@@ -29,7 +29,8 @@ cdis
 cdis
 cdis
 cdis
-        Subroutine Cloud_bogus_w_lgt_ct (dx, cloud_type, height, nk, w)
+        Subroutine Cloud_bogus_w_lgt_ct (dx, cloud_type, height, nk, w,
+     1                                   cloud_fraction)
 
         use cloud_bal_cloud_profiles, only: build_multilayer_w_profile
 
@@ -50,7 +51,7 @@ cdis
 !Can be used with either regular LAPS analysis grid or the cloud analysis grid.
         Implicit none
         Integer*4 nk, cloud_type(nk)
-        Real*4 dx, height(nk), w(nk)
+        Real*4 dx, height(nk), w(nk), cloud_fraction(nk)
 
 !The following specifies the maximum vv in two cloud types as functions
 !of cloud depth.  Make parabolic vv profile, except for stratiform clouds,
@@ -147,7 +148,8 @@ cdis
 !       lobe and upper ascent.  Clear levels retain the missing-data value.
         call build_multilayer_w_profile(dx,cloud_type,height,
      1       max(vv_to_height_ratio_Cu,vv_to_height_ratio_Ct),
-     1       vv_to_height_ratio_Sc,vv_for_St,1E37,w,profile_status)
+     1       vv_to_height_ratio_Sc,vv_for_St,1E37,w,profile_status,
+     1       cloud_fraction)
         if(profile_status .ne. 1)then
           write(6,*)'Cloud profile rejected: invalid height/grid metadata'
           do k = 1,nk

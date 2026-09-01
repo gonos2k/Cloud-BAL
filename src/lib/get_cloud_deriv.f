@@ -93,10 +93,13 @@ cdoc    This routine also does the Cloud Bogussed Omega and the Snow Potential.
         real*4 w_1d(nk)
         real*4 lwc_res_1d(nk)
         real*4 prob_laps(nk)
+        real*4 cloud_fraction_1d(nk)
         real*4 d_thetae_dz_1d(nk)
         integer*4 n_lgt_1d(nk)       !!! for lightning cloud 
         integer*4 cloud_type_1d(nk)
         integer*4 cloud_type_lt(nk)  !!! for lightning cloud 
+        integer*4 kc,k_closest
+        real*4 min_height_diff,height_diff
 
         integer*4 iarg
 
@@ -287,6 +290,22 @@ cdoc    This routine also does the Cloud Bogussed Omega and the Snow Potential.
                     pressures_pa(k) = pres_3d(i,j,k)
                     cloud_type_1d(k) = 0
                     cloud_type_lt(k) = 0   !!! for lightning cloud type
+                    k_closest = 1
+                    min_height_diff = abs(heights_1d(k)-cld_hts(1))
+                    do kc = 2,KCLOUD
+                      height_diff=abs(heights_1d(k)-cld_hts(kc))
+                      if(height_diff.lt.min_height_diff)then
+                        min_height_diff=height_diff
+                        k_closest=kc
+                      endif
+                    enddo
+                    if(clouds_3d(i,j,k_closest).eq.
+     1                 r_missing_data)then
+                      cloud_fraction_1d(k)=0.
+                    else
+                      cloud_fraction_1d(k)=max(0.,min(1.,
+     1                                    clouds_3d(i,j,k_closest)))
+                    endif
 !                    n_lgt_1d(k) = n_lgt(i,j) !!! for lightning number 
                     n_lgt_1d(k) = 0 !!! for lightning number 
                 enddo
@@ -624,7 +643,8 @@ c                       if(i .eq. 1)write(6,*)i,j,k,' Cloud Top',k_base,k_top
 !frl 2009.4.7 start
 ! khlee 2019.03.28. if lightning, calculate cloud updraft ! update `20.1
                   call cloud_bogus_w_lgt_ct
-     1            (grid_spacing_cen_m,cloud_type_1d,heights_1d,nk,w_1d)
+     1            (grid_spacing_cen_m,cloud_type_1d,heights_1d,nk,w_1d,
+     1             cloud_fraction_1d)
 
             write(6,*)'lightning cld=',cloud_type_1d, w_1d 
 
@@ -1524,5 +1544,3 @@ cdoc    Correct precip type for snow drying in sub-cloud layer based on sfc rh
 
         return
         end
-
-

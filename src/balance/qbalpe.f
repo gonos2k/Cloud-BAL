@@ -36,6 +36,7 @@ c balance package.  This is critical for maximum
 c accuracy and adjustment potential
 c
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      use cloud_bal_localization, only: build_compact_influence_3d
       include 'trigd.inc'
       implicit none
       include 'bgdata.inc'
@@ -63,6 +64,7 @@ c    .      ,lapsuo(nx,ny,nz),lapsvo(nx,ny,nz) !t=t0-dt currently not used
      .       ,phibs, tbs, ubs, vbs, shbs, ombs
      .       ,phis,  ts,  us,  vs,  shs,  oms
      .       ,phiout,tout,uout,vout,shout,omout
+     .       ,balance_influence
 
       real*4 errt(nx,ny,nz),errw(nx,ny,nz)
      .      ,pd8(nz),pd5(nz),kpd8,kpd5
@@ -113,7 +115,7 @@ c
      .         ,i,j,k,kk,l,ll,istatus
      .         ,ii,jj,iii,icount
 
-      integer   itstatus,bal_status
+      integer   itstatus,bal_status,localization_status
       integer   init_timer
       integer   ishow_timer
      
@@ -135,10 +137,12 @@ c
       logical frstone,lastone
       logical l_dum
       logical, allocatable :: omb_valid(:,:,:),omo_valid(:,:,:)
-      integer istat_bg(6),nvalid_omb,nvalid_omo
+      integer istat_bg(6),nvalid_omb,nvalid_omo,istat_omo
       real*4 delo_min,delo_max,tau_min,tau_max
+      real*4 cloud_support_radius_m,cloud_support_radius_pa
       parameter(delo_min=1.e-12,delo_max=1.e16)
       parameter(tau_min=1.e-6,tau_max=1.e6)
+      parameter(cloud_support_radius_pa=15000.)
 
       character*255 staticdir,sfcdir
 c     character*255 generic_data_root
@@ -258,6 +262,10 @@ c
          
       enddo
       enddo
+      cloud_support_radius_m=min(60000.,max(30000.,
+     &     6.*dx(nx/2,ny/2)))
+      print*,'cloud balance support horizontal/pressure ',
+     &       cloud_support_radius_m,cloud_support_radius_pa
 c
 c *** Get background grids
 c
@@ -315,13 +323,30 @@ c
       omo=smsng
 
       call get_laps_3d_analysis_data(i4time_sys,nx,ny,nz
-     +,lapsphi,lapstemp,lapsu,lapsv,lapssh,omo,istatus)
+     +,lapsphi,lapstemp,lapsu,lapsv,lapssh,omo,istat_omo,istatus)
 c omo is the cloud vertical motion from lco
       if (istatus .ne. 1) then
          print *,'Error getting LAPS analysis data...Abort.'
          stop
       endif
-      omo_valid=ieee_is_finite(omo).and.abs(omo).le.100.
+      if(istat_omo.eq.1)then
+         omo_valid=ieee_is_finite(omo).and.abs(omo).le.100.
+      else
+         omo_valid=.false.
+      endif
+      allocate(balance_influence(nx,ny,nz))
+      call build_compact_influence_3d(omo_valid,p,dx,dy,
+     &     cloud_support_radius_m,cloud_support_radius_pa,
+     &     balance_influence,localization_status)
+      if(localization_status.eq.0)then
+         print*,'invalid cloud/radar localization; balance rejected'
+         goto 999
+      elseif(localization_status.eq.2)then
+         print*,'no valid COM support; balance increments disabled'
+      else
+         print*,'compact COM support cells ',
+     &          count(balance_influence.gt.0.),' of ',nx*ny*nz
+      endif
 c
 c *** Get LAPS 2D surface pressure.
 c
@@ -746,7 +771,8 @@ c returns staggered grids of full fields u,v,phi
       call balcon(phis,us,vs,oms,phi,u,v,om,phibs,ubs,vbs,ombs
      . ,ts,rod,delo,tau,itmax,err,erru,errphi,errub,errphib
 c    . ,nu,nv,fu,fv
-     . ,nx,ny,nz,lat,dx,dy,ps,p,dp,lmax,bal_status)
+     . ,balance_influence,nx,ny,nz,lat,dx,dy,ps,p,dp,lmax,
+     .  bal_status)
       if(bal_status.ne.1)then
          print*,'balance/continuity solver failed; output rejected'
          goto 999
@@ -1214,7 +1240,8 @@ c    1 nx,ny,nz,rri,rrj,zter,alt)
 
       deallocate(lapsrh)
 
- 999  return
+ 999  if(allocated(balance_influence))deallocate(balance_influence)
+      return
       end
 
       subroutine sfctempadj(t,to,p,ps,nx,ny,nz,npass)
@@ -1430,7 +1457,7 @@ c
       subroutine balcon(to,uo,vo,omo,t,u,v,om,tb,ub,vb,omb,tmp,
      .   rod,delo,tau,itmax,err,erru,errph,errub,errphb
 c    .,nu,nv,fu,fv
-     .,nx,ny,nz,lat,dx,dy,ps,p,dp,lmax,bal_status)
+     .,influence,nx,ny,nz,lat,dx,dy,ps,p,dp,lmax,bal_status)
 c
 c *** Balcon executes the mass/wind balance computations as described
 c        mcginley (Meteor and Appl Phys, 1987) except that
@@ -1456,7 +1483,7 @@ c        verification stats. The observed error is an array that takes into
 c        account both observation error and interpolation error.
 c        omo is the cloud consistent vertical motion
 
-c
+      use cloud_bal_wind_modes, only: diagnose_wind_increment_modes
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
 c
@@ -1466,6 +1493,7 @@ c
      .         ,i,j,k,l,is,ip,js,jp,kp,it,itt
      .         ,icnt,iwpt,istatus
      .         ,ucnt,vcnt,uwpt,vwpt,bal_status,continuity_status
+     .         ,mode_status,kmid,kmode_bottom,kmode_top
 c
       real*4 t(nx,ny,nz),to(nx,ny,nz),tb(nx,ny,nz)
      .      ,u(nx,ny,nz),uo(nx,ny,nz),ub(nx,ny,nz)
@@ -1476,6 +1504,7 @@ c    .,nu(nx,ny,nz),nv(nx,ny,nz),fu(nx,ny,nz),fv(nx,ny,nz)
      .      ,dx(nx,ny),dy(nx,ny),dp(nz)
      .      ,ps(nx,ny),p(nz)
      .      ,lat(nx,ny),ff(nx,ny)
+     .      ,influence(nx,ny,nz)
      .      ,erru(nx,ny,nz),errph(nx,ny,nz)
      .      ,errub(nx,ny,nz),errphb(nx,ny,nz)
 
@@ -1495,7 +1524,8 @@ c    .,nu(nx,ny,nz),nv(nx,ny,nz),fu(nx,ny,nz),fv(nx,ny,nz)
      .      ,eueub,fob,foax,foay
      .      ,fu2,fv2,fuangu,fvangv,dt
       real*4 cont_before,cont_after,cont_max_before,cont_max_after
-     .      ,mom_before,mom_after
+     .      ,mom_before,mom_after,div_mode_rms,vort_mode_rms
+     .      ,div_roughness_rms,max_wind_increment
 
 c 2d array now (JS 2-20-01)
       real*4 tau(nx,ny)
@@ -1517,10 +1547,12 @@ c these are used for diagnostics
       real, allocatable, dimension(:,:,:) :: aaa,bbb
       real, allocatable, dimension(:,:,:) :: fu,fv,nu,nv
       real, allocatable, dimension(:,:,:) :: ucont,vcont,omcont
+      real, allocatable, dimension(:,:,:) :: uorig,vorig,omorig,torig
       real, allocatable, dimension(:,:) :: dxx,dx2,dxs
       real, allocatable, dimension(:,:) :: dyy,dy2,dys
       real, allocatable, dimension(:,:) :: fx,ffx
       real, allocatable, dimension(:,:) :: fy,ffy
+      real, allocatable, dimension(:) :: div_profile,vort_profile
 
 c_______________________________________________________________________________
 c
@@ -1542,9 +1574,30 @@ c
 
       allocate (aaa(nx,ny,nz),bbb(nx,ny,nz))
       allocate (ucont(nx,ny,nz),vcont(nx,ny,nz),omcont(nx,ny,nz))
+      allocate (uorig(nx,ny,nz),vorig(nx,ny,nz),omorig(nx,ny,nz),
+     .          torig(nx,ny,nz))
+      allocate (div_profile(nz),vort_profile(nz))
       ucont=0.
       vcont=0.
       omcont=0.
+      uorig=uo
+      vorig=vo
+      omorig=omo
+      torig=to
+      if(any(.not.ieee_is_finite(influence)).or.
+     &   minval(influence).lt.0..or.maxval(influence).gt.1.)then
+         print*,'invalid compact influence in BALCON'
+         go to 900
+      endif
+      if(maxval(influence).le.0.)then
+         t=to
+         u=uo
+         v=vo
+         om=omo
+         bal_status=1
+         print*,'BALCON no-op: no valid cloud/radar support'
+         go to 900
+      endif
 c
 c only need these calculations once
 c
@@ -1603,13 +1656,13 @@ c analz with input fields prior to balcon iterations on lmax
       nv=0.
 
       call continuity_metrics(uo,vo,omo,nx,ny,nz,dx,dy,ps,p,dp,
-     &     cont_before,cont_max_before,continuity_status)
+     &     influence,cont_before,cont_max_before,continuity_status)
       if(continuity_status.ne.1)then
          print*,'input continuity residual could not be evaluated'
          goto 900
       endif
       call momentum_residual_metrics(to,uo,vo,nx,ny,nz,lat,dx,dy,
-     &     ps,p,mom_before,continuity_status)
+     &     ps,p,influence,mom_before,continuity_status)
       if(continuity_status.ne.1)goto 900
       print*,'RESIDUAL BEFORE cont/max/momentum ',cont_before,
      &       cont_max_before,mom_before
@@ -1637,7 +1690,7 @@ c  accuracy of wind
        erf=.01 !m/sec
        erf=erf*dx(nx/2,ny/2)
 c apply continuity to input winds
-       call leib_sub(nx,ny,nz,erf,tau,erru
+       call leib_sub(nx,ny,nz,erf,tau,erru,influence
      .,lat,dx,dy,ps,p,dp,uo,u,vo,v,
      . omo,om,omb,l,lmax,continuity_status)
        if(continuity_status.ne.1)then
@@ -1941,13 +1994,81 @@ c Restore full winds and heights by adding back in background
       enddo ! on lmax
 
 c Apply continuity into dedicated output arrays. Backgrounds remain immutable.
-       call leib_sub(nx,ny,nz,erf,tau,erru
+c Apply a C2 compact taper to the complete balance candidate first.  Horizontal
+c face weights avoid introducing an unsupported rotational increment at the
+c support edge.  The following LEIB_SUB call reprojects the tapered candidate
+c with the exact localized continuity operator.
+       do k=1,nz
+        do j=1,ny
+         do i=1,nx
+          beta=influence(i,j,k)
+          t(i,j,k)=torig(i,j,k)+beta*(t(i,j,k)-torig(i,j,k))
+          om(i,j,k)=omorig(i,j,k)+beta*(om(i,j,k)-omorig(i,j,k))
+          if(i.lt.nx)then
+             beta=sqrt(influence(i,j,k)*influence(i+1,j,k))
+          else
+             beta=influence(i,j,k)
+          endif
+          if(uorig(i,j,k).ne.bnd)
+     &       u(i,j,k)=uorig(i,j,k)+beta*(u(i,j,k)-uorig(i,j,k))
+          if(j.lt.ny)then
+             beta=sqrt(influence(i,j,k)*influence(i,j+1,k))
+          else
+             beta=influence(i,j,k)
+          endif
+          if(vorig(i,j,k).ne.bnd)
+     &       v(i,j,k)=vorig(i,j,k)+beta*(v(i,j,k)-vorig(i,j,k))
+         enddo
+        enddo
+       enddo
+       call leib_sub(nx,ny,nz,erf,tau,erru,influence
      .,lat,dx,dy,ps,p,dp,u,ucont,v,vcont,
      . om,omcont,omb,l,lmax,continuity_status)
        if(continuity_status.ne.1)then
           print*,'final continuity solver failed'
           goto 900
        endif
+       call diagnose_wind_increment_modes(uorig,vorig,ucont,vcont,
+     &      influence,dx,dy,div_mode_rms,vort_mode_rms,
+     &      div_roughness_rms,div_profile,vort_profile,mode_status)
+       if(mode_status.eq.0)then
+          print*,'divergent/rotational increment diagnosis failed'
+          goto 900
+       endif
+       max_wind_increment=0.
+       if(any(influence.gt.0.))then
+          max_wind_increment=max(maxval(abs(ucont-uorig),
+     &         mask=influence.gt.0.),maxval(abs(vcont-vorig),
+     &         mask=influence.gt.0.))
+       endif
+       if(.not.ieee_is_finite(max_wind_increment).or.
+     &    max_wind_increment.gt.10.)then
+          print*,'excessive localized wind increment rejected ',
+     &           max_wind_increment
+          goto 900
+       endif
+       kmode_bottom=0
+       kmode_top=0
+       do k=1,nz
+          if(any(influence(:,:,k).gt.0.))then
+             if(kmode_bottom.eq.0)kmode_bottom=k
+             kmode_top=k
+          endif
+       enddo
+       if(kmode_bottom.eq.0)then
+          kmode_bottom=1
+          kmode_top=nz
+       endif
+       kmid=(kmode_bottom+kmode_top)/2
+       print*,'INCREMENT MODES div/vort/rough/maxwind ',
+     &      div_mode_rms,vort_mode_rms,div_roughness_rms,
+     &      max_wind_increment
+       print*,'VERTICAL MODE lower/middle/upper div ',
+     &      div_profile(kmode_bottom),div_profile(kmid),
+     &      div_profile(kmode_top)
+       print*,'VERTICAL MODE lower/middle/upper vort ',
+     &      vort_profile(kmode_bottom),vort_profile(kmid),
+     &      vort_profile(kmode_top)
 c evaluate dynamic balance and continuity
       call analzo(t,to,ucont,uo,vcont,vo,omcont,omo
      .                ,nu,nv,fu,fv,delo,tau
@@ -1955,10 +2076,11 @@ c evaluate dynamic balance and continuity
      .                ,lat,dx,dy,ps,p,dp,l,lmax)
 c Use the same discrete operators before and after correction.
        call continuity_metrics(ucont,vcont,omcont,nx,ny,nz,dx,dy,
-     &      ps,p,dp,cont_after,cont_max_after,continuity_status)
+     &      ps,p,dp,influence,cont_after,cont_max_after,
+     &      continuity_status)
        if(continuity_status.ne.1)goto 900
        call momentum_residual_metrics(t,ucont,vcont,nx,ny,nz,lat,
-     &      dx,dy,ps,p,mom_after,continuity_status)
+     &      dx,dy,ps,p,influence,mom_after,continuity_status)
        if(continuity_status.ne.1)goto 900
        print*,'RESIDUAL AFTER cont/max/momentum ',cont_after,
      &        cont_max_after,mom_after
@@ -1985,6 +2107,12 @@ c move accepted work/output fields to solution fields
       if(allocated(ucont))deallocate(ucont)
       if(allocated(vcont))deallocate(vcont)
       if(allocated(omcont))deallocate(omcont)
+      if(allocated(uorig))deallocate(uorig)
+      if(allocated(vorig))deallocate(vorig)
+      if(allocated(omorig))deallocate(omorig)
+      if(allocated(torig))deallocate(torig)
+      if(allocated(div_profile))deallocate(div_profile)
+      if(allocated(vort_profile))deallocate(vort_profile)
       if(allocated(dxx))deallocate(dxx)
       if(allocated(dx2))deallocate(dx2)
       if(allocated(dxs))deallocate(dxs)
@@ -2002,10 +2130,11 @@ c move accepted work/output fields to solution fields
 c
 c ---------------------------------------------------------------
 c
-      subroutine leib_sub(nx,ny,nz,erf,tau,erru
+      subroutine leib_sub(nx,ny,nz,erf,tau,erru,influence
      .,lat,dx,dy,ps,p,dp,uo,u,vo,v,
      . omo,om,omb,l,lmax,solver_status)
 
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
 
       integer nx,ny,nz
@@ -2016,17 +2145,23 @@ c
      .      ,v(nx,ny,nz),vo(nx,ny,nz)
      .      ,om(nx,ny,nz),omo(nx,ny,nz),omb(nx,ny,nz)
      .      ,erru(nx,ny,nz)
+     .      ,influence(nx,ny,nz)
      .      ,lat(nx,ny),dx(nx,ny),dy(nx,ny)
      .      ,ps(nx,ny),p(nz),dp(nz)
 
       real*4 dldx,dldy,dldp,sum,sum1,cnt
-     .,a,erf,bnd,coefx,coefy
+     .,a,erf,bnd,coefx,coefy,coefp,ci,cj
       real*4 tau(nx,ny)
 
       real, allocatable, dimension(:,:,:) :: slam,f3,h
 
       bnd=1.e-30
       solver_status=0
+      call move_3d(uo,u,nx,ny,nz)
+      call move_3d(vo,v,nx,ny,nz)
+      call move_3d(omo,om,nx,ny,nz)
+      if(any(.not.ieee_is_finite(influence)).or.
+     &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
 
 c
 c *** Compute lagrange multiplier (slam) using 3-d relaxtion on eqn. (3).
@@ -2043,7 +2178,7 @@ c
 c
 c ****** Compute a/tau (h) term and rhs terms in eqn. (3)
 c
-      call fthree(f3,uo,vo,omo,omb,h,erru,tau,
+      call fthree(f3,uo,vo,omo,omb,h,erru,tau,influence,
      .   nx,ny,nz,lat,dx,dy,dp,operator_status)
       if(operator_status.ne.1)then
          call move_3d(uo,u,nx,ny,nz)
@@ -2055,7 +2190,7 @@ c
 c
 c ****** Perform 3-d relaxation.
 c
-      call leibp3(slam,f3,200,erf,h,erru,tau
+      call leibp3(slam,f3,200,erf,h,erru,tau,influence
      .  ,nx,ny,nz,dx,dy,ps,p,dp,operator_status)
       if(operator_status.ne.1)then
          print*,'LEIBP3 returned failure/non-convergence ',operator_status
@@ -2085,12 +2220,17 @@ co
          dldp=(slam(i,j,k)-slam(i,j,k+1))/dp(k+ks)
          dldx=(slam(i+1,j+1,k+1)-slam(i,j+1,k+1))/dx(i,j)
          dldy=(slam(i+1,j+1,k+1)-slam(i+1,j,k+1))/dy(i,j)
-         coefx=.25*(1./erru(i,j,k)+1./erru(i+1,j,k))
-         coefy=.25*(1./erru(i,j,k)+1./erru(i,j+1,k))
-         if (u(i,j,k) .ne. bnd) u(i,j,k)=uo(i,j,k)+coefx*dldx
-         if (v(i,j,k) .ne. bnd) v(i,j,k)=vo(i,j,k)+coefy*dldy
-         if (omo(i,j,k).ne.bnd) om(i,j,k)=omo(i,j,k)+
-     &     .5*dldp/tau(i,j)
+         ci=.5*influence(i,j,k)/erru(i,j,k)
+         cj=.5*influence(i+1,j,k)/erru(i+1,j,k)
+         coefx=0.
+         if(ci.gt.0..and.cj.gt.0.)coefx=2.*ci*cj/(ci+cj)
+         cj=.5*influence(i,j+1,k)/erru(i,j+1,k)
+         coefy=0.
+         if(ci.gt.0..and.cj.gt.0.)coefy=2.*ci*cj/(ci+cj)
+         coefp=.5*influence(i,j,k)/tau(i,j)
+         if (uo(i,j,k) .ne. bnd) u(i,j,k)=uo(i,j,k)+coefx*dldx
+         if (vo(i,j,k) .ne. bnd) v(i,j,k)=vo(i,j,k)+coefy*dldy
+         if (omo(i,j,k).ne.bnd) om(i,j,k)=omo(i,j,k)+coefp*dldp
        sum=sum+(u(i,j,k)-uo(i,j,k))**2+(v(i,j,k)-vo(i,j,k))**2
        sum1=sum1+(om(i,j,k)-omo(i,j,k))**2
        cnt=cnt+1.
@@ -2104,9 +2244,12 @@ co
          endif
          dldp=(slam(i,ny,k)-slam(i,ny,k+1))/dp(k+ks)
          dldy=(slam(i+1,ny+1,k+1)-slam(i+1,ny,k+1))/dy(i,ny)
-         if (v(i,ny,k) .ne. bnd) v(i,ny,k)=vo(i,ny,k)+dldy/a
+         coefy=.5*influence(i,ny,k)/erru(i,ny,k)
+         coefp=.5*influence(i,ny,k)/tau(i,ny)
+         if (vo(i,ny,k) .ne. bnd)
+     &       v(i,ny,k)=vo(i,ny,k)+coefy*dldy
          if (omo(i,ny,k).ne.bnd) om(i,ny,k)=omo(i,ny,k)+
-     &     .5*dldp/tau(i,ny)
+     &     coefp*dldp
       enddo
       do j=1,ny
          a=2.*erru(nx,j,k)
@@ -2116,10 +2259,19 @@ co
          endif
          dldp=(slam(nx,j,k)-slam(nx,j,k+1))/dp(k+ks)
          dldx=(slam(nx+1,j+1,k+1)-slam(nx,j+1,k+1))/dx(nx,j)
-         if (u(nx,j,k) .ne. bnd) u(nx,j,k)=uo(nx,j,k)+dldx/a
+         coefx=.5*influence(nx,j,k)/erru(nx,j,k)
+         coefp=.5*influence(nx,j,k)/tau(nx,j)
+         if (uo(nx,j,k) .ne. bnd)
+     &       u(nx,j,k)=uo(nx,j,k)+coefx*dldx
          if (omo(nx,j,k).ne.bnd) om(nx,j,k)=omo(nx,j,k)+
-     &     .5*dldp/tau(nx,j)
+     &     coefp*dldp
       enddo
+c Exact compact support is an output invariant, including solver roundoff.
+      where(influence.le.0.)
+         u=uo
+         v=vo
+         om=omo
+      endwhere
       enddo
 c   print out rms vector adjustment
       print*, 'RMS Vector(m/s) adjustment after continuity applied ' 
@@ -2177,12 +2329,13 @@ c
 c ---------------------------------------------------------------
 c
       subroutine continuity_metrics(u,v,om,nx,ny,nz,dx,dy,ps,p,dp,
-     &                              rmsres,maxres,istatus)
+     &                         influence,rmsres,maxres,istatus)
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
       integer nx,ny,nz,i,j,k,istatus,point_status,npoint
       real*4 u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz)
      &      ,dx(nx,ny),dy(nx,ny),ps(nx,ny),p(nz),dp(nz)
+     &      ,influence(nx,ny,nz)
      &      ,rmsres,maxres,residual,sumres
 
       istatus=0
@@ -2190,17 +2343,27 @@ c
       sumres=0.
       maxres=0.
       npoint=0
+      if(any(.not.ieee_is_finite(influence)).or.
+     &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
+      if(maxval(influence).le.0.)then
+         istatus=1
+         return
+      endif
       do k=2,nz
        do j=2,ny
         do i=2,nx
          if(.not.ieee_is_finite(ps(i,j)).or.
      &      .not.ieee_is_finite(p(k)))return
          if(ps(i,j).ge.p(k))then
+          if(.not.ieee_is_finite(influence(i,j,k)).or.
+     &       influence(i,j,k).lt.0..or.influence(i,j,k).gt.1.)return
+          if(influence(i,j,k).le.0.)cycle
           call continuity_point(u,v,om,nx,ny,nz,dx,dy,dp,
      &         i,j,k,residual,point_status)
           if(point_status.eq.0)then
              return
           elseif(point_status.eq.1)then
+             residual=influence(i,j,k)*residual
              sumres=sumres+residual*residual
              maxres=max(maxres,abs(residual))
              npoint=npoint+1
@@ -2219,13 +2382,14 @@ c
 c ---------------------------------------------------------------
 c
       subroutine momentum_residual_metrics(phi,u,v,nx,ny,nz,lat,
-     &                    dx,dy,ps,p,rmsres,istatus)
+     &                    dx,dy,ps,p,influence,rmsres,istatus)
 c Same guarded geostrophic momentum operator for pre/post comparison.
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
       integer nx,ny,nz,i,j,k,istatus,npoint
       real*4 phi(nx,ny,nz),u(nx,ny,nz),v(nx,ny,nz)
      &      ,lat(nx,ny),dx(nx,ny),dy(nx,ny),ps(nx,ny),p(nz)
+     &      ,influence(nx,ny,nz)
      &      ,rmsres,sumres,f,dphidx,dphidy,ru,rv,rdpdg,fo,bnd
 
       rdpdg=3.141592654/180.
@@ -2235,6 +2399,12 @@ c Same guarded geostrophic momentum operator for pre/post comparison.
       rmsres=0.
       sumres=0.
       npoint=0
+      if(any(.not.ieee_is_finite(influence)).or.
+     &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
+      if(maxval(influence).le.0.)then
+         istatus=1
+         return
+      endif
       do k=1,nz
        do j=1,ny-1
         do i=1,nx-1
@@ -2244,6 +2414,9 @@ c Same guarded geostrophic momentum operator for pre/post comparison.
      &      .not.ieee_is_finite(dy(i,j)).or.dy(i,j).le.0.)return
          if(ps(i,j).ge.p(k).and.u(i,j,k).ne.bnd.and.
      &      v(i,j,k).ne.bnd)then
+          if(.not.ieee_is_finite(influence(i,j,k)).or.
+     &       influence(i,j,k).lt.0..or.influence(i,j,k).gt.1.)return
+          if(influence(i,j,k).le.0.)cycle
           if(.not.ieee_is_finite(lat(i,j)).or.
      &       .not.ieee_is_finite(phi(i,j,k)).or.
      &       .not.ieee_is_finite(phi(i+1,j,k)).or.
@@ -2254,8 +2427,8 @@ c Same guarded geostrophic momentum operator for pre/post comparison.
           if(ieee_is_finite(f).and.abs(f).ge.1.e-6)then
            dphidx=(phi(i+1,j,k)-phi(i,j,k))/dx(i,j)
            dphidy=(phi(i,j+1,k)-phi(i,j,k))/dy(i,j)
-           ru=-f*v(i,j,k)+dphidx
-           rv= f*u(i,j,k)+dphidy
+           ru=influence(i,j,k)*(-f*v(i,j,k)+dphidx)
+           rv=influence(i,j,k)*( f*u(i,j,k)+dphidy)
            if(ieee_is_finite(ru).and.ieee_is_finite(rv))then
               sumres=sumres+ru*ru+rv*rv
               npoint=npoint+2
@@ -2996,7 +3169,7 @@ c
 c
 c===============================================================================
 c
-      subroutine fthree(f3,u,v,om,omb,h,erru,tau
+      subroutine fthree(f3,u,v,om,omb,h,erru,tau,influence
      .,nx,ny,nz,lat,dx,dy,dp,operator_status)
 c
 c *** Fthree computes a/tau (h) and rhs terms in eqn. (3).
@@ -3009,6 +3182,7 @@ c
 c
       real*4 f3(nx+1,ny+1,nz+1),h(nx+1,ny+1,nz+1)
      .      ,erru(nx,ny,nz)
+     .      ,influence(nx,ny,nz)
      .      ,u(nx,ny,nz),v(nx,ny,nz)
      .      ,om(nx,ny,nz),lat(nx,ny)
      .      ,omb(nx,ny,nz)
@@ -3031,15 +3205,18 @@ c
          do i=2,nx
             if(.not.ieee_is_finite(erru(i,j,k)).or.
      &         .not.ieee_is_finite(tau(i,j)).or.
+     &         .not.ieee_is_finite(influence(i,j,k)).or.
      &         erru(i,j,k).le.0..or.tau(i,j).le.0.)return
+            if(influence(i,j,k).lt.0..or.
+     &         influence(i,j,k).gt.1.)return
             call continuity_point(u,v,om,nx,ny,nz,dx,dy,dp,
      &           i,j,k,cont,point_status)
             if(point_status.eq.0)return
             if(point_status.eq.2)cycle
 c The correction is div(C grad(lambda))=-div(V), so the RHS is the
 c unweighted flux divergence. Variable coefficients belong in LEIBP3.
-            h(i,j,k)=0.5/tau(i,j)
-            f3(i,j,k)=-cont
+            h(i,j,k)=0.5*influence(i,j,k)/tau(i,j)
+            f3(i,j,k)=-influence(i,j,k)*cont
            if (abs(f3(i,j,k)) .ge. formax) then
                formax=abs(f3(i,j,k))
                is=i
@@ -3058,7 +3235,7 @@ c
 c     
 c===============================================================================
 c
-      subroutine leibp3(sol,force,itmax,erf,h,erru,tau
+      subroutine leibp3(sol,force,itmax,erf,h,erru,tau,influence
      .                 ,nx,ny,nz,dx,dy,ps,p,dp,solver_status)
 c
 c *** Leibp3 performs 3-d relaxation.
@@ -3077,12 +3254,13 @@ c
      .      ,dx(nx,ny),dy(nx,ny)
      .      ,ps(nx,ny),p(nz),dp(nz)
      .      ,erru(nx,ny,nz),tau(nx,ny)
+     .      ,influence(nx,ny,nz)
      .      ,erf,si,sj,sk
      .      ,ovr,erb,hh,ertm,ermm,corlm
      .      ,dx2,dx1s,dy2,dy1s,dz,dz2,dz1s
      .      ,aa,cortm,res,cor,corb,corlmm
      .      ,reslm,rho,cor0,cor5
-     .      ,ce,cw,cn,cs,cu,cd,ci,cni,diag
+     .      ,ce,cw,cn,cs,cu,cd,ci,cni,cj,diag
      .      ,dpu,dpd,dpc,epsc
 c_______________________________________________________________________________
 c
@@ -3109,6 +3287,8 @@ c
       cor0=0.
       cortm=0.
       epsc=1.e-20
+      if(any(.not.ieee_is_finite(influence)).or.
+     &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
       do it=1,itmax
          ertm=0.
          ermm=0.
@@ -3130,15 +3310,25 @@ c
             if(k.eq.nz)sol(i,j,k+1)=sol(i,j,k)
             if(dx(i,j).le.0..or.dy(i,j).le.0..or.dp(k).le.0.
      &         .or.erru(i,j,k).le.0..or.tau(i,j).le.0.)return
-            ci=0.5/max(erru(i,j,k),epsc)
-            ce=0.5*(ci+0.5/max(erru(i+is,j,k),epsc))
+            ci=0.5*influence(i,j,k)/max(erru(i,j,k),epsc)
+            cj=0.5*influence(i+is,j,k)/
+     &         max(erru(i+is,j,k),epsc)
+            ce=0.
+            if(ci.gt.0..and.cj.gt.0.)ce=2.*ci*cj/(ci+cj)
      &         /(dx(i,j)*dx(i,j))
-            cw=0.5*(ci+0.5/max(erru(i-1,j,k),epsc))
+            cj=0.5*influence(i-1,j,k)/max(erru(i-1,j,k),epsc)
+            cw=0.
+            if(ci.gt.0..and.cj.gt.0.)cw=2.*ci*cj/(ci+cj)
      &         /(dx(i,j)*dx(i,j))
-            cni=0.5/max(erru(i,j+js,k),epsc)
-            cn=0.5*(ci+cni)/(dy(i,j)*dy(i,j))
-            cni=0.5/max(erru(i,j-1,k),epsc)
-            cs=0.5*(ci+cni)/(dy(i,j)*dy(i,j))
+            cni=0.5*influence(i,j+js,k)/
+     &          max(erru(i,j+js,k),epsc)
+            cn=0.
+            if(ci.gt.0..and.cni.gt.0.)cn=2.*ci*cni/(ci+cni)
+     &         /(dy(i,j)*dy(i,j))
+            cni=0.5*influence(i,j-1,k)/max(erru(i,j-1,k),epsc)
+            cs=0.
+            if(ci.gt.0..and.cni.gt.0.)cs=2.*ci*cni/(ci+cni)
+     &         /(dy(i,j)*dy(i,j))
             dpd=dp(k)
             if(k.lt.nz)then
                dpu=dp(k+1)
@@ -3147,12 +3337,27 @@ c
             endif
             if(dpu.le.0.)return
             dpc=0.5*(dpd+dpu)
-            ci=0.5/tau(i,j)
-            cu=ci/(dpu*dpc)
-            cd=ci/(dpd*dpc)
+            ci=0.5*influence(i,j,k)/tau(i,j)
+            if(k.lt.nz)then
+               cj=0.5*influence(i,j,k+1)/tau(i,j)
+            else
+               cj=ci
+            endif
+            cu=0.
+            if(ci.gt.0..and.cj.gt.0.)cu=2.*ci*cj/(ci+cj)
+     &         /(dpu*dpc)
+            cj=0.5*influence(i,j,k-1)/tau(i,j)
+            cd=0.
+            if(ci.gt.0..and.cj.gt.0.)cd=2.*ci*cj/(ci+cj)
+     &         /(dpd*dpc)
             diag=-(ce+cw+cn+cs+cu+cd)
-            if(.not.ieee_is_finite(diag).or.abs(diag).le.epsc.or.
+            if(.not.ieee_is_finite(diag).or.
      &         .not.ieee_is_finite(force(i,j,k)))return
+            if(abs(diag).le.epsc)then
+               if(abs(force(i,j,k)).gt.epsc)return
+               sol(i,j,k)=0.
+               go to 2
+            endif
             res=ce*(sol(i+1,j,k)-sol(i,j,k))
      &         +cw*(sol(i-1,j,k)-sol(i,j,k))
      &         +cn*(sol(i,j+1,k)-sol(i,j,k))
@@ -3181,7 +3386,7 @@ c         write(6,1001) it,reslm,corlm,corlmm,erb
             if(cor0.gt.epsc)then
                rho=(cor5/cor0)**.2
                if (rho .le. 1.and.rho.ge.0.)
-     &             ovr=2./(1.+sqrt(1.-rho))
+     &             ovr=min(1.30,2./(1.+sqrt(1.-rho)))
             endif
             cor0=cor5
          endif

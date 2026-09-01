@@ -52,6 +52,9 @@ cdis
      1                        t_sfc_k,
      1                        j_status,istatus)
 
+        use cloud_bal_radar_downdraft, only:
+     1      couple_radar_precipitation
+
         integer       ss_normal,sys_bad_prod,sys_no_data,
      1                  sys_abort_prod
 
@@ -221,6 +224,11 @@ cdis
         real*4 raicnc(NX_L,NY_L,NZ_L)
         real*4 snocnc(NX_L,NY_L,NZ_L)
         real*4 piccnc(NX_L,NY_L,NZ_L)
+        real*4, allocatable, dimension(:,:,:) ::
+     1          u_balance_3d,v_balance_3d
+        logical, allocatable, dimension(:,:,:) :: radar_support_3d
+        logical wind_available
+        integer istat_u_balance,istat_v_balance,istat_radar_coupling
 
 !       real*4 snow_2d(NX_L,NY_L)
 
@@ -894,20 +902,6 @@ c read in laps lat/lon and topo
         endif ! istat_radar_3dref
 
         if(istat_radar_3dref .eq. 1)then
-            if(l_flag_bogus_w .and. l_bogus_radar_w) then    ! Adan add
-!             Re-calculate cloud bogus omega within radar echo area
-!             Add by Adan
-              call get_radar_deriv(NX_L,NY_L,NZ_L,grid_spacing_cen_m,       
-     1                           r_missing_data,
-     1                           radar_ref_3d,clouds_3d,cld_hts,
-     1                           temp_3d,heights_3d,pres_3d,
-     1                           ibase_array,itop_array,thresh_cvr,
-     1                           cldpcp_type_3d,w_3d,istat_radar_deriv)       
-              if(istat_radar_deriv .ne. 1)then
-                write(6,*)' Bad status return from get_radar_deriv'
-              endif
-            endif                           ! l_flag_bogus_w (Adan add)
-
             I4_elapsed = ishow_timer()
 
             write(6,*)' Computing Precip Concentration'
@@ -919,6 +913,43 @@ c read in laps lat/lon and topo
      1                                  ,raicnc             ! Output
      1                                  ,snocnc             ! Output
      1                                  ,piccnc)            ! Output
+
+!           Couple S-band precipitation fall flux to a bounded air downdraft
+!           only after phase concentrations exist.  The replacement is
+!           deterministic and never calls the dormant evaporation routine.
+            if(l_flag_bogus_w .and. l_bogus_radar_w)then
+              allocate(u_balance_3d(NX_L,NY_L,NZ_L),
+     1                 v_balance_3d(NX_L,NY_L,NZ_L),
+     1                 radar_support_3d(NX_L,NY_L,NZ_L))
+              u_balance_3d=0.
+              v_balance_3d=0.
+              call get_laps_3d(i4time,NX_L,NY_L,NZ_L,
+     1             'lw3','u3 ',units,comment,u_balance_3d,
+     1             istat_u_balance)
+              call get_laps_3d(i4time,NX_L,NY_L,NZ_L,
+     1             'lw3','v3 ',units,comment,v_balance_3d,
+     1             istat_v_balance)
+              wind_available=istat_u_balance.eq.1.and.
+     1                       istat_v_balance.eq.1
+              if(.not.wind_available)then
+                u_balance_3d=0.
+                v_balance_3d=0.
+                write(6,*)'Radar downdraft: no 3-D wind; tilt disabled'
+              endif
+              call couple_radar_precipitation(radar_ref_3d,temp_3d,
+     1             rh_3d_pct,heights_3d,pres_3d,u_balance_3d,
+     1             v_balance_3d,grid_spacing_cen_m,
+     1             grid_spacing_cen_m,r_missing_data,cldpcp_type_3d,
+     1             wind_available,raicnc,snocnc,piccnc,w_3d,
+     1             radar_support_3d,istat_radar_coupling)
+              if(istat_radar_coupling.eq.0)then
+                write(6,*)'Radar downdraft rejected; cloud COM retained'
+              elseif(istat_radar_coupling.eq.2)then
+                write(6,*)'Radar downdraft accepted with degraded status'
+              endif
+              pcpcnc=raicnc+snocnc+piccnc
+              deallocate(u_balance_3d,v_balance_3d,radar_support_3d)
+            endif
 
             I4_elapsed = ishow_timer()
 
@@ -1128,4 +1159,3 @@ c read in laps lat/lon and topo
 
         return
         end
-

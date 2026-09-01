@@ -58,3 +58,12 @@ algorithms.
 
 The staged correction and validation strategy is documented in
 [docs/IMPROVEMENT_PLAN.md](docs/IMPROVEMENT_PLAN.md).
+
+The completed source changes, preserved legacy baseline, and verification
+commands are summarized in
+[docs/IMPLEMENTATION_REPORT.md](docs/IMPLEMENTATION_REPORT.md).
+
+The mathematical design for S-band precipitation fall trajectories,
+downdraft energetics, compact balance support, divergent/rotational modes, and
+wave-control handoff is in
+[docs/RADAR_PRECIP_DOWNDRAFT_DESIGN.md](docs/RADAR_PRECIP_DOWNDRAFT_DESIGN.md).

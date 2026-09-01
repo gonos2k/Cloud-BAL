@@ -11,6 +11,9 @@ gfortran -std=f2008 -Wall -Wextra -fcheck=all \
   "$repo_root/src/common/cloud_bal_field_contracts.f90" \
   "$repo_root/src/common/cloud_bal_moisture.f90" \
   "$repo_root/src/common/cloud_bal_cloud_profiles.f90" \
+  "$repo_root/src/common/cloud_bal_localization.f90" \
+  "$repo_root/src/common/cloud_bal_radar_downdraft.f90" \
+  "$repo_root/src/common/cloud_bal_wind_modes.f90" \
   "$repo_root/tests/test_cloud_bal_core.f90" \
   -o "$test_tmp/test_cloud_bal_core"
 
@@ -28,6 +31,30 @@ gfortran -c -std=f2008 -Wall -Wextra -fcheck=all \
 gfortran -c -std=legacy -ffixed-line-length-none -fcheck=all \
   -J "$test_tmp" -I "$test_tmp" \
   -o "$test_tmp/vv_lgt_ct.o" "$repo_root/src/lib/vv_lgt_ct.f"
+gfortran -c -std=legacy -ffixed-line-length-none -fdollar-ok \
+  -fallow-argument-mismatch -J "$test_tmp" -I "$test_tmp" \
+  -I "$repo_root/src/include" -o "$test_tmp/get_cloud_deriv.o" \
+  "$repo_root/src/lib/get_cloud_deriv.f"
+gfortran -c -std=legacy -ffixed-line-length-none -fdollar-ok \
+  -fallow-argument-mismatch -J "$test_tmp" -I "$test_tmp" \
+  -I "$repo_root/src/include" -o "$test_tmp/pcpcnc.o" \
+  "$repo_root/src/lib/pcpcnc.f"
+gfortran -c -std=legacy -ffixed-line-length-none -fdollar-ok \
+  -fallow-argument-mismatch -J "$test_tmp" -I "$test_tmp" \
+  -I "$repo_root/src/include" -o "$test_tmp/laps_deriv_sub.o" \
+  "$repo_root/src/deriv/laps_deriv_sub.f"
+
+# The focused tree does not ship the legacy NetCDF include required by the
+# whole lapsio.f file.  Extract the modified COM/wind reader so its status
+# interface and fixed-form syntax are still compiled exactly.
+awk '
+  /^      subroutine get_laps_3d_analysis_data\(/ {capture=1}
+  capture && /^cdis/ {exit}
+  capture {print}
+' "$repo_root/src/lib/bgdata/lapsio.f" > "$test_tmp/lapsio_com_reader.f"
+gfortran -c -std=legacy -ffixed-line-length-none \
+  -fallow-argument-mismatch -o "$test_tmp/lapsio_com_reader.o" \
+  "$test_tmp/lapsio_com_reader.f"
 
 # Extract the production continuity/operator routines so the runtime test uses
 # the exact fixed-form implementation without linking the unrelated KLAPS I/O.

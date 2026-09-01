@@ -330,13 +330,14 @@ c
 c ============================================================
 c
       subroutine get_laps_3d_analysis_data(i4time,nx,ny,nz
-     +,phi,t,u,v,sh,omo,istatus)
+     +,phi,t,u,v,sh,omo,omo_status,istatus)
 c
       implicit none
 
       integer   nx,ny,nz
       integer   i4time
       integer   istatus
+      integer   omo_status
       integer   lendlco
       integer   lends
       integer   lendt
@@ -438,12 +439,12 @@ c
 c *** Get laps cloud omega
 c
       call get_laps_3d(i4time,nx,ny,nz
-     1  ,lcoext,'com',units,comment,omo,istatus)
+     1  ,lcoext,'com',units,comment,omo,omo_status)
 
-      if(istatus .ne. 1)then
+      if(omo_status .ne. 1)then
          print*,'No LAPS Cld Omega data ....'
-         print*,'Initializing omo array with zero'
-         call zero3d(omo,nx,ny,nz)
+         print*,'Preserving missing COM provenance'
+         omo=r_missing_data
       endif
 c
 c *** Get laps wind data.

@@ -5,6 +5,7 @@ MODULE cloud_bal_cloud_profiles
   PRIVATE
   PUBLIC :: detect_cloud_layers
   PUBLIC :: build_multilayer_w_profile
+  PUBLIC :: scale_aware_cloud_amplitude
 
 CONTAINS
 
@@ -44,24 +45,33 @@ CONTAINS
     END DO
   END SUBROUTINE detect_cloud_layers
 
-  SUBROUTINE build_multilayer_w_profile(dx_km, cloud_type, height, &
+  SUBROUTINE build_multilayer_w_profile(dx_m, cloud_type, height, &
                                         ratio_cu, ratio_sc, w_stratus, &
-                                        missing, w, status)
-    REAL, INTENT(IN) :: dx_km, height(:), ratio_cu, ratio_sc, &
+                                        missing, w, status, cloud_fraction)
+    REAL, INTENT(IN) :: dx_m, height(:), ratio_cu, ratio_sc, &
                         w_stratus, missing
     INTEGER, INTENT(IN) :: cloud_type(:)
+    REAL, INTENT(IN), OPTIONAL :: cloud_fraction(:)
     REAL, INTENT(OUT) :: w(:)
     INTEGER, INTENT(OUT) :: status
     INTEGER :: bottom(SIZE(cloud_type)), top(SIZE(cloud_type))
     INTEGER :: n_layers, layer, k, kb, kt
-    REAL :: depth, z0, z1, eta, amplitude, pi
+    REAL :: depth, z0, z1, eta, amplitude, pi, fraction, vertical_sampling
     LOGICAL :: convective, precipitating_stratiform
 
     status = 0
     w = missing
     IF (SIZE(height) /= SIZE(cloud_type) .OR. SIZE(w) /= SIZE(cloud_type)) RETURN
-    IF (dx_km <= 0.0 .OR. .NOT. ieee_is_finite(dx_km)) RETURN
+    IF (dx_m <= 0.0 .OR. .NOT. ieee_is_finite(dx_m)) RETURN
+    IF (.NOT. ieee_is_finite(ratio_cu) .OR. ratio_cu < 0.0 .OR. &
+        .NOT. ieee_is_finite(ratio_sc) .OR. ratio_sc < 0.0 .OR. &
+        .NOT. ieee_is_finite(w_stratus) .OR. w_stratus < 0.0) RETURN
     IF (ANY(.NOT. ieee_is_finite(height))) RETURN
+    IF (PRESENT(cloud_fraction)) THEN
+      IF (SIZE(cloud_fraction) /= SIZE(height)) RETURN
+      IF (ANY(.NOT. ieee_is_finite(cloud_fraction)) .OR. &
+          ANY(cloud_fraction < 0.0) .OR. ANY(cloud_fraction > 1.0)) RETURN
+    END IF
     IF (SIZE(height) > 1) THEN
       IF (ANY(height(2:) <= height(:SIZE(height)-1))) RETURN
     END IF
@@ -93,6 +103,13 @@ CONTAINS
                        cloud_type(kb:kt) == 10 .OR. &
                        cloud_type(kb:kt) == 11)
       precipitating_stratiform = ANY(cloud_type(kb:kt) == 4)
+      fraction = 1.0
+      IF (PRESENT(cloud_fraction)) &
+        fraction = SUM(cloud_fraction(kb:kt))/REAL(kt-kb+1)
+      ! At least three vertical samples are required to represent a full
+      ! resolved overturning profile.  A one-level cloud gets only 1/3 of the
+      ! empirical target, independent of its apparent geometric depth.
+      vertical_sampling = MIN(1.0,REAL(kt-kb+1)/3.0)
 
       DO k = kb, kt
         IF (kt == kb) THEN
@@ -101,10 +118,12 @@ CONTAINS
           eta = MIN(1.0, MAX(0.0, (height(k)-z0)/depth))
         END IF
         IF (convective) THEN
-          amplitude = MAX(w_stratus, ratio_cu * depth / dx_km)
+          amplitude = MAX(w_stratus,scale_aware_cloud_amplitude(depth, &
+               dx_m,ratio_cu,fraction,vertical_sampling,5.0))
           w(k) = MAX(w_stratus, amplitude * SIN(pi*eta))
         ELSE IF (precipitating_stratiform) THEN
-          amplitude = MAX(w_stratus, ratio_sc * depth / dx_km)
+          amplitude = MAX(w_stratus,scale_aware_cloud_amplitude(depth, &
+               dx_m,ratio_sc,fraction,vertical_sampling,0.50))
           IF (eta < 0.40) THEN
             ! Evaporation/melting-supported lower-layer descent.
             w(k) = -0.25 * amplitude * SIN(pi*eta/0.40)
@@ -118,5 +137,25 @@ CONTAINS
     END DO
     status = 1
   END SUBROUTINE build_multilayer_w_profile
+
+  PURE REAL FUNCTION scale_aware_cloud_amplitude(depth_m, dx_m, &
+       reference_ratio_ms, cloud_fraction, vertical_sampling, cap_ms)
+    REAL, INTENT(IN) :: depth_m,dx_m,reference_ratio_ms,cloud_fraction
+    REAL, INTENT(IN) :: vertical_sampling,cap_ms
+    REAL :: aspect,area_factor,sampling_factor
+
+    scale_aware_cloud_amplitude=0.0
+    IF (.NOT. ieee_is_finite(depth_m) .OR. depth_m <= 0.0 .OR. &
+        .NOT. ieee_is_finite(dx_m) .OR. dx_m <= 0.0 .OR. &
+        .NOT. ieee_is_finite(reference_ratio_ms) .OR. &
+        reference_ratio_ms < 0.0 .OR. .NOT. ieee_is_finite(cloud_fraction) .OR. &
+        .NOT. ieee_is_finite(vertical_sampling) .OR. &
+        .NOT. ieee_is_finite(cap_ms) .OR. cap_ms <= 0.0) RETURN
+    aspect=MIN(10.0,MAX(0.0,depth_m/MAX(dx_m,250.0)))
+    area_factor=MIN(1.0,MAX(0.0,cloud_fraction))
+    sampling_factor=MIN(1.0,MAX(0.0,vertical_sampling))
+    scale_aware_cloud_amplitude=MIN(cap_ms,reference_ratio_ms*aspect* &
+                                    area_factor*sampling_factor)
+  END FUNCTION scale_aware_cloud_amplitude
 
 END MODULE cloud_bal_cloud_profiles

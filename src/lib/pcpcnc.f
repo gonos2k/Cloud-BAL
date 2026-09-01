@@ -109,11 +109,15 @@ cdis
         use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
         implicit none
         integer ipcp_type
-        real*4 p,t,dbz,fall_velocity,dbz_eff,vvmax
+        real*4 p,t,dbz,fall_velocity,z_linear,vvmax
         real*4 density_norm,sqrt_density_norm
 
-        dbz_eff = max(dbz,1.0)
-        vvmax = 4.32*dbz_eff**0.0714286      ! Adan add
+!       The empirical power law is defined on linear reflectivity Z, not dBZ.
+!       The operational input is S-band logarithmic reflectivity.
+        fall_velocity = 0.
+        if(.not.ieee_is_finite(dbz).or.dbz.lt.-100..or.dbz.gt.100.)return
+        z_linear = 10.**(0.1*dbz)
+        vvmax = 4.32*z_linear**0.0714286
 
         if(ipcp_type .eq. 1)then ! Rain
 !            fall_velocity = 5.0
@@ -129,6 +133,8 @@ cdis
             fall_velocity = vvmax    ! Adan add
         elseif(ipcp_type .eq. 5)then ! Hail
             fall_velocity = 10.0
+        else
+            return
         endif
 
         if(.not.ieee_is_finite(fall_velocity).or.p.le.0..or.t.le.0.)then

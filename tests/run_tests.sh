@@ -10,13 +10,16 @@ gfortran -std=f2008 -Wall -Wextra -Werror -fcheck=all \
   "$repo_dir/src/common/cloud_bal_field_contracts.f90" \
   "$repo_dir/src/common/cloud_bal_moisture.f90" \
   "$repo_dir/src/common/cloud_bal_cloud_profiles.f90" \
+  "$repo_dir/src/common/cloud_bal_localization.f90" \
+  "$repo_dir/src/common/cloud_bal_radar_downdraft.f90" \
+  "$repo_dir/src/common/cloud_bal_wind_modes.f90" \
   "$repo_dir/tests/test_cloud_bal_core.f90" \
   -o "$build_dir/test_cloud_bal_core"
 
 "$build_dir/test_cloud_bal_core"
 
 gfortran -ffixed-form -ffixed-line-length-none \
-  -I "$repo_dir/src/include" -fsyntax-only \
+  -I "$repo_dir/src/include" -I "$build_dir" -fsyntax-only \
   "$repo_dir/src/balance/qbalpe.f"
 
 gfortran -std=legacy -ffixed-form -ffixed-line-length-none \
