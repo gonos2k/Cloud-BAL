@@ -5,6 +5,11 @@
  SNOW_THRESH = 1.1,
  LWC2VAPOR_THRESH = 1.00,
  MAKE_SFC_UV = .false.,
+ HYDRO_MODE = 'CONSERVATIVE',
+ GRID_SCALE = 'NONE',
+ CAP_POLICY = 'TRANSFER',
+ RADAR_W_MODE = 'OFF',
+ ENFORCE_FIELD_CONTRACTS = .true.,
  
 /
 c
@@ -43,6 +48,14 @@ c  make_sfc_uv:
 c    Logical flag. If set to true, then the surface u/v fields from lsx
 c    will be replaced with winds interpolated from the 3D isobaric 
 c    u/v fields.
+c
+c  Cloud-BAL controls:
+c    HYDRO_MODE='CONSERVATIVE' enables paired vapor/condensate transfers.
+c    GRID_SCALE='NONE' removes the undocumented 2/dx concentration scaling.
+c    CAP_POLICY='TRANSFER' moves cap excess into rain/snow instead of dropping it.
+c    RADAR_W_MODE must remain 'OFF'; the dormant radar evaporation/omega path is
+c    intentionally unavailable until it has dedicated correction and unit tests.
+c    ENFORCE_FIELD_CONTRACTS keeps cell validity separate from physical zero.
 c    Any value of snow cover fraction from the LAPS analysis (0.->1.0) 
 c    1.0 (default value is 1.1).  If set to 1.0, cloud water will be converted
 c    for supersaturation (e.g., 1.1 allows 110% max RH).

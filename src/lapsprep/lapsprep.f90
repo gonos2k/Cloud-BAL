@@ -70,6 +70,9 @@
     USE lapsprep_wps
     USE lapsprep_rams
     USE lapsprep_netcdf
+    USE cloud_bal_field_contracts
+    USE cloud_bal_moisture, ONLY: transfer_excess, total_water
+    USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
 
     ! Variable Declarations
 
@@ -102,6 +105,12 @@
     REAL    :: rhadj
     REAL    :: lwc_limit
     REAL    :: hydrometeor_scale
+    INTEGER :: transfer_status, species
+    REAL(KIND=8) :: water_before, water_after, water_error_max
+    REAL(KIND=8) :: water_error, water_tolerance
+    TYPE(field_contract) :: hydro_field(5)
+    TYPE(field_contract) :: input_field(5,num_ext)
+    TYPE(field_contract) :: pressure_field
 
     ! Some stuff for JAX to handle lga problem
     ! with constant mr above 300
@@ -158,7 +167,15 @@
     ! grid spacing.  We assume the values from LAPS are approprate on
     ! a grid with radar scaling (approx. 2km)
 
-    hydrometeor_scale = 2./dx  ! dx is in km
+    SELECT CASE (TRIM(grid_scale))
+      CASE ('NONE')
+        hydrometeor_scale = 1.0
+      CASE ('LEGACY_2KM')
+        hydrometeor_scale = 2./dx  ! dx is in km
+      CASE DEFAULT
+        PRINT *, 'Unsupported GRID_SCALE: ',TRIM(grid_scale)
+        STOP 'invalid_grid_scale'
+    END SELECT
 
     !  Loop through each of the requested extensions for this date.  Each of the
     !  extensions has a couple of the variables that we want.
@@ -224,9 +241,15 @@
       ! Open the netcdf file and get the vertical dimension
 
       cdfid = NCOPN ( TRIM(input_laps_file) , NCNOWRIT , rcode )
+      IF (rcode .NE. 0) THEN
+        PRINT *, 'NetCDF open failed/status: ',TRIM(input_laps_file),rcode
+        STOP 'input_open_failed'
+      ENDIF
 
       zid = NCDID ( cdfid , 'z' , rcode )
+      IF (rcode .NE. 0) STOP 'missing_z_dimension'
       CALL NCDINQ ( cdfid , zid , dum , z , rcode )
+      IF (rcode .NE. 0 .OR. z .LE. 0) STOP 'invalid_z_dimension'
 
       IF ( ( ext(loop) .EQ. 'lsx' ) .OR. &
            ( ext(loop) .EQ. 'lm2') ) THEN
@@ -268,14 +291,40 @@
         ALLOCATE ( sh ( x , y , z3 ) )
         ALLOCATE ( mr ( x , y , z3+1 ) )
 
-        ! Initialize the non-mandatory values
-
-        lwc(:,:,:) = -999.
-        rai(:,:,:) = -999.
-        sno(:,:,:) = -999.
-        pic(:,:,:) = -999.
-        snocov(:,:) = -999.
+        ! Initialize every array before the first read.  Optional physical
+        ! arrays use zero only as storage; the field contracts below retain
+        ! the distinction between an absent value and a valid physical zero.
+        u(:,:,:) = missingflag
+        v(:,:,:) = missingflag
+        w(:,:,:) = missingflag
+        t(:,:,:) = missingflag
+        rh(:,:,:) = missingflag
+        ht(:,:,:) = missingflag
+        sh(:,:,:) = missingflag
+        mr(:,:,:) = missingflag
+        slp(:,:) = missingflag
+        psfc(:,:) = missingflag
+        d2d(:,:) = missingflag
+        tskin(:,:) = missingflag
+        p(:) = missingflag
+        lwc(:,:,:) = 0.
+        rai(:,:,:) = 0.
+        sno(:,:,:) = 0.
+        pic(:,:,:) = 0.
+        ice(:,:,:) = 0.
+        snocov(:,:) = 0.
         lcp(:,:,:) = 0.
+
+        CALL initialize_field_contract(hydro_field(1),'cloud_liquid', &
+             laps_file_time,'kg m-3',x,y,z3,SOURCE_CLOUD)
+        CALL initialize_field_contract(hydro_field(2),'rain', &
+             laps_file_time,'kg m-3',x,y,z3,SOURCE_RADAR_3D)
+        CALL initialize_field_contract(hydro_field(3),'snow', &
+             laps_file_time,'kg m-3',x,y,z3,SOURCE_RADAR_3D)
+        CALL initialize_field_contract(hydro_field(4),'cloud_ice', &
+             laps_file_time,'kg m-3',x,y,z3,SOURCE_CLOUD)
+        CALL initialize_field_contract(hydro_field(5),'graupel', &
+             laps_file_time,'kg m-3',x,y,z3,SOURCE_RADAR_3D)
       END IF
 
       IF       ( ext(loop) .EQ. 'lh3' ) THEN
@@ -290,12 +339,28 @@
           start = (/ 1 , 1 , 1 , 1 /)
           count = (/ x , y , z , 1 /)
           CALL NCVGT ( cdfid , vid , start , count , rh , rcode )
+          CALL initialize_field_contract(input_field(var_loop,loop),'RH', &
+               laps_file_time,'percent',x,y,z,SOURCE_MODEL)
+          CALL capture_field_validity(input_field(var_loop,loop),rh,rcode, &
+                                      0.0,200.0,missingflag)
+          IF (enforce_field_contracts .AND. &
+              input_field(var_loop,loop)%status .NE. FIELD_OK) &
+            STOP 'invalid_rh_field'
 
           !  Do this just once for pressure.
 
           vid = NCVID ( cdfid , 'level' , rcode )
 
           CALL NCVGT ( cdfid , vid , 1 , z3 , p , rcode )
+          IF (rcode .NE. 0) STOP 'pressure_levels_read_failed'
+          CALL initialize_field_contract(pressure_field,'LEVEL', &
+               laps_file_time,'hPa',z3,1,1,SOURCE_MODEL)
+          CALL capture_field_validity(pressure_field,p(1:z3),rcode, &
+                                      1.0,1100.0,missingflag)
+          IF (pressure_field%status .NE. FIELD_OK) &
+            STOP 'invalid_pressure_levels'
+          IF (ANY(p(2:z3) .GE. p(1:z3-1))) &
+            STOP 'nonmonotonic_pressure_levels'
  
           ! Set the pressure level of the lowest level of our
           ! pressure array as 2001 mb to flag the surface
@@ -314,6 +379,13 @@
           start = (/ 1 , 1 , 1 , 1 /)
           count = (/ x , y , z , 1 /)
           CALL NCVGT ( cdfid , vid , start , count , sh , rcode )
+          CALL initialize_field_contract(input_field(var_loop,loop),'SH', &
+               laps_file_time,'kg kg-1',x,y,z,SOURCE_MODEL)
+          CALL capture_field_validity(input_field(var_loop,loop),sh,rcode, &
+                                      0.0,0.2,missingflag)
+          IF (enforce_field_contracts .AND. &
+              input_field(var_loop,loop)%status .NE. FIELD_OK) &
+            STOP 'invalid_sh_field'
 
         END DO var_lq3
 
@@ -331,23 +403,62 @@
 
           IF      ( cdf_var_name(var_loop,loop) .EQ. 'u  ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , u  (1,1,z3+1) , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'U_SFC', &
+                 laps_file_time,'m s-1',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop), &
+                 u(:,:,z3+1),rcode,-200.0,200.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'v  ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , v  (1,1,z3+1) , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'V_SFC', &
+                 laps_file_time,'m s-1',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop), &
+                 v(:,:,z3+1),rcode,-200.0,200.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'vv ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , w  (1,1,z3+1) , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'W_SFC', &
+                 laps_file_time,'m s-1',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop), &
+                 w(:,:,z3+1),rcode,-100.0,100.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 't  ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , t  (1,1,z3+1) , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'T_SFC', &
+                 laps_file_time,'K',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop), &
+                 t(:,:,z3+1),rcode,150.0,350.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'rh ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , rh (1,1,z3+1) , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'RH_SFC', &
+                 laps_file_time,'percent',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop), &
+                 rh(:,:,z3+1),rcode,0.0,200.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'mr ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , mr (1,1,z3+1) , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'MR_SFC', &
+                 laps_file_time,'g kg-1',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop), &
+                 mr(:,:,z3+1),rcode,0.0,100.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'msl' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , slp           , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'MSLP', &
+                 laps_file_time,'Pa',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop),slp,rcode, &
+                                        10000.0,120000.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'ps ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , psfc          , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'PSFC', &
+                 laps_file_time,'Pa',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop),psfc,rcode, &
+                                        10000.0,120000.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'tgd') THEN
             CALL NCVGT ( cdfid , vid , start , count , tskin         , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'TSKIN', &
+                 laps_file_time,'K',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop),tskin,rcode, &
+                                        150.0,350.0,missingflag)
           END IF
+          IF (enforce_field_contracts .AND. &
+              input_field(var_loop,loop)%status .NE. FIELD_OK) &
+            STOP 'invalid_surface_field'
 
         END DO var_lsx
 
@@ -367,6 +478,10 @@
 
           IF      ( cdf_var_name(var_loop,loop) .EQ. 'sc ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , snocov        , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'SNOCOV', &
+                 laps_file_time,'1',x,y,1,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop),snocov,rcode, &
+                                        0.0,1.0,missingflag)
           END IF
 
         END DO var_l1s                             
@@ -384,9 +499,20 @@
           count = (/ x , y , z , 1 /)
           IF      ( cdf_var_name(var_loop,loop) .EQ. 't3 ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , t  , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'T3', &
+                 laps_file_time,'K',x,y,z,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop),t,rcode, &
+                                        150.0,350.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'ht ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , ht , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'HT', &
+                 laps_file_time,'m',x,y,z,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop),ht,rcode, &
+                                        -1000.0,100000.0,missingflag)
           END IF
+          IF (enforce_field_contracts .AND. &
+              input_field(var_loop,loop)%status .NE. FIELD_OK) &
+            STOP 'invalid_lt1_field'
 
         END DO var_lt1
 
@@ -403,11 +529,26 @@
           count = (/ x , y , z , 1 /)
           IF      ( cdf_var_name(var_loop,loop) .EQ. 'u3 ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , u , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'U3', &
+                 laps_file_time,'m s-1',x,y,z,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop),u,rcode, &
+                                        -200.0,200.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'v3 ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , v , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'V3', &
+                 laps_file_time,'m s-1',x,y,z,SOURCE_MODEL)
+            CALL capture_field_validity(input_field(var_loop,loop),v,rcode, &
+                                        -200.0,200.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'om ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , w , rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'OM', &
+                 laps_file_time,'Pa s-1',x,y,z,SOURCE_CLOUD)
+            CALL capture_field_validity(input_field(var_loop,loop),w,rcode, &
+                                        -100.0,100.0,missingflag)
           END IF
+          IF (enforce_field_contracts .AND. &
+              input_field(var_loop,loop)%status .NE. FIELD_OK) &
+            STOP 'invalid_lw3_field'
 
         END DO var_lw3
 
@@ -424,14 +565,24 @@
           count = (/ x , y , z , 1 /)
           IF      ( cdf_var_name(var_loop,loop) .EQ. 'lwc' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , lwc, rcode )
+            CALL capture_field_validity(hydro_field(1),lwc,rcode, &
+                                        0.0,100.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'rai' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , rai , rcode )
+            CALL capture_field_validity(hydro_field(2),rai,rcode, &
+                                        0.0,100.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'sno' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , sno , rcode ) 
+            CALL capture_field_validity(hydro_field(3),sno,rcode, &
+                                        0.0,100.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'ice' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , ice , rcode ) 
+            CALL capture_field_validity(hydro_field(4),ice,rcode, &
+                                        0.0,100.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'pic' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , pic , rcode ) 
+            CALL capture_field_validity(hydro_field(5),pic,rcode, &
+                                        0.0,100.0,missingflag)
           END IF
 
         END DO var_lwc1    
@@ -449,6 +600,11 @@
           count = (/ x , y , z , 1 /)
           IF      ( cdf_var_name(var_loop,loop) .EQ. 'lcp' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , lcp, rcode )
+            CALL initialize_field_contract(input_field(var_loop,loop),'LCP', &
+                 laps_file_time,'1',x,y,z,SOURCE_CLOUD)
+            CALL capture_field_validity(input_field(var_loop,loop),lcp,rcode, &
+                                        0.0,1.0,missingflag)
+            WHERE (.NOT. input_field(var_loop,loop)%valid) lcp=0.0
             print *, 'Got cloud cover...min/max = ',minval(lcp),maxval(lcp)
           END IF
 
@@ -457,6 +613,22 @@
       END IF
 
     END DO file_loop
+
+    DO loop=1,num_ext
+      DO var_loop=1,num_cdf_var(loop)
+        IF (ALLOCATED(input_field(var_loop,loop)%valid)) THEN
+          PRINT *, 'Input contract ',TRIM(input_field(var_loop,loop)%name), &
+                   ' time/dims/units/status/valid = ', &
+                   TRIM(input_field(var_loop,loop)%valid_time), &
+                   input_field(var_loop,loop)%nx, &
+                   input_field(var_loop,loop)%ny, &
+                   input_field(var_loop,loop)%nz, &
+                   TRIM(input_field(var_loop,loop)%units), &
+                   input_field(var_loop,loop)%status, &
+                   valid_fraction(input_field(var_loop,loop))
+        ENDIF
+      ENDDO
+    ENDDO
 
     ! Compute mixing ratio from spec hum.
     ! Fill missing values with sfc value.
@@ -521,107 +693,130 @@
         rho(:,:,k) = p(k)*100. / (rdry * virtual_t(:,:,k))
       ENDDO
 
-      ! For each of the species, ensure they are not "missing".  If missing
-      ! then set their values to 0.000.  Otherwise, divide by the density to 
-      ! convert from concentration to mixing ratio.
+      ! Apply cell-level validity.  One malformed cell no longer invalidates
+      ! an entire species and an absent field remains visible in its contract.
+      WHERE (.NOT. hydro_field(1)%valid) lwc = 0.0
+      WHERE (.NOT. hydro_field(2)%valid) rai = 0.0
+      WHERE (.NOT. hydro_field(3)%valid) sno = 0.0
+      WHERE (.NOT. hydro_field(4)%valid) ice = 0.0
+      WHERE (.NOT. hydro_field(5)%valid) pic = 0.0
 
-      IF (MAXVAL(lwc) .LT. 99999.) THEN
+      lwc = MAX(0.0,lwc) * hydrometeor_scale
+      rai = MAX(0.0,rai) * hydrometeor_scale
+      sno = MAX(0.0,sno) * hydrometeor_scale
+      ice = MAX(0.0,ice) * hydrometeor_scale
+      pic = MAX(0.0,pic) * hydrometeor_scale
 
-        ! Scale lwc for grid spacing
-        lwc = lwc*hydrometeor_scale
-        ! Cap lwc to autoconversion rate for liquid to rain
-        WHERE(lwc .GT. autoconv_lwc2rai) lwc = autoconv_lwc2rai
-        ! Convert lwc concentration to mixing ratio
-        lwc(:,:,:) = lwc(:,:,:)/rho(:,:,:)   ! Cloud liquid mixing ratio
-
-        ! Convert lwc mixing ratio to vapor mixing ratio
-        IF (lwc2vapor_thresh .GT. 0.) THEN
-          DO k=1,z3
-            DO j=1,y
-              DO i=1,x  
-                IF( (lcp(i,j,k).GE.lcp_min).AND.&
-                    (t(i,j,k).GE.263.0).AND.&
-                    (lwc(i,j,k).GT.lwc_min))THEN  
-                !IF (lwc(i,j,k).GT.0.00010) THEN
-                  !CALL lwc2vapor(lwc(i,j,k),sh(i,j,k),t(i,j,k), &
-                  !               p(k),lwc2vapor_thresh, &
-                  !               lwcmod,shmod,rhmod)
-
-                  CALL saturate_lwc_points(sh(i,j,k),t(i,j,k), &
-                                           p(k),lwc2vapor_thresh, &
-                                           shmod,rhmod)
-                  ! Update moisture arrays
-
-                  sh(i,j,k) = shmod
-                  rh(i,j,k) = rhmod
-                  mr(i,j,k) = shmod/(1.-shmod)
-                ENDIF
-              ENDDO
+      IF (TRIM(cap_policy) .EQ. 'TRANSFER') THEN
+        DO k=1,z3
+          DO j=1,y
+            DO i=1,x
+              CALL transfer_excess(lwc(i,j,k),rai(i,j,k), &
+                                   autoconv_lwc2rai,transfer_status)
+              IF (transfer_status .NE. 1) STOP 'liquid_transfer_failed'
+              CALL transfer_excess(ice(i,j,k),sno(i,j,k), &
+                                   autoconv_ice2sno,transfer_status)
+              IF (transfer_status .NE. 1) STOP 'ice_transfer_failed'
             ENDDO
           ENDDO
-        ENDIF
-      ELSE
-        PRINT *,'Missing cloud liquid, setting values to 0.0'
-        lwc(:,:,:) = 0.0
+        ENDDO
+      ELSE IF (TRIM(cap_policy) .NE. 'KEEP') THEN
+        PRINT *, 'Unsupported CAP_POLICY: ',TRIM(cap_policy)
+        STOP 'invalid_cap_policy'
       ENDIF
 
-      IF (MAXVAL(rai) .LT. 99999.) THEN
-        rai(:,:,:) = rai(:,:,:) * hydrometeor_scale
-        rai(:,:,:) = rai(:,:,:)/rho(:,:,:)   ! Rain mixing ratio
-      ELSE
-        PRINT *, 'Missing rain, setting values to 0.0' 
-        rai(:,:,:) = 0.0
-      ENDIF
-
-      IF (MAXVAL(sno) .LT. 99999.) THEN
-        sno(:,:,:) = sno(:,:,:) * hydrometeor_scale
-        sno(:,:,:) = sno(:,:,:)/rho(:,:,:)   ! Snow mixing ratio
-      ELSE
-        PRINT *, 'Missing snow, setting values to 0.0'    
-        sno(:,:,:) = 0.0
-      ENDIF
-
-      IF (MAXVAL(ice) .LT. 99999.) THEN 
-        ! Limit ice to autoconversion threshold
-
-        ice(:,:,:) = ice(:,:,:) * hydrometeor_scale
-        WHERE(ice .GT. autoconv_ice2sno) ice = autoconv_ice2sno
-        ice(:,:,:) = ice(:,:,:)/rho(:,:,:)   ! Ice mixing ratio
-      
-        ! Convert ice mixing ratio to vapor mixing ratio
-        ! (for now ice conversion tied to lwc2vapor_thresh)
-
-        IF (lwc2vapor_thresh .GT. 0.) THEN
-          DO k=1,z3
-            DO j=1,y
-              DO i=1,x
-                IF ((lcp(i,j,k).GE.lcp_min).AND. &
-                    (t(i,j,k).LT.263.).AND. &
-                    (ice(i,j,k).GT.ice_min)) THEN  
-
-                      ! Update moisture arrays
-                       CALL saturate_ice_points(t(i,j,k), &
-                                           p(k),lwc2vapor_thresh, &
-                                           shmod,rhmod)
-                  sh(i,j,k) = shmod
-                  rh(i,j,k) = rhmod
-                  mr(i,j,k) = sh(i,j,k)/(1.-sh(i,j,k))
-                ENDIF
+      ! Concentration (kg m-3) to dry-air mixing ratio (kg kg-1).
+      DO k=1,z3
+        DO j=1,y
+          DO i=1,x
+            IF (ieee_is_finite(rho(i,j,k)) .AND. rho(i,j,k) .GT. 0.0) THEN
+              lwc(i,j,k)=lwc(i,j,k)/rho(i,j,k)
+              rai(i,j,k)=rai(i,j,k)/rho(i,j,k)
+              sno(i,j,k)=sno(i,j,k)/rho(i,j,k)
+              ice(i,j,k)=ice(i,j,k)/rho(i,j,k)
+              pic(i,j,k)=pic(i,j,k)/rho(i,j,k)
+            ELSE
+              lwc(i,j,k)=0.0; rai(i,j,k)=0.0; sno(i,j,k)=0.0
+              ice(i,j,k)=0.0; pic(i,j,k)=0.0
+              DO species=1,5
+                hydro_field(species)%valid(i,j,k)=.FALSE.
               ENDDO
+            ENDIF
+          ENDDO
+        ENDDO
+      ENDDO
+
+      ! Paired phase changes preserve total water at every modified point.
+      water_error_max = 0.0D0
+      IF (TRIM(hydro_mode) .EQ. 'CONSERVATIVE' .AND. &
+          lwc2vapor_thresh .GT. 0.) THEN
+        DO k=1,z3
+          DO j=1,y
+            DO i=1,x
+              water_before = DBLE(total_water(mr(i,j,k),lwc(i,j,k), &
+                   ice(i,j,k),rai(i,j,k),sno(i,j,k),pic(i,j,k)))
+              IF ((lcp(i,j,k).GE.lcp_min) .AND. &
+                  (t(i,j,k).GE.263.0) .AND. &
+                  (lwc(i,j,k).GT.lwc_min)) THEN
+                CALL lwc2vapor(lwc(i,j,k),sh(i,j,k),t(i,j,k),p(k), &
+                     lwc2vapor_thresh,lwcmod,shmod,rhmod)
+                lwc(i,j,k)=lwcmod
+                sh(i,j,k)=shmod
+                rh(i,j,k)=rhmod
+                mr(i,j,k)=shmod/(1.-shmod)
+              ENDIF
+              IF ((lcp(i,j,k).GE.lcp_min) .AND. &
+                  (t(i,j,k).LT.263.0) .AND. &
+                  (ice(i,j,k).GT.ice_min)) THEN
+                CALL ice2vapor(ice(i,j,k),sh(i,j,k),t(i,j,k),p(k), &
+                     lwc2vapor_thresh,icemod,shmod,rhmod)
+                ice(i,j,k)=icemod
+                sh(i,j,k)=shmod
+                rh(i,j,k)=rhmod
+                mr(i,j,k)=shmod/(1.-shmod)
+              ENDIF
+              water_after = DBLE(total_water(mr(i,j,k),lwc(i,j,k), &
+                   ice(i,j,k),rai(i,j,k),sno(i,j,k),pic(i,j,k)))
+              water_error = ABS(water_after-water_before)
+              water_tolerance = MAX(1.0D-12,1.0D-6*ABS(water_before))
+              IF (water_error .GT. water_tolerance) THEN
+                PRINT *, 'Total-water closure failed at ',i,j,k, &
+                         water_before,water_after,water_tolerance
+                STOP 'total_water_not_conserved'
+              ENDIF
+              water_error_max = MAX(water_error_max, &
+                                    water_error)
             ENDDO
           ENDDO
-        ENDIF
-      ELSE
-        PRINT *, 'Missing ice, setting values to 0.0' 
-        ice(:,:,:) = 0.0
+        ENDDO
+      ELSE IF (TRIM(hydro_mode) .NE. 'CONSERVATIVE') THEN
+        PRINT *, 'Unsupported HYDRO_MODE: ',TRIM(hydro_mode)
+        STOP 'invalid_hydro_mode'
       ENDIF
 
-      IF (MAXVAL(pic) .LT. 99999.) THEN
-         pic(:,:,:) = pic(:,:,:)*hydrometeor_scale
-        pic(:,:,:) = pic(:,:,:)/rho(:,:,:)   ! Graupel (precipitating ice) mixing rat.
-      ELSE
-        PRINT *, 'Missing pice, setting values to 0.0' 
-        pic(:,:,:) = 0.0
+      PRINT *, 'Maximum cell total-water closure error = ',water_error_max
+      DO species=1,5
+        CALL refresh_field_status(hydro_field(species))
+        PRINT *, 'Hydrometeor contract ',TRIM(hydro_field(species)%name), &
+                 ' status/fraction = ',hydro_field(species)%status, &
+                 valid_fraction(hydro_field(species))
+      ENDDO
+      IF (ANY(.NOT. ieee_is_finite(lwc)) .OR. MINVAL(lwc) .LT. 0.0 .OR. &
+          ANY(.NOT. ieee_is_finite(ice)) .OR. MINVAL(ice) .LT. 0.0 .OR. &
+          ANY(.NOT. ieee_is_finite(rai)) .OR. MINVAL(rai) .LT. 0.0 .OR. &
+          ANY(.NOT. ieee_is_finite(sno)) .OR. MINVAL(sno) .LT. 0.0 .OR. &
+          ANY(.NOT. ieee_is_finite(pic)) .OR. MINVAL(pic) .LT. 0.0) THEN
+        STOP 'invalid_hydrometeor_output'
+      ENDIF
+
+      ! Vapor changes alter virtual temperature and density.  Recompute the
+      ! density used by the omega-to-w conversion after all paired transfers.
+      virtual_t(:,:,:)=(1.0+0.61*mr(:,:,1:z3))*t(:,:,1:z3)
+      DO k=1,z3
+        rho(:,:,k)=p(k)*100.0/(rdry*virtual_t(:,:,k))
+      ENDDO
+      IF (ANY(.NOT. ieee_is_finite(rho)) .OR. MINVAL(rho) .LE. 0.0) THEN
+        STOP 'invalid_post_transfer_density'
       ENDIF
 
       ! Convert 3d omega from Pa/s to m/s, or fill with sfc value if missing.
@@ -706,5 +901,3 @@
 
   END program lapsprep
   
-
-

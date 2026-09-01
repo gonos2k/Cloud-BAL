@@ -17,7 +17,11 @@ c
           go to 999
       endif
 
-      call qbalpe_stag(nx,ny,nz)
+      call qbalpe_stag(nx,ny,nz,istatus)
+      if(istatus .ne. 1)then
+          write(6,*)'QBAL failed; no balanced analysis was published'
+          stop 1
+      endif
 c
 
 999   print*,'Done'
@@ -26,17 +30,18 @@ c
 c
 c===============================================================================
 c
-      subroutine qbalpe_stag(nx,ny,nz)
+      subroutine qbalpe_stag(nx,ny,nz,qstatus)
 c  This subroutine reinstates the staggering in the 
 c balance package.  This is critical for maximum 
 c accuracy and adjustment potential
 c
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       include 'trigd.inc'
       implicit none
       include 'bgdata.inc'
       include 'grid_fname.cmn'
 c
-      integer   nx,ny,nz   
+      integer   nx,ny,nz,qstatus
 
 c
       real*4 dx(nx,ny),dy(nx,ny),dp(nz)
@@ -57,6 +62,7 @@ c    .      ,lapsuo(nx,ny,nz),lapsvo(nx,ny,nz) !t=t0-dt currently not used
      .       ,phib,  tb,  ub,  vb,  shb,  omb
      .       ,phibs, tbs, ubs, vbs, shbs, ombs
      .       ,phis,  ts,  us,  vs,  shs,  oms
+     .       ,phiout,tout,uout,vout,shout,omout
 
       real*4 errt(nx,ny,nz),errw(nx,ny,nz)
      .      ,pd8(nz),pd5(nz),kpd8,kpd5
@@ -88,7 +94,7 @@ c    .      ,wb(nx,ny,nz)
 !    .      ,sumtscl,sumkf,sumks,sldata,den,sumom2
      .      ,sumtscl,sumkf,sumks,sldata,den,sumom2, sumomt2
 !frl 2011.02.09. end  
-     .      ,ffz,sumu,sumv
+     .      ,ffz,sumu,sumv,sumabsf,windrms,feff,scale_denom
 
       real*4 smsng,rdum,dd,ddmin,cx,cy
       real*4 rstats(7)
@@ -107,7 +113,7 @@ c
      .         ,i,j,k,kk,l,ll,istatus
      .         ,ii,jj,iii,icount
 
-      integer   itstatus
+      integer   itstatus,bal_status
       integer   init_timer
       integer   ishow_timer
      
@@ -128,6 +134,11 @@ c
       logical larray_diag/.false./
       logical frstone,lastone
       logical l_dum
+      logical, allocatable :: omb_valid(:,:,:),omo_valid(:,:,:)
+      integer istat_bg(6),nvalid_omb,nvalid_omo
+      real*4 delo_min,delo_max,tau_min,tau_max
+      parameter(delo_min=1.e-12,delo_max=1.e16)
+      parameter(tau_min=1.e-6,tau_max=1.e6)
 
       character*255 staticdir,sfcdir
 c     character*255 generic_data_root
@@ -155,6 +166,7 @@ c    Arrays for Airdrop application
 !frl 2008.7.17 end
 c_______________________________________________________________________________
 c
+      qstatus=0
       call get_balance_nl(lrunbal,adv_anal_by_t_min,cpads_type,istatus)
       if(istatus.ne.0)then
          print*,'error getting balance namelist'
@@ -167,6 +179,7 @@ c
       if(.not.lrunbal)then
          print*,'Namelist value lrunbal = false '
          print*,'Balance Package not running '
+         qstatus=1
          goto 999
       endif
 c
@@ -181,14 +194,29 @@ c
 c get pressures and determine pressure intervals.
 c
       call get_pres_1d(i4time_sys,nz,p,istatus)
+      if(istatus .ne. 1 .or. nz .lt. 2)then
+         print*,'invalid pressure coordinate status/dimension',istatus,nz
+         goto 999
+      endif
       call get_vertical_grid(vertical_grid,istatus)
+      if(istatus .ne. 1)goto 999
 
       call s_len(vertical_grid,lenvg)
       if(vertical_grid(1:lenvg).eq.'PRESSURE')THEN!Pressure in pa
+         dp=0.
+         pstag=0.
          do i=2,nz
+          if(.not.ieee_is_finite(p(i-1)).or.
+     &       .not.ieee_is_finite(p(i)).or.p(i).le.0..or.
+     &       p(i-1).le.p(i))then
+             print*,'invalid pressure levels ',i-1,p(i-1),p(i)
+             goto 999
+          endif
           dp(i)=p(i-1)-p(i)
           pstag(i-1)=p(i-1)-dp(i)*0.5
          enddo
+         dp(1)=dp(2)
+         pstag(nz)=p(nz)-dp(nz)*0.5
 c        print*,(p(i),dp(i),i=1,nz)
       else
          print*,'vertical grid is not PRESSURE ',vertical_grid
@@ -219,6 +247,12 @@ c
       do i=1,nx
          call get_grid_spacing_actual(lat(i,j),lon(i,j)
      1             ,grid_spacing_actual_m,istatus)
+         if(istatus.ne.1.or.
+     &      .not.ieee_is_finite(grid_spacing_actual_m).or.
+     &      grid_spacing_actual_m.le.0.)then
+            print*,'invalid grid spacing ',i,j,grid_spacing_actual_m
+            goto 999
+         endif
          dx(i,j)=grid_spacing_actual_m
          dy(i,j)=dx(i,j)
          
@@ -229,18 +263,27 @@ c *** Get background grids
 c
       allocate(phib(nx,ny,nz),tb(nx,ny,nz),shb(nx,ny,nz)
      .,ub(nx,ny,nz),vb(nx,ny,nz),omb(nx,ny,nz))
+      phib=smsng
+      tb=smsng
+      shb=smsng
+      ub=smsng
+      vb=smsng
+      omb=smsng
 
-      call get_modelfg_3d(i4time_sys,'U3 ',nx,ny,nz,ub,istatus)
-      call get_modelfg_3d(i4time_sys,'V3 ',nx,ny,nz,vb,istatus)
-      call get_modelfg_3d(i4time_sys,'T3 ',nx,ny,nz,tb,istatus)
-      call get_modelfg_3d(i4time_sys,'HT ',nx,ny,nz,phib,istatus)
-      call get_modelfg_3d(i4time_sys,'SH ',nx,ny,nz,shb,istatus)
-      call get_modelfg_3d(i4time_sys,'OM ',nx,ny,nz,omb,istatus)
+      call get_modelfg_3d(i4time_sys,'U3 ',nx,ny,nz,ub,istat_bg(1))
+      call get_modelfg_3d(i4time_sys,'V3 ',nx,ny,nz,vb,istat_bg(2))
+      call get_modelfg_3d(i4time_sys,'T3 ',nx,ny,nz,tb,istat_bg(3))
+      call get_modelfg_3d(i4time_sys,'HT ',nx,ny,nz,phib,istat_bg(4))
+      call get_modelfg_3d(i4time_sys,'SH ',nx,ny,nz,shb,istat_bg(5))
+      call get_modelfg_3d(i4time_sys,'OM ',nx,ny,nz,omb,istat_bg(6))
 
-      if(istatus.ne.1)then
-         print*,'background model frst guess not obtained'
-         return
-      endif
+      do i=1,5
+         if(istat_bg(i).ne.1)then
+            print*,'required background field failed, index/status ',
+     &              i,istat_bg(i)
+            goto 999
+         endif
+      enddo
 
       call get_modelfg_2d(i4time_sys,'PSF',nx,ny,psb,istatus)
 
@@ -249,8 +292,13 @@ c
          return
       endif
 
-c     check to see that omb is not missing
-      where(abs(omb) .gt. 100.) omb=0.
+c     Preserve background omega validity before a numeric fallback is chosen.
+      allocate(omb_valid(nx,ny,nz),omo_valid(nx,ny,nz))
+      if(istat_bg(6).eq.1)then
+         omb_valid=ieee_is_finite(omb).and.abs(omb).le.100.
+      else
+         omb_valid=.false.
+      endif
 c
 c *** Get LAPS 3D analysis grids.
 c
@@ -259,6 +307,12 @@ c
      .         ,lapstemp(nx,ny,nz)
      .         ,lapsphi(nx,ny,nz)
      .         ,omo(nx,ny,nz))
+      lapsu=smsng
+      lapsv=smsng
+      lapssh=smsng
+      lapstemp=smsng
+      lapsphi=smsng
+      omo=smsng
 
       call get_laps_3d_analysis_data(i4time_sys,nx,ny,nz
      +,lapsphi,lapstemp,lapsu,lapsv,lapssh,omo,istatus)
@@ -267,11 +321,16 @@ c omo is the cloud vertical motion from lco
          print *,'Error getting LAPS analysis data...Abort.'
          stop
       endif
+      omo_valid=ieee_is_finite(omo).and.abs(omo).le.100.
 c
 c *** Get LAPS 2D surface pressure.
 c
       call get_laps_2d(i4time_sys,sfcext,'PS ',units,
      1                  comment,nx,ny,ps,istatus)
+      if(istatus.ne.1)then
+         print*,'LAPS surface pressure not obtained'
+         goto 999
+      endif
 c
 c *** For Airdrop-LAPS project we want to advance
 c *** analyses to the time of payload release as specified
@@ -378,6 +437,7 @@ c an appropriate tau value.
       sumdt=0.
       sumdz=0.
       sumf=0.
+      sumabsf=0.
       sumt=0.
       den=0.
       sumom2=0.
@@ -411,18 +471,25 @@ c set model scale - a low end wave resolvable by the grid
 
          pd8=p/85000.
          pd5=p/50000.
-         kpd8=nz
-         kpd5=nz
+         k8=1
+         k5=1
+         kpd8=abs(p(1)-85000.)
+         kpd5=abs(p(1)-50000.)
          do k=1,nz
-            if(pd8(k).lt.kpd8.and.pd8(k).ge.1.0)then
-               kpd8=pd8(k)
+            if(abs(p(k)-85000.).lt.kpd8)then
+               kpd8=abs(p(k)-85000.)
                k8=k
             endif
-            if(pd5(k).lt.kpd5.and.pd5(k).ge.1.0)then
-               kpd5=pd5(k)
+            if(abs(p(k)-50000.).lt.kpd5)then
+               kpd5=abs(p(k)-50000.)
                k5=k
             endif
          enddo
+         if(k5.lt.k8)then
+            k=k5
+            k5=k8
+            k8=k
+         endif
 
          call terrain_scale(nx,ny,ter,terscl(1,1))
       endif
@@ -447,10 +514,11 @@ c        terscl(i,j)=terscl(1,1)   !make it constant over domain for now.
          sumdz=sumdz+(lapsphi(i,j,kfij)-lapsphi(i,j,ksij))/g
          ff = fo*sind(lat(i,j))
          sumf=sumf+ff
+         sumabsf=sumabsf+abs(ff)
          do k=ksij,kfij
            sumt=sumt+(lapstemp(i,j,k)*(100000./p(k))**cappa)
            den =den +p(k)/287.04/lapstemp(i,j,k)
-           sumom2=sumom2+omb(i,j,k)**2
+           if(omb_valid(i,j,k))sumom2=sumom2+omb(i,j,k)**2
            sumv2=sumv2+(lapsu(i,j,k)**2+lapsv(i,j,k)**2)
          enddo
 c error terms are the inverse sq error; right now with no
@@ -478,13 +546,24 @@ c           erru(i,j,k)=(1.5*(1.+float(k-1)*.25))**(-2)
 !frl 2011.02.09 end   
 c
 c vertical motions in clear areas come in as the missing data parameter.
-c replace missing cloud vv's with background vv's. Unless there is cloud
-c we seek to replicate the background vertical motions
-            if(abs(omb(i,j,k)).gt.100.)omb(i,j,k)=0. ! check for missing omb
-            if(abs(omo(i,j,k)).gt.100.)omo(i,j,k)=omb(i,j,k)
+c Missing-only source policy with persistent validity masks. Zero is chosen
+c only when neither COM nor background is valid.
+            if(.not.omb_valid(i,j,k))omb(i,j,k)=0.
+            if(.not.omo_valid(i,j,k))then
+               if(omb_valid(i,j,k))then
+                  omo(i,j,k)=omb(i,j,k)
+               else
+                  omo(i,j,k)=0.
+               endif
+            endif
          enddo
       enddo
       enddo
+
+      nvalid_omb=count(omb_valid)
+      nvalid_omo=count(omo_valid)
+      print*,'OM contracts valid COM/background cells ',nvalid_omo,
+     &       nvalid_omb,' of ',nx*ny*nz
 
       snxny=float(nx*ny)
       sk=float(kfij-ksij+1)
@@ -492,20 +571,41 @@ c we seek to replicate the background vertical motions
       sumdt=sumdt/snxny
       sumdz=sumdz/snxny
       sumf=sumf/snxny
+      sumabsf=sumabsf/snxny
       sumv2=sumv2/snxny/sk
       den=den/snxny/sk
       sumom2=sumom2/snxny/sk
-      sumr=sqrt(g*sumdt/sumt/sumdz)
+      sumr=0.
+      if(ieee_is_finite(sumt).and.ieee_is_finite(sumdz).and.
+     &   abs(sumt).gt.1.e-12.and.abs(sumdz).gt.1.e-6)then
+         scale_denom=g*sumdt/sumt/sumdz
+         if(ieee_is_finite(scale_denom).and.scale_denom.gt.0.)
+     &      sumr=sqrt(scale_denom)
+      endif
 
 c     delo is scaled as 10% of expected eqn of motion residual ro*U**2/L
-      rod=sqrt(sumv2)/(sumf*sldata)
-      rog=sqrt(sumv2)/(sumf*sl)
-      if(rog.gt.1.) rog=1.
-      if(rod.gt.1.) rod=1.
+      windrms=sqrt(max(sumv2,1.e-6))
+      feff=max(sumabsf,1.e-6)
+      rod=windrms/(feff*max(sldata,1.))
+      rog=windrms/(feff*max(sl,1.))
+      rog=min(1.,max(rog,1.e-3))
+      rod=min(1.,max(rod,1.e-3))
 !frl 2011.02.09 start
 !     delo=100.*sl**2/sumv2**2/rod**2           
-      delo=100.*sl**2/sumv2**2/rog**2         
-      sumomt2=sumv2**3*sumt**2*den**2/(sl**2*rog**2*sumdt**2)
+      scale_denom=max(sumv2**2*rog**2,1.e-20)
+      delo=100.*sl**2/scale_denom
+      if(.not.ieee_is_finite(delo))then
+         print*,'non-finite delo; balance rejected'
+         goto 999
+      endif
+      delo=min(delo_max,max(delo_min,delo))
+      scale_denom=sl**2*rog**2*sumdt**2
+      if(ieee_is_finite(scale_denom).and.scale_denom.gt.1.e-20)then
+         sumomt2=sumv2**3*sumt**2*den**2/scale_denom
+      else
+         sumomt2=0.25
+      endif
+      if(.not.ieee_is_finite(sumomt2).or.sumomt2.le.0.)sumomt2=0.25
 !frl 2011.02.09 end   
 
       do j=1,ny
@@ -522,13 +622,18 @@ c if background is missing sumom2 will be 0. Assume a nominal .5Pa/s vv
 !       else
 !         tau(i,j)=1./0.5**2
 !       endif
-        if(sumom2.ne.0.) then
+        if(ieee_is_finite(sumom2).and.sumom2.gt.0.) then
         omsubs=sumom2
          if(sumom2.lt.sumomt2) omsubs=sumomt2
          tau(i,j)= 1./omsubs
         else
          tau(i,j)=1./sumomt2
         endif
+        if(.not.ieee_is_finite(tau(i,j)))then
+           print*,'non-finite tau at ',i,j
+           goto 999
+        endif
+        tau(i,j)=min(tau_max,max(tau_min,tau(i,j)))
 !frl 2011.02.09 end   
 
       enddo
@@ -578,6 +683,12 @@ c
 c laps analysis grids first.
       allocate (phis(nx,ny,nz),ts(nx,ny,nz),shs(nx,ny,nz)
      .,us(nx,ny,nz),vs(nx,ny,nz),oms(nx,ny,nz))
+      phis=0.
+      ts=0.
+      shs=0.
+      us=0.
+      vs=0.
+      oms=0.
 
       call balstagger(u,v,phi,t,sh,om,us,vs,
      &phis,ts,shs,oms,nx,ny,nz,p,ps,1) 
@@ -599,6 +710,12 @@ c background grids second.
       allocate (phibs(nx,ny,nz),tbs(nx,ny,nz)
      .,shbs(nx,ny,nz),ombs(nx,ny,nz),ubs(nx,ny,nz)
      .,vbs(nx,ny,nz))
+      phibs=0.
+      tbs=0.
+      shbs=0.
+      ombs=0.
+      ubs=0.
+      vbs=0.
       call balstagger(ub,vb,phib,tb,shb,omb,ubs,vbs,
      &phibs,tbs,shbs,ombs,nx,ny,nz,p,ps,1) 
 
@@ -629,7 +746,11 @@ c returns staggered grids of full fields u,v,phi
       call balcon(phis,us,vs,oms,phi,u,v,om,phibs,ubs,vbs,ombs
      . ,ts,rod,delo,tau,itmax,err,erru,errphi,errub,errphib
 c    . ,nu,nv,fu,fv
-     . ,nx,ny,nz,lat,dx,dy,ps,p,dp,lmax)
+     . ,nx,ny,nz,lat,dx,dy,ps,p,dp,lmax,bal_status)
+      if(bal_status.ne.1)then
+         print*,'balance/continuity solver failed; output rejected'
+         goto 999
+      endif
 
       if(larray_diag)then
          print*
@@ -648,11 +769,19 @@ c
 c
 c *** destagger and Write out new laps fields.
 c
-c the non-staggered grids must be input with intact boundaries from background 
-c  the bs arrays are used as dummy arrays to go from stagger to non staggered
+c Dedicated output arrays retain the original LAPS boundaries. Background
+c arrays remain background-only and are never reused as solver/output work.
       print*,'Destaggering grids back to LAPS A grid' 
-      call balstagger(ubs,vbs,phibs,tbs,
-     & shbs,ombs,u,v,phi,t,sh,om,nx,ny,nz,p,ps,-1) 
+      allocate(phiout(nx,ny,nz),tout(nx,ny,nz),uout(nx,ny,nz),
+     &         vout(nx,ny,nz),shout(nx,ny,nz),omout(nx,ny,nz))
+      phiout=lapsphi
+      tout=lapstemp
+      uout=lapsu
+      vout=lapsv
+      shout=lapssh
+      omout=omo
+      call balstagger(uout,vout,phiout,tout,
+     & shout,omout,u,v,phi,t,sh,om,nx,ny,nz,p,ps,-1)
 c   Prior to applying boundary subroutine put non-staggered grids back into
 c   u,v,om,t,sh,phi.
 
@@ -661,39 +790,40 @@ c   u,v,om,t,sh,phi.
 c     write out input laps vs balanced laps at center grid point
       print*,'Output u and Input u and diff after balance and destagger'
       do k=1,nz
-       write (6,1111) ubs(nx/2,ny/2,k),lapsu(nx/2,ny/2,k)
-     &        ,ubs(nx/2,ny/2,k)-lapsu(nx/2,ny/2,k)
+       write (6,1111) uout(nx/2,ny/2,k),lapsu(nx/2,ny/2,k)
+     &        ,uout(nx/2,ny/2,k)-lapsu(nx/2,ny/2,k)
       enddo
       print*,' Output v and Input v after balance and destagger '
       do k=1,nz
-       write (6,1111) vbs(nx/2,ny/2,k),lapsv(nx/2,ny/2,k)
-     &        ,vbs(nx/2,ny/2,k)-lapsv(nx/2,ny/2,k)
+       write (6,1111) vout(nx/2,ny/2,k),lapsv(nx/2,ny/2,k)
+     &        ,vout(nx/2,ny/2,k)-lapsv(nx/2,ny/2,k)
       enddo
       print*,' Output T and Input T after balance and destagger '
       do k=1,nz
-       write (6,1111) tbs(nx/2,ny/2,k),lapstemp(nx/2,ny/2,k)
-     &        ,tbs(nx/2,ny/2,k)-lapstemp(nx/2,ny/2,k)
+       write (6,1111) tout(nx/2,ny/2,k),lapstemp(nx/2,ny/2,k)
+     &        ,tout(nx/2,ny/2,k)-lapstemp(nx/2,ny/2,k)
       enddo
       print*,' Output phi and Input phi after balance and destagger '
       do k=1,nz
-       write (6,1111) phibs(nx/2,ny/2,k),lapsphi(nx/2,ny/2,k)
-     &        ,phibs(nx/2,ny/2,k)-lapsphi(nx/2,ny/2,k)
+       write (6,1111) phiout(nx/2,ny/2,k),lapsphi(nx/2,ny/2,k)
+     &        ,phiout(nx/2,ny/2,k)-lapsphi(nx/2,ny/2,k)
       enddo
  1111 format(1x,3f9.2)
 
       endif
-      deallocate(lapsphi,lapsu,lapsv,omo)
 c adjust surface temps to account for poor phi estimates below ground 
-      call sfctempadj(tb,lapstemp,p,ps,nx,ny,nz,npass)  
+      call sfctempadj(tout,lapstemp,p,ps,nx,ny,nz,npass)
 
-      call move_3d(phibs,phi,nx,ny,nz)
-      call move_3d(ubs,u,nx,ny,nz)
-      call move_3d(vbs,v,nx,ny,nz)
-      call move_3d(tbs,t,nx,ny,nz)
-      call move_3d(ombs,om,nx,ny,nz)
-      call move_3d(shbs,sh,nx,ny,nz)
+      call move_3d(phiout,phi,nx,ny,nz)
+      call move_3d(uout,u,nx,ny,nz)
+      call move_3d(vout,v,nx,ny,nz)
+      call move_3d(tout,t,nx,ny,nz)
+      call move_3d(omout,om,nx,ny,nz)
+      call move_3d(shout,sh,nx,ny,nz)
 
       deallocate (phibs,ubs,vbs,tbs,ombs,shbs,lapstemp)
+      deallocate (phiout,uout,vout,tout,omout,shout)
+      deallocate (lapsphi,lapsu,lapsv,omo)
 
 c JS> commented 8-21-02.  unsure of need for ps at this point?
 c     call get_laps_2d(i4time_sys,sfcext,'PS ',units,
@@ -755,7 +885,7 @@ c       Compute the saturation specific humidity
 c       Ensure the specfic humidity does not exceed
 c       the saturation value for this temperature
 
-        lapssh(i,j,k) = MIN(shsat,lapssh(i,j,k))
+        lapssh(i,j,k) = sh(i,j,k)
 c
 c       Finally, rediagnose RH wrt liquid from the 
 c       modified sh field
@@ -802,6 +932,7 @@ c
          write(6,*)'error writing balance fields'
          return
       endif
+      qstatus=1
 
       if(c8_project .eq. 'AIRDROP')then
 
@@ -1096,22 +1227,27 @@ c Both the temp mmediately above and below ground are given the lt1.
 c There is a super-adiabatic check in the vertical and adjustments made if 
 c necessary.
 
-      integer nx,ny,nz
+      implicit none
+      integer nx,ny,nz,npass
+      integer i,j,k,l,n,ksave
       real t(nx,ny,nz),to(nx,ny,nz),p(nz),ps(nx,ny)
+      real cappa,sum,sum2,cnt,temp
+
       cappa=2./7.
       sum=0.
       sum2=0.
-      cnt2=0
       cnt=0.
-      do j=1,ny  
+      npass=1
+      do j=1,ny
       do i=1,nx
+       ksave=0
        do k=2,nz
         if(ps(i,j).ge.p(k)) then
          temp=to(i,j,k)-t(i,j,k)
          sum=temp+sum
          sum2=temp**2+sum2
-         cnt=cnt+1
-c   put lt1 temps at the levels below the surface
+         cnt=cnt+1.
+c   put lt1 temps only at pressure levels below the surface
          ksave=k-1
          do l = ksave,1,-1
           t(i,j,l)=to(i,j,l)
@@ -1138,21 +1274,25 @@ c        do ll=k+1,lsave
 c         t(i,j,ll)=potemp*(p(ll)/100000.)**cappa
 c        enddo ! on ll
 c        go to 2 ! go to a new grid point
+         exit
         endif ! the ps gt p check
        enddo ! on k
 c run smoother on temps below ground
-!frl060321
-       npass=1
-!frl060321
-       do n=1,npass
-        do k=2,ksave
-         t(i,j,k)=.5*t(i,j,k)+.25*(t(i,j,k+1)+t(i,j,k-1))
+       if(ksave.ge.2)then
+        do n=1,npass
+         do k=2,ksave
+          t(i,j,k)=.5*t(i,j,k)+.25*(t(i,j,k+1)+t(i,j,k-1))
+         enddo
         enddo
-       enddo
+       endif
    2  enddo ! on i
       enddo ! on j
       print*, 'LT1 Temp Adjust Summary '
-      print*, 'Bias ',sum/cnt, ' RMS ',sqrt(sum2/cnt) 
+      if(cnt.gt.0.)then
+         print*, 'Bias ',sum/cnt, ' RMS ',sqrt(sum2/cnt)
+      else
+         print*,'No below-ground pressure levels required adjustment'
+      endif
 c     print*, cnt2 , ' Temps had to be adj for sup-adi lapse rates'
       return
       end 
@@ -1290,7 +1430,7 @@ c
       subroutine balcon(to,uo,vo,omo,t,u,v,om,tb,ub,vb,omb,tmp,
      .   rod,delo,tau,itmax,err,erru,errph,errub,errphb
 c    .,nu,nv,fu,fv
-     .,nx,ny,nz,lat,dx,dy,ps,p,dp,lmax)
+     .,nx,ny,nz,lat,dx,dy,ps,p,dp,lmax,bal_status)
 c
 c *** Balcon executes the mass/wind balance computations as described
 c        mcginley (Meteor and Appl Phys, 1987) except that
@@ -1317,6 +1457,7 @@ c        account both observation error and interpolation error.
 c        omo is the cloud consistent vertical motion
 
 c
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
 c
       integer   nx,ny,nz
@@ -1324,7 +1465,7 @@ c
      .         ,itmax,lmax,ks,kf,ittr
      .         ,i,j,k,l,is,ip,js,jp,kp,it,itt
      .         ,icnt,iwpt,istatus
-     .         ,ucnt,vcnt,uwpt,vwpt
+     .         ,ucnt,vcnt,uwpt,vwpt,bal_status,continuity_status
 c
       real*4 t(nx,ny,nz),to(nx,ny,nz),tb(nx,ny,nz)
      .      ,u(nx,ny,nz),uo(nx,ny,nz),ub(nx,ny,nz)
@@ -1353,6 +1494,8 @@ c    .,nu(nx,ny,nz),nv(nx,ny,nz),fu(nx,ny,nz),fv(nx,ny,nz)
      .      ,euoay,euoax,snv,snu,dfvdy,dfudx
      .      ,eueub,fob,foax,foay
      .      ,fu2,fv2,fuangu,fvangv,dt
+      real*4 cont_before,cont_after,cont_max_before,cont_max_after
+     .      ,mom_before,mom_after
 
 c 2d array now (JS 2-20-01)
       real*4 tau(nx,ny)
@@ -1373,6 +1516,7 @@ c these are used for diagnostics
 
       real, allocatable, dimension(:,:,:) :: aaa,bbb
       real, allocatable, dimension(:,:,:) :: fu,fv,nu,nv
+      real, allocatable, dimension(:,:,:) :: ucont,vcont,omcont
       real, allocatable, dimension(:,:) :: dxx,dx2,dxs
       real, allocatable, dimension(:,:) :: dyy,dy2,dys
       real, allocatable, dimension(:,:) :: fx,ffx
@@ -1381,6 +1525,7 @@ c these are used for diagnostics
 c_______________________________________________________________________________
 c
       print *,'balcon'
+      bal_status=0
       nxm1=nx-1
       nym1=ny-1
       nzm1=nz-1
@@ -1396,6 +1541,10 @@ c
       ittr=0
 
       allocate (aaa(nx,ny,nz),bbb(nx,ny,nz))
+      allocate (ucont(nx,ny,nz),vcont(nx,ny,nz),omcont(nx,ny,nz))
+      ucont=0.
+      vcont=0.
+      omcont=0.
 c
 c only need these calculations once
 c
@@ -1408,8 +1557,17 @@ c
          if(i.eq.nx) is=0
          ang=(lat(i+is,j+js)+lat(i,j+js)+lat(i,j)+lat(i+is,j))*rdpdg*.25
          ff(i,j)=fo*sin(ang)
+         if(.not.ieee_is_finite(ff(i,j)))then
+            print*,'non-finite Coriolis parameter ',i,j,ff(i,j)
+            goto 900
+         endif
 c wind error must be defined at the geopotential stagger points
          aaa(i,j,k)=erru(i,j,k)+errub(i,j,k)+ff(i,j)**2*delo
+         if(.not.ieee_is_finite(aaa(i,j,k)).or.
+     &      aaa(i,j,k).le.1.e-20)then
+            print*,'invalid balance coefficient ',i,j,k,aaa(i,j,k)
+            goto 900
+         endif
          bbb(i,j,k)=(erru(i,j,k)+errub(i,j,k))/aaa(i,j,k)
         enddo
        enddo
@@ -1439,6 +1597,22 @@ c wind error must be defined at the geopotential stagger points
 c analz with input fields prior to balcon iterations on lmax
       allocate (fu(nx,ny,nz),fv(nx,ny,nz)
      .         ,nu(nx,ny,nz),nv(nx,ny,nz))
+      fu=0.
+      fv=0.
+      nu=0.
+      nv=0.
+
+      call continuity_metrics(uo,vo,omo,nx,ny,nz,dx,dy,ps,p,dp,
+     &     cont_before,cont_max_before,continuity_status)
+      if(continuity_status.ne.1)then
+         print*,'input continuity residual could not be evaluated'
+         goto 900
+      endif
+      call momentum_residual_metrics(to,uo,vo,nx,ny,nz,lat,dx,dy,
+     &     ps,p,mom_before,continuity_status)
+      if(continuity_status.ne.1)goto 900
+      print*,'RESIDUAL BEFORE cont/max/momentum ',cont_before,
+     &       cont_max_before,mom_before
 
       call analzo(to,to,uo,uo,vo,vo,omo,omo
      .                ,nu,nv,fu,fv,delo,tau
@@ -1465,8 +1639,15 @@ c  accuracy of wind
 c apply continuity to input winds
        call leib_sub(nx,ny,nz,erf,tau,erru
      .,lat,dx,dy,ps,p,dp,uo,u,vo,v,
-     . omo,om,omb,l,lmax)
-       if(delo.eq.0.) go to 111
+     . omo,om,omb,l,lmax,continuity_status)
+       if(continuity_status.ne.1)then
+          print*,'initial continuity solver failed'
+          goto 900
+       endif
+       if(delo.eq.0.)then
+          bal_status=1
+          go to 111
+       endif
 c move adjusted fields to observation fields 
        call move_3d(u,uo,nx,ny,nz)
        call move_3d(v,vo,nx,ny,nz)
@@ -1565,7 +1746,14 @@ c
                slap=dt2dx2+dt2dy2+dtdx*term1+dtdy*term2+term3*tt
                rest=slap-force
                cortmt=-2./dxs(i,j)-2./dys(i,j)+term3
+               if(.not.ieee_is_finite(rest).or.
+     &            .not.ieee_is_finite(cortmt).or.
+     &            abs(cortmt).le.1.e-20)then
+                  print*,'invalid PHI solver residual/diagonal ',i,j,k
+                  goto 900
+               endif
                cot=rest/cortmt
+               if(.not.ieee_is_finite(cot))goto 900
                t(i,j,k)=tt-cot*ovr
                cotmax=amax1(cotmax,abs(cot))
                if (it .eq. 1) cotma1=cotmax
@@ -1585,8 +1773,11 @@ c ****** Recompute over-relaxation factor every fifth iteration.
 c
          if (ittr .ne. 5) goto 15
          ittr=0
-         rho=(cotm5/cotm0)**.2
-         if (rho .le. 1) ovr=2./(1.+sqrt(1.-rho))
+         if(cotm0.gt.1.e-20)then
+            rho=(cotm5/cotm0)**.2
+            if (rho .le. 1.and.rho.ge.0.)
+     &          ovr=2./(1.+sqrt(1.-rho))
+         endif
          cotm0=cotm5
 15       if (cotmax .lt. err) goto 12
          if (it .ne. 1) goto 1
@@ -1604,6 +1795,10 @@ c
        print*,'Elapsed time after itmax loop (sec): ',itstatus
        print*,' ---------------------------------------------'
 12     write(6,1000) it,cotmax,ovr,cotma1
+       if(.not.ieee_is_finite(cotmax).or.cotmax.ge.err)then
+          print*,'PHI solver failed to converge ',it,cotmax,err
+          goto 900
+       endif
        print*, 'forcing function max '
        print*, 'max ',fmax, ' at ijk ',ismx,jsmx,ksmx
        print*, 'forcing fcn abs average ', sum/float(it*(kf-ks+1)*
@@ -1745,27 +1940,61 @@ c Restore full winds and heights by adding back in background
 
       enddo ! on lmax
 
-c apply continuity to final winds...done with backgrounds use ub,vb,omb
+c Apply continuity into dedicated output arrays. Backgrounds remain immutable.
        call leib_sub(nx,ny,nz,erf,tau,erru
-     .,lat,dx,dy,ps,p,dp,u,ub,v,vb,
-     . om,omb,omb,l,lmax)
+     .,lat,dx,dy,ps,p,dp,u,ucont,v,vcont,
+     . om,omcont,omb,l,lmax,continuity_status)
+       if(continuity_status.ne.1)then
+          print*,'final continuity solver failed'
+          goto 900
+       endif
 c evaluate dynamic balance and continuity
-      call analzo(t,to,ub,uo,vb,vo,omb,omo
+      call analzo(t,to,ucont,uo,vcont,vo,omcont,omo
      .                ,nu,nv,fu,fv,delo,tau
      .                ,nx,ny,nz
      .                ,lat,dx,dy,ps,p,dp,l,lmax)
-c move adjusted fields (uo,vo,omo) to solution fields 
-       call move_3d(ub,u,nx,ny,nz)
-       call move_3d(vb,v,nx,ny,nz)
-       call move_3d(omb,om,nx,ny,nz)
+c Use the same discrete operators before and after correction.
+       call continuity_metrics(ucont,vcont,omcont,nx,ny,nz,dx,dy,
+     &      ps,p,dp,cont_after,cont_max_after,continuity_status)
+       if(continuity_status.ne.1)goto 900
+       call momentum_residual_metrics(t,ucont,vcont,nx,ny,nz,lat,
+     &      dx,dy,ps,p,mom_after,continuity_status)
+       if(continuity_status.ne.1)goto 900
+       print*,'RESIDUAL AFTER cont/max/momentum ',cont_after,
+     &        cont_max_after,mom_after
+       if(cont_after.gt.cont_before*(1.0001)+1.e-10)then
+          print*,'continuity residual worsened; candidate rejected'
+          goto 900
+       endif
+c move accepted work/output fields to solution fields
+       call move_3d(ucont,u,nx,ny,nz)
+       call move_3d(vcont,v,nx,ny,nz)
+       call move_3d(omcont,om,nx,ny,nz)
+       bal_status=1
  111  print*,'------------------------------------------------'
       itstatus=ishow_timer()
       print*,'Elapsed time end of balcon loop (sec): ',itstatus
       print*,'------------------------------------------------'
 
-      deallocate (aaa,bbb,fu,fv,nu,nv)
-      deallocate (dxx,dx2,dxs,dyy,dy2,dys
-     1,fx,fy,ffx,ffy)
+ 900  if(allocated(aaa))deallocate(aaa)
+      if(allocated(bbb))deallocate(bbb)
+      if(allocated(fu))deallocate(fu)
+      if(allocated(fv))deallocate(fv)
+      if(allocated(nu))deallocate(nu)
+      if(allocated(nv))deallocate(nv)
+      if(allocated(ucont))deallocate(ucont)
+      if(allocated(vcont))deallocate(vcont)
+      if(allocated(omcont))deallocate(omcont)
+      if(allocated(dxx))deallocate(dxx)
+      if(allocated(dx2))deallocate(dx2)
+      if(allocated(dxs))deallocate(dxs)
+      if(allocated(dyy))deallocate(dyy)
+      if(allocated(dy2))deallocate(dy2)
+      if(allocated(dys))deallocate(dys)
+      if(allocated(fx))deallocate(fx)
+      if(allocated(fy))deallocate(fy)
+      if(allocated(ffx))deallocate(ffx)
+      if(allocated(ffy))deallocate(ffy)
 
 
       return
@@ -1775,13 +2004,13 @@ c ---------------------------------------------------------------
 c
       subroutine leib_sub(nx,ny,nz,erf,tau,erru
      .,lat,dx,dy,ps,p,dp,uo,u,vo,v,
-     . omo,om,omb,l,lmax)
+     . omo,om,omb,l,lmax,solver_status)
 
       implicit none
 
       integer nx,ny,nz
       integer nxm1,nym1,nzm1
-      integer i,j,k,ks,l,lmax
+      integer i,j,k,ks,l,lmax,solver_status,operator_status
 
       real*4      u(nx,ny,nz),uo(nx,ny,nz)
      .      ,v(nx,ny,nz),vo(nx,ny,nz)
@@ -1791,12 +2020,13 @@ c
      .      ,ps(nx,ny),p(nz),dp(nz)
 
       real*4 dldx,dldy,dldp,sum,sum1,cnt
-     .,a,erf,bnd
+     .,a,erf,bnd,coefx,coefy
       real*4 tau(nx,ny)
 
       real, allocatable, dimension(:,:,:) :: slam,f3,h
 
       bnd=1.e-30
+      solver_status=0
 
 c
 c *** Compute lagrange multiplier (slam) using 3-d relaxtion on eqn. (3).
@@ -1814,12 +2044,27 @@ c
 c ****** Compute a/tau (h) term and rhs terms in eqn. (3)
 c
       call fthree(f3,uo,vo,omo,omb,h,erru,tau,
-     .   nx,ny,nz,lat,dx,dy,dp)
+     .   nx,ny,nz,lat,dx,dy,dp,operator_status)
+      if(operator_status.ne.1)then
+         call move_3d(uo,u,nx,ny,nz)
+         call move_3d(vo,v,nx,ny,nz)
+         call move_3d(omo,om,nx,ny,nz)
+         deallocate(slam,f3,h)
+         return
+      endif
 c
 c ****** Perform 3-d relaxation.
 c
-      call leibp3(slam,f3,200,erf,h
-     .  ,nx,ny,nz,dx,dy,ps,p,dp)
+      call leibp3(slam,f3,200,erf,h,erru,tau
+     .  ,nx,ny,nz,dx,dy,ps,p,dp,operator_status)
+      if(operator_status.ne.1)then
+         print*,'LEIBP3 returned failure/non-convergence ',operator_status
+         call move_3d(uo,u,nx,ny,nz)
+         call move_3d(vo,v,nx,ny,nz)
+         call move_3d(omo,om,nx,ny,nz)
+         deallocate(slam,f3,h)
+         return
+      endif
 c
 c ****** Compute new u, v, omega by adding the lagrange multiplier terms.
 co
@@ -1833,11 +2078,17 @@ co
       do i=1,nxm1
 
          a=2.*erru(i,j,k)
+         if(a.le.0..or.tau(i,j).le.0..or.dp(k+ks).le.0.)then
+            deallocate(slam,f3,h)
+            return
+         endif
          dldp=(slam(i,j,k)-slam(i,j,k+1))/dp(k+ks)
          dldx=(slam(i+1,j+1,k+1)-slam(i,j+1,k+1))/dx(i,j)
          dldy=(slam(i+1,j+1,k+1)-slam(i+1,j,k+1))/dy(i,j)
-         if (u(i,j,k) .ne. bnd) u(i,j,k)=uo(i,j,k)+dldx/a
-         if (v(i,j,k) .ne. bnd) v(i,j,k)=vo(i,j,k)+dldy/a
+         coefx=.25*(1./erru(i,j,k)+1./erru(i+1,j,k))
+         coefy=.25*(1./erru(i,j,k)+1./erru(i,j+1,k))
+         if (u(i,j,k) .ne. bnd) u(i,j,k)=uo(i,j,k)+coefx*dldx
+         if (v(i,j,k) .ne. bnd) v(i,j,k)=vo(i,j,k)+coefy*dldy
          if (omo(i,j,k).ne.bnd) om(i,j,k)=omo(i,j,k)+
      &     .5*dldp/tau(i,j)
        sum=sum+(u(i,j,k)-uo(i,j,k))**2+(v(i,j,k)-vo(i,j,k))**2
@@ -1847,6 +2098,10 @@ co
       enddo
       do i=1,nx
          a=2.*erru(i,ny,k)
+         if(a.le.0..or.tau(i,ny).le.0..or.dp(k+ks).le.0.)then
+            deallocate(slam,f3,h)
+            return
+         endif
          dldp=(slam(i,ny,k)-slam(i,ny,k+1))/dp(k+ks)
          dldy=(slam(i+1,ny+1,k+1)-slam(i+1,ny,k+1))/dy(i,ny)
          if (v(i,ny,k) .ne. bnd) v(i,ny,k)=vo(i,ny,k)+dldy/a
@@ -1855,6 +2110,10 @@ co
       enddo
       do j=1,ny
          a=2.*erru(nx,j,k)
+         if(a.le.0..or.tau(nx,j).le.0..or.dp(k+ks).le.0.)then
+            deallocate(slam,f3,h)
+            return
+         endif
          dldp=(slam(nx,j,k)-slam(nx,j,k+1))/dp(k+ks)
          dldx=(slam(nx+1,j+1,k+1)-slam(nx,j+1,k+1))/dx(nx,j)
          if (u(nx,j,k) .ne. bnd) u(nx,j,k)=uo(nx,j,k)+dldx/a
@@ -1868,8 +2127,148 @@ c   print out rms vector adjustment
       print*, 'RMS omega (Pa/s)adjustment after continuity applied ' 
       print*, sqrt(sum1/cnt)
 
+      solver_status=1
+
       deallocate (slam,f3,h)
 
+      return
+      end
+c
+c ---------------------------------------------------------------
+c
+      subroutine continuity_point(u,v,om,nx,ny,nz,dx,dy,dp,
+     &                             i,j,k,residual,istatus)
+c One flux-divergence operator shared by solver forcing and diagnostics.
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      implicit none
+      integer nx,ny,nz,i,j,k,istatus
+      real*4 u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz)
+     &      ,dx(nx,ny),dy(nx,ny),dp(nz),residual,bnd
+
+      bnd=1.e-30
+      istatus=0
+      residual=0.
+      if(i.lt.2.or.i.gt.nx.or.j.lt.2.or.j.gt.ny.or.
+     &   k.lt.2.or.k.gt.nz)return
+      if(.not.ieee_is_finite(dx(i,j)).or.dx(i,j).le.0..or.
+     &   .not.ieee_is_finite(dy(i,j)).or.dy(i,j).le.0..or.
+     &   .not.ieee_is_finite(dp(k)).or.dp(k).le.0.)return
+      if(u(i,j-1,k-1).eq.bnd.or.u(i-1,j-1,k-1).eq.bnd.or.
+     &   v(i-1,j,k-1).eq.bnd.or.v(i-1,j-1,k-1).eq.bnd.or.
+     &   om(i,j,k-1).eq.bnd.or.om(i,j,k).eq.bnd)then
+c A terrain/boundary mask is expected and is not an operator failure.
+         istatus=2
+         return
+      endif
+      if(.not.ieee_is_finite(u(i,j-1,k-1)).or.
+     &   .not.ieee_is_finite(u(i-1,j-1,k-1)).or.
+     &   .not.ieee_is_finite(v(i-1,j,k-1)).or.
+     &   .not.ieee_is_finite(v(i-1,j-1,k-1)).or.
+     &   .not.ieee_is_finite(om(i,j,k-1)).or.
+     &   .not.ieee_is_finite(om(i,j,k)))return
+      residual=(u(i,j-1,k-1)-u(i-1,j-1,k-1))/dx(i,j)
+     &        +(v(i-1,j,k-1)-v(i-1,j-1,k-1))/dy(i,j)
+     &        +(om(i,j,k-1)-om(i,j,k))/dp(k)
+      if(.not.ieee_is_finite(residual))return
+      istatus=1
+      return
+      end
+c
+c ---------------------------------------------------------------
+c
+      subroutine continuity_metrics(u,v,om,nx,ny,nz,dx,dy,ps,p,dp,
+     &                              rmsres,maxres,istatus)
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      implicit none
+      integer nx,ny,nz,i,j,k,istatus,point_status,npoint
+      real*4 u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz)
+     &      ,dx(nx,ny),dy(nx,ny),ps(nx,ny),p(nz),dp(nz)
+     &      ,rmsres,maxres,residual,sumres
+
+      istatus=0
+      rmsres=0.
+      sumres=0.
+      maxres=0.
+      npoint=0
+      do k=2,nz
+       do j=2,ny
+        do i=2,nx
+         if(.not.ieee_is_finite(ps(i,j)).or.
+     &      .not.ieee_is_finite(p(k)))return
+         if(ps(i,j).ge.p(k))then
+          call continuity_point(u,v,om,nx,ny,nz,dx,dy,dp,
+     &         i,j,k,residual,point_status)
+          if(point_status.eq.0)then
+             return
+          elseif(point_status.eq.1)then
+             sumres=sumres+residual*residual
+             maxres=max(maxres,abs(residual))
+             npoint=npoint+1
+          endif
+         endif
+        enddo
+       enddo
+      enddo
+      if(npoint.gt.0)then
+         rmsres=sqrt(sumres/float(npoint))
+         istatus=1
+      endif
+      return
+      end
+c
+c ---------------------------------------------------------------
+c
+      subroutine momentum_residual_metrics(phi,u,v,nx,ny,nz,lat,
+     &                    dx,dy,ps,p,rmsres,istatus)
+c Same guarded geostrophic momentum operator for pre/post comparison.
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      implicit none
+      integer nx,ny,nz,i,j,k,istatus,npoint
+      real*4 phi(nx,ny,nz),u(nx,ny,nz),v(nx,ny,nz)
+     &      ,lat(nx,ny),dx(nx,ny),dy(nx,ny),ps(nx,ny),p(nz)
+     &      ,rmsres,sumres,f,dphidx,dphidy,ru,rv,rdpdg,fo,bnd
+
+      rdpdg=3.141592654/180.
+      fo=14.52e-5
+      bnd=1.e-30
+      istatus=0
+      rmsres=0.
+      sumres=0.
+      npoint=0
+      do k=1,nz
+       do j=1,ny-1
+        do i=1,nx-1
+         if(.not.ieee_is_finite(ps(i,j)).or.
+     &      .not.ieee_is_finite(p(k)).or.
+     &      .not.ieee_is_finite(dx(i,j)).or.dx(i,j).le.0..or.
+     &      .not.ieee_is_finite(dy(i,j)).or.dy(i,j).le.0.)return
+         if(ps(i,j).ge.p(k).and.u(i,j,k).ne.bnd.and.
+     &      v(i,j,k).ne.bnd)then
+          if(.not.ieee_is_finite(lat(i,j)).or.
+     &       .not.ieee_is_finite(phi(i,j,k)).or.
+     &       .not.ieee_is_finite(phi(i+1,j,k)).or.
+     &       .not.ieee_is_finite(phi(i,j+1,k)).or.
+     &       .not.ieee_is_finite(u(i,j,k)).or.
+     &       .not.ieee_is_finite(v(i,j,k)))return
+          f=fo*sin(lat(i,j)*rdpdg)
+          if(ieee_is_finite(f).and.abs(f).ge.1.e-6)then
+           dphidx=(phi(i+1,j,k)-phi(i,j,k))/dx(i,j)
+           dphidy=(phi(i,j+1,k)-phi(i,j,k))/dy(i,j)
+           ru=-f*v(i,j,k)+dphidx
+           rv= f*u(i,j,k)+dphidy
+           if(ieee_is_finite(ru).and.ieee_is_finite(rv))then
+              sumres=sumres+ru*ru+rv*rv
+              npoint=npoint+2
+           endif
+          endif
+         endif
+        enddo
+       enddo
+      enddo
+      if(npoint.gt.0)then
+         rmsres=sqrt(sumres/float(npoint))
+         istatus=1
+      endif
       return
       end
 c
@@ -1882,6 +2281,7 @@ c     analzo is a diagnostic routine that looks at geostrophic residual
 c     maxima, continuity residual maxs.  It computes the rms terms in the 
 c     variational formalism
 
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
 c
       integer   nx,ny,nz
@@ -1961,22 +2361,23 @@ c for diagnosis near ground
             nuu=(nu(i,j,k)+nu(i+1,j,k)+nu(i+1,j-1,k)+nu(i,j-1,k))/4.
             dtdx=(t(i+1,j,k)-t(i,j,k))/dx(i,j)
             dtdy=(t(i,j+1,k)-t(i,j,k))/dy(i,j)
-            dudx=(u(i,j-1,k-1)-u(i-1,j-1,k-1))/dxx
-            dvdy=(v(i-1,j,k-1)-v(i-1,j-1,k-1))/dyy    
-            domdp=(om(i,j,k-1)-om(i,j,k))/dp(k)
+            call continuity_point(u,v,om,nx,ny,nz,dx,dy,dp,
+     &           i,j,k,con,istatus)
             uot=uo(i,j,k)
             vot=vo(i,j,k)
             tot=to(i,j,k)
 
             if (uot .ne. bnd) then
-               thermu=(u(i,j,k)+dtdy/f)**2+thermu
+               if(ieee_is_finite(f).and.abs(f).ge.1.e-6)
+     &            thermu=(u(i,j,k)+dtdy/f)**2+thermu
                sumu=sumu+(u(i,j,k)-uot)**2
                vres=(f*u(i,j,k)+dtdy+nvv-fvv)**2
                resv=vres+resv
                tgpu=tgpu+1.
             endif
             if (vot .ne. bnd) then
-               thermv=(v(i,j,k)-dtdx/f)**2+thermv
+               if(ieee_is_finite(f).and.abs(f).ge.1.e-6)
+     &            thermv=(v(i,j,k)-dtdx/f)**2+thermv
                sumv=sumv+(v(i,j,k)-vot)**2
                ures=(-f*v(i,j,k)+dtdx+nuu-fuu)**2
                resu=resu+ures
@@ -1986,9 +2387,8 @@ c for diagnosis near ground
             sumt=sumt+(t(i,j,k)-tot)**2
             tgpph=tgpph+1.
 
-            if (ps(i,j) .gt. p(k+1)) then
-               cont=(dudx+dvdy+domdp)**2+cont
-               con=dudx+dvdy+domdp
+            if (ps(i,j) .gt. p(k+1).and.istatus.eq.1) then
+               cont=con**2+cont
                sumom=(om(i,j,k)-omo(i,j,k))**2+sumom
                uuu=(u(i,j-1,k-1)+u(i-1,j-1,k-1))*.5
                vvv=(v(i-1,j,k-1)+v(i-1,j-1,k-1))*.5
@@ -2597,14 +2997,15 @@ c
 c===============================================================================
 c
       subroutine fthree(f3,u,v,om,omb,h,erru,tau
-     .,nx,ny,nz,lat,dx,dy,dp)
+     .,nx,ny,nz,lat,dx,dy,dp,operator_status)
 c
 c *** Fthree computes a/tau (h) and rhs terms in eqn. (3).
 c
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
 c
       integer   nx,ny,nz,nzp1,nxp1,nyp1
-     .         ,i,j,k,is,js,ks
+     .         ,i,j,k,is,js,ks,operator_status,point_status
 c
       real*4 f3(nx+1,ny+1,nz+1),h(nx+1,ny+1,nz+1)
      .      ,erru(nx,ny,nz)
@@ -2618,16 +3019,27 @@ c
 c_______________________________________________________________________________
 c
       print *,'fthree'
+      operator_status=0
+      f3=0.
+      h=0.
       formax=0.
+      is=1
+      js=1
+      ks=1
       do k=2,nz
-         dpp=dp(k)
          do j=2,ny
          do i=2,nx
-            h(i,j,k)=erru(i,j,k)/tau(i,j)
-            f3(i,j,k)=-2.*erru(i,j,k)*
-     &    ((u(i,j-1,k-1)-u(i-1,j-1,k-1))/dx(i,j)
-     .    +(v(i-1,j,k-1)-v(i-1,j-1,k-1))/dy(i,j)
-     .    +(om(i,j,k-1)-om(i,j,k))/dpp)
+            if(.not.ieee_is_finite(erru(i,j,k)).or.
+     &         .not.ieee_is_finite(tau(i,j)).or.
+     &         erru(i,j,k).le.0..or.tau(i,j).le.0.)return
+            call continuity_point(u,v,om,nx,ny,nz,dx,dy,dp,
+     &           i,j,k,cont,point_status)
+            if(point_status.eq.0)return
+            if(point_status.eq.2)cycle
+c The correction is div(C grad(lambda))=-div(V), so the RHS is the
+c unweighted flux divergence. Variable coefficients belong in LEIBP3.
+            h(i,j,k)=0.5/tau(i,j)
+            f3(i,j,k)=-cont
            if (abs(f3(i,j,k)) .ge. formax) then
                formax=abs(f3(i,j,k))
                is=i
@@ -2640,39 +3052,46 @@ c
       print*, 'f3: Maximum forcing function for lamda ',formax
       print*, 'at ',is,js,ks                                  
 c
+      operator_status=1
       return
       end
 c     
 c===============================================================================
 c
-      subroutine leibp3(sol,force,itmax,erf,h
-     .                 ,nx,ny,nz,dx,dy,ps,p,dp)
+      subroutine leibp3(sol,force,itmax,erf,h,erru,tau
+     .                 ,nx,ny,nz,dx,dy,ps,p,dp,solver_status)
 c
 c *** Leibp3 performs 3-d relaxation.
 c
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
 c
       integer   nx,ny,nz
      .         ,nxm1,nym1,nzm1
      .         ,ittr,is,js
-     .         ,i,j,k,it,itmax,ia
+     .         ,i,j,k,it,itmax,ia,solver_status
 c
       real*4 sol(nx+1,ny+1,nz+1)
      .      ,force(nx+1,ny+1,nz+1)
      .      ,h(nx+1,ny+1,nz+1)
      .      ,dx(nx,ny),dy(nx,ny)
      .      ,ps(nx,ny),p(nz),dp(nz)
+     .      ,erru(nx,ny,nz),tau(nx,ny)
      .      ,erf,si,sj,sk
      .      ,ovr,erb,hh,ertm,ermm,corlm
      .      ,dx2,dx1s,dy2,dy1s,dz,dz2,dz1s
      .      ,aa,cortm,res,cor,corb,corlmm
      .      ,reslm,rho,cor0,cor5
+     .      ,ce,cw,cn,cs,cu,cd,ci,cni,diag
+     .      ,dpu,dpd,dpc,epsc
 c_______________________________________________________________________________
 c
-c *** Relaxer solver...eqn must be.......                                 
-c        sxx+syy+h*szz-force=0   
+c Flux-form variable-coefficient equation:
+c   div(C grad(lambda)) - force = 0
+c where horizontal C=1/(2*wind inverse variance) and vertical C=1/(2*tau).
 c
       print *,'leibp3'
+      solver_status=0
       ovr=1.0
       erb=0.
       si=1.
@@ -2686,6 +3105,10 @@ c
       nzm1=nz-1
       ittr=0.
       hh=0.
+      corlmm=0.
+      cor0=0.
+      cortm=0.
+      epsc=1.e-20
       do it=1,itmax
          ertm=0.
          ermm=0.
@@ -2697,26 +3120,50 @@ c
          do i=2,nx
             is=1
             if(i.eq.nx) is=0
-            dx1s=dx(i,j)*dx(i,j)
-            dy1s=dy(i,j)*dy(i,j)
             do 2 k=2,nz
-            dz=dp(k)
-            dz1s=dz*dz
             if (ps(i,j).lt.p(k)) go to 2 
-            aa=h(i,j,k)
             if(ps(i+is,j).lt.p(k)) sol(i+1,j,k)=sol(i,j,k)
             if(ps(i-1 ,j).lt.p(k)) sol(i-1,j,k)=sol(i,j,k)
             if(ps(i,j+js).lt.p(k)) sol(i,j+1,k)=sol(i,j,k)
             if(ps(i,j-1).lt.p(k)) sol(i,j-1,k)=sol(i,j,k)
             if(ps(i,j).lt.p(k-1)) sol(i,j,k-1)=sol(i,j,k)
-            cortm=-2./dx1s-2./dy1s-aa*2./dz1s
-                  res=(sol(i+1,j,k)+sol(i-1,j,k))/dx1s+
-     .           (sol(i,j+1,k)+sol(i,j-1,k))/dy1s+
-     .           aa*(sol(i,j,k+1)+sol(i,j,k-1))/dz1s
-     .           +cortm*sol(i,j,k)-force(i,j,k)
+            if(k.eq.nz)sol(i,j,k+1)=sol(i,j,k)
+            if(dx(i,j).le.0..or.dy(i,j).le.0..or.dp(k).le.0.
+     &         .or.erru(i,j,k).le.0..or.tau(i,j).le.0.)return
+            ci=0.5/max(erru(i,j,k),epsc)
+            ce=0.5*(ci+0.5/max(erru(i+is,j,k),epsc))
+     &         /(dx(i,j)*dx(i,j))
+            cw=0.5*(ci+0.5/max(erru(i-1,j,k),epsc))
+     &         /(dx(i,j)*dx(i,j))
+            cni=0.5/max(erru(i,j+js,k),epsc)
+            cn=0.5*(ci+cni)/(dy(i,j)*dy(i,j))
+            cni=0.5/max(erru(i,j-1,k),epsc)
+            cs=0.5*(ci+cni)/(dy(i,j)*dy(i,j))
+            dpd=dp(k)
+            if(k.lt.nz)then
+               dpu=dp(k+1)
+            else
+               dpu=dp(k)
+            endif
+            if(dpu.le.0.)return
+            dpc=0.5*(dpd+dpu)
+            ci=0.5/tau(i,j)
+            cu=ci/(dpu*dpc)
+            cd=ci/(dpd*dpc)
+            diag=-(ce+cw+cn+cs+cu+cd)
+            if(.not.ieee_is_finite(diag).or.abs(diag).le.epsc.or.
+     &         .not.ieee_is_finite(force(i,j,k)))return
+            res=ce*(sol(i+1,j,k)-sol(i,j,k))
+     &         +cw*(sol(i-1,j,k)-sol(i,j,k))
+     &         +cn*(sol(i,j+1,k)-sol(i,j,k))
+     &         +cs*(sol(i,j-1,k)-sol(i,j,k))
+     &         +cu*(sol(i,j,k+1)-sol(i,j,k))
+     &         +cd*(sol(i,j,k-1)-sol(i,j,k))-force(i,j,k)
+            cortm=diag
             cor=res/cortm
+            if(.not.ieee_is_finite(cor))return
             corb=5.*erf+1.
-            if (it .ne. 1) corb=cor/corlmm
+            if (it .ne. 1.and.corlmm.gt.epsc) corb=cor/corlmm
             if (abs(corb) .gt. erf) ia=1
             if (abs(cor) .gt. corlm) corlm=abs(cor)
             sol(i,j,k)=sol(i,j,k)-cor*ovr
@@ -2731,19 +3178,26 @@ c         write(6,1001) it,reslm,corlm,corlmm,erb
          cor5=corlm
          if (ittr .eq. 5) then
             ittr=0
-            rho=(cor5/cor0)**.2
-            if (rho .le. 1) ovr=2./(1.+sqrt(1.-rho))
+            if(cor0.gt.epsc)then
+               rho=(cor5/cor0)**.2
+               if (rho .le. 1.and.rho.ge.0.)
+     &             ovr=2./(1.+sqrt(1.-rho))
+            endif
             cor0=cor5
          endif
          if (ia .eq. 1 .and. it .eq. 1) then
             corlmm=corlm
             cor0=corlmm
          endif
-         if(corlm.lt.erf) go to 20
+         if(corlm.lt.erf)then
+            solver_status=1
+            go to 20
+         endif
       enddo! on it
 20    reslm=corlm*cortm
       write(6,1001) it,reslm,corlm,corlmm,erb
       write(6,1002) ovr
+      if(solver_status.ne.1)solver_status=2
 c     write(9,1001) it,reslm,corlm,corlmm,erb
 c     write(9,1002) ovr
 1002       format(1x,'LIEBP3:ovr rlxtn const at fnl ittr = ',e11.4)
@@ -2895,6 +3349,7 @@ c  gravity
       if(idstag.gt.0) then
 
         allocate (wr(nx+1,ny+1,nz,6))
+        wr=0.
 
 c set vertical stagger first
 c first wind level for balcon is second level in LAPS
@@ -2912,6 +3367,12 @@ c level nz will be the same as laps for all fields
           wr(i,j,k,5)=(sh(i,j,k)+sh(i,j,k+1))*.5
           wr(i,j,k,6)=phi(i,j,k+1) 
          enddo
+         wr(i,j,nz,1)=u(i,j,nz)
+         wr(i,j,nz,2)=v(i,j,nz)
+         wr(i,j,nz,3)=om(i,j,nz)
+         wr(i,j,nz,4)=t(i,j,nz)
+         wr(i,j,nz,5)=sh(i,j,nz)
+         wr(i,j,nz,6)=phi(i,j,nz)
         enddo
        enddo
 
@@ -3004,7 +3465,7 @@ c put background values in stagged temp arrays at top and btm.
           sh(i,j,k)=(shs(i-1,j-1,k-1)+shs(i,j-1,k-1)+
      &               shs(i-1,j,k-1)+shs(i,j,k-1)+
      &               shs(i-1,j-1,k)+shs(i,j-1,k)+
-     &               shs(i-1,j,k-1)+shs(i,j,k))*.125
+     &               shs(i-1,j,k)+shs(i,j,k))*.125
           phi(i,j,k)=(phis(i-1,j-1,k-1)+phis(i,j-1,k-1)+
      &               phis(i-1,j,k-1)+phis(i,j,k-1))*.25
           t(i,j,k)=(ts(i-1,j-1,k-1)+ts(i,j-1,k-1)+
@@ -3198,63 +3659,66 @@ c
       real data(nx,ny,nz)
       real p(nz)
       real bnd,pt1,pt2
-      integer i,j,k,ii
-      integer j1,j2,j3
+      integer i,j,k,ii,jj,jend,jstep,nfound
+      integer jidx(3)
 
+c Find the nearest three valid points normal to the boundary.  This is safe
+c for narrow domains and does not assume j+3 or j-3 exists.
+      nfound=0
       if(j.eq.ny)then
-         j1=j-1
-         j2=j-2
-         j3=j-3
+         jstep=-1
+         jend=1
       else
-         j1=j+1
-         j2=j+2
-         j3=j+3
+         jstep=1
+         jend=ny
+      endif
+      do jj=j+jstep,jend,jstep
+         if(data(i,jj,k).ne.bnd)then
+            nfound=nfound+1
+            jidx(nfound)=jj
+            if(nfound.eq.3)exit
+         endif
+      enddo
+
+      data(i,j,k)=bnd
+      if(nfound.ge.3)then
+         data(i,j,k)=3.*data(i,jidx(1),k)
+     &              -3.*data(i,jidx(2),k)+data(i,jidx(3),k)
+      elseif(nfound.eq.2)then
+         data(i,j,k)=.5*(data(i,jidx(1),k)+data(i,jidx(2),k))
+      elseif(nfound.eq.1)then
+         data(i,j,k)=data(i,jidx(1),k)
       endif
 
-      if( (data(i,j1,k).ne.bnd).and.
-     1    (data(i,j2,k).ne.bnd).and.
-     1    (data(i,j3,k).ne.bnd) ) then
-
-        data(i,j,k)=3.*data(i,j1,k)-3.*data(i,j2,k)+data(i,j3,k)
-
-      elseif( (data(i,j1,k).eq.bnd) .and.
-     1(data(i,j2,k).ne.bnd) .and. (data(i,j3,k).ne.bnd))then
-
-        data(i,j,k)=(data(i,j2,k)+data(i,j3,k))*.5
-
-      elseif(data(i-1,j,k).ne.bnd)then
-
-        data(i,j,k)=data(i-1,j,k)
-
-      elseif(i.ne.nx)then
-
-        if(data(i+1,j,k).ne.bnd)then
-
-           data(i,j,k)=data(i+1,j,k)
-
-        endif
-
-      else
-
-        pt1=bnd
-        pt2=bnd
-        do ii=i-1,1,-1
-           if(data(ii,j,k).ne.bnd)then
-              pt1=data(ii,j,k)
-           endif
-        enddo
-        do ii=i+1,ny
-           if(data(ii,j,k).ne.bnd)then
-              pt2=data(ii,j,k)
-           endif
-        enddo
-        if(pt1.ne.bnd.and.pt2.ne.bnd)then
-           data(i,j,k)=(pt1+pt2)*.5
-        endif
-
+c If the normal direction is blocked by terrain, use the nearest valid
+c neighbours along x.  The legacy upper bound incorrectly used ny here.
+      if(data(i,j,k).eq.bnd)then
+         pt1=bnd
+         pt2=bnd
+         do ii=i-1,1,-1
+            if(data(ii,j,k).ne.bnd)then
+               pt1=data(ii,j,k)
+               exit
+            endif
+         enddo
+         do ii=i+1,nx
+            if(data(ii,j,k).ne.bnd)then
+               pt2=data(ii,j,k)
+               exit
+            endif
+         enddo
+         if(pt1.ne.bnd.and.pt2.ne.bnd)then
+            data(i,j,k)=.5*(pt1+pt2)
+         elseif(pt1.ne.bnd)then
+            data(i,j,k)=pt1
+         elseif(pt2.ne.bnd)then
+            data(i,j,k)=pt2
+         endif
       endif
 
-      if(k.ne.nz.and.data(i,j,k).eq.bnd)then
+      if(k.ne.nz.and.data(i,j,k).eq.bnd.and.
+     1   p(k).gt.0..and.p(k+1).gt.0..and.
+     1   data(i,j,k+1).ne.bnd)then
 
         data(i,j,k)=data(i,j,k+1)+
      1              data(i,j,k+1)*(alog(p(k+1)/p(k)))

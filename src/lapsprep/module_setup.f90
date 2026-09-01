@@ -49,11 +49,13 @@ MODULE setup
    ! Namelist items
 
    LOGICAL            :: hotstart,balance,make_sfc_uv
+   LOGICAL            :: enforce_field_contracts
    CHARACTER (LEN=4)  :: output_format(10)
    INTEGER            :: num_output
    REAL               :: snow_thresh, lwc2vapor_thresh
    REAL               :: rai_frac, sno_frac
    CHARACTER (LEN=256):: output_prefix
+   CHARACTER (LEN=16) :: hydro_mode, grid_scale, cap_policy, radar_w_mode
   
    !  Output file info.
 
@@ -101,7 +103,12 @@ CONTAINS
                          snow_thresh       , &
                          lwc2vapor_thresh  , &
                          rai_frac          , &
-                         sno_frac        
+                         sno_frac          , &
+                         hydro_mode        , &
+                         grid_scale        , &
+                         cap_policy        , &
+                         radar_w_mode      , &
+                         enforce_field_contracts
 
       nml_unit = 77
 
@@ -113,6 +120,11 @@ CONTAINS
       make_sfc_uv = .false.
       rai_frac = 1.0
       sno_frac = 1.0
+      hydro_mode = 'CONSERVATIVE'
+      grid_scale = 'NONE'
+      cap_policy = 'TRANSFER'
+      radar_w_mode = 'OFF'
+      enforce_field_contracts = .true.
  
       ! Open the namelist
 

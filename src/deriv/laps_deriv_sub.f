@@ -341,7 +341,14 @@ cdis
            stop
         endif
 
-        if(mode_evap .gt. 0)l_evap_radar = .true.
+!       Cloud-BAL safety gate: the legacy evaporation routine has no complete
+!       missing/unit/coverage tests.  Keep it unreachable even if an old
+!       namelist requests MODE_EVAP > 0.
+        l_evap_radar = .false.
+        if(mode_evap .gt. 0)then
+            write(6,*)'MODE_EVAP ignored: radar evaporation is locked OFF'
+            mode_evap = 0
+        endif
 
         default_base     = r_missing_data
         default_top      = r_missing_data
@@ -618,7 +625,7 @@ c read in laps lat/lon and topo
 !       DERIVED RADAR/PRECIP STUFF
         if(istat_radar_3dref .eq. 1)then ! LMT
 
-            if(l_evap_radar)then 
+            if(.false. .and. l_evap_radar)then
 
                 write(6,*)' Calling rfill_evap: mode_evap = ',mode_evap       
 
@@ -1121,5 +1128,4 @@ c read in laps lat/lon and topo
 
         return
         end
-
 

@@ -38,6 +38,13 @@ cdis
      1                                  ,sno_cnc_3d   ! Output (snow)
      1                                  ,pic_cnc_3d)  ! Output (precip ice)
 
+        use cloud_bal_moisture, only: allocate_precipitation
+        implicit none
+
+        integer ni,nj,nk,i,j,k,ipcp_type,alloc_status
+        real*4 pressure,fall_velocity
+        real*4 pressure_of_level
+
         real*4 temp_3d(ni,nj,nk)
         real*4 ref_3d(ni,nj,nk)
         integer cldpcp_type_3d(ni,nj,nk)
@@ -48,6 +55,11 @@ cdis
         real*4 pic_cnc_3d(ni,nj,nk)
 
         real*4 rate_3d(ni,nj,nk)
+
+        pcp_cnc_3d = 0.
+        rai_cnc_3d = 0.
+        sno_cnc_3d = 0.
+        pic_cnc_3d = 0.
 
 !       Get 3D precip rates one layer at a time with ZR routine
         do k = 1,nk
@@ -68,22 +80,15 @@ cdis
                 call cpt_concentration(rate_3d(i,j,k),fall_velocity
      1                                          ,pcp_cnc_3d(i,j,k))
 
-                if(ipcp_type .eq. 1 .or. ipcp_type .eq. 3)then     ! rain or zr
-                    rai_cnc_3d(i,j,k) = pcp_cnc_3d(i,j,k)
-                    sno_cnc_3d(i,j,k) = 0.
-                    pic_cnc_3d(i,j,k) = 0.
-
-                elseif(ipcp_type .eq. 2)then                       ! snow
-                    rai_cnc_3d(i,j,k) = 0.
-                    sno_cnc_3d(i,j,k) = pcp_cnc_3d(i,j,k)
-                    pic_cnc_3d(i,j,k) = 0.
-
-                elseif(ipcp_type .eq. 4 .or. ipcp_type .eq. 5)then ! IP or Hail
+                call allocate_precipitation(pcp_cnc_3d(i,j,k),
+     1               temp_3d(i,j,k),ipcp_type,rai_cnc_3d(i,j,k),
+     1               sno_cnc_3d(i,j,k),pic_cnc_3d(i,j,k),alloc_status)
+                if(alloc_status .ne. 1)then
+                    pcp_cnc_3d(i,j,k) = 0.
                     rai_cnc_3d(i,j,k) = 0.
                     sno_cnc_3d(i,j,k) = 0.
-                    pic_cnc_3d(i,j,k) = pcp_cnc_3d(i,j,k)
-
-                endif ! ipcp_type
+                    pic_cnc_3d(i,j,k) = 0.
+                endif
 
             else  ! ipcp_type = 0
                 pcp_cnc_3d(i,j,k) = 0.
@@ -100,6 +105,12 @@ cdis
         end
 
         subroutine cpt_fall_velocity(ipcp_type,p,t,dbz,fall_velocity)
+
+        use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+        implicit none
+        integer ipcp_type
+        real*4 p,t,dbz,fall_velocity,dbz_eff,vvmax
+        real*4 density_norm,sqrt_density_norm
 
         dbz_eff = max(dbz,1.0)
         vvmax = 4.32*dbz_eff**0.0714286      ! Adan add
@@ -120,14 +131,21 @@ cdis
             fall_velocity = 10.0
         endif
 
+        if(.not.ieee_is_finite(fall_velocity).or.p.le.0..or.t.le.0.)then
+            fall_velocity=0.
+            return
+        endif
         if(p .ne. 101300. .or. t .ne. 273.15)then
             density_norm = (p / 101300.) * (273.15 / t)
-            sqrt_density_norm = sqrt(density_norm)
+            sqrt_density_norm = sqrt(max(density_norm,1.e-6))
         else
             sqrt_density_norm = 1.
         endif
 
-        rate = rate * sqrt_density_norm
+!       Correct the returned fall speed itself.  The legacy routine changed
+!       an unrelated implicit local named RATE, so the density correction was
+!       dormant and processor-dependent.
+        fall_velocity = fall_velocity / sqrt_density_norm
 
         return
         end
@@ -135,13 +153,18 @@ cdis
 
         subroutine cpt_concentration(rate,fall_velocity,concentration)
 
+        use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+        implicit none
+        real*4 rate,fall_velocity,concentration,rho
+
 !       This gets m**3 of water per m**3 of volume (non-dimensional)
 
 C LSW   STOP if fall_velocity = 0
-        if (fall_velocity.eq.0) then
-          write(6,*) 'fall_velocity=',fall_velocity
-          write(6,*)' Error src/lib/pcpcnc.f, cpt_concentration, STOP'
-          stop
+        if (.not.ieee_is_finite(rate).or.
+     1      .not.ieee_is_finite(fall_velocity).or.
+     1      rate.lt.0..or.fall_velocity.le.0.) then
+          concentration=0.
+          return
         else
           concentration = rate / fall_velocity
 

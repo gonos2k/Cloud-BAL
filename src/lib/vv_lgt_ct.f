@@ -31,6 +31,8 @@ cdis
 cdis
         Subroutine Cloud_bogus_w_lgt_ct (dx, cloud_type, height, nk, w)
 
+        use cloud_bal_cloud_profiles, only: build_multilayer_w_profile
+
 !Original version October 1990.
 
 !Modified May 1991 when we realized that a grid box is a lot bigger than
@@ -74,7 +76,7 @@ cdis
 
         Real*4 ratio, vv, Parabolic_vv_profile
 
-        Integer*4 k, k1, kbase, ktop
+        Integer*4 k, k1, kbase, ktop, profile_status
         Real*4 zbase, ztop
 
 !   Cloud Type      /'  ','St','Sc','Cu','Ns','Ac','As','Cs','Ci','Cc','Cb','Ct'/
@@ -139,129 +141,19 @@ cdis
 
 !frl 20070928 end  
 
-!Zero out return vector.
-        Do k = 1, nk
-         w(k) = 0.
-        End do
-
-!Put in the vv's for cumuliform clouds (Cu or Cb) first.
-        ratio = vv_to_height_ratio_Cu / dx
-        Do k = 1, nk
-         If (cloud_type(k) .eq. 3  .OR.  cloud_type(k) .eq. 10) then
-          kbase = k
-          Go to 10
-         End if
-        End do
-        Go to 100
-
-10      Do k = kbase, nk
-c        If (cloud_type(k) .eq. 3  .OR.  cloud_type(k) .eq. 10) then
-!     change to the cloudtop by Adan
-         If (cloud_type(k) .ne. 0) then
-          ktop = k
-         Else
-          Go to 20
-         End if
-        End do
-
-20      k1 = k          ! save our place in the column
-        zbase = height(kbase)
-        ztop  = height(ktop)
-        Do k = 1, nk
-         vv = Parabolic_vv_profile (zbase, ztop, ratio, height(k))
-         If (vv .gt. 0.) then
-          w(k) = vv
-         Else
-          w(k) = 0.
-         End if
-        End do
-        k1 = k1 + 1
-        If (k1 .ge. nk) go to 100
-
-!Try for another level of Cu.
-        Do k = k1, nk
-         If (cloud_type(k) .eq. 3  .OR.  cloud_type(k) .eq. 10) then
-          kbase = k
-          Go to 10
-         End if
-        End do
-
-!Now do the stratocumulus or similar clouds (Sc, Ac, Cc, Ns).
-100     ratio = vv_to_height_ratio_Sc/dx
-        Do k = 1, nk
-         If (cloud_type(k) .eq. 2  .OR.  cloud_type(k) .eq. 4  .OR.
-     1     cloud_type(k) .eq. 5  .OR.  cloud_type(k) .eq. 9) then
-          kbase = k
-          Go to 110
-         End if
-        End do
-        Go to 200
-
-110     Do k = kbase, nk
-         If (cloud_type(k) .eq. 2  .OR.  cloud_type(k) .eq. 4  .OR.
-     1     cloud_type(k) .eq. 5  .OR.  cloud_type(k) .eq. 9) then
-          ktop = k
-         Else
-          Go to 120
-         End if
-        End do
-
-120     k1 = k          ! save our place in the column
-        zbase = height(kbase)
-        ztop  = height(ktop)
-        Do k = 1, nk
-         vv = Parabolic_vv_profile (zbase, ztop, ratio, height(k))
-         If (vv .gt. w(k)) w(k) = vv
-        End do
-        k1 = k1 + 1
-        If (k1 .ge. nk) go to 200       ! try for stratiform clouds
-
-!Try for another level of Sc.
-        Do k = k1, nk
-         If (cloud_type(k) .eq. 2  .OR.  cloud_type(k) .eq. 4  .OR.
-     1     cloud_type(k) .eq. 5  .OR.  cloud_type(k) .eq. 9) then
-          kbase = k
-          Go to 110
-         End if
-        End do
-
-!add cloud type during lightning events (Ct: new) 
-200     ratio = vv_to_height_ratio_Ct / dx
-        Do k = 1, nk
-         If (cloud_type(k) .eq. 11) then
-          kbase = k
-          Go to 210
-         End if
-        End do
-        Go to 300
-
-210     Do k = kbase, nk
-         if(cloud_type(k) .eq. 11) then
-           ktop = k
-         Else
-          Go to 220  
-         End if
-        End do
-
-220     k1 = k          ! save our place in the column
-        zbase = height(kbase)
-        ztop  = height(ktop)
-        Do k = 1, nk
-         vv = Parabolic_vv_profile (zbase, ztop, ratio, height(k))
-         If (vv .gt. w(k)) w(k) = vv
-        write(6,*) 'khlee test2 ct=', vv
-        End do
-        k1 = k1 + 1
-        If (k1 .ge. nk) go to 300       ! try for stratiform clouds
-
-
-!Make sure there is non-zero vv wherever there are clouds of any kind.
-!Also, return missing-data value for any non-bogussed vv value.
-300     Do k = 1, nk
-         If (cloud_type(k).ne.0 .AND. w(k).lt.vv_for_St) w(k)=vv_for_St
-
-         If (w(k) .eq. 0.) w(k) = 1E37
-        End do
+!       Detect every contiguous cloud layer first, including a layer ending
+!       at nk.  Each layer is then profiled independently.  Convective layers
+!       ascend; precipitating stratiform (Ns) layers include a lower descent
+!       lobe and upper ascent.  Clear levels retain the missing-data value.
+        call build_multilayer_w_profile(dx,cloud_type,height,
+     1       max(vv_to_height_ratio_Cu,vv_to_height_ratio_Ct),
+     1       vv_to_height_ratio_Sc,vv_for_St,1E37,w,profile_status)
+        if(profile_status .ne. 1)then
+          write(6,*)'Cloud profile rejected: invalid height/grid metadata'
+          do k = 1,nk
+            w(k) = 1E37
+          enddo
+        endif
 
         Return
         End

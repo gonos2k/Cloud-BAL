@@ -181,6 +181,30 @@ cdis
                   return
               endif
 
+!             Allocate the diagnosed target column mass with cloud-fraction
+!             and geometric cell-thickness weights.  The normalized density
+!             below satisfies sum(density*dz)=density_ave*thickness over the
+!             eligible thin-cloud cells instead of inserting density_ave at
+!             every pressure level.
+              column_mass=density_ave*thickness
+              layer_weight=0.
+              do kk=k_1d_base,k_1d_top
+                if(nk.eq.1)then
+                  dz_layer=1.
+                elseif(kk.eq.1)then
+                  dz_layer=abs(heights_3d(i,j,2)-heights_3d(i,j,1))
+                elseif(kk.eq.nk)then
+                  dz_layer=abs(heights_3d(i,j,nk)
+     1                        -heights_3d(i,j,nk-1))
+                else
+                  dz_layer=.5*abs(heights_3d(i,j,kk+1)
+     1                            -heights_3d(i,j,kk-1))
+                endif
+                if(slwc(i,j,kk).eq.zero.and.cice(i,j,kk).eq.zero)
+     1            layer_weight=layer_weight
+     1              +max(0.,min(1.,clouds_3d_pres(i,j,kk)))*dz_layer
+              enddo
+
 !             Insert density value into LWC/ICE field
               do k = k_1d_base,k_1d_top
 
@@ -189,8 +213,13 @@ cdis
                   if(slwc(i,j,k) .eq. zero .and. 
      1               cice(i,j,k) .eq. zero       )then
 
-                    density = density_ave * clouds_3d_pres(i,j,k) 
-     1                                    / a(ilyr)
+                    if(layer_weight.gt.0.)then
+                      density = column_mass
+     1                   *max(0.,min(1.,clouds_3d_pres(i,j,k)))
+     1                   /layer_weight
+                    else
+                      density = 0.
+                    endif
 
                     if(temp_3d(i,j,k) .le. 243.15)then          ! ICE
                         cice(i,j,k) = density

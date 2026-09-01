@@ -1,5 +1,7 @@
   SUBROUTINE ice2vapor(ice,sh,t,p,thresh,ice_m,sh_m,rh_m)
 
+    USE cloud_bal_moisture, ONLY: evaporate_to_target
+
   ! Subroutine to convert cloud ice to vapor up to a saturation
   ! threshold (wrt ice)
 
@@ -24,6 +26,7 @@
     ! Locals
 
     REAL :: shsat,mr,mrsat,mr_m,mrmax,tc
+    INTEGER :: transfer_status
     REAL, EXTERNAL :: ssh2,make_rh
 
     
@@ -32,25 +35,21 @@
     shsat = ssh2(p,tc,tc,0.)*0.001
    
     ! Convert specific humidity to mixing ratio 
+    ice_m = MAX(0.0,ice)
+    sh_m = sh
+    rh_m = 0.0
+    IF (shsat .LE. 0. .OR. shsat .GE. 1. .OR. &
+        sh .LT. 0. .OR. sh .GE. 1. .OR. p .LE. 0. .OR. &
+        thresh .LT. 0.) RETURN
+
     mrsat = shsat/(1.-shsat)
     mr = sh/(1.-sh)
     mrmax = mrsat*thresh
 
-    ! Create modified mr (mr_m) by adding cloud ice   
-
-    mr_m = mr + ice
-
-    ! Zero out the modified cloud ice  
-
-    ice_m = 0.
-
-    ! If mr_m exceeds mrmax, convert the excess amount 
-    ! back to cloud ice   
-
-    IF (mr_m .GT. mrmax) THEN
-      ice_m = mr_m - mrmax
-      mr_m = mrmax
-    ENDIF
+    ! Sublimate only available ice and preserve vapor plus ice exactly.
+    mr_m = mr
+    CALL evaporate_to_target(mr_m,ice_m,mrmax,transfer_status)
+    IF (transfer_status .NE. 1) RETURN
 
     rh_m = (mr_m/mrsat)*100.
 
