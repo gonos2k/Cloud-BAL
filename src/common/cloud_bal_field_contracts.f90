@@ -83,8 +83,7 @@ CONTAINS
       RETURN
     END IF
 
-    field%valid = ieee_is_finite(values) .AND. values >= lower .AND. &
-                  values <= upper .AND. ABS(values) < missing_abs
+    field%valid = scalar_is_valid(values,lower,upper,missing_abs)
     CALL refresh_field_status(field)
   END SUBROUTINE capture_field_validity_3d
 
@@ -102,8 +101,7 @@ CONTAINS
       field%status = FIELD_FAILED
       RETURN
     END IF
-    field%valid(:,:,1) = ieee_is_finite(values) .AND. values >= lower .AND. &
-                         values <= upper .AND. ABS(values) < missing_abs
+    field%valid(:,:,1) = scalar_is_valid(values,lower,upper,missing_abs)
     CALL refresh_field_status(field)
   END SUBROUTINE capture_field_validity_2d
 
@@ -121,10 +119,17 @@ CONTAINS
       field%status = FIELD_FAILED
       RETURN
     END IF
-    field%valid(:,1,1) = ieee_is_finite(values) .AND. values >= lower .AND. &
-                         values <= upper .AND. ABS(values) < missing_abs
+    field%valid(:,1,1) = scalar_is_valid(values,lower,upper,missing_abs)
     CALL refresh_field_status(field)
   END SUBROUTINE capture_field_validity_1d
+
+  PURE ELEMENTAL LOGICAL FUNCTION scalar_is_valid(value,lower,upper,missing_abs)
+    REAL, INTENT(IN) :: value,lower,upper,missing_abs
+    scalar_is_valid=.FALSE.
+    IF (.NOT.ieee_is_finite(value)) RETURN
+    scalar_is_valid=value>=lower .AND. value<=upper .AND. &
+                    ABS(value)<missing_abs
+  END FUNCTION scalar_is_valid
 
   SUBROUTINE refresh_field_status(field)
     TYPE(field_contract), INTENT(INOUT) :: field

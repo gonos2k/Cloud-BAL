@@ -6,6 +6,7 @@ from __future__ import annotations
 import struct
 import sys
 import tempfile
+import os
 from pathlib import Path
 
 import numpy as np
@@ -13,7 +14,7 @@ import numpy as np
 PROJECT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT / "tools"))
 
-from compare_baseline import numeric_summary, read_wps  # noqa: E402
+from compare_baseline import comparison_files, numeric_summary, read_wps  # noqa: E402
 
 
 def record(payload: bytes) -> bytes:
@@ -46,6 +47,14 @@ def main() -> None:
         valid = root / "valid"
         valid.write_bytes(field_records(1.0))
         assert len(read_wps(valid)) == 1
+
+        intel_true = root / "intel_true"
+        intel_true.write_bytes(field_records(1.0, wind=-1))
+        assert next(iter(read_wps(intel_true).values()))[3][
+            "wind_grid_relative"
+        ] is True
+        summaries = numeric_summary(valid, intel_true)
+        assert not any("metadata changed" in summary for summary in summaries)
 
         wind_changed = root / "wind_changed"
         wind_changed.write_bytes(field_records(1.0, wind=0))
@@ -80,6 +89,57 @@ def main() -> None:
         plain_a.write_text("a", encoding="utf-8")
         plain_b.write_text("b", encoding="utf-8")
         assert numeric_summary(plain_a, plain_b) == []
+
+        independent_a = root / "independent_a"
+        independent_b = root / "independent_b"
+        independent_a.mkdir()
+        independent_b.mkdir()
+        (independent_a / "product").write_bytes(b"same")
+        (independent_b / "product").write_bytes(b"same")
+        (independent_a / "nested").mkdir()
+        (independent_b / "nested").mkdir()
+        (independent_a / "nested" / "README.md").write_text("kept")
+        (independent_b / "nested" / "README.md").write_text("kept")
+        left_files, right_files = comparison_files(independent_a, independent_b)
+        assert Path("nested/README.md") in left_files
+        assert Path("nested/README.md") in right_files
+        try:
+            comparison_files(independent_a, independent_a)
+        except ValueError as exc:
+            assert "non-overlapping" in str(exc)
+        else:
+            raise AssertionError("self-comparison was accepted")
+
+        empty_a = root / "empty_a"
+        empty_b = root / "empty_b"
+        empty_a.mkdir()
+        empty_b.mkdir()
+        try:
+            comparison_files(empty_a, empty_b)
+        except ValueError as exc:
+            assert "at least one" in str(exc)
+        else:
+            raise AssertionError("empty comparison was accepted")
+
+        symlink_root = root / "symlink_root"
+        symlink_root.mkdir()
+        (symlink_root / "product").symlink_to(independent_a / "product")
+        try:
+            comparison_files(independent_a, symlink_root)
+        except ValueError as exc:
+            assert "symbolic link" in str(exc)
+        else:
+            raise AssertionError("symlink candidate was accepted")
+
+        hardlink_root = root / "hardlink_root"
+        hardlink_root.mkdir()
+        os.link(independent_a / "product", hardlink_root / "product")
+        try:
+            comparison_files(independent_a, hardlink_root)
+        except ValueError as exc:
+            assert "multiply-linked" in str(exc)
+        else:
+            raise AssertionError("hardlink candidate was accepted")
 
         from netCDF4 import Dataset
 

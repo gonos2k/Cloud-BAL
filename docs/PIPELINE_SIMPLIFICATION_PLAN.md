@@ -71,8 +71,8 @@ coefficients, and face masks are private work data owned by
 The new pipeline exposes only the following state-transforming operations.
 Their `state_in` argument is immutable, `state_out` has separate storage, and a
 non-`OK` operation returns an exact copy of `state_in`; private work arrays can
-never alias a background or published array.  A rejected candidate may expose
-metrics through `stage_result`, never through partially modified output state.
+never alias a background or published array.  A rejected calculation exposes
+only metrics through `stage_result`, never a partially modified output state.
 
 ```fortran
 call read_canonical_state(input_spec, state_out, result)
@@ -103,7 +103,7 @@ Phase 1 replaces that sketch with these public derived types in
 `cloud_bal_state`; no other module declares a competing state type:
 
 ```fortran
-integer, parameter :: STATUS_FAILED=0, STATUS_DEGRADED=1, STATUS_OK=2
+integer, parameter :: STATUS_FAILED=-10, STATUS_DEGRADED=10, STATUS_OK=20
 integer, parameter :: LOS_REJECTED=0, LOS_ASSIMILATED=1, LOS_HELD_OUT=2
 
 type :: field3d
@@ -142,7 +142,8 @@ type :: grid_spec
   integer :: nx, ny, nz
   character(len=64) :: grid_id
   real(real64), allocatable :: dx(:,:), dy(:,:), dp(:,:,:)
-  real(real64), allocatable :: cell_measure(:,:,:), face_measure(:,:,:,:)
+  real(real64), allocatable :: pressure_mass_measure(:,:,:)
+  real(real64), allocatable :: dry_air_mass_measure(:,:,:)
 end type
 
 type :: radar_los_observation_set
@@ -176,6 +177,7 @@ type :: cloud_bal_state
   type(field3d) :: vt_z_mean, vt_z_sigma
   type(field2d) :: surface_pressure, surface_temperature
   type(field2d) :: omega_top_boundary, omega_bottom_boundary
+  logical, allocatable :: above_ground(:,:,:)
   integer(int32), allocatable :: obs_support(:,:,:)
   integer(int32), allocatable :: hydro_support(:,:,:)
   real(real32), allocatable :: balance_beta(:,:,:)
@@ -273,7 +275,9 @@ mask, not only COM/hydrometeor provenance.
 | vapor and all cloud/precipitation species | kg kg-1 dry air | ingest/state |
 | radar diagnostic mass concentration | kg m-3, private work only | column physics |
 
-`cell_measure` is the finite-volume dry-air cell mass in kg.  Radar
+`pressure_mass_measure=A*dp/g` is the pressure-coordinate operator metric.
+`dry_air_mass_measure=pressure_mass_measure/(1+r_t)` is used only for water
+mass.  The two names and uses may not be interchanged.  Radar
 reflectivity relations may diagnose a private mass concentration (C_h), but
 the state stores (r_h=C_h/\rho_d); the relative precipitation mass flux is
 (F_h=\rho_d r_h\max(V_{t,h}-w,0)).  No public stage may add a concentration to
@@ -671,8 +675,10 @@ tagged legacy executable used by `SHADOW` and rollback.
 
 ### Exit gate
 
-- `tests/run_isolation_gate.sh <case>` proves by resolved-path check and
-  pre/post hashes that reference inputs are unchanged.
+- `tests/run_isolation_gate.sh <case>` proves by resolved-path check, exact
+  frozen inventory, declared-product hashes, and full-tree metadata/ctime that
+  the scoped reference inputs did not change during the command.  It is not a
+  kernel-enforced read-only sandbox.
 - The harness can run the tagged legacy executable and compare only the
   declared product manifest with `tools/compare_baseline.py`.
 - `tests/run_transaction_gate.sh <case>` traces all writes, exercises each
@@ -1047,7 +1053,7 @@ passes within the configured attempts, return the unchanged input as
 - A nonuniform `dx/dy/dp` and terrain/cut-cell manufactured case with nonzero
   `delta_omega`, interior p-face interpolation, explicit top/bottom/terrain
   zero-increment boundary flux, and `q_bc=0` verifies signed-face
-  cancellation, compatibility, gauge, units, and beta placement.
+  cellwise target response, compatibility, gauge, units, and beta placement.
   `nx/ny=1,2,3` fail unchanged at both public entry points, while the declared
   `4x4` narrow case is bounds safe.
 - Zero and tiny `delta_omega` fixtures verify exact no-op/scale behavior and the
@@ -1174,21 +1180,25 @@ and previously current generation are never mixed.
    publish the legacy result.
 2. `HYDRO_ACTIVE`: publish only the conservative hydrometeor result after its
    closure gates pass.
-3. `BALANCE_ACTIVE`: publish the localized divergent correction after operator
-   and residual gates pass.
-4. `RADAR_DOWNDRAFT_ACTIVE`: activate only after multi-case trajectory,
-   displacement, water/energy, and forecast spin-up evidence is accepted.
+3. `RADAR_TARGET_VALIDATED`: authorize a radar-derived dynamic target only
+   after phase, fall-speed, trajectory, displacement, water/energy, and
+   forecast spin-up evidence is accepted.  This is an evidence gate, not a
+   publication mode.
+4. `BALANCE_ACTIVE`: publish a localized divergent correction only after both
+   the dynamic-target and balance-operator gates pass.
 
-These proposed future modes are cumulative: `HYDRO_ACTIVE` implies the canonical contract;
-`BALANCE_ACTIVE` implies contract plus hydro; `RADAR_DOWNDRAFT_ACTIVE` implies
-contract, hydro, balance, and the radar trajectory/downdraft gate.  Keep one
-mode enum for this sequence; do not add independent booleans for every
-subroutine.  Existing `L_BOGUS_RADAR_W`, `l_flag_bogus_w`, and `RADAR_W_MODE`
-controls default off immediately and are removed or mapped at the top-level
-adapter to this enum.  No lower routine reads them.  A non-`OK` stage returns
-the input state unchanged with its `DEGRADED` or `FAILED` result.  It does not select a hidden
-alternate physical algorithm, and radar-coupling failure cannot be logged and
-then followed by COM/hydrometeor publication.
+The only future publication modes are `SHADOW`, `HYDRO_ACTIVE`, and
+`BALANCE_ACTIVE`; target validation is a prerequisite attached to the target,
+not another branch in the execution code.  Keep one mode enum and one dynamic
+authority predicate; do not add independent booleans for every subroutine.
+At production integration, existing `L_BOGUS_RADAR_W`, `l_flag_bogus_w`, and
+`RADAR_W_MODE` controls must be removed or mapped once at the top-level adapter
+to this enum.  Today the radar switch is forced off, but the linked
+derived-cloud path still sets `l_flag_bogus_w=.true.` and lower legacy routines
+still read it.  A non-`OK` canonical stage returns the input
+state unchanged with its `DEGRADED` or `FAILED` result.  It does not select a
+hidden alternate physical algorithm, and radar-coupling failure cannot be
+logged and then followed by COM/hydrometeor publication.
 
 ### Forecast wave check
 
@@ -1205,7 +1215,8 @@ cloud/radar increment only and keep it outside this analysis pipeline.
 Forecast tolerances and frequency bands are proposed from the complete shadow
 case set, reviewed, and frozen before radar activation.  A paired control that
 exceeds any frozen local, spectral, or integrated threshold blocks
-`RADAR_DOWNDRAFT_ACTIVE`; report-only diagnostics do not count as a gate.
+radar-derived target authorization; report-only diagnostics do not count as a
+gate.
 
 ### Git and evidence policy
 
@@ -1222,8 +1233,10 @@ exceeds any frozen local, spectral, or integrated threshold blocks
 
 ## Adversarial-review acceptance checklist
 
-This checklist merges the static adversarial review pinned to
-`main@cb0a5713f1acd737fa9a058f9d32adedf71bd9d1` on 2026-09-01.  It is the
+This checklist merges the reviews pinned to
+`main@cb0a5713f1acd737fa9a058f9d32adedf71bd9d1` and
+`cloud-bal-shadow-contract-20260901@088a996f42424c4c743984cb666021956e9d4be6`
+on 2026-09-01.  It is the
 promotion authority for the implementation: a checked source change is not
 equivalent to a checked scientific or operational gate.  `ACTIVE` remains
 prohibited until every applicable P0 item is closed by the named executable
@@ -1239,22 +1252,27 @@ not an authority present in this source tree.
 
 | ID | Required invariant/change | Implementation owner | Executable evidence | Current state |
 |---|---|---|---|---|
-| P0-BASE | ANAL/MODL/reference executables are independent read-only inputs with verified hashes | Phase 0B harness | `run_isolation_gate.sh`, baseline `sha256sum -c` | local gate implemented and passing for the frozen 21-file manifest; executed-case manifest still pending |
+| P0-BASE | ANAL/MODL/reference executables are independent read-only inputs with verified hashes | Phase 0B harness | `run_isolation_gate.sh`, baseline `sha256sum -c` | frozen 21-file inventory and three-time snapshot manifest pass; legacy executable rerun and real candidate comparison remain blocked/not run |
+| P0-ORIGIN-INPUT | one original-source-derived read closure supplies FUA `U3/V3/T3/HT/SH/OM`, FSF `PSF`, LT1 `HT/T3`, LQ3 `SH`, pre-QBAL LW3 `U3/V3/OM`, LCO `COM`, LSX `PS`, grid/pressure/config/time; final bigfile/WPS/met_em/balance output is never an input | real-data adapter and manifest | `check_qbal_real_inputs.py`, `run_real_input_inventory.sh`, undeclared-open trace | four hourly prepared source sets and static hashes pass; LT1/LQ3/LCO/LSX regeneration is missing, so all four direct closures correctly remain `BLOCKED` |
+| P0-UPSTREAM-FRESH | the original radar/wind/surface/temp/cloud/humidity/derived DAG runs in an empty isolated generation; every stage checks all reads/writes, VRT completes before temperature, and a stale COM can never satisfy a failed derived stage | isolated original-chain runner | forced missing input/write failure, stale-COM fixture, complete open-path manifest | pending; original shell has asynchronous VRT ordering, zero-exit failure paths and unconditional product success assignments |
+| P0-BACKGROUND | one explicitly pinned FUA/FSF pair supplies every background field and records valid/reftime; field-level fallback, mixed cycles and file-list-order selection are rejected | background adapter | multiple-cycle/order permutation and missing-variable tests | four 06 UTC-cycle pairs are pinned; original `get_best_fcst` minimum-lead assignment defect and per-field status overwrite remain to be removed in the isolated source |
+| P0-RAD-PROVENANCE | candidate radar input is VRZ plus explicit coverage/QC provenance, not mixed LPS; `-10 dBZ` is no-echo/unknown and never support; VRT `TID=2` is bright-band quality, not phase; S-band comes from a hashed registry; reused wind LOS cannot be independent validation | radar adapter | real VRZ/VRT/Vxx contract test, no-echo/terrain mask, registry and no-double-use gates | canonical LOS now requires dealiased velocity, radar provenance for velocity/Nyquist/sigma, unique radar IDs and deterministic cell IDs; real source-time/site registry, terrain adapter and independent uncertainty remain pending |
+| P0-IFX | all focused and full-chain Fortran uses one pinned ifx 2026 profile with exact flags, NetCDF/HDF5/Intel runtime hashes and no GNU/ifort fallback | toolchain/build harness | clean out-of-source strict/release link, `ldd/readelf`, endian round trip | focused strict ifx suite passes after missing-omega finite guard; full original tree and dependency stack remain pending |
 | P0-MODE | one top-level mode enum; radar defaults `OFF`; non-`OK` never changes or publishes a candidate | state/coordinator and thin legacy adapters | OFF exact identity, SHADOW no-authority, invalid-mode deep-copy tests | focused coordinator accepts only OFF/SHADOW and tests pass; production callers and any future promotion adapter are absent |
-| P0-STATE | value, valid, quality, source, time, dimensions/layout, unit, algorithm/config identity travel together; sentinels exist only in adapters | `cloud_bal_state` | contract/NetCDF round trip, partial/malformed/absent fixtures | in-memory contract and malformed/absent tests pass; NetCDF serialization and full adapter round trip pending |
+| P0-STATE | value, valid, quality, source, time, dimensions/layout, unit, algorithm/config identity travel together; sentinels exist only in adapters | `cloud_bal_state` | contract/NetCDF round trip, partial/malformed/absent fixtures | one `cell_is_usable`, canonical bottom-to-top order, disjoint status values, `above_ground`, pressure/dry-air mass measures, and malformed/provenance tests pass; source age, NetCDF serialization and full adapter round trip pending |
 | P0-RAD-VALID | no missing/invalid omega, pressure, wind, phase, dBZ, or configuration value enters a trajectory; valid fallback is explicit and degrades the stage | column physics | sentinel/NaN/Inf/all-false/missing-wind properties | core guards and missing-omega/high-dBZ/config tests implemented; full property matrix pending |
-| P0-RAD-FLUX | one relative fall flux `F=C*max(Vt-w,vmin)` is used for both travel time and concentration transfer | column physics | strong up/down, suspended, variable-`Vt` manufactured ledgers | density-consistent relative flux and strong-ascent/downdraft tests implemented; manufactured convergence pending |
+| P0-RAD-FLUX | for `r=Vt-w>vmin`, one rate `F=rho_d*q*r*area` is used for travel and concentration transfer; otherwise no trajectory is advanced and the nonnegative rate is suspended | column physics | strong up/down, suspended, variable-`Vt` manufactured ledgers | density-consistent relative rate and strong-ascent/downdraft tests implemented; storm-motion and manufactured convergence remain pending |
 | P0-RAD-LEDGER | every source closes `input=deposited+suspended+boundary_exit+observation_blocked+microphysical_loss`; observed cells stay immutable | column physics | domain-exit, blocked-destination, partial-echo property tests | ledger, boundary-exit, blocked-observation and closure tests pass; per-source persisted ledger pending |
 | P0-RAD-MERGE | one pristine background snapshot plus radar work: an observed echo replaces background precipitation at that cell, descendants add their transported increment, and a prior candidate is rejected as input | column physics | observed/descendant overlap, reuse and source-permutation tests | overlap policy and candidate-reuse rejection pass; explicit source-permutation test pending |
-| P0-RAD-PHASE | phase-array shape and codes, S-band wavelength use, physical dBZ ceiling, type 3/10/11 protection, and empty-mask behavior are explicit | column physics | phase 0--5/out-of-range, high-dBZ, type and empty-support matrix | canonical phase contract, invalid-code rejection, S-band bounds, dBZ ceiling and type-11 test pass; complete matrix pending |
+| P0-RAD-PHASE | phase-array shape and codes, configured S-band provenance/range, physical dBZ ceiling, type 3/10/11 protection, and empty-mask behavior are explicit | column physics | phase 0--5/out-of-range, high-dBZ, type and empty-support matrix | canonical phase contract, invalid-code rejection, configured S-band bounds, dBZ ceiling and type-11 test pass; wavelength is not used as an unsupported physical multiplier; complete matrix pending |
 | P0-RAD-ENERGY | evaporation/sublimation/melting may affect downdraft only through paired hydrometeor, vapor, temperature and moist-enthalpy changes; until then cooling is report-only | column ledger | water plus moist-enthalpy closure and no-double-count test | bounded water/enthalpy kernel passes; evaporation coupling remains source-locked OFF as required |
 | P0-QBAL-ONE | publish only the canonical A-grid increment from one `S`, `D`, `A=D S`, `K`, `G=-K A^T M`, `L=-A G`; no later taper/destagger/projection changes it | balance operator and qbal adapter | axis, manufactured identity, adjoint, final-published-state residual tests | standalone operator identities/axes/final residual pass; legacy qbal adapter and final writer path pending |
-| P0-QBAL-EDGE | full-state residual includes domain/support-edge background flux while the increment boundary flux is exactly zero | balance operator | analytic support-edge and lateral-boundary flux tests | pending; the standalone operator still masks active--inactive faces in both residuals, so ACTIVE is prohibited |
-| P0-QBAL-COMP | connected components of nonzero `L` pass volume-weighted compatibility and gauge; incompatible/isolated components reject unchanged | balance operator | disconnected, terrain-split, near-zero-beta properties | component labeling/gauge/compatibility and disconnected/isolated tests implemented; terrain split pending |
-| P0-QBAL-GATE | recomputed unweighted physical residual decreases; solver residual, momentum, increments, support, high-pass and finite gates all pass; a small iterate correction is not convergence | balance operator | nonconvergence/large-residual/rollback, accepted-attenuation, boundary-flux and final-state gates | unweighted final-state, solver, momentum, increment and exact-support gates implemented; accepted alpha/attempt diagnostics, nonzero-boundary fixtures, high-pass/roughness and production rollback remain pending |
-| P0-TERRAIN | immutable background lower flux uses canonical terrain-surface omega, including pressure tendency/advection where available; increment flux remains zero | state ingest and balance operator | terrain-touching support and boundary-flux closure | pending |
-| P0-THERMO | vapor and every hydrometeor use kg per kg dry air via dry-air density; any saturation transfer solves coupled water plus latent-heat temperature adjustment | column ledger/output adapter | water/enthalpy closure, liquid/ice bounded-root tests | canonical dry-air basis and bounded liquid/ice water-enthalpy test pass; legacy LAPSPREP water-only transfer is default-disabled and rejects positive thresholds; canonical adapter pending |
-| P0-OUTPUT | calculation success and complete publication success are one transaction: stage, write, close, reread, validate, manifest, marker, atomic generation switch | output coordinator and all writer adapters | failure injection after every writer/open/write/close/verify step | primitive rejects deterministic parent/symlink/hardlink/metadata escapes and revalidates context/hashes before pointer swap; directory-fd protection against concurrent parent replacement, repository-HEAD equality, product-specific reread validation and legacy writer migration remain pending |
+| P0-QBAL-EDGE | full-state residual includes immutable background faces across the support edge while normal increment flux is exactly zero | balance operator | uniform-flow compact-support and lateral-boundary tests | focused operator freezes normal velocity degrees of freedom at support/domain edges and the uniform-flow compact-support test passes; native terrain/lateral adapter evidence remains pending |
+| P0-QBAL-COMP | connected components of nonzero `L` pass volume-weighted compatibility and gauge; only a component with an explicit dynamic target has modification authority | balance operator | disconnected, no-target component, terrain-split, near-zero-beta properties | compatibility/gauge, disconnected/isolated rejection and targetless-component bitwise identity pass; real terrain split remains pending |
+| P0-QBAL-GATE | target-induced increment is projected once; recomputed physical residual cannot exceed background; increment, geostrophic, support and finite gates all pass | balance operator | nonconvergence/large-residual/rollback, background-nonworsening and final-state gates | attenuation retry and background rebalance were removed; one solve, real32 final-state recomputation, projected closure, background nonworsening and audit-preserving rollback pass; high-pass/production evidence remains pending |
+| P0-TERRAIN | `above_ground` defines the only physics/coverage domain; below-ground values cannot create support; immutable terrain-surface omega supplies the lower flux | state ingest and balance operator | terrain-domain, terrain-touching support and boundary-flux closure | canonical domain/contiguity/support tests pass and stages mask it consistently; real PSFC adapter and pressure-tendency/advection lower-boundary construction remain pending |
+| P0-THERMO | vapor and every hydrometeor use kg per kg dry air via dry-air density; any saturation transfer solves coupled water plus latent-heat temperature adjustment | column ledger/output adapter | analytical dry-air mass, water/enthalpy closure, liquid/ice bounded-root and failure-atomicity tests | separate pressure/dry-air measures, evaporation, supersaturation condensation and failure rollback tests pass; legacy LAPSPREP transaction wiring remains pending |
+| P0-OUTPUT | calculation success and complete publication success are one transaction: stage, write, close, reread, validate, manifest, marker, atomic generation switch | output coordinator and all writer adapters | failure injection after every writer/open/write/close/verify step | primitive validates paths/hashes, holds a publication lock, compare-and-swaps expected current and rejects older valid times; product-specific reread, clean-tree/binary/input hashes and legacy writer migration remain pending |
 | P0-STATUS | every reader/writer return is checked immediately; no later success overwrites an earlier failure and no routine assigns unconditional success | I/O adapters | 3-D-read then 2-D-success and first/middle/last writer failure tests | LAPS 3-D background status, all four balance writers and WPS OPEN/metadata/success checks pass; remaining I/O inventory pending |
 | P0-LIGHTNING | lightning is integer value plus explicit validity/quality; no real sentinel is assigned to an integer | ingest/state adapter | absent/partial/invalid lightning fixture | real-to-integer sentinel removed and canonical validity field added; runtime partial/invalid fixture pending |
 | P0-E2E | release and bounds full-tree builds link actual deriv/qbal/LAPSPREP/wind/radar entry points and run a zero-skip real-file smoke chain | integration tree | full-tree build plus production integration commands | pending |
@@ -1274,23 +1292,24 @@ not an authority present in this source tree.
   boundary-layer forcing supports a nonzero target.
 - [ ] `dx` and `dy` remain independent, `dp` is nonuniform and cell-local, and
   legacy error constants/clamps have recorded occurrence rates and provenance.
-- [ ] Physical continuity residuals are unweighted.  Weighted objective norms
+- [x] Physical continuity residuals are unweighted.  Weighted objective norms
   may be reported separately but cannot hide taper-edge residuals.
 - [ ] Before a rotational acceptance gate has authority, a boundary-defined
   Helmholtz solve reports divergent, rotational and harmonic energy plus
   reconstruction error.  Finite-difference divergence/vorticity RMS remains
   report-only.
-- [ ] WPS wind-coordinate metadata is derived and validated, not forced to
+- [x] WPS wind-coordinate metadata is derived and validated, not forced to
   grid-relative unconditionally.
-- [ ] Comparison tooling rejects duplicate field keys and fails rather than
+- [x] Comparison tooling rejects duplicate field keys and fails rather than
   silently omitting a numerical summary after a parse error.
-- [ ] CI separates strict modern and legacy flags, enables bounds/FPE/
-  uninitialized checks, uses a second compiler, records the exact HEAD, and is
-  required on a protected promotion branch.
+- [ ] CI separates strict and release Intel ifx profiles, enables bounds/FPE/
+  uninitialized checks, records the exact HEAD, and is required on a protected
+  promotion branch.  GNU and ifort fallback are intentionally prohibited.
 
-### Required synthetic, integration and forecast matrix
+### Required invariant, real-data integration and forecast matrix
 
-The invariant matrix must contain clear/radar-absent exact no-op; all-missing
+Small manufactured cases are unit invariants only and never promotion
+evidence.  The invariant matrix must contain clear/radar-absent exact no-op; all-missing
 omega; positive/negative/NaN/Inf/sentinel values; all-false and disconnected
 support; constant and variable beta; nonuniform `dx/dy/dp`; terrain contact;
 boundary exit; observation-blocked transport; multiple-source permutation;

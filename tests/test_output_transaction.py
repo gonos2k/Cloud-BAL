@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -14,7 +15,9 @@ sys.path.insert(0, str(PROJECT / "tools"))
 
 from cloud_bal_transaction import OutputTransaction, TransactionError, _current  # noqa: E402
 
-SOURCE_COMMIT = "cb0a5713f1acd737fa9a058f9d32adedf71bd9d1"
+SOURCE_COMMIT = subprocess.check_output(
+    ["git", "rev-parse", "HEAD"], cwd=PROJECT, text=True
+).strip()
 
 
 def expect_rejected(action, message: str) -> None:
@@ -300,6 +303,31 @@ def main() -> None:
         assert protected.stat().st_nlink == 1
         assert hidden_link.staging.exists()
         assert not hidden_link.generation.exists()
+
+        concurrent_a = OutputTransaction(root, "concurrent_a")
+        concurrent_b = OutputTransaction(root, "concurrent_b")
+        concurrent_a.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow", valid_time=2
+        )
+        concurrent_b.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow", valid_time=2
+        )
+        write_products(concurrent_a, {"product": b"a"})
+        write_products(concurrent_b, {"product": b"b"})
+        concurrent_a.commit()
+        expect_rejected(
+            concurrent_b.commit,
+            "a transaction with a stale expected-current identity was committed",
+        )
+        assert _current(root).name == "concurrent_a"
+
+        stale = OutputTransaction(root, "stale")
+        stale.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow", valid_time=1
+        )
+        write_products(stale, {"product": b"stale"})
+        expect_rejected(stale.commit, "an older analysis replaced current")
+        assert _current(root).name == "concurrent_a"
 
     print("Cloud-BAL output transaction tests passed")
 

@@ -7,6 +7,7 @@ PROGRAM test_canonical_state
   INTEGER :: failures
   failures=0
   CALL test_contract(failures)
+  CALL test_domain_and_mass_contract(failures)
   CALL test_transaction(failures)
   CALL test_vertical_conversion(failures)
   CALL test_los_contract(failures)
@@ -40,9 +41,12 @@ CONTAINS
     state%grid%dp(:,:,1)=10000.0_real64
     state%grid%dp(:,:,2)=15000.0_real64
     state%grid%dp(:,:,3)=20000.0_real64
-    state%grid%cell_measure=SPREAD(state%grid%dx*state%grid%dy,3,3)* &
+    state%grid%pressure_mass_measure=SPREAD(state%grid%dx*state%grid%dy,3,3)* &
       state%grid%dp/9.80665_real64
     CALL fill_real_field(state%pressure,80000.0_real32,SOURCE_BACKGROUND_MODEL)
+    state%pressure%value(:,:,1)=95000.0_real32
+    state%pressure%value(:,:,2)=80000.0_real32
+    state%pressure%value(:,:,3)=60000.0_real32
     CALL fill_real_field(state%temperature,280.0_real32,SOURCE_BACKGROUND_MODEL)
     CALL fill_real_field(state%vapor,0.008_real32,SOURCE_BACKGROUND_MODEL)
     CALL fill_real_field(state%u,5.0_real32,SOURCE_ANALYZED_WIND)
@@ -50,6 +54,8 @@ CONTAINS
     CALL fill_real_field(state%omega,0.0_real32,SOURCE_BACKGROUND_MODEL)
     CALL fill_surface_field(state%surface_pressure,100000.0_real32)
     CALL fill_surface_field(state%surface_temperature,290.0_real32)
+    CALL refresh_dry_air_mass_measure(state,status)
+    IF (status/=STATUS_OK) ERROR STOP 'dry-air mass initialization failed'
   END SUBROUTINE make_valid_state
 
   SUBROUTINE fill_real_field(field,value,source)
@@ -85,11 +91,13 @@ CONTAINS
 
     state%vapor%valid(1,1,1)=.FALSE.
     state%vapor%quality(1,1,1)=QUALITY_RAW_MISSING
+    CALL refresh_dry_air_mass_measure(state,status)
     CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
-    CALL check(status==STATUS_DEGRADED, &
+    CALL check(status==STATUS_DEGRADED .AND. reason==REASON_REQUIRED_COVERAGE, &
                'partial required coverage must be degraded',failures)
     state%vapor%valid(1,1,1)=.TRUE.
     state%vapor%quality(1,1,1)=0_int32
+    CALL refresh_dry_air_mass_measure(state,status)
 
     state%pressure%unit='hPa'
     CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
@@ -112,6 +120,82 @@ CONTAINS
                    TRANSFER(5.0_real32,0_int32)), &
                'read must deep-copy the supplied state',failures)
   END SUBROUTINE test_contract
+
+  SUBROUTINE test_domain_and_mass_contract(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: state
+    REAL(real64) :: expected
+    INTEGER :: status,reason
+
+    CALL make_valid_state(state)
+    state%rain%value(2,2,2)=0.002_real32
+    state%rain%valid(2,2,2)=.TRUE.
+    state%rain%quality(2,2,2)=0_int32
+    state%rain%source(2,2,2)=SOURCE_BACKGROUND_MODEL
+    CALL refresh_dry_air_mass_measure(state,status)
+    expected=state%grid%pressure_mass_measure(2,2,2)/(1.0_real64+0.010_real64)
+    CALL check(status==STATUS_OK .AND. &
+      ABS(state%grid%dry_air_mass_measure(2,2,2)-expected)<= &
+      2.0e-7_real64*expected, &
+      'dry-air mass must use represented total-water mixing ratio',failures)
+
+    state%above_ground(1,1,1)=.FALSE.
+    CALL invalidate_cell(state%pressure,1,1,1)
+    CALL invalidate_cell(state%temperature,1,1,1)
+    CALL invalidate_cell(state%vapor,1,1,1)
+    CALL invalidate_cell(state%u,1,1,1)
+    CALL invalidate_cell(state%v,1,1,1)
+    CALL invalidate_cell(state%omega,1,1,1)
+    CALL refresh_dry_air_mass_measure(state,status)
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_OK .AND. &
+      state%grid%dry_air_mass_measure(1,1,1)== &
+      state%grid%pressure_mass_measure(1,1,1), &
+      'below-ground missing core data must not reduce physical coverage',failures)
+
+    state%balance_beta(1,1,1)=1.0_real32
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED, &
+      'support must never enter the below-ground domain',failures)
+
+    CALL make_valid_state(state)
+    state%above_ground(1,1,2)=.FALSE.
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED, &
+      'above-ground domain must be vertically contiguous',failures)
+
+    CALL make_valid_state(state)
+    state%u%source(1,1,1)=0_int32
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA, &
+      'valid data without provenance must fail',failures)
+    CALL make_valid_state(state)
+    state%u%quality(1,1,1)=QUALITY_QC_REJECTED
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA, &
+               'valid QC-rejected data must fail',failures)
+    CALL make_valid_state(state)
+    state%u%source(1,1,1)=ISHFT(1_int32,20)
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA, &
+               'unknown source bits must fail closed',failures)
+    CALL make_valid_state(state)
+    state%u%quality(1,1,1)=ISHFT(1_int32,20)
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA, &
+               'unknown quality bits must fail closed',failures)
+    CALL check(.NOT.dynamic_target_has_authority(.TRUE.,0_int32, &
+      IOR(SOURCE_CLOUD_ANALYSIS,SOURCE_DYNAMIC_TARGET)), &
+      'a dynamic bit without independent wind evidence has no authority',failures)
+  END SUBROUTINE test_domain_and_mass_contract
+
+  SUBROUTINE invalidate_cell(field,i,j,k)
+    TYPE(field3d), INTENT(INOUT) :: field
+    INTEGER, INTENT(IN) :: i,j,k
+    field%valid(i,j,k)=.FALSE.
+    field%quality(i,j,k)=QUALITY_RAW_MISSING
+    field%source(i,j,k)=0_int32
+  END SUBROUTINE invalidate_cell
 
   SUBROUTINE test_transaction(failures)
     INTEGER, INTENT(INOUT) :: failures
@@ -164,7 +248,7 @@ CONTAINS
   SUBROUTINE test_los_contract(failures)
     INTEGER, INTENT(INOUT) :: failures
     TYPE(cloud_bal_state_type) :: state
-    INTEGER :: status,reason,nx,ny,nz,nr
+    INTEGER :: status,reason,nx,ny,nz,nr,i,j,k
     INTEGER(int64) :: valid_time
 
     CALL make_valid_state(state)
@@ -182,6 +266,7 @@ CONTAINS
 
     nr=1
     state%radar_los%is_present=.TRUE.; state%radar_los%nradar=nr
+    state%radar_los%vrad_representation=VRAD_DEALIASED
     CALL initialize_field(state%radar_los%vrad,nx,ny,nz,nr,valid_time,'m s-1')
     CALL initialize_field(state%radar_los%nyquist,nx,ny,nz,nr,valid_time,'m s-1')
     CALL initialize_field(state%radar_los%sigma_vrad,nx,ny,nz,nr,valid_time,'m s-1')
@@ -206,11 +291,16 @@ CONTAINS
              state%radar_los%geometry_condition(nx,ny,nz), &
              state%radar_los%geometry_rank(nx,ny,nz))
     state%radar_los%beam=0.0_real32; state%radar_los%beam(:,:,:,:,1)=1.0_real32
-    state%radar_los%observation_id_hi=1_int64
-    state%radar_los%observation_id_lo=2_int64
+    state%radar_los%observation_id_hi=0_int64
+    state%radar_los%observation_id_lo=0_int64
     state%radar_los%usage=LOS_HELD_OUT
     state%radar_los%los_support=1_int32
     state%radar_los%radar_id=100_int32
+    DO k=1,nz; DO j=1,ny; DO i=1,nx
+      state%radar_los%observation_id_hi(i,j,k,1)=100_int64
+      state%radar_los%observation_id_lo(i,j,k,1)=INT(i,int64)+INT(nx,int64)*( &
+        INT(j-1,int64)+INT(ny,int64)*INT(k-1,int64))
+    END DO; END DO; END DO
     state%radar_los%observation_time=valid_time
     state%radar_los%site_lat=36.0_real64; state%radar_los%site_lon=128.0_real64
     state%radar_los%site_height=100.0_real64; state%radar_los%wavelength=0.10_real64
@@ -218,6 +308,25 @@ CONTAINS
     state%radar_los%geometry_rank=1_int32
     CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
     CALL check(status==STATUS_OK,'complete post-QC LOS record must pass',failures)
+
+    state%radar_los%observation_id_lo(1,1,1,1)= &
+      state%radar_los%observation_id_lo(2,1,1,1)
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_RADAR_CONTRACT, &
+               'non-unique canonical LOS identity must fail',failures)
+    state%radar_los%observation_id_lo(1,1,1,1)=1_int64
+
+    state%radar_los%vrad_representation=VRAD_FOLDED
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
+    CALL check(status==STATUS_FAILED, &
+               'folded LOS data must fail the dealiased contract',failures)
+    state%radar_los%vrad_representation=VRAD_DEALIASED
+
+    state%radar_los%nyquist%source(1,1,1,1)=SOURCE_BACKGROUND_MODEL
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_RADAR_CONTRACT, &
+               'Nyquist provenance must be radar LOS',failures)
+    state%radar_los%nyquist%source(1,1,1,1)=SOURCE_RADAR_VRAD
 
     state%radar_los%nyquist%value(1,1,1,1)=-1.0_real32
     CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)

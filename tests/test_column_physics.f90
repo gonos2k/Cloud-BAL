@@ -39,7 +39,7 @@ CONTAINS
       state%grid%dx(i,j)=2000.0_real64
       state%grid%dy(i,j)=2200.0_real64
       state%grid%dp(i,j,k)=15000.0_real64
-      state%grid%cell_measure(i,j,k)=state%grid%dx(i,j)*state%grid%dy(i,j)* &
+      state%grid%pressure_mass_measure(i,j,k)=state%grid%dx(i,j)*state%grid%dy(i,j)* &
                                       state%grid%dp(i,j,k)/9.80665_real64
       state%pressure%value(i,j,k)=REAL(95000-15000*(k-1),real32)
       state%temperature%value(i,j,k)=280.0_real32
@@ -65,6 +65,8 @@ CONTAINS
     state%surface_pressure%quality=0; state%surface_temperature%quality=0
     state%surface_pressure%source=SOURCE_BACKGROUND_MODEL
     state%surface_temperature%source=SOURCE_BACKGROUND_MODEL
+    CALL refresh_dry_air_mass_measure(state,status)
+    IF (status/=STATUS_OK) ERROR STOP 'dry-air mass initialization failed'
   END SUBROUTINE make_state
 
   SUBROUTINE valid_real(field,source)
@@ -102,6 +104,7 @@ CONTAINS
   SUBROUTINE test_phase_and_thermodynamics(failures)
     INTEGER, INTENT(INOUT) :: failures
     REAL(real64) :: rain,snow,graupel,total,t,rv,qc,qi,water0,enthalpy0
+    REAL(real64) :: t0,rv0,qc0,qi0
     INTEGER :: status
     total=0.004_real64
     CALL allocate_precipitation_phase(total,270.0_real64,PHASE_UNKNOWN, &
@@ -112,14 +115,31 @@ CONTAINS
     CALL check(status==STATUS_FAILED,'invalid phase must not coerce to unknown',failures)
 
     t=280.0_real64; rv=0.002_real64; qc=0.004_real64; qi=0.001_real64
-    water0=rv+qc+qi; enthalpy0=moist_enthalpy(t,rv,qi)
+    water0=rv+qc+qi; enthalpy0=reduced_moist_enthalpy(t,rv,qi)
     CALL saturation_adjust_cell(85000.0_real64,t,rv,qc,qi,0.90_real64,status)
     CALL check(status==STATUS_OK,'bounded saturation adjustment',failures)
     CALL check(ABS((rv+qc+qi)-water0)<2.0e-13_real64, &
                'dry-air total water must close',failures)
-    CALL check(ABS(moist_enthalpy(t,rv,qi)-enthalpy0)<2.0e-7_real64, &
+    CALL check(ABS(reduced_moist_enthalpy(t,rv,qi)-enthalpy0)<2.0e-7_real64, &
                'moist enthalpy must close',failures)
     CALL check(t<280.0_real64,'evaporation/sublimation must cool temperature',failures)
+
+    t=280.0_real64; rv=0.020_real64; qc=0.0_real64; qi=0.0_real64
+    water0=rv; enthalpy0=reduced_moist_enthalpy(t,rv,qi)
+    CALL saturation_adjust_cell(85000.0_real64,t,rv,qc,qi,1.0_real64,status)
+    CALL check(status==STATUS_OK .AND. qc>0.0_real64 .AND. rv<0.020_real64 .AND. &
+               t>280.0_real64, &
+               'supersaturation must condense and warm',failures)
+    CALL check(ABS((rv+qc+qi)-water0)<2.0e-13_real64 .AND. &
+               ABS(reduced_moist_enthalpy(t,rv,qi)-enthalpy0)<2.0e-7_real64, &
+               'condensation must conserve water and reduced enthalpy',failures)
+
+    t=280.0_real64; rv=0.002_real64; qc=0.001_real64; qi=0.2_real64
+    t0=t; rv0=rv; qc0=qc; qi0=qi
+    CALL saturation_adjust_cell(85000.0_real64,t,rv,qc,qi,1.0_real64,status)
+    CALL check(status==STATUS_FAILED .AND. t==t0 .AND. rv==rv0 .AND. &
+               qc==qc0 .AND. qi==qi0, &
+               'failed saturation adjustment must be atomic',failures)
     CALL check(dry_air_density(85000.0_real64,280.0_real64,0.01_real64)>0.0_real64, &
                'dry-air density must be physical',failures)
   END SUBROUTINE test_phase_and_thermodynamics
@@ -130,21 +150,23 @@ CONTAINS
     TYPE(column_physics_config) :: cfg
     TYPE(precipitation_flux_ledger) :: ledger
     REAL(real32) :: p(4,4,3),t(4,4,3),qv(4,4,3),u(4,4,3),v(4,4,3),w(4,4,3)
-    LOGICAL :: wvalid(4,4,3),observed(4,4,3)
+    LOGICAL :: wvalid(4,4,3),domain(4,4,3),observed(4,4,3)
     INTEGER :: phase(4,4,3),status,k
     REAL(real64) :: z(4,4,3),rain(4,4,3),snow(4,4,3),graupel(4,4,3)
 
     grid%nx=4; grid%ny=4; grid%nz=3; grid%grid_id='transport-test'
-    ALLOCATE(grid%dx(4,4),grid%dy(4,4),grid%dp(4,4,3),grid%cell_measure(4,4,3))
+    ALLOCATE(grid%dx(4,4),grid%dy(4,4),grid%dp(4,4,3), &
+             grid%pressure_mass_measure(4,4,3),grid%dry_air_mass_measure(4,4,3))
     grid%dx=2000.0_real64; grid%dy=2000.0_real64; grid%dp=15000.0_real64
-    grid%cell_measure=SPREAD(grid%dx*grid%dy,3,3)*grid%dp/9.80665_real64
+    grid%pressure_mass_measure=SPREAD(grid%dx*grid%dy,3,3)*grid%dp/9.80665_real64
+    grid%dry_air_mass_measure=grid%pressure_mass_measure/(1.0_real64+0.008_real64)
     DO k=1,3; p(:,:,k)=REAL(95000-15000*(k-1),real32); END DO
     t=280.0_real32; qv=0.008_real32; u=0.0_real32; v=0.0_real32
-    w=0.0_real32; wvalid=.TRUE.; observed=.FALSE.; phase=PHASE_UNKNOWN
+    w=0.0_real32; wvalid=.TRUE.; domain=.TRUE.; observed=.FALSE.; phase=PHASE_UNKNOWN
     z=0.0_real64; rain=0.0_real64; snow=0.0_real64; graupel=0.0_real64
     observed(2,2,3)=.TRUE.; observed(2,2,2)=.TRUE.
     phase(2,2,3)=PHASE_RAIN; z(2,2,3)=1000.0_real64; rain(2,2,3)=1.0e-4_real64
-    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,observed,phase,z, &
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
                                       rain,snow,graupel,cfg,ledger,status)
     CALL check(status==STATUS_OK .AND. flux_ledger_closes(ledger,cfg), &
                'blocked-destination flux ledger must close',failures)
@@ -155,7 +177,7 @@ CONTAINS
     rain=0.0_real64; snow=0.0_real64; graupel=0.0_real64
     observed(4,2,3)=.TRUE.; phase(4,2,3)=PHASE_RAIN
     z(4,2,3)=1000.0_real64; rain(4,2,3)=1.0e-4_real64; u=20.0_real32
-    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,observed,phase,z, &
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
                                       rain,snow,graupel,cfg,ledger,status)
     CALL check(status==STATUS_OK .AND. flux_ledger_closes(ledger,cfg), &
                'domain-exit flux ledger must close',failures)
@@ -167,17 +189,29 @@ CONTAINS
     observed(2,2,3)=.TRUE.; phase(2,2,3)=PHASE_RAIN
     z(2,2,3)=1000.0_real64; rain(2,2,3)=1.0e-4_real64
     w=20.0_real32
-    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,observed,phase,z, &
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
                                       rain,snow,graupel,cfg,ledger,status)
     CALL check(status==STATUS_OK .AND. flux_ledger_closes(ledger,cfg) .AND. &
                ABS(rain(2,2,2))<=TINY(1.0_real64), &
                'ascent faster than fall speed must not force downward crossing',failures)
 
     w=-10.0_real32
-    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,observed,phase,z, &
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
                                       rain,snow,graupel,cfg,ledger,status)
     CALL check(status==STATUS_OK .AND. flux_ledger_closes(ledger,cfg), &
                'strong downdraft relative-flux ledger must close',failures)
+
+    w=0.0_real32; wvalid=.TRUE.; domain=.TRUE.; observed=.FALSE.
+    phase=PHASE_UNKNOWN; z=0.0_real64
+    rain=0.0_real64; snow=0.0_real64; graupel=0.0_real64
+    observed(2,2,3)=.TRUE.; phase(2,2,3)=PHASE_RAIN
+    z(2,2,3)=1000.0_real64; rain(2,2,3)=1.0e-4_real64
+    domain(2,2,2)=.FALSE.; wvalid(2,2,2)=.FALSE.
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_OK .AND. flux_ledger_closes(ledger,cfg) .AND. &
+               ledger%terrain_intercept>0.0_real64, &
+               'terrain-intercepted flux must be explicit and conserved',failures)
   END SUBROUTINE test_flux_ledgers
 
   SUBROUTINE test_column_stage(failures)
@@ -200,6 +234,16 @@ CONTAINS
                'cloud type alone must not fabricate a mean vertical velocity',failures)
     CALL check(output%obs_support(2,2,2)==1_int32, &
                'cloud analysis still supplies local support',failures)
+
+    CALL make_state(input,4,4,4)
+    input%cloud_fraction%value(2,2,2)=0.8_real32
+    input%cloud_type%value(2,2,2)=1_int32
+    input%cloud_fraction%valid(1,1,1)=.FALSE.
+    input%cloud_fraction%quality(1,1,1)=QUALITY_RAW_MISSING
+    input%cloud_fraction%source(1,1,1)=0_int32
+    CALL derive_column_physics(input,output,result,cfg)
+    CALL check(result%status==STATUS_OK .AND. output%obs_support(2,2,2)==1_int32, &
+               'a missing optional cloud mate must exclude only its cell',failures)
 
     CALL make_state(input,4,4,4)
     input%cloud_type%value(2,2,2)=3_int32
@@ -227,6 +271,11 @@ CONTAINS
     CALL check(result%numerical%ledger_error<=cfg%ledger_absolute_tolerance+ &
                cfg%ledger_relative_tolerance*result%numerical%flux_input, &
                'published radar ledger closure',failures)
+    CALL check(.NOT.ANY(((input%rain%value/=output%rain%value) .OR. &
+                         (input%snow%value/=output%snow%value) .OR. &
+                         (input%graupel%value/=output%graupel%value)) .AND. &
+                        .NOT.result%changed), &
+               'column changed mask must cover every hydrometeor change',failures)
     CALL derive_column_physics(input,repeat_output,repeat_result,cfg)
     before_bits=TRANSFER(output%rain%value,[0_int32],SIZE(output%rain%value))
     after_bits=TRANSFER(repeat_output%rain%value,[0_int32],SIZE(repeat_output%rain%value))
@@ -267,6 +316,22 @@ CONTAINS
            QUALITY_PHASE_UNCERTAIN)/=0_int32, &
       'explicit unknown phase must remain marked uncertain',failures)
 
+    CALL make_state(input,4,4,4)
+    input%radar_reflectivity%valid(2,2,4)=.TRUE.
+    input%radar_reflectivity%quality(2,2,4)=0_int32
+    input%radar_reflectivity%source(2,2,4)=SOURCE_RADAR_DBZ
+    input%radar_reflectivity%value(2,2,4)=80.0_real32
+    cfg%reference_mass_concentration=1.0_real64
+    cfg%precipitation_loading_efficiency=1.0_real64
+    cfg%maximum_downdraft_ms=200.0_real64
+    cfg%maximum_downdraft_innovation_ms=200.0_real64
+    CALL derive_column_physics(input,output,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_RANGE .AND. &
+      .NOT.ANY(result%changed) .AND. ALL(output%omega_target%valid .EQV. &
+      input%omega_target%valid) .AND. ALL(output%rain%value==input%rain%value), &
+      'out-of-contract column target must rollback before commit',failures)
+    cfg=column_physics_config()
+
     input%precipitation_phase%value(2,2,4)=PHASE_RAIN
     input%rain%unit='kg m-3'
     CALL derive_column_physics(input,output,result,cfg)
@@ -305,7 +370,61 @@ CONTAINS
       'an unallocated fall-speed source mask must reject unchanged',failures)
 
     CALL test_radar_background_isolation(failures)
+    CALL test_transported_loading_has_no_wind_authority(failures)
   END SUBROUTINE test_column_stage
+
+  SUBROUTINE test_transported_loading_has_no_wind_authority(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: base,extended,base_out,extended_out
+    TYPE(stage_result) :: base_result,extended_result
+    TYPE(column_physics_config) :: cfg
+    INTEGER(int32) :: base_bits,extended_bits
+
+    CALL make_state(base,4,4,4)
+    base%u%value=10.5_real32
+    base%radar_reflectivity%valid(2,2,2)=.TRUE.
+    base%radar_reflectivity%quality(2,2,2)=0_int32
+    base%radar_reflectivity%source(2,2,2)=SOURCE_RADAR_DBZ
+    base%radar_reflectivity%value(2,2,2)=30.0_real32
+    base%precipitation_phase%valid(2,2,2)=.TRUE.
+    base%precipitation_phase%quality(2,2,2)=0_int32
+    base%precipitation_phase%source(2,2,2)=SOURCE_RADAR_DBZ
+    base%precipitation_phase%value(2,2,2)=PHASE_RAIN
+    extended=base
+    extended%radar_reflectivity%valid(1,2,4)=.TRUE.
+    extended%radar_reflectivity%quality(1,2,4)=0_int32
+    extended%radar_reflectivity%source(1,2,4)=SOURCE_RADAR_DBZ
+    extended%radar_reflectivity%value(1,2,4)=30.0_real32
+    extended%precipitation_phase%valid(1,2,4)=.TRUE.
+    extended%precipitation_phase%quality(1,2,4)=0_int32
+    extended%precipitation_phase%source(1,2,4)=SOURCE_RADAR_DBZ
+    extended%precipitation_phase%value(1,2,4)=PHASE_RAIN
+
+    CALL derive_column_physics(base,base_out,base_result,cfg)
+    CALL derive_column_physics(extended,extended_out,extended_result,cfg)
+    CALL check(base_result%status==STATUS_OK .AND. extended_result%status==STATUS_OK, &
+      'transported-loading authority fixture must run',failures)
+    CALL check(extended_out%rain%value(2,2,3)>base_out%rain%value(2,2,3), &
+      'fixture must transport a remote echo into the direct-echo column',failures)
+    base_bits=TRANSFER(base_out%omega_target%value(2,2,2),base_bits)
+    extended_bits=TRANSFER(extended_out%omega_target%value(2,2,2),extended_bits)
+    CALL check(base_out%omega_target%valid(2,2,2) .AND. &
+      extended_out%omega_target%valid(2,2,2) .AND. base_bits==extended_bits, &
+      'transported hydrometeors cannot amplify a direct-echo wind target',failures)
+    CALL check(.NOT.dynamic_target_has_authority(base_out%omega_target%valid(2,2,2), &
+      base_out%omega_target%quality(2,2,2),base_out%omega_target%source(2,2,2)), &
+      'uncalibrated loading target cannot obtain dynamic authority',failures)
+
+    base%omega_target%value(2,2,2)=-0.25_real32
+    base%omega_target%valid(2,2,2)=.TRUE.
+    base%omega_target%quality(2,2,2)=0_int32
+    base%omega_target%source(2,2,2)=IOR(SOURCE_CONVENTIONAL_OBS,SOURCE_DYNAMIC_TARGET)
+    CALL derive_column_physics(base,base_out,base_result,cfg)
+    CALL check(base_result%status==STATUS_OK .AND. &
+      base_out%omega_target%value(2,2,2)==base%omega_target%value(2,2,2) .AND. &
+      base_out%omega_target%source(2,2,2)==base%omega_target%source(2,2,2), &
+      'radar loading must preserve a collocated authoritative target',failures)
+  END SUBROUTINE test_transported_loading_has_no_wind_authority
 
   SUBROUTINE test_radar_background_isolation(failures)
     INTEGER, INTENT(INOUT) :: failures
@@ -313,6 +432,7 @@ CONTAINS
     TYPE(stage_result) :: result,repeat_result,updated_result,fresh_result
     TYPE(column_physics_config) :: cfg
     INTEGER(int32) :: far_bits
+    INTEGER :: status
 
     CALL make_state(input,4,4,4)
     input%rain%value(4,4,2)=2.0e-4_real32
@@ -322,6 +442,7 @@ CONTAINS
     far_bits=TRANSFER(input%rain%value(4,4,2),far_bits)
     input%rain%value(2,2,3)=3.0e-4_real32
     input%rain%valid(2,2,3)=.TRUE.
+    input%rain%quality(2,2,3)=0_int32
     input%rain%source(2,2,3)=SOURCE_BACKGROUND_MODEL
     input%rain%value(2,2,4)=7.0e-4_real32
     input%rain%valid(2,2,4)=.TRUE.
@@ -336,8 +457,14 @@ CONTAINS
     fresh%rain%valid(2,2,4)=.FALSE.
     fresh%rain%quality(2,2,4)=0_int32
     fresh%rain%source(2,2,4)=0_int32
+    CALL refresh_dry_air_mass_measure(fresh,status)
+    IF (status/=STATUS_OK) ERROR STOP 'fresh dry-air mass refresh failed'
+    CALL refresh_dry_air_mass_measure(input,status)
+    IF (status/=STATUS_OK) ERROR STOP 'input dry-air mass refresh failed'
     CALL derive_column_physics(fresh,repeated,repeat_result,cfg)
     CALL derive_column_physics(input,output,result,cfg)
+    IF (result%status/=STATUS_OK) PRINT *,'radar reconstruction status/reason:', &
+      result%status,result%reason_code
     CALL check(result%status==STATUS_OK,'isolated radar reconstruction',failures)
     CALL check(TRANSFER(output%rain%value(2,2,4),far_bits)== &
                TRANSFER(repeated%rain%value(2,2,4),far_bits) .AND. &

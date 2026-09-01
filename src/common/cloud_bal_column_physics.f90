@@ -23,13 +23,11 @@ MODULE cloud_bal_column_physics
   REAL(real64), PARAMETER :: LV=2.50e6_real64
   REAL(real64), PARAMETER :: LF=3.34e5_real64
   REAL(real64), PARAMETER :: LS=LV+LF
-  INTEGER(int32), PARAMETER :: EXCLUDED_QUALITY_BITS=IOR(QUALITY_RAW_MISSING, &
-    IOR(QUALITY_QC_REJECTED,QUALITY_TIME_MISMATCH))
 
   TYPE, PUBLIC :: column_physics_config
     REAL(real64) :: cloud_fraction_threshold=0.01_real64
     REAL(real64) :: radar_wavelength_m=0.10_real64
-    REAL(real64) :: minimum_dbz=-10.0_real64
+    REAL(real64) :: minimum_dbz=0.0_real64
     REAL(real64) :: maximum_dbz=80.0_real64
     REAL(real64) :: reference_mass_concentration=1.0e-4_real64
     REAL(real64) :: minimum_relative_fall_speed=0.30_real64
@@ -47,8 +45,10 @@ MODULE cloud_bal_column_physics
     REAL(real64) :: deposited=0.0_real64
     REAL(real64) :: suspended=0.0_real64
     REAL(real64) :: boundary_exit=0.0_real64
+    REAL(real64) :: terrain_intercept=0.0_real64
     REAL(real64) :: observation_blocked=0.0_real64
     REAL(real64) :: microphysical_loss=0.0_real64
+    INTEGER :: maximum_required_substeps=0
   END TYPE precipitation_flux_ledger
 
   PUBLIC :: derive_column_physics
@@ -58,7 +58,7 @@ MODULE cloud_bal_column_physics
   PUBLIC :: transport_precipitation_flux
   PUBLIC :: dry_air_density
   PUBLIC :: saturation_adjust_cell
-  PUBLIC :: moist_enthalpy
+  PUBLIC :: reduced_moist_enthalpy
   PUBLIC :: flux_ledger_closes
 
 CONTAINS
@@ -79,18 +79,24 @@ CONTAINS
     INTEGER, ALLOCATABLE :: phase(:,:,:)
     REAL(real64), ALLOCATABLE :: rain(:,:,:),snow(:,:,:),graupel(:,:,:)
     REAL(real64), ALLOCATABLE :: zlinear(:,:,:)
-    REAL(real64) :: analysis_increment,ledger_error,input_water,output_water
+    REAL(real64) :: ledger_error,input_water,output_water
     INTEGER :: nx,ny,nz,status,reason
-    LOGICAL :: has_cloud,has_radar,has_cloud_contradiction
+    LOGICAL :: cloud_available,has_cloud,has_radar,has_cloud_contradiction
 
     IF (PRESENT(config)) cfg=config
-    CALL validate_canonical_state(state_in,.TRUE.,.FALSE.,status,reason)
+    ! Surface fields are optional here because no column equation uses them.
+    CALL validate_canonical_state(state_in,.FALSE.,.FALSE.,status,reason,.FALSE.)
     IF (status/=STATUS_OK) THEN
       CALL reject_candidate(state_in,state_out,result,status,reason)
       RETURN
     END IF
     IF (.NOT.column_config_valid(cfg)) THEN
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_RANGE)
+      RETURN
+    END IF
+    CALL validate_optional_cloud_pair(state_in,cloud_available,status,reason)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(state_in,state_out,result,status,reason)
       RETURN
     END IF
     nx=state_in%grid%nx; ny=state_in%grid%ny; nz=state_in%grid%nz
@@ -108,18 +114,22 @@ CONTAINS
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
       RETURN
     END IF
-    has_cloud=ANY(state_in%cloud_fraction%valid .AND. state_in%cloud_type%valid .AND. &
-      IAND(state_in%cloud_fraction%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
-      IAND(state_in%cloud_type%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
+    has_cloud=cloud_available .AND. ANY(state_in%above_ground .AND. &
+      cell_is_usable(state_in%cloud_fraction%valid, &
+      state_in%cloud_fraction%quality,state_in%cloud_fraction%source) .AND. &
+      cell_is_usable(state_in%cloud_type%valid,state_in%cloud_type%quality, &
+      state_in%cloud_type%source) .AND. &
       state_in%cloud_fraction%value>=REAL(cfg%cloud_fraction_threshold,real32) .AND. &
       state_in%cloud_type%value>0_int32)
-    has_cloud_contradiction=ANY(state_in%cloud_fraction%valid .AND. &
-      state_in%cloud_type%valid .AND. state_in%cloud_type%value>0_int32 .AND. &
-      IAND(state_in%cloud_fraction%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
-      IAND(state_in%cloud_type%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
+    has_cloud_contradiction=cloud_available .AND. ANY(state_in%above_ground .AND. &
+      cell_is_usable(state_in%cloud_fraction%valid, &
+      state_in%cloud_fraction%quality,state_in%cloud_fraction%source) .AND. &
+      cell_is_usable(state_in%cloud_type%valid,state_in%cloud_type%quality, &
+      state_in%cloud_type%source) .AND. state_in%cloud_type%value>0_int32 .AND. &
       state_in%cloud_fraction%value<REAL(cfg%cloud_fraction_threshold,real32))
-    has_radar=ANY(state_in%radar_reflectivity%valid .AND. &
-      IAND(state_in%radar_reflectivity%quality,EXCLUDED_QUALITY_BITS)==0_int32)
+    has_radar=ANY(state_in%above_ground .AND. &
+      cell_is_usable(state_in%radar_reflectivity%valid, &
+      state_in%radar_reflectivity%quality,state_in%radar_reflectivity%source))
     IF (.NOT.has_cloud .AND. .NOT.has_radar) THEN
       IF (has_cloud_contradiction) THEN
         CALL reject_candidate(state_in,state_out,result,STATUS_DEGRADED,REASON_REQUIRED_COVERAGE)
@@ -143,12 +153,13 @@ CONTAINS
              snow(nx,ny,nz),graupel(nx,ny,nz),zlinear(nx,ny,nz))
     CALL omega_to_w(state_in%omega%value,state_in%pressure%value, &
       state_in%temperature%value,state_in%vapor%value, &
-      state_in%omega%valid .AND. state_in%pressure%valid .AND. &
-      state_in%temperature%valid .AND. state_in%vapor%valid .AND. &
-      IAND(state_in%omega%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
-      IAND(state_in%pressure%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
-      IAND(state_in%temperature%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
-      IAND(state_in%vapor%quality,EXCLUDED_QUALITY_BITS)==0_int32, &
+      state_in%above_ground .AND. &
+      cell_is_usable(state_in%omega%valid,state_in%omega%quality,state_in%omega%source) .AND. &
+      cell_is_usable(state_in%pressure%valid,state_in%pressure%quality, &
+                     state_in%pressure%source) .AND. &
+      cell_is_usable(state_in%temperature%valid,state_in%temperature%quality, &
+                     state_in%temperature%source) .AND. &
+      cell_is_usable(state_in%vapor%valid,state_in%vapor%quality,state_in%vapor%source), &
       w_background,w_valid,status)
     IF (status/=STATUS_OK) THEN
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_NONFINITE)
@@ -164,6 +175,8 @@ CONTAINS
     END IF
 
     candidate=state_in
+    candidate%obs_support=0_int32
+    candidate%hydro_support=0_int32
     WHERE(state_in%cloud_fraction%valid .AND. state_in%cloud_type%valid .AND. &
           state_in%cloud_type%value>0_int32 .AND. &
           state_in%cloud_fraction%value<REAL(cfg%cloud_fraction_threshold,real32))
@@ -177,10 +190,9 @@ CONTAINS
     rain=0.0_real64; snow=0.0_real64; graupel=0.0_real64
     radar_observed=.FALSE.; radar_derived=.FALSE.; phase_uncertain=.FALSE.
     transport_blocked=.FALSE.; phase=PHASE_UNKNOWN; zlinear=0.0_real64
-    analysis_increment=0.0_real64
     IF (has_radar) THEN
       CALL diagnose_radar_cells(state_in,cfg,radar_observed,phase,zlinear, &
-        rain,snow,graupel,phase_uncertain,analysis_increment,status)
+        rain,snow,graupel,phase_uncertain,status)
       IF (status/=STATUS_OK) THEN
         CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_RADAR_CONTRACT)
         RETURN
@@ -194,13 +206,22 @@ CONTAINS
       transport_blocked=radar_observed
       CALL transport_precipitation_flux(state_in%grid,state_in%pressure%value, &
         state_in%temperature%value,state_in%vapor%value,state_in%u%value, &
-        state_in%v%value,w_background,w_valid,transport_blocked,phase,zlinear, &
+        state_in%v%value,w_background,w_valid,state_in%above_ground, &
+        transport_blocked,phase,zlinear, &
         rain,snow,graupel,cfg,ledger,status)
       IF (status/=STATUS_OK .OR. .NOT.flux_ledger_closes(ledger,cfg)) THEN
         CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_GATE)
+        result%numerical%transport_required_substeps=ledger%maximum_required_substeps
+        result%numerical%flux_input=ledger%input
+        result%numerical%flux_deposited=ledger%deposited
+        result%numerical%flux_suspended=ledger%suspended
+        result%numerical%flux_boundary_exit=ledger%boundary_exit
+        result%numerical%flux_terrain_intercept=ledger%terrain_intercept
+        result%numerical%flux_observation_blocked=ledger%observation_blocked
+        result%numerical%flux_microphysical_loss=ledger%microphysical_loss
         RETURN
       END IF
-      CALL add_loading_downdraft(state_in,cfg,rain,snow,graupel, &
+      CALL add_loading_downdraft(state_in,cfg,radar_observed,rain,snow,graupel, &
                                  w_background,w_target,status)
       IF (status/=STATUS_OK) THEN
         CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_NONFINITE)
@@ -221,28 +242,37 @@ CONTAINS
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_NONFINITE)
       RETURN
     END IF
+    CALL validate_canonical_state(candidate,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(state_in,state_out,result,status,reason)
+      RETURN
+    END IF
     CALL initialize_stage_result(candidate_result,nx,ny,nz,STATUS_OK,REASON_NONE)
     candidate_result%changed=column_changed_mask(state_in,candidate)
     candidate_result%coverage%required=SIZE(candidate_result%changed)
-    candidate_result%coverage%usable=COUNT(candidate%omega_target%valid)
+    candidate_result%coverage%usable=COUNT(dynamic_target_has_authority( &
+      candidate%omega_target%valid,candidate%omega_target%quality, &
+      candidate%omega_target%source))
     candidate_result%coverage%excluded=candidate_result%coverage%required- &
                                        candidate_result%coverage%usable
     candidate_result%coverage%usable_fraction=REAL(candidate_result%coverage%usable,real64)/ &
                                               REAL(candidate_result%coverage%required,real64)
     ledger_error=ledger%input-(ledger%deposited+ledger%suspended+ &
-      ledger%boundary_exit+ledger%observation_blocked+ledger%microphysical_loss)
+      ledger%boundary_exit+ledger%terrain_intercept+ledger%observation_blocked+ &
+      ledger%microphysical_loss)
     candidate_result%numerical%ledger_error=ABS(ledger_error)
     candidate_result%numerical%flux_input=ledger%input
     candidate_result%numerical%flux_deposited=ledger%deposited
     candidate_result%numerical%flux_suspended=ledger%suspended
     candidate_result%numerical%flux_boundary_exit=ledger%boundary_exit
+    candidate_result%numerical%flux_terrain_intercept=ledger%terrain_intercept
     candidate_result%numerical%flux_observation_blocked=ledger%observation_blocked
     candidate_result%numerical%flux_microphysical_loss=ledger%microphysical_loss
+    candidate_result%numerical%transport_required_substeps= &
+      ledger%maximum_required_substeps
     input_water=hydrometeor_mass(state_in)
     output_water=hydrometeor_mass(candidate)
-    analysis_increment=output_water-input_water
-    candidate_result%numerical%radar_analysis_increment=analysis_increment
-    candidate_result%numerical%water_error=0.0_real64
+    candidate_result%numerical%radar_analysis_increment=output_water-input_water
     CALL commit_candidate(state_in,candidate,candidate_result,state_out,result)
   END SUBROUTINE derive_column_physics
 
@@ -311,12 +341,11 @@ CONTAINS
     IF (ANY(SHAPE(w_valid)/=(/state%grid%nx,state%grid%ny,state%grid%nz/)) .OR. &
         ANY(SHAPE(w_target)/=(/state%grid%nx,state%grid%ny,state%grid%nz/))) RETURN
     DO j=1,state%grid%ny; DO i=1,state%grid%nx
-      column_valid=state%cloud_type%valid(i,j,:) .AND. &
-                   state%cloud_fraction%valid(i,j,:) .AND. &
-                   IAND(state%cloud_type%quality(i,j,:), &
-                        EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
-                   IAND(state%cloud_fraction%quality(i,j,:), &
-                        EXCLUDED_QUALITY_BITS)==0_int32
+      column_valid=state%above_ground(i,j,:) .AND. &
+                   cell_is_usable(state%cloud_type%valid(i,j,:), &
+                   state%cloud_type%quality(i,j,:),state%cloud_type%source(i,j,:)) .AND. &
+                   cell_is_usable(state%cloud_fraction%valid(i,j,:), &
+                   state%cloud_fraction%quality(i,j,:),state%cloud_fraction%source(i,j,:))
       column_phase=MERGE(state%precipitation_phase%value(i,j,:),PHASE_UNKNOWN, &
                          state%precipitation_phase%valid(i,j,:))
       CALL detect_cloud_sublayers(state%cloud_type%value(i,j,:), &
@@ -339,7 +368,7 @@ CONTAINS
   END SUBROUTINE build_cloud_targets
 
   SUBROUTINE diagnose_radar_cells(state,cfg,observed,phase,zlinear,rain,snow, &
-                                  graupel,phase_uncertain,analysis_increment,status)
+                                  graupel,phase_uncertain,status)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     TYPE(column_physics_config), INTENT(IN) :: cfg
     LOGICAL, INTENT(OUT) :: observed(:,:,:)
@@ -347,26 +376,26 @@ CONTAINS
     REAL(real64), INTENT(OUT) :: zlinear(:,:,:)
     REAL(real64), INTENT(INOUT) :: rain(:,:,:),snow(:,:,:),graupel(:,:,:)
     LOGICAL, INTENT(OUT) :: phase_uncertain(:,:,:)
-    REAL(real64), INTENT(OUT) :: analysis_increment
     INTEGER, INTENT(OUT) :: status
     INTEGER :: i,j,k,allocation_status
-    REAL(real64) :: total,new_rain,new_snow,new_graupel,old_total,rho_d
+    REAL(real64) :: total,new_rain,new_snow,new_graupel,rho_d
 
-    observed=state%radar_reflectivity%valid .AND. &
-      IAND(state%radar_reflectivity%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
+    observed=state%above_ground .AND. &
+      cell_is_usable(state%radar_reflectivity%valid, &
+      state%radar_reflectivity%quality,state%radar_reflectivity%source) .AND. &
       ieee_is_finite(state%radar_reflectivity%value) .AND. &
       REAL(state%radar_reflectivity%value,real64)>=cfg%minimum_dbz .AND. &
       REAL(state%radar_reflectivity%value,real64)<=cfg%maximum_dbz
     phase=PHASE_UNKNOWN; phase_uncertain=.FALSE.
-    zlinear=0.0_real64; analysis_increment=0.0_real64
+    zlinear=0.0_real64
     status=STATUS_FAILED
     DO k=1,state%grid%nz; DO j=1,state%grid%ny; DO i=1,state%grid%nx
       IF (.NOT.observed(i,j,k)) CYCLE
       zlinear(i,j,k)=10.0_real64**(0.1_real64* &
         REAL(state%radar_reflectivity%value(i,j,k),real64))
-      IF (state%precipitation_phase%valid(i,j,k) .AND. &
-          IAND(state%precipitation_phase%quality(i,j,k), &
-               EXCLUDED_QUALITY_BITS)==0_int32) THEN
+      IF (cell_is_usable(state%precipitation_phase%valid(i,j,k), &
+          state%precipitation_phase%quality(i,j,k), &
+          state%precipitation_phase%source(i,j,k))) THEN
         phase(i,j,k)=state%precipitation_phase%value(i,j,k)
         phase_uncertain(i,j,k)=IAND(state%precipitation_phase%quality(i,j,k), &
           IOR(QUALITY_PHASE_UNCERTAIN,QUALITY_BRIGHT_BAND_OR_MIXED))/=0_int32
@@ -378,29 +407,27 @@ CONTAINS
         REAL(state%temperature%value(i,j,k),real64), &
         REAL(state%vapor%value(i,j,k),real64))
       IF (rho_d<=0.0_real64) RETURN
+      ! The fixed S-band contract is validated separately.  Equivalent
+      ! reflectivity does not justify an uncalibrated wavelength multiplier.
       total=cfg%reference_mass_concentration* &
-            (zlinear(i,j,k)/1000.0_real64)**0.55_real64* &
-            SQRT(0.10_real64/cfg%radar_wavelength_m)/rho_d
+            (zlinear(i,j,k)/1000.0_real64)**0.55_real64/rho_d
       total=MIN(0.02_real64/rho_d,MAX(0.0_real64,total))
-      old_total=rain(i,j,k)+snow(i,j,k)+graupel(i,j,k)
       CALL allocate_precipitation_phase(total,REAL(state%temperature%value(i,j,k),real64), &
         phase(i,j,k),new_rain,new_snow,new_graupel,allocation_status)
       IF (allocation_status/=STATUS_OK) RETURN
       rain(i,j,k)=new_rain; snow(i,j,k)=new_snow; graupel(i,j,k)=new_graupel
-      analysis_increment=analysis_increment+(total-old_total)* &
-                         state%grid%cell_measure(i,j,k)
     END DO; END DO; END DO
     status=STATUS_OK
   END SUBROUTINE diagnose_radar_cells
 
   SUBROUTINE transport_precipitation_flux(grid,pressure,temperature,vapor,u,v,w, &
-    w_valid,observed,phase,zlinear,rain,snow,graupel,cfg,ledger,status)
+    w_valid,domain,observed,phase,zlinear,rain,snow,graupel,cfg,ledger,status)
     ! One-shot kernel: the hydrometeors are fresh radar-work arrays, consumed
     ! exactly once by derive_column_physics and never reused as background.
     TYPE(grid_spec), INTENT(IN) :: grid
     REAL(real32), INTENT(IN) :: pressure(:,:,:),temperature(:,:,:),vapor(:,:,:)
     REAL(real32), INTENT(IN) :: u(:,:,:),v(:,:,:),w(:,:,:)
-    LOGICAL, INTENT(IN) :: w_valid(:,:,:),observed(:,:,:)
+    LOGICAL, INTENT(IN) :: w_valid(:,:,:),domain(:,:,:),observed(:,:,:)
     INTEGER, INTENT(INOUT) :: phase(:,:,:)
     REAL(real64), INTENT(INOUT) :: zlinear(:,:,:),rain(:,:,:),snow(:,:,:),graupel(:,:,:)
     TYPE(column_physics_config), INTENT(IN) :: cfg
@@ -411,7 +438,7 @@ CONTAINS
     REAL(real64), ALLOCATABLE :: phase_rate(:,:),phase_zrate(:,:)
 
     ledger=precipitation_flux_ledger(); status=STATUS_FAILED
-    IF (.NOT.transport_shapes_valid(grid,pressure,temperature,vapor,u,v,w,w_valid, &
+    IF (.NOT.transport_shapes_valid(grid,pressure,temperature,vapor,u,v,w,w_valid,domain, &
                                     observed,phase,zlinear,rain,snow,graupel)) RETURN
     IF (ANY(observed .AND. .NOT.w_valid)) RETURN
     ALLOCATE(deposited_rate(grid%nx,grid%ny),deposited_zrate(grid%nx,grid%ny), &
@@ -423,13 +450,13 @@ CONTAINS
         SELECT CASE(phase_code)
         CASE(PHASE_RAIN)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            observed,k,phase_code,zlinear,rain,cfg,ledger,phase_rate,phase_zrate,status)
+            domain,observed,k,phase_code,zlinear,rain,cfg,ledger,phase_rate,phase_zrate,status)
         CASE(PHASE_SNOW)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            observed,k,phase_code,zlinear,snow,cfg,ledger,phase_rate,phase_zrate,status)
+            domain,observed,k,phase_code,zlinear,snow,cfg,ledger,phase_rate,phase_zrate,status)
         CASE(PHASE_GRAUPEL)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            observed,k,phase_code,zlinear,graupel,cfg,ledger,phase_rate,phase_zrate,status)
+            domain,observed,k,phase_code,zlinear,graupel,cfg,ledger,phase_rate,phase_zrate,status)
         END SELECT
         IF (status/=STATUS_OK) RETURN
         deposited_rate=deposited_rate+phase_rate
@@ -458,11 +485,11 @@ CONTAINS
   END SUBROUTINE transport_precipitation_flux
 
   SUBROUTINE transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-    observed,k,phase_code,zlinear,q,cfg,ledger,deposited_rate,deposited_zrate,status)
+    domain,observed,k,phase_code,zlinear,q,cfg,ledger,deposited_rate,deposited_zrate,status)
     TYPE(grid_spec), INTENT(IN) :: grid
     REAL(real32), INTENT(IN) :: pressure(:,:,:),temperature(:,:,:),vapor(:,:,:),u(:,:,:)
     REAL(real32), INTENT(IN) :: v(:,:,:),w(:,:,:)
-    LOGICAL, INTENT(IN) :: w_valid(:,:,:),observed(:,:,:)
+    LOGICAL, INTENT(IN) :: w_valid(:,:,:),domain(:,:,:),observed(:,:,:)
     INTEGER, INTENT(IN) :: k,phase_code
     REAL(real64), INTENT(INOUT) :: zlinear(:,:,:),q(:,:,:)
     TYPE(column_physics_config), INTENT(IN) :: cfg
@@ -516,6 +543,7 @@ CONTAINS
     input_level=SUM(flux); ledger%input=ledger%input+input_level
     IF (input_level<=0.0_real64) THEN; status=STATUS_OK; RETURN; END IF
     nsub=MAX(1,CEILING(max_displacement/cfg%maximum_horizontal_substep))
+    ledger%maximum_required_substeps=MAX(ledger%maximum_required_substeps,nsub)
     IF (nsub>cfg%maximum_transport_substeps) RETURN
     xstep=xstep/REAL(nsub,real64); ystep=ystep/REAL(nsub,real64)
     DO substep=1,nsub
@@ -527,6 +555,10 @@ CONTAINS
     END DO
     DO j=1,grid%ny; DO i=1,grid%nx
       IF (flux(i,j)<=0.0_real64) CYCLE
+      IF (.NOT.domain(i,j,k-1)) THEN
+        ledger%terrain_intercept=ledger%terrain_intercept+flux(i,j)
+        CYCLE
+      END IF
       IF (observed(i,j,k-1)) THEN
         ledger%observation_blocked=ledger%observation_blocked+flux(i,j)
         CYCLE
@@ -624,10 +656,11 @@ CONTAINS
     status=STATUS_OK
   END SUBROUTINE account_bottom_flux
 
-  SUBROUTINE add_loading_downdraft(state,cfg,rain,snow,graupel, &
+  SUBROUTINE add_loading_downdraft(state,cfg,observed,rain,snow,graupel, &
                                    w_background,w_target,status)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     TYPE(column_physics_config), INTENT(IN) :: cfg
+    LOGICAL, INTENT(IN) :: observed(:,:,:)
     REAL(real64), INTENT(IN) :: rain(:,:,:),snow(:,:,:),graupel(:,:,:)
     REAL(real32), INTENT(IN) :: w_background(:,:,:)
     REAL(real32), INTENT(INOUT) :: w_target(:,:,:)
@@ -635,11 +668,15 @@ CONTAINS
     INTEGER :: i,j,k
     REAL(real64) :: rho_d,qprecip,dz,energy,wdown,innovation
     status=STATUS_FAILED
-    IF (ANY(SHAPE(rain)/=(/state%grid%nx,state%grid%ny,state%grid%nz/)) .OR. &
+    IF (ANY(SHAPE(observed)/=(/state%grid%nx,state%grid%ny,state%grid%nz/)) .OR. &
+        ANY(SHAPE(rain)/=SHAPE(observed)) .OR. &
         ANY(SHAPE(snow)/=SHAPE(rain)) .OR. ANY(SHAPE(graupel)/=SHAPE(rain))) RETURN
     DO j=1,state%grid%ny; DO i=1,state%grid%nx
       energy=0.0_real64
       DO k=state%grid%nz,1,-1
+        ! Transported descendants reconstruct hydrometeors only; they cannot
+        ! amplify the loading pseudo-observation used by the wind experiment.
+        IF (.NOT.observed(i,j,k)) CYCLE
         IF (rain(i,j,k)+snow(i,j,k)+graupel(i,j,k)<=0.0_real64) CYCLE
         rho_d=dry_air_density(REAL(state%pressure%value(i,j,k),real64), &
           REAL(state%temperature%value(i,j,k),real64), &
@@ -651,7 +688,12 @@ CONTAINS
         wdown=-MIN(cfg%maximum_downdraft_ms,SQRT(MAX(0.0_real64,2.0_real64*energy)))
         innovation=MAX(-cfg%maximum_downdraft_innovation_ms, &
                        wdown-REAL(w_background(i,j,k),real64))
-        IF (is_convective_type(state%cloud_type%value(i,j,k)) .AND. &
+        IF (cell_is_usable(state%cloud_type%valid(i,j,k), &
+              state%cloud_type%quality(i,j,k),state%cloud_type%source(i,j,k)) .AND. &
+            cell_is_usable(state%cloud_fraction%valid(i,j,k), &
+              state%cloud_fraction%quality(i,j,k),state%cloud_fraction%source(i,j,k)) .AND. &
+            state%cloud_fraction%value(i,j,k)>=REAL(cfg%cloud_fraction_threshold,real32) .AND. &
+            is_convective_type(state%cloud_type%value(i,j,k)) .AND. &
             w_background(i,j,k)>0.0_real32) CYCLE
         w_target(i,j,k)=REAL(MIN(REAL(w_target(i,j,k),real64), &
                                  REAL(w_background(i,j,k),real64)+innovation),real32)
@@ -683,13 +725,21 @@ CONTAINS
     CALL w_to_omega(w_target,input%pressure%value,input%temperature%value, &
       input%vapor%value,w_valid,omega_target,omega_valid,status)
     IF (status/=STATUS_OK) RETURN
-    target_derived=omega_valid .AND. (ABS(omega_target-input%omega%value)> &
-      16.0_real32*EPSILON(1.0_real32)*MAX(1.0_real32,ABS(input%omega%value)))
+    ! Transported descendants diagnose hydrometeors, not new wind evidence.
+    ! Dynamic authority stays with a direct, non-bright-band radar echo.
+    target_derived=omega_valid .AND. observed .AND. &
+      IAND(input%radar_reflectivity%quality,QUALITY_BRIGHT_BAND_OR_MIXED)==0_int32 .AND. &
+      .NOT.dynamic_target_has_authority(input%omega_target%valid, &
+        input%omega_target%quality,input%omega_target%source) .AND. &
+      (ABS(omega_target-input%omega%value)> &
+       16.0_real32*EPSILON(1.0_real32)*MAX(1.0_real32,ABS(input%omega%value)))
     WHERE(target_derived)
       candidate%omega_target%value=omega_target
       candidate%omega_target%valid=.TRUE.
-      candidate%omega_target%quality=0_int32
-      candidate%omega_target%source=IOR(candidate%omega%source,SOURCE_COLUMN_PHYSICS)
+      candidate%omega_target%quality=IOR(input%radar_reflectivity%quality, &
+        IOR(QUALITY_FALL_SPEED_UNCERTAIN, &
+            MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain)))
+      candidate%omega_target%source=IOR(SOURCE_RADAR_DBZ,SOURCE_COLUMN_PHYSICS)
     END WHERE
     WHERE(radar_derived)
       ! A valid echo diagnoses total precipitation at the observed cell.
@@ -702,9 +752,18 @@ CONTAINS
         0.0_real64,.NOT.observed .AND. input%graupel%valid),real32)
       candidate%rain%valid=.TRUE.; candidate%snow%valid=.TRUE.
       candidate%graupel%valid=.TRUE.
-      candidate%rain%quality=MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain)
-      candidate%snow%quality=candidate%rain%quality
-      candidate%graupel%quality=candidate%rain%quality
+      candidate%rain%quality=MERGE( &
+        IOR(input%rain%quality,MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain)), &
+        MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain), &
+        .NOT.observed .AND. input%rain%valid)
+      candidate%snow%quality=MERGE( &
+        IOR(input%snow%quality,MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain)), &
+        MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain), &
+        .NOT.observed .AND. input%snow%valid)
+      candidate%graupel%quality=MERGE( &
+        IOR(input%graupel%quality,MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain)), &
+        MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain), &
+        .NOT.observed .AND. input%graupel%valid)
       candidate%rain%source=MERGE(IOR(SOURCE_RADAR_DBZ,SOURCE_COLUMN_PHYSICS), &
         IOR(candidate%rain%source,IOR(SOURCE_RADAR_DBZ,SOURCE_COLUMN_PHYSICS)),observed)
       candidate%snow%source=MERGE(IOR(SOURCE_RADAR_DBZ,SOURCE_COLUMN_PHYSICS), &
@@ -713,17 +772,21 @@ CONTAINS
         IOR(candidate%graupel%source,IOR(SOURCE_RADAR_DBZ,SOURCE_COLUMN_PHYSICS)),observed)
       candidate%precipitation_phase%value=phase
       candidate%precipitation_phase%valid=.TRUE.
-      candidate%precipitation_phase%quality= &
-        MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain)
+      candidate%precipitation_phase%quality=MERGE( &
+        IOR(input%precipitation_phase%quality, &
+            MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain)), &
+        MERGE(QUALITY_PHASE_UNCERTAIN,0_int32,phase_uncertain), &
+        .NOT.observed .AND. input%precipitation_phase%valid)
       candidate%precipitation_phase%source=MERGE( &
         IOR(SOURCE_RADAR_DBZ,SOURCE_COLUMN_PHYSICS), &
         IOR(candidate%precipitation_phase%source, &
             IOR(SOURCE_RADAR_DBZ,SOURCE_COLUMN_PHYSICS)),observed)
     END WHERE
     WHERE(observed .OR. &
-      (input%cloud_fraction%valid .AND. input%cloud_type%valid .AND. &
-       IAND(input%cloud_fraction%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
-       IAND(input%cloud_type%quality,EXCLUDED_QUALITY_BITS)==0_int32 .AND. &
+      (cell_is_usable(input%cloud_fraction%valid,input%cloud_fraction%quality, &
+                      input%cloud_fraction%source) .AND. &
+       cell_is_usable(input%cloud_type%valid,input%cloud_type%quality, &
+                      input%cloud_type%source) .AND. &
        input%cloud_fraction%value>=REAL(cfg%cloud_fraction_threshold,real32) .AND. &
        input%cloud_type%value>0_int32)) candidate%obs_support=1_int32
     WHERE(radar_derived) candidate%hydro_support=1_int32
@@ -758,6 +821,8 @@ CONTAINS
             .NOT.ieee_is_finite(candidate%graupel%value))) THEN
       status=STATUS_FAILED; RETURN
     END IF
+    CALL refresh_dry_air_mass_measure(candidate,status)
+    IF (status/=STATUS_OK) RETURN
     status=STATUS_OK
   END SUBROUTINE publish_column_candidate
 
@@ -844,6 +909,10 @@ CONTAINS
     REAL(real64), INTENT(IN) :: pressure,target_rh
     REAL(real64), INTENT(INOUT) :: temperature,vapor,cloud_liquid,cloud_ice
     INTEGER, INTENT(OUT) :: status
+    REAL(real64) :: t_work,v_work,ql_work,qi_work,water_before,enthalpy_before
+    REAL(real64) :: water_after,enthalpy_after,tolerance
+    INTEGER :: phase_status
+
     status=STATUS_FAILED
     IF (.NOT.ieee_is_finite(pressure) .OR. pressure<=100.0_real64 .OR. &
         .NOT.ieee_is_finite(temperature) .OR. temperature<150.0_real64 .OR. &
@@ -852,50 +921,86 @@ CONTAINS
         cloud_liquid<0.0_real64 .OR. cloud_ice<0.0_real64 .OR. &
         .NOT.ieee_is_finite(target_rh) .OR. target_rh<0.0_real64 .OR. &
         target_rh>1.0_real64) RETURN
-    IF (temperature>=273.15_real64) THEN
-      CALL evaporate_phase_bounded(pressure,temperature,vapor,cloud_liquid, &
-                                   target_rh,LV,.FALSE.)
-      CALL evaporate_phase_bounded(pressure,temperature,vapor,cloud_ice, &
-                                   target_rh,LS,.TRUE.)
+    t_work=temperature; v_work=vapor; ql_work=cloud_liquid; qi_work=cloud_ice
+    water_before=v_work+ql_work+qi_work
+    enthalpy_before=reduced_moist_enthalpy(t_work,v_work,qi_work)
+    IF (t_work>=273.15_real64) THEN
+      CALL equilibrate_phase_bounded(pressure,t_work,v_work,ql_work, &
+                                     target_rh,LV,.FALSE.,phase_status)
+      IF (phase_status/=STATUS_OK) RETURN
+      IF (v_work<target_rh*saturation_mixing_ratio(t_work,pressure,.FALSE.) .AND. &
+          qi_work>0.0_real64) THEN
+        CALL equilibrate_phase_bounded(pressure,t_work,v_work,qi_work, &
+                                       target_rh,LS,.TRUE.,phase_status)
+        IF (phase_status/=STATUS_OK) RETURN
+      END IF
     ELSE
-      CALL evaporate_phase_bounded(pressure,temperature,vapor,cloud_ice, &
-                                   target_rh,LS,.TRUE.)
-      CALL evaporate_phase_bounded(pressure,temperature,vapor,cloud_liquid, &
-                                   target_rh,LV,.FALSE.)
+      CALL equilibrate_phase_bounded(pressure,t_work,v_work,qi_work, &
+                                     target_rh,LS,.TRUE.,phase_status)
+      IF (phase_status/=STATUS_OK) RETURN
+      IF (v_work<target_rh*saturation_mixing_ratio(t_work,pressure,.TRUE.) .AND. &
+          ql_work>0.0_real64) THEN
+        CALL equilibrate_phase_bounded(pressure,t_work,v_work,ql_work, &
+                                       target_rh,LV,.FALSE.,phase_status)
+        IF (phase_status/=STATUS_OK) RETURN
+      END IF
     END IF
-    IF (.NOT.ieee_is_finite(temperature) .OR. temperature<150.0_real64 .OR. &
-        vapor<0.0_real64 .OR. cloud_liquid<0.0_real64 .OR. cloud_ice<0.0_real64) RETURN
+    water_after=v_work+ql_work+qi_work
+    enthalpy_after=reduced_moist_enthalpy(t_work,v_work,qi_work)
+    tolerance=64.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64,ABS(water_before))
+    IF (.NOT.ieee_is_finite(t_work) .OR. t_work<150.0_real64 .OR. t_work>350.0_real64 .OR. &
+        .NOT.ieee_is_finite(v_work) .OR. .NOT.ieee_is_finite(ql_work) .OR. &
+        .NOT.ieee_is_finite(qi_work) .OR. v_work<0.0_real64 .OR. ql_work<0.0_real64 .OR. &
+        qi_work<0.0_real64 .OR. ABS(water_after-water_before)>tolerance .OR. &
+        ABS(enthalpy_after-enthalpy_before)> &
+        256.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64,ABS(enthalpy_before))) RETURN
+    temperature=t_work; vapor=v_work; cloud_liquid=ql_work; cloud_ice=qi_work
     status=STATUS_OK
   END SUBROUTINE saturation_adjust_cell
 
-  SUBROUTINE evaporate_phase_bounded(pressure,temperature,vapor,condensate, &
-                                     target_rh,latent,over_ice)
+  SUBROUTINE equilibrate_phase_bounded(pressure,temperature,vapor,condensate, &
+                                       target_rh,latent,over_ice,status)
     REAL(real64), INTENT(IN) :: pressure,target_rh,latent
     REAL(real64), INTENT(INOUT) :: temperature,vapor,condensate
     LOGICAL, INTENT(IN) :: over_ice
-    REAL(real64) :: lo,hi,mid,flo,fmid,initial_t
+    INTEGER, INTENT(OUT) :: status
+    REAL(real64) :: lo,hi,mid,flo,fhi,fmid,initial_t,trial_t
     INTEGER :: iteration
-    IF (condensate<=0.0_real64) RETURN
-    initial_t=temperature; lo=0.0_real64; hi=condensate
-    flo=vapor-target_rh*saturation_mixing_ratio(initial_t,pressure,over_ice)
-    IF (flo>=0.0_real64) RETURN
-    fmid=vapor+hi-target_rh*saturation_mixing_ratio( &
-      initial_t-latent*hi/CP_DRY,pressure,over_ice)
-    IF (fmid<=0.0_real64) THEN
-      mid=hi
+    status=STATUS_FAILED; initial_t=temperature
+    lo=-vapor; hi=condensate
+    IF (MAX(ABS(lo),ABS(hi))>HUGE(1.0_real64)/(latent/CP_DRY)) RETURN
+    trial_t=initial_t-latent*lo/CP_DRY
+    IF (.NOT.ieee_is_finite(trial_t) .OR. trial_t<100.0_real64 .OR. &
+        trial_t>400.0_real64) RETURN
+    flo=vapor+lo-target_rh*saturation_mixing_ratio(trial_t,pressure,over_ice)
+    trial_t=initial_t-latent*hi/CP_DRY
+    IF (.NOT.ieee_is_finite(trial_t) .OR. trial_t<100.0_real64 .OR. &
+        trial_t>400.0_real64) RETURN
+    fhi=vapor+hi-target_rh*saturation_mixing_ratio(trial_t,pressure,over_ice)
+    IF (flo>0.0_real64 .OR. fhi<0.0_real64) THEN
+      mid=MERGE(lo,hi,flo>0.0_real64)
     ELSE
       DO iteration=1,80
         mid=0.5_real64*(lo+hi)
-        fmid=vapor+mid-target_rh*saturation_mixing_ratio( &
-          initial_t-latent*mid/CP_DRY,pressure,over_ice)
-        IF (fmid>0.0_real64) THEN; hi=mid; ELSE; lo=mid; END IF
-        IF (hi-lo<=MAX(1.0e-14_real64,1.0e-12_real64*condensate)) EXIT
+        trial_t=initial_t-latent*mid/CP_DRY
+        IF (.NOT.ieee_is_finite(trial_t)) RETURN
+        fmid=vapor+mid-target_rh*saturation_mixing_ratio(trial_t,pressure,over_ice)
+        IF (fmid>0.0_real64) THEN
+          hi=mid
+        ELSE
+          lo=mid
+        END IF
+        IF (hi-lo<=MAX(1.0e-14_real64, &
+          1.0e-12_real64*MAX(vapor,condensate,1.0e-12_real64))) EXIT
       END DO
       mid=0.5_real64*(lo+hi)
     END IF
-    condensate=condensate-mid; vapor=vapor+mid
-    temperature=initial_t-latent*mid/CP_DRY
-  END SUBROUTINE evaporate_phase_bounded
+    trial_t=initial_t-latent*mid/CP_DRY
+    IF (.NOT.ieee_is_finite(trial_t) .OR. vapor+mid<0.0_real64 .OR. &
+        condensate-mid<0.0_real64) RETURN
+    temperature=trial_t; vapor=vapor+mid; condensate=condensate-mid
+    status=STATUS_OK
+  END SUBROUTINE equilibrate_phase_bounded
 
   PURE REAL(real64) FUNCTION saturation_mixing_ratio(temperature,pressure,over_ice)
     REAL(real64), INTENT(IN) :: temperature,pressure
@@ -920,17 +1025,18 @@ CONTAINS
     dry_air_density=pressure/(RD_AIR*temperature*(1.0_real64+vapor/EPSILON_WATER))
   END FUNCTION dry_air_density
 
-  PURE REAL(real64) FUNCTION moist_enthalpy(temperature,vapor,cloud_ice)
+  PURE REAL(real64) FUNCTION reduced_moist_enthalpy(temperature,vapor,cloud_ice)
     REAL(real64), INTENT(IN) :: temperature,vapor,cloud_ice
-    moist_enthalpy=CP_DRY*temperature+LV*vapor-LF*cloud_ice
-  END FUNCTION moist_enthalpy
+    reduced_moist_enthalpy=CP_DRY*temperature+LV*vapor-LF*cloud_ice
+  END FUNCTION reduced_moist_enthalpy
 
   PURE LOGICAL FUNCTION flux_ledger_closes(ledger,cfg)
     TYPE(precipitation_flux_ledger), INTENT(IN) :: ledger
     TYPE(column_physics_config), INTENT(IN) :: cfg
     REAL(real64) :: output,error
     output=ledger%deposited+ledger%suspended+ledger%boundary_exit+ &
-           ledger%observation_blocked+ledger%microphysical_loss
+           ledger%terrain_intercept+ledger%observation_blocked+ &
+           ledger%microphysical_loss
     error=ABS(ledger%input-output)
     flux_ledger_closes=ieee_is_finite(error) .AND. error<= &
       cfg%ledger_absolute_tolerance+cfg%ledger_relative_tolerance* &
@@ -942,16 +1048,23 @@ CONTAINS
     REAL(real64), ALLOCATABLE :: total(:,:,:)
     ALLOCATE(total(state%grid%nx,state%grid%ny,state%grid%nz))
     total=0.0_real64
-    WHERE(state%cloud_water%valid)
+    WHERE(cell_is_usable(state%cloud_water%valid,state%cloud_water%quality, &
+                         state%cloud_water%source))
       total=total+REAL(state%cloud_water%value,real64)
     END WHERE
-    WHERE(state%cloud_ice%valid)
+    WHERE(cell_is_usable(state%cloud_ice%valid,state%cloud_ice%quality, &
+                         state%cloud_ice%source))
       total=total+REAL(state%cloud_ice%value,real64)
     END WHERE
-    WHERE(state%rain%valid) total=total+REAL(state%rain%value,real64)
-    WHERE(state%snow%valid) total=total+REAL(state%snow%value,real64)
-    WHERE(state%graupel%valid) total=total+REAL(state%graupel%value,real64)
-    hydrometeor_mass=SUM(total*state%grid%cell_measure)
+    WHERE(cell_is_usable(state%rain%valid,state%rain%quality,state%rain%source)) &
+      total=total+REAL(state%rain%value,real64)
+    WHERE(cell_is_usable(state%snow%valid,state%snow%quality,state%snow%source)) &
+      total=total+REAL(state%snow%value,real64)
+    WHERE(cell_is_usable(state%graupel%valid,state%graupel%quality, &
+                         state%graupel%source)) &
+      total=total+REAL(state%graupel%value,real64)
+    hydrometeor_mass=SUM(total*state%grid%dry_air_mass_measure, &
+                         MASK=state%above_ground)
   END FUNCTION hydrometeor_mass
 
   PURE REAL(real64) FUNCTION layer_separation(grid,pressure,temperature,vapor,i,j,k)
@@ -994,6 +1107,66 @@ CONTAINS
     END IF
   END FUNCTION temperature_phase
 
+  SUBROUTINE validate_optional_cloud_pair(state,present,status,reason)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    LOGICAL, INTENT(OUT) :: present
+    INTEGER, INTENT(OUT) :: status,reason
+    INTEGER :: target(3)
+    LOGICAL, ALLOCATABLE :: fraction_usable(:,:,:),type_usable(:,:,:)
+
+    present=.FALSE.; status=STATUS_FAILED; reason=REASON_METADATA
+    target=(/state%grid%nx,state%grid%ny,state%grid%nz/)
+    IF (.NOT.ALLOCATED(state%cloud_fraction%value) .OR. &
+        .NOT.ALLOCATED(state%cloud_fraction%valid) .OR. &
+        .NOT.ALLOCATED(state%cloud_fraction%quality) .OR. &
+        .NOT.ALLOCATED(state%cloud_fraction%source) .OR. &
+        .NOT.ALLOCATED(state%cloud_type%value) .OR. &
+        .NOT.ALLOCATED(state%cloud_type%valid) .OR. &
+        .NOT.ALLOCATED(state%cloud_type%quality) .OR. &
+        .NOT.ALLOCATED(state%cloud_type%source)) RETURN
+    IF (ANY(SHAPE(state%cloud_fraction%value)/=target) .OR. &
+        ANY(SHAPE(state%cloud_fraction%valid)/=target) .OR. &
+        ANY(SHAPE(state%cloud_fraction%quality)/=target) .OR. &
+        ANY(SHAPE(state%cloud_fraction%source)/=target) .OR. &
+        ANY(SHAPE(state%cloud_type%value)/=target) .OR. &
+        ANY(SHAPE(state%cloud_type%valid)/=target) .OR. &
+        ANY(SHAPE(state%cloud_type%quality)/=target) .OR. &
+        ANY(SHAPE(state%cloud_type%source)/=target)) RETURN
+    IF (TRIM(state%cloud_fraction%unit)/='1' .OR. &
+        TRIM(state%cloud_type%code_table)/='cloud_type_v1' .OR. &
+        state%cloud_fraction%valid_time/=state%pressure%valid_time .OR. &
+        state%cloud_type%valid_time/=state%pressure%valid_time) RETURN
+    IF (ANY(state%cloud_fraction%quality<0_int32) .OR. &
+        ANY(state%cloud_fraction%source<0_int32) .OR. &
+        ANY(state%cloud_type%quality<0_int32) .OR. &
+        ANY(state%cloud_type%source<0_int32)) THEN
+      reason=REASON_RANGE; RETURN
+    END IF
+    ALLOCATE(fraction_usable(target(1),target(2),target(3)), &
+             type_usable(target(1),target(2),target(3)))
+    fraction_usable=cell_is_usable(state%cloud_fraction%valid, &
+      state%cloud_fraction%quality,state%cloud_fraction%source)
+    type_usable=cell_is_usable(state%cloud_type%valid, &
+      state%cloud_type%quality,state%cloud_type%source)
+    IF (ANY(state%cloud_fraction%valid .AND. .NOT.fraction_usable) .OR. &
+        ANY(state%cloud_type%valid .AND. .NOT.type_usable)) RETURN
+    IF (.NOT.ANY(fraction_usable) .AND. .NOT.ANY(type_usable)) THEN
+      status=STATUS_OK; reason=REASON_NONE; RETURN
+    END IF
+    IF (ANY(fraction_usable .AND. &
+        (.NOT.ieee_is_finite(state%cloud_fraction%value) .OR. &
+         state%cloud_fraction%value<0.0_real32 .OR. &
+         state%cloud_fraction%value>1.0_real32)) .OR. &
+        ANY(type_usable .AND. (state%cloud_type%value<0_int32 .OR. &
+                               state%cloud_type%value>11_int32))) THEN
+      reason=REASON_RANGE; RETURN
+    END IF
+    ! Cloud metadata is optional and cellwise.  A missing mate excludes only
+    ! that cell; paired usable cells remain available to the layer detector.
+    present=ANY(state%above_ground .AND. fraction_usable .AND. type_usable)
+    status=STATUS_OK; reason=REASON_NONE
+  END SUBROUTINE validate_optional_cloud_pair
+
   PURE LOGICAL FUNCTION radar_field_contract_valid(state)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     INTEGER :: target(3)
@@ -1013,6 +1186,12 @@ CONTAINS
     IF (.NOT.radar_field_contract_valid) RETURN
     radar_field_contract_valid=ALL(state%radar_reflectivity%quality>=0_int32) .AND. &
       ALL(state%radar_reflectivity%source>=0_int32) .AND. &
+      .NOT.ANY(state%radar_reflectivity%valid .AND. &
+        .NOT.cell_is_usable(state%radar_reflectivity%valid, &
+          state%radar_reflectivity%quality,state%radar_reflectivity%source)) .AND. &
+      .NOT.ANY(state%radar_reflectivity%valid .AND. &
+        IAND(state%radar_reflectivity%source,SOURCE_RADAR_DBZ)==0_int32) .AND. &
+      .NOT.ANY(state%radar_reflectivity%valid .AND. .NOT.state%above_ground) .AND. &
       .NOT.ANY(state%radar_reflectivity%valid .AND. &
                .NOT.ieee_is_finite(state%radar_reflectivity%value))
   END FUNCTION radar_field_contract_valid
@@ -1038,6 +1217,9 @@ CONTAINS
     precipitation_phase_contract_valid= &
       ALL(state%precipitation_phase%quality>=0_int32) .AND. &
       ALL(state%precipitation_phase%source>=0_int32) .AND. &
+      .NOT.ANY(state%precipitation_phase%valid .AND. &
+        .NOT.cell_is_usable(state%precipitation_phase%valid, &
+          state%precipitation_phase%quality,state%precipitation_phase%source)) .AND. &
       .NOT.ANY(state%precipitation_phase%valid .AND. &
         (state%precipitation_phase%value<PHASE_UNKNOWN .OR. &
          state%precipitation_phase%value>PHASE_GRAUPEL))
@@ -1071,6 +1253,8 @@ CONTAINS
     optional_hydrometeor_field_valid=ALL(field%quality>=0_int32) .AND. &
       ALL(field%source>=0_int32) .AND. &
       .NOT.ANY(field%valid .AND. &
+        .NOT.cell_is_usable(field%valid,field%quality,field%source)) .AND. &
+      .NOT.ANY(field%valid .AND. &
         (.NOT.ieee_is_finite(field%value) .OR. field%value<0.0_real32))
   END FUNCTION optional_hydrometeor_field_valid
 
@@ -1097,7 +1281,10 @@ CONTAINS
       TRIM(field%unit)=='m s-1'
     IF (.NOT.velocity_diagnostic_field_valid) RETURN
     velocity_diagnostic_field_valid=ALL(field%quality>=0_int32) .AND. &
-      ALL(field%source>=0_int32) .AND. .NOT.ANY(field%valid .AND. &
+      ALL(field%source>=0_int32) .AND. &
+      .NOT.ANY(field%valid .AND. &
+        .NOT.cell_is_usable(field%valid,field%quality,field%source)) .AND. &
+      .NOT.ANY(field%valid .AND. &
       (.NOT.ieee_is_finite(field%value) .OR. field%value<0.0_real32 .OR. &
        field%value>100.0_real32))
   END FUNCTION velocity_diagnostic_field_valid
@@ -1107,23 +1294,24 @@ CONTAINS
     LOGICAL :: changed(input%grid%nx,input%grid%ny,input%grid%nz)
     changed=real32_bits(input%omega_target%value)/= &
             real32_bits(candidate%omega_target%value) .OR. &
-            input%omega_target%valid.NEQV.candidate%omega_target%valid .OR. &
+            (input%omega_target%valid.NEQV.candidate%omega_target%valid) .OR. &
             input%omega_target%quality/=candidate%omega_target%quality .OR. &
             input%omega_target%source/=candidate%omega_target%source .OR. &
             real32_bits(input%rain%value)/=real32_bits(candidate%rain%value) .OR. &
-            input%rain%valid.NEQV.candidate%rain%valid .OR. &
+            (input%rain%valid.NEQV.candidate%rain%valid) .OR. &
             input%rain%quality/=candidate%rain%quality .OR. &
             input%rain%source/=candidate%rain%source .OR. &
             real32_bits(input%snow%value)/=real32_bits(candidate%snow%value) .OR. &
-            input%snow%valid.NEQV.candidate%snow%valid .OR. &
+            (input%snow%valid.NEQV.candidate%snow%valid) .OR. &
             input%snow%quality/=candidate%snow%quality .OR. &
             input%snow%source/=candidate%snow%source .OR. &
             real32_bits(input%graupel%value)/=real32_bits(candidate%graupel%value) .OR. &
-            input%graupel%valid.NEQV.candidate%graupel%valid .OR. &
+            (input%graupel%valid.NEQV.candidate%graupel%valid) .OR. &
             input%graupel%quality/=candidate%graupel%quality .OR. &
             input%graupel%source/=candidate%graupel%source .OR. &
             input%precipitation_phase%value/=candidate%precipitation_phase%value .OR. &
-            input%precipitation_phase%valid.NEQV.candidate%precipitation_phase%valid .OR. &
+            (input%precipitation_phase%valid.NEQV. &
+             candidate%precipitation_phase%valid) .OR. &
             input%precipitation_phase%quality/=candidate%precipitation_phase%quality .OR. &
             input%precipitation_phase%source/=candidate%precipitation_phase%source .OR. &
             input%cloud_fraction%quality/=candidate%cloud_fraction%quality .OR. &
@@ -1138,11 +1326,11 @@ CONTAINS
   END FUNCTION real32_bits
 
   PURE LOGICAL FUNCTION transport_shapes_valid(grid,pressure,temperature,vapor,u,v,w, &
-    w_valid,observed,phase,zlinear,rain,snow,graupel)
+    w_valid,domain,observed,phase,zlinear,rain,snow,graupel)
     TYPE(grid_spec), INTENT(IN) :: grid
     REAL(real32), INTENT(IN) :: pressure(:,:,:),temperature(:,:,:),vapor(:,:,:)
     REAL(real32), INTENT(IN) :: u(:,:,:),v(:,:,:),w(:,:,:)
-    LOGICAL, INTENT(IN) :: w_valid(:,:,:),observed(:,:,:)
+    LOGICAL, INTENT(IN) :: w_valid(:,:,:),domain(:,:,:),observed(:,:,:)
     INTEGER, INTENT(IN) :: phase(:,:,:)
     REAL(real64), INTENT(IN) :: zlinear(:,:,:),rain(:,:,:),snow(:,:,:),graupel(:,:,:)
     INTEGER :: target(3)
@@ -1150,7 +1338,8 @@ CONTAINS
     transport_shapes_valid=ALL(SHAPE(pressure)==target) .AND. &
       ALL(SHAPE(temperature)==target) .AND. ALL(SHAPE(vapor)==target) .AND. &
       ALL(SHAPE(u)==target) .AND. ALL(SHAPE(v)==target) .AND. ALL(SHAPE(w)==target) .AND. &
-      ALL(SHAPE(w_valid)==target) .AND. ALL(SHAPE(observed)==target) .AND. &
+      ALL(SHAPE(w_valid)==target) .AND. ALL(SHAPE(domain)==target) .AND. &
+      ALL(SHAPE(observed)==target) .AND. &
       ALL(SHAPE(phase)==target) .AND. ALL(SHAPE(zlinear)==target) .AND. &
       ALL(SHAPE(rain)==target) .AND. ALL(SHAPE(snow)==target) .AND. &
       ALL(SHAPE(graupel)==target)

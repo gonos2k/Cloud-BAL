@@ -26,6 +26,7 @@ MODULE cloud_bal_pipeline
   END TYPE cloud_bal_pipeline_result
 
   PUBLIC :: run_cloud_bal_pipeline
+  PUBLIC :: build_compact_balance_beta
 
 CONTAINS
 
@@ -85,6 +86,7 @@ CONTAINS
       result%status=result%balance%status
       result%reason_code=result%balance%reason_code
       result%overall=result%balance
+      result%overall%changed=result%column%changed .OR. result%balance%changed
       RETURN
     END IF
     candidate_out=balance_candidate
@@ -112,7 +114,14 @@ CONTAINS
         ANY(.NOT.ieee_is_finite(state%grid%dy)) .OR. &
         ANY(state%grid%dx<=0.0_real64) .OR. ANY(state%grid%dy<=0.0_real64)) RETURN
     ALLOCATE(source(nx,ny,nz))
-    source=state%obs_support==1 .OR. state%hydro_support==1
+    ! Only an explicit dynamic proposal grants wind-adjustment authority.
+    ! Cloud and hydrometeor presence remain provenance, never solver seeds.
+    source=state%above_ground .AND. &
+           dynamic_target_is_resolved(state%omega_target%value,state%omega%value, &
+                                      state%omega_target%valid, &
+                                      state%omega_target%quality, &
+                                      state%omega_target%source) .AND. &
+           cell_is_usable(state%omega%valid,state%omega%quality,state%omega%source)
     state%balance_beta=0.0_real32
     IF (.NOT.ANY(source)) THEN
       status=STATUS_OK
@@ -126,6 +135,7 @@ CONTAINS
       DO k=1,nz
         DO j=MAX(1,js-jradius),MIN(ny,js+jradius)
           DO i=MAX(1,is-iradius),MIN(nx,is+iradius)
+            IF (.NOT.state%above_ground(i,j,k)) CYCLE
             pdistance=ABS(REAL(state%pressure%value(is,js,ks),real64)- &
                           REAL(state%pressure%value(i,j,k),real64))
             IF (pdistance>=pressure_radius) CYCLE

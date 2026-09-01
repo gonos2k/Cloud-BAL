@@ -9,12 +9,14 @@ An exception never changes the current-generation pointer.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import hashlib
 import json
 import os
 import re
 import sys
 from datetime import datetime, timezone
+from contextlib import contextmanager
 from pathlib import Path, PurePosixPath
 from typing import Iterable
 
@@ -24,6 +26,7 @@ _GIT_COMMIT = re.compile(r"^[0-9a-f]{40}$")
 _CONTEXT = "TRANSACTION.json"
 _MANIFEST = "MANIFEST.json"
 _COMMITTED = "COMMITTED"
+_LOCK = ".publish.lock"
 
 
 class TransactionError(RuntimeError):
@@ -35,6 +38,28 @@ def _fsync_directory(path: Path) -> None:
     try:
         os.fsync(descriptor)
     finally:
+        os.close(descriptor)
+
+
+@contextmanager
+def _publication_lock(root: Path):
+    """Serialize the compare-and-swap of the current-generation pointer."""
+    lock_path = root / _LOCK
+    try:
+        descriptor = os.open(
+            lock_path,
+            os.O_RDWR | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0),
+            0o600,
+        )
+    except OSError as exc:
+        raise TransactionError("publication lock is unsafe") from exc
+    try:
+        if os.fstat(descriptor).st_nlink != 1:
+            raise TransactionError("publication lock is unsafe")
+        fcntl.flock(descriptor, fcntl.LOCK_EX)
+        yield
+    finally:
+        fcntl.flock(descriptor, fcntl.LOCK_UN)
         os.close(descriptor)
 
 
@@ -152,11 +177,20 @@ def _validate_context(context: object, transaction_id: str) -> dict:
         raise TransactionError("transaction products must be sorted and unique")
     source_commit = context.get("source_commit")
     configuration = context.get("configuration")
+    valid_time = context.get("valid_time")
+    expected_current = context.get("expected_current")
     if not isinstance(source_commit, str) or not _GIT_COMMIT.fullmatch(source_commit):
         raise TransactionError("a lowercase 40-hex Git commit identity is required")
     if not isinstance(configuration, str) or not configuration.strip() or \
             configuration.strip().lower() == "unknown":
         raise TransactionError("an exact configuration identity is required")
+    if not isinstance(valid_time, int) or valid_time < 0:
+        raise TransactionError("a nonnegative analysis valid time is required")
+    if expected_current is not None and (
+        not isinstance(expected_current, str)
+        or _identifier(expected_current) != expected_current
+    ):
+        raise TransactionError("expected current generation is invalid")
     return context
 
 
@@ -189,6 +223,7 @@ class OutputTransaction:
         *,
         source_commit: str,
         configuration: str,
+        valid_time: int = 0,
     ) -> None:
         normalized = [_product(item) for item in products]
         if len(normalized) != len(set(normalized)):
@@ -196,15 +231,6 @@ class OutputTransaction:
         declared = sorted(normalized)
         if not declared:
             raise TransactionError("at least one output product is required")
-        context = {
-            "schema": 1,
-            "transaction_id": self.transaction_id,
-            "products": declared,
-            "source_commit": source_commit,
-            "configuration": configuration,
-        }
-        _validate_context(context, self.transaction_id)
-
         self.root.mkdir(parents=True, exist_ok=True)
         if self.staging_parent.is_symlink() or self.generations.is_symlink():
             raise TransactionError("publication directories must not be symlinks")
@@ -213,6 +239,19 @@ class OutputTransaction:
         self._validate_layout(require_staging=False)
         if self.staging.exists() or self.generation.exists():
             raise TransactionError("transaction identifier already exists")
+
+        with _publication_lock(self.root):
+            expected_current = _current_id(self.root)
+        context = {
+            "schema": 1,
+            "transaction_id": self.transaction_id,
+            "products": declared,
+            "source_commit": source_commit,
+            "configuration": configuration,
+            "valid_time": valid_time,
+            "expected_current": expected_current,
+        }
+        _validate_context(context, self.transaction_id)
 
         self.staging.mkdir(mode=0o750)
         _write_json_atomic(
@@ -307,21 +346,28 @@ class OutputTransaction:
         self._inject("after_generation_rename")
         _verify_generation(self.generation, self.transaction_id)
 
-        pointer = self.root / "current"
-        temporary_pointer = self.root / f".current.{self.transaction_id}.tmp"
-        if temporary_pointer.exists() or temporary_pointer.is_symlink():
-            raise TransactionError("temporary current pointer already exists")
-        os.symlink(f"generations/{self.transaction_id}", temporary_pointer)
-        try:
-            self._inject("before_current_swap")
-            os.replace(temporary_pointer, pointer)
-        finally:
-            # A crash can leave this same-directory link behind, but every
-            # handled failure must be retry/recovery safe and leave no false
-            # publication artefact outside the immutable generation.
-            if temporary_pointer.is_symlink() or temporary_pointer.exists():
-                temporary_pointer.unlink()
-        _fsync_directory(self.root)
+        with _publication_lock(self.root):
+            current_id = _current_id(self.root)
+            if current_id != context["expected_current"]:
+                raise TransactionError("current generation changed during the transaction")
+            if current_id is not None:
+                current_manifest = json.loads(
+                    (self.generations / current_id / _MANIFEST).read_text(encoding="utf-8")
+                )
+                if context["valid_time"] < current_manifest["valid_time"]:
+                    raise TransactionError("an older analysis cannot replace current")
+            pointer = self.root / "current"
+            temporary_pointer = self.root / f".current.{self.transaction_id}.tmp"
+            if temporary_pointer.exists() or temporary_pointer.is_symlink():
+                raise TransactionError("temporary current pointer already exists")
+            os.symlink(f"generations/{self.transaction_id}", temporary_pointer)
+            try:
+                self._inject("before_current_swap")
+                os.replace(temporary_pointer, pointer)
+            finally:
+                if temporary_pointer.is_symlink() or temporary_pointer.exists():
+                    temporary_pointer.unlink()
+            _fsync_directory(self.root)
         return manifest
 
     @staticmethod
@@ -391,6 +437,13 @@ def _current(root: Path) -> Path:
     return _verify_generation(generation, generation.name)
 
 
+def _current_id(root: Path) -> str | None:
+    pointer = root / "current"
+    if not pointer.exists() and not pointer.is_symlink():
+        return None
+    return _current(root).name
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -401,6 +454,7 @@ def main(argv: list[str] | None = None) -> int:
     begin.add_argument("products", nargs="+")
     begin.add_argument("--source-commit", required=True)
     begin.add_argument("--configuration", required=True)
+    begin.add_argument("--valid-time", required=True, type=int)
 
     resolve = subparsers.add_parser("resolve")
     resolve.add_argument("root", type=Path)
@@ -422,6 +476,7 @@ def main(argv: list[str] | None = None) -> int:
                 arguments.products,
                 source_commit=arguments.source_commit,
                 configuration=arguments.configuration,
+                valid_time=arguments.valid_time,
             )
             print(transaction.staging)
         elif arguments.command == "resolve":

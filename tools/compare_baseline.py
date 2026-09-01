@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
+import stat
 import struct
 from pathlib import Path
 
@@ -25,11 +27,50 @@ def digest(path: Path) -> str:
 
 
 def files_under(root: Path) -> dict[Path, Path]:
-    return {
-        path.relative_to(root): path
-        for path in root.rglob("*")
-        if path.is_file() and path.name not in {"README.md", "SHA256SUMS"}
+    files: dict[Path, Path] = {}
+    for path in root.rglob("*"):
+        relative = path.relative_to(root)
+        if path.is_symlink():
+            raise ValueError(f"symbolic link is not an independent product: {path}")
+        mode = path.lstat().st_mode
+        if stat.S_ISDIR(mode):
+            continue
+        if not stat.S_ISREG(mode):
+            raise ValueError(f"non-regular product entry: {path}")
+        if relative in {Path("README.md"), Path("SHA256SUMS")}:
+            continue
+        if path.stat().st_nlink != 1:
+            raise ValueError(f"multiply-linked product is not independent: {path}")
+        files[relative] = path
+    return files
+
+
+def comparison_files(
+    baseline_argument: Path, candidate_argument: Path
+) -> tuple[dict[Path, Path], dict[Path, Path]]:
+    """Validate independent roots and return their complete file inventories."""
+    if baseline_argument.is_symlink() or candidate_argument.is_symlink():
+        raise ValueError("comparison roots must not be symbolic links")
+    baseline_root = baseline_argument.resolve(strict=True)
+    candidate_root = candidate_argument.resolve(strict=True)
+    if not baseline_root.is_dir() or not candidate_root.is_dir():
+        raise ValueError("comparison roots must be directories")
+    if baseline_root == candidate_root or baseline_root in candidate_root.parents or \
+            candidate_root in baseline_root.parents:
+        raise ValueError("comparison roots must be distinct and non-overlapping")
+    baseline = files_under(baseline_root)
+    candidate = files_under(candidate_root)
+    if not baseline or not candidate:
+        raise ValueError("comparison roots must each contain at least one product")
+    baseline_inodes = {
+        (path.stat().st_dev, path.stat().st_ino) for path in baseline.values()
     }
+    candidate_inodes = {
+        (path.stat().st_dev, path.stat().st_ino) for path in candidate.values()
+    }
+    if baseline_inodes & candidate_inodes:
+        raise ValueError("baseline and candidate contain the same inode")
+    return baseline, candidate
 
 
 def _records(path: Path):
@@ -84,7 +125,10 @@ def read_wps(path: Path):
         if len(wind_record) != 4:
             raise ValueError("invalid WPS wind-coordinate record")
         wind_relative = struct.unpack(endian + "i", wind_record)[0]
-        if wind_relative not in {0, 1}:
+        # The record is a Fortran LOGICAL, not a portable C boolean.  Preserve
+        # the two encodings present in the legacy archive and reject every
+        # other integer as corrupt metadata.
+        if wind_relative not in {-1, 0, 1}:
             raise ValueError("invalid WPS wind-coordinate flag")
         _, slab_record = next(records)
         if len(slab_record) != 4 * nx * ny:
@@ -199,8 +243,11 @@ def main() -> int:
     parser.add_argument("candidate", type=Path)
     args = parser.parse_args()
 
-    baseline = files_under(args.baseline.resolve())
-    candidate = files_under(args.candidate.resolve())
+    try:
+        baseline, candidate = comparison_files(args.baseline, args.candidate)
+    except (OSError, ValueError) as exc:
+        print(f"COMPARISON ERROR: {exc}")
+        return 2
     changed = 0
     parse_errors = 0
     for relative in sorted(set(baseline) | set(candidate)):
