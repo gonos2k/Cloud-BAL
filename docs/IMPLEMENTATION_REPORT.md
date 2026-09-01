@@ -63,9 +63,11 @@ tools/compare_baseline.py \
     10 m/s.
 12. Wind increments are diagnosed separately through divergence (velocity
     potential) and vertical vorticity (streamfunction) profiles. Lower/middle/
-    upper supported levels and divergent roughness are reported. Radar alone
-    cannot create a rotational increment; a future cycling path requires wind
-    or vorticity-tendency support for a midlevel rotational update.
+    upper supported levels and divergent roughness are reported. Reflectivity
+    does not directly prescribe a vortex, although the existing momentum
+    balance can diagnose a localized rotational response. Independent wind or
+    vorticity-tendency support remains a future acceptance gate for that
+    midlevel rotational update.
 13. Empirical cloud vertical motion is treated as a resolution-dependent
     target rather than an observation. Cloud depth/grid spacing, analyzed
     cloud fraction, and vertical sampling scale the target, with provisional

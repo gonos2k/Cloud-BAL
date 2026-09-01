@@ -345,14 +345,17 @@ D(zeta+f)/Dt = -(zeta+f) div(Vh)
              + baroclinic + friction terms.
 ```
 
-Version 1 preserves the analyzed/background `psi` and permits no radar-only
-rotational increment.  A later cycling version may add a bounded midlevel
-`delta psi` only where radial-velocity/3-D wind data or a time-integrated
-vorticity tendency supports it.  Its horizontal and pressure support uses the
-same compact `beta`, it must peak in the cloud middle rather than at the
-outflow/inflow layers, and its column-integrated angular-momentum increment is
-required to close to the available torque.  This conditional rule prevents a
-mass-continuity correction from inventing an unsupported mesoscale vortex.
+Version 1 does not prescribe a rotational vortex directly from reflectivity.
+The existing momentum/geopotential balance may nevertheless diagnose a
+localized `delta psi` through its Coriolis and background-flow terms.  That
+response is now reported separately, but it is not yet accepted as an
+independently observed vortex.  A later cycling version should bound a
+midlevel `delta psi` with radial-velocity/3-D wind data or a time-integrated
+vorticity tendency.  Its horizontal and pressure support must use the same
+compact `beta`, peak in the cloud middle rather than at the outflow/inflow
+layers, and close its column angular-momentum increment to the available
+torque.  Until that gate exists, the rotational profile is a required
+diagnostic and calibration warning, not a radar retrieval.
 
 This hydrostatic, pressure-coordinate analysis cannot directly resolve or
 remove acoustic modes.  It can reduce their excitation by bounding and
