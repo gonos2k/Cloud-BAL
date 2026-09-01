@@ -71,7 +71,7 @@
     USE lapsprep_rams
     USE lapsprep_netcdf
     USE cloud_bal_field_contracts
-    USE cloud_bal_moisture, ONLY: transfer_excess, total_water
+    USE cloud_bal_moisture, ONLY: transfer_excess
     USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
 
     ! Variable Declarations
@@ -100,14 +100,13 @@
     ! Miscellaneous local variables
                                         
     INTEGER :: out_loop, loop , var_loop , i, j, k, kbot,istatus
+    CHARACTER(LEN=256) :: cloud_bal_wps_output
     LOGICAL :: file_present
-    REAL    :: rhmod, lwcmod, shmod, icemod
+    REAL    :: rhmod, shmod
     REAL    :: rhadj
     REAL    :: lwc_limit
     REAL    :: hydrometeor_scale
     INTEGER :: transfer_status, species
-    REAL(KIND=8) :: water_before, water_after, water_error_max
-    REAL(KIND=8) :: water_error, water_tolerance
     TYPE(field_contract) :: hydro_field(5)
     TYPE(field_contract) :: input_field(5,num_ext)
     TYPE(field_contract) :: pressure_field
@@ -746,55 +745,15 @@
         ENDDO
       ENDDO
 
-      ! Paired phase changes preserve total water at every modified point.
-      water_error_max = 0.0D0
-      IF (TRIM(hydro_mode) .EQ. 'CONSERVATIVE' .AND. &
-          lwc2vapor_thresh .GT. 0.) THEN
-        DO k=1,z3
-          DO j=1,y
-            DO i=1,x
-              water_before = DBLE(total_water(mr(i,j,k),lwc(i,j,k), &
-                   ice(i,j,k),rai(i,j,k),sno(i,j,k),pic(i,j,k)))
-              IF ((lcp(i,j,k).GE.lcp_min) .AND. &
-                  (t(i,j,k).GE.263.0) .AND. &
-                  (lwc(i,j,k).GT.lwc_min)) THEN
-                CALL lwc2vapor(lwc(i,j,k),sh(i,j,k),t(i,j,k),p(k), &
-                     lwc2vapor_thresh,lwcmod,shmod,rhmod)
-                lwc(i,j,k)=lwcmod
-                sh(i,j,k)=shmod
-                rh(i,j,k)=rhmod
-                mr(i,j,k)=shmod/(1.-shmod)
-              ENDIF
-              IF ((lcp(i,j,k).GE.lcp_min) .AND. &
-                  (t(i,j,k).LT.263.0) .AND. &
-                  (ice(i,j,k).GT.ice_min)) THEN
-                CALL ice2vapor(ice(i,j,k),sh(i,j,k),t(i,j,k),p(k), &
-                     lwc2vapor_thresh,icemod,shmod,rhmod)
-                ice(i,j,k)=icemod
-                sh(i,j,k)=shmod
-                rh(i,j,k)=rhmod
-                mr(i,j,k)=shmod/(1.-shmod)
-              ENDIF
-              water_after = DBLE(total_water(mr(i,j,k),lwc(i,j,k), &
-                   ice(i,j,k),rai(i,j,k),sno(i,j,k),pic(i,j,k)))
-              water_error = ABS(water_after-water_before)
-              water_tolerance = MAX(1.0D-12,1.0D-6*ABS(water_before))
-              IF (water_error .GT. water_tolerance) THEN
-                PRINT *, 'Total-water closure failed at ',i,j,k, &
-                         water_before,water_after,water_tolerance
-                STOP 'total_water_not_conserved'
-              ENDIF
-              water_error_max = MAX(water_error_max, &
-                                    water_error)
-            ENDDO
-          ENDDO
-        ENDDO
-      ELSE IF (TRIM(hydro_mode) .NE. 'CONSERVATIVE') THEN
+      IF (TRIM(hydro_mode) .NE. 'CONSERVATIVE') THEN
         PRINT *, 'Unsupported HYDRO_MODE: ',TRIM(hydro_mode)
         STOP 'invalid_hydro_mode'
       ENDIF
+      IF (lwc2vapor_thresh .GT. 0.) THEN
+        PRINT *, 'Legacy water-only saturation adjustment is disabled.'
+        STOP 'canonical_water_enthalpy_adjustment_not_linked'
+      ENDIF
 
-      PRINT *, 'Maximum cell total-water closure error = ',water_error_max
       DO species=1,5
         CALL refresh_field_status(hydro_field(species))
         PRINT *, 'Hydrometeor contract ',TRIM(hydro_field(species)%name), &
@@ -880,8 +839,19 @@
                              lwc, rai, sno, ice, pic,snocov, tskin)
      
         CASE ('wps ')
-          CALL output_ungrib_format(p, t, ht, u, v, rh, slp, psfc,&
-                             lwc, rai, sno, ice, pic,snocov, tskin)
+          cloud_bal_wps_output=' '
+          CALL GETENV('CLOUD_BAL_WPS_OUTPUT',cloud_bal_wps_output)
+          IF (LEN_TRIM(cloud_bal_wps_output)>0) THEN
+            CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
+              snocov,tskin,istatus,TRIM(cloud_bal_wps_output))
+          ELSE
+            CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
+              snocov,tskin,istatus)
+          END IF
+          IF (istatus .NE. 1) THEN
+            PRINT '(A)', 'WPS output failed; LAPSPREP is not complete.'
+            STOP 1
+          END IF
 
         CASE ('rams') 
           CALL output_ralph2_format(p,u,v,t,ht,rh,slp,psfc,snocov,tskin)

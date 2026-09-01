@@ -3,12 +3,12 @@
  BALANCE = .true., 
  OUTPUT_FORMAT = 'wps',
  SNOW_THRESH = 1.1,
- LWC2VAPOR_THRESH = 1.00,
+ LWC2VAPOR_THRESH = 0.00,
  MAKE_SFC_UV = .false.,
  HYDRO_MODE = 'CONSERVATIVE',
  GRID_SCALE = 'NONE',
  CAP_POLICY = 'TRANSFER',
- RADAR_W_MODE = 'OFF',
+ WIND_COORDINATE = 'GRID_RELATIVE',
  ENFORCE_FIELD_CONTRACTS = .true.,
  
 /
@@ -50,11 +50,14 @@ c    will be replaced with winds interpolated from the 3D isobaric
 c    u/v fields.
 c
 c  Cloud-BAL controls:
-c    HYDRO_MODE='CONSERVATIVE' enables paired vapor/condensate transfers.
+c    LWC2VAPOR_THRESH remains zero until the canonical water/enthalpy
+c    adjustment is linked; the legacy water-only transfer is not authorized.
+c    HYDRO_MODE='CONSERVATIVE' preserves dry-air hydrometeor mass basis.
 c    GRID_SCALE='NONE' removes the undocumented 2/dx concentration scaling.
 c    CAP_POLICY='TRANSFER' moves cap excess into rain/snow instead of dropping it.
-c    RADAR_W_MODE must remain 'OFF'; the dormant radar evaporation/omega path is
-c    intentionally unavailable until it has dedicated correction and unit tests.
+c    WIND_COORDINATE is mandatory WPS metadata: GRID_RELATIVE or EARTH_RELATIVE.
+c    Radar authority is not owned by LAPSPREP.  The single Cloud-BAL pipeline
+c    mode defaults to SHADOW; the dormant evaporation path remains unavailable.
 c    ENFORCE_FIELD_CONTRACTS keeps cell validity separate from physical zero.
 c    Any value of snow cover fraction from the LAPS analysis (0.->1.0) 
 c    1.0 (default value is 1.1).  If set to 1.0, cloud water will be converted

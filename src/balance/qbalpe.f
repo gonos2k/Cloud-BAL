@@ -9,12 +9,12 @@ c
       call get_grid_dim_xy(nx,ny,istatus)
       if (istatus .ne. 1) then
           write (6,*) 'Error getting horizontal domain dimensions'
-          go to 999
+          stop 1
       endif
       call get_laps_dimensions(nz,istatus)
       if (istatus .ne. 1) then
           write (6,*) 'Error getting vertical domain dimension'
-          go to 999
+          stop 1
       endif
 
       call qbalpe_stag(nx,ny,nz,istatus)
@@ -174,7 +174,7 @@ c
       call get_balance_nl(lrunbal,adv_anal_by_t_min,cpads_type,istatus)
       if(istatus.ne.0)then
          print*,'error getting balance namelist'
-         stop
+         return
       endif
       print*,'lrotate = ',lrotate
 c
@@ -199,7 +199,8 @@ c get pressures and determine pressure intervals.
 c
       call get_pres_1d(i4time_sys,nz,p,istatus)
       if(istatus .ne. 1 .or. nz .lt. 2)then
-         print*,'invalid pressure coordinate status/dimension',istatus,nz
+         print*,'invalid pressure coordinate status/dimension'
+     .          ,istatus,nz
          goto 999
       endif
       call get_vertical_grid(vertical_grid,istatus)
@@ -244,7 +245,7 @@ c        print*,(p(i),dp(i),i=1,nz)
 
       if (istatus .ne. 1) then
          print *,'Error getting laps lat, lons.'
-         stop
+         goto 999
       endif
 c
       do j=1,ny
@@ -322,12 +323,12 @@ c
       lapsphi=smsng
       omo=smsng
 
-      call get_laps_3d_analysis_data(i4time_sys,nx,ny,nz
+      call get_laps_3d_analysis_data_ex(i4time_sys,nx,ny,nz
      +,lapsphi,lapstemp,lapsu,lapsv,lapssh,omo,istat_omo,istatus)
 c omo is the cloud vertical motion from lco
       if (istatus .ne. 1) then
          print *,'Error getting LAPS analysis data...Abort.'
-         stop
+         goto 999
       endif
       if(istat_omo.eq.1)then
          omo_valid=ieee_is_finite(omo).and.abs(omo).le.100.
@@ -2193,7 +2194,8 @@ c
       call leibp3(slam,f3,200,erf,h,erru,tau,influence
      .  ,nx,ny,nz,dx,dy,ps,p,dp,operator_status)
       if(operator_status.ne.1)then
-         print*,'LEIBP3 returned failure/non-convergence ',operator_status
+         print*,'LEIBP3 returned failure/non-convergence '
+     .          ,operator_status
          call move_3d(uo,u,nx,ny,nz)
          call move_3d(vo,v,nx,ny,nz)
          call move_3d(omo,om,nx,ny,nz)

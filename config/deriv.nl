@@ -1,6 +1,6 @@
  &deriv_nl
  MODE_EVAP = 0,
- L_BOGUS_RADAR_W = .true.,
+ L_BOGUS_RADAR_W = .false.,
 /
 c DERIV PARAMETERS
 c
@@ -18,4 +18,5 @@ c                   loading/cooling downdraft coupling after concentrations
 c                   are computed.  The legacy get_radar_deriv is not called.
 c
 c             .false. means cloud-only COM
-c             .true.  means bounded radar/precipitation downdraft coupling
+c             .true. is currently rejected by the source-level safety gate;
+c                    radar downdraft candidates run only through SHADOW.

@@ -8,6 +8,69 @@ trap 'rm -rf "$test_tmp"' EXIT
 
 gfortran -std=f2008 -Wall -Wextra -fcheck=all \
   -J "$test_tmp" -I "$test_tmp" \
+  "$repo_root/src/common/cloud_bal_state.f90" \
+  "$repo_root/tests/test_canonical_state.f90" \
+  -o "$test_tmp/test_canonical_state"
+
+"$test_tmp/test_canonical_state"
+
+gfortran -std=f2008 -Wall -Wextra -fcheck=all \
+  -J "$test_tmp" -I "$test_tmp" \
+  "$repo_root/src/common/cloud_bal_state.f90" \
+  "$repo_root/src/common/cloud_bal_column_physics.f90" \
+  "$repo_root/tests/test_column_physics.f90" \
+  -o "$test_tmp/test_column_physics"
+
+"$test_tmp/test_column_physics"
+
+gfortran -std=f2008 -Wall -Wextra -fcheck=all \
+  -J "$test_tmp" -I "$test_tmp" \
+  "$repo_root/src/common/cloud_bal_state.f90" \
+  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
+  "$repo_root/tests/test_balance_operator.f90" \
+  -o "$test_tmp/test_balance_operator"
+
+"$test_tmp/test_balance_operator"
+
+gfortran -std=f2008 -Wall -Wextra -fcheck=all \
+  -J "$test_tmp" -I "$test_tmp" \
+  "$repo_root/src/common/cloud_bal_state.f90" \
+  "$repo_root/src/common/cloud_bal_column_physics.f90" \
+  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
+  "$repo_root/src/common/cloud_bal_pipeline.f90" \
+  "$repo_root/tests/test_pipeline.f90" \
+  -o "$test_tmp/test_pipeline"
+
+"$test_tmp/test_pipeline"
+
+python3 "$repo_root/tests/test_output_transaction.py"
+python3 "$repo_root/tests/test_compare_baseline.py"
+
+mkdir -p "$test_tmp/wps_mod" "$test_tmp/wps_root/lapsprd/lapsprep/wps"
+gfortran -c -std=f2008 -Wall -Wextra -fcheck=all \
+  -J "$test_tmp/wps_mod" -I "$test_tmp/wps_mod" \
+  -o "$test_tmp/wps_stubs.o" "$repo_root/tests/wps_module_stubs.f90"
+gfortran -c -std=f2008 -Wall -Wextra -fcheck=all \
+  -J "$test_tmp/wps_mod" -I "$test_tmp/wps_mod" \
+  -o "$test_tmp/lapsprep_wps.o" "$repo_root/src/lapsprep/module_lapsprep_wps.f90"
+gfortran -std=f2008 -Wall -Wextra -fcheck=all \
+  -J "$test_tmp/wps_mod" -I "$test_tmp/wps_mod" \
+  "$repo_root/tests/test_wps_writer_status.f90" \
+  "$test_tmp/lapsprep_wps.o" "$test_tmp/wps_stubs.o" \
+  -o "$test_tmp/test_wps_writer_status"
+
+"$test_tmp/test_wps_writer_status" "$test_tmp/wps_root"
+
+gfortran -c -std=legacy -ffixed-line-length-none -fcheck=all \
+  -o "$test_tmp/writeballaps.o" "$repo_root/src/balance/writeballaps.f"
+gfortran -std=f2008 -Wall -Wextra -fcheck=all -fallow-argument-mismatch \
+  "$repo_root/tests/test_writeballaps_status.f90" "$test_tmp/writeballaps.o" \
+  -o "$test_tmp/test_writeballaps_status"
+
+"$test_tmp/test_writeballaps_status"
+
+gfortran -std=f2008 -Wall -Wextra -fcheck=all \
+  -J "$test_tmp" -I "$test_tmp" \
   "$repo_root/src/common/cloud_bal_field_contracts.f90" \
   "$repo_root/src/common/cloud_bal_moisture.f90" \
   "$repo_root/src/common/cloud_bal_cloud_profiles.f90" \
@@ -45,8 +108,8 @@ gfortran -c -std=legacy -ffixed-line-length-none -fdollar-ok \
   "$repo_root/src/deriv/laps_deriv_sub.f"
 
 # The focused tree does not ship the legacy NetCDF include required by the
-# whole lapsio.f file.  Extract the modified COM/wind reader so its status
-# interface and fixed-form syntax are still compiled exactly.
+# whole lapsio.f file.  Extract the COM/wind reader, then link and call both
+# the legacy ABI and the independent cloud-omega-status entry point.
 awk '
   /^      subroutine get_laps_3d_analysis_data\(/ {capture=1}
   capture && /^cdis/ {exit}
@@ -55,6 +118,19 @@ awk '
 gfortran -c -std=legacy -ffixed-line-length-none \
   -fallow-argument-mismatch -o "$test_tmp/lapsio_com_reader.o" \
   "$test_tmp/lapsio_com_reader.f"
+gfortran -std=f2008 -Wall -Wextra -fcheck=all \
+  "$repo_root/tests/test_lapsio_abi.f90" \
+  "$test_tmp/lapsio_com_reader.o" -o "$test_tmp/test_lapsio_abi"
+"$test_tmp/test_lapsio_abi"
+
+awk '
+  /call get_laps_3d_analysis_data\(/ {reader=1; next}
+  reader && /if\(istatus.ne.1\)then/ {checked=1}
+  reader && /istatus *= *-1/ {converted=1}
+  reader && /call get_laps_2d\(/ {done=1; exit}
+  END {if (!done || !checked || !converted) exit 1}
+' "$repo_root/src/lib/bgdata/readbgdata.f"
+printf '%s\n' 'LAPS 3-D reader status-conversion check passed'
 
 # Extract the production continuity/operator routines so the runtime test uses
 # the exact fixed-form implementation without linking the unrelated KLAPS I/O.
@@ -80,4 +156,9 @@ gfortran -c -std=legacy -ffixed-line-length-none \
   -J "$test_tmp" -o "$test_tmp/qbalpe.o" \
   "$repo_root/src/balance/qbalpe.f"
 
-printf '%s\n' 'qbalpe fixed-form compile check passed'
+gfortran -c -std=legacy -ffixed-line-length-72 \
+  -fallow-argument-mismatch -I "$repo_root/src/include" \
+  -J "$test_tmp" -o "$test_tmp/qbalpe_72.o" \
+  "$repo_root/src/balance/qbalpe.f"
+
+printf '%s\n' 'qbalpe fixed-form 72-column compile check passed'

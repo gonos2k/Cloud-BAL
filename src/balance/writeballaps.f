@@ -89,6 +89,12 @@ C
         kmax3=kmax*3
         call write_laps_data(i4time,dir,ext,imax,jmax
      +,kmax3,kmax3,var,lvl,lvl_coord,units,comment,bal,istatus)
+
+        IF (ISTATUS.ne.1) THEN
+               PRINT*,'Error writing balanced wind/omega data.'
+               ISTATUS=0
+               RETURN
+        ENDIF
 c
 c----------------------
 c now lt1

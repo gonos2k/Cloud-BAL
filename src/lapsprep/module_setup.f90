@@ -55,7 +55,7 @@ MODULE setup
    REAL               :: snow_thresh, lwc2vapor_thresh
    REAL               :: rai_frac, sno_frac
    CHARACTER (LEN=256):: output_prefix
-   CHARACTER (LEN=16) :: hydro_mode, grid_scale, cap_policy, radar_w_mode
+   CHARACTER (LEN=16) :: hydro_mode, grid_scale, cap_policy, wind_coordinate
   
    !  Output file info.
 
@@ -107,7 +107,7 @@ CONTAINS
                          hydro_mode        , &
                          grid_scale        , &
                          cap_policy        , &
-                         radar_w_mode      , &
+                         wind_coordinate   , &
                          enforce_field_contracts
 
       nml_unit = 77
@@ -116,14 +116,16 @@ CONTAINS
       ! Set namelist defaults
       balance = .false.
       snow_thresh = 0.5
-      lwc2vapor_thresh = 1.1
+      ! The legacy transfer changes water without latent-heat temperature.
+      ! Keep it disabled until the canonical coupled adjustment is linked.
+      lwc2vapor_thresh = 0.0
       make_sfc_uv = .false.
       rai_frac = 1.0
       sno_frac = 1.0
       hydro_mode = 'CONSERVATIVE'
       grid_scale = 'NONE'
       cap_policy = 'TRANSFER'
-      radar_w_mode = 'OFF'
+      wind_coordinate = 'UNSET'
       enforce_field_contracts = .true.
  
       ! Open the namelist
