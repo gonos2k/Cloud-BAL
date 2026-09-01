@@ -55,3 +55,6 @@ improved.
 
 See [docs/BASELINE_REVIEW.md](docs/BASELINE_REVIEW.md) before changing the
 algorithms.
+
+The staged correction and validation strategy is documented in
+[docs/IMPROVEMENT_PLAN.md](docs/IMPROVEMENT_PLAN.md).
