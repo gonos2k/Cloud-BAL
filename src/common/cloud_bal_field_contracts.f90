@@ -104,7 +104,7 @@ CONTAINS
     END IF
     field%valid(:,:,1) = ieee_is_finite(values) .AND. values >= lower .AND. &
                          values <= upper .AND. ABS(values) < missing_abs
-    CALL set_status_from_mask(field)
+    CALL refresh_field_status(field)
   END SUBROUTINE capture_field_validity_2d
 
   SUBROUTINE capture_field_validity_1d(field, values, read_status, lower, upper, &
@@ -123,22 +123,8 @@ CONTAINS
     END IF
     field%valid(:,1,1) = ieee_is_finite(values) .AND. values >= lower .AND. &
                          values <= upper .AND. ABS(values) < missing_abs
-    CALL set_status_from_mask(field)
+    CALL refresh_field_status(field)
   END SUBROUTINE capture_field_validity_1d
-
-  SUBROUTINE set_status_from_mask(field)
-    TYPE(field_contract), INTENT(INOUT) :: field
-    INTEGER :: valid_count
-
-    valid_count = COUNT(field%valid)
-    IF (valid_count == SIZE(field%valid)) THEN
-      field%status = FIELD_OK
-    ELSE IF (valid_count > 0) THEN
-      field%status = FIELD_DEGRADED
-    ELSE
-      field%status = FIELD_FAILED
-    END IF
-  END SUBROUTINE set_status_from_mask
 
   SUBROUTINE refresh_field_status(field)
     TYPE(field_contract), INTENT(INOUT) :: field
