@@ -78,6 +78,9 @@ PROGRAM test_qbal_acceptance
   CALL qbal_mark_valid_omega(omega_values,marked_valid,nx,ny,nz)
   CALL check(.NOT.marked_valid(1,1,1) .AND. COUNT(marked_valid)==nx*ny*nz-1, &
        'omega validity conversion must reject NaN without FPE',failures)
+  ps=90000.0; p=80000.0
+  CALL check(.NOT.background_omega_complete(marked_valid,ps,p,nx,ny,nz), &
+       'target-time omega refresh must reject newly missing OM',failures)
 
   IF (failures/=0) THEN
     PRINT *,'QBAL acceptance tests failed:',failures

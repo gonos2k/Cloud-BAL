@@ -46,7 +46,7 @@ c
 
 c
       real*4 dx(nx,ny),dy(nx,ny),dp(nz)
-     .      ,p(nz),pstag(nz),ps(nx,ny),psb(nx,ny)
+     .      ,p(nz),ps(nx,ny)
      .      ,lat(nx,ny),lon(nx,ny),ter(nx,ny)
      .      ,phi(nx,ny,nz),t(nx,ny,nz)
      .      ,u(nx,ny,nz),v(nx,ny,nz),sh(nx,ny,nz)
@@ -66,8 +66,7 @@ c    .      ,lapsuo(nx,ny,nz),lapsvo(nx,ny,nz) !t=t0-dt currently not used
      .       ,phiout,tout,uout,vout,shout,omout
      .       ,balance_influence
 
-      real*4 errt(nx,ny,nz),errw(nx,ny,nz)
-     .      ,pd8(nz),pd5(nz),kpd8,kpd5
+      real*4 kpd8,kpd5
 
       real*4 om(nx,ny,nz)
 c    .      ,omo(nx,ny,nz)
@@ -76,66 +75,40 @@ c    .      ,ombs(nx,ny,nz)
 c    .      ,omb(nx,ny,nz)
 c    .      ,nu(nx,ny,nz),nv(nx,ny,nz),fu(nx,ny,nz),fv(nx,ny,nz)
 c    .      ,wb(nx,ny,nz)
-     .      ,re,rdpdg,po,cappa
-     .      ,delo,dt
-     .      ,gamo
-     .      ,obert,oberu,oberw,zter,moderu,moderv,modert
-     .      ,erru(nx,ny,nz),errv(nx,ny,nz),errub(nx,ny,nz)
+     .      ,cappa,delo
+     .      ,erru(nx,ny,nz),errub(nx,ny,nz)
      .      ,errphi(nx,ny,nz),errphib(nx,ny,nz)
-     .      ,slastu,slastv,slastt,cor
       real*4 grid_spacing_actual_m
-     .      ,grid_spacing_cen_m
-     .      ,pdif,dpbl,dpblf
+     .      ,unused_grid_spacing_m
      .      ,u_grid,v_grid
      .      ,u_true,v_true
      .      ,dpp
 
       real*4 g,sumdt,omsubs,sk,bnd,ff,fo,err,rog,rod
-     .      ,sumdz,sumr,sumv2,snxny,sumf,sumt,cl,sl
-!frl 2011.02.09. start
-!    .      ,sumtscl,sumkf,sumks,sldata,den,sumom2
-     .      ,sumtscl,sumkf,sumks,sldata,den,sumom2, sumomt2
-!frl 2011.02.09. end  
-     .      ,ffz,sumu,sumv,sumabsf,windrms,feff,scale_denom
+     .      ,sumdz,sumr,sumv2,snxny,sumf,sumt,sl
+     .      ,sldata,den,sumom2,sumomt2
+     .      ,sumabsf,windrms,feff,scale_denom
 
-      real*4 smsng,rdum,dd,ddmin,cx,cy
-      real*4 rstats(7)
+      real*4 smsng
 
 c made 2d 2-20-01 JS.
       real*4  tau(nx,ny)
-      real*4  ro(nx,ny)
       real,   allocatable,dimension (:,:) :: terscl
       integer,allocatable,dimension (:,:) :: ks,kf
-      integer ksij,kfij,k8,k5,lmin
+      integer ksij,kfij,k8,k5
 c
       integer   itmax,lmax
      .         ,npass
      .         ,i4time_sys
-     .         ,i4time_airdrop
-     .         ,i,j,k,kk,l,ll,istatus
-     .         ,ii,jj,iii,icount
+     .         ,i,j,k,istatus
 
-      integer   itstatus,bal_status,localization_status
-      integer   init_timer
-      integer   ishow_timer
-     
-      integer   lend
-      integer   lends
+      integer   bal_status,localization_status
       integer   lenvg
-      integer   lenm
-      integer   adv_anal_by_t_min
-      integer   k1,k2
-      integer   kfirst,klast
-      integer   ij
-      integer   idum
-      integer   max_pr
-      integer   n_snd,nsnd,mxz
+      integer   unused_minutes
 c
       logical lrunbal
       logical lrotate/.false./
       logical larray_diag/.false./
-      logical frstone,lastone
-      logical l_dum
       logical background_omega_complete
       logical, allocatable :: omb_valid(:,:,:),omo_valid(:,:,:)
       integer istat_bg(6),nvalid_omb,nvalid_omo,istat_omo
@@ -145,34 +118,25 @@ c
       parameter(tau_min=1.e-6,tau_max=1.e6)
       parameter(cloud_support_radius_pa=15000.)
 
-      character*255 staticdir,sfcdir
-c     character*255 generic_data_root
       character*125 comment
       character*40  vertical_grid
       character*31  staticext,sfcext
       character*10  units
       character*9   a9_time
-      character*9   a9_time_airdrop
-      character*8   c8_project
-      character*3   cpads_type
+      character*3   unused_profile
 
 c    Added by B. Shaw, 4 Sep 01
       real*4, allocatable :: lapsrh(:,:,:)
       real*4, external :: ssh, make_rh
       real*4 shsat
-      real*4 ubias,vbias,urms,vrms,oberr
-c    Arrays for Airdrop application
-      real, allocatable, dimension(:,:) :: udrop,vdrop,tdrop,rri,rrj,
-     &    rrk,rrit,rrjt,rrkt,rrii,rrjj
-      real, allocatable, dimension (:) :: udropc,vdropc,tdropc,rric,rrjc
-
 !frl 2008.7.17 start
          real rt_ref
 !frl 2008.7.17 end
 c_______________________________________________________________________________
 c
       qstatus=0
-      call get_balance_nl(lrunbal,adv_anal_by_t_min,cpads_type,istatus)
+c     The legacy reader returns two retired experiment fields; ignore them.
+      call get_balance_nl(lrunbal,unused_minutes,unused_profile,istatus)
       if(istatus.ne.0)then
          print*,'error getting balance namelist'
          return
@@ -210,7 +174,6 @@ c
       call s_len(vertical_grid,lenvg)
       if(vertical_grid(1:lenvg).eq.'PRESSURE')THEN!Pressure in pa
          dp=0.
-         pstag=0.
          do i=2,nz
           if(.not.ieee_is_finite(p(i-1)).or.
      &       .not.ieee_is_finite(p(i)).or.p(i).le.0..or.
@@ -219,11 +182,8 @@ c
              goto 999
           endif
           dp(i)=p(i-1)-p(i)
-          pstag(i-1)=p(i-1)-dp(i)*0.5
          enddo
          dp(1)=dp(2)
-         pstag(nz)=p(nz)-dp(nz)*0.5
-c        print*,(p(i),dp(i),i=1,nz)
       else
          print*,'vertical grid is not PRESSURE ',vertical_grid
          goto 999
@@ -231,18 +191,14 @@ c        print*,(p(i),dp(i),i=1,nz)
 
       call find_domain_name(generic_data_root,staticext,istatus)
       sfcext='lsx'
-      call get_directory(staticext,staticdir,lend)
-      call get_directory(sfcext,sfcdir,lends)
 
-      re=6371220.
-      rdpdg=3.141592654/180.
       cappa=287.053/1004.686
       g=9.80665
       bnd=1.e-30 !value of winds on the terrain face 
       itmax=200  !max iterations for relaxation
 
       call get_domain_laps(nx,ny,staticext,lat,lon,ter
-     1                    ,grid_spacing_cen_m,istatus)
+     1                    ,unused_grid_spacing_m,istatus)
 
       if (istatus .ne. 1) then
          print *,'Error getting laps lat, lons.'
@@ -295,16 +251,8 @@ c
          endif
       enddo
 
-      call get_modelfg_2d(i4time_sys,'PSF',nx,ny,psb,istatus)
-
-      if(istatus.ne.1)then
-         print*,'background model frst guess not obtained'
-         return
-      endif
-
-c     Preserve background omega validity before a numeric fallback is chosen.
+c     Preserve omega validity before any numeric fallback is chosen.
       allocate(omb_valid(nx,ny,nz),omo_valid(nx,ny,nz))
-      call qbal_mark_valid_omega(omb,omb_valid,nx,ny,nz)
 c
 c *** Get LAPS 3D analysis grids.
 c
@@ -327,10 +275,27 @@ c omo is the cloud vertical motion from lco
          print *,'Error getting LAPS analysis data...Abort.'
          goto 999
       endif
+c
+c *** Get LAPS 2D surface pressure.
+c
+      call get_laps_2d(i4time_sys,sfcext,'PS ',units,
+     1                  comment,nx,ny,ps,istatus)
+      if(istatus.ne.1)then
+         print*,'LAPS surface pressure not obtained'
+         goto 999
+      endif
+c
+c Build masks and localization from the fields used by the solver.
+      call qbal_mark_valid_omega(omb,omb_valid,nx,ny,nz)
       if(istat_omo.eq.1)then
          call qbal_mark_valid_omega(omo,omo_valid,nx,ny,nz)
       else
          omo_valid=.false.
+      endif
+      if(.not.background_omega_complete(omb_valid,ps,p,
+     &                                  nx,ny,nz))then
+         print*,'incomplete background omega; balance rejected'
+         goto 999
       endif
       allocate(balance_influence(nx,ny,nz))
       call build_compact_influence_3d(omo_valid,p,dx,dy,
@@ -344,56 +309,6 @@ c omo is the cloud vertical motion from lco
       else
          print*,'compact COM support cells ',
      &          count(balance_influence.gt.0.),' of ',nx*ny*nz
-      endif
-c
-c *** Get LAPS 2D surface pressure.
-c
-      call get_laps_2d(i4time_sys,sfcext,'PS ',units,
-     1                  comment,nx,ny,ps,istatus)
-      if(istatus.ne.1)then
-         print*,'LAPS surface pressure not obtained'
-         goto 999
-      endif
-      if(.not.background_omega_complete(omb_valid,ps,p,
-     &                                  nx,ny,nz))then
-         print*,'incomplete background omega; balance rejected'
-         goto 999
-      endif
-c
-c *** For Airdrop-LAPS project we want to advance
-c *** analyses to the time of payload release as specified
-c *** by namelist variable adv_anal_by_t_min. Subr 'advance_grids'
-c *** acquires backgrounds at i4time_airdrop and uses them to
-c *** advance the "laps" analysis arrays forward in time to
-c *** i4time_airdrop. Background arrays are filled with data
-c *** at i4time_airdrop.
-c *** 
-c
-      call get_c8_project(c8_project,istatus)
-      call upcase(c8_project,c8_project)
-
-      if(c8_project .eq. 'AIRDROP')then
-
-         print*
-         print*,' ************************'
-         print*,' ******* Airdrop  *******'
-         print*,' ************************'
-         print*
-         print*,' Advance systime by ',
-     +adv_anal_by_t_min*60, ' seconds '
-
-         i4time_airdrop=i4time_sys+adv_anal_by_t_min*60
-
-         call advance_grids(i4time_sys,i4time_airdrop
-     .,nx,ny,nz,ub,vb,tb,phib,shb,omb,psb
-     .,lapsphi,lapstemp,lapsu,lapsv,lapssh,omo,ps,istatus)
-         if(istatus.ne.1)then
-            print*,'Error returned: advance_grids '
-            return
-         endif
-
-         call make_fnam_lp(i4time_airdrop,a9_time_airdrop,istatus)
-
       endif
 
 c *** Not considering non-linear terms for now, so no need to read t0-dt. 
@@ -497,8 +412,6 @@ c set model scale - a low end wave resolvable by the grid
      &,ks,kf,terscl)
       else
 
-         pd8=p/85000.
-         pd5=p/50000.
          k8=1
          k5=1
          kpd8=abs(p(1)-85000.)
@@ -668,9 +581,6 @@ c if background is missing sumom2 will be 0. Assume a nominal .5Pa/s vv
       enddo
       deallocate(ks,kf,terscl)
 
-c if this is for airdrop there is no need to run the balance package, only 
-c continuity. set delo=0. In balcon this will skip the balance sequence.
-      if(c8_project .eq. 'AIRDROP') delo=0.
 c
 c print these arrays now.
       print*,'/dthet/thet/dz/den/N/V/f/delo/tau:' 
@@ -951,10 +861,6 @@ c
 c Write balance output (balance/lt1 and balance/lw3).
 c ---------------------------------------------------
 c
-      if(c8_project .eq. 'AIRDROP')then
-         i4time_sys = i4time_airdrop
-      endif
-
       call write_bal_laps(i4time_sys,phi,u,v,t,om,lapsrh,lapssh
      .                   ,nx,ny,nz,p,istatus)
       if(istatus.ne.1)then
@@ -962,284 +868,6 @@ c
          return
       endif
       qstatus=1
-
-      if(c8_project .eq. 'AIRDROP')then
-
-c ----------------------------------------------------------------
-c -----------    AIRDROP ANALYSIS ERROR SECTION ------------------
-c Output required: turbulent compontents of u, v, and w;
-c analysis error of u,v,wc t, rh
-c compute dropsone wind difference from background
-c simple solution is to read from .pig and tmg files, then create a
-c truth profile and compute an average analysis error
-
-         write(6,*)' Rotate u/v analysis and background
-     1    to true north for AIRDROP analysis'
-
-         do k = 1, nz
-            do j = 1, ny
-            do i = 1, nx
-               call uvgrid_to_uvtrue(
-     1            u(i,j,k),v(i,j,k)
-     1           ,u_true   ,v_true
-     1           ,lon(i,j)           )
-               u(i,j,k) = u_true
-               v(i,j,k) = v_true
-               call uvgrid_to_uvtrue(
-     1             ub(i,j,k),vb(i,j,k)
-     1            ,u_true   ,v_true
-     1            ,lon(i,j)          )
-            ub(i,j,k)=u_true
-            vb(i,j,k)=v_true
-            enddo
-            enddo
-         enddo
-
-         call get_wind_parms(l_dum,l_dum,l_dum
-     1,rdum,rdum,rdum,rdum,rdum,max_pr,idum,idum,istatus)
-c
-c ---------------------------------------------------------------------------
-c nsnd = the max number of profiles (soundings); used for array dimensioning
-c        purposes.
-c n_snd= the number of soundings found in the ingest files. For "pin", this
-c        is always one while for "snd" 1 <= n_snd <= max_pr, and n_snd is 
-c        returned from routine readprg.
-c ---------------------------------------------------------------------------
-c
-         if(cpads_type.eq.'pin')then
-            nsnd=1
-            n_snd=1
-         else
-            nsnd=max_pr
-         endif
-
-         allocate(udrop(nsnd,nz),udropc(nz)
-     &           ,vdrop(nsnd,nz),vdropc(nz)
-     &           ,tdrop(nsnd,nz),tdropc(nz)
-     &           ,rri(nsnd,nz),rrj(nsnd,nz),rrk(nsnd,nz)
-     &           ,rrit(nsnd,nz),rrjt(nsnd,nz),rrkt(nsnd,nz)
-     &           ,rrii(nsnd,nz),rrjj(nsnd,nz)
-     &           ,rric(nz),rrjc(nz))
-
-         if(cpads_type.eq.'pin')then
-
-            call readpig(a9_time,nx,ny,nz,lat,lon
-     1,udrop,vdrop,tdrop,rri,rrj,rrit,rrjt,istatus)
-
-         elseif(cpads_type.eq.'snd')then
-
-            call readprg(a9_time,nx,ny,nz,nsnd
-     1,udrop,vdrop,tdrop,rri,rrj,rrk,rrit,rrjt,rrkt,n_snd,istatus)
-
-         else
-
-            print*,'********************************************'
-            print*,'   !!! Error: No PADS type indicated !!!'
-            print*,'Check static/balance.nl; variable cpads_type'
-            print*,'********************************************'
-            return
-
-         endif
-
-         if(istatus.eq.-3)then
-         print*,'Failure status: ',cpads_type,' istatus=',istatus
-            print*,'Dropsonde data not available; using default '
-     1    ,'dropsonde (profile in center of grid)'
-            go to 99
-         elseif(istatus.eq.-1)then
-            print*,'Only tmg exists: generate u/v drop profiles
-     1 from analysis with gaussian error'
-         elseif(istatus.eq.-2)then
-             print*,'Only prg exists: generate T drop profile
-     1 from analysis with gaussian error'
-         endif
-c routine to create drop and rr arrays when either prg or tmg
-c do not exist
-         if(istatus.eq.-1)then
-            rri=rrit
-            rrj=rrjt
-            iii=382983
-            slastv=0
-            slastu=0
-            cor=.5
-            do l=1,n_snd
-            do k=1,nz
-               if(rri(l,k).ne.smsng .and. rrj(l,k).ne.smsng)then
-                  ii=rri(l,k)
-                  jj=rrj(l,k)
-                  slastu= ffz(iii,20,cor,slastu) ! assumed gaussian error 3ms 
-                  udrop(l,k)= u(ii,jj,k) + slastu*3.
-                  slastv= ffz(iii,20,cor,slastv) ! assumed gaussian error 3ms 
-                  vdrop(l,k)= v(ii,jj,k) + slastv*3.   
-               endif
-            enddo
-            enddo
-         else ! this is the istatus= -2 option
-            rrit=rri
-            rrjt=rrj
-            iii=382983
-            slastt=0
-            do l=1,n_snd
-            do k=1,nz
-               if(rrit(l,k).ne.smsng .and. rrjt(l,k).ne.smsng)then
-                  ii=rrit(l,k)
-                  jj=rrjt(l,k)
-                  slastt=ffz(iii,20,cor,slastt)
-                  tdrop(l,k)= t(ii,jj,k) + slastt*2.      
-               endif
-            enddo
-            enddo
-         endif
-c
-c this routine checks all levels for u,v, and t. If missing (either
-c no dropsonde or for levels above dropsonde, dropsonde variables 
-c will be proxied by the analysis at either the dropsonde points
-c (if they exist) otherwise, the center of the grid and
-c gaussian noise will be applied: 3 m/s for wind, 1C for temp
-c this will allow a variance to be provided above dropsonde levels
-c
-99    slastu=0
-      slastv=0
-      slastt=0 
-      sumu=0
-      sumv=0
-      print*,'k rri rrj, udrop, vdrop, u and v at drop point'
-      do l=1,n_snd
-       icount=0
-       do k=1,nz
-        if(rri(l,k).eq.smsng.or.rrj(l,k).eq.smsng)then
-         icount=icount+1
-        endif
-       enddo
-       if(icount.ne.nz)then
-        frstone=.true.
-        lastone=.true.
-        do k=1,nz
-         if(rri(l,k).ne.smsng)then
-          if(frstone)then
-           frstone=.false.
-           kfirst=k
-           if(k.gt.1)then
-            do kk=1,k-1
-             rri(l,kk)=rri(l,k)
-             rrj(l,kk)=rrj(l,k)
-            enddo
-           endif
-          endif
-         elseif(.not.frstone)then
-          if(lastone)then
-           lastone=.false.
-           klast=k-1
-           rri(l,k)=rri(l,klast)
-           rrj(l,k)=rrj(l,klast)
-          else
-           rri(l,k)=rri(l,klast)
-           rrj(l,k)=rrj(l,klast)
-          endif
-         endif
-        enddo
-       else
-        rri(l,1:nz)=float(nx)/2.
-        rrj(l,1:nz)=float(ny)/2.
-       endif
-       do  k=1,nz
-        ii=nint(rri(l,k))
-        jj=nint(rrj(l,k))
-        if(udrop(l,k).eq.smsng.or.vdrop(l,k).eq.smsng)then
-         slastu=ffz(iii,20,cor,slastu)
-         slastv=ffz(iii,20,cor,slastv)
-         udrop(l,k)=u(ii,jj,k)+slastu*3.  
-         vdrop(l,k)=v(ii,jj,k)+slastv*3.  
-        endif
-        if(tdrop(l,k).eq.smsng)then
-         slastt=ffz(iii,20,cor,slastt)
-         tdrop(l,k)=t(ii,jj,k)+slastt*1.  
-        endif
-        if(.false.)then
-         write(6,1112) k,rri(l,k),rrj(l,k),udrop(l,k),vdrop(l,k),
-     &   u(50,16,k),v(50,16,k),u(50,16,k)-udrop(l,k),v(50,16,k)-
-     &   vdrop(l,k)
-         if(rri(l,k).ne.50) sumu=u(50,16,k)-udrop(l,k)+sumu!only sum over sonde
-         if(rri(l,k).ne.50) sumv=v(50,16,k)-vdrop(l,k)+sumv
-        endif
-       enddo 
-1112   format (1x,i3,8f6.2)
-       print*,' sonde ',l, 'ballistic u v diff ',sumu,sumv
-      enddo ! on l for each sonde
-
-c -----------------------------------------------------------------
-c routine to find closest sonde to cneter of grid (drop point) for
-c error estimation, when more than one sounding
-
-      if(n_snd.gt.1)then
-         cx=nx/2+.5 
-         cy=ny/2+.5
-         do k=1,nz
-          ddmin=1.e30
-          lmin=0
-          do l=1,n_snd
-           if(rri(l,k).ne.smsng.and.rrj(l,k).ne.smsng) then
-             dd=(cx-rri(l,k))**2+(cy-rrj(l,k))**2
-             if(dd.lt.ddmin) then
-                lmin=l
-                ddmin=dd
-             endif
-           endif
-          enddo 
-          if(lmin.ne.0) then
-             udropc(k)=udrop(lmin,k)
-             vdropc(k)=vdrop(lmin,k)
-             tdropc(k)=tdrop(lmin,k)
-             rric(k)=rri(lmin,k)
-             rrjc(k)=rrj(lmin,k)
-          endif
-         enddo ! on k all levels
-      else
-         rric=rri(1,:)
-         rrjc=rrj(1,:)
-         udropc=udrop(1,:)
-         vdropc=vdrop(1,:)
-         tdropc=tdrop(1,:)
-      endif
-c
-c subr profile fills array erru(u),errub(v) with analysis error 
-c here we assume the following for dropsonde error: wind 1m/s, temp .5deg
-c and model error
-      call read_wind3d_wgi(rstats,istatus)
-      if(istatus .ne. 1)then
-         print*,'Using u/v model errors from climo estimates:'
-         moderu=3.
-         moderv=3.
-         modert=1.0
-      else
-         print*,'Using u/v model errors from wind analysis:'
-         moderu=rstats(6)
-         moderv=rstats(7)
-         modert=1.0
-      endif
-      print*,'u/v model error = ',moderu,moderv
-      oberu=1.
-      obert=.5
-      oberw=.05
-
-c  compute TKE
-c  the s arrays are used to hold the turbulent components of u,v, and w
-
-      call turb(u,v,om,t,phi,p,us,vs,oms,ts,ter,nx,ny,nz)
-
-      print*
-      print*,'Calling subroutine profile. '
-      print*
-
-      call profile(udropc,vdropc,tdropc,rric,rrjc,oberu,oberw
-     &,obert,moderu,moderv,modert,erru,errv,errw ,errt,u,v,om,
-     & lapssh,us,vs,oms,t,phi,ub,vb,omb,tb,p
-     &,ter,zter,nx,ny,nz,i4time_sys)
-
-c           call write_errors(a9_time_airdrop,p,erru,errv,errw,errt,
-c    1 nx,ny,nz,rri,rrj,zter,alt)
-
-      endif
 
       deallocate(lapsrh)
 
@@ -1726,7 +1354,6 @@ c apply continuity to input winds
           print*,'initial continuity solver failed'
           goto 900
        endif
-       if(delo.eq.0.)go to 700
 c move adjusted fields to observation fields 
        call move_3d(u,uo,nx,ny,nz)
        call move_3d(v,vo,nx,ny,nz)
@@ -2019,19 +1646,11 @@ c Restore full winds and heights by adding back in background
 
       enddo ! on lmax
 
- 700  continue
 c Apply continuity into dedicated output arrays. Backgrounds remain immutable.
 c Apply a C2 compact taper to the complete balance candidate first.  Horizontal
 c face weights avoid introducing an unsupported rotational increment at the
 c support edge.  The following LEIB_SUB call reprojects the tapered candidate
 c with the exact localized continuity operator.
-       if(delo.eq.0.)then
-c AIRDROP already has one localized continuity solution; do not solve twice.
-          call move_3d(u,ucont,nx,ny,nz)
-          call move_3d(v,vcont,nx,ny,nz)
-          call move_3d(om,omcont,nx,ny,nz)
-          goto 710
-       endif
        do k=1,nz
         do j=1,ny
          do i=1,nx
@@ -2062,7 +1681,6 @@ c AIRDROP already has one localized continuity solution; do not solve twice.
           print*,'final continuity solver failed'
           goto 900
        endif
- 710  continue
        call diagnose_wind_increment_modes(uorig,vorig,ucont,vcont,
      &      influence,dx,dy,div_mode_rms,vort_mode_rms,
      &      div_roughness_rms,div_profile,vort_profile,mode_status)
@@ -2481,7 +2099,7 @@ c
      &     cont_background,cont_max_background,cont_forced,
      &     cont_max_forced,cont_final,cont_max_final,
      &     geo_forced,geo_final,istatus)
-c One fail-closed acceptance contract for balance and AIRDROP candidates.
+c One fail-closed acceptance contract for every balance candidate.
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
       integer istatus
@@ -4304,992 +3922,5 @@ c--------------------------------------------------
       enddo
 10    format(1x,8(e10.3,1x))
 
-      return
-      end
-cc
-c------------------------------------------------------------
-cc
-      subroutine readprg(a9_time,nx,ny,nz,max_pr
-     &,udrop,vdrop,tdrop,ri,rj,rk,rit,rjt,rkt,nsnd,istatus)
-
-c this subroutine reads the .prg and .tmg files to recover observed  
-c u, v, bnd T profiles, the decimal i,j locations at the nz LAPS levels 
-
-      real udrop(max_pr,nz)
-      real vdrop(max_pr,nz)
-      real tdrop(max_pr,nz)
-      real ri(max_pr,nz)
-      real rj(max_pr,nz)
-      real rit(max_pr,nz)
-      real rjt(max_pr,nz)
-      real rk(max_pr,nz)
-      real rkt(max_pr,nz)
-      real dum2
-
-c variables output:
-c     udrop, vdrop tdrop: dropsonde u,v T obs at the nz laps levels
-c     ri, rj: real grid coordinates of dropsone position in grid space
-c     rit,rjt: real position of temperature sonde in grid space
-c
-c Note: arrays udrop, vdrop, tdrop
-c       must be 2d to allow more than 1.
-c
-      Character*180 dum
-      Character*9 a9_time
-      Character*255 dum1
-      integer len,istatus,nstar,nblank,ncnt,iflag,ngood
-      logical lexist
-      real, allocatable, dimension(:,:) :: dd,ff
-     1,tt,uu,vv
-
-      integer max_pr
-
-      integer ngoodlevs(max_pr)
-
-      allocate(dd(max_pr,nz),ff(max_pr,nz),tt(max_pr,nz))
-      allocate(uu(max_pr,nz),vv(max_pr,nz))
-
-      call get_r_missing_data(smsng,istatus)
-      if(istatus.ne.1)then
-         print*,'Error: returned from get_r_missing_data'
-         return
-      endif
-
-c preset all dropsonde output to missing
-      istatus=0
-      ri=smsng
-      rj=smsng
-      rk=smsng
-      rkt=smsng
-      rit=smsng
-      rjt=smsng
-      udrop=smsng
-      vdrop=smsng
-      tdrop=smsng
-      dd=smsng
-      ff=smsng
-      ngoodlevs=0
-
-      pi=4.*atan(1.)
-      rdpdg=pi/180. 
-      call get_directory('prg',dum,len)
-      dum(len+1:len+13)=a9_time//'.prg'
-      inquire(file=dum,exist=lexist)
-      if(lexist)then
-        open (11, file=dum,form='formatted',status='old',err=50)
-        iflag=0
-        nlev=1
-        nsnd=1
-        do n=1,nz*max_pr
-
-         read(11,1000,end=1) riin,rjin,rkin,dum1(1:20)
- 1000    format(f11.5,2f10.5,a20)
-
-         ri(nsnd,nlev)=riin
-         rj(nsnd,nlev)=rjin
-         rk(nsnd,nlev)=rkin
-
-         if(dum1(1:1).eq.'*'.and.iflag.eq.0 ) then  !the first level of first sounding
-
-          ri(nsnd,nlev)=smsng
-          rj(nsnd,nlev)=smsng
-          rk(nsnd,nlev)=smsng
-          nlev=nlev+1
-
-         elseif(dum1(1:1).eq.'*'.and.iflag.eq.1)then !could be the end of existing sounding or
-c                                                     missing levels within existing sounding.
-          if(nlev.gt.nz)then
-             nsnd=nsnd+1
-             nlev=1
-             ri(nsnd,nlev)=smsng
-             rj(nsnd,nlev)=smsng
-             rk(nsnd,nlev)=smsng
-             nlev=nlev+1
-             iflag=0
-          else
-             ri(nsnd,nlev)=smsng
-             rj(nsnd,nlev)=smsng
-             rk(nsnd,nlev)=smsng
-             if(nlev.eq.nz)then
-                nlev=1
-                nsnd=nsnd+1
-             else
-                nlev=nlev+1
-             endif
-          endif
-
-         else
-
-          read(dum1(4:10),100)dd(nsnd,nlev)
-100       format(f7.3)
-          read(dum1(15:20),101)ff(nsnd,nlev)
-101       format(f6.3)
-          ri(nsnd,nlev)=ri(nsnd,nlev)+1
-          rj(nsnd,nlev)=rj(nsnd,nlev)+1
-          ngoodlevs(nsnd)=ngoodlevs(nsnd)+1
-          iflag=1
-          nlev=nlev+1
-         endif
-        enddo
-
-1       if(ngoodlevs(nsnd).eq.0)nsnd=nsnd-1
-
-        if(nsnd.lt.1)then
-           print*,'No wind data in prg file'
-           istatus=-1
-           goto 7
-        else
-           print*,'Found ',nsnd,' Soundings'
-           print*,'------------------------'
-           do i=1,nsnd
-             print*,' Snd#: ',i,' Number of Good Levels = ',ngoodlevs(i)
-           enddo
-        endif
-
-c convert dd ff to u,v
-        do n=1,nsnd 
-         do k=1,nz
-           if(dd(n,k).ne.smsng)then
-           call disp_to_uv(dd(n,k),ff(n,k),udrop(n,k),vdrop(n,k))
-           endif
-         enddo
-        enddo
-
-c if dropsonde is reverse order, flip it.
-c       if(rk(1).gt.rk(nsave))then
-c          call flip_sonde(mxz,ncnt ,uu,vv,ri,rj,rk)
-c       endif
-   44   close(11)
-      else !on lexist
-       print*,'No prg file at this time'
-       istatus=-1
-      endif
-
-7     continue
-c now read the tmg file to get the dropsonde temps
-c     call get_directory('tmg',dum,len)
-c     dum(len+1:len+13)=a9_time//'.tmg'
-c     nn=0
-c     inquire(file=dum,exist=lexist)
-c     if(lexist)then
-c      continue
-c      open (11, file=dum,form='formatted',status='old',err=50) 
-c      Do n=1,mxz
-c       nn=nn+1
-c       read(11,*,end=2) aa,bb,cc,ee, dum1           
-c       if(dum1.eq.'  ')  go to 2
-c       if(dum1.eq.'ACA') then    
-c        rit(nn)=aa
-c        rjt(nn)=bb
-c        rkt(nn)=cc
-c        tt(nn)=ee  
-c       endif
-c      enddo
-c since dropsonde is reverse order, flip it.
-c 2    nn=nn-1
-c      if(nn.lt.1)then
-c         istatus = istatus-2
-c         deallocate(ri,rj,rk,dd,ff,uu,vv,tt)
-c         goto 49
-c      endif
-c      if(nn.eq.1) then! there is only one ob; put at nearest laps level
-c        do k=1,nz! clear arrays
-c         tdrop(k)=smsng
-c         rit(k)=smsng
-c         rjt(k)=smsng
-c        enddo
-c        k=rk(1)
-c        tdrop(k)=tt(1)
-c        rit(k)=ri(1)
-c        rjt(k)=rj(1) 
-c        close (11) ! close file  and return
-c        return
-c      endif
-c      if(rk(1).gt.rk(nn))then
-c         call flip_sonde(mxz,nn,uu,vv,rit,rjt,rk)
-c      endif
-c now interpolate to the laps levels in rk space
-c      do k=1,nz
-c       rr=k
-c       do  n=1,nn-1
-c        iflag=0        
-c        if (rr.lt.rk(n+1).and.rr.ge.rk(n)) then ! point is between two dropsonde levels
-c          aa=(rr-rk(n))/(rk(n+1)-rk(n))
-c          tdrop(k)=tt(n)*(1.-aa)+tt(n+1)*aa
-c          iflag=1
-c          go to 4
-c        endif
-c      enddo 
-c      if(iflag.eq.0) then
-c       tdrop(k)=smsng
-c      endif
-c  4   enddo
-c     close 11
-c     else ! on lexist
-       print*,'No tmg file for this time'
-       istatus=istatus-2
-c     endif
-
-
-      deallocate(dd,ff)
-      deallocate (uu,vv,tt)
-
-      return
-
-c49    print*,'No temp data in tmg file'
-c     return
-
-50    print*,'Error opening file: ',dum(1:len+13)
-      return
-      end
-c-------------------------------------------------------------------
-      subroutine readpig(a9_time,nx,ny,nz,lat,lon
-     &,udrop,vdrop,tdrop,rri,rrj,rrit,rrjt,istatus)
-
-c this subroutine reads the .pig and .tmg files to recover observed  
-c u, v, bnd T profiles, the decimal i,j locations at the nz LAPS levels 
-      real udrop(nz),vdrop(nz),tdrop(nz),rri(nz),rrj(nz), 
-     & rrit(nz),rrjt(nz),dum2
-c variables output:
-c     udrop, vdrop tdrop: dropsonde u,v T obs at the nz laps levels
-c     rri, rrj: real grid coordinates of dropsone position in grid space 
-c
-c Note: only one profile is allowed atm. arrays udrop, vdrop, tdrop
-c       must be 2d to allow more than 1.
-c
-      Character*180 dum
-      Character*9 a9_time
-      Character*3 dum1
-      integer len,istatus
-      logical lexist
-      real, allocatable, dimension(:) :: ri,rj,rk,dd,ff
-     1,tt,uu,vv
-      real lat(nx,ny),lon(nx,ny)
-
-      integer mxz
-      parameter (mxz=500)
-      
-      allocate(ri(mxz),rj(mxz),rk(mxz))
-      allocate(dd(mxz),ff(mxz),tt(mxz))
-      allocate(uu(mxz),vv(mxz))
-
-      call get_r_missing_data(smsng,istatus)
-      if(istatus.ne.1)then
-         print*,'Error: returned from get_r_missing_data'
-         return
-      endif
-
-c preset all dropsonde output to missing
-      istatus=0
-      rri=smsng
-      rrj=smsng
-      udrop=smsng
-      vdrop=smsng
-      tdrop=smsng
-
-      pi=4.*atan(1.)
-      rdpdg=pi/180. 
-      call get_directory('pig',dum,len)
-      dum(len+1:len+13)=a9_time//'.pig'
-      inquire(file=dum,exist=lexist)
-      if(lexist)then
-        open (11, file=dum,form='formatted',status='old',err=50) 
-        Do n=1,mxz
-         read(11,*,end=1) ri(n),rj(n),rk(n),dd(n),ff(n),dum1
-c change from (0,0,0) origin to (1,1,1) grid origin system.
-         ri(n)=ri(n)+1
-         rj(n)=rj(n)+1
-         rk(n)=rk(n)+1
-         if(dum1.eq.'  ') go to 1
-        enddo
-        print*, 'Suspect read in the pig file'
-        istatus=-1
-        goto 7
-
-1       nsave=n-1 
-        if(nsave.lt.1)then
-           print*,'No wind data in pig file'
-           istatus=-1
-           goto 7
-        endif
-
-c convert dd ff to u,v
-        do n=1,nsave
-           call disp_to_uv(dd(n),ff(n),uu(n),vv(n))
-        enddo
-
-c since dropsonde is reverse order, flip it.
-        if(rk(1).gt.rk(nsave))then
-           call flip_sonde(mxz,nsave,uu,vv,ri,rj,rk)
-        endif
-c now interpolate to the laps levels in rk space
-c if nsave is 1 (one level of data) then assign it to nearest laps level
-c first clear out drop winds, make assignment and then close file
-        do k=1,nz
-         udrop(k)=smsng
-         vdrop(k)=smsng
-         rri(k)=smsng
-         rrj(k)=smsng
-        enddo
-        if(nsave.eq.1) then
-         k=rk(1)
-         udrop(k)=uu(1)
-         vdrop(k)=vv(1)
-         rri(k)=ri(1)
-         rrj(k)=rj(1) 
-         go to  44 ! close file 
-        endif
-        do k=1,nz
-           rr=k
-           do n=1,nsave-1
-              iflag=0        
-              if( rr.lt.rk(n+1).and.rr.ge.rk(n))then !point laps level is between two dropsonde points.
-                 aa=(rr-rk(n))/(rk(n+1)-rk(n))
-                 udrop(k)=uu(n)*(1.-aa)+uu(n+1)*aa
-                 vdrop(k)=vv(n)*(1.-aa)+vv(n+1)*aa
-                 rri(k)=ri(n)*(1.-aa)+ri(n+1)*aa
-                 rrj(k)=rj(n)*(1.-aa)+rj(n+1)*aa
-             print*, 'k ri rj rkn rkn+1   ',k,ri(n),rj(n),rk(n),rk(n+1)
-             print*, 'udrop,uu(n),uu(n+1) ',udrop(k),uu(n),uu(n+1) 
-             print*, 'vdrop,vv(n),vv(n+1) ',vdrop(k),vv(n),vv(n+1) 
-                 
-                 iflag=1
-                 go to 3
-              endif
-           enddo ! on n
-           if(iflag.eq.0)then
-              udrop(k)=smsng
-              vdrop(k)=smsng
-           endif
-   3    enddo ! on k
-   44   close(11)
-      else
-        print*,'No pig file at this time'
-        istatus=-1
-      endif
-
-c now read the tmg file to get the dropsonde temps
-7     call get_directory('tmg',dum,len)
-      dum(len+1:len+13)=a9_time//'.tmg'
-      nn=0
-      inquire(file=dum,exist=lexist)
-      if(lexist)then
-
-       open (11, file=dum,form='formatted',status='old',err=50) 
-       Do n=1,mxz
-        nn=nn+1
-       read(11,*,end=2) aa,bb,cc,ee, dum1           
-       if(dum1.eq.'  ')  go to 2
-       if(dum1.eq.'ACA') then    
-        ri(nn)=aa
-        rj(nn)=bb
-        rk(nn)=cc
-        tt(nn)=ee  
-       endif
-       enddo
-c since dropsonde is reverse order, flip it.
-2      nn=nn-1
-       if(nn.lt.1)then
-          istatus = istatus-2
-          deallocate(ri,rj,rk,dd,ff,uu,vv,tt)
-          goto 49
-       endif
-       if(nn.eq.1) then! there is only one ob; put at nearest laps level
-         do k=1,nz! clear arrays
-          tdrop(k)=smsng
-          rrit(k)=smsng
-          rrjt(k)=smsng
-         enddo
-         k=rk(1)
-         tdrop(k)=tt(1)
-         rrit(k)=ri(1)
-         rrjt(k)=rj(1) 
-         close (11) ! close file  and return
-         return
-       endif
-       if(rk(1).gt.rk(nn))then
-          call flip_sonde(nz,nn,uu,vv,ri,rj,rk)
-       endif
-
-c now interpolate to the laps levels in rk space
-       do k=1,nz
-       rr=k
-       do  n=1,nn-1
-        iflag=0        
-        if (rr.lt.rk(n+1).and.rr.ge.rk(n)) then ! point is between two dropsonde levels
-         aa=(rr-rk(n))/(rk(n+1)-rk(n))
-         tdrop(k)=tt(n)*(1.-aa)+tt(n+1)*aa
-         iflag=1
-         go to 4
-        endif
-       enddo 
-       if(iflag.eq.0) then
-        tdrop(k)=smsng
-       endif
-   4   enddo
-
-      else
-       print*,'No tmg file for this time'
-       istatus=istatus-2
-       return
-      endif
-
-      istatus = 1  !successful return with both pig and tmg data
-
-      deallocate(ri,rj,rk,dd,ff)
-      deallocate (uu,vv,tt)
-      return
-
-49    print*,'No temp data in tmg file'
-      return
-50    print*,'Error opening file: ',dum(1:len+13)
-      return
-      end
-c-------------------------------------------------------------------
-      subroutine flip_sonde(mxz,nk,uu,vv,ri,rj,rk)
-
-      implicit none
-     
-      integer mxz,nk,k
-      real uu(mxz),vv(mxz),ri(mxz),rj(mxz),rk(mxz)
-      real, allocatable, dimension(:) :: rii,rjj,rkk,u,v
-      
-      allocate(rii(mxz),rjj(mxz),rkk(mxz),u(mxz),v(mxz))
-      do k=1,nk
-         rii(nk-k+1)=ri(k)
-         rjj(nk-k+1)=rj(k)
-         rkk(nk-k+1)=rk(k)
-         u(nk-k+1)=uu(k)
-         v(nk-k+1)=vv(k)
-      enddo
-      ri=rii
-      rj=rjj
-      rk=rkk
-      uu=u
-      vv=v
-      deallocate(rii,rjj,rkk,u,v)
-      return
-      end
-c-------------------------------------------------------------------
-      function ffz(ii,n,cor,seed)
-c
-c*********************************************************************
-c
-c     Pulls out a random value from a unit normal distribution with standard 
-c     deviation = 1.  Input is
-c     an integer seed 'ii' and an interation number 'n'. 'n' should
-c     be >20 for best results.
-c     if iswitch is on (1) then value seed is added to the returned 
-c     gaussian number in order to correlate error
-c     
-c  Original: John McGinley, NOAA/FSL  Spring 1998
-c     Changes:
-c       21 Aug 1998  Peter Stamus, NOAA/FSL
-c          Make code dynamic, housekeeping changes, for use in LAPS.
-c       07 Oct 1998  Peter Stamus, NOAA/FSL
-c          Change 'ran' to 'ran1' function for portability.
-c
-c     Notes:
-c
-c*********************************************************************
-c
-      sum=0.
-      do l=1,n
-         sum=sum+ran1(ii)             
-      enddo !l
-      if(n.ne.1) then
-       ffz=sum-float(n)/2.
-      else
-       ffz=sum
-      endif
-      ii=ii-1 
-      if(ii.ge.0) ii=-ii-1
-      ffz=ffz+cor*seed
-c
-      return
-      end
-c
-c
-      function rm(sm,st,mg,mmg,iii)
-c this fuction is set up to create a joint pdf for a series of 
-c gaussian pdfs. Means are passed thru sm(mg); std dev thru st(mg)
-c mmg is actual number of combined distributions. rm is a 
-c nonguassian random number times an error
-      real sm(mg),st(mg),xo,sum,sum1
-c compute overall fuction mean
-      fact=1.001 ! ensures that overall function is larger than joint
-      sum1=0 
-      sum2=0
-      sm(mmg+1)=0
-      if(mmg.eq.2) then
-       sum1=st(1)**2+st(2)**2
-       sum2=sm(1)*st(2)**2+sm(2)*st(1)**2
-       sm(mmg+1)=sum2/sum1
-c      print*,'sm1,st1,sm2,st2 ',sm(1),st(1),sm(2),st(2)
-      endif
-      if (mmg.eq.3) then
-       sum1=(st(1)*st(2))**2+(st(2)*st(3))**2+(st(3)*st(1))**2
-       sum2=sm(1)*(st(2)*st(3))**2+sm(2)*(st(1)*st(3))**2+
-     1       sm(3)*(st(1)*st(2))**2
-       sm(mmg+1)=sqrt(sum2/sum1)
-      endif
-      if(mmg.ge.4) print*, 'not set up for four+ distributions'
-c compute mean st
-      if(mmg.eq.2) then
-       sum1=st(1)**2+st(2)**2
-       sum2=(st(1)*st(2))**2
-       st(mmg+1)=sqrt(sum2/sum1)
-c      print*,'over function sm st ', sm(mmg+1), st(mmg+1)
-      endif
-      if (mmg.eq.3) then
-       sum1=(st(1)*st(2))**2+(st(2)*st(3))**2+(st(3)*st(1))**2
-       sum2=(st(1)*st(2)*st(3))**2
-       st(mmg+1)=sqrt(sum2/sum1)
-      endif
-      if(mmg.ge.4) print*, 'not set up for four+ distributions'
-
-c generate gaussian random number
-      icnt=0
-      slast=0
-      cor=.5
-  5   xo=ffz(iii,20,cor,slast)*st(mmg+1) ! offset relative to sm(mmg+1)
-      slast=xo
-      ep=0.
-      do k=1,mmg
-       ep=-(xo+sm(mmg+1)-sm(k))**2/(st(k)*st(k)) + ep
-      enddo
-       ep1=-(xo/fact)**2/(st(mmg+1)*st(mmg+1))
-       rat=ep-ep1
-       cat=alog(ran1(iii))
-c      print*,'xo,ep,ep1,rat,cat,iii', icnt+1,xo,ep,ep1,rat,cat,iii
-       icnt=icnt+1
-       if(cat.lt.rat) then
-        rm=xo+sm(mmg+1)
-c       print*,'Normal run rejection method. cnt= ',icnt
-        return
-       else
-        if(icnt.eq.100) then
-c        print*,'Problem run rejection method: set to mean. cnt= ',icnt
-         rm=sm(mmg+1)
-         return
-        endif
-        go to 5
-       endif
-       end
-
-c ********************************************************************
-      function ran1(idum)              
-c
-c     Function to generate a random number.  Use this instead of a
-c     machine dependent one. idum must be a negative integer
-c     
-c     Original: Peter Stamus, NOAA/FSL  07 Oct 1998
-c     Changes:  John McGinley, NOAA/FSL 20 Apr 00 - changed to ran2
-c
-c     Notes:
-c        From "Numerical Recipes in Fortran", page 272.  There named ran2.
-c
-c*********************************************************************
-c
-        integer idum, ia1,ia2,im1,im2,imm1,iq1,iq2,ir1,ir2, ntab,ndiv
-        real ran1, am, eps, rnmx
-        parameter( ia1= 40014,
-     &             ia2=40692,
-     &             im1= 2147483563,
-     &             im2= 2147483399,
-     &             am= 1. / im1,
-     &             imm1=im1-1,
-     &             iq1= 53668, 
-     &             iq2= 52774, 
-     &             ir1= 12211,
-     &             ir2= 3791,
-     &             ntab = 32,
-     &             ndiv = 1 + imm1/ntab    ,
-     &             eps = 1.2e-7,
-     &             rnmx = 1. - eps)
-c
-        integer idum2,j, k, iv(ntab), iy
-        save iv, iy,idum2
-        data idum2/123456789/,iv/ntab * 0/, iy/0/
-c
-c.....  Start here.
-c
-        if(idum.gt.0) idum=-idum
-        if(idum.le.0 ) then  !initialize
-           idum = max(-idum,1)           !prevent idum=0
-           idum2=idum
-           do j=ntab+8,1,-1              !load the shuffle table
-              k = idum / iq1
-              idum = ia1* (idum - k*iq1) - ir1*k
-              if(idum .lt. 0) idum = idum + im1
-              if(j .le. ntab) iv(j) = idum
-           enddo !j
-           iy = iv(1)
-        endif
-c
-        k = idum / iq1                    !start here if not initializing
-        idum = ia1* (idum - k*iq1) - ir1*k  
-        if(idum .lt. 0) idum = idum + im1
-        k = idum2/ iq2                    !start here if not initializing
-        idum2= ia2* (idum2- k*iq2) - ir2*k  
-        if(idum2.lt. 0) idum2= idum2+ im2
-        j = 1 + iy/ndiv
-        iy = iv(j)-idum2                  !output prev stored value and 
-        iv(j) = idum                      !  refill shuffle table
-        if(iy.lt.1)iy=iy+imm1
-        ran1 = min(am*iy, rnmx)
-c
-        return
-        end
-c
-c
-      subroutine turb(u,v,om,t,phi,p,us,vs,ws,ts,ter,nx,ny,nz)
-c this subroutine estimates turbulent components from the laps 
-c grids.
-c variables: u,v,om,t,phi,sh are the input laps grids 
-c            us,vs,ws are the output turbulent components
-      real u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz)
-     1,t(nx,ny,nz),phi(nx,ny,nz),p(nz),ts(nx,ny,nz)
-
-      real us(nx,ny,nz),vs(nx,ny,nz),ws(nx,ny,nz)
-      real ter(nx,ny)
-
-      real, allocatable, dimension(:,:,:) :: tke_3d
-
-      real, allocatable, dimension(:) :: p1d,u1d,v1d,t1d,z1d
-     .,dtf
-
-
-      allocate (p1d(nz),u1d(nz),v1d(nz),t1d(nz)
-     .,z1d(nz),dtf(nz))
-      allocate (tke_3d(nx,ny,nz))
-
-c prepare input columns for dtf3
-        
-c$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-C This is the beginning TKE computation
-c
-c subus called: vertirreg
-c functions used: rf, RfKondo
-C
-      factr = 1.0  ! calibration factor for RUC-20 and RUC-10
-
-      do i=1,nx
-      do j=1,ny
-
-      do k=1,nz
-      p1d(k) = p(k)
-      t1d(k) = t(i,j,k)
-      u1d(k) = u(i,j,k)
-      v1d(k) = v(i,j,k)
-      z1d(k) = phi(i,j,k)
-      zter=ter(i,j)
-      enddo
-c
-c Error: arguments differ from those in subroutine
-      call compute_dtf3(p1d,t1d,u1d,v1d,z1d,zter,dtf,nz)
-C
-C The result of the tke computation goes into array tke_3d
-C from that we assume isotropy and recover the 3 turbulent components
-c in u,v,w
-c
-
-      do l=1,nz
-      tke3 = dtf(l)/factr
-      if(tke3.gt.10.) tke3 = 10.
-      tke_3d(i,j,l) = tke3
-      us(i,j,l)=sqrt(tke3/3.) 
-      vs(i,j,l)=us(i,j,l)
-      ws(i,j,l)=vs(i,j,l)
-      enddo
-
-      enddo
-      enddo
-
-      return
-      end
-
-c
-c________________________________________________________________________
-
-      subroutine compute_dtf3(p,t,u,v,z,zter,tke_KH,nz)
-
-c
-c Adrian Marroquin FSL
-c version modified for ITFA
-c 11/09/98
-c
-c Km parameter calibrated to optimize PODn and
-c PODy, Km = 75.0 m^2/s
-c The following is a table of POD's (PODn = PODy) and
-c thresholds for each one of the months from Nov 97
-c to June 1998.
-c
-c
-c Nov   Dec   Jan   Feb   Mar   Apr   May   Jun
-c
-c  66.   66.   61.   62.   68.   65.   64.   60.  GA (I>1, >20kft) all w
-c  .58   .71   .72   .86   .73   .73   .42   .47  Thresholds
-c  67.   66.   64.   63.   67.   64.   62.   59.  HA (I>1, >w120, >20kft)
-c  .65   .67   .63   .71   .70   .68   .4    .4   Thresholds
-c  63.   82.   72.   68.   76.   70.   60.   68.  GA (I>4, >20kft) all w
-c  .55  1.105  .85   .8    .975  .76   .39   .5   Thresholds
-c  62.   82.   72.   66.   75.   68.   59.   67.  HA (I>4, >w120, >20kft)
-c  .6    1.15  .95   .91   .93   .78   .39   .55  Thresholds
-c
-c In the above table GA means General Aviation,
-c HA heavy aircraft (commercial)
-c I>1 turbulence intensities light or greater,
-c >20kft aircraft flying above 20,000 ft,
-c >w120 aircraft heavier than 120,000 lbs,
-c and I>4 turbulence intensities moderate-to-severe or greater.
-c
-c WARNING: The above table was generated with TKE from DTF3 verified
-c with PIREPs. The model output was from RUC2 (40-km), 40 isentropi
-c levels. PIREPs from turbulence related to convection were not
-c removed. DTF3 formulation is only applicable to turbulence from
-c shear intabilities (clear-air turbulence) specially found in
-c upper fronts.
-c-------------------------------------------------------------------------
-c DTF3 has been tested with 12-15 December 97 case study. In this case
-c convective activity was at a minimum in the first half of December 97.
-c During 12-15 Dec 97 a quasi-steady front moved across the US accompanied
-c with a severe turbulence outbreak. For this case PODy = 93.6% and PODn =
-c 76.1% obtained using thresholds for the month of December (see table
-c above, PODn = PODy = 82% for December). The difference in PODy's is
-c attributed to the inclusion of PIREPs from convection during the second
-c half of December 97.
-c
-c DTF3 works well for moderate-to-severe turbulence or greater
-c that affect heavy (commercial aircraft).
-c
-c-------------------------------------------------------------------------
-c Constants from Stull (1988), page 219
-c
-      parameter(c1=1.44,c2=1.0,c3=1.92,
-     *          c13 = c1/c3, c23 = c2/c3, ce = 0.19)
-      parameter(alinf = 200.,akarm = 0.35,cr = 0.54)
-     *
-c
-c
-      parameter (cepn = 2.5, cepp = 0.76)
-c
-c pass p, t, u, v, and z
-c
-        real        p(nz),                     ! pressure in Pa
-     1              t(nz),
-     1              u(nz),
-     1              v(nz),
-     1              z(nz)
-
-      real, allocatable, dimension(:):: brnt,shr,ri
-     1,epsilon
-
-      real tke_KH(nz)
-      real tke
-c
-      data iepn3/0/
-      data akm/75.0/
-c
-c--------------------------------------------------------------
-c compute ri, brnt, and shr
-c
-      data r/287.04/,rocp/0.286/,g/9.8/
-c
-c Constants from Stull (1988), page 219
-c
-      data prands/2.5/
-c
-c
-      if(.not. allocated(brnt))then
-         allocate (brnt(nz),ri(nz),shr(nz),
-     1            epsilon(nz))
-      endif
-      klev= nz
-      pi1 = (p(1)/100000.)**rocp
-      pi2 = (p(2)/100000.)**rocp
-      th1 = t(1)/pi1
-      th2 = t(2)/pi2
-
-      do k=2,nz-1
-      pi3 = (p(k+1)/100000.)**rocp
-      th3 = t(k+1)/pi3
-c
-c vertical derivatives using pressure
-c
-      brunt = vertirreg(th1,th2,th3,
-     *                 p(k-1),p(k),p(k+1))
-      shru = vertirreg(u(k-1),u(k),u(k+1),
-     *                 p(k-1),p(k),p(k+1))
-
-      shrv = vertirreg(v(k-1),v(k),v(k+1),
-     *                 p(k-1),p(k),p(k+1))
-
-c
-      beta = g*g*p(k)/(r*pi2*th2*th2)
-      brnt(k) = -beta*brunt
-      shr(k) = beta*p(k)*(shru*shru+shrv*shrv)/(r*pi2)
-      th1 = th2
-      th2 = th3
-      pi1 = pi2
-      pi2 = pi3
-      ri(k) = brnt(k)/(shr(k)+1.e-10)
-      enddo
-c
-      brnt(1) = brnt(2)
-      shr(1) = shr(2)
-      ri(1) = ri(2)
-      brnt(nz) = brnt(nz-1)
-      shr(nz) = shr(nz-1)
-
-      ri(nz) = ri(nz-1)
-c
-      do k=1,nz
-      if(ri(k).gt.120.) ri(k) = 120.
-      enddo
-c
-c--------------------------------------------------------------
-c
-c now compute dissipation
-c ztop equivalent to cpbl
-c
-      ztop = zter+3000.
-      zsfc = zter
-c
-      DO K=1,klev
-c
-      zlev = z(k)
-        if(ri(k).gt.0.01) then
-        Rff = RfKondo(ri(k))
-        else
-        Rff = rf(ri(k))
-        endif
-      epsilon(k) = akm*shr(k)*(c13-c23*Rff)
-      if(epsilon(k).lt.0.) epsilon(k) = 0.
-c      tke_KH(k) = epsilon(k)
-      if(iepn3.eq.0) then                 ! if iepn3 = 1, only epn
-      if(brnt(k).le.0.) then
-          tke_KH(k) = 0.
-      else
-         br = sqrt(brnt(k))
-         tke_KH(k) = 0.7*epsilon(k)/(ce*br)
-c!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-         if(zsfc.le.zlev.and.zlev.le.ztop) then                     !
-         dz = zlev - zsfc                                           !
-         alb = alinf*akarm*dz/(akarm*dz+alinf)                      !
-         als = cr*sqrt(tke_KH(k))/br                                !
-         all = amin1(alb,als)                                       !
-         tke_KH(k) = (all*epsilon(k))**.666666                      !
-         endif      
-
-c!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      endif
-      endif
-c
-      ENDDO    ! end of K-loop (klev)
-c
-      return
-      end
-c---------------------------------------------------------------------
-      function RfKondo(ri)
-c
-      parameter(c0=6.873,c1=7.)
-c
-c Rfc (critical flux Ri) = 0.143
-c
-      if(ri.gt.1.) then
-      RfKondo = 1./c1
-      else
-      if(0.01.lt.ri.and.ri.le.1.) then
-      d1 = 1.+c0*ri
-      ahm = 1./(c0*ri+1./d1)
-      RfKondo = ri*ahm
-      endif
-      endif
-c
-c for Ri < 0.01 use Rf (Yamada form)
-c
-      return
-      end
-c-------------------------------------------------------------------------
-      subroutine maxminav2d(aux,mx,my,amin,amax)
-c
-      dimension aux(mx,my)
-c
-      anxy = float(mx*my)
-c
-      amax = -1.e10
-      amin = 1.e10
-c
-      sum = 0.
-
-      do i=1,mx
-      do j=1,my
-      sum = sum+ aux(i,j)
-      if(aux(i,j).ge.amax) amax = aux(i,j)
-      if(aux(i,j).le.amin) amin = aux(i,j)
-      enddo
-      enddo
-c
-      avfld = sum/anxy
-      print*,'  max=',amax,'  min=',amin,' average=',avfld
-c
-      return
-      end
-c________________________________________________________________________-
-      function vertirreg(f1,f2,f3,x1,x2,x3)
-      dx1 = x2-x1
-      dx2 = x3-x2
-      rat1 = dx1/dx2
-      rat2 = 1./rat1
-      sdx = 1./(dx1+dx2)
-      vertirreg = ((f3-f2)*rat1+(f2-f1)*rat2)*sdx
-      return
-      end
-C_____________________________________________________________
-      function prand(ri)
-      data b/3.0/, a/6.873/
-c
-      if(ri.gt.1.) then
-      prand = 7.*ri/b
-      else
-      if(0.01.lt.ri.and.ri.lt.1.) then
-      prand = (a*ri*(1.+a*ri)+1.)/(b*(1.+a*ri))
-      else
-      prand = 1./b
-      endif
-      endif
-c
-      return
-      end
-c____________________________________________________________
-      function rifunc(ri2,ri4,ric)
-c
-      fact = sqrt(4.+ri2*(1+4.*ric)/ric)
-      anum = -(2.+ri2/ric)+ri4*fact/sqrt(ric)
-      rifunc = anum/(2.*ri2)
-c
-      return
-      end
-c--------------------------------------------------------------------------
-      function rf(ri)
-c
-      data c1/.056/,c2/.3/,c3/.3333/
-      data a1/.78/,a2/.79/,b1/15./,b2/8./
-c
-      e1 = b1-6.*a1
-      e2 = b1 + 12.*a1*(1.-c2)+3.*b2*(1.-c3)
-      e3 = b1*(1.-3.*c1)-6.*a1
-      e4 = b1*(1.-3.*c1)+12.*a1*(1.-c2)+9.*a2*(1.-c2)
-      e5 = b1+3.*a1*(1.-c2)+3.*b2*(1.-c3)
-c
-      f1 = 0.5*a2*e5/(a1*e4)
-      f2 = a1*e3/(a2*e5)
-      f3 = 2.*a1*(e3*e5-2.*e1*e4)/(a2*e5*e5)
-      f4 = a1*e3/(a2*e5)
-      f42 = f4*f4
-c
-      rf = f1*(ri+f2-sqrt(ri*ri+f3*ri+f42))
-c
       return
       end

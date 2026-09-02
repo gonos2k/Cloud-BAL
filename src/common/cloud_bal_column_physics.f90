@@ -25,6 +25,8 @@ MODULE cloud_bal_column_physics
   REAL(real64), PARAMETER :: LS=LV+LF
   REAL(real64), PARAMETER :: MISSING_PHASE_ALL_SNOW_K=268.15_real64
   REAL(real64), PARAMETER :: MISSING_PHASE_ALL_RAIN_K=275.15_real64
+  INTEGER, PARAMETER :: MAX_ALLOWED_TRANSPORT_SUBSTEPS=256
+  REAL(real64), PARAMETER :: MAX_LEDGER_TOLERANCE=1.0e-6_real64
 
   TYPE, PUBLIC :: column_physics_config
     REAL(real64) :: cloud_fraction_threshold=0.01_real64
@@ -1481,8 +1483,12 @@ CONTAINS
             (snow>0.0_real64 .OR. graupel>0.0_real64)) .OR. &
         ANY(phase==PHASE_SNOW .AND. &
             (rain>0.0_real64 .OR. graupel>0.0_real64)) .OR. &
-        ANY(phase==PHASE_FREEZING_RAIN .AND. snow>0.0_real64) .OR. &
-        ANY(phase==PHASE_SLEET .AND. rain>0.0_real64) .OR. &
+        ANY(phase==PHASE_FREEZING_RAIN .AND. &
+            (snow>0.0_real64 .OR. rain<=0.0_real64 .OR. &
+             graupel<=0.0_real64)) .OR. &
+        ANY(phase==PHASE_SLEET .AND. &
+            (rain>0.0_real64 .OR. snow<=0.0_real64 .OR. &
+             graupel<=0.0_real64)) .OR. &
         ANY(phase==PHASE_GRAUPEL .AND. &
             (rain>0.0_real64 .OR. snow>0.0_real64))) RETURN
     transport_values_valid=.TRUE.
@@ -1514,12 +1520,15 @@ CONTAINS
         cfg%maximum_horizontal_substep<=0.0_real64 .OR. &
         cfg%maximum_horizontal_substep>1.0_real64 .OR. &
         cfg%maximum_transport_substeps<=0 .OR. &
+        cfg%maximum_transport_substeps>MAX_ALLOWED_TRANSPORT_SUBSTEPS .OR. &
         cfg%precipitation_loading_efficiency<0.0_real64 .OR. &
         cfg%precipitation_loading_efficiency>1.0_real64 .OR. &
         cfg%maximum_downdraft_ms<=0.0_real64 .OR. &
         cfg%maximum_downdraft_innovation_ms<=0.0_real64 .OR. &
         cfg%ledger_relative_tolerance<0.0_real64 .OR. &
-        cfg%ledger_absolute_tolerance<0.0_real64) RETURN
+        cfg%ledger_relative_tolerance>MAX_LEDGER_TOLERANCE .OR. &
+        cfg%ledger_absolute_tolerance<0.0_real64 .OR. &
+        cfg%ledger_absolute_tolerance>MAX_LEDGER_TOLERANCE) RETURN
     column_config_valid=.TRUE.
   END FUNCTION column_config_valid
 

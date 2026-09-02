@@ -20,22 +20,16 @@ awk '
   "$test_tmp/qbal_acceptance.o" -o "$test_tmp/test_qbal_acceptance"
 "$test_tmp/test_qbal_acceptance"
 
+if grep -Eiq 'airdrop|advance_grids|delo\.eq\.0|readprg|readpig' \
+    "$repo_root/src/balance/qbalpe.f"; then
+  printf '%s\n' 'retired experimental QBAL path is still present' >&2
+  exit 1
+fi
+
 awk '
-  /if\(delo.eq.0.\)go to 700/ {route=1}
-  route && /^ 700  continue/ {common=1}
-  route && !common && /bal_status=1/ {bad_success=1}
-  common && /if\(delo.eq.0.\)then/ {airdrop_branch=1}
-  airdrop_branch && /call move_3d\(u,ucont/ {airdrop_copy=1}
-  airdrop_branch && !airdrop_exit && /call leib_sub/ {duplicate_solve=1}
-  airdrop_branch && /goto 710/ {airdrop_exit=1}
-  airdrop_exit && /call leib_sub/ {normal_projection=1}
-  normal_projection && /^ 710  continue/ {common_final=1}
-  common_final && /call qbal_candidate_acceptance/ {common_gate=1}
-  END {
-    if (!route || !common || bad_success || duplicate_solve ||
-        !airdrop_branch || !airdrop_copy || !airdrop_exit ||
-        !normal_projection || !common_final || !common_gate) exit 1
-  }
+  /^       call leib_sub\(/ {projection_count++}
+  /^       call qbal_candidate_acceptance\(/ {common_gate=1}
+  END {if (projection_count<2 || !common_gate) exit 1}
 ' "$repo_root/src/balance/qbalpe.f"
 
 for assignment in 't=tworkorig' 'u=uworkorig' 'v=vworkorig' \
@@ -52,8 +46,14 @@ awk '
 
 awk '
   /^      call get_laps_2d\(i4time_sys,sfcext,'\''PS '\''/ {analysis_surface=NR}
+  /^      call qbal_mark_valid_omega\(omb,omb_valid/ {omega_refresh=NR}
   /^      if\(.not.background_omega_complete\(omb_valid,ps,p/ {omega_gate=NR}
-  END {if (!analysis_surface || omega_gate<=analysis_surface) exit 1}
+  /^      call build_compact_influence_3d\(omo_valid/ {localization=NR}
+  END {
+    if (!analysis_surface || !omega_refresh || !omega_gate || !localization ||
+        omega_refresh<=analysis_surface || omega_gate<=omega_refresh ||
+        localization<=omega_gate) exit 1
+  }
 ' "$repo_root/src/balance/qbalpe.f"
 
-printf '%s\n' 'QBAL AIRDROP, background-omega, common-gate and rollback checks passed'
+printf '%s\n' 'QBAL single-path, background-omega, common-gate and rollback checks passed'

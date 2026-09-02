@@ -248,6 +248,21 @@ CONTAINS
                                       rain,snow,graupel,cfg,ledger,status)
     CALL check(status==STATUS_FAILED,'dBZ config must match terminal-speed range',failures)
     cfg%minimum_dbz=0.0_real64
+    cfg%maximum_transport_substeps=HUGE(1)
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'transport work bound must be finite',failures)
+    cfg%maximum_transport_substeps=64
+    cfg%ledger_relative_tolerance=HUGE(1.0_real64)
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'relative ledger gate cannot be disabled',failures)
+    cfg%ledger_relative_tolerance=1.0e-11_real64
+    cfg%ledger_absolute_tolerance=HUGE(1.0_real64)
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'absolute ledger gate cannot be disabled',failures)
+    cfg%ledger_absolute_tolerance=1.0e-13_real64
 
     domain(2,2,3)=.FALSE.
     CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
@@ -272,6 +287,17 @@ CONTAINS
     CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
                                       rain,snow,graupel,cfg,ledger,status)
     CALL check(status==STATUS_FAILED,'sleet phase cannot carry rain',failures)
+    rain=0.0_real64; snow=0.0_real64; graupel(2,2,3)=1.0e-4_real64
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED, &
+               'sleet phase requires both snow and graupel',failures)
+    phase(2,2,3)=PHASE_FREEZING_RAIN
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED, &
+               'freezing-rain phase requires both rain and graupel',failures)
+    graupel=0.0_real64; rain(2,2,3)=1.0e-4_real64
     phase(2,2,3)=PHASE_RAIN
 
     cfg%maximum_dbz=ieee_value(0.0_real64,ieee_quiet_nan)

@@ -34,7 +34,7 @@
 | 수직축 `k=1 bottom`, 압력 단조감소 | DONE | ingest에서 한 방향만 허용; 역방향을 physics 내부에서 추측하지 않음 |
 | 결측/비유한 pressure, omega, wind, dBZ, phase의 산술 진입 차단 | DONE | canonical validation과 trajectory fail-closed 시험 |
 | 레이더 강수의 상대 낙하 flux 재구성과 interface ledger | ENGINEERING | interface별 경계/지형/관측차단 폐합은 구현; source 제거를 포함한 전역 질량수송이나 root-to-sink 보존을 뜻하지 않음 |
-| 강수 trajectory 입력 계약 | DONE | 공개 kernel 입구에서 config·shape·finite·범위·dp·수직순서·domain·phase/species 일관성을 한 번 검사하고 별도 work 배열의 출력/ledger도 재검사한 뒤에만 반환 배열에 commit; 현재 index-space 수송은 균일 dx/dy만 허용하고 비균일 격자는 물리좌표 수송 구현 전 fail-closed |
+| 강수 trajectory 입력 계약 | DONE | 공개 kernel 입구에서 config·계산량·ledger tolerance·shape·finite·범위·dp·수직순서·domain·phase/species 일관성을 한 번 검사하고 별도 work 배열의 출력/ledger도 재검사한 뒤에만 반환 배열에 commit; 현재 index-space 수송은 균일 dx/dy만 허용하고 비균일 격자는 물리좌표 수송 구현 전 fail-closed |
 | radar no-echo의 수송 경계 의미 | BLOCKED | 실자료 adapter는 no-echo와 raw missing을 구분하지만 trajectory의 차단 경계로 아직 전달하지 않음; 관측 부재인지 명시적 무강수인지 정책 고정 전 과학 승격 금지 |
 | 총수분·잠열 동시 보존 | ENGINEERING | canonical bounded adjustment 시험 통과; legacy LAPSPREP 전체 transaction 연결은 남음 |
 | focused source의 dormant radar evaporation/cloud bogus-w OFF | DONE | Cloud-BAL 복사본은 상수-false guard, literal `.false.` cloud call, `w_3d=0` 초기화와 시험으로 잠금 |
@@ -52,6 +52,7 @@
 | 비균일 격자의 물리 거리 localization | DONE | `cloud_bal_grid_geometry`의 누적 인접 center 거리와 overflow-safe 탐색반경을 canonical/legacy localization에 공유; 중간 100 km cell 및 거대 유한반경 반례 통과 |
 | solver 실패·비수렴 시 원본 rollback | DONE | candidate와 operational state 모두 원본 복사본; 실패 수치만 stage result에 보존 |
 | focused legacy QBAL의 background omega 필수성 | DONE | U/V/T/HT/SH와 함께 OM status도 필수이고 solver가 사용하는 분석 surface-pressure domain의 모든 above-ground cell에서 OM coverage를 검사; 누락 OM을 0으로 대체하여 balance를 계속하지 않음 |
+| 실험용 시간전진·dropsonde QBAL 분기 | DONE | AIRDROP 전용 경로와 helper를 제거하고 모든 분석이 동일 solver·acceptance 경로를 사용 |
 | storm motion 및 trajectory frame | BLOCKED | 현재 real SHADOW는 좌표계 미확정 input-native U/V와 zero-translation 가정을 명시; 바람 좌표계·이동벡터 검증 전 과학 승격 금지 |
 | physical continuity·geostrophic·증분·방향 gate | DONE | 최종 real32 배열에서 독립 재계산하고 Fortran failure bitset과 정확히 일치시킴 |
 | 결과 파일의 단일 세대 transaction | ENGINEERING | real runner를 staging→재검증→manifest→atomic generation으로 연결; 제품별 NetCDF/WPS 재읽기와 full legacy writer 연결은 남음 |
