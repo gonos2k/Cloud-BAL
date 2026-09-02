@@ -218,9 +218,11 @@ CONTAINS
     REAL :: rain(nx,ny,nz),snow(nx,ny,nz),graupel(nx,ny,nz)
     REAL :: rain2(nx,ny,nz),snow2(nx,ny,nz),graupel2(nx,ny,nz)
     REAL :: omega(nx,ny,nz),omega2(nx,ny,nz),rain_before(nx,ny,nz)
-    REAL :: bad_pressure(nx,ny,nz),speed30,speed40
-    INTEGER :: types(nx,ny,nz),status,status2,i,j,k
+    REAL :: bad_pressure(nx,ny,nz),dbz2(nx,ny,nz),speed30,speed40
+    INTEGER :: types(nx,ny,nz),types2(nx,ny,nz),bad_types(nx-1,ny,nz)
+    INTEGER :: status,status2,i,j,k
     LOGICAL :: support(nx,ny,nz),support2(nx,ny,nz)
+    TYPE(radar_downdraft_config) :: cfg
 
     dbz=missing; tk=275.0; rh=70.0; u=10.0; v=0.0
     rain=0.0; snow=0.0; graupel=0.0; omega=missing; types=0
@@ -267,6 +269,47 @@ CONTAINS
     speed40=phase_terminal_velocity(1,80000.0,273.15,40.0,status2)
     CALL check(status == 1 .AND. status2 == 1 .AND. speed40 > speed30, &
          'fall speed must use increasing linear reflectivity',failures)
+
+    cfg%storm_motion_available=.TRUE.
+    rain2=rain_before; snow2=0.0; graupel2=0.0; omega2=missing
+    omega2(2,3,4)=0.0
+    CALL couple_radar_precipitation(dbz,tk,rh,height,pressure,u,v, &
+         1000.0,1000.0,missing,types,.TRUE.,rain2,snow2,graupel2,omega2, &
+         support2,status2,cfg)
+    CALL check(status2 == 2, &
+         'missing trajectory omega must use an explicit degraded fallback', &
+         failures)
+
+    dbz2=missing; dbz2(2,3,4)=101.0
+    rain2=rain_before; snow2=0.0; graupel2=0.0; omega2=missing
+    omega2(2,3,4)=0.0
+    CALL couple_radar_precipitation(dbz2,tk,rh,height,pressure,u,v, &
+         1000.0,1000.0,missing,types,.TRUE.,rain2,snow2,graupel2,omega2, &
+         support2,status2,cfg)
+    CALL check(status2 == 2 .AND. .NOT. ANY(support2) .AND. &
+         MAXVAL(ABS(rain2-rain_before)) < TINY(1.0), &
+         'reflectivity above the physical ceiling must not create support', &
+         failures)
+
+    types2=types; types2(2,3,4)=96
+    rain2=rain_before; snow2=0.0; graupel2=0.0; omega2=missing
+    omega2(2,3,4)=0.0
+    CALL couple_radar_precipitation(dbz,tk,rh,height,pressure,u,v, &
+         1000.0,1000.0,missing,types2,.TRUE.,rain2,snow2,graupel2,omega2, &
+         support2,status2,cfg)
+    CALL check(status2 == 0 .AND. &
+         MAXVAL(ABS(rain2-rain_before)) < TINY(1.0), &
+         'out-of-range precipitation phase must reject unchanged',failures)
+
+    bad_types=0
+    rain2=rain_before; snow2=0.0; graupel2=0.0; omega2=missing
+    omega2(2,3,4)=0.0
+    CALL couple_radar_precipitation(dbz,tk,rh,height,pressure,u,v, &
+         1000.0,1000.0,missing,bad_types,.TRUE.,rain2,snow2,graupel2,omega2, &
+         support2,status2,cfg)
+    CALL check(status2 == 0 .AND. &
+         MAXVAL(ABS(rain2-rain_before)) < TINY(1.0), &
+         'mismatched phase-array shape must reject unchanged',failures)
 
     bad_pressure=pressure
     bad_pressure(:,:,3)=bad_pressure(:,:,2)

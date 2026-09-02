@@ -1,5 +1,11 @@
 # Radar-precipitation downdraft and localized mass-wind balance
 
+> Historical candidate-v1 design.  Sections that prescribe a cloud-type
+> velocity amplitude or deterministic radar downdraft are superseded by
+> `SCIENTIFIC_BASIS.md` and `RELEASE_CHECKLIST.md`.  The canonical SHADOW
+> pipeline treats cloud type as support only and gives loading-derived motion
+> no wind authority.  The linked production path is still legacy.
+
 ## 1. Problem statement
 
 `get_cloud_deriv` currently diagnoses cloud type and constructs a cloud-only
@@ -115,32 +121,12 @@ the precipitation shaft is unobserved or below the radar horizon.
 
 ### 4.1 Status of the empirical cloud vertical velocity
 
-The cloud-type profile is not an observation of vertical air velocity.  It is
-a scale-aware target with large representation error.  The historical kernel
-already contains the useful similarity `w_target proportional to Hc/Dx`, but
-previously had no explicit resolved cap, cloud-area factor, or vertical
-sampling requirement.  The revised target is
-
-```text
-w_target = min(wcap,
-               a_type (Hc/max(Dx,250 m)) fc fv),
-
-fc = analyzed cloud fraction in [0,1],
-fv = min(1,Ncloud_levels/3).
-```
-
-The defaults cap convective grid-mean ascent at 5 m/s and stratiform ascent at
-0.5 m/s.  These are safety bounds, not universal physical constants.  A cloud
-sampled by only one model level receives one third of the empirical target.
-Thus refinement increases the resolvable vertical velocity until the cap,
-whereas a coarse or poorly sampled grid receives a smaller grid-mean value.
-
-The next calibration step should replace the fixed type coefficient with
-background-dependent uncertainty using CAPE/CIN, static stability, boundary-
-layer convergence, and any radial-velocity constraint.  Until those fields
-are passed with explicit contracts, the profile remains an uncertain target:
-it may constrain the local mass projection but must not overwrite model
-vertical velocity as if it were directly observed.
+The earlier `Hc/Dx`, level-count, sine-profile and fixed 5/0.5 m s-1 proposal
+is obsolete.  Model vertical velocity is resolution dependent, and cloud type
+does not observe a grid-mean velocity amplitude.  The current contract uses
+cloud type/fraction only to identify a valid layer and regime.  A nonzero mean
+target requires a separately valid dynamic driver and uncertainty; otherwise
+the cloud innovation is zero.
 
 ## 5. Precipitation trajectory and hydrometeor alignment
 
@@ -150,32 +136,35 @@ For phase `x`, define the precipitation mass flux
 Jx = rho_qx (u-cx, v-cy, w-Vtx).
 ```
 
-`(cx,cy)` is storm translation when a reliable estimate is available; version
-1 uses zero and records degraded provenance because no time-adjacent radar
-motion vector is present in this focused source boundary.  Along a descending
-characteristic,
+`(cx,cy)` is storm translation when a reliable estimate is available.  The
+current real-data SHADOW v3 has neither resolved input-wind coordinates nor a
+time-adjacent motion vector, so it records `INPUT_WIND_NATIVE_UNRESOLVED` and a
+zero-translation assumption.  This is an engineering diagnostic, not
+science-promotion evidence.  Define
+`r=Vtx-w`.  If `r<=Vmin`, no characteristic is advanced and the nonnegative
+interface rate is classified as suspended.  Otherwise,
 
 ```text
-dt       = dz/max(Vtx-w, Vmin)
-dx_fall  = (u-cx) dt
-dy_fall  = (v-cy) dt.
+dt       = dz/r
+dx_fall  = u dt
+dy_fall  = v dt
+F        = rho_d qx r area.
 ```
 
 The lower-level mass flux is deposited with bilinear horizontal weights.  A
 radar-observed target is immutable.  Only an unobserved target can be filled.
-The phase mass-flux closure is
+At the lower level, concentration is recovered with the lower-level value of
+the same relative speed.  The interface-throughput closure is
 
 ```text
-rho_qx,lower Vtx,lower
-  = rho_qx,upper Vtx,upper exp(-ke,x D dt),
-
-D = clamp(1-RH/100, 0, 1).
+F_input = F_deposited + F_suspended + F_boundary
+        + F_terrain + F_observation_blocked + F_microphysical_loss.
 ```
 
-The transport step preserves the sum of bilinear weights and therefore the
-incoming flux, apart from the explicit bounded survival factor.  Rain, snow,
-and precipitating ice are transported separately; phase repartition uses the
-same conservative allocator as hydrometeor initialization.
+The reconstruction step preserves the sum of bilinear weights at each
+interface, apart from explicit sinks.  It does not remove the source mass and
+therefore is not a global finite-time transport. Rain, snow, and precipitating
+ice are handled separately; phase allocation preserves their local sum.
 
 Because `w` changes particle residence time and hydrometeors force `w`, use a
 bounded Picard iteration:
@@ -186,9 +175,9 @@ w*^(n+1)  = G[q_p^(n+1),T,RH,Z]
 w^(n+1)   = (1-alpha) w^n + alpha w*^(n+1),   0 < alpha <= 0.5.
 ```
 
-Two to three iterations are sufficient for initialization.  Failure to reduce
-`max|w^(n+1)-w^n|` returns a degraded status and keeps the last bounded field;
-non-finite values return failure without publishing work arrays.
+The current implementation does not use this historical iteration. Any future
+iteration must reject the candidate on nonconvergence or non-finite values;
+the last work array cannot receive publication authority.
 
 ## 6. Negative-buoyancy and downdraft constraint
 
@@ -255,9 +244,9 @@ beta(r) = 0,               r >= 1.
 ```
 
 `beta=1` at a valid source.  Outside the compact support, increments must be
-bitwise zero.  The first operational radius is scale-aware,
-`Rh=clamp(6 Delta-x,30 km,60 km)`, with `Rp=150 hPa`; both values are printed
-for every run and require multi-case calibration.  Apply `beta` to the full balance candidate and to the continuity
+bitwise zero.  The linked legacy qbal currently uses
+`Rh=clamp(6 Delta-x,30 km,60 km)` and `Rp=150 hPa`; these are not approved
+canonical radii and are one cause of the integration block.  Apply `beta` to the full balance candidate and to the continuity
 operator.  With wind inverse variance `eu` and omega inverse variance `tau`,
 the localized correction is
 
@@ -274,7 +263,11 @@ prevents an elliptic solution from leaking into an observation-free region.
 The same localized flux-form operator is used in the solve and in its residual
 check.
 
-## 8. Divergent/rotational separation and wave control
+## 8. Candidate-v1 proposal: divergent/rotational separation and wave control
+
+This section is a design proposal, not a description of the canonical code.
+The current code reports finite-difference divergence and vorticity summaries;
+it does not solve the Helmholtz problems below and has no rotational gate.
 
 The horizontal increment is diagnosed with a discrete Helmholtz split on each
 pressure level,
@@ -337,7 +330,7 @@ column closure:    integral div(Vchi) dp + [omega]bottom^top = 0.
 The rotational circulation has a different constraint.  Midlevel rotation may
 be strengthened by tilting and stretching of background vorticity, but radar
 reflectivity alone does not determine its sign or magnitude.  Its local source
-is therefore diagnosed from the vertical-vorticity budget,
+would therefore have to be diagnosed from the vertical-vorticity budget,
 
 ```text
 D(zeta+f)/Dt = -(zeta+f) div(Vh)
@@ -382,8 +375,7 @@ No work array is published unless all applicable gates pass:
 - `0 <= confidence,beta <= 1`;
 - observed radar/hydrometeor cells remain unchanged by characteristic fill;
 - `omega > 0` wherever the accepted geometric velocity is downward;
-- hydrometeor mass flux closes along each deposited trajectory to the explicit
-  survival tolerance;
+- hydrometeor interface flux closes to the explicit sink ledger;
 - maximum `w`, `omega`, wind increment, and horizontal displacement are bounded;
 - `delta U = delta V = delta omega = 0` wherever `beta=0`;
 - the rotational wind increment remains zero unless supported by a wind
@@ -394,9 +386,10 @@ No work array is published unless all applicable gates pass:
 
 ## 10. Rollout
 
-1. Add deterministic trajectory, buoyancy, and compact-localization kernels
-   with synthetic straight and tilted-shaft tests.
-2. Run radar mode off/on from the same isolated ANAL/MODL baseline.  Radar-off
+1. Use small invariant tests only to catch sign, unit, ledger, and operator
+   errors; do not use them as scientific evidence.
+2. Run every prepared real case from the same isolated ANAL/MODL baseline.
+   Radar-off
    must reproduce the pre-change result.
 3. Validate `COM` sign/support, precipitation-flux closure, increment footprint,
    and before/after continuity and momentum residuals.

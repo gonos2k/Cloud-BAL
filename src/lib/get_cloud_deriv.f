@@ -142,6 +142,7 @@ cdoc    This routine also does the Cloud Bogussed Omega and the Snow Potential.
         character*3 lgt_ext
         data lgt_ext /'lgt'/
         integer*4 n_lgt(ni,nj)
+        logical lgt_valid(ni,nj),lgt_unit_open
 !cde - End
 !frl060100
 
@@ -214,22 +215,28 @@ cdoc    This routine also does the Cloud Bogussed Omega and the Snow Potential.
         call get_directory(ext,directory,len_dir) ! Returns directory
         filename = directory(1:len_dir)//filename13(i4time,lgt_ext)
 
+        n_lgt = 0
+        lgt_valid = .false.
+        lgt_unit_open = .false.
         open(20,file=filename,status='old',err=999)
+        lgt_unit_open = .true.
 
         do i = 1, ni
         do j = 1, nj
           read(20,25,end=999) n_lgt(i,j)
+          if(n_lgt(i,j) .lt. 0)goto 999
+          lgt_valid(i,j) = .true.
         enddo
         enddo
 25      format(18x,i8)
         close(20)
+        lgt_unit_open = .false.
         goto 998
 
-999     do i = 1, ni
-        do j = 1, nj
-          n_lgt(i,j) = r_missing_data
-        enddo
-        enddo
+999     if(lgt_unit_open)close(20)
+        lgt_unit_open = .false.
+        n_lgt = 0
+        lgt_valid = .false.
         write(6,*) 'No lightning'
 
 998     continue
@@ -311,7 +318,7 @@ cdoc    This routine also does the Cloud Bogussed Omega and the Snow Potential.
                 enddo
 
                   
-                  if( n_lgt(i,j) .ne. r_missing_data) then
+                  if(lgt_valid(i,j))then
                    
                    do k = 1,nk
                     n_lgt_1d(k) = n_lgt(i,j)

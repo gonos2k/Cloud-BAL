@@ -1,119 +1,246 @@
 # Cloud-BAL implementation report
 
+Status date: 2026-09-01
+Reference commit: the clean HEAD hash recorded in each hash-verified
+`RUN_SUMMARY.json` and transaction manifest under the trusted single-user model
+
+## Decision
+
+The repository contains a tested **focused SHADOW candidate**, not an
+operationally integrated Cloud-BAL release. `OFF` and `SHADOW` are the only
+safe modes.  This research build does not compile an ACTIVE mode.  A future
+promotion adapter must be reviewed separately after the canonical pipeline
+replaces the linked legacy call graph, the complete KLAPS executables build,
+and real-data end-to-end tests pass.
+
+| Scope | Status |
+|---|---|
+| Canonical modules and engineering tests | conditional GO |
+| Four prepared real hourly input sets | source inventory GO; direct QBAL closure BLOCKED |
+| Legacy executable integration | NO-GO |
+| Real KLAPS parallel experiment | NO-GO |
+| Operational publication | NO-GO |
+| Radar downdraft ACTIVE | NO-GO |
+
 ## Preserved comparison baseline
 
-The legacy analysis was copied before any algorithm change to:
+The pre-change comparison material is isolated at:
 
 ```text
 scratch/baseline_legacy_0d4c9a8_20260816
 ```
 
-The archive contains three final `ANAL/.../LAPS` files, their three KLBG
-background files, three downstream `met_em` files, active namelists/CDLs, and
-the three legacy executables.  Its 21 payload files are independent read-only
-files and pass `sha256sum -c SHA256SUMS`.  `ANAL` and `MODL` are not test output
-locations.
+It contains 21 independent, read-only ANAL/MODL/configuration/executable
+payloads. `tests/run_isolation_gate.sh` verifies the exact archive inventory,
+the declared live-product hashes, and full live-tree metadata/ctime before and
+after a command. Candidate output must start in a new or empty directory below
+`scratch/candidate` and may contain no links or special files. This is an
+integrity receipt, not an OS read-only sandbox; the current host does not allow
+the available `bwrap` user namespace.
 
-Use the read-only comparison gate after an isolated rerun. Changed WPS
-intermediate and NetCDF files are expanded into field-level dimension/unit,
-valid-count, RMS-delta, and maximum-delta diagnostics:
+## Implemented focused candidate
 
-```bash
-tools/compare_baseline.py \
-  scratch/baseline_legacy_0d4c9a8_20260816 \
-  /path/to/isolated/candidate
+Four new modules define one candidate contract:
+
+```text
+cloud_bal_state
+  -> cloud_bal_column_physics
+  -> cloud_bal_balance_operator
+  -> cloud_bal_pipeline
 ```
 
-## Implemented changes
+- `cloud_bal_state` owns values, cell validity, quality/source flags, time,
+  units, dimensions, dry-air mixing-ratio hydrometeors, grid measures, boundary
+  fluxes, and optional post-QC radar LOS observations.
+- `cloud_bal_column_physics` owns cloud-layer detection, cloud-support
+  diagnosis, S-band reflectivity conversion, relative fall-flux
+  reconstruction, and the explicit deposited/suspended/boundary/blocked/
+  microphysical interface ledger. Missing omega never enters trajectory
+  arithmetic. This is not a source-removing, global mass-transport claim.
+- `cloud_bal_balance_operator` owns the discrete support, divergence, adjoint,
+  face coefficients, matrix-free solve, update, and final residual. Connected
+  support components receive compatibility and gauge treatment. Solver and
+  state update use the same coefficients.
+- `cloud_bal_pipeline` is the only candidate authority boundary.  This focused
+  build accepts only `OFF` and `SHADOW`; every other integer is rejected.
+  `OFF` is an exact no-op and `SHADOW` cannot modify the operational state.
 
-1. `qbalpe` now initializes pressure staggering and allocated work arrays,
-   selects `k8/k5` by nearest pressure, fixes the eight-point SH average,
-   bounds-safe `destagger_x`, and applies `sfctempadj` to the actual output.
-2. A field contract carries field name, valid time, dimensions, canonical
-   units, status, source, and a 1-D/2-D/3-D cell-valid mask. LAPSPREP validates
-   mandatory input fields and handles optional hydrometeors cell by cell.
-3. Pressure thickness, Coriolis support, `delo`, `tau`, coefficients, and solver
-   iterates have finite/range guards. Both continuity and PHI solvers return a
-   failure/non-convergence status; failed candidates are not written.
-4. Pre/post continuity and momentum diagnostics call the same guarded
-   operators. A continuity candidate is rejected if its shared residual grows.
-5. Background arrays are no longer reused as continuity or destagger output;
-   dedicated candidate/output arrays hold all modified fields.
-6. The continuity correction solves `div(C grad(lambda))=-div(V)` with spatially
-   varying inverse-error and `tau` coefficients in flux form.
-7. Vapor/liquid/ice changes are paired transfers in dry-air mixing-ratio units.
-   LWC/ice cap excess moves to rain/snow, precipitation phase allocation closes
-   exactly, thin-cloud column mass is thickness-normalized, and post-transfer
-   density is recomputed before omega-to-w conversion.
-8. The cloud layer detector closes top-boundary layers and processes every
-   separated layer. Convective layers ascend; precipitating stratiform layers
-   have lower descent and upper ascent lobes.
-9. Radar evaporation remains compile-time locked off even if an old namelist
-   requests it. `MODE_EVAP=0` remains the active configuration.
-10. The replacement S-band radar path runs only after rain/snow/precipitating-
-    ice concentration exists. It converts dBZ to linear reflectivity for fall
-    speed, preserves observed 3-D echo geometry, fills only unobserved lower
-    gaps along wind/fall characteristics, diagnoses bounded loading/cooling
-    downdrafts, and returns failure/degraded status transactionally.
-11. `COM` read status is now independent of later wind reads, so a missing COM
-    file cannot become a valid zero observation. A compact Wendland-C2 support
-    with `Rh=clamp(6*dx,30 km,60 km)` and `Rp=150 hPa` localizes the full
-    balance candidate and its variable-coefficient continuity projection.
-    Increments are bitwise unchanged outside support and are rejected above
-    10 m/s.
-12. Wind increments are diagnosed separately through divergence (velocity
-    potential) and vertical vorticity (streamfunction) profiles. Lower/middle/
-    upper supported levels and divergent roughness are reported. Reflectivity
-    does not directly prescribe a vortex, although the existing momentum
-    balance can diagnose a localized rotational response. Independent wind or
-    vorticity-tendency support remains a future acceptance gate for that
-    midlevel rotational update.
-13. Empirical cloud vertical motion is treated as a resolution-dependent
-    target rather than an observation. Cloud depth/grid spacing, analyzed
-    cloud fraction, and vertical sampling scale the target, with provisional
-    5 m/s convective and 0.5 m/s stratiform grid-mean safety caps.
+Cloud type alone no longer fabricates a vertical-velocity amplitude or sine
+profile.  It identifies local layer/regime support only.  A future nonzero
+cloud-air-motion target requires a separately valid grid-mean dynamic driver
+and uncertainty; neither is present in this focused snapshot.
 
-## Verification
+The radar cooling/evaporation path remains disabled. Loading-only downdraft is
+calculated for SHADOW diagnostics, but phase/fall-speed-uncertain targets do
+not receive `SOURCE_DYNAMIC_TARGET` and cannot seed the wind solver. The
+finite-difference divergent/vortical summaries are diagnostics, not a
+Helmholtz decomposition or rotational acceptance gate.
 
-Run:
+The legacy LAPSPREP water-only saturation transfer is also default-disabled;
+requesting a positive `LWC2VAPOR_THRESH` now fails until the canonical coupled
+water/latent-heat adapter is linked.
+
+Targeted legacy safety fixes are also present:
+
+- the legacy `get_laps_3d_analysis_data` ABI is preserved; qbal alone calls
+  `get_laps_3d_analysis_data_ex` for the independent cloud-omega status;
+- the legacy background caller checks that 3-D status immediately, before any
+  later 2-D read can overwrite it;
+- integer lightning data use a logical validity mask instead of a real missing
+  sentinel;
+- the first and subsequent balanced-output writes propagate failures;
+- WPS output validates projection/wind coordinates and OPEN/WRITE/CLOSE status;
+- the legacy radar vertical-motion switch is forced off;
+- WPS wind coordinates are declared explicitly, not hard-coded;
+- the baseline comparator rejects duplicate/truncated recognized fields.
+
+`tools/cloud_bal_transaction.py` stages declared products, verifies hashes,
+writes a manifest and completion marker, renames the generation, and only then
+uses a cooperative-process atomic switch for the `current` pointer. Its commit identity is a validated
+40-hex declaration; repository-HEAD equality remains a coordinator/clean-CI
+gate. It is a publication primitive; the legacy multi-writer call paths have
+not yet been migrated to it.
+
+## Verification completed
+
+Run the focused checks with:
 
 ```bash
 tests/run_unit_tests.sh
+tests/run_transaction_gate.sh
+tests/run_isolation_gate.sh scratch/candidate/local/noop
+tests/run_real_input_inventory.sh
 ```
 
-The suite checks field masks/metadata, conservative phase transfers, phase-sum
-closure, scale-aware multi-layer/top-boundary profiles, S-band linear-Z fall
-speed, tilted precipitation-gap fill, downdraft sign, deterministic/no-publish
-behavior, compact localization, divergent/rotational separation, the exact
-extracted production qbal continuity operator, invalid
-`dp`/`tau`/NaN/Coriolis cases, residual improvement, and fixed-form compile
-checks for both derivation and balance paths. The current synthetic continuity
-case reduces RMS residual from about `8.31e-5` to `2.58e-6`.
+The current suite covers canonical state rejection, target metadata and
+missing/range handling,
+column conservation cases, compact disconnected support, balance rollback,
+nonzero-background total-residual projection, OFF identity, SHADOW
+no-authority, WPS and balanced-writer failure injection, transaction context
+and product tamper containment, masked-integer NetCDF/comparator parse failures,
+independent comparison roots (no self/symlink/hardlink alias), a clean-source
+three-repeat synthetic reproduction probe, and explicit PARTIAL status when
+the preserved legacy executable cannot be rerun,
+the retained legacy unit tests, and a fixed-form syntax compile of `qbalpe.f`.
+The complete focused Fortran suite now uses only the pinned Intel ifx 2026
+profile with strict floating-point exceptions.  That gate exposed and then
+verified the explicit missing-omega trajectory fallback; no GNU compiler
+fallback remains in the focused test scripts.
 
-The full LAPSPREP source also passes a gfortran syntax check against the
-archived NetCDF include and the full-tree LAPSPREP modules (using the legacy
-`-fallow-argument-mismatch` compatibility flag). A scientific production
-comparison still requires building in a separate full KLAPS tree and rerunning
-the retained 2026-08-16 inputs into an isolated output root; it must not write
-to live `ANAL` or `MODL`.
+`tests/run_real_input_inventory.sh` validates the hashes, dimensions, fields,
+units, pressure levels, UTC valid/reference times, and radar/TID summaries for
+the prepared 2026-08-16 12/13/14/15 UTC FUA, FSF, pre-QBAL LW3, VRZ and VRT
+sets.  All four prepared sets pass.  The same check deliberately reports the
+direct QBAL closure as `BLOCKED` because original-chain LT1, LQ3, LCO and LSX
+have not yet been regenerated.  It also hard-rejects final bigfile, `LAPS:*`,
+`KLBG:*`, `met_em`, LAPSPREP and post-QBAL balance paths as inputs.  The exact
+source-derived contract is `docs/QBAL_REAL_INPUT_CONTRACT.md`.
 
-## Full-tree build integration
+The same four hours can be run through the radar-only canonical SHADOW adapter
+using Intel ifx.  The authoritative result is not copied into this report: it
+is the hash-verified generation produced by the clean-HEAD runner under the
+documented trusted single-user model.
+Per-case numerical reports independently reconstruct localization, `D*S` continuity
+increments, operator identity, interface flux closure and the Fortran
+acceptance bitset.  Rejected candidates remain diagnostic evidence; they do
+not change operational arrays or become scientific successes.
 
-This focused repository intentionally has no operational KLAPS make system.
-When the files are copied into the full build, compile the free-form modules
-before their fixed-form consumers in this dependency order:
+`tests/run_real_shadow_cases.sh` now writes all four cases into one hash-verified
+generation through staging, per-case independent validation, a hashed
+manifest, completion marker and cooperative-process atomic `current` switch.
+It requires a clean exact-head worktree and reports artifact validity separately from the
+candidate decision.  `tests/run_real_shadow_figures.sh` uses one deterministic
+level/cross-section rule for every case and produces eight
+original/proposal/difference figures.  Each figure states whether dynamic
+balance was evaluated or the result is hydrometeor-only with wind modification
+unauthorized.
+
+The standalone numerical validator deliberately labels its artifact authority
+`UNBOUND`.  Only the hash-verified generation verifier may combine that numerical
+result with product hashes, source commit, input manifest and build receipt and
+call the generation valid evidence.
+
+`tests/run_radar_velocity_audit.sh` reads all ten prepared radar velocity grids
+for every hour and maps native levels to diagnostic levels by pressure value.
+Usable radial velocities exist, but usable Nyquist values are zero in all 40
+files, the files lack an internal S-band wavelength identity, and the LW3
+grid-relative/earth-relative wind contract is unresolved.  The audit therefore
+publishes coverage counts but no projected-wind RMS.  Radial velocity remains
+diagnostic-only; it supplies neither update nor held-out acceptance authority
+until wind coordinates, dealiased/Nyquist/uncertainty, beam,
+wavelength, and hydrometeor-fall-speed provenance are one contract. Exact
+audit numbers belong only to the committed generation, not this report.
+
+`tests/run_reproduction_comparison.sh` is not in the passing verification
+list.  It records available diagnostic receipts but exits nonzero until an
+actual isolated legacy rerun and real candidate comparison complete; the old
+`--allow-partial` success escape has been removed.
+
+Passing these tests does **not** prove a complete KLAPS build, NetCDF/WPS
+round-trip fidelity, real-observation coverage/freshness, cold-start forecast
+impact, or compiler/platform reproducibility.
+
+## Integration blockers
+
+The old modules and call sites remain reachable:
 
 ```text
 cloud_bal_field_contracts
 cloud_bal_moisture
 cloud_bal_cloud_profiles
 cloud_bal_localization
-cloud_bal_radar_downdraft   (depends on cloud_bal_moisture)
+cloud_bal_radar_downdraft
 cloud_bal_wind_modes
-  -> vv_lgt_ct, get_cloud_deriv, pcpcnc, laps_deriv_sub, qbalpe
 ```
 
-`tests/run_unit_tests.sh` performs this source-order compile gate. Enabling the
-new derivation path requires the new module objects to be linked into the
-derived-product executable; enabling localized balance requires the
-localization and wind-mode objects in the qbal executable.
+Production `qbalpe`, derived-cloud, and LAPSPREP paths still use parts of that
+legacy/candidate-v1 graph. The canonical four-module pipeline is therefore not
+yet the linked single source of truth. Replacing only one solver or one update
+would mix operators; the full read -> candidate -> gate -> publish transaction
+must be switched atomically.
+
+In particular, production derived-cloud still calls the legacy cloud-profile
+path with `l_flag_bogus_w=.true.`, and production qbal still builds a 30--60 km
+COM-centered support.  Therefore this branch has **not** yet fixed the reported
+broad wind deformation in the operational executable.  The real-data v3
+SHADOW adapter instead authorizes no dynamic target and changes no wind.
+
+Other release blockers are:
+
+1. no complete KLAPS link or linked-symbol reachability audit;
+2. no full canonical NetCDF/WPS field-contract adapter and round-trip test;
+3. no full-QBAL real-data zero-skip comparison or cold-start experiment;
+4. no full hydrometeor/water/enthalpy transaction in the operational path;
+5. no multi-product migration to generation-based atomic publication;
+6. no protected branch, required CI, signed validation manifest, or promotion
+   evidence for the exact commit.
+
+The original input audit adds these concrete blockers:
+
+7. the original background selector can choose among equal-valid-time cycles
+   by file-list order and checks only the last field status;
+8. the original cloud/derived chain can blend model reflectivity into `LPS`,
+   assign Cb/updraft outside radar coverage, reuse stale COM, and return a
+   normal process exit after required-input failure;
+9. VRT can race the temperature stage, VRZ `-10 dBZ` conflates no echo and
+   unknown coverage, and the files carry no S-band/site provenance;
+10. the full original Intel build still lacks a pinned ABI-compatible
+    NetCDF/HDF5/runtime bundle and clean out-of-source link proof.
+11. the collocated A-grid normal operator retains horizontal parity gauges;
+    checkerboard control or native face velocity degrees of freedom are needed
+    before any balance ACTIVE mode;
+12. localization on a nonuniform grid needs cumulative face distance; the
+    focused real adapter therefore accepts only its verified uniform 5 km grid.
+
+The second eight-agent cross-review keeps several promotion gates open: radar
+flux lineage still needs a persisted per-source ledger plus permutation test,
+and terrain-aware top/bottom boundary fixtures are required. The standalone
+publication primitive rejects
+deterministic symlink and hardlink escapes, but concurrent parent replacement
+requires a directory-fd coordinator before production use.
+
+`docs/RELEASE_CHECKLIST.md` is the authoritative short checklist;
+`docs/PIPELINE_SIMPLIFICATION_PLAN.md` retains the detailed derivation and
+review history. Documentation must keep “source implementation”,
+“linked integration”, and “scientific/operational validation” as separate
+claims.

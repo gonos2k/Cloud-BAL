@@ -357,6 +357,10 @@ cdis
             write(6,*)'MODE_EVAP ignored: radar evaporation is locked OFF'
             mode_evap = 0
         endif
+        if(l_bogus_radar_w)then
+            write(6,*)'L_BOGUS_RADAR_W ignored: use Cloud-BAL SHADOW'
+            l_bogus_radar_w = .false.
+        endif
 
         default_base     = r_missing_data
         default_top      = r_missing_data

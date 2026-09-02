@@ -44,9 +44,10 @@ negative pressure vertical velocity: `omega = -(w * pressure) / 8000`.
 ## Deliberate exclusions
 
 No observations, model data, operational output, executables, object/module
-files, logs, benchmark products, graph/wiki artifacts, or wind Barnes/OpenMP
-release files are included. Raw radar ingest/remap and the complete KLAPS build
-system are also outside this initial repository.
+files, logs, benchmark products, wiki content, or wind Barnes/OpenMP release
+files are included. `graphify-out` contains only the AST-derived structural
+graph of this source snapshot. Raw radar ingest/remap and the complete KLAPS
+build system are also outside this repository.
 
 The selected files preserve their upstream FSL public-domain notices. This is
 a focused source snapshot, not yet a standalone KLAPS build. External KLAPS and
@@ -63,7 +64,35 @@ The completed source changes, preserved legacy baseline, and verification
 commands are summarized in
 [docs/IMPLEMENTATION_REPORT.md](docs/IMPLEMENTATION_REPORT.md).
 
-The mathematical design for S-band precipitation fall trajectories,
+The historical candidate-v1 design for S-band precipitation fall trajectories,
 downdraft energetics, compact balance support, divergent/rotational modes, and
-wave-control handoff is in
+wave-control handoff is retained in
 [docs/RADAR_PRECIP_DOWNDRAFT_DESIGN.md](docs/RADAR_PRECIP_DOWNDRAFT_DESIGN.md).
+
+The original-source-derived direct QBAL inputs, upstream producer chain,
+prepared 2026-08-16 cases, radar extension, and fail-closed ban on final
+`bigfile` inputs are defined in
+[docs/QBAL_REAL_INPUT_CONTRACT.md](docs/QBAL_REAL_INPUT_CONTRACT.md).  Run
+`tests/run_real_input_inventory.sh` to validate the four prepared hourly source
+sets; the command intentionally confirms a `BLOCKED` direct closure until the
+missing original upstream intermediates have been regenerated.
+
+The current one-page authority and promotion decision is
+[docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md).  The cloud-regime,
+S-band radial-velocity, precipitation-trajectory, local-balance, and wave-noise
+basis is summarized with primary literature in
+[docs/SCIENTIFIC_BASIS.md](docs/SCIENTIFIC_BASIS.md).
+
+The focused real-data evidence commands are:
+
+```bash
+tests/run_real_shadow_cases.sh
+tests/run_real_shadow_figures.sh
+tests/run_radar_velocity_audit.sh
+```
+
+The real runner requires a clean exact-head tree and the pinned Intel ifx 2026
+binary.  The figure and velocity-audit wrappers verify and pin that committed
+generation before reading it.  The four prepared hours are never filtered by
+outcome.  A failed stage returns the input state and is not published as a
+candidate; its failure reason remains available in the stage result.

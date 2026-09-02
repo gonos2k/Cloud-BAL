@@ -73,12 +73,14 @@ MODULE lapsprep_wps
   CHARACTER (LEN=46) :: desc 
   INTEGER, PARAMETER :: output_unit = 78
   REAL, PARAMETER    :: slp_level = 201300.0
+  LOGICAL            :: wind_grid_relative
 
   PUBLIC output_ungrib_format
 CONTAINS
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE output_ungrib_format(p, t, ht, u, v, rh, slp, psfc, &
-                               lwc, rai, sno, ice, pic, snocov,tskin)
+                               lwc, rai, sno, ice, pic, snocov,tskin,istatus, &
+                               resolved_output_file)
 
   !  Subroutine of lapsprep that will build a file the
   !  WRFSI "ungrib" format that can be read by hinterp
@@ -102,6 +104,8 @@ CONTAINS
   REAL, INTENT(IN)                   :: pic(:,:,:)  ! Graupel (kg/kg)
   REAL, INTENT(IN)                   :: snocov(:,:) ! Snow cover (fract)
   REAL, INTENT(IN)                   :: tskin(:,:)  ! Skin temperature
+  INTEGER, INTENT(OUT)               :: istatus
+  CHARACTER(LEN=*), INTENT(IN), OPTIONAL :: resolved_output_file
   
   ! Local Variables
   
@@ -109,14 +113,19 @@ CONTAINS
   CHARACTER (LEN=256):: output_file_name
   REAL, ALLOCATABLE  :: d2d(:,:)
   REAL, ALLOCATABLE  :: p_pa(:)
-  INTEGER            :: k,yyyyddd
+  INTEGER            :: k,yyyyddd,io_status,close_status,alloc_status
+  LOGICAL            :: output_open
+
+  istatus = 0
+  output_open = .FALSE.
  
   ! Allocate a scratch 2d array
-  ALLOCATE (d2d (x,y) )
-  ALLOCATE (p_pa (z3+1))
+  ALLOCATE (d2d (x,y), STAT=alloc_status)
+  IF (alloc_status .NE. 0) RETURN
+  ALLOCATE (p_pa (z3+1), STAT=alloc_status)
+  IF (alloc_status .NE. 0) GOTO 900
   ! Build the output file name
  
-  output_prefix = TRIM(laps_data_root)// '/lapsprd/lapsprep/wps/LAPS'
   yyyyddd = valid_yyyy*1000 + valid_jjj
   CALL wrf_date_to_ymd(yyyyddd, valid_yyyy, valid_mm, valid_dd) 
   WRITE(hdate, '(I4.4,"-",I2.2,"-",I2.2,"_",I2.2,":",I2.2,":00.0000")') &
@@ -124,23 +133,16 @@ CONTAINS
 ! IF (valid_min .EQ. 0) THEN
 !   output_file_name = TRIM(output_prefix) // ':' // hdate(1:13)
 ! ELSE
+  IF (PRESENT(resolved_output_file)) THEN
+    IF (LEN_TRIM(resolved_output_file)==0) GOTO 900
+    output_file_name=TRIM(resolved_output_file)
+  ELSE
+    output_prefix = TRIM(laps_data_root)// '/lapsprd/lapsprep/wps/LAPS'
     output_file_name = TRIM(output_prefix) // ':' // hdate(1:16)
+  END IF
 ! ENDIF
-  !  Open the file for sequential, unformatted output
-  OPEN ( FILE   = TRIM(output_file_name)    , &
-         UNIT   = output_unit        , &
-         FORM   = 'UNFORMATTED' , &
-         STATUS = 'UNKNOWN'     , &
-         ACCESS = 'SEQUENTIAL'    )
-
-  ! Convert p levels from mb to Pascals
-
-  p_pa = p * 100.
-
-  ! Set llflag based on grid type
-
-   print*, 'grid_type', grid_type
-
+  ! Resolve all metadata before creating the output file.  A writer must not
+  ! invent the coordinate system or leave an empty final-path artifact.
   IF      ( grid_type(1:8)  .EQ. 'mercator'                 ) THEN
     llflag = 1
   ELSE IF ( ( grid_type(1:24) .EQ. 'secant lambert conformal' ) .or. &
@@ -149,9 +151,34 @@ CONTAINS
   ELSE IF ( grid_type(1:19) .EQ. 'polar stereographic'      ) THEN
     llflag = 5
   ELSE
-    PRINT '(A,A,A)','Unknown map projection: ',TRIM(grid_type),'.  I quit.'
-    STOP 'unknown_projection'
+    PRINT '(A,A,A)','Unknown map projection: ',TRIM(grid_type),'.'
+    GOTO 900
   END IF
+  SELECT CASE (TRIM(wind_coordinate))
+    CASE ('GRID_RELATIVE')
+      wind_grid_relative=.TRUE.
+    CASE ('EARTH_RELATIVE')
+      wind_grid_relative=.FALSE.
+    CASE DEFAULT
+      PRINT '(A,A)','Invalid WIND_COORDINATE: ',TRIM(wind_coordinate)
+      GOTO 900
+  END SELECT
+
+  !  Open the file for sequential, unformatted output
+  OPEN ( FILE   = TRIM(output_file_name)    , &
+         UNIT   = output_unit        , &
+         FORM   = 'UNFORMATTED' , &
+         STATUS = 'REPLACE'     , &
+         ACTION = 'WRITE'       , &
+         ACCESS = 'SEQUENTIAL', IOSTAT=io_status )
+  IF (io_status .NE. 0) GOTO 900
+  output_open = .TRUE.
+
+  ! Convert p levels from mb to Pascals
+
+  p_pa = p * 100.
+
+  print*, 'grid_type', grid_type
 
   PRINT *, 'GRIBPREP VERSION =', gp_version
   PRINT *, 'SOURCE = ', source
@@ -180,9 +207,11 @@ CONTAINS
     IF (( p_pa(k) .GT. 100100).AND.(p_pa(k).LT.200000) ) THEN
       CYCLE var_t
     ENDIF
-    CALL write_ungrib_header(field,units,desc,p_pa(k))
     d2d = t(:,:,k)
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F5.1,A,F5.1)','Level (Pa):',p_pa(k),' Min: ', &
            MINVAL(d2d),' Max: ', MAXVAL(d2d)
   ENDDO var_t
@@ -200,9 +229,11 @@ CONTAINS
       CYCLE var_u
 !     CYCLE var_uv
     END IF
-    CALL write_ungrib_header(field,units,desc,p_pa(k))
     d2d = u(:,:,k)
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F5.1,A,F5.1)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
   ENDDO var_u
@@ -219,9 +250,11 @@ CONTAINS
       CYCLE var_v
 !     CYCLE var_uv
     END IF
-    CALL write_ungrib_header(field,units,desc,p_pa(k))
     d2d = v(:,:,k)
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F5.1,A,F5.1)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
   ENDDO var_v
@@ -238,9 +271,11 @@ CONTAINS
     IF ( ( p_pa(k) .GT. 100100 ) .AND. ( p_pa(k) .LT. 200000 ) ) THEN
       CYCLE var_rh
     END IF
-    CALL write_ungrib_header(field,units,desc,p_pa(k))
     d2d = rh(:,:,k)
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F5.1,A,F5.1)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
   ENDDO var_rh
@@ -256,9 +291,11 @@ CONTAINS
     IF ( ( p_pa(k) .GT. 100100 ) .AND. ( p_pa(k) .LT. 200000 ) ) THEN
       CYCLE var_ht
     END IF
-    CALL write_ungrib_header(field,units,desc,p_pa(k))
     d2d = ht(:,:,k)
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F8.1,A,F8.1)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
   ENDDO var_ht
@@ -283,8 +320,10 @@ CONTAINS
   PRINT *, 'FIELD = ', field
   PRINT *, 'UNITS = ', units
   PRINT *, 'DESC =  ',desc
-  CALL write_ungrib_header(field,units,desc,p_pa(z3+1))
-  WRITE ( output_unit ) tskin
+  CALL write_ungrib_header(field,units,desc,p_pa(z3+1),io_status)
+  IF (io_status .NE. 0) GOTO 900
+  WRITE ( output_unit,IOSTAT=io_status ) tskin
+  IF (io_status .NE. 0) GOTO 900
   PRINT '(A,F9.1,A,F9.1,A,F9.1)', 'Level (Pa):', p_pa(z3+1), &
        ' Min: ', MINVAL(tskin), ' Max: ', MAXVAL(tskin)
 
@@ -295,8 +334,10 @@ CONTAINS
   PRINT *, 'FIELD = ', field
   PRINT *, 'UNITS = ', units
   PRINT *, 'DESC =  ',desc
-  CALL write_ungrib_header(field,units,desc,slp_level)
-  WRITE ( output_unit ) slp
+  CALL write_ungrib_header(field,units,desc,slp_level,io_status)
+  IF (io_status .NE. 0) GOTO 900
+  WRITE ( output_unit,IOSTAT=io_status ) slp
+  IF (io_status .NE. 0) GOTO 900
   PRINT '(A,F9.1,A,F9.1,A,F9.1)', 'Level (Pa):', slp_level, ' Min: ', MINVAL(slp),&
             ' Max: ', MAXVAL(slp)
 
@@ -307,8 +348,10 @@ CONTAINS
   PRINT *, 'FIELD = ', field
   PRINT *, 'UNITS = ', units
   PRINT *, 'DESC =  ',desc
-  CALL write_ungrib_header(field,units,desc,p_pa(z3+1))
-  WRITE ( output_unit ) psfc
+  CALL write_ungrib_header(field,units,desc,p_pa(z3+1),io_status)
+  IF (io_status .NE. 0) GOTO 900
+  WRITE ( output_unit,IOSTAT=io_status ) psfc
+  IF (io_status .NE. 0) GOTO 900
   PRINT '(A,F9.1,A,F9.1,A,F9.1)', 'Level (Pa):', p_pa(z3+1), ' Min: ', MINVAL(psfc),&
             ' Max: ', MAXVAL(psfc)
 
@@ -349,9 +392,11 @@ CONTAINS
       IF ( ( p_pa(k) .GT. 100100 ) .AND. ( p_pa(k) .LT. 200000 ) ) THEN
         CYCLE var_lwc
       END IF
-      CALL write_ungrib_header(field,units,desc,p_pa(k))
       d2d = lwc(:,:,k)
-      WRITE ( output_unit ) d2d
+      CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+      IF (io_status .NE. 0) GOTO 900
+      WRITE ( output_unit,IOSTAT=io_status ) d2d
+      IF (io_status .NE. 0) GOTO 900
       PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
     END DO var_lwc 
@@ -364,8 +409,10 @@ CONTAINS
     PRINT *, 'FIELD = ', field
     PRINT *, 'UNITS = ', units
     PRINT *, 'DESC =  ',desc
-    CALL write_ungrib_header(field,units,desc,p_pa(z3+1))
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(z3+1),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(z3+1), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
 
@@ -380,9 +427,11 @@ CONTAINS
       IF ( ( p_pa(k) .GT. 100100 ) .AND. ( p_pa(k) .LT. 200000 ) ) THEN
         CYCLE var_ice
       END IF
-      CALL write_ungrib_header(field,units,desc,p_pa(k))
       d2d = ice(:,:,k)
-      WRITE ( output_unit ) d2d
+      CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+      IF (io_status .NE. 0) GOTO 900
+      WRITE ( output_unit,IOSTAT=io_status ) d2d
+      IF (io_status .NE. 0) GOTO 900
       PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
     END DO var_ice
@@ -395,8 +444,10 @@ CONTAINS
     PRINT *, 'FIELD = ', field
     PRINT *, 'UNITS = ', units
     PRINT *, 'DESC =  ',desc
-    CALL write_ungrib_header(field,units,desc,p_pa(z3+1))
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(z3+1),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(z3+1), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
 
@@ -411,9 +462,11 @@ CONTAINS
       IF ( ( p_pa(k) .GT. 100100 ) .AND. ( p_pa(k) .LT. 200000 ) ) THEN
         CYCLE var_rai
       END IF
-      CALL write_ungrib_header(field,units,desc,p_pa(k))
       d2d = rai(:,:,k)
-      WRITE ( output_unit ) d2d
+      CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+      IF (io_status .NE. 0) GOTO 900
+      WRITE ( output_unit,IOSTAT=io_status ) d2d
+      IF (io_status .NE. 0) GOTO 900
       PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
     END DO var_rai
@@ -427,8 +480,10 @@ CONTAINS
     PRINT *, 'FIELD = ', field
     PRINT *, 'UNITS = ', units
     PRINT *, 'DESC =  ',desc
-    CALL write_ungrib_header(field,units,desc,p_pa(z3+1))
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(z3+1),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(z3+1), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
 
@@ -443,9 +498,11 @@ CONTAINS
       IF ( ( p_pa(k) .GT. 100100 ) .AND. ( p_pa(k) .LT. 200000 ) ) THEN
         CYCLE var_sno
       END IF
-      CALL write_ungrib_header(field,units,desc,p_pa(k))
       d2d = sno(:,:,k)
-      WRITE ( output_unit ) d2d
+      CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+      IF (io_status .NE. 0) GOTO 900
+      WRITE ( output_unit,IOSTAT=io_status ) d2d
+      IF (io_status .NE. 0) GOTO 900
       PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
     END DO var_sno
@@ -458,8 +515,10 @@ CONTAINS
     PRINT *, 'FIELD = ', field
     PRINT *, 'UNITS = ', units
     PRINT *, 'DESC =  ',desc
-    CALL write_ungrib_header(field,units,desc,p_pa(z3+1))
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(z3+1),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(z3+1), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
 
@@ -474,9 +533,11 @@ CONTAINS
       IF ( ( p_pa(k) .GT. 100100 ) .AND. ( p_pa(k) .LT. 200000 ) ) THEN
         CYCLE var_pic
       END IF
-      CALL write_ungrib_header(field,units,desc,p_pa(k))
       d2d = pic(:,:,k)
-      WRITE ( output_unit ) d2d
+      CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+      IF (io_status .NE. 0) GOTO 900
+      WRITE ( output_unit,IOSTAT=io_status ) d2d
+      IF (io_status .NE. 0) GOTO 900
       PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
     END DO var_pic
@@ -489,21 +550,29 @@ CONTAINS
     PRINT *, 'FIELD = ', field
     PRINT *, 'UNITS = ', units
     PRINT *, 'DESC =  ',desc
-    CALL write_ungrib_header(field,units,desc,p_pa(z3+1))
-    WRITE ( output_unit ) d2d
+    CALL write_ungrib_header(field,units,desc,p_pa(z3+1),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE ( output_unit,IOSTAT=io_status ) d2d
+    IF (io_status .NE. 0) GOTO 900
     PRINT '(A,F9.1,A,F8.6,A,F8.6)', 'Level (Pa):', p_pa(z3+1), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
 
   ENDIF
 
-  CLOSE (output_unit)
-  DEALLOCATE (d2d)
-  DEALLOCATE (p_pa)
+  CLOSE (output_unit,IOSTAT=close_status)
+  output_open = .FALSE.
+  IF (close_status .NE. 0) GOTO 900
+  istatus = 1
+
+900 CONTINUE
+  IF (output_open) CLOSE (output_unit,IOSTAT=close_status)
+  IF (ALLOCATED(d2d)) DEALLOCATE (d2d)
+  IF (ALLOCATED(p_pa)) DEALLOCATE (p_pa)
   RETURN
   END SUBROUTINE output_ungrib_format
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  SUBROUTINE write_ungrib_header(field,units,desc,level)
+  SUBROUTINE write_ungrib_header(field,units,desc,level,istatus)
  
   ! Writes the ungrib header given the filed, units, description, and level
 
@@ -512,19 +581,27 @@ CONTAINS
   CHARACTER(LEN=25),INTENT(IN)  :: units
   CHARACTER(LEN=46),INTENT(IN)  :: desc
   REAL, INTENT(IN)              :: level
+  INTEGER, INTENT(OUT)          :: istatus
+
+  istatus = 0
   
-  WRITE ( output_unit ) gp_version
-  WRITE ( output_unit ) hdate,xfcst,source,field,units,desc,level,x,y,llflag
+  WRITE ( output_unit,IOSTAT=istatus ) gp_version
+  IF (istatus .NE. 0) RETURN
+  WRITE ( output_unit,IOSTAT=istatus ) hdate,xfcst,source,field,units,desc,level,x,y,llflag
+  IF (istatus .NE. 0) RETURN
   SELECT CASE (llflag)
     CASE(1)
-      WRITE ( output_unit ) knownloc,la1,lo1,dx,dy,latin1
+      WRITE ( output_unit,IOSTAT=istatus ) knownloc,la1,lo1,dx,dy,latin1
     CASE(3)
-      WRITE ( output_unit ) knownloc,la1,lo1,dx,dy,lov,latin1,latin2, earth_radius
+      WRITE ( output_unit,IOSTAT=istatus ) knownloc,la1,lo1,dx,dy,lov,latin1,latin2, earth_radius
     CASE(5)
-      WRITE ( output_unit ) knownloc,la1,lo1,dx,dy,lov,latin1
+      WRITE ( output_unit,IOSTAT=istatus ) knownloc,la1,lo1,dx,dy,lov,latin1
+    CASE DEFAULT
+      istatus = -1
   END SELECT
+  IF (istatus .NE. 0) RETURN
 !     WRITE ( output_unit ) .FALSE. 
-      WRITE ( output_unit ) .TRUE.     ! is_wind_grid_rel
+      WRITE ( output_unit,IOSTAT=istatus ) wind_grid_relative
 
   END SUBROUTINE write_ungrib_header
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

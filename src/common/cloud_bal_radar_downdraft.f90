@@ -19,7 +19,9 @@ MODULE cloud_bal_radar_downdraft
     REAL :: storm_motion_u_ms = 0.0
     REAL :: storm_motion_v_ms = 0.0
     LOGICAL :: storm_motion_available = .FALSE.
-    REAL :: minimum_dbz = -10.0
+    ! The operational mosaic uses -10 dBZ as its no-echo base.  It is not an
+    ! observed precipitation value; radar_mosaic.nl sets REF_BASE_USEABLE=0.
+    REAL :: minimum_dbz = 0.0
     REAL :: full_confidence_dbz = 30.0
     REAL :: reference_concentration = 1.0E-4
     REAL :: minimum_fall_speed = 0.5
@@ -44,11 +46,10 @@ CONTAINS
 
   PURE REAL FUNCTION linear_reflectivity(dbz)
     REAL, INTENT(IN) :: dbz
-    IF (.NOT. ieee_is_finite(dbz) .OR. dbz < -100.0 .OR. dbz > 100.0) THEN
-      linear_reflectivity = 0.0
-    ELSE
-      linear_reflectivity = 10.0**(0.1*dbz)
-    END IF
+    linear_reflectivity = 0.0
+    IF (.NOT. ieee_is_finite(dbz)) RETURN
+    IF (dbz < -100.0 .OR. dbz > 100.0) RETURN
+    linear_reflectivity = 10.0**(0.1*dbz)
   END FUNCTION linear_reflectivity
 
   REAL FUNCTION phase_terminal_velocity(phase, pressure_pa, &
@@ -60,8 +61,10 @@ CONTAINS
 
     status = 0
     phase_terminal_velocity = 0.0
-    IF (.NOT. ieee_is_finite(pressure_pa) .OR. pressure_pa <= 0.0 .OR. &
-        .NOT. ieee_is_finite(temperature_k) .OR. temperature_k <= 0.0) RETURN
+    IF (.NOT. ieee_is_finite(pressure_pa)) RETURN
+    IF (pressure_pa <= 0.0) RETURN
+    IF (.NOT. ieee_is_finite(temperature_k)) RETURN
+    IF (temperature_k <= 0.0) RETURN
     z_linear = linear_reflectivity(dbz)
     IF (z_linear <= 0.0) RETURN
 
@@ -101,13 +104,13 @@ CONTAINS
     TYPE(radar_downdraft_config), INTENT(IN), OPTIONAL :: config
 
     TYPE(radar_downdraft_config) :: cfg
-    INTEGER :: nx, ny, nz, iteration
+    INTEGER :: nx, ny, nz, iteration, valid_change_count
     REAL, ALLOCATABLE :: rain_work(:,:,:), snow_work(:,:,:)
     REAL, ALLOCATABLE :: graupel_work(:,:,:), omega_work(:,:,:)
     REAL, ALLOCATABLE :: omega_next(:,:,:), z_proxy(:,:,:)
     LOGICAL, ALLOCATABLE :: observed(:,:,:)
     REAL :: maximum_change
-    LOGICAL :: converged
+    LOGICAL :: converged, used_omega_fallback
 
     status = 0
     source_valid = .FALSE.
@@ -123,14 +126,21 @@ CONTAINS
         .NOT. same_shape_3d(dbz,snow) .OR. &
         .NOT. same_shape_3d(dbz,graupel) .OR. &
         .NOT. same_shape_3d(dbz,omega) .OR. &
+        SIZE(cloud_precip_type,1) /= nx .OR. &
+        SIZE(cloud_precip_type,2) /= ny .OR. &
+        SIZE(cloud_precip_type,3) /= nz .OR. &
         SIZE(source_valid,1) /= nx .OR. SIZE(source_valid,2) /= ny .OR. &
         SIZE(source_valid,3) /= nz .OR. nx < 2 .OR. ny < 2 .OR. nz < 2) RETURN
-    IF (.NOT. config_is_valid(cfg) .OR. .NOT. ieee_is_finite(missing) .OR. &
-        .NOT. ieee_is_finite(dx_m) .OR. .NOT. ieee_is_finite(dy_m) .OR. &
-        dx_m <= 0.0 .OR. dy_m <= 0.0) RETURN
+    IF (.NOT. config_is_valid(cfg)) RETURN
+    IF (.NOT. ieee_is_finite(missing)) RETURN
+    IF (.NOT. ieee_is_finite(dx_m)) RETURN
+    IF (.NOT. ieee_is_finite(dy_m)) RETURN
+    IF (dx_m <= 0.0 .OR. dy_m <= 0.0) RETURN
     IF (.NOT. meteorology_is_valid(temperature_k,rh_percent,height_m, &
                                    pressure_pa,rain,snow,graupel,omega, &
                                    missing)) RETURN
+    IF (ANY(cloud_precip_type < 0) .OR. &
+        ANY(cloud_precip_type/16 > 5)) RETURN
     IF (wind_available) THEN
       IF (ANY(.NOT. ieee_is_finite(u_ms)) .OR. &
           ANY(.NOT. ieee_is_finite(v_ms))) RETURN
@@ -140,9 +150,7 @@ CONTAINS
              graupel_work(nx,ny,nz),omega_work(nx,ny,nz), &
              omega_next(nx,ny,nz),z_proxy(nx,ny,nz), &
              observed(nx,ny,nz))
-    observed = ieee_is_finite(dbz) .AND. ABS(dbz-missing) > 1.0E-5 .AND. &
-               dbz >= cfg%minimum_dbz .AND. &
-               (rain+snow+graupel) > 0.0
+    CALL build_observed_mask(dbz,rain,snow,graupel,missing,cfg,observed)
     IF (.NOT. ANY(observed)) THEN
       status = 2
       DEALLOCATE(rain_work,snow_work,graupel_work,omega_work,omega_next, &
@@ -152,6 +160,7 @@ CONTAINS
 
     omega_work = omega
     converged = .FALSE.
+    used_omega_fallback = .FALSE.
     DO iteration = 1, cfg%maximum_iterations
       rain_work = rain
       snow_work = snow
@@ -159,20 +168,20 @@ CONTAINS
       z_proxy = dbz
       CALL fill_lower_gaps(rain_work,snow_work,graupel_work,z_proxy, &
            observed,cloud_precip_type,temperature_k,rh_percent,height_m, &
-           pressure_pa,u_ms,v_ms,omega_work,dx_m,dy_m,wind_available,cfg)
+           pressure_pa,u_ms,v_ms,omega_work,dx_m,dy_m,wind_available,cfg, &
+           used_omega_fallback)
       CALL diagnose_bounded_downdraft(rain_work,snow_work,graupel_work, &
            z_proxy,observed,cloud_precip_type,temperature_k,rh_percent, &
            height_m,pressure_pa,omega,cfg,omega_next)
-      maximum_change = MAXVAL(ABS(omega_to_w(omega_next,pressure_pa) - &
-                                  omega_to_w(omega_work,pressure_pa)), &
-                              MASK=valid_omega(omega_next,missing))
+      CALL maximum_valid_w_change(omega_next,omega_work,pressure_pa,missing, &
+                                  maximum_change,valid_change_count)
       WHERE (valid_omega(omega_next,missing) .AND. &
              valid_omega(omega_work,missing))
         omega_next = (1.0-cfg%under_relaxation)*omega_work + &
                      cfg%under_relaxation*omega_next
       END WHERE
       omega_work = omega_next
-      IF (maximum_change <= cfg%convergence_ms) THEN
+      IF (valid_change_count > 0 .AND. maximum_change <= cfg%convergence_ms) THEN
         converged = .TRUE.
         EXIT
       END IF
@@ -194,14 +203,15 @@ CONTAINS
     source_valid = observed .OR. (rain+snow+graupel > 0.0) .OR. &
                    valid_omega(omega,missing)
     status = MERGE(1,2,converged .AND. wind_available .AND. &
-                         cfg%storm_motion_available)
+                         cfg%storm_motion_available .AND. &
+                         .NOT. used_omega_fallback)
     DEALLOCATE(rain_work,snow_work,graupel_work,omega_work,omega_next, &
                z_proxy,observed)
   END SUBROUTINE couple_radar_precipitation
 
   SUBROUTINE fill_lower_gaps(rain,snow,graupel,z_proxy,observed, &
        cloud_precip_type,temperature_k,rh_percent,height_m,pressure_pa, &
-       u_ms,v_ms,omega,dx_m,dy_m,wind_available,cfg)
+       u_ms,v_ms,omega,dx_m,dy_m,wind_available,cfg,used_omega_fallback)
     REAL, INTENT(INOUT) :: rain(:,:,:),snow(:,:,:),graupel(:,:,:),z_proxy(:,:,:)
     LOGICAL, INTENT(IN) :: observed(:,:,:),wind_available
     INTEGER, INTENT(IN) :: cloud_precip_type(:,:,:)
@@ -209,16 +219,20 @@ CONTAINS
     REAL, INTENT(IN) :: pressure_pa(:,:,:),u_ms(:,:,:),v_ms(:,:,:),omega(:,:,:)
     REAL, INTENT(IN) :: dx_m,dy_m
     TYPE(radar_downdraft_config), INTENT(IN) :: cfg
+    LOGICAL, INTENT(INOUT) :: used_omega_fallback
     INTEGER :: k
 
     IF (.NOT. wind_available) RETURN
     DO k=SIZE(rain,3),2,-1
       CALL transport_one_level(rain,z_proxy,observed,1,k,temperature_k, &
-           rh_percent,height_m,pressure_pa,u_ms,v_ms,omega,dx_m,dy_m,cfg)
+           rh_percent,height_m,pressure_pa,u_ms,v_ms,omega,dx_m,dy_m,cfg, &
+           used_omega_fallback)
       CALL transport_one_level(snow,z_proxy,observed,2,k,temperature_k, &
-           rh_percent,height_m,pressure_pa,u_ms,v_ms,omega,dx_m,dy_m,cfg)
+           rh_percent,height_m,pressure_pa,u_ms,v_ms,omega,dx_m,dy_m,cfg, &
+           used_omega_fallback)
       CALL transport_one_level(graupel,z_proxy,observed,5,k,temperature_k, &
-           rh_percent,height_m,pressure_pa,u_ms,v_ms,omega,dx_m,dy_m,cfg)
+           rh_percent,height_m,pressure_pa,u_ms,v_ms,omega,dx_m,dy_m,cfg, &
+           used_omega_fallback)
       CALL repartition_unobserved_level(rain,snow,graupel,observed, &
            cloud_precip_type,temperature_k,k-1)
     END DO
@@ -252,7 +266,8 @@ CONTAINS
   END SUBROUTINE repartition_unobserved_level
 
   SUBROUTINE transport_one_level(q,z_proxy,observed,phase,k,temperature_k, &
-       rh_percent,height_m,pressure_pa,u_ms,v_ms,omega,dx_m,dy_m,cfg)
+       rh_percent,height_m,pressure_pa,u_ms,v_ms,omega,dx_m,dy_m,cfg, &
+       used_omega_fallback)
     REAL, INTENT(INOUT) :: q(:,:,:),z_proxy(:,:,:)
     LOGICAL, INTENT(IN) :: observed(:,:,:)
     INTEGER, INTENT(IN) :: phase,k
@@ -260,6 +275,7 @@ CONTAINS
     REAL, INTENT(IN) :: pressure_pa(:,:,:),u_ms(:,:,:),v_ms(:,:,:),omega(:,:,:)
     REAL, INTENT(IN) :: dx_m,dy_m
     TYPE(radar_downdraft_config), INTENT(IN) :: cfg
+    LOGICAL, INTENT(INOUT) :: used_omega_fallback
     INTEGER :: nx,ny,i,j,ii,jj,di,dj,vt_status
     REAL :: dz,fall_speed,w_air,dt,x_target,y_target,fx,fy,weight
     REAL :: survival,deficit,deposit,source_dbz,target_speed
@@ -271,13 +287,23 @@ CONTAINS
         dz=height_m(i,j,k)-height_m(i,j,k-1)
         IF (dz <= 0.0) CYCLE
         source_dbz=z_proxy(i,j,k)
-        IF (.NOT. ieee_is_finite(source_dbz) .OR. source_dbz < -100.0) &
+        IF (.NOT. ieee_is_finite(source_dbz)) THEN
           source_dbz=cfg%minimum_dbz
+        ELSE IF (source_dbz < -100.0) THEN
+          source_dbz=cfg%minimum_dbz
+        END IF
         fall_speed=phase_terminal_velocity(phase,pressure_pa(i,j,k), &
                                            temperature_k(i,j,k),source_dbz, &
                                            vt_status)
         IF (vt_status /= 1) CYCLE
-        w_air=-SCALE_HEIGHT_M*omega(i,j,k)/pressure_pa(i,j,k)
+        IF (valid_scalar_omega(omega(i,j,k))) THEN
+          w_air=-SCALE_HEIGHT_M*omega(i,j,k)/pressure_pa(i,j,k)
+        ELSE
+          ! Missing omega never enters trajectory arithmetic.  Zero is the
+          ! explicit background-unavailable fallback and degrades the result.
+          w_air=0.0
+          used_omega_fallback=.TRUE.
+        END IF
         dt=dz/MAX(fall_speed-w_air,cfg%minimum_fall_speed)
         x_target=REAL(i)+(u_ms(i,j,k)-cfg%storm_motion_u_ms)*dt/dx_m
         y_target=REAL(j)+(v_ms(i,j,k)-cfg%storm_motion_v_ms)*dt/dy_m
@@ -364,7 +390,8 @@ CONTAINS
             w_cloud=0.0
           END IF
           cloud_type=MOD(cloud_precip_type(i,j,k),16)
-          IF ((cloud_type == 3 .OR. cloud_type == 10) .AND. w_cloud > 0.0) &
+          IF ((cloud_type == 3 .OR. cloud_type == 10 .OR. &
+               cloud_type == 11) .AND. w_cloud > 0.0) &
             CYCLE
           w_new=w_cloud+confidence*MAX(-cfg%maximum_innovation_ms, &
                                       MIN(0.0,w_target-w_cloud))
@@ -374,25 +401,81 @@ CONTAINS
     END DO
   END SUBROUTINE diagnose_bounded_downdraft
 
+  SUBROUTINE build_observed_mask(dbz,rain,snow,graupel,missing,cfg,observed)
+    REAL, INTENT(IN) :: dbz(:,:,:),rain(:,:,:),snow(:,:,:),graupel(:,:,:)
+    REAL, INTENT(IN) :: missing
+    TYPE(radar_downdraft_config), INTENT(IN) :: cfg
+    LOGICAL, INTENT(OUT) :: observed(:,:,:)
+    INTEGER :: i,j,k
+
+    observed=.FALSE.
+    DO k=1,SIZE(dbz,3)
+      DO j=1,SIZE(dbz,2)
+        DO i=1,SIZE(dbz,1)
+          IF (.NOT. ieee_is_finite(dbz(i,j,k))) CYCLE
+          IF (ABS(dbz(i,j,k)-missing) <= 1.0E-5) CYCLE
+          IF (dbz(i,j,k) < cfg%minimum_dbz .OR. dbz(i,j,k) > 100.0) CYCLE
+          IF (rain(i,j,k)+snow(i,j,k)+graupel(i,j,k) <= 0.0) CYCLE
+          observed(i,j,k)=.TRUE.
+        END DO
+      END DO
+    END DO
+  END SUBROUTINE build_observed_mask
+
+  SUBROUTINE maximum_valid_w_change(omega_new,omega_old,pressure,missing, &
+                                    maximum_change,valid_count)
+    REAL, INTENT(IN) :: omega_new(:,:,:),omega_old(:,:,:),pressure(:,:,:)
+    REAL, INTENT(IN) :: missing
+    REAL, INTENT(OUT) :: maximum_change
+    INTEGER, INTENT(OUT) :: valid_count
+    INTEGER :: i,j,k
+    REAL :: old_w,new_w
+
+    maximum_change=0.0
+    valid_count=0
+    DO k=1,SIZE(omega_new,3)
+      DO j=1,SIZE(omega_new,2)
+        DO i=1,SIZE(omega_new,1)
+          IF (.NOT. valid_omega(omega_new(i,j,k),missing)) CYCLE
+          IF (.NOT. ieee_is_finite(pressure(i,j,k))) CYCLE
+          IF (pressure(i,j,k) <= 0.0) CYCLE
+          new_w=omega_to_w(omega_new(i,j,k),pressure(i,j,k))
+          old_w=0.0
+          IF (valid_omega(omega_old(i,j,k),missing)) &
+            old_w=omega_to_w(omega_old(i,j,k),pressure(i,j,k))
+          maximum_change=MAX(maximum_change,ABS(new_w-old_w))
+          valid_count=valid_count+1
+        END DO
+      END DO
+    END DO
+  END SUBROUTINE maximum_valid_w_change
+
   PURE ELEMENTAL REAL FUNCTION omega_to_w(omega,pressure)
     REAL, INTENT(IN) :: omega,pressure
-    IF (ieee_is_finite(omega) .AND. ieee_is_finite(pressure) .AND. &
-        pressure > 0.0 .AND. ABS(omega) < 1.0E30) THEN
-      omega_to_w=-SCALE_HEIGHT_M*omega/pressure
-    ELSE
-      omega_to_w=0.0
-    END IF
+    omega_to_w=0.0
+    IF (.NOT. ieee_is_finite(omega)) RETURN
+    IF (.NOT. ieee_is_finite(pressure)) RETURN
+    IF (pressure <= 0.0) RETURN
+    IF (ABS(omega) >= 1.0E30) RETURN
+    omega_to_w=-SCALE_HEIGHT_M*omega/pressure
   END FUNCTION omega_to_w
 
   PURE ELEMENTAL LOGICAL FUNCTION valid_omega(omega,missing)
     REAL, INTENT(IN) :: omega,missing
-    valid_omega=ieee_is_finite(omega) .AND. ABS(omega-missing) > 1.0E-5 .AND. &
-                ABS(omega) <= 100.0
+    valid_omega=.FALSE.
+    IF (.NOT. ieee_is_finite(omega)) RETURN
+    IF (.NOT. ieee_is_finite(missing)) RETURN
+    IF (ABS(omega-missing) <= 1.0E-5) RETURN
+    IF (ABS(omega) > 100.0) RETURN
+    valid_omega=.TRUE.
   END FUNCTION valid_omega
 
   PURE LOGICAL FUNCTION valid_scalar_omega(omega)
     REAL, INTENT(IN) :: omega
-    valid_scalar_omega=ieee_is_finite(omega) .AND. ABS(omega) <= 100.0
+    valid_scalar_omega=.FALSE.
+    IF (.NOT. ieee_is_finite(omega)) RETURN
+    IF (ABS(omega) > 100.0) RETURN
+    valid_scalar_omega=.TRUE.
   END FUNCTION valid_scalar_omega
 
   PURE REAL FUNCTION smoothstep(x)
@@ -418,26 +501,45 @@ CONTAINS
 
   PURE LOGICAL FUNCTION config_is_valid(cfg)
     TYPE(radar_downdraft_config), INTENT(IN) :: cfg
-    config_is_valid=ieee_is_finite(cfg%radar_wavelength_cm) .AND. &
-      cfg%radar_wavelength_cm >= 8.0 .AND. cfg%radar_wavelength_cm <= 12.0 .AND. &
-      ieee_is_finite(cfg%storm_motion_u_ms) .AND. &
-      ieee_is_finite(cfg%storm_motion_v_ms) .AND. &
-      ieee_is_finite(cfg%minimum_dbz) .AND. &
-      ieee_is_finite(cfg%full_confidence_dbz) .AND. &
-      cfg%full_confidence_dbz > cfg%minimum_dbz .AND. &
-      cfg%reference_concentration > 0.0 .AND. cfg%minimum_fall_speed > 0.0 .AND. &
-      cfg%evaporation_efficiency >= 0.0 .AND. &
-      cfg%evaporation_efficiency <= 1.0 .AND. &
-      cfg%sublimation_efficiency >= 0.0 .AND. &
-      cfg%sublimation_efficiency <= 1.0 .AND. &
-      cfg%melting_efficiency >= 0.0 .AND. cfg%melting_efficiency <= 1.0 .AND. &
-      cfg%downdraft_efficiency >= 0.0 .AND. &
-      cfg%downdraft_efficiency <= 1.0 .AND. &
-      cfg%maximum_downdraft_ms > 0.0 .AND. cfg%maximum_innovation_ms > 0.0 .AND. &
-      cfg%entrainment_depth_m > 0.0 .AND. cfg%surface_taper_depth_m > 0.0 .AND. &
-      cfg%under_relaxation > 0.0 .AND. cfg%under_relaxation <= 0.5 .AND. &
-      cfg%maximum_iterations >= 1 .AND. cfg%maximum_iterations <= 10 .AND. &
-      cfg%convergence_ms > 0.0
+    config_is_valid=.FALSE.
+    IF (.NOT. ieee_is_finite(cfg%radar_wavelength_cm)) RETURN
+    IF (cfg%radar_wavelength_cm < 8.0 .OR. &
+        cfg%radar_wavelength_cm > 12.0) RETURN
+    IF (.NOT. ieee_is_finite(cfg%storm_motion_u_ms)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%storm_motion_v_ms)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%minimum_dbz)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%full_confidence_dbz)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%reference_concentration)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%minimum_fall_speed)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%evaporation_efficiency)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%sublimation_efficiency)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%melting_efficiency)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%downdraft_efficiency)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%maximum_downdraft_ms)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%maximum_innovation_ms)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%entrainment_depth_m)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%surface_taper_depth_m)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%under_relaxation)) RETURN
+    IF (.NOT. ieee_is_finite(cfg%convergence_ms)) RETURN
+    IF (cfg%full_confidence_dbz <= cfg%minimum_dbz) RETURN
+    IF (cfg%reference_concentration <= 0.0) RETURN
+    IF (cfg%minimum_fall_speed <= 0.0) RETURN
+    IF (cfg%evaporation_efficiency < 0.0 .OR. &
+        cfg%evaporation_efficiency > 1.0) RETURN
+    IF (cfg%sublimation_efficiency < 0.0 .OR. &
+        cfg%sublimation_efficiency > 1.0) RETURN
+    IF (cfg%melting_efficiency < 0.0 .OR. &
+        cfg%melting_efficiency > 1.0) RETURN
+    IF (cfg%downdraft_efficiency < 0.0 .OR. &
+        cfg%downdraft_efficiency > 1.0) RETURN
+    IF (cfg%maximum_downdraft_ms <= 0.0) RETURN
+    IF (cfg%maximum_innovation_ms <= 0.0) RETURN
+    IF (cfg%entrainment_depth_m <= 0.0) RETURN
+    IF (cfg%surface_taper_depth_m <= 0.0) RETURN
+    IF (cfg%under_relaxation <= 0.0 .OR. cfg%under_relaxation > 0.5) RETURN
+    IF (cfg%maximum_iterations < 1 .OR. cfg%maximum_iterations > 10) RETURN
+    IF (cfg%convergence_ms <= 0.0) RETURN
+    config_is_valid=.TRUE.
   END FUNCTION config_is_valid
 
   LOGICAL FUNCTION meteorology_is_valid(temperature_k,rh_percent,height_m, &
@@ -448,15 +550,19 @@ CONTAINS
     REAL, INTENT(IN) :: omega(:,:,:),missing
     INTEGER :: i,j,k
     meteorology_is_valid=.FALSE.
-    IF (ANY(.NOT. ieee_is_finite(temperature_k)) .OR. &
-        ANY(temperature_k < 180.0) .OR. ANY(temperature_k > 340.0) .OR. &
-        ANY(.NOT. ieee_is_finite(rh_percent)) .OR. ANY(rh_percent < 0.0) .OR. &
-        ANY(rh_percent > 120.0) .OR. ANY(.NOT. ieee_is_finite(height_m)) .OR. &
-        ANY(.NOT. ieee_is_finite(pressure_pa)) .OR. &
-        ANY(pressure_pa <= 0.0) .OR. ANY(.NOT. ieee_is_finite(rain)) .OR. &
-        ANY(rain < 0.0) .OR. ANY(.NOT. ieee_is_finite(snow)) .OR. &
-        ANY(snow < 0.0) .OR. ANY(.NOT. ieee_is_finite(graupel)) .OR. &
-        ANY(graupel < 0.0)) RETURN
+    IF (ANY(.NOT. ieee_is_finite(temperature_k))) RETURN
+    IF (ANY(temperature_k < 180.0) .OR. ANY(temperature_k > 340.0)) RETURN
+    IF (ANY(.NOT. ieee_is_finite(rh_percent))) RETURN
+    IF (ANY(rh_percent < 0.0) .OR. ANY(rh_percent > 120.0)) RETURN
+    IF (ANY(.NOT. ieee_is_finite(height_m))) RETURN
+    IF (ANY(.NOT. ieee_is_finite(pressure_pa))) RETURN
+    IF (ANY(pressure_pa <= 0.0)) RETURN
+    IF (ANY(.NOT. ieee_is_finite(rain))) RETURN
+    IF (ANY(rain < 0.0)) RETURN
+    IF (ANY(.NOT. ieee_is_finite(snow))) RETURN
+    IF (ANY(snow < 0.0)) RETURN
+    IF (ANY(.NOT. ieee_is_finite(graupel))) RETURN
+    IF (ANY(graupel < 0.0)) RETURN
     DO j=1,SIZE(height_m,2)
       DO i=1,SIZE(height_m,1)
         DO k=2,SIZE(height_m,3)

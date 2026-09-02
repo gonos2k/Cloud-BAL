@@ -330,6 +330,29 @@ c
 c ============================================================
 c
       subroutine get_laps_3d_analysis_data(i4time,nx,ny,nz
+     +,phi,t,u,v,sh,omo,istatus)
+c
+c     Preserve the legacy entry point.  Callers needing the independent
+c     cloud-omega status use get_laps_3d_analysis_data_ex.
+c
+      implicit none
+
+      integer   nx,ny,nz
+      integer   i4time
+      integer   istatus
+      integer   omo_status
+      real*4    phi(nx,ny,nz),t(nx,ny,nz)
+     .         ,u(nx,ny,nz),v(nx,ny,nz),sh(nx,ny,nz)
+     .         ,omo(nx,ny,nz)
+
+      call get_laps_3d_analysis_data_ex(i4time,nx,ny,nz
+     +,phi,t,u,v,sh,omo,omo_status,istatus)
+      return
+      end
+c
+c ============================================================
+c
+      subroutine get_laps_3d_analysis_data_ex(i4time,nx,ny,nz
      +,phi,t,u,v,sh,omo,omo_status,istatus)
 c
       implicit none
@@ -412,20 +435,17 @@ c    space).
         DO i = 1, nx
           k = 1
           found_lowest = .false.
-      
-          DO WHILE (.NOT. found_lowest) 
-            IF (sh(i,j,k) .lt. 1.e37) THEN
-              found_lowest = .true.
-              sh(i,j,1:k) = sh(i,j,k)
-            ELSE
-              k = k + 1
-              IF (k .ge. nz) THEN
-                PRINT *, 'No valid SH found in column!'
-                PRINT *, 'I/J = ', i,j
-                STOP
-              ENDIF
-            ENDIF
+          DO WHILE (k .le. nz .and. .not. found_lowest)
+            found_lowest = sh(i,j,k) .lt. 1.e37
+            if(.not. found_lowest) k = k + 1
           ENDDO
+          IF (.NOT. found_lowest) THEN
+            PRINT *, 'No valid SH found in column! I/J = ',i,j
+            istatus=0
+            omo_status=0
+            return
+          ENDIF
+          sh(i,j,1:k) = sh(i,j,k)
         ENDDO
       ENDDO
 
