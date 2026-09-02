@@ -861,9 +861,9 @@ symbols are deleted at their phase removal gate.
 - Compute the effective reflectivity-weighted terminal-speed mean and variance
   through the same phase/PSD/fall-speed policy for the optional LOS operator.
   This is a diagnostic output with provenance, not a second hydrometeor
-  retrieval.  Record any monotonic attenuation of `omega_target` in result
-  diagnostics; attenuation is owned only by the balance stage and never changes
-  the accepted hydrometeor ledger.
+  retrieval.  Record the one-shot trust-region scale applied to the requested
+  `omega_target` increment in result diagnostics.  Scaling is owned only by the
+  balance stage and never changes the accepted hydrometeor ledger.
 - Keep cooling/evaporation as diagnostic available energy only.  Do not change
   vapor, temperature, or hydrometeor mass until a paired water-and-energy
   budget is implemented and approved.
@@ -952,35 +952,42 @@ symbols are deleted at their phase removal gate.
   `0.5*sum_(r,j) delta_x(r,j)^2/K(r,j)` on active variables.  The matrix,
   published correction, and residual all call the same `S`, `D`, `A`, `K`, and
   `G`; no raw face gradient exists as a second intended operator.
-- Balance the complete pre-correction residual, but only inside the compact
-  cloud/radar support.  For monotonic attenuation `alpha`, let
+- Project only the target-induced increment.  Do not rebalance the background
+  residual inside a compact subdomain.  Let
   `Q(delta_omega)=(0,0,delta_omega)` on the A grid and let `R` denote the same
   `D/S` with immutable background boundary values:
 
   ```text
-  delta_omega = alpha*(omega_target-omega_in),  0 <= alpha <= 1
+  delta_omega_requested = omega_target-omega_in
   r_background = R(state_in)
-  b_target     = A*Q(delta_omega)
-  r_forced     = r_background + b_target
-  L(lambda)    = r_forced
-  delta_x      = G(lambda)
-  r_final      = r_forced-L(lambda).
+  b_target     = A*Q(delta_omega_requested)
+  L(lambda)    = b_target
+  delta_x_raw  = Q(delta_omega_requested)+G(lambda)
+  alpha        = trust_region(delta_x_raw),  0 < alpha <= 1
+  delta_x      = alpha*delta_x_raw
+  r_increment  = A*delta_x
+  r_candidate  = r_background+r_increment.
   ```
 
   Component compatibility is
-  `sum_c(M_c*r_forced_c)=sum_boundary(s_cf*q_bc)` and the gauge is
+  `sum_c(M_c*b_target_c)=sum_boundary(s_cf*q_bc)` and the gauge is
   `sum_c(M_c*lambda_c)=0`.  `omega_target` is applied exactly once as a soft,
-  uncertainty-weighted forcing.  The projection supplies local horizontal wind
-  and may make a bounded vertical adjustment where the empirical target is
-  uncertain.  No correction is allowed outside the compact support.  Final
-  omega deviation from the attenuated target is an explicit gate, so the
-  projection cannot silently cancel the diagnosis.  Background, forced, and
-  final residuals are published from these exact equations.
-- Define the momentum diagnostic once as `M(state; f,tau,delo,dp,metrics)` in
-  this module.  The same routine and validated coefficients evaluate
-  `m_background`, `m_forced`, and `m_final`; the gate applies to
-  `m_final-m_background` relative to `m_forced-m_background`.  The solver may
-  not assemble one momentum expression and validate with another.
+  uncertainty-weighted forcing.  The one linear solve is not retried with a
+  different right-hand side; if necessary, the requested target and its solved
+  correction are scaled together once by `alpha`, which preserves the linear
+  projection identity.  The projection supplies local horizontal wind and may
+  make a bounded vertical adjustment where the empirical target is uncertain.
+  No correction is allowed outside the compact support.  Final omega response
+  and `alpha` are explicit gates, so the projection cannot silently cancel the
+  diagnosis.  Background, proposed-increment, projected-increment, and
+  candidate residuals are published from these exact equations.
+- Define the current diagnostic accurately as the geostrophic residual
+  `R_g=(-fv+dPhi/dx, fu+dPhi/dy)`.  The same routine and validated metrics
+  evaluate background and candidate, and the candidate may not worsen beyond
+  tolerance.  This is not a full momentum residual: time tendency, advection,
+  friction, vertical transport, and moist buoyancy are absent.  A future full
+  momentum gate must use one published operator before and after correction;
+  until then it remains a promotion blocker rather than a claimed diagnostic.
 - Remove the separate coefficient/index formulas currently present in the
   relaxation matrix, correction application, and residual routine.
 - Build connected components of the actual nonzero `L=A K A^T M` graph induced
@@ -1014,25 +1021,28 @@ symbols are deleted at their phase removal gate.
   before array access.  A smaller domain returns unchanged input and `FAILED`.
 - Gate the complete candidate transactionally on:
   - exact operator identity in a manufactured solution;
-  - lower final continuity RMS/max than `r_forced` by the frozen required
-    fraction, recomputed from the actual published-precision candidate;
+  - lower projected-increment continuity RMS/max than the proposed-increment
+    residual by the frozen required fraction, recomputed from the actual
+    published-precision candidate;
+  - physical candidate continuity no worse than the background within the
+    frozen absolute and relative tolerance;
   - momentum residual that does not worsen beyond tolerance;
   - bounded wind/omega/temperature/height increments;
   - zero increment outside support;
-  - bounded final high-pass divergent energy and increment roughness relative
-    to the unsmoothed feasible candidate and the locked case threshold;
   - finite converged solver state.
 - If increment-only smoothing is needed, apply it only to the divergent
   potential and reproject with the same exact operator.  Do not filter the full
   wind or thermodynamic state.
 
-The gates have a fixed priority: finite/shape/support and component solvability;
-operator identity and convergence; continuity; hard increment bounds; momentum
-and final high-pass metrics.  If the last three cannot all pass, monotonically
-scale the proposed target increment without rewriting the requested
-`omega_target`, and retry the same operator. If no nonzero fraction
-passes within the configured attempts, return the unchanged input as
-`DEGRADED`; do not choose another solver or expand support implicitly.
+The implemented gates have a fixed priority: finite/shape/support and component
+solvability; operator identity and convergence; continuity; hard increment
+bounds; target response; and geostrophic non-worsening.  Solve once, scale the
+complete feasible increment once by the recorded trust-region fraction, and
+evaluate all gates.  A failed gate returns the unchanged input as `DEGRADED`;
+do not retry with a rewritten right-hand side, choose another solver, or expand
+support implicitly.  High-pass divergent energy, increment roughness, and the
+full momentum residual are required before dynamic promotion but are not
+implemented acceptance gates in the current SHADOW reference.
 
 ### Exit gate
 

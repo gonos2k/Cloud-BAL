@@ -78,7 +78,8 @@
 | 비균일 격자의 물리 거리 localization | DONE | `cloud_bal_grid_geometry`의 누적 인접 center 거리와 overflow-safe 탐색반경을 canonical/legacy localization에 공유; 중간 100 km cell 및 거대 유한반경 반례 통과 |
 | solver 실패·비수렴 시 원본 rollback | DONE | candidate와 operational state 모두 원본 복사본; 실패 수치만 stage result에 보존 |
 | focused legacy QBAL의 background omega 필수성 | DONE | U/V/T/HT/SH와 함께 OM status도 필수이고 solver가 사용하는 분석 surface-pressure domain의 모든 above-ground cell에서 OM coverage를 검사; 누락 OM을 0으로 대체하여 balance를 계속하지 않음 |
-| 실험용 시간전진·dropsonde QBAL 분기 | DONE | AIRDROP 전용 경로와 helper를 제거하고 모든 분석이 동일 solver·acceptance 경로를 사용 |
+| focused snapshot의 실험용 시간전진·dropsonde QBAL 분기 | DONE | Cloud-BAL 복사본에서 AIRDROP 전용 경로와 helper를 제거함 |
+| 현업 linked QBAL의 AIRDROP 제거 | BLOCKED | 원본 `klaps-v5.0_`에는 AIRDROP/advance/read helper가 남아 있으며 canonical adapter와 전체 ifx link 전에는 운영 제거로 간주하지 않음 |
 | storm motion 및 trajectory frame | BLOCKED | 현재 real SHADOW는 좌표계 미확정 input-native U/V와 zero-translation 가정을 명시; 바람 좌표계·이동벡터 검증 전 과학 승격 금지 |
 | physical continuity·geostrophic·증분·방향 gate | DONE | 최종 real32 배열에서 독립 재계산하고 Fortran failure bitset과 정확히 일치시킴 |
 | 결과 파일의 단일 세대 transaction | ENGINEERING | real runner를 staging→재검증→manifest→atomic generation으로 연결; 제품별 NetCDF/WPS 재읽기와 full legacy writer 연결은 남음 |
@@ -130,15 +131,18 @@ Standalone `numerical VALID`는 파일 내부 수치·연산자·gate 재계산�
 
 | 시각 | unique 수상체 support | direct radar | transported | 실제 WPS 변경 |
 |---|---:|---:|---:|---|
-| 13 UTC | 157,918 | 68,592 | 89,326 | QR 112,787 / QS 95,779 |
-| 14 UTC | 161,134 | 72,212 | 88,922 | QR 117,084 / QS 96,984 |
-| 15 UTC | 162,973 | 75,794 | 87,179 | QR 121,350 / QS 95,282 |
+| 13 UTC | 67,524 | 67,524 | 0 | QR 60,513 / QS 13,101 |
+| 14 UTC | 71,241 | 71,241 | 0 | QR 63,207 / QS 15,250 |
+| 15 UTC | 74,842 | 74,842 | 0 | QR 66,598 / QS 15,904 |
 
 - 12 UTC 현업 최종장은 없어 `NOT_AVAILABLE`이다.
 - 실제 `u`, `v`, `omega`, 온도·수증기는 모두 불변이다.
-- 최대 `QR+QS` 증분은 약 `0.0106 kg kg-1`이고 급격한 수평·연직·시간
-  경계가 존재하므로, 이 hybrid를 수치모델 초기장으로 사용하지 않는다.
-- reported replacement attempt와 실제 float32 WPS 변경 수를 분리한다.
+- 전 above-ground 영역이 echo 또는 no-echo로 관측되어 transported deposition은
+  0이다. 따라서 이번 hybrid의 수상체 변경은 direct radar retrieval만 나타내며,
+  기울어진 하층 강수 shaft의 실자료 검증으로 해석하지 않는다.
+- `modified_by_field`는 replacement 시도 수이고 실제 float32 WPS 값 변경 수는
+  위 표와 같이 별도로 집계한다. QG replacement 시도는 있었지만 실제 QG 값
+  변경은 0이다.
 - 그림은 field·시각 공통 고정 scale을 사용하고 changed-cell 통계와 support
   경계 통계를 함께 표시해야 한다.
 
