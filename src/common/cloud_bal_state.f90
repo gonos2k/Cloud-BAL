@@ -8,7 +8,7 @@ MODULE cloud_bal_state
   IMPLICIT NONE
   PRIVATE
 
-  INTEGER, PARAMETER, PUBLIC :: CLOUD_BAL_SCHEMA_VERSION = 2
+  INTEGER, PARAMETER, PUBLIC :: CLOUD_BAL_SCHEMA_VERSION = 3
   ! Canonical statuses deliberately do not overlap the legacy KLAPS 0/1 ABI.
   INTEGER, PARAMETER, PUBLIC :: STATUS_FAILED = -10
   INTEGER, PARAMETER, PUBLIC :: STATUS_DEGRADED = 10
@@ -58,11 +58,12 @@ MODULE cloud_bal_state
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_BALANCE_OPERATOR = ISHFT(1_int32,8)
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_OUTPUT_ADAPTER = ISHFT(1_int32,9)
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_DYNAMIC_TARGET = ISHFT(1_int32,10)
+  INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_BOUNDARY_CONDITION = ISHFT(1_int32,11)
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_KNOWN_BITS = &
     SOURCE_BACKGROUND_MODEL+SOURCE_CONVENTIONAL_OBS+SOURCE_CLOUD_ANALYSIS+ &
     SOURCE_RADAR_DBZ+SOURCE_RADAR_VRAD+SOURCE_LIGHTNING+SOURCE_ANALYZED_WIND+ &
     SOURCE_COLUMN_PHYSICS+SOURCE_BALANCE_OPERATOR+SOURCE_OUTPUT_ADAPTER+ &
-    SOURCE_DYNAMIC_TARGET
+    SOURCE_DYNAMIC_TARGET+SOURCE_BOUNDARY_CONDITION
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_DYNAMIC_EVIDENCE_BITS = &
     SOURCE_CONVENTIONAL_OBS+SOURCE_RADAR_VRAD+SOURCE_ANALYZED_WIND
 
@@ -75,23 +76,29 @@ MODULE cloud_bal_state
   INTEGER(int32), PARAMETER, PUBLIC :: QUALITY_FALL_SPEED_UNCERTAIN = ISHFT(1_int32,6)
   INTEGER(int32), PARAMETER, PUBLIC :: QUALITY_GEOMETRY_POOR = ISHFT(1_int32,7)
   INTEGER(int32), PARAMETER, PUBLIC :: QUALITY_LEGACY_PROVENANCE = ISHFT(1_int32,8)
+  INTEGER(int32), PARAMETER, PUBLIC :: QUALITY_BOUNDARY_INTERIOR_COPY = ISHFT(1_int32,9)
   INTEGER(int32), PARAMETER, PUBLIC :: QUALITY_KNOWN_BITS = &
     QUALITY_RAW_MISSING+QUALITY_QC_REJECTED+QUALITY_TIME_MISMATCH+ &
     QUALITY_BELOW_GROUND_FILLED+QUALITY_PHASE_UNCERTAIN+ &
     QUALITY_BRIGHT_BAND_OR_MIXED+QUALITY_FALL_SPEED_UNCERTAIN+ &
-    QUALITY_GEOMETRY_POOR+QUALITY_LEGACY_PROVENANCE
+    QUALITY_GEOMETRY_POOR+QUALITY_LEGACY_PROVENANCE+ &
+    QUALITY_BOUNDARY_INTERIOR_COPY
   INTEGER(int32), PARAMETER, PUBLIC :: QUALITY_EXCLUDED_BITS = &
     IOR(QUALITY_RAW_MISSING,IOR(QUALITY_QC_REJECTED,QUALITY_TIME_MISMATCH))
   INTEGER(int32), PARAMETER, PUBLIC :: QUALITY_DYNAMIC_TARGET_EXCLUDED_BITS = &
     IOR(QUALITY_EXCLUDED_BITS,IOR(QUALITY_PHASE_UNCERTAIN, &
       IOR(QUALITY_BRIGHT_BAND_OR_MIXED,IOR(QUALITY_FALL_SPEED_UNCERTAIN, &
-          IOR(QUALITY_GEOMETRY_POOR,QUALITY_LEGACY_PROVENANCE)))))
+          IOR(QUALITY_GEOMETRY_POOR,IOR(QUALITY_LEGACY_PROVENANCE, &
+              QUALITY_BOUNDARY_INTERIOR_COPY))))))
 
   INTEGER(int32), PARAMETER, PUBLIC :: LOS_REJECTED = 0_int32
   INTEGER(int32), PARAMETER, PUBLIC :: LOS_ASSIMILATED = 1_int32
   INTEGER(int32), PARAMETER, PUBLIC :: LOS_HELD_OUT = 2_int32
   INTEGER(int32), PARAMETER, PUBLIC :: VRAD_DEALIASED = 1_int32
   INTEGER(int32), PARAMETER, PUBLIC :: VRAD_FOLDED = 2_int32
+  REAL(real32), PARAMETER, PUBLIC :: RADAR_NO_ECHO_DBZ = -10.0_real32
+  REAL(real64), PARAMETER, PUBLIC :: MIN_PRESSURE_PA = 100.0_real64
+  REAL(real64), PARAMETER, PUBLIC :: MAX_PRESSURE_PA = 120000.0_real64
 
   REAL(real64), PARAMETER :: RD_AIR = 287.05_real64
   REAL(real64), PARAMETER :: GRAVITY = 9.80665_real64
@@ -135,9 +142,15 @@ MODULE cloud_bal_state
   TYPE, PUBLIC :: grid_spec
     INTEGER :: nx = 0, ny = 0, nz = 0
     CHARACTER(LEN=64) :: grid_id = ''
-    REAL(real64), ALLOCATABLE :: dx(:,:), dy(:,:), dp(:,:,:)
-    ! Hydrostatic pressure-coordinate mass A*dp/g.  This is the operator
-    ! metric, not dry-air mass.
+    REAL(real64), ALLOCATABLE :: dx(:,:), dy(:,:)
+    ! Pressure interfaces are ordered bottom to top.  cell_dp is the
+    ! control-volume thickness; level_spacing_dp is the center-to-center
+    ! distance and must not be used as cell mass.
+    REAL(real64), ALLOCATABLE :: pressure_interface(:,:,:)
+    REAL(real64), ALLOCATABLE :: cell_dp(:,:,:)
+    REAL(real64), ALLOCATABLE :: level_spacing_dp(:,:,:)
+    ! Hydrostatic pressure-coordinate mass A*cell_dp/g.  This is the
+    ! operator metric, not dry-air mass.
     REAL(real64), ALLOCATABLE :: pressure_mass_measure(:,:,:)
     ! Dry-air mass corresponding to the represented total-water state.
     REAL(real64), ALLOCATABLE :: dry_air_mass_measure(:,:,:)
@@ -218,6 +231,7 @@ MODULE cloud_bal_state
     REAL(real64) :: flux_boundary_exit = 0.0_real64
     REAL(real64) :: flux_terrain_intercept = 0.0_real64
     REAL(real64) :: flux_observation_blocked = 0.0_real64
+    REAL(real64) :: flux_no_echo_blocked = 0.0_real64
     REAL(real64) :: flux_microphysical_loss = 0.0_real64
     REAL(real64) :: radar_analysis_increment = 0.0_real64
     REAL(real64) :: enthalpy_error = 0.0_real64
@@ -266,7 +280,12 @@ MODULE cloud_bal_state
   PUBLIC :: dynamic_target_is_resolved
   PUBLIC :: source_bits_known
   PUBLIC :: quality_bits_known
+  PUBLIC :: radar_echo_cell
+  PUBLIC :: radar_no_echo_cell
+  PUBLIC :: radar_missing_cell
   PUBLIC :: refresh_dry_air_mass_measure
+  PUBLIC :: configure_pressure_geometry
+  PUBLIC :: pressure_geometry_is_valid
   PUBLIC :: stage_is_ok
   PUBLIC :: canonical_to_legacy_status
   PUBLIC :: canonical_states_equal
@@ -352,11 +371,15 @@ CONTAINS
     state%grid%nx=nx; state%grid%ny=ny; state%grid%nz=nz
     state%grid%grid_id=grid_id
     ALLOCATE(state%grid%dx(nx,ny),state%grid%dy(nx,ny), &
-             state%grid%dp(nx,ny,nz), &
+             state%grid%pressure_interface(nx,ny,nz+1), &
+             state%grid%cell_dp(nx,ny,nz), &
+             state%grid%level_spacing_dp(nx,ny,nz-1), &
              state%grid%pressure_mass_measure(nx,ny,nz), &
              state%grid%dry_air_mass_measure(nx,ny,nz))
     state%grid%dx=0.0_real64; state%grid%dy=0.0_real64
-    state%grid%dp=0.0_real64
+    state%grid%pressure_interface=0.0_real64
+    state%grid%cell_dp=0.0_real64
+    state%grid%level_spacing_dp=0.0_real64
     state%grid%pressure_mass_measure=0.0_real64
     state%grid%dry_air_mass_measure=0.0_real64
 
@@ -443,13 +466,15 @@ CONTAINS
         nx < 1 .OR. ny < 1 .OR. nz < 2 .OR. LEN_TRIM(state%grid%grid_id) == 0) RETURN
     IF (.NOT. grid_arrays_valid(state%grid)) RETURN
     IF (.NOT. support_arrays_valid(state,nx,ny,nz)) RETURN
+    IF (.NOT. pressure_geometry_is_valid(state)) RETURN
     valid_time=state%pressure%valid_time
     surface_required=.TRUE.
     IF (PRESENT(require_surface)) surface_required=require_surface
     status=STATUS_OK; reason=REASON_NONE
 
     CALL require_real_field(state%pressure,nx,ny,nz,valid_time,'Pa', &
-                            100.0_real32,120000.0_real32,field_status,reason, &
+                            REAL(MIN_PRESSURE_PA,real32),REAL(MAX_PRESSURE_PA,real32), &
+                            field_status,reason, &
                             state%above_ground)
     CALL merge_status(status,field_status); IF (field_status==STATUS_FAILED) RETURN
     CALL require_real_field(state%temperature,nx,ny,nz,valid_time,'K', &
@@ -495,7 +520,8 @@ CONTAINS
 
     IF (surface_required) THEN
       CALL require_surface_field(state%surface_pressure,nx,ny,valid_time,'Pa', &
-                                 100.0_real32,120000.0_real32,field_status,reason)
+                                 REAL(MIN_PRESSURE_PA,real32), &
+                                 REAL(MAX_PRESSURE_PA,real32),field_status,reason)
       CALL merge_status(status,field_status); IF (field_status==STATUS_FAILED) RETURN
       CALL require_surface_field(state%surface_temperature,nx,ny,valid_time,'K', &
                                  150.0_real32,350.0_real32,field_status,reason)
@@ -685,7 +711,8 @@ CONTAINS
     TYPE(cloud_bal_state_type), INTENT(OUT) :: state_out
     TYPE(stage_result), INTENT(OUT) :: result
 
-    IF (candidate_result%status == STATUS_OK) THEN
+    IF (candidate_result%status == STATUS_OK .AND. &
+        candidate_result%reason_code == REASON_NONE) THEN
       state_out=candidate
     ELSE
       state_out=state_in
@@ -719,7 +746,9 @@ CONTAINS
     DO k=1,SIZE(omega,3); DO j=1,SIZE(omega,2); DO i=1,SIZE(omega,1)
       IF (.NOT.valid(i,j,k)) CYCLE
       IF (.NOT.ieee_is_finite(omega(i,j,k)) .OR. &
-          .NOT.ieee_is_finite(pressure(i,j,k)) .OR. pressure(i,j,k)<=100.0_real32 .OR. &
+          .NOT.ieee_is_finite(pressure(i,j,k)) .OR. &
+          REAL(pressure(i,j,k),real64)<MIN_PRESSURE_PA .OR. &
+          REAL(pressure(i,j,k),real64)>MAX_PRESSURE_PA .OR. &
           .NOT.ieee_is_finite(temperature(i,j,k)) .OR. temperature(i,j,k)<=0.0_real32 .OR. &
           .NOT.ieee_is_finite(vapor(i,j,k)) .OR. vapor(i,j,k)<0.0_real32) RETURN
       tv=REAL(temperature(i,j,k),real64)*(1.0_real64+0.61_real64*REAL(vapor(i,j,k),real64))
@@ -746,7 +775,9 @@ CONTAINS
     DO k=1,SIZE(w,3); DO j=1,SIZE(w,2); DO i=1,SIZE(w,1)
       IF (.NOT.valid(i,j,k)) CYCLE
       IF (.NOT.ieee_is_finite(w(i,j,k)) .OR. &
-          .NOT.ieee_is_finite(pressure(i,j,k)) .OR. pressure(i,j,k)<=100.0_real32 .OR. &
+          .NOT.ieee_is_finite(pressure(i,j,k)) .OR. &
+          REAL(pressure(i,j,k),real64)<MIN_PRESSURE_PA .OR. &
+          REAL(pressure(i,j,k),real64)>MAX_PRESSURE_PA .OR. &
           .NOT.ieee_is_finite(temperature(i,j,k)) .OR. temperature(i,j,k)<=0.0_real32 .OR. &
           .NOT.ieee_is_finite(vapor(i,j,k)) .OR. vapor(i,j,k)<0.0_real32) RETURN
       tv=REAL(temperature(i,j,k),real64)*(1.0_real64+0.61_real64*REAL(vapor(i,j,k),real64))
@@ -801,6 +832,33 @@ CONTAINS
       IAND(quality,NOT(QUALITY_KNOWN_BITS))==0_int32
   END FUNCTION quality_bits_known
 
+  PURE ELEMENTAL LOGICAL FUNCTION radar_echo_cell(value,valid,quality,source)
+    REAL(real32), INTENT(IN) :: value
+    LOGICAL, INTENT(IN) :: valid
+    INTEGER(int32), INTENT(IN) :: quality,source
+    radar_echo_cell=cell_is_usable(valid,quality,source) .AND. &
+      IAND(source,SOURCE_RADAR_DBZ)/=0_int32 .AND. ieee_is_finite(value) .AND. &
+      value>=0.0_real32 .AND. value<=100.0_real32
+  END FUNCTION radar_echo_cell
+
+  PURE ELEMENTAL LOGICAL FUNCTION radar_no_echo_cell(value,valid,quality,source)
+    REAL(real32), INTENT(IN) :: value
+    LOGICAL, INTENT(IN) :: valid
+    INTEGER(int32), INTENT(IN) :: quality,source
+    radar_no_echo_cell=.NOT.valid .AND. quality==0_int32 .AND. &
+      source==SOURCE_RADAR_DBZ .AND. ieee_is_finite(value) .AND. &
+      value==RADAR_NO_ECHO_DBZ
+  END FUNCTION radar_no_echo_cell
+
+  PURE ELEMENTAL LOGICAL FUNCTION radar_missing_cell(value,valid,quality,source)
+    REAL(real32), INTENT(IN) :: value
+    LOGICAL, INTENT(IN) :: valid
+    INTEGER(int32), INTENT(IN) :: quality,source
+    radar_missing_cell=.NOT.valid .AND. source==0_int32 .AND. &
+      quality==QUALITY_RAW_MISSING .AND. ieee_is_finite(value) .AND. &
+      value==0.0_real32
+  END FUNCTION radar_missing_cell
+
   PURE ELEMENTAL LOGICAL FUNCTION dynamic_target_has_authority(valid,quality,source)
     LOGICAL, INTENT(IN) :: valid
     INTEGER(int32), INTENT(IN) :: quality,source
@@ -831,6 +889,99 @@ CONTAINS
     canonical_to_legacy_status=MERGE(1,0,stage_is_ok(status))
   END FUNCTION canonical_to_legacy_status
 
+  SUBROUTINE configure_pressure_geometry(state,status,domain_constraint)
+    TYPE(cloud_bal_state_type), INTENT(INOUT) :: state
+    INTEGER, INTENT(OUT) :: status
+    LOGICAL, INTENT(IN), OPTIONAL :: domain_constraint(:,:,:)
+    REAL(real64) :: center(state%grid%nz),surface_pressure,top_interface
+    REAL(real64), ALLOCATABLE :: interface_work(:,:,:),cell_dp_work(:,:,:)
+    REAL(real64), ALLOCATABLE :: spacing_work(:,:,:),mass_work(:,:,:)
+    LOGICAL, ALLOCATABLE :: domain_work(:,:,:)
+    INTEGER :: i,j,k,k_bottom,k_pressure_bottom,nx,ny,nz,allocation_status
+
+    status=STATUS_FAILED
+    nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
+    IF (.NOT.grid_mass_shapes_valid(state%grid)) RETURN
+    IF (.NOT.field3d_shape_metadata_ok(state%pressure,nx,ny,nz, &
+        state%pressure%valid_time,'Pa') .OR. &
+        .NOT.field2d_shape_metadata_ok(state%surface_pressure,nx,ny, &
+        state%pressure%valid_time,'Pa') .OR. &
+        .NOT.ALLOCATED(state%above_ground) .OR. &
+        ANY(SHAPE(state%above_ground)/=(/nx,ny,nz/))) RETURN
+    IF (PRESENT(domain_constraint)) THEN
+      IF (ANY(SHAPE(domain_constraint)/=(/nx,ny,nz/))) RETURN
+    END IF
+    IF (.NOT.ALL(cell_is_usable(state%pressure%valid,state%pressure%quality, &
+        state%pressure%source)) .OR. &
+        .NOT.ALL(cell_is_usable(state%surface_pressure%valid, &
+        state%surface_pressure%quality,state%surface_pressure%source))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(state%grid%dx)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%dy)) .OR. &
+        ANY(state%grid%dx<=0.0_real64) .OR. ANY(state%grid%dy<=0.0_real64)) RETURN
+    ALLOCATE(domain_work(nx,ny,nz),interface_work(nx,ny,nz+1), &
+      cell_dp_work(nx,ny,nz),spacing_work(nx,ny,nz-1),mass_work(nx,ny,nz), &
+      STAT=allocation_status)
+    IF (allocation_status/=0) RETURN
+    domain_work=.FALSE.; interface_work=0.0_real64; cell_dp_work=0.0_real64
+    spacing_work=0.0_real64; mass_work=0.0_real64
+
+    DO j=1,ny; DO i=1,nx
+      center=REAL(state%pressure%value(i,j,:),real64)
+      surface_pressure=REAL(state%surface_pressure%value(i,j),real64)
+      IF (.NOT.ieee_is_finite(surface_pressure) .OR. &
+          surface_pressure<MIN_PRESSURE_PA .OR. surface_pressure>MAX_PRESSURE_PA .OR. &
+          ANY(.NOT.ieee_is_finite(center)) .OR. ANY(center<MIN_PRESSURE_PA) .OR. &
+          ANY(center>MAX_PRESSURE_PA)) RETURN
+      DO k=1,nz-1
+        spacing_work(i,j,k)=center(k)-center(k+1)
+        IF (spacing_work(i,j,k)<=0.0_real64) RETURN
+      END DO
+      domain_work(i,j,:)=center<=surface_pressure
+      k_pressure_bottom=FINDLOC(domain_work(i,j,:),.TRUE.,DIM=1)
+      IF (PRESENT(domain_constraint)) THEN
+        domain_work(i,j,:)=domain_work(i,j,:) .AND. domain_constraint(i,j,:)
+      END IF
+      IF (COUNT(domain_work(i,j,:))<1) RETURN
+      DO k=1,nz-1
+        IF (domain_work(i,j,k) .AND. .NOT.domain_work(i,j,k+1)) RETURN
+      END DO
+      k_bottom=FINDLOC(domain_work(i,j,:),.TRUE.,DIM=1)
+      ! PSFC and hydrostatic height may disagree by one surface-cut center.
+      ! A larger terrain clip signals inconsistent inputs, not a deep cut cell.
+      IF (PRESENT(domain_constraint)) THEN
+        IF (k_bottom-k_pressure_bottom>1) RETURN
+      END IF
+      interface_work(i,j,1)=surface_pressure
+      DO k=2,nz
+        IF (k<=k_bottom) THEN
+          interface_work(i,j,k)=surface_pressure
+        ELSE
+          interface_work(i,j,k)=0.5_real64*(center(k-1)+center(k))
+        END IF
+      END DO
+      top_interface=center(nz)-0.5_real64*spacing_work(i,j,nz-1)
+      IF (.NOT.ieee_is_finite(top_interface) .OR. top_interface<=0.0_real64) RETURN
+      interface_work(i,j,nz+1)=MIN(surface_pressure,top_interface)
+      DO k=1,nz
+        IF (domain_work(i,j,k)) THEN
+          cell_dp_work(i,j,k)=interface_work(i,j,k)-interface_work(i,j,k+1)
+          IF (cell_dp_work(i,j,k)<=0.0_real64) RETURN
+        END IF
+        mass_work(i,j,k)=state%grid%dx(i,j)*state%grid%dy(i,j)* &
+          cell_dp_work(i,j,k)/GRAVITY
+      END DO
+    END DO; END DO
+    state%above_ground=domain_work
+    state%grid%pressure_interface=interface_work
+    state%grid%cell_dp=cell_dp_work
+    state%grid%level_spacing_dp=spacing_work
+    state%grid%pressure_mass_measure=mass_work
+    ! Geometry cannot infer dry-air mass before vapor/hydrometeors are ready.
+    ! A zero active value makes every premature canonical consumer fail closed.
+    state%grid%dry_air_mass_measure=0.0_real64
+    status=STATUS_OK
+  END SUBROUTINE configure_pressure_geometry
+
   SUBROUTINE refresh_dry_air_mass_measure(state,status)
     TYPE(cloud_bal_state_type), INTENT(INOUT) :: state
     INTEGER, INTENT(OUT) :: status
@@ -847,17 +998,12 @@ CONTAINS
     ! Publish only after the complete candidate passes every cell and array gate.
     DO k=1,state%grid%nz; DO j=1,state%grid%ny; DO i=1,state%grid%nx
       IF (.NOT.state%above_ground(i,j,k)) THEN
-        dry_air_mass_work(i,j,k)= &
-          state%grid%pressure_mass_measure(i,j,k)
+        dry_air_mass_work(i,j,k)=0.0_real64
         CYCLE
       END IF
       IF (.NOT.cell_is_usable(state%vapor%valid(i,j,k), &
           state%vapor%quality(i,j,k),state%vapor%source(i,j,k), &
-          state%vapor%valid_time,state%pressure%valid_time)) THEN
-        dry_air_mass_work(i,j,k)= &
-          state%grid%pressure_mass_measure(i,j,k)
-        CYCLE
-      END IF
+          state%vapor%valid_time,state%pressure%valid_time)) RETURN
       total_water=represented_total_water(state,i,j,k)
       IF (.NOT.ieee_is_finite(total_water)) RETURN
       IF (total_water<0.0_real64) RETURN
@@ -865,7 +1011,8 @@ CONTAINS
         state%grid%pressure_mass_measure(i,j,k)/(1.0_real64+total_water)
     END DO; END DO; END DO
     IF (ANY(.NOT.ieee_is_finite(dry_air_mass_work))) RETURN
-    IF (ANY(dry_air_mass_work<=0.0_real64)) RETURN
+    IF (ANY(dry_air_mass_work<0.0_real64) .OR. &
+        ANY(state%above_ground .AND. dry_air_mass_work<=0.0_real64)) RETURN
     state%grid%dry_air_mass_measure=dry_air_mass_work
     status=STATUS_OK
   END SUBROUTINE refresh_dry_air_mass_measure
@@ -1001,19 +1148,25 @@ CONTAINS
     IF (.NOT.grid_mass_shapes_valid(grid)) RETURN
     IF (ANY(SHAPE(grid%dx)/=(/grid%nx,grid%ny/)) .OR. &
         ANY(SHAPE(grid%dy)/=(/grid%nx,grid%ny/)) .OR. &
-        ANY(SHAPE(grid%dp)/=(/grid%nx,grid%ny,grid%nz/)) .OR. &
+        ANY(SHAPE(grid%pressure_interface)/=(/grid%nx,grid%ny,grid%nz+1/)) .OR. &
+        ANY(SHAPE(grid%cell_dp)/=(/grid%nx,grid%ny,grid%nz/)) .OR. &
+        ANY(SHAPE(grid%level_spacing_dp)/=(/grid%nx,grid%ny,grid%nz-1/)) .OR. &
         ANY(SHAPE(grid%pressure_mass_measure)/=(/grid%nx,grid%ny,grid%nz/)) .OR. &
         ANY(SHAPE(grid%dry_air_mass_measure)/=(/grid%nx,grid%ny,grid%nz/))) RETURN
     IF (ANY(.NOT.ieee_is_finite(grid%dx)) .OR. ANY(grid%dx<=0.0_real64) .OR. &
         ANY(.NOT.ieee_is_finite(grid%dy)) .OR. ANY(grid%dy<=0.0_real64) .OR. &
-        ANY(.NOT.ieee_is_finite(grid%dp)) .OR. ANY(grid%dp<=0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%pressure_interface)) .OR. &
+        ANY(grid%pressure_interface<=0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%cell_dp)) .OR. ANY(grid%cell_dp<0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%level_spacing_dp)) .OR. &
+        ANY(grid%level_spacing_dp<=0.0_real64) .OR. &
         ANY(.NOT.ieee_is_finite(grid%pressure_mass_measure)) .OR. &
-        ANY(grid%pressure_mass_measure<=0.0_real64) .OR. &
+        ANY(grid%pressure_mass_measure<0.0_real64) .OR. &
         ANY(.NOT.ieee_is_finite(grid%dry_air_mass_measure)) .OR. &
-        ANY(grid%dry_air_mass_measure<=0.0_real64)) RETURN
+        ANY(grid%dry_air_mass_measure<0.0_real64)) RETURN
     ALLOCATE(expected_mass(grid%nx,grid%ny))
     DO k=1,grid%nz
-      expected_mass=grid%dx*grid%dy*grid%dp(:,:,k)/GRAVITY
+      expected_mass=grid%dx*grid%dy*grid%cell_dp(:,:,k)/GRAVITY
       IF (ANY(ABS(grid%pressure_mass_measure(:,:,k)-expected_mass)> &
               1.0e-10_real64*MAX(expected_mass,1.0_real64))) RETURN
     END DO
@@ -1023,15 +1176,114 @@ CONTAINS
   PURE LOGICAL FUNCTION grid_mass_shapes_valid(grid)
     TYPE(grid_spec), INTENT(IN) :: grid
     grid_mass_shapes_valid=ALLOCATED(grid%dx) .AND. ALLOCATED(grid%dy) .AND. &
-      ALLOCATED(grid%dp) .AND. ALLOCATED(grid%pressure_mass_measure) .AND. &
+      ALLOCATED(grid%pressure_interface) .AND. ALLOCATED(grid%cell_dp) .AND. &
+      ALLOCATED(grid%level_spacing_dp) .AND. &
+      ALLOCATED(grid%pressure_mass_measure) .AND. &
       ALLOCATED(grid%dry_air_mass_measure)
     IF (.NOT.grid_mass_shapes_valid) RETURN
     grid_mass_shapes_valid=ALL(SHAPE(grid%dx)==(/grid%nx,grid%ny/)) .AND. &
       ALL(SHAPE(grid%dy)==(/grid%nx,grid%ny/)) .AND. &
-      ALL(SHAPE(grid%dp)==(/grid%nx,grid%ny,grid%nz/)) .AND. &
+      ALL(SHAPE(grid%pressure_interface)==(/grid%nx,grid%ny,grid%nz+1/)) .AND. &
+      ALL(SHAPE(grid%cell_dp)==(/grid%nx,grid%ny,grid%nz/)) .AND. &
+      ALL(SHAPE(grid%level_spacing_dp)==(/grid%nx,grid%ny,grid%nz-1/)) .AND. &
       ALL(SHAPE(grid%pressure_mass_measure)==(/grid%nx,grid%ny,grid%nz/)) .AND. &
       ALL(SHAPE(grid%dry_air_mass_measure)==(/grid%nx,grid%ny,grid%nz/))
   END FUNCTION grid_mass_shapes_valid
+
+  PURE LOGICAL FUNCTION pressure_geometry_is_valid(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    REAL(real64) :: tolerance,expected_dp,expected_spacing,expected_interface
+    REAL(real64) :: expected_mass
+    REAL(real64) :: center(state%grid%nz),surface_pressure,top_interface
+    INTEGER :: i,j,k,bottom,pressure_bottom
+    pressure_geometry_is_valid=.FALSE.
+    IF (.NOT.grid_mass_shapes_valid(state%grid) .OR. &
+        .NOT.ALLOCATED(state%above_ground)) RETURN
+    IF (ANY(SHAPE(state%above_ground)/=(/state%grid%nx,state%grid%ny, &
+                                        state%grid%nz/))) RETURN
+    IF (.NOT.field3d_shape_metadata_ok(state%pressure,state%grid%nx, &
+        state%grid%ny,state%grid%nz,state%pressure%valid_time,'Pa') .OR. &
+        .NOT.field2d_shape_metadata_ok(state%surface_pressure,state%grid%nx, &
+        state%grid%ny,state%pressure%valid_time,'Pa')) RETURN
+    IF (.NOT.ALL(cell_is_usable(state%surface_pressure%valid, &
+        state%surface_pressure%quality,state%surface_pressure%source)) .OR. &
+        ANY(state%above_ground .AND. .NOT.cell_is_usable(state%pressure%valid, &
+          state%pressure%quality,state%pressure%source)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%pressure%value)) .OR. &
+        ANY(REAL(state%pressure%value,real64)<MIN_PRESSURE_PA) .OR. &
+        ANY(REAL(state%pressure%value,real64)>MAX_PRESSURE_PA) .OR. &
+        ANY(.NOT.ieee_is_finite(state%surface_pressure%value)) .OR. &
+        ANY(REAL(state%surface_pressure%value,real64)<MIN_PRESSURE_PA) .OR. &
+        ANY(REAL(state%surface_pressure%value,real64)>MAX_PRESSURE_PA)) RETURN
+    IF (ANY(.NOT.ieee_is_finite(state%grid%pressure_interface)) .OR. &
+        ANY(state%grid%pressure_interface<=0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%cell_dp)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%level_spacing_dp)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%pressure_mass_measure)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%dry_air_mass_measure))) RETURN
+    DO j=1,state%grid%ny; DO i=1,state%grid%nx
+      center=REAL(state%pressure%value(i,j,:),real64)
+      surface_pressure=REAL(state%surface_pressure%value(i,j),real64)
+      pressure_bottom=FINDLOC(center<=surface_pressure,.TRUE.,DIM=1)
+      bottom=FINDLOC(state%above_ground(i,j,:),.TRUE.,DIM=1)
+      IF (pressure_bottom==0 .OR. bottom==0 .OR. &
+          bottom<pressure_bottom .OR. bottom-pressure_bottom>1) RETURN
+      DO k=1,state%grid%nz-1
+        IF (state%above_ground(i,j,k) .AND. &
+            .NOT.state%above_ground(i,j,k+1)) RETURN
+      END DO
+      tolerance=64.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64, &
+        ABS(surface_pressure))
+      IF (ABS(state%grid%pressure_interface(i,j,1)- &
+          surface_pressure)>tolerance) RETURN
+      DO k=1,state%grid%nz
+      tolerance=64.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64, &
+        ABS(state%grid%pressure_interface(i,j,k)), &
+        ABS(state%grid%pressure_interface(i,j,k+1)))
+      expected_dp=state%grid%pressure_interface(i,j,k)- &
+        state%grid%pressure_interface(i,j,k+1)
+      IF (expected_dp < -tolerance) RETURN
+      IF (k<=bottom) THEN
+        expected_interface=surface_pressure
+      ELSE
+        expected_interface=0.5_real64*(center(k-1)+center(k))
+      END IF
+      IF (ABS(state%grid%pressure_interface(i,j,k)-expected_interface)> &
+          tolerance) RETURN
+      IF (state%above_ground(i,j,k)) THEN
+        IF (state%grid%cell_dp(i,j,k)<=tolerance .OR. &
+            state%grid%pressure_mass_measure(i,j,k)<=tolerance .OR. &
+            state%grid%dry_air_mass_measure(i,j,k)<=tolerance) RETURN
+        IF (ABS(state%grid%cell_dp(i,j,k)-expected_dp)>tolerance) RETURN
+        expected_mass=state%grid%dx(i,j)*state%grid%dy(i,j)*expected_dp/GRAVITY
+        IF (ABS(state%grid%pressure_mass_measure(i,j,k)-expected_mass)> &
+            1.0e-10_real64*MAX(1.0_real64,expected_mass)) RETURN
+        IF (REAL(state%pressure%value(i,j,k),real64)> &
+              state%grid%pressure_interface(i,j,k)+tolerance .OR. &
+            REAL(state%pressure%value(i,j,k),real64)< &
+              state%grid%pressure_interface(i,j,k+1)-tolerance) RETURN
+      ELSE
+        IF (ABS(state%grid%cell_dp(i,j,k))>tolerance .OR. &
+            ABS(state%grid%pressure_mass_measure(i,j,k))>tolerance .OR. &
+            ABS(state%grid%dry_air_mass_measure(i,j,k))>tolerance .OR. &
+            ABS(expected_dp)>tolerance) RETURN
+      END IF
+      IF (k<state%grid%nz) THEN
+        expected_spacing=REAL(state%pressure%value(i,j,k),real64)- &
+          REAL(state%pressure%value(i,j,k+1),real64)
+        IF (ABS(state%grid%level_spacing_dp(i,j,k)-expected_spacing)> &
+            64.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64,expected_spacing)) RETURN
+      END IF
+      END DO
+      top_interface=MIN(surface_pressure,center(state%grid%nz)- &
+        0.5_real64*(center(state%grid%nz-1)-center(state%grid%nz)))
+      tolerance=64.0_real64*EPSILON(1.0_real64)* &
+        MAX(1.0_real64,ABS(top_interface))
+      IF (ABS(state%grid%pressure_interface(i,j,state%grid%nz+1)- &
+          top_interface)>tolerance) RETURN
+    END DO; END DO
+    pressure_geometry_is_valid=.TRUE.
+  END FUNCTION pressure_geometry_is_valid
 
   PURE LOGICAL FUNCTION canonical_vertical_order_valid(pressure)
     TYPE(field3d), INTENT(IN) :: pressure
@@ -1077,14 +1329,14 @@ CONTAINS
     IF (.NOT.water_storage_valid(state)) RETURN
     DO k=1,state%grid%nz; DO j=1,state%grid%ny; DO i=1,state%grid%nx
       IF (.NOT.state%above_ground(i,j,k)) THEN
-        expected=state%grid%pressure_mass_measure(i,j,k)
+        expected=0.0_real64
       ELSE IF (cell_is_usable(state%vapor%valid(i,j,k),state%vapor%quality(i,j,k), &
           state%vapor%source(i,j,k))) THEN
         total_water=represented_total_water(state,i,j,k)
         IF (.NOT.ieee_is_finite(total_water) .OR. total_water<0.0_real64) RETURN
         expected=state%grid%pressure_mass_measure(i,j,k)/(1.0_real64+total_water)
       ELSE
-        expected=state%grid%pressure_mass_measure(i,j,k)
+        RETURN
       END IF
       tolerance=2.0e-7_real64*MAX(expected,1.0_real64)
       IF (ABS(state%grid%dry_air_mass_measure(i,j,k)-expected)>tolerance) RETURN
@@ -1334,20 +1586,30 @@ CONTAINS
         left%grid_id/=right%grid_id) RETURN
     IF (.NOT.ALLOCATED(left%dx) .OR. .NOT.ALLOCATED(right%dx) .OR. &
         .NOT.ALLOCATED(left%dy) .OR. .NOT.ALLOCATED(right%dy) .OR. &
-        .NOT.ALLOCATED(left%dp) .OR. .NOT.ALLOCATED(right%dp) .OR. &
+        .NOT.ALLOCATED(left%pressure_interface) .OR. &
+        .NOT.ALLOCATED(right%pressure_interface) .OR. &
+        .NOT.ALLOCATED(left%cell_dp) .OR. .NOT.ALLOCATED(right%cell_dp) .OR. &
+        .NOT.ALLOCATED(left%level_spacing_dp) .OR. &
+        .NOT.ALLOCATED(right%level_spacing_dp) .OR. &
         .NOT.ALLOCATED(left%pressure_mass_measure) .OR. &
         .NOT.ALLOCATED(right%pressure_mass_measure) .OR. &
         .NOT.ALLOCATED(left%dry_air_mass_measure) .OR. &
         .NOT.ALLOCATED(right%dry_air_mass_measure)) RETURN
     IF (ANY(SHAPE(left%dx)/=SHAPE(right%dx)) .OR. &
         ANY(SHAPE(left%dy)/=SHAPE(right%dy)) .OR. &
-        ANY(SHAPE(left%dp)/=SHAPE(right%dp)) .OR. &
+        ANY(SHAPE(left%pressure_interface)/=SHAPE(right%pressure_interface)) .OR. &
+        ANY(SHAPE(left%cell_dp)/=SHAPE(right%cell_dp)) .OR. &
+        ANY(SHAPE(left%level_spacing_dp)/=SHAPE(right%level_spacing_dp)) .OR. &
         ANY(SHAPE(left%pressure_mass_measure)/= &
             SHAPE(right%pressure_mass_measure)) .OR. &
         ANY(SHAPE(left%dry_air_mass_measure)/=SHAPE(right%dry_air_mass_measure))) RETURN
     states_equal_grid=states_equal_real64(left%dx,right%dx,SIZE(left%dx)) .AND. &
       states_equal_real64(left%dy,right%dy,SIZE(left%dy)) .AND. &
-      states_equal_real64(left%dp,right%dp,SIZE(left%dp)) .AND. &
+      states_equal_real64(left%pressure_interface,right%pressure_interface, &
+                          SIZE(left%pressure_interface)) .AND. &
+      states_equal_real64(left%cell_dp,right%cell_dp,SIZE(left%cell_dp)) .AND. &
+      states_equal_real64(left%level_spacing_dp,right%level_spacing_dp, &
+                          SIZE(left%level_spacing_dp)) .AND. &
       states_equal_real64(left%pressure_mass_measure,right%pressure_mass_measure, &
                           SIZE(left%pressure_mass_measure))
     IF (states_equal_grid .AND. .NOT.candidate_scope) &

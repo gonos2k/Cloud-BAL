@@ -41,6 +41,9 @@ PROGRAM real_shadow_driver
   WRITE(*,'(A,I0,A,I0,A,I0,A,I0)') 'pipeline_status=',result%status, &
     ',reason=',result%reason_code,',column=',result%column%status, &
     ',balance=',result%balance%status
+  WRITE(*,'(A,I0,A,ES24.16)') 'transport_required_substeps=', &
+    result%column%numerical%transport_required_substeps,',flux_ledger_error=', &
+    result%column%numerical%ledger_error
   IF (result%column%status/=STATUS_OK .OR. &
       (result%balance%numerical%solver_reason/=SOLVER_CONVERGED .AND. &
        result%balance%numerical%solver_reason/=SOLVER_NOT_RUN)) &

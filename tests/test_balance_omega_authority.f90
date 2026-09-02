@@ -41,9 +41,6 @@ CONTAINS
     IF (status/=STATUS_OK) ERROR STOP 'state initialization failed'
     state%grid%dx=2000.0_real64
     state%grid%dy=2000.0_real64
-    state%grid%dp=10000.0_real64
-    state%grid%pressure_mass_measure=SPREAD(state%grid%dx*state%grid%dy,3,nz)* &
-      state%grid%dp/9.80665_real64
     DO k=1,nz; DO j=1,ny; DO i=1,nx
       state%pressure%value(i,j,k)=REAL(95000-15000*(k-1),real32)
       state%temperature%value(i,j,k)=280.0_real32
@@ -75,8 +72,14 @@ CONTAINS
     state%omega_bottom_boundary%valid=.TRUE.
     state%omega_top_boundary%quality=0_int32
     state%omega_bottom_boundary%quality=0_int32
-    state%omega_top_boundary%source=SOURCE_BACKGROUND_MODEL
-    state%omega_bottom_boundary%source=SOURCE_BACKGROUND_MODEL
+    state%omega_top_boundary%source=SOURCE_BOUNDARY_CONDITION
+    state%omega_bottom_boundary%source=SOURCE_BOUNDARY_CONDITION
+    state%surface_pressure%value=100000.0_real32
+    state%surface_pressure%valid=.TRUE.
+    state%surface_pressure%quality=0_int32
+    state%surface_pressure%source=SOURCE_BACKGROUND_MODEL
+    CALL configure_pressure_geometry(state,status)
+    IF (status/=STATUS_OK) ERROR STOP 'pressure geometry initialization failed'
     CALL refresh_dry_air_mass_measure(state,status)
     IF (status/=STATUS_OK) ERROR STOP 'mass initialization failed'
   END SUBROUTINE make_state

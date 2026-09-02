@@ -17,15 +17,17 @@ Every valid-time/product comparison is a three-file transaction:
 | Manifest entry | Required evidence label | Required origin |
 | --- | --- | --- |
 | `original` | `REAL_OPERATIONAL_ORIGINAL` | `ARCHIVED_OPERATIONAL_KLAPS` |
-| `candidate` | `SHADOW_CANDIDATE` | `FULL_SHADOW_KLAPS_PRODUCT` |
+| `candidate` | `SHADOW_CANDIDATE` | `HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT` |
 | `operational_unchanged` | `OPERATIONAL_UNCHANGED` | `LIVE_OPERATIONAL_KLAPS_UNCHANGED` |
 
 The archived and live operational inputs must be independent files whose
 checksum-bound snapshots have the same SHA-256 digest.  The candidate must
 also be an independent file.  The
 archived product must be bound by an independently checksummed `SHA256SUMS`
-inventory, while the candidate must be bound by a Cloud-BAL generation
-`MANIFEST.json` and matching `COMMITTED` marker.  A SHADOW diagnostic
+inventory, while the candidate must be bound by a local diagnostic
+`MANIFEST.json` and matching `COMMITTED` marker.  This manifest records the
+hybrid construction transaction; it is not a full Cloud-BAL pipeline
+generation.  A SHADOW diagnostic
 containing only selected canonical fields is not a full candidate.
 
 ## Readiness gates
@@ -36,10 +38,10 @@ A manifest is `READY` only when every declared pair passes all gates:
    Symbolic links, hard links, shared inodes, parent traversal and any path
    component containing `bigfile` are forbidden.
 2. All three file SHA-256 values equal the values recorded in the comparison
-   manifest.  The original's `SHA256SUMS` and candidate generation manifest
+   manifest.  The original's `SHA256SUMS` and candidate local diagnostic manifest
    are separately checksummed and must bind the exact product path, digest
    and—for the candidate—byte size.
-   The candidate generation configuration must equal
+   The candidate diagnostic configuration must equal
    `radar-only-shadow-ifx-2026-v3`; substring matches are not accepted.
 3. Embedded product valid times equal the UTC manifest valid time.
 4. Complete field inventories and field shapes/dtypes are identical and the
@@ -100,12 +102,12 @@ Paths are relative to the explicit artifact root, not to the manifest.
       },
       "candidate": {
         "evidence_role": "SHADOW_CANDIDATE",
-        "origin": "FULL_SHADOW_KLAPS_PRODUCT",
+        "origin": "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT",
         "path": "shadow/MODL/KLFS/NE57/DAIO/2026081613/met_em.d01.2026-08-16_13:00:00.nc",
         "sha256": "<64 lowercase hexadecimal digits>",
         "wind_coordinate": "GRID_RELATIVE",
         "attestation": {
-          "format": "CLOUD_BAL_GENERATION",
+          "format": "LOCAL_DIAGNOSTIC_MANIFEST",
           "path": "shadow/MANIFEST.json",
           "sha256": "<SHA-256 of shadow/MANIFEST.json>"
         }
@@ -174,6 +176,7 @@ managed live path remains unchanged after its validated snapshot was taken.
 Archived operational LAPS/KLBG/met_em triads currently exist for 13, 14 and
 15 UTC.  The 12 UTC inventory lacks the archived operational LAPS product.
 The 12 UTC comparison must therefore remain `NOT_READY`; KLBG or met_em must
-not be substituted for the missing LAPS product.  No full SHADOW LAPS/WPS or
-met_em candidate has yet been published, so the existing canonical diagnostic
-figures cannot satisfy this contract.
+not be substituted for the missing LAPS product.  No full pipeline-generated
+SHADOW LAPS/WPS or met_em candidate has yet been published.  The existing
+hybrid diagnostic candidates and canonical diagnostic figures are not such a
+product and cannot satisfy this contract.

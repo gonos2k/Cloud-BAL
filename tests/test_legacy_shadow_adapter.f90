@@ -44,7 +44,11 @@ PROGRAM test_legacy_shadow_adapter
              ALL(candidate%above_ground(1,1,2:3)) .AND. &
              .NOT.candidate%u%valid(1,1,1) .AND. &
              candidate%pressure%value(1,1,1)==90000.0_real32 .AND. &
-             candidate%omega_bottom_boundary%value(1,1)==0.25_real32, &
+             candidate%omega_bottom_boundary%value(1,1)==0.25_real32 .AND. &
+             IAND(candidate%omega_top_boundary%quality(1,1), &
+                   QUALITY_BOUNDARY_INTERIOR_COPY)/=0_int32 .AND. &
+             IAND(candidate%omega_bottom_boundary%quality(1,1), &
+                   QUALITY_BOUNDARY_INTERIOR_COPY)/=0_int32, &
              'terrain mask or lower boundary was not normalized',failures)
   CALL check(same_legacy_bits(legacy,call_snapshot), &
              'terrain normalization changed caller arrays',failures)
@@ -251,6 +255,7 @@ CONTAINS
     TYPE(legacy_pre_qbal_arrays), INTENT(INOUT) :: input
     INTEGER, INTENT(IN) :: i,j,k
     input%above_ground(i,j,k)=.FALSE.
+    input%surface_pressure%value(i,j)=input%pressure%value(i,j,k)-50.0_real32
     CALL invalidate_real(input%pressure,i,j,k)
     CALL invalidate_real(input%temperature,i,j,k)
     CALL invalidate_real(input%specific_humidity,i,j,k)

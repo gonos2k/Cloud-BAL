@@ -45,8 +45,8 @@ negative pressure vertical velocity: `omega = -(w * pressure) / 8000`.
 
 No observations, model data, operational output, executables, object/module
 files, logs, benchmark products, wiki content, or wind Barnes/OpenMP release
-files are included. `graphify-out` contains only the AST-derived structural
-graph of this source snapshot. Raw radar ingest/remap and the complete KLAPS
+files are included. `graphify-out` contains the persistent source-and-document
+structural graph of this focused snapshot. Raw radar ingest/remap and the complete KLAPS
 build system are also outside this repository.
 
 The selected files preserve their upstream FSL public-domain notices. This is

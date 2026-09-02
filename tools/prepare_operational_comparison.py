@@ -3,7 +3,7 @@
 
 This tool never treats a Cloud-BAL canonical ``background`` field as an
 operational original.  A comparison is ready only when an independently
-archived operational product, a full SHADOW KLAPS product, and a separately
+archived operational product, a hybrid diagnostic candidate, and a separately
 snapshotted operational product satisfy the same explicit contract.
 """
 
@@ -36,7 +36,10 @@ REPORT_SCHEMA_VERSION = 1
 SHADOW_CONFIGURATION = "radar-only-shadow-ifx-2026-v3"
 ROLES = {
     "original": ("REAL_OPERATIONAL_ORIGINAL", "ARCHIVED_OPERATIONAL_KLAPS"),
-    "candidate": ("SHADOW_CANDIDATE", "FULL_SHADOW_KLAPS_PRODUCT"),
+    "candidate": (
+        "SHADOW_CANDIDATE",
+        "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT",
+    ),
     "operational_unchanged": (
         "OPERATIONAL_UNCHANGED",
         "LIVE_OPERATIONAL_KLAPS_UNCHANGED",
@@ -262,7 +265,9 @@ def read_attestation(
     if not isinstance(value, dict):
         raise ContractError(f"{context} attestation must be an object")
     require_exact_keys(value, {"format", "path", "sha256"}, f"{context} attestation")
-    expected_format = "SHA256SUMS" if key == "original" else "CLOUD_BAL_GENERATION"
+    expected_format = (
+        "SHA256SUMS" if key == "original" else "LOCAL_DIAGNOSTIC_MANIFEST"
+    )
     if value["format"] != expected_format:
         raise ContractError(f"{context} attestation format must be {expected_format}")
     expected_sha = value["sha256"]

@@ -158,7 +158,8 @@ the same relative speed.  The interface-throughput closure is
 
 ```text
 F_input = F_deposited + F_suspended + F_boundary
-        + F_terrain + F_observation_blocked + F_microphysical_loss.
+        + F_terrain + F_observation_blocked + F_no_echo_blocked
+        + F_microphysical_loss.
 ```
 
 The reconstruction step preserves the sum of bilinear weights at each

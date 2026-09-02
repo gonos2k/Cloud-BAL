@@ -19,7 +19,7 @@
 | 목표 구성요소 | 상태 | 현재 판정 |
 |---|---|---|
 | 현업 KLAPS 원본 격리·보존 | DONE | ANAL/MODL 및 현업 최종장은 입력 전용 |
-| radar hydrometeor 수송 | ENGINEERING | interface ledger는 닫히지만 no-echo·frame·storm motion은 미폐합 |
+| radar hydrometeor 수송 | ENGINEERING | no-echo 목적지 hard block과 interface ledger는 닫혔지만 frame·storm motion·과학적 민감도는 미폐합 |
 | 강수 loading 하강 `omega` 후보 | ENGINEERING | 실제자료에서 생성되나 독립 동역학 근거가 없어 적용 권한 0 |
 | 실제자료 `u/v/omega` balance | BLOCKED | real geometry에서 nonzero solver 실행 증거 없음 |
 | cloud-analysis 연직속도 target | BLOCKED | 실제 adapter에 cloud analysis가 없고 type-only 경험식은 금지 |
@@ -53,14 +53,15 @@
 | `main` 통합 exact HEAD 검증 | ENGINEERING | `origin/main`을 비파괴 merge한 통합 HEAD에서 개발 중; 전체 ifx·실자료·O0/O2·transaction 증거와 manifest `source_commit` 일치 후 DONE |
 | 값·valid·quality·source·시간·차원·단위의 단일 field 계약 | DONE | `cloud_bal_state`; 모든 physics가 공통 `cell_is_usable` 사용 |
 | pressure mass와 dry-air mass 분리 | DONE | 연속 연산자는 `pressure_mass_measure`, 수상체 질량은 `dry_air_mass_measure` 사용 |
-| `above_ground`의 독립 domain 권한 | BLOCKED | 현재 real reader가 `LW3/OM raw_valid`로 domain을 만들 수 있음; PSFC·pressure interface·지형/고도로 예상 domain을 먼저 만들고 OM/U/V/T/Qv를 그 안에서 요구해야 함 |
-| pressure interface와 surface-truncated cell | BLOCKED | 고정 50 hPa `dp`가 control-volume 두께와 center spacing을 겸함; `cell_dp`와 `level_spacing_dp`를 분리해야 함 |
+| `above_ground`의 독립 domain 권한 | DONE | OM과 무관하게 PSFC·pressure center·static terrain height의 교집합으로 구성; OM/U/V/T/Qv 결측은 전체 사례를 거부하고, PSFC-height 불일치가 두 층 이상을 절단하면 거부 |
+| pressure interface와 surface-truncated cell | DONE | `pressure_interface`, `cell_dp`, `level_spacing_dp`를 분리하고 PSFC 절단·center=PSFC·원자적 실패·독립 NetCDF 재계산 시험 통과 |
+| legacy `Dx/Dy` 단위 예외 | DONE | 정상 5 km는 m로 변환하고, 고정 legacy 파일의 `5000 + km attribute`는 numerical metre 예외로 명시; 진단 metadata에 adapter policy 저장 |
 | 수직축 `k=1 bottom`, 압력 단조감소 | DONE | ingest에서 한 방향만 허용; 역방향을 physics 내부에서 추측하지 않음 |
 | 결측/비유한 pressure, omega, wind, dBZ, phase의 산술 진입 차단 | DONE | canonical validation과 trajectory fail-closed 시험 |
 | 레이더 강수의 상대 낙하 flux 재구성과 interface ledger | ENGINEERING | interface별 경계/지형/관측차단 폐합은 구현; source 제거를 포함한 전역 질량수송이나 root-to-sink 보존을 뜻하지 않음 |
 | 강수 trajectory 입력 계약 | DONE | 공개 kernel 입구에서 config·계산량·ledger tolerance·shape·finite·범위·dp·수직순서·domain·phase/species 일관성을 한 번 검사하고 별도 work 배열의 출력/ledger도 재검사한 뒤에만 반환 배열에 commit; 현재 index-space 수송은 균일 dx/dy만 허용하고 비균일 격자는 물리좌표 수송 구현 전 fail-closed |
-| radar no-echo의 수송 경계 의미 | BLOCKED | 실자료 adapter는 no-echo와 raw missing을 구분하지만 trajectory의 차단 경계로 아직 전달하지 않음; 관측 부재인지 명시적 무강수인지 정책 고정 전 과학 승격 금지 |
-| top/bottom `omega`의 물리 경계 계약 | BLOCKED | interior `omega` 복사값은 진단 fallback일 뿐; 실제 경계와 source/quality를 저장하거나 `physical_continuity_assessed=0`으로 fail-closed 해야 함 |
+| radar no-echo의 수송 경계 의미 | ENGINEERING | 필수 `no_echo` mask와 공통 predicate로 echo=관측차단, no-echo 목적지=별도 hard-block, missing 목적지=deposition 허용을 구현·시험; 경로 장벽이 아니며 beam sensitivity 기반 과학 검증 전 승격 금지 |
+| top/bottom `omega`의 물리 경계 계약 | ENGINEERING | interior 복사는 copied-only writer가 valid/quality/source와 함께 진단에 저장하고 `physical_continuity_assessed=0`; public operator와 correction도 별도 `SOURCE_BOUNDARY_CONDITION`이 양쪽에 없으면 nonzero solve를 거부하며 실제 terrain/top flux는 아직 없음 |
 | 총수분·잠열 동시 보존 | ENGINEERING | canonical bounded adjustment 시험 통과; legacy LAPSPREP 전체 transaction 연결은 남음 |
 | focused source의 dormant radar evaporation/cloud bogus-w OFF | DONE | Cloud-BAL 복사본은 상수-false guard, literal `.false.` cloud call, `w_3d=0` 초기화와 시험으로 잠금 |
 | 현업 linked derived-cloud의 radar evaporation/cloud bogus-w OFF | BLOCKED | 현재 namelist는 evaporation 0이지만 원본 source·binary에 호출이 남고 cloud bogus-w는 활성; `audit_legacy_deriv_safety.py`가 source/binary/ifx provenance를 모두 통과할 때까지 BLOCKED |
@@ -173,8 +174,9 @@ speed observation operator가 한 계약으로 준비된 뒤 다시 검토한다
 7. clean exact-head manifest, 필수 CI와 보호 브랜치를 적용한다.
 8. production의 cloud bogus-w 및 30--60 km legacy qbal 경로를 canonical
    transaction으로 한 번에 교체한다.
-9. radar no-echo 정책, 비균일 격자 physical-coordinate trajectory, 전역
-   water/enthalpy source-to-sink ledger를 하나의 column-physics 계약으로 닫는다.
+9. 구현된 radar no-echo 목적지 hard-block을 beam sensitivity로 검증하고, 비균일 격자
+   physical-coordinate trajectory와 전역 water/enthalpy source-to-sink ledger를
+   하나의 column-physics 계약으로 닫는다.
 10. comparison candidate가 검증된 generation의 선언 제품임을 transaction,
     input/build receipt와 함께 독립 재검증한다.
 

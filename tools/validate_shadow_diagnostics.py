@@ -44,6 +44,9 @@ FLOAT_UNITS = {
 MASKS = (
     "above_ground",
     "radar_valid",
+    "radar_coverage",
+    "radar_no_echo",
+    "radar_missing",
     "omega_target_valid",
     "omega_target_authority",
     "candidate_balance_support",
@@ -54,6 +57,16 @@ MASKS = (
     "hydro_support",
 )
 TARGET_METADATA = ("omega_target_quality", "omega_target_source")
+BOUNDARY_METADATA = (
+    "omega_top_boundary_quality",
+    "omega_top_boundary_source",
+    "omega_bottom_boundary_quality",
+    "omega_bottom_boundary_source",
+)
+BOUNDARY_MASKS = (
+    "omega_top_boundary_valid",
+    "omega_bottom_boundary_valid",
+)
 HYDROMETEORS = ("cloud_water", "cloud_ice", "rain", "snow", "graupel")
 STATUS_DEGRADED = 10
 STATUS_OK = 20
@@ -75,15 +88,17 @@ SOURCE_CONVENTIONAL_OBS = 1 << 1
 SOURCE_RADAR_VRAD = 1 << 4
 SOURCE_ANALYZED_WIND = 1 << 6
 SOURCE_DYNAMIC_TARGET = 1 << 10
-SOURCE_KNOWN_BITS = (1 << 11) - 1
+SOURCE_BOUNDARY_CONDITION = 1 << 11
+SOURCE_KNOWN_BITS = (1 << 12) - 1
 SOURCE_DYNAMIC_EVIDENCE_BITS = (
     SOURCE_CONVENTIONAL_OBS | SOURCE_RADAR_VRAD | SOURCE_ANALYZED_WIND
 )
-QUALITY_KNOWN_BITS = (1 << 9) - 1
+QUALITY_BOUNDARY_INTERIOR_COPY = 1 << 9
+QUALITY_KNOWN_BITS = (1 << 10) - 1
 QUALITY_EXCLUDED_BITS = (1 << 0) | (1 << 1) | (1 << 2)
 QUALITY_DYNAMIC_TARGET_EXCLUDED_BITS = (
     QUALITY_EXCLUDED_BITS | (1 << 4) | (1 << 5) |
-    (1 << 6) | (1 << 7) | (1 << 8)
+    (1 << 6) | (1 << 7) | (1 << 8) | QUALITY_BOUNDARY_INTERIOR_COPY
 )
 EXPECTED_FLOAT_ATTRIBUTES = {
     "minimum_usable_dbz": 0.0,
@@ -118,7 +133,6 @@ EXPECTED_FLOAT_ATTRIBUTES = {
     "geostrophic_absolute_tolerance": 1.0e-3,
     "grid_dx_m": 5_000.0,
     "grid_dy_m": 5_000.0,
-    "grid_dp_pa": 5_000.0,
 }
 
 
@@ -222,25 +236,53 @@ def continuity_increment(
     active: np.ndarray,
     dx: float,
     dy: float,
-    dp: float,
+    pressure: np.ndarray,
+    pressure_interface: np.ndarray,
+    cell_dp: np.ndarray,
 ) -> np.ndarray:
-    """Independent finite-volume D*S for this uniform real-data contract."""
+    """Independent finite-volume D*S using the persisted pressure geometry."""
     residual = np.zeros(du.shape, dtype=np.float64)
+    volume = dx * dy * cell_dp
 
     xface = active[:, :, :-1] & active[:, :, 1:]
-    xflux = np.where(xface, 0.5 * (du[:, :, :-1] + du[:, :, 1:]) / dx, 0.0)
-    residual[:, :, :-1] += xflux
-    residual[:, :, 1:] -= xflux
+    xarea = dy * 0.5 * (cell_dp[:, :, :-1] + cell_dp[:, :, 1:])
+    xflux = np.where(xface, xarea * 0.5 * (du[:, :, :-1] + du[:, :, 1:]), 0.0)
+    residual[:, :, :-1] += np.divide(
+        xflux, volume[:, :, :-1], out=np.zeros_like(xflux), where=xface
+    )
+    residual[:, :, 1:] -= np.divide(
+        xflux, volume[:, :, 1:], out=np.zeros_like(xflux), where=xface
+    )
 
     yface = active[:, :-1, :] & active[:, 1:, :]
-    yflux = np.where(yface, 0.5 * (dv[:, :-1, :] + dv[:, 1:, :]) / dy, 0.0)
-    residual[:, :-1, :] += yflux
-    residual[:, 1:, :] -= yflux
+    yarea = dx * 0.5 * (cell_dp[:, :-1, :] + cell_dp[:, 1:, :])
+    yflux = np.where(yface, yarea * 0.5 * (dv[:, :-1, :] + dv[:, 1:, :]), 0.0)
+    residual[:, :-1, :] += np.divide(
+        yflux, volume[:, :-1, :], out=np.zeros_like(yflux), where=yface
+    )
+    residual[:, 1:, :] -= np.divide(
+        yflux, volume[:, 1:, :], out=np.zeros_like(yflux), where=yface
+    )
 
     pface = active[:-1, :, :] & active[1:, :, :]
-    pflux = np.where(pface, 0.5 * (domega[:-1, :, :] + domega[1:, :, :]) / dp, 0.0)
-    residual[:-1, :, :] -= pflux
-    residual[1:, :, :] += pflux
+    denominator = pressure[:-1] - pressure[1:]
+    left_weight = (
+        pressure_interface[1:-1] - pressure[1:, None, None]
+    ) / denominator[:, None, None]
+    pflux = np.where(
+        pface,
+        dx * dy * (
+            left_weight * domega[:-1, :, :]
+            + (1.0 - left_weight) * domega[1:, :, :]
+        ),
+        0.0,
+    )
+    residual[:-1, :, :] -= np.divide(
+        pflux, volume[:-1, :, :], out=np.zeros_like(pflux), where=pface
+    )
+    residual[1:, :, :] += np.divide(
+        pflux, volume[1:, :, :], out=np.zeros_like(pflux), where=pface
+    )
     residual[~active] = 0.0
     return residual
 
@@ -249,44 +291,93 @@ def continuity_state(
     u: np.ndarray,
     v: np.ndarray,
     omega: np.ndarray,
-    boundary_omega: np.ndarray,
+    omega_top_boundary: np.ndarray,
+    omega_bottom_boundary: np.ndarray,
     active: np.ndarray,
     above_ground: np.ndarray,
     dx: float,
     dy: float,
-    dp: float,
+    pressure: np.ndarray,
+    pressure_interface: np.ndarray,
+    cell_dp: np.ndarray,
 ) -> np.ndarray:
-    """Independent full-state finite-volume residual for the uniform real grid."""
+    """Independent full-state finite-volume residual from persisted geometry."""
     residual = np.zeros(u.shape, dtype=np.float64)
+    volume = dx * dy * cell_dp
 
     xface = above_ground[:, :, :-1] & above_ground[:, :, 1:]
-    xflux = np.where(xface, 0.5 * (u[:, :, :-1] + u[:, :, 1:]) / dx, 0.0)
-    residual[:, :, :-1] += np.where(active[:, :, :-1], xflux, 0.0)
-    residual[:, :, 1:] -= np.where(active[:, :, 1:], xflux, 0.0)
+    xarea = dy * 0.5 * (cell_dp[:, :, :-1] + cell_dp[:, :, 1:])
+    xflux = np.where(xface, xarea * 0.5 * (u[:, :, :-1] + u[:, :, 1:]), 0.0)
+    residual[:, :, :-1] += np.divide(
+        xflux,
+        volume[:, :, :-1],
+        out=np.zeros_like(xflux),
+        where=active[:, :, :-1],
+    )
+    residual[:, :, 1:] -= np.divide(
+        xflux,
+        volume[:, :, 1:],
+        out=np.zeros_like(xflux),
+        where=active[:, :, 1:],
+    )
     residual[:, :, 0] -= np.where(active[:, :, 0], u[:, :, 0] / dx, 0.0)
     residual[:, :, -1] += np.where(active[:, :, -1], u[:, :, -1] / dx, 0.0)
 
     yface = above_ground[:, :-1, :] & above_ground[:, 1:, :]
-    yflux = np.where(yface, 0.5 * (v[:, :-1, :] + v[:, 1:, :]) / dy, 0.0)
-    residual[:, :-1, :] += np.where(active[:, :-1, :], yflux, 0.0)
-    residual[:, 1:, :] -= np.where(active[:, 1:, :], yflux, 0.0)
+    yarea = dx * 0.5 * (cell_dp[:, :-1, :] + cell_dp[:, 1:, :])
+    yflux = np.where(yface, yarea * 0.5 * (v[:, :-1, :] + v[:, 1:, :]), 0.0)
+    residual[:, :-1, :] += np.divide(
+        yflux,
+        volume[:, :-1, :],
+        out=np.zeros_like(yflux),
+        where=active[:, :-1, :],
+    )
+    residual[:, 1:, :] -= np.divide(
+        yflux,
+        volume[:, 1:, :],
+        out=np.zeros_like(yflux),
+        where=active[:, 1:, :],
+    )
     residual[:, 0, :] -= np.where(active[:, 0, :], v[:, 0, :] / dy, 0.0)
     residual[:, -1, :] += np.where(active[:, -1, :], v[:, -1, :] / dy, 0.0)
 
     pface = above_ground[:-1, :, :] & above_ground[1:, :, :]
+    denominator = pressure[:-1] - pressure[1:]
+    left_weight = (
+        pressure_interface[1:-1] - pressure[1:, None, None]
+    ) / denominator[:, None, None]
     pflux = np.where(
-        pface, 0.5 * (omega[:-1, :, :] + omega[1:, :, :]) / dp, 0.0
+        pface,
+        dx * dy * (
+            left_weight * omega[:-1, :, :]
+            + (1.0 - left_weight) * omega[1:, :, :]
+        ),
+        0.0,
     )
-    residual[:-1, :, :] -= np.where(active[:-1, :, :], pflux, 0.0)
-    residual[1:, :, :] += np.where(active[1:, :, :], pflux, 0.0)
+    residual[:-1, :, :] -= np.divide(
+        pflux,
+        volume[:-1, :, :],
+        out=np.zeros_like(pflux),
+        where=active[:-1, :, :],
+    )
+    residual[1:, :, :] += np.divide(
+        pflux,
+        volume[1:, :, :],
+        out=np.zeros_like(pflux),
+        where=active[1:, :, :],
+    )
 
     for j, i in np.argwhere(np.any(above_ground, axis=0)):
         levels = np.flatnonzero(above_ground[:, j, i])
         bottom, top = int(levels[0]), int(levels[-1])
         if active[bottom, j, i]:
-            residual[bottom, j, i] += boundary_omega[bottom, j, i] / dp
+            residual[bottom, j, i] += (
+                dx * dy * omega_bottom_boundary[j, i] / volume[bottom, j, i]
+            )
         if active[top, j, i]:
-            residual[top, j, i] -= boundary_omega[top, j, i] / dp
+            residual[top, j, i] -= (
+                dx * dy * omega_top_boundary[j, i] / volume[top, j, i]
+            )
     residual[~active] = 0.0
     return residual
 
@@ -301,10 +392,11 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
     with netCDF4.Dataset(path, "r") as dataset:
         require(
             {name: len(dim) for name, dim in dataset.dimensions.items()}
-            == {"x": 235, "y": 283, "z": 22},
-            "dimensions must be x=235,y=283,z=22",
+            == {"x": 235, "y": 283, "z": 22, "z_interface": 23, "z_spacing": 21},
+            "pressure geometry dimensions",
         )
         require(getattr(dataset, "contract", "") == "real_radar_only_shadow_v3", "contract")
+        require(int(getattr(dataset, "diagnostic_schema_version", -1)) == 5, "diagnostic schema")
         require(
             getattr(dataset, "evidence_class", "")
             == "REAL_RADAR_ONLY_SHADOW_PROPOSAL",
@@ -333,12 +425,39 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             == "NOT_AVAILABLE_ZERO_TRANSLATION_ASSUMPTION",
             "storm-motion provenance",
         )
+        require(
+            getattr(dataset, "radar_no_echo_transport_policy", "")
+            == "DESTINATION_HARD_BLOCK_SEPARATE_LEDGER",
+            "no-echo transport policy",
+        )
+        require(getattr(dataset, "radar_valid_semantics", "") == "ECHO_ONLY", "radar valid semantics")
+        require(
+            getattr(dataset, "pressure_interface_semantics", "")
+            == "SURFACE_CLIPPED_CONTROL_VOLUME_BOUNDARY",
+            "pressure interface semantics",
+        )
+        require(
+            getattr(dataset, "above_ground_mask_provenance", "")
+            == "PSFC_PRESSURE_CENTER_AND_STATIC_TERRAIN_HEIGHT",
+            "above-ground mask provenance",
+        )
+        require(
+            getattr(dataset, "grid_spacing_adapter_policy", "")
+            == "KM_TO_M_OR_PINNED_LEGACY_NUMERIC_METERS",
+            "grid-spacing adapter policy",
+        )
+        require(
+            getattr(dataset, "omega_boundary_provenance", "")
+            == "COPIED_INTERIOR_DIAGNOSTIC_ONLY",
+            "omega boundary provenance",
+        )
         for attribute, expected in (
             ("promotion_eligible", 0),
             ("operational_state_changed", 0),
             ("science_assessed", 0),
             ("cloud_analysis_present", 0),
             ("radar_los_used", 0),
+            ("physical_continuity_assessed", 0),
             ("column_status", STATUS_OK),
             ("maximum_solver_iterations", 800),
             ("maximum_transport_substeps", 64),
@@ -359,14 +478,25 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         if not accepted:
             require(int(getattr(dataset, "pipeline_reason", -1)) == REASON_GATE, "rejection reason")
 
-        required = set(FLOAT_UNITS) | set(MASKS) | set(TARGET_METADATA) | {
-            "pressure", "latitude", "longitude"
+        required = set(FLOAT_UNITS) | set(MASKS) | set(TARGET_METADATA) | \
+            set(BOUNDARY_METADATA) | set(BOUNDARY_MASKS) | {
+            "pressure", "latitude", "longitude", "pressure_interface", "cell_dp",
+            "level_spacing_dp", "pressure_mass_measure", "dry_air_mass_measure",
+            "surface_pressure", "omega_top_boundary", "omega_bottom_boundary",
         }
         require(required <= set(dataset.variables), "required variables")
         for name, dimensions, unit in (
             ("pressure", ("z",), "Pa"),
             ("latitude", ("y", "x"), "degree_north"),
             ("longitude", ("y", "x"), "degree_east"),
+            ("pressure_interface", ("z_interface", "y", "x"), "Pa"),
+            ("cell_dp", ("z", "y", "x"), "Pa"),
+            ("level_spacing_dp", ("z_spacing", "y", "x"), "Pa"),
+            ("pressure_mass_measure", ("z", "y", "x"), "kg"),
+            ("dry_air_mass_measure", ("z", "y", "x"), "kg dryair"),
+            ("surface_pressure", ("y", "x"), "Pa"),
+            ("omega_top_boundary", ("y", "x"), "Pa s-1"),
+            ("omega_bottom_boundary", ("y", "x"), "Pa s-1"),
         ):
             if name not in dataset.variables:
                 continue
@@ -393,9 +523,72 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             require(variable.dimensions == ("z", "y", "x"), f"{name} dimensions")
             require(getattr(variable, "units", "") == "1", f"{name} units")
             require(is_signed_int32(variable.dtype), f"{name} type")
+        for name in BOUNDARY_METADATA:
+            if name not in dataset.variables:
+                continue
+            variable = dataset.variables[name]
+            require(variable.dimensions == ("y", "x"), f"{name} dimensions")
+            require(getattr(variable, "units", "") == "1", f"{name} units")
+            require(is_signed_int32(variable.dtype), f"{name} type")
+        for name in BOUNDARY_MASKS:
+            if name not in dataset.variables:
+                continue
+            variable = dataset.variables[name]
+            require(variable.dimensions == ("y", "x"), f"{name} dimensions")
+            require(getattr(variable, "units", "") == "1", f"{name} units")
+            require(is_signed_int32(variable.dtype), f"{name} type")
 
         pressure = values(dataset["pressure"]).astype(np.float64)
         require(np.all(np.isfinite(pressure)) and np.all(np.diff(pressure) < 0.0), "pressure order")
+        pressure_interface = values(dataset["pressure_interface"]).astype(np.float64)
+        cell_dp = values(dataset["cell_dp"]).astype(np.float64)
+        level_spacing_dp = values(dataset["level_spacing_dp"]).astype(np.float64)
+        pressure_mass = values(dataset["pressure_mass_measure"]).astype(np.float64)
+        dry_air_mass = values(dataset["dry_air_mass_measure"]).astype(np.float64)
+        surface_pressure = values(dataset["surface_pressure"]).astype(np.float64)
+        omega_top_boundary = values(dataset["omega_top_boundary"]).astype(np.float64)
+        omega_bottom_boundary = values(dataset["omega_bottom_boundary"]).astype(np.float64)
+        boundary_metadata = {
+            name: values(dataset[name]).astype(np.int64) for name in BOUNDARY_METADATA
+        }
+        boundary_masks = {
+            name: values(dataset[name]).astype(np.int64) for name in BOUNDARY_MASKS
+        }
+        require(np.all(np.isfinite(pressure_interface)) and np.all(pressure_interface > 0.0), "pressure interface")
+        require(np.all(np.isfinite(cell_dp)) and np.all(cell_dp >= 0.0), "cell dp")
+        require(np.all(np.isfinite(level_spacing_dp)) and np.all(level_spacing_dp > 0.0), "level spacing")
+        require(np.all(np.isfinite(pressure_mass)) and np.all(pressure_mass >= 0.0), "pressure mass")
+        require(np.all(np.isfinite(dry_air_mass)) and np.all(dry_air_mass >= 0.0), "dry-air mass")
+        require(np.all(np.isfinite(surface_pressure)) and np.all(surface_pressure > 0.0), "surface pressure")
+        require(np.all(np.isfinite(omega_top_boundary)), "top omega boundary")
+        require(np.all(np.isfinite(omega_bottom_boundary)), "bottom omega boundary")
+        for name, mask in boundary_masks.items():
+            require(np.all((mask == 0) | (mask == 1)), f"{name} binary")
+            require(np.all(mask == 1), f"{name} complete coverage")
+        for name in ("omega_top_boundary_quality", "omega_bottom_boundary_quality"):
+            require(
+                np.all((boundary_metadata[name] & ~QUALITY_KNOWN_BITS) == 0),
+                f"{name} known bits",
+            )
+            require(
+                np.all(
+                    (boundary_metadata[name] & QUALITY_BOUNDARY_INTERIOR_COPY) != 0
+                ),
+                f"{name} copied-interior provenance",
+            )
+        for name in ("omega_top_boundary_source", "omega_bottom_boundary_source"):
+            require(
+                np.all((boundary_metadata[name] & ~SOURCE_KNOWN_BITS) == 0),
+                f"{name} known bits",
+            )
+            require(
+                np.all((boundary_metadata[name] & SOURCE_ANALYZED_WIND) != 0),
+                f"{name} analyzed-wind provenance",
+            )
+            require(
+                np.all((boundary_metadata[name] & SOURCE_BOUNDARY_CONDITION) == 0),
+                f"{name} must remain diagnostic-only",
+            )
         latitude = values(dataset["latitude"]).astype(np.float64)
         longitude = values(dataset["longitude"]).astype(np.float64)
         require(
@@ -425,6 +618,87 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
 
         above = masks["above_ground"]
         radar = masks["radar_valid"]
+        radar_coverage = masks["radar_coverage"]
+        radar_no_echo = masks["radar_no_echo"]
+        radar_missing = masks["radar_missing"]
+        require(np.array_equal(radar_coverage, radar | radar_no_echo), "radar coverage partition")
+        require(np.all(~radar_no_echo | ~radar), "echo/no-echo disjointness")
+        require(np.all(~radar_coverage | ~radar_missing), "coverage/missing disjointness")
+        require(np.all(~radar_no_echo | radar_coverage), "no-echo coverage subset")
+        require(
+            np.all(~radar_no_echo | (fields["radar_dbz"] == -10.0)),
+            "no-echo marker identity",
+        )
+        require(
+            np.all(~radar_missing | (fields["radar_dbz"] == 0.0)),
+            "missing-radar marker identity",
+        )
+        require(
+            np.array_equal(above, radar | radar_no_echo | radar_missing),
+            "above-ground radar coverage/missing partition",
+        )
+        pressure_domain = pressure[:, None, None] <= surface_pressure[None, :, :]
+        require(
+            np.all(np.any(pressure_domain, axis=0)),
+            "at least one pressure-domain level per column",
+        )
+        require(np.all(np.any(above, axis=0)), "at least one active level per column")
+        require(
+            np.all(~above[:-1] | above[1:]),
+            "vertically contiguous above-ground domain",
+        )
+        pressure_bottom = np.argmax(pressure_domain, axis=0)
+        active_bottom = np.argmax(above, axis=0)
+        require(
+            np.all((active_bottom >= pressure_bottom) &
+                   (active_bottom - pressure_bottom <= 1)),
+            "pressure/terrain domain alignment",
+        )
+        expected_interface = np.empty_like(pressure_interface)
+        expected_interface[0] = surface_pressure
+        for interface_index in range(1, pressure.size):
+            midpoint = 0.5 * (
+                pressure[interface_index - 1] + pressure[interface_index]
+            )
+            expected_interface[interface_index] = np.where(
+                interface_index <= active_bottom,
+                surface_pressure,
+                midpoint,
+            )
+        expected_interface[-1] = np.minimum(
+            surface_pressure,
+            pressure[-1] - 0.5 * (pressure[-2] - pressure[-1]),
+        )
+        require(
+            np.allclose(
+                pressure_interface, expected_interface, rtol=0.0, atol=1.0e-10
+            ),
+            "canonical pressure-interface construction",
+        )
+        expected_cell_dp = pressure_interface[:-1] - pressure_interface[1:]
+        require(
+            np.allclose(pressure_interface[0], surface_pressure, rtol=0.0, atol=1.0e-10),
+            "surface pressure/interface identity",
+        )
+        require(
+            np.allclose(
+                level_spacing_dp,
+                (pressure[:-1] - pressure[1:])[:, None, None],
+                rtol=0.0,
+                atol=1.0e-10,
+            ),
+            "pressure center/level spacing identity",
+        )
+        require(np.allclose(cell_dp, np.where(above, expected_cell_dp, 0.0), rtol=0.0, atol=1.0e-10), "cell dp/interface identity")
+        expected_pressure_mass = (
+            float(getattr(dataset, "grid_dx_m"))
+            * float(getattr(dataset, "grid_dy_m"))
+            * cell_dp
+            / 9.80665
+        )
+        require(np.allclose(pressure_mass, expected_pressure_mass, rtol=1.0e-12, atol=1.0e-6), "pressure mass identity")
+        require(np.all(dry_air_mass <= pressure_mass + 1.0e-8), "dry-air mass bound")
+        require(np.all(cell_dp[~above] == 0.0) and np.all(cell_dp[above] > 0.0), "domain cell thickness")
         require(np.all(~radar | above), "radar cells above ground")
         quality_known = (target_quality >= 0) & (
             (target_quality & ~QUALITY_KNOWN_BITS) == 0
@@ -495,6 +769,10 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             require(np.all(after[above] >= 0.0), f"candidate {species} nonnegative")
         require(np.array_equal(balance_changed, masks["balance_changed"]), "balance changed mask")
         require(np.all(~column_changed | masks["column_changed"]), "column changed mask")
+        require(
+            np.all(~radar_no_echo | ~column_changed),
+            "no-echo cells must not receive hydrometeor changes",
+        )
         column_change_evidence = (
             column_changed
             | masks["omega_target_valid"]
@@ -656,23 +934,29 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             fields["background_u"].astype(np.float64),
             fields["background_v"].astype(np.float64),
             fields["background_omega"].astype(np.float64),
-            fields["background_omega"].astype(np.float64),
+            omega_top_boundary,
+            omega_bottom_boundary,
             masks["candidate_balance_support"],
             above,
             float(getattr(dataset, "grid_dx_m")),
             float(getattr(dataset, "grid_dy_m")),
-            float(getattr(dataset, "grid_dp_pa")),
+            pressure,
+            pressure_interface,
+            cell_dp,
         )
         independent_after = continuity_state(
             fields["candidate_u"].astype(np.float64),
             fields["candidate_v"].astype(np.float64),
             fields["candidate_omega"].astype(np.float64),
-            fields["background_omega"].astype(np.float64),
+            omega_top_boundary,
+            omega_bottom_boundary,
             masks["candidate_balance_support"],
             above,
             float(getattr(dataset, "grid_dx_m")),
             float(getattr(dataset, "grid_dy_m")),
-            float(getattr(dataset, "grid_dp_pa")),
+            pressure,
+            pressure_interface,
+            cell_dp,
         )
         state_residual_error = max(
             float(np.max(np.abs(independent_before - residual_before))),
@@ -687,7 +971,9 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             masks["candidate_balance_support"],
             float(getattr(dataset, "grid_dx_m")),
             float(getattr(dataset, "grid_dy_m")),
-            float(getattr(dataset, "grid_dp_pa")),
+            pressure,
+            pressure_interface,
+            cell_dp,
         )
         active_error = np.abs(independent_increment - residual_increment)[
             masks["candidate_balance_support"]
@@ -719,7 +1005,9 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             masks["candidate_balance_support"],
             float(getattr(dataset, "grid_dx_m")),
             float(getattr(dataset, "grid_dy_m")),
-            float(getattr(dataset, "grid_dp_pa")),
+            pressure,
+            pressure_interface,
+            cell_dp,
         )
         proposed_rms, proposed_max = norms(proposed_increment)
         for name, actual in (
@@ -776,25 +1064,35 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             expected_failures |= GATE_OUTSIDE_SUPPORT
         require(expected_failures == acceptance_failures, "acceptance failure bitset")
         require(accepted == (expected_failures == 0), "candidate decision")
-        flux_input = float(getattr(dataset, "flux_input"))
-        flux_accounted = sum(
-            float(getattr(dataset, name))
-            for name in (
+        flux_names = (
                 "flux_deposited",
                 "flux_suspended",
                 "flux_boundary_exit",
                 "flux_terrain_intercept",
                 "flux_observation_blocked",
+                "flux_no_echo_blocked",
                 "flux_microphysical_loss",
-            )
         )
+        flux_input = float(getattr(dataset, "flux_input"))
+        flux_terms = np.asarray(
+            [float(getattr(dataset, name)) for name in flux_names], dtype=np.float64
+        )
+        reported_ledger_error = float(getattr(dataset, "flux_ledger_error"))
+        require(
+            np.isfinite(flux_input) and flux_input >= 0.0
+            and np.all(np.isfinite(flux_terms)) and np.all(flux_terms >= 0.0)
+            and np.isfinite(reported_ledger_error) and reported_ledger_error >= 0.0,
+            "flux ledger finite nonnegative terms",
+        )
+        flux_accounted = float(np.sum(flux_terms))
         ledger_error = abs(flux_input - flux_accounted)
         ledger_limit = float(getattr(dataset, "ledger_absolute_tolerance")) + float(
             getattr(dataset, "ledger_relative_tolerance")
-        ) * flux_input
+        ) * max(abs(flux_input), abs(flux_accounted))
         require(ledger_error <= ledger_limit, "independent flux ledger gate")
         require(
-            float(getattr(dataset, "flux_ledger_error")) <= ledger_limit,
+            np.isclose(reported_ledger_error, ledger_error, rtol=1.0e-12, atol=1.0e-15)
+            and reported_ledger_error <= ledger_limit,
             "reported flux ledger gate",
         )
         require(
@@ -822,10 +1120,12 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             "artifact_decision": "UNBOUND",
             "candidate_decision": (
                 "HYDROMETEOR_ENGINEERING_VALID_WITH_TRAJECTORY_ASSUMPTION"
-                if accepted
+                if accepted and not failures
                 else "REJECTED"
             ),
-            "hydrometeor_engineering_decision": "VALID" if accepted else "REJECTED",
+            "hydrometeor_engineering_decision": (
+                "VALID" if accepted and not failures else "REJECTED"
+            ),
             "trajectory_science_decision": "BLOCKED_MISSING_STORM_MOTION",
             "dynamic_balance_decision": (
                 "EVALUATED" if target_count else "NOT_AUTHORIZED"

@@ -8,8 +8,8 @@ MODULE cloud_bal_real_netcdf
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
   USE netcdf
   USE cloud_bal_state
-  USE cloud_bal_column_physics, ONLY: column_changed_mask
-  USE cloud_bal_balance_operator, ONLY: balance_beta_active
+  USE cloud_bal_column_physics, ONLY: column_changed_mask,column_config_valid
+  USE cloud_bal_balance_operator, ONLY: balance_beta_active,boundary_contract_valid
   IMPLICIT NONE
   PRIVATE
 
@@ -19,7 +19,6 @@ MODULE cloud_bal_real_netcdf
   REAL(real64), PARAMETER :: EPSILON_WATER=0.622_real64
   REAL(real32), PARAMETER :: RAW_MISSING_LIMIT=1.0e30_real32
   REAL(real32), PARAMETER :: MINIMUM_USABLE_DBZ=0.0_real32
-  REAL(real32), PARAMETER :: RADAR_NO_ECHO_DBZ=-10.0_real32
 
   PUBLIC :: read_real_shadow_state
   PUBLIC :: write_shadow_diagnostics
@@ -36,7 +35,7 @@ CONTAINS
     REAL(real32), ALLOCATABLE, INTENT(OUT) :: longitude(:,:)
     INTEGER, INTENT(OUT) :: status,reason
     REAL(real32), ALLOCATABLE :: raw(:,:,:),surface(:,:),tid(:,:,:),topography(:,:)
-    LOGICAL, ALLOCATABLE :: raw_valid(:,:,:),surface_valid(:,:)
+    LOGICAL, ALLOCATABLE :: raw_valid(:,:,:),surface_valid(:,:),terrain_domain(:,:,:)
     LOGICAL, ALLOCATABLE :: latitude_valid(:,:),longitude_valid(:,:),topography_valid(:,:)
     REAL(real64) :: levels(NZ),dx,dy
     INTEGER :: ncid,k,source_k,local_status
@@ -47,57 +46,103 @@ CONTAINS
     IF (local_status/=STATUS_OK) RETURN
     ALLOCATE(raw(NX,NY,NZ),raw_valid(NX,NY,NZ),surface(NX,NY), &
              surface_valid(NX,NY),latitude_valid(NX,NY),longitude_valid(NX,NY), &
-             topography_valid(NX,NY),tid(NX,NY,NZ),longitude(NX,NY), &
+             topography_valid(NX,NY),terrain_domain(NX,NY,NZ), &
+             tid(NX,NY,NZ),longitude(NX,NY), &
              topography(NX,NY))
     raw=0.0_real32; raw_valid=.FALSE.
     surface=0.0_real32; surface_valid=.FALSE.
     latitude_valid=.FALSE.; longitude_valid=.FALSE.; topography_valid=.FALSE.
-    tid=0.0_real32; longitude=0.0_real32; topography=0.0_real32
+    terrain_domain=.FALSE.; tid=0.0_real32
+    longitude=0.0_real32; topography=0.0_real32
+
+    ! Surface pressure and the pressure coordinate own the physical domain.
+    ! Omega is a required field inside that domain, never the domain mask.
+    CALL open_surface_file(fsf_path,valid_time,ncid,dx,dy,local_status)
+    IF (local_status==STATUS_OK) CALL read_real2(ncid,'tsf','kelvins','k', &
+                                                 surface,surface_valid,local_status)
+    IF (local_status==STATUS_OK .AND. .NOT.ALL(surface_valid)) THEN
+      CALL close_file(ncid,local_status)
+      reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
+    IF (local_status==STATUS_OK) CALL assign_surface(surface,surface_valid, &
+      state%surface_temperature,SOURCE_BACKGROUND_MODEL)
+    IF (local_status==STATUS_OK) CALL read_real2(ncid,'psf','pascals','pa', &
+                                                 surface,surface_valid,local_status)
+    IF (local_status==STATUS_OK .AND. .NOT.ALL(surface_valid)) THEN
+      CALL close_file(ncid,local_status)
+      reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
+    IF (local_status==STATUS_OK) CALL assign_surface(surface,surface_valid, &
+      state%surface_pressure,SOURCE_BACKGROUND_MODEL)
+    CALL close_file(ncid,local_status)
+    IF (local_status/=STATUS_OK) RETURN
 
     CALL open_case_file(lw3_path,NZ,valid_time,ncid,levels,dx,dy,local_status)
     IF (local_status/=STATUS_OK) RETURN
     CALL read_real3(ncid,'om','pascals/second','pa/s',raw,raw_valid,local_status)
     IF (local_status/=STATUS_OK) THEN; CALL close_file(ncid,local_status); RETURN; END IF
+    state%grid%dx=dx; state%grid%dy=dy
     DO k=1,NZ
       source_k=NZ+1-k
-      state%above_ground(:,:,k)=raw_valid(:,:,source_k)
       state%pressure%value(:,:,k)=REAL(100.0_real64*levels(source_k),real32)
-      CALL mark_real_field(state%pressure,k,state%above_ground(:,:,k), &
-                           SOURCE_BACKGROUND_MODEL)
-      state%omega%value(:,:,k)=MERGE(raw(:,:,source_k),0.0_real32, &
-                                     state%above_ground(:,:,k))
-      CALL mark_real_field(state%omega,k,state%above_ground(:,:,k), &
-                           SOURCE_ANALYZED_WIND)
+      CALL mark_real_field(state%pressure,k,surface_valid,SOURCE_BACKGROUND_MODEL)
     END DO
+    CALL configure_pressure_geometry(state,local_status)
+    IF (local_status/=STATUS_OK) THEN
+      CALL close_file(ncid,local_status)
+      reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
     IF (.NOT.vertical_domain_is_contiguous(state%above_ground)) THEN
       CALL close_file(ncid,local_status); reason=REASON_REQUIRED_COVERAGE; RETURN
     END IF
+    CALL assign_reversed_core(raw,raw_valid,state%above_ground,state%omega, &
+      SOURCE_ANALYZED_WIND,1.0_real64,local_status)
+    IF (local_status/=STATUS_OK) THEN
+      CALL close_file(ncid,local_status); reason=REASON_REQUIRED_COVERAGE; RETURN
+    END IF
     CALL read_real3(ncid,'u3','meters/second','m/s',raw,raw_valid,local_status)
-    IF (local_status==STATUS_OK) CALL assign_reversed_core(raw,raw_valid,state%above_ground, &
-      state%u,SOURCE_ANALYZED_WIND,1.0_real64,local_status)
-    IF (local_status==STATUS_OK) CALL read_real3(ncid,'v3','meters/second','m/s', &
-                                                 raw,raw_valid,local_status)
-    IF (local_status==STATUS_OK) CALL assign_reversed_core(raw,raw_valid,state%above_ground, &
-      state%v,SOURCE_ANALYZED_WIND,1.0_real64,local_status)
+    IF (local_status/=STATUS_OK) THEN; CALL close_file(ncid,local_status); RETURN; END IF
+    CALL assign_reversed_core(raw,raw_valid,state%above_ground,state%u, &
+      SOURCE_ANALYZED_WIND,1.0_real64,local_status)
+    IF (local_status/=STATUS_OK) THEN
+      CALL close_file(ncid,local_status); reason=REASON_REQUIRED_COVERAGE; RETURN
+    END IF
+    CALL read_real3(ncid,'v3','meters/second','m/s',raw,raw_valid,local_status)
+    IF (local_status/=STATUS_OK) THEN; CALL close_file(ncid,local_status); RETURN; END IF
+    CALL assign_reversed_core(raw,raw_valid,state%above_ground,state%v, &
+      SOURCE_ANALYZED_WIND,1.0_real64,local_status)
+    IF (local_status/=STATUS_OK) reason=REASON_REQUIRED_COVERAGE
     CALL close_file(ncid,local_status)
     IF (local_status/=STATUS_OK) RETURN
-
-    state%grid%dx=dx; state%grid%dy=dy
-    state%grid%dp=5000.0_real64
-    state%grid%pressure_mass_measure=dx*dy*state%grid%dp/GRAVITY
 
     CALL open_case_file(fua_path,NZ,valid_time,ncid,levels,dx,dy,local_status)
     IF (local_status/=STATUS_OK) RETURN
     CALL read_real3(ncid,'t3','kelvins','k',raw,raw_valid,local_status)
-    IF (local_status==STATUS_OK) CALL assign_reversed_core(raw,raw_valid,state%above_ground, &
-      state%temperature,SOURCE_BACKGROUND_MODEL,1.0_real64,local_status)
-    IF (local_status==STATUS_OK) CALL read_real3(ncid,'sh','kg/kg','kgkg-1', &
-                                                 raw,raw_valid,local_status)
-    IF (local_status==STATUS_OK) CALL assign_specific_humidity(raw,raw_valid,state,local_status)
-    IF (local_status==STATUS_OK) CALL read_real3(ncid,'ht','meters','m', &
-                                                 raw,raw_valid,local_status)
-    IF (local_status==STATUS_OK) CALL assign_reversed_core(raw,raw_valid,state%above_ground, &
-      state%geopotential,SOURCE_BACKGROUND_MODEL,GRAVITY,local_status)
+    IF (local_status/=STATUS_OK) THEN; CALL close_file(ncid,local_status); RETURN; END IF
+    CALL assign_reversed_core(raw,raw_valid,state%above_ground,state%temperature, &
+      SOURCE_BACKGROUND_MODEL,1.0_real64,local_status)
+    IF (local_status/=STATUS_OK) THEN
+      CALL close_file(ncid,local_status); reason=REASON_REQUIRED_COVERAGE; RETURN
+    END IF
+    CALL read_real3(ncid,'sh','kg/kg','kgkg-1',raw,raw_valid,local_status)
+    IF (local_status/=STATUS_OK) THEN; CALL close_file(ncid,local_status); RETURN; END IF
+    IF (.NOT.reversed_coverage_is_complete(raw_valid,state%above_ground)) THEN
+      CALL close_file(ncid,local_status); reason=REASON_REQUIRED_COVERAGE; RETURN
+    END IF
+    CALL assign_specific_humidity(raw,raw_valid,state,local_status)
+    IF (local_status/=STATUS_OK) THEN
+      CALL close_file(ncid,local_status); reason=REASON_RANGE; RETURN
+    END IF
+    CALL read_real3(ncid,'ht','meters','m',raw,raw_valid,local_status)
+    IF (local_status/=STATUS_OK) THEN; CALL close_file(ncid,local_status); RETURN; END IF
+    CALL assign_reversed_core(raw,raw_valid,state%above_ground,state%geopotential, &
+      SOURCE_BACKGROUND_MODEL,GRAVITY,local_status)
+    IF (local_status/=STATUS_OK) THEN
+      CALL close_file(ncid,local_status); reason=REASON_REQUIRED_COVERAGE; RETURN
+    END IF
     IF (local_status==STATUS_OK) CALL read_and_assign_hydrometeor(ncid,'lwc', &
       state,state%cloud_water,raw,raw_valid,local_status)
     IF (local_status==STATUS_OK) CALL read_and_assign_hydrometeor(ncid,'ice', &
@@ -157,28 +202,6 @@ CONTAINS
       END WHERE
     END DO
 
-    CALL open_surface_file(fsf_path,valid_time,ncid,dx,dy,local_status)
-    IF (local_status==STATUS_OK) CALL read_real2(ncid,'tsf','kelvins','k', &
-                                                 surface,surface_valid,local_status)
-    IF (local_status==STATUS_OK .AND. .NOT.ALL(surface_valid)) THEN
-      CALL close_file(ncid,local_status)
-      reason=REASON_REQUIRED_COVERAGE
-      RETURN
-    END IF
-    IF (local_status==STATUS_OK) CALL assign_surface(surface,surface_valid, &
-      state%surface_temperature,SOURCE_BACKGROUND_MODEL)
-    IF (local_status==STATUS_OK) CALL read_real2(ncid,'psf','pascals','pa', &
-                                                 surface,surface_valid,local_status)
-    IF (local_status==STATUS_OK .AND. .NOT.ALL(surface_valid)) THEN
-      CALL close_file(ncid,local_status)
-      reason=REASON_REQUIRED_COVERAGE
-      RETURN
-    END IF
-    IF (local_status==STATUS_OK) CALL assign_surface(surface,surface_valid, &
-      state%surface_pressure,SOURCE_BACKGROUND_MODEL)
-    CALL close_file(ncid,local_status)
-    IF (local_status/=STATUS_OK) RETURN
-
     CALL open_static_file(static_path,ncid,local_status)
     IF (local_status==STATUS_OK) CALL read_real2(ncid,'lat','degrees','degree_north', &
                                                  surface,latitude_valid,local_status)
@@ -201,12 +224,23 @@ CONTAINS
     CALL close_file(ncid,local_status)
     IF (local_status/=STATUS_OK .OR. .NOT.ALL(latitude_valid) .OR. &
         .NOT.ALL(longitude_valid) .OR. .NOT.ALL(topography_valid)) RETURN
+    terrain_domain=state%above_ground .AND. state%geopotential%valid .AND. &
+      ieee_is_finite(state%geopotential%value) .AND. &
+      state%geopotential%value/REAL(GRAVITY,real32)>= &
+        SPREAD(topography-128.0_real32*EPSILON(1.0_real32)* &
+          MAX(1.0_real32,ABS(topography)),3,NZ)
+    CALL configure_pressure_geometry(state,local_status,terrain_domain)
+    IF (local_status/=STATUS_OK) THEN
+      reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
+    CALL restrict_state_to_domain(state)
     IF (.NOT.terrain_mask_is_consistent(state,topography)) THEN
       reason=REASON_REQUIRED_COVERAGE
       RETURN
     END IF
 
-    CALL set_resolved_omega_boundaries(state,local_status)
+    CALL set_copied_interior_omega_boundaries(state,local_status)
     IF (local_status/=STATUS_OK) RETURN
     CALL refresh_dry_air_mass_measure(state,local_status)
     IF (local_status/=STATUS_OK) RETURN
@@ -230,11 +264,16 @@ CONTAINS
     REAL(real64), INTENT(IN) :: residual_before(:,:,:),residual_after(:,:,:)
     INTEGER, INTENT(OUT) :: status
     TYPE(cloud_bal_state_type), INTENT(IN) :: operational_state
-    INTEGER :: ncid,xdim,ydim,zdim,level_var,lat_var,lon_var
-    INTEGER :: varid(33),rc,k,contract_reason,nx,ny,nz
-    INTEGER(int32), ALLOCATABLE :: mask(:,:,:)
+    INTEGER :: ncid,xdim,ydim,zdim,zinterface_dim,zspacing_dim
+    INTEGER :: level_var,lat_var,lon_var,interface_var,cell_dp_var,spacing_var
+    INTEGER :: pressure_mass_var,dry_mass_var,surface_pressure_var
+    INTEGER :: omega_top_var,omega_bottom_var,omega_top_valid_var,omega_bottom_valid_var
+    INTEGER :: omega_top_quality_var,omega_top_source_var
+    INTEGER :: omega_bottom_quality_var,omega_bottom_source_var
+    INTEGER :: varid(36),rc,k,contract_reason,nx,ny,nz
+    INTEGER(int32), ALLOCATABLE :: mask(:,:,:),boundary_mask(:,:)
     REAL(real32), ALLOCATABLE :: levels(:)
-    CHARACTER(LEN=32), PARAMETER :: names(33)=[CHARACTER(LEN=32) :: &
+    CHARACTER(LEN=32), PARAMETER :: names(36)=[CHARACTER(LEN=32) :: &
       'radar_dbz','background_u','background_v','background_omega', &
       'candidate_u','candidate_v','candidate_omega','omega_target', &
       'background_cloud_water','background_cloud_ice','background_rain', &
@@ -244,13 +283,14 @@ CONTAINS
       'continuity_background','continuity_candidate','above_ground', &
       'radar_valid','omega_target_valid','omega_target_quality', &
       'omega_target_source','omega_target_authority','candidate_balance_support', &
-      'column_changed','balance_changed','overall_changed','obs_support','hydro_support']
-    CHARACTER(LEN=32), PARAMETER :: units(33)=[CHARACTER(LEN=32) :: &
+      'column_changed','balance_changed','overall_changed','obs_support','hydro_support', &
+      'radar_coverage','radar_no_echo','radar_missing']
+    CHARACTER(LEN=32), PARAMETER :: units(36)=[CHARACTER(LEN=32) :: &
       'dBZ','m s-1','m s-1','Pa s-1','m s-1','m s-1','Pa s-1','Pa s-1', &
       'kg kg-1 dryair','kg kg-1 dryair','kg kg-1 dryair','kg kg-1 dryair', &
       'kg kg-1 dryair','kg kg-1 dryair','kg kg-1 dryair','kg kg-1 dryair', &
       'kg kg-1 dryair','kg kg-1 dryair','1','s-1','s-1', &
-      '1','1','1','1','1','1','1','1','1','1','1','1']
+      '1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']
 
     status=STATUS_FAILED
     CALL validate_shadow_write_contract(state_in,candidate,operational_state, &
@@ -272,10 +312,40 @@ CONTAINS
     IF (rc/=NF90_NOERR) RETURN
     IF (.NOT.nc_ok(nf90_def_dim(ncid,'x',nx,xdim)) .OR. &
         .NOT.nc_ok(nf90_def_dim(ncid,'y',ny,ydim)) .OR. &
-        .NOT.nc_ok(nf90_def_dim(ncid,'z',nz,zdim))) GOTO 900
+        .NOT.nc_ok(nf90_def_dim(ncid,'z',nz,zdim)) .OR. &
+        .NOT.nc_ok(nf90_def_dim(ncid,'z_interface',nz+1,zinterface_dim)) .OR. &
+        .NOT.nc_ok(nf90_def_dim(ncid,'z_spacing',nz-1,zspacing_dim))) GOTO 900
     IF (.NOT.nc_ok(nf90_def_var(ncid,'pressure',NF90_FLOAT,(/zdim/),level_var)) .OR. &
         .NOT.nc_ok(nf90_def_var(ncid,'latitude',NF90_FLOAT,(/xdim,ydim/),lat_var)) .OR. &
         .NOT.nc_ok(nf90_def_var(ncid,'longitude',NF90_FLOAT,(/xdim,ydim/),lon_var))) GOTO 900
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'pressure_interface',NF90_DOUBLE, &
+          (/xdim,ydim,zinterface_dim/),interface_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'cell_dp',NF90_DOUBLE, &
+          (/xdim,ydim,zdim/),cell_dp_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'level_spacing_dp',NF90_DOUBLE, &
+          (/xdim,ydim,zspacing_dim/),spacing_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'pressure_mass_measure',NF90_DOUBLE, &
+          (/xdim,ydim,zdim/),pressure_mass_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'dry_air_mass_measure',NF90_DOUBLE, &
+          (/xdim,ydim,zdim/),dry_mass_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'surface_pressure',NF90_FLOAT, &
+          (/xdim,ydim/),surface_pressure_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'omega_top_boundary',NF90_FLOAT, &
+          (/xdim,ydim/),omega_top_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'omega_bottom_boundary',NF90_FLOAT, &
+          (/xdim,ydim/),omega_bottom_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'omega_top_boundary_valid',NF90_INT, &
+          (/xdim,ydim/),omega_top_valid_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'omega_bottom_boundary_valid',NF90_INT, &
+          (/xdim,ydim/),omega_bottom_valid_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'omega_top_boundary_quality',NF90_INT, &
+          (/xdim,ydim/),omega_top_quality_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'omega_top_boundary_source',NF90_INT, &
+          (/xdim,ydim/),omega_top_source_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'omega_bottom_boundary_quality',NF90_INT, &
+          (/xdim,ydim/),omega_bottom_quality_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'omega_bottom_boundary_source',NF90_INT, &
+          (/xdim,ydim/),omega_bottom_source_var))) GOTO 900
     DO k=1,19
       IF (.NOT.nc_ok(nf90_def_var(ncid,TRIM(names(k)),NF90_FLOAT, &
                                   (/xdim,ydim,zdim/),varid(k)))) GOTO 900
@@ -284,14 +354,28 @@ CONTAINS
       IF (.NOT.nc_ok(nf90_def_var(ncid,TRIM(names(k)),NF90_DOUBLE, &
                                   (/xdim,ydim,zdim/),varid(k)))) GOTO 900
     END DO
-    DO k=22,33
+    DO k=22,36
       IF (.NOT.nc_ok(nf90_def_var(ncid,TRIM(names(k)),NF90_INT, &
                                   (/xdim,ydim,zdim/),varid(k)))) GOTO 900
     END DO
-    DO k=1,33
+    DO k=1,36
       IF (.NOT.nc_ok(nf90_put_att(ncid,varid(k),'units',TRIM(units(k))))) GOTO 900
       IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,varid(k),1,1,1))) GOTO 900
     END DO
+    IF (.NOT.nc_ok(nf90_put_att(ncid,interface_var,'units','Pa')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,cell_dp_var,'units','Pa')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,spacing_var,'units','Pa')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,pressure_mass_var,'units','kg')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,dry_mass_var,'units','kg dryair')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,surface_pressure_var,'units','Pa')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,omega_top_var,'units','Pa s-1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,omega_bottom_var,'units','Pa s-1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,omega_top_valid_var,'units','1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,omega_bottom_valid_var,'units','1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,omega_top_quality_var,'units','1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,omega_top_source_var,'units','1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,omega_bottom_quality_var,'units','1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,omega_bottom_source_var,'units','1'))) GOTO 900
     IF (.NOT.nc_ok(nf90_put_att(ncid,varid(28),'long_name', &
       'candidate balance localization support')) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,varid(28),'legacy_name','balance_active'))) GOTO 900
@@ -305,9 +389,7 @@ CONTAINS
         .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'grid_dx_m', &
                                 state_in%grid%dx(1,1))) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'grid_dy_m', &
-                                state_in%grid%dy(1,1))) .OR. &
-        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'grid_dp_pa', &
-                                state_in%grid%dp(1,1,1)))) GOTO 900
+                                state_in%grid%dy(1,1)))) GOTO 900
     IF (.NOT.nc_ok(nf90_put_att(ncid,level_var,'units','Pa')) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,lat_var,'units','degree_north')) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,lon_var,'units','degree_east'))) GOTO 900
@@ -318,7 +400,35 @@ CONTAINS
     END DO
     IF (.NOT.nc_ok(nf90_put_var(ncid,level_var,levels)) .OR. &
         .NOT.nc_ok(nf90_put_var(ncid,lat_var,state_in%latitude%value)) .OR. &
-        .NOT.nc_ok(nf90_put_var(ncid,lon_var,longitude))) GOTO 900
+        .NOT.nc_ok(nf90_put_var(ncid,lon_var,longitude)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,interface_var, &
+          state_in%grid%pressure_interface)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,cell_dp_var,state_in%grid%cell_dp)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,spacing_var, &
+          state_in%grid%level_spacing_dp)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,pressure_mass_var, &
+          state_in%grid%pressure_mass_measure)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,dry_mass_var, &
+          state_in%grid%dry_air_mass_measure)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,surface_pressure_var, &
+          state_in%surface_pressure%value)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,omega_top_var, &
+          state_in%omega_top_boundary%value)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,omega_bottom_var, &
+          state_in%omega_bottom_boundary%value)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,omega_top_quality_var, &
+          state_in%omega_top_boundary%quality)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,omega_top_source_var, &
+          state_in%omega_top_boundary%source)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,omega_bottom_quality_var, &
+          state_in%omega_bottom_boundary%quality)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,omega_bottom_source_var, &
+          state_in%omega_bottom_boundary%source))) GOTO 900
+    ALLOCATE(boundary_mask(nx,ny))
+    boundary_mask=MERGE(1_int32,0_int32,state_in%omega_top_boundary%valid)
+    IF (.NOT.nc_ok(nf90_put_var(ncid,omega_top_valid_var,boundary_mask))) GOTO 900
+    boundary_mask=MERGE(1_int32,0_int32,state_in%omega_bottom_boundary%valid)
+    IF (.NOT.nc_ok(nf90_put_var(ncid,omega_bottom_valid_var,boundary_mask))) GOTO 900
     IF (.NOT.nc_ok(nf90_put_var(ncid,varid(1),state_in%radar_reflectivity%value)) .OR. &
         .NOT.nc_ok(nf90_put_var(ncid,varid(2),state_in%u%value)) .OR. &
         .NOT.nc_ok(nf90_put_var(ncid,varid(3),state_in%v%value)) .OR. &
@@ -343,7 +453,9 @@ CONTAINS
     ALLOCATE(mask(nx,ny,nz))
     mask=MERGE(1_int32,0_int32,state_in%above_ground)
     IF (.NOT.nc_ok(nf90_put_var(ncid,varid(22),mask))) GOTO 900
-    mask=MERGE(1_int32,0_int32,state_in%radar_reflectivity%valid)
+    mask=MERGE(1_int32,0_int32,state_in%above_ground .AND. radar_echo_cell( &
+      state_in%radar_reflectivity%value,state_in%radar_reflectivity%valid, &
+      state_in%radar_reflectivity%quality,state_in%radar_reflectivity%source))
     IF (.NOT.nc_ok(nf90_put_var(ncid,varid(23),mask))) GOTO 900
     mask=MERGE(1_int32,0_int32,candidate%omega_target%valid)
     IF (.NOT.nc_ok(nf90_put_var(ncid,varid(24),mask))) GOTO 900
@@ -364,6 +476,22 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_var(ncid,varid(31),mask))) GOTO 900
     IF (.NOT.nc_ok(nf90_put_var(ncid,varid(32),candidate%obs_support))) GOTO 900
     IF (.NOT.nc_ok(nf90_put_var(ncid,varid(33),candidate%hydro_support))) GOTO 900
+    mask=MERGE(1_int32,0_int32,state_in%above_ground .AND. &
+      (radar_echo_cell(state_in%radar_reflectivity%value, &
+         state_in%radar_reflectivity%valid,state_in%radar_reflectivity%quality, &
+         state_in%radar_reflectivity%source) .OR. &
+       radar_no_echo_cell(state_in%radar_reflectivity%value, &
+         state_in%radar_reflectivity%valid,state_in%radar_reflectivity%quality, &
+         state_in%radar_reflectivity%source)))
+    IF (.NOT.nc_ok(nf90_put_var(ncid,varid(34),mask))) GOTO 900
+    mask=MERGE(1_int32,0_int32,state_in%above_ground .AND. radar_no_echo_cell( &
+      state_in%radar_reflectivity%value,state_in%radar_reflectivity%valid, &
+      state_in%radar_reflectivity%quality,state_in%radar_reflectivity%source))
+    IF (.NOT.nc_ok(nf90_put_var(ncid,varid(35),mask))) GOTO 900
+    mask=MERGE(1_int32,0_int32,state_in%above_ground .AND. radar_missing_cell( &
+      state_in%radar_reflectivity%value,state_in%radar_reflectivity%valid, &
+      state_in%radar_reflectivity%quality,state_in%radar_reflectivity%source))
+    IF (.NOT.nc_ok(nf90_put_var(ncid,varid(36),mask))) GOTO 900
     rc=nf90_close(ncid)
     IF (rc==NF90_NOERR) status=STATUS_OK
     RETURN
@@ -379,11 +507,45 @@ CONTAINS
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
     INTEGER, INTENT(OUT) :: status,reason
     INTEGER :: state_status,state_reason
+    REAL(real64) :: flux_terms(7),flux_accounted,flux_error,flux_limit
 
     status=STATUS_FAILED; reason=REASON_AUTHORITY
     IF (config%requested_mode/=MODE_SHADOW .OR. &
         result%requested_mode/=MODE_SHADOW) RETURN
+    IF (.NOT.column_config_valid(config%column)) THEN
+      reason=REASON_RANGE
+      RETURN
+    END IF
     IF (.NOT.pipeline_result_is_coherent(result)) RETURN
+    flux_terms=[result%column%numerical%flux_deposited, &
+      result%column%numerical%flux_suspended, &
+      result%column%numerical%flux_boundary_exit, &
+      result%column%numerical%flux_terrain_intercept, &
+      result%column%numerical%flux_observation_blocked, &
+      result%column%numerical%flux_no_echo_blocked, &
+      result%column%numerical%flux_microphysical_loss]
+    IF (.NOT.ieee_is_finite(result%column%numerical%flux_input) .OR. &
+        result%column%numerical%flux_input<0.0_real64 .OR. &
+        ANY(.NOT.ieee_is_finite(flux_terms)) .OR. ANY(flux_terms<0.0_real64) .OR. &
+        .NOT.ieee_is_finite(result%column%numerical%ledger_error) .OR. &
+        result%column%numerical%ledger_error<0.0_real64) THEN
+      reason=REASON_GATE
+      RETURN
+    END IF
+    flux_accounted=SUM(flux_terms)
+    flux_error=ABS(result%column%numerical%flux_input-flux_accounted)
+    flux_limit=config%column%ledger_absolute_tolerance+ &
+      config%column%ledger_relative_tolerance* &
+      MAX(ABS(result%column%numerical%flux_input),ABS(flux_accounted))
+    IF (flux_error>flux_limit .OR. &
+        ABS(result%column%numerical%ledger_error-flux_error)> &
+          64.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64,flux_error) .OR. &
+        result%column%numerical%transport_required_substeps<0 .OR. &
+        result%column%numerical%transport_required_substeps> &
+          config%column%maximum_transport_substeps) THEN
+      reason=REASON_GATE
+      RETURN
+    END IF
     IF (.NOT.stage_masks_valid(result,state_in%grid%nx,state_in%grid%ny, &
                               state_in%grid%nz)) THEN
       reason=REASON_SHAPE
@@ -395,18 +557,13 @@ CONTAINS
       reason=state_reason
       RETURN
     END IF
-    CALL validate_canonical_state(candidate,.FALSE.,.TRUE.,state_status,state_reason,.FALSE.)
-    IF (state_status/=STATUS_OK) THEN
-      reason=state_reason
-      RETURN
-    END IF
-    CALL validate_canonical_state(operational_state,.FALSE.,.TRUE.,state_status, &
-                                  state_reason,.FALSE.)
-    IF (state_status/=STATUS_OK) THEN
-      reason=state_reason
-      RETURN
-    END IF
     IF (.NOT.writer_geometry_is_representable(state_in)) THEN
+      reason=REASON_METADATA
+      RETURN
+    END IF
+    IF (.NOT.copied_diagnostic_boundary_contract_valid(state_in) .OR. &
+        .NOT.copied_diagnostic_boundary_contract_valid(candidate) .OR. &
+        .NOT.copied_diagnostic_boundary_contract_valid(operational_state)) THEN
       reason=REASON_METADATA
       RETURN
     END IF
@@ -428,8 +585,23 @@ CONTAINS
       reason=REASON_AUTHORITY
       RETURN
     END IF
+    ! The SHADOW authority boundary is stricter than ordinary state validity:
+    ! operational fields must be identical and candidate changes are limited to
+    ! the explicitly permitted pipeline fields.  Radar/LOS contracts are checked
+    ! first so their dedicated reason code is preserved.
     IF (.NOT.canonical_states_equal(state_in,operational_state)) RETURN
     IF (.NOT.canonical_states_equal(state_in,candidate,.TRUE.)) RETURN
+    CALL validate_canonical_state(candidate,.FALSE.,.TRUE.,state_status,state_reason,.FALSE.)
+    IF (state_status/=STATUS_OK) THEN
+      reason=state_reason
+      RETURN
+    END IF
+    CALL validate_canonical_state(operational_state,.FALSE.,.TRUE.,state_status, &
+                                  state_reason,.FALSE.)
+    IF (state_status/=STATUS_OK) THEN
+      reason=state_reason
+      RETURN
+    END IF
     IF (.NOT.candidate_result_is_coherent(state_in,candidate,result)) RETURN
 
     status=STATUS_OK; reason=REASON_NONE
@@ -508,7 +680,8 @@ CONTAINS
         WRITE(*,'(A)') 'adapter_error=level-order:'//TRIM(path); GOTO 900
       END IF
     END IF
-    IF (.NOT.read_scalar(ncid,'Dx',dx) .OR. .NOT.read_scalar(ncid,'Dy',dy)) THEN
+    IF (.NOT.read_grid_spacing_m(ncid,'Dx',dx) .OR. &
+        .NOT.read_grid_spacing_m(ncid,'Dy',dy)) THEN
       WRITE(*,'(A)') 'adapter_error=grid-spacing-read:'//TRIM(path); GOTO 900
     END IF
     IF (ABS(dx-5000.0_real64)>1.0e-6_real64 .OR. &
@@ -584,18 +757,20 @@ CONTAINS
     IF (state%radar_reflectivity%valid_time/=state%pressure%valid_time .OR. &
         TRIM(state%radar_reflectivity%unit)/='dBZ') RETURN
     IF (ANY(state%radar_reflectivity%valid .AND. .NOT.state%above_ground) .OR. &
-        ANY(state%radar_reflectivity%valid .AND. &
-            .NOT.cell_is_usable(state%radar_reflectivity%valid, &
-                                state%radar_reflectivity%quality, &
-                                state%radar_reflectivity%source))) RETURN
+        ANY(state%radar_reflectivity%valid .AND. .NOT.radar_echo_cell( &
+          state%radar_reflectivity%value,state%radar_reflectivity%valid, &
+          state%radar_reflectivity%quality,state%radar_reflectivity%source))) RETURN
     IF (ANY(state%radar_reflectivity%valid .AND. &
             (.NOT.ieee_is_finite(state%radar_reflectivity%value) .OR. &
              state%radar_reflectivity%value<MINIMUM_USABLE_DBZ .OR. &
              state%radar_reflectivity%value>100.0_real32))) RETURN
     IF (ANY(.NOT.state%radar_reflectivity%valid .AND. &
-        .NOT.radar_inactive_cell_valid(state%radar_reflectivity%value, &
-          state%radar_reflectivity%quality,state%radar_reflectivity%source, &
-          state%above_ground))) RETURN
+        .NOT.((state%above_ground .AND. radar_no_echo_cell( &
+          state%radar_reflectivity%value,state%radar_reflectivity%valid, &
+          state%radar_reflectivity%quality,state%radar_reflectivity%source)) .OR. &
+          radar_missing_cell(state%radar_reflectivity%value, &
+            state%radar_reflectivity%valid,state%radar_reflectivity%quality, &
+            state%radar_reflectivity%source)))) RETURN
     real_radar_contract_valid=.TRUE.
   END FUNCTION real_radar_contract_valid
 
@@ -623,17 +798,6 @@ CONTAINS
     radar_tid_is_mixed=NINT(value)==2
   END FUNCTION radar_tid_is_mixed
 
-  PURE ELEMENTAL LOGICAL FUNCTION radar_inactive_cell_valid(value,quality,source, &
-                                                             above_ground)
-    REAL(real32), INTENT(IN) :: value
-    INTEGER(int32), INTENT(IN) :: quality,source
-    LOGICAL, INTENT(IN) :: above_ground
-    radar_inactive_cell_valid= &
-      (above_ground .AND. value==RADAR_NO_ECHO_DBZ .AND. quality==0_int32 .AND. &
-       source==SOURCE_RADAR_DBZ) .OR. &
-      (value==0.0_real32 .AND. quality==QUALITY_RAW_MISSING .AND. source==0_int32)
-  END FUNCTION radar_inactive_cell_valid
-
   LOGICAL FUNCTION candidate_result_is_coherent(background,candidate,result)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
@@ -655,6 +819,11 @@ CONTAINS
 
     expected=column_changed_mask(background,candidate)
     IF (ANY(expected .NEQV. result%column%changed)) RETURN
+    IF (ANY(expected .AND. radar_no_echo_cell( &
+        background%radar_reflectivity%value, &
+        background%radar_reflectivity%valid, &
+        background%radar_reflectivity%quality, &
+        background%radar_reflectivity%source))) RETURN
     IF (ANY((result%column%changed .OR. result%balance%changed) .NEQV. &
             result%overall%changed)) RETURN
     candidate_result_is_coherent=.TRUE.
@@ -694,9 +863,7 @@ CONTAINS
           TRANSFER(state%grid%dy(i,j),0_int64)/= &
           TRANSFER(state%grid%dy(1,1),0_int64)) RETURN
       DO k=1,state%grid%nz
-        IF (TRANSFER(state%grid%dp(i,j,k),0_int64)/= &
-            TRANSFER(state%grid%dp(1,1,1),0_int64) .OR. &
-            TRANSFER(state%pressure%value(i,j,k),0_int32)/= &
+        IF (TRANSFER(state%pressure%value(i,j,k),0_int32)/= &
             TRANSFER(state%pressure%value(1,1,k),0_int32)) RETURN
       END DO
     END DO; END DO
@@ -819,6 +986,17 @@ CONTAINS
     status=STATUS_OK
   END SUBROUTINE assign_reversed_core
 
+  PURE LOGICAL FUNCTION reversed_coverage_is_complete(raw_valid,domain)
+    LOGICAL, INTENT(IN) :: raw_valid(NX,NY,NZ),domain(NX,NY,NZ)
+    INTEGER :: k,source_k
+    reversed_coverage_is_complete=.FALSE.
+    DO k=1,NZ
+      source_k=NZ+1-k
+      IF (ANY(domain(:,:,k) .AND. .NOT.raw_valid(:,:,source_k))) RETURN
+    END DO
+    reversed_coverage_is_complete=.TRUE.
+  END FUNCTION reversed_coverage_is_complete
+
   SUBROUTINE assign_specific_humidity(raw,raw_valid,state,status)
     REAL(real32), INTENT(IN) :: raw(NX,NY,NZ)
     LOGICAL, INTENT(IN) :: raw_valid(NX,NY,NZ)
@@ -893,7 +1071,68 @@ CONTAINS
     field%source(:,:,k)=MERGE(source,0_int32,valid)
   END SUBROUTINE mark_real_field
 
-  SUBROUTINE set_resolved_omega_boundaries(state,status)
+  SUBROUTINE restrict_state_to_domain(state)
+    TYPE(cloud_bal_state_type), INTENT(INOUT) :: state
+    CALL restrict_coordinate_field(state%pressure,state%above_ground)
+    CALL restrict_real_field(state%temperature,state%above_ground)
+    CALL restrict_real_field(state%vapor,state%above_ground)
+    CALL restrict_real_field(state%u,state%above_ground)
+    CALL restrict_real_field(state%v,state%above_ground)
+    CALL restrict_real_field(state%omega,state%above_ground)
+    CALL restrict_real_field(state%omega_target,state%above_ground)
+    CALL restrict_real_field(state%geopotential,state%above_ground)
+    CALL restrict_real_field(state%cloud_fraction,state%above_ground)
+    CALL restrict_real_field(state%radar_reflectivity,state%above_ground)
+    CALL restrict_real_field(state%cloud_water,state%above_ground)
+    CALL restrict_real_field(state%cloud_ice,state%above_ground)
+    CALL restrict_real_field(state%rain,state%above_ground)
+    CALL restrict_real_field(state%snow,state%above_ground)
+    CALL restrict_real_field(state%graupel,state%above_ground)
+    CALL restrict_real_field(state%vt_z_mean,state%above_ground)
+    CALL restrict_real_field(state%vt_z_sigma,state%above_ground)
+    CALL restrict_integer_field(state%cloud_type,state%above_ground)
+    CALL restrict_integer_field(state%precipitation_phase,state%above_ground)
+    CALL restrict_integer_field(state%lightning_support,state%above_ground)
+    WHERE(.NOT.state%above_ground)
+      state%obs_support=0_int32
+      state%hydro_support=0_int32
+      state%balance_beta=0.0_real32
+    END WHERE
+  END SUBROUTINE restrict_state_to_domain
+
+  SUBROUTINE restrict_coordinate_field(field,domain)
+    TYPE(field3d), INTENT(INOUT) :: field
+    LOGICAL, INTENT(IN) :: domain(:,:,:)
+    WHERE(.NOT.domain)
+      field%valid=.FALSE.
+      field%quality=QUALITY_RAW_MISSING
+      field%source=0_int32
+    END WHERE
+  END SUBROUTINE restrict_coordinate_field
+
+  SUBROUTINE restrict_real_field(field,domain)
+    TYPE(field3d), INTENT(INOUT) :: field
+    LOGICAL, INTENT(IN) :: domain(:,:,:)
+    WHERE(.NOT.domain)
+      field%value=0.0_real32
+      field%valid=.FALSE.
+      field%quality=QUALITY_RAW_MISSING
+      field%source=0_int32
+    END WHERE
+  END SUBROUTINE restrict_real_field
+
+  SUBROUTINE restrict_integer_field(field,domain)
+    TYPE(integer_field3d), INTENT(INOUT) :: field
+    LOGICAL, INTENT(IN) :: domain(:,:,:)
+    WHERE(.NOT.domain)
+      field%value=0_int32
+      field%valid=.FALSE.
+      field%quality=QUALITY_RAW_MISSING
+      field%source=0_int32
+    END WHERE
+  END SUBROUTINE restrict_integer_field
+
+  SUBROUTINE set_copied_interior_omega_boundaries(state,status)
     TYPE(cloud_bal_state_type), INTENT(INOUT) :: state
     INTEGER, INTENT(OUT) :: status
     INTEGER :: i,j,k
@@ -902,20 +1141,22 @@ CONTAINS
       IF (.NOT.state%omega%valid(i,j,NZ)) RETURN
       state%omega_top_boundary%value(i,j)=state%omega%value(i,j,NZ)
       state%omega_top_boundary%valid(i,j)=.TRUE.
-      state%omega_top_boundary%quality(i,j)=QUALITY_LEGACY_PROVENANCE
+      state%omega_top_boundary%quality(i,j)=IOR(QUALITY_LEGACY_PROVENANCE, &
+        QUALITY_BOUNDARY_INTERIOR_COPY)
       state%omega_top_boundary%source(i,j)=SOURCE_ANALYZED_WIND
       DO k=1,NZ
         IF (.NOT.state%above_ground(i,j,k)) CYCLE
         state%omega_bottom_boundary%value(i,j)=state%omega%value(i,j,k)
         state%omega_bottom_boundary%valid(i,j)=.TRUE.
-        state%omega_bottom_boundary%quality(i,j)=QUALITY_LEGACY_PROVENANCE
+        state%omega_bottom_boundary%quality(i,j)=IOR(QUALITY_LEGACY_PROVENANCE, &
+          QUALITY_BOUNDARY_INTERIOR_COPY)
         state%omega_bottom_boundary%source(i,j)=SOURCE_ANALYZED_WIND
         EXIT
       END DO
       IF (.NOT.state%omega_bottom_boundary%valid(i,j)) RETURN
     END DO; END DO
     status=STATUS_OK
-  END SUBROUTINE set_resolved_omega_boundaries
+  END SUBROUTINE set_copied_interior_omega_boundaries
 
   LOGICAL FUNCTION dimensions_are(ncid,nz)
     INTEGER, INTENT(IN) :: ncid,nz
@@ -948,16 +1189,38 @@ CONTAINS
           .NOT.variable_unit_is(ncid,varid, &
             'seconds since (1970-1-1 00:00:00.0)', &
             'seconds since 1970-01-01 00:00:00')) RETURN
-    CASE('Dx','Dy')
-      IF (.NOT.variable_layout_is(ncid,varid,NF90_FLOAT, &
-          [CHARACTER(LEN=3) :: 'nav']) .OR. &
-          .NOT.variable_unit_is(ncid,varid,'kilometers','km')) RETURN
     CASE DEFAULT
       RETURN
     END SELECT
     IF (.NOT.nc_ok(nf90_get_var(ncid,varid,work))) RETURN
     value=work(1); read_scalar=ieee_is_finite(value)
   END FUNCTION read_scalar
+
+  LOGICAL FUNCTION read_grid_spacing_m(ncid,name,value)
+    INTEGER, INTENT(IN) :: ncid
+    CHARACTER(LEN=*), INTENT(IN) :: name
+    REAL(real64), INTENT(OUT) :: value
+    REAL(real32) :: raw(1)
+    INTEGER :: varid
+
+    read_grid_spacing_m=.FALSE.; value=0.0_real64
+    IF (TRIM(name)/='Dx' .AND. TRIM(name)/='Dy') RETURN
+    IF (.NOT.nc_ok(nf90_inq_varid(ncid,TRIM(name),varid))) RETURN
+    IF (.NOT.variable_layout_is(ncid,varid,NF90_FLOAT, &
+        [CHARACTER(LEN=3) :: 'nav']) .OR. &
+        .NOT.variable_unit_is(ncid,varid,'kilometers','km')) RETURN
+    IF (.NOT.nc_ok(nf90_get_var(ncid,varid,raw))) RETURN
+    IF (.NOT.ieee_is_finite(raw(1))) RETURN
+    IF (ABS(raw(1)-5.0_real32)<=1.0e-6_real32) THEN
+      value=1000.0_real64*REAL(raw(1),real64)
+    ELSE IF (ABS(raw(1)-5000.0_real32)<=1.0e-3_real32) THEN
+      ! The pinned legacy KLAPS files label numerical metres as kilometres.
+      value=REAL(raw(1),real64)
+    ELSE
+      RETURN
+    END IF
+    read_grid_spacing_m=.TRUE.
+  END FUNCTION read_grid_spacing_m
 
   LOGICAL FUNCTION read_vector(ncid,name,value)
     INTEGER, INTENT(IN) :: ncid
@@ -1042,7 +1305,7 @@ CONTAINS
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     REAL(real32), INTENT(IN) :: topography(NX,NY)
     INTEGER :: i,j,k,bottom
-    REAL(real64) :: bottom_height,next_height,layer_depth
+    REAL(real64) :: height,tolerance
     terrain_mask_is_consistent=.FALSE.
     DO j=1,NY; DO i=1,NX
       bottom=0
@@ -1052,23 +1315,42 @@ CONTAINS
           EXIT
         END IF
       END DO
-      IF (bottom==0 .OR. bottom==NZ) RETURN
-      bottom_height=REAL(state%geopotential%value(i,j,bottom),real64)/GRAVITY
-      next_height=REAL(state%geopotential%value(i,j,bottom+1),real64)/GRAVITY
-      layer_depth=next_height-bottom_height
-      IF (.NOT.ieee_is_finite(bottom_height) .OR. &
-          .NOT.ieee_is_finite(next_height) .OR. layer_depth<=0.0_real64) RETURN
-      ! The first active mass level must lie within one resolved layer of the
-      ! static surface. This rejects both missing low levels and subterrain data.
-      IF (ABS(bottom_height-REAL(topography(i,j),real64))> &
-          layer_depth+32.0_real64*EPSILON(layer_depth)*MAX(1.0_real64,layer_depth)) RETURN
-      DO k=bottom+1,NZ
-        IF (state%geopotential%value(i,j,k)<= &
-            state%geopotential%value(i,j,k-1)) RETURN
+      IF (bottom==0) RETURN
+      tolerance=128.0_real64*REAL(EPSILON(1.0_real32),real64)* &
+        MAX(1.0_real64,ABS(REAL(topography(i,j),real64)))
+      DO k=bottom,NZ
+        IF (.NOT.cell_is_usable(state%geopotential%valid(i,j,k), &
+              state%geopotential%quality(i,j,k), &
+              state%geopotential%source(i,j,k))) RETURN
+        height=REAL(state%geopotential%value(i,j,k),real64)/GRAVITY
+        IF (.NOT.ieee_is_finite(height) .OR. height < -1000.0_real64 .OR. &
+            height > 50000.0_real64 .OR. &
+            height<REAL(topography(i,j),real64)-tolerance) RETURN
+        IF (k>bottom) THEN
+          IF (state%geopotential%value(i,j,k)<= &
+              state%geopotential%value(i,j,k-1)) RETURN
+        END IF
       END DO
     END DO; END DO
     terrain_mask_is_consistent=.TRUE.
   END FUNCTION terrain_mask_is_consistent
+
+  PURE LOGICAL FUNCTION copied_diagnostic_boundary_contract_valid(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    copied_diagnostic_boundary_contract_valid=boundary_contract_valid(state)
+    IF (.NOT.copied_diagnostic_boundary_contract_valid) RETURN
+    copied_diagnostic_boundary_contract_valid= &
+      ALL(IAND(state%omega_top_boundary%quality, &
+               QUALITY_BOUNDARY_INTERIOR_COPY)/=0_int32) .AND. &
+      ALL(IAND(state%omega_bottom_boundary%quality, &
+               QUALITY_BOUNDARY_INTERIOR_COPY)/=0_int32) .AND. &
+      ALL(IAND(state%omega_top_boundary%source,SOURCE_ANALYZED_WIND)/=0_int32) .AND. &
+      ALL(IAND(state%omega_bottom_boundary%source,SOURCE_ANALYZED_WIND)/=0_int32) .AND. &
+      .NOT.ANY(IAND(state%omega_top_boundary%source, &
+                    SOURCE_BOUNDARY_CONDITION)/=0_int32) .AND. &
+      .NOT.ANY(IAND(state%omega_bottom_boundary%source, &
+                    SOURCE_BOUNDARY_CONDITION)/=0_int32)
+  END FUNCTION copied_diagnostic_boundary_contract_valid
 
   PURE REAL(real64) FUNCTION dry_density(pressure,temperature,vapor)
     REAL(real64), INTENT(IN) :: pressure,temperature,vapor
@@ -1089,9 +1371,10 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'contract', &
                                 'real_radar_only_shadow_v3'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'diagnostic_schema_version', &
-                                3_int32))) RETURN
+                                5_int32))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
-      'verified_operational_identity_v1,radar_no_echo_value_v1'))) RETURN
+      'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
+      'pressure_geometry_v2,omega_boundary_contract_v2'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'cloud_bal_schema_version', &
                                 CLOUD_BAL_SCHEMA_VERSION))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'evidence_class', &
@@ -1110,13 +1393,25 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'cloud_analysis_present',0_int32))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'radar_los_used',0_int32))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'above_ground_mask_provenance', &
-      'LW3_OM_VALIDITY_CHECKED_AGAINST_STATIC_AVG'))) RETURN
+      'PSFC_PRESSURE_CENTER_AND_STATIC_TERRAIN_HEIGHT'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'grid_spacing_adapter_policy', &
+      'KM_TO_M_OR_PINNED_LEGACY_NUMERIC_METERS'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'pressure_interface_semantics', &
+      'SURFACE_CLIPPED_CONTROL_VOLUME_BOUNDARY'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_continuity_assessed', &
+      0_int32))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'omega_boundary_provenance', &
+      'COPIED_INTERIOR_DIAGNOSTIC_ONLY'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'balance_support_variable', &
                                 'candidate_balance_support'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'minimum_usable_dbz', &
                                 MINIMUM_USABLE_DBZ))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'radar_no_echo_dbz', &
                                 RADAR_NO_ECHO_DBZ))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'radar_no_echo_transport_policy', &
+                                'DESTINATION_HARD_BLOCK_SEPARATE_LEDGER'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'radar_valid_semantics', &
+                                'ECHO_ONLY'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL, &
                                 'configured_assumed_radar_wavelength_m', &
                                 config%column%radar_wavelength_m))) RETURN
@@ -1247,10 +1542,12 @@ CONTAINS
                        result%column%numerical%flux_terrain_intercept))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'flux_observation_blocked', &
                        result%column%numerical%flux_observation_blocked))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'flux_no_echo_blocked', &
+                       result%column%numerical%flux_no_echo_blocked))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'flux_microphysical_loss', &
                        result%column%numerical%flux_microphysical_loss))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'lower_boundary_note', &
-                       'lowest resolved analyzed omega; not terrain kinematic omega'))) RETURN
+      'copied lowest resolved omega; diagnostic only, not terrain kinematic omega'))) RETURN
     put_global_metadata=.TRUE.
   END FUNCTION put_global_metadata
 

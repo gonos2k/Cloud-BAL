@@ -157,6 +157,7 @@ def build_candidate(original: Path, shadow: Path, output: Path) -> dict:
         flux_names = (
             "flux_input", "flux_deposited", "flux_suspended", "flux_boundary_exit",
             "flux_terrain_intercept", "flux_observation_blocked",
+            "flux_no_echo_blocked",
             "flux_microphysical_loss", "flux_ledger_error",
         )
         flux = {name: float(getattr(dataset, name)) for name in flux_names}
@@ -335,7 +336,7 @@ def artifact(root: Path, role: str, origin: str, path: Path) -> dict:
     elif role == "SHADOW_CANDIDATE":
         attestation = path.parent / "MANIFEST.json"
         result["attestation"] = {
-            "format": "CLOUD_BAL_GENERATION",
+            "format": "LOCAL_DIAGNOSTIC_MANIFEST",
             "path": attestation.relative_to(root).as_posix(),
             "sha256": sha256(attestation),
         }
@@ -373,7 +374,7 @@ def seal_case(root: Path, case_id: str, source_commit: str, original: Path,
             root, "REAL_OPERATIONAL_ORIGINAL", "ARCHIVED_OPERATIONAL_KLAPS", original
         ),
         "candidate": artifact(
-            root, "SHADOW_CANDIDATE", "FULL_SHADOW_KLAPS_PRODUCT", candidate
+            root, "SHADOW_CANDIDATE", "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT", candidate
         ),
         "operational_unchanged": artifact(
             root, "OPERATIONAL_UNCHANGED", "LIVE_OPERATIONAL_KLAPS_UNCHANGED",
@@ -534,6 +535,9 @@ def main() -> int:
 
     if not any(case["status"] == "COMPLETED_DIAGNOSTIC" for case in report["cases"]):
         raise ValueError("no comparison case was available")
+    requested_cases_complete = all(
+        case["status"] == "COMPLETED_DIAGNOSTIC" for case in report["cases"]
+    )
 
     with (args.output / "field_statistics.tsv").open("w", newline="") as stream:
         columns = [
@@ -557,8 +561,13 @@ def main() -> int:
             "operational comparison contract failed: "
             + "; ".join(readiness["failures"])
         )
+    report["requested_case_set_complete"] = requested_cases_complete
     report["structural_comparison_readiness"] = {
-        "status": readiness["status"],
+        "status": (
+            readiness["status"] if requested_cases_complete
+            else "NOT_READY_REQUESTED_CASES_INCOMPLETE"
+        ),
+        "available_pairs_status": readiness["status"],
         "algorithm_comparison_status": readiness["algorithm_comparison_status"],
         "readiness_path": str(
             (args.output / "contract_evidence" / "READINESS.json").resolve()
@@ -567,15 +576,19 @@ def main() -> int:
     (args.output / "comparison.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n"
     )
+    comparison_status = (
+        "COMPLETED_DIAGNOSTIC" if requested_cases_complete
+        else "INCOMPLETE_DIAGNOSTIC"
+    )
     (args.output / "STATUS.txt").write_text(
-        "comparison=COMPLETED_DIAGNOSTIC\n"
+        f"comparison={comparison_status}\n"
         "full_end_to_end=NO\n"
         "dynamic_balance_authorized=NO\n"
         "operational_original_modified=NO\n"
         "science_promotion=NO\n"
     )
     print(args.output.resolve())
-    return 0
+    return 0 if requested_cases_complete else 3
 
 
 if __name__ == "__main__":

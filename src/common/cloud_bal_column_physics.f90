@@ -27,6 +27,8 @@ MODULE cloud_bal_column_physics
   REAL(real64), PARAMETER :: MISSING_PHASE_ALL_RAIN_K=275.15_real64
   INTEGER, PARAMETER :: MAX_ALLOWED_TRANSPORT_SUBSTEPS=256
   REAL(real64), PARAMETER :: MAX_LEDGER_TOLERANCE=1.0e-6_real64
+  INTEGER(int32), PARAMETER :: PHASE_EVIDENCE_BITS= &
+    SOURCE_RADAR_DBZ+SOURCE_CLOUD_ANALYSIS
 
   TYPE, PUBLIC :: column_physics_config
     REAL(real64) :: cloud_fraction_threshold=0.01_real64
@@ -51,6 +53,7 @@ MODULE cloud_bal_column_physics
     REAL(real64) :: boundary_exit=0.0_real64
     REAL(real64) :: terrain_intercept=0.0_real64
     REAL(real64) :: observation_blocked=0.0_real64
+    REAL(real64) :: no_echo_blocked=0.0_real64
     REAL(real64) :: microphysical_loss=0.0_real64
     INTEGER :: maximum_required_substeps=0
   END TYPE precipitation_flux_ledger
@@ -66,6 +69,7 @@ MODULE cloud_bal_column_physics
   PUBLIC :: saturation_adjust_cell
   PUBLIC :: reduced_moist_enthalpy
   PUBLIC :: flux_ledger_closes
+  PUBLIC :: column_config_valid
 
 CONTAINS
 
@@ -80,7 +84,7 @@ CONTAINS
     TYPE(precipitation_flux_ledger) :: ledger
     REAL(real32), ALLOCATABLE :: w_background(:,:,:),w_target(:,:,:)
     LOGICAL, ALLOCATABLE :: w_valid(:,:,:),radar_observed(:,:,:)
-    LOGICAL, ALLOCATABLE :: transport_blocked(:,:,:),radar_derived(:,:,:)
+    LOGICAL, ALLOCATABLE :: radar_no_echo(:,:,:),radar_derived(:,:,:)
     LOGICAL, ALLOCATABLE :: phase_uncertain(:,:,:)
     INTEGER, ALLOCATABLE :: phase(:,:,:)
     REAL(real64), ALLOCATABLE :: rain(:,:,:),snow(:,:,:),graupel(:,:,:)
@@ -153,7 +157,7 @@ CONTAINS
     END IF
 
     ALLOCATE(w_background(nx,ny,nz),w_target(nx,ny,nz),w_valid(nx,ny,nz), &
-             radar_observed(nx,ny,nz),transport_blocked(nx,ny,nz), &
+             radar_observed(nx,ny,nz),radar_no_echo(nx,ny,nz), &
              radar_derived(nx,ny,nz),phase_uncertain(nx,ny,nz), &
              phase(nx,ny,nz),rain(nx,ny,nz), &
              snow(nx,ny,nz),graupel(nx,ny,nz),zlinear(nx,ny,nz))
@@ -194,8 +198,9 @@ CONTAINS
     ! observation elsewhere in the domain must never transport an unrelated
     ! background precipitation field.
     rain=0.0_real64; snow=0.0_real64; graupel=0.0_real64
-    radar_observed=.FALSE.; radar_derived=.FALSE.; phase_uncertain=.FALSE.
-    transport_blocked=.FALSE.; phase=PHASE_UNKNOWN; zlinear=0.0_real64
+    radar_observed=.FALSE.; radar_no_echo=.FALSE.
+    radar_derived=.FALSE.; phase_uncertain=.FALSE.
+    phase=PHASE_UNKNOWN; zlinear=0.0_real64
     IF (has_radar) THEN
       CALL diagnose_radar_cells(state_in,cfg,radar_observed,phase,zlinear, &
         rain,snow,graupel,phase_uncertain,status)
@@ -209,12 +214,14 @@ CONTAINS
                               REASON_REQUIRED_COVERAGE)
         RETURN
       END IF
-      transport_blocked=radar_observed
+      radar_no_echo=state_in%above_ground .AND. radar_no_echo_cell( &
+        state_in%radar_reflectivity%value,state_in%radar_reflectivity%valid, &
+        state_in%radar_reflectivity%quality,state_in%radar_reflectivity%source)
       CALL transport_precipitation_flux(state_in%grid,state_in%pressure%value, &
         state_in%temperature%value,state_in%vapor%value,state_in%u%value, &
         state_in%v%value,w_background,w_valid,state_in%above_ground, &
-        transport_blocked,phase,zlinear, &
-        rain,snow,graupel,cfg,ledger,status)
+        radar_observed,phase,zlinear,rain,snow,graupel,cfg,ledger,status, &
+        radar_no_echo)
       IF (status/=STATUS_OK .OR. .NOT.flux_ledger_closes(ledger,cfg)) THEN
         CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_GATE)
         result%numerical%transport_required_substeps=ledger%maximum_required_substeps
@@ -224,6 +231,7 @@ CONTAINS
         result%numerical%flux_boundary_exit=ledger%boundary_exit
         result%numerical%flux_terrain_intercept=ledger%terrain_intercept
         result%numerical%flux_observation_blocked=ledger%observation_blocked
+        result%numerical%flux_no_echo_blocked=ledger%no_echo_blocked
         result%numerical%flux_microphysical_loss=ledger%microphysical_loss
         RETURN
       END IF
@@ -265,7 +273,7 @@ CONTAINS
                                               REAL(candidate_result%coverage%required,real64)
     ledger_error=ledger%input-(ledger%deposited+ledger%suspended+ &
       ledger%boundary_exit+ledger%terrain_intercept+ledger%observation_blocked+ &
-      ledger%microphysical_loss)
+      ledger%no_echo_blocked+ledger%microphysical_loss)
     candidate_result%numerical%ledger_error=ABS(ledger_error)
     candidate_result%numerical%flux_input=ledger%input
     candidate_result%numerical%flux_deposited=ledger%deposited
@@ -273,6 +281,7 @@ CONTAINS
     candidate_result%numerical%flux_boundary_exit=ledger%boundary_exit
     candidate_result%numerical%flux_terrain_intercept=ledger%terrain_intercept
     candidate_result%numerical%flux_observation_blocked=ledger%observation_blocked
+    candidate_result%numerical%flux_no_echo_blocked=ledger%no_echo_blocked
     candidate_result%numerical%flux_microphysical_loss=ledger%microphysical_loss
     candidate_result%numerical%transport_required_substeps= &
       ledger%maximum_required_substeps
@@ -429,7 +438,8 @@ CONTAINS
   END SUBROUTINE diagnose_radar_cells
 
   SUBROUTINE transport_precipitation_flux(grid,pressure,temperature,vapor,u,v,w, &
-    w_valid,domain,observed,phase,zlinear,rain,snow,graupel,cfg,ledger,status)
+    w_valid,domain,observed,phase,zlinear,rain,snow,graupel,cfg,ledger,status, &
+    no_echo)
     ! One-shot kernel: the hydrometeors are fresh radar-work arrays, consumed
     ! exactly once by derive_column_physics and never reused as background.
     TYPE(grid_spec), INTENT(IN) :: grid
@@ -441,6 +451,7 @@ CONTAINS
     TYPE(column_physics_config), INTENT(IN) :: cfg
     TYPE(precipitation_flux_ledger), INTENT(OUT) :: ledger
     INTEGER, INTENT(OUT) :: status
+    LOGICAL, INTENT(IN) :: no_echo(:,:,:)
     INTEGER :: i,j,k,phase_code,nphase
     INTEGER, ALLOCATABLE :: phase_work(:,:,:)
     REAL(real64), ALLOCATABLE :: deposited_rate(:,:),deposited_zrate(:,:)
@@ -455,6 +466,10 @@ CONTAINS
     IF (.NOT.transport_values_valid(grid,pressure,temperature,vapor,u,v,w,domain, &
                                     phase,zlinear,rain,snow,graupel,cfg)) RETURN
     IF (ANY(observed .AND. .NOT.w_valid)) RETURN
+    IF (ANY(SHAPE(no_echo)/=(/grid%nx,grid%ny,grid%nz/))) RETURN
+    IF (ANY(no_echo .AND. observed) .OR. ANY(no_echo .AND. .NOT.domain)) RETURN
+    IF (ANY(no_echo .AND. (zlinear>0.0_real64 .OR. rain>0.0_real64 .OR. &
+        snow>0.0_real64 .OR. graupel>0.0_real64))) RETURN
     ALLOCATE(phase_work(grid%nx,grid%ny,grid%nz), &
              zlinear_work(grid%nx,grid%ny,grid%nz), &
              rain_work(grid%nx,grid%ny,grid%nz), &
@@ -471,15 +486,15 @@ CONTAINS
         SELECT CASE(phase_code)
         CASE(PHASE_RAIN)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            domain,observed,k,phase_code,zlinear_work,rain_work,cfg,ledger, &
+            domain,observed,no_echo,k,phase_code,zlinear_work,rain_work,cfg,ledger, &
             phase_rate,phase_zrate,status)
         CASE(PHASE_SNOW)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            domain,observed,k,phase_code,zlinear_work,snow_work,cfg,ledger, &
+            domain,observed,no_echo,k,phase_code,zlinear_work,snow_work,cfg,ledger, &
             phase_rate,phase_zrate,status)
         CASE(PHASE_GRAUPEL)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            domain,observed,k,phase_code,zlinear_work,graupel_work,cfg,ledger, &
+            domain,observed,no_echo,k,phase_code,zlinear_work,graupel_work,cfg,ledger, &
             phase_rate,phase_zrate,status)
         END SELECT
         IF (status/=STATUS_OK) RETURN
@@ -520,11 +535,13 @@ CONTAINS
   END SUBROUTINE transport_precipitation_flux
 
   SUBROUTINE transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-    domain,observed,k,phase_code,zlinear,q,cfg,ledger,deposited_rate,deposited_zrate,status)
+    domain,observed,no_echo,k,phase_code,zlinear,q,cfg,ledger,deposited_rate, &
+    deposited_zrate,status)
     TYPE(grid_spec), INTENT(IN) :: grid
     REAL(real32), INTENT(IN) :: pressure(:,:,:),temperature(:,:,:),vapor(:,:,:),u(:,:,:)
     REAL(real32), INTENT(IN) :: v(:,:,:),w(:,:,:)
     LOGICAL, INTENT(IN) :: w_valid(:,:,:),domain(:,:,:),observed(:,:,:)
+    LOGICAL, INTENT(IN) :: no_echo(:,:,:)
     INTEGER, INTENT(IN) :: k,phase_code
     REAL(real64), INTENT(INOUT) :: zlinear(:,:,:),q(:,:,:)
     TYPE(column_physics_config), INTENT(IN) :: cfg
@@ -563,8 +580,10 @@ CONTAINS
                          grid%dx(i,j)*grid%dy(i,j)
         CYCLE
       END IF
-      dz=layer_separation(grid,pressure,temperature,vapor,i,j,k)
-      IF (dz<=0.0_real64) RETURN
+      dz=layer_separation(grid,pressure,temperature,vapor,i,j,k,domain(i,j,k-1))
+      ! A pressure-level centre may lie exactly on the lower boundary.  Its
+      ! precipitation exits to terrain without horizontal travel (dt=0).
+      IF (dz<0.0_real64) RETURN
       dt=dz/relative(i,j)
       xstep(i,j)=REAL(u(i,j,k),real64)*dt/grid%dx(i,j)
       ystep(i,j)=REAL(v(i,j,k),real64)*dt/grid%dy(i,j)
@@ -599,6 +618,10 @@ CONTAINS
       END IF
       IF (observed(i,j,k-1)) THEN
         ledger%observation_blocked=ledger%observation_blocked+flux(i,j)
+        CYCLE
+      END IF
+      IF (no_echo(i,j,k-1)) THEN
+        ledger%no_echo_blocked=ledger%no_echo_blocked+flux(i,j)
         CYCLE
       END IF
       vt=terminal_velocity(phase_code,REAL(pressure(i,j,k-1),real64), &
@@ -721,7 +744,7 @@ CONTAINS
           REAL(state%vapor%value(i,j,k),real64))
         IF (rho_d<=0.0_real64) RETURN
         qprecip=rain(i,j,k)+snow(i,j,k)+graupel(i,j,k)
-        dz=state%grid%dp(i,j,k)/(rho_d*GRAVITY)
+        dz=state%grid%cell_dp(i,j,k)/(rho_d*GRAVITY)
         energy=energy+GRAVITY*cfg%precipitation_loading_efficiency*qprecip*dz
         wdown=-MIN(cfg%maximum_downdraft_ms,SQRT(MAX(0.0_real64,2.0_real64*energy)))
         innovation=MAX(-cfg%maximum_downdraft_innovation_ms, &
@@ -954,7 +977,8 @@ CONTAINS
     status=STATUS_FAILED; terminal_velocity=0.0_real64
     IF (.NOT.ieee_is_finite(pressure_pa) .OR. &
         .NOT.ieee_is_finite(temperature_k) .OR. .NOT.ieee_is_finite(dbz)) RETURN
-    IF (pressure_pa<=100.0_real64 .OR. temperature_k<=150.0_real64 .OR. &
+    IF (pressure_pa<MIN_PRESSURE_PA .OR. pressure_pa>MAX_PRESSURE_PA .OR. &
+        temperature_k<=150.0_real64 .OR. &
         temperature_k>350.0_real64 .OR. dbz< -100.0_real64 .OR. &
         dbz>100.0_real64) RETURN
     z=10.0_real64**(0.1_real64*dbz)
@@ -1003,7 +1027,8 @@ CONTAINS
     INTEGER :: phase_status
 
     status=STATUS_FAILED
-    IF (.NOT.ieee_is_finite(pressure) .OR. pressure<=100.0_real64 .OR. &
+    IF (.NOT.ieee_is_finite(pressure) .OR. pressure<MIN_PRESSURE_PA .OR. &
+        pressure>MAX_PRESSURE_PA .OR. &
         .NOT.ieee_is_finite(temperature) .OR. temperature<150.0_real64 .OR. &
         .NOT.ieee_is_finite(vapor) .OR. .NOT.ieee_is_finite(cloud_liquid) .OR. &
         .NOT.ieee_is_finite(cloud_ice) .OR. vapor<0.0_real64 .OR. &
@@ -1123,9 +1148,25 @@ CONTAINS
     TYPE(precipitation_flux_ledger), INTENT(IN) :: ledger
     TYPE(column_physics_config), INTENT(IN) :: cfg
     REAL(real64) :: output,error
+    flux_ledger_closes=.FALSE.
+    IF (.NOT.column_config_valid(cfg)) RETURN
+    IF (.NOT.ieee_is_finite(ledger%input) .OR. &
+        .NOT.ieee_is_finite(ledger%deposited) .OR. &
+        .NOT.ieee_is_finite(ledger%suspended) .OR. &
+        .NOT.ieee_is_finite(ledger%boundary_exit) .OR. &
+        .NOT.ieee_is_finite(ledger%terrain_intercept) .OR. &
+        .NOT.ieee_is_finite(ledger%observation_blocked) .OR. &
+        .NOT.ieee_is_finite(ledger%no_echo_blocked) .OR. &
+        .NOT.ieee_is_finite(ledger%microphysical_loss)) RETURN
+    IF (ledger%input<0.0_real64 .OR. ledger%deposited<0.0_real64 .OR. &
+        ledger%suspended<0.0_real64 .OR. ledger%boundary_exit<0.0_real64 .OR. &
+        ledger%terrain_intercept<0.0_real64 .OR. &
+        ledger%observation_blocked<0.0_real64 .OR. &
+        ledger%no_echo_blocked<0.0_real64 .OR. &
+        ledger%microphysical_loss<0.0_real64) RETURN
     output=ledger%deposited+ledger%suspended+ledger%boundary_exit+ &
            ledger%terrain_intercept+ledger%observation_blocked+ &
-           ledger%microphysical_loss
+           ledger%no_echo_blocked+ledger%microphysical_loss
     error=ABS(ledger%input-output)
     flux_ledger_closes=ieee_is_finite(error) .AND. error<= &
       cfg%ledger_absolute_tolerance+cfg%ledger_relative_tolerance* &
@@ -1156,14 +1197,22 @@ CONTAINS
                          MASK=state%above_ground)
   END FUNCTION hydrometeor_mass
 
-  PURE REAL(real64) FUNCTION layer_separation(grid,pressure,temperature,vapor,i,j,k)
+  PURE REAL(real64) FUNCTION layer_separation(grid,pressure,temperature,vapor,i,j,k, &
+                                               lower_cell_active)
     TYPE(grid_spec), INTENT(IN) :: grid
     REAL(real32), INTENT(IN) :: pressure(:,:,:),temperature(:,:,:),vapor(:,:,:)
     INTEGER, INTENT(IN) :: i,j,k
-    REAL(real64) :: rho
+    LOGICAL, INTENT(IN) :: lower_cell_active
+    REAL(real64) :: rho,pressure_separation
     rho=dry_air_density(REAL(pressure(i,j,k),real64), &
       REAL(temperature(i,j,k),real64),REAL(vapor(i,j,k),real64))
-    layer_separation=0.5_real64*(grid%dp(i,j,k)+grid%dp(i,j,k-1))/(rho*GRAVITY)
+    IF (lower_cell_active) THEN
+      pressure_separation=grid%level_spacing_dp(i,j,k-1)
+    ELSE
+      pressure_separation=grid%pressure_interface(i,j,k)- &
+                          REAL(pressure(i,j,k),real64)
+    END IF
+    layer_separation=pressure_separation/(rho*GRAVITY)
   END FUNCTION layer_separation
 
   PURE INTEGER FUNCTION cloud_regime(cloud_type)
@@ -1247,7 +1296,7 @@ CONTAINS
 
   PURE LOGICAL FUNCTION radar_field_contract_valid(state)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
-    INTEGER :: target(3)
+    INTEGER :: target(3),i,j,k
     target=(/state%grid%nx,state%grid%ny,state%grid%nz/)
     radar_field_contract_valid=ALLOCATED(state%radar_reflectivity%value) .AND. &
       ALLOCATED(state%radar_reflectivity%valid) .AND. &
@@ -1265,13 +1314,39 @@ CONTAINS
     radar_field_contract_valid=ALL(state%radar_reflectivity%quality>=0_int32) .AND. &
       ALL(state%radar_reflectivity%source>=0_int32) .AND. &
       .NOT.ANY(state%radar_reflectivity%valid .AND. &
-        .NOT.cell_is_usable(state%radar_reflectivity%valid, &
-          state%radar_reflectivity%quality,state%radar_reflectivity%source)) .AND. &
-      .NOT.ANY(state%radar_reflectivity%valid .AND. &
-        IAND(state%radar_reflectivity%source,SOURCE_RADAR_DBZ)==0_int32) .AND. &
+        .NOT.radar_echo_cell(state%radar_reflectivity%value, &
+          state%radar_reflectivity%valid,state%radar_reflectivity%quality, &
+          state%radar_reflectivity%source)) .AND. &
       .NOT.ANY(state%radar_reflectivity%valid .AND. .NOT.state%above_ground) .AND. &
       .NOT.ANY(state%radar_reflectivity%valid .AND. &
                .NOT.ieee_is_finite(state%radar_reflectivity%value))
+    IF (.NOT.radar_field_contract_valid) RETURN
+    DO k=1,state%grid%nz; DO j=1,state%grid%ny; DO i=1,state%grid%nx
+      IF (state%above_ground(i,j,k) .AND. .NOT.( &
+                radar_echo_cell(state%radar_reflectivity%value(i,j,k), &
+                                state%radar_reflectivity%valid(i,j,k), &
+                                state%radar_reflectivity%quality(i,j,k), &
+                                state%radar_reflectivity%source(i,j,k)) .OR. &
+                radar_no_echo_cell(state%radar_reflectivity%value(i,j,k), &
+                                   state%radar_reflectivity%valid(i,j,k), &
+                                   state%radar_reflectivity%quality(i,j,k), &
+                                   state%radar_reflectivity%source(i,j,k)) .OR. &
+                radar_missing_cell(state%radar_reflectivity%value(i,j,k), &
+                                   state%radar_reflectivity%valid(i,j,k), &
+                                   state%radar_reflectivity%quality(i,j,k), &
+                                   state%radar_reflectivity%source(i,j,k)))) THEN
+        radar_field_contract_valid=.FALSE.
+        RETURN
+      END IF
+      IF (.NOT.state%above_ground(i,j,k) .AND. &
+          .NOT.radar_missing_cell(state%radar_reflectivity%value(i,j,k), &
+                                  state%radar_reflectivity%valid(i,j,k), &
+                                  state%radar_reflectivity%quality(i,j,k), &
+                                  state%radar_reflectivity%source(i,j,k))) THEN
+        radar_field_contract_valid=.FALSE.
+        RETURN
+      END IF
+    END DO; END DO; END DO
   END FUNCTION radar_field_contract_valid
 
   PURE LOGICAL FUNCTION precipitation_phase_contract_valid(state)
@@ -1298,6 +1373,8 @@ CONTAINS
       .NOT.ANY(state%precipitation_phase%valid .AND. &
         .NOT.cell_is_usable(state%precipitation_phase%valid, &
           state%precipitation_phase%quality,state%precipitation_phase%source)) .AND. &
+      .NOT.ANY(state%precipitation_phase%valid .AND. &
+        IAND(state%precipitation_phase%source,PHASE_EVIDENCE_BITS)==0_int32) .AND. &
       .NOT.ANY(state%precipitation_phase%valid .AND. &
         (state%precipitation_phase%value<PHASE_UNKNOWN .OR. &
          state%precipitation_phase%value>PHASE_GRAUPEL))
@@ -1435,20 +1512,34 @@ CONTAINS
     REAL(real64), INTENT(IN) :: zlinear(:,:,:),rain(:,:,:),snow(:,:,:),graupel(:,:,:)
     TYPE(column_physics_config), INTENT(IN) :: cfg
     REAL(real64) :: dx_tolerance,dy_tolerance,maximum_zlinear
+    INTEGER :: k
 
     transport_values_valid=.FALSE.
     IF (grid%nx<1 .OR. grid%ny<1 .OR. grid%nz<2) RETURN
     IF (.NOT.ALLOCATED(grid%dx) .OR. .NOT.ALLOCATED(grid%dy) .OR. &
-        .NOT.ALLOCATED(grid%dp)) RETURN
+        .NOT.ALLOCATED(grid%pressure_interface) .OR. &
+        .NOT.ALLOCATED(grid%cell_dp) .OR. &
+        .NOT.ALLOCATED(grid%level_spacing_dp)) RETURN
     IF (ANY(SHAPE(grid%dx)/=(/grid%nx,grid%ny/)) .OR. &
         ANY(SHAPE(grid%dy)/=(/grid%nx,grid%ny/)) .OR. &
-        ANY(SHAPE(grid%dp)/=(/grid%nx,grid%ny,grid%nz/))) RETURN
+        ANY(SHAPE(grid%pressure_interface)/=(/grid%nx,grid%ny,grid%nz+1/)) .OR. &
+        ANY(SHAPE(grid%cell_dp)/=(/grid%nx,grid%ny,grid%nz/)) .OR. &
+        ANY(SHAPE(grid%level_spacing_dp)/=(/grid%nx,grid%ny,grid%nz-1/))) RETURN
     IF (ANY(.NOT.ieee_is_finite(grid%dx)) .OR. &
         ANY(.NOT.ieee_is_finite(grid%dy)) .OR. &
-        ANY(.NOT.ieee_is_finite(grid%dp))) RETURN
+        ANY(.NOT.ieee_is_finite(grid%pressure_interface)) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%cell_dp)) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%level_spacing_dp))) RETURN
+    IF (.NOT.ANY(domain)) RETURN
+    DO k=1,grid%nz-1
+      IF (ANY(domain(:,:,k) .AND. .NOT.domain(:,:,k+1))) RETURN
+    END DO
+    IF (ANY(domain .AND. grid%cell_dp<=0.0_real64)) RETURN
     IF (ANY(grid%dx<1.0_real64) .OR. ANY(grid%dx>1.0e6_real64) .OR. &
         ANY(grid%dy<1.0_real64) .OR. ANY(grid%dy>1.0e6_real64) .OR. &
-        ANY(grid%dp<=0.0_real64) .OR. ANY(grid%dp>120000.0_real64)) RETURN
+        ANY(grid%cell_dp<0.0_real64) .OR. ANY(grid%cell_dp>MAX_PRESSURE_PA) .OR. &
+        ANY(grid%level_spacing_dp<=0.0_real64) .OR. &
+        ANY(grid%level_spacing_dp>MAX_PRESSURE_PA)) RETURN
     dx_tolerance=64.0_real64*EPSILON(1.0_real64)*ABS(grid%dx(1,1))
     dy_tolerance=64.0_real64*EPSILON(1.0_real64)*ABS(grid%dy(1,1))
     ! The trajectory kernel advances in grid-index coordinates.  Reject a
@@ -1459,7 +1550,8 @@ CONTAINS
         ANY(.NOT.ieee_is_finite(temperature)) .OR. &
         ANY(.NOT.ieee_is_finite(vapor)) .OR. ANY(.NOT.ieee_is_finite(u)) .OR. &
         ANY(.NOT.ieee_is_finite(v)) .OR. ANY(.NOT.ieee_is_finite(w))) RETURN
-    IF (ANY(domain .AND. (pressure<100.0_real32 .OR. pressure>120000.0_real32)) .OR. &
+    IF (ANY(domain .AND. (REAL(pressure,real64)<MIN_PRESSURE_PA .OR. &
+                          REAL(pressure,real64)>MAX_PRESSURE_PA)) .OR. &
         ANY(domain .AND. (temperature<150.0_real32 .OR. &
                           temperature>350.0_real32)) .OR. &
         ANY(domain .AND. (vapor<0.0_real32 .OR. vapor>0.2_real32)) .OR. &

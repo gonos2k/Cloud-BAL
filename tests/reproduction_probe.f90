@@ -133,9 +133,6 @@ CONTAINS
     DO k=1,3; DO j=1,4; DO i=1,4
       state%grid%dx(i,j)=2000.0_real64
       state%grid%dy(i,j)=2200.0_real64
-      state%grid%dp(i,j,k)=15000.0_real64
-      state%grid%pressure_mass_measure(i,j,k)=state%grid%dx(i,j)*state%grid%dy(i,j)* &
-        state%grid%dp(i,j,k)/9.80665_real64
       state%pressure%value(i,j,k)=REAL(95000-15000*(k-1),real32)
       state%temperature%value(i,j,k)=280.0_real32
       state%vapor%value(i,j,k)=0.008_real32
@@ -171,8 +168,10 @@ CONTAINS
     state%omega_bottom_boundary%valid=.TRUE.
     state%omega_top_boundary%quality=0_int32
     state%omega_bottom_boundary%quality=0_int32
-    state%omega_top_boundary%source=SOURCE_BACKGROUND_MODEL
-    state%omega_bottom_boundary%source=SOURCE_BACKGROUND_MODEL
+    state%omega_top_boundary%source=SOURCE_BOUNDARY_CONDITION
+    state%omega_bottom_boundary%source=SOURCE_BOUNDARY_CONDITION
+    CALL configure_pressure_geometry(state,status)
+    IF (status/=STATUS_OK) ERROR STOP 'pressure geometry initialization failed'
     CALL refresh_dry_air_mass_measure(state,status)
     IF (status/=STATUS_OK) ERROR STOP 'dry-air mass initialization failed'
   END SUBROUTINE make_state

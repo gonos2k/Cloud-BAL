@@ -242,7 +242,7 @@ def artifact(role: str, origin: str, path: Path, root: Path) -> dict[str, object
     elif role == "SHADOW_CANDIDATE":
         attestation = path.parent / "MANIFEST.json"
         result["attestation"] = {
-            "format": "CLOUD_BAL_GENERATION",
+            "format": "LOCAL_DIAGNOSTIC_MANIFEST",
             "path": attestation.relative_to(root).as_posix(),
             "sha256": sha256(attestation),
         }
@@ -260,7 +260,7 @@ def pair(root: Path, paths: tuple[Path, Path, Path], *, product: str = "LAPS") -
             "REAL_OPERATIONAL_ORIGINAL", "ARCHIVED_OPERATIONAL_KLAPS", original, root
         ),
         "candidate": artifact(
-            "SHADOW_CANDIDATE", "FULL_SHADOW_KLAPS_PRODUCT", candidate, root
+            "SHADOW_CANDIDATE", "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT", candidate, root
         ),
         "operational_unchanged": artifact(
             "OPERATIONAL_UNCHANGED",
@@ -459,7 +459,7 @@ def main() -> None:
             root,
             "background",
             [background_pair],
-            "FULL_SHADOW_KLAPS_PRODUCT",
+            "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT",
         )
 
         malformed_id_pair = pair(root, (original, candidate, operational))
@@ -485,7 +485,7 @@ def main() -> None:
         big_candidate = bigfile_paths[1]
         big_pair = pair(root, (original, candidate, operational))
         big_pair["candidate"] = artifact(
-            "SHADOW_CANDIDATE", "FULL_SHADOW_KLAPS_PRODUCT", big_candidate, root
+            "SHADOW_CANDIDATE", "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT", big_candidate, root
         )
         expect_not_ready(root, "forbidden-path", [big_pair], "bigfile")
 

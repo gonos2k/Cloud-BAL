@@ -8,6 +8,7 @@ PROGRAM test_canonical_state
   failures=0
   CALL test_contract(failures)
   CALL test_domain_and_mass_contract(failures)
+  CALL test_pressure_cell_geometry(failures)
   CALL test_transaction(failures)
   CALL test_vertical_conversion(failures)
   CALL test_los_contract(failures)
@@ -38,11 +39,6 @@ CONTAINS
     IF (status/=STATUS_OK) ERROR STOP 'state initialization failed'
     state%grid%dx=2000.0_real64
     state%grid%dy=2500.0_real64
-    state%grid%dp(:,:,1)=10000.0_real64
-    state%grid%dp(:,:,2)=15000.0_real64
-    state%grid%dp(:,:,3)=20000.0_real64
-    state%grid%pressure_mass_measure=SPREAD(state%grid%dx*state%grid%dy,3,3)* &
-      state%grid%dp/9.80665_real64
     CALL fill_real_field(state%pressure,80000.0_real32,SOURCE_BACKGROUND_MODEL)
     state%pressure%value(:,:,1)=95000.0_real32
     state%pressure%value(:,:,2)=80000.0_real32
@@ -54,6 +50,8 @@ CONTAINS
     CALL fill_real_field(state%omega,0.0_real32,SOURCE_BACKGROUND_MODEL)
     CALL fill_surface_field(state%surface_pressure,100000.0_real32)
     CALL fill_surface_field(state%surface_temperature,290.0_real32)
+    CALL configure_pressure_geometry(state,status)
+    IF (status/=STATUS_OK) ERROR STOP 'pressure geometry initialization failed'
     CALL refresh_dry_air_mass_measure(state,status)
     IF (status/=STATUS_OK) ERROR STOP 'dry-air mass initialization failed'
   END SUBROUTINE make_valid_state
@@ -92,9 +90,8 @@ CONTAINS
     state%vapor%valid(1,1,1)=.FALSE.
     state%vapor%quality(1,1,1)=QUALITY_RAW_MISSING
     CALL refresh_dry_air_mass_measure(state,status)
-    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
-    CALL check(status==STATUS_DEGRADED .AND. reason==REASON_REQUIRED_COVERAGE, &
-               'partial required coverage must be degraded',failures)
+    CALL check(status==STATUS_FAILED, &
+               'dry-air mass requires usable vapor in every physical cell',failures)
     state%vapor%valid(1,1,1)=.TRUE.
     state%vapor%quality(1,1,1)=0_int32
     CALL refresh_dry_air_mass_measure(state,status)
@@ -139,7 +136,10 @@ CONTAINS
       2.0e-7_real64*expected, &
       'dry-air mass must use represented total-water mixing ratio',failures)
 
-    state%above_ground(1,1,1)=.FALSE.
+    state%surface_pressure%value(1,1)=90000.0_real32
+    CALL configure_pressure_geometry(state,status)
+    CALL check(status==STATUS_OK .AND. .NOT.state%above_ground(1,1,1), &
+      'surface pressure must define the terrain domain independently',failures)
     CALL invalidate_cell(state%pressure,1,1,1)
     CALL invalidate_cell(state%temperature,1,1,1)
     CALL invalidate_cell(state%vapor,1,1,1)
@@ -149,9 +149,9 @@ CONTAINS
     CALL refresh_dry_air_mass_measure(state,status)
     CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
     CALL check(status==STATUS_OK .AND. &
-      state%grid%dry_air_mass_measure(1,1,1)== &
-      state%grid%pressure_mass_measure(1,1,1), &
-      'below-ground missing core data must not reduce physical coverage',failures)
+      state%grid%dry_air_mass_measure(1,1,1)==0.0_real64 .AND. &
+      state%grid%pressure_mass_measure(1,1,1)==0.0_real64, &
+      'below-ground cells must carry no physical cell mass',failures)
 
     state%balance_beta(1,1,1)=1.0_real32
     CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
@@ -195,6 +195,109 @@ CONTAINS
       'missing domain mask must fail before field indexing',failures)
   END SUBROUTINE test_domain_and_mass_contract
 
+  SUBROUTINE test_pressure_cell_geometry(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: state,boundary_state
+    INTEGER :: status
+    REAL(real64) :: expected_mass
+    LOGICAL :: terrain_domain(1,1,3)
+
+    CALL initialize_cloud_bal_state(state,1,1,3,1788224400_int64, &
+                                    'cut-cell-test',status)
+    IF (status/=STATUS_OK) ERROR STOP 'cut-cell state initialization failed'
+    state%grid%dx=2000.0_real64
+    state%grid%dy=3000.0_real64
+    state%pressure%value(1,1,:)=[100000.0_real32,95000.0_real32,90000.0_real32]
+    state%pressure%valid=.TRUE.
+    state%pressure%quality=0_int32
+    state%pressure%source=SOURCE_BACKGROUND_MODEL
+    state%surface_pressure%value(1,1)=95500.0_real32
+    state%surface_pressure%valid=.TRUE.
+    state%surface_pressure%quality=0_int32
+    state%surface_pressure%source=SOURCE_BACKGROUND_MODEL
+    CALL configure_pressure_geometry(state,status)
+    expected_mass=2000.0_real64*3000.0_real64*3000.0_real64/9.80665_real64
+
+    CALL check(status==STATUS_OK,'surface cut-cell geometry must configure',failures)
+    CALL check(ALL(state%grid%dry_air_mass_measure==0.0_real64) .AND. &
+               .NOT.pressure_geometry_is_valid(state), &
+      'unrefreshed dry-air mass must fail closed',failures)
+    CALL check(.NOT.state%above_ground(1,1,1) .AND. &
+               ALL(state%above_ground(1,1,2:3)), &
+      'pressure-center domain must exclude the sub-surface center',failures)
+    CALL check(ABS(state%grid%pressure_interface(1,1,2)-95500.0_real64)<1.0e-12_real64 &
+               .AND. ABS(state%grid%pressure_interface(1,1,3)-92500.0_real64)< &
+               1.0e-12_real64, &
+      'surface and midpoint interfaces must bound the first active cell',failures)
+    CALL check(ABS(state%grid%cell_dp(1,1,2)-3000.0_real64)<1.0e-12_real64 .AND. &
+               ABS(state%grid%level_spacing_dp(1,1,2)-5000.0_real64)<1.0e-12_real64, &
+      'cell thickness must remain distinct from center spacing',failures)
+    CALL check(state%grid%cell_dp(1,1,1)==0.0_real64 .AND. &
+               state%grid%pressure_mass_measure(1,1,1)==0.0_real64 .AND. &
+               ABS(state%grid%pressure_mass_measure(1,1,2)-expected_mass)<= &
+               1.0e-12_real64*expected_mass, &
+      'pressure mass must use only the surface-truncated control volume',failures)
+
+    state%surface_pressure%value(1,1)=99000.0_real32
+    CALL configure_pressure_geometry(state,status)
+    CALL check(status==STATUS_OK .AND. &
+               ABS(state%grid%pressure_interface(1,1,2)-99000.0_real64)< &
+               1.0e-12_real64 .AND. &
+               ABS(state%grid%cell_dp(1,1,2)-6500.0_real64)<1.0e-12_real64, &
+      'first active cell must extend to surface pressure without a mass gap',failures)
+
+    state%surface_pressure%value(1,1)=100000.0_real32
+    CALL configure_pressure_geometry(state,status)
+    CALL check(status==STATUS_OK .AND. state%above_ground(1,1,1) .AND. &
+               ABS(state%grid%cell_dp(1,1,1)-2500.0_real64)<1.0e-12_real64, &
+      'a pressure center on the surface must retain its upper half cell',failures)
+
+    terrain_domain=.TRUE.
+    terrain_domain(1,1,1)=.FALSE.
+    CALL configure_pressure_geometry(state,status,terrain_domain)
+    CALL check(status==STATUS_OK .AND. .NOT.state%above_ground(1,1,1) .AND. &
+               ALL(state%above_ground(1,1,2:3)) .AND. &
+               ABS(state%grid%cell_dp(1,1,2)-7500.0_real64)<1.0e-12_real64, &
+      'terrain constraint must clip the lower center and recompute its cell', &
+      failures)
+
+    state%surface_pressure%value(1,1)=91000.0_real32
+    terrain_domain=.TRUE.
+    CALL configure_pressure_geometry(state,status,terrain_domain)
+    CALL check(status==STATUS_OK .AND. COUNT(state%above_ground)==1 .AND. &
+               state%above_ground(1,1,3) .AND. &
+               ABS(state%grid%cell_dp(1,1,3)-3500.0_real64)<1.0e-12_real64, &
+      'one resolved surface-cut pressure cell must be representable',failures)
+
+    expected_mass=state%grid%cell_dp(1,1,1)
+    state%surface_pressure%unit='hPa'
+    CALL configure_pressure_geometry(state,status)
+    CALL check(status==STATUS_FAILED .AND. &
+               state%grid%cell_dp(1,1,1)==expected_mass, &
+      'failed pressure configuration must leave published geometry unchanged',failures)
+
+    CALL initialize_cloud_bal_state(boundary_state,1,1,3,1788224400_int64, &
+                                    'minimum-pressure-test',status)
+    boundary_state%grid%dx=2000.0_real64
+    boundary_state%grid%dy=3000.0_real64
+    boundary_state%pressure%value(1,1,:)=[300.0_real32,200.0_real32, &
+                                          REAL(MIN_PRESSURE_PA,real32)]
+    boundary_state%pressure%valid=.TRUE.
+    boundary_state%pressure%quality=0_int32
+    boundary_state%pressure%source=SOURCE_BACKGROUND_MODEL
+    boundary_state%surface_pressure%value=300.0_real32
+    boundary_state%surface_pressure%valid=.TRUE.
+    boundary_state%surface_pressure%quality=0_int32
+    boundary_state%surface_pressure%source=SOURCE_BACKGROUND_MODEL
+    CALL configure_pressure_geometry(boundary_state,status)
+    CALL check(status==STATUS_OK, &
+      'canonical minimum pressure must configure consistently',failures)
+    boundary_state%pressure%value(1,1,3)=REAL(MIN_PRESSURE_PA-1.0_real64,real32)
+    CALL configure_pressure_geometry(boundary_state,status)
+    CALL check(status==STATUS_FAILED, &
+      'pressure below the canonical minimum must fail at construction',failures)
+  END SUBROUTINE test_pressure_cell_geometry
+
   SUBROUTINE invalidate_cell(field,i,j,k)
     TYPE(field3d), INTENT(INOUT) :: field
     INTEGER, INTENT(IN) :: i,j,k
@@ -219,6 +322,12 @@ CONTAINS
                'non-OK candidate must publish exact input',failures)
 
     candidate_result%status=STATUS_OK
+    candidate_result%reason_code=REASON_GATE
+    CALL commit_candidate(original,candidate,candidate_result,published,result)
+    CALL check(TRANSFER(published%u%value(2,3,2),0_int32)== &
+               TRANSFER(original%u%value(2,3,2),0_int32), &
+               'OK status with a failure reason must publish exact input',failures)
+
     candidate_result%reason_code=REASON_NONE
     CALL commit_candidate(original,candidate,candidate_result,published,result)
     CALL check(TRANSFER(published%u%value(2,3,2),0_int32)== &

@@ -26,6 +26,13 @@ PROGRAM test_real_shadow_io_contract
                                       status,reason)
   CALL check(status==STATUS_OK .AND. reason==REASON_NONE, &
              'verified SHADOW state must pass',failures)
+
+  result%column%numerical%flux_deposited=-1.0_real64
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_GATE, &
+             'negative flux ledger terms must fail before publication',failures)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
   CALL write_shadow_diagnostics('verified-shadow.nc',input,candidate,longitude, &
     result,config,residual,residual,status,operational)
   CALL check(status==STATUS_OK,'verified dynamic-size state must be writable',failures)
@@ -36,6 +43,14 @@ PROGRAM test_real_shadow_io_contract
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
              'OK result with nonzero reason must be rejected',failures)
   CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+
+  config%column%ledger_relative_tolerance= &
+    ieee_value(0.0_real64,ieee_quiet_nan)
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_RANGE, &
+             'invalid column configuration must fail before publication',failures)
+  config%column%ledger_relative_tolerance=1.0e-11_real64
 
   result%status=STATUS_DEGRADED
   result%reason_code=REASON_GATE
@@ -173,6 +188,57 @@ PROGRAM test_real_shadow_io_contract
   CALL check(status==STATUS_OK .AND. reason==REASON_NONE, &
              'observed no-echo must remain distinct from missing radar',failures)
 
+  candidate=input
+  candidate%rain%value(1,1,1)=1.0e-4_real32
+  candidate%rain%source(1,1,1)=IOR(candidate%rain%source(1,1,1), &
+                                   SOURCE_COLUMN_PHYSICS)
+  candidate%hydro_support(1,1,1)=1_int32
+  CALL refresh_dry_air_mass_measure(candidate,status)
+  result%column%changed(1,1,1)=.TRUE.
+  result%overall%changed(1,1,1)=.TRUE.
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
+             'no-echo cells must reject hydrometeor candidate changes',failures)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+
+  CALL make_state(input)
+  input%radar_reflectivity%value(1,1,1)=1.0_real32
+  candidate=input; operational=input
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_RADAR_CONTRACT, &
+             'missing radar must retain its canonical zero marker',failures)
+
+  CALL make_state(input)
+  input%omega_top_boundary%valid(1,1)=.FALSE.
+  candidate=input; operational=input
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA, &
+             'invalid diagnostic boundary mask must fail closed',failures)
+
+  CALL make_state(input)
+  input%omega_top_boundary%source=SOURCE_BOUNDARY_CONDITION
+  input%omega_bottom_boundary%source=SOURCE_BOUNDARY_CONDITION
+  candidate=input; operational=input
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA, &
+             'real SHADOW writer must reject physical-boundary provenance',failures)
+
+  CALL make_state(input)
+  input%omega_top_boundary%value(1,1)= &
+    ieee_value(0.0_real32,ieee_quiet_nan)
+  candidate=input; operational=input
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA, &
+             'nonfinite diagnostic boundary must fail closed',failures)
+
+  CALL make_state(input)
+  candidate=input; operational=input
+
   residual=ieee_value(0.0_real64,ieee_quiet_nan)
   CALL write_shadow_diagnostics('nonfinite-residual.nc',input,candidate,longitude, &
     result,config,residual,residual,status,operational)
@@ -196,9 +262,6 @@ CONTAINS
     DO k=1,2; DO j=1,2; DO i=1,2
       state%grid%dx(i,j)=2000.0_real64
       state%grid%dy(i,j)=2200.0_real64
-      state%grid%dp(i,j,k)=20000.0_real64
-      state%grid%pressure_mass_measure(i,j,k)= &
-        state%grid%dx(i,j)*state%grid%dy(i,j)*state%grid%dp(i,j,k)/9.80665_real64
       state%pressure%value(i,j,k)=REAL(90000-20000*(k-1),real32)
       state%temperature%value(i,j,k)=280.0_real32
       state%vapor%value(i,j,k)=0.008_real32
@@ -217,8 +280,24 @@ CONTAINS
     CALL mark_valid(state%rain,SOURCE_BACKGROUND_MODEL)
     CALL mark_valid(state%snow,SOURCE_BACKGROUND_MODEL)
     CALL mark_valid(state%graupel,SOURCE_BACKGROUND_MODEL)
+    state%surface_pressure%value=100000.0_real32
+    state%surface_pressure%valid=.TRUE.
+    state%surface_pressure%quality=0_int32
+    state%surface_pressure%source=SOURCE_BACKGROUND_MODEL
+    CALL configure_pressure_geometry(state,local_status)
+    IF (local_status/=STATUS_OK) ERROR STOP 'pressure geometry initialization failed'
     CALL refresh_dry_air_mass_measure(state,local_status)
     IF (local_status/=STATUS_OK) ERROR STOP 'dry-air mass refresh failed'
+    state%omega_top_boundary%value=0.0_real32
+    state%omega_bottom_boundary%value=0.0_real32
+    state%omega_top_boundary%valid=.TRUE.
+    state%omega_bottom_boundary%valid=.TRUE.
+    state%omega_top_boundary%quality=IOR(QUALITY_LEGACY_PROVENANCE, &
+      QUALITY_BOUNDARY_INTERIOR_COPY)
+    state%omega_bottom_boundary%quality=IOR(QUALITY_LEGACY_PROVENANCE, &
+      QUALITY_BOUNDARY_INTERIOR_COPY)
+    state%omega_top_boundary%source=SOURCE_ANALYZED_WIND
+    state%omega_bottom_boundary%source=SOURCE_ANALYZED_WIND
   END SUBROUTINE make_state
 
   SUBROUTINE mark_valid(field,source)
