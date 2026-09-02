@@ -1,4 +1,4 @@
-# Operational-original versus SHADOW comparison contract
+# Operational-original versus diagnostic-patch comparison contract
 
 ## Purpose
 
@@ -9,36 +9,40 @@ this workflow:
 > a separately archived product written by the operational KLAPS chain.
 
 Canonical `background_*` fields and diagnostic proposal NetCDF files are not
-operational originals or full candidate products.  They are rejected by this
-contract.
+operational originals or full candidate products.  This contract permits only
+a clearly labelled field-level diagnostic patch; it never creates full-pipeline
+candidate evidence.
 
 Every valid-time/product comparison is a three-file transaction:
 
 | Manifest entry | Required evidence label | Required origin |
 | --- | --- | --- |
 | `original` | `REAL_OPERATIONAL_ORIGINAL` | `ARCHIVED_OPERATIONAL_KLAPS` |
-| `candidate` | `SHADOW_CANDIDATE` | `HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT` |
+| `candidate` | `DERIVED_DIAGNOSTIC_PATCH` | `OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH` |
 | `operational_unchanged` | `OPERATIONAL_UNCHANGED` | `LIVE_OPERATIONAL_KLAPS_UNCHANGED` |
 
 The archived and live operational inputs must be independent files whose
-checksum-bound snapshots have the same SHA-256 digest.  The candidate must
-also be an independent file.  The
-archived product must be bound by an independently checksummed `SHA256SUMS`
-inventory, while the candidate must be bound by a local diagnostic
-`MANIFEST.json` and matching `COMMITTED` marker.  This manifest records the
-hybrid construction transaction; it is not a full Cloud-BAL pipeline
-generation.  A SHADOW diagnostic
-containing only selected canonical fields is not a full candidate.
+checksum-bound snapshots have the same SHA-256 digest.  The patch must also be
+an independent file.  The archived product is bound by `SHA256SUMS`; the patch
+is bound by `PATCH_RECEIPT.json` with
+`receipt_type=LOCAL_DERIVATION_RECEIPT`,
+`patch_operation=ABSOLUTE_REPLACE_DIAGNOSTIC_ONLY`,
+`full_product_candidate=false`, and `mass_basis_resolved=false`.  This receipt
+records a local derivation and is deliberately not a Cloud-BAL generation
+manifest or committed operational product.
 
 ## Readiness gates
 
-A manifest is `READY` only when every declared pair passes all gates:
+A manifest is `DIAGNOSTIC_PATCH_VALID_NOT_COMPARABLE` only when every declared
+pair passes all structural gates. This status is not comparison readiness;
+`algorithm_comparison_ready=false` and
+`mass_basis_gate=BLOCKED_UNRESOLVED` remain fixed:
 
 1. The three paths are normalized relative paths below `--artifact-root`.
    Symbolic links, hard links, shared inodes, parent traversal and any path
    component containing `bigfile` are forbidden.
 2. All three file SHA-256 values equal the values recorded in the comparison
-   manifest.  The original's `SHA256SUMS` and candidate local diagnostic manifest
+   manifest.  The original's `SHA256SUMS` and patch derivation receipt
    are separately checksummed and must bind the exact product path, digest
    and—for the candidate—byte size.
    The candidate diagnostic configuration must equal
@@ -62,7 +66,7 @@ A manifest is `READY` only when every declared pair passes all gates:
     authority attributes containing canonical, background, diagnostic,
     proposal, or synthetic authority are rejected.
 
-The supported full-product formats are:
+The supported copied-file formats are:
 
 - `LAPS` and `KLBG`: WPS intermediate version 5
 - `MET_EM`: NetCDF met_em with `Times`, complete variable inventory and the
@@ -101,15 +105,15 @@ Paths are relative to the explicit artifact root, not to the manifest.
         }
       },
       "candidate": {
-        "evidence_role": "SHADOW_CANDIDATE",
-        "origin": "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT",
+        "evidence_role": "DERIVED_DIAGNOSTIC_PATCH",
+        "origin": "OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH",
         "path": "shadow/MODL/KLFS/NE57/DAIO/2026081613/met_em.d01.2026-08-16_13:00:00.nc",
         "sha256": "<64 lowercase hexadecimal digits>",
         "wind_coordinate": "GRID_RELATIVE",
         "attestation": {
-          "format": "LOCAL_DIAGNOSTIC_MANIFEST",
-          "path": "shadow/MANIFEST.json",
-          "sha256": "<SHA-256 of shadow/MANIFEST.json>"
+          "format": "LOCAL_DERIVATION_RECEIPT",
+          "path": "shadow/PATCH_RECEIPT.json",
+          "sha256": "<SHA-256 of shadow/PATCH_RECEIPT.json>"
         }
       },
       "operational_unchanged": {
@@ -159,11 +163,12 @@ Comparison arrays are written only after **all** pairs pass.  On any missing
 original, candidate, field or metadata mismatch, only `READINESS.json` is
 written, `algorithm_comparison_status` remains `NOT_RUN`, and the command exits
 with status 3.  A ready comparison remains non-operational evidence:
+`algorithm_comparison_status` remains `NOT_RUN_FULL_END_TO_END` and
 `promotion_eligible` is always false.
 
 The attestations are local, checksum-bound evidence; they are not digitally
 signed operational authority.  `READINESS.json` therefore records
-`status_scope=STRUCTURAL_NUMERICAL_READINESS_UNDER_LOCAL_MANIFEST`,
+`status_scope=STRUCTURAL_VALIDATION_OF_DIAGNOSTIC_PATCH_ONLY`,
 `provenance_authority=LOCAL_ATTESTATION_BOUND_NOT_SIGNED`,
 `certified_operational_provenance=false`, and never promotes a candidate by
 itself.  It also records
@@ -177,6 +182,6 @@ Archived operational LAPS/KLBG/met_em triads currently exist for 13, 14 and
 15 UTC.  The 12 UTC inventory lacks the archived operational LAPS product.
 The 12 UTC comparison must therefore remain `NOT_READY`; KLBG or met_em must
 not be substituted for the missing LAPS product.  No full pipeline-generated
-SHADOW LAPS/WPS or met_em candidate has yet been published.  The existing
-hybrid diagnostic candidates and canonical diagnostic figures are not such a
-product and cannot satisfy this contract.
+SHADOW LAPS/WPS or met_em candidate has yet been published.  Existing patches
+may satisfy this diagnostic-patch contract but cannot satisfy a full-product or
+algorithm-comparison contract.

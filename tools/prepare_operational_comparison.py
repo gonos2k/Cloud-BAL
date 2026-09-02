@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Prepare a fail-closed operational-original/SHADOW comparison bundle.
+"""Prepare a fail-closed operational-original/diagnostic-patch bundle.
 
 This tool never treats a Cloud-BAL canonical ``background`` field as an
-operational original.  A comparison is ready only when an independently
-archived operational product, a hybrid diagnostic candidate, and a separately
-snapshotted operational product satisfy the same explicit contract.
+operational original.  A diagnostic patch is structurally comparable only when
+an independently archived operational product, a derived diagnostic patch, and
+a separately snapshotted operational product satisfy the same explicit
+contract.  Structural comparability is never full-pipeline evidence.
 """
 
 from __future__ import annotations
@@ -28,17 +29,19 @@ import numpy as np
 
 from compare_baseline import _records, read_wps
 
-__all__ = ("prepare",)
+__all__ = ("DIAGNOSTIC_PATCH_VALID", "prepare")
 
 
 SCHEMA_VERSION = 1
 REPORT_SCHEMA_VERSION = 1
 SHADOW_CONFIGURATION = "radar-only-shadow-ifx-2026-v3"
+DIAGNOSTIC_PATCH_VALID = "DIAGNOSTIC_PATCH_VALID_NOT_COMPARABLE"
+DIAGNOSTIC_PATCH_ALGORITHM_STATUS = "NOT_RUN_FULL_END_TO_END"
 ROLES = {
     "original": ("REAL_OPERATIONAL_ORIGINAL", "ARCHIVED_OPERATIONAL_KLAPS"),
     "candidate": (
-        "SHADOW_CANDIDATE",
-        "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT",
+        "DERIVED_DIAGNOSTIC_PATCH",
+        "OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH",
     ),
     "operational_unchanged": (
         "OPERATIONAL_UNCHANGED",
@@ -48,7 +51,6 @@ ROLES = {
 FORMATS = {"WPS_INTERMEDIATE", "MET_EM_NETCDF"}
 WIND_COORDINATES = {"GRID_RELATIVE", "EARTH_RELATIVE"}
 SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$")
-TRANSACTION_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,191}$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 FORBIDDEN_DIAGNOSTIC_TOKENS = (
     "CANONICAL", "BACKGROUND", "DIAGNOSTIC", "PROPOSAL", "SYNTHETIC",
@@ -265,16 +267,14 @@ def read_attestation(
     if not isinstance(value, dict):
         raise ContractError(f"{context} attestation must be an object")
     require_exact_keys(value, {"format", "path", "sha256"}, f"{context} attestation")
-    expected_format = (
-        "SHA256SUMS" if key == "original" else "LOCAL_DIAGNOSTIC_MANIFEST"
-    )
+    expected_format = "SHA256SUMS" if key == "original" else "LOCAL_DERIVATION_RECEIPT"
     if value["format"] != expected_format:
         raise ContractError(f"{context} attestation format must be {expected_format}")
     expected_sha = value["sha256"]
     if not isinstance(expected_sha, str) or not SHA256.fullmatch(expected_sha):
         raise ContractError(f"{context} attestation sha256 is invalid")
     relative, path = resolve_artifact(root, value["path"], f"{context} attestation")
-    expected_name = "SHA256SUMS" if key == "original" else "MANIFEST.json"
+    expected_name = "SHA256SUMS" if key == "original" else "PATCH_RECEIPT.json"
     if path.name != expected_name:
         raise ContractError(f"{context} attestation filename must be {expected_name}")
     content = path.read_bytes()
@@ -310,35 +310,29 @@ def read_attestation(
         except (UnicodeError, json.JSONDecodeError) as exc:
             raise ContractError(f"{context} generation manifest is invalid") from exc
         if not isinstance(generation, dict) or generation.get("schema") != 1:
-            raise ContractError(f"{context} generation manifest schema is invalid")
-        transaction_id = generation.get("transaction_id")
+            raise ContractError(f"{context} derivation receipt schema is invalid")
         source_commit = generation.get("source_commit")
         configuration = generation.get("configuration")
-        products = generation.get("products")
-        if not isinstance(transaction_id, str) or not TRANSACTION_ID.fullmatch(transaction_id):
-            raise ContractError(f"{context} generation transaction_id is invalid")
+        product = generation.get("product")
         if not isinstance(source_commit, str) or not re.fullmatch(r"[0-9a-f]{40}", source_commit):
-            raise ContractError(f"{context} generation source_commit is invalid")
+            raise ContractError(f"{context} derivation source_commit is invalid")
         if configuration != SHADOW_CONFIGURATION:
             raise ContractError(
-                f"{context} generation configuration is not the approved SHADOW profile"
+                f"{context} derivation configuration is not the approved SHADOW profile"
             )
-        if not isinstance(products, list):
-            raise ContractError(f"{context} generation products are invalid")
-        matches = [
-            item
-            for item in products
-            if isinstance(item, dict) and item.get("path") == product_from_attestation
-        ]
-        if len(matches) != 1 or matches[0].get("sha256") != artifact_sha:
-            raise ContractError(f"{context} product is not bound by generation manifest")
-        if matches[0].get("bytes") != artifact_path.stat().st_size:
-            raise ContractError(f"{context} generation product size differs")
-        marker = path.parent / "COMMITTED"
-        if contains_symlink_component(marker) or not marker.is_file() or marker.stat().st_nlink != 1:
-            raise ContractError(f"{context} generation lacks an independent COMMITTED marker")
-        if marker.read_text(encoding="ascii").strip() != transaction_id:
-            raise ContractError(f"{context} COMMITTED marker differs from transaction_id")
+        if generation.get("receipt_type") != "LOCAL_DERIVATION_RECEIPT" or \
+           generation.get("patch_operation") != "ABSOLUTE_REPLACE_DIAGNOSTIC_ONLY" or \
+           generation.get("full_product_candidate") is not False or \
+           generation.get("mass_basis_resolved") is not False:
+            raise ContractError(f"{context} derivation authority is invalid")
+        for name in ("parent_product_sha256", "shadow_diagnostic_sha256"):
+            if not isinstance(generation.get(name), str) or not SHA256.fullmatch(generation[name]):
+                raise ContractError(f"{context} {name} is invalid")
+        if not isinstance(product, dict) or product.get("path") != product_from_attestation or \
+           product.get("sha256") != artifact_sha:
+            raise ContractError(f"{context} product is not bound by derivation receipt")
+        if product.get("bytes") != artifact_path.stat().st_size:
+            raise ContractError(f"{context} derived product size differs")
     return relative, actual_sha
 
 
@@ -913,6 +907,10 @@ def validate_pair(
         raise ContractError(f"{pair_id} roles must be independent files")
     if artifacts["original"].sha256 != artifacts["operational_unchanged"].sha256:
         raise ContractError(f"{pair_id} operational product is not byte-identical to original")
+    receipt_path = root / str(artifacts["candidate"].attestation_path)
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    if receipt.get("parent_product_sha256") != artifacts["original"].sha256:
+        raise ContractError(f"{pair_id} diagnostic patch parent differs from original")
     wind_coordinates = {artifact.wind_coordinate for artifact in artifacts.values()}
     if len(wind_coordinates) != 1:
         raise ContractError(f"{pair_id} manifest wind coordinates differ")
@@ -974,7 +972,7 @@ def validate_pair(
         "product_kind": product_kind,
         "format": product_format,
         "valid_time": expected_time,
-        "status": "READY",
+        "status": DIAGNOSTIC_PATCH_VALID,
         "evidence": {
             key: {
                 "evidence_role": ROLES[key][0],
@@ -988,9 +986,9 @@ def validate_pair(
             for key, artifact in artifacts.items()
         },
         "contract_checks": {
-            "candidate_full_field_inventory": "PASS",
-            "candidate_full_valid_masks": "PASS",
-            "local_product_attestations": "PASS",
+            "patched_file_full_field_inventory": "PASS",
+            "patched_file_full_valid_masks": "PASS",
+            "local_derivation_receipts": "PASS",
             "checksums": "PASS",
             "grid_projection": "PASS",
             "independent_files": "PASS",
@@ -1035,7 +1033,7 @@ def bundle_metadata(bundle: PlotBundle, directory: Path) -> dict[str, Any]:
         "scale_source": "MANIFEST_FIXED",
         "evidence_roles": {
             "original": "REAL_OPERATIONAL_ORIGINAL",
-            "candidate": "SHADOW_CANDIDATE",
+            "candidate": "DERIVED_DIAGNOSTIC_PATCH",
             "operational": "OPERATIONAL_UNCHANGED",
         },
         "metrics": bundle.metrics,
@@ -1052,8 +1050,10 @@ def base_report(manifest_sha: str | None, comparison_id: str | None) -> dict[str
         "comparison_id": comparison_id,
         "manifest_sha256": manifest_sha,
         "status": "NOT_READY",
-        "status_scope": "STRUCTURAL_NUMERICAL_READINESS_UNDER_LOCAL_MANIFEST",
+        "status_scope": "STRUCTURAL_VALIDATION_OF_DIAGNOSTIC_PATCH_ONLY",
         "algorithm_comparison_status": "NOT_RUN",
+        "algorithm_comparison_ready": False,
+        "mass_basis_gate": "BLOCKED_UNRESOLVED",
         "operational_authority": "NOT_MODIFIED_BY_COMPARISON_TOOL",
         "evidence_time_scope": "CHECKSUM_BOUND_INPUT_SNAPSHOTS_NOT_LIVE_STATE",
         "provenance_authority": "LOCAL_ATTESTATION_BOUND_NOT_SIGNED",
@@ -1063,7 +1063,7 @@ def base_report(manifest_sha: str | None, comparison_id: str | None) -> dict[str
         "bigfile_used": False,
         "evidence_roles": {
             "original": "REAL_OPERATIONAL_ORIGINAL",
-            "candidate": "SHADOW_CANDIDATE",
+            "candidate": "DERIVED_DIAGNOSTIC_PATCH",
             "operational": "OPERATIONAL_UNCHANGED",
         },
         "pairs": [],
@@ -1189,10 +1189,8 @@ def prepare(manifest_path: Path, artifact_root: Path, output_path: Path) -> dict
                         }
                     )
                 report["comparison_data"] = comparison_data
-                report["status"] = "READY"
-                report["algorithm_comparison_status"] = (
-                    "READY_FOR_NUMERICAL_AND_PLOT_COMPARISON"
-                )
+                report["status"] = DIAGNOSTIC_PATCH_VALID
+                report["algorithm_comparison_status"] = DIAGNOSTIC_PATCH_ALGORITHM_STATUS
         except ContractError as exc:
             comparison_data = staging / "comparison_data"
             if comparison_data.exists() and not comparison_data.is_symlink():
@@ -1227,7 +1225,7 @@ def main() -> int:
         print(f"OPERATIONAL COMPARISON ERROR: {exc}", file=os.sys.stderr)
         return 2
     print(json.dumps(report, ensure_ascii=False, sort_keys=True, allow_nan=False))
-    return 0 if report["status"] == "READY" else 3
+    return 0 if report["status"] == DIAGNOSTIC_PATCH_VALID else 3
 
 
 if __name__ == "__main__":

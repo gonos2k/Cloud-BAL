@@ -90,11 +90,18 @@
 | 현업 KLAPS 전체 ifx link | BLOCKED | 3개 현업 binary는 legacy ifort 서명, canonical symbol 0, NetCDF/HDF5 runtime closure 미해결; `audit_intel_integration.py` 결과 38 blocker |
 | canonical pipeline이 전체 KLAPS 호출망의 단일 구현 | BLOCKED | qbalpe/derived-cloud/LAPSPREP adapter와 전체 링크가 아직 없음 |
 | 원래 QBAL 직접 입력 closure | BLOCKED | 4시각 upstream replay preflight과 41개 독립 read-only copy, VRT 4/4는 완료; 실제 producer는 실행하지 않아 LT1/LQ3/LCO/LSX가 `NOT_PRODUCED` |
-| 현업 원본-vs-SHADOW 비교 계약 | ENGINEERING | 13--15 UTC hybrid field 비교는 생성했으나 동일 background·질량기준의 순수 increment임을 증명하지 못함; 12 UTC 현업 최종장은 없음; full E2E 비교로 부르지 않음 |
+| 현업 원본-vs-diagnostic patch 계약 | DONE | role/origin/status를 `DERIVED_DIAGNOSTIC_PATCH` / `OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH` / `DIAGNOSTIC_PATCH_VALID_NOT_COMPARABLE`로 제한하고 full-product·알고리즘 비교 권한을 제거함 |
 | 비교 candidate의 동일 background·질량기준 | BLOCKED | 현재 hybrid는 diagnostic absolute candidate를 운영 WPS에 이식; `diagnostic background == KLAPS original` 또는 보존적으로 변환한 increment를 먼저 증명해야 함 |
+| diagnostic patch 4시각 완전성 | DONE | 요청 사례가 하나라도 없으면 global status는 `NOT_READY_REQUESTED_CASES_INCOMPLETE`이고 nonzero 종료; 12 UTC 현업 원본 부재를 성공으로 덮지 않음 |
+| diagnostic patch 입력 독립성 | ENGINEERING | archive/live root 비중첩, 원본 파일의 symlink·hardlink·same-inode 거부와 기존 archive `SHA256SUMS` 결속을 구현; 적대 CLI 시험 추가 필요 |
+| diagnostic patch 적용 mask·그림 계약 | DONE | canonical species별 expected/applied mask 완전 일치, pressure one-to-one, no-change 정상 처리, 고정 550 hPa·고정 scale 사용 |
 | 실제 NE57 geometry의 nonzero balance | BLOCKED | test-only manufactured dynamic target으로 실제 지형·압력·경계에서 solver/adjoint/residual을 검증하되 science authority는 부여하지 않음 |
 | 독립 column/trajectory 재계산 | BLOCKED | T·qv·phase·pressure interface·boundary·retrieval config·field provenance를 artifact에 저장하고 별도 구현에서 cellwise 재계산해야 함 |
-| 비교 candidate의 완전한 generation attestation | BLOCKED | 현재 비교기는 local manifest+marker 결속까지만 검사; TRANSACTION context, 전체 입력/build receipt, 검증된 generation membership을 함께 확인하기 전 독립 운영 증거로 승격 금지 |
+| SHADOW 입력 generation 검증 | DONE | 비교기는 정규 `TRANSACTION.json`/`MANIFEST.json`/`COMMITTED` current generation verifier와 `RUN_SUMMARY` exact-head·clean-tree·numerical PASS를 요구 |
+| diagnostic patch derivation receipt | DONE | 자체 generation/COMMITTED를 제거하고 parent·SHADOW hash, absolute-replace, unresolved mass basis, non-full-product를 명시한 `PATCH_RECEIPT.json`만 사용 |
+| full candidate generation attestation | BLOCKED | diagnostic patch는 정규 candidate generation이 아니며 전체 입력/build receipt와 full writer가 준비되기 전 운영 증거로 승격 금지 |
+| diagnostic patch bundle 원자성 | BLOCKED | 내부 comparison evidence는 staging→rename이지만 상위 patch/그림/통계 묶음 전체 transaction과 failure injection은 남음 |
+| changed-region 통계·질량 적분 | BLOCKED | all-domain RMS 외 changed-only RMS·분위수·dry-air 질량 적분을 추가해야 함 |
 | 실제 cold-start 0--6 h 과학 검증 | BLOCKED | 준비된 분석자료 SHADOW 진단은 예보 spin-up 검증을 대신하지 않음 |
 | ACTIVE 운영 게시 | BLOCKED | ACTIVE API 자체가 없고 모든 과학·통합 gate가 닫히지 않음 |
 
@@ -129,7 +136,7 @@ Standalone `numerical VALID`는 파일 내부 수치·연산자·gate 재계산�
 비교를 수행했다. 이는 동일 초기상태에서 전체 pipeline을 재실행한 결과가
 아니므로 현업 개선 증거가 아니라 문제 탐지용이다.
 
-| 시각 | unique 수상체 support | direct radar | transported | 실제 WPS 변경 |
+| 시각 | unique patch cell | radar-valid 공간 중첩 | radar 밖 | 실제 WPS 변경 |
 |---|---:|---:|---:|---|
 | 13 UTC | 67,524 | 67,524 | 0 | QR 60,513 / QS 13,101 |
 | 14 UTC | 71,241 | 71,241 | 0 | QR 63,207 / QS 15,250 |
@@ -137,9 +144,9 @@ Standalone `numerical VALID`는 파일 내부 수치·연산자·gate 재계산�
 
 - 12 UTC 현업 최종장은 없어 `NOT_AVAILABLE`이다.
 - 실제 `u`, `v`, `omega`, 온도·수증기는 모두 불변이다.
-- 전 above-ground 영역이 echo 또는 no-echo로 관측되어 transported deposition은
-  0이다. 따라서 이번 hybrid의 수상체 변경은 direct radar retrieval만 나타내며,
-  기울어진 하층 강수 shaft의 실자료 검증으로 해석하지 않는다.
+- 전 above-ground 영역이 echo 또는 no-echo로 관측되고 flux deposition은 0이다.
+  Patch 자체에는 source lineage가 저장되지 않으므로 위 중첩 수를 `direct`로
+  부르지 않는다. 이번 결과는 기울어진 하층 강수 shaft의 실자료 검증이 아니다.
 - `modified_by_field`는 replacement 시도 수이고 실제 float32 WPS 값 변경 수는
   위 표와 같이 별도로 집계한다. QG replacement 시도는 있었지만 실제 QG 값
   변경은 0이다.

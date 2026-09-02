@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Build and compare an isolated Cloud-BAL SHADOW WPS candidate.
+"""Build and compare an isolated Cloud-BAL diagnostic WPS patch.
 
 The operational LAPS file is copied byte-for-byte.  Only hydrometeor cells
-changed by the real-data Cloud-BAL column stage are replaced in the candidate.
-All other fields, including wind, remain the operational values.
+changed by the real-data Cloud-BAL column stage are replaced in the patch.
+All other fields, including wind, remain operational values.  This is not a
+full-pipeline candidate and cannot isolate a Cloud-BAL increment while the
+canonical and operational mass bases remain unresolved.
 """
 
 from __future__ import annotations
@@ -15,6 +17,7 @@ import hashlib
 import json
 import shutil
 import struct
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -23,7 +26,8 @@ import numpy as np
 from netCDF4 import Dataset
 
 from compare_baseline import _records, read_wps
-from prepare_operational_comparison import prepare
+from cloud_bal_transaction import verify_current_generation
+from prepare_operational_comparison import DIAGNOSTIC_PATCH_VALID, prepare
 
 
 HYDROMETEORS = {
@@ -34,6 +38,11 @@ HYDROMETEORS = {
     "QG": ("background_graupel", "candidate_graupel"),
 }
 SHADOW_CONFIGURATION = "radar-only-shadow-ifx-2026-v3"
+PLOT_LEVEL_PA = 55000
+HYDROMETEOR_LIMIT_GKG = 15.0
+HYDROMETEOR_DELTA_LIMIT_GKG = 15.0
+WIND_SPEED_LIMIT_MS = 80.0
+WIND_DELTA_LIMIT_MS = 0.1
 
 
 @dataclass(frozen=True)
@@ -52,8 +61,44 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def paths_overlap(left: Path, right: Path) -> bool:
+    left = left.resolve(strict=True)
+    right = right.resolve(strict=True)
+    return left == right or left in right.parents or right in left.parents
+
+
+def require_independent_inputs(original: Path, live: Path) -> None:
+    if original.is_symlink() or live.is_symlink():
+        raise ValueError("operational input paths must not be symbolic links")
+    original_stat = original.stat(follow_symlinks=False)
+    live_stat = live.stat(follow_symlinks=False)
+    if original_stat.st_nlink != 1 or live_stat.st_nlink != 1:
+        raise ValueError("operational input files must be independent single-link files")
+    if (original_stat.st_dev, original_stat.st_ino) == (live_stat.st_dev, live_stat.st_ino):
+        raise ValueError("archived and live operational inputs are the same file")
+
+
+def archive_receipt(path: Path) -> tuple[Path, str]:
+    digest = sha256(path)
+    for parent in path.parents:
+        receipt = parent / "SHA256SUMS"
+        if not receipt.is_file() or receipt.is_symlink() or receipt.stat().st_nlink != 1:
+            continue
+        relative = path.relative_to(parent).as_posix()
+        for line in receipt.read_text(encoding="utf-8").splitlines():
+            parts = line.split(maxsplit=1)
+            if len(parts) == 2 and parts[0] == digest and parts[1].lstrip("*") == relative:
+                return receipt, sha256(receipt)
+    raise ValueError(f"archived operational input lacks a pre-existing receipt: {path}")
+
+
 def shadow_generation(root: Path, source_commit: str) -> tuple[dict[str, dict], str]:
-    manifest_path = root.resolve(strict=True) / "MANIFEST.json"
+    if root.name != "current" or not root.is_symlink():
+        raise ValueError("--shadow-root must be a committed current-generation pointer")
+    generation = verify_current_generation(root.parent)
+    if generation != root.resolve(strict=True):
+        raise ValueError("--shadow-root does not resolve to the verified current generation")
+    manifest_path = generation / "MANIFEST.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest.get("schema") != 1:
         raise ValueError("unsupported SHADOW generation manifest")
@@ -61,6 +106,15 @@ def shadow_generation(root: Path, source_commit: str) -> tuple[dict[str, dict], 
         raise ValueError("SHADOW generation source commit differs from --source-commit")
     if manifest.get("configuration") != SHADOW_CONFIGURATION:
         raise ValueError("SHADOW generation configuration is not the approved profile")
+    summary_path = generation / "RUN_SUMMARY.json"
+    if not summary_path.is_file():
+        raise ValueError("SHADOW generation lacks RUN_SUMMARY.json")
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if (summary.get("source_commit") != source_commit
+            or summary.get("source_tree_clean") is not True
+            or summary.get("numerical_contract") != "PASS"
+            or summary.get("promotion_eligible") is not False):
+        raise ValueError("SHADOW generation summary is not eligible for diagnostic use")
     products = manifest.get("products")
     if not isinstance(products, list):
         raise ValueError("SHADOW generation product inventory is invalid")
@@ -95,7 +149,11 @@ def build_candidate(original: Path, shadow: Path, output: Path) -> dict:
             raise ValueError(f"SHADOW diagnostic claims an operational change: {shadow}")
 
         pressure = np.asarray(dataset.variables["pressure"][:], dtype=np.float64)
-        pressure_index = {int(round(value)): index for index, value in enumerate(pressure)}
+        rounded_pressure = np.rint(pressure).astype(np.int64)
+        if (len(set(rounded_pressure.tolist())) != pressure.size
+                or np.any(np.abs(pressure - rounded_pressure) > 0.5)):
+            raise ValueError("diagnostic pressure levels do not map one-to-one to WPS levels")
+        pressure_index = {int(value): index for index, value in enumerate(rounded_pressure)}
         above_ground = np.asarray(dataset.variables["above_ground"][:], dtype=bool)
         column_changed = np.asarray(dataset.variables["column_changed"][:], dtype=bool)
         radar_valid = np.asarray(dataset.variables["radar_valid"][:], dtype=bool)
@@ -108,6 +166,20 @@ def build_candidate(original: Path, shadow: Path, output: Path) -> dict:
             )
             for field, (background, candidate) in HYDROMETEORS.items()
         }
+        expected_masks = {
+            field: (
+                above_ground
+                & column_changed
+                & np.isfinite(background)
+                & np.isfinite(candidate)
+                & (candidate != background)
+            )
+            for field, (background, candidate) in field_values.items()
+        }
+        applied_masks = {
+            field: np.zeros_like(column_changed) for field in HYDROMETEORS
+        }
+        applied_levels: set[tuple[str, int]] = set()
 
         temporary = output.with_suffix(output.suffix + ".tmp")
         with temporary.open("wb") as stream:
@@ -124,14 +196,11 @@ def build_candidate(original: Path, shadow: Path, output: Path) -> dict:
 
                 if field in HYDROMETEORS and level in pressure_index:
                     k = pressure_index[level]
+                    if (field, k) in applied_levels:
+                        raise ValueError(f"duplicate WPS hydrometeor level: {field} {level}")
+                    applied_levels.add((field, k))
                     background, candidate = field_values[field]
-                    replacement = (
-                        above_ground[k]
-                        & column_changed[k]
-                        & np.isfinite(background[k])
-                        & np.isfinite(candidate[k])
-                        & (candidate[k] != background[k])
-                    )
+                    replacement = expected_masks[field][k]
                     if replacement.shape != (ny, nx):
                         raise ValueError(
                             f"grid mismatch for {field} at {level} Pa: "
@@ -144,6 +213,7 @@ def build_candidate(original: Path, shadow: Path, output: Path) -> dict:
                     slab = values.astype(endian + "f4", copy=False).tobytes(order="C")
                     count = int(np.count_nonzero(replacement))
                     replacement_union[k] |= replacement
+                    applied_masks[field][k] = replacement
                     modified_by_field[field] += count
                     modified_by_level[str(level)] = modified_by_level.get(str(level), 0) + count
 
@@ -154,6 +224,9 @@ def build_candidate(original: Path, shadow: Path, output: Path) -> dict:
         outside_support = replacement_union & ~hydro_support
         if np.any(outside_support):
             raise ValueError("hydrometeor replacement escaped Cloud-BAL support")
+        for field in HYDROMETEORS:
+            if not np.array_equal(applied_masks[field], expected_masks[field]):
+                raise ValueError(f"WPS does not represent every canonical {field} change")
         flux_names = (
             "flux_input", "flux_deposited", "flux_suspended", "flux_boundary_exit",
             "flux_terrain_intercept", "flux_observation_blocked",
@@ -163,14 +236,15 @@ def build_candidate(original: Path, shadow: Path, output: Path) -> dict:
         flux = {name: float(getattr(dataset, name)) for name in flux_names}
 
     unique_modified = int(np.count_nonzero(replacement_union))
-    direct_radar = int(np.count_nonzero(replacement_union & radar_valid))
+    radar_overlap = int(np.count_nonzero(replacement_union & radar_valid))
     return {
         "modified_by_field": modified_by_field,
         "modified_by_level": modified_by_level,
         "modified_cells": sum(modified_by_field.values()),
         "unique_modified_cells": unique_modified,
-        "direct_radar_modified_cells": direct_radar,
-        "transported_modified_cells": unique_modified - direct_radar,
+        "modified_cells_with_valid_radar": radar_overlap,
+        "modified_cells_without_valid_radar": unique_modified - radar_overlap,
+        "transport_lineage_available": False,
         "outside_hydrometeor_support_cells": 0,
         "flux_ledger": flux,
         "flux_relative_closure_error": abs(flux["flux_ledger_error"]) / max(
@@ -265,23 +339,21 @@ def plot_case(
         radar_valid = np.asarray(dataset.variables["radar_valid"][k], dtype=bool)
         changed = np.asarray(dataset.variables["column_changed"][k], dtype=bool)
 
-    hydro_limit = float(np.nanpercentile(np.concatenate([old_hydro.ravel(), new_hydro.ravel()]), 99.5))
-    hydro_limit = max(hydro_limit, 0.01)
-    speed_limit = max(float(np.nanpercentile(old_speed, 99.5)), 1.0)
     hydro_delta = new_hydro - old_hydro
-    delta_limit = max(float(np.nanpercentile(np.abs(hydro_delta), 99.5)), 0.001)
 
     fig, axes = plt.subplots(2, 4, figsize=(19, 9), constrained_layout=True)
     common = {"shading": "auto", "rasterized": True}
     panels = [
-        (old_hydro, "Operational total hydrometeor", "viridis", 0.0, hydro_limit, None),
-        (new_hydro, "SHADOW candidate total hydrometeor", "viridis", 0.0, hydro_limit, None),
-        (hydro_delta, "Candidate - operational", "RdBu_r", None, None,
-         TwoSlopeNorm(vmin=-delta_limit, vcenter=0.0, vmax=delta_limit)),
+        (old_hydro, "Operational total hydrometeor", "viridis", 0.0, HYDROMETEOR_LIMIT_GKG, None),
+        (new_hydro, "Diagnostic patch total hydrometeor", "viridis", 0.0, HYDROMETEOR_LIMIT_GKG, None),
+        (hydro_delta, "Patch - operational", "RdBu_r", None, None,
+         TwoSlopeNorm(vmin=-HYDROMETEOR_DELTA_LIMIT_GKG, vcenter=0.0,
+                      vmax=HYDROMETEOR_DELTA_LIMIT_GKG)),
         (np.where(radar_valid, radar, np.nan), "S-band radar reflectivity", "turbo", 5.0, 65.0, None),
-        (old_speed, "Operational wind speed", "magma", 0.0, speed_limit, None),
-        (new_speed, "Candidate wind speed (copied)", "magma", 0.0, speed_limit, None),
-        (new_speed - old_speed, "Candidate - operational wind", "RdBu_r", -0.01, 0.01, None),
+        (old_speed, "Operational wind speed", "magma", 0.0, WIND_SPEED_LIMIT_MS, None),
+        (new_speed, "Diagnostic patch wind speed (copied)", "magma", 0.0, WIND_SPEED_LIMIT_MS, None),
+        (new_speed - old_speed, "Patch - operational wind", "RdBu_r",
+         -WIND_DELTA_LIMIT_MS, WIND_DELTA_LIMIT_MS, None),
         (changed.astype(float), "Cloud-BAL column-change mask", "Greys", 0.0, 1.0, None),
     ]
     units = ["g kg$^{-1}$", "g kg$^{-1}$", "g kg$^{-1}$", "dBZ",
@@ -299,8 +371,8 @@ def plot_case(
         axis.set_ylabel("latitude")
         fig.colorbar(image, ax=axis, shrink=0.82, label=unit)
     fig.suptitle(
-        f"{case_id} at {level / 100:.0f} hPa — isolated operational/SHADOW comparison\n"
-        "Wind is unchanged: dynamic balance is not authorized",
+        f"{case_id} at {level / 100:.0f} hPa — operational/diagnostic-patch comparison\n"
+        "Not a full-pipeline candidate; wind is copied and mass basis is unresolved",
         fontsize=14,
     )
     fig.savefig(output, dpi=150)
@@ -333,10 +405,10 @@ def artifact(root: Path, role: str, origin: str, path: Path) -> dict:
             "path": attestation.relative_to(root).as_posix(),
             "sha256": sha256(attestation),
         }
-    elif role == "SHADOW_CANDIDATE":
-        attestation = path.parent / "MANIFEST.json"
+    elif role == "DERIVED_DIAGNOSTIC_PATCH":
+        attestation = path.parent / "PATCH_RECEIPT.json"
         result["attestation"] = {
-            "format": "LOCAL_DIAGNOSTIC_MANIFEST",
+            "format": "LOCAL_DERIVATION_RECEIPT",
             "path": attestation.relative_to(root).as_posix(),
             "sha256": sha256(attestation),
         }
@@ -344,26 +416,30 @@ def artifact(root: Path, role: str, origin: str, path: Path) -> dict:
 
 
 def seal_case(root: Path, case_id: str, source_commit: str, original: Path,
-              candidate: Path, operational: Path, hour: int) -> dict:
+              candidate: Path, operational: Path, shadow: Path, hour: int) -> dict:
     (original.parent / "SHA256SUMS").write_text(
         f"{sha256(original)}  {original.name}\n", encoding="utf-8"
     )
-    transaction_id = f"cloud-bal-{case_id.lower()}-{source_commit[:12]}"
-    generation = {
+    receipt = {
         "schema": 1,
-        "transaction_id": transaction_id,
+        "receipt_type": "LOCAL_DERIVATION_RECEIPT",
         "source_commit": source_commit,
         "configuration": SHADOW_CONFIGURATION,
-        "products": [{
+        "patch_operation": "ABSOLUTE_REPLACE_DIAGNOSTIC_ONLY",
+        "full_product_candidate": False,
+        "mass_basis_resolved": False,
+        "algorithm_comparison_ready": False,
+        "parent_product_sha256": sha256(original),
+        "shadow_diagnostic_sha256": sha256(shadow),
+        "product": {
             "path": candidate.name,
             "bytes": candidate.stat().st_size,
             "sha256": sha256(candidate),
-        }],
+        },
     }
-    (candidate.parent / "MANIFEST.json").write_text(
-        json.dumps(generation, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    (candidate.parent / "PATCH_RECEIPT.json").write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    (candidate.parent / "COMMITTED").write_text(transaction_id + "\n", encoding="ascii")
     valid_time = f"2026-08-16T{hour:02d}:00:00Z"
     return {
         "pair_id": f"laps-{case_id}",
@@ -374,7 +450,8 @@ def seal_case(root: Path, case_id: str, source_commit: str, original: Path,
             root, "REAL_OPERATIONAL_ORIGINAL", "ARCHIVED_OPERATIONAL_KLAPS", original
         ),
         "candidate": artifact(
-            root, "SHADOW_CANDIDATE", "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT", candidate
+            root, "DERIVED_DIAGNOSTIC_PATCH",
+            "OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH", candidate
         ),
         "operational_unchanged": artifact(
             root, "OPERATIONAL_UNCHANGED", "LIVE_OPERATIONAL_KLAPS_UNCHANGED",
@@ -418,26 +495,45 @@ def main() -> int:
     ):
         print("--source-commit must be a 40-character lowercase SHA", file=sys.stderr)
         return 2
+    project = Path(__file__).resolve().parents[1]
+    tool_commit = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=project, text=True
+    ).strip()
+    if tool_commit != args.source_commit:
+        print("comparison tool HEAD differs from --source-commit", file=sys.stderr)
+        return 2
+    if subprocess.check_output(
+        ["git", "status", "--porcelain"], cwd=project, text=True
+    ).strip():
+        print("comparison tool source tree must be clean", file=sys.stderr)
+        return 2
     shadow_products, shadow_manifest_sha = shadow_generation(
         args.shadow_root, args.source_commit
     )
+    if paths_overlap(args.original_root, args.live_root):
+        raise ValueError("archived and live operational roots must not overlap")
     args.output.mkdir(parents=True)
 
     report = {
         "schema_version": 1,
         "comparison_authority": "DIAGNOSTIC_FIELD_LEVEL_ONLY",
         "algorithm_comparison_status": "NOT_RUN_FULL_END_TO_END",
+        "full_product_candidate": False,
+        "comparison_effect_isolated": False,
+        "mass_basis_resolved": False,
         "dynamic_balance_authorized": False,
         "operational_original_modified": False,
         "candidate_construction": (
-            "operational WPS copy with QC/QI/QR/QS/QG replaced only where the "
-            "real-data Cloud-BAL column stage changed that hydrometeor"
+            "diagnostic operational WPS copy with QC/QI/QR/QS/QG absolute values "
+            "replaced only where the real-data Cloud-BAL column stage changed them"
         ),
         "mass_basis_caveat": (
             "operational WPS declares kg kg-1; Cloud-BAL declares kg kg-1 dryair; "
             "the legacy producer does not fully prove an identical denominator"
         ),
         "source_commit": args.source_commit,
+        "comparison_tool_source_commit": tool_commit,
+        "comparison_tool_sha256": sha256(Path(__file__).resolve()),
         "shadow_generation_manifest_sha256": shadow_manifest_sha,
         "cases": [],
     }
@@ -472,6 +568,8 @@ def main() -> int:
             if int(getattr(shadow_dataset, "valid_time_epoch", -1)) != expected_epoch:
                 raise ValueError(f"SHADOW valid time differs from case: {paths.case_id}")
 
+        require_independent_inputs(paths.original, paths.live_original)
+        receipt_path, receipt_sha = archive_receipt(paths.original)
         original_sha = sha256(paths.original)
         live_sha = sha256(paths.live_original)
         if original_sha != live_sha:
@@ -501,22 +599,27 @@ def main() -> int:
 
         build = build_candidate(isolated_original, paths.shadow, candidate)
         rows, comparison = compare_products(isolated_original, candidate)
-        level = max(
-            (int(item) for item in build["modified_by_level"]),
-            key=lambda item: build["modified_by_level"][str(item)],
-        )
+        level = PLOT_LEVEL_PA
+        if build["modified_by_level"]:
+            case_status = "COMPLETED_DIAGNOSTIC"
+        else:
+            with Dataset(paths.shadow) as dataset:
+                pressure = np.asarray(dataset.variables["pressure"][:], dtype=np.float64)
+            if not np.any(np.rint(pressure).astype(np.int64) == PLOT_LEVEL_PA):
+                raise ValueError(f"fixed diagnostic level is absent: {PLOT_LEVEL_PA}")
+            case_status = "COMPLETED_NO_CHANGE"
         figure = figures_dir / f"{paths.case_id}_{level // 100}hPa.png"
         plot_case(paths.case_id, isolated_original, candidate, paths.shadow, level, figure)
         contract_pairs.append(seal_case(
             args.output, paths.case_id, args.source_commit, isolated_original,
-            candidate, operational, hour,
+            candidate, operational, paths.shadow, hour,
         ))
 
         for row in rows:
             row["case_id"] = paths.case_id
             all_rows.append(row)
         case_report.update(
-            status="COMPLETED_DIAGNOSTIC",
+            status=case_status,
             operational_original=str(paths.original.resolve()),
             isolated_original=str(isolated_original.resolve()),
             shadow_diagnostic=str(paths.shadow.resolve()),
@@ -525,6 +628,8 @@ def main() -> int:
             operational_unchanged=str(operational.resolve()),
             figure=str(figure.resolve()),
             operational_sha256=original_sha,
+            source_archive_receipt=str(receipt_path.resolve()),
+            source_archive_receipt_sha256=receipt_sha,
             isolated_original_sha256=sha256(isolated_original),
             candidate_sha256=sha256(candidate),
             selected_level_pa=level,
@@ -533,10 +638,11 @@ def main() -> int:
         )
         report["cases"].append(case_report)
 
-    if not any(case["status"] == "COMPLETED_DIAGNOSTIC" for case in report["cases"]):
+    complete_statuses = {"COMPLETED_DIAGNOSTIC", "COMPLETED_NO_CHANGE"}
+    if not any(case["status"] in complete_statuses for case in report["cases"]):
         raise ValueError("no comparison case was available")
     requested_cases_complete = all(
-        case["status"] == "COMPLETED_DIAGNOSTIC" for case in report["cases"]
+        case["status"] in complete_statuses for case in report["cases"]
     )
 
     with (args.output / "field_statistics.tsv").open("w", newline="") as stream:
@@ -556,7 +662,7 @@ def main() -> int:
     readiness = prepare(
         contract_manifest, args.output, args.output / "contract_evidence"
     )
-    if readiness["status"] != "READY":
+    if readiness["status"] != DIAGNOSTIC_PATCH_VALID:
         raise ValueError(
             "operational comparison contract failed: "
             + "; ".join(readiness["failures"])

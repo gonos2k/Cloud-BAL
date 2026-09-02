@@ -448,6 +448,11 @@ def _current(root: Path) -> Path:
     return _verify_generation(generation, generation.name)
 
 
+def verify_current_generation(root: Path) -> Path:
+    """Return the fully verified current generation for a publication root."""
+    return _current(root)
+
+
 def _current_id(root: Path) -> str | None:
     pointer = root / "current"
     if not pointer.exists() and not pointer.is_symlink():

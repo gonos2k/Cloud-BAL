@@ -17,6 +17,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT / "tools"))
 
 from prepare_operational_comparison import (  # noqa: E402
+    DIAGNOSTIC_PATCH_VALID,
     SHADOW_CONFIGURATION,
     prepare,
 )
@@ -166,21 +167,26 @@ def seal_original(path: Path) -> None:
     )
 
 
-def seal_candidate(path: Path) -> None:
-    transaction_id = "fixture-shadow-generation"
-    manifest = {
+def seal_candidate(path: Path, original: Path) -> None:
+    receipt = {
         "schema": 1,
-        "transaction_id": transaction_id,
+        "receipt_type": "LOCAL_DERIVATION_RECEIPT",
         "source_commit": "1" * 40,
         "configuration": SHADOW_CONFIGURATION,
-        "products": [
-            {"path": path.name, "bytes": path.stat().st_size, "sha256": sha256(path)}
-        ],
+        "patch_operation": "ABSOLUTE_REPLACE_DIAGNOSTIC_ONLY",
+        "full_product_candidate": False,
+        "mass_basis_resolved": False,
+        "parent_product_sha256": sha256(original),
+        "shadow_diagnostic_sha256": "2" * 64,
+        "product": {
+            "path": path.name,
+            "bytes": path.stat().st_size,
+            "sha256": sha256(path),
+        },
     }
-    (path.parent / "MANIFEST.json").write_text(
-        json.dumps(manifest, sort_keys=True), encoding="utf-8"
+    (path.parent / "PATCH_RECEIPT.json").write_text(
+        json.dumps(receipt, sort_keys=True), encoding="utf-8"
     )
-    (path.parent / "COMMITTED").write_text(transaction_id + "\n", encoding="ascii")
 
 
 def make_wps_triad(
@@ -202,7 +208,7 @@ def make_wps_triad(
     )
     write_wps(operational)
     seal_original(original)
-    seal_candidate(candidate)
+    seal_candidate(candidate, original)
     return original, candidate, operational
 
 
@@ -220,7 +226,7 @@ def make_netcdf_triad(
     met_em(candidate, candidate=True, diagnostic=diagnostic)
     met_em(operational)
     seal_original(original)
-    seal_candidate(candidate)
+    seal_candidate(candidate, original)
     return original, candidate, operational
 
 
@@ -239,10 +245,10 @@ def artifact(role: str, origin: str, path: Path, root: Path) -> dict[str, object
             "path": attestation.relative_to(root).as_posix(),
             "sha256": sha256(attestation),
         }
-    elif role == "SHADOW_CANDIDATE":
-        attestation = path.parent / "MANIFEST.json"
+    elif role == "DERIVED_DIAGNOSTIC_PATCH":
+        attestation = path.parent / "PATCH_RECEIPT.json"
         result["attestation"] = {
-            "format": "LOCAL_DIAGNOSTIC_MANIFEST",
+            "format": "LOCAL_DERIVATION_RECEIPT",
             "path": attestation.relative_to(root).as_posix(),
             "sha256": sha256(attestation),
         }
@@ -260,7 +266,8 @@ def pair(root: Path, paths: tuple[Path, Path, Path], *, product: str = "LAPS") -
             "REAL_OPERATIONAL_ORIGINAL", "ARCHIVED_OPERATIONAL_KLAPS", original, root
         ),
         "candidate": artifact(
-            "SHADOW_CANDIDATE", "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT", candidate, root
+            "DERIVED_DIAGNOSTIC_PATCH",
+            "OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH", candidate, root
         ),
         "operational_unchanged": artifact(
             "OPERATIONAL_UNCHANGED",
@@ -324,10 +331,10 @@ def main() -> None:
         ready_a = prepare(manifest, root, root / "ready-a")
         ready_b = prepare(manifest, root, root / "ready-b")
         assert ready_a == ready_b
-        assert ready_a["status"] == "READY"
-        assert ready_a["algorithm_comparison_status"] == (
-            "READY_FOR_NUMERICAL_AND_PLOT_COMPARISON"
-        )
+        assert ready_a["status"] == DIAGNOSTIC_PATCH_VALID
+        assert ready_a["algorithm_comparison_ready"] is False
+        assert ready_a["mass_basis_gate"] == "BLOCKED_UNRESOLVED"
+        assert ready_a["algorithm_comparison_status"] == "NOT_RUN_FULL_END_TO_END"
         assert ready_a["bigfile_used"] is False
         assert ready_a["promotion_eligible"] is False
         assert ready_a["certified_operational_provenance"] is False
@@ -337,7 +344,7 @@ def main() -> None:
         )
         evidence = ready_a["pairs"][0]["evidence"]
         assert evidence["original"]["evidence_role"] == "REAL_OPERATIONAL_ORIGINAL"
-        assert evidence["candidate"]["evidence_role"] == "SHADOW_CANDIDATE"
+        assert evidence["candidate"]["evidence_role"] == "DERIVED_DIAGNOSTIC_PATCH"
         assert evidence["operational_unchanged"]["evidence_role"] == (
             "OPERATIONAL_UNCHANGED"
         )
@@ -424,19 +431,43 @@ def main() -> None:
         expect_not_ready(root, "checksum", [bad_checksum_pair], "checksum")
 
         bad_attestation_paths = make_wps_triad(root, "bad-attestation")
-        generation_path = bad_attestation_paths[1].parent / "MANIFEST.json"
+        generation_path = bad_attestation_paths[1].parent / "PATCH_RECEIPT.json"
         generation = json.loads(generation_path.read_text(encoding="utf-8"))
-        generation["products"][0]["sha256"] = "0" * 64
+        generation["product"]["sha256"] = "0" * 64
         generation_path.write_text(json.dumps(generation, sort_keys=True), encoding="utf-8")
         expect_not_ready(
             root,
             "bad-attestation",
             [pair(root, bad_attestation_paths)],
-            "generation manifest",
+            "derivation receipt",
+        )
+
+        wrong_parent_paths = make_wps_triad(root, "wrong-parent")
+        receipt_path = wrong_parent_paths[1].parent / "PATCH_RECEIPT.json"
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        receipt["parent_product_sha256"] = "0" * 64
+        receipt_path.write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+        expect_not_ready(
+            root,
+            "wrong-parent",
+            [pair(root, wrong_parent_paths)],
+            "patch parent differs from original",
+        )
+
+        false_full_paths = make_wps_triad(root, "false-full-product")
+        receipt_path = false_full_paths[1].parent / "PATCH_RECEIPT.json"
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        receipt["full_product_candidate"] = True
+        receipt_path.write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+        expect_not_ready(
+            root,
+            "false-full-product",
+            [pair(root, false_full_paths)],
+            "derivation authority",
         )
 
         wrong_profile_paths = make_wps_triad(root, "wrong-shadow-profile")
-        generation_path = wrong_profile_paths[1].parent / "MANIFEST.json"
+        generation_path = wrong_profile_paths[1].parent / "PATCH_RECEIPT.json"
         generation = json.loads(generation_path.read_text(encoding="utf-8"))
         generation["configuration"] = "shadow-typo"
         generation_path.write_text(json.dumps(generation, sort_keys=True), encoding="utf-8")
@@ -459,7 +490,7 @@ def main() -> None:
             root,
             "background",
             [background_pair],
-            "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT",
+            "OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH",
         )
 
         malformed_id_pair = pair(root, (original, candidate, operational))
@@ -485,7 +516,8 @@ def main() -> None:
         big_candidate = bigfile_paths[1]
         big_pair = pair(root, (original, candidate, operational))
         big_pair["candidate"] = artifact(
-            "SHADOW_CANDIDATE", "HYBRID_DIAGNOSTIC_HYDROMETEOR_REPLACEMENT", big_candidate, root
+            "DERIVED_DIAGNOSTIC_PATCH",
+            "OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH", big_candidate, root
         )
         expect_not_ready(root, "forbidden-path", [big_pair], "bigfile")
 
@@ -510,7 +542,7 @@ def main() -> None:
             [pair(root, (original_nc, candidate_nc, operational_nc), product="MET_EM")],
         )
         netcdf_ready = prepare(nc_manifest, root, root / "netcdf-ready")
-        assert netcdf_ready["status"] == "READY"
+        assert netcdf_ready["status"] == DIAGNOSTIC_PATCH_VALID
         nc_bundle = root / "netcdf-ready" / "comparison_data"
         nc_bundle /= netcdf_ready["pairs"][0]["pair_id"]
         nc_bundle /= "temperature-level0"
@@ -521,7 +553,7 @@ def main() -> None:
             dataset.variables["Times"][1, :] = np.asarray(
                 list("2026-08-16_13:00:00"), dtype="S1"
             )
-        seal_candidate(repeated_time_paths[1])
+        seal_candidate(repeated_time_paths[1], repeated_time_paths[0])
         expect_not_ready(
             root,
             "repeated-time",
@@ -540,7 +572,7 @@ def main() -> None:
         background_nc_paths = make_netcdf_triad(root, "background-netcdf")
         with netCDF4.Dataset(background_nc_paths[1], "r+") as dataset:
             dataset.result_authority = "CANONICAL_BACKGROUND"
-        seal_candidate(background_nc_paths[1])
+        seal_candidate(background_nc_paths[1], background_nc_paths[0])
         expect_not_ready(
             root,
             "background-netcdf",
