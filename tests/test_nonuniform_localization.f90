@@ -88,6 +88,15 @@ PROGRAM test_nonuniform_localization
   CALL check(status==STATUS_FAILED .AND. ALL(state%balance_beta==beta_before), &
              'pipeline invalid grid must preserve the prior approved support')
 
+  ! The public helper must reject malformed field shapes before indexing them.
+  state%grid%dx=1000.0_real64
+  beta_before=state%balance_beta
+  DEALLOCATE(state%pressure%value)
+  CALL build_compact_balance_beta(state,REAL(horizontal_radius,real64), &
+                                  20000.0_real64,status)
+  CALL check(status==STATUS_FAILED .AND. ALL(state%balance_beta==beta_before), &
+             'pipeline malformed pressure shape must fail without mutation')
+
   IF (failures/=0) THEN
     PRINT *,'Nonuniform localization tests failed:',failures
     ERROR STOP 1

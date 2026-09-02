@@ -4,7 +4,12 @@ set -euo pipefail
 export LC_ALL=C
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(cd "$repo_root/.." && pwd)
+workspace_lexical=$(realpath -ms "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
+workspace_root=$(realpath -e "$workspace_lexical")
+[[ $workspace_root == "$workspace_lexical" ]] || {
+  printf 'workspace root cannot contain a symlink: %s\n' "$workspace_lexical" >&2
+  exit 2
+}
 . "$repo_root/tests/intel_toolchain.sh"
 baseline="$repo_root/scratch/baseline_legacy_0d4c9a8_20260816"
 candidate_parent=$(realpath -m "$repo_root/scratch/candidate")

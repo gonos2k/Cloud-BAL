@@ -34,6 +34,8 @@
 | 수직축 `k=1 bottom`, 압력 단조감소 | DONE | ingest에서 한 방향만 허용; 역방향을 physics 내부에서 추측하지 않음 |
 | 결측/비유한 pressure, omega, wind, dBZ, phase의 산술 진입 차단 | DONE | canonical validation과 trajectory fail-closed 시험 |
 | 레이더 강수의 상대 낙하 flux 재구성과 interface ledger | ENGINEERING | interface별 경계/지형/관측차단 폐합은 구현; source 제거를 포함한 전역 질량수송이나 root-to-sink 보존을 뜻하지 않음 |
+| 강수 trajectory 입력 계약 | DONE | 공개 kernel 입구에서 shape·finite·비음수 수상체·phase 범위를 검사; 현재 index-space 수송은 균일 dx/dy만 허용하고 비균일 격자는 물리좌표 수송 구현 전 fail-closed |
+| radar no-echo의 수송 경계 의미 | BLOCKED | 실자료 adapter는 no-echo와 raw missing을 구분하지만 trajectory의 차단 경계로 아직 전달하지 않음; 관측 부재인지 명시적 무강수인지 정책 고정 전 과학 승격 금지 |
 | 총수분·잠열 동시 보존 | ENGINEERING | canonical bounded adjustment 시험 통과; legacy LAPSPREP 전체 transaction 연결은 남음 |
 | focused source의 dormant radar evaporation/cloud bogus-w OFF | DONE | Cloud-BAL 복사본은 상수-false guard, literal `.false.` cloud call, `w_3d=0` 초기화와 시험으로 잠금 |
 | 현업 linked derived-cloud의 radar evaporation/cloud bogus-w OFF | BLOCKED | 현재 namelist는 evaporation 0이지만 원본 source·binary에 호출이 남고 cloud bogus-w는 활성; `audit_legacy_deriv_safety.py`가 source/binary/ifx provenance를 모두 통과할 때까지 BLOCKED |
@@ -49,6 +51,7 @@
 | A-grid checkerboard null mode 제어 | ENGINEERING | 수직 omega target의 exact/near-alternating mode는 solve 전 거부; 수평 collocated A-grid parity gauge와 terrain/native-face 문제는 남아 ACTIVE 승격 금지 |
 | 비균일 격자의 물리 거리 localization | DONE | `cloud_bal_grid_geometry`의 누적 인접 center 거리와 overflow-safe 탐색반경을 canonical/legacy localization에 공유; 중간 100 km cell 및 거대 유한반경 반례 통과 |
 | solver 실패·비수렴 시 원본 rollback | DONE | candidate와 operational state 모두 원본 복사본; 실패 수치만 stage result에 보존 |
+| focused legacy QBAL의 background omega 필수성 | DONE | U/V/T/HT/SH와 함께 OM status도 필수; 누락 OM을 0으로 대체하여 balance를 계속하지 않음 |
 | storm motion 및 trajectory frame | BLOCKED | 현재 real SHADOW는 좌표계 미확정 input-native U/V와 zero-translation 가정을 명시; 바람 좌표계·이동벡터 검증 전 과학 승격 금지 |
 | physical continuity·geostrophic·증분·방향 gate | DONE | 최종 real32 배열에서 독립 재계산하고 Fortran failure bitset과 정확히 일치시킴 |
 | 결과 파일의 단일 세대 transaction | ENGINEERING | real runner를 staging→재검증→manifest→atomic generation으로 연결; 제품별 NetCDF/WPS 재읽기와 full legacy writer 연결은 남음 |
@@ -60,6 +63,7 @@
 | canonical pipeline이 전체 KLAPS 호출망의 단일 구현 | BLOCKED | qbalpe/derived-cloud/LAPSPREP adapter와 전체 링크가 아직 없음 |
 | 원래 QBAL 직접 입력 closure | BLOCKED | 4시각 upstream replay preflight과 41개 독립 read-only copy, VRT 4/4는 완료; 실제 producer는 실행하지 않아 LT1/LQ3/LCO/LSX가 `NOT_PRODUCED` |
 | 현업 원본-vs-SHADOW 비교 계약 | ENGINEERING | role·hash·time/grid/unit/stagger/wind-coordinate·정확한 SHADOW profile·단일 Times·내장 source/authority·pair 유일성 검증과 고정 scale 배열 생성기 구현; 현재 완전한 candidate가 없어 `NOT_READY`, 운영 전후 그림 생성 금지 |
+| 비교 candidate의 완전한 generation attestation | BLOCKED | 현재 비교기는 local manifest+marker 결속까지만 검사; TRANSACTION context, 전체 입력/build receipt, 검증된 generation membership을 함께 확인하기 전 독립 운영 증거로 승격 금지 |
 | 실제 cold-start 0--6 h 과학 검증 | BLOCKED | 준비된 분석자료 SHADOW 진단은 예보 spin-up 검증을 대신하지 않음 |
 | ACTIVE 운영 게시 | BLOCKED | ACTIVE API 자체가 없고 모든 과학·통합 gate가 닫히지 않음 |
 
@@ -120,5 +124,9 @@ speed observation operator가 한 계약으로 준비된 뒤 다시 검토한다
 7. clean exact-head manifest, 필수 CI와 보호 브랜치를 적용한다.
 8. production의 cloud bogus-w 및 30--60 km legacy qbal 경로를 canonical
    transaction으로 한 번에 교체한다.
+9. radar no-echo 정책, 비균일 격자 physical-coordinate trajectory, 전역
+   water/enthalpy source-to-sink ledger를 하나의 column-physics 계약으로 닫는다.
+10. comparison candidate가 검증된 generation의 선언 제품임을 transaction,
+    input/build receipt와 함께 독립 재검증한다.
 
 이 중 하나라도 빠지면 판정은 계속 `SHADOW / PROMOTION_BLOCKED`다.

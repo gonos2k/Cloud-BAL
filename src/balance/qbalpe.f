@@ -286,7 +286,7 @@ c
       call get_modelfg_3d(i4time_sys,'SH ',nx,ny,nz,shb,istat_bg(5))
       call get_modelfg_3d(i4time_sys,'OM ',nx,ny,nz,omb,istat_bg(6))
 
-      do i=1,5
+      do i=1,6
          if(istat_bg(i).ne.1)then
             print*,'required background field failed, index/status ',
      &              i,istat_bg(i)
@@ -303,11 +303,7 @@ c
 
 c     Preserve background omega validity before a numeric fallback is chosen.
       allocate(omb_valid(nx,ny,nz),omo_valid(nx,ny,nz))
-      if(istat_bg(6).eq.1)then
-         omb_valid=ieee_is_finite(omb).and.abs(omb).le.100.
-      else
-         omb_valid=.false.
-      endif
+      omb_valid=ieee_is_finite(omb).and.abs(omb).le.100.
 c
 c *** Get LAPS 3D analysis grids.
 c

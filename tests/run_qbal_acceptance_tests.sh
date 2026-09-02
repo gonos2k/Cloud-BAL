@@ -44,4 +44,10 @@ for assignment in 't=tworkorig' 'u=uworkorig' 'v=vworkorig' \
   grep -Fq "$assignment" "$repo_root/src/balance/qbalpe.f"
 done
 
-printf '%s\n' 'QBAL AIRDROP common-gate and rollback checks passed'
+awk '
+  /call get_modelfg_3d\(i4time_sys,'\''OM '\'',nx,ny,nz,omb,istat_bg\(6\)\)/ {omega=1}
+  omega && /do i=1,6/ {required=1; exit}
+  END {if (!omega || !required) exit 1}
+' "$repo_root/src/balance/qbalpe.f"
+
+printf '%s\n' 'QBAL AIRDROP, background-omega, common-gate and rollback checks passed'

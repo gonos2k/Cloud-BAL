@@ -56,7 +56,8 @@ CONTAINS
     END IF
 
     IF (config%requested_mode==MODE_OFF) THEN
-      CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_OK,REASON_NONE)
+      CALL initialize_stage_result(result%overall,MAX(0,nx),MAX(0,ny),MAX(0,nz), &
+                                   STATUS_OK,REASON_NONE)
       result%status=STATUS_OK; result%reason_code=REASON_NONE
       RETURN
     END IF
@@ -117,8 +118,7 @@ CONTAINS
     IF (.NOT.ieee_is_finite(horizontal_radius) .OR. horizontal_radius<=0.0_real64 .OR. &
         .NOT.ieee_is_finite(pressure_radius) .OR. pressure_radius<=0.0_real64) RETURN
     nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
-    IF (.NOT.ALLOCATED(state%balance_beta)) RETURN
-    IF (ANY(SHAPE(state%balance_beta)/=(/nx,ny,nz/))) RETURN
+    IF (.NOT.localization_inputs_valid(state,nx,ny,nz)) RETURN
     IF (ANY(.NOT.ieee_is_finite(state%pressure%value)) .OR. &
         ANY(.NOT.ieee_is_finite(state%grid%dx)) .OR. &
         ANY(.NOT.ieee_is_finite(state%grid%dy)) .OR. &
@@ -170,5 +170,38 @@ CONTAINS
     state%balance_beta=beta_work
     status=STATUS_OK
   END SUBROUTINE build_compact_balance_beta
+
+  LOGICAL FUNCTION localization_inputs_valid(state,nx,ny,nz)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: nx,ny,nz
+    INTEGER :: shape2(2),shape3(3)
+
+    localization_inputs_valid=.FALSE.
+    IF (nx<1 .OR. ny<1 .OR. nz<2) RETURN
+    shape2=(/nx,ny/); shape3=(/nx,ny,nz/)
+    IF (.NOT.ALLOCATED(state%grid%dx) .OR. .NOT.ALLOCATED(state%grid%dy) .OR. &
+        .NOT.ALLOCATED(state%above_ground) .OR. &
+        .NOT.ALLOCATED(state%balance_beta)) RETURN
+    IF (ANY(SHAPE(state%grid%dx)/=shape2) .OR. &
+        ANY(SHAPE(state%grid%dy)/=shape2) .OR. &
+        ANY(SHAPE(state%above_ground)/=shape3) .OR. &
+        ANY(SHAPE(state%balance_beta)/=shape3)) RETURN
+    IF (.NOT.field_arrays_match(state%pressure,shape3) .OR. &
+        .NOT.field_arrays_match(state%omega,shape3) .OR. &
+        .NOT.field_arrays_match(state%omega_target,shape3)) RETURN
+    localization_inputs_valid=.TRUE.
+  END FUNCTION localization_inputs_valid
+
+  LOGICAL FUNCTION field_arrays_match(field,shape3)
+    TYPE(field3d), INTENT(IN) :: field
+    INTEGER, INTENT(IN) :: shape3(3)
+
+    field_arrays_match=.FALSE.
+    IF (.NOT.ALLOCATED(field%value) .OR. .NOT.ALLOCATED(field%valid) .OR. &
+        .NOT.ALLOCATED(field%quality) .OR. .NOT.ALLOCATED(field%source)) RETURN
+    IF (ANY(SHAPE(field%value)/=shape3) .OR. ANY(SHAPE(field%valid)/=shape3) .OR. &
+        ANY(SHAPE(field%quality)/=shape3) .OR. ANY(SHAPE(field%source)/=shape3)) RETURN
+    field_arrays_match=.TRUE.
+  END FUNCTION field_arrays_match
 
 END MODULE cloud_bal_pipeline

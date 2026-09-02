@@ -446,6 +446,8 @@ CONTAINS
     ledger=precipitation_flux_ledger(); status=STATUS_FAILED
     IF (.NOT.transport_shapes_valid(grid,pressure,temperature,vapor,u,v,w,w_valid,domain, &
                                     observed,phase,zlinear,rain,snow,graupel)) RETURN
+    IF (.NOT.transport_values_valid(grid,pressure,temperature,vapor,u,v,w,domain, &
+                                    phase,zlinear,rain,snow,graupel)) RETURN
     IF (ANY(observed .AND. .NOT.w_valid)) RETURN
     ALLOCATE(deposited_rate(grid%nx,grid%ny),deposited_zrate(grid%nx,grid%ny), &
              phase_rate(grid%nx,grid%ny),phase_zrate(grid%nx,grid%ny))
@@ -1390,6 +1392,43 @@ CONTAINS
       ALL(SHAPE(rain)==target) .AND. ALL(SHAPE(snow)==target) .AND. &
       ALL(SHAPE(graupel)==target)
   END FUNCTION transport_shapes_valid
+
+  PURE LOGICAL FUNCTION transport_values_valid(grid,pressure,temperature,vapor,u,v,w, &
+    domain,phase,zlinear,rain,snow,graupel)
+    TYPE(grid_spec), INTENT(IN) :: grid
+    REAL(real32), INTENT(IN) :: pressure(:,:,:),temperature(:,:,:),vapor(:,:,:)
+    REAL(real32), INTENT(IN) :: u(:,:,:),v(:,:,:),w(:,:,:)
+    LOGICAL, INTENT(IN) :: domain(:,:,:)
+    INTEGER, INTENT(IN) :: phase(:,:,:)
+    REAL(real64), INTENT(IN) :: zlinear(:,:,:),rain(:,:,:),snow(:,:,:),graupel(:,:,:)
+    REAL(real64) :: dx_tolerance,dy_tolerance
+
+    transport_values_valid=.FALSE.
+    IF (.NOT.ALLOCATED(grid%dx) .OR. .NOT.ALLOCATED(grid%dy)) RETURN
+    IF (ANY(SHAPE(grid%dx)/=(/grid%nx,grid%ny/)) .OR. &
+        ANY(SHAPE(grid%dy)/=(/grid%nx,grid%ny/))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(grid%dx)) .OR. ANY(grid%dx<=0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%dy)) .OR. ANY(grid%dy<=0.0_real64)) RETURN
+    dx_tolerance=64.0_real64*EPSILON(1.0_real64)* &
+                 MAX(1.0_real64,ABS(grid%dx(1,1)))
+    dy_tolerance=64.0_real64*EPSILON(1.0_real64)* &
+                 MAX(1.0_real64,ABS(grid%dy(1,1)))
+    ! The trajectory kernel advances in grid-index coordinates.  Reject a
+    ! nonuniform mesh until transport is implemented in physical coordinates.
+    IF (ANY(ABS(grid%dx-grid%dx(1,1))>dx_tolerance) .OR. &
+        ANY(ABS(grid%dy-grid%dy(1,1))>dy_tolerance)) RETURN
+    IF (ANY(domain .AND. (.NOT.ieee_is_finite(pressure) .OR. pressure<=0.0_real32)) .OR. &
+        ANY(domain .AND. (.NOT.ieee_is_finite(temperature) .OR. temperature<=0.0_real32)) .OR. &
+        ANY(domain .AND. (.NOT.ieee_is_finite(vapor) .OR. vapor<0.0_real32)) .OR. &
+        ANY(domain .AND. (.NOT.ieee_is_finite(u) .OR. .NOT.ieee_is_finite(v) .OR. &
+                          .NOT.ieee_is_finite(w)))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(zlinear)) .OR. ANY(zlinear<0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(rain)) .OR. ANY(rain<0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(snow)) .OR. ANY(snow<0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(graupel)) .OR. ANY(graupel<0.0_real64)) RETURN
+    IF (ANY(phase<PHASE_UNKNOWN) .OR. ANY(phase>PHASE_GRAUPEL)) RETURN
+    transport_values_valid=.TRUE.
+  END FUNCTION transport_values_valid
 
   PURE LOGICAL FUNCTION column_config_valid(cfg)
     TYPE(column_physics_config), INTENT(IN) :: cfg

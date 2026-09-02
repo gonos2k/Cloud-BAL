@@ -212,6 +212,22 @@ CONTAINS
     CALL check(status==STATUS_OK .AND. flux_ledger_closes(ledger,cfg) .AND. &
                ledger%terrain_intercept>0.0_real64, &
                'terrain-intercepted flux must be explicit and conserved',failures)
+
+    domain=.TRUE.; wvalid=.TRUE.; observed=.FALSE.; phase=PHASE_UNKNOWN
+    z=0.0_real64; rain=0.0_real64; snow=0.0_real64; graupel=0.0_real64
+    rain(2,2,3)=-1.0e-4_real64
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED, &
+               'negative hydrometeor input must fail before transport',failures)
+
+    rain=0.0_real64; rain(2,2,3)=1.0e-4_real64
+    z(2,2,3)=1000.0_real64; observed(2,2,3)=.TRUE.; phase(2,2,3)=PHASE_RAIN
+    grid%dx(2,2)=2500.0_real64
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED, &
+               'nonuniform trajectory grid must fail until physical transport exists',failures)
   END SUBROUTINE test_flux_ledgers
 
   SUBROUTINE test_column_stage(failures)
