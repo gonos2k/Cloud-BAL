@@ -304,12 +304,7 @@ c
 
 c     Preserve background omega validity before a numeric fallback is chosen.
       allocate(omb_valid(nx,ny,nz),omo_valid(nx,ny,nz))
-      omb_valid=ieee_is_finite(omb).and.abs(omb).le.100.
-      if(.not.background_omega_complete(omb_valid,psb,p,
-     &                                  nx,ny,nz))then
-         print*,'incomplete background omega; balance rejected'
-         goto 999
-      endif
+      call qbal_mark_valid_omega(omb,omb_valid,nx,ny,nz)
 c
 c *** Get LAPS 3D analysis grids.
 c
@@ -333,7 +328,7 @@ c omo is the cloud vertical motion from lco
          goto 999
       endif
       if(istat_omo.eq.1)then
-         omo_valid=ieee_is_finite(omo).and.abs(omo).le.100.
+         call qbal_mark_valid_omega(omo,omo_valid,nx,ny,nz)
       else
          omo_valid=.false.
       endif
@@ -357,6 +352,11 @@ c
      1                  comment,nx,ny,ps,istatus)
       if(istatus.ne.1)then
          print*,'LAPS surface pressure not obtained'
+         goto 999
+      endif
+      if(.not.background_omega_complete(omb_valid,ps,p,
+     &                                  nx,ny,nz))then
+         print*,'incomplete background omega; balance rejected'
          goto 999
       endif
 c
@@ -2564,6 +2564,28 @@ c One fail-closed acceptance contract for balance and AIRDROP candidates.
 c
 c ---------------------------------------------------------------
 c
+      subroutine qbal_mark_valid_omega(omega,valid,nx,ny,nz)
+c Convert finite in-range omega values to one explicit validity mask.
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      implicit none
+      integer nx,ny,nz,i,j,k
+      real*4 omega(nx,ny,nz)
+      logical valid(nx,ny,nz)
+
+      valid=.false.
+      do k=1,nz
+       do j=1,ny
+        do i=1,nx
+         if(.not.ieee_is_finite(omega(i,j,k)))cycle
+         if(abs(omega(i,j,k)).le.100.)valid(i,j,k)=.true.
+        enddo
+       enddo
+      enddo
+      return
+      end
+c
+c ---------------------------------------------------------------
+c
       logical function background_omega_complete(valid,ps,p,
      &                                           nx,ny,nz)
 c Require background omega at every above-ground pressure-grid cell.
@@ -2577,7 +2599,8 @@ c Require background omega at every above-ground pressure-grid cell.
       if(nx.lt.1.or.ny.lt.1.or.nz.lt.1)return
       if(any(.not.ieee_is_finite(ps)))return
       if(any(.not.ieee_is_finite(p)))return
-      if(any(ps.le.0.).or.any(p.le.0.))return
+      if(any(ps.lt.100.).or.any(ps.gt.120000.))return
+      if(any(p.lt.100.).or.any(p.gt.120000.))return
       do k=1,nz
        do j=1,ny
         do i=1,nx

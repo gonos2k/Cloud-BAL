@@ -3,13 +3,14 @@ PROGRAM test_qbal_acceptance
   IMPLICIT NONE
   INTEGER, PARAMETER :: nx=2,ny=2,nz=1
   INTEGER :: failures,status
-  EXTERNAL :: qbal_increment_maxima,qbal_candidate_acceptance
+  EXTERNAL :: qbal_increment_maxima,qbal_candidate_acceptance,qbal_mark_valid_omega
   LOGICAL, EXTERNAL :: background_omega_complete
   REAL :: u0(nx,ny,nz),v0(nx,ny,nz),om0(nx,ny,nz)
   REAL :: u1(nx,ny,nz),v1(nx,ny,nz),om1(nx,ny,nz)
   REAL :: influence(nx,ny,nz),maxwind,maxomega,nan_value
+  REAL :: omega_values(nx,ny,nz)
   REAL :: ps(nx,ny),p(nz)
-  LOGICAL :: om_valid(nx,ny,nz)
+  LOGICAL :: om_valid(nx,ny,nz),marked_valid(nx,ny,nz)
 
   failures=0
   u0=0.0; v0=0.0; om0=0.0
@@ -69,6 +70,14 @@ PROGRAM test_qbal_acceptance
   ps(1,1)=nan_value
   CALL check(.NOT.background_omega_complete(om_valid,ps,p,nx,ny,nz), &
        'non-finite surface pressure must fail the omega domain',failures)
+  ps=90000.0; ps(1,1)=130000.0
+  CALL check(.NOT.background_omega_complete(om_valid,ps,p,nx,ny,nz), &
+       'out-of-range surface pressure must fail the omega domain',failures)
+
+  omega_values=0.0; omega_values(1,1,1)=nan_value
+  CALL qbal_mark_valid_omega(omega_values,marked_valid,nx,ny,nz)
+  CALL check(.NOT.marked_valid(1,1,1) .AND. COUNT(marked_valid)==nx*ny*nz-1, &
+       'omega validity conversion must reject NaN without FPE',failures)
 
   IF (failures/=0) THEN
     PRINT *,'QBAL acceptance tests failed:',failures

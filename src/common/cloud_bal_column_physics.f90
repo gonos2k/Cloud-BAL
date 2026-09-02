@@ -440,8 +440,11 @@ CONTAINS
     TYPE(precipitation_flux_ledger), INTENT(OUT) :: ledger
     INTEGER, INTENT(OUT) :: status
     INTEGER :: i,j,k,phase_code,nphase
+    INTEGER, ALLOCATABLE :: phase_work(:,:,:)
     REAL(real64), ALLOCATABLE :: deposited_rate(:,:),deposited_zrate(:,:)
     REAL(real64), ALLOCATABLE :: phase_rate(:,:),phase_zrate(:,:)
+    REAL(real64), ALLOCATABLE :: zlinear_work(:,:,:),rain_work(:,:,:)
+    REAL(real64), ALLOCATABLE :: snow_work(:,:,:),graupel_work(:,:,:)
 
     ledger=precipitation_flux_ledger(); status=STATUS_FAILED
     IF (.NOT.column_config_valid(cfg)) RETURN
@@ -450,8 +453,15 @@ CONTAINS
     IF (.NOT.transport_values_valid(grid,pressure,temperature,vapor,u,v,w,domain, &
                                     phase,zlinear,rain,snow,graupel,cfg)) RETURN
     IF (ANY(observed .AND. .NOT.w_valid)) RETURN
-    ALLOCATE(deposited_rate(grid%nx,grid%ny),deposited_zrate(grid%nx,grid%ny), &
+    ALLOCATE(phase_work(grid%nx,grid%ny,grid%nz), &
+             zlinear_work(grid%nx,grid%ny,grid%nz), &
+             rain_work(grid%nx,grid%ny,grid%nz), &
+             snow_work(grid%nx,grid%ny,grid%nz), &
+             graupel_work(grid%nx,grid%ny,grid%nz), &
+             deposited_rate(grid%nx,grid%ny),deposited_zrate(grid%nx,grid%ny), &
              phase_rate(grid%nx,grid%ny),phase_zrate(grid%nx,grid%ny))
+    phase_work=phase; zlinear_work=zlinear
+    rain_work=rain; snow_work=snow; graupel_work=graupel
     DO k=grid%nz,2,-1
       deposited_rate=0.0_real64; deposited_zrate=0.0_real64
       DO phase_code=PHASE_RAIN,PHASE_GRAUPEL
@@ -459,13 +469,16 @@ CONTAINS
         SELECT CASE(phase_code)
         CASE(PHASE_RAIN)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            domain,observed,k,phase_code,zlinear,rain,cfg,ledger,phase_rate,phase_zrate,status)
+            domain,observed,k,phase_code,zlinear_work,rain_work,cfg,ledger, &
+            phase_rate,phase_zrate,status)
         CASE(PHASE_SNOW)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            domain,observed,k,phase_code,zlinear,snow,cfg,ledger,phase_rate,phase_zrate,status)
+            domain,observed,k,phase_code,zlinear_work,snow_work,cfg,ledger, &
+            phase_rate,phase_zrate,status)
         CASE(PHASE_GRAUPEL)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            domain,observed,k,phase_code,zlinear,graupel,cfg,ledger,phase_rate,phase_zrate,status)
+            domain,observed,k,phase_code,zlinear_work,graupel_work,cfg,ledger, &
+            phase_rate,phase_zrate,status)
         END SELECT
         IF (status/=STATUS_OK) RETURN
         deposited_rate=deposited_rate+phase_rate
@@ -473,31 +486,35 @@ CONTAINS
       END DO
       DO j=1,grid%ny; DO i=1,grid%nx
         IF (deposited_rate(i,j)>0.0_real64 .AND. .NOT.observed(i,j,k-1)) THEN
-          zlinear(i,j,k-1)=deposited_zrate(i,j)/deposited_rate(i,j)
-          nphase=MERGE(1,0,rain(i,j,k-1)>0.0_real64)+ &
-                 MERGE(1,0,snow(i,j,k-1)>0.0_real64)+ &
-                 MERGE(1,0,graupel(i,j,k-1)>0.0_real64)
+          zlinear_work(i,j,k-1)=deposited_zrate(i,j)/deposited_rate(i,j)
+          nphase=MERGE(1,0,rain_work(i,j,k-1)>0.0_real64)+ &
+                 MERGE(1,0,snow_work(i,j,k-1)>0.0_real64)+ &
+                 MERGE(1,0,graupel_work(i,j,k-1)>0.0_real64)
           IF (nphase/=1) THEN
-            phase(i,j,k-1)=PHASE_UNKNOWN
-          ELSE IF (rain(i,j,k-1)>0.0_real64) THEN
-            phase(i,j,k-1)=PHASE_RAIN
-          ELSE IF (snow(i,j,k-1)>0.0_real64) THEN
-            phase(i,j,k-1)=PHASE_SNOW
+            phase_work(i,j,k-1)=PHASE_UNKNOWN
+          ELSE IF (rain_work(i,j,k-1)>0.0_real64) THEN
+            phase_work(i,j,k-1)=PHASE_RAIN
+          ELSE IF (snow_work(i,j,k-1)>0.0_real64) THEN
+            phase_work(i,j,k-1)=PHASE_SNOW
           ELSE
-            phase(i,j,k-1)=PHASE_GRAUPEL
+            phase_work(i,j,k-1)=PHASE_GRAUPEL
           END IF
         END IF
       END DO; END DO
     END DO
-    CALL account_bottom_flux(grid,pressure,temperature,vapor,w,w_valid,rain,snow, &
-                             graupel,zlinear,cfg,ledger,status)
+    CALL account_bottom_flux(grid,pressure,temperature,vapor,w,w_valid,rain_work, &
+                             snow_work,graupel_work,zlinear_work,cfg,ledger,status)
     IF (status/=STATUS_OK) RETURN
     IF (.NOT.flux_ledger_closes(ledger,cfg)) THEN
       status=STATUS_FAILED; RETURN
     END IF
     IF (.NOT.transport_values_valid(grid,pressure,temperature,vapor,u,v,w,domain, &
-                                    phase,zlinear,rain,snow,graupel,cfg)) &
-      status=STATUS_FAILED
+                                    phase_work,zlinear_work,rain_work,snow_work, &
+                                    graupel_work,cfg)) THEN
+      status=STATUS_FAILED; RETURN
+    END IF
+    phase=phase_work; zlinear=zlinear_work
+    rain=rain_work; snow=snow_work; graupel=graupel_work
   END SUBROUTINE transport_precipitation_flux
 
   SUBROUTINE transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
@@ -1446,6 +1463,7 @@ CONTAINS
         ANY(domain .AND. (vapor<0.0_real32 .OR. vapor>0.2_real32)) .OR. &
         ANY(domain .AND. (ABS(u)>200.0_real32 .OR. ABS(v)>200.0_real32 .OR. &
                           ABS(w)>200.0_real32))) RETURN
+    IF (ANY(pressure(:,:,1:grid%nz-1)<=pressure(:,:,2:grid%nz))) RETURN
     IF (ANY(.NOT.ieee_is_finite(zlinear)) .OR. &
         ANY(.NOT.ieee_is_finite(rain)) .OR. &
         ANY(.NOT.ieee_is_finite(snow)) .OR. &
@@ -1463,6 +1481,8 @@ CONTAINS
             (snow>0.0_real64 .OR. graupel>0.0_real64)) .OR. &
         ANY(phase==PHASE_SNOW .AND. &
             (rain>0.0_real64 .OR. graupel>0.0_real64)) .OR. &
+        ANY(phase==PHASE_FREEZING_RAIN .AND. snow>0.0_real64) .OR. &
+        ANY(phase==PHASE_SLEET .AND. rain>0.0_real64) .OR. &
         ANY(phase==PHASE_GRAUPEL .AND. &
             (rain>0.0_real64 .OR. snow>0.0_real64))) RETURN
     transport_values_valid=.TRUE.
@@ -1487,10 +1507,12 @@ CONTAINS
         cfg%cloud_fraction_threshold>1.0_real64 .OR. &
         cfg%radar_wavelength_m<0.08_real64 .OR. &
         cfg%radar_wavelength_m>0.12_real64 .OR. &
+        cfg%minimum_dbz< -100.0_real64 .OR. &
         cfg%maximum_dbz<=cfg%minimum_dbz .OR. cfg%maximum_dbz>100.0_real64 .OR. &
         cfg%reference_mass_concentration<=0.0_real64 .OR. &
         cfg%minimum_relative_fall_speed<=0.0_real64 .OR. &
         cfg%maximum_horizontal_substep<=0.0_real64 .OR. &
+        cfg%maximum_horizontal_substep>1.0_real64 .OR. &
         cfg%maximum_transport_substeps<=0 .OR. &
         cfg%precipitation_loading_efficiency<0.0_real64 .OR. &
         cfg%precipitation_loading_efficiency>1.0_real64 .OR. &

@@ -50,4 +50,10 @@ awk '
   END {if (!omega || !required) exit 1}
 ' "$repo_root/src/balance/qbalpe.f"
 
+awk '
+  /^      call get_laps_2d\(i4time_sys,sfcext,'\''PS '\''/ {analysis_surface=NR}
+  /^      if\(.not.background_omega_complete\(omb_valid,ps,p/ {omega_gate=NR}
+  END {if (!analysis_surface || omega_gate<=analysis_surface) exit 1}
+' "$repo_root/src/balance/qbalpe.f"
+
 printf '%s\n' 'QBAL AIRDROP, background-omega, common-gate and rollback checks passed'

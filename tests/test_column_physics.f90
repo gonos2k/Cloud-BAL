@@ -152,8 +152,10 @@ CONTAINS
     TYPE(precipitation_flux_ledger) :: ledger
     REAL(real32) :: p(4,4,3),t(4,4,3),qv(4,4,3),u(4,4,3),v(4,4,3),w(4,4,3)
     LOGICAL :: wvalid(4,4,3),domain(4,4,3),observed(4,4,3)
-    INTEGER :: phase(4,4,3),status,k
+    INTEGER :: phase(4,4,3),phase_before(4,4,3),status,k
     REAL(real64) :: z(4,4,3),rain(4,4,3),snow(4,4,3),graupel(4,4,3)
+    REAL(real64) :: z_before(4,4,3),rain_before(4,4,3)
+    REAL(real64) :: snow_before(4,4,3),graupel_before(4,4,3)
 
     grid%nx=4; grid%ny=4; grid%nz=3; grid%grid_id='transport-test'
     ALLOCATE(grid%dx(4,4),grid%dy(4,4),grid%dp(4,4,3), &
@@ -236,6 +238,16 @@ CONTAINS
                                       rain,snow,graupel,cfg,ledger,status)
     CALL check(status==STATUS_FAILED,'invalid transport config must fail',failures)
     cfg%maximum_horizontal_substep=0.75_real64
+    cfg%maximum_horizontal_substep=HUGE(1.0_real64)
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'overflowing transport config must fail',failures)
+    cfg%maximum_horizontal_substep=0.75_real64
+    cfg%minimum_dbz=-101.0_real64
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'dBZ config must match terminal-speed range',failures)
+    cfg%minimum_dbz=0.0_real64
 
     domain(2,2,3)=.FALSE.
     CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
@@ -249,6 +261,18 @@ CONTAINS
     CALL check(status==STATUS_FAILED, &
                'explicit phase and hydrometeor species must agree',failures)
     snow=0.0_real64
+    phase(2,2,3)=PHASE_FREEZING_RAIN
+    snow(2,2,3)=rain(2,2,3); rain(2,2,3)=0.0_real64
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED, &
+               'freezing-rain phase cannot carry snow',failures)
+    phase(2,2,3)=PHASE_SLEET
+    rain(2,2,3)=snow(2,2,3); snow=0.0_real64
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'sleet phase cannot carry rain',failures)
+    phase(2,2,3)=PHASE_RAIN
 
     cfg%maximum_dbz=ieee_value(0.0_real64,ieee_quiet_nan)
     CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
@@ -261,6 +285,23 @@ CONTAINS
                                       rain,snow,graupel,cfg,ledger,status)
     CALL check(status==STATUS_FAILED,'non-finite transport input must fail',failures)
     p(2,2,3)=65000.0_real32
+
+    p(:,:,1)=60000.0_real32; p(:,:,2)=80000.0_real32
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'reversed pressure order must fail',failures)
+    DO k=1,3; p(:,:,k)=REAL(95000-15000*(k-1),real32); END DO
+
+    wvalid=.TRUE.; wvalid(2,2,1)=.FALSE.
+    phase_before=phase; z_before=z; rain_before=rain
+    snow_before=snow; graupel_before=graupel
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED .AND. ALL(phase==phase_before) .AND. &
+               ALL(z==z_before) .AND. ALL(rain==rain_before) .AND. &
+               ALL(snow==snow_before) .AND. ALL(graupel==graupel_before), &
+               'failed transport must leave caller arrays unchanged',failures)
+    wvalid=.TRUE.
 
     DEALLOCATE(grid%dp)
     CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
