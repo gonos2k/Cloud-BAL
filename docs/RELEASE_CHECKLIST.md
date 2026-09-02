@@ -6,6 +6,27 @@
 기록은 `PIPELINE_SIMPLIFICATION_PLAN.md`에 남기되, 실행 권한은 여기서만
 판정한다.
 
+## 최종 목표와 현재 판정
+
+최종 목표는 분석된 구름·강수 질량과 `u`, `v`, `omega`, 온도, 수증기,
+압력·지위고도를 한 transaction에서 국지적으로 조정해, 질량·수분·엔탈피와
+연속·동역학 잔차를 함께 만족하고 초기 음파·중력파를 키우지 않는 것이다.
+
+현재 판정은 **SHADOW / PROMOTION_BLOCKED**다. 레이더 기반 수상체 수송과
+하강 `omega` 후보 생성은 실행되지만, 실제자료에서 바람·`omega` balance는
+권한이 없어 실행되지 않았고 cloud-analysis target도 연결되지 않았다.
+
+| 목표 구성요소 | 상태 | 현재 판정 |
+|---|---|---|
+| 현업 KLAPS 원본 격리·보존 | DONE | ANAL/MODL 및 현업 최종장은 입력 전용 |
+| radar hydrometeor 수송 | ENGINEERING | interface ledger는 닫히지만 no-echo·frame·storm motion은 미폐합 |
+| 강수 loading 하강 `omega` 후보 | ENGINEERING | 실제자료에서 생성되나 독립 동역학 근거가 없어 적용 권한 0 |
+| 실제자료 `u/v/omega` balance | BLOCKED | real geometry에서 nonzero solver 실행 증거 없음 |
+| cloud-analysis 연직속도 target | BLOCKED | 실제 adapter에 cloud analysis가 없고 type-only 경험식은 금지 |
+| 수분·잠열·부력의 결합 조정 | BLOCKED | legacy 전체 transaction과 source-to-sink budget 미연결 |
+| 음파·중력파 안전성 | BLOCKED | 0--6 h cold-start와 고주파 발산/표면기압 검증 없음 |
+| 전체 KLAPS E2E | BLOCKED | canonical pipeline이 production call graph를 아직 대체하지 않음 |
+
 ## 단일 계약
 
 ```text
@@ -29,13 +50,17 @@
 | 계약 | 상태 | 현재 증거 또는 남은 조건 |
 |---|---|---|
 | ANAL/MODL 원본 격리, final bigfile 입력 금지 | DONE | 고정 hash inventory와 isolation gate; final/downstream path를 입력 단계에서 거부 |
+| `main` 통합 exact HEAD 검증 | ENGINEERING | `origin/main`을 비파괴 merge한 통합 HEAD에서 개발 중; 전체 ifx·실자료·O0/O2·transaction 증거와 manifest `source_commit` 일치 후 DONE |
 | 값·valid·quality·source·시간·차원·단위의 단일 field 계약 | DONE | `cloud_bal_state`; 모든 physics가 공통 `cell_is_usable` 사용 |
 | pressure mass와 dry-air mass 분리 | DONE | 연속 연산자는 `pressure_mass_measure`, 수상체 질량은 `dry_air_mass_measure` 사용 |
+| `above_ground`의 독립 domain 권한 | BLOCKED | 현재 real reader가 `LW3/OM raw_valid`로 domain을 만들 수 있음; PSFC·pressure interface·지형/고도로 예상 domain을 먼저 만들고 OM/U/V/T/Qv를 그 안에서 요구해야 함 |
+| pressure interface와 surface-truncated cell | BLOCKED | 고정 50 hPa `dp`가 control-volume 두께와 center spacing을 겸함; `cell_dp`와 `level_spacing_dp`를 분리해야 함 |
 | 수직축 `k=1 bottom`, 압력 단조감소 | DONE | ingest에서 한 방향만 허용; 역방향을 physics 내부에서 추측하지 않음 |
 | 결측/비유한 pressure, omega, wind, dBZ, phase의 산술 진입 차단 | DONE | canonical validation과 trajectory fail-closed 시험 |
 | 레이더 강수의 상대 낙하 flux 재구성과 interface ledger | ENGINEERING | interface별 경계/지형/관측차단 폐합은 구현; source 제거를 포함한 전역 질량수송이나 root-to-sink 보존을 뜻하지 않음 |
 | 강수 trajectory 입력 계약 | DONE | 공개 kernel 입구에서 config·계산량·ledger tolerance·shape·finite·범위·dp·수직순서·domain·phase/species 일관성을 한 번 검사하고 별도 work 배열의 출력/ledger도 재검사한 뒤에만 반환 배열에 commit; 현재 index-space 수송은 균일 dx/dy만 허용하고 비균일 격자는 물리좌표 수송 구현 전 fail-closed |
 | radar no-echo의 수송 경계 의미 | BLOCKED | 실자료 adapter는 no-echo와 raw missing을 구분하지만 trajectory의 차단 경계로 아직 전달하지 않음; 관측 부재인지 명시적 무강수인지 정책 고정 전 과학 승격 금지 |
+| top/bottom `omega`의 물리 경계 계약 | BLOCKED | interior `omega` 복사값은 진단 fallback일 뿐; 실제 경계와 source/quality를 저장하거나 `physical_continuity_assessed=0`으로 fail-closed 해야 함 |
 | 총수분·잠열 동시 보존 | ENGINEERING | canonical bounded adjustment 시험 통과; legacy LAPSPREP 전체 transaction 연결은 남음 |
 | focused source의 dormant radar evaporation/cloud bogus-w OFF | DONE | Cloud-BAL 복사본은 상수-false guard, literal `.false.` cloud call, `w_3d=0` 초기화와 시험으로 잠금 |
 | 현업 linked derived-cloud의 radar evaporation/cloud bogus-w OFF | BLOCKED | 현재 namelist는 evaporation 0이지만 원본 source·binary에 호출이 남고 cloud bogus-w는 활성; `audit_legacy_deriv_safety.py`가 source/binary/ifx provenance를 모두 통과할 때까지 BLOCKED |
@@ -63,7 +88,10 @@
 | 현업 KLAPS 전체 ifx link | BLOCKED | 3개 현업 binary는 legacy ifort 서명, canonical symbol 0, NetCDF/HDF5 runtime closure 미해결; `audit_intel_integration.py` 결과 38 blocker |
 | canonical pipeline이 전체 KLAPS 호출망의 단일 구현 | BLOCKED | qbalpe/derived-cloud/LAPSPREP adapter와 전체 링크가 아직 없음 |
 | 원래 QBAL 직접 입력 closure | BLOCKED | 4시각 upstream replay preflight과 41개 독립 read-only copy, VRT 4/4는 완료; 실제 producer는 실행하지 않아 LT1/LQ3/LCO/LSX가 `NOT_PRODUCED` |
-| 현업 원본-vs-SHADOW 비교 계약 | ENGINEERING | role·hash·time/grid/unit/stagger/wind-coordinate·정확한 SHADOW profile·단일 Times·내장 source/authority·pair 유일성 검증과 고정 scale 배열 생성기 구현; 현재 완전한 candidate가 없어 `NOT_READY`, 운영 전후 그림 생성 금지 |
+| 현업 원본-vs-SHADOW 비교 계약 | ENGINEERING | 13--15 UTC hybrid field 비교는 생성했으나 동일 background·질량기준의 순수 increment임을 증명하지 못함; 12 UTC 현업 최종장은 없음; full E2E 비교로 부르지 않음 |
+| 비교 candidate의 동일 background·질량기준 | BLOCKED | 현재 hybrid는 diagnostic absolute candidate를 운영 WPS에 이식; `diagnostic background == KLAPS original` 또는 보존적으로 변환한 increment를 먼저 증명해야 함 |
+| 실제 NE57 geometry의 nonzero balance | BLOCKED | test-only manufactured dynamic target으로 실제 지형·압력·경계에서 solver/adjoint/residual을 검증하되 science authority는 부여하지 않음 |
+| 독립 column/trajectory 재계산 | BLOCKED | T·qv·phase·pressure interface·boundary·retrieval config·field provenance를 artifact에 저장하고 별도 구현에서 cellwise 재계산해야 함 |
 | 비교 candidate의 완전한 generation attestation | BLOCKED | 현재 비교기는 local manifest+marker 결속까지만 검사; TRANSACTION context, 전체 입력/build receipt, 검증된 generation membership을 함께 확인하기 전 독립 운영 증거로 승격 금지 |
 | 실제 cold-start 0--6 h 과학 검증 | BLOCKED | 준비된 분석자료 SHADOW 진단은 예보 spin-up 검증을 대신하지 않음 |
 | ACTIVE 운영 게시 | BLOCKED | ACTIVE API 자체가 없고 모든 과학·통합 gate가 닫히지 않음 |
@@ -92,6 +120,26 @@ Standalone `numerical VALID`는 파일 내부 수치·연산자·gate 재계산�
 통과한 뒤에만 artifact evidence라 부른다. 후보가
 과학적으로 좋다는 뜻이 아니다. 실패한 stage는 상태 후보를 게시하지 않고
 원인과 수치만 stage result에 남기며, 운영장은 원본 그대로여야 한다.
+
+## 현업 KLAPS 대조 결과
+
+현업 최종 KLAPS가 존재하는 2026-08-16 13--15 UTC에 한해 진단용 hybrid
+비교를 수행했다. 이는 동일 초기상태에서 전체 pipeline을 재실행한 결과가
+아니므로 현업 개선 증거가 아니라 문제 탐지용이다.
+
+| 시각 | unique 수상체 support | direct radar | transported | 실제 WPS 변경 |
+|---|---:|---:|---:|---|
+| 13 UTC | 157,918 | 68,592 | 89,326 | QR 112,787 / QS 95,779 |
+| 14 UTC | 161,134 | 72,212 | 88,922 | QR 117,084 / QS 96,984 |
+| 15 UTC | 162,973 | 75,794 | 87,179 | QR 121,350 / QS 95,282 |
+
+- 12 UTC 현업 최종장은 없어 `NOT_AVAILABLE`이다.
+- 실제 `u`, `v`, `omega`, 온도·수증기는 모두 불변이다.
+- 최대 `QR+QS` 증분은 약 `0.0106 kg kg-1`이고 급격한 수평·연직·시간
+  경계가 존재하므로, 이 hybrid를 수치모델 초기장으로 사용하지 않는다.
+- reported replacement attempt와 실제 float32 WPS 변경 수를 분리한다.
+- 그림은 field·시각 공통 고정 scale을 사용하고 changed-cell 통계와 support
+  경계 통계를 함께 표시해야 한다.
 
 ## 레이더 시선속도 판정
 
