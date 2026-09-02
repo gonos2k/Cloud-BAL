@@ -1,6 +1,6 @@
 # Cloud-BAL 단일 승인 체크리스트
 
-기준일: 2026-09-01
+기준일: 2026-09-02
 
 이 문서가 현재 승인 판단의 한 장짜리 기준이다. 상세 수식과 과거 검토
 기록은 `PIPELINE_SIMPLIFICATION_PLAN.md`에 남기되, 실행 권한은 여기서만
@@ -35,17 +35,19 @@
 | 결측/비유한 pressure, omega, wind, dBZ, phase의 산술 진입 차단 | DONE | canonical validation과 trajectory fail-closed 시험 |
 | 레이더 강수의 상대 낙하 flux 재구성과 interface ledger | ENGINEERING | interface별 경계/지형/관측차단 폐합은 구현; source 제거를 포함한 전역 질량수송이나 root-to-sink 보존을 뜻하지 않음 |
 | 총수분·잠열 동시 보존 | ENGINEERING | canonical bounded adjustment 시험 통과; legacy LAPSPREP 전체 transaction 연결은 남음 |
-| dormant radar evaporation 경로 OFF | DONE | legacy 호출은 남아 있지만 조건이 상수 false이고 radar bogus-w도 강제로 OFF |
+| focused source의 dormant radar evaporation/cloud bogus-w OFF | DONE | Cloud-BAL 복사본은 상수-false guard, literal `.false.` cloud call, `w_3d=0` 초기화와 시험으로 잠금 |
+| 현업 linked derived-cloud의 radar evaporation/cloud bogus-w OFF | BLOCKED | 현재 namelist는 evaporation 0이지만 원본 source·binary에 호출이 남고 cloud bogus-w는 활성; `audit_legacy_deriv_safety.py`가 source/binary/ifx provenance를 모두 통과할 때까지 BLOCKED |
 | canonical cloud type-only 경험적 `w` 금지 | DONE | 운형은 layer/regime support만 제공; 별도 동역학 driver가 없으면 평균 target은 0 |
 | production derived-cloud 경험적 `w` 제거 | BLOCKED | 실제 호출망은 아직 `l_flag_bogus_w=.true.`인 legacy 경로이며 canonical adapter로 교체되지 않음 |
 | 동역학 target 권한과 일반 usable 값 분리 | DONE | dynamic bit, 독립 바람 근거, clean quality를 모두 만족해야 solver seed가 됨 |
 | 동역학 target의 `R_w`·자료 나이·driver provenance | BLOCKED | 현재 실제자료에는 이 계약이 없어 dynamic authority를 0으로 강제; ACTIVE 전에 field contract 확장 필요 |
 | S-band loading pseudo-target의 바람 권한 | BLOCKED | 현재 echo는 phase·fall-speed가 불확실하므로 hydrometeor/ledger 진단만 수행하고 balance support는 0 |
 | 하나의 `S`, `D`, `G`, `L=-DSG`를 solve/update/residual에 공용 | DONE | 단위시험과 독립 validator가 같은 게시 배열에서 operator identity를 재계산; exact-head 수치는 immutable generation에만 기록 |
+| 요청 `omega_target`과 실제 적용률 분리 | DONE | balance stage는 target 값·mask·quality·source를 bitwise 보존하고 trust-region 적용률은 result에만 기록 |
 | target-induced increment만 projection | DONE | compact 영역에서 배경 전장을 재균형하지 않음; target 없는 component는 bitwise no-op |
 | support 경계의 배경 flux와 zero-normal increment 분리 | ENGINEERING | uniform-flow compact-support 단위시험 통과; 실제 지형 kinematic lower boundary는 남음 |
-| A-grid checkerboard null mode 제거 | BLOCKED | 현재 연산자는 parity gauge를 명시적으로 검출하지만 제거하지 않음; ACTIVE 승격 금지 |
-| 비균일 격자의 물리 거리 localization | BLOCKED | 실제 adapter는 5 km 균일격자만 허용; 누적 face 거리 도입 전 다른 격자 금지 |
+| A-grid checkerboard null mode 제어 | ENGINEERING | 수직 omega target의 exact/near-alternating mode는 solve 전 거부; 수평 collocated A-grid parity gauge와 terrain/native-face 문제는 남아 ACTIVE 승격 금지 |
+| 비균일 격자의 물리 거리 localization | DONE | `cloud_bal_grid_geometry`의 누적 인접 center 거리와 overflow-safe 탐색반경을 canonical/legacy localization에 공유; 중간 100 km cell 및 거대 유한반경 반례 통과 |
 | solver 실패·비수렴 시 원본 rollback | DONE | candidate와 operational state 모두 원본 복사본; 실패 수치만 stage result에 보존 |
 | storm motion 및 trajectory frame | BLOCKED | 현재 real SHADOW는 좌표계 미확정 input-native U/V와 zero-translation 가정을 명시; 바람 좌표계·이동벡터 검증 전 과학 승격 금지 |
 | physical continuity·geostrophic·증분·방향 gate | DONE | 최종 real32 배열에서 독립 재계산하고 Fortran failure bitset과 정확히 일치시킴 |
@@ -53,9 +55,11 @@
 | 증거 세대의 self-contained build/derived provenance | BLOCKED | 현재 build/runtime 절대경로와 figure/audit sidecar가 외부에 남음; 운영 증거 승격 전에 세대 내부 receipt 필요 |
 | exact-head·입력 content snapshot | BLOCKED | 현재 trusted single-user check/hash/check runner이며 adversarial path swap을 막는 immutable source/input snapshot은 미구현 |
 | publication directory race 방어 | BLOCKED | 현재 lock+atomic rename은 협력 프로세스 crash consistency용; hostile directory replacement를 막는 dirfd/openat 계층은 미구현 |
-| Intel ifx 2026 단일 toolchain | DONE | focused strict/reproduction 스크립트에 GNU/ifort fallback 없음 |
+| focused Intel ifx 2026 단일 toolchain | DONE | strict/reproduction 스크립트에 GNU/ifort fallback 없음 |
+| 현업 KLAPS 전체 ifx link | BLOCKED | 3개 현업 binary는 legacy ifort 서명, canonical symbol 0, NetCDF/HDF5 runtime closure 미해결; `audit_intel_integration.py` 결과 38 blocker |
 | canonical pipeline이 전체 KLAPS 호출망의 단일 구현 | BLOCKED | qbalpe/derived-cloud/LAPSPREP adapter와 전체 링크가 아직 없음 |
-| 원래 QBAL 직접 입력 closure | BLOCKED | 준비된 4시각 모두 LT1/LQ3/LCO/LSX가 없고, 경로·schema만 맞춘 복제본도 거부; upstream generation manifest 구현 필요 |
+| 원래 QBAL 직접 입력 closure | BLOCKED | 4시각 upstream replay preflight과 41개 독립 read-only copy, VRT 4/4는 완료; 실제 producer는 실행하지 않아 LT1/LQ3/LCO/LSX가 `NOT_PRODUCED` |
+| 현업 원본-vs-SHADOW 비교 계약 | ENGINEERING | role·hash·time/grid/unit/stagger/wind-coordinate·정확한 SHADOW profile·단일 Times·내장 source/authority·pair 유일성 검증과 고정 scale 배열 생성기 구현; 현재 완전한 candidate가 없어 `NOT_READY`, 운영 전후 그림 생성 금지 |
 | 실제 cold-start 0--6 h 과학 검증 | BLOCKED | 준비된 분석자료 SHADOW 진단은 예보 spin-up 검증을 대신하지 않음 |
 | ACTIVE 운영 게시 | BLOCKED | ACTIVE API 자체가 없고 모든 과학·통합 gate가 닫히지 않음 |
 
@@ -76,7 +80,7 @@
 | 동역학 판정 | 현재 v3 실제자료는 반드시 `NOT_AUTHORIZED`, target/support/wind 변경 0이어야 함 |
 | 운영장 변경 | 모든 사례에서 반드시 0 cell |
 | 국지성·증분·cellwise target response | 사례별 독립 JSON의 재계산 값을 사용 |
-| 원본/후보 그림 | 네 시각 각각 동일 규칙의 수평·연직 그림 2개 |
+| background/proposal 진단 그림 | 네 시각 각각 동일 규칙의 수평·연직 그림 2개; 현업 원본/개선 비교로 부르지 않음 |
 
 Standalone `numerical VALID`는 파일 내부 수치·연산자·gate 재계산이
 일치한다는 뜻일 뿐 provenance가 아니다. Immutable generation 검증까지

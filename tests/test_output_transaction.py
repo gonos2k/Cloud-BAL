@@ -136,6 +136,18 @@ def main() -> None:
         expect_rejected(lambda: _current(root), "tampered manifest was accepted")
         manifest_path.write_text(original_manifest, encoding="utf-8")
 
+        context_path = current / "TRANSACTION.json"
+        original_context = context_path.read_text(encoding="utf-8")
+        context_path.unlink()
+        expect_rejected(lambda: _current(root), "generation without context was accepted")
+        context_path.write_text(original_context, encoding="utf-8")
+
+        rewritten_manifest = json.loads(original_manifest)
+        rewritten_manifest["configuration"] = "rewritten"
+        manifest_path.write_text(json.dumps(rewritten_manifest), encoding="utf-8")
+        expect_rejected(lambda: _current(root), "rewritten manifest context was accepted")
+        manifest_path.write_text(original_manifest, encoding="utf-8")
+
         marker_path = current / "COMMITTED"
         marker_path.write_text("wrong\n", encoding="ascii")
         expect_rejected(lambda: _current(root), "tampered marker was accepted")

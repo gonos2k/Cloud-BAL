@@ -39,6 +39,10 @@ verify_input() {
     printf 'input is not a regular non-symlink file: %s\n' "$path" >&2
     exit 2
   }
+  [[ $(stat -c '%h' "$full") -eq 1 ]] || {
+    printf 'input is hard-linked: %s\n' "$path" >&2
+    exit 2
+  }
   actual=$(sha256sum "$full" | cut -d' ' -f1)
   [[ $actual == "$expected" ]] || {
     printf 'input changed or hash mismatch: %s\n' "$path" >&2
@@ -89,6 +93,7 @@ read -r -a nf_flibs <<<"$nf_flibs_text"
   "$repo_root/src/common/cloud_bal_state.f90" \
   "$repo_root/src/common/cloud_bal_column_physics.f90" \
   "$repo_root/src/common/cloud_bal_balance_operator.f90" \
+  "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
   "$repo_root/src/common/cloud_bal_pipeline.f90" \
   "$repo_root/src/common/cloud_bal_real_netcdf.f90" \
   "$repo_root/tests/real_shadow_driver.f90" \
@@ -261,7 +266,7 @@ PY
 "$repo_root/tests/run_real_input_inventory.sh"
 verify_build_files
 if [[ $(git -C "$repo_root" rev-parse HEAD) != "$source_commit" ]] || \
-   [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=normal) ]]; then
+   [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=all) ]]; then
   printf 'source tree changed during the real-data run\n' >&2
   exit 2
 fi

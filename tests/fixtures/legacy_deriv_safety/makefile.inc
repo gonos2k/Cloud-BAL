@@ -1,0 +1,2 @@
+FC = ifx
+CPP = ifx

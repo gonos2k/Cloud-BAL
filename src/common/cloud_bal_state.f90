@@ -269,6 +269,7 @@ MODULE cloud_bal_state
   PUBLIC :: refresh_dry_air_mass_measure
   PUBLIC :: stage_is_ok
   PUBLIC :: canonical_to_legacy_status
+  PUBLIC :: canonical_states_equal
 
   INTERFACE initialize_field
     MODULE PROCEDURE initialize_field2d
@@ -441,6 +442,7 @@ CONTAINS
     IF (state%schema_version /= CLOUD_BAL_SCHEMA_VERSION .OR. &
         nx < 1 .OR. ny < 1 .OR. nz < 2 .OR. LEN_TRIM(state%grid%grid_id) == 0) RETURN
     IF (.NOT. grid_arrays_valid(state%grid)) RETURN
+    IF (.NOT. support_arrays_valid(state,nx,ny,nz)) RETURN
     valid_time=state%pressure%valid_time
     surface_required=.TRUE.
     IF (PRESENT(require_surface)) surface_required=require_surface
@@ -506,9 +508,6 @@ CONTAINS
       status=STATUS_FAILED; reason=REASON_METADATA; RETURN
     END IF
 
-    IF (.NOT. support_arrays_valid(state,nx,ny,nz)) THEN
-      status=STATUS_FAILED; reason=REASON_SHAPE; RETURN
-    END IF
     IF (ANY(.NOT.ieee_is_finite(state%balance_beta)) .OR. &
         ANY(state%balance_beta < 0.0_real32) .OR. &
         ANY(state%balance_beta > 1.0_real32)) THEN
@@ -774,12 +773,20 @@ CONTAINS
     pipeline_mode_valid=mode==MODE_OFF .OR. mode==MODE_SHADOW
   END FUNCTION pipeline_mode_valid
 
-  PURE ELEMENTAL LOGICAL FUNCTION cell_is_usable(valid,quality,source)
+  PURE ELEMENTAL LOGICAL FUNCTION cell_is_usable(valid,quality,source, &
+      field_valid_time,analysis_time)
     LOGICAL, INTENT(IN) :: valid
     INTEGER(int32), INTENT(IN) :: quality,source
+    INTEGER(int64), INTENT(IN), OPTIONAL :: field_valid_time,analysis_time
+    LOGICAL :: time_matches
+
+    ! Existing cell-only callers omit both times; time-aware callers supply both.
+    time_matches=PRESENT(field_valid_time) .EQV. PRESENT(analysis_time)
+    IF (PRESENT(field_valid_time) .AND. PRESENT(analysis_time)) &
+      time_matches=field_valid_time==analysis_time
     cell_is_usable=valid .AND. source>0_int32 .AND. &
       source_bits_known(source) .AND. quality_bits_known(quality) .AND. &
-      IAND(quality,QUALITY_EXCLUDED_BITS)==0_int32
+      IAND(quality,QUALITY_EXCLUDED_BITS)==0_int32 .AND. time_matches
   END FUNCTION cell_is_usable
 
   PURE ELEMENTAL LOGICAL FUNCTION source_bits_known(source)
@@ -827,31 +834,39 @@ CONTAINS
   SUBROUTINE refresh_dry_air_mass_measure(state,status)
     TYPE(cloud_bal_state_type), INTENT(INOUT) :: state
     INTEGER, INTENT(OUT) :: status
-    INTEGER :: i,j,k
+    INTEGER :: i,j,k,allocation_status
     REAL(real64) :: total_water
+    REAL(real64), ALLOCATABLE :: dry_air_mass_work(:,:,:)
 
     status=STATUS_FAILED
     IF (.NOT.grid_mass_shapes_valid(state%grid)) RETURN
     IF (.NOT.water_storage_valid(state)) RETURN
+    ALLOCATE(dry_air_mass_work(state%grid%nx,state%grid%ny,state%grid%nz), &
+             STAT=allocation_status)
+    IF (allocation_status/=0) RETURN
+    ! Publish only after the complete candidate passes every cell and array gate.
     DO k=1,state%grid%nz; DO j=1,state%grid%ny; DO i=1,state%grid%nx
       IF (.NOT.state%above_ground(i,j,k)) THEN
-        state%grid%dry_air_mass_measure(i,j,k)= &
+        dry_air_mass_work(i,j,k)= &
           state%grid%pressure_mass_measure(i,j,k)
         CYCLE
       END IF
       IF (.NOT.cell_is_usable(state%vapor%valid(i,j,k), &
-          state%vapor%quality(i,j,k),state%vapor%source(i,j,k))) THEN
-        state%grid%dry_air_mass_measure(i,j,k)= &
+          state%vapor%quality(i,j,k),state%vapor%source(i,j,k), &
+          state%vapor%valid_time,state%pressure%valid_time)) THEN
+        dry_air_mass_work(i,j,k)= &
           state%grid%pressure_mass_measure(i,j,k)
         CYCLE
       END IF
       total_water=represented_total_water(state,i,j,k)
-      IF (.NOT.ieee_is_finite(total_water) .OR. total_water<0.0_real64) RETURN
-      state%grid%dry_air_mass_measure(i,j,k)= &
+      IF (.NOT.ieee_is_finite(total_water)) RETURN
+      IF (total_water<0.0_real64) RETURN
+      dry_air_mass_work(i,j,k)= &
         state%grid%pressure_mass_measure(i,j,k)/(1.0_real64+total_water)
     END DO; END DO; END DO
-    IF (ANY(.NOT.ieee_is_finite(state%grid%dry_air_mass_measure)) .OR. &
-        ANY(state%grid%dry_air_mass_measure<=0.0_real64)) RETURN
+    IF (ANY(.NOT.ieee_is_finite(dry_air_mass_work))) RETURN
+    IF (ANY(dry_air_mass_work<=0.0_real64)) RETURN
+    state%grid%dry_air_mass_measure=dry_air_mass_work
     status=STATUS_OK
   END SUBROUTINE refresh_dry_air_mass_measure
 
@@ -1082,27 +1097,50 @@ CONTAINS
     INTEGER :: nx,ny,nz
     nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
     water_storage_valid=ALLOCATED(state%above_ground) .AND. &
-      field3d_storage_valid(state%vapor,nx,ny,nz) .AND. &
-      field3d_storage_valid(state%cloud_water,nx,ny,nz) .AND. &
-      field3d_storage_valid(state%cloud_ice,nx,ny,nz) .AND. &
-      field3d_storage_valid(state%rain,nx,ny,nz) .AND. &
-      field3d_storage_valid(state%snow,nx,ny,nz) .AND. &
-      field3d_storage_valid(state%graupel,nx,ny,nz)
+      water_field_contract_valid(state%vapor,nx,ny,nz, &
+        state%pressure%valid_time) .AND. &
+      water_field_contract_valid(state%cloud_water,nx,ny,nz, &
+        state%pressure%valid_time) .AND. &
+      water_field_contract_valid(state%cloud_ice,nx,ny,nz, &
+        state%pressure%valid_time) .AND. &
+      water_field_contract_valid(state%rain,nx,ny,nz, &
+        state%pressure%valid_time) .AND. &
+      water_field_contract_valid(state%snow,nx,ny,nz, &
+        state%pressure%valid_time) .AND. &
+      water_field_contract_valid(state%graupel,nx,ny,nz, &
+        state%pressure%valid_time)
     IF (.NOT.water_storage_valid) RETURN
     water_storage_valid=ALL(SHAPE(state%above_ground)==(/nx,ny,nz/))
   END FUNCTION water_storage_valid
 
-  PURE LOGICAL FUNCTION field3d_storage_valid(field,nx,ny,nz)
+  PURE LOGICAL FUNCTION water_field_contract_valid(field,nx,ny,nz,analysis_time)
     TYPE(field3d), INTENT(IN) :: field
     INTEGER, INTENT(IN) :: nx,ny,nz
-    field3d_storage_valid=.FALSE.
-    IF (.NOT.ALLOCATED(field%value) .OR. .NOT.ALLOCATED(field%valid) .OR. &
-        .NOT.ALLOCATED(field%quality) .OR. .NOT.ALLOCATED(field%source)) RETURN
-    field3d_storage_valid=ALL(SHAPE(field%value)==(/nx,ny,nz/)) .AND. &
-      ALL(SHAPE(field%valid)==(/nx,ny,nz/)) .AND. &
-      ALL(SHAPE(field%quality)==(/nx,ny,nz/)) .AND. &
-      ALL(SHAPE(field%source)==(/nx,ny,nz/))
-  END FUNCTION field3d_storage_valid
+    INTEGER(int64), INTENT(IN) :: analysis_time
+
+    water_field_contract_valid=field3d_shape_metadata_ok(field,nx,ny,nz, &
+      analysis_time,'kg kg-1 dryair')
+    IF (.NOT.water_field_contract_valid) RETURN
+    water_field_contract_valid= &
+      .NOT.ANY(.NOT.source_bits_known(field%source)) .AND. &
+      .NOT.ANY(.NOT.quality_bits_known(field%quality)) .AND. &
+      .NOT.ANY(field%valid .AND. .NOT.cell_is_usable(field%valid, &
+        field%quality,field%source,field%valid_time,analysis_time)) .AND. &
+      ALL(water_value_is_valid(field%value,field%valid))
+  END FUNCTION water_field_contract_valid
+
+  PURE ELEMENTAL LOGICAL FUNCTION water_value_is_valid(value,valid)
+    REAL(real32), INTENT(IN) :: value
+    LOGICAL, INTENT(IN) :: valid
+
+    water_value_is_valid=.TRUE.
+    IF (.NOT.valid) RETURN
+    IF (.NOT.ieee_is_finite(value)) THEN
+      water_value_is_valid=.FALSE.
+      RETURN
+    END IF
+    water_value_is_valid=value>=0.0_real32
+  END FUNCTION water_value_is_valid
 
   PURE LOGICAL FUNCTION support_arrays_valid(state,nx,ny,nz)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
@@ -1199,18 +1237,26 @@ CONTAINS
 
   PURE LOGICAL FUNCTION los_core_allocated(los)
     TYPE(radar_los_observation_set), INTENT(IN) :: los
-    los_core_allocated=ALLOCATED(los%vrad%value) .OR. ALLOCATED(los%nyquist%value) .OR. &
-      ALLOCATED(los%sigma_vrad%value) .OR. ALLOCATED(los%beam) .OR. &
+    los_core_allocated=field4d_storage_allocated(los%vrad) .OR. &
+      field4d_storage_allocated(los%nyquist) .OR. &
+      field4d_storage_allocated(los%sigma_vrad) .OR. ALLOCATED(los%beam) .OR. &
       ALLOCATED(los%observation_id_hi) .OR. ALLOCATED(los%observation_id_lo) .OR. &
       ALLOCATED(los%usage) .OR. ALLOCATED(los%radar_id) .OR. &
       ALLOCATED(los%observation_time) .OR. ALLOCATED(los%site_lat) .OR. &
       ALLOCATED(los%site_lon) .OR. ALLOCATED(los%site_height) .OR. &
       ALLOCATED(los%wavelength) .OR. ALLOCATED(los%los_support) .OR. &
       ALLOCATED(los%geometry_condition) .OR. ALLOCATED(los%geometry_rank) .OR. &
-      ALLOCATED(los%colocated_dbz%value) .OR. &
-      ALLOCATED(los%spectrum_width%value) .OR. los%has_colocated_dbz .OR. &
+      field4d_storage_allocated(los%colocated_dbz) .OR. &
+      field4d_storage_allocated(los%spectrum_width) .OR. los%has_colocated_dbz .OR. &
       los%has_spectrum_width
   END FUNCTION los_core_allocated
+
+  PURE LOGICAL FUNCTION field4d_storage_allocated(field)
+    TYPE(field4d), INTENT(IN) :: field
+    field4d_storage_allocated=ALLOCATED(field%value) .OR. &
+      ALLOCATED(field%valid) .OR. ALLOCATED(field%quality) .OR. &
+      ALLOCATED(field%source)
+  END FUNCTION field4d_storage_allocated
 
   PURE LOGICAL FUNCTION radar_vectors_allocated(los,nr)
     TYPE(radar_los_observation_set), INTENT(IN) :: los
@@ -1229,6 +1275,299 @@ CONTAINS
         ANY(los%wavelength<=0.0_real64)) RETURN
     radar_vectors_allocated=.TRUE.
   END FUNCTION radar_vectors_allocated
+
+  ! Exact state identity used at authority boundaries.  Array content is
+  ! compared element by element to avoid large TRANSFER temporaries.
+  LOGICAL FUNCTION canonical_states_equal(left,right,allow_pipeline_candidate_changes)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: left,right
+    LOGICAL, INTENT(IN), OPTIONAL :: allow_pipeline_candidate_changes
+    LOGICAL :: candidate_scope
+    candidate_scope=.FALSE.
+    IF (PRESENT(allow_pipeline_candidate_changes)) &
+      candidate_scope=allow_pipeline_candidate_changes
+    canonical_states_equal=.FALSE.
+    IF (left%schema_version/=right%schema_version) RETURN
+    IF (.NOT.states_equal_grid(left%grid,right%grid,candidate_scope)) RETURN
+    IF (.NOT.states_equal_field3d(left%pressure,right%pressure)) RETURN
+    IF (.NOT.states_equal_field3d(left%temperature,right%temperature)) RETURN
+    IF (.NOT.states_equal_field3d(left%vapor,right%vapor)) RETURN
+    IF (.NOT.states_equal_field3d(left%geopotential,right%geopotential)) RETURN
+    IF (.NOT.states_equal_field3d(left%cloud_fraction,right%cloud_fraction)) RETURN
+    IF (.NOT.states_equal_field3d(left%radar_reflectivity, &
+                                  right%radar_reflectivity)) RETURN
+    IF (.NOT.states_equal_integer_field3d(left%cloud_type,right%cloud_type)) RETURN
+    IF (.NOT.states_equal_integer_field3d(left%lightning_support, &
+                                          right%lightning_support)) RETURN
+    IF (.NOT.states_equal_field3d(left%cloud_water,right%cloud_water)) RETURN
+    IF (.NOT.states_equal_field3d(left%cloud_ice,right%cloud_ice)) RETURN
+    IF (.NOT.states_equal_field2d(left%surface_pressure,right%surface_pressure)) RETURN
+    IF (.NOT.states_equal_field2d(left%surface_temperature, &
+                                  right%surface_temperature)) RETURN
+    IF (.NOT.states_equal_field2d(left%latitude,right%latitude)) RETURN
+    IF (.NOT.states_equal_field2d(left%omega_top_boundary, &
+                                  right%omega_top_boundary)) RETURN
+    IF (.NOT.states_equal_field2d(left%omega_bottom_boundary, &
+                                  right%omega_bottom_boundary)) RETURN
+    IF (.NOT.states_equal_support(left,right,candidate_scope)) RETURN
+    IF (.NOT.states_equal_los(left%radar_los,right%radar_los)) RETURN
+    IF (.NOT.candidate_scope) THEN
+      IF (.NOT.states_equal_field3d(left%u,right%u)) RETURN
+      IF (.NOT.states_equal_field3d(left%v,right%v)) RETURN
+      IF (.NOT.states_equal_field3d(left%omega,right%omega)) RETURN
+      IF (.NOT.states_equal_field3d(left%omega_target,right%omega_target)) RETURN
+      IF (.NOT.states_equal_integer_field3d(left%precipitation_phase, &
+                                            right%precipitation_phase)) RETURN
+      IF (.NOT.states_equal_field3d(left%rain,right%rain)) RETURN
+      IF (.NOT.states_equal_field3d(left%snow,right%snow)) RETURN
+      IF (.NOT.states_equal_field3d(left%graupel,right%graupel)) RETURN
+      IF (.NOT.states_equal_field3d(left%vt_z_mean,right%vt_z_mean)) RETURN
+      IF (.NOT.states_equal_field3d(left%vt_z_sigma,right%vt_z_sigma)) RETURN
+    END IF
+    canonical_states_equal=.TRUE.
+  END FUNCTION canonical_states_equal
+
+  LOGICAL FUNCTION states_equal_grid(left,right,candidate_scope)
+    TYPE(grid_spec), INTENT(IN) :: left,right
+    LOGICAL, INTENT(IN) :: candidate_scope
+    states_equal_grid=.FALSE.
+    IF (left%nx/=right%nx .OR. left%ny/=right%ny .OR. left%nz/=right%nz .OR. &
+        left%grid_id/=right%grid_id) RETURN
+    IF (.NOT.ALLOCATED(left%dx) .OR. .NOT.ALLOCATED(right%dx) .OR. &
+        .NOT.ALLOCATED(left%dy) .OR. .NOT.ALLOCATED(right%dy) .OR. &
+        .NOT.ALLOCATED(left%dp) .OR. .NOT.ALLOCATED(right%dp) .OR. &
+        .NOT.ALLOCATED(left%pressure_mass_measure) .OR. &
+        .NOT.ALLOCATED(right%pressure_mass_measure) .OR. &
+        .NOT.ALLOCATED(left%dry_air_mass_measure) .OR. &
+        .NOT.ALLOCATED(right%dry_air_mass_measure)) RETURN
+    IF (ANY(SHAPE(left%dx)/=SHAPE(right%dx)) .OR. &
+        ANY(SHAPE(left%dy)/=SHAPE(right%dy)) .OR. &
+        ANY(SHAPE(left%dp)/=SHAPE(right%dp)) .OR. &
+        ANY(SHAPE(left%pressure_mass_measure)/= &
+            SHAPE(right%pressure_mass_measure)) .OR. &
+        ANY(SHAPE(left%dry_air_mass_measure)/=SHAPE(right%dry_air_mass_measure))) RETURN
+    states_equal_grid=states_equal_real64(left%dx,right%dx,SIZE(left%dx)) .AND. &
+      states_equal_real64(left%dy,right%dy,SIZE(left%dy)) .AND. &
+      states_equal_real64(left%dp,right%dp,SIZE(left%dp)) .AND. &
+      states_equal_real64(left%pressure_mass_measure,right%pressure_mass_measure, &
+                          SIZE(left%pressure_mass_measure))
+    IF (states_equal_grid .AND. .NOT.candidate_scope) &
+      states_equal_grid=states_equal_real64(left%dry_air_mass_measure, &
+        right%dry_air_mass_measure,SIZE(left%dry_air_mass_measure))
+  END FUNCTION states_equal_grid
+
+  LOGICAL FUNCTION states_equal_field3d(left,right)
+    TYPE(field3d), INTENT(IN) :: left,right
+    states_equal_field3d=.FALSE.
+    IF (left%valid_time/=right%valid_time .OR. left%unit/=right%unit) RETURN
+    IF (.NOT.ALLOCATED(left%value) .OR. .NOT.ALLOCATED(right%value) .OR. &
+        .NOT.ALLOCATED(left%valid) .OR. .NOT.ALLOCATED(right%valid) .OR. &
+        .NOT.ALLOCATED(left%quality) .OR. .NOT.ALLOCATED(right%quality) .OR. &
+        .NOT.ALLOCATED(left%source) .OR. .NOT.ALLOCATED(right%source)) RETURN
+    IF (ANY(SHAPE(left%value)/=SHAPE(right%value)) .OR. &
+        ANY(SHAPE(left%valid)/=SHAPE(right%valid)) .OR. &
+        ANY(SHAPE(left%quality)/=SHAPE(right%quality)) .OR. &
+        ANY(SHAPE(left%source)/=SHAPE(right%source))) RETURN
+    states_equal_field3d=states_equal_real32(left%value,right%value,SIZE(left%value)) &
+      .AND. states_equal_logical(left%valid,right%valid,SIZE(left%valid)) .AND. &
+      states_equal_int32(left%quality,right%quality,SIZE(left%quality)) .AND. &
+      states_equal_int32(left%source,right%source,SIZE(left%source))
+  END FUNCTION states_equal_field3d
+
+  LOGICAL FUNCTION states_equal_field2d(left,right)
+    TYPE(field2d), INTENT(IN) :: left,right
+    states_equal_field2d=.FALSE.
+    IF (left%valid_time/=right%valid_time .OR. left%unit/=right%unit) RETURN
+    IF (.NOT.ALLOCATED(left%value) .OR. .NOT.ALLOCATED(right%value) .OR. &
+        .NOT.ALLOCATED(left%valid) .OR. .NOT.ALLOCATED(right%valid) .OR. &
+        .NOT.ALLOCATED(left%quality) .OR. .NOT.ALLOCATED(right%quality) .OR. &
+        .NOT.ALLOCATED(left%source) .OR. .NOT.ALLOCATED(right%source)) RETURN
+    IF (ANY(SHAPE(left%value)/=SHAPE(right%value)) .OR. &
+        ANY(SHAPE(left%valid)/=SHAPE(right%valid)) .OR. &
+        ANY(SHAPE(left%quality)/=SHAPE(right%quality)) .OR. &
+        ANY(SHAPE(left%source)/=SHAPE(right%source))) RETURN
+    states_equal_field2d=states_equal_real32(left%value,right%value,SIZE(left%value)) &
+      .AND. states_equal_logical(left%valid,right%valid,SIZE(left%valid)) .AND. &
+      states_equal_int32(left%quality,right%quality,SIZE(left%quality)) .AND. &
+      states_equal_int32(left%source,right%source,SIZE(left%source))
+  END FUNCTION states_equal_field2d
+
+  LOGICAL FUNCTION states_equal_integer_field3d(left,right)
+    TYPE(integer_field3d), INTENT(IN) :: left,right
+    states_equal_integer_field3d=.FALSE.
+    IF (left%valid_time/=right%valid_time .OR. left%code_table/=right%code_table) RETURN
+    IF (.NOT.ALLOCATED(left%value) .OR. .NOT.ALLOCATED(right%value) .OR. &
+        .NOT.ALLOCATED(left%valid) .OR. .NOT.ALLOCATED(right%valid) .OR. &
+        .NOT.ALLOCATED(left%quality) .OR. .NOT.ALLOCATED(right%quality) .OR. &
+        .NOT.ALLOCATED(left%source) .OR. .NOT.ALLOCATED(right%source)) RETURN
+    IF (ANY(SHAPE(left%value)/=SHAPE(right%value)) .OR. &
+        ANY(SHAPE(left%valid)/=SHAPE(right%valid)) .OR. &
+        ANY(SHAPE(left%quality)/=SHAPE(right%quality)) .OR. &
+        ANY(SHAPE(left%source)/=SHAPE(right%source))) RETURN
+    states_equal_integer_field3d= &
+      states_equal_int32(left%value,right%value,SIZE(left%value)) .AND. &
+      states_equal_logical(left%valid,right%valid,SIZE(left%valid)) .AND. &
+      states_equal_int32(left%quality,right%quality,SIZE(left%quality)) .AND. &
+      states_equal_int32(left%source,right%source,SIZE(left%source))
+  END FUNCTION states_equal_integer_field3d
+
+  LOGICAL FUNCTION states_equal_field4d(left,right)
+    TYPE(field4d), INTENT(IN) :: left,right
+    states_equal_field4d=.FALSE.
+    IF (left%valid_time/=right%valid_time .OR. left%unit/=right%unit) RETURN
+    IF ((ALLOCATED(left%value) .NEQV. ALLOCATED(right%value)) .OR. &
+        (ALLOCATED(left%valid) .NEQV. ALLOCATED(right%valid)) .OR. &
+        (ALLOCATED(left%quality) .NEQV. ALLOCATED(right%quality)) .OR. &
+        (ALLOCATED(left%source) .NEQV. ALLOCATED(right%source))) RETURN
+    IF (.NOT.ALLOCATED(left%value)) THEN
+      states_equal_field4d=.NOT.ALLOCATED(left%valid) .AND. &
+        .NOT.ALLOCATED(left%quality) .AND. .NOT.ALLOCATED(left%source)
+      RETURN
+    END IF
+    IF (.NOT.ALLOCATED(left%valid) .OR. .NOT.ALLOCATED(left%quality) .OR. &
+        .NOT.ALLOCATED(left%source)) RETURN
+    IF (ANY(SHAPE(left%value)/=SHAPE(right%value)) .OR. &
+        ANY(SHAPE(left%valid)/=SHAPE(right%valid)) .OR. &
+        ANY(SHAPE(left%quality)/=SHAPE(right%quality)) .OR. &
+        ANY(SHAPE(left%source)/=SHAPE(right%source))) RETURN
+    states_equal_field4d=states_equal_real32(left%value,right%value,SIZE(left%value)) &
+      .AND. states_equal_logical(left%valid,right%valid,SIZE(left%valid)) .AND. &
+      states_equal_int32(left%quality,right%quality,SIZE(left%quality)) .AND. &
+      states_equal_int32(left%source,right%source,SIZE(left%source))
+  END FUNCTION states_equal_field4d
+
+  LOGICAL FUNCTION states_equal_support(left,right,candidate_scope)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: left,right
+    LOGICAL, INTENT(IN) :: candidate_scope
+    states_equal_support=.FALSE.
+    IF (.NOT.ALLOCATED(left%above_ground) .OR. .NOT.ALLOCATED(right%above_ground) .OR. &
+        .NOT.ALLOCATED(left%obs_support) .OR. .NOT.ALLOCATED(right%obs_support) .OR. &
+        .NOT.ALLOCATED(left%hydro_support) .OR. .NOT.ALLOCATED(right%hydro_support) .OR. &
+        .NOT.ALLOCATED(left%balance_beta) .OR. .NOT.ALLOCATED(right%balance_beta)) RETURN
+    IF (ANY(SHAPE(left%above_ground)/=SHAPE(right%above_ground)) .OR. &
+        ANY(SHAPE(left%obs_support)/=SHAPE(right%obs_support)) .OR. &
+        ANY(SHAPE(left%hydro_support)/=SHAPE(right%hydro_support)) .OR. &
+        ANY(SHAPE(left%balance_beta)/=SHAPE(right%balance_beta))) RETURN
+    states_equal_support=states_equal_logical(left%above_ground,right%above_ground, &
+      SIZE(left%above_ground))
+    IF (states_equal_support .AND. .NOT.candidate_scope) &
+      states_equal_support=states_equal_int32(left%obs_support,right%obs_support, &
+        SIZE(left%obs_support)) .AND. states_equal_int32(left%hydro_support, &
+        right%hydro_support,SIZE(left%hydro_support)) .AND. &
+        states_equal_real32(left%balance_beta,right%balance_beta, &
+        SIZE(left%balance_beta))
+  END FUNCTION states_equal_support
+
+  LOGICAL FUNCTION states_equal_los(left,right)
+    TYPE(radar_los_observation_set), INTENT(IN) :: left,right
+    states_equal_los=.FALSE.
+    IF ((left%is_present .NEQV. right%is_present) .OR. left%nradar/=right%nradar .OR. &
+        left%vrad_representation/=right%vrad_representation .OR. &
+        (left%has_colocated_dbz .NEQV. right%has_colocated_dbz) .OR. &
+        (left%has_spectrum_width .NEQV. right%has_spectrum_width)) RETURN
+    IF (.NOT.states_equal_field4d(left%vrad,right%vrad) .OR. &
+        .NOT.states_equal_field4d(left%nyquist,right%nyquist) .OR. &
+        .NOT.states_equal_field4d(left%sigma_vrad,right%sigma_vrad) .OR. &
+        .NOT.states_equal_field4d(left%colocated_dbz,right%colocated_dbz) .OR. &
+        .NOT.states_equal_field4d(left%spectrum_width,right%spectrum_width)) RETURN
+    IF (.NOT.left%is_present) THEN
+      states_equal_los=.NOT.los_core_allocated(left) .AND. &
+                       .NOT.los_core_allocated(right)
+      RETURN
+    END IF
+    IF (.NOT.radar_vectors_allocated(left,left%nradar) .OR. &
+        .NOT.radar_vectors_allocated(right,right%nradar)) RETURN
+    IF (.NOT.ALLOCATED(left%beam) .OR. .NOT.ALLOCATED(right%beam) .OR. &
+        .NOT.ALLOCATED(left%observation_id_hi) .OR. &
+        .NOT.ALLOCATED(right%observation_id_hi) .OR. &
+        .NOT.ALLOCATED(left%observation_id_lo) .OR. &
+        .NOT.ALLOCATED(right%observation_id_lo) .OR. &
+        .NOT.ALLOCATED(left%usage) .OR. .NOT.ALLOCATED(right%usage) .OR. &
+        .NOT.ALLOCATED(left%los_support) .OR. .NOT.ALLOCATED(right%los_support) .OR. &
+        .NOT.ALLOCATED(left%geometry_condition) .OR. &
+        .NOT.ALLOCATED(right%geometry_condition) .OR. &
+        .NOT.ALLOCATED(left%geometry_rank) .OR. &
+        .NOT.ALLOCATED(right%geometry_rank)) RETURN
+    IF (ANY(SHAPE(left%beam)/=SHAPE(right%beam)) .OR. &
+        ANY(SHAPE(left%observation_id_hi)/=SHAPE(right%observation_id_hi)) .OR. &
+        ANY(SHAPE(left%observation_id_lo)/=SHAPE(right%observation_id_lo)) .OR. &
+        ANY(SHAPE(left%usage)/=SHAPE(right%usage)) .OR. &
+        ANY(SHAPE(left%los_support)/=SHAPE(right%los_support)) .OR. &
+        ANY(SHAPE(left%geometry_condition)/=SHAPE(right%geometry_condition)) .OR. &
+        ANY(SHAPE(left%geometry_rank)/=SHAPE(right%geometry_rank))) RETURN
+    states_equal_los=states_equal_real32(left%beam,right%beam,SIZE(left%beam)) .AND. &
+      states_equal_int64(left%observation_id_hi,right%observation_id_hi, &
+                         SIZE(left%observation_id_hi)) .AND. &
+      states_equal_int64(left%observation_id_lo,right%observation_id_lo, &
+                         SIZE(left%observation_id_lo)) .AND. &
+      states_equal_int32(left%usage,right%usage,SIZE(left%usage)) .AND. &
+      states_equal_int32(left%radar_id,right%radar_id,SIZE(left%radar_id)) .AND. &
+      states_equal_int64(left%observation_time,right%observation_time, &
+                         SIZE(left%observation_time)) .AND. &
+      states_equal_real64(left%site_lat,right%site_lat,SIZE(left%site_lat)) .AND. &
+      states_equal_real64(left%site_lon,right%site_lon,SIZE(left%site_lon)) .AND. &
+      states_equal_real64(left%site_height,right%site_height,SIZE(left%site_height)) .AND. &
+      states_equal_real64(left%wavelength,right%wavelength,SIZE(left%wavelength)) .AND. &
+      states_equal_int32(left%los_support,right%los_support,SIZE(left%los_support)) .AND. &
+      states_equal_real32(left%geometry_condition,right%geometry_condition, &
+                          SIZE(left%geometry_condition)) .AND. &
+      states_equal_int32(left%geometry_rank,right%geometry_rank, &
+                         SIZE(left%geometry_rank))
+  END FUNCTION states_equal_los
+
+  LOGICAL FUNCTION states_equal_real32(left,right,n)
+    REAL(real32), INTENT(IN) :: left(*),right(*)
+    INTEGER, INTENT(IN) :: n
+    INTEGER :: i
+    states_equal_real32=.FALSE.
+    DO i=1,n
+      IF (TRANSFER(left(i),0_int32)/=TRANSFER(right(i),0_int32)) RETURN
+    END DO
+    states_equal_real32=.TRUE.
+  END FUNCTION states_equal_real32
+
+  LOGICAL FUNCTION states_equal_real64(left,right,n)
+    REAL(real64), INTENT(IN) :: left(*),right(*)
+    INTEGER, INTENT(IN) :: n
+    INTEGER :: i
+    states_equal_real64=.FALSE.
+    DO i=1,n
+      IF (TRANSFER(left(i),0_int64)/=TRANSFER(right(i),0_int64)) RETURN
+    END DO
+    states_equal_real64=.TRUE.
+  END FUNCTION states_equal_real64
+
+  LOGICAL FUNCTION states_equal_int32(left,right,n)
+    INTEGER(int32), INTENT(IN) :: left(*),right(*)
+    INTEGER, INTENT(IN) :: n
+    INTEGER :: i
+    states_equal_int32=.FALSE.
+    DO i=1,n
+      IF (left(i)/=right(i)) RETURN
+    END DO
+    states_equal_int32=.TRUE.
+  END FUNCTION states_equal_int32
+
+  LOGICAL FUNCTION states_equal_int64(left,right,n)
+    INTEGER(int64), INTENT(IN) :: left(*),right(*)
+    INTEGER, INTENT(IN) :: n
+    INTEGER :: i
+    states_equal_int64=.FALSE.
+    DO i=1,n
+      IF (left(i)/=right(i)) RETURN
+    END DO
+    states_equal_int64=.TRUE.
+  END FUNCTION states_equal_int64
+
+  LOGICAL FUNCTION states_equal_logical(left,right,n)
+    LOGICAL, INTENT(IN) :: left(*),right(*)
+    INTEGER, INTENT(IN) :: n
+    INTEGER :: i
+    states_equal_logical=.FALSE.
+    DO i=1,n
+      IF (left(i) .NEQV. right(i)) RETURN
+    END DO
+    states_equal_logical=.TRUE.
+  END FUNCTION states_equal_logical
 
   PURE LOGICAL FUNCTION same_shape_3d(a,b,c,d,mask,out,outmask)
     REAL(real32), INTENT(IN) :: a(:,:,:),b(:,:,:),c(:,:,:),d(:,:,:)

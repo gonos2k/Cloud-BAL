@@ -39,6 +39,7 @@ cd "$test_tmp"
   "$repo_root/src/common/cloud_bal_state.f90" \
   "$repo_root/src/common/cloud_bal_column_physics.f90" \
   "$repo_root/src/common/cloud_bal_balance_operator.f90" \
+  "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
   "$repo_root/src/common/cloud_bal_pipeline.f90" \
   "$repo_root/tests/test_pipeline.f90" \
   -o "$test_tmp/test_pipeline"
@@ -50,6 +51,7 @@ cd "$test_tmp"
   "$repo_root/src/common/cloud_bal_state.f90" \
   "$repo_root/src/common/cloud_bal_column_physics.f90" \
   "$repo_root/src/common/cloud_bal_balance_operator.f90" \
+  "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
   "$repo_root/src/common/cloud_bal_pipeline.f90" \
   "$repo_root/tests/reproduction_probe.f90" \
   -o "$test_tmp/reproduction_probe"
@@ -85,6 +87,7 @@ mkdir -p "$test_tmp/wps_mod" "$test_tmp/wps_root/lapsprd/lapsprep/wps"
 
 "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
   -module "$test_tmp" -I "$test_tmp" \
+  "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
   "$repo_root/src/common/cloud_bal_field_contracts.f90" \
   "$repo_root/src/common/cloud_bal_moisture.f90" \
   "$repo_root/src/common/cloud_bal_cloud_profiles.f90" \
@@ -164,6 +167,16 @@ awk '
   "$test_tmp/qbal_operator_core.o" -o "$test_tmp/test_qbal_operator"
 
 "$test_tmp/test_qbal_operator"
+
+"$repo_root/tests/run_contract_regressions.sh"
+"$repo_root/tests/run_qbal_acceptance_tests.sh"
+"$repo_root/tests/run_legacy_shadow_adapter_test.sh"
+"$repo_root/tests/run_real_shadow_io_contract_tests.sh"
+python3 "$repo_root/tests/test_qbal_real_input_manifest.py"
+python3 "$repo_root/tests/test_operational_comparison_prep.py"
+"$repo_root/tests/run_legacy_deriv_safety_audit.sh"
+python3 "$repo_root/tests/test_intel_integration_audit.py"
+"$repo_root/tests/run_original_upstream_replay_tests.sh"
 
 "$CLOUD_BAL_FC" -c "${CLOUD_BAL_FIXED_FLAGS[@]}" \
   -I "$repo_root/src/include" -module "$test_tmp" -I "$test_tmp" \

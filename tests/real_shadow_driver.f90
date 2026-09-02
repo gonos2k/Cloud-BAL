@@ -55,7 +55,7 @@ PROGRAM real_shadow_driver
   CALL state_continuity_residual(op,candidate,residual_after,status)
   IF (status/=STATUS_OK) ERROR STOP 'candidate residual failed'
   CALL write_shadow_diagnostics(TRIM(output),input,candidate,longitude,result,config, &
-                                residual_before,residual_after,status)
+                                residual_before,residual_after,status,operational)
   IF (status/=STATUS_OK) ERROR STOP 'diagnostic write failed'
 
   WRITE(*,'(A,I0)') 'radar_cells=',COUNT(input%radar_reflectivity%valid)

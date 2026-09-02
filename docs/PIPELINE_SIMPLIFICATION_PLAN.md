@@ -1028,8 +1028,9 @@ symbols are deleted at their phase removal gate.
 
 The gates have a fixed priority: finite/shape/support and component solvability;
 operator identity and convergence; continuity; hard increment bounds; momentum
-and final high-pass metrics.  If the last three cannot all pass, attenuate the
-`omega_target` monotonically and retry the same operator.  If no nonzero target
+and final high-pass metrics.  If the last three cannot all pass, monotonically
+scale the proposed target increment without rewriting the requested
+`omega_target`, and retry the same operator. If no nonzero fraction
 passes within the configured attempts, return the unchanged input as
 `DEGRADED`; do not choose another solver or expand support implicitly.
 

@@ -8,6 +8,7 @@ MODULE cloud_bal_real_netcdf
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
   USE netcdf
   USE cloud_bal_state
+  USE cloud_bal_column_physics, ONLY: column_changed_mask
   USE cloud_bal_balance_operator, ONLY: balance_beta_active
   IMPLICIT NONE
   PRIVATE
@@ -18,9 +19,11 @@ MODULE cloud_bal_real_netcdf
   REAL(real64), PARAMETER :: EPSILON_WATER=0.622_real64
   REAL(real32), PARAMETER :: RAW_MISSING_LIMIT=1.0e30_real32
   REAL(real32), PARAMETER :: MINIMUM_USABLE_DBZ=0.0_real32
+  REAL(real32), PARAMETER :: RADAR_NO_ECHO_DBZ=-10.0_real32
 
   PUBLIC :: read_real_shadow_state
   PUBLIC :: write_shadow_diagnostics
+  PUBLIC :: validate_shadow_write_contract
 
 CONTAINS
 
@@ -32,9 +35,9 @@ CONTAINS
     TYPE(cloud_bal_state_type), INTENT(OUT) :: state
     REAL(real32), ALLOCATABLE, INTENT(OUT) :: longitude(:,:)
     INTEGER, INTENT(OUT) :: status,reason
-    REAL(real32), ALLOCATABLE :: raw(:,:,:),surface(:,:),tid(:,:,:)
+    REAL(real32), ALLOCATABLE :: raw(:,:,:),surface(:,:),tid(:,:,:),topography(:,:)
     LOGICAL, ALLOCATABLE :: raw_valid(:,:,:),surface_valid(:,:)
-    LOGICAL, ALLOCATABLE :: latitude_valid(:,:),longitude_valid(:,:)
+    LOGICAL, ALLOCATABLE :: latitude_valid(:,:),longitude_valid(:,:),topography_valid(:,:)
     REAL(real64) :: levels(NZ),dx,dy
     INTEGER :: ncid,k,source_k,local_status
 
@@ -44,12 +47,17 @@ CONTAINS
     IF (local_status/=STATUS_OK) RETURN
     ALLOCATE(raw(NX,NY,NZ),raw_valid(NX,NY,NZ),surface(NX,NY), &
              surface_valid(NX,NY),latitude_valid(NX,NY),longitude_valid(NX,NY), &
-             tid(NX,NY,NZ),longitude(NX,NY))
+             topography_valid(NX,NY),tid(NX,NY,NZ),longitude(NX,NY), &
+             topography(NX,NY))
+    raw=0.0_real32; raw_valid=.FALSE.
+    surface=0.0_real32; surface_valid=.FALSE.
+    latitude_valid=.FALSE.; longitude_valid=.FALSE.; topography_valid=.FALSE.
+    tid=0.0_real32; longitude=0.0_real32; topography=0.0_real32
 
     CALL open_case_file(lw3_path,NZ,valid_time,ncid,levels,dx,dy,local_status)
     IF (local_status/=STATUS_OK) RETURN
     CALL read_real3(ncid,'om','pascals/second','pa/s',raw,raw_valid,local_status)
-    IF (local_status/=STATUS_OK) THEN; CALL close_file(ncid); RETURN; END IF
+    IF (local_status/=STATUS_OK) THEN; CALL close_file(ncid,local_status); RETURN; END IF
     DO k=1,NZ
       source_k=NZ+1-k
       state%above_ground(:,:,k)=raw_valid(:,:,source_k)
@@ -62,7 +70,7 @@ CONTAINS
                            SOURCE_ANALYZED_WIND)
     END DO
     IF (.NOT.vertical_domain_is_contiguous(state%above_ground)) THEN
-      CALL close_file(ncid); reason=REASON_REQUIRED_COVERAGE; RETURN
+      CALL close_file(ncid,local_status); reason=REASON_REQUIRED_COVERAGE; RETURN
     END IF
     CALL read_real3(ncid,'u3','meters/second','m/s',raw,raw_valid,local_status)
     IF (local_status==STATUS_OK) CALL assign_reversed_core(raw,raw_valid,state%above_ground, &
@@ -71,7 +79,7 @@ CONTAINS
                                                  raw,raw_valid,local_status)
     IF (local_status==STATUS_OK) CALL assign_reversed_core(raw,raw_valid,state%above_ground, &
       state%v,SOURCE_ANALYZED_WIND,1.0_real64,local_status)
-    CALL close_file(ncid)
+    CALL close_file(ncid,local_status)
     IF (local_status/=STATUS_OK) RETURN
 
     state%grid%dx=dx; state%grid%dy=dy
@@ -100,21 +108,30 @@ CONTAINS
       state,state%snow,raw,raw_valid,local_status)
     IF (local_status==STATUS_OK) CALL read_and_assign_hydrometeor(ncid,'pic', &
       state,state%graupel,raw,raw_valid,local_status)
-    CALL close_file(ncid)
+    CALL close_file(ncid,local_status)
     IF (local_status/=STATUS_OK) RETURN
 
     CALL open_case_file(vrz_path,NZ,valid_time,ncid,levels,dx,dy,local_status)
     IF (local_status==STATUS_OK) CALL read_real3(ncid,'ref','dbz','dbz', &
                                                  raw,raw_valid,local_status)
-    CALL close_file(ncid)
+    CALL close_file(ncid,local_status)
     IF (local_status/=STATUS_OK) RETURN
     DO k=1,NZ
       source_k=NZ+1-k
-      state%radar_reflectivity%value(:,:,k)=raw(:,:,source_k)
       state%radar_reflectivity%valid(:,:,k)=state%above_ground(:,:,k) .AND. &
         raw_valid(:,:,source_k) .AND. raw(:,:,source_k)>=MINIMUM_USABLE_DBZ .AND. &
         raw(:,:,source_k)<=100.0_real32
-      WHERE(state%radar_reflectivity%valid(:,:,k))
+      IF (ANY(state%above_ground(:,:,k) .AND. raw_valid(:,:,source_k) .AND. &
+          .NOT.(raw(:,:,source_k)==RADAR_NO_ECHO_DBZ .OR. &
+                (raw(:,:,source_k)>=MINIMUM_USABLE_DBZ .AND. &
+                 raw(:,:,source_k)<=100.0_real32)))) THEN
+        reason=REASON_RANGE
+        RETURN
+      END IF
+      WHERE(state%above_ground(:,:,k) .AND. raw_valid(:,:,source_k) .AND. &
+            (state%radar_reflectivity%valid(:,:,k) .OR. &
+             raw(:,:,source_k)==RADAR_NO_ECHO_DBZ))
+        state%radar_reflectivity%value(:,:,k)=raw(:,:,source_k)
         state%radar_reflectivity%quality(:,:,k)=0_int32
         state%radar_reflectivity%source(:,:,k)=SOURCE_RADAR_DBZ
       END WHERE
@@ -123,12 +140,18 @@ CONTAINS
     CALL open_case_file(vrt_path,NZ,valid_time,ncid,levels,dx,dy,local_status)
     IF (local_status==STATUS_OK) CALL read_real3(ncid,'tid','nul','1', &
                                                  tid,raw_valid,local_status)
-    CALL close_file(ncid)
+    CALL close_file(ncid,local_status)
     IF (local_status/=STATUS_OK) RETURN
     DO k=1,NZ
       source_k=NZ+1-k
+      IF (ANY(state%above_ground(:,:,k) .AND. &
+              .NOT.radar_tid_value_valid(tid(:,:,source_k), &
+                                         raw_valid(:,:,source_k)))) THEN
+        reason=REASON_RANGE
+        RETURN
+      END IF
       WHERE(state%radar_reflectivity%valid(:,:,k) .AND. &
-            raw_valid(:,:,source_k) .AND. NINT(tid(:,:,source_k))==2)
+            radar_tid_is_mixed(tid(:,:,source_k),raw_valid(:,:,source_k)))
         state%radar_reflectivity%quality(:,:,k)= &
           IOR(state%radar_reflectivity%quality(:,:,k),QUALITY_BRIGHT_BAND_OR_MIXED)
       END WHERE
@@ -137,13 +160,23 @@ CONTAINS
     CALL open_surface_file(fsf_path,valid_time,ncid,dx,dy,local_status)
     IF (local_status==STATUS_OK) CALL read_real2(ncid,'tsf','kelvins','k', &
                                                  surface,surface_valid,local_status)
+    IF (local_status==STATUS_OK .AND. .NOT.ALL(surface_valid)) THEN
+      CALL close_file(ncid,local_status)
+      reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
     IF (local_status==STATUS_OK) CALL assign_surface(surface,surface_valid, &
       state%surface_temperature,SOURCE_BACKGROUND_MODEL)
     IF (local_status==STATUS_OK) CALL read_real2(ncid,'psf','pascals','pa', &
                                                  surface,surface_valid,local_status)
+    IF (local_status==STATUS_OK .AND. .NOT.ALL(surface_valid)) THEN
+      CALL close_file(ncid,local_status)
+      reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
     IF (local_status==STATUS_OK) CALL assign_surface(surface,surface_valid, &
       state%surface_pressure,SOURCE_BACKGROUND_MODEL)
-    CALL close_file(ncid)
+    CALL close_file(ncid,local_status)
     IF (local_status/=STATUS_OK) RETURN
 
     CALL open_static_file(static_path,ncid,local_status)
@@ -159,19 +192,35 @@ CONTAINS
     IF (local_status==STATUS_OK .AND. &
         ANY(longitude_valid .AND. (longitude < -180.0_real32 .OR. &
                                    longitude > 180.0_real32))) local_status=STATUS_FAILED
-    CALL close_file(ncid)
+    IF (local_status==STATUS_OK) CALL read_real2(ncid,'avg','meters msl','m', &
+      topography,topography_valid,local_status)
+    IF (local_status==STATUS_OK .AND. &
+        ANY(topography_valid .AND. (topography < -500.0_real32 .OR. &
+                                    topography > 9000.0_real32))) &
+      local_status=STATUS_FAILED
+    CALL close_file(ncid,local_status)
     IF (local_status/=STATUS_OK .OR. .NOT.ALL(latitude_valid) .OR. &
-        .NOT.ALL(longitude_valid)) RETURN
+        .NOT.ALL(longitude_valid) .OR. .NOT.ALL(topography_valid)) RETURN
+    IF (.NOT.terrain_mask_is_consistent(state,topography)) THEN
+      reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
 
     CALL set_resolved_omega_boundaries(state,local_status)
     IF (local_status/=STATUS_OK) RETURN
     CALL refresh_dry_air_mass_measure(state,local_status)
     IF (local_status/=STATUS_OK) RETURN
+    IF (.NOT.real_radar_contract_valid(state)) THEN
+      reason=REASON_RADAR_CONTRACT
+      RETURN
+    END IF
+    CALL validate_canonical_state(state,.FALSE.,.TRUE.,local_status,reason,.TRUE.)
+    IF (local_status/=STATUS_OK) RETURN
     status=STATUS_OK; reason=REASON_NONE
   END SUBROUTINE read_real_shadow_state
 
   SUBROUTINE write_shadow_diagnostics(path,state_in,candidate,longitude,result,config, &
-                                      residual_before,residual_after,status)
+                                      residual_before,residual_after,status,operational_state)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config
     CHARACTER(LEN=*), INTENT(IN) :: path
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in,candidate
@@ -180,10 +229,11 @@ CONTAINS
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
     REAL(real64), INTENT(IN) :: residual_before(:,:,:),residual_after(:,:,:)
     INTEGER, INTENT(OUT) :: status
+    TYPE(cloud_bal_state_type), INTENT(IN) :: operational_state
     INTEGER :: ncid,xdim,ydim,zdim,level_var,lat_var,lon_var
-    INTEGER :: varid(33),rc,k
+    INTEGER :: varid(33),rc,k,contract_reason,nx,ny,nz
     INTEGER(int32), ALLOCATABLE :: mask(:,:,:)
-    REAL(real32) :: levels(NZ)
+    REAL(real32), ALLOCATABLE :: levels(:)
     CHARACTER(LEN=32), PARAMETER :: names(33)=[CHARACTER(LEN=32) :: &
       'radar_dbz','background_u','background_v','background_omega', &
       'candidate_u','candidate_v','candidate_omega','omega_target', &
@@ -203,19 +253,26 @@ CONTAINS
       '1','1','1','1','1','1','1','1','1','1','1','1']
 
     status=STATUS_FAILED
-    IF (ANY(SHAPE(longitude)/=(/NX,NY/)) .OR. &
-        ANY(SHAPE(residual_before)/=(/NX,NY,NZ/)) .OR. &
-        ANY(SHAPE(residual_after)/=(/NX,NY,NZ/))) RETURN
+    CALL validate_shadow_write_contract(state_in,candidate,operational_state, &
+      result,config,status,contract_reason)
+    IF (status/=STATUS_OK) RETURN
+    status=STATUS_FAILED
+    nx=state_in%grid%nx; ny=state_in%grid%ny; nz=state_in%grid%nz
+    IF (ANY(SHAPE(longitude)/=(/nx,ny/)) .OR. &
+        ANY(SHAPE(residual_before)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(residual_after)/=(/nx,ny,nz/))) RETURN
     IF (ANY(.NOT.ieee_is_finite(state_in%latitude%value)) .OR. &
         ANY(state_in%latitude%value < -90.0_real32) .OR. &
         ANY(state_in%latitude%value > 90.0_real32) .OR. &
         ANY(.NOT.ieee_is_finite(longitude)) .OR. &
-        ANY(longitude < -180.0_real32) .OR. ANY(longitude > 180.0_real32)) RETURN
+        ANY(longitude < -180.0_real32) .OR. ANY(longitude > 180.0_real32) .OR. &
+        ANY(.NOT.ieee_is_finite(residual_before)) .OR. &
+        ANY(.NOT.ieee_is_finite(residual_after))) RETURN
     rc=nf90_create(TRIM(path),IOR(NF90_CLOBBER,NF90_NETCDF4),ncid)
     IF (rc/=NF90_NOERR) RETURN
-    IF (.NOT.nc_ok(nf90_def_dim(ncid,'x',NX,xdim)) .OR. &
-        .NOT.nc_ok(nf90_def_dim(ncid,'y',NY,ydim)) .OR. &
-        .NOT.nc_ok(nf90_def_dim(ncid,'z',NZ,zdim))) GOTO 900
+    IF (.NOT.nc_ok(nf90_def_dim(ncid,'x',nx,xdim)) .OR. &
+        .NOT.nc_ok(nf90_def_dim(ncid,'y',ny,ydim)) .OR. &
+        .NOT.nc_ok(nf90_def_dim(ncid,'z',nz,zdim))) GOTO 900
     IF (.NOT.nc_ok(nf90_def_var(ncid,'pressure',NF90_FLOAT,(/zdim/),level_var)) .OR. &
         .NOT.nc_ok(nf90_def_var(ncid,'latitude',NF90_FLOAT,(/xdim,ydim/),lat_var)) .OR. &
         .NOT.nc_ok(nf90_def_var(ncid,'longitude',NF90_FLOAT,(/xdim,ydim/),lon_var))) GOTO 900
@@ -235,8 +292,17 @@ CONTAINS
       IF (.NOT.nc_ok(nf90_put_att(ncid,varid(k),'units',TRIM(units(k))))) GOTO 900
       IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,varid(k),1,1,1))) GOTO 900
     END DO
+    IF (.NOT.nc_ok(nf90_put_att(ncid,varid(28),'long_name', &
+      'candidate balance localization support')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,varid(28),'legacy_name','balance_active'))) GOTO 900
     IF (.NOT.put_global_metadata(ncid,result,config,state_in%pressure%valid_time)) GOTO 900
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'grid_dx_m', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'grid_id', &
+                                TRIM(state_in%grid%grid_id))) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'canonical_vertical_order', &
+                                'bottom_to_top')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'netcdf_variable_order', &
+                                'z,y,x')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'grid_dx_m', &
                                 state_in%grid%dx(1,1))) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'grid_dy_m', &
                                 state_in%grid%dy(1,1))) .OR. &
@@ -246,7 +312,8 @@ CONTAINS
         .NOT.nc_ok(nf90_put_att(ncid,lat_var,'units','degree_north')) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,lon_var,'units','degree_east'))) GOTO 900
     IF (.NOT.nc_ok(nf90_enddef(ncid))) GOTO 900
-    DO k=1,NZ
+    ALLOCATE(levels(nz))
+    DO k=1,nz
       levels(k)=state_in%pressure%value(1,1,k)
     END DO
     IF (.NOT.nc_ok(nf90_put_var(ncid,level_var,levels)) .OR. &
@@ -273,7 +340,7 @@ CONTAINS
         .NOT.nc_ok(nf90_put_var(ncid,varid(19),candidate%balance_beta)) .OR. &
         .NOT.nc_ok(nf90_put_var(ncid,varid(20),residual_before)) .OR. &
         .NOT.nc_ok(nf90_put_var(ncid,varid(21),residual_after))) GOTO 900
-    ALLOCATE(mask(NX,NY,NZ))
+    ALLOCATE(mask(nx,ny,nz))
     mask=MERGE(1_int32,0_int32,state_in%above_ground)
     IF (.NOT.nc_ok(nf90_put_var(ncid,varid(22),mask))) GOTO 900
     mask=MERGE(1_int32,0_int32,state_in%radar_reflectivity%valid)
@@ -304,6 +371,115 @@ CONTAINS
     rc=nf90_close(ncid)
   END SUBROUTINE write_shadow_diagnostics
 
+  SUBROUTINE validate_shadow_write_contract(state_in,candidate,operational_state, &
+                                            result,config,status,reason)
+    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state_in,candidate,operational_state
+    TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
+    INTEGER, INTENT(OUT) :: status,reason
+    INTEGER :: state_status,state_reason
+
+    status=STATUS_FAILED; reason=REASON_AUTHORITY
+    IF (config%requested_mode/=MODE_SHADOW .OR. &
+        result%requested_mode/=MODE_SHADOW) RETURN
+    IF (.NOT.pipeline_result_is_coherent(result)) RETURN
+    IF (.NOT.stage_masks_valid(result,state_in%grid%nx,state_in%grid%ny, &
+                              state_in%grid%nz)) THEN
+      reason=REASON_SHAPE
+      RETURN
+    END IF
+
+    CALL validate_canonical_state(state_in,.FALSE.,.TRUE.,state_status,state_reason,.FALSE.)
+    IF (state_status/=STATUS_OK) THEN
+      reason=state_reason
+      RETURN
+    END IF
+    CALL validate_canonical_state(candidate,.FALSE.,.TRUE.,state_status,state_reason,.FALSE.)
+    IF (state_status/=STATUS_OK) THEN
+      reason=state_reason
+      RETURN
+    END IF
+    CALL validate_canonical_state(operational_state,.FALSE.,.TRUE.,state_status, &
+                                  state_reason,.FALSE.)
+    IF (state_status/=STATUS_OK) THEN
+      reason=state_reason
+      RETURN
+    END IF
+    IF (.NOT.writer_geometry_is_representable(state_in)) THEN
+      reason=REASON_METADATA
+      RETURN
+    END IF
+    IF (.NOT.real_radar_contract_valid(state_in) .OR. &
+        .NOT.real_radar_contract_valid(candidate) .OR. &
+        .NOT.real_radar_contract_valid(operational_state)) THEN
+      reason=REASON_RADAR_CONTRACT
+      RETURN
+    END IF
+    IF (.NOT.los_is_empty(state_in%radar_los) .OR. &
+        .NOT.los_is_empty(candidate%radar_los) .OR. &
+        .NOT.los_is_empty(operational_state%radar_los)) THEN
+      reason=REASON_RADAR_CONTRACT
+      RETURN
+    END IF
+    IF (.NOT.cloud_authority_is_absent(state_in) .OR. &
+        .NOT.cloud_authority_is_absent(candidate) .OR. &
+        .NOT.cloud_authority_is_absent(operational_state)) THEN
+      reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (.NOT.canonical_states_equal(state_in,operational_state)) RETURN
+    IF (.NOT.canonical_states_equal(state_in,candidate,.TRUE.)) RETURN
+    IF (.NOT.candidate_result_is_coherent(state_in,candidate,result)) RETURN
+
+    status=STATUS_OK; reason=REASON_NONE
+  END SUBROUTINE validate_shadow_write_contract
+
+  LOGICAL FUNCTION pipeline_result_is_coherent(result)
+    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
+    TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    pipeline_result_is_coherent=.FALSE.
+    IF (result%column%status/=STATUS_OK .OR. &
+        result%column%reason_code/=REASON_NONE) RETURN
+    SELECT CASE(result%status)
+    CASE(STATUS_OK)
+      IF (result%reason_code/=REASON_NONE .OR. &
+          result%balance%status/=STATUS_OK .OR. &
+          result%balance%reason_code/=REASON_NONE .OR. &
+          result%overall%status/=STATUS_OK .OR. &
+          result%overall%reason_code/=REASON_NONE) RETURN
+    CASE(STATUS_DEGRADED)
+      IF (result%reason_code/=REASON_GATE .OR. &
+          result%balance%status/=STATUS_DEGRADED .OR. &
+          result%balance%reason_code/=REASON_GATE .OR. &
+          result%overall%status/=STATUS_DEGRADED .OR. &
+          result%overall%reason_code/=REASON_GATE) RETURN
+    CASE DEFAULT
+      RETURN
+    END SELECT
+    pipeline_result_is_coherent=.TRUE.
+  END FUNCTION pipeline_result_is_coherent
+
+  LOGICAL FUNCTION cloud_authority_is_absent(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER :: expected(3)
+    cloud_authority_is_absent=.FALSE.
+    expected=(/state%grid%nx,state%grid%ny,state%grid%nz/)
+    IF (.NOT.ALLOCATED(state%cloud_fraction%valid) .OR. &
+        .NOT.ALLOCATED(state%cloud_fraction%quality) .OR. &
+        .NOT.ALLOCATED(state%cloud_fraction%source) .OR. &
+        .NOT.ALLOCATED(state%cloud_type%valid) .OR. &
+        .NOT.ALLOCATED(state%cloud_type%quality) .OR. &
+        .NOT.ALLOCATED(state%cloud_type%source)) RETURN
+    IF (ANY(SHAPE(state%cloud_fraction%valid)/=expected) .OR. &
+        ANY(SHAPE(state%cloud_type%valid)/=expected)) RETURN
+    cloud_authority_is_absent= &
+      .NOT.ANY(cell_is_usable(state%cloud_fraction%valid, &
+        state%cloud_fraction%quality,state%cloud_fraction%source)) .AND. &
+      .NOT.ANY(cell_is_usable(state%cloud_type%valid, &
+        state%cloud_type%quality,state%cloud_type%source))
+  END FUNCTION cloud_authority_is_absent
+
   SUBROUTINE open_case_file(path,expected_z,valid_time,ncid,levels,dx,dy,status)
     CHARACTER(LEN=*), INTENT(IN) :: path
     INTEGER, INTENT(IN) :: expected_z
@@ -316,30 +492,33 @@ CONTAINS
       WRITE(*,'(A)') 'adapter_error=open:'//TRIM(path); RETURN
     END IF
     IF (.NOT.dimensions_are(ncid,expected_z)) THEN
-      WRITE(*,'(A)') 'adapter_error=dimensions:'//TRIM(path); RETURN
+      WRITE(*,'(A)') 'adapter_error=dimensions:'//TRIM(path); GOTO 900
     END IF
     IF (.NOT.read_scalar(ncid,'valtime',file_time)) THEN
-      WRITE(*,'(A)') 'adapter_error=valtime-read:'//TRIM(path); RETURN
+      WRITE(*,'(A)') 'adapter_error=valtime-read:'//TRIM(path); GOTO 900
     END IF
     IF (ABS(file_time-REAL(valid_time,real64))>0.5_real64) THEN
-      WRITE(*,'(A)') 'adapter_error=valtime-mismatch:'//TRIM(path); RETURN
+      WRITE(*,'(A)') 'adapter_error=valtime-mismatch:'//TRIM(path); GOTO 900
     END IF
     IF (expected_z==NZ) THEN
       IF (.NOT.read_vector(ncid,'level',levels)) THEN
-        WRITE(*,'(A)') 'adapter_error=level-read:'//TRIM(path); RETURN
+        WRITE(*,'(A)') 'adapter_error=level-read:'//TRIM(path); GOTO 900
       END IF
       IF (.NOT.levels_are_native(levels)) THEN
-        WRITE(*,'(A)') 'adapter_error=level-order:'//TRIM(path); RETURN
+        WRITE(*,'(A)') 'adapter_error=level-order:'//TRIM(path); GOTO 900
       END IF
     END IF
     IF (.NOT.read_scalar(ncid,'Dx',dx) .OR. .NOT.read_scalar(ncid,'Dy',dy)) THEN
-      WRITE(*,'(A)') 'adapter_error=grid-spacing-read:'//TRIM(path); RETURN
+      WRITE(*,'(A)') 'adapter_error=grid-spacing-read:'//TRIM(path); GOTO 900
     END IF
     IF (ABS(dx-5000.0_real64)>1.0e-6_real64 .OR. &
         ABS(dy-5000.0_real64)>1.0e-6_real64) THEN
-      WRITE(*,'(A)') 'adapter_error=grid-spacing-value:'//TRIM(path); RETURN
+      WRITE(*,'(A)') 'adapter_error=grid-spacing-value:'//TRIM(path); GOTO 900
     END IF
     status=STATUS_OK
+    RETURN
+900 CONTINUE
+    CALL close_file(ncid,status)
   END SUBROUTINE open_case_file
 
   SUBROUTINE open_surface_file(path,valid_time,ncid,dx,dy,status)
@@ -356,15 +535,209 @@ CONTAINS
     INTEGER, INTENT(OUT) :: ncid,status
     status=STATUS_FAILED; ncid=-1
     IF (.NOT.nc_ok(nf90_open(TRIM(path),NF90_NOWRITE,ncid))) RETURN
-    IF (.NOT.dimensions_are(ncid,1)) RETURN
+    IF (.NOT.dimensions_are(ncid,1)) THEN
+      CALL close_file(ncid,status)
+      RETURN
+    END IF
     status=STATUS_OK
   END SUBROUTINE open_static_file
 
-  SUBROUTINE close_file(ncid)
-    INTEGER, INTENT(IN) :: ncid
-    INTEGER :: ignored
-    IF (ncid>=0) ignored=nf90_close(ncid)
+  SUBROUTINE close_file(ncid,status)
+    INTEGER, INTENT(INOUT) :: ncid
+    INTEGER, INTENT(INOUT), OPTIONAL :: status
+    INTEGER :: close_status
+    IF (ncid>=0) THEN
+      close_status=nf90_close(ncid)
+      IF (close_status/=NF90_NOERR .AND. PRESENT(status)) status=STATUS_FAILED
+      ncid=-1
+    END IF
   END SUBROUTINE close_file
+
+  LOGICAL FUNCTION stage_masks_valid(result,nx,ny,nz)
+    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
+    TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    INTEGER, INTENT(IN) :: nx,ny,nz
+    INTEGER :: expected(3)
+    expected=(/nx,ny,nz/)
+    stage_masks_valid=.FALSE.
+    IF (.NOT.ALLOCATED(result%column%changed) .OR. &
+        .NOT.ALLOCATED(result%balance%changed) .OR. &
+        .NOT.ALLOCATED(result%overall%changed)) RETURN
+    stage_masks_valid=ALL(SHAPE(result%column%changed)==expected) .AND. &
+      ALL(SHAPE(result%balance%changed)==expected) .AND. &
+      ALL(SHAPE(result%overall%changed)==expected)
+  END FUNCTION stage_masks_valid
+
+  LOGICAL FUNCTION real_radar_contract_valid(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER :: expected(3)
+    real_radar_contract_valid=.FALSE.
+    expected=(/state%grid%nx,state%grid%ny,state%grid%nz/)
+    IF (.NOT.ALLOCATED(state%radar_reflectivity%value) .OR. &
+        .NOT.ALLOCATED(state%radar_reflectivity%valid) .OR. &
+        .NOT.ALLOCATED(state%radar_reflectivity%quality) .OR. &
+        .NOT.ALLOCATED(state%radar_reflectivity%source)) RETURN
+    IF (ANY(SHAPE(state%radar_reflectivity%value)/=expected) .OR. &
+        ANY(SHAPE(state%radar_reflectivity%valid)/=expected) .OR. &
+        ANY(SHAPE(state%radar_reflectivity%quality)/=expected) .OR. &
+        ANY(SHAPE(state%radar_reflectivity%source)/=expected)) RETURN
+    IF (state%radar_reflectivity%valid_time/=state%pressure%valid_time .OR. &
+        TRIM(state%radar_reflectivity%unit)/='dBZ') RETURN
+    IF (ANY(state%radar_reflectivity%valid .AND. .NOT.state%above_ground) .OR. &
+        ANY(state%radar_reflectivity%valid .AND. &
+            .NOT.cell_is_usable(state%radar_reflectivity%valid, &
+                                state%radar_reflectivity%quality, &
+                                state%radar_reflectivity%source))) RETURN
+    IF (ANY(state%radar_reflectivity%valid .AND. &
+            (.NOT.ieee_is_finite(state%radar_reflectivity%value) .OR. &
+             state%radar_reflectivity%value<MINIMUM_USABLE_DBZ .OR. &
+             state%radar_reflectivity%value>100.0_real32))) RETURN
+    IF (ANY(.NOT.state%radar_reflectivity%valid .AND. &
+        .NOT.radar_inactive_cell_valid(state%radar_reflectivity%value, &
+          state%radar_reflectivity%quality,state%radar_reflectivity%source, &
+          state%above_ground))) RETURN
+    real_radar_contract_valid=.TRUE.
+  END FUNCTION real_radar_contract_valid
+
+  PURE ELEMENTAL LOGICAL FUNCTION radar_tid_value_valid(value,has_value)
+    REAL(real32), INTENT(IN) :: value
+    LOGICAL, INTENT(IN) :: has_value
+    INTEGER :: code
+    radar_tid_value_valid=.TRUE.
+    IF (.NOT.has_value) RETURN
+    IF (.NOT.ieee_is_finite(value) .OR. ABS(value)>10.5_real32) THEN
+      radar_tid_value_valid=.FALSE.
+      RETURN
+    END IF
+    code=NINT(value)
+    radar_tid_value_valid=ABS(value-REAL(code,real32))<= &
+      16.0_real32*EPSILON(1.0_real32) .AND. &
+      (code==NINT(RADAR_NO_ECHO_DBZ) .OR. (code>=0 .AND. code<=2))
+  END FUNCTION radar_tid_value_valid
+
+  PURE ELEMENTAL LOGICAL FUNCTION radar_tid_is_mixed(value,has_value)
+    REAL(real32), INTENT(IN) :: value
+    LOGICAL, INTENT(IN) :: has_value
+    radar_tid_is_mixed=.FALSE.
+    IF (.NOT.radar_tid_value_valid(value,has_value) .OR. .NOT.has_value) RETURN
+    radar_tid_is_mixed=NINT(value)==2
+  END FUNCTION radar_tid_is_mixed
+
+  PURE ELEMENTAL LOGICAL FUNCTION radar_inactive_cell_valid(value,quality,source, &
+                                                             above_ground)
+    REAL(real32), INTENT(IN) :: value
+    INTEGER(int32), INTENT(IN) :: quality,source
+    LOGICAL, INTENT(IN) :: above_ground
+    radar_inactive_cell_valid= &
+      (above_ground .AND. value==RADAR_NO_ECHO_DBZ .AND. quality==0_int32 .AND. &
+       source==SOURCE_RADAR_DBZ) .OR. &
+      (value==0.0_real32 .AND. quality==QUALITY_RAW_MISSING .AND. source==0_int32)
+  END FUNCTION radar_inactive_cell_valid
+
+  LOGICAL FUNCTION candidate_result_is_coherent(background,candidate,result)
+    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    LOGICAL, ALLOCATABLE :: expected(:,:,:)
+    INTEGER :: nx,ny,nz
+
+    candidate_result_is_coherent=.FALSE.
+    nx=background%grid%nx; ny=background%grid%ny; nz=background%grid%nz
+    ALLOCATE(expected(nx,ny,nz))
+
+    expected=real_value_changed(background%u%value,candidate%u%value) .OR. &
+             real_value_changed(background%v%value,candidate%v%value) .OR. &
+             real_value_changed(background%omega%value,candidate%omega%value)
+    IF (ANY(expected .NEQV. result%balance%changed)) RETURN
+    IF (.NOT.dynamic_field_is_coherent(background%u,candidate%u) .OR. &
+        .NOT.dynamic_field_is_coherent(background%v,candidate%v) .OR. &
+        .NOT.dynamic_field_is_coherent(background%omega,candidate%omega)) RETURN
+
+    expected=column_changed_mask(background,candidate)
+    IF (ANY(expected .NEQV. result%column%changed)) RETURN
+    IF (ANY((result%column%changed .OR. result%balance%changed) .NEQV. &
+            result%overall%changed)) RETURN
+    candidate_result_is_coherent=.TRUE.
+  END FUNCTION candidate_result_is_coherent
+
+  LOGICAL FUNCTION dynamic_field_is_coherent(background,candidate)
+    TYPE(field3d), INTENT(IN) :: background,candidate
+    LOGICAL, ALLOCATABLE :: changed(:,:,:)
+    INTEGER(int32), ALLOCATABLE :: expected_source(:,:,:)
+
+    dynamic_field_is_coherent=.FALSE.
+    IF (background%valid_time/=candidate%valid_time .OR. &
+        background%unit/=candidate%unit) RETURN
+    IF (ANY(background%valid .NEQV. candidate%valid) .OR. &
+        ANY(background%quality/=candidate%quality)) RETURN
+    ALLOCATE(changed, SOURCE=real_value_changed(background%value,candidate%value))
+    ALLOCATE(expected_source, SOURCE=background%source)
+    WHERE(changed)
+      expected_source=IOR(expected_source,SOURCE_BALANCE_OPERATOR)
+    END WHERE
+    IF (ANY(candidate%source/=expected_source)) RETURN
+    dynamic_field_is_coherent=.TRUE.
+  END FUNCTION dynamic_field_is_coherent
+
+  PURE ELEMENTAL LOGICAL FUNCTION real_value_changed(left,right)
+    REAL(real32), INTENT(IN) :: left,right
+    real_value_changed=TRANSFER(left,0_int32)/=TRANSFER(right,0_int32)
+  END FUNCTION real_value_changed
+
+  LOGICAL FUNCTION writer_geometry_is_representable(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER :: i,j,k
+    writer_geometry_is_representable=.FALSE.
+    DO j=1,state%grid%ny; DO i=1,state%grid%nx
+      IF (TRANSFER(state%grid%dx(i,j),0_int64)/= &
+          TRANSFER(state%grid%dx(1,1),0_int64) .OR. &
+          TRANSFER(state%grid%dy(i,j),0_int64)/= &
+          TRANSFER(state%grid%dy(1,1),0_int64)) RETURN
+      DO k=1,state%grid%nz
+        IF (TRANSFER(state%grid%dp(i,j,k),0_int64)/= &
+            TRANSFER(state%grid%dp(1,1,1),0_int64) .OR. &
+            TRANSFER(state%pressure%value(i,j,k),0_int32)/= &
+            TRANSFER(state%pressure%value(1,1,k),0_int32)) RETURN
+      END DO
+    END DO; END DO
+    writer_geometry_is_representable=.TRUE.
+  END FUNCTION writer_geometry_is_representable
+
+  LOGICAL FUNCTION los_is_empty(los)
+    TYPE(radar_los_observation_set), INTENT(IN) :: los
+    los_is_empty=.FALSE.
+    IF (los%is_present .OR. los%nradar/=0 .OR. &
+        los%vrad_representation/=0_int32 .OR. los%has_colocated_dbz .OR. &
+        los%has_spectrum_width .OR. &
+        los%vrad%valid_time/=0_int64 .OR. LEN_TRIM(los%vrad%unit)/=0 .OR. &
+        los%nyquist%valid_time/=0_int64 .OR. LEN_TRIM(los%nyquist%unit)/=0 .OR. &
+        los%sigma_vrad%valid_time/=0_int64 .OR. &
+        LEN_TRIM(los%sigma_vrad%unit)/=0 .OR. &
+        los%colocated_dbz%valid_time/=0_int64 .OR. &
+        LEN_TRIM(los%colocated_dbz%unit)/=0 .OR. &
+        los%spectrum_width%valid_time/=0_int64 .OR. &
+        LEN_TRIM(los%spectrum_width%unit)/=0) RETURN
+    IF (.NOT.field4d_is_empty(los%vrad) .OR. &
+        .NOT.field4d_is_empty(los%nyquist) .OR. &
+        .NOT.field4d_is_empty(los%sigma_vrad) .OR. &
+        .NOT.field4d_is_empty(los%colocated_dbz) .OR. &
+        .NOT.field4d_is_empty(los%spectrum_width)) RETURN
+    IF (ALLOCATED(los%beam) .OR. ALLOCATED(los%observation_id_hi) .OR. &
+        ALLOCATED(los%observation_id_lo) .OR. ALLOCATED(los%usage) .OR. &
+        ALLOCATED(los%radar_id) .OR. ALLOCATED(los%observation_time) .OR. &
+        ALLOCATED(los%site_lat) .OR. ALLOCATED(los%site_lon) .OR. &
+        ALLOCATED(los%site_height) .OR. ALLOCATED(los%wavelength) .OR. &
+        ALLOCATED(los%los_support) .OR. ALLOCATED(los%geometry_condition) .OR. &
+        ALLOCATED(los%geometry_rank)) RETURN
+    los_is_empty=.TRUE.
+  END FUNCTION los_is_empty
+
+  LOGICAL FUNCTION field4d_is_empty(field)
+    TYPE(field4d), INTENT(IN) :: field
+    field4d_is_empty=.NOT.ALLOCATED(field%value) .AND. &
+      .NOT.ALLOCATED(field%valid) .AND. .NOT.ALLOCATED(field%quality) .AND. &
+      .NOT.ALLOCATED(field%source)
+  END FUNCTION field4d_is_empty
 
   SUBROUTINE read_real3(ncid,name,unit_a,unit_b,data,valid,status)
     INTEGER, INTENT(IN) :: ncid
@@ -381,6 +754,10 @@ CONTAINS
     END IF
     IF (.NOT.variable_unit_is(ncid,varid,unit_a,unit_b)) THEN
       WRITE(*,'(A)') 'adapter_error=units:'//TRIM(name); RETURN
+    END IF
+    IF (.NOT.variable_layout_is(ncid,varid,NF90_FLOAT, &
+        [CHARACTER(LEN=6) :: 'x','y','z','record'])) THEN
+      WRITE(*,'(A)') 'adapter_error=layout:'//TRIM(name); RETURN
     END IF
     ALLOCATE(work(NX,NY,NZ,1))
     rc=nf90_get_var(ncid,varid,work)
@@ -407,6 +784,10 @@ CONTAINS
     END IF
     IF (.NOT.variable_unit_is(ncid,varid,unit_a,unit_b)) THEN
       WRITE(*,'(A)') 'adapter_error=units:'//TRIM(name); RETURN
+    END IF
+    IF (.NOT.variable_layout_is(ncid,varid,NF90_FLOAT, &
+        [CHARACTER(LEN=6) :: 'x','y','z','record'])) THEN
+      WRITE(*,'(A)') 'adapter_error=layout:'//TRIM(name); RETURN
     END IF
     ALLOCATE(work(NX,NY,1,1))
     rc=nf90_get_var(ncid,varid,work)
@@ -560,6 +941,20 @@ CONTAINS
     REAL(real64) :: work(1)
     read_scalar=.FALSE.; value=0.0_real64
     IF (.NOT.nc_ok(nf90_inq_varid(ncid,TRIM(name),varid))) RETURN
+    SELECT CASE(TRIM(name))
+    CASE('valtime')
+      IF (.NOT.variable_layout_is(ncid,varid,NF90_DOUBLE, &
+          [CHARACTER(LEN=6) :: 'record']) .OR. &
+          .NOT.variable_unit_is(ncid,varid, &
+            'seconds since (1970-1-1 00:00:00.0)', &
+            'seconds since 1970-01-01 00:00:00')) RETURN
+    CASE('Dx','Dy')
+      IF (.NOT.variable_layout_is(ncid,varid,NF90_FLOAT, &
+          [CHARACTER(LEN=3) :: 'nav']) .OR. &
+          .NOT.variable_unit_is(ncid,varid,'kilometers','km')) RETURN
+    CASE DEFAULT
+      RETURN
+    END SELECT
     IF (.NOT.nc_ok(nf90_get_var(ncid,varid,work))) RETURN
     value=work(1); read_scalar=ieee_is_finite(value)
   END FUNCTION read_scalar
@@ -571,9 +966,30 @@ CONTAINS
     INTEGER :: varid
     read_vector=.FALSE.; value=0.0_real64
     IF (.NOT.nc_ok(nf90_inq_varid(ncid,TRIM(name),varid))) RETURN
+    IF (TRIM(name)/='level') RETURN
+    IF (.NOT.variable_layout_is(ncid,varid,NF90_FLOAT, &
+        [CHARACTER(LEN=1) :: 'z']) .OR. &
+        .NOT.variable_unit_is(ncid,varid,'hectopascals','hpa')) RETURN
     IF (.NOT.nc_ok(nf90_get_var(ncid,varid,value))) RETURN
     read_vector=ALL(ieee_is_finite(value))
   END FUNCTION read_vector
+
+  LOGICAL FUNCTION variable_layout_is(ncid,varid,expected_type,dimension_names)
+    INTEGER, INTENT(IN) :: ncid,varid,expected_type
+    CHARACTER(LEN=*), INTENT(IN) :: dimension_names(:)
+    CHARACTER(LEN=NF90_MAX_NAME) :: actual_name
+    INTEGER :: actual_type,ndims,dimids(NF90_MAX_VAR_DIMS),k
+    variable_layout_is=.FALSE.
+    IF (.NOT.nc_ok(nf90_inquire_variable(ncid,varid,XTYPE=actual_type, &
+        NDIMS=ndims,DIMIDS=dimids))) RETURN
+    IF (actual_type/=expected_type .OR. ndims/=SIZE(dimension_names)) RETURN
+    DO k=1,ndims
+      actual_name=''
+      IF (.NOT.nc_ok(nf90_inquire_dimension(ncid,dimids(k),NAME=actual_name))) RETURN
+      IF (TRIM(actual_name)/=TRIM(dimension_names(k))) RETURN
+    END DO
+    variable_layout_is=.TRUE.
+  END FUNCTION variable_layout_is
 
   LOGICAL FUNCTION variable_unit_is(ncid,varid,unit_a,unit_b)
     INTEGER, INTENT(IN) :: ncid,varid
@@ -622,6 +1038,38 @@ CONTAINS
     vertical_domain_is_contiguous=.TRUE.
   END FUNCTION vertical_domain_is_contiguous
 
+  LOGICAL FUNCTION terrain_mask_is_consistent(state,topography)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    REAL(real32), INTENT(IN) :: topography(NX,NY)
+    INTEGER :: i,j,k,bottom
+    REAL(real64) :: bottom_height,next_height,layer_depth
+    terrain_mask_is_consistent=.FALSE.
+    DO j=1,NY; DO i=1,NX
+      bottom=0
+      DO k=1,NZ
+        IF (state%above_ground(i,j,k)) THEN
+          bottom=k
+          EXIT
+        END IF
+      END DO
+      IF (bottom==0 .OR. bottom==NZ) RETURN
+      bottom_height=REAL(state%geopotential%value(i,j,bottom),real64)/GRAVITY
+      next_height=REAL(state%geopotential%value(i,j,bottom+1),real64)/GRAVITY
+      layer_depth=next_height-bottom_height
+      IF (.NOT.ieee_is_finite(bottom_height) .OR. &
+          .NOT.ieee_is_finite(next_height) .OR. layer_depth<=0.0_real64) RETURN
+      ! The first active mass level must lie within one resolved layer of the
+      ! static surface. This rejects both missing low levels and subterrain data.
+      IF (ABS(bottom_height-REAL(topography(i,j),real64))> &
+          layer_depth+32.0_real64*EPSILON(layer_depth)*MAX(1.0_real64,layer_depth)) RETURN
+      DO k=bottom+1,NZ
+        IF (state%geopotential%value(i,j,k)<= &
+            state%geopotential%value(i,j,k-1)) RETURN
+      END DO
+    END DO; END DO
+    terrain_mask_is_consistent=.TRUE.
+  END FUNCTION terrain_mask_is_consistent
+
   PURE REAL(real64) FUNCTION dry_density(pressure,temperature,vapor)
     REAL(real64), INTENT(IN) :: pressure,temperature,vapor
     dry_density=0.0_real64
@@ -640,19 +1088,35 @@ CONTAINS
     put_global_metadata=.FALSE.
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'contract', &
                                 'real_radar_only_shadow_v3'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'diagnostic_schema_version', &
+                                3_int32))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
+      'verified_operational_identity_v1,radar_no_echo_value_v1'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'cloud_bal_schema_version', &
+                                CLOUD_BAL_SCHEMA_VERSION))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'evidence_class', &
                                 'REAL_RADAR_ONLY_SHADOW_PROPOSAL'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'configuration_id', &
                                 'real-radar-only-shadow-v3'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'result_authority', &
                                 'DIAGNOSTIC_PROPOSAL_ONLY'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'requested_mode', &
+                                config%requested_mode))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'science_assessed',0_int32))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'promotion_eligible',0_int32))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'operational_state_verified', &
+                                1_int32))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'operational_state_changed',0_int32))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'cloud_analysis_present',0_int32))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'radar_los_used',0_int32))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'above_ground_mask_provenance', &
+      'LW3_OM_VALIDITY_CHECKED_AGAINST_STATIC_AVG'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'balance_support_variable', &
+                                'candidate_balance_support'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'minimum_usable_dbz', &
                                 MINIMUM_USABLE_DBZ))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'radar_no_echo_dbz', &
+                                RADAR_NO_ECHO_DBZ))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL, &
                                 'configured_assumed_radar_wavelength_m', &
                                 config%column%radar_wavelength_m))) RETURN

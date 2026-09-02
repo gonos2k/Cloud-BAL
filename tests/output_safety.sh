@@ -39,7 +39,7 @@ cloud_bal_output_under() {
 }
 
 cloud_bal_require_clean_source() {
-  if [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=normal) ]]; then
+  if [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=all) ]]; then
     printf 'evidence tooling requires a clean exact-head source tree\n' >&2
     return 2
   fi
@@ -47,6 +47,7 @@ cloud_bal_require_clean_source() {
 
 cloud_bal_current_evidence() {
   local publication_root=$1 manifest=$2 generation head
+  cloud_bal_require_clean_source || return
   generation=$(python3 "$repo_root/tools/cloud_bal_transaction.py" current \
     "$publication_root")
   head=$(git -C "$repo_root" rev-parse HEAD)
@@ -144,6 +145,8 @@ for case in expected_cases:
     case_id = case["case_id"]
     diagnostic = generation / f"{case_id}.nc"
     report = json.loads((generation / f"{case_id}.json").read_text(encoding="utf-8"))
+    if report.get("path") != f"{case_id}.nc":
+        raise SystemExit(f"case report path is not generation-relative: {case_id}")
     if report.get("validation_scope") != "NUMERICAL_CONTENT_ONLY" or \
             report.get("numerical_decision") != "VALID" or \
             report.get("artifact_decision") != "UNBOUND":

@@ -44,7 +44,7 @@ else
 fi
 mkdir "$output/build"
 
-if [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=normal) ]]; then
+if [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=all) ]]; then
   printf 'trusted reproduction requires a clean source tree\n' >&2
   exit 2
 fi
@@ -84,6 +84,7 @@ sha256sum \
   "$snapshot_root/src/common/cloud_bal_state.f90" \
   "$snapshot_root/src/common/cloud_bal_column_physics.f90" \
   "$snapshot_root/src/common/cloud_bal_balance_operator.f90" \
+  "$snapshot_root/src/common/cloud_bal_grid_geometry.f90" \
   "$snapshot_root/src/common/cloud_bal_pipeline.f90" \
   "$snapshot_root/tests/intel_toolchain.sh" \
   "$snapshot_root/tests/reproduction_probe.f90" \
@@ -148,6 +149,7 @@ fi
     "$snapshot_root/src/common/cloud_bal_state.f90" \
     "$snapshot_root/src/common/cloud_bal_column_physics.f90" \
     "$snapshot_root/src/common/cloud_bal_balance_operator.f90" \
+    "$snapshot_root/src/common/cloud_bal_grid_geometry.f90" \
     "$snapshot_root/src/common/cloud_bal_pipeline.f90" \
     "$snapshot_root/tests/reproduction_probe.f90" \
     -o "$output/build/cloud_bal_reproduction_probe"
@@ -179,6 +181,7 @@ if [[ $laps_count -ne 3 || $klbg_count -ne 3 || $met_em_count -ne 3 || \
 fi
 
 legacy_rerun_status=BLOCKED
+algorithm_comparison_status=NOT_RUN
 if [[ $missing_library_links -eq 0 && $runtime_intermediate_count -gt 0 && \
       $environment_script_present -eq 1 ]]; then
   legacy_rerun_status=NOT_RUN
@@ -204,7 +207,7 @@ summary="$output/summary.txt"
   printf 'legacy_runtime_intermediate_files=%s\n' "$runtime_intermediate_count"
   printf 'legacy_environment_script_present=%s\n' "$environment_script_present"
   printf 'legacy_executable_rerun=%s\n' "$legacy_rerun_status"
-  printf 'real_case_algorithm_comparison=NOT_RUN\n'
+  printf 'real_case_algorithm_comparison=%s\n' "$algorithm_comparison_status"
   printf 'focused_unit_suite=PASS\n'
   printf 'canonical_synthetic_probe=PASS\n'
   printf 'canonical_probe_repeats=3\n'
@@ -215,14 +218,16 @@ summary="$output/summary.txt"
   printf 'promotion_eligible=0\n'
 } > "$summary"
 
-printf 'diagnostic_complete=1\npromotion_eligible=0\n' \
-  > "$output/DIAGNOSTIC_COMPLETE"
 printf 'Diagnostic reproduction evidence completed with legacy rerun %s: %s\n' \
   "$legacy_rerun_status" "$output"
 sed -n '1,160p' "$summary"
 sed -n '1,180p' "$output/canonical_probe_1.txt"
 
-if [[ $legacy_rerun_status != COMPLETED ]]; then
-  printf 'full real-case reproduction is incomplete; diagnostic evidence cannot satisfy this gate\n' >&2
+if [[ $legacy_rerun_status != COMPLETED || \
+      $algorithm_comparison_status != COMPLETED ]]; then
+  printf 'full original replay and algorithm comparison are incomplete; diagnostic evidence cannot satisfy this gate\n' >&2
   exit 3
 fi
+
+printf 'diagnostic_complete=1\npromotion_eligible=0\n' \
+  > "$output/DIAGNOSTIC_COMPLETE"

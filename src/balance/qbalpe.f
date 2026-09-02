@@ -1524,9 +1524,12 @@ c    .,nu(nx,ny,nz),nv(nx,ny,nz),fu(nx,ny,nz),fv(nx,ny,nz)
      .      ,euoay,euoax,snv,snu,dfvdy,dfudx
      .      ,eueub,fob,foax,foay
      .      ,fu2,fv2,fuangu,fvangv,dt
-      real*4 cont_before,cont_after,cont_max_before,cont_max_after
-     .      ,mom_before,mom_after,div_mode_rms,vort_mode_rms
+      real*4 cont_background,cont_max_background
+     .      ,cont_forced,cont_max_forced,cont_final,cont_max_final
+     .      ,geo_background,geo_forced,geo_final
+     .      ,div_mode_rms,vort_mode_rms
      .      ,div_roughness_rms,max_wind_increment
+     .      ,max_omega_increment
 
 c 2d array now (JS 2-20-01)
       real*4 tau(nx,ny)
@@ -1549,6 +1552,8 @@ c these are used for diagnostics
       real, allocatable, dimension(:,:,:) :: fu,fv,nu,nv
       real, allocatable, dimension(:,:,:) :: ucont,vcont,omcont
       real, allocatable, dimension(:,:,:) :: uorig,vorig,omorig,torig
+      real, allocatable, dimension(:,:,:) :: uworkorig,vworkorig
+     .                                      ,omworkorig,tworkorig
       real, allocatable, dimension(:,:) :: dxx,dx2,dxs
       real, allocatable, dimension(:,:) :: dyy,dy2,dys
       real, allocatable, dimension(:,:) :: fx,ffx
@@ -1577,6 +1582,8 @@ c
       allocate (ucont(nx,ny,nz),vcont(nx,ny,nz),omcont(nx,ny,nz))
       allocate (uorig(nx,ny,nz),vorig(nx,ny,nz),omorig(nx,ny,nz),
      .          torig(nx,ny,nz))
+      allocate (uworkorig(nx,ny,nz),vworkorig(nx,ny,nz),
+     .          omworkorig(nx,ny,nz),tworkorig(nx,ny,nz))
       allocate (div_profile(nz),vort_profile(nz))
       ucont=0.
       vcont=0.
@@ -1585,6 +1592,10 @@ c
       vorig=vo
       omorig=omo
       torig=to
+      uworkorig=u
+      vworkorig=v
+      omworkorig=om
+      tworkorig=t
       if(any(.not.ieee_is_finite(influence)).or.
      &   minval(influence).lt.0..or.maxval(influence).gt.1.)then
          print*,'invalid compact influence in BALCON'
@@ -1656,17 +1667,32 @@ c analz with input fields prior to balcon iterations on lmax
       nu=0.
       nv=0.
 
-      call continuity_metrics(uo,vo,omo,nx,ny,nz,dx,dy,ps,p,dp,
-     &     influence,cont_before,cont_max_before,continuity_status)
+      call continuity_metrics(ub,vb,omb,nx,ny,nz,dx,dy,ps,p,dp,
+     &     influence,cont_background,cont_max_background,
+     &     continuity_status)
       if(continuity_status.ne.1)then
-         print*,'input continuity residual could not be evaluated'
+         print*,'background continuity residual unavailable'
          goto 900
       endif
-      call momentum_residual_metrics(to,uo,vo,nx,ny,nz,lat,dx,dy,
-     &     ps,p,influence,mom_before,continuity_status)
+      call continuity_metrics(uorig,vorig,omorig,nx,ny,nz,dx,dy,
+     &     ps,p,dp,influence,cont_forced,cont_max_forced,
+     &     continuity_status)
+      if(continuity_status.ne.1)then
+         print*,'forced continuity residual unavailable'
+         goto 900
+      endif
+      call geostrophic_residual_metrics(tb,ub,vb,nx,ny,nz,lat,dx,
+     &     dy,ps,p,influence,geo_background,continuity_status)
       if(continuity_status.ne.1)goto 900
-      print*,'RESIDUAL BEFORE cont/max/momentum ',cont_before,
-     &       cont_max_before,mom_before
+      call geostrophic_residual_metrics(torig,uorig,vorig,nx,ny,nz,
+     &     lat,dx,dy,ps,p,influence,geo_forced,continuity_status)
+      if(continuity_status.ne.1)goto 900
+      print*,'CONTINUITY background/forced rms ',cont_background,
+     &       cont_forced
+      print*,'CONTINUITY background/forced max ',cont_max_background,
+     &       cont_max_forced
+      print*,'GEOSTROPHIC background/forced rms ',geo_background,
+     &       geo_forced
 
       call analzo(to,to,uo,uo,vo,vo,omo,omo
      .                ,nu,nv,fu,fv,delo,tau
@@ -1698,10 +1724,7 @@ c apply continuity to input winds
           print*,'initial continuity solver failed'
           goto 900
        endif
-       if(delo.eq.0.)then
-          bal_status=1
-          go to 111
-       endif
+       if(delo.eq.0.)go to 700
 c move adjusted fields to observation fields 
        call move_3d(u,uo,nx,ny,nz)
        call move_3d(v,vo,nx,ny,nz)
@@ -1994,11 +2017,19 @@ c Restore full winds and heights by adding back in background
 
       enddo ! on lmax
 
+ 700  continue
 c Apply continuity into dedicated output arrays. Backgrounds remain immutable.
 c Apply a C2 compact taper to the complete balance candidate first.  Horizontal
 c face weights avoid introducing an unsupported rotational increment at the
 c support edge.  The following LEIB_SUB call reprojects the tapered candidate
 c with the exact localized continuity operator.
+       if(delo.eq.0.)then
+c AIRDROP already has one localized continuity solution; do not solve twice.
+          call move_3d(u,ucont,nx,ny,nz)
+          call move_3d(v,vcont,nx,ny,nz)
+          call move_3d(om,omcont,nx,ny,nz)
+          goto 710
+       endif
        do k=1,nz
         do j=1,ny
          do i=1,nx
@@ -2029,23 +2060,19 @@ c with the exact localized continuity operator.
           print*,'final continuity solver failed'
           goto 900
        endif
+ 710  continue
        call diagnose_wind_increment_modes(uorig,vorig,ucont,vcont,
      &      influence,dx,dy,div_mode_rms,vort_mode_rms,
      &      div_roughness_rms,div_profile,vort_profile,mode_status)
-       if(mode_status.eq.0)then
+       if(mode_status.ne.1)then
           print*,'divergent/rotational increment diagnosis failed'
           goto 900
        endif
-       max_wind_increment=0.
-       if(any(influence.gt.0.))then
-          max_wind_increment=max(maxval(abs(ucont-uorig),
-     &         mask=influence.gt.0.),maxval(abs(vcont-vorig),
-     &         mask=influence.gt.0.))
-       endif
-       if(.not.ieee_is_finite(max_wind_increment).or.
-     &    max_wind_increment.gt.10.)then
-          print*,'excessive localized wind increment rejected ',
-     &           max_wind_increment
+       call qbal_increment_maxima(uorig,vorig,omorig,ucont,vcont,
+     &      omcont,influence,nx,ny,nz,max_wind_increment,
+     &      max_omega_increment,continuity_status)
+       if(continuity_status.ne.1)then
+          print*,'increment maxima could not be evaluated'
           goto 900
        endif
        kmode_bottom=0
@@ -2061,9 +2088,9 @@ c with the exact localized continuity operator.
           kmode_top=nz
        endif
        kmid=(kmode_bottom+kmode_top)/2
-       print*,'INCREMENT MODES div/vort/rough/maxwind ',
+       print*,'INCREMENT MODES div/vort/rough/maxwind/maxomega ',
      &      div_mode_rms,vort_mode_rms,div_roughness_rms,
-     &      max_wind_increment
+     &      max_wind_increment,max_omega_increment
        print*,'VERTICAL MODE lower/middle/upper div ',
      &      div_profile(kmode_bottom),div_profile(kmid),
      &      div_profile(kmode_top)
@@ -2077,18 +2104,19 @@ c evaluate dynamic balance and continuity
      .                ,lat,dx,dy,ps,p,dp,l,lmax)
 c Use the same discrete operators before and after correction.
        call continuity_metrics(ucont,vcont,omcont,nx,ny,nz,dx,dy,
-     &      ps,p,dp,influence,cont_after,cont_max_after,
+     &      ps,p,dp,influence,cont_final,cont_max_final,
      &      continuity_status)
        if(continuity_status.ne.1)goto 900
-       call momentum_residual_metrics(t,ucont,vcont,nx,ny,nz,lat,
-     &      dx,dy,ps,p,influence,mom_after,continuity_status)
+       call geostrophic_residual_metrics(t,ucont,vcont,nx,ny,nz,lat,
+     &      dx,dy,ps,p,influence,geo_final,continuity_status)
        if(continuity_status.ne.1)goto 900
-       print*,'RESIDUAL AFTER cont/max/momentum ',cont_after,
-     &        cont_max_after,mom_after
-       if(cont_after.gt.cont_before*(1.0001)+1.e-10)then
-          print*,'continuity residual worsened; candidate rejected'
-          goto 900
-       endif
+       print*,'CONTINUITY final rms/max ',cont_final,cont_max_final
+       print*,'GEOSTROPHIC final rms ',geo_final
+       call qbal_candidate_acceptance(max_wind_increment,
+     &      max_omega_increment,cont_background,cont_max_background,
+     &      cont_forced,cont_max_forced,cont_final,cont_max_final,
+     &      geo_forced,geo_final,continuity_status)
+       if(continuity_status.ne.1)goto 900
 c move accepted work/output fields to solution fields
        call move_3d(ucont,u,nx,ny,nz)
        call move_3d(vcont,v,nx,ny,nz)
@@ -2099,7 +2127,18 @@ c move accepted work/output fields to solution fields
       print*,'Elapsed time end of balcon loop (sec): ',itstatus
       print*,'------------------------------------------------'
 
- 900  if(allocated(aaa))deallocate(aaa)
+ 900  if(bal_status.ne.1)then
+c Every rejection restores both work and observation arguments exactly.
+         t=tworkorig
+         u=uworkorig
+         v=vworkorig
+         om=omworkorig
+         to=torig
+         uo=uorig
+         vo=vorig
+         omo=omorig
+      endif
+      if(allocated(aaa))deallocate(aaa)
       if(allocated(bbb))deallocate(bbb)
       if(allocated(fu))deallocate(fu)
       if(allocated(fv))deallocate(fv)
@@ -2112,6 +2151,10 @@ c move accepted work/output fields to solution fields
       if(allocated(vorig))deallocate(vorig)
       if(allocated(omorig))deallocate(omorig)
       if(allocated(torig))deallocate(torig)
+      if(allocated(uworkorig))deallocate(uworkorig)
+      if(allocated(vworkorig))deallocate(vworkorig)
+      if(allocated(omworkorig))deallocate(omworkorig)
+      if(allocated(tworkorig))deallocate(tworkorig)
       if(allocated(div_profile))deallocate(div_profile)
       if(allocated(vort_profile))deallocate(vort_profile)
       if(allocated(dxx))deallocate(dxx)
@@ -2338,11 +2381,12 @@ c
       real*4 u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz)
      &      ,dx(nx,ny),dy(nx,ny),ps(nx,ny),p(nz),dp(nz)
      &      ,influence(nx,ny,nz)
-     &      ,rmsres,maxres,residual,sumres
+     &      ,rmsres,maxres,residual
+      real*8 sumres8,rms8
 
       istatus=0
       rmsres=0.
-      sumres=0.
+      sumres8=0.d0
       maxres=0.
       npoint=0
       if(any(.not.ieee_is_finite(influence)).or.
@@ -2365,8 +2409,9 @@ c
           if(point_status.eq.0)then
              return
           elseif(point_status.eq.1)then
-             residual=influence(i,j,k)*residual
-             sumres=sumres+residual*residual
+c Influence defines where authority exists; it does not shrink physical error.
+             sumres8=sumres8+dble(residual)*dble(residual)
+             if(.not.ieee_is_finite(sumres8))return
              maxres=max(maxres,abs(residual))
              npoint=npoint+1
           endif
@@ -2375,7 +2420,12 @@ c
        enddo
       enddo
       if(npoint.gt.0)then
-         rmsres=sqrt(sumres/float(npoint))
+         rms8=sqrt(sumres8/dble(npoint))
+         if(.not.ieee_is_finite(rms8).or.
+     &      rms8.gt.dble(huge(rmsres)))return
+         rmsres=real(rms8)
+         if(.not.ieee_is_finite(rmsres).or.
+     &      .not.ieee_is_finite(maxres))return
          istatus=1
       endif
       return
@@ -2383,23 +2433,153 @@ c
 c
 c ---------------------------------------------------------------
 c
-      subroutine momentum_residual_metrics(phi,u,v,nx,ny,nz,lat,
+      subroutine qbal_increment_maxima(u0,v0,om0,u1,v1,om1,
+     &                 influence,nx,ny,nz,maxwind,maxomega,istatus)
+c Compute the actual horizontal vector increment, not separate components.
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      implicit none
+      integer nx,ny,nz,i,j,k,istatus
+      real*4 u0(nx,ny,nz),v0(nx,ny,nz),om0(nx,ny,nz)
+     &      ,u1(nx,ny,nz),v1(nx,ny,nz),om1(nx,ny,nz)
+     &      ,influence(nx,ny,nz),maxwind,maxomega,dwind,domega
+
+      istatus=0
+      maxwind=0.
+      maxomega=0.
+      if(nx.lt.1.or.ny.lt.1.or.nz.lt.1)return
+      if(any(.not.ieee_is_finite(influence)).or.
+     &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
+      do k=1,nz
+       do j=1,ny
+        do i=1,nx
+         if(influence(i,j,k).le.0.)cycle
+         if(.not.ieee_is_finite(u0(i,j,k)).or.
+     &      .not.ieee_is_finite(v0(i,j,k)).or.
+     &      .not.ieee_is_finite(om0(i,j,k)).or.
+     &      .not.ieee_is_finite(u1(i,j,k)).or.
+     &      .not.ieee_is_finite(v1(i,j,k)).or.
+     &      .not.ieee_is_finite(om1(i,j,k)))return
+         dwind=hypot(u1(i,j,k)-u0(i,j,k),
+     &               v1(i,j,k)-v0(i,j,k))
+         domega=abs(om1(i,j,k)-om0(i,j,k))
+         if(.not.ieee_is_finite(dwind).or.
+     &      .not.ieee_is_finite(domega))return
+         maxwind=max(maxwind,dwind)
+         maxomega=max(maxomega,domega)
+        enddo
+       enddo
+      enddo
+      istatus=1
+      return
+      end
+c
+c ---------------------------------------------------------------
+c
+      subroutine qbal_candidate_acceptance(maxwind,maxomega,
+     &     cont_background,cont_max_background,cont_forced,
+     &     cont_max_forced,cont_final,cont_max_final,
+     &     geo_forced,geo_final,istatus)
+c One fail-closed acceptance contract for balance and AIRDROP candidates.
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      implicit none
+      integer istatus
+      real*4 maxwind,maxomega,cont_background,cont_max_background
+     &      ,cont_forced,cont_max_forced,cont_final,cont_max_final
+     &      ,geo_forced,geo_final
+      real*4 forced_rms_limit,forced_max_limit
+     &      ,physical_rms_limit,physical_max_limit
+      real*4 wind_increment_limit,omega_increment_limit
+     &      ,continuity_fraction,continuity_solver_tolerance
+     &      ,continuity_physical_tolerance,continuity_absolute_limit
+     &      ,geostrophic_relative_tolerance
+     &      ,geostrophic_absolute_tolerance
+      parameter(wind_increment_limit=10.)
+      parameter(omega_increment_limit=5.)
+      parameter(continuity_fraction=.25)
+      parameter(continuity_solver_tolerance=1.e-10)
+      parameter(continuity_physical_tolerance=1.e-7)
+      parameter(continuity_absolute_limit=1.e-3)
+      parameter(geostrophic_relative_tolerance=.05)
+      parameter(geostrophic_absolute_tolerance=1.e-3)
+
+      istatus=0
+      if(.not.ieee_is_finite(maxwind).or.
+     &   .not.ieee_is_finite(maxomega).or.
+     &   .not.ieee_is_finite(cont_background).or.
+     &   .not.ieee_is_finite(cont_max_background).or.
+     &   .not.ieee_is_finite(cont_forced).or.
+     &   .not.ieee_is_finite(cont_max_forced).or.
+     &   .not.ieee_is_finite(cont_final).or.
+     &   .not.ieee_is_finite(cont_max_final).or.
+     &   .not.ieee_is_finite(geo_forced).or.
+     &   .not.ieee_is_finite(geo_final))then
+         print*,'QBAL acceptance has non-finite/invalid input'
+         return
+      endif
+      if(min(maxwind,maxomega,cont_background,
+     &   cont_max_background,cont_forced,cont_max_forced,
+     &   cont_final,cont_max_final,geo_forced,geo_final).lt.0.)then
+         print*,'QBAL acceptance has negative metric'
+         return
+      endif
+      if(maxwind.gt.wind_increment_limit)then
+         print*,'QBAL vector wind increment rejected ',maxwind
+         return
+      endif
+      if(maxomega.gt.omega_increment_limit)then
+         print*,'QBAL omega increment rejected ',maxomega
+         return
+      endif
+      forced_rms_limit=max(continuity_fraction*cont_forced,
+     &                     continuity_solver_tolerance)
+      forced_max_limit=max(continuity_fraction*cont_max_forced,
+     &                     continuity_solver_tolerance)
+      physical_rms_limit=min(cont_background+
+     &     continuity_physical_tolerance,continuity_absolute_limit)
+      physical_max_limit=min(cont_max_background+
+     &     continuity_physical_tolerance,continuity_absolute_limit)
+      if(cont_final.gt.forced_rms_limit.or.
+     &   cont_max_final.gt.forced_max_limit)then
+         print*,'QBAL forced continuity reduction rejected ',
+     &          cont_final,cont_max_final
+         return
+      endif
+      if(cont_final.gt.physical_rms_limit.or.
+     &   cont_max_final.gt.physical_max_limit)then
+         print*,'QBAL background continuity gate rejected ',
+     &          cont_final,cont_max_final
+         return
+      endif
+      if(geo_final.gt.geo_forced*(1.+
+     &   geostrophic_relative_tolerance)+
+     &   geostrophic_absolute_tolerance)then
+         print*,'QBAL geostrophic residual rejected ',geo_final
+         return
+      endif
+      istatus=1
+      return
+      end
+c
+c ---------------------------------------------------------------
+c
+      subroutine geostrophic_residual_metrics(phi,u,v,nx,ny,nz,lat,
      &                    dx,dy,ps,p,influence,rmsres,istatus)
-c Same guarded geostrophic momentum operator for pre/post comparison.
+c Same guarded geostrophic operator for background/forced/final fields.
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
       integer nx,ny,nz,i,j,k,istatus,npoint
       real*4 phi(nx,ny,nz),u(nx,ny,nz),v(nx,ny,nz)
      &      ,lat(nx,ny),dx(nx,ny),dy(nx,ny),ps(nx,ny),p(nz)
      &      ,influence(nx,ny,nz)
-     &      ,rmsres,sumres,f,dphidx,dphidy,ru,rv,rdpdg,fo,bnd
+     &      ,rmsres,f,dphidx,dphidy,ru,rv,rdpdg,fo,bnd
+      real*8 sumres8,rms8
 
       rdpdg=3.141592654/180.
       fo=14.52e-5
       bnd=1.e-30
       istatus=0
       rmsres=0.
-      sumres=0.
+      sumres8=0.d0
       npoint=0
       if(any(.not.ieee_is_finite(influence)).or.
      &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
@@ -2429,19 +2609,24 @@ c Same guarded geostrophic momentum operator for pre/post comparison.
           if(ieee_is_finite(f).and.abs(f).ge.1.e-6)then
            dphidx=(phi(i+1,j,k)-phi(i,j,k))/dx(i,j)
            dphidy=(phi(i,j+1,k)-phi(i,j,k))/dy(i,j)
-           ru=influence(i,j,k)*(-f*v(i,j,k)+dphidx)
-           rv=influence(i,j,k)*( f*u(i,j,k)+dphidy)
-           if(ieee_is_finite(ru).and.ieee_is_finite(rv))then
-              sumres=sumres+ru*ru+rv*rv
-              npoint=npoint+2
-           endif
+           ru=-f*v(i,j,k)+dphidx
+           rv= f*u(i,j,k)+dphidy
+           if(.not.ieee_is_finite(ru).or.
+     &        .not.ieee_is_finite(rv))return
+           sumres8=sumres8+dble(ru)*dble(ru)+dble(rv)*dble(rv)
+           if(.not.ieee_is_finite(sumres8))return
+           npoint=npoint+2
           endif
          endif
         enddo
        enddo
       enddo
       if(npoint.gt.0)then
-         rmsres=sqrt(sumres/float(npoint))
+         rms8=sqrt(sumres8/dble(npoint))
+         if(.not.ieee_is_finite(rms8).or.
+     &      rms8.gt.dble(huge(rmsres)))return
+         rmsres=real(rms8)
+         if(.not.ieee_is_finite(rmsres))return
          istatus=1
       endif
       return

@@ -149,7 +149,7 @@ cdis
         logical l_flag_mvd
         logical l_flag_cloud_type
         logical l_flag_icing_index
-        logical l_flag_bogus_w, l_bogus_radar_w
+        logical l_bogus_radar_w
         logical l_flag_snow_potential
         logical l_parse
 
@@ -581,8 +581,8 @@ c read in laps lat/lon and topo
         l_flag_mvd = .true.
         l_flag_cloud_type = .true.
         l_flag_icing_index = .true.
-        l_flag_bogus_w = .true.
         l_flag_snow_potential = .true.
+        w_3d = r_missing_data
 
 !frl060125
 !cde  Add i4time to handle lightning data
@@ -597,7 +597,7 @@ c read in laps lat/lon and topo
      1                l_flag_cloud_type,cldpcp_type_3d,
      1                l_flag_mvd,mvd_3d,
      1                l_flag_icing_index,icing_index_3d,
-     1                l_flag_bogus_w,w_3d,istatus)
+     1                .false.,w_3d,istatus)
 !    1                l_flag_snow_potential,snow_2d,lwc_res_3d)
 
         if(istatus .ne. 1)then
@@ -921,7 +921,7 @@ c read in laps lat/lon and topo
 !           Couple S-band precipitation fall flux to a bounded air downdraft
 !           only after phase concentrations exist.  The replacement is
 !           deterministic and never calls the dormant evaporation routine.
-            if(l_flag_bogus_w .and. l_bogus_radar_w)then
+            if(.false. .and. l_bogus_radar_w)then
               allocate(u_balance_3d(NX_L,NY_L,NZ_L),
      1                 v_balance_3d(NX_L,NY_L,NZ_L),
      1                 radar_support_3d(NX_L,NY_L,NZ_L))
@@ -1146,7 +1146,7 @@ c read in laps lat/lon and topo
         comment = 'LAPS Cloud Derived Omega'
         call put_laps_3d(i4time,ext,var,units,comment,w_3d
      1                  ,NX_L,NY_L,NZ_L)
-        j_status(n_lco) = ss_normal
+        j_status(n_lco) = sys_no_data
 
         I4_elapsed = ishow_timer()
 

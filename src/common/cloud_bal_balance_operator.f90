@@ -11,6 +11,9 @@ MODULE cloud_bal_balance_operator
   IMPLICIT NONE
   PRIVATE
   REAL(real64), PARAMETER :: GRAVITY=9.80665_real64
+  ! A zero science threshold still must not authorize real32 arithmetic nulls.
+  REAL(real64), PARAMETER :: FACE_RESPONSE_ROUNDOFF = &
+    64.0_real64*REAL(EPSILON(1.0_real32),real64)
 
   TYPE, PUBLIC :: balance_operator_config
     REAL(real64) :: kappa_u = 16.0_real64
@@ -45,6 +48,7 @@ MODULE cloud_bal_balance_operator
     REAL(real64), ALLOCATABLE :: ku(:,:,:),kv(:,:,:),ko(:,:,:)
     LOGICAL, ALLOCATABLE :: cell_usable(:,:,:)
     LOGICAL, ALLOCATABLE :: cell_active(:,:,:)
+    LOGICAL, ALLOCATABLE :: omega_authorized(:,:,:)
     LOGICAL, ALLOCATABLE :: xface_active(:,:,:)
     LOGICAL, ALLOCATABLE :: yface_active(:,:,:)
     LOGICAL, ALLOCATABLE :: pface_active(:,:,:)
@@ -105,6 +109,7 @@ CONTAINS
              op%dp(nx,ny,nz), &
              op%ku(nx,ny,nz),op%kv(nx,ny,nz),op%ko(nx,ny,nz), &
              op%cell_usable(nx,ny,nz),op%cell_active(nx,ny,nz), &
+             op%omega_authorized(nx,ny,nz), &
              op%component(nx,ny,nz))
     ALLOCATE(op%xface_active(nx-1,ny,nz),op%xface_area(nx-1,ny,nz), &
              op%xleft_weight(nx-1,ny,nz),op%xright_weight(nx-1,ny,nz))
@@ -121,6 +126,9 @@ CONTAINS
       cell_is_usable(state%omega%valid,state%omega%quality,state%omega%source)
     op%cell_active=op%cell_usable .AND. &
                    balance_beta_active(state%balance_beta,config%minimum_beta)
+    op%omega_authorized=op%cell_active .AND. dynamic_target_is_resolved( &
+      state%omega_target%value,state%omega%value,state%omega_target%valid, &
+      state%omega_target%quality,state%omega_target%source)
     IF (ANY(op%cell_active .AND. &
         (.NOT.ieee_is_finite(state%pressure%value) .OR. &
          .NOT.ieee_is_finite(state%u%value) .OR. &
@@ -134,6 +142,8 @@ CONTAINS
     WHERE(op%cell_active)
       op%ku=REAL(state%balance_beta,real64)*config%kappa_u
       op%kv=REAL(state%balance_beta,real64)*config%kappa_v
+    END WHERE
+    WHERE(op%omega_authorized)
       op%ko=REAL(state%balance_beta,real64)*config%kappa_omega
     END WHERE
     ! The background flux through the compact-support boundary is fixed.
@@ -302,6 +312,9 @@ CONTAINS
     CALL apply_adjoint_metric(op,lambda,du,dv,domega,status)
     IF (status/=STATUS_OK) RETURN
     du=-op%ku*du; dv=-op%kv*dv; domega=-op%ko*domega
+    ! Horizontal winds may respond throughout the localized support.  Omega is
+    ! a different authority: it may change only at an explicit dynamic target.
+    WHERE(.NOT.op%omega_authorized) domega=0.0_real64
     WHERE(.NOT.op%cell_active)
       du=0.0_real64; dv=0.0_real64; domega=0.0_real64
     END WHERE
@@ -404,10 +417,7 @@ CONTAINS
     END IF
 
     q_requested=0.0_real64
-    WHERE(op%cell_active .AND. dynamic_target_is_resolved( &
-          state_in%omega_target%value,state_in%omega%value, &
-          state_in%omega_target%valid,state_in%omega_target%quality, &
-          state_in%omega_target%source))
+    WHERE(op%omega_authorized)
       q_requested=REAL(state_in%omega_target%value,real64)- &
              REAL(state_in%omega%value,real64)
     END WHERE
@@ -416,7 +426,9 @@ CONTAINS
       CALL initialize_stage_result(result,op%nx,op%ny,op%nz,STATUS_OK,REASON_NONE)
       RETURN
     END IF
-    IF (.NOT.omega_target_observable(op,q_requested,cfg%solver_absolute_tolerance)) THEN
+    IF (.NOT.omega_target_is_observable( &
+        op,q_requested,cfg%solver_absolute_tolerance, &
+        cfg%minimum_target_response_ratio)) THEN
       CALL reject_candidate(state_in,state_out,result,STATUS_DEGRADED,REASON_GATE)
       RETURN
     END IF
@@ -561,19 +573,20 @@ CONTAINS
         modified(i,j,k)=.FALSE.
         CYCLE
       END IF
-      IF (op%cell_active(i,j,k) .AND. dynamic_target_is_resolved( &
-          input%omega_target%value(i,j,k),input%omega%value(i,j,k), &
-          input%omega_target%valid(i,j,k),input%omega_target%quality(i,j,k), &
-          input%omega_target%source(i,j,k))) &
-        candidate%omega_target%value(i,j,k)=REAL( &
-          REAL(input%omega%value(i,j,k),real64)+target(i,j,k),real32)
+      ! omega_target remains the requested pseudo-observation.  The accepted
+      ! fraction belongs to the balance result, not to a rewritten target.
       IF (du(i,j,k)/=0.0_real64) &
         candidate%u%value(i,j,k)=REAL(REAL(input%u%value(i,j,k),real64)+ &
                                       du(i,j,k),real32)
       IF (dv(i,j,k)/=0.0_real64) &
         candidate%v%value(i,j,k)=REAL(REAL(input%v%value(i,j,k),real64)+ &
                                       dv(i,j,k),real32)
-      domega(i,j,k)=target(i,j,k)+domega_correction(i,j,k)
+      IF (op%omega_authorized(i,j,k)) THEN
+        domega(i,j,k)=target(i,j,k)+domega_correction(i,j,k)
+      ELSE
+        domega(i,j,k)=0.0_real64
+        domega_correction(i,j,k)=0.0_real64
+      END IF
       IF (domega(i,j,k)/=0.0_real64) &
         candidate%omega%value(i,j,k)=REAL(REAL(input%omega%value(i,j,k),real64)+ &
                                            domega(i,j,k),real32)
@@ -588,11 +601,15 @@ CONTAINS
       domega_correction(i,j,k)=domega(i,j,k)-target(i,j,k)
       modified(i,j,k)=du(i,j,k)/=0.0_real64 .OR. dv(i,j,k)/=0.0_real64 .OR. &
                       domega(i,j,k)/=0.0_real64
-      IF (modified(i,j,k)) THEN
+      IF (du(i,j,k)/=0.0_real64) THEN
         candidate%u%source(i,j,k)=IOR(candidate%u%source(i,j,k), &
                                       SOURCE_BALANCE_OPERATOR)
+      END IF
+      IF (dv(i,j,k)/=0.0_real64) THEN
         candidate%v%source(i,j,k)=IOR(candidate%v%source(i,j,k), &
                                       SOURCE_BALANCE_OPERATOR)
+      END IF
+      IF (domega(i,j,k)/=0.0_real64) THEN
         candidate%omega%source(i,j,k)=IOR(candidate%omega%source(i,j,k), &
                                           SOURCE_BALANCE_OPERATOR)
       END IF
@@ -803,15 +820,27 @@ CONTAINS
     REAL(real64), INTENT(IN) :: residual(:,:,:)
     REAL(real64), INTENT(OUT) :: rms_value,max_value
     INTEGER :: i,j,k,count_active
-    REAL(real64) :: sum_squares
+    REAL(real64) :: sum_squares,value,term,limit
+    rms_value=HUGE(1.0_real64); max_value=HUGE(1.0_real64)
+    IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
+    IF (ANY(SHAPE(residual)/=(/op%nx,op%ny,op%nz/))) RETURN
     count_active=0
     sum_squares=0.0_real64
     max_value=0.0_real64
+    limit=SQRT(HUGE(1.0_real64)/2.0_real64)
     DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
       IF (.NOT.op%cell_active(i,j,k)) CYCLE
+      value=ABS(residual(i,j,k))
+      IF (.NOT.ieee_is_finite(value) .OR. value>limit) THEN
+        rms_value=HUGE(1.0_real64); max_value=HUGE(1.0_real64); RETURN
+      END IF
+      term=value*value
+      IF (term>HUGE(1.0_real64)-sum_squares) THEN
+        rms_value=HUGE(1.0_real64); max_value=HUGE(1.0_real64); RETURN
+      END IF
       count_active=count_active+1
-      sum_squares=sum_squares+residual(i,j,k)*residual(i,j,k)
-      max_value=MAX(max_value,ABS(residual(i,j,k)))
+      sum_squares=sum_squares+term
+      max_value=MAX(max_value,value)
     END DO; END DO; END DO
     IF (count_active<=0) THEN
       rms_value=0.0_real64; max_value=0.0_real64; RETURN
@@ -830,6 +859,12 @@ CONTAINS
     REAL(real64) :: area,flux
 
     residual=0.0_real64; status=STATUS_FAILED
+    IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
+    IF (ANY(SHAPE(residual)/=(/op%nx,op%ny,op%nz/))) RETURN
+    IF (.NOT.field_storage_shape_valid(state%u,op%nx,op%ny,op%nz) .OR. &
+        .NOT.field_storage_shape_valid(state%v,op%nx,op%ny,op%nz) .OR. &
+        .NOT.field_storage_shape_valid(state%omega,op%nx,op%ny,op%nz)) RETURN
+    IF (.NOT.boundary_contract_valid(state)) RETURN
     IF (ANY(op%cell_usable .AND. (.NOT.ieee_is_finite(state%u%value) .OR. &
         .NOT.ieee_is_finite(state%v%value) .OR. &
         .NOT.ieee_is_finite(state%omega%value)))) RETURN
@@ -917,10 +952,16 @@ CONTAINS
     TYPE(balance_operator_type), INTENT(IN) :: op
     REAL(real64), INTENT(OUT) :: rms_value
     INTEGER, INTENT(OUT) :: status
-    INTEGER :: i,j,k,ix,jy,n
-    REAL(real64) :: f,dphidx,dphidy,ru,rv,total,pi
+    INTEGER :: i,j,k,ix,jy,n,validation_status,reason
+    REAL(real64) :: f,dphidx,dphidy,ru,rv,total,pi,term,limit
     status=STATUS_FAILED; rms_value=0.0_real64; total=0.0_real64; n=0
+    IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
+    IF (.NOT.field_storage_shape_valid(state%u,op%nx,op%ny,op%nz) .OR. &
+        .NOT.field_storage_shape_valid(state%v,op%nx,op%ny,op%nz)) RETURN
+    CALL validate_geostrophic_inputs(state,validation_status,reason)
+    IF (validation_status/=STATUS_OK) RETURN
     pi=ACOS(-1.0_real64)
+    limit=SQRT(HUGE(1.0_real64)/4.0_real64)
     DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
       IF (.NOT.op%cell_active(i,j,k)) CYCLE
       ix=0
@@ -957,10 +998,15 @@ CONTAINS
       ru=-f*REAL(state%v%value(i,j,k),real64)+dphidx
       rv= f*REAL(state%u%value(i,j,k),real64)+dphidy
       IF (.NOT.ieee_is_finite(ru) .OR. .NOT.ieee_is_finite(rv)) RETURN
-      total=total+ru*ru+rv*rv; n=n+2
+      IF (ABS(ru)>limit .OR. ABS(rv)>limit) RETURN
+      term=ru*ru+rv*rv
+      IF (.NOT.ieee_is_finite(term) .OR. term>HUGE(1.0_real64)-total) RETURN
+      total=total+term; n=n+2
     END DO; END DO; END DO
     IF (n==0) RETURN
-    rms_value=SQRT(total/REAL(n,real64)); status=STATUS_OK
+    rms_value=SQRT(total/REAL(n,real64))
+    IF (.NOT.ieee_is_finite(rms_value)) RETURN
+    status=STATUS_OK
   END SUBROUTINE geostrophic_residual
 
   SUBROUTINE validate_geostrophic_inputs(state,status,reason)
@@ -978,7 +1024,13 @@ CONTAINS
         .NOT.ALLOCATED(state%latitude%quality) .OR. &
         .NOT.ALLOCATED(state%latitude%source)) RETURN
     IF (ANY(SHAPE(state%geopotential%value)/=(/nx,ny,nz/)) .OR. &
-        ANY(SHAPE(state%latitude%value)/=(/nx,ny/))) RETURN
+        ANY(SHAPE(state%geopotential%valid)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(state%geopotential%quality)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(state%geopotential%source)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(state%latitude%value)/=(/nx,ny/)) .OR. &
+        ANY(SHAPE(state%latitude%valid)/=(/nx,ny/)) .OR. &
+        ANY(SHAPE(state%latitude%quality)/=(/nx,ny/)) .OR. &
+        ANY(SHAPE(state%latitude%source)/=(/nx,ny/))) RETURN
     IF (TRIM(state%geopotential%unit)/='m2 s-2' .OR. &
         TRIM(state%latitude%unit)/='degree_north' .OR. &
         state%geopotential%valid_time/=state%pressure%valid_time .OR. &
@@ -1392,43 +1444,109 @@ CONTAINS
     IF (n>0) target_response_failure_fraction=REAL(failed,real64)/REAL(n,real64)
   END FUNCTION target_response_failure_fraction
 
-  PURE LOGICAL FUNCTION omega_target_observable(op,qomega,tolerance)
+  PURE LOGICAL FUNCTION omega_target_is_observable( &
+      op,target,tolerance,minimum_face_response)
     TYPE(balance_operator_type), INTENT(IN) :: op
-    REAL(real64), INTENT(IN) :: qomega(:,:,:),tolerance
+    REAL(real64), INTENT(IN) :: target(:,:,:),tolerance,minimum_face_response
     INTEGER :: i,j,k
-    LOGICAL :: connected
-    omega_target_observable=.FALSE.
-    IF (ANY(SHAPE(qomega)/=(/op%nx,op%ny,op%nz/))) RETURN
-    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
-      IF (ABS(qomega(i,j,k))<=tolerance) CYCLE
-      IF (op%ko(i,j,k)<=0.0_real64) RETURN
-      connected=(k>1 .AND. op%pface_active(i,j,MAX(1,k-1))) .OR. &
-                (k<op%nz .AND. op%pface_active(i,j,MIN(op%nz-1,k)))
-      IF (.NOT.connected) RETURN
-    END DO; END DO; END DO
-    omega_target_observable=.TRUE.
-  END FUNCTION omega_target_observable
+    REAL(real64) :: face_value,face_energy,target_energy
+    LOGICAL :: connected,has_target
+
+    omega_target_is_observable=.FALSE.; has_target=.FALSE.
+    IF (ANY(SHAPE(target)/=(/op%nx,op%ny,op%nz/))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(target)) .OR. &
+        .NOT.ieee_is_finite(minimum_face_response) .OR. &
+        minimum_face_response<0.0_real64) RETURN
+    IF (ANY(ABS(target)>tolerance .AND. .NOT.op%omega_authorized)) RETURN
+
+    DO j=1,op%ny; DO i=1,op%nx
+      target_energy=SUM(target(i,j,:)*target(i,j,:))
+      IF (target_energy<=tolerance*tolerance) CYCLE
+      has_target=.TRUE.; face_energy=0.0_real64
+      DO k=1,op%nz
+        IF (ABS(target(i,j,k))<=tolerance) CYCLE
+        connected=.FALSE.
+        IF (k>1) connected=op%pface_active(i,j,k-1)
+        IF (k<op%nz) connected=connected .OR. op%pface_active(i,j,k)
+        IF (.NOT.connected) RETURN
+      END DO
+      DO k=1,op%nz-1
+        IF (.NOT.op%pface_active(i,j,k)) CYCLE
+        face_value=op%pleft_weight(i,j,k)*target(i,j,k)+ &
+                   op%pright_weight(i,j,k)*target(i,j,k+1)
+        face_energy=face_energy+face_value*face_value
+      END DO
+      IF (SQRT(face_energy/target_energy)< &
+          MAX(minimum_face_response,FACE_RESPONSE_ROUNDOFF)) RETURN
+    END DO; END DO
+    omega_target_is_observable=has_target
+  END FUNCTION omega_target_is_observable
 
   PURE LOGICAL FUNCTION operator_input_shapes_valid(state)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     INTEGER :: nx,ny,nz
     nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
     operator_input_shapes_valid=.FALSE.
-    IF (.NOT.ALLOCATED(state%pressure%value) .OR. .NOT.ALLOCATED(state%pressure%valid) .OR. &
-        .NOT.ALLOCATED(state%u%value) .OR. .NOT.ALLOCATED(state%u%valid) .OR. &
-        .NOT.ALLOCATED(state%v%value) .OR. .NOT.ALLOCATED(state%v%valid) .OR. &
-        .NOT.ALLOCATED(state%omega%value) .OR. .NOT.ALLOCATED(state%omega%valid) .OR. &
-        .NOT.ALLOCATED(state%omega_target%value) .OR. &
-        .NOT.ALLOCATED(state%omega_target%valid) .OR. &
+    IF (.NOT.ALLOCATED(state%grid%dx) .OR. .NOT.ALLOCATED(state%grid%dy) .OR. &
+        .NOT.ALLOCATED(state%grid%dp) .OR. &
+        .NOT.ALLOCATED(state%grid%pressure_mass_measure) .OR. &
+        .NOT.ALLOCATED(state%above_ground) .OR. &
         .NOT.ALLOCATED(state%balance_beta)) RETURN
-    IF (ANY(SHAPE(state%pressure%value)/=(/nx,ny,nz/)) .OR. &
-        ANY(SHAPE(state%u%value)/=(/nx,ny,nz/)) .OR. &
-        ANY(SHAPE(state%v%value)/=(/nx,ny,nz/)) .OR. &
-        ANY(SHAPE(state%omega%value)/=(/nx,ny,nz/)) .OR. &
-        ANY(SHAPE(state%omega_target%value)/=(/nx,ny,nz/)) .OR. &
+    IF (ANY(SHAPE(state%grid%dx)/=(/nx,ny/)) .OR. &
+        ANY(SHAPE(state%grid%dy)/=(/nx,ny/)) .OR. &
+        ANY(SHAPE(state%grid%dp)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(state%grid%pressure_mass_measure)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(state%above_ground)/=(/nx,ny,nz/)) .OR. &
         ANY(SHAPE(state%balance_beta)/=(/nx,ny,nz/))) RETURN
+    IF (.NOT.field_storage_shape_valid(state%pressure,nx,ny,nz)) RETURN
+    IF (.NOT.field_storage_shape_valid(state%u,nx,ny,nz)) RETURN
+    IF (.NOT.field_storage_shape_valid(state%v,nx,ny,nz)) RETURN
+    IF (.NOT.field_storage_shape_valid(state%omega,nx,ny,nz)) RETURN
+    IF (.NOT.field_storage_shape_valid(state%omega_target,nx,ny,nz)) RETURN
     operator_input_shapes_valid=.TRUE.
   END FUNCTION operator_input_shapes_valid
+
+  PURE LOGICAL FUNCTION diagnostic_operator_shapes_valid(op)
+    TYPE(balance_operator_type), INTENT(IN) :: op
+    diagnostic_operator_shapes_valid=.FALSE.
+    IF (op%nx<2 .OR. op%ny<2 .OR. op%nz<2) RETURN
+    IF (.NOT.ALLOCATED(op%volume) .OR. .NOT.ALLOCATED(op%dx) .OR. &
+        .NOT.ALLOCATED(op%dy) .OR. .NOT.ALLOCATED(op%dp) .OR. &
+        .NOT.ALLOCATED(op%cell_usable) .OR. .NOT.ALLOCATED(op%cell_active) .OR. &
+        .NOT.ALLOCATED(op%xface_area) .OR. .NOT.ALLOCATED(op%xleft_weight) .OR. &
+        .NOT.ALLOCATED(op%xright_weight) .OR. .NOT.ALLOCATED(op%yface_area) .OR. &
+        .NOT.ALLOCATED(op%yleft_weight) .OR. .NOT.ALLOCATED(op%yright_weight) .OR. &
+        .NOT.ALLOCATED(op%pface_area) .OR. .NOT.ALLOCATED(op%pleft_weight) .OR. &
+        .NOT.ALLOCATED(op%pright_weight)) RETURN
+    IF (ANY(SHAPE(op%volume)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(op%dx)/=(/op%nx,op%ny/)) .OR. &
+        ANY(SHAPE(op%dy)/=(/op%nx,op%ny/)) .OR. &
+        ANY(SHAPE(op%dp)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(op%cell_usable)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(op%cell_active)/=(/op%nx,op%ny,op%nz/))) RETURN
+    IF (ANY(SHAPE(op%xface_area)/=(/op%nx-1,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(op%xleft_weight)/=(/op%nx-1,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(op%xright_weight)/=(/op%nx-1,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(op%yface_area)/=(/op%nx,op%ny-1,op%nz/)) .OR. &
+        ANY(SHAPE(op%yleft_weight)/=(/op%nx,op%ny-1,op%nz/)) .OR. &
+        ANY(SHAPE(op%yright_weight)/=(/op%nx,op%ny-1,op%nz/))) RETURN
+    IF (ANY(SHAPE(op%pface_area)/=(/op%nx,op%ny,op%nz-1/)) .OR. &
+        ANY(SHAPE(op%pleft_weight)/=(/op%nx,op%ny,op%nz-1/)) .OR. &
+        ANY(SHAPE(op%pright_weight)/=(/op%nx,op%ny,op%nz-1/))) RETURN
+    diagnostic_operator_shapes_valid=.TRUE.
+  END FUNCTION diagnostic_operator_shapes_valid
+
+  PURE LOGICAL FUNCTION field_storage_shape_valid(field,nx,ny,nz)
+    TYPE(field3d), INTENT(IN) :: field
+    INTEGER, INTENT(IN) :: nx,ny,nz
+    INTEGER :: expected(3)
+    field_storage_shape_valid=.FALSE.; expected=(/nx,ny,nz/)
+    IF (.NOT.ALLOCATED(field%value) .OR. .NOT.ALLOCATED(field%valid) .OR. &
+        .NOT.ALLOCATED(field%quality) .OR. .NOT.ALLOCATED(field%source)) RETURN
+    field_storage_shape_valid=ALL(SHAPE(field%value)==expected) .AND. &
+      ALL(SHAPE(field%valid)==expected) .AND. &
+      ALL(SHAPE(field%quality)==expected) .AND. ALL(SHAPE(field%source)==expected)
+  END FUNCTION field_storage_shape_valid
 
   PURE LOGICAL FUNCTION boundary_contract_valid(state)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
