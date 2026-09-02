@@ -140,7 +140,8 @@ if [[ -f "$environment_script" ]]; then
   environment_script_present=1
 fi
 
-"$snapshot_root/tests/run_unit_tests.sh" > "$output/focused_unit_suite.txt" 2>&1
+CLOUD_BAL_WORKSPACE_ROOT="$workspace_root" \
+  "$snapshot_root/tests/run_unit_tests.sh" > "$output/focused_unit_suite.txt" 2>&1
 
 (
   cd "$output/build"

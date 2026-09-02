@@ -2,6 +2,12 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+workspace_lexical=$(realpath -ms "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
+workspace_root=$(realpath -e "$workspace_lexical")
+[[ $workspace_root == "$workspace_lexical" ]] || {
+  printf 'workspace root cannot contain a symlink: %s\n' "$workspace_lexical" >&2
+  exit 2
+}
 allowed_root=$repo_root/scratch/original_upstream_replay
 mkdir -p "$allowed_root"
 
@@ -20,6 +26,7 @@ trap cleanup EXIT
 
 status=0
 tool_stdout=$(python3 "$repo_root/tools/original_upstream_replay.py" \
+  --workspace-root "$workspace_root" \
   --root "$run_root") || status=$?
 if [[ $status -ne 3 ]]; then
   printf 'expected deterministic BLOCKED status 3, got %s\n' "$status" >&2
@@ -77,7 +84,7 @@ manifest_sha=$(sha256sum "$run_root/PRE_QBAL_MANIFEST.json" | cut -d' ' -f1)
 checker_report=$run_root/checker.json
 checker_status=0
 python3 "$repo_root/tools/check_qbal_real_inputs.py" \
-  --workspace-root "$(realpath "$repo_root/..")" \
+  --workspace-root "$workspace_root" \
   --pre-qbal-root "$run_root" \
   --pre-qbal-manifest-sha256 "$manifest_sha" > "$checker_report" || \
   checker_status=$?
