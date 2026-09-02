@@ -38,9 +38,10 @@ CONTAINS
     TYPE(cloud_bal_pipeline_result), INTENT(OUT) :: result
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
     TYPE(cloud_bal_state_type) :: column_candidate,balance_candidate
-    INTEGER :: nx,ny,nz,localization_status
+    INTEGER :: nx,ny,nz,localization_status,shape3(3)
 
     nx=state_in%grid%nx; ny=state_in%grid%ny; nz=state_in%grid%nz
+    shape3=(/nx,ny,nz/)
     candidate_out=state_in; operational_out=state_in
     result%requested_mode=config%requested_mode
     CALL initialize_stage_result(result%column,MAX(0,nx),MAX(0,ny),MAX(0,nz), &
@@ -51,6 +52,28 @@ CONTAINS
                                  STATUS_FAILED,REASON_AUTHORITY)
 
     IF (.NOT.pipeline_mode_valid(config%requested_mode)) THEN
+      result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+      RETURN
+    END IF
+    ! Manufactured targets are a direct operator test capability.  They may
+    ! never enter the normal OFF/SHADOW science pipeline.
+    IF (config%balance%target_authority/=TARGET_AUTHORITY_OBSERVATIONAL) THEN
+      result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (ALLOCATED(state_in%omega_target%valid) .OR. &
+        ALLOCATED(state_in%omega_target%source)) THEN
+      IF (.NOT.field_arrays_match(state_in%omega_target,shape3)) THEN
+        result%status=STATUS_FAILED; result%reason_code=REASON_SHAPE
+        RETURN
+      END IF
+      IF (ANY(IAND(state_in%omega_target%source, &
+          SOURCE_MANUFACTURED_TEST)/=0)) THEN
+        result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+        RETURN
+      END IF
+    END IF
+    IF (boundary_has_manufactured_source(state_in)) THEN
       result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
       RETURN
     END IF
@@ -203,5 +226,15 @@ CONTAINS
         ANY(SHAPE(field%quality)/=shape3) .OR. ANY(SHAPE(field%source)/=shape3)) RETURN
     field_arrays_match=.TRUE.
   END FUNCTION field_arrays_match
+
+  LOGICAL FUNCTION boundary_has_manufactured_source(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    boundary_has_manufactured_source=.FALSE.
+    IF (.NOT.ALLOCATED(state%omega_top_boundary%source) .OR. &
+        .NOT.ALLOCATED(state%omega_bottom_boundary%source)) RETURN
+    boundary_has_manufactured_source= &
+      ANY(IAND(state%omega_top_boundary%source,SOURCE_MANUFACTURED_TEST)/=0) .OR. &
+      ANY(IAND(state%omega_bottom_boundary%source,SOURCE_MANUFACTURED_TEST)/=0)
+  END FUNCTION boundary_has_manufactured_source
 
 END MODULE cloud_bal_pipeline

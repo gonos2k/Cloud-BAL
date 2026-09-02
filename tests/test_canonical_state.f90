@@ -9,7 +9,6 @@ PROGRAM test_canonical_state
   CALL test_contract(failures)
   CALL test_domain_and_mass_contract(failures)
   CALL test_pressure_cell_geometry(failures)
-  CALL test_transaction(failures)
   CALL test_vertical_conversion(failures)
   CALL test_los_contract(failures)
   IF (failures/=0) THEN
@@ -187,6 +186,17 @@ CONTAINS
     CALL check(.NOT.dynamic_target_has_authority(.TRUE.,0_int32, &
       IOR(SOURCE_CLOUD_ANALYSIS,SOURCE_DYNAMIC_TARGET)), &
       'a dynamic bit without independent wind evidence has no authority',failures)
+    CALL check(.NOT.dynamic_target_has_authority(.TRUE.,0_int32, &
+      IOR(SOURCE_ANALYZED_WIND,IOR(SOURCE_DYNAMIC_TARGET, &
+          SOURCE_MANUFACTURED_TEST))), &
+      'manufactured evidence must never enter observational authority',failures)
+    CALL check(manufactured_target_has_test_authority(.TRUE.,0_int32, &
+      IOR(SOURCE_DYNAMIC_TARGET,SOURCE_MANUFACTURED_TEST)), &
+      'the exact manufactured source pair grants test-only authority',failures)
+    CALL check(.NOT.manufactured_target_has_test_authority(.TRUE.,0_int32, &
+      IOR(SOURCE_ANALYZED_WIND,IOR(SOURCE_DYNAMIC_TARGET, &
+          SOURCE_MANUFACTURED_TEST))), &
+      'test authority must reject mixed observational provenance',failures)
 
     CALL make_valid_state(state)
     DEALLOCATE(state%above_ground)
@@ -305,35 +315,6 @@ CONTAINS
     field%quality(i,j,k)=QUALITY_RAW_MISSING
     field%source(i,j,k)=0_int32
   END SUBROUTINE invalidate_cell
-
-  SUBROUTINE test_transaction(failures)
-    INTEGER, INTENT(INOUT) :: failures
-    TYPE(cloud_bal_state_type) :: original,candidate,published
-    TYPE(stage_result) :: candidate_result,result
-
-    CALL make_valid_state(original)
-    candidate=original
-    candidate%u%value(2,3,2)=8.0_real32
-    CALL initialize_stage_result(candidate_result,4,5,3,STATUS_DEGRADED,REASON_GATE)
-    candidate_result%changed(2,3,2)=.TRUE.
-    CALL commit_candidate(original,candidate,candidate_result,published,result)
-    CALL check(TRANSFER(published%u%value(2,3,2),0_int32)== &
-               TRANSFER(original%u%value(2,3,2),0_int32), &
-               'non-OK candidate must publish exact input',failures)
-
-    candidate_result%status=STATUS_OK
-    candidate_result%reason_code=REASON_GATE
-    CALL commit_candidate(original,candidate,candidate_result,published,result)
-    CALL check(TRANSFER(published%u%value(2,3,2),0_int32)== &
-               TRANSFER(original%u%value(2,3,2),0_int32), &
-               'OK status with a failure reason must publish exact input',failures)
-
-    candidate_result%reason_code=REASON_NONE
-    CALL commit_candidate(original,candidate,candidate_result,published,result)
-    CALL check(TRANSFER(published%u%value(2,3,2),0_int32)== &
-               TRANSFER(8.0_real32,0_int32), &
-               'OK candidate must commit complete work state',failures)
-  END SUBROUTINE test_transaction
 
   SUBROUTINE test_vertical_conversion(failures)
     INTEGER, INTENT(INOUT) :: failures

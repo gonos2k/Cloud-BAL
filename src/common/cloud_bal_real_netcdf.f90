@@ -9,7 +9,8 @@ MODULE cloud_bal_real_netcdf
   USE netcdf
   USE cloud_bal_state
   USE cloud_bal_column_physics, ONLY: column_changed_mask,column_config_valid
-  USE cloud_bal_balance_operator, ONLY: balance_beta_active,boundary_contract_valid
+  USE cloud_bal_balance_operator, ONLY: balance_beta_active,boundary_contract_valid, &
+    TARGET_AUTHORITY_OBSERVATIONAL
   IMPLICIT NONE
   PRIVATE
 
@@ -21,6 +22,7 @@ MODULE cloud_bal_real_netcdf
   REAL(real32), PARAMETER :: MINIMUM_USABLE_DBZ=0.0_real32
 
   PUBLIC :: read_real_shadow_state
+  PUBLIC :: set_real_numerical_test_boundaries
   PUBLIC :: write_shadow_diagnostics
   PUBLIC :: validate_shadow_write_contract
 
@@ -253,6 +255,157 @@ CONTAINS
     status=STATUS_OK; reason=REASON_NONE
   END SUBROUTINE read_real_shadow_state
 
+  SUBROUTINE set_real_numerical_test_boundaries( &
+      state,fsf_before_path,fsf_center_path,fsf_after_path,status,reason)
+    TYPE(cloud_bal_state_type), INTENT(INOUT) :: state
+    CHARACTER(LEN=*), INTENT(IN) :: fsf_before_path,fsf_center_path,fsf_after_path
+    INTEGER, INTENT(OUT) :: status,reason
+    REAL(real32) :: ps_before(NX,NY),ps_center(NX,NY),ps_after(NX,NY)
+    REAL(real32) :: us(NX,NY),vs(NX,NY),bottom_work(NX,NY)
+    LOGICAL :: valid_before(NX,NY),valid_center(NX,NY),valid_after(NX,NY)
+    LOGICAL :: valid_us(NX,NY),valid_vs(NX,NY)
+    REAL(real64) :: dx_before,dy_before,dx_center,dy_center,dx_after,dy_after
+    REAL(real64) :: reftime_before,reftime_center,reftime_after
+    REAL(real64) :: dpdx,dpdy,x_distance,y_distance,omega
+    INTEGER(int64) :: center_time
+    INTEGER :: ncid,local_status,i,j
+
+    status=STATUS_FAILED; reason=REASON_METADATA
+    center_time=state%pressure%valid_time
+    IF (state%grid%nx/=NX .OR. state%grid%ny/=NY .OR. &
+        .NOT.ALLOCATED(state%grid%dx) .OR. .NOT.ALLOCATED(state%grid%dy) .OR. &
+        .NOT.ALLOCATED(state%surface_pressure%value) .OR. &
+        .NOT.ALLOCATED(state%surface_pressure%valid) .OR. &
+        .NOT.ALLOCATED(state%surface_pressure%quality) .OR. &
+        .NOT.ALLOCATED(state%surface_pressure%source)) THEN
+      reason=REASON_SHAPE
+      RETURN
+    END IF
+    IF (ANY(SHAPE(state%grid%dx)/=(/NX,NY/)) .OR. &
+        ANY(SHAPE(state%grid%dy)/=(/NX,NY/)) .OR. &
+        ANY(SHAPE(state%surface_pressure%value)/=(/NX,NY/)) .OR. &
+        ANY(SHAPE(state%surface_pressure%valid)/=(/NX,NY/)) .OR. &
+        ANY(SHAPE(state%surface_pressure%quality)/=(/NX,NY/)) .OR. &
+        ANY(SHAPE(state%surface_pressure%source)/=(/NX,NY/))) THEN
+      reason=REASON_SHAPE
+      RETURN
+    END IF
+    IF (.NOT.boundary_contract_valid(state) .OR. &
+        state%surface_pressure%valid_time/=center_time .OR. &
+        state%surface_pressure%unit/='Pa' .OR. &
+        .NOT.ALL(cell_is_usable(state%surface_pressure%valid, &
+          state%surface_pressure%quality,state%surface_pressure%source))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(state%grid%dx)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%dy)) .OR. &
+        ANY(state%grid%dx<=0.0_real64) .OR. ANY(state%grid%dy<=0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(state%surface_pressure%value)) .OR. &
+        ANY(state%surface_pressure%value<50000.0_real32) .OR. &
+        ANY(state%surface_pressure%value>110000.0_real32)) THEN
+      reason=REASON_RANGE
+      RETURN
+    END IF
+
+    CALL open_surface_file(fsf_before_path,center_time-3600_int64,ncid, &
+                           dx_before,dy_before,local_status)
+    IF (local_status/=STATUS_OK) RETURN
+    CALL read_real2(ncid,'psf','pascals','pa',ps_before,valid_before,local_status)
+    IF (local_status==STATUS_OK .AND. &
+        .NOT.read_scalar(ncid,'reftime',reftime_before)) local_status=STATUS_FAILED
+    CALL close_file(ncid,local_status)
+    IF (local_status/=STATUS_OK) RETURN
+
+    CALL open_surface_file(fsf_center_path,center_time,ncid, &
+                           dx_center,dy_center,local_status)
+    IF (local_status/=STATUS_OK) RETURN
+    CALL read_real2(ncid,'psf','pascals','pa',ps_center,valid_center,local_status)
+    IF (local_status==STATUS_OK) &
+      CALL read_real2(ncid,'usf','meters/second','m/s',us,valid_us,local_status)
+    IF (local_status==STATUS_OK) &
+      CALL read_real2(ncid,'vsf','meters/second','m/s',vs,valid_vs,local_status)
+    IF (local_status==STATUS_OK .AND. &
+        .NOT.read_scalar(ncid,'reftime',reftime_center)) local_status=STATUS_FAILED
+    CALL close_file(ncid,local_status)
+    IF (local_status/=STATUS_OK) RETURN
+
+    CALL open_surface_file(fsf_after_path,center_time+3600_int64,ncid, &
+                           dx_after,dy_after,local_status)
+    IF (local_status/=STATUS_OK) RETURN
+    CALL read_real2(ncid,'psf','pascals','pa',ps_after,valid_after,local_status)
+    IF (local_status==STATUS_OK .AND. &
+        .NOT.read_scalar(ncid,'reftime',reftime_after)) local_status=STATUS_FAILED
+    CALL close_file(ncid,local_status)
+    IF (local_status/=STATUS_OK) RETURN
+
+    IF (.NOT.ALL(valid_before .AND. valid_center .AND. valid_after .AND. &
+                 valid_us .AND. valid_vs)) THEN
+      reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
+    IF (ABS(reftime_before-reftime_center)>0.5_real64 .OR. &
+        ABS(reftime_after-reftime_center)>0.5_real64) RETURN
+    IF (MAX(ABS(dx_before-dx_center),ABS(dx_after-dx_center), &
+            ABS(dy_before-dy_center),ABS(dy_after-dy_center))>1.0e-6_real64 .OR. &
+        ANY(ABS(state%grid%dx-dx_center)>1.0e-6_real64) .OR. &
+        ANY(ABS(state%grid%dy-dy_center)>1.0e-6_real64)) RETURN
+    IF (ANY(ABS(REAL(ps_center,real64)- &
+        REAL(state%surface_pressure%value,real64))>0.5_real64)) RETURN
+    IF (ANY(ps_before<50000.0_real32) .OR. ANY(ps_before>110000.0_real32) .OR. &
+        ANY(ps_center<50000.0_real32) .OR. ANY(ps_center>110000.0_real32) .OR. &
+        ANY(ps_after<50000.0_real32) .OR. ANY(ps_after>110000.0_real32) .OR. &
+        ANY(ABS(us)>100.0_real32) .OR. ANY(ABS(vs)>100.0_real32)) THEN
+      reason=REASON_RANGE
+      RETURN
+    END IF
+
+    DO j=1,NY; DO i=1,NX
+      IF (i==1) THEN
+        x_distance=0.5_real64*(state%grid%dx(i,j)+state%grid%dx(i+1,j))
+        dpdx=(REAL(ps_center(i+1,j),real64)-REAL(ps_center(i,j),real64))/x_distance
+      ELSE IF (i==NX) THEN
+        x_distance=0.5_real64*(state%grid%dx(i-1,j)+state%grid%dx(i,j))
+        dpdx=(REAL(ps_center(i,j),real64)-REAL(ps_center(i-1,j),real64))/x_distance
+      ELSE
+        x_distance=0.5_real64*state%grid%dx(i-1,j)+state%grid%dx(i,j)+ &
+                   0.5_real64*state%grid%dx(i+1,j)
+        dpdx=(REAL(ps_center(i+1,j),real64)-REAL(ps_center(i-1,j),real64))/x_distance
+      END IF
+      IF (j==1) THEN
+        y_distance=0.5_real64*(state%grid%dy(i,j)+state%grid%dy(i,j+1))
+        dpdy=(REAL(ps_center(i,j+1),real64)-REAL(ps_center(i,j),real64))/y_distance
+      ELSE IF (j==NY) THEN
+        y_distance=0.5_real64*(state%grid%dy(i,j-1)+state%grid%dy(i,j))
+        dpdy=(REAL(ps_center(i,j),real64)-REAL(ps_center(i,j-1),real64))/y_distance
+      ELSE
+        y_distance=0.5_real64*state%grid%dy(i,j-1)+state%grid%dy(i,j)+ &
+                   0.5_real64*state%grid%dy(i,j+1)
+        dpdy=(REAL(ps_center(i,j+1),real64)-REAL(ps_center(i,j-1),real64))/y_distance
+      END IF
+      omega=(REAL(ps_after(i,j),real64)-REAL(ps_before(i,j),real64))/7200.0_real64+ &
+            REAL(us(i,j),real64)*dpdx+REAL(vs(i,j),real64)*dpdy
+      IF (.NOT.ieee_is_finite(omega) .OR. ABS(omega)>20.0_real64) THEN
+        reason=REASON_RANGE
+        RETURN
+      END IF
+      bottom_work(i,j)=REAL(omega,real32)
+    END DO; END DO
+
+    state%omega_top_boundary%value=0.0_real32
+    state%omega_bottom_boundary%value=bottom_work
+    state%omega_top_boundary%valid=.TRUE.
+    state%omega_bottom_boundary%valid=.TRUE.
+    state%omega_top_boundary%quality=0_int32
+    state%omega_bottom_boundary%quality=0_int32
+    ! The FSF files do not declare whether USF/VSF are grid-relative or
+    ! earth-relative.  These real-data kinematic boundaries therefore have
+    ! numerical-test authority only; they cannot authorize an observational
+    ! balance target in the normal pipeline.
+    state%omega_top_boundary%source= &
+      IOR(SOURCE_BOUNDARY_CONDITION,SOURCE_MANUFACTURED_TEST)
+    state%omega_bottom_boundary%source= &
+      IOR(SOURCE_BOUNDARY_CONDITION,SOURCE_MANUFACTURED_TEST)
+    status=STATUS_OK; reason=REASON_NONE
+  END SUBROUTINE set_real_numerical_test_boundaries
+
   SUBROUTINE write_shadow_diagnostics(path,state_in,candidate,longitude,result,config, &
                                       residual_before,residual_after,status,operational_state)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config
@@ -308,7 +461,7 @@ CONTAINS
         ANY(longitude < -180.0_real32) .OR. ANY(longitude > 180.0_real32) .OR. &
         ANY(.NOT.ieee_is_finite(residual_before)) .OR. &
         ANY(.NOT.ieee_is_finite(residual_after))) RETURN
-    rc=nf90_create(TRIM(path),IOR(NF90_CLOBBER,NF90_NETCDF4),ncid)
+    rc=nf90_create(TRIM(path),IOR(NF90_NOCLOBBER,NF90_NETCDF4),ncid)
     IF (rc/=NF90_NOERR) RETURN
     IF (.NOT.nc_ok(nf90_def_dim(ncid,'x',nx,xdim)) .OR. &
         .NOT.nc_ok(nf90_def_dim(ncid,'y',ny,ydim)) .OR. &
@@ -511,7 +664,8 @@ CONTAINS
 
     status=STATUS_FAILED; reason=REASON_AUTHORITY
     IF (config%requested_mode/=MODE_SHADOW .OR. &
-        result%requested_mode/=MODE_SHADOW) RETURN
+        result%requested_mode/=MODE_SHADOW .OR. &
+        config%balance%target_authority/=TARGET_AUTHORITY_OBSERVATIONAL) RETURN
     IF (.NOT.column_config_valid(config%column)) THEN
       reason=REASON_RANGE
       RETURN
@@ -602,10 +756,47 @@ CONTAINS
       reason=state_reason
       RETURN
     END IF
+    IF (state_has_manufactured_source(state_in) .OR. &
+        state_has_manufactured_source(candidate) .OR. &
+        state_has_manufactured_source(operational_state)) THEN
+      reason=REASON_AUTHORITY
+      RETURN
+    END IF
     IF (.NOT.candidate_result_is_coherent(state_in,candidate,result)) RETURN
 
     status=STATUS_OK; reason=REASON_NONE
   END SUBROUTINE validate_shadow_write_contract
+
+  LOGICAL FUNCTION state_has_manufactured_source(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER(int32), PARAMETER :: bit=SOURCE_MANUFACTURED_TEST
+    state_has_manufactured_source= &
+      ANY(IAND(state%pressure%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%temperature%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%vapor%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%u%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%v%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%omega%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%omega_target%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%geopotential%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%cloud_fraction%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%radar_reflectivity%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%cloud_type%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%precipitation_phase%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%lightning_support%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%cloud_water%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%cloud_ice%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%rain%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%snow%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%graupel%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%vt_z_mean%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%vt_z_sigma%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%surface_pressure%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%surface_temperature%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%latitude%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%omega_top_boundary%source,bit)/=0_int32) .OR. &
+      ANY(IAND(state%omega_bottom_boundary%source,bit)/=0_int32)
+  END FUNCTION state_has_manufactured_source
 
   LOGICAL FUNCTION pipeline_result_is_coherent(result)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
@@ -1183,7 +1374,7 @@ CONTAINS
     read_scalar=.FALSE.; value=0.0_real64
     IF (.NOT.nc_ok(nf90_inq_varid(ncid,TRIM(name),varid))) RETURN
     SELECT CASE(TRIM(name))
-    CASE('valtime')
+    CASE('valtime','reftime')
       IF (.NOT.variable_layout_is(ncid,varid,NF90_DOUBLE, &
           [CHARACTER(LEN=6) :: 'record']) .OR. &
           .NOT.variable_unit_is(ncid,varid, &

@@ -3,6 +3,8 @@ PROGRAM test_real_shadow_io_contract
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_value,ieee_quiet_nan
   USE cloud_bal_state
   USE cloud_bal_pipeline
+  USE cloud_bal_balance_operator, ONLY: TARGET_AUTHORITY_OBSERVATIONAL, &
+                                        TARGET_AUTHORITY_MANUFACTURED_TEST
   USE cloud_bal_real_netcdf, ONLY: validate_shadow_write_contract, &
                                    write_shadow_diagnostics
   IMPLICIT NONE
@@ -226,6 +228,41 @@ PROGRAM test_real_shadow_io_contract
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA, &
              'real SHADOW writer must reject physical-boundary provenance',failures)
+
+  CALL make_state(input)
+  candidate=input; operational=input
+  config%balance%target_authority=TARGET_AUTHORITY_MANUFACTURED_TEST
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
+             'real SHADOW writer must reject manufactured test mode',failures)
+  config%balance%target_authority=TARGET_AUTHORITY_OBSERVATIONAL
+
+  input%omega_target%source(1,1,1)=SOURCE_MANUFACTURED_TEST
+  candidate=input; operational=input
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
+             'invalid targets cannot carry manufactured provenance',failures)
+
+  CALL make_state(input)
+  input%temperature%source(1,1,1)=IOR(input%temperature%source(1,1,1), &
+                                     SOURCE_MANUFACTURED_TEST)
+  candidate=input; operational=input
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
+             'real SHADOW fields cannot carry manufactured provenance',failures)
+
+  CALL make_state(input)
+  input%omega_top_boundary%source=IOR(SOURCE_ANALYZED_WIND,SOURCE_MANUFACTURED_TEST)
+  input%omega_bottom_boundary%source= &
+    IOR(SOURCE_ANALYZED_WIND,SOURCE_MANUFACTURED_TEST)
+  candidate=input; operational=input
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
+                                      status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
+             'copied boundaries cannot carry manufactured provenance',failures)
 
   CALL make_state(input)
   input%omega_top_boundary%value(1,1)= &

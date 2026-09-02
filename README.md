@@ -89,6 +89,7 @@ The focused real-data evidence commands are:
 tests/run_real_shadow_cases.sh
 tests/run_real_shadow_figures.sh
 tests/run_radar_velocity_audit.sh
+tests/run_real_manufactured_balance_cases.sh
 ```
 
 The real runner requires a clean exact-head tree and the pinned Intel ifx 2026
@@ -96,3 +97,8 @@ binary.  The figure and velocity-audit wrappers verify and pin that committed
 generation before reading it.  The four prepared hours are never filtered by
 outcome.  A failed stage returns the input state and is not published as a
 candidate; its failure reason remains available in the stage result.
+
+The manufactured-balance runner uses the four actual KLAPS geometries and
+Intel ifx to exercise a nonzero solver path.  Its target and pressure-velocity
+boundary are explicitly test-only, and every artifact states science authority
+`NONE`.  See [docs/REAL_GEOMETRY_DYNAMIC_BALANCE.md](docs/REAL_GEOMETRY_DYNAMIC_BALANCE.md).

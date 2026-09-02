@@ -59,11 +59,14 @@ MODULE cloud_bal_state
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_OUTPUT_ADAPTER = ISHFT(1_int32,9)
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_DYNAMIC_TARGET = ISHFT(1_int32,10)
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_BOUNDARY_CONDITION = ISHFT(1_int32,11)
+  ! This bit is never observational authority.  It exists only so numerical
+  ! tests on real geometry cannot be mistaken for assimilated evidence.
+  INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_MANUFACTURED_TEST = ISHFT(1_int32,12)
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_KNOWN_BITS = &
     SOURCE_BACKGROUND_MODEL+SOURCE_CONVENTIONAL_OBS+SOURCE_CLOUD_ANALYSIS+ &
     SOURCE_RADAR_DBZ+SOURCE_RADAR_VRAD+SOURCE_LIGHTNING+SOURCE_ANALYZED_WIND+ &
     SOURCE_COLUMN_PHYSICS+SOURCE_BALANCE_OPERATOR+SOURCE_OUTPUT_ADAPTER+ &
-    SOURCE_DYNAMIC_TARGET+SOURCE_BOUNDARY_CONDITION
+    SOURCE_DYNAMIC_TARGET+SOURCE_BOUNDARY_CONDITION+SOURCE_MANUFACTURED_TEST
   INTEGER(int32), PARAMETER, PUBLIC :: SOURCE_DYNAMIC_EVIDENCE_BITS = &
     SOURCE_CONVENTIONAL_OBS+SOURCE_RADAR_VRAD+SOURCE_ANALYZED_WIND
 
@@ -269,7 +272,6 @@ MODULE cloud_bal_state
   PUBLIC :: read_canonical_state
   PUBLIC :: validate_canonical_state
   PUBLIC :: validate_los_observations
-  PUBLIC :: commit_candidate
   PUBLIC :: reject_candidate
   PUBLIC :: omega_to_w
   PUBLIC :: w_to_omega
@@ -278,6 +280,8 @@ MODULE cloud_bal_state
   PUBLIC :: cell_is_usable
   PUBLIC :: dynamic_target_has_authority
   PUBLIC :: dynamic_target_is_resolved
+  PUBLIC :: manufactured_target_has_test_authority
+  PUBLIC :: manufactured_target_is_resolved
   PUBLIC :: source_bits_known
   PUBLIC :: quality_bits_known
   PUBLIC :: radar_echo_cell
@@ -705,21 +709,6 @@ CONTAINS
     status=STATUS_OK; reason=REASON_NONE
   END SUBROUTINE validate_los_observations
 
-  SUBROUTINE commit_candidate(state_in,candidate,candidate_result,state_out,result)
-    TYPE(cloud_bal_state_type), INTENT(IN) :: state_in,candidate
-    TYPE(stage_result), INTENT(IN) :: candidate_result
-    TYPE(cloud_bal_state_type), INTENT(OUT) :: state_out
-    TYPE(stage_result), INTENT(OUT) :: result
-
-    IF (candidate_result%status == STATUS_OK .AND. &
-        candidate_result%reason_code == REASON_NONE) THEN
-      state_out=candidate
-    ELSE
-      state_out=state_in
-    END IF
-    result=candidate_result
-  END SUBROUTINE commit_candidate
-
   SUBROUTINE reject_candidate(state_in,state_out,result,status,reason)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in
     TYPE(cloud_bal_state_type), INTENT(OUT) :: state_out
@@ -864,6 +853,7 @@ CONTAINS
     INTEGER(int32), INTENT(IN) :: quality,source
     dynamic_target_has_authority=cell_is_usable(valid,quality,source) .AND. &
       IAND(source,SOURCE_DYNAMIC_TARGET)/=0_int32 .AND. &
+      IAND(source,SOURCE_MANUFACTURED_TEST)==0_int32 .AND. &
       IAND(source,SOURCE_DYNAMIC_EVIDENCE_BITS)/=0_int32 .AND. &
       IAND(quality,QUALITY_DYNAMIC_TARGET_EXCLUDED_BITS)==0_int32
   END FUNCTION dynamic_target_has_authority
@@ -878,6 +868,31 @@ CONTAINS
       ABS(target-background)>16.0_real32*EPSILON(1.0_real32)* &
         MAX(1.0_real32,ABS(background))
   END FUNCTION dynamic_target_is_resolved
+
+  PURE ELEMENTAL LOGICAL FUNCTION manufactured_target_has_test_authority( &
+      valid,quality,source)
+    LOGICAL, INTENT(IN) :: valid
+    INTEGER(int32), INTENT(IN) :: quality,source
+    INTEGER(int32), PARAMETER :: required = &
+      IOR(SOURCE_DYNAMIC_TARGET,SOURCE_MANUFACTURED_TEST)
+    manufactured_target_has_test_authority= &
+      cell_is_usable(valid,quality,source) .AND. quality==0_int32 .AND. &
+      IAND(source,required)==required .AND. &
+      IAND(source,SOURCE_DYNAMIC_EVIDENCE_BITS)==0_int32 .AND. &
+      source==required
+  END FUNCTION manufactured_target_has_test_authority
+
+  PURE ELEMENTAL LOGICAL FUNCTION manufactured_target_is_resolved( &
+      target,background,valid,quality,source)
+    REAL(real32), INTENT(IN) :: target,background
+    LOGICAL, INTENT(IN) :: valid
+    INTEGER(int32), INTENT(IN) :: quality,source
+    manufactured_target_is_resolved= &
+      manufactured_target_has_test_authority(valid,quality,source) .AND. &
+      ieee_is_finite(target) .AND. ieee_is_finite(background) .AND. &
+      ABS(target-background)>16.0_real32*EPSILON(1.0_real32)* &
+        MAX(1.0_real32,ABS(background))
+  END FUNCTION manufactured_target_is_resolved
 
   PURE LOGICAL FUNCTION stage_is_ok(status)
     INTEGER, INTENT(IN) :: status

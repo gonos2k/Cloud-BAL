@@ -14,8 +14,11 @@ MODULE cloud_bal_balance_operator
   ! A zero science threshold still must not authorize real32 arithmetic nulls.
   REAL(real64), PARAMETER :: FACE_RESPONSE_ROUNDOFF = &
     64.0_real64*REAL(EPSILON(1.0_real32),real64)
+  INTEGER, PARAMETER, PUBLIC :: TARGET_AUTHORITY_OBSERVATIONAL = 0
+  INTEGER, PARAMETER, PUBLIC :: TARGET_AUTHORITY_MANUFACTURED_TEST = 1
 
   TYPE, PUBLIC :: balance_operator_config
+    INTEGER :: target_authority = TARGET_AUTHORITY_OBSERVATIONAL
     REAL(real64) :: kappa_u = 16.0_real64
     REAL(real64) :: kappa_v = 16.0_real64
     REAL(real64) :: kappa_omega = 0.25_real64
@@ -33,6 +36,7 @@ MODULE cloud_bal_balance_operator
     REAL(real64) :: maximum_omega_increment = 5.0_real64
     REAL(real64) :: minimum_target_response_ratio = 0.05_real64
     REAL(real64) :: maximum_target_response_ratio = 1.50_real64
+    REAL(real64) :: maximum_target_response_failure_fraction = 0.0_real64
     REAL(real64) :: minimum_trust_region_fraction = 0.05_real64
     REAL(real64) :: increment_headroom = 0.95_real64
     REAL(real64) :: geostrophic_relative_tolerance = 0.05_real64
@@ -42,6 +46,7 @@ MODULE cloud_bal_balance_operator
   END TYPE balance_operator_config
 
   TYPE, PUBLIC :: balance_operator_type
+    PRIVATE
     INTEGER :: nx=0,ny=0,nz=0
     LOGICAL, PRIVATE :: physical_boundary_authorized=.FALSE.
     REAL(real64), ALLOCATABLE :: volume(:,:,:)
@@ -62,6 +67,15 @@ MODULE cloud_bal_balance_operator
     INTEGER :: ncomponent=0
   END TYPE balance_operator_type
 
+  ! Read-only copy for tests and diagnostics.  Mutating this view can never
+  ! alter the sealed operator used by a correction.
+  TYPE, PUBLIC :: balance_operator_snapshot
+    INTEGER :: ncomponent=0
+    REAL(real64), ALLOCATABLE :: volume(:,:,:)
+    LOGICAL, ALLOCATABLE :: cell_active(:,:,:)
+    LOGICAL, ALLOCATABLE :: omega_authorized(:,:,:)
+  END TYPE balance_operator_snapshot
+
   PUBLIC :: build_balance_operator
   PUBLIC :: apply_continuity_operator
   PUBLIC :: apply_adjoint_metric
@@ -75,8 +89,23 @@ MODULE cloud_bal_balance_operator
   PUBLIC :: geostrophic_residual
   PUBLIC :: boundary_contract_valid
   PUBLIC :: physical_boundary_contract_valid
+  PUBLIC :: manufactured_boundary_contract_valid
+  PUBLIC :: snapshot_balance_operator
 
 CONTAINS
+
+  SUBROUTINE snapshot_balance_operator(op,snapshot,status)
+    TYPE(balance_operator_type), INTENT(IN) :: op
+    TYPE(balance_operator_snapshot), INTENT(OUT) :: snapshot
+    INTEGER, INTENT(OUT) :: status
+    status=STATUS_FAILED
+    IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
+    snapshot%ncomponent=op%ncomponent
+    snapshot%volume=op%volume
+    snapshot%cell_active=op%cell_active
+    snapshot%omega_authorized=op%omega_authorized
+    status=STATUS_OK
+  END SUBROUTINE snapshot_balance_operator
 
   SUBROUTINE build_balance_operator(state,config,op,status,reason)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
@@ -91,6 +120,20 @@ CONTAINS
     IF (nx<4 .OR. ny<4 .OR. nz<2) RETURN
     IF (.NOT.config_valid(config)) THEN; reason=REASON_RANGE; RETURN; END IF
     IF (.NOT.operator_input_shapes_valid(state)) RETURN
+    IF (config%target_authority==TARGET_AUTHORITY_OBSERVATIONAL .AND. &
+        ANY(IAND(state%omega_target%source, &
+            SOURCE_MANUFACTURED_TEST)/=0_int32)) THEN
+      reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (config%target_authority==TARGET_AUTHORITY_MANUFACTURED_TEST .AND. &
+        ANY(state%omega_target%valid .AND. &
+            .NOT.manufactured_target_has_test_authority( &
+              state%omega_target%valid,state%omega_target%quality, &
+              state%omega_target%source))) THEN
+      reason=REASON_AUTHORITY
+      RETURN
+    END IF
     IF (ANY(.NOT.ieee_is_finite(state%balance_beta)) .OR. &
         ANY(state%balance_beta<0.0_real32) .OR. &
         ANY(state%balance_beta>1.0_real32)) THEN
@@ -108,11 +151,12 @@ CONTAINS
       RETURN
     END IF
     IF (.NOT.boundary_contract_valid(state)) THEN; reason=REASON_METADATA; RETURN; END IF
-    IF (ANY(dynamic_target_is_resolved(state%omega_target%value, &
+    IF (ANY(target_is_resolved(state%omega_target%value, &
             state%omega%value,state%omega_target%valid, &
-            state%omega_target%quality,state%omega_target%source) .AND. &
+            state%omega_target%quality,state%omega_target%source, &
+            config%target_authority) .AND. &
             balance_beta_active(state%balance_beta,config%minimum_beta)) .AND. &
-        .NOT.physical_boundary_contract_valid(state)) THEN
+        .NOT.target_boundary_contract_valid(state,config%target_authority)) THEN
       reason=REASON_AUTHORITY
       RETURN
     END IF
@@ -126,7 +170,8 @@ CONTAINS
       reason=REASON_RANGE; RETURN
     END IF
     op%nx=nx; op%ny=ny; op%nz=nz
-    op%physical_boundary_authorized=physical_boundary_contract_valid(state)
+    op%physical_boundary_authorized= &
+      target_boundary_contract_valid(state,config%target_authority)
     ALLOCATE(op%volume(nx,ny,nz),op%dx(nx,ny),op%dy(nx,ny), &
              op%cell_dp(nx,ny,nz), &
              op%ku(nx,ny,nz),op%kv(nx,ny,nz),op%ko(nx,ny,nz), &
@@ -149,9 +194,10 @@ CONTAINS
       cell_is_usable(state%omega%valid,state%omega%quality,state%omega%source)
     op%cell_active=op%cell_usable .AND. &
                    balance_beta_active(state%balance_beta,config%minimum_beta)
-    op%omega_authorized=op%cell_active .AND. dynamic_target_is_resolved( &
+    op%omega_authorized=op%cell_active .AND. target_is_resolved( &
       state%omega_target%value,state%omega%value,state%omega_target%valid, &
-      state%omega_target%quality,state%omega_target%source)
+      state%omega_target%quality,state%omega_target%source, &
+      config%target_authority)
     IF (ANY(op%cell_active .AND. &
         (.NOT.ieee_is_finite(state%pressure%value) .OR. &
          .NOT.ieee_is_finite(state%u%value) .OR. &
@@ -350,6 +396,7 @@ CONTAINS
     REAL(real64), INTENT(IN) :: lambda(:,:,:)
     REAL(real64), INTENT(OUT) :: du(:,:,:),dv(:,:,:),domega(:,:,:)
     INTEGER, INTENT(OUT) :: status
+    du=0.0_real64; dv=0.0_real64; domega=0.0_real64
     status=STATUS_FAILED
     IF (.NOT.op%physical_boundary_authorized) RETURN
     CALL apply_adjoint_metric(op,lambda,du,dv,domega,status)
@@ -427,29 +474,53 @@ CONTAINS
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_RANGE)
       RETURN
     END IF
+    IF (cfg%target_authority==TARGET_AUTHORITY_OBSERVATIONAL .AND. &
+        ANY(IAND(state_in%omega_target%source, &
+            SOURCE_MANUFACTURED_TEST)/=0_int32)) THEN
+      CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+      RETURN
+    END IF
+    IF (cfg%target_authority==TARGET_AUTHORITY_OBSERVATIONAL .AND. &
+        (ANY(IAND(state_in%omega_top_boundary%source, &
+                  SOURCE_MANUFACTURED_TEST)/=0_int32) .OR. &
+         ANY(IAND(state_in%omega_bottom_boundary%source, &
+                  SOURCE_MANUFACTURED_TEST)/=0_int32))) THEN
+      CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+      RETURN
+    END IF
+    IF (cfg%target_authority==TARGET_AUTHORITY_MANUFACTURED_TEST .AND. &
+        ANY(state_in%omega_target%valid .AND. &
+            .NOT.manufactured_target_has_test_authority( &
+              state_in%omega_target%valid,state_in%omega_target%quality, &
+              state_in%omega_target%source))) THEN
+      CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+      RETURN
+    END IF
     IF (state_in%grid%nx<4 .OR. state_in%grid%ny<4 .OR. &
         state_in%grid%nz<2) THEN
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_SHAPE)
       RETURN
     END IF
-    has_resolved_target=ANY(dynamic_target_is_resolved(state_in%omega_target%value, &
+    has_resolved_target=ANY(target_is_resolved(state_in%omega_target%value, &
       state_in%omega%value,state_in%omega_target%valid, &
-      state_in%omega_target%quality,state_in%omega_target%source))
+      state_in%omega_target%quality,state_in%omega_target%source, &
+      cfg%target_authority))
     IF (.NOT.has_resolved_target) THEN
       state_out=state_in
       CALL initialize_stage_result(result,state_in%grid%nx,state_in%grid%ny, &
                                    state_in%grid%nz,STATUS_OK,REASON_NONE)
       RETURN
     END IF
-    IF (.NOT.ANY(dynamic_target_is_resolved(state_in%omega_target%value, &
+    IF (.NOT.ANY(target_is_resolved(state_in%omega_target%value, &
                  state_in%omega%value,state_in%omega_target%valid, &
-                 state_in%omega_target%quality,state_in%omega_target%source) .AND. &
+                 state_in%omega_target%quality,state_in%omega_target%source, &
+                 cfg%target_authority) .AND. &
                  balance_beta_active(state_in%balance_beta,cfg%minimum_beta))) THEN
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
       RETURN
     END IF
     IF (boundary_contract_valid(state_in) .AND. &
-        .NOT.physical_boundary_contract_valid(state_in)) THEN
+        .NOT.target_boundary_contract_valid(state_in,cfg%target_authority)) THEN
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
       RETURN
     END IF
@@ -614,7 +685,9 @@ CONTAINS
       result%reason_code=REASON_GATE
       RETURN
     END IF
-    CALL commit_candidate(state_in,candidate,candidate_result,state_out,result)
+    ! Only this stage can publish the candidate after every balance gate passes.
+    state_out=candidate
+    result=candidate_result
   END SUBROUTINE apply_localized_balance
 
   SUBROUTINE make_candidate(input,op,target,candidate,du,dv,domega_correction, &
@@ -715,7 +788,7 @@ CONTAINS
       failures=IOR(failures,GATE_WIND_INCREMENT)
     IF (max_omega>cfg%maximum_omega_increment) &
       failures=IOR(failures,GATE_OMEGA_INCREMENT)
-    IF (response_failure_fraction>0.0_real64) &
+    IF (response_failure_fraction>cfg%maximum_target_response_failure_fraction) &
       failures=IOR(failures,GATE_TARGET_RESPONSE)
     IF (target_fraction<cfg%minimum_trust_region_fraction) &
       failures=IOR(failures,GATE_TARGET_FRACTION)
@@ -866,8 +939,8 @@ CONTAINS
     CALL apply_normal_operator_work(op,lambda,l_lambda,work_u,work_v,work_o,status)
     IF (status/=STATUS_OK) RETURN
     residual=b-l_lambda
-    CALL continuity_norms(op,residual,rms_value,max_value)
     CALL remove_component_means(op,residual)
+    CALL continuity_norms(op,residual,rms_value,max_value)
   END SUBROUTINE refresh_true_residual
 
   PURE LOGICAL FUNCTION solver_residual_converged(rms_value,max_value, &
@@ -1677,15 +1750,56 @@ CONTAINS
     physical_boundary_contract_valid=boundary_contract_valid(state)
     IF (.NOT.physical_boundary_contract_valid) RETURN
     physical_boundary_contract_valid= &
-      .NOT.ANY(IAND(state%omega_top_boundary%quality, &
-                    QUALITY_BOUNDARY_INTERIOR_COPY)/=0_int32) .AND. &
-      .NOT.ANY(IAND(state%omega_bottom_boundary%quality, &
-                    QUALITY_BOUNDARY_INTERIOR_COPY)/=0_int32) .AND. &
-      ALL(IAND(state%omega_top_boundary%source, &
-               SOURCE_BOUNDARY_CONDITION)/=0_int32) .AND. &
-      ALL(IAND(state%omega_bottom_boundary%source, &
-               SOURCE_BOUNDARY_CONDITION)/=0_int32)
+      ALL(state%omega_top_boundary%quality==0_int32) .AND. &
+      ALL(state%omega_bottom_boundary%quality==0_int32) .AND. &
+      ALL(state%omega_top_boundary%source==SOURCE_BOUNDARY_CONDITION) .AND. &
+      ALL(state%omega_bottom_boundary%source==SOURCE_BOUNDARY_CONDITION)
   END FUNCTION physical_boundary_contract_valid
+
+  PURE LOGICAL FUNCTION manufactured_boundary_contract_valid(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER(int32), PARAMETER :: expected_source = &
+      IOR(SOURCE_BOUNDARY_CONDITION,SOURCE_MANUFACTURED_TEST)
+    manufactured_boundary_contract_valid=boundary_contract_valid(state)
+    IF (.NOT.manufactured_boundary_contract_valid) RETURN
+    manufactured_boundary_contract_valid= &
+      ALL(state%omega_top_boundary%quality==0_int32) .AND. &
+      ALL(state%omega_bottom_boundary%quality==0_int32) .AND. &
+      ALL(state%omega_top_boundary%value==0.0_real32) .AND. &
+      ALL(state%omega_top_boundary%source==expected_source) .AND. &
+      ALL(state%omega_bottom_boundary%source==expected_source)
+  END FUNCTION manufactured_boundary_contract_valid
+
+  PURE LOGICAL FUNCTION target_boundary_contract_valid(state,authority)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: authority
+    SELECT CASE(authority)
+    CASE(TARGET_AUTHORITY_OBSERVATIONAL)
+      target_boundary_contract_valid=physical_boundary_contract_valid(state)
+    CASE(TARGET_AUTHORITY_MANUFACTURED_TEST)
+      target_boundary_contract_valid=manufactured_boundary_contract_valid(state)
+    CASE DEFAULT
+      target_boundary_contract_valid=.FALSE.
+    END SELECT
+  END FUNCTION target_boundary_contract_valid
+
+  PURE ELEMENTAL LOGICAL FUNCTION target_is_resolved( &
+      target,background,valid,quality,source,authority)
+    REAL(real32), INTENT(IN) :: target,background
+    LOGICAL, INTENT(IN) :: valid
+    INTEGER(int32), INTENT(IN) :: quality,source
+    INTEGER, INTENT(IN) :: authority
+    SELECT CASE(authority)
+    CASE(TARGET_AUTHORITY_OBSERVATIONAL)
+      target_is_resolved=dynamic_target_is_resolved( &
+        target,background,valid,quality,source)
+    CASE(TARGET_AUTHORITY_MANUFACTURED_TEST)
+      target_is_resolved=manufactured_target_is_resolved( &
+        target,background,valid,quality,source)
+    CASE DEFAULT
+      target_is_resolved=.FALSE.
+    END SELECT
+  END FUNCTION target_is_resolved
 
   PURE LOGICAL FUNCTION operator_array_shapes_valid(op,u,v,omega,residual)
     TYPE(balance_operator_type), INTENT(IN) :: op
@@ -1707,7 +1821,9 @@ CONTAINS
 
   PURE LOGICAL FUNCTION config_valid(config)
     TYPE(balance_operator_config), INTENT(IN) :: config
-    config_valid=ieee_is_finite(config%kappa_u) .AND. config%kappa_u>0.0_real64 .AND. &
+    config_valid=(config%target_authority==TARGET_AUTHORITY_OBSERVATIONAL .OR. &
+      config%target_authority==TARGET_AUTHORITY_MANUFACTURED_TEST) .AND. &
+      ieee_is_finite(config%kappa_u) .AND. config%kappa_u>0.0_real64 .AND. &
       ieee_is_finite(config%kappa_v) .AND. config%kappa_v>0.0_real64 .AND. &
       ieee_is_finite(config%kappa_omega) .AND. config%kappa_omega>0.0_real64 .AND. &
       ieee_is_finite(config%minimum_beta) .AND. config%minimum_beta>0.0_real64 .AND. &
@@ -1737,6 +1853,9 @@ CONTAINS
       config%minimum_target_response_ratio>=0.0_real64 .AND. &
       ieee_is_finite(config%maximum_target_response_ratio) .AND. &
       config%maximum_target_response_ratio>=config%minimum_target_response_ratio .AND. &
+      ieee_is_finite(config%maximum_target_response_failure_fraction) .AND. &
+      config%maximum_target_response_failure_fraction>=0.0_real64 .AND. &
+      config%maximum_target_response_failure_fraction<=1.0_real64 .AND. &
       ieee_is_finite(config%minimum_trust_region_fraction) .AND. &
       config%minimum_trust_region_fraction>0.0_real64 .AND. &
       config%minimum_trust_region_fraction<=1.0_real64 .AND. &

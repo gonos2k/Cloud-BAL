@@ -288,7 +288,9 @@ CONTAINS
     input_water=hydrometeor_mass(state_in)
     output_water=hydrometeor_mass(candidate)
     candidate_result%numerical%radar_analysis_increment=output_water-input_water
-    CALL commit_candidate(state_in,candidate,candidate_result,state_out,result)
+    ! Only this stage can publish the candidate after all column gates pass.
+    state_out=candidate
+    result=candidate_result
   END SUBROUTINE derive_column_physics
 
   SUBROUTINE detect_cloud_sublayers(cloud_type,cloud_fraction,valid,threshold, &

@@ -152,6 +152,7 @@ CONTAINS
     INTEGER, INTENT(INOUT) :: failures
     TYPE(cloud_bal_state_type) :: input
     TYPE(balance_operator_type) :: op
+    TYPE(balance_operator_snapshot) :: view
     TYPE(balance_operator_config) :: cfg
     REAL(real64), ALLOCATABLE :: lambda(:,:,:),du(:,:,:),dv(:,:,:),domega(:,:,:)
     REAL(real64), ALLOCATABLE :: divergence(:,:,:),normal(:,:,:)
@@ -162,6 +163,7 @@ CONTAINS
     CALL authorize_target(input,3,3,3,0.08_real32)
     CALL permissive_config(cfg)
     CALL build_balance_operator(input,cfg,op,status,reason)
+    CALL snapshot_balance_operator(op,view,status)
     ALLOCATE(lambda(6,5,4),du(6,5,4),dv(6,5,4),domega(6,5,4), &
              divergence(6,5,4),normal(6,5,4))
     DO k=1,4; DO j=1,5; DO i=1,6
@@ -169,13 +171,13 @@ CONTAINS
     END DO; END DO; END DO
     CALL apply_balance_correction(op,lambda,du,dv,domega,status)
     CALL check(status==STATUS_OK .AND. &
-               ALL(domega==0.0_real64 .OR. op%omega_authorized), &
+               ALL(domega==0.0_real64 .OR. view%omega_authorized), &
       'partial-authority correction must not create unauthorized omega',failures)
     CALL apply_continuity_operator(op,du,dv,domega,divergence,status)
     CALL apply_normal_operator(op,lambda,normal,status)
-    scale=MAX(MAXVAL(ABS(normal),MASK=op%cell_active),1.0e-30_real64)
-    error=MAXVAL(ABS(normal+divergence),MASK=op%cell_active)/scale
-    quadratic=SUM(op%volume*lambda*normal,MASK=op%cell_active)
+    scale=MAX(MAXVAL(ABS(normal),MASK=view%cell_active),1.0e-30_real64)
+    error=MAXVAL(ABS(normal+divergence),MASK=view%cell_active)/scale
+    quadratic=SUM(view%volume*lambda*normal,MASK=view%cell_active)
     CALL check(status==STATUS_OK .AND. error<5.0e-13_real64, &
       'partial-authority L must equal minus divergence of correction',failures)
     CALL check(quadratic>=-1.0e-12_real64*MAX(1.0_real64,ABS(quadratic)), &

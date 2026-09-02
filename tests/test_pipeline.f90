@@ -2,6 +2,8 @@ PROGRAM test_pipeline
   USE, INTRINSIC :: iso_fortran_env,ONLY: real32,real64,int32,int64
   USE cloud_bal_state
   USE cloud_bal_column_physics,ONLY: derive_column_physics
+  USE cloud_bal_balance_operator,ONLY: TARGET_AUTHORITY_OBSERVATIONAL, &
+    TARGET_AUTHORITY_MANUFACTURED_TEST
   USE cloud_bal_pipeline
   IMPLICIT NONE
   TYPE(cloud_bal_state_type) :: input,candidate,operational,column_candidate
@@ -102,6 +104,41 @@ PROGRAM test_pipeline
   CALL check(same_pipeline_state(input,operational), &
              'authority rejection must rollback',failures)
 
+  config%requested_mode=MODE_SHADOW
+  config%balance%target_authority=TARGET_AUTHORITY_MANUFACTURED_TEST
+  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL check(result%status==STATUS_FAILED .AND. &
+             result%reason_code==REASON_AUTHORITY .AND. &
+             same_pipeline_state(input,operational), &
+    'manufactured authority must never enter the normal pipeline',failures)
+  config%balance%target_authority=TARGET_AUTHORITY_OBSERVATIONAL
+
+  CALL make_state(input)
+  input%omega_top_boundary%source= &
+    IOR(SOURCE_BOUNDARY_CONDITION,SOURCE_MANUFACTURED_TEST)
+  input%omega_bottom_boundary%source= &
+    IOR(SOURCE_BOUNDARY_CONDITION,SOURCE_MANUFACTURED_TEST)
+  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL check(result%status==STATUS_FAILED .AND. &
+             result%reason_code==REASON_AUTHORITY .AND. &
+             same_pipeline_state(input,operational), &
+    'manufactured boundaries must never enter the normal pipeline',failures)
+
+  CALL make_state(input)
+  input%omega_target%source(2,2,2)=SOURCE_MANUFACTURED_TEST
+  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL check(result%status==STATUS_FAILED .AND. &
+             result%reason_code==REASON_AUTHORITY .AND. &
+             same_pipeline_state(input,operational), &
+    'invalid target cells cannot carry manufactured provenance',failures)
+
+  CALL make_state(input)
+  DEALLOCATE(input%omega_target%source)
+  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_SHAPE, &
+    'malformed target provenance storage must fail without array conformability',failures)
+
+  CALL make_state(input)
   input%precipitation_phase%valid(2,2,3)=.TRUE.
   input%precipitation_phase%quality(2,2,3)=0_int32
   input%precipitation_phase%source(2,2,3)=SOURCE_CLOUD_ANALYSIS
