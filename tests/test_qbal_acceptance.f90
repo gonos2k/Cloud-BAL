@@ -4,9 +4,12 @@ PROGRAM test_qbal_acceptance
   INTEGER, PARAMETER :: nx=2,ny=2,nz=1
   INTEGER :: failures,status
   EXTERNAL :: qbal_increment_maxima,qbal_candidate_acceptance
+  LOGICAL, EXTERNAL :: background_omega_complete
   REAL :: u0(nx,ny,nz),v0(nx,ny,nz),om0(nx,ny,nz)
   REAL :: u1(nx,ny,nz),v1(nx,ny,nz),om1(nx,ny,nz)
   REAL :: influence(nx,ny,nz),maxwind,maxomega,nan_value
+  REAL :: ps(nx,ny),p(nz)
+  LOGICAL :: om_valid(nx,ny,nz)
 
   failures=0
   u0=0.0; v0=0.0; om0=0.0
@@ -53,6 +56,19 @@ PROGRAM test_qbal_acceptance
   CALL accept(9.0,4.0,1.0E-4,2.0E-4,4.0E-4,8.0E-4, &
        nan_value,1.5E-4,1.0E-2,1.05E-2,status)
   CALL check(status==0,'non-finite metric must fail closed',failures)
+
+  ps=90000.0; p=80000.0; om_valid=.TRUE.
+  CALL check(background_omega_complete(om_valid,ps,p,nx,ny,nz), &
+       'complete above-ground background omega must pass',failures)
+  om_valid(1,1,1)=.FALSE.
+  CALL check(.NOT.background_omega_complete(om_valid,ps,p,nx,ny,nz), &
+       'missing above-ground background omega must fail',failures)
+  p=100000.0
+  CALL check(background_omega_complete(om_valid,ps,p,nx,ny,nz), &
+       'below-ground background omega may remain invalid',failures)
+  ps(1,1)=nan_value
+  CALL check(.NOT.background_omega_complete(om_valid,ps,p,nx,ny,nz), &
+       'non-finite surface pressure must fail the omega domain',failures)
 
   IF (failures/=0) THEN
     PRINT *,'QBAL acceptance tests failed:',failures

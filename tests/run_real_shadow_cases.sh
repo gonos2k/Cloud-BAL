@@ -3,7 +3,12 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(cd "$repo_root/.." && pwd)
+workspace_lexical=$(realpath -ms "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
+workspace_root=$(realpath -e "$workspace_lexical")
+[[ $workspace_root == "$workspace_lexical" ]] || {
+  printf 'workspace root cannot contain a symlink: %s\n' "$workspace_lexical" >&2
+  exit 2
+}
 . "$repo_root/tests/output_safety.sh"
 manifest=$repo_root/tests/qbal_real_cases_20260816.tsv
 publication_root=$(cloud_bal_output_under \

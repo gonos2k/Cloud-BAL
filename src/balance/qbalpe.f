@@ -136,6 +136,7 @@ c
       logical larray_diag/.false./
       logical frstone,lastone
       logical l_dum
+      logical background_omega_complete
       logical, allocatable :: omb_valid(:,:,:),omo_valid(:,:,:)
       integer istat_bg(6),nvalid_omb,nvalid_omo,istat_omo
       real*4 delo_min,delo_max,tau_min,tau_max
@@ -304,6 +305,11 @@ c
 c     Preserve background omega validity before a numeric fallback is chosen.
       allocate(omb_valid(nx,ny,nz),omo_valid(nx,ny,nz))
       omb_valid=ieee_is_finite(omb).and.abs(omb).le.100.
+      if(.not.background_omega_complete(omb_valid,psb,p,
+     &                                  nx,ny,nz))then
+         print*,'incomplete background omega; balance rejected'
+         goto 999
+      endif
 c
 c *** Get LAPS 3D analysis grids.
 c
@@ -2553,6 +2559,33 @@ c One fail-closed acceptance contract for balance and AIRDROP candidates.
          return
       endif
       istatus=1
+      return
+      end
+c
+c ---------------------------------------------------------------
+c
+      logical function background_omega_complete(valid,ps,p,
+     &                                           nx,ny,nz)
+c Require background omega at every above-ground pressure-grid cell.
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      implicit none
+      integer nx,ny,nz,i,j,k
+      logical valid(nx,ny,nz)
+      real*4 ps(nx,ny),p(nz)
+
+      background_omega_complete=.false.
+      if(nx.lt.1.or.ny.lt.1.or.nz.lt.1)return
+      if(any(.not.ieee_is_finite(ps)))return
+      if(any(.not.ieee_is_finite(p)))return
+      if(any(ps.le.0.).or.any(p.le.0.))return
+      do k=1,nz
+       do j=1,ny
+        do i=1,nx
+         if(ps(i,j).ge.p(k).and..not.valid(i,j,k))return
+        enddo
+       enddo
+      enddo
+      background_omega_complete=.true.
       return
       end
 c

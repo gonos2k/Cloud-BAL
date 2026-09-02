@@ -1,5 +1,6 @@
 PROGRAM test_column_physics
   USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64,int32,int64
+  USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_value,ieee_quiet_nan
   USE cloud_bal_state
   USE cloud_bal_column_physics
   IMPLICIT NONE
@@ -228,6 +229,43 @@ CONTAINS
                                       rain,snow,graupel,cfg,ledger,status)
     CALL check(status==STATUS_FAILED, &
                'nonuniform trajectory grid must fail until physical transport exists',failures)
+
+    grid%dx=2000.0_real64
+    cfg%maximum_horizontal_substep=0.0_real64
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'invalid transport config must fail',failures)
+    cfg%maximum_horizontal_substep=0.75_real64
+
+    domain(2,2,3)=.FALSE.
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED, &
+               'below-ground source hydrometeor must fail',failures)
+    domain=.TRUE.; u=0.0_real32
+    snow(2,2,3)=rain(2,2,3)
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED, &
+               'explicit phase and hydrometeor species must agree',failures)
+    snow=0.0_real64
+
+    cfg%maximum_dbz=ieee_value(0.0_real64,ieee_quiet_nan)
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'non-finite transport config must fail',failures)
+    cfg%maximum_dbz=80.0_real64
+
+    p(2,2,3)=ieee_value(0.0_real32,ieee_quiet_nan)
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'non-finite transport input must fail',failures)
+    p(2,2,3)=65000.0_real32
+
+    DEALLOCATE(grid%dp)
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_FAILED,'malformed transport dp must fail',failures)
   END SUBROUTINE test_flux_ledgers
 
   SUBROUTINE test_column_stage(failures)
