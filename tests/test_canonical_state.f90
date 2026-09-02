@@ -187,6 +187,12 @@ CONTAINS
     CALL check(.NOT.dynamic_target_has_authority(.TRUE.,0_int32, &
       IOR(SOURCE_CLOUD_ANALYSIS,SOURCE_DYNAMIC_TARGET)), &
       'a dynamic bit without independent wind evidence has no authority',failures)
+
+    CALL make_valid_state(state)
+    DEALLOCATE(state%above_ground)
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_SHAPE, &
+      'missing domain mask must fail before field indexing',failures)
   END SUBROUTINE test_domain_and_mass_contract
 
   SUBROUTINE invalidate_cell(field,i,j,k)

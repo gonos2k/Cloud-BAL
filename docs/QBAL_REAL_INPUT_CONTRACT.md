@@ -84,8 +84,9 @@ For the preserved operational shell, the legacy cloud-profile environment is
 `CT=1.3`, `CU=0.5`, `SC=0.10`, and `ST=0.017`
 (`klps_lc05_anal_all_ajob.csh:222-225`).  These values are provenance for the
 legacy comparison, not default scientific authority for the new method.
-`deriv.nl` sets `MODE_EVAP=0` and `L_BOGUS_RADAR_W=.false.`; the dormant radar
-evaporation/bogus-w path stays disabled.
+`deriv.nl` sets `MODE_EVAP=0` and `L_BOGUS_RADAR_W=.false.`; this disables the
+radar-specific `rfill_evap/get_radar_deriv` path only. The operational empirical
+cloud bogus-W path remains separately BLOCKED until the linked source is replaced.
 
 The direct COM producer has a wider read gate than the abbreviated shell
 comment.  `laps_deriv.f:128-225`, `laps_deriv_sub.f:438-534`, and

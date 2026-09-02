@@ -2,7 +2,12 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(cd "$repo_root/.." && pwd)
+workspace_lexical=$(realpath -ms "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
+workspace_root=$(realpath -e "$workspace_lexical")
+[[ $workspace_root == "$workspace_lexical" ]] || {
+  printf 'workspace root cannot contain a symlink: %s\n' "$workspace_lexical" >&2
+  exit 2
+}
 mkdir -p "$repo_root/scratch"
 report=$(mktemp "$repo_root/scratch/qbal_input_inventory.XXXXXX.json")
 trap 'rm -f "$report"' EXIT

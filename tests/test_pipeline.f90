@@ -8,6 +8,7 @@ PROGRAM test_pipeline
   TYPE(cloud_bal_pipeline_config) :: config
   TYPE(cloud_bal_pipeline_result) :: result
   INTEGER :: failures,status
+  REAL(real64) :: saved_minimum_target_response_ratio
 
   failures=0
   CALL make_state(input)
@@ -63,6 +64,20 @@ PROGRAM test_pipeline
              'an explicit trusted dynamic target must reach the solver',failures)
   CALL check(same_pipeline_state(input,operational), &
              'trusted SHADOW target still cannot change operational state',failures)
+
+  saved_minimum_target_response_ratio=config%balance%minimum_target_response_ratio
+  config%balance%minimum_target_response_ratio=0.50_real64
+  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL check(result%status==STATUS_DEGRADED, &
+             'rejected balance must report degraded status',failures)
+  CALL check(same_pipeline_state(input,candidate) .AND. &
+             same_pipeline_state(input,operational), &
+             'rejected balance must publish the original state',failures)
+  CALL check(.NOT.ANY(result%column%changed) .AND. &
+             .NOT.ANY(result%balance%changed) .AND. &
+             .NOT.ANY(result%overall%changed), &
+             'rejected balance must clear all change masks',failures)
+  config%balance%minimum_target_response_ratio=saved_minimum_target_response_ratio
 
   CALL make_state(input)
   input%above_ground(:,:,1)=.FALSE.

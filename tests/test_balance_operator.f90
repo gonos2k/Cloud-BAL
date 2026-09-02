@@ -303,6 +303,14 @@ CONTAINS
     CALL check(result%numerical%max_wind_increment<=cfg%maximum_wind_increment .AND. &
                result%numerical%max_omega_increment<=cfg%maximum_omega_increment, &
                'scaled candidate must satisfy both increment limits',failures)
+    CALL check(ALL(TRANSFER(output%omega_target%value,[0_int32], &
+                           SIZE(output%omega_target%value))== &
+                   TRANSFER(input%omega_target%value,[0_int32], &
+                           SIZE(input%omega_target%value))) .AND. &
+               ALL(output%omega_target%valid .EQV. input%omega_target%valid) .AND. &
+               ALL(output%omega_target%quality==input%omega_target%quality) .AND. &
+               ALL(output%omega_target%source==input%omega_target%source), &
+               'balance must preserve the requested omega target',failures)
     actual_maximum=0.0_real64
     DO k=1,input%grid%nz; DO j=1,input%grid%ny; DO i=1,input%grid%nx
       actual_maximum=MAX(actual_maximum,HYPOT( &

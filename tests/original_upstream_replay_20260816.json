@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "contract": "original_klaps_upstream_replay_plan_v1",
+  "source_tree": "klaps-v5.0_",
+  "source_tree_path": "klaps-v5.0_/src",
+  "compiler_family": "Intel",
+  "case_manifest_sha256": "b6dba2f813773b09261280b5b865636594071b95957789f9aab1495ad2b4f29f",
+  "sandbox_probe": {
+    "executable": "/usr/bin/bwrap",
+    "executable_sha256": "52231e1caf55bcbc667b269f49c63599a6f7db4767ae6a039580d0ff853db712",
+    "payload": "/usr/bin/true",
+    "payload_sha256": "b860051e15938770f4164177f2fc2d4e1af26b226c9b0c3ea75a36d1be33a3cf"
+  },
+  "environment": {
+    "GA_REF_THRESH": "25.0",
+    "GA_VV_FOR_ST": "0.017",
+    "GA_VV_TO_HEIGHT_RATIO_CT": "1.3",
+    "GA_VV_TO_HEIGHT_RATIO_CU": "0.5",
+    "GA_VV_TO_HEIGHT_RATIO_SC": "0.10",
+    "KMP_DETERMINISTIC_REDUCTION": "yes",
+    "OMP_DYNAMIC": "false",
+    "OMP_MAX_ACTIVE_LEVELS": "1"
+  },
+  "global_blockers": [
+    "DECLARED_RUNTIME_LIBRARY_CLOSURE_MISSING",
+    "LEGACY_STAGE_SUCCESS_VALIDATORS_MISSING",
+    "SOURCE_TO_EXECUTABLE_BUILD_BINDING_UNPROVEN"
+  ],
+  "assets": [
+    {
+      "role": "static_grid",
+      "path": "ANAL/NE57/DABA/static.nest7grid",
+      "sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b"
+    },
+    {
+      "role": "grid_configuration_template",
+      "path": "ANAL/NE57/DABA/namelist/nest7grid.parms",
+      "sha256": "ad70f80fb4050a8a14a2b48e725c00f16480977c9e5f4ec3f8904ee72f9430c2"
+    },
+    {
+      "role": "pressure_configuration",
+      "path": "ANAL/NE57/DABA/namelist/pressures.nl",
+      "sha256": "a02a5e18c39cfaa505d3f52cbf1ec9366ca9f91dc24508fdd0167d3f7ebd014f"
+    },
+    {
+      "role": "background_configuration",
+      "path": "ANAL/NE57/DABA/namelist/background.nl",
+      "sha256": "5cc1361c2cce28e384aff83ba13288ea0d1bb27d0ce78496cacb5dd82f23adc5"
+    },
+    {
+      "role": "wind_configuration",
+      "path": "ANAL/NE57/DABA/namelist/wind.nl",
+      "sha256": "bde8352780ed4d5a2ed76d03364b3482fab0df2de0dd4615a25671a17dfdc3fc"
+    },
+    {
+      "role": "surface_configuration",
+      "path": "ANAL/NE57/DABA/namelist/surface_analysis.nl",
+      "sha256": "725b1c8f6464a9a1e5a2e044ea81c44b5a196f4c576038af2707bb09a80cb107"
+    },
+    {
+      "role": "surface_drag_table",
+      "path": "ANAL/NE57/DABA/drag_coef.dat",
+      "sha256": "23491568233312621169f2a0daff42557fd4fce4f20cff0995615801fcc73bf5"
+    },
+    {
+      "role": "temperature_configuration",
+      "path": "ANAL/NE57/DABA/namelist/temp.nl",
+      "sha256": "45eac0501e268d10506f6cafb74c0ee2064ea64da8bc86184af1cecbd4f60b90"
+    },
+    {
+      "role": "cloud_configuration",
+      "path": "ANAL/NE57/DABA/namelist/cloud.nl",
+      "sha256": "faccd9c7b6d0465edd5c11cff9b0c2cf3265040560c0c8bc6e3af253c43155d2"
+    },
+    {
+      "role": "satellite_configuration_template",
+      "path": "ANAL/NE57/DABA/namelist/satellite_lvd.nl",
+      "sha256": "68b13e15aa6d8401354da773c6f5eaa62d4f0f6a65393b8306dcc0b58cbd0815"
+    },
+    {
+      "role": "humidity_configuration_template",
+      "path": "ANAL/NE57/DABA/namelist/moisture_switch.nl",
+      "sha256": "33e5392d012a37af6bc9606bc092c1be41627f29baba9c4b04dc8991fa3ab6f7"
+    },
+    {
+      "role": "humidity_lookup_table",
+      "path": "ANAL/NE57/DABA/pfcgim8.dat",
+      "sha256": "cfae9c8b8bcf812ab5e9877e7528c0a075fe816dfe989ea0be155b4780752a99"
+    },
+    {
+      "role": "derived_configuration",
+      "path": "ANAL/NE57/DABA/namelist/deriv.nl",
+      "sha256": "3cd8b73816cd9a208fecd793cc9a9e7101cbe2b0c5208874a1ac23a4dd5cd072"
+    },
+    {
+      "role": "thetae_lookup_table",
+      "path": "ANAL/NE57/DABA/thetae_lut.dat",
+      "sha256": "ea9d0320a6abdb075f7ff2d01fdcb4c4b172825f977a0a0d5bd1ae3f12dbe80c"
+    },
+    {
+      "role": "temperature_lookup_table",
+      "path": "ANAL/NE57/DABA/tmlaps_lut.dat",
+      "sha256": "591b06bf3bc1434d47de10352616f67f3fdb2d2e7887cac9732054e027290dd9"
+    }
+  ],
+  "stages": [
+    {
+      "id": "wind_analysis",
+      "executable": "klaps-v5.0_/src/wind_openmp/klps_anal_wind_openmp.exe",
+      "executable_sha256": "c1187cbf519ec4e86b4387160393406ac3db88a43ba81ae03426b8484cd38852",
+      "product": "lw3",
+      "closure_blockers": [
+        "WIND_OBSERVATION_CLOSURE_UNDECLARED"
+      ]
+    },
+    {
+      "id": "surface_analysis",
+      "executable": "klaps-v5.0_/bin/klps_anal_lsfc.exe",
+      "executable_sha256": "924b184de9731bc2b37acdb851dfcfb8165d1f484054291636fbe5735fe0f6c6",
+      "product": "lsx",
+      "closure_blockers": [
+        "SURFACE_OBSERVATION_CLOSURE_UNDECLARED"
+      ]
+    },
+    {
+      "id": "vrt_complete_gate",
+      "product": null,
+      "closure_blockers": []
+    },
+    {
+      "id": "temperature_analysis",
+      "executable": "klaps-v5.0_/bin/klps_anal_temp.exe",
+      "executable_sha256": "22efc66583d820dc92fbe6f5b06078bf8d769c6862c71d97ec5d8b016e62ba74",
+      "product": "lt1",
+      "closure_blockers": [
+        "PREVIOUS_TIME_LSX_POLICY_UNDECLARED"
+      ]
+    },
+    {
+      "id": "cloud_analysis",
+      "executable": "klaps-v5.0_/bin/klps_anal_clod.exe",
+      "executable_sha256": "c6e16ec1e3f88df753177dd18daece35ce4d82b181ea968269a4c5b7591c36a0",
+      "product": null,
+      "closure_blockers": [
+        "CDL_GOESLIB_SATELLITE_PREVIOUS_LM2_CLOSURE_UNDECLARED"
+      ]
+    },
+    {
+      "id": "humidity_analysis",
+      "executable": "klaps-v5.0_/bin/klps_anal_humd.exe",
+      "executable_sha256": "9879da304679ecd71f64030dd16358c09a2d7cdaa1680972b38dd9747dd2b803",
+      "product": "lq3",
+      "closure_blockers": [
+        "HUMIDITY_OBSERVATION_CLOSURE_UNDECLARED"
+      ]
+    },
+    {
+      "id": "derived_cloud_analysis",
+      "executable": "klaps-v5.0_/bin/klps_anal_derv.exe",
+      "executable_sha256": "75580100b3ecdf15857468531f62dfec9a051f40b381ecb2758d859e10ce6731",
+      "product": "lco",
+      "closure_blockers": [
+        "DERIVED_CLOUD_LIGHTNING_LSO_LPS_CLOSURE_UNDECLARED"
+      ]
+    }
+  ]
+}

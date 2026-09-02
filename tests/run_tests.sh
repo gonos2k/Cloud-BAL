@@ -9,6 +9,7 @@ cd "$build_dir"
 
 "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
   -module "$build_dir" -I "$build_dir" \
+  "$repo_dir/src/common/cloud_bal_grid_geometry.f90" \
   "$repo_dir/src/common/cloud_bal_field_contracts.f90" \
   "$repo_dir/src/common/cloud_bal_moisture.f90" \
   "$repo_dir/src/common/cloud_bal_cloud_profiles.f90" \
@@ -32,6 +33,16 @@ cd "$build_dir"
 if ! grep -Fq 'if(.false. .and. l_evap_radar)then' \
   "$repo_dir/src/deriv/laps_deriv_sub.f"; then
   echo 'FAIL: dormant radar evaporation is not compile-time locked OFF' >&2
+  exit 1
+fi
+if ! grep -Fq '.false.,w_3d,istatus)' \
+  "$repo_dir/src/deriv/laps_deriv_sub.f" || \
+   ! grep -Fq 'w_3d = r_missing_data' "$repo_dir/src/deriv/laps_deriv_sub.f" || \
+   ! grep -Fq 'if(.false. .and. l_bogus_radar_w)' \
+  "$repo_dir/src/deriv/laps_deriv_sub.f" || \
+   ! grep -Fq 'j_status(n_lco) = sys_no_data' \
+  "$repo_dir/src/deriv/laps_deriv_sub.f"; then
+  echo 'FAIL: disabled cloud/radar W can still claim valid COM authority' >&2
   exit 1
 fi
 

@@ -466,6 +466,20 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             ),
             "radar threshold",
         )
+        inactive_radar = ~radar
+        require(
+            np.all(
+                ~inactive_radar
+                | ~above
+                | (fields["radar_dbz"] == -10.0)
+                | (fields["radar_dbz"] == 0.0)
+            ),
+            "inactive above-ground radar marker",
+        )
+        require(
+            np.all(above | (fields["radar_dbz"] == 0.0)),
+            "below-ground radar marker",
+        )
 
         balance_changed = np.zeros(above.shape, dtype=bool)
         for component in ("u", "v", "omega"):
@@ -800,7 +814,7 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         changed_dbz = fields["radar_dbz"][balance_changed]
         changed_beta = fields["balance_beta"][balance_changed]
         summary = {
-            "path": str(path.resolve()),
+            "path": path.name,
             "sha256": sha256(path),
             "standalone_provenance": "UNBOUND_REQUIRES_COMMITTED_GENERATION",
             "validation_scope": "NUMERICAL_CONTENT_ONLY",
@@ -854,7 +868,7 @@ def main() -> int:
     except Exception as error:
         failures = [f"{type(error).__name__}: {error}"]
         summary = {
-            "path": str(args.diagnostic.resolve()),
+            "path": args.diagnostic.name,
             "standalone_provenance": "UNBOUND_REQUIRES_COMMITTED_GENERATION",
             "validation_scope": "NUMERICAL_CONTENT_ONLY",
             "numerical_decision": "INVALID",

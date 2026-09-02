@@ -1,6 +1,8 @@
 ! Compact observational support for cloud/precipitation balance increments.
 MODULE cloud_bal_localization
+  USE, INTRINSIC :: iso_fortran_env,ONLY: real64
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
+  USE cloud_bal_grid_geometry,ONLY: bounded_grid_radius,cumulative_horizontal_distance
   IMPLICIT NONE
   PRIVATE
 
@@ -31,8 +33,11 @@ CONTAINS
     INTEGER, INTENT(OUT) :: status
     INTEGER :: nx, ny, nz, i, j, k, io, jo, ko, irad, jrad
     INTEGER :: imin, imax, jmin, jmax
-    REAL :: minimum_dx, minimum_dy, local_dx, local_dy
+    REAL :: minimum_dx, minimum_dy
     REAL :: horizontal_distance, pressure_distance, radius, kernel
+    REAL(real64) :: horizontal_distance64
+    REAL(real64), ALLOCATABLE :: dx64(:,:),dy64(:,:)
+    LOGICAL :: distance_ok,radius_ok
 
     status = 0
     influence = 0.0
@@ -58,8 +63,15 @@ CONTAINS
 
     minimum_dx = MINVAL(dx)
     minimum_dy = MINVAL(dy)
-    irad = MIN(nx-1, CEILING(horizontal_radius_m/minimum_dx))
-    jrad = MIN(ny-1, CEILING(horizontal_radius_m/minimum_dy))
+    CALL bounded_grid_radius(REAL(horizontal_radius_m,real64), &
+      REAL(minimum_dx,real64),nx-1,irad,radius_ok)
+    IF (.NOT.radius_ok) RETURN
+    CALL bounded_grid_radius(REAL(horizontal_radius_m,real64), &
+      REAL(minimum_dy,real64),ny-1,jrad,radius_ok)
+    IF (.NOT.radius_ok) RETURN
+    ALLOCATE(dx64(nx,ny),dy64(nx,ny))
+    dx64=REAL(dx,real64)
+    dy64=REAL(dy,real64)
 
     DO ko = 1, nz
       DO jo = 1, ny
@@ -74,10 +86,14 @@ CONTAINS
             IF (pressure_distance >= pressure_radius_pa) CYCLE
             DO j = jmin, jmax
               DO i = imin, imax
-                local_dx = 0.5*(dx(i,j)+dx(io,jo))
-                local_dy = 0.5*(dy(i,j)+dy(io,jo))
-                horizontal_distance = SQRT(((i-io)*local_dx)**2 + &
-                                                   ((j-jo)*local_dy)**2)
+                CALL cumulative_horizontal_distance(dx64,dy64,i,j,io,jo, &
+                                                    horizontal_distance64,distance_ok)
+                IF (.NOT.distance_ok) THEN
+                  influence = 0.0
+                  status = 0
+                  RETURN
+                END IF
+                horizontal_distance=REAL(horizontal_distance64)
                 IF (horizontal_distance >= horizontal_radius_m) CYCLE
                 radius = SQRT((horizontal_distance/horizontal_radius_m)**2 + &
                               (pressure_distance/pressure_radius_pa)**2)

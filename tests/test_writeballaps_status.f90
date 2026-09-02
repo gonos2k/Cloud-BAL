@@ -9,6 +9,7 @@ PROGRAM test_writeballaps_status
   REAL :: phi(2,2,2),u(2,2,2),v(2,2,2),t(2,2,2),omega(2,2,2)
   REAL :: rh(2,2,2),sh(2,2,2),p(2)
   INTEGER :: status,point
+  EXTERNAL :: write_bal_laps
 
   phi=1.0; u=1.0; v=1.0; t=280.0; omega=0.0
   rh=50.0; sh=0.005; p=(/50000.0,85000.0/)

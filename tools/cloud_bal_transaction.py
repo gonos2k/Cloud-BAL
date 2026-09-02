@@ -165,8 +165,13 @@ def _product_inventory(root: Path) -> set[str]:
 
 
 def _validate_context(context: object, transaction_id: str) -> dict:
+    expected_keys = {
+        "schema", "transaction_id", "products", "source_commit",
+        "configuration", "valid_time", "expected_current",
+    }
     if not isinstance(context, dict) or context.get("schema") != 1 or \
-            context.get("transaction_id") != transaction_id:
+            context.get("transaction_id") != transaction_id or \
+            set(context) != expected_keys:
         raise TransactionError("transaction context identity is invalid")
     products = context.get("products")
     if not isinstance(products, list) or not products or \
@@ -382,24 +387,24 @@ def _verify_generation(generation: Path, expected_id: str) -> Path:
         raise TransactionError("generation identity is invalid")
     marker_path = generation / _COMMITTED
     manifest_path = generation / _MANIFEST
+    context_path = generation / _CONTEXT
     if marker_path.is_symlink() or manifest_path.is_symlink() or \
-            not marker_path.is_file() or not manifest_path.is_file() or \
+            context_path.is_symlink() or not marker_path.is_file() or \
+            not manifest_path.is_file() or not context_path.is_file() or \
             marker_path.stat(follow_symlinks=False).st_nlink != 1 or \
-            manifest_path.stat(follow_symlinks=False).st_nlink != 1:
+            manifest_path.stat(follow_symlinks=False).st_nlink != 1 or \
+            context_path.stat(follow_symlinks=False).st_nlink != 1:
         raise TransactionError("generation is not complete")
     try:
         marker = marker_path.read_text(encoding="ascii").strip()
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        context = json.loads(context_path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise TransactionError("generation metadata is invalid") from exc
     if marker != generation.name or manifest.get("schema") != 1 or \
        manifest.get("transaction_id") != generation.name:
         raise TransactionError("generation identity mismatch")
-    _validate_context(
-        {**manifest, "products": [item.get("path") for item in manifest.get("products", [])
-                                  if isinstance(item, dict)]},
-        generation.name,
-    )
+    context = _validate_context(context, generation.name)
     records = manifest.get("products")
     if not isinstance(records, list) or not records:
         raise TransactionError("generation product manifest is empty")
@@ -420,6 +425,12 @@ def _verify_generation(generation: Path, expected_id: str) -> Path:
            not isinstance(size, int) or size < 0 or path.stat().st_size != size or \
            not re.fullmatch(r"[0-9a-f]{64}", digest) or _sha256(path) != digest:
             raise TransactionError(f"generation product failed verification: {product}")
+    manifest_context = {
+        name: manifest.get(name) for name in context if name != "products"
+    }
+    manifest_context["products"] = sorted(declared)
+    if manifest_context != context or set(manifest) != set(context) | {"committed_utc"}:
+        raise TransactionError("generation manifest differs from transaction context")
     actual = _product_inventory(generation)
     if actual != declared:
         raise TransactionError("generation contains undeclared or missing products")

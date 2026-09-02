@@ -23,6 +23,10 @@ MODULE cloud_bal_column_physics
   REAL(real64), PARAMETER :: LV=2.50e6_real64
   REAL(real64), PARAMETER :: LF=3.34e5_real64
   REAL(real64), PARAMETER :: LS=LV+LF
+  REAL(real64), PARAMETER :: MISSING_PHASE_ALL_SNOW_K=268.15_real64
+  REAL(real64), PARAMETER :: MISSING_PHASE_ALL_RAIN_K=275.15_real64
+  INTEGER, PARAMETER :: MAX_ALLOWED_TRANSPORT_SUBSTEPS=256
+  REAL(real64), PARAMETER :: MAX_LEDGER_TOLERANCE=1.0e-6_real64
 
   TYPE, PUBLIC :: column_physics_config
     REAL(real64) :: cloud_fraction_threshold=0.01_real64
@@ -52,9 +56,11 @@ MODULE cloud_bal_column_physics
   END TYPE precipitation_flux_ledger
 
   PUBLIC :: derive_column_physics
+  PUBLIC :: column_changed_mask
   PUBLIC :: detect_cloud_sublayers
   PUBLIC :: terminal_velocity
   PUBLIC :: allocate_precipitation_phase
+  PUBLIC :: missing_phase_partition
   PUBLIC :: transport_precipitation_flux
   PUBLIC :: dry_air_density
   PUBLIC :: saturation_adjust_cell
@@ -400,7 +406,9 @@ CONTAINS
         phase_uncertain(i,j,k)=IAND(state%precipitation_phase%quality(i,j,k), &
           IOR(QUALITY_PHASE_UNCERTAIN,QUALITY_BRIGHT_BAND_OR_MIXED))/=0_int32
       ELSE
-        phase(i,j,k)=temperature_phase(REAL(state%temperature%value(i,j,k),real64))
+        ! Temperature supplies a continuous uncertain partition below; it is
+        ! not an observed phase code and must remain explicitly unknown.
+        phase(i,j,k)=PHASE_UNKNOWN
         phase_uncertain(i,j,k)=.TRUE.
       END IF
       rho_d=dry_air_density(REAL(state%pressure%value(i,j,k),real64), &
@@ -434,15 +442,28 @@ CONTAINS
     TYPE(precipitation_flux_ledger), INTENT(OUT) :: ledger
     INTEGER, INTENT(OUT) :: status
     INTEGER :: i,j,k,phase_code,nphase
+    INTEGER, ALLOCATABLE :: phase_work(:,:,:)
     REAL(real64), ALLOCATABLE :: deposited_rate(:,:),deposited_zrate(:,:)
     REAL(real64), ALLOCATABLE :: phase_rate(:,:),phase_zrate(:,:)
+    REAL(real64), ALLOCATABLE :: zlinear_work(:,:,:),rain_work(:,:,:)
+    REAL(real64), ALLOCATABLE :: snow_work(:,:,:),graupel_work(:,:,:)
 
     ledger=precipitation_flux_ledger(); status=STATUS_FAILED
+    IF (.NOT.column_config_valid(cfg)) RETURN
     IF (.NOT.transport_shapes_valid(grid,pressure,temperature,vapor,u,v,w,w_valid,domain, &
                                     observed,phase,zlinear,rain,snow,graupel)) RETURN
+    IF (.NOT.transport_values_valid(grid,pressure,temperature,vapor,u,v,w,domain, &
+                                    phase,zlinear,rain,snow,graupel,cfg)) RETURN
     IF (ANY(observed .AND. .NOT.w_valid)) RETURN
-    ALLOCATE(deposited_rate(grid%nx,grid%ny),deposited_zrate(grid%nx,grid%ny), &
+    ALLOCATE(phase_work(grid%nx,grid%ny,grid%nz), &
+             zlinear_work(grid%nx,grid%ny,grid%nz), &
+             rain_work(grid%nx,grid%ny,grid%nz), &
+             snow_work(grid%nx,grid%ny,grid%nz), &
+             graupel_work(grid%nx,grid%ny,grid%nz), &
+             deposited_rate(grid%nx,grid%ny),deposited_zrate(grid%nx,grid%ny), &
              phase_rate(grid%nx,grid%ny),phase_zrate(grid%nx,grid%ny))
+    phase_work=phase; zlinear_work=zlinear
+    rain_work=rain; snow_work=snow; graupel_work=graupel
     DO k=grid%nz,2,-1
       deposited_rate=0.0_real64; deposited_zrate=0.0_real64
       DO phase_code=PHASE_RAIN,PHASE_GRAUPEL
@@ -450,13 +471,16 @@ CONTAINS
         SELECT CASE(phase_code)
         CASE(PHASE_RAIN)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            domain,observed,k,phase_code,zlinear,rain,cfg,ledger,phase_rate,phase_zrate,status)
+            domain,observed,k,phase_code,zlinear_work,rain_work,cfg,ledger, &
+            phase_rate,phase_zrate,status)
         CASE(PHASE_SNOW)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            domain,observed,k,phase_code,zlinear,snow,cfg,ledger,phase_rate,phase_zrate,status)
+            domain,observed,k,phase_code,zlinear_work,snow_work,cfg,ledger, &
+            phase_rate,phase_zrate,status)
         CASE(PHASE_GRAUPEL)
           CALL transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
-            domain,observed,k,phase_code,zlinear,graupel,cfg,ledger,phase_rate,phase_zrate,status)
+            domain,observed,k,phase_code,zlinear_work,graupel_work,cfg,ledger, &
+            phase_rate,phase_zrate,status)
         END SELECT
         IF (status/=STATUS_OK) RETURN
         deposited_rate=deposited_rate+phase_rate
@@ -464,24 +488,35 @@ CONTAINS
       END DO
       DO j=1,grid%ny; DO i=1,grid%nx
         IF (deposited_rate(i,j)>0.0_real64 .AND. .NOT.observed(i,j,k-1)) THEN
-          zlinear(i,j,k-1)=deposited_zrate(i,j)/deposited_rate(i,j)
-          nphase=MERGE(1,0,rain(i,j,k-1)>0.0_real64)+ &
-                 MERGE(1,0,snow(i,j,k-1)>0.0_real64)+ &
-                 MERGE(1,0,graupel(i,j,k-1)>0.0_real64)
+          zlinear_work(i,j,k-1)=deposited_zrate(i,j)/deposited_rate(i,j)
+          nphase=MERGE(1,0,rain_work(i,j,k-1)>0.0_real64)+ &
+                 MERGE(1,0,snow_work(i,j,k-1)>0.0_real64)+ &
+                 MERGE(1,0,graupel_work(i,j,k-1)>0.0_real64)
           IF (nphase/=1) THEN
-            phase(i,j,k-1)=PHASE_UNKNOWN
-          ELSE IF (rain(i,j,k-1)>0.0_real64) THEN
-            phase(i,j,k-1)=PHASE_RAIN
-          ELSE IF (snow(i,j,k-1)>0.0_real64) THEN
-            phase(i,j,k-1)=PHASE_SNOW
+            phase_work(i,j,k-1)=PHASE_UNKNOWN
+          ELSE IF (rain_work(i,j,k-1)>0.0_real64) THEN
+            phase_work(i,j,k-1)=PHASE_RAIN
+          ELSE IF (snow_work(i,j,k-1)>0.0_real64) THEN
+            phase_work(i,j,k-1)=PHASE_SNOW
           ELSE
-            phase(i,j,k-1)=PHASE_GRAUPEL
+            phase_work(i,j,k-1)=PHASE_GRAUPEL
           END IF
         END IF
       END DO; END DO
     END DO
-    CALL account_bottom_flux(grid,pressure,temperature,vapor,w,w_valid,rain,snow, &
-                             graupel,zlinear,cfg,ledger,status)
+    CALL account_bottom_flux(grid,pressure,temperature,vapor,w,w_valid,rain_work, &
+                             snow_work,graupel_work,zlinear_work,cfg,ledger,status)
+    IF (status/=STATUS_OK) RETURN
+    IF (.NOT.flux_ledger_closes(ledger,cfg)) THEN
+      status=STATUS_FAILED; RETURN
+    END IF
+    IF (.NOT.transport_values_valid(grid,pressure,temperature,vapor,u,v,w,domain, &
+                                    phase_work,zlinear_work,rain_work,snow_work, &
+                                    graupel_work,cfg)) THEN
+      status=STATUS_FAILED; RETURN
+    END IF
+    phase=phase_work; zlinear=zlinear_work
+    rain=rain_work; snow=snow_work; graupel=graupel_work
   END SUBROUTINE transport_precipitation_flux
 
   SUBROUTINE transport_phase_level(grid,pressure,temperature,vapor,u,v,w,w_valid, &
@@ -542,6 +577,9 @@ CONTAINS
     END DO; END DO
     input_level=SUM(flux); ledger%input=ledger%input+input_level
     IF (input_level<=0.0_real64) THEN; status=STATUS_OK; RETURN; END IF
+    IF (.NOT.ieee_is_finite(max_displacement)) RETURN
+    IF (max_displacement>cfg%maximum_horizontal_substep* &
+                         REAL(cfg%maximum_transport_substeps,real64)) RETURN
     nsub=MAX(1,CEILING(max_displacement/cfg%maximum_horizontal_substep))
     ledger%maximum_required_substeps=MAX(ledger%maximum_required_substeps,nsub)
     IF (nsub>cfg%maximum_transport_substeps) RETURN
@@ -852,10 +890,11 @@ CONTAINS
     INTEGER, INTENT(IN) :: phase
     REAL(real64), INTENT(OUT) :: rain,snow,graupel
     INTEGER, INTENT(OUT) :: status
-    REAL(real64) :: liquid,graupel_fraction
+    REAL(real64) :: rain_fraction,snow_fraction,graupel_fraction
+    INTEGER :: partition_status
     rain=0.0_real64; snow=0.0_real64; graupel=0.0_real64; status=STATUS_FAILED
-    IF (.NOT.ieee_is_finite(total) .OR. total<0.0_real64 .OR. &
-        .NOT.ieee_is_finite(temperature) .OR. temperature<150.0_real64 .OR. &
+    IF (.NOT.ieee_is_finite(total) .OR. .NOT.ieee_is_finite(temperature)) RETURN
+    IF (total<0.0_real64 .OR. temperature<150.0_real64 .OR. &
         temperature>350.0_real64) RETURN
     SELECT CASE(phase)
     CASE(PHASE_RAIN); rain=total
@@ -864,9 +903,12 @@ CONTAINS
     CASE(PHASE_SLEET); snow=0.50_real64*total; graupel=total-snow
     CASE(PHASE_GRAUPEL); graupel=total
     CASE(PHASE_UNKNOWN)
-      liquid=MIN(1.0_real64,MAX(0.0_real64,(temperature-263.15_real64)/10.0_real64))
-      graupel_fraction=0.20_real64*(1.0_real64-liquid)
-      rain=liquid*total; graupel=graupel_fraction*total; snow=total-rain-graupel
+      CALL missing_phase_partition(temperature,rain_fraction,snow_fraction, &
+                                   graupel_fraction,partition_status)
+      IF (partition_status/=STATUS_OK) RETURN
+      rain=rain_fraction*total
+      graupel=graupel_fraction*total
+      snow=total-rain-graupel
     CASE DEFAULT
       RETURN
     END SELECT
@@ -875,34 +917,81 @@ CONTAINS
     status=STATUS_OK
   END SUBROUTINE allocate_precipitation_phase
 
+  PURE SUBROUTINE missing_phase_partition(temperature,rain_fraction,snow_fraction, &
+                                          graupel_fraction,status)
+    REAL(real64), INTENT(IN) :: temperature
+    REAL(real64), INTENT(OUT) :: rain_fraction,snow_fraction,graupel_fraction
+    INTEGER, INTENT(OUT) :: status
+    REAL(real64) :: scaled,liquid
+
+    rain_fraction=0.0_real64
+    snow_fraction=0.0_real64
+    graupel_fraction=0.0_real64
+    status=STATUS_FAILED
+    IF (.NOT.ieee_is_finite(temperature)) RETURN
+    IF (temperature<150.0_real64 .OR. temperature>350.0_real64) RETURN
+
+    ! Missing phase remains an uncertain thermodynamic fallback.  The former
+    ! all-snow and all-rain bounds define one C1-continuous transition; the
+    ! smoothstep avoids a trajectory jump at either bound.  Temperature alone
+    ! provides no evidence for riming, so it cannot manufacture graupel.
+    scaled=MIN(1.0_real64,MAX(0.0_real64, &
+      (temperature-MISSING_PHASE_ALL_SNOW_K)/ &
+      (MISSING_PHASE_ALL_RAIN_K-MISSING_PHASE_ALL_SNOW_K)))
+    liquid=scaled*scaled*(3.0_real64-2.0_real64*scaled)
+    rain_fraction=liquid
+    snow_fraction=1.0_real64-liquid
+    status=STATUS_OK
+  END SUBROUTINE missing_phase_partition
+
   REAL(real64) FUNCTION terminal_velocity(phase,pressure_pa,temperature_k,dbz,status)
     INTEGER, INTENT(IN) :: phase
     REAL(real64), INTENT(IN) :: pressure_pa,temperature_k,dbz
     INTEGER, INTENT(OUT) :: status
-    REAL(real64) :: z,density_ratio,base
+    REAL(real64) :: z,density_ratio,rain_speed,snow_speed,graupel_speed
+    REAL(real64) :: rain_fraction,snow_fraction,graupel_fraction
+    INTEGER :: partition_status
     status=STATUS_FAILED; terminal_velocity=0.0_real64
-    IF (.NOT.ieee_is_finite(pressure_pa) .OR. pressure_pa<=100.0_real64 .OR. &
-        .NOT.ieee_is_finite(temperature_k) .OR. temperature_k<=150.0_real64 .OR. &
-        .NOT.ieee_is_finite(dbz) .OR. dbz< -100.0_real64 .OR. dbz>100.0_real64) RETURN
+    IF (.NOT.ieee_is_finite(pressure_pa) .OR. &
+        .NOT.ieee_is_finite(temperature_k) .OR. .NOT.ieee_is_finite(dbz)) RETURN
+    IF (pressure_pa<=100.0_real64 .OR. temperature_k<=150.0_real64 .OR. &
+        temperature_k>350.0_real64 .OR. dbz< -100.0_real64 .OR. &
+        dbz>100.0_real64) RETURN
     z=10.0_real64**(0.1_real64*dbz)
+    density_ratio=(pressure_pa/101300.0_real64)*(273.15_real64/temperature_k)
+    rain_speed=bounded_terminal_speed( &
+      4.32_real64*z**(1.0_real64/14.0_real64),density_ratio)
+    snow_speed=bounded_terminal_speed( &
+      MIN(2.5_real64,0.80_real64+0.12_real64*z**0.10_real64),density_ratio)
+    graupel_speed=bounded_terminal_speed( &
+      MIN(15.0_real64,7.0_real64+0.30_real64*z**0.08_real64),density_ratio)
     SELECT CASE(phase)
     CASE(PHASE_RAIN,PHASE_FREEZING_RAIN,PHASE_SLEET)
-      base=4.32_real64*z**(1.0_real64/14.0_real64)
+      terminal_velocity=rain_speed
     CASE(PHASE_SNOW)
-      base=MIN(2.5_real64,0.80_real64+0.12_real64*z**0.10_real64)
+      terminal_velocity=snow_speed
     CASE(PHASE_GRAUPEL)
-      base=MIN(15.0_real64,7.0_real64+0.30_real64*z**0.08_real64)
+      terminal_velocity=graupel_speed
+    CASE(PHASE_UNKNOWN)
+      CALL missing_phase_partition(temperature_k,rain_fraction,snow_fraction, &
+                                   graupel_fraction,partition_status)
+      IF (partition_status/=STATUS_OK) RETURN
+      terminal_velocity=rain_fraction*rain_speed+snow_fraction*snow_speed+ &
+                        graupel_fraction*graupel_speed
     CASE DEFAULT
       RETURN
     END SELECT
-    density_ratio=(pressure_pa/101300.0_real64)*(273.15_real64/temperature_k)
-    terminal_velocity=MIN(20.0_real64,MAX(0.1_real64,base/SQRT(MAX( &
-      density_ratio,1.0e-4_real64))))
     IF (.NOT.ieee_is_finite(terminal_velocity)) THEN
       terminal_velocity=0.0_real64; RETURN
     END IF
     status=STATUS_OK
   END FUNCTION terminal_velocity
+
+  PURE REAL(real64) FUNCTION bounded_terminal_speed(base,density_ratio)
+    REAL(real64), INTENT(IN) :: base,density_ratio
+    bounded_terminal_speed=MIN(20.0_real64,MAX(0.1_real64, &
+      base/SQRT(MAX(density_ratio,1.0e-4_real64))))
+  END FUNCTION bounded_terminal_speed
 
   SUBROUTINE saturation_adjust_cell(pressure,temperature,vapor,cloud_liquid, &
                                     cloud_ice,target_rh,status)
@@ -1095,17 +1184,6 @@ CONTAINS
     is_convective_type=cloud_type==3_int32 .OR. cloud_type==10_int32 .OR. &
                        cloud_type==11_int32
   END FUNCTION is_convective_type
-
-  PURE INTEGER FUNCTION temperature_phase(temperature)
-    REAL(real64), INTENT(IN) :: temperature
-    IF (temperature>=275.15_real64) THEN
-      temperature_phase=PHASE_RAIN
-    ELSE IF (temperature<=268.15_real64) THEN
-      temperature_phase=PHASE_SNOW
-    ELSE
-      temperature_phase=PHASE_UNKNOWN
-    END IF
-  END FUNCTION temperature_phase
 
   SUBROUTINE validate_optional_cloud_pair(state,present,status,reason)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
@@ -1334,6 +1412,8 @@ CONTAINS
     INTEGER, INTENT(IN) :: phase(:,:,:)
     REAL(real64), INTENT(IN) :: zlinear(:,:,:),rain(:,:,:),snow(:,:,:),graupel(:,:,:)
     INTEGER :: target(3)
+    transport_shapes_valid=.FALSE.
+    IF (grid%nx<1 .OR. grid%ny<1 .OR. grid%nz<2) RETURN
     target=(/grid%nx,grid%ny,grid%nz/)
     transport_shapes_valid=ALL(SHAPE(pressure)==target) .AND. &
       ALL(SHAPE(temperature)==target) .AND. ALL(SHAPE(vapor)==target) .AND. &
@@ -1345,33 +1425,113 @@ CONTAINS
       ALL(SHAPE(graupel)==target)
   END FUNCTION transport_shapes_valid
 
+  PURE LOGICAL FUNCTION transport_values_valid(grid,pressure,temperature,vapor,u,v,w, &
+    domain,phase,zlinear,rain,snow,graupel,cfg)
+    TYPE(grid_spec), INTENT(IN) :: grid
+    REAL(real32), INTENT(IN) :: pressure(:,:,:),temperature(:,:,:),vapor(:,:,:)
+    REAL(real32), INTENT(IN) :: u(:,:,:),v(:,:,:),w(:,:,:)
+    LOGICAL, INTENT(IN) :: domain(:,:,:)
+    INTEGER, INTENT(IN) :: phase(:,:,:)
+    REAL(real64), INTENT(IN) :: zlinear(:,:,:),rain(:,:,:),snow(:,:,:),graupel(:,:,:)
+    TYPE(column_physics_config), INTENT(IN) :: cfg
+    REAL(real64) :: dx_tolerance,dy_tolerance,maximum_zlinear
+
+    transport_values_valid=.FALSE.
+    IF (grid%nx<1 .OR. grid%ny<1 .OR. grid%nz<2) RETURN
+    IF (.NOT.ALLOCATED(grid%dx) .OR. .NOT.ALLOCATED(grid%dy) .OR. &
+        .NOT.ALLOCATED(grid%dp)) RETURN
+    IF (ANY(SHAPE(grid%dx)/=(/grid%nx,grid%ny/)) .OR. &
+        ANY(SHAPE(grid%dy)/=(/grid%nx,grid%ny/)) .OR. &
+        ANY(SHAPE(grid%dp)/=(/grid%nx,grid%ny,grid%nz/))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(grid%dx)) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%dy)) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%dp))) RETURN
+    IF (ANY(grid%dx<1.0_real64) .OR. ANY(grid%dx>1.0e6_real64) .OR. &
+        ANY(grid%dy<1.0_real64) .OR. ANY(grid%dy>1.0e6_real64) .OR. &
+        ANY(grid%dp<=0.0_real64) .OR. ANY(grid%dp>120000.0_real64)) RETURN
+    dx_tolerance=64.0_real64*EPSILON(1.0_real64)*ABS(grid%dx(1,1))
+    dy_tolerance=64.0_real64*EPSILON(1.0_real64)*ABS(grid%dy(1,1))
+    ! The trajectory kernel advances in grid-index coordinates.  Reject a
+    ! nonuniform mesh until transport is implemented in physical coordinates.
+    IF (ANY(ABS(grid%dx-grid%dx(1,1))>dx_tolerance) .OR. &
+        ANY(ABS(grid%dy-grid%dy(1,1))>dy_tolerance)) RETURN
+    IF (ANY(.NOT.ieee_is_finite(pressure)) .OR. &
+        ANY(.NOT.ieee_is_finite(temperature)) .OR. &
+        ANY(.NOT.ieee_is_finite(vapor)) .OR. ANY(.NOT.ieee_is_finite(u)) .OR. &
+        ANY(.NOT.ieee_is_finite(v)) .OR. ANY(.NOT.ieee_is_finite(w))) RETURN
+    IF (ANY(domain .AND. (pressure<100.0_real32 .OR. pressure>120000.0_real32)) .OR. &
+        ANY(domain .AND. (temperature<150.0_real32 .OR. &
+                          temperature>350.0_real32)) .OR. &
+        ANY(domain .AND. (vapor<0.0_real32 .OR. vapor>0.2_real32)) .OR. &
+        ANY(domain .AND. (ABS(u)>200.0_real32 .OR. ABS(v)>200.0_real32 .OR. &
+                          ABS(w)>200.0_real32))) RETURN
+    IF (ANY(pressure(:,:,1:grid%nz-1)<=pressure(:,:,2:grid%nz))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(zlinear)) .OR. &
+        ANY(.NOT.ieee_is_finite(rain)) .OR. &
+        ANY(.NOT.ieee_is_finite(snow)) .OR. &
+        ANY(.NOT.ieee_is_finite(graupel))) RETURN
+    maximum_zlinear=10.0_real64**(0.1_real64*cfg%maximum_dbz)
+    IF (ANY(zlinear<0.0_real64) .OR. &
+        ANY(zlinear>maximum_zlinear*(1.0_real64+64.0_real64*EPSILON(1.0_real64))) .OR. &
+        ANY(rain<0.0_real64) .OR. ANY(rain>1.0_real64) .OR. &
+        ANY(snow<0.0_real64) .OR. ANY(snow>1.0_real64) .OR. &
+        ANY(graupel<0.0_real64) .OR. ANY(graupel>1.0_real64)) RETURN
+    IF (ANY(.NOT.domain .AND. &
+        (rain>0.0_real64 .OR. snow>0.0_real64 .OR. graupel>0.0_real64))) RETURN
+    IF (ANY(phase<PHASE_UNKNOWN) .OR. ANY(phase>PHASE_GRAUPEL)) RETURN
+    IF (ANY(phase==PHASE_RAIN .AND. &
+            (snow>0.0_real64 .OR. graupel>0.0_real64)) .OR. &
+        ANY(phase==PHASE_SNOW .AND. &
+            (rain>0.0_real64 .OR. graupel>0.0_real64)) .OR. &
+        ANY(phase==PHASE_FREEZING_RAIN .AND. &
+            rain+snow+graupel>0.0_real64 .AND. &
+            (snow>0.0_real64 .OR. rain<=0.0_real64 .OR. &
+             graupel<=0.0_real64)) .OR. &
+        ANY(phase==PHASE_SLEET .AND. &
+            rain+snow+graupel>0.0_real64 .AND. &
+            (rain>0.0_real64 .OR. snow<=0.0_real64 .OR. &
+             graupel<=0.0_real64)) .OR. &
+        ANY(phase==PHASE_GRAUPEL .AND. &
+            (rain>0.0_real64 .OR. snow>0.0_real64))) RETURN
+    transport_values_valid=.TRUE.
+  END FUNCTION transport_values_valid
+
   PURE LOGICAL FUNCTION column_config_valid(cfg)
     TYPE(column_physics_config), INTENT(IN) :: cfg
-    column_config_valid=ieee_is_finite(cfg%cloud_fraction_threshold) .AND. &
-      cfg%cloud_fraction_threshold>=0.0_real64 .AND. cfg%cloud_fraction_threshold<=1.0_real64 .AND. &
-      ieee_is_finite(cfg%radar_wavelength_m) .AND. cfg%radar_wavelength_m>=0.08_real64 .AND. &
-      cfg%radar_wavelength_m<=0.12_real64 .AND. &
-      ieee_is_finite(cfg%minimum_dbz) .AND. ieee_is_finite(cfg%maximum_dbz) .AND. &
-      cfg%maximum_dbz>cfg%minimum_dbz .AND. &
-      cfg%maximum_dbz<=100.0_real64 .AND. &
-      ieee_is_finite(cfg%reference_mass_concentration) .AND. &
-      cfg%reference_mass_concentration>0.0_real64 .AND. &
-      ieee_is_finite(cfg%minimum_relative_fall_speed) .AND. &
-      cfg%minimum_relative_fall_speed>0.0_real64 .AND. &
-      ieee_is_finite(cfg%maximum_horizontal_substep) .AND. &
-      cfg%maximum_horizontal_substep>0.0_real64 .AND. &
-      cfg%maximum_transport_substeps>0 .AND. &
-      ieee_is_finite(cfg%precipitation_loading_efficiency) .AND. &
-      cfg%precipitation_loading_efficiency>=0.0_real64 .AND. &
-      cfg%precipitation_loading_efficiency<=1.0_real64 .AND. &
-      ieee_is_finite(cfg%maximum_downdraft_ms) .AND. &
-      cfg%maximum_downdraft_ms>0.0_real64 .AND. &
-      ieee_is_finite(cfg%maximum_downdraft_innovation_ms) .AND. &
-      cfg%maximum_downdraft_innovation_ms>0.0_real64 .AND. &
-      ieee_is_finite(cfg%ledger_relative_tolerance) .AND. &
-      cfg%ledger_relative_tolerance>=0.0_real64 .AND. &
-      ieee_is_finite(cfg%ledger_absolute_tolerance) .AND. &
-      cfg%ledger_absolute_tolerance>=0.0_real64
+    column_config_valid=.FALSE.
+    IF (.NOT.ieee_is_finite(cfg%cloud_fraction_threshold) .OR. &
+        .NOT.ieee_is_finite(cfg%radar_wavelength_m) .OR. &
+        .NOT.ieee_is_finite(cfg%minimum_dbz) .OR. &
+        .NOT.ieee_is_finite(cfg%maximum_dbz) .OR. &
+        .NOT.ieee_is_finite(cfg%reference_mass_concentration) .OR. &
+        .NOT.ieee_is_finite(cfg%minimum_relative_fall_speed) .OR. &
+        .NOT.ieee_is_finite(cfg%maximum_horizontal_substep) .OR. &
+        .NOT.ieee_is_finite(cfg%precipitation_loading_efficiency) .OR. &
+        .NOT.ieee_is_finite(cfg%maximum_downdraft_ms) .OR. &
+        .NOT.ieee_is_finite(cfg%maximum_downdraft_innovation_ms) .OR. &
+        .NOT.ieee_is_finite(cfg%ledger_relative_tolerance) .OR. &
+        .NOT.ieee_is_finite(cfg%ledger_absolute_tolerance)) RETURN
+    IF (cfg%cloud_fraction_threshold<0.0_real64 .OR. &
+        cfg%cloud_fraction_threshold>1.0_real64 .OR. &
+        cfg%radar_wavelength_m<0.08_real64 .OR. &
+        cfg%radar_wavelength_m>0.12_real64 .OR. &
+        cfg%minimum_dbz< -100.0_real64 .OR. &
+        cfg%maximum_dbz<=cfg%minimum_dbz .OR. cfg%maximum_dbz>100.0_real64 .OR. &
+        cfg%reference_mass_concentration<=0.0_real64 .OR. &
+        cfg%minimum_relative_fall_speed<=0.0_real64 .OR. &
+        cfg%maximum_horizontal_substep<=0.0_real64 .OR. &
+        cfg%maximum_horizontal_substep>1.0_real64 .OR. &
+        cfg%maximum_transport_substeps<=0 .OR. &
+        cfg%maximum_transport_substeps>MAX_ALLOWED_TRANSPORT_SUBSTEPS .OR. &
+        cfg%precipitation_loading_efficiency<0.0_real64 .OR. &
+        cfg%precipitation_loading_efficiency>1.0_real64 .OR. &
+        cfg%maximum_downdraft_ms<=0.0_real64 .OR. &
+        cfg%maximum_downdraft_innovation_ms<=0.0_real64 .OR. &
+        cfg%ledger_relative_tolerance<0.0_real64 .OR. &
+        cfg%ledger_relative_tolerance>MAX_LEDGER_TOLERANCE .OR. &
+        cfg%ledger_absolute_tolerance<0.0_real64 .OR. &
+        cfg%ledger_absolute_tolerance>MAX_LEDGER_TOLERANCE) RETURN
+    column_config_valid=.TRUE.
   END FUNCTION column_config_valid
 
 END MODULE cloud_bal_column_physics

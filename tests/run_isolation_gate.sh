@@ -2,7 +2,12 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(cd "$repo_root/.." && pwd)
+workspace_lexical=$(realpath -ms "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
+workspace_root=$(realpath -e "$workspace_lexical")
+[[ $workspace_root == "$workspace_lexical" ]] || {
+  printf 'workspace root cannot contain a symlink: %s\n' "$workspace_lexical" >&2
+  exit 2
+}
 baseline="$repo_root/scratch/baseline_legacy_0d4c9a8_20260816"
 candidate_parent="$repo_root/scratch/candidate"
 
@@ -11,16 +16,24 @@ if [[ $# -lt 1 ]]; then
   exit 2
 fi
 
+candidate_parent_lexical=$(realpath -ms "$candidate_parent")
+if [[ ! -d "$candidate_parent_lexical" || -L "$candidate_parent_lexical" ]] || \
+   [[ $(realpath -e "$candidate_parent_lexical") != "$candidate_parent_lexical" ]]; then
+  printf 'candidate parent must be a real, non-symlink directory: %s\n' \
+    "$candidate_parent_lexical" >&2
+  exit 2
+fi
 candidate=$(realpath -m "$1")
 shift
 if [[ ${1-} == -- ]]; then shift; fi
-candidate_parent_real=$(realpath -m "$candidate_parent")
+candidate_parent_real=$(realpath -e "$candidate_parent_lexical")
 case "$candidate/" in
   "$candidate_parent_real"/*) ;;
   *) printf 'candidate must be below %s\n' "$candidate_parent_real" >&2; exit 2 ;;
 esac
 
-for protected in "$workspace_root/ANAL" "$workspace_root/MODL" "$baseline"; do
+for protected in "$workspace_root/ANAL" "$workspace_root/MODL" \
+    "$workspace_root/klaps-v5.0_" "$baseline"; do
   protected=$(realpath "$protected")
   case "$candidate/" in
     "$protected"/*) printf 'candidate resolves inside protected root: %s\n' "$protected" >&2; exit 2 ;;
@@ -28,8 +41,8 @@ for protected in "$workspace_root/ANAL" "$workspace_root/MODL" "$baseline"; do
 done
 
 mkdir -p "$(dirname "$candidate")" "$repo_root/scratch"
-if [[ -e "$candidate" ]]; then
-  if [[ ! -d "$candidate" ]] || \
+if [[ -e "$candidate" || -L "$candidate" ]]; then
+  if [[ -L "$candidate" || ! -d "$candidate" ]] || \
       find "$candidate" -mindepth 1 -print -quit | grep -q .; then
     printf 'candidate must be a new or empty directory: %s\n' "$candidate" >&2
     exit 2
@@ -76,7 +89,7 @@ inventory_baseline() {
 
 inventory_live_tree() {
   local destination=$1
-  (cd "$workspace_root" && find ANAL MODL -xdev \
+  (cd "$workspace_root" && find ANAL MODL klaps-v5.0_ -xdev \
     -printf '%p\t%y\t%m\t%n\t%s\t%T@\t%C@\t%l\n' | sort) > "$destination"
 }
 
@@ -96,17 +109,30 @@ check_candidate_contract() {
 }
 
 hash_live_inputs() {
-  local destination=$1 digest relative live
+  local destination=$1 digest relative live lexical resolved actual
   : > "$destination"
   while read -r digest relative; do
     case "$relative" in
-      ANAL/*|MODL/*)
+      ANAL/*|MODL/*|klaps-v5.0_/*)
         live="$workspace_root/$relative"
-        if [[ ! -f "$live" ]]; then
-          printf 'declared live input is missing: %s\n' "$live" >&2
+        lexical=$(realpath -ms "$live")
+        resolved=$(realpath -e "$live" 2>/dev/null || true)
+        if [[ ! -f "$live" || -L "$live" || -z "$resolved" || \
+              "$lexical" != "$resolved" ]]; then
+          printf 'declared live input is missing or symlinked: %s\n' "$live" >&2
           return 1
         fi
-        sha256sum "$live" >> "$destination"
+        if [[ $(stat -c '%h' "$live") -ne 1 ]]; then
+          printf 'declared live input is multiply linked: %s\n' "$live" >&2
+          return 1
+        fi
+        actual=$(sha256sum "$live" | awk '{print $1}')
+        if [[ $actual != "$digest" ]]; then
+          printf 'declared live input differs from immutable baseline: %s\n' \
+            "$relative" >&2
+          return 1
+        fi
+        printf '%s  %s\n' "$actual" "$relative" >> "$destination"
         ;;
     esac
   done < "$baseline/SHA256SUMS"

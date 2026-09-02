@@ -2,6 +2,9 @@ PROGRAM test_qbal_operator
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_value, ieee_quiet_nan
   IMPLICIT NONE
 
+  EXTERNAL :: continuity_metrics,continuity_point,leib_sub
+  EXTERNAL :: geostrophic_residual_metrics
+
   INTEGER, PARAMETER :: nx=6, ny=6, nz=4
   INTEGER :: i, j, k, status, failures
   REAL :: u0(nx,ny,nz), v0(nx,ny,nz), om0(nx,ny,nz)
@@ -10,9 +13,11 @@ PROGRAM test_qbal_operator
   REAL :: om_background(nx,ny,nz), phi(nx,ny,nz)
   REAL :: erru(nx,ny,nz), tau(nx,ny), lat(nx,ny)
   REAL :: influence(nx,ny,nz), local_influence(nx,ny,nz)
+  REAL :: scaled_influence(nx,ny,nz)
   REAL :: bad_tau(nx,ny)
   REAL :: dx(nx,ny), dy(nx,ny), ps(nx,ny), p(nz), dp(nz), bad_dp(nz)
-  REAL :: before_rms, after_rms, before_max, after_max, momentum_rms
+  REAL :: before_rms, after_rms, before_max, after_max, geostrophic_rms
+  REAL :: scaled_rms, scaled_max
   REAL :: residual, erf, bnd, pi
 
   failures = 0
@@ -52,6 +57,12 @@ PROGRAM test_qbal_operator
        before_rms,before_max,status)
   CALL check(status == 1 .AND. before_rms > 0.0, &
        'initial continuity residual should be measurable', failures)
+  scaled_influence = 1.0E-3
+  CALL continuity_metrics(u0,v0,om0,nx,ny,nz,dx,dy,ps,p,dp, &
+       scaled_influence,scaled_rms,scaled_max,status)
+  CALL check(status==1 .AND. ABS(scaled_rms-before_rms)<1.0E-12 .AND. &
+       ABS(scaled_max-before_max)<1.0E-12, &
+       'beta must mask, not attenuate, physical continuity residual',failures)
 
   erf = 0.01*dx(nx/2,ny/2)
   CALL leib_sub(nx,ny,nz,erf,tau,erru,influence,lat,dx,dy,ps,p,dp, &
@@ -107,19 +118,32 @@ PROGRAM test_qbal_operator
        'terrain/boundary mask must be skipped, not treated as failure', failures)
   u0(2,1,1) = 0.0
 
-  CALL momentum_residual_metrics(phi,v0,v0,nx,ny,nz,lat,dx,dy, &
-       ps,p,influence,momentum_rms,status)
-  CALL check(status == 1 .AND. ABS(momentum_rms) < 1.0E-12, &
-       'zero state should have zero momentum residual', failures)
+  CALL geostrophic_residual_metrics(phi,v0,v0,nx,ny,nz,lat,dx,dy, &
+       ps,p,influence,geostrophic_rms,status)
+  CALL check(status == 1 .AND. ABS(geostrophic_rms) < 1.0E-12, &
+       'zero state should have zero geostrophic residual', failures)
+  DO k=1,nz
+    DO j=1,ny
+      DO i=1,nx
+        phi(i,j,k)=10.0*REAL(i)
+      END DO
+    END DO
+  END DO
+  CALL geostrophic_residual_metrics(phi,v0,v0,nx,ny,nz,lat,dx,dy, &
+       ps,p,influence,geostrophic_rms,status)
+  CALL geostrophic_residual_metrics(phi,v0,v0,nx,ny,nz,lat,dx,dy, &
+       ps,p,scaled_influence,scaled_rms,status)
+  CALL check(status==1 .AND. ABS(scaled_rms-geostrophic_rms)<1.0E-12, &
+       'beta must mask, not attenuate, geostrophic residual',failures)
   phi(2,2,2) = ieee_value(0.0, ieee_quiet_nan)
-  CALL momentum_residual_metrics(phi,v0,v0,nx,ny,nz,lat,dx,dy, &
-       ps,p,influence,momentum_rms,status)
+  CALL geostrophic_residual_metrics(phi,v0,v0,nx,ny,nz,lat,dx,dy, &
+       ps,p,influence,geostrophic_rms,status)
   CALL check(status == 0, &
-       'non-finite active momentum input must fail', failures)
+       'non-finite active geostrophic input must fail', failures)
   phi = 0.0
   lat = 0.0
-  CALL momentum_residual_metrics(phi,v0,v0,nx,ny,nz,lat,dx,dy, &
-       ps,p,influence,momentum_rms,status)
+  CALL geostrophic_residual_metrics(phi,v0,v0,nx,ny,nz,lat,dx,dy, &
+       ps,p,influence,geostrophic_rms,status)
   CALL check(status == 0, &
        'out-of-range near-zero Coriolis support must fail', failures)
 
