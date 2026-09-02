@@ -1,21 +1,21 @@
 # Graph Report - Cloud-BAL  (2026-09-02)
 
 ## Corpus Check
-- 114 files · ~154,134 words
+- 121 files · ~163,091 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1283 nodes · 2648 edges · 93 communities (60 shown, 17 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 55 edges (avg confidence: 0.78)
+- 1353 nodes · 2810 edges · 100 communities (67 shown, 17 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 75 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `037b671b`
+- Built from commit: `68efcd6f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- cloud_bal_state_type
+- cloud_bal_column_physics
 - cloud_bal_state
 - cloud_bal_real_netcdf
 - cloud_bal_legacy_shadow_adapter
@@ -23,12 +23,12 @@
 - prepare_operational_comparison.py
 - audit_intel_integration.py
 - intel_toolchain.sh
-- TransactionError
+- cloud_bal_transaction.py
 - Cloud-BAL pipeline simplification and remediation plan
 - Path
 - original_upstream_replay.py
 - audit_legacy_deriv_safety.py
-- compare_operational_shadow.py
+- ValueError
 - check_qbal_real_inputs.py
 - test_balance_operator
 - Cloud-BAL improvement plan
@@ -48,6 +48,7 @@
 - get_cloud_deriv.f
 - test_missing_phase_continuity
 - cloud_bal_field_contracts
+- cloud_bal_state_type
 - test_state_atomic_refresh
 - real_shadow_driver
 - test_nonuniform_localization
@@ -55,7 +56,7 @@
 - QBAL real-input contract
 - lapsprep_wps
 - Cloud-BAL implementation report
-- Operational-original versus SHADOW comparison contract
+- Operational-original versus diagnostic-patch comparison contract
 - Cloud-BAL 단일 승인 체크리스트
 - Cloud-BAL 과학적 기초와 구현 경계
 - cloud_bal_grid_geometry
@@ -90,57 +91,63 @@
 - run_radar_velocity_audit.sh
 - run_real_input_inventory.sh
 - run_transaction_gate.sh
-- 5. Conservative hydrometeor allocation
-- 1. Consolidated problems
+- test_pipeline
+- nc_ok
+- cloud_bal_pipeline
+- test_real_shadow_io_contract
+- inspect_radar
+- validate_shadow_write_contract
+- real_manufactured_balance_driver
+- 실제 KLAPS 격자 동적 balance 수치 검증 계약
 
 ## God Nodes (most connected - your core abstractions)
-1. `cloud_bal_state_type` - 78 edges
-2. `cloud_bal_state` - 76 edges
-3. `cloud_bal_real_netcdf` - 54 edges
-4. `cloud_bal_balance_operator` - 49 edges
+1. `cloud_bal_state_type` - 86 edges
+2. `cloud_bal_state` - 77 edges
+3. `cloud_bal_real_netcdf` - 56 edges
+4. `cloud_bal_balance_operator` - 54 edges
 5. `cloud_bal_column_physics` - 43 edges
 6. `cloud_bal_legacy_shadow_adapter` - 37 edges
 7. `field3d` - 37 edges
-8. `balance_operator_type` - 28 edges
-9. `ContractError` - 27 edges
-10. `test_balance_operator` - 26 edges
+8. `balance_operator_type` - 30 edges
+9. `test_balance_operator` - 27 edges
+10. `ContractError` - 27 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `make_result()` --references--> `cloud_bal_pipeline_result`  [EXTRACTED]
+  tests/test_real_shadow_io_contract.f90 → src/common/cloud_bal_pipeline.f90
+- `install_manufactured_target()` --references--> `cloud_bal_state_type`  [EXTRACTED]
+  tests/real_manufactured_balance_driver.f90 → src/common/cloud_bal_state.f90
+- `outside_support_changes()` --references--> `cloud_bal_state_type`  [EXTRACTED]
+  tests/real_manufactured_balance_driver.f90 → src/common/cloud_bal_state.f90
 - `initialize_pipeline_state()` --references--> `cloud_bal_state_type`  [EXTRACTED]
   tests/test_nonuniform_localization.f90 → src/common/cloud_bal_state.f90
-- `expect_not_ready()` --calls--> `prepare()`  [INFERRED]
-  tests/test_operational_comparison_prep.py → tools/prepare_operational_comparison.py
-- `main()` --calls--> `prepare()`  [INFERRED]
-  tests/test_operational_comparison_prep.py → tools/prepare_operational_comparison.py
-- `accepted()` --calls--> `canonical_omega_target_cells()`  [INFERRED]
-  tests/test_shadow_validator.py → tools/validate_shadow_diagnostics.py
-- `permissive_config()` --references--> `balance_operator_config`  [EXTRACTED]
-  tests/test_balance_omega_authority.f90 → src/common/cloud_bal_balance_operator.f90
+- `add_radar_cell()` --references--> `cloud_bal_state_type`  [EXTRACTED]
+  tests/test_pipeline.f90 → src/common/cloud_bal_state.f90
 
 ## Import Cycles
 - None detected.
 
-## Communities (93 total, 17 thin omitted)
+## Communities (100 total, 17 thin omitted)
 
-### Community 0 - "cloud_bal_state_type"
-Cohesion: 0.06
-Nodes (79): account_bottom_flux(), add_loading_downdraft(), allocate_precipitation_phase(), bounded_terminal_speed(), build_cloud_targets(), cloud_bal_column_physics, cloud_regime(), column_changed_mask() (+71 more)
+### Community 0 - "cloud_bal_column_physics"
+Cohesion: 0.11
+Nodes (44): account_bottom_flux(), add_loading_downdraft(), allocate_precipitation_phase(), bounded_terminal_speed(), build_cloud_targets(), cloud_bal_column_physics, cloud_regime(), column_changed_mask() (+36 more)
 
 ### Community 1 - "cloud_bal_state"
 Cohesion: 0.06
-Nodes (76): copy_real2(), integer3_absent(), integer3_metadata_ok(), integer3_shape_ok(), real2_metadata_ok(), real2_shape_ok(), canonical_input_spec, canonical_states_equal() (+68 more)
+Nodes (73): real2_metadata_ok(), real2_shape_ok(), canonical_input_spec, canonical_states_equal(), canonical_to_legacy_status(), canonical_vertical_order_valid(), cell_is_usable(), cloud_bal_state (+65 more)
 
 ### Community 2 - "cloud_bal_real_netcdf"
-Cohesion: 0.05
-Nodes (79): netcdf, initialize_rejection(), build_compact_balance_beta(), cloud_bal_pipeline, cloud_bal_pipeline_config, cloud_bal_pipeline_result, cloud_bal_balance_operator, cloud_bal_column_physics (+71 more)
+Cohesion: 0.12
+Nodes (29): assign_reversed_core(), assign_specific_humidity(), assign_surface(), cloud_bal_real_netcdf, dry_density(), cloud_bal_balance_operator, cloud_bal_column_physics, cloud_bal_state (+21 more)
 
 ### Community 3 - "cloud_bal_legacy_shadow_adapter"
 Cohesion: 0.07
-Nodes (50): cloud_bal_legacy_shadow_adapter, cloud_bal_legacy_shadow_adapter, copy_domain(), copy_integer3(), copy_real3(), copy_specific_humidity(), direct_closure_valid(), distance_unit_scale() (+42 more)
+Nodes (56): cloud_bal_legacy_shadow_adapter, cloud_bal_legacy_shadow_adapter, copy_domain(), copy_integer3(), copy_real2(), copy_real3(), copy_specific_humidity(), direct_closure_valid() (+48 more)
 
 ### Community 4 - "cloud_bal_balance_operator"
-Cohesion: 0.12
-Nodes (49): add_node(), apply_adjoint_metric(), apply_balance_correction(), apply_continuity_operator(), apply_localized_balance(), apply_normal_operator(), apply_normal_operator_work(), balance_beta_active() (+41 more)
+Cohesion: 0.11
+Nodes (55): add_node(), apply_adjoint_metric(), apply_balance_correction(), apply_continuity_operator(), apply_localized_balance(), apply_normal_operator(), apply_normal_operator_work(), balance_beta_active() (+47 more)
 
 ### Community 5 - "prepare_operational_comparison.py"
 Cohesion: 0.16
@@ -152,11 +159,11 @@ Nodes (34): active_make_lines(), active_shell_lines(), adapter_is_on_link_path()
 
 ### Community 7 - "intel_toolchain.sh"
 Cohesion: 0.08
-Nodes (22): intel_toolchain.sh script, cloud_bal_current_evidence(), cloud_bal_output_under(), cloud_bal_require_clean_source(), output_safety.sh script, build_and_run(), run_contract_regressions.sh script, run_intel_integration_audit.sh script (+14 more)
+Nodes (26): intel_toolchain.sh script, cloud_bal_current_evidence(), cloud_bal_output_under(), cloud_bal_require_clean_source(), output_safety.sh script, build_and_run(), run_contract_regressions.sh script, run_intel_integration_audit.sh script (+18 more)
 
-### Community 8 - "TransactionError"
-Cohesion: 0.18
-Nodes (25): expect_rejected(), main(), write_products(), _current(), _current_id(), _fsync_directory(), _identifier(), _inside() (+17 more)
+### Community 8 - "cloud_bal_transaction.py"
+Cohesion: 0.17
+Nodes (27): expect_rejected(), main(), write_products(), _current(), _current_id(), _fsync_directory(), _identifier(), _inside() (+19 more)
 
 ### Community 9 - "Cloud-BAL pipeline simplification and remediation plan"
 Cohesion: 0.05
@@ -174,9 +181,9 @@ Nodes (31): audit_declared_file(), canonical_sha256(), contained_directory(), co
 Cohesion: 0.15
 Nodes (30): ArgumentParser, analyze_source(), binary_call_edge(), build_parser(), _call_arguments(), _compact(), _condition_is_constant_false(), fixed_form_statements() (+22 more)
 
-### Community 13 - "compare_operational_shadow.py"
-Cohesion: 0.11
-Nodes (45): field_records(), main(), record(), inspect_case(), inspect_radar(), main(), ndarray, Path (+37 more)
+### Community 13 - "ValueError"
+Cohesion: 0.08
+Nodes (61): field_records(), main(), record(), expect_rejected(), main(), comparison_files(), digest(), files_under() (+53 more)
 
 ### Community 14 - "check_qbal_real_inputs.py"
 Cohesion: 0.15
@@ -184,11 +191,11 @@ Nodes (28): main(), make_manifest(), Path, test_pre_qbal_generation_manifest_con
 
 ### Community 15 - "test_balance_operator"
 Cohesion: 0.18
-Nodes (26): add_held_out_los(), check(), cloud_bal_balance_operator, cloud_bal_state, iso_fortran_env, make_balance_state(), mark_valid(), test_actual_operator_nullspace() (+18 more)
+Nodes (27): add_held_out_los(), check(), cloud_bal_balance_operator, cloud_bal_state, iso_fortran_env, make_balance_state(), mark_valid(), test_actual_operator_nullspace() (+19 more)
 
 ### Community 16 - "Cloud-BAL improvement plan"
-Cohesion: 0.15
-Nodes (13): 2. Data contract introduced before physics changes, 3.1 Safe first policy: missing-only fallback, 3.2 Confidence blend after the fallback is validated, 3. Background and omega fusion, 4.1 Preserve the legacy solver as a candidate generator, 4.2 Correct the control parameters, 4.3 Acceptance gate, 4. Bounded mass-wind balance (+5 more)
+Cohesion: 0.08
+Nodes (24): 1.1 Missing values and source status are destroyed, 1.2 Balance strength is hard-coded and not tied to data quality, 1.3 Hydrometeor initialization is not mass conservative, 1.4 Background use is all-or-nothing, 1. Consolidated problems, 2. Data contract introduced before physics changes, 3.1 Safe first policy: missing-only fallback, 3.2 Confidence blend after the fallback is validated (+16 more)
 
 ### Community 17 - "validate_shadow_diagnostics.py"
 Cohesion: 0.16
@@ -219,8 +226,8 @@ Cohesion: 0.31
 Nodes (15): authorize_target(), check(), cloud_bal_balance_operator, cloud_bal_state, iso_fortran_env, make_state(), mark_valid(), permissive_config() (+7 more)
 
 ### Community 25 - "test_canonical_state"
-Cohesion: 0.23
-Nodes (15): check(), cloud_bal_state, ieee_arithmetic, iso_fortran_env, fill_real_field(), fill_surface_field(), invalidate_cell(), make_valid_state() (+7 more)
+Cohesion: 0.24
+Nodes (14): check(), cloud_bal_state, ieee_arithmetic, iso_fortran_env, fill_real_field(), fill_surface_field(), invalidate_cell(), make_valid_state() (+6 more)
 
 ### Community 26 - "test_column_physics"
 Cohesion: 0.25
@@ -250,6 +257,10 @@ Nodes (12): check(), evaluate_fallback(), cloud_bal_column_physics, cloud_bal_st
 Cohesion: 0.36
 Nodes (11): capture_field_validity_1d(), capture_field_validity_2d(), capture_field_validity_3d(), cloud_bal_field_contracts, contract_metadata_ok(), ieee_arithmetic, field_contract, initialize_field_contract() (+3 more)
 
+### Community 33 - "cloud_bal_state_type"
+Cohesion: 0.15
+Nodes (21): cloud_authority_is_absent(), copied_diagnostic_boundary_contract_valid(), state_has_manufactured_source(), writer_geometry_is_representable(), cloud_bal_state_type, add_radar_cell(), core_value_differences(), cloud_bal_balance_operator (+13 more)
+
 ### Community 34 - "test_state_atomic_refresh"
 Cohesion: 0.31
 Nodes (10): check(), cloud_bal_state, ieee_arithmetic, iso_fortran_env, make_refresh_state(), test_late_failure_is_atomic(), test_state_atomic_refresh, test_usable_contract() (+2 more)
@@ -263,7 +274,7 @@ Cohesion: 0.22
 Nodes (7): cloud_bal_grid_geometry, cloud_bal_localization, cloud_bal_pipeline, cloud_bal_state, iso_fortran_env, initialize_pipeline_state(), test_nonuniform_localization
 
 ### Community 37 - "README.md"
-Cohesion: 0.25
+Cohesion: 0.22
 Nodes (4): Cloud-BAL, Data flow, Deliberate exclusions, Repository layout
 
 ### Community 38 - "QBAL real-input contract"
@@ -278,9 +289,9 @@ Nodes (6): date_pack, laps_static, setup, lapsprep_wps, output_ungrib_format(), 
 Cohesion: 0.29
 Nodes (6): Cloud-BAL implementation report, Decision, Implemented focused candidate, Integration blockers, Preserved comparison baseline, Verification completed
 
-### Community 41 - "Operational-original versus SHADOW comparison contract"
+### Community 41 - "Operational-original versus diagnostic-patch comparison contract"
 Cohesion: 0.29
-Nodes (6): Current 2026-08-16 inventory limitation, Invocation and outputs, Manifest example, Operational-original versus SHADOW comparison contract, Purpose, Readiness gates
+Nodes (6): Current 2026-08-16 inventory limitation, Invocation and outputs, Manifest example, Operational-original versus diagnostic-patch comparison contract, Purpose, Readiness gates
 
 ### Community 42 - "Cloud-BAL 단일 승인 체크리스트"
 Cohesion: 0.25
@@ -354,33 +365,57 @@ Nodes (3): cpt_concentration(), cpt_fall_velocity(), ieee_arithmetic
 Cohesion: 0.50
 Nodes (3): lapsprep_wps, setup, test_wps_writer_status
 
-### Community 95 - "5. Conservative hydrometeor allocation"
-Cohesion: 0.33
-Nodes (6): 5.1 Cell-level validation, 5.2 Remove implicit mass sinks and sources, 5.3 Grid scaling and cloud fraction, 5.4 Phase allocation, 5.5 Order of operations, 5. Conservative hydrometeor allocation
+### Community 92 - "test_pipeline"
+Cohesion: 0.13
+Nodes (19): add_radar_cell(), cloud_bal_balance_operator, cloud_bal_column_physics, cloud_bal_pipeline, cloud_bal_state, iso_fortran_env, invalidate_level(), invalidate_real_level() (+11 more)
 
-### Community 96 - "1. Consolidated problems"
-Cohesion: 0.40
-Nodes (5): 1.1 Missing values and source status are destroyed, 1.2 Balance strength is hard-coded and not tied to data quality, 1.3 Hydrometeor initialization is not mass conservative, 1.4 Background use is all-or-nothing, 1. Consolidated problems
+### Community 93 - "nc_ok"
+Cohesion: 0.31
+Nodes (15): close_file(), dimension_is(), dimensions_are(), nc_ok(), open_case_file(), open_static_file(), open_surface_file(), read_grid_spacing_m() (+7 more)
+
+### Community 94 - "cloud_bal_pipeline"
+Cohesion: 0.22
+Nodes (12): boundary_has_manufactured_source(), build_compact_balance_beta(), cloud_bal_pipeline, cloud_bal_balance_operator, cloud_bal_column_physics, cloud_bal_grid_geometry, cloud_bal_state, ieee_arithmetic (+4 more)
+
+### Community 95 - "test_real_shadow_io_contract"
+Cohesion: 0.18
+Nodes (10): cloud_bal_balance_operator, cloud_bal_pipeline, cloud_bal_real_netcdf, cloud_bal_state, ieee_arithmetic, iso_fortran_env, make_result(), make_state() (+2 more)
+
+### Community 96 - "inspect_radar"
+Cohesion: 0.41
+Nodes (11): inspect_case(), inspect_radar(), main(), ndarray, Path, Variable, sha256(), site_from_comment() (+3 more)
+
+### Community 97 - "validate_shadow_write_contract"
+Cohesion: 0.42
+Nodes (11): cloud_bal_pipeline_config, cloud_bal_pipeline_result, candidate_result_is_coherent(), dynamic_field_is_coherent(), cloud_bal_pipeline, pipeline_result_is_coherent(), put_global_metadata(), real_value_changed() (+3 more)
+
+### Community 98 - "real_manufactured_balance_driver"
+Cohesion: 0.18
+Nodes (10): cloud_bal_balance_operator, cloud_bal_column_physics, cloud_bal_real_netcdf, cloud_bal_state, iso_fortran_env, netcdf, install_manufactured_target(), outside_support_changes() (+2 more)
+
+### Community 99 - "실제 KLAPS 격자 동적 balance 수치 검증 계약"
+Cohesion: 0.25
+Nodes (8): balance 문제, target과 국지화, 경계식, 고정 수치시험 설정, 목적과 권한, 승인 gate, 실제 KLAPS 격자 동적 balance 수치 검증 계약, 실행과 해석
 
 ## Knowledge Gaps
-- **244 isolated node(s):** `qbalpe_main`, `iso_fortran_env`, `ieee_arithmetic`, `cloud_bal_state`, `ieee_arithmetic` (+239 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 416 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **259 isolated node(s):** `qbalpe_main`, `iso_fortran_env`, `ieee_arithmetic`, `cloud_bal_state`, `ieee_arithmetic` (+254 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 434 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cloud_bal_state_type` connect `cloud_bal_state_type` to `cloud_bal_state`, `cloud_bal_real_netcdf`, `cloud_bal_legacy_shadow_adapter`, `cloud_bal_balance_operator`, `real_shadow_driver`, `test_nonuniform_localization`, `test_state_atomic_refresh`, `test_balance_operator`, `test_balance_omega_authority`, `test_canonical_state`, `test_column_physics`?**
-  _High betweenness centrality (0.094) - this node is a cross-community bridge._
-- **Why does `field3d` connect `cloud_bal_real_netcdf` to `cloud_bal_state_type`, `cloud_bal_state`, `cloud_bal_legacy_shadow_adapter`, `cloud_bal_balance_operator`, `test_balance_operator`, `test_balance_omega_authority`, `test_canonical_state`, `test_column_physics`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
-- **Why does `cloud_bal_state` connect `cloud_bal_state` to `cloud_bal_state_type`, `cloud_bal_real_netcdf`?**
-  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+- **Why does `cloud_bal_state_type` connect `cloud_bal_state_type` to `cloud_bal_column_physics`, `validate_shadow_write_contract`, `cloud_bal_real_netcdf`, `cloud_bal_legacy_shadow_adapter`, `cloud_bal_balance_operator`, `cloud_bal_state`, `real_manufactured_balance_driver`, `real_shadow_driver`, `test_nonuniform_localization`, `test_state_atomic_refresh`, `test_balance_operator`, `test_balance_omega_authority`, `test_canonical_state`, `test_column_physics`, `test_pipeline`, `nc_ok`, `cloud_bal_pipeline`, `test_real_shadow_io_contract`?**
+  _High betweenness centrality (0.096) - this node is a cross-community bridge._
+- **Why does `cloud_bal_state` connect `cloud_bal_state` to `cloud_bal_column_physics`, `cloud_bal_state_type`, `cloud_bal_legacy_shadow_adapter`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
+- **Why does `field3d` connect `cloud_bal_state` to `cloud_bal_column_physics`, `validate_shadow_write_contract`, `cloud_bal_real_netcdf`, `cloud_bal_legacy_shadow_adapter`, `cloud_bal_balance_operator`, `cloud_bal_state_type`, `test_balance_operator`, `test_balance_omega_authority`, `test_canonical_state`, `test_column_physics`, `test_pipeline`, `cloud_bal_pipeline`, `test_real_shadow_io_contract`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
 - **What connects `qbalpe_main`, `iso_fortran_env`, `ieee_arithmetic` to the rest of the system?**
-  _244 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `cloud_bal_state_type` be split into smaller, more focused modules?**
-  _Cohesion score 0.05553923009109609 - nodes in this community are weakly interconnected._
+  _259 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `cloud_bal_column_physics` be split into smaller, more focused modules?**
+  _Cohesion score 0.11313131313131314 - nodes in this community are weakly interconnected._
 - **Should `cloud_bal_state` be split into smaller, more focused modules?**
-  _Cohesion score 0.05949367088607595 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0645933014354067 - nodes in this community are weakly interconnected._
 - **Should `cloud_bal_real_netcdf` be split into smaller, more focused modules?**
-  _Cohesion score 0.053776079929473995 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11724137931034483 - nodes in this community are weakly interconnected._
