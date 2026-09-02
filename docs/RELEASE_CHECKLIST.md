@@ -76,7 +76,7 @@
 | 요청 `omega_target`과 실제 적용률 분리 | DONE | balance stage는 target 값·mask·quality·source를 bitwise 보존하고 trust-region 적용률은 result에만 기록 |
 | target-induced increment만 projection | DONE | compact 영역에서 배경 전장을 재균형하지 않음; target 없는 component는 bitwise no-op |
 | support 경계의 배경 flux와 zero-normal increment 분리 | ENGINEERING | uniform-flow compact-support 단위시험 통과; 실제 지형 kinematic lower boundary는 남음 |
-| A-grid checkerboard null mode 제어 | ENGINEERING | 수직 omega target의 exact/near-alternating mode는 solve 전 거부; 수평 collocated A-grid parity gauge와 terrain/native-face 문제는 남아 ACTIVE 승격 금지 |
+| A-grid checkerboard null mode 제어 | ENGINEERING | exact/near-alternating target은 solve 전 거부하지만, 실제 13 UTC 격자의 단일-column smooth target에서도 16 cell 중 6 cell이 projection 후 교대 부호/약한 응답을 보임. 50% failure 허용은 수치 경로 실행용일 뿐이며 native-face/C-grid 또는 parity regularization 전 ACTIVE 승격 금지 |
 | 비균일 격자의 물리 거리 localization | DONE | `cloud_bal_grid_geometry`의 누적 인접 center 거리와 overflow-safe 탐색반경을 canonical/legacy localization에 공유; 중간 100 km cell 및 거대 유한반경 반례 통과 |
 | solver 실패·비수렴 시 원본 rollback | DONE | candidate와 operational state 모두 원본 복사본; 실패 수치만 stage result에 보존 |
 | focused legacy QBAL의 background omega 필수성 | DONE | U/V/T/HT/SH와 함께 OM status도 필수이고 solver가 사용하는 분석 surface-pressure domain의 모든 above-ground cell에서 OM coverage를 검사; 누락 OM을 0으로 대체하여 balance를 계속하지 않음 |
@@ -101,7 +101,7 @@
 | diagnostic patch 적용 mask·그림 계약 | DONE | canonical species별 expected/applied mask 완전 일치, pressure one-to-one, no-change 정상 처리, 고정 550 hPa·고정 scale 사용 |
 | WPS patch field provenance | BLOCKED | patched record는 기존 operational source label을 유지하므로 parent/hash/mask sidecar만으로 field 내부 lineage를 복원할 수 없음 |
 | 비교 도구와 입력 generation source identity 분리 | ENGINEERING | patch receipt에 parent와 tool 정보를 나누되 외부 검토 SHA·서명된 release receipt는 미구현 |
-| 실제 NE57 geometry의 nonzero balance | ENGINEERING | 12--15 UTC 전수 ifx transaction은 `NUMERICAL_REAL_GEOMETRY_PASS`만 허용; 제조해 target·미확정 surface-wind frame 때문에 science authority는 NONE |
+| 실제 NE57 geometry의 nonzero balance | ENGINEERING | 12--15 UTC 전수 ifx transaction은 `NUMERICAL_REAL_GEOMETRY_PASS`만 허용; 단일-column 제조해 target의 cellwise response failure도 사례별로 필수 게시; 제조해 target·미확정 surface-wind frame 때문에 science authority는 NONE |
 | real-geometry solver conditioning | BLOCKED | test profile도 최대 1200회 CG를 허용하며 preconditioner·spectral/condition 진단 전 운영 solver로 승격 금지 |
 | 급격한 증분의 wave 대리 guard | ENGINEERING | 최대 증분과 neighbor jump를 고정 threshold로 검사하지만 0--6 h 모델 음파·중력파 검증을 대신하지 않음 |
 | 수상체 질량 충격 gate | BLOCKED | 실제자료 proposal의 총 수상체 질량 변화·국지 분위수를 기록하지만 허용 기준이 없고, 대규모 증감이 잠열·부력·모델 spin-up에 미치는 영향도 미평가 |

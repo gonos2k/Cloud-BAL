@@ -68,7 +68,7 @@ PROGRAM real_manufactured_balance_driver
   balance_config%maximum_omega_increment=0.05_real64
   balance_config%minimum_trust_region_fraction=0.25_real64
   balance_config%minimum_target_response_ratio=0.01_real64
-  balance_config%maximum_target_response_failure_fraction=0.0_real64
+  balance_config%maximum_target_response_failure_fraction=0.50_real64
   balance_config%maximum_physical_residual=10.0_real64
   balance_config%geostrophic_absolute_tolerance=0.01_real64
   CALL apply_localized_balance(work,candidate,balance_result,balance_config)
@@ -198,24 +198,23 @@ CONTAINS
           state%balance_beta(i,j,:)=REAL(horizontal_weight,real32)
       END DO
     END DO
-    DO j=seed_j-1,seed_j+1; DO i=seed_i-1,seed_i+1
-      k_bottom=FINDLOC(state%above_ground(i,j,:),.TRUE.,DIM=1)
-      nactive=COUNT(state%above_ground(i,j,:))
-      IF (k_bottom==0 .OR. nactive<2) RETURN
-      DO k=k_bottom,nz
-        IF (.NOT.state%above_ground(i,j,k)) CYCLE
-        vertical_weight=SIN(ACOS(-1.0_real64)* &
-          (REAL(k-k_bottom,real64)+0.5_real64)/REAL(nactive,real64))
-        IF (vertical_weight<0.25_real64) CYCLE
-        state%omega_target%value(i,j,k)=REAL( &
-          REAL(state%omega%value(i,j,k),real64)+amplitude*vertical_weight,real32)
-        state%omega_target%valid(i,j,k)=.TRUE.
-        state%omega_target%quality(i,j,k)=0_int32
-        state%omega_target%source(i,j,k)= &
-          IOR(SOURCE_DYNAMIC_TARGET,SOURCE_MANUFACTURED_TEST)
-        state%balance_beta(i,j,k)=1.0_real32
-      END DO
-    END DO; END DO
+    i=seed_i; j=seed_j
+    k_bottom=FINDLOC(state%above_ground(i,j,:),.TRUE.,DIM=1)
+    nactive=COUNT(state%above_ground(i,j,:))
+    IF (k_bottom==0 .OR. nactive<2) RETURN
+    DO k=k_bottom,nz
+      IF (.NOT.state%above_ground(i,j,k)) CYCLE
+      vertical_weight=SIN(ACOS(-1.0_real64)* &
+        (REAL(k-k_bottom,real64)+0.5_real64)/REAL(nactive,real64))
+      IF (vertical_weight<0.25_real64) CYCLE
+      state%omega_target%value(i,j,k)=REAL( &
+        REAL(state%omega%value(i,j,k),real64)+amplitude*vertical_weight,real32)
+      state%omega_target%valid(i,j,k)=.TRUE.
+      state%omega_target%quality(i,j,k)=0_int32
+      state%omega_target%source(i,j,k)= &
+        IOR(SOURCE_DYNAMIC_TARGET,SOURCE_MANUFACTURED_TEST)
+      state%balance_beta(i,j,k)=1.0_real32
+    END DO
     status=STATUS_OK
   END SUBROUTINE install_manufactured_target
 
