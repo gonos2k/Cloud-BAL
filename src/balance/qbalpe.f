@@ -2222,7 +2222,7 @@ c Require background omega at every above-ground pressure-grid cell.
       do k=1,nz
        do j=1,ny
         do i=1,nx
-         if(ps(i,j).ge.p(k).and..not.valid(i,j,k))return
+         if(ps(i,j).gt.p(k).and..not.valid(i,j,k))return
         enddo
        enddo
       enddo

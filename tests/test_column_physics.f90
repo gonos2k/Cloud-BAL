@@ -167,6 +167,19 @@ CONTAINS
     t=280.0_real32; qv=0.008_real32; u=0.0_real32; v=0.0_real32
     w=0.0_real32; wvalid=.TRUE.; domain=.TRUE.; observed=.FALSE.; phase=PHASE_UNKNOWN
     z=0.0_real64; rain=0.0_real64; snow=0.0_real64; graupel=0.0_real64
+
+    phase(1,1,1)=PHASE_FREEZING_RAIN
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_OK .AND. flux_ledger_closes(ledger,cfg), &
+               'zero-mass freezing-rain metadata must be a no-op',failures)
+    phase(1,1,1)=PHASE_SLEET
+    CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &
+                                      rain,snow,graupel,cfg,ledger,status)
+    CALL check(status==STATUS_OK .AND. flux_ledger_closes(ledger,cfg), &
+               'zero-mass sleet metadata must be a no-op',failures)
+    phase=PHASE_UNKNOWN
+
     observed(2,2,3)=.TRUE.; observed(2,2,2)=.TRUE.
     phase(2,2,3)=PHASE_RAIN; z(2,2,3)=1000.0_real64; rain(2,2,3)=1.0e-4_real64
     CALL transport_precipitation_flux(grid,p,t,qv,u,v,w,wvalid,domain,observed,phase,z, &

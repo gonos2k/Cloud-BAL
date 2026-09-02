@@ -1484,9 +1484,11 @@ CONTAINS
         ANY(phase==PHASE_SNOW .AND. &
             (rain>0.0_real64 .OR. graupel>0.0_real64)) .OR. &
         ANY(phase==PHASE_FREEZING_RAIN .AND. &
+            rain+snow+graupel>0.0_real64 .AND. &
             (snow>0.0_real64 .OR. rain<=0.0_real64 .OR. &
              graupel<=0.0_real64)) .OR. &
         ANY(phase==PHASE_SLEET .AND. &
+            rain+snow+graupel>0.0_real64 .AND. &
             (rain>0.0_real64 .OR. snow<=0.0_real64 .OR. &
              graupel<=0.0_real64)) .OR. &
         ANY(phase==PHASE_GRAUPEL .AND. &

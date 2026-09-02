@@ -67,6 +67,9 @@ PROGRAM test_qbal_acceptance
   p=100000.0
   CALL check(background_omega_complete(om_valid,ps,p,nx,ny,nz), &
        'below-ground background omega may remain invalid',failures)
+  p=90000.0
+  CALL check(background_omega_complete(om_valid,ps,p,nx,ny,nz), &
+       'terrain-boundary background omega may remain invalid',failures)
   ps(1,1)=nan_value
   CALL check(.NOT.background_omega_complete(om_valid,ps,p,nx,ny,nz), &
        'non-finite surface pressure must fail the omega domain',failures)
