@@ -67,7 +67,7 @@ for row in rows:
     for name in ("fua_path", "fsf_before_path", "fsf_center_path", "fsf_after_path"):
         with netCDF4.Dataset(workspace / row[name]) as dataset:
             cycle_times.append(float(dataset.variables["reftime"][0]))
-    if len(set(cycle_times)) != 1 or cycle_times[0] != 1786831200.0:
+    if len(set(cycle_times)) != 1 or cycle_times[0] != 1786860000.0:
         raise SystemExit("FUA/FSF model-cycle lineage mismatch")
 PY
 
