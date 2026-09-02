@@ -113,13 +113,7 @@ def independent_bottom_boundary(
     return (ps_after - ps_before) / 7200.0 + us * dpdx + vs * dpdy
 
 
-def verify(root: Path, manifest_path: Path, repo: Path) -> Path:
-    transaction = load_module(repo / "tools/cloud_bal_transaction.py", "transaction")
-    validator = load_module(
-        repo / "tools/validate_real_manufactured_balance.py", "validator"
-    )
-    plotter = load_module(repo / "tools/plot_real_manufactured_balance.py", "plotter")
-    generation = transaction.verify_current_generation(root)
+def source_identity(repo: Path) -> str:
     source_commit = subprocess.run(
         ["git", "-C", str(repo), "rev-parse", "HEAD"],
         check=True,
@@ -134,11 +128,10 @@ def verify(root: Path, manifest_path: Path, repo: Path) -> Path:
     ).stdout
     if status:
         raise ValueError("source tree is not clean")
+    return source_commit
 
-    transaction_manifest = json.loads(
-        (generation / "MANIFEST.json").read_text(encoding="utf-8")
-    )
-    summary = json.loads((generation / "RUN_SUMMARY.json").read_text(encoding="utf-8"))
+
+def reviewed_cases(manifest_path: Path, repo: Path) -> list[dict[str, str]]:
     regular_unlinked_input(manifest_path, EXPECTED_MANIFEST_SHA256)
     with manifest_path.open(encoding="utf-8", newline="") as stream:
         reader = csv.DictReader(stream, delimiter="\t")
@@ -148,32 +141,54 @@ def verify(root: Path, manifest_path: Path, repo: Path) -> Path:
     if [case["case_id"] for case in cases] != EXPECTED_CASE_IDS or \
             [case["valid_time_utc"] for case in cases] != EXPECTED_VALID_TIMES:
         raise ValueError("real-geometry manifest is not the reviewed four-case set")
-    all_paths = [
-        case[field]
-        for case in cases
-        for field in REQUIRED_CASE_FIELDS
-        if field.endswith("_path")
-    ]
-    if len(all_paths) != len(set(all_paths)):
-        raise ValueError("real-geometry manifest contains a duplicate input path")
+
+    # Adjacent valid times intentionally share FUA/FSF cycle files.  Bind each
+    # repeated path to one immutable hash instead of rejecting legitimate reuse.
+    input_hashes: dict[str, str] = {}
     workspace = repo.parent
     for case in cases:
-        for prefix in ("fua", "fsf_before", "fsf_center", "fsf_after", "lw3", "vrz", "vrt"):
-            regular_unlinked_input(
-                workspace / case[f"{prefix}_path"], case[f"{prefix}_sha256"]
-            )
+        for prefix in (
+            "fua", "fsf_before", "fsf_center", "fsf_after", "lw3", "vrz", "vrt"
+        ):
+            path = case[f"{prefix}_path"]
+            expected_hash = case[f"{prefix}_sha256"]
+            if path in input_hashes and input_hashes[path] != expected_hash:
+                raise ValueError("one input path is bound to multiple hashes")
+            input_hashes[path] = expected_hash
+    for path, expected_hash in input_hashes.items():
+        regular_unlinked_input(workspace / path, expected_hash)
+    return cases
+
+
+def verify_bundle(
+    bundle: Path,
+    metadata: dict,
+    cases: list[dict[str, str]],
+    manifest_path: Path,
+    repo: Path,
+    source_commit: str,
+) -> Path:
+    validator = load_module(
+        repo / "tools/validate_real_manufactured_balance.py", "validator"
+    )
+    plotter = load_module(repo / "tools/plot_real_manufactured_balance.py", "plotter")
+    summary = json.loads((bundle / "RUN_SUMMARY.json").read_text(encoding="utf-8"))
+    workspace = repo.parent
     case_ids = [case["case_id"] for case in cases]
     expected_products = {"RUN_SUMMARY.json"}
     for case_id in case_ids:
         expected_products.update(
             f"{case_id}.{extension}" for extension in ("nc", "json", "log", "png")
         )
-    actual_products = {item["path"] for item in transaction_manifest["products"]}
-    if actual_products != expected_products:
+    products = metadata.get("products")
+    declared_products = {
+        item["path"] if isinstance(item, dict) else item for item in products or []
+    }
+    if declared_products != expected_products:
         raise ValueError("generation case/product inventory differs from the manifest")
-    if transaction_manifest.get("source_commit") != source_commit:
+    if metadata.get("source_commit") != source_commit:
         raise ValueError("generation does not belong to exact source HEAD")
-    if transaction_manifest.get("configuration") != EXPECTED_CONFIGURATION:
+    if metadata.get("configuration") != EXPECTED_CONFIGURATION:
         raise ValueError("generation configuration mismatch")
     required_summary = {
         "contract": EXPECTED_CONTRACT,
@@ -202,10 +217,10 @@ def verify(root: Path, manifest_path: Path, repo: Path) -> Path:
         raise ValueError("not every case passed the numerical contract")
 
     for case_id in case_ids:
-        diagnostic = generation / f"{case_id}.nc"
-        log = generation / f"{case_id}.log"
+        diagnostic = bundle / f"{case_id}.nc"
+        log = bundle / f"{case_id}.log"
         stored_report = json.loads(
-            (generation / f"{case_id}.json").read_text(encoding="utf-8")
+            (bundle / f"{case_id}.json").read_text(encoding="utf-8")
         )
         if stored_report != validator.validate(diagnostic, log):
             raise ValueError(f"stored validator report differs: {case_id}")
@@ -231,9 +246,42 @@ def verify(root: Path, manifest_path: Path, repo: Path) -> Path:
         with tempfile.TemporaryDirectory(prefix="cloud-bal-figure-check-") as temp:
             repeated = Path(temp) / "figure.png"
             plotter.plot(diagnostic, repeated, case_id)
-            if sha256(repeated) != sha256(generation / f"{case_id}.png"):
+            if sha256(repeated) != sha256(bundle / f"{case_id}.png"):
                 raise ValueError(f"figure is not reproducible: {case_id}")
-    return generation
+    return bundle
+
+
+def verify_staging(staging: Path, manifest_path: Path, repo: Path) -> Path:
+    if staging.is_symlink():
+        raise ValueError("semantic preflight staging directory cannot be a symlink")
+    staging = staging.resolve(strict=True)
+    if staging.parent.name != ".staging":
+        raise ValueError("semantic preflight requires one transaction staging directory")
+    context = json.loads((staging / "TRANSACTION.json").read_text(encoding="utf-8"))
+    expected_files = set(context.get("products", [])) | {"TRANSACTION.json"}
+    actual_files = {
+        path.relative_to(staging).as_posix()
+        for path in staging.rglob("*")
+        if path.is_file()
+    }
+    if actual_files != expected_files:
+        raise ValueError("staging product inventory is incomplete or undeclared")
+    source_commit = source_identity(repo)
+    cases = reviewed_cases(manifest_path, repo)
+    return verify_bundle(staging, context, cases, manifest_path, repo, source_commit)
+
+
+def verify(root: Path, manifest_path: Path, repo: Path) -> Path:
+    transaction = load_module(repo / "tools/cloud_bal_transaction.py", "transaction")
+    generation = transaction.verify_current_generation(root)
+    source_commit = source_identity(repo)
+    cases = reviewed_cases(manifest_path, repo)
+    transaction_manifest = json.loads(
+        (generation / "MANIFEST.json").read_text(encoding="utf-8")
+    )
+    return verify_bundle(
+        generation, transaction_manifest, cases, manifest_path, repo, source_commit
+    )
 
 
 def main() -> int:
@@ -241,8 +289,12 @@ def main() -> int:
     parser.add_argument("publication_root", type=Path)
     parser.add_argument("manifest", type=Path)
     parser.add_argument("--repo", required=True, type=Path)
+    parser.add_argument("--staging", type=Path)
     args = parser.parse_args()
-    print(verify(args.publication_root, args.manifest, args.repo))
+    if args.staging is None:
+        print(verify(args.publication_root, args.manifest, args.repo))
+    else:
+        print(verify_staging(args.staging, args.manifest, args.repo))
     return 0
 
 

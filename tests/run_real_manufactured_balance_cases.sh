@@ -288,6 +288,8 @@ if [[ $(git -C "$repo_root" rev-parse HEAD) != "$source_commit" ]] || \
   printf 'source tree changed during the real-data numerical run\n' >&2
   exit 2
 fi
+python3 "$repo_root/tools/verify_real_manufactured_balance_generation.py" \
+  "$publication_root" "$manifest" --repo "$repo_root" --staging "$staging" >/dev/null
 python3 "$repo_root/tools/cloud_bal_transaction.py" commit \
   "$publication_root" "$transaction_id" >/dev/null
 staging=
