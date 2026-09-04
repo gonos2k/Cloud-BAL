@@ -29,10 +29,11 @@ from compare_operational_shadow import (  # noqa: E402
     archive_receipt,
     paths_overlap,
     plot_field_specs,
-    require_independent_inputs,
+    require_matching_inputs,
     render_status,
     scope_exclusions,
     shadow_generation,
+    snapshot_input,
     status_values,
     strict_root_path,
     validate_scope_inventory,
@@ -61,9 +62,30 @@ def _run_provenance_tests() -> None:
         current = live / "product"
         original.write_bytes(b"original")
         current.write_bytes(b"original")
-        require_independent_inputs(original, current)
         assert not paths_overlap(archive, live)
         assert paths_overlap(root, archive)
+
+        snapshots = root / "snapshots"
+        snapshots.mkdir()
+        original_snapshot = snapshot_input(original, snapshots / "original")
+        live_snapshot = snapshot_input(current, snapshots / "live")
+        require_matching_inputs(original_snapshot, live_snapshot)
+        duplicate_snapshot = snapshot_input(original, snapshots / "duplicate")
+        expect_rejected(
+            lambda: require_matching_inputs(
+                original_snapshot, duplicate_snapshot
+            ),
+            "same file",
+        )
+        different = root / "different"
+        different.write_bytes(b"different")
+        different_snapshot = snapshot_input(different, snapshots / "different")
+        expect_rejected(
+            lambda: require_matching_inputs(
+                original_snapshot, different_snapshot
+            ),
+            "mismatch",
+        )
 
         digest = hashlib.sha256(original.read_bytes()).hexdigest()
         receipt = root / "SHA256SUMS"
@@ -72,27 +94,122 @@ def _run_provenance_tests() -> None:
         assert found == receipt
         assert found_digest == hashlib.sha256(receipt.read_bytes()).hexdigest()
 
-        expect_rejected(
-            lambda: require_independent_inputs(original, original), "same file"
-        )
-        hardlink = live / "hardlink"
-        os.link(original, hardlink)
-        expect_rejected(
-            lambda: require_independent_inputs(original, hardlink), "single-link"
-        )
-        symlink = live / "symlink"
-        symlink.symlink_to(current)
-        expect_rejected(
-            lambda: require_independent_inputs(original, symlink), "symbolic links"
-        )
         receipt.unlink()
         expect_rejected(lambda: archive_receipt(original), "pre-existing receipt")
+
+        snapshot_source = root / "snapshot-source"
+        snapshot_source.write_bytes(b"snapshot")
+        snapshot = snapshot_input(snapshot_source, root / "snapshots" / "copy")
+        assert snapshot.sha256 == hashlib.sha256(b"snapshot").hexdigest()
+        assert snapshot.path.read_bytes() == b"snapshot"
+        assert snapshot.path.stat().st_mode & 0o777 == 0o400
+
+        snapshot_link = root / "snapshot-link"
+        snapshot_link.symlink_to(snapshot_source)
+        expect_rejected(
+            lambda: snapshot_input(snapshot_link, root / "snapshots" / "link"),
+            "unsafe input file",
+        )
+        snapshot_hardlink = root / "snapshot-hardlink"
+        os.link(snapshot_source, snapshot_hardlink)
+        expect_rejected(
+            lambda: snapshot_input(
+                snapshot_source, root / "snapshots" / "hardlink"
+            ),
+            "independent regular file",
+        )
+        snapshot_hardlink.unlink()
+
+        race_source = root / "race-source"
+        race_source.write_bytes(b"stable bytes")
+        race_backup = root / "race-source-opened"
+        real_read = os.read
+        replaced = False
+
+        def replace_path(descriptor, count):
+            nonlocal replaced
+            block = real_read(descriptor, count)
+            if block and not replaced:
+                replaced = True
+                race_source.rename(race_backup)
+                race_source.write_bytes(b"stable bytes")
+            return block
+
+        with mock.patch("compare_operational_shadow.os.read", side_effect=replace_path):
+            expect_rejected(
+                lambda: snapshot_input(
+                    race_source, root / "snapshots" / "raced"
+                ),
+                "changed while being",
+            )
+        assert not (root / "snapshots" / "raced").exists()
+
+        outside = root / "outside"
+        outside.mkdir()
+        (outside / "product").write_bytes(b"attacker")
+        linked_parent = root / "linked-parent"
+        linked_parent.symlink_to(outside, target_is_directory=True)
+        expect_rejected(
+            lambda: snapshot_input(
+                linked_parent / "product", root / "snapshots" / "escaped"
+            ),
+            "unsafe input file",
+        )
+
+        fifo = root / "fifo"
+        os.mkfifo(fifo)
+        expect_rejected(
+            lambda: snapshot_input(fifo, snapshots / "fifo"),
+            "independent regular file",
+        )
+
+        outside_destination = root / "outside-destination"
+        outside_destination.mkdir()
+        linked_destination = root / "linked-destination"
+        linked_destination.symlink_to(outside_destination, target_is_directory=True)
+        expect_rejected(
+            lambda: snapshot_input(
+                snapshot_source, linked_destination / "nested" / "copy"
+            ),
+            "unsafe input snapshot destination",
+        )
+        assert not (outside_destination / "nested").exists()
 
     print("Operational diagnostic-patch provenance tests passed")
 
 
 def test_provenance_guards() -> None:
     _run_provenance_tests()
+
+
+def test_archive_receipt_rejects_same_content_path_replacement() -> None:
+    with tempfile.TemporaryDirectory(prefix="cloud-bal-receipt-race-") as directory:
+        root = Path(directory)
+        product = root / "archive" / "product"
+        product.parent.mkdir()
+        product.write_bytes(b"product")
+        digest = hashlib.sha256(b"product").hexdigest()
+        receipt = root / "SHA256SUMS"
+        receipt.write_text(f"{digest}  archive/product\n", encoding="utf-8")
+        backup = root / "opened-receipt"
+        real_read = os.read
+        replaced = False
+
+        def replace_receipt(descriptor, count):
+            nonlocal replaced
+            block = real_read(descriptor, count)
+            if block and not replaced:
+                replaced = True
+                receipt.rename(backup)
+                receipt.write_bytes(backup.read_bytes())
+            return block
+
+        with mock.patch(
+            "compare_operational_shadow.os.read", side_effect=replace_receipt
+        ):
+            expect_rejected(
+                lambda: archive_receipt(product, digest), "changed while being"
+            )
 
 
 def test_shadow_generation_accepts_bound_schema_two() -> None:
@@ -117,9 +234,10 @@ def test_shadow_generation_accepts_bound_schema_two() -> None:
             encoding="utf-8",
         )
         transaction.commit()
-        products, manifest_sha = shadow_generation(
+        generation, products, manifest_sha = shadow_generation(
             root / "current", source_commit
         )
+        assert generation == (root / "current").resolve(strict=True)
         assert "RUN_SUMMARY.json" in products
         assert len(manifest_sha) == 64
 
@@ -411,7 +529,9 @@ def test_missing_partial_case_writes_non_ready_status_and_returns_three() -> Non
                 mock.patch("compare_operational_shadow.subprocess.check_output",
                            side_effect=git_output), \
                 mock.patch("compare_operational_shadow.shadow_generation",
-                           return_value=({}, "shadow-manifest-sha")):
+                           return_value=(
+                               shadow_generation, {}, "shadow-manifest-sha"
+                           )):
             assert compare_main() == 3
 
         report = json.loads(
@@ -458,7 +578,9 @@ def test_p1_report_and_status_seal_12_utc_exclusion_provenance() -> None:
                 mock.patch("compare_operational_shadow.subprocess.check_output",
                            side_effect=git_output), \
                 mock.patch("compare_operational_shadow.shadow_generation",
-                           return_value=({}, "shadow-manifest-sha")):
+                           return_value=(
+                               shadow_generation, {}, "shadow-manifest-sha"
+                           )):
             assert compare_main() == 3
 
         report = json.loads(
@@ -512,6 +634,7 @@ def test_p1_report_and_status_seal_12_utc_exclusion_provenance() -> None:
 
 def main() -> None:
     test_provenance_guards()
+    test_archive_receipt_rejects_same_content_path_replacement()
     test_shadow_generation_accepts_bound_schema_two()
     test_validate_hours_is_authoritative_and_fail_closed()
     test_p1_operational_scope_excludes_12_and_has_its_own_authority()

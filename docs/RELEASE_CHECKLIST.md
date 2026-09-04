@@ -106,7 +106,7 @@ algorithm comparison, mass basis, full-product provenance, promotion 또는
 | physical continuity·geostrophic·증분·방향 gate | ENGINEERING | 최종 real32 배열의 저장 residual·최댓값·선형 폐합과 Fortran bitset을 재검사; 별도 구현의 전체 D/G 재구성과 full-domain physical residual은 남음 |
 | 결과 파일의 단일 세대 transaction | ENGINEERING | schema 2 begin receipt, dirfd inventory/hash, no-replace generation rename, current 임시 pointer identity와 게시 직전 재검증을 적용; 외부 writer pathname/retained-fd와 전체 비교 bundle transaction은 남음 |
 | 증거 세대의 self-contained build/derived provenance | BLOCKED | 현재 build/runtime 절대경로와 figure/audit sidecar가 외부에 남음; 운영 증거 승격 전에 세대 내부 receipt 필요 |
-| exact-head·입력 content snapshot | BLOCKED | 현재 trusted single-user check/hash/check runner이며 adversarial path swap을 막는 immutable source/input snapshot은 미구현 |
+| exact-head·입력 content snapshot | BLOCKED | comparator 입력은 component-wise `O_NOFOLLOW`와 동일 fd read/hash/copy로 로컬 snapshot에 고정; prepare 경로, 실행 전 입력 권위, 동일 UID 변조 방어는 미구현 |
 | publication directory race 방어 | BLOCKED | generation 검증·inventory와 부모 identity는 dirfd/openat 계층으로 강화했고 schema 1 current는 거부; 동일 UID 공격자에 대한 writer capability/권한 격리와 operational input·comparison bundle 결속은 남음 |
 | focused Intel ifx 2026 단일 toolchain | DONE | strict/reproduction 스크립트에 GNU/ifort fallback 없음 |
 | 현업 KLAPS 전체 ifx link | BLOCKED | 3개 현업 binary는 legacy ifort 서명, canonical symbol 0, NetCDF/HDF5 runtime closure 미해결; `audit_intel_integration.py` 결과 38 blocker |
@@ -117,7 +117,7 @@ algorithm comparison, mass basis, full-product provenance, promotion 또는
 | Cloud-BAL 증분과 operational background 분리 | BLOCKED | 현재 patch의 `q_C-q_O=(q_C-q_B)+(q_B-q_O)`에서 두 항이 섞임; `q_C-q_B`와 basis 변환을 먼저 증명해야 함 |
 | WPS·Cloud-BAL 수분 질량분모 동일성 | BLOCKED | canonical은 `kg kg-1 dryair`, WPS 분모는 독립 입증되지 않아 field-level 민감도 이외 해석 금지 |
 | raw SHADOW diagnostic patch 4시각 완전성 | ENGINEERING | 12--15 UTC raw SHADOW 계약은 유지; 누락 시 global status와 exit는 fail-closed지만 내부 partial readiness artifact까지 완전히 무효화하는 적대시험은 남음 |
-| diagnostic patch 입력 독립성 | ENGINEERING | archive/live root 비중첩, 원본 파일의 symlink·hardlink·same-inode 거부와 기존 archive `SHA256SUMS` 결속을 구현; 적대 CLI 시험 추가 필요 |
+| diagnostic patch 입력 독립성 | ENGINEERING | archive/live/SHADOW/기존 receipt를 독립 로컬 snapshot으로 복사하고 read 중 symlink component·hardlink·same-inode·pathname replacement를 거부; snapshot은 인증되지 않으며 prepare/bundle 결속은 남음 |
 | diagnostic patch 적용 mask·그림 계약 | DONE | canonical species별 expected/applied mask 완전 일치, pressure one-to-one, no-change 정상 처리, 고정 550 hPa·고정 scale 사용 |
 | WPS patch field provenance | BLOCKED | patched record는 기존 operational source label을 유지하므로 parent/hash/mask sidecar만으로 field 내부 lineage를 복원할 수 없음 |
 | 비교 도구와 입력 generation source identity 분리 | ENGINEERING | patch receipt에 parent와 tool 정보를 나누되 외부 검토 SHA·서명된 release receipt는 미구현 |

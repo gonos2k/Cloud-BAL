@@ -206,7 +206,9 @@ P2~P8이 닫히기 전에는 `ACTIVE`를 만들거나 운영장에 candidate를 
       `stat/hash/read`에 결속하고, generation·부모 inode 변경을 거부한다.
 - [x] generation rename은 `RENAME_NOREPLACE`로 기존 target을 덮어쓰지 않고,
       current 임시 symlink의 target·inode 및 게시 직전 product 재검증을 요구한다.
-- [ ] operational/archive 입력도 동일 fd의 `stat/hash/read` snapshot으로 고정한다.
+- [ ] operational/archive 입력 전체의 immutable snapshot은 미완료다. comparator의
+      archive/live/SHADOW/기존 receipt는 동일 fd의 `stat/hash/read`로 로컬 복사하지만,
+      이 snapshot은 인증 증거가 아니며 prepare 경로와 동일 UID 공격은 남는다.
 - [ ] 외부 writer가 사용하는 `resolve_output()` pathname을 안전한 writer/import
       API로 교체하고 retained writable-fd 위협을 제거한다.
 - [ ] 전체 bundle을 staging에서 검증한 뒤 한 번의 atomic rename으로 게시한다.

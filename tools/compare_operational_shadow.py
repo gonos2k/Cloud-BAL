@@ -16,7 +16,6 @@ import csv
 import hashlib
 import json
 import os
-import shutil
 import stat
 import struct
 import subprocess
@@ -71,6 +70,15 @@ class CasePaths:
     original: Path
     live_original: Path
     shadow: Path
+
+
+@dataclass(frozen=True)
+class InputSnapshot:
+    path: Path
+    source_device: int
+    source_inode: int
+    source_size: int
+    sha256: str
 
 
 def strict_root_path(
@@ -361,11 +369,149 @@ def render_status(values: dict[str, object]) -> str:
 
 
 def sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest()
+    payload, _ = stable_file_bytes(path)
+    return hashlib.sha256(payload).hexdigest()
+
+
+def file_identity(status: os.stat_result) -> tuple[int, ...]:
+    return (
+        status.st_dev, status.st_ino, status.st_size,
+        status.st_mtime_ns, status.st_ctime_ns, status.st_nlink,
+    )
+
+
+def open_directory(path: Path) -> int:
+    """Open an absolute directory without following symlink components."""
+
+    absolute = Path(os.path.abspath(path))
+    descriptor = os.open(absolute.anchor, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        for part in absolute.parts[1:]:
+            child = os.open(
+                part,
+                os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
+                dir_fd=descriptor,
+            )
+            os.close(descriptor)
+            descriptor = child
+        return descriptor
+    except OSError:
+        os.close(descriptor)
+        raise
+
+
+def stable_file_bytes(path: Path) -> tuple[bytes, os.stat_result]:
+    parent_fd = None
+    descriptor = None
+    try:
+        absolute = Path(os.path.abspath(path))
+        parent_fd = open_directory(absolute.parent)
+        descriptor = os.open(
+            absolute.name,
+            os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW,
+            dir_fd=parent_fd,
+        )
+    except OSError as exc:
+        if parent_fd is not None:
+            os.close(parent_fd)
+        raise ValueError(f"unsafe input file: {path}") from exc
+    try:
+        before = os.fstat(descriptor)
+        if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1:
+            raise ValueError(f"input must be an independent regular file: {path}")
+        blocks = []
+        while True:
+            block = os.read(descriptor, 1024 * 1024)
+            if not block:
+                break
+            blocks.append(block)
+        after = os.fstat(descriptor)
+        try:
+            named = os.stat(
+                absolute.name, dir_fd=parent_fd, follow_symlinks=False
+            )
+        except OSError as exc:
+            raise ValueError(f"input path changed while being read: {path}") from exc
+        source_changed = file_identity(before) != file_identity(after)
+        path_changed = (named.st_dev, named.st_ino) != (
+            after.st_dev, after.st_ino
+        )
+        if source_changed or path_changed:
+            raise ValueError(f"input changed while being read: {path}")
+        payload = b"".join(blocks)
+        if len(payload) != after.st_size:
+            raise ValueError(f"input size changed while being read: {path}")
+        return payload, after
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        if parent_fd is not None:
+            os.close(parent_fd)
+
+
+def snapshot_input(
+    source: Path, destination: Path, *, mode: int = 0o400
+) -> InputSnapshot:
+    """Copy the exact bytes returned by one stable source-file read."""
+
+    payload, source_status = stable_file_bytes(source)
+    digest = hashlib.sha256(payload).hexdigest()
+    try:
+        parent_fd = open_directory(destination.parent)
+    except OSError as exc:
+        raise ValueError(f"unsafe input snapshot destination: {destination}") from exc
+    output_fd = None
+    try:
+        output_fd = os.open(
+            destination.name,
+            os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+            0o600,
+            dir_fd=parent_fd,
+        )
+        view = memoryview(payload)
+        while view:
+            written = os.write(output_fd, view)
+            if written <= 0:
+                raise ValueError(f"input snapshot write failed: {destination}")
+            view = view[written:]
+        os.fchmod(output_fd, mode)
+        os.fsync(output_fd)
+        copied = os.fstat(output_fd)
+        named = os.stat(
+            destination.name, dir_fd=parent_fd, follow_symlinks=False
+        )
+        os.lseek(output_fd, 0, os.SEEK_SET)
+        copied_digest = hashlib.sha256()
+        for block in iter(lambda: os.read(output_fd, 1024 * 1024), b""):
+            copied_digest.update(block)
+        verified = os.fstat(output_fd)
+        copy_changed = file_identity(copied) != file_identity(verified)
+        path_mismatch = (
+            verified.st_dev, verified.st_ino, verified.st_size, verified.st_nlink
+        ) != (named.st_dev, named.st_ino, len(payload), 1)
+        checksum_mismatch = copied_digest.hexdigest() != digest
+        if copy_changed or path_mismatch or checksum_mismatch:
+            raise ValueError(f"input snapshot checksum mismatch: {source}")
+        return InputSnapshot(
+            path=destination,
+            source_device=source_status.st_dev,
+            source_inode=source_status.st_ino,
+            source_size=source_status.st_size,
+            sha256=digest,
+        )
+    except (OSError, ValueError) as exc:
+        if output_fd is not None:
+            try:
+                os.unlink(destination.name, dir_fd=parent_fd)
+            except FileNotFoundError:
+                pass
+        if isinstance(exc, ValueError):
+            raise
+        raise ValueError(f"unsafe input snapshot destination: {destination}") from exc
+    finally:
+        if output_fd is not None:
+            os.close(output_fd)
+        os.close(parent_fd)
 
 
 def paths_overlap(left: Path, right: Path) -> bool:
@@ -374,39 +520,45 @@ def paths_overlap(left: Path, right: Path) -> bool:
     return left == right or left in right.parents or right in left.parents
 
 
-def require_independent_inputs(original: Path, live: Path) -> None:
-    if original.is_symlink() or live.is_symlink():
-        raise ValueError("operational input paths must not be symbolic links")
-    original_stat = original.stat(follow_symlinks=False)
-    live_stat = live.stat(follow_symlinks=False)
-    if original_stat.st_nlink != 1 or live_stat.st_nlink != 1:
-        raise ValueError("operational input files must be independent single-link files")
-    if (original_stat.st_dev, original_stat.st_ino) == (live_stat.st_dev, live_stat.st_ino):
+def require_matching_inputs(
+    original: InputSnapshot, live: InputSnapshot, case_id: str = "input pair"
+) -> None:
+    if (original.source_device, original.source_inode) == (
+        live.source_device, live.source_inode
+    ):
         raise ValueError("archived and live operational inputs are the same file")
+    if original.sha256 != live.sha256:
+        raise ValueError(f"archived/live operational mismatch for {case_id}")
 
 
-def archive_receipt(path: Path) -> tuple[Path, str]:
-    digest = sha256(path)
+def archive_receipt(path: Path, digest: str | None = None) -> tuple[Path, str]:
+    if digest is None:
+        payload, _ = stable_file_bytes(path)
+        digest = hashlib.sha256(payload).hexdigest()
     for parent in path.parents:
         receipt = parent / "SHA256SUMS"
-        if not receipt.is_file() or receipt.is_symlink() or receipt.stat().st_nlink != 1:
+        if not receipt.is_file():
             continue
         relative = path.relative_to(parent).as_posix()
-        for line in receipt.read_text(encoding="utf-8").splitlines():
+        payload, _ = stable_file_bytes(receipt)
+        for line in payload.decode("utf-8").splitlines():
             parts = line.split(maxsplit=1)
             if len(parts) == 2 and parts[0] == digest and parts[1].lstrip("*") == relative:
-                return receipt, sha256(receipt)
+                return receipt, hashlib.sha256(payload).hexdigest()
     raise ValueError(f"archived operational input lacks a pre-existing receipt: {path}")
 
 
-def shadow_generation(root: Path, source_commit: str) -> tuple[dict[str, dict], str]:
+def shadow_generation(
+    root: Path, source_commit: str
+) -> tuple[Path, dict[str, dict], str]:
     if root.name != "current" or not root.is_symlink():
         raise ValueError("--shadow-root must be a committed current-generation pointer")
     generation = verify_current_generation(root.parent)
     if generation != root.resolve(strict=True):
         raise ValueError("--shadow-root does not resolve to the verified current generation")
     manifest_path = generation / "MANIFEST.json"
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest_bytes, _ = stable_file_bytes(manifest_path)
+    manifest = json.loads(manifest_bytes.decode("utf-8"))
     if manifest.get("schema") != 2:
         raise ValueError("unsupported SHADOW generation manifest")
     if manifest.get("source_commit") != source_commit:
@@ -414,9 +566,8 @@ def shadow_generation(root: Path, source_commit: str) -> tuple[dict[str, dict], 
     if manifest.get("configuration") != SHADOW_CONFIGURATION:
         raise ValueError("SHADOW generation configuration is not the approved profile")
     summary_path = generation / "RUN_SUMMARY.json"
-    if not summary_path.is_file():
-        raise ValueError("SHADOW generation lacks RUN_SUMMARY.json")
-    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary_bytes, _ = stable_file_bytes(summary_path)
+    summary = json.loads(summary_bytes.decode("utf-8"))
     if (summary.get("source_commit") != source_commit
             or summary.get("source_tree_clean") is not True
             or summary.get("numerical_contract") != "PASS"
@@ -428,7 +579,9 @@ def shadow_generation(root: Path, source_commit: str) -> tuple[dict[str, dict], 
     by_path = {item.get("path"): item for item in products if isinstance(item, dict)}
     if len(by_path) != len(products):
         raise ValueError("SHADOW generation product inventory has duplicate paths")
-    return by_path, sha256(manifest_path)
+    if verify_current_generation(root.parent) != generation:
+        raise ValueError("SHADOW current generation changed while it was inspected")
+    return generation, by_path, hashlib.sha256(manifest_bytes).hexdigest()
 
 
 def write_record(stream, endian: str, payload: bytes) -> None:
@@ -850,9 +1003,11 @@ def main() -> int:
     ).strip():
         print("comparison tool source tree must be clean", file=sys.stderr)
         return 2
-    shadow_products, shadow_manifest_sha = shadow_generation(
+    shadow_root, shadow_products, shadow_manifest_sha = shadow_generation(
         args.shadow_root, args.source_commit
     )
+    shadow_publication_root = args.shadow_root.parent
+    args.shadow_root = shadow_root
     if paths_overlap(args.original_root, args.live_root):
         raise ValueError("archived and live operational roots must not overlap")
     args.output.mkdir(parents=True)
@@ -874,6 +1029,9 @@ def main() -> int:
         "mass_basis_resolved": False,
         "dynamic_balance_authorized": False,
         "operational_original_modified": False,
+        "input_snapshot_contract": (
+            "LOCAL_CONTENT_SNAPSHOT_NO_AUTHENTICATION"
+        ),
         "candidate_construction": (
             "diagnostic operational WPS copy with QC/QI/QR/QS/QG absolute values "
             "replaced only where the real-data Cloud-BAL column stage changed them"
@@ -908,62 +1066,66 @@ def main() -> int:
             report["cases"].append(case_report)
             continue
 
-        shadow_entry = shadow_products.get(paths.shadow.name)
-        shadow_sha = sha256(paths.shadow)
-        if (not isinstance(shadow_entry, dict)
-                or shadow_entry.get("sha256") != shadow_sha
-                or shadow_entry.get("bytes") != paths.shadow.stat().st_size):
-            raise ValueError(f"SHADOW diagnostic is not generation-bound: {paths.case_id}")
-        expected_epoch = calendar.timegm((2026, 8, 16, hour, 0, 0))
-        with Dataset(paths.shadow) as shadow_dataset:
-            if int(getattr(shadow_dataset, "valid_time_epoch", -1)) != expected_epoch:
-                raise ValueError(f"SHADOW valid time differs from case: {paths.case_id}")
-
-        require_independent_inputs(paths.original, paths.live_original)
-        receipt_path, receipt_sha = archive_receipt(paths.original)
-        original_sha = sha256(paths.original)
-        live_sha = sha256(paths.live_original)
-        if original_sha != live_sha:
-            raise ValueError(f"archived/live operational mismatch for {paths.case_id}")
-
         case_root = args.output / paths.case_id
         original_dir = case_root / "original"
         candidate_dir = case_root / "candidate"
         operational_dir = case_root / "operational_unchanged"
         figures_dir = case_root / "figures"
+        shadow_dir = case_root / "shadow_input"
+        receipt_dir = case_root / "source_receipt"
         original_dir.mkdir(parents=True)
         candidate_dir.mkdir()
         operational_dir.mkdir()
         figures_dir.mkdir()
+        shadow_dir.mkdir()
+        receipt_dir.mkdir()
         isolated_original = original_dir / paths.original.name
         candidate = candidate_dir / paths.original.name
         operational = operational_dir / paths.original.name
-        shutil.copy2(paths.original, isolated_original)
-        shutil.copy2(paths.original, candidate)
-        shutil.copy2(paths.live_original, operational)
-        if isolated_original.stat().st_ino == paths.original.stat().st_ino:
-            raise ValueError("operational original was not independently copied")
-        if (sha256(isolated_original) != original_sha
-                or sha256(candidate) != original_sha
-                or sha256(operational) != original_sha):
-            raise ValueError("isolated operational copy failed checksum validation")
+        shadow_input = shadow_dir / paths.shadow.name
+        original_snapshot = snapshot_input(paths.original, isolated_original)
+        live_snapshot = snapshot_input(paths.live_original, operational)
+        shadow_snapshot = snapshot_input(paths.shadow, shadow_input)
+        require_matching_inputs(original_snapshot, live_snapshot, paths.case_id)
+        receipt_path, receipt_sha = archive_receipt(
+            paths.original, original_snapshot.sha256
+        )
+        receipt_snapshot = snapshot_input(
+            receipt_path, receipt_dir / "SHA256SUMS"
+        )
+        if receipt_snapshot.sha256 != receipt_sha:
+            raise ValueError("archive receipt changed while it was snapshotted")
 
-        build = build_candidate(isolated_original, paths.shadow, candidate)
+        shadow_entry = shadow_products.get(paths.shadow.name)
+        if (not isinstance(shadow_entry, dict)
+                or shadow_entry.get("sha256") != shadow_snapshot.sha256
+                or shadow_entry.get("bytes") != shadow_snapshot.source_size):
+            raise ValueError(f"SHADOW diagnostic is not generation-bound: {paths.case_id}")
+        if verify_current_generation(shadow_publication_root) != args.shadow_root:
+            raise ValueError("SHADOW generation changed while input was snapshotted")
+        expected_epoch = calendar.timegm((2026, 8, 16, hour, 0, 0))
+        with Dataset(shadow_input) as shadow_dataset:
+            if int(getattr(shadow_dataset, "valid_time_epoch", -1)) != expected_epoch:
+                raise ValueError(f"SHADOW valid time differs from case: {paths.case_id}")
+
+        original_sha = original_snapshot.sha256
+        shadow_sha = shadow_snapshot.sha256
+        build = build_candidate(isolated_original, shadow_input, candidate)
         rows, comparison = compare_products(isolated_original, candidate)
         level = PLOT_LEVEL_PA
         if build["modified_by_level"]:
             case_status = "COMPLETED_DIAGNOSTIC"
         else:
-            with Dataset(paths.shadow) as dataset:
+            with Dataset(shadow_input) as dataset:
                 pressure = np.asarray(dataset.variables["pressure"][:], dtype=np.float64)
             if not np.any(np.rint(pressure).astype(np.int64) == PLOT_LEVEL_PA):
                 raise ValueError(f"fixed diagnostic level is absent: {PLOT_LEVEL_PA}")
             case_status = "COMPLETED_NO_CHANGE"
         figure = figures_dir / f"{paths.case_id}_{level // 100}hPa.png"
-        plot_case(paths.case_id, isolated_original, candidate, paths.shadow, level, figure)
+        plot_case(paths.case_id, isolated_original, candidate, shadow_input, level, figure)
         contract_pairs.append(seal_case(
             args.output, paths.case_id, args.source_commit, isolated_original,
-            candidate, operational, paths.shadow, hour,
+            candidate, operational, shadow_input, hour,
         ))
 
         for row in rows:
@@ -973,14 +1135,31 @@ def main() -> int:
             status=case_status,
             operational_original=str(paths.original.resolve()),
             isolated_original=str(isolated_original.resolve()),
-            shadow_diagnostic=str(paths.shadow.resolve()),
+            shadow_diagnostic=str(paths.shadow.absolute()),
             shadow_diagnostic_sha256=shadow_sha,
+            shadow_snapshot=str(shadow_input.resolve()),
             candidate=str(candidate.resolve()),
             operational_unchanged=str(operational.resolve()),
             figure=str(figure.resolve()),
             operational_sha256=original_sha,
+            operational_original_source_identity={
+                "device": original_snapshot.source_device,
+                "inode": original_snapshot.source_inode,
+                "bytes": original_snapshot.source_size,
+            },
+            live_operational_source_identity={
+                "device": live_snapshot.source_device,
+                "inode": live_snapshot.source_inode,
+                "bytes": live_snapshot.source_size,
+            },
+            shadow_source_identity={
+                "device": shadow_snapshot.source_device,
+                "inode": shadow_snapshot.source_inode,
+                "bytes": shadow_snapshot.source_size,
+            },
             source_archive_receipt=str(receipt_path.resolve()),
             source_archive_receipt_sha256=receipt_sha,
+            source_archive_receipt_snapshot=str(receipt_snapshot.path.resolve()),
             isolated_original_sha256=sha256(isolated_original),
             candidate_sha256=sha256(candidate),
             selected_level_pa=level,
