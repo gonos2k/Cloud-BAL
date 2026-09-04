@@ -45,6 +45,26 @@
 
 상태 표시는 `DONE`, `ENGINEERING`, `BLOCKED`만 사용한다. `DONE`은 명시된
 범위만 닫혔다는 뜻이며 과학·운영 승인을 뜻하지 않는다.
+P1 operational comparison에는 별도로 `DONE (SCOPED)`를 사용할 수 있으며,
+이는 13/14/15 UTC comparison scope 선언만 닫혔다는 뜻이다. 실행 evidence,
+algorithm comparison, mass basis, full-product provenance, promotion 또는
+`ACTIVE` 권한은 포함하지 않는다.
+
+## P1 operational-comparison scope
+
+| 범위 | 상태 | 현재 판정 또는 남은 조건 |
+|---|---|---|
+| 2026-08-16 13/14/15 UTC archived operational comparison | **DONE (SCOPED)** | P1 operational comparison은 정확히 세 시각만 완결; exact-HEAD receipt가 실행과 구조 gate를 기록 |
+| 2026-08-16 12 UTC archived operational comparison | `EXCLUDED_HISTORICAL_NOT_AVAILABLE` | `ARCHIVED_OPERATIONAL_LAPS_MISSING`; KLBG/met_em 대체 금지 |
+| raw SHADOW/upstream/manufactured 12--15 UTC contracts | 유지 | 이 P1 comparison scope 변경으로 네 시각 전수 계약을 축소하지 않음 |
+
+실행 evidence의 exact HEAD, 입력·도구 hash와 exit 수치는 scoped output의
+`comparison.json`, `scope-manifest.json`, `STATUS.txt`를 함께 사용한다.
+`comparison-manifest.json`과 `READINESS.json`은 pair-level 구조 검증에
+한정하고 독립 scope/HEAD receipt로 해석하지 않는다. 위 scoped 상태는
+`algorithm_comparison_ready=false`, `mass_basis_gate=BLOCKED_UNRESOLVED`,
+`promotion_eligible=false` 및 full-product/`ACTIVE` BLOCKED 판정을 변경하지
+않는다.
 
 ## P0 체크리스트
 
@@ -92,11 +112,11 @@
 | 현업 KLAPS 전체 ifx link | BLOCKED | 3개 현업 binary는 legacy ifort 서명, canonical symbol 0, NetCDF/HDF5 runtime closure 미해결; `audit_intel_integration.py` 결과 38 blocker |
 | canonical pipeline이 전체 KLAPS 호출망의 단일 구현 | BLOCKED | qbalpe/derived-cloud/LAPSPREP adapter와 전체 링크가 아직 없음 |
 | 원래 QBAL 직접 입력 closure | BLOCKED | 4시각 upstream replay preflight과 41개 독립 read-only copy, VRT 4/4는 완료; 실제 producer는 실행하지 않아 LT1/LQ3/LCO/LSX가 `NOT_PRODUCED` |
-| 현업 원본-vs-diagnostic patch 계약 | ENGINEERING | role/origin/status를 `DERIVED_DIAGNOSTIC_PATCH` / `OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH` / `DIAGNOSTIC_PATCH_VALID_NOT_COMPARABLE`로 제한; source-path 적대시험과 bundle 전체 transaction은 남음 |
+| 현업 원본-vs-diagnostic patch 계약 | DONE (SCOPED) | P1 operational comparison scope는 13/14/15 UTC로 제한하고 12 UTC는 `EXCLUDED_HISTORICAL_NOT_AVAILABLE` / `ARCHIVED_OPERATIONAL_LAPS_MISSING`으로 기록; role/origin/status 계약은 유지되며 source-path 적대시험과 bundle 전체 transaction은 남음 |
 | 비교 candidate의 동일 background·질량기준 | BLOCKED | 현재 hybrid는 diagnostic absolute candidate를 운영 WPS에 이식; `diagnostic background == KLAPS original` 또는 보존적으로 변환한 increment를 먼저 증명해야 함 |
 | Cloud-BAL 증분과 operational background 분리 | BLOCKED | 현재 patch의 `q_C-q_O=(q_C-q_B)+(q_B-q_O)`에서 두 항이 섞임; `q_C-q_B`와 basis 변환을 먼저 증명해야 함 |
 | WPS·Cloud-BAL 수분 질량분모 동일성 | BLOCKED | canonical은 `kg kg-1 dryair`, WPS 분모는 독립 입증되지 않아 field-level 민감도 이외 해석 금지 |
-| diagnostic patch 4시각 완전성 | ENGINEERING | 누락 시 global status와 exit는 fail-closed지만 내부 partial readiness artifact까지 완전히 무효화하는 적대시험은 남음 |
+| raw SHADOW diagnostic patch 4시각 완전성 | ENGINEERING | 12--15 UTC raw SHADOW 계약은 유지; 누락 시 global status와 exit는 fail-closed지만 내부 partial readiness artifact까지 완전히 무효화하는 적대시험은 남음 |
 | diagnostic patch 입력 독립성 | ENGINEERING | archive/live root 비중첩, 원본 파일의 symlink·hardlink·same-inode 거부와 기존 archive `SHA256SUMS` 결속을 구현; 적대 CLI 시험 추가 필요 |
 | diagnostic patch 적용 mask·그림 계약 | DONE | canonical species별 expected/applied mask 완전 일치, pressure one-to-one, no-change 정상 처리, 고정 550 hPa·고정 scale 사용 |
 | WPS patch field provenance | BLOCKED | patched record는 기존 operational source label을 유지하므로 parent/hash/mask sidecar만으로 field 내부 lineage를 복원할 수 없음 |

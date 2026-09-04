@@ -42,6 +42,17 @@ HYDROMETEORS = {
 }
 SHADOW_CONFIGURATION = "radar-only-shadow-ifx-2026-v3"
 AUTHORITATIVE_HOURS = (12, 13, 14, 15)
+# ``full`` is the original four-hour replay contract.  The explicit P1 scope
+# is limited to the archived operational LAPS inventory (13/14/15 UTC).
+FULL_SCOPE = "full"
+P1_OPERATIONAL_SCOPE = "p1-operational"
+P1_OPERATIONAL_HOURS = (13, 14, 15)
+P1_EXCLUDED_UTC_HOURS = (12,)
+P1_EXCLUSION_STATUS = "EXCLUDED_HISTORICAL_NOT_AVAILABLE"
+P1_EXCLUSION_REASON = "ARCHIVED_OPERATIONAL_LAPS_MISSING"
+P1_EXCLUSION_PROVENANCE = (
+    "OPERATIONAL_COMPARISON_CONTRACT_2026_08_16_INVENTORY"
+)
 PLOT_LEVEL_PA = 55000
 HYDROMETEOR_LIMIT_GKG = 15.0
 HYDROMETEOR_DELTA_LIMIT_GKG = 15.0
@@ -101,16 +112,73 @@ def strict_root_path(
     return lexical
 
 
+def normalize_scope(scope: str | None) -> str:
+    """Return one of the two explicit comparison scopes."""
+
+    if scope is None:
+        return FULL_SCOPE
+    if not isinstance(scope, str) or not scope.strip():
+        raise ValueError("comparison scope must be a non-empty string")
+    normalized = scope.strip().lower()
+    if normalized not in (FULL_SCOPE, P1_OPERATIONAL_SCOPE):
+        choices = f"{FULL_SCOPE!r} or {P1_OPERATIONAL_SCOPE!r}"
+        raise ValueError(f"unknown comparison scope {scope!r}; use {choices}")
+    return normalized
+
+
+def scope_contract(scope: str | None = None) -> dict[str, object]:
+    """Return the hour and exclusion contract for a comparison scope."""
+
+    scope = normalize_scope(scope)
+    if scope == P1_OPERATIONAL_SCOPE:
+        return {
+            "scope": scope,
+            "hours": P1_OPERATIONAL_HOURS,
+            "excluded_utc_hours": P1_EXCLUDED_UTC_HOURS,
+            "excluded_utc_status": P1_EXCLUSION_STATUS,
+            "excluded_utc_reason": P1_EXCLUSION_REASON,
+            "excluded_utc_provenance": P1_EXCLUSION_PROVENANCE,
+        }
+    return {
+        "scope": FULL_SCOPE,
+        "hours": AUTHORITATIVE_HOURS,
+        "excluded_utc_hours": (),
+        "excluded_utc_status": "NOT_APPLICABLE_FULL_SCOPE",
+        "excluded_utc_reason": "NOT_APPLICABLE_FULL_SCOPE",
+        "excluded_utc_provenance": "FULL_SCOPE_INCLUDES_12_UTC",
+    }
+
+
+def scope_exclusions(scope: str | None = None) -> list[dict[str, object]]:
+    """Return explicit records for cases intentionally outside a scope."""
+
+    contract = scope_contract(scope)
+    return [
+        {
+            "case_id": f"20260816T{hour:02d}0000Z",
+            "valid_time": f"2026-08-16T{hour:02d}:00:00Z",
+            "status": contract["excluded_utc_status"],
+            "reason": contract["excluded_utc_reason"],
+            "provenance": contract["excluded_utc_provenance"],
+        }
+        for hour in contract["excluded_utc_hours"]
+    ]
+
+
 def validate_hours(
-    hours: Sequence[int], allow_partial: bool = False
+    hours: Sequence[int], allow_partial: bool = False,
+    scope: str = FULL_SCOPE,
 ) -> tuple[int, ...]:
     """Validate the requested diagnostic hours before creating any output.
 
-    The authoritative replay is exactly the four ordered UTC hours.  A
-    smaller replay is useful for debugging only when it is explicitly marked
-    as partial; it can never become an authoritative diagnostic execution.
+    A scope's ordered UTC hours are authoritative only when all of them are
+    requested.  A smaller replay is useful for debugging only when it is
+    explicitly marked as partial; it can never become authoritative.
     """
 
+    contract = scope_contract(scope)
+    scope = contract["scope"]
+    scoped_hours = contract["hours"]
     requested = tuple(hours)
     if not requested:
         raise ValueError("at least one diagnostic hour is required")
@@ -121,6 +189,17 @@ def validate_hours(
     if unknown:
         raise ValueError(f"unknown diagnostic hour(s): {unknown}")
 
+    excluded = sorted(set(requested) - set(scoped_hours))
+    if excluded:
+        if scope == P1_OPERATIONAL_SCOPE and 12 in excluded:
+            raise ValueError(
+                "12 UTC is excluded from the P1 operational scope; "
+                "the archived operational LAPS product is missing"
+            )
+        raise ValueError(
+            f"diagnostic hour(s) {excluded} are outside comparison scope {scope}"
+        )
+
     duplicate = sorted({hour for hour in requested if requested.count(hour) > 1})
     if duplicate:
         raise ValueError(f"duplicate diagnostic hour(s): {duplicate}")
@@ -128,9 +207,9 @@ def validate_hours(
     if requested != tuple(sorted(requested)):
         raise ValueError(
             "diagnostic hours must be in authoritative order: "
-            f"{AUTHORITATIVE_HOURS}"
+            f"{scoped_hours}"
         )
-    if requested != AUTHORITATIVE_HOURS and not allow_partial:
+    if requested != scoped_hours and not allow_partial:
         raise ValueError(
             "a diagnostic hour subset requires --allow-partial-diagnostic"
         )
@@ -174,7 +253,7 @@ def plot_field_specs(level: int = PLOT_LEVEL_PA) -> list[dict]:
 
 def status_values(
     requested_hours: Sequence[int], requested_case_set_complete: bool,
-    available_pairs: bool = True,
+    available_pairs: bool = True, scope: str = FULL_SCOPE,
 ) -> dict[str, object]:
     """Build the separate diagnostic-execution and comparison statuses."""
 
@@ -182,13 +261,16 @@ def status_values(
         raise ValueError("requested-case completeness must be boolean")
     if not isinstance(available_pairs, bool):
         raise ValueError("available-pairs state must be boolean")
-    requested = validate_hours(requested_hours, allow_partial=True)
+    contract = scope_contract(scope)
+    scope = contract["scope"]
+    scoped_hours = contract["hours"]
+    requested = validate_hours(requested_hours, allow_partial=True, scope=scope)
     authoritative_complete = (
-        requested == AUTHORITATIVE_HOURS
+        requested == scoped_hours
         and requested_case_set_complete
         and available_pairs
     )
-    if requested != AUTHORITATIVE_HOURS:
+    if requested != scoped_hours:
         execution = DIAGNOSTIC_PARTIAL
     elif authoritative_complete:
         execution = DIAGNOSTIC_COMPLETE
@@ -196,7 +278,7 @@ def status_values(
         execution = DIAGNOSTIC_INCOMPLETE
     comparison_readiness = (
         COMPARISON_NOT_READY_MASS
-        if requested_case_set_complete and available_pairs
+        if authoritative_complete
         else "NOT_READY_REQUESTED_CASES_INCOMPLETE"
     )
     return {
@@ -212,8 +294,14 @@ def status_values(
         "mass_basis_gate": "BLOCKED_UNRESOLVED",
         "authoritative_complete": authoritative_complete,
         "requested_hours": list(requested),
-        "authoritative_hours": list(AUTHORITATIVE_HOURS),
+        "authoritative_hours": list(scoped_hours),
         "requested_case_set_complete": requested_case_set_complete,
+        "comparison_scope": scope,
+        "scope_hours": list(scoped_hours),
+        "excluded_utc_hours": list(contract["excluded_utc_hours"]),
+        "excluded_utc_status": contract["excluded_utc_status"],
+        "excluded_utc_reason": contract["excluded_utc_reason"],
+        "excluded_utc_provenance": contract["excluded_utc_provenance"],
     }
 
 
@@ -225,7 +313,9 @@ def render_status(values: dict[str, object]) -> str:
         "comparison_status", "available_artifact_validity", "mass_basis_gate",
         "diagnostic_exit", "algorithm_comparison_ready", "promotion_eligible",
         "authoritative_complete", "requested_hours", "authoritative_hours",
-        "requested_case_set_complete",
+        "requested_case_set_complete", "comparison_scope", "scope_hours",
+        "excluded_utc_hours", "excluded_utc_reason",
+        "excluded_utc_status", "excluded_utc_provenance",
     )
     missing = [key for key in required if key not in values]
     if missing:
@@ -240,6 +330,7 @@ def render_status(values: dict[str, object]) -> str:
         values["requested_hours"],
         values["requested_case_set_complete"],
         available_pairs=values["available_artifact_validity"] == DIAGNOSTIC_PATCH_VALID,
+        scope=values["comparison_scope"],
     )
     if any(values[key] != expected[key] for key in expected):
         raise ValueError("status values are inconsistent with the case inventory")
@@ -249,6 +340,15 @@ def render_status(values: dict[str, object]) -> str:
         f"comparison_readiness={values['comparison_readiness']}",
         f"comparison_status={values['comparison_status']}",
         f"available_artifact_validity={values['available_artifact_validity']}",
+        f"comparison_scope={values['comparison_scope']}",
+        "scope_hours=" + ",".join(str(hour) for hour in values["scope_hours"]),
+        "excluded_utc_hours=" + (
+            ",".join(str(hour) for hour in values["excluded_utc_hours"])
+            if values["excluded_utc_hours"] else "NONE"
+        ),
+        f"excluded_utc_status={values['excluded_utc_status']}",
+        f"excluded_utc_reason={values['excluded_utc_reason']}",
+        f"excluded_utc_provenance={values['excluded_utc_provenance']}",
         "algorithm_comparison_ready=false",
         "promotion_eligible=false",
         f"mass_basis_gate={values['mass_basis_gate']}",
@@ -597,6 +697,22 @@ def case_paths(args, hour: int) -> CasePaths:
     )
 
 
+def validate_scope_inventory(original_root: Path, live_root: Path, scope: str) -> None:
+    """Reject a scoped exclusion whose operational input is now present."""
+
+    for hour in scope_contract(scope)["excluded_utc_hours"]:
+        filename = f"LAPS:2026-08-16_{hour:02d}:00"
+        paths = (
+            original_root / f"20260816{hour:02d}" / filename,
+            live_root / f"20260816{hour:02d}" / filename,
+        )
+        if any(path.exists() or path.is_symlink() for path in paths):
+            raise ValueError(
+                f"{hour:02d} UTC cannot remain excluded because an operational "
+                "LAPS input is present"
+            )
+
+
 def artifact(root: Path, role: str, origin: str, path: Path) -> dict:
     result = {
         "evidence_role": role,
@@ -675,17 +791,29 @@ def main() -> int:
     parser.add_argument("--shadow-root", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--source-commit", required=True)
-    parser.add_argument("--hours", nargs="+", type=int, default=list(AUTHORITATIVE_HOURS))
+    parser.add_argument(
+        "--scope", choices=(FULL_SCOPE, P1_OPERATIONAL_SCOPE),
+        default=FULL_SCOPE,
+        help=(
+            "comparison scope: full (12/13/14/15 UTC) or "
+            "p1-operational (13/14/15 UTC)"
+        ),
+    )
+    parser.add_argument("--hours", nargs="+", type=int, default=None)
     parser.add_argument(
         "--allow-partial-diagnostic",
         action="store_true",
-        help="allow an explicitly non-authoritative subset of the four diagnostic hours",
+        help="allow an explicitly non-authoritative subset of the selected scope",
     )
     args = parser.parse_args()
 
     try:
+        args.scope = normalize_scope(args.scope)
+        if args.hours is None:
+            args.hours = list(scope_contract(args.scope)["hours"])
         requested_hours = validate_hours(
-            args.hours, allow_partial=args.allow_partial_diagnostic
+            args.hours, allow_partial=args.allow_partial_diagnostic,
+            scope=args.scope,
         )
         args.original_root = strict_root_path(args.original_root, "original-root")
         args.live_root = strict_root_path(args.live_root, "live-root")
@@ -694,6 +822,9 @@ def main() -> int:
         )
         args.output = strict_root_path(
             args.output, "output", must_exist=False
+        )
+        validate_scope_inventory(
+            args.original_root, args.live_root, args.scope
         )
     except ValueError as exc:
         print(f"invalid comparison request: {exc}", file=sys.stderr)
@@ -726,8 +857,16 @@ def main() -> int:
         raise ValueError("archived and live operational roots must not overlap")
     args.output.mkdir(parents=True)
 
+    scope = scope_contract(args.scope)
     report = {
         "schema_version": 1,
+        "comparison_scope": scope["scope"],
+        "scope_hours": list(scope["hours"]),
+        "excluded_utc_hours": list(scope["excluded_utc_hours"]),
+        "excluded_utc_status": scope["excluded_utc_status"],
+        "excluded_utc_reason": scope["excluded_utc_reason"],
+        "excluded_utc_provenance": scope["excluded_utc_provenance"],
+        "scope_exclusions": scope_exclusions(args.scope),
         "comparison_authority": "DIAGNOSTIC_FIELD_LEVEL_ONLY",
         "algorithm_comparison_status": "NOT_RUN_FULL_END_TO_END",
         "full_product_candidate": False,
@@ -864,10 +1003,23 @@ def main() -> int:
         writer.writeheader()
         writer.writerows(all_rows)
     contract_manifest = args.output / "comparison-manifest.json"
+    comparison_id = f"operational-shadow-{args.scope}-{args.source_commit[:12]}"
     contract_manifest.write_text(json.dumps({
         "schema_version": 1,
-        "comparison_id": f"operational-shadow-{args.source_commit[:12]}",
+        "comparison_id": comparison_id,
         "pairs": contract_pairs,
+    }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    scope_manifest = args.output / "scope-manifest.json"
+    scope_manifest.write_text(json.dumps({
+        "schema_version": 1,
+        "comparison_id": comparison_id,
+        "comparison_scope": scope["scope"],
+        "scope_hours": list(scope["hours"]),
+        "scope_exclusions": scope_exclusions(args.scope),
+        "source_commit": args.source_commit,
+        "comparison_tool_sha256": report["comparison_tool_sha256"],
+        "shadow_generation_manifest_sha256": shadow_manifest_sha,
+        "comparison_manifest_sha256": sha256(contract_manifest),
     }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     if contract_pairs:
         readiness = prepare(
@@ -884,11 +1036,18 @@ def main() -> int:
             "algorithm_comparison_status": "NOT_RUN",
         }
     status = status_values(
-        requested_hours, requested_cases_complete, available_pairs=bool(contract_pairs)
+        requested_hours, requested_cases_complete,
+        available_pairs=bool(contract_pairs), scope=args.scope,
     )
     report["requested_case_set_complete"] = requested_cases_complete
     report["diagnostic_execution"] = {
         "status": status["diagnostic_execution"],
+        "comparison_scope": status["comparison_scope"],
+        "scope_hours": status["scope_hours"],
+        "excluded_utc_hours": status["excluded_utc_hours"],
+        "excluded_utc_status": status["excluded_utc_status"],
+        "excluded_utc_reason": status["excluded_utc_reason"],
+        "excluded_utc_provenance": status["excluded_utc_provenance"],
         "requested_hours": status["requested_hours"],
         "authoritative_hours": status["authoritative_hours"],
         "authoritative_complete": status["authoritative_complete"],

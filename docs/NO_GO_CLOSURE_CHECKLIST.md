@@ -26,6 +26,7 @@
 | `BLOCKED` | 알려진 blocker가 있어 다음 단계의 승격을 막음 |
 | `PLANNED` | 선행 단계 폐합 뒤 시작할 예정이며 아직 유효한 증거가 없음 |
 | `DONE` | 이 ledger의 단계 범위가 exact-HEAD 증거로 폐합됨. 운영 승인을 뜻하지 않음 |
+| `DONE (SCOPED)` | P1 operational-comparison 범위만 폐합됨. 실행 evidence, 과학 비교, 질량기준, full product 또는 운영 승인을 뜻하지 않음 |
 
 ### 진단 종료와 비교 준비를 분리한다
 
@@ -46,7 +47,7 @@
 
 | ID | 단계 | 현재 상태 | 현재 판정/다음 승격 |
 |---|---|---|---|
-| P1 | diagnostic compare 계약·fail-closed | **IN_PROGRESS** | 진단만 허용; `NOT_READY` 유지 |
+| P1 | diagnostic compare 계약·fail-closed | **DONE (SCOPED)** | 13/14/15 UTC operational comparison scope만 폐합; 12 UTC는 `EXCLUDED_HISTORICAL_NOT_AVAILABLE` / `ARCHIVED_OPERATIONAL_LAPS_MISSING`; algorithm comparison·mass basis·full product·promotion/`ACTIVE`는 NO-GO/BLOCKED |
 | P2 | provenance / atomicity | **BLOCKED** | TOCTOU·dirfd·세대 원자성 폐합 전 정지 |
 | P3 | delta / mass / metrics | **BLOCKED** | `qC-qB` 및 질량분모 계약 전 비교 금지 |
 | P4 | independent generation validation | **BLOCKED** | 원천자료 독립 재계산 전 생성 증거 불인정 |
@@ -64,16 +65,37 @@ RED는 적대시험·반례 부재를 각각 서명한다. 어느 한 팀이라�
 
 ## P1 — Diagnostic compare 계약·fail-closed
 
-현재 상태: **IN_PROGRESS**
-목표: 12/13/14/15 UTC의 diagnostic 산출을 빠짐없이 점검하되, 진단 성공을
-algorithm comparison 또는 운영 후보로 오인하지 않는다.
+현재 상태: **DONE (SCOPED)**
+목표: 13/14/15 UTC의 archived operational comparison만 scope로 폐합하되,
+진단 성공을 algorithm comparison 또는 운영 후보로 오인하지 않는다.
+
+### P1 operational-comparison 범위 폐합
+
+- [x] operational comparison pair는 정확히 13, 14, 15 UTC만 선언한다.
+- [x] 12 UTC pair는 만들거나 대체하지 않고
+      `EXCLUDED_HISTORICAL_NOT_AVAILABLE` /
+      `ARCHIVED_OPERATIONAL_LAPS_MISSING`으로 기록한다.
+- [x] 위 `DONE (SCOPED)`는 P1 scope 선언에만 적용한다. algorithm comparison,
+      mass basis, full-product provenance, promotion/`ACTIVE`는 계속
+      `NO-GO`/`BLOCKED`다.
+- [x] raw SHADOW, upstream replay, manufactured-balance의 12--15 UTC 전수
+      계약은 이 P1 comparison scope 변경으로 축소하지 않는다.
+
+범위 폐합은 algorithm comparison 성공을 주장하지 않는다. 실행 증거는
+`scratch/candidate/p1-operational-shadow-<source-commit>/comparison.json`,
+`scope-manifest.json`, `STATUS.txt`에 scope, exact HEAD, pair-manifest hash,
+입력·도구 hash와 exit를 기록한다. `comparison-manifest.json`과
+`contract_evidence/READINESS.json`은 pair 구조 검증용이며 독자적인 scope 또는
+source-HEAD receipt로 해석하지 않는다.
 
 ### 선행조건
 
-- [ ] GREEN/RED가 P1 계획과 입력 manifest를 교차 검토하고 범위를 고정했다.
-- [ ] 원본·live·diagnostic 입력이 독립 snapshot이며 원본은 입력 전용이다.
-- [ ] 고정 manifest가 2026-08-16 12, 13, 14, 15 UTC를 모두 선언한다.
-- [ ] 각 pair의 role/origin, valid time, field inventory, grid, level, unit,
+- [x] GREEN/RED가 P1 계획과 입력 manifest를 교차 검토하고 범위를 고정했다.
+- [x] 원본·live·diagnostic 입력이 독립 snapshot이며 원본은 입력 전용이다.
+- [x] P1 pair manifest가 2026-08-16 13, 14, 15 UTC pair만 선언하고,
+      `scope-manifest.json`이 12 UTC exclusion status/reason과 pair-manifest
+      hash를 함께 기록한다.
+- [x] 각 pair의 role/origin, valid time, field inventory, grid, level, unit,
       wind-coordinate, valid-mask hash가 선언되어 있다.
 
 ### 대상 파일
@@ -89,19 +111,21 @@ algorithm comparison 또는 운영 후보로 오인하지 않는다.
 
 ### 체크리스트
 
-- [ ] authoritative 실행은 정확히 네 시각만 허용하고 중복·누락 시각은
-      fail-closed 한다. 명시적 debug partial은 허용하되 authoritative가 아니다.
-- [ ] `--hours 12` 같은 축소 인자로 네 시각 계약을 우회할 수 없다.
-- [ ] diagnostic 출력은 `DERIVED_DIAGNOSTIC_PATCH`로만 표시하고 full-product,
+- [x] authoritative operational comparison은 정확히 13, 14, 15 UTC만
+      허용하고 중복·누락 시각은 fail-closed 한다. 12 UTC는 명시적
+      historical exclusion으로만 기록하며 authoritative pair가 아니다.
+- [x] scope 밖 시각을 추가하거나 13--15 중 하나를 생략하는 인자로 P1
+      comparison 계약을 우회할 수 없다.
+- [x] diagnostic 출력은 `DERIVED_DIAGNOSTIC_PATCH`로만 표시하고 full-product,
       operational candidate, scientific authority로 표시하지 않는다.
-- [ ] no-change는 `COMPLETED_NO_CHANGE` 진단 no-op으로 기록하고, missing field,
+- [x] no-change는 `COMPLETED_NO_CHANGE` 진단 no-op으로 기록하고, missing field,
       non-finite, mask mismatch, invalid time, path traversal, symlink/hardlink는 거부한다.
-- [ ] 실패 시 운영 원본은 byte-identical이다. 명시적 debug partial은
+- [x] 실패 시 운영 원본은 byte-identical이다. 명시적 debug partial은
       `PARTIAL_DIAGNOSTIC`, exit 3으로만 보존하고 `current`/승인 generation에는
       게시하지 않는다. bundle 전체 atomic publish는 P2에서 폐합한다.
-- [ ] 결과에 `diagnostic_exit`, `comparison_status`,
+- [x] 결과에 `diagnostic_exit`, `comparison_status`,
       `algorithm_comparison_ready`, `promotion_eligible`를 분리 기록한다.
-- [ ] `diagnostic_exit=0`이더라도 `comparison_status=NOT_READY`이면 해당
+- [x] `diagnostic_exit=0`이더라도 `comparison_status=NOT_READY`이면 해당
       결과를 승격·비교 GO로 집계하지 않는다.
 
 ### 테스트
@@ -111,44 +135,44 @@ algorithm comparison 또는 운영 후보로 오인하지 않는다.
 - `tests/test_shadow_validator.py`
 - `tests/run_real_shadow_io_contract_tests.sh`
 - `tests/run_reproduction_comparison.sh`
-- 적대시험: exact four hours, reduced hours, duplicate/missing hour,
-  relative path, path swap, no-change, invalid/missing field
+- 적대시험: exact three operational-comparison hours (13/14/15), explicit
+  12 UTC exclusion, reduced/expanded scope, duplicate/missing hour, relative
+  path, path swap, no-change, invalid/missing field
 
 ### 증거
 
 - `scratch/<generation>/RUN_SUMMARY.json`
 - `scratch/<generation>/MANIFEST.json`, `COMMITTED`
 - 사례별 validator JSON과 비교 `READINESS.json`
-- exact HEAD, 입력 SHA-256, command line, tool hash를 포함한 receipt
+- scoped execution의 exact HEAD, 입력 SHA-256, tool hash와 exit 수치는
+  `comparison.json`, `scope-manifest.json`, `STATUS.txt`를 함께 사용한다.
+  `comparison-manifest.json`과 `READINESS.json`은 pair 구조 검증에 한정한다.
 - 기존 참고: `scratch/green_unit_exact_head.log`는 시험 로그이며 P1 exit
   승인 자체가 아니다.
 
 ### 종료/GO gate
 
-P1의 diagnostic gate는 네 시각이 동일 exact HEAD에서 재현되고, 모든 실패
-경로가 fail-closed이며 원본 변경이 0일 때만 닫힌다. 이 gate가 닫혀도
-`mass_basis_gate=BLOCKED_UNRESOLVED` 또는 독립 provenance가 남아 있으면
-최종 판정은 **P1 진단 GO / algorithm comparison NO-GO**다. P2~P8이 닫히기
-전에는 `ACTIVE`를 만들거나 운영장에 candidate를 게시하지 않는다.
+P1의 scoped diagnostic gate는 13/14/15 UTC 세 pair가 동일 exact HEAD에서
+재현되고, 모든 실패 경로가 fail-closed이며 원본 변경이 0일 때 닫힌다.
+12 UTC historical exclusion은 이 gate의 누락 pair가 아니다. 이 scope gate가
+닫혀도 `mass_basis_gate=BLOCKED_UNRESOLVED` 또는 독립 provenance가 남아
+있으면 최종 판정은 **P1 scope DONE / algorithm comparison NO-GO**다.
+P2~P8이 닫히기 전에는 `ACTIVE`를 만들거나 운영장에 candidate를 게시하지
+않는다.
 
-### 2026-09-04 구현·검토 기록
+### 2026-09-04 범위·실행 evidence 기록
 
-- 코드 gate: **PASS**. authoritative hours, explicit partial exit 3, 550 hPa
-  plot contract, 상태/권한 분리, CLI root symlink·parent traversal 차단을 구현했다.
-- 회귀시험: `tests/run_unit_tests.sh` exit 0, focused Python direct/pytest 통과.
-- GREEN `phase1_green_verify`와 RED `phase1_red_verify`가 최종 수정본을 각각
-  읽기 전용으로 재검토해 Phase 1 코드 범위에 잔여 blocker가 없다고 판정했다.
-- initial exit evidence: **BLOCKED**. 검토 당시 변경은 base HEAD
-  `ec4af286964e6fd728e833df8be4caa44ebca949` 위의 미커밋 작업이었고, 기존 real
-  SHADOW current는 `f51950f48c16...` 세대였다.
-- GO 실행 규칙: 검토된 여섯 파일만 로컬 커밋한 clean HEAD에서 새 commit 전용
-  publication root를 사용한다. exact commit은 generation receipt로 고정하며 기존
-  `real_shadow/current`는 변경하지 않는다.
-- archived operational WPS는 13/14/15 UTC만 있어 12 UTC가 없다. 따라서 새
-  exact-HEAD real SHADOW가 통과해도 P1 전체 exit evidence는 **BLOCKED**다.
-- 따라서 위 체크박스는 아직 닫지 않고 P1을 `IN_PROGRESS`로 유지한다. 새
-  exact-HEAD real SHADOW 세대와 독립 12 UTC archived/live operational input이
-  확보되어 네 시각 실행이 통과하기 전에는 P2 구현을 시작하지 않는다.
+- P1 scope closure: **DONE (SCOPED)**. operational comparison 대상은
+  13/14/15 UTC로 고정한다.
+- 12 UTC는 `EXCLUDED_HISTORICAL_NOT_AVAILABLE` /
+  `ARCHIVED_OPERATIONAL_LAPS_MISSING`으로 보존하며 KLBG/met_em 대체를
+  허용하지 않는다.
+- exact-HEAD scoped 실행은 정확히 13/14/15 UTC를 처리하고
+  `diagnostic_exit=0`, `comparison_status=NOT_READY_MASS_BASIS_UNRESOLVED`,
+  `algorithm_comparison_ready=false`, `promotion_eligible=false`여야 한다.
+- 따라서 P1 scope만 DONE이며 algorithm comparison·mass basis·full-product
+  provenance·promotion/`ACTIVE`는 계속 NO-GO/BLOCKED다. P2 구현·승격은 해당
+  별도 gate와 새 execution evidence 전까지 진행하지 않는다.
 
 ---
 
@@ -160,7 +184,8 @@ P1의 diagnostic gate는 네 시각이 동일 exact HEAD에서 재현되고, 모
 
 ### 선행조건
 
-- [ ] P1의 네 시각 manifest와 role/origin 계약이 고정되어 있다.
+- [ ] P1의 13/14/15 UTC comparison manifest와 role/origin 계약이 고정되어
+      있다.
 - [ ] 원본 archive/live/current의 inode·hash·세대 식별 정책이 합의되어 있다.
 - [ ] GREEN/RED가 hostile filesystem 가정과 failure-injection 목록을 승인했다.
 
@@ -264,10 +289,10 @@ Cloud-BAL 증분으로 잘못 해석하지 않고, 동일 질량기준에서 변
 
 ### 종료/GO gate
 
-네 시각 모두에서 basis가 해소되고 independent mass ledger가 허용 오차를
-만족하며 changed-only 지표가 게시될 때만 `ALGORITHM_COMPARISON_GO` 검토가
-가능하다. 이 단계가 완료되기 전 candidate는 진단 patch이며 `ACTIVE`는
-금지된다.
+P1의 13/14/15 UTC scoped pairs 모두에서 basis가 해소되고 independent mass
+ledger가 허용 오차를 만족하며 changed-only 지표가 게시될 때만
+`ALGORITHM_COMPARISON_GO` 검토가 가능하다. 현재 mass basis는 BLOCKED이며,
+이 단계가 완료되기 전 candidate는 진단 patch이고 `ACTIVE`는 금지된다.
 
 ---
 
@@ -562,9 +587,10 @@ P8의 모든 required check가 protected `main`의 exact HEAD에서 통과하고
 
 ## 현재 실행 순서와 금지 조건
 
-1. P1을 먼저 완료한다. P1 계획·입력·적대시험을 GREEN/RED가 재검토하고,
-   `diagnostic_exit=0`과 `comparison_status=NOT_READY`를 결과에서 확인한다.
-2. P1 exit evidence가 없으면 P2를 시작하지 않는다. P2~P8은 표의 순서대로
+1. P1 scope를 먼저 폐합한다. P1 계획·입력·적대시험을 GREEN/RED가 재검토하고,
+   operational comparison은 13/14/15 UTC로만 기록하며 12 UTC exclusion을
+   확인한다. 이는 실행 evidence나 `comparison_status`의 GO를 뜻하지 않는다.
+2. 새 P1 execution evidence가 없으면 P2를 시작하지 않는다. P2~P8은 표의 순서대로
    한 단계씩 진행하며, 각 단계 종료 후 두 팀의 독립 review를 받는다.
 3. 어느 단계에서든 원본 변경, missing-to-zero 은닉, provenance 불일치,
    partial generation, 독립 validator 불일치가 발생하면 해당 단계와 이후
@@ -581,7 +607,7 @@ P8의 모든 required check가 protected `main`의 exact HEAD에서 통과하고
 
 | 단계 | GREEN review (이름/일시/commit) | RED review (이름/일시/commit) | exit evidence | 승인 상태 |
 |---|---|---|---|---|
-| P1 | phase1_green_verify / 2026-09-04 / pre-commit tree | phase1_red_verify / 2026-09-04 / 동일 | unit exit 0; exact execution HEAD는 generation receipt 참조 | CODE_GATE_PASS / EXIT_BLOCKED |
+| P1 | GREEN scoped execution review / 2026-09-04 / receipt exact HEAD | RED authority review / 2026-09-04 / 동일 | 13/14/15 complete, exit 0; comparison `NOT_READY_MASS_BASIS_UNRESOLVED` | DONE (SCOPED); algorithm/promotion NO-GO |
 | P2 | 미기록 | 미기록 | 미완료 | BLOCKED |
 | P3 | 미기록 | 미기록 | 미완료 | BLOCKED |
 | P4 | 미기록 | 미기록 | 미완료 | BLOCKED |

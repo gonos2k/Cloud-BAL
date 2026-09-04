@@ -13,6 +13,32 @@ operational originals or full candidate products.  This contract permits only
 a clearly labelled field-level diagnostic patch; it never creates full-pipeline
 candidate evidence.
 
+## P1 operational-comparison scope
+
+For the 2026-08-16 operational comparison, P1 is explicitly scoped to exactly
+three archived operational pairs: **13, 14 and 15 UTC**.  The scope may be
+closed as `DONE (SCOPED)` when those three declared pairs satisfy this
+contract; that label closes only the comparison scope and does not assert an
+algorithm comparison, a resolved mass basis, a full-product candidate, or any
+promotion/`ACTIVE` authority.
+
+12 UTC is not a failed comparison pair and is not substituted with another
+product.  It is recorded as:
+
+| valid time | P1 scope status | exclusion reason |
+| --- | --- | --- |
+| 2026-08-16 12 UTC | `EXCLUDED_HISTORICAL_NOT_AVAILABLE` | `ARCHIVED_OPERATIONAL_LAPS_MISSING` |
+
+The exclusion is limited to this archived-original operational comparison.
+The raw SHADOW, upstream replay and manufactured-balance contracts continue to
+declare and retain their independent 12--15 UTC coverage.  The scoped output's
+`comparison.json`, `scope-manifest.json` and `STATUS.txt` bind the scope, exact
+source HEAD, pair-manifest hash, input/tool hashes and exit status.
+`comparison-manifest.json` and `contract_evidence/READINESS.json` are only
+pair-level structural-validator inputs/results; they are not independent scope
+or source-HEAD receipts.  Scope closure alone must not be used as execution
+evidence.
+
 Every valid-time/product comparison is a three-file transaction:
 
 | Manifest entry | Required evidence label | Required origin |
@@ -179,9 +205,11 @@ managed live path remains unchanged after its validated snapshot was taken.
 ## Current 2026-08-16 inventory limitation
 
 Archived operational LAPS/KLBG/met_em triads currently exist for 13, 14 and
-15 UTC.  The 12 UTC inventory lacks the archived operational LAPS product.
-The 12 UTC comparison must therefore remain `NOT_READY`; KLBG or met_em must
-not be substituted for the missing LAPS product.  No full pipeline-generated
-SHADOW LAPS/WPS or met_em candidate has yet been published.  Existing patches
-may satisfy this diagnostic-patch contract but cannot satisfy a full-product or
+15 UTC, which are the complete P1 operational-comparison scope.  The 12 UTC
+inventory lacks the archived operational LAPS product and remains recorded as
+`EXCLUDED_HISTORICAL_NOT_AVAILABLE` with reason
+`ARCHIVED_OPERATIONAL_LAPS_MISSING`; KLBG or met_em must not be substituted for
+the missing LAPS product.  No full pipeline-generated SHADOW LAPS/WPS or
+met_em candidate has yet been published.  Existing patches may satisfy this
+diagnostic-patch contract but cannot satisfy a full-product or
 algorithm-comparison contract.
