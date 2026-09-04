@@ -247,6 +247,9 @@ exact-head generation을 다시 생성해야 한다. 현재 보장은 publicatio
 동일 UID의 임의 공격 프로세스를 신뢰하는 모델이 아니다. 해당 위협은 writer API와
 실행 계정/권한 격리가 완료될 때까지 P2 blocker로 유지한다.
 Local begin receipt는 구조적 결속이며 인증·서명 증거가 아니다.
+현재 workspace의 Lustre는 `RENAME_NOREPLACE`를 `EINVAL`로 거부한다. 일반
+`rename` fallback은 사용하지 않으며, 지원되는 publication backend 전까지
+실자료 generation 게시는 fail-closed다.
 
 ---
 

@@ -104,7 +104,7 @@ algorithm comparison, mass basis, full-product provenance, promotion 또는
 | 현업 linked QBAL의 AIRDROP 제거 | BLOCKED | 원본 `klaps-v5.0_`에는 AIRDROP/advance/read helper가 남아 있으며 canonical adapter와 전체 ifx link 전에는 운영 제거로 간주하지 않음 |
 | storm motion 및 trajectory frame | BLOCKED | 현재 real SHADOW는 좌표계 미확정 input-native U/V와 zero-translation 가정을 명시; 바람 좌표계·이동벡터 검증 전 과학 승격 금지 |
 | physical continuity·geostrophic·증분·방향 gate | ENGINEERING | 최종 real32 배열의 저장 residual·최댓값·선형 폐합과 Fortran bitset을 재검사; 별도 구현의 전체 D/G 재구성과 full-domain physical residual은 남음 |
-| 결과 파일의 단일 세대 transaction | ENGINEERING | schema 2 begin receipt, dirfd inventory/hash, no-replace generation rename, current 임시 pointer identity와 게시 직전 재검증을 적용; 외부 writer pathname/retained-fd와 전체 비교 bundle transaction은 남음 |
+| 결과 파일의 단일 세대 transaction | ENGINEERING | schema 2·dirfd·no-replace를 적용했으나 workspace Lustre가 no-replace rename을 지원하지 않아 게시를 차단; unsafe fallback, 외부 writer pathname/retained-fd, 전체 비교 bundle은 남음 |
 | 증거 세대의 self-contained build/derived provenance | BLOCKED | 현재 build/runtime 절대경로와 figure/audit sidecar가 외부에 남음; 운영 증거 승격 전에 세대 내부 receipt 필요 |
 | exact-head·입력 content snapshot | BLOCKED | comparator 입력은 component-wise `O_NOFOLLOW`와 동일 fd read/hash/copy로 로컬 snapshot에 고정; prepare 경로, 실행 전 입력 권위, 동일 UID 변조 방어는 미구현 |
 | publication directory race 방어 | BLOCKED | generation 검증·inventory와 부모 identity는 dirfd/openat 계층으로 강화했고 schema 1 current는 거부; 동일 UID 공격자에 대한 writer capability/권한 격리와 operational input·comparison bundle 결속은 남음 |

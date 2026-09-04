@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import ctypes
+import errno
 import hashlib
 import json
 import os
@@ -11,11 +13,17 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from unittest import mock
 
 PROJECT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT / "tools"))
 
-from cloud_bal_transaction import OutputTransaction, TransactionError, _current  # noqa: E402
+from cloud_bal_transaction import (  # noqa: E402
+    OutputTransaction,
+    TransactionError,
+    _current,
+    _rename_noreplace,
+)
 
 SOURCE_COMMIT = subprocess.check_output(
     ["git", "rev-parse", "HEAD"], cwd=PROJECT, text=True
@@ -51,6 +59,38 @@ def write_products(transaction: OutputTransaction, values: dict[str, bytes]) -> 
 def main() -> None:
     with tempfile.TemporaryDirectory(prefix="cloud-bal-transaction-") as directory:
         root = Path(directory) / "publication"
+
+        class FailedRename:
+            def __init__(self, error: int):
+                self.error = error
+
+            def __call__(self, *_args):
+                ctypes.set_errno(self.error)
+                return -1
+
+        failures = (
+            (errno.EINVAL, "does not support atomic no-replace"),
+            (errno.EXDEV, "filesystem or mount boundary"),
+        )
+        for error, message in failures:
+            source = Path(directory) / f"failed-source-{error}" / "generation"
+            destination = (
+                Path(directory) / f"failed-destination-{error}" / "generation"
+            )
+            source.mkdir(parents=True)
+            destination.parent.mkdir()
+            library = type("Library", (), {"renameat2": FailedRename(error)})()
+            with mock.patch(
+                "cloud_bal_transaction.ctypes.CDLL", return_value=library
+            ):
+                try:
+                    _rename_noreplace(source, destination)
+                except TransactionError as exc:
+                    assert message in str(exc)
+                else:
+                    raise AssertionError("failed no-replace rename was accepted")
+            assert source.is_dir()
+            assert not destination.exists()
 
         old = OutputTransaction(root, "old")
         old.begin(

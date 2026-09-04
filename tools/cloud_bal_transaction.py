@@ -377,6 +377,18 @@ def _rename_noreplace(source: Path, destination: Path) -> None:
             error = ctypes.get_errno()
             if error == errno.EEXIST:
                 raise TransactionError("generation target already exists")
+            if error in {
+                errno.EINVAL, errno.ENOSYS, errno.ENOTSUP, errno.EOPNOTSUPP
+            }:
+                raise TransactionError(
+                    "publication filesystem does not support atomic "
+                    "no-replace generation rename"
+                )
+            if error == errno.EXDEV:
+                raise TransactionError(
+                    "cannot atomically move generation across a filesystem or "
+                    "mount boundary"
+                )
             raise TransactionError(
                 f"atomic no-replace generation rename failed: {os.strerror(error)}"
             )
