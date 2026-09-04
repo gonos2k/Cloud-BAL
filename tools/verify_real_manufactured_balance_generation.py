@@ -9,6 +9,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import stat
 import subprocess
 import tempfile
 from pathlib import Path
@@ -29,6 +30,38 @@ REQUIRED_CASE_FIELDS = [
     "fsf_center_sha256", "fsf_after_path", "fsf_after_sha256", "lw3_path",
     "lw3_sha256", "vrz_path", "vrz_sha256", "vrt_path", "vrt_sha256",
 ]
+
+
+def strict_cli_path(value: Path, label: str) -> Path:
+    """Return an existing absolute path without traversing a symlink.
+
+    ``Path.resolve`` alone is not sufficient at the CLI boundary: it follows
+    a symlink before the verifier can decide whether that path was intended.
+    Check every lexical component with ``lstat`` first, then require strict
+    canonical resolution to leave the lexical path unchanged.
+    """
+    raw = value if value.is_absolute() else Path.cwd() / value
+    component = Path(raw.anchor)
+    for part in raw.parts[1:]:
+        if part == "..":
+            component = component.parent
+            continue
+        component /= part
+        try:
+            mode = os.lstat(component).st_mode
+        except OSError as exc:
+            raise ValueError(f"{label} is not a strict existing path: {value}") from exc
+        if stat.S_ISLNK(mode):
+            raise ValueError(f"{label} contains a symlink component: {value}")
+
+    lexical = Path(os.path.abspath(os.fspath(raw)))
+    try:
+        canonical = lexical.resolve(strict=True)
+    except OSError as exc:
+        raise ValueError(f"{label} is not a strict existing path: {value}") from exc
+    if canonical != lexical:
+        raise ValueError(f"{label} canonical path differs from its lexical path: {value}")
+    return canonical
 
 
 def load_module(path: Path, name: str):
@@ -291,10 +324,22 @@ def main() -> int:
     parser.add_argument("--repo", required=True, type=Path)
     parser.add_argument("--staging", type=Path)
     args = parser.parse_args()
-    if args.staging is None:
-        print(verify(args.publication_root, args.manifest, args.repo))
+    try:
+        publication_root = strict_cli_path(args.publication_root, "publication_root")
+        manifest = strict_cli_path(args.manifest, "manifest")
+        repo = strict_cli_path(args.repo, "repo")
+        staging = (
+            None
+            if args.staging is None
+            else strict_cli_path(args.staging, "staging")
+        )
+    except ValueError as exc:
+        parser.error(str(exc))
+
+    if staging is None:
+        print(verify(publication_root, manifest, repo))
     else:
-        print(verify_staging(args.staging, args.manifest, args.repo))
+        print(verify_staging(staging, manifest, repo))
     return 0
 
 

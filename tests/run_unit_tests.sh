@@ -61,6 +61,7 @@ cd "$test_tmp"
 python3 "$repo_root/tests/test_output_transaction.py"
 python3 "$repo_root/tests/test_compare_baseline.py"
 python3 "$repo_root/tests/test_shadow_validator.py"
+python3 "$repo_root/tests/test_real_manufactured_balance_generation.py"
 
 mkdir -p "$test_tmp/wps_mod" "$test_tmp/wps_root/lapsprd/lapsprep/wps"
 "$CLOUD_BAL_FC" -c "${CLOUD_BAL_FREE_FLAGS[@]}" \

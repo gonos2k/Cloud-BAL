@@ -15,12 +15,15 @@ import calendar
 import csv
 import hashlib
 import json
+import os
 import shutil
+import stat
 import struct
 import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Sequence
 
 import numpy as np
 from netCDF4 import Dataset
@@ -38,11 +41,17 @@ HYDROMETEORS = {
     "QG": ("background_graupel", "candidate_graupel"),
 }
 SHADOW_CONFIGURATION = "radar-only-shadow-ifx-2026-v3"
+AUTHORITATIVE_HOURS = (12, 13, 14, 15)
 PLOT_LEVEL_PA = 55000
 HYDROMETEOR_LIMIT_GKG = 15.0
 HYDROMETEOR_DELTA_LIMIT_GKG = 15.0
 WIND_SPEED_LIMIT_MS = 80.0
 WIND_DELTA_LIMIT_MS = 0.1
+DIAGNOSTIC_COMPLETE = "COMPLETE_DIAGNOSTIC"
+DIAGNOSTIC_PARTIAL = "PARTIAL_DIAGNOSTIC"
+DIAGNOSTIC_INCOMPLETE = "INCOMPLETE_DIAGNOSTIC"
+COMPARISON_NOT_READY_MASS = "NOT_READY_MASS_BASIS_UNRESOLVED"
+NO_DIAGNOSTIC_ARTIFACT = "NO_DIAGNOSTIC_PATCH_AVAILABLE"
 
 
 @dataclass(frozen=True)
@@ -51,6 +60,204 @@ class CasePaths:
     original: Path
     live_original: Path
     shadow: Path
+
+
+def strict_root_path(
+    value: Path,
+    label: str,
+    *,
+    must_exist: bool = True,
+    allow_final_symlink: bool = False,
+) -> Path:
+    """Return an absolute root after checking every lexical path component."""
+
+    raw = value if value.is_absolute() else Path.cwd() / value
+    if ".." in raw.parts:
+        raise ValueError(f"{label} must not contain parent traversal: {value}")
+
+    component = Path(raw.anchor)
+    missing = False
+    parts = raw.parts[1:]
+    for index, part in enumerate(parts):
+        component /= part
+        try:
+            mode = os.lstat(component).st_mode
+        except FileNotFoundError:
+            missing = True
+            continue
+        except OSError as exc:
+            raise ValueError(f"{label} is not accessible: {value}") from exc
+        if missing:
+            raise ValueError(f"{label} has an invalid lexical path: {value}")
+        final_pointer = allow_final_symlink and index == len(parts) - 1
+        if stat.S_ISLNK(mode) and not final_pointer:
+            raise ValueError(f"{label} contains a symlink component: {value}")
+
+    if must_exist and missing:
+        raise ValueError(f"{label} is not an existing directory: {value}")
+    lexical = Path(os.path.abspath(os.fspath(raw)))
+    if must_exist and not lexical.is_dir():
+        raise ValueError(f"{label} is not an existing directory: {value}")
+    return lexical
+
+
+def validate_hours(
+    hours: Sequence[int], allow_partial: bool = False
+) -> tuple[int, ...]:
+    """Validate the requested diagnostic hours before creating any output.
+
+    The authoritative replay is exactly the four ordered UTC hours.  A
+    smaller replay is useful for debugging only when it is explicitly marked
+    as partial; it can never become an authoritative diagnostic execution.
+    """
+
+    requested = tuple(hours)
+    if not requested:
+        raise ValueError("at least one diagnostic hour is required")
+    if any(isinstance(hour, bool) or not isinstance(hour, int) for hour in requested):
+        raise ValueError("diagnostic hours must be integers")
+
+    unknown = sorted(set(requested) - set(AUTHORITATIVE_HOURS))
+    if unknown:
+        raise ValueError(f"unknown diagnostic hour(s): {unknown}")
+
+    duplicate = sorted({hour for hour in requested if requested.count(hour) > 1})
+    if duplicate:
+        raise ValueError(f"duplicate diagnostic hour(s): {duplicate}")
+
+    if requested != tuple(sorted(requested)):
+        raise ValueError(
+            "diagnostic hours must be in authoritative order: "
+            f"{AUTHORITATIVE_HOURS}"
+        )
+    if requested != AUTHORITATIVE_HOURS and not allow_partial:
+        raise ValueError(
+            "a diagnostic hour subset requires --allow-partial-diagnostic"
+        )
+    return requested
+
+
+def plot_field_specs(level: int = PLOT_LEVEL_PA) -> list[dict]:
+    """Return the fixed plot contract for the one diagnostic level.
+
+    Plot IDs and selectors must be generated together so a figure and its
+    sealed comparison manifest cannot silently use different levels.
+    """
+
+    if isinstance(level, bool) or not isinstance(level, (int, float)):
+        raise ValueError("plot level must be numeric")
+    if float(level) != float(PLOT_LEVEL_PA):
+        raise ValueError(f"plot level must equal PLOT_LEVEL_PA ({PLOT_LEVEL_PA})")
+    level_hpa = int(PLOT_LEVEL_PA // 100)
+    suffix = f"{level_hpa}hpa"
+    return [
+        {
+            "plot_id": f"rain-{suffix}", "field": "QR",
+            "level": float(PLOT_LEVEL_PA),
+            "scale": {"value_min": 0.0, "value_max": 0.02,
+                      "delta_abs_max": 0.02},
+        },
+        {
+            "plot_id": f"snow-{suffix}", "field": "QS",
+            "level": float(PLOT_LEVEL_PA),
+            "scale": {"value_min": 0.0, "value_max": 0.02,
+                      "delta_abs_max": 0.02},
+        },
+        {
+            "plot_id": f"u-wind-{suffix}", "field": "UU",
+            "level": float(PLOT_LEVEL_PA),
+            "scale": {"value_min": -60.0, "value_max": 60.0,
+                      "delta_abs_max": 1.0},
+        },
+    ]
+
+
+def status_values(
+    requested_hours: Sequence[int], requested_case_set_complete: bool,
+    available_pairs: bool = True,
+) -> dict[str, object]:
+    """Build the separate diagnostic-execution and comparison statuses."""
+
+    if not isinstance(requested_case_set_complete, bool):
+        raise ValueError("requested-case completeness must be boolean")
+    if not isinstance(available_pairs, bool):
+        raise ValueError("available-pairs state must be boolean")
+    requested = validate_hours(requested_hours, allow_partial=True)
+    authoritative_complete = (
+        requested == AUTHORITATIVE_HOURS
+        and requested_case_set_complete
+        and available_pairs
+    )
+    if requested != AUTHORITATIVE_HOURS:
+        execution = DIAGNOSTIC_PARTIAL
+    elif authoritative_complete:
+        execution = DIAGNOSTIC_COMPLETE
+    else:
+        execution = DIAGNOSTIC_INCOMPLETE
+    comparison_readiness = (
+        COMPARISON_NOT_READY_MASS
+        if requested_case_set_complete and available_pairs
+        else "NOT_READY_REQUESTED_CASES_INCOMPLETE"
+    )
+    return {
+        "diagnostic_execution": execution,
+        "diagnostic_exit": 0 if authoritative_complete else 3,
+        "comparison_readiness": comparison_readiness,
+        "comparison_status": comparison_readiness,
+        "available_artifact_validity": (
+            DIAGNOSTIC_PATCH_VALID if available_pairs else NO_DIAGNOSTIC_ARTIFACT
+        ),
+        "algorithm_comparison_ready": False,
+        "promotion_eligible": False,
+        "mass_basis_gate": "BLOCKED_UNRESOLVED",
+        "authoritative_complete": authoritative_complete,
+        "requested_hours": list(requested),
+        "authoritative_hours": list(AUTHORITATIVE_HOURS),
+        "requested_case_set_complete": requested_case_set_complete,
+    }
+
+
+def render_status(values: dict[str, object]) -> str:
+    """Render the machine-readable status file without ambiguous aliases."""
+
+    required = (
+        "diagnostic_execution", "comparison_readiness",
+        "comparison_status", "available_artifact_validity", "mass_basis_gate",
+        "diagnostic_exit", "algorithm_comparison_ready", "promotion_eligible",
+        "authoritative_complete", "requested_hours", "authoritative_hours",
+        "requested_case_set_complete",
+    )
+    missing = [key for key in required if key not in values]
+    if missing:
+        raise ValueError(f"status values missing keys: {missing}")
+    text_keys = required[:5]
+    if any(
+        not isinstance(values[key], str) or len(values[key].splitlines()) != 1
+        for key in text_keys
+    ):
+        raise ValueError("status values must be single-line strings")
+    expected = status_values(
+        values["requested_hours"],
+        values["requested_case_set_complete"],
+        available_pairs=values["available_artifact_validity"] == DIAGNOSTIC_PATCH_VALID,
+    )
+    if any(values[key] != expected[key] for key in expected):
+        raise ValueError("status values are inconsistent with the case inventory")
+    lines = [
+        f"diagnostic_execution={values['diagnostic_execution']}",
+        f"diagnostic_exit={values['diagnostic_exit']}",
+        f"comparison_readiness={values['comparison_readiness']}",
+        f"comparison_status={values['comparison_status']}",
+        f"available_artifact_validity={values['available_artifact_validity']}",
+        "algorithm_comparison_ready=false",
+        "promotion_eligible=false",
+        f"mass_basis_gate={values['mass_basis_gate']}",
+        "full_end_to_end=NO",
+        "dynamic_balance_authorized=NO",
+        "operational_original_modified=NO",
+        "science_promotion=NO",
+    ]
+    return "\n".join(lines) + "\n"
 
 
 def sha256(path: Path) -> str:
@@ -457,23 +664,7 @@ def seal_case(root: Path, case_id: str, source_commit: str, original: Path,
             root, "OPERATIONAL_UNCHANGED", "LIVE_OPERATIONAL_KLAPS_UNCHANGED",
             operational,
         ),
-        "plot_fields": [
-            {
-                "plot_id": "rain-950hpa", "field": "QR", "level": 95000.0,
-                "scale": {"value_min": 0.0, "value_max": 0.02,
-                          "delta_abs_max": 0.02},
-            },
-            {
-                "plot_id": "snow-950hpa", "field": "QS", "level": 95000.0,
-                "scale": {"value_min": 0.0, "value_max": 0.02,
-                          "delta_abs_max": 0.02},
-            },
-            {
-                "plot_id": "u-wind-950hpa", "field": "UU", "level": 95000.0,
-                "scale": {"value_min": -60.0, "value_max": 60.0,
-                          "delta_abs_max": 1.0},
-            },
-        ],
+        "plot_fields": plot_field_specs(PLOT_LEVEL_PA),
     }
 
 
@@ -484,8 +675,29 @@ def main() -> int:
     parser.add_argument("--shadow-root", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--source-commit", required=True)
-    parser.add_argument("--hours", nargs="+", type=int, default=[12, 13, 14, 15])
+    parser.add_argument("--hours", nargs="+", type=int, default=list(AUTHORITATIVE_HOURS))
+    parser.add_argument(
+        "--allow-partial-diagnostic",
+        action="store_true",
+        help="allow an explicitly non-authoritative subset of the four diagnostic hours",
+    )
     args = parser.parse_args()
+
+    try:
+        requested_hours = validate_hours(
+            args.hours, allow_partial=args.allow_partial_diagnostic
+        )
+        args.original_root = strict_root_path(args.original_root, "original-root")
+        args.live_root = strict_root_path(args.live_root, "live-root")
+        args.shadow_root = strict_root_path(
+            args.shadow_root, "shadow-root", allow_final_symlink=True
+        )
+        args.output = strict_root_path(
+            args.output, "output", must_exist=False
+        )
+    except ValueError as exc:
+        print(f"invalid comparison request: {exc}", file=sys.stderr)
+        return 2
 
     if args.output.exists():
         print(f"output already exists: {args.output}", file=sys.stderr)
@@ -540,7 +752,7 @@ def main() -> int:
     all_rows: list[dict] = []
     contract_pairs: list[dict] = []
 
-    for hour in args.hours:
+    for hour in requested_hours:
         paths = case_paths(args, hour)
         case_report = {"case_id": paths.case_id}
         missing = [
@@ -639,8 +851,6 @@ def main() -> int:
         report["cases"].append(case_report)
 
     complete_statuses = {"COMPLETED_DIAGNOSTIC", "COMPLETED_NO_CHANGE"}
-    if not any(case["status"] in complete_statuses for case in report["cases"]):
-        raise ValueError("no comparison case was available")
     requested_cases_complete = all(
         case["status"] in complete_statuses for case in report["cases"]
     )
@@ -659,42 +869,57 @@ def main() -> int:
         "comparison_id": f"operational-shadow-{args.source_commit[:12]}",
         "pairs": contract_pairs,
     }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    readiness = prepare(
-        contract_manifest, args.output, args.output / "contract_evidence"
-    )
-    if readiness["status"] != DIAGNOSTIC_PATCH_VALID:
-        raise ValueError(
-            "operational comparison contract failed: "
-            + "; ".join(readiness["failures"])
+    if contract_pairs:
+        readiness = prepare(
+            contract_manifest, args.output, args.output / "contract_evidence"
         )
+        if readiness["status"] != DIAGNOSTIC_PATCH_VALID:
+            raise ValueError(
+                "operational comparison contract failed: "
+                + "; ".join(readiness["failures"])
+            )
+    else:
+        readiness = {
+            "status": "NOT_RUN_NO_AVAILABLE_PAIRS",
+            "algorithm_comparison_status": "NOT_RUN",
+        }
+    status = status_values(
+        requested_hours, requested_cases_complete, available_pairs=bool(contract_pairs)
+    )
     report["requested_case_set_complete"] = requested_cases_complete
+    report["diagnostic_execution"] = {
+        "status": status["diagnostic_execution"],
+        "requested_hours": status["requested_hours"],
+        "authoritative_hours": status["authoritative_hours"],
+        "authoritative_complete": status["authoritative_complete"],
+        "requested_case_set_complete": status["requested_case_set_complete"],
+    }
+    report["diagnostic_execution_status"] = status["diagnostic_execution"]
+    report["comparison_readiness"] = status["comparison_readiness"]
+    report["comparison_status"] = status["comparison_status"]
+    report["available_artifact_validity"] = status["available_artifact_validity"]
+    report["diagnostic_exit"] = status["diagnostic_exit"]
+    report["algorithm_comparison_ready"] = status["algorithm_comparison_ready"]
+    report["promotion_eligible"] = status["promotion_eligible"]
+    report["mass_basis_gate"] = status["mass_basis_gate"]
     report["structural_comparison_readiness"] = {
-        "status": (
-            readiness["status"] if requested_cases_complete
-            else "NOT_READY_REQUESTED_CASES_INCOMPLETE"
-        ),
+        "status": status["comparison_readiness"],
         "available_pairs_status": readiness["status"],
+        "available_artifact_validity": status["available_artifact_validity"],
         "algorithm_comparison_status": readiness["algorithm_comparison_status"],
-        "readiness_path": str(
-            (args.output / "contract_evidence" / "READINESS.json").resolve()
+        "readiness_path": (
+            str((args.output / "contract_evidence" / "READINESS.json").resolve())
+            if contract_pairs else None
         ),
     }
     (args.output / "comparison.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n"
     )
-    comparison_status = (
-        "COMPLETED_DIAGNOSTIC" if requested_cases_complete
-        else "INCOMPLETE_DIAGNOSTIC"
-    )
     (args.output / "STATUS.txt").write_text(
-        f"comparison={comparison_status}\n"
-        "full_end_to_end=NO\n"
-        "dynamic_balance_authorized=NO\n"
-        "operational_original_modified=NO\n"
-        "science_promotion=NO\n"
+        render_status(status)
     )
     print(args.output.resolve())
-    return 0 if requested_cases_complete else 3
+    return 0 if status["authoritative_complete"] else 3
 
 
 if __name__ == "__main__":
