@@ -104,10 +104,10 @@ algorithm comparison, mass basis, full-product provenance, promotion 또는
 | 현업 linked QBAL의 AIRDROP 제거 | BLOCKED | 원본 `klaps-v5.0_`에는 AIRDROP/advance/read helper가 남아 있으며 canonical adapter와 전체 ifx link 전에는 운영 제거로 간주하지 않음 |
 | storm motion 및 trajectory frame | BLOCKED | 현재 real SHADOW는 좌표계 미확정 input-native U/V와 zero-translation 가정을 명시; 바람 좌표계·이동벡터 검증 전 과학 승격 금지 |
 | physical continuity·geostrophic·증분·방향 gate | ENGINEERING | 최종 real32 배열의 저장 residual·최댓값·선형 폐합과 Fortran bitset을 재검사; 별도 구현의 전체 D/G 재구성과 full-domain physical residual은 남음 |
-| 결과 파일의 단일 세대 transaction | ENGINEERING | real runner는 staging 내 4사례 수치·구조·그림 재검증을 먼저 통과한 뒤 manifest/marker/generation/current를 atomic commit하고 게시 후 한 번 더 검증; 제품별 WPS 재읽기와 full legacy writer 연결은 남음 |
+| 결과 파일의 단일 세대 transaction | ENGINEERING | schema 2 begin receipt, dirfd inventory/hash, no-replace generation rename, current 임시 pointer identity와 게시 직전 재검증을 적용; 외부 writer pathname/retained-fd와 전체 비교 bundle transaction은 남음 |
 | 증거 세대의 self-contained build/derived provenance | BLOCKED | 현재 build/runtime 절대경로와 figure/audit sidecar가 외부에 남음; 운영 증거 승격 전에 세대 내부 receipt 필요 |
 | exact-head·입력 content snapshot | BLOCKED | 현재 trusted single-user check/hash/check runner이며 adversarial path swap을 막는 immutable source/input snapshot은 미구현 |
-| publication directory race 방어 | BLOCKED | 현재 lock+atomic rename은 협력 프로세스 crash consistency용; hostile directory replacement를 막는 dirfd/openat 계층은 미구현 |
+| publication directory race 방어 | BLOCKED | generation 검증·inventory와 부모 identity는 dirfd/openat 계층으로 강화했고 schema 1 current는 거부; 동일 UID 공격자에 대한 writer capability/권한 격리와 operational input·comparison bundle 결속은 남음 |
 | focused Intel ifx 2026 단일 toolchain | DONE | strict/reproduction 스크립트에 GNU/ifort fallback 없음 |
 | 현업 KLAPS 전체 ifx link | BLOCKED | 3개 현업 binary는 legacy ifort 서명, canonical symbol 0, NetCDF/HDF5 runtime closure 미해결; `audit_intel_integration.py` 결과 38 blocker |
 | canonical pipeline이 전체 KLAPS 호출망의 단일 구현 | BLOCKED | qbalpe/derived-cloud/LAPSPREP adapter와 전체 링크가 아직 없음 |
@@ -126,7 +126,7 @@ algorithm comparison, mass basis, full-product provenance, promotion 또는
 | 급격한 증분의 wave 대리 guard | ENGINEERING | 최대 증분과 neighbor jump를 고정 threshold로 검사하지만 0--6 h 모델 음파·중력파 검증을 대신하지 않음 |
 | 수상체 질량 충격 gate | BLOCKED | 실제자료 proposal의 총 수상체 질량 변화·국지 분위수를 기록하지만 허용 기준이 없고, 대규모 증감이 잠열·부력·모델 spin-up에 미치는 영향도 미평가 |
 | 독립 column/trajectory 재계산 | BLOCKED | T·qv·phase·pressure interface·boundary·retrieval config·field provenance를 artifact에 저장하고 별도 구현에서 cellwise 재계산해야 함 |
-| SHADOW 입력 generation 검증 | ENGINEERING | 정규 transaction/current, summary, exact-head를 검사하지만 comparison 진입점의 사례별 독립 numerical 재실행과 외부 reviewed-SHA pin은 남음 |
+| SHADOW 입력 generation 검증 | ENGINEERING | schema 2 transaction/current와 외부 begin receipt, summary, exact-head를 검사하며 schema 1은 fail-closed 거부; comparison 진입점의 사례별 독립 numerical 재실행과 외부 reviewed-SHA pin은 남음 |
 | diagnostic patch derivation receipt | DONE | 자체 generation/COMMITTED를 제거하고 parent·SHADOW hash, absolute-replace, unresolved mass basis, non-full-product를 명시한 `PATCH_RECEIPT.json`만 사용 |
 | full candidate generation attestation | BLOCKED | diagnostic patch는 정규 candidate generation이 아니며 전체 입력/build receipt와 full writer가 준비되기 전 운영 증거로 승격 금지 |
 | diagnostic patch bundle 원자성 | BLOCKED | 내부 comparison evidence는 staging→rename이지만 상위 patch/그림/통계 묶음 전체 transaction과 failure injection은 남음 |

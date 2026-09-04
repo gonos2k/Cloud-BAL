@@ -25,17 +25,20 @@ from compare_operational_shadow import (  # noqa: E402
     P1_EXCLUSION_REASON,
     P1_OPERATIONAL_HOURS,
     P1_OPERATIONAL_SCOPE,
+    SHADOW_CONFIGURATION,
     archive_receipt,
     paths_overlap,
     plot_field_specs,
     require_independent_inputs,
     render_status,
     scope_exclusions,
+    shadow_generation,
     status_values,
     strict_root_path,
     validate_scope_inventory,
     validate_hours,
 )
+from cloud_bal_transaction import OutputTransaction  # noqa: E402
 
 
 def expect_rejected(action, text: str) -> None:
@@ -90,6 +93,35 @@ def _run_provenance_tests() -> None:
 
 def test_provenance_guards() -> None:
     _run_provenance_tests()
+
+
+def test_shadow_generation_accepts_bound_schema_two() -> None:
+    source_commit = "0" * 40
+    with tempfile.TemporaryDirectory(prefix="cloud-bal-shadow-schema2-") as directory:
+        root = Path(directory) / "publication"
+        transaction = OutputTransaction(root, "shadow")
+        transaction.begin(
+            ["RUN_SUMMARY.json"],
+            source_commit=source_commit,
+            configuration=SHADOW_CONFIGURATION,
+        )
+        transaction.resolve_output("RUN_SUMMARY.json").write_text(
+            json.dumps(
+                {
+                    "source_commit": source_commit,
+                    "source_tree_clean": True,
+                    "numerical_contract": "PASS",
+                    "promotion_eligible": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        transaction.commit()
+        products, manifest_sha = shadow_generation(
+            root / "current", source_commit
+        )
+        assert "RUN_SUMMARY.json" in products
+        assert len(manifest_sha) == 64
 
 
 def test_validate_hours_is_authoritative_and_fail_closed() -> None:
@@ -480,6 +512,7 @@ def test_p1_report_and_status_seal_12_utc_exclusion_provenance() -> None:
 
 def main() -> None:
     test_provenance_guards()
+    test_shadow_generation_accepts_bound_schema_two()
     test_validate_hours_is_authoritative_and_fail_closed()
     test_p1_operational_scope_excludes_12_and_has_its_own_authority()
     test_plot_field_specs_are_single_fixed_level()

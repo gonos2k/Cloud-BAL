@@ -3,8 +3,10 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -28,6 +30,18 @@ def expect_rejected(action, message: str) -> None:
     raise AssertionError(message)
 
 
+def expect_rejected_with_hook(
+    action, hook, message: str
+) -> None:
+    """Run one failure-injection action and always restore the class hook."""
+    original = OutputTransaction.__dict__["_inject"]
+    OutputTransaction._inject = staticmethod(hook)
+    try:
+        expect_rejected(action, message)
+    finally:
+        OutputTransaction._inject = original
+
+
 def write_products(transaction: OutputTransaction, values: dict[str, bytes]) -> None:
     for product, payload in values.items():
         path = transaction.resolve_output(product)
@@ -48,6 +62,288 @@ def main() -> None:
         old_manifest = old.commit()
         assert _current(root).name == "old"
         assert len(old_manifest["products"]) == 2
+        assert old_manifest["schema"] == 2
+        assert json.loads((old.generation / "TRANSACTION.json").read_text())["schema"] == 2
+        assert json.loads(old.owner.read_text())["schema"] == 2
+
+        legacy_root = Path(directory) / "legacy-publication"
+        legacy_generation = legacy_root / "generations" / "legacy"
+        legacy_generation.mkdir(parents=True)
+        (legacy_root / ".staging").mkdir()
+        (legacy_root / ".owners").mkdir()
+        payload = b"legacy"
+        (legacy_generation / "product").write_bytes(payload)
+        legacy_context = {
+            "schema": 1,
+            "transaction_id": "legacy",
+            "products": ["product"],
+            "source_commit": SOURCE_COMMIT,
+            "configuration": "shadow",
+            "valid_time": 0,
+            "expected_current": None,
+        }
+        (legacy_generation / "TRANSACTION.json").write_text(
+            json.dumps(legacy_context), encoding="utf-8"
+        )
+        (legacy_generation / "MANIFEST.json").write_text(
+            json.dumps(
+                {
+                    **legacy_context,
+                    "committed_utc": "2026-01-01T00:00:00+00:00",
+                    "products": [
+                        {
+                            "path": "product",
+                            "bytes": len(payload),
+                            "sha256": hashlib.sha256(payload).hexdigest(),
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        (legacy_generation / "COMMITTED").write_text("legacy\n", encoding="ascii")
+        (legacy_root / "current").symlink_to("generations/legacy")
+        expect_rejected(
+            lambda: _current(legacy_root),
+            "ownerless schema-1 current generation was accepted",
+        )
+
+        adversary_outside = Path(directory) / "adversary-outside"
+        adversary_outside.mkdir()
+
+        # A caller that never ran begin() must not be able to forge a complete
+        # looking staging tree by writing a plausible transaction context.
+        forged = OutputTransaction(root, "forged")
+        forged.staging.mkdir(parents=True)
+        (forged.staging / "TRANSACTION.json").write_text(
+            json.dumps(
+                {
+                    "schema": 1,
+                    "transaction_id": "forged",
+                    "products": ["product"],
+                    "source_commit": SOURCE_COMMIT,
+                    "configuration": "shadow",
+                    "valid_time": 1,
+                    "expected_current": "old",
+                }
+            ),
+            encoding="utf-8",
+        )
+        (forged.staging / "product").write_bytes(b"forged")
+        expect_rejected(forged.commit, "forged staging without begin receipt was accepted")
+        assert _current(root).name == "old"
+
+        missing_owner = OutputTransaction(root, "missing_owner")
+        missing_owner.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(missing_owner, {"product": b"candidate"})
+        missing_owner.owner.unlink()
+        expect_rejected(
+            missing_owner.commit,
+            "transaction without its begin receipt was accepted",
+        )
+
+        tampered_owner = OutputTransaction(root, "tampered_owner")
+        tampered_owner.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(tampered_owner, {"product": b"candidate"})
+        owner = json.loads(tampered_owner.owner.read_text())
+        owner["context_sha256"] = "0" * 64
+        tampered_owner.owner.write_text(json.dumps(owner), encoding="utf-8")
+        expect_rejected(
+            tampered_owner.commit,
+            "transaction with a tampered begin receipt was accepted",
+        )
+        assert _current(root).name == "old"
+
+        # Metadata targets are never allowed to be symlinks: replacing one
+        # would hide an external write behind an apparently atomic rename.
+        metadata_link = OutputTransaction(root, "metadata_link")
+        metadata_link.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(metadata_link, {"product": b"candidate"})
+        metadata_sentinel = adversary_outside / "manifest-sentinel"
+        metadata_sentinel.write_bytes(b"untouched")
+        (metadata_link.staging / "MANIFEST.json").symlink_to(metadata_sentinel)
+        expect_rejected(
+            metadata_link.commit,
+            "metadata symlink external-write attempt was accepted",
+        )
+        assert metadata_sentinel.read_bytes() == b"untouched"
+        assert _current(root).name == "old"
+
+        # Swap the declared product itself after its initial hash/close pass.
+        product_swap = OutputTransaction(root, "product_swap")
+        product_swap.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(product_swap, {"product": b"candidate"})
+        product_sentinel = adversary_outside / "product-sentinel"
+        product_sentinel.write_bytes(b"untouched")
+
+        def swap_product(point: str) -> None:
+            if point == "after_manifest":
+                candidate = product_swap.staging / "product"
+                candidate.unlink()
+                candidate.symlink_to(product_sentinel)
+
+        expect_rejected_with_hook(
+            product_swap.commit,
+            swap_product,
+            "product path swap around commit was accepted",
+        )
+        assert product_sentinel.read_bytes() == b"untouched"
+        assert _current(root).name == "old"
+
+        # Replace a product's directory parent at the same explicit commit
+        # boundary.  The external directory contains a sentinel with the same
+        # basename, so following the swapped parent would be observable.
+        parent_swap = OutputTransaction(root, "parent_swap")
+        parent_swap.begin(
+            ["nested/product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(parent_swap, {"nested/product": b"candidate"})
+        parent_target = adversary_outside / "parent-target"
+        parent_target.mkdir()
+        parent_sentinel = parent_target / "product"
+        parent_sentinel.write_bytes(b"untouched")
+        nested_parent = parent_swap.staging / "nested"
+        nested_backup = parent_swap.staging / "nested-original"
+
+        def swap_product_parent(point: str) -> None:
+            if point == "after_manifest":
+                nested_parent.rename(nested_backup)
+                nested_parent.symlink_to(parent_target, target_is_directory=True)
+
+        expect_rejected_with_hook(
+            parent_swap.commit,
+            swap_product_parent,
+            "product directory-parent replacement was accepted",
+        )
+        assert parent_sentinel.read_bytes() == b"untouched"
+        assert _current(root).name == "old"
+
+        # A generation target can appear after begin().  It must not be
+        # overwritten when the staged tree is renamed into generations/.
+        collision = OutputTransaction(root, "generation_collision")
+        collision.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(collision, {"product": b"candidate"})
+        collision_sentinel = collision.generation / "existing-sentinel"
+
+        def collide_generation(point: str) -> None:
+            if point == "after_marker":
+                collision.generation.mkdir()
+                collision_sentinel.write_bytes(b"untouched")
+
+        expect_rejected_with_hook(
+            collision.commit,
+            collide_generation,
+            "generation target collision was accepted",
+        )
+        assert collision_sentinel.read_bytes() == b"untouched"
+        assert _current(root).name == "old"
+
+        replaced_generation = OutputTransaction(root, "replaced_generation")
+        replaced_generation.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(replaced_generation, {"product": b"candidate"})
+
+        def replace_generation(point: str) -> None:
+            if point == "after_generation_rename":
+                backup = replaced_generation.generation.with_name(
+                    "replaced_generation-original"
+                )
+                replaced_generation.generation.rename(backup)
+                shutil.copytree(backup, replaced_generation.generation)
+                (replaced_generation.generation / "product").write_bytes(b"forged")
+
+        expect_rejected_with_hook(
+            replaced_generation.commit,
+            replace_generation,
+            "generation-directory replacement was accepted",
+        )
+        assert _current(root).name == "old"
+
+        # Neither a symlinked publication lock nor a pre-existing current-temp
+        # symlink may be followed or replaced, and both sentinels remain intact.
+        lock_symlink = OutputTransaction(root, "lock_symlink")
+        lock_symlink.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(lock_symlink, {"product": b"candidate"})
+        lock_sentinel = adversary_outside / "lock-sentinel"
+        lock_sentinel.write_bytes(b"untouched")
+        lock_path = root / ".publish.lock"
+        lock_path.unlink()
+        lock_path.symlink_to(lock_sentinel)
+        expect_rejected(
+            lock_symlink.commit,
+            "publication lock symlink was followed or replaced",
+        )
+        assert lock_sentinel.read_bytes() == b"untouched"
+        assert lock_path.is_symlink()
+        assert _current(root).name == "old"
+        lock_path.unlink()
+
+        temp_symlink = OutputTransaction(root, "temp_symlink")
+        temp_symlink.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(temp_symlink, {"product": b"candidate"})
+        temp_sentinel = adversary_outside / "current-temp-sentinel"
+        temp_sentinel.write_bytes(b"untouched")
+        temporary_pointer = root / f".current.{temp_symlink.transaction_id}.tmp"
+        temporary_pointer.symlink_to(temp_sentinel)
+        expect_rejected(
+            temp_symlink.commit,
+            "current temporary symlink was followed or replaced",
+        )
+        assert temp_sentinel.read_bytes() == b"untouched"
+        assert temporary_pointer.is_symlink()
+        assert _current(root).name == "old"
+        temporary_pointer.unlink()
+
+        swapped_temp = OutputTransaction(root, "swapped_temp")
+        swapped_temp.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(swapped_temp, {"product": b"candidate"})
+
+        def replace_current_temp(point: str) -> None:
+            if point == "before_current_swap":
+                temporary = root / ".current.swapped_temp.tmp"
+                temporary.unlink()
+                temporary.symlink_to("generations/old")
+
+        expect_rejected_with_hook(
+            swapped_temp.commit,
+            replace_current_temp,
+            "replacement current temporary pointer was published",
+        )
+        assert _current(root).name == "old"
+
+        changed_after_verify = OutputTransaction(root, "changed_after_verify")
+        changed_after_verify.begin(
+            ["product"], source_commit=SOURCE_COMMIT, configuration="shadow"
+        )
+        write_products(changed_after_verify, {"product": b"candidate"})
+
+        def mutate_verified_product(point: str) -> None:
+            if point == "before_current_swap":
+                (changed_after_verify.generation / "product").write_bytes(b"mutated")
+
+        expect_rejected_with_hook(
+            changed_after_verify.commit,
+            mutate_verified_product,
+            "product mutation after generation verification was published",
+        )
+        assert _current(root).name == "old"
 
         incomplete = OutputTransaction(root, "incomplete")
         incomplete.begin(
@@ -250,6 +546,15 @@ def main() -> None:
             "symlinked staging parent was accepted",
         )
 
+        publication_target = Path(directory) / "publication-target"
+        publication_target.mkdir()
+        publication_alias = Path(directory) / "publication-alias"
+        publication_alias.symlink_to(publication_target, target_is_directory=True)
+        expect_rejected(
+            lambda: OutputTransaction(publication_alias, "root_alias"),
+            "symlinked publication root was accepted",
+        )
+
         swapped_root = Path(directory) / "swapped-publication"
         swapped = OutputTransaction(swapped_root, "swapped")
         swapped.begin(["product"], source_commit=SOURCE_COMMIT, configuration="shadow")
@@ -266,6 +571,8 @@ def main() -> None:
         os.link(protected, hardlink.resolve_output("product"))
         expect_rejected(hardlink.commit, "hardlinked output product was accepted")
         assert protected.read_bytes() == b"protected"
+        assert protected.stat().st_nlink == 2
+        (hardlink.staging / "product").unlink()
         assert protected.stat().st_nlink == 1
 
         resolve_hardlink = OutputTransaction(root, "resolve_hardlink")
@@ -278,6 +585,8 @@ def main() -> None:
             "pre-existing output hardlink was returned to a writer",
         )
         assert protected.read_bytes() == b"protected"
+        assert protected.stat().st_nlink == 2
+        (resolve_hardlink.staging / "product").unlink()
         assert protected.stat().st_nlink == 1
 
         manifest_temp = OutputTransaction(root, "manifest_temp")
@@ -312,6 +621,8 @@ def main() -> None:
         os.link(protected, hidden_link.staging / "hidden" / "MANIFEST.json")
         expect_rejected(hidden_link.commit, "nested metadata-named hardlink was hidden")
         assert protected.read_bytes() == b"protected"
+        assert protected.stat().st_nlink == 2
+        (hidden_link.staging / "hidden" / "MANIFEST.json").unlink()
         assert protected.stat().st_nlink == 1
         assert hidden_link.staging.exists()
         assert not hidden_link.generation.exists()

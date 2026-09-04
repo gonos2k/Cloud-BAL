@@ -407,7 +407,7 @@ def shadow_generation(root: Path, source_commit: str) -> tuple[dict[str, dict], 
         raise ValueError("--shadow-root does not resolve to the verified current generation")
     manifest_path = generation / "MANIFEST.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if manifest.get("schema") != 1:
+    if manifest.get("schema") != 2:
         raise ValueError("unsupported SHADOW generation manifest")
     if manifest.get("source_commit") != source_commit:
         raise ValueError("SHADOW generation source commit differs from --source-commit")

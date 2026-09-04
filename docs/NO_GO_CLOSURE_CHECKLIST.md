@@ -200,8 +200,15 @@ P2~P8이 닫히기 전에는 `ACTIVE`를 만들거나 운영장에 candidate를 
 
 ### 체크리스트
 
-- [ ] 입력을 `O_NOFOLLOW` 및 동일 fd의 `stat/hash/read`로 고정한다.
-- [ ] current/generation/staging을 dirfd와 허용된 부모 inode에 결속한다.
+- [x] 정규 generation은 schema 2 context와 staging 외부의 local begin receipt를 요구하고,
+      owner 없는 schema 1 generation은 current 검증에서 거부한다.
+- [x] generation metadata/product inventory를 `O_NOFOLLOW` dirfd와 동일 fd의
+      `stat/hash/read`에 결속하고, generation·부모 inode 변경을 거부한다.
+- [x] generation rename은 `RENAME_NOREPLACE`로 기존 target을 덮어쓰지 않고,
+      current 임시 symlink의 target·inode 및 게시 직전 product 재검증을 요구한다.
+- [ ] operational/archive 입력도 동일 fd의 `stat/hash/read` snapshot으로 고정한다.
+- [ ] 외부 writer가 사용하는 `resolve_output()` pathname을 안전한 writer/import
+      API로 교체하고 retained writable-fd 위협을 제거한다.
 - [ ] 전체 bundle을 staging에서 검증한 뒤 한 번의 atomic rename으로 게시한다.
 - [ ] symlink component, hardlink/shared inode, parent traversal, pathname
       replacement race를 거부한다.
@@ -231,6 +238,13 @@ P2~P8이 닫히기 전에는 `ACTIVE`를 만들거나 운영장에 candidate를 
 모든 적대시험에서 검증 대상과 게시 대상이 동일 fd/hash로 결속되고, 실패 후
 부분 세대가 보이지 않을 때 P2를 닫는다. P2 미폐합 상태에서는 어떤 `exit=0`
 진단도 provenance-authoritative evidence가 아니며 `ACTIVE`는 금지된다.
+
+schema 2 전환은 fail-closed migration이다. 기존 schema 1 `current`를 자동
+승계하거나 현장에서 고쳐 쓰지 않으며, runner는 비어 있는 새 publication root에
+exact-head generation을 다시 생성해야 한다. 현재 보장은 publication root를 쓰는
+동일 UID의 임의 공격 프로세스를 신뢰하는 모델이 아니다. 해당 위협은 writer API와
+실행 계정/권한 격리가 완료될 때까지 P2 blocker로 유지한다.
+Local begin receipt는 구조적 결속이며 인증·서명 증거가 아니다.
 
 ---
 
