@@ -153,6 +153,7 @@ CONTAINS
     TYPE(cloud_bal_state_type), INTENT(OUT) :: state
     INTEGER, INTENT(OUT) :: status,reason
     INTEGER :: nx,ny,nz,i,j,k,initialization_status
+    LOGICAL, ALLOCATABLE :: declared_domain(:,:,:)
     REAL(real64), PARAMETER :: GRAVITY=9.80665_real64
     REAL(real64) :: pressure_scale,surface_pressure_scale,grid_scale
 
@@ -172,9 +173,22 @@ CONTAINS
         grid_scale<=0.0_real64) RETURN
 
     state%grid%dx=grid_scale*legacy%dx; state%grid%dy=grid_scale*legacy%dy
-    CALL copy_domain(legacy%above_ground,state%above_ground,legacy%vertical_order)
     CALL copy_real3(legacy%pressure,state%pressure,legacy%vertical_order, &
                     pressure_scale)
+    ! Pressure levels are coordinates.  A below-ground field mask must not
+    ! remove the coordinate needed to construct the PSFC-clipped domain.
+    state%pressure%valid=.TRUE.
+    state%pressure%quality=0_int32
+    state%pressure%source=SOURCE_BACKGROUND_MODEL
+    CALL copy_real2(legacy%surface_pressure,state%surface_pressure, &
+                    surface_pressure_scale)
+    ALLOCATE(declared_domain(nx,ny,nz))
+    CALL copy_domain(legacy%above_ground,declared_domain,legacy%vertical_order)
+    CALL configure_pressure_geometry(state,status)
+    IF (status/=STATUS_OK .OR. ANY(state%above_ground.NEQV.declared_domain)) THEN
+      reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
     CALL copy_real3(legacy%temperature,state%temperature,legacy%vertical_order, &
                     1.0_real64,state%above_ground)
     CALL copy_specific_humidity(legacy%specific_humidity,state%vapor, &
@@ -198,31 +212,16 @@ CONTAINS
                     legacy%vertical_order,1.0_real64,state%above_ground)
     CALL copy_integer3(legacy%precipitation_phase,state%precipitation_phase, &
                        legacy%vertical_order,state%above_ground)
-    CALL copy_real2(legacy%surface_pressure,state%surface_pressure, &
-                    surface_pressure_scale)
     CALL copy_real2(legacy%latitude,state%latitude,1.0_real64)
 
-    DO k=1,nz-1
-      state%grid%dp(:,:,k)=REAL(state%pressure%value(:,:,k),real64)- &
-                            REAL(state%pressure%value(:,:,k+1),real64)
-    END DO
-    state%grid%dp(:,:,nz)=state%grid%dp(:,:,nz-1)
-    IF (ANY(.NOT.ieee_is_finite(state%grid%dp)) .OR. &
-        ANY(state%grid%dp<=0.0_real64)) THEN
-      reason=REASON_RANGE
-      RETURN
-    END IF
-    DO k=1,nz
-      state%grid%pressure_mass_measure(:,:,k)=state%grid%dx*state%grid%dy* &
-        state%grid%dp(:,:,k)/GRAVITY
-    END DO
-
     state%omega_top_boundary%valid=.TRUE.
-    state%omega_top_boundary%quality=0_int32
+    state%omega_top_boundary%quality=IOR(QUALITY_LEGACY_PROVENANCE, &
+      QUALITY_BOUNDARY_INTERIOR_COPY)
     state%omega_top_boundary%source=SOURCE_ANALYZED_WIND
     state%omega_top_boundary%value=state%omega%value(:,:,nz)
     state%omega_bottom_boundary%valid=.TRUE.
-    state%omega_bottom_boundary%quality=0_int32
+    state%omega_bottom_boundary%quality=IOR(QUALITY_LEGACY_PROVENANCE, &
+      QUALITY_BOUNDARY_INTERIOR_COPY)
     state%omega_bottom_boundary%source=SOURCE_ANALYZED_WIND
     DO k=1,nz
       DO j=1,ny

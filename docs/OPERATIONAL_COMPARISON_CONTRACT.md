@@ -1,4 +1,4 @@
-# Operational-original versus SHADOW comparison contract
+# Operational-original versus diagnostic-patch comparison contract
 
 ## Purpose
 
@@ -9,37 +9,69 @@ this workflow:
 > a separately archived product written by the operational KLAPS chain.
 
 Canonical `background_*` fields and diagnostic proposal NetCDF files are not
-operational originals or full candidate products.  They are rejected by this
-contract.
+operational originals or full candidate products.  This contract permits only
+a clearly labelled field-level diagnostic patch; it never creates full-pipeline
+candidate evidence.
+
+## P1 operational-comparison scope
+
+For the 2026-08-16 operational comparison, P1 is explicitly scoped to exactly
+three archived operational pairs: **13, 14 and 15 UTC**.  The scope may be
+closed as `DONE (SCOPED)` when those three declared pairs satisfy this
+contract; that label closes only the comparison scope and does not assert an
+algorithm comparison, a resolved mass basis, a full-product candidate, or any
+promotion/`ACTIVE` authority.
+
+12 UTC is not a failed comparison pair and is not substituted with another
+product.  It is recorded as:
+
+| valid time | P1 scope status | exclusion reason |
+| --- | --- | --- |
+| 2026-08-16 12 UTC | `EXCLUDED_HISTORICAL_NOT_AVAILABLE` | `ARCHIVED_OPERATIONAL_LAPS_MISSING` |
+
+The exclusion is limited to this archived-original operational comparison.
+The raw SHADOW, upstream replay and manufactured-balance contracts continue to
+declare and retain their independent 12--15 UTC coverage.  The scoped output's
+`comparison.json`, `scope-manifest.json` and `STATUS.txt` bind the scope, exact
+source HEAD, pair-manifest hash, input/tool hashes and exit status.
+`comparison-manifest.json` and `contract_evidence/READINESS.json` are only
+pair-level structural-validator inputs/results; they are not independent scope
+or source-HEAD receipts.  Scope closure alone must not be used as execution
+evidence.
 
 Every valid-time/product comparison is a three-file transaction:
 
 | Manifest entry | Required evidence label | Required origin |
 | --- | --- | --- |
 | `original` | `REAL_OPERATIONAL_ORIGINAL` | `ARCHIVED_OPERATIONAL_KLAPS` |
-| `candidate` | `SHADOW_CANDIDATE` | `FULL_SHADOW_KLAPS_PRODUCT` |
+| `candidate` | `DERIVED_DIAGNOSTIC_PATCH` | `OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH` |
 | `operational_unchanged` | `OPERATIONAL_UNCHANGED` | `LIVE_OPERATIONAL_KLAPS_UNCHANGED` |
 
 The archived and live operational inputs must be independent files whose
-checksum-bound snapshots have the same SHA-256 digest.  The candidate must
-also be an independent file.  The
-archived product must be bound by an independently checksummed `SHA256SUMS`
-inventory, while the candidate must be bound by a Cloud-BAL generation
-`MANIFEST.json` and matching `COMMITTED` marker.  A SHADOW diagnostic
-containing only selected canonical fields is not a full candidate.
+checksum-bound snapshots have the same SHA-256 digest.  The patch must also be
+an independent file.  The archived product is bound by `SHA256SUMS`; the patch
+is bound by `PATCH_RECEIPT.json` with
+`receipt_type=LOCAL_DERIVATION_RECEIPT`,
+`patch_operation=ABSOLUTE_REPLACE_DIAGNOSTIC_ONLY`,
+`full_product_candidate=false`, and `mass_basis_resolved=false`.  This receipt
+records a local derivation and is deliberately not a Cloud-BAL generation
+manifest or committed operational product.
 
 ## Readiness gates
 
-A manifest is `READY` only when every declared pair passes all gates:
+A manifest is `DIAGNOSTIC_PATCH_VALID_NOT_COMPARABLE` only when every declared
+pair passes all structural gates. This status is not comparison readiness;
+`algorithm_comparison_ready=false` and
+`mass_basis_gate=BLOCKED_UNRESOLVED` remain fixed:
 
 1. The three paths are normalized relative paths below `--artifact-root`.
    Symbolic links, hard links, shared inodes, parent traversal and any path
    component containing `bigfile` are forbidden.
 2. All three file SHA-256 values equal the values recorded in the comparison
-   manifest.  The original's `SHA256SUMS` and candidate generation manifest
+   manifest.  The original's `SHA256SUMS` and patch derivation receipt
    are separately checksummed and must bind the exact product path, digest
    and—for the candidate—byte size.
-   The candidate generation configuration must equal
+   The candidate diagnostic configuration must equal
    `radar-only-shadow-ifx-2026-v3`; substring matches are not accepted.
 3. Embedded product valid times equal the UTC manifest valid time.
 4. Complete field inventories and field shapes/dtypes are identical and the
@@ -60,7 +92,7 @@ A manifest is `READY` only when every declared pair passes all gates:
     authority attributes containing canonical, background, diagnostic,
     proposal, or synthetic authority are rejected.
 
-The supported full-product formats are:
+The supported copied-file formats are:
 
 - `LAPS` and `KLBG`: WPS intermediate version 5
 - `MET_EM`: NetCDF met_em with `Times`, complete variable inventory and the
@@ -99,15 +131,15 @@ Paths are relative to the explicit artifact root, not to the manifest.
         }
       },
       "candidate": {
-        "evidence_role": "SHADOW_CANDIDATE",
-        "origin": "FULL_SHADOW_KLAPS_PRODUCT",
+        "evidence_role": "DERIVED_DIAGNOSTIC_PATCH",
+        "origin": "OPERATIONAL_COPY_WITH_CANONICAL_HYDROMETEOR_PATCH",
         "path": "shadow/MODL/KLFS/NE57/DAIO/2026081613/met_em.d01.2026-08-16_13:00:00.nc",
         "sha256": "<64 lowercase hexadecimal digits>",
         "wind_coordinate": "GRID_RELATIVE",
         "attestation": {
-          "format": "CLOUD_BAL_GENERATION",
-          "path": "shadow/MANIFEST.json",
-          "sha256": "<SHA-256 of shadow/MANIFEST.json>"
+          "format": "LOCAL_DERIVATION_RECEIPT",
+          "path": "shadow/PATCH_RECEIPT.json",
+          "sha256": "<SHA-256 of shadow/PATCH_RECEIPT.json>"
         }
       },
       "operational_unchanged": {
@@ -157,11 +189,12 @@ Comparison arrays are written only after **all** pairs pass.  On any missing
 original, candidate, field or metadata mismatch, only `READINESS.json` is
 written, `algorithm_comparison_status` remains `NOT_RUN`, and the command exits
 with status 3.  A ready comparison remains non-operational evidence:
+`algorithm_comparison_status` remains `NOT_RUN_FULL_END_TO_END` and
 `promotion_eligible` is always false.
 
 The attestations are local, checksum-bound evidence; they are not digitally
 signed operational authority.  `READINESS.json` therefore records
-`status_scope=STRUCTURAL_NUMERICAL_READINESS_UNDER_LOCAL_MANIFEST`,
+`status_scope=STRUCTURAL_VALIDATION_OF_DIAGNOSTIC_PATCH_ONLY`,
 `provenance_authority=LOCAL_ATTESTATION_BOUND_NOT_SIGNED`,
 `certified_operational_provenance=false`, and never promotes a candidate by
 itself.  It also records
@@ -172,8 +205,11 @@ managed live path remains unchanged after its validated snapshot was taken.
 ## Current 2026-08-16 inventory limitation
 
 Archived operational LAPS/KLBG/met_em triads currently exist for 13, 14 and
-15 UTC.  The 12 UTC inventory lacks the archived operational LAPS product.
-The 12 UTC comparison must therefore remain `NOT_READY`; KLBG or met_em must
-not be substituted for the missing LAPS product.  No full SHADOW LAPS/WPS or
-met_em candidate has yet been published, so the existing canonical diagnostic
-figures cannot satisfy this contract.
+15 UTC, which are the complete P1 operational-comparison scope.  The 12 UTC
+inventory lacks the archived operational LAPS product and remains recorded as
+`EXCLUDED_HISTORICAL_NOT_AVAILABLE` with reason
+`ARCHIVED_OPERATIONAL_LAPS_MISSING`; KLBG or met_em must not be substituted for
+the missing LAPS product.  No full pipeline-generated SHADOW LAPS/WPS or
+met_em candidate has yet been published.  Existing patches may satisfy this
+diagnostic-patch contract but cannot satisfy a full-product or
+algorithm-comparison contract.

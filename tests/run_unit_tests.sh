@@ -61,6 +61,7 @@ cd "$test_tmp"
 python3 "$repo_root/tests/test_output_transaction.py"
 python3 "$repo_root/tests/test_compare_baseline.py"
 python3 "$repo_root/tests/test_shadow_validator.py"
+python3 "$repo_root/tests/test_real_manufactured_balance_generation.py"
 
 mkdir -p "$test_tmp/wps_mod" "$test_tmp/wps_root/lapsprd/lapsprep/wps"
 "$CLOUD_BAL_FC" -c "${CLOUD_BAL_FREE_FLAGS[@]}" \
@@ -174,6 +175,7 @@ awk '
 "$repo_root/tests/run_real_shadow_io_contract_tests.sh"
 python3 "$repo_root/tests/test_qbal_real_input_manifest.py"
 python3 "$repo_root/tests/test_operational_comparison_prep.py"
+python3 "$repo_root/tests/test_operational_shadow_compare.py"
 "$repo_root/tests/run_legacy_deriv_safety_audit.sh"
 python3 "$repo_root/tests/test_intel_integration_audit.py"
 "$repo_root/tests/run_original_upstream_replay_tests.sh"

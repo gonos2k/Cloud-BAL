@@ -19,6 +19,8 @@ PROGRAM test_balance_operator
   CALL test_los_rejection_diagnostics(failures)
   CALL test_disconnected_support(failures)
   CALL test_boundary_contract_rejection(failures)
+  CALL test_copied_boundary_has_no_dynamic_authority(failures)
+  CALL test_manufactured_target_is_test_only(failures)
   CALL test_target_metadata_rejection(failures)
   CALL test_pressure_order_rejection(failures)
   CALL test_malformed_dimension_rejection(failures)
@@ -54,9 +56,6 @@ CONTAINS
       state%grid%dx(i,j)=1200.0_real64+31.0_real64*i+7.0_real64*j
       state%grid%dy(i,j)=1800.0_real64+13.0_real64*i+29.0_real64*j
       DO k=1,nz
-        state%grid%dp(i,j,k)=7000.0_real64+600.0_real64*k+5.0_real64*i
-        state%grid%pressure_mass_measure(i,j,k)=state%grid%dx(i,j)*state%grid%dy(i,j)* &
-                                       state%grid%dp(i,j,k)/9.80665_real64
         plev=95000.0_real64-15000.0_real64*REAL(k-1,real64)
         state%pressure%value(i,j,k)=REAL(plev,real32)
         state%temperature%value(i,j,k)=280.0_real32
@@ -92,8 +91,10 @@ CONTAINS
     state%omega_top_boundary%valid=.TRUE.
     state%omega_bottom_boundary%valid=.TRUE.
     state%omega_top_boundary%quality=0; state%omega_bottom_boundary%quality=0
-    state%omega_top_boundary%source=SOURCE_BACKGROUND_MODEL
-    state%omega_bottom_boundary%source=SOURCE_BACKGROUND_MODEL
+    state%omega_top_boundary%source=SOURCE_BOUNDARY_CONDITION
+    state%omega_bottom_boundary%source=SOURCE_BOUNDARY_CONDITION
+    CALL configure_pressure_geometry(state,status)
+    IF (status/=STATUS_OK) ERROR STOP 'pressure geometry initialization failed'
     DO k=1,nz; DO j=1,ny; DO i=1,nx
       state%balance_beta(i,j,k)=REAL(0.25_real64+0.75_real64* &
         SIN(ACOS(-1.0_real64)*REAL(i,real64)/REAL(nx+1,real64))**2* &
@@ -114,6 +115,7 @@ CONTAINS
     TYPE(cloud_bal_state_type) :: state
     TYPE(balance_operator_config) :: cfg
     TYPE(balance_operator_type) :: op
+    TYPE(balance_operator_snapshot) :: view
     REAL(real64), ALLOCATABLE :: xu(:,:,:),xv(:,:,:),xo(:,:,:),lambda(:,:,:)
     REAL(real64), ALLOCATABLE :: ax(:,:,:),atu(:,:,:),atv(:,:,:),ato(:,:,:)
     REAL(real64), ALLOCATABLE :: gu(:,:,:),gv(:,:,:),go(:,:,:),ag(:,:,:),ll(:,:,:)
@@ -123,6 +125,8 @@ CONTAINS
     CALL make_balance_state(state,6,5,4)
     CALL build_balance_operator(state,cfg,op,status,reason)
     CALL check(status==STATUS_OK,'operator construction',failures)
+    CALL snapshot_balance_operator(op,view,status)
+    CALL check(status==STATUS_OK,'operator inspection',failures)
     ALLOCATE(xu(6,5,4),xv(6,5,4),xo(6,5,4),lambda(6,5,4),ax(6,5,4), &
              atu(6,5,4),atv(6,5,4),ato(6,5,4),gu(6,5,4),gv(6,5,4), &
              go(6,5,4),ag(6,5,4),ll(6,5,4))
@@ -135,7 +139,7 @@ CONTAINS
     CALL apply_continuity_operator(op,xu,xv,xo,ax,status)
     CALL check(status==STATUS_OK,'A application',failures)
     CALL apply_adjoint_metric(op,lambda,atu,atv,ato,status)
-    lhs=SUM(op%volume*lambda*ax,MASK=op%cell_active)
+    lhs=SUM(view%volume*lambda*ax,MASK=view%cell_active)
     rhs=SUM(atu*xu+atv*xv+ato*xo)
     scale=MAX(ABS(lhs),ABS(rhs),1.0e-30_real64)
     error=ABS(lhs-rhs)/scale
@@ -145,24 +149,24 @@ CONTAINS
     CALL apply_balance_correction(op,lambda,gu,gv,go,status)
     CALL apply_continuity_operator(op,gu,gv,go,ag,status)
     CALL apply_normal_operator(op,lambda,ll,status)
-    scale=MAX(MAXVAL(ABS(ll),MASK=op%cell_active),1.0e-30_real64)
-    error=MAXVAL(ABS(ll+ag),MASK=op%cell_active)/scale
+    scale=MAX(MAXVAL(ABS(ll),MASK=view%cell_active),1.0e-30_real64)
+    error=MAXVAL(ABS(ll+ag),MASK=view%cell_active)/scale
     CALL check(error<5.0e-13_real64,'L equals -A G pointwise',failures)
-    quad=SUM(op%volume*lambda*ll,MASK=op%cell_active)
+    quad=SUM(view%volume*lambda*ll,MASK=view%cell_active)
     CALL check(quad>=-1.0e-12_real64*MAX(1.0_real64,ABS(quad)), &
                'normal operator must be positive semidefinite',failures)
 
     xv=0.0_real64; xo=0.0_real64
     CALL apply_continuity_operator(op,xu,xv,xo,ax,status)
-    CALL check(MAXVAL(ABS(ax),MASK=op%cell_active)>0.0_real64, &
+    CALL check(MAXVAL(ABS(ax),MASK=view%cell_active)>0.0_real64, &
                'u-axis pattern must contribute',failures)
     xu=0.0_real64; xv=1.0_real64
     CALL apply_continuity_operator(op,xu,xv,xo,ax,status)
-    CALL check(MAXVAL(ABS(ax),MASK=op%cell_active)>0.0_real64, &
+    CALL check(MAXVAL(ABS(ax),MASK=view%cell_active)>0.0_real64, &
                'v-axis pattern must contribute',failures)
     xv=0.0_real64; xo=1.0_real64
     CALL apply_continuity_operator(op,xu,xv,xo,ax,status)
-    CALL check(MAXVAL(ABS(ax),MASK=op%cell_active)>0.0_real64, &
+    CALL check(MAXVAL(ABS(ax),MASK=view%cell_active)>0.0_real64, &
                'omega-axis pattern must include zero-flux boundaries',failures)
   END SUBROUTINE test_operator_identities
 
@@ -171,18 +175,18 @@ CONTAINS
     TYPE(cloud_bal_state_type) :: state
     TYPE(balance_operator_config) :: cfg
     TYPE(balance_operator_type) :: op
+    TYPE(balance_operator_snapshot) :: view
     REAL(real64), ALLOCATABLE :: lambda(:,:,:),l_lambda(:,:,:)
     INTEGER :: status,reason,i,j,k,pattern
 
     CALL make_balance_state(state,6,6,4)
     state%grid%dx=2000.0_real64; state%grid%dy=2000.0_real64
-    state%grid%dp=10000.0_real64
-    state%grid%pressure_mass_measure=SPREAD(state%grid%dx*state%grid%dy,3,4)* &
-      state%grid%dp/9.80665_real64
+    CALL configure_pressure_geometry(state,status)
     state%balance_beta=1.0_real32
     CALL refresh_dry_air_mass_measure(state,status)
     CALL build_balance_operator(state,cfg,op,status,reason)
-    CALL check(status==STATUS_OK .AND. op%ncomponent==4, &
+    CALL snapshot_balance_operator(op,view,status)
+    CALL check(status==STATUS_OK .AND. view%ncomponent==4, &
       'uniform A-grid operator must expose four horizontal parity gauges',failures)
     ALLOCATE(lambda(6,6,4),l_lambda(6,6,4))
     DO pattern=1,3
@@ -195,7 +199,7 @@ CONTAINS
       END DO; END DO; END DO
       CALL apply_normal_operator(op,lambda,l_lambda,status)
       CALL check(status==STATUS_OK .AND. &
-        MAXVAL(ABS(l_lambda),MASK=op%cell_active)<1.0e-14_real64, &
+        MAXVAL(ABS(l_lambda),MASK=view%cell_active)<1.0e-14_real64, &
         'checkerboard multiplier must be an explicit normal-operator gauge',failures)
     END DO
   END SUBROUTINE test_actual_operator_nullspace
@@ -205,24 +209,24 @@ CONTAINS
     TYPE(cloud_bal_state_type) :: state
     TYPE(balance_operator_config) :: cfg
     TYPE(balance_operator_type) :: op
+    TYPE(balance_operator_snapshot) :: view
     REAL(real64), ALLOCATABLE :: residual(:,:,:)
     INTEGER :: status,reason
 
     CALL make_balance_state(state,6,5,4)
     state%grid%dx=2000.0_real64; state%grid%dy=2000.0_real64
-    state%grid%dp=10000.0_real64
-    state%grid%pressure_mass_measure=SPREAD(state%grid%dx*state%grid%dy,3,4)* &
-      state%grid%dp/9.80665_real64
+    CALL configure_pressure_geometry(state,status)
     state%u%value=4.0_real32; state%v%value=-3.0_real32
     state%omega%value=0.0_real32
     state%balance_beta=0.0_real32
     state%balance_beta(2:5,2:4,:)=1.0_real32
     CALL refresh_dry_air_mass_measure(state,status)
     CALL build_balance_operator(state,cfg,op,status,reason)
+    CALL snapshot_balance_operator(op,view,status)
     ALLOCATE(residual(6,5,4))
     CALL state_continuity_residual(op,state,residual,status)
     CALL check(status==STATUS_OK .AND. &
-      MAXVAL(ABS(residual),MASK=op%cell_active)<1.0e-14_real64, &
+      MAXVAL(ABS(residual),MASK=view%cell_active)<1.0e-14_real64, &
       'uniform flow must remain divergence free across compact-support edges',failures)
   END SUBROUTINE test_uniform_flow_compact_support
 
@@ -421,13 +425,19 @@ CONTAINS
 
   SUBROUTINE test_beta_threshold(failures)
     INTEGER, INTENT(INOUT) :: failures
-    TYPE(cloud_bal_state_type) :: input
+    TYPE(cloud_bal_state_type) :: input,output
     TYPE(balance_operator_config) :: cfg
     TYPE(balance_operator_type) :: op
+    TYPE(balance_operator_snapshot) :: view
+    TYPE(stage_result) :: result
     REAL(real32) :: rounded_below,next_above
     INTEGER :: status,reason
 
     CALL make_balance_state(input,6,5,4)
+    input%omega_target%valid=.FALSE.
+    input%omega_target%value=input%omega%value
+    input%omega_target%value(3,3,2)=0.08_real32
+    input%omega_target%valid(3,3,2)=.TRUE.
     rounded_below=REAL(cfg%minimum_beta,real32)
     next_above=NEAREST(rounded_below,1.0_real32)
     CALL check(.NOT.balance_beta_active(rounded_below,cfg%minimum_beta) .AND. &
@@ -436,12 +446,24 @@ CONTAINS
     input%balance_beta=0.0_real32
     input%balance_beta(3,3,2)=rounded_below
     CALL build_balance_operator(input,cfg,op,status,reason)
-    CALL check(status==STATUS_OK .AND. COUNT(op%cell_active)==0, &
+    CALL snapshot_balance_operator(op,view,status)
+    CALL check(status==STATUS_OK .AND. COUNT(view%cell_active)==0, &
                'rounded-below beta must remain inactive',failures)
-    input%balance_beta(3,3,2)=next_above
+    CALL apply_localized_balance(input,output,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. &
+               result%reason_code==REASON_AUTHORITY, &
+      'a resolved target without active localization must not report success',failures)
+    ! A pressure increment needs an adjacent active level so that its flux is
+    ! closed inside the compact support.
+    input%balance_beta(3,3,1:3)=next_above
     CALL build_balance_operator(input,cfg,op,status,reason)
-    CALL check(status==STATUS_OK .AND. COUNT(op%cell_active)==1, &
-               'next representable beta must become active',failures)
+    CALL snapshot_balance_operator(op,view,status)
+    CALL check(status==STATUS_OK, &
+               'next representable beta must build a valid operator',failures)
+    IF (status==STATUS_OK) THEN
+      CALL check(COUNT(view%cell_active)==3, &
+                 'next representable beta must become active',failures)
+    END IF
   END SUBROUTINE test_beta_threshold
 
   SUBROUTINE test_los_rejection_diagnostics(failures)
@@ -554,6 +576,7 @@ CONTAINS
     TYPE(stage_result) :: result
     TYPE(balance_operator_config) :: cfg
     TYPE(balance_operator_type) :: op
+    TYPE(balance_operator_snapshot) :: view
     INTEGER :: status,reason
 
     CALL make_balance_state(input,6,5,4)
@@ -561,7 +584,8 @@ CONTAINS
     input%balance_beta(2,2,:)=1.0_real32
     input%balance_beta(5,4,:)=1.0_real32
     CALL build_balance_operator(input,cfg,op,status,reason)
-    CALL check(status==STATUS_OK .AND. op%ncomponent==2, &
+    CALL snapshot_balance_operator(op,view,status)
+    CALL check(status==STATUS_OK .AND. view%ncomponent==2, &
                'separated compact supports must have separate gauges',failures)
 
     input%balance_beta=0.0_real32
@@ -590,6 +614,92 @@ CONTAINS
                    TRANSFER(input%omega%value,[0_int32],SIZE(input%omega%value))), &
                'boundary rejection must preserve omega',failures)
   END SUBROUTINE test_boundary_contract_rejection
+
+  SUBROUTINE test_copied_boundary_has_no_dynamic_authority(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: input,output
+    TYPE(stage_result) :: result
+    TYPE(balance_operator_config) :: cfg
+    TYPE(balance_operator_type) :: op
+    INTEGER :: status,reason
+
+    CALL make_balance_state(input,6,5,4)
+    input%omega_top_boundary%quality=QUALITY_BOUNDARY_INTERIOR_COPY
+    input%omega_bottom_boundary%quality=QUALITY_BOUNDARY_INTERIOR_COPY
+    CALL check(.NOT.physical_boundary_contract_valid(input), &
+      'interior-copy omega is not a physical boundary condition',failures)
+    CALL build_balance_operator(input,cfg,op,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
+      'low-level operator build must reject copied dynamic boundaries',failures)
+    CALL apply_localized_balance(input,output,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. &
+               result%reason_code==REASON_AUTHORITY, &
+      'dynamic balance must reject diagnostic-only omega boundaries',failures)
+    CALL check(ALL(TRANSFER(output%omega%value,[0_int32],SIZE(output%omega%value))== &
+                   TRANSFER(input%omega%value,[0_int32],SIZE(input%omega%value))), &
+      'boundary authority rejection must preserve omega',failures)
+
+    CALL make_balance_state(input,6,5,4)
+    input%omega_top_boundary%source=SOURCE_BACKGROUND_MODEL
+    input%omega_bottom_boundary%source=SOURCE_BACKGROUND_MODEL
+    CALL check(.NOT.physical_boundary_contract_valid(input), &
+      'untagged background omega is not a physical boundary condition',failures)
+    CALL apply_localized_balance(input,output,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. &
+               result%reason_code==REASON_AUTHORITY, &
+      'dynamic balance must require positive boundary provenance',failures)
+  END SUBROUTINE test_copied_boundary_has_no_dynamic_authority
+
+  SUBROUTINE test_manufactured_target_is_test_only(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: input,output
+    TYPE(stage_result) :: result
+    TYPE(balance_operator_config) :: cfg
+    INTEGER(int32), PARAMETER :: target_source = &
+      IOR(SOURCE_DYNAMIC_TARGET,SOURCE_MANUFACTURED_TEST)
+    INTEGER(int32), PARAMETER :: boundary_source = &
+      IOR(SOURCE_BOUNDARY_CONDITION,SOURCE_MANUFACTURED_TEST)
+
+    CALL make_balance_state(input,6,5,4)
+    input%omega_target%source=target_source
+    input%omega_top_boundary%source=boundary_source
+    input%omega_bottom_boundary%source=boundary_source
+    cfg%required_residual_fraction=0.50_real64
+    cfg%minimum_target_response_ratio=0.0_real64
+    cfg%maximum_target_response_ratio=100.0_real64
+    cfg%physical_residual_tolerance=1.0_real64
+    cfg%maximum_physical_residual=1.0_real64
+    cfg%geostrophic_absolute_tolerance=100.0_real64
+
+    CALL apply_localized_balance(input,output,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. &
+               result%reason_code==REASON_AUTHORITY, &
+      'observational mode must reject a manufactured target',failures)
+    CALL check(.NOT.physical_boundary_contract_valid(input), &
+      'manufactured boundaries are not physical evidence',failures)
+
+    cfg%target_authority=TARGET_AUTHORITY_MANUFACTURED_TEST
+    CALL apply_localized_balance(input,output,result,cfg)
+    CALL check(result%status==STATUS_OK .AND. &
+               result%numerical%solver_reason==SOLVER_CONVERGED .AND. &
+               ANY(result%changed), &
+      'explicit test mode must exercise a nonzero manufactured solve',failures)
+
+    input%omega_top_boundary%source=SOURCE_BOUNDARY_CONDITION
+    input%omega_bottom_boundary%source=SOURCE_BOUNDARY_CONDITION
+    CALL apply_localized_balance(input,output,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. &
+               result%reason_code==REASON_AUTHORITY, &
+      'manufactured mode must require test-only boundary provenance',failures)
+
+    input%omega_top_boundary%source=boundary_source
+    input%omega_bottom_boundary%source=boundary_source
+    input%omega_target%source=IOR(target_source,SOURCE_ANALYZED_WIND)
+    CALL apply_localized_balance(input,output,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. &
+               result%reason_code==REASON_AUTHORITY, &
+      'manufactured targets must reject mixed observational provenance',failures)
+  END SUBROUTINE test_manufactured_target_is_test_only
 
   SUBROUTINE test_target_metadata_rejection(failures)
     INTEGER, INTENT(INOUT) :: failures
@@ -641,6 +751,10 @@ CONTAINS
     CALL apply_localized_balance(input,output,result,cfg)
     CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_SHAPE, &
                'nx<4 must fail unchanged before access',failures)
+    input%omega_target%valid=.FALSE.
+    CALL apply_localized_balance(input,output,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_SHAPE, &
+               'nx<4 no-target state must fail at the same public boundary',failures)
   END SUBROUTINE test_small_domain_rejection
 
 END PROGRAM test_balance_operator

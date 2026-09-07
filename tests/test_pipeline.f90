@@ -2,6 +2,8 @@ PROGRAM test_pipeline
   USE, INTRINSIC :: iso_fortran_env,ONLY: real32,real64,int32,int64
   USE cloud_bal_state
   USE cloud_bal_column_physics,ONLY: derive_column_physics
+  USE cloud_bal_balance_operator,ONLY: TARGET_AUTHORITY_OBSERVATIONAL, &
+    TARGET_AUTHORITY_MANUFACTURED_TEST
   USE cloud_bal_pipeline
   IMPLICIT NONE
   TYPE(cloud_bal_state_type) :: input,candidate,operational,column_candidate
@@ -42,7 +44,7 @@ PROGRAM test_pipeline
 
   CALL make_state(input)
   CALL remove_cloud_analysis(input)
-  CALL remove_unused_surface_fields(input)
+  CALL remove_unused_surface_temperature(input)
   CALL add_radar_cell(input)
   CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
   CALL check(result%status==STATUS_OK .AND. result%column%status==STATUS_OK .AND. &
@@ -80,7 +82,9 @@ PROGRAM test_pipeline
   config%balance%minimum_target_response_ratio=saved_minimum_target_response_ratio
 
   CALL make_state(input)
-  input%above_ground(:,:,1)=.FALSE.
+  input%surface_pressure%value=90000.0_real32
+  CALL configure_pressure_geometry(input,status)
+  IF (status/=STATUS_OK) ERROR STOP 'terrain fixture geometry failed'
   CALL invalidate_level(input,1)
   CALL remove_cloud_analysis(input)
   CALL refresh_dry_air_mass_measure(input,status)
@@ -100,6 +104,41 @@ PROGRAM test_pipeline
   CALL check(same_pipeline_state(input,operational), &
              'authority rejection must rollback',failures)
 
+  config%requested_mode=MODE_SHADOW
+  config%balance%target_authority=TARGET_AUTHORITY_MANUFACTURED_TEST
+  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL check(result%status==STATUS_FAILED .AND. &
+             result%reason_code==REASON_AUTHORITY .AND. &
+             same_pipeline_state(input,operational), &
+    'manufactured authority must never enter the normal pipeline',failures)
+  config%balance%target_authority=TARGET_AUTHORITY_OBSERVATIONAL
+
+  CALL make_state(input)
+  input%omega_top_boundary%source= &
+    IOR(SOURCE_BOUNDARY_CONDITION,SOURCE_MANUFACTURED_TEST)
+  input%omega_bottom_boundary%source= &
+    IOR(SOURCE_BOUNDARY_CONDITION,SOURCE_MANUFACTURED_TEST)
+  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL check(result%status==STATUS_FAILED .AND. &
+             result%reason_code==REASON_AUTHORITY .AND. &
+             same_pipeline_state(input,operational), &
+    'manufactured boundaries must never enter the normal pipeline',failures)
+
+  CALL make_state(input)
+  input%omega_target%source(2,2,2)=SOURCE_MANUFACTURED_TEST
+  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL check(result%status==STATUS_FAILED .AND. &
+             result%reason_code==REASON_AUTHORITY .AND. &
+             same_pipeline_state(input,operational), &
+    'invalid target cells cannot carry manufactured provenance',failures)
+
+  CALL make_state(input)
+  DEALLOCATE(input%omega_target%source)
+  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_SHAPE, &
+    'malformed target provenance storage must fail without array conformability',failures)
+
+  CALL make_state(input)
   input%precipitation_phase%valid(2,2,3)=.TRUE.
   input%precipitation_phase%quality(2,2,3)=0_int32
   input%precipitation_phase%source(2,2,3)=SOURCE_CLOUD_ANALYSIS
@@ -137,9 +176,6 @@ CONTAINS
     DO k=1,3; DO j=1,4; DO i=1,4
       state%grid%dx(i,j)=2000.0_real64
       state%grid%dy(i,j)=2200.0_real64
-      state%grid%dp(i,j,k)=15000.0_real64
-      state%grid%pressure_mass_measure(i,j,k)=state%grid%dx(i,j)*state%grid%dy(i,j)* &
-                                     state%grid%dp(i,j,k)/9.80665_real64
       state%pressure%value(i,j,k)=REAL(95000-15000*(k-1),real32)
       state%temperature%value(i,j,k)=280.0_real32
       state%vapor%value(i,j,k)=0.008_real32
@@ -172,8 +208,10 @@ CONTAINS
     state%omega_bottom_boundary%value=0.0_real32
     state%omega_top_boundary%valid=.TRUE.; state%omega_bottom_boundary%valid=.TRUE.
     state%omega_top_boundary%quality=0_int32; state%omega_bottom_boundary%quality=0_int32
-    state%omega_top_boundary%source=SOURCE_BACKGROUND_MODEL
-    state%omega_bottom_boundary%source=SOURCE_BACKGROUND_MODEL
+    state%omega_top_boundary%source=SOURCE_BOUNDARY_CONDITION
+    state%omega_bottom_boundary%source=SOURCE_BOUNDARY_CONDITION
+    CALL configure_pressure_geometry(state,status)
+    IF (status/=STATUS_OK) ERROR STOP 'pressure geometry initialization failed'
     CALL refresh_dry_air_mass_measure(state,status)
     IF (status/=STATUS_OK) ERROR STOP 'dry-air mass initialization failed'
   END SUBROUTINE make_state
@@ -202,15 +240,12 @@ CONTAINS
     state%cloud_type%source=0_int32
   END SUBROUTINE remove_cloud_analysis
 
-  SUBROUTINE remove_unused_surface_fields(state)
+  SUBROUTINE remove_unused_surface_temperature(state)
     TYPE(cloud_bal_state_type),INTENT(INOUT) :: state
-    state%surface_pressure%valid=.FALSE.
-    state%surface_pressure%quality=QUALITY_RAW_MISSING
-    state%surface_pressure%source=0_int32
     state%surface_temperature%valid=.FALSE.
     state%surface_temperature%quality=QUALITY_RAW_MISSING
     state%surface_temperature%source=0_int32
-  END SUBROUTINE remove_unused_surface_fields
+  END SUBROUTINE remove_unused_surface_temperature
 
   SUBROUTINE invalidate_level(state,k)
     TYPE(cloud_bal_state_type),INTENT(INOUT) :: state
@@ -286,8 +321,14 @@ CONTAINS
     a=TRANSFER(left%dy,[0_int64],SIZE(left%dy))
     b=TRANSFER(right%dy,[0_int64],SIZE(right%dy))
     IF (.NOT.ALL(a==b)) RETURN
-    a=TRANSFER(left%dp,[0_int64],SIZE(left%dp))
-    b=TRANSFER(right%dp,[0_int64],SIZE(right%dp))
+    a=TRANSFER(left%cell_dp,[0_int64],SIZE(left%cell_dp))
+    b=TRANSFER(right%cell_dp,[0_int64],SIZE(right%cell_dp))
+    IF (.NOT.ALL(a==b)) RETURN
+    a=TRANSFER(left%pressure_interface,[0_int64],SIZE(left%pressure_interface))
+    b=TRANSFER(right%pressure_interface,[0_int64],SIZE(right%pressure_interface))
+    IF (.NOT.ALL(a==b)) RETURN
+    a=TRANSFER(left%level_spacing_dp,[0_int64],SIZE(left%level_spacing_dp))
+    b=TRANSFER(right%level_spacing_dp,[0_int64],SIZE(right%level_spacing_dp))
     IF (.NOT.ALL(a==b)) RETURN
     a=TRANSFER(left%pressure_mass_measure,[0_int64],SIZE(left%pressure_mass_measure))
     b=TRANSFER(right%pressure_mass_measure,[0_int64],SIZE(right%pressure_mass_measure))

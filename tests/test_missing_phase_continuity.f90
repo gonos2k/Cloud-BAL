@@ -1,7 +1,7 @@
 PROGRAM test_missing_phase_continuity
   USE, INTRINSIC :: iso_fortran_env, ONLY: real64
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite,ieee_value,ieee_quiet_nan
-  USE cloud_bal_state, ONLY: STATUS_OK,STATUS_FAILED
+  USE cloud_bal_state, ONLY: STATUS_OK,STATUS_FAILED,MIN_PRESSURE_PA
   USE cloud_bal_column_physics, ONLY: PHASE_UNKNOWN,PHASE_RAIN,PHASE_SNOW, &
     PHASE_FREEZING_RAIN,PHASE_SLEET,PHASE_GRAUPEL,missing_phase_partition, &
     allocate_precipitation_phase,terminal_velocity
@@ -241,9 +241,10 @@ CONTAINS
                                       rain,snow,graupel,status)
     CALL check(status==STATUS_FAILED,'invalid phase must fail allocation',failures)
 
-    vt=terminal_velocity(PHASE_UNKNOWN,100.0_real64,270.0_real64,30.0_real64,status)
+    vt=terminal_velocity(PHASE_UNKNOWN,MIN_PRESSURE_PA-1.0_real64, &
+                         270.0_real64,30.0_real64,status)
     CALL check(status==STATUS_FAILED .AND. vt==0.0_real64, &
-               'invalid pressure must fail fall speed closed',failures)
+               'below-minimum pressure must fail fall speed closed',failures)
     vt=terminal_velocity(PHASE_UNKNOWN,80000.0_real64,351.0_real64,30.0_real64,status)
     CALL check(status==STATUS_FAILED .AND. vt==0.0_real64, &
                'invalid temperature must fail fall speed closed',failures)

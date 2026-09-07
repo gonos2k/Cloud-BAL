@@ -45,8 +45,8 @@ negative pressure vertical velocity: `omega = -(w * pressure) / 8000`.
 
 No observations, model data, operational output, executables, object/module
 files, logs, benchmark products, wiki content, or wind Barnes/OpenMP release
-files are included. `graphify-out` contains only the AST-derived structural
-graph of this source snapshot. Raw radar ingest/remap and the complete KLAPS
+files are included. `graphify-out` contains the persistent source-and-document
+structural graph of this focused snapshot. Raw radar ingest/remap and the complete KLAPS
 build system are also outside this repository.
 
 The selected files preserve their upstream FSL public-domain notices. This is
@@ -83,12 +83,17 @@ S-band radial-velocity, precipitation-trajectory, local-balance, and wave-noise
 basis is summarized with primary literature in
 [docs/SCIENTIFIC_BASIS.md](docs/SCIENTIFIC_BASIS.md).
 
+The goal, implemented scope, remaining integration work, and completion of the
+separate radial-velocity/Barnes release are summarized in
+[docs/STATUS_20260907.md](docs/STATUS_20260907.md).
+
 The focused real-data evidence commands are:
 
 ```bash
 tests/run_real_shadow_cases.sh
 tests/run_real_shadow_figures.sh
 tests/run_radar_velocity_audit.sh
+tests/run_real_manufactured_balance_cases.sh
 ```
 
 The real runner requires a clean exact-head tree and the pinned Intel ifx 2026
@@ -96,3 +101,8 @@ binary.  The figure and velocity-audit wrappers verify and pin that committed
 generation before reading it.  The four prepared hours are never filtered by
 outcome.  A failed stage returns the input state and is not published as a
 candidate; its failure reason remains available in the stage result.
+
+The manufactured-balance runner uses the four actual KLAPS geometries and
+Intel ifx to exercise a nonzero solver path.  Its target and pressure-velocity
+boundary are explicitly test-only, and every artifact states science authority
+`NONE`.  See [docs/REAL_GEOMETRY_DYNAMIC_BALANCE.md](docs/REAL_GEOMETRY_DYNAMIC_BALANCE.md).

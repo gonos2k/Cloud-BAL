@@ -8,12 +8,12 @@ PROGRAM test_real_shadow_reader
   REAL(real32), ALLOCATABLE :: longitude(:,:)
   CHARACTER(LEN=1024) :: fua,fsf,lw3,vrz,vrt,static_file,time_text,mode
   INTEGER(int64) :: valid_time
-  INTEGER :: status,reason,io_status,k
+  INTEGER :: status,reason,io_status,k,expected_reason
   LOGICAL, ALLOCATABLE :: no_echo(:,:,:),missing(:,:,:)
   LOGICAL :: expect_reject
 
   IF (COMMAND_ARGUMENT_COUNT()<7 .OR. COMMAND_ARGUMENT_COUNT()>8) ERROR STOP &
-    'usage: reader-test FUA FSF LW3 VRZ VRT STATIC VALID_TIME_EPOCH [REJECT]'
+    'usage: reader-test FUA FSF LW3 VRZ VRT STATIC VALID_TIME_EPOCH [REJECT|REJECT_COVERAGE]'
   CALL GET_COMMAND_ARGUMENT(1,fua)
   CALL GET_COMMAND_ARGUMENT(2,fsf)
   CALL GET_COMMAND_ARGUMENT(3,lw3)
@@ -21,10 +21,11 @@ PROGRAM test_real_shadow_reader
   CALL GET_COMMAND_ARGUMENT(5,vrt)
   CALL GET_COMMAND_ARGUMENT(6,static_file)
   CALL GET_COMMAND_ARGUMENT(7,time_text)
-  expect_reject=.FALSE.
+  expect_reject=.FALSE.; expected_reason=-1
   IF (COMMAND_ARGUMENT_COUNT()==8) THEN
     CALL GET_COMMAND_ARGUMENT(8,mode)
-    expect_reject=TRIM(mode)=='REJECT'
+    expect_reject=TRIM(mode)=='REJECT' .OR. TRIM(mode)=='REJECT_COVERAGE'
+    IF (TRIM(mode)=='REJECT_COVERAGE') expected_reason=REASON_REQUIRED_COVERAGE
     IF (.NOT.expect_reject) ERROR STOP 'invalid reader-test mode'
   END IF
   READ(time_text,*,IOSTAT=io_status) valid_time
@@ -34,10 +35,15 @@ PROGRAM test_real_shadow_reader
                               TRIM(static_file),valid_time,state,longitude,status,reason)
   IF (expect_reject) THEN
     IF (status==STATUS_OK) ERROR STOP 'reader accepted malformed real input'
+    IF (expected_reason>=0 .AND. reason/=expected_reason) &
+      ERROR STOP 'reader returned the wrong rejection reason'
     PRINT *,'Malformed real SHADOW input rejected'
     STOP
   END IF
-  IF (status/=STATUS_OK .OR. reason/=REASON_NONE) ERROR STOP 'reader rejected real case'
+  IF (status/=STATUS_OK .OR. reason/=REASON_NONE) THEN
+    WRITE(*,'(A,I0,A,I0)') 'reader_status=',status,' reason=',reason
+    ERROR STOP 'reader rejected real case'
+  END IF
   CALL validate_canonical_state(state,.FALSE.,.TRUE.,status,reason,.TRUE.)
   IF (status/=STATUS_OK .OR. reason/=REASON_NONE) ERROR STOP 'final state is not canonical'
 
@@ -56,16 +62,18 @@ PROGRAM test_real_shadow_reader
 
   ALLOCATE(no_echo(state%grid%nx,state%grid%ny,state%grid%nz), &
            missing(state%grid%nx,state%grid%ny,state%grid%nz))
-  no_echo=.NOT.state%radar_reflectivity%valid .AND. state%above_ground .AND. &
-    state%radar_reflectivity%value==-10.0_real32 .AND. &
-    state%radar_reflectivity%quality==0_int32 .AND. &
-    state%radar_reflectivity%source==SOURCE_RADAR_DBZ
-  missing=.NOT.state%radar_reflectivity%valid .AND. &
-    state%radar_reflectivity%value==0.0_real32 .AND. &
-    state%radar_reflectivity%quality==QUALITY_RAW_MISSING .AND. &
-    state%radar_reflectivity%source==0_int32
+  no_echo=state%above_ground .AND. radar_no_echo_cell( &
+    state%radar_reflectivity%value,state%radar_reflectivity%valid, &
+    state%radar_reflectivity%quality,state%radar_reflectivity%source)
+  missing=radar_missing_cell(state%radar_reflectivity%value, &
+    state%radar_reflectivity%valid,state%radar_reflectivity%quality, &
+    state%radar_reflectivity%source)
   IF (.NOT.ANY(state%radar_reflectivity%valid) .OR. .NOT.ANY(no_echo)) &
     ERROR STOP 'echo/no-echo split is absent'
+  IF (ANY(state%radar_reflectivity%valid .NEQV. radar_echo_cell( &
+      state%radar_reflectivity%value,state%radar_reflectivity%valid, &
+      state%radar_reflectivity%quality,state%radar_reflectivity%source))) &
+    ERROR STOP 'radar echo mask does not use the canonical predicate'
   IF (ANY(state%radar_reflectivity%valid .AND. .NOT.state%above_ground)) &
     ERROR STOP 'below-ground echo gained authority'
   IF (ANY(state%radar_reflectivity%valid .AND. &

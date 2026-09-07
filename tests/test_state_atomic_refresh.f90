@@ -49,6 +49,17 @@ CONTAINS
       'a cell-level time-mismatch flag must not be usable',failures)
     CALL check(.NOT.cell_is_usable(.TRUE.,0_int32,0_int32), &
       'valid data without provenance must not be usable',failures)
+    CALL check(radar_echo_cell(20.0_real32,.TRUE.,0_int32,SOURCE_RADAR_DBZ), &
+      'usable radar reflectivity must be classified as echo',failures)
+    CALL check(radar_no_echo_cell(RADAR_NO_ECHO_DBZ,.FALSE.,0_int32, &
+      SOURCE_RADAR_DBZ), &
+      'observed no-echo must have one canonical representation',failures)
+    CALL check(radar_missing_cell(0.0_real32,.FALSE.,QUALITY_RAW_MISSING,0_int32), &
+      'missing radar must remain distinct from observed no-echo',failures)
+    CALL check(.NOT.radar_echo_cell(101.0_real32,.TRUE.,0_int32,SOURCE_RADAR_DBZ), &
+      'echo predicate must reject out-of-range reflectivity',failures)
+    CALL check(.NOT.radar_missing_cell(1.0_real32,.FALSE.,QUALITY_RAW_MISSING,0_int32), &
+      'missing-radar predicate must require the zero marker',failures)
   END SUBROUTINE test_usable_contract
 
   SUBROUTINE test_late_failure_is_atomic(failures)
@@ -113,7 +124,11 @@ CONTAINS
     IF (status/=STATUS_OK) ERROR STOP 'state initialization failed'
     state%grid%dx=1000.0_real64
     state%grid%dy=1000.0_real64
-    state%grid%dp=10000.0_real64
+    state%grid%pressure_interface(:,:,1)=100000.0_real64
+    state%grid%pressure_interface(:,:,2)=90000.0_real64
+    state%grid%pressure_interface(:,:,3)=80000.0_real64
+    state%grid%cell_dp=10000.0_real64
+    state%grid%level_spacing_dp=10000.0_real64
     state%grid%pressure_mass_measure=1000.0_real64
     state%grid%dry_air_mass_measure=777.0_real64
     state%vapor%value=0.01_real32

@@ -118,10 +118,17 @@ Targeted legacy safety fixes are also present:
 
 `tools/cloud_bal_transaction.py` stages declared products, verifies hashes,
 writes a manifest and completion marker, renames the generation, and only then
-uses a cooperative-process atomic switch for the `current` pointer. Its commit identity is a validated
-40-hex declaration; repository-HEAD equality remains a coordinator/clean-CI
-gate. It is a publication primitive; the legacy multi-writer call paths have
-not yet been migrated to it.
+switches the `current` pointer. New publications use schema 2: a local begin
+receipt binds the context and publication-directory identities, generation
+inventory and hashes are read through non-following dirfds, and an existing
+generation target is never replaced. Ownerless schema 1 generations are rejected
+and must be regenerated in a fresh publication root. Its commit identity is a
+validated 40-hex declaration; repository-HEAD equality remains a
+coordinator/clean-CI gate. External writer path capabilities and whole comparison
+bundle publication have not yet been migrated, so this remains an engineering
+primitive rather than hostile-filesystem promotion authority.
+The local begin receipt is structural binding, not authenticated or signed
+authority.
 
 ## Verification completed
 
@@ -177,8 +184,9 @@ acceptance bitset.  Rejected candidates remain diagnostic evidence; they do
 not change operational arrays or become scientific successes.
 
 `tests/run_real_shadow_cases.sh` now writes all four cases into one hash-verified
-generation through staging, per-case independent validation, a hashed
-manifest, completion marker and cooperative-process atomic `current` switch.
+schema 2 generation through staging, per-case independent validation, a hashed
+manifest, completion marker and atomic `current` switch. A legacy schema 1 root
+is not rolled forward in place; use a fresh publication root.
 It requires a clean exact-head worktree and reports artifact validity separately from the
 candidate decision.  `tests/run_real_shadow_figures.sh` uses one deterministic
 level/cross-section rule for every case and produces eight diagnostic
