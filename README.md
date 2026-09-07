@@ -83,6 +83,10 @@ S-band radial-velocity, precipitation-trajectory, local-balance, and wave-noise
 basis is summarized with primary literature in
 [docs/SCIENTIFIC_BASIS.md](docs/SCIENTIFIC_BASIS.md).
 
+The goal, implemented scope, remaining integration work, and completion of the
+separate radial-velocity/Barnes release are summarized in
+[docs/STATUS_20260907.md](docs/STATUS_20260907.md).
+
 The focused real-data evidence commands are:
 
 ```bash
