@@ -136,3 +136,7 @@ The [plan](docs/CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md),
 [scientific review](docs/CP02_MULTI_RADAR_SCIENTIFIC_REVIEW_20260914.md) define observation reuse,
 phase-change consistency, startup-wave controls, and 1–6 h precipitation validation.
 These documents do not claim implemented or validated coupled initialization.
+The [conditional proofs](docs/CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md)
+state the assumptions behind identifiability, conservation, and wave-energy bounds.
+The [September 14 corrections](docs/CLOUD_BAL_DESIGN_REVIEW_20260907.md)
+clarify covariance weighting, phase policy, development dependencies, and evidence closure.

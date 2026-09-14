@@ -1,12 +1,9 @@
 # 다중 레이더·국지 균형초기화 실행 체크리스트와 체크포인트
 
-이 PR은 계획·체크리스트·검토 요약을 제공한다. 아래의 로컬 작업공간 근거는 이 PR에
-포함되지 않으며 공개 저장소에서 재실행 검증한 결과로 해석하지 않는다. 상세 구현·실험은
-별도 작업으로 남고, 기존 CP02의 실행·통합 요구사항을 완료 처리하지 않는다.
-
 작성·갱신: 2026-09-14.
 상위 계획: [추가 과제 계획서](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
-검토 근거: [수학·수치해석·기상학 종합 검토](CP02_MULTI_RADAR_SCIENTIFIC_REVIEW_20260914.md).
+검토 근거: 수학·수치해석·기상학 종합 검토 (로컬 작업공간 근거: `../scratch/cp02_multiradar_additional_review_20260914/REVIEW.md`).
+수학 근거: [정리·증명과 실제 적용 조건](CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md).
 
 ## 상태와 사용 방법
 
@@ -15,6 +12,8 @@
 여섯 요구사항을 대체하지 않는다. 체크는 실제 산출물·판정·입력/소스/설정 근거가
 있을 때만 완료한다. 문서 작성, 정상 종료, 0회 solver 또는 기존 OFF 실험은 새
 물리 초기화의 완료 근거가 아니다.
+현재 MR-C0–MR-C6에는 실제 `PASS`가 없으며, 아래 결정·매핑의 상태도 `PENDING` 또는
+`NOT_RUN`으로 유지한다.
 
 | 체크포인트 | 계획 연결 | 현재 상태 | 종료 산출물 |
 |---|---|---|---|
@@ -25,6 +24,19 @@
 | MR-C4 구현·t0 전달 | R3, R4 | NOT_RUN | 실제 FORTRAN 검증과 첫 시간전진 전 native 재읽기 |
 | MR-C5 초기 충격 | R5 | NOT_RUN | 첫 미세물리·음향/중력파·대류 보존의 초기 시간 진단 |
 | MR-C6 강수 효과 | R6 | NOT_RUN | 동일 사례 1–6시간 RN1/PTY·CSI 및 분석장 비교 |
+
+MR 체크포인트와 기존 본체 45개 ID의 추적 매핑은 다음과 같다. 이 표는 기존 ID의
+gate/closure를 승격하지 않으며, 각 MR 상태는 위 표의 실제 상태를 따른다.
+
+| MR | 기존 45-ID 추적 범위 |
+|---|---|
+| MR-C0 | M01, M04, M06, O01, O06, E01 |
+| MR-C1 | O03, O05, O06, O08, B06 |
+| MR-C2 | M05, M07, B01–B03, T05 |
+| MR-C3 | T01, T03, T04, V04 |
+| MR-C4 | E02–E04, B06 |
+| MR-C5 | V04, T03, B05 |
+| MR-C6 | V01–V03, E08 |
 
 MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 자료 조사와 방정식 검토는 병렬로 진행할 수 있다. MR-C2/C3를 통과하지 않은 진단
@@ -42,6 +54,8 @@ MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 - [ ] Cloud-BAL의 현재 merged U/V·dBZ 입력과 필요한 LOS 입력 확장의 차이를 기록한다.
 - [ ] state/validator/stage payload의 LOS 계약과 기존 OFF 호환성을 검토한다. 임의 sigma나
   가짜 동시시각으로 계약을 통과시키지 않는다.
+- [ ] 외부 모델 omega/`w` target은 요구하지 않으며, Barnes 초기 분석장은 독립 prior가
+  아닌 background/시작값으로 기록한다.
 
 통과: 실제 파일·변수·시각·좌표·QC에서 다음 단계로 사용할 입력을 재현할 수 있다.
 정보 부족은 필드/영역별로 표시한다. 이미 쓰는 관측 전체를 “자료 없음”으로 처리하지 않는다.
@@ -54,11 +68,18 @@ MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 - [ ] 고도별 레이더 수·빔 교차각·연직 민감도·유효 rank와 조건수를 계산한다.
 - [ ] Barnes가 이미 흡수한 성분을 고려한 잔존 연직 연산자와 오차 공분산을 평가한다.
 - [ ] 조건부 보정 또는 원 관측을 한 번 사용하는 공동 분석 중 구현할 경로를 선택한다.
+- [ ] 실제 Barnes 선형화·교차공분산을 재현할 수 있을 때만 조건부 경로를 선택하고,
+  그렇지 않으면 raw Vr를 공동 3성분 목적함수에 한 번만 넣는다. 공동 분석도 poor
+  geometry/rank를 고치지 않는다.
 - [ ] 조건부 경로는 공분산의 양의 준정부호성·유효 rank·특이 부분공간 처리 근거를 갖춘다.
   이를 복원할 수 없으면 원 관측 1회 경로로 전환하고, 미완료 상태를 관측 W로 승격하지 않는다.
 - [ ] `w-Vt`와 공기 W를 구분하고, 혼합상·PSD·입자형상·대표성 및 공통 Vt 오차를 반영한다.
 - [ ] 같은 Vt 오차가 여러 빔에 작용할 때 레이더 간 상관을 포함한다. 종간 분산 0을
   전체 낙하속도 오차 0으로 해석하지 않는다.
+- [ ] 합성 sanity check의 `0.412213%`를 unknown-horizontal 대 known-horizontal의
+  조건부 연직 정보비로 기록한다. 이는 Barnes 99.6% 손실률이 아니다. 독립 Vr
+  `sigma=1 m s^-1`, exact Vt fixture의 조건부 표준편차 `약 238.6 m s^-1`도
+  합성 계산값으로만 기록하고 실제 sigma/Vt 불확실도로 사용하지 않는다.
 - [ ] scan age·레이더 간 시차·가능한 폭풍 이동·빔 부피를 5 km 모델의 표현 규모와 비교한다.
 - [ ] 약한/중복 빔의 알려진 해를 확인하고 관측 가능·약제약·불가 영역을 분리한다.
 
@@ -79,6 +100,25 @@ MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 - [ ] 엄밀 제약과 오차 허용 목적, 변수별 단위·척도, rank·실현 가능성·수렴·rollback을 정한다.
 - [ ] 최소 비선형 반복 후 T/Q/P·밀도·geometry와 실제 저장 상태의 잔차를 다시 검사한다.
 - [ ] canonical 등압면과 native C-grid의 잔차를 구분하고 기존 공유 face 보존 구조를 활용한다.
+- [ ] unknown 수(`n_unknown`)와 자유도 목록, 등식/부등식·허용오차, 지형/상·하단/측면
+  경계, rank·호환성·feasibility·rollback을 별도 R2 결정으로 기록한다. 현재 결정은
+  `PENDING`이다.
+- [ ] 질량 경향은 `data`/`fixed_quasisteady`/`bounded_estimation` 중 하나를 근거와
+  함께 선택하며, 사후 `mdot=-DF`로 잔차를 지우지 않는다. 건조질량 식은
+  `d rho_d/dt + div(rho_d V)`의 full `rho_d V`를 유지하고, 이산 증분
+  `delta(rho_d V)=rho_d,b*delta V+V_b*delta rho_d+delta rho_d*delta V`를 포함한다.
+- [ ] R2 결과를 independent control, diagnostic, fixed, constraints, native checks로
+  분리하고 native checks를 닫힌 native formulation이나 solver 완료로 기록하지 않는다.
+
+R2 범주별 기록은 다음처럼 정의한다.
+
+| 범주 | 기록할 항목 | 상태 |
+|---|---|---|
+| 독립 제어변수 | 실제 최소화 제어변수(예: R2에서 선택한 U/V/W 증분), 개수·저장 위치·stagger | PENDING |
+| 진단변수 | 종속적으로 계산한 W/omega/WW/Phi·pressure와 변환·provenance | PENDING |
+| 고정 입력 | 선택한 terrain·time·boundary·geometry·basis 등 고정 입력 | PENDING |
+| 제약식 | mass/EOS/thermo 관계와 support·경계·rank·feasibility·rollback | PENDING |
+| native checks | source 식·units·stagger와 최종 array의 mass/EOS/thermo/metric 잔차·readback 검사; native 폐쇄식은 미확정 | PENDING |
 
 통과: 물리적으로 가능한 제약 집합과 실패 판정이 명확하며, 증분 폐쇄를 전체 상태
 폐쇄로 혼동하지 않는다. 이론상 계약 확정과 실제 수치 검증 완료는 별도로 기록한다.
@@ -114,6 +154,13 @@ MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 - [ ] canonical/native 잔차, 물/열 예산, 지원 영역과 U/V/W/P/T/Q 변경을 재읽어 비교한다.
 - [ ] `W`, material pressure omega, mu-coupled eta-dot WW와 그 변환 가정을 구분한다.
 - [ ] `use_input_w`와 실제 startup/경계 처리 후 **첫 시간전진 전** W 및 결합 상태를 확인한다.
+- [ ] `x_b→initialized t0` 전체 증분과 그 안의 실제 phase operator ledger 종별
+  `Δr_phase`·`ΔT_phase`를 analysis/remap/기타 증분과 분리하고, 별도 시간 태그와
+  동일 cell/unit을 기록한다.
+- [ ] `immediately before first MP→immediately after first MP` 짝에서 종별
+  `Δr_extra_MP`·`ΔT_extra_MP`를 계산하고, 사이의 시간전진/연산을 명시한다.
+- [ ] 각 짝진 상태에서 buoyancy·pressure·vertical acceleration을 같은 snapshot 단위로
+  readback하며 phase 증분과 extra-MP 증분을 한 차이로 합치지 않는다.
 - [ ] 변경 예정 필드는 후보와 일치하고, 변경 대상 밖 필드와 원본 입력은 보존됨을 확인한다.
 
 통과: 해당 후보의 소스·입력·설정·빌드·readback이 결속되고 적분 전 실제 소비가 입증된다.
@@ -166,6 +213,12 @@ MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 완료 기록은 체크포인트마다 다음 여섯 항목만 남긴다. 별도 배포용 감사 프레임워크를
 만들지 않고 기존 보고서/receipt를 재사용한다.
 
+시험 유형은 서로 대체하지 않는다. `DISCRETE_EXACT_SOLVER`/`INDEPENDENT_SPARSE`는
+고정 이산 연산자의 exact·독립 희소 검증, `CONTINUOUS_MMS_GRID_CONVERGENCE`는
+제조해의 연속 문제 격자 수렴, `REAL_GRID_SINE_EXECUTION`은 실제 격자 sine 입력의
+소비·실행 경로 점검이다. 마지막 유형은 실제 기하 관측 가능성이나 solver/과학 폐합을
+증명하지 않는다.
+
 1. 판정과 날짜: PASS / FAIL / IN_PROGRESS / NOT_RUN, 과학/수치 판정의 범위.
 2. 입력·소스·설정 및 후보 식별자.
 3. 실제 실행한 검사와 사전 기준.
@@ -174,4 +227,5 @@ MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 6. 다음 체크포인트와 재검증이 필요한 변경 범위.
 
 현재 재개 위치는 **MR-C0의 레이더별 입력 연결과 MR-C2/MR-C3의 방정식·기준 확정**이다.
+MR-C1은 아직 실행하지 않은 선행 단계이며, 방정식의 병렬 검토가 이를 통과시킨 것은 아니다.
 관측자료는 이미 사용 중이며, 새 연직풍 경로에 필요한 정보의 보존·전달 범위를 확인한다.

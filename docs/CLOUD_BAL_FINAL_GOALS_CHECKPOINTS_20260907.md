@@ -156,19 +156,19 @@ state-dependent 재구성은 CP06/07에서 확인한다.
 - [ ] producer 종료 → snapshot 재검증 → seal → 고유 generation → current 전환의 실패주입과 재시도 증거를 만든다.
 
 진행 갱신 (2026-09-14): **CP02 IN_PROGRESS / E03 OPEN**. 위 여섯 요구사항은 유지한다.
-[항목별 근거](../scratch/cp02_requirement_matrix_20260911/CP02_REQUIREMENT_MATRIX.md)에 따라
+항목별 근거 (로컬 작업공간 근거: `../scratch/cp02_requirement_matrix_20260911/CP02_REQUIREMENT_MATRIX.md`)에 따라
 #1·2·3·5·6은 기록된 소스·설정·격리 실행 범위에서 `PROVEN-SCOPED`, #4는 `INCOMPLETE`다.
 이는 공식 체크박스나 전체 gate의 PASS 승격이 아니다. 관련 소스·입력·설정 변경 또는
 새 실패가 해당 근거를 무효화할 때만 그 범위를 재검증한다.
 
 기존 관측·처리자료는 확보되어 입력으로 사용 중이다. 추가로
-[12/15 UTC OFF native 준비](../scratch/cp02_native_12_15.B4Lwmh/RUN_REPORT.md)는
+12/15 UTC OFF native 준비 (로컬 작업공간 근거: `../scratch/cp02_native_12_15.B4Lwmh/RUN_REPORT.md`)는
 metgrid/real 종료 0, 12 UTC 초기장과 12→15 UTC 경계자료 생성을 기록한다.
 이는 물리 omega 구현이나 실제 결합 후보 전달의 완료 근거가 아니다.
 
 남은 작업 순서와 책임 범위:
 
-추가 과제 (2026-09-14): [다중 레이더 연직풍·국지 균형초기화 계획](https://github.com/gonos2k/Cloud-BAL/blob/docs/cp02-multiradar-balanced-init-20260914/docs/CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
+추가 과제 (2026-09-14): [다중 레이더 연직풍·국지 균형초기화 계획](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
 시선속도가 이미 반영된 Barnes 수평풍을 기준으로 남은 연직 관측 제약을 평가하고,
 수상체와 주변 전이 영역에서 최소 보정으로 전체 상태의 질량·역학 정합성을 맞춘다.
 관측 중복 사용, 입자 낙하속도, 레이더 기하의 비식별성을 먼저 검토한다.
@@ -179,7 +179,7 @@ metgrid/real 종료 0, 12 UTC 초기장과 12→15 UTC 경계자료 생성을 �
 연결 성분별 질량 호환성, 상변화 후 native 열역학·역학 정합성 및 음향/중력파
 구분 검증을 R1–R5에 명시했다. 물리적 잠열 응답·대류·냉기류·지형성 파동을 보존하며
 불일치로 생긴 과도한 초기 조정을 줄인다. 이 계획 갱신은 구현·충격 억제 PASS가 아니다.
-추가 과제의 실행 상태는 [MR-C0–MR-C6 체크리스트](https://github.com/gonos2k/Cloud-BAL/blob/docs/cp02-multiradar-balanced-init-20260914/docs/CP02_MULTI_RADAR_INITIALIZATION_CHECKLIST_20260914.md)에서
+추가 과제의 실행 상태는 [MR-C0–MR-C6 체크리스트](CP02_MULTI_RADAR_INITIALIZATION_CHECKLIST_20260914.md)에서
 입력 연결→연직 정보→결합 방정식/상변화·파동→t0 전달→초기 충격→강수 효과 순으로 추적한다.
 
 현재 단계의 OMEGA는 시간 적분하는 예측변수가 아니라, 같은 분석 시각의 질량 연속성을
@@ -263,7 +263,7 @@ projection이 자동 보존된다고 가정하지 않는다. B01의 최종 nativ
 허용되지만 이는 T01의 실제 retrieval lineage 폐합이 아니다. O03/T01 실제 연결과
 thermo 이후 EOS/geometry·balance 재평가는 CP05/CP06-A에서 필요하다. 기존 standalone
 함수의 PASS만으로 이 연결이나 KDM6 열역학 호환을 완료 처리하지 않는다.
-실패 시: 과포화·음수 종·budget 실패/상한 도달을 숨기는 clip 성공 처리 금지; 원본 복귀.
+실패 시: native 물·얼음 포화/혼합상 정책 위반, 수치적 overshoot·중복 상변화·음수 종·budget 실패/상한 도달을 숨기는 clip 성공 처리 금지; 원본 복귀. 물리적으로 허용되는 얼음 과포화·과냉각 액체수는 보존한다.
 
 ### CP05 — 실제 관측·동역학 target·수송 의미
 
@@ -273,12 +273,13 @@ thermo 이후 EOS/geometry·balance 재평가는 CP05/CP06-A에서 필요하다.
 - [ ] 실제 cloud fraction/base/top/type/T/qv와 H_Z·parameterization ID·R_Z를 연결한다.
 - [ ] ECHO/BELOW_DETECTION/MISSING/QC_REJECTED와 검출한계를 분리한다. no-echo 목적지 차단을 증발·지표 sink로 세지 않는다.
 - [ ] Barnes 완료 receipt를 참조해 frame·beam·dealias/Nyquist 필요조건·관측 ID·time·오차와 중복 관측을 검증한다. Barnes 재개발이 아니다.
-- [ ] 격자평균 dynamic target의 식별가능성·R_w·독립 근거·physical boundary를 검증한다. type/dBZ-only 및 무권한 입력은 wind innovation 0이다.
+- [ ] O06의 레이더별 입력 연결을 O05의 완성된 target보다 먼저 진행한다. 직접 w 관측이나 외부 모델 target을 필수 입력으로 요구하지 않는다.
+- [ ] 관측·물리 결합으로 추정하는 격자평균 연직풍의 식별가능성·오차·physical boundary를 검증한다. 관측 제약/물리·배경 의존/미해결을 구분하며, type/dBZ-only 및 기존 무권한 입력의 wind innovation 0·rollback은 유지한다.
 - [ ] Vt_mass와 Vt_Z를 분리하거나 근사/PSD/오차를 선언하고, suspension/상승·양의 deposition·boundary exit·terrain intercept를 실행한다.
 - [ ] earth-fixed 시간수송과 storm-relative reconstruction 중 모형을 선택한다. 실제 시간수송은 source 제거·sink·boundary kg budget, 재구성은 A_Q 장부로 검사한다.
 - [ ] 관측 계약/단위/종별 ledger를 CP04와 상호 점검한다. Poor geometry·held-out ID 중복·결측 sigma는 거부한다.
 
-완료 산출물: 관측 contract receipt, 승인 가능한 실제 비영 target 사례, selected transport-model tests.
+완료 산출물: 관측 contract receipt, 관측·물리 결합으로 승인 조건을 검사한 실제 초기 연직풍 후보, 실행 범위에 맞는 재구성/시간수송/기존 수상체 장부 검사. 비영 값 자체는 승인 근거가 아니다.
 CP05의 단독 수송 fixture는 T01/T02의 전체 결합 보존이나 V02의 사건 검증을 닫지 않는다.
 실패 시: 정보 없는 no-op과 잘못된 필수 입력 거부를 구분; 제조해로 실제 target을 대체하지 않는다.
 

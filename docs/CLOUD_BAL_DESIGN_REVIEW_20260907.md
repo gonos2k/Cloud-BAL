@@ -12,6 +12,47 @@
 - 편집 가능한 요구사항 원장: [CLOUD_BAL_REQUIREMENTS_20260907.tsv](CLOUD_BAL_REQUIREMENTS_20260907.tsv)
 - 현재 승인 기준: [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md).
 
+## 2026-09-14 검토 반영 — 현재 설계 해석
+
+위 `f837bad`는 9월 7일 정적 코드 검토의 기준이다. 다중 레이더 계획의 병합 기준은
+`main@816c03820a92571dd5eb2efac41b2bf010be7722` (PR #4)이며, 문서 기준 SHA와
+실제 시험 대상 SHA·dirty source hash를 구분한다. 문서 변경으로 과거 시험을 최신
+코드의 PASS로 복사하지 않는다. 아래 정정은 현재 설계에 적용하고 과거 실행 기록은 유지한다.
+
+사용자가 제시한 원 보고서 §3.2의 “R_Z와 retrieval confidence를 낮춘다”는 문구는
+관측오차 공분산의 가중 방향과 반대다. 이 저장소 검토본에는 해당 문구가 없었으므로
+원 보고서를 직접 수정한 것으로 표시하지 않고, 다음을 O03의 적용 기준으로 명시한다.
+
+$$
+J_Z=\tfrac12(H_Z(x)-y_Z)^T R_Z^{-1}(H_Z(x)-y_Z),\quad
+R_{Z,new}=R_{Z,old}+Q,\quad Q\succeq0.
+$$
+
+`R_Z`가 양의 정부호이면 `A=R_Z^{-1/2} Q R_Z^{-1/2} ⪰ 0`이고
+`(R_Z+Q)^{-1}=R_Z^{-1/2}(I+A)^{-1}R_Z^{-1/2} ⪯ R_Z^{-1}`이다.
+따라서 산란·입자분포·대표성 불확실성이 클수록 **공분산을 확대하거나 정밀도 가중을
+낮춘다**. 고정 innovation의 관측항 영향에 대한 관계이며, 결합 최적해의 모든 성분이
+단조 변화한다는 뜻은 아니다. 오차모형을 정당화할 수 없으면 적용 범위를 제한하고
+진단으로 남긴다. 특이 공분산의 지원 공간을 바꾸면서 이 역행렬 식을 그대로 쓰지 않는다.
+
+Native 미세물리의 물·얼음 포화 기준, 혼합상·과냉각 액체수 정책을 따른다.
+물리적 얼음 과포화·과냉각 액체수 자체를 제거하는 완료조건은 사용하지 않는다.
+검출 대상은 수치적 overshoot, 중복 상변화, 비현실적 냉각과 해당 host 정책 위반이다.
+Morrison의 정책을 현재 pinned KDM6의 정책으로 대신 가정하지 않는다.
+
+사용자가 보고한 Excel 122개 수식·네 반례는 외부 검토 결과이며, 이 문서·원장의
+수정 검증으로 Excel 엔진 실행이나 workbook 수식 교정을 완료 처리하지 않는다.
+Excel 파일의 직접 편집·재계산은 별도 결과로 기록한다.
+저장소의 Markdown/TSV는 수동 원장으로 유지하며, `PASS 기록요건 충족`과
+선행조건·검증된 증거·승인 범위까지 갖춘 `폐합`을 구분한다. 상세 판정은
+[체크리스트 운용 규칙](CLOUD_BAL_CHECKLIST_20260907.md)을 따른다.
+
+다음 milestone은 실제 첫 사례의 레이더별 자료로 연직 정보와 공통 낙하속도 오차를
+정량화한 후, 최소 제어변수·질량 경향·경계조건을 확정하는 것이다.
+[다중 레이더 계획](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md)과
+[MR 체크포인트](CP02_MULTI_RADAR_INITIALIZATION_CHECKLIST_20260914.md)를 함께 사용한다.
+새 결합 초기화 구현·과학 검증·운영 승격은 아직 완료가 아니다.
+
 ## 1. 검토 결론
 
 설계의 중심인 **작은 full-state 경로, dry-mass 기준, 관측 권한에 따른 국지
@@ -113,7 +154,10 @@ pressure-cell total mass와 dry mass를 모두 불변이라고 할 수 없다. �
 `Qa-Qb=A_Q+dt*(F_in-F_out)+epsilon_Q`를 사용하고, 외부 분석과 source-to-sink
 물리수송을 분리한다. Interface throughput kg/s를 층마다 합한 값은 고유 source
 mass kg가 아니다. Reconstruction prior와 source-removing 시간수송 중 실행
-모형을 고정하고 ledger의 단위·시간창·source ID를 일치시킨다.
+모형을 고정하고 ledger의 단위·시간창·source ID를 일치시킨다. 기존 수상체 기반
+연직풍 복원은 수상체의 질량기준·낙하속도·오차·변경 여부를 기록하며 새 시간수송기를
+항상 선행시키지 않는다. 적용 요구사항 집합은 실행 전 범위와 함께 승인하며 미선택을
+기능 완료로 바꾸거나 임의로 필수 항목을 제외하지 않는다.
 
 `h_d=h_dry(T)+sum(rj*hj(T))`는 종별 기준점과 열용량을 host microphysics와
 맞춘 뒤 사용한다. Reduced cell enthalpy 보존은 native compressible total-energy
@@ -162,8 +206,10 @@ Jacobi/vertical-line 전처리 후보를 정확도·iteration·p95 wall로 비�
 분리한다. Coupled 상태에서 `D delta_Fd=-delta_dot_md`를 평가할 때, 수분 증가를
 dry-air source로 넣거나 geometry가 바뀌어도 무조건 `d=0`으로 두지 않는다.
 
-진짜 제조해는 feasible `delta*`, gauge-compatible `lambda*`에서
-`q=delta*+W^-1 C^T lambda*`를 만들어 복원을 검사한다. 저장소에 기록된
+이산 정확해 시험은 feasible `delta*`, gauge-compatible `lambda*`에서
+`q=delta*+W^-1 C^T lambda*`를 만들어 복원을 검사한다. 같은 C로 생성·검사한
+일치는 공간 미분의 정확도를 증명하지 않는다. 독립 sparse reference로 solver·adjoint·
+nullspace를 검사하고, 연속 제조해와 격자수렴으로 metric·경계·미분 정확도를 별도 검사한다. 저장소에 기록된
 6/16 adverse-response와 50% 허용은 numerical path exercise다. 같은 target
 위치와 고정 threshold에서 독립 sparse reference·다격자·지형 partial face·
 native handoff 뒤 residual과 target fit을 함께 검사한다.
@@ -183,12 +229,14 @@ nonlinear 수렴으로 간주하지 않는다.
 | A3 | 작은 thermo block와 bounded outer coupling | T03/T05/B05 | 종별 수분·enthalpy와 후속 geometry/balance 재검증 |
 | B1 | 실제 upstream·전체 ifx·OFF native 왕복 | E01/E02/E03 | 동일 입력으로 최소 full-state vertical slice |
 | B2 | 시작 시 capability probe·세대 seal | E05/E06 | 지원 backend에서 검증한 byte와 게시 byte 결속 |
-| 합류 | observational target을 가진 FULL_SHADOW_PRODUCT | O05/O06/E04/E08 | native 최종 상태를 독립 verifier가 검사 |
+| 합류 | 관측·물리 결합 근거가 검증된 FULL_SHADOW_PRODUCT | O05/O06/E04/E08 | native 최종 상태를 독립 verifier가 검사 |
 | 이후 | 사건별 paired 0–6 h와 운영 예산 | V01–V06 | 사전 고정 지표·hold-out·wave sampling·독립 승인 |
 
 위 순서는 구현 착수/설계 검토 제안이다. 기존 P1–P8 단계와 긴급도 P0/P1/P2는
 다른 축이다. 격리된 연구의 병렬 수행과 통합·게시·운영 승격의 의존성을 구분하되,
-기존 ledger의 승인 선행조건은 이번 문서 작성만으로 바꾸지 않는다.
+기존 구현의 권한 검사·rollback은 유지한다. 새 개발의 O06 입력 연결은 O05보다
+먼저 가능하며, O06 결합 분석은 입력·관측 가능성·질량·경계 계약을 충족한 뒤 진행한다.
+R2의 실제 조건부/공동 분석 경로 선택 전 대형 solver 확장을 선행하지 않는다.
 
 ## 8. 체크리스트 운용과 평가
 
