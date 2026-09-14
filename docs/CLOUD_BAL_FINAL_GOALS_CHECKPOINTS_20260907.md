@@ -297,6 +297,9 @@ CP02 전체 완료나 native 왕복은 요구하지 않는다. 실제 관측 기
 실행 전에 사례·입력·허용 변수/support·관측 target 권한·threshold가 정해진 격리 실험
 승인 근거를 A receipt에 연결한다. 이번 순서 변경 GO만으로 미확정 실제 target이나
 범위를 승인한 것으로 간주하지 않는다. 승인 범위가 없으면 그 실자료 결합 실행은 보류한다.
+새 다중 레이더 경로를 사용하는 후보는 MR-C0–MR-C3의 계약·증거를 A receipt에 연결한다.
+격리된 native 전달·소비 시험은 MR-C4에서 수행하며, 그 통과 증거가 있는 후보를
+MR-C5 초기 충격 검증으로 넘긴다. 기존 등압면 연구 범위와 소규모 진단은 유지한다.
 
 - [ ] 사전 지정한 동일 pre-QBAL x_b에서 OFF, hydro+thermo, 실제 dynamic-coupled 후보를 각각 만든다.
 - [ ] proposal → thermo → EOS/geometry → balance → 전체 제약의 bounded outer loop를 연결한다.
@@ -347,6 +350,8 @@ RELEASE/NO-GO 통합·게시 선행조건. 하위 상태는 현재 `PLANNED / NO
 
 진입: CP07 전체 PASS + O06 관측 계보와 V01 hold-out 검증 + 시험 전 승인한 threshold/평가 계획.
 주 연결: V01/V02/V03/V04, B05/E08. 담당 역할: 과학 평가 / 독립 통계·관측 검증자.
+새 다중 레이더 후보의 추가 증거 순서는 MR-C4 실제 native 게시·소비, MR-C5 초기 충격,
+MR-C6 1–6시간 강수 검증이다. 이는 기존 45개 분모·상태·선행 DAG를 변경하지 않는다.
 
 - [ ] 연속 네 시각을 독립 네 사건으로 세지 않고 사건별 split·hold-out 관측 ID·regime coverage를 고정한다.
 - [ ] 같은 model/physics/forcing의 OFF·가능한 legacy·hydro/thermo·full 후보를 paired 비교한다. Legacy 불가 시 원인과 대조군 공백을 명시하고 승인받는다.
@@ -500,3 +505,7 @@ CP01은 **COMPLETE / PASS (격리 연구 계약·소규모 시험 범위)**로 �
 KDM6 호환성과 빌드 인터페이스 차이를 조사한다. 근거가 있는 개선 항목과 우선순위를
 별도 결과로 정리하며, 현재 단계에서 최신 버전 호환성을 확인했다고 간주하지 않는다.
 코드 현대화·운영 전환은 이 조사와 구분하며 기존 체크포인트 번호와 승격 조건은 유지한다.
+
+## 2026-09-15 검토 연결
+
+PR #5 병합 `ba45e8f` 기준의 추가 검토를 [다중 레이더 계획](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md)과 [MR 체크리스트](CP02_MULTI_RADAR_INITIALIZATION_CHECKLIST_20260914.md)에 반영했다. B06의 legacy nonlin 부호·섭동 수정은 한 묶음이며, E03/M06/M07의 native 기준 상태·geometry·지원 영역·재시도·전체 하부 W 경계 검사는 MR-C4 승인 전에 필요하다. 작은 수치시험·consumer 시험·native startup 검증을 구분하고 기존 부품 구현을 전체 결합 완료로 집계하지 않는다. 이번 반영은 계획 수정이며 CP02 또는 MR-C4/C5의 PASS가 아니다.
