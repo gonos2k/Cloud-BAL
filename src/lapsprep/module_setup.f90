@@ -50,6 +50,7 @@ MODULE setup
 
    LOGICAL            :: hotstart,balance,make_sfc_uv
    LOGICAL            :: enforce_field_contracts
+   LOGICAL            :: wps_output_vapor
    CHARACTER (LEN=4)  :: output_format(10)
    INTEGER            :: num_output
    REAL               :: snow_thresh, lwc2vapor_thresh
@@ -108,6 +109,7 @@ CONTAINS
                          grid_scale        , &
                          cap_policy        , &
                          wind_coordinate   , &
+                         wps_output_vapor  , &
                          enforce_field_contracts
 
       nml_unit = 77
@@ -127,6 +129,8 @@ CONTAINS
       cap_policy = 'TRANSFER'
       wind_coordinate = 'UNSET'
       enforce_field_contracts = .true.
+      ! Opt-in until the downstream real QV path is explicitly selected.
+      wps_output_vapor = .false.
  
       ! Open the namelist
 

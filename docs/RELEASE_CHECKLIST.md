@@ -90,7 +90,7 @@ algorithm comparison, mass basis, full-product provenance, promotion 또는
 | production derived-cloud 경험적 `w` 제거 | BLOCKED | 실제 호출망은 아직 `l_flag_bogus_w=.true.`인 legacy 경로이며 canonical adapter로 교체되지 않음 |
 | 동역학 target 권한과 일반 usable 값 분리 | DONE | dynamic bit, 독립 바람 근거, clean quality를 모두 만족해야 solver seed가 됨 |
 | 제조해 target/boundary의 과학 권한 격리 | DONE | 별도 source bit와 authority enum을 사용하고 정상 OFF/SHADOW pipeline은 입력 단계에서 거부 |
-| 동역학 target의 `R_w`·자료 나이·driver provenance | BLOCKED | 현재 실제자료에는 이 계약이 없어 dynamic authority를 0으로 강제; ACTIVE 전에 field contract 확장 필요 |
+| 동역학 target의 `R_w`·자료 나이·driver provenance | BLOCKED | canonical schema 4에 Pa/s 표준편차와 대각 오차 가중치를 구현; 오차가 없으면 적용 권한 0. 실제자료 오차 보정·frame·자료 나이·독립성 및 driver provenance는 미폐합이며 수치 fixture는 관측 승인을 뜻하지 않음 |
 | S-band loading pseudo-target의 바람 권한 | BLOCKED | 현재 echo는 phase·fall-speed가 불확실하므로 hydrometeor/ledger 진단만 수행하고 balance support는 0 |
 | 하나의 `S`, `D`, `G`, `L=-DSG`를 solve/update/residual에 공용 | DONE | 단위시험과 독립 validator가 같은 게시 배열에서 operator identity를 재계산; exact-head 수치는 immutable generation에만 기록 |
 | 요청 `omega_target`과 실제 적용률 분리 | DONE | balance stage는 target 값·mask·quality·source를 bitwise 보존하고 trust-region 적용률은 result에만 기록 |
@@ -125,7 +125,7 @@ algorithm comparison, mass basis, full-product provenance, promotion 또는
 | real-geometry solver conditioning | BLOCKED | test profile도 최대 1200회 CG를 허용하며 preconditioner·spectral/condition 진단 전 운영 solver로 승격 금지 |
 | 급격한 증분의 wave 대리 guard | ENGINEERING | 최대 증분과 neighbor jump를 고정 threshold로 검사하지만 0--6 h 모델 음파·중력파 검증을 대신하지 않음 |
 | 수상체 질량 충격 gate | BLOCKED | 실제자료 proposal의 총 수상체 질량 변화·국지 분위수를 기록하지만 허용 기준이 없고, 대규모 증감이 잠열·부력·모델 spin-up에 미치는 영향도 미평가 |
-| 독립 column/trajectory 재계산 | BLOCKED | T·qv·phase·pressure interface·boundary·retrieval config·field provenance를 artifact에 저장하고 별도 구현에서 cellwise 재계산해야 함 |
+| 독립 column/trajectory 재계산 | BLOCKED | schema 8 v2 선택 확장으로 최종 강수 3종·interface ledger 독립 재계산. source별 연속 위치·도착점 분배로 substep 과소 이동을 수정하고 도착 분포·동일종 교차·소단계 크기 불변·부분 경계 유출 시험 추가; frozen-source 층 내 근사의 수치 증거이며 전체 outer map·실제 trajectory/frame·전체 provenance 폐합은 남음 |
 | SHADOW 입력 generation 검증 | ENGINEERING | schema 2 transaction/current와 외부 begin receipt, summary, exact-head를 검사하며 schema 1은 fail-closed 거부; comparison 진입점의 사례별 독립 numerical 재실행과 외부 reviewed-SHA pin은 남음 |
 | diagnostic patch derivation receipt | DONE | 자체 generation/COMMITTED를 제거하고 parent·SHADOW hash, absolute-replace, unresolved mass basis, non-full-product를 명시한 `PATCH_RECEIPT.json`만 사용 |
 | full candidate generation attestation | BLOCKED | diagnostic patch는 정규 candidate generation이 아니며 전체 입력/build receipt와 full writer가 준비되기 전 운영 증거로 승격 금지 |

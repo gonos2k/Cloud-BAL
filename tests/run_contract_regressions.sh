@@ -27,14 +27,15 @@ build_and_run test_missing_phase_continuity \
 
 build_and_run test_balance_omega_authority \
   "$repo_root/src/common/cloud_bal_state.f90" \
+  "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
   "$repo_root/src/common/cloud_bal_balance_operator.f90" \
   "$repo_root/tests/test_balance_omega_authority.f90"
 
 build_and_run test_nonuniform_localization \
   "$repo_root/src/common/cloud_bal_state.f90" \
   "$repo_root/src/common/cloud_bal_column_physics.f90" \
-  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
   "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
+  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
   "$repo_root/src/common/cloud_bal_pipeline.f90" \
   "$repo_root/src/common/cloud_bal_localization.f90" \
   "$repo_root/tests/test_nonuniform_localization.f90"

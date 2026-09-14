@@ -1,0 +1,14 @@
+--- a/start_em.F
++++ b/start_em.F
+@@ -1801,6 +1801,11 @@
+                           scalar(i,k,j,p_qnn) = grid%ccn_conc*grid%qnn_sea_mult
+                        endif
+                     endif
++                    IF (config_flags%mp_physics == kdm6scheme) THEN
++                       ! Configured CCN is #/m3; the public scalar is #/kg dry air.
++                       scalar(i,k,j,p_qnn) = scalar(i,k,j,p_qnn) * &
++                                            (grid%al(i,k,j)+grid%alb(i,k,j))
++                    END IF
+ ! ------------------
+ ! yhee end
+ ! ======================================

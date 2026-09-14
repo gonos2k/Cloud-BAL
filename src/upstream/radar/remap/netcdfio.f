@@ -1,0 +1,745 @@
+cdis   
+cdis    Open Source License/Disclaimer, Forecast Systems Laboratory
+cdis    NOAA/OAR/FSL, 325 Broadway Boulder, CO 80305
+cdis    
+cdis    This software is distributed under the Open Source Definition,
+cdis    which may be found at http://www.opensource.org/osd.html.
+cdis    
+cdis    In particular, redistribution and use in source and binary forms,
+cdis    with or without modification, are permitted provided that the
+cdis    following conditions are met:
+cdis    
+cdis    - Redistributions of source code must retain this notice, this
+cdis    list of conditions and the following disclaimer.
+cdis    
+cdis    - Redistributions in binary form must provide access to this
+cdis    notice, this list of conditions and the following disclaimer, and
+cdis    the underlying source code.
+cdis    
+cdis    - All modifications to this software must be clearly documented,
+cdis    and are solely the responsibility of the agent making the
+cdis    modifications.
+cdis    
+cdis    - If significant modifications or enhancements are made to this
+cdis    software, the FSL Software Policy Manager
+cdis    (softwaremgr@fsl.noaa.gov) should be notified.
+cdis    
+cdis    THIS SOFTWARE AND ITS DOCUMENTATION ARE IN THE PUBLIC DOMAIN
+cdis    AND ARE FURNISHED "AS IS."  THE AUTHORS, THE UNITED STATES
+cdis    GOVERNMENT, ITS INSTRUMENTALITIES, OFFICERS, EMPLOYEES, AND
+cdis    AGENTS MAKE NO WARRANTY, EXPRESS OR IMPLIED, AS TO THE USEFULNESS
+cdis    OF THE SOFTWARE AND DOCUMENTATION FOR ANY PURPOSE.  THEY ASSUME
+cdis    NO RESPONSIBILITY (1) FOR THE USE OF THE SOFTWARE AND
+cdis    DOCUMENTATION; OR (2) TO PROVIDE TECHNICAL SUPPORT TO USERS.
+cdis   
+cdis
+cdis
+cdis   
+cdis
+
+ 
+       subroutine radar_init(i_radar,path_to_radar,path_to_vrc          ! I
+     1                      ,i_tilt_proc                                ! I/O
+     1                      ,i_last_scan,istatus)                       ! O
+ 
+!      Open/Read Polar NetCDF file for the proper time
+       integer max_files
+       parameter(max_files=1000)
+
+       character*150 path_to_radar,c_filespec,filename,directory
+     1              ,c_fnames(max_files),fname     !!! yskim
+       character*15 path_to_vrc
+       character*9 a9_time, radar_time    !!! kys
+       integer*4 i4times_raw(max_files),i4times_lapsprd(max_files)
+       character*2 c2_tilt
+       character*3 laps_radar_ext, c3_radar_subdir
+       character*8 radar_subdir
+       logical l_multi_tilt,l_exist,l_output
+       character*13 a9_to_rsa13
+       integer i4time_kys    !!! yskim
+       integer n_tilts
+
+
+       save a9_time,n_tilts
+
+       common /kys/i4time_kys,radar_time     !!! yskim
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+!      include 'remap_constants.dat' ! for debugging only
+!      include 'remap.cmn' ! for debugging only
+
+!      This call is still needed for return of 'laps_radar_ext/c3_radar_subdir'
+!      We could change this to pass these in through the 'radar_init' call
+       call get_remap_parms(i_radar,n_radars_remap
+     1                    ,max_times,path_to_radar     
+     1                    ,laps_radar_ext,c3_radar_subdir
+     1                    ,path_to_vrc
+     1                    ,ref_min,min_ref_samples,min_vel_samples,dgr
+     1                    ,istatus)       
+       if(istatus .ne. 1)then
+           write(6,*)'Warning: bad status return from get_remap_parms'       
+           return
+       endif
+
+       call get_systime_i4(i4time_sys,istatus)
+       if(istatus .ne. 1)return   
+
+       call get_laps_cycle_time(laps_cycle_time,istatus)   
+       if(istatus .ne. 1)return   
+c
+c      Determine filename extension
+       write(6,*)' radar_init: laps_ext = ',laps_radar_ext
+       if(laps_radar_ext(1:1) .ne. 'v')then ! Sanity check
+           laps_radar_ext = 'v01'
+       endif
+
+       if(laps_radar_ext .eq. 'vrc')then 
+           radar_subdir = c3_radar_subdir
+           write(6,*)' radar_init: radar_subdir = ',radar_subdir
+       endif
+
+       i_last_scan = 0
+
+       if(i_tilt_proc .lt. 10)then
+           write(c2_tilt,101)i_tilt_proc
+ 101       format('0',i1)
+       else
+           write(c2_tilt,102)i_tilt_proc
+ 102       format(i2)
+       endif
+
+       if(i_tilt_proc .eq. 1)then
+cyskim : get time
+           call s_len(path_to_radar,len_path)
+         call get_directory('time',fname,len_fname)       !!! kys
+         open(11,file=fname(1:len_fname)//'systime.dat',status='old')
+         read(11,292) i4time_kys, radar_time
+chm      write(6,*) 'kysssssssssss  ==  ',i4time_kys,radar_time
+292      format(i12/,1x,a9)
+          close(11)
+cyskim : get time end
+
+           call validate_tilt_sequence(path_to_radar,radar_time,
+     1                                 n_tilts,istatus)
+           if(istatus .ne. 1)return
+
+ 
+!          Get filecount of 02 elevation raw files
+chm
+           c2_tilt = '02'
+           c_filespec = path_to_radar(1:len_path)//'/'//radar_time//'_el
+     &ev'//c2_tilt        !!! kys add
+
+           c_filespec = path_to_radar(1:len_path)//'/*_elev'//c2_tilt
+           print *, c_filespec ! chm
+           call get_file_names(c_filespec,i_nbr_files_raw,c_fnames
+     1                        ,max_files,istatus)
+           print *, istatus ! chm
+           if(istatus .ne. 1)then
+               return
+           endif
+
+           write(6,*)' # of 2nd tilt raw files = ',i_nbr_files_raw
+
+           if(i_nbr_files_raw .gt. 0)then
+               l_multi_tilt = .true.
+               write(6,*)' We have multiple tilt data'
+           else
+               l_multi_tilt = .false.
+               write(6,*)' We have single tilt data'
+           endif
+ 
+!          Get i4times of 01 elevation raw files
+           c2_tilt = '01'
+           c_filespec = path_to_radar(1:len_path)//'/'//radar_time//'_el
+     &ev'//c2_tilt        !!! kys add
+
+           c_filespec = path_to_radar(1:len_path)//'/*_elev'//c2_tilt
+           print *, c_filespec ! chm
+           call get_file_names(c_filespec,i_nbr_files_raw,c_fnames
+     1                        ,max_files,istatus)
+chm        call get_file_times(c_filespec,max_files,c_fnames
+chm  1                        ,i4times_lapsprd,i_nbr_files_raw,istatus)
+
+           write(6,*)' # of 1st tilt raw files = ',i_nbr_files_raw
+           if(istatus .ne. 1 .or. i_nbr_files_raw .eq. 0)then
+              istatus = 0
+              return
+           endif
+
+!          Get output filespec
+           if(laps_radar_ext .ne. 'vrc')then
+               call get_filespec(laps_radar_ext,1,c_filespec,istatus)
+
+           else ! laps_radar_ext = 'vrc', now check path_to_vrc
+               if(path_to_vrc .eq. 'rdr')then
+                   call get_directory('rdr',directory,len_dir)
+                   c_filespec = directory(1:len_dir)//radar_subdir(1:3)
+     1                          //'/vrc'     
+               else ! path_to_vrc = 'lapsprd'
+                   call get_filespec(laps_radar_ext,1,c_filespec
+     1                              ,istatus)      
+               endif
+
+           endif
+
+           call s_len(c_filespec,lenspec)
+           write(6,*)' Output filespec = ',c_filespec(1:lenspec)
+
+!          Get i4times of output files 
+           call get_file_times(c_filespec,max_files,c_fnames
+     1                   ,i4times_lapsprd,i_nbr_lapsprd_files,istatus)
+           write(6,*)' # of output files = ',i_nbr_lapsprd_files
+           
+           i4time_process = 0
+
+!          Get input filetime to process
+           if(.false.)then                   ! process latest or 2nd latest time
+               if(l_multi_tilt .and. i_nbr_files_raw .ge. 2)then
+                   i4time_process = i4times_raw(i_nbr_files_raw-1)
+                   write(6,*)' Processing second latest input file'
+
+!                  Compare output files with input filetime to process
+                   do i = 1,i_nbr_lapsprd_files
+                       if(i4time_process .eq. i4times_lapsprd(i))then
+                           write(6,*)' Product file already exists '
+     1                              ,a9_time      
+                           istatus = 0
+                           return
+                       endif
+                   enddo ! i
+               else
+                   i4time_process = i4times_raw(i_nbr_files_raw)
+                   write(6,*)' Processing latest input file'
+               endif
+
+           elseif(i_nbr_files_raw .ge. 2)then ! process earliest time
+               i4_earliest_window = i4time_sys - laps_cycle_time - 1800       
+               call make_fnam_lp(i4_earliest_window,a9_time,istatus)
+
+               write(6,*)
+     1           ' Looking for earliest unprocessed input file back to '       
+     1           ,a9_time
+
+               do i = i_nbr_files_raw-1,1,-1
+                   if(i .eq. i_nbr_files_raw-1)then ! Write latest raw filetime
+                       call make_fnam_lp(i4times_raw(i),a9_time,istatus)
+                       write(6,*)' Latest raw filetime = ',a9_time
+                   endif
+
+                   l_output = .false.
+                   do j = 1,i_nbr_lapsprd_files
+                       if(i4times_raw(i) .eq. i4times_lapsprd(j))then
+                           l_output = .true.
+                       endif
+                   enddo ! j
+
+                   if( (.not. l_output)                      .AND. 
+     1                i4times_raw(i) .gt. i4_earliest_window       )then
+                       i4time_process = i4times_raw(i)
+                   endif
+
+               enddo
+
+           endif
+
+ckys       if(i4time_process .ne. 0)then
+ckys           call make_fnam_lp(i4time_process,a9_time,istatus)
+ckys           write(6,*)' Processing filetime ',a9_time
+ckys       else
+ckys           write(6,*)' No new filetimes to process'
+ckys           istatus = 0
+ckys           return
+ckys       endif
+
+       endif ! i_tilt_proc = 1
+
+!      Pull in housekeeping data from the requested tilt.
+       write(6,*)' radar_init: looking for file... '
+
+       if(i_tilt_proc .gt. n_tilts)then
+           write(6,*)' End of contiguous radar tilt sequence at ',
+     1               i_tilt_proc
+           i_last_scan = 1
+           istatus = 1
+           return
+       endif
+
+       call check_input_file(path_to_radar,a9_time,i_tilt_proc,filename
+     1                      ,l_exist)
+       if(.not.l_exist)then
+           write(6,*)' Missing expected radar tilt # ',i_tilt_proc
+           i_last_scan = 0
+           istatus = 0
+           return
+       endif
+
+       call get_tilt_netcdf_data(filename
+     1                           ,radarName
+     1                           ,siteLat
+     1                           ,siteLon
+     1                           ,siteAlt
+     1                           ,elevationAngle
+     1                           ,numRadials
+     1                           ,numGatesV
+     1                           ,numGatesZ
+     1                           ,elevationNumber
+     1                           ,VCP
+     1                           ,nyquist
+     1                           ,radialAzim
+     1                           ,Z
+     1                           ,V
+     1                           ,resolutionV
+     1                           ,gateSizeV,gateSizeZ
+     1                           ,firstGateRangeV,firstGateRangeZ
+     1                           ,MAX_VEL_GATES, MAX_REF_GATES
+     1                           ,MAX_RAY_TILT
+     1                           ,istatus)
+       if(istatus .ne. 1)then
+           write(6,*)' Could not read expected radar tilt # ',
+     1                       i_tilt_proc
+           i_last_scan = 0
+           return
+       endif
+
+       write(6,201)elevationNumber, i_tilt_proc
+ 201   format(' elevationNumber, i_tilt_proc',2i4)
+       write(6,*)
+       istatus = 1
+       return
+       end
+ 
+       subroutine validate_tilt_sequence(path_to_radar,radar_time,
+     1                                    n_tilts,istatus)
+       character*(*) path_to_radar,radar_time
+       character*150 filename
+       character*2 c2_tilt
+       logical l_exist,l_gap
+       integer n_tilts,istatus,j,len_path
+
+       call s_len(path_to_radar,len_path)
+       n_tilts = 0
+       l_gap = .false.
+       istatus = 1
+       do j=1,20
+           if(j .lt. 10)then
+               write(c2_tilt,101)j
+ 101           format('0',i1)
+           else
+               write(c2_tilt,102)j
+ 102           format(i2)
+           endif
+           filename = path_to_radar(1:len_path)//'/'//radar_time//
+     1                '_elev'//c2_tilt
+           inquire(file=filename,exist=l_exist)
+           if(l_exist)then
+               if(l_gap)then
+                   write(6,*)' Missing radar tilt before file ',filename
+                   istatus = 0
+                   return
+               endif
+               n_tilts = j
+           else
+               l_gap = .true.
+           endif
+       enddo
+
+       if(n_tilts .lt. 1)then
+           write(6,*)' No contiguous radar tilts found for ',radar_time
+           istatus = 0
+           return
+       endif
+       write(6,*)' Validated contiguous radar tilts: ',n_tilts
+       return
+       end
+
+       function get_altitude()
+       integer get_altitude          ! Site altitude (meters)
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       get_altitude = nint(siteAlt)
+
+       return
+       end
+ 
+ 
+       function get_latitude()
+       integer get_latitude          ! Site latitude (degrees * 100000)
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       get_latitude = nint(siteLat*100000)
+       return
+       end
+ 
+ 
+       function get_longitude()
+       integer get_longitude         ! Site longitude (degrees * 100000)
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+
+       character*8 c8_project
+
+!      call get_c8_project(c8_project,istatus)
+!      if(istatus .ne. 1)then
+!          write(6,*)' Error, no c8_project'
+!          stop
+!      endif
+
+!      if(c8_project(1:3) .ne. 'CWB')then
+
+       if(.false.)then
+           get_longitude = -abs(nint(siteLon*100000))
+       else
+           get_longitude =      nint(siteLon*100000)
+       endif
+
+       return
+       end
+
+       subroutine get_radarname(c4_radarname,istatus)
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+       character*4 c4_radarname
+
+!frl 2008.12.16
+       print*, 'radarName ==='//radarName//'==='
+       c4_radarname = radarName
+       call upcase(c4_radarname,c4_radarname)
+       write(6,*)' c4_radarname = ',c4_radarname
+
+       istatus = 1
+       return
+       end
+       
+ 
+       function get_field_num(c3_field)
+       integer get_field_num
+       character*3 c3_field
+ 
+       if(c3_field .eq. 'DBZ')get_field_num = 1
+       if(c3_field .eq. 'VEL')get_field_num = 2
+ 
+       return
+       end
+ 
+ 
+       function read_radial()
+ 
+       read_radial = 0
+       return
+       end
+ 
+ 
+       function get_status()
+       integer get_status
+ 
+       get_status = 0
+       return
+       end
+ 
+ 
+       function get_fixed_angle()
+       integer get_fixed_angle     ! Beam tilt angle (degrees * 100)
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+
+       if( abs(elevationAngle) .le. 1e10 )then
+           get_fixed_angle = nint(elevationAngle * 100.)
+       else
+           write(6,*)' warning in get_fixed_angle, invalid value'
+           get_fixed_angle = -999 ! i_missing_data
+       endif
+
+ 
+       return
+       end
+ 
+ 
+       function get_scan()
+       integer get_scan            ! Scan #
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       get_scan = elevationNumber
+       return
+       end
+ 
+ 
+       function get_tilt()
+       integer get_tilt            ! Tilt #
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       get_tilt = elevationNumber
+       return
+       end
+ 
+ 
+       function get_num_rays()
+       integer get_num_rays
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       get_num_rays = numRadials
+       return
+       end
+ 
+ 
+       subroutine get_volume_time(i4time_process_ret)
+
+       integer*4 i4time_kys
+       character*9 radar_time
+       common /kys/i4time_kys,radar_time
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       i4time_process_ret = i4time_kys
+       return
+       end
+ 
+ 
+       function get_vcp()
+       integer get_vcp
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       get_vcp = VCP
+       return
+       end
+ 
+ 
+       function get_azi(iray) ! azimuth * 100.
+       integer get_azi
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       if( abs(radialAzim(iray)) .le. 1e10 )then
+           get_azi = nint(radialAzim(iray)*100.)
+       else
+           write(6,*)' warning in get_azi, azimuth = ',iray
+     1                                   , radialAzim(iray)
+           get_azi = -999 ! i_missing_data
+       endif
+
+       return
+       end
+ 
+ 
+       function get_nyquist()
+       real get_nyquist                 ! Nyquist velocity of the radial (M/S)
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       get_nyquist = nyquist
+       return
+       end
+ 
+ 
+       function get_number_of_gates(index)
+       integer get_number_of_gates
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       if(index .eq. 1)then
+           get_number_of_gates = numGatesZ
+       elseif(index .eq. 2)then
+           get_number_of_gates = numGatesV
+       else
+           get_number_of_gates = 0
+       endif
+       return
+       end
+ 
+ 
+       subroutine get_first_gate(index,first_gate_m,gate_spacing_m)
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+
+       call get_r_missing_data(r_missing_data,istatus)
+       if(istatus .ne. 1)then
+           write(6,*)' Error calling get_r_missing_data'
+           stop
+       endif
+ 
+       if(index .eq. 1)then
+           if(firstGateRangeZ .ge. -10. .and. 
+     1        firstGateRangeZ .lt. 1000.)then     
+               first_gate_m = firstGateRangeZ * 1000.
+           else
+               write(6,*)' Warning: firstGateRangeZ is outside range'
+     1                  ,firstGateRangeZ
+               first_gate_m = r_missing_data
+           endif
+
+           if(gateSizeZ .ge. 0. .and. gateSizeZ .lt. 1000.)then     
+               gate_spacing_m = gateSizeZ * 1000.
+           else
+               write(6,*)' Warning: gateSizeZ is outside range'
+     1                  ,gateSizeZ
+               gate_spacing_m = r_missing_data
+           endif
+
+       elseif(index .eq. 2)then
+           if(firstGateRangeV .ge. -10. .and. 
+     1        firstGateRangeV .lt. 1000.)then     
+               first_gate_m = firstGateRangeV * 1000.
+           else
+               write(6,*)' Warning: firstGateRangeV is outside range'
+     1                  ,firstGateRangeV
+               first_gate_m = r_missing_data
+           endif
+
+           if(gateSizeV .ge. 0. .and. gateSizeV .lt. 1000.)then     
+               gate_spacing_m = gateSizeV * 1000.
+           else
+               write(6,*)' Warning: gateSizeV is outside range'
+     1                  ,gateSizeV      
+               gate_spacing_m = r_missing_data
+           endif
+
+       endif
+
+       return
+       end
+ 
+ 
+       function get_data_field(index, data, n_ptr, n_gates
+     1                                           , b_missing_data)
+       integer get_data_field
+
+       include 'remap_dims.inc'
+       include 'netcdfio_radar_common.inc'
+ 
+       real*4 data(n_gates)
+
+       do i = 1,n_gates     !!! yskim initialize the data directory
+       data(i) = -10.       !!! kys
+       enddo                !!! kys
+
+       if(index .eq. 1)then ! reflectivity
+           do i = 1,n_gates
+               data(i) = Z(n_ptr + (i-1))
+               if(i .gt. numGatesZ) data(i) = b_missing_data
+               if(data(i).ge.255.or.data(i).le.0.) then      !!! kys
+                       data(i)=b_missing_data      !!! kys
+               endif                     !!! kys
+
+!              Convert from signed to unsigned
+ckys           if(data(i) .gt. 127.) then
+ckys               print *, 'error in Reflectivity: ',i,data(i)
+ckys               stop
+ckys           endif
+ckys           if(data(i) .lt. 0.) then
+ckys               data(i) = 256. + data(i)
+ckys           endif
+
+ckys           if(data(i) .ne. b_missing_data)then ! Scale
+ckys               data(i) = (data(i) - 2.)/2.0 - 32.
+ckys           endif
+
+           enddo
+
+       elseif(index .eq. 2)then ! velocity
+           do i = 1,n_gates
+               data(i) = V(n_ptr + (i-1))
+               if(i .gt. numGatesV) data(i) = b_missing_data
+               if(data(i).ge.255.or.data(i).le.-100.) then    !!! kys
+                       data(i) = b_missing_data    !!! kys
+               endif    !!! kys
+
+!              Convert from signed to unsigned
+ckys           if(data(i) .gt. 127.) then
+ckys               print *, 'error in Velocity: ',i,data(i)
+ckys               stop
+ckys           endif
+ckys           if(data(i) .lt. 0.) then
+ckys               data(i) = 256. + data(i)
+ckys           endif
+
+ckys           if(data(i) .eq. 1. .or. data(i) .eq. 0.)then 
+ckys               data(i) = b_missing_data  ! Invalid Measurement
+ckys           endif
+
+ckys           if(resolutionV .eq. 0.)then ! QC Check
+ckys               data(i) = b_missing_data
+ckys           endif
+
+ckys           if(data(i) .ne. b_missing_data)then ! Scale valid V
+ckys               data(i) = (data(i) - 129.) * resolutionV
+ckys           endif
+
+           enddo
+
+       endif
+
+       get_data_field = 1
+       return
+       end
+ 
+ 
+       function cvt_fname_data()
+ 
+       cvt_fname_data = 0
+       return
+       end
+ 
+ 
+       subroutine check_input_file(path_to_radar,a9_time,i_tilt
+     1                            ,filename,l_exist)       
+
+       logical l_exist
+
+       character*(*) path_to_radar
+       character*(*) filename
+       character*150 fname          !!! kys 
+       character*2 c2_tilt
+       character*9 a9_time,radar_time !!! yskim
+       integer i4time_kys     !!! yskim
+
+cyskim : get time
+         call get_directory('time',fname,len_fname)       !!! kys
+         open(11,file=fname(1:len_fname)//'systime.dat',status='old')
+         read(11,292) i4time_kys, radar_time
+chm         write(6,*) 'kysssssssssss  ==  ',i4time_kys,radar_time
+292      format(i12/,1x,a9)
+         close(11)
+
+cyskim : get time end
+
+       if(i_tilt .lt. 10)then
+           write(c2_tilt,101)i_tilt
+ 101       format('0',i1)
+       else
+           write(c2_tilt,102)i_tilt
+ 102       format(i2)
+       endif
+
+       call s_len(path_to_radar,len_path)
+      filename = path_to_radar(1:len_path)//'/'//radar_time//'_elev'//c2
+     &_tilt       !!! kys add
+
+ckys   filename = path_to_radar(1:len_path)//'/'//a9_time//'_elev'
+ckys 1            //c2_tilt
+
+!      Test existence of yyjjjhhmm file
+       inquire(file=filename,exist=l_exist)
+
+       call s_len(filename,len_file)
+       write(6,*)' check_input_file: ',filename(1:len_file),' ',l_exist       
+
+       return
+       end

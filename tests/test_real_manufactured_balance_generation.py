@@ -9,6 +9,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -82,6 +83,78 @@ class TestStrictCliPath(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="cloud-bal-path-") as directory:
             with self.assertRaisesRegex(ValueError, "strict existing path"):
                 verifier.strict_cli_path(Path(directory) / "missing", "staging")
+
+    def test_workspace_root_uses_configured_original_path(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="cloud-bal-workspace-") as directory:
+            workspace = Path(directory)
+            with patch.dict(
+                os.environ, {"CLOUD_BAL_WORKSPACE_ROOT": str(workspace)}
+            ):
+                self.assertEqual(
+                    verifier.resolve_workspace_root(Path("/unused/repo")),
+                    workspace,
+                )
+
+    def test_workspace_root_rejects_symlink_component(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="cloud-bal-workspace-") as directory:
+            root = Path(directory)
+            target = root / "target"
+            target.mkdir()
+            alias = root / "alias"
+            alias.symlink_to(target, target_is_directory=True)
+            with patch.dict(
+                os.environ, {"CLOUD_BAL_WORKSPACE_ROOT": str(alias)}
+            ):
+                with self.assertRaisesRegex(ValueError, "workspace root.*symlink"):
+                    verifier.resolve_workspace_root(Path("/unused/repo"))
+
+    def test_workspace_root_rejects_missing_path(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="cloud-bal-workspace-") as directory:
+            missing = Path(directory) / "missing"
+            with patch.dict(
+                os.environ, {"CLOUD_BAL_WORKSPACE_ROOT": str(missing)}
+            ):
+                with self.assertRaisesRegex(
+                    ValueError, "workspace root.*strict existing path"
+                ):
+                    verifier.resolve_workspace_root(Path("/unused/repo"))
+
+    def test_workspace_root_rejects_regular_file(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="cloud-bal-workspace-") as directory:
+            workspace_file = Path(directory) / "workspace-file"
+            workspace_file.write_text("not a workspace\n", encoding="utf-8")
+            with patch.dict(
+                os.environ, {"CLOUD_BAL_WORKSPACE_ROOT": str(workspace_file)}
+            ):
+                with self.assertRaisesRegex(
+                    ValueError, "workspace root is not a directory"
+                ):
+                    verifier.resolve_workspace_root(Path("/unused/repo"))
+
+    def test_snapshot_validation_returns_explicit_product_binding(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="cloud-bal-snapshot-") as directory:
+            snapshot = Path(directory) / ".snapshots" / "candidate"
+            snapshot.mkdir(parents=True)
+            (snapshot / "TRANSACTION.json").write_text(
+                '{"transaction_id":"candidate","products":["product"]}\n',
+                encoding="utf-8",
+            )
+            (snapshot / "product").write_bytes(b"validated")
+            with patch.object(verifier, "source_identity", return_value="head"):
+                with patch.object(verifier, "reviewed_cases", return_value=[]):
+                    with patch.object(verifier, "verify_bundle") as verify_bundle:
+                        receipt = verifier.verify_snapshot(snapshot, Path("manifest"), Path("repo"))
+            verify_bundle.assert_called_once()
+            self.assertEqual(receipt["status"], "PASS")
+            self.assertEqual(receipt["transaction_id"], "candidate")
+            self.assertEqual(receipt["products"][0]["sha256"], verifier.sha256(snapshot / "product"))
+
+    def test_snapshot_validation_rejects_mutable_staging_path(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="cloud-bal-snapshot-") as directory:
+            staging = Path(directory) / ".staging" / "candidate"
+            staging.mkdir(parents=True)
+            with self.assertRaisesRegex(ValueError, "detached snapshot"):
+                verifier.verify_snapshot(staging, Path("manifest"), Path("repo"))
 
 
 if __name__ == "__main__":

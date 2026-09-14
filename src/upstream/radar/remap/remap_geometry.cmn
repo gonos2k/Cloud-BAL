@@ -1,0 +1,6 @@
+c     Geometry used when the radar lookup tables were generated.
+c     A LUT is valid only for the same first gate and gate spacing.
+      real*4 lut_first_gate_m_cmn,lut_gate_spacing_m_cmn
+      integer lut_geometry_ready_cmn
+      common /radar_lut_geometry/ lut_first_gate_m_cmn,
+     :        lut_gate_spacing_m_cmn,lut_geometry_ready_cmn

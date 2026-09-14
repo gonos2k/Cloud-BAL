@@ -1,0 +1,53 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -1264,7 +1264,7 @@
+ ! pgmlt: melting of graupel [HL A23]  [LFO 47]
+ !       (T>T0: QG->QR)
+ !---------------------------------------------------------------
+-            if(qrs(i,k,3).gt.0.) then
++            if(qrs(i,k,3).gt.0. .and. rhox(i,k).gt.0.) then
+ ! revised 
+               coeres = (rslope2(i,k,3))*sqrt(rslope(i,k,3)*rslopeb(i,k,3))           &
+                        *rslopemu(i,k,3)
+@@ -2256,7 +2256,7 @@
+ ! pgeml: Enhanced melting of graupel by accretion of water [HL A24] [RH84 A21-A22]
+ !        (T>=T0: QG->QR)
+ !-------------------------------------------------------------
+-            if(qrs(i,k,3).gt.0.)                                               &
++            if(qrs(i,k,3).gt.0. .and. rhox(i,k).gt.0.)                          &
+               pgeml(i,k) = min(max((cliq)*supcol*(paacw(i,k)+pgacr(i,k))/xlf &
+                           ,-(qrs(i,k,3))/dtcld),0.)
+ !--------------------------------------------------------------
+@@ -2341,7 +2341,7 @@
+ ! pgdep: deposition/sublimation rate of graupel [HL A21] [LFO 46]
+ !        (T<T0: QV->QG or QG->QV)
+ !-------------------------------------------------------------
+-            if(qrs(i,k,3).gt.0. .and. ifsat.ne.1) then
++            if(qrs(i,k,3).gt.0. .and. rhox(i,k).gt.0. .and. ifsat.ne.1) then
+ !revised
+               coeres = (rslope2(i,k,3))*sqrt(rslope(i,k,3)*rslopeb(i,k,3)) &
+                       *rslopemu(i,k,3)
+@@ -2400,7 +2400,7 @@
+ ! pgevp: Evaporation of melting graupel [HL A25] [RH84 A19]
+ !       (T>=T0: QG->QV)
+ !-------------------------------------------------------------
+-            if(qrs(i,k,3).gt.0. .and. rh(i,k,1).lt.1.) then
++            if(qrs(i,k,3).gt.0. .and. rhox(i,k).gt.0. .and. rh(i,k,1).lt.1.) then
+               coeres = (rslope2(i,k,3))*sqrt(rslope(i,k,3)*rslopeb(i,k,3))  &
+                       *rslopemu(i,k,3)
+               pgevp(i,k) =(rh(i,k,1)-1.)*((precg1)*n0go(i,k)*rslope2(i,k,3)        &
+@@ -3310,10 +3310,10 @@
+   real, intent(in)  ::rslopegmax
+   REAL, DIMENSION( its:ite , kts:kte,3), INTENT(IN) :: qrs
+   REAL, DIMENSION( its:ite , kts:kte), INTENT(INOUT):: brs   !prognosticparameter
+-  REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: rhox    !diagnosticparameter
+-  REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: cmg,pidn0g
+-  REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: avtg,pvtg,precg2
+-  REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,&
++  REAL, DIMENSION( its:ite , kts:kte),INTENT(INOUT)   :: rhox    !diagnosticparameter
++  REAL, DIMENSION( its:ite , kts:kte),INTENT(INOUT)   :: cmg,pidn0g
++  REAL, DIMENSION( its:ite , kts:kte),INTENT(INOUT)   :: avtg,pvtg,precg2
++  REAL, DIMENSION( its:ite , kts:kte),INTENT(INOUT)   :: bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,&
+                                                        g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1
+   REAL ::tmp1,tmp2
+   real,dimension(9) :: Tbl,aTbl,bTbl

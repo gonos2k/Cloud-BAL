@@ -57,6 +57,7 @@ MODULE lapsprep_wps
   USE setup
   USE laps_static
   USE date_pack
+  USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
   IMPLICIT NONE
 
   PRIVATE
@@ -80,7 +81,8 @@ CONTAINS
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   SUBROUTINE output_ungrib_format(p, t, ht, u, v, rh, slp, psfc, &
                                lwc, rai, sno, ice, pic, snocov,tskin,istatus, &
-                               resolved_output_file)
+                               resolved_output_file, vapor_mixing_ratio,include_hydrometeors, &
+                               include_surface_height,create_new)
 
   !  Subroutine of lapsprep that will build a file the
   !  WRFSI "ungrib" format that can be read by hinterp
@@ -106,18 +108,49 @@ CONTAINS
   REAL, INTENT(IN)                   :: tskin(:,:)  ! Skin temperature
   INTEGER, INTENT(OUT)               :: istatus
   CHARACTER(LEN=*), INTENT(IN), OPTIONAL :: resolved_output_file
+  ! Explicit dry-air mixing ratio, including the supplied surface slab.
+  ! Omission retains the legacy RH-only file.  The downstream real path must
+  ! select FLAG_QV/use_sh_qv; writing QV alone does not certify that handoff.
+  REAL, INTENT(IN), OPTIONAL :: vapor_mixing_ratio(:,:,:) ! kg vapor / kg dry air
+  ! A completed candidate can supply species without re-running legacy hotstart.
+  LOGICAL, INTENT(IN), OPTIONAL :: include_hydrometeors
+  ! Source terrain paired with PSFC, for the existing metgrid SOILHGT contract.
+  ! real must select sfcp_to_sfcp to retain PSFC through terrain adjustment.
+  LOGICAL, INTENT(IN), OPTIONAL :: include_surface_height
+  LOGICAL, INTENT(IN), OPTIONAL :: create_new
   
   ! Local Variables
   
   INTEGER            :: valid_mm, valid_dd
   CHARACTER (LEN=256):: output_file_name
+  CHARACTER (LEN=7)  :: file_status
   REAL, ALLOCATABLE  :: d2d(:,:)
   REAL, ALLOCATABLE  :: p_pa(:)
   INTEGER            :: k,yyyyddd,io_status,close_status,alloc_status
-  LOGICAL            :: output_open
+  LOGICAL            :: output_open,write_hydrometeors,write_surface_height
 
   istatus = 0
   output_open = .FALSE.
+  file_status='REPLACE'
+  IF (PRESENT(create_new)) THEN
+    IF (create_new) file_status='NEW'
+  END IF
+  write_hydrometeors=hotstart
+  IF (PRESENT(include_hydrometeors)) write_hydrometeors=include_hydrometeors
+  write_surface_height=.FALSE.
+  IF (PRESENT(include_surface_height)) write_surface_height=include_surface_height
+  IF (write_surface_height) THEN
+    IF (ANY(SHAPE(ht)/=(/x,y,z3+1/))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(ht(:,:,z3+1)))) RETURN
+  END IF
+
+  ! Reject incomplete or invalid vapor before opening/replacing any file.
+  ! Keep finite and range checks separate for trapping IEEE builds.
+  IF (PRESENT(vapor_mixing_ratio)) THEN
+    IF (ANY(SHAPE(vapor_mixing_ratio) /= (/x,y,z3+1/))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(vapor_mixing_ratio))) RETURN
+    IF (ANY(vapor_mixing_ratio < 0.0)) RETURN
+  END IF
  
   ! Allocate a scratch 2d array
   ALLOCATE (d2d (x,y), STAT=alloc_status)
@@ -135,8 +168,10 @@ CONTAINS
 ! ELSE
   IF (PRESENT(resolved_output_file)) THEN
     IF (LEN_TRIM(resolved_output_file)==0) GOTO 900
+    IF (LEN_TRIM(resolved_output_file)>LEN(output_file_name)) GOTO 900
     output_file_name=TRIM(resolved_output_file)
   ELSE
+    IF (LEN_TRIM(laps_data_root)+LEN('/lapsprd/lapsprep/wps/LAPS:')+16>LEN(output_file_name)) GOTO 900
     output_prefix = TRIM(laps_data_root)// '/lapsprd/lapsprep/wps/LAPS'
     output_file_name = TRIM(output_prefix) // ':' // hdate(1:16)
   END IF
@@ -168,7 +203,7 @@ CONTAINS
   OPEN ( FILE   = TRIM(output_file_name)    , &
          UNIT   = output_unit        , &
          FORM   = 'UNFORMATTED' , &
-         STATUS = 'REPLACE'     , &
+         STATUS = file_status   , &
          ACTION = 'WRITE'       , &
          ACCESS = 'SEQUENTIAL', IOSTAT=io_status )
   IF (io_status .NE. 0) GOTO 900
@@ -280,6 +315,21 @@ CONTAINS
             ' Max: ', MAXVAL(d2d)
   ENDDO var_rh
 
+  ! Preserve analyzed vapor directly; do not recover it from rounded RH/T.
+  IF (PRESENT(vapor_mixing_ratio)) THEN
+    field = 'QV'
+    units = 'kg kg{-1}'
+    desc = 'Water vapor mixing ratio (kg/kg dry air)'
+    DO k = 1, z3 + 1
+      IF (p_pa(k) > 100100 .AND. p_pa(k) < 200000) CYCLE
+      d2d = vapor_mixing_ratio(:,:,k)
+      CALL write_ungrib_header(field,units,desc,p_pa(k),io_status)
+      IF (io_status .NE. 0) GOTO 900
+      WRITE (output_unit,IOSTAT=io_status) d2d
+      IF (io_status .NE. 0) GOTO 900
+    END DO
+  END IF
+
   ! Do the heights
   field = 'HGT      '
   units = 'm                        '
@@ -299,6 +349,16 @@ CONTAINS
     PRINT '(A,F9.1,A,F8.1,A,F8.1)', 'Level (Pa):', p_pa(k), ' Min: ', MINVAL(d2d),&
             ' Max: ', MAXVAL(d2d)
   ENDDO var_ht
+
+  IF (write_surface_height) THEN
+    field = 'SOILHGT '
+    units = 'm'
+    desc = 'Source terrain height paired with surface pressure'
+    CALL write_ungrib_header(field,units,desc,p_pa(z3+1),io_status)
+    IF (io_status .NE. 0) GOTO 900
+    WRITE (output_unit,IOSTAT=io_status) ht(:,:,z3+1)
+    IF (io_status .NE. 0) GOTO 900
+  END IF
 
   ! Terrain height
   field = 'HGT     '
@@ -381,7 +441,7 @@ CONTAINS
   ENDIF
 
   ! Get cloud species if this is a hot start
-  IF (hotstart) THEN
+  IF (write_hydrometeors) THEN
     field = 'QC       '     ! QLIQUID
     units = 'kg kg{-1}               '
     desc  = 'Cloud liquid water mixing ratio             '

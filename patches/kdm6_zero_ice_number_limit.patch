@@ -1,0 +1,44 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -1423,8 +1423,13 @@
+             endif
+           endif
+           if(qci(i,k,2) .ge. 1.e-14 ) then
++            if(nci(i,k,2) .eq. 0.) then
++              ! Continuous zero-number limit; existing size bounds below apply.
++              lamdi_tmp(i,k) = 0.
++            else
+             lamdi_tmp(i,k) = exp(log((((pidni)*nci(i,k,2))                       &
+                          /(den(i,k)*qci(i,k,2))))*(1./dmi))
++            endif
+             n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             if(lamdi_tmp(i,k) .le. lamdaimin) then
+               lamdi_tmp(i,k) = lamdaimin
+@@ -1608,8 +1613,13 @@
+             endif
+           endif
+           if(qci(i,k,2).ge. 1.e-14 ) then
++            if(nci(i,k,2) .eq. 0.) then
++              ! Continuous zero-number limit; existing size bounds below apply.
++              lamdi_tmp(i,k) = 0.
++            else
+             lamdi_tmp(i,k) = exp(log((((pidni)*nci(i,k,2))                       &
+                          /(den(i,k)*qci(i,k,2))))*(1./dmi))
++            endif
+             n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             if(lamdi_tmp(i,k) .le. lamdaimin) then
+               lamdi_tmp(i,k) = lamdaimin
+@@ -3490,8 +3500,13 @@
+             rslope2(i,k,4) = rslopei2max
+             rslope3(i,k,4) = rslopei3max
+           else
++            if(nci(i,k) .eq. 0.) then
++              ! Limit of the bounded inverse slope as number tends to zero.
++              rslope(i,k,4) = 1./lamdaimin
++            else
+            rslope(i,k,4) =max(min(1./lamdai(qci(i,k),den(i,k),nci(i,k)),1./lamdaimin), &
+                           1./lamdaimax)
++            endif
+             rslopeb(i,k,4) = (rslope(i,k,4))**bvti
+             rslopemu(i,k,4) = DBLE(rslope(i,k,4))**mui
+             rsloped(i,k,4) = (rslope(i,k,4))**dmi

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish every prepared real-data case as one immutable Intel SHADOW generation.
+# Publish every prepared real-data case as one committed Intel SHADOW generation.
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
@@ -26,7 +26,7 @@ expected_netcdff_sha=f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17
 expected_netcdf_sha=f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288
 
 . "$repo_root/tests/intel_toolchain.sh"
-"$repo_root/tests/run_real_input_inventory.sh"
+bash "$repo_root/tests/run_real_input_inventory.sh"
 
 cloud_bal_require_clean_source
 source_commit=$(git -C "$repo_root" rev-parse HEAD)
@@ -93,23 +93,27 @@ nf_fflags_text=$($nf_config --fflags)
 nf_flibs_text=$($nf_config --flibs)
 read -r -a nf_fflags <<<"$nf_fflags_text"
 read -r -a nf_flibs <<<"$nf_flibs_text"
+cd "$build_root"
 "$CLOUD_BAL_FC" "${CLOUD_BAL_REPRO_FLAGS[@]}" \
   -module "$build_root" -I "$build_root" "${nf_fflags[@]}" \
   "$repo_root/src/common/cloud_bal_state.f90" \
   "$repo_root/src/common/cloud_bal_column_physics.f90" \
-  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
   "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
+  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
   "$repo_root/src/common/cloud_bal_pipeline.f90" \
   "$repo_root/src/common/cloud_bal_real_netcdf.f90" \
+  "$repo_root/src/common/cloud_bal_pressure_analysis.f90" \
   "$repo_root/tests/real_shadow_driver.f90" \
   "${nf_flibs[@]}" -o "$build_root/real_shadow_driver"
 driver=$build_root/real_shadow_driver
-ldd_output=$(ldd "$driver")
+pin_build_file driver "$driver"
+awk -F '\t' '$1 == "driver" {print $3 "  " $2}' "$build_receipt" > "$build_root/driver.sha256"
+ldd_output=$(python3 "$repo_root/tools/inspect_bound_runtime.py" \
+  "$driver" --sha256-file "$build_root/driver.sha256")
 if [[ $ldd_output == *"not found"* ]]; then
   printf 'unresolved runtime dependency:\n%s\n' "$ldd_output" >&2
   exit 2
 fi
-pin_build_file driver "$driver"
 runtime_index=0
 while IFS= read -r runtime_path; do
   runtime_index=$((runtime_index + 1))
@@ -131,7 +135,8 @@ staging=$(python3 "$repo_root/tools/cloud_bal_transaction.py" begin \
   "$publication_root" "$transaction_id" "${products[@]}" \
   --source-commit "$source_commit" \
   --configuration "radar-only-shadow-ifx-2026-v3" \
-  --valid-time "$last_epoch")
+  --valid-time "$last_epoch" \
+  --require-validation)
 trap 'if [[ -d $staging ]]; then mv "$staging" "$staging.failed.$$"; fi' EXIT
 
 case_count=0
@@ -159,7 +164,8 @@ while IFS=$'\t' read -r case_id valid_time background_time laps_stamp \
   verify_input "$vrt" "$vrt_hash"
   verify_input "ANAL/NE57/DABA/static.nest7grid" "$expected_static_sha"
   set +e
-  "$build_root/real_shadow_driver" \
+  python3 "$repo_root/tools/run_bound_executable.py" \
+    --sha256-file "$build_root/driver.sha256" "$build_root/real_shadow_driver" -- \
     "$workspace_root/$fua" "$workspace_root/$fsf" \
     "$workspace_root/$lw3" "$workspace_root/$vrz" \
     "$workspace_root/$vrt" "$static_file" "$temporary" "$epoch" \
@@ -268,15 +274,21 @@ summary = {
 }
 Path(path).write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
 PY
-"$repo_root/tests/run_real_input_inventory.sh"
+bash "$repo_root/tests/run_real_input_inventory.sh"
 verify_build_files
 if [[ $(git -C "$repo_root" rev-parse HEAD) != "$source_commit" ]] || \
    [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=all) ]]; then
   printf 'source tree changed during the real-data run\n' >&2
   exit 2
 fi
-python3 "$repo_root/tools/cloud_bal_transaction.py" commit \
-  "$publication_root" "$transaction_id" >/dev/null
+snapshot=$(cloud_bal_prepare_snapshot "$publication_root" "$transaction_id")
+validation_receipt=$build_root/validation_receipt.json
+python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+  --snapshot "$snapshot" > "$validation_receipt"
+cloud_bal_commit_validated "$publication_root" "$transaction_id" \
+  "$validation_receipt" >/dev/null
+staging=
+trap - EXIT
 current=$(cloud_bal_current_evidence "$publication_root" "$manifest")
 printf 'REAL RADAR-ONLY ENGINEERING CONTRACT PASS: %d/%d cases, Intel ifx only\n' \
   "$case_count" "$case_count"

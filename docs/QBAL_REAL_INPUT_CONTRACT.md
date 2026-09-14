@@ -12,7 +12,7 @@ cell-validity information intact.
 
 Supplying a directory with correctly named NetCDF files is deliberately
 insufficient.  The current checker never returns READY for a `--pre-qbal-root`:
-the missing isolated upstream runner must first emit a hash-pinned generation
+the isolated upstream replay must first emit an accepted hash-pinned generation
 manifest that binds every product to its producer executable, source tree,
 configuration, complete input closure, command, time, and output hash.  This
 keeps renamed, copied, or hard-linked final/bigfile products inadmissible.
@@ -177,6 +177,28 @@ order can select the background.  The new real-case harness must therefore
 pin one FUA/FSF pair per case and verify all required variables from that pair
 before reading any field.  Per-field fallback to another cycle or to `lga/lgb`
 is rejected.
+
+## 2026-09-10 isolated replay evidence
+
+The prepared-root inventory above is distinct from the newly retained isolated
+replays. Four final six-producer replays now contain LT1, LQ3, LCO and LSX at
+12–15 UTC, with independent GREEN verification and actual LAPSPREP OFF O0/O2
+comparisons. Their evidence is indexed in
+`scratch/cp02_final_logging_cases_n74wlcn1/case_index.json` and summarized in
+`docs/CP02_COMPLETION_WORKLOG_20260910.md`.
+
+The candidate ten-role inventory at
+`scratch/cp02_candidate_qbal_inventory_y_ailcpv/` binds these artifacts to
+retained source/build/stage receipts. Its status is explicitly
+EVIDENCE_ONLY / NOT_READY / NO_AUTHORITY. It does not replace a complete accepted
+generation manifest: direct balance controls, exhaustive transitive input and
+runtime closure, canonical adapter execution and writer authority remain open.
+The optional LCO evidence checker is a bounded content/lineage diagnostic;
+its independent RED hash/read-race findings have been corrected with detached
+byte buffers and passed final independent review within the bounded ingress. The registered portable
+Python suite passes 35 test files; default readiness remains blocked. FSF background masks and same-case LSX analysis masks
+must be identified separately. Sparse legacy COM supplies no uncertainty sigma
+or authorized dynamic target.
 
 ## 6. Forbidden inputs and fail-closed gates
 

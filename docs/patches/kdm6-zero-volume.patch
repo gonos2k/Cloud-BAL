@@ -1,0 +1,24 @@
+--- a/phys/module_mp_kdm6.F
++++ b/phys/module_mp_kdm6.F
+@@ -3291,6 +3291,7 @@
+                          ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2&
+                          ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax     &
+                          ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++  use, intrinsic :: ieee_arithmetic, only: ieee_is_negative
+   implicit none
+   integer           :: i,k,sy, its,ite, jts,jte, kts,kte
+   real, intent(in)  ::qcrmin,dmg,mug,pi
+@@ -3322,7 +3323,12 @@
+ 
+      if (qrs(i,k,3).gt. qcrmin .or. brs(i,k).gt. brs_min) then
+ 
+-         rhox(i,k) = qrs(i,k,3)/brs(i,k)
++         if (brs(i,k) == 0.0) then
++           rhox(i,k) = rho_max
++           if (ieee_is_negative(brs(i,k))) rhox(i,k) = rho_min
++         else
++           rhox(i,k) = qrs(i,k,3)/brs(i,k)
++         endif
+ 
+          if (rhox(i,k) .lt. rho_min .or. rhox(i,k) .gt. rho_max) then
+           rhox(i,k) = min(rho_max,max(rho_min,rhox(i,k)))

@@ -51,7 +51,7 @@ cloud_bal_current_evidence() {
   generation=$(python3 "$repo_root/tools/cloud_bal_transaction.py" current \
     "$publication_root")
   head=$(git -C "$repo_root" rev-parse HEAD)
-  python3 - "$generation" "$head" "$manifest" <<'PY'
+  python3 - "$generation" "$head" "$manifest" "$repo_root" <<'PY'
 import csv
 import hashlib
 import json
@@ -59,7 +59,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-generation, head, manifest_path = map(Path, sys.argv[1:])
+generation, head, manifest_path, repo_root = map(Path, sys.argv[1:])
 head = str(head)
 manifest_path = manifest_path.resolve()
 
@@ -76,6 +76,24 @@ with manifest_path.open(newline="", encoding="utf-8") as stream:
     expected_cases = list(csv.DictReader(stream, delimiter="\t"))
 if transaction.get("source_commit") != head or summary.get("source_commit") != head:
     raise SystemExit("generation does not belong to the clean source HEAD")
+validation = transaction.get("validation")
+if transaction.get("require_validation") is not True:
+    raise SystemExit("generation was not begun with required semantic validation")
+if not isinstance(validation, dict) or validation.get("status") != "PASS" or \
+        validation.get("transaction_id") != generation.name or \
+        validation.get("products") != transaction.get("products"):
+    raise SystemExit("generation lacks an exact semantic validation receipt")
+trusted_validators = {
+    "validate_shadow_diagnostics": repo_root / "tools/validate_shadow_diagnostics.py",
+    "verify_real_manufactured_balance_generation":
+        repo_root / "tools/verify_real_manufactured_balance_generation.py",
+}
+validator = validation.get("validator")
+if not isinstance(validator, dict) or set(validator) != {"name", "source_sha256"}:
+    raise SystemExit("generation validator receipt is malformed")
+validator_path = trusted_validators.get(validator.get("name"))
+if validator_path is None or sha256(validator_path) != validator.get("source_sha256"):
+    raise SystemExit("generation validator is not trusted")
 if transaction.get("configuration") != "radar-only-shadow-ifx-2026-v3":
     raise SystemExit("transaction configuration mismatch")
 if summary.get("contract") != "radar_only_shadow_ifx_2026_v3":
@@ -170,4 +188,17 @@ if valid_reports != summary.get("hydrometeor_valid_count") or \
     raise SystemExit("generation per-case decision summary mismatch")
 PY
   printf '%s\n' "$generation"
+}
+
+cloud_bal_prepare_snapshot() {
+  local publication_root=$1 transaction_id=$2
+  python3 "$repo_root/tools/cloud_bal_transaction.py" prepare \
+    "$publication_root" "$transaction_id"
+}
+
+cloud_bal_commit_validated() {
+  local publication_root=$1 transaction_id=$2 validation_receipt=$3
+  python3 "$repo_root/tools/cloud_bal_transaction.py" commit \
+    "$publication_root" "$transaction_id" \
+    --validation-receipt "$validation_receipt"
 }

@@ -11,8 +11,8 @@ trap 'rm -rf "$test_tmp"' EXIT
   -module "$test_tmp" -I "$test_tmp" \
   "$repo_root/src/common/cloud_bal_state.f90" \
   "$repo_root/src/common/cloud_bal_column_physics.f90" \
-  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
   "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
+  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
   "$repo_root/src/common/cloud_bal_pipeline.f90" \
   "$repo_root/src/common/cloud_bal_legacy_shadow_adapter.f90" \
   "$repo_root/tests/test_legacy_shadow_adapter.f90" \

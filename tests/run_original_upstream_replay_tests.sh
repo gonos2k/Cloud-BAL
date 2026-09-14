@@ -12,6 +12,7 @@ allowed_root=$repo_root/scratch/original_upstream_replay
 mkdir -p "$allowed_root"
 
 python3 "$repo_root/tests/test_original_upstream_replay.py"
+python3 "$repo_root/tests/test_lgt_observation.py"
 
 run_root=$(mktemp -d "$allowed_root/dry_run.XXXXXX")
 cleanup() {
@@ -53,6 +54,18 @@ assert manifest["final_bigfile_allowed_as_input"] is False
 assert len(manifest["cases"]) == 4
 assert all(case["status"] == "BLOCKED" for case in manifest["cases"])
 assert all(case["input_closure_sha256"] is None for case in manifest["cases"])
+assert all(
+    len([item for item in case["inputs"] if item["role"] == "lgt"]) == 1
+    and next(item for item in case["inputs"] if item["role"] == "lgt")["status"] == "PASS"
+    and next(item for item in case["inputs"] if item["role"] == "lgt")["content_validation"] == "PASS"
+    and next(item for item in case["inputs"] if item["role"] == "lgt")["count_missing"] == 1032
+    and next(item for item in case["inputs"] if item["role"] == "lgt")["materialized_path"].endswith(
+        "/declared_inputs/lgt/" + case["laps_stamp"] + ".lgt"
+    )
+    and next(item for item in case["inputs"] if item["role"] == "lgt")["materialized_sha256"]
+        == next(item for item in case["inputs"] if item["role"] == "lgt")["sha256"]
+    for case in manifest["cases"]
+)
 assert all(case["vrt_completion_gate"]["status"] == "PASS"
            for case in manifest["cases"])
 assert all(set(case["products"]) == {"lt1", "lq3", "lw3", "lco", "lsx"}

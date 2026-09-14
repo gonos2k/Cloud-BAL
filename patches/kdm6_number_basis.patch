@@ -1,0 +1,89 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -306,35 +306,7 @@
+    real, dimension(kts:kte) :: qc1d, nc1d, den1d
+    real, dimension(kts:kte) :: qi1d, ni1d
+    real, dimension(kts:kte) :: re_qc, re_qi, re_qs
+-! 20250106 CCN init
+-   real :: z_sum
+-!
+-   if (itimestep .eq. 1) then 
+-! yhlee start
+-     do j = jms,jme
+-       do i = ims,ime
+-         z_sum=0.0
+-         do k = kms,kme    
+-           z_sum = z_sum + delz(i,k,j)
+-           if (xland(i,j)==1) then
+-             if (scale_h > 0.) then
+-               nn(i,k,j) = ccn0*qnn_land_mult*exp(-z_sum/scale_h)
+-             else
+-               nn(i,k,j) = ccn0*qnn_land_mult
+-             endif
+-           else
+-             if (scale_h > 0.) then
+-               nn(i,k,j) = ccn0*qnn_sea_mult*exp(-z_sum/scale_h)
+-             else
+-               nn(i,k,j) = ccn0*qnn_sea_mult
+-             endif
+-           endif
+-!           nn(i,k,j) = ccn0   
+-! yhlee end
+-         enddo
+-       enddo
+-     enddo
+-   endif
++! CCN is initialized in start_em; preserve supplied and restart fields here.
+ !
+    do j = jts,jte
+      do k = kts,kte
+@@ -345,10 +317,11 @@
+          qrs(i,k,1) = qr(i,k,j)
+          qrs(i,k,2) = qs(i,k,j)
+          qrs(i,k,3) = qg(i,k,j)
+-         nci(i,k,1) = nc(i,k,j)
+-         nci(i,k,2) = ni(i,k,j)
+-         nci(i,k,3) = nn(i,k,j)
+-         nrs(i,k,1) = nr(i,k,j)     
++         ! Public number scalars are #/kg; internal moments use #/m3.
++         nci(i,k,1) = nc(i,k,j)*den(i,k,j)
++         nci(i,k,2) = ni(i,k,j)*den(i,k,j)
++         nrs(i,k,1) = nr(i,k,j)*den(i,k,j)
++         nci(i,k,3) = nn(i,k,j)*den(i,k,j)
+          nrs(i,k,2) = 0. 
+          nrs(i,k,3) = 0. 
+          brs(i,k) = bg(i,k,j)
+@@ -385,10 +358,11 @@
+          qr(i,k,j) = qrs(i,k,1)
+          qs(i,k,j) = qrs(i,k,2)
+          qg(i,k,j) = qrs(i,k,3)
+-         nr(i,k,j) = nrs(i,k,1)   
+-         nc(i,k,j) = nci(i,k,1)
+-         ni(i,k,j) = nci(i,k,2)
+-         nn(i,k,j) = nci(i,k,3)
++         ! Return number scalars on their public #/kg basis.
++         nr(i,k,j) = nrs(i,k,1)/den(i,k,j)
++         nc(i,k,j) = nci(i,k,1)/den(i,k,j)
++         ni(i,k,j) = nci(i,k,2)/den(i,k,j)
++         nn(i,k,j) = nci(i,k,3)/den(i,k,j)
+          bg(i,k,j) = brs(i,k)
+          diag_rhog(i,k,j) = rhox(i,k)
+        enddo
+@@ -4074,7 +4048,7 @@
+         do k=kts,kte
+           if (rqc(k).le.R1 .or. rnc(k).le.R2) CYCLE
+ !          lamc = 2.*cdm2*(pidnc*nc(k)/rqc(k))**obmr
+-          lamc = (pidnc*nc(k)/rqc(k))**(1./xbm_r)
++          lamc = (pidnc*rnc(k)/rqc(k))**(1./xbm_r)
+           lamco =  lamc*2*cdm2/cdm3
+           re_qc(k) =  max(2.51e-6,min(sngl(1.0d0/lamco),50.e-6))
+         enddo
+@@ -4083,7 +4057,7 @@
+       if (has_qi) then
+         do k=kts,kte
+           if (rqi(k).le.R1 .or. rni(k).le.R2) CYCLE
+-           lami = (pidni*ni(k)/rqi(k))**(1./xbm_i) 
++           lami = (pidni*rni(k)/rqi(k))**(1./xbm_i)
+            lamio = lami*2*idm4/idm3
+            re_qi(k) = max(10.01e-6,min(sngl(1.0d0/lamio),125.e-6))
+         enddo

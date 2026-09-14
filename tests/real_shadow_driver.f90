@@ -4,6 +4,7 @@ PROGRAM real_shadow_driver
   USE cloud_bal_pipeline
   USE cloud_bal_balance_operator
   USE cloud_bal_real_netcdf
+  USE cloud_bal_pressure_analysis, ONLY: run_pressure_analysis_shadow
   IMPLICIT NONE
   TYPE(cloud_bal_state_type) :: input,candidate,operational
   TYPE(cloud_bal_pipeline_config) :: config
@@ -12,11 +13,29 @@ PROGRAM real_shadow_driver
   REAL(real32), ALLOCATABLE :: longitude(:,:)
   REAL(real64), ALLOCATABLE :: residual_before(:,:,:),residual_after(:,:,:)
   CHARACTER(LEN=1024) :: fua,fsf,lw3,vrz,vrt,static_file,output,time_text
+  CHARACTER(LEN=1024) :: lt1,lq3,lwc,lsx
+  CHARACTER(LEN=64) :: thermo_option,experiment
   INTEGER(int64) :: valid_time
   INTEGER :: status,reason,io_status,operational_differences
 
-  IF (COMMAND_ARGUMENT_COUNT()/=8) ERROR STOP &
-    'usage: driver FUA FSF LW3 VRZ VRT STATIC OUTPUT VALID_TIME_EPOCH'
+  IF (COMMAND_ARGUMENT_COUNT()/=8 .AND. COMMAND_ARGUMENT_COUNT()/=12 .AND. &
+      COMMAND_ARGUMENT_COUNT()/=13) ERROR STOP &
+    'usage: driver FUA FSF LW3 VRZ VRT STATIC OUTPUT EPOCH [LT1 LQ3 LWC LSX [THERMO_OPTION]]'
+  IF (COMMAND_ARGUMENT_COUNT()==13) THEN
+    CALL GET_COMMAND_ARGUMENT(13,thermo_option)
+    IF (TRIM(thermo_option)/='--thermo-liquid-radar' .AND. &
+        TRIM(thermo_option)/='--thermo-liquid-radar-phi' .AND. &
+        TRIM(thermo_option)/='--thermo-liquid-radar-surface-phi') ERROR STOP 'unknown experiment option'
+    IF (TRIM(thermo_option)=='--thermo-liquid-radar') THEN
+      experiment='LIQUID_RADAR_RH1'
+    ELSE IF (TRIM(thermo_option)=='--thermo-liquid-radar-surface-phi') THEN
+      experiment='LIQUID_RADAR_RH1_SURFACE_PHI'
+    ELSE
+      experiment='LIQUID_RADAR_RH1_PHI'
+    END IF
+  ELSE
+    experiment='HYDRO'
+  END IF
   CALL GET_COMMAND_ARGUMENT(1,fua); CALL GET_COMMAND_ARGUMENT(2,fsf)
   CALL GET_COMMAND_ARGUMENT(3,lw3); CALL GET_COMMAND_ARGUMENT(4,vrz)
   CALL GET_COMMAND_ARGUMENT(5,vrt); CALL GET_COMMAND_ARGUMENT(6,static_file)
@@ -24,23 +43,36 @@ PROGRAM real_shadow_driver
   READ(time_text,*,IOSTAT=io_status) valid_time
   IF (io_status/=0) ERROR STOP 'invalid valid-time epoch'
 
-  CALL read_real_shadow_state(TRIM(fua),TRIM(fsf),TRIM(lw3),TRIM(vrz),TRIM(vrt), &
-                              TRIM(static_file),valid_time,input,longitude,status,reason)
+  IF (COMMAND_ARGUMENT_COUNT()>=12) THEN
+    CALL GET_COMMAND_ARGUMENT(9,lt1); CALL GET_COMMAND_ARGUMENT(10,lq3)
+    CALL GET_COMMAND_ARGUMENT(11,lwc); CALL GET_COMMAND_ARGUMENT(12,lsx)
+    CALL read_real_shadow_state(TRIM(fua),TRIM(fsf),TRIM(lw3),TRIM(vrz),TRIM(vrt), &
+      TRIM(static_file),valid_time,input,longitude,status,reason, &
+      lt1_path=TRIM(lt1),lq3_path=TRIM(lq3),lwc_path=TRIM(lwc),lsx_path=TRIM(lsx))
+    WRITE(*,'(A)') 'input_mode=DIRECT_PRESSURE_ANALYSIS'
+  ELSE
+    CALL read_real_shadow_state(TRIM(fua),TRIM(fsf),TRIM(lw3),TRIM(vrz),TRIM(vrt), &
+      TRIM(static_file),valid_time,input,longitude,status,reason)
+    WRITE(*,'(A)') 'input_mode=BACKGROUND_FUA_FSF'
+  END IF
   IF (status/=STATUS_OK) THEN
     WRITE(*,'(A,I0,A,I0)') 'adapter_status=',status,',reason=',reason
     ERROR STOP 2
   END IF
 
-  config%requested_mode=MODE_SHADOW
-  config%horizontal_support_radius_m=10000.0_real64
-  config%pressure_support_radius_pa=20000.0_real64
-  config%balance%maximum_iterations=800
-  CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+  CALL run_pressure_analysis_shadow(input,candidate,operational,result,config, &
+    experiment,status)
+  IF (.NOT.canonical_states_equal(input,operational)) &
+    ERROR STOP 'SHADOW changed operational values or metadata'
   operational_differences=core_value_differences(input,operational)
   IF (operational_differences/=0) ERROR STOP 'SHADOW changed operational state'
   WRITE(*,'(A,I0,A,I0,A,I0,A,I0)') 'pipeline_status=',result%status, &
     ',reason=',result%reason_code,',column=',result%column%status, &
     ',balance=',result%balance%status
+  WRITE(*,'(A,I0,A,L1)') 'outer_iterations=',result%outer_iterations, &
+    ',outer_converged=',result%outer_converged
+  WRITE(*,'(A,I0,A,I0)') 'geopotential_status=',result%geopotential%status, &
+    ',changed_cells=',COUNT(result%geopotential%changed)
   WRITE(*,'(A,I0,A,ES24.16)') 'transport_required_substeps=', &
     result%column%numerical%transport_required_substeps,',flux_ledger_error=', &
     result%column%numerical%ledger_error
@@ -58,7 +90,8 @@ PROGRAM real_shadow_driver
   CALL state_continuity_residual(op,candidate,residual_after,status)
   IF (status/=STATUS_OK) ERROR STOP 'candidate residual failed'
   CALL write_shadow_diagnostics(TRIM(output),input,candidate,longitude,result,config, &
-                                residual_before,residual_after,status,operational)
+    residual_before,residual_after,status,operational, &
+    pressure_analysis_candidate=ALLOCATED(result%geopotential_support))
   IF (status/=STATUS_OK) ERROR STOP 'diagnostic write failed'
 
   WRITE(*,'(A,I0)') 'radar_cells=',COUNT(input%radar_reflectivity%valid)
