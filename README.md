@@ -125,3 +125,14 @@ The manufactured-balance runner uses the four actual KLAPS geometries and
 Intel ifx to exercise a nonzero solver path.  Its target and pressure-velocity
 boundary are explicitly test-only, and every artifact states science authority
 `NONE`.  See [docs/REAL_GEOMETRY_DYNAMIC_BALANCE.md](docs/REAL_GEOMETRY_DYNAMIC_BALANCE.md).
+
+
+## Multi-radar balanced initialization planning
+
+The added CP02 work diagnoses localized vertical motion before time integration,
+using the existing radar-informed horizontal analysis and hydrometeors.
+The [plan](docs/CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md),
+[checkpoints](docs/CP02_MULTI_RADAR_INITIALIZATION_CHECKLIST_20260914.md), and
+[scientific review](docs/CP02_MULTI_RADAR_SCIENTIFIC_REVIEW_20260914.md) define observation reuse,
+phase-change consistency, startup-wave controls, and 1–6 h precipitation validation.
+These documents do not claim implemented or validated coupled initialization.
