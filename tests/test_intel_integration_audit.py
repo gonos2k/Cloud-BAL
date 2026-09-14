@@ -99,7 +99,7 @@ class IntegrationFixture:
                     "\t$(FC) $(CLOUD_BAL_ADAPTER) -o $(EXE)\n"
                     "clean:\n\t@true\n"
                 ))
-                entry = str(AUDIT.STAGES[stage]["entry_symbol"]).split("_MOD_", 1)[1]
+                entry = str(AUDIT.STAGES[stage]["entry_symbol"]).split("_mp_", 1)[1].removesuffix("_")
                 self._write(
                     (root / AUDIT.STAGES[stage]["makefile"]).parent
                     / f"{adapter}.f90",
@@ -474,11 +474,32 @@ class IntelIntegrationAuditTest(unittest.TestCase):
                 )
             self.assertIn("SCRATCH_ROOT_UNSAFE", report["summary"]["blocker_codes"])
 
+    def test_gnu_module_symbol_cannot_satisfy_pinned_ifx_entry(self) -> None:
+        def gnu_symbol(argv: list[str], timeout: int = 30) -> dict[str, object]:
+            result = command_result(argv, timeout)
+            if Path(argv[0]).name.endswith("nm"):
+                result["stdout"] = "".join(
+                    f"00000000 T __cloud_bal_{stage}_adapter_MOD_cloud_bal_{stage}_entry\n"
+                    for stage in ("deriv", "balance", "lapsprep")
+                )
+            return result
+
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = IntegrationFixture(Path(temporary), go=True)
+            with mock.patch.object(AUDIT, "run_command", side_effect=gnu_symbol):
+                report = AUDIT.audit(
+                    fixture.root, fixture.repo, fixture.ifx, fixture.version, fixture.ifx_hash
+                )
+            self.assertIn(
+                "BINARY_CANONICAL_SYMBOLS_MISSING",
+                report["summary"]["blocker_codes"],
+            )
+
     def test_local_or_suffix_symbol_cannot_fake_adapter_entry(self) -> None:
         def fake_symbol(argv: list[str], timeout: int = 30) -> dict[str, object]:
             result = command_result(argv, timeout)
             if Path(argv[0]).name.endswith("nm"):
-                result["stdout"] = "00000000 t __cloud_bal_deriv_adapter_MOD_fake\n"
+                result["stdout"] = "00000000 t cloud_bal_deriv_adapter_mp_fake_\n"
             return result
 
         with tempfile.TemporaryDirectory() as temporary:

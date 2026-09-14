@@ -126,22 +126,25 @@ pin_build_file link_netcdf "$netcdf_archive" "$expected_netcdf_sha"
 verify_build_files
 read -r -a nf_fflags <<<"$($nf_config --fflags)"
 read -r -a nf_flibs <<<"$($nf_config --flibs)"
+cd "$build_root"
 "$CLOUD_BAL_FC" "${CLOUD_BAL_REPRO_FLAGS[@]}" \
   -module "$build_root" -I "$build_root" "${nf_fflags[@]}" \
   "$repo_root/src/common/cloud_bal_state.f90" \
   "$repo_root/src/common/cloud_bal_column_physics.f90" \
-  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
   "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
+  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
   "$repo_root/src/common/cloud_bal_pipeline.f90" \
   "$repo_root/src/common/cloud_bal_real_netcdf.f90" \
   "$repo_root/tests/real_manufactured_balance_driver.f90" \
   "${nf_flibs[@]}" -o "$build_root/driver"
-ldd_output=$(ldd "$build_root/driver")
+pin_build_file driver "$build_root/driver"
+awk -F '\t' '$1 == "driver" {print $3 "  " $2}' "$build_receipt" > "$build_root/driver.sha256"
+ldd_output=$(python3 "$repo_root/tools/inspect_bound_runtime.py" \
+  "$build_root/driver" --sha256-file "$build_root/driver.sha256")
 [[ $ldd_output != *"not found"* ]] || {
   printf 'unresolved runtime dependency:\n%s\n' "$ldd_output" >&2
   exit 2
 }
-pin_build_file driver "$build_root/driver"
 runtime_index=0
 while IFS= read -r runtime_path; do
   runtime_index=$((runtime_index + 1))
@@ -165,7 +168,8 @@ staging=$(python3 "$repo_root/tools/cloud_bal_transaction.py" begin \
   "$publication_root" "$transaction_id" "${products[@]}" \
   --source-commit "$source_commit" \
   --configuration real-geometry-manufactured-balance-ifx-2026-v1 \
-  --valid-time "$last_epoch")
+  --valid-time "$last_epoch" \
+  --require-validation)
 trap 'if [[ -d $staging ]]; then mv "$staging" "$staging.failed.$$"; fi' EXIT
 
 case_count=0
@@ -194,7 +198,8 @@ while IFS=$'\t' read -r case_id valid_time fua fua_hash \
   figure_tmp=$build_root/$case_id.png
   figure_repeat=$build_root/$case_id.repeat.png
 
-  "$build_root/driver" "$workspace_root/$fua" "$workspace_root/$fsf_before" \
+  python3 "$repo_root/tools/run_bound_executable.py" \
+    --sha256-file "$build_root/driver.sha256" "$build_root/driver" -- "$workspace_root/$fua" "$workspace_root/$fsf_before" \
     "$workspace_root/$fsf_center" "$workspace_root/$fsf_after" \
     "$workspace_root/$lw3" "$workspace_root/$vrz" "$workspace_root/$vrt" \
     "$static_file" "$diagnostic_tmp" "$epoch" 0.1 >"$log" 2>&1
@@ -288,10 +293,13 @@ if [[ $(git -C "$repo_root" rev-parse HEAD) != "$source_commit" ]] || \
   printf 'source tree changed during the real-data numerical run\n' >&2
   exit 2
 fi
+snapshot=$(cloud_bal_prepare_snapshot "$publication_root" "$transaction_id")
+validation_receipt=$build_root/validation_receipt.json
 python3 "$repo_root/tools/verify_real_manufactured_balance_generation.py" \
-  "$publication_root" "$manifest" --repo "$repo_root" --staging "$staging" >/dev/null
-python3 "$repo_root/tools/cloud_bal_transaction.py" commit \
-  "$publication_root" "$transaction_id" >/dev/null
+  "$publication_root" "$manifest" --repo "$repo_root" --snapshot "$snapshot" \
+  > "$validation_receipt"
+cloud_bal_commit_validated "$publication_root" "$transaction_id" \
+  "$validation_receipt" >/dev/null
 staging=
 trap - EXIT
 python3 "$repo_root/tools/verify_real_manufactured_balance_generation.py" \

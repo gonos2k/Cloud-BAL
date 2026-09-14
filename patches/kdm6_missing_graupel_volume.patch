@@ -1,0 +1,17 @@
+diff --git a/module_mp_kdm6.F b/module_mp_kdm6.F
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -3320,6 +3320,13 @@
+         do i = its, ite
+ 
+ 
++     ! Research startup policy: when native MP37 supplies graupel mass but
++     ! no volume, use KDM6's declared midpoint density for this startup state.
++     ! Volumes above brs_min keep the existing density handling.
++     if (qrs(i,k,3).gt. qcrmin .and. brs(i,k).le. brs_min) then
++         brs(i,k) = qrs(i,k,3)/rho_mid
++     endif
++
+      if (qrs(i,k,3).gt. qcrmin .or. brs(i,k).gt. brs_min) then
+ 
+          rhox(i,k) = qrs(i,k,3)/brs(i,k)

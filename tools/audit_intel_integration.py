@@ -41,7 +41,7 @@ STAGES = {
         "executable": "klps_anal_derv.exe",
         "job_token": "${KL05EXET}/klps_anal_derv.exe",
         "adapter_token": "cloud_bal_deriv_adapter",
-        "entry_symbol": "__cloud_bal_deriv_adapter_MOD_cloud_bal_deriv_entry",
+        "entry_symbol": "cloud_bal_deriv_adapter_mp_cloud_bal_deriv_entry_",
     },
     "balance": {
         "makefile": BUILD_ROOT / "src/balance/Makefile",
@@ -49,7 +49,7 @@ STAGES = {
         "executable": "klps_anal_qbal.exe",
         "job_token": "${KL05EXET}/klps_anal_qbal.exe",
         "adapter_token": "cloud_bal_balance_adapter",
-        "entry_symbol": "__cloud_bal_balance_adapter_MOD_cloud_bal_balance_entry",
+        "entry_symbol": "cloud_bal_balance_adapter_mp_cloud_bal_balance_entry_",
     },
     "lapsprep": {
         "makefile": BUILD_ROOT / "src/lapsprep/Makefile",
@@ -57,7 +57,7 @@ STAGES = {
         "executable": "klps_anal_prep.exe",
         "job_token": "${KL05EXET}/klps_anal_prep.exe",
         "adapter_token": "cloud_bal_lapsprep_adapter",
-        "entry_symbol": "__cloud_bal_lapsprep_adapter_MOD_cloud_bal_lapsprep_entry",
+        "entry_symbol": "cloud_bal_lapsprep_adapter_mp_cloud_bal_lapsprep_entry_",
     },
 }
 STAGE_ORDER = tuple(STAGES)

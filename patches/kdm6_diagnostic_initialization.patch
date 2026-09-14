@@ -1,0 +1,11 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -760,7 +760,7 @@
+ !ADD UPPER BOUND ON ICE NUMBER
+ !TO PREVENT VERY LARGE ICE NUMBER DUE TO HOMOGENEOUS FREEZING OF DROPLETS,
+        nci(i,k,2) = min(max(nci(i,k,2),0.0),1.0e6)
+-       rhox(i,k) = max(rhox(i,k),0.0)
++       rhox(i,k) = 0.0
+        brs(i,k) = max(brs(i,k),0.0)
+      enddo
+    enddo

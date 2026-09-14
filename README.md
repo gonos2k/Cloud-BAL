@@ -87,6 +87,25 @@ The goal, implemented scope, remaining integration work, and completion of the
 separate radial-velocity/Barnes release are summarized in
 [docs/STATUS_20260907.md](docs/STATUS_20260907.md).
 
+The in-progress native mass/frame contract and bounded geometry test evidence are in
+[docs/NATIVE_MASS_FRAME_CONTRACT.md](docs/NATIVE_MASS_FRAME_CONTRACT.md) and
+[docs/CP01_EXECUTION_RECORD_20260907.md](docs/CP01_EXECUTION_RECORD_20260907.md).
+
+The detailed design review and the 45 main requirements plus the separately
+completed radial-velocity scope are available in
+[docs/CLOUD_BAL_DESIGN_REVIEW_20260907.md](docs/CLOUD_BAL_DESIGN_REVIEW_20260907.md)
+and [docs/CLOUD_BAL_CHECKLIST_20260907.md](docs/CLOUD_BAL_CHECKLIST_20260907.md).
+Final goals and ten scoped development checkpoints are recorded in
+[docs/CLOUD_BAL_FINAL_GOALS_CHECKPOINTS_20260907.md](docs/CLOUD_BAL_FINAL_GOALS_CHECKPOINTS_20260907.md),
+with an editable [checkpoint ledger](docs/CLOUD_BAL_CHECKPOINTS_20260907.tsv).
+These plans do not grant execution or promotion authority.
+CP00 implementation and local evidence are tracked in
+[docs/CP00_EXECUTION_RECORD_20260907.md](docs/CP00_EXECUTION_RECORD_20260907.md).
+The bounded portable Python CI lane is described in
+[docs/CI_CONTRACT.md](docs/CI_CONTRACT.md).
+The editable requirement ledger is
+[docs/CLOUD_BAL_REQUIREMENTS_20260907.tsv](docs/CLOUD_BAL_REQUIREMENTS_20260907.tsv).
+
 The focused real-data evidence commands are:
 
 ```bash
@@ -117,3 +136,7 @@ The [plan](docs/CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md),
 [scientific review](docs/CP02_MULTI_RADAR_SCIENTIFIC_REVIEW_20260914.md) define observation reuse,
 phase-change consistency, startup-wave controls, and 1–6 h precipitation validation.
 These documents do not claim implemented or validated coupled initialization.
+The [conditional proofs](docs/CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md)
+state the assumptions behind identifiability, conservation, and wave-energy bounds.
+The [September 14 corrections](docs/CLOUD_BAL_DESIGN_REVIEW_20260907.md)
+clarify covariance weighting, phase policy, development dependencies, and evidence closure.

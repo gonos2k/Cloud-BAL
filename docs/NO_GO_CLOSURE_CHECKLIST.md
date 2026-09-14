@@ -606,6 +606,16 @@ P8의 모든 required check가 protected `main`의 exact HEAD에서 통과하고
 
 ## 현재 실행 순서와 금지 조건
 
+2026-09-07 격리 연구 순서 보완(사용자 GO): 아래 P1–P8 순서는 각 정식 gate의 종료와
+통합·게시·과학/운영 승격을 관리한다. 운영 원본 read-only, OFF/SHADOW 격리와 필요한
+입력·질량·열역학·frame 계약을 지키는 독립 구현/시험은 해당 최종 gate의 전체 PASS를
+기다리지 않고 진행할 수 있다. 여기에는 격리된 등압면 후보장 내부의 물리 block 결합을
+포함하지만 정식 full-KLAPS 통합·게시를 포함하지 않는다. 개발 주 경로는 등압면 결합 검증(CP06-A) 이후 전체
+WPS→metgrid→real 통합(CP06-B)이며, 필요한 upstream 입력 확보·작은 전달 계약 시험은
+먼저 수행할 수 있다. 이 허용은 P2–P8의 진입/종료 PASS, FULL_SHADOW_GO, 게시 또는
+ACTIVE 권한이 아니다. 실제 관측 권한 검사를 생략하거나 제조해를 정상 pipeline에 넣지
+않으며, 통합·게시·승격에는 아래와 각 단계의 기존 선행조건 및 독립 review가 그대로 적용된다.
+
 1. P1 scope를 먼저 폐합한다. P1 계획·입력·적대시험을 GREEN/RED가 재검토하고,
    operational comparison은 13/14/15 UTC로만 기록하며 12 UTC exclusion을
    확인한다. 이는 실행 evidence나 `comparison_status`의 GO를 뜻하지 않는다.

@@ -64,6 +64,16 @@ def strict_cli_path(value: Path, label: str) -> Path:
     return canonical
 
 
+def resolve_workspace_root(repo: Path) -> Path:
+    """Resolve the input workspace with the runner's strict path contract."""
+    configured = os.environ.get("CLOUD_BAL_WORKSPACE_ROOT")
+    value = Path(configured) if configured else repo.parent
+    workspace = strict_cli_path(value, "workspace root")
+    if not workspace.is_dir():
+        raise ValueError(f"workspace root is not a directory: {value}")
+    return workspace
+
+
 def load_module(path: Path, name: str):
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
@@ -178,7 +188,7 @@ def reviewed_cases(manifest_path: Path, repo: Path) -> list[dict[str, str]]:
     # Adjacent valid times intentionally share FUA/FSF cycle files.  Bind each
     # repeated path to one immutable hash instead of rejecting legitimate reuse.
     input_hashes: dict[str, str] = {}
-    workspace = repo.parent
+    workspace = resolve_workspace_root(repo)
     for case in cases:
         for prefix in (
             "fua", "fsf_before", "fsf_center", "fsf_after", "lw3", "vrz", "vrt"
@@ -206,7 +216,7 @@ def verify_bundle(
     )
     plotter = load_module(repo / "tools/plot_real_manufactured_balance.py", "plotter")
     summary = json.loads((bundle / "RUN_SUMMARY.json").read_text(encoding="utf-8"))
-    workspace = repo.parent
+    workspace = resolve_workspace_root(repo)
     case_ids = [case["case_id"] for case in cases]
     expected_products = {"RUN_SUMMARY.json"}
     for case_id in case_ids:
@@ -284,24 +294,47 @@ def verify_bundle(
     return bundle
 
 
-def verify_staging(staging: Path, manifest_path: Path, repo: Path) -> Path:
-    if staging.is_symlink():
-        raise ValueError("semantic preflight staging directory cannot be a symlink")
-    staging = staging.resolve(strict=True)
-    if staging.parent.name != ".staging":
-        raise ValueError("semantic preflight requires one transaction staging directory")
-    context = json.loads((staging / "TRANSACTION.json").read_text(encoding="utf-8"))
+def verify_snapshot(snapshot: Path, manifest_path: Path, repo: Path) -> dict[str, object]:
+    """Validate exactly one detached snapshot and return its binding receipt."""
+    if snapshot.is_symlink():
+        raise ValueError("semantic validation snapshot cannot be a symlink")
+    snapshot = snapshot.resolve(strict=True)
+    if snapshot.parent.name != ".snapshots":
+        raise ValueError("semantic validation requires one detached snapshot")
+    context = json.loads((snapshot / "TRANSACTION.json").read_text(encoding="utf-8"))
+    if context.get("transaction_id") != snapshot.name:
+        raise ValueError("snapshot transaction identity mismatch")
     expected_files = set(context.get("products", [])) | {"TRANSACTION.json"}
     actual_files = {
-        path.relative_to(staging).as_posix()
-        for path in staging.rglob("*")
-        if path.is_file()
+        path.relative_to(snapshot).as_posix() for path in snapshot.rglob("*")
+        if path.is_file() and not path.is_symlink()
     }
     if actual_files != expected_files:
-        raise ValueError("staging product inventory is incomplete or undeclared")
+        raise ValueError("snapshot product inventory is incomplete or undeclared")
     source_commit = source_identity(repo)
     cases = reviewed_cases(manifest_path, repo)
-    return verify_bundle(staging, context, cases, manifest_path, repo, source_commit)
+    verify_bundle(snapshot, context, cases, manifest_path, repo, source_commit)
+    products = []
+    for product in context["products"]:
+        path = snapshot.joinpath(*Path(product).parts)
+        if path.is_symlink() or not path.is_file() or path.stat().st_nlink != 1:
+            raise ValueError(f"snapshot product is not an independent regular file: {product}")
+        products.append({
+            "path": product,
+            "bytes": path.stat().st_size,
+            "sha256": sha256(path),
+        })
+    return {
+        "schema": 1,
+        "status": "PASS",
+        "transaction_id": snapshot.name,
+        "snapshot_identity": [snapshot.stat().st_dev, snapshot.stat().st_ino],
+        "validator": {
+            "name": "verify_real_manufactured_balance_generation",
+            "source_sha256": sha256(Path(__file__)),
+        },
+        "products": products,
+    }
 
 
 def verify(root: Path, manifest_path: Path, repo: Path) -> Path:
@@ -312,6 +345,13 @@ def verify(root: Path, manifest_path: Path, repo: Path) -> Path:
     transaction_manifest = json.loads(
         (generation / "MANIFEST.json").read_text(encoding="utf-8")
     )
+    if transaction_manifest.get("require_validation") is not True:
+        raise ValueError("generation was not begun with required semantic validation")
+    validation = transaction_manifest.get("validation")
+    if not isinstance(validation, dict) or validation.get("status") != "PASS" or \
+            validation.get("transaction_id") != generation.name or \
+            validation.get("products") != transaction_manifest.get("products"):
+        raise ValueError("generation lacks an exact semantic validation receipt")
     return verify_bundle(
         generation, transaction_manifest, cases, manifest_path, repo, source_commit
     )
@@ -322,24 +362,27 @@ def main() -> int:
     parser.add_argument("publication_root", type=Path)
     parser.add_argument("manifest", type=Path)
     parser.add_argument("--repo", required=True, type=Path)
-    parser.add_argument("--staging", type=Path)
+    parser.add_argument(
+        "--snapshot", type=Path,
+        help="validate this detached snapshot before transaction publication",
+    )
     args = parser.parse_args()
     try:
         publication_root = strict_cli_path(args.publication_root, "publication_root")
         manifest = strict_cli_path(args.manifest, "manifest")
         repo = strict_cli_path(args.repo, "repo")
-        staging = (
+        snapshot = (
             None
-            if args.staging is None
-            else strict_cli_path(args.staging, "staging")
+            if args.snapshot is None
+            else strict_cli_path(args.snapshot, "snapshot")
         )
     except ValueError as exc:
         parser.error(str(exc))
 
-    if staging is None:
+    if snapshot is None:
         print(verify(publication_root, manifest, repo))
     else:
-        print(verify_staging(staging, manifest, repo))
+        print(json.dumps(verify_snapshot(snapshot, manifest, repo), sort_keys=True))
     return 0
 
 

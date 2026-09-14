@@ -88,8 +88,8 @@ fi
 sha256sum \
   "$snapshot_root/src/common/cloud_bal_state.f90" \
   "$snapshot_root/src/common/cloud_bal_column_physics.f90" \
-  "$snapshot_root/src/common/cloud_bal_balance_operator.f90" \
   "$snapshot_root/src/common/cloud_bal_grid_geometry.f90" \
+  "$snapshot_root/src/common/cloud_bal_balance_operator.f90" \
   "$snapshot_root/src/common/cloud_bal_pipeline.f90" \
   "$snapshot_root/tests/intel_toolchain.sh" \
   "$snapshot_root/tests/reproduction_probe.f90" \
@@ -154,8 +154,8 @@ CLOUD_BAL_WORKSPACE_ROOT="$workspace_root" \
     -module "$output/build" -I "$output/build" \
     "$snapshot_root/src/common/cloud_bal_state.f90" \
     "$snapshot_root/src/common/cloud_bal_column_physics.f90" \
-    "$snapshot_root/src/common/cloud_bal_balance_operator.f90" \
     "$snapshot_root/src/common/cloud_bal_grid_geometry.f90" \
+    "$snapshot_root/src/common/cloud_bal_balance_operator.f90" \
     "$snapshot_root/src/common/cloud_bal_pipeline.f90" \
     "$snapshot_root/tests/reproduction_probe.f90" \
     -o "$output/build/cloud_bal_reproduction_probe"

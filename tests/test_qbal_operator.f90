@@ -1,8 +1,9 @@
 PROGRAM test_qbal_operator
-  USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_value, ieee_quiet_nan
+  USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite, ieee_value, ieee_quiet_nan
   IMPLICIT NONE
 
   EXTERNAL :: continuity_metrics,continuity_point,leib_sub
+  EXTERNAL :: leibp3
   EXTERNAL :: geostrophic_residual_metrics
 
   INTEGER, PARAMETER :: nx=6, ny=6, nz=4
@@ -147,6 +148,8 @@ PROGRAM test_qbal_operator
   CALL check(status == 0, &
        'out-of-range near-zero Coriolis support must fail', failures)
 
+  CALL test_leibp3_scale_guard(failures)
+
   IF (failures /= 0) THEN
     PRINT *, 'QBAL operator unit tests failed:', failures
     ERROR STOP 1
@@ -165,6 +168,90 @@ CONTAINS
       PRINT *, 'FAIL: ', TRIM(message)
     END IF
   END SUBROUTINE check
+
+  SUBROUTINE test_leibp3_scale_guard(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    REAL :: sol_ref(nx+1,ny+1,nz+1), sol_tiny(nx+1,ny+1,nz+1)
+    REAL :: force_ref(nx+1,ny+1,nz+1), force_tiny(nx+1,ny+1,nz+1)
+    REAL :: htest(nx+1,ny+1,nz+1)
+    REAL :: influence_ref(nx,ny,nz), influence_tiny(nx,ny,nz)
+    REAL :: tiny_max, ref_max, max_relative
+    REAL :: nan_value
+    INTEGER :: scale_status, zero_status, tiny_status, reject_status
+    INTEGER :: finite_status
+    INTEGER :: ii, jj, kk
+
+    dx = 5061.267
+    dy = 5061.267
+    ps = 101000.0
+    p = (/100000.0, 85000.0, 70000.0, 50000.0/)
+    dp = (/15000.0, 15000.0, 15000.0, 20000.0/)
+    erru = 0.5917161
+    tau = 0.5787722
+    sol_ref = 0.0
+    sol_tiny = 0.0
+    force_ref = 0.0
+    force_tiny = 0.0
+    htest = 0.0
+    influence_ref = 1.0
+    influence_tiny = 1.0E-14
+    force_ref(3,3,2) = 1.0
+    force_tiny(3,3,2) = 1.0E-14
+
+    CALL leibp3(sol_ref,force_ref,1,1.0,htest,erru,tau,influence_ref, &
+         nx,ny,nz,dx,dy,ps,p,dp,scale_status)
+    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
+         nx,ny,nz,dx,dy,ps,p,dp,finite_status)
+    ref_max = MAXVAL(ABS(sol_ref))
+    tiny_max = MAXVAL(ABS(sol_tiny))
+    max_relative = 0.0
+    DO kk=1,nz+1
+      DO jj=1,ny+1
+        DO ii=1,nx+1
+          max_relative = MAX(max_relative, &
+               ABS(sol_tiny(ii,jj,kk)-sol_ref(ii,jj,kk))/ &
+               MAX(ABS(sol_ref(ii,jj,kk)),1.0))
+        END DO
+      END DO
+    END DO
+    CALL check(scale_status == 2, &
+         'unit-scale one-iteration LEIBP3 should reach iteration limit',failures)
+    CALL check(finite_status == scale_status .AND. tiny_max > 1.0 .AND. &
+         ieee_is_finite(tiny_max) .AND. ieee_is_finite(max_relative) .AND. &
+         max_relative < 1.0E-3, &
+         'uniformly scaled connected row must remain finite and equivalent',failures)
+
+    sol_tiny = 0.0
+    force_tiny = 0.0
+    influence_tiny = 0.0
+    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
+         nx,ny,nz,dx,dy,ps,p,dp,zero_status)
+    CALL check(zero_status == 1 .AND. MAXVAL(ABS(sol_tiny)) == 0.0, &
+         'disconnected zero row with zero forcing must remain a solved zero',failures)
+
+    force_tiny(3,3,2) = 1.0E-30
+    sol_tiny = 0.0
+    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
+         nx,ny,nz,dx,dy,ps,p,dp,tiny_status)
+    CALL check(tiny_status == 0 .AND. MAXVAL(ABS(sol_tiny)) == 0.0, &
+         'disconnected row with any nonzero RHS must fail closed',failures)
+
+    force_tiny(3,3,2) = 2.0E-20
+    sol_tiny = 0.0
+    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
+         nx,ny,nz,dx,dy,ps,p,dp,reject_status)
+    CALL check(reject_status == 0, &
+         'disconnected row with nonzero forcing must still reject',failures)
+
+    influence_tiny = 1.0
+    force_tiny = 0.0
+    nan_value = ieee_value(0.0,ieee_quiet_nan)
+    force_tiny(3,3,2) = nan_value
+    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
+         nx,ny,nz,dx,dy,ps,p,dp,finite_status)
+    CALL check(finite_status == 0, &
+         'nonfinite forcing must still fail closed',failures)
+  END SUBROUTINE test_leibp3_scale_guard
 
 END PROGRAM test_qbal_operator
 

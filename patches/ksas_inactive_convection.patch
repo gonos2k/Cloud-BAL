@@ -1,0 +1,19 @@
+--- a/module_cu_ksas.F
++++ b/module_cu_ksas.F
+@@ -1973,10 +1973,12 @@
+ ! calculate critical cloud work function
+ !
+    do i = its,ite
+-     tem = zi(i,ktcon1(i)) - zi(i,kbcon1(i))
+-     dtconv(i) = tfac * tem / wc(i)
+-     dtconv(i) = max(dtconv(i),dtmin)
+-     dtconv(i) = min(dtconv(i),dtmax)
++     if (cnvflg(i)) then
++       tem = zi(i,ktcon1(i)) - zi(i,kbcon1(i))
++       dtconv(i) = tfac * tem / wc(i)
++       dtconv(i) = max(dtconv(i),dtmin)
++       dtconv(i) = min(dtconv(i),dtmax)
++     endif
+ !    dtconv(i) = max(1800., dt2)
+    enddo
+ !

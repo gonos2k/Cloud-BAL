@@ -1,16 +1,14 @@
 # 다중 레이더 연직풍 복원 및 국지 균형초기화 추가 과제
 
-이 PR은 계획·체크리스트·검토 요약을 제공한다. 아래의 로컬 작업공간 근거는 이 PR에
-포함되지 않으며 공개 저장소에서 재실행 검증한 결과로 해석하지 않는다. 상세 구현·실험은
-별도 작업으로 남고, 기존 CP02의 실행·통합 요구사항을 완료 처리하지 않는다.
-
 작성: 2026-09-14. 상태: **계획 수립 / 자료·방정식 검토 중 / 결합 구현 및 검증 미완료**.
 
 추가 검토 반영: 수학·수치해석·기상학 팀 검토와 상변화 유발 중력파 제어 요구를
-R1–R5의 작업·통과 조건에 반영했다. [종합 검토](CP02_MULTI_RADAR_SCIENTIFIC_REVIEW_20260914.md)는
+R1–R5의 작업·통과 조건에 반영했다. 종합 검토 (로컬 작업공간 근거: `../scratch/cp02_multiradar_additional_review_20260914/REVIEW.md`)는
 설계 보완의 근거이며, 결합 구현이나 초기 충격 억제를 실증한 결과는 아니다.
 실행 상태와 완료 근거는 [체크리스트·체크포인트](CP02_MULTI_RADAR_INITIALIZATION_CHECKLIST_20260914.md)의
 MR-C0–MR-C6에서 추적한다.
+성립 가정·해 존재·유일성·보존·파동 제어의 수학적 근거는
+[조건부 증명](CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md)에 정리한다.
 
 ## 1. 목적과 기존 과제와의 관계
 
@@ -38,6 +36,9 @@ CP06-A 물리 검증에 연결하며, 후속 적분 검증은 CP06-B와 연계�
   경험함수와 구별하되, 기존 물리·입자종 정보에 근거하고 오차를 명시한다.
 - 모델 시간 적분은 초기화 이후 검증에만 사용한다. 직접 omega 관측이나 외부 모델의
   omega target을 입력 필수조건으로 추가하지 않는다.
+- 외부 모델의 omega/`w` target은 요구하지 않는다. Barnes 초기 분석장은 시작값 또는
+  background일 뿐 독립 prior가 아니며, 같은 radial 표본을 다시 독립 관측으로 가중하지
+  않는다.
 
 ## 2. 확인된 출발점과 해결해야 할 결함
 
@@ -138,6 +139,15 @@ w와 Vt를 이 식만으로 별개로 식별할 수는 없다. 혼합상·입자
 둘째 경로는 관측 중복을 명확히 처리할 수 있으나 분석기 변경 범위가 커진다.
 상관을 무시한 강한 background 가중과 Vr 가중을 임의로 조합하지 않는다.
 
+합성 기하의 수치 해석도 제한해서 기록한다. `0.412213%`는 수평 성분을 미지 nuisance로
+둘 때와 수평 성분을 알고 고정할 때의 **조건부 연직 정보(제곱 민감도) 비율**이다
+(`I_w,unknown/I_w,known=0.00412213`). 이는 Barnes가 정보의 99.6%를 파괴했다는
+감쇠율이 아니다. 같은 합성 행렬에서 서로 독립인 Vr 오차를 `sigma_Vr=1 m s^-1`로
+두고 Vt를 정확히 고정하면 조건부 연직 표준편차는 `1/sqrt(I_w,unknown)≈238.6 m s^-1`로
+계산된다. 두 수치는 해당 fixture의 가정에만 해당하며 실제 Vr sigma나 실제 Vt 불확실도의
+주장이 아니다. 원 관측을 한 번 넣는 공동 분석도 낮은 고도각·나쁜 rank/condition을
+고치지 않으므로, geometry gate를 통과하지 못한 영역의 W를 식별한다고 표현하지 않는다.
+
 조건부 경로의 단순 선형 예에서 `u_B=L*y`, `P=I-H_h*L`이면 잔차는 `r=P*y`다.
 `L*H_h=I`인 수평 최소제곱 투영에서는 연직 민감도와 오차가 각각 `P*h_z`,
 `P*R*P^T`가 된다. 이 경우 잔차 공분산은 특이할 수 있으므로 남은 부분공간에서
@@ -233,13 +243,45 @@ W 보정의 국지화와 압력/환류의 영향 범위를 구분하고 모든 �
 | R5 초기 충격 | 첫 미세물리 재조정·부력/가열 경향, 음향/내부 중력파 진단 | 사전 기준 충족, 실제 잠열 응답·불안정 대류·냉기류/지형성 파동 보존 |
 | R6 강수 효과 | 1–6시간 RN1/PTY·분석장·레이더 구조 비교 | 동일 시각·영역·임계값 비교; 개선/악화와 사례 한계 별도 판정 |
 
+R2 산출물은 다음 다섯 범주를 한 결과나 한 PASS로 합치지 않고 각각 `PENDING`으로
+기록한다.
+
+| R2 산출물 범주 | 별도 기록할 내용 | 현재 상태 |
+|---|---|---|
+| 독립 제어변수 | 실제 최소화 제어변수(예: R2에서 선택한 U/V/W 증분), 개수·저장 위치·stagger | PENDING |
+| 진단변수 | 종속적으로 계산한 W/omega/WW/Phi·pressure와 변환·provenance | PENDING |
+| 고정 입력 | 선택한 terrain·time·boundary·geometry·basis 등 고정 입력(무조건 U/V 고정은 아님) | PENDING |
+| 제약식 | mass/EOS/thermo 관계와 support·경계·rank·feasibility·rollback | PENDING |
+| native checks | source 식·units·stagger와 최종 array의 mass/EOS/thermo/metric 잔차·readback 검사; native 폐쇄식은 별도 미확정 | PENDING |
+
+R2에서 폐합해야 할 항목은 `n_unknown`과 자유도 목록, 실제 mass/EOS/thermo 제약식과
+허용오차, 지형/상·하단/측면 경계, rank·호환성·실현 가능성이다. 질량 경향의 선택도 `PENDING`으로 두고
+`data`/`fixed_quasisteady`/`bounded_estimation` 중 하나를 근거와 함께 고정한다.
+자료나 경계로 정해지지 않은 경향을 사후에 `mdot=-DF`로 만들어 잔차를 없애지 않으며,
+건조질량 식은 `d rho_d/dt + div(rho_d V)`의 full `rho_d V`를 유지한다. 이산 증분에도
+`delta(rho_d V)=rho_d,b*delta V+V_b*delta rho_d+delta rho_d*delta V`를 포함한다.
+이 목록과
+native source 대조가 끝나기 전에는 닫힌 native formulation을 발명하지 않는다.
+
 R0→R1→R2→R3→R4→R5→R6 순서다. 자료 조사와 방정식 검토는 병렬 진행할 수 있으나
 R2 미확정 후보를 native 초기장으로 게시하지 않는다. 현재 R0/R2 검토와 기존 native
 진단 준비가 진행 중이며 R3 이후의 추가 과제 완료 증거는 없다.
 
+R3에 들어가기 전에 관측 경로를 하나로 고정한다. 실제 Barnes 선형화·background와
+Vr의 교차공분산을 재현할 수 있으면 조건부 경로를 선택하고, 그렇지 않으면 원시 Vr를
+공동 3성분 목적함수에 **한 번만** 넣는다. 두 경우 모두 공동 분석이 나쁜 기하를
+보정한다고 가정하지 않으며, 외부 모델 또는 `omega_target`/`wtarget`은 필요조건으로
+추가하지 않는다.
+
 native 시작 설정은 실제 pinned host의 `use_input_w` 위치·기본값·표면/경계 처리와
 결속한다. 현재 준비본은 `&dynamics use_input_w=.true.`를 사용하지만 설정만으로
-전달 성공을 선언하지 않는다. **첫 시간전진 전 readback**을 필수 산출물로 남긴다.
+전달 성공을 선언하지 않는다. **첫 시간전진 전 t0 readback**을 필수 산출물로 남긴다.
+readback은 `x_b→initialized t0` 전체 증분과 `immediately before first MP→immediately
+after first MP` 증분을 분리해 수집한다. 전자의 전체 증분 안에서도 실제 phase operator
+ledger의 종별 `Δr_phase`·`ΔT_phase`를 analysis/remap/기타 증분과 분리하고, 후자에는
+종별 `Δr_extra_MP`·`ΔT_extra_MP`를 기록한다. 각 snapshot에 동일 cell·단위·별도 시간
+태그와 사이의 연산을 붙인다. 각 짝진 상태의 buoyancy·pressure·vertical acceleration도
+같은 snapshot 단위로 기록하며 두 증분을 한 차이로 합치지 않는다.
 
 ## 7. 실험 구성과 수치·물리 검증
 
@@ -296,6 +338,13 @@ R2에서 후보 결과를 보기 전에 고정한다. 아직 근거가 없는 �
 필요한 수렴성 확인에 한정하며, 현재 단일 영역에 쓰이지 않는 중첩 격자나 범용 감사
 프레임워크를 새 필수 구현으로 추가하지 않는다.
 
+시험 증거의 종류는 구분해서 기록한다. `DISCRETE_EXACT_SOLVER`/`INDEPENDENT_SPARSE`는
+고정된 이산 행렬·희소 reference의 exact 또는 독립 대수 검증이고, 연속해의 수렴을
+뜻하지 않는다. `CONTINUOUS_MMS_GRID_CONVERGENCE`는 제조해와 격자 세분화에 대한
+연속 문제 수렴이며 실제 레이더 기하를 검증하지 않는다. `REAL_GRID_SINE_EXECUTION`은
+실제 격자에서 sine 입력을 소비하는 실행·경로 검사이며 과학적 관측 가능성이나
+solver 폐합의 증거가 아니다. 어느 시험도 다른 종류의 PASS를 대신하지 않는다.
+
 ## 8. 구현·검토·기록 관리
 
 최대 네 역할로 병렬 검토한다: (1) 레이더 자료/관측 기하, (2) 역문제·균형 방정식,
@@ -313,11 +362,11 @@ R2에서 후보 결과를 보기 전에 고정한다. 아직 근거가 없는 �
 
 ## 9. 연결 문서와 문헌
 
-- CP02 전체 계획 (로컬 작업공간 근거: `CLOUD_BAL_FINAL_GOALS_CHECKPOINTS_20260907.md`)
-- 기존 모델 비교 실험과 내부 진단 범위 (로컬 작업공간 근거: `CP02_MODEL_DYNAMICS_INCREMENT_EXPERIMENT_20260914.md`)
-- 레이더 구조 검토 (로컬 작업공간 근거: `CP02_RADAR_STRUCTURE_REVIEW_20260914.md`)
-- 6시간 강수 검증 (로컬 작업공간 근거: `CP02_SIX_HOUR_PRECIPITATION_VERIFICATION_20260914.md`)
-- 실제 레이더 입력 코드 (로컬 작업공간 근거: `../src/upstream/wind_openmp/main_sub.f`)
+- [CP02 전체 계획](CLOUD_BAL_FINAL_GOALS_CHECKPOINTS_20260907.md)
+- [기존 모델 비교 실험과 내부 진단 범위](CP02_MODEL_DYNAMICS_INCREMENT_EXPERIMENT_20260914.md)
+- [레이더 구조 검토](CP02_RADAR_STRUCTURE_REVIEW_20260914.md)
+- [6시간 강수 검증](CP02_SIX_HOUR_PRECIPITATION_VERIFICATION_20260914.md)
+- [실제 레이더 입력 코드](../src/upstream/wind_openmp/main_sub.f)
 - [Oue et al. (2019)](https://amt.copernicus.org/articles/12/1999/2019/):
   다중 Doppler 연직풍 복원에서 고도각 밀도와 체적 관측 소요시간의 중요성을 확인한
   연구다. 그 논문의 스캔 시간 수치를 이 프로젝트의 허용값으로 그대로 채택하지 않는다.

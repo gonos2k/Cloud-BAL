@@ -101,6 +101,10 @@ CONTAINS
     state%omega_target%quality(i,j,k)=0_int32
     state%omega_target%source(i,j,k)=IOR(SOURCE_ANALYZED_WIND, &
                                         SOURCE_DYNAMIC_TARGET)
+    state%omega_target_sigma%value(i,j,k)=0.5_real32
+    state%omega_target_sigma%valid(i,j,k)=.TRUE.
+    state%omega_target_sigma%quality(i,j,k)=0_int32
+    state%omega_target_sigma%source(i,j,k)=SOURCE_ANALYZED_WIND
   END SUBROUTINE authorize_target
 
   SUBROUTINE permissive_config(cfg)

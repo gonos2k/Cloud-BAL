@@ -8,7 +8,7 @@ MODULE cloud_bal_state
   IMPLICIT NONE
   PRIVATE
 
-  INTEGER, PARAMETER, PUBLIC :: CLOUD_BAL_SCHEMA_VERSION = 3
+  INTEGER, PARAMETER, PUBLIC :: CLOUD_BAL_SCHEMA_VERSION = 5
   ! Canonical statuses deliberately do not overlap the legacy KLAPS 0/1 ABI.
   INTEGER, PARAMETER, PUBLIC :: STATUS_FAILED = -10
   INTEGER, PARAMETER, PUBLIC :: STATUS_DEGRADED = 10
@@ -104,6 +104,7 @@ MODULE cloud_bal_state
   REAL(real64), PARAMETER, PUBLIC :: MAX_PRESSURE_PA = 120000.0_real64
 
   REAL(real64), PARAMETER :: RD_AIR = 287.05_real64
+  REAL(real64), PARAMETER :: EPSILON_WATER = 0.622_real64
   REAL(real64), PARAMETER :: GRAVITY = 9.80665_real64
 
   TYPE, PUBLIC :: field3d
@@ -185,17 +186,22 @@ MODULE cloud_bal_state
     INTEGER :: schema_version = CLOUD_BAL_SCHEMA_VERSION
     TYPE(grid_spec) :: grid
     TYPE(field3d) :: pressure, temperature, vapor, u, v, omega, omega_target
+    TYPE(field3d) :: omega_target_sigma
     TYPE(field3d) :: geopotential
     TYPE(field3d) :: cloud_fraction, radar_reflectivity
     TYPE(integer_field3d) :: cloud_type, precipitation_phase, lightning_support
     TYPE(field3d) :: cloud_water, cloud_ice, rain, snow, graupel
     TYPE(field3d) :: vt_z_mean, vt_z_sigma
-    TYPE(field2d) :: surface_pressure, surface_temperature, latitude
+    TYPE(field2d) :: surface_pressure, surface_temperature, surface_vapor, surface_height, latitude
     TYPE(field2d) :: omega_top_boundary, omega_bottom_boundary
     LOGICAL, ALLOCATABLE :: above_ground(:,:,:)
     INTEGER(int32), ALLOCATABLE :: obs_support(:,:,:)
     INTEGER(int32), ALLOCATABLE :: hydro_support(:,:,:)
     REAL(real32), ALLOCATABLE :: balance_beta(:,:,:)
+    ! Native paired-model coverage is separate from omega_target validity:
+    ! true cells may include the model's closed halo, while target validity
+    ! marks only cells carrying an absolute model target.
+    LOGICAL, ALLOCATABLE :: model_target_coverage(:,:,:)
     TYPE(radar_los_observation_set) :: radar_los
   END TYPE cloud_bal_state_type
 
@@ -236,6 +242,7 @@ MODULE cloud_bal_state
     REAL(real64) :: flux_observation_blocked = 0.0_real64
     REAL(real64) :: flux_no_echo_blocked = 0.0_real64
     REAL(real64) :: flux_microphysical_loss = 0.0_real64
+    ! Legacy condensate-only diagnostic; not the six-species water increment.
     REAL(real64) :: radar_analysis_increment = 0.0_real64
     REAL(real64) :: enthalpy_error = 0.0_real64
     REAL(real64) :: rotational_rms = 0.0_real64
@@ -275,11 +282,20 @@ MODULE cloud_bal_state
   PUBLIC :: reject_candidate
   PUBLIC :: omega_to_w
   PUBLIC :: w_to_omega
+  PUBLIC :: dry_air_density
+  PUBLIC :: moist_gas_density
   PUBLIC :: field_coverage
   PUBLIC :: pipeline_mode_valid
   PUBLIC :: cell_is_usable
+  PUBLIC :: field3d_shape_metadata_ok,field2d_shape_metadata_ok
   PUBLIC :: dynamic_target_has_authority
   PUBLIC :: dynamic_target_is_resolved
+    PUBLIC :: model_dynamic_target_has_authority
+  PUBLIC :: model_dynamic_target_is_resolved
+  PUBLIC :: model_target_level_is_interior
+  PUBLIC :: model_target_coverage_contract_valid
+  PUBLIC :: omega_target_sigma_contract_valid,observational_target_is_resolved
+  PUBLIC :: observational_target_has_authority
   PUBLIC :: manufactured_target_has_test_authority
   PUBLIC :: manufactured_target_is_resolved
   PUBLIC :: source_bits_known
@@ -288,6 +304,7 @@ MODULE cloud_bal_state
   PUBLIC :: radar_no_echo_cell
   PUBLIC :: radar_missing_cell
   PUBLIC :: refresh_dry_air_mass_measure
+  PUBLIC :: represented_water_species
   PUBLIC :: configure_pressure_geometry
   PUBLIC :: pressure_geometry_is_valid
   PUBLIC :: stage_is_ok
@@ -394,6 +411,7 @@ CONTAINS
     CALL initialize_field(state%v,nx,ny,nz,valid_time,'m s-1')
     CALL initialize_field(state%omega,nx,ny,nz,valid_time,'Pa s-1')
     CALL initialize_field(state%omega_target,nx,ny,nz,valid_time,'Pa s-1')
+    CALL initialize_field(state%omega_target_sigma,nx,ny,nz,valid_time,'Pa s-1')
     CALL initialize_field(state%geopotential,nx,ny,nz,valid_time,'m2 s-2')
     CALL initialize_field(state%cloud_fraction,nx,ny,nz,valid_time,'1')
     CALL initialize_field(state%radar_reflectivity,nx,ny,nz,valid_time,'dBZ')
@@ -412,15 +430,18 @@ CONTAINS
     CALL initialize_field(state%vt_z_sigma,nx,ny,nz,valid_time,'m s-1')
     CALL initialize_field(state%surface_pressure,nx,ny,valid_time,'Pa')
     CALL initialize_field(state%surface_temperature,nx,ny,valid_time,'K')
+    CALL initialize_field(state%surface_vapor,nx,ny,valid_time,'kg kg-1 dryair')
+    CALL initialize_field(state%surface_height,nx,ny,valid_time,'m')
     CALL initialize_field(state%latitude,nx,ny,valid_time,'degree_north')
     CALL initialize_field(state%omega_top_boundary,nx,ny,valid_time,'Pa s-1')
     CALL initialize_field(state%omega_bottom_boundary,nx,ny,valid_time,'Pa s-1')
     ALLOCATE(state%above_ground(nx,ny,nz),state%obs_support(nx,ny,nz), &
              state%hydro_support(nx,ny,nz), &
-             state%balance_beta(nx,ny,nz))
+             state%balance_beta(nx,ny,nz),state%model_target_coverage(nx,ny,nz))
     state%above_ground=.TRUE.
     state%obs_support=0_int32; state%hydro_support=0_int32
     state%balance_beta=0.0_real32
+    state%model_target_coverage=.FALSE.
     status=STATUS_OK
   END SUBROUTINE initialize_cloud_bal_state
 
@@ -522,6 +543,10 @@ CONTAINS
       status=STATUS_FAILED; reason=REASON_RANGE; RETURN
     END IF
 
+    IF (.NOT.omega_target_sigma_contract_valid(state)) THEN
+      status=STATUS_FAILED; reason=REASON_METADATA; RETURN
+    END IF
+
     IF (surface_required) THEN
       CALL require_surface_field(state%surface_pressure,nx,ny,valid_time,'Pa', &
                                  REAL(MIN_PRESSURE_PA,real32), &
@@ -531,6 +556,14 @@ CONTAINS
                                  150.0_real32,350.0_real32,field_status,reason)
       CALL merge_status(status,field_status); IF (field_status==STATUS_FAILED) RETURN
     END IF
+    CALL validate_optional_surface_field(state%surface_vapor,nx,ny,valid_time, &
+                                         'kg kg-1 dryair',0.0_real32,0.1_real32, &
+                                         field_status,reason)
+    CALL merge_status(status,field_status); IF (field_status==STATUS_FAILED) RETURN
+    CALL validate_optional_surface_field(state%surface_height,nx,ny,valid_time, &
+                                         'm',-500.0_real32,9000.0_real32, &
+                                         field_status,reason)
+    CALL merge_status(status,field_status); IF (field_status==STATUS_FAILED) RETURN
     IF (.NOT.canonical_vertical_order_valid(state%pressure)) THEN
       status=STATUS_FAILED; reason=REASON_RANGE; RETURN
     END IF
@@ -542,6 +575,9 @@ CONTAINS
         ANY(state%balance_beta < 0.0_real32) .OR. &
         ANY(state%balance_beta > 1.0_real32)) THEN
       status=STATUS_FAILED; reason=REASON_RANGE; RETURN
+    END IF
+    IF (.NOT.model_target_coverage_contract_valid(state)) THEN
+      status=STATUS_FAILED; reason=REASON_METADATA; RETURN
     END IF
 
     IF (require_cloud) THEN
@@ -720,6 +756,30 @@ CONTAINS
                                  MAX(0,state_in%grid%nz),status,reason)
   END SUBROUTINE reject_candidate
 
+  PURE REAL(real64) FUNCTION dry_air_density(pressure,temperature,vapor)
+    REAL(real64), INTENT(IN) :: pressure,temperature,vapor
+    ! Canonical ideal-gas EOS: vapor is kg vapor / kg dry air, not specific humidity.
+    ! Condensate contributes neither gas pressure nor dry-air density.
+    dry_air_density=-1.0_real64
+    IF (.NOT.ieee_is_finite(pressure) .OR. .NOT.ieee_is_finite(temperature) .OR. &
+        .NOT.ieee_is_finite(vapor)) RETURN
+    IF (pressure<MIN_PRESSURE_PA .OR. pressure>MAX_PRESSURE_PA .OR. &
+        temperature<150.0_real64 .OR. temperature>350.0_real64 .OR. &
+        vapor<0.0_real64 .OR. vapor>REAL(0.2_real32,real64)) RETURN
+    dry_air_density=pressure/(RD_AIR*temperature*(1.0_real64+vapor/EPSILON_WATER))
+  END FUNCTION dry_air_density
+
+  PURE REAL(real64) FUNCTION moist_gas_density(pressure,temperature,vapor)
+    REAL(real64), INTENT(IN) :: pressure,temperature,vapor
+    REAL(real64) :: dry_density
+    moist_gas_density=-1.0_real64
+    dry_density=dry_air_density(pressure,temperature,vapor)
+    IF (dry_density<=0.0_real64) RETURN
+    moist_gas_density=dry_density*(1.0_real64+vapor)
+  END FUNCTION moist_gas_density
+
+  ! These conversions retain the gas-only hydrostatic approximation. Pressure
+  ! tendency/advection and condensate loading are not supplied by this API.
   SUBROUTINE omega_to_w(omega,pressure,temperature,vapor,valid,w,w_valid,status)
     REAL(real32), INTENT(IN) :: omega(:,:,:),pressure(:,:,:),temperature(:,:,:), &
                                 vapor(:,:,:)
@@ -728,7 +788,7 @@ CONTAINS
     LOGICAL, INTENT(OUT) :: w_valid(:,:,:)
     INTEGER, INTENT(OUT) :: status
     INTEGER :: i,j,k
-    REAL(real64) :: tv,rho
+    REAL(real64) :: rho
 
     w=0.0_real32; w_valid=.FALSE.; status=STATUS_FAILED
     IF (.NOT. same_shape_3d(omega,pressure,temperature,vapor,valid,w,w_valid)) RETURN
@@ -740,8 +800,9 @@ CONTAINS
           REAL(pressure(i,j,k),real64)>MAX_PRESSURE_PA .OR. &
           .NOT.ieee_is_finite(temperature(i,j,k)) .OR. temperature(i,j,k)<=0.0_real32 .OR. &
           .NOT.ieee_is_finite(vapor(i,j,k)) .OR. vapor(i,j,k)<0.0_real32) RETURN
-      tv=REAL(temperature(i,j,k),real64)*(1.0_real64+0.61_real64*REAL(vapor(i,j,k),real64))
-      rho=REAL(pressure(i,j,k),real64)/(RD_AIR*tv)
+      rho=moist_gas_density(REAL(pressure(i,j,k),real64), &
+        REAL(temperature(i,j,k),real64),REAL(vapor(i,j,k),real64))
+      IF (rho<=0.0_real64) RETURN
       w(i,j,k)=REAL(-REAL(omega(i,j,k),real64)/(rho*GRAVITY),real32)
       IF (.NOT.ieee_is_finite(w(i,j,k))) RETURN
       w_valid(i,j,k)=.TRUE.
@@ -757,7 +818,7 @@ CONTAINS
     LOGICAL, INTENT(OUT) :: omega_valid(:,:,:)
     INTEGER, INTENT(OUT) :: status
     INTEGER :: i,j,k
-    REAL(real64) :: tv,rho
+    REAL(real64) :: rho
 
     omega=0.0_real32; omega_valid=.FALSE.; status=STATUS_FAILED
     IF (.NOT. same_shape_3d(w,pressure,temperature,vapor,valid,omega,omega_valid)) RETURN
@@ -769,8 +830,9 @@ CONTAINS
           REAL(pressure(i,j,k),real64)>MAX_PRESSURE_PA .OR. &
           .NOT.ieee_is_finite(temperature(i,j,k)) .OR. temperature(i,j,k)<=0.0_real32 .OR. &
           .NOT.ieee_is_finite(vapor(i,j,k)) .OR. vapor(i,j,k)<0.0_real32) RETURN
-      tv=REAL(temperature(i,j,k),real64)*(1.0_real64+0.61_real64*REAL(vapor(i,j,k),real64))
-      rho=REAL(pressure(i,j,k),real64)/(RD_AIR*tv)
+      rho=moist_gas_density(REAL(pressure(i,j,k),real64), &
+        REAL(temperature(i,j,k),real64),REAL(vapor(i,j,k),real64))
+      IF (rho<=0.0_real64) RETURN
       omega(i,j,k)=REAL(-rho*GRAVITY*REAL(w(i,j,k),real64),real32)
       IF (.NOT.ieee_is_finite(omega(i,j,k))) RETURN
       omega_valid(i,j,k)=.TRUE.
@@ -848,6 +910,77 @@ CONTAINS
       value==0.0_real32
   END FUNCTION radar_missing_cell
 
+  PURE LOGICAL FUNCTION omega_target_sigma_contract_valid(state) RESULT(ok)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER :: nx,ny,nz,i,j,k
+    REAL(real32) :: sigma
+    ok=.FALSE.
+    nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
+    IF (.NOT.ALLOCATED(state%above_ground)) RETURN
+    IF (ANY(SHAPE(state%above_ground)/=[nx,ny,nz])) RETURN
+    IF (.NOT.field3d_shape_metadata_ok(state%omega_target_sigma,nx,ny,nz, &
+      state%pressure%valid_time,'Pa s-1')) RETURN
+    IF (ANY(state%omega_target_sigma%quality<0_int32) .OR. &
+        ANY(IAND(state%omega_target_sigma%quality,NOT(QUALITY_KNOWN_BITS))/=0_int32) .OR. &
+        ANY(state%omega_target_sigma%source<0_int32) .OR. &
+        ANY(IAND(state%omega_target_sigma%source,NOT(SOURCE_KNOWN_BITS))/=0_int32)) RETURN
+    IF (ANY(state%omega_target_sigma%valid .AND. .NOT.state%above_ground)) RETURN
+    IF (ANY(state%omega_target_sigma%valid .AND. .NOT.cell_is_usable( &
+      state%omega_target_sigma%valid,state%omega_target_sigma%quality, &
+      state%omega_target_sigma%source))) RETURN
+    ! Check selected values without a domain-sized PACK temporary. Invalid
+    ! payloads remain opaque, including retained NaNs.
+    DO k=1,nz; DO j=1,ny; DO i=1,nx
+      IF (.NOT.state%omega_target_sigma%valid(i,j,k)) CYCLE
+      sigma=state%omega_target_sigma%value(i,j,k)
+      IF (.NOT.ieee_is_finite(sigma)) RETURN
+      IF (sigma<=0.0_real32) RETURN
+    END DO; END DO; END DO
+    ok=.TRUE.
+  END FUNCTION omega_target_sigma_contract_valid
+
+  PURE FUNCTION observational_target_has_authority(state) RESULT(resolved)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    LOGICAL, ALLOCATABLE :: resolved(:,:,:)
+    INTEGER :: i,j,k
+    INTEGER(int32) :: source
+    ALLOCATE(resolved(state%grid%nx,state%grid%ny,state%grid%nz))
+    resolved=.FALSE.
+    IF (.NOT.omega_target_sigma_contract_valid(state)) RETURN
+    IF (.NOT.field3d_shape_metadata_ok(state%omega_target,state%grid%nx,state%grid%ny, &
+      state%grid%nz,state%pressure%valid_time,'Pa s-1')) RETURN
+    DO k=1,state%grid%nz; DO j=1,state%grid%ny; DO i=1,state%grid%nx
+      IF (.NOT.state%above_ground(i,j,k)) CYCLE
+      IF (.NOT.state%omega_target_sigma%valid(i,j,k)) CYCLE
+      source=state%omega_target_sigma%source(i,j,k)
+      IF (IAND(source,SOURCE_MANUFACTURED_TEST)/=0_int32) CYCLE
+      IF (IAND(state%omega_target_sigma%quality(i,j,k),QUALITY_DYNAMIC_TARGET_EXCLUDED_BITS)/=0_int32) CYCLE
+      IF (IAND(IAND(source,state%omega_target%source(i,j,k)),SOURCE_DYNAMIC_EVIDENCE_BITS)==0_int32) CYCLE
+      IF (.NOT.dynamic_target_has_authority(state%omega_target%valid(i,j,k), &
+        state%omega_target%quality(i,j,k),state%omega_target%source(i,j,k))) CYCLE
+      resolved(i,j,k)=ieee_is_finite(state%omega_target%value(i,j,k))
+    END DO; END DO; END DO
+  END FUNCTION observational_target_has_authority
+
+  PURE FUNCTION observational_target_is_resolved(state) RESULT(resolved)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    LOGICAL, ALLOCATABLE :: resolved(:,:,:)
+    INTEGER :: i,j,k
+    ALLOCATE(resolved(state%grid%nx,state%grid%ny,state%grid%nz))
+    resolved=.FALSE.
+    IF (.NOT.field3d_shape_metadata_ok(state%omega,state%grid%nx,state%grid%ny, &
+      state%grid%nz,state%pressure%valid_time,'Pa s-1')) RETURN
+    resolved=observational_target_has_authority(state)
+    DO k=1,state%grid%nz; DO j=1,state%grid%ny; DO i=1,state%grid%nx
+      IF (.NOT.resolved(i,j,k)) CYCLE
+      resolved(i,j,k)=.FALSE.
+      IF (.NOT.ieee_is_finite(state%omega%value(i,j,k))) CYCLE
+      resolved(i,j,k)=dynamic_target_is_resolved(state%omega_target%value(i,j,k), &
+        state%omega%value(i,j,k),state%omega_target%valid(i,j,k), &
+        state%omega_target%quality(i,j,k),state%omega_target%source(i,j,k))
+    END DO; END DO; END DO
+  END FUNCTION observational_target_is_resolved
+
   PURE ELEMENTAL LOGICAL FUNCTION dynamic_target_has_authority(valid,quality,source)
     LOGICAL, INTENT(IN) :: valid
     INTEGER(int32), INTENT(IN) :: quality,source
@@ -868,6 +1001,62 @@ CONTAINS
       ABS(target-background)>16.0_real32*EPSILON(1.0_real32)* &
         MAX(1.0_real32,ABS(background))
   END FUNCTION dynamic_target_is_resolved
+
+  PURE ELEMENTAL LOGICAL FUNCTION model_dynamic_target_has_authority( &
+      valid,quality,source)
+    LOGICAL, INTENT(IN) :: valid
+    INTEGER(int32), INTENT(IN) :: quality,source
+    INTEGER(int32), PARAMETER :: required_source=IOR( &
+      SOURCE_BACKGROUND_MODEL,SOURCE_DYNAMIC_TARGET)
+    ! A model target is a paired-model product carried by the existing source
+    ! bits.  Requiring the exact pair prevents observations, diagnostics, or
+    ! manufactured fixtures from silently becoming model authority.
+    model_dynamic_target_has_authority=cell_is_usable(valid,quality,source) .AND. &
+      source==required_source .AND. &
+      IAND(quality,QUALITY_DYNAMIC_TARGET_EXCLUDED_BITS)==0_int32
+  END FUNCTION model_dynamic_target_has_authority
+
+  PURE ELEMENTAL LOGICAL FUNCTION model_dynamic_target_is_resolved( &
+      target,valid,quality,source)
+    REAL(real32), INTENT(IN) :: target
+    LOGICAL, INTENT(IN) :: valid
+    INTEGER(int32), INTENT(IN) :: quality,source
+    ! Zero is a resolved model target.  The model supplies an absolute target,
+    ! so resolution is finite payload plus validated provenance, without a
+    ! sigma or nonzero-innovation criterion.
+    model_dynamic_target_is_resolved= &
+      model_dynamic_target_has_authority(valid,quality,source) .AND. &
+      ieee_is_finite(target)
+  END FUNCTION model_dynamic_target_is_resolved
+
+  PURE LOGICAL FUNCTION model_target_level_is_interior(state,i,j,k)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: i,j,k
+    INTEGER :: kk,nusable,rank
+    model_target_level_is_interior=.FALSE.
+    ! Callers validate the full coverage array once. Keep this per-cell helper
+    ! local so a million-cell operator build does not rescan the domain.
+    IF (.NOT.ALLOCATED(state%above_ground) .OR. &
+        .NOT.ALLOCATED(state%model_target_coverage)) RETURN
+    IF (i<1 .OR. i>state%grid%nx .OR. j<1 .OR. j>state%grid%ny .OR. &
+        k<1 .OR. k>state%grid%nz) RETURN
+    nusable=0; rank=0
+    DO kk=1,state%grid%nz
+      IF (.NOT.state%above_ground(i,j,kk) .OR. &
+          .NOT.state%model_target_coverage(i,j,kk) .OR. &
+          .NOT.cell_is_usable(state%pressure%valid(i,j,kk), &
+            state%pressure%quality(i,j,kk),state%pressure%source(i,j,kk)) .OR. &
+          .NOT.cell_is_usable(state%u%valid(i,j,kk),state%u%quality(i,j,kk), &
+            state%u%source(i,j,kk)) .OR. &
+          .NOT.cell_is_usable(state%v%valid(i,j,kk),state%v%quality(i,j,kk), &
+            state%v%source(i,j,kk)) .OR. &
+          .NOT.cell_is_usable(state%omega%valid(i,j,kk), &
+            state%omega%quality(i,j,kk),state%omega%source(i,j,kk))) CYCLE
+      nusable=nusable+1
+      IF (kk==k) rank=nusable
+    END DO
+    model_target_level_is_interior=rank>=3 .AND. rank<=nusable-2
+  END FUNCTION model_target_level_is_interior
 
   PURE ELEMENTAL LOGICAL FUNCTION manufactured_target_has_test_authority( &
       valid,quality,source)
@@ -931,8 +1120,8 @@ CONTAINS
         .NOT.ALL(cell_is_usable(state%surface_pressure%valid, &
         state%surface_pressure%quality,state%surface_pressure%source))) RETURN
     IF (ANY(.NOT.ieee_is_finite(state%grid%dx)) .OR. &
-        ANY(.NOT.ieee_is_finite(state%grid%dy)) .OR. &
-        ANY(state%grid%dx<=0.0_real64) .OR. ANY(state%grid%dy<=0.0_real64)) RETURN
+        ANY(.NOT.ieee_is_finite(state%grid%dy))) RETURN
+    IF (ANY(state%grid%dx<=0.0_real64) .OR. ANY(state%grid%dy<=0.0_real64)) RETURN
     ALLOCATE(domain_work(nx,ny,nz),interface_work(nx,ny,nz+1), &
       cell_dp_work(nx,ny,nz),spacing_work(nx,ny,nz-1),mass_work(nx,ny,nz), &
       STAT=allocation_status)
@@ -943,10 +1132,12 @@ CONTAINS
     DO j=1,ny; DO i=1,nx
       center=REAL(state%pressure%value(i,j,:),real64)
       surface_pressure=REAL(state%surface_pressure%value(i,j),real64)
+      ! Fortran does not guarantee short-circuit evaluation of .OR.; reject
+      ! nonfinite inputs before ordered comparisons under the pinned -fpe0.
       IF (.NOT.ieee_is_finite(surface_pressure) .OR. &
-          surface_pressure<MIN_PRESSURE_PA .OR. surface_pressure>MAX_PRESSURE_PA .OR. &
-          ANY(.NOT.ieee_is_finite(center)) .OR. ANY(center<MIN_PRESSURE_PA) .OR. &
-          ANY(center>MAX_PRESSURE_PA)) RETURN
+          ANY(.NOT.ieee_is_finite(center))) RETURN
+      IF (surface_pressure<MIN_PRESSURE_PA .OR. surface_pressure>MAX_PRESSURE_PA .OR. &
+          ANY(center<MIN_PRESSURE_PA) .OR. ANY(center>MAX_PRESSURE_PA)) RETURN
       DO k=1,nz-1
         spacing_work(i,j,k)=center(k)-center(k+1)
         IF (spacing_work(i,j,k)<=0.0_real64) RETURN
@@ -1041,7 +1232,7 @@ CONTAINS
     REAL(real32), INTENT(IN) :: lower,upper
     INTEGER, INTENT(OUT) :: status,reason
     LOGICAL, INTENT(IN), OPTIONAL :: domain(:,:,:)
-    INTEGER :: required_count,usable_count
+    INTEGER :: required_count,usable_count,i,j,k
 
     status=STATUS_FAILED; reason=REASON_SHAPE
     IF (.NOT.field3d_shape_metadata_ok(field,nx,ny,nz,valid_time,unit)) RETURN
@@ -1058,9 +1249,12 @@ CONTAINS
     IF (ANY(field%valid .AND. .NOT.ieee_is_finite(field%value))) THEN
       reason=REASON_NONFINITE; RETURN
     END IF
-    IF (ANY(field%valid .AND. (field%value<lower .OR. field%value>upper))) THEN
-      reason=REASON_RANGE; RETURN
-    END IF
+    DO k=1,nz; DO j=1,ny; DO i=1,nx
+      IF (.NOT.field%valid(i,j,k)) CYCLE
+      IF (field%value(i,j,k)<lower .OR. field%value(i,j,k)>upper) THEN
+        reason=REASON_RANGE; RETURN
+      END IF
+    END DO; END DO; END DO
     IF (PRESENT(domain)) THEN
       IF (ANY(SHAPE(domain)/=(/nx,ny,nz/))) RETURN
       required_count=COUNT(domain)
@@ -1116,6 +1310,44 @@ CONTAINS
     END IF
   END SUBROUTINE require_surface_field
 
+  SUBROUTINE validate_optional_surface_field(field,nx,ny,valid_time,unit,lower,upper, &
+                                             status,reason)
+    TYPE(field2d), INTENT(IN) :: field
+    INTEGER, INTENT(IN) :: nx,ny
+    INTEGER(int64), INTENT(IN) :: valid_time
+    CHARACTER(LEN=*), INTENT(IN) :: unit
+    REAL(real32), INTENT(IN) :: lower,upper
+    INTEGER, INTENT(OUT) :: status,reason
+    INTEGER :: i,j
+
+    ! Coverage is optional for legacy inputs, but allocated storage must have
+    ! the canonical shape and metadata.
+    status=STATUS_FAILED; reason=REASON_SHAPE
+    IF (.NOT.field2d_shape_metadata_ok(field,nx,ny,valid_time,unit)) THEN
+      RETURN
+    END IF
+    status=STATUS_OK; reason=REASON_NONE
+    IF (ANY(.NOT.source_bits_known(field%source)) .OR. &
+        ANY(.NOT.quality_bits_known(field%quality))) THEN
+      status=STATUS_FAILED; reason=REASON_METADATA; RETURN
+    END IF
+    ! Inspect payload values only for valid cells so retained invalid NaNs are
+    ! opaque and cannot trigger floating-point exceptions on the legacy path.
+    DO j=1,ny; DO i=1,nx
+      IF (.NOT.field%valid(i,j)) CYCLE
+      IF (.NOT.cell_is_usable(field%valid(i,j),field%quality(i,j), &
+                              field%source(i,j))) THEN
+        status=STATUS_FAILED; reason=REASON_METADATA; RETURN
+      END IF
+      IF (.NOT.ieee_is_finite(field%value(i,j))) THEN
+        status=STATUS_FAILED; reason=REASON_NONFINITE; RETURN
+      END IF
+      IF (field%value(i,j)<lower .OR. field%value(i,j)>upper) THEN
+        status=STATUS_FAILED; reason=REASON_RANGE; RETURN
+      END IF
+    END DO; END DO
+  END SUBROUTINE validate_optional_surface_field
+
   SUBROUTINE require_integer_field(field,nx,ny,nz,valid_time,code_table,status,reason, &
                                    domain)
     TYPE(integer_field3d), INTENT(IN) :: field
@@ -1168,16 +1400,21 @@ CONTAINS
         ANY(SHAPE(grid%level_spacing_dp)/=(/grid%nx,grid%ny,grid%nz-1/)) .OR. &
         ANY(SHAPE(grid%pressure_mass_measure)/=(/grid%nx,grid%ny,grid%nz/)) .OR. &
         ANY(SHAPE(grid%dry_air_mass_measure)/=(/grid%nx,grid%ny,grid%nz/))) RETURN
-    IF (ANY(.NOT.ieee_is_finite(grid%dx)) .OR. ANY(grid%dx<=0.0_real64) .OR. &
-        ANY(.NOT.ieee_is_finite(grid%dy)) .OR. ANY(grid%dy<=0.0_real64) .OR. &
+    ! Fortran does not guarantee short-circuit evaluation of .OR.; keep all
+    ! finite checks separate from ordered comparisons so NaN input is a
+    ! normal validation failure under the pinned -fpe0 contract.
+    IF (ANY(.NOT.ieee_is_finite(grid%dx)) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%dy)) .OR. &
         ANY(.NOT.ieee_is_finite(grid%pressure_interface)) .OR. &
-        ANY(grid%pressure_interface<=0.0_real64) .OR. &
-        ANY(.NOT.ieee_is_finite(grid%cell_dp)) .OR. ANY(grid%cell_dp<0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%cell_dp)) .OR. &
         ANY(.NOT.ieee_is_finite(grid%level_spacing_dp)) .OR. &
-        ANY(grid%level_spacing_dp<=0.0_real64) .OR. &
         ANY(.NOT.ieee_is_finite(grid%pressure_mass_measure)) .OR. &
+        ANY(.NOT.ieee_is_finite(grid%dry_air_mass_measure))) RETURN
+    IF (ANY(grid%dx<=0.0_real64) .OR. ANY(grid%dy<=0.0_real64) .OR. &
+        ANY(grid%pressure_interface<=0.0_real64) .OR. &
+        ANY(grid%cell_dp<0.0_real64) .OR. &
+        ANY(grid%level_spacing_dp<=0.0_real64) .OR. &
         ANY(grid%pressure_mass_measure<0.0_real64) .OR. &
-        ANY(.NOT.ieee_is_finite(grid%dry_air_mass_measure)) .OR. &
         ANY(grid%dry_air_mass_measure<0.0_real64)) RETURN
     ALLOCATE(expected_mass(grid%nx,grid%ny))
     DO k=1,grid%nz
@@ -1223,19 +1460,24 @@ CONTAINS
     IF (.NOT.ALL(cell_is_usable(state%surface_pressure%valid, &
         state%surface_pressure%quality,state%surface_pressure%source)) .OR. &
         ANY(state%above_ground .AND. .NOT.cell_is_usable(state%pressure%valid, &
-          state%pressure%quality,state%pressure%source)) .OR. &
-        ANY(.NOT.ieee_is_finite(state%pressure%value)) .OR. &
-        ANY(REAL(state%pressure%value,real64)<MIN_PRESSURE_PA) .OR. &
-        ANY(REAL(state%pressure%value,real64)>MAX_PRESSURE_PA) .OR. &
+          state%pressure%quality,state%pressure%source))) RETURN
+    ! Keep nonfinite checks out of the ordered expressions below.  Intel
+    ! -fpe0 traps an invalid comparison with NaN instead of returning false.
+    IF (ANY(.NOT.ieee_is_finite(state%pressure%value)) .OR. &
         ANY(.NOT.ieee_is_finite(state%surface_pressure%value)) .OR. &
-        ANY(REAL(state%surface_pressure%value,real64)<MIN_PRESSURE_PA) .OR. &
-        ANY(REAL(state%surface_pressure%value,real64)>MAX_PRESSURE_PA)) RETURN
-    IF (ANY(.NOT.ieee_is_finite(state%grid%pressure_interface)) .OR. &
-        ANY(state%grid%pressure_interface<=0.0_real64) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%dx)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%dy)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%pressure_interface)) .OR. &
         ANY(.NOT.ieee_is_finite(state%grid%cell_dp)) .OR. &
         ANY(.NOT.ieee_is_finite(state%grid%level_spacing_dp)) .OR. &
         ANY(.NOT.ieee_is_finite(state%grid%pressure_mass_measure)) .OR. &
         ANY(.NOT.ieee_is_finite(state%grid%dry_air_mass_measure))) RETURN
+    IF (ANY(REAL(state%pressure%value,real64)<MIN_PRESSURE_PA) .OR. &
+        ANY(REAL(state%pressure%value,real64)>MAX_PRESSURE_PA) .OR. &
+        ANY(REAL(state%surface_pressure%value,real64)<MIN_PRESSURE_PA) .OR. &
+        ANY(REAL(state%surface_pressure%value,real64)>MAX_PRESSURE_PA) .OR. &
+        ANY(state%grid%dx<=0.0_real64) .OR. ANY(state%grid%dy<=0.0_real64)) RETURN
+    IF (ANY(state%grid%pressure_interface<=0.0_real64)) RETURN
     DO j=1,state%grid%ny; DO i=1,state%grid%nx
       center=REAL(state%pressure%value(i,j,:),real64)
       surface_pressure=REAL(state%surface_pressure%value(i,j),real64)
@@ -1315,25 +1557,30 @@ CONTAINS
   PURE REAL(real64) FUNCTION represented_total_water(state,i,j,k)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     INTEGER, INTENT(IN) :: i,j,k
-    represented_total_water=REAL(state%vapor%value(i,j,k),real64)
+    represented_total_water=SUM(represented_water_species(state,i,j,k))
+  END FUNCTION represented_total_water
+
+  PURE FUNCTION represented_water_species(state,i,j,k) RESULT(species)
+    ! For validated canonical cells only. Unusable condensate is unrepresented,
+    ! not an observation of zero; callers must retain the coverage limitation.
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: i,j,k
+    REAL(real64) :: species(6)
+    species=0.0_real64
+    species(1)=REAL(state%vapor%value(i,j,k),real64)
     IF (cell_is_usable(state%cloud_water%valid(i,j,k), &
         state%cloud_water%quality(i,j,k),state%cloud_water%source(i,j,k))) &
-      represented_total_water=represented_total_water+ &
-        REAL(state%cloud_water%value(i,j,k),real64)
+      species(2)=REAL(state%cloud_water%value(i,j,k),real64)
     IF (cell_is_usable(state%cloud_ice%valid(i,j,k), &
         state%cloud_ice%quality(i,j,k),state%cloud_ice%source(i,j,k))) &
-      represented_total_water=represented_total_water+ &
-        REAL(state%cloud_ice%value(i,j,k),real64)
+      species(3)=REAL(state%cloud_ice%value(i,j,k),real64)
     IF (cell_is_usable(state%rain%valid(i,j,k),state%rain%quality(i,j,k), &
-        state%rain%source(i,j,k))) represented_total_water=represented_total_water+ &
-        REAL(state%rain%value(i,j,k),real64)
+        state%rain%source(i,j,k))) species(4)=REAL(state%rain%value(i,j,k),real64)
     IF (cell_is_usable(state%snow%valid(i,j,k),state%snow%quality(i,j,k), &
-        state%snow%source(i,j,k))) represented_total_water=represented_total_water+ &
-        REAL(state%snow%value(i,j,k),real64)
+        state%snow%source(i,j,k))) species(5)=REAL(state%snow%value(i,j,k),real64)
     IF (cell_is_usable(state%graupel%valid(i,j,k),state%graupel%quality(i,j,k), &
-        state%graupel%source(i,j,k))) represented_total_water=represented_total_water+ &
-        REAL(state%graupel%value(i,j,k),real64)
-  END FUNCTION represented_total_water
+        state%graupel%source(i,j,k))) species(6)=REAL(state%graupel%value(i,j,k),real64)
+  END FUNCTION represented_water_species
 
   PURE LOGICAL FUNCTION dry_air_mass_measure_consistent(state)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
@@ -1437,6 +1684,19 @@ CONTAINS
     END DO; END DO
     support_arrays_valid=.TRUE.
   END FUNCTION support_arrays_valid
+
+  PURE LOGICAL FUNCTION model_target_coverage_contract_valid(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER :: nx,ny,nz
+    model_target_coverage_contract_valid=.FALSE.
+    nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
+    IF (.NOT.ALLOCATED(state%above_ground) .OR. &
+        .NOT.ALLOCATED(state%model_target_coverage)) RETURN
+    IF (ANY(SHAPE(state%above_ground)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(state%model_target_coverage)/=(/nx,ny,nz/))) RETURN
+    IF (ANY((.NOT.state%above_ground) .AND. state%model_target_coverage)) RETURN
+    model_target_coverage_contract_valid=.TRUE.
+  END FUNCTION model_target_coverage_contract_valid
 
   PURE LOGICAL FUNCTION field3d_shape_metadata_ok(field,nx,ny,nz,valid_time,unit)
     TYPE(field3d), INTENT(IN) :: field
@@ -1570,6 +1830,8 @@ CONTAINS
     IF (.NOT.states_equal_field2d(left%surface_pressure,right%surface_pressure)) RETURN
     IF (.NOT.states_equal_field2d(left%surface_temperature, &
                                   right%surface_temperature)) RETURN
+    IF (.NOT.states_equal_field2d(left%surface_vapor,right%surface_vapor)) RETURN
+    IF (.NOT.states_equal_field2d(left%surface_height,right%surface_height)) RETURN
     IF (.NOT.states_equal_field2d(left%latitude,right%latitude)) RETURN
     IF (.NOT.states_equal_field2d(left%omega_top_boundary, &
                                   right%omega_top_boundary)) RETURN
@@ -1577,6 +1839,7 @@ CONTAINS
                                   right%omega_bottom_boundary)) RETURN
     IF (.NOT.states_equal_support(left,right,candidate_scope)) RETURN
     IF (.NOT.states_equal_los(left%radar_los,right%radar_los)) RETURN
+    IF (.NOT.states_equal_field3d(left%omega_target_sigma,right%omega_target_sigma)) RETURN
     IF (.NOT.candidate_scope) THEN
       IF (.NOT.states_equal_field3d(left%u,right%u)) RETURN
       IF (.NOT.states_equal_field3d(left%v,right%v)) RETURN
@@ -1719,13 +1982,19 @@ CONTAINS
     IF (.NOT.ALLOCATED(left%above_ground) .OR. .NOT.ALLOCATED(right%above_ground) .OR. &
         .NOT.ALLOCATED(left%obs_support) .OR. .NOT.ALLOCATED(right%obs_support) .OR. &
         .NOT.ALLOCATED(left%hydro_support) .OR. .NOT.ALLOCATED(right%hydro_support) .OR. &
-        .NOT.ALLOCATED(left%balance_beta) .OR. .NOT.ALLOCATED(right%balance_beta)) RETURN
+        .NOT.ALLOCATED(left%balance_beta) .OR. .NOT.ALLOCATED(right%balance_beta) .OR. &
+        .NOT.ALLOCATED(left%model_target_coverage) .OR. &
+        .NOT.ALLOCATED(right%model_target_coverage)) RETURN
     IF (ANY(SHAPE(left%above_ground)/=SHAPE(right%above_ground)) .OR. &
         ANY(SHAPE(left%obs_support)/=SHAPE(right%obs_support)) .OR. &
         ANY(SHAPE(left%hydro_support)/=SHAPE(right%hydro_support)) .OR. &
-        ANY(SHAPE(left%balance_beta)/=SHAPE(right%balance_beta))) RETURN
+        ANY(SHAPE(left%balance_beta)/=SHAPE(right%balance_beta)) .OR. &
+        ANY(SHAPE(left%model_target_coverage)/=SHAPE(right%model_target_coverage))) RETURN
     states_equal_support=states_equal_logical(left%above_ground,right%above_ground, &
       SIZE(left%above_ground))
+    IF (states_equal_support) states_equal_support=states_equal_logical( &
+      left%model_target_coverage,right%model_target_coverage, &
+      SIZE(left%model_target_coverage))
     IF (states_equal_support .AND. .NOT.candidate_scope) &
       states_equal_support=states_equal_int32(left%obs_support,right%obs_support, &
         SIZE(left%obs_support)) .AND. states_equal_int32(left%hydro_support, &

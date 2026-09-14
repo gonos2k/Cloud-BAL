@@ -7,6 +7,14 @@ MODULE cloud_bal_grid_geometry
 
   PUBLIC :: cumulative_horizontal_distance
   PUBLIC :: bounded_grid_radius
+  PUBLIC :: pressure_face_segment
+  PUBLIC :: partition_pressure_face
+
+  TYPE :: pressure_face_segment
+    INTEGER :: left_level
+    INTEGER :: right_level
+    REAL(real64) :: pressure_thickness
+  END TYPE pressure_face_segment
 
   INTERFACE cumulative_horizontal_distance
     MODULE PROCEDURE cumulative_horizontal_distance_r32
@@ -14,6 +22,81 @@ MODULE cloud_bal_grid_geometry
   END INTERFACE cumulative_horizontal_distance
 
 CONTAINS
+
+  PURE SUBROUTINE partition_pressure_face(left_interface,right_interface, &
+                                           segments,ok)
+    REAL(real64), INTENT(IN) :: left_interface(:),right_interface(:)
+    TYPE(pressure_face_segment), ALLOCATABLE, INTENT(OUT) :: segments(:)
+    LOGICAL, INTENT(OUT) :: ok
+    TYPE(pressure_face_segment), ALLOCATABLE :: compact_segments(:)
+    INTEGER :: left_level,right_level,nleft,nright,nsegments,upper_bound,i
+    REAL(real64) :: left_top,right_top,left_bottom,right_bottom,overlap
+
+    ok=.FALSE.
+    ALLOCATE(segments(0))
+    nleft=SIZE(left_interface)-1
+    nright=SIZE(right_interface)-1
+    IF (nleft<1 .OR. nright<1) RETURN
+
+    ! Keep all IEEE finite checks separate from ordered comparisons.  This
+    ! avoids evaluating a pressure ordering relation while an input is NaN.
+    DO i=1,SIZE(left_interface)
+      IF (.NOT.ieee_is_finite(left_interface(i))) RETURN
+    END DO
+    DO i=1,SIZE(right_interface)
+      IF (.NOT.ieee_is_finite(right_interface(i))) RETURN
+    END DO
+
+    DO i=1,SIZE(left_interface)
+      IF (left_interface(i)<=0.0_real64) RETURN
+    END DO
+    DO i=1,SIZE(right_interface)
+      IF (right_interface(i)<=0.0_real64) RETURN
+    END DO
+    DO i=2,SIZE(left_interface)
+      IF (left_interface(i)>left_interface(i-1)) RETURN
+    END DO
+    DO i=2,SIZE(right_interface)
+      IF (right_interface(i)>right_interface(i-1)) RETURN
+    END DO
+
+    upper_bound=nleft+nright-1
+    DEALLOCATE(segments)
+    ALLOCATE(segments(upper_bound))
+    nsegments=0
+    left_level=1
+    right_level=1
+
+    DO WHILE (left_level<=nleft .AND. right_level<=nright)
+      left_bottom=left_interface(left_level)
+      left_top=left_interface(left_level+1)
+      right_bottom=right_interface(right_level)
+      right_top=right_interface(right_level+1)
+      overlap=MIN(left_bottom,right_bottom)-MAX(left_top,right_top)
+      IF (overlap>0.0_real64) THEN
+        nsegments=nsegments+1
+        segments(nsegments)%left_level=left_level
+        segments(nsegments)%right_level=right_level
+        segments(nsegments)%pressure_thickness=overlap
+      END IF
+
+      IF (left_top>right_top) THEN
+        left_level=left_level+1
+      ELSE IF (right_top>left_top) THEN
+        right_level=right_level+1
+      ELSE
+        left_level=left_level+1
+        right_level=right_level+1
+      END IF
+    END DO
+
+    IF (nsegments<upper_bound) THEN
+      ALLOCATE(compact_segments(nsegments))
+      IF (nsegments>0) compact_segments=segments(:nsegments)
+      CALL MOVE_ALLOC(compact_segments,segments)
+    END IF
+    ok=.TRUE.
+  END SUBROUTINE partition_pressure_face
 
   PURE SUBROUTINE bounded_grid_radius(radius,minimum_spacing,maximum_index, &
                                       radius_cells,ok)

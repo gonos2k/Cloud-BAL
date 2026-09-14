@@ -1,11 +1,21 @@
       program qbalpe_main
+      use cloud_bal_balance_adapter, only: cloud_bal_balance_entry
+      use cloud_bal_state, only: STATUS_OK
 c
       implicit none
 c
       integer   nx,ny,nz
       integer   istatus
+      logical   stage_enabled
 c_______________________________________________________________________________
 c
+      call cloud_bal_balance_entry(stage_enabled,istatus)
+      if(istatus.ne.STATUS_OK)stop 1
+      if(stage_enabled)then
+          print*,'Done'
+          stop
+      endif
+
       call get_grid_dim_xy(nx,ny,istatus)
       if (istatus .ne. 1) then
           write (6,*) 'Error getting horizontal domain dimensions'
@@ -3210,8 +3220,10 @@ c
             diag=-(ce+cw+cn+cs+cu+cd)
             if(.not.ieee_is_finite(diag).or.
      &         .not.ieee_is_finite(force(i,j,k)))return
-            if(abs(diag).le.epsc)then
-               if(abs(force(i,j,k)).gt.epsc)return
+c A small connected row is not a zero row: its scale cancels in res/diag.
+c A disconnected row is compatible only with an exactly zero force.
+            if(diag.eq.0.)then
+               if(force(i,j,k).ne.0.)return
                sol(i,j,k)=0.
                go to 2
             endif

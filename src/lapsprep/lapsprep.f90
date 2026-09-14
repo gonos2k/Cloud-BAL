@@ -62,6 +62,8 @@
 
     ! Module declarations
 
+    USE cloud_bal_stage_context, ONLY: stage_context,read_stage_context
+    USE cloud_bal_lapsprep_adapter, ONLY: cloud_bal_lapsprep_entry
     USE constants
     USE setup
     USE laps_static
@@ -72,6 +74,17 @@
     USE lapsprep_netcdf
     USE cloud_bal_field_contracts
     USE cloud_bal_moisture, ONLY: transfer_excess
+    USE, INTRINSIC :: iso_fortran_env, ONLY: int64,real32,real64
+    USE cloud_bal_state, ONLY: cloud_bal_state_type,field3d,STATUS_OK,MODE_OFF,canonical_states_equal
+    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_config,cloud_bal_pipeline_result, &
+      restore_pre_balance_winds
+    USE cloud_bal_pressure_analysis, ONLY: run_pressure_analysis_shadow
+    USE cloud_bal_real_netcdf, ONLY: read_real_shadow_state,write_shadow_diagnostics, &
+      read_model_omega_increment
+    USE cloud_bal_balance_operator, ONLY: balance_operator_type, &
+      build_balance_operator,state_continuity_residual
+    USE cloud_bal_wps_adapter, ONLY: pressure_wps_fields,map_pressure_candidate_to_wps, &
+      build_pressure_transition_prior,evaluate_source_host_pressure_residual
     USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
 
     ! Variable Declarations
@@ -92,16 +105,26 @@
     ! Arrays for data
     REAL , ALLOCATABLE , DIMENSION (:,:,:) :: u , v , t , rh , ht, &   
                                              lwc,rai,sno,pic,ice, sh, mr, w, & 
-                                             virtual_t, rho,lcp
+                                             rho,lcp
     REAL , ALLOCATABLE , DIMENSION (:,:)   :: slp , psfc, snocov, d2d,tskin
     REAL , ALLOCATABLE , DIMENSION (:)     :: p
     REAL , PARAMETER                       :: tiny = 1.0e-30
+    REAL , PARAMETER                       :: dry_vapor_gas_ratio = 0.622
     
     ! Miscellaneous local variables
                                         
     INTEGER :: out_loop, loop , var_loop , i, j, k, kbot,istatus
     CHARACTER(LEN=256) :: cloud_bal_wps_output
-    LOGICAL :: file_present
+    CHARACTER(LEN=64) :: shadow_experiment
+    INTEGER :: environment_status,environment_length
+    TYPE(stage_context) :: stage_transport_context
+    INTEGER :: stage_reason
+    LOGICAL :: stage_enabled
+    LOGICAL :: file_present, wps_only
+    LOGICAL :: specific_humidity_ready=.FALSE., surface_mixing_ratio_ready=.FALSE.
+    LOGICAL :: temperature_ready=.FALSE., surface_temperature_ready=.FALSE.
+    LOGICAL :: surface_pressure_ready=.FALSE.
+    LOGICAL, ALLOCATABLE :: subterrain_sh_fill(:,:,:)
     REAL    :: rhmod, shmod
     REAL    :: rhadj
     REAL    :: lwc_limit
@@ -149,12 +172,64 @@
   
     ! Get the LAPS_DATA_ROOT from the environment.  
 
-    CALL GETENV('LAPS_DATA_ROOT', laps_data_root)
+    CALL GET_ENVIRONMENT_VARIABLE('LAPS_DATA_ROOT',laps_data_root,STATUS=environment_status)
+    IF (environment_status/=0 .OR. LEN_TRIM(laps_data_root)==0) THEN
+      PRINT '(A)', 'LAPS_DATA_ROOT is missing, empty, or too long.'
+      STOP 1
+    END IF
     PRINT '(2A)', 'LAPS_DATA_ROOT=',laps_data_root
 
     !  Get the namelist items (from the setup module).
 
     CALL read_namelist
+    wps_only=ALL(output_format(1:num_output)=='wps ')
+    shadow_experiment=''
+    CALL GET_ENVIRONMENT_VARIABLE('CLOUD_BAL_SHADOW_EXPERIMENT',shadow_experiment, &
+      LENGTH=environment_length,STATUS=environment_status)
+    IF (environment_status/=0 .AND. environment_status/=1) STOP 1
+    CALL read_stage_context('lapsprep','OFF',stage_transport_context,stage_enabled,istatus,stage_reason)
+    IF (istatus/=STATUS_OK) STOP 1
+    IF (stage_enabled) THEN
+      IF (LEN_TRIM(shadow_experiment)>0) THEN
+        PRINT *, 'Stage transport cannot be mixed with a SHADOW experiment'
+        STOP 1
+      END IF
+      IF (TRIM(laps_data_root)/=TRIM(stage_transport_context%source_root) .OR. &
+          laps_file_time/=stage_transport_context%stamp) STOP 1
+      shadow_experiment='OFF'
+    END IF
+    IF (LEN_TRIM(shadow_experiment)>0) THEN
+      SELECT CASE (TRIM(shadow_experiment))
+        CASE ('OFF','HYDRO','MODEL_DYNAMICS','LIQUID_RADAR_RH1','LIQUID_RADAR_RH1_PHI','LIQUID_RADAR_RH1_SURFACE_PHI', &
+              'LIQUID_RADAR_RH1_SURFACE_PHI_HOST_PSFC')
+        CASE DEFAULT
+          PRINT *, 'Invalid CLOUD_BAL_SHADOW_EXPERIMENT'
+          STOP 1
+      END SELECT
+      IF (.NOT.wps_only .OR. num_output/=1 .OR. &
+          (TRIM(shadow_experiment)/='OFF' .AND. .NOT.wps_output_vapor) .OR. &
+          hotstart .OR. balance .OR. make_sfc_uv .OR. lwc2vapor_thresh/=0.0 .OR. &
+          TRIM(wind_coordinate)/='GRID_RELATIVE') THEN
+        PRINT *, 'SHADOW requires WPS-only/QV and unmodified legacy inputs'
+        STOP 1
+      END IF
+      CALL GET_ENVIRONMENT_VARIABLE('CLOUD_BAL_WPS_OUTPUT',cloud_bal_wps_output, &
+        LENGTH=environment_length,STATUS=environment_status)
+      IF (environment_status/=0 .OR. LEN_TRIM(cloud_bal_wps_output)==0) THEN
+        PRINT *, 'SHADOW requires an explicit separate WPS output path'
+        STOP 1
+      END IF
+      INQUIRE(FILE=TRIM(cloud_bal_wps_output),EXIST=file_present)
+      IF (file_present) THEN
+        PRINT *, 'SHADOW output already exists'
+        STOP 1
+      END IF
+      INQUIRE(FILE=TRIM(cloud_bal_wps_output)//'.shadow.nc',EXIST=file_present)
+      IF (file_present) THEN
+        PRINT *, 'SHADOW diagnostic already exists'
+        STOP 1
+      END IF
+    END IF
 
     ! Get the static information (projection, dimensions,etc.)
  
@@ -286,8 +361,9 @@
         ! for converting non-mandatory cloud variables
         ! to mixing ratio values 
         ALLOCATE ( rho ( x , y , z3 ) )
-        ALLOCATE ( virtual_t ( x , y , z3 ) )
         ALLOCATE ( sh ( x , y , z3 ) )
+        ALLOCATE ( subterrain_sh_fill(x,y,z3) )
+        subterrain_sh_fill=.FALSE.
         ALLOCATE ( mr ( x , y , z3+1 ) )
 
         ! Initialize every array before the first read.  Optional physical
@@ -340,26 +416,38 @@
           CALL NCVGT ( cdfid , vid , start , count , rh , rcode )
           CALL initialize_field_contract(input_field(var_loop,loop),'RH', &
                laps_file_time,'percent',x,y,z,SOURCE_MODEL)
-          CALL capture_field_validity(input_field(var_loop,loop),rh,rcode, &
+          CALL capture_field_validity(input_field(var_loop,loop),rh(:,:,1:z),rcode, &
                                       0.0,200.0,missingflag)
           IF (enforce_field_contracts .AND. &
-              input_field(var_loop,loop)%status .NE. FIELD_OK) &
-            STOP 'invalid_rh_field'
+              input_field(var_loop,loop)%status .NE. FIELD_OK) THEN
+            PRINT *, 'invalid_rh_field'
+            STOP 1
+          END IF
 
           !  Do this just once for pressure.
 
           vid = NCVID ( cdfid , 'level' , rcode )
 
           CALL NCVGT ( cdfid , vid , 1 , z3 , p , rcode )
-          IF (rcode .NE. 0) STOP 'pressure_levels_read_failed'
+          IF (rcode .NE. 0) THEN
+            PRINT *, 'pressure_levels_read_failed'
+            STOP 1
+          END IF
           CALL initialize_field_contract(pressure_field,'LEVEL', &
                laps_file_time,'hPa',z3,1,1,SOURCE_MODEL)
           CALL capture_field_validity(pressure_field,p(1:z3),rcode, &
                                       1.0,1100.0,missingflag)
-          IF (pressure_field%status .NE. FIELD_OK) &
-            STOP 'invalid_pressure_levels'
-          IF (ANY(p(2:z3) .GE. p(1:z3-1))) &
-            STOP 'nonmonotonic_pressure_levels'
+          IF (pressure_field%status .NE. FIELD_OK) THEN
+            PRINT *, 'invalid_pressure_levels'
+            STOP 1
+          END IF
+          ! Original producers use ascending pressure; retain either strict
+          ! ordering with its arrays, rather than reversing coordinates alone.
+          IF (.NOT.(ALL(p(2:z3)>p(1:z3-1)) .OR. &
+                    ALL(p(2:z3)<p(1:z3-1)))) THEN
+            PRINT *, 'nonmonotonic_pressure_levels'
+            STOP 1
+          END IF
  
           ! Set the pressure level of the lowest level of our
           ! pressure array as 2001 mb to flag the surface
@@ -382,9 +470,24 @@
                laps_file_time,'kg kg-1',x,y,z,SOURCE_MODEL)
           CALL capture_field_validity(input_field(var_loop,loop),sh,rcode, &
                                       0.0,0.2,missingflag)
-          IF (enforce_field_contracts .AND. &
-              input_field(var_loop,loop)%status .NE. FIELD_OK) &
-            STOP 'invalid_sh_field'
+          specific_humidity_ready=input_field(var_loop,loop)%status==FIELD_OK
+          ! WPS needs a rectangular inventory, including underground slabs.
+          ! Retain raw validity; only explicit missing SH below a valid PSFC
+          ! may use the existing surface extrapolation. Malformed values fail.
+          IF (wps_only .AND. rcode==0 .AND. &
+              surface_pressure_ready .AND. surface_mixing_ratio_ready) THEN
+            DO k=1,z3; DO j=1,y; DO i=1,x
+              IF (.NOT.ieee_is_finite(sh(i,j,k))) CYCLE
+              subterrain_sh_fill(i,j,k)=ABS(sh(i,j,k))==missingflag .AND. &
+                                       p(k)*100.0>psfc(i,j)
+            END DO; END DO; END DO
+            specific_humidity_ready=ALL(input_field(var_loop,loop)%valid .OR. &
+                                        subterrain_sh_fill)
+          END IF
+          IF ((enforce_field_contracts .OR. wps_only) .AND. .NOT.specific_humidity_ready) THEN
+            PRINT *, 'invalid_sh_field'
+            STOP 1
+          END IF
 
         END DO var_lq3
 
@@ -393,6 +496,9 @@
         !  Loop over the number of variables for this data file.
 
         var_lsx : DO var_loop = 1 , num_cdf_var(loop)
+
+          ! WPS has no vertical-velocity slab; do not require an unused input.
+          IF (wps_only .AND. cdf_var_name(var_loop,loop)=='vv ') CYCLE var_lsx
 
           !  Get the variable ID.
 
@@ -424,6 +530,7 @@
                  laps_file_time,'K',x,y,1,SOURCE_MODEL)
             CALL capture_field_validity(input_field(var_loop,loop), &
                  t(:,:,z3+1),rcode,150.0,350.0,missingflag)
+            surface_temperature_ready=input_field(var_loop,loop)%status==FIELD_OK
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'rh ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , rh (1,1,z3+1) , rcode )
             CALL initialize_field_contract(input_field(var_loop,loop),'RH_SFC', &
@@ -436,6 +543,7 @@
                  laps_file_time,'g kg-1',x,y,1,SOURCE_MODEL)
             CALL capture_field_validity(input_field(var_loop,loop), &
                  mr(:,:,z3+1),rcode,0.0,100.0,missingflag)
+            surface_mixing_ratio_ready=input_field(var_loop,loop)%status==FIELD_OK
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'msl' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , slp           , rcode )
             CALL initialize_field_contract(input_field(var_loop,loop),'MSLP', &
@@ -448,6 +556,7 @@
                  laps_file_time,'Pa',x,y,1,SOURCE_MODEL)
             CALL capture_field_validity(input_field(var_loop,loop),psfc,rcode, &
                                         10000.0,120000.0,missingflag)
+            surface_pressure_ready=input_field(var_loop,loop)%status==FIELD_OK
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'tgd') THEN
             CALL NCVGT ( cdfid , vid , start , count , tskin         , rcode )
             CALL initialize_field_contract(input_field(var_loop,loop),'TSKIN', &
@@ -456,8 +565,10 @@
                                         150.0,350.0,missingflag)
           END IF
           IF (enforce_field_contracts .AND. &
-              input_field(var_loop,loop)%status .NE. FIELD_OK) &
-            STOP 'invalid_surface_field'
+              input_field(var_loop,loop)%status .NE. FIELD_OK) THEN
+            PRINT *, 'invalid_surface_field: ',TRIM(cdf_var_name(var_loop,loop))
+            STOP 1
+          END IF
 
         END DO var_lsx
 
@@ -500,18 +611,21 @@
             CALL NCVGT ( cdfid , vid , start , count , t  , rcode )
             CALL initialize_field_contract(input_field(var_loop,loop),'T3', &
                  laps_file_time,'K',x,y,z,SOURCE_MODEL)
-            CALL capture_field_validity(input_field(var_loop,loop),t,rcode, &
+            CALL capture_field_validity(input_field(var_loop,loop),t(:,:,1:z),rcode, &
                                         150.0,350.0,missingflag)
+            temperature_ready=input_field(var_loop,loop)%status==FIELD_OK
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'ht ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , ht , rcode )
             CALL initialize_field_contract(input_field(var_loop,loop),'HT', &
                  laps_file_time,'m',x,y,z,SOURCE_MODEL)
-            CALL capture_field_validity(input_field(var_loop,loop),ht,rcode, &
+            CALL capture_field_validity(input_field(var_loop,loop),ht(:,:,1:z),rcode, &
                                         -1000.0,100000.0,missingflag)
           END IF
           IF (enforce_field_contracts .AND. &
-              input_field(var_loop,loop)%status .NE. FIELD_OK) &
-            STOP 'invalid_lt1_field'
+              input_field(var_loop,loop)%status .NE. FIELD_OK) THEN
+            PRINT *, 'invalid_lt1_field: ',TRIM(cdf_var_name(var_loop,loop))
+            STOP 1
+          END IF
 
         END DO var_lt1
 
@@ -520,6 +634,8 @@
         !  Loop over the number of variables for this data file.
 
         var_lw3 : DO var_loop = 1 , num_cdf_var(loop)
+
+          IF (wps_only .AND. cdf_var_name(var_loop,loop)=='om ') CYCLE var_lw3
 
           !  Get the variable ID.
 
@@ -530,24 +646,26 @@
             CALL NCVGT ( cdfid , vid , start , count , u , rcode )
             CALL initialize_field_contract(input_field(var_loop,loop),'U3', &
                  laps_file_time,'m s-1',x,y,z,SOURCE_MODEL)
-            CALL capture_field_validity(input_field(var_loop,loop),u,rcode, &
+            CALL capture_field_validity(input_field(var_loop,loop),u(:,:,1:z),rcode, &
                                         -200.0,200.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'v3 ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , v , rcode )
             CALL initialize_field_contract(input_field(var_loop,loop),'V3', &
                  laps_file_time,'m s-1',x,y,z,SOURCE_MODEL)
-            CALL capture_field_validity(input_field(var_loop,loop),v,rcode, &
+            CALL capture_field_validity(input_field(var_loop,loop),v(:,:,1:z),rcode, &
                                         -200.0,200.0,missingflag)
           ELSE IF ( cdf_var_name(var_loop,loop) .EQ. 'om ' ) THEN
             CALL NCVGT ( cdfid , vid , start , count , w , rcode )
             CALL initialize_field_contract(input_field(var_loop,loop),'OM', &
                  laps_file_time,'Pa s-1',x,y,z,SOURCE_CLOUD)
-            CALL capture_field_validity(input_field(var_loop,loop),w,rcode, &
+            CALL capture_field_validity(input_field(var_loop,loop),w(:,:,1:z),rcode, &
                                         -100.0,100.0,missingflag)
           END IF
           IF (enforce_field_contracts .AND. &
-              input_field(var_loop,loop)%status .NE. FIELD_OK) &
-            STOP 'invalid_lw3_field'
+              input_field(var_loop,loop)%status .NE. FIELD_OK) THEN
+            PRINT *, 'invalid_lw3_field: ',TRIM(cdf_var_name(var_loop,loop))
+            STOP 1
+          END IF
 
         END DO var_lw3
 
@@ -629,6 +747,17 @@
       ENDDO
     ENDDO
 
+    ! Direct QV output must not turn a missing analysis into a surface fallback.
+    ! These read/coverage checks apply even if legacy enforcement is disabled.
+    IF (wps_output_vapor) THEN
+      IF (.NOT.(specific_humidity_ready .AND. surface_mixing_ratio_ready .AND. &
+                temperature_ready .AND. surface_temperature_ready .AND. &
+                surface_pressure_ready)) THEN
+        PRINT *, 'WPS QV requires complete SH, MR_SFC, T3, and T_SFC inputs.'
+        STOP 1
+      END IF
+    END IF
+
     ! Compute mixing ratio from spec hum.
     ! Fill missing values with sfc value.
 
@@ -643,6 +772,11 @@
     do k=1,z3
     do j=1,y
     do i=1,x
+
+      IF (subterrain_sh_fill(i,j,k)) THEN
+        mr(i,j,k)=mr(i,j,z3+1)
+        CYCLE
+      END IF
 
       if ((jaxsbn).and.(p(k).LT.300.)) then
            weight_bot = (p(k) - 50) / (250)
@@ -665,6 +799,10 @@
       if (sh(i,j,k) .ge. 0. .and. sh(i,j,k) .lt. 1.) then
         mr(i,j,k)=sh(i,j,k)/(1.-sh(i,j,k))
       else
+        IF (wps_output_vapor) THEN
+          PRINT *, 'Invalid pressure-level SH cannot be replaced for WPS QV.'
+          STOP 1
+        END IF
         mr(i,j,k)=mr(i,j,z3+1)
       endif
 !      if (u(i,j,k) .eq. 1.e-30 .or. abs(u(i,j,k)) .gt. 200.) u(i,j,k)=u(i,j,z3+1)
@@ -672,6 +810,8 @@
     enddo
     enddo
     enddo
+    IF (wps_only .AND. wps_output_vapor) &
+      PRINT '(A,I0)', 'WPS below-ground SH surface extrapolation cells=',SUM(MERGE(1,0,subterrain_sh_fill))
 
     !  Set the lowest level of the geopotential height to topographic height
 
@@ -680,16 +820,23 @@
     IF (hotstart) THEN
 
       ! If this is a hot start, then we need to convert the microphysical
-      ! species from mass per volume to mass per mass (mixing ratio).  This
-      ! requires that we compute the air density from virtual temperature
-      ! and divide each species by the air density.
-       
-      ! Compute virtual temperature from mixing ratio and temperature
-      virtual_t(:,:,:)=( 1. + 0.61*mr(:,:,1:z3))*t(:,:,1:z3)
- 
-      ! Compute density from virtual temperature and gas constant for dry air
+      ! species from kg/m3 to kg/kg DRY AIR, as required by QV and the native
+      ! species convention. Moist-gas density would give a different denominator.
+      IF (ANY(.NOT.ieee_is_finite(t(:,:,1:z3))) .OR. &
+          ANY(.NOT.ieee_is_finite(mr(:,:,1:z3))) .OR. &
+          ANY(.NOT.ieee_is_finite(p(1:z3)))) THEN
+        PRINT *, 'Invalid hot-start pressure, temperature or vapor.'
+        STOP 1
+      END IF
+      IF (ANY(t(:,:,1:z3)<=0.0) .OR. ANY(mr(:,:,1:z3)<0.0) .OR. &
+          ANY(p(1:z3)<=0.0)) THEN
+        PRINT *, 'Invalid hot-start pressure, temperature or vapor.'
+        STOP 1
+      END IF
+      ! p = rho_d * Rd * T * (1 + rv / epsilon); rv is kg vapor/kg dry air.
       DO k = 1, z3
-        rho(:,:,k) = p(k)*100. / (rdry * virtual_t(:,:,k))
+        rho(:,:,k) = p(k)*100. / &
+          (rdry*t(:,:,k)*(1.0+mr(:,:,k)/dry_vapor_gas_ratio))
       ENDDO
 
       ! Apply cell-level validity.  One malformed cell no longer invalidates
@@ -768,11 +915,12 @@
         STOP 'invalid_hydrometeor_output'
       ENDIF
 
-      ! Vapor changes alter virtual temperature and density.  Recompute the
-      ! density used by the omega-to-w conversion after all paired transfers.
-      virtual_t(:,:,:)=(1.0+0.61*mr(:,:,1:z3))*t(:,:,1:z3)
+      ! Recompute MOIST-GAS density after transfers for the existing hydrostatic
+      ! omega-to-w approximation. This is not the dry denominator used above,
+      ! nor a full condensate-loaded pressure-coordinate conversion.
       DO k=1,z3
-        rho(:,:,k)=p(k)*100.0/(rdry*virtual_t(:,:,k))
+        rho(:,:,k)=p(k)*100.0*(1.0+mr(:,:,k))/ &
+          (rdry*t(:,:,k)*(1.0+mr(:,:,k)/dry_vapor_gas_ratio))
       ENDDO
       IF (ANY(.NOT. ieee_is_finite(rho)) .OR. MINVAL(rho) .LE. 0.0) THEN
         STOP 'invalid_post_transfer_density'
@@ -780,6 +928,7 @@
 
       ! Convert 3d omega from Pa/s to m/s, or fill with sfc value if missing.
 
+      IF (.NOT.wps_only) THEN
       do k=1,z3
       do j=1,y
       do i=1,x
@@ -791,6 +940,7 @@
       enddo
       enddo
       enddo
+      END IF
 
 
     ENDIF
@@ -804,8 +954,11 @@
           kbot = 0
           get_lowest: DO k = z3,1,-1
             IF (ht(i,j,k) .GT. topo(i,j)) THEN
-              kbot = k
-              EXIT get_lowest
+              IF (kbot==0) THEN
+                kbot=k
+              ELSE IF (p(k)>p(kbot)) THEN
+                kbot=k
+              END IF
             ENDIF
           ENDDO get_lowest
           IF (kbot .NE. 0) THEN
@@ -824,9 +977,9 @@
 
     DO out_loop = 1, num_output
       ! Now it is time to output these arrays.  The arrays are ordered
-      !  as (x,y,z).  The origin is the southwest corner at the top of the 
-      ! atmosphere for the 3d arrays, where the last layer (z3+1) contains    
-      ! the surface information.  This is where you would insert a call
+      ! as (x,y,z), starting at the southwest corner. Pressure levels retain
+      ! their input ordering; the last layer (z3+1) contains the
+      ! surface information. This is where you would insert a call
       ! to a custom output routine.
 
       select_output: SELECT CASE (output_format(out_loop))
@@ -840,8 +993,25 @@
      
         CASE ('wps ')
           cloud_bal_wps_output=' '
-          CALL GETENV('CLOUD_BAL_WPS_OUTPUT',cloud_bal_wps_output)
-          IF (LEN_TRIM(cloud_bal_wps_output)>0) THEN
+          CALL GET_ENVIRONMENT_VARIABLE('CLOUD_BAL_WPS_OUTPUT',cloud_bal_wps_output,STATUS=environment_status)
+          IF (environment_status/=0 .AND. environment_status/=1) THEN
+            PRINT '(A)', 'CLOUD_BAL_WPS_OUTPUT could not be read without truncation.'
+            STOP 1
+          END IF
+          IF (LEN_TRIM(shadow_experiment)>0) CALL prepare_shadow_wps
+          IF (LEN_TRIM(shadow_experiment)>0 .AND. TRIM(shadow_experiment)/='OFF') THEN
+            CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
+              snocov,tskin,istatus,TRIM(cloud_bal_wps_output), &
+              vapor_mixing_ratio=mr,include_hydrometeors=.TRUE.,include_surface_height=.TRUE.,create_new=.TRUE.)
+          ELSE IF (wps_output_vapor) THEN
+            IF (LEN_TRIM(cloud_bal_wps_output)>0) THEN
+              CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
+                snocov,tskin,istatus,TRIM(cloud_bal_wps_output),vapor_mixing_ratio=mr)
+            ELSE
+              CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
+                snocov,tskin,istatus,vapor_mixing_ratio=mr)
+            END IF
+          ELSE IF (LEN_TRIM(cloud_bal_wps_output)>0) THEN
             CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
               snocov,tskin,istatus,TRIM(cloud_bal_wps_output))
           ELSE
@@ -868,6 +1038,211 @@
       END SELECT select_output
     ENDDO 
     PRINT '(A)', 'LAPSPREP Complete.'
+
+  CONTAINS
+
+    SUBROUTINE prepare_shadow_wps
+      TYPE(cloud_bal_state_type) :: original,candidate,operational,transition_seed,pre_balance
+      TYPE(field3d), ALLOCATABLE :: retained_omega
+      TYPE(cloud_bal_pipeline_config) :: config
+      TYPE(cloud_bal_pipeline_result) :: result
+      TYPE(pressure_wps_fields) :: background,mapped,baseline_mapped
+      TYPE(balance_operator_type) :: op
+      REAL(real32), ALLOCATABLE :: longitude(:,:)
+      REAL(real64), ALLOCATABLE :: before(:,:,:),after(:,:,:)
+      REAL(real64), ALLOCATABLE :: pressure_request(:,:),pressure_residual(:,:),pressure_tolerance(:,:)
+      REAL(real64), ALLOCATABLE :: previous_pressure(:,:)
+      LOGICAL, ALLOCATABLE :: pressure_columns(:,:)
+      LOGICAL :: pressure_converged
+      INTEGER(int64) :: epoch
+      INTEGER :: status,reason,legacy_time,pressure_iteration,failed_column(2)
+      CHARACTER(LEN=512) :: product_root,model_target_path
+
+      ! The clock helper returns seconds since 1960; canonical time is Unix.
+      CALL i4time_fname_lp(laps_file_time,legacy_time,status)
+      IF (status/=1) STOP 1
+      epoch=INT(legacy_time,int64)-315619200_int64
+      product_root=TRIM(laps_data_root)//'/lapsprd/'
+      CALL read_real_shadow_state('','', &
+        TRIM(product_root)//'lw3/'//laps_file_time//'.lw3', &
+        TRIM(product_root)//'vrz/'//laps_file_time//'.vrz', &
+        TRIM(product_root)//'vrt/'//laps_file_time//'.vrt', &
+        TRIM(laps_data_root)//'/static/static.nest7grid',epoch, &
+        original,longitude,status,reason, &
+        lt1_path=TRIM(product_root)//'lt1/'//laps_file_time//'.lt1', &
+        lq3_path=TRIM(product_root)//'lq3/'//laps_file_time//'.lq3', &
+        lwc_path=TRIM(product_root)//'lwc/'//laps_file_time//'.lwc', &
+        lsx_path=TRIM(product_root)//'lsx/'//laps_file_time//'.lsx',retained_omega=retained_omega, &
+        lcp_path=TRIM(product_root)//'lcp/'//laps_file_time//'.lcp', &
+        lty_path=TRIM(product_root)//'lty/'//laps_file_time//'.lty')
+      IF (status/=STATUS_OK) THEN
+        PRINT *, 'SHADOW pressure reader rejected input: ',reason
+        STOP 1
+      END IF
+      IF (stage_enabled) THEN
+        CALL cloud_bal_lapsprep_entry(stage_transport_context,original,longitude,status,reason)
+        IF (status/=STATUS_OK) STOP 1
+      END IF
+      IF (x/=original%grid%nx .OR. y/=original%grid%ny .OR. z3/=original%grid%nz) STOP 1
+      IF (ANY(lats/=original%latitude%value) .OR. ANY(lons/=longitude)) STOP 1
+      IF (TRIM(shadow_experiment)=='MODEL_DYNAMICS') THEN
+        model_target_path=''
+        CALL GET_ENVIRONMENT_VARIABLE('CLOUD_BAL_MODEL_TARGET',model_target_path,STATUS=status)
+        IF (status/=0 .OR. LEN_TRIM(model_target_path)==0) THEN
+          PRINT *, 'MODEL_DYNAMICS requires an explicit paired model response'
+          STOP 1
+        END IF
+        CALL read_model_omega_increment(TRIM(model_target_path),original,longitude,status)
+        IF (status/=STATUS_OK) THEN
+          PRINT *, 'MODEL_DYNAMICS response does not match the analysis contract'
+          STOP 1
+        END IF
+      END IF
+      ! Retain the actual host slabs, including its explicit underground fills.
+      background%p=p; background%t=t; background%ht=ht
+      background%u=u; background%v=v; background%rh=rh; background%qv=mr
+      background%qc=lwc; background%qi=ice; background%qr=rai
+      background%qs=sno; background%qg=pic
+      background%psfc=psfc; background%slp=slp
+      background%skin_temperature=tskin; background%snow_cover=snocov
+      background%valid_time=epoch; background%grid_id=original%grid%grid_id
+      background%wind_coordinate=wind_coordinate
+      IF (TRIM(shadow_experiment)=='LIQUID_RADAR_RH1_SURFACE_PHI_HOST_PSFC') THEN
+        ! A bounded source-grid coupled pressure solve, not native conservation.
+        ! Use the SAME canonical OFF background and retained host slabs. The
+        ! normal METGRID interpolation still runs after this WPS writer.
+        CALL map_pressure_candidate_to_wps(original,background,baseline_mapped,status,wind_coordinate)
+        IF (status/=STATUS_OK) STOP 1
+        CALL run_pressure_analysis_shadow(original,candidate,operational,result, &
+          config,'LIQUID_RADAR_RH1_SURFACE_PHI',status,single_pass=.TRUE.)
+        IF (status/=STATUS_OK) STOP 1
+        CALL map_pressure_candidate_to_wps(candidate,background,mapped,status,wind_coordinate)
+        IF (status/=STATUS_OK) STOP 1
+        ALLOCATE(pressure_request(x,y),pressure_columns(x,y), &
+          pressure_residual(x,y),pressure_tolerance(x,y),previous_pressure(x,y))
+        previous_pressure=0.0_real64
+        pressure_request=REAL(original%surface_pressure%value,real64)
+        pressure_columns=.FALSE.
+        IF (ALLOCATED(result%geopotential_support)) &
+          pressure_columns=ANY(result%geopotential_support,DIM=3)
+        IF (ANY(pressure_columns)) THEN
+          ! Unit-slope fixed-point steps use the actual remapped profile at
+          ! every trial. No fixed-q approximation can certify the final state.
+          pressure_converged=.FALSE.
+          DO pressure_iteration=1,12
+            pressure_residual=0.0_real64
+            CALL evaluate_source_host_pressure_residual(baseline_mapped,mapped,pressure_columns, &
+              287.0_real64,9.81_real64,pressure_residual,status)
+            IF (status/=STATUS_OK) STOP 1
+            pressure_tolerance=2.0_real64*REAL(SPACING(mapped%psfc),real64)+ &
+              128.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64,ABS(REAL(mapped%psfc,real64)))
+            PRINT *, 'source_host_pressure_iteration_residual=',pressure_iteration,MAXVAL(ABS(pressure_residual))
+            IF (ALL(ABS(pressure_residual)<=pressure_tolerance)) THEN
+              pressure_converged=.TRUE.
+              EXIT
+            END IF
+            IF (pressure_iteration==12) EXIT
+            pressure_request=REAL(original%surface_pressure%value,real64)
+            WHERE (pressure_columns)
+              pressure_request=REAL(mapped%psfc,real64)-pressure_residual
+            END WHERE
+            IF (ANY(.NOT.ieee_is_finite(pressure_request)) .OR. &
+                ANY(pressure_request<100.0_real64) .OR. ANY(pressure_request>120000.0_real64) .OR. &
+                ANY(ABS(pressure_request-REAL(original%surface_pressure%value,real64))>100.0_real64)) THEN
+              PRINT *, 'Source-grid host pressure solve exceeded its 100 Pa request bound'
+              STOP 1
+            END IF
+            pressure_request=REAL(REAL(pressure_request,real32),real64)
+            IF (ALL(pressure_request==REAL(mapped%psfc,real64))) THEN
+              PRINT *, 'Source-grid host pressure solve stagnated at stored precision'
+              STOP 1
+            END IF
+            IF (ALL(pressure_request==previous_pressure)) THEN
+              PRINT *, 'Source-grid host pressure solve entered a stored two-cycle'
+              STOP 1
+            END IF
+            previous_pressure=REAL(mapped%psfc,real64)
+            CALL build_pressure_transition_prior(original,background,retained_omega, &
+              MAX(pressure_request,REAL(original%surface_pressure%value,real64)),transition_seed,status,failed_column)
+            IF (status/=STATUS_OK) THEN
+              PRINT *, 'Host pressure prior rejected at column ',failed_column
+              IF (ALL(failed_column>0)) PRINT *, 'Host pressure original/request Pa: ', &
+                original%surface_pressure%value(failed_column(1),failed_column(2)), &
+                pressure_request(failed_column(1),failed_column(2))
+              STOP 1
+            END IF
+            ! Each trial starts from the SAME immutable input. Negative
+            ! same-domain requests use the existing hydrostatic stage; positive
+            ! requests use the explicit conservative seed and transition.
+            CALL run_pressure_analysis_shadow(original,candidate,operational,result, &
+              config,'LIQUID_RADAR_RH1_SURFACE_PHI',status, &
+              requested_surface_pressure=pressure_request,single_pass=.TRUE., &
+              pressure_transition_seed=transition_seed)
+            IF (status/=STATUS_OK) THEN
+              PRINT *, 'Host pressure pipeline rejected trial: ',pressure_iteration,result%reason_code
+              STOP 1
+            END IF
+            CALL map_pressure_candidate_to_wps(candidate,background,mapped,status,wind_coordinate)
+            IF (status/=STATUS_OK) STOP 1
+          END DO
+          IF (.NOT.pressure_converged) THEN
+            PRINT *, 'Source-grid host pressure solve did not converge'
+            STOP 1
+          END IF
+          PRINT *, 'pressure_request_experiment=SOURCE_GRID_HOST_COUPLED_RESEARCH_NOT_NATIVE_CONSERVATION'
+          PRINT *, 'pressure_request_host_Rd_g_cap=',287.0_real64,9.81_real64,100.0_real64
+          PRINT *, 'pressure_request_max_abs_pa=', &
+            MAXVAL(ABS(pressure_request-REAL(original%surface_pressure%value,real64)))
+          PRINT *, 'source_host_final_pressure_residual_max_abs_pa=',MAXVAL(ABS(pressure_residual))
+        ELSE
+          PRINT *, 'pressure_request_experiment=NO_OBSERVATIONAL_CONSTRAINT'
+        END IF
+      ELSE
+        CALL run_pressure_analysis_shadow(original,candidate,operational,result, &
+          config,TRIM(shadow_experiment),status)
+        IF (status/=STATUS_OK) STOP 1
+        IF (config%requested_mode==MODE_OFF) THEN
+          IF (.NOT.canonical_states_equal(original,candidate) .OR. &
+              .NOT.canonical_states_equal(original,operational)) STOP 1
+          ! OFF validates the real canonical path, then retains every host slab.
+          ! Mapping even an unchanged canonical state would round heights and
+          ! introduce condensates that ordinary cold initialization never read.
+          PRINT *, 'OFF canonical identity verified; host fields retained'
+          RETURN
+        END IF
+        CALL map_pressure_candidate_to_wps(candidate,background,mapped,status,wind_coordinate)
+        IF (status/=STATUS_OK) THEN
+          PRINT *, 'SHADOW candidate-to-WPS mapping failed'
+          STOP 1
+        END IF
+      END IF
+      IF (status/=STATUS_OK) STOP 1
+      IF (config%requested_mode/=MODE_OFF) THEN
+        CALL build_balance_operator(candidate,config%balance,op,status,reason)
+        IF (status/=STATUS_OK) STOP 1
+        ALLOCATE(before(x,y,z3),after(x,y,z3))
+        IF (ALLOCATED(result%pressure_transition_seed)) THEN
+          CALL restore_pre_balance_winds(candidate,original,pre_balance,status, &
+            transition_seed=result%pressure_transition_seed)
+        ELSE
+          CALL restore_pre_balance_winds(candidate,original,pre_balance,status)
+        END IF
+        IF (status/=STATUS_OK) STOP 1
+        CALL state_continuity_residual(op,pre_balance,before,status)
+        IF (status/=STATUS_OK) STOP 1
+        CALL state_continuity_residual(op,candidate,after,status)
+        IF (status/=STATUS_OK) STOP 1
+        CALL write_shadow_diagnostics(TRIM(cloud_bal_wps_output)//'.shadow.nc', &
+          original,candidate,longitude,result,config,before,after,status,operational, &
+          pressure_analysis_candidate=ALLOCATED(result%geopotential_support))
+        IF (status/=STATUS_OK) STOP 1
+      END IF
+      ! Assign only to this process's WPS arrays after all candidate checks.
+      t=mapped%t; ht=mapped%ht; u=mapped%u; v=mapped%v; mr=mapped%qv
+      lwc=mapped%qc; ice=mapped%qi; rai=mapped%qr; sno=mapped%qs; pic=mapped%qg
+      psfc=mapped%psfc
+      PRINT *, 'SHADOW WPS mapping complete; research only, not native/science approval'
+    END SUBROUTINE prepare_shadow_wps
 
   END program lapsprep
   

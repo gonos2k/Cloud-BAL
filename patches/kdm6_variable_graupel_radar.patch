@@ -1,0 +1,50 @@
+--- a/module_mp_radar.F
++++ b/module_mp_radar.F
+@@ -69,10 +69,11 @@
+ !+---+-----------------------------------------------------------------+
+ !+---+-----------------------------------------------------------------+
+ 
+-      subroutine radar_init
++      subroutine radar_init(variable_graupel_mass)
+ 
+       IMPLICIT NONE
+       INTEGER:: n
++      LOGICAL, OPTIONAL, INTENT(IN):: variable_graupel_mass
+       PI5 = 3.14159*3.14159*3.14159*3.14159*3.14159
+       lamda4 = lamda_radar*lamda_radar*lamda_radar*lamda_radar
+       m_w_0 = m_complex_water_ray (lamda_radar, 0.0d0)
+@@ -178,8 +179,12 @@
+       xoams = 1./xam_s
+       xobms = 1./xbm_s
+       xocms = xoams**xobms
++      xobmg = 1./xbm_g
++      ! Variable-density schemes compute the inverse mass law per cell.
++      IF (PRESENT(variable_graupel_mass)) THEN
++         IF (variable_graupel_mass) RETURN
++      ENDIF
+       xoamg = 1./xam_g
+-      xobmg = 1./xbm_g
+       xocmg = xoamg**xobmg
+ 
+ 
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -3282,7 +3282,7 @@
+    xam_i = cmi
+    xbm_i = dmi
+    xmu_i = mui
+-   call radar_init
++   call radar_init(variable_graupel_mass=.true.)
+ !+---+-----------------------------------------------------------------+
+ !
+   END SUBROUTINE kdm6init
+@@ -3974,7 +3974,8 @@
+            lamg = 1./ilamg(k)
+            do n = 1, nrbins
+               x = xam_g(k) * xxDg(n)**xbm_g
+-              call rayleigh_soak_wetgraupel (x,DBLE(xocmg),DBLE(xobmg), &
++              call rayleigh_soak_wetgraupel (x,                       &
++                    DBLE((1./xam_g(k))**xobmg),DBLE(xobmg), &
+                     fmelt_g, melt_outside_g, m_w_0, m_i_0, lamda_radar, &
+                     CBACK, mixingrulestring_g, matrixstring_g,          &
+                     inclusionstring_g, hoststring_g,                    &

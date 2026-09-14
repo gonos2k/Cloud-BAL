@@ -1,0 +1,11 @@
+--- a/start_em.F
++++ b/start_em.F
+@@ -1523,7 +1523,7 @@
+          END IF
+       END IF
+ 
+-      IF ( w_needs_to_be_set ) THEN
++      IF ( w_needs_to_be_set .AND. .NOT. config_flags%use_input_w ) THEN
+ 
+          ! setting kinematic condition for w at the surface
+ 

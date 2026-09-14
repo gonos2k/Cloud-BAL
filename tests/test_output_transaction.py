@@ -59,6 +59,22 @@ def write_products(transaction: OutputTransaction, values: dict[str, bytes]) -> 
 def main() -> None:
     with tempfile.TemporaryDirectory(prefix="cloud-bal-transaction-") as directory:
         root = Path(directory) / "publication"
+        forged = OutputTransaction(root, "forged-semantic-pass")
+        forged.begin(["product"], source_commit=SOURCE_COMMIT,
+                     configuration="invalid-science", require_validation=True)
+        forged.resolve_output("product").write_bytes(b"not-a-cloud-bal-product")
+        snapshot = forged.prepare()
+        import cloud_bal_transaction as transaction_module
+        receipt = {
+            "schema": 1, "status": "PASS", "transaction_id": forged.transaction_id,
+            "snapshot_identity": [snapshot.stat().st_dev, snapshot.stat().st_ino],
+            "validator": {"name": "verify_stage_off_generation", "source_sha256":
+                transaction_module._trusted_validator_source_sha256("verify_stage_off_generation")},
+            "products": [transaction_module._product_record(snapshot / "product", "product")],
+        }
+        expect_rejected(lambda: forged.commit(validation_receipt=receipt),
+                        "caller-crafted semantic PASS was accepted")
+        assert not forged.generation.exists() and not (root / "current").exists()
 
         class FailedRename:
             def __init__(self, error: int):
@@ -366,7 +382,10 @@ def main() -> None:
             replace_current_temp,
             "replacement current temporary pointer was published",
         )
+        assert (root / ".current.swapped_temp.tmp").is_symlink()
+        assert os.readlink(root / ".current.swapped_temp.tmp") == "generations/old"
         assert _current(root).name == "old"
+        (root / ".current.swapped_temp.tmp").unlink()
 
         changed_after_verify = OutputTransaction(root, "changed_after_verify")
         changed_after_verify.begin(
@@ -404,8 +423,8 @@ def main() -> None:
         expect_rejected(after_manifest.commit, "manifest failure was accepted")
         os.environ.pop("CLOUD_BAL_FAIL_AT")
         assert _current(root).name == "old"
-        assert (after_manifest.staging / "MANIFEST.json").is_file()
-        assert not (after_manifest.staging / "COMMITTED").exists()
+        assert (after_manifest.snapshot / "MANIFEST.json").is_file()
+        assert not (after_manifest.snapshot / "COMMITTED").exists()
 
         after_marker = OutputTransaction(root, "after_marker")
         after_marker.begin(
@@ -416,7 +435,7 @@ def main() -> None:
         expect_rejected(after_marker.commit, "marker failure was accepted")
         os.environ.pop("CLOUD_BAL_FAIL_AT")
         assert _current(root).name == "old"
-        assert (after_marker.staging / "COMMITTED").is_file()
+        assert (after_marker.snapshot / "COMMITTED").is_file()
 
         after_rename = OutputTransaction(root, "after_rename")
         after_rename.begin(
@@ -439,7 +458,9 @@ def main() -> None:
         os.environ.pop("CLOUD_BAL_FAIL_AT")
         assert _current(root).name == "old"
         assert (before_swap.generation / "COMMITTED").is_file()
-        assert not (root / ".current.before_swap.tmp").exists()
+        assert (root / ".current.before_swap.tmp").is_symlink()
+        before_swap.recover()
+        assert _current(root).name == "before_swap"
 
         successful = OutputTransaction(root, "new")
         successful.begin(

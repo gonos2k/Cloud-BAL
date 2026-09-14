@@ -134,6 +134,10 @@ CONTAINS
     candidate%omega_target%quality(1,1,1)=0_int32
     candidate%omega_target%source(1,1,1)= &
       IOR(SOURCE_DYNAMIC_TARGET,SOURCE_CONVENTIONAL_OBS)
+    candidate%omega_target_sigma%value(1,1,1)=0.5_real32
+    candidate%omega_target_sigma%valid(1,1,1)=.TRUE.
+    candidate%omega_target_sigma%quality(1,1,1)=0_int32
+    candidate%omega_target_sigma%source(1,1,1)=SOURCE_CONVENTIONAL_OBS
   END SUBROUTINE initialize_pipeline_state
 
 END PROGRAM test_nonuniform_localization

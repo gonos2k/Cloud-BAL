@@ -1,0 +1,58 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -1862,8 +1862,8 @@
+ !        (T<T0: NI->NR)
+ !-------------------------------------------------------------
+ ! revised
+-          if(supcol.gt.0. .and. nci(i,k,2).gt.ncmin) then
+-          if(nrs(i,k,1).gt.nrmin) then
++          if(supcol.gt.0. .and. qci(i,k,2).gt.qmin .and. nci(i,k,2).gt.ncmin) then
++          if(qrs(i,k,1).gt.qcrmin .and. nrs(i,k,1).gt.nrmin) then
+                acrfac=(g3pmr)*rslopemu(i,k,1)*rslope3(i,k,1)*g1pmi*rslopemu(i,k,4)*rslope(i,k,4)&
+                      +(2.)*g2pmr*rslopemu(i,k,1)*rslope2(i,k,1)*g2pmi*rslopemu(i,k,4)*rslope2(i,k,4)&
+                      +(g1pmr)*rslopemu(i,k,1)*rslope(i,k,1)*g3pmi*rslopemu(i,k,4)*rslope3(i,k,4)
+@@ -1928,7 +1928,7 @@
+ ! nsacw: Accretion of cloud water by snow  [LH A12]
+ !        (NC ->) 
+ !-------------------------------------------------------------
+-         if(qrs(i,k,2).gt.qcrmin .and. nci(i,k,1).gt.ncmin) then
++         if(qrs(i,k,2).gt.qcrmin .and. qci(i,k,1).gt.qmin .and. nci(i,k,1).gt.ncmin) then
+ !           nsacw(i,k) = min(pacrc*n0sfac(i,k)*rslope3(i,k,2)*rslopeb(i,k,2)    &
+            nsacw(i,k) = min((pi)*avts*.25*eacsc*n0so(i,k)*n0sfac(i,k)*n0c(i,k)/(muc+1)  &
+                        *g3pbs*rslope3(i,k,2)*rslopeb(i,k,2)*rslopemu(i,k,2)     &
+@@ -1953,7 +1953,7 @@
+ ! ngacw: Accretion of cloud water by graupel [LH A13]
+ !        (NC-> 
+ !-------------------------------------------------------------
+-          if(qrs(i,k,3).gt.qcrmin .and. nci(i,k,1).gt.ncmin) then
++          if(qrs(i,k,3).gt.qcrmin .and. qci(i,k,1).gt.qmin .and. nci(i,k,1).gt.ncmin) then
+            ngacw(i,k) = min((pi)*avtg(i,k)*.25*eacgc*n0go(i,k)*n0c(i,k)/(muc+1)&
+                        *g3pbg(i,k)*rslope3(i,k,3)*rslopeb(i,k,3)*rslopemu(i,k,3)&
+                        *rslopec(i,k)*rslopecmu(i,k)     &
+@@ -1990,7 +1990,7 @@
+ ! niacw: Accretion of cloud water by ice
+ !        (T<T0: NC ->NI) 
+ !-------------------------------------------------------------
+-          if(nci(i,k,1).gt.ncmin .and. avedia(i,k,3).GE. di50) then
++          if(qci(i,k,1).gt.qmin .and. nci(i,k,1).gt.ncmin .and. avedia(i,k,3).GE.di50) then
+              niacw(i,k) = min(pi*avti*.25*eacic*n0i(i,k)*n0c(i,k)/(muc+1)&
+                        *g3pbi*rslope3(i,k,4)*rslopeb(i,k,4)*rslopemu(i,k,4)&
+                        *rslopec(i,k)*rslopecmu(i,k)     &
+@@ -2058,7 +2058,7 @@
+             psacr(i,k) = psacr(i,k)*min(max(0.0,(qrs(i,k,2))/qrs(i,k,1)),1.)**2
+             psacr(i,k) = min(psacr(i,k),(qrs(i,k,1))/dtcld)
+           endif
+-          if(qrs(i,k,2).gt.qcrmin .and. nrs(i,k,1).gt.nrmin) then
++          if(qrs(i,k,2).gt.qcrmin .and. qrs(i,k,1).gt.qcrmin .and. nrs(i,k,1).gt.nrmin) then
+ !-------------------------------------------------------------
+ ! nsacr: Accretion of rain by snow  [LH A23] 
+ !       (T<T0:NR->)
+@@ -2104,7 +2104,7 @@
+ ! ngacr: Accretion of rain by graupel  [LH A24] 
+ !        (T<T0: NR->) 
+ !-------------------------------------------------------------
+-          if(qrs(i,k,3).gt.qcrmin .and. nrs(i,k,1).gt.nrmin) then
++          if(qrs(i,k,3).gt.qcrmin .and. qrs(i,k,1).gt.qcrmin .and. nrs(i,k,1).gt.nrmin) then
+ ! revised
+             acrfac = (g3pmg)*g1pmr*rslope3(i,k,3)*rslopemu(i,k,3)&
+                      *rslope(i,k,1)*rslopemu(i,k,1)                            &

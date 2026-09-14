@@ -1,0 +1,378 @@
+cdis   
+cdis    Open Source License/Disclaimer, Forecast Systems Laboratory
+cdis    NOAA/OAR/FSL, 325 Broadway Boulder, CO 80305
+cdis    
+cdis    This software is distributed under the Open Source Definition,
+cdis    which may be found at http://www.opensource.org/osd.html.
+cdis    
+cdis    In particular, redistribution and use in source and binary forms,
+cdis    with or without modification, are permitted provided that the
+cdis    following conditions are met:
+cdis    
+cdis    - Redistributions of source code must retain this notice, this
+cdis    list of conditions and the following disclaimer.
+cdis    
+cdis    - Redistributions in binary form must provide access to this
+cdis    notice, this list of conditions and the following disclaimer, and
+cdis    the underlying source code.
+cdis    
+cdis    - All modifications to this software must be clearly documented,
+cdis    and are solely the responsibility of the agent making the
+cdis    modifications.
+cdis    
+cdis    - If significant modifications or enhancements are made to this
+cdis    software, the FSL Software Policy Manager
+cdis    (softwaremgr@fsl.noaa.gov) should be notified.
+cdis    
+cdis    THIS SOFTWARE AND ITS DOCUMENTATION ARE IN THE PUBLIC DOMAIN
+cdis    AND ARE FURNISHED "AS IS."  THE AUTHORS, THE UNITED STATES
+cdis    GOVERNMENT, ITS INSTRUMENTALITIES, OFFICERS, EMPLOYEES, AND
+cdis    AGENTS MAKE NO WARRANTY, EXPRESS OR IMPLIED, AS TO THE USEFULNESS
+cdis    OF THE SOFTWARE AND DOCUMENTATION FOR ANY PURPOSE.  THEY ASSUME
+cdis    NO RESPONSIBILITY (1) FOR THE USE OF THE SOFTWARE AND
+cdis    DOCUMENTATION; OR (2) TO PROVIDE TECHNICAL SUPPORT TO USERS.
+cdis   
+cdis
+cdis
+cdis   
+cdis
+      subroutine lut_gen(c4_radarname,rlat_radar,rlon_radar
+     :                  ,rheight_radar,first_gate_m,gate_spacing_m_ret
+     :                  ,NX_L,NY_L,NZ_L,istatus_out)
+c
+c     PURPOSE:
+c        Generate look-up tables for radar remapping.
+c
+      include 'trigd.inc'
+      implicit none
+c
+      include 'remap_constants.dat'
+      include 'remap.cmn'
+      include 'remap_geometry.cmn'
+c
+c     Variables from LAPS domain file
+c
+
+      integer NX_L,NY_L,NZ_L
+      real*4 lat(NX_L,NY_L)
+      real*4 lon(NX_L,NY_L)
+      real*4 topo(NX_L,NY_L)
+c
+c     Functions
+c
+      real height_to_zcoord
+c
+c     Misc interval variables
+c
+      integer i,j,igate_lut,iaz,ielev,iran,iz_grid,istatus,len_dir
+      integer istatus_out,ios
+      real rlat_grid,rlon_grid,height_grid
+      real rlat_radar,rlon_radar,rheight_radar
+      real first_gate_m,gate_spacing_m_ret
+      real elev,elev_deg,coselev,azimuth,azi_deg
+      real slant_range,sl_range_m,ri,rj,dbz,z,grid_spacing_cen_m
+      character*4 c4_radarname
+      character*150 static_dir,filename,geometry_filename
+      character*3 ext
+c
+c     Fill arrays with initial values
+c
+      istatus_out = 0
+      lut_geometry_ready_cmn = 0
+      IF (first_gate_m .lt. 0. .or. first_gate_m .ge. 1000. .or.
+     :    gate_spacing_m_ret .le. 0. .or.
+     :    gate_spacing_m_ret .gt. 1000.) THEN
+        write(6,*) ' Invalid radar geometry for LUT generation: ',
+     :             first_gate_m,gate_spacing_m_ret
+        RETURN
+      END IF
+
+      DO 50 i = 1,10
+        i4time_old(i) = 0
+        n_ref_obs_old(i) = 99999
+   50 CONTINUE
+c
+      write(6,801)NX_L,NY_L
+  801 format('REMAP > Getting LAPS Domain: ',2i5)
+c
+      call get_domain_laps(NX_L,NY_L,'nest7grid',
+     :                     lat,lon,topo,grid_spacing_cen_m,istatus)    
+      IF (istatus .eq. 0) THEN
+        write(6,*)' Error getting LAPS domain'
+        RETURN
+      END IF
+
+      write(6,*)' Corners of domain:'
+      write(6,*)lat(1,1),lon(1,1),lat(NX_L,NY_L),lon(NX_L,NY_L)
+
+c
+      write(6,810) range_interval
+  810 format(' Range interval for LUTs is ',F10.2)
+
+      if(range_interval .gt. grid_spacing_cen_m)then
+          write(6,*)' WARNING: Range interval is > grid spacing of'
+     1             ,grid_spacing_cen_m, 'leading to inaccurate remap'
+      endif
+
+      write(6,812) gate_spacing_m_ret
+  812 format(' Effective gate spacing for radar ',F10.2)
+
+      write(6,*)' Radar Name  ',c4_radarname
+      write(6,*)' Radar Coords',rlat_radar,rlon_radar,rheight_radar
+      
+      ext = 'dat'
+      call get_directory(ext,static_dir,len_dir)
+
+      geometry_filename = static_dir(1:len_dir)//'vxx/'
+     1         //'radar_lut_geometry.'//c4_radarname
+
+      write(6,*)' LUT geometry first gate / spacing = ',first_gate_m,
+     :          gate_spacing_m_ret
+      write(6,*)' Generating LUTs for current radar and LAPS domain'
+
+      lut_first_gate_m_cmn = first_gate_m
+      lut_gate_spacing_m_cmn = gate_spacing_m_ret
+      lut_geometry_ready_cmn = 1
+
+c     Put the coords into common so remap_process can access them
+      rlat_radar_cmn = rlat_radar
+      rlon_radar_cmn = rlon_radar
+      rheight_radar_cmn = rheight_radar
+      c4_radarname_cmn = c4_radarname      
+c
+c     Generate Gate/Elev to Projran lut
+c
+!     Try to read lut
+      filename = static_dir(1:len_dir)//'vxx/'
+     1         //'gate_elev_to_projran_lut.'//c4_radarname
+90    write(6,*)' Generating Gate/Elev to Projran LUT'
+
+!     Calculate lut
+      write(6,820) lut_gates
+  820 format(' REMAP > Building Gate/Elev to Projran lut, gates =',
+     :        I12)
+
+      DO ielev = 0,lut_elevs
+
+        elev_deg = ielev * elev_interval
+        coselev = cosd(elev_deg)
+
+        DO igate_lut = 1,lut_gates
+
+          sl_range_m = first_gate_m + (igate_lut - 1) *
+     :                 gate_spacing_m_ret * gate_interval
+          iran = sl_range_m * coselev / range_interval
+          gate_elev_to_projran_lut(igate_lut,ielev) = iran
+
+        ENDDO
+      ENDDO
+
+!     Write lut
+      open(12,file=filename,form='unformatted',status='replace',
+     1     iostat=ios)
+      IF (ios .ne. 0) THEN
+        write(6,*)' Cannot open LUT for writing: ',filename
+        RETURN
+      END IF
+      write(12)gate_elev_to_projran_lut
+      close(12,iostat=ios)
+      IF (ios .ne. 0) RETURN
+  110 continue 
+
+c
+c     Generate Gate/Elev to Z lut
+c
+!     Try to read lut
+      filename = static_dir(1:len_dir)//'vxx/'
+     1         //'gate_elev_to_z_lut.'//c4_radarname
+190   write(6,*)' Generating Gate/Elev to Z LUT'
+
+!     Calculate lut
+      write(6,830)
+  830 format(' REMAP > Building Gate/Elev to Z lut')
+c
+      DO 200 ielev = 0,lut_elevs
+ 
+        elev_deg = ielev * elev_interval
+ 
+        DO 180 igate_lut = 1,lut_gates
+
+          sl_range_m = first_gate_m + (igate_lut - 1) *
+     :                 gate_spacing_m_ret * GATE_INTERVAL
+          azi_deg=0.
+ 
+          call radar_to_latlon
+     :         (rlat_grid,rlon_grid,height_grid
+     :                   ,azi_deg,sl_range_m,elev_deg
+     :                  ,rlat_radar,rlon_radar,rheight_radar)
+
+          iz_grid = nint(height_to_zcoord(height_grid,istatus))
+          gate_elev_to_z_lut(igate_lut,ielev) = min(iz_grid,NZ_L)
+
+  180   CONTINUE
+  200 CONTINUE
+
+!     Write lut
+      open(12,file=filename,form='unformatted',status='replace',
+     1     iostat=ios)
+      IF (ios .ne. 0) THEN
+        write(6,*)' Cannot open LUT for writing: ',filename
+        RETURN
+      END IF
+      write(12)gate_elev_to_z_lut
+      close(12,iostat=ios)
+      IF (ios .ne. 0) RETURN
+  210 continue 
+
+c
+c     Generate Az/Ran to i,j lut
+c
+!     Try to read lut
+      filename = static_dir(1:len_dir)//'vxx/'
+     1         //'azran_to_ijgrid_lut.'//c4_radarname
+290   write(6,*)' Generating Az/Ran to I/J LUT'
+
+!     Calculate lut
+      write(6,840)
+  840 format(' REMAP > Building Az/Ran to i,j lut')
+c
+      DO 300 iran = 0,lut_ranges
+
+        slant_range = iran*range_interval
+
+        DO 280 iaz = 0,lut_azimuths
+
+          azimuth = float(iaz)
+          elev = 0.
+
+          call radar_to_latlon(rlat_grid,rlon_grid,height_grid
+     :                  ,azimuth,slant_range,elev
+     :                  ,rlat_radar,rlon_radar,rheight_radar)
+
+          call latlon_to_rlapsgrid(rlat_grid,rlon_grid,lat,lon,
+     :                   NX_L,NY_L,ri,rj,istatus)
+          i = nint(ri)
+          j = nint(rj)
+
+          IF (i.le.0.or.i.gt.NX_L.or.j.le.0.or.j.gt.NY_L) THEN
+
+            azran_to_igrid_lut(iaz,iran) = 0
+            azran_to_jgrid_lut(iaz,iran) = 0
+
+          ELSE
+
+            azran_to_igrid_lut(iaz,iran) = i
+            azran_to_jgrid_lut(iaz,iran) = j
+
+          END IF
+
+  280   CONTINUE
+  300 CONTINUE
+
+!     Write lut
+      open(12,file=filename,form='unformatted',status='replace',
+     1     iostat=ios)
+      IF (ios .ne. 0) THEN
+        write(6,*)' Cannot open LUT for writing: ',filename
+        RETURN
+      END IF
+      write(12)azran_to_igrid_lut,azran_to_jgrid_lut
+      close(12,iostat=ios)
+      IF (ios .ne. 0) RETURN
+  310 continue 
+
+c     Record the geometry used for this volume for auditability.
+      open(12,file=geometry_filename,form='formatted',status='replace',
+     1     iostat=ios)
+      IF (ios .ne. 0) THEN
+        write(6,*)' Cannot write LUT geometry signature'
+        RETURN
+      END IF
+      write(12,*,iostat=ios) first_gate_m,gate_spacing_m_ret
+      close(12,iostat=istatus)
+      IF (ios .ne. 0 .or. istatus .ne. 0) RETURN
+
+c     Generate DbZ Lookup Table (graduated for each tenth of a dbz)
+      do i = -1000,+1000
+          dbz = float(i) / 10.
+          z = 10**(dbz / 10.)
+          dbz_to_z_lut(i) = z
+      enddo ! i
+
+c     These lookup tables flag which gates actually need processing
+      do i = 1,MAX_GATES
+           
+          if(i .le. 920       .and. i .ge. INITIAL_VEL_GATE)then
+              lgate_vel_lut(i) = .true.
+          else
+              lgate_vel_lut(i) = .false.
+          endif
+
+          if(i .eq. (i/4) * 4 .and. i .ge. INITIAL_REF_GATE)then
+              lgate_ref_lut(i) = .true.
+          else
+              lgate_ref_lut(i) = .false.
+          endif
+
+          if(lgate_vel_lut(i) .or. lgate_ref_lut(i))then
+              lgate_lut(i) = .true.
+          else
+              lgate_lut(i) = .false.
+          endif
+
+      enddo ! i
+
+
+      write(6,850)
+  850 format(' REMAP > Lookup Tables Complete')
+
+      istatus_out = 1
+      RETURN
+      END
+
+   
+
+
+      subroutine read_radar_info(c4_radarname,rlat_radar,rlon_radar
+     :                                       ,rheight_radar,istatus)
+
+      character*4 c4_radarname
+      character*80 c80_line
+
+      call getenv('RADARNAME',c4_radarname)
+
+      write(6,*)'read_radar_info: RADARNAME = ',c4_radarname
+
+      open(11,file='radarinfo.dat',status='old')
+
+ 10   read(11,1,err=900)c80_line
+ 1    format(a)
+
+      if(c80_line(1:4) .eq. c4_radarname)then ! We've got the right radar
+          read(c80_line,2)ideg_lat,imin_lat,isec_lat
+     1                   ,ideg_lon,imin_lon,isec_lon
+     1                   ,iheight
+ 2        format(26x,i2,6x,i2,6x,i2,7x,i3,5x,i2,6x,i2,6x,i4)
+          rlat_radar =  float(ideg_lat) + float(imin_lat)/60.
+     1                                  + float(isec_lat)/3600.
+          rlon_radar = -float(ideg_lon) - float(imin_lon)/60.
+     1                                  - float(isec_lon)/3600.
+          rheight_radar = iheight
+          write(6,*)' rlat_radar,rlon_radar,rheight_radar '
+     1               ,rlat_radar,rlon_radar,rheight_radar
+          istatus = 1
+          close(11)
+          return
+      endif       
+
+      goto 10
+
+ 900  istatus = 0
+      close(11)
+      write(6,*)'read_radar_info: Radar data not found'
+      return
+
+ 999  istatus = 1
+
+      return
+      end

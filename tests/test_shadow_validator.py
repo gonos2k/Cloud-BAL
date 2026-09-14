@@ -4,11 +4,14 @@
 from pathlib import Path
 import sys
 import tempfile
+import json
+from unittest.mock import patch
 
 import netCDF4
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+import validate_shadow_diagnostics as validator  # noqa: E402
 from validate_shadow_diagnostics import (  # noqa: E402
     canonical_omega_target_cells,
     is_signed_int32,
@@ -50,5 +53,21 @@ with tempfile.TemporaryDirectory() as directory:
     with netCDF4.Dataset(path) as dataset:
         assert is_signed_int32(dataset["packed"].dtype)
         assert not is_signed_int32(values(dataset["packed"]).dtype)
+
+with tempfile.TemporaryDirectory(prefix="cloud-bal-shadow-snapshot-") as directory:
+    snapshot = Path(directory) / ".snapshots" / "candidate"
+    snapshot.mkdir(parents=True)
+    (snapshot / "TRANSACTION.json").write_text(
+        json.dumps({"transaction_id": "candidate", "products": ["case.nc", "case.json"]}),
+        encoding="utf-8",
+    )
+    (snapshot / "case.nc").write_bytes(b"diagnostic")
+    report = {"path": "case.nc", "numerical_decision": "VALID"}
+    (snapshot / "case.json").write_text(json.dumps(report), encoding="utf-8")
+    with patch.object(validator, "validate", return_value=(report, [])):
+        receipt = validator.validate_snapshot(snapshot)
+    assert receipt["status"] == "PASS"
+    assert receipt["transaction_id"] == "candidate"
+    assert receipt["products"][0]["path"] == "case.json"
 
 print("Shadow diagnostic validator tests passed")

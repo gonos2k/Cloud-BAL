@@ -1,0 +1,23 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -2608,7 +2608,8 @@
+                            +praci(i,k)*(1.-delta3)+psacr(i,k)*(1.-delta2)      &
+                            +pracs(i,k)*(1.-delta2)+pgaci(i,k)+paacw(i,k)       &
+                            +pgacr(i,k)+pgacs(i,k))*dtcld,0.)
+-            brs(i,k) = max(brs(i,k)+(pgdep(i,k)/rhox(i,k)+biacr(i,k)           &
++            if(pgdep(i,k).ne.0.) bgdep(i,k)=pgdep(i,k)/rhox(i,k)
++            brs(i,k) = max(brs(i,k)+(bgdep(i,k)+biacr(i,k)           &
+                            +braci(i,k)+bsacr(i,k)+bracs(i,k)+bgaci(i,k)        &
+                            +baacw(i,k)+bgacr(i,k))*dtcld,0.)
+             xlf = xls-xl(i,k)
+@@ -2699,8 +2700,8 @@
+ !
+ !     graupel volume mixing ratio
+ !
+-            bgevp(i,k)=pgevp(i,k)/rhox(i,k)
+-            bgeml(i,k)=pgeml(i,k)/rhox(i,k)
++            if(pgevp(i,k).ne.0.) bgevp(i,k)=pgevp(i,k)/rhox(i,k)
++            if(pgeml(i,k).ne.0.) bgeml(i,k)=pgeml(i,k)/rhox(i,k)
+ !     update
+             q(i,k) = q(i,k)+work2(i,k)*dtcld
+             qci(i,k,1) = max(qci(i,k,1)-(praut(i,k)+pracw(i,k)                 &
