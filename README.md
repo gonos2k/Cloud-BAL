@@ -116,4 +116,6 @@ The [plan](docs/CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md),
 [checkpoints](docs/CP02_MULTI_RADAR_INITIALIZATION_CHECKLIST_20260914.md), and
 [scientific review](docs/CP02_MULTI_RADAR_SCIENTIFIC_REVIEW_20260914.md) define observation reuse,
 phase-change consistency, startup-wave controls, and 1–6 h precipitation validation.
+The [mathematical proofs](docs/CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md)
+state the assumptions for identifiability, conservation, minimum corrections, and wave control.
 These documents do not claim implemented or validated coupled initialization.
