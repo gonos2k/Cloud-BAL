@@ -1,6 +1,6 @@
 # 다중 레이더 연직풍 복원 및 국지 균형초기화 추가 과제
 
-작성: 2026-09-14. 상태: **계획 수립 / 자료·방정식 검토 중 / 결합 구현 및 검증 미완료**.
+작성: 2026-09-14. 추가 검토 반영: 2026-09-15. 상태: **계획 수립 / 자료·방정식 검토 중 / 결합 구현 및 검증 미완료**.
 
 추가 검토 반영: 수학·수치해석·기상학 팀 검토와 상변화 유발 중력파 제어 요구를
 R1–R5의 작업·통과 조건에 반영했다. 종합 검토 (로컬 작업공간 근거: `../scratch/cp02_multiradar_additional_review_20260914/REVIEW.md`)는
@@ -9,6 +9,113 @@ R1–R5의 작업·통과 조건에 반영했다. 종합 검토 (로컬 작업�
 MR-C0–MR-C6에서 추적한다.
 성립 가정·해 존재·유일성·보존·파동 제어의 수학적 근거는
 [조건부 증명](CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md)에 정리한다.
+
+## 2026-09-15 추가 검토 반영 — 수식 수정과 native 통합 종료조건
+
+검토 기준은 PR #5 병합 `ba45e8f6b9ed3bbd6fba5ddf2766133a3fe2657a`, tree
+`948683c18fb43fd5235f6288373864e5f0b9707c`다. 이전 `816c038`과 구분한다.
+종별 엔탈피·유한 상변화, 보존적 pressure remap, 제한된 outer feedback,
+upstream 입력 및 native W 전달 부품은 이미 존재한다. 이를 미구현으로 되돌리지 않는다.
+다만 루틴 시험·소스 존재·모델이 소비한 전체 초기장의 물리 정합성은 별도 판정이다.
+이 절은 **후속 구현·검증 계획**이며 아래 결함을 수정 완료로 처리하지 않는다.
+사용자 검토의 여섯 수식 반례는 독립 Python 재계산 근거로 인용하며, 이 계획 갱신에서
+해당 파일이나 pinned ifx·NetCDF·startup 실행을 재현했다고 주장하지 않는다.
+
+관측오차 공분산 방향, native 혼합상 정책, PASS/수동 폐합 구분 등 이전 문서 교정은
+반영된 상태로 유지한다. 이후 검토는 실제 계산·소비 경로의 이행 여부에 집중한다.
+
+| 우선순위 / 연결 | 수정·결정할 작업 | 종료조건 |
+|---|---|---|
+| P0 / B06, R3 | legacy `nonlin`의 압력미분 부호와 전체/섭동 omega 계약을 한 묶음으로 수정 | 실제 호출 인자·단위와 네 U/V 미분을 함께 검증; affine pressure 미분 및 영섭동 항등식의 생산 루틴 O0/O2 통과 |
+| 통합 전 P0 / M06, E03, MR-C4 | baseline·staged candidate·geometry·실제 U/V 증분과 payload 결속 | 같은 시각·shape의 다른 수직 상태도 거부; actual native relevant fields를 소비 직전 대조 |
+| 통합 전 P0 / M07, MR-C4 | seed와 최종 지형 하부 W의 전체값 경계조건 | pinned host의 stagger/map factor/CF·경계 stencil로 baseline와 consumed 상태 모두 검사; startup 후 재읽기 |
+| P1 / B01, E03, E05 | mask 밖 실제 수평풍 변경 및 payload 재적용 처리 | 지원 밖 변경은 후보 거부 또는 관련 U/V/W를 함께 rollback; 재시도로 delta W가 두 번 더해지지 않음 |
+| 새 결합 구현 P0 / MR-C0–C2 | 레이더별 관측→Barnes 사용 계보·정보 평가→전체 질량식·경계 선택 | 외부 paired target 없이 내부 진단 경로와 최소 수평풍 보정의 실현 가능성을 확정 |
+| 병렬 P1 / G02, E03 | exact-source 시험·공개 CI와 소비 readback 연결 | code/input/config/compiler·실제 소비 상태가 같은 사례에 결속; CI 부재가 격리 연구를 막지는 않음 |
+
+P1인 mask·재시도 항목도 native 통합 승인 전에 닫는다. P0/P1은 작업 우선순위이며
+낮은 우선순위라는 이유로 MR-C4 완료조건에서 제외하지 않는다. 레이더 자료 연결과
+기하 평가는 수식 수정·전달 계약 설계와 병렬 진행할 수 있다.
+
+### Legacy nonlin 수정 묶음
+
+현재 감소하는 pressure level에서 `dp(k)=p(k-1)-p(k)>0`이다. 따라서
+`du/dp=(u(k-1)-u(k+1))/(dp(k)+dp(k+1))`의 부호를 사용하거나 동일한 signed
+pressure 차이로 계산한다. background/perturbation U/V의 네 미분을 함께 수정한다.
+`u(p)=10^-4 p`이면 결과는 `+10^-4`여야 한다. 비균일 격자의 affine 검증도 포함한다.
+
+연직 섭동 이류는 `omega_b*d(delta_u)/dp + delta_omega*du_b/dp`와 V의 대응식이다.
+호출부와 함수에서 background와 delta를 명확히 구분하고, 전체 omega를 delta로
+전달하지 않는다. 전체/배경 omega를 명시적으로 받아 내부 face 값에서 delta를 구하는
+작은 구현도 검토하되, 연속성에 필요한 전체 omega를 덮어쓰거나 불필요한 3-D 배열을
+추가하지 않는다. omega 부호·Pa/s·stagger를 같은 시험에서 확인한다. 수정 대상은
+`src/balance/qbalpe.f`의 `balcon→nonlin` 경로다. `src/sfc/lapsvanl.f`의 별도
+동명 호출은 인자 구성이 다르므로 링크·호출 범위를 확인하기 전에 일괄 치환하지 않는다.
+`delta_u=delta_v=delta_omega=0`이면 background shear와 omega가 비영이어도
+섭동항은 0이어야 한다. 미분 부호만 고친 비영 결과를 정답으로 인정하지 않는다.
+비교용 원본은 보존하지만 잘못된 수식과의 바이트 일치를 새 경로의 정당화로 쓰지 않는다.
+운영 영향 크기는 실제 binary–source 결속과 대조실험 전에는 단정하지 않는다.
+
+### Native W 소비의 최소 계약
+
+최소 식별 정보는 `baseline_state_id`, `staged_candidate_state_id`,
+`geometry_fingerprint`, `increment_id`, `mapping_assumption`이다. 문자열·hash를
+추가하는 것만으로 종료하지 않는다. 실제 native의 P/PB, PH/PHB, U/V, W와 필요한
+질량·수직좌표·metric·시각의 결속 범위를 정하고, payload P/Z·미분값 및 DELTA_U/V가
+그 배열에서 유도됐음을 소비 직전 검사한다. 정확한 필드 집합과 mapping은 **미확정**이며
+R2에서 pinned host 정의에 맞게 선택한다. baseline U/V 파일, candidate U/V 파일,
+W seed 파일, 최종 staged 파일의 역할을 분리하고 consumed U/V는 stage에 실제 저장된
+candidate U/V를 뜻하도록 고정한다. 소비하는 host 경로별 W-level pressure 재구성,
+중력상수·metric stencil·저장 정밀도도 선택·결속하기 전에는 payload를 exact native로
+부르지 않는다. 변환식의 고정 geometry·동일 시간경향
+가정이 깨지는 후보는 현행 증분 변환에 그대로 넣지 않는다.
+
+`actual changed U/V support ⊆ validated W mapping support`를 native stagger와
+보간 footprint에서 검사한다. mask 밖 payload NaN을 무시하는 것과 실제 staged
+U/V 변경을 누락하는 것을 구분한다. 대응하지 않는 수평풍 변경을 남긴 채 W만 생략하지 않는다.
+
+재시도 방식은 immutable baseline 대조로 거부, baseline에서 매번 새 stage 생성,
+검증된 increment ID 중복 오류/멱등 처리 중 하나를 실제 소비 경로에 고정한다.
+선택은 **미확정**이다. write 직전 W가 최초 read 값과 같다는 검사만으로 과거 적용을
+판정하지 않는다. 동일 payload를 두 번 호출하는 실제 시험에서 원래 delta W가 중복되지
+않고 다른 입력 쌍·다른 increment와 혼동되지 않아야 한다.
+
+고정 지형의 native 하부 연산자를 B라 하면 `W_seed,s=B(U_base,V_base)`와
+`W_consumed,s=B(U_consumed,V_consumed)`를 모두 확인한다. 증분
+`delta W_s=B(delta U,delta V)`만으로 baseline 경계 오류는 고쳐지지 않는다.
+경사 0.01·수평풍 10 m/s·delta U=0·seed W=0인 반례는 부적합으로 검출해야 한다.
+CF 계수·map factor·비주기 경계 stencil과 저장 정밀도를 포함한 epsilon_s는 실제
+host 근거로 사전 결정한다. `use_input_w` 보존 patch의 제거/전역 덮어쓰기 대신 이
+검사를 적용하고 첫 시간전진 전 consumed 배열에서도 반복한다. 과거 v2 paired
+readback은 선언된 증분 전달 범위의 이력으로 보존하며 seed의 전체값 경계조건을
+확인한 M07 승인 증거로 사용하지 않는다. 임의의 새 입력도 자동 승인하지 않는다.
+
+### 추가할 작은 회귀·적대시험
+
+| 시험 | 기대 판정 / 근거 연결 |
+|---|---|
+| U/V affine pressure profile, 비균일 pressure | 네 pressure 미분의 크기·부호 일치 / B06 |
+| 모든 섭동 0, background shear·omega 비영 | nonlin 섭동항 0; 호출부 포함 / B06 |
+| 같은 시각·위경도·shape, 다른 P/Z·수직 geometry | 소비 전 거부, W 무변경 / M06, E03 |
+| 실제 staged U/V 변경이 W 지원 밖에 존재 | 후보 거부 또는 관련 전체 변경 rollback / B01, E03 |
+| 같은 payload 두 번 적용 | 명시적 중복 거부 또는 검증된 no-op / E03, E05 |
+| 경사 지형·비영 baseline U/V·부적합 seed W | 하부 전체값 경계 오류 검출 / M07 |
+| 일관된 seed와 알려진 surface delta U/V | 최종 전체값 경계 보존 / M07, MR-C4 |
+| 초기화 phase ledger와 첫 native 미세물리 전후 | 추가 종별/열 변화·부력·압력·연직가속도와 중복 상변화 확인 / T03, MR-C5 |
+| source-bound 사례의 O0/O2·startup readback | 같은 입력·설정·코드의 실제 소비 확인 / G02, E03 |
+
+기존 시험에 작은 fixture를 추가하고 새 범용 감사 프레임워크를 생산 FORTRAN에
+넣지 않는다. kernel 단독, NetCDF consumer, 실제 startup 시험의 PASS 범위를 분리한다.
+전체 질량식은 `dot(m_d)+D F_d=0`의 경향·경계 가정을 먼저 고정하며, 기존 증분
+projection RHS만 바꿔 full-state 균형을 달성했다고 하지 않는다. 다섯 feedback field의
+저장값 고정점도 수상체·pressure geometry·native 전체 결합 수렴으로 승격하지 않는다.
+
+다음 통합 milestone: **하나의 고정 사례에서 레이더별 관측과 Barnes의 관계를 확인하고,
+내부 결합 후보를 정확한 baseline에 결속해 전달한 뒤, 첫 시간전진 전 전체 하부 경계·
+질량·열역학 잔차를 독립 재검증한다.** 이후 동일 수상체·열역학·pressure 처리·native
+baseline으로 관측/균형 제약만 달리하여 초기 충격, 남한 육지의 1–6 h RN1/PTY·CSI를
+평가한다. 기존 OFF/HYDRO/LIQUID 간 record·입력 우선순위·지표압 분기 차이를 순수
+omega 효과로 해석하지 않는다. 새 결합 초기화의 과학·운영 승격은 아직 미승인이다.
 
 ## 1. 목적과 기존 과제와의 관계
 
@@ -276,6 +383,9 @@ Vr의 교차공분산을 재현할 수 있으면 조건부 경로를 선택하�
 native 시작 설정은 실제 pinned host의 `use_input_w` 위치·기본값·표면/경계 처리와
 결속한다. 현재 준비본은 `&dynamics use_input_w=.true.`를 사용하지만 설정만으로
 전달 성공을 선언하지 않는다. **첫 시간전진 전 t0 readback**을 필수 산출물로 남긴다.
+R4/MR-C4는 t0 전달·재읽기와 첫 미세물리 진단 준비까지, R5/MR-C5는 실제 첫 호출
+전후 변화와 초기 충격 판정을 담당한다. pinned host의 호출 위치·수집 지점과 인접한
+시간전진·경계 처리 순서를 고정한다. 호출 후 결과를 MR-C4 완료의 선행조건으로 두지 않는다.
 readback은 `x_b→initialized t0` 전체 증분과 `immediately before first MP→immediately
 after first MP` 증분을 분리해 수집한다. 전자의 전체 증분 안에서도 실제 phase operator
 ledger의 종별 `Δr_phase`·`ΔT_phase`를 analysis/remap/기타 증분과 분리하고, 후자에는
@@ -327,8 +437,11 @@ ledger의 종별 `Δr_phase`·`ΔT_phase`를 analysis/remap/기타 증분과 분
   PTY의 레이더 의존성은 실제 생성 경로 확인 전 단정하지 않는다.
 
 수치 허용오차는 기존 계약에서 재사용 가능한 값과 새 기준을 구분해 기록한다.
-새 기준은 변수별 단위·정규화·상한·기준군 대비 허용 변화·자료 출처를 포함해
-R2에서 후보 결과를 보기 전에 고정한다. 아직 근거가 없는 수치를 발명하지 않는다.
+새 기준은 변수별 단위·정규화·상한·기준군 대비 허용 변화·자료 출처를 포함한다.
+확정 시점은 MR 체크리스트를 따른다: 관측 정보는 MR-C1, 보존·수렴은 MR-C2,
+파동·상변화는 MR-C3, 강수 검증은 MR-C6 실행 전이다. 각 기준은 해당 후보의 평가
+결과를 보기 전에 고정하고 R2에서는 방정식에 필요한 관측·보존 계약을 연결한다.
+아직 근거가 없는 수치를 발명하지 않는다.
 미확정 기준이 남으면 관련 단계는 PASS로 승격하지 않는다. 한 사례의 CSI 개선은
 일반적 성능 또는 배포 승인 근거가 아니며 후속 독립 사례 검증을 별도로 남긴다.
 
