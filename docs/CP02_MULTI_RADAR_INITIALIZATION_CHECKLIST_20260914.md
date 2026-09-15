@@ -8,6 +8,7 @@
 ## 상태와 사용 방법
 
 **계획·체크리스트 작성 완료 / 입력·방정식 조사 진행 / 새 결합 초기화 미검증**.
+PR #7 이후 보강은 계획 검토 중이며, 사용자 계획 확정 뒤 코드 수정·회귀시험을 진행한다.
 `MR-C0`–`MR-C6`는 이 추가 과제의 체크포인트다. 기존 CP00–CP07 번호나 CP02의
 여섯 요구사항을 대체하지 않는다. 체크는 실제 산출물·판정·입력/소스/설정 근거가
 있을 때만 완료한다. 문서 작성, 정상 종료, 0회 solver 또는 기존 OFF 실험은 새
@@ -152,13 +153,16 @@ R2 범주별 기록은 다음처럼 정의한다.
 - [ ] `nonlin`의 네 pressure 미분 부호와 전체/섭동 omega 계약을 한 수정 묶음으로 닫는다. affine profile 및 비영 background의 영섭동 항등식을 실제 호출 경로·O0/O2에서 검증한다.
 - [ ] 전체/배경 omega의 donor·가중·유효성 기준을 공유하고 결측 sentinel의 가짜 영섭동을 거부한다. 두 연직 이류항의 단독 비영 사례를 U/V 각각 검사한다. P1 비균일격자 곡률·수렴성은 P0 부호·선형 일관성과 별도 기록한다.
 - [ ] baseline/staged candidate/geometry/increment/mapping을 actual native P/PB·PH/PHB·U/V·W 및 필요한 질량·좌표·metric에 결속한다. 시각·위경도·shape 일치만으로 수용하지 않는다.
+- [ ] raw 불변 입력과 N0 준비 완료 seed의 관계를 고정한다. W time level·내부/경계/halo·설정·처리 지점을 pinned host에서 확인하고 raw W=0과 부적합 ready W를 구분한다. 같은 ready 단계에서 Cloud-BAL 증분을 계산한다.
 - [ ] 실제 변경된 native U/V 지원 영역이 W mapping의 검증된 stagger·보간 footprint 안에 있는지 확인한다. 지원 밖 변경은 거부 또는 관련 U/V/W 전체 rollback한다.
-- [ ] baseline/pre-W/post-W/consumed와 payload의 역할을 기존 receipt에 결속한다. 매번 불변 baseline에서 존재하지 않는 새 private stage를 만들고 candidate 변경을 재구성한다. 기존 경로 덮어쓰기·실패/중단 stage 재사용·동일 stage 중복 적용을 실제 경로에서 거부한다.
+- [ ] raw/seed/pre-W/post-W/consumed와 payload의 역할을 기존 receipt에 결속한다. 매번 불변 준비 완료 seed에서 존재하지 않는 새 private stage를 만들고 candidate 변경을 재구성한다. 기존 경로 덮어쓰기·실패/중단 stage 재사용·동일 stage 중복 적용을 실제 경로에서 거부한다.
 - [ ] native CF·map factor·경계 stencil의 B로 seed W_s=B(U_base,V_base)를 검사한 후, 저장된 candidate U/V로 최종 하부 W를 재계산한다. 변경 지원 영역과 물리·연산·입력 오차를 구분한 epsilon_s로 검사하고 startup 후 W_s=B(U_consumed,V_consumed)를 재확인한다. 상쇄 사례에 bitwise 일치를 강제하지 않는다.
+- [ ] 변경 U/V를 참조하는 B stencil의 출력 영역만 기록하고 영역 밖 W는 seed와 동일하게 유지한다. raw 원본 불변과 ready 영증분 동일성을 별도로 시험한다.
 - [ ] geometry 불일치·mask 밖 실제 변경·중복 적용·부적합 seed의 거부 및 일관된 surface 증분의 양성 사례를 기존 NetCDF 시험에 추가한다.
 - [ ] `tests/intel_toolchain.sh`의 pinned ifx로 새 scratch cwd에서 O0/O2를 검증한다.
 - [ ] 약한 관측 기하·부적합 질량경계·상변화·결측·저장 정밀도·rollback의 필요한 시험을 한다.
 - [ ] canonical/native 잔차, 물/열 예산, 지원 영역과 U/V/W/P/T/Q 변경을 재읽어 비교한다.
+- [ ] 하부 W·저장 정밀도·native 경계/halo의 마지막 수정 후 실제 W/WW·질량·metric으로 유량과 전체 질량/하부 경계 잔차를 재계산한다. solver 중간 잔차로 최종 consumed 검사를 대신하지 않는다.
 - [ ] `W`, material pressure omega, mu-coupled eta-dot WW와 그 변환 가정을 구분한다.
 - [ ] `use_input_w`와 실제 startup/경계 처리 후 **첫 시간전진 전** W 및 결합 상태를 확인한다.
 - [ ] `x_b→initialized t0` 전체 증분과 그 안의 실제 phase operator ledger 종별
@@ -169,6 +173,7 @@ R2 범주별 기록은 다음처럼 정의한다.
   startup/RHS 평가/MP call index/경계 처리/시간전진을 구분하며 미평가 경향은
   `NOT_EVALUATED`로 남긴다. 첫 미세물리 호출 위치와 전후 수집 지점을 pinned host에서 정하고,
   MR-C5의 진단 준비를 확인한다. 호출 후 결과는 MR-C4 완료조건에 포함하지 않는다.
+- [ ] 진단 on/off에서 같은 연산 단계의 주 상태·지속 상태가 동일함을 확인한다. 실제 호출 관찰을 우선하고 추가 물리 호출로 상태를 바꾸지 않는다. 첫 MP 이후 동일성은 MR-C5에서 확인한다.
 - [ ] 변경 예정 필드는 후보와 일치하고, 변경 대상 밖 필드와 원본 입력은 보존됨을 확인한다.
 
 통과: 해당 후보의 소스·입력·설정·빌드·readback이 결속되고 적분 전 실제 소비가 입증된다.
@@ -189,6 +194,7 @@ R2 범주별 기록은 다음처럼 정의한다.
   동일 cell/unit·별도 시간 태그로 재읽는다. 사이의 연산과 인접한 시간전진·경계 처리를
   구분하며, MR-C4의 phase 증분과 extra-MP 증분을 한 차이로 합치지 않는다.
 - [ ] 첫 미세물리 호출의 물·열 경향과 과도한 포화/상변화 재조정을 검사한다.
+- [ ] MR-C4에서 정한 진단 on/off 동일성을 실제 첫 MP 이후에도 확인한다. 누적 tendency·첫 호출 상태·입자모멘트를 포함하고 진단 파일·실행시간은 제외한다.
 - [ ] 호출 전후 순변화를 내부 종전환·sedimentation·지표/경계 유출입·clipping/number 조정·분석 증분과 구분한다. tendency 누적과 실제 state update 시점도 확인하며 정상적인 추가 상변화를 0으로 강제하지 않는다.
 - [ ] 같은 호출의 질량기준·단위·강수 증가량으로 `Q_after-Q_before+M_out-M_in-A_Q`를 검사한다. 내부 낙하와 지표 유출을 중복 집계하지 않고 `1.0→0.9 kg + 유출 0.1 kg` 양성 사례를 포함한다. 정확한 native 장부는 상위 계획에 따른다.
 - [ ] 압력 경향·발산·수직 가속도·부력·하중과 음향/내부 중력파 응답을 비교한다.
