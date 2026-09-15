@@ -21,6 +21,10 @@ upstream 입력 및 native W 전달 부품은 이미 존재한다. 이를 미구
 사용자 검토의 여섯 수식 반례는 독립 Python 재계산 근거로 인용하며, 이 계획 갱신에서
 해당 파일이나 pinned ifx·NetCDF·startup 실행을 재현했다고 주장하지 않는다.
 
+PR #6 병합 `3a7f4696270d7a8a6b350534ddf4491ba0e1f064` 이후 추가 검토도 반영한다.
+PR #5와 비교한 `src/tests/tools/patches/config` tree는 동일하다. 아래 보강은 설계
+결정이며 소스 수정이나 새 회귀시험 PASS가 아니다.
+
 관측오차 공분산 방향, native 혼합상 정책, PASS/수동 폐합 구분 등 이전 문서 교정은
 반영된 상태로 유지한다. 이후 검토는 실제 계산·소비 경로의 이행 여부에 집중한다.
 
@@ -42,7 +46,18 @@ P1인 mask·재시도 항목도 native 통합 승인 전에 닫는다. P0/P1은 
 현재 감소하는 pressure level에서 `dp(k)=p(k-1)-p(k)>0`이다. 따라서
 `du/dp=(u(k-1)-u(k+1))/(dp(k)+dp(k+1))`의 부호를 사용하거나 동일한 signed
 pressure 차이로 계산한다. background/perturbation U/V의 네 미분을 함께 수정한다.
-`u(p)=10^-4 p`이면 결과는 `+10^-4`여야 한다. 비균일 격자의 affine 검증도 포함한다.
+`u(p)=10^-4 p`이면 결과는 `+10^-4`여야 한다. 비균일 격자의 affine 검증도 포함하되,
+이는 부호·선형 일관성 검사다. **P0 부호·섭동 수정과 P1 비균일격자 정확도 개선을 분리**한다.
+`a=p(k-1)-p(k)>0`, `b=p(k)-p(k+1)>0`에서 양끝 차분의 전개는
+`Ds u = u' + (a-b)u''/2 + (a*a-a*b+b*b)u'''/6 + ...`다.
+비대칭 간격비를 유지한 세분화에서는 일반적으로 1차 오차이며, `a-b=O(h^2)`인
+매끄러운 격자족에서는 2차가 가능하다. 실제 pressure inventory와 격자족을 먼저 확인한다.
+필요시 검토할 3점 1차 미분식은
+`D2 u = [(b/a)(u(k-1)-u(k)) + (a/b)(u(k)-u(k+1))]/(a+b)`다.
+2차 함수에 정확하고 균일격자에서는 중앙차분이다. 곡률·격자수렴과 간격비에 따른
+반올림 민감도는 P1로 검사하며, affine PASS로 정확도 검증을 대신하지 않는다.
+`p=(100000,90000,85000) Pa`, `u=10^-8(p-90000)^2 m/s`의 중앙 미분은
+정확값 0, Ds는 `5e-5`, D2는 0이다. 독립 산술 예제는 생산 루틴 실행 증거가 아니다.
 
 연직 섭동 이류는 `omega_b*d(delta_u)/dp + delta_omega*du_b/dp`와 V의 대응식이다.
 호출부와 함수에서 background와 delta를 명확히 구분하고, 전체 omega를 delta로
@@ -53,6 +68,11 @@ pressure 차이로 계산한다. background/perturbation U/V의 네 미분을 �
 동명 호출은 인자 구성이 다르므로 링크·호출 범위를 확인하기 전에 일괄 치환하지 않는다.
 `delta_u=delta_v=delta_omega=0`이면 background shear와 omega가 비영이어도
 섭동항은 0이어야 한다. 미분 부호만 고친 비영 결과를 정답으로 인정하지 않는다.
+`I(omega-omega_b)=I(omega)-I(omega_b)`는 같은 선형 보간 I에서만 사용한다.
+전체/배경에 동일 donor·가중·유효성 기준을 적용하고 필수 donor 결측을 독립 재가중으로
+숨기지 않는다. missing sentinel끼리 뺀 0도 유효한 영섭동이 아니다.
+`omega_b*d(delta_u)/dp`만 비영인 경우와 `delta_omega*du_b/dp`만 비영인 경우를
+U/V 각각 분리해 시험하여 항간 상쇄가 결함을 가리지 않게 한다.
 비교용 원본은 보존하지만 잘못된 수식과의 바이트 일치를 새 경로의 정당화로 쓰지 않는다.
 운영 영향 크기는 실제 binary–source 결속과 대조실험 전에는 단정하지 않는다.
 
@@ -69,23 +89,40 @@ candidate U/V를 뜻하도록 고정한다. 소비하는 host 경로별 W-level 
 중력상수·metric stencil·저장 정밀도도 선택·결속하기 전에는 payload를 exact native로
 부르지 않는다. 변환식의 고정 geometry·동일 시간경향
 가정이 깨지는 후보는 현행 증분 변환에 그대로 넣지 않는다.
+예를 들어 `w=A*omega`, `A=z_eta/p_eta`이면 geometry 변화 시
+`delta w=A_b*delta omega+delta A*omega_b+delta A*delta omega`다.
+현재 고정 geometry 식이 뒤 두 항을 누락하는 후보는 음성시험으로 거부한다.
+기존 식별 필드에는 역할을 붙인다: 불변 baseline, W 적용 전 `candidate_pre_w`,
+재읽기 완료 `candidate_post_w`, startup 후 `consumed`, 입력 쌍과 mapping을 담은 payload.
+기존 receipt를 재사용하고 `delta U/V=candidate_pre_w U/V-baseline U/V`를 실제 저장값으로
+검사한다. 별도 hash 체계를 늘리기보다 relevant-field 범위와 변경 전후 역할을 고정한다.
 
 `actual changed U/V support ⊆ validated W mapping support`를 native stagger와
 보간 footprint에서 검사한다. mask 밖 payload NaN을 무시하는 것과 실제 staged
 U/V 변경을 누락하는 것을 구분한다. 대응하지 않는 수평풍 변경을 남긴 채 W만 생략하지 않는다.
 
-재시도 방식은 immutable baseline 대조로 거부, baseline에서 매번 새 stage 생성,
-검증된 increment ID 중복 오류/멱등 처리 중 하나를 실제 소비 경로에 고정한다.
-선택은 **미확정**이다. write 직전 W가 최초 read 값과 같다는 검사만으로 과거 적용을
-판정하지 않는다. 동일 payload를 두 번 호출하는 실제 시험에서 원래 delta W가 중복되지
-않고 다른 입력 쌍·다른 increment와 혼동되지 않아야 한다.
+첫 구현의 재시도 정책은 **불변 baseline에서 매번 새 private stage 생성**으로 선택한다.
+존재하지 않는 경로에만 생성하고 승인된 candidate U/V 등 변경을 같은 입력에서 재구성한 뒤,
+`candidate_pre_w`·payload·geometry·지원 영역을 대조하여 W를 한 번 적용한다.
+실패·중단 stage는 재사용하지 않고 성공한 재읽기 결과만 다음 단계로 전달한다.
+동일 stage에 같은 payload를 다시 적용하면 명시적으로 거부한다. 생성·거부를 보장하는
+기존 실행 경로와 receipt 필드의 구현·시험은 미완료다. write 직전 W 비교만으로 이력을
+대신하지 않는다. 반복 요청은 서로 다른 새 stage에서 같은 검증 결과를 내며,
+기존 경로 덮어쓰기·중단 후 재사용·같은 stage 중복 호출은 거부하는 시험을 둔다.
 
 고정 지형의 native 하부 연산자를 B라 하면 `W_seed,s=B(U_base,V_base)`와
 `W_consumed,s=B(U_consumed,V_consumed)`를 모두 확인한다. 증분
 `delta W_s=B(delta U,delta V)`만으로 baseline 경계 오류는 고쳐지지 않는다.
 경사 0.01·수평풍 10 m/s·delta U=0·seed W=0인 반례는 부적합으로 검출해야 한다.
-CF 계수·map factor·비주기 경계 stencil과 저장 정밀도를 포함한 epsilon_s는 실제
-host 근거로 사전 결정한다. `use_input_w` 보존 patch의 제거/전역 덮어쓰기 대신 이
+baseline 경계를 먼저 검증한 뒤 최종 **하부 W만 실제 저장된 candidate U/V에 B를 적용해
+재계산**한다. 내부 W는 기존 mapping을 유지한다. 하부 재계산도 명시된 변경 지원 영역에
+포함하며, 지원 밖 변화가 필요하면 조용히 덮어쓰지 않고 후보를 거부한다.
+실수에서 B가 선형이어도 real32 저장·연산 순서에 따른 bitwise 일치를 요구하지 않는다.
+`epsilon_s=epsilon_physical+epsilon_arithmetic+epsilon_input`의 오차 출처와 중복 여부를
+분리하고, 상쇄 시에는 결과 |B|만이 아니라 stencil 항 절댓값 합과 저장 오차를 고려한다.
+CF 계수·map factor·비주기 경계 stencil에 따른 각 상한은 R2에서 근거로 확정한다.
+반례의 작은 반올림 차이를 허용오차로 복사하거나 부적합 baseline을 맞추도록 조정하지 않는다.
+`use_input_w` 보존 patch의 제거/전역 덮어쓰기 대신 이
 검사를 적용하고 첫 시간전진 전 consumed 배열에서도 반복한다. 과거 v2 paired
 readback은 선언된 증분 전달 범위의 이력으로 보존하며 seed의 전체값 경계조건을
 확인한 M07 승인 증거로 사용하지 않는다. 임의의 새 입력도 자동 승인하지 않는다.
@@ -94,14 +131,14 @@ readback은 선언된 증분 전달 범위의 이력으로 보존하며 seed의 
 
 | 시험 | 기대 판정 / 근거 연결 |
 |---|---|
-| U/V affine pressure profile, 비균일 pressure | 네 pressure 미분의 크기·부호 일치 / B06 |
-| 모든 섭동 0, background shear·omega 비영 | nonlin 섭동항 0; 호출부 포함 / B06 |
+| U/V affine pressure profile; P1 곡률·격자수렴 별도 | P0 부호·선형 일관성; 일반 비균일 정확도와 구분 / B06 |
+| 영섭동·각 연직 이류항 단독 비영·필수 donor 결측 | 유효 donor에서 항별 정답, 결측을 가짜 0으로 처리하지 않음 / B06 |
 | 같은 시각·위경도·shape, 다른 P/Z·수직 geometry | 소비 전 거부, W 무변경 / M06, E03 |
 | 실제 staged U/V 변경이 W 지원 밖에 존재 | 후보 거부 또는 관련 전체 변경 rollback / B01, E03 |
-| 같은 payload 두 번 적용 | 명시적 중복 거부 또는 검증된 no-op / E03, E05 |
+| 새 stage 재시도·기존 경로·중단 stage·같은 stage 중복 | 새 stage 결과 재현, 덮어쓰기·재사용·중복 거부 / E03, E05 |
 | 경사 지형·비영 baseline U/V·부적합 seed W | 하부 전체값 경계 오류 검출 / M07 |
-| 일관된 seed와 알려진 surface delta U/V | 최종 전체값 경계 보존 / M07, MR-C4 |
-| 초기화 phase ledger와 첫 native 미세물리 전후 | 추가 종별/열 변화·부력·압력·연직가속도와 중복 상변화 확인 / T03, MR-C5 |
+| 일관된 seed·알려진 surface delta U/V·저장 상쇄 | 저장 candidate U/V로 하부 B 재계산 및 오차 출처별 검사 / M07, MR-C4 |
+| 초기화 phase ledger와 첫 MP 전후·낙하 유출 | 종전환·강수·수치 조정·경향 적용 시점을 분리해 수지 검사 / T03, MR-C5 |
 | source-bound 사례의 O0/O2·startup readback | 같은 입력·설정·코드의 실제 소비 확인 / G02, E03 |
 
 기존 시험에 작은 fixture를 추가하고 새 범용 감사 프레임워크를 생산 FORTRAN에
@@ -392,6 +429,27 @@ ledger의 종별 `Δr_phase`·`ΔT_phase`를 analysis/remap/기타 증분과 분
 종별 `Δr_extra_MP`·`ΔT_extra_MP`를 기록한다. 각 snapshot에 동일 cell·단위·별도 시간
 태그와 사이의 연산을 붙인다. 각 짝진 상태의 buoyancy·pressure·vertical acceleration도
 같은 snapshot 단위로 기록하며 두 증분을 한 차이로 합치지 않는다.
+
+연직가속도는 단순 W readback이 아니라 `a_w=F_w(x0)`의 RHS 진단으로 정의한다.
+상태·native 우변·mass coupling 변환과 `startup 단계/RHS 평가 여부/MP call index/
+경계 처리 전후/물리 시간전진 여부`를 기존 snapshot에 연결한다. 아직 평가되지 않은
+경향은 `NOT_EVALUATED`이며 0으로 채우지 않는다. t0 RHS는 가능한 순수 진단 경로로
+확보하고 첫 미세물리를 MR-C4 충족용으로 미리 실행하지 않는다.
+
+MR-C5의 `delta r_extra_MP`는 순수 상변화량이 아니라 해당 호출 구간의 순변화다.
+내부 종전환, sedimentation·지표/경계 유출입, 분석 물·열 증분, clipping·number 재초기화와
+tendency 누적/실제 state update 시점을 분리한다. 분해할 정보가 없으면 미분해 잔차로
+남기며 상변화로 귀속하지 않는다. 물리적으로 정상인 추가 응결·증발·융해를 0으로 강제하지 않는다.
+고정 dry mass의 column에서 `Q=sum_k m_d,k sum_s r_s`이면
+`epsilon_Q=Q_after-Q_before+M_out-M_in-A_Q`로 계산한다.
+M은 같은 호출 구간의 시간적분 유출입 질량(kg), A_Q는 명시된 외부 추가량(양의 유입)이다.
+column 내부 sedimentation은 상쇄하며 외부 경계 flux만 장부에 더한다. 지표 누적강수는
+해당 호출 증가량·실제 cell 면적·단위를 써서 변환하고 flux와 중복 집계하지 않는다.
+dry mass/geometry도 변한 구간은 양끝의 실제 질량가중과 해당 수송항으로 다시 계산한다.
+`1.0→0.9 kg`, 지표 유출 `0.1 kg`은 잔차 0인 작은 양성 예제로 둔다.
+WRF 미세물리가 열·수분 경향과 지표강수를 제공한다는 일반 설명은
+[WRF Physics](https://www2.mmm.ucar.edu/wrf/site/documentation/users_guide/physics.html#microphysics)를
+참조하되, 항별 배열·단위·호출 순서는 pinned host에서 확정한다.
 
 ## 7. 실험 구성과 수치·물리 검증
 

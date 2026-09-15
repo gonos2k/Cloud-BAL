@@ -150,10 +150,11 @@ R2 범주별 기록은 다음처럼 정의한다.
 
 - [ ] 실제 사용하는 기존 FORTRAN 경로에 작은 단일 목적 변경으로 연결한다.
 - [ ] `nonlin`의 네 pressure 미분 부호와 전체/섭동 omega 계약을 한 수정 묶음으로 닫는다. affine profile 및 비영 background의 영섭동 항등식을 실제 호출 경로·O0/O2에서 검증한다.
+- [ ] 전체/배경 omega의 donor·가중·유효성 기준을 공유하고 결측 sentinel의 가짜 영섭동을 거부한다. 두 연직 이류항의 단독 비영 사례를 U/V 각각 검사한다. P1 비균일격자 곡률·수렴성은 P0 부호·선형 일관성과 별도 기록한다.
 - [ ] baseline/staged candidate/geometry/increment/mapping을 actual native P/PB·PH/PHB·U/V·W 및 필요한 질량·좌표·metric에 결속한다. 시각·위경도·shape 일치만으로 수용하지 않는다.
 - [ ] 실제 변경된 native U/V 지원 영역이 W mapping의 검증된 stagger·보간 footprint 안에 있는지 확인한다. 지원 밖 변경은 거부 또는 관련 U/V/W 전체 rollback한다.
-- [ ] 재시도 방식을 고정하고 동일 payload 두 번 적용 시 delta W가 중복되지 않는 실제 consumer 시험을 통과한다.
-- [ ] native CF·map factor·경계 stencil의 B로 seed W_s=B(U_base,V_base)와 최종 W_s=B(U_consumed,V_consumed)를 검사한다. epsilon_s는 사전 결정하고 startup 보존 후 재확인한다.
+- [ ] baseline/pre-W/post-W/consumed와 payload의 역할을 기존 receipt에 결속한다. 매번 불변 baseline에서 존재하지 않는 새 private stage를 만들고 candidate 변경을 재구성한다. 기존 경로 덮어쓰기·실패/중단 stage 재사용·동일 stage 중복 적용을 실제 경로에서 거부한다.
+- [ ] native CF·map factor·경계 stencil의 B로 seed W_s=B(U_base,V_base)를 검사한 후, 저장된 candidate U/V로 최종 하부 W를 재계산한다. 변경 지원 영역과 물리·연산·입력 오차를 구분한 epsilon_s로 검사하고 startup 후 W_s=B(U_consumed,V_consumed)를 재확인한다. 상쇄 사례에 bitwise 일치를 강제하지 않는다.
 - [ ] geometry 불일치·mask 밖 실제 변경·중복 적용·부적합 seed의 거부 및 일관된 surface 증분의 양성 사례를 기존 NetCDF 시험에 추가한다.
 - [ ] `tests/intel_toolchain.sh`의 pinned ifx로 새 scratch cwd에서 O0/O2를 검증한다.
 - [ ] 약한 관측 기하·부적합 질량경계·상변화·결측·저장 정밀도·rollback의 필요한 시험을 한다.
@@ -164,7 +165,9 @@ R2 범주별 기록은 다음처럼 정의한다.
   `Δr_phase`·`ΔT_phase`를 analysis/remap/기타 증분과 분리하고, 별도 시간 태그와
   동일 cell/unit을 기록한다.
 - [ ] t0 짝진 상태의 buoyancy·pressure·vertical acceleration을 같은 snapshot 단위로
-  readback한다. 첫 미세물리 호출 위치와 전후 수집 지점을 pinned host에서 정하고,
+  확인한다. 가속도는 상태·native RHS·mass coupling 변환을 명시한 진단으로 기록한다.
+  startup/RHS 평가/MP call index/경계 처리/시간전진을 구분하며 미평가 경향은
+  `NOT_EVALUATED`로 남긴다. 첫 미세물리 호출 위치와 전후 수집 지점을 pinned host에서 정하고,
   MR-C5의 진단 준비를 확인한다. 호출 후 결과는 MR-C4 완료조건에 포함하지 않는다.
 - [ ] 변경 예정 필드는 후보와 일치하고, 변경 대상 밖 필드와 원본 입력은 보존됨을 확인한다.
 
@@ -172,7 +175,8 @@ R2 범주별 기록은 다음처럼 정의한다.
 기존 unlocalized WW/정지-Phi 진단이나 W-only consumer 시험만으로 완료하지 않는다.
 위 2026-09-15 추가 항목은 모두 미완료다. 상세 우선순위와 작은 시험 행렬은
 [상위 계획의 9월 15일 보완](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md)을 따른다.
-식별 필드·재시도 방식·epsilon_s의 미확정 결정을 명시하며 문서 반영으로 체크하지 않는다.
+새 stage 재시도 정책은 설계상 선택했다. 식별 필드·호출 경로·epsilon_s의 세부 확정과
+구현·시험은 미완료이며 문서 반영으로 체크하지 않는다.
 
 ## MR-C5 — 첫 미세물리와 초기 충격 검증
 
@@ -185,6 +189,8 @@ R2 범주별 기록은 다음처럼 정의한다.
   동일 cell/unit·별도 시간 태그로 재읽는다. 사이의 연산과 인접한 시간전진·경계 처리를
   구분하며, MR-C4의 phase 증분과 extra-MP 증분을 한 차이로 합치지 않는다.
 - [ ] 첫 미세물리 호출의 물·열 경향과 과도한 포화/상변화 재조정을 검사한다.
+- [ ] 호출 전후 순변화를 내부 종전환·sedimentation·지표/경계 유출입·clipping/number 조정·분석 증분과 구분한다. tendency 누적과 실제 state update 시점도 확인하며 정상적인 추가 상변화를 0으로 강제하지 않는다.
+- [ ] 같은 호출의 질량기준·단위·강수 증가량으로 `Q_after-Q_before+M_out-M_in-A_Q`를 검사한다. 내부 낙하와 지표 유출을 중복 집계하지 않고 `1.0→0.9 kg + 유출 0.1 kg` 양성 사례를 포함한다. 정확한 native 장부는 상위 계획에 따른다.
 - [ ] 압력 경향·발산·수직 가속도·부력·하중과 음향/내부 중력파 응답을 비교한다.
 - [ ] MR-C3의 사전 기준과 물리 대류·냉기류·지형성 파동 보존 조건을 함께 판정한다.
 - [ ] 필요할 때만 timestep 민감도·해상도 수렴성을 추가 확인한다. 동일 수치를 강제하지 않는다.
