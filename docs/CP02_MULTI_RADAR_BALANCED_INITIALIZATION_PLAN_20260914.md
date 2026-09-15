@@ -25,6 +25,11 @@ PR #6 병합 `3a7f4696270d7a8a6b350534ddf4491ba0e1f064` 이후 추가 검토도 
 PR #5와 비교한 `src/tests/tools/patches/config` tree는 동일하다. 아래 보강은 설계
 결정이며 소스 수정이나 새 회귀시험 PASS가 아니다.
 
+PR #7 병합 `7320165f1544668e2b20653a29d587be4581a6a9` 이후 검토는 raw/seed 단계,
+최종 수정 후 잔차와 진단 비침습성 계약을 보강한다. **현재는 계획 반영 단계이며,
+사용자가 계획을 확정한 뒤 코드 수정·회귀시험에 착수한다.** 첫 구현은 독립적인 legacy
+P0 묶음, 다음은 native 전달로 나누고 레이더 자료·계보 조사는 병렬로 진행한다.
+
 관측오차 공분산 방향, native 혼합상 정책, PASS/수동 폐합 구분 등 이전 문서 교정은
 반영된 상태로 유지한다. 이후 검토는 실제 계산·소비 경로의 이행 여부에 집중한다.
 
@@ -78,6 +83,19 @@ U/V 각각 분리해 시험하여 항간 상쇄가 결함을 가리지 않게 �
 
 ### Native W 소비의 최소 계약
 
+원본 `x_b_raw`와 준비 완료 `x_b_seed=N0(x_b_raw)`를 구분한다. N0는 pinned host의
+첫 시간전진 전 필요한 초기·경계 준비 처리이며, 원본 파일은 불변으로 보존한다.
+W 증분의 baseline은 준비 완료 seed다. `raw_state_id`와 기존 `baseline_state_id`의
+관계를 기록하고, 모든 baseline U/V·W·geometry는 같은 seed 단계에서 취한다.
+raw W=0은 host가 준비하는 정상 입력 표현일 수 있으므로 seed의 하부 경계 검사를
+raw에 그대로 적용하지 않는다. 준비 완료 seed/consumed의 부적합 W는 거부한다.
+N0의 W time level·내부 초기 처리·경계/halo·설정·파일/메모리 지점은 **미확정**이며
+pinned host에서 고정한다. 바닥 W 채우기만으로 전체 준비를 재현했다고 하지 않고,
+전체 startup을 무조건 두 번 호출하거나 시간적분·외부 omega target으로 대신하지 않는다.
+여기서 `x_b_ready=x_b_seed`이며 ready는 같은 준비 완료 연산 단계를 뜻한다.
+알고리즘 효과는 같은 단계의 `delta x_CB=x_c_ready-x_b_ready`로 비교한다.
+정상 준비 변화 `x_b_ready-x_b_raw`는 별도 기록하며 Cloud-BAL 증분으로 집계하지 않는다.
+
 최소 식별 정보는 `baseline_state_id`, `staged_candidate_state_id`,
 `geometry_fingerprint`, `increment_id`, `mapping_assumption`이다. 문자열·hash를
 추가하는 것만으로 종료하지 않는다. 실제 native의 P/PB, PH/PHB, U/V, W와 필요한
@@ -101,7 +119,7 @@ candidate U/V를 뜻하도록 고정한다. 소비하는 host 경로별 W-level 
 보간 footprint에서 검사한다. mask 밖 payload NaN을 무시하는 것과 실제 staged
 U/V 변경을 누락하는 것을 구분한다. 대응하지 않는 수평풍 변경을 남긴 채 W만 생략하지 않는다.
 
-첫 구현의 재시도 정책은 **불변 baseline에서 매번 새 private stage 생성**으로 선택한다.
+첫 구현의 재시도 정책은 **불변 준비 완료 seed에서 매번 새 private stage 생성**으로 선택한다.
 존재하지 않는 경로에만 생성하고 승인된 candidate U/V 등 변경을 같은 입력에서 재구성한 뒤,
 `candidate_pre_w`·payload·geometry·지원 영역을 대조하여 W를 한 번 적용한다.
 실패·중단 stage는 재사용하지 않고 성공한 재읽기 결과만 다음 단계로 전달한다.
@@ -114,9 +132,14 @@ U/V 변경을 누락하는 것을 구분한다. 대응하지 않는 수평풍 �
 `W_consumed,s=B(U_consumed,V_consumed)`를 모두 확인한다. 증분
 `delta W_s=B(delta U,delta V)`만으로 baseline 경계 오류는 고쳐지지 않는다.
 경사 0.01·수평풍 10 m/s·delta U=0·seed W=0인 반례는 부적합으로 검출해야 한다.
+이 반례는 준비 완료 seed에 적용하며, raw W=0 자체를 실패로 분류하지 않는다.
 baseline 경계를 먼저 검증한 뒤 최종 **하부 W만 실제 저장된 candidate U/V에 B를 적용해
 재계산**한다. 내부 W는 기존 mapping을 유지한다. 하부 재계산도 명시된 변경 지원 영역에
 포함하며, 지원 밖 변화가 필요하면 조용히 덮어쓰지 않고 후보를 거부한다.
+변경된 U/V 자유도 집합 M_UV에 대해 하부 영향 영역은
+`M_s={s: 어떤 f in M_UV에 대해 B_sf != 0}`로 정의한다. 작업 배열에서 B(candidate)를
+구하고 승인된 stencil 출력 영역만 기록한다. 영역 밖 W는 seed 값을 정확히 유지하면서
+전체 하부 잔차도 검사한다. U/V 셀과 W 셀의 같은 인덱스 mask로 대체하지 않는다.
 실수에서 B가 선형이어도 real32 저장·연산 순서에 따른 bitwise 일치를 요구하지 않는다.
 `epsilon_s=epsilon_physical+epsilon_arithmetic+epsilon_input`의 오차 출처와 중복 여부를
 분리하고, 상쇄 시에는 결과 |B|만이 아니라 stencil 항 절댓값 합과 저장 오차를 고려한다.
@@ -126,6 +149,14 @@ CF 계수·map factor·비주기 경계 stencil에 따른 각 상한은 R2에서
 검사를 적용하고 첫 시간전진 전 consumed 배열에서도 반복한다. 과거 v2 paired
 readback은 선언된 증분 전달 범위의 이력으로 보존하며 seed의 전체값 경계조건을
 확인한 M07 승인 증거로 사용하지 않는다. 임의의 새 입력도 자동 승인하지 않는다.
+
+최종 검사는 **내부 증분→하부 W 재계산→최종 정밀도 저장→native 재읽기→실제 W/WW·
+질량·metric 유량 재계산→전체 질량/하부 경계 잔차→첫 시간전진 전 consumed 재확인**
+순서로 수행한다. 경계·halo 등이 다시 상태를 바꾸면 그 이후의 배열에서 재평가한다.
+고정 geometry·동일 질량 경향에서는 `r_final=r_before+D*delta F_last`이므로 solver의
+중간 PASS가 최종 PASS를 대신하지 않는다. geometry/질량도 변하면 전체 식을 재계산한다.
+정상 seed에서 `delta U=delta V=delta omega=0`일 때 같은 설정·처리 단계의
+`x_c_ready=x_b_ready`를 검사한다. raw 원본 불변과 ready 영증분 동일성은 별도 불변량이다.
 
 ### 추가할 작은 회귀·적대시험
 
@@ -140,6 +171,9 @@ readback은 선언된 증분 전달 범위의 이력으로 보존하며 seed의 
 | 일관된 seed·알려진 surface delta U/V·저장 상쇄 | 저장 candidate U/V로 하부 B 재계산 및 오차 출처별 검사 / M07, MR-C4 |
 | 초기화 phase ledger와 첫 MP 전후·낙하 유출 | 종전환·강수·수치 조정·경향 적용 시점을 분리해 수지 검사 / T03, MR-C5 |
 | source-bound 사례의 O0/O2·startup readback | 같은 입력·설정·코드의 실제 소비 확인 / G02, E03 |
+
+기존 native 사례에 raw→seed 정상 준비, ready 영증분 동일성, 하부/저장/경계 처리 후
+잔차 및 진단 on/off 동일성을 추가한다. 별도 요구사항 ID나 큰 시험 계층은 만들지 않는다.
 
 기존 시험에 작은 fixture를 추가하고 새 범용 감사 프레임워크를 생산 FORTRAN에
 넣지 않는다. kernel 단독, NetCDF consumer, 실제 startup 시험의 PASS 범위를 분리한다.
@@ -435,6 +469,11 @@ ledger의 종별 `Δr_phase`·`ΔT_phase`를 analysis/remap/기타 증분과 분
 경계 처리 전후/물리 시간전진 여부`를 기존 snapshot에 연결한다. 아직 평가되지 않은
 경향은 `NOT_EVALUATED`이며 0으로 채우지 않는다. t0 RHS는 가능한 순수 진단 경로로
 확보하고 첫 미세물리를 MR-C4 충족용으로 미리 실행하지 않는다.
+진단은 실제 수행되는 RHS·미세물리 호출의 입출력 관찰을 우선한다. 별도 RHS 평가가
+필요하면 누적 tendency·첫 호출 상태·입자모멘트 등 다음 계산에 영향을 주는 상태를
+바꾸지 않는 경로인지 확인한다. 같은 executable·설정·입력·스레드·연산 단계에서
+`x_diagnostics_on=x_diagnostics_off`를 주 상태와 지속 상태에 대해 검사한다.
+진단 출력 파일·실행시간은 이 동일성 대상이 아니다. MR-C4/C5의 기존 시험에 연결한다.
 
 MR-C5의 `delta r_extra_MP`는 순수 상변화량이 아니라 해당 호출 구간의 순변화다.
 내부 종전환, sedimentation·지표/경계 유출입, 분석 물·열 증분, clipping·number 재초기화와
