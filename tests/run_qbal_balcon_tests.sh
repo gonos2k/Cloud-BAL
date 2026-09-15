@@ -40,6 +40,7 @@ for level in O0 O2; do
       "$CLOUD_BAL_FC" -c "${fixed_flags[@]}" "$repo_root/../klaps-v5.0_/src/lib/$utility.f"
     done
     "$CLOUD_BAL_FC" "${free_flags[@]}" "$repo_root/tests/test_qbal_balcon.f90" \
+      "$repo_root/tests/test_qbal_reverse_output.f90" \
       cloud_bal_wind_modes.o qbal_core.o move.o zero.o array_diagnosis.o -o test_qbal_balcon
     ./test_qbal_balcon
   )

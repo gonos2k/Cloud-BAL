@@ -124,7 +124,7 @@ Native fresh-start seed/적용/경계·halo/첫 small-step readback과 레이더
 uniform/nonuniform pressure의 interior/top에 적용하는 것이다. 여기에 total과 background가
 같은 varying field라서 delta가 0인 사례, required donor missing의 reject+rollback,
 정확히 0 weight인 top midpoint donor missing의 산술·유효성 검사 제외를 포함한다. 고차 curvature/수렴,
-full BALCON, native startup/readback, 과학 검증은 계속 미검증이다. 문서의 계획 반영과
+이 helper 시험만으로 full BALCON, native startup/readback, 과학 검증을 주장하지 않는다. 문서의 계획 반영과
 체크리스트의 실제 실행 근거를 구분한다.
 
 ### PR #12 이후 연결 검증
@@ -136,6 +136,20 @@ full BALCON, native startup/readback, 과학 검증은 계속 미검증이다. �
 이 시험의 산출물은 메모리 배열이다. 실자료 main/writer, native fresh seed→후보→consumed
 및 레이더별 Vr·Barnes 계보 연결은 별도 실행 과제로 유지한다. 고차 profile 연구를 이들
 연결의 일률적인 선행조건으로 추가하거나 새 외부 omega target을 요구하지 않는다.
+
+### PR #13 이후 시험 범위 보강
+
+PR #13의 합성 전체 BALCON 실행과 상단 보호는 제한적 완료로 유지한다. 기존 입력의
+U/V/omega는 0이므로 기록된 continuity는 **역 stagger 전 잔차 유지**의 근거다.
+비영 초기잔차 감소와 최종 출력 정합성을 해당 수치만으로 주장하지 않는다.
+
+- 경계 flux와 양립하는 국지 발산·수렴 입력을 정 stagger부터 연결한다. 시험 입력의
+  비영 최소신호와 감소율을 실행 전에 고정하고, 기존 acceptance를 완화하지 않는다.
+- 여섯 역변환 출력의 finite 및 합성 수분 범위를 검사한다. A-grid 해석해 재현과
+  출력 위치에 맞는 독립 차분 검사를 별도로 두며 staggered continuity 연산자를
+  A-grid 배열에 그대로 적용하지 않는다.
+- 실제 BALCON 출력의 독립 잔차 기록과 알려진 해석해의 PASS를 구분한다.
+  경계·terrain·비균일 pressure·native 잔차 검증으로 확대하지 않는다.
 
 ### Legacy nonlin 수정 묶음
 
