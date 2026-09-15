@@ -27,6 +27,13 @@ test -s "$build_root/nonlin.f"
 grep -Eq '^[[:space:]]*subroutine nonlin\(' "$build_root/nonlin.f"
 grep -Eq '^[[:space:]]*subroutine qbal_omega_face_delta\(' "$build_root/nonlin.f"
 
+# Include the actual forward routine and its reverse-branch link dependencies.
+awk '
+  tolower($0) ~ /^[[:space:]]*subroutine balstagger\(/ {capture=1}
+  capture && /^[[:space:]]*subroutine savemxmninfo\(/ {exit}
+  capture {print}
+' "$repo_root/src/balance/qbalpe.f" > "$build_root/balstagger.f"
+
 # Runtime -check all disables ifx optimization; retain it only in O0.
 fixed_o2=()
 skip_next=0
@@ -53,8 +60,27 @@ for level in O0 O2; do
       nonlin.o -o test_qbal_nonlin
     "$CLOUD_BAL_FC" "${free_flags[@]}" "$repo_root/tests/test_qbal_nonlin_caller.f90" \
       nonlin.o caller_fragment.o -o test_qbal_nonlin_caller
+    "$CLOUD_BAL_FC" -c "${fixed_flags[@]}" "$build_root/balstagger.f" -o balstagger.o
+    "$CLOUD_BAL_FC" "${free_flags[@]}" "$repo_root/tests/test_qbal_stagger_nonlin.f90" \
+      nonlin.o balstagger.o -o test_qbal_stagger_nonlin
     ./test_qbal_nonlin
     ./test_qbal_nonlin_caller
+    ./test_qbal_stagger_nonlin
+    # Every protected field changes before failure; each restore is necessary.
+    for restore in t=tworkorig u=uworkorig v=vworkorig om=omworkorig \
+                   to=torig uo=uorig vo=vorig omo=omorig; do
+      sed "/^[[:space:]]*${restore}$/d" "$build_root/caller_fragment.f" > caller_mutation.f
+      "$CLOUD_BAL_FC" -c "${fixed_flags[@]}" caller_mutation.f -o caller_mutation.o
+      "$CLOUD_BAL_FC" "${free_flags[@]}" "$repo_root/tests/test_qbal_nonlin_caller.f90" \
+        nonlin.o caller_mutation.o -o test_missing_restore
+      log="missing_${restore%%=*}.log"
+      if ./test_missing_restore > "$log" 2>&1; then
+        printf 'undetected rollback mutation: %s\n' "$restore" >&2
+        exit 1
+      fi
+      grep -Fq 'caller rollback changed bits' "$log"
+    done
+    printf 'Eight rollback deletion mutations detected\n'
   )
   printf 'QBAL nonlinear Intel %s tests passed\n' "$level"
 done

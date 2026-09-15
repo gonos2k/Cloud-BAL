@@ -20,17 +20,19 @@ rollback = " 900  if(bal_status.ne.1)then" + between(
 assert "nonlin_status" in call and "goto 900" in call
 
 prefix = """      subroutine caller_fragment(to,uo,vo,omo,t,u,v,om,
-     &                           tb,ub,vb,omb,dp,nu,nv,bal_status)
+     &                           tb,ub,vb,omb,p,nu,nv,bal_status,
+     &                           fault_injection)
       implicit none
       integer,parameter :: nx=4,ny=4,nz=4
       integer i,j,k,bal_status,nonlin_status
       real*4 to(nx,ny,nz),uo(nx,ny,nz),vo(nx,ny,nz),omo(nx,ny,nz)
       real*4 t(nx,ny,nz),u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz)
       real*4 tb(nx,ny,nz),ub(nx,ny,nz),vb(nx,ny,nz),omb(nx,ny,nz)
-      real*4 nu(nx,ny,nz),nv(nx,ny,nz),dp(nz),dx(nx,ny),dy(nx,ny)
+      real*4 nu(nx,ny,nz),nv(nx,ny,nz),p(nz),dx(nx,ny),dy(nx,ny)
       real*4 torig(nx,ny,nz),uorig(nx,ny,nz),vorig(nx,ny,nz)
       real*4 omorig(nx,ny,nz),tworkorig(nx,ny,nz),uworkorig(nx,ny,nz)
       real*4 vworkorig(nx,ny,nz),omworkorig(nx,ny,nz),dt,bnd,rod
+      logical fault_injection
       torig=to
       uorig=uo
       vorig=vo
@@ -45,5 +47,12 @@ prefix = """      subroutine caller_fragment(to,uo,vo,omo,t,u,v,om,
       rod=1.
       bnd=1.e-30
       bal_status=0
+      if(fault_injection)then
+c Synthetic pre-failure mutation for this caller fixture only.  The
+c fixture snapshot above must restore both omega arrays.  This
+c scenario is intentionally not a full BALCON execution.
+         om=om+3.
+         omo=omo+4.
+      endif
 """
 Path(sys.argv[2]).write_text(prefix + conversion + call + "      bal_status=1\n" + rollback + "      end\n")

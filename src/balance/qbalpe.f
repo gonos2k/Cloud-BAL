@@ -1390,7 +1390,7 @@ c                      boundary values(zero perturbation)
       call frict(fu,fv,ub,vb,uo,vo,p,ps,tmp
      .                 ,nx,ny,nz,dx,dy,dp,dt,bnd)
       call nonlin(nu,nv,uo,vo,ub,vb,om,omb
-     .           ,nx,ny,nz,dx,dy,dp,dt,bnd,rod,nonlin_status)
+     .           ,nx,ny,nz,dx,dy,p(2:nz),dt,bnd,rod,nonlin_status)
       if(nonlin_status.ne.1)goto 900
 c *** Compute new phi (t array) using relaxation on eqn. (2).
 c        beta*dldx term is dropped to eliminate coupling with lambda eqn.
@@ -2937,7 +2937,7 @@ c
 c===============================================================================
 c
       subroutine nonlin(nu,nv,u,v,ub,vb,om,omb
-     .                 ,nx,ny,nz,dx,dy,dp,dt,bnd,rod,istatus)
+     .                 ,nx,ny,nz,dx,dy,wind_p,dt,bnd,rod,istatus)
 c
 c *** Nonlin computes the non-linear terms (nu,nv) from staggered input.
 c     The non linear terms are linearized with a background/perturbation
@@ -2946,18 +2946,19 @@ c     The non-linear terms nu,nv, are computed on the
 c     u, v grids, respectively. The nonlin term is scaled by the rossby number
 c     rod - the length scale is that defined by data resolvability 
 c
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
 c
       real*4 omega_donors(2,2),background_donors(2,2)
       integer   nx,ny,nz,istatus,face_status
      .         ,nxm1,nym1,nzm1
-     .         ,i,j,k
+     .         ,i,j,k,kupper
 c
       real*4 nu(nx,ny,nz),nv(nx,ny,nz)
      .      ,u(nx,ny,nz),v(nx,ny,nz)     !time=t
      .      ,ub(nx,ny,nz),vb(nx,ny,nz)     !time=t
      .      ,om(nx,ny,nz),omb(nx,ny,nz)
-     .      ,dx(nx,ny),dy(nx,ny),dp(nz),bnd
+     .      ,dx(nx,ny),dy(nx,ny),wind_p(nz-1),bnd,wind_dp
      .      ,dt,dudx,dvdy,dudy,dvdx
      .      ,dudp,dvdp,dudt,dvdt
      .      ,dvbdy,dubdp,dvbdp,dudby
@@ -2975,7 +2976,15 @@ c
 c U/V are perturbations; OM is total pressure omega (Pa/s).
 c OMB and UB/VB are backgrounds. A missing donor rejects BALCON.
       istatus=0
+c Physical wind levels are input P(2:NZ); NZ is a duplicate endpoint.
+      if(nx.lt.3.or.ny.lt.3.or.nz.lt.3)return
+      if(any(.not.ieee_is_finite(wind_p)))return
+      if(any(wind_p.le.0.))return
+      if(any(wind_p(1:nz-2).le.wind_p(2:nz-1)))return
       do k=2,nzm1
+c Use a one-sided slope at the last physical level, never layer NZ.
+      kupper=min(k+1,nzm1)
+      wind_dp=wind_p(k-1)-wind_p(kupper)
       do j=2,nym1
       do i=2,nxm1
          if(u(i,j,k).eq.bnd) then
@@ -2984,7 +2993,7 @@ c OMB and UB/VB are backgrounds. A missing donor rejects BALCON.
           omega_donors=om(i:i+1,j+1,k:k+1)
           background_donors=omb(i:i+1,j+1,k:k+1)
           call qbal_omega_face_delta(omega_donors,
-     &         background_donors,omu,ombu,face_status)
+     &         background_donors,bnd,omu,ombu,face_status)
           if(face_status.ne.1)return
           vvu=(v(i-1,j+1,k)+v(i,j+1,k)+v(i-1,j,k)+v(i,j,k))*.25
           vvbu=(vb(i-1,j+1,k)+vb(i,j+1,k)+vb(i-1,j,k)+vb(i,j,k))*.25
@@ -2992,8 +3001,8 @@ c OMB and UB/VB are backgrounds. A missing donor rejects BALCON.
           dudx=(u(i+1,j,k)-u(i-1,j,k))/(2.*dx(i,j))
           dubdy=(ub(i,j+1,k)-ub(i,j-1,k))/(2.*dy(i,j))
           dudy=(u(i,j+1,k)-u(i,j-1,k))/(2.*dy(i,j))
-          dubdp=(ub(i,j,k-1)-ub(i,j,k+1))/(dp(k)+dp(k+1))
-          dudp=(u(i,j,k-1)-u(i,j,k+1))/(dp(k)+dp(k+1))
+          dubdp=(ub(i,j,k-1)-ub(i,j,kupper))/wind_dp
+          dudp=(u(i,j,k-1)-u(i,j,kupper))/wind_dp
           dudt=0.
           nu(i,j,k)=(dudt+ub(i,j,k)*dudx+vvbu*dudy+ombu*dudp
      &                 +u(i,j,k)*dubdx+vvu*dubdy+omu*dubdp)*rod
@@ -3004,7 +3013,7 @@ c OMB and UB/VB are backgrounds. A missing donor rejects BALCON.
           omega_donors=om(i+1,j:j+1,k:k+1)
           background_donors=omb(i+1,j:j+1,k:k+1)
           call qbal_omega_face_delta(omega_donors,
-     &         background_donors,omv,ombv,face_status)
+     &         background_donors,bnd,omv,ombv,face_status)
           if(face_status.ne.1)return
           uuv=(u(i,j,k)+u(i+1,j,k)+u(i,j-1,k)+u(i+1,j-1,k))*.25
           uubv=(ub(i,j,k)+ub(i+1,j,k)+ub(i,j-1,k)+ub(i+1,j-1,k))*.25
@@ -3012,8 +3021,8 @@ c OMB and UB/VB are backgrounds. A missing donor rejects BALCON.
           dvdx=(v(i+1,j,k)-v(i-1,j,k))/(2.*dx(i,j))
           dvbdy=(vb(i,j+1,k)-vb(i,j-1,k))/(2.*dy(i,j))
           dvdy=(v(i,j+1,k)-v(i,j-1,k))/(2.*dy(i,j))
-          dvbdp=(vb(i,j,k-1)-vb(i,j,k+1))/(dp(k)+dp(k+1))
-          dvdp=(v(i,j,k-1)-v(i,j,k+1))/(dp(k)+dp(k+1))
+          dvbdp=(vb(i,j,k-1)-vb(i,j,kupper))/wind_dp
+          dvdp=(v(i,j,k-1)-v(i,j,kupper))/wind_dp
           dvdt=0.           
           nv(i,j,k)=(dvdt+uubv*dvdx+vb(i,j,k)*dvdy+ombv*dvdp
      &                 +uuv*dvbdx+v(i,j,k)*dvbdy+omv*dvbdp)*rod
@@ -3041,18 +3050,20 @@ c
       return
       end
 c
-      subroutine qbal_omega_face_delta(total,background,delta,
+      subroutine qbal_omega_face_delta(total,background,bnd,delta,
      &                                 background_face,istatus)
 c Same four donors/weights for both fields; use the omega input range.
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
-      real*4 total(2,2),background(2,2),delta,background_face
+      real*4 total(2,2),background(2,2),bnd,delta,background_face
       integer istatus
       istatus=0
       delta=0.
       background_face=0.
       if(any(.not.ieee_is_finite(total)))return
       if(any(.not.ieee_is_finite(background)))return
+c Exact terrain exclusion is distinct from a valid zero omega.
+      if(any(total.eq.bnd).or.any(background.eq.bnd))return
       if(any(abs(total).gt.100.))return
       if(any(abs(background).gt.100.))return
       background_face=sum(background)*.25

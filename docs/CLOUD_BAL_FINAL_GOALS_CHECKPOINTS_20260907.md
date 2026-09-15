@@ -525,3 +525,15 @@ PR #7 병합 `7320165` 이후에는 raw 원본과 준비 완료 seed를 구분�
 2026-09-15 사용자 계획 승인 완료. MR 체크리스트의 승인 후 구현 체크포인트를 팀 검토한 뒤
 P0 legacy 수정, native 전달 순서로 구현·회귀시험을 진행한다. 승인 자체를 소스 수정 완료나
 시험 PASS로 집계하지 않으며, 실행 결과는 해당 체크포인트에 별도로 기록한다.
+
+
+PR #10 병합 `2316cfe`에서 legacy `nonlin`의 두 P0 수식 교정과 제한적 O0/O2 통과를
+인정한다. 후속 순서는 B06의 **실제 balstagger pressure 좌표·중복 상단(P1) → active
+terrain donor 유효성(P1) → OM/OMO 변경 후 실패·복원문 삭제 변이(P2)**다.
+좌표 연결은 비균일격자의 고차 정확도와 구분하고, 기존 8개 최종 배열 동일성을 OM/OMO
+복원 분기 행사로 해석하지 않는다. 세 항목의 종료조건은 기존 계획·MR 체크리스트에서
+PASS_SCOPED로 추적한다. 실제 balstagger 연결·terrain donor·8개 복원문 삭제 변이를
+새 scratch cwd의 pinned ifx O0/O2에서 확인했다. 잘못된 pressure 연결·terrain 검사 제거·
+상단 기울기 변이도 검출했다. 근거는 MR 체크리스트의 후속 실행 기록을 따른다.
+비균일 가변 omega 보간·고차 정확도, 전체 BALCON 및 native 실행은 미검증이다.
+Native fresh-start 및 레이더 계보 조사를 이어가며 CP02/MR 상태는 승격하지 않는다.
