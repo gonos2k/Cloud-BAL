@@ -1134,7 +1134,7 @@ c
      .         ,i,j,k,l,is,ip,js,jp,kp,it,itt
      .         ,icnt,iwpt,istatus
      .         ,ucnt,vcnt,uwpt,vwpt,bal_status,continuity_status
-     .         ,mode_status,kmid,kmode_bottom,kmode_top
+     .         ,mode_status,kmid,kmode_bottom,kmode_top,nonlin_status
 c
       real*4 t(nx,ny,nz),to(nx,ny,nz),tb(nx,ny,nz)
      .      ,u(nx,ny,nz),uo(nx,ny,nz),ub(nx,ny,nz)
@@ -1390,7 +1390,8 @@ c                      boundary values(zero perturbation)
       call frict(fu,fv,ub,vb,uo,vo,p,ps,tmp
      .                 ,nx,ny,nz,dx,dy,dp,dt,bnd)
       call nonlin(nu,nv,uo,vo,ub,vb,om,omb
-     .           ,nx,ny,nz,dx,dy,dp,dt,bnd,rod)
+     .           ,nx,ny,nz,dx,dy,dp,dt,bnd,rod,nonlin_status)
+      if(nonlin_status.ne.1)goto 900
 c *** Compute new phi (t array) using relaxation on eqn. (2).
 c        beta*dldx term is dropped to eliminate coupling with lambda eqn.
 c
@@ -2936,7 +2937,7 @@ c
 c===============================================================================
 c
       subroutine nonlin(nu,nv,u,v,ub,vb,om,omb
-     .                 ,nx,ny,nz,dx,dy,dp,dt,bnd,rod)
+     .                 ,nx,ny,nz,dx,dy,dp,dt,bnd,rod,istatus)
 c
 c *** Nonlin computes the non-linear terms (nu,nv) from staggered input.
 c     The non linear terms are linearized with a background/perturbation
@@ -2947,7 +2948,8 @@ c     rod - the length scale is that defined by data resolvability
 c
       implicit none
 c
-      integer   nx,ny,nz
+      real*4 omega_donors(2,2),background_donors(2,2)
+      integer   nx,ny,nz,istatus,face_status
      .         ,nxm1,nym1,nzm1
      .         ,i,j,k
 c
@@ -2968,27 +2970,30 @@ c
       nxm1=nx-1
       nym1=ny-1
       nzm1=nz-1
-      call zero3d(nu,nx,ny,nz)
-      call zero3d(nv,nx,ny,nz)
-c the u,v,om variables are perturbations
+      nu=0.
+      nv=0.
+c U/V are perturbations; OM is total pressure omega (Pa/s).
+c OMB and UB/VB are backgrounds. A missing donor rejects BALCON.
+      istatus=0
       do k=2,nzm1
       do j=2,nym1
       do i=2,nxm1
          if(u(i,j,k).eq.bnd) then
           nu(i,j,k)=0.
          else
-          ombu=(omb(i+1,j+1,k+1)+omb(i,j+1,k+1)+omb(i+1,j+1,k)+
-     &            omb(i,j+1,k))*.25
-          omu=(om(i+1,j+1,k+1)+om(i,j+1,k+1)+om(i+1,j+1,k)+
-     &            om(i,j+1,k))*.25
+          omega_donors=om(i:i+1,j+1,k:k+1)
+          background_donors=omb(i:i+1,j+1,k:k+1)
+          call qbal_omega_face_delta(omega_donors,
+     &         background_donors,omu,ombu,face_status)
+          if(face_status.ne.1)return
           vvu=(v(i-1,j+1,k)+v(i,j+1,k)+v(i-1,j,k)+v(i,j,k))*.25
           vvbu=(vb(i-1,j+1,k)+vb(i,j+1,k)+vb(i-1,j,k)+vb(i,j,k))*.25
           dubdx=(ub(i+1,j,k)-ub(i-1,j,k))/(2.*dx(i,j))
           dudx=(u(i+1,j,k)-u(i-1,j,k))/(2.*dx(i,j))
           dubdy=(ub(i,j+1,k)-ub(i,j-1,k))/(2.*dy(i,j))
           dudy=(u(i,j+1,k)-u(i,j-1,k))/(2.*dy(i,j))
-          dubdp=(ub(i,j,k+1)-ub(i,j,k-1))/(dp(k)+dp(k+1))
-          dudp=(u(i,j,k+1)-u(i,j,k-1))/(dp(k)+dp(k+1))
+          dubdp=(ub(i,j,k-1)-ub(i,j,k+1))/(dp(k)+dp(k+1))
+          dudp=(u(i,j,k-1)-u(i,j,k+1))/(dp(k)+dp(k+1))
           dudt=0.
           nu(i,j,k)=(dudt+ub(i,j,k)*dudx+vvbu*dudy+ombu*dudp
      &                 +u(i,j,k)*dubdx+vvu*dubdy+omu*dubdp)*rod
@@ -2996,18 +3001,19 @@ c the u,v,om variables are perturbations
          if(v(i,j,k).eq.bnd) then
           nv(i,j,k)=0.
          else 
-          ombv=(omb(i+1,j+1,k+1)+omb(i+1,j,k+1)+omb(i+1,j,k)+
-     &            omb(i+1,j+1,k))*.25
-          omv=(om(i+1,j+1,k+1)+om(i+1,j,k+1)+om(i+1,j,k)+
-     &            om(i+1,j+1,k))*.25
+          omega_donors=om(i+1,j:j+1,k:k+1)
+          background_donors=omb(i+1,j:j+1,k:k+1)
+          call qbal_omega_face_delta(omega_donors,
+     &         background_donors,omv,ombv,face_status)
+          if(face_status.ne.1)return
           uuv=(u(i,j,k)+u(i+1,j,k)+u(i,j-1,k)+u(i+1,j-1,k))*.25
           uubv=(ub(i,j,k)+ub(i+1,j,k)+ub(i,j-1,k)+ub(i+1,j-1,k))*.25
           dvbdx=(vb(i+1,j,k)-vb(i-1,j,k))/(2.*dx(i,j))
           dvdx=(v(i+1,j,k)-v(i-1,j,k))/(2.*dx(i,j))
           dvbdy=(vb(i,j+1,k)-vb(i,j-1,k))/(2.*dy(i,j))
           dvdy=(v(i,j+1,k)-v(i,j-1,k))/(2.*dy(i,j))
-          dvbdp=(vb(i,j,k+1)-vb(i,j,k-1))/(dp(k)+dp(k+1))
-          dvdp=(v(i,j,k+1)-v(i,j,k-1))/(dp(k)+dp(k+1))
+          dvbdp=(vb(i,j,k-1)-vb(i,j,k+1))/(dp(k)+dp(k+1))
+          dvdp=(v(i,j,k-1)-v(i,j,k+1))/(dp(k)+dp(k+1))
           dvdt=0.           
           nv(i,j,k)=(dvdt+uubv*dvdx+vb(i,j,k)*dvdy+ombv*dvdp
      &                 +uuv*dvbdx+v(i,j,k)*dvbdy+omv*dvbdp)*rod
@@ -3031,6 +3037,27 @@ c fill nonlinear arrays near boundaries, don't want big gradients.
       enddo
       enddo
 c
+      istatus=1
+      return
+      end
+c
+      subroutine qbal_omega_face_delta(total,background,delta,
+     &                                 background_face,istatus)
+c Same four donors/weights for both fields; use the omega input range.
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      implicit none
+      real*4 total(2,2),background(2,2),delta,background_face
+      integer istatus
+      istatus=0
+      delta=0.
+      background_face=0.
+      if(any(.not.ieee_is_finite(total)))return
+      if(any(.not.ieee_is_finite(background)))return
+      if(any(abs(total).gt.100.))return
+      if(any(abs(background).gt.100.))return
+      background_face=sum(background)*.25
+      delta=sum(total-background)*.25
+      istatus=1
       return
       end
 c

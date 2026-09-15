@@ -275,6 +275,7 @@ awk '
 
 "$repo_root/tests/run_contract_regressions.sh"
 "$repo_root/tests/run_qbal_acceptance_tests.sh"
+bash "$repo_root/tests/run_qbal_nonlin_tests.sh"
 "$repo_root/tests/run_legacy_shadow_adapter_test.sh"
 bash "$repo_root/tests/run_pressure_radar_reference.sh"
 "$repo_root/tests/run_real_shadow_io_contract_tests.sh"

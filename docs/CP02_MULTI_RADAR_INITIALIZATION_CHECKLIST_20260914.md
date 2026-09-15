@@ -8,7 +8,7 @@
 ## 상태와 사용 방법
 
 **계획·체크리스트 작성 완료 / 입력·방정식 조사 진행 / 새 결합 초기화 미검증**.
-PR #7 이후 보강은 계획 검토 중이며, 사용자 계획 확정 뒤 코드 수정·회귀시험을 진행한다.
+2026-09-15 사용자 계획 승인 완료. 아래 구현 체크리스트의 팀 검토 후 코드 수정·회귀시험을 진행한다.
 `MR-C0`–`MR-C6`는 이 추가 과제의 체크포인트다. 기존 CP00–CP07 번호나 CP02의
 여섯 요구사항을 대체하지 않는다. 체크는 실제 산출물·판정·입력/소스/설정 근거가
 있을 때만 완료한다. 문서 작성, 정상 종료, 0회 solver 또는 기존 OFF 실험은 새
@@ -43,6 +43,64 @@ MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 자료 조사와 방정식 검토는 병렬로 진행할 수 있다. MR-C2/C3를 통과하지 않은 진단
 후보를 실제 초기화 후보로 게시하지 않는다. 실패는 해당 체크포인트에 남기고
 소유한 scratch 후보를 폐기하거나 원상태로 되돌린다. 운영 입력과 보존 실험은 유지한다.
+
+## 승인 후 구현 체크리스트 (2026-09-15)
+
+사용자가 `main@d25faf9` 계획을 승인했다. 아래 실행 체크리스트를 팀 검토한 뒤 개선한다.
+기존 45개 요구사항과 MR 상태를 대체하지 않는 구현 작업 기록이다. 첫 묶음은 독립적인
+B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통합의 MR 선행조건은 유지한다.
+
+| 구현 체크포인트 | 실행 항목 / 완료 근거 | 현재 상태 |
+|---|---|---|
+| 팀 사전 검토 | GREEN/RED GO; 생산 루틴과 caller fragment의 8개 배열 원복을 검증하며 full BALCON 증거로 확대하지 않음 | GO |
+| B06 legacy P0 | 네 pressure 미분 부호, 같은 donor의 전체/배경 omega 차이, 실패 시 balcon 원상복구 | IMPLEMENTED_SCOPED |
+| B06 생산 루틴 검증 | pinned ifx O0/O2: affine, 영섭동, U/V 각 연직항 단독 비영, 결측 donor, 입력 불변; 실제 caller wind 계약과 실패 fragment 확인; 아래 범위 한정 | PASS_SCOPED |
+| E03 native 준비 | 마지막 startup 및 첫 solve 전 경계 호출망 조사 중; time level/derived state 연결과 raw·seed 실행 증거는 미완료 | IN_PROGRESS |
+| E03/M07 native 소비 | 새 stage·payload/geometry/실제 U/V 차이·footprint·하부 W·최종 저장 후 질량/경계 검사 | NOT_RUN |
+| E03 native 회귀 | W 단독 영증분/전체 영변경/물리 변경 분리; 유효 비영 전달·geometry/지원 밖/중복/중단 거부; 진단 비침습성 | NOT_RUN |
+| MR-C0/C1 병렬 조사 | 실제 레이더별 Vr·기하·시각·QC·Barnes 계보 및 남은 연직 정보; 외부 omega target을 필수로 추가하지 않음 | IN_PROGRESS |
+
+- [x] 팀 사전 검토의 차단사항을 닫고 첫 코드 묶음을 시작한다.
+- [x] 생산 코드 변경은 작은 기존 함수/호출 경로에 한정하고, P1 비균일 고차 정확도는 별도 기록한다.
+- [x] donor 결측·실패를 0의 성공으로 만들지 않고 원본/입력·최종 게시를 보호한다.
+- [x] 시험은 새 실제 scratch cwd와 pinned Intel profile을 사용한다. 추출 루틴, caller 확인,
+  source compile, native 실행의 증거 범위를 나눠 기록한다.
+- [ ] 구현 후 독립 팀 검토·관련 회귀를 통과한 묶음만 원본에 반영하고 Graphify를 증분 갱신한다.
+- [x] 한 묶음의 제한적 통과를 CP02·MR-C4/C5/C6 전체 PASS로 승격하지 않는다.
+
+### 첫 구현 묶음 — legacy P0 제한 범위 검증
+
+- 기준: PR #9 `d25faf9`. 생산 `qbalpe.f` SHA256:
+  `0bd45cb1e2423c80b5f4fbdee8c681fba7e69c60292ab6c40677bfa45a0b7b60`.
+- 팀 사전 GREEN/RED GO 뒤 구현; 독립 소스·시험 검토에서 차단사항 없음.
+- `bash tests/run_qbal_nonlin_tests.sh`: pinned ifx O0(runtime checks) 및 실제 O2 PASS.
+  O2는 최적화를 비활성화하는 `-check all`을 제외하고 pinned 부동소수점 설정을 유지한다.
+- 균일/비균일 pressure-affine, 영섭동, U/V 각 연직항, 이질 donor, 필수 donor NaN,
+  terrain skip 및 입력 불변을 생산 `nonlin` 추출본에서 확인했다.
+- 실제 caller의 wind 섭동 변환·호출·실패 복구 구간을 추출하여 비영 omega 차이와
+  결측 시 8개 배열 bitwise 복원을 확인했다. continuity/relaxation 및 전체 BALCON 실행은 아니다.
+- `tests/run_tests.sh`의 core/source gates 및 기존 `run_qbal_acceptance_tests.sh` PASS.
+  전체 unit suite, native consumer/startup, 실자료 예보는 이번 묶음에서 실행하지 않았다.
+- 로컬 실행 근거: `scratch/cp02_approved_20260915/Cloud-BAL/scratch/`의
+  `nonlin_final.log`, `nonlin_validation.json`, `source_gates_final.log`, `qbal_acceptance.log`.
+  B06 전체 및 CP02/MR 상태는 유지한다. P1 비균일 고차 정확도와 native 계약은 후속이다.
+
+### native N0 호출 위치 조사 (실행 미검증)
+
+Pinned host 소스에서 준비 완료 seed 후보는 `module_wrf_top.F`의 마지막
+`start_domain(head_grid,.TRUE.)` 반환 직후다. 더 이른 입력 중의 startup 호출을
+seed 완료로 간주하지 않는다. 첫 `solve_interface` 앞의 `med_before_solve_io`가
+지정 경계를 다시 갱신할 수 있어 consumed 검사는 그 처리 이후에 둔다.
+U/V/W 두 time level과 PH/PHB, MU/MUB, WW 및 metric/지속 상태의 관계를 함께 확인한다.
+현재 staged-file W consumer의 재읽기는 host 메모리의 이 상태들을 검증하지 않는다.
+Generated input 경로에서 fresh 파일 `W`는 `w_2`에 읽히고, `w_1`은 첫
+`small_step_prep`에서 `w_2`로 동기화된다. Restart에는 이 fresh 계약을 적용하지 않는다.
+첫 `med_latbound_in`은 W/U/V/PH/T/MU 경계 버퍼를 읽으며, 그 호출만으로 W 전체장을
+직접 덮지는 않는다. 이후 solver의 경계 처리가 후보를 바꿀 수 있다.
+적용 지점 후보는 첫 경계 입력 반환 후 `solve_interface` 직전이며, seed capture는
+마지막 `start_domain` 반환 후로 구분한다. 실제 specified/경계 알람·파일과 후보 변경 후
+halo 재교환, 첫 small-step 전후 readback을 확인하기 전 실행 경로 확정으로 집계하지 않는다.
+이 조사는 N0 실행, 정상 seed, E03/MR-C4 통과 증거가 아니다.
 
 ## MR-C0 — 기존 관측과 분석장 연결
 
