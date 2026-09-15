@@ -127,6 +127,16 @@ uniform/nonuniform pressure의 interior/top에 적용하는 것이다. 여기에
 full BALCON, native startup/readback, 과학 검증은 계속 미검증이다. 문서의 계획 반영과
 체크리스트의 실제 실행 근거를 구분한다.
 
+### PR #12 이후 연결 검증
+
+기존 pressure·terrain·원복·omega collocation의 제한적 완료는 유지한다. 다음 범위인
+작은 합성 forward→전체 BALCON→reverse 연결은 pinned ifx O0/O2에서 비영 승인 및
+계산 후 PHI 비수렴 원복을 확인했다. 확장 실행에서 발견한 진단/역 stagger 상단 bounds는
+작은 guard 수정으로 처리했으며 근거·시험용 metadata 경계는 MR 체크리스트를 따른다.
+이 시험의 산출물은 메모리 배열이다. 실자료 main/writer, native fresh seed→후보→consumed
+및 레이더별 Vr·Barnes 계보 연결은 별도 실행 과제로 유지한다. 고차 profile 연구를 이들
+연결의 일률적인 선행조건으로 추가하거나 새 외부 omega target을 요구하지 않는다.
+
 ### Legacy nonlin 수정 묶음
 
 PR #10에서 교정한 국소 계약은 배열이 해당 pressure에 놓인다는 전제다.

@@ -60,6 +60,7 @@ B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통
 | B06 P2 원복 검출력 | snapshot 후 OM/OMO 포함 보호 배열 변경→실패→원복; 각 복원문 삭제 변이 검출 | PASS_SCOPED |
 | B06 P1 가변 omega collocation | PR #11 병합 기준 `f55c0b1`; 실제 forward→nonlin에서 pressure-distance weights, top endpoint, zero-weight donor의 산술·유효성 검사 제외, required invalid reject+rollback 검증 | PASS_SCOPED |
 | E03 native 준비 | 마지막 startup 및 첫 solve 전 경계 호출망 조사 중; time level/derived state 연결과 raw·seed 실행 증거는 미완료 | IN_PROGRESS |
+| B06 합성 BALCON 연결 | 실제 forward→전체 BALCON→reverse, 비영 승인과 PHI 비수렴 후 원복; 실자료 main/writer·native 제외 | PASS_SCOPED |
 | E03/M07 native 소비 | 새 stage·payload/geometry/실제 U/V 차이·footprint·하부 W·최종 저장 후 질량/경계 검사 | NOT_RUN |
 | E03 native 회귀 | W 단독 영증분/전체 영변경/물리 변경 분리; 유효 비영 전달·geometry/지원 밖/중복/중단 거부; 진단 비침습성 | NOT_RUN |
 | MR-C0/C1 병렬 조사 | 실제 레이더별 Vr·기하·시각·QC·Barnes 계보 및 남은 연직 정보; 외부 omega target을 필수로 추가하지 않음 | IN_PROGRESS |
@@ -162,6 +163,32 @@ missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수
   `omega_final.log`, `omega_source_gates.log`, `omega_mutations.log`.
 - 최초 비균일 stencil 기대값은 이전 동일 가중 기준이었다. pressure 가중 3/4·1/4에서
   독립 계산한 U=23.25, V=14.375로 교정한 뒤 위 최종 시험을 수행했다.
+
+### PR #12 이후 — 작은 전체 BALCON 연결 (PASS_SCOPED)
+
+- 기준: merged PR #12 `cea70d0`; 생산 `qbalpe.f` SHA256
+  `e38758be0dac93402e198bc2e1d91ed30469a94ee6d0f2d7f13d5a864b4bcbe7`.
+- `tests/run_qbal_balcon_tests.sh`는 생산 DIAGNOSE 이후 루틴 전체와 실제 wind-mode,
+  move/zero/array-diagnosis 유틸리티를 컴파일한다. 수치 routine을 stub으로 대체하지 않는다.
+  fixture의 6×6 격자 metadata, missing 값, timer 네 함수만 시험용으로 공급한다.
+- 6×6×4 합성 입력에서 실제 정 stagger→BALCON(continuity, nonlin, PHI relaxation,
+  최종 projection, acceptance)→역 stagger를 실행했다. 최대 바람 증분은 약
+  `1.2452605e-4 m/s`, 최종 continuity rms/max는 `1.1829953e-16 / 3.1862092e-16`이다.
+  이는 작은 합성 사례의 수치 결과이며 허용오차나 운영 영향의 제안이 아니다.
+- finite PHI 비수렴(`itmax=1`)은 continuity 호출·PHI 섭동 구성 및 첫 relaxation 뒤
+  실패하며, 작업/관측 8개 배열과 고정 배경의 bitwise 원복/불변을 확인했다. 이 사례는
+  실패 전에 PHI가 변경된다. 8개 배열 모두가 변경됐다는 뜻은 아니며, 각 복원문 검출력은
+  기존 caller fragment의 8개 삭제 변이로 별도 유지한다.
+- 확장 실행에서 진단 omega의 `ksmx+1>nz`와 역 stagger의 `.and.` 조건 내 `p(k+1)`
+  상단 접근을 실제 Intel O0에서 검출했다. 진단 level 상한, forcing 최대 절댓값 기록,
+  `destagger_x`의 별도 상단 guard로 수정했다. 두 bounds 수정 제거 변이는 O0에서 각각 검출했다.
+- pinned ifx 새 scratch cwd의 O0/O2 연결시험 PASS. 기존 nonlin 세 driver 및 8개 원복문
+  삭제 변이 O0/O2, source/core gates도 PASS. 전체 unit suite는 재실행하지 않았다.
+- 근거: `scratch/pr12_balcon_20260915/Cloud-BAL/scratch/`의 `BALCON_VALIDATION.json`,
+  `balcon_final.log`, `bounds_mutations.log`, `nonlin_regression.log`, `source_gates.log`.
+  `balcon_initial.log`/`balcon_second.log`는 수정 전 bounds 실패 근거다.
+- 실자료 input/main/writer와 NetCDF 게시, native seed/consumed, 초기 충격·RN1/PTY 예보는
+  미검증이다. 이번 전체 routine의 작은 연결시험으로 B06 전체·CP02/MR를 승격하지 않는다.
 
 ### native N0 호출 위치 조사 (실행 미검증)
 
