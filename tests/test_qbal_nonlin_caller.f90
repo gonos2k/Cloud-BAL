@@ -4,22 +4,20 @@ program test_qbal_nonlin_caller
   real :: to(4,4,4),uo(4,4,4),vo(4,4,4),omo(4,4,4)
   real :: t(4,4,4),u(4,4,4),v(4,4,4),om(4,4,4)
   real :: tb(4,4,4),ub(4,4,4),vb(4,4,4),omb(4,4,4)
-  real :: nu(4,4,4),nv(4,4,4),saved(4,4,4,8),dp(4),p(4)
+  real :: nu(4,4,4),nv(4,4,4),saved(4,4,4,8),p(4)
   integer :: k,status
   external :: caller_fragment
 
   p=[100000.,90000.,85000.,70000.]
-  dp(1)=0.
-  dp(2:4)=p(1:3)-p(2:4)
   tb=300.
   do k=1,4
-    ub(:,:,k)=1.e-4*p(k)
-    vb(:,:,k)=-2.e-4*p(k)
+    ub(:,:,k)=1.e-4*p(min(k+1,4))
+    vb(:,:,k)=-2.e-4*p(min(k+1,4))
   end do
   omb=0.5
   call prepare()
   ! The real caller must subtract U/V backgrounds but pass total OM.
-  call run()
+  call run(.false.)
   if(status/=1) error stop 'caller valid status'
   if(any(uo/=0.).or.any(vo/=0.)) error stop 'caller perturbations'
   if(any(nu/=0.).or.any(nv/=0.)) error stop 'caller zero perturbation'
@@ -27,7 +25,7 @@ program test_qbal_nonlin_caller
 
   call prepare()
   om=omo
-  call run()
+  call run(.false.)
   if(status/=1) error stop 'caller nonzero omega status'
   if(abs(nu(2,2,2)-2.5e-5)>1.e-9) error stop 'caller delta omega U'
   if(abs(nv(2,2,2)+5.e-5)>1.e-9) error stop 'caller delta omega V'
@@ -43,7 +41,7 @@ program test_qbal_nonlin_caller
   saved(:,:,:,3)=v; saved(:,:,:,4)=om
   saved(:,:,:,5)=to; saved(:,:,:,6)=uo
   saved(:,:,:,7)=vo; saved(:,:,:,8)=omo
-  call run()
+  call run(.true.)
   if(status/=0) error stop 'caller missing donor accepted'
   call same_bits(t,saved(:,:,:,1))
   call same_bits(u,saved(:,:,:,2))
@@ -65,8 +63,10 @@ contains
     v=12.
     om=omb
   end subroutine
-  subroutine run()
-    call caller_fragment(to,uo,vo,omo,t,u,v,om,tb,ub,vb,omb,dp,nu,nv,status)
+  subroutine run(fault_injection)
+    logical, intent(in) :: fault_injection
+    call caller_fragment(to,uo,vo,omo,t,u,v,om,tb,ub,vb,omb,p,nu,nv,status, &
+         fault_injection)
   end subroutine
   subroutine same_bits(actual,expected)
     real,intent(in) :: actual(4,4,4),expected(4,4,4)

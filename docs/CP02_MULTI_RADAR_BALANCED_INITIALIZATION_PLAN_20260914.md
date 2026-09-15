@@ -46,9 +46,57 @@ P1인 mask·재시도 항목도 native 통합 승인 전에 닫는다. P0/P1은 
 낮은 우선순위라는 이유로 MR-C4 완료조건에서 제외하지 않는다. 레이더 자료 연결과
 기하 평가는 수식 수정·전달 계약 설계와 병렬 진행할 수 있다.
 
+### PR #10 이후 — 실제 격자·terrain·원복 시험 연결
+
+최신 기준은 PR #10 병합 `2316cfe27490577cc15bafd4b9be27740b9da1e3`
+(tree `f5f42d773c9b9f2081a17263ea3c26fc3e94bb96`)다. 위 PR #5–#9의 미수정 설명은
+당시 이력이다. 네 압력미분 부호와 전체/섭동 omega 구분은 PR #10의 생산 `nonlin`
+루틴 범위에서 교정됐으며 `IMPLEMENTED_SCOPED/PASS_SCOPED`를 유지한다.
+아래 후속 계약의 제한적 구현·시험 결과는 MR 체크리스트의 PR #10 후속 실행 근거에 기록한다.
+문구 반영 자체와 실행 PASS를 구분하며 전체 B06·CP02/MR 상태는 유지한다.
+사용자가 제공한 GNU Fortran 14.2.0 O0/O2 결과는 외부 교차검증 기록이다. 첨부 묶음을
+이 작업공간에서 재실행한 근거가 아니며 프로젝트의 pinned ifx 검증을 대체하지 않는다.
+
+| 순서 / 연결 | 후속 작업 | 종료조건 |
+|---|---|---|
+| 1, P1 / B06 | 실제 `balstagger→nonlin` pressure 좌표 연결 | 원래 U/V affine 입력부터 생산 stagger를 거쳐 균일·비균일 내부 및 상단 경계의 기대 미분/연직항 검증 |
+| 2, P1 / B06 | active omega stencil의 terrain donor 유효성 | 전체/배경 중 한쪽 또는 양쪽의 필수 `bnd` donor를 검출; 진짜 0은 수용하고 terrain target skip은 유지 |
+| 3, P2 / B06 | OM/OMO 변경 후 실패하는 caller fixture | snapshot 후 보호 배열을 실제 변경; 원복 성공 및 각 대응 복원문 삭제 변이의 실패 확인 |
+
+**Pressure 좌표:** 현 `balstagger`는 `k<nz`에서 U/V를 입력 `p(k+1)`의 값으로
+옮기고 최상층을 복제한다. `nonlin`에 직접 `u_k=a*p_k+b`를 넣는 기존 시험과 구분한다.
+중복 상단의 영향을 받지 않는 내부에서 현재 연결식은
+`D_p u_stag(k)=a*(p(k)-p(k+2))/(p(k-1)-p(k+1))`가 되어 affine에도 좌표 오차가 남는다.
+원래 pressure와 실제 wind-pressure 좌표·유효 level을 구분하고 미분 donor의 실제 위치로
+분모를 정의한다. 복제된 상단을 독립 물리 level로 사용하지 않도록 상단 stencil/적용 범위를
+함께 정한다. `dp(k+1)+dp(k+2)`의 전역 치환으로 해결하지 않으며 공통 dp를 사용하는
+다른 연산자의 계약도 확인한다. 이 좌표 정합성을 닫은 뒤 기존 P1 곡률·격자수렴을 평가한다.
+연결시험에는 `p=(100000,90000,85000,70000) Pa`, 배경 U 기울기 `1e-4`,
+`delta omega=0.5 Pa/s`의 기대 연직항 `5e-5 m/s^2`와 V 대응항, 균일격자 상단을 포함한다.
+사용자 반례의 `6.66667e-5` 및 `2.5e-5`는 후속 회귀의 오류 검출 기준이며 실제 예보 오차가 아니다.
+
+**Terrain donor:** `bnd=1e-30`의 내부 제외 의미를 helper의 계약에 연결한다.
+정확한 sentinel 또는 명시적 유효성 정보를 전달하며 0 근처 임계값으로 대체하지 않는다.
+active target의 필수 donor가 제외되면 실패 또는 명시적 비적용으로 처리하고, 그 선택과
+caller 원복을 시험한다. 전체/배경을 따로 재가중하거나 누락을 0의 정상 증분으로 숨기지 않는다.
+양쪽 같은 sentinel, 한쪽만 sentinel, 실제 0, 제외 target skip을 별도 사례로 둔다.
+실제 terrain 처리 후 active stencil에서의 발생 영역·빈도는 별도 확인하며 커널 반례만으로
+운영 영향의 크기를 단정하지 않는다.
+
+**원복 검출력:** 기존 시험은 실패 후 8개 배열의 동일성을 확인하지만 OM/OMO는
+snapshot 이후 바뀌지 않아 해당 복원 분기를 행사하지 않는다. 작은 fixture에서 실패 전에
+보호 배열이 저장값과 달라지게 하고, 각 복원문 삭제를 시험이 검출하도록 한다.
+이 보강도 continuity/relaxation을 포함한 전체 BALCON 실행 증거로 확대하지 않는다.
+
+후속 시험은 `tests/intel_toolchain.sh`의 pinned ifx, 새 실제 scratch cwd에서 O0/O2로
+실행한다. 기존 수정·오류 복원 변이시험은 유지한다. 별도 대형 감사 계층은 추가하지 않는다.
+Native fresh-start seed/적용/경계·halo/첫 small-step readback과 레이더별 Vr·Barnes 계보
+조사는 병렬로 계속하며, 외부 omega target을 필수 경로로 되돌리지 않는다.
+
 ### Legacy nonlin 수정 묶음
 
-현재 감소하는 pressure level에서 `dp(k)=p(k-1)-p(k)>0`이다. 따라서
+PR #10에서 교정한 국소 계약은 배열이 해당 pressure에 놓인다는 전제다.
+감소하는 pressure level에서 `dp(k)=p(k-1)-p(k)>0`이다. 따라서
 `du/dp=(u(k-1)-u(k+1))/(dp(k)+dp(k+1))`의 부호를 사용하거나 동일한 signed
 pressure 차이로 계산한다. background/perturbation U/V의 네 미분을 함께 수정한다.
 `u(p)=10^-4 p`이면 결과는 `+10^-4`여야 한다. 비균일 격자의 affine 검증도 포함하되,
