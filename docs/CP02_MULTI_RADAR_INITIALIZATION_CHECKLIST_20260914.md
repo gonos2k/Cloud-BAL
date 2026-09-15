@@ -153,11 +153,12 @@ R2 범주별 기록은 다음처럼 정의한다.
 - [ ] `nonlin`의 네 pressure 미분 부호와 전체/섭동 omega 계약을 한 수정 묶음으로 닫는다. affine profile 및 비영 background의 영섭동 항등식을 실제 호출 경로·O0/O2에서 검증한다.
 - [ ] 전체/배경 omega의 donor·가중·유효성 기준을 공유하고 결측 sentinel의 가짜 영섭동을 거부한다. 두 연직 이류항의 단독 비영 사례를 U/V 각각 검사한다. P1 비균일격자 곡률·수렴성은 P0 부호·선형 일관성과 별도 기록한다.
 - [ ] baseline/staged candidate/geometry/increment/mapping을 actual native P/PB·PH/PHB·U/V·W 및 필요한 질량·좌표·metric에 결속한다. 시각·위경도·shape 일치만으로 수용하지 않는다.
-- [ ] raw 불변 입력과 N0 준비 완료 seed의 관계를 고정한다. W time level·내부/경계/halo·설정·처리 지점을 pinned host에서 확인하고 raw W=0과 부적합 ready W를 구분한다. 같은 ready 단계에서 Cloud-BAL 증분을 계산한다.
+- [ ] raw 불변 입력과 N0 준비 완료 seed의 관계를 고정한다. 실제 routine의 호출 전후·W time level·질량/geometry/지속 상태·완료된 경계/halo 처리·후보 적용 후 재개 지점을 pinned host에서 확인한다. raw W=0과 부적합 ready W를 구분하고 같은 ready 단계에서 Cloud-BAL 증분을 계산한다.
 - [ ] 실제 변경된 native U/V 지원 영역이 W mapping의 검증된 stagger·보간 footprint 안에 있는지 확인한다. 지원 밖 변경은 거부 또는 관련 U/V/W 전체 rollback한다.
 - [ ] raw/seed/pre-W/post-W/consumed와 payload의 역할을 기존 receipt에 결속한다. 매번 불변 준비 완료 seed에서 존재하지 않는 새 private stage를 만들고 candidate 변경을 재구성한다. 기존 경로 덮어쓰기·실패/중단 stage 재사용·동일 stage 중복 적용을 실제 경로에서 거부한다.
 - [ ] native CF·map factor·경계 stencil의 B로 seed W_s=B(U_base,V_base)를 검사한 후, 저장된 candidate U/V로 최종 하부 W를 재계산한다. 변경 지원 영역과 물리·연산·입력 오차를 구분한 epsilon_s로 검사하고 startup 후 W_s=B(U_consumed,V_consumed)를 재확인한다. 상쇄 사례에 bitwise 일치를 강제하지 않는다.
-- [ ] 변경 U/V를 참조하는 B stencil의 출력 영역만 기록하고 영역 밖 W는 seed와 동일하게 유지한다. raw 원본 불변과 ready 영증분 동일성을 별도로 시험한다.
+- [ ] 변경 U/V를 참조하는 B stencil의 출력 영역만 기록하고 영역 밖 W는 seed와 동일하게 유지한다. raw 원본 불변은 별도 검사한다.
+- [ ] 영증분 fixture를 구분한다: W consumer 단독은 다른 입력·geometry·설정이 같고 진입 후보가 경계에 맞을 때 바람 영증분에 대해 W와 비-W 필드의 pre/post 동일성을 검사한다. 전체 pipeline은 모든 제안 변경이 없을 때만 ready 기준·후보 전체 동일성을 요구한다. 물리 변경 후보는 승인 필드·수지·경계 검사로 판정한다.
 - [ ] geometry 불일치·mask 밖 실제 변경·중복 적용·부적합 seed의 거부 및 일관된 surface 증분의 양성 사례를 기존 NetCDF 시험에 추가한다.
 - [ ] `tests/intel_toolchain.sh`의 pinned ifx로 새 scratch cwd에서 O0/O2를 검증한다.
 - [ ] 약한 관측 기하·부적합 질량경계·상변화·결측·저장 정밀도·rollback의 필요한 시험을 한다.

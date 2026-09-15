@@ -90,7 +90,8 @@ W 증분의 baseline은 준비 완료 seed다. `raw_state_id`와 기존 `baselin
 raw W=0은 host가 준비하는 정상 입력 표현일 수 있으므로 seed의 하부 경계 검사를
 raw에 그대로 적용하지 않는다. 준비 완료 seed/consumed의 부적합 W는 거부한다.
 N0의 W time level·내부 초기 처리·경계/halo·설정·파일/메모리 지점은 **미확정**이며
-pinned host에서 고정한다. 바닥 W 채우기만으로 전체 준비를 재현했다고 하지 않고,
+pinned host에서 고정한다. 실제 routine의 호출 전후 위치, 보존할 질량·geometry·지속 상태,
+이미 끝난 처리와 후보 적용 후 재개할 호출을 함께 기록한다. 바닥 W 채우기만으로 전체 준비를 재현했다고 하지 않고,
 전체 startup을 무조건 두 번 호출하거나 시간적분·외부 omega target으로 대신하지 않는다.
 여기서 `x_b_ready=x_b_seed`이며 ready는 같은 준비 완료 연산 단계를 뜻한다.
 알고리즘 효과는 같은 단계의 `delta x_CB=x_c_ready-x_b_ready`로 비교한다.
@@ -155,8 +156,17 @@ readback은 선언된 증분 전달 범위의 이력으로 보존하며 seed의 
 순서로 수행한다. 경계·halo 등이 다시 상태를 바꾸면 그 이후의 배열에서 재평가한다.
 고정 geometry·동일 질량 경향에서는 `r_final=r_before+D*delta F_last`이므로 solver의
 중간 PASS가 최종 PASS를 대신하지 않는다. geometry/질량도 변하면 전체 식을 재계산한다.
-정상 seed에서 `delta U=delta V=delta omega=0`일 때 같은 설정·처리 단계의
-`x_c_ready=x_b_ready`를 검사한다. raw 원본 불변과 ready 영증분 동일성은 별도 불변량이다.
+영증분 시험은 다음 세 범위로 구분한다. raw 원본 불변은 이들과 별도 불변량이다.
+
+| 시험 범위 | 전제와 비교 대상 | 판정 |
+|---|---|---|
+| W consumer 단독 | 경계에 맞는 진입 직전 후보 상태에서 다른 입력·geometry·설정을 고정하고 `delta U=delta V=delta omega=0` | `W_post=W_pre`, `x_nonW_post=x_nonW_pre`; 이미 승인된 후보 필드를 baseline으로 되돌리지 않음 |
+| 전체 pipeline 영변경 | 수분·온도·압력·바람 등 **모든** 제안 변경 `delta x_requested=0`, 같은 준비 조건·ready 단계 | `x_c_ready=x_b_ready` |
+| 물리 변경 coupled 후보 | 수상체·열역학 등을 포함한 승인된 변경이 있음 | 각 필드의 후보 일치 및 수분·엔탈피·질량·경계 잔차 검사; 전체 baseline 동일성을 요구하지 않음 |
+
+바람 영증분만으로 전체 상태 영변경을 추론하지 않는다. 첫 행의 pre/post는 consumer
+적용 직전/직후이며 startup 전후 차이가 아니다. 기존 영증분 fixture의 전제와 비교 대상을
+이 구분에 맞추고 별도 요구사항 ID를 추가하지 않는다.
 
 ### 추가할 작은 회귀·적대시험
 
@@ -172,7 +182,7 @@ readback은 선언된 증분 전달 범위의 이력으로 보존하며 seed의 
 | 초기화 phase ledger와 첫 MP 전후·낙하 유출 | 종전환·강수·수치 조정·경향 적용 시점을 분리해 수지 검사 / T03, MR-C5 |
 | source-bound 사례의 O0/O2·startup readback | 같은 입력·설정·코드의 실제 소비 확인 / G02, E03 |
 
-기존 native 사례에 raw→seed 정상 준비, ready 영증분 동일성, 하부/저장/경계 처리 후
+기존 native 사례에 raw→seed 정상 준비, W 전달 단독 영증분과 전체 pipeline 영변경, 하부/저장/경계 처리 후
 잔차 및 진단 on/off 동일성을 추가한다. 별도 요구사항 ID나 큰 시험 계층은 만들지 않는다.
 
 기존 시험에 작은 fixture를 추가하고 새 범용 감사 프레임워크를 생산 FORTRAN에
