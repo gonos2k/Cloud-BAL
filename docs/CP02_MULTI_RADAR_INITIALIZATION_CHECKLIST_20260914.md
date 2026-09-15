@@ -46,7 +46,7 @@ MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 
 ## 승인 후 구현 체크리스트 (2026-09-15)
 
-사용자가 `main@d25faf9` 계획을 승인했다. 아래 실행 체크리스트를 팀 검토한 뒤 개선한다.
+사용자가 승인한 계획을 기준으로 아래 실행 체크리스트를 팀 검토한 뒤 개선한다.
 기존 45개 요구사항과 MR 상태를 대체하지 않는 구현 작업 기록이다. 첫 묶음은 독립적인
 B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통합의 MR 선행조건은 유지한다.
 
@@ -58,6 +58,7 @@ B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통
 | B06 P1 pressure 연결 | 원래 pressure-affine U/V→실제 balstagger→nonlin; wind-pressure donor 좌표·중복 상단 처리 검증, 곡률·수렴 별도 미검증 | PASS_SCOPED |
 | B06 P1 terrain donor | active target의 양쪽/한쪽 bnd donor 검출, 유효 0 수용, terrain target skip 및 실패 전파 확인 | PASS_SCOPED |
 | B06 P2 원복 검출력 | snapshot 후 OM/OMO 포함 보호 배열 변경→실패→원복; 각 복원문 삭제 변이 검출 | PASS_SCOPED |
+| B06 P1 가변 omega collocation | PR #11 병합 기준 `f55c0b1`; 실제 forward→nonlin에서 pressure-distance weights, top endpoint, zero-weight donor의 산술·유효성 검사 제외, required invalid reject+rollback 검증 | PASS_SCOPED |
 | E03 native 준비 | 마지막 startup 및 첫 solve 전 경계 호출망 조사 중; time level/derived state 연결과 raw·seed 실행 증거는 미완료 | IN_PROGRESS |
 | E03/M07 native 소비 | 새 stage·payload/geometry/실제 U/V 차이·footprint·하부 W·최종 저장 후 질량/경계 검사 | NOT_RUN |
 | E03 native 회귀 | W 단독 영증분/전체 영변경/물리 변경 분리; 유효 비영 전달·geometry/지원 밖/중복/중단 거부; 진단 비침습성 | NOT_RUN |
@@ -89,10 +90,13 @@ B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통
   `nonlin_final.log`, `nonlin_validation.json`, `source_gates_final.log`, `qbal_acceptance.log`.
   B06 전체 및 CP02/MR 상태는 유지한다. P1 비균일 고차 정확도와 native 계약은 후속이다.
 
-### PR #10 후속 종료조건 (제한적 구현·실행 PASS_SCOPED)
+### PR #10 당시 후속 종료조건 (PR #11에서 제한적 PASS_SCOPED로 기록)
 
-기준 `2316cfe`: 기존 P0 제한적 통과를 유지한다. 상세 계약과 반례는 상위 계획의
-“PR #10 이후” 절을 따른다. GNU 교차검증은 사용자 제공 외부 근거이며 자체 ifx 실행과 구분한다.
+기준 `2316cfe`: 당시 기존 P0 제한적 통과와 아래 세 후속 조건을 기록한다. 실제
+`balstagger` pressure 연결, active terrain donor, OM/OMO 원복 검출력은 PR #11 병합
+`f55c0b1`에서 각각 제한적 `PASS_SCOPED`로 유지·기록한다. 상세 계약과 반례는 상위
+계획의 PR #10 역사 절을 따른다. GNU 교차검증은 사용자 제공 외부 근거이며 자체 ifx
+실행과 구분한다.
 
 - [x] 실제 `balstagger`의 한 level 이동 및 중복 상단을 거친 U/V affine 연결시험을 둔다.
   실제 donor pressure·상단 stencil을 고정하고 균일/비균일 내부·상단을 검사한다.
@@ -121,6 +125,43 @@ B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통
 - 전체 BALCON·전체 unit suite·native startup·실자료 예보 및 실제 terrain 발생 빈도는
   이번 실행 범위가 아니다. 비균일격자의 가변 omega 보간 정합성과 고차 곡률·수렴도
   별도 미검증이다. 세 행의 제한적 통과로 B06 전체나 CP02/MR를 승격하지 않는다.
+
+### PR #11 후속 — B06 P1 가변 omega collocation (PASS_SCOPED)
+
+현재 기준은 merged PR #11 `f55c0b1`이다. 위 PR #10 후속 세 행의
+`PASS_SCOPED`는 유지한다. 가변 omega collocation도 아래 신규 시험 범위에서
+`PASS_SCOPED`로 기록한다. 이 항목은 기존 B06 범위의 추가 검증이며 새
+MR/CP checkpoint ID나 대형 감사 계층을 추가하지 않는다.
+
+- 내부 `omega(k)`는 `p_k`와 `p_{k+1}`의 midpoint이고 wind level은 `p_{k+1}`이다.
+  내부에서 동일 가중 double-average를 쓰면 affine omega `c`에
+  `c/4*(p_k-2*p_{k+1}+p_{k+2})` 오차가 생기므로 pressure-distance weights를 사용한다.
+- total/background는 같은 horizontal pair와 같은 pressure-distance weights를 사용한다.
+  정확히 0인 weight의 donor는 산술 및 finite/sentinel/range validity 검사에서 제외한다.
+  필수 donor가 invalid이면 renormalization 없이 reject하고 caller snapshot을 rollback한다.
+- 최상층은 저장된 `omega(nz)` 실제 endpoint만 사용한다. 상단에서 0 weight인 unused
+  midpoint donor가 missing이어도 산술에 사용하거나 유효성 검사하지 않으며, 기존
+  `balstagger`, 공통 `dp`, continuity 계약은 유지한다.
+
+실행한 시험은 실제 forward→nonlin에서 constant/affine omega를 U/V의 각 isolated
+term (`omega_b*d(delta_u_or_v)/dp`, `delta_omega*d(u_or_v_b)/dp`)별로 uniform/nonuniform
+pressure의 interior/top에 적용하는 사례다. total과 background가 같은 varying field라서
+delta가 0인 사례, required donor missing의 reject+rollback, zero-weight top midpoint donor
+missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수렴, full BALCON, native startup/readback, 과학 검증은
+계속 미검증이며 아래 제한적 통과로 전체 B06·CP02/MR를 승격하지 않는다.
+
+실행 근거 (2026-09-15, 기준 `f55c0b1`):
+
+- 생산 `qbalpe.f` SHA256: `55722851b4dc1114488d2386b2a8a7138ec18bb1c6ff04f7f4400d5d2fc23b56`.
+- 새 scratch cwd, pinned Intel ifx O0/O2에서 기존 세 driver와 확장된 가변 omega 시험 PASS.
+  상단 결측/미사용 donor는 helper 시험, 실패 원복은 기존 caller fragment 시험으로 확인했다.
+- 최적화별 8개 복원문 삭제 변이를 계속 검출했다. 내부 동일 가중 복원, 상단 평균 복원,
+  미사용 donor까지 검사하는 세 추가 변이도 O0/O2 각각 검출했다.
+- `tests/run_tests.sh` source/core gates PASS. 전체 unit suite 및 실제 BALCON/native/예보는 미실행.
+- 근거: `scratch/pr11_omega_20260915/Cloud-BAL/scratch/`의 `OMEGA_VALIDATION.json`,
+  `omega_final.log`, `omega_source_gates.log`, `omega_mutations.log`.
+- 최초 비균일 stencil 기대값은 이전 동일 가중 기준이었다. pressure 가중 3/4·1/4에서
+  독립 계산한 U=23.25, V=14.375로 교정한 뒤 위 최종 시험을 수행했다.
 
 ### native N0 호출 위치 조사 (실행 미검증)
 
@@ -245,7 +286,7 @@ R2 범주별 기록은 다음처럼 정의한다.
 담당: 구현/native I/O. 선행: MR-C2 및 MR-C3.
 
 - [ ] 실제 사용하는 기존 FORTRAN 경로에 작은 단일 목적 변경으로 연결한다.
-- [ ] PR #10의 `nonlin` 부호·섭동 제한적 통과는 유지하고, 위 B06 P1 pressure/terrain 연결 및 P2 원복 검출력의 후속 종료조건을 실제 호출 범위에서 검증한다. 루틴 PASS를 MR-C4 전체 완료로 대체하지 않는다.
+- [ ] PR #11의 B06 pressure 연결·terrain donor·원복 검출력 세 `PASS_SCOPED`를 유지한다. B06 P1 가변 omega collocation은 실제 forward→nonlin에서 검증하고, 루틴 PASS를 MR-C4 전체 완료로 대체하지 않는다.
 - [ ] 전체/배경 omega의 donor·가중·유효성 기준을 공유하고 결측 sentinel의 가짜 영섭동을 거부한다. 두 연직 이류항의 단독 비영 사례를 U/V 각각 검사한다. P1 비균일격자 곡률·수렴성은 P0 부호·선형 일관성과 별도 기록한다.
 - [ ] baseline/staged candidate/geometry/increment/mapping을 actual native P/PB·PH/PHB·U/V·W 및 필요한 질량·좌표·metric에 결속한다. 시각·위경도·shape 일치만으로 수용하지 않는다.
 - [ ] raw 불변 입력과 N0 준비 완료 seed의 관계를 고정한다. 실제 routine의 호출 전후·W time level·질량/geometry/지속 상태·완료된 경계/halo 처리·후보 적용 후 재개 지점을 pinned host에서 확인한다. raw W=0과 부적합 ready W를 구분하고 같은 ready 단계에서 Cloud-BAL 증분을 계산한다.

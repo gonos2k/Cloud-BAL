@@ -46,13 +46,14 @@ P1인 mask·재시도 항목도 native 통합 승인 전에 닫는다. P0/P1은 
 낮은 우선순위라는 이유로 MR-C4 완료조건에서 제외하지 않는다. 레이더 자료 연결과
 기하 평가는 수식 수정·전달 계약 설계와 병렬 진행할 수 있다.
 
-### PR #10 이후 — 실제 격자·terrain·원복 시험 연결
+### PR #10 당시 후속 조건 — 실제 격자·terrain·원복 시험 연결 (역사 기록)
 
-최신 기준은 PR #10 병합 `2316cfe27490577cc15bafd4b9be27740b9da1e3`
-(tree `f5f42d773c9b9f2081a17263ea3c26fc3e94bb96`)다. 위 PR #5–#9의 미수정 설명은
-당시 이력이다. 네 압력미분 부호와 전체/섭동 omega 구분은 PR #10의 생산 `nonlin`
-루틴 범위에서 교정됐으며 `IMPLEMENTED_SCOPED/PASS_SCOPED`를 유지한다.
-아래 후속 계약의 제한적 구현·시험 결과는 MR 체크리스트의 PR #10 후속 실행 근거에 기록한다.
+PR #10 병합 `2316cfe27490577cc15bafd4b9be27740b9da1e3`
+(tree `f5f42d773c9b9f2081a17263ea3c26fc3e94bb96`) 당시에는 네 압력미분 부호와
+전체/섭동 omega 구분이 생산 `nonlin` 루틴 범위에서 교정되었고, 아래 세 조건이
+후속 과제로 남아 있었다. PR #11 병합 `f55c0b1`에서 실제 `balstagger` pressure
+연결, active terrain donor, OM/OMO 원복 검출력의 제한적 `PASS_SCOPED` 근거가
+추가되었다. 이 절의 표와 설명은 PR #10 시점의 계획과 그 후속 실행 이력이다.
 문구 반영 자체와 실행 PASS를 구분하며 전체 B06·CP02/MR 상태는 유지한다.
 사용자가 제공한 GNU Fortran 14.2.0 O0/O2 결과는 외부 교차검증 기록이다. 첨부 묶음을
 이 작업공간에서 재실행한 근거가 아니며 프로젝트의 pinned ifx 검증을 대체하지 않는다.
@@ -63,14 +64,14 @@ P1인 mask·재시도 항목도 native 통합 승인 전에 닫는다. P0/P1은 
 | 2, P1 / B06 | active omega stencil의 terrain donor 유효성 | 전체/배경 중 한쪽 또는 양쪽의 필수 `bnd` donor를 검출; 진짜 0은 수용하고 terrain target skip은 유지 |
 | 3, P2 / B06 | OM/OMO 변경 후 실패하는 caller fixture | snapshot 후 보호 배열을 실제 변경; 원복 성공 및 각 대응 복원문 삭제 변이의 실패 확인 |
 
-**Pressure 좌표:** 현 `balstagger`는 `k<nz`에서 U/V를 입력 `p(k+1)`의 값으로
-옮기고 최상층을 복제한다. `nonlin`에 직접 `u_k=a*p_k+b`를 넣는 기존 시험과 구분한다.
-중복 상단의 영향을 받지 않는 내부에서 현재 연결식은
-`D_p u_stag(k)=a*(p(k)-p(k+2))/(p(k-1)-p(k+1))`가 되어 affine에도 좌표 오차가 남는다.
+**Pressure 좌표 (PR #10 당시 미해결):** 당시 `balstagger`는 `k<nz`에서 U/V를
+입력 `p(k+1)`의 값으로 옮기고 최상층을 복제했다. `nonlin`에 직접 `u_k=a*p_k+b`를
+넣는 기존 시험과 구분해야 했으며, 중복 상단의 영향을 받지 않는 내부에서 당시 연결식은
+`D_p u_stag(k)=a*(p(k)-p(k+2))/(p(k-1)-p(k+1))`가 되어 affine에도 좌표 오차가 남았다.
 원래 pressure와 실제 wind-pressure 좌표·유효 level을 구분하고 미분 donor의 실제 위치로
-분모를 정의한다. 복제된 상단을 독립 물리 level로 사용하지 않도록 상단 stencil/적용 범위를
-함께 정한다. `dp(k+1)+dp(k+2)`의 전역 치환으로 해결하지 않으며 공통 dp를 사용하는
-다른 연산자의 계약도 확인한다. 이 좌표 정합성을 닫은 뒤 기존 P1 곡률·격자수렴을 평가한다.
+분모를 정의하는 조건은 PR #11의 제한적 pressure 연결 시험으로 닫혔다. 복제된 상단을
+독립 물리 level로 사용하지 않는 상단 stencil/적용 범위와 공통 dp를 사용하는 다른
+연산자의 계약도 함께 확인했다.
 연결시험에는 `p=(100000,90000,85000,70000) Pa`, 배경 U 기울기 `1e-4`,
 `delta omega=0.5 Pa/s`의 기대 연직항 `5e-5 m/s^2`와 V 대응항, 균일격자 상단을 포함한다.
 사용자 반례의 `6.66667e-5` 및 `2.5e-5`는 후속 회귀의 오류 검출 기준이며 실제 예보 오차가 아니다.
@@ -83,15 +84,48 @@ caller 원복을 시험한다. 전체/배경을 따로 재가중하거나 누락
 실제 terrain 처리 후 active stencil에서의 발생 영역·빈도는 별도 확인하며 커널 반례만으로
 운영 영향의 크기를 단정하지 않는다.
 
-**원복 검출력:** 기존 시험은 실패 후 8개 배열의 동일성을 확인하지만 OM/OMO는
-snapshot 이후 바뀌지 않아 해당 복원 분기를 행사하지 않는다. 작은 fixture에서 실패 전에
-보호 배열이 저장값과 달라지게 하고, 각 복원문 삭제를 시험이 검출하도록 한다.
-이 보강도 continuity/relaxation을 포함한 전체 BALCON 실행 증거로 확대하지 않는다.
+**원복 검출력 (PR #10 당시 미검증):** 당시 시험은 실패 후 8개 배열의 동일성을
+확인했지만 OM/OMO가 snapshot 이후 바뀌지 않아 해당 복원 분기를 행사하지 않았다.
+PR #11에서 작은 fixture가 실패 전에 보호 배열을 변경하고 각 복원문 삭제 변이를
+검출하는 제한적 근거를 추가했다. 이 근거도 continuity/relaxation을 포함한 전체
+BALCON 실행 증거로 확대하지 않는다.
 
 후속 시험은 `tests/intel_toolchain.sh`의 pinned ifx, 새 실제 scratch cwd에서 O0/O2로
 실행한다. 기존 수정·오류 복원 변이시험은 유지한다. 별도 대형 감사 계층은 추가하지 않는다.
 Native fresh-start seed/적용/경계·halo/첫 small-step readback과 레이더별 Vr·Barnes 계보
 조사는 병렬로 계속하며, 외부 omega target을 필수 경로로 되돌리지 않는다.
+
+### PR #11 병합 기준 — B06 P1 가변 omega collocation
+
+현재 기준은 PR #11 병합 `f55c0b1`이다. 기존 B06 제한 범위의 세 항목인 실제
+`balstagger→nonlin` pressure 연결, active terrain donor 유효성, OM/OMO 원복 검출력은
+각각 `PASS_SCOPED`를 유지한다. 새 B06 P1 가변 omega collocation의 제한적 구현·시험
+결과도 MR 체크리스트의 별도 실행 근거에서 `PASS_SCOPED`로 추적한다. 이 추가 항목은 기존 B06
+범위를 세분화한 계획 기록이며 새 MR/CP checkpoint ID나 대형 감사 계층을 만들지 않는다.
+
+실제 collocation 계약은 다음과 같다.
+
+- 내부에서 `omega(k)`는 `p_k`와 `p_{k+1}`의 pressure midpoint에 있고, wind level은
+  `p_{k+1}`에 있다. 내부에서 동일 가중 double-average를 쓰면 affine omega 기울기 `c`에
+  `c/4*(p_k-2*p_{k+1}+p_{k+2})`의 오차를 남기므로 pressure-distance weights로
+  두 midpoint를 `p_{k+1}`에 보간한다. 내부 간격 `a=p_k-p_{k+1}`, `b=p_{k+1}-p_{k+2}`에
+  대해 하부 midpoint 가중은 `b/(a+b)`, 상부 가중은 `1-b/(a+b)`다. 상단 가중은 `(0,1)`이다.
+- 전체 omega와 background omega는 같은 horizontal pair 및 같은 pressure-distance
+  weights를 사용한다. 필수 donor가 invalid이면 independent renormalization 없이
+  caller를 reject하고 snapshot 상태로 rollback한다. weight가 정확히 0인 donor는
+  산술·finite/sentinel/range validity 검사에 들어가지 않는 unused donor다.
+- 최상층에는 저장된 `omega(nz)` 실제 endpoint만 사용한다. 상단에서 0 weight인 unused
+  midpoint donor가 missing이어도 산술에 사용하거나 유효성 검사하지 않으며, 복제층을 새
+  물리 donor로 만들거나 다른 donor로 재가중하지 않는다. 기존 `balstagger` mapping,
+  공통 `dp`, continuity 계약은 변경하지 않는다.
+
+제한적 시험 범위는 실제 forward→nonlin 경로에서 constant/affine omega를 U/V의
+각 isolated term (`omega_b*d(delta_u_or_v)/dp`, `delta_omega*d(u_or_v_b)/dp`)별로
+uniform/nonuniform pressure의 interior/top에 적용하는 것이다. 여기에 total과 background가
+같은 varying field라서 delta가 0인 사례, required donor missing의 reject+rollback,
+정확히 0 weight인 top midpoint donor missing의 산술·유효성 검사 제외를 포함한다. 고차 curvature/수렴,
+full BALCON, native startup/readback, 과학 검증은 계속 미검증이다. 문서의 계획 반영과
+체크리스트의 실제 실행 근거를 구분한다.
 
 ### Legacy nonlin 수정 묶음
 
