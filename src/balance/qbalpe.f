@@ -1479,7 +1479,7 @@ c
                 ismx=i
                 jsmx=j
                 ksmx=k
-                fmax=force
+                fmax=abs(force)
                endif
 2          continue
 c        write(6,1000) it,cotmax,ovr,cotma1
@@ -1524,7 +1524,8 @@ c
       call diagnose(to,nx,ny,nz,ismx,jsmx,ksmx,7,'INPUT GEOPOTENTIALS')
       call diagnose(uo,nx,ny,nz,ismx,jsmx,ksmx,7,'INPUT U-COMPONENT  ')
       call diagnose(vo,nx,ny,nz,ismx,jsmx,ksmx,7,'INPUT V-COMPONENT  ')
-      call diagnose(omo,nx,ny,nz,ismx,jsmx,ksmx+1,7,'INPUT OMEGA')
+      call diagnose(omo,nx,ny,nz,ismx,jsmx,min(ksmx+1,nz),7,
+     &              'INPUT OMEGA')
 
 c     write(9,1000) it,cotmax,ovr,cotma1
 c     erf=0.
@@ -3851,12 +3852,13 @@ c neighbours along x.  The legacy upper bound incorrectly used ny here.
          endif
       endif
 
-      if(k.ne.nz.and.data(i,j,k).eq.bnd.and.
-     1   p(k).gt.0..and.p(k+1).gt.0..and.
-     1   data(i,j,k+1).ne.bnd)then
-
-        data(i,j,k)=data(i,j,k+1)+
+c Fortran .and. does not guarantee short-circuit bounds protection.
+      if(k.lt.nz)then
+         if(data(i,j,k).eq.bnd.and.p(k).gt.0..and.
+     1      p(k+1).gt.0..and.data(i,j,k+1).ne.bnd)then
+            data(i,j,k)=data(i,j,k+1)+
      1              data(i,j,k+1)*(alog(p(k+1)/p(k)))
+         endif
       endif
 
       return
