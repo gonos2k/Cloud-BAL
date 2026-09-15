@@ -2950,6 +2950,7 @@ c
       implicit none
 c
       real*4 omega_donors(2,2),background_donors(2,2)
+      real*4 lower_weight
       integer   nx,ny,nz,istatus,face_status
      .         ,nxm1,nym1,nzm1
      .         ,i,j,k,kupper
@@ -2985,6 +2986,12 @@ c Physical wind levels are input P(2:NZ); NZ is a duplicate endpoint.
 c Use a one-sided slope at the last physical level, never layer NZ.
       kupper=min(k+1,nzm1)
       wind_dp=wind_p(k-1)-wind_p(kupper)
+c Omega K/K+1 are pressure midpoints bracketing wind_p(K).
+c At the last wind level, omega NZ is the actual endpoint.
+      lower_weight=0.
+      if(k.lt.nzm1)then
+         lower_weight=(wind_p(k)-wind_p(k+1))/wind_dp
+      endif
       do j=2,nym1
       do i=2,nxm1
          if(u(i,j,k).eq.bnd) then
@@ -2993,7 +3000,7 @@ c Use a one-sided slope at the last physical level, never layer NZ.
           omega_donors=om(i:i+1,j+1,k:k+1)
           background_donors=omb(i:i+1,j+1,k:k+1)
           call qbal_omega_face_delta(omega_donors,
-     &         background_donors,bnd,omu,ombu,face_status)
+     &         background_donors,bnd,lower_weight,omu,ombu,face_status)
           if(face_status.ne.1)return
           vvu=(v(i-1,j+1,k)+v(i,j+1,k)+v(i-1,j,k)+v(i,j,k))*.25
           vvbu=(vb(i-1,j+1,k)+vb(i,j+1,k)+vb(i-1,j,k)+vb(i,j,k))*.25
@@ -3013,7 +3020,7 @@ c Use a one-sided slope at the last physical level, never layer NZ.
           omega_donors=om(i+1,j:j+1,k:k+1)
           background_donors=omb(i+1,j:j+1,k:k+1)
           call qbal_omega_face_delta(omega_donors,
-     &         background_donors,bnd,omv,ombv,face_status)
+     &         background_donors,bnd,lower_weight,omv,ombv,face_status)
           if(face_status.ne.1)return
           uuv=(u(i,j,k)+u(i+1,j,k)+u(i,j-1,k)+u(i+1,j-1,k))*.25
           uubv=(ub(i,j,k)+ub(i+1,j,k)+ub(i,j-1,k)+ub(i+1,j-1,k))*.25
@@ -3050,24 +3057,40 @@ c
       return
       end
 c
-      subroutine qbal_omega_face_delta(total,background,bnd,delta,
-     &                                 background_face,istatus)
-c Same four donors/weights for both fields; use the omega input range.
+      subroutine qbal_omega_face_delta(total,background,bnd,
+     &                    lower_weight,delta,background_face,istatus)
+c Pressure-distance vertical weights, equal horizontal pair weights.
+c Total/background use identical support; zero-weight donors are unused.
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
-      real*4 total(2,2),background(2,2),bnd,delta,background_face
-      integer istatus
+      real*4 total(2,2),background(2,2),bnd,lower_weight
+      real*4 delta,background_face,weights(2),delta_sum,background_sum
+      integer istatus,k
       istatus=0
       delta=0.
       background_face=0.
-      if(any(.not.ieee_is_finite(total)))return
-      if(any(.not.ieee_is_finite(background)))return
+      if(.not.ieee_is_finite(lower_weight))return
+      if(lower_weight.lt.0..or.lower_weight.gt.1.)return
+      weights(1)=lower_weight
+      weights(2)=1.-lower_weight
+      delta_sum=0.
+      background_sum=0.
+      do k=1,2
+         if(weights(k).eq.0.)cycle
+         if(any(.not.ieee_is_finite(total(:,k))))return
+         if(any(.not.ieee_is_finite(background(:,k))))return
 c Exact terrain exclusion is distinct from a valid zero omega.
-      if(any(total.eq.bnd).or.any(background.eq.bnd))return
-      if(any(abs(total).gt.100.))return
-      if(any(abs(background).gt.100.))return
-      background_face=sum(background)*.25
-      delta=sum(total-background)*.25
+         if(any(total(:,k).eq.bnd))return
+         if(any(background(:,k).eq.bnd))return
+         if(any(abs(total(:,k)).gt.100.))return
+         if(any(abs(background(:,k)).gt.100.))return
+         background_sum=background_sum
+     &                  +weights(k)*sum(background(:,k))*.5
+         delta_sum=delta_sum
+     &                  +weights(k)*sum(total(:,k)-background(:,k))*.5
+      enddo
+      background_face=background_sum
+      delta=delta_sum
       istatus=1
       return
       end

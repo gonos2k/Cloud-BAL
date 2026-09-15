@@ -49,7 +49,9 @@ contains
     if (.not.nonuniform) then
       expected_u=28.; expected_v=38.5
     else
-      expected_u=23.; expected_v=13.75
+      ! Vertical pressure weights are 3/4 and 1/4 (effective k=2.25).
+      ! Against equal weights, d(omega_b)=-0.5 and d(delta_omega)=0.25.
+      expected_u=23.25; expected_v=14.375
     end if
     call check(abs(nu(2,2,2)-expected_u)<1.e-5,'stencil U value',failures)
     call check(abs(nv(2,2,2)-expected_v)<1.e-5,'stencil V value',failures)
@@ -133,9 +135,12 @@ contains
     real :: wind_p(3)
     total=reshape([10.,20.,30.,40.],[2,2])
     background=reshape([1.,3.,5.,7.],[2,2])
-    call qbal_omega_face_delta(total,background,1.e-30,delta,background_face,status)
+    call qbal_omega_face_delta(total,background,1.e-30,0.5,delta,background_face,status)
     call check(status==1.and.abs(delta-21.)<1.e-6.and.abs(background_face-4.)<1.e-6, &
          'heterogeneous donor averages',failures)
+    call qbal_omega_face_delta(total,background,1.e-30,0.75,delta,background_face,status)
+    call check(status==1.and.abs(delta-17.)<1.e-6.and.abs(background_face-3.)<1.e-6, &
+         'pressure weights shared by total and background',failures)
     u=0.; v=0.; ub=0.; vb=0.; om=0.; omb=0.; dx=1.; dy=1.; dp=1.
     om(2,3,2:3)=[10.,30.]; om(3,3,2:3)=[20.,40.]
     omb(2,3,2:3)=[1.,5.]; omb(3,3,2:3)=[3.,7.]
@@ -214,10 +219,10 @@ contains
       enddo
     enddo
     total=0.; background=0.
-    call qbal_omega_face_delta(total,background,bnd,delta,mean_background,status)
+    call qbal_omega_face_delta(total,background,bnd,0.5,delta,mean_background,status)
     call check(status==1.and.delta==0.,'valid zero omega',failures)
     total=1.e-31; background=total
-    call qbal_omega_face_delta(total,background,bnd,delta,mean_background,status)
+    call qbal_omega_face_delta(total,background,bnd,0.5,delta,mean_background,status)
     call check(status==1.and.delta==0.,'small valid omega is not terrain',failures)
     call blank(u,v,ub,vb,om,omb,dx,dy,dp)
     wind_p=[100000.,90000.,90000.]

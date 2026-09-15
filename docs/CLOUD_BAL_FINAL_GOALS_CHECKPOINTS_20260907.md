@@ -495,6 +495,15 @@ CP01은 **COMPLETE / PASS (격리 연구 계약·소규모 시험 범위)**로 �
 기존 RELEASE/NO-GO의 통합·게시·과학 승격 종료조건은 변경하지 않았다.
 다음 통합 목표는 FG1, 최종 개발 인수 목표는 FG3이며 현재 PROMOTION_BLOCKED를 해제하지 않는다.
 
+현재 B06 기준은 merged PR #11 `f55c0b1`이다. PR #11의 실제
+`balstagger→nonlin` pressure 연결, active terrain donor 유효성, OM/OMO 원복 검출력
+세 제한 범위는 `PASS_SCOPED`를 유지한다. 가변 omega collocation은 기존 B06 범위의
+추가 P1 검증으로 `NOT_RUN`이며, 해당 실제 forward→nonlin 시험이 끝나기 전에는
+승격하지 않는다. 내부 omega midpoint와 wind pressure level의 거리 가중, top 저장
+endpoint, zero-weight donor의 산술·유효성 검사 제외, 필수 donor invalid 시 무재가중 reject+rollback을
+검사한다. 고차 curvature/수렴, full BALCON, native startup/readback, 과학 검증은
+여전히 미검증이고 새 MR/CP checkpoint ID나 대형 감사 계층은 추가하지 않는다.
+
 ## 9. 10단계 완료 후 별도 조사 — LAPSPREP와 최신 WRF
 
 사용자 지시(2026-09-08)에 따라 **DEFERRED / NOT_RUN**으로 등록한다.
@@ -527,13 +536,13 @@ P0 legacy 수정, native 전달 순서로 구현·회귀시험을 진행한다. 
 시험 PASS로 집계하지 않으며, 실행 결과는 해당 체크포인트에 별도로 기록한다.
 
 
-PR #10 병합 `2316cfe`에서 legacy `nonlin`의 두 P0 수식 교정과 제한적 O0/O2 통과를
-인정한다. 후속 순서는 B06의 **실제 balstagger pressure 좌표·중복 상단(P1) → active
-terrain donor 유효성(P1) → OM/OMO 변경 후 실패·복원문 삭제 변이(P2)**다.
-좌표 연결은 비균일격자의 고차 정확도와 구분하고, 기존 8개 최종 배열 동일성을 OM/OMO
-복원 분기 행사로 해석하지 않는다. 세 항목의 종료조건은 기존 계획·MR 체크리스트에서
-PASS_SCOPED로 추적한다. 실제 balstagger 연결·terrain donor·8개 복원문 삭제 변이를
-새 scratch cwd의 pinned ifx O0/O2에서 확인했다. 잘못된 pressure 연결·terrain 검사 제거·
-상단 기울기 변이도 검출했다. 근거는 MR 체크리스트의 후속 실행 기록을 따른다.
-비균일 가변 omega 보간·고차 정확도, 전체 BALCON 및 native 실행은 미검증이다.
-Native fresh-start 및 레이더 계보 조사를 이어가며 CP02/MR 상태는 승격하지 않는다.
+PR #10 병합 `2316cfe`에서는 legacy `nonlin`의 두 P0 수식 교정과 제한적 O0/O2
+통과를 인정했고, B06의 실제 `balstagger` pressure 좌표·중복 상단, active terrain
+donor 유효성, OM/OMO 변경 후 실패·복원문 삭제 변이를 후속 조건으로 남겼다.
+좌표 연결은 비균일격자의 고차 정확도와 구분했고, 기존 8개 최종 배열 동일성을 OM/OMO
+복원 분기 행사로 해석하지 않았다. 이 세 항목은 PR #11 병합 `f55c0b1`에서 실제
+`PASS_SCOPED`로 기록되었다. 근거는 MR 체크리스트의 후속 실행 기록을 따른다.
+가변 omega collocation은 pressure 거리 가중·상단 endpoint로 구현했고, 실제 forward→nonlin
+및 helper/caller의 pinned ifx O0/O2 시험 범위에서 `PASS_SCOPED`로 기록한다. 내부 동일 가중·
+상단 평균·미사용 donor 검사 변이도 검출했다. 고차 정확도, 전체 BALCON 및 native 실행은 미검증이다. Native fresh-start 및 레이더 계보 조사를 이어가며 CP02/MR
+상태는 승격하지 않는다.
