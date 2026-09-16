@@ -47,14 +47,24 @@ def verify(candidate, output_root, i4time):
                     == (1, nz, ny, nx), f"{extension}: dimensions mismatch")
             levels = dataset.variables["level"]
             require(levels.units == "hectopascals", f"{extension}: pressure units mismatch")
+            level_values = levels[:]
+            require(not np.ma.getmaskarray(level_values).any(),
+                    f"{extension}: level: unexpected missing mask")
+            require(np.isfinite(np.asarray(level_values)).all(),
+                    f"{extension}: level: nonfinite coordinate")
             # The actual LAPS writer stores pressure levels in ascending order.
-            require(np.array_equal(levels[:], pressure[::-1] / np.float32(100)),
+            require(np.array_equal(level_values, pressure[::-1] / np.float32(100)),
                     f"{extension}: pressure levels mismatch")
             for name in ("reftime", "valtime"):
                 time = dataset.variables[name]
                 require(time.units == "seconds since (1970-1-1 00:00:00.0)",
                         f"{extension}: {name} units mismatch")
-                require(np.array_equal(time[:], [i4time - 315619200]),
+                time_values = time[:]
+                require(not np.ma.getmaskarray(time_values).any(),
+                        f"{extension}: {name}: unexpected missing mask")
+                require(np.isfinite(np.asarray(time_values)).all(),
+                        f"{extension}: {name}: nonfinite coordinate")
+                require(np.array_equal(time_values, [i4time - 315619200]),
                         f"{extension}: {name} mismatch")
             for name, values, units in variables:
                 variable = dataset.variables[name]
