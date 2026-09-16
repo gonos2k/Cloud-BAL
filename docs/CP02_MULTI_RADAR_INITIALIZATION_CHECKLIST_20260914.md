@@ -1,6 +1,6 @@
 # 다중 레이더·국지 균형초기화 실행 체크리스트와 체크포인트
 
-작성: 2026-09-14. 추가 검토 반영: 2026-09-15.
+작성: 2026-09-14. 추가 검토 반영: 2026-09-16.
 상위 계획: [추가 과제 계획서](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
 검토 근거: 수학·수치해석·기상학 종합 검토 (로컬 작업공간 근거: `../scratch/cp02_multiradar_additional_review_20260914/REVIEW.md`).
 수학 근거: [정리·증명과 실제 적용 조건](CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md).
@@ -164,6 +164,54 @@ missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수
 - 최초 비균일 stencil 기대값은 이전 동일 가중 기준이었다. pressure 가중 3/4·1/4에서
   독립 계산한 U=23.25, V=14.375로 교정한 뒤 위 최종 시험을 수행했다.
 
+### PR #13 이후 — 비영 잔차·역변환 출력 (PASS_SCOPED / 출력 질량 폐합 OPEN)
+
+- 생산 소스·승인 기준은 PR #13 `1f56aa3` 그대로다. 기존 PHI 비영 승인·늦은 실패 원복을 유지한다.
+- 6×6×4 원래 A-grid의 내부 `U(3,3,:)=0.2 m/s`만 변경한다. 정 stagger 뒤 네 측면
+  유량이 0인지 검사한다. 각 층 25개 셀 중 두 셀의 발산은 `±1e-5 s^-1`이므로
+  초기 RMS는 `1e-5*sqrt(2/25)`다. 이 해석값과 비영 최소신호를 검사한 뒤 기존
+  RMS/max 25% 감소 조건을 적용한다. 바람 변경량 기준은 별도 m/s 단위로 둔다.
+- pinned ifx O0/O2: 초기 RMS/max `2.8284271e-6 / 1e-5`에서 역변환 전
+  `2.3457572e-7 / 7.2383540e-7 s^-1`로 감소했다. 배경 불변도 확인한다.
+- 여섯 역변환 출력의 finite와 합성 specific humidity `[0,0.05]`를 검사한다.
+  별도 8×8×6 해석해 `u=a*x, v=-a*y`, 상수 omega/q, 정역학 PHI를 실제
+  정·역 stagger에 통과시켜 내부 U/V/omega/PHI/q 재현과 A-grid 중앙차분 잔차 0을 확인했다.
+  온도는 finite 검사이며 열역학 정확해 또는 고차 수렴의 증거가 아니다.
+- 실제 BALCON 출력의 독립 A-grid RMS/max는 `1.3718337e-6 / 4.7921303e-6 s^-1`이다.
+  이는 균일 Cartesian/pressure 내부 중앙차분 진단이며 staggered 잔차와 같은 연산자가 아니다.
+  **해석해 PASS와 실제 출력의 전체 질량 폐합은 구분하며 후자는 OPEN이다.**
+  terrain·일반 비균일격자·경계·native 소비 상태의 검증으로 확대하지 않는다.
+- 탐색 중 경계를 건드린 입력은 성공 근거에서 제외했다. 내부 `0.02 m/s` 입력의
+  기존 25% gate 거부도 남겼다. 최종 입력은 solver의 `0.01 m/s` 보정 규모보다 충분히
+  큰 `0.2 m/s`로 정했으며, 생산 solver나 acceptance 허용치를 완화하지 않았다.
+- 최종 projection을 direct copy로 바꾼 음성시험은 O0/O2 모두 기존 continuity gate에서
+  거부됐다(`projection_bypass_20260915/summary.log`). 정상 실행은 원본 소스 복원 후 다시 검증했다.
+- 근거: `scratch/pr13_residual_20260915/Cloud-BAL/scratch/balcon_output_verified.log`.
+  `balcon_output_candidate.log`/`balcon_output_final.log`는 각각 제외한 경계 입력/작은 신호 거부의
+  탐색 기록이며 최종 PASS 근거가 아니다. 전체 unit suite·실자료·native·예보는 재실행하지 않았다.
+
+### 2026-09-16 재검토 — 역변환 갱신 누락 검출
+
+- 위 2026-09-15 해석해는 출력 배열을 기대값으로 미리 채워 PHI 대입 누락에도
+  O0/O2 연결시험이 통과했다. 이는 시험 검출력의 허점이며 생산 PHI 오류의 재현은 아니다.
+- 원래 A-grid 배경을 유지하고 staggered 후보에 알려진 상수 증분을 더한다.
+  내부 U/V/PHI/q/omega가 각각 배경과 다른 해석값으로 갱신되는지 검사한다.
+  온도는 finite 범위만 확인하며 열역학 정확해 검증으로 확대하지 않는다.
+- omega 증분 `0.1 Pa/s`와 원래 하단 배경 사이의 차이 때문에 중앙차분 잔차는
+  `k=2`에서만 생긴다. 최대 절댓값 `0.1/(p(1)-p(3))=5e-6 s^-1`,
+  RMS `5e-6/sqrt(nz-2)=2.5e-6 s^-1`를 독립 기대값으로 검사한다.
+  잔차를 0으로 만드는 입력만으로 연산자를 검증하지 않는다.
+- 승인 전후 U/V 측면 경계의 최대값·변경량(m/s), omega 양 끝 층의
+  최대값·변경량(Pa/s)을 따로 기록한다. 경계를 고정하거나 전체 질량 수지를 검증한 것은 아니다.
+- runner는 원본에서 추출한 scratch 소스에만 최종 projection 생략과 역변환 PHI
+  대입 누락을 각각 적용한다. 정상 실행의 성공과 각 변이의 지정된 검사 실패를 구분한다.
+  실제 BALCON 출력의 전체 질량 폐합·실자료 main/writer·native·예보 검증은 OPEN이다.
+- 최종 pinned ifx O0/O2 정상 2회 PASS, 두 변이×O0/O2 4회 검출이다.
+  변이는 Intel `ERROR STOP` 종료 128과 해당 거부 메시지를 모두 요구한다.
+  근거는 로컬 `scratch/qbal_balcon.F4pa3u/manifest.json` 및 각 실행의 `test.log`다.
+  runner는 컴파일 전 소스·실행기·toolchain·setvars·compiler·runtime 해시를 수집하고
+  실행 후 불변을 확인한다. 전체 unit suite·실자료·native·예보는 이번에 실행하지 않았다.
+
 ### PR #12 이후 — 작은 전체 BALCON 연결 (PASS_SCOPED)
 
 - 기준: merged PR #12 `cea70d0`; 생산 `qbalpe.f` SHA256
@@ -173,7 +221,7 @@ missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수
   fixture의 6×6 격자 metadata, missing 값, timer 네 함수만 시험용으로 공급한다.
 - 6×6×4 합성 입력에서 실제 정 stagger→BALCON(continuity, nonlin, PHI relaxation,
   최종 projection, acceptance)→역 stagger를 실행했다. 최대 바람 증분은 약
-  `1.2452605e-4 m/s`, 최종 continuity rms/max는 `1.1829953e-16 / 3.1862092e-16`이다.
+  `1.2452605e-4 m/s`, 역 stagger 전 continuity rms/max는 `1.1829953e-16 / 3.1862092e-16`이다.
   이는 작은 합성 사례의 수치 결과이며 허용오차나 운영 영향의 제안이 아니다.
 - finite PHI 비수렴(`itmax=1`)은 continuity 호출·PHI 섭동 구성 및 첫 relaxation 뒤
   실패하며, 작업/관측 8개 배열과 고정 배경의 bitwise 원복/불변을 확인했다. 이 사례는

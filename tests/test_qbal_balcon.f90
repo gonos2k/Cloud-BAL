@@ -11,8 +11,13 @@ program test_qbal_balcon
   real :: dx(nx,ny),dy(nx,ny),lat(nx,ny),ps(nx,ny),p(nz),dp(nz),tau(nx,ny)
   real :: erru(nx,ny,nz),errub(nx,ny,nz),errph(nx,ny,nz),errphb(nx,ny,nz),influence(nx,ny,nz)
   real :: before_rms,before_max,after_rms,after_max,wind_change
+  real, parameter :: nonzero_residual_minimum=1.e-8
+  real, parameter :: nonzero_wind_minimum=1.e-6
+  real, parameter :: synthetic_moisture_minimum=0.
+  real, parameter :: synthetic_moisture_maximum=.05
   integer :: k,status
   external :: balcon,balstagger,continuity_metrics
+  external :: report_qbal_agrid_residual,test_qbal_reverse_output
 
   p=[100000.,90000.,80000.,70000.]
   dp=10000.; dx=10000.; dy=10000.; lat=45.; ps=110000.
@@ -26,6 +31,8 @@ program test_qbal_balcon
   if(status/=1) error stop 'full BALCON valid candidate rejected'
   if(any(.not.ieee_is_finite(t)).or.any(.not.ieee_is_finite(u)).or. &
      any(.not.ieee_is_finite(v)).or.any(.not.ieee_is_finite(om))) error stop 'BALCON nonfinite output'
+  call report_accepted_boundary_changes(u,v,om,saved(:,:,:,6),saved(:,:,:,7), &
+     saved(:,:,:,8),'BALCON full accepted boundary')
   wind_change=maxval(sqrt((u-saved(:,:,:,6))**2+(v-saved(:,:,:,7))**2))
   if(wind_change<1.e-5) error stop 'BALCON success was a zero increment'
   if(maxval(abs(t-saved(:,:,:,1)))<1.e-3) error stop 'BALCON PHI relaxation did not change candidate'
@@ -38,8 +45,39 @@ program test_qbal_balcon
   if(any(.not.ieee_is_finite(lu)).or.any(.not.ieee_is_finite(lv)).or. &
      any(.not.ieee_is_finite(lp)).or.any(.not.ieee_is_finite(lt)).or. &
      any(.not.ieee_is_finite(lo))) error stop 'BALCON reverse stagger nonfinite'
+  call check_moisture(lh,'BALCON reverse stagger moisture invalid')
   if(maxval(abs(lu))+maxval(abs(lv))<1.e-5) error stop 'BALCON reverse stagger lost increment'
+  call report_qbal_agrid_residual(lu,lv,lo,nx,ny,nz,p,dx,dy)
   print *, 'Full BALCON accepted nonzero wind increment: ',wind_change
+
+  call prepare(.true.)
+  call continuity_metrics(uo,vo,omo,nx,ny,nz,dx,dy,ps,p,dp,influence,before_rms,before_max,status)
+  if(status/=1.or.before_rms<=nonzero_residual_minimum.or. &
+     before_max<=nonzero_residual_minimum) error stop 'BALCON localized input residual too small'
+  ! Forward averaging gives two opposite 1.e-5 /s cells per layer,
+  ! among (nx-1)*(ny-1) continuity cells; all boundary fluxes are zero.
+  if(abs(before_max-1.e-5)>1.e-11.or. &
+     abs(before_rms-1.e-5*sqrt(2./real((nx-1)*(ny-1))))>1.e-11) &
+    error stop 'BALCON manufactured divergence pair mismatch'
+  call run(200,1.e-6)
+  if(status/=1) error stop 'BALCON localized residual candidate rejected'
+  call unchanged_background()
+  if(any(.not.ieee_is_finite(t)).or.any(.not.ieee_is_finite(u)).or. &
+     any(.not.ieee_is_finite(v)).or.any(.not.ieee_is_finite(om))) error stop 'BALCON localized output nonfinite'
+  call report_accepted_boundary_changes(u,v,om,saved(:,:,:,6),saved(:,:,:,7), &
+     saved(:,:,:,8),'BALCON localized accepted boundary')
+  wind_change=maxval(sqrt((u-saved(:,:,:,6))**2+(v-saved(:,:,:,7))**2))
+  if(wind_change<nonzero_wind_minimum) error stop 'BALCON localized success did not change state'
+  call continuity_metrics(u,v,om,nx,ny,nz,dx,dy,ps,p,dp,influence,after_rms,after_max,status)
+  if(status/=1.or.after_rms>max(.25*before_rms,1.e-10).or. &
+     after_max>max(.25*before_max,1.e-10)) error stop 'BALCON localized residual reduction failed'
+  call balstagger(lu,lv,lp,lt,lh,lo,u,v,t,tmp,shs,om,nx,ny,nz,p,ps,-1)
+  if(any(.not.ieee_is_finite(lu)).or.any(.not.ieee_is_finite(lv)).or. &
+     any(.not.ieee_is_finite(lp)).or.any(.not.ieee_is_finite(lt)).or. &
+     any(.not.ieee_is_finite(lo))) error stop 'BALCON localized reverse nonfinite'
+  call check_moisture(lh,'BALCON localized reverse moisture invalid')
+  call report_qbal_agrid_residual(lu,lv,lo,nx,ny,nz,p,dx,dy)
+  print *, 'Full BALCON accepted localized residual reduction: ',before_rms,after_rms
 
   call prepare()
   ! One relaxation sweep cannot meet this tolerance for the nonzero PHI forcing.
@@ -53,16 +91,34 @@ program test_qbal_balcon
   call same_bits(vo,saved(:,:,:,7)); call same_bits(omo,saved(:,:,:,8))
   call unchanged_background()
   print *, 'Full BALCON late rejection: eight-array bitwise rollback PASS'
+  call test_qbal_reverse_output()
 contains
-  subroutine prepare()
+  subroutine prepare(localized_residual)
     ! Isothermal hydrostatic PHI gives finite temperatures on reverse staggering.
+    logical, intent(in), optional :: localized_residual
+    logical :: localized
+    localized=.false.
+    if(present(localized_residual))localized=localized_residual
     lu=0.; lv=0.; lo=0.; lt=280.; lh=0.001
+    if(localized)then
+      do k=1,nz
+        ! 0.2 m/s exceeds the solver's 0.01 m/s correction scale.
+        ! Compact support avoids the forward extrapolation boundaries.
+        lu(3,3,k)=.2
+      enddo
+    endif
+    call check_moisture(lh,'BALCON synthetic moisture invalid')
     do k=1,nz
       lp(:,:,k)=287.04*280.*log(p(1)/p(k))
     end do
     call balstagger(lu,lv,lp,lt,lh,lo,ub,vb,tb,tmp,shs,omb,nx,ny,nz,p,ps,1)
+    call check_moisture(shs,'BALCON staggered moisture invalid')
     lp=lp+1.
     call balstagger(lu,lv,lp,lt,lh,lo,uo,vo,to,tmp,shs,omo,nx,ny,nz,p,ps,1)
+    call check_moisture(shs,'BALCON forced staggered moisture invalid')
+    if(localized.and.(maxval(abs(uo(1,:,:)))>1.e-12.or. &
+       maxval(abs(uo(nx,:,:)))>1.e-12.or.maxval(abs(vo(:,1,:)))>1.e-12.or. &
+       maxval(abs(vo(:,ny,:)))>1.e-12)) error stop 'BALCON localized input touches boundary flux'
     t=to; u=uo; v=vo; om=omo
     saved(:,:,:,1)=t; saved(:,:,:,2)=u; saved(:,:,:,3)=v; saved(:,:,:,4)=om
     saved(:,:,:,5)=to; saved(:,:,:,6)=uo; saved(:,:,:,7)=vo; saved(:,:,:,8)=omo
@@ -83,6 +139,37 @@ contains
     real, intent(in) :: actual(nx,ny,nz),expected(nx,ny,nz)
     if(any(transfer(actual,[0_int32],ncell)/=transfer(expected,[0_int32],ncell))) &
       error stop 'full BALCON changed preserved array bits'
+  end subroutine
+  subroutine check_moisture(field,message)
+    real, intent(in) :: field(nx,ny,nz)
+    character(len=*), intent(in) :: message
+    if(any(.not.ieee_is_finite(field)).or.any(field<synthetic_moisture_minimum).or. &
+       any(field>synthetic_moisture_maximum)) error stop message
+  end subroutine
+  subroutine report_accepted_boundary_changes(u,v,om,uo_ref,vo_ref,om_ref,label)
+    ! The final LEIB_SUB projection may adjust legacy boundary faces. Report
+    ! those changes without imposing an unsupported zero-increment contract.
+    real, intent(in) :: u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz)
+    real, intent(in) :: uo_ref(nx,ny,nz),vo_ref(nx,ny,nz),om_ref(nx,ny,nz)
+    character(len=*), intent(in) :: label
+    real :: u_before,u_after,u_delta,v_before,v_after,v_delta
+    real :: om_before,om_after,om_delta
+
+    u_before=max(maxval(abs(uo_ref(1,:,:))),maxval(abs(uo_ref(nx,:,:))))
+    u_after=max(maxval(abs(u(1,:,:))),maxval(abs(u(nx,:,:))))
+    u_delta=max(maxval(abs(u(1,:,:)-uo_ref(1,:,:))), &
+      maxval(abs(u(nx,:,:)-uo_ref(nx,:,:))))
+    v_before=max(maxval(abs(vo_ref(:,1,:))),maxval(abs(vo_ref(:,ny,:))))
+    v_after=max(maxval(abs(v(:,1,:))),maxval(abs(v(:,ny,:))))
+    v_delta=max(maxval(abs(v(:,1,:)-vo_ref(:,1,:))), &
+      maxval(abs(v(:,ny,:)-vo_ref(:,ny,:))))
+    om_before=max(maxval(abs(om_ref(:,:,1))),maxval(abs(om_ref(:,:,nz))))
+    om_after=max(maxval(abs(om(:,:,1))),maxval(abs(om(:,:,nz))))
+    om_delta=max(maxval(abs(om(:,:,1)-om_ref(:,:,1))), &
+      maxval(abs(om(:,:,nz)-om_ref(:,:,nz))))
+    print *,trim(label),' U boundary max input/output/change (m/s): ',u_before,u_after,u_delta
+    print *,trim(label),' V boundary max input/output/change (m/s): ',v_before,v_after,v_delta
+    print *,trim(label),' OM endpoint max input/output/change (Pa/s): ',om_before,om_after,om_delta
   end subroutine
 end program
 
