@@ -765,7 +765,8 @@
     do k= 1,z3
       if (p(k) .eq. 300.) k300 = k
     enddo
-    if (k300 .eq. 0) THEN
+    ! Only the optional JAX upper-level adjustment uses the 300 hPa anchor.
+    if (jaxsbn .and. k300 .eq. 0) THEN
       print *, "Could not find k300!"
       stop
     endif

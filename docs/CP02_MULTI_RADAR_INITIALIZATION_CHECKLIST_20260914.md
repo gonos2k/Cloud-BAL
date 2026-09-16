@@ -62,6 +62,7 @@ B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통
 | E03 native 준비 | 마지막 startup 및 첫 solve 전 경계 호출망 조사 중; time level/derived state 연결과 raw·seed 실행 증거는 미완료 | IN_PROGRESS |
 | B06 합성 BALCON 연결 | 실제 forward→전체 BALCON→reverse, 비영 승인과 PHI 비수렴 후 원복; 실자료 main/writer·native 제외 | PASS_SCOPED |
 | CP02 첫 synthetic writer/readback | 승인된 6×6×4 역변환 후보→`write_bal_laps`→`write_laps_data`→NetCDF와 독립 six-field/metadata readback; 보정된 private CDL fixture | PASS_SCOPED |
+| CP02 synthetic writer→실제 LAPSPREP | 실제 reader의 여섯 배열·WPS 다섯 pressure field와 명시적 변환 확인; 시각 보존은 OPEN | PASS_SCOPED |
 | E03/M07 native 소비 | 새 stage·payload/geometry/실제 U/V 차이·footprint·하부 W·최종 저장 후 질량/경계 검사 | NOT_RUN |
 | E03 native 회귀 | W 단독 영증분/전체 영변경/물리 변경 분리; 유효 비영 전달·geometry/지원 밖/중복/중단 거부; 진단 비침습성 | NOT_RUN |
 | MR-C0/C1 병렬 조사 | 실제 레이더별 Vr·기하·시각·QC·Barnes 계보 및 남은 연직 정보; 외부 omega target을 필수로 추가하지 않음 | IN_PROGRESS |
@@ -243,6 +244,51 @@ missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수
 - 생산 BALCON 수치식·acceptance·허용오차 변경은 없다. 보정된 private CDL과 합성 RH의
   all-valid 전달시험 범위이며 full main, terrain/missing-mask 정합, native consumed,
   원자적 게시, 전체 질량·열역학·예보 검증은 기존 OPEN을 유지한다.
+
+### PR #17 이후 — 실제 LAPSPREP reader 연결 (수치 전달 PASS_SCOPED / 시각 보존 OPEN)
+
+PR #17 `7834b7d`의 writer O2·좌표 유효성 두 지적은 `PASS_SCOPED`로 폐합한다.
+독립 검토의 Bash 인자/좌표 검사식 실행과 저장소의 실제 Intel writer/netCDF4 실행
+근거를 구분한다. 이번 작업은 기존 R3의 제한적 입력 경계·reader 경로 근거와 R4 전달 준비이며,
+R3의 물/열·EOS·밀도·유량 잔차 조건이나 R4/MR-C4 전체 완료가 아니다.
+
+- 검증된 실제 writer 파일을 바이트 그대로 private `lapsprd/balance/`에 전달한다.
+  synthetic LSX/static을 추가하고 실제 `lapsprep.f90`, setup/static reader, WPS writer를 실행한다.
+- 300 hPa anchor는 optional JAX 보정만 사용한다. JAX 비활성 경로도 중단하던
+  무조건 요구를 JAX 활성 조건으로 제한한다. BALCON 방정식·acceptance·허용오차는 변경하지 않는다.
+- 수치 기준식과 reader/WPS 값 비교는 `tests/verify_qbal_lapsprep.f90`에 모은다.
+  Python은 시험자료·metadata 사전 검사·변이 생성·결과 기록을 담당한다. 기존 PR #17 writer
+  검증을 선행 검사로 재사용하되, 새 reader/WPS 수치 기준식은 Fortran에만 작성한다.
+- actual cold caller의 출력 인자를 test-only CDF hook으로 관찰한다. 여섯 필드의 pressure
+  대응과 float32 값을 검사하며 수분에는 `q/(1-q)` 변환식을 적용한다. 이 hook은 실제 CDF/native writer가 아니다.
+- 실제 WPS의 U/V/T/HGT/QV 다섯 pressure field를 검사한다. cold caller의 `w(:,:,1:z3)`는
+  아직 omega(Pa/s)이고 surface slot은 LSX `VV`(m/s)다. WPS에는 omega slab가 없다. 이를 native W 전달로 승격하지 않는다.
+- reader가 pressure를 얻는 ancillary LH3도 pressure-level 좌표·시각·mask preflight 대상에 포함한다.
+  이 Python 사전 검사는 legacy NCVGT 자체의 metadata/mask 검출 능력과 구별한다.
+- 시각 제한: 기존 fixture `i4time=2000000000`은 `2023-05-18T03:33:20Z`다.
+  A9 파일명과 WPS 출력은 분 단위 `03:33:00`이므로 20초 차이가 있다. 이 동작을
+  명시적으로 검사하되 시각 보존 PASS로 간주하지 않는다. 실제 native 연결 전 시각 계약은 OPEN이다.
+- 계획 상태 유지: MR-C4, native ready seed→후보→startup/halo 이후 consumed,
+  실제 terrain/missing-mask, full main·질량/열역학·초기 충격·예보는 미완료다.
+
+Fortran 기준 검증기 최종 실행 근거 (2026-09-16):
+
+- PR #17 수정 후 writer `qbal_writer.TKPjE9`의 보존 산출물을 hash 검증 후 재사용했다.
+  이번에는 writer를 다시 컴파일하지 않고 실제 LAPSPREP reader를 새 scratch에서 컴파일했다.
+- pinned ifx O0/O2 각 정상 1회 PASS; 각 12개 artifact 변이 거부와 old-k300 조건의
+  실제 caller 중단 검출로 총 26개 대조군을 확인했다. old-k300는 STOP exit 0이어도
+  지정 메시지와 산출물 부재로 검출한다. WPS QV slab 손상과 다섯 surface slab 값도 검사한다.
+- O0/O2 각 25개 실제 compiler/link argv, build/runtime cwd, 실행 전후 입력 해시를
+  기록했다. 620개 산출물 해시를 부모가 재확인했고 reader-state O0/O2 바이트가 일치했다.
+  기존 `run_lapsprep_vapor.sh` 전체 회귀도 pinned O0/O2에서 exit 0이다.
+- 유지 checkout 기준 최종 근거:
+  `scratch/pr17_reader_20260916/fortran_final_20260916/manifest.json`,
+  `scratch/pr17_reader_20260916/Cloud-BAL/scratch/pr18_regression_cwd/vapor.log`.
+  초기 Fortran 변환 시험의 endian 문자열 잘림에 따른 `WPS open failed` 실행과
+  이전 Python 수치 판정 실행은 이 최종 횟수에 포함하지 않는다.
+- 재현: `bash tests/run_qbal_lapsprep_tests.sh <PR17_WRITER_SCRATCH_ROOT> <NEW_RUN_ROOT>`.
+  `NEW_RUN_ROOT`는 존재하지 않아야 한다. 검증 범위는 pressure-level 배열·WPS 전달 및
+  명시된 surface fixture이며, source mask의 native 보존이나 위경도 remap 검증이 아니다.
 
 ### PR #13 이후 — 비영 잔차·역변환 출력 (PASS_SCOPED / 출력 질량 폐합 OPEN)
 
