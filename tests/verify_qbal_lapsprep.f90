@@ -182,7 +182,7 @@ CONTAINS
     REAL, INTENT(IN) :: expected_ht(:,:,:),expected_t(:,:,:),expected_mr(:,:,:)
     REAL, INTENT(IN) :: expected_u(:,:,:),expected_v(:,:,:)
     REAL, PARAMETER :: levels(5)=[70000.0,80000.0,90000.0,100000.0,200100.0]
-    CHARACTER(24), PARAMETER :: expected_time='2023-05-18_03:33:00.0000'
+    CHARACTER(24), PARAMETER :: expected_time='2023-05-18_03:33:20.0000'
     CHARACTER(4), PARAMETER :: names(5)=(/'UU  ','VV  ','TT  ','HGT ','QV  '/)
     CHARACTER(25), PARAMETER :: units_expected(5)=[character(25) :: 'm s{-1}','m s{-1}','K','m','kg kg{-1}']
     LOGICAL :: seen(5,5),exists

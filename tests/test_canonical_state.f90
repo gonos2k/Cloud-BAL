@@ -695,8 +695,11 @@ CONTAINS
   SUBROUTINE test_los_contract(failures)
     INTEGER, INTENT(INOUT) :: failures
     TYPE(cloud_bal_state_type) :: state
-    INTEGER :: status,reason,nx,ny,nz,nr,i,j,k
+    INTEGER :: status,reason,nx,ny,nz,nr,i,j,k,r
     INTEGER(int64) :: valid_time
+    INTEGER(int64) :: original_observation_time(2)
+    INTEGER(int64), PARAMETER :: int64_min_value=-HUGE(0_int64)-1_int64
+    INTEGER(int64), PARAMETER :: int64_max_value=HUGE(0_int64)
 
     CALL make_valid_state(state)
     nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
@@ -711,7 +714,7 @@ CONTAINS
                'absent LOS record with allocated payload must fail',failures)
     DEALLOCATE(state%radar_los%beam)
 
-    nr=1
+    nr=2
     state%radar_los%is_present=.TRUE.; state%radar_los%nradar=nr
     state%radar_los%vrad_representation=VRAD_DEALIASED
     CALL initialize_field(state%radar_los%vrad,nx,ny,nz,nr,valid_time,'m s-1')
@@ -742,12 +745,12 @@ CONTAINS
     state%radar_los%observation_id_lo=0_int64
     state%radar_los%usage=LOS_HELD_OUT
     state%radar_los%los_support=1_int32
-    state%radar_los%radar_id=100_int32
-    DO k=1,nz; DO j=1,ny; DO i=1,nx
-      state%radar_los%observation_id_hi(i,j,k,1)=100_int64
-      state%radar_los%observation_id_lo(i,j,k,1)=INT(i,int64)+INT(nx,int64)*( &
+    state%radar_los%radar_id=[100_int32,101_int32]
+    DO r=1,nr; DO k=1,nz; DO j=1,ny; DO i=1,nx
+      state%radar_los%observation_id_hi(i,j,k,r)=INT(state%radar_los%radar_id(r),int64)
+      state%radar_los%observation_id_lo(i,j,k,r)=INT(i,int64)+INT(nx,int64)*( &
         INT(j-1,int64)+INT(ny,int64)*INT(k-1,int64))
-    END DO; END DO; END DO
+    END DO; END DO; END DO; END DO
     state%radar_los%observation_time=valid_time
     state%radar_los%site_lat=36.0_real64; state%radar_los%site_lon=128.0_real64
     state%radar_los%site_height=100.0_real64; state%radar_los%wavelength=0.10_real64
@@ -755,6 +758,84 @@ CONTAINS
     state%radar_los%geometry_rank=1_int32
     CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
     CALL check(status==STATUS_OK,'complete post-QC LOS record must pass',failures)
+
+    state%radar_los%vrad%valid_time=valid_time+1_int64
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
+    CALL check(status==STATUS_FAILED, &
+               'LOS field valid_time metadata must remain exact',failures)
+    state%radar_los%vrad%valid_time=valid_time
+
+    state%pressure%valid_time=valid_time+1_int64
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED, &
+               'canonical analysis valid_time metadata must remain exact',failures)
+    state%pressure%valid_time=valid_time
+
+    state%radar_los%observation_time=[valid_time-299_int64,valid_time+299_int64]
+    original_observation_time=state%radar_los%observation_time
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
+    CALL check(status==STATUS_OK,'LOS observations inside the five-minute window must pass',failures)
+    CALL check(ALL(state%radar_los%observation_time==original_observation_time) .AND. &
+               state%pressure%valid_time==valid_time, &
+               'LOS validation must preserve observation and analysis timestamps',failures)
+
+    state%radar_los%observation_time=[valid_time-300_int64,valid_time+300_int64]
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
+    CALL check(status==STATUS_OK,'LOS observations at the five-minute boundary must pass',failures)
+
+    state%radar_los%observation_time=[valid_time-301_int64,valid_time]
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_RANGE, &
+               'a mixed LOS collection with one stale observation must fail',failures)
+    state%radar_los%observation_time=[valid_time,valid_time+301_int64]
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_RANGE, &
+               'a mixed LOS collection with one future observation must fail',failures)
+
+    ! Exercise both saturation guards without changing the arithmetic domain.
+    state%radar_los%vrad%valid_time=int64_min_value+300_int64
+    state%radar_los%nyquist%valid_time=int64_min_value+300_int64
+    state%radar_los%sigma_vrad%valid_time=int64_min_value+300_int64
+    state%radar_los%observation_time=[int64_min_value,int64_min_value+300_int64]
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,int64_min_value+300_int64,status,reason)
+    CALL check(status==STATUS_OK,'minimum int64 boundary timestamps must pass safely',failures)
+    state%radar_los%observation_time(1)=int64_min_value+601_int64
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,int64_min_value+300_int64,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_RANGE, &
+               'minimum int64 timestamps outside the window must fail safely',failures)
+
+    state%radar_los%vrad%valid_time=int64_min_value
+    state%radar_los%nyquist%valid_time=int64_min_value
+    state%radar_los%sigma_vrad%valid_time=int64_min_value
+    state%radar_los%observation_time=[int64_min_value,int64_max_value]
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,int64_min_value,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_RANGE, &
+               'opposite signed int64 timestamps must fail safely',failures)
+
+    state%radar_los%vrad%valid_time=int64_max_value-300_int64
+    state%radar_los%nyquist%valid_time=int64_max_value-300_int64
+    state%radar_los%sigma_vrad%valid_time=int64_max_value-300_int64
+    state%radar_los%observation_time=[int64_max_value-300_int64,int64_max_value]
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,int64_max_value-300_int64,status,reason)
+    CALL check(status==STATUS_OK,'maximum int64 boundary timestamps must pass safely',failures)
+    state%radar_los%observation_time(2)=int64_max_value-601_int64
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,int64_max_value-300_int64,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_RANGE, &
+               'maximum int64 timestamps outside the window must fail safely',failures)
+
+    state%radar_los%vrad%valid_time=int64_max_value
+    state%radar_los%nyquist%valid_time=int64_max_value
+    state%radar_los%sigma_vrad%valid_time=int64_max_value
+    state%radar_los%observation_time=[int64_min_value,int64_max_value]
+    CALL validate_los_observations(state%radar_los,nx,ny,nz,int64_max_value,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_RANGE, &
+               'opposite signed int64 timestamps must fail safely at maximum',failures)
+
+    ! Restore the normal metadata before the remaining structural checks.
+    state%radar_los%vrad%valid_time=valid_time
+    state%radar_los%nyquist%valid_time=valid_time
+    state%radar_los%sigma_vrad%valid_time=valid_time
+    state%radar_los%observation_time=valid_time
 
     state%radar_los%observation_id_lo(1,1,1,1)= &
       state%radar_los%observation_id_lo(2,1,1,1)

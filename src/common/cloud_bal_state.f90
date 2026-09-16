@@ -103,6 +103,9 @@ MODULE cloud_bal_state
   REAL(real64), PARAMETER, PUBLIC :: MIN_PRESSURE_PA = 100.0_real64
   REAL(real64), PARAMETER, PUBLIC :: MAX_PRESSURE_PA = 120000.0_real64
 
+  INTEGER(int64), PARAMETER :: LOS_OBSERVATION_WINDOW_SECONDS = 300_int64
+  INTEGER(int64), PARAMETER :: INT64_MIN_VALUE = -HUGE(0_int64)-1_int64
+
   REAL(real64), PARAMETER :: RD_AIR = 287.05_real64
   REAL(real64), PARAMETER :: EPSILON_WATER = 0.622_real64
   REAL(real64), PARAMETER :: GRAVITY = 9.80665_real64
@@ -683,7 +686,7 @@ CONTAINS
       reason=REASON_RANGE; RETURN
     END IF
     IF (ANY(los%radar_id<=0_int32) .OR. &
-        ANY(los%observation_time/=valid_time) .OR. &
+        .NOT.ALL(observation_time_within_window(los%observation_time,valid_time)) .OR. &
         ANY(.NOT.ieee_is_finite(los%site_lat)) .OR. &
         ANY(.NOT.ieee_is_finite(los%site_lon)) .OR. &
         ANY(.NOT.ieee_is_finite(los%site_height)) .OR. &
@@ -744,6 +747,31 @@ CONTAINS
     END IF
     status=STATUS_OK; reason=REASON_NONE
   END SUBROUTINE validate_los_observations
+
+  PURE ELEMENTAL LOGICAL FUNCTION observation_time_within_window(observation_time,valid_time)
+    INTEGER(int64), INTENT(IN) :: observation_time,valid_time
+
+    observation_time_within_window=.FALSE.
+    IF (observation_time==valid_time) THEN
+      observation_time_within_window=.TRUE.
+    ELSE IF (observation_time<valid_time) THEN
+      ! Avoid valid_time-observation_time when valid_time is near int64 min.
+      IF (valid_time<=INT64_MIN_VALUE+LOS_OBSERVATION_WINDOW_SECONDS) THEN
+        observation_time_within_window=.TRUE.
+      ELSE
+        observation_time_within_window=observation_time>= &
+          valid_time-LOS_OBSERVATION_WINDOW_SECONDS
+      END IF
+    ELSE
+      ! Avoid observation_time-valid_time when valid_time is near int64 max.
+      IF (valid_time>=HUGE(0_int64)-LOS_OBSERVATION_WINDOW_SECONDS) THEN
+        observation_time_within_window=.TRUE.
+      ELSE
+        observation_time_within_window=observation_time<= &
+          valid_time+LOS_OBSERVATION_WINDOW_SECONDS
+      END IF
+    END IF
+  END FUNCTION observation_time_within_window
 
   SUBROUTINE reject_candidate(state_in,state_out,result,status,reason)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in

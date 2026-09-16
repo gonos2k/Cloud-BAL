@@ -12,6 +12,8 @@ import numpy as np
 
 STAMP = "260010300"
 NX, NY, NZ = 2, 2, 3
+ANALYSIS_TIME_SECONDS = 1767236400.0  # 2026-01-01 03:00:00 UTC
+TIME_UNITS = "seconds since (1970-1-1 00:00:00.0)"
 LEVELS_HPA = np.array([500.0, 400.0, 300.0], dtype=np.float32)
 BASE_SPECIFIC_HUMIDITY = np.array([0.001, 0.002, 0.003], dtype=np.float32)
 HOTSTART_SPECIFIC_HUMIDITY = np.array([0.12, 0.14, 0.16], dtype=np.float32)
@@ -48,6 +50,10 @@ def make_file(
         dataset.createDimension("y", NY)
         levels = dataset.createVariable("level", "f4", ("z",))
         levels[:] = levels_hpa[:depth]
+        for name in ("reftime", "valtime"):
+            variable = dataset.createVariable(name, "f8", ("record",))
+            variable.units = TIME_UNITS
+            variable[:] = ANALYSIS_TIME_SECONDS
 
         def level_index(level_hpa: float) -> int:
             index = int(np.flatnonzero(levels_hpa[:depth] == level_hpa)[0])

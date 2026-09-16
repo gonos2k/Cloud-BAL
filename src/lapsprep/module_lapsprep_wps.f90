@@ -82,7 +82,7 @@ CONTAINS
   SUBROUTINE output_ungrib_format(p, t, ht, u, v, rh, slp, psfc, &
                                lwc, rai, sno, ice, pic, snocov,tskin,istatus, &
                                resolved_output_file, vapor_mixing_ratio,include_hydrometeors, &
-                               include_surface_height,create_new)
+                               include_surface_height,create_new,valid_second)
 
   !  Subroutine of lapsprep that will build a file the
   !  WRFSI "ungrib" format that can be read by hinterp
@@ -118,9 +118,11 @@ CONTAINS
   ! real must select sfcp_to_sfcp to retain PSFC through terrain adjustment.
   LOGICAL, INTENT(IN), OPTIONAL :: include_surface_height
   LOGICAL, INTENT(IN), OPTIONAL :: create_new
+  INTEGER, INTENT(IN), OPTIONAL :: valid_second
   
   ! Local Variables
   
+  INTEGER :: second
   INTEGER            :: valid_mm, valid_dd
   CHARACTER (LEN=256):: output_file_name
   CHARACTER (LEN=7)  :: file_status
@@ -130,6 +132,9 @@ CONTAINS
   LOGICAL            :: output_open,write_hydrometeors,write_surface_height
 
   istatus = 0
+  second=0
+  IF (PRESENT(valid_second)) second=valid_second
+  IF (second<0 .OR. second>59) RETURN
   output_open = .FALSE.
   file_status='REPLACE'
   IF (PRESENT(create_new)) THEN
@@ -161,8 +166,8 @@ CONTAINS
  
   yyyyddd = valid_yyyy*1000 + valid_jjj
   CALL wrf_date_to_ymd(yyyyddd, valid_yyyy, valid_mm, valid_dd) 
-  WRITE(hdate, '(I4.4,"-",I2.2,"-",I2.2,"_",I2.2,":",I2.2,":00.0000")') &
-          valid_yyyy, valid_mm, valid_dd, valid_hh, valid_min
+  WRITE(hdate, '(I4.4,"-",I2.2,"-",I2.2,"_",I2.2,":",I2.2,":",I2.2,".0000")') &
+          valid_yyyy, valid_mm, valid_dd, valid_hh, valid_min, second
 ! IF (valid_min .EQ. 0) THEN
 !   output_file_name = TRIM(output_prefix) // ':' // hdate(1:13)
 ! ELSE

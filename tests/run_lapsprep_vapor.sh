@@ -19,8 +19,13 @@ fi
 nf_config="$workspace_root/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config"
 netcdff_archive="$(dirname "$(dirname "$nf_config")")/lib/libnetcdff.a"
 netcdf_archive="$workspace_root/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/lib/libnetcdf.a"
+date_pack_source="$workspace_root/klaps-v5.0_/src/lapsprep/module_date_pack.f90"
 [[ -x "$nf_config" && -f "$netcdff_archive" && -f "$netcdf_archive" ]] || {
   printf 'pinned NetCDF Fortran/C archives are unavailable\n' >&2
+  exit 2
+}
+[[ -f "$date_pack_source" ]] || {
+  printf 'upstream date_pack source is unavailable: %s\n' "$date_pack_source" >&2
   exit 2
 }
 verify_hash() {
@@ -41,10 +46,14 @@ build="$test_tmp/build"
 
 compile() {
   local output_build=$1 source=$2 object=$3
+  local source_path="$repo_root/$source"
   shift 3
+  if [[ "$source" == /* ]]; then
+    source_path="$source"
+  fi
   if ! "$CLOUD_BAL_FC" -c "$@" \
       -module "$output_build" -I "$output_build" "${nf_fflags[@]}" \
-      "$repo_root/$source" -o "$output_build/$object" \
+      "$source_path" -o "$output_build/$object" \
       >"$output_build/$object.log" 2>&1; then
     cat "$output_build/$object.log" >&2
     exit 1
@@ -57,6 +66,7 @@ link() {
   if ! "$CLOUD_BAL_FC" "$@" \
       "$output_build/lapsprep.o" "$output_build/wps.o" "$output_build/setup.o" \
       "$output_build/contracts.o" "$output_build/moisture.o" "$output_build/stubs.o" \
+      "$output_build/date_pack.o" \
       "$output_build/cloud_bal_wps_adapter.o" \
       "$output_build/cloud_bal_pressure_analysis.o" \
       "$output_build/cloud_bal_real_netcdf.o" \
@@ -80,6 +90,7 @@ build_executable() {
   shift
   mkdir -p "$output_build"
   compile "$output_build" tests/lapsprep_vapor_stubs.f90 stubs.o "$@"
+  compile "$output_build" "$date_pack_source" date_pack.o "$@"
   compile "$output_build" src/common/cloud_bal_field_contracts.f90 contracts.o "$@"
   compile "$output_build" src/common/cloud_bal_moisture.f90 moisture.o "$@"
   compile "$output_build" src/common/cloud_bal_state.f90 cloud_bal_state.o "$@"

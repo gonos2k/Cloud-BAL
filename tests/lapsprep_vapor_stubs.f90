@@ -10,19 +10,6 @@ MODULE constants
   REAL, PARAMETER :: pi = 3.14159265358
 END MODULE constants
 
-MODULE date_pack
-  IMPLICIT NONE
-CONTAINS
-  SUBROUTINE wrf_date_to_ymd(wrf_date, century_year, month, day)
-    INTEGER, INTENT(IN) :: wrf_date
-    INTEGER, INTENT(INOUT) :: century_year
-    INTEGER, INTENT(OUT) :: month, day
-    century_year = wrf_date / 1000
-    month = 1
-    day = 1
-  END SUBROUTINE wrf_date_to_ymd
-END MODULE date_pack
-
 MODULE laps_static
   IMPLICIT NONE
   INTEGER :: x, y, z2, z3

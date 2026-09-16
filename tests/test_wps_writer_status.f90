@@ -3,7 +3,9 @@ PROGRAM test_wps_writer_status
   USE lapsprep_wps,ONLY: output_ungrib_format
   IMPLICIT NONE
   REAL :: p(2),a3(2,2,2),a2(2,2)
-  INTEGER :: status,unit,io_status,file_size,version
+  INTEGER :: status,unit,io_status,file_size,version,second
+  CHARACTER(24) :: timestamp
+  CHARACTER(2) :: seconds_text
   CHARACTER(LEN=256) :: root
   CHARACTER(LEN=257) :: long_path
   CHARACTER(LEN=256) :: create_new_path,existing_path,legacy_path
@@ -89,6 +91,29 @@ PROGRAM test_wps_writer_status
   READ(unit,'(A)') sentinel
   CLOSE(unit)
   IF (sentinel/='sentinel') ERROR STOP 'truncated WPS output path replaced another file'
+
+  ! Seconds are data, not a tolerance or a rounded filename component.
+  DO second=0,59
+    IF (second/=0 .AND. second/=20 .AND. second/=59) CYCLE
+    CALL output_ungrib_format(p,a3,a3,a3,a3,a3,a2,a2,a3,a3,a3,a3,a3,a2,a2,status, &
+                              resolved_output_file=TRIM(legacy_path),valid_second=second)
+    IF (status/=1) ERROR STOP 'valid WPS seconds rejected'
+    OPEN(NEWUNIT=unit,FILE=TRIM(legacy_path),STATUS='OLD',FORM='UNFORMATTED',ACTION='READ')
+    READ(unit) version
+    READ(unit) timestamp
+    CLOSE(unit)
+    WRITE(seconds_text,'(I2.2)') second
+    IF (timestamp(18:19)/=seconds_text) ERROR STOP 'WPS seconds not preserved'
+  END DO
+  DO second=-1,60,61
+    CALL output_ungrib_format(p,a3,a3,a3,a3,a3,a2,a2,a3,a3,a3,a3,a3,a2,a2,status, &
+                              resolved_output_file=TRIM(existing_path),valid_second=second)
+    IF (status/=0) ERROR STOP 'invalid WPS seconds accepted'
+    OPEN(NEWUNIT=unit,FILE=TRIM(existing_path),STATUS='OLD',ACTION='READ')
+    READ(unit,'(A)') sentinel
+    CLOSE(unit)
+    IF (sentinel/='sentinel') ERROR STOP 'invalid seconds replaced output'
+  END DO
 
   PRINT *,'WPS writer status tests passed'
 END PROGRAM test_wps_writer_status

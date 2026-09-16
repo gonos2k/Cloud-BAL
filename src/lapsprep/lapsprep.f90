@@ -65,6 +65,8 @@
     USE cloud_bal_stage_context, ONLY: stage_context,read_stage_context
     USE cloud_bal_lapsprep_adapter, ONLY: cloud_bal_lapsprep_entry
     USE constants
+    USE date_pack, ONLY: geth_idts,wrf_date_to_ymd,nfeb
+    USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
     USE setup
     USE laps_static
     USE lapsprep_mm5
@@ -94,6 +96,10 @@
     ! Declarations for use of NetCDF library
 
     INCLUDE "netcdf.inc" 
+    LOGICAL :: check_analysis_time
+    REAL(real64) :: analysis_time=-HUGE(0.0_real64),lookup_time
+    INTEGER :: valid_second=0,time_month,time_day,seconds_in_year,year
+    CHARACTER(19) :: lookup_date,year_start_date
     INTEGER :: cdfid , rcode
     INTEGER :: zid
     INTEGER :: z 
@@ -254,6 +260,20 @@
     !  Loop through each of the requested extensions for this date.  Each of the
     !  extensions has a couple of the variables that we want.
 
+    ! A9 locates the minute; original NetCDF metadata supplies exact seconds.
+    check_analysis_time=.NOT.hotstart .AND. ANY(output_format(:num_output)=='wps ')
+    IF (check_analysis_time) THEN
+      CALL wrf_date_to_ymd(valid_yyyy*1000+valid_jjj,valid_yyyy,time_month,time_day)
+      WRITE(lookup_date,'(I4.4,"-",I2.2,"-",I2.2,"_",I2.2,":",I2.2,":00")') &
+        valid_yyyy,time_month,time_day,valid_hh,valid_min
+      WRITE(year_start_date,'(I4.4,"-01-01_00:00:00")') valid_yyyy
+      CALL geth_idts(lookup_date,year_start_date,seconds_in_year)
+      lookup_time=REAL(seconds_in_year,real64)
+      DO year=1970,valid_yyyy-1
+        lookup_time=lookup_time+REAL(365+nfeb(year)-28,real64)*86400.0_real64
+      END DO
+    END IF
+
     PRINT '(A)', 'Starting Loop for each LAPS file'
     file_loop : DO loop = 1 , num_ext
       
@@ -319,6 +339,8 @@
         PRINT *, 'NetCDF open failed/status: ',TRIM(input_laps_file),rcode
         STOP 'input_open_failed'
       ENDIF
+
+      IF (check_analysis_time) CALL check_input_time(cdfid)
 
       zid = NCDID ( cdfid , 'z' , rcode )
       IF (rcode .NE. 0) STOP 'missing_z_dimension'
@@ -1003,21 +1025,22 @@
           IF (LEN_TRIM(shadow_experiment)>0 .AND. TRIM(shadow_experiment)/='OFF') THEN
             CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
               snocov,tskin,istatus,TRIM(cloud_bal_wps_output), &
-              vapor_mixing_ratio=mr,include_hydrometeors=.TRUE.,include_surface_height=.TRUE.,create_new=.TRUE.)
+              vapor_mixing_ratio=mr,include_hydrometeors=.TRUE.,include_surface_height=.TRUE.,create_new=.TRUE., &
+              valid_second=valid_second)
           ELSE IF (wps_output_vapor) THEN
             IF (LEN_TRIM(cloud_bal_wps_output)>0) THEN
               CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
-                snocov,tskin,istatus,TRIM(cloud_bal_wps_output),vapor_mixing_ratio=mr)
+                snocov,tskin,istatus,TRIM(cloud_bal_wps_output),vapor_mixing_ratio=mr,valid_second=valid_second)
             ELSE
               CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
-                snocov,tskin,istatus,vapor_mixing_ratio=mr)
+                snocov,tskin,istatus,vapor_mixing_ratio=mr,valid_second=valid_second)
             END IF
           ELSE IF (LEN_TRIM(cloud_bal_wps_output)>0) THEN
             CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
-              snocov,tskin,istatus,TRIM(cloud_bal_wps_output))
+              snocov,tskin,istatus,TRIM(cloud_bal_wps_output),valid_second=valid_second)
           ELSE
             CALL output_ungrib_format(p,t,ht,u,v,rh,slp,psfc,lwc,rai,sno,ice,pic, &
-              snocov,tskin,istatus)
+              snocov,tskin,istatus,valid_second=valid_second)
           END IF
           IF (istatus .NE. 1) THEN
             PRINT '(A)', 'WPS output failed; LAPSPREP is not complete.'
@@ -1041,6 +1064,67 @@
     PRINT '(A)', 'LAPSPREP Complete.'
 
   CONTAINS
+
+    SUBROUTINE time_error(message)
+      CHARACTER(*), INTENT(IN) :: message
+      PRINT '(A)', 'LAPSPREP input time: '//message
+      STOP 1
+    END SUBROUTINE time_error
+
+    SUBROUTINE check_input_time(ncid)
+      INTEGER, INTENT(IN) :: ncid
+      REAL(real64) :: reference_time,file_time
+      file_time=read_time_value(ncid,'valtime')
+      reference_time=read_time_value(ncid,'reftime')
+      IF (file_time/=reference_time) CALL time_error('reference/valid mismatch')
+      IF (file_time<lookup_time .OR. file_time>=lookup_time+60.0_real64) &
+        CALL time_error('filename minute mismatch')
+      IF (analysis_time==-HUGE(0.0_real64)) analysis_time=file_time
+      IF (file_time/=analysis_time) CALL time_error('analysis files disagree')
+      valid_second=INT(file_time-lookup_time)
+    END SUBROUTINE check_input_time
+
+    FUNCTION read_time_value(ncid,name) RESULT(value)
+      INTEGER, INTENT(IN) :: ncid
+      CHARACTER(*), INTENT(IN) :: name
+      REAL(real64) :: value,missing
+      INTEGER :: variable,xtype,rank,dimensions(NF_MAX_VAR_DIMS),attributes,length,code,attribute
+      CHARACTER(80) :: units_text
+      CHARACTER(NF_MAX_NAME) :: dimension_name
+      CHARACTER(13), PARAMETER :: missing_names(2)=[character(13) :: '_FillValue','missing_value']
+      code=nf_inq_varid(ncid,name,variable)
+      IF (code/=NF_NOERR) CALL time_error(name//': missing variable')
+      code=nf_inq_var(ncid,variable,units_text,xtype,rank,dimensions,attributes)
+      IF (code/=NF_NOERR) CALL time_error(name//': inquiry failed')
+      IF (xtype/=NF_DOUBLE .OR. rank/=1) CALL time_error(name//': scalar double required')
+      dimension_name=''
+      code=nf_inq_dimname(ncid,dimensions(1),dimension_name)
+      IF (code/=NF_NOERR .OR. TRIM(dimension_name)/='record') CALL time_error(name//': record dimension required')
+      code=nf_inq_dimlen(ncid,dimensions(1),length)
+      IF (code/=NF_NOERR .OR. length/=1) CALL time_error(name//': single record required')
+      code=nf_inq_att(ncid,variable,'units',xtype,length)
+      IF (code/=NF_NOERR) CALL time_error(name//': missing units')
+      IF (xtype/=NF_CHAR .OR. length>LEN(units_text)) CALL time_error(name//': invalid units')
+      units_text=''
+      code=nf_get_att_text(ncid,variable,'units',units_text)
+      IF (code/=NF_NOERR) CALL time_error(name//': units read failed')
+      IF (TRIM(units_text)/='seconds since (1970-1-1 00:00:00.0)') CALL time_error(name//': invalid units')
+      code=nf_get_var_double(ncid,variable,value)
+      IF (code/=NF_NOERR) CALL time_error(name//': read failed')
+      IF (.NOT.ieee_is_finite(value)) CALL time_error(name//': nonfinite')
+      IF (value/=ANINT(value)) CALL time_error(name//': fractional seconds')
+      DO attribute=1,SIZE(missing_names)
+        code=nf_inq_att(ncid,variable,TRIM(missing_names(attribute)),xtype,length)
+        IF (code==NF_ENOTATT) CYCLE
+        IF (code/=NF_NOERR) CALL time_error(name//': missing attribute inquiry failed')
+        IF (length/=1 .OR. xtype/=NF_DOUBLE) CALL time_error(name//': invalid missing attribute')
+        code=nf_get_att_double(ncid,variable,TRIM(missing_names(attribute)),missing)
+        IF (code/=NF_NOERR) CALL time_error(name//': missing attribute read failed')
+        IF (ieee_is_finite(missing)) THEN
+          IF (value==missing) CALL time_error(name//': missing value')
+        END IF
+      END DO
+    END FUNCTION read_time_value
 
     SUBROUTINE prepare_shadow_wps
       TYPE(cloud_bal_state_type) :: original,candidate,operational,transition_seed,pre_balance
