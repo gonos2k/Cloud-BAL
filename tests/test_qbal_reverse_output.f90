@@ -3,10 +3,12 @@ subroutine test_qbal_reverse_output()
   implicit none
   integer, parameter :: nx=8,ny=8,nz=6
   real, parameter :: rd=287.04, t0=280., q0=1.e-3, om0=2., dx0=1.e4, a=1.e-3
+  real, parameter :: du=0.35, dv=-0.45, dphi=125., dsh=0.004, domega=0.1
   real :: lu(nx,ny,nz),lv(nx,ny,nz),lp(nx,ny,nz),lt(nx,ny,nz),lh(nx,ny,nz),lo(nx,ny,nz)
   real :: u(nx,ny,nz),v(nx,ny,nz),phi(nx,ny,nz),t(nx,ny,nz),sh(nx,ny,nz),om(nx,ny,nz)
   real :: us(nx,ny,nz),vs(nx,ny,nz),phis(nx,ny,nz),ts(nx,ny,nz),shs(nx,ny,nz),oms(nx,ny,nz)
   real :: p(nz),ps(nx,ny),dx(nx,ny),dy(nx,ny),ur,vr,orr,pr,qr,rmax,rms
+  real :: expected_residual,expected_rms
   integer :: i,j,k
   external :: balstagger, qbal_agrid_residual, report_qbal_agrid_residual
 
@@ -16,25 +18,36 @@ subroutine test_qbal_reverse_output()
     lp(i,j,k)=rd*t0*alog(p(1)/p(k)); lt(i,j,k)=t0; lh(i,j,k)=q0; lo(i,j,k)=om0
   enddo; enddo; enddo
   call balstagger(lu,lv,lp,lt,lh,lo,us,vs,phis,ts,shs,oms,nx,ny,nz,p,ps,1)
+
+  ! Keep the original A-grid fields as the in-place reverse input.  Modify
+  ! only the finite staggered payload, so a reverse no-op leaves a measurable
+  ! difference at every checked field.  Affine U/V and constant PHI/SH make
+  ! the reverse averages exact: U=lu+du, V=lv+dv, PHI=lp+dphi, SH=lh+dsh.
+  us=us+du; vs=vs+dv; phis=phis+dphi; shs=shs+dsh
+  oms=oms+domega
   u=lu; v=lv; phi=lp; t=lt; sh=lh; om=lo
   call balstagger(u,v,phi,t,sh,om,us,vs,phis,ts,shs,oms,nx,ny,nz,p,ps,-1)
   if(any(.not.ieee_is_finite(u)).or.any(.not.ieee_is_finite(v)).or. &
      any(.not.ieee_is_finite(phi)).or.any(.not.ieee_is_finite(t)).or. &
      any(.not.ieee_is_finite(sh)).or.any(.not.ieee_is_finite(om))) &
     error stop 'reverse A-grid output is nonfinite'
-  ur=maxval(abs(u(2:nx,2:ny,2:nz)-lu(2:nx,2:ny,2:nz)))
-  vr=maxval(abs(v(2:nx,2:ny,2:nz)-lv(2:nx,2:ny,2:nz)))
-  orr=maxval(abs(om(2:nx,2:ny,2:nz)-lo(2:nx,2:ny,2:nz)))
-  pr=maxval(abs(phi(2:nx,2:ny,2:nz)-lp(2:nx,2:ny,2:nz)))
-  qr=maxval(abs(sh(2:nx,2:ny,2:nz)-lh(2:nx,2:ny,2:nz)))
-  ! Constant omega avoids claiming affine-in-pressure exactness from the
-  ! legacy index-space average of adjacent omega levels.
+  ur=maxval(abs(u(2:nx,2:ny,2:nz)-(lu(2:nx,2:ny,2:nz)+du)))
+  vr=maxval(abs(v(2:nx,2:ny,2:nz)-(lv(2:nx,2:ny,2:nz)+dv)))
+  orr=maxval(abs(om(2:nx,2:ny,2:nz)-(lo(2:nx,2:ny,2:nz)+domega)))
+  pr=maxval(abs(phi(2:nx,2:ny,2:nz)-(lp(2:nx,2:ny,2:nz)+dphi)))
+  qr=maxval(abs(sh(2:nx,2:ny,2:nz)-(lh(2:nx,2:ny,2:nz)+dsh)))
   if(ur>2.e-5.or.vr>2.e-5.or.orr>2.e-5.or.pr>5.e-3.or.qr>2.e-6) &
-    error stop 'reverse A-grid affine/constant oracle failed'
+    error stop 'reverse A-grid manufactured oracle failed'
   call qbal_agrid_residual(u,v,om,nx,ny,nz,p,dx,dy,rmax,rms)
-  if(rmax>2.e-7.or.rms>2.e-7) error stop 'A-grid centered residual oracle failed'
+  ! The changed interior omega is constant, but level 1 remains the original
+  ! A-grid background.  Only k=2 sees that interface in the centered stencil:
+  ! rmax=domega/(p(1)-p(3)), and rms=rmax/sqrt(nz-2).
+  expected_residual=domega/(p(1)-p(3))
+  expected_rms=expected_residual/sqrt(real(nz-2))
+  if(abs(rmax-expected_residual)>2.e-8.or.abs(rms-expected_rms)>2.e-8) &
+    error stop 'A-grid centered manufactured residual oracle failed'
   call report_qbal_agrid_residual(u,v,om,nx,ny,nz,p,dx,dy)
-  print *, 'Reverse balstagger A-grid oracle PASS: ',ur,vr,orr,pr,qr,rmax
+  print *, 'Reverse balstagger manufactured A-grid oracle PASS: ',ur,vr,orr,pr,qr,rmax
 end subroutine test_qbal_reverse_output
 
 subroutine report_qbal_agrid_residual(lu,lv,lo,nx,ny,nz,p,dx,dy)

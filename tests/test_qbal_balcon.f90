@@ -31,6 +31,8 @@ program test_qbal_balcon
   if(status/=1) error stop 'full BALCON valid candidate rejected'
   if(any(.not.ieee_is_finite(t)).or.any(.not.ieee_is_finite(u)).or. &
      any(.not.ieee_is_finite(v)).or.any(.not.ieee_is_finite(om))) error stop 'BALCON nonfinite output'
+  call report_accepted_boundary_changes(u,v,om,saved(:,:,:,6),saved(:,:,:,7), &
+     saved(:,:,:,8),'BALCON full accepted boundary')
   wind_change=maxval(sqrt((u-saved(:,:,:,6))**2+(v-saved(:,:,:,7))**2))
   if(wind_change<1.e-5) error stop 'BALCON success was a zero increment'
   if(maxval(abs(t-saved(:,:,:,1)))<1.e-3) error stop 'BALCON PHI relaxation did not change candidate'
@@ -62,6 +64,8 @@ program test_qbal_balcon
   call unchanged_background()
   if(any(.not.ieee_is_finite(t)).or.any(.not.ieee_is_finite(u)).or. &
      any(.not.ieee_is_finite(v)).or.any(.not.ieee_is_finite(om))) error stop 'BALCON localized output nonfinite'
+  call report_accepted_boundary_changes(u,v,om,saved(:,:,:,6),saved(:,:,:,7), &
+     saved(:,:,:,8),'BALCON localized accepted boundary')
   wind_change=maxval(sqrt((u-saved(:,:,:,6))**2+(v-saved(:,:,:,7))**2))
   if(wind_change<nonzero_wind_minimum) error stop 'BALCON localized success did not change state'
   call continuity_metrics(u,v,om,nx,ny,nz,dx,dy,ps,p,dp,influence,after_rms,after_max,status)
@@ -141,6 +145,31 @@ contains
     character(len=*), intent(in) :: message
     if(any(.not.ieee_is_finite(field)).or.any(field<synthetic_moisture_minimum).or. &
        any(field>synthetic_moisture_maximum)) error stop message
+  end subroutine
+  subroutine report_accepted_boundary_changes(u,v,om,uo_ref,vo_ref,om_ref,label)
+    ! The final LEIB_SUB projection may adjust legacy boundary faces. Report
+    ! those changes without imposing an unsupported zero-increment contract.
+    real, intent(in) :: u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz)
+    real, intent(in) :: uo_ref(nx,ny,nz),vo_ref(nx,ny,nz),om_ref(nx,ny,nz)
+    character(len=*), intent(in) :: label
+    real :: u_before,u_after,u_delta,v_before,v_after,v_delta
+    real :: om_before,om_after,om_delta
+
+    u_before=max(maxval(abs(uo_ref(1,:,:))),maxval(abs(uo_ref(nx,:,:))))
+    u_after=max(maxval(abs(u(1,:,:))),maxval(abs(u(nx,:,:))))
+    u_delta=max(maxval(abs(u(1,:,:)-uo_ref(1,:,:))), &
+      maxval(abs(u(nx,:,:)-uo_ref(nx,:,:))))
+    v_before=max(maxval(abs(vo_ref(:,1,:))),maxval(abs(vo_ref(:,ny,:))))
+    v_after=max(maxval(abs(v(:,1,:))),maxval(abs(v(:,ny,:))))
+    v_delta=max(maxval(abs(v(:,1,:)-vo_ref(:,1,:))), &
+      maxval(abs(v(:,ny,:)-vo_ref(:,ny,:))))
+    om_before=max(maxval(abs(om_ref(:,:,1))),maxval(abs(om_ref(:,:,nz))))
+    om_after=max(maxval(abs(om(:,:,1))),maxval(abs(om(:,:,nz))))
+    om_delta=max(maxval(abs(om(:,:,1)-om_ref(:,:,1))), &
+      maxval(abs(om(:,:,nz)-om_ref(:,:,nz))))
+    print *,trim(label),' U boundary max input/output/change (m/s): ',u_before,u_after,u_delta
+    print *,trim(label),' V boundary max input/output/change (m/s): ',v_before,v_after,v_delta
+    print *,trim(label),' OM endpoint max input/output/change (Pa/s): ',om_before,om_after,om_delta
   end subroutine
 end program
 

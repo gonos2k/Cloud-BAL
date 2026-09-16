@@ -1,6 +1,6 @@
 # 다중 레이더·국지 균형초기화 실행 체크리스트와 체크포인트
 
-작성: 2026-09-14. 추가 검토 반영: 2026-09-15.
+작성: 2026-09-14. 추가 검토 반영: 2026-09-16.
 상위 계획: [추가 과제 계획서](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
 검토 근거: 수학·수치해석·기상학 종합 검토 (로컬 작업공간 근거: `../scratch/cp02_multiradar_additional_review_20260914/REVIEW.md`).
 수학 근거: [정리·증명과 실제 적용 조건](CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md).
@@ -189,6 +189,28 @@ missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수
 - 근거: `scratch/pr13_residual_20260915/Cloud-BAL/scratch/balcon_output_verified.log`.
   `balcon_output_candidate.log`/`balcon_output_final.log`는 각각 제외한 경계 입력/작은 신호 거부의
   탐색 기록이며 최종 PASS 근거가 아니다. 전체 unit suite·실자료·native·예보는 재실행하지 않았다.
+
+### 2026-09-16 재검토 — 역변환 갱신 누락 검출
+
+- 위 2026-09-15 해석해는 출력 배열을 기대값으로 미리 채워 PHI 대입 누락에도
+  O0/O2 연결시험이 통과했다. 이는 시험 검출력의 허점이며 생산 PHI 오류의 재현은 아니다.
+- 원래 A-grid 배경을 유지하고 staggered 후보에 알려진 상수 증분을 더한다.
+  내부 U/V/PHI/q/omega가 각각 배경과 다른 해석값으로 갱신되는지 검사한다.
+  온도는 finite 범위만 확인하며 열역학 정확해 검증으로 확대하지 않는다.
+- omega 증분 `0.1 Pa/s`와 원래 하단 배경 사이의 차이 때문에 중앙차분 잔차는
+  `k=2`에서만 생긴다. 최대 절댓값 `0.1/(p(1)-p(3))=5e-6 s^-1`,
+  RMS `5e-6/sqrt(nz-2)=2.5e-6 s^-1`를 독립 기대값으로 검사한다.
+  잔차를 0으로 만드는 입력만으로 연산자를 검증하지 않는다.
+- 승인 전후 U/V 측면 경계의 최대값·변경량(m/s), omega 양 끝 층의
+  최대값·변경량(Pa/s)을 따로 기록한다. 경계를 고정하거나 전체 질량 수지를 검증한 것은 아니다.
+- runner는 원본에서 추출한 scratch 소스에만 최종 projection 생략과 역변환 PHI
+  대입 누락을 각각 적용한다. 정상 실행의 성공과 각 변이의 지정된 검사 실패를 구분한다.
+  실제 BALCON 출력의 전체 질량 폐합·실자료 main/writer·native·예보 검증은 OPEN이다.
+- 최종 pinned ifx O0/O2 정상 2회 PASS, 두 변이×O0/O2 4회 검출이다.
+  변이는 Intel `ERROR STOP` 종료 128과 해당 거부 메시지를 모두 요구한다.
+  근거는 로컬 `scratch/qbal_balcon.F4pa3u/manifest.json` 및 각 실행의 `test.log`다.
+  runner는 컴파일 전 소스·실행기·toolchain·setvars·compiler·runtime 해시를 수집하고
+  실행 후 불변을 확인한다. 전체 unit suite·실자료·native·예보는 이번에 실행하지 않았다.
 
 ### PR #12 이후 — 작은 전체 BALCON 연결 (PASS_SCOPED)
 
