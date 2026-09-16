@@ -26,11 +26,11 @@ awk '/^[[:space:]]*subroutine diagnose\(/ {capture=1} capture {print}' \
 
 projection_bypass_source="$build_root/final_projection_bypass.f"
 reverse_phi_omitted_source="$build_root/reverse_phi_assignment_omitted.f"
-python3 - "$core_source" "$projection_bypass_source" "$reverse_phi_omitted_source" <<'PY'
+python3 - "$core_source" "$projection_bypass_source" "$reverse_phi_omitted_source" "$reverse_test_source" <<'PY'
 from pathlib import Path
 import sys
 
-core, projection, reverse = map(Path, sys.argv[1:])
+core, projection, reverse, diagnostic = map(Path, sys.argv[1:])
 source = core.read_text(encoding="utf-8")
 cases = [
     (projection,
@@ -49,6 +49,20 @@ for path, target, replacement, name in cases:
     if source.count(target) != 1:
         raise SystemExit(f"{name} mutation target count is not one")
     path.write_text(source.replace(target, replacement), encoding="utf-8")
+source = diagnostic.read_text(encoding="utf-8")
+horizontal = (
+    "residual=(lu(i+1,j,k)-lu(i-1,j,k))/(2.*dx(i,j)) &\n"
+    "       +(lv(i,j+1,k)-lv(i,j-1,k))/(2.*dy(i,j)) &\n"
+    "       +"
+)
+vertical = "(lo(i,j,k-1)-lo(i,j,k+1))/dp2"
+for name, target, replacement in [
+    ("agrid_no_horizontal", horizontal, "residual="),
+    ("agrid_omega_sign", vertical, "(lo(i,j,k+1)-lo(i,j,k-1))/dp2"),
+]:
+    if source.count(target) != 1:
+        raise SystemExit(f"{name} mutation target count is not one")
+    (core.parent / f"{name}.f90").write_text(source.replace(target, replacement), encoding="utf-8")
 PY
 
 fixed_o2=()
@@ -75,6 +89,7 @@ files = [
     root + "/../klaps-v5.0_/src/lib/move.f", root + "/../klaps-v5.0_/src/lib/zero.f",
     root + "/../klaps-v5.0_/src/lib/array_diagnosis.f", scratch + "/qbal_core.f",
     scratch + "/final_projection_bypass.f", scratch + "/reverse_phi_assignment_omitted.f",
+    scratch + "/agrid_no_horizontal.f90", scratch + "/agrid_omega_sign.f90",
     compiler, imf, intlc, setvars,
 ]
 def digest(path):
@@ -94,6 +109,7 @@ projection_driver_expected='BALCON localized residual candidate rejected'
 reverse_expected='reverse A-grid manufactured oracle failed'
 run_variant() {
   local level=$1 variant=$2 core_path=$3 expected=$4 driver_expected=$5
+  local diagnostic_source=${6:-$reverse_test_source}
   local level_root variant_root
   level_root="$build_root/$level"
   variant_root="$level_root/$variant"
@@ -102,13 +118,18 @@ run_variant() {
   (
     cd "$variant_root"
     "$CLOUD_BAL_FC" -c "${fixed_flags[@]}" -I "$level_root" "$core_path"
+    "$CLOUD_BAL_FC" -c "${free_flags[@]}" "$diagnostic_source" -o reverse_output.o
     "$CLOUD_BAL_FC" "${free_flags[@]}" \
-      "$level_root/test_qbal_balcon.o" "$level_root/test_qbal_reverse_output.o" \
+      "$level_root/test_qbal_balcon.o" reverse_output.o \
       "$level_root/cloud_bal_wind_modes.o" "$level_root/move.o" "$level_root/zero.o" \
       "$level_root/array_diagnosis.o" "$(basename "$core_path" .f).o" -o "$executable"
   )
   local return_code=0
-  if "$executable" > "$log_path" 2>&1; then return_code=0; else return_code=$?; fi
+  if (
+    cd "$variant_root" || exit
+    pwd -P > run.cwd || exit
+    "$executable"
+  ) > "$log_path" 2>&1; then return_code=0; else return_code=$?; fi
   if [[ -n "$expected" ]]; then
     if ((return_code != 128)) || ! rg -F -q -- "$expected" "$log_path"; then
       printf '%s %s did not produce expected rejection: %s\n' \
@@ -151,7 +172,6 @@ for level in O0 O2; do
     cd "$level_root"
     "$CLOUD_BAL_FC" -c "${free_flags[@]}" "$wind_source"
     "$CLOUD_BAL_FC" -c "${free_flags[@]}" "$balcon_test_source"
-    "$CLOUD_BAL_FC" -c "${free_flags[@]}" "$reverse_test_source"
     for utility in move zero array_diagnosis; do
       "$CLOUD_BAL_FC" -c "${fixed_flags[@]}" "$utility_root/$utility.f"
     done
@@ -161,6 +181,9 @@ for level in O0 O2; do
     "$projection_expected" "$projection_driver_expected"
   run_variant "$level" reverse_phi_assignment_omitted "$reverse_phi_omitted_source" \
     "$reverse_expected" ""
+  for variant in agrid_no_horizontal agrid_omega_sign; do
+    run_variant "$level" "$variant" "$core_source" 'A-grid term oracle failed' "" "$build_root/$variant.f90"
+  done
 done
 
 if [[ "$(sha256sum "$qbal_source" | awk '{print $1}')" != "$qbal_source_hash" ]]; then
@@ -189,11 +212,15 @@ if after != before["files"]:
 rows = []
 for line in Path(results_path).read_text(encoding="utf-8").splitlines():
     level, variant, status, code, log, expected = line.split("\t")
+    working_directory = Path(log).parent.joinpath("run.cwd").read_text().strip()
+    if Path(working_directory) != Path(log).parent.resolve():
+        raise SystemExit("variant did not execute in its scratch directory")
     rows.append({"level": level, "variant": variant, "status": status,
                  "return_code": int(code), "log": log,
+                 "working_directory": working_directory,
                  "expected_rejection": expected or None})
-if len(rows) != 6:
-    raise SystemExit("negative-control receipt count is not six runs")
+if len(rows) != 10:
+    raise SystemExit("negative-control receipt count is not ten runs")
 files = before["files"]
 entry = lambda path: {"path": path, "sha256": files[path]}
 compiler = next(path for path in files if path.endswith("/bin/ifx"))
@@ -208,6 +235,8 @@ mutations = [
      "QBAL forced continuity reduction rejected"),
     ("reverse_phi_assignment_omitted", scratch / "reverse_phi_assignment_omitted.f", 1,
      "reverse A-grid manufactured oracle failed"),
+    ("agrid_no_horizontal", scratch / "agrid_no_horizontal.f90", 1, "A-grid term oracle failed"),
+    ("agrid_omega_sign", scratch / "agrid_omega_sign.f90", 1, "A-grid term oracle failed"),
 ]
 manifest = {
     "schema": 1, "runner": "tests/run_qbal_balcon_tests.sh",

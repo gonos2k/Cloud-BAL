@@ -164,6 +164,24 @@ missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수
 - 최초 비균일 stencil 기대값은 이전 동일 가중 기준이었다. pressure 가중 3/4·1/4에서
   독립 계산한 U=23.25, V=14.375로 교정한 뒤 위 최종 시험을 수행했다.
 
+### PR #14 이후 — A-grid 항별 검출력과 실행 디렉터리
+
+- 기준은 merged PR #14 `fdb5cc2`다. 생산 수치식·acceptance와 기존 PASS_SCOPED는 유지한다.
+- 기존 역변환 사례의 수평항은 상쇄되며 RMS/최대 절댓값만으로 omega 부호 반전을
+  구분하지 못했다. U 단독 `u=a*x`, V 단독 `v=a*y`의 기대 잔차 `a`와,
+  `u=a*x, omega=-0.5*a*(p-p0)`의 기대 잔차 `0.5*a`를 별도로 검사한다.
+  혼합 입력에서 omega 부호를 뒤집으면 `1.5*a`가 되어 허용오차 변경 없이 검출된다.
+- runner의 실행도 `cd "$variant_root"`를 포함한 subshell 안에서 수행한다.
+  실행 지점의 실제 디렉터리를 `run.cwd`에 기록하고 manifest 작성 시 variant scratch와
+  일치하는지 검사한다. 컴파일 위치만으로 실행 위치를 주장하지 않는다.
+- scratch 진단기 소스의 수평항 누락·omega 부호 반전 변이를 기존 projection 생략·PHI
+  대입 누락과 함께 검사한다. 지정된 검사 메시지와 Intel 종료 128을 모두 요구한다.
+- pinned ifx O0/O2 정상 2회 PASS, 네 변이×O0/O2 8회 검출이다. 저장소 밖 빈 디렉터리에서
+  runner를 호출해 10개 실행의 scratch cwd 일치와 호출자 디렉터리 무출력을 확인했다.
+  로컬 근거: `scratch/qbal_balcon.Nsumyf/manifest.json`, `summary.log`, 각 variant의 `test.log`와 `run.cwd`.
+- 이 보강은 진단기 항별 검출력과 실행 위치에 한정한다. 최종 출력 전체 질량 폐합,
+  실자료 writer·native 소비 상태·예보 검증은 OPEN이며 다음 주요 통합 범위로 유지한다.
+
 ### PR #13 이후 — 비영 잔차·역변환 출력 (PASS_SCOPED / 출력 질량 폐합 OPEN)
 
 - 생산 소스·승인 기준은 PR #13 `1f56aa3` 그대로다. 기존 PHI 비영 승인·늦은 실패 원복을 유지한다.

@@ -11,6 +11,7 @@ subroutine test_qbal_reverse_output()
   real :: expected_residual,expected_rms
   integer :: i,j,k
   external :: balstagger, qbal_agrid_residual, report_qbal_agrid_residual
+  external :: test_qbal_agrid_terms
 
   p=[100000.,90000.,80000.,70000.,60000.,50000.]; ps=110000.; dx=dx0; dy=dx0
   do k=1,nz; do j=1,ny; do i=1,nx
@@ -47,8 +48,52 @@ subroutine test_qbal_reverse_output()
   if(abs(rmax-expected_residual)>2.e-8.or.abs(rms-expected_rms)>2.e-8) &
     error stop 'A-grid centered manufactured residual oracle failed'
   call report_qbal_agrid_residual(u,v,om,nx,ny,nz,p,dx,dy)
+  call test_qbal_agrid_terms()
   print *, 'Reverse balstagger manufactured A-grid oracle PASS: ',ur,vr,orr,pr,qr,rmax
 end subroutine test_qbal_reverse_output
+
+subroutine test_qbal_agrid_terms()
+  implicit none
+  integer, parameter :: nx=8,ny=8,nz=6
+  real, parameter :: a=1.e-3,dx0=1.e4,p0=100000.,tol=1.e-7
+  real :: u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz),p(nz),dx(nx,ny),dy(nx,ny)
+  real :: maxres,rms
+  integer :: i,j,k
+  external :: qbal_agrid_residual
+
+  p=[100000.,90000.,80000.,70000.,60000.,50000.]
+  dx=dx0; dy=dx0
+  do k=1,nz; do j=1,ny; do i=1,nx
+    u(i,j,k)=a*dx0*real(i-1)
+  enddo; enddo; enddo
+
+  v=0.; om=0.
+  call qbal_agrid_residual(u,v,om,nx,ny,nz,p,dx,dy,maxres,rms)
+  if(abs(maxres-a)>tol.or.abs(rms-a)>tol) then
+    print *, 'A-grid term oracle U-only:',maxres,rms
+    error stop 'A-grid term oracle failed'
+  endif
+  do k=1,nz; do j=1,ny; do i=1,nx
+    v(i,j,k)=a*dx0*real(j-1)
+  enddo; enddo; enddo
+  u=0.; om=0.
+  call qbal_agrid_residual(u,v,om,nx,ny,nz,p,dx,dy,maxres,rms)
+  if(abs(maxres-a)>tol.or.abs(rms-a)>tol) then
+    print *, 'A-grid term oracle V-only:',maxres,rms
+    error stop 'A-grid term oracle failed'
+  endif
+  do k=1,nz; do j=1,ny; do i=1,nx
+    u(i,j,k)=a*dx0*real(i-1)
+  enddo; enddo
+    om(:,:,k)=-.5*a*(p(k)-p0)
+  enddo
+  v=0.
+  call qbal_agrid_residual(u,v,om,nx,ny,nz,p,dx,dy,maxres,rms)
+  if(abs(maxres-.5*a)>tol.or.abs(rms-.5*a)>tol) then
+    print *, 'A-grid term oracle U+omega:',maxres,rms
+    error stop 'A-grid term oracle failed'
+  endif
+end subroutine test_qbal_agrid_terms
 
 subroutine report_qbal_agrid_residual(lu,lv,lo,nx,ny,nz,p,dx,dy)
   implicit none
