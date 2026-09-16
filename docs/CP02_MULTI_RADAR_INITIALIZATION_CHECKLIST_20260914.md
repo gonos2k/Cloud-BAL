@@ -62,7 +62,7 @@ B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통
 | E03 native 준비 | 마지막 startup 및 첫 solve 전 경계 호출망 조사 중; time level/derived state 연결과 raw·seed 실행 증거는 미완료 | IN_PROGRESS |
 | B06 합성 BALCON 연결 | 실제 forward→전체 BALCON→reverse, 비영 승인과 PHI 비수렴 후 원복; 실자료 main/writer·native 제외 | PASS_SCOPED |
 | CP02 첫 synthetic writer/readback | 승인된 6×6×4 역변환 후보→`write_bal_laps`→`write_laps_data`→NetCDF와 독립 six-field/metadata readback; 보정된 private CDL fixture | PASS_SCOPED |
-| CP02 synthetic writer→실제 LAPSPREP | 실제 reader의 여섯 배열·WPS 다섯 pressure field와 명시적 변환 확인; 시각 보존은 OPEN | PASS_SCOPED |
+| CP02 synthetic writer→실제 LAPSPREP | 실제 reader의 여섯 배열·WPS 다섯 pressure field와 명시적 변환 확인; cold WPS 초 보존 확인, native 시각은 OPEN | PASS_SCOPED |
 | CP02 Lambert 공간 metadata | 실제 static 원점·간격·투영값→WPS 전달과 finite/양수 조건; remapping 제외 | PASS_SCOPED |
 | E03/M07 native 소비 | 새 stage·payload/geometry/실제 U/V 차이·footprint·하부 W·최종 저장 후 질량/경계 검사 | NOT_RUN |
 | E03 native 회귀 | W 단독 영증분/전체 영변경/물리 변경 분리; 유효 비영 전달·geometry/지원 밖/중복/중단 거부; 진단 비침습성 | NOT_RUN |
@@ -290,6 +290,45 @@ Fortran 기준 검증기 최종 실행 근거 (2026-09-16):
 - 재현: `bash tests/run_qbal_lapsprep_tests.sh <PR17_WRITER_SCRATCH_ROOT> <NEW_RUN_ROOT>`.
   `NEW_RUN_ROOT`는 존재하지 않아야 한다. 검증 범위는 pressure-level 배열·WPS 전달 및
   명시된 surface fixture이며, source mask의 native 보존이나 위경도 remap 검증이 아니다.
+
+### PR #20 이후 — 관측 수집 윈도우와 분석장 시각 계약
+
+사용자가 확정한 관측 수집 범위는 분석 기준시각의 **±5분, 경계 포함**이다.
+원본 관측시각을 분석시각으로 덮어쓰거나 분석장의 시각 오차로 해석하지 않는다.
+
+- 레이더 LOS 계약은 `abs(observation_time - analysis_time) <= 300 s`를 요구한다.
+  실제 구현은 int64 끝값에서도 뺄셈 overflow 없이 비교한다. 하나라도 범위 밖이면
+  해당 LOS 묶음을 거부하며, 원본 관측시각과 분석장 field의 valid time을 보존한다.
+  이 변경은 LOS 계약의 수용 범위다. 실제 레이더 수집기·Barnes 계보 연결 완료는 아니다.
+- 분석장 파일끼리는 ±300초를 허용하지 않는다. cold LAPSPREP의 원본 NetCDF 시각을
+  확인하고, WPS header에는 동일한 초를 전달한다. A9 파일명은 검색 키로 사용한다.
+- PR #19/#20의 입력 `03:33:20`을 그대로 두고 WPS `03:33:20`을 요구한다.
+  원본 시각을 분 단위로 내리거나 기대값을 `03:33:00`으로 바꿔 통과시키지 않는다.
+- 이번 시간 전달 범위는 cold WPS다. 관찰용 CDF hook은 native writer가 아니며,
+  다른 출력형식·hotstart·실제 metgrid/native 소비 시각은 별도 검증 대상이다.
+- PR #19 수치 전달과 PR #20 Lambert metadata 전달의 기존 `PASS_SCOPED`는 유지한다.
+  전체 위경도 격자의 자기일관성·remapping·별도 omega/W·최종 consumed 상태와
+  질량·열역학·초기 충격·예보 효과는 계속 OPEN이다.
+
+실행 근거 (2026-09-16):
+
+- LOS canonical 계약은 pinned Intel O0/O2에서 통과했다. ±299/300초 수용,
+  ±301초 및 분석 field 시각 불일치 거부, mixed radar·int64 극값을 검사했다.
+- retained PR #17 writer 파일을 변경하지 않고 fresh scratch에서 실제 LAPSPREP를
+  빌드했다. 기본·대체 geometry × O0/O2 정상 4회 통과, 지정 음성 대조군 총 90회
+  거부했다. 그중 30회는 Python preflight 없이 실제 실행기에 원본 시각 오류를 넣고
+  지정 오류·비영 종료·WPS/CDF hook 출력 부재를 확인한 결과다.
+- 최종 근거: `scratch/pr20_time_20260916/run_time_final/manifest.json`, SHA256
+  `170c3c8027af34e1fed2499ac38d7a4fa78934bd64f7236cf610d97421a601f0`.
+  2,126개 산출물 해시와 입력 해시·수준당 25개 compiler argv를 확인했다.
+- PR #20 실행의 여섯 caller 배열과 이번 배열은 바이트가 같다. 모든 WPS 바이트도
+  header 시각의 `03:33:00 → 03:33:20` 외에는 같다. 수치식·허용오차는 변경하지 않았다.
+- 원본 시각은 단일 record의 NetCDF double 정수초와 선언된 Unix 단위를 요구한다.
+  cold WPS 시각 검사는 field-contract 옵션과 무관하게 수행한다. NaN·fraction·결측·단위 오류,
+  파일끼리의 시각 차이와 A9 검색 분 불일치는 출력 전 거부한다.
+
+아래 PR #19/#20 당시의 20초 손실·정책 선택 대기 기록은 수정 전 이력이다.
+현재 scoped 판정은 위의 LOS 수집 범위와 cold WPS 시각 전달 근거를 따른다.
 
 ### PR #19 이후 — Lambert 공간 metadata 전달 검사 (PASS_SCOPED)
 

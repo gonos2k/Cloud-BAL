@@ -314,6 +314,8 @@ PY
   python3 "$verifier" verify "$variant" "$level_root" "$level_root/wps.out" > "$level_root/verify.json"
   python3 "$verifier" controls "$variant" "$level_root" "$level_root/wps.out" > "$level_root/controls.json"
 
+  python3 "$verifier" time-controls "$level_root" > "$level_root/time_controls.json"
+
   # A second source geometry must pass through the same actual reader/writer.
   local geometry_root="${level_root}-geometry"
   python3 "$verifier" stage-geometry "$variant" "$geometry_root" > "$geometry_root.stamp"
@@ -356,6 +358,7 @@ for level in levels:
         "level": level,
         "alternate_geometry": json.loads((root / (level + "-geometry") / "verify.json").read_text()),
         "verify": json.loads((level_root / "verify.json").read_text()),
+        "time_controls": json.loads((level_root / "time_controls.json").read_text()),
         "controls": json.loads((level_root / "controls.json").read_text()),
         "k300_negative_control": json.loads((level_root / "k300_negative.json").read_text()),
         "compiler_argv": [json.loads(line) for line in
@@ -383,7 +386,7 @@ manifest = {
     "limitations": [
         "synthetic all-valid 6x6x4 BALCON candidate and staged LSX/static/RH",
         "CDF hook is test-only caller observation; no native model startup",
-        "legacy WPS filename has minute precision and loses the candidate's 20-second timestamp",
+        "A9 lookup filename has minute precision; WPS header preserves exact source analysis seconds; other formats/native time unverified",
         "hotstart omega-to-W conversion, masks/terrain, native seed/halo and forecast effects remain open",
     ],
 }

@@ -27,7 +27,7 @@ from compare_baseline import _records
 I4TIME = 2000000000
 VALID_TIME = datetime(1960, 1, 1, tzinfo=timezone.utc) + timedelta(seconds=I4TIME)
 STAMP = VALID_TIME.strftime("%y%j%H%M")
-WPS_TIME = VALID_TIME.replace(second=0).strftime("%Y-%m-%d_%H:%M:%S.0000")
+WPS_TIME = VALID_TIME.strftime("%Y-%m-%d_%H:%M:%S.0000")
 
 
 def sha256(path):
@@ -72,6 +72,10 @@ def stage(variant, root, alternate_geometry=False):
     with netCDF4.Dataset(root / "lapsprd/lsx" / f"{STAMP}.lsx", "w", format="NETCDF3_CLASSIC") as ds:
         for name, size in (("record", 1), ("z", 1), ("y", 6), ("x", 6)):
             ds.createDimension(name, size)
+        for name in ("reftime", "valtime"):
+            variable = ds.createVariable(name, "f8", ("record",))
+            variable.units = "seconds since (1970-1-1 00:00:00.0)"
+            variable[:] = I4TIME - 315619200
         values = {"u": 2., "v": -2., "t": 280., "rh": 50., "tgd": 285.,
                   "ps": 101000., "msl": 101000., "mr": 8., "vv": 0.}
         for name, value in values.items():
@@ -132,13 +136,13 @@ def verify(variant, root, wps_path):
                          "remapping": "NOT_TESTED"},
             "transformations": {"height": "float32 PHI/9.80665", "vapor": "float32 q/(1-q)",
                                 "pressure": "ascending hPa in caller; Pa in WPS", "omega": "pressure slots retain Pa/s; surface slot is LSX VV (m/s); absent from WPS"},
-            "time": {"file": VALID_TIME.isoformat(), "wps": WPS_TIME, "lost_seconds": VALID_TIME.second,
-                     "status": "OPEN: legacy filename/WPS minute precision loses 20 seconds"},
+            "time": {"file": VALID_TIME.isoformat(), "wps": WPS_TIME, "lost_seconds": 0,
+                     "status": "PASS_SCOPED: exact analysis seconds preserved in WPS"},
             "open": ["time-preserving native handoff", "terrain/missing-mask correspondence", "native seed/startup/halo consumed state",
                      "hotstart omega-to-W and thermodynamics", "full mass closure", "forecast effects"],
             "limitations": ["synthetic all-valid 6x6x4; synthetic LSX/static/RH",
                             "test-only CDF hook is not a native writer; no model startup executed",
-                            "mask/unit/time preflight belongs to Python gate, not legacy NCVGT"]}
+                            "field mask/unit preflight belongs to Python gate; analysis time is checked by LAPSPREP"]}
 
 
 def corrupt_wps_qv(path):
@@ -198,7 +202,7 @@ def controls(variant, root, wps_path):
     negative.mkdir(exist_ok=False)
     results = []
     names = ["ht", "t", "mr", "u", "v", "omega"]
-    for index, name in enumerate([*names, "pressure", "wps_time", "wps_qv", *WPS_GEOMETRY_CONTROLS]):
+    for index, name in enumerate([*names, "pressure", "wps_time", "wps_seconds", "wps_qv", *WPS_GEOMETRY_CONTROLS]):
         target = negative / name
         shutil.copytree(root, target, ignore=shutil.ignore_patterns("build"))
         output = target / "control.wps"
@@ -208,10 +212,12 @@ def controls(variant, root, wps_path):
         elif name == "wps_qv":
             corrupt_wps_qv(output)
             expected = "WPS QV 700.0: bits differ"
-        elif name == "wps_time":
+        elif name in ("wps_time", "wps_seconds"):
             raw = output.read_bytes()
             require(WPS_TIME.encode() in raw, "WPS time control target absent")
-            output.write_bytes(raw.replace(WPS_TIME.encode(), WPS_TIME.replace("03:33:", "03:34:").encode()))
+            changed_time = (WPS_TIME.replace("03:33:", "03:34:") if name == "wps_time"
+                            else WPS_TIME.replace(":20.0000", ":00.0000"))
+            output.write_bytes(raw.replace(WPS_TIME.encode(), changed_time.encode()))
             expected = "WPS time mismatch"
         else:
             path = target / "reader_state.bin"
@@ -245,6 +251,68 @@ def controls(variant, root, wps_path):
     return results
 
 
+def time_controls(root):
+    """Run actual LAPSPREP on malformed source times, without Python preflight."""
+    executable = (root / "build/lapsprep.exe").resolve()
+    negative = root.parent / (root.name + "-time-negative")
+    negative.mkdir(exist_ok=False)
+    cases = [("offset_" + str(offset), "lw3", "valtime", offset)
+             for offset in (-301, -300, -1, 1, 300, 301)]
+    cases += [("lookup_minute", "lt1", "valtime", 60),
+              ("surface_time", "lsx", "valtime", 1),
+              ("reference_time", "lw3", "reftime", 1),
+              ("nan", "lw3", "valtime", float("nan")),
+              ("fraction", "lw3", "valtime", .25),
+              ("missing", "lw3", "valtime", None),
+              ("units", "lw3", "valtime", None),
+              ("absent", "lw3", "valtime", None),
+              ("dimension", "lw3", "valtime", None)]
+    results = []
+    for name, extension, variable, offset in cases:
+        target = negative / name
+        shutil.copytree(root, target, ignore=shutil.ignore_patterns("build", "wps.out", "reader_state.bin"))
+        directory = target / "lapsprd" / ("lsx" if extension == "lsx" else "balance/" + extension)
+        with netCDF4.Dataset(directory / f"{STAMP}.{extension}", "r+") as ds:
+            value = ds[variable]
+            if name == "missing":
+                value.missing_value = value[:].flat[0]
+            elif name == "units":
+                value.units = "hours since (1970-1-1 00:00:00.0)"
+            elif name == "dimension":
+                ds.renameDimension("record", "not_record")
+            elif name == "absent":
+                ds.renameVariable(variable, "removed_time")
+            else:
+                value[:] = value[:] + offset
+                if name == "lookup_minute" or name.startswith("offset_") or name == "surface_time":
+                    ds["reftime"][:] = ds["reftime"][:] + offset
+        environment = os.environ.copy()
+        for key in ("CLOUD_BAL_STAGE_MODE", "CLOUD_BAL_STAGE_CONTEXT", "CLOUD_BAL_SHADOW_EXPERIMENT"):
+            environment.pop(key, None)
+        environment.update(LAPS_DATA_ROOT=str(target.resolve()), CLOUD_BAL_WPS_OUTPUT=str((target / "wps.out").resolve()))
+        result = subprocess.run([str(executable), STAMP], cwd=target, env=environment,
+                                capture_output=True, text=True)
+        log = result.stdout + result.stderr
+        (target / "lapsprep.log").write_text(log)
+        if name.startswith("offset_"):
+            expected = "analysis files disagree" if abs(offset) == 1 else "filename minute mismatch"
+        else:
+            expected = {"lookup_minute": "filename minute mismatch",
+                        "surface_time": "analysis files disagree",
+                        "reference_time": "reference/valid mismatch",
+                        "nan": "valtime: nonfinite", "fraction": "valtime: fractional seconds",
+                        "missing": "valtime: missing value", "units": "valtime: invalid units",
+                        "absent": "valtime: missing variable",
+                        "dimension": "valtime: record dimension required"}[name]
+        require(result.returncode != 0 and "LAPSPREP input time: " + expected in log,
+                f"{name}: expected production time rejection ({expected}): {log}")
+        require(not (target / "wps.out").exists() and not (target / "reader_state.bin").exists(),
+                f"{name}: invalid time created output")
+        results.append({"case": name, "status": "REJECTED", "exit_status": result.returncode,
+                        "reason": expected, "output_created": False})
+    return results
+
+
 if __name__ == "__main__":
     command, *arguments = sys.argv[1:]
     paths = list(map(Path, arguments))
@@ -254,6 +322,8 @@ if __name__ == "__main__":
         print(stage(*paths, alternate_geometry=True))
     elif command == "verify":
         print(json.dumps(verify(*paths), indent=2))
+    elif command == "time-controls":
+        print(json.dumps(time_controls(*paths), indent=2))
     elif command == "controls":
         print(json.dumps(controls(*paths), indent=2))
     else:
