@@ -63,7 +63,7 @@ def preflight(variant):
                 "lh3: incomplete inventory")
 
 
-def stage(variant, root):
+def stage(variant, root, alternate_geometry=False):
     preflight(variant)
     root.mkdir(parents=True, exist_ok=False)
     (root / "static").mkdir()
@@ -79,12 +79,17 @@ def stage(variant, root):
     with netCDF4.Dataset(root / "static/static.nest7grid", "w", format="NETCDF3_CLASSIC") as ds:
         for name, size in (("record", 1), ("z", 1), ("y", 6), ("x", 6), ("nav", 1), ("namelen", 132)):
             ds.createDimension(name, size)
-        for name, value in {"Dx": 10000., "Dy": 10000., "LoV": 127., "Latin1": 45., "Latin2": 45.}.items():
+        geometry = {"Dx": 10000., "Dy": 10000., "LoV": 127., "Latin1": 45., "Latin2": 45.}
+        if alternate_geometry:
+            geometry.update(Dx=12000., Dy=14000., LoV=233., Latin1=44., Latin2=46.)
+        for name, value in geometry.items():
             ds.createVariable(name, "f4", ("nav",))[:] = value
         ds.createVariable("grid_type", "S1", ("nav", "namelen"))[:] = np.frombuffer(
             b"secant lambert conformal".ljust(132, b" "), dtype="S1")
-        for name, value in {"lat": np.broadcast_to(np.linspace(45., 45.5, 6)[:, None], (6, 6)),
-                            "lon": np.broadcast_to(np.linspace(127., 127.5, 6), (6, 6)), "avg": 0.}.items():
+        latitude = 45.25 if alternate_geometry else 45.
+        longitude = 233. if alternate_geometry else 127.
+        for name, value in {"lat": np.broadcast_to(np.linspace(latitude, latitude + .5, 6)[:, None], (6, 6)),
+                            "lon": np.broadcast_to(np.linspace(longitude, longitude + .5, 6), (6, 6)), "avg": 0.}.items():
             ds.createVariable(name, "f4", ("record", "z", "y", "x"))[:] = value
     (root / "static/lapsprep.nl").write_text(
         "&lapsprep_nl\n HOTSTART=.false., BALANCE=.true., OUTPUT_FORMAT='wps','cdf',\n"
@@ -108,7 +113,8 @@ def verify(variant, root, wps_path):
     # Numerical equations and all reader/WPS value comparisons live in Fortran.
     oracle = Path(os.environ["QBAL_LAPSPREP_ORACLE"]).resolve()
     result = subprocess.run([str(oracle), str((variant / "candidate.bin").resolve()),
-                             str((root / "reader_state.bin").resolve()), str(wps_path.resolve())],
+                             str((root / "reader_state.bin").resolve()), str(wps_path.resolve()),
+                             str((root / "static/static.nest7grid").resolve())],
                             cwd=root, capture_output=True, text=True)
     if result.returncode:
         reasons = [line.removeprefix("FAIL: ") for line in result.stdout.splitlines()
@@ -120,6 +126,10 @@ def verify(variant, root, wps_path):
             "reader_fields": ["ht", "t", "mr", "u", "v", "omega"],
             "wps_fields": ["UU", "VV", "TT", "HGT", "QV"],
             "numerical_oracle": {"language": "Fortran", "executable_sha256": sha256(oracle)},
+            "geometry": {"source_static_sha256": sha256(root / "static/static.nest7grid"),
+                         "comparison": "source-bound Lambert metadata; float32 bitwise",
+                         "spacing": "static meters / 1000 to WPS kilometers",
+                         "remapping": "NOT_TESTED"},
             "transformations": {"height": "float32 PHI/9.80665", "vapor": "float32 q/(1-q)",
                                 "pressure": "ascending hPa in caller; Pa in WPS", "omega": "pressure slots retain Pa/s; surface slot is LSX VV (m/s); absent from WPS"},
             "time": {"file": VALID_TIME.isoformat(), "wps": WPS_TIME, "lost_seconds": VALID_TIME.second,
@@ -142,10 +152,43 @@ def corrupt_wps_qv(path):
             break
     else:
         raise ValueError("WPS QV control target absent")
+    write_wps_records(path, records)
+
+
+def write_wps_records(path, records):
     with path.open("wb") as stream:
         for endian, payload in records:
             marker = struct.pack(endian + "i", len(payload))
             stream.write(marker + payload + marker)
+
+
+# Byte mutations only; the independent source-bound expectations live in Fortran.
+WPS_GEOMETRY_CONTROLS = {
+    "knownloc": (2, 0, b"UNKNOWN ", "WPS KNOWNLOC mismatch"),
+    **{name: (2, 8 + 4 * i, value, "WPS geometry: bits differ")
+       for i, (name, value) in enumerate(zip(
+           ["la1", "lo1", "dx", "dy", "lov", "latin1", "latin2", "earth_radius"],
+           [46., 128., 100., 100., 128., 46., 46., 6372.]))},
+    "earth_nan": (2, 36, float("nan"), "WPS geometry: nonfinite"),
+    "dx_zero": (2, 16, 0., "WPS geometry: nonpositive scale"),
+    "dy_negative": (2, 20, -10., "WPS geometry: nonpositive scale"),
+    "radius_zero": (2, 36, 0., "WPS geometry: nonpositive scale"),
+    "xfcst": (1, 24, 1., "WPS XFCST: bits differ"),
+    "xfcst_nan": (1, 24, float("nan"), "WPS XFCST: nonfinite"),
+    "last_dx": (-3, 16, 100., "WPS geometry: bits differ"),
+}
+
+
+def corrupt_wps_geometry(path, control):
+    records = list(_records(path))
+    index, offset, value, expected = WPS_GEOMETRY_CONTROLS[control]
+    endian, record = records[index]
+    payload = bytearray(record)
+    data = value if isinstance(value, bytes) else struct.pack(endian + "f", value)
+    payload[offset:offset + len(data)] = data
+    records[index] = (endian, payload)
+    write_wps_records(path, records)
+    return expected
 
 
 def controls(variant, root, wps_path):
@@ -155,12 +198,14 @@ def controls(variant, root, wps_path):
     negative.mkdir(exist_ok=False)
     results = []
     names = ["ht", "t", "mr", "u", "v", "omega"]
-    for index, name in enumerate([*names, "pressure", "wps_time", "wps_qv"]):
+    for index, name in enumerate([*names, "pressure", "wps_time", "wps_qv", *WPS_GEOMETRY_CONTROLS]):
         target = negative / name
         shutil.copytree(root, target, ignore=shutil.ignore_patterns("build"))
         output = target / "control.wps"
         shutil.copyfile(wps_path, output)
-        if name == "wps_qv":
+        if name in WPS_GEOMETRY_CONTROLS:
+            expected = corrupt_wps_geometry(output, name)
+        elif name == "wps_qv":
             corrupt_wps_qv(output)
             expected = "WPS QV 700.0: bits differ"
         elif name == "wps_time":
@@ -205,6 +250,8 @@ if __name__ == "__main__":
     paths = list(map(Path, arguments))
     if command == "stage":
         print(stage(*paths))
+    elif command == "stage-geometry":
+        print(stage(*paths, alternate_geometry=True))
     elif command == "verify":
         print(json.dumps(verify(*paths), indent=2))
     elif command == "controls":

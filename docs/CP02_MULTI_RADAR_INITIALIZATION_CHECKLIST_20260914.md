@@ -63,6 +63,7 @@ B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통
 | B06 합성 BALCON 연결 | 실제 forward→전체 BALCON→reverse, 비영 승인과 PHI 비수렴 후 원복; 실자료 main/writer·native 제외 | PASS_SCOPED |
 | CP02 첫 synthetic writer/readback | 승인된 6×6×4 역변환 후보→`write_bal_laps`→`write_laps_data`→NetCDF와 독립 six-field/metadata readback; 보정된 private CDL fixture | PASS_SCOPED |
 | CP02 synthetic writer→실제 LAPSPREP | 실제 reader의 여섯 배열·WPS 다섯 pressure field와 명시적 변환 확인; 시각 보존은 OPEN | PASS_SCOPED |
+| CP02 Lambert 공간 metadata | 실제 static 원점·간격·투영값→WPS 전달과 finite/양수 조건; remapping 제외 | PASS_SCOPED |
 | E03/M07 native 소비 | 새 stage·payload/geometry/실제 U/V 차이·footprint·하부 W·최종 저장 후 질량/경계 검사 | NOT_RUN |
 | E03 native 회귀 | W 단독 영증분/전체 영변경/물리 변경 분리; 유효 비영 전달·geometry/지원 밖/중복/중단 거부; 진단 비침습성 | NOT_RUN |
 | MR-C0/C1 병렬 조사 | 실제 레이더별 Vr·기하·시각·QC·Barnes 계보 및 남은 연직 정보; 외부 omega target을 필수로 추가하지 않음 | IN_PROGRESS |
@@ -289,6 +290,46 @@ Fortran 기준 검증기 최종 실행 근거 (2026-09-16):
 - 재현: `bash tests/run_qbal_lapsprep_tests.sh <PR17_WRITER_SCRATCH_ROOT> <NEW_RUN_ROOT>`.
   `NEW_RUN_ROOT`는 존재하지 않아야 한다. 검증 범위는 pressure-level 배열·WPS 전달 및
   명시된 surface fixture이며, source mask의 native 보존이나 위경도 remap 검증이 아니다.
+
+### PR #19 이후 — Lambert 공간 metadata 전달 검사 (PASS_SCOPED)
+
+PR #19 `cda5b886ca6710153ffce98bcae895b733a27cbe`의 실제 cold LAPSPREP 수치 전달은
+`PASS_SCOPED`로 유지한다. 외부 독립 검토는 원본 Fortran oracle의 GNU 합성 실행이고,
+저장소의 pinned Intel 실제 LAPSPREP 실행과 구분한다. 그 검토에서 확인한 공간 metadata
+검사 공백을 보강하며, 이전 수치 전달 범위를 다시 OPEN으로 되돌리지 않는다.
+
+- Fortran oracle은 해시가 고정된 실제 `static.nest7grid`를 독립적으로 읽어 WPS와 비교한다.
+  원점은 `lat/lon(1,1)`이며, source의 `Dx/Dy`는 m에서 WPS의 km로 변환한다.
+  longitude 정규화와 `LoV/Latin1/Latin2` 대응을 명시적으로 확인한다.
+- 모든 WPS record에서 geometry finite, `DX/DY/EARTH_RADIUS > 0`, `KNOWNLOC=SWCORNER`,
+  source-bound geometry의 float32 정확 일치, 분석 `XFCST=0`을 요구한다.
+  writer가 선언한 지구 반경은 `6371.229 km`다.
+- 보존된 PR #19 pinned Intel oracle로 `DX`, 원점 위도, 반경 NaN, `KNOWNLOC`, `XFCST`
+  변이를 재실행해 O0/O2 총 10회 모두 과거 `PASS_SCOPED`였음을 직접 재현했다.
+  근거: 이 작업트리의 `scratch/geometry_before/results.json`. 실제 writer 결함의 증거는 아니다.
+- 오류 metadata 16개와 기존 수치/metadata 대조군을 함께 검사한다. 다른 static 원점·격자
+  간격·투영값을 사용하는 정상 실행도 수행해, source 변화가 실제 reader/writer를 통과하고
+  oracle이 기존 fixture의 상수를 정답으로 사용하지 않는지 검사한다.
+- 이 범위는 공간 **metadata 전달**이다. 전체 lat/lon 격자의 Lambert 자기일관성,
+  metgrid remapping, 실제 native 사용 상태의 지리적 정확성을 검증한 것은 아니다.
+- 시각 정책은 별도 선택 대기다. 기존 `03:33:20 → 03:33:00` 20초 손실은 OPEN이며,
+  공간 metadata PASS로 시각 보존이나 native W·WW 전달을 승인하지 않는다.
+
+실행 근거 (2026-09-16):
+
+- pinned Intel O0/O2에서 기본·대체 geometry의 실제 LAPSPREP 실행 4회가 통과했다.
+  각 수준의 기존 12개 + 신규 공간 metadata 16개 변이는 지정 오류로 거부했고,
+  old-k300 중단 2회를 포함해 총 58개 음성 대조군을 확인했다.
+- 소스 기대값은 static에서 독립적으로 읽는다. 대체 사례는 Dx/Dy=12000/14000 m,
+  원점 위도 45.25°, 원점 경도·LoV=233°(WPS -127°), Latin1/2=44/46°다.
+  변경 geometry에서도 여섯 caller 배열은 기본 사례와 바이트가 같다.
+- 최종 근거: 유지 checkout 기준
+  `scratch/pr19_geometry_20260916/run_geometry_validated/manifest.json`.
+  컴파일/link argv는 수준당 25개이며 source와 dependency는 실행 전후 해시로 고정한다.
+  source 결측 표지의 NaN을 float32로 축소하며 발생했던 탐색 실패는 최종 실행에서 제외한다.
+- 생산 LAPSPREP·WPS writer 수치 코드, 허용오차와 기존 시각 동작은 변경하지 않았다.
+
+형식 근거: [WPS 공식 intermediate format](https://www2.mmm.ucar.edu/wrf/users/wrf_users_guide/build/html/wps.html#writing-meteorological-data-to-the-intermediate-format).
 
 ### PR #13 이후 — 비영 잔차·역변환 출력 (PASS_SCOPED / 출력 질량 폐합 OPEN)
 

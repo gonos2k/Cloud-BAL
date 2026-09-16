@@ -166,7 +166,7 @@ PY
   done
   compile_one "$oracle_source" verify_qbal_lapsprep.o
   record_argv "link:verify_qbal_lapsprep.exe" "$CLOUD_BAL_FC" "${flags[@]}" \
-    "$build/verify_qbal_lapsprep.o" \
+    "$build/verify_qbal_lapsprep.o" "${nf_flibs[@]}" \
     -o "$build/verify_qbal_lapsprep.exe"
   link_lapsprep() {
     local main_object=$1 executable=$2
@@ -313,6 +313,19 @@ PY
   export QBAL_LAPSPREP_ORACLE="$level_root/build/verify_qbal_lapsprep.exe"
   python3 "$verifier" verify "$variant" "$level_root" "$level_root/wps.out" > "$level_root/verify.json"
   python3 "$verifier" controls "$variant" "$level_root" "$level_root/wps.out" > "$level_root/controls.json"
+
+  # A second source geometry must pass through the same actual reader/writer.
+  local geometry_root="${level_root}-geometry"
+  python3 "$verifier" stage-geometry "$variant" "$geometry_root" > "$geometry_root.stamp"
+  (
+    cd "$geometry_root"
+    pwd -P > run.cwd
+    env -u CLOUD_BAL_STAGE_MODE -u CLOUD_BAL_STAGE_CONTEXT \
+      -u CLOUD_BAL_SHADOW_EXPERIMENT LAPS_DATA_ROOT="$geometry_root" \
+      CLOUD_BAL_WPS_OUTPUT="$geometry_root/wps.out" \
+      "$level_root/build/lapsprep.exe" "$stamp"
+  ) > "$geometry_root/lapsprep.log" 2>&1
+  python3 "$verifier" verify "$variant" "$geometry_root" "$geometry_root/wps.out" > "$geometry_root/verify.json"
   if ! sha256sum -c --strict "$level_root/input_hashes.sha256" > "$level_root/input_verification_final.log"; then
     cat "$level_root/input_verification_final.log" >&2
     exit 1
@@ -341,6 +354,7 @@ for level in levels:
     level_root = root / level
     results.append({
         "level": level,
+        "alternate_geometry": json.loads((root / (level + "-geometry") / "verify.json").read_text()),
         "verify": json.loads((level_root / "verify.json").read_text()),
         "controls": json.loads((level_root / "controls.json").read_text()),
         "k300_negative_control": json.loads((level_root / "k300_negative.json").read_text()),
