@@ -61,6 +61,7 @@ B06 legacy P0이며 MR-C2/C3 전체 완료를 요구하지 않는다. native 통
 | B06 P1 가변 omega collocation | PR #11 병합 기준 `f55c0b1`; 실제 forward→nonlin에서 pressure-distance weights, top endpoint, zero-weight donor의 산술·유효성 검사 제외, required invalid reject+rollback 검증 | PASS_SCOPED |
 | E03 native 준비 | 마지막 startup 및 첫 solve 전 경계 호출망 조사 중; time level/derived state 연결과 raw·seed 실행 증거는 미완료 | IN_PROGRESS |
 | B06 합성 BALCON 연결 | 실제 forward→전체 BALCON→reverse, 비영 승인과 PHI 비수렴 후 원복; 실자료 main/writer·native 제외 | PASS_SCOPED |
+| CP02 첫 synthetic writer/readback | 승인된 6×6×4 역변환 후보→`write_bal_laps`→`write_laps_data`→NetCDF와 독립 six-field/metadata readback; 보정된 private CDL fixture | PASS_SCOPED |
 | E03/M07 native 소비 | 새 stage·payload/geometry/실제 U/V 차이·footprint·하부 W·최종 저장 후 질량/경계 검사 | NOT_RUN |
 | E03 native 회귀 | W 단독 영증분/전체 영변경/물리 변경 분리; 유효 비영 전달·geometry/지원 밖/중복/중단 거부; 진단 비침습성 | NOT_RUN |
 | MR-C0/C1 병렬 조사 | 실제 레이더별 Vr·기하·시각·QC·Barnes 계보 및 남은 연직 정보; 외부 omega target을 필수로 추가하지 않음 | IN_PROGRESS |
@@ -181,6 +182,44 @@ missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수
   로컬 근거: `scratch/qbal_balcon.Nsumyf/manifest.json`, `summary.log`, 각 variant의 `test.log`와 `run.cwd`.
 - 이 보강은 진단기 항별 검출력과 실행 위치에 한정한다. 최종 출력 전체 질량 폐합,
   실자료 writer·native 소비 상태·예보 검증은 OPEN이며 다음 주요 통합 범위로 유지한다.
+
+### PR #15 이후 — 첫 합성 writer/readback 시험 (PASS_SCOPED)
+
+- 현재 B06 기준은 merged PR #15 `1eebfe1`이다. PR #14의 A-grid 항별 검출력과 실제
+  실행 `cwd` 검사는 해당 범위의 `PASS_SCOPED`로 닫혔고 재개하지 않는다.
+- 완료된 첫 실행은 승인된 6×6×4 국지 BALCON 역변환 메모리 후보를 실제
+  `write_bal_laps` → `write_laps_data` → NetCDF로 연결한 뒤 독립 reader로
+  `U3,V3,T3,HT,SH,OM` 여섯 필드, pressure levels, valid time, units,
+  all-valid mask를 확인한다.
+- `U3,V3,T3,SH,OM`과 shape·pressure-level vector·time·units·mask는 선언된 저장
+  표현에서 원소별 정확 일치로 비교한다. `HT`는 `PHI`를 그대로 비교하지 않고
+  `HT=PHI/g`, `g=9.80665 m s^-2`의 선언된 변환 결과를 선언된 저장 정밀도에서 비교한다.
+  새 threshold나 변환을 임의로 추가하지 않는다.
+- 이 작은 writer 시험에는 full main의 `sfctempadj`·rotation·RH 과학 검증과 native
+  startup/consumed가 포함되지 않는다. native consumed는 다음 별도 단계이며 이 시험의
+  선행조건이 아니다. 최종 출력 전체 질량 폐합과 native/예보는 OPEN이다.
+- pinned ifx O0/O2 정상 BALCON 2회와 기존 변이 8회 검출을 유지했다. 승인된 국지 후보는
+  little-endian float32 stream으로 내보내고 정상 실행 manifest에 SHA256을 묶었다.
+  O0/O2 후보 SHA256은 모두 `a1ef61ef6c8c0a5d0de894c3c064679382148a6e4bc11e4e031c3222a68efe9c`다.
+- 실제 `write_bal_laps`, `write_laps_data`, `rwl_v3.c`, pinned `ncgen`으로 새 scratch에서
+  파일을 생성했다. `get_config/get_directory/get_pres_1d`와 static navigation은 합성 metadata다.
+  RH는 별도 50% fixture이며 수분/열역학 정확해로 해석하지 않는다.
+- pressure는 후보의 `[100000,90000,80000,70000] Pa`에서 파일의
+  `[700,800,900,1000] hPa` 순서로 바뀐다. 이 층 대응과 float32 `PHI/9.80665`를 반영한
+  여섯 필드의 비트 일치, dimensions·units·시각·all-valid mask·층별 inventory를 확인했다.
+- 원본 `lt1.cdl`의 Kelvin 온도 `valid_range=0..100`은 실제 재읽기에서 280 K를 가렸다.
+  기존 `tools/stage_cp02_metadata.py`의 정확한 reviewed transformation을 재사용해
+  private CDL의 stale 온도/RH 범위만 제거하고 변경 내역을 기록했다. 범위를 새로 맞추거나
+  reader의 mask를 끄지 않았다. 원본 CDL·운영 입력은 수정하지 않았다.
+- O0/O2 actual writer/readback 2회 PASS. U 값 변경, inventory 0, 시각 변경, stale 온도
+  범위 재삽입의 네 파일 변이×O0/O2 8회를 지정된 재읽기 오류로 검출했다.
+- 로컬 근거: `scratch/qbal_balcon.r6EmUU/manifest.json`,
+  `scratch/qbal_writer.nhlRP8/manifest.json`, 각 최적화의 `writer.log`, `readback.json`,
+  `negative_controls.json`, `metadata_corrections.json`. 소스/도구 입력 해시는 실행 전후 대조했다.
+- 재실행: `CLOUD_BAL_KEEP_TEST_OUTPUT=1 bash tests/run_qbal_balcon_tests.sh` 후 출력된
+  scratch 경로를 `bash tests/run_qbal_writer_tests.sh <BALCON_SCRATCH_ROOT>`에 전달한다.
+  전자는 승인 후보를 생성하고 후자는 실제 writer를 새 scratch cwd에서 컴파일·실행한다.
+  atomic publication 및 full main 전처리·native 소비는 이번 시험 범위가 아니다.
 
 ### PR #13 이후 — 비영 잔차·역변환 출력 (PASS_SCOPED / 출력 질량 폐합 OPEN)
 

@@ -166,6 +166,19 @@ state-dependent 재구성은 CP06/07에서 확인한다.
 metgrid/real 종료 0, 12 UTC 초기장과 12→15 UTC 경계자료 생성을 기록한다.
 이는 물리 omega 구현이나 실제 결합 후보 전달의 완료 근거가 아니다.
 
+2026-09-16 PR #15 후속의 첫 실행은 기존 `PASS_SCOPED`로 닫힌 A-grid 항별·실행 `cwd`
+검사와 분리한다. 승인된 6×6×4 국지 BALCON 역변환 메모리 후보를
+`write_bal_laps` → `write_laps_data` → NetCDF로 연결하고, 독립 reader로
+`U3,V3,T3,HT,SH,OM` 여섯 필드와 pressure levels, valid time, units, all-valid mask를
+확인한다. `U3,V3,T3,SH,OM` 및 선언된 shape/level/time/units/mask는 저장 표현에서
+원소별 정확 일치로 비교하고, `HT`는 `HT=PHI/9.80665`의 선언된 변환 결과만 비교한다.
+새 threshold는 만들지 않는다. 이 작은 writer 시험은 full main의
+`sfctempadj`·rotation·RH 과학 검증과 native startup/consumed를 포함하지 않으며,
+native consumed는 다음 별도 단계다. 이 합성 writer/readback은 pinned ifx O0/O2에서
+`PASS_SCOPED`다. 기존 CP02 로직으로 stale 온도/RH `valid_range`를 보정한 private CDL과
+제조한 격자 metadata를 사용했다. 원본 운영 CDL·원자적 게시·native는 미검증이며 상세
+실행·음성시험 근거는 MR 체크리스트에서 추적한다.
+
 남은 작업 순서와 책임 범위:
 
 추가 과제 (2026-09-14): [다중 레이더 연직풍·국지 균형초기화 계획](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
@@ -495,7 +508,8 @@ CP01은 **COMPLETE / PASS (격리 연구 계약·소규모 시험 범위)**로 �
 기존 RELEASE/NO-GO의 통합·게시·과학 승격 종료조건은 변경하지 않았다.
 다음 통합 목표는 FG1, 최종 개발 인수 목표는 FG3이며 현재 PROMOTION_BLOCKED를 해제하지 않는다.
 
-현재 B06 기준은 merged PR #13 `1f56aa3`이다. PR #11의 실제
+현재 B06 기준은 merged PR #15 `1eebfe1`이다. PR #14의 A-grid 항별 검출력과 실제
+실행 `cwd` 검사는 해당 범위에서 `PASS_SCOPED`로 닫혔다. PR #11의 실제
 `balstagger→nonlin` pressure 연결, active terrain donor 유효성, OM/OMO 원복 검출력
 세 제한 범위는 `PASS_SCOPED`를 유지한다. 가변 omega의 내부 pressure-distance 보간,
 상단 endpoint, zero-weight donor 제외도 PR #12의 forward/helper/caller 시험 범위에서

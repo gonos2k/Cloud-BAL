@@ -157,6 +157,27 @@ U/V/omega는 0이므로 기록된 continuity는 **역 stagger 전 잔차 유지*
 - 입력 경계 유량과 승인 후 경계 유량을 구분한다. solver가 조정하는 경계에 임의의
   불변 조건을 추가하지 않으며, 합성 내부 재구성 검사만으로 전체 출력 질량 폐합을 승인하지 않는다.
 
+### PR #15 이후 — 첫 합성 BALCON writer/readback 시험 (PASS_SCOPED)
+
+현재 B06 기준은 merged PR #15 `1eebfe1`이다. PR #14의 A-grid 항별 검출력과 실제
+실행 `cwd` 검사는 해당 범위에서 `PASS_SCOPED`로 종료했으며 다시 열지 않는다. 기존
+P0 pressure·omega·terrain·원복 및 합성 BALCON 제한 범위도 같은 상태로 유지한다.
+
+완료된 첫 실행은 승인된 6×6×4 국지 BALCON 역변환 메모리 후보를
+`write_bal_laps` → `write_laps_data` → 실제 NetCDF로 보내고, 독립 파일 reader로
+`U3,V3,T3,HT,SH,OM` 여섯 필드와 pressure-level vector, valid time, units,
+all-valid mask를 확인하는 작은 writer 시험이다. `U3,V3,T3,SH,OM`과 shape·level·time·
+units·mask는 선언된 저장 표현에서 원소별 정확 일치로 비교한다. `HT`는 원본 `PHI`와
+같다고 보지 않고 선언한 `HT=PHI/g`, `g=9.80665 m s^-2` 변환 결과를 선언한 저장
+정밀도에서 비교한다. 새 허용오차나 다른 변환을 임의로 만들지 않는다.
+
+이 시험은 full main의 `sfctempadj`·rotation·RH 과학 검증과 native startup/consumed
+검사를 실행하지 않는다. native consumed는 이 파일 시험 다음의 별도 R4/MR-C4 단계이며,
+그 완료를 작은 writer 시험의 선행조건으로 두지 않는다. pinned ifx O0/O2의 실제 writer와
+독립 재읽기는 아래 체크리스트 근거에 따라 `PASS_SCOPED`다. 기존 CP02 메타데이터 보정
+로직으로 오래된 온도/RH `valid_range`를 제거한 private CDL fixture를 사용하며, 원본
+CDL·운영 설정·게시 경로를 변경하거나 검증한 것은 아니다.
+
 ### Legacy nonlin 수정 묶음
 
 PR #10에서 교정한 국소 계약은 배열이 해당 pressure에 놓인다는 전제다.
