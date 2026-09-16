@@ -671,3 +671,24 @@ R2 범주별 기록은 다음처럼 정의한다.
 현재 재개 위치는 **MR-C0의 레이더별 입력 연결과 MR-C2/MR-C3의 방정식·기준 확정**이다.
 MR-C1은 아직 실행하지 않은 선행 단계이며, 방정식의 병렬 검토가 이를 통과시킨 것은 아니다.
 관측자료는 이미 사용 중이며, 새 연직풍 경로에 필요한 정보의 보존·전달 범위를 확인한다.
+
+### PR21 이후 실제 metgrid reader 연결
+
+PR21의 LOS ±300초 및 명시적 cold WPS 초 보존은 검토 결과에 따라
+`PASS_SCOPED`로 유지한다. 원본 `2023-05-18_03:33:20` WPS 네 파일을
+변경하지 않고, 고정한 공식 WPS v4.6.0의 실제 `read_met_module`에 전달하는
+독립 실행기를 추가했다. source/빌드/검사 범위는
+[metgrid reader 전달 기록](PR22_METGRID_READER_HANDOFF_20260916.md)을 따른다.
+전체 metgrid/real 또는 설치된 KLFS 실행파일의 동등성 검증과 구분한다.
+
+전체 metgrid는 `interval_seconds`에 따라 검색명·출력 시각을 줄이므로,
+다음 full-domain 실행에서 실제 `met_em`·`wrfinput`의 초를 확인해야 한다.
+기존 wind 수집기의 900초 tolerance와 Barnes 유도 U/V의 분석시각 부여는
+canonical LOS ±300초 계약과 별도 경로다. 실제 관측 원시시각·수신시각·Barnes
+기여 계보, 준비 완료 native seed·omega/W·startup/halo 이후 consumed 검사는
+계속 OPEN이다. 과거 2026 실제 native 실행과 현재 2023 합성 후보를 혼합하지 않는다.
+
+고정 Intel O0/O2에서 실제 reader 정상 8회(각 33레코드), 지정 오류 거부 14회와
+78개 아티팩트 해시 재검사를 통과했다. 이번 `PASS_SCOPED`는 little endian으로
+명시한 공식 WPS reader의 보간 전 반환 상태다. 설치된 KLFS full metgrid/real의
+시각·byte order·remapping 또는 native 소비 완료로 확대하지 않는다.
