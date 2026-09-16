@@ -15,9 +15,22 @@ program test_qbal_balcon
   real, parameter :: nonzero_wind_minimum=1.e-6
   real, parameter :: synthetic_moisture_minimum=0.
   real, parameter :: synthetic_moisture_maximum=.05
-  integer :: k,status
+  integer :: k,status,nargs,arg_length,arg_status
+  character(len=:), allocatable :: output_path
+  logical :: export_requested
   external :: balcon,balstagger,continuity_metrics
   external :: report_qbal_agrid_residual,test_qbal_reverse_output
+
+  nargs=command_argument_count()
+  if(nargs>1) error stop 'BALCON export accepts at most one filename'
+  export_requested=nargs==1
+  if(export_requested)then
+    call get_command_argument(1,length=arg_length,status=arg_status)
+    if(arg_status/=0.or.arg_length==0) error stop 'BALCON export filename unavailable'
+    allocate(character(len=arg_length) :: output_path)
+    call get_command_argument(1,value=output_path,status=arg_status)
+    if(arg_status/=0.or.len_trim(output_path)==0) error stop 'BALCON export filename is blank'
+  endif
 
   p=[100000.,90000.,80000.,70000.]
   dp=10000.; dx=10000.; dy=10000.; lat=45.; ps=110000.
@@ -76,6 +89,7 @@ program test_qbal_balcon
      any(.not.ieee_is_finite(lp)).or.any(.not.ieee_is_finite(lt)).or. &
      any(.not.ieee_is_finite(lo))) error stop 'BALCON localized reverse nonfinite'
   call check_moisture(lh,'BALCON localized reverse moisture invalid')
+  if(export_requested) call export_reverse_output(output_path)
   call report_qbal_agrid_residual(lu,lv,lo,nx,ny,nz,p,dx,dy)
   print *, 'Full BALCON accepted localized residual reduction: ',before_rms,after_rms
 
@@ -145,6 +159,20 @@ contains
     character(len=*), intent(in) :: message
     if(any(.not.ieee_is_finite(field)).or.any(field<synthetic_moisture_minimum).or. &
        any(field>synthetic_moisture_maximum)) error stop message
+  end subroutine
+  subroutine export_reverse_output(filename)
+    character(len=*), intent(in) :: filename
+    integer :: unit,ios
+    character(len=256) :: message
+
+    ! Stream snapshot: int32 nx,ny,nz; default-real32 p, lu, lv, lp, lt, lh, lo.
+    open(newunit=unit,file=filename,form='unformatted',access='stream',status='new', &
+      action='write',convert='little_endian',iostat=ios,iomsg=message)
+    if(ios/=0) error stop 'BALCON reverse output open failed'
+    write(unit,iostat=ios,iomsg=message) nx,ny,nz,p,lu,lv,lp,lt,lh,lo
+    if(ios/=0) error stop 'BALCON reverse output write failed'
+    close(unit,iostat=ios,iomsg=message)
+    if(ios/=0) error stop 'BALCON reverse output close failed'
   end subroutine
   subroutine report_accepted_boundary_changes(u,v,om,uo_ref,vo_ref,om_ref,label)
     ! The final LEIB_SUB projection may adjust legacy boundary faces. Report

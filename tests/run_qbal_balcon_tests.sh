@@ -128,7 +128,11 @@ run_variant() {
   if (
     cd "$variant_root" || exit
     pwd -P > run.cwd || exit
-    "$executable"
+    if [[ $variant == normal ]]; then
+      "$executable" approved_candidate.bin
+    else
+      "$executable"
+    fi
   ) > "$log_path" 2>&1; then return_code=0; else return_code=$?; fi
   if [[ -n "$expected" ]]; then
     if ((return_code != 128)) || ! rg -F -q -- "$expected" "$log_path"; then
@@ -219,6 +223,9 @@ for line in Path(results_path).read_text(encoding="utf-8").splitlines():
                  "return_code": int(code), "log": log,
                  "working_directory": working_directory,
                  "expected_rejection": expected or None})
+    if variant == "normal":
+        candidate = Path(log).parent / "approved_candidate.bin"
+        rows[-1]["approved_candidate"] = {"path": str(candidate), "sha256": digest(candidate)}
 if len(rows) != 10:
     raise SystemExit("negative-control receipt count is not ten runs")
 files = before["files"]
