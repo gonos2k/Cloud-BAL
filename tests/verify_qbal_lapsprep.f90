@@ -1,6 +1,9 @@
 PROGRAM verify_qbal_lapsprep
-  USE, INTRINSIC :: iso_fortran_env, ONLY: int32, int64
+  USE, INTRINSIC :: iso_fortran_env, ONLY: int32, int64, real64
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
+  USE netcdf, ONLY: nf90_open,nf90_close,nf90_nowrite,nf90_noerr,nf90_float, &
+    nf90_inq_varid,nf90_inquire_variable,nf90_get_var,nf90_get_att,nf90_enotatt, &
+    nf90_inq_dimid,nf90_inquire_dimension
   IMPLICIT NONE
   INTEGER, PARAMETER :: nx=6, ny=6, nz=4, nout=nz+1
   INTEGER(int64), PARAMETER :: candidate_size=12_int64+4_int64*(nz+6*nx*ny*nz)
@@ -13,12 +16,15 @@ PROGRAM verify_qbal_lapsprep
   REAL :: reader_u(nx,ny,nout),reader_v(nx,ny,nout),reader_omega(nx,ny,nout)
   REAL :: expected_ht(nx,ny,nout),expected_t(nx,ny,nout),expected_mr(nx,ny,nout)
   REAL :: expected_u(nx,ny,nout),expected_v(nx,ny,nout),expected_omega(nx,ny,nout)
-  CHARACTER(4096) :: candidate_file,reader_file,wps_file
+  REAL :: expected_geometry(8)
+  CHARACTER(4096) :: candidate_file,reader_file,wps_file,static_file
   INTEGER :: k,source
-  IF (COMMAND_ARGUMENT_COUNT() /= 3) CALL fail('usage: candidate.bin reader_state.bin wps.out')
+  IF (COMMAND_ARGUMENT_COUNT() /= 4) CALL fail('usage: candidate.bin reader_state.bin wps.out static.nest7grid')
   CALL GET_COMMAND_ARGUMENT(1,candidate_file)
   CALL GET_COMMAND_ARGUMENT(2,reader_file)
   CALL GET_COMMAND_ARGUMENT(3,wps_file)
+  CALL GET_COMMAND_ARGUMENT(4,static_file)
+  CALL read_source_geometry(TRIM(static_file),expected_geometry)
   CALL read_candidate(TRIM(candidate_file),candidate_p,u,v,phi,temperature,q,omega)
   expected_ht=0.0; expected_t=0.0; expected_mr=0.0
   expected_u=0.0; expected_v=0.0; expected_omega=0.0
@@ -67,6 +73,60 @@ CONTAINS
       IF (.NOT.same_bits(actual(i),expected(i))) CALL fail(TRIM(label)//': bits differ')
     END DO
   END SUBROUTINE check_vector
+  SUBROUTINE read_source_geometry(name,geometry)
+    CHARACTER(*), INTENT(IN) :: name
+    REAL, INTENT(OUT) :: geometry(8)
+    CHARACTER(6), PARAMETER :: variables(7)=[character(6) :: 'lat','lon','Dx','Dy','LoV','Latin1','Latin2']
+    CHARACTER(13), PARAMETER :: missing_attributes(2)=[character(13) :: '_FillValue','missing_value']
+    INTEGER :: ncid,vid,status,xtype,rank,i,j,dimid,length
+    INTEGER :: start(4)
+    REAL(real64) :: missing
+    CHARACTER(132) :: projection
+
+    status=nf90_open(name,nf90_nowrite,ncid)
+    IF (status /= nf90_noerr) CALL fail('source static open failed')
+    status=nf90_inq_dimid(ncid,'x',dimid)
+    IF (status == nf90_noerr) status=nf90_inquire_dimension(ncid,dimid,len=length)
+    IF (status /= nf90_noerr) CALL fail('source static x dimension missing')
+    IF (length /= nx) CALL fail('source static x dimension mismatch')
+    status=nf90_inq_dimid(ncid,'y',dimid)
+    IF (status == nf90_noerr) status=nf90_inquire_dimension(ncid,dimid,len=length)
+    IF (status /= nf90_noerr) CALL fail('source static y dimension missing')
+    IF (length /= ny) CALL fail('source static y dimension mismatch')
+    status=nf90_inq_varid(ncid,'grid_type',vid)
+    IF (status == nf90_noerr) status=nf90_get_var(ncid,vid,projection)
+    IF (status /= nf90_noerr) CALL fail('source static projection read failed')
+    IF (TRIM(projection) /= 'secant lambert conformal') CALL fail('source static projection unsupported')
+    start=1
+    DO i=1,SIZE(variables)
+      status=nf90_inq_varid(ncid,TRIM(variables(i)),vid)
+      IF (status == nf90_noerr) status=nf90_inquire_variable(ncid,vid,xtype=xtype,ndims=rank)
+      IF (status /= nf90_noerr) CALL fail('source static variable missing: '//TRIM(variables(i)))
+      IF (xtype /= nf90_float .OR. rank < 1 .OR. rank > 4) CALL fail('source static layout mismatch')
+      status=nf90_get_var(ncid,vid,geometry(i),start=start(:rank))
+      IF (status /= nf90_noerr) CALL fail('source static value read failed')
+      IF (.NOT.ieee_is_finite(geometry(i))) CALL fail('source geometry: nonfinite')
+      DO j=1,SIZE(missing_attributes)
+        status=nf90_get_att(ncid,vid,TRIM(missing_attributes(j)),missing)
+        IF (status == nf90_noerr) THEN
+          IF (ieee_is_finite(missing)) THEN
+            IF (REAL(geometry(i),real64) == missing) CALL fail('source geometry: missing value')
+          END IF
+        ELSE IF (status /= nf90_enotatt) THEN
+          CALL fail('source geometry: invalid missing attribute')
+        END IF
+      END DO
+    END DO
+    status=nf90_close(ncid)
+    IF (status /= nf90_noerr) CALL fail('source static close failed')
+    ! Static navigation is in degrees and meters; WPS spacing/radius is in km.
+    IF (geometry(1) > 270.) geometry(1)=geometry(1)-360.
+    IF (geometry(2) > 180.) geometry(2)=geometry(2)-360.
+    geometry(3:4)=geometry(3:4)/1000.
+    IF (geometry(5) > 180.) geometry(5)=geometry(5)-360.
+    geometry(8)=6371.229  ! Declared Earth radius in the maintained WPS writer.
+    IF (ANY(geometry(3:4) <= 0.)) CALL fail('source geometry: nonpositive scale')
+  END SUBROUTINE read_source_geometry
   SUBROUTINE read_candidate(name,p,u,v,phi,temp,moisture,om)
     CHARACTER(*), INTENT(IN) :: name
     REAL, INTENT(OUT) :: p(:),u(:,:,:),v(:,:,:),phi(:,:,:),temp(:,:,:),moisture(:,:,:),om(:,:,:)
@@ -169,11 +229,17 @@ CONTAINS
       READ(unit,IOSTAT=ios) hdate,xfcst,source_name,field,units,description,level, &
         nx_file,ny_file,llflag
       IF (ios /= 0) CALL fail('WPS metadata read failed')
+      CALL check_vector([xfcst],[0.],'WPS XFCST')
       IF (hdate /= expected_time) CALL fail('WPS time mismatch')
       IF (nx_file /= nx .OR. ny_file /= ny) CALL fail('WPS shape mismatch')
       IF (llflag /= 3) CALL fail('WPS projection mismatch')
       READ(unit,IOSTAT=ios) knownloc,la1,lo1,dx,dy,lov,latin1,latin2,earth_radius
       IF (ios /= 0) CALL fail('WPS projection read failed')
+      IF (knownloc /= 'SWCORNER') CALL fail('WPS KNOWNLOC mismatch')
+      IF (.NOT.ALL(ieee_is_finite([la1,lo1,dx,dy,lov,latin1,latin2,earth_radius]))) &
+        CALL fail('WPS geometry: nonfinite')
+      IF (dx <= 0. .OR. dy <= 0. .OR. earth_radius <= 0.) CALL fail('WPS geometry: nonpositive scale')
+      CALL check_vector([la1,lo1,dx,dy,lov,latin1,latin2,earth_radius],expected_geometry,'WPS geometry')
       READ(unit,IOSTAT=ios) wind_raw
       IF (ios /= 0) CALL fail('WPS wind metadata read failed')
       IF (wind_raw /= -1 .AND. wind_raw /= 0 .AND. wind_raw /= 1) &
