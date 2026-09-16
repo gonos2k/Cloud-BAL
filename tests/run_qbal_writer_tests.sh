@@ -21,6 +21,13 @@ sources=("$repo_root/src/balance/writeballaps.f" "$lib/writelapsdata.f"
          "$lib/readlapsdata.f" "$lib/upcase.f" "$lib/downcase.f"
          "$lib/make_fnam_lp.f" "$lib/cv_i4tim_asc_lp.f"
          "$repo_root/tests/qbal_writer_metadata.f")
+fixed_o2=()
+skip_next=0
+for flag in "${CLOUD_BAL_FIXED_72_FLAGS[@]}"; do
+  if ((skip_next)); then skip_next=0; continue; fi
+  if [[ "$flag" == -check ]]; then skip_next=1; continue; fi
+  fixed_o2+=("${flag/-O0/-O2}")
+done
 sha256sum "${sources[@]}" "$lib/rwl_v3.c" "$lib/fort2c_str.c" "$lib/get_dir_length.f" \
   "$nc_root/bin/nc-config" "$repo_root/tests/test_qbal_writer.f90" \
   "$repo_root/tests/verify_qbal_writer.py" "$repo_root/tests/run_qbal_writer_tests.sh" \
@@ -85,23 +92,39 @@ PY
     fixed_flags=("${CLOUD_BAL_FIXED_72_FLAGS[@]}")
     free_flags=("${CLOUD_BAL_FREE_FLAGS[@]}")
     if [[ $level == O2 ]]; then
-      fixed_flags=("${fixed_flags[@]/-O0/-O2}")
+      fixed_flags=("${fixed_o2[@]}")
       free_flags=("${CLOUD_BAL_REPRO_FLAGS[@]}")
     fi
+    : > compiler_argv.jsonl
+    record_argv() {
+      local source=$1
+      shift
+      python3 - "$source" "$@" >> compiler_argv.jsonl <<'PY'
+import json
+import sys
+
+source, *argv = sys.argv[1:]
+print(json.dumps({'source': source, 'argv': argv}))
+PY
+      "$@"
+    }
     for source in "${sources[@]}"; do
-      "$CLOUD_BAL_FC" -c "${fixed_flags[@]}" -ffunction-sections -fdata-sections \
+      record_argv "$source" "$CLOUD_BAL_FC" -c "${fixed_flags[@]}" \
+        -ffunction-sections -fdata-sections \
         -I "$upstream/src/include" "$source"
     done
     # Extract the unchanged string helper, avoiding unrelated file-discovery code.
     awk '/^[[:space:]]*subroutine s_len\(/ {capture=1} capture {print} \
       capture && /^[[:space:]]*end[[:space:]]*$/ {exit}' "$lib/get_dir_length.f" > s_len.f
-    "$CLOUD_BAL_FC" -c "${fixed_flags[@]}" s_len.f
+    record_argv s_len.f "$CLOUD_BAL_FC" -c "${fixed_flags[@]}" s_len.f
     for source in rwl_v3 fort2c_str; do
-      "$cc" -c "-$level" -std=gnu89 -ffunction-sections -fdata-sections \
+      record_argv "$lib/$source.c" "$cc" -c "-$level" -std=gnu89 \
+        -ffunction-sections -fdata-sections \
         -DFORTRANUNDERSCORE -DLITTLE -DSWAPBYTE -I "$upstream/src/include" \
         -I "$nc_root/include" "$lib/$source.c"
     done
-    "$CLOUD_BAL_FC" "${free_flags[@]}" "$repo_root/tests/test_qbal_writer.f90" \
+    record_argv "$repo_root/tests/test_qbal_writer.f90" "$CLOUD_BAL_FC" \
+      "${free_flags[@]}" "$repo_root/tests/test_qbal_writer.f90" \
       ./*.o -Wl,--gc-sections "${nc_libs[@]}" -o test_qbal_writer
     pwd -P > run.cwd
     ./test_qbal_writer > writer.log 2>&1
@@ -110,6 +133,7 @@ PY
 import json, shutil, sys
 from pathlib import Path
 import netCDF4
+import numpy as np
 sys.path.insert(0, sys.argv[1])
 from verify_qbal_writer import verify
 cases = [
@@ -117,6 +141,9 @@ cases = [
     ('inventory', 'lw3', 'u3_fcinv', 'u3: incomplete level inventory'),
     ('time', 'lw3', 'valtime', 'lw3: valtime mismatch'),
     ('stale_temperature_range', 'lt1', 't3', 't3: unexpected missing mask'),
+    ('missing_level', 'lw3', 'level', 'lw3: level: unexpected missing mask'),
+    ('missing_reftime', 'lw3', 'reftime', 'lw3: reftime: unexpected missing mask'),
+    ('missing_valtime', 'lw3', 'valtime', 'lw3: valtime: unexpected missing mask'),
 ]
 results = []
 for name, extension, variable, expected in cases:
@@ -125,9 +152,18 @@ for name, extension, variable, expected in cases:
     path = next((target/'balance'/extension).glob('*.'+extension))
     with netCDF4.Dataset(path, 'r+') as ds:
         var = ds[variable]
+        raw_values = np.ascontiguousarray(np.ma.getdata(var[:])).copy()
         if name == 'field': var[0,0,0,0] += 1.
         elif name == 'inventory': var[0,0] = 0
         elif name == 'time': var[0] += 1.
+        elif name.startswith('missing_'):
+            var.setncattr('missing_value', raw_values.flat[0].item())
+            ds.sync()
+            # Inspect the raw storage only to prove this metadata edit changed no data.
+            ds.set_auto_mask(False)
+            raw_after = np.ascontiguousarray(var[:])
+            if raw_after.dtype != raw_values.dtype or raw_after.tobytes() != raw_values.tobytes():
+                raise SystemExit(f'{name}: metadata mutation changed raw values')
         else: var.setncattr('valid_range', [0., 100.])
     try:
         verify(Path('candidate.bin'), target, 2000000000)
@@ -154,7 +190,9 @@ for level in ['O0', 'O2']:
         raise SystemExit('writer did not execute in its scratch directory')
     results.append({'level': level, 'readback': json.loads((variant/'readback.json').read_text()),
                     'negative_controls': json.loads((variant/'negative_controls.json').read_text()),
-                    'metadata_corrections': json.loads((variant/'metadata_corrections.json').read_text())})
+                    'metadata_corrections': json.loads((variant/'metadata_corrections.json').read_text()),
+                    'compiler_argv': [json.loads(line) for line in
+                                      (variant/'compiler_argv.jsonl').read_text().splitlines()]})
 artifacts = {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
              for path in root.rglob('*') if path.is_file() and path.suffix not in ['.o']}
 manifest = {'status': 'PASS_SCOPED', 'compiler': sys.argv[3], 'balcon_manifest': sys.argv[2],

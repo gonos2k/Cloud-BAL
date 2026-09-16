@@ -211,8 +211,9 @@ missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수
   기존 `tools/stage_cp02_metadata.py`의 정확한 reviewed transformation을 재사용해
   private CDL의 stale 온도/RH 범위만 제거하고 변경 내역을 기록했다. 범위를 새로 맞추거나
   reader의 mask를 끄지 않았다. 원본 CDL·운영 입력은 수정하지 않았다.
-- O0/O2 actual writer/readback 2회 PASS. U 값 변경, inventory 0, 시각 변경, stale 온도
-  범위 재삽입의 네 파일 변이×O0/O2 8회를 지정된 재읽기 오류로 검출했다.
+- 최초 O0/O2 명명 디렉터리에서 actual writer/readback 2회 PASS와 네 파일 변이×2회
+  검출을 기록했다. PR #16 추가 검토에서 fixed-form O2에 `-check all`이 남아
+  실제 O2 근거가 제한됨을 확인했다. 해당 근거는 아래 수정 후 재실행으로 대체한다.
 - 로컬 근거: `scratch/qbal_balcon.r6EmUU/manifest.json`,
   `scratch/qbal_writer.nhlRP8/manifest.json`, 각 최적화의 `writer.log`, `readback.json`,
   `negative_controls.json`, `metadata_corrections.json`. 소스/도구 입력 해시는 실행 전후 대조했다.
@@ -220,6 +221,28 @@ missing의 산술·유효성 검사 제외도 포함한다. 고차 curvature/수
   scratch 경로를 `bash tests/run_qbal_writer_tests.sh <BALCON_SCRATCH_ROOT>`에 전달한다.
   전자는 승인 후보를 생성하고 후자는 실제 writer를 새 scratch cwd에서 컴파일·실행한다.
   atomic publication 및 full main 전처리·native 소비는 이번 시험 범위가 아니다.
+
+### PR #16 추가 검토 — 실제 O2와 좌표 유효성 보강 (PASS_SCOPED)
+
+- 기준은 merged PR #16 `664dedc`이다. writer fixed-form O2에서 `-check`와 인자
+  `all`을 함께 제거했다. O0 runtime checks와 O0/O2 strict floating-point 계약은 유지한다.
+  manifest의 각 level `compiler_argv`는 fixed-form 9개, C 2개, free-form driver 1개의
+  실제 컴파일 인자 배열을 기록한다. O2 ifx 인자에 `-check`가 없음을 확인했다.
+- `level`, `reftime`, `valtime`은 mask 없음과 finite를 먼저 확인한 뒤 값을 비교한다.
+  NetCDF `missing_value` 속성만 추가하는 세 변이는 원시 숫자 바이트 불변도 확인한다.
+  실제 NetCDF4 전체 `verify()`에서 기존 reader는 6회 모두 통과시켰지만 수정 reader는
+  O0/O2 각각 세 변이를 지정된 mask 오류로 거부했다.
+- 새 scratch에서 pinned ifx/icx로 O0/O2 actual writer/readback 2회와 여섯 필드의
+  float32 bitwise 일치를 확인했다. 기존 4종+신규 3종 파일 변이×O0/O2 14회 검출,
+  BALCON 정상 2회와 기존 변이 8회 검출, 입력 해시 전후 검증도 통과했다.
+  reader는 netCDF4 1.7.4 / NumPy 1.26.4다.
+- 보존된 로컬 근거(유지 checkout `Cloud-BAL/` 기준):
+  `scratch/pr16_validation_20260916/Cloud-BAL/scratch/qbal_balcon.u9xjgE/manifest.json`,
+  `scratch/pr16_validation_20260916/Cloud-BAL/scratch/qbal_writer.TKPjE9/manifest.json`,
+  같은 writer scratch의 `coordinate_regression.json`과 각 level `compiler_argv.jsonl`.
+- 생산 BALCON 수치식·acceptance·허용오차 변경은 없다. 보정된 private CDL과 합성 RH의
+  all-valid 전달시험 범위이며 full main, terrain/missing-mask 정합, native consumed,
+  원자적 게시, 전체 질량·열역학·예보 검증은 기존 OPEN을 유지한다.
 
 ### PR #13 이후 — 비영 잔차·역변환 출력 (PASS_SCOPED / 출력 질량 폐합 OPEN)
 
