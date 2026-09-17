@@ -692,3 +692,22 @@ canonical LOS ±300초 계약과 별도 경로다. 실제 관측 원시시각·�
 78개 아티팩트 해시 재검사를 통과했다. 이번 `PASS_SCOPED`는 little endian으로
 명시한 공식 WPS reader의 보간 전 반환 상태다. 설치된 KLFS full metgrid/real의
 시각·byte order·remapping 또는 native 소비 완료로 확대하지 않는다.
+
+## 2026-09-17 full metgrid handoff (PR23)
+
+The approved base 2023 cold WPS case now has a full serial metgrid test, beyond
+the PR22 pre-interpolation reader boundary. A narrow patch preserves exact
+seconds while keeping the actual `interval_seconds=300`; aligned legacy names
+remain supported. The input WPS bytes are reused unchanged.
+
+The Fortran fixture/reference checks a coherent synthetic inner Lambert C-grid,
+source/target sphere radii, nearest source-cell membership, exact analysis time,
+pressure/surface roles, scalar fields, and the actual staggered U/V rotation
+sequence. See [the full handoff record](PR23_FULL_METGRID_HANDOFF_20260917.md)
+for the final pinned Intel run, controls, source pins, and evidence limitations.
+
+This stage does not consume the alternate geometry, run `real.exe`, pass omega
+through WPS, or certify native startup/halo state. Real radar selection/Barnes
+lineage and the ±300-second canonical contract still need a bridge. Physical
+budgets, initialization response, and forecast outcomes remain OPEN. Earlier
+writer, LAPSPREP, metadata, and time `PASS_SCOPED` results remain separate.

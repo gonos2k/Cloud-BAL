@@ -1,0 +1,43 @@
+diff --git a/WPS/metgrid/src/module_date_pack.F b/WPS/metgrid/src/module_date_pack.F
+--- a/WPS/metgrid/src/module_date_pack.F
++++ b/WPS/metgrid/src/module_date_pack.F
+@@ -643,1 +643,27 @@
++!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
++   SUBROUTINE pack_metgrid_time (valid_date, interval_seconds, temp_date)
++
++      IMPLICIT NONE
++
++      CHARACTER(LEN=19), INTENT(IN) :: valid_date
++      INTEGER, INTENT(IN) :: interval_seconds
++      CHARACTER(LEN=*), INTENT(OUT) :: temp_date
++      INTEGER :: century_year, month, day, hour, minute, second
++
++      CALL split_date_char(valid_date, century_year, month, day, hour, minute, second)
++
++      IF (second /= 0) THEN
++         temp_date = valid_date
++         temp_date(11:11) = '_'
++      ELSE IF (MOD(interval_seconds, 3600) == 0 .AND. minute == 0) THEN
++         temp_date = valid_date(1:10)//'_'//valid_date(12:13)
++      ELSE IF (MOD(interval_seconds, 60) == 0) THEN
++         temp_date = valid_date(1:10)//'_'//valid_date(12:16)
++      ELSE
++         temp_date = valid_date
++         temp_date(11:11) = '_'
++      END IF
++
++   END SUBROUTINE pack_metgrid_time
++
+ END MODULE date_pack
+diff --git a/WPS/metgrid/src/process_domain_module.F b/WPS/metgrid/src/process_domain_module.F
+--- a/WPS/metgrid/src/process_domain_module.F
++++ b/WPS/metgrid/src/process_domain_module.F
+@@ -144,7 +144,1 @@
+-         if (mod(interval_seconds,3600) == 0) then
+-            write(temp_date,'(a13)') valid_date(1:10)//'_'//valid_date(12:13)
+-         else if (mod(interval_seconds,60) == 0) then
+-            write(temp_date,'(a16)') valid_date(1:10)//'_'//valid_date(12:16)
+-         else
+-            write(temp_date,'(a19)') valid_date(1:10)//'_'//valid_date(12:19)
+-         end if
++         call pack_metgrid_time(valid_date, interval_seconds, temp_date)
