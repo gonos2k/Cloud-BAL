@@ -92,7 +92,7 @@ algorithm comparison, mass basis, full-product provenance, promotion 또는
 | 제조해 target/boundary의 과학 권한 격리 | DONE | 별도 source bit와 authority enum을 사용하고 정상 OFF/SHADOW pipeline은 입력 단계에서 거부 |
 | 동역학 target의 `R_w`·자료 나이·driver provenance | BLOCKED | canonical schema 4에 Pa/s 표준편차와 대각 오차 가중치를 구현; 오차가 없으면 적용 권한 0. 실제자료 오차 보정·frame·자료 나이·독립성 및 driver provenance는 미폐합이며 수치 fixture는 관측 승인을 뜻하지 않음 |
 | S-band loading pseudo-target의 바람 권한 | BLOCKED | 현재 echo는 phase·fall-speed가 불확실하므로 hydrometeor/ledger 진단만 수행하고 balance support는 0 |
-| 하나의 `S`, `D`, `G`, `L=-DSG`를 solve/update/residual에 공용 | DONE | 단위시험과 독립 validator가 같은 게시 배열에서 operator identity를 재계산; exact-head 수치는 immutable generation에만 기록 |
+| canonical의 `S`, `D`, `G`, `L=-DSG`를 solve/update/residual에 공용 | DONE | canonical operator 범위만 해당. 단위시험과 독립 validator가 같은 게시 배열에서 identity를 재계산; exact-head 수치는 immutable generation에만 기록. legacy `qbalpe.f`의 solver/update 연결은 [PR25 후속 검토](LEGACY_BALANCE_MATH_REVIEW_20260917.md)의 불일치로 OPEN이며 이 DONE에 포함하지 않음 |
 | 요청 `omega_target`과 실제 적용률 분리 | DONE | balance stage는 target 값·mask·quality·source를 bitwise 보존하고 trust-region 적용률은 result에만 기록 |
 | target-induced increment만 projection | DONE | compact 영역에서 배경 전장을 재균형하지 않음; target 없는 component는 bitwise no-op |
 | support 경계의 배경 flux와 zero-normal increment 분리 | ENGINEERING | uniform-flow compact-support 단위시험 통과; 실제 지형 kinematic lower boundary는 남음 |

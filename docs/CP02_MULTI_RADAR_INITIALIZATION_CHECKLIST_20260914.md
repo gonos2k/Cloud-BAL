@@ -1,6 +1,6 @@
 # 다중 레이더·국지 균형초기화 실행 체크리스트와 체크포인트
 
-작성: 2026-09-14. 추가 검토 반영: 2026-09-16.
+작성: 2026-09-14. 추가 검토 반영: 2026-09-17.
 상위 계획: [추가 과제 계획서](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
 검토 근거: 수학·수치해석·기상학 종합 검토 (로컬 작업공간 근거: `../scratch/cp02_multiradar_additional_review_20260914/REVIEW.md`).
 수학 근거: [정리·증명과 실제 적용 조건](CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md).
@@ -43,6 +43,33 @@ MR-C0→MR-C1→MR-C2/MR-C3→MR-C4→MR-C5→MR-C6 순서로 통과한다.
 자료 조사와 방정식 검토는 병렬로 진행할 수 있다. MR-C2/C3를 통과하지 않은 진단
 후보를 실제 초기화 후보로 게시하지 않는다. 실패는 해당 체크포인트에 남기고
 소유한 scratch 후보를 폐기하거나 원상태로 되돌린다. 운영 입력과 보존 실험은 유지한다.
+
+## 2026-09-17 PR #25 후속 실행 순서 — 현재 적용
+
+상위 계획의 **PR #25 legacy 수학적 연결 교정** 절을 다음 실행의 우선순위로 적용한다.
+이 표는 기존 MR/45-ID를 대체하지 않으며 개별 `PASS_SCOPED`를 취소하지 않는다.
+현행 legacy의 선언된 전체 후보 continuity 목표를 출발점으로 삼고, canonical 증분
+projection과 구분한다. 물리 경계에서 목표가 불가능하면 거부하며 RHS 평균 제거나
+부분 보정 전환으로 성공을 만들지 않는다.
+
+| 구현 작업 / 연결 | 현재 상태 | 다음 종료 근거 |
+|---|---|---|
+| `A_solver=DG` / B06, R2–R3 | DEFECT_CONFIRMED / OPEN | 실제 전체 격자 가변계수·metric·pressure·경계 항등식과 source-bound Fortran Intel O0/O2 |
+| RHS·influence 목표 / B01–B03, MR-C2 | CONTRACT_RECORDED / IMPLEMENTATION_OPEN | 전체 후보 `D(y+delta_y)=0`의 RHS·mobility·support·경계와 acceptance 정합; 계약 변경 시 이유와 기대 잔차 명시 |
+| 기존 행렬 성분·호환 진단 / M05, M07 | DIAGNOSED_INCOMPATIBLE | 3개 닫힌 성분의 부적합은 확인됨. 물리적 처리 정책 확정과 수정 행렬의 재진단은 OPEN |
+| P0-4 실제 residual 로그 / B06 | OPEN | 최종 lambda의 RMS/max/위치와 delta lambda·실제 wind/omega 증분을 별도 기록; 진단 무변경 검증 |
+| 같은 NE57의 비영 ON 생성 / R3 | BLOCKED_BY_LEGACY_P0 | 위 조건 충족 후 전체 235×283×22 실제 입력 실행; 승인된 after와 실패 원복·무게시 |
+| 최종 A-grid/native 전후 / MR-C4 | NOT_RUN | 마지막 변환·startup·halo 후 실제 상태와 질량·열역학·omega/W 대응 |
+
+근거: [보존한 수학·기상학 검토](LEGACY_BALANCE_MATH_REVIEW_20260917.md).
+실제 입력은 `2026-08-16 13 UTC`이며 PR #24의 역사 후보 재현과 이번 비영 balance
+목표를 같은 성공으로 세지 않는다. 기존 분석을 재사용했으며 3차원 분석 프로그램을
+새로 실행했다는 주장은 하지 않는다. 작은 합성 기상장 또는 다른 시각 seed로 대체하지 않는다.
+
+P0-1/2 공동 설계→P0-3 경계·호환 정책 및 P0-4 실제 잔차 검증→수렴/비영 후보→최종 상태 비교
+순서다. 실제 residual 진단은 P0 구현과 함께 준비한다. 레이더 시각/Barnes 계보 및
+native 경로 조사는 병렬이며, 미완료 물리 후보를 게시하지 않는다. 반복 상한 증가,
+허용오차 완화, 영증분 대체는 종료 근거가 아니다.
 
 ## 승인 후 구현 체크리스트 (2026-09-15)
 
