@@ -731,3 +731,21 @@ writer, LAPSPREP, metadata, and time `PASS_SCOPED` results remain separate.
   Native startup/halo, balance application, observation lineage, conservation
   and forecasts remain OPEN. Prior synthetic PR17–23 receipts retain their
   historical scopes and are not represented as full real-data execution.
+
+## 2026-09-17 actual full-domain balance comparison attempt
+
+- Use the original actual 2026-08-16 13 UTC analysis on all 235×283×22 LAPS
+  cells, with the same input copies and operational balance configuration.
+  The historical thermo research candidate used in PR24 remains a separate
+  replay baseline. No synthetic meteorology or subdomain is used here.
+- Current pinned Intel QBAL fails its initial continuity solve at the default
+  200-iteration budget. A private 2000-iteration diagnostic also fails without
+  changing tolerances, acceptance, or rollback. No balanced files are published.
+- OFF LAPSPREP completes. ON LAPSPREP and the actual before/after comparison
+  remain NOT_RUN/OPEN because no accepted after state exists. A rejected solve
+  is not a zero increment or a successful balance result.
+- The Fortran full-grid comparison utility reports differences and mask counts;
+  its O0/O2 self-comparisons use actual fields and are smoke checks only.
+- Evidence and unresolved scope: [actual balance comparison record](REAL_BALANCE_COMPARISON_20260917.md).
+  Native before/after consumption, separate omega/W delivery, conservation,
+  and forecast response remain OPEN. PR24 replay PASS_SCOPED is unchanged.
