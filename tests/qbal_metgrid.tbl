@@ -1,0 +1,57 @@
+# Minimal ARW table for the approved 2023-05-18 6x6x4 WPS source.
+# HGT is renamed to GHT by read_met_module.  Every other field present in
+# the 33-record source is listed explicitly so the parser's implicit default
+# cannot publish an unrelated field.
+========================================
+name=TT
+        mandatory=yes
+        interp_option=nearest_neighbor
+        fill_missing=0.
+========================================
+name=UU
+        mandatory=yes
+        interp_option=nearest_neighbor
+        is_u_field=yes
+        output_stagger=U
+        fill_missing=0.
+========================================
+name=VV
+        mandatory=yes
+        interp_option=nearest_neighbor
+        is_v_field=yes
+        output_stagger=V
+        fill_missing=0.
+========================================
+name=QV
+        mandatory=yes
+        interp_option=nearest_neighbor
+        fill_missing=0.
+========================================
+name=GHT
+        mandatory=yes
+        interp_option=nearest_neighbor
+        fill_missing=0.
+========================================
+name=PRES
+        z_dim_name=num_metgrid_levels
+        derived=yes
+        mandatory=yes
+        fill_lev=all:PRESSURE
+        fill_lev=200100:PSFC(200100)
+        fill_lev=all:vertical_index; level_template=TT
+========================================
+name=PSFC
+        output=no
+        interp_option=nearest_neighbor
+========================================
+name=RH
+        output=no
+        interp_option=nearest_neighbor
+========================================
+name=SKINTEMP
+        output=no
+        interp_option=nearest_neighbor
+========================================
+name=PMSL
+        output=no
+        interp_option=nearest_neighbor

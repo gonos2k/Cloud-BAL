@@ -1,0 +1,27 @@
+# Pinned link/compile inputs for the full metgrid build.
+# WRF and KIM NetCDF are prebuilt dependencies. Runtime files are the ldd
+# closure captured with the pinned Intel profile for this installation.
+# The fixture verifier's separate NetCDF-fortran/C baseline is pinned by
+# run_qbal_full_metgrid_tests.sh and is intentionally not substituted here.
+97f42ff0837577b9d0527b8c189eae4142f628791dc6a687d78ea4dea9b6ce94  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/frame/module_driver_constants.o
+60b8f94e3d8c1cfe19e0c9325ad5aa2ed7da71f88505d89335f7b4655a53e413  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/frame/pack_utils.o
+3fb55c12811481b8bd9e7cd41492f96b5e151dd42a68e6702b4d9c01c226077d  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/frame/module_machine.o
+2e70eac3b74a3ae3db793d24a257ee94f3e326085e80a7837616911e96fc6774  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/frame/module_internal_header_util.o
+c4e742a2fa9aac91ef5f936ca598f4f887f9c77cebe997c382a308c3b8e1a07b  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/external/io_grib1/libio_grib1.a
+62b302c8512b260c7a97b1b2a303693f248bf08b87dfec327303eec91185f39b  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/external/io_grib_share/libio_grib_share.a
+9445972841e86191d2e9a1d659390593f39785e9f78f343ceb7a4378172d6007  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/external/io_int/libwrfio_int.a
+e20d74389748c617e9fcc1fa6be62a1789067615bcb92d6406a3bd273230ff75  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/external/io_netcdf/libwrfio_nf.a
+9a310dc22d2fb711d7bbebc848993a267a449e96bcdb7b5da3df1ff803d62a9c  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/inc/wrf_io_flags.h
+df25bc800cb2729b8d21c52087920b7f6167a355ac208e071d574e7f7ba3618d  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/inc/wrf_status_codes.h
+bbc95d55d8493dbea98422362ebb51aa19b4b9a6360c02a6e933eaae331fe64f  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/external/io_int/module_internal_header_util.mod
+c86d5962e6c0cc4a94198c4674ce1ecc5738dbd8db2c873b7864ffa08b08da73  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/deps/netcdf-intel/include/netcdf.inc
+5c7c67a194ff6a26c591c14e6ba5fbe8ea25c91d0b7facab87272f5db7505495  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/deps/netcdf-intel/include/netcdf.mod
+bd49839821489672f27977d0a19e0a9076b1581ec0064616050815354f2d07be  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/deps/netcdf-intel/lib/libnetcdff.a
+66fb64ef6ea005a89d3c362b20098672174e4f9f1fec813dd3e39532efe46f1d  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/deps/netcdf-intel/lib/libnetcdf.a
+# Runtime closure from ldd -r of the pinned metgrid executable.
+31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8  /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so
+2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120  /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5
+511f825ee075610ac9c0f7f91e2c13de2000d0f7b859f6461137e809a0a009d0  /lib/x86_64-linux-gnu/libc.so.6
+02f3f192bf5f79b811f1e34a650fea443d407408703448906585232383957f60  /lib/x86_64-linux-gnu/libgcc_s.so.1
+f06f2ce1f1833df5f41cf13b6447ff07bea993ad9b27297d3428c2f70ab3f0e7  /lib/x86_64-linux-gnu/libm.so.6
+6222a16be7f2d458d6870efe6e715fc0c8d45766fb79cf7dcc3125538d703e28  /lib64/ld-linux-x86-64.so.2
