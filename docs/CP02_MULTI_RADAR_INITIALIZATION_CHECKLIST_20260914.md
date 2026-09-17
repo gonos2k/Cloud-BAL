@@ -711,3 +711,23 @@ through WPS, or certify native startup/halo state. Real radar selection/Barnes
 lineage and the ±300-second canonical contract still need a bridge. Physical
 budgets, initialization response, and forecast outcomes remain OPEN. Earlier
 writer, LAPSPREP, metadata, and time `PASS_SCOPED` results remain separate.
+
+## 2026-09-17 full real-data domain replay (PR24)
+
+- User scope correction: use the already prepared whole-domain real-data case;
+  no synthetic meteorological/static fixture or subdomain is used in this stage.
+- The existing `2026-08-16_13:00:00` LAPS analysis and matching background,
+  soil/surface/static inputs feed actual full metgrid and real. Mass dimensions
+  are 234×282, with 21 metgrid levels and 39 native mass levels (40 interfaces).
+- The selected `METGRID.TBL` resolves to `METGRID.TBL.ARW.OML.KWW`; its hash is
+  additionally pinned. The old manifest pinned the neighboring OML table.
+- Corrected replay `met_em` and `wrfinput` are byte-identical to the prepared
+  reference. Existing 3-D analysis reuse and real initialization are confirmed;
+  the 3-D analysis programs were not rerun.
+- Producer `BALANCE=F`, historical zero wind/omega increments, and the absence
+  of wrf.exe startup mean this is not BALCON/omega-W/consumed-state completion.
+  Existing interpolation and soil-category fallback behavior is recorded.
+- Full details, evidence identity and reproduction: `PR24_FULL_REAL_DOMAIN_20260917.md`.
+  Native startup/halo, balance application, observation lineage, conservation
+  and forecasts remain OPEN. Prior synthetic PR17–23 receipts retain their
+  historical scopes and are not represented as full real-data execution.
