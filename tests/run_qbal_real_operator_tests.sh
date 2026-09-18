@@ -7,7 +7,7 @@ snapshot_default="$maintained_root/scratch/baudit_20260917/run/operator_snapshot
 snapshot=${1:-$snapshot_default}
 output_prefix=${2:-$repo_root/scratch/qbal_real_operator_rows}
 expected_snapshot_sha256=96932e53e5f30bf3e9c307617765aaa7200750ec01d4ead6b45842faf97fa661
-expected_source_sha256=e5a669b5f6c8ac005ba433c6e21149efb4c75d6eb7d8a5020205305d9b28f2e0
+expected_source_sha256=bfd5459f07ccd28a69626499a0ece4cfc5e34685fa4d423517e4e792d7b5fc30
 
 [[ -s "$snapshot" ]] || {
   printf 'actual operator snapshot is required: %s\n' "$snapshot" >&2

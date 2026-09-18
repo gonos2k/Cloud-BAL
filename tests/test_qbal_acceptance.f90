@@ -1,7 +1,7 @@
 PROGRAM test_qbal_acceptance
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_value, ieee_quiet_nan
   IMPLICIT NONE
-  INTEGER, PARAMETER :: nx=2,ny=2,nz=1
+  INTEGER, PARAMETER :: nx=3,ny=3,nz=3
   INTEGER :: failures,status
   EXTERNAL :: qbal_increment_maxima,qbal_candidate_acceptance,qbal_mark_valid_omega
   LOGICAL, EXTERNAL :: background_omega_complete
@@ -16,13 +16,13 @@ PROGRAM test_qbal_acceptance
   u0=0.0; v0=0.0; om0=0.0
   u1=0.0; v1=0.0; om1=0.0
   influence=1.0
-  u1(1,1,1)=8.0
-  v1(1,1,1)=8.0
-  om1(1,1,1)=4.0
+  u1(2,1,1)=8.0
+  v1(1,2,1)=8.0
+  om1(2,2,2)=4.0
   CALL qbal_increment_maxima(u0,v0,om0,u1,v1,om1,influence, &
        nx,ny,nz,maxwind,maxomega,status)
   CALL check(status==1 .AND. ABS(maxwind-SQRT(128.0))<1.0E-6, &
-       'wind maximum must use horizontal vector magnitude',failures)
+       'wind maximum must conservatively bound staggered faces',failures)
   CALL check(ABS(maxomega-4.0)<1.0E-6, &
        'omega maximum must be evaluated independently',failures)
 
@@ -33,7 +33,77 @@ PROGRAM test_qbal_acceptance
   CALL accept(maxwind,4.0,1.0E-4,2.0E-4,4.0E-4,8.0E-4, &
        8.0E-5,1.5E-4,1.0E-2,1.05E-2,status)
   CALL check(status==0, &
-       'diagonal increment above 10 m/s must fail',failures)
+       'staggered component bound above 10 m/s must fail',failures)
+
+  CALL accept(10.00001,0.0,1.0E-4,2.0E-4,4.0E-4,8.0E-4, &
+       8.0E-5,1.5E-4,1.0E-2,1.05E-2,status)
+  CALL check(status==0,'just-over-limit wind increment must fail',failures)
+
+  u0=0.0; v0=0.0; om0=0.0
+  u1=0.0; v1=0.0; om1=0.0
+  influence=1.0
+  u1(2,1,1)=10.00001
+  CALL qbal_increment_maxima(u0,v0,om0,u1,v1,om1,influence, &
+       nx,ny,nz,maxwind,maxomega,status)
+  CALL check(status==1 .AND. maxwind>10.0 .AND. maxwind<10.001, &
+       'face maximum must preserve just-over-limit increment',failures)
+  CALL accept(maxwind,maxomega,1.0E-4,2.0E-4,4.0E-4,8.0E-4, &
+       8.0E-5,1.5E-4,1.0E-2,1.05E-2,status)
+  CALL check(status==0, &
+       'just-over-limit face increment must fail gate',failures)
+
+  u1=0.0; v1=0.0; om1=0.0
+  u1(2,1,1)=10.0; v1(1,2,1)=0.001
+  om0(2,2,2)=-1.0E-7; om1(2,2,2)=5.0
+  CALL qbal_increment_maxima(u0,v0,om0,u1,v1,om1,influence, &
+       nx,ny,nz,maxwind,maxomega,status)
+  CALL check(status==1 .AND. maxwind>10.0 .AND. maxomega>5.0, &
+       'real32 return must round conservative bounds upward',failures)
+  om0=0.0
+
+  u1=0.0; v1=0.0; om1=0.0
+  om1(2,2,2)=5.1
+  CALL qbal_increment_maxima(u0,v0,om0,u1,v1,om1,influence, &
+       nx,ny,nz,maxwind,maxomega,status)
+  CALL check(status==1 .AND. ABS(maxomega-5.1)<1.0E-6, &
+       'omega face increment must be measured independently',failures)
+  CALL accept(maxwind,maxomega,1.0E-4,2.0E-4,4.0E-4,8.0E-4, &
+       8.0E-5,1.5E-4,1.0E-2,1.05E-2,status)
+  CALL check(status==0,'5.1 Pa/s omega increment must fail gate',failures)
+
+  u0=0.0; v0=0.0; om0=0.0
+  u1=0.0; v1=0.0; om1=0.0
+  influence=0.0
+  influence(2,2,2)=1.0
+  influence(3,2,2)=1.0
+  influence(2,3,2)=1.0
+  u1(2,1,1)=12.0
+  v1(1,2,1)=12.0
+  CALL qbal_increment_maxima(u0,v0,om0,u1,v1,om1,influence, &
+       nx,ny,nz,maxwind,maxomega,status)
+  CALL check(status==1 .AND. maxwind>12.0, &
+       'supported 12 m/s U/V face increments must be measured',failures)
+  CALL accept(maxwind,0.0,1.0E-4,2.0E-4,4.0E-4,8.0E-4, &
+       8.0E-5,1.5E-4,1.0E-2,1.05E-2,status)
+  CALL check(status==0,'12 m/s U/V increment must fail production gate', &
+       failures)
+
+  u1=0.0; v1=0.0; om1=0.0
+  u1(1,1,1)=12.0
+  CALL qbal_increment_maxima(u0,v0,om0,u1,v1,om1,influence, &
+       nx,ny,nz,maxwind,maxomega,status)
+  CALL check(status==1 .AND. maxwind>=12.0, &
+       'all-face audit must measure outside-support change',failures)
+  CALL accept(maxwind,maxomega,1.0E-4,2.0E-4,4.0E-4,8.0E-4, &
+       8.0E-5,1.5E-4,1.0E-2,1.05E-2,status)
+  CALL check(status==0, &
+       'outside-support 12 m/s change must fail gate',failures)
+
+  u1=0.0; v1=0.0; om1=0.0
+  u0(2,1,1)=1.0E-30
+  CALL qbal_increment_maxima(u0,v0,om0,u1,v1,om1,influence, &
+       nx,ny,nz,maxwind,maxomega,status)
+  CALL check(status==0,'U face sentinel transition must fail closed',failures)
 
   CALL accept(9.0,5.1,1.0E-4,2.0E-4,4.0E-4,8.0E-4, &
        8.0E-5,1.5E-4,1.0E-2,1.05E-2,status)

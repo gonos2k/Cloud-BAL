@@ -1720,7 +1720,7 @@ c with the exact localized continuity operator.
           kmode_top=nz
        endif
        kmid=(kmode_bottom+kmode_top)/2
-       print*,'INCREMENT MODES div/vort/rough/maxwind/maxomega ',
+       print*,'INCREMENT MODES div/vort/rough/windbound/maxomega ',
      &      div_mode_rms,vort_mode_rms,div_roughness_rms,
      &      max_wind_increment,max_omega_increment
        print*,'VERTICAL MODE lower/middle/upper div ',
@@ -2050,13 +2050,18 @@ c ---------------------------------------------------------------
 c
       subroutine qbal_increment_maxima(u0,v0,om0,u1,v1,om1,
      &                 influence,nx,ny,nz,maxwind,maxomega,istatus)
-c Compute the actual horizontal vector increment, not separate components.
+c Measure every stored face, independent of the pressure-row support mask.
+c U/V occupy different faces: hypot of their separate maxima is a
+c conservative bound, not an exact collocated horizontal vector maximum.
+c Authority remains in the taper and continuity face coefficients.
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
       integer nx,ny,nz,i,j,k,istatus
       real*4 u0(nx,ny,nz),v0(nx,ny,nz),om0(nx,ny,nz)
      &      ,u1(nx,ny,nz),v1(nx,ny,nz),om1(nx,ny,nz)
-     &      ,influence(nx,ny,nz),maxwind,maxomega,dwind,domega
+     &      ,influence(nx,ny,nz),maxwind,maxomega,bnd
+      real*8 maxu,maxv,maxom,windbound
+      parameter(bnd=1.e-30)
 
       istatus=0
       maxwind=0.
@@ -2064,26 +2069,38 @@ c Compute the actual horizontal vector increment, not separate components.
       if(nx.lt.1.or.ny.lt.1.or.nz.lt.1)return
       if(any(.not.ieee_is_finite(influence)).or.
      &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
+      if(any(.not.ieee_is_finite(u0)).or.
+     &   any(.not.ieee_is_finite(v0)).or.
+     &   any(.not.ieee_is_finite(om0)).or.
+     &   any(.not.ieee_is_finite(u1)).or.
+     &   any(.not.ieee_is_finite(v1)).or.
+     &   any(.not.ieee_is_finite(om1)))return
+c Unchanged terrain sentinels contribute zero; validity transitions fail.
+      if(any((u0.eq.bnd).neqv.(u1.eq.bnd)).or.
+     &   any((v0.eq.bnd).neqv.(v1.eq.bnd)).or.
+     &   any((om0.eq.bnd).neqv.(om1.eq.bnd)))return
+      maxu=0.d0
+      maxv=0.d0
+      maxom=0.d0
       do k=1,nz
        do j=1,ny
         do i=1,nx
-         if(influence(i,j,k).le.0.)cycle
-         if(.not.ieee_is_finite(u0(i,j,k)).or.
-     &      .not.ieee_is_finite(v0(i,j,k)).or.
-     &      .not.ieee_is_finite(om0(i,j,k)).or.
-     &      .not.ieee_is_finite(u1(i,j,k)).or.
-     &      .not.ieee_is_finite(v1(i,j,k)).or.
-     &      .not.ieee_is_finite(om1(i,j,k)))return
-         dwind=hypot(u1(i,j,k)-u0(i,j,k),
-     &               v1(i,j,k)-v0(i,j,k))
-         domega=abs(om1(i,j,k)-om0(i,j,k))
-         if(.not.ieee_is_finite(dwind).or.
-     &      .not.ieee_is_finite(domega))return
-         maxwind=max(maxwind,dwind)
-         maxomega=max(maxomega,domega)
+         maxu=max(maxu,abs(dble(u1(i,j,k))-dble(u0(i,j,k))))
+         maxv=max(maxv,abs(dble(v1(i,j,k))-dble(v0(i,j,k))))
+         maxom=max(maxom,abs(dble(om1(i,j,k))-dble(om0(i,j,k))))
         enddo
        enddo
       enddo
+      windbound=hypot(maxu,maxv)
+      if(windbound.gt.dble(huge(maxwind)).or.
+     &   maxom.gt.dble(huge(maxomega)))return
+      maxwind=real(windbound)
+      maxomega=real(maxom)
+c Keep an upper bound when returning through the legacy real32 ABI.
+      if(dble(maxwind).lt.windbound)maxwind=nearest(maxwind,1.)
+      if(dble(maxomega).lt.maxom)maxomega=nearest(maxomega,1.)
+      print*,'INCREMENT face maxima U/V/omega and wind bound ',
+     &       maxu,maxv,maxom,windbound
       istatus=1
       return
       end
@@ -2138,7 +2155,7 @@ c One fail-closed acceptance contract for every balance candidate.
          return
       endif
       if(maxwind.gt.wind_increment_limit)then
-         print*,'QBAL vector wind increment rejected ',maxwind
+         print*,'QBAL wind increment bound rejected ',maxwind
          return
       endif
       if(maxomega.gt.omega_increment_limit)then
@@ -3268,7 +3285,7 @@ c
      & nx,ny,nz,dx,dy,dp,status)
 c Each bidirectionally connected closed block has right null vector 1.
 c Construct a candidate positive left null vector from shared edges and
-c certify A^T w before using w^T RHS. Non-reversible metrics for which this
+c certify each edge and A^T w before w^T RHS. Metrics for which this
 c construction fails are UNRESOLVED, never declared compatible. No RHS
 c mean removal or boundary flux adjustment is performed.
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
@@ -3281,6 +3298,7 @@ c mean removal or boundary flux adjustment is performed.
       real dx(nx,ny),dy(nx,ny),dp(nz)
       real*8 rhs(nx+1,ny+1,nz+1),cx(nx,ny,nz),cy(nx,ny,nz)
      & ,cp(nx,ny,nz),c(6),cn(6),defect,scale,norm,cert,bound
+     & ,forward,reverse,edge_scale,edge_error
       real*8, allocatable :: weight(:,:,:),transpose(:,:,:)
       data step /1,0,0, -1,0,0, 0,1,0, 0,-1,0, 0,0,1, 0,0,-1/
       status=0
@@ -3331,7 +3349,27 @@ c mean removal or boundary flux adjustment is performed.
               print*,'CONTINUITY reverse edge UNRESOLVED ',ii,jj,kk
               return
            endif
-           if(seen(ii,jj,kk))cycle
+           if(seen(ii,jj,kk))then
+c Check non-tree edges relative to their own flux, even if very weak.
+            forward=weight(point(1),point(2),point(3))*c(d)
+            reverse=weight(ii,jj,kk)*cn(opp)
+            if(.not.ieee_is_finite(forward).or.
+     &         .not.ieee_is_finite(reverse))return
+            edge_scale=max(forward,reverse)
+            if(edge_scale.le.0.d0)then
+               print*,'CONTINUITY edge underflow UNRESOLVED'
+               return
+            endif
+            forward=forward/edge_scale
+            reverse=reverse/edge_scale
+            edge_error=abs(forward-reverse)/(forward+reverse)
+            if(edge_error.gt.bound)then
+               print*,'CONTINUITY edge balance UNRESOLVED ',
+     &                ii,jj,kk,edge_error
+               return
+            endif
+            cycle
+           endif
            tail=tail+1
            queue(:,tail)=(/ii,jj,kk/)
            seen(ii,jj,kk)=.true.

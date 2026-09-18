@@ -13,12 +13,23 @@ awk '
   capture {print}
 ' "$repo_root/src/balance/qbalpe.f" > "$test_tmp/qbal_acceptance.f"
 
+cd "$test_tmp"
+
 "$CLOUD_BAL_FC" -c "${CLOUD_BAL_FIXED_72_FLAGS[@]}" \
   "$test_tmp/qbal_acceptance.f" -o "$test_tmp/qbal_acceptance.o"
 "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
   "$repo_root/tests/test_qbal_acceptance.f90" \
   "$test_tmp/qbal_acceptance.o" -o "$test_tmp/test_qbal_acceptance"
 "$test_tmp/test_qbal_acceptance"
+
+fixed_repro_flags=(-fixed -extend-source 72 "${CLOUD_BAL_REPRO_FLAGS[@]}")
+free_repro_flags=("${CLOUD_BAL_REPRO_FLAGS[@]}")
+"$CLOUD_BAL_FC" -c "${fixed_repro_flags[@]}" \
+  "$test_tmp/qbal_acceptance.f" -o "$test_tmp/qbal_acceptance_o2.o"
+"$CLOUD_BAL_FC" "${free_repro_flags[@]}" \
+  "$repo_root/tests/test_qbal_acceptance.f90" \
+  "$test_tmp/qbal_acceptance_o2.o" -o "$test_tmp/test_qbal_acceptance_o2"
+"$test_tmp/test_qbal_acceptance_o2"
 
 if grep -Eiq 'airdrop|advance_grids|delo\.eq\.0|readprg|readpig' \
     "$repo_root/src/balance/qbalpe.f"; then
