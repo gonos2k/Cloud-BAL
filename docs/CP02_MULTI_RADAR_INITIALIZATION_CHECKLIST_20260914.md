@@ -56,9 +56,9 @@ projection과 구분한다. 물리 경계에서 목표가 불가능하면 거부
 |---|---|---|
 | `A_solver=DG` / B06, R2–R3 | IMPLEMENTED_SCOPED | 같은 face 계수로 solve/update/residual 연결; 실제 723,638행 및 작은 가변계수·경계 검사의 Intel O0/O2 근거는 [교정 기록](LEGACY_OPERATOR_CLOSURE_20260918.md) |
 | RHS·influence 목표 / B01–B03, MR-C2 | IMPLEMENTED_SCOPED | RHS `-D(y)`; beta는 mobility/support. 외곽·terrain·지원 경계의 제안 상태 유량 고정; 전체/native 물리 승인은 아님 |
-| 성분·호환 진단 / M05, M07 | IMPLEMENTED / INCOMPATIBLE | 과거 3개 부적합 성분과 별도로, 수정 행렬의 222개 닫힌 성분(171 영행) 모두 부적합. 인증 실패·비영 부적합 RHS는 사전 거부; 후속 물리 제약 설계 OPEN |
+| 성분·호환 진단 / M05, M07 | IMPLEMENTED / INCOMPATIBLE | 과거 3개 부적합 성분과 별도로, 첫 폐합의 222개/171 영행 이후, 수평 mobility 위치 정렬로 8개/4 영행. 현재 8개 모두 부적합. 인증 실패·비영 부적합 RHS는 사전 거부; 후속 물리 제약 설계 OPEN |
 | P0-4 실제 residual 로그 / B06 | INSTRUMENTATION_IMPLEMENTED | 최종 lambda 잔차·delta lambda·실제 U/V/omega 및 전체/지원 pressure 잔차의 분리 계측 구현, 합성 검사에서 검증. 실자료는 preflight RMS/max/위치와 실패 시 적용 증분 0만 확인했으며, 수렴한 최종 lambda 또는 승인 after의 계측 근거는 없음 |
-| 같은 NE57의 비영 ON 생성 / R3 | PREFLIGHT_REJECTED / ON_BLOCKED | 수정 소스 Intel O0/O2 전체 실행 모두 222개 성분 RHS 부적합으로 exit 1; 실패 원복·무게시 확인. 물리적으로 정당한 경계/support/제약 설계 후 재실행 필요 |
+| 같은 NE57의 비영 ON 생성 / R3 | PREFLIGHT_REJECTED / ON_BLOCKED | 수평 위치 정렬 후 같은 실자료의 전체 Intel O0/O2 실행 모두 8개 부적합으로 exit 1·무게시. [후속 근거](LEGACY_SUPPORT_ALIGNMENT_20260918.md) 참조. 물리적으로 정당한 경계/support/제약 설계 후 재실행 필요 |
 | 최종 A-grid/native 전후 / MR-C4 | NOT_RUN | 마지막 변환·startup·halo 후 실제 상태와 질량·열역학·omega/W 대응 |
 
 근거: [보존한 수학·기상학 검토](LEGACY_BALANCE_MATH_REVIEW_20260917.md).

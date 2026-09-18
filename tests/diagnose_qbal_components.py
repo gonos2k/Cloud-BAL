@@ -18,6 +18,9 @@ from scipy.sparse.csgraph import breadth_first_order, connected_components
 from scipy.sparse.linalg import spsolve
 
 
+RESIDUAL_TOLERANCE = 1e-10
+
+
 def diagnose(path: Path) -> dict:
     raw = path.read_bytes()
     nx, ny, nz, count = np.frombuffer(raw, dtype='<i4', count=4).tolist()
@@ -61,6 +64,15 @@ def diagnose(path: Path) -> dict:
         entry = {'id': component, 'rows': len(selected),
                  'first_cell': ijk[selected[0]].tolist(),
                  'anchored': bool(anchored[selected].any())}
+        positive_diagonal = coeff[selected].sum(axis=1)
+        diagonal_min = float(np.min(positive_diagonal))
+        diagonal_max = float(np.max(positive_diagonal))
+        entry.update(
+            positive_diagonal_min=diagonal_min,
+            positive_diagonal_max=diagonal_max,
+            positive_diagonal_ratio=(diagonal_max / diagonal_min
+                                      if diagonal_min > 0 else None),
+        )
         components.append(entry)
         if entry['anchored']:
             entry['compatibility'] = 'ANCHORED_NO_CONSTANT_RIGHT_NULLSPACE'
@@ -102,8 +114,20 @@ def diagnose(path: Path) -> dict:
         left /= left.sum()
         defect = float(left @ force)
         rounding = float(64 * np.finfo(float).eps * (np.abs(left) @ np.abs(force)))
+        left_norm2 = float(np.linalg.norm(left, ord=2))
+        rhs_norm2 = float(np.linalg.norm(force, ord=2))
+        rhs_norm_inf = float(np.linalg.norm(force, ord=np.inf))
+        obstruction_inf = float(abs(defect) / np.sum(np.abs(left)))
+        obstruction_2 = float(abs(defect) / left_norm2)
         entry.update(left_rhs=defect, arithmetic_bound=rounding,
                      transpose_residual=residual,
+                     left_norm2=left_norm2,
+                     rhs_norm2=rhs_norm2,
+                     rhs_norm_inf=rhs_norm_inf,
+                     obstruction_inf=obstruction_inf,
+                     obstruction_2=obstruction_2,
+                     fixed_tolerance=RESIDUAL_TOLERANCE,
+                     fixed_tolerance_infeasible=bool(obstruction_inf > RESIDUAL_TOLERANCE),
                      relative_defect=abs(defect) / max(float(np.max(np.abs(force))),
                                                      np.finfo(float).tiny),
                      compatibility='COMPATIBLE_TO_ARITHMETIC' if abs(defect) <= rounding
@@ -111,7 +135,12 @@ def diagnose(path: Path) -> dict:
     return {'source': str(path.resolve()), 'sha256': hashlib.sha256(raw).hexdigest(),
             'shape': [nx, ny, nz], 'active_rows': count,
             'components': components, 'rhs_modified': False,
-            'scope': 'Discrete production rows only; no accepted after-state or forecast claim'}
+            'scope': 'Discrete production rows only; no accepted after-state or forecast claim',
+            'diagnostic_note': (
+                'Obstruction bounds are conditional on the numerically validated, '
+                'sum-normalized left-null certificate and are not rigorous interval '
+                'bounds. The fixed 1e-10 tolerance is diagnostic only; the positive '
+                'diagonal ratio is coefficient contrast, not a condition number.')}
 
 
 def main() -> None:

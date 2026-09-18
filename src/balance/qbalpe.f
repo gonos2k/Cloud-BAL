@@ -3083,7 +3083,7 @@ c===============================================================================
 c
       subroutine qbal_continuity_setup(u,v,w,erru,tau,beta,
      & nx,ny,nz,dx,dy,ps,p,dp,active,cx,cy,cp,rhs,status)
-c Coefficients live on stored wind/omega faces, not multiplier rows.
+c Store face coefficients using mobility from the rows they connect.
 c Corrections cannot cross inactive/support, terrain or exterior faces.
 c The prescribed base boundary flux is unchanged, including lower/top
 c omega. No boundary value changes in a sweep.
@@ -3137,10 +3137,10 @@ c omega. No boundary value changes in a sweep.
          left=active(i,j+1,k+1)
          right=active(i+1,j+1,k+1)
          if(.not.(left.and.right))cycle
-         ci=.5d0*dble(beta(i,j,k))/dble(erru(i,j,k))
-         cj=ci
-         if(i.lt.nx)cj=.5d0*dble(beta(i+1,j,k))/
-     &                        dble(erru(i+1,j,k))
+c U face joins pressure rows (i,j+1,k+1) and (i+1,j+1,k+1).
+         ci=.5d0*dble(beta(i,j+1,k+1))/dble(erru(i,j+1,k+1))
+         cj=.5d0*dble(beta(i+1,j+1,k+1))/
+     &                  dble(erru(i+1,j+1,k+1))
          if(u(i,j,k).ne.1.e-30)
      &      cx(i,j,k)=qbal_harmonic(ci,cj)/dble(dx(i,j))
         enddo
@@ -3150,10 +3150,10 @@ c omega. No boundary value changes in a sweep.
          left=active(i+1,j,k+1)
          right=active(i+1,j+1,k+1)
          if(.not.(left.and.right))cycle
-         ci=.5d0*dble(beta(i,j,k))/dble(erru(i,j,k))
-         cj=ci
-         if(j.lt.ny)cj=.5d0*dble(beta(i,j+1,k))/
-     &                        dble(erru(i,j+1,k))
+c V face joins pressure rows (i+1,j,k+1) and (i+1,j+1,k+1).
+         ci=.5d0*dble(beta(i+1,j,k+1))/dble(erru(i+1,j,k+1))
+         cj=.5d0*dble(beta(i+1,j+1,k+1))/
+     &                  dble(erru(i+1,j+1,k+1))
          if(v(i,j,k).ne.1.e-30)
      &      cy(i,j,k)=qbal_harmonic(ci,cj)/dble(dy(i,j))
         enddo

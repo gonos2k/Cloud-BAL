@@ -6,6 +6,9 @@ PR #25의 오류를 고친 국지 수학 계약과 실제 비영 balance 성공�
 과거 [수학 검토](LEGACY_BALANCE_MATH_REVIEW_20260917.md), PR #24 초기화 재현,
 기존 pressure/omega/rollback/writer 검증은 각 역사적 범위로 보존한다.
 
+후속 [지원영역–face 정렬 검토](LEGACY_SUPPORT_ALIGNMENT_20260918.md)는 수평 mobility의
+참조 위치를 추가 교정했다. 아래 222개 성분과 소스 해시는 첫 폐합 구현의 역사적 근거다.
+
 ## 수정한 계산
 
 `qbal_continuity_setup`이 유효 pressure/support 행과 허용된 face coefficient를 만든다.

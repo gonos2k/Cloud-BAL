@@ -64,7 +64,8 @@ face 계수를 재사용한다. `A=DG`만으로 SPD를 주장하지 않는다. �
   있으나 유효 active row가 하나도 없으면 성공한 영보정으로 바꾸지 않고 거부한다.
 - Active row는 기존 pressure stencil, `ps>=p`, 양의 influence, 유효한 여섯 donor로
   정의한다. 유효하지만 지원 밖인 pressure 행의 진단은 별도로 계속 보고한다.
-- G의 기존 stagger/gradient와 mobility 위치를 유지하고, 같은 face coefficient에서
+- G의 기존 stagger/gradient를 유지하되 수평 mobility는 실제 연결하는 두 pressure 행의
+  beta/erru에서 구성한다. 같은 face coefficient에서
   `A=DG`의 행을 구성한다. 경계는 구성 때 제거하며 sweep 중 이웃 lambda를 덮어쓰지 않는다.
   이 방식에 최소분산 또는 adjoint/SPD 성질을 추가로 주장하지 않는다.
 - RHS는 동일 divergence의 real64 산술로 구성한다. 저장 상태는 기존 real32이며,
@@ -109,6 +110,13 @@ anchored 성분에 있어 정체 원인을 이 한 사실로 단정하지 않는
 후속 설계는 물리적 근거를 가진 경계 유량/지원 영역/제약 선택을 명시해야 하며,
 현재 강제 상태를 맞추기 위해 외곽 lambda를 다시 0으로 고정하거나 평균 RHS를
 제거하는 자동 우회는 허용하지 않는다.
+
+추가 [수학·수치 검토](LEGACY_SUPPORT_ALIGNMENT_20260918.md)는 수평 mobility의 beta/erru
+참조 위치가 active pressure 행과 달라 33,808개의 연결을 불필요하게 끊었음을 확인했다.
+위치를 정렬한 뒤 active 723,638행과 RHS는 그대로이며 성분은 8개, 영행은 4개다.
+8개 모두 부적합하고 가장 큰 성분의 잔차 하한은 약 `7.09e-6`으로 `1e-10`을 넘는다.
+P0-3은 계속 OPEN이다. 다음 순서는 경계/source 또는 증분 목표의 수학적 해 존재 조건,
+그 다음 스케일링·전처리이며, 미수렴을 반복수나 계수 floor로 우회하지 않는다.
 
 구현은 단순한 Fortran 절차와 기존 구조를 사용한다. 새 scratch cwd에서
 `tests/intel_toolchain.sh`의 pinned Intel O0/O2로 검증한다. 외부 GNU 대수 반례는

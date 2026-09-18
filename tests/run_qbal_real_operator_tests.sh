@@ -7,7 +7,7 @@ snapshot_default="$maintained_root/scratch/baudit_20260917/run/operator_snapshot
 snapshot=${1:-$snapshot_default}
 output_prefix=${2:-$repo_root/scratch/qbal_real_operator_rows}
 expected_snapshot_sha256=96932e53e5f30bf3e9c307617765aaa7200750ec01d4ead6b45842faf97fa661
-expected_source_sha256=cb49b1e92c6829e12bf8f26a936b5058c7f41f107dcc143f59a97e4a739dc951
+expected_source_sha256=e5a669b5f6c8ac005ba433c6e21149efb4c75d6eb7d8a5020205305d9b28f2e0
 
 [[ -s "$snapshot" ]] || {
   printf 'actual operator snapshot is required: %s\n' "$snapshot" >&2
@@ -136,12 +136,14 @@ for component in result['components']:
 component_count = len(result['components'])
 anchored_count = sum(bool(component['anchored']) for component in result['components'])
 singleton_count = sum(component['rows'] == 1 for component in result['components'])
+component_rows = sorted(component['rows'] for component in result['components'])
 expected = {
     'active_rows': 723638,
-    'component_count': 222,
-    'incompatible': 222,
+    'component_count': 8,
+    'incompatible': 8,
     'anchored': 0,
-    'singleton_zero_rows': 171,
+    'singleton_zero_rows': 4,
+    'component_rows': [1, 1, 1, 1, 135, 453, 670, 722376],
 }
 actual = {
     'active_rows': result['active_rows'],
@@ -149,10 +151,11 @@ actual = {
     'incompatible': counts.get('INCOMPATIBLE', 0),
     'anchored': anchored_count,
     'singleton_zero_rows': singleton_count,
+    'component_rows': component_rows,
 }
 if actual != expected:
     raise SystemExit(f'unexpected component audit result: {actual}')
-print('QBAL sparse component audit: 222 INCOMPATIBLE closed components; 0 anchored; 171 singleton zero rows')
+print('QBAL sparse component audit: 8 INCOMPATIBLE closed components; 0 anchored; 4 singleton zero rows')
 print('QBAL sparse component audit is not a physical PASS or after-state acceptance')
 PY
 

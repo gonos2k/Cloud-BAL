@@ -22,6 +22,7 @@ PROGRAM test_qbal_operator_identity
   failures = 0
   CALL initialize_inputs()
   CALL test_setup_and_masks(failures)
+  CALL test_active_edge_mobility(failures)
   CALL test_operator_identity(failures)
   CALL test_variable_metric_solve(failures)
   CALL test_component_preflight(failures)
@@ -149,8 +150,8 @@ CONTAINS
     ! Verify the variable-coefficient harmonic face calculation at a supported
     ! interior face, including its local dx metric.
     i = 4; j = 2; k = 2
-    ci = 0.5D0*DBLE(beta(i,j,k))/DBLE(erru(i,j,k))
-    cj = 0.5D0*DBLE(beta(i+1,j,k))/DBLE(erru(i+1,j,k))
+    ci = 0.5D0*DBLE(beta(i,j+1,k+1))/DBLE(erru(i,j+1,k+1))
+    cj = 0.5D0*DBLE(beta(i+1,j+1,k+1))/DBLE(erru(i+1,j+1,k+1))
     expected = harmonic(ci,cj)/DBLE(dx(i,j))
     actual = cx(i,j,k)
     scale = MAX(ABS(expected),1.0D-30)
@@ -190,6 +191,90 @@ CONTAINS
          rhs_alt(5,5,3) == 0.0D0, &
          'zero beta must remove its row and forcing', failures)
   END SUBROUTINE test_setup_and_masks
+
+  SUBROUTINE test_active_edge_mobility(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    REAL :: ue(nx,ny,nz), ve(nx,ny,nz), we(nx,ny,nz)
+    REAL :: erre(nx,ny,nz), taue(nx,ny), betae(nx,ny,nz)
+    REAL :: dxe(nx,ny), dye(nx,ny), p_se(nx,ny), dpe(nz), p_e(nz)
+    REAL*8 :: cxe(nx,ny,nz), cye(nx,ny,nz), cpe(nx,ny,nz)
+    REAL*8 :: rhse(nx+1,ny+1,nz+1), sol_e(nx+1,ny+1,nz+1)
+    REAL*8 :: rmsres, maxres
+    LOGICAL :: active_e(nx+1,ny+1,nz+1)
+    INTEGER :: status, location(3)
+
+    ue = 0.0
+    ve = 0.0
+    we = 0.0
+    erre = 1.0
+    taue = 1.0
+    dxe = 1.0
+    dye = 1.0
+    p_se = 102000.0
+    p_e = p
+    dpe = 1.0
+
+    ! Exactly two active rows joined in X.  The old stored-face lookup sees
+    ! beta(2,2,2) and beta(3,2,2), both zero; the incident rows are (2,3,3)
+    ! and (3,3,3), which must provide the positive mobility.
+    betae = 0.0
+    betae(2,3,3) = 0.8
+    betae(3,3,3) = 0.7
+    CALL qbal_continuity_setup(ue,ve,we,erre,taue,betae,nx,ny,nz,dxe,dye, &
+         p_se,p_e,dpe,active_e,cxe,cye,cpe,rhse,status)
+    CALL check(status == 1 .AND. COUNT(active_e) == 2 .AND. &
+         active_e(2,3,3) .AND. active_e(3,3,3), &
+         'X compact fixture must contain exactly two active rows', failures)
+    CALL check(betae(2,2,2) == 0.0 .AND. betae(3,2,2) == 0.0, &
+         'X compact fixture must zero the old shifted beta locations', failures)
+    CALL check(cxe(2,2,2) > 0.0D0 .AND. COUNT(cxe > 0.0D0) == 1 .AND. &
+         COUNT(cye > 0.0D0) == 0 .AND. COUNT(cpe > 0.0D0) == 0, &
+         'X active pair must have exactly one positive connecting face', failures)
+
+    ! Equal metrics make this nonzero two-row forcing compatible.
+    rhse = 0.0D0
+    rhse(2,3,3) = -1.0D0
+    rhse(3,3,3) = 1.0D0
+    sol_e = 0.0D0
+    CALL leibp3(sol_e,rhse,200,1.0,active_e,cxe,cye,cpe,nx,ny,nz, &
+         dxe,dye,dpe,status)
+    CALL qbal_linear_residual(sol_e,rhse,active_e,cxe,cye,cpe,nx,ny,nz, &
+         dxe,dye,dpe,rmsres,maxres,location)
+    CALL check(status == 1 .AND. maxres <= 1.0D-10 .AND. &
+         MAXVAL(ABS(sol_e)) > 1.0D-8, &
+         'X compact pair must support a nonzero compatible manufactured solve', &
+         failures)
+
+    ! Exactly two active rows joined in Y.  The old lookup sees beta(2,2,2)
+    ! and beta(2,3,2), both zero; the incident rows are (3,2,3) and (3,3,3).
+    betae = 0.0
+    betae(3,2,3) = 0.8
+    betae(3,3,3) = 0.7
+    CALL qbal_continuity_setup(ue,ve,we,erre,taue,betae,nx,ny,nz,dxe,dye, &
+         p_se,p_e,dpe,active_e,cxe,cye,cpe,rhse,status)
+    CALL check(status == 1 .AND. COUNT(active_e) == 2 .AND. &
+         active_e(3,2,3) .AND. active_e(3,3,3), &
+         'Y compact fixture must contain exactly two active rows', failures)
+    CALL check(betae(2,2,2) == 0.0 .AND. betae(2,3,2) == 0.0, &
+         'Y compact fixture must zero the old shifted beta locations', failures)
+    CALL check(cye(2,2,2) > 0.0D0 .AND. COUNT(cye > 0.0D0) == 1 .AND. &
+         COUNT(cxe > 0.0D0) == 0 .AND. COUNT(cpe > 0.0D0) == 0, &
+         'Y active pair must have exactly one positive connecting face', failures)
+
+    ! Equal metrics make this nonzero two-row forcing compatible.
+    rhse = 0.0D0
+    rhse(3,2,3) = -1.0D0
+    rhse(3,3,3) = 1.0D0
+    sol_e = 0.0D0
+    CALL leibp3(sol_e,rhse,200,1.0,active_e,cxe,cye,cpe,nx,ny,nz, &
+         dxe,dye,dpe,status)
+    CALL qbal_linear_residual(sol_e,rhse,active_e,cxe,cye,cpe,nx,ny,nz, &
+         dxe,dye,dpe,rmsres,maxres,location)
+    CALL check(status == 1 .AND. maxres <= 1.0D-10 .AND. &
+         MAXVAL(ABS(sol_e)) > 1.0D-8, &
+         'Y compact pair must support a nonzero compatible manufactured solve', &
+         failures)
+  END SUBROUTINE test_active_edge_mobility
 
   SUBROUTINE check_forbidden_faces(row_active,cx_faces,cy_faces,cp_faces, &
        du,dv,dw,failures)
