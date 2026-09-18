@@ -136,3 +136,6 @@ if [[ "$(sha256sum "$qbal_source" | awk '{print $1}')" != "$qbal_source_hash" ]]
   printf 'production qbal source changed during focused tests\n' >&2
   exit 1
 fi
+
+python3 "$repo_root/tests/test_qbal_component_diagnostics.py"
+python3 "$repo_root/tests/test_qbal_boundary_diagnostics.py"

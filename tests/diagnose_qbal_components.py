@@ -15,10 +15,10 @@ from pathlib import Path
 import numpy as np
 from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import breadth_first_order, connected_components
-from scipy.sparse.linalg import spsolve
 
 
 RESIDUAL_TOLERANCE = 1e-10
+DETAILED_BALANCE_TOLERANCE = 4096 * np.finfo(float).eps
 
 
 def diagnose(path: Path) -> dict:
@@ -78,38 +78,76 @@ def diagnose(path: Path) -> dict:
             entry['compatibility'] = 'ANCHORED_NO_CONSTANT_RIGHT_NULLSPACE'
             continue
         force = rhs[selected]
+        block = matrix[selected][:, selected]
+        edge_block = off[selected][:, selected]
+        tree_valid = True
         if len(selected) == 1:
             left = np.ones(1)
             residual = 0.0
         else:
-            block = matrix[selected][:, selected]
-            scale = np.max(np.abs(block.data))
             # A spanning-tree candidate is cheap even for the actual 3-D
-            # component. Its full transpose residual is the certificate;
-            # a tree alone is never evidence of compatibility.
+            # component. Both edge detailed balance and the full transpose
+            # residual are required; a tree alone is not a certificate.
             order, parent = breadth_first_order(block, 0, directed=False)
             child = order[1:]
-            ratio = np.asarray(block[parent[child], child]).ravel() / np.asarray(
-                block[child, parent[child]]).ravel()
-            left = np.ones(len(selected))
-            for node, edge_ratio in zip(child, ratio):
-                left[node] = left[parent[node]] * edge_ratio
-            left /= left.sum()
-            residual = float(np.sum(np.abs(block.T @ left)) /
-                             np.sum(abs(block).T @ np.abs(left)))
-            if residual > 1e-12 and len(selected) <= 10000:
-                # General nonreversible small blocks: solve an independently
-                # assembled sparse transposed system with normalization.
-                system = (block.T / scale).tolil()
-                system[-1, :] = np.ones(len(selected))
-                forcing = np.zeros(len(selected))
-                forcing[-1] = 1
-                left = spsolve(system.tocsc(), forcing)
+            if len(order) != len(selected):
+                tree_valid = False
+            else:
+                tree_forward = np.asarray(
+                    block[parent[child], child]).ravel()
+                tree_reverse = np.asarray(
+                    block[child, parent[child]]).ravel()
+                tree_valid = bool(
+                    np.isfinite(tree_forward).all() and
+                    np.isfinite(tree_reverse).all() and
+                    (tree_forward > 0).all() and (tree_reverse > 0).all())
+            if tree_valid:
+                ratio = tree_forward / tree_reverse
+                left = np.ones(len(selected))
+                for node, edge_ratio in zip(child, ratio):
+                    left[node] = left[parent[node]] * edge_ratio
+                left /= left.sum()
                 residual = float(np.sum(np.abs(block.T @ left)) /
-                             np.sum(abs(block).T @ np.abs(left)))
-        if not np.isfinite(left).all() or residual > 1e-12 or left.min() < -1e-12:
+                                 np.sum(abs(block).T @ np.abs(left)))
+            else:
+                left = np.full(len(selected), np.nan)
+                residual = float('inf')
+        edge_max_relative = None
+        edge_count = edge_block.nnz
+        unresolved_edges = 0
+        missing_reverse = not tree_valid
+        if edge_count == 0 and tree_valid:
+            edge_max_relative = 0.0
+        if edge_count and np.isfinite(left).all() and left.min() > 0:
+            edges = edge_block.tocoo()
+            reverse = np.asarray(edge_block[edges.col, edges.row]).ravel()
+            lhs = left[edges.row] * edges.data
+            rhs_edge = left[edges.col] * reverse
+            edge_scale = np.maximum(np.abs(lhs), np.abs(rhs_edge))
+            valid = (np.isfinite(lhs) & np.isfinite(rhs_edge) &
+                     (edge_scale > 0) & (reverse > 0))
+            missing_reverse = bool((reverse <= 0).any())
+            relative = np.ones(edge_count)
+            forward_scaled = lhs[valid] / edge_scale[valid]
+            reverse_scaled = rhs_edge[valid] / edge_scale[valid]
+            relative[valid] = np.abs(forward_scaled - reverse_scaled) / (
+                np.abs(forward_scaled) + np.abs(reverse_scaled))
+            edge_max_relative = float(relative.max(initial=0.0))
+            unresolved_edges = int(np.count_nonzero(
+                ~valid | (relative > DETAILED_BALANCE_TOLERANCE)))
+        entry.update(edge_count=edge_count,
+                     edge_max_relative_defect=edge_max_relative,
+                     edge_tolerance=DETAILED_BALANCE_TOLERANCE)
+        if (not np.isfinite(left).all() or not np.isfinite(residual) or
+                residual > DETAILED_BALANCE_TOLERANCE or
+                left.min() <= 0 or unresolved_edges):
             entry['compatibility'] = 'UNRESOLVED_LEFT_NULLSPACE'
-            entry['transpose_residual'] = residual
+            entry['transpose_residual'] = (float(residual)
+                                           if np.isfinite(residual) else None)
+            if missing_reverse:
+                entry['unresolved_reason'] = 'MISSING_REVERSE_EDGE'
+            elif unresolved_edges:
+                entry['unresolved_reason'] = 'DETAILED_BALANCE_EDGE'
             continue
         left /= left.sum()
         defect = float(left @ force)
@@ -121,6 +159,7 @@ def diagnose(path: Path) -> dict:
         obstruction_2 = float(abs(defect) / left_norm2)
         entry.update(left_rhs=defect, arithmetic_bound=rounding,
                      transpose_residual=residual,
+                     transpose_residual_l1=float(np.sum(np.abs(block.T @ left))),
                      left_norm2=left_norm2,
                      rhs_norm2=rhs_norm2,
                      rhs_norm_inf=rhs_norm_inf,
@@ -130,6 +169,8 @@ def diagnose(path: Path) -> dict:
                      fixed_tolerance_infeasible=bool(obstruction_inf > RESIDUAL_TOLERANCE),
                      relative_defect=abs(defect) / max(float(np.max(np.abs(force))),
                                                      np.finfo(float).tiny),
+                     obstruction_interpretation=(
+                         'conditional_diagnostic; not a rigorous lower bound'),
                      compatibility='COMPATIBLE_TO_ARITHMETIC' if abs(defect) <= rounding
                      else 'INCOMPATIBLE')
     return {'source': str(path.resolve()), 'sha256': hashlib.sha256(raw).hexdigest(),
@@ -137,10 +178,15 @@ def diagnose(path: Path) -> dict:
             'components': components, 'rhs_modified': False,
             'scope': 'Discrete production rows only; no accepted after-state or forecast claim',
             'diagnostic_note': (
-                'Obstruction bounds are conditional on the numerically validated, '
-                'sum-normalized left-null certificate and are not rigorous interval '
-                'bounds. The fixed 1e-10 tolerance is diagnostic only; the positive '
-                'diagonal ratio is coefficient contrast, not a condition number.')}
+                'The edge test requires a numerically validated, sum-normalized '
+                'detailed-balance certificate. Obstruction values are conditional '
+                'diagnostics from that certificate, not rigorous lower bounds or '
+                'interval bounds. The fixed 1e-10 tolerance is diagnostic only; '
+                'the positive diagonal ratio is coefficient contrast, not a '
+                'condition number. No independent left-null solve is used to '
+                'accept a nonreversible component. For approximate z, subtract '
+                '||A^T z||1 * ||lambda||inf from |z^T b| (floored at zero) '
+                'before dividing by ||z||1 for an infinity residual bound.')}
 
 
 def main() -> None:

@@ -5,6 +5,7 @@ PROGRAM test_qbal_operator
   EXTERNAL :: continuity_metrics,continuity_point,leib_sub
   EXTERNAL :: leibp3
   EXTERNAL :: qbal_continuity_row
+  EXTERNAL :: qbal_component_check
   EXTERNAL :: geostrophic_residual_metrics
   REAL*8, EXTERNAL :: qbal_row_value
   REAL*8, EXTERNAL :: qbal_divergence_value
@@ -160,6 +161,7 @@ PROGRAM test_qbal_operator
        'out-of-range near-zero Coriolis support must fail', failures)
 
   CALL test_leibp3_scale_guard(failures)
+  CALL test_component_detailed_balance(failures)
 
   IF (failures /= 0) THEN
     PRINT *, 'QBAL operator unit tests failed:', failures
@@ -300,6 +302,56 @@ CONTAINS
     CALL check(finite_status == 0, &
          'nonfinite forcing must still fail closed',failures)
   END SUBROUTINE test_leibp3_scale_guard
+
+  SUBROUTINE test_component_detailed_balance(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    REAL*8 :: rhs(nx+1,ny+1,nz+1), cx(nx,ny,nz), cy(nx,ny,nz)
+    REAL*8 :: cp(nx,ny,nz), epsilons(3), epsilon_value
+    LOGICAL :: active(nx+1,ny+1,nz+1)
+    REAL :: local_dx(nx,ny), local_dy(nx,ny), local_dp(nz)
+    INTEGER :: component_status, ie
+
+    epsilons = (/1.0D0, 1.0D-8, 1.0D-13/)
+    local_dx = 1.0
+    local_dy = 1.0
+    local_dp = 1.0
+    DO ie=1,3
+      epsilon_value = epsilons(ie)
+      active = .FALSE.
+      active(2,2,2) = .TRUE.
+      active(3,2,2) = .TRUE.
+      active(2,3,2) = .TRUE.
+      active(3,3,2) = .TRUE.
+      cx = 0.0D0
+      cy = 0.0D0
+      cp = 0.0D0
+      ! The production face coefficient is shared by both rows.  A row
+      ! metric contrast creates the requested weak one-edge asymmetry.
+      local_dx = 1.0
+      local_dx(3,3) = 2.0
+      cx(2,1,1) = epsilon_value
+      cx(2,2,1) = epsilon_value
+      cy(1,2,1) = 1.0D0
+      cy(2,2,1) = 1.0D0
+      rhs = 0.0D0
+      rhs(2,2,2) = 1.0D0
+      rhs(3,2,2) = -1.0D0
+      rhs(2,3,2) = 1.0D0
+      rhs(3,3,2) = -1.0D0
+      CALL qbal_component_check(rhs,active,cx,cy,cp,nx,ny,nz, &
+           local_dx,local_dy,local_dp,component_status)
+      CALL check(component_status == 0, &
+           'weak nonreversible cycle must remain unresolved', failures)
+
+      ! Restore the weak reverse face to make every edge reversible.  The
+      ! same small coefficients must pass the relative edge test.
+      local_dx = 1.0
+      CALL qbal_component_check(rhs,active,cx,cy,cp,nx,ny,nz, &
+           local_dx,local_dy,local_dp,component_status)
+      CALL check(component_status == 1, &
+           'reversible weak edge must not be falsely rejected', failures)
+    END DO
+  END SUBROUTINE test_component_detailed_balance
 
 END PROGRAM test_qbal_operator
 

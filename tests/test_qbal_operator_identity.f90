@@ -7,6 +7,7 @@ PROGRAM test_qbal_operator_identity
   EXTERNAL :: qbal_continuity_setup, qbal_multiplier_increment
   EXTERNAL :: qbal_continuity_row, qbal_linear_residual, leibp3
   EXTERNAL :: qbal_component_check
+  EXTERNAL :: qbal_increment_maxima, qbal_candidate_acceptance
   REAL*8, EXTERNAL :: qbal_row_value
 
   INTEGER, PARAMETER :: nx=6, ny=6, nz=5
@@ -23,6 +24,7 @@ PROGRAM test_qbal_operator_identity
   CALL initialize_inputs()
   CALL test_setup_and_masks(failures)
   CALL test_active_edge_mobility(failures)
+  CALL test_solved_face_increment_gate(failures)
   CALL test_operator_identity(failures)
   CALL test_variable_metric_solve(failures)
   CALL test_component_preflight(failures)
@@ -191,6 +193,51 @@ CONTAINS
          rhs_alt(5,5,3) == 0.0D0, &
          'zero beta must remove its row and forcing', failures)
   END SUBROUTINE test_setup_and_masks
+
+  SUBROUTINE test_solved_face_increment_gate(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    INTEGER :: direction, status
+    REAL :: du(nx,ny,nz), dv(nx,ny,nz), dw(nx,ny,nz), maxwind, maxomega
+    REAL*8 :: multiplier(nx+1,ny+1,nz+1)
+
+    DO direction=1,2
+      CALL initialize_inputs()
+      u=0.0; v=0.0; w=0.0
+      dx=5000.0; dy=5000.0; dp=5000.0
+      ps=102000.0; erru=1.0; tau=1.0; beta=0.0
+      beta(3,3,3)=0.7
+      IF(direction==1)THEN
+        beta(2,3,3)=0.8
+        u(2,2,2)=12.0
+      ELSE
+        beta(3,2,3)=0.8
+        v(2,2,2)=12.0
+      END IF
+      CALL qbal_continuity_setup(u,v,w,erru,tau,beta,nx,ny,nz,dx,dy,ps,p, &
+           dp,active,cx,cy,cp,rhs,status)
+      CALL check(status==1 .AND. COUNT(active)==2 .AND. beta(2,2,2)==0.0, &
+           '12 m/s fixture must use two shifted active rows',failures)
+      multiplier=0.0D0
+      CALL leibp3(multiplier,rhs,200,50.0,active,cx,cy,cp,nx,ny,nz, &
+           dx,dy,dp,status)
+      CALL check(status==1,'12 m/s compatible face solve must converge',failures)
+      CALL qbal_multiplier_increment(multiplier,cx,cy,cp,nx,ny,nz,du,dv,dw)
+      CALL check(ABS(MAX(MAXVAL(ABS(du)),MAXVAL(ABS(dv)))-12.0)<1.0E-5, &
+           'production solve must create actual 12 m/s face correction',failures)
+      CALL check(ALL(PACK(du,cx==0.0D0)==0.0) .AND. &
+           ALL(PACK(dv,cy==0.0D0)==0.0) .AND. ALL(PACK(dw,cp==0.0D0)==0.0), &
+           'projection must preserve every unauthorized face',failures)
+      CALL qbal_increment_maxima(u,v,w,u+du,v+dv,w+dw,beta,nx,ny,nz, &
+           maxwind,maxomega,status)
+      CALL check(status==1 .AND. ABS(maxwind-12.0)<1.0E-5, &
+           'face gate must measure actual shifted 12 m/s correction',failures)
+      CALL qbal_candidate_acceptance(maxwind,maxomega,1.0E-4,2.0E-4, &
+           4.0E-4,8.0E-4,8.0E-5,1.5E-4,1.0E-2,1.05E-2,status)
+      CALL check(status==0,'12 m/s face correction must fail acceptance',failures)
+      PRINT *, 'QBAL solved face gate direction/maxwind/status ',direction,maxwind,status
+    END DO
+    CALL initialize_inputs()
+  END SUBROUTINE test_solved_face_increment_gate
 
   SUBROUTINE test_active_edge_mobility(failures)
     INTEGER, INTENT(INOUT) :: failures
