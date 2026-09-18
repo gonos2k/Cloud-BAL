@@ -97,7 +97,9 @@ native 경로 조사는 병렬이며, 미완료 물리 후보를 게시하지 �
 | 제외된 이웃의 실제 이유 | 지면 아래/sentinel/support 중첩을 분리하고 큰 기여 face·donor 좌표 기록 | DIAGNOSED_SCOPED |
 | 단일 감쇠·증분 목표 | 같은 graph에서 성분별 결함 평가; 자동 해소가 아님을 명시 | DIAGNOSED_SCOPED |
 | 허용 조정 목록 | face/source별 물리·자료 근거, E, 단위, 양쪽 행, 오차·상한 | OPEN |
-| 상한 포함 성분 문제 | `Z^T D E eta=Z^T b`의 공통 feasible eta, 입력/정책 고정 | OPEN |
+| 상한 포함 성분 문제 | 진단용 support omega로 호환 가능; 생산 E/권한은 미확정 | DIAGNOSED_SCOPED / POLICY_OPEN |
+| 전체 행·총 증분 상한 | 원래 A의 비제약 해는 상한 위반; bounded 유량 후보는 별도 조건부 진단 | DIAGNOSED_SCOPED |
+| 비활성 수신 영역·가중 목적함수 | 이웃 발산 변화와 관측 오차·상한을 포함한 전체 문제 확정 | OPEN |
 | 비영 ON·native·예보 | 위 정책과 해 존재 조건을 만족한 실제 후보 검증 | BLOCKED / NOT_RUN |
 
 ## 승인 후 구현 체크리스트 (2026-09-15)
