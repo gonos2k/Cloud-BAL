@@ -254,24 +254,10 @@ awk '
 ' "$repo_root/src/lib/bgdata/readbgdata.f"
 printf '%s\n' 'LAPS 3-D reader status-conversion check passed'
 
-# Extract the production continuity/operator routines so the runtime test uses
-# the exact fixed-form implementation without linking the unrelated KLAPS I/O.
-awk '
-  /^      subroutine leib_sub\(/ {capture=1}
-  capture && /^      subroutine analzo\(/ {capture=0}
-  capture {print}
-  /^      subroutine fthree\(/ {operator=1}
-  operator && /^      subroutine leib\(/ {operator=0}
-  operator {print}
-' "$repo_root/src/balance/qbalpe.f" > "$test_tmp/qbal_operator_core.f"
-
-"$CLOUD_BAL_FC" -c "${CLOUD_BAL_FIXED_FLAGS[@]}" \
-  -o "$test_tmp/qbal_operator_core.o" "$test_tmp/qbal_operator_core.f"
-"$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
-  "$repo_root/tests/test_qbal_operator.f90" \
-  "$test_tmp/qbal_operator_core.o" -o "$test_tmp/test_qbal_operator"
-
-"$test_tmp/test_qbal_operator"
+# The focused operator runner owns extraction and the O0/O2 identity,
+# rollback, and mutation checks.  Calling it here keeps the broad unit suite
+# from maintaining a second stale qbalpe extraction.
+bash "$repo_root/tests/run_qbal_operator_tests.sh"
 
 "$repo_root/tests/run_contract_regressions.sh"
 "$repo_root/tests/run_qbal_acceptance_tests.sh"

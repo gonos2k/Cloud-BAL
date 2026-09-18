@@ -1,6 +1,6 @@
 # 다중 레이더·국지 균형초기화 실행 체크리스트와 체크포인트
 
-작성: 2026-09-14. 추가 검토 반영: 2026-09-17.
+작성: 2026-09-14. 추가 검토·P0 교정 반영: 2026-09-18.
 상위 계획: [추가 과제 계획서](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
 검토 근거: 수학·수치해석·기상학 종합 검토 (로컬 작업공간 근거: `../scratch/cp02_multiradar_additional_review_20260914/REVIEW.md`).
 수학 근거: [정리·증명과 실제 적용 조건](CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md).
@@ -54,11 +54,11 @@ projection과 구분한다. 물리 경계에서 목표가 불가능하면 거부
 
 | 구현 작업 / 연결 | 현재 상태 | 다음 종료 근거 |
 |---|---|---|
-| `A_solver=DG` / B06, R2–R3 | DEFECT_CONFIRMED / OPEN | 실제 전체 격자 가변계수·metric·pressure·경계 항등식과 source-bound Fortran Intel O0/O2 |
-| RHS·influence 목표 / B01–B03, MR-C2 | CONTRACT_RECORDED / IMPLEMENTATION_OPEN | 전체 후보 `D(y+delta_y)=0`의 RHS·mobility·support·경계와 acceptance 정합; 계약 변경 시 이유와 기대 잔차 명시 |
-| 기존 행렬 성분·호환 진단 / M05, M07 | DIAGNOSED_INCOMPATIBLE | 3개 닫힌 성분의 부적합은 확인됨. 물리적 처리 정책 확정과 수정 행렬의 재진단은 OPEN |
-| P0-4 실제 residual 로그 / B06 | OPEN | 최종 lambda의 RMS/max/위치와 delta lambda·실제 wind/omega 증분을 별도 기록; 진단 무변경 검증 |
-| 같은 NE57의 비영 ON 생성 / R3 | BLOCKED_BY_LEGACY_P0 | 위 조건 충족 후 전체 235×283×22 실제 입력 실행; 승인된 after와 실패 원복·무게시 |
+| `A_solver=DG` / B06, R2–R3 | IMPLEMENTED_SCOPED | 같은 face 계수로 solve/update/residual 연결; 실제 723,638행 및 작은 가변계수·경계 검사의 Intel O0/O2 근거는 [교정 기록](LEGACY_OPERATOR_CLOSURE_20260918.md) |
+| RHS·influence 목표 / B01–B03, MR-C2 | IMPLEMENTED_SCOPED | RHS `-D(y)`; beta는 mobility/support. 외곽·terrain·지원 경계의 제안 상태 유량 고정; 전체/native 물리 승인은 아님 |
+| 성분·호환 진단 / M05, M07 | IMPLEMENTED / INCOMPATIBLE | 과거 3개 부적합 성분과 별도로, 수정 행렬의 222개 닫힌 성분(171 영행) 모두 부적합. 인증 실패·비영 부적합 RHS는 사전 거부; 후속 물리 제약 설계 OPEN |
+| P0-4 실제 residual 로그 / B06 | INSTRUMENTATION_IMPLEMENTED | 최종 lambda 잔차·delta lambda·실제 U/V/omega 및 전체/지원 pressure 잔차의 분리 계측 구현, 합성 검사에서 검증. 실자료는 preflight RMS/max/위치와 실패 시 적용 증분 0만 확인했으며, 수렴한 최종 lambda 또는 승인 after의 계측 근거는 없음 |
+| 같은 NE57의 비영 ON 생성 / R3 | PREFLIGHT_REJECTED / ON_BLOCKED | 수정 소스 Intel O0/O2 전체 실행 모두 222개 성분 RHS 부적합으로 exit 1; 실패 원복·무게시 확인. 물리적으로 정당한 경계/support/제약 설계 후 재실행 필요 |
 | 최종 A-grid/native 전후 / MR-C4 | NOT_RUN | 마지막 변환·startup·halo 후 실제 상태와 질량·열역학·omega/W 대응 |
 
 근거: [보존한 수학·기상학 검토](LEGACY_BALANCE_MATH_REVIEW_20260917.md).
@@ -68,7 +68,9 @@ projection과 구분한다. 물리 경계에서 목표가 불가능하면 거부
 
 P0-1/2 공동 설계→P0-3 경계·호환 정책 및 P0-4 실제 잔차 검증→수렴/비영 후보→최종 상태 비교
 순서다. 실제 residual 진단은 P0 구현과 함께 준비한다. 레이더 시각/Barnes 계보 및
-native 경로 조사는 병렬이며, 미완료 물리 후보를 게시하지 않는다. 반복 상한 증가,
+native 경로 조사는 병렬이며, 미완료 물리 후보를 게시하지 않는다. 현재는 수정된
+전체 상태/고정 경계 문제의 실제 부적합이 확인돼, 물리적 경계 유량·support·제약
+선택의 후속 설계가 필요하다. 검사 구현 완료를 호환성 통과로 바꾸지 않는다. 반복 상한 증가,
 허용오차 완화, 영증분 대체는 종료 근거가 아니다.
 
 ## 승인 후 구현 체크리스트 (2026-09-15)

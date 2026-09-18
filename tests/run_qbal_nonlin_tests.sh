@@ -20,7 +20,7 @@ python3 "$repo_root/tests/extract_qbal_nonlin_caller.py" \
   "$repo_root/src/balance/qbalpe.f" "$build_root/caller_fragment.f"
 awk '
   /^[[:space:]]*subroutine nonlin\(/ {capture=1}
-  capture && /^[[:space:]]*subroutine fthree\(/ {exit}
+  capture && /^[[:space:]]*subroutine qbal_continuity_setup\(/ {exit}
   capture {print}
 ' "$repo_root/src/balance/qbalpe.f" > "$build_root/nonlin.f"
 test -s "$build_root/nonlin.f"
