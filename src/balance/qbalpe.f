@@ -2067,8 +2067,8 @@ c Authority remains in the taper and continuity face coefficients.
       maxwind=0.
       maxomega=0.
       if(nx.lt.1.or.ny.lt.1.or.nz.lt.1)return
-      if(any(.not.ieee_is_finite(influence)).or.
-     &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
+      if(any(.not.ieee_is_finite(influence)))return
+      if(minval(influence).lt.0..or.maxval(influence).gt.1.)return
       if(any(.not.ieee_is_finite(u0)).or.
      &   any(.not.ieee_is_finite(v0)).or.
      &   any(.not.ieee_is_finite(om0)).or.

@@ -110,6 +110,67 @@ class BoundaryDiagnostics(unittest.TestCase):
         self.assertEqual(result["metric"]["signed_quantity"], "z^T b = -z^T D(y)")
         self.assertLess(abs(result["state_summaries"]["proposal"]["closure_error"]), 1e-10)
 
+    def test_reason_partition_preserves_signed_budget_and_fixed_state_counts(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            rows, snapshot = write_fixture(directory)
+            result = diagnostic.diagnose(rows, snapshot, write_background_fixture(directory))
+        states = result["state_decompositions"]
+        for state in states.values():
+            component = state[0]
+            reasons = component["exclusion_reasons"]
+            self.assertEqual(sum(x["faces"] for x in reasons.values()),
+                             sum(component["boundary_face_counts"].values()))
+            self.assertAlmostEqual(sum(x["signed"] for x in reasons.values()),
+                                   component["boundary_signed_sum"])
+            self.assertEqual({k: v["faces"] for k, v in reasons.items()},
+                             {k: v["faces"] for k, v in states["proposal"][0]["exclusion_reasons"].items()})
+        for reason, total in states["proposal"][0]["exclusion_reasons"].items():
+            self.assertAlmostEqual(total["signed"],
+                states["background"][0]["exclusion_reasons"][reason]["signed"]
+                + states["proposal_delta"][0]["exclusion_reasons"][reason]["signed"])
+
+    def test_remote_sentinel_and_overlap_are_not_mislabeled_as_only_terrain(self) -> None:
+        from dataclasses import replace
+        with tempfile.TemporaryDirectory() as temporary:
+            rows_path, snapshot_path = write_fixture(Path(temporary))
+            rows = diagnostic.read_sparse_rows(rows_path)
+            snapshot = diagnostic.read_snapshot(snapshot_path)
+            neighbors = diagnostic._neighbor_indices(rows)
+        bucket, reason = diagnostic._classify_missing_face(rows, snapshot, 1, 2, neighbors)
+        self.assertEqual((bucket, reason), ("terrain-sentinel", "sentinel-donor"))
+        self.assertEqual(diagnostic._sentinel_donors(snapshot, np.array([3, 3, 2])),
+                         [{"field": "u", "stored_ijk": [3, 2, 1]}])
+        # The active row's boundary is a valid V face, not the missing U donor.
+        self.assertEqual(diagnostic._continuity_faces(rows.ijk[1])[2], ("v", (2, 2, 1)))
+        ps, beta = snapshot.ps.copy(), snapshot.beta.copy()
+        ps[2, 2], beta[2, 2, 1] = 150.0, 0.0
+        changed = replace(snapshot, ps=ps, beta=beta)
+        self.assertEqual(diagnostic._classify_missing_face(rows, changed, 1, 2, neighbors),
+                         ("terrain-sentinel", "below-surface-pressure+sentinel-donor+outside-support"))
+
+    def test_reported_face_coordinates_match_all_six_stored_donors(self) -> None:
+        self.assertEqual(diagnostic._continuity_faces(np.array([3, 3, 2])),
+                         (("u", (3, 2, 1)), ("u", (2, 2, 1)),
+                          ("v", (2, 3, 1)), ("v", (2, 2, 1)),
+                          ("omega", (3, 3, 2)), ("omega", (3, 3, 1))))
+        with tempfile.TemporaryDirectory() as temporary:
+            rows, snapshot = write_fixture(Path(temporary))
+            result = diagnostic.diagnose(rows, snapshot)
+        faces = result["components"][0]["largest_boundary_faces"]
+        self.assertEqual(len(faces), 10)
+        magnitudes = [abs(face["signed_contribution"]) for face in faces]
+        self.assertEqual(magnitudes, sorted(magnitudes, reverse=True))
+        self.assertEqual(len({(tuple(f["row_ijk"]), f["direction"]) for f in faces}), 10)
+        for face in faces:
+            field, ijk = diagnostic._continuity_faces(np.array(face["row_ijk"]))[face["direction"]]
+            self.assertEqual((face["field"], tuple(face["stored_ijk"])), (field, ijk))
+            if face["reason"] in ("horizontal-grid-limit", "vertical-grid-limit"):
+                self.assertIsNone(face["excluded_neighbor"])
+            else:
+                self.assertIsNotNone(face["excluded_neighbor"])
+
+
     def test_stored_rhs_is_checked_against_float64_flux_terms(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             rows, snapshot = write_fixture(Path(temporary))

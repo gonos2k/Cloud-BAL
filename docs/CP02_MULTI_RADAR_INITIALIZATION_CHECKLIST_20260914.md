@@ -86,6 +86,20 @@ native 경로 조사는 병렬이며, 미완료 물리 후보를 게시하지 �
 | 경계/source 또는 증분 목표 | 관측·배경 근거, 변경 권한·오차·상한·승인식과 해 존재 조건 확정 | OPEN |
 | 팀 검토·Intel 검증·PR | 지적사항 조치·현재 소스 Intel 검증·팀 검토 완료; PR 게시와 비영 ON 승인 구분 | REVIEWED_SCOPED |
 
+## PR #28 후속 경계·실현 가능성 점검
+
+두 기존 승인·인증 지적은 위 `PASS_SCOPED`를 유지한다. 변경은 같은 이산 문제의
+안전한 거부와 읽기 전용 진단을 보강하며 새 경계 권한을 부여하지 않는다.
+
+| 항목 | 종료조건 | 상태 |
+|---|---|---|
+| P2 NaN influence | finite 검사 후 min/max; pinned Intel O0/O2에서 중단 없이 status=0 | PASS_SCOPED |
+| 제외된 이웃의 실제 이유 | 지면 아래/sentinel/support 중첩을 분리하고 큰 기여 face·donor 좌표 기록 | DIAGNOSED_SCOPED |
+| 단일 감쇠·증분 목표 | 같은 graph에서 성분별 결함 평가; 자동 해소가 아님을 명시 | DIAGNOSED_SCOPED |
+| 허용 조정 목록 | face/source별 물리·자료 근거, E, 단위, 양쪽 행, 오차·상한 | OPEN |
+| 상한 포함 성분 문제 | `Z^T D E eta=Z^T b`의 공통 feasible eta, 입력/정책 고정 | OPEN |
+| 비영 ON·native·예보 | 위 정책과 해 존재 조건을 만족한 실제 후보 검증 | BLOCKED / NOT_RUN |
+
 ## 승인 후 구현 체크리스트 (2026-09-15)
 
 사용자가 승인한 계획을 기준으로 아래 실행 체크리스트를 팀 검토한 뒤 개선한다.

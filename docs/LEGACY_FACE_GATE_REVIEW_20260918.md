@@ -142,3 +142,86 @@ terrain/sentinel을 support보다 먼저 판정한다. 분류 우선순위와 �
 `A lambda+S eta=b`, `Z^T S eta=Z^T b`와 권한·오차·상한으로 명시해야 한다.
 증분 전용 목표를 선택한다면 배경 잔차를 보존한다는 한계도 함께 선언해야 한다.
 그 결정 전까지 실제 비영 ON·native·열역학·startup·예보 승인은 계속 OPEN이다.
+
+## PR #28 병합 후 추가 검토 — `68239af` 기준
+
+두 face 승인·약결합 인증 수정은 `PASS_SCOPED`로 유지한다. 다음 생산 변경은
+`qbal_increment_maxima`의 NaN influence 검사뿐이다. 유한성 검사에서 먼저 반환하고
+유한 입력에만 min/max 범위를 검사한다. `.or.`의 단락 평가에 의존하지 않는다.
+Pinned Intel O0/O2에서 수정 전 코드는 quiet NaN에 floating invalid로 중단됐고,
+수정 후에는 `status=0`으로 반환한다. 정상·상한·sentinel 회귀도 유지한다.
+이는 기존 방어식 보강이며 실자료 8개 부적합의 원인 교정이 아니다.
+
+현재 소스 SHA256은 `63a8fd2e1f7a0025e02efa91d77bfe576452c83810f7ba676ee936dc97b60e17`이다.
+이 소스로 새 scratch에서 Intel O0/O2 실제 snapshot 연산자를 다시 추출했다.
+두 export는 PR #28의 `dceb0827...278b335`와 바이트 일치하며 723,638행·8개 부적합·
+4개 영행을 유지한다. operator 회귀·변이 대조군, Python 성분 10개와 경계 11개 시험을
+통과했다. 이번에는 전체 QBAL/BALCON·ON·native·예보를 새로 실행하지 않았다.
+앞 절의 전체 생산 실행은 PR #28의 역사 근거로 구분한다.
+
+### 경계의 제외 사유를 더 좁힌 결과
+
+읽기 전용 진단은 기존 네 경계 합계와 같은 성분·mask를 보존하면서, 이웃 행 제외
+사유의 **배타적 조합**과 큰 기여 10개 face의 저장 좌표·sentinel donor를 추가한다.
+지면 아래 판정, sentinel donor, support 밖을 중복 집계하지 않는다.
+기존 `feasible_from_snapshot` 필드는 배경 계측의 존재 여부이며 물리적 실현 가능성이 아니다. 원래 metric·
+각 성분·상태의 모든 합계는 이전 JSON과 정확히 일치한다. 다음은 가장 큰 성분의
+전체 제안 상태에서 기존 `terrain/sentinel` 합계를 나눈 결과다.
+
+| 이웃 행 제외 조건 | face 수 | 정규화 signed 기여 |
+|---|---:|---:|
+| sentinel donor만 | 59,433 | +5.66368731e-6 |
+| sentinel donor와 support 밖 | 3,155 | +4.98130497e-9 |
+| 이웃 pressure 행 자체가 지면 아래 | 0 | 0 |
+
+따라서 이 합계를 이웃 행 자체의 지면 아래 유량이라고 부를 수 없다. 그렇다고
+sentinel이 관측 결측이라는 뜻도 아니다. 제안 차이의 큰 기여 예는 active 행
+`(57,253,5)`의 저장 omega `(57,253,4)`다. 제외된 이웃 `(57,253,4)`는
+`p=95000 Pa`, `ps=97912.984375 Pa`, `beta=1`이지만, 다른 donor인 omega
+`(57,253,3)`가 sentinel이다. 보고한 face는 유효하고, 그 이웃의 다른 donor가
+제외 조건을 만든다. 이 위치 관계를 근거 없이 face 개방 권한으로 바꾸지 않는다.
+
+생산 `terbnd` 본문(73행)을 그대로 발췌해 실제 ps/p와 유한한 비-sentinel 상수
+배열에 적용했다. Pinned Intel O0/O2에서 snapshot의 sentinel mask와 U/V/omega 각각
+102,385 / 102,477 / 168,111개가 완전히 일치했고 불일치는 모두 0이었다.
+따라서 이 snapshot의 sentinel 위치는 명시적 지형 mask 절차로 재현된다. 원래
+관측의 결측·오차가 없었다는 증거나 현재 이산 경계가 native 불투과면과 같다는
+증거는 아니다. 발췌 SHA256은
+`aeb995cf752d18a47e193a04ae2a3576b2b508ebfb427e5342bdf3e191bf26ff`이며
+드라이버·로그는 `scratch/pr29_validation/terbnd_mask*`에 보존한다.
+
+제안 U/V는 LAPS 분석, omega는 LCO/COM에서 시작한다
+(`src/lib/bgdata/lapsio.f:461–462`, `qbalpe.f:608–612`).
+COM 결측 셀은 유효한 background omega로 대체하는 정책을 거쳐 stagger와 `terbnd`가
+적용된다. 파일 수준 COM 계보 필수조건과 셀별 결측 대체를 구분한다.
+`QBAL_REAL_INPUT_CONTRACT.md`는 sparse COM에 uncertainty sigma나 승인된
+역학 target이 없다고 명시한다. 기존 beta/erru/tau와 최종 증분 상한은 새 경계
+변수의 오차공분산·변경 권한을 대신하지 않는다.
+
+670행·453행 성분의 경계는 각각 598개·438개 모두 support 밖이다. 가장 큰 성분과
+동일한 지형면 문제라고 묶을 수 없다. 이런 성분별 차이는 단일 omega 조절 또는
+일괄 경계 개방보다 실제 producer·localization 정책을 먼저 확인해야 하는 이유다.
+
+### 고정 graph의 감쇠와 허용 변경의 실현 가능성
+
+보존한 full-precision JSON 수치에서 `d(gamma)=d_b+gamma*d_delta`를 다시 계산했다.
+이는 저장 부동소수점 수치의 대수 분석이며 정확한 유리수 인증은 아니다.
+722,376행 성분의 근은 `0.00680654248`이지만 670/453/135행 성분의 근은 각각
+`-0.0221632510`, `-0.0285463251`, `-3.93575438`이다. 네 영행의 근도 모두
+`[0,1]` 밖이다. 따라서 공통 감쇠로 8개를 호환시킬 수 없고, 증분 목표의 결함도
+8개 모두 비영이므로 목표 이름만 바꾸어 해결할 수 없다.
+
+`y_new=y+G lambda+E eta`, `b=-D(y)`, `S=DE`이면 필요한 작은 성분 식은
+`M eta=d`, `M=Z^T DE`, `d=Z^T b`다. 각 내부 공유 face의 양쪽 행 기여는 같은
+상쇄 가중치에서 소거된다. 현재 허용된 내부 face만으로는 `M=0`이므로 비영 d를
+없앨 수 없다. 이는 계수를 더 크게 하거나 반복수를 늘려 해결할 문제가 아니다.
+
+새 변수의 자료·물리 근거, 실제 face/양쪽 행, 단위, 사전 오차와 상한을 먼저 정해야 한다.
+무상한 최소분산 식 또는 rank 검사만으로 상한 포함 실현 가능성을 선언하지 않는다.
+성분별 도달 구간은 필요조건이며 모든 성분에 공통인 eta가 있어야 한다. 이후 전체 행의
+해와 실제 U/V/omega 상한·관측·native 계약을 별도로 확인한다. 결과를 clipping하거나
+RHS 평균을 빼서 성공으로 바꾸지 않는다. 현재 허용할 새 경계/source 정책은 미확정이고,
+실자료 비영 ON은 계속 보류한다.
+
+이번 실행 근거는 격리 PR29 작업공간의 `scratch/pr29_validation/`이며,
+감쇠 계산은 `scratch/pr29_feasibility/`에 입력 JSON 해시와 함께 보존한다.

@@ -124,6 +124,13 @@ PROGRAM test_qbal_acceptance
   CALL check(status==0,'geostrophic degradation must fail',failures)
 
   nan_value=ieee_value(0.0,ieee_quiet_nan)
+  u0=0.0; v0=0.0; om0=0.0
+  u1=0.0; v1=0.0; om1=0.0
+  influence=1.0; influence(1,1,1)=nan_value
+  CALL qbal_increment_maxima(u0,v0,om0,u1,v1,om1,influence, &
+       nx,ny,nz,maxwind,maxomega,status)
+  CALL check(status==0,'non-finite influence must fail closed',failures)
+
   CALL accept(9.0,4.0,1.0E-4,2.0E-4,4.0E-4,8.0E-4, &
        nan_value,1.5E-4,1.0E-2,1.05E-2,status)
   CALL check(status==0,'non-finite metric must fail closed',failures)

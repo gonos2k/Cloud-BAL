@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import heapq
 import json
 import math
 from dataclasses import dataclass
@@ -206,17 +207,24 @@ def _neighbor_indices(rows: SparseRows) -> np.ndarray:
     return neighbors
 
 
+def _continuity_faces(cell: np.ndarray) -> tuple[tuple[str, tuple[int, int, int]], ...]:
+    """Six stored donor locations in Fortran one-based coordinates."""
+    i, j, k = cell.tolist()
+    return (("u", (i, j - 1, k - 1)), ("u", (i - 1, j - 1, k - 1)),
+            ("v", (i - 1, j, k - 1)), ("v", (i - 1, j - 1, k - 1)),
+            ("omega", (i, j, k)), ("omega", (i, j, k - 1)))
+
+
+def _sentinel_donors(snapshot: Snapshot, cell: np.ndarray) -> list[dict]:
+    fields = {"u": snapshot.u, "v": snapshot.v, "omega": snapshot.w}
+    return [{"field": field, "stored_ijk": list(ijk)}
+            for field, ijk in _continuity_faces(cell)
+            if fields[field][tuple(index - 1 for index in ijk)] == SENTINEL]
+
+
 def _sentinel_row(snapshot: Snapshot, cell: np.ndarray) -> bool:
-    """Return whether a physical cell has a sentinel in its six continuity faces."""
-    i, j, k = (cell - 1).tolist()
-    return bool(
-        snapshot.u[i, j - 1, k - 1] == SENTINEL
-        or snapshot.u[i - 1, j - 1, k - 1] == SENTINEL
-        or snapshot.v[i - 1, j, k - 1] == SENTINEL
-        or snapshot.v[i - 1, j - 1, k - 1] == SENTINEL
-        or snapshot.w[i, j, k - 1] == SENTINEL
-        or snapshot.w[i, j, k] == SENTINEL
-    )
+    """An excluded neighbor may have a sentinel on a different donor face."""
+    return bool(_sentinel_donors(snapshot, cell))
 
 
 def _stored_active_mask(rows: SparseRows) -> np.ndarray:
@@ -247,21 +255,21 @@ def _classify_missing_face(
     row_number: int,
     direction: int,
     neighbors: np.ndarray,
-) -> str:
-    """Classify exactly one non-operator face of an active row."""
+) -> tuple[str, str]:
+    """Return the historical bucket and the exclusive exclusion-reason combination."""
     i, j, k = rows.ijk[row_number].tolist()
     if direction == 0 and i == rows.dimensions[0]:
-        return "outer"
+        return "outer", "horizontal-grid-limit"
     if direction == 1 and i == 2:
-        return "outer"
+        return "outer", "horizontal-grid-limit"
     if direction == 2 and j == rows.dimensions[1]:
-        return "outer"
+        return "outer", "horizontal-grid-limit"
     if direction == 3 and j == 2:
-        return "outer"
+        return "outer", "horizontal-grid-limit"
     if direction == 4 and k == rows.dimensions[2]:
-        return "topbottom"
+        return "topbottom", "vertical-grid-limit"
     if direction == 5 and k == 2:
-        return "topbottom"
+        return "topbottom", "vertical-grid-limit"
 
     candidate = rows.ijk[row_number] + SHIFTS[direction]
     if neighbors[row_number, direction] >= 0:
@@ -270,10 +278,16 @@ def _classify_missing_face(
     beta = float(snapshot.beta[ci, cj, ck])
     above_ground = float(snapshot.ps[ci, cj]) >= float(snapshot.p[ck])
     sentinel = _sentinel_row(snapshot, candidate)
-    if (not above_ground) or sentinel:
-        return "terrain-sentinel"
+    reasons = []
+    if not above_ground:
+        reasons.append("below-surface-pressure")
+    if sentinel:
+        reasons.append("sentinel-donor")
     if beta <= 0.0:
-        return "support"
+        reasons.append("outside-support")
+    if reasons:
+        bucket = "terrain-sentinel" if (not above_ground) or sentinel else "support"
+        return bucket, "+".join(reasons)
     raise ValueError("active row has an unexplained missing positive-support neighbor")
 
 
@@ -354,6 +368,8 @@ def _decompose_components(
             raise ValueError("component has a nonpositive analytic metric weight sum")
         boundary_values = {name: [] for name in BOUNDARY_NAMES}
         boundary_counts = {name: 0 for name in BOUNDARY_NAMES}
+        reason_values: dict[str, list[float]] = {}
+        top_faces: list[tuple[float, int, int, str, str]] = []
         internal_sum = 0.0
         internal_compensation = 0.0
         internal_max = 0.0
@@ -373,10 +389,16 @@ def _decompose_components(
                         internal_max = max(internal_max, abs(pair))
                         internal_count += 1
                     continue
-                name = _classify_missing_face(rows, snapshot, row_number,
-                                              direction, neighbors)
-                boundary_values[name].append(float(signed_terms[row_number, direction]))
+                name, reason = _classify_missing_face(
+                    rows, snapshot, row_number, direction, neighbors)
+                value = float(signed_terms[row_number, direction])
+                boundary_values[name].append(value)
                 boundary_counts[name] += 1
+                reason_values.setdefault(reason, []).append(value)
+                # Keep only ten largest individual contributions, with deterministic row/direction ties.
+                heapq.heappush(top_faces, (abs(value), int(row_number), direction, name, reason))
+                if len(top_faces) > 10:
+                    heapq.heappop(top_faces)
         if sum(boundary_counts.values()) + 2 * internal_count != 6 * len(selected):
             raise ValueError("boundary partition double-counted or omitted a face")
         boundary = {name: math.fsum(values)
@@ -388,6 +410,30 @@ def _decompose_components(
             "omega": math.fsum(float(value) for value in signed_terms[selected, 4:6].ravel()),
         }
         normalized = {name: value / weight_sum for name, value in boundary.items()}
+        largest_faces = []
+        for _, row_number, direction, bucket, reason in sorted(top_faces, reverse=True):
+            cell = rows.ijk[row_number]
+            field, stored = _continuity_faces(cell)[direction]
+            candidate = cell + SHIFTS[direction]
+            inside = bool(np.all((candidate >= 2) & (candidate <= rows.dimensions)))
+            excluded = None
+            if inside:
+                ci, cj, ck = candidate - 1
+                excluded = {
+                    "ijk": candidate.tolist(),
+                    "pressure": float(snapshot.p[ck]),
+                    "surface_pressure": float(snapshot.ps[ci, cj]),
+                    "beta": float(snapshot.beta[ci, cj, ck]),
+                    "sentinel_donors": _sentinel_donors(snapshot, candidate),
+                }
+            largest_faces.append({
+                "row_ijk": cell.tolist(), "direction": int(direction),
+                "field": field, "stored_ijk": list(stored),
+                "bucket": bucket, "reason": reason,
+                "signed_contribution": float(signed_terms[row_number, direction]),
+                "normalized_contribution": float(signed_terms[row_number, direction]) / weight_sum,
+                "excluded_neighbor": excluded,
+            })
         components.append({
             "id": component,
             "state": state_label,
@@ -397,6 +443,12 @@ def _decompose_components(
             "weighted_rhs": weighted_rhs,
             "normalized_left_rhs": weighted_rhs / weight_sum,
             "boundary_signed": boundary,
+            "exclusion_reasons": {
+                reason: {"faces": len(values), "signed": math.fsum(values),
+                         "normalized": math.fsum(values) / weight_sum}
+                for reason, values in sorted(reason_values.items())
+            },
+            "largest_boundary_faces": largest_faces,
             "boundary_normalized": normalized,
             "axis_signed": axis_signed,
             "boundary_face_counts": boundary_counts,
@@ -641,6 +693,11 @@ def diagnose(
         "state_summaries": state_summaries,
         "component_count": component_count,
         "boundary_groups": list(BOUNDARY_NAMES),
+        "exclusion_reason_scope": (
+            "Exclusive combinations of stored pressure, donor sentinel and beta predicates; "
+            "not physical boundary identification or permission to change a face. "
+            "Largest faces use absolute signed contribution, not inferred causality."
+        ),
         "no_doublecount_contract": (
             "Each positive internal face is paired once by row index. Boundary terms "
             "are assigned once to outer, topbottom, support, or terrain-sentinel."
