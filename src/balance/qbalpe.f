@@ -1809,161 +1809,130 @@ c
       subroutine leib_sub(nx,ny,nz,erf,tau,erru,influence
      .,lat,dx,dy,ps,p,dp,uo,u,vo,v,
      . omo,om,omb,l,lmax,solver_status)
-
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
+      integer nx,ny,nz,l,lmax,solver_status,status,i,j,k
+      real uo(nx,ny,nz),u(nx,ny,nz),vo(nx,ny,nz),v(nx,ny,nz)
+     & ,omo(nx,ny,nz),om(nx,ny,nz),omb(nx,ny,nz)
+     & ,erru(nx,ny,nz),influence(nx,ny,nz),tau(nx,ny)
+     & ,lat(nx,ny),dx(nx,ny),dy(nx,ny),ps(nx,ny),p(nz),dp(nz)
+     & ,erf,cont,roundoff,scale
+      real, allocatable :: du(:,:,:),dv(:,:,:),dw(:,:,:)
+      real*8, allocatable :: slam(:,:,:),rhs(:,:,:)
+     & ,cx(:,:,:),cy(:,:,:),cp(:,:,:)
+      logical, allocatable :: active(:,:,:)
 
-      integer nx,ny,nz
-      integer nxm1,nym1,nzm1
-      integer i,j,k,ks,l,lmax,solver_status,operator_status
-
-      real*4      u(nx,ny,nz),uo(nx,ny,nz)
-     .      ,v(nx,ny,nz),vo(nx,ny,nz)
-     .      ,om(nx,ny,nz),omo(nx,ny,nz),omb(nx,ny,nz)
-     .      ,erru(nx,ny,nz)
-     .      ,influence(nx,ny,nz)
-     .      ,lat(nx,ny),dx(nx,ny),dy(nx,ny)
-     .      ,ps(nx,ny),p(nz),dp(nz)
-
-      real*4 dldx,dldy,dldp,sum,sum1,cnt
-     .,a,erf,bnd,coefx,coefy,coefp,ci,cj
-      real*4 tau(nx,ny)
-
-      real, allocatable, dimension(:,:,:) :: slam,f3,h
-
-      bnd=1.e-30
+c Full-state projection on active rows. All failure paths preserve inputs.
       solver_status=0
-      call move_3d(uo,u,nx,ny,nz)
-      call move_3d(vo,v,nx,ny,nz)
-      call move_3d(omo,om,nx,ny,nz)
-      if(any(.not.ieee_is_finite(influence)).or.
-     &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
-
-c
-c *** Compute lagrange multiplier (slam) using 3-d relaxtion on eqn. (3).
-c
-      nxm1=nx-1
-      nym1=ny-1
-      nzm1=nz-1
-
-      allocate (slam(nx+1,ny+1,nz+1),f3(nx+1,ny+1,nz+1)
-     .      ,h(nx+1,ny+1,nz+1))
-
-      call zero3d(slam,nx+1,ny+1,nz+1)
-      call zero3d(h,nx+1,ny+1,nz+1)
-c
-c ****** Compute a/tau (h) term and rhs terms in eqn. (3)
-c
-      call fthree(f3,uo,vo,omo,omb,h,erru,tau,influence,
-     .   nx,ny,nz,lat,dx,dy,dp,operator_status)
-      if(operator_status.ne.1)then
-         call move_3d(uo,u,nx,ny,nz)
-         call move_3d(vo,v,nx,ny,nz)
-         call move_3d(omo,om,nx,ny,nz)
-         deallocate(slam,f3,h)
+      u=uo
+      v=vo
+      om=omo
+      allocate(slam(nx+1,ny+1,nz+1),rhs(nx+1,ny+1,nz+1),
+     & active(nx+1,ny+1,nz+1),cx(nx,ny,nz),cy(nx,ny,nz),
+     & cp(nx,ny,nz),du(nx,ny,nz),dv(nx,ny,nz),dw(nx,ny,nz))
+      slam=0.d0
+      call qbal_continuity_setup(uo,vo,omo,erru,tau,influence,
+     & nx,ny,nz,dx,dy,ps,p,dp,active,cx,cy,cp,rhs,status)
+      if(status.ne.1)return
+      call qbal_continuity_report(uo,vo,omo,influence,nx,ny,nz,
+     & dx,dy,ps,p,dp,'before',status)
+      if(status.ne.1)return
+      call leibp3(slam,rhs,200,erf,active,cx,cy,cp,
+     & nx,ny,nz,dx,dy,dp,status)
+      if(status.ne.1)then
+         print*,'LEIBP3 returned failure/non-convergence ',status
+         print*,'CONTINUITY applied delta U/V/omega ',0.,0.,0.
          return
       endif
-c
-c ****** Perform 3-d relaxation.
-c
-      call leibp3(slam,f3,200,erf,h,erru,tau,influence
-     .  ,nx,ny,nz,dx,dy,ps,p,dp,operator_status)
-      if(operator_status.ne.1)then
-         print*,'LEIBP3 returned failure/non-convergence '
-     .          ,operator_status
-         call move_3d(uo,u,nx,ny,nz)
-         call move_3d(vo,v,nx,ny,nz)
-         call move_3d(omo,om,nx,ny,nz)
-         deallocate(slam,f3,h)
-         return
-      endif
-c
-c ****** Compute new u, v, omega by adding the lagrange multiplier terms.
-co
-      sum=0
-      sum1=0
-      cnt=0
-      do k=1,nz
-      ks=1
-      if(k.eq.nz) ks=0
-      do j=1,nym1
-      do i=1,nxm1
-
-         a=2.*erru(i,j,k)
-         if(a.le.0..or.tau(i,j).le.0..or.dp(k+ks).le.0.)then
-            deallocate(slam,f3,h)
+      call qbal_multiplier_increment(slam,cx,cy,cp,nx,ny,nz,
+     & du,dv,dw)
+      print*,'CONTINUITY delta U/V/omega maxima ',maxval(abs(du)),
+     & maxval(abs(dv)),maxval(abs(dw))
+c Validate the stored candidate before returning it to BALCON. Zero
+c coefficients preserve bit patterns, including terrain and support faces.
+      where(cx.ne.0.d0)u=uo+du
+      where(cy.ne.0.d0)v=vo+dv
+      where(cp.ne.0.d0)om=omo+dw
+      do k=2,nz
+       do j=2,ny
+        do i=2,nx
+         if(.not.active(i,j,k))cycle
+         call continuity_point(u,v,om,nx,ny,nz,dx,dy,dp,
+     &                          i,j,k,cont,status)
+c Bound only float32 storage/divergence rounding, not physical error.
+         scale=(abs(uo(i,j-1,k-1))+abs(uo(i-1,j-1,k-1))+
+     &          abs(du(i,j-1,k-1))+abs(du(i-1,j-1,k-1)))/dx(i,j)
+     &        +(abs(vo(i-1,j,k-1))+abs(vo(i-1,j-1,k-1))+
+     &          abs(dv(i-1,j,k-1))+abs(dv(i-1,j-1,k-1)))/dy(i,j)
+     &        +(abs(omo(i,j,k-1))+abs(omo(i,j,k))+
+     &          abs(dw(i,j,k-1))+abs(dw(i,j,k)))/dp(k)
+         roundoff=8.*epsilon(cont)*scale
+         if(status.ne.1.or..not.ieee_is_finite(roundoff).or.
+     &      abs(cont).gt.1.e-10+roundoff)then
+            print*,'CONTINUITY stored-state rejection ',i,j,k,cont,
+     &             roundoff
+            u=uo
+            v=vo
+            om=omo
             return
          endif
-         dldp=(slam(i,j,k)-slam(i,j,k+1))/dp(k+ks)
-         dldx=(slam(i+1,j+1,k+1)-slam(i,j+1,k+1))/dx(i,j)
-         dldy=(slam(i+1,j+1,k+1)-slam(i+1,j,k+1))/dy(i,j)
-         ci=.5*influence(i,j,k)/erru(i,j,k)
-         cj=.5*influence(i+1,j,k)/erru(i+1,j,k)
-         coefx=0.
-         if(ci.gt.0..and.cj.gt.0.)coefx=2.*ci*cj/(ci+cj)
-         cj=.5*influence(i,j+1,k)/erru(i,j+1,k)
-         coefy=0.
-         if(ci.gt.0..and.cj.gt.0.)coefy=2.*ci*cj/(ci+cj)
-         coefp=.5*influence(i,j,k)/tau(i,j)
-         if (uo(i,j,k) .ne. bnd) u(i,j,k)=uo(i,j,k)+coefx*dldx
-         if (vo(i,j,k) .ne. bnd) v(i,j,k)=vo(i,j,k)+coefy*dldy
-         if (omo(i,j,k).ne.bnd) om(i,j,k)=omo(i,j,k)+coefp*dldp
-       sum=sum+(u(i,j,k)-uo(i,j,k))**2+(v(i,j,k)-vo(i,j,k))**2
-       sum1=sum1+(om(i,j,k)-omo(i,j,k))**2
-       cnt=cnt+1.
+        enddo
+       enddo
       enddo
-      enddo
-      do i=1,nx
-         a=2.*erru(i,ny,k)
-         if(a.le.0..or.tau(i,ny).le.0..or.dp(k+ks).le.0.)then
-            deallocate(slam,f3,h)
-            return
-         endif
-         dldp=(slam(i,ny,k)-slam(i,ny,k+1))/dp(k+ks)
-         dldy=(slam(i+1,ny+1,k+1)-slam(i+1,ny,k+1))/dy(i,ny)
-         coefy=.5*influence(i,ny,k)/erru(i,ny,k)
-         coefp=.5*influence(i,ny,k)/tau(i,ny)
-         if (vo(i,ny,k) .ne. bnd)
-     &       v(i,ny,k)=vo(i,ny,k)+coefy*dldy
-         if (omo(i,ny,k).ne.bnd) om(i,ny,k)=omo(i,ny,k)+
-     &     coefp*dldp
-      enddo
-      do j=1,ny
-         a=2.*erru(nx,j,k)
-         if(a.le.0..or.tau(nx,j).le.0..or.dp(k+ks).le.0.)then
-            deallocate(slam,f3,h)
-            return
-         endif
-         dldp=(slam(nx,j,k)-slam(nx,j,k+1))/dp(k+ks)
-         dldx=(slam(nx+1,j+1,k+1)-slam(nx,j+1,k+1))/dx(nx,j)
-         coefx=.5*influence(nx,j,k)/erru(nx,j,k)
-         coefp=.5*influence(nx,j,k)/tau(nx,j)
-         if (uo(nx,j,k) .ne. bnd)
-     &       u(nx,j,k)=uo(nx,j,k)+coefx*dldx
-         if (omo(nx,j,k).ne.bnd) om(nx,j,k)=omo(nx,j,k)+
-     &     coefp*dldp
-      enddo
-c Exact compact support is an output invariant, including solver roundoff.
-      where(influence.le.0.)
+      call qbal_continuity_report(u,v,om,influence,nx,ny,nz,
+     & dx,dy,ps,p,dp,'after',status)
+      if(status.ne.1)then
          u=uo
          v=vo
          om=omo
-      endwhere
-      enddo
-c   print out rms vector adjustment
-      print*, 'RMS Vector(m/s) adjustment after continuity applied ' 
-      print*, sqrt(sum/cnt)
-      print*, 'RMS omega (Pa/s)adjustment after continuity applied ' 
-      print*, sqrt(sum1/cnt)
-
+         return
+      endif
       solver_status=1
-
-      deallocate (slam,f3,h)
-
-      return
       end
 c
-c ---------------------------------------------------------------
+      subroutine qbal_continuity_report(u,v,w,beta,nx,ny,nz,
+     & dx,dy,ps,p,dp,label,status)
+c Whole valid pressure domain and active support are distinct diagnostics.
+      implicit none
+      integer nx,ny,nz,status,i,j,k,t,n(2),loc(3,2),point_status
+      real u(nx,ny,nz),v(nx,ny,nz),w(nx,ny,nz),beta(nx,ny,nz)
+     & ,dx(nx,ny),dy(nx,ny),ps(nx,ny),p(nz),dp(nz),r
+      real*8 rms(2),peak(2)
+      character*(*) label
+      status=0
+      n=0
+      loc=0
+      rms=0.d0
+      peak=0.d0
+      do k=2,nz
+       do j=2,ny
+        do i=2,nx
+         if(ps(i,j).lt.p(k))cycle
+         call continuity_point(u,v,w,nx,ny,nz,dx,dy,dp,
+     &                          i,j,k,r,point_status)
+         if(point_status.eq.0)return
+         if(point_status.ne.1)cycle
+         do t=1,2
+          if(t.eq.2.and.beta(i,j,k).le.0.)cycle
+          n(t)=n(t)+1
+          rms(t)=rms(t)+dble(r)**2
+          if(abs(dble(r)).gt.peak(t))then
+             peak(t)=abs(dble(r))
+             loc(:,t)=(/i,j,k/)
+          endif
+         enddo
+        enddo
+       enddo
+      enddo
+      do t=1,2
+       if(n(t).gt.0)rms(t)=sqrt(rms(t)/dble(n(t)))
+      enddo
+      print*,'CONTINUITY ',label,' full count/RMS/max/location ',
+     & n(1),rms(1),peak(1),loc(:,1)
+      print*,'CONTINUITY ',label,' support count/RMS/max/location ',
+     & n(2),rms(2),peak(2),loc(:,2)
+      status=1
+      end
 c
       subroutine continuity_point(u,v,om,nx,ny,nz,dx,dy,dp,
      &                             i,j,k,residual,istatus)
@@ -1973,6 +1942,7 @@ c One flux-divergence operator shared by solver forcing and diagnostics.
       integer nx,ny,nz,i,j,k,istatus
       real*4 u(nx,ny,nz),v(nx,ny,nz),om(nx,ny,nz)
      &      ,dx(nx,ny),dy(nx,ny),dp(nz),residual,bnd
+      real*8 qbal_divergence_value
 
       bnd=1.e-30
       istatus=0
@@ -1995,15 +1965,28 @@ c A terrain/boundary mask is expected and is not an operator failure.
      &   .not.ieee_is_finite(v(i-1,j-1,k-1)).or.
      &   .not.ieee_is_finite(om(i,j,k-1)).or.
      &   .not.ieee_is_finite(om(i,j,k)))return
-      residual=(u(i,j-1,k-1)-u(i-1,j-1,k-1))/dx(i,j)
-     &        +(v(i-1,j,k-1)-v(i-1,j-1,k-1))/dy(i,j)
-     &        +(om(i,j,k-1)-om(i,j,k))/dp(k)
+      residual=real(qbal_divergence_value(u,v,om,nx,ny,nz,
+     &                                  dx,dy,dp,i,j,k))
       if(.not.ieee_is_finite(residual))return
       istatus=1
       return
       end
 c
 c ---------------------------------------------------------------
+c
+      real*8 function qbal_divergence_value(u,v,w,nx,ny,nz,
+     &                                     dx,dy,dp,i,j,k)
+c Algebra in real64 prevents RHS rounding from inventing a net source
+c in a closed component. Public state arrays retain their real32 ABI.
+      implicit none
+      integer nx,ny,nz,i,j,k
+      real u(nx,ny,nz),v(nx,ny,nz),w(nx,ny,nz)
+     & ,dx(nx,ny),dy(nx,ny),dp(nz)
+      qbal_divergence_value=
+     & (dble(u(i,j-1,k-1))-dble(u(i-1,j-1,k-1)))/dble(dx(i,j))
+     & +(dble(v(i-1,j,k-1))-dble(v(i-1,j-1,k-1)))/dble(dy(i,j))
+     & +(dble(w(i,j,k-1))-dble(w(i,j,k)))/dble(dp(k))
+      end
 c
       subroutine continuity_metrics(u,v,om,nx,ny,nz,dx,dy,ps,p,dp,
      &                         influence,rmsres,maxres,istatus)
@@ -3098,253 +3081,406 @@ c Exact terrain exclusion is distinct from a valid zero omega.
 c
 c===============================================================================
 c
-      subroutine fthree(f3,u,v,om,omb,h,erru,tau,influence
-     .,nx,ny,nz,lat,dx,dy,dp,operator_status)
-c
-c *** Fthree computes a/tau (h) and rhs terms in eqn. (3).
-c
+      subroutine qbal_continuity_setup(u,v,w,erru,tau,beta,
+     & nx,ny,nz,dx,dy,ps,p,dp,active,cx,cy,cp,rhs,status)
+c Store face coefficients using mobility from the rows they connect.
+c Corrections cannot cross inactive/support, terrain or exterior faces.
+c The prescribed base boundary flux is unchanged, including lower/top
+c omega. No boundary value changes in a sweep.
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
-c
-      integer   nx,ny,nz,nzp1,nxp1,nyp1
-     .         ,i,j,k,is,js,ks,operator_status,point_status
-c
-      real*4 f3(nx+1,ny+1,nz+1),h(nx+1,ny+1,nz+1)
-     .      ,erru(nx,ny,nz)
-     .      ,influence(nx,ny,nz)
-     .      ,u(nx,ny,nz),v(nx,ny,nz)
-     .      ,om(nx,ny,nz),lat(nx,ny)
-     .      ,omb(nx,ny,nz)
-     .      ,dx(nx,ny),dy(nx,ny),dp(nz)
-     .      ,dpp,aa,dxx,dyy
-     .      ,cont,formax
-      real*4 tau(nx,ny)
-c_______________________________________________________________________________
-c
-      print *,'fthree'
-      operator_status=0
-      f3=0.
-      h=0.
-      formax=0.
-      is=1
-      js=1
-      ks=1
+      integer nx,ny,nz,status,i,j,k,point_status
+      real u(nx,ny,nz),v(nx,ny,nz),w(nx,ny,nz)
+     & ,erru(nx,ny,nz),tau(nx,ny),beta(nx,ny,nz)
+     & ,dx(nx,ny),dy(nx,ny),ps(nx,ny),p(nz),dp(nz),cont
+      real*8 cx(nx,ny,nz),cy(nx,ny,nz),cp(nx,ny,nz)
+     & ,rhs(nx+1,ny+1,nz+1),ci,cj,qbal_harmonic
+     & ,qbal_divergence_value
+      logical active(nx+1,ny+1,nz+1),left,right
+      status=0
+      active=.false.
+      cx=0.d0
+      cy=0.d0
+      cp=0.d0
+      rhs=0.d0
+      if(min(nx,ny,nz).lt.2)return
+      if(any(.not.ieee_is_finite(beta)).or.minval(beta).lt.0.
+     & .or.maxval(beta).gt.1.)return
+      if(any(.not.ieee_is_finite(erru)).or.minval(erru).le.0.
+     & .or.any(.not.ieee_is_finite(tau)).or.minval(tau).le.0.
+     & .or.any(.not.ieee_is_finite(dx)).or.minval(dx).le.0.
+     & .or.any(.not.ieee_is_finite(dy)).or.minval(dy).le.0.
+     & .or.any(.not.ieee_is_finite(dp)).or.minval(dp).le.0.
+     & .or.any(.not.ieee_is_finite(ps))
+     & .or.any(.not.ieee_is_finite(p)))return
       do k=2,nz
-         do j=2,ny
-         do i=2,nx
-            if(.not.ieee_is_finite(erru(i,j,k)).or.
-     &         .not.ieee_is_finite(tau(i,j)).or.
-     &         .not.ieee_is_finite(influence(i,j,k)).or.
-     &         erru(i,j,k).le.0..or.tau(i,j).le.0.)return
-            if(influence(i,j,k).lt.0..or.
-     &         influence(i,j,k).gt.1.)return
-            call continuity_point(u,v,om,nx,ny,nz,dx,dy,dp,
-     &           i,j,k,cont,point_status)
-            if(point_status.eq.0)return
-            if(point_status.eq.2)cycle
-c The correction is div(C grad(lambda))=-div(V), so the RHS is the
-c unweighted flux divergence. Variable coefficients belong in LEIBP3.
-            h(i,j,k)=0.5*influence(i,j,k)/tau(i,j)
-            f3(i,j,k)=-influence(i,j,k)*cont
-           if (abs(f3(i,j,k)) .ge. formax) then
-               formax=abs(f3(i,j,k))
-               is=i
-               js=j
-               ks=k
-            endif
-         enddo
-         enddo
+       do j=2,ny
+        do i=2,nx
+         if(ps(i,j).lt.p(k).or.beta(i,j,k).le.0.)cycle
+         call continuity_point(u,v,w,nx,ny,nz,dx,dy,dp,
+     &                          i,j,k,cont,point_status)
+         if(point_status.eq.0)return
+         if(point_status.ne.1)cycle
+         active(i,j,k)=.true.
+         rhs(i,j,k)=-qbal_divergence_value(u,v,w,nx,ny,nz,
+     &                                    dx,dy,dp,i,j,k)
+        enddo
+       enddo
       enddo
-      print*, 'f3: Maximum forcing function for lamda ',formax
-      print*, 'at ',is,js,ks                                  
-c
-      operator_status=1
-      return
+      if(maxval(beta).gt.0..and..not.any(active))then
+         print*,'CONTINUITY positive support has no valid rows'
+         return
+      endif
+      do k=1,nz-1
+       do j=1,ny-1
+        do i=1,nx
+         left=active(i,j+1,k+1)
+         right=active(i+1,j+1,k+1)
+         if(.not.(left.and.right))cycle
+c U face joins pressure rows (i,j+1,k+1) and (i+1,j+1,k+1).
+         ci=.5d0*dble(beta(i,j+1,k+1))/dble(erru(i,j+1,k+1))
+         cj=.5d0*dble(beta(i+1,j+1,k+1))/
+     &                  dble(erru(i+1,j+1,k+1))
+         if(u(i,j,k).ne.1.e-30)
+     &      cx(i,j,k)=qbal_harmonic(ci,cj)/dble(dx(i,j))
+        enddo
+       enddo
+       do j=1,ny
+        do i=1,nx-1
+         left=active(i+1,j,k+1)
+         right=active(i+1,j+1,k+1)
+         if(.not.(left.and.right))cycle
+c V face joins pressure rows (i+1,j,k+1) and (i+1,j+1,k+1).
+         ci=.5d0*dble(beta(i+1,j,k+1))/dble(erru(i+1,j,k+1))
+         cj=.5d0*dble(beta(i+1,j+1,k+1))/
+     &                  dble(erru(i+1,j+1,k+1))
+         if(v(i,j,k).ne.1.e-30)
+     &      cy(i,j,k)=qbal_harmonic(ci,cj)/dble(dy(i,j))
+        enddo
+       enddo
+      enddo
+      do k=1,nz-1
+       do j=2,ny
+        do i=2,nx
+         left=active(i,j,k)
+         right=active(i,j,k+1)
+         if(.not.(left.and.right))cycle
+         if(w(i,j,k).ne.1.e-30)cp(i,j,k)=.5d0*
+     &     dble(beta(i,j,k))/(dble(tau(i,j))*dble(dp(k+1)))
+        enddo
+       enddo
+      enddo
+      status=1
       end
-c     
-c===============================================================================
 c
-      subroutine leibp3(sol,force,itmax,erf,h,erru,tau,influence
-     .                 ,nx,ny,nz,dx,dy,ps,p,dp,solver_status)
+      real*8 function qbal_harmonic(a,b)
+      implicit none
+      real*8 a,b
+      qbal_harmonic=0.d0
+      if(min(a,b).gt.0.d0)
+     & qbal_harmonic=2.d0*min(a,b)/(1.d0+min(a,b)/max(a,b))
+      end
 c
-c *** Leibp3 performs 3-d relaxation.
+      subroutine qbal_multiplier_increment(sol,cx,cy,cp,nx,ny,nz,
+     & du,dv,dw)
+      implicit none
+      integer nx,ny,nz,i,j,k
+      real*8 sol(nx+1,ny+1,nz+1),cx(nx,ny,nz),cy(nx,ny,nz)
+     & ,cp(nx,ny,nz)
+      real du(nx,ny,nz),dv(nx,ny,nz),dw(nx,ny,nz)
+      du=0.
+      dv=0.
+      dw=0.
+      do k=1,nz
+       do j=1,ny
+        do i=1,nx
+         du(i,j,k)=real(cx(i,j,k)*(sol(i+1,j+1,k+1)-
+     &                                      sol(i,j+1,k+1)))
+         dv(i,j,k)=real(cy(i,j,k)*(sol(i+1,j+1,k+1)-
+     &                                      sol(i+1,j,k+1)))
+         dw(i,j,k)=real(cp(i,j,k)*(sol(i,j,k)-sol(i,j,k+1)))
+        enddo
+       enddo
+      enddo
+      end
 c
+      subroutine qbal_continuity_row(cx,cy,cp,nx,ny,nz,dx,dy,dp,
+     & i,j,k,c)
+c D composed with G: east, west, north, south, upper, lower.
+      implicit none
+      integer nx,ny,nz,i,j,k
+      real dx(nx,ny),dy(nx,ny),dp(nz)
+      real*8 cx(nx,ny,nz),cy(nx,ny,nz),cp(nx,ny,nz),c(6)
+      c(1)=cx(i,j-1,k-1)/dble(dx(i,j))
+      c(2)=cx(i-1,j-1,k-1)/dble(dx(i,j))
+      c(3)=cy(i-1,j,k-1)/dble(dy(i,j))
+      c(4)=cy(i-1,j-1,k-1)/dble(dy(i,j))
+      c(5)=cp(i,j,k)/dble(dp(k))
+      c(6)=cp(i,j,k-1)/dble(dp(k))
+      end
+c
+      real*8 function qbal_row_value(sol,nx,ny,nz,i,j,k,c)
+      implicit none
+      integer nx,ny,nz,i,j,k
+      real*8 sol(nx+1,ny+1,nz+1),c(6)
+      qbal_row_value=c(1)*(sol(i+1,j,k)-sol(i,j,k))
+     & +c(2)*(sol(i-1,j,k)-sol(i,j,k))
+     & +c(3)*(sol(i,j+1,k)-sol(i,j,k))
+     & +c(4)*(sol(i,j-1,k)-sol(i,j,k))
+     & +c(5)*(sol(i,j,k+1)-sol(i,j,k))
+     & +c(6)*(sol(i,j,k-1)-sol(i,j,k))
+      end
+c
+      subroutine qbal_linear_residual(sol,rhs,active,cx,cy,cp,
+     & nx,ny,nz,dx,dy,dp,rmsres,maxres,location)
+c Read-only final-state diagnostic; never changes multiplier or ghosts.
+      implicit none
+      integer nx,ny,nz,i,j,k,n,location(3)
+      logical active(nx+1,ny+1,nz+1)
+      real dx(nx,ny),dy(nx,ny),dp(nz)
+      real*8 sol(nx+1,ny+1,nz+1),rhs(nx+1,ny+1,nz+1)
+     & ,cx(nx,ny,nz),cy(nx,ny,nz),cp(nx,ny,nz)
+     & ,rmsres,maxres,c(6),r,qbal_row_value
+      rmsres=0.d0
+      maxres=0.d0
+      location=0
+      n=0
+      do k=2,nz
+       do j=2,ny
+        do i=2,nx
+         if(.not.active(i,j,k))cycle
+         call qbal_continuity_row(cx,cy,cp,nx,ny,nz,dx,dy,dp,
+     &                            i,j,k,c)
+         r=qbal_row_value(sol,nx,ny,nz,i,j,k,c)-rhs(i,j,k)
+         rmsres=rmsres+r*r
+         n=n+1
+         if(abs(r).gt.maxres)then
+            maxres=abs(r)
+            location=(/i,j,k/)
+         endif
+        enddo
+       enddo
+      enddo
+      if(n.gt.0)rmsres=sqrt(rmsres/dble(n))
+      end
+c
+      subroutine qbal_component_check(rhs,active,cx,cy,cp,
+     & nx,ny,nz,dx,dy,dp,status)
+c Each bidirectionally connected closed block has right null vector 1.
+c Construct a candidate positive left null vector from shared edges and
+c certify A^T w before using w^T RHS. Non-reversible metrics for which this
+c construction fails are UNRESOLVED, never declared compatible. No RHS
+c mean removal or boundary flux adjustment is performed.
       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
       implicit none
-c
-      integer   nx,ny,nz
-     .         ,nxm1,nym1,nzm1
-     .         ,ittr,is,js
-     .         ,i,j,k,it,itmax,ia,solver_status
-c
-      real*4 sol(nx+1,ny+1,nz+1)
-     .      ,force(nx+1,ny+1,nz+1)
-     .      ,h(nx+1,ny+1,nz+1)
-     .      ,dx(nx,ny),dy(nx,ny)
-     .      ,ps(nx,ny),p(nz),dp(nz)
-     .      ,erru(nx,ny,nz),tau(nx,ny)
-     .      ,influence(nx,ny,nz)
-     .      ,erf,si,sj,sk
-     .      ,ovr,erb,hh,ertm,ermm,corlm
-     .      ,dx2,dx1s,dy2,dy1s,dz,dz2,dz1s
-     .      ,aa,cortm,res,cor,corb,corlmm
-     .      ,reslm,rho,cor0,cor5
-     .      ,ce,cw,cn,cs,cu,cd,ci,cni,cj,diag
-     .      ,dpu,dpd,dpc,epsc
-c_______________________________________________________________________________
-c
-c Flux-form variable-coefficient equation:
-c   div(C grad(lambda)) - force = 0
-c where horizontal C=1/(2*wind inverse variance) and vertical C=1/(2*tau).
-c
-      print *,'leibp3'
-      solver_status=0
-      ovr=1.0
-      erb=0.
-      si=1.
-      sj=1.
-      sk=1.
-c
-c *** First guess here.
-c
-      nxm1=nx-1
-      nym1=ny-1
-      nzm1=nz-1
-      ittr=0.
-      hh=0.
-      corlmm=0.
-      cor0=0.
-      cortm=0.
-      epsc=1.e-20
-      if(any(.not.ieee_is_finite(influence)).or.
-     &   minval(influence).lt.0..or.maxval(influence).gt.1.)return
-      do it=1,itmax
-         ertm=0.
-         ermm=0.
-         ia=0
-         corlm=0.
-         do j=2,ny
-         js=1
-         if(j.eq.ny)js=0
-         do i=2,nx
-            is=1
-            if(i.eq.nx) is=0
-            do 2 k=2,nz
-            if (ps(i,j).lt.p(k)) go to 2 
-            if(ps(i+is,j).lt.p(k)) sol(i+1,j,k)=sol(i,j,k)
-            if(ps(i-1 ,j).lt.p(k)) sol(i-1,j,k)=sol(i,j,k)
-            if(ps(i,j+js).lt.p(k)) sol(i,j+1,k)=sol(i,j,k)
-            if(ps(i,j-1).lt.p(k)) sol(i,j-1,k)=sol(i,j,k)
-            if(ps(i,j).lt.p(k-1)) sol(i,j,k-1)=sol(i,j,k)
-            if(k.eq.nz)sol(i,j,k+1)=sol(i,j,k)
-            if(dx(i,j).le.0..or.dy(i,j).le.0..or.dp(k).le.0.
-     &         .or.erru(i,j,k).le.0..or.tau(i,j).le.0.)return
-            ci=0.5*influence(i,j,k)/max(erru(i,j,k),epsc)
-            cj=0.5*influence(i+is,j,k)/
-     &         max(erru(i+is,j,k),epsc)
-            ce=0.
-            if(ci.gt.0..and.cj.gt.0.)ce=2.*ci*cj/(ci+cj)
-     &         /(dx(i,j)*dx(i,j))
-            cj=0.5*influence(i-1,j,k)/max(erru(i-1,j,k),epsc)
-            cw=0.
-            if(ci.gt.0..and.cj.gt.0.)cw=2.*ci*cj/(ci+cj)
-     &         /(dx(i,j)*dx(i,j))
-            cni=0.5*influence(i,j+js,k)/
-     &          max(erru(i,j+js,k),epsc)
-            cn=0.
-            if(ci.gt.0..and.cni.gt.0.)cn=2.*ci*cni/(ci+cni)
-     &         /(dy(i,j)*dy(i,j))
-            cni=0.5*influence(i,j-1,k)/max(erru(i,j-1,k),epsc)
-            cs=0.
-            if(ci.gt.0..and.cni.gt.0.)cs=2.*ci*cni/(ci+cni)
-     &         /(dy(i,j)*dy(i,j))
-            dpd=dp(k)
-            if(k.lt.nz)then
-               dpu=dp(k+1)
-            else
-               dpu=dp(k)
-            endif
-            if(dpu.le.0.)return
-            dpc=0.5*(dpd+dpu)
-            ci=0.5*influence(i,j,k)/tau(i,j)
-            if(k.lt.nz)then
-               cj=0.5*influence(i,j,k+1)/tau(i,j)
-            else
-               cj=ci
-            endif
-            cu=0.
-            if(ci.gt.0..and.cj.gt.0.)cu=2.*ci*cj/(ci+cj)
-     &         /(dpu*dpc)
-            cj=0.5*influence(i,j,k-1)/tau(i,j)
-            cd=0.
-            if(ci.gt.0..and.cj.gt.0.)cd=2.*ci*cj/(ci+cj)
-     &         /(dpd*dpc)
-            diag=-(ce+cw+cn+cs+cu+cd)
-            if(.not.ieee_is_finite(diag).or.
-     &         .not.ieee_is_finite(force(i,j,k)))return
-c A small connected row is not a zero row: its scale cancels in res/diag.
-c A disconnected row is compatible only with an exactly zero force.
-            if(diag.eq.0.)then
-               if(force(i,j,k).ne.0.)return
-               sol(i,j,k)=0.
-               go to 2
-            endif
-            res=ce*(sol(i+1,j,k)-sol(i,j,k))
-     &         +cw*(sol(i-1,j,k)-sol(i,j,k))
-     &         +cn*(sol(i,j+1,k)-sol(i,j,k))
-     &         +cs*(sol(i,j-1,k)-sol(i,j,k))
-     &         +cu*(sol(i,j,k+1)-sol(i,j,k))
-     &         +cd*(sol(i,j,k-1)-sol(i,j,k))-force(i,j,k)
-            cortm=diag
-            cor=res/cortm
-            if(.not.ieee_is_finite(cor))return
-            corb=5.*erf+1.
-            if (it .ne. 1.and.corlmm.gt.epsc) corb=cor/corlmm
-            if (abs(corb) .gt. erf) ia=1
-            if (abs(cor) .gt. corlm) corlm=abs(cor)
-            sol(i,j,k)=sol(i,j,k)-cor*ovr
-2            continue
+      integer nx,ny,nz,status,i,j,k,ii,jj,kk,d,opp,head,tail,n,
+     & count_components,zero_rows,point(3),step(3,6),q,component_status
+      logical active(nx+1,ny+1,nz+1)
+      logical, allocatable :: seen(:,:,:)
+      integer, allocatable :: queue(:,:)
+      real dx(nx,ny),dy(nx,ny),dp(nz)
+      real*8 rhs(nx+1,ny+1,nz+1),cx(nx,ny,nz),cy(nx,ny,nz)
+     & ,cp(nx,ny,nz),c(6),cn(6),defect,scale,norm,cert,bound
+      real*8, allocatable :: weight(:,:,:),transpose(:,:,:)
+      data step /1,0,0, -1,0,0, 0,1,0, 0,-1,0, 0,0,1, 0,0,-1/
+      status=0
+      n=count(active)
+      allocate(seen(nx+1,ny+1,nz+1),queue(3,max(1,n)),
+     & weight(nx+1,ny+1,nz+1),transpose(nx+1,ny+1,nz+1))
+      seen=.false.
+      weight=0.d0
+      transpose=0.d0
+      count_components=0
+      zero_rows=0
+      component_status=1
+      bound=4096.d0*epsilon(1.d0)
+      do k=2,nz
+       do j=2,ny
+        do i=2,nx
+         if(.not.active(i,j,k).or.seen(i,j,k))cycle
+         count_components=count_components+1
+         tail=1
+         queue(:,1)=(/i,j,k/)
+         seen(i,j,k)=.true.
+         weight(i,j,k)=1.d0
+         head=1
+         do while(head.le.tail)
+          point=queue(:,head)
+          call qbal_continuity_row(cx,cy,cp,nx,ny,nz,dx,dy,dp,
+     &                            point(1),point(2),point(3),c)
+          do d=1,6
+           if(c(d).eq.0.d0)cycle
+           ii=point(1)+step(1,d)
+           jj=point(2)+step(2,d)
+           kk=point(3)+step(3,d)
+           if(ii.lt.2.or.ii.gt.nx.or.jj.lt.2.or.jj.gt.ny.or.
+     &        kk.lt.2.or.kk.gt.nz)then
+              print*,'CONTINUITY undeclared exterior face ',ii,jj,kk
+              return
+           endif
+           if(.not.active(ii,jj,kk))then
+              print*,'CONTINUITY undeclared boundary anchor ',ii,jj,kk
+              return
+           endif
+           call qbal_continuity_row(cx,cy,cp,nx,ny,nz,dx,dy,dp,
+     &                              ii,jj,kk,cn)
+           opp=d+1
+           if(mod(d,2).eq.0)opp=d-1
+           if(.not.ieee_is_finite(cn(opp)).or.
+     &        cn(opp).le.0.d0)then
+              print*,'CONTINUITY reverse edge UNRESOLVED ',ii,jj,kk
+              return
+           endif
+           if(seen(ii,jj,kk))cycle
+           tail=tail+1
+           queue(:,tail)=(/ii,jj,kk/)
+           seen(ii,jj,kk)=.true.
+           weight(ii,jj,kk)=weight(point(1),point(2),point(3))*
+     &                                      c(d)/cn(opp)
+           if(.not.ieee_is_finite(weight(ii,jj,kk)).or.
+     &        weight(ii,jj,kk).le.0.d0)then
+              print*,'CONTINUITY left weight UNRESOLVED ',ii,jj,kk
+              return
+           endif
+          enddo
+          head=head+1
          enddo
+         norm=0.d0
+         do q=1,tail
+          point=queue(:,q)
+          norm=norm+weight(point(1),point(2),point(3))
          enddo
-         reslm=corlm*cortm
-c         write(6,1001) it,reslm,corlm,corlmm,erb
-1200     format(1x,3e12.5)
-         erb=amax1(ermm,ertm)
-5        ittr=ittr+1
-         cor5=corlm
-         if (ittr .eq. 5) then
-            ittr=0
-            if(cor0.gt.epsc)then
-               rho=(cor5/cor0)**.2
-               if (rho .le. 1.and.rho.ge.0.)
-     &             ovr=min(1.30,2./(1.+sqrt(1.-rho)))
-            endif
-            cor0=cor5
+         if(.not.ieee_is_finite(norm).or.norm.le.0.d0)then
+            print*,'CONTINUITY normalization UNRESOLVED ',i,j,k
+            return
          endif
-         if (ia .eq. 1 .and. it .eq. 1) then
-            corlmm=corlm
-            cor0=corlmm
+         defect=0.d0
+         scale=0.d0
+         cert=0.d0
+         do q=1,tail
+          point=queue(:,q)
+          ii=point(1)
+          jj=point(2)
+          kk=point(3)
+          weight(ii,jj,kk)=weight(ii,jj,kk)/norm
+          defect=defect+weight(ii,jj,kk)*rhs(ii,jj,kk)
+          scale=scale+weight(ii,jj,kk)*abs(rhs(ii,jj,kk))
+          call qbal_continuity_row(cx,cy,cp,nx,ny,nz,dx,dy,dp,
+     &                             ii,jj,kk,c)
+          transpose(ii,jj,kk)=transpose(ii,jj,kk)-
+     &                                      weight(ii,jj,kk)*sum(c)
+          cert=cert+2.d0*weight(ii,jj,kk)*sum(c)
+          do d=1,6
+           if(c(d).eq.0.d0)cycle
+           transpose(ii+step(1,d),jj+step(2,d),kk+step(3,d))=
+     &      transpose(ii+step(1,d),jj+step(2,d),kk+step(3,d))+
+     &      weight(ii,jj,kk)*c(d)
+          enddo
+         enddo
+         norm=0.d0
+         do q=1,tail
+          point=queue(:,q)
+          norm=norm+abs(transpose(point(1),point(2),point(3)))
+         enddo
+         if(.not.ieee_is_finite(defect).or.
+     &      .not.ieee_is_finite(scale).or.
+     &      .not.ieee_is_finite(cert).or.
+     &      .not.ieee_is_finite(norm))then
+            print*,'CONTINUITY certificate arithmetic UNRESOLVED ',
+     &             count_components
+            return
          endif
-         if(corlm.lt.erf)then
-            solver_status=1
-            go to 20
+         if(cert.eq.0.d0)zero_rows=zero_rows+tail
+         print*,'CONTINUITY closed component/id/rows/wTb/ATwL1 ',
+     &      count_components,tail,defect,norm
+         if(norm.gt.bound*cert)then
+            print*,'CONTINUITY left-null certificate UNRESOLVED'
+            component_status=0
+         elseif((cert.eq.0.d0.and.defect.ne.0.d0).or.
+     &          abs(defect).gt.bound*scale)then
+            print*,'CONTINUITY incompatible closed RHS ',defect,
+     &             bound*scale
+            component_status=0
          endif
-      enddo! on it
-20    reslm=corlm*cortm
-      write(6,1001) it,reslm,corlm,corlmm,erb
-      write(6,1002) ovr
-      if(solver_status.ne.1)solver_status=2
-c     write(9,1001) it,reslm,corlm,corlmm,erb
-c     write(9,1002) ovr
-1002       format(1x,'LIEBP3:ovr rlxtn const at fnl ittr = ',e11.4)
-1001       format(1x,'iterations= ',i4,' max residual= ',e10.3,
-     .    ' max correction= ',e10.3, ' first iter max cor= ',e10.3,
-     .    'max bndry error= ',e10.3)
-c
-      return
+        enddo
+       enddo
+      enddo
+      print*,'CONTINUITY rows/components/zero/anchors ',n,
+     &       count_components,zero_rows,0
+      print*,'CONTINUITY exterior correction flux ',0.d0
+      status=component_status
       end
-c                           
-c===============================================================================
+c
+      subroutine leibp3(sol,rhs,itmax,erf,active,cx,cy,cp,
+     & nx,ny,nz,dx,dy,dp,solver_status)
+c Nonsymmetric D G relaxation; no SPD/adjoint claim. Keep the 200-step
+c caller limit and lambda correction threshold, and also require the
+c existing 1.e-10 continuity solver tolerance on the true linear residual.
+      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+      implicit none
+      integer nx,ny,nz,itmax,solver_status,it,i,j,k,location(3)
+      logical active(nx+1,ny+1,nz+1)
+      real erf,dx(nx,ny),dy(nx,ny),dp(nz)
+      real*8 sol(nx+1,ny+1,nz+1),rhs(nx+1,ny+1,nz+1)
+     & ,cx(nx,ny,nz),cy(nx,ny,nz),cp(nx,ny,nz)
+     & ,c(6),diag,r,cor,corlm,rmsres,maxres,qbal_row_value
+      solver_status=0
+      if(any(.not.ieee_is_finite(rhs)).or.
+     & any(.not.ieee_is_finite(sol)).or.
+     & any(.not.ieee_is_finite(cx)).or.minval(cx).lt.0.d0.or.
+     & any(.not.ieee_is_finite(cy)).or.minval(cy).lt.0.d0.or.
+     & any(.not.ieee_is_finite(cp)).or.minval(cp).lt.0.d0)return
+      if(.not.ieee_is_finite(erf).or.erf.le.0.)return
+      if(itmax.lt.1)return
+      call qbal_component_check(rhs,active,cx,cy,cp,nx,ny,nz,
+     &                          dx,dy,dp,solver_status)
+      if(solver_status.ne.1)then
+         call qbal_linear_residual(sol,rhs,active,cx,cy,cp,
+     &    nx,ny,nz,dx,dy,dp,rmsres,maxres,location)
+         print*,'LEIBP3 preflight residual RMS/max/location ',
+     &          rmsres,maxres,location
+         return
+      endif
+      solver_status=2
+      corlm=0.d0
+      do it=1,itmax
+       corlm=0.d0
+       do j=2,ny
+        do i=2,nx
+         do k=2,nz
+          if(.not.active(i,j,k))cycle
+          call qbal_continuity_row(cx,cy,cp,nx,ny,nz,dx,dy,dp,
+     &                             i,j,k,c)
+          diag=-sum(c)
+          if(diag.eq.0.d0)cycle
+          r=qbal_row_value(sol,nx,ny,nz,i,j,k,c)-rhs(i,j,k)
+          cor=r/diag
+          if(.not.ieee_is_finite(cor))then
+             solver_status=0
+             return
+          endif
+          corlm=max(corlm,abs(cor))
+          sol(i,j,k)=sol(i,j,k)-cor
+         enddo
+        enddo
+       enddo
+       call qbal_linear_residual(sol,rhs,active,cx,cy,cp,
+     & nx,ny,nz,dx,dy,dp,rmsres,maxres,location)
+       if(.not.ieee_is_finite(rmsres).or.
+     &    .not.ieee_is_finite(maxres))then
+          solver_status=0
+          return
+       endif
+       if(corlm.lt.dble(erf).and.maxres.le.1.d-10)then
+          solver_status=1
+          exit
+       endif
+      enddo
+      print*,'LEIBP3 iterations/status ',min(it,itmax),solver_status
+      print*,'LEIBP3 true residual RMS/max/location ',rmsres,maxres,
+     &       location
+      print*,'LEIBP3 max delta lambda ',corlm
+      end
 c
       subroutine leib(sol,force,itmax,erf,nx,ny,nz
      .               ,ps,p,a,b,c,d,e,dx,dy,dz,lpress)

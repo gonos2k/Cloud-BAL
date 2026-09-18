@@ -4,7 +4,10 @@ PROGRAM test_qbal_operator
 
   EXTERNAL :: continuity_metrics,continuity_point,leib_sub
   EXTERNAL :: leibp3
+  EXTERNAL :: qbal_continuity_row
   EXTERNAL :: geostrophic_residual_metrics
+  REAL*8, EXTERNAL :: qbal_row_value
+  REAL*8, EXTERNAL :: qbal_divergence_value
 
   INTEGER, PARAMETER :: nx=6, ny=6, nz=4
   INTEGER :: i, j, k, status, failures
@@ -50,6 +53,11 @@ PROGRAM test_qbal_operator
       tau(i,j) = 3.0 + 0.1*REAL(i+j)
     END DO
   END DO
+  ! The production projection now freezes exterior correction faces.  Keep
+  ! this manufactured forcing in the closed operator range by zeroing its
+  ! prescribed outer normal fluxes.
+  u0(1,:,:) = 0.0
+  u0(nx,:,:) = 0.0
   u1 = u0
   v1 = v0
   om1 = om0
@@ -78,7 +86,10 @@ PROGRAM test_qbal_operator
        'continuity correction must not worsen the shared residual', failures)
 
   local_influence = 0.0
-  local_influence(2:4,2:4,2:3) = 1.0
+  ! The stored face coefficients use the lower i/j face index.  A one-cell
+  ! authority halo supplies the interior faces for this compact 3x3x2 block;
+  ! the row mask still begins at (2,2,2), and exterior normal faces stay frozen.
+  local_influence(1:4,1:4,2:3) = 1.0
   ulocal0 = 0.0
   vlocal0 = 0.0
   omlocal0 = 0.0
@@ -171,10 +182,12 @@ CONTAINS
 
   SUBROUTINE test_leibp3_scale_guard(failures)
     INTEGER, INTENT(INOUT) :: failures
-    REAL :: sol_ref(nx+1,ny+1,nz+1), sol_tiny(nx+1,ny+1,nz+1)
-    REAL :: force_ref(nx+1,ny+1,nz+1), force_tiny(nx+1,ny+1,nz+1)
-    REAL :: htest(nx+1,ny+1,nz+1)
-    REAL :: influence_ref(nx,ny,nz), influence_tiny(nx,ny,nz)
+    REAL*8 :: lambda_ref(nx+1,ny+1,nz+1), lambda_tiny(nx+1,ny+1,nz+1)
+    REAL*8 :: rhs_ref(nx+1,ny+1,nz+1), rhs_tiny(nx+1,ny+1,nz+1)
+    REAL*8 :: cx_ref(nx,ny,nz), cy_ref(nx,ny,nz), cp_ref(nx,ny,nz)
+    REAL*8 :: cx_tiny(nx,ny,nz), cy_tiny(nx,ny,nz), cp_tiny(nx,ny,nz)
+    REAL*8 :: target(nx+1,ny+1,nz+1), c(6)
+    LOGICAL :: active(nx+1,ny+1,nz+1)
     REAL :: tiny_max, ref_max, max_relative
     REAL :: nan_value
     INTEGER :: scale_status, zero_status, tiny_status, reject_status
@@ -183,34 +196,62 @@ CONTAINS
 
     dx = 5061.267
     dy = 5061.267
-    ps = 101000.0
-    p = (/100000.0, 85000.0, 70000.0, 50000.0/)
     dp = (/15000.0, 15000.0, 15000.0, 20000.0/)
-    erru = 0.5917161
-    tau = 0.5787722
-    sol_ref = 0.0
-    sol_tiny = 0.0
-    force_ref = 0.0
-    force_tiny = 0.0
-    htest = 0.0
-    influence_ref = 1.0
-    influence_tiny = 1.0E-14
-    force_ref(3,3,2) = 1.0
-    force_tiny(3,3,2) = 1.0E-14
+    active = .FALSE.
+    active(2:nx,2:ny,2:nz) = .TRUE.
+    lambda_ref = 0.0D0
+    lambda_tiny = 0.0D0
+    rhs_ref = 0.0D0
+    rhs_tiny = 0.0D0
+    cx_ref = 1.0D0
+    cy_ref = 1.0D0
+    cp_ref = 1.0D0
+    cx_ref(1,:,:) = 0.0D0
+    cx_ref(nx,:,:) = 0.0D0
+    cx_ref(:,ny,:) = 0.0D0
+    cx_ref(:,:,nz) = 0.0D0
+    cy_ref(:,1,:) = 0.0D0
+    cy_ref(:,ny,:) = 0.0D0
+    cy_ref(nx,:,:) = 0.0D0
+    cy_ref(:,:,nz) = 0.0D0
+    cp_ref(:,:,1) = 0.0D0
+    cp_ref(:,:,nz) = 0.0D0
+    cx_tiny = 1.0D-14*cx_ref
+    cy_tiny = 1.0D-14*cy_ref
+    cp_tiny = 1.0D-14*cp_ref
+    target = 0.0D0
+    DO kk=1,nz+1
+      DO jj=1,ny+1
+        DO ii=1,nx+1
+          target(ii,jj,kk) = 7.0D0*REAL(ii) - 3.0D0*REAL(jj) + &
+               5.0D0*REAL(kk) + 0.2D0*REAL(ii*jj)
+        END DO
+      END DO
+    END DO
+    DO kk=2,nz
+      DO jj=2,ny
+        DO ii=2,nx
+          CALL qbal_continuity_row(cx_ref,cy_ref,cp_ref,nx,ny,nz,dx,dy,dp, &
+               ii,jj,kk,c)
+          rhs_ref(ii,jj,kk) = qbal_row_value(target,nx,ny,nz,ii,jj,kk,c)
+          rhs_tiny(ii,jj,kk) = 1.0D-14*rhs_ref(ii,jj,kk)
+        END DO
+      END DO
+    END DO
 
-    CALL leibp3(sol_ref,force_ref,1,1.0,htest,erru,tau,influence_ref, &
-         nx,ny,nz,dx,dy,ps,p,dp,scale_status)
-    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
-         nx,ny,nz,dx,dy,ps,p,dp,finite_status)
-    ref_max = MAXVAL(ABS(sol_ref))
-    tiny_max = MAXVAL(ABS(sol_tiny))
+    CALL leibp3(lambda_ref,rhs_ref,1,1.0,active,cx_ref,cy_ref,cp_ref, &
+         nx,ny,nz,dx,dy,dp,scale_status)
+    CALL leibp3(lambda_tiny,rhs_tiny,1,1.0,active,cx_tiny,cy_tiny,cp_tiny, &
+         nx,ny,nz,dx,dy,dp,finite_status)
+    ref_max = REAL(MAXVAL(ABS(lambda_ref)))
+    tiny_max = REAL(MAXVAL(ABS(lambda_tiny)))
     max_relative = 0.0
     DO kk=1,nz+1
       DO jj=1,ny+1
         DO ii=1,nx+1
           max_relative = MAX(max_relative, &
-               ABS(sol_tiny(ii,jj,kk)-sol_ref(ii,jj,kk))/ &
-               MAX(ABS(sol_ref(ii,jj,kk)),1.0))
+               REAL(ABS(lambda_tiny(ii,jj,kk)-lambda_ref(ii,jj,kk)))/ &
+               MAX(REAL(ABS(lambda_ref(ii,jj,kk))),1.0))
         END DO
       END DO
     END DO
@@ -221,34 +262,41 @@ CONTAINS
          max_relative < 1.0E-3, &
          'uniformly scaled connected row must remain finite and equivalent',failures)
 
-    sol_tiny = 0.0
-    force_tiny = 0.0
-    influence_tiny = 0.0
-    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
-         nx,ny,nz,dx,dy,ps,p,dp,zero_status)
-    CALL check(zero_status == 1 .AND. MAXVAL(ABS(sol_tiny)) == 0.0, &
+    active = .FALSE.
+    active(3,3,2) = .TRUE.
+    cx_tiny = 0.0D0
+    cy_tiny = 0.0D0
+    cp_tiny = 0.0D0
+    rhs_tiny = 0.0D0
+    lambda_tiny = 0.0D0
+    CALL leibp3(lambda_tiny,rhs_tiny,1,1.0,active,cx_tiny,cy_tiny,cp_tiny, &
+         nx,ny,nz,dx,dy,dp,zero_status)
+    CALL check(zero_status == 1 .AND. MAXVAL(ABS(lambda_tiny)) == 0.0, &
          'disconnected zero row with zero forcing must remain a solved zero',failures)
 
-    force_tiny(3,3,2) = 1.0E-30
-    sol_tiny = 0.0
-    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
-         nx,ny,nz,dx,dy,ps,p,dp,tiny_status)
-    CALL check(tiny_status == 0 .AND. MAXVAL(ABS(sol_tiny)) == 0.0, &
+    rhs_tiny(3,3,2) = 1.0D-30
+    lambda_tiny = 0.0D0
+    CALL leibp3(lambda_tiny,rhs_tiny,1,1.0,active,cx_tiny,cy_tiny,cp_tiny, &
+         nx,ny,nz,dx,dy,dp,tiny_status)
+    CALL check(tiny_status == 0 .AND. MAXVAL(ABS(lambda_tiny)) == 0.0, &
          'disconnected row with any nonzero RHS must fail closed',failures)
 
-    force_tiny(3,3,2) = 2.0E-20
-    sol_tiny = 0.0
-    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
-         nx,ny,nz,dx,dy,ps,p,dp,reject_status)
+    rhs_tiny(3,3,2) = 2.0D-20
+    lambda_tiny = 0.0D0
+    CALL leibp3(lambda_tiny,rhs_tiny,1,1.0,active,cx_tiny,cy_tiny,cp_tiny, &
+         nx,ny,nz,dx,dy,dp,reject_status)
     CALL check(reject_status == 0, &
          'disconnected row with nonzero forcing must still reject',failures)
 
-    influence_tiny = 1.0
-    force_tiny = 0.0
+    active(3,3,2) = .TRUE.
+    rhs_tiny = 0.0D0
     nan_value = ieee_value(0.0,ieee_quiet_nan)
-    force_tiny(3,3,2) = nan_value
-    CALL leibp3(sol_tiny,force_tiny,1,1.0,htest,erru,tau,influence_tiny, &
-         nx,ny,nz,dx,dy,ps,p,dp,finite_status)
+    rhs_tiny(3,3,2) = REAL(nan_value,8)
+    cx_tiny = 1.0D0
+    cy_tiny = 1.0D0
+    cp_tiny = 1.0D0
+    CALL leibp3(lambda_tiny,rhs_tiny,1,1.0,active,cx_tiny,cy_tiny,cp_tiny, &
+         nx,ny,nz,dx,dy,dp,finite_status)
     CALL check(finite_status == 0, &
          'nonfinite forcing must still fail closed',failures)
   END SUBROUTINE test_leibp3_scale_guard
