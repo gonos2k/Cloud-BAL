@@ -845,3 +845,20 @@ writer, LAPSPREP, metadata, and time `PASS_SCOPED` results remain separate.
 - [ ] 완전한 기주 수지·새 후보·ON·native·열역학·예보 승인.
 
 실제 결과와 한계: `docs/PHYSICAL_COLUMN_TERMS_20260921.md`.
+
+### PR37 — 조건부 하부 표본과 구간 외곽 수지
+
+- [x] LSX 10 m–LT1 pressure 표본의 명시적 연구 보간; 지면으로의 외삽 없음.
+- [x] PS/높이 역전 위치의 미지원 보존, 같은 고유 face의 조건부 하부 적분.
+- [x] 12/13/14 수송 Simpson 평균과 12–14 지면 체적 secant의 시간구간 정렬.
+- [x] 내부 미정 공유면 상쇄와 외부 미정 face 개수 분리; 전체 잔차 NaN 유지.
+- [ ] 높이 datum·하부 profile·0–10 m 수송의 물리 권한과 오차 근거.
+- [ ] 연속시간 적분오차·독립 상단 prior·완전한 기주 수지.
+- [ ] 새 균형 후보·ON·native·열역학·예보 승인.
+
+근거: [조건부 하부 적분과 구간 수지](LOWER_TRANSPORT_INTERVAL_BUDGET_20260921.md).
+
+PR37 추가 판정: 단조로운 높이–기압 보간에도 10 m 압력차가 암시하는 온도의
+비현실적 극값이 있어 실제 하부 profile은 `NOT_SUPPORTED_FOR_PHYSICAL_PROFILE`이다.
+조건부 적분의 수치 통과를 물리 경계 승인으로 올리지 않으며, 다음은 온도·수분·
+높이 datum에 근거한 표본 pressure 연결을 확정하는 작업이다.
