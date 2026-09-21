@@ -4,6 +4,9 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from fractions import Fraction
+from itertools import product
+from unittest.mock import patch
 import sys
 import unittest
 from pathlib import Path
@@ -74,7 +77,87 @@ def candidate_for(snapshot: boundary.Snapshot, *, shared: float = 0.0,
     return candidate
 
 
+def circulation_fixture():
+    """Three binary-exact closed cycles inside eight active pressure rows."""
+    snapshot, rows = make_fixture()
+    ijk = np.asarray(list(product((2, 3), repeat=3)), dtype=np.int32)
+    beta = np.zeros(SHAPE, dtype=np.float32)
+    beta[tuple((ijk-1).T)] = 1.
+    fields = tuple(np.zeros(SHAPE, dtype=np.float32) for _ in range(3))
+    metric = np.full((4, 4), 5000., dtype=np.float32)
+    snapshot = replace(snapshot, beta=beta, dx=metric, dy=metric.copy(),
+                       dp=np.full(4, 5000., dtype=np.float32),
+                       u=fields[0], v=fields[1], w=fields[2])
+    coefficients = np.zeros((8, 6))
+    vertices = {tuple(row) for row in ijk}
+    for n, row in enumerate(ijk):
+        for direction, shift in enumerate(boundary.SHIFTS):
+            coefficients[n, direction] = tuple(row+shift) in vertices
+    rows = replace(rows, ijk=ijk, rhs=np.zeros(8), coefficients=coefficients)
+    candidate = tuple(field.copy() for field in fields)
+    cycles = (
+        ([(2,2,2), (3,2,2), (3,3,2), (2,3,2), (2,2,2)], .125),
+        ([(2,2,2), (2,3,2), (2,3,3), (2,2,3), (2,2,2)], .125),
+        ([(2,2,2), (3,2,2), (3,2,3), (2,2,3), (2,2,2)], .25),
+    )
+    for cycle, flow in cycles:
+        for start, end in zip(cycle, cycle[1:]):
+            start, end = np.asarray(start), np.asarray(end)
+            axis = int(np.flatnonzero(start != end)[0])
+            sign = int(end[axis]-start[axis])
+            i, j, k = np.minimum(start, end)-1
+            face = ((i, j-1, k-1) if axis == 0 else
+                    (i-1, j, k-1) if axis == 1 else (i, j, k))
+            # Omega has the opposite orientation in the pressure divergence.
+            candidate[axis][face] += flow*sign*(-1 if axis == 2 else 1)
+    return snapshot, rows, candidate
+
+
 class ReceiverDiagnosticTests(unittest.TestCase):
+    def test_exact_circulation_survives_cancellation(self):
+        snapshot, rows, candidate = circulation_fixture()
+        summary, arrays = diagnostic.audit(snapshot, rows, candidate)
+        self.assertEqual(len(arrays['receiver_ijk']), 4)
+        u, v, w = candidate
+        # Independent rational oracle: no floating divergence in this assertion.
+        for i, j, k in np.vstack((rows.ijk, arrays['receiver_ijk']))-1:
+            donors = (u[i,j-1,k-1], -u[i-1,j-1,k-1],
+                      v[i-1,j,k-1], -v[i-1,j-1,k-1],
+                      w[i,j,k-1], -w[i,j,k])
+            self.assertEqual(sum(Fraction(float(value)) for value in donors)/5000, 0)
+        self.assertNotEqual(summary['shared_face_closure'], 0.)
+        self.assertLess(abs(summary['shared_face_closure']), summary['closure_arithmetic_bound'])
+        # Restoring the cancelled-residual scale reproduces the false rejection.
+        with patch.object(diagnostic, 'divergence_scale',
+                          side_effect=lambda s, f, ijk: np.abs(diagnostic.divergence(s, f, ijk))):
+            with self.assertRaisesRegex(ValueError, 'shared-face budget'):
+                diagnostic.audit(snapshot, rows, candidate)
+
+    def test_circulation_still_rejects_wrong_divergence(self):
+        snapshot, rows, candidate = circulation_fixture()
+        original = diagnostic.divergence
+
+        def wrong_divergence(state, fields, ijk):
+            result = original(state, fields, ijk)
+            if fields is candidate and np.array_equal(ijk, rows.ijk):
+                result[0] += 1.e-3
+            return result
+
+        with patch.object(diagnostic, 'divergence', side_effect=wrong_divergence):
+            with self.assertRaisesRegex(ValueError, 'shared-face budget'):
+                diagnostic.audit(snapshot, rows, candidate)
+
+    def test_nonworsening_necessary_margin(self):
+        before, weight = np.array([1., -1.]), np.array([2., 2.])
+        for demand, margin in ((1., 3.), (4., 0.), (5., -1.)):
+            with self.subTest(demand=demand):
+                result = diagnostic.nonworsening_bound(demand, before, weight)
+                self.assertEqual(result['absolute_before_capacity'], 4.)
+                self.assertEqual(result['required_final_sum'], -demand)
+                self.assertEqual(result['capacity_margin'], margin)
+        self.assertEqual(diagnostic.nonworsening_bound(1., np.array([]), np.array([]))
+                         ['capacity_margin'], -1.)
+
     def test_inventory_deduplicates_shared_receiver_and_couples_components(self) -> None:
         snapshot, rows = make_fixture()
         _, labels, source, direction, stored, receiver, receiver_index = diagnostic.receiver_inventory(
