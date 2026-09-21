@@ -816,3 +816,12 @@ writer, LAPSPREP, metadata, and time `PASS_SCOPED` results remain separate.
 - Evidence and unresolved scope: [actual balance comparison record](REAL_BALANCE_COMPARISON_20260917.md).
   Native before/after consumption, separate omega/W delivery, conservation,
   and forecast response remain OPEN. PR24 replay PASS_SCOPED is unchanged.
+
+## 2026-09-21 PR #33 후속 공유 pressure 유량 연구
+
+- `surface_layer`의 마지막 pressure 구간 검색을 수정하고 endpoint 회귀를 추가한다.
+- [새 연구 코드 및 실자료 기하](PRESSURE_SHARED_FLUX_KERNEL_20260921.md):
+  하부 부분층·유한 상단, 공유 유량 incidence와 가중 adjoint를 Fortran으로 검증한다.
+- 실제 66,505개 기주 기하와 공유 2,583,082개 구간은 GEOMETRY_ONLY다.
+  경사진 face의 비공유 구간, 실제 바람 보간·회전·metric은 아직 연결하지 않았다.
+- 생산 D/G·RHS·경계 권한·상한은 유지한다. 비영 ON 및 native/예보는 OPEN이다.

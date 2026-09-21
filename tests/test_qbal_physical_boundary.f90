@@ -19,6 +19,10 @@ program test_qbal_physical_boundary
   call check(status==STATUS_OK.and.q==2.and.part==13000,'surface above midpoint, no clipping')
   call surface_layer(p,90000._real64,q,part,status)
   call check(status==STATUS_OK.and.q==2.and.part==5000,'exact level equality')
+  call surface_layer(p,70001._real64,q,part,status)
+  call check(status==STATUS_OK.and.q==4.and.part==1._real64,'last interval lower endpoint')
+  call surface_layer(p,75000._real64,q,part,status)
+  call check(status==STATUS_OK.and.q==4.and.part==5000._real64,'last interval upper endpoint')
   call surface_layer(p,nan,q,part,status)
   call check(status/=STATUS_OK,'nan pressure refusal')
   p(2)=p(1)
@@ -43,7 +47,7 @@ program test_qbal_physical_boundary
              'surface pressure advection')
   call check(abs(physical_column_residual(2._real64,5._real64,7._real64))<1.e-12_real64,'column top sign')
   if (failures/=0) error stop 'physical boundary diagnostic tests failed'
-  print *, 'physical boundary diagnostic tests passed: 18 checks'
+  print *, 'physical boundary diagnostic tests passed: 20 checks'
 contains
   subroutine production_incidence_probe()
     real :: u(3,3,4),v(3,3,4),w(3,3,4),dx(3,3),dy(3,3),dp(4)

@@ -42,7 +42,7 @@ contains
     if (status/=STATUS_OK) return
     status=STATUS_INVALID
     if (ps>p(1).or.ps<=p(size(p))) return
-    do k=1,size(p)-1
+    do k=1,size(p)
       if (p(k)>ps) cycle
       q=k; partial_dp=ps-omega_p(k)
       status=STATUS_OK
