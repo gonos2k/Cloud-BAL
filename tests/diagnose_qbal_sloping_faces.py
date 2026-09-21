@@ -11,8 +11,60 @@ from netCDF4 import Dataset
 from diagnose_qbal_boundary import read_snapshot
 
 
+TIME_UNITS = "seconds since (1970-1-1 00:00:00.0)"
+
+
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def validate_product_time(nc, expected_epoch, product_name="product"):
+    """Validate and return a product's exact integer valid time.
+
+    This follows the existing LAPSPREP input-time contract.  In particular,
+    the value is checked before conversion to ``int`` so fractional seconds
+    cannot be silently truncated.
+    """
+    label = f"{product_name} valtime"
+    if "valtime" not in nc.variables:
+        raise ValueError(f"{label}: missing variable")
+    var = nc.variables["valtime"]
+    if var.dtype != np.dtype("float64") or var.ndim != 1:
+        raise ValueError(f"{label}: scalar double required")
+    if var.dimensions != ("record",):
+        raise ValueError(f"{label}: record dimension required")
+    if "record" not in nc.dimensions or len(nc.dimensions["record"]) != 1:
+        raise ValueError(f"{label}: single record required")
+    units = getattr(var, "units", None)
+    if units is None:
+        raise ValueError(f"{label}: missing units")
+    if not isinstance(units, str) or units.rstrip() != TIME_UNITS:
+        raise ValueError(f"{label}: invalid units")
+
+    var.set_auto_maskandscale(False)
+    values = np.asarray(var[:], dtype=np.float64)
+    if values.shape != (1,):
+        raise ValueError(f"{label}: single record required")
+    value = float(values[0])
+    if not np.isfinite(value):
+        raise ValueError(f"{label}: nonfinite")
+    if value != np.rint(value):
+        raise ValueError(f"{label}: fractional seconds")
+
+    for attribute_name in ("_FillValue", "missing_value"):
+        if attribute_name not in var.ncattrs():
+            continue
+        attribute = np.asarray(var.getncattr(attribute_name))
+        if attribute.shape != () or attribute.dtype != np.dtype("float64"):
+            raise ValueError(f"{label}: invalid missing attribute")
+        missing = float(attribute)
+        if np.isfinite(missing) and value == missing:
+            raise ValueError(f"{label}: missing value")
+
+    epoch = int(value)
+    if epoch != expected_epoch:
+        raise ValueError(f"{product_name} time mismatch")
+    return epoch
 
 
 def field(nc, name):
@@ -51,14 +103,16 @@ def main():
         lat, lon, navigation = field(nc, "lat"), field(nc, "lon"), nav(nc)
     with Dataset(files["lsx"]) as nc:
         nc.set_auto_maskandscale(False)
-        if int(nc["valtime"][0]) != args.epoch or nav(nc) != navigation:
+        validate_product_time(nc, args.epoch, "LSX")
+        if nav(nc) != navigation:
             raise ValueError("LSX time/navigation mismatch")
         if nc["ps"].units != "pascals":
             raise ValueError("LSX pressure units mismatch")
         ps = field(nc, "ps")
     with Dataset(files["lw3"]) as nc:
         nc.set_auto_maskandscale(False)
-        if int(nc["valtime"][0]) != args.epoch or nav(nc) != navigation:
+        validate_product_time(nc, args.epoch, "LW3")
+        if nav(nc) != navigation:
             raise ValueError("LW3 time/navigation mismatch")
         if nc["level"].units != "hectopascals":
             raise ValueError("LW3 pressure units mismatch")
