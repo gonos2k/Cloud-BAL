@@ -28,6 +28,15 @@ def divergence(snapshot, fields, ijk):
             + (w[i, j, k-1] - w[i, j, k]) / snapshot.dp[k].astype(float))
 
 
+def divergence_scale(snapshot, fields, ijk):
+    """Uncancelled six-face magnitude for arithmetic error, not a residual limit."""
+    i, j, k = (ijk - 1).T
+    u, v, w = (np.asarray(field, dtype=np.float64) for field in fields)
+    return ((np.abs(u[i, j-1, k-1]) + np.abs(u[i-1, j-1, k-1])) / snapshot.dx[i, j].astype(float)
+            + (np.abs(v[i-1, j, k-1]) + np.abs(v[i-1, j-1, k-1])) / snapshot.dy[i, j].astype(float)
+            + (np.abs(w[i, j, k-1]) + np.abs(w[i, j, k])) / snapshot.dp[k].astype(float))
+
+
 def weights(snapshot, ijk):
     i, j, k = (ijk - 1).T
     return snapshot.dx[i, j].astype(float) * snapshot.dp[k].astype(float)
@@ -55,6 +64,14 @@ def necessary_bounds(demand, before_sum, weight_sum):
             "delta_inf_lower_bound": abs(demand)/weight_sum,
             "final_inf_lower_bound": abs(before_sum-demand)/weight_sum,
             "missing_receiver_for_nonzero_demand": False}
+
+
+def nonworsening_bound(demand, before, weight):
+    """Necessary receiver interval sum for an exact active target; not feasibility."""
+    required = weighted_sum(before, weight)-demand
+    capacity = weighted_sum(np.abs(before), weight)
+    return {"required_final_sum": required, "absolute_before_capacity": capacity,
+            "capacity_margin": capacity-abs(required)}
 
 
 def receiver_inventory(snapshot, rows):
@@ -157,17 +174,23 @@ def audit(snapshot, rows, candidate):
         p, r = p_group == group, r_group == group
         result = necessary_bounds(weighted_sum(rows.rhs[p], z_p[p]),
                                   weighted_sum(before[r], z_r[r]), math.fsum(z_r[r]))
+        result["nonworsening_exact_target"] = nonworsening_bound(
+            result["active_defect"], before[r], z_r[r])
         result.update(active_rows=int(p.sum()), receiver_rows=int(r.sum()),
                       components=np.unique(labels[p]).tolist())
         groups.append(result)
     global_bound = necessary_bounds(weighted_sum(rows.rhs, z_p), weighted_sum(before, z_r), math.fsum(z_r))
+    global_bound["nonworsening_exact_target"] = nonworsening_bound(
+        global_bound["active_defect"], before, z_r)
     active_change = weighted_sum(active_after-active_before, z_p)
     receiver_change = weighted_sum(delta, z_r)
     closure = active_change+receiver_change
-    # Arithmetic audit only, not a physical tolerance. Sum absolute terms to
-    # avoid hiding cancellation error behind the small signed total.
-    roundoff = 256*np.finfo(float).eps*(weighted_sum(np.abs(active_after)+np.abs(active_before), z_p)
-                                     + weighted_sum(np.abs(after)+np.abs(before), z_r))
+    # Include rounding within each divergence, before its face terms cancel.
+    # This arithmetic audit does not change any physical residual tolerance.
+    roundoff = 256*np.finfo(float).eps*math.fsum(
+        weighted_sum(divergence_scale(snapshot, fields, ijk), weight)
+        for fields in (initial, candidate)
+        for ijk, weight in ((rows.ijk, z_p), (receiver, z_r)))
     if abs(closure) > roundoff:
         raise ValueError("active/receiver shared-face budget does not close")
     summary = {
@@ -184,6 +207,7 @@ def audit(snapshot, rows, candidate):
         "active_weighted_change": active_change, "receiver_weighted_change": receiver_change,
         "shared_face_closure": closure, "closure_arithmetic_bound": roundoff,
         "exact_active_target_bounds": global_bound, "coupled_groups": groups,
+        "nonworsening_condition": "capacity_margin >= 0 is necessary only for |after_j| <= |before_j| and exact active target; no physical authority or roundoff certification",
         "interval_condition": "sum(z_R*lower) <= B-d <= sum(z_R*upper); necessary only",
         "nonzero_active_residual": "replace B-d by B-d-z_P^T e_P; this is not a physical tolerance",
     }

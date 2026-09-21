@@ -143,6 +143,60 @@ It therefore did not enforce individual receiver balances or final intervals.
 A receiver-aware network would need distinct receiver nodes and their limits;
 merely imposing a limit on that one reservoir cannot express this joint problem.
 
+## PR30 follow-up: cancellation and receiver non-worsening
+
+The diagnostic arithmetic check now uses the uncancelled six-face magnitude
+`S(y)=(|u_E|+|u_W|)/dx+(|v_N|+|v_S|)/dy+(|omega_L|+|omega_U|)/dp`.
+Its budget tolerance is `256*eps64*sum(z*(S(before)+S(after)))` over P and R.
+The previous expression used already-cancelled divergence and could shrink to
+order eps64 squared for an exact internal circulation. `math.fsum` cannot undo
+rounding inside each divergence. This change concerns arithmetic closure only;
+it does not relax production or physical residual limits. The factor 256 is a
+conservative diagnostic allowance, not a universal interval-arithmetic proof.
+
+Replaying the same snapshot, row export and stored candidate gives closure 0 and
+an arithmetic allowance of **0.011127543673908715** in the discrete weighted units.
+The receiver states, statistics and original lower bounds are unchanged.
+
+A stronger proposed receiver restriction is `|r_after_j|<=|r_before_j|` for every
+receiver. This differs from preserving signed residuals. For an exact active goal
+its necessary aggregate condition is
+
+```text
+C = sum(z_R*abs(r_before))
+margin = C - abs(B-d) >= 0.
+```
+
+The new report records this margin without claiming sufficiency or physical
+permission. Direct evaluation on the same actual arrays gives:
+
+| Active components | Receiver rows | C | margin |
+|---|---:|---:|---:|
+| 0 + 7 | 78,889 | 67,284,801.91907342 | -71,721,985.5731432 |
+| 1 | 1 | 246.7787663974 | +21.8862197772 |
+| 2 | 1 | 170.2705218608 | -644.8866519677 |
+| 3 | 1 | 59.8539478276 | -333.9562267363 |
+| 4 | 1 | 611.0693773715 | +358.4985479868 |
+| 5 | 87 | 59,309.36590895 | +11,861.30841523 |
+| 6 | 336 | 178,948.81097866 | -283,392.34885851 |
+| Whole union | 79,316 | 67,524,148.06857449 | -70,974,536.63703564 |
+
+Thus four of seven groups already violate a necessary condition. On this fixed
+hypothetical face set, **exact active closure and receiver-wise non-worsening are
+jointly infeasible**, even before face capacity and total increment limits are
+imposed. An optimizer cannot repair this failed sum constraint. Positive margins
+in the other three groups do not prove their bounded feasibility. These are
+float64 diagnostic evaluations with large obstruction margins, not a new exact
+rational certificate for the full dataset.
+
+For a tolerance-based active goal, use `C+sum(z_P*t_P)` instead of C; that allowance
+must be established independently. The actual stored candidate has
+`z_P^T e_P=0.047542259208776264` globally, far smaller than the global shortfall,
+but its observed error is not a bound on every possible candidate. No target or
+receiver tolerance is chosen from the shortfall. The next scientific decision
+must identify a justified change to the active target, authorized faces, receiver
+intervals or external tendency; production rejection remains in force until then.
+
 ## Implementation decision and remaining physical contract
 
 The next production problem must state actual authorized faces, units, uncertainty
@@ -153,8 +207,8 @@ expressed with `abs(delta_U)<=m_u`, `abs(delta_V)<=m_v`,
 unconstrained solution afterward does not solve this constrained problem.
 
 The present evidence rules out “preserve every receiver” and “make every receiver
-zero” under the current hypothetical closed face set. It does not identify which
-physical boundary, mass tendency or observations authorize a different problem.
+zero” under the current hypothetical closed face set. The non-worsening restriction also fails for an exact active goal, as shown above.
+It does not identify which physical boundary, mass tendency or observations authorize a different problem.
 Such a policy cannot be derived from beta, a 5 Pa/s cap, or solver convergence.
 No unauthorized boundary/source adjustment is added to production. Receiver-aware
 joint optimization and native mass/thermodynamic/forecast validation remain OPEN.
@@ -203,3 +257,18 @@ new bundle replay reproduces the complete report and every row/face array.
 Current evidence is under `scratch/pr30_validation/`; the original PR29 evidence
 is preserved in its own worktree. No synthetic test is substituted for this
 actual 235×283×22 snapshot.
+
+The PR30 follow-up evidence is in the isolated PR31 worktree under
+`scratch/pr31_validation/`. It re-evaluates the actual stored candidate, not a new
+BALCON or forecast run. The pinned Intel O0/O2 comparison above remains historical
+PR30 evidence; this diagnostic-only change does not rerun or modify production
+Fortran. The portable replay references the updated diagnostic and report while
+retaining the original input and candidate hashes.
+
+The follow-up regression constructs three binary-exact internal cycles on eight
+active rows and four unchanged receivers. A rational oracle gives zero divergence
+on all twelve rows. Float64 weighted closure is `-1.6940658945086007e-13`; the old
+cancelled-residual scale rejects it, while the six-face allowance accepts it.
+Injecting an incorrect `1e-3 s^-1` active divergence still rejects the budget.
+All 39 Q-BAL diagnostic tests pass, including the 18 receiver tests. These small
+algebra tests do not replace the actual snapshot replay.
