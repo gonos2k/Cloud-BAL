@@ -82,6 +82,29 @@ def nav(nc):
             for key in ("Nx", "Ny", "La1", "Lo1", "LoV", "Latin1", "Latin2")}
 
 
+def triangular_mesh(nx, ny):
+    """One shared oriented edge per pair on the fixed southwest/northeast mesh."""
+    node = np.arange(nx * ny).reshape(ny, nx)
+    triangles = []
+    for j in range(ny - 1):
+        for i in range(nx - 1):
+            a, b, c, d = node[j, i], node[j, i+1], node[j+1, i+1], node[j+1, i]
+            triangles.extend(((a, b, c), (a, c, d)))
+    triangles = np.asarray(triangles, dtype=np.int32)
+    edges, lookup, incidence = [], {}, []
+    for triangle in triangles:
+        row = []
+        for a, b in zip(triangle, np.roll(triangle, -1)):
+            key = (min(a, b), max(a, b))
+            if key not in lookup:
+                lookup[key] = len(edges) + 1
+                edges.append(key)
+            row.append(lookup[key] if a < b else -lookup[key])
+        incidence.append(row)
+    edges, incidence = np.asarray(edges, dtype=np.int32), np.asarray(incidence, dtype=np.int32)
+    return node, triangles, edges, incidence
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("snapshot", "static", "lsx", "lw3", "frame-evidence", "output-dir"):
@@ -125,24 +148,7 @@ def main():
     ny, nx = ps.shape
     if lat.shape != ps.shape or lon.shape != ps.shape or u.shape != (len(pressure), ny, nx) or v.shape != u.shape:
         raise ValueError("input shapes differ")
-    node = np.arange(nx * ny).reshape(ny, nx)
-    triangles = []
-    for j in range(ny - 1):
-        for i in range(nx - 1):
-            a, b, c, d = node[j, i], node[j, i+1], node[j+1, i+1], node[j+1, i]
-            triangles.extend(((a, b, c), (a, c, d)))
-    triangles = np.asarray(triangles, dtype=np.int32)
-    edges, lookup, incidence = [], {}, []
-    for triangle in triangles:
-        row = []
-        for a, b in zip(triangle, np.roll(triangle, -1)):
-            key = (min(a, b), max(a, b))
-            if key not in lookup:
-                lookup[key] = len(edges) + 1
-                edges.append(key)
-            row.append(lookup[key] if a < b else -lookup[key])
-        incidence.append(row)
-    edges, incidence = np.asarray(edges, dtype=np.int32), np.asarray(incidence, dtype=np.int32)
+    node, triangles, edges, incidence = triangular_mesh(nx, ny)
     phi1, phi2 = [np.deg2rad(navigation[name][0]) for name in ("Latin1", "Latin2")]
     if not (0 < phi1 < phi2 < np.pi/2) or not np.isfinite(args.radius_m) or not 0 < args.radius_m <= 1.e8:
         raise ValueError("unsupported secant projection or sphere radius")
