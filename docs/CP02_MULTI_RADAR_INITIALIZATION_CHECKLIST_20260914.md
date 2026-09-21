@@ -105,6 +105,9 @@ native 경로 조사는 병렬이며, 미완료 물리 후보를 게시하지 �
 | 수신 행별 비악화 필요조건 | 정확한 활성 목표에서 7개 결합 집합 중 4개 위반; 상한 최적화로 해소 불가 | DIAGNOSED_SCOPED |
 | 실제 물리 경계 입력 | 12/13/14 UTC LSX/FSF 시간·단위·해시 확인; 13 UTC LSX PS와 snapshot PS 동일 | EVIDENCE_REVIEWED |
 | 물리 경계 재구성 경로 | 지면기압 시간변화+수평 이류·실제 face 매핑을 우선; 오차·권한은 별도 필요 | SELECTED / NOT_AUTHORIZED |
+| 지면·저장 face·부분층 대응 | 실제 ps와 stagger 위치·incident 행을 읽기 전용으로 기록; 물리 권한과 분리 | DIAGNOSED_SCOPED / NOT_AUTHORIZED |
+| 기주·상단·측면 연결 | legacy 기주 합 검증·상단 2500/5000 Pa 차이 확인; 물리 경계항 미확정 | DIAGNOSED_SCOPED / PHYSICAL_OPEN |
+| 시간 계약 | 사후 LSX 중심차분·발행시각 가용 자료·예보 prior 구분 | DOCUMENTED / AVAILABILITY_OPEN |
 | 비활성 수신 영역·가중 목적함수 | 최종 잔차 범위·관측 비용·권한·총 상한을 포함한 전체 문제 확정 | OPEN |
 | 비영 ON·native·예보 | 위 정책과 해 존재 조건을 만족한 실제 후보 검증 | BLOCKED / NOT_RUN |
 

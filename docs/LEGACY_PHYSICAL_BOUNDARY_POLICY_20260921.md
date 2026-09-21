@@ -39,6 +39,16 @@ condition is `sum_P(z*t)+sum_R(z*epsilon)>=max(0,|B-d|-C)` in each group.
 The right-hand side must never be used to choose those allowances.
 Adding only internal paths on the same closed union cannot remove its net defect.
 
+For a proposed boundary/source basis `E_s`, component reachability is only the
+reduced map `M_s=Z^T*D*E_s`, with compatibility equation
+`M_s*eta=d` and `d=Z^T*b`. Internal shared faces can give `M_s=0` because
+their two incident-row contributions cancel, leaving nonzero `d` unreachable.
+Nonzero rank or a solution of this reduced relation is necessary, not
+sufficient: the full row equations, face bounds, receiver constraints, units,
+common two-row stencil and physical source authority still have to pass. This
+diagnostic cannot authorize opening a sentinel/support face or choose a
+covariance.
+
 ## Physical equation and where it belongs
 
 For an impermeable material surface, pressure-coordinate surface motion obeys
@@ -52,7 +62,42 @@ is not omega_s: the horizontal pressure-advection term is essential. This is a
 boundary relation, not permission to insert a compensating source into the
 interior pressure continuity equation. The pressure and wind must share the
 same physical surface, time, frame and metric. ECMWF's pressure-coordinate
-boundary derivation supplies this relation ([section 4.1, equation 82](https://www.ecmwf.int/sites/default/files/elibrary/2002/16949-adiabatic-formulation-models.pdf)).
+boundary derivation supplies this relation ([section 4.1, equation 84](https://www.ecmwf.int/sites/default/files/elibrary/2002/16949-adiabatic-formulation-models.pdf)).
+In that PDF, equation 82 is the pressure-coordinate continuity equation;
+equation 84 is the no-normal-flux surface condition that gives the material
+surface relation used here.
+
+The pressure-coordinate value `omega` must also be distinguished from
+geometric vertical velocity `w`. For a collocated pressure field
+`p(x,y,z,t)`, with the derivatives below taken at fixed geometric `z` where
+applicable,
+
+```text
+omega = (partial_t p)|z + u*(partial_x p)|z + v*(partial_y p)|z + w*p_z,
+w = (omega - p_t - u*p_x - v*p_y)/p_z
+  = -(omega - p_t - u*p_x - v*p_y)/(rho_m*g)   [hydrostatic p_z=-rho_m*g].
+```
+
+Thus `w=-8000*omega/p` is not the full conversion: it omits pressure
+tendency/advection and replaces density with an assumed scale height. A
+pressure-to-native conversion needs the collocated pressure, thermodynamic
+density, geometric height and their metric/tendency terms; those inputs are
+not supplied by this boundary evidence.
+
+For a column with fixed top pressure `p_top`, pressure-coordinate continuity
+also gives the bookkeeping identity
+
+```text
+0 = partial_t(p_s) + div_h(integral(p_top to p_s, v dp)) - omega_top
+  = partial_t(p_s) + integral(p_top to p_s, div_p(v) dp)
+    + v_s dot grad_h(p_s) - omega_top.
+```
+
+The second line is the Leibniz expansion of the variable upper limit and makes
+the surface-advection term explicit. If the fixed top has no normal flux,
+`omega_top=0`; with a finite top flux, the top term must remain. This column
+identity does not replace the material surface condition and does not make
+`omega_s` zero merely because `p_top` is fixed.
 
 If surface wind is adjusted while the pressure time series is fixed, impose the
 coupled equation `omega_s-u_s*grad_x(p_s)-v_s*grad_y(p_s)=partial_t(p_s)`.
@@ -103,7 +148,15 @@ The helper is test-only evidence, not the selected physical boundary contract.
 
 The retained six-producer case index binds hourly analyses at 12, 13 and 14 UTC
 on 2026-08-16. Matching FSF files have one reference cycle, 06 UTC, and valid times
-12/13/14 UTC (+6/+7/+8 h). This follow-up opened the six actual NetCDF files,
+12/13/14 UTC (+6/+7/+8 h). The LSX products at 12 and 14 UTC are therefore
+retrospective analyses relative to the 13 UTC case: a centered 12/14 estimate
+can be formed only after the 14 UTC analysis exists and was not causally
+available at 13 UTC. The FSF 12/13/14 UTC files share the 06 UTC reference
+cycle; the 13 UTC file may be a candidate prior by product metadata, but actual
+operational availability at issuance requires a delivery/availability receipt,
+which `reftime` alone does not provide. This single forecast product also does
+not establish an operational error model.
+This follow-up opened the six actual NetCDF files,
 checked internal `valtime`/`reftime`, units and full 283×235 arrays, and hashed
 all input bytes. Navigation metadata match within each hourly series. LSX and
 FSF origin metadata differ slightly (`La1` by about 3.81e-6 degrees and `Lo1` by
@@ -122,7 +175,8 @@ through `get_laps_2d` at [qbalpe.f](../src/balance/qbalpe.f), lines 287–293.
 | 13 | `ad31e6fe7c9f42172d8c8afd5ff60b0761c13d81519f804f868b753af901014a` | `e63b6db409eecd706c09257f167203f05acb74ca2701172846f05d5a0a6c51bd` |
 | 14 | `7681b61ef75aa33bfd6afd083d41c51221d24a68676076cf6b4b5652e80f52ef` | `0e39caa1086e9575980408a166d648cb04099babfb8c84dcc0eb32ef35c853b4` |
 
-The raw central temporal difference `(p14-p12)/7200` gives:
+The raw central temporal difference `(p14-p12)/7200` gives a two-hour
+interval-average rate centered on 13 UTC:
 
 | Field (Pa/s) | Minimum | Maximum | RMS |
 |---|---:|---:|---:|
@@ -130,10 +184,14 @@ The raw central temporal difference `(p14-p12)/7200` gives:
 | FSF raw background temporal estimate | -0.01651042 | 0.05715495 | 0.01249815 |
 | Analysis minus background estimate | -0.00160482 | 0.00755859 | 0.00188084 |
 
-These are resolved hourly temporal estimates, **not** instantaneous derivative
-error bounds, sigma estimates, omega targets or permission to modify a boundary.
-Successive analyses share observations/background; the one forecast cycle is not
-an independent error ensemble. The RMS difference is not a calibrated uncertainty.
+These are resolved interval-average temporal estimates, **not** an instantaneous
+13 UTC derivative, an error bound, a sigma, an omega target or permission to
+modify a boundary. The LSX-minus-FSF difference combines product and
+representation differences (and the small cross-role grid-origin mismatch); it
+is not a calibrated sigma. Successive analyses share observations/background,
+and the one forecast prior is not an independent error ensemble. Neither the
+retrospective centered rate nor that representation difference establishes
+causal operational availability or an uncertainty distribution.
 
 There is also a metadata distinction to preserve. FSF `PSF` declares
 `valid_range=[0,100000] Pa`, but 40,956 / 41,188 / 41,385 raw finite non-fill values
