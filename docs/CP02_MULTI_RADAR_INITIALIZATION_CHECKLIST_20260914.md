@@ -834,3 +834,14 @@ writer, LAPSPREP, metadata, and time `PASS_SCOPED` results remain separate.
   모든 면의 지면 근처 미계산 구간을 별도로 보존한다. 전체 물리 잔차는 null이다.
 - source 풍향 설정과 역사적 실행 metadata의 확인, 지면 표본·PS 시간경향·상단
   omega 연결은 OPEN이다. 수직 layer remap·K·속도증분 상한·ON/native 승인은 후속이다.
+
+### PR36 — 지면 pressure 경향 연결
+
+- [x] 소수초를 절삭하지 않는 정확한 정수초 입력 검사.
+- [x] 같은 삼각 기주에서 사후 지면 법선 항과 압력 체적 변화율 일치.
+- [x] 알려진 부분합과 미정 전체 잔차 분리; COM 상단 결측을 0으로 대체하지 않음.
+- [x] 같은 격자 LW3 OM의 조건부 상단 적분을 COM 결측 경로와 별도 기록.
+- [ ] 하부 측면 profile·상단 omega의 물리적 표본/좌표 계약.
+- [ ] 완전한 기주 수지·새 후보·ON·native·열역학·예보 승인.
+
+실제 결과와 한계: `docs/PHYSICAL_COLUMN_TERMS_20260921.md`.
