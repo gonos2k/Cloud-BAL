@@ -825,3 +825,12 @@ writer, LAPSPREP, metadata, and time `PASS_SCOPED` results remain separate.
 - 실제 66,505개 기주 기하와 공유 2,583,082개 구간은 GEOMETRY_ONLY다.
   경사진 face의 비공유 구간, 실제 바람 보간·회전·metric은 아직 연결하지 않았다.
 - 생산 D/G·RHS·경계 권한·상한은 유지한다. 비영 ON 및 native/예보는 OPEN이다.
+
+## 2026-09-21 PR #34 후속 경사진 면 재구성
+
+- [실행 기록](SLOPING_PRESSURE_FACES_20260921.md): 실제 좌표·PS에서 131,976개
+  삼각 기주의 셀별 일정장·affine metric 폐합을 검증했다. 기존 생산 기하 변경은 없다.
+- 실제 LW3 공통 지면 위 표본으로 198,480개 면의 조건부 측면 유량을 적분했다.
+  모든 면의 지면 근처 미계산 구간을 별도로 보존한다. 전체 물리 잔차는 null이다.
+- source 풍향 설정과 역사적 실행 metadata의 확인, 지면 표본·PS 시간경향·상단
+  omega 연결은 OPEN이다. 수직 layer remap·K·속도증분 상한·ON/native 승인은 후속이다.
