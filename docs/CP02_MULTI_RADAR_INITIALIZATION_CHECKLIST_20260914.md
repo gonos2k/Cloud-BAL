@@ -99,7 +99,9 @@ native 경로 조사는 병렬이며, 미완료 물리 후보를 게시하지 �
 | 허용 조정 목록 | face/source별 물리·자료 근거, E, 단위, 양쪽 행, 오차·상한 | OPEN |
 | 상한 포함 성분 문제 | 진단용 support omega로 호환 가능; 생산 E/권한은 미확정 | DIAGNOSED_SCOPED / POLICY_OPEN |
 | 전체 행·총 증분 상한 | 원래 A의 비제약 해는 상한 위반; bounded 유량 후보는 별도 조건부 진단 | DIAGNOSED_SCOPED |
-| 비활성 수신 영역·가중 목적함수 | 이웃 발산 변화와 관측 오차·상한을 포함한 전체 문제 확정 | OPEN |
+| 수신 before/변화/after | 고정 79,316행·저장 후보·같은 D로 평가; Intel O0/O2 절차 대조 | DIAGNOSED_SCOPED |
+| 수신 공동 수지 | 공유 receiver를 한 번만 센 7개 결합 집합의 필요조건 | DIAGNOSED_SCOPED |
+| 비활성 수신 영역·가중 목적함수 | 최종 잔차 범위·관측 비용·권한·총 상한을 포함한 전체 문제 확정 | OPEN |
 | 비영 ON·native·예보 | 위 정책과 해 존재 조건을 만족한 실제 후보 검증 | BLOCKED / NOT_RUN |
 
 ## 승인 후 구현 체크리스트 (2026-09-15)
