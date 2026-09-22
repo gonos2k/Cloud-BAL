@@ -1,11 +1,12 @@
 ! Prepared-input research replay. No production state or boundary is modified.
 program diagnose_qbal_lower_transport
   use iso_fortran_env, only: real64,int64
-  use ieee_arithmetic, only: ieee_value,ieee_quiet_nan
+  use ieee_arithmetic, only: ieee_value,ieee_quiet_nan,ieee_is_finite
   use qbal_sloping_geometry
   use qbal_column_budget
   use qbal_lower_transport
   use qbal_domain_flux
+  use qbal_surface_thermo
   implicit none
   integer :: nn,nz,nt,ne,unit,i,j,k,e,t,a,b,q,ids(3),external_unknown,internal_unknown,cell_signs(3)
   integer, allocatable :: tri(:,:),edges(:,:),incidence(:,:),mapped(:,:)
@@ -22,8 +23,15 @@ program diagnose_qbal_lower_transport
   logical, allocatable :: unknown_mask(:),top_mask(:)
   real(real64) :: domain_subtotal,domain_residual
   logical :: ok,complete,orientation_ok,cell_missing_known(3)
-  character(1024) :: input,output
+  character(1024) :: input,output,pressure_model
+  real(real64), allocatable :: surface_t(:,:),surface_r(:,:),profile_t(:,:,:),profile_r(:,:,:)
+  real(real64), allocatable :: thermo(:,:,:),layer_defect(:,:,:),tv_profile(:)
+  logical :: thermodynamic
+  real(real64) :: tv0,dheight,dtemperature,old_pressure
   call get_command_argument(1,input);call get_command_argument(2,output)
+  call get_command_argument(3,pressure_model)
+  thermodynamic=trim(pressure_model)=='surface-thermo'
+  if (len_trim(pressure_model)>0.and..not.thermodynamic) error stop 'unknown pressure model'
   open(newunit=unit,file=trim(input),access='stream',form='unformatted',status='old')
   read(unit) nn,nz,nt,ne,times,parameters
   if (min(nn,nz,nt,ne)<1) error stop 'invalid dimensions'
@@ -31,6 +39,12 @@ program diagnose_qbal_lower_transport
   allocate(lat(nn),lon(nn),terrain(nn),ps(nn,3),p(nz),height(nz,nn,3),u(nz,nn,3),v(nz,nn,3))
   allocate(us(nn,3),vs(nn,3),omega(nn,3),tri(3,nt),edges(2,ne),incidence(3,nt))
   read(unit) lat,lon,terrain,p,ps,height,u,v,us,vs,omega,tri,edges,incidence
+  if (thermodynamic) then
+    allocate(surface_t(nn,3),surface_r(nn,3),profile_t(nz,nn,3),profile_r(nz,nn,3))
+    read(unit) surface_t,surface_r,profile_t,profile_r
+    allocate(thermo(5,nn,3),layer_defect(nz-1,nn,3),tv_profile(nz))
+    thermo=ieee_value(0._real64,ieee_quiet_nan);layer_defect=thermo(1,1,1)
+  end if
   close(unit)
   allocate(edge_u(nz,2),edge_v(nz,2))
   allocate(xy(2,nn),scales(2,nn),p10(nn,3),mapped(nn,3),covered(ne,3),lower(ne,3),missing(ne,3))
@@ -50,6 +64,31 @@ program diagnose_qbal_lower_transport
       vn=-sin(theta)*us(i,j)+cos(theta)*vs(i,j)
       us(i,j)=scales(1,i)*ue;vs(i,j)=scales(2,i)*vn
       call pressure_at_height(ps(i,j),terrain(i),p,height(:,i,j),10._real64,p10(i,j),ok)
+      if (thermodynamic) then
+        old_pressure=p10(i,j)
+        call thermodynamic_sample_pressure(ps(i,j),surface_t(i,j),surface_r(i,j),10._real64, &
+                                           p10(i,j),tv0,dheight,dtemperature,ok)
+        thermo(1:4,i,j)=[tv0,dheight,dtemperature,old_pressure]
+        if (ok) then
+          ! Diagnostic height residuals do not alter the thin-layer prior.
+          tv_profile=nan
+          do k=1,nz
+            if (p(k)>=ps(i,j)) cycle
+            call virtual_temperature_from_mixing(p(k),profile_t(k,i,j),profile_r(k,i,j),tv_profile(k),complete)
+          end do
+          do k=1,nz
+            if (p(k)>=ps(i,j)) cycle
+            call hydrostatic_height_defect(ps(i,j),p(k),terrain(i),height(k,i,j),tv0,tv_profile(k), &
+                                           thermo(5,i,j),complete)
+            exit
+          end do
+          do k=1,nz-1
+            if (p(k)>=ps(i,j)) cycle
+            call hydrostatic_height_defect(p(k),p(k+1),height(k,i,j),height(k+1,i,j), &
+                                           tv_profile(k),tv_profile(k+1),layer_defect(k,i,j),complete)
+          end do
+        end if
+      end if
       if (ok) mapped(i,j)=1
     end do
   end do
@@ -127,5 +166,6 @@ program diagnose_qbal_lower_transport
   open(newunit=unit,file=trim(output),access='stream',form='unformatted',status='new')
   write(unit) xy,p10,covered,lower,missing,area,surface,volume_rate,bound,top,known,residual,mapped
   write(unit) domain_subtotal,domain_residual,external_unknown,internal_unknown
+  if (thermodynamic) write(unit) thermo,layer_defect
   close(unit)
 end program

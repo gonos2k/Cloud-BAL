@@ -8,7 +8,7 @@ import tempfile
 import numpy as np
 
 
-def check_driver(executable):
+def check_driver(executable, thermodynamic=False):
     nn,nz,nt,ne = 4,3,2,5
     lat = np.deg2rad([38.,38.,38.01,38.01])
     lon = np.deg2rad([126.,126.01,126.,126.01])
@@ -37,12 +37,24 @@ def check_driver(executable):
                         stream.write(np.asarray(value,dtype="<f8").tobytes())
                     for value in (triangles,edges,incidence):
                         stream.write(value.tobytes())
-                subprocess.run([str(executable),str(root/"input.bin"),str(root/"output.bin")],check=True)
+                    if thermodynamic:
+                        for value in (np.full((3,nn),300.),np.zeros((3,nn)),
+                                      np.full((3,nn,nz),300.),np.zeros((3,nn,nz))):
+                            stream.write(np.asarray(value,dtype="<f8").tobytes())
+                command = [str(executable),str(root/"input.bin"),str(root/"output.bin")]
+                if thermodynamic:
+                    command.append("surface-thermo")
+                subprocess.run(command,check=True)
                 with (root/"output.bin").open("rb") as stream:
                     raw = np.fromfile(stream,dtype="<f8",count=sum(counts))
                     mapped = np.fromfile(stream,dtype="<i4",count=3*nn).reshape(3,nn)
                     domain = np.fromfile(stream,dtype="<f8",count=2)
                     unknown = np.fromfile(stream,dtype="<i4",count=2)
+                    if thermodynamic:
+                        thermo = np.fromfile(stream,dtype="<f8",count=15*nn).reshape(3,nn,5)
+                        defects = np.fromfile(stream,dtype="<f8",count=3*nn*(nz-1))
+                        assert np.allclose(thermo[:,:,0],300.,rtol=1e-14)
+                        expected_pressure = ps*np.exp(-9.80665*10/(287.05*300))
                     assert not stream.read(1)
                 xy,p10,covered,lower,missing,area,surface,rate,bound,top,known,residual = np.split(raw,np.cumsum(counts)[:-1])
                 expected = -top_coefficient*area/3
@@ -51,7 +63,9 @@ def check_driver(executable):
                 np.testing.assert_allclose(domain[0],expected.sum(),rtol=1e-13,atol=1e-8)
                 assert np.isnan(residual).all() and np.isnan(domain[1])
                 assert np.array_equal(unknown,[4,1])
-                assert np.all(mapped[:,0] == (0 if invalid else 1))
+                assert np.all(mapped[:,0] == (0 if invalid and not thermodynamic else 1))
+                if thermodynamic:
+                    np.testing.assert_allclose(p10.reshape(3,nn),expected_pressure,rtol=1e-14)
                 assert np.all(mapped[:,1:] == 1)
     print("Fortran lower-transport stream: 4 manufactured cases passed")
 
@@ -59,4 +73,6 @@ def check_driver(executable):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("executable",type=Path)
-    check_driver(parser.parse_args().executable.resolve())
+    parser.add_argument("--thermodynamic",action="store_true")
+    args = parser.parse_args()
+    check_driver(args.executable.resolve(),args.thermodynamic)
