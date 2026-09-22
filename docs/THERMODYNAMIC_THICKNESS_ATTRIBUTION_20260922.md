@@ -201,7 +201,8 @@ Retained evidence under its `scratch/pr41_validation/`:
 - `final/arrays.npz`: pressure, PS, common support, all nine layer fields and
   matched-layer column sums; `final/{O0,O2}/result.bin` are raw Fortran output.
 - `kernel_mutations/original_runner.log`: eight unit-test scenarios with
-  54 assertions at each pinned Intel optimization level.
+  52 assertions at each pinned Intel optimization level (PR42 runtime-counter
+  correction of the earlier manual count of 54; all eight scenarios pass).
 - `kernel_mutations/receipt.md`: temperature sign, moisture sign and failed
   output transaction mutations all detected at O0 and O2 (six rejections).
 - `prepared_final.log`: two valid masked/gapped driver runs and eight invalid

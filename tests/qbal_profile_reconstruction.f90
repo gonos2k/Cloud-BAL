@@ -6,7 +6,47 @@ module qbal_profile_reconstruction
   implicit none
   private
   public :: fit_profile_sample
+  public :: profile_sample_row
 contains
+  ! Build the piecewise-linear sampling row for one pressure sample.  The
+  ! row belongs to the declared state basis; it does not add a knot or infer
+  ! a coefficient.  Failed calls return NaN outputs and ok=.false.
+  subroutine profile_sample_row(p,p_sample,a,ok)
+    real(real64), intent(in) :: p(:),p_sample
+    real(real64), intent(out) :: a(:)
+    logical, intent(out) :: ok
+    real(real64) :: nan,weight
+    integer :: n,k
+
+    nan=ieee_value(0._real64,ieee_quiet_nan)
+    a=nan
+    ok=.false.
+    n=size(p)
+    if (size(a)/=n .or. n<2) return
+    if (.not.all(ieee_is_finite(p)).or.&
+        .not.ieee_is_finite(p_sample)) return
+    if (any(p<=0._real64).or.any(p>1.e9_real64)) return
+    if (p_sample<=0._real64.or.p_sample>1.e9_real64) return
+    if (any(p(:n-1)<=p(2:n))) return
+    if (p_sample<p(n).or.p_sample>p(1)) return
+
+    a=0._real64
+    do k=1,n-1
+      if (p_sample<=p(k).and.p_sample>=p(k+1)) then
+        weight=(p_sample-p(k+1))/(p(k)-p(k+1))
+        if (weight<0._real64.or.weight>1._real64) then
+          a=nan
+          return
+        end if
+        a(k)=weight
+        a(k+1)=1._real64-weight
+        ok=.true.
+        return
+      end if
+    end do
+    a=nan
+  end subroutine profile_sample_row
+
   ! Fuse one scalar observation with a piecewise-linear profile.  The supplied
   ! variance is diagonal in knot space; no covariance or variance is inferred.
   ! A sample must lie in the finite knot domain, so this routine never
@@ -18,9 +58,10 @@ contains
     real(real64), intent(out) :: fitted(:),innovation
     logical, intent(out) :: ok
     real(real64) :: nan,a(size(p)),scaled_variance(size(p))
-    real(real64) :: pred,scale,denominator,weight
+    real(real64) :: pred,scale,denominator
     real(real64) :: gain(size(p))
-    integer :: n,k,interval
+    integer :: n
+    logical :: row_ok
 
     nan=ieee_value(0._real64,ieee_quiet_nan)
     fitted=nan
@@ -29,37 +70,21 @@ contains
     n=size(p)
     if (size(fitted)/=n .or. n<2) return
     if (size(wind)/=n .or. size(variance)/=n) return
-    if (.not.all(ieee_is_finite(p)).or. &
-        .not.all(ieee_is_finite(wind)).or. &
+    if (.not.all(ieee_is_finite(wind)).or. &
         .not.all(ieee_is_finite(variance))) return
-    if (.not.all(ieee_is_finite([p_sample,wind_sample,sample_variance]))) return
+    if (.not.all(ieee_is_finite([wind_sample,sample_variance]))) return
 
     ! This finite arithmetic envelope protects the research calculation from
     ! overflow and underflow; it is not a physical bound or data authority.
-    if (any(p<=0._real64).or.any(p>1.e9_real64)) return
     if (any(abs(wind)>1.e12_real64)) return
     if (any(variance<1.e-100_real64).or.any(variance>1.e100_real64)) return
-    if (p_sample<=0._real64.or.p_sample>1.e9_real64) return
     if (abs(wind_sample)>1.e12_real64) return
     if (sample_variance<1.e-100_real64.or.sample_variance>1.e100_real64) return
-    if (any(p(:n-1)<=p(2:n))) return
-    if (p_sample<p(n).or.p_sample>p(1)) return
 
-    ! The row has at most two nonzero weights.  At an exact knot the first
-    ! matching interval gives that knot weight one, making the row continuous.
-    a=0._real64
-    interval=0
-    do k=1,n-1
-      if (p_sample<=p(k).and.p_sample>=p(k+1)) then
-        weight=(p_sample-p(k+1))/(p(k)-p(k+1))
-        if (weight<0._real64.or.weight>1._real64) return
-        a(k)=weight
-        a(k+1)=1._real64-weight
-        interval=k
-        exit
-      end if
-    end do
-    if (interval==0) return
+    ! Reuse the same state-basis row exposed for independent experiments.
+    ! At an exact knot the first matching interval gives that knot weight one.
+    call profile_sample_row(p,p_sample,a,row_ok)
+    if (.not.row_ok) return
 
     pred=dot_product(a,wind)
     innovation=wind_sample-pred
