@@ -5,9 +5,10 @@ PROGRAM test_qbal_thickness_attribution
   USE qbal_thickness_attribution, ONLY: thickness_change
   IMPLICIT NONE
 
-  INTEGER :: failures
+  INTEGER :: failures,checks
 
   failures=0
+  checks=0
   CALL test_zero_change()
   CALL test_temperature_only()
   CALL test_humidity_only()
@@ -21,13 +22,14 @@ PROGRAM test_qbal_thickness_attribution
     PRINT '(A,I0)', 'Thickness attribution tests failed: ',failures
     ERROR STOP 1
   END IF
-  PRINT '(A)', 'Thickness attribution tests passed'
+  PRINT '(A,I0,A)', 'Thickness attribution tests passed: ',checks,' assertions'
 
 CONTAINS
 
   SUBROUTINE check(condition,message)
     LOGICAL, INTENT(IN) :: condition
     CHARACTER(LEN=*), INTENT(IN) :: message
+    checks=checks+1
     IF (.NOT.condition) THEN
       failures=failures+1
       PRINT '(A)', 'FAIL: '//TRIM(message)
