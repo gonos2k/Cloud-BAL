@@ -4,7 +4,7 @@ module qbal_lower_transport
   use ieee_arithmetic, only: ieee_is_finite, ieee_value, ieee_quiet_nan
   implicit none
   private
-  public :: pressure_at_height, lower_strip_flux
+  public :: pressure_at_height, lower_strip_flux, cap_switch_jump
 contains
 
   ! Interpolate log(p) in the supplied vertical coordinate.  The caller is
@@ -126,4 +126,26 @@ contains
     end if
     ok=.true.
   end subroutine lower_strip_flux
+  ! Frozen-input jump when the old piecewise model changes cap from p_next
+  ! to p_level. This is a diagnostic limit, not a new boundary transport.
+  subroutine cap_switch_jump(xy,p_sample,p_level,p_next,wind_sample,wind_level,wind_next,jump,ok)
+    real(real64), intent(in) :: xy(2,2),p_sample(2),p_level,p_next
+    real(real64), intent(in) :: wind_sample(2,2),wind_level(2,2),wind_next(2,2)
+    real(real64), intent(out) :: jump
+    logical, intent(out) :: ok
+    real(real64) :: old_lower,new_lower,upper_band,band_pressure(2)
+    logical :: valid
+    jump=ieee_value(0._real64,ieee_quiet_nan);ok=.false.
+    if (.not.all(ieee_is_finite([p_sample,p_level,p_next]))) return
+    if (p_level<=p_next.or.minval(p_sample)/=p_level) return
+    call lower_strip_flux(xy,p_sample,p_next,wind_sample,wind_next,old_lower,valid)
+    if (.not.valid) return
+    call lower_strip_flux(xy,p_sample,p_level,wind_sample,wind_level,new_lower,valid)
+    if (.not.valid) return
+    band_pressure=p_level
+    call lower_strip_flux(xy,band_pressure,p_next,wind_level,wind_next,upper_band,valid)
+    if (.not.valid) return
+    jump=upper_band+new_lower-old_lower
+    ok=.true.
+  end subroutine cap_switch_jump
 end module qbal_lower_transport
