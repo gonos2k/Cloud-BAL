@@ -1,10 +1,10 @@
-# Physical candidate readiness after PR42
+# Physical candidate readiness after PR43
 
-Base: `045027b49f81233e2630b1b81b58e7ed3a0b4da3`.
+Base: `5f51fbbcec8d7908ce4e91f9d59394927348a917`.
 This is an execution record for resolving candidate prerequisites, not a
-balance candidate or a production permission change. The PR scope is the
-completed conditional ground-reference calculation and reproducible execution
-evidence. Physical candidate gates remain separate from these scoped
+balance candidate or a production permission change. It includes the PR43
+conditional ground-reference calculation and a same-support comparison with
+retained HT. Physical candidate gates remain separate from these scoped
 implementation and reproducibility checks.
 
 ## Closed diagnostics and the next physical decision
@@ -61,10 +61,13 @@ cloud-fraction threshold, and `lq3_driver1a.f` calls it when eligible. The
 retained `moisture_switch.nl` has `CLOUD_SWITCH=1`, and the historical humidity
 read inventory includes FUA, LT1, LC3 and LSX.
 
-This is source-path and spatial evidence consistent with a cloud-associated
-analysis structure. It does not isolate the exact numerical contribution of
-that producer step: that requires its intermediate state and pressure-level
-cloud mapping. Do not erase the central humidity change merely because its
+At PR43 this was source-path and spatial evidence, without a same-case
+per-node causal separation. The subsequent PR44
+[controlled humidity replay](CLOUD_MOISTURE_CAUSAL_REPLAY_20260923.md) now
+isolates the **net late cloud-block effect**, including its final QC
+consequence, at the target node. It still does not split the raw
+`cloud_sat` call from clipping or certify the humidity change as physically
+correct. Do not erase the central humidity change merely because its
 relative force is large. Preserve the cloud/observation lineage when defining
 which thermodynamic changes a candidate may alter.
 
@@ -250,6 +253,19 @@ python3 tests/diagnose_qbal_ground_reference.py \
 ```
 
 ## Required candidate decisions
+
+The PR44 [same-support retained-HT comparison](CONDITIONAL_GROUND_HT_COMPARISON_20260923.md)
+separates the constructed stage defect from the final T/q change at 17,182
+supported node-level values. Their RMS values are 163.955 and 8.832 m²/s²,
+respectively. These are different terms in the identity leading from retained
+HT to the conditional final profile; neither is an authorized HT adjustment.
+The target maximum-force triangle remains unsupported by the 10 m bracket.
+The PR44 [cloud-switch replay](CLOUD_MOISTURE_CAUSAL_REPLAY_20260923.md)
+reproduces retained LQ3 byte-for-byte with cloud ON. At `(55,162)`, ON–OFF
+accounts for the entire 850–500 hPa stage-to-final humidity increase; the
+1000–900 hPa increase belongs to earlier humidity processing in this replay.
+This is causal source attribution, not permission to change the analyzed
+moisture or its error covariance.
 
 | Quantity | Current evidence | Condition before changing a state |
 |---|---|---|
