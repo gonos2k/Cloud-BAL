@@ -1019,3 +1019,16 @@ PR37 추가 판정: 단조로운 높이–기압 보간에도 10 m 압력차가 
 비현실적 극값이 있어 실제 하부 profile은 `NOT_SUPPORTED_FOR_PHYSICAL_PROFILE`이다.
 조건부 적분의 수치 통과를 물리 경계 승인으로 올리지 않으며, 다음은 온도·수분·
 높이 datum에 근거한 표본 pressure 연결을 확정하는 작업이다.
+
+
+### PR38 — 열역학적 10 m pressure prior와 높이 기준 진단
+
+[실행·입력 근거](SURFACE_THERMODYNAMIC_PRESSURE_20260922.md): LSX T2와 건조공기
+기준 MR를 0–10 m에 일정하다고 선언한 prior를 기존 gas EOS와 연결했다.
+새 Fortran 절차와 같은 사례의 Intel O0/O2 재계산은 통과했다. LT1 level 선택 없이
+표본 pressure를 계산하며, 원래 HT/PS는 변경하지 않는다. 지면–첫 level의
+정역학 두께 불일치는 내부 level 사이보다 크게 남아 `DATUM_UNVERIFIED`이다.
+모든 하부 face가 prior상 계산 가능해도 0–10 m 유량은 미정이며, 전체 기주·영역
+잔차는 null이다. `CONDITIONAL_THIN_LAYER_PRIOR`는 물리 profile·경계 권한·
+비영 ON·native 승인이 아니다. 다음은 높이 기준과 층 대표성, 미정 0–10 m
+수송의 독립적 근거를 연결하는 작업이다.
