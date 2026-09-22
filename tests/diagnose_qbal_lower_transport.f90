@@ -23,14 +23,21 @@ program diagnose_qbal_lower_transport
   logical, allocatable :: unknown_mask(:),top_mask(:)
   real(real64) :: domain_subtotal,domain_residual
   logical :: ok,complete,orientation_ok,cell_missing_known(3)
-  character(1024) :: input,output,pressure_model
+  character(1024) :: input,output,pressure_model,audit_mode
   real(real64), allocatable :: surface_t(:,:),surface_r(:,:),profile_t(:,:,:),profile_r(:,:,:)
   real(real64), allocatable :: thermo(:,:,:),layer_defect(:,:,:),tv_profile(:)
-  logical :: thermodynamic
+  logical :: thermodynamic,cap_audit
+  real(real64), allocatable :: cap_diagnostics(:,:,:)
+  real(real64) :: wind_next(2,2),shifted_pressure(2),jump
+  integer :: transition
   real(real64) :: tv0,dheight,dtemperature,old_pressure
   call get_command_argument(1,input);call get_command_argument(2,output)
   call get_command_argument(3,pressure_model)
   thermodynamic=trim(pressure_model)=='surface-thermo'
+  call get_command_argument(4,audit_mode)
+  cap_audit=trim(audit_mode)=='cap-audit'
+  if (len_trim(audit_mode)>0.and..not.cap_audit) error stop 'unknown profile audit'
+  if (cap_audit.and..not.thermodynamic) error stop 'cap audit requires thermodynamic prior'
   if (len_trim(pressure_model)>0.and..not.thermodynamic) error stop 'unknown pressure model'
   open(newunit=unit,file=trim(input),access='stream',form='unformatted',status='old')
   read(unit) nn,nz,nt,ne,times,parameters
@@ -50,6 +57,9 @@ program diagnose_qbal_lower_transport
   allocate(xy(2,nn),scales(2,nn),p10(nn,3),mapped(nn,3),covered(ne,3),lower(ne,3),missing(ne,3))
   allocate(area(nt),surface(nt),top(nt,3),known(nt),residual(nt),volume_rate(nt),bound(nt))
   nan=ieee_value(0._real64,ieee_quiet_nan);p10=nan;lower=nan;mapped=0
+  if (cap_audit) then
+    allocate(cap_diagnostics(5,ne,3));cap_diagnostics=nan
+  end if
   do i=1,nn
     call equal_area_point(lat(i),lon(i),parameters(1),parameters(2),parameters(3),xy(:,i),scales(:,i),ok)
     if (.not.ok) error stop 'invalid coordinates'
@@ -116,6 +126,21 @@ program diagnose_qbal_lower_transport
       call lower_strip_flux(edge_xy,edge_p10,p(q),wind0,wind1,lower(e,j),ok)
       if (.not.ok) error stop 'invalid lower strip'
       missing(e,j)=sum(ps([a,b],j)-p10([a,b],j))/2
+      if (cap_audit) then
+        ! Current cap crossing from below in pressure, translating sample pressures
+        ! by the same amount while holding all winds fixed. Not a time tendency.
+        transition=q
+        shifted_pressure=edge_p10+(p(transition)-minval(edge_p10))
+        where (edge_p10==minval(edge_p10)) shifted_pressure=p(transition)
+        wind1(1,:)=u(transition,[a,b],j);wind1(2,:)=v(transition,[a,b],j)
+        wind_next(1,:)=u(transition+1,[a,b],j);wind_next(2,:)=v(transition+1,[a,b],j)
+        call cap_switch_jump(edge_xy,shifted_pressure,p(transition),p(transition+1), &
+                             wind0,wind1,wind_next,jump,ok)
+        if (.not.ok) error stop 'invalid cap-limit audit'
+        cap_diagnostics(:,e,j)=[real(q,real64),p(transition)-minval(edge_p10),jump, &
+                                maxval(abs(wind1(1,:)-wind0(1,:))), &
+                                maxval(abs(wind1(2,:)-wind0(2,:)))]
+      end if
     end do
   end do
   do t=1,nt
@@ -167,5 +192,6 @@ program diagnose_qbal_lower_transport
   write(unit) xy,p10,covered,lower,missing,area,surface,volume_rate,bound,top,known,residual,mapped
   write(unit) domain_subtotal,domain_residual,external_unknown,internal_unknown
   if (thermodynamic) write(unit) thermo,layer_defect
+  if (cap_audit) write(unit) cap_diagnostics
   close(unit)
 end program

@@ -7,6 +7,7 @@ program test_qbal_lower_transport
   real(real64) :: p(6),height(6),bad(6),sample,nan,p_sample,expected
   real(real64) :: xy(2,2),reverse_xy(2,2),pedge(2),reverse_pedge(2),flux,reverse_flux
   real(real64) :: wind_sample(2,2),wind_cap(2,2),reverse_sample(2,2),reverse_cap(2,2)
+  real(real64) :: wind_next(2,2)
   logical :: ok
 
   checks=0
@@ -99,6 +100,26 @@ program test_qbal_lower_transport
   xy(:,2)=xy(:,1)
   call lower_strip_flux(xy,pedge,80._real64,wind_sample,wind_cap,flux,ok)
   call check(.not.ok.and.ieee_is_nan(flux),'zero-length edge rejected')
+  xy(:,1)=[0._real64,0._real64];xy(:,2)=[0._real64,1._real64]
+  pedge=95000._real64
+  wind_sample=0;wind_cap=0;wind_next=0
+  wind_sample(1,:)=4;wind_cap(1,:)=8;wind_next(1,:)=6
+  call cap_switch_jump(xy,pedge,95000._real64,90000._real64,wind_sample,wind_cap,wind_next,flux,ok)
+  call check(ok.and.abs(flux-10000._real64)<1.e-10_real64,'cap jump analytic mismatch')
+  reverse_xy=xy(:,[2,1]);reverse_sample=wind_sample(:,[2,1]);reverse_cap=wind_cap(:,[2,1])
+  wind_next=wind_next(:,[2,1])
+  call cap_switch_jump(reverse_xy,pedge,95000._real64,90000._real64, &
+                        reverse_sample,reverse_cap,wind_next,reverse_flux,ok)
+  call check(ok.and.abs(reverse_flux+flux)<1.e-10_real64,'cap jump reverses with face')
+  wind_sample=wind_cap
+  call cap_switch_jump(xy,pedge,95000._real64,90000._real64,wind_sample,wind_cap,wind_next,flux,ok)
+  call check(ok.and.abs(flux)<1.e-10_real64,'matching cap samples have no finite jump')
+  pedge=95001._real64
+  call cap_switch_jump(xy,pedge,95000._real64,90000._real64,wind_sample,wind_cap,wind_next,flux,ok)
+  call check(.not.ok.and.ieee_is_nan(flux),'cap limit requires endpoint at crossing')
+  pedge=95000._real64
+  call cap_switch_jump(xy,pedge,nan,90000._real64,wind_sample,wind_cap,wind_next,flux,ok)
+  call check(.not.ok.and.ieee_is_nan(flux),'cap limit NaN rejected')
   print '(a,i0)', 'lower transport checks passed: ',checks
 contains
   subroutine check(condition,label)

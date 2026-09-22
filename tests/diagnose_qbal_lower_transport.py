@@ -47,6 +47,7 @@ def main():
     parser.add_argument("--retrospective", action="store_true", required=True)
     parser.add_argument("--height-model", choices=["log-pressure-static-avg", "constant-surface-thermodynamics"], required=True)
     parser.add_argument("--lq3", type=Path, nargs=3)
+    parser.add_argument("--cap-audit", action="store_true")
     parser.add_argument("--lower-model", choices=["linear-normalized-pressure"], required=True)
     parser.add_argument("--top-source", choices=["lw3-derived"], required=True)
     args = parser.parse_args()
@@ -55,6 +56,8 @@ def main():
     thermodynamic = args.height_model == "constant-surface-thermodynamics"
     if thermodynamic != (args.lq3 is not None):
         parser.error("--lq3 is required only with constant-surface-thermodynamics")
+    if args.cap_audit and not thermodynamic:
+        parser.error("--cap-audit requires constant-surface-thermodynamics")
     products = ("lsx", "lt1", "lw3") + (("lq3",) if thermodynamic else ())
     paths = {name: getattr(args, name).resolve() for name in ("snapshot", "static", "frame_evidence")}
     for name in products:
@@ -174,19 +177,20 @@ set -euo pipefail
 repo=$1
 out=$2
 mode=$3
+audit=$4
 . "$repo/tests/intel_toolchain.sh"
 for level in O0 O2; do
  mkdir "$out/$level"
  if [[ $level == O0 ]]; then flags=("${CLOUD_BAL_FREE_FLAGS[@]}"); else flags=("${CLOUD_BAL_REPRO_FLAGS[@]}"); fi
  (
  cd "$out/$level"
- "$CLOUD_BAL_FC" "${flags[@]}" -convert little_endian "${@:4}" -o diagnose
- ./diagnose "$out/prepared.bin" result.bin "$mode"
+ "$CLOUD_BAL_FC" "${flags[@]}" -convert little_endian "${@:5}" -o diagnose
+ ./diagnose "$out/prepared.bin" result.bin "$mode" "$audit"
  )
 done
 ''')
     with (out/"intel.log").open("w") as log:
-        subprocess.run(["bash",str(script),str(repo),str(out),"surface-thermo" if thermodynamic else ""]+[str(repo/"tests"/s) for s in sources],
+        subprocess.run(["bash",str(script),str(repo),str(out),"surface-thermo" if thermodynamic else "","cap-audit" if args.cap_audit else ""]+[str(repo/"tests"/s) for s in sources],
                        stdout=log,stderr=subprocess.STDOUT,check=True)
     if any(sha(repo/"tests"/s) != source_pins[s] for s in sources):
         raise ValueError("source changed during compilation/replay")
@@ -201,6 +205,7 @@ done
             unknown_counts = np.fromfile(stream,dtype="<i4",count=2)
             thermo = np.fromfile(stream,dtype="<f8",count=15*nn).reshape(3,nn,5) if thermodynamic else None
             defects = np.fromfile(stream,dtype="<f8",count=3*nn*(nz-1)).reshape(3,nn,nz-1) if thermodynamic else None
+            cap_data = np.fromfile(stream,dtype="<f8",count=15*ne).reshape(3,ne,5) if args.cap_audit else None
             if stream.read(1) or len(domain)!=2 or len(unknown_counts)!=2:
                 raise ValueError("invalid domain output extent")
         if raw.size != sum(counts) or not np.isin(mapped,[0,1]).all():
@@ -212,6 +217,8 @@ done
         if thermodynamic:
             arrays["thermo"] = thermo
             arrays["layer_defect"] = defects
+        if args.cap_audit:
+            arrays["cap_audit"] = cap_data
         for key, width in (("p10",nn),("covered",ne),("lower",ne),("missing",ne),("top",nt)):
             arrays[key] = arrays[key].reshape(3,width)
         arrays["xy"] = arrays["xy"].reshape(nn,2)
@@ -248,6 +255,18 @@ done
                 raise ValueError(f"{name}: optimization support differs")
             if not np.allclose(ref[name],other[name],rtol=1e-12,atol=1e-8,equal_nan=True):
                 raise ValueError(f"{name}: optimization arithmetic difference")
+    if args.cap_audit:
+        if not np.array_equal(ref["cap_audit"][:,:,0],other["cap_audit"][:,:,0]):
+            raise ValueError("cap index differs across optimization")
+        if not np.isfinite(ref["cap_audit"]).all() or not np.isfinite(other["cap_audit"]).all():
+            raise ValueError("incomplete cap audit")
+        if np.any(np.abs(ref["cap_audit"][:,:,2]-other["cap_audit"][:,:,2])>3*tolerance):
+            raise ValueError("cap-limit arithmetic differs across optimization")
+        for column in (1,3,4):
+            scale=max(float(np.max(np.abs(ref["cap_audit"][:,:,column]))),1.)
+            if not np.allclose(ref["cap_audit"][:,:,column],other["cap_audit"][:,:,column],
+                               rtol=0,atol=2048*np.finfo(float).eps*scale):
+                raise ValueError("cap diagnostic operands differ across optimization")
     np.savez(out/"arrays.npz",**ref,triangles=triangles,edges=edges,incidence=incidence)
     signs = np.bincount(np.abs(incidence).ravel()-1,weights=np.sign(incidence).ravel(),minlength=ne)
     outer = signs != 0
@@ -315,6 +334,15 @@ done
         report["legacy_comparison_valid_count"] = np.isfinite(ref["thermo"][:,:,3]).sum(axis=1).tolist()
         report["ground_height_status"] = "DATUM_UNVERIFIED"
         report["defect_contract"] = "g*HT minus trapezoid in log-pressure of Rd*Tv; common terrain/HT datum conditional; not a calibrated error or forced adjustment"
+    report["profile_status"]="CAP_DEPENDENT_LEGACY_EXPERIMENT / NOT_AUTHORIZED_FOR_PHYSICAL_PROFILE"
+    if args.cap_audit:
+        audit=ref["cap_audit"]
+        edge_length=np.linalg.norm(ref["xy"][edges[:,1]]-ref["xy"][edges[:,0]],axis=1)
+        report["cap_index_changes_between_samples"]=(audit[1:,:,0]!=audit[:-1,:,0]).sum(axis=1).tolist()
+        report["cap_limit_shift_percentiles_Pa"]=[finite_percentiles(x[:,1]) for x in audit]
+        report["cap_limit_jump_per_length_percentiles_m_Pa_per_s"]=[finite_percentiles(x[:,2]/edge_length) for x in audit]
+        report["cap_wind_disagreement_max_coordinate_m_per_s"]=[[float(np.nanmax(x[:,3])),float(np.nanmax(x[:,4]))] for x in audit]
+        report["cap_audit_contract"]="Frozen winds; translate both p10 endpoints to current cap crossing; jump is alternative reconstruction difference, not observed time change or boundary forcing. Both cap levels are above current ground. No variance-based profile fit is applied to actual data."
     if any(sha(path)!=pins[name] for name,path in paths.items()):
         raise ValueError("input changed during replay")
     report["artifact_sha256"] = {p.name:sha(p) for p in (out/"prepared.bin",out/"arrays.npz")}
