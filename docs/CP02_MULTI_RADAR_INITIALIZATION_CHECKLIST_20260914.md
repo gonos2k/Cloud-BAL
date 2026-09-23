@@ -1,16 +1,15 @@
 # 다중 레이더·국지 균형초기화 실행 체크리스트와 체크포인트
 
-작성: 2026-09-14. 현재 실행표 갱신: 2026-09-22 (PR #42 검토·후속 실제 해소 근거).
+작성: 2026-09-14. 현재 실행표 갱신: 2026-09-23 (PR #43 검토·PR #44 후속 비교).
 상위 계획: [추가 과제 계획서](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
 검토 근거: 수학·수치해석·기상학 종합 검토 (로컬 작업공간 근거: `../scratch/cp02_multiradar_additional_review_20260914/REVIEW.md`).
 수학 근거: [정리·증명과 실제 적용 조건](CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md).
 
-## 2026-09-22 PR #42 검토 반영 — 현재 실행 기준
+## 2026-09-23 PR #43 검토와 PR #44 후속 비교 — 현재 실행 기준
 
-기준 HEAD `045027b49f81233e2630b1b81b58e7ed3a0b4da3`.
-사용자 독립 검토의 공통 판정을 반영한다. 전달된 두 검토문의 상세 시험 개수는
-서로 달라 합산하지 않는다. 저장소의 pinned Intel 실행 기록과 외부 GNU 검토는
-별도 근거다. 아래 개별 폐합은 MR-C0–MR-C6 전체 통과나 실제 후보 승인을 뜻하지 않는다.
+기준 HEAD `5f51fbbcec8d7908ce4e91f9d59394927348a917` (병합 PR #43).
+PR #43의 외부 GNU 검토와 저장소의 pinned Intel 실행은 별도 근거다.
+아래 개별 폐합은 MR-C0–MR-C6 전체 통과나 실제 후보 승인을 뜻하지 않는다.
 
 | 항목 | 현재 판정 | 종료 근거 / 남은 조건 |
 |---|---|---|
@@ -23,16 +22,20 @@
 | 동위치 층간 힘·주변 구조 | DIAGNOSED_SCOPED | 최대 삼각형과 edge 이웃 3개, 동일 20개 level; 600–550/650–600 hPa 수분 기여 우세. 정확한 producer 단계 인과분해와 물리 anchor는 별도 |
 | 지면 기준면 지원 조사 | DIAGNOSED_SCOPED | 기존 0–10 m pressure bracket 및 기준면 연결: 876 node / 98 triangle; 최대 힘 삼각형은 미지원 |
 | 지원 범위의 조건부 지면 기준면 | PASS_SCOPED / CONDITIONAL_GROUND_REFERENCE | 876개 기주 적분·98개 삼각형 지원, Intel O0/O2 동일; 공통 지면항 소거·기존 상대 Phi 연결 확인. 실제 datum 승인과 별도 |
+| 지원 기주의 조건부 생성단계와 보존 HT 차이 | PASS_SCOPED / CONDITIONAL_STAGE_HT_COMPARISON | 동일 876개 기주·17,182개 node-level에서 `Phi_a^G-g0*HT`와 T/q 변화 분리; 보정 권한 아님 |
+| 최대 힘 지점의 구름–수분 단계별 기여 | PASS_SCOPED / LATE_CLOUD_BLOCK_CAUSAL_REPLAY | 같은 입력의 현재 소스 ON이 보존 LQ3와 바이트 동일; OFF와의 차이로 (55,162) 850–500 hPa 순변화가 후기 구름 블록 기여임을 확인. 원시 `cloud_sat`와 후속 QC의 개별 기여·물리적 타당성은 별도 |
 | 실제 기준면·허용 T/q 변경 | OPEN | datum과 완전한 하부 열역학 경로 필요; 현 단계 T/q 고정, 조정은 별도 오차 근거 필요 |
 | 실제 하부 prior·frame·좌표 연결 | OPEN | LW3/LT1와 FUA/FUA 등 source별 위치·높이·방향 및 표본 제약 확인 |
 | 현재 temperature target 소스 빌드·launcher | PASS_SCOPED | fresh Intel O0/O2·새 검증 launcher로 actual13 LT1 전체 바이트 재현; 과거 pin 우회·다른 producer 승격 없음 |
+| 현재 humidity target 소스 빌드·구름 ON/OFF | PASS_SCOPED | fresh Intel O0/O2 동일 사례의 ON LQ3가 보존 파일과 바이트 동일; OFF 차이는 후기 구름 블록의 순기여. 다른 producer·기상학적 승인과 별도 |
 | 0–10 m·상단·전체 기주 유량 | OPEN | 미정 항의 독립 근거, 동일 시간구간·공유면 수지 |
 | 공동 비영 후보·ON·native·예보 | NOT_AUTHORIZED / NOT_RUN | 물리 조건 해소 후 공동 제약·저장 증분·실제 소비 및 시간응답 검증 |
 
-실행 근거: [물리 후보 준비 점검](PHYSICAL_CANDIDATE_READINESS_20260922.md).
-이번 PR은 실제 실행으로 해소한 항목과 지원 범위가 명시된 조건부 기준면 구현을
-대상으로 한다. 검증·팀 검토를 완료한 범위만 폐합하며, 물리 후보의
-미해소 조건은 그대로 남긴다. 기준면이나 prior를 현재 잔차에 맞춰 선택하지 않는다.
+실행 근거: [물리 후보 준비 점검](PHYSICAL_CANDIDATE_READINESS_20260922.md),
+[보존 HT와의 조건부 비교](CONDITIONAL_GROUND_HT_COMPARISON_20260923.md),
+[구름 가습 ON/OFF 재현](CLOUD_MOISTURE_CAUSAL_REPLAY_20260923.md).
+검증·팀 검토를 완료한 범위만 폐합하며, 물리 후보의 미해소 조건은 그대로
+남긴다. 기준면이나 prior를 현재 잔차에 맞춰 선택하지 않는다.
 
 이하 날짜별 절은 당시 경과를 보존한다. 현재 상태 판단에는 이 표와 이후의 실제
 해소 근거를 우선하며, 과거의 상대힘 미구현·중간 T/SH 부재를 현재 OPEN으로 되돌리지 않는다.
