@@ -16,8 +16,15 @@ def paired_inputs(on, off):
     """Check copied producer inputs; LQ3/LH3/LH4 are generated outputs."""
     excluded = {'lq3', 'lh3', 'lh4'}
     def paths(root):
+        if root.is_symlink() or not root.is_dir():
+            raise ValueError(f'paired input root must be a real directory: {root}')
         names = set()
         for path in root.rglob('*'):
+            if path.is_symlink():
+                if not path.exists():
+                    raise ValueError(f'broken paired input symlink: {path.relative_to(root)}')
+                if path.is_dir():
+                    raise ValueError(f'directory paired input symlink: {path.relative_to(root)}')
             if not path.is_file():
                 continue
             name = path.relative_to(root)

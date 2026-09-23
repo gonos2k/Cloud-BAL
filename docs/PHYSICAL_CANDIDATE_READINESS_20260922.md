@@ -267,6 +267,13 @@ accounts for the entire 850–500 hPa stage-to-final humidity increase; the
 This is causal source attribution, not permission to change the analyzed
 moisture or its error covariance.
 
+The PR45 [same-case force link](PR45_SCOPED_FORCE_LINK_20260923.md) applies
+the common PR42 triangle metric to `S`, direct T/q change `D`, and their sum
+on the 98 ground-supported triangles. Separately, it evaluates the cloud
+ON–OFF relative force at triangle 75,455 with final T held fixed. These
+diagnostics use different supports and gauges. They do not supply the missing
+physical datum, lower transport, or a joint balance candidate.
+
 | Quantity | Current evidence | Condition before changing a state |
 |---|---|---|
 | Reference geopotential b | PR42 only fixes a diagnostic gauge | Accepted height/geopotential datum plus a complete supported hydrostatic path, including the surface partial layer, common EOS/operator and gap policy |
