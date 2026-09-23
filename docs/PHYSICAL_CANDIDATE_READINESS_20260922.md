@@ -282,11 +282,21 @@ from a future native dry-mass-conserving candidate; no increment is authorized
 by either interpretation. It also closes the cloud-force CLI's unsupported
 100000 Pa summary case without changing the default triangle's values.
 
+The PR47 [dry-mass column study](PR47_DRY_MASS_COLUMN_20260923.md) now closes
+the *one supported gas-column algebra* under a fixed 5000 Pa top interface.
+At `(55,162)`, retaining each of the 19 original dry layer masses changes the
+cloud OFF–ON vapor increment from the fixed-pressure 9.802161313 to
+9.879769348 kg/m² and moves the lower represented interface by 96.88744 Pa.
+The post-state column is repartitioned with dry/vapor component mass closure;
+the two states have not been compared on a shared truncated pressure grid.
+This does not supply the omitted surface partial layer, physical datum,
+condensate/energy response or native hybrid handoff.
+
 | Quantity | Current evidence | Condition before changing a state |
 |---|---|---|
 | Reference geopotential b | PR42 only fixes a diagnostic gauge | Accepted height/geopotential datum plus a complete supported hydrostatic path, including the surface partial layer, common EOS/operator and gap policy |
 | Final T/q | Actual final LT1/LQ3 and stage difference are bound; cloud-linked structure is present | Declare fixed vs adjustable variables and independently supported errors; no removal selected by force magnitude |
-| Moisture mass basis | PR45 ON–OFF uses fixed pressure-cell total mass and gas specific humidity | Choose fixed pressure-cell total mass or fixed native dry mass explicitly; account for pressure/EOS, species, energy and boundary response before a candidate |
+| Moisture mass basis | PR45 fixed-pressure comparison and PR47 conditional dry-fixed 19-layer gas transform are both explicit | Extend through the surface partial layer, species, energy, boundaries and native hybrid mapping before a physical candidate |
 | Lower wind coefficients | Manufactured basis works; actual low-level source family remains conditional | Bind location, physical height, frame, prior and shared-analysis errors |
 | 0–10 m transport | Missing strip remains explicit | Actual surface-layer model/data with parameters and representation limits; no residual-matching fill |
 | Finite-top transport | LW3 omega is derived from analyzed wind | Declare dependent prior/constraint role, not an independent duplicate observation |
