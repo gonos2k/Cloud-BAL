@@ -1,0 +1,59 @@
+{
+  "status": "PASS_SCOPED / SURFACE_SUPPORT_AND_COMMON_PRESSURE_COMPARISON",
+  "production_authority": false,
+  "target_i_j_one_based": [
+    55,
+    162
+  ],
+  "pressure_basis": "gas-only; fixed PS and LSX 0-10 m prior; old levels are modeled interfaces",
+  "surface_pressure_Pa": 100512.09375,
+  "surface_temperature_K": 301.21905517578125,
+  "surface_dry_mixing_ratio_kg_kg": 0.01847556495666504,
+  "pressure_10m_Pa": 100399.40154922259,
+  "surface_support": {
+    "old": {
+      "supported_span_Pa": 112.69220077741193,
+      "unsupported_span_Pa": 399.4015492225881,
+      "supported_dry_mass_kg_m2": 11.282947589791249,
+      "supported_vapor_mass_kg_m2": 0.20845883109783545,
+      "unsupported_gas_mass_kg_m2": 40.72762352307751
+    },
+    "new_if_PS_fixed": {
+      "supported_span_Pa": 112.69220077741193,
+      "unsupported_span_Pa": 302.51410914206645,
+      "supported_dry_mass_kg_m2": 11.282947589791249,
+      "supported_vapor_mass_kg_m2": 0.20845883109783545,
+      "unsupported_gas_mass_kg_m2": 30.847854174673966
+    }
+  },
+  "surface_partial_complete": false,
+  "moved_edge_dry_mass_kg_m2": 9.70343055152492,
+  "moved_edge_vapor_mass_kg_m2": 0.1763387968786254,
+  "common_pressure_dry_mass_kg_m2": 9630.513291337511,
+  "common_pressure_vapor_mass_kg_m2": 56.79073195280868,
+  "original_pressure_cell_q_difference": {
+    "maximum_absolute_kg_kg": 4.9090810170186044e-05,
+    "rms_kg_kg": 1.8026961952995765e-05
+  },
+  "original_pressure_cell_temperature_difference": {
+    "maximum_absolute_K": 0.07723436728406341,
+    "rms_K": 0.031127055849473825
+  },
+  "conditional_gas_mixture_enthalpy_J_m2": {
+    "before": 7837691.44268107,
+    "after": 32647703.72571538,
+    "change": 24810012.28303431,
+    "role": "fixed-temperature state difference; not a closed energy budget"
+  },
+  "source_sha256": {
+    "qbal_surface_mass_bridge.py": "061c922a00de1587eb8afbf6a17b9cebd9f6f8283b2dcb4100a2e8624c3b154d",
+    "diagnose_qbal_surface_mass_bridge.py": "91ac0b3b10e47cffba360f06a0ac25f333c22389ce6e4019802ffdc78e47082f"
+  },
+  "input_sha256": {
+    "dry_report": "2666166001019014483090a838c676ce99b822526d15a8776eb50e7feceda6ac",
+    "cloud_report": "7da456203ca8508b63ef331205b5a41a54830e1bb400e038e6b8cc68b47f342e",
+    "geometry_report": "9005eb8b7b009dd8b20a0c26764d2b0b3fc15c3f2966a78d95ac3505b282156c",
+    "geometry_arrays": "3608f1211f1164ce58782b633daac908c3f10cb994214ca66ac2bf00bec8e116",
+    "lsx": "ad31e6fe7c9f42172d8c8afd5ff60b0761c13d81519f804f868b753af901014a"
+  }
+}
