@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Check the fixed-temperature cloud force integration and support gaps."""
+import json
 import unittest
 
 import numpy as np
 
 from diagnose_qbal_cloud_force import (
-    ALPHA, G0, RD_AIR, _column_increment, relative_geopotential,
+    ALPHA, G0, RD_AIR, _acceleration_at_pressure, _column_increment, relative_geopotential,
 )
 from diagnose_qbal_ground_ht_force import triangle_pressure_force
 
@@ -64,6 +65,25 @@ class CloudRelativeForceTest(unittest.TestCase):
         missing, no_segments = _column_increment(q_effect, self.pressure, np.zeros(2, bool))
         self.assertIsNone(missing)
         self.assertEqual(no_segments, [])
+
+    def test_cli_100000_pa_acceleration_is_null_when_unsupported(self):
+        support = np.array([False, True])
+        acceleration = np.array([[np.nan, 1.0], [np.nan, 2.0]])
+        value = _acceleration_at_pressure(
+            np.array([100000.0, 50000.0]), support, acceleration, 100000.0)
+        summary = {'100000_Pa_acceleration_en_m_s2': value}
+        self.assertIsNone(json.loads(json.dumps(summary))['100000_Pa_acceleration_en_m_s2'])
+
+    def test_cli_100000_pa_acceleration_is_preserved_when_supported(self):
+        self.assertEqual(_acceleration_at_pressure(
+            np.array([100000.0]), np.array([True]), np.array([[1.0], [2.0]]),
+            100000.0), [1.0, 2.0])
+
+    def test_cli_rejects_triangle_without_supported_levels(self):
+        with self.assertRaisesRegex(ValueError, 'no supported pressure levels'):
+            _acceleration_at_pressure(
+                np.array([100000.0]), np.array([False]),
+                np.full((2, 1), np.nan), 100000.0)
 
 
 if __name__ == '__main__':

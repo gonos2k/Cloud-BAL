@@ -1,14 +1,14 @@
 # 다중 레이더·국지 균형초기화 실행 체크리스트와 체크포인트
 
-작성: 2026-09-14. 현재 실행표 갱신: 2026-09-23 (PR #44 검토·PR #45 후속 힘 진단).
+작성: 2026-09-14. 현재 실행표 갱신: 2026-09-23 (PR #45 검토·PR #46 출력/질량 계약).
 상위 계획: [추가 과제 계획서](CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md).
 검토 근거: 수학·수치해석·기상학 종합 검토 (로컬 작업공간 근거: `../scratch/cp02_multiradar_additional_review_20260914/REVIEW.md`).
 수학 근거: [정리·증명과 실제 적용 조건](CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md).
 
-## 2026-09-23 PR #44 검토와 PR #45 후속 힘 진단 — 현재 실행 기준
+## 2026-09-23 PR #45 검토와 PR #46 출력/질량 계약 — 현재 실행 기준
 
-기준 HEAD `7d356f8b6eb7e1c686720b39a4578c5c3ddb9991` (병합 PR #44).
-PR #44의 외부 GNU 검토와 저장소의 pinned Intel 실행은 별도 근거다.
+기준 HEAD `ea5fa10321faf6a3945b2c7532be61133f84ead6` (병합 PR #45).
+PR #45의 외부 GNU 검토와 저장소의 pinned Intel 실행은 별도 근거다.
 아래 개별 폐합은 MR-C0–MR-C6 전체 통과나 실제 후보 승인을 뜻하지 않는다.
 
 | 항목 | 현재 판정 | 종료 근거 / 남은 조건 |
@@ -27,6 +27,8 @@ PR #44의 외부 GNU 검토와 저장소의 pinned Intel 실행은 별도 근거
 | 지원 삼각형의 조건부 HT 수평력 | PASS_SCOPED / SAME_SUPPORT_GROUND_HT_FORCE | 98개 삼각형·1,959개 삼각형층에서 `-grad S`, `-grad D`, `-grad F` 분리·산술 폐합; 최대 힘 삼각형은 미지원 |
 | 최대 힘 지점의 구름–수분 단계별 기여 | PASS_SCOPED / LATE_CLOUD_BLOCK_CAUSAL_REPLAY | 같은 입력의 현재 소스 ON이 보존 LQ3와 바이트 동일; OFF와의 차이로 (55,162) 850–500 hPa 순변화가 후기 구름 블록 기여임을 확인. 원시 `cloud_sat`와 후속 QC의 개별 기여·물리적 타당성은 별도 |
 | 최대 삼각형의 구름 ON/OFF 상대힘·수증기 기주증분 | PASS_SCOPED / CLOUD_ON_OFF_RELATIVE_FORCE | 최종 T 고정·5000 Pa 영점의 조건부 힘과 100000–5000 Pa 정규층 수증기량; 지면 부분층·실제 기준힘·완전한 수분 수지는 별도 |
+| 1000 hPa 미지원 삼각형의 CLI 요약 P2 | CLOSED_SCOPED | 실제 397번 삼각형은 19개 상층을 저장하고 100000 Pa 요약을 null로 출력; 기본 75,455번의 수치 유지 |
+| 구름 수분 변화의 질량 기준 | CONTRACT_RECORDED / NOT_AUTHORIZED | 고정 pressure-cell 총질량의 정규층 +9.802161313 kg/m² 수증기는 같은 범위의 건조기체 −9.802161313 kg/m²와 짝; native 건조질량 고정 후보와 혼동 금지 |
 | 실제 기준면·허용 T/q 변경 | OPEN | datum과 완전한 하부 열역학 경로 필요; 현 단계 T/q 고정, 조정은 별도 오차 근거 필요 |
 | 실제 하부 prior·frame·좌표 연결 | OPEN | LW3/LT1와 FUA/FUA 등 source별 위치·높이·방향 및 표본 제약 확인 |
 | 현재 temperature target 소스 빌드·launcher | PASS_SCOPED | fresh Intel O0/O2·새 검증 launcher로 actual13 LT1 전체 바이트 재현; 과거 pin 우회·다른 producer 승격 없음 |
@@ -37,7 +39,8 @@ PR #44의 외부 GNU 검토와 저장소의 pinned Intel 실행은 별도 근거
 실행 근거: [물리 후보 준비 점검](PHYSICAL_CANDIDATE_READINESS_20260922.md),
 [보존 HT와의 조건부 비교](CONDITIONAL_GROUND_HT_COMPARISON_20260923.md),
 [구름 가습 ON/OFF 재현](CLOUD_MOISTURE_CAUSAL_REPLAY_20260923.md),
-[같은 기하의 조건부 힘 연결](PR45_SCOPED_FORCE_LINK_20260923.md).
+[같은 기하의 조건부 힘 연결](PR45_SCOPED_FORCE_LINK_20260923.md),
+[후속 출력·질량 계약](PR46_CANDIDATE_MASS_DECISIONS_20260923.md).
 검증·팀 검토를 완료한 범위만 폐합하며, 물리 후보의 미해소 조건은 그대로
 남긴다. 기준면이나 prior를 현재 잔차에 맞춰 선택하지 않는다.
 
