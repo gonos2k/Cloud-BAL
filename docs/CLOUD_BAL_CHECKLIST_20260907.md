@@ -174,7 +174,7 @@
 
 - 분류/증거: `설계·계약` / `소스검토`; 긴급도 `P0`; 기존 단계 `P3/P5`.
 - 담당 역할: `미배정 — 질량·수분 보존 책임`; 선행 ID: `M04`.
-- 다음 작업: pressure-level Δqv·Δdry-mass·PSFC와 A_Q/A_E/A_M·enthalpy convention을 고정하고 pressure-fixed/native-dry-mass scoped cell/column budget을 실행.
+- 다음 작업: PR47_DRY_MASS_COLUMN_20260923.md의 단일 기주 기체 기준 계산을 발판으로 지면 부분층, 수상체·에너지, PSFC·경계와 native hybrid 전달을 연결하고 A_Q/A_E/A_M ledger를 확인. PR47의 고정 상단 계산을 완전한 건조질량 보존 후보로 취급하지 않음.
 - 완료조건: 고정 pressure mass와 수분추가로 생기는 dry-mass 변화를 숨기지 않으며 결합 후보의 A_Q/A_E/A_M ledger 폐합; 독립 cell/column 시험만으로 완료하지 않음.
 - 적대/회귀시험: 같은 Δ수분을 pressure-fixed/native-dry-mass로 처리하고 denominator·PSFC·enthalpy budget 차이를 비교.
 - 근거: [R03]. gate=`NOT_RUN`; tested_sha/evidence_uri/reviewer=`(빈 값)`; closure=`OPEN`.
