@@ -146,6 +146,14 @@ def _column_increment(delta_q, pressure, layer_supported):
     ]
 
 
+def _acceleration_at_pressure(pressure, support, acceleration, pressure_pa):
+    """Return a supported pressure-level acceleration, or None if absent."""
+    if not np.any(support):
+        raise ValueError('selected triangle has no supported pressure levels')
+    level = np.flatnonzero(support & (pressure == pressure_pa))
+    return acceleration[:, level[0]].tolist() if level.size else None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--thickness-dir', type=Path, required=True, help='PR41 actual arrays/report')
@@ -297,6 +305,8 @@ def main():
     force_supported = target_force_support[0]
     if not np.array_equal(force_supported, triangle_support[triangle_index]):
         raise ValueError('cloud force support differs from PR42 triangle support')
+    acceleration_100000 = _acceleration_at_pressure(
+        pressure, force_supported, acceleration, 100000.0)
 
     target_i, target_j = RECEIPT_TARGET_IJ
     target_node = (target_j - 1) * nx + target_i - 1
@@ -377,8 +387,7 @@ def main():
         'status': report_out['status'],
         'triangle_one_based': args.triangle,
         'support_levels': int(force_supported.sum()),
-        '100000_Pa_acceleration_en_m_s2': next(
-            row['acceleration_en_m_s2'] for row in level_rows if row['pressure_Pa'] == 100000.0),
+        '100000_Pa_acceleration_en_m_s2': acceleration_100000,
         'target_node_vapor_column_increment_kg_m2': column_delta,
     }, allow_nan=False))
 

@@ -274,10 +274,19 @@ ON–OFF relative force at triangle 75,455 with final T held fixed. These
 diagnostics use different supports and gauges. They do not supply the missing
 physical datum, lower transport, or a joint balance candidate.
 
+The PR46 [candidate mass decision record](PR46_CANDIDATE_MASS_DECISIONS_20260923.md)
+keeps final T and retained HT/winds unchanged in the current attribution
+experiments; the cloud comparison varies q only through its controlled ON/OFF
+replay. It distinguishes a fixed pressure-cell total-mass comparison
+from a future native dry-mass-conserving candidate; no increment is authorized
+by either interpretation. It also closes the cloud-force CLI's unsupported
+100000 Pa summary case without changing the default triangle's values.
+
 | Quantity | Current evidence | Condition before changing a state |
 |---|---|---|
 | Reference geopotential b | PR42 only fixes a diagnostic gauge | Accepted height/geopotential datum plus a complete supported hydrostatic path, including the surface partial layer, common EOS/operator and gap policy |
 | Final T/q | Actual final LT1/LQ3 and stage difference are bound; cloud-linked structure is present | Declare fixed vs adjustable variables and independently supported errors; no removal selected by force magnitude |
+| Moisture mass basis | PR45 ON–OFF uses fixed pressure-cell total mass and gas specific humidity | Choose fixed pressure-cell total mass or fixed native dry mass explicitly; account for pressure/EOS, species, energy and boundary response before a candidate |
 | Lower wind coefficients | Manufactured basis works; actual low-level source family remains conditional | Bind location, physical height, frame, prior and shared-analysis errors |
 | 0–10 m transport | Missing strip remains explicit | Actual surface-layer model/data with parameters and representation limits; no residual-matching fill |
 | Finite-top transport | LW3 omega is derived from analyzed wind | Declare dependent prior/constraint role, not an independent duplicate observation |
