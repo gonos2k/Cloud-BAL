@@ -2,6 +2,7 @@
 """Read-only surface support and original-pressure comparison for PR47's column."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -10,11 +11,26 @@ from netCDF4 import Dataset
 
 from audit_qbal_profile_domain import sha256
 from qbal_dry_mass_column import EPSILON, G0, RD
-from qbal_surface_mass_bridge import (common_pressure_projection, gas_enthalpy,
+from qbal_surface_mass_bridge import (common_pressure_projection,
+                                      fixed_ps_gap_requirement, gas_enthalpy,
                                       surface_support)
 
 
 TARGET = (55, 162)
+
+
+def read_pinned_json(path, expected=None):
+    raw = path.read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    if expected is not None and digest != expected:
+        raise ValueError(f'input report changed: {path}')
+    return json.loads(raw), digest
+
+
+def verify_input_hashes(inputs):
+    for name, (path, digest) in inputs.items():
+        if sha256(path) != digest:
+            raise ValueError(f'input changed during calculation: {name}')
 
 
 def read_surface(path):
@@ -88,10 +104,9 @@ def main():
         raise FileExistsError(args.output)
     dry_path = args.dry_report.resolve()
     cloud_path = args.cloud_report.resolve()
-    dry = json.loads(dry_path.read_text())
-    cloud = json.loads(cloud_path.read_text())
-    if (dry['cloud_report_sha256'] != sha256(cloud_path) or
-            cloud['status'] != 'PASS_SCOPED / CLOUD_ON_OFF_RELATIVE_FORCE'):
+    dry, dry_pin = read_pinned_json(dry_path)
+    cloud, cloud_pin = read_pinned_json(cloud_path, dry['cloud_report_sha256'])
+    if cloud['status'] != 'PASS_SCOPED / CLOUD_ON_OFF_RELATIVE_FORCE':
         raise ValueError('cloud and dry-column lineage differs')
     for name, digest in dry['input_sha256'].items():
         if cloud['input_sha256'][name] != digest:
@@ -100,19 +115,19 @@ def main():
         if sha256(Path(__file__).with_name(name)) != digest:
             raise ValueError(f'dry-column source changed: {name}')
     geometry_path = Path(cloud['input_paths']['geometry_report'])
-    if sha256(geometry_path) != cloud['input_sha256']['geometry_report']:
-        raise ValueError('geometry report changed')
-    geometry = json.loads(geometry_path.read_text())
+    geometry, geometry_pin = read_pinned_json(
+        geometry_path, cloud['input_sha256']['geometry_report'])
     thickness_path = Path(cloud['input_paths']['thickness_report'])
-    if sha256(thickness_path) != cloud['input_sha256']['thickness_report']:
-        raise ValueError('thickness report changed')
-    thickness = json.loads(thickness_path.read_text())
+    thickness, thickness_pin = read_pinned_json(
+        thickness_path, cloud['input_sha256']['thickness_report'])
     if geometry['times'][1] != thickness['epoch']:
         raise ValueError('surface and dry-column valid times differ')
     lsx_path = Path(geometry['input_paths']['lsx_1'])
     arrays_path = geometry_path.with_name('arrays.npz')
-    if (sha256(lsx_path) != geometry['input_sha256']['lsx_1'] or
-            sha256(arrays_path) != geometry['artifact_sha256']['arrays.npz']):
+    lsx_pin = sha256(lsx_path)
+    arrays_pin = sha256(arrays_path)
+    if (lsx_pin != geometry['input_sha256']['lsx_1'] or
+            arrays_pin != geometry['artifact_sha256']['arrays.npz']):
         raise ValueError('surface or 10 m prior input changed')
 
     state = state_from_receipt(dry)
@@ -134,6 +149,10 @@ def main():
 
     support = surface_support(ps, p10, state['old_pressure'][0],
                               state['new_pressure'][0], rs)
+    gap_requirement = fixed_ps_gap_requirement(
+        support['old']['unsupported_gas_mass_kg_m2'],
+        support['new_if_PS_fixed']['unsupported_gas_mass_kg_m2'],
+        float(np.sum(state['new_vapor'] - state['old_vapor'])))
     projection = common_pressure_projection(state)
     for name, original, edge, mapped in (
             ('dry', state['dry_mass'], projection['edge_dry_mass_kg_m2'],
@@ -156,8 +175,11 @@ def main():
         raise ValueError('mixture enthalpy changed during pressure repartition')
     q_error = projection['old_pressure_cell_q_kg_kg'] - state['new_q']
     t_error = projection['old_pressure_cell_temperature_K'] - state['layer_temperature_K']
-    if sha256(dry_path) != sha256(args.dry_report) or sha256(lsx_path) != geometry['input_sha256']['lsx_1']:
-        raise ValueError('input changed during calculation')
+    inputs = {'dry_report': (dry_path, dry_pin), 'cloud_report': (cloud_path, cloud_pin),
+              'geometry_report': (geometry_path, geometry_pin),
+              'thickness_report': (thickness_path, thickness_pin),
+              'geometry_arrays': (arrays_path, arrays_pin), 'lsx': (lsx_path, lsx_pin)}
+    verify_input_hashes(inputs)
     result = {
         'status': 'PASS_SCOPED / SURFACE_SUPPORT_AND_COMMON_PRESSURE_COMPARISON',
         'production_authority': False,
@@ -168,6 +190,7 @@ def main():
         'surface_dry_mixing_ratio_kg_kg': rs,
         'pressure_10m_Pa': float(p10),
         'surface_support': support,
+        'conditional_fixed_PS_full_dry_mass_gap_requirement': gap_requirement,
         'surface_partial_complete': bool(support['old']['unsupported_span_Pa'] == 0 and
                                          support['new_if_PS_fixed']['unsupported_span_Pa'] == 0),
         'moved_edge_dry_mass_kg_m2': projection['edge_dry_mass_kg_m2'],
@@ -189,9 +212,7 @@ def main():
         },
         'source_sha256': {name: sha256(Path(__file__).with_name(name)) for name in
                           ('qbal_surface_mass_bridge.py', 'diagnose_qbal_surface_mass_bridge.py')},
-        'input_sha256': {'dry_report': sha256(dry_path), 'cloud_report': sha256(cloud_path),
-                         'geometry_report': sha256(geometry_path), 'geometry_arrays': sha256(arrays_path),
-                         'lsx': sha256(lsx_path)},
+        'input_sha256': {name: digest for name, (_, digest) in inputs.items()},
     }
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + '\n')
     print(json.dumps({key: result[key] for key in

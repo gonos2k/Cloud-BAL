@@ -1,0 +1,479 @@
+{
+  "status": "PASS_SCOPED / CONDITIONAL_DRY_MASS_COLUMN",
+  "production_authority": false,
+  "target_i_j_one_based": [
+    55,
+    162
+  ],
+  "gas_model": "dry air + vapor only; condensate, surface partial layer and energy response unsupported",
+  "temperature": "retained final LT1; pressure-cell endpoint mean held fixed",
+  "humidity": "cloud OFF/ON LQ3 gas specific humidity; endpoint mean attached to each dry-mass cell",
+  "pressure_anchor": "5000 Pa upper interface fixed; 100000 Pa is not surface pressure",
+  "pressure_coordinate_role": "source pressure levels used as model integration interfaces, not native faces",
+  "height_datum": "none; only layer thicknesses are calculated",
+  "retained_surface_pressure_Pa": 100512.09375,
+  "old_omitted_surface_span_Pa": 512.09375,
+  "new_omitted_surface_span_Pa_if_PS_fixed": 415.2063099194638,
+  "old_model_interfaces_Pa": [
+    100000.0,
+    95000.0,
+    90000.0,
+    85000.0,
+    80000.0,
+    75000.0,
+    70000.0,
+    65000.0,
+    60000.0,
+    55000.0,
+    50000.0,
+    45000.0,
+    40000.0,
+    35000.0,
+    30000.0,
+    25000.0,
+    20000.0,
+    15000.0,
+    10000.0,
+    5000.0
+  ],
+  "new_model_interfaces_Pa": [
+    100096.88744008054,
+    95096.88744008054,
+    90096.88744008054,
+    85090.89652019298,
+    80079.61818535841,
+    75070.08451021642,
+    70061.49581717301,
+    65048.83577246237,
+    60029.71205196573,
+    55011.7438417409,
+    50002.2941162773,
+    45000.0,
+    40000.0,
+    35000.0,
+    30000.0,
+    25000.0,
+    20000.0,
+    15000.0,
+    10000.0,
+    5000.0
+  ],
+  "old_bottom_pressure_Pa": 100000.0,
+  "new_bottom_pressure_Pa": 100096.88744008054,
+  "old_dry_mass_kg_m2": 9640.216721889037,
+  "new_dry_mass_kg_m2": 9640.216721889037,
+  "old_vapor_mass_kg_m2": 47.08730140128185,
+  "new_vapor_mass_kg_m2": 56.96707074968731,
+  "fixed_pressure_vapor_increment_kg_m2": 9.80216131324417,
+  "fixed_dry_vapor_increment_kg_m2": 9.879769348405448,
+  "pressure_change_Pa": 96.88744008053618,
+  "old_supported_thickness_m": 21022.123749849474,
+  "new_supported_thickness_m": 21037.18554561183,
+  "layers": [
+    {
+      "old_bottom_top_Pa": [
+        100000.0,
+        95000.0
+      ],
+      "new_bottom_top_Pa": [
+        100096.88744008054,
+        95096.88744008054
+      ],
+      "old_q_kg_kg": 0.01784847304224968,
+      "new_q_kg_kg": 0.01784847304224968,
+      "temperature_K": 298.5892333984375,
+      "dry_mass_kg_m2": 500.7579178199234,
+      "old_vapor_kg_m2": 9.100188669040744,
+      "new_vapor_kg_m2": 9.100188669040744,
+      "old_thickness_m": 453.1656285243912,
+      "new_thickness_m": 452.7155600282762
+    },
+    {
+      "old_bottom_top_Pa": [
+        95000.0,
+        90000.0
+      ],
+      "new_bottom_top_Pa": [
+        95096.88744008054,
+        90096.88744008054
+      ],
+      "old_q_kg_kg": 0.016228845342993736,
+      "new_q_kg_kg": 0.016228845342993736,
+      "temperature_K": 294.5982208251953,
+      "dry_mass_kg_m2": 501.5836981318831,
+      "old_vapor_kg_m2": 8.27440835708103,
+      "new_vapor_kg_m2": 8.27440835708103,
+      "old_thickness_m": 470.82911476130914,
+      "new_thickness_m": 470.33622971344545
+    },
+    {
+      "old_bottom_top_Pa": [
+        90000.0,
+        85000.0
+      ],
+      "new_bottom_top_Pa": [
+        90096.88744008054,
+        85090.89652019298
+      ],
+      "old_q_kg_kg": 0.01251367712393403,
+      "new_q_kg_kg": 0.01369545143097639,
+      "temperature_K": 291.6606903076172,
+      "dry_mass_kg_m2": 503.4779067653409,
+      "old_vapor_kg_m2": 6.380199723623272,
+      "new_vapor_kg_m2": 6.991103537622826,
+      "old_thickness_m": 491.6829633101087,
+      "new_thickness_m": 492.09495422638304
+    },
+    {
+      "old_bottom_top_Pa": [
+        85000.0,
+        80000.0
+      ],
+      "new_bottom_top_Pa": [
+        85090.89652019298,
+        80079.61818535841
+      ],
+      "old_q_kg_kg": 0.009499905165284872,
+      "new_q_kg_kg": 0.011729115154594183,
+      "temperature_K": 289.24598693847656,
+      "dry_mass_kg_m2": 505.0145028295673,
+      "old_vapor_kg_m2": 4.843603659396875,
+      "new_vapor_kg_m2": 5.993673748017692,
+      "old_thickness_m": 516.2420097436154,
+      "new_thickness_m": 517.568922256908
+    },
+    {
+      "old_bottom_top_Pa": [
+        80000.0,
+        75000.0
+      ],
+      "new_bottom_top_Pa": [
+        80079.61818535841,
+        75070.08451021642
+      ],
+      "old_q_kg_kg": 0.00817361893132329,
+      "new_q_kg_kg": 0.010061169974505901,
+      "temperature_K": 286.33387756347656,
+      "dry_mass_kg_m2": 505.6907206174773,
+      "old_vapor_kg_m2": 4.167385871486843,
+      "new_vapor_kg_m2": 5.139550182642888,
+      "old_thickness_m": 543.6013515509857,
+      "new_thickness_m": 544.7337589440706
+    },
+    {
+      "old_bottom_top_Pa": [
+        75000.0,
+        70000.0
+      ],
+      "new_bottom_top_Pa": [
+        75070.08451021642,
+        70061.49581717301
+      ],
+      "old_q_kg_kg": 0.006663838401436806,
+      "new_q_kg_kg": 0.008367204340174794,
+      "temperature_K": 283.07911682128906,
+      "dry_mass_kg_m2": 506.4604944596591,
+      "old_vapor_kg_m2": 3.3976120293050154,
+      "new_vapor_kg_m2": 4.273414983769496,
+      "old_thickness_m": 573.9897686584276,
+      "new_thickness_m": 575.047069989033
+    },
+    {
+      "old_bottom_top_Pa": [
+        70000.0,
+        65000.0
+      ],
+      "new_bottom_top_Pa": [
+        70061.49581717301,
+        65048.83577246237
+      ],
+      "old_q_kg_kg": 0.0048037932720035315,
+      "new_q_kg_kg": 0.007317274808883667,
+      "temperature_K": 279.9390563964844,
+      "dry_mass_kg_m2": 507.408853547336,
+      "old_vapor_kg_m2": 2.449252941628146,
+      "new_vapor_kg_m2": 3.7402182264747745,
+      "old_thickness_m": 609.0196549684798,
+      "new_thickness_m": 610.9932206444175
+    },
+    {
+      "old_bottom_top_Pa": [
+        65000.0,
+        60000.0
+      ],
+      "new_bottom_top_Pa": [
+        65048.83577246237,
+        60029.71205196573
+      ],
+      "old_q_kg_kg": 0.003091379418037832,
+      "new_q_kg_kg": 0.006889771902933717,
+      "temperature_K": 276.7729034423828,
+      "dry_mass_kg_m2": 508.28194163244444,
+      "old_vapor_kg_m2": 1.5761648565197248,
+      "new_vapor_kg_m2": 3.5262416408076023,
+      "old_thickness_m": 649.6767925540508,
+      "new_thickness_m": 653.2559722745696
+    },
+    {
+      "old_bottom_top_Pa": [
+        60000.0,
+        55000.0
+      ],
+      "new_bottom_top_Pa": [
+        60029.71205196573,
+        55011.7438417409
+      ],
+      "old_q_kg_kg": 0.002313844859600067,
+      "new_q_kg_kg": 0.005886333528906107,
+      "temperature_K": 272.98150634765625,
+      "dry_mass_kg_m2": 508.67837393013923,
+      "old_vapor_kg_m2": 1.1797325588249132,
+      "new_vapor_kg_m2": 3.0119800872705147,
+      "old_thickness_m": 696.2358838951415,
+      "new_thickness_m": 700.0032998643079
+    },
+    {
+      "old_bottom_top_Pa": [
+        55000.0,
+        50000.0
+      ],
+      "new_bottom_top_Pa": [
+        55011.7438417409,
+        50002.2941162773
+      ],
+      "old_q_kg_kg": 0.0024978143628686666,
+      "new_q_kg_kg": 0.004379482474178076,
+      "temperature_K": 268.3210906982422,
+      "dry_mass_kg_m2": 508.584575587551,
+      "old_vapor_kg_m2": 1.2735309014131568,
+      "new_vapor_kg_m2": 2.237134727755555,
+      "old_thickness_m": 749.7038114894034,
+      "new_thickness_m": 751.879811027433
+    },
+    {
+      "old_bottom_top_Pa": [
+        50000.0,
+        45000.0
+      ],
+      "new_bottom_top_Pa": [
+        50002.2941162773,
+        45000.0
+      ],
+      "old_q_kg_kg": 0.0027732878224924207,
+      "new_q_kg_kg": 0.003230628790333867,
+      "temperature_K": 263.2935485839844,
+      "dry_mass_kg_m2": 508.44412321103925,
+      "old_vapor_kg_m2": 1.4139832779248882,
+      "new_vapor_kg_m2": 1.6479180341669335,
+      "old_thickness_m": 813.3665606119281,
+      "new_thickness_m": 813.946536861353
+    },
+    {
+      "old_bottom_top_Pa": [
+        45000.0,
+        40000.0
+      ],
+      "new_bottom_top_Pa": [
+        45000.0,
+        40000.0
+      ],
+      "old_q_kg_kg": 0.0024628082755953074,
+      "new_q_kg_kg": 0.0024628082755953074,
+      "temperature_K": 258.1420593261719,
+      "dry_mass_kg_m2": 508.60242372492377,
+      "old_vapor_kg_m2": 1.2556827640403745,
+      "new_vapor_kg_m2": 1.2556827640403745,
+      "old_thickness_m": 891.3082117805257,
+      "new_thickness_m": 891.3082117805257
+    },
+    {
+      "old_bottom_top_Pa": [
+        40000.0,
+        35000.0
+      ],
+      "new_bottom_top_Pa": [
+        40000.0,
+        35000.0
+      ],
+      "old_q_kg_kg": 0.0017608567140996456,
+      "new_q_kg_kg": 0.0017608567140996456,
+      "temperature_K": 252.21753692626953,
+      "dry_mass_kg_m2": 508.96031941891493,
+      "old_vapor_kg_m2": 0.8977870700492246,
+      "new_vapor_kg_m2": 0.8977870700492246,
+      "old_thickness_m": 986.8701781102053,
+      "new_thickness_m": 986.8701781102053
+    },
+    {
+      "old_bottom_top_Pa": [
+        35000.0,
+        30000.0
+      ],
+      "new_bottom_top_Pa": [
+        35000.0,
+        30000.0
+      ],
+      "old_q_kg_kg": 0.001024687458993867,
+      "new_q_kg_kg": 0.001024687458993867,
+      "temperature_K": 244.9968032836914,
+      "dry_mass_kg_m2": 509.3356612813786,
+      "old_vapor_kg_m2": 0.5224452075856012,
+      "new_vapor_kg_m2": 0.5224452075856012,
+      "old_thickness_m": 1106.1476408556443,
+      "new_thickness_m": 1106.1476408556443
+    },
+    {
+      "old_bottom_top_Pa": [
+        30000.0,
+        25000.0
+      ],
+      "new_bottom_top_Pa": [
+        30000.0,
+        25000.0
+      ],
+      "old_q_kg_kg": 0.0004884754889644682,
+      "new_q_kg_kg": 0.0004884754889644682,
+      "temperature_K": 236.7094268798828,
+      "dry_mass_kg_m2": 509.60905330109443,
+      "old_vapor_kg_m2": 0.2490531878696947,
+      "new_vapor_kg_m2": 0.2490531878696947,
+      "old_thickness_m": 1263.6283280251205,
+      "new_thickness_m": 1263.6283280251205
+    },
+    {
+      "old_bottom_top_Pa": [
+        25000.0,
+        20000.0
+      ],
+      "new_bottom_top_Pa": [
+        25000.0,
+        20000.0
+      ],
+      "old_q_kg_kg": 0.00016976164624793455,
+      "new_q_kg_kg": 0.00016976164624793455,
+      "temperature_K": 229.48251342773438,
+      "dry_mass_kg_m2": 509.77155213745374,
+      "old_vapor_kg_m2": 0.08655435151042128,
+      "new_vapor_kg_m2": 0.08655435151042128,
+      "old_thickness_m": 1499.0482668967645,
+      "new_thickness_m": 1499.0482668967645
+    },
+    {
+      "old_bottom_top_Pa": [
+        20000.0,
+        15000.0
+      ],
+      "new_bottom_top_Pa": [
+        20000.0,
+        15000.0
+      ],
+      "old_q_kg_kg": 2.9315193842194276e-05,
+      "new_q_kg_kg": 2.9315193842194276e-05,
+      "temperature_K": 222.25629425048828,
+      "dry_mass_kg_m2": 509.8431598997404,
+      "old_vapor_kg_m2": 0.014946589223738115,
+      "new_vapor_kg_m2": 0.014946589223738115,
+      "old_thickness_m": 1871.5932935059573,
+      "new_thickness_m": 1871.5932935059573
+    },
+    {
+      "old_bottom_top_Pa": [
+        15000.0,
+        10000.0
+      ],
+      "new_bottom_top_Pa": [
+        15000.0,
+        10000.0
+      ],
+      "old_q_kg_kg": 5.159357897355221e-06,
+      "new_q_kg_kg": 5.159357897355221e-06,
+      "temperature_K": 213.76121520996094,
+      "dry_mass_kg_m2": 509.8554759485159,
+      "old_vapor_kg_m2": 0.0026305404482444166,
+      "new_vapor_kg_m2": 0.0026305404482444166,
+      "old_thickness_m": 2537.00097674682,
+      "new_thickness_m": 2537.00097674682
+    },
+    {
+      "old_bottom_top_Pa": [
+        10000.0,
+        5000.0
+      ],
+      "new_bottom_top_Pa": [
+        10000.0,
+        5000.0
+      ],
+      "old_q_kg_kg": 4.19497951043013e-06,
+      "new_q_kg_kg": 4.19497951043013e-06,
+      "temperature_K": 211.88750457763672,
+      "dry_mass_kg_m2": 509.8559676446542,
+      "old_vapor_kg_m2": 0.002138844309947908,
+      "new_vapor_kg_m2": 0.002138844309947908,
+      "old_thickness_m": 4299.013313860596,
+      "new_thickness_m": 4299.013313860596
+    }
+  ],
+  "post_repartition_target_interfaces_Pa": [
+    100096.88744008054,
+    100000.0,
+    95000.0,
+    90000.0,
+    85000.0,
+    80000.0,
+    75000.0,
+    70000.0,
+    65000.0,
+    60000.0,
+    55000.0,
+    50000.0,
+    45000.0,
+    40000.0,
+    35000.0,
+    30000.0,
+    25000.0,
+    20000.0,
+    15000.0,
+    10000.0,
+    5000.0
+  ],
+  "post_repartition_dry_mass_kg_m2": 9640.216721889037,
+  "post_repartition_vapor_mass_kg_m2": 56.9670707496873,
+  "post_repartition_q_kg_kg": [
+    0.017848473042249683,
+    0.017817088725916794,
+    0.016179754532823543,
+    0.013659704805965919,
+    0.011702555400890992,
+    0.010037425824144793,
+    0.008354291085274627,
+    0.0073130993219552715,
+    0.006883809060311013,
+    0.00588279428484334,
+    0.004378955353390807,
+    0.0032306287903338666,
+    0.0024628082755953074,
+    0.0017608567140996456,
+    0.001024687458993867,
+    0.0004884754889644682,
+    0.00016976164624793455,
+    2.9315193842194276e-05,
+    5.159357897355221e-06,
+    4.19497951043013e-06
+  ],
+  "post_repartition_includes_moved_edge": true,
+  "cloud_report_sha256": "7da456203ca8508b63ef331205b5a41a54830e1bb400e038e6b8cc68b47f342e",
+  "input_sha256": {
+    "thickness_report": "be7ffa374b7829708d29db95dd064c30fb4fe1d2fc82bfbee8632af9388667ae",
+    "thickness_arrays": "a2708ef9007d4ef490c450292fdfbf2468a54d585479edc8a3997b8a24b04d87",
+    "on_lq3": "30f88ef53fa19a7db892be0c2ccda5fa2fb77a127eaefbc9ad23192443854df2",
+    "off_lq3": "19295cfe180d4eeadfa599e9712fbe968d8411618c36e68e2c585d6038f19bb2",
+    "retained_lt1": "3c8a1bf0be2149826a6050101e8371d072e7511be194f66f2c86dcb74a7186dd",
+    "receipt_o0": "160d89a32e5632a6cb36904651e4f964589af5cd75b0ed67c4497d22c7f9eb65"
+  },
+  "source_sha256": {
+    "qbal_dry_mass_column.py": "5e245925581638f91842c56bf6f71e12432ebc1e436279542dbf93c6b0a5a78c",
+    "diagnose_qbal_dry_mass_column.py": "d9e0da18bda7bb358f0bd88e8369b1987dadd29b2c40c1a2cd1717566229d50f",
+    "diagnose_qbal_thickness_attribution.py": "c0b52b5afa527f061e3286a49c6732a3a670b7f2ebfa113ded04bc23c2193c51",
+    "audit_qbal_profile_domain.py": "00b23d916013ce964f42cc35a66448bcaccf19617a1c4188d249f67e07713bf6"
+  }
+}

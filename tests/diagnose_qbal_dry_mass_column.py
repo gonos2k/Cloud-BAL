@@ -2,6 +2,7 @@
 """Read-only dry-mass-fixed gas column from the retained cloud OFF/ON pair."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -29,7 +30,9 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     report_path = args.cloud_report.resolve()
-    report = json.loads(report_path.read_text())
+    report_bytes = report_path.read_bytes()
+    report_pin = hashlib.sha256(report_bytes).hexdigest()
+    report = json.loads(report_bytes)
     if (report.get('status') != 'PASS_SCOPED / CLOUD_ON_OFF_RELATIVE_FORCE' or
             report['target_node_vapor_column_increment']['node_i_j_one_based'] != list(TARGET_IJ) or
             report['target_node_vapor_column_increment']['pressure_interval_Pa'] != [100000.0, 5000.0]):
@@ -120,6 +123,8 @@ def main():
     for name, path in inputs.items():
         if sha256(path) != report['input_sha256'][name]:
             raise ValueError(f'input changed during calculation: {name}')
+    if sha256(report_path) != report_pin:
+        raise ValueError('cloud report changed during calculation')
 
     repo = Path(__file__).resolve().parents[1]
     source_names = ('qbal_dry_mass_column.py', 'diagnose_qbal_dry_mass_column.py',
@@ -169,7 +174,7 @@ def main():
         'post_repartition_vapor_mass_kg_m2': float(np.sum(mapped_vapor)),
         'post_repartition_q_kg_kg': mapped_q.tolist(),
         'post_repartition_includes_moved_edge': True,
-        'cloud_report_sha256': sha256(report_path),
+        'cloud_report_sha256': report_pin,
         'input_sha256': {name: report['input_sha256'][name] for name in names},
         'source_sha256': source_hashes,
     }
