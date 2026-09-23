@@ -15,15 +15,29 @@ G0 = 9.80665
 
 def compare(ground, height):
     support = ground['support']
-    before, after, change = ground['before'], ground['after'], ground['delta'][2]
+    before, after = ground['before'], ground['after']
+    delta, bound = ground['delta'], ground['bound']
+    if delta.ndim != support.ndim + 1 or delta.shape != (3,) + support.shape:
+        raise ValueError('ground delta shape mismatch')
+    change = delta[2]
     if height.shape != support.shape or not np.isfinite(height[support]).all():
         raise ValueError('retained HT support mismatch')
+    arrays = (before, after, change, bound)
+    if any(values.shape != support.shape for values in arrays):
+        raise ValueError('ground comparison shape mismatch')
+    if any(not np.isfinite(values[support]).all() for values in arrays):
+        raise ValueError('nonfinite supported comparison input')
+    if np.any(bound[support] < 0):
+        raise ValueError('negative supported bound')
     stage = before - G0 * height
     final = after - G0 * height
     error = final - stage - change
-    scale = ground['bound'] + 32*np.finfo(np.float64).eps * (
+    scale = bound + 32*np.finfo(np.float64).eps * (
         np.abs(before) + np.abs(after) + 2*G0*np.abs(height))
-    if not np.isfinite(stage[support]).all() or not np.isfinite(final[support]).all():
+    if (not np.isfinite(stage[support]).all() or
+            not np.isfinite(final[support]).all() or
+            not np.isfinite(error[support]).all() or
+            not np.isfinite(scale[support]).all()):
         raise ValueError('nonfinite supported defect')
     if np.any(np.abs(error[support]) > scale[support]):
         raise ValueError('HT/change closure failed')

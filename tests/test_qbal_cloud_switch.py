@@ -26,6 +26,34 @@ class PairedCloudInputTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'paired input differs'):
                 paired_inputs(on, off)
 
+    def test_directory_symlinks_are_rejected(self):
+        with TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            on, off = base/'on', base/'off'
+            for root, switch in ((on, 1), (off, 0)):
+                (root/'static').mkdir(parents=True)
+                (root/'static/moisture_switch.nl').write_text(
+                    f'CLOUD_SWITCH = {switch},\n')
+                target = base/f'{root.name}_target'
+                target.mkdir()
+                (target/'data.bin').write_bytes(root.name.encode())
+                (root/'linked_data').symlink_to(target, target_is_directory=True)
+
+            with self.assertRaisesRegex(ValueError, 'directory paired input symlink'):
+                paired_inputs(on, off)
+
+    def test_broken_symlinks_are_rejected(self):
+        with TemporaryDirectory() as tmp:
+            on, off = Path(tmp)/'on', Path(tmp)/'off'
+            for root, switch in ((on, 1), (off, 0)):
+                (root/'static').mkdir(parents=True)
+                (root/'static/moisture_switch.nl').write_text(
+                    f'CLOUD_SWITCH = {switch},\n')
+                (root/'missing.bin').symlink_to(root/'does-not-exist')
+
+            with self.assertRaisesRegex(ValueError, 'broken paired input symlink'):
+                paired_inputs(on, off)
+
 
 if __name__ == '__main__':
     unittest.main()
