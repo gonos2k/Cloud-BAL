@@ -36,6 +36,28 @@ class DryMassColumnTests(unittest.TestCase):
         np.testing.assert_allclose(state['new_vapor'], state['old_vapor'], rtol=1e-15)
         np.testing.assert_allclose(state['new_thickness'], state['old_thickness'], rtol=1e-15)
 
+    def test_nonuniform_no_change_keeps_interfaces_exactly(self):
+        cases = [
+            ([102395.70717171567, 80906.64636360883, 11962.660913864118],
+             [0.026865091588487298, 0.0094724541486514643, 0.0074974744395596505]),
+            ([100000, 83536.412684769821, 5000],
+             [0.027485916530171368, 0.0075586558662123441, 0.012039327185437761]),
+        ]
+        for pressure, q in cases:
+            state = dry_mass_column(pressure, q, q, [300, 280, 220])
+            np.testing.assert_array_equal(state['new_pressure'], pressure)
+            np.testing.assert_array_equal(state['new_vapor'], state['old_vapor'])
+            np.testing.assert_array_equal(state['new_thickness'], state['old_thickness'])
+        rng = np.random.default_rng(92023)
+        for _ in range(200):
+            widths = rng.uniform(100, 12000, 12)
+            pressure = np.r_[5000 + np.cumsum(widths[::-1])[::-1], 5000.]
+            q = rng.uniform(0, .03, pressure.size)
+            state = dry_mass_column(pressure, q, q, rng.uniform(220, 310, pressure.size))
+            np.testing.assert_array_equal(state['new_pressure'], pressure)
+            np.testing.assert_array_equal(state['new_vapor'], state['old_vapor'])
+            np.testing.assert_array_equal(state['new_thickness'], state['old_thickness'])
+
     def test_decimal_mass_oracle(self):
         rng = np.random.default_rng(824)
         with localcontext() as context:

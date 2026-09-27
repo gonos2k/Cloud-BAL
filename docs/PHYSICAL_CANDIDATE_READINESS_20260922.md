@@ -301,11 +301,20 @@ no complete surface column or new physical candidate is claimed. The
 common-pressure (q,T) differences and conditional dry-air/vapor enthalpy
 change are diagnostics, not a fit threshold or energy closure.
 
+The PR49 [identity and input-pinning follow-up](PR49_DRY_MASS_HARDENING_20260923.md)
+closes the nonuniform no-change pressure drift and the dry-receipt hash race.
+The actual13 receipts were regenerated under the revised source; PR47/48
+receipts remain pinned historical results. Under the additional assumptions
+of fixed PS, fixed full-column dry mass, fixed regular dry masses and an
+unchanged known 0–10 m strip, the unsupported gap would require initial
+mass-weighted specific humidity approximately 0.242582 or greater. This is a conditional
+necessary bound, not an observed gap profile or a candidate approval.
+
 | Quantity | Current evidence | Condition before changing a state |
 |---|---|---|
 | Reference geopotential b | PR42 only fixes a diagnostic gauge | Accepted height/geopotential datum plus a complete supported hydrostatic path, including the surface partial layer, common EOS/operator and gap policy |
 | Final T/q | Actual final LT1/LQ3 and stage difference are bound; cloud-linked structure is present | Declare fixed vs adjustable variables and independently supported errors; no removal selected by force magnitude |
-| Moisture mass basis | PR45 fixed-pressure comparison, PR47 dry-fixed cells, and PR48 moved-edge/common-pressure mass accounting are explicit | Resolve the unsupported surface gap, species, energy, boundaries and native hybrid mapping before a physical candidate |
+| Moisture mass basis | PR45 fixed-pressure comparison, PR47 dry-fixed cells, PR48 moved-edge accounting, and PR49 conditional gap bound are explicit | Resolve the unsupported surface gap, species, energy, boundaries and native hybrid mapping before a physical candidate |
 | Lower wind coefficients | Manufactured basis works; actual low-level source family remains conditional | Bind location, physical height, frame, prior and shared-analysis errors |
 | 0–10 m transport | Missing strip remains explicit | Actual surface-layer model/data with parameters and representation limits; no residual-matching fill |
 | Finite-top transport | LW3 omega is derived from analyzed wind | Declare dependent prior/constraint role, not an independent duplicate observation |

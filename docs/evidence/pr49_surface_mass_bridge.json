@@ -1,0 +1,65 @@
+{
+  "status": "PASS_SCOPED / SURFACE_SUPPORT_AND_COMMON_PRESSURE_COMPARISON",
+  "production_authority": false,
+  "target_i_j_one_based": [
+    55,
+    162
+  ],
+  "pressure_basis": "gas-only; fixed PS and LSX 0-10 m prior; old levels are modeled interfaces",
+  "surface_pressure_Pa": 100512.09375,
+  "surface_temperature_K": 301.21905517578125,
+  "surface_dry_mixing_ratio_kg_kg": 0.01847556495666504,
+  "pressure_10m_Pa": 100399.40154922259,
+  "surface_support": {
+    "old": {
+      "supported_span_Pa": 112.69220077741193,
+      "unsupported_span_Pa": 399.4015492225881,
+      "supported_dry_mass_kg_m2": 11.282947589791249,
+      "supported_vapor_mass_kg_m2": 0.20845883109783545,
+      "unsupported_gas_mass_kg_m2": 40.72762352307751
+    },
+    "new_if_PS_fixed": {
+      "supported_span_Pa": 112.69220077741193,
+      "unsupported_span_Pa": 302.5141091420519,
+      "supported_dry_mass_kg_m2": 11.282947589791249,
+      "supported_vapor_mass_kg_m2": 0.20845883109783545,
+      "unsupported_gas_mass_kg_m2": 30.847854174672484
+    }
+  },
+  "conditional_fixed_PS_full_dry_mass_gap_requirement": {
+    "minimum_initial_gap_vapor_mass_kg_m2": 9.879769348405027,
+    "minimum_initial_gap_q_kg_kg": 0.24258153296881782,
+    "role": "necessary bound only; gap composition is unobserved"
+  },
+  "surface_partial_complete": false,
+  "moved_edge_dry_mass_kg_m2": 9.703430551526377,
+  "moved_edge_vapor_mass_kg_m2": 0.17633879687865187,
+  "common_pressure_dry_mass_kg_m2": 9630.513291337511,
+  "common_pressure_vapor_mass_kg_m2": 56.790731952808656,
+  "original_pressure_cell_q_difference": {
+    "maximum_absolute_kg_kg": 4.909081017019298e-05,
+    "rms_kg_kg": 1.8026961952998336e-05
+  },
+  "original_pressure_cell_temperature_difference": {
+    "maximum_absolute_K": 0.07723436728406341,
+    "rms_K": 0.031127055849479283
+  },
+  "conditional_gas_mixture_enthalpy_J_m2": {
+    "before": 7837691.44268107,
+    "after": 32647703.72571538,
+    "change": 24810012.28303431,
+    "role": "fixed-temperature state difference; not a closed energy budget"
+  },
+  "source_sha256": {
+    "qbal_surface_mass_bridge.py": "f8f66bbcb1d00fe6c3267e07e4b8f0872384aa09231f445a3ab9577a6962d9d4",
+    "diagnose_qbal_surface_mass_bridge.py": "946912e2938cfdfbf2ec5de57df1ada5d831af301d3a9849ab0fcca4b7e75c96"
+  },
+  "input_sha256": {
+    "dry_report": "67e81ed1f2bec8843f4cca5f550a0aaae5395004fb76f56a96599164d8ec5a36",
+    "cloud_report": "7da456203ca8508b63ef331205b5a41a54830e1bb400e038e6b8cc68b47f342e",
+    "geometry_report": "9005eb8b7b009dd8b20a0c26764d2b0b3fc15c3f2966a78d95ac3505b282156c",
+    "thickness_report": "be7ffa374b7829708d29db95dd064c30fb4fe1d2fc82bfbee8632af9388667ae",
+    "geometry_arrays": "3608f1211f1164ce58782b633daac908c3f10cb994214ca66ac2bf00bec8e116",
+    "lsx": "ad31e6fe7c9f42172d8c8afd5ff60b0761c13d81519f804f868b753af901014a"
+  }
+}

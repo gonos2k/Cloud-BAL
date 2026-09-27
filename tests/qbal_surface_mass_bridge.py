@@ -43,6 +43,21 @@ def gas_enthalpy(dry_mass, vapor_mass, temperature):
             + H_VAPOR_0 * vapor_mass)
 
 
+def fixed_ps_gap_requirement(old_gap_mass, new_gap_mass, regular_vapor_gain):
+    """Necessary initial gap vapor under fixed PS and full-column dry mass."""
+    values = np.asarray((old_gap_mass, new_gap_mass, regular_vapor_gain))
+    if (not np.isfinite(values).all() or old_gap_mass <= 0 or new_gap_mass < 0 or
+            not np.isclose(old_gap_mass - new_gap_mass, regular_vapor_gain,
+                           rtol=2e-14, atol=1e-11)):
+        raise ValueError('fixed-PS gap and regular-column mass changes differ')
+    required_vapor = max(0.0, old_gap_mass - new_gap_mass)
+    return {
+        'minimum_initial_gap_vapor_mass_kg_m2': required_vapor,
+        'minimum_initial_gap_q_kg_kg': required_vapor / old_gap_mass,
+        'role': 'necessary bound only; gap composition is unobserved',
+    }
+
+
 def common_pressure_projection(state):
     """Project the moved gas cells onto old intervals; retain the new edge separately."""
     old_pressure = state['old_pressure']

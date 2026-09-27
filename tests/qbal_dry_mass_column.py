@@ -35,11 +35,15 @@ def dry_mass_column(pressure, q_before, q_after, temperature):
     dry_mass = old_width * (1 - q0) / G0
     old_vapor = old_width * q0 / G0
     new_vapor = dry_mass * q1 / (1 - q1)
-    new_width = G0 * (dry_mass + new_vapor)
-    new_pressure = np.empty_like(pressure)
-    new_pressure[-1] = pressure[-1]
-    for k in range(new_width.size - 1, -1, -1):
-        new_pressure[k] = new_pressure[k + 1] + new_width[k]
+    new_vapor = np.where(q1 == q0, old_vapor, new_vapor)
+    # Accumulate only the width change, so identical humidity preserves every
+    # original interface exactly, including on a nonuniform pressure grid.
+    width_change = old_width * (q1 - q0) / (1 - q1)
+    new_pressure = pressure.copy()
+    accumulated_change = 0.0
+    for k in range(width_change.size - 1, -1, -1):
+        accumulated_change += width_change[k]
+        new_pressure[k] += accumulated_change
 
     # Constant T and q within each cell give this exact hypsometric thickness.
     old_tv = t * (1 - q0 + q0 / EPSILON)
