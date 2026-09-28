@@ -717,7 +717,7 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "omega_target_error_contract": "diagonal_pressure_omega_v1",
         "schema_extensions": (
             "verified_operational_identity_v1,radar_no_echo_masks_v1,"
-            "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v1"
+            "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2"
         ),
         "requested_mode": 1,
         "operational_state_verified": 1,
@@ -727,7 +727,7 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "above_ground_mask_provenance": "PSFC_PRESSURE_CENTER_AND_STATIC_TERRAIN_HEIGHT",
         "grid_spacing_adapter_policy": "KM_TO_M_OR_PINNED_LEGACY_NUMERIC_METERS",
         "radar_valid_semantics": "ECHO_ONLY",
-        "candidate_endpoint_contract": "signed_represented_mixture_endpoint_v1",
+        "candidate_endpoint_contract": "signed_represented_mixture_endpoint_v2",
     }
     for name, value in expected.items():
         if getattr(dataset, name, None) != value:
@@ -828,6 +828,51 @@ if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
   printf 'validator accepted an inconsistent final candidate enthalpy receipt\n' >&2
   exit 1
 fi
+
+bad_endpoint_scale=$test_tmp/bad-endpoint-scale.nc
+cp "$diagnostic_o0" "$bad_endpoint_scale"
+python3 - "$bad_endpoint_scale" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_endpoint_enthalpy_arithmetic_scale_j", -1.0)
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$bad_endpoint_scale" >/dev/null 2>&1; then
+  printf 'validator accepted invalid endpoint arithmetic evidence\n' >&2
+  exit 1
+fi
+
+missing_species_scale=$test_tmp/missing-species-scale.nc
+cp "$diagnostic_o0" "$missing_species_scale"
+python3 - "$missing_species_scale" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.delncattr("candidate_endpoint_species_arithmetic_scale_kg")
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$missing_species_scale" >/dev/null 2>&1; then
+  printf 'validator accepted missing endpoint species arithmetic evidence\n' >&2
+  exit 1
+fi
+
+legacy_endpoint=$test_tmp/legacy-endpoint.nc
+cp "$diagnostic_o0" "$legacy_endpoint"
+python3 - "$legacy_endpoint" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.delncattr("candidate_endpoint_enthalpy_arithmetic_scale_j")
+    dataset.delncattr("candidate_endpoint_species_arithmetic_scale_kg")
+    dataset.setncattr("candidate_endpoint_contract", "signed_represented_mixture_endpoint_v1")
+    dataset.setncattr("schema_extensions", dataset.schema_extensions.replace(
+        "candidate_endpoint_v2", "candidate_endpoint_v1"))
+PY
+python3 "$repo_root/tools/validate_shadow_diagnostics.py" "$legacy_endpoint" >/dev/null
 
 bad_radar_marker=$test_tmp/bad-radar-marker.nc
 cp "$diagnostic_o0" "$bad_radar_marker"

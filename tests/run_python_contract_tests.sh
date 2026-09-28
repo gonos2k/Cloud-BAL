@@ -32,6 +32,7 @@ tests=(
   tests/test_lco_evidence.py
   tests/test_real_manufactured_balance_generation.py
   tests/test_shadow_validator.py
+  tests/test_candidate_endpoint_roundoff.py
   tests/test_pressure_transition_payload.py
   tests/test_pressure_transition_reference.py
   tests/test_thermo_output_certificate.py

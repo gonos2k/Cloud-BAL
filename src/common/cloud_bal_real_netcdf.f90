@@ -1708,13 +1708,15 @@ CONTAINS
 
     put_candidate_endpoint=.FALSE.
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_contract', &
-      'signed_represented_mixture_endpoint_v1'))) RETURN
+      'signed_represented_mixture_endpoint_v2'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_species_change_kg', &
       budget%species_change_kg))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_mixing_ratio_change_kg', &
       budget%mixing_ratio_change_kg))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_dry_mass_redistribution_kg', &
       budget%dry_mass_redistribution_kg))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_species_arithmetic_scale_kg', &
+      budget%species_arithmetic_scale_kg))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_dry_air_change_kg', &
       budget%dry_air_change_kg))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_change_j', &
@@ -1725,6 +1727,8 @@ CONTAINS
       budget%enthalpy_composition_change_j))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_mass_metric_change_j', &
       budget%enthalpy_mass_metric_change_j))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_arithmetic_scale_j', &
+      budget%enthalpy_arithmetic_scale_j))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_total_mass_error_kg', &
       budget%total_mass_error_kg))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_max_cell_mass_error_kg', &
@@ -1753,7 +1757,7 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
       'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
       'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,pressure_analysis_v1,pressure_outer_v1,'// &
-      'candidate_endpoint_v1'))) RETURN
+      'candidate_endpoint_v2'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'outer_contract', &
       'pressure_fixed_feedback_producer_replay_v1'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'outer_maximum_iterations',config%maximum_outer_iterations))) RETURN
@@ -1793,7 +1797,7 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
       'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
       'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,pressure_analysis_v1,'// &
-      'candidate_endpoint_v1'))) RETURN
+      'candidate_endpoint_v2'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'analysis_contract', &
       'pressure_fixed_represented_mixture_v1'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'analysis_species_change_kg', &
@@ -2286,11 +2290,13 @@ CONTAINS
       ALL(left%species_change_kg==right%species_change_kg) .AND. &
       ALL(left%mixing_ratio_change_kg==right%mixing_ratio_change_kg) .AND. &
       ALL(left%dry_mass_redistribution_kg==right%dry_mass_redistribution_kg) .AND. &
+      ALL(left%species_arithmetic_scale_kg==right%species_arithmetic_scale_kg) .AND. &
       left%dry_air_change_kg==right%dry_air_change_kg .AND. &
       left%enthalpy_change_j==right%enthalpy_change_j .AND. &
       left%geometry_mass_change_kg==right%geometry_mass_change_kg .AND. &
       left%enthalpy_composition_change_j==right%enthalpy_composition_change_j .AND. &
       left%enthalpy_mass_metric_change_j==right%enthalpy_mass_metric_change_j .AND. &
+      left%enthalpy_arithmetic_scale_j==right%enthalpy_arithmetic_scale_j .AND. &
       left%total_mass_error_kg==right%total_mass_error_kg .AND. &
       left%max_cell_mass_error_kg==right%max_cell_mass_error_kg .AND. &
       left%accounted_cells==right%accounted_cells .AND. &
@@ -3432,7 +3438,7 @@ CONTAINS
                                 5_int32))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
       'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
-      'pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v1'))) RETURN
+      'pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'cloud_bal_schema_version', &
                                 CLOUD_BAL_SCHEMA_VERSION))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'evidence_class', &
