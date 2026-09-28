@@ -9,8 +9,9 @@ workspace_root=$(realpath -e "$workspace_lexical")
   printf 'workspace root cannot contain a symlink: %s\n' "$workspace_lexical" >&2
   exit 2
 }
-mkdir -p "$repo_root/scratch"
-test_tmp=$(mktemp -d "$repo_root/scratch/real_shadow_io_tests.XXXXXX")
+test_scratch_root=${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}
+mkdir -p "$test_scratch_root"
+test_tmp=$(mktemp -d "$test_scratch_root/cloud_bal_real_shadow.XXXXXX")
 cleanup_test_tmp() {
   if [[ "${CLOUD_BAL_KEEP_TEST_ARTIFACTS:-0}" == 1 ]]; then
     printf 'preserving real SHADOW test artifacts: %s\n' "$test_tmp"
@@ -716,7 +717,7 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "omega_target_error_contract": "diagonal_pressure_omega_v1",
         "schema_extensions": (
             "verified_operational_identity_v1,radar_no_echo_masks_v1,"
-            "pressure_geometry_v2,omega_boundary_contract_v2"
+            "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v1"
         ),
         "requested_mode": 1,
         "operational_state_verified": 1,
@@ -726,6 +727,7 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "above_ground_mask_provenance": "PSFC_PRESSURE_CENTER_AND_STATIC_TERRAIN_HEIGHT",
         "grid_spacing_adapter_policy": "KM_TO_M_OR_PINNED_LEGACY_NUMERIC_METERS",
         "radar_valid_semantics": "ECHO_ONLY",
+        "candidate_endpoint_contract": "signed_represented_mixture_endpoint_v1",
     }
     for name, value in expected.items():
         if getattr(dataset, name, None) != value:
@@ -763,6 +765,69 @@ if ! "$test_tmp/real_shadow_driver_o0" \
   exit 1
 fi
 validate_diagnostic "$diagnostic_o0"
+
+bad_endpoint=$test_tmp/bad-endpoint.nc
+cp "$diagnostic_o0" "$bad_endpoint"
+python3 - "$bad_endpoint" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_endpoint_total_mass_error_kg", 1.0e20)
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$bad_endpoint" >/dev/null 2>&1; then
+  printf 'validator accepted an inconsistent final candidate receipt\n' >&2
+  exit 1
+fi
+
+incomplete_endpoint=$test_tmp/incomplete-endpoint.nc
+cp "$diagnostic_o0" "$incomplete_endpoint"
+python3 - "$incomplete_endpoint" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.delncattr("candidate_endpoint_accounted_cells")
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$incomplete_endpoint" >/dev/null 2>&1; then
+  printf 'validator accepted an incomplete final candidate receipt\n' >&2
+  exit 1
+fi
+
+missing_endpoint=$test_tmp/missing-endpoint.nc
+cp "$diagnostic_o0" "$missing_endpoint"
+python3 - "$missing_endpoint" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    for name in list(dataset.ncattrs()):
+        if name.startswith("candidate_endpoint_"):
+            dataset.delncattr(name)
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$missing_endpoint" >/dev/null 2>&1; then
+  printf 'validator accepted a missing final candidate receipt\n' >&2
+  exit 1
+fi
+
+bad_endpoint_enthalpy=$test_tmp/bad-endpoint-enthalpy.nc
+cp "$diagnostic_o0" "$bad_endpoint_enthalpy"
+python3 - "$bad_endpoint_enthalpy" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    value = dataset.getncattr("candidate_endpoint_enthalpy_change_j")
+    dataset.setncattr("candidate_endpoint_enthalpy_change_j", value + 1.0e20)
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$bad_endpoint_enthalpy" >/dev/null 2>&1; then
+  printf 'validator accepted an inconsistent final candidate enthalpy receipt\n' >&2
+  exit 1
+fi
 
 bad_radar_marker=$test_tmp/bad-radar-marker.nc
 cp "$diagnostic_o0" "$bad_radar_marker"

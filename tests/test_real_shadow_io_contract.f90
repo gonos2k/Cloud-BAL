@@ -5,7 +5,7 @@ PROGRAM test_real_shadow_io_contract
   USE cloud_bal_state
   USE cloud_bal_pipeline
   USE cloud_bal_pressure_analysis, ONLY: run_pressure_analysis_shadow
-  USE cloud_bal_column_physics, ONLY: SATURATION_LIQUID,SATURATION_ICE
+  USE cloud_bal_column_physics, ONLY: SATURATION_LIQUID,SATURATION_ICE,pressure_analysis_budget
   USE cloud_bal_balance_operator, ONLY: TARGET_AUTHORITY_OBSERVATIONAL, &
                                         TARGET_AUTHORITY_MANUFACTURED_TEST, &
                                         balance_operator_type,build_balance_operator, &
@@ -28,7 +28,7 @@ PROGRAM test_real_shadow_io_contract
   TYPE(cloud_bal_pipeline_result) :: result
   REAL(real32) :: longitude(2,2)
   REAL(real64) :: residual(2,2,2)
-  INTEGER :: failures,status,reason
+  INTEGER :: failures,status,reason,ncid,rc
   LOGICAL :: pressure_request_file_exists
 
   failures=0
@@ -36,7 +36,7 @@ PROGRAM test_real_shadow_io_contract
   CALL make_state(input)
   candidate=input
   operational=input
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
   config%requested_mode=MODE_SHADOW
 
   longitude=0.0_real32; residual=0.0_real64
@@ -51,29 +51,38 @@ PROGRAM test_real_shadow_io_contract
   INQUIRE(FILE='unbound-pressure-request.nc',EXIST=pressure_request_file_exists)
   CALL check(status==STATUS_FAILED .AND. .NOT.pressure_request_file_exists, &
     'prescribed pressure request cannot use the old fixed-geometry sidecar',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
   result%geometry_budget%geometry_mass_change_kg=1.0_real64
   CALL validate_shadow_write_contract(input,candidate,operational,result,config,status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
     'unserialized geometry increment must be rejected',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
 
   result%column%numerical%flux_deposited=-1.0_real64
   CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_GATE, &
              'negative flux ledger terms must fail before publication',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
   CALL write_shadow_diagnostics('verified-shadow.nc',input,candidate,longitude, &
     result,config,residual,residual,status,operational)
   CALL check(status==STATUS_OK,'verified dynamic-size state must be writable',failures)
+  IF (status==STATUS_OK) THEN
+    rc=nf90_open('verified-shadow.nc',NF90_NOWRITE,ncid)
+    CALL check(rc==NF90_NOERR,'final candidate receipt can be reopened',failures)
+    IF (rc==NF90_NOERR) THEN
+      CALL check_endpoint_receipt(ncid,result%candidate_budget,failures)
+      rc=nf90_close(ncid)
+      CALL check(rc==NF90_NOERR,'final candidate receipt closes',failures)
+    END IF
+  END IF
 
   result%reason_code=REASON_GATE
   CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
              'OK result with nonzero reason must be rejected',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
 
   config%column%ledger_relative_tolerance= &
     ieee_value(0.0_real64,ieee_quiet_nan)
@@ -98,7 +107,7 @@ PROGRAM test_real_shadow_io_contract
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
              'degraded stage reasons must agree',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
 
   config%requested_mode=MODE_OFF
   CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
@@ -196,7 +205,7 @@ PROGRAM test_real_shadow_io_contract
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
              'result masks must describe candidate deltas',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
 
   input%omega_target%value(1,1,1)=input%omega%value(1,1,1)
   input%omega_target%valid(1,1,1)=.TRUE.
@@ -237,7 +246,7 @@ PROGRAM test_real_shadow_io_contract
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
              'no-echo cells must reject hydrometeor candidate changes',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
 
   CALL make_state(input)
   input%radar_reflectivity%value(1,1,1)=1.0_real32
@@ -1757,7 +1766,7 @@ CONTAINS
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_extensions)== &
         'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
         'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,'// &
-        'pressure_analysis_v1,pressure_outer_v1', &
+        'pressure_analysis_v1,pressure_outer_v1,candidate_endpoint_v1', &
         'schema-8 extensions are exact',failures)
       rc=nf90_get_att(ncid,NF90_GLOBAL,'outer_contract',outer_contract)
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_contract)== &
@@ -1872,6 +1881,12 @@ CONTAINS
     CALL validate_shadow_write_contract(background,candidate,operational,bad_result, &
       thermo_config,status,reason)
     CALL check(status==STATUS_FAILED,'tampered thermo budget is rejected',failures)
+    bad_result=thermo_result
+    bad_result%candidate_budget%dry_air_change_kg= &
+      bad_result%candidate_budget%dry_air_change_kg+1.0_real64
+    CALL validate_shadow_write_contract(background,candidate,operational,bad_result, &
+      thermo_config,status,reason)
+    CALL check(status==STATUS_FAILED,'tampered final candidate budget is rejected',failures)
     DO mutation=1,10
       bad_result=thermo_result
       SELECT CASE (mutation)
@@ -2081,7 +2096,7 @@ CONTAINS
       SOURCE_BACKGROUND_MODEL,0_int32],[2,2])
     candidate=background
     operational=background
-    CALL make_result(surface_result,2,2,2)
+    CALL make_result(surface_result,2,2,2,background,candidate)
     surface_config%requested_mode=MODE_SHADOW
     longitude=0.0_real32
     residual=0.0_real64
@@ -2827,16 +2842,73 @@ CONTAINS
     field%source=source
   END SUBROUTINE mark_valid
 
-  SUBROUTINE make_result(pipeline,nx,ny,nz)
+  SUBROUTINE make_result(pipeline,nx,ny,nz,background,candidate)
     TYPE(cloud_bal_pipeline_result), INTENT(OUT) :: pipeline
     INTEGER, INTENT(IN) :: nx,ny,nz
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    INTEGER :: status,reason
     pipeline%status=STATUS_OK
     pipeline%reason_code=REASON_NONE
     pipeline%requested_mode=MODE_SHADOW
     CALL initialize_stage_result(pipeline%column,nx,ny,nz,STATUS_OK,REASON_NONE)
     CALL initialize_stage_result(pipeline%balance,nx,ny,nz,STATUS_OK,REASON_NONE)
     CALL initialize_stage_result(pipeline%overall,nx,ny,nz,STATUS_OK,REASON_NONE)
+    CALL account_candidate_endpoint(background,candidate,pipeline%candidate_budget,status,reason)
+    IF (status/=STATUS_OK) ERROR STOP 'invalid test candidate endpoint'
   END SUBROUTINE make_result
+
+  SUBROUTINE check_endpoint_receipt(ncid,budget,failures)
+    INTEGER, INTENT(IN) :: ncid
+    TYPE(pressure_analysis_budget), INTENT(IN) :: budget
+    INTEGER, INTENT(INOUT) :: failures
+    CHARACTER(LEN=65), PARAMETER :: vectors(3)=[CHARACTER(LEN=65) :: &
+      'candidate_endpoint_species_change_kg', &
+      'candidate_endpoint_mixing_ratio_change_kg', &
+      'candidate_endpoint_dry_mass_redistribution_kg']
+    CHARACTER(LEN=65), PARAMETER :: scalars(7)=[CHARACTER(LEN=65) :: &
+      'candidate_endpoint_dry_air_change_kg', &
+      'candidate_endpoint_enthalpy_change_j', &
+      'candidate_endpoint_geometry_mass_change_kg', &
+      'candidate_endpoint_enthalpy_composition_change_j', &
+      'candidate_endpoint_enthalpy_mass_metric_change_j', &
+      'candidate_endpoint_total_mass_error_kg', &
+      'candidate_endpoint_max_cell_mass_error_kg']
+    CHARACTER(LEN=65), PARAMETER :: counts(3)=[CHARACTER(LEN=65) :: &
+      'candidate_endpoint_accounted_cells', &
+      'candidate_endpoint_incomplete_background_cells', &
+      'candidate_endpoint_incomplete_candidate_cells']
+    REAL(real64) :: expected_vectors(6,3),expected_scalars(7),read_vector(6),read_scalar
+    INTEGER(int64) :: expected_counts(3),read_count
+    INTEGER :: n,rc
+
+    expected_vectors(:,1)=budget%species_change_kg
+    expected_vectors(:,2)=budget%mixing_ratio_change_kg
+    expected_vectors(:,3)=budget%dry_mass_redistribution_kg
+    expected_scalars=[budget%dry_air_change_kg,budget%enthalpy_change_j, &
+      budget%geometry_mass_change_kg,budget%enthalpy_composition_change_j, &
+      budget%enthalpy_mass_metric_change_j,budget%total_mass_error_kg, &
+      budget%max_cell_mass_error_kg]
+    expected_counts=[budget%accounted_cells,budget%incomplete_background_cells, &
+      budget%incomplete_candidate_cells]
+    DO n=1,SIZE(vectors)
+      read_vector=HUGE(1.0_real64)
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(vectors(n)),read_vector)
+      CALL check(rc==NF90_NOERR .AND. ALL(read_vector==expected_vectors(:,n)), &
+        'stored endpoint vector matches accepted candidate',failures)
+    END DO
+    DO n=1,SIZE(scalars)
+      read_scalar=HUGE(1.0_real64)
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(scalars(n)),read_scalar)
+      CALL check(rc==NF90_NOERR .AND. read_scalar==expected_scalars(n), &
+        'stored endpoint scalar matches accepted candidate',failures)
+    END DO
+    DO n=1,SIZE(counts)
+      read_count=-1_int64
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(counts(n)),read_count)
+      CALL check(rc==NF90_NOERR .AND. read_count==expected_counts(n), &
+        'stored endpoint count matches accepted candidate',failures)
+    END DO
+  END SUBROUTINE check_endpoint_receipt
 
   SUBROUTINE check(condition,message,count)
     LOGICAL, INTENT(IN) :: condition

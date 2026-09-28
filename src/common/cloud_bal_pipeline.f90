@@ -30,6 +30,9 @@ MODULE cloud_bal_pipeline
     TYPE(water_phase_budget) :: thermo_budget
     TYPE(pressure_analysis_budget) :: analysis_budget
     TYPE(pressure_analysis_budget) :: geometry_budget
+    ! Endpoint accounting for the one final candidate, including all stages.
+    ! This is not a physical boundary-flux or native energy closure claim.
+    TYPE(pressure_analysis_budget) :: candidate_budget
     REAL(real64), ALLOCATABLE :: requested_surface_pressure(:,:)
     TYPE(cloud_bal_state_type), ALLOCATABLE :: pressure_transition_seed
     LOGICAL, ALLOCATABLE :: thermo_support(:,:,:)
@@ -44,6 +47,7 @@ MODULE cloud_bal_pipeline
   END TYPE cloud_bal_pipeline_result
 
   PUBLIC :: run_cloud_bal_pipeline
+  PUBLIC :: account_candidate_endpoint
   PUBLIC :: build_compact_balance_beta
   PUBLIC :: restore_pre_balance_winds
 
@@ -145,7 +149,7 @@ CONTAINS
     TYPE(stage_result) :: transition_result
     TYPE(pressure_analysis_budget) :: proposal_budget,geometry_budget
     REAL(real64), ALLOCATABLE :: first_stage_pressure(:,:)
-    INTEGER :: nx,ny,nz,localization_status,shape3(3),iteration,i,j,k
+    INTEGER :: nx,ny,nz,localization_status,shape3(3),iteration,i,j,k,validation_reason
 
     nx=state_in%grid%nx; ny=state_in%grid%ny; nz=state_in%grid%nz
     shape3=(/nx,ny,nz/)
@@ -156,6 +160,7 @@ CONTAINS
     result%thermo_budget=water_phase_budget()
     result%analysis_budget=pressure_analysis_budget()
     result%geometry_budget=pressure_analysis_budget()
+    result%candidate_budget=pressure_analysis_budget()
     CALL initialize_stage_result(result%column,MAX(0,nx),MAX(0,ny),MAX(0,nz), &
                                  STATUS_OK,REASON_NONE)
     CALL initialize_stage_result(result%geopotential,MAX(0,nx),MAX(0,ny),MAX(0,nz), &
@@ -444,6 +449,21 @@ CONTAINS
       CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_SOLVER)
       RETURN
     END IF
+    ! Recheck the whole endpoint after the ordered stages have completed.
+    ! A stage budget alone cannot describe the final thermodynamic/geometry
+    ! state consumed by the downstream WPS mapper.
+    CALL account_candidate_endpoint(state_in,balance_candidate,result%candidate_budget, &
+                                    localization_status,validation_reason)
+    IF (localization_status/=STATUS_OK) THEN
+      candidate_out=state_in
+      result%thermo_budget=water_phase_budget()
+      result%candidate_budget=pressure_analysis_budget()
+      result%column%changed=.FALSE.; result%balance%changed=.FALSE.
+      result%geopotential%changed=.FALSE.
+      result%status=STATUS_FAILED; result%reason_code=validation_reason
+      CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,validation_reason)
+      RETURN
+    END IF
     candidate_out=balance_candidate
     result%analysis_budget=proposal_budget
     result%geometry_budget=geometry_budget
@@ -472,6 +492,32 @@ CONTAINS
     IF (PRESENT(requested_surface_pressure)) result%requested_surface_pressure=requested_surface_pressure
     IF (PRESENT(pressure_transition_seed)) result%pressure_transition_seed=pressure_transition_seed
   END SUBROUTINE run_cloud_bal_pipeline
+
+  SUBROUTINE account_candidate_endpoint(background,candidate,budget,status,reason)
+    ! Signed whole-state endpoint difference. It does not assign an external
+    ! mass or energy source, a boundary flux, or native conservation authority.
+    ! The caller supplies a validated immutable background.
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    TYPE(pressure_analysis_budget), INTENT(OUT) :: budget
+    INTEGER, INTENT(OUT) :: status,reason
+    LOGICAL :: domain_changed,geometry_changed
+
+    budget=pressure_analysis_budget()
+    reason=REASON_GATE
+    CALL validate_canonical_state(candidate,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK) RETURN
+    domain_changed=ANY(background%above_ground .NEQV. candidate%above_ground)
+    geometry_changed=domain_changed .OR. &
+      ANY(background%surface_pressure%value/=candidate%surface_pressure%value) .OR. &
+      ANY(background%grid%pressure_interface/=candidate%grid%pressure_interface)
+    CALL account_pressure_analysis(background,candidate,budget,status,geometry_changed,domain_changed)
+    IF (status/=STATUS_OK) THEN
+      budget=pressure_analysis_budget()
+      reason=REASON_GATE
+    ELSE
+      reason=REASON_NONE
+    END IF
+  END SUBROUTINE account_candidate_endpoint
 
   FUNCTION pressure_feedback_delta(left,right) RESULT(delta)
     TYPE(cloud_bal_state_type), INTENT(IN) :: left,right

@@ -262,6 +262,33 @@ ANALYSIS_COUNT_ATTRIBUTES = (
     "analysis_incomplete_background_cells",
     "analysis_incomplete_candidate_cells",
 )
+ENDPOINT_CONTRACT = "signed_represented_mixture_endpoint_v1"
+ENDPOINT_EXTENSION = "candidate_endpoint_v1"
+ENDPOINT_VECTOR_ATTRIBUTES = (
+    "candidate_endpoint_species_change_kg",
+    "candidate_endpoint_mixing_ratio_change_kg",
+    "candidate_endpoint_dry_mass_redistribution_kg",
+)
+ENDPOINT_FLOAT_ATTRIBUTES = (
+    "candidate_endpoint_dry_air_change_kg",
+    "candidate_endpoint_enthalpy_change_j",
+    "candidate_endpoint_geometry_mass_change_kg",
+    "candidate_endpoint_enthalpy_composition_change_j",
+    "candidate_endpoint_enthalpy_mass_metric_change_j",
+    "candidate_endpoint_total_mass_error_kg",
+    "candidate_endpoint_max_cell_mass_error_kg",
+)
+ENDPOINT_COUNT_ATTRIBUTES = (
+    "candidate_endpoint_accounted_cells",
+    "candidate_endpoint_incomplete_background_cells",
+    "candidate_endpoint_incomplete_candidate_cells",
+)
+ENDPOINT_ATTRIBUTES = (
+    "candidate_endpoint_contract",
+    *ENDPOINT_VECTOR_ATTRIBUTES,
+    *ENDPOINT_FLOAT_ATTRIBUTES,
+    *ENDPOINT_COUNT_ATTRIBUTES,
+)
 PRESSURE_GEOMETRY_CONTRACT = "prescribed_surface_pressure_v1"
 PRESSURE_GEOMETRY_CONTINUITY_SCOPE = "candidate_balance_stage_geometry_v1"
 PRESSURE_GEOMETRY_VARIABLES = (
@@ -5590,6 +5617,54 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         schema6 = schema_version == 6
         schema7 = schema_version == 7
         schema8 = schema_version == 8
+        endpoint_declared = ENDPOINT_EXTENSION in getattr(dataset, "schema_extensions", "").split(",")
+        endpoint_present = endpoint_declared or bool(set(ENDPOINT_ATTRIBUTES) & set(dataset.ncattrs()))
+        if endpoint_present:
+            endpoint_complete = set(ENDPOINT_ATTRIBUTES) <= set(dataset.ncattrs())
+            require(endpoint_complete, "complete candidate endpoint receipt")
+            require(getattr(dataset, "candidate_endpoint_contract", "") == ENDPOINT_CONTRACT,
+                    "candidate endpoint contract")
+            endpoint_values = {}
+            for name in ENDPOINT_VECTOR_ATTRIBUTES + ENDPOINT_FLOAT_ATTRIBUTES:
+                shape = (6,) if name in ENDPOINT_VECTOR_ATTRIBUTES else ()
+                try:
+                    value = np.asarray(getattr(dataset, name), dtype=np.float64)
+                    valid = value.shape == shape and bool(np.all(np.isfinite(value)))
+                except (AttributeError, TypeError, ValueError):
+                    valid = False
+                require(valid, name)
+                if valid:
+                    endpoint_values[name] = value
+            for name in ENDPOINT_COUNT_ATTRIBUTES:
+                value = exact_scalar_integer(getattr(dataset, name, None))
+                require(value is not None and value >= 0, name)
+            if (endpoint_complete and len(endpoint_values) ==
+                    len(ENDPOINT_VECTOR_ATTRIBUTES) + len(ENDPOINT_FLOAT_ATTRIBUTES)):
+                species = endpoint_values["candidate_endpoint_species_change_kg"]
+                mixing = endpoint_values["candidate_endpoint_mixing_ratio_change_kg"]
+                redistribution = endpoint_values["candidate_endpoint_dry_mass_redistribution_kg"]
+                require(np.allclose(species, mixing + redistribution, rtol=1e-12, atol=1e-8),
+                        "candidate endpoint species decomposition")
+                mass_error = (float(endpoint_values["candidate_endpoint_dry_air_change_kg"])
+                              + float(np.sum(species))
+                              - float(endpoint_values["candidate_endpoint_geometry_mass_change_kg"]))
+                mass_scale = (abs(float(endpoint_values["candidate_endpoint_dry_air_change_kg"]))
+                              + float(np.sum(np.abs(species)))
+                              + abs(float(endpoint_values["candidate_endpoint_geometry_mass_change_kg"])))
+                mass_tolerance = 256.0 * np.finfo(np.float64).eps * max(1.0, mass_scale)
+                require(abs(float(endpoint_values["candidate_endpoint_total_mass_error_kg"])
+                            - mass_error) <= mass_tolerance,
+                        "candidate endpoint mass identity")
+                enthalpy = float(endpoint_values["candidate_endpoint_enthalpy_change_j"])
+                composition = float(endpoint_values["candidate_endpoint_enthalpy_composition_change_j"])
+                metric = float(endpoint_values["candidate_endpoint_enthalpy_mass_metric_change_j"])
+                # Each term is accumulated from much larger per-cell moist
+                # enthalpies; the file carries no absolute-sum accumulator.
+                enthalpy_tolerance = 1.0e-10 * max(
+                    1.0, abs(enthalpy) + abs(composition) + abs(metric)
+                )
+                require(abs(enthalpy - composition - metric) <= enthalpy_tolerance,
+                        "candidate endpoint enthalpy identity")
         pressure_analysis_candidate_present = bool(
             set(PRESSURE_ANALYSIS_CANDIDATE_ATTRIBUTES) & set(dataset.ncattrs())
             or set(PRESSURE_ANALYSIS_CANDIDATE_VARIABLES) & set(dataset.variables)
@@ -5731,15 +5806,17 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             set(PRESSURE_GEOPOTENTIAL_ATTRIBUTES) & set(dataset.ncattrs())
             or set(PRESSURE_GEOPOTENTIAL_VARIABLES) & set(dataset.variables)
         )
+        allowed_extensions = (expected_extensions,
+                              expected_extensions + "," + ENDPOINT_EXTENSION)
         if pressure_geopotential_signalled:
             require(
-                getattr(dataset, "schema_extensions", "") == expected_extensions,
+                getattr(dataset, "schema_extensions", "") in allowed_extensions,
                 "schema extensions",
             )
         else:
             require(
                 getattr(dataset, "schema_extensions", "") in (
-                    expected_extensions,
+                    *allowed_extensions,
                     expected_extensions + "," + PRESSURE_GEOPOTENTIAL_EXTENSION,
                 ),
                 "schema extensions",

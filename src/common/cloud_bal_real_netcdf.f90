@@ -1063,6 +1063,7 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,varid(37),'long_name', &
       'paired model native target and closed halo coverage'))) GOTO 900
     IF (.NOT.put_global_metadata(ncid,result,config,state_in%pressure%valid_time)) GOTO 900
+    IF (.NOT.put_candidate_endpoint(ncid,result%candidate_budget)) GOTO 900
     IF (config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS) THEN
       IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'omega_target_error_contract', &
         'MODEL_ABSOLUTE_TARGET_NO_SIGMA'))) GOTO 900
@@ -1239,11 +1240,26 @@ CONTAINS
       END IF
     END IF
     rc=nf90_close(ncid)
-    IF (rc==NF90_NOERR) status=STATUS_OK
+    IF (rc==NF90_NOERR) THEN
+      status=STATUS_OK
+    ELSE
+      CALL delete_failed_shadow_file(path)
+    END IF
     RETURN
 900 CONTINUE
     rc=nf90_close(ncid)
+    CALL delete_failed_shadow_file(path)
   END SUBROUTINE write_shadow_diagnostics
+
+  SUBROUTINE delete_failed_shadow_file(path)
+    ! nf90_create used NOCLOBBER, so only this fresh failed product is removed.
+    CHARACTER(LEN=*), INTENT(IN) :: path
+    INTEGER :: unit,io_status
+    OPEN(NEWUNIT=unit,FILE=TRIM(path),STATUS='OLD',ACCESS='STREAM', &
+      FORM='UNFORMATTED',IOSTAT=io_status)
+    IF (io_status/=0) RETURN
+    CLOSE(unit,STATUS='DELETE',IOSTAT=io_status)
+  END SUBROUTINE delete_failed_shadow_file
 
   LOGICAL FUNCTION put_pressure_geostrophic_extension(ncid,dims,support,stencil_support, &
                                                        before_rms,after_rms,transition_reference)
@@ -1686,6 +1702,42 @@ CONTAINS
     put_radar_reconstruction_inputs=.TRUE.
   END FUNCTION put_radar_reconstruction_inputs
 
+  LOGICAL FUNCTION put_candidate_endpoint(ncid,budget)
+    INTEGER, INTENT(IN) :: ncid
+    TYPE(pressure_analysis_budget), INTENT(IN) :: budget
+
+    put_candidate_endpoint=.FALSE.
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_contract', &
+      'signed_represented_mixture_endpoint_v1'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_species_change_kg', &
+      budget%species_change_kg))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_mixing_ratio_change_kg', &
+      budget%mixing_ratio_change_kg))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_dry_mass_redistribution_kg', &
+      budget%dry_mass_redistribution_kg))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_dry_air_change_kg', &
+      budget%dry_air_change_kg))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_change_j', &
+      budget%enthalpy_change_j))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_geometry_mass_change_kg', &
+      budget%geometry_mass_change_kg))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_composition_change_j', &
+      budget%enthalpy_composition_change_j))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_mass_metric_change_j', &
+      budget%enthalpy_mass_metric_change_j))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_total_mass_error_kg', &
+      budget%total_mass_error_kg))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_max_cell_mass_error_kg', &
+      budget%max_cell_mass_error_kg))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_accounted_cells', &
+      budget%accounted_cells))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_incomplete_background_cells', &
+      budget%incomplete_background_cells))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_incomplete_candidate_cells', &
+      budget%incomplete_candidate_cells))) RETURN
+    put_candidate_endpoint=.TRUE.
+  END FUNCTION put_candidate_endpoint
+
   LOGICAL FUNCTION put_outer_extension(ncid,result,config)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config
     INTEGER, INTENT(IN) :: ncid
@@ -1700,7 +1752,8 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'configuration_id','pressure-thermo-shadow-v3'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
       'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
-      'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,pressure_analysis_v1,pressure_outer_v1'))) RETURN
+      'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,pressure_analysis_v1,pressure_outer_v1,'// &
+      'candidate_endpoint_v1'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'outer_contract', &
       'pressure_fixed_feedback_producer_replay_v1'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'outer_maximum_iterations',config%maximum_outer_iterations))) RETURN
@@ -1739,7 +1792,8 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'configuration_id','pressure-thermo-shadow-v2'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
       'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
-      'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,pressure_analysis_v1'))) RETURN
+      'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,pressure_analysis_v1,'// &
+      'candidate_endpoint_v1'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'analysis_contract', &
       'pressure_fixed_represented_mixture_v1'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'analysis_species_change_kg', &
@@ -1867,7 +1921,8 @@ CONTAINS
 
   SUBROUTINE validate_shadow_write_contract(state_in,candidate,operational_state, &
                                             result,config,status,reason,pressure_analysis_candidate)
-    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config
+    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config, &
+      account_candidate_endpoint
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in,candidate,operational_state
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
@@ -1875,6 +1930,7 @@ CONTAINS
     LOGICAL, INTENT(IN), OPTIONAL :: pressure_analysis_candidate
     LOGICAL :: pressure_candidate,variable_geometry,transition,cloud_present
     INTEGER :: state_status,state_reason
+    TYPE(pressure_analysis_budget) :: endpoint_budget
     REAL(real64) :: flux_terms(7),flux_accounted,flux_error,flux_limit
 
     status=STATUS_FAILED; reason=REASON_AUTHORITY
@@ -2078,6 +2134,12 @@ CONTAINS
         variable_geometry .OR. cloud_present) THEN
       IF (.NOT.pipeline_result_replays(state_in,candidate,result,config)) RETURN
     END IF
+    CALL account_candidate_endpoint(state_in,candidate,endpoint_budget,state_status,state_reason)
+    IF (state_status/=STATUS_OK) THEN
+      reason=state_reason
+      RETURN
+    END IF
+    IF (.NOT.pressure_analysis_budgets_equal(endpoint_budget,result%candidate_budget)) RETURN
 
     status=STATUS_OK; reason=REASON_NONE
   END SUBROUTINE validate_shadow_write_contract
@@ -2155,6 +2217,7 @@ CONTAINS
         .NOT.stage_results_equal(replay_result%geopotential,result%geopotential) .OR. &
         .NOT.stage_results_equal(replay_result%overall,result%overall)) RETURN
     IF (.NOT.pressure_analysis_budgets_equal(replay_result%analysis_budget,result%analysis_budget)) RETURN
+    IF (.NOT.pressure_analysis_budgets_equal(replay_result%candidate_budget,result%candidate_budget)) RETURN
     IF (ANY(replay_result%thermo_budget%species_change_kg/=result%thermo_budget%species_change_kg) .OR. &
         replay_result%thermo_budget%sensible_change_j/=result%thermo_budget%sensible_change_j .OR. &
         replay_result%thermo_budget%phase_change_j/=result%thermo_budget%phase_change_j .OR. &
@@ -3369,7 +3432,7 @@ CONTAINS
                                 5_int32))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
       'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
-      'pressure_geometry_v2,omega_boundary_contract_v2'))) RETURN
+      'pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v1'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'cloud_bal_schema_version', &
                                 CLOUD_BAL_SCHEMA_VERSION))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'evidence_class', &

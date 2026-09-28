@@ -28,6 +28,8 @@ PROGRAM test_pipeline
              'OFF must preserve operational state',failures)
   CALL check(zero_analysis_budget(result%analysis_budget), &
              'OFF must publish a zero analysis budget',failures)
+  CALL check(zero_analysis_budget(result%candidate_budget), &
+             'OFF must not publish a candidate endpoint budget',failures)
 
   config%requested_mode=MODE_SHADOW
   CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
@@ -67,6 +69,8 @@ PROGRAM test_pipeline
              'radar rain lowers dry and vapor mass despite unchanged vapor ratio',failures)
   CALL check_analysis_budget(input,candidate,result%analysis_budget,failures, &
                              'complete radar budget')
+  CALL check_analysis_budget(input,candidate,result%candidate_budget,failures, &
+                             'complete final candidate budget')
 
   CALL make_state(input)
   CALL remove_cloud_analysis(input)
@@ -94,7 +98,8 @@ PROGRAM test_pipeline
   CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
   CALL check(result%status==STATUS_FAILED .AND. same_pipeline_state(input,candidate) .AND. &
              same_pipeline_state(input,operational) .AND. &
-             zero_analysis_budget(result%analysis_budget), &
+             zero_analysis_budget(result%analysis_budget) .AND. &
+             zero_analysis_budget(result%candidate_budget), &
              'late localization failure must rollback the radar analysis budget',failures)
   config%horizontal_support_radius_m=5000.0_real64
 
@@ -389,6 +394,8 @@ CONTAINS
       'separate production derive-to-balance replay reproduces exact feedback',failures)
     CALL check(analysis_budgets_equal(fixed_result%analysis_budget,replay_analysis_budget), &
       'fixed-point analysis budget remains anchored to the accepted trial',failures)
+    CALL check_analysis_budget(background,fixed_candidate,fixed_result%candidate_budget, &
+      failures,'fixed-point final candidate budget')
 
     ! A deliberately small cap must roll back before this changed thermo/radar
     ! fixture reaches its exact fixed point.
@@ -403,6 +410,7 @@ CONTAINS
       same_pipeline_state(background,single_candidate) .AND. &
       same_pipeline_state(background,single_operational) .AND. &
       zero_analysis_budget(cap_result%analysis_budget) .AND. &
+      zero_analysis_budget(cap_result%candidate_budget) .AND. &
       zero_thermo_budget(cap_result%thermo_budget) .AND. &
       .NOT.ALLOCATED(cap_result%thermo_support) .AND. &
       .NOT.ALLOCATED(cap_result%thermo_surface), &

@@ -452,7 +452,7 @@ CONTAINS
     LOGICAL :: thermo_active(NX,NY,NZ),geopotential_support(NX,NY,NZ)
     LOGICAL :: baseline_support(NX,NY,NZ)
     INTEGER :: thermo_surface(NX,NY,NZ),reference_level(NX,NY),status
-    REAL(real64) :: requested(NX,NY)
+    REAL(real64) :: requested(NX,NY),expected_geometry,expected_dry,expected_vapor
 
     CALL make_background(background,status)
     CALL make_retained(background,retained,.FALSE.)
@@ -509,6 +509,25 @@ CONTAINS
     CALL check(result%geometry_budget%accounted_cells>0_int64 .AND. &
       result%geometry_budget%geometry_mass_change_kg>0.0_real64, &
       'pipeline geometry budget covers post-column transition')
+    expected_geometry=SUM(candidate%grid%pressure_mass_measure, &
+      MASK=candidate%above_ground)-SUM(background%grid%pressure_mass_measure, &
+      MASK=background%above_ground)
+    expected_dry=SUM(candidate%grid%dry_air_mass_measure, &
+      MASK=candidate%above_ground)-SUM(background%grid%dry_air_mass_measure, &
+      MASK=background%above_ground)
+    expected_vapor=SUM(candidate%grid%dry_air_mass_measure*REAL(candidate%vapor%value,real64), &
+      MASK=candidate%above_ground)- &
+      SUM(background%grid%dry_air_mass_measure*REAL(background%vapor%value,real64), &
+      MASK=background%above_ground)
+    CALL check(result%candidate_budget%accounted_cells== &
+      COUNT(background%above_ground .OR. candidate%above_ground,KIND=int64) .AND. &
+      ABS(result%candidate_budget%geometry_mass_change_kg-expected_geometry)< &
+        1.0e-8_real64*MAX(1.0_real64,ABS(expected_geometry)) .AND. &
+      ABS(result%candidate_budget%dry_air_change_kg-expected_dry)< &
+        1.0e-8_real64*MAX(1.0_real64,ABS(expected_dry)) .AND. &
+      ABS(result%candidate_budget%species_change_kg(1)-expected_vapor)< &
+        1.0e-8_real64*MAX(1.0_real64,ABS(expected_vapor)), &
+      'final candidate budget accounts the union domain and new center once')
     CALL check(result%geopotential%coverage%required==5_int64 .AND. &
       result%geopotential%coverage%usable==5_int64 .AND. &
       result%geopotential%coverage%excluded==0_int64, &
