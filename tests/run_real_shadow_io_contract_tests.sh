@@ -718,7 +718,7 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "schema_extensions": (
             "verified_operational_identity_v1,radar_no_echo_masks_v1,"
             "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2,"
-            "candidate_evaluation_v1"
+            "candidate_evaluation_v1,candidate_diagnostic_domain_v1"
         ),
         "requested_mode": 1,
         "operational_state_verified": 1,
@@ -759,6 +759,18 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
     ):
         if getattr(dataset, name).dtype != "float64":
             raise SystemExit(f"candidate evaluation metric type mismatch: {name}")
+    if dataset.candidate_diagnostic_domain_support_representation != (
+        "aggregate_counts_only_exact_masks_not_persisted_v1"
+    ):
+        raise SystemExit("candidate diagnostic support representation mismatch")
+    for name in (
+        "candidate_diagnostic_domain_changed_cells",
+        "candidate_diagnostic_domain_requested_cells",
+        "candidate_diagnostic_domain_continuity_assessable_cells",
+        "candidate_diagnostic_domain_geostrophic_assessable_cells",
+    ):
+        if getattr(dataset, name).dtype != "int64":
+            raise SystemExit(f"candidate diagnostic count must be int64: {name}")
     if "candidate_balance_support" not in dataset.variables:
         raise SystemExit("candidate balance support variable is absent")
     for name in (
@@ -840,6 +852,46 @@ if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
   exit 1
 fi
 
+bad_diagnostic_domain=$test_tmp/bad-diagnostic-domain.nc
+cp "$diagnostic_o0" "$bad_diagnostic_domain"
+python3 - "$bad_diagnostic_domain" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr(
+        "candidate_diagnostic_domain_support_representation",
+        "exact_masks_persisted_v1",
+    )
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$bad_diagnostic_domain" >/dev/null 2>&1; then
+  printf 'validator accepted a forged changed-domain representation receipt\n' >&2
+  exit 1
+fi
+
+forged_unassessed_domain=$test_tmp/forged-unassessed-domain.nc
+cp "$diagnostic_o0" "$forged_unassessed_domain"
+python3 - "$forged_unassessed_domain" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_diagnostic_domain_changed_cells", 1)
+    dataset.setncattr("candidate_diagnostic_domain_requested_cells", 1)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_assessable_cells", 1)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_assessed", 0)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_status", 20)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_reason", 0)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_rms", 0.0)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_max_abs", 0.0)
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$forged_unassessed_domain" >/dev/null 2>&1; then
+  printf 'validator accepted a forged complete-support unassessed diagnostic\n' >&2
+  exit 1
+fi
+
 bad_endpoint_enthalpy=$test_tmp/bad-endpoint-enthalpy.nc
 cp "$diagnostic_o0" "$bad_endpoint_enthalpy"
 python3 - "$bad_endpoint_enthalpy" <<'PY'
@@ -896,10 +948,13 @@ with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
     for name in list(dataset.ncattrs()):
         if name.startswith("candidate_evaluation_"):
             dataset.delncattr(name)
+        if name.startswith("candidate_diagnostic_domain_"):
+            dataset.delncattr(name)
     dataset.delncattr("candidate_endpoint_enthalpy_arithmetic_scale_j")
     dataset.delncattr("candidate_endpoint_species_arithmetic_scale_kg")
     dataset.setncattr("candidate_endpoint_contract", "signed_represented_mixture_endpoint_v1")
     dataset.setncattr("schema_extensions", dataset.schema_extensions.replace(
+        ",candidate_diagnostic_domain_v1", "").replace(
         ",candidate_evaluation_v1", "").replace(
         "candidate_endpoint_v2", "candidate_endpoint_v1"))
 PY
