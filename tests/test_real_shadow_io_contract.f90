@@ -8,7 +8,7 @@ PROGRAM test_real_shadow_io_contract
   USE cloud_bal_column_physics, ONLY: SATURATION_LIQUID,SATURATION_ICE,pressure_analysis_budget
   USE cloud_bal_balance_operator, ONLY: TARGET_AUTHORITY_OBSERVATIONAL, &
                                         TARGET_AUTHORITY_MANUFACTURED_TEST, &
-                                        balance_operator_type,build_balance_operator, &
+                                        balance_operator_config,balance_operator_type,build_balance_operator, &
                                         state_continuity_residual
   USE cloud_bal_real_netcdf, ONLY: validate_shadow_write_contract, &
                                    write_shadow_diagnostics,pipeline_result_replays, &
@@ -36,7 +36,7 @@ PROGRAM test_real_shadow_io_contract
   CALL make_state(input)
   candidate=input
   operational=input
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
   config%requested_mode=MODE_SHADOW
 
   longitude=0.0_real32; residual=0.0_real64
@@ -51,19 +51,19 @@ PROGRAM test_real_shadow_io_contract
   INQUIRE(FILE='unbound-pressure-request.nc',EXIST=pressure_request_file_exists)
   CALL check(status==STATUS_FAILED .AND. .NOT.pressure_request_file_exists, &
     'prescribed pressure request cannot use the old fixed-geometry sidecar',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
   result%geometry_budget%geometry_mass_change_kg=1.0_real64
   CALL validate_shadow_write_contract(input,candidate,operational,result,config,status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
     'unserialized geometry increment must be rejected',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
 
   result%column%numerical%flux_deposited=-1.0_real64
   CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_GATE, &
              'negative flux ledger terms must fail before publication',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
   CALL write_shadow_diagnostics('verified-shadow.nc',input,candidate,longitude, &
     result,config,residual,residual,status,operational)
   CALL check(status==STATUS_OK,'verified dynamic-size state must be writable',failures)
@@ -77,12 +77,18 @@ PROGRAM test_real_shadow_io_contract
     END IF
   END IF
 
+  result%candidate_evaluation%canonical_accounting_assessed=.FALSE.
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config,status,reason)
+  CALL check(status==STATUS_FAILED, &
+             'writer rejects a forged final-state evaluation',failures)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
+
   result%reason_code=REASON_GATE
   CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
              'OK result with nonzero reason must be rejected',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
 
   config%column%ledger_relative_tolerance= &
     ieee_value(0.0_real64,ieee_quiet_nan)
@@ -107,7 +113,7 @@ PROGRAM test_real_shadow_io_contract
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
              'degraded stage reasons must agree',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
 
   config%requested_mode=MODE_OFF
   CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
@@ -205,7 +211,7 @@ PROGRAM test_real_shadow_io_contract
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
              'result masks must describe candidate deltas',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
 
   input%omega_target%value(1,1,1)=input%omega%value(1,1,1)
   input%omega_target%valid(1,1,1)=.TRUE.
@@ -246,7 +252,7 @@ PROGRAM test_real_shadow_io_contract
                                       status,reason)
   CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
              'no-echo cells must reject hydrometeor candidate changes',failures)
-  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
 
   CALL make_state(input)
   input%radar_reflectivity%value(1,1,1)=1.0_real32
@@ -2096,7 +2102,7 @@ CONTAINS
       SOURCE_BACKGROUND_MODEL,0_int32],[2,2])
     candidate=background
     operational=background
-    CALL make_result(surface_result,2,2,2,background,candidate)
+    CALL make_result(surface_result,2,2,2,background,candidate,surface_config%balance)
     surface_config%requested_mode=MODE_SHADOW
     longitude=0.0_real32
     residual=0.0_real64
@@ -2842,10 +2848,11 @@ CONTAINS
     field%source=source
   END SUBROUTINE mark_valid
 
-  SUBROUTINE make_result(pipeline,nx,ny,nz,background,candidate)
+  SUBROUTINE make_result(pipeline,nx,ny,nz,background,candidate,balance_config)
     TYPE(cloud_bal_pipeline_result), INTENT(OUT) :: pipeline
     INTEGER, INTENT(IN) :: nx,ny,nz
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    TYPE(balance_operator_config), INTENT(IN) :: balance_config
     INTEGER :: status,reason
     pipeline%status=STATUS_OK
     pipeline%reason_code=REASON_NONE
@@ -2853,7 +2860,8 @@ CONTAINS
     CALL initialize_stage_result(pipeline%column,nx,ny,nz,STATUS_OK,REASON_NONE)
     CALL initialize_stage_result(pipeline%balance,nx,ny,nz,STATUS_OK,REASON_NONE)
     CALL initialize_stage_result(pipeline%overall,nx,ny,nz,STATUS_OK,REASON_NONE)
-    CALL account_candidate_endpoint(background,candidate,pipeline%candidate_budget,status,reason)
+    CALL evaluate_joint_candidate(background,candidate,balance_config, &
+      pipeline%candidate_budget,pipeline%candidate_evaluation,status,reason)
     IF (status/=STATUS_OK) ERROR STOP 'invalid test candidate endpoint'
   END SUBROUTINE make_result
 

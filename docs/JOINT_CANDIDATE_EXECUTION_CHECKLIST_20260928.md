@@ -94,6 +94,34 @@ scale; the writer recomputes it from the final in-memory state. A generation
 transaction must bind the stored receipt to its source and payload before it
 can be treated as provenance evidence.
 
+## Second implementation batch: one final-state evaluator
+
+- [x] Recompute the endpoint ledger, pressure-grid continuity residual, and
+  geostrophic diagnostic from the same final candidate. The SHADOW writer
+  independently repeats this evaluation before accepting the in-memory result.
+- [ ] Add independently authorized analysis sources and physical-time boundary
+  fluxes to evaluate dry-air, water-species, and energy conservation residuals.
+  A computed endpoint change must never be copied into its own source term.
+- [ ] Evaluate EOS, reference surface, hydrostatic applicability, observation
+  operators/errors, change authority, positivity, and local shared-face
+  residuals under one versioned candidate contract.
+- [ ] Persist a complete final-state assessment with explicit unresolved
+  conditions and bind it to the diagnostic and WPS payload readback.
+- [ ] Distinguish feasibility, objective stationarity, and step size in a
+  common iteration; the current five-field stored-value fixed point is not
+  a joint constrained solve.
+
+The first checked item is diagnostic scope only. Continuity and geostrophic
+values are measured only on the final state's active balance support with the
+existing pressure-grid operator. The receipt records that support count and
+each diagnostic's status; zero support is unassessed, not a zero residual.
+The evaluator's returned status covers canonical endpoint accounting, not
+completion of every diagnostic. These values are not a universal zero-motion
+target.
+External source, boundary, and independent observation fit remain unassessed.
+The evaluator does not issue physical or native approval, and its metrics are
+not yet a standalone file receipt. The second-batch gate remains open.
+
 ## 3. Run one actual joint candidate
 
 - [ ] On one pinned actual cycle, form one candidate from existing analysis,
