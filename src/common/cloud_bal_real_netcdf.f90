@@ -1926,7 +1926,7 @@ CONTAINS
   SUBROUTINE validate_shadow_write_contract(state_in,candidate,operational_state, &
                                             result,config,status,reason,pressure_analysis_candidate)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config, &
-      account_candidate_endpoint
+      joint_candidate_evaluation,evaluate_joint_candidate
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in,candidate,operational_state
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
@@ -1935,6 +1935,7 @@ CONTAINS
     LOGICAL :: pressure_candidate,variable_geometry,transition,cloud_present
     INTEGER :: state_status,state_reason
     TYPE(pressure_analysis_budget) :: endpoint_budget
+    TYPE(joint_candidate_evaluation) :: endpoint_evaluation
     REAL(real64) :: flux_terms(7),flux_accounted,flux_error,flux_limit
 
     status=STATUS_FAILED; reason=REASON_AUTHORITY
@@ -2138,12 +2139,14 @@ CONTAINS
         variable_geometry .OR. cloud_present) THEN
       IF (.NOT.pipeline_result_replays(state_in,candidate,result,config)) RETURN
     END IF
-    CALL account_candidate_endpoint(state_in,candidate,endpoint_budget,state_status,state_reason)
+    CALL evaluate_joint_candidate(state_in,candidate,config%balance,endpoint_budget, &
+      endpoint_evaluation,state_status,state_reason)
     IF (state_status/=STATUS_OK) THEN
       reason=state_reason
       RETURN
     END IF
     IF (.NOT.pressure_analysis_budgets_equal(endpoint_budget,result%candidate_budget)) RETURN
+    IF (.NOT.joint_candidate_evaluations_equal(endpoint_evaluation,result%candidate_evaluation)) RETURN
 
     status=STATUS_OK; reason=REASON_NONE
   END SUBROUTINE validate_shadow_write_contract
@@ -2222,6 +2225,8 @@ CONTAINS
         .NOT.stage_results_equal(replay_result%overall,result%overall)) RETURN
     IF (.NOT.pressure_analysis_budgets_equal(replay_result%analysis_budget,result%analysis_budget)) RETURN
     IF (.NOT.pressure_analysis_budgets_equal(replay_result%candidate_budget,result%candidate_budget)) RETURN
+    IF (.NOT.joint_candidate_evaluations_equal(replay_result%candidate_evaluation, &
+      result%candidate_evaluation)) RETURN
     IF (ANY(replay_result%thermo_budget%species_change_kg/=result%thermo_budget%species_change_kg) .OR. &
         replay_result%thermo_budget%sensible_change_j/=result%thermo_budget%sensible_change_j .OR. &
         replay_result%thermo_budget%phase_change_j/=result%thermo_budget%phase_change_j .OR. &
@@ -2303,6 +2308,25 @@ CONTAINS
       left%incomplete_background_cells==right%incomplete_background_cells .AND. &
       left%incomplete_candidate_cells==right%incomplete_candidate_cells
   END FUNCTION pressure_analysis_budgets_equal
+
+  PURE LOGICAL FUNCTION joint_candidate_evaluations_equal(left,right)
+    USE cloud_bal_pipeline, ONLY: joint_candidate_evaluation
+    TYPE(joint_candidate_evaluation), INTENT(IN) :: left,right
+    joint_candidate_evaluations_equal= &
+      (left%canonical_accounting_assessed .EQV. right%canonical_accounting_assessed) .AND. &
+      (left%continuity_assessed .EQV. right%continuity_assessed) .AND. &
+      (left%geostrophic_assessed .EQV. right%geostrophic_assessed) .AND. &
+      (left%source_boundary_assessed .EQV. right%source_boundary_assessed) .AND. &
+      (left%observation_fit_assessed .EQV. right%observation_fit_assessed) .AND. &
+      left%balance_support_cells==right%balance_support_cells .AND. &
+      left%operator_status==right%operator_status .AND. &
+      left%operator_reason==right%operator_reason .AND. &
+      left%continuity_status==right%continuity_status .AND. &
+      left%geostrophic_status==right%geostrophic_status .AND. &
+      left%continuity_rms==right%continuity_rms .AND. &
+      left%continuity_max_abs==right%continuity_max_abs .AND. &
+      left%geostrophic_rms==right%geostrophic_rms
+  END FUNCTION joint_candidate_evaluations_equal
 
   PURE LOGICAL FUNCTION numerical_diagnostics_equal(left,right)
     TYPE(numerical_diagnostics), INTENT(IN) :: left,right
