@@ -22,6 +22,7 @@ import os
 import re
 import secrets
 import stat
+import subprocess
 import sys
 import tempfile
 import types
@@ -42,6 +43,7 @@ _VALIDATION = "validation"
 _TRUSTED_VALIDATOR_FILES = {
     "verify_stage_off_generation": "verify_stage_off_generation.py",
     "validate_shadow_diagnostics": "validate_shadow_diagnostics.py",
+    "verify_shadow_wps_pair": "verify_shadow_wps_pair.py",
     "verify_real_manufactured_balance_generation":
         "verify_real_manufactured_balance_generation.py",
 }
@@ -451,11 +453,20 @@ def _trusted_validator_source_sha256(name: str) -> str:
     if filename is None:
         raise TransactionError("snapshot validation receipt validator is not trusted")
     source = Path(__file__).resolve().with_name(filename)
+    sources = (source, source.with_name("compare_baseline.py"),
+               source.with_name("validate_shadow_diagnostics.py"),
+               source.with_name("pressure_transition_reference.py"),
+               source.with_name("pressure_radar_reference.py")) if name == "verify_shadow_wps_pair" else (source,)
+    digest = hashlib.sha256()
     try:
-        payload, _ = _stable_regular_bytes(source)
+        for item in sources:
+            payload, _ = _stable_regular_bytes(item)
+            if len(sources) > 1:
+                digest.update(len(payload).to_bytes(8, "big"))
+            digest.update(payload)
     except TransactionError as exc:
         raise TransactionError("trusted snapshot validator source is unavailable") from exc
-    return hashlib.sha256(payload).hexdigest()
+    return digest.hexdigest()
 
 
 def _validate_validation_receipt(
@@ -497,6 +508,36 @@ def _execute_trusted_validator(name: str, snapshot: Path) -> dict:
     if filename is None:
         raise TransactionError("snapshot validator is not trusted")
     source = Path(__file__).resolve().with_name(filename)
+    if name == "verify_shadow_wps_pair":
+        files = (filename, "compare_baseline.py", "validate_shadow_diagnostics.py",
+                 "pressure_transition_reference.py", "pressure_radar_reference.py")
+        with tempfile.TemporaryDirectory(prefix="cloud-bal-validator-") as directory:
+            bundle = Path(directory)
+            for item in files:
+                payload, _ = _stable_regular_bytes(source.with_name(item))
+                (bundle / item).write_bytes(payload)
+            if _trusted_validator_source_sha256(name) != _bundle_sha256(bundle, files):
+                raise TransactionError("trusted snapshot validator source changed")
+            result_path = bundle / "receipt.json"
+            # -I skips parent imports and user-site startup hooks. Add only the
+            # runtime package path after placing the hashed bundle first.
+            script = (
+                "import importlib, json, pathlib, site, sys\n"
+                "sys.path.insert(0, sys.argv[1])\n"
+                "sys.path.append(site.getusersitepackages())\n"
+                "module = importlib.import_module('verify_shadow_wps_pair')\n"
+                "receipt = module.verify_snapshot(pathlib.Path(sys.argv[2]))\n"
+                "pathlib.Path(sys.argv[3]).write_text(json.dumps(receipt))\n"
+            )
+            completed = subprocess.run(
+                [sys.executable, "-I", "-c", script, str(bundle), str(snapshot),
+                 str(result_path)], capture_output=True, text=True, check=False,
+            )
+            if completed.returncode != 0:
+                raise TransactionError(
+                    "trusted semantic validation failed: " + completed.stderr[-2000:]
+                )
+            return _parse_json(result_path.read_bytes(), "trusted validator receipt")
     payload, _ = _stable_regular_bytes(source)
     module = types.ModuleType("_cloud_bal_publication_validator")
     module.__file__ = str(source)
@@ -504,6 +545,8 @@ def _execute_trusted_validator(name: str, snapshot: Path) -> dict:
         exec(compile(payload, str(source), "exec"), module.__dict__)
         if name == "validate_shadow_diagnostics":
             return module.validate_snapshot(snapshot)
+        if name == "verify_shadow_wps_pair":
+            return module.verify_snapshot(snapshot)
         if name == "verify_real_manufactured_balance_generation":
             repo = source.parent.parent
             return module.verify_snapshot(
@@ -512,6 +555,15 @@ def _execute_trusted_validator(name: str, snapshot: Path) -> dict:
         return module.verify_snapshot(snapshot)
     except Exception as exc:
         raise TransactionError(f"trusted semantic validation failed: {exc}") from exc
+
+
+def _bundle_sha256(directory: Path, files: tuple[str, ...]) -> str:
+    digest = hashlib.sha256()
+    for name in files:
+        payload, _ = _stable_regular_bytes(directory / name)
+        digest.update(len(payload).to_bytes(8, "big"))
+        digest.update(payload)
+    return digest.hexdigest()
 
 
 def _directory_identity(path: Path) -> list[int]:
