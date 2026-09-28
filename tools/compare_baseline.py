@@ -116,11 +116,39 @@ def read_wps(path: Path):
         if len(metadata) < 156:
             raise ValueError("short WPS metadata record")
         hdate = metadata[0:24].decode("ascii", "replace").strip()
+        xfcst = struct.unpack(endian + "f", metadata[24:28])[0]
+        if not np.isfinite(xfcst):
+            raise ValueError("invalid WPS forecast hour")
         field = metadata[60:69].decode("ascii", "replace").strip()
         units = metadata[69:94].decode("ascii", "replace").strip()
         level = struct.unpack(endian + "f", metadata[140:144])[0]
         nx, ny, projection = struct.unpack(endian + "iii", metadata[144:156])
         _, projection_record = next(records)
+        geometry = None
+        if len(projection_record) == 40:
+            try:
+                startloc = projection_record[:8].decode("ascii", "strict")
+            except UnicodeError as exc:
+                raise ValueError("invalid WPS projection location") from exc
+            raw_geometry = struct.unpack(endian + "8f", projection_record[8:])
+            if not np.isfinite(raw_geometry).all():
+                raise ValueError("non-finite WPS projection geometry")
+            (startlat, startlon, dx_km, dy_km, xlonc, truelat1,
+             truelat2, earth_radius_km) = raw_geometry
+            if (startloc != "SWCORNER" or dx_km <= 0.0 or dy_km <= 0.0 or
+                    earth_radius_km <= 0.0):
+                raise ValueError("unsupported WPS projection geometry")
+            geometry = {
+                "startloc": startloc,
+                "startlat": startlat,
+                "startlon": startlon,
+                "dx_km": dx_km,
+                "dy_km": dy_km,
+                "xlonc": xlonc,
+                "truelat1": truelat1,
+                "truelat2": truelat2,
+                "earth_radius_km": earth_radius_km,
+            }
         _, wind_record = next(records)
         if len(wind_record) != 4:
             raise ValueError("invalid WPS wind-coordinate record")
@@ -142,8 +170,10 @@ def read_wps(path: Path):
             (nx, ny),
             slab,
             {
+                "forecast_hour": xfcst,
                 "projection": projection,
                 "projection_record_sha256": hashlib.sha256(projection_record).hexdigest(),
+                "geometry": geometry,
                 "wind_grid_relative": bool(wind_relative),
             },
         )
