@@ -105,6 +105,23 @@ can be treated as provenance evidence.
 - [x] Recompute the endpoint ledger, pressure-grid continuity residual, and
   geostrophic diagnostic from the same final candidate. The SHADOW writer
   independently repeats this evaluation before accepting the in-memory result.
+- [x] Request continuity and geostrophic diagnostics on the changed final
+  pressure state and its stencil, separately from beta-limited wind-control
+  support. Include changes to T, vapor, hydrometeors, pressure geometry,
+  geopotential, winds, and surface thermodynamics; report each diagnostic's
+  assessable count and status even when wind control support is empty.
+- [x] Store the changed-domain counts, assessability, and diagnostics in a
+  versioned SHADOW receipt and reject malformed receipts on independent file
+  validation. The receipt stores aggregate counts, not the exact masks.
+- [ ] Persist the exact requested and assessable masks and bind their readback
+  to the same WPS payload. The present receipt alone cannot establish which
+  individual cells were assessed.
+- [ ] Make required-domain diagnostics assessable independently of the
+  wind-control operator's target and authority preconditions. An operator-build
+  failure still leaves the new diagnostics unassessed and blocks publication.
+- [ ] Preserve the specific geostrophic metadata or range failure reason in
+  the changed-domain receipt. Those failures currently remain failed and
+  unassessed but can carry a generic nonfinite reason.
 - [ ] Add independently authorized analysis sources and physical-time boundary
   fluxes to evaluate dry-air, water-species, and energy conservation residuals.
   A computed endpoint change must never be copied into its own source term.
@@ -121,10 +138,12 @@ can be treated as provenance evidence.
   common iteration; the current five-field stored-value fixed point is not
   a joint constrained solve.
 
-The first checked item is diagnostic scope only. Continuity and geostrophic
-values are measured only on the final state's active balance support with the
-existing pressure-grid operator. The receipt records that support count and
-each diagnostic's status; zero support is unassessed, not a zero residual.
+The first checked item is diagnostic scope only. The legacy continuity and
+geostrophic values are measured on active balance support. The additional
+changed-domain values use the same final state and operator with a separate
+requested domain; they do not grant correction authority outside beta support.
+The receipts record support counts and each diagnostic's status; zero support
+is unassessed, not a zero residual.
 An operator-build failure can also leave the count at zero; its status
 distinguishes that failure from a successfully built empty support.
 The evaluator's returned status covers canonical endpoint accounting, not
@@ -132,9 +151,11 @@ completion of every diagnostic. These values are not a universal zero-motion
 target. The SHADOW file now stores the limited evaluation flags, statuses,
 active-balance support count, and metrics, and the independent validator checks
 the receipt structure and values. This receipt records what was assessed; it
-does not apply physical pass/fail thresholds, cover the mandatory evaluation
-domain above, or bind the candidate to source/input/config/build/runtime
-identity. The transaction's WPS-pair receipt binds its three stored products
+does not apply physical pass/fail thresholds or bind the candidate to
+source/input/config/build/runtime identity. The changed-domain receipt covers
+requested cells only as aggregate counts and depends on a successful operator
+build.
+The transaction's WPS-pair receipt binds its three stored products
 and verifier bundle, not the producer lineage or a complete physical
 assessment. External source, boundary, and independent observation fit remain
 unassessed.
@@ -224,10 +245,11 @@ test does not pass this gate.
 
 ## Physical-initialization execution gates (PR55)
 
-The current evaluator already supports a no-omega diagnostic execution. It
+The current evaluator supports a no-omega-target diagnostic execution. It
 reports endpoint accounting and continuity/geostrophic diagnostics on active
-balance support; zero support or a failed operator leaves these diagnostics
-unassessed. The continuity diagnostic includes supplied boundary velocities
+balance support and a separate changed-state domain. Empty changed support or
+a failed operator leaves the corresponding diagnostics unassessed. The
+continuity diagnostic includes supplied boundary velocities
 and valid top/bottom omega, but does not validate their physical provenance or
 close independently authorized source and boundary fluxes. It also does not
 assess observation fit, KDM6 startup response, or native consumed
