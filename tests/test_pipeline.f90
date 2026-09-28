@@ -66,6 +66,13 @@ PROGRAM test_pipeline
              result%balance%numerical%solver_reason==SOLVER_NOT_RUN .AND. &
              .NOT.ANY(result%balance%changed), &
              'uncertain radar loading cannot seed the wind solver',failures)
+  CALL check(result%candidate_evaluation%canonical_accounting_assessed .AND. &
+             result%candidate_evaluation%balance_support_cells==0_int64 .AND. &
+             .NOT.result%candidate_evaluation%continuity_assessed .AND. &
+             .NOT.result%candidate_evaluation%geostrophic_assessed .AND. &
+             .NOT.result%candidate_evaluation%source_boundary_assessed .AND. &
+             .NOT.result%candidate_evaluation%observation_fit_assessed, &
+             'no-omega hydrometeor candidate retains explicit unresolved diagnostics',failures)
   CALL check(same_pipeline_state(input,operational), &
              'SHADOW must not change operational state',failures)
   CALL derive_column_physics(input,column_candidate,result%column,config%column)

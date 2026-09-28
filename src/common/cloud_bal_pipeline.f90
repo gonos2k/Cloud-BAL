@@ -572,10 +572,19 @@ CONTAINS
         ieee_is_finite(evaluation%continuity_max_abs) .AND. &
         evaluation%continuity_max_abs<HUGE(1.0_real64)
     END IF
+    IF (.NOT.evaluation%continuity_assessed) THEN
+      evaluation%continuity_status=STATUS_FAILED
+      evaluation%continuity_rms=0.0_real64
+      evaluation%continuity_max_abs=0.0_real64
+    END IF
     CALL geostrophic_residual(candidate,op,evaluation%geostrophic_rms,evaluation%geostrophic_status)
     evaluation%geostrophic_assessed=evaluation%geostrophic_status==STATUS_OK .AND. &
       ieee_is_finite(evaluation%geostrophic_rms) .AND. &
       evaluation%geostrophic_rms<HUGE(1.0_real64)
+    IF (.NOT.evaluation%geostrophic_assessed) THEN
+      evaluation%geostrophic_status=STATUS_FAILED
+      evaluation%geostrophic_rms=0.0_real64
+    END IF
   END SUBROUTINE evaluate_joint_candidate
 
   FUNCTION pressure_feedback_delta(left,right) RESULT(delta)
