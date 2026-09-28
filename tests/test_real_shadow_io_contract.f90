@@ -1766,7 +1766,7 @@ CONTAINS
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_extensions)== &
         'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
         'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,'// &
-        'pressure_analysis_v1,pressure_outer_v1,candidate_endpoint_v1', &
+        'pressure_analysis_v1,pressure_outer_v1,candidate_endpoint_v2', &
         'schema-8 extensions are exact',failures)
       rc=nf90_get_att(ncid,NF90_GLOBAL,'outer_contract',outer_contract)
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_contract)== &
@@ -2861,32 +2861,35 @@ CONTAINS
     INTEGER, INTENT(IN) :: ncid
     TYPE(pressure_analysis_budget), INTENT(IN) :: budget
     INTEGER, INTENT(INOUT) :: failures
-    CHARACTER(LEN=65), PARAMETER :: vectors(3)=[CHARACTER(LEN=65) :: &
+    CHARACTER(LEN=65), PARAMETER :: vectors(4)=[CHARACTER(LEN=65) :: &
       'candidate_endpoint_species_change_kg', &
       'candidate_endpoint_mixing_ratio_change_kg', &
-      'candidate_endpoint_dry_mass_redistribution_kg']
-    CHARACTER(LEN=65), PARAMETER :: scalars(7)=[CHARACTER(LEN=65) :: &
+      'candidate_endpoint_dry_mass_redistribution_kg', &
+      'candidate_endpoint_species_arithmetic_scale_kg']
+    CHARACTER(LEN=65), PARAMETER :: scalars(8)=[CHARACTER(LEN=65) :: &
       'candidate_endpoint_dry_air_change_kg', &
       'candidate_endpoint_enthalpy_change_j', &
       'candidate_endpoint_geometry_mass_change_kg', &
       'candidate_endpoint_enthalpy_composition_change_j', &
       'candidate_endpoint_enthalpy_mass_metric_change_j', &
+      'candidate_endpoint_enthalpy_arithmetic_scale_j', &
       'candidate_endpoint_total_mass_error_kg', &
       'candidate_endpoint_max_cell_mass_error_kg']
     CHARACTER(LEN=65), PARAMETER :: counts(3)=[CHARACTER(LEN=65) :: &
       'candidate_endpoint_accounted_cells', &
       'candidate_endpoint_incomplete_background_cells', &
       'candidate_endpoint_incomplete_candidate_cells']
-    REAL(real64) :: expected_vectors(6,3),expected_scalars(7),read_vector(6),read_scalar
+    REAL(real64) :: expected_vectors(6,4),expected_scalars(8),read_vector(6),read_scalar
     INTEGER(int64) :: expected_counts(3),read_count
     INTEGER :: n,rc
 
     expected_vectors(:,1)=budget%species_change_kg
     expected_vectors(:,2)=budget%mixing_ratio_change_kg
     expected_vectors(:,3)=budget%dry_mass_redistribution_kg
+    expected_vectors(:,4)=budget%species_arithmetic_scale_kg
     expected_scalars=[budget%dry_air_change_kg,budget%enthalpy_change_j, &
       budget%geometry_mass_change_kg,budget%enthalpy_composition_change_j, &
-      budget%enthalpy_mass_metric_change_j,budget%total_mass_error_kg, &
+      budget%enthalpy_mass_metric_change_j,budget%enthalpy_arithmetic_scale_j,budget%total_mass_error_kg, &
       budget%max_cell_mass_error_kg]
     expected_counts=[budget%accounted_cells,budget%incomplete_background_cells, &
       budget%incomplete_candidate_cells]

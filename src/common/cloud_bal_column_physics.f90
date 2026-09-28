@@ -92,6 +92,7 @@ MODULE cloud_bal_column_physics
     REAL(real64) :: species_change_kg(6)=0.0_real64
     REAL(real64) :: mixing_ratio_change_kg(6)=0.0_real64
     REAL(real64) :: dry_mass_redistribution_kg(6)=0.0_real64
+    REAL(real64) :: species_arithmetic_scale_kg(6)=0.0_real64
     REAL(real64) :: dry_air_change_kg=0.0_real64
     ! External represented-mixture enthalpy increment, not latent heating.
     REAL(real64) :: enthalpy_change_j=0.0_real64
@@ -102,6 +103,9 @@ MODULE cloud_bal_column_physics
     ! Neither term is a separately conserved process or a pure PSFC effect.
     REAL(real64) :: enthalpy_composition_change_j=0.0_real64
     REAL(real64) :: enthalpy_mass_metric_change_j=0.0_real64
+    ! Absolute pre-cancellation terms for the endpoint split identity.
+    ! This is numerical evidence, not an allowed physical energy residual.
+    REAL(real64) :: enthalpy_arithmetic_scale_j=0.0_real64
     REAL(real64) :: total_mass_error_kg=0.0_real64
     REAL(real64) :: max_cell_mass_error_kg=0.0_real64
     INTEGER(int64) :: accounted_cells=0_int64
@@ -546,12 +550,16 @@ CONTAINS
       ! Exact split: ma*ra-mb*rb = mb*(ra-rb)+(ma-mb)*ra.
       work%mixing_ratio_change_kg=work%mixing_ratio_change_kg+mb*(after-before)
       work%dry_mass_redistribution_kg=work%dry_mass_redistribution_kg+dm*after
+      work%species_arithmetic_scale_kg=work%species_arithmetic_scale_kg+ &
+        ABS(ma*after)+ABS(mb*before)+ABS(mb*(after-before))+ABS(dm*after)
       work%dry_air_change_kg=work%dry_air_change_kg+dm
       ! Includes the dry-air contribution: using only condensate latent heat
       ! would miss both vapor and the pressure-fixed denominator change.
       work%enthalpy_change_j=work%enthalpy_change_j+(ma*ha-mb*hb)
       work%enthalpy_composition_change_j=work%enthalpy_composition_change_j+mb*(ha-hb)
       work%enthalpy_mass_metric_change_j=work%enthalpy_mass_metric_change_j+dm*ha
+      work%enthalpy_arithmetic_scale_j=work%enthalpy_arithmetic_scale_j+ &
+        ABS(ma*ha)+ABS(mb*hb)+ABS(mb*(ha-hb))+ABS(dm*ha)
       IF (present_before .AND. .NOT.ALL([background%vapor%valid(i,j,k),background%cloud_water%valid(i,j,k), &
           background%cloud_ice%valid(i,j,k),background%rain%valid(i,j,k), &
           background%snow%valid(i,j,k),background%graupel%valid(i,j,k)])) &

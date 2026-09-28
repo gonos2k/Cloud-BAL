@@ -262,8 +262,12 @@ ANALYSIS_COUNT_ATTRIBUTES = (
     "analysis_incomplete_background_cells",
     "analysis_incomplete_candidate_cells",
 )
-ENDPOINT_CONTRACT = "signed_represented_mixture_endpoint_v1"
-ENDPOINT_EXTENSION = "candidate_endpoint_v1"
+ENDPOINT_CONTRACT = "signed_represented_mixture_endpoint_v2"
+ENDPOINT_EXTENSION = "candidate_endpoint_v2"
+LEGACY_ENDPOINT_CONTRACT = "signed_represented_mixture_endpoint_v1"
+LEGACY_ENDPOINT_EXTENSION = "candidate_endpoint_v1"
+ENDPOINT_SCALE_ATTRIBUTE = "candidate_endpoint_enthalpy_arithmetic_scale_j"
+ENDPOINT_SPECIES_SCALE_ATTRIBUTE = "candidate_endpoint_species_arithmetic_scale_kg"
 ENDPOINT_VECTOR_ATTRIBUTES = (
     "candidate_endpoint_species_change_kg",
     "candidate_endpoint_mixing_ratio_change_kg",
@@ -289,6 +293,21 @@ ENDPOINT_ATTRIBUTES = (
     *ENDPOINT_FLOAT_ATTRIBUTES,
     *ENDPOINT_COUNT_ATTRIBUTES,
 )
+
+
+def endpoint_roundoff_bound(scale: float, cells: int) -> float | None:
+    """Bound binary64 endpoint product/split/sum roundoff using absolute terms.
+
+    Each endpoint total uses at most ``cells`` sequential additions.  Twelve
+    extra unit roundoffs cover per-cell products, differences, absolute-scale
+    accumulation and the final two subtractions.  This checks an algebraic
+    identity only; it is never an allowed physical energy imbalance.
+    """
+    unit_roundoff = np.finfo(np.float64).eps / 2.0
+    operations = float(cells) + 12.0
+    if not np.isfinite(scale) or scale < 0.0 or cells < 0 or operations * unit_roundoff >= 1.0:
+        return None
+    return (operations * unit_roundoff / (1.0 - operations * unit_roundoff)) * scale
 PRESSURE_GEOMETRY_CONTRACT = "prescribed_surface_pressure_v1"
 PRESSURE_GEOMETRY_CONTINUITY_SCOPE = "candidate_balance_stage_geometry_v1"
 PRESSURE_GEOMETRY_VARIABLES = (
@@ -5617,16 +5636,31 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         schema6 = schema_version == 6
         schema7 = schema_version == 7
         schema8 = schema_version == 8
-        endpoint_declared = ENDPOINT_EXTENSION in getattr(dataset, "schema_extensions", "").split(",")
-        endpoint_present = endpoint_declared or bool(set(ENDPOINT_ATTRIBUTES) & set(dataset.ncattrs()))
+        extensions = getattr(dataset, "schema_extensions", "").split(",")
+        endpoint_declared = ENDPOINT_EXTENSION in extensions
+        legacy_endpoint_declared = LEGACY_ENDPOINT_EXTENSION in extensions
+        endpoint_present = (endpoint_declared or legacy_endpoint_declared
+                            or bool(set(ENDPOINT_ATTRIBUTES) & set(dataset.ncattrs()))
+                            or ENDPOINT_SCALE_ATTRIBUTE in dataset.ncattrs())
         if endpoint_present:
-            endpoint_complete = set(ENDPOINT_ATTRIBUTES) <= set(dataset.ncattrs())
+            require(endpoint_declared != legacy_endpoint_declared,
+                    "candidate endpoint extension")
+            required_attributes = set(ENDPOINT_ATTRIBUTES)
+            if endpoint_declared:
+                required_attributes.add(ENDPOINT_SCALE_ATTRIBUTE)
+                required_attributes.add(ENDPOINT_SPECIES_SCALE_ATTRIBUTE)
+            endpoint_complete = required_attributes <= set(dataset.ncattrs())
             require(endpoint_complete, "complete candidate endpoint receipt")
-            require(getattr(dataset, "candidate_endpoint_contract", "") == ENDPOINT_CONTRACT,
+            require(getattr(dataset, "candidate_endpoint_contract", "") ==
+                    (ENDPOINT_CONTRACT if endpoint_declared else LEGACY_ENDPOINT_CONTRACT),
                     "candidate endpoint contract")
             endpoint_values = {}
-            for name in ENDPOINT_VECTOR_ATTRIBUTES + ENDPOINT_FLOAT_ATTRIBUTES:
-                shape = (6,) if name in ENDPOINT_VECTOR_ATTRIBUTES else ()
+            vector_attributes = (ENDPOINT_VECTOR_ATTRIBUTES + (ENDPOINT_SPECIES_SCALE_ATTRIBUTE,)
+                                 if endpoint_declared else ENDPOINT_VECTOR_ATTRIBUTES)
+            float_attributes = (ENDPOINT_FLOAT_ATTRIBUTES + (ENDPOINT_SCALE_ATTRIBUTE,)
+                                if endpoint_declared else ENDPOINT_FLOAT_ATTRIBUTES)
+            for name in vector_attributes + float_attributes:
+                shape = (6,) if name in vector_attributes else ()
                 try:
                     value = np.asarray(getattr(dataset, name), dtype=np.float64)
                     valid = value.shape == shape and bool(np.all(np.isfinite(value)))
@@ -5639,12 +5673,28 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                 value = exact_scalar_integer(getattr(dataset, name, None))
                 require(value is not None and value >= 0, name)
             if (endpoint_complete and len(endpoint_values) ==
-                    len(ENDPOINT_VECTOR_ATTRIBUTES) + len(ENDPOINT_FLOAT_ATTRIBUTES)):
+                    len(vector_attributes) + len(float_attributes)):
                 species = endpoint_values["candidate_endpoint_species_change_kg"]
                 mixing = endpoint_values["candidate_endpoint_mixing_ratio_change_kg"]
                 redistribution = endpoint_values["candidate_endpoint_dry_mass_redistribution_kg"]
-                require(np.allclose(species, mixing + redistribution, rtol=1e-12, atol=1e-8),
-                        "candidate endpoint species decomposition")
+                if endpoint_declared:
+                    cells = exact_scalar_integer(
+                        getattr(dataset, "candidate_endpoint_accounted_cells", None))
+                    species_scale = endpoint_values[ENDPOINT_SPECIES_SCALE_ATTRIBUTE]
+                    species_bounds = [endpoint_roundoff_bound(float(value), cells or 0)
+                                      for value in species_scale]
+                    require(all(bound is not None for bound in species_bounds),
+                            "candidate endpoint species arithmetic scale")
+                    if all(bound is not None for bound in species_bounds):
+                        bounds = np.asarray(species_bounds)
+                        require(np.all(np.maximum.reduce((np.abs(species), np.abs(mixing),
+                                                         np.abs(redistribution))) <= species_scale + bounds),
+                                "candidate endpoint species arithmetic scale bounds")
+                        require(np.all(np.abs(species - mixing - redistribution) <= bounds),
+                                "candidate endpoint species decomposition")
+                else:
+                    require(np.allclose(species, mixing + redistribution, rtol=1e-12, atol=1e-8),
+                            "candidate endpoint species decomposition")
                 mass_error = (float(endpoint_values["candidate_endpoint_dry_air_change_kg"])
                               + float(np.sum(species))
                               - float(endpoint_values["candidate_endpoint_geometry_mass_change_kg"]))
@@ -5658,11 +5708,22 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                 enthalpy = float(endpoint_values["candidate_endpoint_enthalpy_change_j"])
                 composition = float(endpoint_values["candidate_endpoint_enthalpy_composition_change_j"])
                 metric = float(endpoint_values["candidate_endpoint_enthalpy_mass_metric_change_j"])
-                # Each term is accumulated from much larger per-cell moist
-                # enthalpies; the file carries no absolute-sum accumulator.
-                enthalpy_tolerance = 1.0e-10 * max(
-                    1.0, abs(enthalpy) + abs(composition) + abs(metric)
-                )
+                if endpoint_declared:
+                    scale = float(endpoint_values[ENDPOINT_SCALE_ATTRIBUTE])
+                    cells = exact_scalar_integer(
+                        getattr(dataset, "candidate_endpoint_accounted_cells", None))
+                    bound = endpoint_roundoff_bound(scale, cells or 0)
+                    require(bound is not None, "candidate endpoint arithmetic scale")
+                    enthalpy_tolerance = bound if bound is not None else 0.0
+                    require(max(abs(enthalpy), abs(composition), abs(metric)) <=
+                            scale + enthalpy_tolerance,
+                            "candidate endpoint arithmetic scale bounds")
+                else:
+                    # Historical v1 receipts did not store pre-cancellation
+                    # terms. Keep their original, limited identity check.
+                    enthalpy_tolerance = 1.0e-10 * max(
+                        1.0, abs(enthalpy) + abs(composition) + abs(metric)
+                    )
                 require(abs(enthalpy - composition - metric) <= enthalpy_tolerance,
                         "candidate endpoint enthalpy identity")
         pressure_analysis_candidate_present = bool(
@@ -5807,6 +5868,7 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             or set(PRESSURE_GEOPOTENTIAL_VARIABLES) & set(dataset.variables)
         )
         allowed_extensions = (expected_extensions,
+                              expected_extensions + "," + LEGACY_ENDPOINT_EXTENSION,
                               expected_extensions + "," + ENDPOINT_EXTENSION)
         if pressure_geopotential_signalled:
             require(

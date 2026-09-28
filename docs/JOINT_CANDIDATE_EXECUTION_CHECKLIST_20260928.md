@@ -83,6 +83,17 @@ term. This receipt does not bind source/input/config hashes or prove the WPS
 payload is the same candidate. No actual-cycle joint candidate was run. The
 batch gate remains open.
 
+The v2 endpoint receipt also carries the absolute pre-cancellation sums for
+each species split and the mixture-enthalpy split. The independent validator
+uses the accounted cell count and binary64 unit roundoff to bound arithmetic
+differences; this is separate from any physical mass or energy tolerance.
+Legacy v1 receipts retain their historical, less informative check. Because
+some schemas lack full background state, a standalone v2 validator checks the
+declared scale's form and algebra but cannot independently recompute every
+scale; the writer recomputes it from the final in-memory state. A generation
+transaction must bind the stored receipt to its source and payload before it
+can be treated as provenance evidence.
+
 ## 3. Run one actual joint candidate
 
 - [ ] On one pinned actual cycle, form one candidate from existing analysis,

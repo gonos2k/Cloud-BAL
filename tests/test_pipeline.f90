@@ -1119,11 +1119,13 @@ CONTAINS
     analysis_budgets_equal=close_vector(left%species_change_kg,right%species_change_kg) .AND. &
       close_vector(left%mixing_ratio_change_kg,right%mixing_ratio_change_kg) .AND. &
       close_vector(left%dry_mass_redistribution_kg,right%dry_mass_redistribution_kg) .AND. &
+      close_vector(left%species_arithmetic_scale_kg,right%species_arithmetic_scale_kg) .AND. &
       close_scalar(left%dry_air_change_kg,right%dry_air_change_kg) .AND. &
       close_scalar(left%enthalpy_change_j,right%enthalpy_change_j) .AND. &
       close_scalar(left%geometry_mass_change_kg,right%geometry_mass_change_kg) .AND. &
       close_scalar(left%enthalpy_composition_change_j,right%enthalpy_composition_change_j) .AND. &
       close_scalar(left%enthalpy_mass_metric_change_j,right%enthalpy_mass_metric_change_j) .AND. &
+      close_scalar(left%enthalpy_arithmetic_scale_j,right%enthalpy_arithmetic_scale_j) .AND. &
       close_scalar(left%total_mass_error_kg,right%total_mass_error_kg) .AND. &
       close_scalar(left%max_cell_mass_error_kg,right%max_cell_mass_error_kg) .AND. &
       left%accounted_cells==right%accounted_cells .AND. &
@@ -1136,10 +1138,12 @@ CONTAINS
     zero_analysis_budget=ALL(budget%species_change_kg==0.0_real64) .AND. &
       ALL(budget%mixing_ratio_change_kg==0.0_real64) .AND. &
       ALL(budget%dry_mass_redistribution_kg==0.0_real64) .AND. &
+      ALL(budget%species_arithmetic_scale_kg==0.0_real64) .AND. &
       budget%dry_air_change_kg==0.0_real64 .AND. budget%enthalpy_change_j==0.0_real64 .AND. &
       budget%geometry_mass_change_kg==0.0_real64 .AND. &
       budget%enthalpy_composition_change_j==0.0_real64 .AND. &
       budget%enthalpy_mass_metric_change_j==0.0_real64 .AND. &
+      budget%enthalpy_arithmetic_scale_j==0.0_real64 .AND. &
       budget%total_mass_error_kg==0.0_real64 .AND. &
       budget%max_cell_mass_error_kg==0.0_real64 .AND. &
       budget%accounted_cells==0_int64 .AND. budget%incomplete_background_cells==0_int64 .AND. &
