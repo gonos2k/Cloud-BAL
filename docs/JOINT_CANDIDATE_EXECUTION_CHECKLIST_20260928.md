@@ -23,6 +23,12 @@ native initialization, forecast, or operational authority.
   as a physical transport interval.
 - [ ] Separate atmospheric domain, observation support, and change authority.
   Missing observations do not remove state cells or create authority to fill them.
+- [ ] Define a mandatory evaluation domain from the union of every changed
+  field's support plus the stencil/shared-face neighborhood and any before/after
+  pressure-boundary cells and fluxes. Store its mask and distinguish it from
+  both atmospheric support and the narrower domain authorized for corrections.
+  Require evaluation coverage to contain the control domain; do not derive
+  evaluation coverage only from active balance rows or valid omega targets.
 - [ ] Classify conservation, positivity, units, and change authority as hard
   constraints. Scope hydrostatic, geostrophic, saturation, and acceleration
   approximations to the regimes and error models that support them; do not
@@ -123,21 +129,47 @@ An operator-build failure can also leave the count at zero; its status
 distinguishes that failure from a successfully built empty support.
 The evaluator's returned status covers canonical endpoint accounting, not
 completion of every diagnostic. These values are not a universal zero-motion
-target.
-External source, boundary, and independent observation fit remain unassessed.
-The evaluator does not issue physical or native approval, and its metrics are
-not yet a standalone file receipt. The second-batch gate remains open.
+target. The SHADOW file now stores the limited evaluation flags, statuses,
+active-balance support count, and metrics, and the independent validator checks
+the receipt structure and values. This receipt records what was assessed; it
+does not apply physical pass/fail thresholds, cover the mandatory evaluation
+domain above, or bind the candidate to source/input/config/build/runtime
+identity. The transaction's WPS-pair receipt binds its three stored products
+and verifier bundle, not the producer lineage or a complete physical
+assessment. External source, boundary, and independent observation fit remain
+unassessed.
+The evaluator does not issue physical or native approval. The complete
+assessment and physical-acceptance gate remains open.
 
 ## Third implementation batch: stored WPS pair
 
 - [x] Reopen a completed pressure-level WPS candidate, its retained WPS
-  baseline, and the SHADOW diagnostic in one detached snapshot. Compare
-  inventory, time, units, grid metadata, mapped candidate values, unchanged
-  slabs, support masks, candidate surface TT/PSFC where declared, and the
-  declared geopotential conversion.
+  baseline, and the SHADOW diagnostic in one detached snapshot. Compare the
+  declared inventory, valid date, units, baseline/candidate WPS header
+  metadata, mapped candidate values, retained slabs, candidate support masks,
+  candidate surface TT/PSFC where declared, and the declared geopotential
+  conversion.
 - [x] Bind this scoped numerical check to exact snapshot product hashes and
   the validator/parser source bundle; reject altered WPS or SHADOW bytes and
   a stale validation receipt before an isolated generation is published.
+- [x] For the declared Lambert/`SWCORNER` analysis pair, reconstruct the full
+  WPS grid from its projection header and compare its coordinates, dimensions,
+  spacing, and wind frame with SHADOW. Reject a shared WPS header mutation.
+  This does not independently establish the producer's source-grid identity.
+- [ ] Bind baseline and candidate WPS metadata to one independent grid
+  identity, including its input/configuration/build provenance. Cross-file
+  coordinate agreement alone does not establish that source identity.
+- [x] Preserve `XFCST` in parsed WPS metadata and require zero forecast hours
+  for this analysis-time pair. A future forecast-lead workflow needs its own
+  declared lead contract relative to `HDATE`.
+- [x] Check the current legacy writer's stored inventory as the canonical
+  pressure axis at or below 1001 hPa, independently of above-ground support.
+  Keep baseline values and zero hydrometeors on stored below-ground slabs.
+- [ ] Define the stored pressure inventory independently from atmospheric and
+  change masks for every supported writer/grid, with an explicit versioned
+  pressure-list declaration and separate `M_atmosphere(i,j,k)` and
+  `M_change(i,j,k)` readback. The current 1001 hPa rule is specific to the
+  retained legacy writer; it does not authorize another pressure inventory.
 - [ ] Run the current LAPSPREP producer into a detached generation with a
   pinned source/input/configuration/build manifest and verify the pair before
   changing any consumer-visible pointer. The current test republishes a
@@ -175,8 +207,9 @@ is a diagnostic milestone only; it does not pass this gate.
 ## 4. Verify delivery without changing the scientific gate
 
 - [ ] Bind candidate identity, denominator, species, masks, support, time,
-  geometry, boundary semantics, source/quality provenance, species order, mass
-  metric IDs, QV/RH precedence, and source hashes to the WPS payload and sidecar.
+  geometry (including the cross-checked grid identity), boundary semantics,
+  source/quality provenance, species order, mass metric IDs, QV/RH precedence,
+  forecast lead policy, and source hashes to the WPS payload and sidecar.
 - [ ] Publish to a fresh generation with no clobber. Reopen and verify data and
   sidecar after close; on any failure, leave the current generation untouched.
 - [ ] Verify WPS, metgrid, real, and native consumed fields against the same

@@ -56,6 +56,10 @@ BASE_PRESSURE_FIELDS = ("TT", "UU", "VV", "RH", "QV", "HGT")
 SURFACE_BOUNDARY_CONTRACT = "CANONICAL_SURFACE_BOUNDARY_V1"
 PRESSURE_GEOMETRY_CONTRACT = "prescribed_surface_pressure_v1"
 ANALYSIS_FORECAST_HOUR = 0.0
+# The retained NE57 WPS Lambert reconstruction differs from stored float32
+# SHADOW coordinates by at most 8e-5 degrees. This bounds representation
+# agreement for this grid; it is not a physical location-error allowance.
+GRID_COORDINATE_TOLERANCE_DEGREES = 1e-4
 WPS_STORED_MAX_PRESSURE_PA = 100_100.0
 WPS_PRESSURE_INVENTORY_CONTRACT = "legacy_wps_levels_through_1001_hpa_v1"
 
@@ -319,7 +323,7 @@ def check_records(
         (geometry["startlat"], geometry["startlon"]),
         (float(shadow["latitude"][0, 0]), float(shadow["longitude"][0, 0])),
         rtol=0.0,
-        atol=1e-4,
+        atol=GRID_COORDINATE_TOLERANCE_DEGREES,
         err_msg="WPS southwest corner differs from SHADOW coordinates",
     )
     expected_latitude, expected_longitude = _lambert_latlon(geometry, shape[::-1])
@@ -327,7 +331,7 @@ def check_records(
         expected_latitude,
         shadow["latitude"],
         rtol=0.0,
-        atol=1e-4,
+        atol=GRID_COORDINATE_TOLERANCE_DEGREES,
         err_msg="WPS Lambert latitude grid differs from SHADOW coordinates",
     )
     longitude_error = (expected_longitude - shadow["longitude"] + 180.0) % 360.0 - 180.0
@@ -335,7 +339,7 @@ def check_records(
         longitude_error,
         0.0,
         rtol=0.0,
-        atol=1e-4,
+        atol=GRID_COORDINATE_TOLERANCE_DEGREES,
         err_msg="WPS Lambert longitude grid differs from SHADOW coordinates",
     )
     forecast_hours = {record[3]["forecast_hour"]
