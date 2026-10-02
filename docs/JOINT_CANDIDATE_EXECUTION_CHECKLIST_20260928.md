@@ -205,12 +205,15 @@ assessment and physical-acceptance gate remains open.
   pressure-list declaration and separate `M_atmosphere(i,j,k)` and
   `M_change(i,j,k)` readback. The current 1001 hPa rule is specific to the
   retained legacy writer; it does not authorize another pressure inventory.
-- [ ] Run the current LAPSPREP producer into a detached generation with a
-  pinned source/input/configuration/build manifest and verify the pair before
-  changing any consumer-visible pointer. The current actual pair passes
-  independent readback, but its research publication failed the filesystem's
-  atomic no-replace rename requirement. No generation or pointer was created;
-  its dirty build source is recorded by exact hashes, not as a clean commit.
+- [x] Run current LAPSPREP into a detached research generation with recorded
+  source/input/configuration/build/runtime manifests. Recheck all 391 build
+  input hashes against committed code, validate the three products in the
+  trusted snapshot, atomically publish on an eligible local filesystem and
+  reopen the generation for exact hash/schema/semantic readback. This binds
+  the scoped products to commit `90179191edc33b5ae5606a37f4cd67eac507eed0`;
+  compiler-process and full upstream-generation closure remain unassessed.
+  The earlier Lustre publication failure is preserved with no generation or
+  pointer created. The successful local pointer is research-only.
 - [x] Rebuild and run current LAPSPREP BASE and a declared research candidate
   on the same copied NE57 inputs and pinned Intel/runtime profile. Preserve
   source/input/config/product hashes and verify all 235 same-run WPS records.

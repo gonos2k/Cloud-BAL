@@ -85,9 +85,8 @@
     "science": "NOT_ASSESSED; native first-call and candidate handoff remain open; do not infer physical benefit or approval"
   },
   "open_gates": [
-    "commit or otherwise bind exact dirty source bytes before any generation publication whose source_commit is meant to identify source",
-    "atomic no-replace generation rename support on eligible research publication filesystem",
-    "compiler process closure",
+    "compiler process closure remains NOT_ASSESSED; pinned strace unavailable",
+    "full upstream generation authority and science/native handoff are outside this scoped LAPSPREP replay",
     "complete current candidate native handoff/readback and first-call per-field initialization trace",
     "declared physical initialization policy and uncertainty for QNCLOUD, QNICE, QNRAIN and QIB",
     "scientific, native conservation, physical boundary and operational acceptance"
@@ -115,25 +114,70 @@
     "status": "REJECTED; preserved; not reused"
   },
   "research_publication": {
-    "attempted_root": "scratch/current_lapsprep_research_publication_20261002",
-    "current_pointer_changed": false,
-    "current_pointer_exists": false,
-    "failure": "OutputTransaction could not atomically rename prepared snapshot: publication filesystem does not support atomic no-replace generation rename; prepared snapshot retained, no generation path or current pointer was published",
-    "generation_path_exists": false,
-    "prepared_snapshot_manifest_sha256": "b91f271659b1a28b5e9afc5f9e70e041c6f6a4b67983fe746d2eb3e309989c72",
-    "semantic_receipt_status": "PASS",
-    "source_identity_caveat": "worktree is dirty; HEAD is base only and must not be presented as exact clean source identity",
-    "status": "NOT_PUBLISHED",
-    "validation_receipt_sha256": "661a5e9123b795ae2569fa04185e397b0b9c2a36ad85d310fc8f08538322e94a"
+    "committed_generation_manifest_sha256": "95c55515e55960053ffae07c588d9b58c27cd1cb4b9e51dda4164f5881aac0c8",
+    "configuration": "lapsprep-O0;cycle=262281200;run_config_sha256=b3fd26d4b7d5e0dfdb3c27a79abae8b4e6c53f95825b2b71c81965a3d1db0d6f;prepared_input_inventory_sha256=58708fbc0ab6da38bd191b5c91169b55b297253374428b31a3ca61b23709887a;build_inputs_manifest_sha256=42e629593f968a1ebe849c98ecfbcf1c46c20e7155da3d9b2b76d5a882620e6c;build_runtime_manifest_sha256=1dd6859bc4ff84c3b81eab834b156cfafadaab83978feb0c22e989c605ce2014;producer_source_freeze_aggregate_sha256=6f15ac01c70a5a07210a378d02a84c4f4ca7206815a239f9f3bb6a694965c154;postcommit_391_input_hashes=PASS;compiler_process_closure=NOT_ASSESSED",
+    "current_pointer": "/var/tmp/cloud_bal_pr59_current_lapsprep_20261002/current",
+    "current_pointer_resolves_to_generation": true,
+    "generation": "/var/tmp/cloud_bal_pr59_current_lapsprep_20261002/generations/lapsprep-262281200-9017919-o0",
+    "generation_manifest_sha256": "95c55515e55960053ffae07c588d9b58c27cd1cb4b9e51dda4164f5881aac0c8",
+    "previous_lustre_attempt": {
+      "current_pointer_exists": false,
+      "failure": "Lustre filesystem does not support OutputTransaction atomic no-replace generation rename",
+      "generation_path_exists": false,
+      "prepared_snapshot_manifest_sha256": "b91f271659b1a28b5e9afc5f9e70e041c6f6a4b67983fe746d2eb3e309989c72",
+      "preserved_without_retry": true,
+      "root": "scratch/current_lapsprep_research_publication_20261002",
+      "status": "NOT_PUBLISHED"
+    },
+    "products": {
+      "baseline.wps": {
+        "bytes": 34348056,
+        "sha256": "f50a031d9795cc87bfe47fae475bbe111a3984073c9fe784c6d2cdcbdd4a10fd"
+      },
+      "candidate.wps": {
+        "bytes": 62572040,
+        "sha256": "fbe2238d13a4308ea7ef53a1d13196e2791801974c696ce8951127d14f043afc"
+      },
+      "candidate.wps.shadow.nc": {
+        "bytes": 148760831,
+        "sha256": "222989c98a62804696f9264267c85725ab443bcab99f6a20f3a736dbcfac34ff"
+      }
+    },
+    "publication_binding": "PASS: trusted OutputTransaction generation binds the three exact output products to the clean source commit, explicit configuration identity, and valid time. This does not grant science, native, or operational authority.",
+    "reopen_readback_receipt": "scratch/current_lapsprep_aug16_262281200/run_JGlEuo/research_publication_readback.json",
+    "reopen_readback_receipt_sha256": "b50749ba5a6b6dddba2a72d198d84ddcb99a5a937e38b88881f52febc85eac14",
+    "reopen_readback_status": "PASS",
+    "reopen_semantic_pair_readback": "PASS; verify_pair(generation) returned successfully",
+    "reopen_shape_xyz": [
+      235,
+      283,
+      22
+    ],
+    "root": "/var/tmp/cloud_bal_pr59_current_lapsprep_20261002",
+    "source_commit": "90179191edc33b5ae5606a37f4cd67eac507eed0",
+    "standalone_validator_artifact_decision": "UNBOUND (standalone numerical report, correctly unchanged by publication)",
+    "status": "PUBLISHED_RESEARCH_ONLY",
+    "transaction_id": "lapsprep-262281200-9017919-o0",
+    "trusted_validation_receipt_sha256": "3621063dc68f9e2572ae07f0a61f1ceaef3b928863a01b1985a604919ae61d00",
+    "trusted_validation_status": "PASS",
+    "trusted_validator": "verify_shadow_wps_pair",
+    "trusted_validator_bundle_sha256": "7fe1c46d3131140a905ef8e7d992101d4d5d07afdb3abc72ce82285e05bf0914",
+    "valid_time_epoch": 1786881600
   },
   "schema": "pr59_current_lapsprep_research_evidence_v1",
   "scope": "isolated current LAPSPREP replay; numerical diagnostic only; no science/native/operational approval",
   "source": {
     "build_input_entries": 391,
     "build_input_manifest_sha256": "42e629593f968a1ebe849c98ecfbcf1c46c20e7155da3d9b2b76d5a882620e6c",
+    "build_origin_qualification": "Producer executable was built before the commit from a dirty worktree; all 391 captured input hashes were rechecked against the committed source and matched. Transaction publication itself binds the product set to the clean commit.",
     "clean_commit_claim": false,
     "compiler_process_closure": "NOT_ASSESSED; pinned strace unavailable",
+    "postcommit_input_manifest_sha256": "42e629593f968a1ebe849c98ecfbcf1c46c20e7155da3d9b2b76d5a882620e6c",
+    "postcommit_source_hash_guard": "PASS; 391/391 SHA256 entries",
     "postrun_source_hash_guard": "PASS",
+    "publication_commit": "90179191edc33b5ae5606a37f4cd67eac507eed0",
+    "publication_commit_exact_full_sha": true,
+    "worktree_clean_at_publication": true,
     "worktree_head": "97478079859d759bef4fbc163f63a29092bd4c30",
     "writer_source_sha256": "6f15ac01c70a5a07210a378d02a84c4f4ca7206815a239f9f3bb6a694965c154"
   },

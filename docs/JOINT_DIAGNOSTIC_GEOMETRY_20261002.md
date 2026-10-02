@@ -154,11 +154,19 @@ malformed input/receipt rejection. Final log SHA256:
 `ffa8a58d07f427a25a5b75c5d94648f8fbd1f0bbf559ed7e0c379f69eeb4cd78`.
 The current-producer standalone validator reports no failures and independently
 replays the hydrostatic assessment; its engineering decision retains the
-trajectory assumption and no scientific approval. The isolated snapshot passes the trusted verifier, but generation publication
-stops at the filesystem's unsupported atomic no-replace rename. No generation
-or current pointer was created. Its dirty source is recorded by exact hashes;
-the base HEAD is not claimed as the modified code identity. The artifact
-remains UNBOUND. These dispositions are recorded in the execution receipt. Team review precedes the PR. Graph snapshots
+trajectory assumption and no scientific approval. The first research publication stops at Lustre's unsupported atomic
+no-replace rename, leaving its snapshot preserved with no generation or
+pointer. After committing code, all 391 captured build-input hashes still
+match. A fresh `/var/tmp` research transaction binds the three products to
+commit `90179191edc33b5ae5606a37f4cd67eac507eed0`, passes the trusted
+verifier, atomically publishes on the eligible local filesystem and passes
+reopened hash/schema/semantic readback. Its generation manifest SHA256 is
+`95c55515e55960053ffae07c588d9b58c27cd1cb4b9e51dda4164f5881aac0c8`.
+The build's earlier dirty source and its base HEAD are retained honestly;
+publication uses the subsequent clean commit. The standalone numerical
+validator's UNBOUND label remains distinct from this transaction's scoped
+product binding. Full compiler-process/upstream and native scientific
+closure remain open. These dispositions are recorded in the execution receipt. Team review precedes the PR. Graph snapshots
 are maintained separately for KLAPS50 and Cloud-BAL; Fortran cross-file CALL
 extraction remains partial, and graph freshness establishes navigation only.
 
