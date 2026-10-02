@@ -102,8 +102,11 @@ MODULE cloud_bal_balance_operator
   PUBLIC :: manufactured_boundary_contract_valid
   PUBLIC :: model_boundary_increment_contract_valid
   PUBLIC :: snapshot_balance_operator
+  PUBLIC :: field2d_identity_equal
   PUBLIC :: active_balance_cell_count
   PUBLIC :: target_is_resolved
+  PUBLIC :: diagnostic_domain_assessable
+  PUBLIC :: include_lateral_face_stencil
 
 CONTAINS
 
@@ -112,6 +115,140 @@ CONTAINS
     active_cells=-1_int64
     IF (ALLOCATED(op%cell_active)) active_cells=COUNT(op%cell_active,KIND=int64)
   END FUNCTION active_balance_cell_count
+
+  SUBROUTINE diagnostic_domain_assessable(state,op,requested, &
+      continuity_assessable,geostrophic_assessable,status)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    TYPE(balance_operator_type), INTENT(IN) :: op
+    LOGICAL, INTENT(IN) :: requested(:,:,:)
+    LOGICAL, INTENT(OUT) :: continuity_assessable(:,:,:),geostrophic_assessable(:,:,:)
+    INTEGER, INTENT(OUT) :: status
+    INTEGER :: i,j,k,s,left_level,right_level,ix,jy
+    LOGICAL, ALLOCATABLE :: geo_input_usable(:,:,:)
+    LOGICAL :: geopotential_available,latitude_available
+
+    status=STATUS_FAILED
+    continuity_assessable=.FALSE.; geostrophic_assessable=.FALSE.
+    IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
+    IF (ANY(SHAPE(requested)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(continuity_assessable)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(geostrophic_assessable)/=(/op%nx,op%ny,op%nz/))) RETURN
+    continuity_assessable=requested .AND. op%cell_usable
+    ALLOCATE(geo_input_usable(op%nx,op%ny,op%nz))
+    geo_input_usable=.FALSE.
+    geopotential_available=field_storage_shape_valid(state%geopotential,op%nx,op%ny,op%nz)
+    latitude_available=ALLOCATED(state%latitude%value) .AND. &
+      ALLOCATED(state%latitude%valid) .AND. ALLOCATED(state%latitude%quality) .AND. &
+      ALLOCATED(state%latitude%source)
+    IF (latitude_available) latitude_available= &
+      ALL(SHAPE(state%latitude%value)==(/op%nx,op%ny/)) .AND. &
+      ALL(SHAPE(state%latitude%valid)==(/op%nx,op%ny/)) .AND. &
+      ALL(SHAPE(state%latitude%quality)==(/op%nx,op%ny/)) .AND. &
+      ALL(SHAPE(state%latitude%source)==(/op%nx,op%ny/))
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (.NOT.state%above_ground(i,j,k)) CYCLE
+      geo_input_usable(i,j,k)= &
+        cell_is_usable(state%pressure%valid(i,j,k),state%pressure%quality(i,j,k), &
+          state%pressure%source(i,j,k)) .AND. &
+        cell_is_usable(state%u%valid(i,j,k),state%u%quality(i,j,k),state%u%source(i,j,k)) .AND. &
+        cell_is_usable(state%v%valid(i,j,k),state%v%quality(i,j,k),state%v%source(i,j,k))
+    END DO; END DO; END DO
+    geostrophic_assessable=requested .AND. geo_input_usable .AND. &
+      geopotential_available .AND. latitude_available
+    DO j=1,op%ny; DO i=1,op%nx-1
+      DO s=op%xface_start(i,j),op%xface_start(i,j)+op%xface_count(i,j)-1
+        left_level=op%xseg_left(s); right_level=op%xseg_right(s)
+        IF (requested(i,j,left_level) .AND. &
+            .NOT.op%cell_usable(i+1,j,right_level)) &
+          continuity_assessable(i,j,left_level)=.FALSE.
+        IF (requested(i+1,j,right_level) .AND. &
+            .NOT.op%cell_usable(i,j,left_level)) &
+          continuity_assessable(i+1,j,right_level)=.FALSE.
+      END DO
+    END DO; END DO
+    DO j=1,op%ny-1; DO i=1,op%nx
+      DO s=op%yface_start(i,j),op%yface_start(i,j)+op%yface_count(i,j)-1
+        left_level=op%yseg_left(s); right_level=op%yseg_right(s)
+        IF (requested(i,j,left_level) .AND. &
+            .NOT.op%cell_usable(i,j+1,right_level)) &
+          continuity_assessable(i,j,left_level)=.FALSE.
+        IF (requested(i,j+1,right_level) .AND. &
+            .NOT.op%cell_usable(i,j,left_level)) &
+          continuity_assessable(i,j+1,right_level)=.FALSE.
+      END DO
+    END DO; END DO
+    DO k=1,op%nz-1; DO j=1,op%ny; DO i=1,op%nx
+      IF (requested(i,j,k) .AND. state%above_ground(i,j,k+1) .AND. &
+          .NOT.op%cell_usable(i,j,k+1)) continuity_assessable(i,j,k)=.FALSE.
+      IF (requested(i,j,k+1) .AND. state%above_ground(i,j,k) .AND. &
+          .NOT.op%cell_usable(i,j,k)) continuity_assessable(i,j,k+1)=.FALSE.
+    END DO; END DO; END DO
+
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (.NOT.geostrophic_assessable(i,j,k)) CYCLE
+      ix=0
+      IF (i<op%nx) THEN
+        IF (geo_input_usable(i+1,j,k)) ix=i+1
+      END IF
+      IF (ix==0 .AND. i>1) THEN
+        IF (geo_input_usable(i-1,j,k)) ix=i-1
+      END IF
+      jy=0
+      IF (j<op%ny) THEN
+        IF (geo_input_usable(i,j+1,k)) jy=j+1
+      END IF
+      IF (jy==0 .AND. j>1) THEN
+        IF (geo_input_usable(i,j-1,k)) jy=j-1
+      END IF
+      IF (ix==0 .OR. jy==0) THEN
+        geostrophic_assessable(i,j,k)=.FALSE.
+        CYCLE
+      END IF
+      IF (.NOT.cell_is_usable(state%geopotential%valid(i,j,k), &
+          state%geopotential%quality(i,j,k),state%geopotential%source(i,j,k)) .OR. &
+          .NOT.cell_is_usable(state%geopotential%valid(ix,j,k), &
+          state%geopotential%quality(ix,j,k),state%geopotential%source(ix,j,k)) .OR. &
+          .NOT.cell_is_usable(state%geopotential%valid(i,jy,k), &
+          state%geopotential%quality(i,jy,k),state%geopotential%source(i,jy,k)) .OR. &
+          .NOT.cell_is_usable(state%latitude%valid(i,j),state%latitude%quality(i,j), &
+          state%latitude%source(i,j))) geostrophic_assessable(i,j,k)=.FALSE.
+    END DO; END DO; END DO
+    status=STATUS_OK
+  END SUBROUTINE diagnostic_domain_assessable
+
+  SUBROUTINE include_lateral_face_stencil(op,changed,domain_union,requested,status)
+    TYPE(balance_operator_type), INTENT(IN) :: op
+    LOGICAL, INTENT(IN) :: changed(:,:,:),domain_union(:,:,:)
+    LOGICAL, INTENT(INOUT) :: requested(:,:,:)
+    INTEGER, INTENT(OUT) :: status
+    INTEGER :: i,j,s,left_level,right_level
+
+    status=STATUS_FAILED
+    IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
+    IF (ANY(SHAPE(changed)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(domain_union)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(requested)/=(/op%nx,op%ny,op%nz/))) RETURN
+    DO j=1,op%ny; DO i=1,op%nx-1
+      DO s=op%xface_start(i,j),op%xface_start(i,j)+op%xface_count(i,j)-1
+        left_level=op%xseg_left(s); right_level=op%xseg_right(s)
+        IF (changed(i,j,left_level) .AND. domain_union(i+1,j,right_level)) &
+          requested(i+1,j,right_level)=.TRUE.
+        IF (changed(i+1,j,right_level) .AND. domain_union(i,j,left_level)) &
+          requested(i,j,left_level)=.TRUE.
+      END DO
+    END DO; END DO
+    DO j=1,op%ny-1; DO i=1,op%nx
+      DO s=op%yface_start(i,j),op%yface_start(i,j)+op%yface_count(i,j)-1
+        left_level=op%yseg_left(s); right_level=op%yseg_right(s)
+        IF (changed(i,j,left_level) .AND. domain_union(i,j+1,right_level)) &
+          requested(i,j+1,right_level)=.TRUE.
+        IF (changed(i,j+1,right_level) .AND. domain_union(i,j,left_level)) &
+          requested(i,j,left_level)=.TRUE.
+      END DO
+    END DO; END DO
+    requested=requested .AND. domain_union
+    status=STATUS_OK
+  END SUBROUTINE include_lateral_face_stencil
 
   SUBROUTINE snapshot_balance_operator(op,snapshot,status)
     TYPE(balance_operator_type), INTENT(IN) :: op
@@ -1378,21 +1515,29 @@ CONTAINS
                      cfg%solver_absolute_tolerance)
   END FUNCTION solver_residual_converged
 
-  SUBROUTINE continuity_norms(op,residual,rms_value,max_value)
+  SUBROUTINE continuity_norms(op,residual,rms_value,max_value,evaluation_mask)
     TYPE(balance_operator_type), INTENT(IN) :: op
     REAL(real64), INTENT(IN) :: residual(:,:,:)
     REAL(real64), INTENT(OUT) :: rms_value,max_value
+    LOGICAL, INTENT(IN), OPTIONAL :: evaluation_mask(:,:,:)
     INTEGER :: i,j,k,count_active
     REAL(real64) :: sum_squares,value,term,limit
+    LOGICAL :: active
     rms_value=HUGE(1.0_real64); max_value=HUGE(1.0_real64)
     IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
     IF (ANY(SHAPE(residual)/=(/op%nx,op%ny,op%nz/))) RETURN
+    IF (PRESENT(evaluation_mask)) THEN
+      IF (ANY(SHAPE(evaluation_mask)/=(/op%nx,op%ny,op%nz/))) RETURN
+      IF (ANY(evaluation_mask .AND. .NOT.op%cell_usable)) RETURN
+    END IF
     count_active=0
     sum_squares=0.0_real64
     max_value=0.0_real64
     limit=SQRT(HUGE(1.0_real64)/2.0_real64)
     DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
-      IF (.NOT.op%cell_active(i,j,k)) CYCLE
+      active=op%cell_active(i,j,k)
+      IF (PRESENT(evaluation_mask)) active=evaluation_mask(i,j,k)
+      IF (.NOT.active) CYCLE
       value=ABS(residual(i,j,k))
       IF (.NOT.ieee_is_finite(value) .OR. value>limit) THEN
         rms_value=HUGE(1.0_real64); max_value=HUGE(1.0_real64); RETURN
@@ -1450,18 +1595,29 @@ CONTAINS
     END IF
   END SUBROUTINE state_dry_air_mass_flux_divergence
 
-  SUBROUTINE state_continuity_residual(op,state,residual,status,dry_air_fraction)
+  SUBROUTINE state_continuity_residual(op,state,residual,status,dry_air_fraction,evaluation_mask)
     TYPE(balance_operator_type), INTENT(IN) :: op
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     REAL(real64), INTENT(OUT) :: residual(:,:,:)
     INTEGER, INTENT(OUT) :: status
     REAL(real64), INTENT(IN), OPTIONAL :: dry_air_fraction(:,:,:)
+    LOGICAL, INTENT(IN), OPTIONAL :: evaluation_mask(:,:,:)
     INTEGER :: i,j,k,s,k_top,k_bottom,left_level,right_level
     REAL(real64) :: area,flux,left_fraction,right_fraction
+    LOGICAL, ALLOCATABLE :: row_mask(:,:,:)
+    INTEGER :: allocation_status
 
     residual=0.0_real64; status=STATUS_FAILED
     IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
     IF (ANY(SHAPE(residual)/=(/op%nx,op%ny,op%nz/))) RETURN
+    ALLOCATE(row_mask(op%nx,op%ny,op%nz),STAT=allocation_status)
+    IF (allocation_status/=0) RETURN
+    row_mask=op%cell_active
+    IF (PRESENT(evaluation_mask)) THEN
+      IF (ANY(SHAPE(evaluation_mask)/=(/op%nx,op%ny,op%nz/))) RETURN
+      IF (ANY(evaluation_mask .AND. .NOT.op%cell_usable)) RETURN
+      row_mask=evaluation_mask
+    END IF
     IF (PRESENT(dry_air_fraction)) THEN
       IF (ANY(SHAPE(dry_air_fraction)/=(/op%nx,op%ny,op%nz/))) RETURN
       IF (ANY(.NOT.ieee_is_finite(dry_air_fraction))) RETURN
@@ -1488,10 +1644,10 @@ CONTAINS
           REAL(state%u%value(i,j,left_level),real64)*left_fraction+ &
           op%xright_weight(i,j,right_level)* &
           REAL(state%u%value(i+1,j,right_level),real64)*right_fraction)
-        IF (op%cell_active(i,j,left_level)) &
+        IF (row_mask(i,j,left_level)) &
           residual(i,j,left_level)=residual(i,j,left_level)+ &
             flux/op%volume(i,j,left_level)
-        IF (op%cell_active(i+1,j,right_level)) &
+        IF (row_mask(i+1,j,right_level)) &
           residual(i+1,j,right_level)=residual(i+1,j,right_level)- &
             flux/op%volume(i+1,j,right_level)
       END DO
@@ -1510,10 +1666,10 @@ CONTAINS
           REAL(state%v%value(i,j,left_level),real64)*left_fraction+ &
           op%yright_weight(i,j,right_level)* &
           REAL(state%v%value(i,j+1,right_level),real64)*right_fraction)
-        IF (op%cell_active(i,j,left_level)) &
+        IF (row_mask(i,j,left_level)) &
           residual(i,j,left_level)=residual(i,j,left_level)+ &
             flux/op%volume(i,j,left_level)
-        IF (op%cell_active(i,j+1,right_level)) &
+        IF (row_mask(i,j+1,right_level)) &
           residual(i,j+1,right_level)=residual(i,j+1,right_level)- &
             flux/op%volume(i,j+1,right_level)
       END DO
@@ -1528,9 +1684,9 @@ CONTAINS
       flux=op%pface_area(i,j,k)*(op%pleft_weight(i,j,k)* &
         REAL(state%omega%value(i,j,k),real64)*left_fraction+op%pright_weight(i,j,k)* &
         REAL(state%omega%value(i,j,k+1),real64)*right_fraction)
-      IF (op%cell_active(i,j,k+1)) &
+      IF (row_mask(i,j,k+1)) &
         residual(i,j,k+1)=residual(i,j,k+1)+flux/op%volume(i,j,k+1)
-      IF (op%cell_active(i,j,k)) &
+      IF (row_mask(i,j,k)) &
         residual(i,j,k)=residual(i,j,k)-flux/op%volume(i,j,k)
     END DO; END DO; END DO
     ! Zero-gradient lateral boundary flux makes a uniform through-flow exactly
@@ -1538,13 +1694,13 @@ CONTAINS
     ! Dry-fraction mode also extrapolates boundary composition from the nearest
     ! cell. This explicit donor assumption is not observed boundary composition.
     DO k=1,op%nz; DO j=1,op%ny
-      IF (op%cell_active(1,j,k)) THEN
+      IF (row_mask(1,j,k)) THEN
         area=op%dy(1,j)*op%cell_dp(1,j,k)/GRAVITY
         IF (PRESENT(dry_air_fraction)) area=area*dry_air_fraction(1,j,k)
         residual(1,j,k)=residual(1,j,k)-area* &
           REAL(state%u%value(1,j,k),real64)/op%volume(1,j,k)
       END IF
-      IF (op%cell_active(op%nx,j,k)) THEN
+      IF (row_mask(op%nx,j,k)) THEN
         area=op%dy(op%nx,j)*op%cell_dp(op%nx,j,k)/GRAVITY
         IF (PRESENT(dry_air_fraction)) area=area*dry_air_fraction(op%nx,j,k)
         residual(op%nx,j,k)=residual(op%nx,j,k)+area* &
@@ -1552,13 +1708,13 @@ CONTAINS
       END IF
     END DO; END DO
     DO k=1,op%nz; DO i=1,op%nx
-      IF (op%cell_active(i,1,k)) THEN
+      IF (row_mask(i,1,k)) THEN
         area=op%dx(i,1)*op%cell_dp(i,1,k)/GRAVITY
         IF (PRESENT(dry_air_fraction)) area=area*dry_air_fraction(i,1,k)
         residual(i,1,k)=residual(i,1,k)-area* &
           REAL(state%v%value(i,1,k),real64)/op%volume(i,1,k)
       END IF
-      IF (op%cell_active(i,op%ny,k)) THEN
+      IF (row_mask(i,op%ny,k)) THEN
         area=op%dx(i,op%ny)*op%cell_dp(i,op%ny,k)/GRAVITY
         IF (PRESENT(dry_air_fraction)) area=area*dry_air_fraction(i,op%ny,k)
         residual(i,op%ny,k)=residual(i,op%ny,k)+area* &
@@ -1574,31 +1730,35 @@ CONTAINS
       END DO
       IF (k_bottom==0) CYCLE
       area=op%dx(i,j)*op%dy(i,j)/GRAVITY
-      IF (op%cell_active(i,j,k_top) .AND. state%omega_top_boundary%valid(i,j)) THEN
+      IF (row_mask(i,j,k_top) .AND. state%omega_top_boundary%valid(i,j)) THEN
         flux=area*REAL(state%omega_top_boundary%value(i,j),real64)
         IF (PRESENT(dry_air_fraction)) flux=flux*dry_air_fraction(i,j,k_top)
         residual(i,j,k_top)=residual(i,j,k_top)-flux/op%volume(i,j,k_top)
       END IF
-      IF (op%cell_active(i,j,k_bottom) .AND. state%omega_bottom_boundary%valid(i,j)) THEN
+      IF (row_mask(i,j,k_bottom) .AND. state%omega_bottom_boundary%valid(i,j)) THEN
         flux=area*REAL(state%omega_bottom_boundary%value(i,j),real64)
         IF (PRESENT(dry_air_fraction)) flux=flux*dry_air_fraction(i,j,k_bottom)
         residual(i,j,k_bottom)=residual(i,j,k_bottom)+flux/op%volume(i,j,k_bottom)
       END IF
     END DO; END DO
-    WHERE(.NOT.op%cell_active) residual=0.0_real64
-    IF (ANY(op%cell_active .AND. .NOT.ieee_is_finite(residual))) RETURN
+    WHERE(.NOT.row_mask) residual=0.0_real64
+    IF (ANY(row_mask .AND. .NOT.ieee_is_finite(residual))) RETURN
     status=STATUS_OK
   END SUBROUTINE state_continuity_residual
 
-  SUBROUTINE geostrophic_residual(state,op,rms_value,status)
+  SUBROUTINE geostrophic_residual(state,op,rms_value,status,evaluation_mask)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     TYPE(balance_operator_type), INTENT(IN) :: op
     REAL(real64), INTENT(OUT) :: rms_value
     INTEGER, INTENT(OUT) :: status
+    LOGICAL, INTENT(IN), OPTIONAL :: evaluation_mask(:,:,:)
     INTEGER :: i,j,k,ix,jy,n,validation_status,reason
     REAL(real64) :: f,dphidx,dphidy,ru,rv,total,pi,term,limit
     status=STATUS_FAILED; rms_value=0.0_real64; total=0.0_real64; n=0
     IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
+    IF (PRESENT(evaluation_mask)) THEN
+      IF (ANY(SHAPE(evaluation_mask)/=(/op%nx,op%ny,op%nz/))) RETURN
+    END IF
     IF (.NOT.field_storage_shape_valid(state%u,op%nx,op%ny,op%nz) .OR. &
         .NOT.field_storage_shape_valid(state%v,op%nx,op%ny,op%nz)) RETURN
     CALL validate_geostrophic_inputs(state,validation_status,reason)
@@ -1606,21 +1766,42 @@ CONTAINS
     pi=ACOS(-1.0_real64)
     limit=SQRT(HUGE(1.0_real64)/4.0_real64)
     DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
-      IF (.NOT.op%cell_active(i,j,k)) CYCLE
+      IF (PRESENT(evaluation_mask)) THEN
+        IF (.NOT.evaluation_mask(i,j,k)) CYCLE
+        IF (.NOT.geostrophic_cell_usable(state,i,j,k)) RETURN
+      ELSE
+        IF (.NOT.op%cell_active(i,j,k)) CYCLE
+      END IF
       ix=0
       IF (i<op%nx) THEN
-        IF (op%cell_usable(i+1,j,k)) ix=i+1
+        IF (PRESENT(evaluation_mask)) THEN
+          IF (geostrophic_cell_usable(state,i+1,j,k)) ix=i+1
+        ELSE IF (op%cell_usable(i+1,j,k)) THEN
+          ix=i+1
+        END IF
       END IF
       IF (ix==0 .AND. i>1) THEN
-        IF (op%cell_usable(i-1,j,k)) ix=i-1
+        IF (PRESENT(evaluation_mask)) THEN
+          IF (geostrophic_cell_usable(state,i-1,j,k)) ix=i-1
+        ELSE IF (op%cell_usable(i-1,j,k)) THEN
+          ix=i-1
+        END IF
       END IF
       IF (ix==0) RETURN
       jy=0
       IF (j<op%ny) THEN
-        IF (op%cell_usable(i,j+1,k)) jy=j+1
+        IF (PRESENT(evaluation_mask)) THEN
+          IF (geostrophic_cell_usable(state,i,j+1,k)) jy=j+1
+        ELSE IF (op%cell_usable(i,j+1,k)) THEN
+          jy=j+1
+        END IF
       END IF
       IF (jy==0 .AND. j>1) THEN
-        IF (op%cell_usable(i,j-1,k)) jy=j-1
+        IF (PRESENT(evaluation_mask)) THEN
+          IF (geostrophic_cell_usable(state,i,j-1,k)) jy=j-1
+        ELSE IF (op%cell_usable(i,j-1,k)) THEN
+          jy=j-1
+        END IF
       END IF
       IF (jy==0) RETURN
       IF (.NOT.(cell_is_usable(state%geopotential%valid(i,j,k), &
@@ -1651,6 +1832,18 @@ CONTAINS
     IF (.NOT.ieee_is_finite(rms_value)) RETURN
     status=STATUS_OK
   END SUBROUTINE geostrophic_residual
+
+  PURE LOGICAL FUNCTION geostrophic_cell_usable(state,i,j,k)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: i,j,k
+    geostrophic_cell_usable=.FALSE.
+    IF (.NOT.state%above_ground(i,j,k)) RETURN
+    geostrophic_cell_usable= &
+      cell_is_usable(state%pressure%valid(i,j,k),state%pressure%quality(i,j,k), &
+        state%pressure%source(i,j,k)) .AND. &
+      cell_is_usable(state%u%valid(i,j,k),state%u%quality(i,j,k),state%u%source(i,j,k)) .AND. &
+      cell_is_usable(state%v%valid(i,j,k),state%v%quality(i,j,k),state%v%source(i,j,k))
+  END FUNCTION geostrophic_cell_usable
 
   ! Diagnostic-only original/final pressure assessment.  This intentionally
   ! does not use the balance acceptance gate: it reports the same residual

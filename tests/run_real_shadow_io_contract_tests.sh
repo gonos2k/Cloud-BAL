@@ -717,7 +717,9 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "omega_target_error_contract": "diagonal_pressure_omega_v1",
         "schema_extensions": (
             "verified_operational_identity_v1,radar_no_echo_masks_v1,"
-            "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2"
+            "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2,"
+            "candidate_evaluation_v1,candidate_diagnostic_domain_v1,"
+            "candidate_diagnostic_masks_v1"
         ),
         "requested_mode": 1,
         "operational_state_verified": 1,
@@ -728,10 +730,77 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "grid_spacing_adapter_policy": "KM_TO_M_OR_PINNED_LEGACY_NUMERIC_METERS",
         "radar_valid_semantics": "ECHO_ONLY",
         "candidate_endpoint_contract": "signed_represented_mixture_endpoint_v2",
+        "candidate_evaluation_contract": "final_pressure_diagnostics_v1",
+        "candidate_evaluation_scope": (
+            "endpoint_and_active_pressure_balance_diagnostics_only"
+        ),
     }
     for name, value in expected.items():
         if getattr(dataset, name, None) != value:
             raise SystemExit(f"writer metadata mismatch: {name}")
+    for name in (
+        "candidate_evaluation_canonical_accounting_assessed",
+        "candidate_evaluation_continuity_assessed",
+        "candidate_evaluation_geostrophic_assessed",
+        "candidate_evaluation_source_boundary_assessed",
+        "candidate_evaluation_observation_fit_assessed",
+        "candidate_evaluation_operator_status",
+        "candidate_evaluation_operator_reason",
+        "candidate_evaluation_continuity_status",
+        "candidate_evaluation_geostrophic_status",
+    ):
+        if getattr(dataset, name).dtype != "int32":
+            raise SystemExit(f"candidate evaluation attribute type mismatch: {name}")
+    if dataset.candidate_evaluation_balance_support_cells.dtype != "int64":
+        raise SystemExit("candidate evaluation support count must be int64")
+    for name in (
+        "candidate_evaluation_continuity_rms",
+        "candidate_evaluation_continuity_max_abs",
+        "candidate_evaluation_geostrophic_rms",
+    ):
+        if getattr(dataset, name).dtype != "float64":
+            raise SystemExit(f"candidate evaluation metric type mismatch: {name}")
+    if dataset.candidate_diagnostic_domain_support_representation != (
+        "aggregate_counts_and_exact_masks_v2"
+    ):
+        raise SystemExit("candidate diagnostic support representation mismatch")
+    mask_names = (
+        "candidate_diagnostic_changed_mask",
+        "candidate_diagnostic_requested_mask",
+        "candidate_diagnostic_continuity_assessable_mask",
+        "candidate_diagnostic_geostrophic_assessable_mask",
+    )
+    counts = (
+        "candidate_diagnostic_domain_changed_cells",
+        "candidate_diagnostic_domain_requested_cells",
+        "candidate_diagnostic_domain_continuity_assessable_cells",
+        "candidate_diagnostic_domain_geostrophic_assessable_cells",
+    )
+    masks = []
+    for name, count in zip(mask_names, counts):
+        variable = dataset.variables.get(name)
+        if (variable is None or variable.dimensions != ("z", "y", "x")
+                or variable.dtype != "int32" or variable.units != "1"):
+            raise SystemExit(f"candidate diagnostic exact mask is malformed: {name}")
+        values = variable[:]
+        if not ((values == 0) | (values == 1)).all():
+            raise SystemExit(f"candidate diagnostic mask is not binary: {name}")
+        if int(values.sum()) != int(getattr(dataset, count)):
+            raise SystemExit(f"candidate diagnostic mask count mismatch: {name}")
+        masks.append(values.astype(bool))
+    for mask in masks[2:]:
+        if (mask & ~masks[1]).any():
+            raise SystemExit("assessable diagnostic mask escapes requested mask")
+    if (masks[0] & ~masks[1]).any():
+        raise SystemExit("changed diagnostic mask escapes requested mask")
+    for name in (
+        "candidate_diagnostic_domain_changed_cells",
+        "candidate_diagnostic_domain_requested_cells",
+        "candidate_diagnostic_domain_continuity_assessable_cells",
+        "candidate_diagnostic_domain_geostrophic_assessable_cells",
+    ):
+        if getattr(dataset, name).dtype != "int64":
+            raise SystemExit(f"candidate diagnostic count must be int64: {name}")
     if "candidate_balance_support" not in dataset.variables:
         raise SystemExit("candidate balance support variable is absent")
     for name in (
@@ -813,6 +882,79 @@ if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
   exit 1
 fi
 
+bad_diagnostic_domain=$test_tmp/bad-diagnostic-domain.nc
+cp "$diagnostic_o0" "$bad_diagnostic_domain"
+python3 - "$bad_diagnostic_domain" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr(
+        "candidate_diagnostic_domain_support_representation",
+        "exact_masks_persisted_v1",
+    )
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$bad_diagnostic_domain" >/dev/null 2>&1; then
+  printf 'validator accepted a forged changed-domain representation receipt\n' >&2
+  exit 1
+fi
+
+bad_mask_count=$test_tmp/bad-mask-count.nc
+cp "$diagnostic_o0" "$bad_mask_count"
+python3 - "$bad_mask_count" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    name = "candidate_diagnostic_requested_mask"
+    mask = dataset.variables[name][:]
+    index = tuple(int(item) for item in next(iter(__import__("numpy").argwhere(mask == 1))))
+    dataset.variables[name][index] = 0
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$bad_mask_count" >/dev/null 2>&1; then
+  printf 'validator accepted an exact diagnostic mask with a false count\n' >&2
+  exit 1
+fi
+
+nonbinary_mask=$test_tmp/nonbinary-mask.nc
+cp "$diagnostic_o0" "$nonbinary_mask"
+python3 - "$nonbinary_mask" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.variables["candidate_diagnostic_changed_mask"][0, 0, 0] = 2
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$nonbinary_mask" >/dev/null 2>&1; then
+  printf 'validator accepted a nonbinary diagnostic mask\n' >&2
+  exit 1
+fi
+
+forged_unassessed_domain=$test_tmp/forged-unassessed-domain.nc
+cp "$diagnostic_o0" "$forged_unassessed_domain"
+python3 - "$forged_unassessed_domain" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_diagnostic_domain_changed_cells", 1)
+    dataset.setncattr("candidate_diagnostic_domain_requested_cells", 1)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_assessable_cells", 1)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_assessed", 0)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_status", 20)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_reason", 0)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_rms", 0.0)
+    dataset.setncattr("candidate_diagnostic_domain_continuity_max_abs", 0.0)
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$forged_unassessed_domain" >/dev/null 2>&1; then
+  printf 'validator accepted a forged complete-support unassessed diagnostic\n' >&2
+  exit 1
+fi
+
 bad_endpoint_enthalpy=$test_tmp/bad-endpoint-enthalpy.nc
 cp "$diagnostic_o0" "$bad_endpoint_enthalpy"
 python3 - "$bad_endpoint_enthalpy" <<'PY'
@@ -862,17 +1004,174 @@ fi
 legacy_endpoint=$test_tmp/legacy-endpoint.nc
 cp "$diagnostic_o0" "$legacy_endpoint"
 python3 - "$legacy_endpoint" <<'PY'
+import os
+import sys
+import netCDF4
+
+source_path = sys.argv[1]
+temporary_path = source_path + ".tmp"
+mask_names = {
+    "candidate_diagnostic_changed_mask",
+    "candidate_diagnostic_requested_mask",
+    "candidate_diagnostic_continuity_assessable_mask",
+    "candidate_diagnostic_geostrophic_assessable_mask",
+}
+with netCDF4.Dataset(source_path) as source, netCDF4.Dataset(temporary_path, "w") as legacy:
+    for name, dimension in source.dimensions.items():
+        legacy.createDimension(name, None if dimension.isunlimited() else len(dimension))
+    for name in source.ncattrs():
+        if name.startswith(("candidate_evaluation_", "candidate_diagnostic_domain_")):
+            continue
+        if name in ("candidate_endpoint_enthalpy_arithmetic_scale_j",
+                    "candidate_endpoint_species_arithmetic_scale_kg"):
+            continue
+        value = source.getncattr(name)
+        if name == "candidate_endpoint_contract":
+            value = "signed_represented_mixture_endpoint_v1"
+        elif name == "schema_extensions":
+            value = value.replace(
+                ",candidate_diagnostic_domain_v1,candidate_diagnostic_masks_v1", ""
+            ).replace(",candidate_evaluation_v1", "").replace(
+                "candidate_endpoint_v2", "candidate_endpoint_v1"
+            )
+        legacy.setncattr(name, value)
+    for name, source_variable in source.variables.items():
+        if name in mask_names:
+            continue
+        fill_value = source_variable.getncattr("_FillValue") if "_FillValue" in source_variable.ncattrs() else None
+        variable = legacy.createVariable(
+            name, source_variable.datatype, source_variable.dimensions, fill_value=fill_value
+        )
+        for attribute in source_variable.ncattrs():
+            if attribute != "_FillValue":
+                variable.setncattr(attribute, source_variable.getncattr(attribute))
+        variable[...] = source_variable[...]
+os.replace(temporary_path, source_path)
+PY
+python3 "$repo_root/tools/validate_shadow_diagnostics.py" "$legacy_endpoint" >/dev/null
+
+legacy_domain_masks=$test_tmp/legacy-domain-masks.nc
+cp "$diagnostic_o0" "$legacy_domain_masks"
+python3 - "$legacy_domain_masks" <<'PY'
+import os
+import sys
+import netCDF4
+
+path = sys.argv[1]
+temporary = path + ".tmp"
+mask_names = {
+    "candidate_diagnostic_changed_mask",
+    "candidate_diagnostic_requested_mask",
+    "candidate_diagnostic_continuity_assessable_mask",
+    "candidate_diagnostic_geostrophic_assessable_mask",
+}
+with netCDF4.Dataset(path) as source, netCDF4.Dataset(temporary, "w") as target:
+    for name, dimension in source.dimensions.items():
+        target.createDimension(name, None if dimension.isunlimited() else len(dimension))
+    for name in source.ncattrs():
+        if name == "candidate_diagnostic_domain_mask_contract":
+            continue
+        value = source.getncattr(name)
+        if name == "candidate_diagnostic_domain_support_representation":
+            value = "aggregate_counts_only_exact_masks_not_persisted_v1"
+        elif name == "schema_extensions":
+            value = value.replace(",candidate_diagnostic_masks_v1", "")
+        target.setncattr(name, value)
+    for name, original in source.variables.items():
+        if name in mask_names:
+            continue
+        fill_value = original.getncattr("_FillValue") if "_FillValue" in original.ncattrs() else None
+        variable = target.createVariable(name, original.datatype, original.dimensions,
+                                         fill_value=fill_value)
+        for attribute in original.ncattrs():
+            if attribute != "_FillValue":
+                variable.setncattr(attribute, original.getncattr(attribute))
+        variable[...] = original[...]
+os.replace(temporary, path)
+PY
+python3 "$repo_root/tools/validate_shadow_diagnostics.py" "$legacy_domain_masks" >/dev/null
+
+missing_candidate_evaluation_flag=$test_tmp/missing-candidate-evaluation-flag.nc
+cp "$diagnostic_o0" "$missing_candidate_evaluation_flag"
+python3 - "$missing_candidate_evaluation_flag" <<'PY'
 import sys
 import netCDF4
 
 with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
-    dataset.delncattr("candidate_endpoint_enthalpy_arithmetic_scale_j")
-    dataset.delncattr("candidate_endpoint_species_arithmetic_scale_kg")
-    dataset.setncattr("candidate_endpoint_contract", "signed_represented_mixture_endpoint_v1")
-    dataset.setncattr("schema_extensions", dataset.schema_extensions.replace(
-        "candidate_endpoint_v2", "candidate_endpoint_v1"))
+    dataset.delncattr("candidate_evaluation_continuity_assessed")
 PY
-python3 "$repo_root/tools/validate_shadow_diagnostics.py" "$legacy_endpoint" >/dev/null
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$missing_candidate_evaluation_flag" >/dev/null 2>&1; then
+  printf 'validator accepted an incomplete candidate evaluation receipt\n' >&2
+  exit 1
+fi
+
+forged_candidate_evaluation_flag=$test_tmp/forged-candidate-evaluation-flag.nc
+cp "$diagnostic_o0" "$forged_candidate_evaluation_flag"
+python3 - "$forged_candidate_evaluation_flag" <<'PY'
+import sys
+import netCDF4
+import numpy as np
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_evaluation_source_boundary_assessed", np.int32(1))
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$forged_candidate_evaluation_flag" >/dev/null 2>&1; then
+  printf 'validator accepted unauthorized candidate evaluation authority\n' >&2
+  exit 1
+fi
+
+bad_candidate_evaluation_status=$test_tmp/bad-candidate-evaluation-status.nc
+cp "$diagnostic_o0" "$bad_candidate_evaluation_status"
+python3 - "$bad_candidate_evaluation_status" <<'PY'
+import sys
+import netCDF4
+import numpy as np
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_evaluation_continuity_status", np.int32(99))
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$bad_candidate_evaluation_status" >/dev/null 2>&1; then
+  printf 'validator accepted an invalid candidate evaluation status\n' >&2
+  exit 1
+fi
+
+false_candidate_evaluation_status=$test_tmp/false-candidate-evaluation-status.nc
+cp "$diagnostic_o0" "$false_candidate_evaluation_status"
+python3 - "$false_candidate_evaluation_status" <<'PY'
+import sys
+import netCDF4
+import numpy as np
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_evaluation_continuity_assessed", np.int32(0))
+    dataset.setncattr("candidate_evaluation_continuity_status", np.int32(2))
+    dataset.setncattr("candidate_evaluation_continuity_rms", np.float64(0.0))
+    dataset.setncattr("candidate_evaluation_continuity_max_abs", np.float64(0.0))
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$false_candidate_evaluation_status" >/dev/null 2>&1; then
+  printf 'validator accepted OK status for unassessed candidate continuity\n' >&2
+  exit 1
+fi
+
+stray_candidate_evaluation=$test_tmp/stray-candidate-evaluation.nc
+cp "$diagnostic_o0" "$stray_candidate_evaluation"
+python3 - "$stray_candidate_evaluation" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("schema_extensions", dataset.schema_extensions.replace(
+        ",candidate_evaluation_v1", ""))
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$stray_candidate_evaluation" >/dev/null 2>&1; then
+  printf 'validator accepted candidate evaluation attributes without extension\n' >&2
+  exit 1
+fi
 
 bad_radar_marker=$test_tmp/bad-radar-marker.nc
 cp "$diagnostic_o0" "$bad_radar_marker"

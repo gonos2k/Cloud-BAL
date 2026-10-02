@@ -110,6 +110,96 @@ def _check_surface_temperature_mutation(
                      "candidate surface TT units", lambda: None)
 
 
+def _rewrite_metadata(records: dict, **changes) -> dict:
+    rewritten = {}
+    for key, (units, shape, values, metadata) in records.items():
+        updated = dict(metadata)
+        updated.update(changes)
+        rewritten[key] = (units, shape, values, updated)
+    return rewritten
+
+
+def _check_geometry_and_time_contract(baseline: dict, candidate: dict,
+                                      shadow: dict) -> None:
+    changed_pair = _rewrite_metadata(
+        baseline,
+        geometry={**next(iter(baseline.values()))[3]["geometry"], "dx_km": 10.0},
+    )
+    changed_candidate = _rewrite_metadata(
+        candidate,
+        geometry={**next(iter(candidate.values()))[3]["geometry"], "dx_km": 10.0},
+    )
+    _reject_mutation(changed_pair, changed_candidate, shadow,
+                     "shared WPS spacing changed from SHADOW", lambda: None)
+
+    changed_pair = _rewrite_metadata(
+        baseline,
+        geometry={**next(iter(baseline.values()))[3]["geometry"], "startlon": 120.0},
+    )
+    changed_candidate = _rewrite_metadata(
+        candidate,
+        geometry={**next(iter(candidate.values()))[3]["geometry"], "startlon": 120.0},
+    )
+    _reject_mutation(changed_pair, changed_candidate, shadow,
+                     "shared WPS origin changed from SHADOW", lambda: None)
+
+    changed_pair = _rewrite_metadata(
+        baseline,
+        geometry={**next(iter(baseline.values()))[3]["geometry"], "xlonc": 127.0},
+    )
+    changed_candidate = _rewrite_metadata(
+        candidate,
+        geometry={**next(iter(candidate.values()))[3]["geometry"], "xlonc": 127.0},
+    )
+    _reject_mutation(changed_pair, changed_candidate, shadow,
+                     "shared WPS Lambert center changed from SHADOW", lambda: None)
+
+    changed_candidate = _rewrite_metadata(candidate, forecast_hour=6.0)
+    _reject_mutation(baseline, changed_candidate, shadow,
+                     "candidate XFCST changed", lambda: None)
+    changed_pair = _rewrite_metadata(baseline, forecast_hour=6.0)
+    _reject_mutation(changed_pair, changed_candidate, shadow,
+                     "shared nonzero analysis XFCST", lambda: None)
+
+
+def _check_stored_below_ground_slab(baseline: dict, candidate: dict,
+                                    shadow: dict) -> None:
+    pressure_level = max(key[1] for key in baseline
+                         if key[0] == "TT" and key[1] < SURFACE)
+    z = next(i for i, level in enumerate(shadow["pressure"])
+             if level == pressure_level)
+    changed_shadow = dict(shadow)
+    candidate_domain = np.asarray(shadow["candidate_above_ground"]).copy()
+    assert np.any(candidate_domain[z + 1]), "lower pressure slab is not represented above ground"
+    candidate_domain[z] = False
+    changed_shadow["candidate_above_ground"] = candidate_domain
+    changed_candidate = candidate.copy()
+    for key, (units, shape, values, metadata) in candidate.items():
+        name, level, _ = key
+        if level != pressure_level or name not in (
+                "TT", "UU", "VV", "QV", "HGT", "QC", "QI", "QR", "QS", "QG"):
+            continue
+        expected = (np.zeros((shape[1], shape[0]), dtype=np.float32)
+                    if name in ("QC", "QI", "QR", "QS", "QG")
+                    else baseline[key][2].reshape(shape, order="F").T.copy())
+        changed_candidate[key] = (
+            units, shape, expected.T.reshape(-1, order="F"), metadata,
+        )
+    check_records(baseline, changed_candidate, changed_shadow)
+
+
+def _check_complete_stored_pressure_inventory(baseline: dict, candidate: dict,
+                                              shadow: dict) -> None:
+    pressure_level = next(key[1] for key in baseline
+                          if key[0] == "TT" and key[1] < SURFACE)
+    dropped_baseline = {key: value for key, value in baseline.items()
+                        if key[1] != pressure_level or key[1] == SURFACE}
+    dropped_candidate = {key: value for key, value in candidate.items()
+                        if key[1] != pressure_level or key[1] == SURFACE}
+    _reject_mutation(dropped_baseline, dropped_candidate, shadow,
+                     "dropped stored pressure level", lambda: None)
+
+
 def check(root: Path) -> None:
     baseline = read_wps(root / "baseline.wps")
     candidate = read_wps(root / "candidate.wps")
@@ -155,6 +245,9 @@ def check(root: Path) -> None:
     terrain_record[2][0] = old_terrain
     _check_surface_pressure_mutation(baseline, candidate, shadow)
     _check_surface_temperature_mutation(baseline, candidate, shadow)
+    _check_geometry_and_time_contract(baseline, candidate, shadow)
+    _check_stored_below_ground_slab(baseline, candidate, shadow)
+    _check_complete_stored_pressure_inventory(baseline, candidate, shadow)
     check_records(baseline, candidate, shadow)
     print(
         "PASS actual LAPSPREP WPS/shadow: 235 records, source terrain, "

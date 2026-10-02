@@ -72,6 +72,7 @@ PROGRAM test_real_shadow_io_contract
     CALL check(rc==NF90_NOERR,'final candidate receipt can be reopened',failures)
     IF (rc==NF90_NOERR) THEN
       CALL check_endpoint_receipt(ncid,result%candidate_budget,failures)
+      CALL check_evaluation_receipt(ncid,result%candidate_evaluation,failures)
       rc=nf90_close(ncid)
       CALL check(rc==NF90_NOERR,'final candidate receipt closes',failures)
     END IF
@@ -1606,7 +1607,8 @@ CONTAINS
     REAL(real64) :: analysis_species(6),analysis_mixing(6),analysis_dry_mass(6)
     REAL(real64) :: analysis_scalar
     CHARACTER(LEN=256) :: analysis_contract,outer_contract,outer_config_id
-    CHARACTER(LEN=256) :: outer_extensions,outer_fields,outer_units
+    CHARACTER(LEN=512) :: outer_extensions
+    CHARACTER(LEN=256) :: outer_fields,outer_units
     CALL make_state(background,4,4)
     background%cloud_water%value(1,1,1)=0.002_real32
     background%rain%value(2,2,2)=1.0e-4_real32
@@ -1772,7 +1774,8 @@ CONTAINS
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_extensions)== &
         'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
         'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,'// &
-        'pressure_analysis_v1,pressure_outer_v1,candidate_endpoint_v2', &
+        'pressure_analysis_v1,pressure_outer_v1,candidate_endpoint_v2,candidate_evaluation_v1,'// &
+        'candidate_diagnostic_domain_v1,candidate_diagnostic_masks_v1', &
         'schema-8 extensions are exact',failures)
       rc=nf90_get_att(ncid,NF90_GLOBAL,'outer_contract',outer_contract)
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_contract)== &
@@ -2920,6 +2923,176 @@ CONTAINS
         'stored endpoint count matches accepted candidate',failures)
     END DO
   END SUBROUTINE check_endpoint_receipt
+
+  SUBROUTINE check_evaluation_receipt(ncid,evaluation,failures)
+    INTEGER, INTENT(IN) :: ncid
+    TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
+    INTEGER, INTENT(INOUT) :: failures
+    CHARACTER(LEN=65), PARAMETER :: integer_names(9)=[CHARACTER(LEN=65) :: &
+      'candidate_evaluation_canonical_accounting_assessed', &
+      'candidate_evaluation_continuity_assessed', &
+      'candidate_evaluation_geostrophic_assessed', &
+      'candidate_evaluation_source_boundary_assessed', &
+      'candidate_evaluation_observation_fit_assessed', &
+      'candidate_evaluation_operator_status', &
+      'candidate_evaluation_operator_reason', &
+      'candidate_evaluation_continuity_status', &
+      'candidate_evaluation_geostrophic_status']
+    CHARACTER(LEN=65), PARAMETER :: real_names(3)=[CHARACTER(LEN=65) :: &
+      'candidate_evaluation_continuity_rms', &
+      'candidate_evaluation_continuity_max_abs', &
+      'candidate_evaluation_geostrophic_rms']
+    INTEGER :: expected_integer(9),read_integer,n,rc
+    INTEGER(int64) :: read_count
+    REAL(real64) :: expected_real(3),read_real
+    CHARACTER(LEN=65) :: contract,scope
+
+    contract=''; scope=''
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_evaluation_contract',contract)
+    CALL check(rc==NF90_NOERR .AND. TRIM(contract)=='final_pressure_diagnostics_v1', &
+      'stored evaluation contract is scoped',failures)
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_evaluation_scope',scope)
+    CALL check(rc==NF90_NOERR .AND. TRIM(scope)== &
+      'endpoint_and_active_pressure_balance_diagnostics_only', &
+      'stored evaluation scope is explicit',failures)
+    expected_integer=[ &
+      MERGE(1,0,evaluation%canonical_accounting_assessed), &
+      MERGE(1,0,evaluation%continuity_assessed), &
+      MERGE(1,0,evaluation%geostrophic_assessed), &
+      MERGE(1,0,evaluation%source_boundary_assessed), &
+      MERGE(1,0,evaluation%observation_fit_assessed), &
+      evaluation%operator_status,evaluation%operator_reason, &
+      evaluation%continuity_status,evaluation%geostrophic_status]
+    DO n=1,SIZE(integer_names)
+      read_integer=-999
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(integer_names(n)),read_integer)
+      CALL check(rc==NF90_NOERR .AND. read_integer==expected_integer(n), &
+        'stored evaluation integer matches final candidate',failures)
+    END DO
+    read_count=-1_int64
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_evaluation_balance_support_cells',read_count)
+    CALL check(rc==NF90_NOERR .AND. read_count==evaluation%balance_support_cells, &
+      'stored evaluation support count matches final candidate',failures)
+    expected_real=[evaluation%continuity_rms,evaluation%continuity_max_abs, &
+      evaluation%geostrophic_rms]
+    DO n=1,SIZE(real_names)
+      read_real=HUGE(1.0_real64)
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(real_names(n)),read_real)
+      CALL check(rc==NF90_NOERR .AND. read_real==expected_real(n), &
+        'stored evaluation metric matches final candidate',failures)
+    END DO
+    CALL check_candidate_diagnostic_domain_receipt(ncid,evaluation,failures)
+  END SUBROUTINE check_evaluation_receipt
+
+  SUBROUTINE check_candidate_diagnostic_domain_receipt(ncid,evaluation,failures)
+    INTEGER, INTENT(IN) :: ncid
+    TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
+    INTEGER, INTENT(INOUT) :: failures
+    CHARACTER(LEN=80), PARAMETER :: integer_names(6)=[CHARACTER(LEN=80) :: &
+      'candidate_diagnostic_domain_continuity_assessed', &
+      'candidate_diagnostic_domain_geostrophic_assessed', &
+      'candidate_diagnostic_domain_continuity_status', &
+      'candidate_diagnostic_domain_geostrophic_status', &
+      'candidate_diagnostic_domain_continuity_reason', &
+      'candidate_diagnostic_domain_geostrophic_reason']
+    CHARACTER(LEN=80), PARAMETER :: count_names(4)=[CHARACTER(LEN=80) :: &
+      'candidate_diagnostic_domain_changed_cells', &
+      'candidate_diagnostic_domain_requested_cells', &
+      'candidate_diagnostic_domain_continuity_assessable_cells', &
+      'candidate_diagnostic_domain_geostrophic_assessable_cells']
+    CHARACTER(LEN=80), PARAMETER :: metric_names(3)=[CHARACTER(LEN=80) :: &
+      'candidate_diagnostic_domain_continuity_rms', &
+      'candidate_diagnostic_domain_continuity_max_abs', &
+      'candidate_diagnostic_domain_geostrophic_rms']
+    INTEGER :: expected(6),read_value,n,rc
+    INTEGER(int64) :: expected_count(4),read_count
+    REAL(real64) :: expected_metric(3),read_metric
+    CHARACTER(LEN=80) :: contract,scope,representation
+    CHARACTER(LEN=128) :: boundary
+    CHARACTER(LEN=64), PARAMETER :: mask_names(4)=[CHARACTER(LEN=64) :: &
+      'candidate_diagnostic_changed_mask','candidate_diagnostic_requested_mask', &
+      'candidate_diagnostic_continuity_assessable_mask', &
+      'candidate_diagnostic_geostrophic_assessable_mask']
+    INTEGER :: mask_varid,mask_index
+    INTEGER(int32), ALLOCATABLE :: stored_mask(:,:,:)
+
+    contract=''; scope=''; boundary=''; representation=''
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_contract',contract)
+    CALL check(rc==NF90_NOERR .AND. TRIM(contract)=='changed_pressure_state_domain_v1', &
+      'stored changed-domain contract',failures)
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_scope',scope)
+    CALL check(rc==NF90_NOERR .AND. TRIM(scope)== &
+      'changed_thermo_hydrometeor_pressure_geopotential_wind_plus_one_cell_stencil', &
+      'stored changed-domain scope',failures)
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_boundary_contract',boundary)
+    CALL check(rc==NF90_NOERR .AND. TRIM(boundary)== &
+      'full_state_open_internal_faces_zero_gradient_horizontal_perimeter_prescribed_top_bottom_omega', &
+      'stored diagnostic boundary convention',failures)
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_support_representation', &
+      representation)
+    IF (evaluation%diagnostic_masks_assessed) THEN
+      CALL check(rc==NF90_NOERR .AND. TRIM(representation)== &
+        'aggregate_counts_and_exact_masks_v2', &
+        'stored diagnostic support representation',failures)
+    ELSE
+      CALL check(rc==NF90_NOERR .AND. TRIM(representation)== &
+        'aggregate_counts_only_exact_masks_not_persisted_v1', &
+        'stored legacy diagnostic support representation',failures)
+    END IF
+    expected=[MERGE(1,0,evaluation%diagnostic_continuity_assessed), &
+      MERGE(1,0,evaluation%diagnostic_geostrophic_assessed), &
+      evaluation%diagnostic_continuity_status,evaluation%diagnostic_geostrophic_status, &
+      evaluation%diagnostic_continuity_reason,evaluation%diagnostic_geostrophic_reason]
+    DO n=1,6
+      read_value=-999
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(integer_names(n)),read_value)
+      CALL check(rc==NF90_NOERR .AND. read_value==expected(n), &
+        'stored changed-domain status matches evaluation',failures)
+    END DO
+    expected_count=[evaluation%diagnostic_changed_cells,evaluation%diagnostic_requested_cells, &
+      evaluation%continuity_assessable_cells,evaluation%geostrophic_assessable_cells]
+    DO n=1,4
+      read_count=-1_int64
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(count_names(n)),read_count)
+      CALL check(rc==NF90_NOERR .AND. read_count==expected_count(n), &
+        'stored changed-domain count matches evaluation',failures)
+    END DO
+    expected_metric=[evaluation%diagnostic_continuity_rms, &
+      evaluation%diagnostic_continuity_max_abs,evaluation%diagnostic_geostrophic_rms]
+    DO n=1,3
+      read_metric=HUGE(1.0_real64)
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(metric_names(n)),read_metric)
+      CALL check(rc==NF90_NOERR .AND. read_metric==expected_metric(n), &
+        'stored changed-domain metric matches evaluation',failures)
+    END DO
+    IF (.NOT.evaluation%diagnostic_masks_assessed) RETURN
+    ALLOCATE(stored_mask(SIZE(evaluation%diagnostic_changed_mask,1), &
+      SIZE(evaluation%diagnostic_changed_mask,2),SIZE(evaluation%diagnostic_changed_mask,3)))
+    DO mask_index=1,SIZE(mask_names)
+      rc=nf90_inq_varid(ncid,TRIM(mask_names(mask_index)),mask_varid)
+      CALL check(rc==NF90_NOERR,'stored exact diagnostic mask exists',failures)
+      IF (rc/=NF90_NOERR) CYCLE
+      rc=nf90_get_var(ncid,mask_varid,stored_mask)
+      SELECT CASE(mask_index)
+      CASE(1)
+        CALL check(rc==NF90_NOERR .AND. ALL(stored_mask== &
+          MERGE(1_int32,0_int32,evaluation%diagnostic_changed_mask)), &
+          'stored changed mask matches evaluation',failures)
+      CASE(2)
+        CALL check(rc==NF90_NOERR .AND. ALL(stored_mask== &
+          MERGE(1_int32,0_int32,evaluation%diagnostic_requested_mask)), &
+          'stored requested mask matches evaluation',failures)
+      CASE(3)
+        CALL check(rc==NF90_NOERR .AND. ALL(stored_mask== &
+          MERGE(1_int32,0_int32,evaluation%diagnostic_continuity_assessable_mask)), &
+          'stored continuity assessable mask matches evaluation',failures)
+      CASE(4)
+        CALL check(rc==NF90_NOERR .AND. ALL(stored_mask== &
+          MERGE(1_int32,0_int32,evaluation%diagnostic_geostrophic_assessable_mask)), &
+          'stored geostrophic assessable mask matches evaluation',failures)
+      END SELECT
+    END DO
+  END SUBROUTINE check_candidate_diagnostic_domain_receipt
 
   SUBROUTINE check(condition,message,count)
     LOGICAL, INTENT(IN) :: condition

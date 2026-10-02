@@ -23,6 +23,12 @@ native initialization, forecast, or operational authority.
   as a physical transport interval.
 - [ ] Separate atmospheric domain, observation support, and change authority.
   Missing observations do not remove state cells or create authority to fill them.
+- [ ] Define a mandatory evaluation domain from the union of every changed
+  field's support plus the stencil/shared-face neighborhood and any before/after
+  pressure-boundary cells and fluxes. Store its mask and distinguish it from
+  both atmospheric support and the narrower domain authorized for corrections.
+  Require evaluation coverage to contain the control domain; do not derive
+  evaluation coverage only from active balance rows or valid omega targets.
 - [ ] Classify conservation, positivity, units, and change authority as hard
   constraints. Scope hydrostatic, geostrophic, saturation, and acceleration
   approximations to the regimes and error models that support them; do not
@@ -99,6 +105,26 @@ can be treated as provenance evidence.
 - [x] Recompute the endpoint ledger, pressure-grid continuity residual, and
   geostrophic diagnostic from the same final candidate. The SHADOW writer
   independently repeats this evaluation before accepting the in-memory result.
+- [x] Request continuity and geostrophic diagnostics on the changed final
+  pressure state and its stencil, separately from beta-limited wind-control
+  support. Include changes to T, vapor, hydrometeors, pressure geometry,
+  geopotential, winds, and surface thermodynamics; report each diagnostic's
+  assessable count and status even when wind control support is empty.
+- [x] Store the changed-domain counts, assessability, and diagnostics in a
+  versioned SHADOW receipt and reject malformed receipts on independent file
+  validation.
+- [x] Persist exact changed, requested, continuity-assessable, and
+  geostrophic-assessable masks in SHADOW; validate their binary shape, counts,
+  subsets, and status consistency. The detached WPS-pair receipt hashes the
+  SHADOW bytes with the same generation and validates them on readback.
+- [ ] Independently reconstruct semantic mask equality from WPS background
+  fields. Current WPS schemas do not all carry the background fields needed.
+- [ ] Make required-domain diagnostics assessable independently of the
+  wind-control operator's target and authority preconditions. An operator-build
+  failure still leaves the new diagnostics unassessed and blocks publication.
+- [ ] Preserve the specific geostrophic metadata or range failure reason in
+  the changed-domain receipt. Those failures currently remain failed and
+  unassessed but can carry a generic nonfinite reason.
 - [ ] Add independently authorized analysis sources and physical-time boundary
   fluxes to evaluate dry-air, water-species, and energy conservation residuals.
   A computed endpoint change must never be copied into its own source term.
@@ -107,31 +133,73 @@ can be treated as provenance evidence.
   residuals under one versioned candidate contract.
 - [ ] Persist a complete final-state assessment with explicit unresolved
   conditions and bind it to the diagnostic and WPS payload readback.
+- [x] Persist the current limited endpoint/active-support evaluation flags,
+  statuses, count, and metrics in SHADOW and reject malformed receipts on
+  independent file validation. This receipt does not satisfy the complete
+  assessment item above.
 - [ ] Distinguish feasibility, objective stationarity, and step size in a
   common iteration; the current five-field stored-value fixed point is not
   a joint constrained solve.
 
-The first checked item is diagnostic scope only. Continuity and geostrophic
-values are measured only on the final state's active balance support with the
-existing pressure-grid operator. The receipt records that support count and
-each diagnostic's status; zero support is unassessed, not a zero residual.
+The first checked item is diagnostic scope only. The legacy continuity and
+geostrophic values are measured on active balance support. The additional
+changed-domain values use the same final state and operator with a separate
+requested domain; they do not grant correction authority outside beta support.
+The receipts record support counts and each diagnostic's status; zero support
+is unassessed, not a zero residual.
+An operator-build failure can also leave the count at zero; its status
+distinguishes that failure from a successfully built empty support.
 The evaluator's returned status covers canonical endpoint accounting, not
 completion of every diagnostic. These values are not a universal zero-motion
-target.
-External source, boundary, and independent observation fit remain unassessed.
-The evaluator does not issue physical or native approval, and its metrics are
-not yet a standalone file receipt. The second-batch gate remains open.
+target. The SHADOW file now stores the limited evaluation flags, statuses,
+active-balance support count, and metrics, and the independent validator checks
+the receipt structure and values. This receipt records what was assessed; it
+does not apply physical pass/fail thresholds or bind the candidate to
+source/input/config/build/runtime identity. The changed-domain receipt now
+persists exact changed, requested, continuity-assessable, and
+geostrophic-assessable binary masks alongside their counts. The validator
+checks mask shape, binary values, counts, subsets, and status consistency. The
+writer publishes this extension only when the operator built and all four
+masks are complete. The WPS-pair product hash binds these SHADOW bytes to that
+stored generation; it
+does not independently reconstruct semantic mask equality from WPS background
+fields, which are not carried by every schema.
+The transaction's WPS-pair receipt binds its three stored products
+and verifier bundle, not the producer lineage or a complete physical
+assessment. External source, boundary, and independent observation fit remain
+unassessed.
+The evaluator does not issue physical or native approval. The complete
+assessment and physical-acceptance gate remains open.
 
 ## Third implementation batch: stored WPS pair
 
 - [x] Reopen a completed pressure-level WPS candidate, its retained WPS
-  baseline, and the SHADOW diagnostic in one detached snapshot. Compare
-  inventory, time, units, grid metadata, mapped candidate values, unchanged
-  slabs, support masks, candidate surface TT/PSFC where declared, and the
-  declared geopotential conversion.
+  baseline, and the SHADOW diagnostic in one detached snapshot. Compare the
+  declared inventory, valid date, units, baseline/candidate WPS header
+  metadata, mapped candidate values, retained slabs, candidate support masks,
+  candidate surface TT/PSFC where declared, and the declared geopotential
+  conversion.
 - [x] Bind this scoped numerical check to exact snapshot product hashes and
   the validator/parser source bundle; reject altered WPS or SHADOW bytes and
   a stale validation receipt before an isolated generation is published.
+- [x] For the declared Lambert/`SWCORNER` analysis pair, reconstruct the full
+  WPS grid from its projection header and compare its coordinates, dimensions,
+  spacing, and wind frame with SHADOW. Reject a shared WPS header mutation.
+  This does not independently establish the producer's source-grid identity.
+- [ ] Bind baseline and candidate WPS metadata to one independent grid
+  identity, including its input/configuration/build provenance. Cross-file
+  coordinate agreement alone does not establish that source identity.
+- [x] Preserve `XFCST` in parsed WPS metadata and require zero forecast hours
+  for this analysis-time pair. A future forecast-lead workflow needs its own
+  declared lead contract relative to `HDATE`.
+- [x] Check the current legacy writer's stored inventory as the canonical
+  pressure axis at or below 1001 hPa, independently of above-ground support.
+  Keep baseline values and zero hydrometeors on stored below-ground slabs.
+- [ ] Define the stored pressure inventory independently from atmospheric and
+  change masks for every supported writer/grid, with an explicit versioned
+  pressure-list declaration and separate `M_atmosphere(i,j,k)` and
+  `M_change(i,j,k)` readback. The current 1001 hPa rule is specific to the
+  retained legacy writer; it does not authorize another pressure inventory.
 - [ ] Run the current LAPSPREP producer into a detached generation with a
   pinned source/input/configuration/build manifest and verify the pair before
   changing any consumer-visible pointer. The current test republishes a
@@ -169,8 +237,9 @@ is a diagnostic milestone only; it does not pass this gate.
 ## 4. Verify delivery without changing the scientific gate
 
 - [ ] Bind candidate identity, denominator, species, masks, support, time,
-  geometry, boundary semantics, source/quality provenance, species order, mass
-  metric IDs, QV/RH precedence, and source hashes to the WPS payload and sidecar.
+  geometry (including the cross-checked grid identity), boundary semantics,
+  source/quality provenance, species order, mass metric IDs, QV/RH precedence,
+  forecast lead policy, and source hashes to the WPS payload and sidecar.
 - [ ] Publish to a fresh generation with no clobber. Reopen and verify data and
   sidecar after close; on any failure, leave the current generation untouched.
 - [ ] Verify WPS, metgrid, real, and native consumed fields against the same
@@ -182,6 +251,57 @@ is a diagnostic milestone only; it does not pass this gate.
 Gate: the consumed native state matches the authorized candidate within
 predeclared field and conservation tolerances. A payload-only or writer-only
 test does not pass this gate.
+
+## Physical-initialization execution gates (PR55)
+
+The current evaluator supports a no-omega-target diagnostic execution. It
+reports endpoint accounting and continuity/geostrophic diagnostics on active
+balance support and a separate changed-state domain. Empty changed support or
+a failed operator leaves the corresponding diagnostics unassessed. The
+continuity diagnostic includes supplied boundary velocities
+and valid top/bottom omega, but does not validate their physical provenance or
+close independently authorized source and boundary fluxes. It also does not
+assess observation fit, KDM6 startup response, or native consumed
+state, and it grants no initialization approval. Treat this as the implemented
+limited baseline, not a completed physical evaluation.
+
+- [ ] Capture the first KDM6 call's `itimestep`, TH/PII (or derived T), dry
+  density `DEN`, vapor and each hydrometeor Q, all N fields, and QIB/BG
+  immediately before and after the call. Bind the actual executable, source,
+  input, and configuration identities. Check finiteness and the declared
+  initialization policy; retain zero or missing moments as such when no
+  authorized rule exists.
+- [ ] Carry one current producer candidate identity through WPS, metgrid, real,
+  and native initialization. Bind source/input/config/build/runtime hashes,
+  generation IDs, and independent readbacks of the consumed values and time at
+  each stage. Reject identity breaks; do not substitute a historical pair.
+- [ ] Run BASE, HYDRO, and COUPLED from the same pinned case, boundary forcing,
+  model/physics settings, and toolchain. Freeze the mode definitions, paired
+  comparisons, startup metrics, and acceptance thresholds before examining
+  results.
+- [ ] Retain high-frequency startup output at the cadence needed for the
+  resolved fast modes, plus 10-, 30-, and 60-minute checkpoints. Compare at
+  least pressure tendency/divergence, vertical and horizontal wind response,
+  temperature/moisture/species changes, and finite/positivity status. Report
+  each predeclared metric against its frozen threshold; do not infer shock
+  safety from hourly output or a 0–6 h aggregate.
+- [ ] Record each gate as PASS, FAIL, UNSUPPORTED, or NOT_RUN with its reason.
+  Missing inputs, unsupported fields/mappings, or absent native consumers are
+  not zeros and cannot count as PASS. Preserve rejected and incomplete runs.
+
+These items remain open until one reviewable execution receipt binds the
+pre/post KDM6 fields, stage identities/readbacks, paired startup diagnostics,
+frozen criteria, and unresolved dispositions. No item is closed by the
+existing no-omega evaluator or historical WPS/native tests alone.
+The retained native input has positive hydrometeor mass with zero paired
+number/volume moments, and the inspected private `real.exe` initializer has
+no identified QIB transfer path. Treat both as handoff questions requiring
+source-bound readback; neither permits a fabricated moment initializer.
+Read-only MP37 preflight on the retained input hash `f0ccee31...a052e1`
+returns `NO_AUTHORITY` (exit 3): positive mass with zero paired moments in
+962,388 cloud, 258,832 ice, 219,996 rain, and 817 graupel cells. The CLI's
+immediate reason is `EXPECTED_DENOMINATOR_MAPPING_MISSING`; the pair counts
+are diagnostic evidence, not an authorization to run KDM6.
 
 ## 5. Demonstrate generalization
 

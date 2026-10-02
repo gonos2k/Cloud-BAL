@@ -14,6 +14,7 @@ PROGRAM test_balance_partial_faces
     CALL test_partial_faces(axis,.TRUE.)
     CALL test_partial_faces(axis,.FALSE.,.TRUE.)
   END DO
+  CALL test_diagnostic_cross_level_stencil()
   CALL test_uniform_dry_fraction(1)
   CALL test_varying_dry_fraction()
   CALL test_dry_boundary_budget()
@@ -420,6 +421,54 @@ CONTAINS
     CALL require(MAXVAL(ABS(actual-expected))<1.0e-12_real64,'final state versus independent overlap')
     CALL check_components(op,state,view)
   END SUBROUTINE test_partial_faces
+
+  SUBROUTINE test_diagnostic_cross_level_stencil()
+    TYPE(cloud_bal_state_type) :: state
+    TYPE(balance_operator_config) :: cfg
+    TYPE(balance_operator_type) :: op
+    TYPE(balance_operator_snapshot) :: before,after
+    LOGICAL :: changed(nx,ny,nz),domain_union(nx,ny,nz),requested(nx,ny,nz)
+    LOGICAL :: flux_row(nx,ny,nz)
+    LOGICAL :: wrong_shape_mask(1,1,1)
+    REAL(real64) :: actual(nx,ny,nz),expected(nx,ny,nz)
+    INTEGER :: status,reason
+
+    CALL make_state(state,1,.FALSE.)
+    CALL build_balance_operator(state,cfg,op,status,reason)
+    CALL require(status==STATUS_OK,'build diagnostic shared-face operator')
+    CALL snapshot_balance_operator(op,before,status)
+    CALL require(status==STATUS_OK,'snapshot solver control before diagnostic domain')
+
+    changed=.FALSE.; domain_union=state%above_ground
+    changed(3,3,1)=.TRUE.
+    requested=changed
+    CALL include_lateral_face_stencil(op,changed,domain_union,requested,status)
+    CALL require(status==STATUS_OK,'include diagnostic shared-face stencil')
+    ! The independently established 1500 Pa overlap joins (3,3,1) to (4,3,2).
+    CALL require(requested(4,3,2),'diagnostic domain includes cross-level shared-face neighbor')
+    CALL snapshot_balance_operator(op,after,status)
+    CALL require(status==STATUS_OK,'snapshot solver control after diagnostic domain')
+    CALL require(ALL(before%cell_active .EQV. after%cell_active) .AND. &
+      ALL(before%omega_authorized .EQV. after%omega_authorized) .AND. &
+      ALL(before%volume==after%volume),'diagnostic stencil leaves solver control unchanged')
+
+    ! Evaluate only the left residual row while retaining the full candidate
+    ! wind on the right side of the cross-level face.
+    state%u%value=0.0_real32
+    state%u%value(4,3,2)=1.0_real32
+    flux_row=.FALSE.; flux_row(3,3,1)=.TRUE.
+    CALL dense_horizontal_residual(state,flux_row,REAL(state%u%value,real64), &
+      REAL(state%v%value,real64),expected)
+    CALL state_continuity_residual(op,state,actual,status,evaluation_mask=flux_row)
+    CALL require(status==STATUS_OK,'masked shared-face flux residual')
+    CALL require(ABS(actual(3,3,1)-expected(3,3,1))<1.0e-13_real64 .AND. &
+      ABS(actual(3,3,1))>0.0_real64,'selected row retains full-state cross-level face flux')
+    CALL require(ALL(PACK(actual,.NOT.flux_row)==0.0_real64), &
+      'masked diagnostic residual writes no rows outside evaluation domain')
+    wrong_shape_mask=.TRUE.
+    CALL state_continuity_residual(op,state,actual,status,evaluation_mask=wrong_shape_mask)
+    CALL require(status==STATUS_FAILED,'reject wrong-shaped diagnostic residual mask safely')
+  END SUBROUTINE test_diagnostic_cross_level_stencil
 
   SUBROUTINE dense_horizontal_residual(state,active,u,v,residual)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state

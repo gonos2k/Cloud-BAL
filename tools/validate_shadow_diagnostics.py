@@ -266,6 +266,93 @@ ENDPOINT_CONTRACT = "signed_represented_mixture_endpoint_v2"
 ENDPOINT_EXTENSION = "candidate_endpoint_v2"
 LEGACY_ENDPOINT_CONTRACT = "signed_represented_mixture_endpoint_v1"
 LEGACY_ENDPOINT_EXTENSION = "candidate_endpoint_v1"
+CANDIDATE_EVALUATION_CONTRACT = "final_pressure_diagnostics_v1"
+CANDIDATE_EVALUATION_EXTENSION = "candidate_evaluation_v1"
+CANDIDATE_EVALUATION_SCOPE = "endpoint_and_active_pressure_balance_diagnostics_only"
+CANDIDATE_DIAGNOSTIC_DOMAIN_CONTRACT = "changed_pressure_state_domain_v1"
+CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION = "candidate_diagnostic_domain_v1"
+CANDIDATE_DIAGNOSTIC_MASK_EXTENSION = "candidate_diagnostic_masks_v1"
+CANDIDATE_DIAGNOSTIC_DOMAIN_SCOPE = (
+    "changed_thermo_hydrometeor_pressure_geopotential_wind_plus_one_cell_stencil"
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_BOUNDARY = (
+    "full_state_open_internal_faces_zero_gradient_horizontal_perimeter_"
+    "prescribed_top_bottom_omega"
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_REPRESENTATION = (
+    "aggregate_counts_and_exact_masks_v2"
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_LEGACY_REPRESENTATION = (
+    "aggregate_counts_only_exact_masks_not_persisted_v1"
+)
+CANDIDATE_DIAGNOSTIC_MASK_CONTRACT = "exact_binary_int32_xyz_masks_v1"
+CANDIDATE_DIAGNOSTIC_MASK_VARIABLES = (
+    "candidate_diagnostic_changed_mask",
+    "candidate_diagnostic_requested_mask",
+    "candidate_diagnostic_continuity_assessable_mask",
+    "candidate_diagnostic_geostrophic_assessable_mask",
+)
+DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN = 10
+CANDIDATE_DIAGNOSTIC_DOMAIN_FLAGS = (
+    "candidate_diagnostic_domain_continuity_assessed",
+    "candidate_diagnostic_domain_geostrophic_assessed",
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_INT32_ATTRIBUTES = (
+    *CANDIDATE_DIAGNOSTIC_DOMAIN_FLAGS,
+    "candidate_diagnostic_domain_continuity_status",
+    "candidate_diagnostic_domain_geostrophic_status",
+    "candidate_diagnostic_domain_continuity_reason",
+    "candidate_diagnostic_domain_geostrophic_reason",
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_INT64_ATTRIBUTES = (
+    "candidate_diagnostic_domain_changed_cells",
+    "candidate_diagnostic_domain_requested_cells",
+    "candidate_diagnostic_domain_continuity_assessable_cells",
+    "candidate_diagnostic_domain_geostrophic_assessable_cells",
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_FLOAT64_ATTRIBUTES = (
+    "candidate_diagnostic_domain_continuity_rms",
+    "candidate_diagnostic_domain_continuity_max_abs",
+    "candidate_diagnostic_domain_geostrophic_rms",
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_ATTRIBUTES = frozenset((
+    "candidate_diagnostic_domain_contract",
+    "candidate_diagnostic_domain_scope",
+    "candidate_diagnostic_domain_boundary_contract",
+    "candidate_diagnostic_domain_support_representation",
+    *CANDIDATE_DIAGNOSTIC_DOMAIN_INT32_ATTRIBUTES,
+    *CANDIDATE_DIAGNOSTIC_DOMAIN_INT64_ATTRIBUTES,
+    *CANDIDATE_DIAGNOSTIC_DOMAIN_FLOAT64_ATTRIBUTES,
+))
+CANDIDATE_EVALUATION_FLAGS = (
+    "candidate_evaluation_canonical_accounting_assessed",
+    "candidate_evaluation_continuity_assessed",
+    "candidate_evaluation_geostrophic_assessed",
+    "candidate_evaluation_source_boundary_assessed",
+    "candidate_evaluation_observation_fit_assessed",
+)
+CANDIDATE_EVALUATION_INT32_ATTRIBUTES = (
+    *CANDIDATE_EVALUATION_FLAGS,
+    "candidate_evaluation_operator_status",
+    "candidate_evaluation_operator_reason",
+    "candidate_evaluation_continuity_status",
+    "candidate_evaluation_geostrophic_status",
+)
+CANDIDATE_EVALUATION_INT64_ATTRIBUTES = (
+    "candidate_evaluation_balance_support_cells",
+)
+CANDIDATE_EVALUATION_FLOAT64_ATTRIBUTES = (
+    "candidate_evaluation_continuity_rms",
+    "candidate_evaluation_continuity_max_abs",
+    "candidate_evaluation_geostrophic_rms",
+)
+CANDIDATE_EVALUATION_ATTRIBUTES = frozenset((
+    "candidate_evaluation_contract",
+    *CANDIDATE_EVALUATION_INT32_ATTRIBUTES,
+    *CANDIDATE_EVALUATION_INT64_ATTRIBUTES,
+    *CANDIDATE_EVALUATION_FLOAT64_ATTRIBUTES,
+    "candidate_evaluation_scope",
+))
 ENDPOINT_SCALE_ATTRIBUTE = "candidate_endpoint_enthalpy_arithmetic_scale_j"
 ENDPOINT_SPECIES_SCALE_ATTRIBUTE = "candidate_endpoint_species_arithmetic_scale_kg"
 ENDPOINT_VECTOR_ATTRIBUTES = (
@@ -359,8 +446,13 @@ OUTER_CONTRACT = "pressure_fixed_feedback_producer_replay_v1"
 OUTER_FEEDBACK_FIELDS = "temperature,vapor,u,v,omega"
 OUTER_FEEDBACK_UNITS = "K,kg kg-1 dryair,m s-1,m s-1,Pa s-1"
 STATUS_DEGRADED = 10
+STATUS_FAILED = -10
 STATUS_OK = 20
+REASON_NONE = 0
+REASON_REQUIRED_COVERAGE = 3
+REASON_NONFINITE = 4
 REASON_GATE = 7
+REASON_AUTHORITY = 9
 SOLVER_NOT_RUN = 0
 SOLVER_CONVERGED = 1
 GATE_INCREMENT_RMS = 1 << 0
@@ -5726,6 +5818,302 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                     )
                 require(abs(enthalpy - composition - metric) <= enthalpy_tolerance,
                         "candidate endpoint enthalpy identity")
+        evaluation_reserved_attributes = {
+            name for name in dataset.ncattrs()
+            if name.startswith("candidate_evaluation_")
+        }
+        candidate_evaluation_declared = CANDIDATE_EVALUATION_EXTENSION in extensions
+        candidate_evaluation_present = (
+            candidate_evaluation_declared
+            or bool(evaluation_reserved_attributes)
+        )
+        if candidate_evaluation_present:
+            require(candidate_evaluation_declared,
+                    "candidate evaluation extension")
+            require(evaluation_reserved_attributes == CANDIDATE_EVALUATION_ATTRIBUTES,
+                    "candidate evaluation attribute set")
+            require(endpoint_declared,
+                    "candidate evaluation requires candidate endpoint v2")
+            require(schema_version in (5, 7, 8),
+                    "candidate evaluation schema version")
+            require(getattr(dataset, "candidate_evaluation_contract", "") ==
+                    CANDIDATE_EVALUATION_CONTRACT,
+                    "candidate evaluation contract")
+            require(getattr(dataset, "candidate_evaluation_scope", "") ==
+                    CANDIDATE_EVALUATION_SCOPE,
+                    "candidate evaluation scope")
+
+            evaluation_flags = {
+                name: exact_scalar_int32(getattr(dataset, name, None))
+                for name in CANDIDATE_EVALUATION_FLAGS
+            }
+            for name, value in evaluation_flags.items():
+                require(value in (0, 1), name)
+            evaluation_ints = {
+                name: exact_scalar_int32(getattr(dataset, name, None))
+                for name in CANDIDATE_EVALUATION_INT32_ATTRIBUTES
+                if name not in CANDIDATE_EVALUATION_FLAGS
+            }
+            for name, value in evaluation_ints.items():
+                require(value is not None, name)
+            support_cells = exact_scalar_int64(
+                getattr(dataset, "candidate_evaluation_balance_support_cells", None)
+            )
+            require(support_cells is not None and support_cells >= 0,
+                    "candidate evaluation balance support cells")
+            dimension_lengths = {
+                name: len(dataset.dimensions[name])
+                for name in ("x", "y", "z")
+                if name in dataset.dimensions
+            }
+            if len(dimension_lengths) == 3 and support_cells is not None:
+                grid_capacity = (dimension_lengths["x"] * dimension_lengths["y"]
+                                 * dimension_lengths["z"])
+                require(support_cells <= grid_capacity,
+                        "candidate evaluation support grid capacity")
+            support_variable = dataset.variables.get("candidate_balance_support")
+            if (support_variable is not None and support_cells is not None
+                    and len(dimension_lengths) == 3
+                    and support_variable.dimensions == ("z", "y", "x")):
+                support_mask = values(support_variable)
+                if (support_mask.dtype == np.dtype(np.int32)
+                        and support_mask.shape == tuple(
+                            dimension_lengths[name] for name in ("z", "y", "x")
+                        )
+                        and np.all((support_mask == 0) | (support_mask == 1))):
+                    require(support_cells <= int(np.count_nonzero(support_mask)),
+                            "candidate evaluation support mask bound")
+            evaluation_values = {
+                name: exact_scalar_float64(getattr(dataset, name, None))
+                for name in CANDIDATE_EVALUATION_FLOAT64_ATTRIBUTES
+            }
+            for name, value in evaluation_values.items():
+                require(value is not None and np.isfinite(value) and value >= 0.0,
+                        name)
+
+            statuses = (STATUS_FAILED, STATUS_DEGRADED, STATUS_OK)
+            reasons = range(REASON_NONE, REASON_AUTHORITY + 1)
+            for name in (
+                "candidate_evaluation_operator_status",
+                "candidate_evaluation_continuity_status",
+                "candidate_evaluation_geostrophic_status",
+            ):
+                require(evaluation_ints.get(name) in statuses, name)
+            for name in (
+                "candidate_evaluation_operator_reason",
+            ):
+                require(evaluation_ints.get(name) in reasons, name)
+
+            canonical = evaluation_flags.get(
+                "candidate_evaluation_canonical_accounting_assessed"
+            )
+            continuity_assessed = evaluation_flags.get(
+                "candidate_evaluation_continuity_assessed"
+            )
+            geostrophic_assessed = evaluation_flags.get(
+                "candidate_evaluation_geostrophic_assessed"
+            )
+            require(canonical == 1, "candidate evaluation canonical accounting")
+            require(evaluation_flags.get(
+                "candidate_evaluation_source_boundary_assessed"
+            ) == 0, "candidate evaluation source boundary authority")
+            require(evaluation_flags.get(
+                "candidate_evaluation_observation_fit_assessed"
+            ) == 0, "candidate evaluation observation authority")
+            if support_cells == 0:
+                require(continuity_assessed == 0 and geostrophic_assessed == 0,
+                        "zero-support candidate evaluation")
+            if continuity_assessed == 1:
+                require(evaluation_ints.get("candidate_evaluation_operator_status") == STATUS_OK
+                        and evaluation_ints.get("candidate_evaluation_continuity_status") == STATUS_OK,
+                        "candidate evaluation continuity status")
+            if geostrophic_assessed == 1:
+                require(evaluation_ints.get("candidate_evaluation_operator_status") == STATUS_OK
+                        and evaluation_ints.get("candidate_evaluation_geostrophic_status") == STATUS_OK,
+                        "candidate evaluation geostrophic status")
+            if continuity_assessed == 0:
+                require(evaluation_ints.get("candidate_evaluation_continuity_status") == STATUS_FAILED
+                        and evaluation_values.get("candidate_evaluation_continuity_rms") == 0.0
+                        and evaluation_values.get("candidate_evaluation_continuity_max_abs") == 0.0,
+                        "unassessed candidate continuity status and values")
+            if geostrophic_assessed == 0:
+                require(evaluation_ints.get("candidate_evaluation_geostrophic_status") == STATUS_FAILED
+                        and evaluation_values.get("candidate_evaluation_geostrophic_rms") == 0.0,
+                        "unassessed candidate geostrophic status and value")
+        domain_reserved_attributes = {
+            name for name in dataset.ncattrs()
+            if name.startswith("candidate_diagnostic_domain_")
+            and name != "candidate_diagnostic_domain_mask_contract"
+        }
+        domain_declared = CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION in extensions
+        domain_present = domain_declared or bool(domain_reserved_attributes)
+        if domain_present:
+            require(domain_declared, "candidate diagnostic domain extension")
+            require(domain_reserved_attributes == CANDIDATE_DIAGNOSTIC_DOMAIN_ATTRIBUTES,
+                    "candidate diagnostic domain attribute set")
+            require(CANDIDATE_EVALUATION_EXTENSION in extensions,
+                    "candidate diagnostic domain requires legacy evaluation receipt")
+            require(getattr(dataset, "candidate_diagnostic_domain_contract", "") ==
+                    CANDIDATE_DIAGNOSTIC_DOMAIN_CONTRACT,
+                    "candidate diagnostic domain contract")
+            require(getattr(dataset, "candidate_diagnostic_domain_scope", "") ==
+                    CANDIDATE_DIAGNOSTIC_DOMAIN_SCOPE,
+                    "candidate diagnostic domain scope")
+            require(getattr(dataset, "candidate_diagnostic_domain_boundary_contract", "") ==
+                    CANDIDATE_DIAGNOSTIC_DOMAIN_BOUNDARY,
+                    "candidate diagnostic domain boundary contract")
+            mask_extension_declared = CANDIDATE_DIAGNOSTIC_MASK_EXTENSION in extensions
+            mask_variables_present = bool(
+                set(CANDIDATE_DIAGNOSTIC_MASK_VARIABLES) & set(dataset.variables)
+            )
+            mask_contract_present = "candidate_diagnostic_domain_mask_contract" in dataset.ncattrs()
+            mask_extension_present = mask_extension_declared or mask_variables_present or mask_contract_present
+            representation = getattr(
+                dataset, "candidate_diagnostic_domain_support_representation", ""
+            )
+            require(
+                representation == (CANDIDATE_DIAGNOSTIC_DOMAIN_REPRESENTATION
+                                   if mask_extension_present
+                                   else CANDIDATE_DIAGNOSTIC_DOMAIN_LEGACY_REPRESENTATION),
+                "candidate diagnostic domain support representation",
+            )
+            if mask_extension_present:
+                require(mask_extension_declared, "candidate diagnostic mask extension")
+                require(mask_variables_present and
+                        set(CANDIDATE_DIAGNOSTIC_MASK_VARIABLES) <= set(dataset.variables),
+                        "complete candidate diagnostic masks")
+                require(getattr(dataset, "candidate_diagnostic_domain_mask_contract", "") ==
+                        CANDIDATE_DIAGNOSTIC_MASK_CONTRACT,
+                        "candidate diagnostic mask contract")
+
+            domain_flags = {
+                name: exact_scalar_int32(getattr(dataset, name, None))
+                for name in CANDIDATE_DIAGNOSTIC_DOMAIN_FLAGS
+            }
+            for name, value in domain_flags.items():
+                require(value in (0, 1), name)
+            domain_ints = {
+                name: exact_scalar_int32(getattr(dataset, name, None))
+                for name in CANDIDATE_DIAGNOSTIC_DOMAIN_INT32_ATTRIBUTES
+                if name not in CANDIDATE_DIAGNOSTIC_DOMAIN_FLAGS
+            }
+            domain_counts = {
+                name: exact_scalar_int64(getattr(dataset, name, None))
+                for name in CANDIDATE_DIAGNOSTIC_DOMAIN_INT64_ATTRIBUTES
+            }
+            domain_values = {
+                name: exact_scalar_float64(getattr(dataset, name, None))
+                for name in CANDIDATE_DIAGNOSTIC_DOMAIN_FLOAT64_ATTRIBUTES
+            }
+            for name, value in domain_ints.items():
+                require(value is not None, name)
+            for name, value in domain_counts.items():
+                require(value is not None and value >= 0, name)
+            for name, value in domain_values.items():
+                require(value is not None and np.isfinite(value) and value >= 0.0, name)
+
+            changed_cells = domain_counts.get("candidate_diagnostic_domain_changed_cells")
+            requested_cells = domain_counts.get("candidate_diagnostic_domain_requested_cells")
+            continuity_cells = domain_counts.get(
+                "candidate_diagnostic_domain_continuity_assessable_cells")
+            geostrophic_cells = domain_counts.get(
+                "candidate_diagnostic_domain_geostrophic_assessable_cells")
+            capacity = None
+            if len(dimension_lengths) == 3:
+                capacity = (dimension_lengths["x"] * dimension_lengths["y"] *
+                            dimension_lengths["z"])
+            if capacity is not None:
+                for name, value in domain_counts.items():
+                    require(value is not None and value <= capacity, name + " grid capacity")
+            if requested_cells is not None and continuity_cells is not None:
+                require(continuity_cells <= requested_cells,
+                        "continuity assessable count exceeds requested domain")
+            if requested_cells is not None and geostrophic_cells is not None:
+                require(geostrophic_cells <= requested_cells,
+                        "geostrophic assessable count exceeds requested domain")
+            if changed_cells is not None and requested_cells is not None:
+                require(changed_cells <= requested_cells,
+                        "requested domain omits changed-state rows")
+            if mask_extension_present and set(CANDIDATE_DIAGNOSTIC_MASK_VARIABLES) <= set(dataset.variables):
+                mask_arrays: dict[str, np.ndarray] = {}
+                expected_shape = tuple(dimension_lengths[name] for name in ("z", "y", "x")) \
+                    if len(dimension_lengths) == 3 else None
+                mask_structure_ok = expected_shape is not None
+                for name in CANDIDATE_DIAGNOSTIC_MASK_VARIABLES:
+                    variable = dataset.variables[name]
+                    array = values(variable)
+                    valid = (
+                        variable.dimensions == ("z", "y", "x")
+                        and is_signed_int32(variable.dtype)
+                        and expected_shape is not None
+                        and array.shape == expected_shape
+                        and np.all((array == 0) | (array == 1))
+                        and getattr(variable, "units", "") == "1"
+                    )
+                    require(valid, name + " binary shape and type")
+                    mask_structure_ok = mask_structure_ok and valid
+                    if valid:
+                        mask_arrays[name] = array.astype(bool)
+                if mask_structure_ok:
+                    changed_mask = mask_arrays[CANDIDATE_DIAGNOSTIC_MASK_VARIABLES[0]]
+                    requested_mask = mask_arrays[CANDIDATE_DIAGNOSTIC_MASK_VARIABLES[1]]
+                    continuity_mask = mask_arrays[CANDIDATE_DIAGNOSTIC_MASK_VARIABLES[2]]
+                    geostrophic_mask = mask_arrays[CANDIDATE_DIAGNOSTIC_MASK_VARIABLES[3]]
+                    require(int(np.count_nonzero(changed_mask)) == changed_cells,
+                            "changed mask count")
+                    require(int(np.count_nonzero(requested_mask)) == requested_cells,
+                            "requested mask count")
+                    require(int(np.count_nonzero(continuity_mask)) == continuity_cells,
+                            "continuity assessable mask count")
+                    require(int(np.count_nonzero(geostrophic_mask)) == geostrophic_cells,
+                            "geostrophic assessable mask count")
+                    require(np.all(~changed_mask | requested_mask),
+                            "changed mask subset of requested domain")
+                    require(np.all(~continuity_mask | requested_mask),
+                            "continuity assessable mask subset of requested domain")
+                    require(np.all(~geostrophic_mask | requested_mask),
+                            "geostrophic assessable mask subset of requested domain")
+            domain_statuses = (STATUS_FAILED, STATUS_DEGRADED, STATUS_OK)
+            for name in ("candidate_diagnostic_domain_continuity_status",
+                         "candidate_diagnostic_domain_geostrophic_status"):
+                require(domain_ints.get(name) in domain_statuses, name)
+            for name in ("candidate_diagnostic_domain_continuity_reason",
+                         "candidate_diagnostic_domain_geostrophic_reason"):
+                require(domain_ints.get(name) in (REASON_NONE, REASON_REQUIRED_COVERAGE,
+                                                  REASON_NONFINITE,
+                                                  DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN), name)
+
+            for kind, count, residual_names in (
+                ("continuity", continuity_cells,
+                 ("candidate_diagnostic_domain_continuity_rms",
+                  "candidate_diagnostic_domain_continuity_max_abs")),
+                ("geostrophic", geostrophic_cells,
+                 ("candidate_diagnostic_domain_geostrophic_rms",)),
+            ):
+                assessed = domain_flags.get(f"candidate_diagnostic_domain_{kind}_assessed")
+                status_name = f"candidate_diagnostic_domain_{kind}_status"
+                reason_name = f"candidate_diagnostic_domain_{kind}_reason"
+                if assessed == 1:
+                    require(requested_cells is not None and requested_cells > 0 and
+                            count == requested_cells and
+                            domain_ints.get(status_name) == STATUS_OK and
+                            domain_ints.get(reason_name) == REASON_NONE,
+                            kind + " domain assessed contract")
+                else:
+                    require(all(domain_values.get(name) == 0.0 for name in residual_names),
+                            kind + " unassessed domain values")
+                    if requested_cells == 0:
+                        require(domain_ints.get(status_name) == STATUS_DEGRADED and
+                                domain_ints.get(reason_name) == DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN,
+                                kind + " empty domain status")
+                    elif count is not None and count < requested_cells:
+                        require(domain_ints.get(status_name) == STATUS_DEGRADED and
+                                domain_ints.get(reason_name) == REASON_REQUIRED_COVERAGE,
+                                kind + " incomplete domain reason")
+                    elif count is not None and count == requested_cells:
+                        require(domain_ints.get(status_name) == STATUS_FAILED and
+                                domain_ints.get(reason_name) == REASON_NONFINITE,
+                                kind + " complete-support diagnostic failure")
         pressure_analysis_candidate_present = bool(
             set(PRESSURE_ANALYSIS_CANDIDATE_ATTRIBUTES) & set(dataset.ncattrs())
             or set(PRESSURE_ANALYSIS_CANDIDATE_VARIABLES) & set(dataset.variables)
@@ -5869,7 +6257,16 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         )
         allowed_extensions = (expected_extensions,
                               expected_extensions + "," + LEGACY_ENDPOINT_EXTENSION,
-                              expected_extensions + "," + ENDPOINT_EXTENSION)
+                              expected_extensions + "," + ENDPOINT_EXTENSION,
+                              expected_extensions + "," + ENDPOINT_EXTENSION + "," +
+                              CANDIDATE_EVALUATION_EXTENSION,
+                              expected_extensions + "," + ENDPOINT_EXTENSION + "," +
+                              CANDIDATE_EVALUATION_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION,
+                              expected_extensions + "," + ENDPOINT_EXTENSION + "," +
+                              CANDIDATE_EVALUATION_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_MASK_EXTENSION)
         if pressure_geopotential_signalled:
             require(
                 getattr(dataset, "schema_extensions", "") in allowed_extensions,

@@ -22,9 +22,11 @@ def record(payload: bytes) -> bytes:
     return marker + payload + marker
 
 
-def field_records(value: float, *, projection_record: bytes = b"projection", wind: int = 1) -> bytes:
+def field_records(value: float, *, projection_record: bytes = b"projection",
+                  wind: int = 1, forecast_hour: float = 0.0) -> bytes:
     metadata = bytearray(156)
     metadata[0:24] = b"2026-09-01_03:00:00.000"
+    metadata[24:28] = struct.pack("<f", forecast_hour)
     metadata[60:69] = b"TT       "
     metadata[69:94] = b"K                        "
     metadata[140:144] = struct.pack("<f", 50000.0)
@@ -47,6 +49,18 @@ def main() -> None:
         valid = root / "valid"
         valid.write_bytes(field_records(1.0))
         assert len(read_wps(valid)) == 1
+
+        forecast = root / "forecast"
+        forecast.write_bytes(field_records(1.0, forecast_hour=6.0))
+        assert next(iter(read_wps(forecast).values()))[3]["forecast_hour"] == 6.0
+        invalid_forecast = root / "invalid_forecast"
+        invalid_forecast.write_bytes(field_records(1.0, forecast_hour=float("nan")))
+        try:
+            read_wps(invalid_forecast)
+        except ValueError as exc:
+            assert "forecast hour" in str(exc)
+        else:
+            raise AssertionError("non-finite WPS forecast hour was accepted")
 
         intel_true = root / "intel_true"
         intel_true.write_bytes(field_records(1.0, wind=-1))

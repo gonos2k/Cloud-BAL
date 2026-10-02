@@ -9,6 +9,9 @@ MODULE cloud_bal_pipeline
   IMPLICIT NONE
   PRIVATE
 
+  ! Separate reason namespace for the changed-domain receipt extension.
+  INTEGER, PUBLIC, PARAMETER :: DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN=10
+
   TYPE, PUBLIC :: cloud_bal_pipeline_config
     INTEGER :: requested_mode=MODE_OFF
     REAL(real64) :: horizontal_support_radius_m=12000.0_real64
@@ -35,6 +38,29 @@ MODULE cloud_bal_pipeline
     REAL(real64) :: continuity_rms=0.0_real64
     REAL(real64) :: continuity_max_abs=0.0_real64
     REAL(real64) :: geostrophic_rms=0.0_real64
+    ! Separate changed-domain receipt; the legacy fields above retain their
+    ! balance-control-support meaning and schema.
+    INTEGER(int64) :: diagnostic_changed_cells=0_int64
+    INTEGER(int64) :: diagnostic_requested_cells=0_int64
+    INTEGER(int64) :: continuity_assessable_cells=0_int64
+    INTEGER(int64) :: geostrophic_assessable_cells=0_int64
+    LOGICAL :: diagnostic_continuity_assessed=.FALSE.
+    LOGICAL :: diagnostic_geostrophic_assessed=.FALSE.
+    INTEGER :: diagnostic_continuity_status=STATUS_FAILED
+    INTEGER :: diagnostic_geostrophic_status=STATUS_FAILED
+    INTEGER :: diagnostic_continuity_reason=REASON_NONE
+    INTEGER :: diagnostic_geostrophic_reason=REASON_NONE
+    REAL(real64) :: diagnostic_continuity_rms=0.0_real64
+    REAL(real64) :: diagnostic_continuity_max_abs=0.0_real64
+    REAL(real64) :: diagnostic_geostrophic_rms=0.0_real64
+    ! Exact receipt masks for changed, requested and independently assessable
+    ! cells. These describe this evaluation only; they do not establish a
+    ! reconstruction from external WPS background products.
+    LOGICAL, ALLOCATABLE :: diagnostic_changed_mask(:,:,:)
+    LOGICAL, ALLOCATABLE :: diagnostic_requested_mask(:,:,:)
+    LOGICAL, ALLOCATABLE :: diagnostic_continuity_assessable_mask(:,:,:)
+    LOGICAL, ALLOCATABLE :: diagnostic_geostrophic_assessable_mask(:,:,:)
+    LOGICAL :: diagnostic_masks_assessed=.FALSE.
   END TYPE joint_candidate_evaluation
 
   TYPE, PUBLIC :: cloud_bal_pipeline_result
@@ -550,33 +576,385 @@ CONTAINS
     INTEGER, INTENT(OUT) :: status,reason
     TYPE(balance_operator_type) :: op
     REAL(real64), ALLOCATABLE :: continuity(:,:,:)
+    LOGICAL, ALLOCATABLE :: changed_domain(:,:,:),requested_domain(:,:,:),domain_union(:,:,:)
+    LOGICAL, ALLOCATABLE :: continuity_support(:,:,:),geostrophic_support(:,:,:)
+    INTEGER :: domain_status,domain_reason
 
     evaluation=joint_candidate_evaluation()
+    IF (background%grid%grid_id/=candidate%grid%grid_id .OR. &
+        .NOT.optional_field2d_identity_equal(background%latitude,candidate%latitude)) THEN
+      status=STATUS_FAILED; reason=REASON_METADATA
+      RETURN
+    END IF
     ! The returned status/reason cover canonical endpoint accounting only.
     ! Each balance diagnostic has its own status and may remain unassessed.
     CALL account_candidate_endpoint(background,candidate,budget,status,reason)
     IF (status/=STATUS_OK) RETURN
+    ALLOCATE(evaluation%diagnostic_changed_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      evaluation%diagnostic_requested_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      evaluation%diagnostic_continuity_assessable_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      evaluation%diagnostic_geostrophic_assessable_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
+    evaluation%diagnostic_changed_mask=.FALSE.
+    evaluation%diagnostic_requested_mask=.FALSE.
+    evaluation%diagnostic_continuity_assessable_mask=.FALSE.
+    evaluation%diagnostic_geostrophic_assessable_mask=.FALSE.
     evaluation%canonical_accounting_assessed=.TRUE.
 
     CALL build_balance_operator(candidate,balance_config,op,evaluation%operator_status, &
       evaluation%operator_reason)
     IF (evaluation%operator_status/=STATUS_OK) RETURN
     evaluation%balance_support_cells=active_balance_cell_count(op)
-    IF (evaluation%balance_support_cells<=0_int64) RETURN
-    ALLOCATE(continuity(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
-    CALL state_continuity_residual(op,candidate,continuity,evaluation%continuity_status)
-    IF (evaluation%continuity_status==STATUS_OK) THEN
-      CALL continuity_norms(op,continuity,evaluation%continuity_rms,evaluation%continuity_max_abs)
-      evaluation%continuity_assessed=ieee_is_finite(evaluation%continuity_rms) .AND. &
-        evaluation%continuity_rms<HUGE(1.0_real64) .AND. &
-        ieee_is_finite(evaluation%continuity_max_abs) .AND. &
-        evaluation%continuity_max_abs<HUGE(1.0_real64)
+    IF (evaluation%balance_support_cells>0_int64) THEN
+      IF (.NOT.ALLOCATED(continuity)) &
+        ALLOCATE(continuity(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
+      CALL state_continuity_residual(op,candidate,continuity,evaluation%continuity_status)
+      IF (evaluation%continuity_status==STATUS_OK) THEN
+        CALL continuity_norms(op,continuity,evaluation%continuity_rms,evaluation%continuity_max_abs)
+        evaluation%continuity_assessed=ieee_is_finite(evaluation%continuity_rms) .AND. &
+          evaluation%continuity_rms<HUGE(1.0_real64) .AND. &
+          ieee_is_finite(evaluation%continuity_max_abs) .AND. &
+          evaluation%continuity_max_abs<HUGE(1.0_real64)
+      END IF
+      IF (.NOT.evaluation%continuity_assessed) THEN
+        evaluation%continuity_status=STATUS_FAILED
+        evaluation%continuity_rms=0.0_real64
+        evaluation%continuity_max_abs=0.0_real64
+      END IF
+      CALL geostrophic_residual(candidate,op,evaluation%geostrophic_rms,evaluation%geostrophic_status)
+      evaluation%geostrophic_assessed=evaluation%geostrophic_status==STATUS_OK .AND. &
+        ieee_is_finite(evaluation%geostrophic_rms) .AND. &
+        evaluation%geostrophic_rms<HUGE(1.0_real64)
+      IF (.NOT.evaluation%geostrophic_assessed) THEN
+        evaluation%geostrophic_status=STATUS_FAILED
+        evaluation%geostrophic_rms=0.0_real64
+      END IF
     END IF
-    CALL geostrophic_residual(candidate,op,evaluation%geostrophic_rms,evaluation%geostrophic_status)
-    evaluation%geostrophic_assessed=evaluation%geostrophic_status==STATUS_OK .AND. &
-      ieee_is_finite(evaluation%geostrophic_rms) .AND. &
-      evaluation%geostrophic_rms<HUGE(1.0_real64)
+
+    ALLOCATE(changed_domain(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      requested_domain(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      domain_union(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      continuity_support(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      geostrophic_support(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
+    CALL build_candidate_evaluation_domain(background,candidate,changed_domain, &
+      requested_domain,domain_status,domain_reason)
+    IF (domain_status/=STATUS_OK) THEN
+      evaluation%diagnostic_continuity_reason=domain_reason
+      evaluation%diagnostic_geostrophic_reason=domain_reason
+      RETURN
+    END IF
+    domain_union=background%above_ground .OR. candidate%above_ground
+    CALL include_lateral_face_stencil(op,changed_domain,domain_union,requested_domain,domain_status)
+    IF (domain_status/=STATUS_OK) THEN
+      evaluation%diagnostic_continuity_reason=REASON_REQUIRED_COVERAGE
+      evaluation%diagnostic_geostrophic_reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
+    evaluation%diagnostic_changed_cells=COUNT(changed_domain,KIND=int64)
+    evaluation%diagnostic_requested_cells=COUNT(requested_domain,KIND=int64)
+    evaluation%diagnostic_changed_mask=changed_domain
+    evaluation%diagnostic_requested_mask=requested_domain
+    CALL diagnostic_domain_assessable(candidate,op,requested_domain,continuity_support, &
+      geostrophic_support,domain_status)
+    IF (domain_status/=STATUS_OK) THEN
+      evaluation%diagnostic_continuity_status=STATUS_FAILED
+      evaluation%diagnostic_geostrophic_status=STATUS_FAILED
+      evaluation%diagnostic_continuity_reason=REASON_REQUIRED_COVERAGE
+      evaluation%diagnostic_geostrophic_reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
+    evaluation%continuity_assessable_cells=COUNT(continuity_support,KIND=int64)
+    evaluation%geostrophic_assessable_cells=COUNT(geostrophic_support,KIND=int64)
+    evaluation%diagnostic_continuity_assessable_mask=continuity_support
+    evaluation%diagnostic_geostrophic_assessable_mask=geostrophic_support
+    evaluation%diagnostic_masks_assessed=.TRUE.
+    IF (evaluation%diagnostic_requested_cells==0_int64) THEN
+      evaluation%diagnostic_continuity_status=STATUS_DEGRADED
+      evaluation%diagnostic_geostrophic_status=STATUS_DEGRADED
+      evaluation%diagnostic_continuity_reason=DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN
+      evaluation%diagnostic_geostrophic_reason=DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN
+      RETURN
+    END IF
+    IF (evaluation%continuity_assessable_cells/=evaluation%diagnostic_requested_cells) THEN
+      evaluation%diagnostic_continuity_status=STATUS_DEGRADED
+      evaluation%diagnostic_continuity_reason=REASON_REQUIRED_COVERAGE
+    ELSE
+      IF (.NOT.ALLOCATED(continuity)) &
+        ALLOCATE(continuity(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
+      CALL state_continuity_residual(op,candidate,continuity, &
+        evaluation%diagnostic_continuity_status,evaluation_mask=requested_domain)
+      IF (evaluation%diagnostic_continuity_status==STATUS_OK) THEN
+        CALL continuity_norms(op,continuity,evaluation%diagnostic_continuity_rms, &
+          evaluation%diagnostic_continuity_max_abs,requested_domain)
+        evaluation%diagnostic_continuity_assessed= &
+          ieee_is_finite(evaluation%diagnostic_continuity_rms) .AND. &
+          evaluation%diagnostic_continuity_rms<HUGE(1.0_real64) .AND. &
+          ieee_is_finite(evaluation%diagnostic_continuity_max_abs) .AND. &
+          evaluation%diagnostic_continuity_max_abs<HUGE(1.0_real64)
+      END IF
+      IF (.NOT.evaluation%diagnostic_continuity_assessed) THEN
+        evaluation%diagnostic_continuity_status=STATUS_FAILED
+        evaluation%diagnostic_continuity_reason=REASON_NONFINITE
+        evaluation%diagnostic_continuity_rms=0.0_real64
+        evaluation%diagnostic_continuity_max_abs=0.0_real64
+      END IF
+    END IF
+    IF (evaluation%geostrophic_assessable_cells/=evaluation%diagnostic_requested_cells) THEN
+      evaluation%diagnostic_geostrophic_status=STATUS_DEGRADED
+      evaluation%diagnostic_geostrophic_reason=REASON_REQUIRED_COVERAGE
+    ELSE
+      CALL geostrophic_residual(candidate,op,evaluation%diagnostic_geostrophic_rms, &
+        evaluation%diagnostic_geostrophic_status,requested_domain)
+      evaluation%diagnostic_geostrophic_assessed= &
+        evaluation%diagnostic_geostrophic_status==STATUS_OK .AND. &
+        ieee_is_finite(evaluation%diagnostic_geostrophic_rms) .AND. &
+        evaluation%diagnostic_geostrophic_rms<HUGE(1.0_real64)
+      IF (.NOT.evaluation%diagnostic_geostrophic_assessed) THEN
+        evaluation%diagnostic_geostrophic_status=STATUS_FAILED
+        evaluation%diagnostic_geostrophic_reason=REASON_NONFINITE
+        evaluation%diagnostic_geostrophic_rms=0.0_real64
+      END IF
+    END IF
   END SUBROUTINE evaluate_joint_candidate
+
+  SUBROUTINE build_candidate_evaluation_domain(background,candidate,changed,requested,status,reason)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    LOGICAL, INTENT(OUT) :: changed(:,:,:),requested(:,:,:)
+    INTEGER, INTENT(OUT) :: status,reason
+    LOGICAL, ALLOCATABLE :: geometry_changed(:,:),domain_union(:,:,:),pressure_change(:,:,:)
+    LOGICAL, ALLOCATABLE :: surface_pressure_change(:,:),surface_thermo_change(:,:)
+    LOGICAL, ALLOCATABLE :: surface_height_change(:,:)
+    INTEGER :: nx,ny,nz,i,j,k,allocation_status
+
+    status=STATUS_FAILED; reason=REASON_SHAPE
+    nx=background%grid%nx; ny=background%grid%ny; nz=background%grid%nz
+    changed=.FALSE.; requested=.FALSE.
+    IF (nx<1 .OR. ny<1 .OR. nz<2) RETURN
+    IF (candidate%grid%nx/=nx .OR. candidate%grid%ny/=ny .OR. &
+        candidate%grid%nz/=nz) RETURN
+    IF (ANY(SHAPE(changed)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(requested)/=(/nx,ny,nz/))) RETURN
+    IF (.NOT.ALLOCATED(background%above_ground) .OR. &
+        .NOT.ALLOCATED(candidate%above_ground) .OR. &
+        .NOT.ALLOCATED(background%grid%pressure_interface) .OR. &
+        .NOT.ALLOCATED(candidate%grid%pressure_interface)) RETURN
+    IF (ANY(SHAPE(background%above_ground)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(candidate%above_ground)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(background%grid%pressure_interface)/=(/nx,ny,nz+1/)) .OR. &
+        ANY(SHAPE(candidate%grid%pressure_interface)/=(/nx,ny,nz+1/))) RETURN
+    IF (.NOT.candidate_evaluation_inputs_valid(background,candidate,nx,ny,nz)) RETURN
+    ALLOCATE(geometry_changed(nx,ny),domain_union(nx,ny,nz),pressure_change(nx,ny,nz), &
+      surface_pressure_change(nx,ny),surface_thermo_change(nx,ny), &
+      surface_height_change(nx,ny), &
+      STAT=allocation_status)
+    IF (allocation_status/=0) THEN
+      reason=REASON_RANGE
+      RETURN
+    END IF
+    domain_union=background%above_ground .OR. candidate%above_ground
+    geometry_changed=.FALSE.
+    DO j=1,ny; DO i=1,nx
+      geometry_changed(i,j)=ANY(background%above_ground(i,j,:) .NEQV. &
+        candidate%above_ground(i,j,:)) .OR. &
+        ANY(background%grid%pressure_interface(i,j,:) /= &
+            candidate%grid%pressure_interface(i,j,:))
+    END DO; END DO
+    surface_pressure_change=field2d_change_vector(background%surface_pressure, &
+      candidate%surface_pressure)
+    geometry_changed=geometry_changed .OR. surface_pressure_change
+    surface_height_change=field2d_change_vector(background%surface_height,candidate%surface_height)
+    geometry_changed=geometry_changed .OR. surface_height_change
+    surface_thermo_change=field2d_change_vector(background%surface_temperature, &
+      candidate%surface_temperature) .OR. &
+      field2d_change_vector(background%surface_vapor,candidate%surface_vapor)
+
+    CALL add_field_change(background%temperature,candidate%temperature,changed)
+    CALL add_field_change(background%vapor,candidate%vapor,changed)
+    CALL add_field_change(background%cloud_water,candidate%cloud_water,changed)
+    CALL add_field_change(background%cloud_ice,candidate%cloud_ice,changed)
+    CALL add_field_change(background%rain,candidate%rain,changed)
+    CALL add_field_change(background%snow,candidate%snow,changed)
+    CALL add_field_change(background%graupel,candidate%graupel,changed)
+    CALL add_field_change(background%u,candidate%u,changed)
+    CALL add_field_change(background%v,candidate%v,changed)
+    CALL add_field_change(background%omega,candidate%omega,changed)
+    CALL add_optional_field_change(background%geopotential,candidate%geopotential, &
+      changed,domain_union)
+    pressure_change=field_change_vector(background%pressure,candidate%pressure)
+    changed=changed .OR. pressure_change
+    DO j=1,ny; DO i=1,nx
+      IF (ANY(pressure_change(i,j,:))) geometry_changed(i,j)=.TRUE.
+      IF (geometry_changed(i,j)) changed(i,j,:)=changed(i,j,:) .OR. domain_union(i,j,:)
+      IF (surface_thermo_change(i,j)) THEN
+        DO k=1,nz
+          IF (domain_union(i,j,k)) THEN
+            changed(i,j,k)=.TRUE.
+            EXIT
+          END IF
+        END DO
+      END IF
+    END DO; END DO
+
+    changed=changed .AND. domain_union
+    requested=changed
+    DO k=1,nz; DO j=1,ny; DO i=1,nx
+      IF (.NOT.changed(i,j,k)) CYCLE
+      IF (i>1) requested(i-1,j,k)=.TRUE.
+      IF (i<nx) requested(i+1,j,k)=.TRUE.
+      IF (j>1) requested(i,j-1,k)=.TRUE.
+      IF (j<ny) requested(i,j+1,k)=.TRUE.
+      IF (k>1) requested(i,j,k-1)=.TRUE.
+      IF (k<nz) requested(i,j,k+1)=.TRUE.
+    END DO; END DO; END DO
+    requested=requested .AND. domain_union
+    status=STATUS_OK; reason=REASON_NONE
+  END SUBROUTINE build_candidate_evaluation_domain
+
+  SUBROUTINE add_field_change(background,candidate,mask)
+    TYPE(field3d), INTENT(IN) :: background,candidate
+    LOGICAL, INTENT(INOUT) :: mask(:,:,:)
+    mask=mask .OR. field_change_vector(background,candidate)
+  END SUBROUTINE add_field_change
+
+  SUBROUTINE add_optional_field_change(background,candidate,mask,domain_union)
+    TYPE(field3d), INTENT(IN) :: background,candidate
+    LOGICAL, INTENT(INOUT) :: mask(:,:,:)
+    LOGICAL, INTENT(IN) :: domain_union(:,:,:)
+    LOGICAL :: background_present,candidate_present
+    background_present=field3d_any_allocated(background)
+    candidate_present=field3d_any_allocated(candidate)
+    IF (.NOT.background_present .AND. .NOT.candidate_present) RETURN
+    IF (background_present .AND. candidate_present) THEN
+      CALL add_field_change(background,candidate,mask)
+    ELSE
+      mask=mask .OR. domain_union
+    END IF
+  END SUBROUTINE add_optional_field_change
+
+  LOGICAL FUNCTION field3d_any_allocated(field)
+    TYPE(field3d), INTENT(IN) :: field
+    field3d_any_allocated=ALLOCATED(field%value) .OR. ALLOCATED(field%valid) .OR. &
+      ALLOCATED(field%quality) .OR. ALLOCATED(field%source)
+  END FUNCTION field3d_any_allocated
+
+  LOGICAL FUNCTION field2d_any_allocated(field)
+    TYPE(field2d), INTENT(IN) :: field
+    field2d_any_allocated=ALLOCATED(field%value) .OR. ALLOCATED(field%valid) .OR. &
+      ALLOCATED(field%quality) .OR. ALLOCATED(field%source)
+  END FUNCTION field2d_any_allocated
+
+  LOGICAL FUNCTION optional_field3d_pair_valid(background,candidate,expected_shape)
+    TYPE(field3d), INTENT(IN) :: background,candidate
+    INTEGER, INTENT(IN) :: expected_shape(3)
+    LOGICAL :: background_present,candidate_present
+    optional_field3d_pair_valid=.FALSE.
+    background_present=field3d_any_allocated(background)
+    candidate_present=field3d_any_allocated(candidate)
+    IF (.NOT.background_present .AND. .NOT.candidate_present) THEN
+      optional_field3d_pair_valid=.TRUE.
+      RETURN
+    END IF
+    optional_field3d_pair_valid=.TRUE.
+    IF (background_present) &
+      optional_field3d_pair_valid=optional_field3d_pair_valid .AND. &
+        field_arrays_match(background,expected_shape)
+    IF (candidate_present) &
+      optional_field3d_pair_valid=optional_field3d_pair_valid .AND. &
+        field_arrays_match(candidate,expected_shape)
+  END FUNCTION optional_field3d_pair_valid
+
+  LOGICAL FUNCTION optional_field2d_identity_equal(background,candidate)
+    TYPE(field2d), INTENT(IN) :: background,candidate
+    LOGICAL :: background_present,candidate_present
+    background_present=field2d_any_allocated(background)
+    candidate_present=field2d_any_allocated(candidate)
+    optional_field2d_identity_equal=.FALSE.
+    IF (.NOT.background_present .AND. .NOT.candidate_present) THEN
+      optional_field2d_identity_equal=.TRUE.
+    ELSE IF (background_present .AND. candidate_present) THEN
+      optional_field2d_identity_equal=field2d_identity_equal(background,candidate)
+    END IF
+  END FUNCTION optional_field2d_identity_equal
+
+  FUNCTION field_change_vector(background,candidate) RESULT(changed)
+    TYPE(field3d), INTENT(IN) :: background,candidate
+    LOGICAL, ALLOCATABLE :: changed(:,:,:)
+    INTEGER :: nx,ny,nz
+    nx=SIZE(background%value,1); ny=SIZE(background%value,2); nz=SIZE(background%value,3)
+    ALLOCATE(changed(nx,ny,nz))
+    changed=(background%value/=candidate%value) .OR. &
+      (background%valid .NEQV. candidate%valid) .OR. &
+      (background%quality/=candidate%quality) .OR. &
+      (background%source/=candidate%source)
+  END FUNCTION field_change_vector
+
+  FUNCTION field2d_change_vector(background,candidate) RESULT(changed)
+    TYPE(field2d), INTENT(IN) :: background,candidate
+    LOGICAL, ALLOCATABLE :: changed(:,:)
+    INTEGER :: nx,ny
+    ! Callers validate both complete field allocations and shapes before this
+    ! private comparison helper is reached.
+    nx=SIZE(background%value,1); ny=SIZE(background%value,2)
+    ALLOCATE(changed(nx,ny))
+    changed=(background%value/=candidate%value) .OR. &
+      (background%valid .NEQV. candidate%valid) .OR. &
+      (background%quality/=candidate%quality) .OR. &
+      (background%source/=candidate%source)
+  END FUNCTION field2d_change_vector
+
+  LOGICAL FUNCTION candidate_evaluation_inputs_valid(background,candidate,nx,ny,nz)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    INTEGER, INTENT(IN) :: nx,ny,nz
+    INTEGER :: shape3(3),shape2(2)
+    shape3=(/nx,ny,nz/); shape2=(/nx,ny/)
+    candidate_evaluation_inputs_valid=.FALSE.
+    IF (.NOT.field_arrays_match(background%temperature,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%temperature,shape3) .OR. &
+        .NOT.field_arrays_match(background%vapor,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%vapor,shape3) .OR. &
+        .NOT.field_arrays_match(background%cloud_water,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%cloud_water,shape3) .OR. &
+        .NOT.field_arrays_match(background%cloud_ice,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%cloud_ice,shape3) .OR. &
+        .NOT.field_arrays_match(background%rain,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%rain,shape3) .OR. &
+        .NOT.field_arrays_match(background%snow,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%snow,shape3) .OR. &
+        .NOT.field_arrays_match(background%graupel,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%graupel,shape3) .OR. &
+        .NOT.field_arrays_match(background%u,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%u,shape3) .OR. &
+        .NOT.field_arrays_match(background%v,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%v,shape3) .OR. &
+        .NOT.field_arrays_match(background%omega,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%omega,shape3) .OR. &
+        .NOT.field_arrays_match(background%pressure,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%pressure,shape3)) RETURN
+    IF (.NOT.optional_field3d_pair_valid(background%geopotential,candidate%geopotential, &
+        shape3)) RETURN
+    IF (.NOT.field2d_arrays_match(background%surface_pressure,shape2) .OR. &
+        .NOT.field2d_arrays_match(candidate%surface_pressure,shape2)) RETURN
+    IF (.NOT.field2d_arrays_match(background%surface_temperature,shape2) .OR. &
+        .NOT.field2d_arrays_match(candidate%surface_temperature,shape2) .OR. &
+        .NOT.field2d_arrays_match(background%surface_vapor,shape2) .OR. &
+        .NOT.field2d_arrays_match(candidate%surface_vapor,shape2) .OR. &
+        .NOT.field2d_arrays_match(background%surface_height,shape2) .OR. &
+        .NOT.field2d_arrays_match(candidate%surface_height,shape2)) RETURN
+    IF (.NOT.optional_field2d_identity_equal(background%latitude,candidate%latitude)) RETURN
+    candidate_evaluation_inputs_valid=.TRUE.
+  END FUNCTION candidate_evaluation_inputs_valid
+
+  PURE LOGICAL FUNCTION field2d_arrays_match(field,expected_shape)
+    TYPE(field2d), INTENT(IN) :: field
+    INTEGER, INTENT(IN) :: expected_shape(2)
+    field2d_arrays_match=.FALSE.
+    IF (.NOT.ALLOCATED(field%value) .OR. .NOT.ALLOCATED(field%valid) .OR. &
+        .NOT.ALLOCATED(field%quality) .OR. .NOT.ALLOCATED(field%source)) RETURN
+    IF (ANY(SHAPE(field%value)/=expected_shape) .OR. &
+        ANY(SHAPE(field%valid)/=expected_shape) .OR. &
+        ANY(SHAPE(field%quality)/=expected_shape) .OR. &
+        ANY(SHAPE(field%source)/=expected_shape)) RETURN
+    field2d_arrays_match=.TRUE.
+  END FUNCTION field2d_arrays_match
 
   FUNCTION pressure_feedback_delta(left,right) RESULT(delta)
     TYPE(cloud_bal_state_type), INTENT(IN) :: left,right

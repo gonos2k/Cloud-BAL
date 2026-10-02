@@ -55,6 +55,13 @@ HYDROMETEORS = ("QC", "QI", "QR", "QS", "QG")
 BASE_PRESSURE_FIELDS = ("TT", "UU", "VV", "RH", "QV", "HGT")
 SURFACE_BOUNDARY_CONTRACT = "CANONICAL_SURFACE_BOUNDARY_V1"
 PRESSURE_GEOMETRY_CONTRACT = "prescribed_surface_pressure_v1"
+ANALYSIS_FORECAST_HOUR = 0.0
+# The retained NE57 WPS Lambert reconstruction differs from stored float32
+# SHADOW coordinates by at most 8e-5 degrees. This bounds representation
+# agreement for this grid; it is not a physical location-error allowance.
+GRID_COORDINATE_TOLERANCE_DEGREES = 1e-4
+WPS_STORED_MAX_PRESSURE_PA = 100_100.0
+WPS_PRESSURE_INVENTORY_CONTRACT = "legacy_wps_levels_through_1001_hpa_v1"
 
 
 def _date_from_epoch(epoch: int) -> str:
@@ -93,7 +100,8 @@ def read_shadow(path: Path) -> dict[str, object]:
                 "surface-boundary contract requires candidate_surface_temperature"
             )
 
-        names = (*MAPPED.values(), "pressure", "above_ground", "surface_pressure")
+        names = (*MAPPED.values(), "pressure", "above_ground", "surface_pressure",
+                 "latitude", "longitude")
         if candidate_present:
             names += ("candidate_surface_pressure",)
         if candidate_temperature_present:
@@ -111,6 +119,8 @@ def read_shadow(path: Path) -> dict[str, object]:
         assert values["pressure"].shape == (nz,)
         assert values["above_ground"].shape == (nz, ny, nx)
         assert values["surface_pressure"].shape == (ny, nx)
+        assert values["latitude"].shape == (ny, nx)
+        assert values["longitude"].shape == (ny, nx)
         assert np.all(np.diff(values["pressure"]) < 0.0)
         assert np.all((values["above_ground"] == 0) | (values["above_ground"] == 1))
         candidate_domain = values.get("candidate_above_ground", values["above_ground"])
@@ -121,6 +131,10 @@ def read_shadow(path: Path) -> dict[str, object]:
             assert values[name].shape == (nz, ny, nx)
             assert np.isfinite(values[name]).all()
         assert np.isfinite(values["surface_pressure"]).all()
+        assert np.isfinite(values["latitude"]).all()
+        assert np.isfinite(values["longitude"]).all()
+        assert np.all(np.abs(values["latitude"]) <= 90.0)
+        assert np.all(np.abs(values["longitude"]) <= 360.0)
         assert np.all(
             (values["surface_pressure"] >= 100.0)
             & (values["surface_pressure"] <= 120000.0)
@@ -180,6 +194,10 @@ def read_shadow(path: Path) -> dict[str, object]:
                 if candidate_temperature_present else None
             ),
             "expected_surface_temperature_units": "K",
+            "grid_dx_m": float(dataset.grid_dx_m),
+            "grid_dy_m": float(dataset.grid_dy_m),
+            "latitude": values["latitude"].astype(np.float64),
+            "longitude": values["longitude"].astype(np.float64),
             "fields": values,
             "hdate": _date_from_epoch(int(dataset.valid_time_epoch)),
         }
@@ -189,6 +207,46 @@ def _inventory(names: tuple[str, ...], pressure_levels: list[float], hdate: str)
     keys = {(name, level, hdate) for name in names for level in pressure_levels}
     keys.update((name, SURFACE, hdate) for name in names)
     return keys
+
+
+def _lambert_latlon(geometry: dict[str, object], shape: tuple[int, int]):
+    """Reconstruct a WPS Lambert grid from its SW-corner header."""
+    radians = np.pi / 180.0
+    start_lat = float(geometry["startlat"]) * radians
+    start_lon = float(geometry["startlon"]) * radians
+    central_lon = float(geometry["xlonc"]) * radians
+    true_lat_1 = float(geometry["truelat1"]) * radians
+    true_lat_2 = float(geometry["truelat2"]) * radians
+    radius_m = float(geometry["earth_radius_km"]) * 1000.0
+    dx_m = float(geometry["dx_km"]) * 1000.0
+    dy_m = float(geometry["dy_km"]) * 1000.0
+    if abs(true_lat_1) >= np.pi / 2 or abs(true_lat_2) >= np.pi / 2:
+        raise AssertionError("invalid Lambert standard parallel")
+    if abs(true_lat_1 - true_lat_2) < 1e-12:
+        cone = np.sin(true_lat_1)
+    else:
+        numerator = np.log(np.cos(true_lat_1) / np.cos(true_lat_2))
+        denominator = np.log(
+            np.tan(np.pi / 4 + true_lat_2 / 2)
+            / np.tan(np.pi / 4 + true_lat_1 / 2)
+        )
+        cone = numerator / denominator
+    if not np.isfinite(cone) or cone == 0.0:
+        raise AssertionError("invalid Lambert cone constant")
+    factor = np.cos(true_lat_1) * np.tan(np.pi / 4 + true_lat_1 / 2) ** cone / cone
+    rho_origin = radius_m * factor / np.tan(np.pi / 4 + start_lat / 2) ** cone
+    rho_start = radius_m * factor / np.tan(np.pi / 4 + start_lat / 2) ** cone
+    theta_start = cone * (start_lon - central_lon)
+    x_start = rho_start * np.sin(theta_start)
+    y_start = rho_origin - rho_start * np.cos(theta_start)
+    row, column = np.indices(shape, dtype=np.float64)
+    x = x_start + column * dx_m
+    y = y_start + row * dy_m
+    rho = np.sign(cone) * np.hypot(x, rho_origin - y)
+    theta = np.arctan2(x, rho_origin - y)
+    latitude = 2 * np.arctan((radius_m * factor / rho) ** (1.0 / cone)) - np.pi / 2
+    longitude = central_lon + theta / cone
+    return latitude / radians, longitude / radians
 
 
 def check_records(
@@ -220,10 +278,15 @@ def check_records(
     baseline_tt = [key[1] for key in baseline if key[0] == "TT"]
     assert baseline_tt[-1] == SURFACE
     pressure_levels = baseline_tt[:-1]
-    active_pressure = [float(level) for level, active in zip(pressure, above_ground)
-                       if np.any(active)]
     assert pressure_levels == sorted(pressure_levels)
-    assert set(pressure_levels) == set(active_pressure)
+    assert len(set(pressure_levels)) == len(pressure_levels)
+    expected_pressure_levels = [
+        float(level) for level in pressure
+        if float(level) <= WPS_STORED_MAX_PRESSURE_PA
+    ]
+    assert pressure_levels == sorted(expected_pressure_levels), (
+        f"stored pressure inventory violates {WPS_PRESSURE_INVENTORY_CONTRACT}"
+    )
 
     expected_baseline = _inventory((*BASE_PRESSURE_FIELDS,), pressure_levels, hdate)
     expected_baseline.update(
@@ -238,6 +301,52 @@ def check_records(
 
     metadata = next(iter(baseline.values()))[3]
     assert metadata["wind_grid_relative"] is True
+    geometry = metadata["geometry"]
+    assert geometry is not None, "WPS Lambert geometry is required for pair validation"
+    assert metadata["projection"] == 3, "only the declared Lambert WPS projection is supported"
+    assert geometry["startloc"] == "SWCORNER"
+    np.testing.assert_allclose(
+        geometry["dx_km"] * 1000.0,
+        float(shadow["grid_dx_m"]),
+        rtol=1e-6,
+        atol=1e-3,
+        err_msg="WPS and SHADOW x spacing differ",
+    )
+    np.testing.assert_allclose(
+        geometry["dy_km"] * 1000.0,
+        float(shadow["grid_dy_m"]),
+        rtol=1e-6,
+        atol=1e-3,
+        err_msg="WPS and SHADOW y spacing differ",
+    )
+    np.testing.assert_allclose(
+        (geometry["startlat"], geometry["startlon"]),
+        (float(shadow["latitude"][0, 0]), float(shadow["longitude"][0, 0])),
+        rtol=0.0,
+        atol=GRID_COORDINATE_TOLERANCE_DEGREES,
+        err_msg="WPS southwest corner differs from SHADOW coordinates",
+    )
+    expected_latitude, expected_longitude = _lambert_latlon(geometry, shape[::-1])
+    np.testing.assert_allclose(
+        expected_latitude,
+        shadow["latitude"],
+        rtol=0.0,
+        atol=GRID_COORDINATE_TOLERANCE_DEGREES,
+        err_msg="WPS Lambert latitude grid differs from SHADOW coordinates",
+    )
+    longitude_error = (expected_longitude - shadow["longitude"] + 180.0) % 360.0 - 180.0
+    np.testing.assert_allclose(
+        longitude_error,
+        0.0,
+        rtol=0.0,
+        atol=GRID_COORDINATE_TOLERANCE_DEGREES,
+        err_msg="WPS Lambert longitude grid differs from SHADOW coordinates",
+    )
+    forecast_hours = {record[3]["forecast_hour"]
+                      for records in (baseline, candidate) for record in records.values()}
+    assert forecast_hours == {ANALYSIS_FORECAST_HOUR}, (
+        "WPS XFCST must be zero for this analysis-time pair"
+    )
     for records in (baseline, candidate):
         for key, (units, record_shape, values, record_metadata) in records.items():
             name, level, date = key
