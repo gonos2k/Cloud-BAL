@@ -271,6 +271,7 @@ CANDIDATE_EVALUATION_EXTENSION = "candidate_evaluation_v1"
 CANDIDATE_EVALUATION_SCOPE = "endpoint_and_active_pressure_balance_diagnostics_only"
 CANDIDATE_DIAGNOSTIC_DOMAIN_CONTRACT = "changed_pressure_state_domain_v1"
 CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION = "candidate_diagnostic_domain_v1"
+CANDIDATE_DIAGNOSTIC_MASK_EXTENSION = "candidate_diagnostic_masks_v1"
 CANDIDATE_DIAGNOSTIC_DOMAIN_SCOPE = (
     "changed_thermo_hydrometeor_pressure_geopotential_wind_plus_one_cell_stencil"
 )
@@ -279,7 +280,17 @@ CANDIDATE_DIAGNOSTIC_DOMAIN_BOUNDARY = (
     "prescribed_top_bottom_omega"
 )
 CANDIDATE_DIAGNOSTIC_DOMAIN_REPRESENTATION = (
+    "aggregate_counts_and_exact_masks_v2"
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_LEGACY_REPRESENTATION = (
     "aggregate_counts_only_exact_masks_not_persisted_v1"
+)
+CANDIDATE_DIAGNOSTIC_MASK_CONTRACT = "exact_binary_int32_xyz_masks_v1"
+CANDIDATE_DIAGNOSTIC_MASK_VARIABLES = (
+    "candidate_diagnostic_changed_mask",
+    "candidate_diagnostic_requested_mask",
+    "candidate_diagnostic_continuity_assessable_mask",
+    "candidate_diagnostic_geostrophic_assessable_mask",
 )
 DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN = 10
 CANDIDATE_DIAGNOSTIC_DOMAIN_FLAGS = (
@@ -5932,6 +5943,7 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         domain_reserved_attributes = {
             name for name in dataset.ncattrs()
             if name.startswith("candidate_diagnostic_domain_")
+            and name != "candidate_diagnostic_domain_mask_contract"
         }
         domain_declared = CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION in extensions
         domain_present = domain_declared or bool(domain_reserved_attributes)
@@ -5950,9 +5962,29 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             require(getattr(dataset, "candidate_diagnostic_domain_boundary_contract", "") ==
                     CANDIDATE_DIAGNOSTIC_DOMAIN_BOUNDARY,
                     "candidate diagnostic domain boundary contract")
-            require(getattr(dataset, "candidate_diagnostic_domain_support_representation", "") ==
-                    CANDIDATE_DIAGNOSTIC_DOMAIN_REPRESENTATION,
-                    "candidate diagnostic domain support representation")
+            mask_extension_declared = CANDIDATE_DIAGNOSTIC_MASK_EXTENSION in extensions
+            mask_variables_present = bool(
+                set(CANDIDATE_DIAGNOSTIC_MASK_VARIABLES) & set(dataset.variables)
+            )
+            mask_contract_present = "candidate_diagnostic_domain_mask_contract" in dataset.ncattrs()
+            mask_extension_present = mask_extension_declared or mask_variables_present or mask_contract_present
+            representation = getattr(
+                dataset, "candidate_diagnostic_domain_support_representation", ""
+            )
+            require(
+                representation == (CANDIDATE_DIAGNOSTIC_DOMAIN_REPRESENTATION
+                                   if mask_extension_present
+                                   else CANDIDATE_DIAGNOSTIC_DOMAIN_LEGACY_REPRESENTATION),
+                "candidate diagnostic domain support representation",
+            )
+            if mask_extension_present:
+                require(mask_extension_declared, "candidate diagnostic mask extension")
+                require(mask_variables_present and
+                        set(CANDIDATE_DIAGNOSTIC_MASK_VARIABLES) <= set(dataset.variables),
+                        "complete candidate diagnostic masks")
+                require(getattr(dataset, "candidate_diagnostic_domain_mask_contract", "") ==
+                        CANDIDATE_DIAGNOSTIC_MASK_CONTRACT,
+                        "candidate diagnostic mask contract")
 
             domain_flags = {
                 name: exact_scalar_int32(getattr(dataset, name, None))
@@ -6002,6 +6034,45 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             if changed_cells is not None and requested_cells is not None:
                 require(changed_cells <= requested_cells,
                         "requested domain omits changed-state rows")
+            if mask_extension_present and set(CANDIDATE_DIAGNOSTIC_MASK_VARIABLES) <= set(dataset.variables):
+                mask_arrays: dict[str, np.ndarray] = {}
+                expected_shape = tuple(dimension_lengths[name] for name in ("z", "y", "x")) \
+                    if len(dimension_lengths) == 3 else None
+                mask_structure_ok = expected_shape is not None
+                for name in CANDIDATE_DIAGNOSTIC_MASK_VARIABLES:
+                    variable = dataset.variables[name]
+                    array = values(variable)
+                    valid = (
+                        variable.dimensions == ("z", "y", "x")
+                        and is_signed_int32(variable.dtype)
+                        and expected_shape is not None
+                        and array.shape == expected_shape
+                        and np.all((array == 0) | (array == 1))
+                        and getattr(variable, "units", "") == "1"
+                    )
+                    require(valid, name + " binary shape and type")
+                    mask_structure_ok = mask_structure_ok and valid
+                    if valid:
+                        mask_arrays[name] = array.astype(bool)
+                if mask_structure_ok:
+                    changed_mask = mask_arrays[CANDIDATE_DIAGNOSTIC_MASK_VARIABLES[0]]
+                    requested_mask = mask_arrays[CANDIDATE_DIAGNOSTIC_MASK_VARIABLES[1]]
+                    continuity_mask = mask_arrays[CANDIDATE_DIAGNOSTIC_MASK_VARIABLES[2]]
+                    geostrophic_mask = mask_arrays[CANDIDATE_DIAGNOSTIC_MASK_VARIABLES[3]]
+                    require(int(np.count_nonzero(changed_mask)) == changed_cells,
+                            "changed mask count")
+                    require(int(np.count_nonzero(requested_mask)) == requested_cells,
+                            "requested mask count")
+                    require(int(np.count_nonzero(continuity_mask)) == continuity_cells,
+                            "continuity assessable mask count")
+                    require(int(np.count_nonzero(geostrophic_mask)) == geostrophic_cells,
+                            "geostrophic assessable mask count")
+                    require(np.all(~changed_mask | requested_mask),
+                            "changed mask subset of requested domain")
+                    require(np.all(~continuity_mask | requested_mask),
+                            "continuity assessable mask subset of requested domain")
+                    require(np.all(~geostrophic_mask | requested_mask),
+                            "geostrophic assessable mask subset of requested domain")
             domain_statuses = (STATUS_FAILED, STATUS_DEGRADED, STATUS_OK)
             for name in ("candidate_diagnostic_domain_continuity_status",
                          "candidate_diagnostic_domain_geostrophic_status"):
@@ -6191,7 +6262,11 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                               CANDIDATE_EVALUATION_EXTENSION,
                               expected_extensions + "," + ENDPOINT_EXTENSION + "," +
                               CANDIDATE_EVALUATION_EXTENSION + "," +
-                              CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION)
+                              CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION,
+                              expected_extensions + "," + ENDPOINT_EXTENSION + "," +
+                              CANDIDATE_EVALUATION_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_MASK_EXTENSION)
         if pressure_geopotential_signalled:
             require(
                 getattr(dataset, "schema_extensions", "") in allowed_extensions,

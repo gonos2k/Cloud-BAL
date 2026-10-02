@@ -1218,6 +1218,12 @@ CONTAINS
     CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
       evaluation,status,reason)
     CALL check(status==STATUS_OK .AND. evaluation%diagnostic_requested_cells==0_int64 .AND. &
+      evaluation%diagnostic_masks_assessed .AND. &
+      ALLOCATED(evaluation%diagnostic_changed_mask) .AND. &
+      ALLOCATED(evaluation%diagnostic_requested_mask) .AND. &
+      ALLOCATED(evaluation%diagnostic_continuity_assessable_mask) .AND. &
+      ALLOCATED(evaluation%diagnostic_geostrophic_assessable_mask) .AND. &
+      COUNT(evaluation%diagnostic_requested_mask)==0 .AND. &
       .NOT.evaluation%diagnostic_continuity_assessed .AND. &
       .NOT.evaluation%diagnostic_geostrophic_assessed .AND. &
       evaluation%diagnostic_continuity_status==STATUS_DEGRADED .AND. &
@@ -1232,10 +1238,17 @@ CONTAINS
     CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
       evaluation,status,reason)
     CALL check(status==STATUS_OK .AND. evaluation%balance_support_cells==0_int64 .AND. &
+      evaluation%diagnostic_masks_assessed .AND. &
       evaluation%diagnostic_changed_cells>0_int64 .AND. &
       evaluation%diagnostic_requested_cells>evaluation%diagnostic_changed_cells .AND. &
+      COUNT(evaluation%diagnostic_changed_mask,KIND=int64)==evaluation%diagnostic_changed_cells .AND. &
+      COUNT(evaluation%diagnostic_requested_mask,KIND=int64)==evaluation%diagnostic_requested_cells .AND. &
       evaluation%continuity_assessable_cells==evaluation%diagnostic_requested_cells .AND. &
+      COUNT(evaluation%diagnostic_continuity_assessable_mask,KIND=int64)== &
+        evaluation%continuity_assessable_cells .AND. &
       evaluation%geostrophic_assessable_cells==evaluation%diagnostic_requested_cells .AND. &
+      COUNT(evaluation%diagnostic_geostrophic_assessable_mask,KIND=int64)== &
+        evaluation%geostrophic_assessable_cells .AND. &
       evaluation%diagnostic_continuity_assessed .AND. evaluation%diagnostic_geostrophic_assessed, &
       'hydrometeor-only change gets stencil diagnostics without balance authority',failures)
 

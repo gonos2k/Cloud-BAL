@@ -112,10 +112,13 @@ can be treated as provenance evidence.
   assessable count and status even when wind control support is empty.
 - [x] Store the changed-domain counts, assessability, and diagnostics in a
   versioned SHADOW receipt and reject malformed receipts on independent file
-  validation. The receipt stores aggregate counts, not the exact masks.
-- [ ] Persist the exact requested and assessable masks and bind their readback
-  to the same WPS payload. The present receipt alone cannot establish which
-  individual cells were assessed.
+  validation.
+- [x] Persist exact changed, requested, continuity-assessable, and
+  geostrophic-assessable masks in SHADOW; validate their binary shape, counts,
+  subsets, and status consistency. The detached WPS-pair receipt hashes the
+  SHADOW bytes with the same generation and validates them on readback.
+- [ ] Independently reconstruct semantic mask equality from WPS background
+  fields. Current WPS schemas do not all carry the background fields needed.
 - [ ] Make required-domain diagnostics assessable independently of the
   wind-control operator's target and authority preconditions. An operator-build
   failure still leaves the new diagnostics unassessed and blocks publication.
@@ -152,9 +155,15 @@ target. The SHADOW file now stores the limited evaluation flags, statuses,
 active-balance support count, and metrics, and the independent validator checks
 the receipt structure and values. This receipt records what was assessed; it
 does not apply physical pass/fail thresholds or bind the candidate to
-source/input/config/build/runtime identity. The changed-domain receipt covers
-requested cells only as aggregate counts and depends on a successful operator
-build.
+source/input/config/build/runtime identity. The changed-domain receipt now
+persists exact changed, requested, continuity-assessable, and
+geostrophic-assessable binary masks alongside their counts. The validator
+checks mask shape, binary values, counts, subsets, and status consistency. The
+writer publishes this extension only when the operator built and all four
+masks are complete. The WPS-pair product hash binds these SHADOW bytes to that
+stored generation; it
+does not independently reconstruct semantic mask equality from WPS background
+fields, which are not carried by every schema.
 The transaction's WPS-pair receipt binds its three stored products
 and verifier bundle, not the producer lineage or a complete physical
 assessment. External source, boundary, and independent observation fit remain

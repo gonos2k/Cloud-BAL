@@ -718,7 +718,8 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "schema_extensions": (
             "verified_operational_identity_v1,radar_no_echo_masks_v1,"
             "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2,"
-            "candidate_evaluation_v1,candidate_diagnostic_domain_v1"
+            "candidate_evaluation_v1,candidate_diagnostic_domain_v1,"
+            "candidate_diagnostic_masks_v1"
         ),
         "requested_mode": 1,
         "operational_state_verified": 1,
@@ -760,9 +761,38 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         if getattr(dataset, name).dtype != "float64":
             raise SystemExit(f"candidate evaluation metric type mismatch: {name}")
     if dataset.candidate_diagnostic_domain_support_representation != (
-        "aggregate_counts_only_exact_masks_not_persisted_v1"
+        "aggregate_counts_and_exact_masks_v2"
     ):
         raise SystemExit("candidate diagnostic support representation mismatch")
+    mask_names = (
+        "candidate_diagnostic_changed_mask",
+        "candidate_diagnostic_requested_mask",
+        "candidate_diagnostic_continuity_assessable_mask",
+        "candidate_diagnostic_geostrophic_assessable_mask",
+    )
+    counts = (
+        "candidate_diagnostic_domain_changed_cells",
+        "candidate_diagnostic_domain_requested_cells",
+        "candidate_diagnostic_domain_continuity_assessable_cells",
+        "candidate_diagnostic_domain_geostrophic_assessable_cells",
+    )
+    masks = []
+    for name, count in zip(mask_names, counts):
+        variable = dataset.variables.get(name)
+        if (variable is None or variable.dimensions != ("z", "y", "x")
+                or variable.dtype != "int32" or variable.units != "1"):
+            raise SystemExit(f"candidate diagnostic exact mask is malformed: {name}")
+        values = variable[:]
+        if not ((values == 0) | (values == 1)).all():
+            raise SystemExit(f"candidate diagnostic mask is not binary: {name}")
+        if int(values.sum()) != int(getattr(dataset, count)):
+            raise SystemExit(f"candidate diagnostic mask count mismatch: {name}")
+        masks.append(values.astype(bool))
+    for mask in masks[2:]:
+        if (mask & ~masks[1]).any():
+            raise SystemExit("assessable diagnostic mask escapes requested mask")
+    if (masks[0] & ~masks[1]).any():
+        raise SystemExit("changed diagnostic mask escapes requested mask")
     for name in (
         "candidate_diagnostic_domain_changed_cells",
         "candidate_diagnostic_domain_requested_cells",
@@ -870,6 +900,39 @@ if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
   exit 1
 fi
 
+bad_mask_count=$test_tmp/bad-mask-count.nc
+cp "$diagnostic_o0" "$bad_mask_count"
+python3 - "$bad_mask_count" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    name = "candidate_diagnostic_requested_mask"
+    mask = dataset.variables[name][:]
+    index = tuple(int(item) for item in next(iter(__import__("numpy").argwhere(mask == 1))))
+    dataset.variables[name][index] = 0
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$bad_mask_count" >/dev/null 2>&1; then
+  printf 'validator accepted an exact diagnostic mask with a false count\n' >&2
+  exit 1
+fi
+
+nonbinary_mask=$test_tmp/nonbinary-mask.nc
+cp "$diagnostic_o0" "$nonbinary_mask"
+python3 - "$nonbinary_mask" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.variables["candidate_diagnostic_changed_mask"][0, 0, 0] = 2
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$nonbinary_mask" >/dev/null 2>&1; then
+  printf 'validator accepted a nonbinary diagnostic mask\n' >&2
+  exit 1
+fi
+
 forged_unassessed_domain=$test_tmp/forged-unassessed-domain.nc
 cp "$diagnostic_o0" "$forged_unassessed_domain"
 python3 - "$forged_unassessed_domain" <<'PY'
@@ -941,24 +1004,92 @@ fi
 legacy_endpoint=$test_tmp/legacy-endpoint.nc
 cp "$diagnostic_o0" "$legacy_endpoint"
 python3 - "$legacy_endpoint" <<'PY'
+import os
 import sys
 import netCDF4
 
-with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
-    for name in list(dataset.ncattrs()):
-        if name.startswith("candidate_evaluation_"):
-            dataset.delncattr(name)
-        if name.startswith("candidate_diagnostic_domain_"):
-            dataset.delncattr(name)
-    dataset.delncattr("candidate_endpoint_enthalpy_arithmetic_scale_j")
-    dataset.delncattr("candidate_endpoint_species_arithmetic_scale_kg")
-    dataset.setncattr("candidate_endpoint_contract", "signed_represented_mixture_endpoint_v1")
-    dataset.setncattr("schema_extensions", dataset.schema_extensions.replace(
-        ",candidate_diagnostic_domain_v1", "").replace(
-        ",candidate_evaluation_v1", "").replace(
-        "candidate_endpoint_v2", "candidate_endpoint_v1"))
+source_path = sys.argv[1]
+temporary_path = source_path + ".tmp"
+mask_names = {
+    "candidate_diagnostic_changed_mask",
+    "candidate_diagnostic_requested_mask",
+    "candidate_diagnostic_continuity_assessable_mask",
+    "candidate_diagnostic_geostrophic_assessable_mask",
+}
+with netCDF4.Dataset(source_path) as source, netCDF4.Dataset(temporary_path, "w") as legacy:
+    for name, dimension in source.dimensions.items():
+        legacy.createDimension(name, None if dimension.isunlimited() else len(dimension))
+    for name in source.ncattrs():
+        if name.startswith(("candidate_evaluation_", "candidate_diagnostic_domain_")):
+            continue
+        if name in ("candidate_endpoint_enthalpy_arithmetic_scale_j",
+                    "candidate_endpoint_species_arithmetic_scale_kg"):
+            continue
+        value = source.getncattr(name)
+        if name == "candidate_endpoint_contract":
+            value = "signed_represented_mixture_endpoint_v1"
+        elif name == "schema_extensions":
+            value = value.replace(
+                ",candidate_diagnostic_domain_v1,candidate_diagnostic_masks_v1", ""
+            ).replace(",candidate_evaluation_v1", "").replace(
+                "candidate_endpoint_v2", "candidate_endpoint_v1"
+            )
+        legacy.setncattr(name, value)
+    for name, source_variable in source.variables.items():
+        if name in mask_names:
+            continue
+        fill_value = source_variable.getncattr("_FillValue") if "_FillValue" in source_variable.ncattrs() else None
+        variable = legacy.createVariable(
+            name, source_variable.datatype, source_variable.dimensions, fill_value=fill_value
+        )
+        for attribute in source_variable.ncattrs():
+            if attribute != "_FillValue":
+                variable.setncattr(attribute, source_variable.getncattr(attribute))
+        variable[...] = source_variable[...]
+os.replace(temporary_path, source_path)
 PY
 python3 "$repo_root/tools/validate_shadow_diagnostics.py" "$legacy_endpoint" >/dev/null
+
+legacy_domain_masks=$test_tmp/legacy-domain-masks.nc
+cp "$diagnostic_o0" "$legacy_domain_masks"
+python3 - "$legacy_domain_masks" <<'PY'
+import os
+import sys
+import netCDF4
+
+path = sys.argv[1]
+temporary = path + ".tmp"
+mask_names = {
+    "candidate_diagnostic_changed_mask",
+    "candidate_diagnostic_requested_mask",
+    "candidate_diagnostic_continuity_assessable_mask",
+    "candidate_diagnostic_geostrophic_assessable_mask",
+}
+with netCDF4.Dataset(path) as source, netCDF4.Dataset(temporary, "w") as target:
+    for name, dimension in source.dimensions.items():
+        target.createDimension(name, None if dimension.isunlimited() else len(dimension))
+    for name in source.ncattrs():
+        if name == "candidate_diagnostic_domain_mask_contract":
+            continue
+        value = source.getncattr(name)
+        if name == "candidate_diagnostic_domain_support_representation":
+            value = "aggregate_counts_only_exact_masks_not_persisted_v1"
+        elif name == "schema_extensions":
+            value = value.replace(",candidate_diagnostic_masks_v1", "")
+        target.setncattr(name, value)
+    for name, original in source.variables.items():
+        if name in mask_names:
+            continue
+        fill_value = original.getncattr("_FillValue") if "_FillValue" in original.ncattrs() else None
+        variable = target.createVariable(name, original.datatype, original.dimensions,
+                                         fill_value=fill_value)
+        for attribute in original.ncattrs():
+            if attribute != "_FillValue":
+                variable.setncattr(attribute, original.getncattr(attribute))
+        variable[...] = original[...]
+os.replace(temporary, path)
+PY
+python3 "$repo_root/tools/validate_shadow_diagnostics.py" "$legacy_domain_masks" >/dev/null
 
 missing_candidate_evaluation_flag=$test_tmp/missing-candidate-evaluation-flag.nc
 cp "$diagnostic_o0" "$missing_candidate_evaluation_flag"

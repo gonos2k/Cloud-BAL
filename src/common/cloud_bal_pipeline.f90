@@ -53,6 +53,14 @@ MODULE cloud_bal_pipeline
     REAL(real64) :: diagnostic_continuity_rms=0.0_real64
     REAL(real64) :: diagnostic_continuity_max_abs=0.0_real64
     REAL(real64) :: diagnostic_geostrophic_rms=0.0_real64
+    ! Exact receipt masks for changed, requested and independently assessable
+    ! cells. These describe this evaluation only; they do not establish a
+    ! reconstruction from external WPS background products.
+    LOGICAL, ALLOCATABLE :: diagnostic_changed_mask(:,:,:)
+    LOGICAL, ALLOCATABLE :: diagnostic_requested_mask(:,:,:)
+    LOGICAL, ALLOCATABLE :: diagnostic_continuity_assessable_mask(:,:,:)
+    LOGICAL, ALLOCATABLE :: diagnostic_geostrophic_assessable_mask(:,:,:)
+    LOGICAL :: diagnostic_masks_assessed=.FALSE.
   END TYPE joint_candidate_evaluation
 
   TYPE, PUBLIC :: cloud_bal_pipeline_result
@@ -582,6 +590,14 @@ CONTAINS
     ! Each balance diagnostic has its own status and may remain unassessed.
     CALL account_candidate_endpoint(background,candidate,budget,status,reason)
     IF (status/=STATUS_OK) RETURN
+    ALLOCATE(evaluation%diagnostic_changed_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      evaluation%diagnostic_requested_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      evaluation%diagnostic_continuity_assessable_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
+      evaluation%diagnostic_geostrophic_assessable_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
+    evaluation%diagnostic_changed_mask=.FALSE.
+    evaluation%diagnostic_requested_mask=.FALSE.
+    evaluation%diagnostic_continuity_assessable_mask=.FALSE.
+    evaluation%diagnostic_geostrophic_assessable_mask=.FALSE.
     evaluation%canonical_accounting_assessed=.TRUE.
 
     CALL build_balance_operator(candidate,balance_config,op,evaluation%operator_status, &
@@ -635,6 +651,8 @@ CONTAINS
     END IF
     evaluation%diagnostic_changed_cells=COUNT(changed_domain,KIND=int64)
     evaluation%diagnostic_requested_cells=COUNT(requested_domain,KIND=int64)
+    evaluation%diagnostic_changed_mask=changed_domain
+    evaluation%diagnostic_requested_mask=requested_domain
     CALL diagnostic_domain_assessable(candidate,op,requested_domain,continuity_support, &
       geostrophic_support,domain_status)
     IF (domain_status/=STATUS_OK) THEN
@@ -646,6 +664,9 @@ CONTAINS
     END IF
     evaluation%continuity_assessable_cells=COUNT(continuity_support,KIND=int64)
     evaluation%geostrophic_assessable_cells=COUNT(geostrophic_support,KIND=int64)
+    evaluation%diagnostic_continuity_assessable_mask=continuity_support
+    evaluation%diagnostic_geostrophic_assessable_mask=geostrophic_support
+    evaluation%diagnostic_masks_assessed=.TRUE.
     IF (evaluation%diagnostic_requested_cells==0_int64) THEN
       evaluation%diagnostic_continuity_status=STATUS_DEGRADED
       evaluation%diagnostic_geostrophic_status=STATUS_DEGRADED
