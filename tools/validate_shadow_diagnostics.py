@@ -269,6 +269,50 @@ LEGACY_ENDPOINT_EXTENSION = "candidate_endpoint_v1"
 CANDIDATE_EVALUATION_CONTRACT = "final_pressure_diagnostics_v1"
 CANDIDATE_EVALUATION_EXTENSION = "candidate_evaluation_v1"
 CANDIDATE_EVALUATION_SCOPE = "endpoint_and_active_pressure_balance_diagnostics_only"
+CANDIDATE_DIAGNOSTIC_DOMAIN_CONTRACT = "changed_pressure_state_domain_v1"
+CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION = "candidate_diagnostic_domain_v1"
+CANDIDATE_DIAGNOSTIC_DOMAIN_SCOPE = (
+    "changed_thermo_hydrometeor_pressure_geopotential_wind_plus_one_cell_stencil"
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_BOUNDARY = (
+    "full_state_open_internal_faces_zero_gradient_horizontal_perimeter_"
+    "prescribed_top_bottom_omega"
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_REPRESENTATION = (
+    "aggregate_counts_only_exact_masks_not_persisted_v1"
+)
+DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN = 10
+CANDIDATE_DIAGNOSTIC_DOMAIN_FLAGS = (
+    "candidate_diagnostic_domain_continuity_assessed",
+    "candidate_diagnostic_domain_geostrophic_assessed",
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_INT32_ATTRIBUTES = (
+    *CANDIDATE_DIAGNOSTIC_DOMAIN_FLAGS,
+    "candidate_diagnostic_domain_continuity_status",
+    "candidate_diagnostic_domain_geostrophic_status",
+    "candidate_diagnostic_domain_continuity_reason",
+    "candidate_diagnostic_domain_geostrophic_reason",
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_INT64_ATTRIBUTES = (
+    "candidate_diagnostic_domain_changed_cells",
+    "candidate_diagnostic_domain_requested_cells",
+    "candidate_diagnostic_domain_continuity_assessable_cells",
+    "candidate_diagnostic_domain_geostrophic_assessable_cells",
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_FLOAT64_ATTRIBUTES = (
+    "candidate_diagnostic_domain_continuity_rms",
+    "candidate_diagnostic_domain_continuity_max_abs",
+    "candidate_diagnostic_domain_geostrophic_rms",
+)
+CANDIDATE_DIAGNOSTIC_DOMAIN_ATTRIBUTES = frozenset((
+    "candidate_diagnostic_domain_contract",
+    "candidate_diagnostic_domain_scope",
+    "candidate_diagnostic_domain_boundary_contract",
+    "candidate_diagnostic_domain_support_representation",
+    *CANDIDATE_DIAGNOSTIC_DOMAIN_INT32_ATTRIBUTES,
+    *CANDIDATE_DIAGNOSTIC_DOMAIN_INT64_ATTRIBUTES,
+    *CANDIDATE_DIAGNOSTIC_DOMAIN_FLOAT64_ATTRIBUTES,
+))
 CANDIDATE_EVALUATION_FLAGS = (
     "candidate_evaluation_canonical_accounting_assessed",
     "candidate_evaluation_continuity_assessed",
@@ -394,6 +438,8 @@ STATUS_DEGRADED = 10
 STATUS_FAILED = -10
 STATUS_OK = 20
 REASON_NONE = 0
+REASON_REQUIRED_COVERAGE = 3
+REASON_NONFINITE = 4
 REASON_GATE = 7
 REASON_AUTHORITY = 9
 SOLVER_NOT_RUN = 0
@@ -5883,6 +5929,120 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                 require(evaluation_ints.get("candidate_evaluation_geostrophic_status") == STATUS_FAILED
                         and evaluation_values.get("candidate_evaluation_geostrophic_rms") == 0.0,
                         "unassessed candidate geostrophic status and value")
+        domain_reserved_attributes = {
+            name for name in dataset.ncattrs()
+            if name.startswith("candidate_diagnostic_domain_")
+        }
+        domain_declared = CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION in extensions
+        domain_present = domain_declared or bool(domain_reserved_attributes)
+        if domain_present:
+            require(domain_declared, "candidate diagnostic domain extension")
+            require(domain_reserved_attributes == CANDIDATE_DIAGNOSTIC_DOMAIN_ATTRIBUTES,
+                    "candidate diagnostic domain attribute set")
+            require(CANDIDATE_EVALUATION_EXTENSION in extensions,
+                    "candidate diagnostic domain requires legacy evaluation receipt")
+            require(getattr(dataset, "candidate_diagnostic_domain_contract", "") ==
+                    CANDIDATE_DIAGNOSTIC_DOMAIN_CONTRACT,
+                    "candidate diagnostic domain contract")
+            require(getattr(dataset, "candidate_diagnostic_domain_scope", "") ==
+                    CANDIDATE_DIAGNOSTIC_DOMAIN_SCOPE,
+                    "candidate diagnostic domain scope")
+            require(getattr(dataset, "candidate_diagnostic_domain_boundary_contract", "") ==
+                    CANDIDATE_DIAGNOSTIC_DOMAIN_BOUNDARY,
+                    "candidate diagnostic domain boundary contract")
+            require(getattr(dataset, "candidate_diagnostic_domain_support_representation", "") ==
+                    CANDIDATE_DIAGNOSTIC_DOMAIN_REPRESENTATION,
+                    "candidate diagnostic domain support representation")
+
+            domain_flags = {
+                name: exact_scalar_int32(getattr(dataset, name, None))
+                for name in CANDIDATE_DIAGNOSTIC_DOMAIN_FLAGS
+            }
+            for name, value in domain_flags.items():
+                require(value in (0, 1), name)
+            domain_ints = {
+                name: exact_scalar_int32(getattr(dataset, name, None))
+                for name in CANDIDATE_DIAGNOSTIC_DOMAIN_INT32_ATTRIBUTES
+                if name not in CANDIDATE_DIAGNOSTIC_DOMAIN_FLAGS
+            }
+            domain_counts = {
+                name: exact_scalar_int64(getattr(dataset, name, None))
+                for name in CANDIDATE_DIAGNOSTIC_DOMAIN_INT64_ATTRIBUTES
+            }
+            domain_values = {
+                name: exact_scalar_float64(getattr(dataset, name, None))
+                for name in CANDIDATE_DIAGNOSTIC_DOMAIN_FLOAT64_ATTRIBUTES
+            }
+            for name, value in domain_ints.items():
+                require(value is not None, name)
+            for name, value in domain_counts.items():
+                require(value is not None and value >= 0, name)
+            for name, value in domain_values.items():
+                require(value is not None and np.isfinite(value) and value >= 0.0, name)
+
+            changed_cells = domain_counts.get("candidate_diagnostic_domain_changed_cells")
+            requested_cells = domain_counts.get("candidate_diagnostic_domain_requested_cells")
+            continuity_cells = domain_counts.get(
+                "candidate_diagnostic_domain_continuity_assessable_cells")
+            geostrophic_cells = domain_counts.get(
+                "candidate_diagnostic_domain_geostrophic_assessable_cells")
+            capacity = None
+            if len(dimension_lengths) == 3:
+                capacity = (dimension_lengths["x"] * dimension_lengths["y"] *
+                            dimension_lengths["z"])
+            if capacity is not None:
+                for name, value in domain_counts.items():
+                    require(value is not None and value <= capacity, name + " grid capacity")
+            if requested_cells is not None and continuity_cells is not None:
+                require(continuity_cells <= requested_cells,
+                        "continuity assessable count exceeds requested domain")
+            if requested_cells is not None and geostrophic_cells is not None:
+                require(geostrophic_cells <= requested_cells,
+                        "geostrophic assessable count exceeds requested domain")
+            if changed_cells is not None and requested_cells is not None:
+                require(changed_cells <= requested_cells,
+                        "requested domain omits changed-state rows")
+            domain_statuses = (STATUS_FAILED, STATUS_DEGRADED, STATUS_OK)
+            for name in ("candidate_diagnostic_domain_continuity_status",
+                         "candidate_diagnostic_domain_geostrophic_status"):
+                require(domain_ints.get(name) in domain_statuses, name)
+            for name in ("candidate_diagnostic_domain_continuity_reason",
+                         "candidate_diagnostic_domain_geostrophic_reason"):
+                require(domain_ints.get(name) in (REASON_NONE, REASON_REQUIRED_COVERAGE,
+                                                  REASON_NONFINITE,
+                                                  DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN), name)
+
+            for kind, count, residual_names in (
+                ("continuity", continuity_cells,
+                 ("candidate_diagnostic_domain_continuity_rms",
+                  "candidate_diagnostic_domain_continuity_max_abs")),
+                ("geostrophic", geostrophic_cells,
+                 ("candidate_diagnostic_domain_geostrophic_rms",)),
+            ):
+                assessed = domain_flags.get(f"candidate_diagnostic_domain_{kind}_assessed")
+                status_name = f"candidate_diagnostic_domain_{kind}_status"
+                reason_name = f"candidate_diagnostic_domain_{kind}_reason"
+                if assessed == 1:
+                    require(requested_cells is not None and requested_cells > 0 and
+                            count == requested_cells and
+                            domain_ints.get(status_name) == STATUS_OK and
+                            domain_ints.get(reason_name) == REASON_NONE,
+                            kind + " domain assessed contract")
+                else:
+                    require(all(domain_values.get(name) == 0.0 for name in residual_names),
+                            kind + " unassessed domain values")
+                    if requested_cells == 0:
+                        require(domain_ints.get(status_name) == STATUS_DEGRADED and
+                                domain_ints.get(reason_name) == DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN,
+                                kind + " empty domain status")
+                    elif count is not None and count < requested_cells:
+                        require(domain_ints.get(status_name) == STATUS_DEGRADED and
+                                domain_ints.get(reason_name) == REASON_REQUIRED_COVERAGE,
+                                kind + " incomplete domain reason")
+                    elif count is not None and count == requested_cells:
+                        require(domain_ints.get(status_name) == STATUS_FAILED and
+                                domain_ints.get(reason_name) == REASON_NONFINITE,
+                                kind + " complete-support diagnostic failure")
         pressure_analysis_candidate_present = bool(
             set(PRESSURE_ANALYSIS_CANDIDATE_ATTRIBUTES) & set(dataset.ncattrs())
             or set(PRESSURE_ANALYSIS_CANDIDATE_VARIABLES) & set(dataset.variables)
@@ -6028,7 +6188,10 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                               expected_extensions + "," + LEGACY_ENDPOINT_EXTENSION,
                               expected_extensions + "," + ENDPOINT_EXTENSION,
                               expected_extensions + "," + ENDPOINT_EXTENSION + "," +
-                              CANDIDATE_EVALUATION_EXTENSION)
+                              CANDIDATE_EVALUATION_EXTENSION,
+                              expected_extensions + "," + ENDPOINT_EXTENSION + "," +
+                              CANDIDATE_EVALUATION_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION)
         if pressure_geopotential_signalled:
             require(
                 getattr(dataset, "schema_extensions", "") in allowed_extensions,
