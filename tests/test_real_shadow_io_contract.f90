@@ -1607,7 +1607,8 @@ CONTAINS
     REAL(real64) :: analysis_species(6),analysis_mixing(6),analysis_dry_mass(6)
     REAL(real64) :: analysis_scalar
     CHARACTER(LEN=256) :: analysis_contract,outer_contract,outer_config_id
-    CHARACTER(LEN=256) :: outer_extensions,outer_fields,outer_units
+    CHARACTER(LEN=512) :: outer_extensions
+    CHARACTER(LEN=256) :: outer_fields,outer_units
     CALL make_state(background,4,4)
     background%cloud_water%value(1,1,1)=0.002_real32
     background%rain%value(2,2,2)=1.0e-4_real32
@@ -1774,7 +1775,7 @@ CONTAINS
         'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
         'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,'// &
         'pressure_analysis_v1,pressure_outer_v1,candidate_endpoint_v2,candidate_evaluation_v1,'// &
-        'candidate_diagnostic_domain_v1', &
+        'candidate_diagnostic_domain_v1,candidate_diagnostic_masks_v1', &
         'schema-8 extensions are exact',failures)
       rc=nf90_get_att(ncid,NF90_GLOBAL,'outer_contract',outer_contract)
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_contract)== &
@@ -3008,6 +3009,12 @@ CONTAINS
     REAL(real64) :: expected_metric(3),read_metric
     CHARACTER(LEN=80) :: contract,scope,representation
     CHARACTER(LEN=128) :: boundary
+    CHARACTER(LEN=64), PARAMETER :: mask_names(4)=[CHARACTER(LEN=64) :: &
+      'candidate_diagnostic_changed_mask','candidate_diagnostic_requested_mask', &
+      'candidate_diagnostic_continuity_assessable_mask', &
+      'candidate_diagnostic_geostrophic_assessable_mask']
+    INTEGER :: mask_varid,mask_index
+    INTEGER(int32), ALLOCATABLE :: stored_mask(:,:,:)
 
     contract=''; scope=''; boundary=''; representation=''
     rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_contract',contract)
@@ -3023,9 +3030,15 @@ CONTAINS
       'stored diagnostic boundary convention',failures)
     rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_support_representation', &
       representation)
-    CALL check(rc==NF90_NOERR .AND. TRIM(representation)== &
-      'aggregate_counts_only_exact_masks_not_persisted_v1', &
-      'stored diagnostic support mask limitation',failures)
+    IF (evaluation%diagnostic_masks_assessed) THEN
+      CALL check(rc==NF90_NOERR .AND. TRIM(representation)== &
+        'aggregate_counts_and_exact_masks_v2', &
+        'stored diagnostic support representation',failures)
+    ELSE
+      CALL check(rc==NF90_NOERR .AND. TRIM(representation)== &
+        'aggregate_counts_only_exact_masks_not_persisted_v1', &
+        'stored legacy diagnostic support representation',failures)
+    END IF
     expected=[MERGE(1,0,evaluation%diagnostic_continuity_assessed), &
       MERGE(1,0,evaluation%diagnostic_geostrophic_assessed), &
       evaluation%diagnostic_continuity_status,evaluation%diagnostic_geostrophic_status, &
@@ -3051,6 +3064,33 @@ CONTAINS
       rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(metric_names(n)),read_metric)
       CALL check(rc==NF90_NOERR .AND. read_metric==expected_metric(n), &
         'stored changed-domain metric matches evaluation',failures)
+    END DO
+    IF (.NOT.evaluation%diagnostic_masks_assessed) RETURN
+    ALLOCATE(stored_mask(SIZE(evaluation%diagnostic_changed_mask,1), &
+      SIZE(evaluation%diagnostic_changed_mask,2),SIZE(evaluation%diagnostic_changed_mask,3)))
+    DO mask_index=1,SIZE(mask_names)
+      rc=nf90_inq_varid(ncid,TRIM(mask_names(mask_index)),mask_varid)
+      CALL check(rc==NF90_NOERR,'stored exact diagnostic mask exists',failures)
+      IF (rc/=NF90_NOERR) CYCLE
+      rc=nf90_get_var(ncid,mask_varid,stored_mask)
+      SELECT CASE(mask_index)
+      CASE(1)
+        CALL check(rc==NF90_NOERR .AND. ALL(stored_mask== &
+          MERGE(1_int32,0_int32,evaluation%diagnostic_changed_mask)), &
+          'stored changed mask matches evaluation',failures)
+      CASE(2)
+        CALL check(rc==NF90_NOERR .AND. ALL(stored_mask== &
+          MERGE(1_int32,0_int32,evaluation%diagnostic_requested_mask)), &
+          'stored requested mask matches evaluation',failures)
+      CASE(3)
+        CALL check(rc==NF90_NOERR .AND. ALL(stored_mask== &
+          MERGE(1_int32,0_int32,evaluation%diagnostic_continuity_assessable_mask)), &
+          'stored continuity assessable mask matches evaluation',failures)
+      CASE(4)
+        CALL check(rc==NF90_NOERR .AND. ALL(stored_mask== &
+          MERGE(1_int32,0_int32,evaluation%diagnostic_geostrophic_assessable_mask)), &
+          'stored geostrophic assessable mask matches evaluation',failures)
+      END SELECT
     END DO
   END SUBROUTINE check_candidate_diagnostic_domain_receipt
 
