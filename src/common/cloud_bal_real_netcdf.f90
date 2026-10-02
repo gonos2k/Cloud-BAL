@@ -933,7 +933,7 @@ CONTAINS
     INTEGER :: omega_top_var,omega_bottom_var,omega_top_valid_var,omega_bottom_valid_var
     INTEGER :: omega_top_quality_var,omega_top_source_var
     INTEGER :: omega_bottom_quality_var,omega_bottom_source_var
-    INTEGER :: varid(37),rc,k,contract_reason,nx,ny,nz
+    INTEGER :: varid(37),diagnostic_mask_varid(4),rc,k,contract_reason,nx,ny,nz
     INTEGER(int32), ALLOCATABLE :: mask(:,:,:),boundary_mask(:,:)
     REAL(real32), ALLOCATABLE :: levels(:)
     CHARACTER(LEN=32), PARAMETER :: names(37)=[CHARACTER(LEN=32) :: &
@@ -954,6 +954,10 @@ CONTAINS
       'kg kg-1 dryair','kg kg-1 dryair','kg kg-1 dryair','kg kg-1 dryair', &
       'kg kg-1 dryair','kg kg-1 dryair','1','s-1','s-1', &
       '1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']
+    CHARACTER(LEN=48), PARAMETER :: diagnostic_mask_names(4)=[CHARACTER(LEN=48) :: &
+      'candidate_diagnostic_changed_mask','candidate_diagnostic_requested_mask', &
+      'candidate_diagnostic_continuity_assessable_mask', &
+      'candidate_diagnostic_geostrophic_assessable_mask']
 
     status=STATUS_FAILED
     pressure_candidate=.FALSE.
@@ -1039,6 +1043,14 @@ CONTAINS
       IF (.NOT.nc_ok(nf90_def_var(ncid,TRIM(names(k)),NF90_INT, &
                                   (/xdim,ydim,zdim/),varid(k)))) GOTO 900
     END DO
+    IF (result%candidate_evaluation%diagnostic_masks_assessed) THEN
+      DO k=1,4
+        IF (.NOT.nc_ok(nf90_def_var(ncid,TRIM(diagnostic_mask_names(k)),NF90_INT, &
+                                    (/xdim,ydim,zdim/),diagnostic_mask_varid(k)))) GOTO 900
+        IF (.NOT.nc_ok(nf90_put_att(ncid,diagnostic_mask_varid(k),'units','1'))) GOTO 900
+        IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,diagnostic_mask_varid(k),1,1,1))) GOTO 900
+      END DO
+    END IF
     DO k=1,36
       IF (.NOT.nc_ok(nf90_put_att(ncid,varid(k),'units',TRIM(units(k))))) GOTO 900
       IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,varid(k),1,1,1))) GOTO 900
@@ -1064,6 +1076,8 @@ CONTAINS
       'paired model native target and closed halo coverage'))) GOTO 900
     IF (.NOT.put_global_metadata(ncid,result,config,state_in%pressure%valid_time)) GOTO 900
     IF (.NOT.put_candidate_endpoint(ncid,result%candidate_budget)) GOTO 900
+    IF (.NOT.put_candidate_evaluation(ncid,result%candidate_evaluation)) GOTO 900
+    IF (.NOT.put_candidate_diagnostic_domain(ncid,result%candidate_evaluation)) GOTO 900
     IF (config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS) THEN
       IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'omega_target_error_contract', &
         'MODEL_ABSOLUTE_TARGET_NO_SIGMA'))) GOTO 900
@@ -1087,6 +1101,26 @@ CONTAINS
         .NOT.nc_ok(nf90_put_att(ncid,lat_var,'units','degree_north')) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,lon_var,'units','degree_east'))) GOTO 900
     IF (.NOT.nc_ok(nf90_enddef(ncid))) GOTO 900
+    IF (result%candidate_evaluation%diagnostic_masks_assessed) THEN
+      IF (.NOT.ALLOCATED(result%candidate_evaluation%diagnostic_changed_mask) .OR. &
+          .NOT.ALLOCATED(result%candidate_evaluation%diagnostic_requested_mask) .OR. &
+          .NOT.ALLOCATED(result%candidate_evaluation%diagnostic_continuity_assessable_mask) .OR. &
+          .NOT.ALLOCATED(result%candidate_evaluation%diagnostic_geostrophic_assessable_mask)) GOTO 900
+      IF (ANY(SHAPE(result%candidate_evaluation%diagnostic_changed_mask)/=(/nx,ny,nz/)) .OR. &
+          ANY(SHAPE(result%candidate_evaluation%diagnostic_requested_mask)/=(/nx,ny,nz/)) .OR. &
+          ANY(SHAPE(result%candidate_evaluation%diagnostic_continuity_assessable_mask)/=(/nx,ny,nz/)) .OR. &
+          ANY(SHAPE(result%candidate_evaluation%diagnostic_geostrophic_assessable_mask)/=(/nx,ny,nz/))) GOTO 900
+      ALLOCATE(mask(nx,ny,nz))
+      mask=MERGE(1_int32,0_int32,result%candidate_evaluation%diagnostic_changed_mask)
+      IF (.NOT.nc_ok(nf90_put_var(ncid,diagnostic_mask_varid(1),mask))) GOTO 900
+      mask=MERGE(1_int32,0_int32,result%candidate_evaluation%diagnostic_requested_mask)
+      IF (.NOT.nc_ok(nf90_put_var(ncid,diagnostic_mask_varid(2),mask))) GOTO 900
+      mask=MERGE(1_int32,0_int32,result%candidate_evaluation%diagnostic_continuity_assessable_mask)
+      IF (.NOT.nc_ok(nf90_put_var(ncid,diagnostic_mask_varid(3),mask))) GOTO 900
+      mask=MERGE(1_int32,0_int32,result%candidate_evaluation%diagnostic_geostrophic_assessable_mask)
+      IF (.NOT.nc_ok(nf90_put_var(ncid,diagnostic_mask_varid(4),mask))) GOTO 900
+      DEALLOCATE(mask)
+    END IF
     ALLOCATE(levels(nz))
     DO k=1,nz
       levels(k)=state_in%pressure%value(1,1,k)
@@ -1239,6 +1273,8 @@ CONTAINS
           ALLOCATED(result%pressure_transition_seed))) GOTO 900
       END IF
     END IF
+    IF (.NOT.put_interior_hydrostatic_assessment(ncid,(/xdim,ydim,zdim/),zspacing_dim, &
+      candidate,result%candidate_evaluation)) GOTO 900
     rc=nf90_close(ncid)
     IF (rc==NF90_NOERR) THEN
       status=STATUS_OK
@@ -1301,8 +1337,8 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,stencil_var,1,1,1))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,stencil_var,'units','1'))) RETURN
     IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
-    IF (.NOT.nc_ok(nf90_put_var(ncid,support_var,MERGE(1_int32,0_int32,support)))) RETURN
-    IF (.NOT.nc_ok(nf90_put_var(ncid,stencil_var,MERGE(1_int32,0_int32,stencil_support)))) RETURN
+    IF (.NOT.put_logical_mask(ncid,support_var,support)) RETURN
+    IF (.NOT.put_logical_mask(ncid,stencil_var,stencil_support)) RETURN
     put_pressure_geostrophic_extension=.TRUE.
   END FUNCTION put_pressure_geostrophic_extension
 
@@ -1388,8 +1424,7 @@ CONTAINS
     END IF
     IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
     IF (ALLOCATED(result%geopotential_support)) THEN
-      IF (.NOT.nc_ok(nf90_put_var(ncid,support_var, &
-        MERGE(1_int32,0_int32,result%geopotential_support)))) RETURN
+      IF (.NOT.put_logical_mask(ncid,support_var,result%geopotential_support)) RETURN
       IF (.NOT.nc_ok(nf90_put_var(ncid,reference_var, &
         result%geopotential_reference_level))) RETURN
       IF (.NOT.put_thermo_field(ncid,dims,'background_geopotential', &
@@ -1517,11 +1552,9 @@ CONTAINS
           .NOT.nc_ok(nf90_put_att(ncid,seed_domain_var,'units','1')) .OR. &
           .NOT.nc_ok(nf90_put_att(ncid,dry_mass_var,'units','kg dryair'))) RETURN
       IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
-      IF (.NOT.nc_ok(nf90_put_var(ncid,candidate_domain_var, &
-        MERGE(1_int32,0_int32,candidate%above_ground))) .OR. &
-          .NOT.nc_ok(nf90_put_var(ncid,seed_domain_var, &
-            MERGE(1_int32,0_int32,seed%above_ground))) .OR. &
-          .NOT.nc_ok(nf90_put_var(ncid,dry_mass_var,seed%grid%dry_air_mass_measure))) RETURN
+      IF (.NOT.put_logical_mask(ncid,candidate_domain_var,candidate%above_ground)) RETURN
+      IF (.NOT.put_logical_mask(ncid,seed_domain_var,seed%above_ground)) RETURN
+      IF (.NOT.nc_ok(nf90_put_var(ncid,dry_mass_var,seed%grid%dry_air_mass_measure))) RETURN
       IF (.NOT.put_surface_field(ncid,surface_dims,'transition_seed_surface_pressure', &
         seed%surface_pressure)) RETURN
       IF (.NOT.put_thermo_field(ncid,volume_dims,'transition_seed_pressure',seed%pressure)) RETURN
@@ -1683,19 +1716,16 @@ CONTAINS
     END IF
     IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
     IF (.NOT.nc_ok(nf90_put_var(ncid,ids(1),background%precipitation_phase%value))) RETURN
-    IF (.NOT.nc_ok(nf90_put_var(ncid,ids(2), &
-      MERGE(1_int32,0_int32,background%precipitation_phase%valid)))) RETURN
+    IF (.NOT.put_logical_mask(ncid,ids(2),background%precipitation_phase%valid)) RETURN
     IF (.NOT.nc_ok(nf90_put_var(ncid,ids(3),background%precipitation_phase%quality))) RETURN
     IF (.NOT.nc_ok(nf90_put_var(ncid,ids(4),background%precipitation_phase%source))) RETURN
     IF (cloud_present) THEN
       IF (.NOT.nc_ok(nf90_put_var(ncid,fraction_ids(1),background%cloud_fraction%value))) RETURN
-      IF (.NOT.nc_ok(nf90_put_var(ncid,fraction_ids(2), &
-        MERGE(1_int32,0_int32,background%cloud_fraction%valid)))) RETURN
+      IF (.NOT.put_logical_mask(ncid,fraction_ids(2),background%cloud_fraction%valid)) RETURN
       IF (.NOT.nc_ok(nf90_put_var(ncid,fraction_ids(3),background%cloud_fraction%quality))) RETURN
       IF (.NOT.nc_ok(nf90_put_var(ncid,fraction_ids(4),background%cloud_fraction%source))) RETURN
       IF (.NOT.nc_ok(nf90_put_var(ncid,type_ids(1),background%cloud_type%value))) RETURN
-      IF (.NOT.nc_ok(nf90_put_var(ncid,type_ids(2), &
-        MERGE(1_int32,0_int32,background%cloud_type%valid)))) RETURN
+      IF (.NOT.put_logical_mask(ncid,type_ids(2),background%cloud_type%valid)) RETURN
       IF (.NOT.nc_ok(nf90_put_var(ncid,type_ids(3),background%cloud_type%quality))) RETURN
       IF (.NOT.nc_ok(nf90_put_var(ncid,type_ids(4),background%cloud_type%source))) RETURN
     END IF
@@ -1742,22 +1772,118 @@ CONTAINS
     put_candidate_endpoint=.TRUE.
   END FUNCTION put_candidate_endpoint
 
+  LOGICAL FUNCTION put_candidate_evaluation(ncid,evaluation)
+    USE cloud_bal_pipeline, ONLY: joint_candidate_evaluation
+    INTEGER, INTENT(IN) :: ncid
+    TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
+
+    put_candidate_evaluation=.FALSE.
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_contract', &
+      'final_pressure_diagnostics_v1'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_scope', &
+      'endpoint_and_active_pressure_balance_diagnostics_only'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_canonical_accounting_assessed', &
+      MERGE(1_int32,0_int32,evaluation%canonical_accounting_assessed)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_continuity_assessed', &
+      MERGE(1_int32,0_int32,evaluation%continuity_assessed)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_geostrophic_assessed', &
+      MERGE(1_int32,0_int32,evaluation%geostrophic_assessed)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_source_boundary_assessed', &
+      MERGE(1_int32,0_int32,evaluation%source_boundary_assessed)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_observation_fit_assessed', &
+      MERGE(1_int32,0_int32,evaluation%observation_fit_assessed)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_balance_support_cells', &
+      evaluation%balance_support_cells))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_operator_status', &
+      evaluation%operator_status))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_operator_reason', &
+      evaluation%operator_reason))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_continuity_status', &
+      evaluation%continuity_status))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_geostrophic_status', &
+      evaluation%geostrophic_status))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_continuity_rms', &
+      evaluation%continuity_rms))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_continuity_max_abs', &
+      evaluation%continuity_max_abs))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_evaluation_geostrophic_rms', &
+      evaluation%geostrophic_rms))) RETURN
+    put_candidate_evaluation=.TRUE.
+  END FUNCTION put_candidate_evaluation
+
+  LOGICAL FUNCTION put_candidate_diagnostic_domain(ncid,evaluation)
+    USE cloud_bal_pipeline, ONLY: joint_candidate_evaluation
+    INTEGER, INTENT(IN) :: ncid
+    TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
+    put_candidate_diagnostic_domain=.FALSE.
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_contract', &
+      'changed_pressure_state_domain_v1'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_scope', &
+      'changed_thermo_hydrometeor_pressure_geopotential_wind_plus_one_cell_stencil'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_boundary_contract', &
+      'full_state_open_internal_faces_zero_gradient_horizontal_perimeter_prescribed_top_bottom_omega'))) RETURN
+    IF (evaluation%diagnostic_masks_assessed) THEN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_support_representation', &
+        'aggregate_counts_and_exact_masks_v2'))) RETURN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_mask_contract', &
+        'exact_binary_int32_xyz_masks_v1'))) RETURN
+    ELSE
+      IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_support_representation', &
+        'aggregate_counts_only_exact_masks_not_persisted_v1'))) RETURN
+    END IF
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_changed_cells', &
+      evaluation%diagnostic_changed_cells))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_requested_cells', &
+      evaluation%diagnostic_requested_cells))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_continuity_assessable_cells', &
+      evaluation%continuity_assessable_cells))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_geostrophic_assessable_cells', &
+      evaluation%geostrophic_assessable_cells))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_continuity_assessed', &
+      MERGE(1_int32,0_int32,evaluation%diagnostic_continuity_assessed)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_geostrophic_assessed', &
+      MERGE(1_int32,0_int32,evaluation%diagnostic_geostrophic_assessed)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_continuity_status', &
+      evaluation%diagnostic_continuity_status))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_geostrophic_status', &
+      evaluation%diagnostic_geostrophic_status))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_operator_status', &
+      evaluation%diagnostic_operator_status))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_operator_reason', &
+      evaluation%diagnostic_operator_reason))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_continuity_reason', &
+      evaluation%diagnostic_continuity_reason))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_geostrophic_reason', &
+      evaluation%diagnostic_geostrophic_reason))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_continuity_rms', &
+      evaluation%diagnostic_continuity_rms))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_continuity_max_abs', &
+      evaluation%diagnostic_continuity_max_abs))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_diagnostic_domain_geostrophic_rms', &
+      evaluation%diagnostic_geostrophic_rms))) RETURN
+    put_candidate_diagnostic_domain=.TRUE.
+  END FUNCTION put_candidate_diagnostic_domain
+
   LOGICAL FUNCTION put_outer_extension(ncid,result,config)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config
     INTEGER, INTENT(IN) :: ncid
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
     INTEGER :: count
+    CHARACTER(LEN=512) :: extension_list
     put_outer_extension=.FALSE.
     count=result%outer_iterations
     IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'diagnostic_schema_version',8))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'contract','real_radar_thermo_shadow_v3'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'configuration_id','pressure-thermo-shadow-v3'))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
-      'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
+    extension_list='verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
       'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,pressure_analysis_v1,pressure_outer_v1,'// &
-      'candidate_endpoint_v2'))) RETURN
+      'candidate_endpoint_v2,candidate_evaluation_v1,'// &
+      'candidate_diagnostic_domain_v1,candidate_diagnostic_operator_v1'
+    IF (result%candidate_evaluation%diagnostic_masks_assessed) &
+      extension_list=TRIM(extension_list)//',candidate_diagnostic_masks_v1'
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions',TRIM(extension_list)))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'outer_contract', &
       'pressure_fixed_feedback_producer_replay_v1'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'outer_maximum_iterations',config%maximum_outer_iterations))) RETURN
@@ -1772,12 +1898,28 @@ CONTAINS
     put_outer_extension=.TRUE.
   END FUNCTION put_outer_extension
 
+  LOGICAL FUNCTION put_logical_mask(ncid,varid,logical_mask)
+    INTEGER, INTENT(IN) :: ncid,varid
+    LOGICAL, INTENT(IN) :: logical_mask(:,:,:)
+    INTEGER(int32), ALLOCATABLE :: encoded_mask(:,:,:)
+    INTEGER :: allocation_status
+
+    put_logical_mask=.FALSE.
+    ALLOCATE(encoded_mask(SIZE(logical_mask,1),SIZE(logical_mask,2),SIZE(logical_mask,3)), &
+      STAT=allocation_status)
+    IF (allocation_status/=0) RETURN
+    encoded_mask=0_int32
+    WHERE(logical_mask) encoded_mask=1_int32
+    put_logical_mask=nc_ok(nf90_put_var(ncid,varid,encoded_mask))
+  END FUNCTION put_logical_mask
+
   LOGICAL FUNCTION put_thermo_extension(ncid,dims,background,candidate,result)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
     INTEGER, INTENT(IN) :: ncid,dims(3)
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
     INTEGER :: support_var,surface_var,mass_var
+    CHARACTER(LEN=512) :: extension_list
     put_thermo_extension=.FALSE.
     IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
     IF (.NOT.nc_ok(nf90_def_var(ncid,'thermo_support',NF90_INT,dims,support_var))) RETURN
@@ -1794,10 +1936,13 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'contract','real_radar_thermo_shadow_v2'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'evidence_class','PRESSURE_THERMO_SHADOW_PROPOSAL'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'configuration_id','pressure-thermo-shadow-v2'))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
-      'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
+    extension_list='verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
       'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,pressure_analysis_v1,'// &
-      'candidate_endpoint_v2'))) RETURN
+      'candidate_endpoint_v2,candidate_evaluation_v1,'// &
+      'candidate_diagnostic_domain_v1,candidate_diagnostic_operator_v1'
+    IF (result%candidate_evaluation%diagnostic_masks_assessed) &
+      extension_list=TRIM(extension_list)//',candidate_diagnostic_masks_v1'
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions',TRIM(extension_list)))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'analysis_contract', &
       'pressure_fixed_represented_mixture_v1'))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'analysis_species_change_kg', &
@@ -1834,7 +1979,7 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'thermo_enthalpy_error_j', &
       result%thermo_budget%enthalpy_error_j))) RETURN
     IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
-    IF (.NOT.nc_ok(nf90_put_var(ncid,support_var,MERGE(1_int32,0_int32,result%thermo_support)))) RETURN
+    IF (.NOT.put_logical_mask(ncid,support_var,result%thermo_support)) RETURN
     IF (.NOT.nc_ok(nf90_put_var(ncid,surface_var,result%thermo_surface))) RETURN
     IF (.NOT.nc_ok(nf90_put_var(ncid,mass_var,candidate%grid%dry_air_mass_measure))) RETURN
     IF (.NOT.put_thermo_field(ncid,dims,'background_temperature',background%temperature)) RETURN
@@ -2309,10 +2454,127 @@ CONTAINS
       left%incomplete_candidate_cells==right%incomplete_candidate_cells
   END FUNCTION pressure_analysis_budgets_equal
 
+  LOGICAL FUNCTION put_interior_hydrostatic_assessment(ncid,dims,spacing_dim,candidate,evaluation)
+    USE cloud_bal_pipeline, ONLY: joint_candidate_evaluation
+    INTEGER, INTENT(IN) :: ncid,dims(3),spacing_dim
+    TYPE(cloud_bal_state_type), INTENT(IN) :: candidate
+    TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
+    INTEGER :: group,ids(5),k
+    CHARACTER(LEN=512) :: extensions
+    INTEGER(int32), ALLOCATABLE :: mask(:,:,:)
+    CHARACTER(LEN=16), PARAMETER :: names(5)=[CHARACTER(LEN=16) :: &
+      'requested','assessable','reason','residual','above_ground']
+
+    put_interior_hydrostatic_assessment=.FALSE.
+    IF (.NOT.ALLOCATED(evaluation%interior_hydrostatic_requested)) THEN
+      put_interior_hydrostatic_assessment=.TRUE.
+      RETURN
+    END IF
+    IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
+    IF (.NOT.nc_ok(nf90_get_att(ncid,NF90_GLOBAL,'schema_extensions',extensions))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
+      TRIM(extensions)//',candidate_interior_hydrostatic_v1'))) RETURN
+    IF (.NOT.nc_ok(nf90_def_grp(ncid,'candidate_interior_hydrostatic_v1',group))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'contract', &
+      'signed_interior_thickness_diagnostic_v1'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'scope', &
+      'approximate_interior_only_no_surface_or_physical_approval'))) RETURN
+    ASSOCIATE(summary=>evaluation%interior_hydrostatic_summary)
+      IF (.NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'requested_layers',summary%requested_layers)) .OR. &
+          .NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'assessable_layers',summary%assessable_layers)) .OR. &
+          .NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'missing_support_layers',summary%missing_support_layers)) .OR. &
+          .NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'nonfinite_layers',summary%nonfinite_layers)) .OR. &
+          .NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'range_layers',summary%range_layers)) .OR. &
+          .NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'shape_errors',summary%shape_errors)) .OR. &
+          .NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'metadata_errors',summary%metadata_errors)) .OR. &
+          .NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'residual_rms_m2_s2',summary%residual_rms_m2_s2)) .OR. &
+          .NOT.nc_ok(nf90_put_att(group,NF90_GLOBAL,'residual_max_abs_m2_s2', &
+            summary%residual_max_abs_m2_s2))) RETURN
+    END ASSOCIATE
+    DO k=1,5
+      IF (k==4) THEN
+        IF (.NOT.nc_ok(nf90_def_var(group,TRIM(names(k)),NF90_DOUBLE, &
+          (/dims(1),dims(2),spacing_dim/),ids(k)))) RETURN
+        IF (.NOT.nc_ok(nf90_put_att(group,ids(k),'units','m2 s-2'))) RETURN
+      ELSE IF (k==5) THEN
+        IF (.NOT.nc_ok(nf90_def_var(group,TRIM(names(k)),NF90_INT,dims,ids(k)))) RETURN
+        IF (.NOT.nc_ok(nf90_put_att(group,ids(k),'units','1'))) RETURN
+      ELSE
+        IF (.NOT.nc_ok(nf90_def_var(group,TRIM(names(k)),NF90_INT, &
+          (/dims(1),dims(2),spacing_dim/),ids(k)))) RETURN
+        IF (.NOT.nc_ok(nf90_put_att(group,ids(k),'units','1'))) RETURN
+      END IF
+      IF (.NOT.nc_ok(nf90_def_var_deflate(group,ids(k),1,1,1))) RETURN
+    END DO
+    IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
+    ALLOCATE(mask(SIZE(evaluation%interior_hydrostatic_requested,1), &
+      SIZE(evaluation%interior_hydrostatic_requested,2),SIZE(evaluation%interior_hydrostatic_requested,3)))
+    mask=MERGE(1_int32,0_int32,evaluation%interior_hydrostatic_requested)
+    IF (.NOT.nc_ok(nf90_put_var(group,ids(1),mask))) RETURN
+    mask=MERGE(1_int32,0_int32,evaluation%interior_hydrostatic_assessable)
+    IF (.NOT.nc_ok(nf90_put_var(group,ids(2),mask))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(group,ids(3),evaluation%interior_hydrostatic_reason))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(group,ids(4),evaluation%interior_hydrostatic_residual))) RETURN
+    DEALLOCATE(mask)
+    ALLOCATE(mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
+    mask=MERGE(1_int32,0_int32,candidate%above_ground)
+    IF (.NOT.nc_ok(nf90_put_var(group,ids(5),mask))) RETURN
+    ! Store the canonical inputs in this group for standalone semantic
+    ! readback, including schemas that lack background thermodynamic fields.
+    IF (.NOT.put_thermo_field(group,dims,'pressure',candidate%pressure)) RETURN
+    IF (.NOT.put_thermo_field(group,dims,'temperature',candidate%temperature)) RETURN
+    IF (ALLOCATED(candidate%geopotential%value) .AND. ALLOCATED(candidate%geopotential%valid) .AND. &
+        ALLOCATED(candidate%geopotential%quality) .AND. ALLOCATED(candidate%geopotential%source)) THEN
+      IF (.NOT.put_thermo_field(group,dims,'geopotential',candidate%geopotential)) RETURN
+    END IF
+    IF (.NOT.put_thermo_field(group,dims,'vapor',candidate%vapor)) RETURN
+    IF (.NOT.put_thermo_field(group,dims,'cloud_water',candidate%cloud_water)) RETURN
+    IF (.NOT.put_thermo_field(group,dims,'cloud_ice',candidate%cloud_ice)) RETURN
+    IF (.NOT.put_thermo_field(group,dims,'rain',candidate%rain)) RETURN
+    IF (.NOT.put_thermo_field(group,dims,'snow',candidate%snow)) RETURN
+    IF (.NOT.put_thermo_field(group,dims,'graupel',candidate%graupel)) RETURN
+    put_interior_hydrostatic_assessment=.TRUE.
+  END FUNCTION put_interior_hydrostatic_assessment
+
+  PURE LOGICAL FUNCTION interior_hydrostatic_assessments_equal(left,right)
+    USE cloud_bal_pipeline, ONLY: joint_candidate_evaluation
+    TYPE(joint_candidate_evaluation), INTENT(IN) :: left,right
+    interior_hydrostatic_assessments_equal=.FALSE.
+    IF (ALLOCATED(left%interior_hydrostatic_requested) .NEQV. &
+        ALLOCATED(right%interior_hydrostatic_requested)) RETURN
+    IF (.NOT.ALLOCATED(left%interior_hydrostatic_requested)) THEN
+      interior_hydrostatic_assessments_equal=.TRUE.
+      RETURN
+    END IF
+    IF (.NOT.ALLOCATED(left%interior_hydrostatic_assessable) .OR. &
+        .NOT.ALLOCATED(right%interior_hydrostatic_assessable) .OR. &
+        .NOT.ALLOCATED(left%interior_hydrostatic_reason) .OR. &
+        .NOT.ALLOCATED(right%interior_hydrostatic_reason) .OR. &
+        .NOT.ALLOCATED(left%interior_hydrostatic_residual) .OR. &
+        .NOT.ALLOCATED(right%interior_hydrostatic_residual)) RETURN
+    IF (ANY(SHAPE(left%interior_hydrostatic_requested)/=SHAPE(right%interior_hydrostatic_requested))) RETURN
+    IF (ANY(SHAPE(left%interior_hydrostatic_assessable)/=SHAPE(right%interior_hydrostatic_assessable))) RETURN
+    IF (ANY(SHAPE(left%interior_hydrostatic_reason)/=SHAPE(right%interior_hydrostatic_reason))) RETURN
+    IF (ANY(SHAPE(left%interior_hydrostatic_residual)/=SHAPE(right%interior_hydrostatic_residual))) RETURN
+    interior_hydrostatic_assessments_equal= &
+      ALL(left%interior_hydrostatic_requested .EQV. right%interior_hydrostatic_requested) .AND. &
+      ALL(left%interior_hydrostatic_assessable .EQV. right%interior_hydrostatic_assessable) .AND. &
+      ALL(left%interior_hydrostatic_reason==right%interior_hydrostatic_reason) .AND. &
+      ALL(left%interior_hydrostatic_residual==right%interior_hydrostatic_residual)
+    ASSOCIATE(a=>left%interior_hydrostatic_summary,b=>right%interior_hydrostatic_summary)
+      interior_hydrostatic_assessments_equal=interior_hydrostatic_assessments_equal .AND. &
+        a%requested_layers==b%requested_layers .AND. a%assessable_layers==b%assessable_layers .AND. &
+        a%missing_support_layers==b%missing_support_layers .AND. a%nonfinite_layers==b%nonfinite_layers .AND. &
+        a%range_layers==b%range_layers .AND. a%shape_errors==b%shape_errors .AND. &
+        a%metadata_errors==b%metadata_errors .AND. a%residual_rms_m2_s2==b%residual_rms_m2_s2 .AND. &
+        a%residual_max_abs_m2_s2==b%residual_max_abs_m2_s2
+    END ASSOCIATE
+  END FUNCTION interior_hydrostatic_assessments_equal
+
   PURE LOGICAL FUNCTION joint_candidate_evaluations_equal(left,right)
     USE cloud_bal_pipeline, ONLY: joint_candidate_evaluation
     TYPE(joint_candidate_evaluation), INTENT(IN) :: left,right
-    joint_candidate_evaluations_equal= &
+    joint_candidate_evaluations_equal=interior_hydrostatic_assessments_equal(left,right) .AND. &
       (left%canonical_accounting_assessed .EQV. right%canonical_accounting_assessed) .AND. &
       (left%continuity_assessed .EQV. right%continuity_assessed) .AND. &
       (left%geostrophic_assessed .EQV. right%geostrophic_assessed) .AND. &
@@ -2325,7 +2587,68 @@ CONTAINS
       left%geostrophic_status==right%geostrophic_status .AND. &
       left%continuity_rms==right%continuity_rms .AND. &
       left%continuity_max_abs==right%continuity_max_abs .AND. &
-      left%geostrophic_rms==right%geostrophic_rms
+      left%geostrophic_rms==right%geostrophic_rms .AND. &
+      left%diagnostic_changed_cells==right%diagnostic_changed_cells .AND. &
+      left%diagnostic_requested_cells==right%diagnostic_requested_cells .AND. &
+      left%continuity_assessable_cells==right%continuity_assessable_cells .AND. &
+      left%geostrophic_assessable_cells==right%geostrophic_assessable_cells .AND. &
+      (left%diagnostic_continuity_assessed .EQV. right%diagnostic_continuity_assessed) .AND. &
+      (left%diagnostic_geostrophic_assessed .EQV. right%diagnostic_geostrophic_assessed) .AND. &
+      left%diagnostic_continuity_status==right%diagnostic_continuity_status .AND. &
+      left%diagnostic_geostrophic_status==right%diagnostic_geostrophic_status .AND. &
+      left%diagnostic_continuity_reason==right%diagnostic_continuity_reason .AND. &
+      left%diagnostic_geostrophic_reason==right%diagnostic_geostrophic_reason .AND. &
+      left%diagnostic_operator_status==right%diagnostic_operator_status .AND. &
+      left%diagnostic_operator_reason==right%diagnostic_operator_reason .AND. &
+      left%diagnostic_continuity_rms==right%diagnostic_continuity_rms .AND. &
+      left%diagnostic_continuity_max_abs==right%diagnostic_continuity_max_abs .AND. &
+      left%diagnostic_geostrophic_rms==right%diagnostic_geostrophic_rms
+    joint_candidate_evaluations_equal=joint_candidate_evaluations_equal .AND. &
+      (left%diagnostic_masks_assessed .EQV. right%diagnostic_masks_assessed)
+    IF (.NOT.joint_candidate_evaluations_equal) RETURN
+    IF (ALLOCATED(left%diagnostic_changed_mask) .NEQV. &
+        ALLOCATED(right%diagnostic_changed_mask)) THEN
+      joint_candidate_evaluations_equal=.FALSE.
+      RETURN
+    END IF
+    IF (ALLOCATED(left%diagnostic_requested_mask) .NEQV. &
+        ALLOCATED(right%diagnostic_requested_mask)) THEN
+      joint_candidate_evaluations_equal=.FALSE.
+      RETURN
+    END IF
+    IF (ALLOCATED(left%diagnostic_continuity_assessable_mask) .NEQV. &
+        ALLOCATED(right%diagnostic_continuity_assessable_mask)) THEN
+      joint_candidate_evaluations_equal=.FALSE.
+      RETURN
+    END IF
+    IF (ALLOCATED(left%diagnostic_geostrophic_assessable_mask) .NEQV. &
+        ALLOCATED(right%diagnostic_geostrophic_assessable_mask)) THEN
+      joint_candidate_evaluations_equal=.FALSE.
+      RETURN
+    END IF
+    IF (.NOT.ALLOCATED(left%diagnostic_changed_mask)) RETURN
+    IF (.NOT.ALLOCATED(left%diagnostic_requested_mask) .OR. &
+        .NOT.ALLOCATED(left%diagnostic_continuity_assessable_mask) .OR. &
+        .NOT.ALLOCATED(left%diagnostic_geostrophic_assessable_mask)) THEN
+      joint_candidate_evaluations_equal=.FALSE.
+      RETURN
+    END IF
+    IF (ANY(SHAPE(left%diagnostic_changed_mask)/=SHAPE(right%diagnostic_changed_mask)) .OR. &
+        ANY(SHAPE(left%diagnostic_requested_mask)/=SHAPE(right%diagnostic_requested_mask)) .OR. &
+        ANY(SHAPE(left%diagnostic_continuity_assessable_mask)/= &
+            SHAPE(right%diagnostic_continuity_assessable_mask)) .OR. &
+        ANY(SHAPE(left%diagnostic_geostrophic_assessable_mask)/= &
+            SHAPE(right%diagnostic_geostrophic_assessable_mask))) THEN
+      joint_candidate_evaluations_equal=.FALSE.
+      RETURN
+    END IF
+    joint_candidate_evaluations_equal= &
+      ALL(left%diagnostic_changed_mask .EQV. right%diagnostic_changed_mask) .AND. &
+      ALL(left%diagnostic_requested_mask .EQV. right%diagnostic_requested_mask) .AND. &
+      ALL(left%diagnostic_continuity_assessable_mask .EQV. &
+          right%diagnostic_continuity_assessable_mask) .AND. &
+      ALL(left%diagnostic_geostrophic_assessable_mask .EQV. &
+          right%diagnostic_geostrophic_assessable_mask)
   END FUNCTION joint_candidate_evaluations_equal
 
   PURE LOGICAL FUNCTION numerical_diagnostics_equal(left,right)
@@ -3441,6 +3764,7 @@ CONTAINS
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
     INTEGER(int64), INTENT(IN) :: valid_time
+    CHARACTER(LEN=512) :: extensions
     CHARACTER(LEN=64) :: evidence_class,configuration_id,target_provenance, &
       boundary_provenance,contract_name
     put_global_metadata=.FALSE.
@@ -3460,9 +3784,13 @@ CONTAINS
                                 TRIM(contract_name)))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'diagnostic_schema_version', &
                                 5_int32))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions', &
-      'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
-      'pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2'))) RETURN
+    extensions='verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
+      'pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2,'// &
+      'candidate_evaluation_v1,candidate_diagnostic_domain_v1,'// &
+      'candidate_diagnostic_operator_v1'
+    IF (result%candidate_evaluation%diagnostic_masks_assessed) &
+      extensions=TRIM(extensions)//',candidate_diagnostic_masks_v1'
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions',TRIM(extensions)))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'cloud_bal_schema_version', &
                                 CLOUD_BAL_SCHEMA_VERSION))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'evidence_class', &

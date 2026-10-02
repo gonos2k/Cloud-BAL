@@ -37,6 +37,7 @@ PROGRAM test_pipeline
   CALL check(status==STATUS_FAILED .AND. zero_analysis_budget(independent_budget) .AND. &
              .NOT.reassessment%canonical_accounting_assessed, &
              'invalid final state leaves no assessed endpoint',failures)
+  CALL test_candidate_diagnostic_domain(failures)
   config%requested_mode=MODE_OFF
   CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
   CALL check(result%status==STATUS_OK,'OFF must be a successful no-op',failures)
@@ -66,6 +67,13 @@ PROGRAM test_pipeline
              result%balance%numerical%solver_reason==SOLVER_NOT_RUN .AND. &
              .NOT.ANY(result%balance%changed), &
              'uncertain radar loading cannot seed the wind solver',failures)
+  CALL check(result%candidate_evaluation%canonical_accounting_assessed .AND. &
+             result%candidate_evaluation%balance_support_cells==0_int64 .AND. &
+             .NOT.result%candidate_evaluation%continuity_assessed .AND. &
+             .NOT.result%candidate_evaluation%geostrophic_assessed .AND. &
+             .NOT.result%candidate_evaluation%source_boundary_assessed .AND. &
+             .NOT.result%candidate_evaluation%observation_fit_assessed, &
+             'no-omega hydrometeor candidate retains explicit unresolved diagnostics',failures)
   CALL check(same_pipeline_state(input,operational), &
              'SHADOW must not change operational state',failures)
   CALL derive_column_physics(input,column_candidate,result%column,config%column)
@@ -1195,6 +1203,169 @@ CONTAINS
       PRINT *,'FAIL: ',TRIM(message)
     END IF
   END SUBROUTINE check
+
+  SUBROUTINE test_candidate_diagnostic_domain(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: background,candidate
+    TYPE(cloud_bal_pipeline_config) :: local_config
+    TYPE(joint_candidate_evaluation) :: evaluation
+    TYPE(pressure_analysis_budget) :: budget
+    INTEGER :: status,reason
+
+    CALL make_state(background)
+    CALL make_complete_water_fields(background)
+    candidate=background
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. evaluation%diagnostic_requested_cells==0_int64 .AND. &
+      evaluation%diagnostic_masks_assessed .AND. &
+      ALLOCATED(evaluation%diagnostic_changed_mask) .AND. &
+      ALLOCATED(evaluation%diagnostic_requested_mask) .AND. &
+      ALLOCATED(evaluation%diagnostic_continuity_assessable_mask) .AND. &
+      ALLOCATED(evaluation%diagnostic_geostrophic_assessable_mask) .AND. &
+      COUNT(evaluation%diagnostic_requested_mask)==0 .AND. &
+      .NOT.evaluation%diagnostic_continuity_assessed .AND. &
+      .NOT.evaluation%diagnostic_geostrophic_assessed .AND. &
+      evaluation%diagnostic_continuity_status==STATUS_DEGRADED .AND. &
+      evaluation%diagnostic_geostrophic_status==STATUS_DEGRADED .AND. &
+      evaluation%diagnostic_continuity_reason==DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN .AND. &
+      evaluation%diagnostic_geostrophic_reason==DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN, &
+      'unchanged candidate has explicit not-assessed changed-domain status',failures)
+
+    candidate%rain%value(2,2,2)=0.001_real32
+    CALL refresh_dry_air_mass_measure(candidate,status)
+    CALL check(status==STATUS_OK,'diagnostic domain hydro fixture setup',failures)
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. evaluation%balance_support_cells==0_int64 .AND. &
+      evaluation%diagnostic_masks_assessed .AND. &
+      evaluation%diagnostic_changed_cells>0_int64 .AND. &
+      evaluation%diagnostic_requested_cells>evaluation%diagnostic_changed_cells .AND. &
+      COUNT(evaluation%diagnostic_changed_mask,KIND=int64)==evaluation%diagnostic_changed_cells .AND. &
+      COUNT(evaluation%diagnostic_requested_mask,KIND=int64)==evaluation%diagnostic_requested_cells .AND. &
+      evaluation%continuity_assessable_cells==evaluation%diagnostic_requested_cells .AND. &
+      COUNT(evaluation%diagnostic_continuity_assessable_mask,KIND=int64)== &
+        evaluation%continuity_assessable_cells .AND. &
+      evaluation%geostrophic_assessable_cells==evaluation%diagnostic_requested_cells .AND. &
+      COUNT(evaluation%diagnostic_geostrophic_assessable_mask,KIND=int64)== &
+        evaluation%geostrophic_assessable_cells .AND. &
+      evaluation%diagnostic_continuity_assessed .AND. evaluation%diagnostic_geostrophic_assessed, &
+      'hydrometeor-only change gets stencil diagnostics without balance authority',failures)
+
+    candidate=background
+    candidate%temperature%value(2,2,2)=candidate%temperature%value(2,2,2)+1.0_real32
+    candidate%omega_target%source(1,1,1)=SOURCE_MANUFACTURED_TEST
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. evaluation%operator_status==STATUS_FAILED .AND. &
+      evaluation%operator_reason==REASON_AUTHORITY .AND. &
+      evaluation%diagnostic_operator_status==STATUS_OK .AND. &
+      evaluation%diagnostic_continuity_assessed .AND. &
+      evaluation%diagnostic_geostrophic_assessed, &
+      'required-domain diagnostics survive a control target-authority rejection',failures)
+
+    candidate=background
+    candidate%temperature%value(2,2,2)=candidate%temperature%value(2,2,2)+1.0_real32
+    candidate%geopotential%valid(2,2,2)=.FALSE.
+    candidate%geopotential%quality(2,2,2)=QUALITY_RAW_MISSING
+    candidate%geopotential%source(2,2,2)=0_int32
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. evaluation%diagnostic_requested_cells>0_int64 .AND. &
+      evaluation%diagnostic_continuity_assessed .AND. &
+      evaluation%continuity_assessable_cells==evaluation%diagnostic_requested_cells .AND. &
+      .NOT.evaluation%diagnostic_geostrophic_assessed .AND. &
+      evaluation%geostrophic_assessable_cells<evaluation%diagnostic_requested_cells .AND. &
+      evaluation%diagnostic_geostrophic_reason==REASON_REQUIRED_COVERAGE, &
+      'missing optional geopotential blocks only its independent diagnostic',failures)
+
+    candidate=background
+    DEALLOCATE(background%geopotential%value,background%geopotential%valid, &
+      background%geopotential%quality,background%geopotential%source)
+    DEALLOCATE(candidate%geopotential%value,candidate%geopotential%valid, &
+      candidate%geopotential%quality,candidate%geopotential%source)
+    DEALLOCATE(background%latitude%value,background%latitude%valid, &
+      background%latitude%quality,background%latitude%source)
+    DEALLOCATE(candidate%latitude%value,candidate%latitude%valid, &
+      candidate%latitude%quality,candidate%latitude%source)
+    background%surface_vapor%valid=.FALSE.; candidate%surface_vapor%valid=.FALSE.
+    background%surface_vapor%quality=QUALITY_RAW_MISSING
+    candidate%surface_vapor%quality=QUALITY_RAW_MISSING
+    background%surface_vapor%source=0_int32; candidate%surface_vapor%source=0_int32
+    background%surface_height%valid=.FALSE.; candidate%surface_height%valid=.FALSE.
+    background%surface_height%quality=QUALITY_RAW_MISSING
+    candidate%surface_height%quality=QUALITY_RAW_MISSING
+    background%surface_height%source=0_int32; candidate%surface_height%source=0_int32
+    candidate%temperature%value(2,2,2)=candidate%temperature%value(2,2,2)+1.0_real32
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. evaluation%diagnostic_continuity_assessed .AND. &
+      .NOT.evaluation%diagnostic_geostrophic_assessed .AND. &
+      evaluation%diagnostic_requested_cells>0_int64, &
+      'both-absent optional geo and surface fields retain continuity assessment',failures)
+
+    CALL make_state(background)
+    CALL make_complete_water_fields(background)
+    candidate=background
+    DEALLOCATE(candidate%geopotential%value,candidate%geopotential%valid, &
+      candidate%geopotential%quality,candidate%geopotential%source)
+    candidate%surface_height%valid=.FALSE.
+    candidate%surface_height%quality=QUALITY_RAW_MISSING
+    candidate%surface_height%source=0_int32
+    candidate%temperature%value(2,2,2)=candidate%temperature%value(2,2,2)+1.0_real32
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. evaluation%diagnostic_changed_cells>= &
+      COUNT(background%above_ground) .AND. evaluation%diagnostic_continuity_assessed .AND. &
+      .NOT.evaluation%diagnostic_geostrophic_assessed, &
+      'one-sided optional geo and terrain availability is explicit changed support',failures)
+
+    candidate=background
+    candidate%surface_pressure%value(2,2)=candidate%surface_pressure%value(2,2)+20.0_real32
+    CALL configure_pressure_geometry(candidate,status)
+    IF (status==STATUS_OK) CALL refresh_dry_air_mass_measure(candidate,status)
+    CALL check(status==STATUS_OK,'diagnostic domain pressure fixture setup',failures)
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. &
+      evaluation%diagnostic_changed_cells>=COUNT(background%above_ground(2,2,:)) .AND. &
+      evaluation%diagnostic_requested_cells>=evaluation%diagnostic_changed_cells, &
+      'surface-pressure change includes the pressure-domain column union',failures)
+
+    candidate=background
+    candidate%surface_temperature%value(2,2)= &
+      candidate%surface_temperature%value(2,2)+1.0_real32
+    candidate%surface_vapor%value(2,2)=candidate%surface_vapor%value(2,2)+0.001_real32
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. evaluation%diagnostic_changed_cells>0_int64 .AND. &
+      evaluation%diagnostic_requested_cells>evaluation%diagnostic_changed_cells, &
+      'surface temperature and vapor changes map into the lowest atmospheric stencil',failures)
+
+    candidate=background
+    candidate%surface_height%value(2,2)=candidate%surface_height%value(2,2)+10.0_real32
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. &
+      evaluation%diagnostic_changed_cells>=COUNT(background%above_ground(2,2,:)), &
+      'surface-height change includes the old/new atmospheric column union',failures)
+
+    candidate=background
+    candidate%latitude%value(2,2)=candidate%latitude%value(2,2)+0.01_real32
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA .AND. &
+      .NOT.evaluation%canonical_accounting_assessed, &
+      'candidate latitude identity is immutable in joint evaluation',failures)
+
+    candidate=background
+    candidate%grid%grid_id='different-grid-id'
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA .AND. &
+      .NOT.evaluation%canonical_accounting_assessed, &
+      'candidate grid identity is immutable in joint evaluation',failures)
+  END SUBROUTINE test_candidate_diagnostic_domain
 
   SUBROUTINE make_state(state,nz_requested)
     TYPE(cloud_bal_state_type),INTENT(OUT) :: state
