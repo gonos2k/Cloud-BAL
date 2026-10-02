@@ -2,8 +2,21 @@
 # Build one current KLAPS stage in scratch; never run or install.
 set -euo pipefail
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(cd "$repo_root/.." && pwd)
+if [[ -n ${CLOUD_BAL_WORKSPACE_ROOT:-} ]]; then
+  [[ -d $CLOUD_BAL_WORKSPACE_ROOT ]] || {
+    printf 'CLOUD_BAL_WORKSPACE_ROOT is not a directory: %s\n' \
+      "$CLOUD_BAL_WORKSPACE_ROOT" >&2
+    exit 2
+  }
+  workspace_root=$(cd "$CLOUD_BAL_WORKSPACE_ROOT" && pwd -P)
+else
+  workspace_root=$(cd "$repo_root/.." && pwd -P)
+fi
 source_root="$workspace_root/klaps-v5.0_/src"
+[[ -d $source_root ]] || {
+  printf 'KLAPS source tree is unavailable: %s\n' "$source_root" >&2
+  exit 2
+}
 producer=${1:-temperature}
 optimization=${2:-O0}
 [[ $# -le 2 ]] || { echo 'Usage: bash build_upstream_producer.sh [temperature|surface|humidity|derived|cloud|wind_openmp|balance|lapsprep] [O0|O2]' >&2; exit 2; }

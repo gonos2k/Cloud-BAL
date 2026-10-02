@@ -1775,7 +1775,8 @@ CONTAINS
         'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
         'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,'// &
         'pressure_analysis_v1,pressure_outer_v1,candidate_endpoint_v2,candidate_evaluation_v1,'// &
-        'candidate_diagnostic_domain_v1,candidate_diagnostic_masks_v1', &
+        'candidate_diagnostic_domain_v1,candidate_diagnostic_operator_v1,'// &
+        'candidate_diagnostic_masks_v1,candidate_interior_hydrostatic_v1', &
         'schema-8 extensions are exact',failures)
       rc=nf90_get_att(ncid,NF90_GLOBAL,'outer_contract',outer_contract)
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_contract)== &
@@ -2988,13 +2989,15 @@ CONTAINS
     INTEGER, INTENT(IN) :: ncid
     TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
     INTEGER, INTENT(INOUT) :: failures
-    CHARACTER(LEN=80), PARAMETER :: integer_names(6)=[CHARACTER(LEN=80) :: &
+    CHARACTER(LEN=80), PARAMETER :: integer_names(8)=[CHARACTER(LEN=80) :: &
       'candidate_diagnostic_domain_continuity_assessed', &
       'candidate_diagnostic_domain_geostrophic_assessed', &
       'candidate_diagnostic_domain_continuity_status', &
       'candidate_diagnostic_domain_geostrophic_status', &
       'candidate_diagnostic_domain_continuity_reason', &
-      'candidate_diagnostic_domain_geostrophic_reason']
+      'candidate_diagnostic_domain_geostrophic_reason', &
+      'candidate_diagnostic_domain_operator_status', &
+      'candidate_diagnostic_domain_operator_reason']
     CHARACTER(LEN=80), PARAMETER :: count_names(4)=[CHARACTER(LEN=80) :: &
       'candidate_diagnostic_domain_changed_cells', &
       'candidate_diagnostic_domain_requested_cells', &
@@ -3004,7 +3007,7 @@ CONTAINS
       'candidate_diagnostic_domain_continuity_rms', &
       'candidate_diagnostic_domain_continuity_max_abs', &
       'candidate_diagnostic_domain_geostrophic_rms']
-    INTEGER :: expected(6),read_value,n,rc
+    INTEGER :: expected(8),read_value,n,rc
     INTEGER(int64) :: expected_count(4),read_count
     REAL(real64) :: expected_metric(3),read_metric
     CHARACTER(LEN=80) :: contract,scope,representation
@@ -3042,8 +3045,9 @@ CONTAINS
     expected=[MERGE(1,0,evaluation%diagnostic_continuity_assessed), &
       MERGE(1,0,evaluation%diagnostic_geostrophic_assessed), &
       evaluation%diagnostic_continuity_status,evaluation%diagnostic_geostrophic_status, &
-      evaluation%diagnostic_continuity_reason,evaluation%diagnostic_geostrophic_reason]
-    DO n=1,6
+      evaluation%diagnostic_continuity_reason,evaluation%diagnostic_geostrophic_reason, &
+      evaluation%diagnostic_operator_status,evaluation%diagnostic_operator_reason]
+    DO n=1,8
       read_value=-999
       rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(integer_names(n)),read_value)
       CALL check(rc==NF90_NOERR .AND. read_value==expected(n), &

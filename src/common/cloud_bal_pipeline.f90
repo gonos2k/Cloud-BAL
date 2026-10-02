@@ -1,6 +1,6 @@
 ! Single authority boundary for the canonical Cloud-BAL pipeline.
 MODULE cloud_bal_pipeline
-  USE, INTRINSIC :: iso_fortran_env,ONLY: int64,real32,real64
+  USE, INTRINSIC :: iso_fortran_env,ONLY: int32,int64,real32,real64
   USE, INTRINSIC :: ieee_arithmetic,ONLY: ieee_is_finite
   USE cloud_bal_state
   USE cloud_bal_column_physics
@@ -50,6 +50,8 @@ MODULE cloud_bal_pipeline
     INTEGER :: diagnostic_geostrophic_status=STATUS_FAILED
     INTEGER :: diagnostic_continuity_reason=REASON_NONE
     INTEGER :: diagnostic_geostrophic_reason=REASON_NONE
+    INTEGER :: diagnostic_operator_status=STATUS_FAILED
+    INTEGER :: diagnostic_operator_reason=REASON_NONE
     REAL(real64) :: diagnostic_continuity_rms=0.0_real64
     REAL(real64) :: diagnostic_continuity_max_abs=0.0_real64
     REAL(real64) :: diagnostic_geostrophic_rms=0.0_real64
@@ -61,6 +63,11 @@ MODULE cloud_bal_pipeline
     LOGICAL, ALLOCATABLE :: diagnostic_continuity_assessable_mask(:,:,:)
     LOGICAL, ALLOCATABLE :: diagnostic_geostrophic_assessable_mask(:,:,:)
     LOGICAL :: diagnostic_masks_assessed=.FALSE.
+    TYPE(hydrostatic_constraint_summary) :: interior_hydrostatic_summary
+    LOGICAL, ALLOCATABLE :: interior_hydrostatic_requested(:,:,:)
+    LOGICAL, ALLOCATABLE :: interior_hydrostatic_assessable(:,:,:)
+    INTEGER(int32), ALLOCATABLE :: interior_hydrostatic_reason(:,:,:)
+    REAL(real64), ALLOCATABLE :: interior_hydrostatic_residual(:,:,:)
   END TYPE joint_candidate_evaluation
 
   TYPE, PUBLIC :: cloud_bal_pipeline_result
@@ -574,7 +581,7 @@ CONTAINS
     TYPE(pressure_analysis_budget), INTENT(OUT) :: budget
     TYPE(joint_candidate_evaluation), INTENT(OUT) :: evaluation
     INTEGER, INTENT(OUT) :: status,reason
-    TYPE(balance_operator_type) :: op
+    TYPE(balance_operator_type) :: op,diagnostic_op
     REAL(real64), ALLOCATABLE :: continuity(:,:,:)
     LOGICAL, ALLOCATABLE :: changed_domain(:,:,:),requested_domain(:,:,:),domain_union(:,:,:)
     LOGICAL, ALLOCATABLE :: continuity_support(:,:,:),geostrophic_support(:,:,:)
@@ -602,32 +609,41 @@ CONTAINS
 
     CALL build_balance_operator(candidate,balance_config,op,evaluation%operator_status, &
       evaluation%operator_reason)
-    IF (evaluation%operator_status/=STATUS_OK) RETURN
-    evaluation%balance_support_cells=active_balance_cell_count(op)
-    IF (evaluation%balance_support_cells>0_int64) THEN
-      IF (.NOT.ALLOCATED(continuity)) &
-        ALLOCATE(continuity(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
-      CALL state_continuity_residual(op,candidate,continuity,evaluation%continuity_status)
-      IF (evaluation%continuity_status==STATUS_OK) THEN
-        CALL continuity_norms(op,continuity,evaluation%continuity_rms,evaluation%continuity_max_abs)
-        evaluation%continuity_assessed=ieee_is_finite(evaluation%continuity_rms) .AND. &
-          evaluation%continuity_rms<HUGE(1.0_real64) .AND. &
-          ieee_is_finite(evaluation%continuity_max_abs) .AND. &
-          evaluation%continuity_max_abs<HUGE(1.0_real64)
+    IF (evaluation%operator_status==STATUS_OK) THEN
+      evaluation%balance_support_cells=active_balance_cell_count(op)
+      IF (evaluation%balance_support_cells>0_int64) THEN
+        IF (.NOT.ALLOCATED(continuity)) &
+          ALLOCATE(continuity(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
+        CALL state_continuity_residual(op,candidate,continuity,evaluation%continuity_status)
+        IF (evaluation%continuity_status==STATUS_OK) THEN
+          CALL continuity_norms(op,continuity,evaluation%continuity_rms,evaluation%continuity_max_abs)
+          evaluation%continuity_assessed=ieee_is_finite(evaluation%continuity_rms) .AND. &
+            evaluation%continuity_rms<HUGE(1.0_real64) .AND. &
+            ieee_is_finite(evaluation%continuity_max_abs) .AND. &
+            evaluation%continuity_max_abs<HUGE(1.0_real64)
+        END IF
+        IF (.NOT.evaluation%continuity_assessed) THEN
+          evaluation%continuity_status=STATUS_FAILED
+          evaluation%continuity_rms=0.0_real64
+          evaluation%continuity_max_abs=0.0_real64
+        END IF
+        CALL geostrophic_residual(candidate,op,evaluation%geostrophic_rms,evaluation%geostrophic_status)
+        evaluation%geostrophic_assessed=evaluation%geostrophic_status==STATUS_OK .AND. &
+          ieee_is_finite(evaluation%geostrophic_rms) .AND. &
+          evaluation%geostrophic_rms<HUGE(1.0_real64)
+        IF (.NOT.evaluation%geostrophic_assessed) THEN
+          evaluation%geostrophic_status=STATUS_FAILED
+          evaluation%geostrophic_rms=0.0_real64
+        END IF
       END IF
-      IF (.NOT.evaluation%continuity_assessed) THEN
-        evaluation%continuity_status=STATUS_FAILED
-        evaluation%continuity_rms=0.0_real64
-        evaluation%continuity_max_abs=0.0_real64
-      END IF
-      CALL geostrophic_residual(candidate,op,evaluation%geostrophic_rms,evaluation%geostrophic_status)
-      evaluation%geostrophic_assessed=evaluation%geostrophic_status==STATUS_OK .AND. &
-        ieee_is_finite(evaluation%geostrophic_rms) .AND. &
-        evaluation%geostrophic_rms<HUGE(1.0_real64)
-      IF (.NOT.evaluation%geostrophic_assessed) THEN
-        evaluation%geostrophic_status=STATUS_FAILED
-        evaluation%geostrophic_rms=0.0_real64
-      END IF
+    END IF
+
+    CALL build_diagnostic_balance_operator(candidate,diagnostic_op, &
+      evaluation%diagnostic_operator_status,evaluation%diagnostic_operator_reason)
+    IF (evaluation%diagnostic_operator_status/=STATUS_OK) THEN
+      evaluation%diagnostic_continuity_reason=evaluation%diagnostic_operator_reason
+      evaluation%diagnostic_geostrophic_reason=evaluation%diagnostic_operator_reason
+      RETURN
     END IF
 
     ALLOCATE(changed_domain(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
@@ -643,7 +659,7 @@ CONTAINS
       RETURN
     END IF
     domain_union=background%above_ground .OR. candidate%above_ground
-    CALL include_lateral_face_stencil(op,changed_domain,domain_union,requested_domain,domain_status)
+    CALL include_lateral_face_stencil(diagnostic_op,changed_domain,domain_union,requested_domain,domain_status)
     IF (domain_status/=STATUS_OK) THEN
       evaluation%diagnostic_continuity_reason=REASON_REQUIRED_COVERAGE
       evaluation%diagnostic_geostrophic_reason=REASON_REQUIRED_COVERAGE
@@ -653,7 +669,20 @@ CONTAINS
     evaluation%diagnostic_requested_cells=COUNT(requested_domain,KIND=int64)
     evaluation%diagnostic_changed_mask=changed_domain
     evaluation%diagnostic_requested_mask=requested_domain
-    CALL diagnostic_domain_assessable(candidate,op,requested_domain,continuity_support, &
+    ! Each required center requests both adjacent thickness relations. Keep
+    ! old-only atmospheric endpoints requested: missing candidate support is
+    ! reported by the layer evaluator rather than dropped from the domain.
+    ALLOCATE(evaluation%interior_hydrostatic_requested(candidate%grid%nx,candidate%grid%ny, &
+        candidate%grid%nz-1), &
+      evaluation%interior_hydrostatic_assessable(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz-1), &
+      evaluation%interior_hydrostatic_reason(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz-1), &
+      evaluation%interior_hydrostatic_residual(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz-1))
+    evaluation%interior_hydrostatic_requested= &
+      requested_domain(:,:,1:candidate%grid%nz-1) .OR. requested_domain(:,:,2:candidate%grid%nz)
+    CALL evaluate_interior_hydrostatic_residual(candidate,evaluation%interior_hydrostatic_requested, &
+      evaluation%interior_hydrostatic_residual,evaluation%interior_hydrostatic_assessable, &
+      evaluation%interior_hydrostatic_reason,evaluation%interior_hydrostatic_summary)
+    CALL diagnostic_domain_assessable(candidate,diagnostic_op,requested_domain,continuity_support, &
       geostrophic_support,domain_status)
     IF (domain_status/=STATUS_OK) THEN
       evaluation%diagnostic_continuity_status=STATUS_FAILED
@@ -680,10 +709,10 @@ CONTAINS
     ELSE
       IF (.NOT.ALLOCATED(continuity)) &
         ALLOCATE(continuity(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
-      CALL state_continuity_residual(op,candidate,continuity, &
+      CALL state_continuity_residual(diagnostic_op,candidate,continuity, &
         evaluation%diagnostic_continuity_status,evaluation_mask=requested_domain)
       IF (evaluation%diagnostic_continuity_status==STATUS_OK) THEN
-        CALL continuity_norms(op,continuity,evaluation%diagnostic_continuity_rms, &
+        CALL continuity_norms(diagnostic_op,continuity,evaluation%diagnostic_continuity_rms, &
           evaluation%diagnostic_continuity_max_abs,requested_domain)
         evaluation%diagnostic_continuity_assessed= &
           ieee_is_finite(evaluation%diagnostic_continuity_rms) .AND. &
@@ -702,15 +731,17 @@ CONTAINS
       evaluation%diagnostic_geostrophic_status=STATUS_DEGRADED
       evaluation%diagnostic_geostrophic_reason=REASON_REQUIRED_COVERAGE
     ELSE
-      CALL geostrophic_residual(candidate,op,evaluation%diagnostic_geostrophic_rms, &
-        evaluation%diagnostic_geostrophic_status,requested_domain)
+      CALL geostrophic_residual(candidate,diagnostic_op,evaluation%diagnostic_geostrophic_rms, &
+        evaluation%diagnostic_geostrophic_status,requested_domain, &
+        evaluation%diagnostic_geostrophic_reason)
       evaluation%diagnostic_geostrophic_assessed= &
         evaluation%diagnostic_geostrophic_status==STATUS_OK .AND. &
         ieee_is_finite(evaluation%diagnostic_geostrophic_rms) .AND. &
         evaluation%diagnostic_geostrophic_rms<HUGE(1.0_real64)
       IF (.NOT.evaluation%diagnostic_geostrophic_assessed) THEN
         evaluation%diagnostic_geostrophic_status=STATUS_FAILED
-        evaluation%diagnostic_geostrophic_reason=REASON_NONFINITE
+        IF (evaluation%diagnostic_geostrophic_reason==REASON_NONE) &
+          evaluation%diagnostic_geostrophic_reason=REASON_NONFINITE
         evaluation%diagnostic_geostrophic_rms=0.0_real64
       END IF
     END IF

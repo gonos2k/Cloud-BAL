@@ -110,6 +110,7 @@ done
   python3 "$repo_root/tests/check_pressure_candidate_shadow.py" pressure-thermo-candidate-shadow.nc
   python3 "$repo_root/tests/check_pressure_candidate_shadow.py" pressure-outer-candidate-shadow.nc
   python3 "$repo_root/tests/check_pressure_geopotential_shadow.py" geopotential-candidate-shadow.nc
+  python3 "$repo_root/tests/test_interior_hydrostatic_receipt.py" geopotential-candidate-shadow.nc
   python3 "$repo_root/tests/check_pressure_geopotential_shadow.py" geopotential-outer-candidate-shadow.nc
   python3 "$repo_root/tests/check_pressure_geopotential_shadow.py" surface-geopotential-shadow.nc
   python3 "$repo_root/tests/check_pressure_geometry_shadow.py" variable-pressure-shadow.nc
@@ -168,6 +169,7 @@ done
   python3 "$repo_root/tests/check_pressure_candidate_shadow.py" pressure-thermo-candidate-shadow.nc
   python3 "$repo_root/tests/check_pressure_candidate_shadow.py" pressure-outer-candidate-shadow.nc
   python3 "$repo_root/tests/check_pressure_geopotential_shadow.py" geopotential-candidate-shadow.nc
+  python3 "$repo_root/tests/test_interior_hydrostatic_receipt.py" geopotential-candidate-shadow.nc
   python3 "$repo_root/tests/check_pressure_geopotential_shadow.py" geopotential-outer-candidate-shadow.nc
   python3 "$repo_root/tests/check_pressure_geopotential_shadow.py" surface-geopotential-shadow.nc
   python3 "$repo_root/tests/check_pressure_geometry_shadow.py" variable-pressure-shadow.nc
@@ -719,7 +721,8 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
             "verified_operational_identity_v1,radar_no_echo_masks_v1,"
             "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2,"
             "candidate_evaluation_v1,candidate_diagnostic_domain_v1,"
-            "candidate_diagnostic_masks_v1"
+            "candidate_diagnostic_operator_v1,"
+            "candidate_diagnostic_masks_v1,candidate_interior_hydrostatic_v1"
         ),
         "requested_mode": 1,
         "operational_state_verified": 1,
@@ -1029,8 +1032,9 @@ with netCDF4.Dataset(source_path) as source, netCDF4.Dataset(temporary_path, "w"
         if name == "candidate_endpoint_contract":
             value = "signed_represented_mixture_endpoint_v1"
         elif name == "schema_extensions":
-            value = value.replace(
-                ",candidate_diagnostic_domain_v1,candidate_diagnostic_masks_v1", ""
+            value = value.replace(",candidate_interior_hydrostatic_v1", "").replace(
+                ",candidate_diagnostic_domain_v1,candidate_diagnostic_operator_v1," \
+                "candidate_diagnostic_masks_v1", ""
             ).replace(",candidate_evaluation_v1", "").replace(
                 "candidate_endpoint_v2", "candidate_endpoint_v1"
             )
@@ -1075,7 +1079,8 @@ with netCDF4.Dataset(path) as source, netCDF4.Dataset(temporary, "w") as target:
         if name == "candidate_diagnostic_domain_support_representation":
             value = "aggregate_counts_only_exact_masks_not_persisted_v1"
         elif name == "schema_extensions":
-            value = value.replace(",candidate_diagnostic_masks_v1", "")
+            value = value.replace(",candidate_diagnostic_masks_v1", "").replace(
+                ",candidate_interior_hydrostatic_v1", "")
         target.setncattr(name, value)
     for name, original in source.variables.items():
         if name in mask_names:

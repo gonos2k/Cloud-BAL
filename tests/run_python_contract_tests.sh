@@ -32,12 +32,14 @@ tests=(
   tests/test_lco_evidence.py
   tests/test_real_manufactured_balance_generation.py
   tests/test_shadow_validator.py
+  tests/test_cloud_provenance_receipt.py
   tests/test_candidate_endpoint_roundoff.py
   tests/test_pressure_transition_payload.py
   tests/test_pressure_transition_reference.py
   tests/test_thermo_output_certificate.py
   tests/test_pressure_cell_geometry.py
   tests/test_pressure_continuity_oracle.py
+  tests/test_verify_shadow_wps_pair_lambert.py
   tests/test_pressure_geometry_budget.py
   tests/test_pressure_state_replay.py
   tests/test_transition_geopotential_reference.py

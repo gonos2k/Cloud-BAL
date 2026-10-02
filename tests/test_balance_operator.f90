@@ -30,6 +30,7 @@ PROGRAM test_balance_operator
   CALL test_model_dynamic_bounded_projection(failures)
   CALL test_observational_model_boundary_rejection(failures)
   CALL test_target_metadata_rejection(failures)
+  CALL test_diagnostic_geometry_without_control_inputs(failures)
   CALL test_pressure_order_rejection(failures)
   CALL test_malformed_dimension_rejection(failures)
   CALL test_small_domain_rejection(failures)
@@ -1104,6 +1105,22 @@ CONTAINS
     CALL check(status==STATUS_FAILED .AND. reason==REASON_RANGE, &
                'non-monotone pressure must be rejected',failures)
   END SUBROUTINE test_pressure_order_rejection
+
+  SUBROUTINE test_diagnostic_geometry_without_control_inputs(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: input
+    TYPE(balance_operator_type) :: op
+    INTEGER :: status,reason
+
+    CALL make_balance_state(input,6,5,4)
+    DEALLOCATE(input%balance_beta)
+    DEALLOCATE(input%omega_target%value,input%omega_target%valid, &
+      input%omega_target%quality,input%omega_target%source)
+    CALL build_diagnostic_balance_operator(input,op,status,reason)
+    CALL check(status==STATUS_OK .AND. reason==REASON_NONE .AND. &
+      active_balance_cell_count(op)>0_int64, &
+      'diagnostic geometry does not require beta or target storage',failures)
+  END SUBROUTINE test_diagnostic_geometry_without_control_inputs
 
   SUBROUTINE test_malformed_dimension_rejection(failures)
     INTEGER, INTENT(INOUT) :: failures

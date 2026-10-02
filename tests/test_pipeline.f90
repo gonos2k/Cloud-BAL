@@ -1254,6 +1254,18 @@ CONTAINS
 
     candidate=background
     candidate%temperature%value(2,2,2)=candidate%temperature%value(2,2,2)+1.0_real32
+    candidate%omega_target%source(1,1,1)=SOURCE_MANUFACTURED_TEST
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget, &
+      evaluation,status,reason)
+    CALL check(status==STATUS_OK .AND. evaluation%operator_status==STATUS_FAILED .AND. &
+      evaluation%operator_reason==REASON_AUTHORITY .AND. &
+      evaluation%diagnostic_operator_status==STATUS_OK .AND. &
+      evaluation%diagnostic_continuity_assessed .AND. &
+      evaluation%diagnostic_geostrophic_assessed, &
+      'required-domain diagnostics survive a control target-authority rejection',failures)
+
+    candidate=background
+    candidate%temperature%value(2,2,2)=candidate%temperature%value(2,2,2)+1.0_real32
     candidate%geopotential%valid(2,2,2)=.FALSE.
     candidate%geopotential%quality(2,2,2)=QUALITY_RAW_MISSING
     candidate%geopotential%source(2,2,2)=0_int32

@@ -242,8 +242,9 @@ def _lambert_latlon(geometry: dict[str, object], shape: tuple[int, int]):
     row, column = np.indices(shape, dtype=np.float64)
     x = x_start + column * dx_m
     y = y_start + row * dy_m
-    rho = np.sign(cone) * np.hypot(x, rho_origin - y)
-    theta = np.arctan2(x, rho_origin - y)
+    hemisphere = np.sign(cone)
+    rho = hemisphere * np.hypot(x, rho_origin - y)
+    theta = np.arctan2(hemisphere * x, hemisphere * (rho_origin - y))
     latitude = 2 * np.arctan((radius_m * factor / rho) ** (1.0 / cone)) - np.pi / 2
     longitude = central_lon + theta / cone
     return latitude / radians, longitude / radians

@@ -85,6 +85,7 @@ MODULE cloud_bal_balance_operator
   END TYPE balance_operator_snapshot
 
   PUBLIC :: build_balance_operator
+  PUBLIC :: build_diagnostic_balance_operator
   PUBLIC :: apply_continuity_operator
   PUBLIC :: apply_adjoint_metric
   PUBLIC :: apply_balance_correction
@@ -263,13 +264,110 @@ CONTAINS
     status=STATUS_OK
   END SUBROUTINE snapshot_balance_operator
 
+  SUBROUTINE initialize_balance_geometry(state,op,status,reason)
+    ! Shared physical grid and face geometry for control and diagnostics.
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    TYPE(balance_operator_type), INTENT(OUT) :: op
+    INTEGER, INTENT(OUT) :: status,reason
+    INTEGER :: nx,ny,nz,i,j,k
+    REAL(real64) :: denom
+
+    status=STATUS_FAILED; reason=REASON_SHAPE
+    nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
+    IF (nx<2 .OR. ny<2 .OR. nz<2) RETURN
+    IF (.NOT.physical_geometry_shapes_valid(state)) RETURN
+    DO k=1,nz-1
+      IF (ANY(state%pressure%value(:,:,k)<=state%pressure%value(:,:,k+1))) THEN
+        reason=REASON_RANGE
+        RETURN
+      END IF
+    END DO
+    IF (.NOT.pressure_geometry_is_valid(state)) THEN
+      reason=REASON_METADATA
+      RETURN
+    END IF
+    IF (ANY(.NOT.ieee_is_finite(state%grid%dx)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%dy)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%cell_dp)) .OR. &
+        ANY(.NOT.ieee_is_finite(state%grid%pressure_mass_measure)) .OR. &
+        ANY(state%grid%dx<=0.0_real64) .OR. ANY(state%grid%dy<=0.0_real64) .OR. &
+        ANY(state%above_ground .AND. state%grid%cell_dp<=0.0_real64) .OR. &
+        ANY(state%above_ground .AND. state%grid%pressure_mass_measure<=0.0_real64)) THEN
+      reason=REASON_RANGE
+      RETURN
+    END IF
+    op%nx=nx; op%ny=ny; op%nz=nz
+    ALLOCATE(op%volume(nx,ny,nz),op%dx(nx,ny),op%dy(nx,ny),op%cell_dp(nx,ny,nz), &
+      op%ku(nx,ny,nz),op%kv(nx,ny,nz),op%ko(nx,ny,nz), &
+      op%cell_usable(nx,ny,nz),op%cell_active(nx,ny,nz), &
+      op%omega_authorized(nx,ny,nz),op%component(nx,ny,nz))
+    ALLOCATE(op%xleft_weight(nx-1,ny,nz),op%xright_weight(nx-1,ny,nz), &
+      op%yleft_weight(nx,ny-1,nz),op%yright_weight(nx,ny-1,nz), &
+      op%pface_active(nx,ny,nz-1),op%pface_area(nx,ny,nz-1), &
+      op%pleft_weight(nx,ny,nz-1),op%pright_weight(nx,ny,nz-1))
+    op%volume=state%grid%pressure_mass_measure
+    op%dx=state%grid%dx; op%dy=state%grid%dy
+    op%cell_dp=state%grid%cell_dp
+    op%cell_usable=state%above_ground .AND. &
+      cell_is_usable(state%pressure%valid,state%pressure%quality,state%pressure%source) .AND. &
+      cell_is_usable(state%u%valid,state%u%quality,state%u%source) .AND. &
+      cell_is_usable(state%v%valid,state%v%quality,state%v%source) .AND. &
+      cell_is_usable(state%omega%valid,state%omega%quality,state%omega%source)
+    op%ku=0.0_real64; op%kv=0.0_real64; op%ko=0.0_real64
+    op%cell_active=.FALSE.; op%omega_authorized=.FALSE.; op%component=0
+    op%pface_active=.FALSE.
+    DO k=1,nz; DO j=1,ny; DO i=1,nx-1
+      denom=op%dx(i,j)+op%dx(i+1,j)
+      op%xleft_weight(i,j,k)=op%dx(i+1,j)/denom
+      op%xright_weight(i,j,k)=op%dx(i,j)/denom
+    END DO; END DO; END DO
+    DO k=1,nz; DO j=1,ny-1; DO i=1,nx
+      denom=op%dy(i,j)+op%dy(i,j+1)
+      op%yleft_weight(i,j,k)=op%dy(i,j+1)/denom
+      op%yright_weight(i,j,k)=op%dy(i,j)/denom
+    END DO; END DO; END DO
+    DO k=1,nz-1; DO j=1,ny; DO i=1,nx
+      denom=REAL(state%pressure%value(i,j,k),real64)- &
+        REAL(state%pressure%value(i,j,k+1),real64)
+      op%pleft_weight(i,j,k)=0.5_real64
+      op%pright_weight(i,j,k)=0.5_real64
+      IF (op%cell_usable(i,j,k) .AND. op%cell_usable(i,j,k+1)) THEN
+        op%pleft_weight(i,j,k)=(state%grid%pressure_interface(i,j,k+1)- &
+          REAL(state%pressure%value(i,j,k+1),real64))/denom
+        op%pright_weight(i,j,k)=1.0_real64-op%pleft_weight(i,j,k)
+        IF (op%pleft_weight(i,j,k)<0.0_real64 .OR. &
+            op%pleft_weight(i,j,k)>1.0_real64) THEN
+          reason=REASON_RANGE
+          RETURN
+        END IF
+      END IF
+      op%pface_area(i,j,k)=op%dx(i,j)*op%dy(i,j)/GRAVITY
+    END DO; END DO; END DO
+    CALL build_lateral_face_geometry(state,op,status,reason)
+  END SUBROUTINE initialize_balance_geometry
+
+  SUBROUTINE build_diagnostic_balance_operator(state,op,status,reason)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    TYPE(balance_operator_type), INTENT(OUT) :: op
+    INTEGER, INTENT(OUT) :: status,reason
+
+    CALL initialize_balance_geometry(state,op,status,reason)
+    IF (status/=STATUS_OK) RETURN
+    status=STATUS_FAILED; reason=REASON_NONE
+    ! Diagnostics use physical usability only.  No target, beta, or control
+    ! authority is inferred from this operator.
+    op%cell_active=op%cell_usable
+    CALL set_lateral_segment_activity(op)
+    status=STATUS_OK; reason=REASON_NONE
+  END SUBROUTINE build_diagnostic_balance_operator
+
   SUBROUTINE build_balance_operator(state,config,op,status,reason)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     TYPE(balance_operator_config), INTENT(IN) :: config
     TYPE(balance_operator_type), INTENT(OUT) :: op
     INTEGER, INTENT(OUT) :: status,reason
     INTEGER :: nx,ny,nz,i,j,k
-    REAL(real64) :: denom,gain,posterior
+    REAL(real64) :: gain,posterior
     LOGICAL, ALLOCATABLE :: resolved(:,:,:)
 
     status=STATUS_FAILED; reason=REASON_SHAPE
@@ -305,17 +403,6 @@ CONTAINS
       reason=REASON_RANGE
       RETURN
     END IF
-    DO k=1,nz-1
-      IF (ANY(state%pressure%value(:,:,k)<=state%pressure%value(:,:,k+1))) THEN
-        reason=REASON_RANGE
-        RETURN
-      END IF
-    END DO
-    IF (.NOT.pressure_geometry_is_valid(state)) THEN
-      reason=REASON_METADATA
-      RETURN
-    END IF
-    IF (.NOT.boundary_contract_valid(state)) THEN; reason=REASON_METADATA; RETURN; END IF
     IF (config%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS) THEN
       ALLOCATE(resolved(nx,ny,nz))
       resolved=target_is_resolved(state,config%target_authority)
@@ -327,42 +414,18 @@ CONTAINS
         END IF
       END DO; END DO; END DO
     END IF
+    CALL initialize_balance_geometry(state,op,status,reason)
+    IF (status/=STATUS_OK) RETURN
+    status=STATUS_FAILED; reason=REASON_NONE
+    IF (.NOT.boundary_contract_valid(state)) THEN; reason=REASON_METADATA; RETURN; END IF
     IF (ANY(target_is_resolved(state,config%target_authority) .AND. &
             balance_beta_active(state%balance_beta,config%minimum_beta)) .AND. &
         .NOT.target_boundary_contract_valid(state,config%target_authority)) THEN
       reason=REASON_AUTHORITY
       RETURN
     END IF
-    IF (ANY(.NOT.ieee_is_finite(state%grid%dx)) .OR. &
-        ANY(.NOT.ieee_is_finite(state%grid%dy)) .OR. &
-        ANY(.NOT.ieee_is_finite(state%grid%cell_dp)) .OR. &
-        ANY(.NOT.ieee_is_finite(state%grid%pressure_mass_measure)) .OR. &
-        ANY(state%grid%dx<=0.0_real64) .OR. ANY(state%grid%dy<=0.0_real64) .OR. &
-        ANY(state%above_ground .AND. state%grid%cell_dp<=0.0_real64) .OR. &
-        ANY(state%above_ground .AND. state%grid%pressure_mass_measure<=0.0_real64)) THEN
-      reason=REASON_RANGE; RETURN
-    END IF
-    op%nx=nx; op%ny=ny; op%nz=nz
     op%physical_boundary_authorized= &
       target_boundary_contract_valid(state,config%target_authority)
-    ALLOCATE(op%volume(nx,ny,nz),op%dx(nx,ny),op%dy(nx,ny), &
-             op%cell_dp(nx,ny,nz), &
-             op%ku(nx,ny,nz),op%kv(nx,ny,nz),op%ko(nx,ny,nz), &
-             op%cell_usable(nx,ny,nz),op%cell_active(nx,ny,nz), &
-             op%omega_authorized(nx,ny,nz), &
-             op%component(nx,ny,nz))
-    ALLOCATE(op%xleft_weight(nx-1,ny,nz),op%xright_weight(nx-1,ny,nz))
-    ALLOCATE(op%yleft_weight(nx,ny-1,nz),op%yright_weight(nx,ny-1,nz))
-    ALLOCATE(op%pface_active(nx,ny,nz-1),op%pface_area(nx,ny,nz-1), &
-             op%pleft_weight(nx,ny,nz-1),op%pright_weight(nx,ny,nz-1))
-    op%volume=state%grid%pressure_mass_measure
-    op%dx=state%grid%dx; op%dy=state%grid%dy
-    op%cell_dp=state%grid%cell_dp
-    op%cell_usable=state%above_ground .AND. &
-      cell_is_usable(state%pressure%valid,state%pressure%quality,state%pressure%source) .AND. &
-      cell_is_usable(state%u%valid,state%u%quality,state%u%source) .AND. &
-      cell_is_usable(state%v%valid,state%v%quality,state%v%source) .AND. &
-      cell_is_usable(state%omega%valid,state%omega%quality,state%omega%source)
     op%cell_active=op%cell_usable .AND. &
                    balance_beta_active(state%balance_beta,config%minimum_beta)
     IF (config%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS) THEN
@@ -417,46 +480,18 @@ CONTAINS
       END IF
     END DO; END DO; END DO
 
-    DO k=1,nz; DO j=1,ny; DO i=1,nx-1
-      denom=op%dx(i,j)+op%dx(i+1,j)
-      op%xleft_weight(i,j,k)=op%dx(i+1,j)/denom
-      op%xright_weight(i,j,k)=op%dx(i,j)/denom
-    END DO; END DO; END DO
-    DO k=1,nz; DO j=1,ny-1; DO i=1,nx
-      denom=op%dy(i,j)+op%dy(i,j+1)
-      op%yleft_weight(i,j,k)=op%dy(i,j+1)/denom
-      op%yright_weight(i,j,k)=op%dy(i,j)/denom
-    END DO; END DO; END DO
-    CALL build_lateral_segments(state,op,status,reason)
-    IF (status/=STATUS_OK) RETURN
+    CALL set_lateral_segment_activity(op)
+    status=STATUS_OK; reason=REASON_NONE
     DO k=1,nz-1; DO j=1,ny; DO i=1,nx
-      denom=REAL(state%pressure%value(i,j,k),real64)- &
-        REAL(state%pressure%value(i,j,k+1),real64)
-      IF (denom<=0.0_real64) THEN
-        reason=REASON_RANGE; RETURN
-      END IF
-      op%pleft_weight(i,j,k)=0.5_real64
-      op%pright_weight(i,j,k)=0.5_real64
-      IF (op%cell_usable(i,j,k) .AND. op%cell_usable(i,j,k+1)) THEN
-        op%pleft_weight(i,j,k)=(state%grid%pressure_interface(i,j,k+1)- &
-          REAL(state%pressure%value(i,j,k+1),real64))/denom
-        op%pright_weight(i,j,k)=1.0_real64-op%pleft_weight(i,j,k)
-        IF (op%pleft_weight(i,j,k)<0.0_real64 .OR. &
-            op%pleft_weight(i,j,k)>1.0_real64) THEN
-          reason=REASON_RANGE; RETURN
-        END IF
-      END IF
-      op%pface_area(i,j,k)=op%dx(i,j)*op%dy(i,j)/GRAVITY
       op%pface_active(i,j,k)=op%cell_active(i,j,k) .AND. &
-                             op%cell_active(i,j,k+1) .AND. &
-                             (op%ko(i,j,k)>0.0_real64 .OR. &
-                              op%ko(i,j,k+1)>0.0_real64)
+        op%cell_active(i,j,k+1) .AND. &
+        (op%ko(i,j,k)>0.0_real64 .OR. op%ko(i,j,k+1)>0.0_real64)
       IF (op%pface_active(i,j,k)) THEN
         IF (ABS(REAL(state%pressure%value(i,j,k),real64)- &
-                   REAL(state%pressure%value(i,j,k+1),real64))<= &
+            REAL(state%pressure%value(i,j,k+1),real64))<= &
             EPSILON(1.0_real64)*MAX(ABS(REAL(state%pressure%value(i,j,k),real64)), &
-                                    ABS(REAL(state%pressure%value(i,j,k+1),real64)))) THEN
-          reason=REASON_RANGE; RETURN
+            ABS(REAL(state%pressure%value(i,j,k+1),real64)))) THEN
+          status=STATUS_FAILED; reason=REASON_RANGE; RETURN
         END IF
       END IF
     END DO; END DO; END DO
@@ -475,7 +510,7 @@ CONTAINS
     status=STATUS_OK; reason=REASON_NONE
   END SUBROUTINE build_balance_operator
 
-  SUBROUTINE build_lateral_segments(state,op,status,reason)
+  SUBROUTINE build_lateral_face_geometry(state,op,status,reason)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     TYPE(balance_operator_type), INTENT(INOUT) :: op
     INTEGER, INTENT(OUT) :: status,reason
@@ -548,6 +583,13 @@ CONTAINS
       END DO
     END DO; END DO
 
+    status=STATUS_OK; reason=REASON_NONE
+  END SUBROUTINE build_lateral_face_geometry
+
+  SUBROUTINE set_lateral_segment_activity(op)
+    TYPE(balance_operator_type), INTENT(INOUT) :: op
+    INTEGER :: i,j,s
+
     CALL restrict_lateral_support(op)
     DO j=1,op%ny; DO i=1,op%nx-1
       DO s=op%xface_start(i,j),op%xface_start(i,j)+op%xface_count(i,j)-1
@@ -565,8 +607,7 @@ CONTAINS
            op%kv(i,j+1,op%yseg_right(s))>0.0_real64)
       END DO
     END DO; END DO
-    status=STATUS_OK; reason=REASON_NONE
-  END SUBROUTINE build_lateral_segments
+  END SUBROUTINE set_lateral_segment_activity
 
   SUBROUTINE restrict_lateral_support(op)
     TYPE(balance_operator_type), INTENT(INOUT) :: op
@@ -1746,29 +1787,40 @@ CONTAINS
     status=STATUS_OK
   END SUBROUTINE state_continuity_residual
 
-  SUBROUTINE geostrophic_residual(state,op,rms_value,status,evaluation_mask)
+  SUBROUTINE geostrophic_residual(state,op,rms_value,status,evaluation_mask,reason)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     TYPE(balance_operator_type), INTENT(IN) :: op
     REAL(real64), INTENT(OUT) :: rms_value
     INTEGER, INTENT(OUT) :: status
     LOGICAL, INTENT(IN), OPTIONAL :: evaluation_mask(:,:,:)
-    INTEGER :: i,j,k,ix,jy,n,validation_status,reason
+    INTEGER, INTENT(OUT), OPTIONAL :: reason
+    INTEGER :: i,j,k,ix,jy,n,validation_status,validation_reason,reason_code
     REAL(real64) :: f,dphidx,dphidy,ru,rv,total,pi,term,limit
     status=STATUS_FAILED; rms_value=0.0_real64; total=0.0_real64; n=0
+    reason_code=REASON_SHAPE
+    IF (PRESENT(reason)) reason=reason_code
     IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
     IF (PRESENT(evaluation_mask)) THEN
       IF (ANY(SHAPE(evaluation_mask)/=(/op%nx,op%ny,op%nz/))) RETURN
     END IF
     IF (.NOT.field_storage_shape_valid(state%u,op%nx,op%ny,op%nz) .OR. &
         .NOT.field_storage_shape_valid(state%v,op%nx,op%ny,op%nz)) RETURN
-    CALL validate_geostrophic_inputs(state,validation_status,reason)
-    IF (validation_status/=STATUS_OK) RETURN
+    CALL validate_geostrophic_inputs(state,validation_status,validation_reason)
+    IF (validation_status/=STATUS_OK) THEN
+      reason_code=validation_reason
+      IF (PRESENT(reason)) reason=reason_code
+      RETURN
+    END IF
     pi=ACOS(-1.0_real64)
     limit=SQRT(HUGE(1.0_real64)/4.0_real64)
     DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
       IF (PRESENT(evaluation_mask)) THEN
         IF (.NOT.evaluation_mask(i,j,k)) CYCLE
-        IF (.NOT.geostrophic_cell_usable(state,i,j,k)) RETURN
+        IF (.NOT.geostrophic_cell_usable(state,i,j,k)) THEN
+          reason_code=REASON_REQUIRED_COVERAGE
+          IF (PRESENT(reason)) reason=reason_code
+          RETURN
+        END IF
       ELSE
         IF (.NOT.op%cell_active(i,j,k)) CYCLE
       END IF
@@ -1787,7 +1839,11 @@ CONTAINS
           ix=i-1
         END IF
       END IF
-      IF (ix==0) RETURN
+      IF (ix==0) THEN
+        reason_code=REASON_REQUIRED_COVERAGE
+        IF (PRESENT(reason)) reason=reason_code
+        RETURN
+      END IF
       jy=0
       IF (j<op%ny) THEN
         IF (PRESENT(evaluation_mask)) THEN
@@ -1803,7 +1859,11 @@ CONTAINS
           jy=j-1
         END IF
       END IF
-      IF (jy==0) RETURN
+      IF (jy==0) THEN
+        reason_code=REASON_REQUIRED_COVERAGE
+        IF (PRESENT(reason)) reason=reason_code
+        RETURN
+      END IF
       IF (.NOT.(cell_is_usable(state%geopotential%valid(i,j,k), &
                 state%geopotential%quality(i,j,k),state%geopotential%source(i,j,k)) .AND. &
                 cell_is_usable(state%geopotential%valid(ix,j,k), &
@@ -1811,7 +1871,11 @@ CONTAINS
                 cell_is_usable(state%geopotential%valid(i,jy,k), &
                 state%geopotential%quality(i,jy,k),state%geopotential%source(i,jy,k)) .AND. &
                 cell_is_usable(state%latitude%valid(i,j),state%latitude%quality(i,j), &
-                state%latitude%source(i,j)))) RETURN
+                state%latitude%source(i,j)))) THEN
+        reason_code=REASON_REQUIRED_COVERAGE
+        IF (PRESENT(reason)) reason=reason_code
+        RETURN
+      END IF
       f=1.458423e-4_real64*SIN(REAL(state%latitude%value(i,j),real64)*pi/180.0_real64)
       dphidx=(REAL(state%geopotential%value(ix,j,k),real64)- &
               REAL(state%geopotential%value(i,j,k),real64))/ &
@@ -1821,16 +1885,38 @@ CONTAINS
              (REAL(jy-j,real64)*0.5_real64*(op%dy(i,j)+op%dy(i,jy)))
       ru=-f*REAL(state%v%value(i,j,k),real64)+dphidx
       rv= f*REAL(state%u%value(i,j,k),real64)+dphidy
-      IF (.NOT.ieee_is_finite(ru) .OR. .NOT.ieee_is_finite(rv)) RETURN
-      IF (ABS(ru)>limit .OR. ABS(rv)>limit) RETURN
+      IF (.NOT.ieee_is_finite(ru) .OR. .NOT.ieee_is_finite(rv)) THEN
+        reason_code=REASON_NONFINITE
+        IF (PRESENT(reason)) reason=reason_code
+        RETURN
+      END IF
+      IF (ABS(ru)>limit .OR. ABS(rv)>limit) THEN
+        reason_code=REASON_RANGE
+        IF (PRESENT(reason)) reason=reason_code
+        RETURN
+      END IF
       term=ru*ru+rv*rv
-      IF (.NOT.ieee_is_finite(term) .OR. term>HUGE(1.0_real64)-total) RETURN
+      IF (.NOT.ieee_is_finite(term) .OR. term>HUGE(1.0_real64)-total) THEN
+        reason_code=REASON_RANGE
+        IF (PRESENT(reason)) reason=reason_code
+        RETURN
+      END IF
       total=total+term; n=n+2
     END DO; END DO; END DO
-    IF (n==0) RETURN
+    IF (n==0) THEN
+      reason_code=REASON_REQUIRED_COVERAGE
+      IF (PRESENT(reason)) reason=reason_code
+      RETURN
+    END IF
     rms_value=SQRT(total/REAL(n,real64))
-    IF (.NOT.ieee_is_finite(rms_value)) RETURN
+    IF (.NOT.ieee_is_finite(rms_value)) THEN
+      reason_code=REASON_NONFINITE
+      IF (PRESENT(reason)) reason=reason_code
+      RETURN
+    END IF
     status=STATUS_OK
+    reason_code=REASON_NONE
+    IF (PRESENT(reason)) reason=reason_code
   END SUBROUTINE geostrophic_residual
 
   PURE LOGICAL FUNCTION geostrophic_cell_usable(state,i,j,k)
@@ -2838,28 +2924,37 @@ CONTAINS
     INTEGER :: nx,ny,nz
     nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
     operator_input_shapes_valid=.FALSE.
+    IF (.NOT.physical_geometry_shapes_valid(state)) RETURN
+    IF (.NOT.ALLOCATED(state%balance_beta)) RETURN
+    IF (ANY(SHAPE(state%balance_beta)/=(/nx,ny,nz/))) RETURN
+    IF (.NOT.field_storage_shape_valid(state%omega_target,nx,ny,nz)) RETURN
+    operator_input_shapes_valid=.TRUE.
+  END FUNCTION operator_input_shapes_valid
+
+  PURE LOGICAL FUNCTION physical_geometry_shapes_valid(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER :: nx,ny,nz
+    nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
+    physical_geometry_shapes_valid=.FALSE.
     IF (.NOT.ALLOCATED(state%grid%dx) .OR. .NOT.ALLOCATED(state%grid%dy) .OR. &
         .NOT.ALLOCATED(state%grid%pressure_interface) .OR. &
         .NOT.ALLOCATED(state%grid%cell_dp) .OR. &
         .NOT.ALLOCATED(state%grid%level_spacing_dp) .OR. &
         .NOT.ALLOCATED(state%grid%pressure_mass_measure) .OR. &
-        .NOT.ALLOCATED(state%above_ground) .OR. &
-        .NOT.ALLOCATED(state%balance_beta)) RETURN
+        .NOT.ALLOCATED(state%above_ground)) RETURN
     IF (ANY(SHAPE(state%grid%dx)/=(/nx,ny/)) .OR. &
         ANY(SHAPE(state%grid%dy)/=(/nx,ny/)) .OR. &
         ANY(SHAPE(state%grid%pressure_interface)/=(/nx,ny,nz+1/)) .OR. &
         ANY(SHAPE(state%grid%cell_dp)/=(/nx,ny,nz/)) .OR. &
         ANY(SHAPE(state%grid%level_spacing_dp)/=(/nx,ny,nz-1/)) .OR. &
         ANY(SHAPE(state%grid%pressure_mass_measure)/=(/nx,ny,nz/)) .OR. &
-        ANY(SHAPE(state%above_ground)/=(/nx,ny,nz/)) .OR. &
-        ANY(SHAPE(state%balance_beta)/=(/nx,ny,nz/))) RETURN
+        ANY(SHAPE(state%above_ground)/=(/nx,ny,nz/))) RETURN
     IF (.NOT.field_storage_shape_valid(state%pressure,nx,ny,nz)) RETURN
     IF (.NOT.field_storage_shape_valid(state%u,nx,ny,nz)) RETURN
     IF (.NOT.field_storage_shape_valid(state%v,nx,ny,nz)) RETURN
     IF (.NOT.field_storage_shape_valid(state%omega,nx,ny,nz)) RETURN
-    IF (.NOT.field_storage_shape_valid(state%omega_target,nx,ny,nz)) RETURN
-    operator_input_shapes_valid=.TRUE.
-  END FUNCTION operator_input_shapes_valid
+    physical_geometry_shapes_valid=.TRUE.
+  END FUNCTION physical_geometry_shapes_valid
 
   PURE LOGICAL FUNCTION diagnostic_operator_shapes_valid(op)
     TYPE(balance_operator_type), INTENT(IN) :: op

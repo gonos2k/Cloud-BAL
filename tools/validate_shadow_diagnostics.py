@@ -232,6 +232,24 @@ PHASE_GRAUPEL = 5
 SOURCE_CLOUD_ANALYSIS = 1 << 2
 SOURCE_RADAR_DBZ = 1 << 3
 SOURCE_PHASE_EVIDENCE = SOURCE_CLOUD_ANALYSIS | SOURCE_RADAR_DBZ
+CLOUD_ANALYSIS_CONTRACT = "cloud_analysis_provenance_v1"
+CLOUD_ANALYSIS_MASK_ENCODING = (
+    "valid:0=invalid,1=valid;quality:canonical_quality_bits_v1;"
+    "source:canonical_source_bits_v1"
+)
+CLOUD_ANALYSIS_FIELDS = {
+    "background_cloud_fraction": (np.dtype(np.float32), "1", None),
+    "background_cloud_type": (np.dtype(np.int32), "1", "cloud_type_v1"),
+}
+CLOUD_ANALYSIS_ATTRIBUTES = (
+    "cloud_analysis_contract",
+    "cloud_analysis_mask_encoding",
+)
+CLOUD_ANALYSIS_VARIABLES = tuple(
+    f"{field}{suffix}"
+    for field in CLOUD_ANALYSIS_FIELDS
+    for suffix in ("", "_valid", "_quality", "_source")
+)
 ANALYSIS_CONTRACT = "pressure_fixed_represented_mixture_v1"
 ANALYSIS_ATTRIBUTE_NAMES = (
     "analysis_contract",
@@ -272,6 +290,7 @@ CANDIDATE_EVALUATION_SCOPE = "endpoint_and_active_pressure_balance_diagnostics_o
 CANDIDATE_DIAGNOSTIC_DOMAIN_CONTRACT = "changed_pressure_state_domain_v1"
 CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION = "candidate_diagnostic_domain_v1"
 CANDIDATE_DIAGNOSTIC_MASK_EXTENSION = "candidate_diagnostic_masks_v1"
+CANDIDATE_DIAGNOSTIC_OPERATOR_EXTENSION = "candidate_diagnostic_operator_v1"
 CANDIDATE_DIAGNOSTIC_DOMAIN_SCOPE = (
     "changed_thermo_hydrometeor_pressure_geopotential_wind_plus_one_cell_stencil"
 )
@@ -304,6 +323,10 @@ CANDIDATE_DIAGNOSTIC_DOMAIN_INT32_ATTRIBUTES = (
     "candidate_diagnostic_domain_continuity_reason",
     "candidate_diagnostic_domain_geostrophic_reason",
 )
+CANDIDATE_DIAGNOSTIC_OPERATOR_ATTRIBUTES = frozenset((
+    "candidate_diagnostic_domain_operator_status",
+    "candidate_diagnostic_domain_operator_reason",
+))
 CANDIDATE_DIAGNOSTIC_DOMAIN_INT64_ATTRIBUTES = (
     "candidate_diagnostic_domain_changed_cells",
     "candidate_diagnostic_domain_requested_cells",
@@ -449,8 +472,11 @@ STATUS_DEGRADED = 10
 STATUS_FAILED = -10
 STATUS_OK = 20
 REASON_NONE = 0
+REASON_SHAPE = 1
+REASON_METADATA = 2
 REASON_REQUIRED_COVERAGE = 3
 REASON_NONFINITE = 4
+REASON_RANGE = 5
 REASON_GATE = 7
 REASON_AUTHORITY = 9
 SOLVER_NOT_RUN = 0
@@ -5670,6 +5696,373 @@ def validate_pressure_geostrophic_extension(
     return True, bool(clean), expected_support if clean else np.zeros(shape, dtype=bool)
 
 
+def validate_interior_hydrostatic_assessment(dataset, require) -> None:
+    """Replay the signed layer diagnostic from its stored canonical inputs."""
+    name = "candidate_interior_hydrostatic_v1"
+    declared = name in getattr(dataset, "schema_extensions", "").split(",")
+    require(declared == (name in dataset.groups), "interior hydrostatic declared group")
+    require(not any(key.startswith("candidate_interior_hydrostatic") and key != name
+                    for key in dataset.groups), "interior hydrostatic group version")
+    if name not in dataset.groups:
+        return  # Historical receipts predate this optional assessment.
+    group = dataset.groups[name]
+    if not all(key in dataset.dimensions for key in ("x", "y", "z", "z_spacing")):
+        require(False, "interior hydrostatic inherited dimensions")
+        return
+    require(getattr(group, "contract", "") == "signed_interior_thickness_diagnostic_v1",
+            "interior hydrostatic contract")
+    require(getattr(group, "scope", "") ==
+            "approximate_interior_only_no_surface_or_physical_approval",
+            "interior hydrostatic scope")
+    shape = (len(dataset.dimensions["z_spacing"]), len(dataset.dimensions["y"]),
+             len(dataset.dimensions["x"]))
+    full_shape = (len(dataset.dimensions["z"]), *shape[1:])
+    arrays = {}
+    for key in ("requested", "assessable", "reason", "residual", "above_ground"):
+        if key not in group.variables:
+            require(False, "interior hydrostatic missing " + key)
+            return
+        variable = group[key]
+        array = values(variable)
+        residual = key == "residual"
+        full = key == "above_ground"
+        correct = (variable.dimensions == (("z", "y", "x") if full else
+                                           ("z_spacing", "y", "x")) and
+                   array.shape == (full_shape if full else shape) and
+                   (np.dtype(variable.dtype) == np.dtype("float64") if residual else
+                    is_signed_int32(variable.dtype)) and
+                   getattr(variable, "units", "") == ("m2 s-2" if residual else "1"))
+        if key in ("requested", "assessable", "above_ground"):
+            correct = correct and np.all((array == 0) | (array == 1))
+        require(correct, "interior hydrostatic " + key + " structure")
+        if not correct:
+            return
+        arrays[key] = array
+    requested = arrays["requested"].astype(bool)
+    assessed = arrays["assessable"].astype(bool)
+    reasons = arrays["reason"]
+    residual = arrays["residual"]
+    require(np.all(np.isfinite(residual)), "interior hydrostatic finite residual")
+    require(np.all((reasons >= 0) & (reasons <= 31)), "interior hydrostatic reason bits")
+    require(np.array_equal(assessed, requested & (reasons == 0)),
+            "interior hydrostatic assessability reasons")
+    require(np.all(reasons[~requested] == 0) and np.all(residual[~assessed] == 0),
+            "interior hydrostatic unassessed values")
+    requested_name = "candidate_diagnostic_requested_mask"
+    require(requested_name in dataset.variables, "interior hydrostatic requested cell receipt")
+    if requested_name in dataset.variables:
+        cells = values(dataset[requested_name]).astype(bool)
+        require(np.array_equal(requested, cells[:-1] | cells[1:]),
+                "interior hydrostatic requested layers")
+    counts = {"requested_layers": np.count_nonzero(requested),
+              "assessable_layers": np.count_nonzero(assessed)}
+    for key, bit in (("missing_support_layers", 1), ("nonfinite_layers", 2),
+                     ("range_layers", 4), ("shape_errors", 8), ("metadata_errors", 16)):
+        counts[key] = np.count_nonzero(requested & ((reasons & bit) != 0))
+    for key, count in counts.items():
+        require(exact_scalar_int64(getattr(group, key, None)) == count,
+                "interior hydrostatic " + key)
+    expected_rms = float(np.sqrt(np.mean(residual[assessed] ** 2))) if np.any(assessed) else 0.
+    expected_max = float(np.max(np.abs(residual[assessed]))) if np.any(assessed) else 0.
+    # Sequential binary64 sums and NumPy reductions may use different orders.
+    # This is an arithmetic bound; no physical residual threshold is implied.
+    reduction_bound = max(64, 4 * int(counts["assessable_layers"])) * np.finfo(float).eps
+    for key, expected in (("residual_rms_m2_s2", expected_rms),
+                          ("residual_max_abs_m2_s2", expected_max)):
+        observed = exact_scalar_float64(getattr(group, key, None))
+        require(observed is not None and np.isfinite(observed) and
+                abs(observed - expected) <= reduction_bound * max(1., expected),
+                "interior hydrostatic " + key)
+    if not np.any(requested):
+        return
+    field_units = {"pressure": "Pa", "temperature": "K", "geopotential": "m2 s-2",
+                   **{key: "kg kg-1 dryair" for key in THERMO_SPECIES}}
+    fields = {}
+    support = arrays["above_ground"].astype(bool)
+    missing_field = False
+    for key, unit in field_units.items():
+        names = [key, *(key + "_" + suffix for suffix in ("valid", "quality", "source"))]
+        if not all(item in group.variables for item in names):
+            missing_field = True
+            continue
+        variable = group[key]
+        field = values(variable).astype(np.float64)
+        metadata = [values(group[item]) for item in names[1:]]
+        correct = (variable.dimensions == ("z", "y", "x") and field.shape == full_shape and
+                   np.dtype(variable.dtype) == np.dtype("float32") and
+                   all(item.shape == full_shape and is_signed_int32(group[item_name].dtype)
+                       for item_name, item in zip(names[1:], metadata)))
+        require(correct, "interior hydrostatic " + key + " input structure")
+        if not correct:
+            return
+        require(getattr(variable, "units", "") == unit and
+                exact_scalar_int64(getattr(variable, "valid_time", None)) ==
+                exact_scalar_int64(getattr(dataset, "valid_time_epoch", None)),
+                "interior hydrostatic " + key + " metadata")
+        support &= ((metadata[0] == 1) & ((metadata[1] & QUALITY_EXCLUDED_BITS) == 0)
+                    & ((metadata[1] & ~QUALITY_KNOWN_BITS) == 0)
+                    & (metadata[2] > 0) & ((metadata[2] & ~SOURCE_KNOWN_BITS) == 0))
+        fields[key] = field
+        candidate_key = ("transition_candidate_pressure" if key == "pressure" and
+                         "transition_candidate_pressure" in dataset.variables else
+                         "candidate_" + key)
+        if candidate_key in dataset.variables:
+            require(np.array_equal(field, values(dataset[candidate_key]), equal_nan=True),
+                    "interior hydrostatic " + key + " final candidate identity")
+        for suffix, item in zip(("valid", "quality", "source"), metadata):
+            candidate_metadata = candidate_key + "_" + suffix
+            if candidate_metadata in dataset.variables:
+                require(np.array_equal(item, values(dataset[candidate_metadata])),
+                        "interior hydrostatic " + key + " " + suffix + " candidate identity")
+    if missing_field:
+        require(not np.any(assessed) and np.all((reasons[requested] & 8) != 0),
+                "interior hydrostatic missing input cannot be assessed")
+        return
+    layer_support = support[:-1] & support[1:]
+    require(np.all(~assessed | layer_support), "interior hydrostatic usable endpoints")
+    p, temperature = fields["pressure"], fields["temperature"]
+    if "transition_candidate_pressure" in dataset.variables:
+        expected_pressure = values(dataset["transition_candidate_pressure"])
+    else:
+        expected_pressure = np.broadcast_to(values(dataset["pressure"])[:, None, None], full_shape)
+    require(np.array_equal(p, expected_pressure), "interior hydrostatic pressure candidate identity")
+    if "candidate_above_ground" in dataset.variables:
+        expected_domain = values(dataset["candidate_above_ground"])
+    else:
+        # Fixed geometry retains the canonical pressure AND static-terrain
+        # domain. PS alone cannot reconstruct terrain-clipped pressure cells.
+        # A domain transition stores its explicit candidate mask above.
+        expected_domain = values(dataset["above_ground"])
+    require(np.array_equal(arrays["above_ground"], expected_domain),
+            "interior hydrostatic atmospheric candidate identity")
+    water = np.stack([fields[key] for key in THERMO_SPECIES])
+    finite = np.isfinite(p) & np.isfinite(temperature) & np.isfinite(fields["geopotential"])
+    finite &= np.all(np.isfinite(water), axis=0)
+    ranges = ((p >= 100.) & (p <= 120000.) & (temperature >= 150.) &
+              (temperature <= 350.) & np.all(water >= 0., axis=0) &
+              (water[0] <= float(np.float32(.2))))
+    expected_reasons = np.zeros(shape, dtype=np.int32)
+    expected_reasons[requested & ~layer_support] |= 1
+    expected_reasons[requested & ~(finite[:-1] & finite[1:])] |= 2
+    expected_reasons[requested & ~(ranges[:-1] & ranges[1:] & (p[:-1] > p[1:]))] |= 4
+    require(np.array_equal(reasons, expected_reasons),
+            "interior hydrostatic independent assessment reasons")
+    require(np.all(~assessed | (finite[:-1] & finite[1:] & ranges[:-1] & ranges[1:] &
+                               (p[:-1] > p[1:]))), "interior hydrostatic admissible endpoints")
+    with np.errstate(all="ignore"):
+        density = p / (287.05 * temperature * (1. + water[0] / .622))
+        alpha = p / (density * (1. + np.sum(water, axis=0)))
+        thickness = .5 * (alpha[:-1] + alpha[1:]) * np.log(p[:-1] / p[1:])
+        phi = fields["geopotential"]
+        expected = phi[1:] - phi[:-1] - thickness
+    scale = np.abs(phi[1:]) + np.abs(phi[:-1]) + np.abs(thickness)
+    bound = 64 * np.finfo(float).eps * np.maximum(1., scale)
+    require(np.all(np.abs(residual[assessed] - expected[assessed]) <= bound[assessed]),
+            "interior hydrostatic independent layer residual")
+
+
+def validate_cloud_analysis_provenance(dataset, require) -> tuple[bool, bool]:
+    """Validate the optional cloud-analysis fields written with radar inputs."""
+    clean = True
+
+    def check(condition: object, message: str) -> bool:
+        nonlocal clean
+        passed = bool(condition)
+        clean = clean and passed
+        require(passed, message)
+        return passed
+
+    flag = exact_scalar_int32(getattr(dataset, "cloud_analysis_present", None))
+    check(flag in (0, 1), "cloud analysis present flag")
+    cloud_attributes = {
+        name for name in dataset.ncattrs()
+        if name.startswith("cloud_analysis_") and name != "cloud_analysis_present"
+    }
+    cloud_variables = {
+        name for name in dataset.variables
+        if name.startswith("background_cloud_fraction")
+        or name.startswith("background_cloud_type")
+    }
+    present = flag == 1 or bool(cloud_attributes or cloud_variables)
+    if flag != 1:
+        check(not cloud_attributes and not cloud_variables,
+              "cloud analysis absent has no provenance bundle")
+        return present, clean
+
+    expected_attributes = set(CLOUD_ANALYSIS_ATTRIBUTES)
+    check(expected_attributes <= set(dataset.ncattrs()),
+          "complete cloud analysis attributes")
+    check(cloud_attributes <= expected_attributes, "known cloud analysis attributes")
+    check(set(CLOUD_ANALYSIS_VARIABLES) <= set(dataset.variables),
+          "complete cloud analysis variables")
+    check(cloud_variables <= set(CLOUD_ANALYSIS_VARIABLES),
+          "known cloud analysis variables")
+    check(getattr(dataset, "cloud_analysis_contract", "") == CLOUD_ANALYSIS_CONTRACT,
+          "cloud analysis contract")
+    check(getattr(dataset, "cloud_analysis_mask_encoding", "") ==
+          CLOUD_ANALYSIS_MASK_ENCODING, "cloud analysis mask encoding")
+    if not set(CLOUD_ANALYSIS_VARIABLES) <= set(dataset.variables):
+        return present, False
+
+    expected_shape = tuple(
+        len(dataset.dimensions[name]) for name in ("z", "y", "x")
+    ) if all(name in dataset.dimensions for name in ("z", "y", "x")) else None
+    check(expected_shape is not None, "cloud analysis dimensions")
+    valid_time = exact_scalar_int64(getattr(dataset, "valid_time_epoch", None))
+    check(valid_time is not None, "cloud analysis global valid time")
+    if expected_shape is None:
+        return present, False
+
+    arrays: dict[str, np.ndarray] = {}
+    structure_ok = True
+    for field, (dtype, units, code_table) in CLOUD_ANALYSIS_FIELDS.items():
+        for suffix in ("", "_valid", "_quality", "_source"):
+            name = field + suffix
+            variable = dataset.variables[name]
+            field_dtype = dtype if suffix == "" else np.dtype(np.int32)
+            correct = (
+                variable.dimensions == ("z", "y", "x")
+                and ((np.dtype(variable.dtype) == field_dtype)
+                     if field_dtype == np.dtype(np.float32)
+                     else is_signed_int32(variable.dtype))
+                and getattr(variable, "units", "") == units
+                and "scale_factor" not in variable.ncattrs()
+                and "add_offset" not in variable.ncattrs()
+            )
+            if suffix == "":
+                field_time = exact_scalar_int64(getattr(variable, "valid_time", None))
+                correct = correct and field_time is not None and field_time == valid_time
+                if code_table is not None:
+                    correct = correct and getattr(variable, "code_table", "") == code_table
+            else:
+                correct = correct and "valid_time" not in variable.ncattrs()
+                if suffix == "_valid":
+                    correct = correct and getattr(variable, "mask_encoding", "") == \
+                        "0=invalid,1=valid"
+                elif suffix == "_quality":
+                    correct = correct and getattr(variable, "mask_encoding", "") == \
+                        "canonical_quality_bits_v1"
+                else:
+                    correct = correct and getattr(variable, "mask_encoding", "") == \
+                        "canonical_source_bits_v1"
+            check(correct, f"{name} metadata")
+            if not correct:
+                structure_ok = False
+                continue
+            try:
+                array = values(variable)
+            except (RuntimeError, ValueError, TypeError):
+                check(False, f"{name} unmasked values")
+                structure_ok = False
+                continue
+            expected_dtype = field_dtype
+            correct_values = (
+                array.shape == expected_shape
+                and ((array.dtype == expected_dtype)
+                     if expected_dtype == np.dtype(np.float32)
+                     else is_signed_int32(array.dtype))
+            )
+            check(correct_values, f"{name} shape and unpacked type")
+            if not correct_values:
+                structure_ok = False
+                continue
+            arrays[name] = array
+
+    above_ground = dataset.variables.get("above_ground")
+    above_ok = above_ground is not None
+    if above_ground is not None:
+        above_ok = (
+            above_ground.dimensions == ("z", "y", "x")
+            and is_signed_int32(above_ground.dtype)
+            and getattr(above_ground, "units", "") == "1"
+        )
+        check(above_ok, "cloud analysis above-ground structure")
+        if above_ok:
+            try:
+                above = values(above_ground)
+                above_ok = (above.shape == expected_shape and is_signed_int32(above.dtype)
+                            and np.all((above == 0) | (above == 1)))
+            except (RuntimeError, ValueError, TypeError):
+                above_ok = False
+            check(above_ok, "cloud analysis above-ground mask")
+    else:
+        check(False, "cloud analysis above-ground mask present")
+    if not structure_ok or not above_ok:
+        return present, False
+
+    above_mask = above.astype(bool)
+    for field, (dtype, _units, _code_table) in CLOUD_ANALYSIS_FIELDS.items():
+        value = arrays[field]
+        valid = arrays[field + "_valid"].astype(np.int64)
+        quality = arrays[field + "_quality"].astype(np.int64)
+        source = arrays[field + "_source"].astype(np.int64)
+        valid_cells = valid == 1
+        check(np.all((valid == 0) | (valid == 1)), f"{field} valid binary")
+        check(np.all(quality >= 0), f"{field} quality nonnegative")
+        check(np.all((quality & ~QUALITY_KNOWN_BITS) == 0), f"{field} quality bits")
+        check(np.all(source >= 0), f"{field} source nonnegative")
+        check(np.all((source & ~SOURCE_KNOWN_BITS) == 0), f"{field} source bits")
+        usable = (
+            valid_cells
+            & (source > 0)
+            & ((quality & QUALITY_EXCLUDED_BITS) == 0)
+        )
+        check(np.all(~valid_cells | usable), f"{field} valid provenance")
+        check(np.all(~valid_cells | above_mask), f"{field} above-ground coverage")
+        if dtype == np.dtype(np.float32):
+            check(np.all(~valid_cells | np.isfinite(value)), f"{field} finite")
+            check(np.all(~valid_cells | ((value >= 0.0) & (value <= 1.0))),
+                  f"{field} range")
+        else:
+            check(np.all(~valid_cells | ((value >= 0) & (value <= 11))),
+                  f"{field} code range")
+
+    field_evidence = any(
+        np.any(arrays[field + "_valid"] == 1) for field in CLOUD_ANALYSIS_FIELDS
+    )
+    phase_evidence = False
+    phase_valid_name = "background_precipitation_phase_valid"
+    phase_source_name = "background_precipitation_phase_source"
+    if phase_valid_name in dataset.variables and phase_source_name in dataset.variables:
+        phase_valid_var = dataset.variables[phase_valid_name]
+        phase_source_var = dataset.variables[phase_source_name]
+        phase_structure_ok = (
+            phase_valid_var.dimensions == ("z", "y", "x")
+            and phase_source_var.dimensions == ("z", "y", "x")
+            and is_signed_int32(phase_valid_var.dtype)
+            and is_signed_int32(phase_source_var.dtype)
+            and getattr(phase_valid_var, "units", "") == "1"
+            and getattr(phase_source_var, "units", "") == "1"
+            and "scale_factor" not in phase_valid_var.ncattrs()
+            and "add_offset" not in phase_valid_var.ncattrs()
+            and "scale_factor" not in phase_source_var.ncattrs()
+            and "add_offset" not in phase_source_var.ncattrs()
+        )
+        check(phase_structure_ok, "cloud analysis phase evidence structure")
+        if phase_structure_ok:
+            try:
+                phase_valid = values(phase_valid_var)
+                phase_source = values(phase_source_var)
+                phase_structure_ok = (
+                    phase_valid.shape == expected_shape
+                    and phase_source.shape == expected_shape
+                    and is_signed_int32(phase_valid.dtype)
+                    and is_signed_int32(phase_source.dtype)
+                )
+                check(phase_structure_ok, "cloud analysis phase evidence shape and type")
+                if phase_structure_ok:
+                    check(np.all((phase_valid == 0) | (phase_valid == 1)),
+                          "cloud analysis phase valid binary")
+                    phase_evidence = bool(np.any(
+                        (phase_valid == 1)
+                        & ((phase_source.astype(np.int64) & SOURCE_CLOUD_ANALYSIS) != 0)
+                    ))
+            except (RuntimeError, ValueError, TypeError):
+                check(False, "cloud analysis phase evidence values")
+    check(field_evidence or phase_evidence, "cloud analysis presence evidence")
+    return present, clean
+
+
 def validate(path: Path) -> tuple[dict[str, object], list[str]]:
     failures: list[str] = []
     schema_version = -1
@@ -5713,6 +6106,9 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             failures.append(message)
 
     with netCDF4.Dataset(path, "r") as dataset:
+        interior_hydrostatic_present = "candidate_interior_hydrostatic_v1" in dataset.groups
+        validate_interior_hydrostatic_assessment(dataset, require)
+        interior_hydrostatic_clean = interior_hydrostatic_present and not failures
         schema_version = exact_scalar_integer(
             getattr(dataset, "diagnostic_schema_version", None)
         )
@@ -5944,15 +6340,28 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             name for name in dataset.ncattrs()
             if name.startswith("candidate_diagnostic_domain_")
             and name != "candidate_diagnostic_domain_mask_contract"
+            and name not in CANDIDATE_DIAGNOSTIC_OPERATOR_ATTRIBUTES
+        }
+        diagnostic_operator_reserved_attributes = {
+            name for name in dataset.ncattrs()
+            if name in CANDIDATE_DIAGNOSTIC_OPERATOR_ATTRIBUTES
         }
         domain_declared = CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION in extensions
         domain_present = domain_declared or bool(domain_reserved_attributes)
+        operator_extension_present = CANDIDATE_DIAGNOSTIC_OPERATOR_EXTENSION in extensions
+        if operator_extension_present or diagnostic_operator_reserved_attributes:
+            require(domain_present, "candidate diagnostic operator requires diagnostic domain")
         if domain_present:
             require(domain_declared, "candidate diagnostic domain extension")
             require(domain_reserved_attributes == CANDIDATE_DIAGNOSTIC_DOMAIN_ATTRIBUTES,
                     "candidate diagnostic domain attribute set")
             require(CANDIDATE_EVALUATION_EXTENSION in extensions,
                     "candidate diagnostic domain requires legacy evaluation receipt")
+            operator_extension_declared = operator_extension_present
+            require(diagnostic_operator_reserved_attributes == (
+                CANDIDATE_DIAGNOSTIC_OPERATOR_ATTRIBUTES
+                if operator_extension_declared else set()),
+                "candidate diagnostic operator extension attributes")
             require(getattr(dataset, "candidate_diagnostic_domain_contract", "") ==
                     CANDIDATE_DIAGNOSTIC_DOMAIN_CONTRACT,
                     "candidate diagnostic domain contract")
@@ -6077,19 +6486,46 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             for name in ("candidate_diagnostic_domain_continuity_status",
                          "candidate_diagnostic_domain_geostrophic_status"):
                 require(domain_ints.get(name) in domain_statuses, name)
+            diagnostic_operator_status = exact_scalar_int32(getattr(
+                dataset, "candidate_diagnostic_domain_operator_status", None)) \
+                if operator_extension_declared else STATUS_OK
+            diagnostic_operator_reason = exact_scalar_int32(getattr(
+                dataset, "candidate_diagnostic_domain_operator_reason", None)) \
+                if operator_extension_declared else REASON_NONE
+            if operator_extension_declared:
+                require(diagnostic_operator_status in domain_statuses,
+                        "candidate diagnostic operator status")
+                require(diagnostic_operator_reason in reasons,
+                        "candidate diagnostic geometry reason")
+            if operator_extension_declared and diagnostic_operator_status != STATUS_OK:
+                require(domain_flags.get("candidate_diagnostic_domain_continuity_assessed") == 0 and
+                        domain_flags.get("candidate_diagnostic_domain_geostrophic_assessed") == 0 and
+                        domain_ints.get("candidate_diagnostic_domain_continuity_status") == STATUS_FAILED and
+                        domain_ints.get("candidate_diagnostic_domain_geostrophic_status") == STATUS_FAILED and
+                        domain_ints.get("candidate_diagnostic_domain_continuity_reason") ==
+                        diagnostic_operator_reason and
+                        domain_ints.get("candidate_diagnostic_domain_geostrophic_reason") ==
+                        diagnostic_operator_reason,
+                        "failed diagnostic geometry cannot claim physical assessment")
             for name in ("candidate_diagnostic_domain_continuity_reason",
                          "candidate_diagnostic_domain_geostrophic_reason"):
-                require(domain_ints.get(name) in (REASON_NONE, REASON_REQUIRED_COVERAGE,
-                                                  REASON_NONFINITE,
+                require(domain_ints.get(name) in (*range(REASON_NONE, REASON_AUTHORITY + 1),
                                                   DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN), name)
+            if operator_extension_declared and diagnostic_operator_status != STATUS_OK:
+                require(not mask_extension_present and
+                        changed_cells == 0 and requested_cells == 0 and
+                        domain_flags.get("candidate_diagnostic_domain_continuity_assessed") == 0 and
+                        domain_flags.get("candidate_diagnostic_domain_geostrophic_assessed") == 0,
+                        "failed diagnostic geometry has no assessed domain")
 
-            for kind, count, residual_names in (
+            for kind, count, residual_names in (() if operator_extension_declared and
+                                                 diagnostic_operator_status != STATUS_OK else (
                 ("continuity", continuity_cells,
                  ("candidate_diagnostic_domain_continuity_rms",
                   "candidate_diagnostic_domain_continuity_max_abs")),
                 ("geostrophic", geostrophic_cells,
                  ("candidate_diagnostic_domain_geostrophic_rms",)),
-            ):
+            )):
                 assessed = domain_flags.get(f"candidate_diagnostic_domain_{kind}_assessed")
                 status_name = f"candidate_diagnostic_domain_{kind}_status"
                 reason_name = f"candidate_diagnostic_domain_{kind}_reason"
@@ -6266,15 +6702,27 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                               expected_extensions + "," + ENDPOINT_EXTENSION + "," +
                               CANDIDATE_EVALUATION_EXTENSION + "," +
                               CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_MASK_EXTENSION,
+                              expected_extensions + "," + ENDPOINT_EXTENSION + "," +
+                              CANDIDATE_EVALUATION_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_OPERATOR_EXTENSION,
+                              expected_extensions + "," + ENDPOINT_EXTENSION + "," +
+                              CANDIDATE_EVALUATION_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_DOMAIN_EXTENSION + "," +
+                              CANDIDATE_DIAGNOSTIC_OPERATOR_EXTENSION + "," +
                               CANDIDATE_DIAGNOSTIC_MASK_EXTENSION)
+        base_extension_list = ",".join(
+            token for token in extensions if token != "candidate_interior_hydrostatic_v1"
+        )
         if pressure_geopotential_signalled:
             require(
-                getattr(dataset, "schema_extensions", "") in allowed_extensions,
+                base_extension_list in allowed_extensions,
                 "schema extensions",
             )
         else:
             require(
-                getattr(dataset, "schema_extensions", "") in (
+                base_extension_list in (
                     *allowed_extensions,
                     expected_extensions + "," + PRESSURE_GEOPOTENTIAL_EXTENSION,
                 ),
@@ -6284,7 +6732,6 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             ("promotion_eligible", 0),
             ("operational_state_changed", 0),
             ("science_assessed", 0),
-            ("cloud_analysis_present", 0),
             ("radar_los_used", 0),
             ("physical_continuity_assessed", 0),
             ("column_status", STATUS_OK),
@@ -6292,6 +6739,7 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             ("maximum_transport_substeps", 64),
         ):
             require(int(getattr(dataset, attribute, -999)) == expected, attribute)
+        validate_cloud_analysis_provenance(dataset, require)
         for attribute, expected in EXPECTED_FLOAT_ATTRIBUTES.items():
             if (schema6 or schema7 or schema8 or pressure_analysis_candidate_present) and attribute in ("grid_dx_m", "grid_dy_m"):
                 try:
@@ -7539,6 +7987,8 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                 transition_present and transition_numerical_clean and not failures
             ),
             "science_assessed": False,
+            "interior_hydrostatic_assessment_present": interior_hydrostatic_present,
+            "interior_hydrostatic_independently_validated": interior_hydrostatic_clean,
             "promotion_eligible": False,
             "physical_continuity_assessed": False,
             "trajectory_science_decision": "BLOCKED_MISSING_STORM_MOTION",

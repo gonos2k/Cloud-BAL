@@ -11,6 +11,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from validate_shadow_diagnostics import validate, dry_air_flux_divergence
+from netcdf_test_copy import copy_groups
 
 
 CANDIDATE_VARIABLES = (
@@ -104,6 +105,7 @@ def rewrite_without(source_path: Path, destination: Path, omitted: set[str]) -> 
                 }
             )
             output[...] = variable[:]
+        copy_groups(source, target)
 
 
 def reject(path: Path, damaged: Path, edit, label: str) -> None:

@@ -119,12 +119,17 @@ can be treated as provenance evidence.
   SHADOW bytes with the same generation and validates them on readback.
 - [ ] Independently reconstruct semantic mask equality from WPS background
   fields. Current WPS schemas do not all carry the background fields needed.
-- [ ] Make required-domain diagnostics assessable independently of the
-  wind-control operator's target and authority preconditions. An operator-build
-  failure still leaves the new diagnostics unassessed and blocks publication.
-- [ ] Preserve the specific geostrophic metadata or range failure reason in
-  the changed-domain receipt. Those failures currently remain failed and
-  unassessed but can carry a generic nonfinite reason.
+- [x] Make required-domain diagnostics assessable independently of the
+  wind-control operator's target and authority preconditions, using its shared
+  physical geometry/face construction. Record diagnostic-operator failures
+  separately from control failures.
+- [x] Preserve the specific geostrophic metadata, coverage, shape, nonfinite,
+  or range failure reason in the changed-domain receipt.
+- [x] Evaluate signed interior hydrostatic thickness residuals using the
+  existing increment's mixture state relation. Store requested/assessable
+  layers, reasons, values, and canonical inputs for independent semantic
+  readback. This does not impose hydrostatic balance on all regimes or assess
+  the surface datum, native vertical dynamics, or EOS independently.
 - [ ] Add independently authorized analysis sources and physical-time boundary
   fluxes to evaluate dry-air, water-species, and energy conservation residuals.
   A computed endpoint change must never be copied into its own source term.
@@ -143,7 +148,7 @@ can be treated as provenance evidence.
 
 The first checked item is diagnostic scope only. The legacy continuity and
 geostrophic values are measured on active balance support. The additional
-changed-domain values use the same final state and operator with a separate
+changed-domain values use the same final state and shared physical geometry with a separate
 requested domain; they do not grant correction authority outside beta support.
 The receipts record support counts and each diagnostic's status; zero support
 is unassessed, not a zero residual.
@@ -202,11 +207,18 @@ assessment and physical-acceptance gate remains open.
   retained legacy writer; it does not authorize another pressure inventory.
 - [ ] Run the current LAPSPREP producer into a detached generation with a
   pinned source/input/configuration/build manifest and verify the pair before
-  changing any consumer-visible pointer. The current test republishes a
-  historical actual pair in an isolated evidence root.
-- [ ] Reproduce this readback with the current writer's surface-boundary
-  schema; the historical sidecar lacks candidate surface TT/PSFC and is
-  checked against its retained baseline for those fields.
+  changing any consumer-visible pointer. The current actual pair passes
+  independent readback, but its research publication failed the filesystem's
+  atomic no-replace rename requirement. No generation or pointer was created;
+  its dirty build source is recorded by exact hashes, not as a clean commit.
+- [x] Rebuild and run current LAPSPREP BASE and a declared research candidate
+  on the same copied NE57 inputs and pinned Intel/runtime profile. Preserve
+  source/input/config/product hashes and verify all 235 same-run WPS records.
+  This is conditional execution evidence, not the joint-solve gate below.
+- [x] Reproduce this readback with the current writer's surface-boundary
+  schema, including stored candidate surface TT/PSFC. The current producer
+  evidence and remaining dispositions are in
+  `evidence/pr59_current_lapsprep.json`.
 - [ ] Confirm metgrid, real, and native consumed state against that same
   generation and its declared QV, mass, frame, boundary, and omega contracts.
 
@@ -302,6 +314,16 @@ returns `NO_AUTHORITY` (exit 3): positive mass with zero paired moments in
 962,388 cloud, 258,832 ice, 219,996 rain, and 817 graupel cells. The CLI's
 immediate reason is `EXPECTED_DENOMINATOR_MAPPING_MISSING`; the pair counts
 are diagnostic evidence, not an authorization to run KDM6.
+
+The subsequent source audit distinguishes missing moments. The private KDM6
+source has a named CCN startup profile and a separately tested research prior
+for missing graupel volume (`QIB=QGRAUP/400 kg m-3`). That graupel prior was
+not used by the retained 20-second native capture. Cloud, ice, and rain
+number thresholds are guards for existing moments; no corresponding named
+startup prior was found. Do not treat all four missing fields as requiring
+external observations, or substitute numerical floors for a declared prior.
+The initial three number moments still require a producer or a specified PSD
+prior with uncertainty and scientific validation.
 
 ## 5. Demonstrate generalization
 
