@@ -72,6 +72,7 @@ PROGRAM test_real_shadow_io_contract
     CALL check(rc==NF90_NOERR,'final candidate receipt can be reopened',failures)
     IF (rc==NF90_NOERR) THEN
       CALL check_endpoint_receipt(ncid,result%candidate_budget,failures)
+      CALL check_evaluation_receipt(ncid,result%candidate_evaluation,failures)
       rc=nf90_close(ncid)
       CALL check(rc==NF90_NOERR,'final candidate receipt closes',failures)
     END IF
@@ -1772,7 +1773,7 @@ CONTAINS
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_extensions)== &
         'verified_operational_identity_v1,radar_no_echo_masks_v1,'// &
         'pressure_geometry_v2,omega_boundary_contract_v2,pressure_thermo_v1,'// &
-        'pressure_analysis_v1,pressure_outer_v1,candidate_endpoint_v2', &
+        'pressure_analysis_v1,pressure_outer_v1,candidate_endpoint_v2,candidate_evaluation_v1', &
         'schema-8 extensions are exact',failures)
       rc=nf90_get_att(ncid,NF90_GLOBAL,'outer_contract',outer_contract)
       CALL check(rc==NF90_NOERR .AND. TRIM(outer_contract)== &
@@ -2920,6 +2921,65 @@ CONTAINS
         'stored endpoint count matches accepted candidate',failures)
     END DO
   END SUBROUTINE check_endpoint_receipt
+
+  SUBROUTINE check_evaluation_receipt(ncid,evaluation,failures)
+    INTEGER, INTENT(IN) :: ncid
+    TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
+    INTEGER, INTENT(INOUT) :: failures
+    CHARACTER(LEN=65), PARAMETER :: integer_names(9)=[CHARACTER(LEN=65) :: &
+      'candidate_evaluation_canonical_accounting_assessed', &
+      'candidate_evaluation_continuity_assessed', &
+      'candidate_evaluation_geostrophic_assessed', &
+      'candidate_evaluation_source_boundary_assessed', &
+      'candidate_evaluation_observation_fit_assessed', &
+      'candidate_evaluation_operator_status', &
+      'candidate_evaluation_operator_reason', &
+      'candidate_evaluation_continuity_status', &
+      'candidate_evaluation_geostrophic_status']
+    CHARACTER(LEN=65), PARAMETER :: real_names(3)=[CHARACTER(LEN=65) :: &
+      'candidate_evaluation_continuity_rms', &
+      'candidate_evaluation_continuity_max_abs', &
+      'candidate_evaluation_geostrophic_rms']
+    INTEGER :: expected_integer(9),read_integer,n,rc
+    INTEGER(int64) :: read_count
+    REAL(real64) :: expected_real(3),read_real
+    CHARACTER(LEN=65) :: contract,scope
+
+    contract=''; scope=''
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_evaluation_contract',contract)
+    CALL check(rc==NF90_NOERR .AND. TRIM(contract)=='final_pressure_diagnostics_v1', &
+      'stored evaluation contract is scoped',failures)
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_evaluation_scope',scope)
+    CALL check(rc==NF90_NOERR .AND. TRIM(scope)== &
+      'endpoint_and_active_pressure_balance_diagnostics_only', &
+      'stored evaluation scope is explicit',failures)
+    expected_integer=[ &
+      MERGE(1,0,evaluation%canonical_accounting_assessed), &
+      MERGE(1,0,evaluation%continuity_assessed), &
+      MERGE(1,0,evaluation%geostrophic_assessed), &
+      MERGE(1,0,evaluation%source_boundary_assessed), &
+      MERGE(1,0,evaluation%observation_fit_assessed), &
+      evaluation%operator_status,evaluation%operator_reason, &
+      evaluation%continuity_status,evaluation%geostrophic_status]
+    DO n=1,SIZE(integer_names)
+      read_integer=-999
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(integer_names(n)),read_integer)
+      CALL check(rc==NF90_NOERR .AND. read_integer==expected_integer(n), &
+        'stored evaluation integer matches final candidate',failures)
+    END DO
+    read_count=-1_int64
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'candidate_evaluation_balance_support_cells',read_count)
+    CALL check(rc==NF90_NOERR .AND. read_count==evaluation%balance_support_cells, &
+      'stored evaluation support count matches final candidate',failures)
+    expected_real=[evaluation%continuity_rms,evaluation%continuity_max_abs, &
+      evaluation%geostrophic_rms]
+    DO n=1,SIZE(real_names)
+      read_real=HUGE(1.0_real64)
+      rc=nf90_get_att(ncid,NF90_GLOBAL,TRIM(real_names(n)),read_real)
+      CALL check(rc==NF90_NOERR .AND. read_real==expected_real(n), &
+        'stored evaluation metric matches final candidate',failures)
+    END DO
+  END SUBROUTINE check_evaluation_receipt
 
   SUBROUTINE check(condition,message,count)
     LOGICAL, INTENT(IN) :: condition

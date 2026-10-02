@@ -107,6 +107,10 @@ can be treated as provenance evidence.
   residuals under one versioned candidate contract.
 - [ ] Persist a complete final-state assessment with explicit unresolved
   conditions and bind it to the diagnostic and WPS payload readback.
+- [x] Persist the current limited endpoint/active-support evaluation flags,
+  statuses, count, and metrics in SHADOW and reject malformed receipts on
+  independent file validation. This receipt does not satisfy the complete
+  assessment item above.
 - [ ] Distinguish feasibility, objective stationarity, and step size in a
   common iteration; the current five-field stored-value fixed point is not
   a joint constrained solve.
@@ -115,6 +119,8 @@ The first checked item is diagnostic scope only. Continuity and geostrophic
 values are measured only on the final state's active balance support with the
 existing pressure-grid operator. The receipt records that support count and
 each diagnostic's status; zero support is unassessed, not a zero residual.
+An operator-build failure can also leave the count at zero; its status
+distinguishes that failure from a successfully built empty support.
 The evaluator's returned status covers canonical endpoint accounting, not
 completion of every diagnostic. These values are not a universal zero-motion
 target.
@@ -182,6 +188,56 @@ is a diagnostic milestone only; it does not pass this gate.
 Gate: the consumed native state matches the authorized candidate within
 predeclared field and conservation tolerances. A payload-only or writer-only
 test does not pass this gate.
+
+## Physical-initialization execution gates (PR55)
+
+The current evaluator already supports a no-omega diagnostic execution. It
+reports endpoint accounting and continuity/geostrophic diagnostics on active
+balance support; zero support or a failed operator leaves these diagnostics
+unassessed. The continuity diagnostic includes supplied boundary velocities
+and valid top/bottom omega, but does not validate their physical provenance or
+close independently authorized source and boundary fluxes. It also does not
+assess observation fit, KDM6 startup response, or native consumed
+state, and it grants no initialization approval. Treat this as the implemented
+limited baseline, not a completed physical evaluation.
+
+- [ ] Capture the first KDM6 call's `itimestep`, TH/PII (or derived T), dry
+  density `DEN`, vapor and each hydrometeor Q, all N fields, and QIB/BG
+  immediately before and after the call. Bind the actual executable, source,
+  input, and configuration identities. Check finiteness and the declared
+  initialization policy; retain zero or missing moments as such when no
+  authorized rule exists.
+- [ ] Carry one current producer candidate identity through WPS, metgrid, real,
+  and native initialization. Bind source/input/config/build/runtime hashes,
+  generation IDs, and independent readbacks of the consumed values and time at
+  each stage. Reject identity breaks; do not substitute a historical pair.
+- [ ] Run BASE, HYDRO, and COUPLED from the same pinned case, boundary forcing,
+  model/physics settings, and toolchain. Freeze the mode definitions, paired
+  comparisons, startup metrics, and acceptance thresholds before examining
+  results.
+- [ ] Retain high-frequency startup output at the cadence needed for the
+  resolved fast modes, plus 10-, 30-, and 60-minute checkpoints. Compare at
+  least pressure tendency/divergence, vertical and horizontal wind response,
+  temperature/moisture/species changes, and finite/positivity status. Report
+  each predeclared metric against its frozen threshold; do not infer shock
+  safety from hourly output or a 0–6 h aggregate.
+- [ ] Record each gate as PASS, FAIL, UNSUPPORTED, or NOT_RUN with its reason.
+  Missing inputs, unsupported fields/mappings, or absent native consumers are
+  not zeros and cannot count as PASS. Preserve rejected and incomplete runs.
+
+These items remain open until one reviewable execution receipt binds the
+pre/post KDM6 fields, stage identities/readbacks, paired startup diagnostics,
+frozen criteria, and unresolved dispositions. No item is closed by the
+existing no-omega evaluator or historical WPS/native tests alone.
+The retained native input has positive hydrometeor mass with zero paired
+number/volume moments, and the inspected private `real.exe` initializer has
+no identified QIB transfer path. Treat both as handoff questions requiring
+source-bound readback; neither permits a fabricated moment initializer.
+Read-only MP37 preflight on the retained input hash `f0ccee31...a052e1`
+returns `NO_AUTHORITY` (exit 3): positive mass with zero paired moments in
+962,388 cloud, 258,832 ice, 219,996 rain, and 817 graupel cells. The CLI's
+immediate reason is `EXPECTED_DENOMINATOR_MAPPING_MISSING`; the pair counts
+are diagnostic evidence, not an authorization to run KDM6.
 
 ## 5. Demonstrate generalization
 

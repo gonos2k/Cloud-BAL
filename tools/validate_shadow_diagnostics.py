@@ -266,6 +266,38 @@ ENDPOINT_CONTRACT = "signed_represented_mixture_endpoint_v2"
 ENDPOINT_EXTENSION = "candidate_endpoint_v2"
 LEGACY_ENDPOINT_CONTRACT = "signed_represented_mixture_endpoint_v1"
 LEGACY_ENDPOINT_EXTENSION = "candidate_endpoint_v1"
+CANDIDATE_EVALUATION_CONTRACT = "final_pressure_diagnostics_v1"
+CANDIDATE_EVALUATION_EXTENSION = "candidate_evaluation_v1"
+CANDIDATE_EVALUATION_SCOPE = "endpoint_and_active_pressure_balance_diagnostics_only"
+CANDIDATE_EVALUATION_FLAGS = (
+    "candidate_evaluation_canonical_accounting_assessed",
+    "candidate_evaluation_continuity_assessed",
+    "candidate_evaluation_geostrophic_assessed",
+    "candidate_evaluation_source_boundary_assessed",
+    "candidate_evaluation_observation_fit_assessed",
+)
+CANDIDATE_EVALUATION_INT32_ATTRIBUTES = (
+    *CANDIDATE_EVALUATION_FLAGS,
+    "candidate_evaluation_operator_status",
+    "candidate_evaluation_operator_reason",
+    "candidate_evaluation_continuity_status",
+    "candidate_evaluation_geostrophic_status",
+)
+CANDIDATE_EVALUATION_INT64_ATTRIBUTES = (
+    "candidate_evaluation_balance_support_cells",
+)
+CANDIDATE_EVALUATION_FLOAT64_ATTRIBUTES = (
+    "candidate_evaluation_continuity_rms",
+    "candidate_evaluation_continuity_max_abs",
+    "candidate_evaluation_geostrophic_rms",
+)
+CANDIDATE_EVALUATION_ATTRIBUTES = frozenset((
+    "candidate_evaluation_contract",
+    *CANDIDATE_EVALUATION_INT32_ATTRIBUTES,
+    *CANDIDATE_EVALUATION_INT64_ATTRIBUTES,
+    *CANDIDATE_EVALUATION_FLOAT64_ATTRIBUTES,
+    "candidate_evaluation_scope",
+))
 ENDPOINT_SCALE_ATTRIBUTE = "candidate_endpoint_enthalpy_arithmetic_scale_j"
 ENDPOINT_SPECIES_SCALE_ATTRIBUTE = "candidate_endpoint_species_arithmetic_scale_kg"
 ENDPOINT_VECTOR_ATTRIBUTES = (
@@ -359,8 +391,11 @@ OUTER_CONTRACT = "pressure_fixed_feedback_producer_replay_v1"
 OUTER_FEEDBACK_FIELDS = "temperature,vapor,u,v,omega"
 OUTER_FEEDBACK_UNITS = "K,kg kg-1 dryair,m s-1,m s-1,Pa s-1"
 STATUS_DEGRADED = 10
+STATUS_FAILED = -10
 STATUS_OK = 20
+REASON_NONE = 0
 REASON_GATE = 7
+REASON_AUTHORITY = 9
 SOLVER_NOT_RUN = 0
 SOLVER_CONVERGED = 1
 GATE_INCREMENT_RMS = 1 << 0
@@ -5726,6 +5761,128 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                     )
                 require(abs(enthalpy - composition - metric) <= enthalpy_tolerance,
                         "candidate endpoint enthalpy identity")
+        evaluation_reserved_attributes = {
+            name for name in dataset.ncattrs()
+            if name.startswith("candidate_evaluation_")
+        }
+        candidate_evaluation_declared = CANDIDATE_EVALUATION_EXTENSION in extensions
+        candidate_evaluation_present = (
+            candidate_evaluation_declared
+            or bool(evaluation_reserved_attributes)
+        )
+        if candidate_evaluation_present:
+            require(candidate_evaluation_declared,
+                    "candidate evaluation extension")
+            require(evaluation_reserved_attributes == CANDIDATE_EVALUATION_ATTRIBUTES,
+                    "candidate evaluation attribute set")
+            require(endpoint_declared,
+                    "candidate evaluation requires candidate endpoint v2")
+            require(schema_version in (5, 7, 8),
+                    "candidate evaluation schema version")
+            require(getattr(dataset, "candidate_evaluation_contract", "") ==
+                    CANDIDATE_EVALUATION_CONTRACT,
+                    "candidate evaluation contract")
+            require(getattr(dataset, "candidate_evaluation_scope", "") ==
+                    CANDIDATE_EVALUATION_SCOPE,
+                    "candidate evaluation scope")
+
+            evaluation_flags = {
+                name: exact_scalar_int32(getattr(dataset, name, None))
+                for name in CANDIDATE_EVALUATION_FLAGS
+            }
+            for name, value in evaluation_flags.items():
+                require(value in (0, 1), name)
+            evaluation_ints = {
+                name: exact_scalar_int32(getattr(dataset, name, None))
+                for name in CANDIDATE_EVALUATION_INT32_ATTRIBUTES
+                if name not in CANDIDATE_EVALUATION_FLAGS
+            }
+            for name, value in evaluation_ints.items():
+                require(value is not None, name)
+            support_cells = exact_scalar_int64(
+                getattr(dataset, "candidate_evaluation_balance_support_cells", None)
+            )
+            require(support_cells is not None and support_cells >= 0,
+                    "candidate evaluation balance support cells")
+            dimension_lengths = {
+                name: len(dataset.dimensions[name])
+                for name in ("x", "y", "z")
+                if name in dataset.dimensions
+            }
+            if len(dimension_lengths) == 3 and support_cells is not None:
+                grid_capacity = (dimension_lengths["x"] * dimension_lengths["y"]
+                                 * dimension_lengths["z"])
+                require(support_cells <= grid_capacity,
+                        "candidate evaluation support grid capacity")
+            support_variable = dataset.variables.get("candidate_balance_support")
+            if (support_variable is not None and support_cells is not None
+                    and len(dimension_lengths) == 3
+                    and support_variable.dimensions == ("z", "y", "x")):
+                support_mask = values(support_variable)
+                if (support_mask.dtype == np.dtype(np.int32)
+                        and support_mask.shape == tuple(
+                            dimension_lengths[name] for name in ("z", "y", "x")
+                        )
+                        and np.all((support_mask == 0) | (support_mask == 1))):
+                    require(support_cells <= int(np.count_nonzero(support_mask)),
+                            "candidate evaluation support mask bound")
+            evaluation_values = {
+                name: exact_scalar_float64(getattr(dataset, name, None))
+                for name in CANDIDATE_EVALUATION_FLOAT64_ATTRIBUTES
+            }
+            for name, value in evaluation_values.items():
+                require(value is not None and np.isfinite(value) and value >= 0.0,
+                        name)
+
+            statuses = (STATUS_FAILED, STATUS_DEGRADED, STATUS_OK)
+            reasons = range(REASON_NONE, REASON_AUTHORITY + 1)
+            for name in (
+                "candidate_evaluation_operator_status",
+                "candidate_evaluation_continuity_status",
+                "candidate_evaluation_geostrophic_status",
+            ):
+                require(evaluation_ints.get(name) in statuses, name)
+            for name in (
+                "candidate_evaluation_operator_reason",
+            ):
+                require(evaluation_ints.get(name) in reasons, name)
+
+            canonical = evaluation_flags.get(
+                "candidate_evaluation_canonical_accounting_assessed"
+            )
+            continuity_assessed = evaluation_flags.get(
+                "candidate_evaluation_continuity_assessed"
+            )
+            geostrophic_assessed = evaluation_flags.get(
+                "candidate_evaluation_geostrophic_assessed"
+            )
+            require(canonical == 1, "candidate evaluation canonical accounting")
+            require(evaluation_flags.get(
+                "candidate_evaluation_source_boundary_assessed"
+            ) == 0, "candidate evaluation source boundary authority")
+            require(evaluation_flags.get(
+                "candidate_evaluation_observation_fit_assessed"
+            ) == 0, "candidate evaluation observation authority")
+            if support_cells == 0:
+                require(continuity_assessed == 0 and geostrophic_assessed == 0,
+                        "zero-support candidate evaluation")
+            if continuity_assessed == 1:
+                require(evaluation_ints.get("candidate_evaluation_operator_status") == STATUS_OK
+                        and evaluation_ints.get("candidate_evaluation_continuity_status") == STATUS_OK,
+                        "candidate evaluation continuity status")
+            if geostrophic_assessed == 1:
+                require(evaluation_ints.get("candidate_evaluation_operator_status") == STATUS_OK
+                        and evaluation_ints.get("candidate_evaluation_geostrophic_status") == STATUS_OK,
+                        "candidate evaluation geostrophic status")
+            if continuity_assessed == 0:
+                require(evaluation_ints.get("candidate_evaluation_continuity_status") == STATUS_FAILED
+                        and evaluation_values.get("candidate_evaluation_continuity_rms") == 0.0
+                        and evaluation_values.get("candidate_evaluation_continuity_max_abs") == 0.0,
+                        "unassessed candidate continuity status and values")
+            if geostrophic_assessed == 0:
+                require(evaluation_ints.get("candidate_evaluation_geostrophic_status") == STATUS_FAILED
+                        and evaluation_values.get("candidate_evaluation_geostrophic_rms") == 0.0,
+                        "unassessed candidate geostrophic status and value")
         pressure_analysis_candidate_present = bool(
             set(PRESSURE_ANALYSIS_CANDIDATE_ATTRIBUTES) & set(dataset.ncattrs())
             or set(PRESSURE_ANALYSIS_CANDIDATE_VARIABLES) & set(dataset.variables)
@@ -5869,7 +6026,9 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         )
         allowed_extensions = (expected_extensions,
                               expected_extensions + "," + LEGACY_ENDPOINT_EXTENSION,
-                              expected_extensions + "," + ENDPOINT_EXTENSION)
+                              expected_extensions + "," + ENDPOINT_EXTENSION,
+                              expected_extensions + "," + ENDPOINT_EXTENSION + "," +
+                              CANDIDATE_EVALUATION_EXTENSION)
         if pressure_geopotential_signalled:
             require(
                 getattr(dataset, "schema_extensions", "") in allowed_extensions,

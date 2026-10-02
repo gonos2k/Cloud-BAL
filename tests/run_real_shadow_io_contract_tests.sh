@@ -717,7 +717,8 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "omega_target_error_contract": "diagonal_pressure_omega_v1",
         "schema_extensions": (
             "verified_operational_identity_v1,radar_no_echo_masks_v1,"
-            "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2"
+            "pressure_geometry_v2,omega_boundary_contract_v2,candidate_endpoint_v2,"
+            "candidate_evaluation_v1"
         ),
         "requested_mode": 1,
         "operational_state_verified": 1,
@@ -728,10 +729,36 @@ with netCDF4.Dataset(sys.argv[1]) as dataset:
         "grid_spacing_adapter_policy": "KM_TO_M_OR_PINNED_LEGACY_NUMERIC_METERS",
         "radar_valid_semantics": "ECHO_ONLY",
         "candidate_endpoint_contract": "signed_represented_mixture_endpoint_v2",
+        "candidate_evaluation_contract": "final_pressure_diagnostics_v1",
+        "candidate_evaluation_scope": (
+            "endpoint_and_active_pressure_balance_diagnostics_only"
+        ),
     }
     for name, value in expected.items():
         if getattr(dataset, name, None) != value:
             raise SystemExit(f"writer metadata mismatch: {name}")
+    for name in (
+        "candidate_evaluation_canonical_accounting_assessed",
+        "candidate_evaluation_continuity_assessed",
+        "candidate_evaluation_geostrophic_assessed",
+        "candidate_evaluation_source_boundary_assessed",
+        "candidate_evaluation_observation_fit_assessed",
+        "candidate_evaluation_operator_status",
+        "candidate_evaluation_operator_reason",
+        "candidate_evaluation_continuity_status",
+        "candidate_evaluation_geostrophic_status",
+    ):
+        if getattr(dataset, name).dtype != "int32":
+            raise SystemExit(f"candidate evaluation attribute type mismatch: {name}")
+    if dataset.candidate_evaluation_balance_support_cells.dtype != "int64":
+        raise SystemExit("candidate evaluation support count must be int64")
+    for name in (
+        "candidate_evaluation_continuity_rms",
+        "candidate_evaluation_continuity_max_abs",
+        "candidate_evaluation_geostrophic_rms",
+    ):
+        if getattr(dataset, name).dtype != "float64":
+            raise SystemExit(f"candidate evaluation metric type mismatch: {name}")
     if "candidate_balance_support" not in dataset.variables:
         raise SystemExit("candidate balance support variable is absent")
     for name in (
@@ -866,13 +893,99 @@ import sys
 import netCDF4
 
 with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    for name in list(dataset.ncattrs()):
+        if name.startswith("candidate_evaluation_"):
+            dataset.delncattr(name)
     dataset.delncattr("candidate_endpoint_enthalpy_arithmetic_scale_j")
     dataset.delncattr("candidate_endpoint_species_arithmetic_scale_kg")
     dataset.setncattr("candidate_endpoint_contract", "signed_represented_mixture_endpoint_v1")
     dataset.setncattr("schema_extensions", dataset.schema_extensions.replace(
+        ",candidate_evaluation_v1", "").replace(
         "candidate_endpoint_v2", "candidate_endpoint_v1"))
 PY
 python3 "$repo_root/tools/validate_shadow_diagnostics.py" "$legacy_endpoint" >/dev/null
+
+missing_candidate_evaluation_flag=$test_tmp/missing-candidate-evaluation-flag.nc
+cp "$diagnostic_o0" "$missing_candidate_evaluation_flag"
+python3 - "$missing_candidate_evaluation_flag" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.delncattr("candidate_evaluation_continuity_assessed")
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$missing_candidate_evaluation_flag" >/dev/null 2>&1; then
+  printf 'validator accepted an incomplete candidate evaluation receipt\n' >&2
+  exit 1
+fi
+
+forged_candidate_evaluation_flag=$test_tmp/forged-candidate-evaluation-flag.nc
+cp "$diagnostic_o0" "$forged_candidate_evaluation_flag"
+python3 - "$forged_candidate_evaluation_flag" <<'PY'
+import sys
+import netCDF4
+import numpy as np
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_evaluation_source_boundary_assessed", np.int32(1))
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$forged_candidate_evaluation_flag" >/dev/null 2>&1; then
+  printf 'validator accepted unauthorized candidate evaluation authority\n' >&2
+  exit 1
+fi
+
+bad_candidate_evaluation_status=$test_tmp/bad-candidate-evaluation-status.nc
+cp "$diagnostic_o0" "$bad_candidate_evaluation_status"
+python3 - "$bad_candidate_evaluation_status" <<'PY'
+import sys
+import netCDF4
+import numpy as np
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_evaluation_continuity_status", np.int32(99))
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$bad_candidate_evaluation_status" >/dev/null 2>&1; then
+  printf 'validator accepted an invalid candidate evaluation status\n' >&2
+  exit 1
+fi
+
+false_candidate_evaluation_status=$test_tmp/false-candidate-evaluation-status.nc
+cp "$diagnostic_o0" "$false_candidate_evaluation_status"
+python3 - "$false_candidate_evaluation_status" <<'PY'
+import sys
+import netCDF4
+import numpy as np
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("candidate_evaluation_continuity_assessed", np.int32(0))
+    dataset.setncattr("candidate_evaluation_continuity_status", np.int32(2))
+    dataset.setncattr("candidate_evaluation_continuity_rms", np.float64(0.0))
+    dataset.setncattr("candidate_evaluation_continuity_max_abs", np.float64(0.0))
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$false_candidate_evaluation_status" >/dev/null 2>&1; then
+  printf 'validator accepted OK status for unassessed candidate continuity\n' >&2
+  exit 1
+fi
+
+stray_candidate_evaluation=$test_tmp/stray-candidate-evaluation.nc
+cp "$diagnostic_o0" "$stray_candidate_evaluation"
+python3 - "$stray_candidate_evaluation" <<'PY'
+import sys
+import netCDF4
+
+with netCDF4.Dataset(sys.argv[1], "r+") as dataset:
+    dataset.setncattr("schema_extensions", dataset.schema_extensions.replace(
+        ",candidate_evaluation_v1", ""))
+PY
+if python3 "$repo_root/tools/validate_shadow_diagnostics.py" \
+    "$stray_candidate_evaluation" >/dev/null 2>&1; then
+  printf 'validator accepted candidate evaluation attributes without extension\n' >&2
+  exit 1
+fi
 
 bad_radar_marker=$test_tmp/bad-radar-marker.nc
 cp "$diagnostic_o0" "$bad_radar_marker"
