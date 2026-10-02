@@ -94,6 +94,58 @@ scale; the writer recomputes it from the final in-memory state. A generation
 transaction must bind the stored receipt to its source and payload before it
 can be treated as provenance evidence.
 
+## Second implementation batch: one final-state evaluator
+
+- [x] Recompute the endpoint ledger, pressure-grid continuity residual, and
+  geostrophic diagnostic from the same final candidate. The SHADOW writer
+  independently repeats this evaluation before accepting the in-memory result.
+- [ ] Add independently authorized analysis sources and physical-time boundary
+  fluxes to evaluate dry-air, water-species, and energy conservation residuals.
+  A computed endpoint change must never be copied into its own source term.
+- [ ] Evaluate EOS, reference surface, hydrostatic applicability, observation
+  operators/errors, change authority, positivity, and local shared-face
+  residuals under one versioned candidate contract.
+- [ ] Persist a complete final-state assessment with explicit unresolved
+  conditions and bind it to the diagnostic and WPS payload readback.
+- [ ] Distinguish feasibility, objective stationarity, and step size in a
+  common iteration; the current five-field stored-value fixed point is not
+  a joint constrained solve.
+
+The first checked item is diagnostic scope only. Continuity and geostrophic
+values are measured only on the final state's active balance support with the
+existing pressure-grid operator. The receipt records that support count and
+each diagnostic's status; zero support is unassessed, not a zero residual.
+The evaluator's returned status covers canonical endpoint accounting, not
+completion of every diagnostic. These values are not a universal zero-motion
+target.
+External source, boundary, and independent observation fit remain unassessed.
+The evaluator does not issue physical or native approval, and its metrics are
+not yet a standalone file receipt. The second-batch gate remains open.
+
+## Third implementation batch: stored WPS pair
+
+- [x] Reopen a completed pressure-level WPS candidate, its retained WPS
+  baseline, and the SHADOW diagnostic in one detached snapshot. Compare
+  inventory, time, units, grid metadata, mapped candidate values, unchanged
+  slabs, support masks, candidate surface TT/PSFC where declared, and the
+  declared geopotential conversion.
+- [x] Bind this scoped numerical check to exact snapshot product hashes and
+  the validator/parser source bundle; reject altered WPS or SHADOW bytes and
+  a stale validation receipt before an isolated generation is published.
+- [ ] Run the current LAPSPREP producer into a detached generation with a
+  pinned source/input/configuration/build manifest and verify the pair before
+  changing any consumer-visible pointer. The current test republishes a
+  historical actual pair in an isolated evidence root.
+- [ ] Reproduce this readback with the current writer's surface-boundary
+  schema; the historical sidecar lacks candidate surface TT/PSFC and is
+  checked against its retained baseline for those fields.
+- [ ] Confirm metgrid, real, and native consumed state against that same
+  generation and its declared QV, mass, frame, boundary, and omega contracts.
+
+Gate: the current source-produced pair and its input/build identity survive
+independent stored-value readback and one atomic research publication. Pair
+validation alone does not approve the joint solve or native initialization.
+
 ## 3. Run one actual joint candidate
 
 - [ ] On one pinned actual cycle, form one candidate from existing analysis,

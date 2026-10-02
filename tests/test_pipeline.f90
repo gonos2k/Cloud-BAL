@@ -11,7 +11,9 @@ PROGRAM test_pipeline
   TYPE(cloud_bal_state_type) :: input,candidate,operational,column_candidate
   TYPE(cloud_bal_pipeline_config) :: config
   TYPE(cloud_bal_pipeline_result) :: result
-  INTEGER :: failures,status
+  TYPE(joint_candidate_evaluation) :: reassessment
+  TYPE(pressure_analysis_budget) :: independent_budget
+  INTEGER :: failures,status,reason
   REAL(real64) :: saved_minimum_target_response_ratio
   REAL(real64), PARAMETER :: ORACLE_T0=273.15_real64,ORACLE_CPD=1004.5_real64
   REAL(real64), PARAMETER :: ORACLE_CP(6)=[1846.4_real64,4190.0_real64,2106.0_real64, &
@@ -21,6 +23,20 @@ PROGRAM test_pipeline
 
   failures=0
   CALL make_state(input)
+  CALL evaluate_joint_candidate(input,input,config%balance,independent_budget, &
+                                reassessment,status,reason)
+  CALL check(status==STATUS_OK .AND. reassessment%canonical_accounting_assessed .AND. &
+             reassessment%balance_support_cells==0_int64 .AND. &
+             .NOT.reassessment%continuity_assessed .AND. &
+             .NOT.reassessment%geostrophic_assessed, &
+             'zero balance support is unassessed, not a zero residual',failures)
+  candidate=input
+  candidate%temperature%value(2,2,2)=-1.0_real32
+  CALL evaluate_joint_candidate(input,candidate,config%balance,independent_budget, &
+                                reassessment,status,reason)
+  CALL check(status==STATUS_FAILED .AND. zero_analysis_budget(independent_budget) .AND. &
+             .NOT.reassessment%canonical_accounting_assessed, &
+             'invalid final state leaves no assessed endpoint',failures)
   config%requested_mode=MODE_OFF
   CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
   CALL check(result%status==STATUS_OK,'OFF must be a successful no-op',failures)
@@ -128,6 +144,19 @@ PROGRAM test_pipeline
              'accepted radar-plus-balance proposal carries its analysis budget',failures)
   CALL check_analysis_budget(input,candidate,result%analysis_budget,failures, &
                              'accepted radar-plus-balance budget')
+  CALL evaluate_joint_candidate(input,candidate,config%balance,independent_budget, &
+                                reassessment,status,reason)
+  CALL check(status==STATUS_OK .AND. &
+             analysis_budgets_equal(independent_budget,result%candidate_budget) .AND. &
+             reassessment%canonical_accounting_assessed .AND. &
+             reassessment%continuity_assessed .AND. reassessment%geostrophic_assessed .AND. &
+             reassessment%balance_support_cells>0_int64 .AND. &
+             result%candidate_evaluation%continuity_assessed .AND. &
+             reassessment%continuity_max_abs==result%candidate_evaluation%continuity_max_abs, &
+             'joint evaluator rechecks the same final candidate',failures)
+  CALL check(.NOT.reassessment%source_boundary_assessed .AND. &
+             .NOT.reassessment%observation_fit_assessed, &
+             'endpoint and pressure diagnostics do not grant physical approval',failures)
 
   saved_minimum_target_response_ratio=config%balance%minimum_target_response_ratio
   config%balance%minimum_target_response_ratio=0.50_real64

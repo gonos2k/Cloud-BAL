@@ -19,6 +19,24 @@ MODULE cloud_bal_pipeline
     INTEGER :: maximum_outer_iterations=1
   END TYPE cloud_bal_pipeline_config
 
+  TYPE, PUBLIC :: joint_candidate_evaluation
+    ! Diagnostics recomputed from one final state. Neither an external source
+    ! nor an observational/physical approval is inferred from these numbers.
+    LOGICAL :: canonical_accounting_assessed=.FALSE.
+    LOGICAL :: continuity_assessed=.FALSE.
+    LOGICAL :: geostrophic_assessed=.FALSE.
+    LOGICAL :: source_boundary_assessed=.FALSE.
+    LOGICAL :: observation_fit_assessed=.FALSE.
+    INTEGER(int64) :: balance_support_cells=0_int64
+    INTEGER :: operator_status=STATUS_FAILED
+    INTEGER :: operator_reason=REASON_NONE
+    INTEGER :: continuity_status=STATUS_FAILED
+    INTEGER :: geostrophic_status=STATUS_FAILED
+    REAL(real64) :: continuity_rms=0.0_real64
+    REAL(real64) :: continuity_max_abs=0.0_real64
+    REAL(real64) :: geostrophic_rms=0.0_real64
+  END TYPE joint_candidate_evaluation
+
   TYPE, PUBLIC :: cloud_bal_pipeline_result
     INTEGER :: status=STATUS_FAILED
     INTEGER :: reason_code=REASON_NONE
@@ -33,6 +51,7 @@ MODULE cloud_bal_pipeline
     ! Endpoint accounting for the one final candidate, including all stages.
     ! This is not a physical boundary-flux or native energy closure claim.
     TYPE(pressure_analysis_budget) :: candidate_budget
+    TYPE(joint_candidate_evaluation) :: candidate_evaluation
     REAL(real64), ALLOCATABLE :: requested_surface_pressure(:,:)
     TYPE(cloud_bal_state_type), ALLOCATABLE :: pressure_transition_seed
     LOGICAL, ALLOCATABLE :: thermo_support(:,:,:)
@@ -48,6 +67,7 @@ MODULE cloud_bal_pipeline
 
   PUBLIC :: run_cloud_bal_pipeline
   PUBLIC :: account_candidate_endpoint
+  PUBLIC :: evaluate_joint_candidate
   PUBLIC :: build_compact_balance_beta
   PUBLIC :: restore_pre_balance_winds
 
@@ -452,8 +472,8 @@ CONTAINS
     ! Recheck the whole endpoint after the ordered stages have completed.
     ! A stage budget alone cannot describe the final thermodynamic/geometry
     ! state consumed by the downstream WPS mapper.
-    CALL account_candidate_endpoint(state_in,balance_candidate,result%candidate_budget, &
-                                    localization_status,validation_reason)
+    CALL evaluate_joint_candidate(state_in,balance_candidate,config%balance, &
+      result%candidate_budget,result%candidate_evaluation,localization_status,validation_reason)
     IF (localization_status/=STATUS_OK) THEN
       candidate_out=state_in
       result%thermo_budget=water_phase_budget()
@@ -518,6 +538,45 @@ CONTAINS
       reason=REASON_NONE
     END IF
   END SUBROUTINE account_candidate_endpoint
+
+  SUBROUTINE evaluate_joint_candidate(background,candidate,balance_config,budget,evaluation,status,reason)
+    ! Re-evaluate the existing pressure-grid diagnostics on the same final
+    ! candidate used for the endpoint ledger. Missing physical-time sources,
+    ! boundary fluxes and independent observation operators remain unassessed.
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    TYPE(balance_operator_config), INTENT(IN) :: balance_config
+    TYPE(pressure_analysis_budget), INTENT(OUT) :: budget
+    TYPE(joint_candidate_evaluation), INTENT(OUT) :: evaluation
+    INTEGER, INTENT(OUT) :: status,reason
+    TYPE(balance_operator_type) :: op
+    REAL(real64), ALLOCATABLE :: continuity(:,:,:)
+
+    evaluation=joint_candidate_evaluation()
+    ! The returned status/reason cover canonical endpoint accounting only.
+    ! Each balance diagnostic has its own status and may remain unassessed.
+    CALL account_candidate_endpoint(background,candidate,budget,status,reason)
+    IF (status/=STATUS_OK) RETURN
+    evaluation%canonical_accounting_assessed=.TRUE.
+
+    CALL build_balance_operator(candidate,balance_config,op,evaluation%operator_status, &
+      evaluation%operator_reason)
+    IF (evaluation%operator_status/=STATUS_OK) RETURN
+    evaluation%balance_support_cells=active_balance_cell_count(op)
+    IF (evaluation%balance_support_cells<=0_int64) RETURN
+    ALLOCATE(continuity(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz))
+    CALL state_continuity_residual(op,candidate,continuity,evaluation%continuity_status)
+    IF (evaluation%continuity_status==STATUS_OK) THEN
+      CALL continuity_norms(op,continuity,evaluation%continuity_rms,evaluation%continuity_max_abs)
+      evaluation%continuity_assessed=ieee_is_finite(evaluation%continuity_rms) .AND. &
+        evaluation%continuity_rms<HUGE(1.0_real64) .AND. &
+        ieee_is_finite(evaluation%continuity_max_abs) .AND. &
+        evaluation%continuity_max_abs<HUGE(1.0_real64)
+    END IF
+    CALL geostrophic_residual(candidate,op,evaluation%geostrophic_rms,evaluation%geostrophic_status)
+    evaluation%geostrophic_assessed=evaluation%geostrophic_status==STATUS_OK .AND. &
+      ieee_is_finite(evaluation%geostrophic_rms) .AND. &
+      evaluation%geostrophic_rms<HUGE(1.0_real64)
+  END SUBROUTINE evaluate_joint_candidate
 
   FUNCTION pressure_feedback_delta(left,right) RESULT(delta)
     TYPE(cloud_bal_state_type), INTENT(IN) :: left,right

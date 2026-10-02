@@ -5,7 +5,7 @@
 ! A=D*S, G=-K*A^T*M, and L=-A*G.  The same procedures are used by the solver,
 ! the published increment, and the final residual diagnostics.
 MODULE cloud_bal_balance_operator
-  USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64,int32
+  USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64,int32,int64
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite,ieee_next_after
   USE cloud_bal_state
   USE cloud_bal_grid_geometry, ONLY: pressure_face_segment,partition_pressure_face
@@ -102,9 +102,16 @@ MODULE cloud_bal_balance_operator
   PUBLIC :: manufactured_boundary_contract_valid
   PUBLIC :: model_boundary_increment_contract_valid
   PUBLIC :: snapshot_balance_operator
+  PUBLIC :: active_balance_cell_count
   PUBLIC :: target_is_resolved
 
 CONTAINS
+
+  PURE INTEGER(int64) FUNCTION active_balance_cell_count(op) RESULT(active_cells)
+    TYPE(balance_operator_type), INTENT(IN) :: op
+    active_cells=-1_int64
+    IF (ALLOCATED(op%cell_active)) active_cells=COUNT(op%cell_active,KIND=int64)
+  END FUNCTION active_balance_cell_count
 
   SUBROUTINE snapshot_balance_operator(op,snapshot,status)
     TYPE(balance_operator_type), INTENT(IN) :: op
