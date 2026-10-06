@@ -60,6 +60,7 @@ class MP37AuxiliaryContractTest(unittest.TestCase):
         qrain=None,
         qcloud=None,
         qice=None,
+        moment_bounds=None,
     ):
         declared_evidence = authority() if evidence is MISSING else evidence
         return validate_mp37_auxiliaries(
@@ -72,7 +73,32 @@ class MP37AuxiliaryContractTest(unittest.TestCase):
             qice=np.full(SHAPE, 1.0e-7) if qice is None else qice,
             expected_shape=SHAPE,
             expected_denominators=EXPECTED_DENOMINATORS,
+            moment_bounds=moment_bounds,
         )
+
+    def test_declared_mean_mass_and_density_bounds_are_shared_with_native_gate(self):
+        bounds = {
+            name: dict(particle_mass_min_kg=1e-13, particle_mass_max_kg=1e-11,
+                       bound_source="manufactured fixture",
+                       uncertainty_description="test support interval, not measured sigma")
+            for name in ("QCLOUD", "QICE", "QRAIN")
+        }
+        bounds["QGRAUP"] = dict(bulk_density_min_kg_m3=100,
+                               bulk_density_max_kg_m3=900,
+                               bound_source="manufactured fixture",
+                               uncertainty_description="test density interval")
+        values = arrays()
+        values["QIB"][:] = 1e-7 / 400
+        report = self.check(values=values, moment_bounds=bounds)
+        self.assertEqual(report["moment_realizability"]["status"], "PASS_SCOPED")
+        self.assertFalse(report["accepted"])
+        values["QNRAIN"][:] = 1e-30
+        report = self.check(values=values, moment_bounds=bounds)
+        self.assertEqual(report["status"], "REJECTED")
+        self.assertEqual(report["moment_realizability"]["status"], "FAIL")
+        self.assertEqual(report["moment_realizability"]["checks"]["QRAIN"]["violation_count"], 4)
+        report = self.check(moment_bounds={})
+        self.assertEqual(report["moment_realizability"]["status"], "UNSUPPORTED")
 
     def test_constructed_declared_authority_is_diagnostic_only(self):
         report = self.check()

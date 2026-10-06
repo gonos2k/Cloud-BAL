@@ -108,6 +108,7 @@ def _declaration(path: Path, *, scope: str = "CONSTRUCTED_TEST_ONLY",
                  expected_denominators: dict[str, str] | None = None,
                  metadata: dict[str, FieldMetadata] | None = None,
                  authority: AuthorityEvidence | None = None,
+                 moment_bounds: dict | None = None,
                  ) -> native.NativeAuxiliaryDeclaration:
     return native.NativeAuxiliaryDeclaration(
         input_sha256=_sha256(path) if input_sha256 is None else input_sha256,
@@ -129,6 +130,7 @@ def _declaration(path: Path, *, scope: str = "CONSTRUCTED_TEST_ONLY",
             AuthorityEvidence(scope, "a" * 64, "b" * 64, "c" * 64)
             if authority is None else authority
         ),
+        moment_bounds=moment_bounds,
     )
 
 
@@ -146,6 +148,37 @@ def _commit_prior_generation(root: Path) -> bytes:
 
 
 class NativeMP37AuxiliaryReaderTest(unittest.TestCase):
+    def test_native_declared_moment_bounds_require_serialized_mass_units(self):
+        bounds = {
+            name: dict(particle_mass_min_kg=1.0, particle_mass_max_kg=20.0,
+                       bound_source="manufactured fixture",
+                       uncertainty_description="test support interval")
+            for name in ("QCLOUD", "QICE", "QRAIN")
+        }
+        bounds["QGRAUP"] = dict(bulk_density_min_kg_m3=5.0,
+                               bulk_density_max_kg_m3=20.0,
+                               bound_source="manufactured fixture",
+                               uncertainty_description="test support interval")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "native.nc"
+            _write_native(path, units=True)
+            report = native.inspect_native_mp37(path, declaration=_declaration(path, moment_bounds=bounds))
+            self.assertEqual(report["reason"], "MASS_UNITS_ATTRIBUTE_MISMATCH:QGRAUP")
+            with netCDF4.Dataset(path, "r+") as dataset:
+                for name in MASS_FIELDS:
+                    dataset[name].units = "kg kg-1"
+            report = native.inspect_native_mp37(path, declaration=_declaration(path, moment_bounds=bounds))
+            self.assertEqual(report["moment_realizability"]["status"], "PASS_SCOPED")
+            self.assertFalse(report["accepted"])
+            self.assertEqual(report["native_authority"], "NONE")
+            # A nonzero numerical floor is structurally present but violates
+            # the independently declared mean-mass bound.
+            with netCDF4.Dataset(path, "r+") as dataset:
+                dataset["QNRAIN"][:] = 1e-30
+            report = native.inspect_native_mp37(path, declaration=_declaration(path, moment_bounds=bounds))
+            self.assertEqual(report["moment_realizability"]["status"], "FAIL")
+            self.assertEqual(report["status"], "REJECTED")
+
     def test_complete_payload_is_read_only_and_has_pair_gap_counts(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "wrfinput_d01.nc"

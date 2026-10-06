@@ -32,6 +32,8 @@ _UNIT_ALIASES = {
     "kg(-1)": "kg-1",
     "m3 kg-1": "m3 kg-1",
     "m(3) kg(-1)": "m3 kg-1",
+    "kg kg-1": "kg kg-1",
+    "kg kg(-1)": "kg kg-1",
 }
 
 
@@ -48,6 +50,7 @@ class NativeAuxiliaryDeclaration:
     metadata: Mapping[str, FieldMetadata]
     expected_denominators: Mapping[str, str]
     authority: AuthorityEvidence
+    moment_bounds: Mapping[str, Mapping[str, object]] | None = None
 
 
 class NativePreflightRejected(RuntimeError):
@@ -116,6 +119,10 @@ def _unit_attribute_issue(
             return f"MISSING_OR_UNKNOWN_UNITS_ATTRIBUTE:{name}"
         if serialized != declared:
             return f"UNITS_ATTRIBUTE_MISMATCH:{name}"
+    if declaration.moment_bounds is not None:
+        for name, _ in PAIRS:
+            if _serialized_unit(dataset.variables[name]) != "kg kg-1":
+                return f"MASS_UNITS_ATTRIBUTE_MISMATCH:{name}"
     return None
 
 
@@ -181,6 +188,7 @@ def inspect_dataset(
             qcloud=fields["QCLOUD"], qice=fields["QICE"],
             expected_shape=shape,
             expected_denominators=declaration.expected_denominators,
+            moment_bounds=declaration.moment_bounds,
         )
     if report["status"] == "REJECTED":
         return report

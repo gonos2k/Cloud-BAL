@@ -12,6 +12,8 @@ from collections.abc import Mapping
 
 import numpy as np
 
+from hydrometeor_moments import validate_bulk_volume, validate_mass_number
+
 
 AUX_FIELDS = ("QNCCN", "QNCLOUD", "QNICE", "QNRAIN", "QIB")
 EXPECTED_UNITS = {
@@ -124,6 +126,7 @@ def validate_mp37_auxiliaries(
     qice: np.ndarray,
     expected_shape: tuple[int, int, int],
     expected_denominators: Mapping[str, str] | None = None,
+    moment_bounds: Mapping[str, Mapping[str, object]] | None = None,
 ) -> dict[str, object]:
     """Validate exact MP37 coverage without changing or synthesizing values.
 
@@ -181,7 +184,15 @@ def validate_mp37_auxiliaries(
         if np.any((values[mass] > 0) & (values[moment] == 0)):
             return _result("NO_AUTHORITY", f"{moment}_ZERO_WITH_NONZERO_{mass}")
 
-    return {
+    realizability = None
+    if moment_bounds is not None:
+        realizability = _validate_moment_bounds(values, metadata, moment_bounds)
+        if realizability["status"] != "PASS_SCOPED":
+            status = "NO_AUTHORITY" if realizability["status"] == "UNSUPPORTED" else "REJECTED"
+            return _result(status, "MOMENT_REALIZABILITY_NOT_SATISFIED",
+                           moment_realizability=realizability)
+
+    report = {
         "status": "STRUCTURAL_CONTRACT_VALID",
         "contract_valid": True,
         "accepted": False,
@@ -194,3 +205,47 @@ def validate_mp37_auxiliaries(
         "synthesized_fields": [],
         "mutated_input": False,
     }
+    if realizability is not None:
+        report["moment_realizability"] = realizability
+    return report
+
+
+def _validate_moment_bounds(values, metadata, bounds):
+    """Apply supplied mean-mass/density bounds; source text is unverified."""
+    pairs = (("QCLOUD", "QNCLOUD"), ("QICE", "QNICE"),
+             ("QRAIN", "QNRAIN"), ("QGRAUP", "QIB"))
+    if not isinstance(bounds, Mapping):
+        return {"status": "REJECTED", "reason": "INVALID_MOMENT_BOUND_MAPPING"}
+    if set(bounds) != {mass for mass, _ in pairs}:
+        return {"status": "UNSUPPORTED", "reason": "INCOMPLETE_MOMENT_BOUND_MAPPING"}
+    checks = {}
+    for mass, moment in pairs:
+        declaration = bounds[mass]
+        if not isinstance(declaration, Mapping):
+            return {"status": "REJECTED", "reason": f"INVALID_MOMENT_BOUND:{mass}"}
+        common = dict(mass_units="kg kg-1", mass_basis="dry_air",
+                      bound_source=declaration.get("bound_source"),
+                      uncertainty_description=declaration.get("uncertainty_description"))
+        if moment == "QIB":
+            check = validate_bulk_volume(
+                values[mass], values[moment], **common,
+                volume_units=metadata[moment].units,
+                volume_basis=metadata[moment].denominator,
+                bulk_density_min_kg_m3=declaration.get("bulk_density_min_kg_m3"),
+                bulk_density_max_kg_m3=declaration.get("bulk_density_max_kg_m3"))
+        else:
+            check = validate_mass_number(
+                values[mass], values[moment], **common,
+                number_units=metadata[moment].units,
+                number_basis=metadata[moment].denominator,
+                particle_mass_min_kg=declaration.get("particle_mass_min_kg"),
+                particle_mass_max_kg=declaration.get("particle_mass_max_kg"))
+        # Receipts retain counts; the common helper returns the exact mask to
+        # array callers. Avoid expanding millions of mask cells into JSON here.
+        checks[mass] = {key: value for key, value in check.items()
+                        if key != "violation_mask"}
+    statuses = {check["status"] for check in checks.values()}
+    status = next((state for state in ("REJECTED", "FAIL", "UNSUPPORTED")
+                   if state in statuses), "PASS_SCOPED")
+    return {"status": status, "checks": checks,
+            "source_authentication": "NOT_ASSESSED"}

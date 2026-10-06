@@ -1,0 +1,50 @@
+--- a/phys/module_mp_kdm6.F
++++ b/phys/module_mp_kdm6.F
+@@ -649,6 +649,7 @@
+    integer, dimension(its:ite)        :: mstep, numdt
+    integer, dimension(its:ite)        :: mstep_i, numdt_i
+    logical, dimension(its:ite)        :: flgcld
++   logical, dimension(its:ite,kts:kte) :: rain_full_evap_pending
+    real                               :: temp
+    real                               :: holdc, holdci
+    real, dimension(its:ite,kts:kte)   :: vt2g
+@@ -903,6 +904,7 @@
+           bgevp(i,k) =0.
+           bgeml(i,k) =0.
+           prevp(i,k) = 0.
++          rain_full_evap_pending(i,k) = .false.
+           psdep(i,k) = 0.
+           pgdep(i,k) = 0.
+           praut(i,k) = 0.
+@@ -1724,8 +1726,7 @@
+ !        (NR->NCCN) 
+ !----------------------------------------------------------------
+               if(prevp(i,k).eq.-qrs(i,k,1)/dtcld) then
+-                nci(i,k,3) = nci(i,k,3)+nrs(i,k,1)
+-                nrs(i,k,1) = 0.
++                rain_full_evap_pending(i,k) = .true.
+               endif
+             else
+               prevp(i,k) = min(prevp(i,k),(satdt)/2)
+@@ -2555,6 +2556,10 @@
+                            -psacr(i,k)-pmulrs(i,k)-pmulrg(i,k))*dtcld,0.)
+             nrs(i,k,1) = max(nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)-niacr(i,k)      &
+                            -nraci(i,k)-nsacr(i,k)-ngacr(i,k))*dtcld,0.)
++            if(rain_full_evap_pending(i,k) .and. qrs(i,k,1).le.qcrmin) then
++              nci(i,k,3) = nci(i,k,3)+nrs(i,k,1)
++              nrs(i,k,1) = 0.
++            endif
+             qci(i,k,2) = max(qci(i,k,2)-(psaut(i,k)+praci(i,k)                 &
+                            +psaci(i,k)+pgaci(i,k)-pinud(i,k)-pidep(i,k)        &
+                            -piacw(i,k)-pmulcs(i,k)-pmulcg(i,k)-pmulrs(i,k)     &
+@@ -2680,6 +2685,10 @@
+                    -naacw(i,k)-naacw(i,k))*dtcld,0.)
+             nrs(i,k,1) = max(nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)+nseml(i,k)      &
+                            +ngeml(i,k))*dtcld,0.)
++            if(rain_full_evap_pending(i,k) .and. qrs(i,k,1).le.qcrmin) then
++              nci(i,k,3) = nci(i,k,3)+nrs(i,k,1)
++              nrs(i,k,1) = 0.
++            endif
+             brs(i,k) = max(brs(i,k)+(bgevp(i,k)+bgeml(i,k))*dtcld,0.)
+             xlf = xls-xl(i,k)
+             xlwork2 = -xl(i,k)*(prevp(i,k)+psevp(i,k)+pgevp(i,k))              &

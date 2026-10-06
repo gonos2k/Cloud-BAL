@@ -196,7 +196,9 @@ bytes and declared lineage, not physical validity.
   divided by zero QIB before the density clamp. The selected traced source
   explicitly uses `rhox=900` for its zero-volume branch, then reconstructs
   QIB; that numerical protection is not a physical prior. The separate
-  `rho_mid=400` branch is not the zero-volume fallback.
+  `rho_mid=400` parameter is declared but unused in the selected source.
+  PR61's 400 kg m-3 research center is a separate prior informed by that
+  declaration, not an executed source initializer or the zero-volume fallback.
 - [ ] For each setting, retain native states at t0 and through t+60 min,
   including the first-call trace, every model output interval, and at least
   each 10-minute checkpoint. Record timestep-level fatal/nonfinite counts,
@@ -221,3 +223,25 @@ runtime execution or meteorological validity. After each completed batch,
 incrementally update the Cloud-BAL graph and dated KG audit. Keep this Cloud-BAL snapshot dated independently from the
 KLAPS50 snapshot; report extraction limits and graph deltas with any graph
 freshness claim.
+
+## PR61 scoped update (2026-10-06)
+
+The [team checklist](PR61_TEAM_REVIEW_20261006.md) records the common dry-air
+mass/number/volume validator, shared-carrier conservative remap, optional MP37
+physical bounds, and early fixed-pressure mass-increment compatibility check.
+The [native moment experiment](PR61_NATIVE_MOMENT_INITIALIZATION_20261006.md)
+uses a frozen source-bounded research prior, not operational moment authority.
+
+The matched source-copy PD-only and finalized-order runs share the same KDM6
+entry state. The combined 20-second run has 0 negative/zero/nonfinite NN at
+entry and 0 nonfinite reflectivity cells at return history, while 49,067
+positive-QC/zero-NC cells remain at KDM6 return. The native full-state gate is
+**FAIL**, and no COUPLED, 0–60 minute, forecast, or operational gate is closed.
+The [CCN origin report](PR61_CCN_ORIGIN_20261006.md) separates normal-range
+roundoff evidence from unsupported subnormal/CFL/source-tendency cases and
+separates retained private startup objects from upstream source observations.
+
+Only the selected source-copy PD and KDM6 objects were rebuilt with the pinned
+strict Intel profile. Operational sources were not patched. Contracted SHADOW
+publication, independent source/boundary budgets, joint trial search, and the
+complete moment state remain open.

@@ -26,8 +26,21 @@ COUPLED solution or native initialization approval.
 For dry-air mixing ratios, the represented pressure-coordinate cell measure
 and dry mass are different quantities. The current code reconstructs dry mass from
 the pressure-cell measure and all represented water ratios. Changing vapor or
-condensate at fixed pressure geometry can therefore change dry mass. A zero
-endpoint accounting identity does not authorize that change.
+condensate at fixed pressure geometry can therefore change dry mass. The
+canonical relation is
+
+```text
+m_d = P / (1 + Σ r_s)
+m_s = m_d r_s
+m_d + Σ m_s = P
+```
+
+Here `P` is the pressure-coordinate cell mass measure and the six `r_s`
+include vapor and every represented condensate. So even when condensate loading
+changes `m_d`, the sum of dry and all species masses remains `P`. For example,
+at `P = 100 kg`, total water ratios of `0.1` and `0.2` give dry masses of
+`90.909... kg` and `83.333... kg`, respectively; the species masses are
+`9.091... kg` and `16.667... kg`. Both totals remain `100 kg`.
 
 Mixture enthalpy uses the existing `moist_species_enthalpy` reference at
 273.15 K and the dry-air basis. Kinetic energy, gravitational energy, pressure
@@ -58,6 +71,22 @@ cell must be covered, including unchanged cells in the declared atmosphere.
 Opposite local residuals cannot cancel through a domain
 sum. Missing species, geometry changes, missing declarations or unsupported
 criteria must remain explicit; they do not become zero residuals.
+
+Because pressure geometry is held fixed, the declared net increments in
+components 1–7 must also satisfy the per-cell necessary condition
+
+```text
+Σ(c=1..7) [source_c + boundary_c] = 0
+```
+
+When no surface-pressure reconstruction is requested, the pipeline checks this
+before any candidate trial. A pressure request defers the fixed-geometry
+decision to the endpoint gate, even if the requested pressure happens to be
+unchanged. Its allowance is the sum
+of the seven declared physical tolerances plus a separate floating-point bound
+scaled by pressure mass and declaration magnitudes. Component 8, enthalpy, is
+not part of the mass sum. This early check only rejects an incompatible
+declaration; it does not create or infer a physical source term.
 
 This prescribed-increment check cannot authenticate the supplied increment.
 It must not construct \(I\) from the endpoint it is checking. In a complete
