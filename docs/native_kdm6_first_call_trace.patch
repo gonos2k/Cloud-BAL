@@ -1,0 +1,93 @@
+--- selected_private/module_mp_kdm6.F
++++ diagnostic_trace/module_mp_kdm6.F
+@@ -284,6 +284,8 @@
+    real, dimension(its:ite,kts:kte,3) :: qrs
+    real, dimension(its:ite,kts:kte)   :: n0so, n0go
+    integer                            :: i,j,k
++   logical, save :: first_kdm6_trace_complete = .false.
++   logical :: trace_this_call
+    real, dimension(its:ite,kts:kte) :: brs
+    real, dimension(its:ite,kts:kte) :: rhox
+    real, dimension(its:ite,kts:kte) :: cmg
+@@ -306,6 +308,15 @@
+    real, dimension(kts:kte) :: qc1d, nc1d, den1d
+    real, dimension(kts:kte) :: qi1d, ni1d
+    real, dimension(kts:kte) :: re_qc, re_qi, re_qs
++! Diagnostic-only one-call trace; writes input and returned states without
++! modifying or initializing any microphysical fields.
++   trace_this_call = .not. first_kdm6_trace_complete
++   if (trace_this_call) then
++     call kdm6_trace_dump(1, itimestep, ids,ide,jds,jde,kds,kde, &
++          ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++          delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult, &
++          th,pii,den,p,delz,q,qc,qr,qi,qs,qg,nn,nc,ni,nr,bg,diag_rhog,xland)
++   endif
+ ! CCN is initialized in start_em; preserve supplied and restart fields here.
+ !
+    do j = jts,jte
+@@ -423,7 +434,65 @@
+      endif
+    enddo        
+ ! 
++   if (trace_this_call) then
++     call kdm6_trace_dump(2, itimestep, ids,ide,jds,jde,kds,kde, &
++          ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++          delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult, &
++          th,pii,den,p,delz,q,qc,qr,qi,qs,qg,nn,nc,ni,nr,bg,diag_rhog,xland)
++     first_kdm6_trace_complete = .true.
++   endif
+    end subroutine kdm6
++
++   subroutine kdm6_trace_dump(stage,itimestep,ids,ide,jds,jde,kds,kde, &
++          ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++          delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult, &
++          th,pii,den,p,delz,q,qc,qr,qi,qs,qg,nn,nc,ni,nr,bg,diag_rhog,xland)
++     implicit none
++     integer,intent(in) :: stage,itimestep,ids,ide,jds,jde,kds,kde
++     integer,intent(in) :: ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte
++     real,intent(in) :: delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult
++     real,intent(in) :: th(ims:ime,kms:kme,jms:jme),pii(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: den(ims:ime,kms:kme,jms:jme),p(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: delz(ims:ime,kms:kme,jms:jme),q(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: qc(ims:ime,kms:kme,jms:jme),qr(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: qi(ims:ime,kms:kme,jms:jme),qs(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: qg(ims:ime,kms:kme,jms:jme),nn(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: nc(ims:ime,kms:kme,jms:jme),ni(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: nr(ims:ime,kms:kme,jms:jme),bg(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: diag_rhog(ims:ime,kms:kme,jms:jme),xland(ims:ime,jms:jme)
++     integer :: u
++     character(len=32) :: path
++     if (stage == 1) then
++       path='kdm6_first_call_pre.raw'
++     else
++       path='kdm6_first_call_post.raw'
++     endif
++     open(newunit=u,file=trim(path),access='stream',form='unformatted', &
++          status='replace',action='write')
++     write(u) 'KDM6TRC1'
++     write(u) stage,itimestep,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++               its,ite,jts,jte,kts,kte
++     write(u) delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult
++     write(u) 'TH      '; write(u) th
++     write(u) 'PII     '; write(u) pii
++     write(u) 'DEN     '; write(u) den
++     write(u) 'P       '; write(u) p
++     write(u) 'DELZ    '; write(u) delz
++     write(u) 'Q       '; write(u) q
++     write(u) 'QC      '; write(u) qc
++     write(u) 'QR      '; write(u) qr
++     write(u) 'QI      '; write(u) qi
++     write(u) 'QS      '; write(u) qs
++     write(u) 'QG      '; write(u) qg
++     write(u) 'NN      '; write(u) nn
++     write(u) 'NC      '; write(u) nc
++     write(u) 'NI      '; write(u) ni
++     write(u) 'NR      '; write(u) nr
++     write(u) 'BG      '; write(u) bg
++     write(u) 'DIAGRHOG'; write(u) diag_rhog
++     write(u) 'XLAND   '; write(u) xland
++     close(u)
++   end subroutine kdm6_trace_dump
+ !
+ !------------------------------------------------------------------------------
+ !

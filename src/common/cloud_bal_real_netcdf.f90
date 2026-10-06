@@ -2573,13 +2573,25 @@ CONTAINS
 
   PURE LOGICAL FUNCTION joint_candidate_evaluations_equal(left,right)
     USE cloud_bal_pipeline, ONLY: joint_candidate_evaluation
+    USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
     TYPE(joint_candidate_evaluation), INTENT(IN) :: left,right
+    joint_candidate_evaluations_equal=.FALSE.
+    IF (.NOT.ieee_is_finite(left%physical_feasibility_residual_scaled) .OR. &
+        .NOT.ieee_is_finite(right%physical_feasibility_residual_scaled)) RETURN
     joint_candidate_evaluations_equal=interior_hydrostatic_assessments_equal(left,right) .AND. &
       (left%canonical_accounting_assessed .EQV. right%canonical_accounting_assessed) .AND. &
       (left%continuity_assessed .EQV. right%continuity_assessed) .AND. &
       (left%geostrophic_assessed .EQV. right%geostrophic_assessed) .AND. &
       (left%source_boundary_assessed .EQV. right%source_boundary_assessed) .AND. &
       (left%observation_fit_assessed .EQV. right%observation_fit_assessed) .AND. &
+      (left%optimality_assessed .EQV. right%optimality_assessed) .AND. &
+      (left%native_conservation_assessed .EQV. right%native_conservation_assessed) .AND. &
+      left%physical_feasibility_status==right%physical_feasibility_status .AND. &
+      left%physical_feasibility_reason==right%physical_feasibility_reason .AND. &
+      ALL(left%physical_feasibility_failed_cell==right%physical_feasibility_failed_cell) .AND. &
+      left%physical_feasibility_failed_component==right%physical_feasibility_failed_component .AND. &
+      left%physical_feasibility_residual_scaled==right%physical_feasibility_residual_scaled .AND. &
+      left%physical_feasibility_cells==right%physical_feasibility_cells .AND. &
       left%balance_support_cells==right%balance_support_cells .AND. &
       left%operator_status==right%operator_status .AND. &
       left%operator_reason==right%operator_reason .AND. &

@@ -11,12 +11,14 @@ import sys
 import tempfile
 
 PROJECT = Path(__file__).resolve().parents[1]
+WORKSPACE_ROOT = Path(os.environ.get("CLOUD_BAL_WORKSPACE_ROOT", PROJECT.parent)).resolve()
+TEST_SCRATCH_ROOT = Path(os.environ.get("CLOUD_BAL_TEST_SCRATCH_ROOT", "/var/tmp")).resolve()
 ICX = Path(
     "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/icx"
 )
 TOOLS = PROJECT / "tools"
 NCGEN = (
-    PROJECT.parent
+    WORKSPACE_ROOT
     / "klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/bin/ncgen"
 ).resolve()
 
@@ -94,7 +96,7 @@ def compile_harness(directory: Path) -> Path:
 
 
 def test_bridge_fallback_and_strict_bound_direct_exec() -> None:
-    with tempfile.TemporaryDirectory(prefix="ncgen-bridge-", dir=PROJECT / "scratch") as temporary:
+    with tempfile.TemporaryDirectory(prefix="ncgen-bridge-", dir=TEST_SCRATCH_ROOT) as temporary:
         root = Path(temporary).resolve()
         harness = compile_harness(root)
         cdl = root / "input.cdl"
@@ -177,7 +179,7 @@ def test_bridge_fallback_and_strict_bound_direct_exec() -> None:
 
 
 def test_bound_bridge_matches_direct_ncgen_bytes() -> None:
-    with tempfile.TemporaryDirectory(prefix="ncgen-bridge-real-", dir=PROJECT / "scratch") as temporary:
+    with tempfile.TemporaryDirectory(prefix="ncgen-bridge-real-", dir=TEST_SCRATCH_ROOT) as temporary:
         root = Path(temporary).resolve()
         harness = compile_harness(root)
         cdl = root / "input.cdl"

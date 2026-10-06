@@ -12,6 +12,44 @@ MODULE cloud_bal_pipeline
   ! Separate reason namespace for the changed-domain receipt extension.
   INTEGER, PUBLIC, PARAMETER :: DIAGNOSTIC_REASON_NO_CHANGED_DOMAIN=10
 
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_FEASIBILITY_FAILED=-1
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_FEASIBILITY_UNSUPPORTED=0
+  ! PASS means only that the declared local component increments are feasible.
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_FEASIBILITY_PASS=1
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_DRY_MASS_METRIC=1
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_VAPOR=2
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_CLOUD_WATER=3
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_CLOUD_ICE=4
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_RAIN=5
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_SNOW=6
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_GRAUPEL=7
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_ENTHALPY=8
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_TEMPERATURE=ISHFT(1,0)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_VAPOR=ISHFT(1,1)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_CLOUD_WATER=ISHFT(1,2)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_CLOUD_ICE=ISHFT(1,3)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_RAIN=ISHFT(1,4)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_SNOW=ISHFT(1,5)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_GRAUPEL=ISHFT(1,6)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_U=ISHFT(1,7)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_V=ISHFT(1,8)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_OMEGA=ISHFT(1,9)
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_GEOPOTENTIAL=ISHFT(1,10)
+
+  TYPE, PUBLIC :: physical_joint_candidate_contract
+    ! Caller-prescribed per-cell source and boundary increments in kg
+    ! (components 1:7) and J (component 8), plus physical tolerances in those
+    ! units. Component 1 is the canonical dry-mass metric, not physical gas
+    ! source authority. Component 8 is represented mixture enthalpy only.
+    ! Only source+boundary net is compared; their separate attribution,
+    ! observation fit, optimality and native conservation remain unassessed.
+    INTEGER :: adjustable_variables=0
+    LOGICAL, ALLOCATABLE :: coverage(:,:,:)
+    REAL(real64), ALLOCATABLE :: source_increment(:,:,:,:)
+    REAL(real64), ALLOCATABLE :: boundary_increment(:,:,:,:)
+    REAL(real64), ALLOCATABLE :: physical_tolerance(:,:,:,:)
+  END TYPE physical_joint_candidate_contract
+
   TYPE, PUBLIC :: cloud_bal_pipeline_config
     INTEGER :: requested_mode=MODE_OFF
     REAL(real64) :: horizontal_support_radius_m=12000.0_real64
@@ -30,6 +68,14 @@ MODULE cloud_bal_pipeline
     LOGICAL :: geostrophic_assessed=.FALSE.
     LOGICAL :: source_boundary_assessed=.FALSE.
     LOGICAL :: observation_fit_assessed=.FALSE.
+    LOGICAL :: optimality_assessed=.FALSE.
+    LOGICAL :: native_conservation_assessed=.FALSE.
+    INTEGER :: physical_feasibility_status=PHYSICAL_FEASIBILITY_UNSUPPORTED
+    INTEGER :: physical_feasibility_reason=REASON_NONE
+    INTEGER :: physical_feasibility_failed_cell(3)=0
+    INTEGER :: physical_feasibility_failed_component=0
+    REAL(real64) :: physical_feasibility_residual_scaled=0.0_real64
+    INTEGER(int64) :: physical_feasibility_cells=0_int64
     INTEGER(int64) :: balance_support_cells=0_int64
     INTEGER :: operator_status=STATUS_FAILED
     INTEGER :: operator_reason=REASON_NONE
@@ -183,7 +229,7 @@ CONTAINS
   SUBROUTINE run_cloud_bal_pipeline(state_in,candidate_out,operational_out, &
                                     result,config,thermo_active,thermo_surface,target_rh, &
                                     geopotential_support,geopotential_reference_level,requested_surface_pressure, &
-                                    pressure_transition_seed)
+                                    pressure_transition_seed,physical_contract)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in
     TYPE(cloud_bal_state_type), INTENT(OUT) :: candidate_out,operational_out
     TYPE(cloud_bal_pipeline_result), INTENT(OUT) :: result
@@ -197,10 +243,12 @@ CONTAINS
     ! or a solved native mass constraint. The caller owns its target contract.
     REAL(real64), INTENT(IN), OPTIONAL :: requested_surface_pressure(:,:)
     TYPE(cloud_bal_state_type), INTENT(IN), OPTIONAL :: pressure_transition_seed
+    TYPE(physical_joint_candidate_contract), INTENT(IN), OPTIONAL :: physical_contract
     TYPE(cloud_bal_state_type) :: column_candidate,geopotential_candidate,balance_candidate,evaluation
     TYPE(cloud_bal_state_type) :: transition_prior,transition_candidate
     TYPE(stage_result) :: transition_result
-    TYPE(pressure_analysis_budget) :: proposal_budget,geometry_budget
+    TYPE(pressure_analysis_budget) :: proposal_budget,geometry_budget,trial_budget
+    TYPE(joint_candidate_evaluation) :: trial_evaluation
     REAL(real64), ALLOCATABLE :: first_stage_pressure(:,:)
     INTEGER :: nx,ny,nz,localization_status,shape3(3),iteration,i,j,k,validation_reason
 
@@ -471,6 +519,23 @@ CONTAINS
         result%overall%changed=.FALSE.
         RETURN
       END IF
+      CALL evaluate_joint_candidate(state_in,balance_candidate,config%balance, &
+        trial_budget,trial_evaluation,localization_status,validation_reason,physical_contract)
+      IF (localization_status/=STATUS_OK .OR. &
+          (PRESENT(physical_contract) .AND. &
+           trial_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS)) THEN
+        candidate_out=state_in; operational_out=state_in
+        result%thermo_budget=water_phase_budget()
+        result%candidate_budget=pressure_analysis_budget()
+        result%candidate_evaluation=trial_evaluation
+        result%column%changed=.FALSE.; result%balance%changed=.FALSE.
+        result%geopotential%changed=.FALSE.
+        result%status=STATUS_FAILED
+        result%reason_code=validation_reason
+        IF (localization_status==STATUS_OK) result%reason_code=REASON_GATE
+        CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,result%reason_code)
+        RETURN
+      END IF
       IF (config%maximum_outer_iterations==1) EXIT
       result%outer_max_abs_delta(:,iteration)=pressure_feedback_delta(evaluation,balance_candidate)
       result%outer_converged=ALL(result%outer_max_abs_delta(:,iteration)==0.0_real64)
@@ -496,28 +561,18 @@ CONTAINS
     IF (config%maximum_outer_iterations>1 .AND. .NOT.result%outer_converged) THEN
       candidate_out=state_in
       result%thermo_budget=water_phase_budget()
+      result%candidate_budget=pressure_analysis_budget()
+      result%candidate_evaluation=joint_candidate_evaluation()
       result%column%changed=.FALSE.; result%balance%changed=.FALSE.
       result%geopotential%changed=.FALSE.
       result%status=STATUS_FAILED; result%reason_code=REASON_SOLVER
       CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_SOLVER)
       RETURN
     END IF
-    ! Recheck the whole endpoint after the ordered stages have completed.
-    ! A stage budget alone cannot describe the final thermodynamic/geometry
-    ! state consumed by the downstream WPS mapper.
-    CALL evaluate_joint_candidate(state_in,balance_candidate,config%balance, &
-      result%candidate_budget,result%candidate_evaluation,localization_status,validation_reason)
-    IF (localization_status/=STATUS_OK) THEN
-      candidate_out=state_in
-      result%thermo_budget=water_phase_budget()
-      result%candidate_budget=pressure_analysis_budget()
-      result%column%changed=.FALSE.; result%balance%changed=.FALSE.
-      result%geopotential%changed=.FALSE.
-      result%status=STATUS_FAILED; result%reason_code=validation_reason
-      CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,validation_reason)
-      RETURN
-    END IF
+    ! The last successful block trial was re-evaluated before acceptance.
     candidate_out=balance_candidate
+    result%candidate_budget=trial_budget
+    result%candidate_evaluation=trial_evaluation
     result%analysis_budget=proposal_budget
     result%geometry_budget=geometry_budget
     result%overall=result%balance
@@ -572,7 +627,8 @@ CONTAINS
     END IF
   END SUBROUTINE account_candidate_endpoint
 
-  SUBROUTINE evaluate_joint_candidate(background,candidate,balance_config,budget,evaluation,status,reason)
+  SUBROUTINE evaluate_joint_candidate(background,candidate,balance_config,budget,evaluation,status,reason, &
+                                      physical_contract)
     ! Re-evaluate the existing pressure-grid diagnostics on the same final
     ! candidate used for the endpoint ledger. Missing physical-time sources,
     ! boundary fluxes and independent observation operators remain unassessed.
@@ -581,6 +637,7 @@ CONTAINS
     TYPE(pressure_analysis_budget), INTENT(OUT) :: budget
     TYPE(joint_candidate_evaluation), INTENT(OUT) :: evaluation
     INTEGER, INTENT(OUT) :: status,reason
+    TYPE(physical_joint_candidate_contract), INTENT(IN), OPTIONAL :: physical_contract
     TYPE(balance_operator_type) :: op,diagnostic_op
     REAL(real64), ALLOCATABLE :: continuity(:,:,:)
     LOGICAL, ALLOCATABLE :: changed_domain(:,:,:),requested_domain(:,:,:),domain_union(:,:,:)
@@ -597,6 +654,8 @@ CONTAINS
     ! Each balance diagnostic has its own status and may remain unassessed.
     CALL account_candidate_endpoint(background,candidate,budget,status,reason)
     IF (status/=STATUS_OK) RETURN
+    IF (PRESENT(physical_contract)) &
+      CALL assess_physical_joint_candidate(background,candidate,physical_contract,evaluation)
     ALLOCATE(evaluation%diagnostic_changed_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
       evaluation%diagnostic_requested_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
       evaluation%diagnostic_continuity_assessable_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
@@ -746,6 +805,311 @@ CONTAINS
       END IF
     END IF
   END SUBROUTINE evaluate_joint_candidate
+
+  SUBROUTINE assess_physical_joint_candidate(background,candidate,contract,evaluation)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    TYPE(physical_joint_candidate_contract), INTENT(IN) :: contract
+    TYPE(joint_candidate_evaluation), INTENT(INOUT) :: evaluation
+    REAL(real64) :: source,boundary,after_term,before_term
+    REAL(real64) :: before_mass,after_mass,before_enthalpy,after_enthalpy,species_before(6),species_after(6)
+    REAL(real64) :: scaled_residual
+    INTEGER :: nx,ny,nz,i,j,k,c,shape3(3)
+    LOGICAL, ALLOCATABLE :: domain(:,:,:)
+
+    evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+    evaluation%physical_feasibility_reason=REASON_GATE
+    evaluation%physical_feasibility_failed_cell=0
+    evaluation%physical_feasibility_failed_component=0
+    evaluation%physical_feasibility_residual_scaled=0.0_real64
+    nx=candidate%grid%nx; ny=candidate%grid%ny; nz=candidate%grid%nz
+    shape3=(/nx,ny,nz/)
+    IF (.NOT.ALLOCATED(contract%coverage) .OR. .NOT.ALLOCATED(contract%source_increment) .OR. &
+        .NOT.ALLOCATED(contract%boundary_increment) .OR. .NOT.ALLOCATED(contract%physical_tolerance)) THEN
+      evaluation%physical_feasibility_reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
+    IF (ANY(SHAPE(contract%coverage)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(contract%source_increment)/=(/8,nx,ny,nz/)) .OR. &
+        ANY(SHAPE(contract%boundary_increment)/=(/8,nx,ny,nz/)) .OR. &
+        ANY(SHAPE(contract%physical_tolerance)/=(/8,nx,ny,nz/))) THEN
+      evaluation%physical_feasibility_reason=REASON_SHAPE
+      RETURN
+    END IF
+    IF (ANY(background%above_ground .NEQV. candidate%above_ground) .OR. &
+        ANY(background%surface_pressure%value/=candidate%surface_pressure%value) .OR. &
+        ANY(background%grid%pressure_interface/=candidate%grid%pressure_interface) .OR. &
+        ANY(background%grid%pressure_mass_measure/=candidate%grid%pressure_mass_measure)) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_UNSUPPORTED
+      evaluation%physical_feasibility_reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (.NOT.optional_field2d_identity_equal(background%surface_pressure,candidate%surface_pressure) .OR. &
+        .NOT.optional_field2d_identity_equal(background%surface_temperature,candidate%surface_temperature) .OR. &
+        .NOT.optional_field2d_identity_equal(background%surface_vapor,candidate%surface_vapor) .OR. &
+        .NOT.optional_field2d_identity_equal(background%surface_height,candidate%surface_height) .OR. &
+        .NOT.optional_field2d_identity_equal(background%omega_top_boundary,candidate%omega_top_boundary) .OR. &
+        .NOT.optional_field2d_identity_equal(background%omega_bottom_boundary,candidate%omega_bottom_boundary)) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_UNSUPPORTED
+      evaluation%physical_feasibility_reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (.NOT.field3d_identity_metadata_equal(background%pressure,candidate%pressure,shape3)) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_UNSUPPORTED
+      evaluation%physical_feasibility_reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (.NOT.optional_field3d_identity_equal(background%omega_target,candidate%omega_target,shape3) .OR. &
+        .NOT.optional_field3d_identity_equal(background%omega_target_sigma,candidate%omega_target_sigma,shape3) .OR. &
+        .NOT.optional_field3d_identity_equal(background%cloud_fraction,candidate%cloud_fraction,shape3) .OR. &
+        .NOT.optional_field3d_identity_equal(background%radar_reflectivity,candidate%radar_reflectivity,shape3)) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_UNSUPPORTED
+      evaluation%physical_feasibility_reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (ANY((background%above_ground .OR. candidate%above_ground) .AND. .NOT.contract%coverage)) THEN
+      evaluation%physical_feasibility_reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
+    IF (ANY(.NOT.ieee_is_finite(contract%source_increment)) .OR. &
+        ANY(.NOT.ieee_is_finite(contract%boundary_increment)) .OR. &
+        ANY(.NOT.ieee_is_finite(contract%physical_tolerance))) THEN
+      evaluation%physical_feasibility_reason=REASON_NONFINITE
+      RETURN
+    END IF
+    IF (ANY(contract%physical_tolerance<0.0_real64)) THEN
+      evaluation%physical_feasibility_reason=REASON_RANGE
+      RETURN
+    END IF
+    IF (IAND(contract%adjustable_variables,NOT(ISHFT(1,11)-1))/=0) THEN
+      evaluation%physical_feasibility_reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (.NOT.field_arrays_match(background%temperature,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%temperature,shape3) .OR. &
+        .NOT.field_arrays_match(background%vapor,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%vapor,shape3) .OR. &
+        .NOT.field_arrays_match(background%cloud_water,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%cloud_water,shape3) .OR. &
+        .NOT.field_arrays_match(background%cloud_ice,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%cloud_ice,shape3) .OR. &
+        .NOT.field_arrays_match(background%rain,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%rain,shape3) .OR. &
+        .NOT.field_arrays_match(background%snow,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%snow,shape3) .OR. &
+        .NOT.field_arrays_match(background%graupel,shape3) .OR. &
+        .NOT.field_arrays_match(candidate%graupel,shape3)) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_UNSUPPORTED
+      evaluation%physical_feasibility_reason=REASON_REQUIRED_COVERAGE
+      RETURN
+    END IF
+    IF (.NOT.adjusted_field_allowed(background%temperature,candidate%temperature,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_TEMPERATURE) .OR. &
+        .NOT.adjusted_field_allowed(background%vapor,candidate%vapor,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_VAPOR) .OR. &
+        .NOT.adjusted_field_allowed(background%cloud_water,candidate%cloud_water,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_CLOUD_WATER) .OR. &
+        .NOT.adjusted_field_allowed(background%cloud_ice,candidate%cloud_ice,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_CLOUD_ICE) .OR. &
+        .NOT.adjusted_field_allowed(background%rain,candidate%rain,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_RAIN) .OR. &
+        .NOT.adjusted_field_allowed(background%snow,candidate%snow,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_SNOW) .OR. &
+        .NOT.adjusted_field_allowed(background%graupel,candidate%graupel,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_GRAUPEL) .OR. &
+        .NOT.adjusted_field_allowed(background%u,candidate%u,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_U) .OR. &
+        .NOT.adjusted_field_allowed(background%v,candidate%v,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_V) .OR. &
+        .NOT.adjusted_field_allowed(background%omega,candidate%omega,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_OMEGA) .OR. &
+        .NOT.adjusted_field_allowed(background%geopotential,candidate%geopotential,shape3, &
+        contract%adjustable_variables,PHYSICAL_ADJUST_GEOPOTENTIAL)) THEN
+      evaluation%physical_feasibility_reason=REASON_AUTHORITY
+      RETURN
+    END IF
+
+    ALLOCATE(domain(nx,ny,nz))
+    domain=background%above_ground .OR. candidate%above_ground
+    DO k=1,nz; DO j=1,ny; DO i=1,nx
+      IF (.NOT.domain(i,j,k)) CYCLE
+      IF (.NOT.physical_cell_covered(background,i,j,k) .OR. &
+          .NOT.physical_cell_covered(candidate,i,j,k)) THEN
+        evaluation%physical_feasibility_reason=REASON_REQUIRED_COVERAGE
+        evaluation%physical_feasibility_failed_cell=[i,j,k]
+        RETURN
+      END IF
+      before_mass=background%grid%dry_air_mass_measure(i,j,k)
+      after_mass=candidate%grid%dry_air_mass_measure(i,j,k)
+      species_before=represented_water_species(background,i,j,k)
+      species_after=represented_water_species(candidate,i,j,k)
+      before_enthalpy=moist_species_enthalpy(REAL(background%temperature%value(i,j,k),real64),species_before)
+      after_enthalpy=moist_species_enthalpy(REAL(candidate%temperature%value(i,j,k),real64),species_after)
+      DO c=1,8
+        source=contract%source_increment(c,i,j,k)
+        boundary=contract%boundary_increment(c,i,j,k)
+        IF (c==PHYSICAL_COMPONENT_DRY_MASS_METRIC) THEN
+          after_term=after_mass; before_term=before_mass
+        ELSE IF (c==PHYSICAL_COMPONENT_ENTHALPY) THEN
+          after_term=after_mass*after_enthalpy; before_term=before_mass*before_enthalpy
+        ELSE
+          after_term=after_mass*species_after(c-1)
+          before_term=before_mass*species_before(c-1)
+        END IF
+        IF (.NOT.increment_matches(after_term,before_term,source,boundary, &
+            contract%physical_tolerance(c,i,j,k),scaled_residual)) THEN
+          CALL record_physical_failure(evaluation,i,j,k,c,scaled_residual)
+          RETURN
+        END IF
+      END DO
+    END DO; END DO; END DO
+    evaluation%physical_feasibility_cells=COUNT(domain,KIND=int64)
+    evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_PASS
+    evaluation%physical_feasibility_reason=REASON_NONE
+  END SUBROUTINE assess_physical_joint_candidate
+
+  LOGICAL FUNCTION adjusted_field_allowed(background,candidate,expected_shape,adjustable_variables,variable_bit)
+    TYPE(field3d), INTENT(IN) :: background,candidate
+    INTEGER, INTENT(IN) :: expected_shape(3),adjustable_variables,variable_bit
+    LOGICAL :: background_present,candidate_present
+    INTEGER(int32), PARAMETER :: stage_sources=IOR(SOURCE_COLUMN_PHYSICS,SOURCE_BALANCE_OPERATOR)
+    INTEGER(int32), PARAMETER :: allowed_source_additions=IOR(stage_sources, &
+      IOR(SOURCE_RADAR_DBZ,SOURCE_CLOUD_ANALYSIS))
+    adjusted_field_allowed=.FALSE.
+    background_present=field3d_any_allocated(background)
+    candidate_present=field3d_any_allocated(candidate)
+    IF (.NOT.background_present .AND. .NOT.candidate_present) THEN
+      adjusted_field_allowed=.TRUE.
+      RETURN
+    END IF
+    IF (background_present .NEQV. candidate_present) THEN
+      RETURN
+    END IF
+    IF (.NOT.field_arrays_match(background,expected_shape) .OR. &
+        .NOT.field_arrays_match(candidate,expected_shape)) RETURN
+    IF (background%unit/=candidate%unit .OR. background%valid_time/=candidate%valid_time .OR. &
+        ANY(background%valid .NEQV. candidate%valid) .OR. &
+        ANY(background%quality/=candidate%quality)) RETURN
+    IF (.NOT.valid_values_equal(background%value,candidate%value,background%valid) .OR. &
+        ANY(background%source/=candidate%source)) THEN
+      IF (IAND(adjustable_variables,variable_bit)==0) RETURN
+      IF (ANY(IAND(candidate%source,NOT(SOURCE_KNOWN_BITS))/=0_int32) .OR. &
+          ANY(IAND(candidate%source,SOURCE_MANUFACTURED_TEST)/=0_int32)) RETURN
+      IF (ANY(IAND(IAND(candidate%source,NOT(background%source)), &
+          NOT(allowed_source_additions))/=0_int32)) RETURN
+      IF (valid_value_changed_without_stage(background%value,candidate%value,background%valid, &
+          candidate%source,stage_sources) .OR. &
+          ANY((background%source/=candidate%source) .AND. IAND(candidate%source,stage_sources)==0_int32)) RETURN
+    END IF
+    adjusted_field_allowed=.TRUE.
+  END FUNCTION adjusted_field_allowed
+
+  LOGICAL FUNCTION field3d_identity_metadata_equal(background,candidate,expected_shape)
+    TYPE(field3d), INTENT(IN) :: background,candidate
+    INTEGER, INTENT(IN) :: expected_shape(3)
+    field3d_identity_metadata_equal=.FALSE.
+    IF (.NOT.field_arrays_match(background,expected_shape) .OR. &
+        .NOT.field_arrays_match(candidate,expected_shape)) RETURN
+    IF (background%unit/=candidate%unit .OR. background%valid_time/=candidate%valid_time) RETURN
+    IF (ANY(background%valid .NEQV. candidate%valid)) RETURN
+    IF (.NOT.valid_values_equal(background%value,candidate%value,background%valid)) RETURN
+    field3d_identity_metadata_equal=ALL(background%quality==candidate%quality) .AND. &
+      ALL(background%source==candidate%source)
+  END FUNCTION field3d_identity_metadata_equal
+
+  LOGICAL FUNCTION valid_values_equal(left,right,valid)
+    REAL(real32), INTENT(IN) :: left(:,:,:),right(:,:,:)
+    LOGICAL, INTENT(IN) :: valid(:,:,:)
+    INTEGER :: i,j,k
+    valid_values_equal=.FALSE.
+    DO k=1,SIZE(valid,3); DO j=1,SIZE(valid,2); DO i=1,SIZE(valid,1)
+      IF (.NOT.valid(i,j,k)) CYCLE
+      IF (.NOT.ieee_is_finite(left(i,j,k)) .OR. .NOT.ieee_is_finite(right(i,j,k))) RETURN
+      IF (left(i,j,k)/=right(i,j,k)) RETURN
+    END DO; END DO; END DO
+    valid_values_equal=.TRUE.
+  END FUNCTION valid_values_equal
+
+  LOGICAL FUNCTION valid_value_changed_without_stage(left,right,valid,source,stage_sources)
+    REAL(real32), INTENT(IN) :: left(:,:,:),right(:,:,:)
+    LOGICAL, INTENT(IN) :: valid(:,:,:)
+    INTEGER(int32), INTENT(IN) :: source(:,:,:),stage_sources
+    INTEGER :: i,j,k
+    valid_value_changed_without_stage=.FALSE.
+    DO k=1,SIZE(valid,3); DO j=1,SIZE(valid,2); DO i=1,SIZE(valid,1)
+      IF (.NOT.valid(i,j,k)) CYCLE
+      IF (.NOT.ieee_is_finite(left(i,j,k)) .OR. .NOT.ieee_is_finite(right(i,j,k))) THEN
+        valid_value_changed_without_stage=.TRUE.
+        RETURN
+      END IF
+      IF (left(i,j,k)/=right(i,j,k) .AND. IAND(source(i,j,k),stage_sources)==0_int32) THEN
+        valid_value_changed_without_stage=.TRUE.
+        RETURN
+      END IF
+    END DO; END DO; END DO
+  END FUNCTION valid_value_changed_without_stage
+
+  LOGICAL FUNCTION optional_field3d_identity_equal(background,candidate,expected_shape)
+    TYPE(field3d), INTENT(IN) :: background,candidate
+    INTEGER, INTENT(IN) :: expected_shape(3)
+    LOGICAL :: background_present,candidate_present
+    background_present=field3d_any_allocated(background)
+    candidate_present=field3d_any_allocated(candidate)
+    optional_field3d_identity_equal=.FALSE.
+    IF (.NOT.background_present .AND. .NOT.candidate_present) THEN
+      optional_field3d_identity_equal=.TRUE.
+    ELSE IF (background_present .AND. candidate_present) THEN
+      optional_field3d_identity_equal=field3d_identity_metadata_equal(background,candidate,expected_shape)
+    END IF
+  END FUNCTION optional_field3d_identity_equal
+
+  LOGICAL FUNCTION physical_cell_covered(state,i,j,k)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: i,j,k
+    physical_cell_covered=cell_is_usable(state%temperature%valid(i,j,k),state%temperature%quality(i,j,k), &
+      state%temperature%source(i,j,k),state%temperature%valid_time,state%pressure%valid_time) .AND. &
+      cell_is_usable(state%vapor%valid(i,j,k),state%vapor%quality(i,j,k),state%vapor%source(i,j,k), &
+      state%vapor%valid_time,state%pressure%valid_time) .AND. &
+      cell_is_usable(state%cloud_water%valid(i,j,k),state%cloud_water%quality(i,j,k), &
+      state%cloud_water%source(i,j,k),state%cloud_water%valid_time,state%pressure%valid_time) .AND. &
+      cell_is_usable(state%cloud_ice%valid(i,j,k),state%cloud_ice%quality(i,j,k), &
+      state%cloud_ice%source(i,j,k),state%cloud_ice%valid_time,state%pressure%valid_time) .AND. &
+      cell_is_usable(state%rain%valid(i,j,k),state%rain%quality(i,j,k),state%rain%source(i,j,k), &
+      state%rain%valid_time,state%pressure%valid_time) .AND. &
+      cell_is_usable(state%snow%valid(i,j,k),state%snow%quality(i,j,k),state%snow%source(i,j,k), &
+      state%snow%valid_time,state%pressure%valid_time) .AND. &
+      cell_is_usable(state%graupel%valid(i,j,k),state%graupel%quality(i,j,k), &
+      state%graupel%source(i,j,k),state%graupel%valid_time,state%pressure%valid_time)
+  END FUNCTION physical_cell_covered
+
+  SUBROUTINE record_physical_failure(evaluation,i,j,k,component,residual_scaled)
+    TYPE(joint_candidate_evaluation), INTENT(INOUT) :: evaluation
+    INTEGER, INTENT(IN) :: i,j,k,component
+    REAL(real64), INTENT(IN) :: residual_scaled
+    evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+    evaluation%physical_feasibility_reason=REASON_GATE
+    evaluation%physical_feasibility_failed_cell=[i,j,k]
+    evaluation%physical_feasibility_failed_component=component
+    evaluation%physical_feasibility_residual_scaled=residual_scaled
+  END SUBROUTINE record_physical_failure
+
+  LOGICAL FUNCTION increment_matches(after_term,before_term,source,boundary,physical_tolerance,residual_scaled)
+    REAL(real64), INTENT(IN) :: after_term,before_term,source,boundary,physical_tolerance
+    REAL(real64), INTENT(OUT) :: residual_scaled
+    REAL(real64) :: scale,tolerance_scaled
+    increment_matches=.FALSE.
+    residual_scaled=0.0_real64
+    IF (ANY(.NOT.ieee_is_finite([after_term,before_term,source,boundary,physical_tolerance]))) RETURN
+    IF (physical_tolerance<0.0_real64) RETURN
+    scale=MAX(ABS(after_term),ABS(before_term),ABS(source),ABS(boundary),physical_tolerance)
+    IF (scale==0.0_real64) THEN
+      increment_matches=.TRUE.
+      RETURN
+    END IF
+    residual_scaled=after_term/scale-before_term/scale-source/scale-boundary/scale
+    tolerance_scaled=physical_tolerance/scale+64.0_real64*EPSILON(1.0_real64)* &
+      (ABS(source/scale)+ABS(boundary/scale)+ABS(after_term/scale)+ABS(before_term/scale))
+    increment_matches=ABS(residual_scaled)<=tolerance_scaled
+  END FUNCTION increment_matches
 
   SUBROUTINE build_candidate_evaluation_domain(background,candidate,changed,requested,status,reason)
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
@@ -902,9 +1266,32 @@ CONTAINS
     IF (.NOT.background_present .AND. .NOT.candidate_present) THEN
       optional_field2d_identity_equal=.TRUE.
     ELSE IF (background_present .AND. candidate_present) THEN
-      optional_field2d_identity_equal=field2d_identity_equal(background,candidate)
+      optional_field2d_identity_equal=safe_field2d_identity_equal(background,candidate)
     END IF
   END FUNCTION optional_field2d_identity_equal
+
+  LOGICAL FUNCTION safe_field2d_identity_equal(left,right)
+    TYPE(field2d), INTENT(IN) :: left,right
+    INTEGER :: i,j
+    safe_field2d_identity_equal=.FALSE.
+    IF (left%valid_time/=right%valid_time .OR. left%unit/=right%unit) RETURN
+    IF (.NOT.allocated(left%value) .OR. .NOT.allocated(right%value) .OR. &
+        .NOT.allocated(left%valid) .OR. .NOT.allocated(right%valid) .OR. &
+        .NOT.allocated(left%quality) .OR. .NOT.allocated(right%quality) .OR. &
+        .NOT.allocated(left%source) .OR. .NOT.allocated(right%source)) RETURN
+    IF (ANY(SHAPE(left%value)/=SHAPE(right%value)) .OR. &
+        ANY(SHAPE(left%valid)/=SHAPE(right%valid)) .OR. &
+        ANY(SHAPE(left%quality)/=SHAPE(right%quality)) .OR. &
+        ANY(SHAPE(left%source)/=SHAPE(right%source))) RETURN
+    IF (ANY(left%valid .NEQV. right%valid)) RETURN
+    IF (ANY(left%quality/=right%quality) .OR. ANY(left%source/=right%source)) RETURN
+    DO j=1,SIZE(left%valid,2); DO i=1,SIZE(left%valid,1)
+      IF (.NOT.left%valid(i,j)) CYCLE
+      IF (.NOT.ieee_is_finite(left%value(i,j)) .OR. .NOT.ieee_is_finite(right%value(i,j))) RETURN
+      IF (left%value(i,j)/=right%value(i,j)) RETURN
+    END DO; END DO
+    safe_field2d_identity_equal=.TRUE.
+  END FUNCTION safe_field2d_identity_equal
 
   FUNCTION field_change_vector(background,candidate) RESULT(changed)
     TYPE(field3d), INTENT(IN) :: background,candidate
@@ -912,10 +1299,22 @@ CONTAINS
     INTEGER :: nx,ny,nz
     nx=SIZE(background%value,1); ny=SIZE(background%value,2); nz=SIZE(background%value,3)
     ALLOCATE(changed(nx,ny,nz))
-    changed=(background%value/=candidate%value) .OR. &
-      (background%valid .NEQV. candidate%valid) .OR. &
+    changed=(background%valid .NEQV. candidate%valid) .OR. &
       (background%quality/=candidate%quality) .OR. &
       (background%source/=candidate%source)
+    BLOCK
+      INTEGER :: i,j,k
+      DO k=1,nz; DO j=1,ny; DO i=1,nx
+        IF (.NOT.background%valid(i,j,k) .AND. .NOT.candidate%valid(i,j,k)) CYCLE
+        IF (.NOT.background%valid(i,j,k) .OR. .NOT.candidate%valid(i,j,k)) CYCLE
+        IF (.NOT.ieee_is_finite(background%value(i,j,k)) .OR. &
+            .NOT.ieee_is_finite(candidate%value(i,j,k))) THEN
+          changed(i,j,k)=.TRUE.
+        ELSE
+          changed(i,j,k)=changed(i,j,k) .OR. background%value(i,j,k)/=candidate%value(i,j,k)
+        END IF
+      END DO; END DO; END DO
+    END BLOCK
   END FUNCTION field_change_vector
 
   FUNCTION field2d_change_vector(background,candidate) RESULT(changed)

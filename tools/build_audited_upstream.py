@@ -32,7 +32,9 @@ def run_build(work, phase, args, manifest=None):
     trace_dir.mkdir()
     env = os.environ.copy()
     env.pop('CLOUD_BAL_COMPILER_INPUTS_MANIFEST', None)
-    env.update(TMPDIR=str(work / 'tmp'), PYTHONDONTWRITEBYTECODE='1',
+    env.update(TMPDIR=str(work / 'tmp'),
+               CLOUD_BAL_BUILD_SCRATCH_ROOT=str(work / 'builds'),
+               PYTHONDONTWRITEBYTECODE='1',
                PYTHONPYCACHEPREFIX=str(work / 'empty_cache'))
     if manifest is not None:
         env['CLOUD_BAL_COMPILER_INPUTS_MANIFEST'] = str(manifest)
@@ -48,7 +50,7 @@ def run_build(work, phase, args, manifest=None):
         raise RuntimeError(f'{phase} build exited {result.returncode}; see {log}')
     build = Path(log.read_text().splitlines()[0])
     if not build.is_absolute() or build.resolve(strict=True) != build or \
-            build.parent != REPO / 'scratch' or \
+            build.parent != work / 'builds' or \
             not build.name.startswith(f'upstream_{args.producer}_build.'):
         raise RuntimeError(f'unexpected build directory: {build}')
     if 'BUILD_AND_LINK_PASS;' not in (build / 'build.log').read_text():
@@ -76,8 +78,8 @@ def main():
     args.tracer = args.tracer.resolve(strict=True)
     if digest(args.tracer) != TRACER_SHA256:
         parser.error('tracer bytes do not match the reviewed tracing tool')
-    work = Path(tempfile.mkdtemp(prefix='compiler_audited_build.', dir=REPO / 'scratch'))
-    for name in ('tmp', 'empty_cache'):
+    work = Path(tempfile.mkdtemp(prefix='compiler_audited_build.', dir='/var/tmp'))
+    for name in ('tmp', 'empty_cache', 'builds'):
         (work / name).mkdir()
     print(work, flush=True)
     sources = {str(p): digest(p) for p in (Path(__file__).resolve(), BUILDER, PINNER)}
