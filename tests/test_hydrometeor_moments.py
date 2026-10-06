@@ -62,6 +62,13 @@ def test_mass_number_checks_finite_declared_bounds_and_reports_masks():
     assert invalid["status"] == "REJECTED"
     assert invalid["reason"] == "INVALID_PARTICLE_MASS_BOUNDS"
 
+    overflowing_product = _mass_number(
+        [1.0], [1.0e100], particle_mass_min_kg=1.0e300,
+        particle_mass_max_kg=2.0e300,
+    )
+    assert overflowing_product["status"] == "REJECTED"
+    assert overflowing_product["reason"] == "PARTICLE_BOUND_PRODUCT_NONFINITE"
+
 
 def test_positive_mass_with_zero_number_is_unrealizable_and_not_floored():
     mass = np.array([0.0, 1.0e-6, 1.0e-6])
@@ -135,6 +142,19 @@ def test_bulk_volume_bounds_and_missing_volume_support():
     empty = _bulk_volume([], [])
     assert empty["status"] == "UNSUPPORTED"
     assert empty["reason"] == "EMPTY_VALIDATION_DOMAIN"
+
+
+def test_bulk_volume_rejects_overflowing_derived_bounds():
+    overflow = _bulk_volume(
+        [1.0e-3], [1.0e-6], bulk_density_min_kg_m3=1.0e-312,
+        bulk_density_max_kg_m3=2.0e-312,
+    )
+    assert overflow["status"] == "REJECTED"
+    assert overflow["reason"] == "BULK_VOLUME_BOUND_NONFINITE"
+
+    ordinary = _bulk_volume([0.09], [0.0003])
+    assert ordinary["status"] == "PASS_SCOPED"
+    assert ordinary["valid"] is True
 
 
 def test_conservative_remap_transfers_mass_number_and_volume_extensively():
@@ -348,6 +368,7 @@ def main():
         test_positive_mass_with_zero_number_is_unrealizable_and_not_floored,
         test_missing_number_is_explicitly_unsupported_and_declarations_are_checked,
         test_bulk_volume_bounds_and_missing_volume_support,
+        test_bulk_volume_rejects_overflowing_derived_bounds,
         test_conservative_remap_transfers_mass_number_and_volume_extensively,
         test_remap_rejects_bad_weights_shapes_and_zero_target_carrier,
         test_remap_preserves_unsupported_species_moments_as_none,

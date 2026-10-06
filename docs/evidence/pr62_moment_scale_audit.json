@@ -1,0 +1,373 @@
+{
+  "artifacts": {
+    "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pure_strict/kdm6_first_call_post.raw": {
+      "bytes": 195542592,
+      "sha256": "526285dedd8e27eb3f59529671193c723d6519d99ea4f98d13b89dae39eb7f30"
+    },
+    "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pure_strict/kdm6_first_call_pre.raw": {
+      "bytes": 195542592,
+      "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+    },
+    "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pure_strict/wrfout_d01_2026-08-16_12:00:00": {
+      "bytes": 635851912,
+      "sha256": "9408b3c75cd7410a7d036dd4317f195f6b0a69e4124510364d0f3eedaee11fd1"
+    },
+    "/var/tmp/kdm6_pr62_extent_patch_20261006/build_final/build-artifacts.sha256": {
+      "bytes": 1233,
+      "sha256": "f324dc6795cd3a42851c43fd790c07de00ba084ad3667c4c46ba5ced6755d79e"
+    },
+    "/var/tmp/kdm6_pr62_extent_patch_20261006/build_final_manifest.json": {
+      "bytes": 4930,
+      "sha256": "df41c94adafe13d9749fdb667ee1e39962a5fea53d85d14bc587a471f69866f2"
+    },
+    "/var/tmp/kdm6_pr62_extent_patch_20261006/candidate_trace_summary.json": {
+      "bytes": 14379,
+      "sha256": "e7320cb672367b6cab9113c60a850d4bc54defc70093d6199ab933e21911d9fc"
+    },
+    "/var/tmp/kdm6_pr62_extent_patch_20261006/native_run_final/kdm6_first_call_post.raw": {
+      "bytes": 195542592,
+      "sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51"
+    },
+    "/var/tmp/kdm6_pr62_extent_patch_20261006/native_run_final/kdm6_first_call_pre.raw": {
+      "bytes": 195542592,
+      "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+    },
+    "/var/tmp/kdm6_pr62_extent_patch_20261006/native_run_final/pr62_extent_cells.txt": {
+      "bytes": 24716,
+      "sha256": "1fea469d3d9d62ee9680e0e3084010ba5f50657217b799e3dd71c5ff9721b626"
+    },
+    "/var/tmp/kdm6_pr62_extent_patch_20261006/native_run_final/wrf.exe": {
+      "bytes": 69720464,
+      "sha256": "15cbd37862eeb6b8de3bd4802691a26f8257aecb817077a97f78d5237f432a34"
+    },
+    "/var/tmp/kdm6_pr62_extent_patch_20261006/native_run_final/wrfout_d01_2026-08-16_12:00:00": {
+      "bytes": 635851912,
+      "sha256": "24d41f956840a3383f27c0e76a0cb673383c65bf61e1aee5a0921337f2243ec8"
+    },
+    "/var/tmp/kdm6_pr62_extent_patch_20261006/pr62_native_run_receipt.json": {
+      "bytes": 19193,
+      "sha256": "29abc0260e50deb9bb490ca84a5c3184194b771fd63620151ddd15bdc9510886"
+    },
+    "/var/tmp/kdm6_pr62_gap_trace_20261006/native_run_full_trace/kdm6_first_call_post.raw": {
+      "bytes": 195542592,
+      "sha256": "526285dedd8e27eb3f59529671193c723d6519d99ea4f98d13b89dae39eb7f30"
+    },
+    "/var/tmp/kdm6_pr62_gap_trace_20261006/native_run_full_trace/kdm6_first_call_pre.raw": {
+      "bytes": 195542592,
+      "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+    },
+    "/var/tmp/kdm6_pr62_gap_trace_20261006/native_run_full_trace/pr62_cloud_gap_process.txt": {
+      "bytes": 102688,
+      "sha256": "f92f97d0df5f09020a8af8a3a2e4c9c7c55104ce3d7bb919fa674eb5be46293b"
+    },
+    "/var/tmp/kdm6_pr62_gap_trace_20261006/native_run_full_trace/wrf.exe": {
+      "bytes": 69728792,
+      "sha256": "53dfab38a27357c2484068d917f7b66dfec564ca629a896346ba83dcbc4651d4"
+    }
+  },
+  "candidate_extent_run": {
+    "artifact_restoration": {
+      "PR61_and_candidate_raw_files_distinct_inodes": true,
+      "PR61_post_expected_and_current_sha256": "526285dedd8e27eb3f59529671193c723d6519d99ea4f98d13b89dae39eb7f30",
+      "PR61_pre_expected_and_current_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "candidate_post_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+      "hardlink_incident_recorded_in": "/var/tmp/kdm6_pr62_extent_patch_20261006/pr62_native_run_receipt.json",
+      "incident_status": "A hardlink alias briefly caused a candidate execution to rewrite shared historical mutable output names; independent byte-identical control raw files were copied back, expected hashes restored, and candidate files detached. The history remains disclosed.",
+      "verification": "Current retained PR61 pre/post raw hashes equal the expected historical hashes; candidate raw captures have distinct inodes and nlink=1. The initial hardlink rewrite remains disclosed in the source run receipt."
+    },
+    "candidate_reflectivity": {
+      "max_dbz": 68.50911712646484,
+      "min_dbz": -35.0,
+      "nonfinite": 0,
+      "total": 2573532,
+      "variable": "REFL_10CM"
+    },
+    "candidate_t20_output_differences_vs_control": {
+      "MU_MUB_condensate_number_fields_unchanged": true,
+      "QVAPOR_changed_cells": 496,
+      "QVAPOR_max_abs_difference_kgkg": 1.862645149230957e-09,
+      "REFL_10CM_changed_cells": 21,
+      "REFL_10CM_max_abs_difference_dBZ": 1.1444091796875e-05,
+      "T_changed_cells": 111,
+      "T_max_abs_difference_K": 6.103515625e-05,
+      "all_changes_finite": true
+    },
+    "candidate_tplus20_geometry_reference": {
+      "active_cell_total": 2533440,
+      "column_closure_max_abs_pa": 0.00010944342648144811,
+      "formula": "dp=-(C1H*(MU+MUB)+C2H)*DNW; area=DX*DY/(MAPFAC_MX*MAPFAC_MY); layer_dry_mass=area*dp/9.81",
+      "gap_QC_mass_kg": 477.4698860937005,
+      "gap_cell_QCLOUD_t20_equals_raw_post": true,
+      "gap_dry_layer_mass_kg": 1551842443.7042882,
+      "gridtype": "C",
+      "hybrid_opt": 2,
+      "layer_interface_closure_max_abs_pa": 0.002499805738352734,
+      "limitation": "t+20 weights are diagnostic references only; same-call MU/MUB, hybrid coefficients, and map metrics were not captured with KDM6 raw output.",
+      "negative_proxy_is_physical_water": false,
+      "pre_negative_QC_signed_proxy_kg": -2124452.5106343324,
+      "raw_post_QC_vs_candidate_t20_QCLOUD_exact_matches": 2533436,
+      "raw_post_QC_vs_candidate_t20_QCLOUD_max_abs_difference_kgkg": 2.495653461664915e-09
+    },
+    "identity": {
+      "archive_sha256": "85bb7a2811bca7d878af6c9eb8a8f625b1d8c6816de4b9c6407dd17c5a755c38",
+      "build_manifest_note": "Fresh PR62 manifest replaces the preserved stale inherited PR61 manifest and binds production source, diagnostic extension, CPP output, selected object/archive member, archive, executable and pinned Intel compile/preprocessor inputs. Host closure remains partial.",
+      "build_manifest_path": "/var/tmp/kdm6_pr62_extent_patch_20261006/build_final_manifest.json",
+      "build_manifest_sha256": "df41c94adafe13d9749fdb667ee1e39962a5fea53d85d14bc587a471f69866f2",
+      "generated_fortran_sha256": "a847491d8599eb71c513dd002ed583110fd574fe259865cd1a803018ff2b57db",
+      "instrumented_source_sha256": "10879c5cfaebd5969c2e70dc0c4b6e187bbe6c1ca09244187d302b18c40903f2",
+      "link_argv_status": "The retained host link input manifest is hash-bound and matches PR61; the command record references the retained PR61 link-library list but does not expand every linker argument. The selected object/archive member and resulting executable/launch-copy hashes are bound; host closure remains partial.",
+      "object_and_archive_member_sha256": "668047a5584fb63d4c0fcbc4caaabb1190131f9941a8975c535f028dce03bcc0",
+      "object_sha256": "668047a5584fb63d4c0fcbc4caaabb1190131f9941a8975c535f028dce03bcc0",
+      "production_candidate_source_sha256": "43be4388b69374caff13d1822b4020103e491a6786da1f2b70da521befe6e3bd",
+      "run_executable_equals_recorded_launch_image": true,
+      "run_executable_sha256": "15cbd37862eeb6b8de3bd4802691a26f8257aecb817077a97f78d5237f432a34",
+      "run_receipt_path": "/var/tmp/kdm6_pr62_extent_patch_20261006/pr62_native_run_receipt.json",
+      "run_receipt_sha256": "29abc0260e50deb9bb490ca84a5c3184194b771fd63620151ddd15bdc9510886"
+    },
+    "raw_pair": {
+      "entry_negative_QC": 23494,
+      "entry_negative_QC_now_positive": 30,
+      "entry_negative_QC_now_zero": 23464,
+      "post_QC_positive_NC_zero": 1,
+      "post_gap_NC_per_kg": 0.0,
+      "post_gap_QC_kgkg": 3.0767935754738573e-07,
+      "post_gap_cell_global_i_j_k": [
+        172,
+        76,
+        1
+      ],
+      "post_negative_QC": 0,
+      "post_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+      "pre_matches_retained_PR61_pre": true,
+      "pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "process_aggregate_280_calls": {
+        "final_gaps": 1,
+        "first_gap_after_condensation": 0,
+        "first_gap_after_warm_cold": 0,
+        "first_gap_at_entry": 1,
+        "first_gap_before_condensation": 0,
+        "full_evap_tags": 0
+      }
+    },
+    "receipt_hashes": {
+      "archive_member_receipt_sha256": "f541bbeec47dfdb9e6010e6042f7d3280d76ac9e2cf5ce61c4d7e619bce0c315",
+      "build_artifacts_manifest_sha256": "f324dc6795cd3a42851c43fd790c07de00ba084ad3667c4c46ba5ced6755d79e",
+      "run_artifacts_sha256": "a9f56da41bc248baee40c062c8cb7d4ef04f64d038658b4d8ed33b4fb1a0b4fe"
+    },
+    "representative_full_evap_FP32_storage": {
+      "FP32_Q_plus_QC_sum_after": 0.014251811429858208,
+      "FP32_Q_plus_QC_sum_before": 0.014251811429858208,
+      "FP32_Q_plus_QC_sum_delta": 0.0,
+      "NC_after_internal_m3": 0.0,
+      "QC_after_kgkg": 0.0,
+      "QC_before_stored_kgkg": 3.0924054499337217e-06,
+      "QV_after_logged_kgkg": 0.014251811,
+      "QV_after_stored_kgkg_exact": 0.014251811429858208,
+      "QV_before_logged_kgkg": 0.014248719,
+      "QV_before_stored_kgkg_exact": 0.014248719438910484,
+      "QV_stored_increase_kgkg": 3.0919909477233887e-06,
+      "T_after_stored_K": 293.5903625488281,
+      "T_before_stored_K": 293.5978088378906,
+      "extent_kgkg": 3.0924054e-06,
+      "extent_minus_stored_increase_kgkg": 4.1450221033301204e-10,
+      "float64_sum_from_stored_Q_and_QC_delta_kgkg": -4.1450221033301204e-10,
+      "global_i_j_k": [
+        167,
+        280,
+        6
+      ],
+      "half_QV_ulp_kgkg": 4.656612873077393e-10,
+      "interpretation": "The exact phase extent is paired in the source equations. Stored QV increase alone is short of E by less than half a QV ULP; FP32 QV+QC sums round equal before and after. Per-cell heat closure is not established by the available process fields.",
+      "limitation": "Stored QV alone rises short of E by 4.15e-10 kg/kg. Binary64 addition of stored operands shows that residual, while the FP32 QV+QC sum rounds identically before and after. The process trace lacks xl/cpm and full-precision mid-process inputs, so per-cell stored enthalpy closure is not established.",
+      "thermal_update_sign": "cooling, as required for QC evaporation into QV"
+    },
+    "run_path": "/var/tmp/kdm6_pr62_extent_patch_20261006/native_run_final",
+    "status": "One-rank/one-tile 20-second diagnostic rerun. Candidate pre.raw exactly matches retained PR61 pre.raw; candidate post.raw is distinct. Whole-model conservation/science acceptance not assessed.",
+    "strict_full_PSD_gate": {
+      "QC_NC": {
+        "max_relative_lower_bound_excursion": 3.2416831663439893e-08,
+        "positive_mass_zero_number_gap": 1,
+        "positive_pairs_above_max_mean_mass": 0,
+        "positive_pairs_below_min_mean_mass": 9,
+        "violations": 10
+      },
+      "QG_BG": {
+        "max_relative_lower_density_excursion": 5.71090539303043e-08,
+        "max_relative_upper_density_excursion": 5.929800073189995e-08,
+        "positive_pair_density_above_900_kg_m3": 30067,
+        "positive_pair_density_below_100_kg_m3": 1142,
+        "violations": 33674,
+        "zero_mass_positive_volume": 2465,
+        "zero_mass_positive_volume_BG_max_m3kg": 9.984235660454033e-12
+      },
+      "QI_NI": {
+        "max_relative_lower_bound_excursion": 3.826754824132195e-08,
+        "positive_pairs_above_max_mean_mass": 0,
+        "positive_pairs_below_min_mean_mass": 3,
+        "violations": 3
+      },
+      "QR_NR": {
+        "max_relative_lower_bound_excursion": 1.498433401803112e-07,
+        "max_relative_upper_bound_excursion": 5.507374734037285e-08,
+        "positive_pairs_above_max_mean_mass": 1,
+        "positive_pairs_below_min_mean_mass": 259,
+        "violations": 260
+      },
+      "separate_initializer_cap_diagnostic": {
+        "gate_interpretation": "Not counted as a general post-run PSD violation: the cap constrains candidate prior construction; no source runtime clamp was found.",
+        "post_NI_times_DEN_above_candidate_prior_cap_1e6_m3": 3533
+      },
+      "status": "FAIL"
+    }
+  },
+  "count_findings": {
+    "post_gap_QC_1e-12_to_1e-9": 13873,
+    "post_gap_QC_1e-15_to_1e-12": 35193,
+    "post_gap_QC_1e-9_to_1e-7": 0,
+    "post_gap_QC_above_1e-7": 1,
+    "post_gap_pre_call_NC_positive": 49021,
+    "post_gap_pre_call_NC_zero": 46,
+    "post_gap_total": 49067,
+    "pre_call_negative_QC": 23494
+  },
+  "counterfactual_preserve_entry_N_mean_mass": {
+    "assumption": "Use post-return gap QC divided by pre-call public NC as a simple preserve-entry-N illustration; entry N is not the final tendency-updated N.",
+    "cloud_source_mean_mass_bounds_kg": [
+      4.188790204786391e-15,
+      3.0300855069345996e-10
+    ],
+    "gate_interpretation": "Not a predicted post-patch state or PSD validation; defer-only number transfer does not establish realizability.",
+    "illustrative_QC_over_entry_N_kg_particle": {
+      "count": 49021,
+      "max": 1.146293865911475e-11,
+      "min": 9.169908451747955e-22,
+      "p50": 8.581909321979244e-20,
+      "p90": 1.0483803573446628e-19,
+      "p99": 1.547030669759926e-19,
+      "sum": 2.2003554179835358e-11
+    },
+    "illustrative_below_source_min_cells": 48992,
+    "illustrative_cells_with_entry_N_positive": 49021
+  },
+  "dry_pressure_weighted_reference": {
+    "area_metric": "Native source-derived horizontal integration metric DX*DY/(MAPFAC_MX*MAPFAC_MY); AREA2D is separate active physics DX*DY field.",
+    "formula": "dp_dry=-(C1H*(MU+MUB)+C2H)*DNW; area=DX*DY/(MAPFAC_MX*MAPFAC_MY); m_dry=area*dp_dry/9.81; species mass=sum(q_kgkg_dry*m_dry_kg_dry)",
+    "gap_QC_signed_mass_kg": 1746.0142133480726,
+    "gap_share_positive_QC_mass": 1.2293553811228928e-09,
+    "gravity_assumption_m_s2": 9.81,
+    "limits": [
+      "weights use t+20 WRF output geometry, not same-call geometry capture",
+      "the raw KDM6 post fields are first-call return values; later host updates cause small QCLOUD differences in t+20 output",
+      "accessible source/build does not establish the executed host binary mass-closure contract",
+      "negative QC signed proxy is not physical negative water"
+    ],
+    "post_positive_QC_mass_kg": 1420268085338.565,
+    "pre_negative_QC_signed_proxy_kg": -2124452.5106343324,
+    "status": "DIAGNOSTIC_REFERENCE_ONLY"
+  },
+  "geometry_and_mapping_checks": {
+    "AREA2D_over_native_area_minus_one_min_max": [
+      -0.06710776453877543,
+      -0.011711082474217593
+    ],
+    "AREA2D_semantics": "serialized description says dx/dy/map factors, but source contract binds active physics AREA2D=DX*DY; do not use as native dynamics integration metric",
+    "DNW_sum": -1.0,
+    "gridtype": "C",
+    "hybrid_column_closure_max_abs_error_pa": 0.00010944342648144811,
+    "hybrid_layer_interface_max_abs_error_pa": 0.002499805738352734,
+    "hybrid_opt": 2,
+    "native_area_m2_min_median_max": [
+      25296246.428208888,
+      26341443.91653527,
+      26798379.330105506
+    ],
+    "raw_active_shape_y_k_x": [
+      280,
+      39,
+      232
+    ],
+    "raw_post_QC_vs_t20_QCLOUD_exact_matches": 2484370,
+    "raw_post_QC_vs_t20_QCLOUD_max_abs_difference_kgkg": 2.495653461664915e-09,
+    "raw_post_QC_vs_t20_QCLOUD_total": 2533440,
+    "wrfout_interior_crop_shape_y_k_x": [
+      280,
+      39,
+      232
+    ],
+    "wrfout_time_record": "t+20; second retained record"
+  },
+  "native_process_trace": {
+    "aggregate_counts": {
+      "aggregate_units_note": "The tagged QC residual and QV delta are sums of mixing ratios from per-KDM62D diagnostics across calls, not column or domain mass integrals.",
+      "final_QC_positive_NC_zero": 49067,
+      "first_gap_stage_after_condensation": 49010,
+      "first_gap_stage_after_warm_cold": 13,
+      "first_gap_stage_before_condensation": 0,
+      "first_gap_stage_entry": 44,
+      "kdm62d_calls": 280,
+      "max_per_call_tagged_full_evap_QC_residual_kgkg": 5.8207661e-11,
+      "pcond_equals_negative_QC_over_dtcld_branches": 2299811,
+      "post_update_positive_QC_in_full_evap": 49066,
+      "sum_tagged_QC_residual_over_cells_kgkg": 1.5258068053469742e-07,
+      "sum_tagged_QV_delta_over_cells_kgkg": 2.007886919134762,
+      "tagged_full_evap_residuals": 49066,
+      "untagged_final_gaps": 1
+    },
+    "candidate_patch_sha256": "acbbf4985e1bcd919ca96c7cf8c72a900a6821301ebc2df99484b7e9f3986a8b",
+    "candidate_review": "Reviewed source-level math: positive E=QC_before is captured before mutation; unchanged equality predicate transfers NC; positive-E branch sets QC=0, adds E to QV, and subtracts E*xl/cpm from temperature. Zero-E equality retains legacy NC transfer and old Q/QC/T operations; all other cells retain old Q/QC/T sequence. This is a focused candidate review, not runtime or scientific validation.",
+    "candidate_source_sha256": "43be4388b69374caff13d1822b4020103e491a6786da1f2b70da521befe6e3bd",
+    "executable_sha256": "53dfab38a27357c2484068d917f7b66dfec564ca629a896346ba83dcbc4651d4",
+    "generated_fortran_sha256": "624ffc81a9c116577ee4ec5d52c74fa0c9410b0b4a931a28a3191f6a514f10cf",
+    "instrumented_source_sha256": "3d2ae3e3428be428231b10bb06aabb42bdc9cea52e0891f824d6cfe5cd2dd8a8",
+    "interpretation": "Process evidence supports cancellation residue in the exact full-cloud-evaporation branch for 49,066 of 49,067 returned QC-positive/NC-zero gaps in this trace. One gap remains untagged. This is not attribution for other runs or proof of whole-model conservation.",
+    "object_and_archive_member_sha256": "bde8436b902352ff54e1d2c869c97e40d840f0f933d8374149f9297cc239ab7b",
+    "run": "/var/tmp/kdm6_pr62_gap_trace_20261006/native_run_full_trace",
+    "scope": "Instrumented one-rank, one-tile first-call trace; KDM62D invoked 280 times. Raw pre/post are byte-identical to retained combined PR61 captures.",
+    "selected_cell": {
+      "NC_after_internal_m3": 0.0,
+      "NC_before_internal_m3": 2891842.0,
+      "QC_before_kgkg": 3.0924054e-06,
+      "QV_after_kgkg": 0.014251811,
+      "QV_before_kgkg": 0.014248719,
+      "T_after_K": 293.5904,
+      "T_before_K": 293.5978,
+      "double_precision_remainder_kgkg": 1.1368683772161603e-13,
+      "dtcld_s": 20.0,
+      "full_evap_branch": true,
+      "i": 167,
+      "j": 280,
+      "k": 6,
+      "pcond_kgkg_s": -1.5462027e-07,
+      "stored_QC_after_kgkg": 2.2737368e-13
+    }
+  },
+  "post_gap_QC_kgkg_stats": {
+    "count": 49067,
+    "max": 3.0767935754738573e-07,
+    "min": 1.7763568394002505e-15,
+    "p50": 2.2737367544323206e-13,
+    "p90": 1.4551915228366852e-11,
+    "p99": 2.9103830456733704e-11,
+    "sum": 4.6026003808208316e-07
+  },
+  "pre_call_negative_QC_kgkg_stats": {
+    "count": 23494,
+    "max": -4.5925943257170666e-20,
+    "min": -4.586014483720646e-07,
+    "p50": -2.4278758257306743e-12,
+    "p90": -1.298145616660141e-15,
+    "p99": -1.3621322824628962e-17,
+    "sum": -0.0001860653140333421
+  },
+  "receipt_assembly": {
+    "base_reducer_output": "The reducer at runner.path emits artifact hashes for retained PR61 pre/post raw and matched t+20 WRF output, geometry checks, counts, and weighted references.",
+    "base_reducer_sha256": "a16154c60184fda1e75f0f69e8b4a06042fdb5dad286b05f998824f97723ce58",
+    "separately_added_fields": "native_process_trace and its native trace artifact hashes/build identity were appended from the instrumented PR62 run log and build manifest; they are not generated by the base reducer."
+  },
+  "runner": {
+    "path": "/var/tmp/pr62_moment_scale_audit_20261006.py",
+    "sha256": "a16154c60184fda1e75f0f69e8b4a06042fdb5dad286b05f998824f97723ce58"
+  },
+  "schema": "pr62_moment_scale_audit_v1",
+  "scope": "Read-only scale and source-bound moment audit of the retained PR61 call, plus a matched-input PR62 positive-extent candidate rerun and process trace; no forecast/science acceptance or whole-model conservation claim."
+}

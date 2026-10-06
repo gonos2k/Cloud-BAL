@@ -1,0 +1,85 @@
+{
+  "schema": "pr62_team_validation_v1",
+  "recorded_utc": "2026-10-06T09:20:38.453336+00:00",
+  "base_commit": "6f403258a8b67675e0882f0edb0cbbe3a6ee5459",
+  "tested_source_checkout": "isolated worktree; source bytes tested during development, not a full clean producer build",
+  "status": "PASS_SCOPED_IMPLEMENTATION_WITH_NATIVE_PSD_FAIL",
+  "code_source_sha256": {
+    "src/common/cloud_bal_pipeline.f90": "a9e923b4d23c1bc75b54f474b8ec7a74822b3b9b78a2f787e6b5805b8800761b",
+    "src/common/cloud_bal_real_netcdf.f90": "3b1caedfa0f567f71b12d6198c69daac364aad8fa281f5e9728877936599f5f4",
+    "tools/hydrometeor_moments.py": "6d9308582226ce79cf9e20e57927008de86c7c4fd5d2089ea27f1639810752bc",
+    "tools/validate_shadow_diagnostics.py": "1dfd906f75ba8ae54c457e7b73a55215564de54f86ced156eb7df6ae65c39360",
+    "tests/test_hydrometeor_moments.py": "fd6bdbb3826086cf2acee7f61dc04d0a9c3094a61d7a23114516626c811e08c5",
+    "tests/test_pipeline.f90": "0220a31b2eb0ee2f0863f4ebd18dad93208f218464579c6cad7262efdd7fa79a",
+    "tests/test_real_shadow_io_contract.f90": "034eb35aa140a4192e870082c9b1ea161d7f5fb6f05a17f34f3d404f61572855",
+    "tests/check_physical_contract_shadow.py": "b7d203affb2c2bcde1bfabed1b43cdca28dcffee0885a0d696a0561511c41e21",
+    "tests/run_real_shadow_io_contract_tests.sh": "fb883a77b996a31ff0691f6b2505739802de5e15df666181b4b0cd5a6f4c5d34"
+  },
+  "evidence_receipts_sha256": {
+    "docs/evidence/pr62_native_cloud_run_receipt_20261006.json": "aef5ab00e96ed4f00bab059623827c971b1a070bbe55dd74592adf2c5f14b159",
+    "docs/evidence/pr62_native_cloud_sha256_20261006.txt": "2f047df0cb179359806c10412378a1d0096f2aea216c9ec24520c67a2f92e10b",
+    "docs/evidence/pr62_native_cloud_build_manifest_20261006.json": "1511b02821686333886203ae0c894761fe67bd7dc83ae268457197670a4a2dc3",
+    "docs/evidence/pr62_component_contract_readback.json": "88c01385a8c0030e4da3338c8f41a41434d7e85137df85dc2ccdd62fea533901",
+    "docs/evidence/pr62_moment_scale_audit.json": "2aa089300636f7dce5abf478bc80214185ed41ac63553da9d6667b5523a6ee53",
+    "docs/evidence/pr62_native_cloud_gate_audit_20261006.json": "a333567f3103b2661c863507c4f2ec1cefc169b28c8823916d937e9c985ff2b6",
+    "docs/evidence/pr62_precall_cloud_gap.json": "372bf5743cb70609f2c99c780c15b25c2d027e9cd162f6a41beedfb5335b4f27"
+  },
+  "root_checks": {
+    "/var/tmp/pr62_review_20261006/python_batch_initial/receipt.json": "8e2a1714b01cdab87ca161e4e17d36f924c67b49a1bd08c31adea272f5868325",
+    "/var/tmp/pr62_review_20261006/patch_chain_check.json": "a9297852795a875078a2869d284e04c7c3fa1e2d401c6f628d4a8674e77784e6",
+    "/var/tmp/pr62_review_20261006/native_artifact_identity_check.json": "b156d114e0c6f3c4d55641063218610ebb0f9ef72679197e62797f801c95c96a",
+    "/var/tmp/pr62_review_20261006/native_output_check.json": "e90e7216d66a72ddeefb165d8045c0b26e66974e711fca2550bb9e0bb5d2158f",
+    "/var/tmp/pr62_review_20261006/isolated_graph_attempt/receipt.json": "93e3dc4128b30376e1f8b0df31d2c8032a32ffe979832d59f251b2c5e050350b"
+  },
+  "team": {
+    "max_simultaneous_agents": 4,
+    "model": "gpt-6-luna",
+    "reasoning": "high",
+    "reviews": [
+      "common volume helper and independent file replay",
+      "contract pipeline/writer implementation and final source attribution",
+      "native source-copy process trace and matched execution",
+      "independent process math, full bound counts, mapped-scale caveats"
+    ],
+    "scoped_unresolved_implementation_blockers": []
+  },
+  "validation": {
+    "focused_python_tests_passed": 87,
+    "pinned_intel_pipeline": "O0/O2 PASS; final source hashes in component receipt",
+    "pinned_intel_writer": "O0/O2 actual 2x2x2 zero-change fixture PASS; pre-cleanup pipeline bytes recorded separately",
+    "independent_readback": "11 corruptions rejected for each writer fixture; 2 synthetic reader controls accepted",
+    "native": "one rank, one tile, 20 seconds, matched first-call input, reused host objects",
+    "patch_chain": "exact baseline61bac -> positive extent43be -> diagnostic10879 reconstruction verified"
+  },
+  "physical_result": {
+    "QC_positive_zero_NC_return_count": 1,
+    "negative_QC_entry_count": 23494,
+    "strict_moment_violations": {
+      "cloud": 10,
+      "rain": 260,
+      "ice": 3,
+      "graupel_volume": 33674
+    },
+    "reflectivity_t20_nonfinite": 0,
+    "full_physical_approval": "FAIL_OPEN",
+    "open": [
+      "pre-call moment/negative QC generating steps",
+      "joint Q/N/BG transport and finalized process admissibility",
+      "source/boundary authority and feasible joint trial search",
+      "same-call mapped mass/energy, parallel and full host build closure",
+      "BASE/HYDRO/COUPLED 10/30/60 minute and forecast/observation comparisons"
+    ]
+  },
+  "retained_incidents": [
+    "wrong CPP diagnostic attempt excluded",
+    "missing module original log overwritten; reproduction labeled separately",
+    "hardlinked historical raw/launch files overwritten then restored to committed expected bytes; mutable outputs detached",
+    "isolated historical graph update restored; maintained incremental KG is performed after freeze"
+  ],
+  "limits": [
+    "No full unit-suite claim.",
+    "No native total-energy or whole-domain conservation claim.",
+    "Component identity is a caller label; source authority is not authenticated.",
+    "Native patch is an external research source-copy patch, not a deployment to maintained WRF."
+  ]
+}

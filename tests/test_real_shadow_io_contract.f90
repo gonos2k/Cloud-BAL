@@ -77,6 +77,20 @@ PROGRAM test_real_shadow_io_contract
       CALL check(rc==NF90_NOERR,'final candidate receipt closes',failures)
     END IF
   END IF
+  CALL make_physical_result(result,input,candidate,config%balance)
+  CALL write_shadow_diagnostics('verified-physical-shadow.nc',input,candidate,longitude, &
+    result,config,residual,residual,status,operational)
+  CALL check(status==STATUS_OK,'contracted SHADOW state must be writable after replay',failures)
+  IF (status==STATUS_OK) THEN
+    rc=nf90_open('verified-physical-shadow.nc',NF90_NOWRITE,ncid)
+    CALL check(rc==NF90_NOERR,'contracted SHADOW can be reopened',failures)
+    IF (rc==NF90_NOERR) THEN
+      CALL check_physical_contract_receipt(ncid,failures)
+      rc=nf90_close(ncid)
+      CALL check(rc==NF90_NOERR,'contracted SHADOW closes after readback',failures)
+    END IF
+  END IF
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
 
   result%candidate_evaluation%canonical_accounting_assessed=.FALSE.
   CALL validate_shadow_write_contract(input,candidate,operational,result,config,status,reason)
@@ -2881,6 +2895,55 @@ CONTAINS
       pipeline%candidate_budget,pipeline%candidate_evaluation,status,reason)
     IF (status/=STATUS_OK) ERROR STOP 'invalid test candidate endpoint'
   END SUBROUTINE make_result
+
+  SUBROUTINE make_physical_result(pipeline,background,candidate,balance_config)
+    TYPE(cloud_bal_pipeline_result), INTENT(OUT) :: pipeline
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    TYPE(balance_operator_config), INTENT(IN) :: balance_config
+    TYPE(physical_joint_candidate_contract) :: contract
+    INTEGER :: nx,ny,nz,status,reason
+    nx=background%grid%nx; ny=background%grid%ny; nz=background%grid%nz
+    ALLOCATE(contract%coverage(nx,ny,nz),contract%source_increment(8,nx,ny,nz), &
+      contract%boundary_increment(8,nx,ny,nz),contract%physical_tolerance(8,nx,ny,nz))
+    contract%contract_identity='test-zero-increment-contract-v1'
+    contract%coverage=background%above_ground
+    contract%source_increment=0.0_real64
+    contract%boundary_increment=0.0_real64
+    contract%physical_tolerance=0.0_real64
+    CALL make_result(pipeline,nx,ny,nz,background,candidate,balance_config)
+    pipeline%physical_contract=contract
+    CALL evaluate_joint_candidate(background,candidate,balance_config,pipeline%candidate_budget, &
+      pipeline%candidate_evaluation,status,reason,physical_contract=contract)
+    IF (status/=STATUS_OK .OR. &
+        pipeline%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS) THEN
+      ERROR STOP 'physical writer fixture did not pass component evaluation'
+    END IF
+  END SUBROUTINE make_physical_result
+
+  SUBROUTINE check_physical_contract_receipt(ncid,failures)
+    INTEGER, INTENT(IN) :: ncid
+    INTEGER, INTENT(INOUT) :: failures
+    INTEGER :: rc,variable
+    CHARACTER(LEN=128) :: identity
+    INTEGER(int32) :: evaluation_status
+    REAL(real64) :: source(8,2,2,2)
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'physical_contract_identity',identity)
+    CALL check(rc==NF90_NOERR .AND. TRIM(identity)=='test-zero-increment-contract-v1', &
+      'caller contract identity label reads back exactly',failures)
+    rc=nf90_get_att(ncid,NF90_GLOBAL,'physical_feasibility_status',evaluation_status)
+    CALL check(rc==NF90_NOERR .AND. evaluation_status==PHYSICAL_FEASIBILITY_PASS, &
+      'contract assessment reads back as component PASS',failures)
+    rc=nf90_inq_varid(ncid,'physical_source_increment',variable)
+    source=HUGE(1.0_real64)
+    IF (rc==NF90_NOERR) rc=nf90_get_var(ncid,variable,source)
+    CALL check(rc==NF90_NOERR .AND. ALL(source==0.0_real64), &
+      'prescribed source increments read back exactly',failures)
+    rc=nf90_inq_varid(ncid,'physical_boundary_increment',variable)
+    source=HUGE(1.0_real64)
+    IF (rc==NF90_NOERR) rc=nf90_get_var(ncid,variable,source)
+    CALL check(rc==NF90_NOERR .AND. ALL(source==0.0_real64), &
+      'prescribed boundary increments read back exactly',failures)
+  END SUBROUTINE check_physical_contract_receipt
 
   SUBROUTINE check_endpoint_receipt(ncid,budget,failures)
     INTEGER, INTENT(IN) :: ncid

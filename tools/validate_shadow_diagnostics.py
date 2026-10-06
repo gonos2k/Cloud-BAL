@@ -376,6 +376,22 @@ CANDIDATE_EVALUATION_ATTRIBUTES = frozenset((
     *CANDIDATE_EVALUATION_FLOAT64_ATTRIBUTES,
     "candidate_evaluation_scope",
 ))
+PHYSICAL_COMPONENTS = (
+    "dry_mass", "vapor", "cloud_water", "cloud_ice", "rain", "snow",
+    "graupel", "mixture_enthalpy",
+)
+PHYSICAL_FEASIBILITY_PASS = 1
+PHYSICAL_CONTRACT_VARIABLES = frozenset((
+    "physical_contract_coverage", "physical_source_increment",
+    "physical_boundary_increment", "physical_tolerance",
+))
+PHYSICAL_CONTRACT_ATTRIBUTES = frozenset((
+    "physical_contract_version", "physical_contract_identity",
+    "physical_contract_adjustable_variables", "physical_contract_component_order",
+    "physical_contract_component_units", "physical_feasibility_status",
+    "physical_feasibility_reason", "physical_feasibility_cells",
+    "physical_feasibility_residual_scaled",
+))
 ENDPOINT_SCALE_ATTRIBUTE = "candidate_endpoint_enthalpy_arithmetic_scale_j"
 ENDPOINT_SPECIES_SCALE_ATTRIBUTE = "candidate_endpoint_species_arithmetic_scale_kg"
 ENDPOINT_VECTOR_ATTRIBUTES = (
@@ -6080,6 +6096,304 @@ def validate_cloud_analysis_provenance(dataset, require) -> tuple[bool, bool]:
     return present, clean
 
 
+def validate_physical_joint_contract(dataset, above, require) -> bool:
+    """Replay the serialized eight-component contract from stored thermo state."""
+    extensions = getattr(dataset, "schema_extensions", "").split(",")
+    declared = "physical_joint_candidate_v1" in extensions
+    present = declared or bool(PHYSICAL_CONTRACT_ATTRIBUTES & set(dataset.ncattrs())) \
+        or bool(PHYSICAL_CONTRACT_VARIABLES & set(dataset.variables))
+    if not present:
+        return False
+    require(declared, "physical joint candidate extension")
+    require(PHYSICAL_CONTRACT_ATTRIBUTES <= set(dataset.ncattrs()),
+            "physical joint candidate attributes")
+    require(PHYSICAL_CONTRACT_VARIABLES <= set(dataset.variables),
+            "physical joint candidate variables")
+    require(getattr(dataset, "physical_contract_version", "") ==
+            "physical_joint_candidate_v1", "physical joint candidate version")
+    require(exact_scalar_integer(getattr(dataset, "diagnostic_schema_version", None)) in (5, 7, 8),
+            "physical joint candidate schema")
+    identity = getattr(dataset, "physical_contract_identity", "")
+    require(isinstance(identity, str) and bool(identity.strip()) and len(identity) <= 128,
+            "physical contract caller identity label")
+    require(getattr(dataset, "physical_contract_component_order", "") == ",".join(PHYSICAL_COMPONENTS),
+            "physical contract component order")
+    require(getattr(dataset, "physical_contract_component_units", "") == "kg,kg,kg,kg,kg,kg,kg,J",
+            "physical contract component units")
+
+    coverage_var = dataset.variables.get("physical_contract_coverage")
+    if coverage_var is None:
+        return True
+    shape = tuple(above.shape)
+    coverage_structure_ok = (
+        coverage_var.dimensions == ("z", "y", "x")
+        and coverage_var.shape == shape
+        and is_signed_int32(coverage_var.dtype)
+        and getattr(coverage_var, "units", "") == "1"
+        and "scale_factor" not in coverage_var.ncattrs()
+        and "add_offset" not in coverage_var.ncattrs()
+    )
+    require(coverage_structure_ok, "physical contract coverage structure")
+    if not coverage_structure_ok:
+        return True
+    try:
+        coverage = values(coverage_var)
+    except (RuntimeError, ValueError, TypeError):
+        require(False, "physical contract coverage values")
+        return True
+    require(np.all((coverage == 0) | (coverage == 1)), "physical contract coverage binary")
+    coverage = coverage == 1
+    require(np.all(~above | coverage), "physical contract full atmospheric coverage")
+
+    increment_names = ("physical_source_increment", "physical_boundary_increment", "physical_tolerance")
+    increment_variables = [dataset.variables[name] for name in increment_names
+                           if name in dataset.variables]
+    structure_ok = len(increment_variables) == len(increment_names)
+    for name, variable in zip(increment_names, increment_variables):
+        valid = (
+            variable.dimensions == ("z", "y", "x", "physical_component")
+            and variable.shape == (*shape, 8)
+            and np.dtype(variable.dtype) == np.dtype(np.float64)
+            and getattr(variable, "units", "") == "kg for components 1:7; J for component 8"
+            and "scale_factor" not in variable.ncattrs()
+            and "add_offset" not in variable.ncattrs()
+        )
+        require(valid, f"{name} structure")
+        structure_ok = structure_ok and valid
+    require(structure_ok, "physical contract increment bundle")
+    if not structure_ok:
+        return True
+    try:
+        arrays = [values(variable).astype(np.float64) for variable in increment_variables]
+    except (RuntimeError, ValueError, TypeError):
+        require(False, "physical contract increment values")
+        return True
+    sources = arrays[:2]
+    tolerances = arrays[2]
+    finite_arrays = all(np.all(np.isfinite(array)) for array in arrays)
+    require(finite_arrays, "physical contract increments finite")
+    require(np.all(tolerances >= 0.0), "physical tolerance nonnegative")
+    if not finite_arrays or np.any(tolerances < 0.0):
+        return True
+    adjustable = exact_scalar_int32(getattr(dataset, "physical_contract_adjustable_variables", None))
+    require(adjustable is not None and adjustable >= 0 and adjustable < (1 << 11),
+            "physical contract adjustable variables")
+
+    status = exact_scalar_integer(getattr(dataset, "physical_feasibility_status", None))
+    reason = exact_scalar_integer(getattr(dataset, "physical_feasibility_reason", None))
+    cells = exact_scalar_int64(getattr(dataset, "physical_feasibility_cells", None))
+    residual = exact_scalar_float64(getattr(dataset, "physical_feasibility_residual_scaled", None))
+    require(status == PHYSICAL_FEASIBILITY_PASS and reason == REASON_NONE,
+            "physical contract writer feasibility status")
+    require(cells == int(np.count_nonzero(above)), "physical contract covered cell count")
+    require(residual == 0.0, "physical contract passing residual")
+    if len(sources) != 2 or len(tolerances) == 0:
+        return True
+
+    prefixes = ("physical_background", "physical_candidate")
+    required_fields = {
+        f"{prefix}_{name}{suffix}"
+        for prefix in prefixes
+        for name in THERMO_FIELDS
+        for suffix in ("", "_valid")
+    } | {
+        "physical_background_dry_air_mass_measure",
+        "physical_candidate_dry_air_mass_measure",
+    }
+    if not required_fields <= set(dataset.variables):
+        require(False, "physical contract canonical thermo state")
+        return True
+    state_structure_ok = True
+    for prefix in prefixes:
+        for name in THERMO_FIELDS:
+            value = dataset.variables[f"{prefix}_{name}"]
+            valid = dataset.variables[f"{prefix}_{name}_valid"]
+            expected_unit = THERMO_VALUE_UNITS[name]
+            value_ok = (value.dimensions == ("z", "y", "x") and value.shape == shape
+                        and np.dtype(value.dtype) == np.dtype(np.float32)
+                        and getattr(value, "units", "") == expected_unit
+                        and "scale_factor" not in value.ncattrs()
+                        and "add_offset" not in value.ncattrs())
+            valid_ok = (valid.dimensions == ("z", "y", "x") and valid.shape == shape
+                        and is_signed_int32(valid.dtype)
+                        and getattr(valid, "units", "") == "1"
+                        and "scale_factor" not in valid.ncattrs()
+                        and "add_offset" not in valid.ncattrs())
+            require(value_ok, f"{prefix} {name} structure")
+            require(valid_ok, f"{prefix} {name} validity structure")
+            state_structure_ok = state_structure_ok and value_ok and valid_ok
+        mass = dataset.variables[f"{prefix}_dry_air_mass_measure"]
+        mass_ok = (mass.dimensions == ("z", "y", "x") and mass.shape == shape
+                   and np.dtype(mass.dtype) == np.dtype(np.float64)
+                   and getattr(mass, "units", "") == "kg dryair"
+                   and "scale_factor" not in mass.ncattrs()
+                   and "add_offset" not in mass.ncattrs())
+        require(mass_ok, f"{prefix} dry mass structure")
+        state_structure_ok = state_structure_ok and mass_ok
+    if not state_structure_ok:
+        return True
+
+    for physical_prefix, canonical_prefix in (("physical_background", "background"),
+                                               ("physical_candidate", "candidate")):
+        for name in THERMO_FIELDS:
+            canonical_name = f"{canonical_prefix}_{name}"
+            if canonical_name not in dataset.variables:
+                continue
+            canonical_var = dataset.variables[canonical_name]
+            canonical_ok = (canonical_var.dimensions == ("z", "y", "x")
+                            and canonical_var.shape == shape
+                            and np.dtype(canonical_var.dtype) == np.dtype(np.float32)
+                            and "scale_factor" not in canonical_var.ncattrs()
+                            and "add_offset" not in canonical_var.ncattrs())
+            require(canonical_ok, f"{canonical_name} canonical structure")
+            if not canonical_ok:
+                continue
+            try:
+                physical_values = values(dataset[f"{physical_prefix}_{name}"])
+                canonical_values = values(canonical_var)
+            except (RuntimeError, ValueError, TypeError):
+                require(False, f"{physical_prefix} {name} canonical values")
+                continue
+            equal = np.array_equal(physical_values[above], canonical_values[above])
+            require(equal, f"{physical_prefix} snapshot matches {canonical_name}")
+            canonical_valid_name = f"{canonical_name}_valid"
+            if canonical_valid_name in dataset.variables:
+                try:
+                    canonical_valid = values(dataset[canonical_valid_name])
+                    physical_valid = values(dataset[f"{physical_prefix}_{name}_valid"])
+                    valid_equal = (canonical_valid.shape == shape
+                                   and np.all(canonical_valid[above] == physical_valid[above]))
+                except (RuntimeError, ValueError, TypeError):
+                    valid_equal = False
+                require(valid_equal, f"{physical_prefix} validity matches {canonical_valid_name}")
+
+    try:
+        canonical_background_mass_var = dataset["dry_air_mass_measure"]
+        physical_background_mass = values(dataset["physical_background_dry_air_mass_measure"])
+        canonical_background_mass = values(canonical_background_mass_var)
+        canonical_background_mass_ok = (
+            canonical_background_mass_var.dimensions == ("z", "y", "x")
+            and canonical_background_mass_var.shape == shape
+            and np.dtype(canonical_background_mass_var.dtype) == np.dtype(np.float64)
+            and getattr(canonical_background_mass_var, "units", "") == "kg dryair"
+            and "scale_factor" not in canonical_background_mass_var.ncattrs()
+            and "add_offset" not in canonical_background_mass_var.ncattrs()
+        )
+        background_mass_equal = (physical_background_mass.shape == shape
+                                 and canonical_background_mass.shape == shape
+                                 and canonical_background_mass_ok
+                                 and np.array_equal(physical_background_mass[above],
+                                                    canonical_background_mass[above]))
+    except (RuntimeError, ValueError, TypeError):
+        background_mass_equal = False
+    require(background_mass_equal, "physical background mass matches dry_air_mass_measure")
+    if "candidate_dry_air_mass_measure" in dataset.variables:
+        try:
+            physical_candidate_mass_var = dataset["physical_candidate_dry_air_mass_measure"]
+            canonical_candidate_mass_var = dataset["candidate_dry_air_mass_measure"]
+            physical_candidate_mass = values(physical_candidate_mass_var)
+            canonical_candidate_mass = values(canonical_candidate_mass_var)
+            canonical_candidate_mass_ok = (
+                canonical_candidate_mass_var.dimensions == ("z", "y", "x")
+                and canonical_candidate_mass_var.shape == shape
+                and np.dtype(canonical_candidate_mass_var.dtype) == np.dtype(np.float64)
+                and getattr(canonical_candidate_mass_var, "units", "") == "kg dryair"
+                and "scale_factor" not in canonical_candidate_mass_var.ncattrs()
+                and "add_offset" not in canonical_candidate_mass_var.ncattrs()
+            )
+            candidate_mass_equal = (physical_candidate_mass.shape == shape
+                                    and canonical_candidate_mass.shape == shape
+                                    and canonical_candidate_mass_ok
+                                    and np.array_equal(physical_candidate_mass[above],
+                                                       canonical_candidate_mass[above]))
+        except (RuntimeError, ValueError, TypeError):
+            candidate_mass_equal = False
+        require(candidate_mass_equal,
+                "physical candidate mass matches candidate_dry_air_mass_measure")
+    else:
+        candidate_unchanged = False
+        try:
+            candidate_unchanged = all(
+                np.array_equal(values(dataset[f"physical_candidate_{name}"])[above],
+                               values(dataset[f"physical_background_{name}"])[above])
+                and np.array_equal(
+                    values(dataset[f"physical_candidate_{name}_valid"])[above],
+                    values(dataset[f"physical_background_{name}_valid"])[above],
+                )
+                for name in THERMO_FIELDS
+            )
+            if candidate_unchanged:
+                physical_candidate_mass = values(dataset["physical_candidate_dry_air_mass_measure"])
+                candidate_mass_equal = (physical_candidate_mass.shape == shape
+                                        and np.array_equal(physical_candidate_mass[above],
+                                                           canonical_background_mass[above]))
+            else:
+                candidate_mass_equal = True
+        except (RuntimeError, ValueError, TypeError):
+            require(False, "physical candidate unchanged-state comparison")
+        else:
+            if candidate_unchanged:
+                require(candidate_mass_equal,
+                        "unchanged physical candidate mass matches dry_air_mass_measure")
+
+    component_state = []
+    for prefix, mass_name in (("physical_background", "physical_background_dry_air_mass_measure"),
+                              ("physical_candidate", "physical_candidate_dry_air_mass_measure")):
+        try:
+            mass = values(dataset[mass_name]).astype(np.float64)
+            temperature = values(dataset[f"{prefix}_temperature"]).astype(np.float64)
+            species = np.stack([values(dataset[f"{prefix}_{name}"]).astype(np.float64)
+                                for name in THERMO_SPECIES], axis=-1)
+            pressure_mass = values(dataset["pressure_mass_measure"]).astype(np.float64)
+            valid_fields = [values(dataset[f"{prefix}_{name}_valid"]) for name in THERMO_FIELDS]
+        except (RuntimeError, ValueError, TypeError):
+            require(False, f"{prefix} physical state values")
+            return True
+        for name, valid in zip(THERMO_FIELDS, valid_fields):
+            require(np.all((valid == 0) | (valid == 1)),
+                    f"{prefix} {name} validity binary")
+            require(np.all((valid[above] == 1)), f"{prefix} {name} physical contract coverage")
+        require(np.all(np.isfinite(mass[above])) and np.all(mass[above] >= 0.0),
+                f"{prefix} dry mass for physical contract")
+        require(np.all(np.isfinite(temperature[above])) and np.all(np.isfinite(species[above])),
+                f"{prefix} thermo values for physical contract")
+        for name, field_values in (("temperature", temperature),):
+            lower, upper = PRESSURE_TRANSITION_VALUE_RANGES[name]
+            require(np.all((field_values[above] >= lower) & (field_values[above] <= upper)),
+                    f"{prefix} {name} range for physical contract")
+        for index, name in enumerate(THERMO_SPECIES):
+            lower, upper = PRESSURE_TRANSITION_VALUE_RANGES[name]
+            require(np.all((species[..., index][above] >= lower)
+                           & (species[..., index][above] <= upper)),
+                    f"{prefix} {name} range for physical contract")
+        expected_mass = pressure_mass / (1.0 + np.sum(species, axis=-1))
+        require(np.allclose(mass[above], expected_mass[above], rtol=1.0e-12, atol=1.0e-8),
+                f"{prefix} dry mass matches pressure mass and water state")
+        enthalpy = ((THERMO_CP_DRY + np.sum(THERMO_SPECIES_CP * species, axis=-1))
+                    * (temperature - THERMO_T0)
+                    + np.sum(THERMO_SPECIES_H0 * species, axis=-1))
+        components = np.concatenate((mass[..., None], mass[..., None] * species,
+                                     (mass * enthalpy)[..., None]), axis=-1)
+        if not np.all(np.isfinite(components[above])):
+            require(False, f"{prefix} physical extensive components finite")
+            return True
+        component_state.append(components)
+
+    before, after = component_state
+    source, boundary = sources
+    scale = np.maximum.reduce((np.abs(after), np.abs(before), np.abs(source),
+                               np.abs(boundary), tolerances))
+    safe_scale = np.where(scale == 0.0, 1.0, scale)
+    residual_scaled = after / safe_scale - before / safe_scale - source / safe_scale - boundary / safe_scale
+    tolerance_scaled = tolerances / safe_scale + 64.0 * np.finfo(np.float64).eps * (
+        np.abs(source / safe_scale) + np.abs(boundary / safe_scale)
+        + np.abs(after / safe_scale) + np.abs(before / safe_scale)
+    )
+    require(np.all(np.abs(residual_scaled[above]) <= tolerance_scaled[above]),
+            "independent eight-component local contract replay")
+    return True
+
+
 def validate(path: Path) -> tuple[dict[str, object], list[str]]:
     failures: list[str] = []
     schema_version = -1
@@ -6701,6 +7015,11 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             else base_extensions + ",pressure_thermo_v1" if schema6
             else base_extensions
         )
+        require(extensions.count("physical_joint_candidate_v1") <= 1,
+                "physical joint candidate extension uniqueness")
+        extensions_without_physical = [
+            token for token in extensions if token != "physical_joint_candidate_v1"
+        ]
         # Phi is a dedicated optional pressure-candidate group.  Its contract
         # is identified by its own attributes and variables, so historical
         # files may retain either spelling of the base extension list.
@@ -6730,7 +7049,8 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                               CANDIDATE_DIAGNOSTIC_OPERATOR_EXTENSION + "," +
                               CANDIDATE_DIAGNOSTIC_MASK_EXTENSION)
         base_extension_list = ",".join(
-            token for token in extensions if token != "candidate_interior_hydrostatic_v1"
+            token for token in extensions_without_physical
+            if token != "candidate_interior_hydrostatic_v1"
         )
         if pressure_geopotential_signalled:
             require(
@@ -6953,6 +7273,7 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         )
         fields = {name: values(dataset[name]) for name in FLOAT_UNITS}
         masks = {name: values(dataset[name]) for name in MASKS}
+        validate_physical_joint_contract(dataset, masks["above_ground"].astype(bool), require)
         global_valid_time = exact_scalar_int64(
             getattr(dataset, "valid_time_epoch", None)
         )

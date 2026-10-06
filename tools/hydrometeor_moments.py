@@ -264,8 +264,11 @@ def validate_bulk_volume(
     rho_max = _real_scalar(bulk_density_max_kg_m3)
     if rho_min is None or rho_max is None or rho_min <= 0.0 or rho_max < rho_min:
         return _report("REJECTED", "INVALID_BULK_DENSITY_BOUNDS")
-    lower_volume = r / rho_max
-    upper_volume = r / rho_min
+    with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+        lower_volume = r / rho_max
+        upper_volume = r / rho_min
+    if not np.all(np.isfinite(lower_volume)) or not np.all(np.isfinite(upper_volume)):
+        return _report("REJECTED", "BULK_VOLUME_BOUND_NONFINITE")
     eps = 16.0 * np.finfo(np.float64).eps
     lower_tolerance = eps * np.maximum(np.abs(bg), np.abs(lower_volume))
     upper_tolerance = eps * np.maximum(np.abs(bg), np.abs(upper_volume))

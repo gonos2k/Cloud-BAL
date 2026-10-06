@@ -40,6 +40,7 @@ PROGRAM test_pipeline
              'invalid final state leaves no assessed endpoint',failures)
   CALL test_candidate_diagnostic_domain(failures)
   CALL test_physical_candidate_contract(failures)
+  CALL test_default_physical_contract_is_not_absent(failures)
   config%requested_mode=MODE_OFF
   CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
   CALL check(result%status==STATUS_OK,'OFF must be a successful no-op',failures)
@@ -1399,6 +1400,46 @@ CONTAINS
       'invalid NaN water placeholders fail closed without ordered comparisons',failures)
   END SUBROUTINE test_physical_candidate_contract
 
+  SUBROUTINE test_default_physical_contract_is_not_absent(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: input,candidate,operational
+    TYPE(cloud_bal_pipeline_config) :: local_config
+    TYPE(cloud_bal_pipeline_result) :: result
+    TYPE(physical_joint_candidate_contract) :: empty_contract,blank_identity_contract
+    TYPE(joint_candidate_evaluation) :: evaluation
+    TYPE(pressure_analysis_budget) :: budget
+    INTEGER :: status,reason
+
+    CALL make_state(input)
+    candidate=input
+    operational=input
+    local_config%requested_mode=MODE_SHADOW
+    CALL run_cloud_bal_pipeline(input,candidate,operational,result,local_config)
+    CALL check(result%status==STATUS_OK .AND. same_pipeline_state(input,candidate) .AND. &
+      same_pipeline_state(input,operational), &
+      'an absent physical contract preserves the existing no-op behavior',failures)
+
+    candidate=input
+    operational=input
+    CALL run_cloud_bal_pipeline(input,candidate,operational,result,local_config, &
+      physical_contract=empty_contract)
+    CALL check(result%status==STATUS_FAILED .AND. same_pipeline_state(input,candidate) .AND. &
+      same_pipeline_state(input,operational) .AND. &
+      result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      result%candidate_evaluation%physical_feasibility_reason==REASON_REQUIRED_COVERAGE, &
+      'a supplied default physical contract fails missing coverage and rolls back',failures)
+
+    CALL make_complete_water_fields(input)
+    CALL initialize_physical_contract(input,blank_identity_contract)
+    blank_identity_contract%contract_identity=''
+    CALL evaluate_joint_candidate(input,input,local_config%balance,budget,evaluation,status,reason, &
+      blank_identity_contract)
+    CALL check(status==STATUS_OK .AND. &
+      evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_UNSUPPORTED .AND. &
+      evaluation%physical_feasibility_reason==REASON_AUTHORITY, &
+      'allocated physical declarations with a blank identity are unsupported',failures)
+  END SUBROUTINE test_default_physical_contract_is_not_absent
+
   SUBROUTINE initialize_physical_contract(background,contract)
     TYPE(cloud_bal_state_type), INTENT(IN) :: background
     TYPE(physical_joint_candidate_contract), INTENT(OUT) :: contract
@@ -1406,6 +1447,7 @@ CONTAINS
       contract%source_increment(8,background%grid%nx,background%grid%ny,background%grid%nz), &
       contract%boundary_increment(8,background%grid%nx,background%grid%ny,background%grid%nz), &
       contract%physical_tolerance(8,background%grid%nx,background%grid%ny,background%grid%nz))
+    contract%contract_identity='test-prescribed-increments-v1'
     contract%coverage=background%above_ground
     contract%source_increment=0.0_real64
     contract%boundary_increment=0.0_real64

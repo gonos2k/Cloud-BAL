@@ -38,6 +38,9 @@ MODULE cloud_bal_pipeline
   INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_GEOPOTENTIAL=ISHFT(1,10)
 
   TYPE, PUBLIC :: physical_joint_candidate_contract
+    ! Caller supplied reference label for this declaration set. It does not
+    ! authenticate the physical authority of the declared increments.
+    CHARACTER(LEN=128) :: contract_identity=''
     ! Caller-prescribed per-cell source and boundary increments in kg
     ! (components 1:7) and J (component 8), plus physical tolerances in those
     ! units. Component 1 is the canonical dry-mass metric, not physical gas
@@ -134,6 +137,7 @@ MODULE cloud_bal_pipeline
     ! This is not a physical boundary-flux or native energy closure claim.
     TYPE(pressure_analysis_budget) :: candidate_budget
     TYPE(joint_candidate_evaluation) :: candidate_evaluation
+    TYPE(physical_joint_candidate_contract), ALLOCATABLE :: physical_contract
     REAL(real64), ALLOCATABLE :: requested_surface_pressure(:,:)
     TYPE(cloud_bal_state_type), ALLOCATABLE :: pressure_transition_seed
     LOGICAL, ALLOCATABLE :: thermo_support(:,:,:)
@@ -259,6 +263,7 @@ CONTAINS
     shape3=(/nx,ny,nz/)
     candidate_out=state_in; operational_out=state_in
     result%requested_mode=config%requested_mode
+    IF (PRESENT(physical_contract)) result%physical_contract=physical_contract
     result%outer_iterations=0; result%outer_converged=.FALSE.
     result%outer_max_abs_delta=0.0_real64
     result%thermo_budget=water_phase_budget()
@@ -894,6 +899,11 @@ CONTAINS
       RETURN
     END IF
     IF (IAND(contract%adjustable_variables,NOT(ISHFT(1,11)-1))/=0) THEN
+      evaluation%physical_feasibility_reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (LEN_TRIM(contract%contract_identity)==0) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_UNSUPPORTED
       evaluation%physical_feasibility_reason=REASON_AUTHORITY
       RETURN
     END IF

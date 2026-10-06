@@ -1,0 +1,116 @@
+{
+  "evidence_version": 1,
+  "date": "2026-10-06",
+  "scope": "physical_joint_candidate_v1 writer and independent eight-component file readback",
+  "source_hashes_sha256": {
+    "src/common/cloud_bal_pipeline.f90": "a9e923b4d23c1bc75b54f474b8ec7a74822b3b9b78a2f787e6b5805b8800761b",
+    "src/common/cloud_bal_real_netcdf.f90": "3b1caedfa0f567f71b12d6198c69daac364aad8fa281f5e9728877936599f5f4",
+    "tests/test_pipeline.f90": "0220a31b2eb0ee2f0863f4ebd18dad93208f218464579c6cad7262efdd7fa79a",
+    "tests/test_real_shadow_io_contract.f90": "034eb35aa140a4192e870082c9b1ea161d7f5fb6f05a17f34f3d404f61572855",
+    "tests/check_physical_contract_shadow.py": "b7d203affb2c2bcde1bfabed1b43cdca28dcffee0885a0d696a0561511c41e21",
+    "tests/run_real_shadow_io_contract_tests.sh": "fb883a77b996a31ff0691f6b2505739802de5e15df666181b4b0cd5a6f4c5d34",
+    "tools/validate_shadow_diagnostics.py": "1dfd906f75ba8ae54c457e7b73a55215564de54f86ced156eb7df6ae65c39360"
+  },
+  "writer_fixture_build_source_hashes_sha256": {
+    "src/common/cloud_bal_state.f90": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61",
+    "src/common/cloud_bal_grid_geometry.f90": "3e2b75c5a64730a65dd4762a4ed9cc8fe82017ca95a11cf40690bfa4bca3e703",
+    "src/common/cloud_bal_column_physics.f90": "5df548fe52f4d4fc987344deacadf9de9f6fb68185dd57ed87d0c273d5b8f479",
+    "src/common/cloud_bal_balance_operator.f90": "64631cf4df055b3de9198c87b4eb3650a10078c480dfc995e8de7bb691536747",
+    "src/common/cloud_bal_pipeline.f90": "69201919089deda323e1fdef49cfad859235226bc25e76dd35ff7e5d85e2b6be",
+    "src/common/cloud_bal_real_netcdf.f90": "3b1caedfa0f567f71b12d6198c69daac364aad8fa281f5e9728877936599f5f4",
+    "src/common/cloud_bal_pressure_analysis.f90": "c81ebce5b07998dbe26e7ef40c4dcf787e53550be0c7af106b5f5e31710b0396",
+    "tests/wps_module_stubs.f90": "11fc98fe81cf01dbf1d319a64598906f950f4ff8ec304a747cc6d0618c16d866",
+    "src/common/cloud_bal_wps_adapter.f90": "f063f9b3605fe2504b6d364f858cef82605105a0888825cd795ea03c7c65eacb",
+    "src/lapsprep/module_lapsprep_wps.f90": "d41849677d965d3b8ad1e5834cbd74f99f958f3e9894b7157049ec1dae077cce",
+    "tests/test_real_shadow_io_contract.f90": "034eb35aa140a4192e870082c9b1ea161d7f5fb6f05a17f34f3d404f61572855"
+  },
+  "writer_pipeline_source_snapshot": {
+    "path": "/var/tmp/pr62_joint_contract_evidence_20261006/cloud_bal_pipeline_writer_build.f90",
+    "sha256": "69201919089deda323e1fdef49cfad859235226bc25e76dd35ff7e5d85e2b6be",
+    "method": "reconstructed from final source by reversing only the subsequent optional-presence cleanup hunk; writer fixture scratch timestamps predate that cleanup"
+  },
+  "profile": {
+    "runner": "tests/run_real_shadow_io_contract_tests.sh",
+    "requested_command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 CLOUD_BAL_TEST_SCRATCH_ROOT=/var/tmp bash tests/run_real_shadow_io_contract_tests.sh",
+    "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "o0_flags": [
+      "-stand f08", "-warn all", "-check all", "-fpe0", "-traceback", "-O0",
+      "-fp-model strict", "-fimf-arch-consistency=true", "-no-ftz"
+    ],
+    "o2_flags": [
+      "-stand f08", "-warn all", "-fpe0", "-traceback", "-O2",
+      "-fp-model strict", "-fimf-arch-consistency=true", "-no-ftz"
+    ],
+    "fresh_scratch_root": "/var/tmp",
+    "full_runner_output_log": "not captured to a file; final output was Real SHADOW I/O contract suite passed with pinned Intel/NetCDF inputs (20260816T120000Z)",
+    "pipeline_authority_retest": {
+      "runner": "/var/tmp/pr62_joint_contract_evidence_20261006/run_pipeline_contract.sh",
+      "pipeline_source_sha256": "a9e923b4d23c1bc75b54f474b8ec7a74822b3b9b78a2f787e6b5805b8800761b",
+      "result": "Cloud-BAL pipeline authority tests passed at O0 and O2",
+      "fresh_scratch_directories": [
+        "/var/tmp/pr62-pipeline-O0.1oqbdl",
+        "/var/tmp/pr62-pipeline-O2.Avagr7"
+      ],
+      "log": "/var/tmp/pr62_joint_contract_evidence_20261006/pipeline-O0-O2.log",
+      "log_sha256": "f83027734834957fdcf3e153ca967b4c15d11b5ce7b55e443f709ccb4201e2cd"
+    }
+  },
+  "writer_fixtures": [
+    {
+      "optimization": "O0",
+      "path": "/var/tmp/pr62_joint_contract_evidence_20261006/verified-physical-shadow-O0.nc",
+      "sha256": "1f52fccaac7fe2085bd43d3d8a661514f86a62c91fb35186db3c077258d3593d",
+      "writer_reopen": "passed"
+    },
+    {
+      "optimization": "O2",
+      "path": "/var/tmp/pr62_joint_contract_evidence_20261006/verified-physical-shadow-O2.nc",
+      "sha256": "1f52fccaac7fe2085bd43d3d8a661514f86a62c91fb35186db3c077258d3593d",
+      "writer_reopen": "passed"
+    }
+  ],
+  "independent_readback": {
+    "command": "python3 tests/check_physical_contract_shadow.py <fixture>",
+    "result": "passed for O0 and O2; eleven corruption mutations rejected per fixture",
+    "mutation_cases": [
+      "forged source",
+      "coverage gap",
+      "NaN",
+      "negative tolerance",
+      "wrong coverage shape",
+      "wrong source dtype",
+      "packed tolerance",
+      "missing bundle",
+      "packed candidate mass",
+      "coordinated detached candidate cloud-water bundle and source",
+      "negative vapor with coherent mass and source"
+    ],
+    "positive_controls": [
+      "synthetic cloud-water candidate change with independently recomputed dry mass and declared component source accepted; reader policy only, not an actual producer file",
+      "schema-5 synthetic +0.5 K candidate temperature change accepted with adjustable-temperature bit and independently prescribed m_d*(cp_d + sum(cp_i*r_i))*0.5 enthalpy source; reader policy only, not an actual producer file"
+    ],
+    "logs": [
+      {
+        "path": "/var/tmp/pr62_joint_contract_evidence_20261006/readback-O0.log",
+        "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+      },
+      {
+        "path": "/var/tmp/pr62_joint_contract_evidence_20261006/readback-O2.log",
+        "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+      }
+    ]
+  },
+  "contract_cases": {
+    "omitted_optional_contract": "legacy SHADOW no-op PASS retained",
+    "present_default_constructed_contract": "fails with REQUIRED_COVERAGE and rolls back candidate and operational states",
+    "allocated_arrays_blank_identity": "UNSUPPORTED with REASON_AUTHORITY"
+  },
+  "semantic_limits": {
+    "identity": "caller-supplied label only; not authenticated authority",
+    "independent_file_replay": "eight local component residuals plus coverage and tolerance; not full assess_physical_joint_candidate authority replay",
+    "gate_vs_search": "gate assessment does not imply trial search or optimality",
+    "science_approval": "not established by this test"
+  }
+}

@@ -1,0 +1,444 @@
+{
+  "date_utc": "2026-10-06",
+  "diagnosis": {
+    "CCN_t20": {
+      "cells": 2573532,
+      "finite": 2573532,
+      "negative": 0,
+      "nonfinite": 0,
+      "positive": 2557538,
+      "zero": 15994
+    },
+    "active_cell_shape_xyz": [
+      232,
+      280,
+      39
+    ],
+    "active_cells": 2533440,
+    "candidate_trace_summary_sha256": "e7320cb672367b6cab9113c60a850d4bc54defc70093d6199ab933e21911d9fc",
+    "conditional_prior_cap_diagnostic": {
+      "ice_NI_times_DEN_over_1e6_count": 3533,
+      "interpretation": "Initialization-prior feasibility cap diagnostic only; not treated as a general KDM6 runtime invariant or added to the PSD gate."
+    },
+    "cross_stage_mass_weighted_gap_proxy": {
+      "QC_equivalent_mass_kg": 477.4698860937005,
+      "QC_t20": 3.0767935754738573e-07,
+      "area_native_m2": 25929624.610319857,
+      "dp_dry_Pa": 587.1112521497964,
+      "dry_layer_mass_kg": 1551842443.7042882,
+      "geometry_time": "t+20 WRF output; same-call MU/MUB/DNW/map metrics were not captured; diagnostic proxy only",
+      "i_j_k": [
+        172,
+        76,
+        1
+      ]
+    },
+    "diagnostic_row_aggregate_sha256": "1fea469d3d9d62ee9680e0e3084010ba5f50657217b799e3dd71c5ff9721b626",
+    "full_declared_PSD_bound_validators": {
+      "QCLOUD": {
+        "bound_source": "PR61 declared QCLOUD source mean-particle-mass envelope",
+        "checked_count": 2533440,
+        "mutated_input": false,
+        "reason": "MASS_NUMBER_OUTSIDE_DECLARED_PARTICLE_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "FAIL",
+        "uncertainty_description": "deterministic source envelope; mean mass only",
+        "valid": false,
+        "violation_count": 10
+      },
+      "QGRAUP": {
+        "bound_source": "PR61 declared QGRAUP bulk-density envelope",
+        "checked_count": 2533440,
+        "mutated_input": false,
+        "reason": "MASS_VOLUME_OUTSIDE_DECLARED_DENSITY_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "FAIL",
+        "uncertainty_description": "deterministic source envelope",
+        "valid": false,
+        "violation_count": 33674
+      },
+      "QICE": {
+        "bound_source": "PR61 declared QICE source mean-particle-mass envelope",
+        "checked_count": 2533440,
+        "mutated_input": false,
+        "reason": "MASS_NUMBER_OUTSIDE_DECLARED_PARTICLE_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "FAIL",
+        "uncertainty_description": "deterministic source envelope; mean mass only",
+        "valid": false,
+        "violation_count": 3
+      },
+      "QRAIN": {
+        "bound_source": "PR61 declared QRAIN source mean-particle-mass envelope",
+        "checked_count": 2533440,
+        "mutated_input": false,
+        "reason": "MASS_NUMBER_OUTSIDE_DECLARED_PARTICLE_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "FAIL",
+        "uncertainty_description": "deterministic source envelope; mean mass only",
+        "valid": false,
+        "violation_count": 260
+      }
+    },
+    "full_gate": "FAIL: 1 QC>qmin/NC=0 gap; 9 further cloud mean-mass lower-bound violations; 260 rain mean-mass violations; 3 ice mean-mass violations; 33,674 graupel density/volume violations.",
+    "interpretation": "The paired extent branch removed all 49,066 tagged FP32 cloud residual gaps from the matched baseline; it did not repair the separately present large entry gap or the remaining strict PSD bound violations. Paired QV/QC and temperature arithmetic binds the local phase extent but does not prove native total-energy or whole-domain water closure.",
+    "local_stored_water_arithmetic": {
+      "167,280,6": {
+        "QC_post": 0.0,
+        "QC_pre": 3.0924054499337217e-06,
+        "Q_post": 0.014251811429858208,
+        "Q_pre": 0.014248719438910484,
+        "T_K_post": 293.5903625488281,
+        "T_K_pre": 293.5978088378906,
+        "float64_sum_from_stored_operands_delta": -4.1450221033301204e-10,
+        "pre_sum_ulp": 9.313225746154785e-10,
+        "stored_fp32_Q_plus_QC_post": 0.014251811429858208,
+        "stored_fp32_Q_plus_QC_pre": 0.014251811429858208,
+        "stored_fp32_sum_delta": 0.0
+      },
+      "172,76,1": {
+        "QC_post": 3.0767935754738573e-07,
+        "QC_pre": 5.03652699990198e-07,
+        "Q_post": 0.017737682908773422,
+        "Q_pre": 0.017737485468387604,
+        "T_K_post": 296.0556945800781,
+        "T_K_pre": 296.05615234375,
+        "float64_sum_from_stored_operands_delta": 1.4670433756691637e-09,
+        "pre_sum_ulp": 1.862645149230957e-09,
+        "stored_fp32_Q_plus_QC_post": 0.017737990245223045,
+        "stored_fp32_Q_plus_QC_pre": 0.017737988382577896,
+        "stored_fp32_sum_delta": 1.862645149230957e-09
+      }
+    },
+    "negative_QC_entry": {
+      "entry_negative_count": 23494,
+      "entry_negative_median_kg_kg": -2.4278758257306743e-12,
+      "entry_negative_min_kg_kg": -4.586014483720646e-07,
+      "entry_negative_returned_positive_count": 30,
+      "entry_negative_returned_zero_count": 23464,
+      "entry_negative_unweighted_sum_kg_kg": -0.0001860653140333421,
+      "interpretation": "Entry values are not clipped by this patch; existing initial KDM6 projection clears negative QC. No matching source-specific QV/temperature correction or physical closure is claimed.",
+      "returned_negative_count": 0
+    },
+    "negative_QC_t20_weight_proxy_kg": -2124450.0,
+    "negative_QC_weight_proxy_caveat": "Uses matched t+20 geometry rather than same-call geometry; signed diagnostic weighting, not physical negative-water closure.",
+    "one_remaining_gap": {
+      "entry_NC": 0.0,
+      "entry_QC": 5.03652699990198e-07,
+      "exact64_QC_plus_dt_pcond": 3.0767935754738573e-07,
+      "full_evap_equality_branch": false,
+      "index_i_j_k": [
+        172,
+        76,
+        1
+      ],
+      "interpretation": "Pre-existing entry QC-positive/NC-zero gap; cause remains unlocalized before KDM6. Not attributed to the evaporation residual mechanism.",
+      "returned_QC": 3.0767935754738573e-07
+    },
+    "post_species_gaps": {
+      "QC": {
+        "active_mass_count": 233629,
+        "active_q_gt_declared_threshold_zero_moment": 1,
+        "positive_mass_zero_moment_q_gt_zero": 1
+      },
+      "QG": {
+        "active_mass_count": 65464,
+        "active_q_gt_declared_threshold_zero_moment": 0,
+        "positive_mass_zero_moment_q_gt_zero": 0
+      },
+      "QI": {
+        "active_mass_count": 221419,
+        "active_q_gt_declared_threshold_zero_moment": 0,
+        "positive_mass_zero_moment_q_gt_zero": 0
+      },
+      "QR": {
+        "active_mass_count": 260612,
+        "active_q_gt_declared_threshold_zero_moment": 0,
+        "positive_mass_zero_moment_q_gt_zero": 0
+      }
+    },
+    "reflectivity_t20": {
+      "cells": 2573532,
+      "finite": 2573532,
+      "max": 68.50911712646484,
+      "min": -35.0,
+      "nonfinite": 0
+    },
+    "representative_cell_records": [
+      [
+        " CELL           1         172          76           1 F  5.0365270E-07",
+        "  0.0000000E+00 -9.7986668E-09   20.00000      3.0767936E-07  3.0767936E-07"
+      ],
+      [
+        " CELL           1         167         280           6 T  3.0924054E-06",
+        "  0.0000000E+00 -1.5462027E-07   20.00000      1.1368684E-13  0.0000000E+00"
+      ]
+    ],
+    "row_call_count": 280,
+    "summed_stage_counts": [
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "summed_stage_counts_order": [
+      "final_QC_gt_qmin_NC_eq_0",
+      "tagged_positive_full_evap_residuals",
+      "first_gap_after_initial_projection",
+      "first_gap_after_warm_cold",
+      "first_gap_before_cloud_pcond",
+      "first_gap_after_cloud_pcond"
+    ]
+  },
+  "entry_controls": {
+    "baseline_executable_sha256": "47bb9cc921374cb0c2190f83de941c0aa1d55eb7981b93732a4f10a851a0e14d",
+    "baseline_post_raw_sha256": "526285dedd8e27eb3f59529671193c723d6519d99ea4f98d13b89dae39eb7f30",
+    "baseline_pre_raw_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "candidate_inputs": {
+      "namelist_sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "wrfbdy_sha256": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+    },
+    "candidate_post_raw_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+    "candidate_pre_raw_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "expected_matched_inputs": {
+      "namelist_sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "wrfbdy_sha256": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+    }
+  },
+  "failed_preparation_attempts": [
+    {
+      "result": "Intel compiler rejected missing module .mod dependencies; no object/executable resulted; log preserved at compile.log.",
+      "scope": "Initial build scratch copied from combined pure build"
+    },
+    {
+      "result": "Intel compiler reported missing module_mp_radar/module_model_constants .mod; no valid object resulted. The original compile_final.log was overwritten by the successful retry and is not retained. compile_final_missing_mod.log is a fresh-scratch reproduction, not the original log.",
+      "scope": "First build_final compile without read-only WRF module search paths"
+    },
+    {
+      "result": "Incorrect preprocessing omitted RWORDSIZE=4, ran until explicitly terminated and produced no valid post raw/process result; excluded from findings.",
+      "scope": "Earlier preprocessor diagnostic executable"
+    }
+  ],
+  "hardlink_incident": {
+    "artifact_separation_current": {
+      "candidate_run.log": {
+        "inode": 2420776346,
+        "nlink": 1,
+        "sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+      },
+      "kdm6_first_call_post.raw": {
+        "inode": 5177058588,
+        "nlink": 1,
+        "sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51"
+      },
+      "kdm6_first_call_pre.raw": {
+        "inode": 5177058586,
+        "nlink": 1,
+        "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+      },
+      "launch_environment.txt": {
+        "inode": 5177058581,
+        "nlink": 1,
+        "sha256": "1e0a2e915de198518e0b8404b8b1944f4c7a6ac7d2f4f440854a6e8c594917a5"
+      },
+      "pr62_extent_cells.txt": {
+        "inode": 2420776351,
+        "nlink": 1,
+        "sha256": "1fea469d3d9d62ee9680e0e3084010ba5f50657217b799e3dd71c5ff9721b626"
+      },
+      "wrfout_d01_2026-08-16_12:00:00": {
+        "inode": 2420776354,
+        "nlink": 1,
+        "sha256": "24d41f956840a3383f27c0e76a0cb673383c65bf61e1aee5a0921337f2243ec8"
+      }
+    },
+    "candidate_namelist_output_and_rsl_old_links_unlinked_before_run": true,
+    "description": "The first candidate run directory was cloned with cp -al, so mutable candidate output files initially shared inodes with PR61 control files. Candidate execution rewrote shared first-call trace streams and launch_environment.txt. These were restored from an independent baseline trace and the documented PR61 launch record; current hashes and inode separation are recorded below. The candidate WRFout is a distinct current file (24d41f95...), while the PR61 WRFout again matches its receipt hash (9408b3c7...).",
+    "historical_output_expected_and_current": {
+      "PR61_WRFout_expected_current_sha256": "9408b3c75cd7410a7d036dd4317f195f6b0a69e4124510364d0f3eedaee11fd1",
+      "candidate_Wrfout_sha256": "24d41f956840a3383f27c0e76a0cb673383c65bf61e1aee5a0921337f2243ec8",
+      "candidate_output_was_created_as_an_independent_current_artifact": true
+    },
+    "historical_raw_expected_and_restored": {
+      "PR61_post_current_sha256": "526285dedd8e27eb3f59529671193c723d6519d99ea4f98d13b89dae39eb7f30",
+      "PR61_post_expected_restored_sha256": "526285dedd8e27eb3f59529671193c723d6519d99ea4f98d13b89dae39eb7f30",
+      "PR61_pre_current_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "PR61_pre_expected_restored_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "candidate_post_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+      "candidate_pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "independent_restore_source": "/var/tmp/kdm6_pr62_gap_trace_20261006/native_run_full_trace"
+    },
+    "inputs_retained_as_read_only_hardlinks_and_hash_stable": {
+      "namelist.input": {
+        "nlink": 2,
+        "sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8"
+      },
+      "wrfbdy_d01": {
+        "nlink": 2,
+        "sha256": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d"
+      },
+      "wrfinput_d01": {
+        "nlink": 2,
+        "sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+      }
+    },
+    "launch_environment_restore": {
+      "PR61_current_sha256": "fa4a0719fe079ac884e9d795abac34f7fa735b9815db7dd1c307c21a75ca0457",
+      "PR61_expected_executable_sha256": "47bb9cc921374cb0c2190f83de941c0aa1d55eb7981b93732a4f10a851a0e14d",
+      "candidate_current_sha256": "1e0a2e915de198518e0b8404b8b1944f4c7a6ac7d2f4f440854a6e8c594917a5",
+      "restore_basis": "documented original content stack_kib=unlimited and PR61 executable SHA; candidate record preserved separately."
+    },
+    "mitigation": "Candidate mutable raw/output files were detached from prior control names. No subsequent run will use hardlink-cloned output directories; future run inputs will be copied and mutable output files freshly created.",
+    "timestamp_is_not_validation": true
+  },
+  "review": {
+    "independent_math_review": "Approved positive exact phase extent; zero-E equality retains legacy rate arithmetic. Candidate result is runtime evidence only.",
+    "independent_source_review": "Completed by root: scoped production patch reviewed; git apply --check passed against the PR61 production source base.",
+    "source_review_requested_after_receipt": false
+  },
+  "run": {
+    "launch_environment_sha256": "1e0a2e915de198518e0b8404b8b1944f4c7a6ac7d2f4f440854a6e8c594917a5",
+    "netcdf_baseline_sha256": "9408b3c75cd7410a7d036dd4317f195f6b0a69e4124510364d0f3eedaee11fd1",
+    "netcdf_candidate_sha256": "24d41f956840a3383f27c0e76a0cb673383c65bf61e1aee5a0921337f2243ec8",
+    "omp_threads": 68,
+    "output_comparison_t20": {
+      "MU": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "MUB": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QCLOUD": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QGRAUP": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QIB": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QICE": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QNCCN": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QNCLOUD": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QNICE": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QNRAIN": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QRAIN": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QSNOW": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 0,
+        "max_abs_difference": 0.0
+      },
+      "QVAPOR": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 496,
+        "max_abs_difference": 1.862645149230957e-09
+      },
+      "REFL_10CM": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 21,
+        "max_abs_difference": 1.1444091796875e-05
+      },
+      "T": {
+        "candidate_nonfinite": 0,
+        "changed_cells": 111,
+        "max_abs_difference": 6.103515625e-05,
+        "meaning": "WRF perturbation potential temperature theta-t0 (K); not physical air temperature. Raw physical temperature is TH*PII."
+      }
+    },
+    "rsl_error_sha256": "aaaac744e5d1f89c4e5dcb25577f3a168fa8a2bf311ff1b8e244eb232b5ece7a",
+    "rsl_out_sha256": "7825553c261abc10a4167a91fd4ddd8ee37dcb20fad2f83b00441b8611552126",
+    "run_log_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df",
+    "stack": "unlimited",
+    "status": "SUCCESS COMPLETE WRF",
+    "time_steps": [
+      "2026-08-16_12:00:00",
+      "2026-08-16_12:00:20"
+    ],
+    "timestep_s": 20
+  },
+  "schema": "pr62_native_cloud_gap_candidate_receipt_v1",
+  "scope": "One-rank, 20-second KDM6 source-copy candidate run. No maintained WRF/private source changes, no commit, no push.",
+  "source_and_build": {
+    "archive_member_object_sha256": "668047a5584fb63d4c0fcbc4caaabb1190131f9941a8975c535f028dce03bcc0",
+    "archive_sha256": "85bb7a2811bca7d878af6c9eb8a8f625b1d8c6816de4b9c6407dd17c5a755c38",
+    "baseline_production_source_sha256": "61bac0c2868a5d31dcfaa9f4a4e076622cdfaa260ca69524eeb8ce3f5a840244",
+    "candidate_production_source_sha256": "43be4388b69374caff13d1822b4020103e491a6786da1f2b70da521befe6e3bd",
+    "compile_profile": "Pinned Cloud-BAL/tests/intel_toolchain.sh; retained host ABI flags then CLOUD_BAL_REPRO_FLAGS strict profile; exact command logs retained.",
+    "compiler": [
+      "compiler=/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "version=ifx (IFX) 2026.0.0 20260331",
+      "compiler_sha256=909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef"
+    ],
+    "cpp_macros_asserted": [
+      "RWORDSIZE=4",
+      "IWORDSIZE=4",
+      "DWORDSIZE=8",
+      "LWORDSIZE=4",
+      "EM_CORE=1",
+      "NMM_CORE=0",
+      "NMM_MAX_DIM=2600",
+      "DA_CORE=0",
+      "WRFPLUS=0",
+      "NONSTANDARD_SYSTEM_FUNC",
+      "WRF_USE_CLM",
+      "DM_PARALLEL",
+      "NETCDF"
+    ],
+    "diagnostic_extension_patch_sha256": "0aef77fc2459490f1ee2cf27e64b63725be9d6a91e95d54c4146ac9a506b8c88",
+    "executable_sha256": "15cbd37862eeb6b8de3bd4802691a26f8257aecb817077a97f78d5237f432a34",
+    "generated_cpp_assertions": {
+      "configure_RWORDSIZE_4": true,
+      "vsrec": true,
+      "vssqrt": true
+    },
+    "generated_f90_sha256": "a847491d8599eb71c513dd002ed583110fd574fe259865cd1a803018ff2b57db",
+    "host_closure": "Partial. Selected KDM6 object freshly compiled and linked; retained host objects/libraries remain reused.",
+    "host_link_input_manifest_matches_PR61": true,
+    "host_link_input_manifest_sha256": "93526b56eae733d9186565be7bc1e9ce2a92c8ca35ff24b3cb59054862e12d20",
+    "inherited_manifest_note": "A PR61 build-artifacts.sha256 copied into build scratch was stale. It was preserved as build-artifacts.inherited_pr61.sha256; a new PR62 build-artifacts.sha256 now binds current candidate source/generated/object/archive/exe.",
+    "instrumented_extension_source_sha256": "10879c5cfaebd5969c2e70dc0c4b6e187bbe6c1ca09244187d302b18c40903f2",
+    "link_argv_capture": "The retained link command is a summary with a placeholder for retained pinned WRF libraries; expanded link argv was not captured. Do not claim exact link-command provenance. Object/archive/executable identities and PR61-matching host input manifest are recorded.",
+    "object_sha256": "668047a5584fb63d4c0fcbc4caaabb1190131f9941a8975c535f028dce03bcc0",
+    "production_patch_sha256": "acbbf4985e1bcd919ca96c7cf8c72a900a6821301ebc2df99484b7e9f3986a8b",
+    "run_copy_executable_sha256": "15cbd37862eeb6b8de3bd4802691a26f8257aecb817077a97f78d5237f432a34"
+  },
+  "status": "RESEARCH_ONLY_FULL_MOMENT_PSD_GATE_FAIL"
+}
