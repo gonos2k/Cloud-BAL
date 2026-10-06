@@ -1,0 +1,350 @@
+{
+  "bg_magnitude": {
+    "control_sum_per_cell_values_for_qg_le_qcrmin_after": 3.642089051517024e-09,
+    "float64_sum_delta_m3_per_kg_dry": 3.64208905151702e-09,
+    "independent_den_delz_measure_relative_difference": 0.0005855647241648221,
+    "max_per_cell_value_before_cutoff": 9.984235660454033e-12,
+    "paired_sum_per_cell_values_for_qg_le_qcrmin_after": 0.0,
+    "post_control_minus_paired_bg_cells": 2465,
+    "post_control_minus_paired_bg_max_m3_per_kg_dry": 9.984235660454033e-12,
+    "precutoff_sum_for_qg_le_qcrmin": 3.642089051517024e-09,
+    "replay_tool_sha256": "f09be7e1ae309c088ef666a1039c9c40bd74a9c66c1ba8e642c5931f351b907a",
+    "same_call_hybrid_carrier_weighted_removed_descriptor_m3": 44.97818557873735,
+    "same_call_measure": "Sum((BG_control_post-BG_paired_post)*md_cell) over the 2465 cells where BG_control>0 and BG_paired=0; md=dp*DX*DY/(MSFTX*MSFTY*g), dp=\u2212[C1H*(MU2+MUB)+C2H]*DNW. Control and paired geometry captures are byte-identical. This is a mapped bulk-volume descriptor removal diagnostic, not a process or water/energy budget closure.",
+    "units_and_limit": "The raw stage logger sums per-cell BG values without dry-carrier weighting; this is not an integrated volume or mass budget. The sum is only an aggregate diagnostic of the logged cells."
+  },
+  "control_and_paired_inputs_identical": true,
+  "first_call_pair": {
+    "interpretation": "Paired KDM6 return removes the QG=0/BG>0 mismatch (0 cells); QC>runtime epsilon and NC=0 remains 1 cell. The single QC/NC gate still fails.",
+    "paired_replay": {
+      "exact_global_overlap": {
+        "i": [
+          2,
+          233
+        ],
+        "j": [
+          2,
+          281
+        ],
+        "k": [
+          1,
+          39
+        ],
+        "runtime_epsilon": 1.0000000036274937e-15
+      },
+      "kdm6_entry": {
+        "negative_qc": 23494,
+        "nonfinite_qc_nc_qg_bg": 0,
+        "qc_gt_1e-9_nc_zero": 981,
+        "qc_gt_runtime_epsilon_nc_zero": 29310,
+        "qc_gt_zero_nc_zero": 327544
+      },
+      "kdm6_return": {
+        "negative_qc": 0,
+        "nonfinite_qc_nc_qg_bg": 0,
+        "qc_gt_1e-9_nc_zero": 1,
+        "qc_gt_runtime_epsilon_nc_zero": 1,
+        "qc_gt_zero_nc_zero": 1,
+        "qg_zero_bg_positive": 0
+      },
+      "mask_full_tile": {
+        "gap": 236,
+        "negative_qc": 45,
+        "qg_zero_bg_positive": 0
+      },
+      "mask_kdm6_intersection": {
+        "gap": 1,
+        "negative_qc": 0,
+        "qg_zero_bg_positive": 0
+      },
+      "mask_vs_kdm6": {
+        "gap_predicate_mismatches": 0,
+        "graupel_volume_predicate_mismatches": 0,
+        "negative_predicate_mismatches": 0
+      },
+      "sha256": {
+        "masks": "dbec19cd475aee01d9c8a18bd6ce1755cea585935d73c909b410486083ab6e6e",
+        "post": "ff39f3f7b4cd8d0610328254bff3e3a3d193cff31542b7a6ab8ee3f9d78db0c5",
+        "pre": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+      },
+      "stage_masks_full_tile": [
+        {
+          "gap": 13383,
+          "negative_qc": 0,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 0,
+          "stage": "PRE_RK"
+        },
+        {
+          "gap": 4079,
+          "negative_qc": 163244,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 1,
+          "stage": "RK_STAGE_END"
+        },
+        {
+          "gap": 258,
+          "negative_qc": 399233,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 2,
+          "stage": "RK_STAGE_END"
+        },
+        {
+          "gap": 29545,
+          "negative_qc": 23539,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 3,
+          "stage": "RK_STAGE_END"
+        },
+        {
+          "gap": 29545,
+          "negative_qc": 23539,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 4,
+          "stage": "PRE_MOIST_PREP"
+        },
+        {
+          "gap": 29545,
+          "negative_qc": 23539,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 4,
+          "stage": "POST_MOIST_PREP"
+        },
+        {
+          "gap": 29545,
+          "negative_qc": 23539,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 4,
+          "stage": "PRE_MICROPHYSICS"
+        },
+        {
+          "gap": 236,
+          "negative_qc": 45,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 4,
+          "stage": "POST_MICROPHYSICS"
+        }
+      ],
+      "stage_masks_kdm6_window": [
+        {
+          "gap": 0,
+          "negative_qc": 0,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 0,
+          "stage": "PRE_RK"
+        },
+        {
+          "gap": 3925,
+          "negative_qc": 161526,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 1,
+          "stage": "RK_STAGE_END"
+        },
+        {
+          "gap": 202,
+          "negative_qc": 395145,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 2,
+          "stage": "RK_STAGE_END"
+        },
+        {
+          "gap": 29310,
+          "negative_qc": 23494,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 3,
+          "stage": "RK_STAGE_END"
+        },
+        {
+          "gap": 29310,
+          "negative_qc": 23494,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 4,
+          "stage": "PRE_MOIST_PREP"
+        },
+        {
+          "gap": 29310,
+          "negative_qc": 23494,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 4,
+          "stage": "POST_MOIST_PREP"
+        },
+        {
+          "gap": 29310,
+          "negative_qc": 23494,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 4,
+          "stage": "PRE_MICROPHYSICS"
+        },
+        {
+          "gap": 1,
+          "negative_qc": 0,
+          "qg_zero_bg_positive": 0,
+          "rkstep": 4,
+          "stage": "POST_MICROPHYSICS"
+        }
+      ]
+    },
+    "post_control_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+    "post_field_differences_paired_vs_control": {
+      "BG": {
+        "changed_cells": 2465,
+        "max_abs_difference": 9.984235660454033e-12
+      }
+    },
+    "post_paired_sha256": "ff39f3f7b4cd8d0610328254bff3e3a3d193cff31542b7a6ab8ee3f9d78db0c5",
+    "pre_hashes_equal": true,
+    "pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+  },
+  "limitations": [
+    "The 11 pre-cutoff QG=0/BG>0 cells remain source-unlocalized.",
+    "The one QC>epsilon,NC=0 active KDM6 return cell remains.",
+    "No full water/energy, mass-wind, startup-wave, or forecast assessment.",
+    "Research source copy only; no maintained WRF/KDM6 deployment.",
+    "Matched source/object/archive provenance includes the staged-control/archive-member hash mismatch noted above.",
+    "The 44.978 m3 quantity is a same-call hybrid-carrier-weighted BG descriptor removal, not closure of microphysical, boundary, or total-water/energy budgets; the separate DEN*DELZ diagnostic differs by 0.05856%."
+  ],
+  "replay_command": "python3 tools/pr63_transition_replay.py /var/tmp/pr63_native_transition_20261006/run_pair_paired/pr63_transition_masks.bin /var/tmp/pr63_native_transition_20261006/run_pair_paired/kdm6_first_call_pre.raw /var/tmp/pr63_native_transition_20261006/run_pair_paired/kdm6_first_call_post.raw\npython3 tools/pr63_paired_bg_volume.py /var/tmp/pr63_native_transition_20261006/run_pair_control/pr63_geometry.raw /var/tmp/pr63_native_transition_20261006/run_pair_paired/pr63_geometry.raw /var/tmp/pr63_native_transition_20261006/run_pair_control/kdm6_first_call_post.raw /var/tmp/pr63_native_transition_20261006/run_pair_paired/kdm6_first_call_post.raw",
+  "run_receipts": {
+    "control": {
+      "executable_sha256": "2a412690a6c6b4acdacfbf66507fae53406b4a1170403133b801e88a868a4e4e",
+      "input_count": 104,
+      "input_hashes": {
+        "namelist.input": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+        "wrfbdy_d01": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+        "wrfinput_d01": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+      },
+      "input_integrity": "PASS",
+      "kdm_post_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+      "kdm_pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "launch_script_sha256": "0341c57be373e4e72ecdec8384d51f4fa68447b37843eb52393d3c2945cfa559",
+      "output_count": 15,
+      "output_isolation": "PASS",
+      "receipt_sha256": "bd8ea9ee3cdf475ae371ce9e2bd1cc637ea734c48601dde13a9cfb844a9458ae",
+      "returncode": 0,
+      "run_root": "/var/tmp/pr63_native_transition_20261006/run_pair_control",
+      "stage_raw_sha256": "9e089855b81156c6f1ce550114f9fad7cdc7c42f59d7df779ee9cbef67f25dc0",
+      "wrfout_sha256": "24d41f956840a3383f27c0e76a0cb673383c65bf61e1aee5a0921337f2243ec8"
+    },
+    "paired": {
+      "executable_sha256": "ee6d85d22597a1973dd551c9f33b3c5c7bb2f399a02300d6ad9da03a57c18155",
+      "input_count": 104,
+      "input_hashes": {
+        "namelist.input": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+        "wrfbdy_d01": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+        "wrfinput_d01": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+      },
+      "input_integrity": "PASS",
+      "kdm_post_sha256": "ff39f3f7b4cd8d0610328254bff3e3a3d193cff31542b7a6ab8ee3f9d78db0c5",
+      "kdm_pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "launch_script_sha256": "0341c57be373e4e72ecdec8384d51f4fa68447b37843eb52393d3c2945cfa559",
+      "output_count": 15,
+      "output_isolation": "PASS",
+      "receipt_sha256": "0073caf9a11c4b2c66d528c769ee21ebba632d3a3bdcc92c0803e58a8a98a609",
+      "returncode": 0,
+      "run_root": "/var/tmp/pr63_native_transition_20261006/run_pair_paired",
+      "stage_raw_sha256": "2e41e32e0ebfd06247bbd9e7136d6ff957cce393793b1af0291392a46a8505d8",
+      "wrfout_sha256": "3dded224a7757cc528a9d16ede591d6a1046f45ddc2db28fc1edd04401859099"
+    }
+  },
+  "schema": "pr63_paired_graupel_cleanup_evidence_v1",
+  "scope": "one-rank, one-tile, 20-second NE57 research-copy KDM6 execution; not maintained WRF and not a full physical approval",
+  "source_change": "paired only adds brs(i,k)=0 immediately after qrs(i,k,3)=0 in existing qrs<=qcrmin terminal species-extinction branch; threshold, source, prior, timestep unchanged",
+  "sources": {
+    "archive_member_comparison": {
+      "archive_member_sha_differences_only": [
+        "module_mp_kdm6.o"
+      ],
+      "archive_names_equal": true,
+      "control_archive_sha256": "5071426d76cc09a0ce0a01ab2c29bc88ae9780a5020d26dd013ac12bad9ef84e",
+      "control_linked_solve_em_member_sha256": "8670703c8229399709caaf5fb47e8c9dc865ad5def98cc7d4baaed6054bfd772",
+      "note": "The control staged object file (6c58...) differs from its archive member (de145...). Runtime archive member/executable identity is bound by receipt, and archives differ only in KDM6 member; staged-object compilation chain is not asserted byte-identical.",
+      "paired_archive_sha256": "1cc5bc27cd0deed406069fd05470f01be98807767ef31ccea7be05bbdf086882",
+      "paired_linked_solve_em_member_sha256": "8670703c8229399709caaf5fb47e8c9dc865ad5def98cc7d4baaed6054bfd772"
+    },
+    "artifact_paths": {
+      "control_archive": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/control/libwrflib.a",
+      "control_linked_executable": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/control/wrf_pr63_pair_control.exe",
+      "control_preprocessed": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/control/module_mp_kdm6.f90",
+      "control_source": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/control/module_mp_kdm6.F",
+      "control_staged_object": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/control/module_mp_kdm6.o",
+      "paired_archive": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/paired/libwrflib.a",
+      "paired_linked_executable": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/paired/wrf_pr63_pair_paired.exe",
+      "paired_preprocessed": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/paired/module_mp_kdm6.f90",
+      "paired_source": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/paired/module_mp_kdm6.F",
+      "paired_staged_object": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/paired/module_mp_kdm6.o"
+    },
+    "build_chain_caveat": "The staged control object hash differs from the control archive member hash; retain these as separate identities. Runtime executable and guard receipts are bound. Do not claim staged-object/archive-member byte identity.",
+    "control_archive_member_sha256": "de145f8c7393085beb03e841fccbf78fe0243ffc28d2148c139747e6cbe03ab3",
+    "control_executable_sha256": "2a412690a6c6b4acdacfbf66507fae53406b4a1170403133b801e88a868a4e4e",
+    "control_fortran_sha256": "2c3c77b262c928803140207e9bfcd79627101faa50de0d48bafefd1138a4675c",
+    "control_preprocessed_sha256": "ad0e0022c6c597ce54af9b41e09837fa44d35777625c8bfd95dd136eef4d081d",
+    "control_staged_object_sha256": "6c58c715dce54c2c83b0707ca0d83fc6b74055e8dadc5c4f3ef21c76f7f07ed6",
+    "paired_archive_member_sha256": "659a50b84906ba23c1e9265b0549cb774594ab33055fb9eb9b41d7506ceae00c",
+    "paired_executable_sha256": "ee6d85d22597a1973dd551c9f33b3c5c7bb2f399a02300d6ad9da03a57c18155",
+    "paired_fortran_sha256": "099b4a744c4f11f30ba2b50c23b551d9edd196d58d9813885398d3861e3fa040",
+    "paired_preprocessed_sha256": "dea09e05c59c5a55bf389488eeb840388ad842040190060ff3f0e5ab0602fec2",
+    "paired_staged_object_sha256": "659a50b84906ba23c1e9265b0549cb774594ab33055fb9eb9b41d7506ceae00c"
+  },
+  "terminal_cleanup_stage_counts": {
+    "control": {
+      "after_terminal_cutoff": {
+        "ghost_cells": 2465,
+        "max_bg_ghost": 9.984235660454033e-12,
+        "max_bg_le_qcrmin": 9.984235660454033e-12,
+        "rows": 280,
+        "sum_bg_ghost_cell_values": 3.642089051517024e-09,
+        "sum_bg_le_qcrmin_cell_values": 3.642089051517024e-09
+      },
+      "before_terminal_cutoff": {
+        "ghost_cells": 11,
+        "max_bg_ghost": 1.1102230246251565e-16,
+        "max_bg_le_qcrmin": 9.984235660454033e-12,
+        "rows": 280,
+        "sum_bg_ghost_cell_values": 1.1734889742467643e-16,
+        "sum_bg_le_qcrmin_cell_values": 3.642089051517024e-09
+      },
+      "sha256": "9e089855b81156c6f1ce550114f9fad7cdc7c42f59d7df779ee9cbef67f25dc0"
+    },
+    "interpretation": "11 QG=0/BG>0 cells already existed before cutoff. The matched control has 2465 after; the paired cleanup has 0. The 2454 net increase is not described as 2465 newly created at cutoff.",
+    "paired": {
+      "after_terminal_cutoff": {
+        "ghost_cells": 0,
+        "max_bg_ghost": 0.0,
+        "max_bg_le_qcrmin": 0.0,
+        "rows": 280,
+        "sum_bg_ghost_cell_values": 0.0,
+        "sum_bg_le_qcrmin_cell_values": 0.0
+      },
+      "before_terminal_cutoff": {
+        "ghost_cells": 11,
+        "max_bg_ghost": 1.1102230246251565e-16,
+        "max_bg_le_qcrmin": 9.984235660454033e-12,
+        "rows": 280,
+        "sum_bg_ghost_cell_values": 1.1734889742467643e-16,
+        "sum_bg_le_qcrmin_cell_values": 3.642089051517024e-09
+      },
+      "sha256": "2e41e32e0ebfd06247bbd9e7136d6ff957cce393793b1af0291392a46a8505d8"
+    }
+  },
+  "threshold": {
+    "semantics": "existing KDM6 cutoff; paired BG cleanup is limited to cells already classified extinct by this branch",
+    "symbol": "qcrmin",
+    "value_kg_kg_minus1": 1e-09
+  },
+  "wrf_history_compare": {
+    "fields_differ": {
+      "QIB": {
+        "changed_values": 2465,
+        "max_abs_difference": 9.984235660454033e-12
+      }
+    },
+    "interpretation": "Across the 2-time-record wrfout, only QIB differs; all other numeric output variables are bitwise equal. REFL_10CM is finite in both outputs. The public KDM6 raw return and WRF history diagnose different cuts.",
+    "reflectivity": {
+      "control_equals_paired": true,
+      "control_nonfinite": 0,
+      "paired_max": 68.50911712646484,
+      "paired_min": -35.0,
+      "paired_nonfinite": 0
+    }
+  }
+}

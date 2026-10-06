@@ -1218,7 +1218,10 @@ CONTAINS
     TYPE(pressure_analysis_budget) :: budget
     REAL(real64) :: specific_heat,mass_before,mass_after,enthalpy_before,enthalpy_after
     REAL(real64) :: species_before(6),species_after(6),mass_increment_sum
+    REAL(real64) :: inactive_dry_mass
     REAL(real32), PARAMETER :: phase_step=0.0009765625_real32
+    LOGICAL, ALLOCATABLE :: thermo_active(:,:,:)
+    INTEGER, ALLOCATABLE :: thermo_surface(:,:,:)
     INTEGER :: status,reason
 
     CALL make_state(background)
@@ -1359,6 +1362,79 @@ CONTAINS
       'finite extreme increment declarations are compared without overflow',failures)
 
     CALL initialize_physical_contract(background,contract)
+    ALLOCATE(contract%phase_increment(8,background%grid%nx,background%grid%ny,background%grid%nz))
+    contract%phase_increment=0.0_real64
+    contract%source_increment(PHYSICAL_COMPONENT_VAPOR,1,1,2)=12.5_real64
+    contract%source_increment(PHYSICAL_COMPONENT_CLOUD_WATER,1,1,2)=-12.5_real64
+    contract%phase_increment(PHYSICAL_COMPONENT_VAPOR,1,1,2)=-12.5_real64
+    contract%phase_increment(PHYSICAL_COMPONENT_CLOUD_WATER,1,1,2)=12.5_real64
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(status==STATUS_OK .AND. evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_PASS, &
+      'independently prescribed source and stoichiometric phase terms are compared separately',failures)
+
+    contract%source_increment=0.0_real64
+    contract%phase_increment=0.0_real64
+    contract%source_increment(PHYSICAL_COMPONENT_VAPOR,1,1,2)=HUGE(1.0_real64)
+    contract%source_increment(PHYSICAL_COMPONENT_CLOUD_WATER,1,1,2)=-HUGE(1.0_real64)
+    contract%phase_increment(PHYSICAL_COMPONENT_VAPOR,1,1,2)=-HUGE(1.0_real64)
+    contract%phase_increment(PHYSICAL_COMPONENT_CLOUD_WATER,1,1,2)=HUGE(1.0_real64)
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_PASS, &
+      'finite extreme source and phase terms cancel after normalization without overflow',failures)
+
+    contract%source_increment=0.0_real64
+    contract%phase_increment(PHYSICAL_COMPONENT_DRY_MASS_METRIC,1,1,2)=1.0_real64
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_reason==REASON_GATE, &
+      'internal phase transfer rejects nonzero dry-mass extent',failures)
+    contract%phase_increment=0.0_real64
+    contract%phase_increment(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)=1.0_real64
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_reason==REASON_GATE, &
+      'internal phase transfer rejects nonzero represented enthalpy extent',failures)
+    contract%phase_increment=0.0_real64
+    contract%phase_increment(PHYSICAL_COMPONENT_VAPOR,1,1,2)=1.0_real64
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_reason==REASON_GATE, &
+      'internal phase transfer rejects nonzero net water extent',failures)
+    contract%phase_increment=0.0_real64
+    contract%phase_increment(PHYSICAL_COMPONENT_VAPOR,1,1,2)= &
+      ieee_value(0.0_real64,ieee_quiet_nan)
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_reason==REASON_NONFINITE, &
+      'nonfinite internal phase values fail before stoichiometric arithmetic',failures)
+    contract%phase_increment=0.0_real64
+    contract%phase_increment(PHYSICAL_COMPONENT_VAPOR,1,1,2)= &
+      ieee_value(0.0_real64,ieee_positive_inf)
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_reason==REASON_NONFINITE, &
+      'infinite internal phase values fail before stoichiometric arithmetic',failures)
+    CALL initialize_physical_contract(background,contract)
+    ALLOCATE(contract%phase_increment(7,background%grid%nx,background%grid%ny,background%grid%nz))
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_reason==REASON_SHAPE, &
+      'internal phase ledger with wrong component shape is rejected',failures)
+
+    CALL initialize_physical_contract(background,contract)
+    ALLOCATE(contract%phase_increment(8,background%grid%nx,background%grid%ny,background%grid%nz))
+    contract%phase_increment=0.0_real64
+    contract%phase_increment(PHYSICAL_COMPONENT_DRY_MASS_METRIC,1,1,2)=1.0_real64
+    candidate=background
+    local_config%requested_mode=MODE_SHADOW
+    local_config%maximum_outer_iterations=2
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,local_config,physical_contract=contract)
+    CALL check(result%status==STATUS_FAILED .AND. result%outer_iterations==0 .AND. &
+      same_pipeline_state(background,candidate) .AND. same_pipeline_state(background,operational) .AND. &
+      result%candidate_evaluation%physical_feasibility_reason==REASON_GATE, &
+      'invalid internal phase contract rolls back before the first trial',failures)
+
+    CALL initialize_physical_contract(background,contract)
     candidate=background
     candidate%surface_temperature%value(1,1)=candidate%surface_temperature%value(1,1)+1.0_real32
     CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget,evaluation,status,reason,contract)
@@ -1398,7 +1474,64 @@ CONTAINS
     CALL check(status/=STATUS_OK .OR. &
       evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
       'invalid NaN water placeholders fail closed without ordered comparisons',failures)
+    candidate=background; operational=background
+    local_config%requested_mode=MODE_SHADOW
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,local_config, &
+      physical_contract=contract)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_METADATA .AND. &
+      same_pipeline_state_with_invalid_water_placeholders(background,candidate) .AND. &
+      same_pipeline_state_with_invalid_water_placeholders(background,operational) .AND. &
+      zero_analysis_budget(result%candidate_budget), &
+      'pipeline rejects invalid NaN placeholders with a controlled reason and full rollback',failures)
+
+    CALL make_state(background)
+    CALL make_complete_water_fields(background)
+    ALLOCATE(thermo_active(background%grid%nx,background%grid%ny,background%grid%nz), &
+      thermo_surface(background%grid%nx,background%grid%ny,background%grid%nz))
+    thermo_active=.FALSE.; thermo_active(1,1,2)=.TRUE.
+    thermo_surface=SATURATION_LIQUID
+    CALL derive_column_physics(background,candidate,result%column,local_config%column, &
+      thermo_active=thermo_active,thermo_surface=thermo_surface,target_rh=0.8_real64)
+
+    CALL make_state(background)
+    CALL make_complete_water_fields(background)
+    CALL refresh_dry_air_mass_measure(background,status)
+    background%grid%dry_air_mass_measure(4,4,2)= &
+      background%grid%dry_air_mass_measure(4,4,2)*(1.0_real64+1.0e-8_real64)
+    inactive_dry_mass=background%grid%dry_air_mass_measure(4,4,2)
+    candidate=background
+    candidate%cloud_water%value(1,1,2)=candidate%cloud_water%value(1,1,2)+phase_step
+    CALL canonicalize_contracted_thermo_storage(background,candidate,status,reason)
+    CALL check(status==STATUS_OK .AND. &
+      candidate%grid%dry_air_mass_measure(4,4,2)==inactive_dry_mass .AND. &
+      candidate%grid%dry_air_mass_measure(1,1,2)== &
+        candidate%grid%pressure_mass_measure(1,1,2)/(1.0_real64+ &
+          REAL(candidate%vapor%value(1,1,2),real64)+ &
+          REAL(candidate%cloud_water%value(1,1,2),real64)+ &
+          REAL(candidate%cloud_ice%value(1,1,2),real64)+REAL(candidate%rain%value(1,1,2),real64)+ &
+          REAL(candidate%snow%value(1,1,2),real64)+REAL(candidate%graupel%value(1,1,2),real64)), &
+      'contracted storage closure updates changed cells and preserves valid inactive mass bitwise',failures)
   END SUBROUTINE test_physical_candidate_contract
+
+  LOGICAL FUNCTION same_pipeline_state_with_invalid_water_placeholders(left,right)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: left,right
+    TYPE(cloud_bal_state_type) :: normalized_left,normalized_right
+    normalized_left=left; normalized_right=right
+    WHERE(.NOT.normalized_left%vapor%valid) normalized_left%vapor%value=0.0_real32
+    WHERE(.NOT.normalized_right%vapor%valid) normalized_right%vapor%value=0.0_real32
+    WHERE(.NOT.normalized_left%cloud_water%valid) normalized_left%cloud_water%value=0.0_real32
+    WHERE(.NOT.normalized_right%cloud_water%valid) normalized_right%cloud_water%value=0.0_real32
+    WHERE(.NOT.normalized_left%cloud_ice%valid) normalized_left%cloud_ice%value=0.0_real32
+    WHERE(.NOT.normalized_right%cloud_ice%valid) normalized_right%cloud_ice%value=0.0_real32
+    WHERE(.NOT.normalized_left%rain%valid) normalized_left%rain%value=0.0_real32
+    WHERE(.NOT.normalized_right%rain%valid) normalized_right%rain%value=0.0_real32
+    WHERE(.NOT.normalized_left%snow%valid) normalized_left%snow%value=0.0_real32
+    WHERE(.NOT.normalized_right%snow%valid) normalized_right%snow%value=0.0_real32
+    WHERE(.NOT.normalized_left%graupel%valid) normalized_left%graupel%value=0.0_real32
+    WHERE(.NOT.normalized_right%graupel%valid) normalized_right%graupel%value=0.0_real32
+    same_pipeline_state_with_invalid_water_placeholders= &
+      same_pipeline_state(normalized_left,normalized_right)
+  END FUNCTION same_pipeline_state_with_invalid_water_placeholders
 
   SUBROUTINE test_default_physical_contract_is_not_absent(failures)
     INTEGER, INTENT(INOUT) :: failures

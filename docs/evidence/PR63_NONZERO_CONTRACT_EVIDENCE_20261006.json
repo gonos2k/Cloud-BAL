@@ -1,0 +1,158 @@
+{
+  "evidence_version": 1,
+  "created_utc_date": "2026-10-06",
+  "scope": "nonzero prescribed internal-phase contract through the existing fixed-geometry pipeline, SHADOW writer, and independent contract reader",
+  "source_identity": {
+    "repository_head": "8a26a2cf414e89a31ddcefe8a68e51b5b3e82391",
+    "working_tree_was_modified": true,
+    "qualification": "The tests compiled the working-tree sources listed below; HEAD identifies the base revision, not the tested source tree.",
+    "sha256": {
+      "src/common/cloud_bal_pipeline.f90": "e9034c1595d69101e9cfee7034bbaa3b72c08f18d2f2114a41bfdeb41226ebf1",
+      "src/common/cloud_bal_real_netcdf.f90": "4b099c85630fe4acfefc37ed474176d4c2b71a112f7a4fe5272a1c663f9633bc",
+      "src/common/cloud_bal_column_physics.f90": "fd5e924c645d8d73e88f34f38f9bf8bd62e0d8c5bd6eaa13eedeabbd882b6496",
+      "tests/test_pipeline.f90": "3381e75199742ca9732604d620b6b3d7df27c84036fdf9150ba86ad0b5315d15",
+      "tests/test_real_shadow_io_contract.f90": "f01ba7a9ffd851999be6319d8893fef9d3226246cc22c70d45f1272ab5055175",
+      "tests/check_physical_contract_shadow.py": "df7f3e72424294c53cd22e339905f4afa4ddbc68cd4993edcbaa69119857c45c",
+      "tools/validate_shadow_diagnostics.py": "02bb85f50fd444071c73dfa467919b7c52f801349ec0369decaa01b6e6089f56",
+      "tests/run_real_shadow_io_contract_tests.sh": "40f69489cff0bdc247d3fbace02b2cc5f8531c580d804afcbd8a79222d0f7b16",
+      "docs/JOINT_CANDIDATE_PHYSICAL_CONTRACT_20261006.md": "888271844d771dd363bb32358f5d403919a96f2f4e702f32bb7761bf55401fe9"
+    }
+  },
+  "toolchain": {
+    "profile": "tests/intel_toolchain.sh",
+    "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "setvars_sha256": "26084d08db985eadb61adc43c7f18821be9e75156b60f920de363ea51c70887e",
+    "netcdf_fortran_config_sha256": "e39004b972304d63c1b46fb065db754718d571430063819ddafdd7bd3612d8a5",
+    "netcdf_fortran_archive_sha256": "f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17c8a39",
+    "netcdf_c_archive_sha256": "f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288",
+    "flags_o0": "-stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz",
+    "flags_o2": "-stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz"
+  },
+  "writer_suite": {
+    "status": "PASS",
+    "exit_code": 0,
+    "command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 CLOUD_BAL_TEST_SCRATCH_ROOT=/var/tmp CLOUD_BAL_KEEP_TEST_ARTIFACTS=1 bash tests/run_real_shadow_io_contract_tests.sh > /var/tmp/pr63_run9_20261006.log 2>&1",
+    "log": {
+      "path": "/var/tmp/pr63_run9_20261006.log",
+      "sha256": "72aa5ef45c6ecf97abf0b6e9f4cd9656ff9d88e04cccf253e23730d47cb6c109"
+    },
+    "scratch_artifacts": "/var/tmp/cloud_bal_real_shadow.W0g57n",
+    "assertions": [
+      "The actual run_cloud_bal_pipeline output contains a nonzero liquid-condensation candidate whose phase extent was independently fixed before invocation.",
+      "External source and boundary increments are zero and remain distinct from the prescribed phase ledger.",
+      "The actual SHADOW writer publishes the nonzero candidate after replaying the same physical contract.",
+      "The independent physical-contract reader replays the nonzero artifact and corruption mutations under both writer profiles.",
+      "Legacy no-phase writer/readback and pressure-transition full-file replay pass under both profiles."
+    ],
+    "artifacts": {
+      "o0_nonzero_shadow": {
+        "path": "/var/tmp/cloud_bal_real_shadow.W0g57n/verified-nonzero-phase-shadow.nc",
+        "shape_xyz": [
+          4,
+          4,
+          3
+        ],
+        "sha256": "71827a511bcb9e9c9da14653cd417b3ca7cbf6e51a6d9002013cb3b2935e206b"
+      },
+      "o2_nonzero_shadow": {
+        "path": "/var/tmp/cloud_bal_real_shadow.W0g57n/o2/verified-nonzero-phase-shadow.nc",
+        "shape_xyz": [
+          4,
+          4,
+          3
+        ],
+        "sha256": "71827a511bcb9e9c9da14653cd417b3ca7cbf6e51a6d9002013cb3b2935e206b"
+      },
+      "o0_legacy_no_phase_shadow_sha256": "1f52fccaac7fe2085bd43d3d8a661514f86a62c91fb35186db3c077258d3593d",
+      "o2_legacy_no_phase_shadow_sha256": "1f52fccaac7fe2085bd43d3d8a661514f86a62c91fb35186db3c077258d3593d",
+      "o0_writer_executable_sha256": "7d6fa2acf1f8f9ad10b1d6a3e88208cf4b26f8efe9f739eecbb8e8653a9390d6",
+      "o2_writer_executable_sha256": "0fe00d912b90500ee33d870b06be550b1a06c67b76cf075a6a916888c7d302c1",
+      "o0_real_reader_executable_sha256": "c116eecb4fb1adb7cbe0bdb271a615f34b4468ecb534527c5f19c32310a42150",
+      "o2_real_reader_executable_sha256": "3850babaa89d6f0dcab918130def08bb25846dbb5d85a08ccae627263d41b106"
+    },
+    "legacy_transition_replay": {
+      "status": "PASS_MEASURED_NOT_APPROVED",
+      "o0_log_line": 3300,
+      "o2_log_line": 3826,
+      "maximum_differences": {
+        "temperature": 0.0,
+        "dry_air_mass": 0.0,
+        "vapor": 0.0,
+        "cloud_water": 0.0,
+        "cloud_ice": 0.0,
+        "rain": 0.0,
+        "snow": 0.0,
+        "graupel": 0.0
+      }
+    }
+  },
+  "focused_tests": {
+    "status": "PASS",
+    "profiles": [
+      "O0",
+      "O2"
+    ],
+    "command_recipe": "source tests/intel_toolchain.sh; create a fresh /var/tmp build directory per O0/O2 profile; compile and run test_pipeline from cloud_bal_state, cloud_bal_column_physics, cloud_bal_grid_geometry, cloud_bal_balance_operator, cloud_bal_pipeline; compile and run test_pressure_thermo_state, test_water_phase_transfer, and test_pressure_phase_transfer from cloud_bal_state and cloud_bal_column_physics. Use CLOUD_BAL_FREE_FLAGS for O0 and CLOUD_BAL_REPRO_FLAGS for O2.",
+    "tests_each_profile": [
+      "test_pipeline",
+      "test_pressure_thermo_state",
+      "test_water_phase_transfer",
+      "test_pressure_phase_transfer"
+    ],
+    "log_receipt": {
+      "path": "/var/tmp/pr63_focused3.2AB9w2/result.txt",
+      "sha256": "7c0019695107d36f5570bbda4b7ab422fc7473dbd20e4ac34d3b9f5dee00b984"
+    },
+    "executables": {
+      "O0_test_pipeline": "8b05539eef5f5d610247614306a1cc8855f9746cdc72f6eef2f3e8195146e2e0",
+      "O2_test_pipeline": "890d2ca1901feb6732cf5aafcf2589ab007862ef16422a4ca0274d71a6f97ffd",
+      "O0_test_pressure_thermo_state": "43e3caeeb759e48a1112f9574d1e077d10950262209d6155fe2ef73e69cc76f2",
+      "O2_test_pressure_thermo_state": "4eb87a674166d9dfe24c4ce5a142fd012c2561cd210fbf9fd0b4f27190d5bb8a",
+      "O0_test_water_phase_transfer": "5c272f22da7179271f300b35a843a6ee45e4f745787cc6f6944cee3663407235",
+      "O2_test_water_phase_transfer": "cdc489a355fbcb5415579d8cca9d62ad1c1580b20902578bdfa7e05ab903ba3b",
+      "O0_test_pressure_phase_transfer": "dba69447a350323b0e1c3a262ad6eddf8cdf01089abef19fce787109970807ef",
+      "O2_test_pressure_phase_transfer": "7109881f6bf05fcf532d661687eb3e441a757902485edc8a1abe998702b73c62"
+    },
+    "regressions": [
+      "Invalid NaN water placeholders fail the pipeline with REASON_METADATA, full output rollback, and empty accepted budget; invalid payload equality is tested without ordered NaN comparisons.",
+      "Contract storage closure canonicalizes changed cells and preserves a valid inactive dry-mass value bitwise."
+    ],
+    "command_log": null,
+    "command_log_note": "No complete focused compile/run stdout-stderr log was retained. log_receipt.path is only the concise PASS marker; command_recipe plus per-executable hashes are the available evidence."
+  },
+  "scope_and_limits": {
+    "admission": "PASS_SCOPED",
+    "supports": "A synthetic 4x4x3, fixed-pressure, independently predeclared nonzero internal-phase candidate can pass the existing pipeline contract, SHADOW writer replay, and independent physical-contract readback at pinned Intel O0/O2.",
+    "does_not_support": [
+      "Production schema-7 admission of the 4x4x3 artifact.",
+      "Source/boundary authority authentication, global optimizer or joint physical optimality.",
+      "Native KDM6 acceptance, full NE57 coupled balance, initial-shock reduction or forecast benefit."
+    ],
+    "schema7_gate": "The top-level production validator retains its 235x283x22 domain gate. It was intentionally not invoked to admit the 4x4x3 synthetic artifact; the dedicated physical-contract reader checks only the scoped optional contract and endpoint semantics.",
+    "canonicalization": "Only explicit fixed-pressure contracts use changed-cell stored dry-mass reconstruction; the physical phase extent remains based on the pre-transfer dry carrier. The caller's predeclared tolerance bounds the representation residual and does not declare it a physical source or phase term."
+  },
+  "excluded_attempts": [
+    {
+      "path": "/var/tmp/pr63_run7_20261006.log",
+      "outcome": "EXCLUDED_BEFORE_COMPILE",
+      "reason": "Wrong default workspace root made the pinned nf-config dependency unavailable."
+    },
+    {
+      "path": "/var/tmp/pr63_run8_20261006.log",
+      "outcome": "EXCLUDED_AS_FULL_SUITE_EVIDENCE",
+      "reason": "The O0 writer and physical readers passed, but an interim modified pressure-transition assertion failed; the assertion was restored to the HEAD legacy replay contract before run9."
+    },
+    {
+      "path": "/var/tmp/pr63_focused2.UOnQHQ",
+      "outcome": "EXCLUDED",
+      "reason": "An interim rollback test used ordinary equality on invalid NaN payloads and included a mistaken standalone-kernel dry-mass assertion. Both test expectations were corrected; focused3 passed."
+    }
+  ],
+  "repository_actions": {
+    "commit_or_push": false,
+    "production_input_modified": false,
+    "git_diff_check": "PASS"
+  }
+}

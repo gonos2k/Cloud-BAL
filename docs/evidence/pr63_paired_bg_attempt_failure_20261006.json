@@ -1,0 +1,88 @@
+{
+  "build_profile_difference": {
+    "paired_attempt_added_flags": [
+      "-check bounds"
+    ],
+    "paired_attempt_module_search_paths": [
+      "/var/tmp/pr63_native_transition_20261006/build_paired_v1",
+      "/var/tmp/kdm6_pr62_gap_trace_20261006/build/phys"
+    ],
+    "pr62_kdm_compile_manifest": "/var/tmp/kdm6_pr62_extent_patch_20261006/build_final_manifest.json",
+    "profile_match_established": false,
+    "strict_profile_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef"
+  },
+  "comparison_reference": {
+    "paired_pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "v2_kdm_pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "v2_valid_receipt_sha256": "3570a95c63702d548f18de3417369d210b749a0ba46ee704dd1a4794e524e7e6"
+  },
+  "guard": {
+    "input_integrity": "PASS",
+    "output_isolation": "FAIL",
+    "receipt_sha256": "a59bcd0b804ca29a25e380c6d13b8e35b0ed659f057fc6085b85c2a6a86bc2a1",
+    "returncode": 1
+  },
+  "interpretation": "Identical KDM6 entry bytes do not establish matched execution: the compiled object and runtime profile differed, and the run ended before the paired cleanup. No physical effect is inferred. The declared executable was present in the guard input inventory and its hash is known; only the launch.sh bytes were not declared in that failed attempt.",
+  "preserved": {
+    "candidate_log": {
+      "path": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b/candidate_run.log",
+      "sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+    },
+    "geometry_raw": {
+      "path": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b/pr63_geometry.raw",
+      "sha256": "5a12d2a0549523c57285d35e60905488ca0315fd460123093ae4d57ec7f8ff0c"
+    },
+    "guard_receipt": {
+      "path": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b/run-isolation.json",
+      "sha256": "a59bcd0b804ca29a25e380c6d13b8e35b0ed659f057fc6085b85c2a6a86bc2a1"
+    },
+    "kdm6_pre_raw": {
+      "path": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b/kdm6_first_call_pre.raw",
+      "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+    },
+    "kdm6_stage_raw": {
+      "path": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b/pr63_kdm_stages.raw",
+      "sha256": "c78586a9ba6929cf005bd3b3f23a7c9fb4078cb0500d85966559f1e8aa8838be"
+    },
+    "launch_script": {
+      "path": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b/launch.sh",
+      "sha256": "2e6f5fd68eea0803eb3c7a3d6050cbac5921ab753c6c0adeb682608b35096cce"
+    },
+    "paired_executable": {
+      "path": "/var/tmp/pr63_native_transition_20261006/build_paired_v2/link/wrf_pr63_paired_v2.exe",
+      "sha256": "2b2b6aa8c67b9235cb1bea4b6cf012d415a21f13be3abef9e062441d0581515e"
+    },
+    "patched_host_object": {
+      "path": "/var/tmp/pr63_native_transition_20261006/build_paired_v1/solve_em.o",
+      "sha256": "58fe9780780c42c4f58a27878926f5513f30ab02aedc63acb4a622c8ba2918fc"
+    },
+    "patched_kdm_object": {
+      "path": "/var/tmp/pr63_native_transition_20261006/build_paired_v1/module_mp_kdm6.o",
+      "sha256": "eacb57fb5a5f77841217f956c2b529ad45ec6099904b9abf9100c62a28423569"
+    },
+    "rk_update_cuts": {
+      "path": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b/pr63_rk_update_cuts.raw",
+      "sha256": "08f2f8e3dc5e0ce6d9b8302d8f69665a970e78abaf082e022284dc89f092cff8"
+    },
+    "transition_masks": {
+      "path": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b/pr63_transition_masks.bin",
+      "sha256": "dda1d60ee07ba557b398428e468b48d00180d70289d2b876d7551a317575dccd"
+    },
+    "transition_stages_raw": {
+      "path": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b/pr63_transition_stages.raw",
+      "sha256": "d11a20a0780e7868051dd1e33795e10abd0c2b4f57523bd734ea890626297007"
+    },
+    "unmodified_v2_kdm_object": {
+      "path": "/var/tmp/pr63_native_transition_20261006/build_cutoff_v2/link/module_mp_kdm6.o",
+      "sha256": "7717a8531a40b42fa46b9c7fe2be57a844e4692ab820dcf1728a0b3170c971f2"
+    }
+  },
+  "reason": "The run was terminated by SIGTERM after prolonged KDM6 loop execution; no post-call or terminal-cleanup raw capture was produced.",
+  "run_root": "/var/tmp/pr63_native_transition_20261006/run_paired_v2b",
+  "schema": "pr63_paired_bg_attempt_failure_v1",
+  "status": "INCOMPLETE_NOT_PHYSICS_RESULT",
+  "undeclared_launcher": {
+    "declared_as_input": false,
+    "sha256": "2e6f5fd68eea0803eb3c7a3d6050cbac5921ab753c6c0adeb682608b35096cce"
+  }
+}

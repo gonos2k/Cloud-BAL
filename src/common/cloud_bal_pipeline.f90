@@ -43,16 +43,23 @@ MODULE cloud_bal_pipeline
     CHARACTER(LEN=128) :: contract_identity=''
     ! Caller-prescribed per-cell source and boundary increments in kg
     ! (components 1:7) and J (component 8), plus physical tolerances in those
-    ! units. Component 1 is the canonical dry-mass metric, not physical gas
-    ! source authority. Component 8 is represented mixture enthalpy only.
-    ! Components 1:7 must have zero net total-mass increment per covered cell
-    ! when pressure geometry is fixed. Only source+boundary net is compared;
-    ! their separate attribution,
+    ! units. The optional phase_increment is a separate internal exchange and
+    ! must have zero dry mass, net water, and represented mixture enthalpy.
+    ! Component 1 is the canonical dry-mass metric, not physical gas source
+    ! authority. Component 8 is represented mixture enthalpy only.
+    ! Components 1:7 of source+boundary must have zero net total-mass
+    ! increment per covered cell when pressure geometry is fixed. The
+    ! endpoint is compared against source, boundary, and the separately
+    ! constrained internal phase exchange. Source/boundary attribution,
     ! observation fit, optimality and native conservation remain unassessed.
     INTEGER :: adjustable_variables=0
     LOGICAL, ALLOCATABLE :: coverage(:,:,:)
     REAL(real64), ALLOCATABLE :: source_increment(:,:,:,:)
     REAL(real64), ALLOCATABLE :: boundary_increment(:,:,:,:)
+    ! Optional, separately declared internal phase exchange. Components use
+    ! the same order/units as source_increment; stoichiometry requires zero
+    ! dry-mass, net-water, and represented-enthalpy exchange per cell.
+    REAL(real64), ALLOCATABLE :: phase_increment(:,:,:,:)
     REAL(real64), ALLOCATABLE :: physical_tolerance(:,:,:,:)
   END TYPE physical_joint_candidate_contract
 
@@ -80,6 +87,8 @@ MODULE cloud_bal_pipeline
     INTEGER :: physical_feasibility_reason=REASON_NONE
     INTEGER :: physical_feasibility_failed_cell(3)=0
     INTEGER :: physical_feasibility_failed_component=0
+    ! Zero is the receipt sentinel when no component failed; it is not a
+    ! measured global residual or evidence of a physical balance.
     REAL(real64) :: physical_feasibility_residual_scaled=0.0_real64
     INTEGER(int64) :: physical_feasibility_cells=0_int64
     INTEGER(int64) :: balance_support_cells=0_int64
@@ -154,6 +163,7 @@ MODULE cloud_bal_pipeline
   PUBLIC :: run_cloud_bal_pipeline
   PUBLIC :: account_candidate_endpoint
   PUBLIC :: evaluate_joint_candidate
+  PUBLIC :: canonicalize_contracted_thermo_storage
   PUBLIC :: build_compact_balance_beta
   PUBLIC :: restore_pre_balance_winds
 
@@ -537,6 +547,18 @@ CONTAINS
         result%overall%changed=.FALSE.
         RETURN
       END IF
+      IF (PRESENT(physical_contract)) THEN
+        CALL canonicalize_contracted_thermo_storage(state_in,balance_candidate, &
+          localization_status,validation_reason)
+        IF (localization_status/=STATUS_OK) THEN
+          candidate_out=state_in; operational_out=state_in
+          result%thermo_budget=water_phase_budget()
+          result%candidate_budget=pressure_analysis_budget()
+          result%status=STATUS_FAILED; result%reason_code=validation_reason
+          CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,validation_reason)
+          RETURN
+        END IF
+      END IF
       CALL evaluate_joint_candidate(state_in,balance_candidate,config%balance, &
         trial_budget,trial_evaluation,localization_status,validation_reason,physical_contract)
       IF (localization_status/=STATUS_OK .OR. &
@@ -618,6 +640,106 @@ CONTAINS
     IF (PRESENT(requested_surface_pressure)) result%requested_surface_pressure=requested_surface_pressure
     IF (PRESENT(pressure_transition_seed)) result%pressure_transition_seed=pressure_transition_seed
   END SUBROUTINE run_cloud_bal_pipeline
+
+  SUBROUTINE canonicalize_contracted_thermo_storage(background,candidate,status,reason)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background
+    TYPE(cloud_bal_state_type), INTENT(INOUT) :: candidate
+    INTEGER, INTENT(OUT) :: status,reason
+    LOGICAL, ALLOCATABLE :: changed(:,:,:)
+    REAL(real64) :: total_water,pressure_mass
+    INTEGER :: nx,ny,nz,allocation_status,i,j,k
+
+    status=STATUS_FAILED
+    reason=REASON_SHAPE
+    nx=background%grid%nx; ny=background%grid%ny; nz=background%grid%nz
+    IF (candidate%grid%nx/=nx .OR. candidate%grid%ny/=ny .OR. candidate%grid%nz/=nz) RETURN
+    IF (ANY(candidate%above_ground .NEQV. background%above_ground)) THEN
+      reason=REASON_GATE
+      RETURN
+    END IF
+    IF (ANY(.NOT.ieee_is_finite(candidate%grid%pressure_mass_measure)) .OR. &
+        ANY(.NOT.ieee_is_finite(background%grid%pressure_mass_measure))) THEN
+      reason=REASON_NONFINITE
+      RETURN
+    END IF
+    IF (ANY(candidate%grid%pressure_mass_measure/=background%grid%pressure_mass_measure)) THEN
+      reason=REASON_GATE
+      RETURN
+    END IF
+    ALLOCATE(changed(nx,ny,nz),STAT=allocation_status)
+    IF (allocation_status/=0) THEN
+      reason=REASON_RANGE
+      RETURN
+    END IF
+    changed=.FALSE.
+    DO k=1,nz; DO j=1,ny; DO i=1,nx
+      IF (.NOT.background%above_ground(i,j,k)) CYCLE
+      IF (.NOT.(background%temperature%valid(i,j,k) .AND. candidate%temperature%valid(i,j,k) .AND. &
+          background%vapor%valid(i,j,k) .AND. candidate%vapor%valid(i,j,k) .AND. &
+          background%cloud_water%valid(i,j,k) .AND. candidate%cloud_water%valid(i,j,k) .AND. &
+          background%cloud_ice%valid(i,j,k) .AND. candidate%cloud_ice%valid(i,j,k) .AND. &
+          background%rain%valid(i,j,k) .AND. candidate%rain%valid(i,j,k) .AND. &
+          background%snow%valid(i,j,k) .AND. candidate%snow%valid(i,j,k) .AND. &
+          background%graupel%valid(i,j,k) .AND. candidate%graupel%valid(i,j,k))) THEN
+        ! Missing cells are handled by the declared contract's coverage gate.
+        ! Do not compare or canonicalize invalid placeholder payloads here.
+        CYCLE
+      END IF
+      IF (.NOT.ieee_is_finite(background%temperature%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(candidate%temperature%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(background%vapor%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(candidate%vapor%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(background%cloud_water%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(candidate%cloud_water%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(background%cloud_ice%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(candidate%cloud_ice%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(background%rain%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(candidate%rain%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(background%snow%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(candidate%snow%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(background%graupel%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(candidate%graupel%value(i,j,k))) THEN
+        reason=REASON_NONFINITE
+        RETURN
+      END IF
+      changed(i,j,k)=candidate%temperature%value(i,j,k)/=background%temperature%value(i,j,k) .OR. &
+        candidate%vapor%value(i,j,k)/=background%vapor%value(i,j,k) .OR. &
+        candidate%cloud_water%value(i,j,k)/=background%cloud_water%value(i,j,k) .OR. &
+        candidate%cloud_ice%value(i,j,k)/=background%cloud_ice%value(i,j,k) .OR. &
+        candidate%rain%value(i,j,k)/=background%rain%value(i,j,k) .OR. &
+        candidate%snow%value(i,j,k)/=background%snow%value(i,j,k) .OR. &
+        candidate%graupel%value(i,j,k)/=background%graupel%value(i,j,k)
+    END DO; END DO; END DO
+    IF (.NOT.ANY(changed)) THEN
+      status=STATUS_OK
+      reason=REASON_NONE
+      RETURN
+    END IF
+    DO k=1,nz; DO j=1,ny; DO i=1,nx
+      IF (.NOT.changed(i,j,k)) CYCLE
+      total_water=REAL(candidate%vapor%value(i,j,k),real64)+ &
+        REAL(candidate%cloud_water%value(i,j,k),real64)+REAL(candidate%cloud_ice%value(i,j,k),real64)+ &
+        REAL(candidate%rain%value(i,j,k),real64)+REAL(candidate%snow%value(i,j,k),real64)+ &
+        REAL(candidate%graupel%value(i,j,k),real64)
+      pressure_mass=candidate%grid%pressure_mass_measure(i,j,k)
+      IF (.NOT.ieee_is_finite(total_water) .OR. .NOT.ieee_is_finite(pressure_mass)) THEN
+        reason=REASON_NONFINITE
+        RETURN
+      END IF
+      IF (total_water<0.0_real64 .OR. pressure_mass<=0.0_real64) THEN
+        reason=REASON_RANGE
+        RETURN
+      END IF
+      candidate%grid%dry_air_mass_measure(i,j,k)=pressure_mass/(1.0_real64+total_water)
+      IF (.NOT.ieee_is_finite(candidate%grid%dry_air_mass_measure(i,j,k)) .OR. &
+          candidate%grid%dry_air_mass_measure(i,j,k)<=0.0_real64) THEN
+        reason=REASON_RANGE
+        RETURN
+      END IF
+    END DO; END DO; END DO
+    status=STATUS_OK
+    reason=REASON_NONE
+  END SUBROUTINE canonicalize_contracted_thermo_storage
 
   SUBROUTINE account_candidate_endpoint(background,candidate,budget,status,reason)
     ! Signed whole-state endpoint difference. It does not assign an external
@@ -828,7 +950,7 @@ CONTAINS
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(physical_joint_candidate_contract), INTENT(IN) :: contract
     TYPE(joint_candidate_evaluation), INTENT(INOUT) :: evaluation
-    REAL(real64) :: source,boundary,after_term,before_term
+    REAL(real64) :: source,boundary,phase,after_term,before_term
     REAL(real64) :: before_mass,after_mass,before_enthalpy,after_enthalpy,species_before(6),species_after(6)
     REAL(real64) :: scaled_residual
     INTEGER :: nx,ny,nz,i,j,k,c,shape3(3)
@@ -852,6 +974,20 @@ CONTAINS
         ANY(SHAPE(contract%physical_tolerance)/=(/8,nx,ny,nz/))) THEN
       evaluation%physical_feasibility_reason=REASON_SHAPE
       RETURN
+    END IF
+    IF (ALLOCATED(contract%phase_increment)) THEN
+      IF (ANY(SHAPE(contract%phase_increment)/=(/8,nx,ny,nz/))) THEN
+        evaluation%physical_feasibility_reason=REASON_SHAPE
+        RETURN
+      END IF
+      IF (ANY(.NOT.ieee_is_finite(contract%phase_increment))) THEN
+        evaluation%physical_feasibility_reason=REASON_NONFINITE
+        RETURN
+      END IF
+      IF (.NOT.internal_phase_contract_valid(contract%phase_increment,contract%coverage)) THEN
+        evaluation%physical_feasibility_reason=REASON_GATE
+        RETURN
+      END IF
     END IF
     IF (ANY(background%above_ground .NEQV. candidate%above_ground) .OR. &
         ANY(background%surface_pressure%value/=candidate%surface_pressure%value) .OR. &
@@ -970,6 +1106,8 @@ CONTAINS
       DO c=1,8
         source=contract%source_increment(c,i,j,k)
         boundary=contract%boundary_increment(c,i,j,k)
+        phase=0.0_real64
+        IF (ALLOCATED(contract%phase_increment)) phase=contract%phase_increment(c,i,j,k)
         IF (c==PHYSICAL_COMPONENT_DRY_MASS_METRIC) THEN
           after_term=after_mass; before_term=before_mass
         ELSE IF (c==PHYSICAL_COMPONENT_ENTHALPY) THEN
@@ -978,7 +1116,7 @@ CONTAINS
           after_term=after_mass*species_after(c-1)
           before_term=before_mass*species_before(c-1)
         END IF
-        IF (.NOT.increment_matches(after_term,before_term,source,boundary, &
+        IF (.NOT.increment_matches(after_term,before_term,source,boundary,phase, &
             contract%physical_tolerance(c,i,j,k),scaled_residual)) THEN
           CALL record_physical_failure(evaluation,i,j,k,c,scaled_residual)
           RETURN
@@ -989,6 +1127,32 @@ CONTAINS
     evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_PASS
     evaluation%physical_feasibility_reason=REASON_NONE
   END SUBROUTINE assess_physical_joint_candidate
+
+  PURE LOGICAL FUNCTION internal_phase_contract_valid(phase_increment,coverage)
+    REAL(real64), INTENT(IN) :: phase_increment(:,:,:,:)
+    LOGICAL, INTENT(IN) :: coverage(:,:,:)
+    REAL(real64) :: scale,water_sum,roundoff
+    INTEGER :: i,j,k
+    internal_phase_contract_valid=.FALSE.
+    IF (SIZE(phase_increment,1)/=8) RETURN
+    IF (ANY(SHAPE(phase_increment(1,:,:,:))/=SHAPE(coverage))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(phase_increment))) RETURN
+    DO k=1,SIZE(coverage,3); DO j=1,SIZE(coverage,2); DO i=1,SIZE(coverage,1)
+      IF (.NOT.coverage(i,j,k)) THEN
+        IF (ANY(phase_increment(:,i,j,k)/=0.0_real64)) RETURN
+        CYCLE
+      END IF
+      scale=MAXVAL(ABS(phase_increment(:,i,j,k)))
+      IF (scale==0.0_real64) CYCLE
+      IF (phase_increment(PHYSICAL_COMPONENT_DRY_MASS_METRIC,i,j,k)/=0.0_real64 .OR. &
+          phase_increment(PHYSICAL_COMPONENT_ENTHALPY,i,j,k)/=0.0_real64) RETURN
+      water_sum=SUM(phase_increment(2:7,i,j,k)/scale)
+      roundoff=64.0_real64*EPSILON(1.0_real64)* &
+        SUM(ABS(phase_increment(2:7,i,j,k)/scale))
+      IF (ABS(water_sum)>roundoff) RETURN
+    END DO; END DO; END DO
+    internal_phase_contract_valid=.TRUE.
+  END FUNCTION internal_phase_contract_valid
 
   SUBROUTINE preflight_physical_mass_contract(state,contract,evaluation)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
@@ -1010,6 +1174,23 @@ CONTAINS
         ANY(SHAPE(contract%source_increment)/=(/8,nx,ny,nz/)) .OR. &
         ANY(SHAPE(contract%boundary_increment)/=(/8,nx,ny,nz/)) .OR. &
         ANY(SHAPE(contract%physical_tolerance)/=(/8,nx,ny,nz/))) RETURN
+    IF (ALLOCATED(contract%phase_increment)) THEN
+      IF (ANY(SHAPE(contract%phase_increment)/=(/8,nx,ny,nz/))) THEN
+        evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+        evaluation%physical_feasibility_reason=REASON_SHAPE
+        RETURN
+      END IF
+      IF (ANY(.NOT.ieee_is_finite(contract%phase_increment))) THEN
+        evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+        evaluation%physical_feasibility_reason=REASON_NONFINITE
+        RETURN
+      END IF
+      IF (.NOT.internal_phase_contract_valid(contract%phase_increment,contract%coverage)) THEN
+        evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+        evaluation%physical_feasibility_reason=REASON_GATE
+        RETURN
+      END IF
+    END IF
     IF (ANY(.NOT.ieee_is_finite(contract%source_increment(1:7,:,:,:))) .OR. &
         ANY(.NOT.ieee_is_finite(contract%boundary_increment(1:7,:,:,:))) .OR. &
         ANY(.NOT.ieee_is_finite(contract%physical_tolerance(1:7,:,:,:)))) THEN
@@ -1185,22 +1366,23 @@ CONTAINS
     evaluation%physical_feasibility_residual_scaled=residual_scaled
   END SUBROUTINE record_physical_failure
 
-  LOGICAL FUNCTION increment_matches(after_term,before_term,source,boundary,physical_tolerance,residual_scaled)
-    REAL(real64), INTENT(IN) :: after_term,before_term,source,boundary,physical_tolerance
+  LOGICAL FUNCTION increment_matches(after_term,before_term,source,boundary,phase,physical_tolerance, &
+                                     residual_scaled)
+    REAL(real64), INTENT(IN) :: after_term,before_term,source,boundary,phase,physical_tolerance
     REAL(real64), INTENT(OUT) :: residual_scaled
     REAL(real64) :: scale,tolerance_scaled
     increment_matches=.FALSE.
     residual_scaled=0.0_real64
-    IF (ANY(.NOT.ieee_is_finite([after_term,before_term,source,boundary,physical_tolerance]))) RETURN
+    IF (ANY(.NOT.ieee_is_finite([after_term,before_term,source,boundary,phase,physical_tolerance]))) RETURN
     IF (physical_tolerance<0.0_real64) RETURN
-    scale=MAX(ABS(after_term),ABS(before_term),ABS(source),ABS(boundary),physical_tolerance)
+    scale=MAX(ABS(after_term),ABS(before_term),ABS(source),ABS(boundary),ABS(phase),physical_tolerance)
     IF (scale==0.0_real64) THEN
       increment_matches=.TRUE.
       RETURN
     END IF
-    residual_scaled=after_term/scale-before_term/scale-source/scale-boundary/scale
+    residual_scaled=after_term/scale-before_term/scale-source/scale-boundary/scale-phase/scale
     tolerance_scaled=physical_tolerance/scale+64.0_real64*EPSILON(1.0_real64)* &
-      (ABS(source/scale)+ABS(boundary/scale)+ABS(after_term/scale)+ABS(before_term/scale))
+      (ABS(source/scale)+ABS(boundary/scale)+ABS(phase/scale)+ABS(after_term/scale)+ABS(before_term/scale))
     increment_matches=ABS(residual_scaled)<=tolerance_scaled
   END FUNCTION increment_matches
 

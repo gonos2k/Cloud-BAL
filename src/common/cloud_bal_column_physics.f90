@@ -2945,7 +2945,7 @@ CONTAINS
     INTEGER(int64) :: selected
 
     ! One storage, budget and rollback path for both internal phase operations.
-    ! Fixed dry mass/geometry; no analysis increments or authority grant.
+    ! Fixed dry carrier/geometry; no analysis increments or authority grant.
     ! Copied targets and fall speeds are stale until a coupled caller refreshes
     ! dependent diagnostics; derive_column_physics does so for explicit requests.
     CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_SHAPE)

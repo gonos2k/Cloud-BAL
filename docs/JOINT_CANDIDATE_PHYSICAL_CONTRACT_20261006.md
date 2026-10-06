@@ -58,16 +58,22 @@ C=(m_d,m_v,m_c,m_i,m_r,m_s,m_g,H).
 The optional `physical_joint_candidate_contract` API requires the caller to
 prescribe source and boundary increments, complete atmospheric coverage,
 field change permissions, and physical tolerances \(t\) before solving.
-Only their net increment \(I=I_{\mathrm{source}}+I_{\mathrm{boundary}}\) is checked.
+Their prescribed increments are compared separately in scaled arithmetic; an
+optional internal phase ledger is a third term and is never folded into an
+external source. A phase ledger is caller supplied and stoichiometrically
+constrained (zero dry mass, zero net water, zero represented enthalpy); it is
+not a solved phase extent or a global optimizer.
 The local comparison is
 
 \[
-|C_i^a-C_i^b-I_i|\le t_i+e_{\mathrm{arithmetic},i}.
+|C_i^a-C_i^b-I_{\mathrm{source},i}-I_{\mathrm{boundary},i}-I_{\mathrm{phase},i}|
+\le t_i+e_{\mathrm{arithmetic},i}.
 \]
 
 The arithmetic allowance uses the operand scale and binary64 rounding;
 it is separate from the caller's physical tolerance. Every changed atmospheric
-cell must be covered, including unchanged cells in the declared atmosphere.
+declared coverage must include every required atmospheric cell, including
+cells whose values remain unchanged.
 Opposite local residuals cannot cancel through a domain
 sum. Missing species, geometry changes, missing declarations or unsupported
 criteria must remain explicit; they do not become zero residuals.
@@ -89,18 +95,42 @@ not part of the mass sum. This early check only rejects an incompatible
 declaration; it does not create or infer a physical source term.
 
 This prescribed-increment check cannot authenticate the supplied increment.
-It must not construct \(I\) from the endpoint it is checking. In a complete
-physical contract, independently admitted analysis, physical-time boundary
-transport and internal phase transfers determine \(I\). Only internal phase
-transfer has zero dry increment and zero total-water increment; external
-analysis or transport can change either. Solver iterations are not a physical
-transport interval. The current producer does not supply this complete policy.
+It must not construct \(I\) from the endpoint it is checking. The endpoint
+ledger keeps source, boundary and phase declarations separate:
+\[
+C^a-C^b=I_{\rm source}+I_{\rm boundary}+I_{\rm phase}.
+\]
+The optional phase ledger is caller supplied and checked independently for
+zero dry-mass change, zero net water change and zero represented mixture
+enthalpy. It is a prescribed local feasibility extent, not an inferred source
+or a solved global phase-transfer field. External analysis and physical-time
+boundary transport can change dry mass or water; solver iterations are not a
+physical transport interval. The current producer does not supply a complete
+admission policy for those terms.
 
 A local feasibility pass is distinct from stored-value convergence,
 observational fit, constrained stationarity, native acceptance and forecast
 benefit. In particular, the existing five-field fixed point does not establish
 an optimum. The default research path retains its diagnostic status when no
 independent contract is supplied.
+
+For an explicitly contracted fixed-pressure trial, the pipeline closes the
+stored dry-air-mass representation on cells whose committed temperature or
+water fields changed, using the fixed pressure-cell mass and stored float32
+water values:
+
+```text
+md_stored = pressure_mass / (1 + sum(stored water mixing ratios))
+```
+
+The standalone phase-transfer kernel continues to use its pre-transfer dry
+carrier when computing the physical extent and phase ledger. This final
+pipeline step reconciles stored representation; it is not a dry-mass source,
+phase transfer, or physical correction. Cells outside the changed
+thermodynamic mask remain bitwise unchanged. The caller's predeclared component
+tolerance bounds the resulting endpoint representation residual; it does not
+authorize an additional physical source. Variable-pressure contracts remain
+outside this fixed-geometry closure path.
 
 ## Native consumption and first call
 
@@ -136,12 +166,21 @@ failure assessment identifies the rejected trial; it does not describe an
 accepted state. The check runs before testing the five-field stored fixed point.
 An absent contract retains the existing research diagnostic path.
 
-The new contract and its assessment are in-memory API data. The present
-SHADOW schema does not serialize the declarations and its writer cannot
-independently reconstruct a contracted assessment. It rejects a result whose
-assessment differs from its own default research re-evaluation rather than
-discarding the new fields. A component PASS therefore does not grant a
-SHADOW publication or native acceptance.
+The schema now serializes physical component snapshots, source and boundary
+declarations, tolerances, coverage, and—when present—the optional internal
+phase ledger under `physical_internal_phase_v1`. The writer replays the same
+contract against its received endpoint; the independent reader checks the
+complete optional-field group and recomputes the eight-component local
+residual from stored values. Legacy no-phase receipts remain valid. A focused
+4×4×3 pipeline fixture exercises a nonzero, independently predeclared
+condensation extent through writer and both independent readback checks. Its
+storage tolerance is a float32 representation allowance fixed from the
+fixture inputs and oracle before invocation; it is not physical permission to
+alter the state. This fixture demonstrates local feasibility and file replay,
+not source authentication, global optimization, a full production candidate,
+native acceptance or forecast benefit. The schema-7 production validator
+retains its 235×283×22 domain gate and is not used to admit this deliberately
+small synthetic artifact.
 
 These conditions remain open until their actual execution evidence is linked
 to the same candidate. This document does not lower an acceptance threshold or

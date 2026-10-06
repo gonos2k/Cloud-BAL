@@ -265,3 +265,43 @@ The [team review](PR62_TEAM_REVIEW_20261006.md) and
 [closure plan](PR62_REVIEW_CLOSURE_CHECKLIST_20261006.md) separate completed
 implementation from pre-call transport, full moments, joint trial search,
 same-call budgets, and BASE/HYDRO/COUPLED time-response gates.
+
+## PR63 scoped update (2026-10-06)
+
+The [state-transition checklist](PR63_STATE_TRANSITION_CHECKLIST_20261006.md)
+separates the completed diagnostic and contract paths from physical approval.
+The [nonzero contract report](evidence/PR63_NONZERO_CONTRACT_REPORT_20261006.md)
+now records an actual pipeline/writer/readback on a synthetic 4x4x3 phase
+candidate with independently predeclared internal exchange, external source,
+boundary terms, and storage tolerances. Pinned Intel O0/O2 tests passed; this
+is not production-schema admission or a real NE57 joint optimization.
+
+The [native transition trace](PR63_NATIVE_STATE_TRANSITION_20261006.md)
+reproduces the PR62 KDM entry/return bytes with verified host instrumentation.
+The target QC/NC gap first appears at the observed RK1 QC-update cut; the
+actual donor flux/source remains unassigned. Solve-tile buffers and the KDM
+active window are now compared by global coordinates. The exact active
+window has 29,310 incoming QC>runtime-epsilon/NC=0 cells and 23,494 negative
+QC cells, and one QC/NC gap with no negative QC on return. No count from a
+larger buffer tile is silently reclassified as consumed KDM state.
+
+Contemporaneous hybrid geometry and DEN/DELZ are captured. The MU2-based dry
+carrier and DEN*DELZ diagnostic differ by +0.05856%, and process/boundary
+water and energy closure remain open. Eleven ghost-volume cases precede the
+terminal cutoff; 2,454 additional cases appear across that cutoff. A paired
+QG/BG research cleanup subsequently completed with the same pre-call state
+and geometry: returned ghost-volume states fell from 2,465 to zero while
+QG and every other captured KDM field stayed bitwise unchanged. The initial
+upstream-divergent attempt was interrupted and remains failed/incomplete
+evidence. The 11 pre-cutoff origins remain open. This is scoped extinction
+consistency, with a disclosed control object/archive chain limitation.
+
+The [isolated-run guard](NATIVE_RESEARCH_RUN_ISOLATION.md) checks declared
+input/output hashes and inode separation. It is not an OS sandbox, complete
+host build, or physical authorization. Failed builds/runs remain separate
+evidence. An extracted helper object was overwritten and restored; the
+original archive, executable, and raw results stayed unchanged. The
+overwrite command is unknown, and runtime isolation does not guard build
+paths. Overall physical initialization remains **FAIL/OPEN**; same-call
+budgets, admissible incoming moments, joint mass-wind trial construction, and
+fixed-setting 10/30/60-minute comparison remain required.
