@@ -1,0 +1,38 @@
+--- a/phys/module_mp_kdm6.F
++++ b/phys/module_mp_kdm6.F
+@@ -515,6 +515,8 @@
+                     )
+ !------------------------------------------------------------------------------
+     implicit none
++   real :: cloud_evap_extent
++   logical :: full_cloud_evap
+ !-------------------------------------------------------------------------------
+ !
+ !  This code is a KNU double-moment 6-class GRAUPEL phase 
+@@ -3005,14 +3007,22 @@
+ ! ncevp: evpration of Cloud number concentration  [LH A3] 
+ ! (NC->NCCN) 
+ !----------------------------------------------------------------
++          full_cloud_evap = .false.
+           if(pcond(i,k).eq.-qci(i,k,1)/dtcld) then
++            cloud_evap_extent = qci(i,k,1)
+             nci(i,k,3) = nci(i,k,3)+nci(i,k,1)
+             nci(i,k,1) = 0.
++            if(cloud_evap_extent.gt.0.) full_cloud_evap = .true.
++          endif
++          if(full_cloud_evap) then
++            q(i,k) = q(i,k)+cloud_evap_extent
++            qci(i,k,1) = 0.
++            t(i,k) = t(i,k)-cloud_evap_extent*xl(i,k)/cpm(i,k)
++          else
++            q(i,k) = q(i,k)-pcond(i,k)*dtcld
++            qci(i,k,1) = max(qci(i,k,1)+pcond(i,k)*dtcld,0.)
++            t(i,k) = t(i,k)+pcond(i,k)*xl(i,k)/cpm(i,k)*dtcld
+           endif
+-!
+-          q(i,k) = q(i,k)-pcond(i,k)*dtcld
+-          qci(i,k,1) = max(qci(i,k,1)+pcond(i,k)*dtcld,0.)
+-          t(i,k) = t(i,k)+pcond(i,k)*xl(i,k)/cpm(i,k)*dtcld
+         enddo
+       enddo
+ !----------------------------------------------------------------

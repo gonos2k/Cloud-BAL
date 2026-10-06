@@ -1,0 +1,139 @@
+{
+  "artifact_hashes": {
+    "archive_member_object_sha256": "668047a5584fb63d4c0fcbc4caaabb1190131f9941a8975c535f028dce03bcc0",
+    "archive_sha256": "85bb7a2811bca7d878af6c9eb8a8f625b1d8c6816de4b9c6407dd17c5a755c38",
+    "build_copy_executable_sha256": "15cbd37862eeb6b8de3bd4802691a26f8257aecb817077a97f78d5237f432a34",
+    "executable_sha256": "15cbd37862eeb6b8de3bd4802691a26f8257aecb817077a97f78d5237f432a34",
+    "object_sha256": "668047a5584fb63d4c0fcbc4caaabb1190131f9941a8975c535f028dce03bcc0"
+  },
+  "compile_abi_flags": [
+    "-FR",
+    "-convert big_endian",
+    "-real-size 32",
+    "-i4",
+    "-O3",
+    "-ip",
+    "-fp-model precise",
+    "-w",
+    "-ftz",
+    "-align all",
+    "-fno-alias"
+  ],
+  "compile_argv": [
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "-c",
+    "-FR",
+    "-convert",
+    "big_endian",
+    "-real-size",
+    "32",
+    "-i4",
+    "-O3",
+    "-ip",
+    "-fp-model",
+    "precise",
+    "-w",
+    "-ftz",
+    "-align",
+    "all",
+    "-fno-alias",
+    "-stand",
+    "f08",
+    "-warn",
+    "all",
+    "-fpe0",
+    "-traceback",
+    "-O2",
+    "-fp-model",
+    "strict",
+    "-fimf-arch-consistency=true",
+    "-no-ftz",
+    "-I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys",
+    "-I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/frame",
+    "-I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/inc",
+    "-I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/share",
+    "-I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/main",
+    "module_mp_kdm6_pr62_extent.f90",
+    "-o",
+    "module_mp_kdm6.o"
+  ],
+  "compiler": [
+    "compiler=/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "version=ifx (IFX) 2026.0.0 20260331",
+    "compiler_sha256=909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef"
+  ],
+  "failed_prep": {
+    "original_log_status": "Original compile_final.log was overwritten by successful retry and is not retained; the reproduced log hash below is not the original attempt.",
+    "reproduced_missing_mod_log_sha256": "d3faba9e3aff04ffc095fb6f7fb82fa3e56e003778400d67ab5fcc4302359091",
+    "result": "Intel failed with missing module_mp_radar/module_model_constants .mod; resolved via read-only module search paths; no wrong object was linked."
+  },
+  "host_link_inputs": {
+    "closure": "Partial: retained host objects/libraries; only selected KDM6 object freshly compiled.",
+    "manifest_sha256": "93526b56eae733d9186565be7bc1e9ce2a92c8ca35ff24b3cb59054862e12d20",
+    "matches_PR61_combined_strict": true
+  },
+  "inherited_manifest": {
+    "filename": "build_final/build-artifacts.inherited_pr61.sha256",
+    "sha256": "f834d6ba186bce0310612ff2b4e1298c54504092be86571255d4c1febdc0ec5d",
+    "status": "preserved as stale PR61 identity; replaced by fresh candidate manifest."
+  },
+  "link_argv_record": "/var/tmp/kdm6_pr62_extent_patch_20261006/link_final.command.txt",
+  "link_argv_record_status": "Summary command only: retained pinned WRF link libraries are represented by a placeholder, so the expanded link argv was not captured. Exact link closure is not claimed; host input manifest matches PR61 and executable/archive/object identities are recorded.",
+  "preprocessor": {
+    "arguments": [
+      "/lib/cpp",
+      "-P",
+      "-nostdinc",
+      "-DIWORDSIZE=4",
+      "-DDWORDSIZE=8",
+      "-DRWORDSIZE=4",
+      "-DLWORDSIZE=4",
+      "-DEM_CORE=1",
+      "-DNMM_CORE=0",
+      "-DNMM_MAX_DIM=2600",
+      "-DDA_CORE=0",
+      "-DWRFPLUS=0",
+      "-DNONSTANDARD_SYSTEM_FUNC",
+      "-DWRF_USE_CLM",
+      "-DDM_PARALLEL",
+      "-DNETCDF",
+      "-traditional-cpp",
+      "module_mp_kdm6.F",
+      ">",
+      "module_mp_kdm6_pr62_extent.f90"
+    ],
+    "binary": "/lib/cpp",
+    "configure_rwordsize_4": true,
+    "configure_wrf_sha256": "94b5638a043247f8fff3614e13330d15e5a2ec74482d20bc907f58baeba3aba5",
+    "generated_source_sha256": "a847491d8599eb71c513dd002ed583110fd574fe259865cd1a803018ff2b57db",
+    "macro_assertions": [
+      "DRWORDSIZE=4",
+      "DIWORDSIZE=4",
+      "DDWORDSIZE=8",
+      "DLWORDSIZE=4",
+      "vsrec",
+      "vssqrt"
+    ]
+  },
+  "schema": "pr62_kdm6_build_manifest_v1",
+  "source": {
+    "baseline_production_sha256": "61bac0c2868a5d31dcfaa9f4a4e076622cdfaa260ca69524eeb8ce3f5a840244",
+    "candidate_production_sha256": "43be4388b69374caff13d1822b4020103e491a6786da1f2b70da521befe6e3bd",
+    "diagnostic_extension_patch_sha256": "0aef77fc2459490f1ee2cf27e64b63725be9d6a91e95d54c4146ac9a506b8c88",
+    "diagnostic_extension_sha256": "10879c5cfaebd5969c2e70dc0c4b6e187bbe6c1ca09244187d302b18c40903f2",
+    "production_patch_sha256": "acbbf4985e1bcd919ca96c7cf8c72a900a6821301ebc2df99484b7e9f3986a8b"
+  },
+  "source_commit_base": "PR61 research source-copy production patch base; not maintained WRF tree",
+  "strict_repro_flags": [
+    "-stand f08",
+    "-warn all",
+    "-fpe0",
+    "-traceback",
+    "-O2",
+    "-fp-model strict",
+    "-fimf-arch-consistency=true",
+    "-no-ftz"
+  ],
+  "successful_compile_log_sha256": "5e3043681565e5f79152783d535e53cfa407b01d5284b755c5010187b78aa924",
+  "successful_link_log_sha256": "5e3043681565e5f79152783d535e53cfa407b01d5284b755c5010187b78aa924"
+}

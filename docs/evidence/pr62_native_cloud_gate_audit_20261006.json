@@ -1,0 +1,224 @@
+{
+  "bound_validators": {
+    "QCLOUD": {
+      "bound_source": "PR61 declared QCLOUD source mean-particle-mass envelope",
+      "checked_count": 2533440,
+      "mutated_input": false,
+      "reason": "MASS_NUMBER_OUTSIDE_DECLARED_PARTICLE_BOUNDS",
+      "source_authentication": "NOT_ASSESSED",
+      "status": "FAIL",
+      "uncertainty_description": "deterministic source envelope; mean mass only",
+      "valid": false,
+      "violation_count": 10
+    },
+    "QGRAUP": {
+      "bound_source": "PR61 declared QGRAUP bulk-density envelope",
+      "checked_count": 2533440,
+      "mutated_input": false,
+      "reason": "MASS_VOLUME_OUTSIDE_DECLARED_DENSITY_BOUNDS",
+      "source_authentication": "NOT_ASSESSED",
+      "status": "FAIL",
+      "uncertainty_description": "deterministic source envelope",
+      "valid": false,
+      "violation_count": 33674
+    },
+    "QICE": {
+      "bound_source": "PR61 declared QICE source mean-particle-mass envelope",
+      "checked_count": 2533440,
+      "mutated_input": false,
+      "reason": "MASS_NUMBER_OUTSIDE_DECLARED_PARTICLE_BOUNDS",
+      "source_authentication": "NOT_ASSESSED",
+      "status": "FAIL",
+      "uncertainty_description": "deterministic source envelope; mean mass only",
+      "valid": false,
+      "violation_count": 3
+    },
+    "QRAIN": {
+      "bound_source": "PR61 declared QRAIN source mean-particle-mass envelope",
+      "checked_count": 2533440,
+      "mutated_input": false,
+      "reason": "MASS_NUMBER_OUTSIDE_DECLARED_PARTICLE_BOUNDS",
+      "source_authentication": "NOT_ASSESSED",
+      "status": "FAIL",
+      "uncertainty_description": "deterministic source envelope; mean mass only",
+      "valid": false,
+      "violation_count": 260
+    }
+  },
+  "ccn_t20": {
+    "cells": 2573532,
+    "finite": 2573532,
+    "negative": 0,
+    "nonfinite": 0,
+    "positive": 2557538,
+    "zero": 15994
+  },
+  "cross_stage_weighted_gap": {
+    "QC_equivalent_mass_kg": 477.4698860937005,
+    "QC_t20": 3.0767935754738573e-07,
+    "area_native_m2": 25929624.610319857,
+    "dp_dry_Pa": 587.1112521497964,
+    "dry_layer_mass_kg": 1551842443.7042882,
+    "geometry_time": "t+20 WRF output; same-call MU/MUB/DNW/map metrics were not captured; diagnostic proxy only",
+    "i_j_k": [
+      172,
+      76,
+      1
+    ]
+  },
+  "entry_negative_QC": {
+    "entry_negative_count": 23494,
+    "entry_negative_median_kg_kg": -2.4278758257306743e-12,
+    "entry_negative_min_kg_kg": -4.586014483720646e-07,
+    "entry_negative_returned_positive_count": 30,
+    "entry_negative_returned_zero_count": 23464,
+    "entry_negative_unweighted_sum_kg_kg": -0.0001860653140333421,
+    "interpretation": "Entry values are not clipped by this patch; existing initial KDM6 projection clears negative QC. No matching source-specific QV/temperature correction or physical closure is claimed.",
+    "returned_negative_count": 0
+  },
+  "local_water_arithmetic": {
+    "167,280,6": {
+      "QC_post": 0.0,
+      "QC_pre": 3.0924054499337217e-06,
+      "Q_post": 0.014251811429858208,
+      "Q_pre": 0.014248719438910484,
+      "T_K_post": 293.5903625488281,
+      "T_K_pre": 293.5978088378906,
+      "float64_sum_from_stored_operands_delta": -4.1450221033301204e-10,
+      "pre_sum_ulp": 9.313225746154785e-10,
+      "stored_fp32_Q_plus_QC_post": 0.014251811429858208,
+      "stored_fp32_Q_plus_QC_pre": 0.014251811429858208,
+      "stored_fp32_sum_delta": 0.0
+    },
+    "172,76,1": {
+      "QC_post": 3.0767935754738573e-07,
+      "QC_pre": 5.03652699990198e-07,
+      "Q_post": 0.017737682908773422,
+      "Q_pre": 0.017737485468387604,
+      "T_K_post": 296.0556945800781,
+      "T_K_pre": 296.05615234375,
+      "float64_sum_from_stored_operands_delta": 1.4670433756691637e-09,
+      "pre_sum_ulp": 1.862645149230957e-09,
+      "stored_fp32_Q_plus_QC_post": 0.017737990245223045,
+      "stored_fp32_Q_plus_QC_pre": 0.017737988382577896,
+      "stored_fp32_sum_delta": 1.862645149230957e-09
+    }
+  },
+  "netcdf_t20_output_changes": {
+    "MU": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "MUB": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QCLOUD": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QGRAUP": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QIB": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QICE": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QNCCN": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QNCLOUD": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QNICE": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QNRAIN": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QRAIN": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QSNOW": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 0,
+      "max_abs_difference": 0.0
+    },
+    "QVAPOR": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 496,
+      "max_abs_difference": 1.862645149230957e-09
+    },
+    "REFL_10CM": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 21,
+      "max_abs_difference": 1.1444091796875e-05
+    },
+    "T": {
+      "candidate_nonfinite": 0,
+      "changed_cells": 111,
+      "max_abs_difference": 6.103515625e-05,
+      "meaning": "WRF perturbation potential temperature theta-t0 (K); not physical air temperature. Raw physical temperature is TH*PII."
+    }
+  },
+  "reflectivity_t20": {
+    "cells": 2573532,
+    "finite": 2573532,
+    "max": 68.50911712646484,
+    "min": -35.0,
+    "nonfinite": 0
+  },
+  "schema": "pr62_candidate_qn_gate_audit_v1",
+  "species_gap_counts": {
+    "QC": {
+      "active_mass_count": 233629,
+      "active_q_gt_declared_threshold_zero_moment": 1,
+      "positive_mass_zero_moment_q_gt_zero": 1
+    },
+    "QG": {
+      "active_mass_count": 65464,
+      "active_q_gt_declared_threshold_zero_moment": 0,
+      "positive_mass_zero_moment_q_gt_zero": 0
+    },
+    "QI": {
+      "active_mass_count": 221419,
+      "active_q_gt_declared_threshold_zero_moment": 0,
+      "positive_mass_zero_moment_q_gt_zero": 0
+    },
+    "QR": {
+      "active_mass_count": 260612,
+      "active_q_gt_declared_threshold_zero_moment": 0,
+      "positive_mass_zero_moment_q_gt_zero": 0
+    }
+  },
+  "stage_row_calls": 280,
+  "stage_sum": [
+    1,
+    0,
+    1,
+    0,
+    0,
+    0
+  ]
+}

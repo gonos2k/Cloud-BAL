@@ -1,6 +1,6 @@
 # NE57 physical execution checklist — 2026-10-06
 
-Status: **CLEAN FROZEN-SOURCE RESEARCH REPLAY PASSED; FIRST NATIVE CALL CAPTURED; REFLECTIVITY ACCEPTANCE FAILED; JOINT AND SCIENTIFIC APPROVAL OPEN.** This checklist carries the PR59 review into a bounded NE57 execution plan. A valid build, WPS pair, or graph snapshot is not a native initialization or forecast result.
+Status: **RESEARCH PRODUCER AND FIRST NATIVE CALL CAPTURED; FULL MOMENT AND SCIENTIFIC APPROVAL FAIL/OPEN.** PR60's reflectivity failure is historical evidence; PR61's copied-source experiment has finite reflectivity but fails the cloud mass/number gate. The [PR62 closure checklist](PR62_REVIEW_CLOSURE_CHECKLIST_20261006.md) tracks the subsequent process investigation and contract readback. A valid build, WPS pair, or graph snapshot is not a native initialization or forecast result.
 
 ## Prior actual-case baseline
 
@@ -39,10 +39,10 @@ Keep output and temporary directories separate. Hash-check the copied inputs
 again after each process. The retained inputs and prior generation are
 historical evidence and must not be changed.
 
-## Current source identity and safe replay setup
+## Historical PR60 source identity and safe replay setup
 
-This worktree starts at `ea2c02bb808bc9cf77b97fc4a25a2da06dfd73a1`, the PR59
-merge now named `origin/main`. It contains audit changes after source 901,
+The PR60 replay worktree started at `ea2c02bb808bc9cf77b97fc4a25a2da06dfd73a1`,
+the PR59 merge. It contained audit changes after source 901,
 including the diagnostic-operator NaN guard and receipt-validator checks.
 The new producer replay is bound to clean commit
 `44212f938f0a529d298e903dc4146d7e0401134a`, recorded before the later
@@ -245,3 +245,23 @@ Only the selected source-copy PD and KDM6 objects were rebuilt with the pinned
 strict Intel profile. Operational sources were not patched. Contracted SHADOW
 publication, independent source/boundary budgets, joint trial search, and the
 complete moment state remain open.
+
+## PR62 scoped update (2026-10-06)
+
+The [native gap trace](PR62_NATIVE_CLOUD_GAP_TRACE_20261006.md) follows the
+PR61 first-call input in a copied-source, pinned Intel 20-second run. A paired
+full-evaporation extent removes 49,066 tagged QC/NC residual gaps; one gap was
+already present at entry and remains. Negative entry QC and strict moment
+violations are retained as failures. Reflectivity finiteness is a scoped PASS.
+
+The [contract readback](PR62_COMPONENT_CONTRACT_READBACK_20261006.md) retains
+and serializes the optional prescribed component declaration and replays its
+eight local residuals against stored inputs and available canonical fields.
+The actual writer fixture is zero-change; changed-state controls are synthetic
+reader tests. This closes the implementation bridge within that scope, without
+authenticating physical sources or establishing a feasible coupled producer.
+
+The [team review](PR62_TEAM_REVIEW_20261006.md) and
+[closure plan](PR62_REVIEW_CLOSURE_CHECKLIST_20261006.md) separate completed
+implementation from pre-call transport, full moments, joint trial search,
+same-call budgets, and BASE/HYDRO/COUPLED time-response gates.

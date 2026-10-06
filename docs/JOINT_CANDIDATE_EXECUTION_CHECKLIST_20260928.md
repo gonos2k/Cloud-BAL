@@ -405,3 +405,23 @@ external-scratch suites are used as validation evidence here.
   disabled and does not supply the optional prescribed-component contract.
   Content identity with the traced native candidate does not resolve its
   33,617 nonfinite reflectivity cells or missing rain-number prior.
+
+## PR62 scoped contract and native update (2026-10-06)
+
+- [x] Retain the optional component declaration, serialize its label/coverage/
+  increments/tolerances, and independently replay the eight local components
+  while binding available canonical fields. Actual writer O0/O2 fixture is
+  zero-change; two changed-state reader controls are synthetic.
+- [x] Trace a matched native full-evaporation gap and test a paired phase extent
+  in an external source copy. Returned QC-positive/NC-zero count is 1, with
+  strict moment gate still FAIL and host build closure partial.
+- [ ] Locate and correct the pre-call Q/N and negative-QC generation steps
+  using a common admissibility-preserving transport/process update.
+- [ ] Generate feasible joint trials with independent source/boundary authority
+  and internal phase freedom; establish feasibility and optimality separately.
+- [ ] Verify full native mapped budgets and fixed-setting BASE/HYDRO/COUPLED
+  10/30/60-minute responses and independent forecast observations.
+
+See [PR62 team review](PR62_TEAM_REVIEW_20261006.md) and
+[closure checklist](PR62_REVIEW_CLOSURE_CHECKLIST_20261006.md). No scoped PASS
+is promoted to full physical or operational approval.

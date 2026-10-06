@@ -8,6 +8,8 @@ MODULE cloud_bal_real_netcdf
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
   USE netcdf
   USE cloud_bal_state
+  USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config, &
+    run_cloud_bal_pipeline
   USE cloud_bal_column_physics, ONLY: column_changed_mask,column_config_valid, &
     saturation_adjust_pressure_state,water_phase_budget,pressure_analysis_budget,account_pressure_analysis, &
     apply_pressure_hydrostatic_increment,PHASE_UNKNOWN,PHASE_RAIN,PHASE_SNOW, &
@@ -1275,6 +1277,10 @@ CONTAINS
     END IF
     IF (.NOT.put_interior_hydrostatic_assessment(ncid,(/xdim,ydim,zdim/),zspacing_dim, &
       candidate,result%candidate_evaluation)) GOTO 900
+    IF (ALLOCATED(result%physical_contract)) THEN
+      IF (.NOT.put_physical_contract_extension(ncid,(/xdim,ydim,zdim/), &
+        state_in,candidate,result%physical_contract,result%candidate_evaluation)) GOTO 900
+    END IF
     rc=nf90_close(ncid)
     IF (rc==NF90_NOERR) THEN
       status=STATUS_OK
@@ -1286,6 +1292,97 @@ CONTAINS
     rc=nf90_close(ncid)
     CALL delete_failed_shadow_file(path)
   END SUBROUTINE write_shadow_diagnostics
+
+  LOGICAL FUNCTION put_physical_contract_extension(ncid,dims,background,candidate,contract,evaluation)
+    USE cloud_bal_pipeline, ONLY: physical_joint_candidate_contract,joint_candidate_evaluation
+    INTEGER, INTENT(IN) :: ncid,dims(3)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
+    TYPE(physical_joint_candidate_contract), INTENT(IN) :: contract
+    TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
+    INTEGER :: component_dim,coverage_var,source_var,boundary_var,tolerance_var,nx,ny,nz,mass_var
+    INTEGER(int32), ALLOCATABLE :: coverage(:,:,:)
+    CHARACTER(LEN=1024) :: extensions
+
+    put_physical_contract_extension=.FALSE.
+    IF (LEN_TRIM(contract%contract_identity)==0) RETURN
+    IF (.NOT.ALLOCATED(contract%coverage) .OR. .NOT.ALLOCATED(contract%source_increment) .OR. &
+        .NOT.ALLOCATED(contract%boundary_increment) .OR. .NOT.ALLOCATED(contract%physical_tolerance)) RETURN
+    IF (nf90_inquire_dimension(ncid,dims(1),len=nx)/=NF90_NOERR .OR. &
+        nf90_inquire_dimension(ncid,dims(2),len=ny)/=NF90_NOERR .OR. &
+        nf90_inquire_dimension(ncid,dims(3),len=nz)/=NF90_NOERR) RETURN
+    IF (ANY(SHAPE(contract%coverage)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(contract%source_increment)/=(/8,nx,ny,nz/)) .OR. &
+        ANY(SHAPE(contract%boundary_increment)/=(/8,nx,ny,nz/)) .OR. &
+        ANY(SHAPE(contract%physical_tolerance)/=(/8,nx,ny,nz/))) RETURN
+    IF (.NOT.put_thermo_field(ncid,dims,'physical_background_temperature',background%temperature) .OR. &
+        .NOT.put_thermo_field(ncid,dims,'physical_candidate_temperature',candidate%temperature)) RETURN
+    IF (.NOT.put_thermo_field(ncid,dims,'physical_background_vapor',background%vapor) .OR. &
+        .NOT.put_thermo_field(ncid,dims,'physical_candidate_vapor',candidate%vapor)) RETURN
+    IF (.NOT.put_thermo_field(ncid,dims,'physical_background_cloud_water',background%cloud_water) .OR. &
+        .NOT.put_thermo_field(ncid,dims,'physical_candidate_cloud_water',candidate%cloud_water)) RETURN
+    IF (.NOT.put_thermo_field(ncid,dims,'physical_background_cloud_ice',background%cloud_ice) .OR. &
+        .NOT.put_thermo_field(ncid,dims,'physical_candidate_cloud_ice',candidate%cloud_ice)) RETURN
+    IF (.NOT.put_thermo_field(ncid,dims,'physical_background_rain',background%rain) .OR. &
+        .NOT.put_thermo_field(ncid,dims,'physical_candidate_rain',candidate%rain)) RETURN
+    IF (.NOT.put_thermo_field(ncid,dims,'physical_background_snow',background%snow) .OR. &
+        .NOT.put_thermo_field(ncid,dims,'physical_candidate_snow',candidate%snow)) RETURN
+    IF (.NOT.put_thermo_field(ncid,dims,'physical_background_graupel',background%graupel) .OR. &
+        .NOT.put_thermo_field(ncid,dims,'physical_candidate_graupel',candidate%graupel)) RETURN
+    IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
+    IF (.NOT.nc_ok(nf90_def_dim(ncid,'physical_component',8,component_dim))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_background_dry_air_mass_measure', &
+        NF90_DOUBLE,dims,mass_var))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,mass_var,'units','kg dryair'))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,mass_var,1,1,1))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_candidate_dry_air_mass_measure', &
+        NF90_DOUBLE,dims,mass_var))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,mass_var,'units','kg dryair'))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,mass_var,1,1,1))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_contract_coverage',NF90_INT,dims,coverage_var))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_source_increment',NF90_DOUBLE, &
+        (/component_dim,dims/),source_var))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_boundary_increment',NF90_DOUBLE, &
+        (/component_dim,dims/),boundary_var))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_tolerance',NF90_DOUBLE, &
+        (/component_dim,dims/),tolerance_var))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_contract_version', &
+        'physical_joint_candidate_v1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_contract_identity', &
+        TRIM(contract%contract_identity))) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_feasibility_status', &
+        evaluation%physical_feasibility_status)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_feasibility_reason', &
+        evaluation%physical_feasibility_reason)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_feasibility_cells', &
+        evaluation%physical_feasibility_cells)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_feasibility_residual_scaled', &
+        evaluation%physical_feasibility_residual_scaled)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_contract_adjustable_variables', &
+        INT(contract%adjustable_variables,int32))) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_contract_component_order', &
+        'dry_mass,vapor,cloud_water,cloud_ice,rain,snow,graupel,mixture_enthalpy')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_contract_component_units', &
+        'kg,kg,kg,kg,kg,kg,kg,J')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,coverage_var,'units','1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,source_var,'units','kg for components 1:7; J for component 8')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,boundary_var,'units','kg for components 1:7; J for component 8')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,tolerance_var,'units','kg for components 1:7; J for component 8'))) RETURN
+    IF (.NOT.nc_ok(nf90_get_att(ncid,NF90_GLOBAL,'schema_extensions',extensions))) RETURN
+    extensions=TRIM(extensions)//',physical_joint_candidate_v1'
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions',TRIM(extensions)))) RETURN
+    IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
+    ALLOCATE(coverage(nx,ny,nz))
+    coverage=MERGE(1_int32,0_int32,contract%coverage)
+    IF (.NOT.nc_ok(nf90_inq_varid(ncid,'physical_background_dry_air_mass_measure',mass_var))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(ncid,mass_var,background%grid%dry_air_mass_measure))) RETURN
+    IF (.NOT.nc_ok(nf90_inq_varid(ncid,'physical_candidate_dry_air_mass_measure',mass_var))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(ncid,mass_var,candidate%grid%dry_air_mass_measure))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(ncid,coverage_var,coverage)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,source_var,contract%source_increment)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,boundary_var,contract%boundary_increment)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,tolerance_var,contract%physical_tolerance))) RETURN
+    put_physical_contract_extension=.TRUE.
+  END FUNCTION put_physical_contract_extension
 
   SUBROUTINE delete_failed_shadow_file(path)
     ! nf90_create used NOCLOBBER, so only this fresh failed product is removed.
@@ -2071,7 +2168,7 @@ CONTAINS
   SUBROUTINE validate_shadow_write_contract(state_in,candidate,operational_state, &
                                             result,config,status,reason,pressure_analysis_candidate)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config, &
-      joint_candidate_evaluation,evaluate_joint_candidate
+      joint_candidate_evaluation,evaluate_joint_candidate,PHYSICAL_FEASIBILITY_PASS
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in,candidate,operational_state
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
@@ -2084,6 +2181,9 @@ CONTAINS
     REAL(real64) :: flux_terms(7),flux_accounted,flux_error,flux_limit
 
     status=STATUS_FAILED; reason=REASON_AUTHORITY
+    IF (ALLOCATED(result%physical_contract)) THEN
+      IF (result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS) RETURN
+    END IF
     pressure_candidate=.FALSE.
     transition=ALLOCATED(result%pressure_transition_seed)
     ! Serialization binds a candidate to its producing pipeline. Independent
@@ -2284,8 +2384,13 @@ CONTAINS
         variable_geometry .OR. cloud_present) THEN
       IF (.NOT.pipeline_result_replays(state_in,candidate,result,config)) RETURN
     END IF
-    CALL evaluate_joint_candidate(state_in,candidate,config%balance,endpoint_budget, &
-      endpoint_evaluation,state_status,state_reason)
+    IF (ALLOCATED(result%physical_contract)) THEN
+      CALL evaluate_joint_candidate(state_in,candidate,config%balance,endpoint_budget, &
+        endpoint_evaluation,state_status,state_reason,physical_contract=result%physical_contract)
+    ELSE
+      CALL evaluate_joint_candidate(state_in,candidate,config%balance,endpoint_budget, &
+        endpoint_evaluation,state_status,state_reason)
+    END IF
     IF (state_status/=STATUS_OK) THEN
       reason=state_reason
       RETURN
@@ -2297,7 +2402,6 @@ CONTAINS
   END SUBROUTINE validate_shadow_write_contract
 
   LOGICAL FUNCTION pipeline_result_replays(background,candidate,result,config)
-    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config,run_cloud_bal_pipeline
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
@@ -2320,12 +2424,12 @@ CONTAINS
       ! only covered the background; transition reconstructs the added support.
       requested_support=result%geopotential_support .AND. background%above_ground
       IF (ALLOCATED(result%thermo_support)) THEN
-        CALL run_cloud_bal_pipeline(background,replay,operational,replay_result,config, &
+        CALL run_pipeline_replay(background,replay,operational,replay_result,config,result, &
           result%thermo_support,result%thermo_surface,result%thermo_target_rh, &
           requested_support,result%geopotential_reference_level, &
           result%requested_surface_pressure,result%pressure_transition_seed)
       ELSE
-        CALL run_cloud_bal_pipeline(background,replay,operational,replay_result,config, &
+        CALL run_pipeline_replay(background,replay,operational,replay_result,config,result, &
           geopotential_support=requested_support, &
           geopotential_reference_level=result%geopotential_reference_level, &
           requested_surface_pressure=result%requested_surface_pressure, &
@@ -2334,31 +2438,31 @@ CONTAINS
     ELSE IF (ALLOCATED(result%thermo_support) .AND. &
         ALLOCATED(result%geopotential_support)) THEN
       IF (ALLOCATED(result%requested_surface_pressure)) THEN
-        CALL run_cloud_bal_pipeline(background,replay,operational,replay_result,config, &
+        CALL run_pipeline_replay(background,replay,operational,replay_result,config,result, &
           result%thermo_support,result%thermo_surface,result%thermo_target_rh, &
           result%geopotential_support,result%geopotential_reference_level, &
           result%requested_surface_pressure)
       ELSE
-        CALL run_cloud_bal_pipeline(background,replay,operational,replay_result,config, &
+        CALL run_pipeline_replay(background,replay,operational,replay_result,config,result, &
           result%thermo_support,result%thermo_surface,result%thermo_target_rh, &
           result%geopotential_support,result%geopotential_reference_level)
       END IF
     ELSE IF (ALLOCATED(result%thermo_support)) THEN
-      CALL run_cloud_bal_pipeline(background,replay,operational,replay_result,config, &
+      CALL run_pipeline_replay(background,replay,operational,replay_result,config,result, &
         result%thermo_support,result%thermo_surface,result%thermo_target_rh)
     ELSE IF (ALLOCATED(result%geopotential_support)) THEN
       IF (ALLOCATED(result%requested_surface_pressure)) THEN
-        CALL run_cloud_bal_pipeline(background,replay,operational,replay_result,config, &
+        CALL run_pipeline_replay(background,replay,operational,replay_result,config,result, &
           geopotential_support=result%geopotential_support, &
           geopotential_reference_level=result%geopotential_reference_level, &
           requested_surface_pressure=result%requested_surface_pressure)
       ELSE
-        CALL run_cloud_bal_pipeline(background,replay,operational,replay_result,config, &
+        CALL run_pipeline_replay(background,replay,operational,replay_result,config,result, &
           geopotential_support=result%geopotential_support, &
           geopotential_reference_level=result%geopotential_reference_level)
       END IF
     ELSE
-      CALL run_cloud_bal_pipeline(background,replay,operational,replay_result,config)
+      CALL run_pipeline_replay(background,replay,operational,replay_result,config,result)
     END IF
     IF (replay_result%status/=STATUS_OK) RETURN
     IF (replay_result%requested_mode/=result%requested_mode .OR. &
@@ -2417,6 +2521,34 @@ CONTAINS
     IF (.NOT.canonical_states_equal(replay,candidate)) RETURN
     pipeline_result_replays=.TRUE.
   END FUNCTION pipeline_result_replays
+
+  SUBROUTINE run_pipeline_replay(background,candidate,operational,replay_result,config,receipt, &
+      thermo_active,thermo_surface,target_rh,geopotential_support,geopotential_reference_level, &
+      requested_surface_pressure,pressure_transition_seed)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background
+    TYPE(cloud_bal_state_type), INTENT(OUT) :: candidate,operational
+    TYPE(cloud_bal_pipeline_result), INTENT(OUT) :: replay_result
+    TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
+    TYPE(cloud_bal_pipeline_result), INTENT(IN) :: receipt
+    LOGICAL, INTENT(IN), OPTIONAL :: thermo_active(:,:,:)
+    INTEGER, INTENT(IN), OPTIONAL :: thermo_surface(:,:,:)
+    REAL(real64), INTENT(IN), OPTIONAL :: target_rh
+    LOGICAL, INTENT(IN), OPTIONAL :: geopotential_support(:,:,:)
+    INTEGER, INTENT(IN), OPTIONAL :: geopotential_reference_level(:,:)
+    REAL(real64), INTENT(IN), OPTIONAL :: requested_surface_pressure(:,:)
+    TYPE(cloud_bal_state_type), INTENT(IN), OPTIONAL :: pressure_transition_seed
+
+    IF (ALLOCATED(receipt%physical_contract)) THEN
+      CALL run_cloud_bal_pipeline(background,candidate,operational,replay_result,config, &
+        thermo_active,thermo_surface,target_rh,geopotential_support, &
+        geopotential_reference_level,requested_surface_pressure,pressure_transition_seed, &
+        physical_contract=receipt%physical_contract)
+    ELSE
+      CALL run_cloud_bal_pipeline(background,candidate,operational,replay_result,config, &
+        thermo_active,thermo_surface,target_rh,geopotential_support, &
+        geopotential_reference_level,requested_surface_pressure,pressure_transition_seed)
+    END IF
+  END SUBROUTINE run_pipeline_replay
 
   LOGICAL FUNCTION stage_results_equal(left,right)
     TYPE(stage_result), INTENT(IN) :: left,right

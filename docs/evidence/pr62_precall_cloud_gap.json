@@ -1,0 +1,86 @@
+{
+  "schema": "pr62_precall_cloud_gap_evidence_v1",
+  "scope": "read-only retained-artifact comparison; no rerun",
+  "finding": "runtime input QCLOUD/QNCLOUD are both zero at the target; first KDM6 call pre has positive QC and zero NC; generation step before the call is unlocalized",
+  "coordinate": {
+    "reported_global_fortran_ijk": [172, 76, 1],
+    "native_raw_parser_active_storage": "[j,k,i]",
+    "native_raw_parser_zero_based_index": [74, 0, 170],
+    "basis": "its=2, jts=2, kts=1"
+  },
+  "runtime": {
+    "directory": "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pure_strict",
+    "input": {
+      "path": "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pure_strict/wrfinput_d01",
+      "sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+      "variables": {
+        "QCLOUD": {"units": "kg kg-1"},
+        "QNCLOUD": {"units": "  kg(-1)"},
+        "QNCCN": {"units": "  kg(-1)"}
+      },
+      "target": {"QCLOUD": 0.0, "QNCLOUD": 0.0, "QNCCN": 0.0},
+      "six_face_neighbors_ijk_qc_nc": [
+        {"ijk": [171, 76, 1], "QCLOUD": 0.0, "QNCLOUD": 0.0},
+        {"ijk": [173, 76, 1], "QCLOUD": 0.0, "QNCLOUD": 0.0},
+        {"ijk": [172, 75, 1], "QCLOUD": 0.0, "QNCLOUD": 0.0},
+        {"ijk": [172, 77, 1], "QCLOUD": 0.0, "QNCLOUD": 0.0},
+        {"ijk": [172, 76, 0], "QCLOUD": null, "QNCLOUD": null, "note": "outside domain"},
+        {"ijk": [172, 76, 2], "QCLOUD": 2.4288598069688305e-5, "QNCLOUD": 21559104.0}
+      ],
+      "horizontal_face_neighbors_zero": true
+    },
+    "first_call_pre": {
+      "path": "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pure_strict/kdm6_first_call_pre.raw",
+      "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "stage": 1,
+      "timestep": 1,
+      "active_shape_xyz": [232, 280, 39],
+      "target": {"QC": 5.03652699990198e-7, "NC": 0.0, "QR": 0.00012699329818133265, "NR": 1971.324462890625},
+      "six_face_neighbors_ijk_qc_nc": [
+        {"ijk": [171, 76, 1], "QC": 4.4878598259856517e-7, "NC": 0.0},
+        {"ijk": [173, 76, 1], "QC": 4.605564640769444e-7, "NC": 74.19922637939453},
+        {"ijk": [172, 75, 1], "QC": 4.5977250806572556e-7, "NC": 0.0},
+        {"ijk": [172, 77, 1], "QC": 4.572127068058762e-7, "NC": 3425.337158203125},
+        {"ijk": [172, 76, 0], "QC": null, "NC": null, "note": "outside domain"},
+        {"ijk": [172, 76, 2], "QC": 2.379831494181417e-5, "NC": 21451780.0}
+      ]
+    },
+    "first_call_post_sha256": "526285dedd8e27eb3f59529671193c723d6519d99ea4f98d13b89dae39eb7f30",
+    "executable_sha256": "47bb9cc921374cb0c2190f83de941c0aa1d55eb7981b93732a4f10a851a0e14d",
+    "namelist": {
+      "path": "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pure_strict/namelist.input",
+      "sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "mp_physics": 37,
+      "mp_zero_out": 2,
+      "mp_zero_out_thresh_explicit": false,
+      "documented_registry_default_threshold_kg_kg": 1e-8,
+      "moist_adv_opt": 1,
+      "scalar_adv_opt": 1
+    }
+  },
+  "geometry_reference": {
+    "metadata_path": "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pure_strict/geometry.json",
+    "metadata_sha256": "62af1351ba1a207ca5c44d344baeffcd7ae6e2f7860cd975cfb0e31a70dae4ad",
+    "recorded_input_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/real_HYDRO/wrfinput_d01",
+    "recorded_input_sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+    "recorded_host_binary_equivalence": "UNVERIFIED",
+    "target": {"QCLOUD": 1.8210486132375081e-6, "QNCLOUD": 0.0},
+    "six_face_neighbors_ijk_qc_nc": [
+      {"ijk": [171, 76, 1], "QCLOUD": 1.4878762613079743e-6, "QNCLOUD": 0.0},
+      {"ijk": [173, 76, 1], "QCLOUD": 2.02444880414987e-6, "QNCLOUD": 0.0},
+      {"ijk": [172, 75, 1], "QCLOUD": 1.3074247817712603e-6, "QNCLOUD": 0.0},
+      {"ijk": [172, 77, 1], "QCLOUD": 2.1671455670002615e-6, "QNCLOUD": 0.0},
+      {"ijk": [172, 76, 0], "QCLOUD": null, "QNCLOUD": null, "note": "outside domain"},
+      {"ijk": [172, 76, 2], "QCLOUD": 3.108270175289363e-5, "QNCLOUD": 0.0}
+    ],
+    "same_file_as_runtime_wrfinput": false,
+    "hydrometeor_arrays_differ_across_many_cells": true
+  },
+  "limits": [
+    "The exact runtime input and first-call pre are authoritative for this comparison; geometry.json points at a distinct file.",
+    "The retained namelist shows policy settings, but source revision and Registry binding to the executable are absent.",
+    "The raw trace brackets the KDM6 call only; it does not capture QC/NC at earlier startup, transport, or physics stages.",
+    "Retained CCN stage traces are not QC captures.",
+    "No source step is attributed and no scientific conclusion is made."
+  ]
+}
