@@ -32,9 +32,9 @@ promotes a candidate to full physical approval.
   the stored background/candidate against that declaration. Keep contracts
   independent of computed endpoint differences; refuse forged or partial data.
 - [x] Complete team cross-review and scoped pinned Intel/Python validation.
-- [ ] Freeze source; incrementally refresh maintained KLAPS50 and Cloud-BAL
+- [x] Freeze source; incrementally refresh maintained KLAPS50 and Cloud-BAL
   structural graphs with separate timestamps/deltas and derived wiki audit.
-- [ ] Push the reviewed change and open a PR against main.
+- [x] Push the reviewed change and open [PR #62](https://github.com/gonos2k/Cloud-BAL/pull/62) against main.
 
 ## Remaining scientific gates
 
@@ -84,3 +84,5 @@ feasible joint trial search, and optimality are not established.
 
 Historical PR61 receipts and the frozen PSD prior remain unchanged. The
 new native patch is applied only to an external research source copy.
+
+The [KG maintenance report](PR62_GRAPHIFY_KG_UPDATE_20261006.md) records separate snapshots and extraction limits for the frozen implementation batch.
