@@ -18,9 +18,9 @@ and native physical acceptance. Full physical approval remains FAIL/OPEN.
   hardlink/symlink output aliases and preserve control hashes through the run.
 - [x] Complete independent agent-team review and affected pinned Intel/Python
   validation; record failed attempts and source/build/artifact identities.
-- [ ] Freeze implementation; update separately dated KLAPS50/Cloud-BAL graphs
+- [x] Freeze implementation; update separately dated KLAPS50/Cloud-BAL graphs
   and derived wiki reports/audit, with extraction limits.
-- [ ] Push reviewed changes and create a PR against main.
+- [x] Push reviewed changes and create [PR #63](https://github.com/gonos2k/Cloud-BAL/pull/63) against main.
 
 ## Physical exit gates
 
@@ -83,3 +83,5 @@ Same-call MU2/hybrid coefficients/map factors and KDM DEN/DELZ were captured.
 The MU-based mapped dry mass and DEN*DELZ diagnostic differ by +0.05856%; no
 scale fitting was applied. Boundary/process fluxes and water/energy closure
 remain open even though contemporaneous geometry is now available.
+
+[KG update and separate corpus snapshots](PR63_KG_UPDATE_20261006.md) record the frozen implementation and extraction limits.
