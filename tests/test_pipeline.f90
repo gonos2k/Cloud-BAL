@@ -1,5 +1,6 @@
 PROGRAM test_pipeline
   USE, INTRINSIC :: iso_fortran_env,ONLY: real32,real64,int32,int64
+  USE, INTRINSIC :: ieee_arithmetic,ONLY: ieee_value,ieee_quiet_nan,ieee_positive_inf
   USE cloud_bal_state
   USE cloud_bal_column_physics,ONLY: derive_column_physics,SATURATION_LIQUID,SATURATION_ICE, &
     pressure_analysis_budget,water_phase_budget
@@ -38,6 +39,7 @@ PROGRAM test_pipeline
              .NOT.reassessment%canonical_accounting_assessed, &
              'invalid final state leaves no assessed endpoint',failures)
   CALL test_candidate_diagnostic_domain(failures)
+  CALL test_physical_candidate_contract(failures)
   config%requested_mode=MODE_OFF
   CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
   CALL check(result%status==STATUS_OK,'OFF must be a successful no-op',failures)
@@ -623,6 +625,7 @@ CONTAINS
       same_pipeline_state(background,cap_operational) .AND. &
       .NOT.ANY(cap_result%geopotential%changed) .AND. &
       .NOT.ANY(cap_result%overall%changed) .AND. zero_analysis_budget(cap_result%analysis_budget) .AND. &
+      zero_analysis_budget(cap_result%candidate_budget) .AND. &
       zero_thermo_budget(cap_result%thermo_budget) .AND. &
       .NOT.ALLOCATED(cap_result%geopotential_support), &
       'outer iteration cap rolls back completed geopotential trial',failures)
@@ -1203,6 +1206,164 @@ CONTAINS
       PRINT *,'FAIL: ',TRIM(message)
     END IF
   END SUBROUTINE check
+
+  SUBROUTINE test_physical_candidate_contract(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: background,candidate,operational
+    TYPE(cloud_bal_pipeline_config) :: local_config
+    TYPE(cloud_bal_pipeline_result) :: result
+    TYPE(physical_joint_candidate_contract) :: contract
+    TYPE(joint_candidate_evaluation) :: evaluation
+    TYPE(pressure_analysis_budget) :: budget
+    REAL(real64) :: specific_heat
+    REAL(real32), PARAMETER :: phase_step=0.0009765625_real32
+    INTEGER :: status,reason
+
+    CALL make_state(background)
+    CALL make_complete_water_fields(background)
+    background%cloud_water%value=0.00390625_real32
+    background%vapor%value(1,1,2)=0.015625_real32
+    background%vapor%value(2,2,2)=0.015625_real32
+    CALL refresh_dry_air_mass_measure(background,status)
+    CALL check(status==STATUS_OK,'physical gate fixture has complete water state',failures)
+    CALL initialize_physical_contract(background,contract)
+
+    candidate=background
+    specific_heat=ORACLE_CPD+SUM(ORACLE_CP*represented_water_species(background,1,1,2))
+    contract%adjustable_variables=PHYSICAL_ADJUST_TEMPERATURE
+    contract%source_increment(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)= &
+      background%grid%dry_air_mass_measure(1,1,2)*specific_heat*0.5_real64
+    candidate%temperature%value(1,1,2)=candidate%temperature%value(1,1,2)+0.5_real32
+    candidate%temperature%source(1,1,2)=SOURCE_COLUMN_PHYSICS
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(status==STATUS_OK .AND. evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_PASS .AND. &
+      evaluation%physical_feasibility_reason==REASON_NONE .AND. &
+      .NOT.evaluation%source_boundary_assessed .AND. .NOT.evaluation%observation_fit_assessed .AND. &
+      .NOT.evaluation%optimality_assessed, &
+      'a predeclared 0.5 K temperature step passes the mixture-enthalpy component check',failures)
+
+    candidate=background
+    CALL initialize_physical_contract(background,contract)
+    candidate%vapor%value(1,1,2)=candidate%vapor%value(1,1,2)-phase_step
+    candidate%cloud_water%value(1,1,2)=candidate%cloud_water%value(1,1,2)+phase_step
+    candidate%vapor%value(2,2,2)=candidate%vapor%value(2,2,2)+phase_step
+    candidate%cloud_water%value(2,2,2)=candidate%cloud_water%value(2,2,2)-phase_step
+    candidate%vapor%source(1,1,2)=SOURCE_COLUMN_PHYSICS
+    candidate%cloud_water%source(1,1,2)=SOURCE_COLUMN_PHYSICS
+    candidate%vapor%source(2,2,2)=SOURCE_COLUMN_PHYSICS
+    candidate%cloud_water%source(2,2,2)=SOURCE_COLUMN_PHYSICS
+    contract%adjustable_variables=PHYSICAL_ADJUST_VAPOR+PHYSICAL_ADJUST_CLOUD_WATER
+    CALL refresh_dry_air_mass_measure(candidate,status)
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(status==STATUS_OK .AND. evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_failed_cell(1)==1 .AND. &
+      evaluation%physical_feasibility_failed_cell(2)==1 .AND. &
+      evaluation%physical_feasibility_failed_cell(3)==2 .AND. &
+      evaluation%physical_feasibility_failed_component==PHYSICAL_COMPONENT_VAPOR .AND. &
+      budget%species_change_kg(1)+budget%species_change_kg(2)==0.0_real64, &
+      'per-cell water changes fail despite globally cancelling species totals',failures)
+
+    candidate=background
+    contract%adjustable_variables=0
+    contract%source_increment(PHYSICAL_COMPONENT_DRY_MASS_METRIC,1,1,2)=1.0_real64
+    local_config%requested_mode=MODE_SHADOW
+    local_config%maximum_outer_iterations=2
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,local_config,physical_contract=contract)
+    CALL check(result%status==STATUS_FAILED .AND. same_pipeline_state(background,candidate) .AND. &
+      same_pipeline_state(background,operational) .AND. zero_analysis_budget(result%candidate_budget) .AND. &
+      result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      result%candidate_evaluation%physical_feasibility_failed_component==PHYSICAL_COMPONENT_DRY_MASS_METRIC, &
+      'a stable no-observation iteration rolls back when its local declared mass increment is infeasible',failures)
+
+    CALL initialize_physical_contract(background,contract)
+    contract%source_increment(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)=1.0_real64
+    contract%boundary_increment(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)=-1.0_real64
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(status==STATUS_OK .AND. evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_PASS .AND. &
+      .NOT.evaluation%source_boundary_assessed .AND. .NOT.evaluation%observation_fit_assessed .AND. &
+      .NOT.evaluation%optimality_assessed, &
+      'equal and opposite declarations test only net feasibility, not source or boundary authority',failures)
+
+    contract%physical_tolerance(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)=ieee_value(0.0_real64,ieee_quiet_nan)
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_reason==REASON_NONFINITE, &
+      'NaN physical tolerance is rejected before ordered comparisons',failures)
+    contract%physical_tolerance=0.0_real64
+    contract%physical_tolerance(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)=-1.0_real64
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_reason==REASON_RANGE, 'negative physical tolerance is rejected',failures)
+
+    contract%physical_tolerance=0.0_real64
+    contract%source_increment(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)= &
+      ieee_value(0.0_real64,ieee_positive_inf)
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_reason==REASON_NONFINITE, &
+      'infinite source increments are rejected before arithmetic',failures)
+    contract%source_increment=0.0_real64
+    contract%source_increment(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)=HUGE(1.0_real64)
+    contract%boundary_increment(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)=HUGE(1.0_real64)
+    CALL evaluate_joint_candidate(background,background,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      evaluation%physical_feasibility_failed_component==PHYSICAL_COMPONENT_ENTHALPY, &
+      'finite extreme increment declarations are compared without overflow',failures)
+
+    CALL initialize_physical_contract(background,contract)
+    candidate=background
+    candidate%surface_temperature%value(1,1)=candidate%surface_temperature%value(1,1)+1.0_real32
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_UNSUPPORTED, &
+      'unmodeled surface thermodynamic changes are unsupported',failures)
+
+    candidate=background
+    DEALLOCATE(candidate%snow%value,candidate%snow%valid,candidate%snow%quality,candidate%snow%source)
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(status==STATUS_FAILED .OR. &
+      evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_UNSUPPORTED, &
+      'absent required snow coverage fails closed without dereferencing missing storage',failures)
+
+    CALL make_state(background)
+    CALL make_complete_water_fields(background)
+    CALL initialize_physical_contract(background,contract)
+    background%vapor%valid(1,1,2)=.FALSE.
+    background%cloud_water%valid(1,1,2)=.FALSE.
+    background%cloud_ice%valid(1,1,2)=.FALSE.
+    background%rain%valid(1,1,2)=.FALSE.
+    background%snow%valid(1,1,2)=.FALSE.
+    background%graupel%valid(1,1,2)=.FALSE.
+    background%vapor%value(1,1,2)=ieee_value(0.0_real32,ieee_quiet_nan)
+    background%cloud_water%value(1,1,2)=ieee_value(0.0_real32,ieee_quiet_nan)
+    background%cloud_ice%value(1,1,2)=ieee_value(0.0_real32,ieee_quiet_nan)
+    background%rain%value(1,1,2)=ieee_value(0.0_real32,ieee_quiet_nan)
+    background%snow%value(1,1,2)=ieee_value(0.0_real32,ieee_quiet_nan)
+    background%graupel%value(1,1,2)=ieee_value(0.0_real32,ieee_quiet_nan)
+    background%vapor%quality(1,1,2)=QUALITY_RAW_MISSING
+    background%cloud_water%quality(1,1,2)=QUALITY_RAW_MISSING
+    background%cloud_ice%quality(1,1,2)=QUALITY_RAW_MISSING
+    background%rain%quality(1,1,2)=QUALITY_RAW_MISSING
+    background%snow%quality(1,1,2)=QUALITY_RAW_MISSING
+    background%graupel%quality(1,1,2)=QUALITY_RAW_MISSING
+    candidate=background
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(status/=STATUS_OK .OR. &
+      evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
+      'invalid NaN water placeholders fail closed without ordered comparisons',failures)
+  END SUBROUTINE test_physical_candidate_contract
+
+  SUBROUTINE initialize_physical_contract(background,contract)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background
+    TYPE(physical_joint_candidate_contract), INTENT(OUT) :: contract
+    ALLOCATE(contract%coverage(background%grid%nx,background%grid%ny,background%grid%nz), &
+      contract%source_increment(8,background%grid%nx,background%grid%ny,background%grid%nz), &
+      contract%boundary_increment(8,background%grid%nx,background%grid%ny,background%grid%nz), &
+      contract%physical_tolerance(8,background%grid%nx,background%grid%ny,background%grid%nz))
+    contract%coverage=background%above_ground
+    contract%source_increment=0.0_real64
+    contract%boundary_increment=0.0_real64
+    contract%physical_tolerance=0.0_real64
+  END SUBROUTINE initialize_physical_contract
 
   SUBROUTINE test_candidate_diagnostic_domain(failures)
     INTEGER, INTENT(INOUT) :: failures

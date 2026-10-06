@@ -84,6 +84,19 @@ PROGRAM test_real_shadow_io_contract
              'writer rejects a forged final-state evaluation',failures)
   CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
 
+  result%candidate_evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_PASS
+  result%candidate_evaluation%physical_feasibility_cells=1_int64
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config,status,reason)
+  CALL check(status==STATUS_FAILED, &
+    'writer rejects an in-memory physical assessment that its contract-free replay cannot recreate',failures)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
+
+  result%candidate_evaluation%physical_feasibility_residual_scaled= &
+    ieee_value(0.0_real64,ieee_quiet_nan)
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config,status,reason)
+  CALL check(status==STATUS_FAILED, 'writer rejects a NaN physical assessment without trapping',failures)
+  CALL make_result(result,input%grid%nx,input%grid%ny,input%grid%nz,input,candidate,config%balance)
+
   result%reason_code=REASON_GATE
   CALL validate_shadow_write_contract(input,candidate,operational,result,config, &
                                       status,reason)

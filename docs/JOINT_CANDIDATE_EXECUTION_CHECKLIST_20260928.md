@@ -361,3 +361,47 @@ record the exact source SHA, input/config/tool/runtime hashes, receipt,
 independent review, and validation scope. Compile in a fresh scratch working
 directory with the pinned Intel profile in `tests/intel_toolchain.sh` (O0/O2
 as applicable); GNU/gfortran and ifort are not substitute validation.
+
+## 2026-10-06 scoped update after PR59 review
+
+- [x] Add an optional fixed-geometry, complete-coverage per-cell component
+  contract and evaluate every block trial before fixed-point acceptance.
+  Compare prescribed net increments; keep source attribution, observations,
+  stationarity and native conservation unassessed. Failure restores both
+  outputs and clears the accepted endpoint ledger.
+- [x] Reject contracted assessments the current SHADOW writer cannot
+  reconstruct, including forged PASS and nonfinite residual values.
+- [x] Capture the retained source-901 12 UTC candidate's first public KDM6
+  call on one serial active tile, with source-supported T, dry density,
+  vapor, all Q/N/QIB fields and exact input/executable/configuration hashes.
+  This checks capture and finite traced values, not physical acceptance.
+- [x] Repeat that 20-second run with only output cadence changed. The raw
+  traces match exactly; t+20 `REFL_10CM` fails at 33,617 cells, all with
+  positive post-call rain mass and zero rain number. Preserve this failure.
+- [ ] Resolve the three number priors and graupel-volume policy, negative
+  CCN between t0 and first-call entry, and native reflectivity failure before
+  claiming a physically accepted initialization.
+- [ ] Supply the producer's independent increment/boundary/observation
+  contract, solve the joint problem, and run BASE/HYDRO/COUPLED through
+  10/30/60-minute response and forecast comparison.
+
+See [the candidate contract](JOINT_CANDIDATE_PHYSICAL_CONTRACT_20261006.md),
+[actual-case checklist](NE57_PHYSICAL_EXECUTION_CHECKLIST_20261006.md),
+[native evidence](PR59_CURRENT12_NATIVE_KDM6_FIRST_CALL_20261006.md), and
+[team review](PR60_TEAM_REVIEW_20261006.md). The broader unit runner's legacy
+child scratch paths are a separate maintenance item; only the completed
+external-scratch suites are used as validation evidence here.
+
+### Clean-source actual replay — 2026-10-06
+
+- [x] Freeze clean source `44212f938f0a529d298e903dc4146d7e0401134a`,
+  build LAPSPREP with pinned Intel O0 in external scratch, and run NE57
+  BASE/`LIQUID_RADAR_RH1_PHI` against one verified read-only input copy.
+- [x] Verify closed WPS/SHADOW files and preserve input/build/runtime/product
+  hashes in [the replay receipt](evidence/pr60_current_lapsprep.json).
+  All three products match the retained source-901 products byte for byte.
+  Readback is PASS; no new generation was published.
+- [ ] Authorize a physical COUPLED candidate: this producer leaves wind balance
+  disabled and does not supply the optional prescribed-component contract.
+  Content identity with the traced native candidate does not resolve its
+  33,617 nonfinite reflectivity cells or missing rain-number prior.

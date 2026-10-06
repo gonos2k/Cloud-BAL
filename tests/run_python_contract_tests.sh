@@ -15,6 +15,7 @@ tests=(
   tests/test_native_host_pressure.py
   tests/test_mp37_aux_contract.py
   tests/test_native_mp37_aux.py
+  tests/test_native_kdm6_trace.py
   tests/test_operational_comparison_prep.py
   tests/test_operational_shadow_compare.py
   tests/test_output_transaction.py

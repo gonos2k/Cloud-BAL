@@ -2,6 +2,7 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+workspace_root=$(realpath -e "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
 test_scratch_root=${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}
 mkdir -p "$test_scratch_root"
 test_tmp=$(mktemp -d "$test_scratch_root/unit_tests.XXXXXX")
@@ -289,7 +290,7 @@ bash "$repo_root/tests/run_upstream_wind_status.sh"
 # Real full-main compilation now includes the canonical stage adapter API.
 # Compile its actual dependency modules; never remove the main's USE/call.
 bash "$repo_root/tests/run_cloud_bal_stage_payload.sh"
-nf_config="$repo_root/../klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config"
+nf_config="$workspace_root/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config"
 read -r -a stage_nf_flags <<<"$("$nf_config" --fflags)"
 "$CLOUD_BAL_FC" -c "${CLOUD_BAL_FREE_FLAGS[@]}" \
   "${stage_nf_flags[@]}" -module "$test_tmp" -I "$test_tmp" \

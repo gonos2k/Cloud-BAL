@@ -76,7 +76,9 @@ netcdff_archive="$(dirname "$(dirname "$nf_config")")/lib/libnetcdff.a"
 netcdf_archive="$(dirname "$nc_include")/lib/libnetcdf.a"
 [[ $(sha256sum "$netcdff_archive" | cut -d' ' -f1) == f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17c8a39 ]]
 [[ $(sha256sum "$netcdf_archive" | cut -d' ' -f1) == f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288 ]]
-build_dir=$(mktemp -d "$repo_root/scratch/upstream_${producer}_build.XXXXXX")
+build_scratch_root=${CLOUD_BAL_BUILD_SCRATCH_ROOT:-/var/tmp}
+mkdir -p -- "$build_scratch_root"
+build_dir=$(mktemp -d "$build_scratch_root/upstream_${producer}_build.XXXXXX")
 printf '%s\n' "$build_dir"
 mkdir "$build_dir/main"
 # GNU89 denotes the legacy C dialect, not a GNU compiler fallback.
