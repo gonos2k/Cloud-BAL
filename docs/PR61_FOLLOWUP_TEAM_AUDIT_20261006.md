@@ -53,3 +53,20 @@ protected wiki content and prior receipts. Separate corpus dates/deltas and the
 new receipt are recorded in the reporting-only follow-up. AST and Markdown
 heading extraction, partial Fortran cross-file CALL edges and overlay scope
 do not establish runtime or scientific validity.
+
+### Recorded graph result
+
+Graphify 0.9.53 refreshed 11 selected paths at frozen source commit
+`a69176f6c303025bff80f688a9e3b99fe6af5e2f` against the previous overlay.
+The next commit only records these outcomes.
+
+| Corpus | Snapshot UTC | Nodes | Edges | Communities | Delta nodes/edges |
+| --- | --- | ---: | ---: | ---: | ---: |
+| KLAPS50 | 2026-10-06 07:52:08 | 32,449 | 71,411 | 2,504 | +22 / +41 |
+| Cloud-BAL | 2026-10-06 07:52:14 | 6,617 | 12,994 | 475 | +22 / +41 |
+
+Integrity, unchanged maintained source, private profile (134/133), and protected
+wiki-content guards passed. Derived graph reports now state selected-overlay
+provenance; their wiki mirrors match. The index snapshot and audit log are
+synchronized. The previous KG receipt is preserved. Structural extraction
+limitations and all native/scientific open gates remain unchanged.

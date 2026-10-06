@@ -62,7 +62,45 @@
     "status": "PASS",
     "unchanged_mass_other_fields_and_input": true
   },
-  "kg_maintenance": "Pending frozen follow-up source commit; preserve previous receipt and protect maintained source/private profile/wiki content.",
+  "kg_maintenance": {
+    "base_overlay_commit": "91cac783c5dffd8ff18cc67bcdf95bdeb8ccd222",
+    "corpora": {
+      "Cloud-BAL": {
+        "communities": 475,
+        "delta_edges": 41,
+        "delta_nodes": 22,
+        "edges": 12994,
+        "nodes": 6617,
+        "sha256": "44117b0ee50d7b54082fc813d41c8af290c32c96e6a5e1dcb6ed1105f194453a",
+        "snapshot": "2026-10-06T07:52:14+00:00"
+      },
+      "KLAPS50": {
+        "communities": 2504,
+        "delta_edges": 41,
+        "delta_nodes": 22,
+        "edges": 71411,
+        "nodes": 32449,
+        "sha256": "df99f7a7543125e8ce093fcee03ad5561febf4ab52e8f11a536b53cc1ae9b3ad",
+        "snapshot": "2026-10-06T07:52:08+00:00"
+      }
+    },
+    "frozen_source_commit": "a69176f6c303025bff80f688a9e3b99fe6af5e2f",
+    "limitations": [
+      "Graph counts are separate for overlapping KLAPS50 and Cloud-BAL corpora.",
+      "Markdown semantic extraction was not performed; Markdown contributes heading structure only.",
+      "Fortran cross-file CALL extraction is partial.",
+      "Candidate overlay graphs and freshness are structural navigation evidence, not runtime or scientific validation.",
+      "Prior native failures/PR61 runtime evidence are preserved as separately scoped receipts."
+    ],
+    "protected_source_wiki_and_private_profile_unchanged": true,
+    "receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr61_followup_team_audit_20261006/kg_receipt.json",
+      "sha256": "35cf8bd37f453aea5d72da6e7ffdcdd395b1ec29799d94f53403b34f4522f61a"
+    },
+    "reporting_followup": "Only records KG outcome; the extraction source is the frozen commit above.",
+    "selected_paths": 11,
+    "status": "COMPLETED_SELECTED_PATH_OVERLAY"
+  },
   "native_scientific_result": {
     "BASE_HYDRO_COUPLED_0_to_60min_and_forecast": "OPEN",
     "entry_negative_QC": 23494,
