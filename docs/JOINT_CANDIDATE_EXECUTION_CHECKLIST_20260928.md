@@ -391,3 +391,17 @@ See [the candidate contract](JOINT_CANDIDATE_PHYSICAL_CONTRACT_20261006.md),
 [team review](PR60_TEAM_REVIEW_20261006.md). The broader unit runner's legacy
 child scratch paths are a separate maintenance item; only the completed
 external-scratch suites are used as validation evidence here.
+
+### Clean-source actual replay — 2026-10-06
+
+- [x] Freeze clean source `44212f938f0a529d298e903dc4146d7e0401134a`,
+  build LAPSPREP with pinned Intel O0 in external scratch, and run NE57
+  BASE/`LIQUID_RADAR_RH1_PHI` against one verified read-only input copy.
+- [x] Verify closed WPS/SHADOW files and preserve input/build/runtime/product
+  hashes in [the replay receipt](evidence/pr60_current_lapsprep.json).
+  All three products match the retained source-901 products byte for byte.
+  Readback is PASS; no new generation was published.
+- [ ] Authorize a physical COUPLED candidate: this producer leaves wind balance
+  disabled and does not supply the optional prescribed-component contract.
+  Content identity with the traced native candidate does not resolve its
+  33,617 nonfinite reflectivity cells or missing rain-number prior.

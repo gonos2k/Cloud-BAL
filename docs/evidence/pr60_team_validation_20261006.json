@@ -1,0 +1,87 @@
+{
+  "actual_producer_replay": {
+    "compiler_process_closure": "NOT_ASSESSED",
+    "contract_supplied": false,
+    "evidence": "pr60_current_lapsprep.json",
+    "sha256": "a42e580b0358e8afee5a669e9ee857e9be29e15b77fca5e61f6d547ffa4c0ad9",
+    "status": "PAIR_READBACK_PASS_RESEARCH_ONLY_NOT_PUBLISHED",
+    "wind_balance_enabled": false
+  },
+  "base_commit": "ea2c02bb808bc9cf77b97fc4a25a2da06dfd73a1",
+  "broad_suite": {
+    "reason": "Legacy child runners use source-tree scratch. Parent stopped before those runners; termination caused trailing getcwd error during active compile. No full-suite PASS.",
+    "source_tree_compile_used": false,
+    "status": "PARTIAL_STOPPED"
+  },
+  "execution_logs": [
+    {
+      "path": "/var/tmp/pr60-physical-final-O0.log",
+      "scope": "pinned Intel O0 focused pipeline",
+      "sha256": "cd49d5bf8f1266cad50b59c795fab0fa9c6b7b1d2f56bce043b4d33fa9801014",
+      "status": "PASS"
+    },
+    {
+      "path": "/var/tmp/pr60-physical-final-O2.log",
+      "scope": "pinned Intel O2 focused pipeline",
+      "sha256": "cd49d5bf8f1266cad50b59c795fab0fa9c6b7b1d2f56bce043b4d33fa9801014",
+      "status": "PASS"
+    },
+    {
+      "path": "/var/tmp/pr60-physical-final-writer2.log",
+      "scope": "complete real SHADOW IO contract runner",
+      "sha256": "df66cb06e1601eb65f3861871c1cf5790cd407c6b3925ef3050d792c68c383ac",
+      "status": "PASS"
+    },
+    {
+      "path": "/var/tmp/pr60-physical-unit-runner-rootfix.log",
+      "scope": "broad unit runner stopped before legacy source-scratch children",
+      "sha256": "eb878c53b63140dbaa5fc8348ca74eb17bda4e235dd11cccb920ded5d2381a94",
+      "status": "PARTIAL_STOPPED"
+    }
+  ],
+  "frozen_code_commit": "44212f938f0a529d298e903dc4146d7e0401134a",
+  "initial_0_60_minute_improvement_assessed": false,
+  "joint_optimization_assessed": false,
+  "native_first_call": {
+    "all_nonfinite_cells_match_post_QR_positive_NR_zero": true,
+    "evidence": "pr60_current12_kdm6_first_call.json",
+    "new_replay_products_byte_identical": true,
+    "nonfinite_reflectivity_cells": 33617,
+    "producer_source_commit": "90179191edc33b5ae5606a37f4cd67eac507eed0",
+    "reflectivity_acceptance": "FAIL_NONFINITE_REFL_10CM",
+    "scope": "one rank, one active tile, partial native rebuild, 20 seconds; cadence-only repeat raw hashes identical",
+    "sha256": "612bc31be11c1541c720792502fbd19f620d6cfa0b0814a86fdf5b42e4cc4f35"
+  },
+  "native_parser_tests": {
+    "actual_raw_pair_replay": "PASS",
+    "command": "python3 -m unittest discover -s tests -p test_native_kdm6_trace.py",
+    "status": "PASS",
+    "tests": 10
+  },
+  "open_items": [
+    "independent source/boundary attribution",
+    "observational error model and constrained optimality",
+    "physical hydrometeor number/volume priors",
+    "negative first-call CCN origin",
+    "native reflectivity failure",
+    "BASE/HYDRO/COUPLED 0\u201360 minute response",
+    "forecast skill",
+    "legacy broad-runner external scratch migration"
+  ],
+  "operational_approval": false,
+  "pinned_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "schema": "pr60_team_validation_v1",
+  "scientific_approval": false,
+  "source_file_sha256": {
+    "src/common/cloud_bal_pipeline.f90": "ba0410650718e9d5c2fa6ceff1f6e429b5b86924801f9c0e837b3f127120b7cf",
+    "src/common/cloud_bal_real_netcdf.f90": "dac2bb4e2607248546a0e088570ceb1a6aa60ce80ae6cba4fd7092e57c4c8100",
+    "tests/test_native_kdm6_trace.py": "4a419a7455419ed35f2d77fc2ed035dd1a843e122dfd187340ab45b0e301fa92",
+    "tests/test_pipeline.f90": "9e0cd0fd757c324c7ea5d63719ea1e9878caff838b70d0e4ebf5d0824d8b6c65",
+    "tests/test_real_shadow_io_contract.f90": "c0f3689b69f6b09aea3e8b5a21625ea1493082a2f1c0d84050c6f0ae164741f2",
+    "tools/native_kdm6_trace.py": "53c2897af95e5d90c42739bf05f084362fb6905b9c49b76305121f1daedfd73b"
+  },
+  "team_review": {
+    "review": "../PR60_TEAM_REVIEW_20261006.md",
+    "status": "SCOPED_CODE_FINDINGS_ADDRESSED"
+  }
+}

@@ -1,6 +1,6 @@
 # NE57 physical execution checklist — 2026-10-06
 
-Status: **RESEARCH REPLAY EVIDENCE EXISTS; CURRENT SOURCE REPLAY PENDING FREEZE; NATIVE AND SCIENTIFIC APPROVAL OPEN.** This checklist carries the PR59 review into a bounded NE57 execution plan. A valid build, WPS pair, or graph snapshot is not a native initialization or forecast result.
+Status: **CLEAN FROZEN-SOURCE RESEARCH REPLAY PASSED; FIRST NATIVE CALL CAPTURED; REFLECTIVITY ACCEPTANCE FAILED; JOINT AND SCIENTIFIC APPROVAL OPEN.** This checklist carries the PR59 review into a bounded NE57 execution plan. A valid build, WPS pair, or graph snapshot is not a native initialization or forecast result.
 
 ## Prior actual-case baseline
 
@@ -44,13 +44,14 @@ historical evidence and must not be changed.
 This worktree starts at `ea2c02bb808bc9cf77b97fc4a25a2da06dfd73a1`, the PR59
 merge now named `origin/main`. It contains audit changes after source 901,
 including the diagnostic-operator NaN guard and receipt-validator checks.
-Thus the source-901 generation is not evidence for this current source. The
-current source is **not yet frozen**; do not build or run LAPSPREP until the
-parent records a clean commit and input freeze for the actual replay.
+The new producer replay is bound to clean commit
+`44212f938f0a529d298e903dc4146d7e0401134a`, recorded before the later
+documentation-only evidence update. The source-901 and source-442 executions
+remain distinct even though their output bytes match.
 
-After that freeze, record the full commit and clean-worktree status, then use a
-new `/var/tmp` root. From this Cloud-BAL checkout, the pinned Intel O0 build
-command is:
+For a subsequent replay, record the full commit and clean-worktree status, then
+use a new `/var/tmp` root. From this Cloud-BAL checkout, the pinned Intel O0
+build command is:
 
 ```bash
 freeze=$(git rev-parse HEAD)
@@ -130,14 +131,26 @@ passes `preflight_publication_filesystem`; keep failed output generations
 separate and preserve their receipts. Even a successful transaction binds
 bytes and declared lineage, not physical validity.
 
-## Current actual-case progress possible
+## Current actual-case execution
 
 - The historical NE57 LAPSPREP BASE/candidate pair, readback, retained 122-file
   input copy, 391-entry build-input list, and 41-entry runtime list are
   inspectable and hash-verifiable.
-- A clean-source current LAPSPREP BASE/candidate replay is prepared in concept
-  and can reuse those exact bytes after a new read-only copy is checked. It is
-  pending the source freeze; no current-source producer run is claimed here.
+- The clean source-442 replay completed on 2026-10-06 in
+  `/var/tmp/cloud_bal_pr60_ne57_20261006`. Pinned Intel O0 built in fresh
+  external scratch; 391 recorded build inputs, 41 runtime entries and the
+  read-only 122-file input copy passed their hash guards. Both producer arms
+  completed and the closed WPS/SHADOW snapshot passed the full pair verifier.
+  Source status remained clean through the final guard. The transaction was
+  not committed or published.
+- All three new product hashes match the retained source-901 generation:
+  BASE WPS, candidate WPS and candidate SHADOW are byte-identical. This links
+  candidate content to the retained native trace; it does not turn that trace
+  into a source-442 native execution or establish native compiler closure.
+  [The replay receipt](evidence/pr60_current_lapsprep.json) records source,
+  inputs, executable, runtime, product and readback identities. The producer
+  still runs `balance=false` and supplies no optional component contract. It
+  is a research candidate, not an accepted coupled physical solution.
 - Full original upstream generation is still blocked pending its declared
   producer chain and authority. LAPSPREP replay alone does not recreate or
   authorize every upstream input.
@@ -204,8 +217,7 @@ bytes and declared lineage, not physical validity.
 
 Graph navigation located the actual-source input contract, LAPSPREP build
 path, writer mapping, and research transaction path. It does not establish
-runtime execution or meteorological validity. When this checklist and the
-build-scratch change are finalized, incrementally update the Cloud-BAL graph
-and dated KG audit. Keep this Cloud-BAL snapshot dated independently from the
+runtime execution or meteorological validity. After each completed batch,
+incrementally update the Cloud-BAL graph and dated KG audit. Keep this Cloud-BAL snapshot dated independently from the
 KLAPS50 snapshot; report extraction limits and graph deltas with any graph
 freshness claim.

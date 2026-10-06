@@ -62,3 +62,19 @@ increments and boundary fluxes, observational error models, complete moment
 priors, 10/30/60-minute response and forecast benefit remain open. They cannot
 be replaced by component accounting, a finite first call, a stored fixed
 point, or a fresh graph snapshot.
+
+## Final frozen-source replay
+
+Clean source `44212f938f0a529d298e903dc4146d7e0401134a` built and ran the
+actual NE57 BASE and `LIQUID_RADAR_RH1_PHI` arms in external scratch.
+Recorded build inputs (391), runtime entries (41), immutable input-copy hashes
+and final source guards passed. Closed WPS/SHADOW readback passed. All three
+product hashes match source-901 products byte for byte; execution lineage
+remains separate. No transaction was committed or published. Neither this
+research producer nor its readback establishes a coupled physical solve.
+
+[The validation index](evidence/pr60_team_validation_20261006.json) pins code,
+profile and logs, keeps the partial broad-unit run separate, and links the
+[new producer receipt](evidence/pr60_current_lapsprep.json) to the failed native
+reflectivity gate. Remaining scientific blockers stay explicit; no arbitrary
+number or volume value was inserted to bypass them.
