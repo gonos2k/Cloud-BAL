@@ -18,6 +18,7 @@ from validate_shadow_diagnostics import (  # noqa: E402
     CLOUD_ANALYSIS_VARIABLES,
     SOURCE_CLOUD_ANALYSIS,
     SOURCE_RADAR_DBZ,
+    SOURCE_MANUFACTURED_TEST,
     validate_cloud_analysis_provenance,
 )
 
@@ -162,6 +163,8 @@ def test_cloud_provenance_receipt() -> None:
             ("code table", "variable_attr", "background_cloud_type", ("code_table", "wrong")),
             ("valid encoding", "variable_attr", "background_cloud_type_valid", ("mask_encoding", "wrong")),
             ("unknown source bit", "cell", "background_cloud_fraction_source", np.int32(1 << 20)),
+            ("manufactured fraction", "cell", "background_cloud_fraction_source", np.int32(SOURCE_MANUFACTURED_TEST)),
+            ("manufactured type", "cell", "background_cloud_type_source", np.int32(SOURCE_MANUFACTURED_TEST)),
             ("unknown quality bit", "cell", "background_cloud_type_quality", np.int32(1 << 20)),
             ("invalid valid mask", "cell", "background_cloud_fraction_valid", np.int32(2)),
             ("fraction range", "cell", "background_cloud_fraction", np.float32(1.1)),
@@ -184,6 +187,14 @@ def test_cloud_provenance_receipt() -> None:
         missing = root / "missing-field.nc"
         write_fixture(missing, omit=CLOUD_ANALYSIS_VARIABLES[-1])
         present, clean, failures = validate(missing)
+        assert present and not clean and failures
+        manufactured_phase = root / "manufactured-phase.nc"
+        shutil.copyfile(phase_evidence, manufactured_phase)
+        with netCDF4.Dataset(manufactured_phase, "r+") as dataset:
+            dataset["background_precipitation_phase_source"][:] = (
+                SOURCE_CLOUD_ANALYSIS | SOURCE_MANUFACTURED_TEST
+            )
+        present, clean, failures = validate(manufactured_phase)
         assert present and not clean and failures
         assert set(CLOUD_ANALYSIS_ATTRIBUTES) == {
             "cloud_analysis_contract", "cloud_analysis_mask_encoding"

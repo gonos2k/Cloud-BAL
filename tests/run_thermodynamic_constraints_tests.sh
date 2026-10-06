@@ -2,8 +2,9 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-mkdir -p "$repo_root/scratch"
-test_tmp=$(mktemp -d "$repo_root/scratch/thermo-constraint.XXXXXX")
+test_scratch_root=${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}
+mkdir -p "$test_scratch_root"
+test_tmp=$(mktemp -d "$test_scratch_root/thermo-constraint.XXXXXX")
 trap 'rm -rf "$test_tmp"' EXIT
 . "$repo_root/tests/intel_toolchain.sh"
 

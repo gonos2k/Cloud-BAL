@@ -32,6 +32,7 @@ PROGRAM test_balance_operator
   CALL test_target_metadata_rejection(failures)
   CALL test_diagnostic_geometry_without_control_inputs(failures)
   CALL test_pressure_order_rejection(failures)
+  CALL test_nonfinite_pressure_rejection(failures)
   CALL test_malformed_dimension_rejection(failures)
   CALL test_small_domain_rejection(failures)
   IF (failures/=0) THEN
@@ -1105,6 +1106,23 @@ CONTAINS
     CALL check(status==STATUS_FAILED .AND. reason==REASON_RANGE, &
                'non-monotone pressure must be rejected',failures)
   END SUBROUTINE test_pressure_order_rejection
+
+  SUBROUTINE test_nonfinite_pressure_rejection(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: input
+    TYPE(balance_operator_config) :: cfg
+    TYPE(balance_operator_type) :: op
+    INTEGER :: status,reason
+
+    CALL make_balance_state(input,6,5,4)
+    input%pressure%value(3,3,2)=ieee_value(0.0_real32,ieee_quiet_nan)
+    CALL build_diagnostic_balance_operator(input,op,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_NONFINITE, &
+      'diagnostic NaN pressure returns failure before ordered comparison',failures)
+    CALL build_balance_operator(input,cfg,op,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_NONFINITE, &
+      'control NaN pressure returns failure before ordered comparison',failures)
+  END SUBROUTINE test_nonfinite_pressure_rejection
 
   SUBROUTINE test_diagnostic_geometry_without_control_inputs(failures)
     INTEGER, INTENT(INOUT) :: failures

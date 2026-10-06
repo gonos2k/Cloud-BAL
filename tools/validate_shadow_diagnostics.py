@@ -5773,8 +5773,6 @@ def validate_interior_hydrostatic_assessment(dataset, require) -> None:
         require(observed is not None and np.isfinite(observed) and
                 abs(observed - expected) <= reduction_bound * max(1., expected),
                 "interior hydrostatic " + key)
-    if not np.any(requested):
-        return
     field_units = {"pressure": "Pa", "temperature": "K", "geopotential": "m2 s-2",
                    **{key: "kg kg-1 dryair" for key in THERMO_SPECIES}}
     fields = {}
@@ -5791,7 +5789,11 @@ def validate_interior_hydrostatic_assessment(dataset, require) -> None:
         correct = (variable.dimensions == ("z", "y", "x") and field.shape == full_shape and
                    np.dtype(variable.dtype) == np.dtype("float32") and
                    all(item.shape == full_shape and is_signed_int32(group[item_name].dtype)
-                       for item_name, item in zip(names[1:], metadata)))
+                       and group[item_name].dimensions == ("z", "y", "x")
+                       and getattr(group[item_name], "units", "") == "1"
+                       for item_name, item in zip(names[1:], metadata)) and
+                   all("scale_factor" not in group[item].ncattrs() and
+                       "add_offset" not in group[item].ncattrs() for item in names))
         require(correct, "interior hydrostatic " + key + " input structure")
         if not correct:
             return
@@ -5799,6 +5801,15 @@ def validate_interior_hydrostatic_assessment(dataset, require) -> None:
                 exact_scalar_int64(getattr(variable, "valid_time", None)) ==
                 exact_scalar_int64(getattr(dataset, "valid_time_epoch", None)),
                 "interior hydrostatic " + key + " metadata")
+        require(np.all((metadata[0] == 0) | (metadata[0] == 1)),
+                "interior hydrostatic " + key + " valid binary")
+        require(np.all(metadata[1] >= 0) and
+                np.all((metadata[1] & ~QUALITY_KNOWN_BITS) == 0),
+                "interior hydrostatic " + key + " quality bits")
+        require(np.all(metadata[2] >= 0) and
+                np.all((metadata[2] & ~SOURCE_KNOWN_BITS) == 0) and
+                np.all((metadata[2] & SOURCE_MANUFACTURED_TEST) == 0),
+                "interior hydrostatic " + key + " production source bits")
         support &= ((metadata[0] == 1) & ((metadata[1] & QUALITY_EXCLUDED_BITS) == 0)
                     & ((metadata[1] & ~QUALITY_KNOWN_BITS) == 0)
                     & (metadata[2] > 0) & ((metadata[2] & ~SOURCE_KNOWN_BITS) == 0))
@@ -5814,18 +5825,13 @@ def validate_interior_hydrostatic_assessment(dataset, require) -> None:
             if candidate_metadata in dataset.variables:
                 require(np.array_equal(item, values(dataset[candidate_metadata])),
                         "interior hydrostatic " + key + " " + suffix + " candidate identity")
-    if missing_field:
-        require(not np.any(assessed) and np.all((reasons[requested] & 8) != 0),
-                "interior hydrostatic missing input cannot be assessed")
-        return
-    layer_support = support[:-1] & support[1:]
-    require(np.all(~assessed | layer_support), "interior hydrostatic usable endpoints")
-    p, temperature = fields["pressure"], fields["temperature"]
     if "transition_candidate_pressure" in dataset.variables:
         expected_pressure = values(dataset["transition_candidate_pressure"])
     else:
         expected_pressure = np.broadcast_to(values(dataset["pressure"])[:, None, None], full_shape)
-    require(np.array_equal(p, expected_pressure), "interior hydrostatic pressure candidate identity")
+    if "pressure" in fields:
+        require(np.array_equal(fields["pressure"], expected_pressure),
+                "interior hydrostatic pressure candidate identity")
     if "candidate_above_ground" in dataset.variables:
         expected_domain = values(dataset["candidate_above_ground"])
     else:
@@ -5835,6 +5841,13 @@ def validate_interior_hydrostatic_assessment(dataset, require) -> None:
         expected_domain = values(dataset["above_ground"])
     require(np.array_equal(arrays["above_ground"], expected_domain),
             "interior hydrostatic atmospheric candidate identity")
+    if missing_field:
+        require(not np.any(assessed) and np.all((reasons[requested] & 8) != 0),
+                "interior hydrostatic missing input cannot be assessed")
+        return
+    layer_support = support[:-1] & support[1:]
+    require(np.all(~assessed | layer_support), "interior hydrostatic usable endpoints")
+    p, temperature = fields["pressure"], fields["temperature"]
     water = np.stack([fields[key] for key in THERMO_SPECIES])
     finite = np.isfinite(p) & np.isfinite(temperature) & np.isfinite(fields["geopotential"])
     finite &= np.all(np.isfinite(water), axis=0)
@@ -6002,6 +6015,8 @@ def validate_cloud_analysis_provenance(dataset, require) -> tuple[bool, bool]:
         check(np.all((quality & ~QUALITY_KNOWN_BITS) == 0), f"{field} quality bits")
         check(np.all(source >= 0), f"{field} source nonnegative")
         check(np.all((source & ~SOURCE_KNOWN_BITS) == 0), f"{field} source bits")
+        check(np.all((source & SOURCE_MANUFACTURED_TEST) == 0),
+              f"{field} manufactured source prohibited")
         usable = (
             valid_cells
             & (source > 0)
@@ -6053,6 +6068,8 @@ def validate_cloud_analysis_provenance(dataset, require) -> tuple[bool, bool]:
                 if phase_structure_ok:
                     check(np.all((phase_valid == 0) | (phase_valid == 1)),
                           "cloud analysis phase valid binary")
+                    check(np.all((phase_source & SOURCE_MANUFACTURED_TEST) == 0),
+                          "cloud analysis phase manufactured source prohibited")
                     phase_evidence = bool(np.any(
                         (phase_valid == 1)
                         & ((phase_source.astype(np.int64) & SOURCE_CLOUD_ANALYSIS) != 0)

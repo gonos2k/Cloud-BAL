@@ -276,6 +276,12 @@ CONTAINS
     nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
     IF (nx<2 .OR. ny<2 .OR. nz<2) RETURN
     IF (.NOT.physical_geometry_shapes_valid(state)) RETURN
+    ! Intel -fpe0 traps ordered NaN comparisons. Reject before checking
+    ! pressure order, including direct diagnostic calls without validation.
+    IF (ANY(.NOT.ieee_is_finite(state%pressure%value))) THEN
+      reason=REASON_NONFINITE
+      RETURN
+    END IF
     DO k=1,nz-1
       IF (ANY(state%pressure%value(:,:,k)<=state%pressure%value(:,:,k+1))) THEN
         reason=REASON_RANGE

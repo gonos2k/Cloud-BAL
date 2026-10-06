@@ -26,7 +26,9 @@ def check(path):
     with tempfile.TemporaryDirectory() as temporary:
         output = Path(temporary) / "mutation.nc"
         for mutation in ("residual", "count", "dtype", "requested", "input", "unassessed",
-                         "domain", "source", "declaration", "group"):
+                         "domain", "source", "declaration", "group", "valid_units",
+                         "quality_units", "source_units", "metadata_packing",
+                         "manufactured_source", "empty_invalid_mask"):
             shutil.copyfile(path, output)
             with netCDF4.Dataset(output, "r+") as dataset:
                 group = dataset.groups["candidate_interior_hydrostatic_v1"]
@@ -50,6 +52,21 @@ def check(path):
                     group["above_ground"][index] = 0
                 elif mutation == "source":
                     group["temperature_source"][index] = 0
+                elif mutation.endswith("_units"):
+                    group["temperature_" + mutation.removesuffix("_units")].units = "K"
+                elif mutation == "metadata_packing":
+                    group["temperature_valid"].scale_factor = np.float32(1.)
+                elif mutation == "manufactured_source":
+                    group["pressure_source"][index] = 1 << 12
+                elif mutation == "empty_invalid_mask":
+                    for name in ("requested", "assessable", "reason", "residual"):
+                        group[name][:] = 0
+                    dataset["candidate_diagnostic_requested_mask"][:] = 0
+                    for name in ("requested_layers", "assessable_layers", "missing_support_layers",
+                                 "nonfinite_layers", "range_layers", "shape_errors", "metadata_errors"):
+                        group.setncattr(name, np.int64(0))
+                    group.residual_rms_m2_s2 = np.float64(0.)
+                    group.residual_max_abs_m2_s2 = np.float64(0.)
                 elif mutation == "declaration":
                     dataset.schema_extensions = dataset.schema_extensions.replace(
                         ",candidate_interior_hydrostatic_v1", "")
@@ -64,8 +81,12 @@ def check(path):
                     group.missing_support_layers = np.int64(group.missing_support_layers + 1)
                     group.residual_rms_m2_s2 = np.float64(np.sqrt(np.mean(altered ** 2)))
                     group.residual_max_abs_m2_s2 = np.float64(np.max(np.abs(altered)))
+            if mutation == "empty_invalid_mask":
+                assert not failures(output), "valid empty assessment must remain accepted"
+                with netCDF4.Dataset(output, "r+") as dataset:
+                    dataset.groups["candidate_interior_hydrostatic_v1"]["temperature_valid"][:] = 2
             assert failures(output), "accepted forged interior assessment: " + mutation
-    print("Interior hydrostatic semantic readback and ten mutations passed:", path.name)
+    print("Interior hydrostatic semantic readback and sixteen mutations passed:", path.name)
 
 
 if __name__ == "__main__":
