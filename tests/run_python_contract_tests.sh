@@ -14,6 +14,9 @@ tests=(
   tests/test_native_mass_metric.py
   tests/test_native_host_pressure.py
   tests/test_mp37_aux_contract.py
+  tests/test_hydrometeor_moments.py
+  tests/test_initialize_native_moments.py
+  tests/test_native_ccn_stage_trace.py
   tests/test_native_mp37_aux.py
   tests/test_native_kdm6_trace.py
   tests/test_operational_comparison_prep.py

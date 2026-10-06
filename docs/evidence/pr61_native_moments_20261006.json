@@ -1,0 +1,370 @@
+{
+  "baseline": {
+    "baseline_refl_nonfinite_outside_that_mask": 0,
+    "baseline_refl_overlap_post_QR_positive_NR_zero": 33617,
+    "baseline_t_plus_20_refl_nonfinite": 33617,
+    "build_limit": "Retained instrumented KDM6 object reused host objects/libraries; compiler/source closure and operational equivalence are not established.",
+    "root": "/var/tmp/kdm6_first_call_pr60_20261006",
+    "trace_post_sha256": "ffdfabb7fadb3d986400003ecc0283af1511c4f6931c842130c3309852fd7c1c",
+    "trace_pre_sha256": "aa01a611b81cf041961748a945e91b4d52aa6704c9fea4398ec7cbe9138139b2",
+    "wrf_executable_sha256": "ab8cc24579adb6112684029636e3bdd2ab06e6fa600721b7ee6c322b21a7ba62",
+    "wrfbdy_sha256": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+    "wrfinput_sha256": "397daf0387d522243167f5e48831f7415bea07f00c22e5674ef89f73db1a2c0c"
+  },
+  "date": "2026-10-06",
+  "failed_prior_run_preserved": {
+    "global_ijk": [
+      35,
+      117,
+      15
+    ],
+    "note": "Retained pre-order-change result; not overwritten. Initial Intel MPI launcher attempt failed before WRF tile strategy, then direct singleton launch succeeded.",
+    "reflectivity_nonfinite": 1,
+    "root": "/var/tmp/kdm6_pr61_psd_prior_20261006/native_run"
+  },
+  "gates": {
+    "QNCCN_call_entry": "PASS_SCOPED for the combined PD source-copy run only (0 negative, 0 zero, 0 nonfinite at KDM6 entry); earlier baseline/prior-only call-entry NN values remain unresolved in their historical runs",
+    "all_moment_source_realizability": "FAIL: combined run has 49,067 robust QC-positive/NC-zero cells, all above qmin; strict binary64 source-bound edge flags are reported separately",
+    "operational_authority": "NONE",
+    "rain_reflectivity_mechanism": "PASS_SCOPED for target (35,117,15) in one 20-second combined source-copy run; paired QR/NR gap and t+20 REFL nonfinite count both zero",
+    "science_acceptance": "NOT_ASSESSED"
+  },
+  "initializer": {
+    "QNCCN_changed": false,
+    "changed_counts": {
+      "BG": 1468,
+      "NC": 940173,
+      "NI": 255428,
+      "NR": 206095
+    },
+    "first_run": {
+      "code_identity": "Not captured by the original receipt; the later initializer source hash must not be attributed to this run.",
+      "output_wrfinput_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+      "receipt_sha256": "209154263442235a48b1374bff4d914cd81d72a725d84cd2f1ce64a76cfb63f4",
+      "root": "/var/tmp/kdm6_pr61_psd_prior_20261006"
+    },
+    "independent_replay": {
+      "code_sha256": "5975542b273bc406b52b03912e03b908429394a42ddee245ca4f858752d69d6e",
+      "code_unchanged_before_after": true,
+      "output_wrfinput_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+      "receipt_distinct_from_first_run": true,
+      "receipt_sha256": "f8efcfbf751c13f7095fabaea47081d145a0c84c2d76d134f1a0eeb0d8a006f2",
+      "root": "/var/tmp/kdm6_pr61_initializer_recheck_20261006"
+    },
+    "input_state_infeasible_ice_cells": 3094,
+    "other_variables_changed": false,
+    "positive_QRAIN_at_or_below_strict_fill_cutoff_left_uninitialized": 8,
+    "publication_semantics": "Two-file candidate/receipt publication rolls back handled failures; it is not crash-atomic as a pair.",
+    "source_path": "tools/initialize_native_moments.py",
+    "source_sha256": "5975542b273bc406b52b03912e03b908429394a42ddee245ca4f858752d69d6e",
+    "test_result": "4 tests passed, including forced receipt-temp failure cleanup and transaction rollback",
+    "tests_path": "tests/test_initialize_native_moments.py",
+    "tests_sha256": "a16252dfd7b68d5d1195b7615f0bea375608c0b0f3f92c1cbf85a8fe1b8243fd"
+  },
+  "limitations": [
+    "The combined run closes the traced rain reflectivity failure through existing KDM6 small-drop/cloud-evaporation transfers, but leaves 49,067 robust cloud mass-number gaps above qmin.",
+    "Strict binary64 source-bound checks include tiny FP32 edge excursions: 9 cloud, 3 ice, 260 rain, and 33,674 graupel cells; apart from the cloud zero-number gaps these are at most about 1.5e-7 relative and are not asserted as robust physical failures.",
+    "Only selected PD and KDM6 objects were freshly compiled with the pinned Intel reproducibility profile; retained host objects/libraries prevent compiler/source closure.",
+    "A single 20-second diagnostic does not validate longer forecast behavior.",
+    "All source changes are private, reviewable source-copy patches; maintained WRF/KDM6 source was not changed."
+  ],
+  "matched_pure_strict_experiment": {
+    "build": {
+      "compiler_profile": "Pinned Cloud-BAL/tests/intel_toolchain.sh Intel reproducibility profile appended after retained host ABI flags. The selected PD and KDM6 objects were freshly compiled; other host objects/archive members were retained.",
+      "executable_sha256": "47bb9cc921374cb0c2190f83de941c0aa1d55eb7981b93732a4f10a851a0e14d",
+      "execution_guard": "Child wrapper records stack_kib=unlimited and checks executable SHA-256 immediately before exec.",
+      "host_closure": "PARTIAL: retained host objects and libraries mean no whole-model compiler/source closure.",
+      "kdm6_object_sha256": "9572c18ec0937a320d555d8ea0432c0cd98c9833f861b514aa6e7be849603116",
+      "link_log_sha256": "60b42a0267b675060764e0e24577c7942ca886f7dd8d6eb795364d2267186472",
+      "pd_object_sha256": "0b9be5ea72d428ef66d5876a3820681a82471e319bdcbe7fabf8f67d1c30316c",
+      "pd_source_sha256": "a1dc18bce40f84ad709d38fbe7b0658590e587d42528b1124f9c8b7e9c1830fa",
+      "root": "/var/tmp/kdm6_pr61_process_trace_20261006/combined_pure_strict_build"
+    },
+    "failed_interface_attempt": {
+      "executable_sha256": "8077c06be9cf2b1d54ccb991e95722b7c7e4b7716a68876d225a6e509c48b043",
+      "result": "SIGSEGV in advect_scalar_pd diagnostic branch after adding optional trace_qnn interface while retaining original caller objects; preserved failed attempt, excluded from physical results. Replaced with signature-preserving production-shaped PD patch and a fresh successful run.",
+      "root": "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pd_orderfix_strict",
+      "rsl_error_sha256": "b7ecf77531f886e9e1fc6297e2916d746e122459850def08c0c43646447ff217"
+    },
+    "input": {
+      "namelist_sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "pre_trace_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "same_first_call_pre_trace": true,
+      "wrfbdy_sha256": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+    },
+    "matched_process_comparison": {
+      "QR_change_kg_kg-1": -1.7459242940276454e-09,
+      "Q_change_kg_kg-1": 1.862645149230957e-09,
+      "TH_and_derived_temperature_changed": false,
+      "comparison_stage": "KDM6 return/postcall arrays; matched KDM6 pretrace hashes are identical.",
+      "float32_base_Q_plus_QR_equals_candidate_Q": true,
+      "half_ulp_of_float32_sum_kg_kg-1": 2.3283064365386963e-10,
+      "limiter_scope": "The reproduced warm mass-limiter factor was 1.0. The pending flag was raised by exact full-evaporation proposal before finalized rates; broader behavior when later limiter scaling and final QR<=qcrmin coincide is not claimed.",
+      "only_call_return_Q_and_QR_changed": true,
+      "process_chain": "Final QR/NR enter source slope_kdm6; mean-volume diameter 23.8646 um is below the source 82 um cutoff, so existing small-drop conversion moves QR to QC and NR to NC. A subsequent full cloud evaporation transfers NC to NCCN. No floor or reflectivity clipping/replacement.",
+      "signed_Q_plus_QR_residual_kg_kg-1": 1.1672085520331166e-10,
+      "t_plus_20_QVAPOR_change_kg_kg-1": 1.862645149230957e-09,
+      "t_plus_20_all_condensate_TH_derived_temperature_pressure_dynamics_unchanged": true,
+      "t_plus_20_only_QVAPOR_cell_changed": true,
+      "target_global_ijk": [
+        35,
+        117,
+        15
+      ]
+    },
+    "patches": {
+      "kdm6_finalized_evaporation": {
+        "compiled_instrumented_source_sha256": "b39afa8e02689367b81f8006a104a686995b33f82202ddd7a1bb138f1812f00d",
+        "path": "docs/native_kdm6_finalized_evaporation.patch",
+        "production_patch_source_sha256": "61bac0c2868a5d31dcfaa9f4a4e076622cdfaa260ca69524eeb8ce3f5a840244",
+        "scope": "Defer the early terminal NR-to-NCCN transfer until finalized warm/cold Q and N updates; transfer remaining NR only when finalized QR <= qcrmin, otherwise keep ordinary finalized NR.",
+        "sha256": "2ec5755d05a795ae662905daf833a8483a27dac233ecac6fd15c1c616a732824"
+      },
+      "pd_roundoff": {
+        "conditional_bound_scope": "gamma_69 is a conditional roundoff bound for finite normal-range binary32 operands/results, positive timestep and normal positive mesh metrics. It excludes overflow/underflow, subnormal/FTZ behavior, upstream face-flux construction, external negative tendencies, and negative low-order seeds.",
+        "interface": "Original module and routine interfaces; no trace dummy, capture arrays, or debug-file writes.",
+        "normalized_limiter_match": "The production-shaped limiter source matches the independently reviewed diagnostic candidate after removing only scale_capture assignments and the trace-only diagnostic block.",
+        "path": "docs/native_pd_roundoff.patch",
+        "sha256": "8d5123b2374edfdf7320f7332f3b9cf7e6d92bbb20d6706b46cd666eb239b416",
+        "source_copy_sha256": "a1dc18bce40f84ad709d38fbe7b0658590e587d42528b1124f9c8b7e9c1830fa"
+      }
+    },
+    "post_call_source_bound_checks_strict_binary64": {
+      "all_moment_gate": "FAIL",
+      "non_gap_edge_flags": "Tiny FP32/source-arithmetic boundary excursions, max relative excursion below 1.5e-7; distinct from robust QC positive-mass/NC-zero failures.",
+      "robust_cloud_gaps_above_qmin": 49067,
+      "strict_flag_counts": {
+        "QCLOUD": 49076,
+        "QGRAUP_bulk_density": 33674,
+        "QICE": 3,
+        "QRAIN": 260
+      }
+    },
+    "runs": {
+      "combined_pd_and_kdm6_order": {
+        "call_entry_NN": {
+          "negative": 0,
+          "nonfinite": 0,
+          "zero": 0
+        },
+        "call_entry_QC_negative": 23494,
+        "call_entry_QC_note": "First-call QC negative count; distinct from post-call positive-mass/NC-zero gap count.",
+        "executable_sha256": "47bb9cc921374cb0c2190f83de941c0aa1d55eb7981b93732a4f10a851a0e14d",
+        "launch_log_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df",
+        "launch_record_sha256": "fa4a0719fe079ac884e9d795abac34f7fa735b9815db7dd1c307c21a75ca0457",
+        "post_call_positive_mass_zero_moment": {
+          "QC_NC": 49067,
+          "QG_BG": 0,
+          "QI_NI": 0,
+          "QR_NR": 0
+        },
+        "post_trace_sha256": "526285dedd8e27eb3f59529671193c723d6519d99ea4f98d13b89dae39eb7f30",
+        "pre_trace_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+        "process_log_sha256": "21956296210fda46258be18f899cbca618af33ef1e5c95f76c040d2478233930",
+        "root": "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_combined_pure_strict",
+        "stack_kib": "unlimited",
+        "t_plus_20_REFL": {
+          "cells": 2573532,
+          "max_dbz": 68.50911712646484,
+          "min_dbz": -35.0,
+          "nonfinite": 0
+        },
+        "times": [
+          "2026-08-16_12:00:00",
+          "2026-08-16_12:00:20"
+        ],
+        "wrfout_sha256": "9408b3c75cd7410a7d036dd4317f195f6b0a69e4124510364d0f3eedaee11fd1"
+      },
+      "pd_only_control": {
+        "call_entry_NN": {
+          "negative": 0,
+          "nonfinite": 0,
+          "zero": 0
+        },
+        "call_entry_QC_negative": 23494,
+        "call_entry_QC_note": "First-call QC negative count; distinct from post-call positive-mass/NC-zero gap count.",
+        "executable_sha256": "aeeacd97a4d9a76b10b480fafc9876fcb793ec5e65334b856644bfb825710d08",
+        "launch_log_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df",
+        "launch_record_sha256": "90f515160032f6c697049dd6ef01e1dddd12047523a48218b818bc45573f45df",
+        "post_call_positive_mass_zero_moment": {
+          "QC_NC": 49067,
+          "QG_BG": 0,
+          "QI_NI": 0,
+          "QR_NR": 1
+        },
+        "post_trace_sha256": "29e736e924f4b57e2c815fe756098769a4ac649d1a4a42b7e35b67fba74a4b23",
+        "pre_trace_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+        "process_log_sha256": "b7fffc6685a65c5485c1ed675162ea43d5de4038f86015aa3bf3a9232e2a0e97",
+        "root": "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_pd_only_pure_strict",
+        "t_plus_20_REFL_nonfinite": 1,
+        "wrfout_sha256": "fd8e5446cbe5fd8e5ea311cf0c07738a3bf3d4a2ecd1011d52b9aab7296ce65e"
+      }
+    },
+    "scope": "Same copied PR61 prior input, boundary, namelist, static tables, timestep, damping, and duration in matched PD-only and PD+KDM6-order runs. One rank/tile; not a forecast or operational result.",
+    "status": "COMPLETED_20S_SOURCE_COPY_DIAGNOSTIC"
+  },
+  "policy": {
+    "declared_before_experiment": true,
+    "frozen_errata": [
+      "QICE policy label source_active_mass_threshold=1e-15 is the strict research fill cutoff; selected source PSD branch uses QI >= 1e-14.",
+      "rho_mid=400 kg m-3 appears as an unused parameter; it informed an independent research center, not an active source default. Source support is [100,900]; zero-BG fallback 900 is distinct."
+    ],
+    "path": "docs/PR61_NATIVE_MOMENT_POLICY_20261006.json",
+    "sha256": "20fd53ec626cbb4e192583f99777b5f7f56d580959171c240b804c38873517b3",
+    "status": "RESEARCH_PRIOR_NOT_OPERATIONAL_OR_SCIENCE_APPROVAL"
+  },
+  "rain_only_order_fix_experiment": {
+    "build": {
+      "archive_sha256": "31e0d72f0bc1292e12ebe7dad5f8988180a004d067cf380ef81a517f4ddbe58d",
+      "compile_log_sha256": "00288514ef75c8f78e0dc5c000099b4d7f7bb0fd0780b6b1a48c94c2908e961f",
+      "compiler_profile": "Sourced Cloud-BAL/tests/intel_toolchain.sh; pinned Intel ifx profile; CLOUD_BAL_REPRO_FLAGS plus -align all -fno-alias -fno-common and host ABI flags -free -fpp -auto -convert big_endian -real-size 32 -i4 -DRWORDSIZE=4.",
+      "executable_sha256": "6aeb5b3ead1be9a9c76f559c6b8078c6bbcb049ee5a55589365b8788a6d8468e",
+      "host_scope": "Only the selected KDM6 object was freshly recompiled; main objects and the host archive members were reused. This is not a closed whole-model build and the reused host compile profile is not asserted strict.",
+      "kdm6_object_sha256": "9572c18ec0937a320d555d8ea0432c0cd98c9833f861b514aa6e7be849603116",
+      "link_log_sha256": "fb9763833c7e85f351aaca76032b4ddc20d404b0faef7c1021ad5de7f551066e",
+      "root": "/var/tmp/kdm6_pr61_process_trace_20261006/order_fix_chaintrace_aligned_build"
+    },
+    "candidate_source_path": "/var/tmp/kdm6_pr61_process_trace_20261006/order_fix_chaintrace_aligned_build/phys/module_mp_kdm6.F",
+    "candidate_source_sha256": "b39afa8e02689367b81f8006a104a686995b33f82202ddd7a1bb138f1812f00d",
+    "patch_summary": "Replace early exact-full-evaporation NR->NCCN transfer with a per-cell/per-microstep flag. After finalized warm/cold Q and N updates, transfer the remaining NR only if final QR <= qcrmin; otherwise preserve the regular finalized NR. The candidate and later diagnostic chain changes exist only in /var/tmp forensic source copies.",
+    "results": {
+      "baseline_vs_candidate_first_call_physical_fields": {
+        "QC_QI_QS_QG_TH_unchanged": true,
+        "TH_and_derived_T_K_changed": false,
+        "changed_raw_fields": {
+          "Q": {
+            "cells": 1,
+            "delta": 1.862645149230957e-09
+          },
+          "QR": {
+            "cells": 1,
+            "delta": -1.7459100831729302e-09
+          }
+        },
+        "fp32_rounding_check": {
+          "absolute_residual_below_half_ulp": true,
+          "actual_ulp": 4.656612873077393e-10,
+          "float32_base_Q_plus_QR_equals_candidate_Q": true,
+          "half_ulp": 2.3283064365386963e-10
+        },
+        "signed_total_water_residual_kg_kg-1": 1.1673506605802686e-10
+      },
+      "baseline_vs_candidate_wrfout": {
+        "QVAPOR_changed_cells": 1,
+        "QVAPOR_max_abs_change": 1.862645149230957e-09,
+        "all_condensate_pressure_dynamics_and_T_fields_unchanged": true
+      },
+      "post_call_cloud_gap_q_range_kg_kg-1": {
+        "all_above_qmin_1e-15": true,
+        "max": 3.07679e-07,
+        "min": 1.776e-15
+      },
+      "post_call_entry_QNCCN_NN": {
+        "negative": 98,
+        "nonfinite": 0,
+        "zero": 88
+      },
+      "post_call_positive_mass_zero_moment": {
+        "QC_NC": 48980,
+        "QG_BG": 0,
+        "QI_NI": 0,
+        "QR_NR": 0
+      },
+      "post_call_return_NN": {
+        "negative": 0,
+        "nonfinite": 0,
+        "note": "KDM6 internal clamp; does not repair call-entry provenance.",
+        "zero": 0
+      },
+      "reflectivity_t_plus_20": {
+        "cells": 2573532,
+        "max_dbz": 68.50911712646484,
+        "min_dbz": -35.0,
+        "nonfinite": 0
+      },
+      "source_bound_strict_binary64_check": {
+        "QCLOUD": {
+          "max_relative_excursion": 3.24168328e-08,
+          "nonzero_ratio_edge_count": 9,
+          "violations_including_zero_number": 48989,
+          "zero_number_gaps": 48980
+        },
+        "QGRAUP_bulk_density": {
+          "max_relative_excursion": 5.9298007e-08,
+          "violations": 33636
+        },
+        "QICE": {
+          "max_relative_excursion": 3.82675498e-08,
+          "violations": 1
+        },
+        "QRAIN": {
+          "max_relative_excursion": 1.45339649e-07,
+          "violations": 259
+        },
+        "interpretation": "Non-gap excursions are all within approximately 1.5e-7 relative and may reflect float32 storage/source-arithmetic boundaries; treat as strict numerical flags, not independently established physical defects."
+      }
+    },
+    "review": {
+      "finding": "No blocker in scoped defer design; caveat that if prevp is later scaled but final QR <= qcrmin, flagged NR still transfers. At reproduced target the measured limiter factor was exactly 1.0; this is a focused result, not a universal ordering proof.",
+      "reviewer": "pr61_source_math_review"
+    },
+    "reviewed_patch_source_path": "/var/tmp/kdm6_pr61_process_trace_20261006/order_fix_build/phys/module_mp_kdm6.F",
+    "reviewed_patch_source_sha256": "61bac0c2868a5d31dcfaa9f4a4e076622cdfaa260ca69524eeb8ce3f5a840244",
+    "run": {
+      "executable_sha256": "6aeb5b3ead1be9a9c76f559c6b8078c6bbcb049ee5a55589365b8788a6d8468e",
+      "namelist_sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "process_log_sha256": "f02bf9309c5b79a80203183383ab6e9000a9da30dc3e1918ae10ee98756992a5",
+      "root": "/var/tmp/kdm6_pr61_process_trace_20261006/native_run_order_fix_chaintrace",
+      "scope": "One rank, one active tile, one timestep (20 seconds), unchanged namelist, boundary, prior input, timestep and damping. Direct singleton launch; successful exit.",
+      "times": [
+        "2026-08-16_12:00:00",
+        "2026-08-16_12:00:20"
+      ],
+      "trace_post_sha256": "a3604c7778006b76a95018fa0cc6aff809580a2385e11d7e3e88f96c30201720",
+      "trace_pre_sha256": "8409ceac6ec4792fcc50d1c4fc043d8e5fc118db3b62ef488db6cee9b5cf69ab",
+      "wrfbdy_sha256": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+      "wrfout_sha256": "03d6d12b577bf474a42ee135370e281c2ee44002373338cfbb0f91b31a49ea8f"
+    },
+    "stage_note": "Historical rain-only KDM6 ordering run using the retained prior input and prior host executable/profile; it is not the final matched strict-profile combined run.",
+    "target_process_chain": {
+      "cloud_evaporation": {
+        "action": "NC to NCCN",
+        "full_cloud_evaporation": true,
+        "pcond_kg_kg-1_s-1": -2.5549004e-06
+      },
+      "deferred_candidate": {
+        "finalized_QR_kg_kg-1": 1.7459101e-09,
+        "finalized_internal_NR_m-3": 192.2938,
+        "post_finalized_action": "retain regular NR because QR>qcrmin"
+      },
+      "entry": {
+        "DEN": 0.7838002443313599,
+        "NR_kg-1": 0.21512578427791595,
+        "QR_kg_kg-1": 1.3858462821758621e-08
+      },
+      "evaporation_proposal": {
+        "early_unpatched_transfer": "NR to NCCN before final Q/N rates",
+        "exact_full_evaporation": true,
+        "prevp_kg_kg-1_s-1": -4.0215378e-09,
+        "qcrmin": 9.9999997e-10,
+        "warm_mass_limiter_factor": 1.0
+      },
+      "final_target": "QR=NR=QC=NC=0; NCCN positive. This closes the target QR-positive/NR-zero state by existing source process branches, not an NR floor.",
+      "global_ijk": [
+        35,
+        117,
+        15
+      ],
+      "native_small_drop": {
+        "action": "QR to QC and NR to NC",
+        "mean_volume_diameter_um": 23.864613,
+        "source_cutoff_um": 82.0
+      }
+    }
+  },
+  "schema": "pr61_native_moment_initialization_evidence_v3",
+  "scope": "One copied PR60 input; declared PSD prior; matched 20-second MP_PHYSICS=37 source-copy diagnostic with strict freshly compiled PD/KDM6 objects; no forecast, science acceptance, or operational claim.",
+  "status": "PARTIAL_RESEARCH_REPAIR_FULL_MOMENT_GATE_FAIL"
+}

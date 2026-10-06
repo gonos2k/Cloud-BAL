@@ -1,0 +1,78 @@
+--- a/dyn_em/module_advect_em.f90
++++ b/dyn_em/module_advect_em.f90
+@@ -6050,8 +6050,11 @@
+ 
+    REAL,DIMENSION( its-1:ite+2, kts:kte, jts-1:jte+2  ) :: flux_out, ph_low
+    REAL :: scale
++   DOUBLE PRECISION :: seed_abs, low_flux_abs, high_flux_abs, roundoff_reserve, allowed_outflow
++   DOUBLE PRECISION :: unit_roundoff, gamma_reserve
+    
+    REAL, PARAMETER :: eps=1.e-20
++   INTEGER, PARAMETER :: reserve_ops=69
+ 
+ 
+ 
+@@ -7142,7 +7145,7 @@
+    ELSE
+ 
+       WRITE ( wrf_err_message , * ) 'module_advect: advect_scalar_pd, h_order not known ',horz_order
+-      CALL wrf_error_fatal3("<stdin>",7145,&
++      CALL wrf_error_fatal3("<stdin>",7150,&
+ TRIM( wrf_err_message ) )
+ 
+    ENDIF horizontal_order_test
+@@ -7569,14 +7572,15 @@
+    ELSE
+ 
+       WRITE (wrf_err_message,*) ' advect_scalar_pd, v_order not known ',vert_order
+-      CALL wrf_error_fatal3("<stdin>",7572,&
++      CALL wrf_error_fatal3("<stdin>",7577,&
+ wrf_err_message )
+ 
+    ENDIF vert_order_test
+ 
+    IF (pd_limit) THEN
+ 
+-
++     unit_roundoff = 2.d0**(-24)
++     gamma_reserve = (DBLE(reserve_ops)*unit_roundoff)/(1.d0-DBLE(reserve_ops)*unit_roundoff)
+ 
+    i_start = its-1
+    i_end   = MIN(ite,ide-1)+1
+@@ -7653,17 +7657,31 @@
+    DO k=kts, ktf
+ !DIR$ vector always
+    DO i=i_start, i_end
+-     IF( flux_out(i,k,j) .gt. ph_low(i,k,j) ) THEN
+-       scale = max(0.,ph_low(i,k,j)/(flux_out(i,k,j)+eps))
++     seed_abs = (abs(DBLE(c1(k)))*abs(DBLE(mub(i,j))) + abs(DBLE(c2(k))) + &
++                 abs(DBLE(c1(k)))*abs(DBLE(mu_old(i,j)))) * abs(DBLE(field_old(i,k,j)))
++     low_flux_abs = abs(DBLE(msftx(i,j))*DBLE(msfty(i,j))*DBLE(rdx)) * &
++          (abs(DBLE(fqxl(i+1,k,j)))+abs(DBLE(fqxl(i,k,j)))) + &
++          abs(DBLE(msftx(i,j))*DBLE(msfty(i,j))*DBLE(rdy)) * &
++          (abs(DBLE(fqyl(i,k,j+1)))+abs(DBLE(fqyl(i,k,j)))) + &
++          abs(DBLE(msfty(i,j))*DBLE(rdzw(k))) * &
++          (abs(DBLE(fqzl(i,k+1,j)))+abs(DBLE(fqzl(i,k,j))))
++     high_flux_abs = abs(DBLE(msftx(i,j))*DBLE(msfty(i,j))*DBLE(rdx)) * &
++          (abs(DBLE(fqx(i+1,k,j)))+abs(DBLE(fqx(i,k,j)))) + &
++          abs(DBLE(msftx(i,j))*DBLE(msfty(i,j))*DBLE(rdy)) * &
++          (abs(DBLE(fqy(i,k,j+1)))+abs(DBLE(fqy(i,k,j)))) + &
++          abs(DBLE(msfty(i,j))*DBLE(rdzw(k))) * &
++          (abs(DBLE(fqz(i,k+1,j)))+abs(DBLE(fqz(i,k,j))))
++     roundoff_reserve = gamma_reserve * &
++          (seed_abs + DBLE(dt)*(low_flux_abs+high_flux_abs))
++     allowed_outflow = max(0.d0,DBLE(ph_low(i,k,j))-roundoff_reserve)
++     IF (DBLE(flux_out(i,k,j)) .gt. allowed_outflow) THEN
++       scale = REAL(max(0.d0,allowed_outflow/(DBLE(flux_out(i,k,j))+DBLE(eps))))
+        IF( fqx (i+1,k,j) .gt. 0.) fqx(i+1,k,j) = scale*fqx(i+1,k,j)
+        IF( fqx (i  ,k,j) .lt. 0.) fqx(i  ,k,j) = scale*fqx(i  ,k,j)
+        IF( fqy (i,k,j+1) .gt. 0.) fqy(i,k,j+1) = scale*fqy(i,k,j+1)
+        IF( fqy (i,k,j  ) .lt. 0.) fqy(i,k,j  ) = scale*fqy(i,k,j  )
+-
+-
+        IF( fqz (i,k+1,j) .lt. 0.) fqz(i,k+1,j) = scale*fqz(i,k+1,j)
+        IF( fqz (i,k  ,j) .gt. 0.) fqz(i,k  ,j) = scale*fqz(i,k  ,j)
+-
+      END IF
+ 
+    ENDDO

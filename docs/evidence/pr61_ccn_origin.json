@@ -1,0 +1,472 @@
+{
+  "artifact_note": {
+    "aborted_preliminary_launch": "A preexisting wrf.exe symlink selected the old baseline executable; it regenerated only the generated namelist.output in run_update_capture before termination, and never reached KDM trace. Baseline input hashes and raw stage/KDM captures remained unchanged. Final experiment used new isolated run root with copied inputs and all outputs local.",
+    "patch_path": "docs/native_ccn_stage_trace.patch",
+    "patch_sha256": "3f64b4d2f8925c7788b01710fa80a72fcb3fb187e990bb184877147ab13ec034"
+  },
+  "baseline": {
+    "executable_sha256": "5575a4392e1810da5f8e0c63401a0aa5fb32020e4a054665c15d254feeab59d0",
+    "execution_scope": "one MPI rank, one tile, 20 seconds, dt=20 s",
+    "inputs_sha256": {
+      "namelist.input": "a3c29306c6ae7112500e89aecf0bf41015b430c462f0243d4231bec87e899e3c",
+      "wrfbdy_d01": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_d01": "397daf0387d522243167f5e48831f7415bea07f00c22e5674ef89f73db1a2c0c"
+    },
+    "kdm_pre": {
+      "NN": {
+        "finite": 2533440,
+        "max": 5029003264.0,
+        "min": -11.047990798950195,
+        "negative": 98,
+        "nonfinite": 0,
+        "positive": 2533254,
+        "size": 2533440,
+        "zero": 88
+      },
+      "sha256": "aa01a611b81cf041961748a945e91b4d52aa6704c9fea4398ec7cbe9138139b2"
+    },
+    "pd_budget": {
+      "active_limiter_cells": 15724,
+      "bytes": 118444628,
+      "dt_s": 20.0,
+      "flux_out": {
+        "finite": 2533440,
+        "max": 11507167395840.0,
+        "min": 0.0,
+        "negative": 0,
+        "nonfinite": 0,
+        "positive": 2531183,
+        "size": 2533440,
+        "zero": 2257
+      },
+      "negative_call_cells": 98,
+      "negative_call_cells_postscale_budget_overshoot": 47,
+      "negative_call_cells_postscale_budget_positive": 12,
+      "negative_call_cells_postscale_budget_zero": 39,
+      "negative_call_cells_with_active_limiter": 98,
+      "negative_call_cells_with_positive_ph_low": 98,
+      "negative_ph_low_cells": 0,
+      "path": "/var/tmp/pr61_ccn_origin_20261006/run_pdtrace_metrics/pr61_qnn_pd_budget_rk3.raw",
+      "ph_low": {
+        "finite": 2533440,
+        "max": 393350855262208.0,
+        "min": 32.697357177734375,
+        "negative": 0,
+        "nonfinite": 0,
+        "positive": 2533440,
+        "size": 2533440,
+        "zero": 0
+      },
+      "postscale_budget_residual_max": 1048576.0,
+      "postscale_budget_residual_min": -1048576.0,
+      "rdx": 0.00019999999494757503,
+      "rdy": 0.00019999999494757503,
+      "residual_method": "Replays source max/min outgoing-face split and flux_out grouping in float32 from post-limit shared face values.",
+      "scale": {
+        "finite": 2533440,
+        "max": 1.0,
+        "min": 0.1281525194644928,
+        "negative": 0,
+        "nonfinite": 0,
+        "positive": 2533440,
+        "size": 2533440,
+        "zero": 0
+      },
+      "sha256": "70776f60763059db51b84d9b58700f11d28c5e9e251d9dd23ea4ee8f4be9a658"
+    },
+    "post_update_to_post_boundary": {
+      "1": {
+        "changed_cells": 0,
+        "max_abs_change": 0.0
+      },
+      "2": {
+        "changed_cells": 0,
+        "max_abs_change": 0.0
+      },
+      "3": {
+        "changed_cells": 0,
+        "max_abs_change": 0.0
+      }
+    },
+    "rkfinal_update_replay": {
+      "bytes": 43627660,
+      "dt_s": 20.0,
+      "float32_replay_exact_matches": 98,
+      "float64_replay_negative": 89,
+      "float64_replay_positive": 9,
+      "float64_replay_zero": 0,
+      "negative_cells": 98,
+      "negative_cells_with_nonnegative_rk_old_state": 98,
+      "negative_cells_with_zero_scalar_tend": 98,
+      "path": "/var/tmp/pr61_ccn_origin_20261006/run_pdtrace_metrics/pr61_qnn_update_rkfinal.raw",
+      "scope_note": "Float64 replay uses already-rounded float32 operands and does not test precision inside the flux limiter or tendency generation.",
+      "sha256": "3077b350384c0ddb74f786212010f074d85db5d83ad7d1c30247648a9ef2c8db"
+    },
+    "run_root": "/var/tmp/pr61_ccn_origin_20261006/run_update_capture",
+    "stage_counts": [
+      {
+        "minimum": 0.0003105879877693951,
+        "negative": 0,
+        "rk_step": 1,
+        "sha256": "16cc9437b63d124ef629fe73dd65e4ac9da505728a6a88701bcca64cafdadd61",
+        "stage": 1,
+        "zero": 0
+      },
+      {
+        "minimum": -10765781.0,
+        "negative": 1650,
+        "rk_step": 1,
+        "sha256": "7bc275d783184dbb88365bbf766d2cb08925cd3366719d801f41c98d24964811",
+        "stage": 2,
+        "zero": 0
+      },
+      {
+        "minimum": -10765781.0,
+        "negative": 1650,
+        "rk_step": 1,
+        "sha256": "df3b6b6d8c011c25e64ff1304c90511c930e256a59d4962f0a0c43617baac6b7",
+        "stage": 3,
+        "zero": 0
+      },
+      {
+        "minimum": -10765781.0,
+        "negative": 1650,
+        "rk_step": 2,
+        "sha256": "2cd14158505a23d8dd1f972735905ad68eacfc4c673a09ef0e0c998a50435887",
+        "stage": 1,
+        "zero": 0
+      },
+      {
+        "minimum": -24917584.0,
+        "negative": 4820,
+        "rk_step": 2,
+        "sha256": "ecabbd261703caace88947cc4ba6b81d92eb89d589fe4d2217e1c1e9a1c15e0f",
+        "stage": 2,
+        "zero": 0
+      },
+      {
+        "minimum": -24917584.0,
+        "negative": 4820,
+        "rk_step": 2,
+        "sha256": "3ee11327ce5fcd996e606eeeb86776e449c91100876f9fd6faf1f40b2195b356",
+        "stage": 3,
+        "zero": 0
+      },
+      {
+        "minimum": -24917584.0,
+        "negative": 4820,
+        "rk_step": 3,
+        "sha256": "c548f212ff05b4c58bfa620dcb7f6b863ea52f2e1a45736c15ac60786e3a565c",
+        "stage": 1,
+        "zero": 0
+      },
+      {
+        "minimum": -11.047990798950195,
+        "negative": 98,
+        "rk_step": 3,
+        "sha256": "163ccfc539b54e76226cdf334619e6552db810ffb6ea4fccf48f118978dde41c",
+        "stage": 2,
+        "zero": 88
+      },
+      {
+        "minimum": -11.047990798950195,
+        "negative": 98,
+        "rk_step": 3,
+        "sha256": "b5683b4974f8c09239af4ce9e674be8872a00d6b910e0d9799445e58d28a5507",
+        "stage": 3,
+        "zero": 88
+      }
+    ]
+  },
+  "boundary_source_audit": {
+    "instrumented_case_boundary_capture": {
+      "attributed_as_source_of_final_98": false,
+      "post_boundary_changed_cells": {
+        "rk1": 0,
+        "rk2": 0,
+        "rk3": 0
+      }
+    },
+    "selected_startup_capture": {
+      "interpretation": "Startup evidence is positive and precedes the later call-entry negatives.",
+      "max_relative_profile_reconstruction_error": 5.73821e-06,
+      "wrfout_nonfinite": 0,
+      "wrfout_start_QNCCN_range_number_kg_dry": [
+        0.000310587988,
+        5029232640.0
+      ]
+    },
+    "selected_startup_object": {
+      "byte_identical_to_known_private_startup_object": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/ccn_native_start.j2U4Rf/start_em.o",
+      "full_selected_host_source_and_object_closure_assessed": false,
+      "known_private_startup_object_sha256": "76bb6306e334c261045a0f28e8c4a24b2a5afcbc9025d4a45e2b21bce67dd7c9",
+      "matching_source_patch": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/patches/kdm6_ccn_initialization.patch",
+      "matching_source_patch_sha256": "0a3b5c36d9e8b51cdac566bbdf57af230904fff748f24e59aaf57d0ab6b9d2ae",
+      "patch_behavior": "For the KDM6 scheme only, multiply the configured #/m3 profile by (al+alb) to write public QNCCN as #/kg dry air.",
+      "path": "/var/tmp/kdm6_first_call_pr60_20261006/private_trace_build/start_em.o",
+      "sha256": "76bb6306e334c261045a0f28e8c4a24b2a5afcbc9025d4a45e2b21bce67dd7c9"
+    },
+    "upstream_source_audit_not_attributed_to_retained_binary": {
+      "boundary_source": "share/module_bc.F:2460-2651; Y z_sum reset once per j and accumulates across i; X z_sum reset once per i and accumulates along j.",
+      "module_bc.F_sha256": "5cd9d775c88caf44d378040071a14c2dc1501d80a860c7a7b38dd8ec35a23c5b",
+      "original_start_em_direct_profile_assignment_without_al_plus_alb": true,
+      "registry_ccn_conc_units": "# m-3",
+      "registry_qnccn_units": "# kg(-1)",
+      "registry_sha256": "b01855ed80569be04bbd99e43ea1672a60e35590db00145c839b8f74cfd9b07f",
+      "source_checkout_commit": "24e82afde6f9cb4b299ee330643253fbbc565a79",
+      "source_closure_for_retained_boundary_object_assessed": false,
+      "start_em.F_sha256": "6be17d3a4252065cf972dcf59bf3510cd29be35f898694e38187aa525cf27ac9"
+    }
+  },
+  "candidate": {
+    "archive_sha256": "2163f2411972c7e12e82e30c0b7849cd35890627e61d25566314e8291d488cd9",
+    "compiler": "pinned ifx 2026.0.0 / Intel MPI; Cloud-BAL tests/intel_toolchain.sh",
+    "exe_sha256": "104221a55719b64348828c3aac623b6ad74981077a3a183481fc3890c717f7c1",
+    "execution_scope": "one MPI rank, one active tile, 20 seconds, dt=20 s",
+    "field_differences_vs_baseline_kdm_pre": {
+      "NN": {
+        "changed_cells": 52713,
+        "max_abs_delta": 850.75
+      },
+      "QC": {
+        "changed_cells": 659850,
+        "max_abs_delta": 7.077005648170598e-10
+      },
+      "QG": {
+        "changed_cells": 5958,
+        "max_abs_delta": 4.656612873077393e-10
+      },
+      "QI": {
+        "changed_cells": 582853,
+        "max_abs_delta": 1.3310454960446805e-09
+      },
+      "QR": {
+        "changed_cells": 159758,
+        "max_abs_delta": 2.3283064365386963e-10
+      },
+      "QS": {
+        "changed_cells": 117590,
+        "max_abs_delta": 3.750756150111556e-09
+      }
+    },
+    "final_rk3_after_boundary_matches_kdm_pre_NN": true,
+    "host_closure_assessed": false,
+    "inputs_sha256": {
+      "namelist.input": "a3c29306c6ae7112500e89aecf0bf41015b430c462f0243d4231bec87e899e3c",
+      "wrfbdy_d01": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_d01": "397daf0387d522243167f5e48831f7415bea07f00c22e5674ef89f73db1a2c0c"
+    },
+    "kdm_pre": {
+      "NN": {
+        "finite": 2533440,
+        "max": 5029003264.0,
+        "min": 9.460449490461542e-08,
+        "negative": 0,
+        "nonfinite": 0,
+        "positive": 2533440,
+        "size": 2533440,
+        "zero": 0
+      },
+      "sha256": "23106924d273944845d38d240ffafa14cabfefbb7c8aa9f34127df4d5c6bd976"
+    },
+    "kind": "isolated source-copy experiment; generic positive-definite limiter donor-outflow reserve; no NN floor or clipping",
+    "link_profile": "Retained host objects/libraries reused; pinned strict/repro flags appended last at link; only module_advect_em rebuilt in this profile.",
+    "module_compile_cloud_bal_repro_flags": "-stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz (appended last)",
+    "module_compile_command_record": "/var/tmp/pr61_ccn_origin_20261006/build_strict/module/compile-command.txt",
+    "module_compile_host_abi_args": "-real-size 32 -i4 -align all -fno-alias -FR -convert big_endian",
+    "module_compile_log": "/var/tmp/pr61_ccn_origin_20261006/build_strict/module/compile.log",
+    "module_object_sha256": "008bdc3deac6c0b51ecef4f9a8ead2b2d1dc452fd4d04cfde795d947a10d34f3",
+    "pd_budget": {
+      "active_limiter_cells": 15724,
+      "bytes": 118444628,
+      "dt_s": 20.0,
+      "flux_out": {
+        "finite": 2533440,
+        "max": 11507167395840.0,
+        "min": 0.0,
+        "negative": 0,
+        "nonfinite": 0,
+        "positive": 2531183,
+        "size": 2533440,
+        "zero": 2257
+      },
+      "negative_call_cells": 0,
+      "negative_call_cells_postscale_budget_overshoot": 0,
+      "negative_call_cells_postscale_budget_positive": 0,
+      "negative_call_cells_postscale_budget_zero": 0,
+      "negative_call_cells_with_active_limiter": 0,
+      "negative_call_cells_with_positive_ph_low": 0,
+      "negative_ph_low_cells": 0,
+      "path": "/var/tmp/pr61_ccn_origin_20261006/run_pdreserve69_strict/pr61_qnn_pd_budget_rk3.raw",
+      "ph_low": {
+        "finite": 2533440,
+        "max": 393350855262208.0,
+        "min": 32.697357177734375,
+        "negative": 0,
+        "nonfinite": 0,
+        "positive": 2533440,
+        "size": 2533440,
+        "zero": 0
+      },
+      "postscale_budget_residual_max": null,
+      "postscale_budget_residual_min": null,
+      "rdx": 0.00019999999494757503,
+      "rdy": 0.00019999999494757503,
+      "residual_method": "Replays source max/min outgoing-face split and flux_out grouping in float32 from post-limit shared face values.",
+      "scale": {
+        "finite": 2533440,
+        "max": 1.0,
+        "min": 0.128147691488266,
+        "negative": 0,
+        "nonfinite": 0,
+        "positive": 2533440,
+        "size": 2533440,
+        "zero": 0
+      },
+      "sha256": "a17d408c9376ee1d1ed2653d72bae802d70a100f9e08cae36ed0b290cd2151e5"
+    },
+    "rkfinal_update_replay": {
+      "bytes": 43627660,
+      "dt_s": 20.0,
+      "float32_replay_exact_matches": 0,
+      "float64_replay_negative": 0,
+      "float64_replay_positive": 0,
+      "float64_replay_zero": 0,
+      "negative_cells": 0,
+      "negative_cells_with_nonnegative_rk_old_state": 0,
+      "negative_cells_with_zero_scalar_tend": 0,
+      "path": "/var/tmp/pr61_ccn_origin_20261006/run_pdreserve69_strict/pr61_qnn_update_rkfinal.raw",
+      "scope_note": "Float64 replay uses already-rounded float32 operands and does not test precision inside the flux limiter or tendency generation.",
+      "sha256": "8c69f1c7198f20e74b3d1b99be48ea2add9693fef9fa388bee65fd480b5d2eec"
+    },
+    "run_complete": true,
+    "run_root": "/var/tmp/pr61_ccn_origin_20261006/run_pdreserve69_strict",
+    "science_approval": false,
+    "source_sha256": "555e48802974a3998639230dcef9a9a9fb3c99be91523b89d4b7d1467bcb5209",
+    "stage_counts": [
+      {
+        "minimum": 0.0003105879877693951,
+        "negative": 0,
+        "rk_step": 1,
+        "sha256": "16cc9437b63d124ef629fe73dd65e4ac9da505728a6a88701bcca64cafdadd61",
+        "stage": 1,
+        "zero": 0
+      },
+      {
+        "minimum": -10765781.0,
+        "negative": 1650,
+        "rk_step": 1,
+        "sha256": "7bc275d783184dbb88365bbf766d2cb08925cd3366719d801f41c98d24964811",
+        "stage": 2,
+        "zero": 0
+      },
+      {
+        "minimum": -10765781.0,
+        "negative": 1650,
+        "rk_step": 1,
+        "sha256": "df3b6b6d8c011c25e64ff1304c90511c930e256a59d4962f0a0c43617baac6b7",
+        "stage": 3,
+        "zero": 0
+      },
+      {
+        "minimum": -10765781.0,
+        "negative": 1650,
+        "rk_step": 2,
+        "sha256": "2cd14158505a23d8dd1f972735905ad68eacfc4c673a09ef0e0c998a50435887",
+        "stage": 1,
+        "zero": 0
+      },
+      {
+        "minimum": -24917584.0,
+        "negative": 4820,
+        "rk_step": 2,
+        "sha256": "ecabbd261703caace88947cc4ba6b81d92eb89d589fe4d2217e1c1e9a1c15e0f",
+        "stage": 2,
+        "zero": 0
+      },
+      {
+        "minimum": -24917584.0,
+        "negative": 4820,
+        "rk_step": 2,
+        "sha256": "3ee11327ce5fcd996e606eeeb86776e449c91100876f9fd6faf1f40b2195b356",
+        "stage": 3,
+        "zero": 0
+      },
+      {
+        "minimum": -24917584.0,
+        "negative": 4820,
+        "rk_step": 3,
+        "sha256": "c548f212ff05b4c58bfa620dcb7f6b863ea52f2e1a45736c15ac60786e3a565c",
+        "stage": 1,
+        "zero": 0
+      },
+      {
+        "minimum": 9.460449490461542e-08,
+        "negative": 0,
+        "rk_step": 3,
+        "sha256": "1e103d66a647e2dadaa11e5408b0168f99824841afbe04a46fb15a9d7ffada65",
+        "stage": 2,
+        "zero": 0
+      },
+      {
+        "minimum": 9.460449490461542e-08,
+        "negative": 0,
+        "rk_step": 3,
+        "sha256": "c3db6a090866a778cafd0515aaa95ebd699126afbe97fa0225b7f3735c3896e1",
+        "stage": 3,
+        "zero": 0
+      }
+    ],
+    "strict_run_stdout_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df",
+    "unchanged_fields": [
+      "TH",
+      "PII",
+      "DEN",
+      "P",
+      "DELZ",
+      "Q",
+      "NC",
+      "NI",
+      "NR",
+      "BG",
+      "DIAGRHOG",
+      "XLAND"
+    ]
+  },
+  "date": "2026-10-06",
+  "limits": [
+    "one rank / one tile / 20 seconds only",
+    "partial host source/object closure; old retained objects/libraries reused",
+    "no full WRF strict-profile build or operational equivalence claim",
+    "global mapped extensive conservation not measured",
+    "no multi-rank, multi-tile, longer run, or science approval",
+    "gamma reserve does not give a general positivity guarantee; candidate success is one target-case observation"
+  ],
+  "pd_candidate_arithmetic": {
+    "bookkeeping_groups": {
+      "flux_divergence": 17,
+      "high_order_outflow_budget": 13,
+      "low_order_budget": 13,
+      "reserve_ratio_face_scaling": 11,
+      "rk_assembly": 10,
+      "seed": 5
+    },
+    "gamma_ops": 69,
+    "status": "candidate magnitude reserve estimate only, not general positivity proof; upstream face-flux construction, subnormal/FTZ behavior, already-negative ph_low/CFL violations, and external sink tendencies are outside any general claim",
+    "u_binary32": 5.960464477539063e-08
+  },
+  "purpose": "Bracket negative QNCCN origin before first KDM6 entry and document an isolated generic PD limiter candidate; no operational source change or science approval.",
+  "schema": "pr61_ccn_origin_evidence_v1",
+  "source_provenance": {
+    "commit": "24e82afde6f9cb4b299ee330643253fbbc565a79",
+    "full_retained_host_closure_assessed": false,
+    "instrumented_source_copy_files": {
+      "dyn_em/module_advect_em.F": "555e48802974a3998639230dcef9a9a9fb3c99be91523b89d4b7d1467bcb5209",
+      "dyn_em/module_em.F": "7b9170e6399356d382c2be8921b59a3eb7c6f71b8bea4ac93751e68ee4a1619e",
+      "dyn_em/solve_em.F": "8a8a2169d7582620c7101f2e7272028fa50baf5b17a42789f02893e4d12bd879"
+    },
+    "local_untracked_build_artifacts_present": true,
+    "tracked_source_clean": true,
+    "wrf_checkout": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2"
+  }
+}

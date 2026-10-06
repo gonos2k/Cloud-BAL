@@ -1,0 +1,234 @@
+{
+  "base_commit": "8c7ec0a4496ea5705f5b53ff8c3a2f8691e97211",
+  "current_initializer_replay": {
+    "current_code_bound": true,
+    "historical_native_not_relabelled": true,
+    "output_equals_native_research_input_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+    "receipt": {
+      "path": "/var/tmp/kdm6_pr61_initializer_recheck_20261006/initializer_receipt.json",
+      "sha256": "f8efcfbf751c13f7095fabaea47081d145a0c84c2d76d134f1a0eeb0d8a006f2"
+    }
+  },
+  "diff_check": {
+    "literal_patch_artifacts": "Original source whitespace is preserved in hash-bound forensic diffs. The unfiltered check reports those literal lines; they are not rewritten to preserve patch context and experimental identities.",
+    "source_and_documents": "PASS: git diff 8c7ec0a HEAD --check -- . :(exclude)docs/*.patch"
+  },
+  "focused_intel_pipeline": {
+    "external_runner": {
+      "path": "/var/tmp/pr61-focused-20261006/run.sh",
+      "sha256": "2c8ffbecfd7fc09e34bfd4e97f74be083571c0e7f819336d0a2b075315c1b9a9"
+    },
+    "logs": [
+      {
+        "path": "/var/tmp/pr61-focused-20261006/O0-final.log",
+        "sha256": "e0eafdc584071906504b75c3e4e5bf3681b75c7c9aead2862d5089f6eef93c15"
+      },
+      {
+        "path": "/var/tmp/pr61-focused-20261006/O2-final.log",
+        "sha256": "ee225e0f7f2281a291f84f7d2bb5e86bd07f4e368c425cb57f068057114eeac8"
+      }
+    ],
+    "profile": {
+      "path": "tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    "scope": "Focused test_pipeline only; historical broad unit suite remains PARTIAL_STOPPED.",
+    "status": "PASS_O0_O2"
+  },
+  "focused_python": {
+    "commands": [
+      [
+        "/usr/bin/python3",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr61_moment_state_20261006/Cloud-BAL/tests/test_hydrometeor_moments.py"
+      ],
+      [
+        "/usr/bin/python3",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr61_moment_state_20261006/Cloud-BAL/tests/test_mp37_aux_contract.py"
+      ],
+      [
+        "/usr/bin/python3",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr61_moment_state_20261006/Cloud-BAL/tests/test_native_mp37_aux.py"
+      ],
+      [
+        "/usr/bin/python3",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr61_moment_state_20261006/Cloud-BAL/tests/test_initialize_native_moments.py"
+      ],
+      [
+        "/usr/bin/python3",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr61_moment_state_20261006/Cloud-BAL/tests/test_native_ccn_stage_trace.py"
+      ],
+      [
+        "/usr/bin/python3",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr61_moment_state_20261006/Cloud-BAL/tests/test_native_kdm6_trace.py"
+      ]
+    ],
+    "receipt": {
+      "path": "/var/tmp/pr61-focused-20261006/python_final_batch/receipt.json",
+      "sha256": "1d1e8805e9cd612fcb871b67a5f8426975a0f4c0871c4a29d78ff35be6916797"
+    },
+    "source_bytes_unchanged": true,
+    "status": "PASS",
+    "test_count": 80
+  },
+  "graph_maintenance": {
+    "corpora": {
+      "Cloud-BAL": {
+        "communities": 470,
+        "delta_edges": 271,
+        "delta_nodes": 126,
+        "edges": 12953,
+        "nodes": 6595,
+        "sha256": "76c0c783eba783b0d183ec9b72ae4adc1a4d901189813b6373af18f9fd353b44",
+        "snapshot": "2026-10-06T07:35:48+00:00"
+      },
+      "KLAPS50": {
+        "communities": 2500,
+        "delta_edges": 272,
+        "delta_nodes": 127,
+        "edges": 71370,
+        "nodes": 32427,
+        "sha256": "a40094af9d74d689a6018f29ed3dc257cd85ddbcb4863c76ac2dc2b0e4d98894",
+        "snapshot": "2026-10-06T07:35:41+00:00"
+      }
+    },
+    "final_metadata_commit": "Reporting-only follow-up; graph extraction is attributed to the frozen source commit above.",
+    "frozen_source_commit": "91cac783c5dffd8ff18cc67bcdf95bdeb8ccd222",
+    "limitations": [
+      "Graph counts are separate for overlapping KLAPS50 and Cloud-BAL corpora.",
+      "Markdown semantic extraction was not performed; Markdown contributes heading structure only.",
+      "Fortran cross-file CALL extraction is partial.",
+      "Candidate overlay graphs and freshness are structural navigation evidence, not runtime or scientific validation.",
+      "Prior native failures/PR61 runtime evidence are preserved as separately scoped receipts."
+    ],
+    "private_profile_unchanged": true,
+    "protected_wiki_content_unchanged": true,
+    "receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr61_moment_state_20261006/kg_receipt.json",
+      "sha256": "f906cf9f440f3fc2c45a14a5afc5d034cfcd4df39b303fa97912cb671af8f1bc"
+    },
+    "selected_path_count": 25,
+    "status": "COMPLETED_SELECTED_PATH_OVERLAY"
+  },
+  "historical_metadata_erratum": {
+    "actual_control": "history_interval=60 minutes (3600 seconds)",
+    "field": "native_execution.namelist_controls.history_interval_s",
+    "old_receipt_unchanged": true,
+    "receipt": {
+      "path": "docs/evidence/pr60_current12_kdm6_first_call.json",
+      "sha256": "612bc31be11c1541c720792502fbd19f620d6cfa0b0814a86fdf5b42e4cc4f35"
+    },
+    "recorded_value": 60
+  },
+  "native_artifact_receipts": {
+    "ccn_origin_evidence": {
+      "path": "docs/evidence/pr61_ccn_origin.json",
+      "sha256": "0e4e34a22b312569e0037e1447392f9fe63b370ede2edb840c85e9a411e45778"
+    },
+    "ccn_origin_report": {
+      "path": "docs/PR61_CCN_ORIGIN_20261006.md",
+      "sha256": "c73fd68aa7ede3cc0dc956e6abd239b9562fba6b4d831d9a7f2e65d7e1d4fec2"
+    },
+    "frozen_policy": {
+      "path": "docs/PR61_NATIVE_MOMENT_POLICY_20261006.json",
+      "sha256": "20fd53ec626cbb4e192583f99777b5f7f56d580959171c240b804c38873517b3"
+    },
+    "kdm6_finalized_order_patch": {
+      "path": "docs/native_kdm6_finalized_evaporation.patch",
+      "sha256": "2ec5755d05a795ae662905daf833a8483a27dac233ecac6fd15c1c616a732824"
+    },
+    "matched_call_chain_diagnostic_patch": {
+      "path": "docs/native_ccn_stage_trace.patch",
+      "sha256": "3f64b4d2f8925c7788b01710fa80a72fcb3fb187e990bb184877147ab13ec034"
+    },
+    "native_moment_evidence": {
+      "path": "docs/evidence/pr61_native_moments_20261006.json",
+      "sha256": "2983e9ad47783767f63234318711209d6956585dc9f5d4e9ad5c9fc779cf164c"
+    },
+    "native_moment_report": {
+      "path": "docs/PR61_NATIVE_MOMENT_INITIALIZATION_20261006.md",
+      "sha256": "21cefd1656191d04bf49ffd138ba76f3de1109a72d346f699324fe694ca67be6"
+    },
+    "pure_pd_patch": {
+      "path": "docs/native_pd_roundoff.patch",
+      "sha256": "8d5123b2374edfdf7320f7332f3b9cf7e6d92bbb20d6706b46cd666eb239b416"
+    }
+  },
+  "open_items": [
+    "Complete Q/N/volume state: robust 49067 QC/NC gaps and negative QC at entry",
+    "Normal-range PD allowance is empirical/conditional, not universal positivity or mapped-global conservation proof",
+    "Independent source/boundary/phase/observation contract, feasible joint trial search and optimality",
+    "Optional component-contract SHADOW serialization/readback",
+    "Whole-host build closure, multi-rank/tile validation",
+    "BASE/HYDRO/COUPLED 0\u201360 minute and forecast/observation assessment"
+  ],
+  "recorded_utc": "2026-10-06T07:32:11.272439+00:00",
+  "root_independent_native_replay": {
+    "NN_entry_negative_zero_nonfinite": [
+      0,
+      0,
+      0
+    ],
+    "command": [
+      "python3",
+      "/var/tmp/pr61-focused-20261006/check_combined_native.py"
+    ],
+    "entry_negative_cloud_mass": 23494,
+    "full_native_moment_status": "FAIL",
+    "post_cloud_positive_mass_zero_number": 49067,
+    "receipt": {
+      "path": "/var/tmp/pr61-focused-20261006/combined_native_independent_replay.json",
+      "sha256": "9fbd480f89e98f8df3a6ab76749d3cfe3a744e142e14e08880042636e3d727e6"
+    },
+    "reflectivity_cells": 2573532,
+    "reflectivity_nonfinite": 0,
+    "same_pre_trace": true,
+    "script": {
+      "path": "/var/tmp/pr61-focused-20261006/check_combined_native.py",
+      "sha256": "27dd6a8ab2faba28564bd69a76220a548f329b53654f94be135f539a6ef1e839"
+    }
+  },
+  "schema": "pr61_agent_team_validation_v1",
+  "source_byte_hashes": {
+    "src/common/cloud_bal_pipeline.f90": "670c5af297d135cb66198795d2aca7a25b909f78071a4c762f66c712146bbe8a",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/run_python_contract_tests.sh": "95268f24b52a498f6d638742b11184f9e08301702fa13ad44c0309360fe4d099",
+    "tests/test_hydrometeor_moments.py": "5d35f503a64724036d58c4e8fdca4141d53f413b0b74cbb04c500a62de8c9a76",
+    "tests/test_initialize_native_moments.py": "a16252dfd7b68d5d1195b7615f0bea375608c0b0f3f92c1cbf85a8fe1b8243fd",
+    "tests/test_mp37_aux_contract.py": "2558a29bd6bdb5b94f755f7b27784c2ca9c98822263cdfda8272d3824feea55e",
+    "tests/test_native_ccn_stage_trace.py": "ba648d1546fa02e87e9147649e0bab30d5f6b44691e744aab8f0cd975f70285b",
+    "tests/test_native_kdm6_trace.py": "74534569935b7ac13280aa622ad0959bcbf613cee849828cc7de3980d8263213",
+    "tests/test_native_mp37_aux.py": "a62ba17c1a77e089db5911ae8dc33a4b66288ea22458e7367a652420e799a132",
+    "tests/test_pipeline.f90": "cdda6d18ede6983d591e52ee6e94525e976cd823c6e6ae59385171b5e8c9adb8",
+    "tools/check_native_mp37_aux.py": "64ca1df271b963cb41a6be2f754bb39a20e413b10ef233fc9e8c393993346f5e",
+    "tools/hydrometeor_moments.py": "2320a38b5ed7e3d29f60f446f2405e7fc603b300a246d90650b0894618e9c2dc",
+    "tools/initialize_native_moments.py": "5975542b273bc406b52b03912e03b908429394a42ddee245ca4f858752d69d6e",
+    "tools/mp37_aux_contract.py": "1677e7888008c0231772486d33e9c30cba512b8335af56267c50fc0ed8f52dd4",
+    "tools/native_ccn_stage_trace.py": "2141f82f6b400e142945b6bdb38364e31900a57a3a92b8f7f6a5f8ab8988d7dc",
+    "tools/native_kdm6_trace.py": "6a33128956352a1298943dba338dd56b06c1d7ea818067edd8c797457a8dd77b"
+  },
+  "team_review": {
+    "final_scope": "Independent source/math and artifact reviewers found no remaining scoped implementation blocker. Scientific/native full-state FAIL is retained.",
+    "resolved_findings": [
+      "Nonfinite pressure mass preflight",
+      "Complex/masked/subnormal zero-pair validity",
+      "Overflow in extensive aggregate/roundoff scale",
+      "Initializer receipt failure cleanup and no-replace rollback",
+      "CCN vertical origin and PD memory identity",
+      "Source-vs-selected startup provenance",
+      "Frozen policy metadata errata",
+      "Mixed Fortran diagnostic interface failure; final original interface preserved",
+      "Historical namelist cadence units",
+      "First-call return versus entry label"
+    ],
+    "reviewers": [
+      "pr61_moment_core: common contracts, initializer and parser; final artifacts",
+      "pr61_joint_contract: fixed-pressure feasibility, remap arithmetic and PD math",
+      "pr61_source_math_review: PSD basis/bounds and finalized-order source patch",
+      "pr61_ccn_origin: stage captures and numerical origin",
+      "pr61_native_moments: source-copy native experiments"
+    ],
+    "scientific_approval": "NONE",
+    "status": "COMPLETE_SCOPED"
+  },
+  "validation_source_state": "Tests ran before commit in the isolated worktree. Exact tested source hashes are recorded; no clean-commit-at-execution claim."
+}

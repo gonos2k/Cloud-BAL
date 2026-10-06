@@ -1215,7 +1215,8 @@ CONTAINS
     TYPE(physical_joint_candidate_contract) :: contract
     TYPE(joint_candidate_evaluation) :: evaluation
     TYPE(pressure_analysis_budget) :: budget
-    REAL(real64) :: specific_heat
+    REAL(real64) :: specific_heat,mass_before,mass_after,enthalpy_before,enthalpy_after
+    REAL(real64) :: species_before(6),species_after(6),mass_increment_sum
     REAL(real32), PARAMETER :: phase_step=0.0009765625_real32
     INTEGER :: status,reason
 
@@ -1241,6 +1242,29 @@ CONTAINS
       .NOT.evaluation%source_boundary_assessed .AND. .NOT.evaluation%observation_fit_assessed .AND. &
       .NOT.evaluation%optimality_assessed, &
       'a predeclared 0.5 K temperature step passes the mixture-enthalpy component check',failures)
+
+    candidate=background
+    CALL initialize_physical_contract(background,contract)
+    candidate%cloud_water%value(1,1,2)=candidate%cloud_water%value(1,1,2)+phase_step
+    candidate%cloud_water%source(1,1,2)=SOURCE_COLUMN_PHYSICS
+    contract%adjustable_variables=PHYSICAL_ADJUST_CLOUD_WATER
+    CALL refresh_dry_air_mass_measure(candidate,status)
+    species_before=represented_water_species(background,1,1,2)
+    species_after=represented_water_species(candidate,1,1,2)
+    mass_before=background%grid%dry_air_mass_measure(1,1,2)
+    mass_after=candidate%grid%dry_air_mass_measure(1,1,2)
+    enthalpy_before=raw_mixture_enthalpy(REAL(background%temperature%value(1,1,2),real64),species_before)
+    enthalpy_after=raw_mixture_enthalpy(REAL(candidate%temperature%value(1,1,2),real64),species_after)
+    contract%source_increment(1,1,1,2)=mass_after-mass_before
+    contract%source_increment(2:7,1,1,2)=mass_after*species_after-mass_before*species_before
+    contract%source_increment(8,1,1,2)=mass_after*enthalpy_after-mass_before*enthalpy_before
+    mass_increment_sum=SUM(contract%source_increment(1:7,1,1,2))
+    CALL evaluate_joint_candidate(background,candidate,local_config%balance,budget,evaluation,status,reason,contract)
+    CALL check(ABS(mass_after-mass_before)>0.0_real64 .AND. &
+      ABS(mass_increment_sum)<=64.0_real64*EPSILON(1.0_real64)* &
+        background%grid%pressure_mass_measure(1,1,2) .AND. &
+      evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_PASS, &
+      'condensate loading changes dry metric while fixed-geometry dry plus species mass remains conserved',failures)
 
     candidate=background
     CALL initialize_physical_contract(background,contract)
@@ -1271,9 +1295,32 @@ CONTAINS
     CALL run_cloud_bal_pipeline(background,candidate,operational,result,local_config,physical_contract=contract)
     CALL check(result%status==STATUS_FAILED .AND. same_pipeline_state(background,candidate) .AND. &
       same_pipeline_state(background,operational) .AND. zero_analysis_budget(result%candidate_budget) .AND. &
+      result%outer_iterations==0 .AND. &
       result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
-      result%candidate_evaluation%physical_feasibility_failed_component==PHYSICAL_COMPONENT_DRY_MASS_METRIC, &
-      'a stable no-observation iteration rolls back when its local declared mass increment is infeasible',failures)
+      result%candidate_evaluation%physical_feasibility_failed_component==PHYSICAL_COMPONENT_TOTAL_MASS, &
+      'an incompatible local total-mass declaration rolls back before the first trial',failures)
+
+    CALL initialize_physical_contract(background,contract)
+    contract%source_increment(1,1,1,2)=HUGE(1.0_real64)
+    contract%boundary_increment(1,1,1,2)=-HUGE(1.0_real64)
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,local_config,physical_contract=contract)
+    CALL check(result%outer_iterations>0 .AND. &
+      result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_PASS, &
+      'opposite finite extreme mass declarations pass only their net feasibility check',failures)
+
+    CALL initialize_physical_contract(background,contract)
+    mass_before=background%grid%pressure_mass_measure(1,1,2)
+    background%grid%pressure_mass_measure(1,1,2)=ieee_value(0.0_real64,ieee_quiet_nan)
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,local_config,physical_contract=contract)
+    CALL check(result%outer_iterations==0 .AND. &
+      result%candidate_evaluation%physical_feasibility_reason==REASON_NONFINITE, &
+      'preflight rejects NaN pressure mass before scale comparisons',failures)
+    background%grid%pressure_mass_measure(1,1,2)=0.0_real64
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,local_config,physical_contract=contract)
+    CALL check(result%outer_iterations==0 .AND. &
+      result%candidate_evaluation%physical_feasibility_reason==REASON_RANGE, &
+      'preflight rejects nonpositive atmospheric pressure mass',failures)
+    background%grid%pressure_mass_measure(1,1,2)=mass_before
 
     CALL initialize_physical_contract(background,contract)
     contract%source_increment(PHYSICAL_COMPONENT_ENTHALPY,1,1,2)=1.0_real64

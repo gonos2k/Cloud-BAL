@@ -1,0 +1,286 @@
+--- a/dyn_em/solve_em.F
++++ b/dyn_em/solve_em.F
+@@ -2773,6 +2773,11 @@
+ 
+            CALL wrf_debug ( 200 , ' call rk_scalar_tend' )
+            tenddec = .false.
++           IF ( grid%itimestep .EQ. 1 .AND. is .EQ. P_QNN ) THEN
++             CALL pr61_ccn_stage(1,rk_step,scalar(ims,kms,jms,is),scalar_tend(ims,kms,jms,is), &
++                  ims,ime,kms,kme,jms,jme,ids,ide,kds,kde,jds,jde, &
++                  grid%i_start(ij),grid%i_end(ij),k_start,k_end)
++           ENDIF
+            CALL rk_scalar_tend ( is, is, config_flags, tenddec,                   & 
+                                  rk_step, dt_rk,                                  &
+                                  grid%ru_m, grid%rv_m, grid%ww_m, wwE, wwI,       &
+@@ -2798,7 +2803,7 @@
+                                  ims, ime, jms, jme, kms, kme,     &
+                                  grid%i_start(ij), grid%i_end(ij), &
+                                  grid%j_start(ij), grid%j_end(ij), &
+-                                 k_start    , k_end               )
++                                 k_start    , k_end, trace_qnn=(grid%itimestep .EQ. 1 .AND. is .EQ. P_QNN) )
+ 
+            IF( rk_step == 1 ) THEN
+              IF ( config_flags%nested .OR. &
+@@ -2848,6 +2853,13 @@
+ 
+            CALL wrf_debug ( 200 , ' call rk_update_scalar' )
+            tenddec = .false.
++           IF ( grid%itimestep .EQ. 1 .AND. is .EQ. P_QNN .AND. rk_step .EQ. rk_order ) THEN
++             CALL pr61_ccn_update_inputs(scalar_old(ims,kms,jms,is),scalar(ims,kms,jms,is), &
++                  scalar_tend(ims,kms,jms,is),advect_tend,grid%msfty,grid%mu_1,grid%mu_2, &
++                  grid%mub,grid%c1h,grid%c2h,dt_rk,ims,ime,kms,kme,jms,jme, &
++                  grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij), &
++                  k_start,k_end)
++           ENDIF
+            CALL rk_update_scalar( scs=is, sce=is,                                         &
+                                   scalar_1=scalar_old(ims,kms,jms,is),                    &
+                                   scalar_2=scalar(ims,kms,jms,is),                        &
+@@ -2867,6 +2879,11 @@
+                                   jts=grid%j_start(ij), jte=grid%j_end(ij),               &
+                                   kts=k_start    , kte=k_end                              )
+ 
++           IF ( grid%itimestep .EQ. 1 .AND. is .EQ. P_QNN ) THEN
++             CALL pr61_ccn_stage(2,rk_step,scalar(ims,kms,jms,is),scalar_tend(ims,kms,jms,is), &
++                  ims,ime,kms,kme,jms,jme,ids,ide,kds,kde,jds,jde, &
++                  grid%i_start(ij),grid%i_end(ij),k_start,k_end)
++           ENDIF
+ ! bound the aerosol fields (greater than 0) when using first guess aerosol
+ ! as fields may be highly heterogeneous compared to climatology
+ 
+@@ -2946,6 +2963,11 @@
+ 
+            ENDIF
+ 
++           IF ( grid%itimestep .EQ. 1 .AND. is .EQ. P_QNN ) THEN
++             CALL pr61_ccn_stage(3,rk_step,scalar(ims,kms,jms,is),scalar_tend(ims,kms,jms,is), &
++                  ims,ime,kms,kme,jms,jme,ids,ide,kds,kde,jds,jde, &
++                  grid%i_start(ij),grid%i_end(ij),k_start,k_end)
++           ENDIF
+          ENDDO scalar_tile_loop_2
+          !$OMP END PARALLEL DO
+ 
+@@ -5004,3 +5026,63 @@
+    RETURN
+ 
+ END SUBROUTINE solve_em
++
++SUBROUTINE pr61_ccn_update_inputs(scalar_old,scalar,scalar_tend,advect_tend, &
++     msfty,mu_old,mu_new,mu_base,c1,c2,dt,ims,ime,kms,kme,jms,jme, &
++     its,ite,jts,jte,kts,kte)
++  IMPLICIT NONE
++  INTEGER, INTENT(IN) :: ims,ime,kms,kme,jms,jme,its,ite,jts,jte,kts,kte
++  REAL, INTENT(IN) :: dt
++  REAL, INTENT(IN) :: scalar_old(ims:ime,kms:kme,jms:jme)
++  REAL, INTENT(IN) :: scalar(ims:ime,kms:kme,jms:jme)
++  REAL, INTENT(IN) :: scalar_tend(ims:ime,kms:kme,jms:jme)
++  REAL, INTENT(IN) :: advect_tend(ims:ime,kms:kme,jms:jme)
++  REAL, INTENT(IN) :: msfty(ims:ime,jms:jme),mu_old(ims:ime,jms:jme)
++  REAL, INTENT(IN) :: mu_new(ims:ime,jms:jme),mu_base(ims:ime,jms:jme)
++  REAL, INTENT(IN) :: c1(kms:kme),c2(kms:kme)
++  CHARACTER(128) :: path
++  CHARACTER(8) :: magic
++  INTEGER :: u
++  magic='CCNUPD1'
++  path='pr61_qnn_update_rkfinal.raw'
++  OPEN(NEWUNIT=u,FILE=TRIM(path),ACCESS='stream',FORM='unformatted', &
++       STATUS='replace',ACTION='write')
++  WRITE(u) magic
++  WRITE(u) ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte
++  WRITE(u) dt
++  WRITE(u) scalar_old(its:ite,kts:kte,jts:jte)
++  WRITE(u) scalar(its:ite,kts:kte,jts:jte)
++  WRITE(u) scalar_tend(its:ite,kts:kte,jts:jte)
++  WRITE(u) advect_tend(its:ite,kts:kte,jts:jte)
++  WRITE(u) msfty(its:ite,jts:jte)
++  WRITE(u) mu_old(its:ite,jts:jte)
++  WRITE(u) mu_new(its:ite,jts:jte)
++  WRITE(u) mu_base(its:ite,jts:jte)
++  WRITE(u) c1(kts:kte)
++  WRITE(u) c2(kts:kte)
++  CLOSE(u)
++END SUBROUTINE pr61_ccn_update_inputs
++
++
++SUBROUTINE pr61_ccn_stage(stage,rk_step,scalar,tendency, &
++     ims,ime,kms,kme,jms,jme,ids,ide,kds,kde,jds,jde,its,ite,kts,kte)
++  IMPLICIT NONE
++  INTEGER, INTENT(IN) :: stage,rk_step,ims,ime,kms,kme,jms,jme
++  INTEGER, INTENT(IN) :: ids,ide,kds,kde,jds,jde,its,ite,kts,kte
++  REAL, INTENT(IN) :: scalar(ims:ime,kms:kme,jms:jme)
++  REAL, INTENT(IN) :: tendency(ims:ime,kms:kme,jms:jme)
++  CHARACTER(128) :: path
++  CHARACTER(8) :: magic
++  INTEGER :: u
++  magic='CCNSTG1'
++  WRITE(path,'("pr61_qnn_stage_",I0,"_rk",I0,".raw")') stage,rk_step
++  OPEN(NEWUNIT=u,FILE=TRIM(path),ACCESS='stream',FORM='unformatted', &
++       STATUS='replace',ACTION='write')
++  WRITE(u) magic
++  WRITE(u) stage,rk_step,ids,ide,jds,jde,kds,kde
++  WRITE(u) ims,ime,jms,jme,kms,kme,its,ite,kts,kte
++  WRITE(u) scalar(its:ite,kts:kte,jms:jme)
++  WRITE(u) tendency(its:ite,kts:kte,jms:jme)
++  CLOSE(u)
++END SUBROUTINE pr61_ccn_stage
++
+--- a/dyn_em/module_em.F
++++ b/dyn_em/module_em.F
+@@ -837,7 +837,7 @@
+                                          khdq , xkhh, rdx, rdy,           &
+                                          ids, ide, jds, jde, kds, kde,    &
+                                          ims, ime, jms, jme, kms, kme,    &
+-                                         its, ite, jts, jte, kts, kte    )
++                                         its, ite, jts, jte, kts, kte )
+ 
+         pbl_test : IF (config_flags%bl_pbl_physics .eq. 0) THEN
+ 
+@@ -1115,15 +1115,17 @@
+                             mix2_off, mix6_off,              &
+                             ids, ide, jds, jde, kds, kde,    &
+                             ims, ime, jms, jme, kms, kme,    &
+-                            its, ite, jts, jte, kts, kte    )
++                            its, ite, jts, jte, kts, kte, trace_qnn )
+ 
+    IMPLICIT NONE
++   LOGICAL :: trace_pd_qnn
+ 
+    !  Input data.
+ 
+    TYPE(grid_config_rec_type   ) ,   INTENT(IN   ) :: config_flags
+ 
+    LOGICAL ,                INTENT(IN   ) :: tenddec ! tendency term
++   LOGICAL , OPTIONAL,      INTENT(IN   ) :: trace_qnn
+ 
+    INTEGER ,                INTENT(IN   ) :: rk_step, scs, sce
+    INTEGER ,                INTENT(IN   ) :: ids, ide, jds, jde, kds, kde, &
+@@ -1262,7 +1264,9 @@
+ 
+      CALL nl_get_time_step ( 1, time_step )
+ 
+-      IF( (rk_step == rk_order) .and. (adv_opt == POSITIVEDEF) ) THEN
++      trace_pd_qnn = .FALSE.
++   IF (PRESENT(trace_qnn)) trace_pd_qnn = trace_qnn
++   IF( (rk_step == rk_order) .and. (adv_opt == POSITIVEDEF) ) THEN
+ 
+         CALL advect_scalar_pd       ( scalar(ims,kms,jms,im),             &
+                                       scalar_old(ims,kms,jms,im),         &
+@@ -1277,7 +1281,8 @@
+                                       rdx, rdy, rdnw, dt_step,            &  
+                                       ids, ide, jds, jde, kds, kde,       &
+                                       ims, ime, jms, jme, kms, kme,       &
+-                                      its, ite, jts, jte, kts, kte     )
++                                      its, ite, jts, jte, kts, kte,      &
++                                      trace_pd_qnn )
+ 
+       ELSE IF( (rk_step == rk_order) .and. (adv_opt == MONOTONIC) ) THEN
+ 
+--- a/dyn_em/module_advect_em.F
++++ b/dyn_em/module_advect_em.F
+@@ -6079,7 +6079,7 @@
+                                 rdx, rdy, rdzw, dt,            &
+                                 ids, ide, jds, jde, kds, kde,  &
+                                 ims, ime, jms, jme, kms, kme,  &
+-                                its, ite, jts, jte, kts, kte  )
++                                its, ite, jts, jte, kts, kte, trace_qnn  )
+ 
+ !  this is a first cut at a positive definite advection option
+ !  for scalars in WRF.  This version is memory intensive ->
+@@ -6099,6 +6099,7 @@
+    TYPE(grid_config_rec_type), INTENT(IN   ) :: config_flags
+ 
+    LOGICAL ,                 INTENT(IN   ) :: tenddec  ! tendency flag
++   LOGICAL ,                 INTENT(IN   ) :: trace_qnn
+ 
+    INTEGER ,                 INTENT(IN   ) :: ids, ide, jds, jde, kds, kde, &
+                                               ims, ime, jms, jme, kms, kme, &
+@@ -6154,10 +6155,17 @@
+ 
+    INTEGER :: jp1, jp0, jtmp
+ 
+-   REAL,DIMENSION( its-1:ite+2, kts:kte, jts-1:jte+2  ) :: flux_out, ph_low
++   REAL,DIMENSION( its-1:ite+2, kts:kte, jts-1:jte+2  ) :: flux_out, ph_low, scale_capture
+    REAL :: scale
+-   !REAL :: flux_out, ph_low, scale
++   DOUBLE PRECISION :: seed_abs, low_flux_abs, high_flux_abs, roundoff_reserve, allowed_outflow
++   DOUBLE PRECISION :: unit_roundoff, gamma_reserve
+    REAL, PARAMETER :: eps=1.e-20
++   ! Candidate arithmetic reserve only; this count is not a general positivity
++   ! proof. It covers the listed normal-range operations, not subnormal/FTZ
++   ! behavior, flux construction upstream of these budgets, or external sinks.
++   ! Upper bound: seed 5 + low-order budget 13 + high outflow budget 13 +
++   ! limiter reserve/ratio/face scaling 11 + flux divergence 17 + RK update 10.
++   INTEGER, PARAMETER :: reserve_ops=69
+ 
+ 
+ ! definition of flux operators, 3rd, 4th, 5th or 6th order
+@@ -7679,6 +7687,9 @@
+    ENDIF vert_order_test
+ 
+    IF (pd_limit) THEN
++
++     unit_roundoff = 2.d0**(-24)
++     gamma_reserve = (DBLE(reserve_ops)*unit_roundoff)/(1.d0-DBLE(reserve_ops)*unit_roundoff)
+ 
+ ! positive definite filter
+ 
+@@ -7761,8 +7772,28 @@
+    DO k=kts, ktf
+ !DIR$ vector always
+    DO i=i_start, i_end
+-     IF( flux_out(i,k,j) .gt. ph_low(i,k,j) ) THEN
+-       scale = max(0.,ph_low(i,k,j)/(flux_out(i,k,j)+eps))
++     scale_capture(i,k,j) = 1.
++     seed_abs = (abs(DBLE(c1(k)))*abs(DBLE(mub(i,j))) + abs(DBLE(c2(k))) + &
++                 abs(DBLE(c1(k)))*abs(DBLE(mu_old(i,j)))) * abs(DBLE(field_old(i,k,j)))
++     low_flux_abs = abs(DBLE(msftx(i,j))*DBLE(msfty(i,j))*DBLE(rdx)) * &
++          (abs(DBLE(fqxl(i+1,k,j)))+abs(DBLE(fqxl(i,k,j)))) + &
++          abs(DBLE(msftx(i,j))*DBLE(msfty(i,j))*DBLE(rdy)) * &
++          (abs(DBLE(fqyl(i,k,j+1)))+abs(DBLE(fqyl(i,k,j)))) + &
++          abs(DBLE(msfty(i,j))*DBLE(rdzw(k))) * &
++          (abs(DBLE(fqzl(i,k+1,j)))+abs(DBLE(fqzl(i,k,j))))
++     high_flux_abs = abs(DBLE(msftx(i,j))*DBLE(msfty(i,j))*DBLE(rdx)) * &
++          (abs(DBLE(fqx(i+1,k,j)))+abs(DBLE(fqx(i,k,j)))) + &
++          abs(DBLE(msftx(i,j))*DBLE(msfty(i,j))*DBLE(rdy)) * &
++          (abs(DBLE(fqy(i,k,j+1)))+abs(DBLE(fqy(i,k,j)))) + &
++          abs(DBLE(msfty(i,j))*DBLE(rdzw(k))) * &
++          (abs(DBLE(fqz(i,k+1,j)))+abs(DBLE(fqz(i,k,j))))
++     roundoff_reserve = gamma_reserve * &
++          (seed_abs + DBLE(dt)*(low_flux_abs+high_flux_abs))
++     allowed_outflow = max(0.d0,DBLE(ph_low(i,k,j))-roundoff_reserve)
++     scale_capture(i,k,j) = 1.
++     IF (DBLE(flux_out(i,k,j)) .gt. allowed_outflow) THEN
++       scale = REAL(max(0.d0,allowed_outflow/(DBLE(flux_out(i,k,j))+DBLE(eps))))
++       scale_capture(i,k,j) = scale
+        IF( fqx (i+1,k,j) .gt. 0.) fqx(i+1,k,j) = scale*fqx(i+1,k,j)
+        IF( fqx (i  ,k,j) .lt. 0.) fqx(i  ,k,j) = scale*fqx(i  ,k,j)
+        IF( fqy (i,k,j+1) .gt. 0.) fqy(i,k,j+1) = scale*fqy(i,k,j+1)
+@@ -7867,6 +7898,29 @@
+   ENDDO
+   ENDDO
+   ENDDO
++
++  IF (trace_qnn) THEN
++    OPEN(UNIT=97,FILE='pr61_qnn_pd_budget_rk3.raw',ACCESS='stream',FORM='unformatted', &
++         STATUS='replace',ACTION='write')
++    WRITE(97) 'CCNPDB1 '
++    WRITE(97) ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte
++    WRITE(97) dt,rdx,rdy
++    WRITE(97) field_old(its:ite,kts:kte,jts:jte)
++    WRITE(97) tendency(its:ite,kts:kte,jts:jte)
++    WRITE(97) ph_low(its:ite,kts:kte,jts:jte)
++    WRITE(97) flux_out(its:ite,kts:kte,jts:jte)
++    WRITE(97) scale_capture(its:ite,kts:kte,jts:jte)
++    WRITE(97) fqx(its-1:ite+1,kts:kte,jts:jte)
++    WRITE(97) fqy(its:ite,kts:kte,jts-1:jte+1)
++    WRITE(97) fqz(its:ite,kts:kte+1,jts:jte)
++    WRITE(97) fqxl(its-1:ite+1,kts:kte,jts:jte)
++    WRITE(97) fqyl(its:ite,kts:kte,jts-1:jte+1)
++    WRITE(97) fqzl(its:ite,kts:kte+1,jts:jte)
++    WRITE(97) msftx(its:ite,jts:jte)
++    WRITE(97) msfty(its:ite,jts:jte)
++    WRITE(97) rdzw(kts:kte)
++    CLOSE(97)
++  ENDIF
+ 
+   IF(tenddec) THEN
+   DO j = j_start, j_end

@@ -1,0 +1,168 @@
+{
+  "audit_base_commit": "4ee6aaf84fe80369c4a95355b458a291346bf0cd",
+  "current_native_document": {
+    "path": "docs/PR61_NATIVE_MOMENT_INITIALIZATION_20261006.md",
+    "scope": "Description clarified; no native source/executable/data change.",
+    "sha256": "de445d36f2c58b069a91c53bf87120699ef0d4009f9ff10abfbb722560b210cb"
+  },
+  "focused_python": {
+    "clean_commit_at_execution": false,
+    "receipt": {
+      "path": "/var/tmp/pr61_reaudit_20261006/python_batch/receipt.json",
+      "sha256": "af889fd13390ea074c69ea83ce4bab68f10828ebbe485cc849ec4fffbcbfb5d1"
+    },
+    "source_byte_hashes": {
+      "tests/run_python_contract_tests.sh": "95268f24b52a498f6d638742b11184f9e08301702fa13ad44c0309360fe4d099",
+      "tests/test_hydrometeor_moments.py": "b9aa200448676a610bf40ba558eeee0110f421033145cb2e2eb0160b1252fd79",
+      "tests/test_initialize_native_moments.py": "ee913a5fdadd28e48613faf311d0a9fe69440236a0ae69db4ba568f4785f6dc8",
+      "tests/test_mp37_aux_contract.py": "2558a29bd6bdb5b94f755f7b27784c2ca9c98822263cdfda8272d3824feea55e",
+      "tests/test_native_ccn_stage_trace.py": "fcd45e497c117da48251b3270f2742799ce05f6b22218f414ba18f1fb9de2b0c",
+      "tests/test_native_kdm6_trace.py": "74534569935b7ac13280aa622ad0959bcbf613cee849828cc7de3980d8263213",
+      "tests/test_native_mp37_aux.py": "a62ba17c1a77e089db5911ae8dc33a4b66288ea22458e7367a652420e799a132",
+      "tools/check_native_mp37_aux.py": "64ca1df271b963cb41a6be2f754bb39a20e413b10ef233fc9e8c393993346f5e",
+      "tools/hydrometeor_moments.py": "6633ab9cd708503faa7d0cb1aec335d98b90f3dc9e0f15c97d57e309d933e52e",
+      "tools/initialize_native_moments.py": "9cc65f68568e62240c5470f14cc595ac5e67553f1c5c1b812ed820092bf764b4",
+      "tools/mp37_aux_contract.py": "1677e7888008c0231772486d33e9c30cba512b8335af56267c50fc0ed8f52dd4",
+      "tools/native_ccn_stage_trace.py": "c4986a28d36e0cb9edc2a2d4b20553b4299e74b11b9ab64492b7472fc065186e",
+      "tools/native_kdm6_trace.py": "6a33128956352a1298943dba338dd56b06c1d7ea818067edd8c797457a8dd77b"
+    },
+    "status": "PASS",
+    "tests": 86
+  },
+  "fortran_validation": {
+    "new_compile": "NOT_REQUIRED: Python/doc changes only; no claim of a new full suite run.",
+    "retained_scoped_O0_O2_logs": [
+      {
+        "path": "/var/tmp/pr61-focused-20261006/O0-final.log",
+        "sha256": "e0eafdc584071906504b75c3e4e5bf3681b75c7c9aead2862d5089f6eef93c15"
+      },
+      {
+        "path": "/var/tmp/pr61-focused-20261006/O2-final.log",
+        "sha256": "ee225e0f7f2281a291f84f7d2bb5e86bd07f4e368c425cb57f068057114eeac8"
+      }
+    ],
+    "source_and_test_bytes_unchanged": true
+  },
+  "historical_evidence": {
+    "original_validation_receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr61_moment_state_20261006/Cloud-BAL/docs/evidence/pr61_team_validation_20261006.json",
+      "sha256": "6240239e6f6f6d9ab32e2f9330c7d2e829218e95bb006cb3c7faf7659fb80024"
+    },
+    "reference_scope": "Original source/document hash references describe their historical bytes at PR61 audit base4ee6aaf, not subsequent edited files. Native run and frozen policy bytes are unchanged. This follow-up receipt records current Python validation."
+  },
+  "initializer_real_input_replay": {
+    "current_code_sha256": "9cc65f68568e62240c5470f14cc595ac5e67553f1c5c1b812ed820092bf764b4",
+    "old_native_execution_not_relabelled": true,
+    "output_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+    "prior_policy_sha256": "20fd53ec626cbb4e192583f99777b5f7f56d580959171c240b804c38873517b3",
+    "receipt": {
+      "path": "/var/tmp/pr61_reaudit_20261006/initializer_replay/receipt.json",
+      "sha256": "db732cc93fd8909914f5df070fb5ce9f071700573a56df351f818199622ab080"
+    },
+    "status": "PASS",
+    "unchanged_mass_other_fields_and_input": true
+  },
+  "kg_maintenance": {
+    "base_overlay_commit": "91cac783c5dffd8ff18cc67bcdf95bdeb8ccd222",
+    "corpora": {
+      "Cloud-BAL": {
+        "communities": 475,
+        "delta_edges": 41,
+        "delta_nodes": 22,
+        "edges": 12994,
+        "nodes": 6617,
+        "sha256": "44117b0ee50d7b54082fc813d41c8af290c32c96e6a5e1dcb6ed1105f194453a",
+        "snapshot": "2026-10-06T07:52:14+00:00"
+      },
+      "KLAPS50": {
+        "communities": 2504,
+        "delta_edges": 41,
+        "delta_nodes": 22,
+        "edges": 71411,
+        "nodes": 32449,
+        "sha256": "df99f7a7543125e8ce093fcee03ad5561febf4ab52e8f11a536b53cc1ae9b3ad",
+        "snapshot": "2026-10-06T07:52:08+00:00"
+      }
+    },
+    "frozen_source_commit": "a69176f6c303025bff80f688a9e3b99fe6af5e2f",
+    "limitations": [
+      "Graph counts are separate for overlapping KLAPS50 and Cloud-BAL corpora.",
+      "Markdown semantic extraction was not performed; Markdown contributes heading structure only.",
+      "Fortran cross-file CALL extraction is partial.",
+      "Candidate overlay graphs and freshness are structural navigation evidence, not runtime or scientific validation.",
+      "Prior native failures/PR61 runtime evidence are preserved as separately scoped receipts."
+    ],
+    "protected_source_wiki_and_private_profile_unchanged": true,
+    "receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr61_followup_team_audit_20261006/kg_receipt.json",
+      "sha256": "35cf8bd37f453aea5d72da6e7ffdcdd395b1ec29799d94f53403b34f4522f61a"
+    },
+    "reporting_followup": "Only records KG outcome; the extraction source is the frozen commit above.",
+    "selected_paths": 11,
+    "status": "COMPLETED_SELECTED_PATH_OVERLAY"
+  },
+  "native_scientific_result": {
+    "BASE_HYDRO_COUPLED_0_to_60min_and_forecast": "OPEN",
+    "entry_negative_QC": 23494,
+    "full_host_or_parallel_closure": "OPEN",
+    "full_moment_gate": "FAIL",
+    "joint_optimization": "OPEN",
+    "new_native_run": false,
+    "post_QC_positive_NC_zero": 49067
+  },
+  "recorded_utc": "2026-10-06T07:51:27.983625+00:00",
+  "resolved_findings": [
+    {
+      "area": "conservative remap",
+      "fix": "Reject positive-product underflow in carrier multiplication, weighted terms and intensive recovery; no floors or inferred sources.",
+      "reproduction": "dry_mass=1e-300, mass_ratio=number_ratio=1e-30, identity weights: positive extensive values underflowed to zero, both recovered ratios became zero and conservation/realizability returned PASS",
+      "severity": "P2"
+    },
+    {
+      "area": "CCN diagnostics",
+      "fix": "Finite-pair comparison in binary64; unassessed nonfinite count and null whole-field maximum; explicit nonfinite PD residual subset; controlled CLI JSON errors.",
+      "reproduction": "NaN stage values or finite FP32-extreme boundary subtraction yielded nonfinite max delta and unhandled strict JSON encoding error",
+      "severity": "P2"
+    },
+    {
+      "area": "frozen prior numerical declarations",
+      "fix": "Exact species inventory and declared values, with 16 binary64 eps only for derived pidn/bound relationships. This checks numerical declarations, not arbitrary executable/authentication closure.",
+      "reproduction": "Changing an executable species slope declaration still passed frozen policy-file validation",
+      "severity": "P2"
+    },
+    {
+      "area": "native build description",
+      "fix": "Matched paragraph distinguishes pure PD source from compiled instrumented KDM6 extension; historical source/object/run hashes unchanged.",
+      "severity": "P3"
+    },
+    {
+      "area": "graph navigation provenance",
+      "fix": "Derived report freshness distinguishes maintained checkout base from selected source overlay. The initially used bundled 1499-node graph was superseded by a query of the maintained6595-node graph.",
+      "severity": "P3"
+    }
+  ],
+  "retained_ccn_parser_replay": {
+    "old_and_new_summary_identical": true,
+    "receipt": {
+      "path": "/var/tmp/pr61_reaudit_20261006/ccn_parser_replay_receipt.json",
+      "sha256": "542a60b1ee93a6a67d75eb28906a8543f224580811d76fdcf2dc93e2b802f4e7"
+    },
+    "status": "PASS_IDENTICAL",
+    "summary": {
+      "path": "/var/tmp/pr61_reaudit_20261006/retained_ccn_summary.json",
+      "sha256": "f33dd6e8ce4e52a341d87afc07720c4905377bd90e01fe38741266cf224f944b"
+    }
+  },
+  "schema": "pr61_followup_team_audit_v1",
+  "scope": "PR61 implementation/evidence audit and focused fixes. No new native integration or forecast run.",
+  "team_review": {
+    "agents": [
+      "pr61_reaudit_math",
+      "pr61_reaudit_io",
+      "pr61_reaudit_fortran",
+      "pr61_reaudit_native"
+    ],
+    "cross_review": "Fortran reviewer checked remap fix; native reviewer checked IO fixes independently.",
+    "status": "COMPLETE_SCOPED_NO_REMAINING_IMPLEMENTATION_BLOCKER"
+  }
+}

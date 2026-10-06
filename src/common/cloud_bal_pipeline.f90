@@ -24,6 +24,7 @@ MODULE cloud_bal_pipeline
   INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_SNOW=6
   INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_GRAUPEL=7
   INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_ENTHALPY=8
+  INTEGER, PUBLIC, PARAMETER :: PHYSICAL_COMPONENT_TOTAL_MASS=0
   INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_TEMPERATURE=ISHFT(1,0)
   INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_VAPOR=ISHFT(1,1)
   INTEGER, PUBLIC, PARAMETER :: PHYSICAL_ADJUST_CLOUD_WATER=ISHFT(1,2)
@@ -41,7 +42,9 @@ MODULE cloud_bal_pipeline
     ! (components 1:7) and J (component 8), plus physical tolerances in those
     ! units. Component 1 is the canonical dry-mass metric, not physical gas
     ! source authority. Component 8 is represented mixture enthalpy only.
-    ! Only source+boundary net is compared; their separate attribution,
+    ! Components 1:7 must have zero net total-mass increment per covered cell
+    ! when pressure geometry is fixed. Only source+boundary net is compared;
+    ! their separate attribution,
     ! observation fit, optimality and native conservation remain unassessed.
     INTEGER :: adjustable_variables=0
     LOGICAL, ALLOCATABLE :: coverage(:,:,:)
@@ -282,6 +285,16 @@ CONTAINS
                                    STATUS_OK,REASON_NONE)
       result%status=STATUS_OK; result%reason_code=REASON_NONE
       RETURN
+    END IF
+    IF (PRESENT(physical_contract) .AND. .NOT.PRESENT(requested_surface_pressure)) THEN
+      CALL preflight_physical_mass_contract(state_in,physical_contract,trial_evaluation)
+      IF (trial_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED) THEN
+        result%candidate_evaluation=trial_evaluation
+        result%status=STATUS_FAILED
+        result%reason_code=REASON_GATE
+        CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_GATE)
+        RETURN
+      END IF
     END IF
     ! Manufactured targets are a direct operator test capability.  They may
     ! never enter the normal OFF/SHADOW science pipeline.
@@ -966,6 +979,76 @@ CONTAINS
     evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_PASS
     evaluation%physical_feasibility_reason=REASON_NONE
   END SUBROUTINE assess_physical_joint_candidate
+
+  SUBROUTINE preflight_physical_mass_contract(state,contract,evaluation)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    TYPE(physical_joint_candidate_contract), INTENT(IN) :: contract
+    TYPE(joint_candidate_evaluation), INTENT(OUT) :: evaluation
+    REAL(real64) :: scale,residual_scaled,tolerance_scaled,arithmetic_scaled,pressure_mass
+    REAL(real64) :: source(7),boundary(7),tolerance(7)
+    INTEGER :: i,j,k,nx,ny,nz
+
+    evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_UNSUPPORTED
+    evaluation%physical_feasibility_reason=REASON_NONE
+    IF (.NOT.ALLOCATED(state%above_ground) .OR. .NOT.ALLOCATED(state%grid%pressure_mass_measure)) RETURN
+    IF (.NOT.ALLOCATED(contract%coverage) .OR. .NOT.ALLOCATED(contract%source_increment) .OR. &
+        .NOT.ALLOCATED(contract%boundary_increment) .OR. .NOT.ALLOCATED(contract%physical_tolerance)) RETURN
+    nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
+    IF (ANY(SHAPE(state%above_ground)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(state%grid%pressure_mass_measure)/=(/nx,ny,nz/))) RETURN
+    IF (ANY(SHAPE(contract%coverage)/=(/nx,ny,nz/)) .OR. &
+        ANY(SHAPE(contract%source_increment)/=(/8,nx,ny,nz/)) .OR. &
+        ANY(SHAPE(contract%boundary_increment)/=(/8,nx,ny,nz/)) .OR. &
+        ANY(SHAPE(contract%physical_tolerance)/=(/8,nx,ny,nz/))) RETURN
+    IF (ANY(.NOT.ieee_is_finite(contract%source_increment(1:7,:,:,:))) .OR. &
+        ANY(.NOT.ieee_is_finite(contract%boundary_increment(1:7,:,:,:))) .OR. &
+        ANY(.NOT.ieee_is_finite(contract%physical_tolerance(1:7,:,:,:)))) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+      evaluation%physical_feasibility_reason=REASON_NONFINITE
+      RETURN
+    END IF
+    IF (ANY(contract%physical_tolerance(1:7,:,:,:)<0.0_real64)) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+      evaluation%physical_feasibility_reason=REASON_RANGE
+      RETURN
+    END IF
+    evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_PASS
+    DO k=1,nz; DO j=1,ny; DO i=1,nx
+      IF (.NOT.state%above_ground(i,j,k) .OR. .NOT.contract%coverage(i,j,k)) CYCLE
+      source=contract%source_increment(1:7,i,j,k)
+      boundary=contract%boundary_increment(1:7,i,j,k)
+      tolerance=contract%physical_tolerance(1:7,i,j,k)
+      pressure_mass=state%grid%pressure_mass_measure(i,j,k)
+      IF (.NOT.ieee_is_finite(pressure_mass)) THEN
+        evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+        evaluation%physical_feasibility_reason=REASON_NONFINITE
+        evaluation%physical_feasibility_failed_cell=[i,j,k]
+        evaluation%physical_feasibility_failed_component=PHYSICAL_COMPONENT_TOTAL_MASS
+        RETURN
+      END IF
+      IF (pressure_mass<=0.0_real64) THEN
+        evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+        evaluation%physical_feasibility_reason=REASON_RANGE
+        evaluation%physical_feasibility_failed_cell=[i,j,k]
+        evaluation%physical_feasibility_failed_component=PHYSICAL_COMPONENT_TOTAL_MASS
+        RETURN
+      END IF
+      scale=MAX(ABS(pressure_mass),MAXVAL(ABS(source)),MAXVAL(ABS(boundary)),MAXVAL(tolerance))
+      IF (scale==0.0_real64) CYCLE
+      residual_scaled=SUM(source/scale+boundary/scale)
+      tolerance_scaled=SUM(tolerance/scale)
+      arithmetic_scaled=64.0_real64*EPSILON(1.0_real64)* &
+        (ABS(pressure_mass/scale)+SUM(ABS(source/scale))+SUM(ABS(boundary/scale)))
+      IF (ABS(residual_scaled)>tolerance_scaled+arithmetic_scaled) THEN
+        evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+        evaluation%physical_feasibility_reason=REASON_GATE
+        evaluation%physical_feasibility_failed_cell=[i,j,k]
+        evaluation%physical_feasibility_failed_component=PHYSICAL_COMPONENT_TOTAL_MASS
+        evaluation%physical_feasibility_residual_scaled=residual_scaled
+        RETURN
+      END IF
+    END DO; END DO; END DO
+  END SUBROUTINE preflight_physical_mass_contract
 
   LOGICAL FUNCTION adjusted_field_allowed(background,candidate,expected_shape,adjustable_variables,variable_bit)
     TYPE(field3d), INTENT(IN) :: background,candidate
