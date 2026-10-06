@@ -48,6 +48,10 @@ def read_dump(path: Path) -> dict:
     params = (dt, ccn, scale_h, land_mult, sea_mult)
     if not all(np.isfinite(value) for value in params) or min(params) <= 0:
         raise TraceError("call parameters must be finite and positive")
+    for start, end, label in (("ids", "ide", "i"), ("jds", "jde", "j"),
+                              ("kds", "kde", "k")):
+        if bounds[start] > bounds[end]:
+            raise TraceError(f"empty or inverted domain {label} bounds")
     nx = bounds["ime"] - bounds["ims"] + 1
     ny = bounds["jme"] - bounds["jms"] + 1
     nz = bounds["kme"] - bounds["kms"] + 1
@@ -57,6 +61,13 @@ def read_dump(path: Path) -> dict:
                               ("kts", "kte", "k")):
         if bounds[start] > bounds[end]:
             raise TraceError(f"empty or inverted active {label} tile")
+    for active_start, active_end, domain_start, domain_end, label in (
+            ("its", "ite", "ids", "ide", "i"),
+            ("jts", "jte", "jds", "jde", "j"),
+            ("kts", "kte", "kds", "kde", "k")):
+        if (bounds[active_start] < bounds[domain_start] or
+                bounds[active_end] > bounds[domain_end]):
+            raise TraceError(f"active {label} tile is outside the domain bounds")
     active = (slice(bounds["jts"] - bounds["jms"], bounds["jte"] - bounds["jms"] + 1),
               slice(bounds["kts"] - bounds["kms"], bounds["kte"] - bounds["kms"] + 1),
               slice(bounds["its"] - bounds["ims"], bounds["ite"] - bounds["ims"] + 1))

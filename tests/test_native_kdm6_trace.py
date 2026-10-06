@@ -96,6 +96,38 @@ class NativeKdm6TraceTest(unittest.TestCase):
         with self.assertRaisesRegex(TraceError, "inverted active i tile"):
             summarize_pair(self.pre, self.post)
 
+    def test_rejects_empty_or_inverted_domain_bounds(self):
+        default = (1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2)
+        for start_index, end_index, axis in ((0, 1, "i"), (2, 3, "j"), (4, 5, "k")):
+            with self.subTest(axis=axis):
+                bounds = list(default)
+                bounds[start_index], bounds[end_index] = 2, 1
+                write_dump(self.pre, 1, bounds=tuple(bounds))
+                with self.assertRaisesRegex(TraceError, f"inverted domain {axis} bounds"):
+                    summarize_pair(self.pre, self.post)
+
+    def test_rejects_active_tile_outside_domain_on_each_axis(self):
+        cases = (
+            ((1, 2, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2), "i"),
+            ((2, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2), "i"),
+            ((1, 3, 1, 1, 1, 2, 1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2), "j"),
+            ((1, 3, 2, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2), "j"),
+            ((1, 3, 1, 2, 1, 1, 1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2), "k"),
+            ((1, 3, 1, 2, 2, 2, 1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2), "k"),
+        )
+        for bounds, axis in cases:
+            with self.subTest(axis=axis):
+                write_dump(self.pre, 1, bounds=bounds)
+                with self.assertRaisesRegex(TraceError, f"active {axis} tile is outside the domain"):
+                    summarize_pair(self.pre, self.post)
+
+    def test_allows_allocated_halos_outside_domain(self):
+        bounds = (2, 2, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 2, 2, 1, 2, 1, 2)
+        write_dump(self.pre, 1, bounds=bounds)
+        write_dump(self.post, 2, bounds=bounds)
+        summary = summarize_pair(self.pre, self.post)
+        self.assertEqual(summary["pre"]["active_shape_xyz"], [1, 2, 2])
+
     def test_rejects_little_endian_header(self):
         write_dump(self.pre, 1, little_endian=True)
         with self.assertRaises(TraceError):

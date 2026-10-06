@@ -1,0 +1,75 @@
+{
+  "broad_suite_status": "PARTIAL_STOPPED",
+  "historical_native_producer_commit": "90179191edc33b5ae5606a37f4cd67eac507eed0",
+  "historical_producer_code_commit": "44212f938f0a529d298e903dc4146d7e0401134a",
+  "initial_0_60_minute_improvement_assessed": false,
+  "intel_followup_validation": {
+    "compiler": "pinned Intel ifx 2026.0.0 20260331",
+    "excluded_setup_attempt": {
+      "path": "/var/tmp/pr60-focused-repro-20261006/O2-setup-error.log",
+      "reason": "shell retained O0 scratch cwd; not a test result",
+      "status": "EXCLUDED_SETUP_ERROR"
+    },
+    "logs_include": [
+      "compiler invocation",
+      "compiler version and hash",
+      "profile environment",
+      "selected source hashes before and after",
+      "binary hash",
+      "test output",
+      "worktree status"
+    ],
+    "profile_file": "tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "runs": [
+      {
+        "binary_sha256": "315c434035da3e81da5571fb108e474b2bee16576a0bc2b1b962d252bef2fb70",
+        "log": "/var/tmp/pr60-focused-repro-20261006/O0.log",
+        "log_sha256": "1b9b8ac28f03a63b5d70e3482d8d2ef646e7afa2c0a4452910329ccaa2ce038e",
+        "profile": "O0",
+        "scratch_directory": "/var/tmp/pr60-pipeline-O0.IQNmmo",
+        "status": "PASS"
+      },
+      {
+        "binary_sha256": "847623bf035a6d13602cf29754f233daf369648d264f12a9aeb52d7678f96231",
+        "log": "/var/tmp/pr60-focused-repro-20261006/O2.log",
+        "log_sha256": "64f64720bbfdf50b476c1ae7d71812026386f77d2ba2f2dc068c6e9d9f207e50",
+        "profile": "O2",
+        "scratch_directory": "/var/tmp/pr60-pipeline-O2.ILNQ6z",
+        "status": "PASS"
+      }
+    ],
+    "scope": "focused test_pipeline only",
+    "source_precondition": "six selected Fortran/test inputs match review HEAD303a4f2 before and after; unrelated Python edits were present. No clean-worktree claim.",
+    "status": "PASS"
+  },
+  "joint_optimization_assessed": false,
+  "native_reflectivity_acceptance": "FAIL_NONFINITE_REFL_10CM",
+  "nonfinite_reflectivity_cells": 33617,
+  "original_evidence_sha256": {
+    "docs/evidence/pr60_current12_kdm6_first_call.json": "612bc31be11c1541c720792502fbd19f620d6cfa0b0814a86fdf5b42e4cc4f35",
+    "docs/evidence/pr60_current_lapsprep.json": "a42e580b0358e8afee5a669e9ee857e9be29e15b77fca5e61f6d547ffa4c0ad9",
+    "docs/evidence/pr60_team_validation_20261006.json": "e1619545b42aa93e305d5b42dbc2d534e9e0e71dd8bf0d0207235c32f5c6d19b"
+  },
+  "parser_fix": {
+    "actual_raw_summary_sha256": "33dbe95367ea422120513f0d8a3f9396306a78de86f7e711422df81fc1a76018",
+    "actual_retained_bounds_coherent": true,
+    "actual_summary_byte_identical": true,
+    "finding": "active tile bounds were not checked against declared domain",
+    "focused_tests": 13,
+    "independent_fix_review": "PASS",
+    "source_sha256": {
+      "tests/test_native_kdm6_trace.py": "74534569935b7ac13280aa622ad0959bcbf613cee849828cc7de3980d8263213",
+      "tools/native_kdm6_trace.py": "6a33128956352a1298943dba338dd56b06c1d7ea818067edd8c797457a8dd77b"
+    },
+    "status": "VALIDATED"
+  },
+  "review_base_commit": "303a4f22cb9e5b93a8038d77e4508d22075f5b8f",
+  "review_disposition": {
+    "claims_and_lineage": "NO_MATERIAL_OVERSTATEMENT_FOUND_SCOPED",
+    "numerical_and_rollback": "NO_ADDITIONAL_ACTIONABLE_FINDING_SCOPED",
+    "writer_and_runners": "NO_ACTIONABLE_FINDING_SCOPED"
+  },
+  "schema": "pr60_followup_team_audit_v1",
+  "scientific_approval": false
+}
