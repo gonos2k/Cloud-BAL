@@ -9,6 +9,10 @@
       "sha256": "f8efcfbf751c13f7095fabaea47081d145a0c84c2d76d134f1a0eeb0d8a006f2"
     }
   },
+  "diff_check": {
+    "literal_patch_artifacts": "Original source whitespace is preserved in hash-bound forensic diffs. The unfiltered check reports those literal lines; they are not rewritten to preserve patch context and experimental identities.",
+    "source_and_documents": "PASS: git diff 8c7ec0a HEAD --check -- . :(exclude)docs/*.patch"
+  },
   "focused_intel_pipeline": {
     "external_runner": {
       "path": "/var/tmp/pr61-focused-20261006/run.sh",
@@ -66,7 +70,45 @@
     "status": "PASS",
     "test_count": 80
   },
-  "graph_maintenance": "Selected frozen-path Graphify/KG update runs after source commit; separately dated corpora and receipt will be recorded. No graph-based scientific claim.",
+  "graph_maintenance": {
+    "corpora": {
+      "Cloud-BAL": {
+        "communities": 470,
+        "delta_edges": 271,
+        "delta_nodes": 126,
+        "edges": 12953,
+        "nodes": 6595,
+        "sha256": "76c0c783eba783b0d183ec9b72ae4adc1a4d901189813b6373af18f9fd353b44",
+        "snapshot": "2026-10-06T07:35:48+00:00"
+      },
+      "KLAPS50": {
+        "communities": 2500,
+        "delta_edges": 272,
+        "delta_nodes": 127,
+        "edges": 71370,
+        "nodes": 32427,
+        "sha256": "a40094af9d74d689a6018f29ed3dc257cd85ddbcb4863c76ac2dc2b0e4d98894",
+        "snapshot": "2026-10-06T07:35:41+00:00"
+      }
+    },
+    "final_metadata_commit": "Reporting-only follow-up; graph extraction is attributed to the frozen source commit above.",
+    "frozen_source_commit": "91cac783c5dffd8ff18cc67bcdf95bdeb8ccd222",
+    "limitations": [
+      "Graph counts are separate for overlapping KLAPS50 and Cloud-BAL corpora.",
+      "Markdown semantic extraction was not performed; Markdown contributes heading structure only.",
+      "Fortran cross-file CALL extraction is partial.",
+      "Candidate overlay graphs and freshness are structural navigation evidence, not runtime or scientific validation.",
+      "Prior native failures/PR61 runtime evidence are preserved as separately scoped receipts."
+    ],
+    "private_profile_unchanged": true,
+    "protected_wiki_content_unchanged": true,
+    "receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr61_moment_state_20261006/kg_receipt.json",
+      "sha256": "f906cf9f440f3fc2c45a14a5afc5d034cfcd4df39b303fa97912cb671af8f1bc"
+    },
+    "selected_path_count": 25,
+    "status": "COMPLETED_SELECTED_PATH_OVERLAY"
+  },
   "historical_metadata_erratum": {
     "actual_control": "history_interval=60 minutes (3600 seconds)",
     "field": "native_execution.namelist_controls.history_interval_s",

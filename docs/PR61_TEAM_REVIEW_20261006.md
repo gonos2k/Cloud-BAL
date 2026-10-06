@@ -126,6 +126,29 @@ not relabel either native execution.
 - [ ] Compare BASE/HYDRO/COUPLED under identical settings through 0–60 minutes
   and subsequent forecasts, preserving observed cloud and dynamical signals.
   The conditional PSD experiment is not a COUPLED run.
-- [ ] Synchronize selected-source Graphify overlays and derived KG reports,
+- [x] Synchronize selected-source Graphify overlays and derived KG reports,
   with separately dated KLAPS50/Cloud-BAL snapshots. Graph freshness is not
   runtime or scientific validation.
+
+## Frozen graph maintenance
+
+Graphify 0.9.53 extracted the 25 changed paths from frozen commit
+`91cac783c5dffd8ff18cc67bcdf95bdeb8ccd222` as candidate overlays; maintained
+source files were not replaced. The subsequent commit only records these
+results. Separate corpus snapshots are:
+
+| Corpus | Snapshot UTC | Nodes | Edges | Communities | Batch delta nodes/edges |
+| --- | --- | ---: | ---: | ---: | ---: |
+| KLAPS50 | 2026-10-06 07:35:41 | 32,427 | 71,370 | 2,500 | +127 / +272 |
+| Cloud-BAL | 2026-10-06 07:35:48 | 6,595 | 12,953 | 470 | +126 / +271 |
+
+Private profile preservation (134 nodes/133 links), graph integrity, maintained
+source guards, and protected wiki-content guards passed. Derived reports,
+index Graph snapshot and append-only log were synchronized. Extraction used
+AST and Markdown headings without semantic refresh; cross-file Fortran CALL
+extraction remains partial. Graph freshness is structural navigation evidence.
+
+The unfiltered diff whitespace check reports whitespace embedded in literal
+source-copy `.patch` artifacts. Their original context and hashes are retained.
+The source/document check excluding these forensic diffs passes; this scope
+qualification replaces any earlier unqualified diff-clean statement.
