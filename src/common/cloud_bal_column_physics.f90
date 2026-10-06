@@ -113,6 +113,24 @@ MODULE cloud_bal_column_physics
     INTEGER(int64) :: incomplete_candidate_cells=0_int64
   END TYPE pressure_analysis_budget
 
+  TYPE, PUBLIC :: hydrostatic_constraint_summary
+    INTEGER(int64) :: requested_layers=0_int64
+    INTEGER(int64) :: assessable_layers=0_int64
+    INTEGER(int64) :: missing_support_layers=0_int64
+    INTEGER(int64) :: nonfinite_layers=0_int64
+    INTEGER(int64) :: range_layers=0_int64
+    INTEGER(int64) :: shape_errors=0_int64
+    INTEGER(int64) :: metadata_errors=0_int64
+    REAL(real64) :: residual_rms_m2_s2=0.0_real64
+    REAL(real64) :: residual_max_abs_m2_s2=0.0_real64
+  END TYPE hydrostatic_constraint_summary
+
+  INTEGER(int32), PARAMETER, PUBLIC :: HYDRO_REASON_MISSING_SUPPORT=ISHFT(1_int32,0)
+  INTEGER(int32), PARAMETER, PUBLIC :: HYDRO_REASON_NONFINITE=ISHFT(1_int32,1)
+  INTEGER(int32), PARAMETER, PUBLIC :: HYDRO_REASON_RANGE=ISHFT(1_int32,2)
+  INTEGER(int32), PARAMETER, PUBLIC :: HYDRO_REASON_SHAPE=ISHFT(1_int32,3)
+  INTEGER(int32), PARAMETER, PUBLIC :: HYDRO_REASON_METADATA=ISHFT(1_int32,4)
+
   PUBLIC :: validate_optional_cloud_pair,precipitation_phase_contract_valid
   PUBLIC :: derive_column_physics
   PUBLIC :: account_pressure_analysis
@@ -131,6 +149,7 @@ MODULE cloud_bal_column_physics
   PUBLIC :: moist_species_enthalpy,apply_water_phase_transfer,apply_pressure_phase_transfer
   PUBLIC :: saturation_adjust_mixture_cell
   PUBLIC :: hydrostatic_geopotential_increment
+  PUBLIC :: hydrostatic_pressure_alpha,evaluate_interior_hydrostatic_residual
   PUBLIC :: apply_pressure_hydrostatic_increment
   PUBLIC :: remap_pressure_column
   PUBLIC :: flux_ledger_closes
@@ -2084,6 +2103,293 @@ CONTAINS
       base/SQRT(MAX(density_ratio,1.0e-4_real64))))
   END FUNCTION bounded_terminal_speed
 
+  PURE REAL(real64) FUNCTION hydrostatic_pressure_alpha(pressure,temperature,water)
+    REAL(real64), INTENT(IN) :: pressure,temperature,water(6)
+    REAL(real64) :: rho_d
+
+    ! The hydrostatic gas-volume factor is p/rho_total.  rho_d follows the
+    ! canonical dry-air EOS; all six water species are kg/kg dry air.
+    hydrostatic_pressure_alpha=-1.0_real64
+    IF (.NOT.ieee_is_finite(pressure) .OR. .NOT.ieee_is_finite(temperature)) RETURN
+    IF (ANY(.NOT.ieee_is_finite(water))) RETURN
+    IF (ANY(water<0.0_real64)) RETURN
+    IF (ANY(water>REAL(HUGE(1.0_real32),real64))) RETURN
+    rho_d=dry_air_density(pressure,temperature,water(1))
+    IF (rho_d<=0.0_real64) RETURN
+    hydrostatic_pressure_alpha=pressure/(rho_d*(1.0_real64+SUM(water)))
+    IF (.NOT.ieee_is_finite(hydrostatic_pressure_alpha)) hydrostatic_pressure_alpha=-1.0_real64
+  END FUNCTION hydrostatic_pressure_alpha
+
+  SUBROUTINE evaluate_interior_hydrostatic_residual(state,requested,residual,assessable,reason,summary)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    LOGICAL, INTENT(IN) :: requested(:,:,:)
+    REAL(real64), INTENT(OUT) :: residual(:,:,:)
+    LOGICAL, INTENT(OUT) :: assessable(:,:,:)
+    INTEGER(int32), INTENT(OUT) :: reason(:,:,:)
+    TYPE(hydrostatic_constraint_summary), INTENT(OUT) :: summary
+    REAL(real64) :: water_bottom(6),water_top(6),alpha_bottom,alpha_top
+    REAL(real32) :: species_bottom,species_top
+    REAL(real64) :: pressure_bottom,pressure_top,phi_bottom,phi_top,value,sum_squares
+    INTEGER :: nx,ny,nz,i,j,k,s
+    INTEGER(int32) :: layer_reason
+    LOGICAL :: shape_ok,metadata_ok,missing_support,species_supported
+
+    residual=0.0_real64
+    assessable=.FALSE.
+    reason=0_int32
+    summary=hydrostatic_constraint_summary()
+    summary%requested_layers=COUNT(requested,KIND=int64)
+    nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
+    IF (ANY(SHAPE(residual)/=SHAPE(requested)) .OR. &
+        ANY(SHAPE(assessable)/=SHAPE(requested)) .OR. &
+        ANY(SHAPE(reason)/=SHAPE(requested)) .OR. nx<1 .OR. ny<1 .OR. nz<2 .OR. &
+        ANY(SHAPE(requested)/=[nx,ny,MAX(0,nz-1)])) THEN
+      summary%shape_errors=summary%requested_layers
+      reason=HYDRO_REASON_SHAPE
+      RETURN
+    END IF
+    IF (summary%requested_layers==0_int64) RETURN
+
+    shape_ok=hydrostatic_field_shape_ok(state%pressure,nx,ny,nz) .AND. &
+      hydrostatic_field_shape_ok(state%temperature,nx,ny,nz) .AND. &
+      hydrostatic_field_shape_ok(state%geopotential,nx,ny,nz) .AND. &
+      ALLOCATED(state%above_ground)
+    IF (shape_ok) shape_ok=ALL(SHAPE(state%above_ground)==[nx,ny,nz])
+    metadata_ok=TRIM(state%pressure%unit)=='Pa' .AND. TRIM(state%temperature%unit)=='K' .AND. &
+      TRIM(state%geopotential%unit)=='m2 s-2' .AND. &
+      state%pressure%valid_time==state%temperature%valid_time .AND. &
+      state%pressure%valid_time==state%geopotential%valid_time
+    DO s=1,6
+      shape_ok=shape_ok .AND. hydrostatic_species_shape_ok(state,s,nx,ny,nz)
+      metadata_ok=metadata_ok .AND. hydrostatic_species_metadata_ok(state,s,state%pressure%valid_time)
+    END DO
+    IF (.NOT.shape_ok .OR. .NOT.metadata_ok) THEN
+      IF (.NOT.shape_ok) WHERE(requested) reason=IOR(reason,HYDRO_REASON_SHAPE)
+      IF (.NOT.metadata_ok) WHERE(requested) reason=IOR(reason,HYDRO_REASON_METADATA)
+      IF (.NOT.shape_ok) summary%shape_errors=summary%requested_layers
+      IF (.NOT.metadata_ok) summary%metadata_errors=summary%requested_layers
+      RETURN
+    END IF
+
+    sum_squares=0.0_real64
+    DO k=1,nz-1; DO j=1,ny; DO i=1,nx
+      IF (.NOT.requested(i,j,k)) CYCLE
+      layer_reason=0_int32
+      pressure_bottom=REAL(state%pressure%value(i,j,k),real64)
+      pressure_top=REAL(state%pressure%value(i,j,k+1),real64)
+      phi_bottom=REAL(state%geopotential%value(i,j,k),real64)
+      phi_top=REAL(state%geopotential%value(i,j,k+1),real64)
+      IF (.NOT.cell_is_usable(state%pressure%valid(i,j,k),state%pressure%quality(i,j,k), &
+          state%pressure%source(i,j,k),state%pressure%valid_time,state%pressure%valid_time) .OR. &
+          .NOT.cell_is_usable(state%pressure%valid(i,j,k+1),state%pressure%quality(i,j,k+1), &
+          state%pressure%source(i,j,k+1),state%pressure%valid_time,state%pressure%valid_time) .OR. &
+          .NOT.cell_is_usable(state%temperature%valid(i,j,k),state%temperature%quality(i,j,k), &
+          state%temperature%source(i,j,k),state%temperature%valid_time,state%pressure%valid_time) .OR. &
+          .NOT.cell_is_usable(state%temperature%valid(i,j,k+1),state%temperature%quality(i,j,k+1), &
+          state%temperature%source(i,j,k+1),state%temperature%valid_time,state%pressure%valid_time) .OR. &
+          .NOT.cell_is_usable(state%geopotential%valid(i,j,k),state%geopotential%quality(i,j,k), &
+          state%geopotential%source(i,j,k),state%geopotential%valid_time,state%pressure%valid_time) .OR. &
+          .NOT.cell_is_usable(state%geopotential%valid(i,j,k+1),state%geopotential%quality(i,j,k+1), &
+          state%geopotential%source(i,j,k+1),state%geopotential%valid_time,state%pressure%valid_time)) &
+        layer_reason=IOR(layer_reason,HYDRO_REASON_MISSING_SUPPORT)
+      IF (.NOT.state%above_ground(i,j,k) .OR. .NOT.state%above_ground(i,j,k+1)) &
+        layer_reason=IOR(layer_reason,HYDRO_REASON_MISSING_SUPPORT)
+      missing_support=.FALSE.
+      DO s=1,6
+        CALL hydrostatic_species_cell(state,s,i,j,k,species_bottom,species_supported)
+        IF (.NOT.species_supported) missing_support=.TRUE.
+        CALL hydrostatic_species_cell(state,s,i,j,k+1,species_top,species_supported)
+        IF (.NOT.species_supported) missing_support=.TRUE.
+      END DO
+      IF (missing_support) layer_reason=IOR(layer_reason,HYDRO_REASON_MISSING_SUPPORT)
+
+      IF (.NOT.ieee_is_finite(pressure_bottom) .OR. .NOT.ieee_is_finite(pressure_top) .OR. &
+          .NOT.ieee_is_finite(REAL(state%temperature%value(i,j,k),real64)) .OR. &
+          .NOT.ieee_is_finite(REAL(state%temperature%value(i,j,k+1),real64)) .OR. &
+          .NOT.ieee_is_finite(phi_bottom) .OR. .NOT.ieee_is_finite(phi_top)) &
+        layer_reason=IOR(layer_reason,HYDRO_REASON_NONFINITE)
+      IF (ieee_is_finite(pressure_bottom) .AND. ieee_is_finite(pressure_top) .AND. &
+          ieee_is_finite(REAL(state%temperature%value(i,j,k),real64)) .AND. &
+          ieee_is_finite(REAL(state%temperature%value(i,j,k+1),real64))) THEN
+        IF (pressure_bottom<MIN_PRESSURE_PA .OR. pressure_bottom>MAX_PRESSURE_PA .OR. &
+            pressure_top<MIN_PRESSURE_PA .OR. pressure_top>MAX_PRESSURE_PA .OR. &
+            pressure_bottom<=pressure_top .OR. &
+            REAL(state%temperature%value(i,j,k),real64)<150.0_real64 .OR. &
+            REAL(state%temperature%value(i,j,k),real64)>350.0_real64 .OR. &
+            REAL(state%temperature%value(i,j,k+1),real64)<150.0_real64 .OR. &
+            REAL(state%temperature%value(i,j,k+1),real64)>350.0_real64) &
+          layer_reason=IOR(layer_reason,HYDRO_REASON_RANGE)
+      END IF
+      DO s=1,6
+        CALL hydrostatic_species_cell(state,s,i,j,k,species_bottom,species_supported)
+        IF (.NOT.species_supported) CYCLE
+        CALL hydrostatic_species_cell(state,s,i,j,k+1,species_top,species_supported)
+        IF (.NOT.species_supported) CYCLE
+        IF (.NOT.ieee_is_finite(REAL(species_bottom,real64)) .OR. &
+            .NOT.ieee_is_finite(REAL(species_top,real64))) &
+          layer_reason=IOR(layer_reason,HYDRO_REASON_NONFINITE)
+        IF (ieee_is_finite(REAL(species_bottom,real64)) .AND. &
+            ieee_is_finite(REAL(species_top,real64))) THEN
+          IF (species_bottom<0.0_real32 .OR. species_top<0.0_real32) &
+            layer_reason=IOR(layer_reason,HYDRO_REASON_RANGE)
+        END IF
+      END DO
+      IF (layer_reason/=0_int32) THEN
+        reason(i,j,k)=layer_reason
+        IF (IAND(layer_reason,HYDRO_REASON_MISSING_SUPPORT)/=0_int32) &
+          summary%missing_support_layers=summary%missing_support_layers+1_int64
+        IF (IAND(layer_reason,HYDRO_REASON_NONFINITE)/=0_int32) &
+          summary%nonfinite_layers=summary%nonfinite_layers+1_int64
+        IF (IAND(layer_reason,HYDRO_REASON_RANGE)/=0_int32) &
+          summary%range_layers=summary%range_layers+1_int64
+        CYCLE
+      END IF
+
+      DO s=1,6
+        CALL hydrostatic_species_cell(state,s,i,j,k,species_bottom,species_supported)
+        CALL hydrostatic_species_cell(state,s,i,j,k+1,species_top,species_supported)
+        water_bottom(s)=REAL(species_bottom,real64)
+        water_top(s)=REAL(species_top,real64)
+      END DO
+      alpha_bottom=hydrostatic_pressure_alpha(pressure_bottom, &
+        REAL(state%temperature%value(i,j,k),real64),water_bottom)
+      alpha_top=hydrostatic_pressure_alpha(pressure_top, &
+        REAL(state%temperature%value(i,j,k+1),real64),water_top)
+      IF (alpha_bottom<=0.0_real64 .OR. alpha_top<=0.0_real64) THEN
+        reason(i,j,k)=HYDRO_REASON_RANGE
+        summary%range_layers=summary%range_layers+1_int64
+        CYCLE
+      END IF
+      value=(phi_top-phi_bottom)-0.5_real64*(alpha_bottom+alpha_top)*LOG(pressure_bottom/pressure_top)
+      IF (.NOT.ieee_is_finite(value)) THEN
+        reason(i,j,k)=HYDRO_REASON_NONFINITE
+        summary%nonfinite_layers=summary%nonfinite_layers+1_int64
+        CYCLE
+      END IF
+      residual(i,j,k)=value
+      assessable(i,j,k)=.TRUE.
+      summary%assessable_layers=summary%assessable_layers+1_int64
+      sum_squares=sum_squares+value*value
+      summary%residual_max_abs_m2_s2=MAX(summary%residual_max_abs_m2_s2,ABS(value))
+    END DO; END DO; END DO
+    IF (summary%assessable_layers>0_int64) &
+      summary%residual_rms_m2_s2=SQRT(sum_squares/REAL(summary%assessable_layers,real64))
+  END SUBROUTINE evaluate_interior_hydrostatic_residual
+
+  PURE LOGICAL FUNCTION hydrostatic_field_shape_ok(field,nx,ny,nz)
+    TYPE(field3d), INTENT(IN) :: field
+    INTEGER, INTENT(IN) :: nx,ny,nz
+    hydrostatic_field_shape_ok=.FALSE.
+    IF (.NOT.ALLOCATED(field%value) .OR. .NOT.ALLOCATED(field%valid) .OR. &
+        .NOT.ALLOCATED(field%quality) .OR. .NOT.ALLOCATED(field%source)) RETURN
+    hydrostatic_field_shape_ok=ALL(SHAPE(field%value)==[nx,ny,nz]) .AND. &
+      ALL(SHAPE(field%valid)==[nx,ny,nz]) .AND. &
+      ALL(SHAPE(field%quality)==[nx,ny,nz]) .AND. &
+      ALL(SHAPE(field%source)==[nx,ny,nz])
+  END FUNCTION hydrostatic_field_shape_ok
+
+  PURE LOGICAL FUNCTION hydrostatic_species_shape_ok(state,species,nx,ny,nz)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: species,nx,ny,nz
+    IF (.NOT.hydrostatic_species_stored(state,species)) THEN
+      hydrostatic_species_shape_ok=.TRUE.
+      RETURN
+    END IF
+    SELECT CASE(species)
+    CASE(1); hydrostatic_species_shape_ok=hydrostatic_field_shape_ok(state%vapor,nx,ny,nz)
+    CASE(2); hydrostatic_species_shape_ok=hydrostatic_field_shape_ok(state%cloud_water,nx,ny,nz)
+    CASE(3); hydrostatic_species_shape_ok=hydrostatic_field_shape_ok(state%cloud_ice,nx,ny,nz)
+    CASE(4); hydrostatic_species_shape_ok=hydrostatic_field_shape_ok(state%rain,nx,ny,nz)
+    CASE(5); hydrostatic_species_shape_ok=hydrostatic_field_shape_ok(state%snow,nx,ny,nz)
+    CASE(6); hydrostatic_species_shape_ok=hydrostatic_field_shape_ok(state%graupel,nx,ny,nz)
+    CASE DEFAULT; hydrostatic_species_shape_ok=.FALSE.
+    END SELECT
+  END FUNCTION hydrostatic_species_shape_ok
+
+  PURE LOGICAL FUNCTION hydrostatic_species_metadata_ok(state,species,analysis_time)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: species
+    INTEGER(int64), INTENT(IN) :: analysis_time
+    IF (.NOT.hydrostatic_species_stored(state,species)) THEN
+      hydrostatic_species_metadata_ok=.TRUE.
+      RETURN
+    END IF
+    SELECT CASE(species)
+    CASE(1); hydrostatic_species_metadata_ok=TRIM(state%vapor%unit)=='kg kg-1 dryair' .AND. &
+      state%vapor%valid_time==analysis_time
+    CASE(2); hydrostatic_species_metadata_ok=TRIM(state%cloud_water%unit)=='kg kg-1 dryair' .AND. &
+      state%cloud_water%valid_time==analysis_time
+    CASE(3); hydrostatic_species_metadata_ok=TRIM(state%cloud_ice%unit)=='kg kg-1 dryair' .AND. &
+      state%cloud_ice%valid_time==analysis_time
+    CASE(4); hydrostatic_species_metadata_ok=TRIM(state%rain%unit)=='kg kg-1 dryair' .AND. &
+      state%rain%valid_time==analysis_time
+    CASE(5); hydrostatic_species_metadata_ok=TRIM(state%snow%unit)=='kg kg-1 dryair' .AND. &
+      state%snow%valid_time==analysis_time
+    CASE(6); hydrostatic_species_metadata_ok=TRIM(state%graupel%unit)=='kg kg-1 dryair' .AND. &
+      state%graupel%valid_time==analysis_time
+    CASE DEFAULT; hydrostatic_species_metadata_ok=.FALSE.
+    END SELECT
+  END FUNCTION hydrostatic_species_metadata_ok
+
+  PURE SUBROUTINE hydrostatic_species_cell(state,species,i,j,k,value,supported)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: species,i,j,k
+    REAL(real32), INTENT(OUT) :: value
+    LOGICAL, INTENT(OUT) :: supported
+    value=0.0_real32
+    supported=.FALSE.
+    IF (.NOT.hydrostatic_species_stored(state,species)) RETURN
+    SELECT CASE(species)
+    CASE(1)
+      value=state%vapor%value(i,j,k)
+      supported=cell_is_usable(state%vapor%valid(i,j,k),state%vapor%quality(i,j,k), &
+        state%vapor%source(i,j,k),state%vapor%valid_time,state%pressure%valid_time)
+    CASE(2)
+      value=state%cloud_water%value(i,j,k)
+      supported=cell_is_usable(state%cloud_water%valid(i,j,k),state%cloud_water%quality(i,j,k), &
+        state%cloud_water%source(i,j,k),state%cloud_water%valid_time,state%pressure%valid_time)
+    CASE(3)
+      value=state%cloud_ice%value(i,j,k)
+      supported=cell_is_usable(state%cloud_ice%valid(i,j,k),state%cloud_ice%quality(i,j,k), &
+        state%cloud_ice%source(i,j,k),state%cloud_ice%valid_time,state%pressure%valid_time)
+    CASE(4)
+      value=state%rain%value(i,j,k)
+      supported=cell_is_usable(state%rain%valid(i,j,k),state%rain%quality(i,j,k), &
+        state%rain%source(i,j,k),state%rain%valid_time,state%pressure%valid_time)
+    CASE(5)
+      value=state%snow%value(i,j,k)
+      supported=cell_is_usable(state%snow%valid(i,j,k),state%snow%quality(i,j,k), &
+        state%snow%source(i,j,k),state%snow%valid_time,state%pressure%valid_time)
+    CASE(6)
+      value=state%graupel%value(i,j,k)
+      supported=cell_is_usable(state%graupel%valid(i,j,k),state%graupel%quality(i,j,k), &
+        state%graupel%source(i,j,k),state%graupel%valid_time,state%pressure%valid_time)
+    END SELECT
+  END SUBROUTINE hydrostatic_species_cell
+
+  PURE LOGICAL FUNCTION hydrostatic_species_stored(state,species)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: species
+    SELECT CASE(species)
+    CASE(1); hydrostatic_species_stored=ALLOCATED(state%vapor%value) .OR. &
+      ALLOCATED(state%vapor%valid) .OR. ALLOCATED(state%vapor%quality) .OR. ALLOCATED(state%vapor%source)
+    CASE(2); hydrostatic_species_stored=ALLOCATED(state%cloud_water%value) .OR. &
+      ALLOCATED(state%cloud_water%valid) .OR. ALLOCATED(state%cloud_water%quality) .OR. &
+      ALLOCATED(state%cloud_water%source)
+    CASE(3); hydrostatic_species_stored=ALLOCATED(state%cloud_ice%value) .OR. &
+      ALLOCATED(state%cloud_ice%valid) .OR. ALLOCATED(state%cloud_ice%quality) .OR. &
+      ALLOCATED(state%cloud_ice%source)
+    CASE(4); hydrostatic_species_stored=ALLOCATED(state%rain%value) .OR. &
+      ALLOCATED(state%rain%valid) .OR. ALLOCATED(state%rain%quality) .OR. ALLOCATED(state%rain%source)
+    CASE(5); hydrostatic_species_stored=ALLOCATED(state%snow%value) .OR. &
+      ALLOCATED(state%snow%valid) .OR. ALLOCATED(state%snow%quality) .OR. ALLOCATED(state%snow%source)
+    CASE(6); hydrostatic_species_stored=ALLOCATED(state%graupel%value) .OR. &
+      ALLOCATED(state%graupel%valid) .OR. ALLOCATED(state%graupel%quality) .OR. &
+      ALLOCATED(state%graupel%source)
+    CASE DEFAULT; hydrostatic_species_stored=.FALSE.
+    END SELECT
+  END FUNCTION hydrostatic_species_stored
+
   PURE SUBROUTINE hydrostatic_geopotential_increment(pressure,temperature_before,water_before, &
       temperature_after,water_after,delta_geopotential,status, &
       surface_pressure_pair,surface_temperature_pair,surface_water_pair)
@@ -2096,7 +2402,7 @@ CONTAINS
     REAL(real64), INTENT(IN), OPTIONAL :: surface_pressure_pair(:),surface_temperature_pair(:)
     REAL(real64), INTENT(IN), OPTIONAL :: surface_water_pair(:,:)
     REAL(real64) :: delta_p_alpha(SIZE(pressure)),work(SIZE(pressure))
-    REAL(real64) :: rho_before,rho_after,alpha_bottom(2),alpha_surface(2),rho
+    REAL(real64) :: alpha_before,alpha_after,alpha_bottom(2),alpha_surface(2)
     LOGICAL :: surface_anchor
     INTEGER :: n,k
 
@@ -2137,22 +2443,19 @@ CONTAINS
       IF (pressure(k)<=pressure(k+1)) RETURN
     END DO
     DO k=1,n
-      rho_before=dry_air_density(pressure(k),temperature_before(k),water_before(1,k))
-      rho_after=dry_air_density(pressure(k),temperature_after(k),water_after(1,k))
-      IF (rho_before<=0.0_real64 .OR. rho_after<=0.0_real64) RETURN
-      rho_before=rho_before*(1.0_real64+SUM(water_before(:,k)))
-      rho_after=rho_after*(1.0_real64+SUM(water_after(:,k)))
-      IF (k==1) alpha_bottom=[pressure(k)/rho_before,pressure(k)/rho_after]
-      delta_p_alpha(k)=pressure(k)/rho_after-pressure(k)/rho_before
+      alpha_before=hydrostatic_pressure_alpha(pressure(k),temperature_before(k),water_before(:,k))
+      alpha_after=hydrostatic_pressure_alpha(pressure(k),temperature_after(k),water_after(:,k))
+      IF (alpha_before<=0.0_real64 .OR. alpha_after<=0.0_real64) RETURN
+      IF (k==1) alpha_bottom=[alpha_before,alpha_after]
+      delta_p_alpha(k)=alpha_after-alpha_before
     END DO
     work(1)=0.0_real64
     IF (surface_anchor) THEN
       IF (ANY(surface_pressure_pair<pressure(1))) RETURN
       DO k=1,2
-        rho=dry_air_density(surface_pressure_pair(k),surface_temperature_pair(k),surface_water_pair(1,k))
-        IF (rho<=0.0_real64) RETURN
-        rho=rho*(1.0_real64+SUM(surface_water_pair(:,k)))
-        alpha_surface(k)=surface_pressure_pair(k)/rho
+        alpha_surface(k)=hydrostatic_pressure_alpha(surface_pressure_pair(k), &
+          surface_temperature_pair(k),surface_water_pair(:,k))
+        IF (alpha_surface(k)<=0.0_real64) RETURN
       END DO
       ! Retain the original column residual; change only its hydrostatic
       ! surface-to-center thickness, with the source terrain held fixed.

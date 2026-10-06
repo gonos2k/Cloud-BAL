@@ -1,0 +1,199 @@
+{
+  "build": {
+    "command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 bash tools/build_upstream_producer.sh lapsprep O0",
+    "executable_sha256": "22e7e3c2c64d5d36e874b1de81344aa3a61acdc3b3d110d62272997e5e42d5af",
+    "profile": "pinned Intel O0",
+    "runtime_entries": 41,
+    "runtime_manifest_sha256": "1dd6859bc4ff84c3b81eab834b156cfafadaab83978feb0c22e989c605ce2014",
+    "status": "BUILD_AND_LINK_PASS; actual detached baseline/candidate runs completed"
+  },
+  "cycle": {
+    "laps_timestamp": "262281200",
+    "utc": "2026-08-16T12:00:00Z",
+    "valid_time_epoch": 1786881600
+  },
+  "diagnostics": {
+    "changed_cells": 143711,
+    "common_supported_background_candidate_residual": {
+      "background_residual_rms_max_m2_s2": [
+        14.286914617622651,
+        149.67355409228367
+      ],
+      "candidate_minus_background_rms_max_m2_s2": [
+        0.0015249400412604985,
+        0.013108587852912024
+      ],
+      "candidate_residual_rms_max_m2_s2": [
+        14.286910087876636,
+        149.67250051910924
+      ],
+      "layers": 180756,
+      "method": "same requested layers with usable stored metadata for background/candidate T, Phi, vapor and five hydrometeors; unsupported layers excluded, no zero-fill; diagnostic only, no physical threshold",
+      "requested_layers_missing_support": 9298
+    },
+    "continuity": {
+      "assessable": 189957,
+      "rms_max": [
+        8.109281132364312e-05,
+        0.00232086703247293
+      ],
+      "status_reason_assessed": [
+        20,
+        0,
+        1
+      ]
+    },
+    "geostrophic": {
+      "assessable": 189921,
+      "rms_max": "not assessed; serialized zero is not a measured residual",
+      "status_reason_assessed": [
+        10,
+        3,
+        0
+      ],
+      "unassessed_requested": 36
+    },
+    "interior_hydrostatic_m2_s2": {
+      "assessable_layers": 180756,
+      "metadata_errors": 0,
+      "missing_support_layers": 9298,
+      "nonfinite_layers": 0,
+      "range_layers": 9298,
+      "requested_layers": 190054,
+      "residual_max_abs_m2_s2": 149.67250051910924,
+      "residual_rms_m2_s2": 14.286910087876626,
+      "shape_errors": 0
+    },
+    "qualification": "approximate diagnostics only; no physical threshold, zero-target assumption, or native approval",
+    "requested_cells": 189957
+  },
+  "inputs": {
+    "baseline": "SHADOW unset",
+    "bytes": 470989067,
+    "config_manifest_sha256": "b3fd26d4b7d5e0dfdb3c27a79abae8b4e6c53f95825b2b71c81965a3d1db0d6f",
+    "configuration": "LIQUID_RADAR_RH1_PHI",
+    "files": 122,
+    "postrun_copy_guard": "PASS",
+    "prepared_copy_manifest_sha256": "58708fbc0ab6da38bd191b5c91169b55b297253374428b31a3ca61b23709887a",
+    "static_namelist_sha256": "57200a43845a437c27490afb53ba8023263919d4317ff7f07c487a985180daf6"
+  },
+  "native_science_disposition": {
+    "candidate_native_handoff": "MISSING: current candidate ends at LAPSPREP WPS pair; no current-candidate WPS->metgrid->real mapping/readback receipt binds this run to a native model state",
+    "native_aux_contract": "QNCCN has a configured source-bound CCN initializer; QNCLOUD/QNICE/QNRAIN/QIB have no implicit initializer in selected CP01 profile and are not made authoritative by stored zero values",
+    "qib_zero_mass_behavior": "unpatched KDM6 ProgB_param divides qgraupel/QIB before density clamp; fpe0 aborts at zero QIB. The private numerical guard sets rhox=900 for zero volume then reconstructs QIB; this is a numerical fallback, not a physical prior. rho_mid=400 is separately named and not the zero-volume branch.",
+    "retained_probe": "prior private 20s run at actual 13:00:00 input completed with QNCCN reconstruction max relative error 5.90e-6; it did not provide first-call per-field trace or validate the current WPS candidate; no t+20s state used as t0",
+    "science": "NOT_ASSESSED; native first-call and candidate handoff remain open; do not infer physical benefit or approval"
+  },
+  "open_gates": [
+    "compiler process closure remains NOT_ASSESSED; pinned strace unavailable",
+    "full upstream generation authority and science/native handoff are outside this scoped LAPSPREP replay",
+    "complete current candidate native handoff/readback and first-call per-field initialization trace",
+    "declared physical initialization policy and uncertainty for QNCLOUD, QNICE, QNRAIN and QIB",
+    "scientific, native conservation, physical boundary and operational acceptance"
+  ],
+  "products": {
+    "baseline_matches_retained": true,
+    "baseline_wps_sha256": "f50a031d9795cc87bfe47fae475bbe111a3984073c9fe784c6d2cdcbdd4a10fd",
+    "candidate_shadow_bytes": 148760831,
+    "candidate_shadow_sha256": "222989c98a62804696f9264267c85725ab443bcab99f6a20f3a736dbcfac34ff",
+    "candidate_wps_sha256": "fbe2238d13a4308ea7ef53a1d13196e2791801974c696ce8951127d14f043afc",
+    "grid_shape_xyz": [
+      235,
+      283,
+      22
+    ],
+    "grid_spacing_m": [
+      5000.0,
+      5000.0
+    ],
+    "records_checked": 235,
+    "wps_metadata_mapping_source_terrain_mutation_checks": "PASS"
+  },
+  "rejected_pre_fix_run": {
+    "receipt_sha256": "3af25fd3a0504d2f8cc2d096623580e618f0a33a94b2f38311fd1ec693d18405",
+    "status": "REJECTED; preserved; not reused"
+  },
+  "research_publication": {
+    "committed_generation_manifest_sha256": "95c55515e55960053ffae07c588d9b58c27cd1cb4b9e51dda4164f5881aac0c8",
+    "configuration": "lapsprep-O0;cycle=262281200;run_config_sha256=b3fd26d4b7d5e0dfdb3c27a79abae8b4e6c53f95825b2b71c81965a3d1db0d6f;prepared_input_inventory_sha256=58708fbc0ab6da38bd191b5c91169b55b297253374428b31a3ca61b23709887a;build_inputs_manifest_sha256=42e629593f968a1ebe849c98ecfbcf1c46c20e7155da3d9b2b76d5a882620e6c;build_runtime_manifest_sha256=1dd6859bc4ff84c3b81eab834b156cfafadaab83978feb0c22e989c605ce2014;producer_source_freeze_aggregate_sha256=6f15ac01c70a5a07210a378d02a84c4f4ca7206815a239f9f3bb6a694965c154;postcommit_391_input_hashes=PASS;compiler_process_closure=NOT_ASSESSED",
+    "current_pointer": "/var/tmp/cloud_bal_pr59_current_lapsprep_20261002/current",
+    "current_pointer_resolves_to_generation": true,
+    "generation": "/var/tmp/cloud_bal_pr59_current_lapsprep_20261002/generations/lapsprep-262281200-9017919-o0",
+    "generation_manifest_sha256": "95c55515e55960053ffae07c588d9b58c27cd1cb4b9e51dda4164f5881aac0c8",
+    "previous_lustre_attempt": {
+      "current_pointer_exists": false,
+      "failure": "Lustre filesystem does not support OutputTransaction atomic no-replace generation rename",
+      "generation_path_exists": false,
+      "prepared_snapshot_manifest_sha256": "b91f271659b1a28b5e9afc5f9e70e041c6f6a4b67983fe746d2eb3e309989c72",
+      "preserved_without_retry": true,
+      "root": "scratch/current_lapsprep_research_publication_20261002",
+      "status": "NOT_PUBLISHED"
+    },
+    "products": {
+      "baseline.wps": {
+        "bytes": 34348056,
+        "sha256": "f50a031d9795cc87bfe47fae475bbe111a3984073c9fe784c6d2cdcbdd4a10fd"
+      },
+      "candidate.wps": {
+        "bytes": 62572040,
+        "sha256": "fbe2238d13a4308ea7ef53a1d13196e2791801974c696ce8951127d14f043afc"
+      },
+      "candidate.wps.shadow.nc": {
+        "bytes": 148760831,
+        "sha256": "222989c98a62804696f9264267c85725ab443bcab99f6a20f3a736dbcfac34ff"
+      }
+    },
+    "publication_binding": "PASS: trusted OutputTransaction generation binds the three exact output products to the clean source commit, explicit configuration identity, and valid time. This does not grant science, native, or operational authority.",
+    "reopen_readback_receipt": "scratch/current_lapsprep_aug16_262281200/run_JGlEuo/research_publication_readback.json",
+    "reopen_readback_receipt_sha256": "b50749ba5a6b6dddba2a72d198d84ddcb99a5a937e38b88881f52febc85eac14",
+    "reopen_readback_status": "PASS",
+    "reopen_semantic_pair_readback": "PASS; verify_pair(generation) returned successfully",
+    "reopen_shape_xyz": [
+      235,
+      283,
+      22
+    ],
+    "root": "/var/tmp/cloud_bal_pr59_current_lapsprep_20261002",
+    "source_commit": "90179191edc33b5ae5606a37f4cd67eac507eed0",
+    "standalone_validator_artifact_decision": "UNBOUND (standalone numerical report, correctly unchanged by publication)",
+    "status": "PUBLISHED_RESEARCH_ONLY",
+    "transaction_id": "lapsprep-262281200-9017919-o0",
+    "trusted_validation_receipt_sha256": "3621063dc68f9e2572ae07f0a61f1ceaef3b928863a01b1985a604919ae61d00",
+    "trusted_validation_status": "PASS",
+    "trusted_validator": "verify_shadow_wps_pair",
+    "trusted_validator_bundle_sha256": "7fe1c46d3131140a905ef8e7d992101d4d5d07afdb3abc72ce82285e05bf0914",
+    "valid_time_epoch": 1786881600
+  },
+  "schema": "pr59_current_lapsprep_research_evidence_v1",
+  "scope": "isolated current LAPSPREP replay; numerical diagnostic only; no science/native/operational approval",
+  "source": {
+    "build_input_entries": 391,
+    "build_input_manifest_sha256": "42e629593f968a1ebe849c98ecfbcf1c46c20e7155da3d9b2b76d5a882620e6c",
+    "build_origin_qualification": "Producer executable was built before the commit from a dirty worktree; all 391 captured input hashes were rechecked against the committed source and matched. Transaction publication itself binds the product set to the clean commit.",
+    "clean_commit_claim": false,
+    "compiler_process_closure": "NOT_ASSESSED; pinned strace unavailable",
+    "postcommit_input_manifest_sha256": "42e629593f968a1ebe849c98ecfbcf1c46c20e7155da3d9b2b76d5a882620e6c",
+    "postcommit_source_hash_guard": "PASS; 391/391 SHA256 entries",
+    "postrun_source_hash_guard": "PASS",
+    "publication_commit": "90179191edc33b5ae5606a37f4cd67eac507eed0",
+    "publication_commit_exact_full_sha": true,
+    "worktree_clean_at_publication": true,
+    "worktree_head": "97478079859d759bef4fbc163f63a29092bd4c30",
+    "writer_source_sha256": "6f15ac01c70a5a07210a378d02a84c4f4ca7206815a239f9f3bb6a694965c154"
+  },
+  "validation": {
+    "actual_pair_mapping_mutation_checks": "PASS",
+    "artifact_decision": "UNBOUND",
+    "candidate_decision": "HYDROMETEOR_ENGINEERING_VALID_WITH_TRAJECTORY_ASSUMPTION",
+    "numerical_decision": "VALID",
+    "outer_lineage_validated": true,
+    "outer_validation_scope": "METADATA_ONLY_PRODUCER_REPLAY_NOT_REEXECUTED",
+    "pair_semantic_readback": "PASS; verify_pair exit 0; transaction verify_snapshot status PASS",
+    "promotion_eligible": false,
+    "science_assessed": false,
+    "standalone_exit": 0,
+    "standalone_failures": [],
+    "standalone_json_sha256": "bf5fc59b858d3825d03af414786330357cf5cfd01d33c89990612738f436728a",
+    "trusted_validator_source_sha256": "7fe1c46d3131140a905ef8e7d992101d4d5d07afdb3abc72ce82285e05bf0914"
+  }
+}

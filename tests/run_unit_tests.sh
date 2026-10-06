@@ -2,8 +2,9 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-mkdir -p "$repo_root/scratch"
-test_tmp=$(mktemp -d "$repo_root/scratch/unit_tests.XXXXXX")
+test_scratch_root=${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}
+mkdir -p "$test_scratch_root"
+test_tmp=$(mktemp -d "$test_scratch_root/unit_tests.XXXXXX")
 trap 'rm -rf "$test_tmp"' EXIT
 . "$repo_root/tests/intel_toolchain.sh"
 cd "$test_tmp"
@@ -61,7 +62,8 @@ for hydrostatic_build in checked optimized; do
   if [[ "$hydrostatic_build" == optimized ]]; then
     hydrostatic_flags=("${CLOUD_BAL_REPRO_FLAGS[@]}")
   fi
-  for hydrostatic_test in test_saturation_reference test_hydrostatic_increment test_pressure_hydrostatic_state \
+  for hydrostatic_test in test_saturation_reference test_hydrostatic_increment test_thermodynamic_constraints \
+      test_pressure_hydrostatic_state \
       test_pressure_geometry_budget test_pressure_column_remap test_pressure_domain_budget \
       test_pressure_domain_transition; do
     "$CLOUD_BAL_FC" "${hydrostatic_flags[@]}" \

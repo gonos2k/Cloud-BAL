@@ -11,6 +11,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from validate_shadow_diagnostics import validate
+from netcdf_test_copy import copy_groups
 
 
 ERROR_GROUP_VARIABLES = (
@@ -56,6 +57,7 @@ def copy_without_error_group(source_path: Path, destination: Path) -> None:
                 }
             )
             output[...] = variable[...]
+        copy_groups(source, target)
 
 
 def check_omega_target_error_group(path: Path, damaged: Path) -> int:
