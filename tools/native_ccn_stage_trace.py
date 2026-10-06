@@ -38,6 +38,26 @@ def _stats(values: np.ndarray) -> dict:
     }
 
 
+def _boundary_delta(after_update: np.ndarray, after_boundary: np.ndarray) -> dict:
+    comparable = np.isfinite(after_update) & np.isfinite(after_boundary)
+    unassessed = int(comparable.size - np.count_nonzero(comparable))
+    result = {
+        "changed_cells": int(np.count_nonzero(
+            comparable & (after_update != after_boundary)
+        )),
+        "max_abs_change": None,
+    }
+    if unassessed == 0 and np.any(comparable):
+        difference = np.abs(
+            after_update[comparable].astype(np.float64)
+            - after_boundary[comparable].astype(np.float64)
+        )
+        result["max_abs_change"] = float(difference.max())
+    if unassessed:
+        result["unassessed_nonfinite_cells"] = unassessed
+    return result
+
+
 def _read_f32(view: memoryview, offset: int, count: int, label: str) -> tuple[np.ndarray, int]:
     end = offset + count * 4
     if end > len(view):
@@ -273,6 +293,8 @@ def _read_pd_budget(path: Path, call_bounds: dict, final_nn: np.ndarray) -> dict
         outgoing = np.float32(np.float32(dt) * np.float32(horizontal + vertical_term))
         residuals.append(float(np.float32(ph_low[y, z, x] - outgoing)))
     residuals = np.asarray(residuals, dtype=np.float64)
+    finite_residuals = residuals[np.isfinite(residuals)]
+    nonfinite_residual_count = int(residuals.size - finite_residuals.size)
     return {
         "path": str(path), "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw),
         "dt_s": float(dt), "rdx": float(rdx), "rdy": float(rdy),
@@ -282,12 +304,14 @@ def _read_pd_budget(path: Path, call_bounds: dict, final_nn: np.ndarray) -> dict
         "negative_call_cells": int(negative.sum()),
         "negative_call_cells_with_positive_ph_low": int(((ph_low > 0) & negative).sum()),
         "negative_call_cells_with_active_limiter": int(((scale < 1) & negative).sum()),
-        "negative_call_cells_postscale_budget_overshoot": int((residuals < 0).sum()),
-        "negative_call_cells_postscale_budget_zero": int((residuals == 0).sum()),
-        "negative_call_cells_postscale_budget_positive": int((residuals > 0).sum()),
-        "postscale_budget_residual_min": float(residuals.min()) if residuals.size else None,
-        "postscale_budget_residual_max": float(residuals.max()) if residuals.size else None,
+        "negative_call_cells_postscale_budget_overshoot": int((finite_residuals < 0).sum()),
+        "negative_call_cells_postscale_budget_zero": int((finite_residuals == 0).sum()),
+        "negative_call_cells_postscale_budget_positive": int((finite_residuals > 0).sum()),
+        "postscale_budget_residual_min": float(finite_residuals.min()) if finite_residuals.size else None,
+        "postscale_budget_residual_max": float(finite_residuals.max()) if finite_residuals.size else None,
         "residual_method": "Replays source max/min outgoing-face split and flux_out grouping in float32 from post-limit shared face values.",
+        **({"nonfinite_postscale_budget_residuals": nonfinite_residual_count}
+           if nonfinite_residual_count else {}),
     }
 
 def summarize(run_dir: Path, kdm_pre_path: Path) -> dict:
@@ -307,10 +331,7 @@ def summarize(run_dir: Path, kdm_pre_path: Path) -> dict:
     for rk in (1, 2, 3):
         after_update = retained[(2, rk)]
         after_boundary = retained[(3, rk)]
-        boundary_delta[str(rk)] = {
-            "changed_cells": int((after_update != after_boundary).sum()),
-            "max_abs_change": float(np.max(np.abs(after_update - after_boundary))),
-        }
+        boundary_delta[str(rk)] = _boundary_delta(after_update, after_boundary)
     final = retained[(3, 3)]
     call_nn = kdm_pre["fields"]["NN"]
     call_match = bool(np.array_equal(final, call_nn))
@@ -350,13 +371,13 @@ def main() -> int:
     args = parser.parse_args()
     try:
         result = summarize(args.run_dir, args.kdm_pre)
+        encoded = json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n"
+        if args.output:
+            args.output.write_text(encoded, encoding="utf-8")
+        else:
+            print(encoded, end="")
     except (OSError, TraceError, ValueError, struct.error) as exc:
         parser.error(str(exc))
-    encoded = json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n"
-    if args.output:
-        args.output.write_text(encoded, encoding="utf-8")
-    else:
-        print(encoded, end="")
     return 0
 
 

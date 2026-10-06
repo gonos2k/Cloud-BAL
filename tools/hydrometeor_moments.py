@@ -111,6 +111,49 @@ def _conservation_error(
     }
 
 
+def _nonnegative_product(
+    left: np.ndarray, right: np.ndarray, name: str
+) -> np.ndarray:
+    """Multiply nonnegative fields without silently losing positive products."""
+    with np.errstate(over="ignore", under="ignore", invalid="ignore"):
+        product = left * right
+    if np.any((left > 0.0) & (right > 0.0) & (product == 0.0)):
+        raise ValueError(f"UNDERFLOW:{name}")
+    if not np.all(np.isfinite(product)):
+        raise ValueError(f"NONFINITE:{name}")
+    return product
+
+
+def _weighted_extensive_sum(
+    weights: np.ndarray, extensive: np.ndarray, name: str
+) -> np.ndarray:
+    """Apply remap weights and reject positive weighted terms that vanish."""
+    totals = np.empty(weights.shape[0], dtype=np.float64)
+    rows_per_chunk = max(1, min(256, 1_000_000 // weights.shape[1]))
+    for start in range(0, weights.shape[0], rows_per_chunk):
+        stop = min(start + rows_per_chunk, weights.shape[0])
+        rows = weights[start:stop]
+        terms = _nonnegative_product(rows, extensive[None, :], f"REMAP_{name}")
+        with np.errstate(over="ignore", invalid="ignore"):
+            totals[start:stop] = np.sum(terms, axis=1)
+    if not np.all(np.isfinite(totals)):
+        raise ValueError(f"NONFINITE:REMAP_{name}")
+    return totals
+
+
+def _recover_intensive(
+    extensive: np.ndarray, carrier: np.ndarray, name: str
+) -> np.ndarray:
+    """Recover a ratio and reject underflow of any positive extensive value."""
+    with np.errstate(over="ignore", under="ignore", divide="ignore", invalid="ignore"):
+        ratio = extensive / carrier
+    if np.any((extensive > 0.0) & (ratio == 0.0)):
+        raise ValueError(f"UNDERFLOW:RECOVER_{name}")
+    if not np.all(np.isfinite(ratio)):
+        raise ValueError(f"NONFINITE:RECOVER_{name}")
+    return ratio
+
+
 def validate_mass_number(
     mass: Any,
     number: Any | None,
@@ -279,7 +322,8 @@ def conservative_remap_moments(
     w, issue = _array(weights, "weights")
     if issue:
         raise ValueError("NEGATIVE_REMAP_WEIGHT" if issue == "NEGATIVE_FIELD:weights" else issue)
-    if md.ndim != 1 or w.ndim != 2 or w.shape[1] != md.size or w.shape[0] == 0:
+    if (md.ndim != 1 or md.size == 0 or w.ndim != 2
+            or w.shape[1] != md.size or w.shape[0] == 0):
         raise ValueError("MALFORMED_REMAP_SHAPE")
     if (not isinstance(mass_mixing_ratios, Mapping)
             or not isinstance(number_concentrations, Mapping)
@@ -316,8 +360,8 @@ def conservative_remap_moments(
     tolerance = 64.0 * np.finfo(np.float64).eps * max(1, w.shape[0])
     if not np.all(np.abs(column_sums - 1.0) <= tolerance):
         raise ValueError("REMAP_WEIGHTS_MUST_CONSERVE_EACH_DONOR")
-    remapped_dry_mass = w @ md
-    if not np.all(np.isfinite(remapped_dry_mass)) or np.any(remapped_dry_mass <= 0.0):
+    remapped_dry_mass = _weighted_extensive_sum(w, md, "DRY_AIR_MASS")
+    if np.any(remapped_dry_mass <= 0.0):
         raise ValueError("ZERO_OR_INVALID_TARGET_DRY_MASS")
 
     mass_out: dict[str, np.ndarray] = {}
@@ -333,9 +377,11 @@ def conservative_remap_moments(
             raise ValueError(issue)
         if r.shape != md.shape:
             raise ValueError(f"MALFORMED_MASS_SHAPE:{species}")
-        if (not np.all(np.isfinite(md * r))):
-            raise ValueError(f"NONFINITE_MASS_EXTENSIVE:{species}")
-        mass_out[species] = (w @ (md * r)) / remapped_dry_mass
+        mass_extensive = _nonnegative_product(md, r, f"MASS_EXTENSIVE:{species}")
+        remapped_mass = _weighted_extensive_sum(w, mass_extensive, f"MASS_EXTENSIVE:{species}")
+        mass_out[species] = _recover_intensive(
+            remapped_mass, remapped_dry_mass, f"MASS:{species}"
+        )
 
         n_raw = number_concentrations.get(species)
         if n_raw is None:
@@ -362,9 +408,15 @@ def conservative_remap_moments(
             )
             if donor_check["status"] != "PASS_SCOPED":
                 raise ValueError(f"DONOR_MASS_NUMBER_INVALID:{species}:{donor_check['reason']}")
-            if not np.all(np.isfinite(md * n)):
-                raise ValueError(f"NONFINITE_NUMBER_EXTENSIVE:{species}")
-            number_out[species] = (w @ (md * n)) / remapped_dry_mass
+            number_extensive = _nonnegative_product(
+                md, n, f"NUMBER_EXTENSIVE:{species}"
+            )
+            remapped_number = _weighted_extensive_sum(
+                w, number_extensive, f"NUMBER_EXTENSIVE:{species}"
+            )
+            number_out[species] = _recover_intensive(
+                remapped_number, remapped_dry_mass, f"NUMBER:{species}"
+            )
             n_check = validate_mass_number(
                 mass_out[species], number_out[species],
                 mass_units=mass_units, number_units=number_units,
@@ -402,9 +454,15 @@ def conservative_remap_moments(
             )
             if donor_check["status"] != "PASS_SCOPED":
                 raise ValueError(f"DONOR_MASS_VOLUME_INVALID:{species}:{donor_check['reason']}")
-            if not np.all(np.isfinite(md * bg)):
-                raise ValueError(f"NONFINITE_VOLUME_EXTENSIVE:{species}")
-            volume_out[species] = (w @ (md * bg)) / remapped_dry_mass
+            volume_extensive = _nonnegative_product(
+                md, bg, f"VOLUME_EXTENSIVE:{species}"
+            )
+            remapped_volume = _weighted_extensive_sum(
+                w, volume_extensive, f"VOLUME_EXTENSIVE:{species}"
+            )
+            volume_out[species] = _recover_intensive(
+                remapped_volume, remapped_dry_mass, f"VOLUME:{species}"
+            )
             bg_check = validate_bulk_volume(
                 mass_out[species], volume_out[species],
                 mass_units=mass_units, volume_units=volume_units,

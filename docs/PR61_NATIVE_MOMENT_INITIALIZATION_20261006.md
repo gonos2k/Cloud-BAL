@@ -206,17 +206,25 @@ conservation or science-acceptance claim.
 
 ## Matched strict-profile PD and finalized-order run
 
-The combined confirmation used two pure source-copy patches with the original
-WRF routine interfaces: [`native_pd_roundoff.patch`](native_pd_roundoff.patch)
-for the PD limiter and
+The combined confirmation used the pure PD source-copy patch
+[`native_pd_roundoff.patch`](native_pd_roundoff.patch) and the KDM6 patch
 [`native_kdm6_finalized_evaporation.patch`](native_kdm6_finalized_evaporation.patch)
-for the KDM6 transfer order. The PD patch removes the earlier trace-only dummy
-argument, automatic capture arrays, and debug writes while retaining the same
-69-operation roundoff reserve. Its normalized limiter block is byte-identical
-to the independently reviewed PD candidate after removing only those debug
-captures. The KDM6 patch defers terminal NR-to-NCCN bookkeeping until after
-the finalized warm/cold number and mass updates. These patches are stored as
-reviewable artifacts; neither was applied to the maintained WRF source tree.
+for finalized evaporation, both with the original WRF routine interfaces. The
+PD patch removes the earlier trace-only dummy argument, automatic capture
+arrays, and debug writes while retaining the same 69-operation roundoff
+reserve. Its compiled source hash is
+`a1dc18bce40f84ad709d38fbe7b0658590e587d42528b1124f9c8b7e9c1830fa`; its
+normalized limiter block is byte-identical to the independently reviewed PD
+candidate after removing only those debug captures. The KDM6 patch defers
+terminal NR-to-NCCN bookkeeping until after the finalized warm/cold number and
+mass updates. The combined run compiled an instrumented extension of that
+patch: production-patch source hash
+`61bac0c2868a5d31dcfaa9f4a4e076622cdfaa260ca69524eeb8ce3f5a840244`, compiled
+instrumented source hash
+`b39afa8e02689367b81f8006a104a686995b33f82202ddd7a1bb138f1812f00d`. The
+extension adds target-cell process-chain logging used for the retained process
+trace. The PD patch and KDM6 production patch are reviewable artifacts; neither
+was applied to the maintained WRF source tree.
 
 Both native runs used the same copied prior input, boundary, namelist, static
 tables, 20-second duration, timestep, damping, and strict freshly compiled PD

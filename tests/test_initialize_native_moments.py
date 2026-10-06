@@ -80,6 +80,34 @@ class NativeMomentInitializationTests(unittest.TestCase):
             ):
                 initializer._validate_policy_file(altered)
 
+    def test_policy_rejects_executable_declaration_drift(self):
+        mutations = (
+            (initializer.SPECIES["QCLOUD"], "moment", "QNRAIN", "QCLOUD.moment"),
+            (initializer.SPECIES["QCLOUD"], "threshold", 2.0e-15, "QCLOUD.threshold"),
+            (initializer.SPECIES["QCLOUD"], "power", 4, "QCLOUD.power"),
+            (initializer.SPECIES["QCLOUD"], "lambda_min", 12001.0, "QCLOUD.lambda_min"),
+            (initializer.SPECIES["QCLOUD"], "lambda_max", 500001.0, "QCLOUD.lambda_max"),
+            (initializer.SPECIES["QCLOUD"], "internal_cap", 4.0e10, "QCLOUD.internal_cap"),
+            (initializer.SPECIES["QCLOUD"], "m_min", 5.0e-15, "QCLOUD.m_min"),
+            (initializer.SPECIES["QCLOUD"], "m_max", 3.1e-10, "QCLOUD.m_max"),
+            (initializer.SPECIES["QCLOUD"], "pidn", initializer.SPECIES["QCLOUD"]["pidn"] * 1.01,
+             "QCLOUD.pidn_min"),
+            (initializer.GRAUPEL, "moment", "QGRAUPEL", "QGRAUP.moment"),
+            (initializer.GRAUPEL, "threshold", 2.0e-9, "QGRAUP.threshold"),
+            (initializer.GRAUPEL, "rho_center", 500.0, "QGRAUP.rho_center"),
+            (initializer.GRAUPEL, "rho_min", 101.0, "QGRAUP.rho_min"),
+            (initializer.GRAUPEL, "rho_max", 901.0, "QGRAUP.rho_max"),
+        )
+        for declarations, key, changed_value, expected in mutations:
+            with self.subTest(field=expected), mock.patch.dict(
+                declarations, {key: changed_value}
+            ):
+                with self.assertRaisesRegex(
+                    initializer.InitializationError,
+                    f"POLICY_IMPLEMENTATION_MISMATCH:{expected}",
+                ):
+                    initializer._validate_policy_file(initializer.DEFAULT_POLICY)
+
     def test_receipt_temp_failure_removes_candidate_and_all_temporary_files(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

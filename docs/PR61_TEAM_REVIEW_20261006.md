@@ -152,3 +152,13 @@ The unfiltered diff whitespace check reports whitespace embedded in literal
 source-copy `.patch` artifacts. Their original context and hashes are retained.
 The source/document check excluding these forensic diffs passes; this scope
 qualification replaces any earlier unqualified diff-clean statement.
+
+## Follow-up audit
+
+A further independent audit of `4ee6aaf` reproduced remap underflow-to-zero
+and nonfinite diagnostic serialization failures, added a numerical-policy
+drift guard, and clarified native instrumentation and graph provenance.
+See [the follow-up report](PR61_FOLLOWUP_TEAM_AUDIT_20261006.md) and its
+[receipt](evidence/pr61_followup_team_audit_20261006.json). The earlier
+80-test receipt remains historical; the follow-up focused batch has 86 PASS.
+Native full-state FAIL and scientific open gates are unchanged.

@@ -280,6 +280,68 @@ def test_remap_rejects_overflowing_totals_without_an_infinite_error_budget():
         raise AssertionError("an overflowing total passed conservation")
 
 
+def test_remap_rejects_underflow_of_positive_mass_number_and_volume_products():
+    common = dict(
+        weights=[[1.0]], mass_mixing_ratios={"rain": [1.0e-30]},
+        number_concentrations={}, bulk_volume_moments={},
+        particle_mass_bounds_kg={}, bulk_density_bounds_kg_m3={},
+        particle_mass_bound_source={}, particle_mass_uncertainty={},
+        bulk_density_bound_source={}, bulk_density_uncertainty={},
+        mass_units=MASS_UNITS, number_units=NUMBER_UNITS,
+        volume_units=BULK_VOLUME_UNITS, mass_basis=DRY_AIR_BASIS,
+        number_basis=DRY_AIR_BASIS, volume_basis=DRY_AIR_BASIS,
+    )
+
+    cases = (
+        ([1.0e-300], common, "UNDERFLOW:MASS_EXTENSIVE:rain"),
+        ([1.0e-20], dict(
+            common,
+            number_concentrations={"rain": [1.0e-320]},
+            particle_mass_bounds_kg={"rain": (1.0e289, 1.0e291)},
+            particle_mass_bound_source={"rain": "manufactured bounds"},
+            particle_mass_uncertainty={"rain": "interval only; sigma not assessed"},
+        ), "UNDERFLOW:NUMBER_EXTENSIVE:rain"),
+        ([1.0e-20], dict(
+            common,
+            bulk_volume_moments={"rain": [1.0e-320]},
+            bulk_density_bounds_kg_m3={"rain": (1.0e289, 1.0e291)},
+            bulk_density_bound_source={"rain": "manufactured bounds"},
+            bulk_density_uncertainty={"rain": "interval only; sigma not assessed"},
+        ), "UNDERFLOW:VOLUME_EXTENSIVE:rain"),
+    )
+    for dry_mass, declarations, expected in cases:
+        try:
+            conservative_remap_moments(dry_mass, **declarations)
+        except ValueError as exc:
+            assert expected in str(exc), str(exc)
+        else:
+            raise AssertionError(f"positive extensive product underflow passed: {expected}")
+
+    weighted = dict(common, weights=[[1.0e-320], [1.0]])
+    try:
+        conservative_remap_moments([1.0], **weighted)
+    except ValueError as exc:
+        assert "UNDERFLOW:REMAP_MASS_EXTENSIVE:rain" in str(exc)
+    else:
+        raise AssertionError("positive weighted extensive product underflow passed")
+
+    try:
+        conservative_remap_moments(
+            [1.0, 1.0e308], [[1.0, 1.0]],
+            {"rain": [np.nextafter(0.0, 1.0), 0.0]}, {}, {},
+            particle_mass_bounds_kg={}, bulk_density_bounds_kg_m3={},
+            particle_mass_bound_source={}, particle_mass_uncertainty={},
+            bulk_density_bound_source={}, bulk_density_uncertainty={},
+            mass_units=MASS_UNITS, number_units=NUMBER_UNITS,
+            volume_units=BULK_VOLUME_UNITS, mass_basis=DRY_AIR_BASIS,
+            number_basis=DRY_AIR_BASIS, volume_basis=DRY_AIR_BASIS,
+        )
+    except ValueError as exc:
+        assert "UNDERFLOW:RECOVER_MASS:rain" in str(exc)
+    else:
+        raise AssertionError("positive intensive recovery underflow passed")
+
+
 def main():
     tests = (
         test_mass_number_checks_finite_declared_bounds_and_reports_masks,
@@ -290,6 +352,7 @@ def main():
         test_remap_rejects_bad_weights_shapes_and_zero_target_carrier,
         test_remap_preserves_unsupported_species_moments_as_none,
         test_remap_rejects_overflowing_totals_without_an_infinite_error_budget,
+        test_remap_rejects_underflow_of_positive_mass_number_and_volume_products,
     )
     for test in tests:
         test()

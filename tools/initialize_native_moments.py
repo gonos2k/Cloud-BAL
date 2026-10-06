@@ -98,6 +98,64 @@ def _read_unmasked(variable: Any, name: str) -> np.ndarray:
     return values
 
 
+def _check_policy_implementation(policy: dict[str, Any]) -> None:
+    """Reject drift between the frozen policy and executable declarations."""
+    policy_species = policy["species"]
+    if set(policy_species) != set(SPECIES) | {"QGRAUP"}:
+        raise InitializationError("POLICY_IMPLEMENTATION_MISMATCH:species_inventory")
+
+    policy_fields = (
+        ("moment", "target_moment"),
+        ("threshold", "source_active_mass_threshold_kg_kg-1"),
+        ("power", "shape_exponent_d"),
+        ("lambda_min", "lambda_min_m-1"),
+        ("lambda_max", "lambda_max_m-1"),
+        ("internal_cap", "internal_number_cap_number_m-3"),
+    )
+    for mass_name, spec in SPECIES.items():
+        declared = policy_species[mass_name]
+        for code_field, policy_field in policy_fields:
+            if spec[code_field] != declared[policy_field]:
+                raise InitializationError(
+                    f"POLICY_IMPLEMENTATION_MISMATCH:{mass_name}.{code_field}"
+                )
+        mean_mass_bounds = declared["particle_mean_mass_bounds_kg"]
+        derived_bounds = (
+            spec["pidn"] / spec["lambda_max"] ** spec["power"],
+            spec["pidn"] / spec["lambda_min"] ** spec["power"],
+        )
+        for actual, expected, field in (
+            (spec["m_min"], mean_mass_bounds[0], "m_min"),
+            (spec["m_max"], mean_mass_bounds[1], "m_max"),
+        ):
+            if actual != expected:
+                raise InitializationError(
+                    f"POLICY_IMPLEMENTATION_MISMATCH:{mass_name}.{field}"
+                )
+        for actual, expected, field in (
+            (derived_bounds[0], mean_mass_bounds[0], "pidn_min"),
+            (derived_bounds[1], mean_mass_bounds[1], "pidn_max"),
+        ):
+            if not math.isclose(actual, expected, rel_tol=16 * sys.float_info.epsilon):
+                raise InitializationError(
+                    f"POLICY_IMPLEMENTATION_MISMATCH:{mass_name}.{field}"
+                )
+
+    declared_graupel = policy_species["QGRAUP"]
+    graupel_fields = (
+        ("moment", "target_moment"),
+        ("threshold", "source_active_mass_threshold_kg_kg-1"),
+        ("rho_center", "bulk_density_prior_center_kg_m-3"),
+        ("rho_min", "bulk_density_min_kg_m-3"),
+        ("rho_max", "bulk_density_max_kg_m-3"),
+    )
+    for code_field, policy_field in graupel_fields:
+        if GRAUPEL[code_field] != declared_graupel[policy_field]:
+            raise InitializationError(
+                f"POLICY_IMPLEMENTATION_MISMATCH:QGRAUP.{code_field}"
+            )
+
+
 def _validate_policy_file(path: Path) -> dict[str, Any]:
     try:
         policy = json.loads(path.read_text(encoding="utf-8"))
@@ -111,6 +169,7 @@ def _validate_policy_file(path: Path) -> dict[str, Any]:
         raise InitializationError("UNSUPPORTED_OR_UNDECLARED_POLICY")
     if file_sha256(path) != EXPECTED_POLICY_SHA256:
         raise InitializationError("POLICY_HASH_MISMATCH")
+    _check_policy_implementation(policy)
     return policy
 
 

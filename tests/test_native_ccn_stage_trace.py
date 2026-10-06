@@ -1,13 +1,20 @@
+import contextlib
+import io
+import json
 import struct
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from native_ccn_stage_trace import TraceError, _read_pd_budget, _read_stage, _read_update
+import native_ccn_stage_trace as trace_tool
+from native_ccn_stage_trace import (
+    TraceError, _boundary_delta, _read_pd_budget, _read_stage, _read_update, _stats,
+)
 
 
 BOUNDS = {
@@ -39,7 +46,7 @@ def write_update(path: Path, *, dt=20.0, c2=(95000.0, 95000.0)):
     path.write_bytes(raw)
 
 
-def write_pd_budget(path: Path, *, memory=(1, 3, 1, 2, 1, 2)):
+def write_pd_budget(path: Path, *, memory=(1, 3, 1, 2, 1, 2), nan_metric=False):
     nx, ny, nz = 3, 2, 2
     tile = (1, 3, 1, 2, 1, 2)
     n3, n2 = nx * ny * nz, nx * ny
@@ -50,6 +57,8 @@ def write_pd_budget(path: Path, *, memory=(1, 3, 1, 2, 1, 2)):
     arrays += [np.ones(nzface, dtype=">f4") for _ in range(2)]
     arrays += [np.ones(n2, dtype=">f4") for _ in range(2)]
     arrays += [np.ones(nz, dtype=">f4")]
+    if nan_metric:
+        arrays[11][0] = np.nan
     raw = b"CCNPDB1 " + struct.pack(">12i3f", *memory, *tile, 20.0, 0.0002, 0.0002)
     raw += b"".join(a.tobytes() for a in arrays)
     path.write_bytes(raw)
@@ -69,6 +78,66 @@ class NativeCcnStageTraceTest(unittest.TestCase):
         record = _read_stage(path, BOUNDS, expected_stage=1, expected_rk=1)
         self.assertEqual(record["active_shape_xyz"], [3, 2, 2])
         self.assertEqual(record["state"].shape, (2, 2, 3))
+
+    def test_boundary_delta_uses_float64_and_marks_nonfinite_pairs_unassessed(self):
+        baseline = _boundary_delta(
+            np.array([1.0, 3.0], dtype=np.float32),
+            np.array([1.0, 2.0], dtype=np.float32),
+        )
+        self.assertEqual(baseline, {"changed_cells": 1, "max_abs_change": 1.0})
+
+        extreme = _boundary_delta(
+            np.array([3.0e38], dtype=np.float32),
+            np.array([-3.0e38], dtype=np.float32),
+        )
+        expected = float(np.float64(np.float32(3.0e38))
+                         - np.float64(np.float32(-3.0e38)))
+        self.assertEqual(extreme["max_abs_change"], expected)
+
+        partial = _boundary_delta(
+            np.array([1.0, np.nan], dtype=np.float32),
+            np.array([0.0, 4.0], dtype=np.float32),
+        )
+        self.assertEqual(partial["changed_cells"], 1)
+        self.assertIsNone(partial["max_abs_change"])
+        self.assertEqual(partial["unassessed_nonfinite_cells"], 1)
+
+    def test_stage_parser_preserves_nonfinite_value_counts(self):
+        path = self.root / "pr61_qnn_stage_1_rk1.raw"
+        write_stage(path)
+        raw = bytearray(path.read_bytes())
+        struct.pack_into(">f", raw, 80, float("nan"))
+        struct.pack_into(">f", raw, 84, float("inf"))
+        path.write_bytes(raw)
+        record = _read_stage(path, BOUNDS, expected_stage=1, expected_rk=1)
+        self.assertEqual(_stats(record["state"])["nonfinite"], 2)
+
+    def test_nonfinite_pd_residual_is_counted_and_serializable(self):
+        path = self.root / "pr61_qnn_pd_budget_rk3.raw"
+        write_pd_budget(path, nan_metric=True)
+        final_nn = np.zeros((2, 2, 3), dtype=np.float32)
+        final_nn[0, 0, 0] = -1.0
+        final_nn[0, 0, 1] = -1.0
+        result = _read_pd_budget(path, BOUNDS, final_nn)
+        self.assertEqual(result["nonfinite_postscale_budget_residuals"], 1)
+        self.assertEqual(result["negative_call_cells_postscale_budget_overshoot"], 0)
+        self.assertEqual(result["negative_call_cells_postscale_budget_positive"], 1)
+        self.assertAlmostEqual(result["postscale_budget_residual_min"], 20.992, places=5)
+        self.assertAlmostEqual(result["postscale_budget_residual_max"], 20.992, places=5)
+        json.dumps(result, allow_nan=False)
+
+    def test_cli_converts_nonfinite_json_error_to_argparse_error(self):
+        stderr = io.StringIO()
+        with (
+            mock.patch.object(sys, "argv", ["native_ccn_stage_trace.py", "run", "pre.raw"]),
+            mock.patch.object(trace_tool, "summarize", return_value={"bad": float("nan")}),
+            contextlib.redirect_stderr(stderr),
+        ):
+            with self.assertRaises(SystemExit) as raised:
+                trace_tool.main()
+        self.assertEqual(raised.exception.code, 2)
+        self.assertIn("Out of range float values", stderr.getvalue())
+        self.assertNotIn("Traceback", stderr.getvalue())
 
     def test_rejects_pd_budget_memory_metadata_mismatch(self):
         path = self.root / "pr61_qnn_pd_budget_rk3.raw"
