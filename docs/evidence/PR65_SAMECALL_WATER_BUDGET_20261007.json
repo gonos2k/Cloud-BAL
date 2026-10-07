@@ -1,0 +1,430 @@
+{
+  "capture_hashes": {
+    "kdm6_first_call_post.raw": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+    "kdm6_first_call_pre.raw": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "pr63_geometry.raw": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008"
+  },
+  "diagnostic_limits": [
+    "The hybrid dry-air measure uses the exact same-call host geometry and is fixed across the KDM6 call in this capture.",
+    "DEN*DELZ*area is reported as a separate volume-style diagnostic and is not substituted for hybrid dry-air mass.",
+    "The integrated changes are endpoint storage diagnostics; they are not mass or energy closure because source and boundary fluxes are incomplete.",
+    "Float32 state fields are reduced in float64; no formal aggregate summation error bound is claimed."
+  ],
+  "execution_scope": "same-call KDM6 pre/post fields, first timestep, one-rank/one-tile research observer",
+  "geometry_audit": {
+    "DEN_DELZ_area_mass_diagnostic_kg": 1.6213518543367404e+16,
+    "DEN_DELZ_area_relative_difference_vs_hybrid_mass": 0.0005855647241648221,
+    "audit_source_sha256": "cdc4d1dc0352cf9fb47ff77ca43dcbf16e827961960b2801c4ee728b8826dbec",
+    "call_duration_identity": {
+      "grid_dt_part_of_identity": false,
+      "grid_dt_s_metadata": 20.0,
+      "host_argument": "solve_em dtm passed as microphysics_driver DT",
+      "host_dtm_s": 20.0,
+      "kdm6_argument": "KDM6 delt recorded as trace dt_s",
+      "kdm6_delt_s": 20.0,
+      "matched": true
+    },
+    "capture_hashes": {
+      "kdm6_first_call_post.raw": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+      "kdm6_first_call_pre.raw": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "pr63_geometry.raw": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008"
+    },
+    "executable_sha256": "53d704da329058ea8fc8de044be9646a5ca470c0ddde8e2ee18a1ffcc49da3b3",
+    "geometry_array_shapes": {
+      "c1h": [
+        40
+      ],
+      "c2h": [
+        40
+      ],
+      "c3f": [
+        40
+      ],
+      "c4f": [
+        40
+      ],
+      "dnw": [
+        40
+      ],
+      "msftx": [
+        245,
+        293
+      ],
+      "msfty": [
+        245,
+        293
+      ],
+      "mu1": [
+        245,
+        293
+      ],
+      "mu2": [
+        245,
+        293
+      ],
+      "mub": [
+        245,
+        293
+      ]
+    },
+    "geometry_arrays_finite": true,
+    "geometry_records": [
+      {
+        "bounds": {
+          "ime": 240,
+          "ims": -4,
+          "ite": 234,
+          "its": 1,
+          "jme": 288,
+          "jms": -4,
+          "jte": 282,
+          "jts": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "dt_s": 20.0,
+        "dtm_s": 20.0,
+        "dx_m": 5000.0,
+        "dy_m": 5000.0,
+        "extents": [
+          245,
+          293,
+          245,
+          293,
+          245,
+          293,
+          40,
+          40,
+          40,
+          40,
+          40,
+          245,
+          293,
+          245,
+          293
+        ],
+        "gravity_m_s2": 9.8100004196167,
+        "hybrid_opt": 2,
+        "p_top_pa": 5000.0,
+        "rkstep": 4,
+        "stage": "PRE_MICROPHYSICS",
+        "timestep": 1
+      },
+      {
+        "bounds": {
+          "ime": 240,
+          "ims": -4,
+          "ite": 234,
+          "its": 1,
+          "jme": 288,
+          "jms": -4,
+          "jte": 282,
+          "jts": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "dt_s": 20.0,
+        "dtm_s": 20.0,
+        "dx_m": 5000.0,
+        "dy_m": 5000.0,
+        "extents": [
+          245,
+          293,
+          245,
+          293,
+          245,
+          293,
+          40,
+          40,
+          40,
+          40,
+          40,
+          245,
+          293,
+          245,
+          293
+        ],
+        "gravity_m_s2": 9.8100004196167,
+        "hybrid_opt": 2,
+        "p_top_pa": 5000.0,
+        "rkstep": 4,
+        "stage": "POST_MICROPHYSICS",
+        "timestep": 1
+      }
+    ],
+    "identity_bound_interpretation": "The 0.01 Pa defaults are fixed numerical research-audit bounds for these recorded geometry identities. They are not physical tolerances, a proof of floating-point error bounds, or a criterion for scientific closure.",
+    "kdm6_active_shape_xyz": [
+      232,
+      280,
+      39
+    ],
+    "kdm6_active_tile_within_solve_em_tile": true,
+    "kdm6_memory_bounds_match_geometry": true,
+    "kdm6_timestep": 1,
+    "layer_dp_pa_minmax": [
+      444.2081743718756,
+      4809.189884507891
+    ],
+    "mapped_hybrid_dry_mass_kg": 1.6204030034989606e+16,
+    "max_column_dp_to_mu2_mub_difference_pa": 0.00010944342648144811,
+    "max_layer_to_interface_dp_difference_pa": 0.002499805738352734,
+    "pre_post_geometry_arrays_equal": {
+      "c1h": true,
+      "c2h": true,
+      "c3f": true,
+      "c4f": true,
+      "dnw": true,
+      "msftx": true,
+      "msfty": true,
+      "mu1": true,
+      "mu2": true,
+      "mub": true
+    },
+    "pressure_identity_tolerances_pa": {
+      "column": 0.01,
+      "layer": 0.01
+    },
+    "receipt_sha256": "21f62cb20db9402b83886f896f5948f7eadb79f8edf0c906f2670b8524934857",
+    "receipt_status": {
+      "input_integrity": "PASS",
+      "output_isolation": "PASS",
+      "returncode": 0
+    },
+    "schema": "pr63_same_call_geometry_audit_v1",
+    "source_equations": {
+      "alternative_diagnostic_only": "sum(DEN*DELZ*DX*DY/(MSFTX*MSFTY)); not a closed mass budget",
+      "hybrid_dry_mass": "sum(dp_k*DX*DY/(MSFTX*MSFTY*g))",
+      "layer_pressure": "dp_k = -[C1H_k*(MU2+MUB)+C2H_k]*DNW_k"
+    },
+    "units_and_limits": "Units are inferred from source equations; PR63GEO2 has no unit strings. This checks same-call geometry consistency only. DEN*DELZ area mass is diagnostic and is not forced to match hybrid mass. One-rank/tile/timestep capture only; no source/boundary budget or physical approval."
+  },
+  "integrated_measures": {
+    "DEN_DELZ_diagnostic": {
+      "post": {
+        "arithmetic": "DEN and DELZ promoted to float64 before multiplication; area scaling and reduction in float64",
+        "relative_difference_from_hybrid_dry_mass": 0.0005855647194381586,
+        "total_kg_diagnostic": 1.6213518543290812e+16
+      },
+      "pre": {
+        "arithmetic": "DEN and DELZ promoted to float64 before multiplication; area scaling and reduction in float64",
+        "relative_difference_from_hybrid_dry_mass": 0.0005855647194381586,
+        "total_kg_diagnostic": 1.6213518543290812e+16
+      }
+    },
+    "DEN_DELZ_precision_comparison": {
+      "difference_kg": -76592.0,
+      "interpretation": "Both are volume-style diagnostics from the same stored DEN/DELZ values and same area. Their small difference is arithmetic-order sensitivity, not a physical tolerance or closure result.",
+      "legacy_geometry_audit_float32_product_kg": 1.6213518543367404e+16,
+      "promoted_float64_product_kg": 1.6213518543290812e+16,
+      "relative_difference_to_hybrid_mass": -4.726725378477684e-12
+    },
+    "formula": "sum(dp_k * DX*DY/(MSFTX*MSFTY) / g), dp_k=-[C1H_k*(MU2+MUB)+C2H_k]*DNW_k",
+    "hybrid_dry_air_mass_kg": 1.6204030034989606e+16,
+    "species_mixing_ratio_basis": "KDM6 Q, QC, QR, QI, QS, QG are treated as kg species per kg dry air"
+  },
+  "missing_budget_terms": [
+    "same-call rainncv/snowncv/graupelncv or equivalent bottom sedimentation flux increments",
+    "per-process phase and cleanup tendency ledger to separate internal transfers from nonconservative edits",
+    "same-call thermodynamic tendency/enthalpy ledger and precipitation enthalpy export",
+    "pressure-work and kinetic-energy terms only if asserting a broader whole-model energy budget"
+  ],
+  "negative_qc_cleanup": {
+    "interpretation": "The model microphysics source clips input QC to nonnegative at call entry. This estimate is not a complete decomposition of QC change and is not a new model floor proposal.",
+    "post_negative_cell_count": 0,
+    "pre_negative_cell_count": 23494,
+    "pre_negative_qc_hybrid_mass_correction_kg_if_clipped_to_zero": 2124452.4197621904
+  },
+  "provenance": {
+    "audit_tool": "tools/pr65_samecall_budget_audit.py",
+    "audit_tool_sha256": "3c0c5d4d17b187953bc9197b2cde99273a3551a3ec59c5d92c63261925aa34b6",
+    "budget_test": "tests/test_pr65_samecall_budget_audit.py",
+    "budget_test_sha256": "b260e8ea80c22a4a33c4507097e5fb22bf450a14bd504fa93f1f576ce231db40",
+    "executable_sha256": "53d704da329058ea8fc8de044be9646a5ca470c0ddde8e2ee18a1ffcc49da3b3",
+    "geometry_capture_sha256": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+    "geometry_test": "tests/test_native_kdm6_call_geometry.py",
+    "geometry_test_sha256": "87da0515a0b6ecdfc621a4d92091ae94bdc670bae3ce864f27b9bec4a0bfbb7d",
+    "guard_receipt": "docs/evidence/pr65_nc_donor_run_isolation_20261007.json",
+    "guard_receipt_sha256": "21f62cb20db9402b83886f896f5948f7eadb79f8edf0c906f2670b8524934857",
+    "guarded_run_root": "/var/tmp/pr65_nc_donors_20261007/run_guarded_final",
+    "member_binding_note": "docs/evidence/pr65_kdm6_member_binding_20261007.sha256",
+    "member_binding_note_sha256": "0ac5a7a8b62b01356a740cc499a4352624205dc07fd141c58ef7175b853b3057",
+    "post_capture_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+    "pre_capture_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "replay_command": "python3 tools/pr65_samecall_budget_audit.py /var/tmp/pr65_nc_donors_20261007/run_guarded_final/pr63_geometry.raw /var/tmp/pr65_nc_donors_20261007/run_guarded_final/kdm6_first_call_pre.raw /var/tmp/pr65_nc_donors_20261007/run_guarded_final/kdm6_first_call_post.raw /var/tmp/pr65_nc_donors_20261007/run_guarded_final/run-isolation.json --expected-executable-sha256 53d704da329058ea8fc8de044be9646a5ca470c0ddde8e2ee18a1ffcc49da3b3",
+    "shared_geometry_tool": "tools/native_kdm6_call_geometry.py",
+    "shared_geometry_tool_sha256": "cdc4d1dc0352cf9fb47ff77ca43dcbf16e827961960b2801c4ee728b8826dbec"
+  },
+  "receipt_sha256": "21f62cb20db9402b83886f896f5948f7eadb79f8edf0c906f2670b8524934857",
+  "schema": "pr65_samecall_kdm6_water_budget_audit_v1",
+  "source_inspection": {
+    "archive_path": "/var/tmp/pr65_nc_donors_20261007/link/libwrflib_observer.a",
+    "archive_sha256": "55b6ede90bf2f30a1c7fb74284618a1bac4bd34c80067649bef0f6ac7c0c5c79",
+    "archived_module_mp_kdm6_member_path": "/var/tmp/pr65_nc_donors_20261007/module_mp_kdm6_pr65_archive.o",
+    "archived_module_mp_kdm6_member_sha256": "7717a8531a40b42fa46b9c7fe2be57a844e4692ab820dcf1728a0b3170c971f2",
+    "capture_decision": "No new KDM6 native observer was built. Although the maintained source exposes the accumulator interface and unit/accumulation semantics, the PR65 archive member lacks source/compile provenance. Recompiling this maintained source could change science relative to the guarded executable, and a source-bound uninstrumented control plus instrumented run was not available in this audit.",
+    "capture_inventory": {
+      "guarded_output_manifest_artifacts": [
+        "wrfout_d01_2026-08-16_12:00:00",
+        "kdm6_first_call_pre.raw",
+        "kdm6_first_call_post.raw",
+        "pr63_geometry.raw"
+      ],
+      "pre_post_trace_fields": [
+        "TH",
+        "PII",
+        "DEN",
+        "P",
+        "DELZ",
+        "Q",
+        "QC",
+        "QR",
+        "QI",
+        "QS",
+        "QG",
+        "NN",
+        "NC",
+        "NI",
+        "NR",
+        "BG",
+        "DIAGRHOG",
+        "XLAND"
+      ],
+      "precipitation_accumulator_fields_in_trace": [],
+      "same_call_source_or_process_tendencies_captured": false,
+      "wrfout_same_call_accumulator_binding_established": false,
+      "wrfout_used_for_same_call_budget": false
+    },
+    "member_match_to_pr64_base_archive": true,
+    "pr64_base_archive_path": "/var/tmp/pr64_qc_channel_20261007/link/libwrflib_observer.before.a",
+    "pr64_base_archive_sha256": "71241dcc4ad169365c47d1c303ec11ef5d4acade1bc577c360a5c4cf84f6351f",
+    "runtime_object_binding": "UNVERIFIED: no retained compile command/source hash links the PR65 archived KDM6 member to this maintained source.",
+    "source_budget_implication": "The observed storage delta is real for captured endpoint fields, but it cannot be tested against surface precipitation because no per-call accumulator increment is bound to the KDM6 call. The guarded manifest contains a wrfout artifact, but it does not identify a same-call precipitation increment; the wrfout is therefore excluded. Source code shows these diagnostics are updated, but source equations without runtime values cannot close mass.",
+    "source_object_binding_note": "docs/evidence/pr65_kdm6_member_binding_20261007.sha256",
+    "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_mp_kdm6.F",
+    "source_sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a",
+    "verified_source_paths": [
+      {
+        "finding": "KDM wrapper accepts rain/rainncv and optional snow/snowncv/graupel/graupelncv inout diagnostics, updates q/qci/qrs water species, then writes them back to host arrays.",
+        "lines": "204-211, 252-259, 284, 371-387"
+      },
+      {
+        "finding": "At call entry, qci cloud water and qrs rain/snow/graupel are floored at zero. This can change the input column storage and must be included in a cleanup ledger.",
+        "lines": "750-754"
+      },
+      {
+        "finding": "The source resets rainncv and optional snowncv/graupelncv accumulators at call start.",
+        "lines": "814-819"
+      },
+      {
+        "finding": "Lower-level falling flux updates rainncv, rain and optional snow/graupel accumulation outputs. The source comment describes precipitation accumulation in mm; the visible increment is fall*DELZ/denr*dtcld*1000.",
+        "lines": "1307-1323"
+      }
+    ]
+  },
+  "species_mass_changes": {
+    "Q": {
+      "delta_mass_kg": 582717022207.2579,
+      "delta_mixing_ratio": {
+        "changed_count": 1164661,
+        "count": 2533440,
+        "max_abs": 0.001302043441683054,
+        "maximum": 0.001302043441683054,
+        "minimum": -0.000458473339676857
+      },
+      "post_mass_kg": 89717673146882.83,
+      "pre_mass_kg": 89134956124675.62
+    },
+    "QC": {
+      "delta_mass_kg": -665780902112.782,
+      "delta_mixing_ratio": {
+        "changed_count": 1551864,
+        "count": 2533440,
+        "max_abs": 0.004965765401721001,
+        "maximum": 0.000458404392702505,
+        "minimum": -0.004965765401721001
+      },
+      "post_mass_kg": 1420268023318.9324,
+      "pre_mass_kg": 2086048925431.714
+    },
+    "QG": {
+      "delta_mass_kg": 22708863034.940174,
+      "delta_mixing_ratio": {
+        "changed_count": 69406,
+        "count": 2533440,
+        "max_abs": 0.0023804712836863473,
+        "maximum": 0.0023804712836863473,
+        "minimum": -0.00237795828434173
+      },
+      "post_mass_kg": 39509158089.469444,
+      "pre_mass_kg": 16800295054.529257
+    },
+    "QI": {
+      "delta_mass_kg": -1284139376374.2385,
+      "delta_mixing_ratio": {
+        "changed_count": 853875,
+        "count": 2533440,
+        "max_abs": 0.010035258510470157,
+        "maximum": 0.000817402615211904,
+        "minimum": -0.010035258510470157
+      },
+      "post_mass_kg": 6496842886.342242,
+      "pre_mass_kg": 1290636219260.581
+    },
+    "QR": {
+      "delta_mass_kg": 38601534124.04815,
+      "delta_mixing_ratio": {
+        "changed_count": 366663,
+        "count": 2533440,
+        "max_abs": 0.0036862336382910144,
+        "maximum": 0.0036862336382910144,
+        "minimum": -0.00027922347362618893
+      },
+      "post_mass_kg": 138419446483.51312,
+      "pre_mass_kg": 99817912359.46506
+    },
+    "QS": {
+      "delta_mass_kg": 14780878271.810797,
+      "delta_mixing_ratio": {
+        "changed_count": 267181,
+        "count": 2533440,
+        "max_abs": 0.0024019507691264153,
+        "maximum": 0.0024019507691264153,
+        "minimum": -0.001251555047929287
+      },
+      "post_mass_kg": 366933857470.50256,
+      "pre_mass_kg": 352152979198.6917
+    }
+  },
+  "temperature_change_diagnostic": {
+    "delta_temperature_k": {
+      "changed_count": 1184042,
+      "count": 2533440,
+      "max_abs": 3.2289879915770143,
+      "maximum": 1.1558813347728574,
+      "minimum": -3.2289879915770143
+    },
+    "dry_mass_weighted_delta_temperature_kg_k": -1417963847919256.5,
+    "dry_mass_weighted_mean_delta_temperature_k": -0.08750686371584265,
+    "energy_closure": "OPEN: the same-call thermodynamic tendency/enthalpy ledger and precipitation enthalpy export are not captured. A broader whole-model energy budget would additionally require pressure-work and kinetic-energy terms.",
+    "formula": "T=TH*PII reconstructed in float64 from captured REAL*4 operands; report only, not an energy measure"
+  },
+  "total_water": {
+    "closure": "OPEN: same-call precipitation accumulation/bottom sedimentation flux is not captured; the net storage change cannot be closed or attributed.",
+    "delta_kg": -1291111980849.0156,
+    "post_kg": 91689300475131.6,
+    "pre_kg": 92980412455980.61,
+    "relative_delta": -0.013885849145488167,
+    "species": [
+      "Q",
+      "QC",
+      "QR",
+      "QI",
+      "QS",
+      "QG"
+    ]
+  }
+}

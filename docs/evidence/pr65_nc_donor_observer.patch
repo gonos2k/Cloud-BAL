@@ -1,0 +1,67 @@
+--- a/module_advect_em_pr61_bound.f90
++++ b/module_advect_em_pr65_faces.f90
+@@ -2987,6 +2987,9 @@
+    LOGICAL :: degrade_xe, degrade_ye
+ 
+    INTEGER :: jp1, jp0, jtmp
++   INTEGER :: pr64_context_species,pr64_context_rk,pr64_context_qc,pr64_context_qnc,pr65_unit
++   COMMON /PR64_ADVECT_CONTEXT/ pr64_context_species,pr64_context_rk, &
++        pr64_context_qc,pr64_context_qnc
+ 
+ 
+ 
+@@ -3424,6 +3427,17 @@
+           DO k=kts,ktf
+           DO i = i_start, i_end
+             mrdy=msftx(i,j-1)*rdy    
++            IF (pr64_context_species==pr64_context_qnc .AND. &
++                pr64_context_rk>=1 .AND. pr64_context_rk<=2 .AND. &
++                i==172 .AND. j==77 .AND. k==1) THEN
++              OPEN(NEWUNIT=pr65_unit,FILE='pr65_nc_donor_faces.raw',STATUS='UNKNOWN',POSITION='APPEND',ACTION='WRITE')
++              WRITE(pr65_unit,'(A,1X,5(I0,1X),13(ES24.16,1X))') 'FACE_Y', &
++                pr64_context_rk,pr64_context_species,i,j-1,k, &
++                fqy(i,k,jp0),fqy(i,k,jp1),rv(i,k,j-1),rv(i,k,j), &
++                field(i,k,73),field(i,k,74),field(i,k,75),field(i,k,76), &
++                field(i,k,77),field(i,k,78),field(i,k,79),rdy,msftx(i,j-1)
++              CLOSE(pr65_unit)
++            END IF
+             tendency(i,k,j-1) = tendency(i,k,j-1) - mrdy*(fqy(i,k,jp1)-fqy(i,k,jp0))
+           ENDDO
+           ENDDO
+@@ -3534,6 +3548,19 @@
+           DO k=kts,ktf
+           DO i = i_start, i_end
+             mrdx=msftx(i,j)*rdx      
++            IF (pr64_context_species==pr64_context_qnc .AND. &
++                pr64_context_rk>=1 .AND. pr64_context_rk<=2 .AND. &
++                i==172 .AND. j==76 .AND. k==1) THEN
++              OPEN(NEWUNIT=pr65_unit,FILE='pr65_nc_donor_faces.raw',STATUS='UNKNOWN',POSITION='APPEND',ACTION='WRITE')
++              WRITE(pr65_unit,'(A,1X,5(I0,1X),18(ES24.16,1X))') 'FACE_X', &
++                pr64_context_rk,pr64_context_species,i,j,k, &
++                fqx(i,k),fqx(i+1,k),ru(i,k,j),ru(i+1,k,j), &
++                field(i-3,k,j),field(i-2,k,j),field(i-1,k,j),field(i,k,j), &
++                field(i+1,k,j),field(i+2,k,j), &
++                field(i-2,k,j),field(i-1,k,j),field(i,k,j),field(i+1,k,j), &
++                field(i+2,k,j),field(i+3,k,j),rdx,msftx(i,j)
++              CLOSE(pr65_unit)
++            END IF
+             tendency(i,k,j) = tendency(i,k,j) - mrdx*(fqx(i+1,k)-fqx(i,k))
+           ENDDO
+           ENDDO
+@@ -4219,6 +4246,16 @@
+ 
+          DO k=kts,ktf
+          DO i = i_start, i_end
++            IF (pr64_context_species==pr64_context_qnc .AND. &
++                pr64_context_rk>=1 .AND. pr64_context_rk<=2 .AND. &
++                i==172 .AND. j==76 .AND. k==1) THEN
++              OPEN(NEWUNIT=pr65_unit,FILE='pr65_nc_donor_faces.raw',STATUS='UNKNOWN',POSITION='APPEND',ACTION='WRITE')
++              WRITE(pr65_unit,'(A,1X,5(I0,1X),9(ES24.16,1X))') 'FACE_Z', &
++                pr64_context_rk,pr64_context_species,i,j,k, &
++                vflux(i,k),vflux(i,k+1),rom(i,k,j),rom(i,k+1,j), &
++                field(i,k,j),field(i,k+1,j),fzm(k+1),fzp(k+1),rdzw(k)
++              CLOSE(pr65_unit)
++            END IF
+             tendency(i,k,j)=tendency(i,k,j)-rdzw(k)*(vflux(i,k+1)-vflux(i,k))
+          ENDDO
+          ENDDO

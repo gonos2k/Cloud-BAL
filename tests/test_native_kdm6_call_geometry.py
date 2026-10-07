@@ -15,8 +15,9 @@ _SPEC = importlib.util.spec_from_file_location("native_kdm6_call_geometry", _MOD
 assert _SPEC is not None and _SPEC.loader is not None
 _MODULE = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_MODULE)
-ARRAY_NAMES, STAGES, audit, parse_geometry = (
-    _MODULE.ARRAY_NAMES, _MODULE.STAGES, _MODULE.audit, _MODULE.parse_geometry
+ARRAY_NAMES, STAGES, active_geometry_measure, audit, parse_geometry = (
+    _MODULE.ARRAY_NAMES, _MODULE.STAGES, _MODULE.active_geometry_measure,
+    _MODULE.audit, _MODULE.parse_geometry
 )
 
 TRACE_FIELDS_3D = ("TH", "PII", "DEN", "P", "DELZ", "Q", "QC", "QR", "QI",
@@ -113,6 +114,18 @@ class NativeGeometryParserTests(unittest.TestCase):
         self.assertEqual([r["stage"] for r in records], list(STAGES))
         self.assertEqual(records[0]["arrays"]["mu2"].shape, (2, 2))
         self.assertEqual(records[0]["timestep"], 1)
+
+    def test_active_hybrid_measure_matches_kdm_active_shape(self):
+        records = parse_geometry(valid_capture())
+        with tempfile.TemporaryDirectory() as tmp:
+            trace_path = Path(tmp) / "kdm_pre.raw"
+            trace_path.write_bytes(encode_kdm_trace(1, 20.0))
+            kdm = _MODULE._load_trace_reader()(trace_path)
+        measure = active_geometry_measure(records[0], kdm)
+        self.assertEqual(measure["dp"].shape, (2, 2, 2))
+        self.assertEqual(measure["area"].shape, (2, 2))
+        self.assertTrue(np.all(measure["dp"] > 0.0))
+        self.assertTrue(np.all(measure["dry_mass"] > 0.0))
 
     def test_wrong_magic_is_rejected(self):
         raw = b"BADMAGIC" + valid_capture()[8:]
