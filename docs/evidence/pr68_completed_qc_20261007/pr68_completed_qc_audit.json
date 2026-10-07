@@ -1,0 +1,377 @@
+{
+  "pr67_first_negative_replay": {
+    "first_negative_cell_term_evidence": {
+      "rk1": {
+        "advect_tendency_sign": {
+          "negative": 21331,
+          "positive": 110
+        },
+        "base_q_sign": {
+          "positive": 41,
+          "zero": 21400
+        },
+        "first_negative_cells": 21441,
+        "maximum_dt": 6.666666507720947,
+        "minimum_dt": 6.666666507720947,
+        "minimum_new_mass": 65296.62109375,
+        "minimum_old_mass": 65194.70703125,
+        "negative_if_advection_omitted": 10338,
+        "negative_if_physical_term_omitted": 21330,
+        "physical_tendency_sign": {
+          "negative": 10361,
+          "positive": 11078,
+          "zero": 2
+        },
+        "scaled_advect_sign": {
+          "negative": 21331,
+          "positive": 110
+        }
+      },
+      "rk2": {
+        "advect_tendency_sign": {
+          "negative": 1109,
+          "positive": 30
+        },
+        "base_q_sign": {
+          "positive": 2,
+          "zero": 1137
+        },
+        "first_negative_cells": 1139,
+        "maximum_dt": 10.0,
+        "minimum_dt": 10.0,
+        "minimum_new_mass": 65852.25,
+        "minimum_old_mass": 65720.375,
+        "negative_if_advection_omitted": 137,
+        "negative_if_physical_term_omitted": 1108,
+        "physical_tendency_sign": {
+          "negative": 138,
+          "positive": 833,
+          "zero": 168
+        },
+        "scaled_advect_sign": {
+          "negative": 1109,
+          "positive": 30
+        }
+      },
+      "rk3": {
+        "advect_tendency_sign": {
+          "negative": 492,
+          "positive": 422
+        },
+        "base_q_sign": {
+          "negative": 566,
+          "positive": 322,
+          "zero": 26
+        },
+        "first_negative_cells": 914,
+        "maximum_dt": 20.0,
+        "minimum_dt": 20.0,
+        "minimum_new_mass": 68403.109375,
+        "minimum_old_mass": 68462.078125,
+        "negative_if_advection_omitted": 566,
+        "negative_if_physical_term_omitted": 914,
+        "physical_tendency_sign": {
+          "zero": 914
+        },
+        "scaled_advect_sign": {
+          "negative": 492,
+          "positive": 422
+        }
+      }
+    },
+    "interpretation_limits": [
+      "The no-advection and no-physical counts are binary32 component-omission screens; they are not independent causal interventions or a conserved-flux replay.",
+      "The source observer records the native advection tendency and mass factor, not face-by-face advection fluxes.",
+      "The physical tendency also includes RK1 horizontal diffusion when enabled; it cannot be identified with PBL mixing alone.",
+      "The PBL channel columns in the run3 record are ignored because SHCU/NC-SHCU values were invalid and process-channel closure failed; only the aggregate physical tendency passed to the update is replayed.",
+      "The replay identifies the first completed negative-QC boundary and verifies the local update equation. It does not establish which physical process should be changed."
+    ],
+    "negative_qc": {
+      "all_combined_tendencies_reconstructed": 23494,
+      "all_first_negative_cells_reconstructed_by_binary32_update": 23494,
+      "all_new_mass_denominators_reconstructed": 23494,
+      "all_old_mass_denominators_reconstructed": 23494,
+      "all_reconstructed_values_match_native_after_update": 23494,
+      "all_scaled_advection_terms_reconstructed": 23494,
+      "first_negative_after_rk1": 21441,
+      "first_negative_after_rk2": 1139,
+      "first_negative_after_rk3": 914,
+      "flow_boundary_added_negatives_outside_kdm_window": {
+        "rk1": 1718,
+        "rk2": 4088,
+        "rk3": 45
+      },
+      "kdm_entry_cells": 23494,
+      "negative_cell_sets_match_transition_masks_at_each_captured_boundary": true,
+      "negative_cells_at_completed_rk1_full_transition_mask": 163244,
+      "negative_cells_at_completed_rk1_kdm_window": 161526,
+      "negative_cells_at_completed_rk2_full_transition_mask": 399233,
+      "negative_cells_at_completed_rk2_kdm_window": 395145,
+      "negative_cells_at_completed_rk3_full_transition_mask": 23539,
+      "negative_cells_at_completed_rk3_kdm_window": 23494,
+      "transition_mask_negatives_outside_kdm_window": {
+        "rk1": 1718,
+        "rk2": 4088,
+        "rk3": 45
+      }
+    },
+    "observer_record_counts": {
+      "after_diabatic_kdm_window": 580165,
+      "after_diabatic_rk1_kdm_window": 161526,
+      "after_diabatic_rk1_total": 161526,
+      "after_diabatic_rk2_kdm_window": 395145,
+      "after_diabatic_rk2_total": 395145,
+      "after_diabatic_rk3_kdm_window": 23494,
+      "after_diabatic_rk3_total": 23494,
+      "after_diabatic_total": 580165,
+      "after_flow_bdy_kdm_window": 580165,
+      "after_flow_bdy_rk1_kdm_window": 161526,
+      "after_flow_bdy_rk1_total": 163244,
+      "after_flow_bdy_rk2_kdm_window": 395145,
+      "after_flow_bdy_rk2_total": 399233,
+      "after_flow_bdy_rk3_kdm_window": 23494,
+      "after_flow_bdy_rk3_total": 23539,
+      "after_flow_bdy_total": 586016,
+      "after_update_kdm_window": 580165,
+      "after_update_rk1_kdm_window": 161526,
+      "after_update_rk1_total": 161526,
+      "after_update_rk2_kdm_window": 395145,
+      "after_update_rk2_total": 395145,
+      "after_update_rk3_kdm_window": 23494,
+      "after_update_rk3_total": 23494,
+      "after_update_total": 580165,
+      "ignored_run3_channel_invalid_nc_shcu": 2235,
+      "ignored_run3_channel_invalid_shcu": 2303,
+      "qc_pre_rk1_kdm_window": 161526,
+      "qc_pre_rk1_total": 164321,
+      "qc_pre_rk2_kdm_window": 238762,
+      "qc_pre_rk2_total": 242492,
+      "qc_pre_rk3_kdm_window": 1048,
+      "qc_pre_rk3_total": 3332,
+      "qc_pre_total": 410145,
+      "run3_channel_schema_rows": 410145
+    },
+    "provenance": {
+      "baseline_dir": "/var/tmp/pr65_pbl_lineage_20261007/run_sharednc_postcapture_pinned",
+      "baseline_hashes_match_observer": true,
+      "declared_unchanged_input_count": 102,
+      "expected_executable_sha256": "038a255a40944c41db86254f0113a25ea90d704bcf57ff227368faeef7909251",
+      "kdm_post_sha256": "2a12ae233ace7ef8e2b0a79c3b9de778a237b8bb7570f980d835272647d8109b",
+      "kdm_pre_sha256": "5e45b2d0c719909739db5bc20689ac2e9738ed850902e3b327c32a425b2b7ea8",
+      "observer_dir": "/var/tmp/pr68_completed_qc_20261007/run_final",
+      "observer_raw_sha256": "0ae93af19183c60dc2bbf178349fe37703f739513daa641adb221b1dd4af97d1",
+      "observer_run_receipt_sha256": "16979d554d3e7c7648d9a630259dfbecfb59cd102b83fe14157fc93c3c87495c",
+      "observer_source_path": "/var/tmp/pr68_completed_qc_20261007/source_pr68_completed_qc.f90",
+      "observer_source_sha256": "c099486a3f0913e8cf4998e9e98c95fc388980f38159494c03f02447c955e926",
+      "replay_tool_sha256": "f40b53c399c5c4cd3c2e64eac4807d3e981c1748402fe4410bfa69df5b0bbe55",
+      "run_executable_receipt_input_sha256": "038a255a40944c41db86254f0113a25ea90d704bcf57ff227368faeef7909251",
+      "run_executable_sha256": "038a255a40944c41db86254f0113a25ea90d704bcf57ff227368faeef7909251",
+      "transition_masks_sha256": "34501d78da7669303654a82de31106249825b55a8888c7bc8c4cb31fa0e9cf1e"
+    },
+    "schema": "pr67_negative_qc_replay_v1"
+  },
+  "process_interpretation": {
+    "limits": [
+      "No face fluxes were captured; the cell advection tendency cannot establish face-by-face conservative flux behavior.",
+      "No PBL-versus-convection numeric split is claimed; the captured increment is the active aggregate source update.",
+      "No inactive or uninitialized process channel values are interpreted.",
+      "No QC floor, tendency zeroing, or physics-option change was applied."
+    ],
+    "rk1_closure": "For each target RK1 cell, P2_POST equals RK_TEND_PRE, RK_TEND_POST equals UPDATE_PRE, and UPDATE_PRE equals the aggregate physical_tend recorded by PR67. Thus the aggregate physical update is resolved into the actual physics-source increment and later RK tendency increment at these boundaries.",
+    "rk1_diffusion_increment": "RK_TEND_POST - RK_TEND_PRE measures the binary32 tendency change inside rk_scalar_tend. The receipt-bound namelist.output has diff_opt=1, diff_6th_opt=0, moist_mix2_off=F and bl_pbl_physics=11. In the linked rk_scalar_tend source, horizontal diffusion is active for diff_opt=1 when moist_mix2_off is false; its vertical diffusion guard requires bl_pbl_physics=0 and is therefore false. Sixth-order diffusion is disabled. This measured increment is the active horizontal-diffusion tendency change for RK1 under this configuration.",
+    "rk1_source_increment": "P2_POST - P1_POST measures the active update_phy_ten QC tendency increment. With BL PBL and CU options active and SHCU inactive, it is the aggregate of configured PBL and convection source contributions. Per-cell channel arrays were not read from potentially stale inactive channels.",
+    "runtime_configuration_from_namelist_output": {
+      "bl_pbl_physics": 11,
+      "cu_physics": 37,
+      "diff_6th_opt": 0,
+      "diff_opt": 1,
+      "have_bcs_moist": false,
+      "km_opt": 4,
+      "moist_mix2_off": false,
+      "moist_mix6_off": false,
+      "nested": false,
+      "shcu_physics": 0,
+      "specified": true,
+      "use_q_diabatic": 0
+    }
+  },
+  "provenance": {
+    "build_chain": {
+      "archived_solve_em_member_sha256": "84f268aace8b8809bb764911b538f7a2a838f6a4b7a2bedb262208edbb7c3894",
+      "compile_command_sha256": "9d82b5a3863bfa3ab75766229834b4b916548042d125b80c6244111576036f7d",
+      "link_archive_sha256": "55b7f451e4888bccc6106da14dd3052044db04de1da096f613115263dfd9cbe7",
+      "link_command_sha256": "becd65c774d9e0c8257d2fd8f8296db165c7f7ea9aaf9b28965975b048123dcc",
+      "linked_executable_sha256": "038a255a40944c41db86254f0113a25ea90d704bcf57ff227368faeef7909251",
+      "observer_object_sha256": "84f268aace8b8809bb764911b538f7a2a838f6a4b7a2bedb262208edbb7c3894"
+    },
+    "declared_unchanged_input_count": 102,
+    "keyed_after_update_matches": 67381,
+    "keyed_initialized_pr64_process_matches": 9,
+    "keyed_initialized_pre_column_matches": 23628,
+    "matched_baseline_output_sha256": {
+      "kdm6_first_call_post.raw": {
+        "baseline": "2a12ae233ace7ef8e2b0a79c3b9de778a237b8bb7570f980d835272647d8109b",
+        "observer": "2a12ae233ace7ef8e2b0a79c3b9de778a237b8bb7570f980d835272647d8109b"
+      },
+      "kdm6_first_call_pre.raw": {
+        "baseline": "5e45b2d0c719909739db5bc20689ac2e9738ed850902e3b327c32a425b2b7ea8",
+        "observer": "5e45b2d0c719909739db5bc20689ac2e9738ed850902e3b327c32a425b2b7ea8"
+      },
+      "namelist.output": {
+        "baseline": "ad2164d8d0db9eac8cf778e8a05b8e56ec68c9fa0a85f8a503c045ad075429d9",
+        "observer": "ad2164d8d0db9eac8cf778e8a05b8e56ec68c9fa0a85f8a503c045ad075429d9"
+      },
+      "pr63_geometry.raw": {
+        "baseline": "af81c3a03fb55205908d9ddc5c19f2c8b89f6e6879ca08dbcb8fb7644c26ee8f",
+        "observer": "af81c3a03fb55205908d9ddc5c19f2c8b89f6e6879ca08dbcb8fb7644c26ee8f"
+      },
+      "pr63_transition_masks.bin": {
+        "baseline": "34501d78da7669303654a82de31106249825b55a8888c7bc8c4cb31fa0e9cf1e",
+        "observer": "34501d78da7669303654a82de31106249825b55a8888c7bc8c4cb31fa0e9cf1e"
+      },
+      "pr63_transition_stages.raw": {
+        "baseline": "89317f9c3ab3f5939c57a913a94674e569b0c36892c9de91cfd6622e7588dbc9",
+        "observer": "89317f9c3ab3f5939c57a913a94674e569b0c36892c9de91cfd6622e7588dbc9"
+      },
+      "pr65_pbl_nc.raw": {
+        "baseline": "be94b846e487a544852d24eb85702dad70e7997faa0de42415e2027702b673a1",
+        "observer": "be94b846e487a544852d24eb85702dad70e7997faa0de42415e2027702b673a1"
+      },
+      "pr65_pbl_operator.raw": {
+        "baseline": "fa937f9d19540cec65059bf8f1d78c27e8a739cc26e015da0ea1bb5b9fa588a0",
+        "observer": "fa937f9d19540cec65059bf8f1d78c27e8a739cc26e015da0ea1bb5b9fa588a0"
+      },
+      "wrfout_d01_2026-08-16_12:00:00": {
+        "baseline": "c7f20c60be9343b1c4afcbb32e6c5851c9c5fc018807ffb44454ab068fedbb56",
+        "observer": "c7f20c60be9343b1c4afcbb32e6c5851c9c5fc018807ffb44454ab068fedbb56"
+      }
+    },
+    "namelist_input_sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+    "namelist_output_sha256": "ad2164d8d0db9eac8cf778e8a05b8e56ec68c9fa0a85f8a503c045ad075429d9",
+    "neutral_baseline_outputs_byte_identical": [
+      "wrfout_d01_2026-08-16_12:00:00",
+      "namelist.output",
+      "pr63_transition_masks.bin",
+      "kdm6_first_call_pre.raw",
+      "kdm6_first_call_post.raw",
+      "pr63_transition_stages.raw",
+      "pr63_geometry.raw",
+      "pr65_pbl_operator.raw",
+      "pr65_pbl_nc.raw"
+    ],
+    "observer_qc_raw_sha256": "0ae93af19183c60dc2bbf178349fe37703f739513daa641adb221b1dd4af97d1",
+    "observer_receipt_sha256": "16979d554d3e7c7648d9a630259dfbecfb59cd102b83fe14157fc93c3c87495c",
+    "observer_source_sha256": "c099486a3f0913e8cf4998e9e98c95fc388980f38159494c03f02447c955e926",
+    "observer_stage_sha256": "6e450fe0dce61a4de8d02a7a652a743973aaed4ef22f9104af298cb66390abc5",
+    "raw_diagnostic_whole_file_hashes_differ_from_reference": {
+      "pr64_qc_channels.raw": {
+        "observer": "b33ba75084dc3d071649b9fda4a70cd4bbf29307c55fe9f9c69fc79659aeca9a",
+        "reference": "71fd1d07758b9dfd318df112e2a5f05fd61875adadc1db2bf8e4b79a588cb7a7"
+      },
+      "pr67_qc_rk.raw": {
+        "observer": "0ae93af19183c60dc2bbf178349fe37703f739513daa641adb221b1dd4af97d1",
+        "reference": "371ccfc25150d4ce7beb77a72c395e30920084721f206e6c48f1778c4283cd13"
+      }
+    },
+    "reference_qc_raw_sha256": "371ccfc25150d4ce7beb77a72c395e30920084721f206e6c48f1778c4283cd13",
+    "run_executable_sha256": "038a255a40944c41db86254f0113a25ea90d704bcf57ff227368faeef7909251",
+    "target_coordinate_sha256": "c3cbbc7ac6a381b4530ff118e0b7131eafe6600691d904289c691faa03a91292"
+  },
+  "schema": "pr68_completed_qc_audit_v1",
+  "stage_boundary_exact_identity_counts": {
+    "aggregate_physical_to_update_pre": 21441,
+    "diffusion_to_update_entry": 70482,
+    "first_negative_update_post_match": 23494,
+    "physics_to_rk_entry": 23494
+  },
+  "stage_increment_summary_binary32": {
+    "first_negative_cell_increments": {
+      "rk_scalar_tend_increment_post_minus_pre": {
+        "rk1": {
+          "count": 21441,
+          "max": 0.0017909908201545477,
+          "min": -1.428881660103798e-06,
+          "signs": {
+            "negative": 16,
+            "positive": 654,
+            "zero": 20771
+          },
+          "sum_abs_binary32_values": 0.019969196789769383
+        },
+        "rk2": {
+          "count": 1139,
+          "max": 0.0,
+          "min": 0.0,
+          "signs": {
+            "zero": 1139
+          },
+          "sum_abs_binary32_values": 0.0
+        },
+        "rk3": {
+          "count": 914,
+          "max": 0.0,
+          "min": 0.0,
+          "signs": {
+            "zero": 914
+          },
+          "sum_abs_binary32_values": 0.0
+        }
+      },
+      "update_phy_ten_increment_rk1_P2_minus_P1": {
+        "count": 21441,
+        "max": 3.7856452195228485e-07,
+        "min": -0.002857307903468609,
+        "signs": {
+          "negative": 10362,
+          "positive": 11076,
+          "zero": 3
+        },
+        "sum_abs_binary32_values": 0.9049381385703057
+      }
+    },
+    "rk_scalar_tend_increment_post_minus_pre": {
+      "rk1": {
+        "count": 23494,
+        "max": 0.0017909908201545477,
+        "min": -1.428881660103798e-06,
+        "signs": {
+          "negative": 17,
+          "positive": 712,
+          "zero": 22765
+        },
+        "sum_abs_binary32_values": 0.020462701257947358
+      },
+      "rk2": {
+        "count": 23494,
+        "max": 0.0,
+        "min": 0.0,
+        "signs": {
+          "zero": 23494
+        },
+        "sum_abs_binary32_values": 0.0
+      },
+      "rk3": {
+        "count": 23494,
+        "max": 0.0,
+        "min": 0.0,
+        "signs": {
+          "zero": 23494
+        },
+        "sum_abs_binary32_values": 0.0
+      }
+    },
+    "update_phy_ten_increment_P2_minus_P1": {
+      "rk1": {
+        "count": 23494,
+        "max": 1.8670978079171618e-06,
+        "min": -0.002875310368835926,
+        "signs": {
+          "negative": 11067,
+          "positive": 12229,
+          "zero": 198
+        },
+        "sum_abs_binary32_values": 1.0135546655289862
+      }
+    }
+  }
+}

@@ -168,14 +168,15 @@ def float32_update(values: np.ndarray, omit: str = "") -> np.float32:
 
 
 def summarize(observer: Path, baseline: Path, expected_executable: Path | None = None,
-              observer_source: Path | None = None) -> dict:
+              observer_source: Path | None = None,
+              expected_input_count: int = 101) -> dict:
     receipt = json.loads((observer / "run-isolation.json").read_text())
     if (receipt.get("returncode") != 0 or receipt.get("input_integrity") != "PASS" or
             receipt.get("output_isolation") != "PASS" or receipt.get("changed_inputs") or
             receipt.get("input_read_issues") or receipt.get("output_issues")):
         raise ValueError("guarded observer run or its isolation checks did not pass")
     inputs = receipt.get("inputs", [])
-    if len(inputs) != 101 or any(item.get("sha256_before") != item.get("sha256_after")
+    if len(inputs) != expected_input_count or any(item.get("sha256_before") != item.get("sha256_after")
                                   for item in inputs):
         raise ValueError("declared run inputs are incomplete or changed")
     executable_inputs = [item for item in inputs

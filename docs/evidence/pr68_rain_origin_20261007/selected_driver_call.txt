@@ -1,0 +1,59 @@
+        CASE (KDM6SCHEME)
+             CALL wrf_debug ( 100 , 'microphysics_driver: calling kdm6' )
+             IF ( PRESENT( QV_CURR ) .AND. PRESENT ( QC_CURR ) .AND.  &
+                  PRESENT( QR_CURR ) .AND. PRESENT ( QI_CURR ) .AND.  &
+                  PRESENT( QS_CURR ) .AND. PRESENT ( QG_CURR ) .AND.  &
+                  PRESENT( QNN_CURR ) .AND. PRESENT ( QNC_CURR ) .AND.&
+                  PRESENT( QNI_CURR ).AND.  PRESENT( QNR_CURR ).AND.  &
+                  PRESENT( QIB_CURR).AND.PRESENT( RHOPO3D).AND.       &
+                  PRESENT( RAINNC  ) .AND. PRESENT ( RAINNCV )  ) THEN
+             CALL kdm6(                                             & 
+                  TH=th                                             &    
+                 ,Q=qv_curr                                         &    
+                 ,QC=qc_curr                                        &    
+                 ,QR=qr_curr                                        &    
+                 ,QI=qi_curr                                        &
+                 ,QS=qs_curr                                        & 
+                 ,QG=qg_curr                                        &
+                 ,NN=qnn_curr                                       &
+                 ,NC=qnc_curr                                       &
+                 ,NI=qni_curr                                       & 
+                 ,NR=qnr_curr                                       &
+                 ,BG=qib_curr                                       &
+                 ,diag_rhog=rhopo3d                                 &
+                 ,DEN=rho,PII=pi_phy,P=p,DELZ=dz8w                  &
+                 ,DELT=dt,G=g,CPD=cp,CPV=cpv,CCN0=ccn_conc          & 
+                 ,RD=r_d,RV=r_v,T0C=svpt0                           &
+                 ,EP1=ep_1, EP2=ep_2, QMIN=epsilon                  &
+                 ,XLS=xls, XLV0=xlv, XLF0=xlf                       &
+                 ,DEN0=rhoair0, DENR=rhowater                       &
+                 ,scale_h=scale_h                                   & 
+                 ,qnn_land_mult=qnn_land_mult                       &
+                 ,qnn_sea_mult=qnn_sea_mult                         &
+                 ,ncmin_land=ncmin_land                             & 
+                 ,ncmin_sea=ncmin_sea                               & 
+                 ,CLIQ=cliq,CICE=cice,PSAT=psat                     &
+                 ,xland=xland                                       &  
+                 ,RAIN=rainnc ,RAINNCV=rainncv                      & 
+                 ,SNOW=snownc ,SNOWNCV=snowncv                      &
+                 ,SR=sr                                             &
+                 ,REFL_10CM=refl_10cm                               &  
+
+                 ,diagflag=.true.                                   &  
+                 ,do_radar_ref=do_radar_ref                         &  
+                 ,GRAUPEL=graupelnc ,GRAUPELNCV=graupelncv          & 
+                 ,ITIMESTEP=itimestep                               &
+                 ,has_reqc=has_reqc                                 &  
+                 ,has_reqi=has_reqi                                 &
+                 ,has_reqs=has_reqs                                 &
+                 ,re_cloud=re_cloud                                 &
+                 ,re_ice=re_ice                                     &
+                 ,re_snow=re_snow                                   &  
+                 ,IDS=ids,IDE=ide, JDS=jds,JDE=jde, KDS=kds,KDE=kde &
+                 ,IMS=ims,IME=ime, JMS=jms,JME=jme, KMS=kms,KME=kme &
+                 ,ITS=its,ITE=ite, JTS=jts,JTE=jte, KTS=kts,KTE=kte &
+                  )
+             ELSE
+                 CALL wrf_error_fatal3("<stdin>",2325,&
+'arguments not present for calling kdm6')
+             ENDIF

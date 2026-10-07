@@ -1,0 +1,47 @@
+{
+  "artifacts": {
+    "compile_argv.json": {
+      "original_path": "/var/tmp/pr68_completed_qc_20261007/compile_command.json",
+      "sha256": "9d82b5a3863bfa3ab75766229834b4b916548042d125b80c6244111576036f7d"
+    },
+    "link_argv.json": {
+      "original_path": "/var/tmp/pr68_completed_qc_20261007/link_final_command.json",
+      "sha256": "becd65c774d9e0c8257d2fd8f8296db165c7f7ea9aaf9b28965975b048123dcc"
+    },
+    "run_argv.json": {
+      "original_path": "/var/tmp/pr68_completed_qc_20261007/run_final_command.json",
+      "sha256": "2544223924316a142ed755521d52f71f8a5f97a47572e699bfc9f6ae0d2af93d"
+    }
+  },
+  "base_source": {
+    "path": "/var/tmp/pr67_negativeqc_20261007/source_channels/solve_em_pr67_negativeqc_channels.f90",
+    "sha256": "54c2697158a7d6efb307ba90956a17c4607cc5a7fb4a82fc3a18d974f704abed"
+  },
+  "executable": {
+    "path": "/var/tmp/pr68_completed_qc_20261007/link_final/main/wrf_pr68_completed_qc.exe",
+    "sha256": "038a255a40944c41db86254f0113a25ea90d704bcf57ff227368faeef7909251"
+  },
+  "link_archive": {
+    "member": "solve_em.o",
+    "member_sha256": "84f268aace8b8809bb764911b538f7a2a838f6a4b7a2bedb262208edbb7c3894",
+    "path": "/var/tmp/pr68_completed_qc_20261007/link_final/main/libwrflib_pr65.a",
+    "sha256": "55b7f451e4888bccc6106da14dd3052044db04de1da096f613115263dfd9cbe7"
+  },
+  "object": {
+    "path": "/var/tmp/pr68_completed_qc_20261007/solve_em_pr68_completed_qc.o",
+    "sha256": "84f268aace8b8809bb764911b538f7a2a838f6a4b7a2bedb262208edbb7c3894"
+  },
+  "observer_source": {
+    "path": "/var/tmp/pr68_completed_qc_20261007/source_pr68_completed_qc.f90",
+    "sha256": "c099486a3f0913e8cf4998e9e98c95fc388980f38159494c03f02447c955e926"
+  },
+  "patch": {
+    "path": "docs/evidence/pr68_completed_qc_20261007/observer.patch",
+    "reconstructed_source_sha256": "c099486a3f0913e8cf4998e9e98c95fc388980f38159494c03f02447c955e926",
+    "sha256": "f6ba43aef5775b8a888f472b1b5a1ebafdae6668cbb3767bd8bdd0fb3161d873",
+    "verification_dir": "/var/tmp/pr68_qc_patch_verify.c1_lgsff"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "schema": "pr68_completed_qc_observer_delta_v1",
+  "scope": "Observation-only solve_em delta; public captured arrays have INTENT(IN). Captured expanded compile/link/run argv. Retained host objects and dependencies limit full source/compiler closure. One rank, one tile; general parallel observer safety is not validated."
+}

@@ -1,0 +1,319 @@
+{
+  "captured_source": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_combined_research.f90",
+  "captured_source_sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d",
+  "checks": {
+    "O0_log_sha256": "c7c36121078cf982c780ab871081c8b1df37c5e1ba2f88a5708a4b5c8c66d5bb",
+    "O2_log_sha256": "c7c36121078cf982c780ab871081c8b1df37c5e1ba2f88a5708a4b5c8c66d5bb",
+    "halo_index_mapping": "PASS",
+    "m_to_cm_speed_and_thickness_invariance": "PASS",
+    "nonuniform_dz_and_halo_bounds": "PASS",
+    "pinned_intel_O0": "PASS",
+    "pinned_intel_O2": "PASS",
+    "process_observer_uses_ice_mass_rate": "PASS",
+    "repeated_minor_loop_refresh": "PASS",
+    "separate_mass_number_rates": "PASS",
+    "seven_slope_calls_named": "PASS",
+    "three_transport_refreshes_wired": "PASS",
+    "tight_binary64_rate_expectations": "PASS",
+    "zero_moment_flux_despite_nonzero_speed": "PASS",
+    "zero_speed": "PASS"
+  },
+  "compiler": "ifx (IFX) 2026.0.0 20260331",
+  "date_utc": "2026-10-07",
+  "helper_validation_receipt": {
+    "o0_log_sha256": "c7c36121078cf982c780ab871081c8b1df37c5e1ba2f88a5708a4b5c8c66d5bb",
+    "o0_o2": "PASS",
+    "o2_log_sha256": "c7c36121078cf982c780ab871081c8b1df37c5e1ba2f88a5708a4b5c8c66d5bb",
+    "path": "/var/tmp/cloud_bal_pr68_velocity.DAzSaj/validation.json",
+    "sha256": "26229e389b6446d71e9b797747a10b172b5e185a46d3451b6b01001aa4787443"
+  },
+  "matched_native_run": {
+    "baseline_receipt": {
+      "changed_inputs": 0,
+      "executable_sha256": "517a4813dc3da539b9e2bbf2faf79fd55cef9c2936353ebc92f10129f8139919",
+      "exit_code": 0,
+      "input_integrity": "PASS",
+      "inputs": 101,
+      "output_isolation": "PASS",
+      "output_records_all_nlink_1": true,
+      "outputs": 16,
+      "path": "/var/tmp/pr68_velocity_native_20261007/run_baseline/run-isolation-pr68.json",
+      "sha256": "15a495c39d39bedee7f085d06f226710302ccf896d6bb46f252d2fe258e9079a"
+    },
+    "candidate_build": {
+      "archive_sha256": "9d39c7527918013eff610d43a1f3449aa08a622b373b9d3fc6b3421a4f888d68",
+      "compile_argv_path": "/var/tmp/pr68_velocity_native_20261007/compile_argv.json",
+      "compile_argv_sha256": "6c408f7de6866107d65a70939bf330a51a215f9f1108a01e1e3eeb68d57e72ab",
+      "compiler": "ifx (IFX) 2026.0.0 20260331",
+      "link_argv_path": "/var/tmp/pr68_velocity_native_20261007/link_argv.json",
+      "link_argv_sha256": "a1ddb18743cf5a2caab1629b5e084172da16890abce8353260531125c99908f9",
+      "object_sha256": "e67789edf8eb227ea5fd0a5ca4e48695517723e4ac0a9f14b52e5d6b86e9f28f",
+      "source_sha256": "97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa"
+    },
+    "candidate_receipt": {
+      "changed_inputs": 0,
+      "executable_sha256": "536a7b8863f0a34e40ce9e4367678e0e5538155532c8cd26aab9d02e0a7eb19d",
+      "exit_code": 0,
+      "input_integrity": "PASS",
+      "inputs": 101,
+      "output_isolation": "PASS",
+      "output_records_all_nlink_1": true,
+      "outputs": 16,
+      "path": "/var/tmp/pr68_velocity_native_20261007/run_candidate/run-isolation-pr68.json",
+      "sha256": "a73ffc4132a1e9761d5e78149443fdc3e8d118f0de25d4316fe563c4550b29da"
+    },
+    "comparison": "Geometry/stages/masks/pre-call trace are bitwise equal between baseline and candidate. Post-call KDM trace, process capture, and wrfout differ. Baseline key products match retained PR67 combined run; its stderr/log/env/runtime-library outputs differ because of new run directory and launch context.",
+    "interpretation": "Both guarded executions passed process/input/output isolation checks. Candidate is not bitwise neutral after KDM6; behavior change is observed but not scientifically accepted.",
+    "key_output_hashes": {
+      "baseline": {
+        "geometry": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+        "kdm_post": "07f4706ca3a2613c64fd4b0cc4459880616a29a7504fa2891b81242bf782dc30",
+        "kdm_pre": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+        "kdm_process": "4c9447daea830d8220aa5c67122b00b844eb80346fde32369547fa236c0a66d9",
+        "transition_masks": "dbec19cd475aee01d9c8a18bd6ce1755cea585935d73c909b410486083ab6e6e",
+        "transition_stages": "46283bca2a1666ac42ec3fae113264b9f5de8490edb21492767a8d6064a991cf",
+        "wrfout": "20bf58a4f8ceaf556cbbe9ac8e23a2a9334ed7ac1fa0c5313efe30f5de539f41"
+      },
+      "candidate": {
+        "geometry": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+        "kdm_post": "533daa5bedac451698ad5963cd4a44bd5cacd64b237931d468e3af5715b6e596",
+        "kdm_pre": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+        "kdm_process": "2bd1d071a288ab330f2a541e1861693ae1b6b45af7549e2003658746907abace",
+        "transition_masks": "dbec19cd475aee01d9c8a18bd6ce1755cea585935d73c909b410486083ab6e6e",
+        "transition_stages": "46283bca2a1666ac42ec3fae113264b9f5de8490edb21492767a8d6064a991cf",
+        "wrfout": "a209144ca250353dd13ed4423cd6bfde46b5493725eafe6cb82afe46042ebd87"
+      }
+    },
+    "run_root": "/var/tmp/pr68_velocity_native_20261007",
+    "scope": "Matched one-rank 20-second native source-copy check; no whole-model science claim"
+  },
+  "matched_native_runs": {
+    "o3_candidate_vs_retained_combined": {
+      "all_output_files_nlink_1": true,
+      "candidate_archive_member_name": "module_mp_kdm6.o",
+      "candidate_archive_member_sha256": "1c170a5a77f532fcb843dccec2a0b71c8427c0702960ee301d02cc4306fe6e29",
+      "candidate_archive_path": "/var/tmp/pr68_velocity_native_20261007/revised_o3/archive/libwrflib_pr65.a",
+      "candidate_archive_sha256": "5d6b240df7e377f0dd0df365ddeac4b2d418f6b4632eb4cdbc1d7ccafc7e2a66",
+      "candidate_executable_path": "/var/tmp/pr68_velocity_native_20261007/revised_o3/executable/wrf.exe",
+      "candidate_executable_sha256": "9559499836a37cf70f4e43f69bf67a3e6c7687246405b2021ea23c94f06abdfa",
+      "candidate_object_path": "/var/tmp/pr68_velocity_native_20261007/revised_o3/object/module_mp_kdm6.o",
+      "candidate_object_sha256": "1c170a5a77f532fcb843dccec2a0b71c8427c0702960ee301d02cc4306fe6e29",
+      "candidate_receipt_path": "/var/tmp/pr68_velocity_native_20261007/revised_o3/run/run-isolation-pr68-o3.json",
+      "candidate_receipt_sha256": "156cec7ef290b994e7750d86f4f30d33b73a34478dd718906f8ceec0b4c709e3",
+      "candidate_source_sha256": "aeda1032e6255fda5404a48a6a698020ea914215d8e2851f8d6f8b5bb1930ce2",
+      "changed_inputs": 0,
+      "compile_argv_path": "/var/tmp/pr68_velocity_native_20261007/revised_o3/compile_argv.json",
+      "compile_argv_sha256": "ea0d39ed4111f18040d43f5c335590d47fade8deefb1d666dcd12b2a25154074",
+      "compiler": "ifx (IFX) 2026.0.0 20260331",
+      "exit_code": 0,
+      "input_integrity": "PASS",
+      "inputs": 101,
+      "interpretation": "Observed profile-specific differences; no cause inferred.",
+      "key_result": "Geometry, stages/masks, and pre-call trace match retained PR67. Post-call trace, process capture, and wrfout differ. The previous O3 process observer used stale work1 and is not used in this corrected comparison.",
+      "link_argv_path": "/var/tmp/pr68_velocity_native_20261007/revised_o3/link_argv.json",
+      "link_argv_sha256": "c70b0827cb3475b0c2294863709bed75a27652ffc02527e69170f2d7f0092b50",
+      "output_isolation": "PASS",
+      "outputs": 16,
+      "post_trace_differences": {
+        "nan_masks": "Both traces contain zero NaNs for all listed fields",
+        "temperature_semantics": "TH is WRF potential temperature; actual temperature is TH*PII.",
+        "unequal_cells_max_abs": {
+          "BG": [
+            203,
+            1.3073986337985843e-12
+          ],
+          "DIAGRHOG": [
+            64,
+            0.00030517578125
+          ],
+          "NC": [
+            96,
+            426432.0
+          ],
+          "NI": [
+            129,
+            499.4434814453125
+          ],
+          "NN": [
+            589,
+            194304.0
+          ],
+          "NR": [
+            326,
+            0.001953125
+          ],
+          "Q": [
+            411,
+            9.313225746154785e-09
+          ],
+          "QC": [
+            694,
+            9.778887033462524e-09
+          ],
+          "QG": [
+            210,
+            1.1641532182693481e-09
+          ],
+          "QI": [
+            866,
+            1.1641532182693481e-09
+          ],
+          "QR": [
+            689,
+            2.3283064365386963e-10
+          ],
+          "QS": [
+            490,
+            1.1641532182693481e-09
+          ],
+          "TH": [
+            25,
+            6.103515625e-05
+          ]
+        }
+      },
+      "process_differences": {
+        "NaNs": 0,
+        "first_ice_substep_flux_unequal_cells_max_abs": [
+          521,
+          9.094947017729282e-13
+        ],
+        "first_ice_substep_state_unequal_cells_max_abs": [
+          110,
+          2.3283064365386963e-10
+        ],
+        "ice_fall_accumulator_unequal_cells_max_abs": [
+          546,
+          9.094947017729282e-13
+        ],
+        "ice_rate_unequal_cells_max_abs": [
+          543,
+          3.8026932687798554e-10
+        ]
+      },
+      "process_records": 840,
+      "profile": "-O3 -ip -fp-model precise -w -ftz -align all -fno-alias -FR -convert big_endian",
+      "root": "/var/tmp/pr68_velocity_native_20261007/revised_o3",
+      "scope": "Separate captured host profile candidate; baseline is retained PR67 combined executable/run, not a freshly compiled matched O3 source pair"
+    },
+    "strict_o2_pair": {
+      "baseline": {
+        "all_output_files_nlink_1": true,
+        "archive_member_name": "module_mp_kdm6.o",
+        "archive_member_sha256": "96732aeaaa4eb8d356d5a9fe9f24966fa957ae4a6ede0b4c135fcbed7692cd4c",
+        "archive_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/baseline/archive/libwrflib_pr65.a",
+        "archive_sha256": "214657a1743b81bf7485669488281a5ab9c3511be067d1b90055dc50dd419293",
+        "changed_inputs": 0,
+        "executable_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/baseline/executable/wrf.exe",
+        "executable_sha256": "19ebf9a327caa4e4ab99248ec0da67190ddde3f994af3fa007ea65c586d1437c",
+        "exit_code": 0,
+        "input_integrity": "PASS",
+        "inputs": 101,
+        "object_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/baseline/object/module_mp_kdm6.o",
+        "object_sha256": "96732aeaaa4eb8d356d5a9fe9f24966fa957ae4a6ede0b4c135fcbed7692cd4c",
+        "output_isolation": "PASS",
+        "outputs": 16,
+        "receipt_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/baseline/run/run-isolation-pr68-o2.json",
+        "receipt_sha256": "1d2bf4f920b4f4752f4e6c584d613bb6672ee7872bc13aa95ef0b76ec16fa4cb",
+        "source_sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d"
+      },
+      "candidate": {
+        "all_output_files_nlink_1": true,
+        "archive_member_name": "module_mp_kdm6.o",
+        "archive_member_sha256": "387ae1bf2378e68235e1181bb8cefbef0350699f071580a516893eae5b2ce7b8",
+        "archive_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/candidate/archive/libwrflib_pr65.a",
+        "archive_sha256": "2a06c0b4c34a0dfd6dbad43edefee3ddc1343e106c45cc3dc915c02b4b4d6479",
+        "changed_inputs": 0,
+        "executable_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/candidate/executable/wrf.exe",
+        "executable_sha256": "c64d1755bea7c1e59903d40bf9bd349bf24bd130ecab615c1696e7b9cec075aa",
+        "exit_code": 0,
+        "input_integrity": "PASS",
+        "inputs": 101,
+        "object_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/candidate/object/module_mp_kdm6.o",
+        "object_sha256": "387ae1bf2378e68235e1181bb8cefbef0350699f071580a516893eae5b2ce7b8",
+        "output_isolation": "PASS",
+        "outputs": 16,
+        "receipt_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/candidate/run/run-isolation-pr68-o2.json",
+        "receipt_sha256": "62b056349752b430dc48bbd89c102327d934d3ff01ea1c2a7534b6a49753d3dc",
+        "source_sha256": "aeda1032e6255fda5404a48a6a698020ea914215d8e2851f8d6f8b5bb1930ce2"
+      },
+      "compile_argv": {
+        "baseline_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/baseline/compile_argv.json",
+        "baseline_sha256": "7d910b425fe793306c995a979cc54db4722d2b9d2dc46a185351c19e2476456a",
+        "candidate_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/candidate/compile_argv.json",
+        "candidate_sha256": "44c7eaeff2612ba8400aad7df0e74e058caa89fbfc8a880685b71ee5037ef8a5"
+      },
+      "compile_profile": "CLOUD_BAL_REPRO_FLAGS plus -convert big_endian -fpp and captured phys/frame includes: -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz",
+      "compiler": "ifx (IFX) 2026.0.0 20260331",
+      "link_argv": {
+        "baseline_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/baseline/link_argv.json",
+        "baseline_sha256": "2036477868c40e6bd590e8698aa8a8a2414e0d72e4926d0936edde738da3b3b4",
+        "candidate_path": "/var/tmp/pr68_velocity_native_20261007/matched_o2/candidate/link_argv.json",
+        "candidate_sha256": "dedf1c436347e0112d10b4f1690d3eaa11a141222616e7ca755e7503ad3b873c"
+      },
+      "physical_observations": {
+        "interpretation": "The refactor preserves these existing FAIL observations in the strict O2 paired check; it does not repair or pass the reflectivity or QC/NC gate.",
+        "kdm6_post": {
+          "QC_positive_NC_zero_cells_baseline_candidate": 1,
+          "QR_positive_NR_zero_cells_baseline_candidate": 25
+        },
+        "reflectivity": {
+          "QR_positive_NR_zero_cells_baseline_candidate": 25,
+          "mask_sha256_baseline_candidate": "f8750861800823e492c163be0a9bd698701e97beeb865f767dbffb4ce705e448",
+          "nonfinite_cells_baseline_candidate": 25
+        },
+        "six_water_budget": {
+          "baseline_candidate_equal": true,
+          "delta_kg": -492401757.921875,
+          "focused_residual_kg": 6529669.628570735,
+          "mapped_precipitation_increment_kg": 498931427.55044574,
+          "scope": "one KDM6 call; not whole-scheme water or energy closure"
+        },
+        "timestamp": "2026-08-16_12:00:20"
+      },
+      "result": "Byte-identical for geometry, transition stage/masks, KDM6 pre/post traces, process capture, and wrfout. Only RSL logs, launch environment, and runtime library listings differ.",
+      "root": "/var/tmp/pr68_velocity_native_20261007/matched_o2",
+      "scope": "One-rank 20-second matched research case; selected KDM6 module built fresh from both sources with pinned strict O2/no-FTZ profile and identical host objects/dependencies"
+    }
+  },
+  "patch": "docs/evidence/pr68_velocity_contract_20261007.patch",
+  "patch_sha256": "63fc847396dc3a77b7075439d520b2bca542e7d283f6153c7dfcf7fc963823b4",
+  "patched_source_sha256": "aeda1032e6255fda5404a48a6a698020ea914215d8e2851f8d6f8b5bb1930ce2",
+  "research_artifacts": {
+    "maintained_source_changed": false,
+    "patch_sha256": "63fc847396dc3a77b7075439d520b2bca542e7d283f6153c7dfcf7fc963823b4",
+    "pinned_fixture_source_sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a",
+    "report_sha256": "facf048c52a73462add33b3910e502ed931bf24b77e8944f6985f030527ac483",
+    "runner_sha256": "5f4ec04a153aa3f74f92716758858fec56ba40a7eb3575f584215e5204e9d2d9",
+    "unit_test_source_sha256": "f93e79d24978a21ce9f6ef44d70a32def5b2fd990aa24c5cdc3a474076646de0"
+  },
+  "schema": "pr68_velocity_contract_validation_v1",
+  "scratch_work_dir": "/var/tmp/cloud_bal_pr68_velocity.YXOjZd",
+  "whole_wrapper_attempt": {
+    "baseline": {
+      "build_run_log": "/var/tmp/pr68_velocity_wrapper_baseline_20261007/build_and_run.log",
+      "build_run_log_sha256": "4718a1de2c675508e3fdb59583c51dd4c2ef95cdbb3d6e6b02413db0c2555350",
+      "compiled_source_sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d",
+      "exit_code": 12,
+      "runtime_log": "/var/tmp/pr68_velocity_wrapper_baseline_20261007/run.log",
+      "runtime_log_sha256": "1f4d063a00c5bb42668dd3a0608b1b6fe922d55429f99dba064c1b2aaf01505c",
+      "source_path": "/var/tmp/pr68_velocity_wrapper_baseline_20261007/module_mp_kdm6.f90",
+      "source_sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d"
+    },
+    "candidate": {
+      "build_run_log": "/var/tmp/pr68_velocity_wrapper_candidate_20261007/build_and_run.log",
+      "build_run_log_sha256": "cd43be0fd1ea7b6e215a8aabb0879978626962515c662c5a5f31bbaabe4bb838",
+      "compiled_source_sha256": "97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa",
+      "exit_code": 12,
+      "runtime_log": "/var/tmp/pr68_velocity_wrapper_candidate_20261007/run.log",
+      "runtime_log_sha256": "cc115be2cbb20dae18570c694b42b56b53c1d4f28ef015518e5b883a86aa63ac",
+      "source_path": "/var/tmp/pr68_velocity_wrapper_candidate_20261007/module_mp_kdm6.f90",
+      "source_sha256": "97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa"
+    },
+    "compiler_profile": "ifx 2026.0.0 20260331; tests/intel_toolchain.sh CLOUD_BAL_FREE_FLAGS; O0 strict checked build",
+    "failure": "Both pinned O0 runs stop at ERROR STOP 12 in the harness positive-number assertion at density 1, printing the same failed state. The assertion is unchanged; baseline reproduces the failure, so this does not isolate a velocity-patch regression.",
+    "interpretation": "FAIL for this manufactured wrapper harness; failure is not isolated to velocity patch; it is not counted as a passing validation.",
+    "scope": "Pinned Intel O0 manufactured full KDM6 wrapper, run against captured PR67 baseline and candidate source with the same harness",
+    "test_source_sha256": "94f578ca51656fad7f3f816ceec305a47f3394acbd0e67cc0d0a36dd7b388c1c"
+  }
+}
