@@ -60,7 +60,7 @@ source hashes were stable during each batch. This is not the full suite.
 Actual pinned-Intel reader/native evidence lives in the linked per-task manifests;
 Python replays do not replace those builds. Full unit suite, full host rebuild,
 multi-rank/tile runs and forecast/scientific approval are not claimed.
-Graphify/KG metadata will identify the frozen commit and separate corpus snapshots;
+[Graphify/KG metadata](PR67_KG_MAINTENANCE_20261007.md) identifies the frozen implementation commit and separate corpus snapshots;
 graph freshness is navigation evidence only.
 
 See [closure checklist](PR67_PHYSICAL_CLOSURE_CHECKLIST_20261007.md),

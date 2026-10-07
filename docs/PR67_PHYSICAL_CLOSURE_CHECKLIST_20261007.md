@@ -32,8 +32,8 @@ and failed attempts remain immutable.
   source aliasing; preserve the original artifact.
 - [x] Review the resulting changes independently with the agent team, fix
   findings and validate the affected paths.
-- [ ] Freeze reviewed source and push/create the PR directly after validation.
-- [ ] Update separately dated KLAPS50 and Cloud-BAL Graphify snapshots and
+- [x] Freeze reviewed source and push/create the PR directly after validation.
+- [x] Update separately dated KLAPS50 and Cloud-BAL Graphify snapshots and
   derived KG reports against the frozen commit, then publish the metadata.
 
 ## Interpretation rules
@@ -92,3 +92,5 @@ and failed attempts remain immutable.
 5. Only after a valid candidate, connect native consumption and identical-setting
    BASE/HYDRO/COUPLED time responses and independent observations. Keep all
    unsupported and failed gates visible until their own criteria pass.
+
+Graph/KG completion is recorded in [the separately dated maintenance report](PR67_KG_MAINTENANCE_20261007.md); the source snapshot excludes this metadata follow-up.
