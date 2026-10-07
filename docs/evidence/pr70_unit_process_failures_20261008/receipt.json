@@ -1,0 +1,62 @@
+{
+  "schema": "pr70_unit_process_prior_failures_v1",
+  "entries": [
+    {
+      "file": "wide_invalid_fixture.log",
+      "origin": "/var/tmp/pr70_fullmodule_probe.Ih6KfF/run.log",
+      "sha256": "d737abe330c6630c2876f0858aa4bf69e7d7861cbd844c34efd0c4a703f71646",
+      "scope": "Actual full module compiled; original wide fixture rejected at cold joint gate. QV=.01, T=250 K, NR=1e7, QG=0, BG=1e-12; not a valid accepted cold-state fixture."
+    },
+    {
+      "file": "invalid_ice_psd_candidate.log",
+      "origin": "/var/tmp/pr70_integrated_snow.F5zajn/candidate/run.log",
+      "sha256": "16db76186616a4d46ac21b4aff7a994cb24e3407c2379399f39a1caec2053ef2",
+      "scope": "Source PSD initial ice lambda below declared minimum and QV=.01; cold-gate rejection is retained, not a valid fixture pass."
+    },
+    {
+      "file": "invalid_ice_psd_dt001_candidate.log",
+      "origin": "/var/tmp/pr70_integrated_dt001.7geq9b/candidate/run.log",
+      "sha256": "6443926d2009931884f2c0ced75dab19db42471d935bfd93ca14bd5f78e36483",
+      "scope": "Same invalid source-PSD initial state at DELT=.01 s; original rejection retained."
+    },
+    {
+      "failure": "stock fixture overwrote the composed module before the preliminary compile",
+      "origin_work_dir": "/var/tmp/pr70_unit_process_probe.cx3yLD/build",
+      "compile_log": null,
+      "compile_log_sha256": null,
+      "compile_log_status": "NOT_RETAINED; the failed compiler output was emitted to the interactive tool response, and no compile/build log file exists in the retained work directory",
+      "retained_source_artifacts": {
+        "work_module_mp_kdm6_F": {
+          "path": "/var/tmp/pr70_unit_process_probe.cx3yLD/module_mp_kdm6.F",
+          "sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a"
+        },
+        "build_module_mp_kdm6_F": {
+          "path": "/var/tmp/pr70_unit_process_probe.cx3yLD/build/module_mp_kdm6.F",
+          "sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a"
+        },
+        "stock_fixture_module_mp_kdm6_F": {
+          "path": "tests/fixtures/kdm6_wrapper/module_mp_kdm6.F",
+          "sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a"
+        },
+        "test_driver": {
+          "path": "/var/tmp/pr70_unit_process_probe.cx3yLD/build/test_pr70_unit_process_integration.f90",
+          "sha256": "3f5bdf65c068e84efd8f5b204412093e2e49a0750254c545506dc4ddfd0d3379"
+        },
+        "composer_density_receipt": {
+          "path": "/var/tmp/pr70_unit_process_probe.cx3yLD/module_mp_kdm6.density_roles.json",
+          "sha256": "516cafc649f28e9086d4687e410199c6d6300e4386998079cd15ff50d032e8a7",
+          "expected_composed_source_sha256": "ff85ee096fbd86a33b5d05adc2d949bcb8f6b3b583f8d48057b3cca247f04aa1"
+        }
+      },
+      "diagnostic_observed_in_interactive_tool_output": [
+        "Intel Fortran error #6580 in the test-driver USE ONLY list for missing moist_to_dry_density",
+        "Intel Fortran error #6580 in the test-driver USE ONLY list for missing specific_number_to_volume",
+        "Intel Fortran error #6580 in the test-driver USE ONLY list for missing volume_number_to_specific",
+        "test driver compilation aborted with code 1"
+      ],
+      "cause": "Fixture wildcard copy overwrote the composed module_mp_kdm6.F with tests/fixtures/kdm6_wrapper/module_mp_kdm6.F before compilation; the compiler therefore saw no composed unit-conversion helper exports.",
+      "classification": "HARNESS_COPY_ORDER_FAILURE; no model output or integration pass; corrected copy order compiled the composed module in later hash-bound runs.",
+      "sha256": null
+    }
+  ]
+}

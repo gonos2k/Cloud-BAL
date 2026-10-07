@@ -1,0 +1,36 @@
+{
+  "schema": "pr70_executed_runner_reconstruction_v1",
+  "status": "RECONSTRUCTED_EXACT_BYTES_HASH_VERIFIED_NOT_ORIGINAL_ARCHIVE",
+  "reconstructed_copy": "docs/evidence/pr70_executed_runner_reconstructed_exact_bytes_20261008.sh",
+  "reconstructed_sha256": "24c8a129e3792b81c543ddfb0fa733d7e358b59f4eaf9ccb51f9c09345f565a0",
+  "executed_runner_sha256": "24c8a129e3792b81c543ddfb0fa733d7e358b59f4eaf9ccb51f9c09345f565a0",
+  "current_corrected_runner": "tests/run_pr70_unit_process_integration.sh",
+  "current_corrected_runner_sha256": "07ddd6e0bff0a8108ff95828354d6b47da5d4690ab7b239e691b8cf3cef5ba3b",
+  "method": "Reverse only the four metadata-key renames in the corrected runner and verify the resulting bytes against the executed-runner SHA-256 recorded in the immutable run receipt. No model run was repeated.",
+  "reversed_substitutions": [
+    {
+      "corrected": "cloud_lambda_m_inv",
+      "executed": "cloud_lambda_m",
+      "occurrences": 1
+    },
+    {
+      "corrected": "ice_lambda_m_inv",
+      "executed": "ice_lambda_m",
+      "occurrences": 1
+    },
+    {
+      "corrected": "rain_lambda_m_inv",
+      "executed": "rain_lambda_m",
+      "occurrences": 1
+    },
+    {
+      "corrected": "graupel_BG_m3_kg_dry",
+      "executed": "graupel_BG_kg_m3",
+      "occurrences": 1
+    }
+  ],
+  "original_runner_archive_present": false,
+  "reconstruction_is_not_original_archive": true,
+  "execution_receipt": "docs/evidence/pr70_unit_process_integration_validation_20261008.json",
+  "execution_receipt_sha256": "7b762890db93d2bc1874deac28018fa9dd595245c0a3977bcfe5776b7760b15b"
+}

@@ -1,0 +1,157 @@
+{
+  "schema": "pr70_volume_process_source_audit_v1",
+  "source": {
+    "path": "/var/tmp/pr69_native_jointprocess_20261007_v3/source/selected_candidate_fbf_pr69_water.f90",
+    "sha256": "ee688498b32b7a1ccaf69858f62f4e457f7153df4fb8b965acfd069d8eefb425",
+    "line_anchors": {
+      "rhox_initialization": 1259,
+      "prog_b_threshold": 3864,
+      "prog_b_density": 3866,
+      "prog_b_definition": 3831,
+      "prog_b_rhox_intent": 3842,
+      "prog_b_end": 3924,
+      "pgdep_threshold": 2715,
+      "pgdep_formula": 2719,
+      "pgdep_mass_cap": 2723,
+      "volume_consumer": 2988,
+      "prog_b_calls_before_pgdep": [
+        1389,
+        1492,
+        1583,
+        1732,
+        1927
+      ],
+      "last_prog_b_call_before_pgdep": 1927
+    },
+    "intent_out_names": [
+      "rhox",
+      "cmg",
+      "pidn0g",
+      "avtg",
+      "pvtg",
+      "precg2",
+      "bvtg",
+      "bvtg1",
+      "bvtg2",
+      "bvtg3",
+      "bvtg4",
+      "rslopegbmax",
+      "g1pbg",
+      "g3pbg",
+      "g4pbg",
+      "g5pbgo2",
+      "g1pdgbgmg",
+      "dgbgmug1"
+    ],
+    "intent_out_assignment_lines": {
+      "rhox": [
+        3866,
+        3869,
+        3871
+      ],
+      "cmg": [
+        3876
+      ],
+      "pidn0g": [
+        3877
+      ],
+      "avtg": [
+        3885,
+        3904
+      ],
+      "pvtg": [
+        3898,
+        3917
+      ],
+      "precg2": [
+        3899,
+        3918
+      ],
+      "bvtg": [
+        3886,
+        3905
+      ],
+      "bvtg1": [
+        3887,
+        3906
+      ],
+      "bvtg2": [
+        3888,
+        3907
+      ],
+      "bvtg3": [
+        3889,
+        3908
+      ],
+      "bvtg4": [
+        3890,
+        3909
+      ],
+      "rslopegbmax": [
+        3897,
+        3916
+      ],
+      "g1pbg": [
+        3892,
+        3911
+      ],
+      "g3pbg": [
+        3893,
+        3912
+      ],
+      "g4pbg": [
+        3894,
+        3913
+      ],
+      "g5pbgo2": [
+        3895,
+        3914
+      ],
+      "g1pdgbgmg": [
+        3896,
+        3915
+      ],
+      "dgbgmug1": [
+        3891,
+        3910
+      ]
+    },
+    "all_outputs_assigned_on_every_control_path": false,
+    "branch_audit": {
+      "density_gate_false": "No rhox or other INTENT(OUT) assignments; outputs undefined on return",
+      "density_gate_true": "rhox set to qg/brs and clamped to 100..900; cmg and pidn0g assigned if the range check passes",
+      "cmg_positive": "Gamma-law parameters assigned only inside the 100..900 table intervals or exact 900 endpoint"
+    },
+    "thresholds": {
+      "qcrmin": 1e-09,
+      "brs_min": 1e-15
+    },
+    "logic": {
+      "density_setup_gate": "qg > qcrmin OR brs > brs_min",
+      "tendency_gate": "qg > 0 AND ifsat != 1",
+      "negative_tendency": "pgdep is multiplied by (rh_ice - 1); available graupel mass caps negative pgdep",
+      "skipped_density_gate": "rhox has INTENT(OUT); if the ProgB_param gate is false the source makes no assignment, so rhox is undefined by Fortran semantics on return"
+    }
+  },
+  "native_receipt": {
+    "path": "scratch/pr70_unit_process_20261008/Cloud-BAL/docs/evidence/pr69_coupled_process_native_20261007.json",
+    "sha256": "3b39e94f4d2249717d242526ab17066f0293b2d7eba8390bbfaecbfde960db9c",
+    "status": "REJECTED_UNSUPPORTED_BG_VOLUME_RATE",
+    "actual_rejection_operand": "pgdep=-7.6110288e-16, rhox=0",
+    "cell": {
+      "i": 125,
+      "j": "NOT_CAPTURED_IN_FATAL_MESSAGE",
+      "k": 17
+    },
+    "observed_operands": {
+      "pgdep": -7.6110288e-16,
+      "rhox": 0.0,
+      "brs": 1.5222057e-17,
+      "printed_final_qg_component": 6.1943273e-10
+    },
+    "qg_at_pgdep_line": "NOT_CAPTURED",
+    "endpoint_qg_caveat": "printed Qfixed qg is a projected endpoint, not a checkpoint at the pgdep tendency line"
+  },
+  "finding": "The source admits positive qg into pgdep below the qcrmin PSD setup threshold, while ProgB_param has no rhox assignment when its density gate is false. Because rhox is INTENT(OUT), that path leaves the output undefined by the language; the retained ifx run observed zero. The source does not define a density-based graupel bulk-volume rate in this unsupported state.",
+  "scope": "Source and retained-receipt audit only; no runtime rerun or physical closure claim."
+}
