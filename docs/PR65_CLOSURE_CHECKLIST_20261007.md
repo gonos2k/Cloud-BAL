@@ -72,3 +72,9 @@ Four independent agents cover the Phi suite, PBL lineage/mixing, NC donor recons
 ## Follow-up team audit
 
 The [independent PR65 reaudit](PR65_TEAM_REAUDIT_20261007.md) corrected preflight log-failure handling, receipt-bound regular-file validation and the pre-existing CI workflow wording. The [new maintenance record](PR66_KG_MAINTENANCE_20261007.md) follows the separately frozen validator fixes. These changes preserve the checked scientific gates and their remaining FAIL/OPEN conditions; no new native model execution or full physical acceptance is asserted.
+
+## PR67 continuation
+
+[The ordered physical closure checklist](PR67_PHYSICAL_CLOSURE_CHECKLIST_20261007.md)
+records the subsequent investigation and scoped fixes. This continuation does
+not rewrite prior run identities or change their original PASS/FAIL scope.

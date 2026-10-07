@@ -1,0 +1,171 @@
+{
+  "first_negative_cell_term_evidence": {
+    "rk1": {
+      "advect_tendency_sign": {
+        "negative": 21331,
+        "positive": 110
+      },
+      "base_q_sign": {
+        "positive": 41,
+        "zero": 21400
+      },
+      "first_negative_cells": 21441,
+      "maximum_dt": 6.666666507720947,
+      "minimum_dt": 6.666666507720947,
+      "minimum_new_mass": 65296.62109375,
+      "minimum_old_mass": 65194.70703125,
+      "negative_if_advection_omitted": 10338,
+      "negative_if_physical_term_omitted": 21330,
+      "physical_tendency_sign": {
+        "negative": 10361,
+        "positive": 11078,
+        "zero": 2
+      },
+      "scaled_advect_sign": {
+        "negative": 21331,
+        "positive": 110
+      }
+    },
+    "rk2": {
+      "advect_tendency_sign": {
+        "negative": 1109,
+        "positive": 30
+      },
+      "base_q_sign": {
+        "positive": 2,
+        "zero": 1137
+      },
+      "first_negative_cells": 1139,
+      "maximum_dt": 10.0,
+      "minimum_dt": 10.0,
+      "minimum_new_mass": 65852.25,
+      "minimum_old_mass": 65720.375,
+      "negative_if_advection_omitted": 137,
+      "negative_if_physical_term_omitted": 1108,
+      "physical_tendency_sign": {
+        "negative": 138,
+        "positive": 833,
+        "zero": 168
+      },
+      "scaled_advect_sign": {
+        "negative": 1109,
+        "positive": 30
+      }
+    },
+    "rk3": {
+      "advect_tendency_sign": {
+        "negative": 492,
+        "positive": 422
+      },
+      "base_q_sign": {
+        "negative": 566,
+        "positive": 322,
+        "zero": 26
+      },
+      "first_negative_cells": 914,
+      "maximum_dt": 20.0,
+      "minimum_dt": 20.0,
+      "minimum_new_mass": 68403.109375,
+      "minimum_old_mass": 68462.078125,
+      "negative_if_advection_omitted": 566,
+      "negative_if_physical_term_omitted": 914,
+      "physical_tendency_sign": {
+        "zero": 914
+      },
+      "scaled_advect_sign": {
+        "negative": 492,
+        "positive": 422
+      }
+    }
+  },
+  "interpretation_limits": [
+    "The no-advection and no-physical counts are binary32 component-omission screens; they are not independent causal interventions or a conserved-flux replay.",
+    "The source observer records the native advection tendency and mass factor, not face-by-face advection fluxes.",
+    "The physical tendency also includes RK1 horizontal diffusion when enabled; it cannot be identified with PBL mixing alone.",
+    "The PBL channel columns in the run3 record are ignored because SHCU/NC-SHCU values were invalid and process-channel closure failed; only the aggregate physical tendency passed to the update is replayed.",
+    "The replay identifies the first completed negative-QC boundary and verifies the local update equation. It does not establish which physical process should be changed."
+  ],
+  "negative_qc": {
+    "all_combined_tendencies_reconstructed": 23494,
+    "all_first_negative_cells_reconstructed_by_binary32_update": 23494,
+    "all_new_mass_denominators_reconstructed": 23494,
+    "all_old_mass_denominators_reconstructed": 23494,
+    "all_reconstructed_values_match_native_after_update": 23494,
+    "all_scaled_advection_terms_reconstructed": 23494,
+    "first_negative_after_rk1": 21441,
+    "first_negative_after_rk2": 1139,
+    "first_negative_after_rk3": 914,
+    "flow_boundary_added_negatives_outside_kdm_window": {
+      "rk1": 1718,
+      "rk2": 4088,
+      "rk3": 45
+    },
+    "kdm_entry_cells": 23494,
+    "negative_cell_sets_match_transition_masks_at_each_captured_boundary": true,
+    "negative_cells_at_completed_rk1_full_transition_mask": 163244,
+    "negative_cells_at_completed_rk1_kdm_window": 161526,
+    "negative_cells_at_completed_rk2_full_transition_mask": 399233,
+    "negative_cells_at_completed_rk2_kdm_window": 395145,
+    "negative_cells_at_completed_rk3_full_transition_mask": 23539,
+    "negative_cells_at_completed_rk3_kdm_window": 23494,
+    "transition_mask_negatives_outside_kdm_window": {
+      "rk1": 1718,
+      "rk2": 4088,
+      "rk3": 45
+    }
+  },
+  "observer_record_counts": {
+    "after_diabatic_kdm_window": 580165,
+    "after_diabatic_rk1_kdm_window": 161526,
+    "after_diabatic_rk1_total": 161526,
+    "after_diabatic_rk2_kdm_window": 395145,
+    "after_diabatic_rk2_total": 395145,
+    "after_diabatic_rk3_kdm_window": 23494,
+    "after_diabatic_rk3_total": 23494,
+    "after_diabatic_total": 580165,
+    "after_flow_bdy_kdm_window": 580165,
+    "after_flow_bdy_rk1_kdm_window": 161526,
+    "after_flow_bdy_rk1_total": 163244,
+    "after_flow_bdy_rk2_kdm_window": 395145,
+    "after_flow_bdy_rk2_total": 399233,
+    "after_flow_bdy_rk3_kdm_window": 23494,
+    "after_flow_bdy_rk3_total": 23539,
+    "after_flow_bdy_total": 586016,
+    "after_update_kdm_window": 580165,
+    "after_update_rk1_kdm_window": 161526,
+    "after_update_rk1_total": 161526,
+    "after_update_rk2_kdm_window": 395145,
+    "after_update_rk2_total": 395145,
+    "after_update_rk3_kdm_window": 23494,
+    "after_update_rk3_total": 23494,
+    "after_update_total": 580165,
+    "ignored_run3_channel_invalid_nc_shcu": 2299,
+    "ignored_run3_channel_invalid_shcu": 2279,
+    "qc_pre_rk1_kdm_window": 161526,
+    "qc_pre_rk1_total": 164321,
+    "qc_pre_rk2_kdm_window": 238762,
+    "qc_pre_rk2_total": 242492,
+    "qc_pre_rk3_kdm_window": 1048,
+    "qc_pre_rk3_total": 3332,
+    "qc_pre_total": 410145,
+    "run3_channel_schema_rows": 410145
+  },
+  "provenance": {
+    "baseline_dir": "/var/tmp/pr65_pbl_lineage_20261007/run_sharednc_postcapture_pinned",
+    "baseline_hashes_match_observer": true,
+    "declared_unchanged_input_count": 101,
+    "expected_executable_sha256": "835a0567c9caf4843358e40076f3a82ac25143de28d6d8bcec9a3fc09fe5f7df",
+    "kdm_post_sha256": "2a12ae233ace7ef8e2b0a79c3b9de778a237b8bb7570f980d835272647d8109b",
+    "kdm_pre_sha256": "5e45b2d0c719909739db5bc20689ac2e9738ed850902e3b327c32a425b2b7ea8",
+    "observer_dir": "/var/tmp/pr67_negativeqc_20261007/run3",
+    "observer_raw_sha256": "371ccfc25150d4ce7beb77a72c395e30920084721f206e6c48f1778c4283cd13",
+    "observer_run_receipt_sha256": "77df17d002a5a718c0173ecf21c6b6b125ee856bd539bb59256029b0e17b3f9a",
+    "observer_source_path": "/var/tmp/pr67_negativeqc_20261007/source_channels/solve_em_pr67_negativeqc_channels.f90",
+    "observer_source_sha256": "54c2697158a7d6efb307ba90956a17c4607cc5a7fb4a82fc3a18d974f704abed",
+    "replay_tool_sha256": "0635515d42bb817f7f7476a9c9ab0379e2e838e7d088479fb374da15c27603f5",
+    "run_executable_receipt_input_sha256": "835a0567c9caf4843358e40076f3a82ac25143de28d6d8bcec9a3fc09fe5f7df",
+    "run_executable_sha256": "835a0567c9caf4843358e40076f3a82ac25143de28d6d8bcec9a3fc09fe5f7df",
+    "transition_masks_sha256": "34501d78da7669303654a82de31106249825b55a8888c7bc8c4cb31fa0e9cf1e"
+  },
+  "schema": "pr67_negative_qc_replay_v1"
+}

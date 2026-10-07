@@ -1,0 +1,71 @@
+{
+  "artifacts": {
+    "derived_coverage_cells": 1150134,
+    "derived_observational_sigma_cells": 0,
+    "derived_target_authorized_cells": 892338,
+    "derived_target_sha256": "78dc6594340af295acdb1db4aee96f50fdb184aed31f15da91f10e040dc5e647",
+    "removed_coverage_cells": 1,
+    "removed_unsupported_target_cells": 1,
+    "source_target_sha256": "37ec7c3bc53ef15668abc37ab6d4e071f12b62c634fc9fcefe261a66ae899bef",
+    "support_widened": false
+  },
+  "copied_evidence_sha256": {
+    "12Z_derived_target_rejection.log": "a919c1c21ea1bfcd0511e5694948456fa950c4f1436998ab56019c04cb469e6b",
+    "13Z_derived_target_acceptance.log": "98e37d18cb31642b492271395b9006c46a3b3fdf8374c5d6761a3d382c523582",
+    "13Z_original_target_rejection.log": "a919c1c21ea1bfcd0511e5694948456fa950c4f1436998ab56019c04cb469e6b",
+    "O2_12Z_derived_target_rejection.log": "a919c1c21ea1bfcd0511e5694948456fa950c4f1436998ab56019c04cb469e6b",
+    "O2_13Z_derived_target_acceptance.log": "98e37d18cb31642b492271395b9006c46a3b3fdf8374c5d6761a3d382c523582",
+    "actual_inputs.after.sha256": "07380e8c3ffebd157c05a69ee25dcb9ed6e782958e60d81c1a1cd4081573e92b",
+    "actual_inputs.before.sha256": "07380e8c3ffebd157c05a69ee25dcb9ed6e782958e60d81c1a1cd4081573e92b",
+    "compiled_artifacts.sha256": "93ca3d6d4fd6522a7aa5d517bf0bde2225e0b2db2b0efbadb66343f3709794dd",
+    "derived_target_receipt.log": "629ec44f20ac9132a7bdf883790b114071faac4cc88a1d903285f13a756ebcc0",
+    "helper_output_guard_tests.log": "feabb4add9e2ca3374e538560634d1ec97dc4f4ce89aab12f3d726e36ea9b2f6",
+    "mask_preparation.log": "36ec5efcc5b6ee3f496ffcb8cb06b21dc42313d04be5751b78cabfb4c2e23ef7",
+    "profile_and_sources.after.sha256": "4a77f70ea3f72607d73b2f54255d024839cc97ab888abdc61f2162cd780a53f7",
+    "profile_and_sources.before.sha256": "4a77f70ea3f72607d73b2f54255d024839cc97ab888abdc61f2162cd780a53f7",
+    "receipt.txt": "0675936f9cbb4ad75daf35081d843b64442dd36cab0fbdcc3bf621236d047953"
+  },
+  "post_run_source_followups": {
+    "tests/pr67_model_target_compatibility.f90": {
+      "change": "generalized rejection diagnostic text only; validation logic unchanged; no rerun",
+      "sha256": "9f5a740685f32ca50cdc80eacd9658fb09e4542d2a28a3f0dafb2bfdb9b37f71"
+    },
+    "tests/prepare_pr67_model_target.py": {
+      "change": "requires regular non-symlink source and absent output before copy; four local guard regressions pass; no full input rerun",
+      "sha256": "5894b494d5924338664326a9fde4b424eff658ccb89b728485eb76379645bcd3"
+    },
+    "tests/run_pr67_model_target_compatibility.sh": {
+      "change": "registers helper output-path regression and hashes its source; no full input rerun",
+      "sha256": "4d0f1777eb7963c8aaee16ab797f7302c31423e0bf2b096abcddc049dc33adb1"
+    },
+    "tests/test_prepare_pr67_model_target.py": {
+      "result": "4 tests passed",
+      "sha256": "56f21e4d931e7f7d0891b4688af4e8f4a19826a50079c414dd859626ae112bab"
+    }
+  },
+  "results": {
+    "derived_13z_target_against_12z_o0": "rejected with generic unsupported-target status; state unchanged",
+    "derived_13z_target_against_12z_o2": "rejected with generic unsupported-target status; state unchanged",
+    "derived_13z_target_o0": "STATUS_OK; PASS_SCOPED",
+    "derived_13z_target_o2": "STATUS_OK; PASS_SCOPED",
+    "original_13z_target": "rejected; retained state unchanged"
+  },
+  "run_directory": "/var/tmp/cloud_bal_pr67_model_target.DmIP3h",
+  "schema": "pr67_model_target_compatibility_evidence_v1",
+  "scope": "paired-model-target reader compatibility only; not an observation-conditioned physical candidate",
+  "tested_source_snapshot_sha256": {
+    "tests/pr67_model_target_compatibility.f90": "cf8944230054c8cc3d39a08e97acab3d7612f52cd91ad82689e99332a53dd65d",
+    "tests/prepare_pr67_model_target.py": "8fa9b96d420af89ed45595c9be89b7be15e4c772abe3528a9f524985bf6e6220",
+    "tests/run_pr67_model_target_compatibility.sh": "5d35c4f3000ca136d0c3860276d02c246ce8becaf803acc92814c7440335872b"
+  },
+  "toolchain": {
+    "build_profiles": [
+      "O0",
+      "O2"
+    ],
+    "compiler": "ifx 2026.0.0 20260331",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "netcdf_fortran": "4.6.1",
+    "reader_process_stack_limit_kib": 8192
+  }
+}

@@ -305,3 +305,13 @@ overwrite command is unknown, and runtime isolation does not guard build
 paths. Overall physical initialization remains **FAIL/OPEN**; same-call
 budgets, admissible incoming moments, joint mass-wind trial construction, and
 fixed-setting 10/30/60-minute comparison remain required.
+
+## 2026-10-07 PR67 follow-up
+
+The [current ordered checklist](PR67_PHYSICAL_CLOSURE_CHECKLIST_20261007.md)
+tracks the source-bound PBL carrier investigation, completed RK negative-QC
+replay, same-call ice sedimentation and bottom-export audit, and independently
+admitted joint inputs. Historical receipts and research stacks remain separate.
+Overall physical initialization stays **FAIL/OPEN** until incoming moments,
+water/energy/process/boundary budgets, the joint mass–wind candidate and its
+fixed-setting native response are validated.

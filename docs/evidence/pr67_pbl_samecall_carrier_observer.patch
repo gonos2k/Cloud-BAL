@@ -1,0 +1,75 @@
+--- a/module_pbl_driver_pr65_generated.f90
++++ b/module_pbl_driver_pr67_observer.f90
+@@ -761,6 +761,7 @@
+    INTEGER :: pr65_unit, pr65_k, pr65_iostat
+    LOGICAL :: pr65_qnc_enabled, pr65_qnc_flag
+    INTEGER :: pr65_scalar_pblmix
++   INTEGER :: pr67_k
+    REAL :: pr65_scalar_tend_before
+ 
+    REAL,       DIMENSION( ims:ime, kms:kme, jms:jme ) ::v_phytmp
+@@ -1307,6 +1308,26 @@
+                  ENDIF
+                ENDIF
+              ENDIF
++             IF (pr65_qnc_enabled .AND. 172.GE.its .AND. 172.LE.ite .AND. &
++                 76.GE.jts .AND. 76.LE.jte .AND. PRESENT(mut) .AND. &
++                 PRESENT(znw) .AND. PRESENT(znu) .AND. PRESENT(area2d) .AND. &
++                 PRESENT(dx2d)) THEN
++               OPEN(NEWUNIT=pr65_unit,FILE='pr67_pbl_carrier.raw',STATUS='UNKNOWN', &
++                    POSITION='APPEND',ACTION='WRITE',IOSTAT=pr65_iostat)
++               IF (pr65_iostat.EQ.0) THEN
++                 WRITE(pr65_unit,'(A,",",I0,",",I0,",",I0,",",ES24.16E3,",",I0,",",I0,",",7(ES24.16E3,","))') &
++                      'RUNTIME_CALL',172,76,itimestep,dtbl,kts,kte, &
++                      mut(172,76),g,dx,dy,area2d(172,76),dx2d(172,76),p_top
++                 DO pr67_k=kts,kte
++                   WRITE(pr65_unit,'(A,",",I0,",",5(ES24.16E3,","),ES24.16E3)') &
++                        'RUNTIME_ROW',pr67_k,p8w(172,pr67_k,76), &
++                        p8w(172,pr67_k+1,76),znw(pr67_k),znw(pr67_k+1),znu(pr67_k), &
++                        area2d(172,76)
++                 ENDDO
++                 WRITE(pr65_unit,'(A)') 'GRID_STATIC_INPUT_LINKED'
++                 CLOSE(pr65_unit)
++               ENDIF
++             ENDIF
+ 
+              CALL shinhong(                                         &
+                U3D=u_phytmp,V3D=v_phytmp,TH3D=th_phy,T3D=t_phy      &
+@@ -1339,6 +1360,18 @@
+               ,ITS=its,ITE=ite,JTS=jts,JTE=jte,KTS=kts,KTE=kte      &
+               ,DX=dx,DY=dy                                          &
+                                                                     )
++             IF (pr65_qnc_enabled .AND. 172.GE.its .AND. 172.LE.ite .AND. &
++                 76.GE.jts .AND. 76.LE.jte) THEN
++               OPEN(NEWUNIT=pr65_unit,FILE='pr67_pbl_carrier.raw',STATUS='UNKNOWN', &
++                    POSITION='APPEND',ACTION='WRITE',IOSTAT=pr65_iostat)
++               IF (pr65_iostat.EQ.0) THEN
++                 DO pr67_k=kts,kte
++                   WRITE(pr65_unit,'(A,",",I0,",",ES24.16E3)') &
++                        'QC_PBL',pr67_k,rqcblten(172,pr67_k,76)
++                 ENDDO
++                 CLOSE(pr65_unit)
++               ENDIF
++             ENDIF
+              IF (pr65_qnc_enabled) THEN
+                pr65_iostat = -1
+                IF (172.GE.its .AND. 172.LE.ite .AND. 76.GE.jts .AND. 76.LE.jte) THEN
+@@ -2217,6 +2250,18 @@
+                ims,ime, jms,jme, kms,kme,                        &
+                i_start(ij),i_end(ij),                            &
+                j_start(ij),j_end(ij),kts,kte                     )
++          IF (172.GE.i_start(ij) .AND. 172.LE.i_end(ij) .AND. &
++              76.GE.j_start(ij) .AND. 76.LE.j_end(ij)) THEN
++            OPEN(NEWUNIT=pr65_unit,FILE='pr67_pbl_carrier.raw',STATUS='UNKNOWN', &
++                 POSITION='APPEND',ACTION='WRITE',IOSTAT=pr65_iostat)
++            IF (pr65_iostat.EQ.0) THEN
++              DO pr67_k=kts,kte
++                WRITE(pr65_unit,'(A,",",I0,",",ES24.16E3)') &
++                     'QC_SETTLED',pr67_k,rqcblten(172,pr67_k,76)
++              ENDDO
++              CLOSE(pr65_unit)
++            ENDIF
++          ENDIF
+       ELSE
+           CALL wrf_error_fatal3("<stdin>",2178,&
+ 'Missing args for bl_fogdes in pbl driver')

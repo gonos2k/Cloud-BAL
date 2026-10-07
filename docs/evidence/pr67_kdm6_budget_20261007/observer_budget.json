@@ -1,0 +1,111 @@
+{
+  "capture_sha256": {
+    "kdm6_first_call_post.raw": "7e189ce0803d52121ad2ff58e350bcad6a964fde6918024cb97c45533ea25b52",
+    "kdm6_first_call_pre.raw": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "pr63_geometry.raw": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+    "pr67_kdm6_process.raw": "3510b9d3539e045018a58abcb87a8025c5e96e29254838a5a2793b91d2bf1ed9"
+  },
+  "extent": {
+    "dtcld_s": 20.0,
+    "i": [
+      2,
+      233
+    ],
+    "j": [
+      2,
+      281
+    ],
+    "j_rows": 280,
+    "k": [
+      1,
+      39
+    ],
+    "process_records": 840
+  },
+  "focused_residual_kg": -1290632098446.7463,
+  "geometry_audit": {
+    "executable_sha256": "f6c3a0281afa21901ae78e8d5ac37af8faf7c99c864626930757752afa5ecf45",
+    "kdm6_active_shape_xyz": [
+      232,
+      280,
+      39
+    ],
+    "kdm6_timestep": 1,
+    "mapped_hybrid_dry_mass_kg": 1.6204030034989606e+16,
+    "max_column_dp_to_mu2_mub_difference_pa": 0.00010944342648144811,
+    "max_layer_to_interface_dp_difference_pa": 0.002499805738352734
+  },
+  "ice_process": {
+    "fraction_retained": 2.802957366248214e-09,
+    "max_relative_native_to_hybrid_carrier_difference": 0.0009534995036752834,
+    "native_carrier_delta_kg": -1291747225427.4233,
+    "post_first_ice_substep_hybrid_dry_mass_kg": 3617.5982979231926,
+    "post_first_ice_substep_kg": 3617.5982979231926,
+    "post_first_ice_substep_native_carrier_kg": 3620.1192234158707,
+    "pre_first_ice_substep_hybrid_dry_mass_kg": 1290636219260.5818,
+    "pre_first_ice_substep_kg": 1290636219260.5818,
+    "pre_first_ice_substep_native_carrier_kg": 1291747229047.5425,
+    "weight_basis_note": "The process stream's native DEND*DELZ*area carrier is the local sedimentation mass basis; hybrid-pressure dry mass is a separate call-budget basis."
+  },
+  "limitations": [
+    "This compares one public KDM6 call's six-water state change with its source-derived surface precipitation increment. It is a focused diagnostic, not whole-scheme water or energy closure.",
+    "rainncv is a cumulative millimeter accumulator. The mapped increment comes from the captured bottom fall rates using the source equation; snow and graupel accumulators are subsets and are not added again.",
+    "DTCLD is checked against the KDM6 source formula: loops=max(NINT(DELT/120 s),1), DTCLD=DELT/loops, with DTCLD=DELT when DELT<=120 s. The result is unsupported if the captured value does not match.",
+    "The capture is a research-only observer and normalization experiment. Maintained WRF and operational input sources are unchanged."
+  ],
+  "receipt": {
+    "input_integrity": "PASS",
+    "output_isolation": "PASS",
+    "path": "/var/tmp/pr67_budget_capture_20261007/run_observer_be/run-isolation-pr67.json",
+    "returncode": 0,
+    "run_root": "/var/tmp/pr67_budget_capture_20261007/run_observer_be"
+  },
+  "schema": "pr67_kdm6_samecall_budget_v1",
+  "six_water": {
+    "delta_kg": -1291131029874.2969,
+    "post_kg": 91689281426106.19,
+    "pre_kg": 92980412455980.48,
+    "species": {
+      "Q": {
+        "delta_kg": 582656033186.9143,
+        "post_kg": 89717612157862.45,
+        "pre_kg": 89134956124675.5
+      },
+      "QC": {
+        "delta_kg": -664865308568.9003,
+        "post_kg": 1421183616866.6428,
+        "pre_kg": 2086048925431.7136
+      },
+      "QG": {
+        "delta_kg": 22737247330.56884,
+        "post_kg": 39537542370.301445,
+        "pre_kg": 16800295054.529259
+      },
+      "QI": {
+        "delta_kg": -1284702811119.413,
+        "post_kg": 5933408590.854981,
+        "pre_kg": 1290636219260.5818
+      },
+      "QR": {
+        "delta_kg": 38267684070.44377,
+        "post_kg": 138085596427.2051,
+        "pre_kg": 99817912359.46498
+      },
+      "QS": {
+        "delta_kg": 14776124789.90446,
+        "post_kg": 366929103988.72577,
+        "pre_kg": 352152979198.69165
+      }
+    }
+  },
+  "surface_precipitation": {
+    "mapped_increment_kg": 498931427.55044574,
+    "phase_increment_kg": {
+      "phase_1": 495547715.1050177,
+      "phase_2": 0.0,
+      "phase_3": 3383712.44542799,
+      "phase_4": 8.344140323389615e-15
+    },
+    "source_accumulator_units": "mm; mapped with 1 mm = 1 kg m^-2 times active map area"
+  }
+}

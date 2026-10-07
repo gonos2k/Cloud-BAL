@@ -26,6 +26,11 @@ tests=(
   tests/test_pr65_pbl_operator_replay.py
   tests/test_pr65_pbl_domain_metrics.py
   tests/test_pr65_samecall_budget_audit.py
+  tests/test_pr67_pbl_carrier_audit.py
+  tests/test_pr67_kdm6_process_budget.py
+  tests/test_pr67_output_safety_crosscheck.py
+  tests/test_pr67_negative_qc_replay.py
+  tests/test_prepare_pr67_model_target.py
   tests/test_pr63_paired_bg_volume.py
   tests/test_operational_comparison_prep.py
   tests/test_operational_shadow_compare.py

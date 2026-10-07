@@ -1,0 +1,108 @@
+{
+  "schema": "pr67_focused_validation_partial_v1",
+  "recorded_utc": "2026-10-07T09:11:32.766572+00:00",
+  "scope": "11 selected Python modules, 79 tests: 19 new tests and 60 directly affected dependency regressions. No full suite, full host build or forecast approval. Actual Intel/native builds separately bound.",
+  "sources_sha256": {
+    "tests/test_native_kdm6_trace.py": "74534569935b7ac13280aa622ad0959bcbf613cee849828cc7de3980d8263213",
+    "tests/test_native_kdm6_call_geometry.py": "4a1bf6465c4c763768f05ac4720a651185e90f975359e436a7b59c64e89a2372",
+    "tests/test_pr65_pbl_operator_replay.py": "e55d773a325422acea31b4c365ec7e429e578a2b1354f6475f908b9f2c1e78f9",
+    "tests/test_pr65_pbl_domain_metrics.py": "cb500213b337492bb7a5d0f771dfe54cba4d61e85b6c5b11d25aa826082af528",
+    "tests/test_pr65_samecall_budget_audit.py": "b260e8ea80c22a4a33c4507097e5fb22bf450a14bd504fa93f1f576ce231db40",
+    "tests/test_run_isolated_native.py": "8f0d4229070c7db9c243b4b445903b1b08525bee413d3c73c57b9a2366b6bf62",
+    "tests/test_pr67_pbl_carrier_audit.py": "5b2fef502df5060507bef870bcd29551e8a282ef003947d6c7fd6cf815d21eee",
+    "tests/test_pr67_negative_qc_replay.py": "175d559550dde1e085ceec2923e1ff9360c89ad67b24a508a2924d52ddba95e8",
+    "tests/test_prepare_pr67_model_target.py": "56f21e4d931e7f7d0891b4688af4e8f4a19826a50079c414dd859626ae112bab",
+    "src/common/cloud_bal_real_netcdf.f90": "d936dfee5c6dfa30ae664c97bfece042acdaeedf264d9be023089be0590b14a5",
+    "tools/pr67_pbl_carrier_audit.py": "ee14b894d87c625d8880c958b38698a299f0fd3f4e14714d439fb3504f0027c9",
+    "tools/pr67_negative_qc_replay.py": "0635515d42bb817f7f7476a9c9ab0379e2e838e7d088479fb374da15c27603f5",
+    "tests/prepare_pr67_model_target.py": "5894b494d5924338664326a9fde4b424eff658ccb89b728485eb76379645bcd3",
+    "tests/run_pr67_model_target_compatibility.sh": "4d0f1777eb7963c8aaee16ab797f7302c31423e0bf2b096abcddc049dc33adb1",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/test_pr67_kdm6_process_budget.py": "dafdb8eeffeb2726de98a7fa3862adff26c98405424113a881508849894fcdc0",
+    "tests/test_pr67_output_safety_crosscheck.py": "c0bb7227627d588a9f18ca657495df634b0705352c62d0a7d22dc32c71d80bbe",
+    "tools/pr67_kdm6_process_budget.py": "58aeed47e49e0d41845fda8ade88413a6991dddb1e41a250d9a6184a083c1f94",
+    "tools/pr67_output_safety_crosscheck.py": "d7c541d46c9ad2b218065640d1243cc87a7fa0b84674f1979aa5c4e0056a88e8",
+    "tests/run_python_contract_tests.sh": "3719a2bf17a89fc368817700a633c6e18d9589e54801b1ada0b90acd9c35f09d"
+  },
+  "results": [
+    {
+      "test": "tests/test_native_kdm6_trace.py",
+      "returncode": 0,
+      "test_count": 13,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_native_kdm6_trace.txt",
+      "log_sha256": "cac5b565578e1b31f6787112c1d12a0e79d4751c7f652d4b10f39d4362432419"
+    },
+    {
+      "test": "tests/test_native_kdm6_call_geometry.py",
+      "returncode": 0,
+      "test_count": 15,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_native_kdm6_call_geometry.txt",
+      "log_sha256": "975e0425226508b074cb5b4fb8ecbac30d3972e91ff2267af8c7849169c920bb"
+    },
+    {
+      "test": "tests/test_pr65_pbl_operator_replay.py",
+      "returncode": 0,
+      "test_count": 7,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_pr65_pbl_operator_replay.txt",
+      "log_sha256": "74c03fc16fde9a2dfeff03db0ec8f472a5a8dfed04e9e982a912b4b7f64faee3"
+    },
+    {
+      "test": "tests/test_pr65_pbl_domain_metrics.py",
+      "returncode": 0,
+      "test_count": 11,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_pr65_pbl_domain_metrics.txt",
+      "log_sha256": "1607edbfae007ff56d6138df5d24d28abfe4b1ef27902563e1bb9ad258e5c4ec"
+    },
+    {
+      "test": "tests/test_pr65_samecall_budget_audit.py",
+      "returncode": 0,
+      "test_count": 4,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_pr65_samecall_budget_audit.txt",
+      "log_sha256": "e73c3805f810fdcf3d0167ced7085c48306c9482a952ffb710551d230cdb3e51"
+    },
+    {
+      "test": "tests/test_run_isolated_native.py",
+      "returncode": 0,
+      "test_count": 10,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_run_isolated_native.txt",
+      "log_sha256": "01e63b905ca272af9d94edfc7600be4b93bfe1d527766fe24ba5d094f945af2f"
+    },
+    {
+      "test": "tests/test_pr67_pbl_carrier_audit.py",
+      "returncode": 0,
+      "test_count": 3,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_pr67_pbl_carrier_audit.txt",
+      "log_sha256": "3a315533b81287472852b81ae89b89d0f42abf74b1503c45c2c62712388d3eb1"
+    },
+    {
+      "test": "tests/test_pr67_negative_qc_replay.py",
+      "returncode": 0,
+      "test_count": 3,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_pr67_negative_qc_replay.txt",
+      "log_sha256": "921b60a7fd52e978fbb551cacd29df2d6708879400278e1fcc70fceeb0c6f8e0"
+    },
+    {
+      "test": "tests/test_prepare_pr67_model_target.py",
+      "returncode": 0,
+      "test_count": 4,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_prepare_pr67_model_target.txt",
+      "log_sha256": "feabb4add9e2ca3374e538560634d1ec97dc4f4ce89aab12f3d726e36ea9b2f6"
+    },
+    {
+      "test": "tests/test_pr67_kdm6_process_budget.py",
+      "returncode": 0,
+      "test_count": 4,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_pr67_kdm6_process_budget.txt",
+      "log_sha256": "feabb4add9e2ca3374e538560634d1ec97dc4f4ce89aab12f3d726e36ea9b2f6"
+    },
+    {
+      "test": "tests/test_pr67_output_safety_crosscheck.py",
+      "returncode": 0,
+      "test_count": 5,
+      "log": "docs/evidence/pr67_focused_validation_20261007/test_pr67_output_safety_crosscheck.txt",
+      "log_sha256": "6273232de4d3ef7acd4ecafa5c86beeeb974f56586b21089a2990b3f72facbe6"
+    }
+  ],
+  "all_passed": true,
+  "total_test_count": 79
+}

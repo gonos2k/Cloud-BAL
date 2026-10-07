@@ -1,0 +1,192 @@
+--- retained-current-generated.f90
++++ ice-only-observer-source.f90
+@@ -277,6 +277,8 @@
+    real, dimension(its:ite,kts:kte,3) :: qrs
+    real, dimension(its:ite,kts:kte)   :: n0so, n0go
+    integer                            :: i,j,k
++   logical, save :: pr67_trace_complete = .false.
++   logical :: pr67_trace_this_call
+    real, dimension(its:ite,kts:kte) :: brs
+    real, dimension(its:ite,kts:kte) :: rhox
+    real, dimension(its:ite,kts:kte) :: cmg
+@@ -302,6 +304,14 @@
+ 
+    real :: z_sum
+ 
++   pr67_trace_this_call = .not. pr67_trace_complete
++   if (pr67_trace_this_call) then
++     call kdm6_trace_dump(1,itimestep,ids,ide,jds,jde,kds,kde, &
++          ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++          delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult, &
++          th,pii,den,p,delz,q,qc,qr,qi,qs,qg,nn,nc,ni,nr,bg,diag_rhog,xland)
++   endif
++
+    if (itimestep .eq. 1) then 
+ 
+      do j = jms,jme
+@@ -368,6 +378,7 @@
+                 ,its,ite, jts,jte, kts,kte,n0so,n0go          &
+                 ,snow(ims,j),snowncv(ims,j)                &
+                 ,graupel(ims,j),graupelncv(ims,j)          &
++                ,pr67_trace_this_call                         &
+                 )
+ 
+      do k = kts,kte
+@@ -442,8 +453,68 @@
+      endif
+    enddo        
+ 
++   if (pr67_trace_this_call) then
++     call kdm6_trace_dump(2,itimestep,ids,ide,jds,jde,kds,kde, &
++          ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++          delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult, &
++          th,pii,den,p,delz,q,qc,qr,qi,qs,qg,nn,nc,ni,nr,bg,diag_rhog,xland)
++     pr67_trace_complete = .true.
++   endif
++
+    end subroutine kdm6
+ 
++   subroutine kdm6_trace_dump(stage,itimestep,ids,ide,jds,jde,kds,kde, &
++          ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++          delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult, &
++          th,pii,den,p,delz,q,qc,qr,qi,qs,qg,nn,nc,ni,nr,bg,diag_rhog,xland)
++     implicit none
++     integer,intent(in) :: stage,itimestep,ids,ide,jds,jde,kds,kde
++     integer,intent(in) :: ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte
++     real,intent(in) :: delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult
++     real,intent(in) :: th(ims:ime,kms:kme,jms:jme),pii(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: den(ims:ime,kms:kme,jms:jme),p(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: delz(ims:ime,kms:kme,jms:jme),q(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: qc(ims:ime,kms:kme,jms:jme),qr(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: qi(ims:ime,kms:kme,jms:jme),qs(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: qg(ims:ime,kms:kme,jms:jme),nn(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: nc(ims:ime,kms:kme,jms:jme),ni(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: nr(ims:ime,kms:kme,jms:jme),bg(ims:ime,kms:kme,jms:jme)
++     real,intent(in) :: diag_rhog(ims:ime,kms:kme,jms:jme),xland(ims:ime,jms:jme)
++     integer :: u
++     character(len=32) :: path
++     if (stage == 1) then
++       path='kdm6_first_call_pre.raw'
++     else
++       path='kdm6_first_call_post.raw'
++     endif
++     open(newunit=u,file=trim(path),access='stream',form='unformatted', &
++          status='replace',action='write')
++     write(u) 'KDM6TRC1'
++     write(u) stage,itimestep,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++               its,ite,jts,jte,kts,kte
++     write(u) delt,ccn0,scale_h,qnn_land_mult,qnn_sea_mult
++     write(u) 'TH      '; write(u) th
++     write(u) 'PII     '; write(u) pii
++     write(u) 'DEN     '; write(u) den
++     write(u) 'P       '; write(u) p
++     write(u) 'DELZ    '; write(u) delz
++     write(u) 'Q       '; write(u) q
++     write(u) 'QC      '; write(u) qc
++     write(u) 'QR      '; write(u) qr
++     write(u) 'QI      '; write(u) qi
++     write(u) 'QS      '; write(u) qs
++     write(u) 'QG      '; write(u) qg
++     write(u) 'NN      '; write(u) nn
++     write(u) 'NC      '; write(u) nc
++     write(u) 'NI      '; write(u) ni
++     write(u) 'NR      '; write(u) nr
++     write(u) 'BG      '; write(u) bg
++     write(u) 'DIAGRHOG'; write(u) diag_rhog
++     write(u) 'XLAND   '; write(u) xland
++     close(u)
++   end subroutine kdm6_trace_dump
++
++
+ 
+ 
+    subroutine kdm62D(t, q, qci, qrs, nci, nrs                     &
+@@ -462,6 +533,7 @@
+                    ,its,ite, jts,jte, kts,kte, n0so, n0go         &
+                    ,snow,snowncv                                  &
+                    ,graupel,graupelncv                            &
++                   ,pr67_trace_this_call                            &
+                     )
+ 
+     implicit none
+@@ -560,6 +632,7 @@
+                                                    ims,ime, jms,jme, kms,kme, &
+                                                    its,ite, jts,jte, kts,kte
+    integer                                , intent(in   ) :: lat
++   logical                                , intent(in   ) :: pr67_trace_this_call
+    real                                   , intent(in   ) :: delt
+    real                                   , intent(in   ) :: g, cpd, cpv, t0c, &
+                                                              den0, rd, rv,     &
+@@ -652,6 +725,7 @@
+    real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+    real, dimension(its:ite)           :: delqi
+    real, dimension(its:ite)           :: tstepsnow, tstepgraup
++   integer :: pr67_unit
+    real                               :: gfac, sfac
+    real, dimension(its:ite,kts:kte)   :: difa
+    double precision   :: pinuc,ninuc
+@@ -1152,6 +1226,8 @@
+             workn(i,k,1) = workn(i,k,1)/delz(i,k)
+             work1(i,k,2) = work1(i,k,2)/delz(i,k)
+             work1(i,k,3) = work1(i,k,3)/delz(i,k)
++            work1(i,k,4) = work1(i,k,4)/delz(i,k)
++            workn(i,k,2) = workn(i,k,2)/delz(i,k)
+           enddo
+         enddo
+       enddo      
+@@ -1159,6 +1235,17 @@
+ 
+ 
+ 
++      if (pr67_trace_this_call) then
++        open(newunit=pr67_unit,file='pr67_kdm6_process.raw', &
++             access='stream',form='unformatted',status='unknown',position='append')
++        write(pr67_unit) 'PR67P001'
++        write(pr67_unit) 0,lat,its,ite,kts,kte,dtcld
++        write(pr67_unit) work1(its:ite,kts:kte,4)
++        write(pr67_unit) delz(its:ite,kts:kte)
++        write(pr67_unit) dend(its:ite,kts:kte)
++        write(pr67_unit) qci(its:ite,kts:kte,2)
++        close(pr67_unit)
++      endif
+       do n = 1, mstepmax_i
+         k = kte
+         do i = its, ite
+@@ -1192,6 +1279,16 @@
+           enddo
+         enddo 
+ 
++        if (pr67_trace_this_call .and. n .eq. 1) then
++          open(newunit=pr67_unit,file='pr67_kdm6_process.raw', &
++               access='stream',form='unformatted',status='unknown',position='append')
++          write(pr67_unit) 'PR67P001'
++          write(pr67_unit) 1,lat,its,ite,kts,kte,dtcld
++          write(pr67_unit) qci(its:ite,kts:kte,2)
++          write(pr67_unit) falk(its:ite,kts:kte,4)
++          write(pr67_unit) fall(its:ite,kts:kte,4)
++          close(pr67_unit)
++        endif
+         do k = kts, kte
+           do i = its, ite
+             qrs_tmp(i,k,1) = qrs(i,k,1)
+@@ -1328,6 +1425,20 @@
+         ENDIF
+       enddo
+ 
++      if (pr67_trace_this_call) then
++        open(newunit=pr67_unit,file='pr67_kdm6_process.raw', &
++             access='stream',form='unformatted',status='unknown',position='append')
++        write(pr67_unit) 'PR67P001'
++        write(pr67_unit) 2,lat,its,ite,kts,kte,dtcld,denr
++        write(pr67_unit) fall(its:ite,kts,1:4)
++        write(pr67_unit) delz(its:ite,kts)
++        write(pr67_unit) den(its:ite,kts)
++        write(pr67_unit) rainncv(its:ite)
++        write(pr67_unit) present(snowncv),present(graupelncv)
++        if (present(snowncv)) write(pr67_unit) snowncv(its:ite)
++        if (present(graupelncv)) write(pr67_unit) graupelncv(its:ite)
++        close(pr67_unit)
++      endif
+ 
+       do k = kts, kte
+         do i = its, ite
