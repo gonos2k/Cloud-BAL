@@ -1,0 +1,113 @@
+--- solve_em_pr64_qc_channel.f90
++++ solve_em_pr67_negativeqc_channels.f90
+@@ -2764,6 +2764,13 @@
+                CALL wrf_debug ( 200 , ' call rk_update_scalar' )
+                tenddec = .false.
+ 
++               IF (im==P_QC) CALL pr67_qc_rk_before(rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                    moist(ims,kms,jms,P_QC),moist_old(ims,kms,jms,P_QC), &
++                    moist_tend(ims,kms,jms,P_QC),advect_tend,grid%msfty, &
++                    grid%c1h,grid%c2h,grid%mu_1,grid%mu_2,grid%mub,dt_rk, &
++                    grid%rqcblten,grid%rqccuten,grid%rqcshten,grid%rqcncuten,grid%rqcnshten)
+ 
+                CALL rk_update_scalar( scs=im, sce=im,                                  &
+                                scalar_1=moist_old(ims,kms,jms,im),                     &
+@@ -2788,6 +2795,9 @@
+                     moist_old(ims,kms,jms,P_QC),moist(ims,kms,jms,P_QC), &
+                     moist_tend(ims,kms,jms,P_QC),advect_tend,grid%msfty, &
+                     grid%c1h,grid%c2h,grid%mu_1,grid%mu_2,grid%mub,dt_rk)
++               IF (im==P_QC) CALL pr67_qc_rk_after('AFTER_UPDATE',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),moist(ims,kms,jms,P_QC))
+ 
+                IF( rk_step == rk_order .AND. config_flags%use_q_diabatic == 1 )THEN
+                IF( im.eq.p_qv .or. im.eq.p_qc )THEN
+@@ -2804,7 +2814,9 @@
+                ENDIF
+                ENDIF
+ 
+-
++               IF (im==P_QC) CALL pr67_qc_rk_after('AFTER_DIABATIC',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),moist(ims,kms,jms,P_QC))
+ 
+                IF( config_flags%specified .AND. ( .NOT. config_flags%have_bcs_moist ) ) THEN
+                  IF(im .ne. P_QV)THEN
+@@ -2819,7 +2831,9 @@
+                                 k_start, k_end                               )
+                  ENDIF
+                ENDIF
+-
++               IF (im==P_QC) CALL pr67_qc_rk_after('AFTER_FLOW_BDY',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),moist(ims,kms,jms,P_QC))
+ 
+              ENDDO moist_tile_loop_2
+              !$OMP END PARALLEL DO
+@@ -6192,6 +6206,64 @@
+   close(u)
+ END SUBROUTINE pr64_host_cut
+ 
++SUBROUTINE pr67_qc_rk_before(rkstep,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++     qc,qc_base,qc_phys_tend,qc_advect_tend,msfty,c1,c2,mu_old,mu_new,mu_base,dt, &
++     qc_bl_tend,qc_cu_tend,qc_sh_tend,qc_nc_tend,qc_ns_tend)
++  implicit none
++  integer,intent(in)::rkstep,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte
++  real,intent(in)::qc(ims:ime,kms:kme,jms:jme),qc_base(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::qc_phys_tend(ims:ime,kms:kme,jms:jme),qc_advect_tend(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::msfty(ims:ime,jms:jme),c1(kms:kme),c2(kms:kme)
++  real,intent(in)::mu_old(ims:ime,jms:jme),mu_new(ims:ime,jms:jme),mu_base(ims:ime,jms:jme),dt
++  real,intent(in)::qc_bl_tend(ims:ime,kms:kme,jms:jme),qc_cu_tend(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::qc_sh_tend(ims:ime,kms:kme,jms:jme),qc_nc_tend(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::qc_ns_tend(ims:ime,kms:kme,jms:jme)
++  integer::i,j,k,u
++  real::base_q,adv_term,total_tend,old_mass,new_mass,predicted_q
++  if(rkstep<1 .or. rkstep>3) return
++  open(newunit=u,file='pr67_qc_rk.raw',status='unknown',position='append',action='write')
++  do j=jts,jte
++    do k=kts,kte
++      do i=its,ite
++        base_q=qc_base(i,k,j)
++        if(rkstep==1) base_q=qc(i,k,j)
++        adv_term=qc_advect_tend(i,k,j)*msfty(i,j)
++        total_tend=adv_term+qc_phys_tend(i,k,j)
++        old_mass=c1(k)*(mu_old(i,j)+mu_base(i,j))+c2(k)
++        new_mass=c1(k)*(mu_new(i,j)+mu_base(i,j))+c2(k)
++        predicted_q=(old_mass*base_q+dt*total_tend)/new_mass
++        if(qc(i,k,j)>=0. .and. predicted_q<0.) then
++          write(u,'(A,1X,I0,1X,3(I0,1X),21(ES24.16,1X))') 'QC_PRE',rkstep,i,j,k, &
++               qc(i,k,j),base_q,qc_advect_tend(i,k,j),msfty(i,j),adv_term, &
++               qc_phys_tend(i,k,j),qc_bl_tend(i,k,j),qc_cu_tend(i,k,j), &
++               qc_sh_tend(i,k,j),qc_nc_tend(i,k,j),qc_ns_tend(i,k,j),total_tend,dt, &
++               c1(k),c2(k),mu_old(i,j),mu_new(i,j),mu_base(i,j),old_mass,new_mass,predicted_q
++        endif
++      enddo
++    enddo
++  enddo
++  close(u)
++END SUBROUTINE pr67_qc_rk_before
++
++SUBROUTINE pr67_qc_rk_after(stage,rkstep,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte,qc)
++  implicit none
++  character(len=*),intent(in)::stage
++  integer,intent(in)::rkstep,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte
++  real,intent(in)::qc(ims:ime,kms:kme,jms:jme)
++  integer::i,j,k,u
++  if(rkstep<1 .or. rkstep>3) return
++  open(newunit=u,file='pr67_qc_rk.raw',status='unknown',position='append',action='write')
++  do j=jts,jte
++    do k=kts,kte
++      do i=its,ite
++        if(qc(i,k,j)<0.) write(u,'(A,1X,A,1X,I0,1X,3(I0,1X),ES24.16)') &
++             'QC_POST',trim(stage),rkstep,i,j,k,qc(i,k,j)
++      enddo
++    enddo
++  enddo
++  close(u)
++END SUBROUTINE pr67_qc_rk_after
++
+ SUBROUTINE pr64_qc_channels(rkstep,bl,cu,shcu,diff_opt,km_opt, &
+      ims,ime,jms,jme,kms,kme,qc_tend,qc_bl,qc_cu,qc_sh,qnc_cu,qnc_sh)
+   implicit none

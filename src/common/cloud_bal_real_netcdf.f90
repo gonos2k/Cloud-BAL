@@ -210,12 +210,21 @@ CONTAINS
     INTEGER, INTENT(IN) :: ncid
     CHARACTER(LEN=*), INTENT(IN) :: name
     INTEGER(int32), INTENT(OUT) :: data(:,:,:)
-    INTEGER :: varid
+    INTEGER :: varid,k,nx,ny,nz
+    INTEGER(int32), ALLOCATABLE :: level(:,:,:)
     read_model_int3=.FALSE.; data=0_int32
     IF (.NOT.nc_ok(nf90_inq_varid(ncid,TRIM(name),varid))) RETURN
     IF (.NOT.variable_layout_is(ncid,varid,NF90_INT, &
         [CHARACTER(LEN=1) :: 'x','y','z'])) RETURN
-    IF (.NOT.nc_ok(nf90_get_var(ncid,varid,data))) RETURN
+    ! A full-domain integer read exceeds the ordinary 8 MiB process stack in
+    ! the pinned NetCDF Fortran runtime. Read one vertical level at a time so
+    ! large paired-model masks do not depend on an enlarged shell stack limit.
+    nx=SIZE(data,1); ny=SIZE(data,2); nz=SIZE(data,3)
+    ALLOCATE(level(nx,ny,1))
+    DO k=1,nz
+      IF (.NOT.nc_ok(nf90_get_var(ncid,varid,level,start=[1,1,k],count=[nx,ny,1]))) RETURN
+      data(:,:,k)=level(:,:,1)
+    END DO
     read_model_int3=.TRUE.
   END FUNCTION read_model_int3
 

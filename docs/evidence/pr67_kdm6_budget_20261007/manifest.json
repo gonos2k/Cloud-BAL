@@ -1,0 +1,137 @@
+{
+  "analysis_tools": {
+    "contract_test_runner_sha256": "3719a2bf17a89fc368817700a633c6e18d9589e54801b1ada0b90acd9c35f09d",
+    "output_safety_tests_sha256": "c0bb7227627d588a9f18ca657495df634b0705352c62d0a7d22dc32c71d80bbe",
+    "output_safety_tool_sha256": "d7c541d46c9ad2b218065640d1243cc87a7fa0b84674f1979aa5c4e0056a88e8",
+    "process_budget_tests_sha256": "dafdb8eeffeb2726de98a7fa3862adff26c98405424113a881508849894fcdc0",
+    "process_budget_tool_sha256": "58aeed47e49e0d41845fda8ade88413a6991dddb1e41a250d9a6184a083c1f94"
+  },
+  "build_provenance_file": "build_provenance.json",
+  "build_provenance_sha256": "5a82fcecc570af94479aca543e9ed1d55e33d64c3ceb4221b032138f92fd82ca",
+  "compiler": {
+    "byte_order": "-convert big_endian",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "2026.0.0 20260331"
+  },
+  "evidence_files": [
+    "build_provenance.json",
+    "combined_budget.json",
+    "combined_generated_source.patch",
+    "combined_kdm6_trace.json",
+    "combined_output_safety.json",
+    "ice_only_budget.json",
+    "ice_only_generated_source.patch",
+    "ice_only_kdm6_trace.json",
+    "ice_only_output_safety.json",
+    "observer_budget.json",
+    "observer_kdm6_trace.json",
+    "observer_output_safety.json",
+    "output_safety_crosscheck.json",
+    "run_receipt_combined.json",
+    "run_receipt_control.json",
+    "run_receipt_ice_only.json",
+    "run_receipt_observer.json",
+    "uninstrumented_observer_neutrality.json"
+  ],
+  "exploratory_little_endian_variants": "build_provenance.json#exploratory_little_endian_variants",
+  "note": "Each receipt also hashes its own variant wrf.exe; that executable is intentionally different across variants.",
+  "observer_neutrality_file": "uninstrumented_observer_neutrality.json",
+  "research_candidate_disposition": {
+    "combined_pr61_pr62_pr63_pr67": "REJECTED_DISABLED: 25 active REFL_10CM nonfinite cells at 20 seconds",
+    "ice_only_normalization": "REJECTED_DISABLED: 26 active REFL_10CM nonfinite cells at 20 seconds"
+  },
+  "research_objects": {
+    "combined_executable_sha256": "517a4813dc3da539b9e2bbf2faf79fd55cef9c2936353ebc92f10129f8139919",
+    "combined_generated_source_sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d",
+    "combined_object_sha256": "e846c95d926b1ad77df6ec2f2f45baf135a2bab670b05a695a4a148531506f78",
+    "ice_only_executable_sha256": "3b0f378e94366201520e94606b754334f7c96086c4b1e003a8637100016c593c",
+    "ice_only_generated_source_sha256": "45a52d4d82c5d14ce03559b4479ef3e127795ffc5610636bc7bc568c5ad03e16",
+    "ice_only_object_sha256": "ebfcb6342d64fd6d9e7367c22fba079c9a5f59dc495e3bd14e47a85c35d19016"
+  },
+  "runs": {
+    "combined": {
+      "executable_sha256": "517a4813dc3da539b9e2bbf2faf79fd55cef9c2936353ebc92f10129f8139919",
+      "geometry_sha256": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+      "input_count": 101,
+      "input_integrity": "PASS",
+      "output_count": 16,
+      "output_isolation": "PASS",
+      "post_sha256": "07f4706ca3a2613c64fd4b0cc4459880616a29a7504fa2891b81242bf782dc30",
+      "pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "process_capture_sha256": "4c9447daea830d8220aa5c67122b00b844eb80346fde32369547fa236c0a66d9",
+      "receipt_path": "/var/tmp/pr67_budget_capture_20261007/run_combined/run-isolation-pr67.json",
+      "receipt_sha256": "98b308e7e39d47cf989ca329ba09edf2ffe6f7212a18ddae18eb4f4fd3f36240",
+      "returncode": 0,
+      "run_root": "/var/tmp/pr67_budget_capture_20261007/run_combined"
+    },
+    "ice_only": {
+      "executable_sha256": "3b0f378e94366201520e94606b754334f7c96086c4b1e003a8637100016c593c",
+      "geometry_sha256": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+      "input_count": 101,
+      "input_integrity": "PASS",
+      "output_count": 16,
+      "output_isolation": "PASS",
+      "post_sha256": "c203935fb88275727c0351e558dfaf647e6f5316c012c7e946e8a21c03b2ce26",
+      "pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "process_capture_sha256": "4c9447daea830d8220aa5c67122b00b844eb80346fde32369547fa236c0a66d9",
+      "receipt_path": "/var/tmp/pr67_budget_capture_20261007/run_patch_be/run-isolation-pr67.json",
+      "receipt_sha256": "795d6aa535dfa3307e3cf8fa4c06a1a9827d701fd267e6626b6926d5fe142e06",
+      "returncode": 0,
+      "run_root": "/var/tmp/pr67_budget_capture_20261007/run_patch_be"
+    },
+    "observer": {
+      "executable_sha256": "f6c3a0281afa21901ae78e8d5ac37af8faf7c99c864626930757752afa5ecf45",
+      "geometry_sha256": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+      "input_count": 101,
+      "input_integrity": "PASS",
+      "output_count": 16,
+      "output_isolation": "PASS",
+      "post_sha256": "7e189ce0803d52121ad2ff58e350bcad6a964fde6918024cb97c45533ea25b52",
+      "pre_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "process_capture_sha256": "3510b9d3539e045018a58abcb87a8025c5e96e29254838a5a2793b91d2bf1ed9",
+      "receipt_path": "/var/tmp/pr67_budget_capture_20261007/run_observer_be/run-isolation-pr67.json",
+      "receipt_sha256": "2e963b2998dba0c5107915c10dab8530301e1a189b2269b1d261c3610a40064d",
+      "returncode": 0,
+      "run_root": "/var/tmp/pr67_budget_capture_20261007/run_observer_be"
+    }
+  },
+  "same_100_non_executable_input_files_all_variants": true,
+  "schema": "pr67_kdm6_budget_research_manifest_v1",
+  "scope_limits": [
+    "PR67 captures one same-call KDM6 tile and its bottom precipitation. The measured residual is diagnostic, not a conservation closure.",
+    "Ice-only normalization and combined PR61+PR62+PR63+PR67 research candidates both fail the active 20-second reflectivity safety gate and remain disabled.",
+    "No maintained WRF or operational input source was modified.",
+    "External static dependency closure and full energy closure remain open."
+  ],
+  "source_binding": {
+    "dependencies": {
+      "module_model_constants.mod": "262c94bfd198c60701a4fdceb8e85f30ae40c4a167fc5918cc7e73530d8bbe65",
+      "module_mp_radar.mod": "2d811755278297963f5cd3c968127e2384ba8fe6026ef40f2e6070aca462b8dc"
+    },
+    "generated_control_source": {
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_control.f90",
+      "sha256": "8f0a0da543aba9b936092d05a2a4a3ba8e0c8e991f13a8cd6519a2e1ef62ea6c"
+    },
+    "patches": {
+      "PR61_finalized_rain_evaporation": "2ec5755d05a795ae662905daf833a8483a27dac233ecac6fd15c1c616a732824",
+      "PR62_paired_cloud_extent": "acbbf4985e1bcd919ca96c7cf8c72a900a6821301ebc2df99484b7e9f3986a8b",
+      "PR63_paired_graupel_extinction": "aedc650a2af60c6931c1529476b460441231b992f9744867b233d4419e68a1e9",
+      "combined_generated_source_patch": "a82f8c6cc8891ff9ea3f62e96b75d7f948905f341f022e410c19687a23240bf9",
+      "ice_only_generated_source_patch": "ac1a96af7c7343e806a163258e1537a998677e5f936353670ec9d0d2a4793242"
+    },
+    "pinned_profile": {
+      "path": "tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    "preprocessed_F_hostcopy": {
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_mp_kdm6.F",
+      "sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a"
+    },
+    "relationship": "The retained generated source preprocesses byte-identically from the retained .F under the archived build route; source is an archived hostcopy bound by its hash, not an unbound maintained-source claim.",
+    "retained_current_generated_fortran_path": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_control.f90",
+    "retained_current_preprocessed_source_path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_mp_kdm6.F",
+    "sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a"
+  },
+  "uninstrumented_observer_neutrality_sha256": "41614c343f732efe93f9dd983031cb156b403c57fa660fe41d8394fe2169547e"
+}

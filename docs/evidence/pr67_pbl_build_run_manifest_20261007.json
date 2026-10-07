@@ -1,0 +1,83 @@
+{
+  "compiler_profile": {
+    "compile_flags": "-O3 -ip -fp-model precise -w -ftz -align all -fno-alias -FR -convert big_endian -real-size 32 -i4",
+    "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "module_dirs_sha256": "676c2f990e9a596a60d59ead1d24fdc55c8c28c44c00e0481cbfc6e98a14e32b",
+    "script": "tests/intel_toolchain.sh",
+    "script_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "history_neutrality": {
+    "operator_capture_byte_identical": true,
+    "pr65_baseline_operator_sha256": "fa937f9d19540cec65059bf8f1d78c27e8a739cc26e015da0ea1bb5b9fa588a0",
+    "pr65_baseline_wrfout_sha256": "c7f20c60be9343b1c4afcbb32e6c5851c9c5fc018807ffb44454ab068fedbb56",
+    "pr67_observer_wrfout_sha256": "c7f20c60be9343b1c4afcbb32e6c5851c9c5fc018807ffb44454ab068fedbb56",
+    "pr67_operator_sha256": "fa937f9d19540cec65059bf8f1d78c27e8a739cc26e015da0ea1bb5b9fa588a0",
+    "wrfout_byte_identical": true,
+    "wrfout_path": "wrfout_d01_2026-08-16_12:00:00"
+  },
+  "instrumentation": {
+    "baseline_generated_source_sha256": "efbb83ff27d7aabf6c0a498f57f546756b640d2bfad289e384be6a4c184863a0",
+    "reconstructed_compile_recipe": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -o /var/tmp/pr67_pbl_carrier_20261007/build_nohead/module_pbl_driver.o -c -O3 -ip -fp-model precise -w -ftz -align all -fno-alias -FR -convert big_endian -real-size 32 -i4 -module /var/tmp/pr67_pbl_carrier_20261007/build_nohead [retained module_dirs.txt include paths] /var/tmp/pr67_pbl_carrier_20261007/build_nohead/module_pbl_driver.f90",
+    "actual_expanded_compile_argv_captured": false,
+    "compile_argv_capture_note": "Exact compiler argv was not retained; this is a reconstructed recipe with the original module include arguments represented by a placeholder.",
+    "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "guarded_run_executable_sha256": "7b996087b280622b200fdc7cd0fb38cdb0b8b199ac13847b0a838a9876481332",
+    "host_closure": "retained PR65 archive with only module_pbl_driver.o replaced; not a full WRF rebuild",
+    "instrumented_generated_source_sha256": "6c8921e6ac1f96e5033d6f3067e7d850e51a60a32509ebfa2b3d8d700648815d",
+    "instrumented_object_sha256": "6cc270c390847abab854e98056f9df842fd25e3b3256a5aff8d616bfade165d1",
+    "link_command_sha256": "e81674924be10de42f0a266ef0818c34fc63149bb6f3487303452fe1f8a73d1d",
+    "link_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "linked_executable_sha256": "7b996087b280622b200fdc7cd0fb38cdb0b8b199ac13847b0a838a9876481332",
+    "observer_patch": "docs/evidence/pr67_pbl_samecall_carrier_observer.patch",
+    "observer_patch_sha256": "cb534abb32aabebe5532fef1a0afaa8bdecb99aa1cddc4cd94dee9f961890b0c",
+    "physics_algorithm_changed": false,
+    "static_archive_sha256": "f581bf9a01914b18c63cfd8a426a593304942d256ebdd9165c6af0443b110d95"
+  },
+  "limitations": [
+    "run_isolated_native checks declared paths only and is not an OS sandbox",
+    "the retained host object closure is partial; source/object/archive/executable hashes are recorded but the whole host was not rebuilt",
+    "retained module_domain type metadata failed live-grid id/dx sanity checks; hybrid coefficients are STATIC_INPUT_LINKED, not same-call coefficient captures"
+  ],
+  "module_identity": {
+    "compiled_module_pbl_driver_mod_sha256": "9157c2ed9cd0882239095d276925f3f04d24fd9d4a1ccf501d5b50f33f64feb8",
+    "module_bl_shinhong_mod_sha256": "080f2a3344e1a73ca31cb3e29c512ea6283b487b51a91914c56a8f2e460781fc",
+    "module_domain_mod_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/module_domain.mod",
+    "module_domain_mod_sha256": "7efc6a05c4d86e36d7d5e83d867029408fa72d33eced8c6ad6c33bc94643ddcc",
+    "module_domain_type_mod_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/module_domain_type.mod",
+    "module_domain_type_mod_sha256": "88b1dcefd382188e8cfa0b355c565de2d23a77da068b082abc13493f62bd02e8",
+    "note": "Pinned compiler resolved module_domain from the listed WRF frame directory; retained archive type layout failed live grid-id/DX sanity.",
+    "retained_module_dirs_file_sha256": "676c2f990e9a596a60d59ead1d24fdc55c8c28c44c00e0481cbfc6e98a14e32b"
+  },
+  "run": {
+    "command_json": "/var/tmp/pr67_pbl_carrier_20261007/run_bound_command.json",
+    "command_json_sha256": "981ebf37631ac1957fae86614bd3dacbb02524223a318c786175fb155fd27ff1",
+    "input_integrity": "PASS",
+    "isolation_runner_sha256": "f01bf3be9ac6f649fe8c350ddf445a582201d322dac5c80210e37a546484ebf1",
+    "live_executable_receipt_record": {
+      "path": "/var/tmp/pr67_pbl_carrier_20261007/run_bound/wrf.exe",
+      "sha256_after": "7b996087b280622b200fdc7cd0fb38cdb0b8b199ac13847b0a838a9876481332",
+      "sha256_before": "7b996087b280622b200fdc7cd0fb38cdb0b8b199ac13847b0a838a9876481332"
+    },
+    "output_isolation": "PASS",
+    "outputs": {
+      "pr65_pbl_nc.raw": {
+        "nlink": 1,
+        "sha256": "be94b846e487a544852d24eb85702dad70e7997faa0de42415e2027702b673a1"
+      },
+      "pr65_pbl_operator.raw": {
+        "nlink": 1,
+        "sha256": "fa937f9d19540cec65059bf8f1d78c27e8a739cc26e015da0ea1bb5b9fa588a0"
+      },
+      "pr67_pbl_carrier.raw": {
+        "nlink": 1,
+        "sha256": "283e6bd7bcc58d7c555776a1e6674b286a0415f5149cedd8987e1179a6d96e8e"
+      }
+    },
+    "receipt": "run-isolation.json",
+    "receipt_returncode": 0,
+    "run_root": "/var/tmp/pr67_pbl_carrier_20261007/run_bound",
+    "wrfinput_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+  },
+  "schema": "pr67_pbl_build_run_manifest_v1"
+}

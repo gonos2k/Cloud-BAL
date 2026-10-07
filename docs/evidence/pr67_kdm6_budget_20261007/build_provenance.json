@@ -1,0 +1,351 @@
+{
+  "byte_order": "-convert big_endian; confirmed by matching big-endian process and KDM capture readers",
+  "compile_command_capture_limit": "The retained KDM/driver compile logs contain compiler diagnostics but do not echo complete ifx argument vectors. The pinned tests/intel_toolchain.sh profile, compiler identity, byte-order setting, object hashes, generated source hashes, dependencies, and link argv are bound here. Do not infer unrecorded compile flags.",
+  "compiler": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "source": "tests/intel_toolchain.sh",
+    "source_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "version": "2026.0.0 20260331"
+  },
+  "exploratory_little_endian_variants": [
+    {
+      "input_integrity": "PASS",
+      "interpretation": "Completed little-endian format variant; retained as exploratory, superseded for final byte-order-authoritative results by -convert big_endian runs.",
+      "output_isolation": "PASS",
+      "process_capture_bytes": null,
+      "process_capture_sha256": null,
+      "receipt_sha256": "baa9c9b0c902ec1fd9a1b61636cfdf6ab172a379ff937f71c7fa882d4b99444e",
+      "returncode": 0,
+      "run_root": "/var/tmp/pr67_budget_capture_20261007/run_control",
+      "variant": "control"
+    },
+    {
+      "input_integrity": "PASS",
+      "interpretation": "Completed little-endian format variant; retained as exploratory, superseded for final byte-order-authoritative results by -convert big_endian runs.",
+      "output_isolation": "PASS",
+      "process_capture_bytes": 83442240,
+      "process_capture_sha256": "2b859111bdb3f377a5a6ad6383f0158e57e31e923462d40237bafd453afbdf4e",
+      "receipt_sha256": "0e4bae482b3702b78cf135e289dc28877b3d673cf0d797dc83549ad31f64f205",
+      "returncode": 0,
+      "run_root": "/var/tmp/pr67_budget_capture_20261007/run_observer",
+      "variant": "observer"
+    },
+    {
+      "input_integrity": "PASS",
+      "interpretation": "Completed little-endian format variant; retained as exploratory, superseded for final byte-order-authoritative results by -convert big_endian runs.",
+      "output_isolation": "PASS",
+      "process_capture_bytes": 83442240,
+      "process_capture_sha256": "68f6fff19cc3f45e7467092dcfa845b37194f5c421a5a94982b45f23dec00548",
+      "receipt_sha256": "79b23b8ffb6bcefd3ec4d8dd9662d2b62b29b283db64eb846218664aa6a37e35",
+      "returncode": 0,
+      "run_root": "/var/tmp/pr67_budget_capture_20261007/run_patch",
+      "variant": "ice_only"
+    }
+  ],
+  "failed_attempts_review": {
+    "result": "No failed build log or HDF5 rebuild/compatibility attempt was retained in these selected paths. The compile logs include diagnostics; HDF5 references are runtime ldd resolutions only.",
+    "searched_paths": [
+      "/var/tmp/pr67_budget_capture_20261007/kdm_control_be/compile.log",
+      "/var/tmp/pr67_budget_capture_20261007/kdm_observer_be/compile.log",
+      "/var/tmp/pr67_budget_capture_20261007/kdm_patch_be/compile.log",
+      "/var/tmp/pr67_budget_capture_20261007/kdm_combined/compile.log",
+      "/var/tmp/pr67_budget_capture_20261007/build/compile_driver_control.log",
+      "/var/tmp/pr67_budget_capture_20261007/build/compile_driver_observer.log"
+    ]
+  },
+  "fresh_build_tree": "/var/tmp/pr67_budget_capture_20261007",
+  "fresh_current_source_control_binding": {
+    "archive_member_bindings": {
+      "combined": {
+        "archive_path": "/var/tmp/pr67_budget_capture_20261007/link_combined/libwrflib_pr65.a",
+        "archive_sha256": "3c2a26eccc2c72d8bca2ac93b6276617249652006807547ffca7faaf3ddbe7ec",
+        "embedded_archive_member_sha256": "e846c95d926b1ad77df6ec2f2f45baf135a2bab670b05a695a4a148531506f78",
+        "object_matches_embedded_member": true,
+        "object_path": "/var/tmp/pr67_budget_capture_20261007/kdm_combined/module_mp_kdm6.o",
+        "object_sha256": "e846c95d926b1ad77df6ec2f2f45baf135a2bab670b05a695a4a148531506f78"
+      },
+      "control": {
+        "archive_path": "/var/tmp/pr67_budget_capture_20261007/link_control_be/libwrflib_pr65.a",
+        "archive_sha256": "5c6807d36ce9d0aa60c67d7dbaeef58978b457d3d09c780a3337acf15fed2300",
+        "embedded_archive_member_sha256": "5cad80b333033f9007ff89d94f14b95d75efbb364ca8ca215e31c94ef93525cf",
+        "object_matches_embedded_member": true,
+        "object_path": "/var/tmp/pr67_budget_capture_20261007/kdm_control_be/module_mp_kdm6.o",
+        "object_sha256": "5cad80b333033f9007ff89d94f14b95d75efbb364ca8ca215e31c94ef93525cf"
+      },
+      "ice_only": {
+        "archive_path": "/var/tmp/pr67_budget_capture_20261007/link_patch_be/libwrflib_pr65.a",
+        "archive_sha256": "f55eeb2c21fa3095a06c3709877f2d1269136bc305c36e04f6fd7d967939ee9a",
+        "embedded_archive_member_sha256": "ebfcb6342d64fd6d9e7367c22fba079c9a5f59dc495e3bd14e47a85c35d19016",
+        "object_matches_embedded_member": true,
+        "object_path": "/var/tmp/pr67_budget_capture_20261007/kdm_patch_be/module_mp_kdm6.o",
+        "object_sha256": "ebfcb6342d64fd6d9e7367c22fba079c9a5f59dc495e3bd14e47a85c35d19016"
+      },
+      "observer": {
+        "archive_path": "/var/tmp/pr67_budget_capture_20261007/link_observer_be/libwrflib_pr65.a",
+        "archive_sha256": "ad80bc043c5c55587f127478828ddc5b3bd86726b9878b226a2f36395f049ddd",
+        "embedded_archive_member_sha256": "8e9db735e6e841b82d33afc351a5bec972902d01d90fe640b4f6e001d8f8e075",
+        "object_matches_embedded_member": true,
+        "object_path": "/var/tmp/pr67_budget_capture_20261007/kdm_observer_be/module_mp_kdm6.o",
+        "object_sha256": "8e9db735e6e841b82d33afc351a5bec972902d01d90fe640b4f6e001d8f8e075"
+      }
+    },
+    "current_generated_control_compile_log": {
+      "bytes": 30239,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_control_be/compile.log",
+      "sha256": "1a2a937696be8260815f5ec4eab37a942031bffe39d5a71372be71bd38ca67c5"
+    },
+    "current_generated_control_object": {
+      "bytes": 3806944,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_control_be/module_mp_kdm6.o",
+      "sha256": "5cad80b333033f9007ff89d94f14b95d75efbb364ca8ca215e31c94ef93525cf"
+    },
+    "current_generated_control_source": {
+      "bytes": 138071,
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_control.f90",
+      "sha256": "8f0a0da543aba9b936092d05a2a4a3ba8e0c8e991f13a8cd6519a2e1ef62ea6c"
+    },
+    "scope": "The control and observer KDM6 objects are compiled from the same selected current generated control source and observer derivative, then inserted into separate copies of the retained PR65 host archive. KDM6 member identity is byte-checked; external static members/dependencies remain partially bound."
+  },
+  "hdf5_note": "No separate HDF5 rebuild/compatibility attempt is present in the retained PR67 build logs. The successful executables resolve the existing runtime libhdf5_hl.so.310 and libhdf5.so.310 from the WRF library tree; runtime ldd records are hash-bound above.",
+  "link_log_note": "The retained pinned link-route log records mpiifx -O3 -convert big_endian with a local libwrflib_pr65.a argument. Candidate archives and executables have separate hashes and receipts. Candidate-specific expanded link argv logs are not retained here; do not claim the referenced route log attests each exact invocation.",
+  "runs": {
+    "combined": {
+      "executable": {
+        "bytes": 71177016,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_combined/wrf.exe",
+        "sha256": "517a4813dc3da539b9e2bbf2faf79fd55cef9c2936353ebc92f10129f8139919"
+      },
+      "launch_environment": {
+        "bytes": 7258,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_combined/launch_environment.txt",
+        "sha256": "bb50079f681782960bb27b93d451cfd5d5c6fe9822e0ed773faa8bb657c34161"
+      },
+      "resolved_hdf5_libraries": [
+        "libhdf5_hl.so.310 => /NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib/libhdf5_hl.so.310 (0x00001453f9670000)",
+        "libhdf5.so.310 => /NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib/libhdf5.so.310 (0x00001453ee349000)"
+      ],
+      "runtime_libraries": {
+        "bytes": 4529,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_combined/runtime_libraries.txt",
+        "sha256": "0c912009813827a8ec6a0599c5f754bd8074afb95bfbce26321909ecac74f1f3"
+      }
+    },
+    "control": {
+      "executable": {
+        "bytes": 71114192,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_control_be/wrf.exe",
+        "sha256": "28696209fc9f57c3cce22eafa8d5b818ae90c0fbef8b4d0d8ce3448eefc9a0d1"
+      },
+      "launch_environment": {
+        "bytes": 7260,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_control_be/launch_environment.txt",
+        "sha256": "281a27c950c62b7b67ce69279f9b243771494ac45747d5cb3f282d53f8fa78ee"
+      },
+      "resolved_hdf5_libraries": [
+        "libhdf5_hl.so.310 => /NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib/libhdf5_hl.so.310 (0x00000c7b96a96000)",
+        "libhdf5.so.310 => /NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib/libhdf5.so.310 (0x00000c7b8b749000)"
+      ],
+      "runtime_libraries": {
+        "bytes": 4529,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_control_be/runtime_libraries.txt",
+        "sha256": "e946b104f15f970c50f7cc8b936ef9b551d1b31c3a6a3c703b5922eb42c16b79"
+      }
+    },
+    "ice_only": {
+      "executable": {
+        "bytes": 71162904,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_patch_be/wrf.exe",
+        "sha256": "3b0f378e94366201520e94606b754334f7c96086c4b1e003a8637100016c593c"
+      },
+      "launch_environment": {
+        "bytes": 7258,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_patch_be/launch_environment.txt",
+        "sha256": "6c5a42406d83b9017e3265f61d541956566a8047d77296f3c547c794f40edba2"
+      },
+      "resolved_hdf5_libraries": [
+        "libhdf5_hl.so.310 => /NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib/libhdf5_hl.so.310 (0x00000c94f9559000)",
+        "libhdf5.so.310 => /NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib/libhdf5.so.310 (0x00000c94ee149000)"
+      ],
+      "runtime_libraries": {
+        "bytes": 4529,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_patch_be/runtime_libraries.txt",
+        "sha256": "b1e8245bf6f85376209795752de949a132111adab5cd79d4b78b89fb90801c5f"
+      }
+    },
+    "observer": {
+      "executable": {
+        "bytes": 71158224,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_observer_be/wrf.exe",
+        "sha256": "f6c3a0281afa21901ae78e8d5ac37af8faf7c99c864626930757752afa5ecf45"
+      },
+      "launch_environment": {
+        "bytes": 7261,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_observer_be/launch_environment.txt",
+        "sha256": "98466dc43e1944482589b9ea017a0d8e9fad665c926512f9ba9eb7d451e49a45"
+      },
+      "resolved_hdf5_libraries": [
+        "libhdf5_hl.so.310 => /NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib/libhdf5_hl.so.310 (0x00000dd477ce7000)",
+        "libhdf5.so.310 => /NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib/libhdf5.so.310 (0x00000dd46c949000)"
+      ],
+      "runtime_libraries": {
+        "bytes": 4529,
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_observer_be/runtime_libraries.txt",
+        "sha256": "192ed1ed7486d2d7002c5db49a2371088c70242be55b46259968e90bb4b8c37b"
+      }
+    }
+  },
+  "schema": "pr67_pinned_build_provenance_v1",
+  "selected_artifacts": {
+    "combined_archive": {
+      "bytes": 94793474,
+      "path": "/var/tmp/pr67_budget_capture_20261007/link_combined/libwrflib_pr65.a",
+      "sha256": "3c2a26eccc2c72d8bca2ac93b6276617249652006807547ffca7faaf3ddbe7ec"
+    },
+    "combined_kdm_compile_log": {
+      "bytes": 31226,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_combined/compile.log",
+      "sha256": "5a20e5b1e7ba57d0cb8a4dbbeb4706081866759a63175ba887ef9534f371374b"
+    },
+    "combined_kdm_object": {
+      "bytes": 3890456,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_combined/module_mp_kdm6.o",
+      "sha256": "e846c95d926b1ad77df6ec2f2f45baf135a2bab670b05a695a4a148531506f78"
+    },
+    "control_archive": {
+      "bytes": 94709924,
+      "path": "/var/tmp/pr67_budget_capture_20261007/link_control_be/libwrflib_pr65.a",
+      "sha256": "5c6807d36ce9d0aa60c67d7dbaeef58978b457d3d09c780a3337acf15fed2300"
+    },
+    "control_kdm_compile_log": {
+      "bytes": 30239,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_control_be/compile.log",
+      "sha256": "1a2a937696be8260815f5ec4eab37a942031bffe39d5a71372be71bd38ca67c5"
+    },
+    "control_kdm_object": {
+      "bytes": 3806944,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_control_be/module_mp_kdm6.o",
+      "sha256": "5cad80b333033f9007ff89d94f14b95d75efbb364ca8ca215e31c94ef93525cf"
+    },
+    "generated_combined_observer_source": {
+      "bytes": 144102,
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_combined_observer.f90",
+      "sha256": "86fcbbddff23929b33f4bd7e54655078839a940a89c480791455ef97aa9cdfbd"
+    },
+    "generated_combined_research_source": {
+      "bytes": 144202,
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_combined_research.f90",
+      "sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d"
+    },
+    "generated_control_source": {
+      "bytes": 138071,
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_control.f90",
+      "sha256": "8f0a0da543aba9b936092d05a2a4a3ba8e0c8e991f13a8cd6519a2e1ef62ea6c"
+    },
+    "generated_ice_only_source": {
+      "bytes": 143333,
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_pr67_researchfix.f90",
+      "sha256": "45a52d4d82c5d14ce03559b4479ef3e127795ffc5610636bc7bc568c5ad03e16"
+    },
+    "generated_observer_source": {
+      "bytes": 143233,
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_pr67.f90",
+      "sha256": "f50ad9d7009b79159f3ce360487d30f6956417cfd86906c16f1ee270b27fab2f"
+    },
+    "ice_only_archive": {
+      "bytes": 94771138,
+      "path": "/var/tmp/pr67_budget_capture_20261007/link_patch_be/libwrflib_pr65.a",
+      "sha256": "f55eeb2c21fa3095a06c3709877f2d1269136bc305c36e04f6fd7d967939ee9a"
+    },
+    "ice_only_kdm_compile_log": {
+      "bytes": 31105,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_patch_be/compile.log",
+      "sha256": "cfaf7c54c8d8fad50cf7ab1f943d6998ef5e826508d67d98130a7fd7c40cf0e4"
+    },
+    "ice_only_kdm_object": {
+      "bytes": 3868120,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_patch_be/module_mp_kdm6.o",
+      "sha256": "ebfcb6342d64fd6d9e7367c22fba079c9a5f59dc495e3bd14e47a85c35d19016"
+    },
+    "module_microphysics_driver_control_compile_log": {
+      "bytes": 37372,
+      "path": "/var/tmp/pr67_budget_capture_20261007/build/compile_driver_control.log",
+      "sha256": "959a9a4a7f2ea3ecb7edc40f2eedb10088465662124d831b162a85bc7ef6c882"
+    },
+    "module_microphysics_driver_control_object": {
+      "bytes": 301168,
+      "path": "/var/tmp/pr67_budget_capture_20261007/build/module_microphysics_driver_control.o",
+      "sha256": "021027c0980385e8db462463b39a7690245207eeaa4a26a8809ece2c3a9afea9"
+    },
+    "module_microphysics_driver_control_source": {
+      "bytes": 135525,
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_microphysics_driver.f90",
+      "sha256": "149e11e0dc678600f189bd5fb66c190b6253b0663b253d211d929d8b17b0cddc"
+    },
+    "module_microphysics_driver_mod": {
+      "bytes": 704896,
+      "path": "/var/tmp/pr67_budget_capture_20261007/build/module_microphysics_driver.mod",
+      "sha256": "ca0e2f1e131d50e48d5be520631482268bf2fd0db8e6c668df687c7b2d8743f8"
+    },
+    "module_microphysics_driver_observer_compile_log": {
+      "bytes": 38118,
+      "path": "/var/tmp/pr67_budget_capture_20261007/build/compile_driver_observer.log",
+      "sha256": "72ce54bd54b666c333be7d0dc6e903a0d868846b5994de8ddc8172e59480b6ce"
+    },
+    "module_microphysics_driver_observer_object": {
+      "bytes": 309128,
+      "path": "/var/tmp/pr67_budget_capture_20261007/build/module_microphysics_driver_observer.o",
+      "sha256": "20b41aa98bac25b5df30c0c489a60b820a2a7952ba36cb2db71162a9b46ecfe3"
+    },
+    "module_microphysics_driver_observer_source": {
+      "bytes": 137916,
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_microphysics_driver_pr67.f90",
+      "sha256": "f36888922b87944ff040da54ebbadd1677a641ef02c72764a812c2dbbeedf3c2"
+    },
+    "module_mixactivate_mod": {
+      "bytes": 54902,
+      "path": "/var/tmp/pr67_budget_capture_20261007/build/module_mixactivate.mod",
+      "sha256": "08eda884075368026c03562c6eb9fc4e40169f6d392f829bf0303d488f916c2f"
+    },
+    "module_mixactivate_object": {
+      "bytes": 1508832,
+      "path": "/var/tmp/pr67_budget_capture_20261007/build/module_mixactivate.o",
+      "sha256": "62488bafca67b625f7bf713e3aca328a154eb7cb4f17f6238bc7b0f4edb2388b"
+    },
+    "module_mixactivate_source": {
+      "bytes": 83692,
+      "path": "/var/tmp/pr67_budget_capture_20261007/source/module_mixactivate.f90",
+      "sha256": "fef635e813b481fed3837721dee2baca123f6fb507af4f3b55f6b5bb1bd1a0c7"
+    },
+    "observer_archive": {
+      "bytes": 94764106,
+      "path": "/var/tmp/pr67_budget_capture_20261007/link_observer_be/libwrflib_pr65.a",
+      "sha256": "ad80bc043c5c55587f127478828ddc5b3bd86726b9878b226a2f36395f049ddd"
+    },
+    "observer_kdm_compile_log": {
+      "bytes": 29653,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_observer_be/compile.log",
+      "sha256": "fc34ecac18953bcba450eeab073cdae08b4b13859d66848957436a68b473cfa4"
+    },
+    "observer_kdm_object": {
+      "bytes": 3861088,
+      "path": "/var/tmp/pr67_budget_capture_20261007/kdm_observer_be/module_mp_kdm6.o",
+      "sha256": "8e9db735e6e841b82d33afc351a5bec972902d01d90fe640b4f6e001d8f8e075"
+    },
+    "selected_module_model_constants_mod": {
+      "bytes": 15750,
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/frame/module_model_constants.mod",
+      "sha256": "262c94bfd198c60701a4fdceb8e85f30ae40c4a167fc5918cc7e73530d8bbe65"
+    },
+    "selected_module_mp_radar_mod": {
+      "bytes": 9761,
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_mp_radar.mod",
+      "sha256": "2d811755278297963f5cd3c968127e2384ba8fe6026ef40f2e6070aca462b8dc"
+    },
+    "successful_pinned_link_log": {
+      "bytes": 1751,
+      "path": "/var/tmp/pr65_pbl_lineage_20261007/link_sharednc_postcapture_pinned/make_link.log",
+      "sha256": "835b9b9d54fa9d9d0bcca08c1260e23e587c77f534e620ff834cc91888cb8249"
+    }
+  }
+}
