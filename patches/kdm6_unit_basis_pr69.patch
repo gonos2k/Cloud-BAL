@@ -1,0 +1,165 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -10,6 +10,7 @@
+ !-------------------------------------------------------------------------------
+ !
+    use module_mp_radar
++   use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
+    use module_model_constants, only : RE_QC_BG, RE_QI_BG, RE_QS_BG
+ !
+ !
+@@ -186,6 +187,56 @@
+   real, parameter, private :: F2S =0.44 ! 
+ !
+     contains
++
++    pure elemental subroutine moist_to_dry_density(total_density, vapor_mixing_ratio, dry_density, valid)
++      real, intent(in) :: total_density, vapor_mixing_ratio
++      real, intent(out) :: dry_density
++      logical, intent(out) :: valid
++
++      dry_density = 0.0
++      valid = .false.
++      if (.not. ieee_is_finite(total_density) .or. &
++          .not. ieee_is_finite(vapor_mixing_ratio)) return
++      if (total_density <= 0.0 .or. vapor_mixing_ratio < 0.0) return
++      if (vapor_mixing_ratio > huge(vapor_mixing_ratio) - 1.0) return
++      dry_density = total_density / (1.0 + vapor_mixing_ratio)
++      valid = ieee_is_finite(dry_density) .and. dry_density > 0.0
++    end subroutine moist_to_dry_density
++
++    pure elemental subroutine specific_number_to_volume(number_per_kg, dry_density, number_per_m3, valid)
++      real, intent(in) :: number_per_kg, dry_density
++      real, intent(out) :: number_per_m3
++      logical, intent(out) :: valid
++
++      number_per_m3 = 0.0
++      valid = .false.
++      if (.not. ieee_is_finite(number_per_kg) .or. .not. ieee_is_finite(dry_density)) return
++      if (number_per_kg < 0.0 .or. dry_density <= 0.0) return
++      if (dry_density > 1.0) then
++        if (number_per_kg > huge(number_per_kg) / dry_density) return
++      end if
++      number_per_m3 = number_per_kg * dry_density
++      valid = ieee_is_finite(number_per_m3)
++      if (number_per_kg > 0.0 .and. number_per_m3 == 0.0) valid = .false.
++    end subroutine specific_number_to_volume
++
++    pure elemental subroutine volume_number_to_specific(number_per_m3, dry_density, number_per_kg, valid)
++      real, intent(in) :: number_per_m3, dry_density
++      real, intent(out) :: number_per_kg
++      logical, intent(out) :: valid
++
++      number_per_kg = 0.0
++      valid = .false.
++      if (.not. ieee_is_finite(number_per_m3) .or. .not. ieee_is_finite(dry_density)) return
++      if (number_per_m3 < 0.0 .or. dry_density <= 0.0) return
++      if (dry_density < 1.0) then
++        if (number_per_m3 > huge(number_per_m3) * dry_density) return
++      end if
++      number_per_kg = number_per_m3 / dry_density
++      valid = ieee_is_finite(number_per_kg)
++      if (number_per_m3 > 0.0 .and. number_per_kg == 0.0) valid = .false.
++    end subroutine volume_number_to_specific
++
+ !===================================================================
+ !
+     subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
+@@ -306,6 +357,9 @@
+    real, dimension(kts:kte) :: qc1d, nc1d, den1d
+    real, dimension(kts:kte) :: qi1d, ni1d
+    real, dimension(kts:kte) :: re_qc, re_qi, re_qs
++   real :: number_value
++   real, dimension(ims:ime,kms:kme) :: dry_density
++   logical :: number_valid
+ ! 20250106 CCN init
+    real :: z_sum
+ !
+@@ -340,15 +394,26 @@
+      do k = kts,kte
+        do i = its,ite
+          t(i,k) = th(i,k,j)*pii(i,k,j)
++         call moist_to_dry_density(den(i,k,j), q(i,k,j), &
++                                   dry_density(i,k), number_valid)
++         if (.not. number_valid) error stop 'KDM6 invalid moist-to-dry density'
+          qci(i,k,1) = qc(i,k,j)
+          qci(i,k,2) = qi(i,k,j)
+          qrs(i,k,1) = qr(i,k,j)
+          qrs(i,k,2) = qs(i,k,j)
+          qrs(i,k,3) = qg(i,k,j)
+-         nci(i,k,1) = nc(i,k,j)
+-         nci(i,k,2) = ni(i,k,j)
+-         nci(i,k,3) = nn(i,k,j)
+-         nrs(i,k,1) = nr(i,k,j)     
++         call specific_number_to_volume(nc(i,k,j), dry_density(i,k), number_value, number_valid)
++         if (.not. number_valid) error stop 'KDM6 invalid NC number basis input'
++         nci(i,k,1) = number_value
++         call specific_number_to_volume(ni(i,k,j), dry_density(i,k), number_value, number_valid)
++         if (.not. number_valid) error stop 'KDM6 invalid NI number basis input'
++         nci(i,k,2) = number_value
++         call specific_number_to_volume(nn(i,k,j), dry_density(i,k), number_value, number_valid)
++         if (.not. number_valid) error stop 'KDM6 invalid NN number basis input'
++         nci(i,k,3) = number_value
++         call specific_number_to_volume(nr(i,k,j), dry_density(i,k), number_value, number_valid)
++         if (.not. number_valid) error stop 'KDM6 invalid NR number basis input'
++         nrs(i,k,1) = number_value
+          nrs(i,k,2) = 0. 
+          nrs(i,k,3) = 0. 
+          brs(i,k) = bg(i,k,j)
+@@ -385,10 +450,18 @@
+          qr(i,k,j) = qrs(i,k,1)
+          qs(i,k,j) = qrs(i,k,2)
+          qg(i,k,j) = qrs(i,k,3)
+-         nr(i,k,j) = nrs(i,k,1)   
+-         nc(i,k,j) = nci(i,k,1)
+-         ni(i,k,j) = nci(i,k,2)
+-         nn(i,k,j) = nci(i,k,3)
++         call volume_number_to_specific(nrs(i,k,1), dry_density(i,k), number_value, number_valid)
++         if (.not. number_valid) error stop 'KDM6 invalid NR number basis output'
++         nr(i,k,j) = number_value
++         call volume_number_to_specific(nci(i,k,1), dry_density(i,k), number_value, number_valid)
++         if (.not. number_valid) error stop 'KDM6 invalid NC number basis output'
++         nc(i,k,j) = number_value
++         call volume_number_to_specific(nci(i,k,2), dry_density(i,k), number_value, number_valid)
++         if (.not. number_valid) error stop 'KDM6 invalid NI number basis output'
++         ni(i,k,j) = number_value
++         call volume_number_to_specific(nci(i,k,3), dry_density(i,k), number_value, number_valid)
++         if (.not. number_valid) error stop 'KDM6 invalid NN number basis output'
++         nn(i,k,j) = number_value
+          bg(i,k,j) = brs(i,k)
+          diag_rhog(i,k,j) = rhox(i,k)
+        enddo
+@@ -428,12 +501,12 @@
+            re_qs(k) = RE_QS_BG
+ !
+            t1d(k)  = th(i,k,j)*pii(i,k,j)
+-           den1d(k)= den(i,k,j)
++           den1d(k)= dry_density(i,k)
+            qc1d(k) = qc(i,k,j)
+            qi1d(k) = qi(i,k,j)
+            qs1d(k) = qs(i,k,j)
+-           nc1d(k) = nc(i,k,j)
+-           ni1d(k) = ni(i,k,j)
++           nc1d(k) = nci(i,k,1)/dry_density(i,k)
++           ni1d(k) = nci(i,k,2)/dry_density(i,k)
+          enddo
+ !
+          call effectRad_kdm6(t1d, qc1d, nc1d, qi1d, ni1d, qs1d, den1d,   &
+@@ -4074,7 +4147,7 @@
+         do k=kts,kte
+           if (rqc(k).le.R1 .or. rnc(k).le.R2) CYCLE
+ !          lamc = 2.*cdm2*(pidnc*nc(k)/rqc(k))**obmr
+-          lamc = (pidnc*nc(k)/rqc(k))**(1./xbm_r)
++          lamc = (pidnc*rnc(k)/rqc(k))**(1./xbm_r)
+           lamco =  lamc*2*cdm2/cdm3
+           re_qc(k) =  max(2.51e-6,min(sngl(1.0d0/lamco),50.e-6))
+         enddo
+@@ -4083,7 +4156,7 @@
+       if (has_qi) then
+         do k=kts,kte
+           if (rqi(k).le.R1 .or. rni(k).le.R2) CYCLE
+-           lami = (pidni*ni(k)/rqi(k))**(1./xbm_i) 
++           lami = (pidni*rni(k)/rqi(k))**(1./xbm_i) 
+            lamio = lami*2*idm4/idm3
+            re_qi(k) = max(10.01e-6,min(sngl(1.0d0/lamio),125.e-6))
+         enddo

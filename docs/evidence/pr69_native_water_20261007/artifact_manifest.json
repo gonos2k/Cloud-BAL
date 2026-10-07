@@ -1,0 +1,128 @@
+{
+  "schema": "pr69_native_water_artifact_manifest_v1",
+  "scope": "PR68-neutral baseline source-carrier accounting replay, hardened run guards, generation-only joint candidate composition",
+  "evidence_files": [
+    {
+      "path": "build_hashes.txt",
+      "size_bytes": 303,
+      "sha256": "4e32ed4dd51da732c0d41a5510cbfc1ea9a611519f271396b126f5ef8cc73234"
+    },
+    {
+      "path": "build_provenance.json",
+      "size_bytes": 1315,
+      "sha256": "52836ec13b524f31ccd2a26edf58055b0db0ca9c8780fb0548f72d43332938c4"
+    },
+    {
+      "path": "candidate_composition.json",
+      "size_bytes": 4162,
+      "sha256": "e78598b49a2b6a4de814deceaef43d7dc51980802254e24052e6788505f7eae1"
+    },
+    {
+      "path": "compile.log",
+      "size_bytes": 30502,
+      "sha256": "c33ea552decc58fbbb4403e23ede315b94c4843762064400bfd7af156d5f9f3c"
+    },
+    {
+      "path": "legacy_receipt_recheck.json",
+      "size_bytes": 617,
+      "sha256": "267d9c1876961c8b76985fb1345903be9a415c0479c10b51c77401c239e9141b"
+    },
+    {
+      "path": "link_argv.json",
+      "size_bytes": 2231,
+      "sha256": "bdf7bc9dcbca62a9eb9c12034e10f54663d311da0266461218767d99c9bad125"
+    },
+    {
+      "path": "native_water_budget.json",
+      "size_bytes": 13022,
+      "sha256": "fdc24b13e873e26eff5660f9ad4a711c2cd44da1b2f2ae09910fb31549d3332f"
+    },
+    {
+      "path": "observer_v6.patch",
+      "size_bytes": 29089,
+      "sha256": "ed0933d00724e5a19f7b05e91fa8d6a9313da9b6a8c6bc4afe03b52cf4da2ac8"
+    },
+    {
+      "path": "run_receipt.json",
+      "size_bytes": 45139,
+      "sha256": "d55802adcb102f006c34619a3c2db71105602a41f1d78048880f3cafbbe5bf2e"
+    },
+    {
+      "path": "runtime_bootstrap.json",
+      "size_bytes": 935,
+      "sha256": "9daad6456e9aa974abecd3b55d0883004c9dfa4dfdadd983dee5a99c8907eddd"
+    },
+    {
+      "path": "/var/tmp/pr69_water_native_20261007/source/module_mp_kdm6_pr69_water_v6.f90",
+      "sha256": "77c83992949f8a8373a72240d167dca03a2a74309a555e9440ccd4c03e633f73",
+      "expected_sha256": "77c83992949f8a8373a72240d167dca03a2a74309a555e9440ccd4c03e633f73",
+      "exists": true
+    },
+    {
+      "path": "/var/tmp/pr68_rain_observer_final4_20261007/source/module_mp_kdm6_pr68_observer.f90",
+      "sha256": "8429adf9182ee979219ffc43a84706d1cab3d81dab2fd35012b463454a13f5da",
+      "expected_sha256": "8429adf9182ee979219ffc43a84706d1cab3d81dab2fd35012b463454a13f5da",
+      "exists": true
+    },
+    {
+      "path": "/var/tmp/pr69_native_jointprocess_20261007_v2/source/selected_candidate_fda620.f90",
+      "sha256": "fda6206010139b48affe40b899606ad9201fcc5bd091c1f269c00e0dce77ff25",
+      "expected_sha256": "fda6206010139b48affe40b899606ad9201fcc5bd091c1f269c00e0dce77ff25",
+      "exists": true
+    },
+    {
+      "path": "/var/tmp/pr69_native_jointprocess_20261007_v2/source/selected_candidate_fda620_pr69_water.f90",
+      "sha256": "5659e86a8453b66ddd1688b8383167974bb285dbf4dc0eda9121bf4e3368e4ce",
+      "expected_sha256": "5659e86a8453b66ddd1688b8383167974bb285dbf4dc0eda9121bf4e3368e4ce",
+      "exists": true
+    },
+    {
+      "path": "/var/tmp/pr69_native_jointprocess_20261007_v3/source/selected_candidate_fbf.json.f90",
+      "sha256": "fbfa823b7cba54f0fdd5ffb1cfeaf58fc5722e845508f954e6c992a7aa32a594",
+      "expected_sha256": "fbfa823b7cba54f0fdd5ffb1cfeaf58fc5722e845508f954e6c992a7aa32a594",
+      "exists": true
+    },
+    {
+      "path": "/var/tmp/pr69_native_jointprocess_20261007_v3/source/selected_candidate_fbf_pr69_water.f90",
+      "sha256": "ee688498b32b7a1ccaf69858f62f4e457f7153df4fb8b965acfd069d8eefb425",
+      "expected_sha256": "ee688498b32b7a1ccaf69858f62f4e457f7153df4fb8b965acfd069d8eefb425",
+      "exists": true
+    }
+  ],
+  "large_raw_capture_external": {
+    "path": "/var/tmp/pr69_water_native_20261007/run6/observer/pr69_water.raw",
+    "size_bytes": 28638400,
+    "sha256": "494adde8f7eb31bafbbd9a39ad66eae70520a33d67e4104975322ef899f9e107"
+  },
+  "compile_argv": "NOT_RETAINED for baseline v6; compile log/profile/source-object hash record preserved",
+  "candidate_observer": "Final fbfa823b composition was built and run once. Candidate rejected because nonzero-mass pgdep with rhox=0 makes BG partner volume-rate support false; the fraction helper and later PSD/cutoff gates were skipped. Fatal location is i=125, k=17; j was not captured. Post-call capture absent. No successful budget replay. Prior fda620 draft attempt remains separately excluded.",
+  "prior_candidate_attempt": {
+    "path": "docs/evidence/pr69_coupled_process_native_prior_attempt_20261007.json",
+    "sha256": "610894f97354e953ecb59fea8842fad94bb7ea2a174b35c1b246395cc6de35e4",
+    "status": "REJECTED_WITH_DRAFT_MAPPING_BUG"
+  },
+  "final_candidate_composition": {
+    "selected_source_path": "/var/tmp/pr69_native_jointprocess_20261007_v3/source/selected_candidate_fbf.json.f90",
+    "selected_source_sha256": "fbfa823b7cba54f0fdd5ffb1cfeaf58fc5722e845508f954e6c992a7aa32a594",
+    "observer_source_path": "/var/tmp/pr69_native_jointprocess_20261007_v3/source/selected_candidate_fbf_pr69_water.f90",
+    "observer_source_sha256": "ee688498b32b7a1ccaf69858f62f4e457f7153df4fb8b965acfd069d8eefb425",
+    "status": "BUILT_AND_USED_IN_GUARDED_RUN"
+  },
+  "final_candidate_attempt": {
+    "path": "docs/evidence/pr69_coupled_process_native_20261007.json",
+    "sha256": "3b39e94f4d2249717d242526ab17066f0293b2d7eba8390bbfaecbfde960db9c",
+    "size_bytes": 13591,
+    "status": "REJECTED_UNSUPPORTED_BG_VOLUME_RATE",
+    "returncode": 128,
+    "input_integrity": "PASS",
+    "output_isolation": "FAIL",
+    "required_missing": [
+      "kdm6_first_call_post.raw"
+    ],
+    "fatal_location": {
+      "i": 125,
+      "j": "NOT_CAPTURED_IN_FATAL_MESSAGE",
+      "k": 17
+    }
+  }
+}

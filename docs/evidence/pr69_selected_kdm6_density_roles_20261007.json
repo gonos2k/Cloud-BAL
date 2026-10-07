@@ -1,0 +1,489 @@
+{
+  "source_sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d",
+  "role_counts": {
+    "dry_mass_number_carrier": 59,
+    "moist_gas_ventilation": 2,
+    "thermal_conductivity_density_cancels": 2,
+    "dynamic_viscosity": 2,
+    "growth_latent_carrier": 2,
+    "unresolved_ice_threshold": 2
+  },
+  "uses": [
+    {
+      "source_line": 840,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "dend(i,k) = den(i,k)"
+    },
+    {
+      "source_line": 880,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "den_tmp(i,k) = den(i,k)"
+    },
+    {
+      "source_line": 1090,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "rslopec(i,k) = 1./lamdac(qci(i,k,1),den(i,k),nci(i,k,1))"
+    },
+    {
+      "source_line": 1336,
+      "role": "moist_gas_ventilation",
+      "action": "retain moist DEN",
+      "density_references": 1,
+      "source": "work2(i,k) = venfac(p(i,k),t(i,k),den(i,k))"
+    },
+    {
+      "source_line": 1341,
+      "role": "thermal_conductivity_density_cancels",
+      "action": "retain moist DEN",
+      "density_references": 1,
+      "source": "psmlt(i,k) =(xka(t(i,k),den(i,k)))/xlf*(t0c-t(i,k))*n0sfac(i,k)       &"
+    },
+    {
+      "source_line": 1343,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "+(precs2)*n0so(i,k)*work2(i,k)*coeres)/den(i,k)"
+    },
+    {
+      "source_line": 1365,
+      "role": "thermal_conductivity_density_cancels",
+      "action": "retain moist DEN",
+      "density_references": 1,
+      "source": "pgmlt(i,k) = (xka(t(i,k),den(i,k)))/xlf*(t0c-t(i,k))                   &"
+    },
+    {
+      "source_line": 1367,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "+(precg2(i,k))*n0go(i,k)*work2(i,k)*coeres)/den(i,k)"
+    },
+    {
+      "source_line": 1495,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "rslopec(i,k) = 1./lamdac(qci(i,k,1),den(i,k),nci(i,k,1))"
+    },
+    {
+      "source_line": 1507,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(den(i,k)*qrs(i,k,1))))*(1./dmr))"
+    },
+    {
+      "source_line": 1511,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr"
+    },
+    {
+      "source_line": 1515,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr"
+    },
+    {
+      "source_line": 1521,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(den(i,k)*qci(i,k,1))))*(1./dmc))"
+    },
+    {
+      "source_line": 1525,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc"
+    },
+    {
+      "source_line": 1529,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc"
+    },
+    {
+      "source_line": 1535,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(den(i,k)*qci(i,k,2))))*(1./dmi))"
+    },
+    {
+      "source_line": 1539,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni"
+    },
+    {
+      "source_line": 1543,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni"
+    },
+    {
+      "source_line": 1557,
+      "role": "dynamic_viscosity",
+      "action": "retain moist DEN",
+      "density_references": 2,
+      "source": "difa(i,k) = ele2*t(i,k)*(1.+ele1/Rcn)/(viscos(t(i,k),den(i,k))*den(i,k))"
+    },
+    {
+      "source_line": 1558,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "pinuc = min((cmc)*difa(i,k)*2.*pi*Nic*n0c(i,k)/den(i,k)/(muc+1) &"
+    },
+    {
+      "source_line": 1580,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "pfrzdtc = min((cmc)*cmc*pfrz1*n0c(i,k)/den(i,k)/denr/(muc+1)       &"
+    },
+    {
+      "source_line": 1610,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "pfrzdtr = min((cmr)*cmr*pfrz1*n0r(i,k)/den(i,k)/denr          &"
+    },
+    {
+      "source_line": 1676,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "rslopec(i,k) = 1./lamdac(qci(i,k,1),den(i,k),nci(i,k,1))"
+    },
+    {
+      "source_line": 1692,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(den(i,k)*qrs(i,k,1))))*(1./dmr))"
+    },
+    {
+      "source_line": 1696,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr"
+    },
+    {
+      "source_line": 1700,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr"
+    },
+    {
+      "source_line": 1706,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(den(i,k)*qci(i,k,1))))*(1./dmc))"
+    },
+    {
+      "source_line": 1710,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc"
+    },
+    {
+      "source_line": 1714,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc"
+    },
+    {
+      "source_line": 1720,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(den(i,k)*qci(i,k,2))))*(1./dmi))"
+    },
+    {
+      "source_line": 1724,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni"
+    },
+    {
+      "source_line": 1728,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni"
+    },
+    {
+      "source_line": 1745,
+      "role": "growth_latent_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "work1(i,k,1) = diffac(xl(i,k),p(i,k),t(i,k),den(i,k),qs(i,k,1))"
+    },
+    {
+      "source_line": 1746,
+      "role": "growth_latent_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "work1(i,k,2) = diffac(xls,p(i,k),t(i,k),den(i,k),qs(i,k,2))"
+    },
+    {
+      "source_line": 1747,
+      "role": "moist_gas_ventilation",
+      "action": "retain moist DEN",
+      "density_references": 1,
+      "source": "work2(i,k) = venfac(p(i,k),t(i,k),den(i,k))"
+    },
+    {
+      "source_line": 1769,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "lencon  = 2.7e-2*den(i,k)*qci(i,k,1)*(1.e20/16.*avedia(i,k,1) &"
+    },
+    {
+      "source_line": 1779,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nraut(i,k) = (3.5e9)*den(i,k)*praut(i,k)"
+    },
+    {
+      "source_line": 1795,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "pracw(i,k) = min(((cmc)/den(i,k))*ncrk1*nci(i,k,1)                      &"
+    },
+    {
+      "source_line": 1803,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "pracw(i,k) = min(((cmc)/den(i,k))*ncrk2*nci(i,k,1)                      &"
+    },
+    {
+      "source_line": 1908,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "praci(i,k)=(pi)*cmi*n0i(i,k)*n0r(i,k)*abs(vt2r-vt2i)/(4*den(i,k))*acrfac*eacri"
+    },
+    {
+      "source_line": 1923,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "piacr(i,k)=(pi)*cmr*n0i(i,k)*n0r(i,k)*abs(vt2i-vt2r)/(4*den(i,k))*acrfac*eacir"
+    },
+    {
+      "source_line": 1938,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "psaci(i,k)=(pi)*cmi*n0i(i,k)*n0so(i,k)*n0sfac(i,k)*abs(vt2s-vt2i)/(4*den(i,k))*acrfac*eacsi"
+    },
+    {
+      "source_line": 1952,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "pgaci(i,k)=(pi)*cmi*n0i(i,k)*n0go(i,k)*abs(vt2g(i,k)-vt2i)/(4*den(i,k))*acrfac*eacgi"
+    },
+    {
+      "source_line": 2117,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(4*den(i,k))*acrfac*eacrs"
+    },
+    {
+      "source_line": 2153,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(4*den(i,k))*acrfac*eacsr"
+    },
+    {
+      "source_line": 2193,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(4*den(i,k))*acrfac*eacgr"
+    },
+    {
+      "source_line": 2252,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nmulcs(i,k) = nmulcs(i,k)*den(i,k)"
+    },
+    {
+      "source_line": 2267,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nmulrs(i,k) = nmulrs(i,k)*den(i,k)"
+    },
+    {
+      "source_line": 2304,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nmulcg(i,k) = nmulcg(i,k)*den(i,k)"
+    },
+    {
+      "source_line": 2320,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nmulrg(i,k) = nmulrg(i,k)*den(i,k)"
+    },
+    {
+      "source_line": 2387,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "pinud(i,k) = ninud(i,k)/den(i,k)*Minud"
+    },
+    {
+      "source_line": 2389,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "ninud(i,k) = pinud(i,k)*den(i,k)/Minud"
+    },
+    {
+      "source_line": 2464,
+      "role": "unresolved_ice_threshold",
+      "action": "retain moist DEN pending equation units",
+      "density_references": 1,
+      "source": "qi0 = 0.4632*10**(-6.0-0.0413*(-supcol))*den(i,k)"
+    },
+    {
+      "source_line": 2466,
+      "role": "unresolved_ice_threshold",
+      "action": "retain moist DEN pending equation units",
+      "density_references": 1,
+      "source": "qi0 = 0.2316*10**(-4.0+0.0519*(-supcol))*den(i,k)"
+    },
+    {
+      "source_line": 2471,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nsaut(i,k) = min((psaut(i,k))*den(i,k)/Miaut,nci(i,k,2)/dtcld)"
+    },
+    {
+      "source_line": 2866,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "rslopec(i,k) = 1./lamdac(qci(i,k,1),den(i,k),nci(i,k,1))"
+    },
+    {
+      "source_line": 2982,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "(3.*den(i,k)),max(q(i,k),0.)/dtcld)"
+    },
+    {
+      "source_line": 3057,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(den(i,k)*qrs(i,k,1))))*(1./dmr))"
+    },
+    {
+      "source_line": 3060,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr"
+    },
+    {
+      "source_line": 3063,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr"
+    },
+    {
+      "source_line": 3068,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(den(i,k)*qci(i,k,1))))*(1./dmc))"
+    },
+    {
+      "source_line": 3071,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc"
+    },
+    {
+      "source_line": 3074,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc"
+    },
+    {
+      "source_line": 3079,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "/(den(i,k)*qci(i,k,2))))*(1./dmi))"
+    },
+    {
+      "source_line": 3082,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*lamdi_tmp(i,k)**dmi/pidni"
+    },
+    {
+      "source_line": 3085,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*lamdi_tmp(i,k)**dmi/pidni"
+    },
+    {
+      "source_line": 3091,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr"
+    },
+    {
+      "source_line": 3095,
+      "role": "dry_mass_number_carrier",
+      "action": "use dry carrier",
+      "density_references": 1,
+      "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc"
+    }
+  ]
+}
