@@ -1,6 +1,24 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+run_logged_command() {
+  local output_log=$1
+  local -a pipeline_status
+  shift
+
+  "$@" 2>&1 | tee "$output_log"
+  pipeline_status=("${PIPESTATUS[@]}")
+  if (( pipeline_status[1] != 0 )); then
+    printf 'preflight output capture failed: tee exit=%d\n' "${pipeline_status[1]}" >&2
+    return 125
+  fi
+  return "${pipeline_status[0]}"
+}
+
+if [[ ${BASH_SOURCE[0]} != "$0" ]]; then
+  return 0
+fi
+
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 workspace_root=${CLOUD_BAL_WORKSPACE_ROOT:-/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50}
 scratch_root=${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}
@@ -95,12 +113,14 @@ sha256sum "$run_root/pr65_observation_joint_preflight" > executable_pre_run.sha2
 record_command "$run_root/pr65_observation_joint_preflight" \
   "${inputs[0]}" "${inputs[1]}" "${inputs[2]}" "${inputs[3]}" "${inputs[4]}" \
   "$static_file" "$valid_epoch"
-set +e
-"$run_root/pr65_observation_joint_preflight" \
+if run_logged_command preflight.log \
+  "$run_root/pr65_observation_joint_preflight" \
   "${inputs[0]}" "${inputs[1]}" "${inputs[2]}" "${inputs[3]}" "${inputs[4]}" \
-  "$static_file" "$valid_epoch" | tee preflight.log
-preflight_exit=${PIPESTATUS[0]}
-set -e
+  "$static_file" "$valid_epoch"; then
+  preflight_exit=0
+else
+  preflight_exit=$?
+fi
 sha256sum "${source_files[@]}" > source_postrun.sha256
 sha256sum "${inputs[@]}" > inputs_postrun.sha256
 sha256sum "${profile_files[@]}" > profile_postrun.sha256

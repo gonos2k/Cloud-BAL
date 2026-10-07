@@ -182,6 +182,40 @@ class PR65PblDomainMetricsTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "required output"):
                 validate_run_receipt(root, ("missing-output",))
 
+    def test_run_receipt_rejects_symlinked_manifest_and_outputs(self) -> None:
+        for symlinked in ("manifest", "output"):
+            with self.subTest(symlinked=symlinked), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                manifest_target = root / "manifest-target"
+                output_target = root / "output-target"
+                manifest_target.write_text("manifest\n")
+                output_target.write_text("output\n")
+                manifest = root / "runtime_reference_manifest.json"
+                output = root / "wrfout"
+                manifest_path = manifest_target if symlinked == "manifest" else manifest
+                output_path = output_target if symlinked == "output" else output
+                if symlinked == "manifest":
+                    manifest.symlink_to(manifest_target)
+                else:
+                    manifest.write_text("manifest\n")
+                if symlinked == "output":
+                    output.symlink_to(output_target)
+                else:
+                    output.write_text("output\n")
+                manifest_hash = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+                output_hash = hashlib.sha256(output_path.read_bytes()).hexdigest()
+                receipt = {
+                    "run_root": str(root), "returncode": 0, "input_integrity": "PASS",
+                    "output_isolation": "PASS", "changed_inputs": [], "input_read_issues": [],
+                    "output_issues": [],
+                    "inputs": [{"path": str(manifest), "sha256_before": manifest_hash,
+                                "sha256_after": manifest_hash}],
+                    "outputs": [{"path": "wrfout", "nlink": 1, "sha256": output_hash}],
+                }
+                (root / "run-isolation.json").write_text(json.dumps(receipt))
+                with self.assertRaisesRegex(ValueError, "missing or not receipt-bound|absent from receipt"):
+                    validate_run_receipt(root, ("wrfout",))
+
     def test_transition_stage_and_mask_hashes_bind_to_receipt_outputs(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

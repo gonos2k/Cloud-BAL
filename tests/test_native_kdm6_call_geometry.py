@@ -101,7 +101,7 @@ def audit_fixture(root: Path, *, dtm: float, grid_dt: float, kdm_dt: float) -> t
         "output_isolation": "PASS",
         "inputs": [{"path": str(executable), "sha256_before": sha256(executable),
                     "sha256_after": sha256(executable)}],
-        "outputs": [{"path": path.name, "sha256": sha256(path)}
+        "outputs": [{"path": path.name, "sha256": sha256(path), "nlink": 1}
                     for path in (geometry, pre, post)],
     }
     receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
@@ -192,6 +192,16 @@ class NativeGeometryParserTests(unittest.TestCase):
                        {"column_tolerance_pa": float("inf")}):
             with self.subTest(kwargs=kwargs), self.assertRaisesRegex(ValueError, "finite and positive"):
                 audit(missing, missing, missing, missing, **kwargs)
+
+    def test_run_root_executable_symlink_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = audit_fixture(Path(tmp), dtm=20.0, grid_dt=20.0, kdm_dt=20.0)
+            executable = Path(tmp) / "wrf.exe"
+            target = Path(tmp) / "executable-target"
+            executable.rename(target)
+            executable.symlink_to(target)
+            with self.assertRaisesRegex(ValueError, "run-root executable"):
+                audit(*paths)
 
 
 if __name__ == "__main__":

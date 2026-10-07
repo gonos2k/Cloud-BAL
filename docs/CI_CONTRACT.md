@@ -1,32 +1,27 @@
 # Portable Python contract CI
 
-The `Portable Python contract` workflow runs on pull requests and on pushes to
-`main`. It uses the hosted `ubuntu-24.04` runner, Python `3.11.11`, and no
-repository secrets. Checkout and setup actions are pinned to immutable commits;
-the commit comments record the verified upstream tags.
+The maintained entry point is `tests/run_python_contract_tests.sh`. The
+current checkout has no tracked `.github/workflows` file, so this document
+does not establish an active hosted CI check or a hosted-runner result.
+`PYTHON_BIN` selects the local interpreter; the script's test list is the
+authoritative registration. It also runs the shell failure-injection test for
+the preflight log capture.
 
-The workflow runs `tests/run_python_contract_tests.sh`, which executes these
-existing fixture and temporary-directory tests:
+The registered tests use fixtures and temporary directories. Examples include
+transaction rollback, native geometry algebra, trace parsing, and PR65
+numerical replay. The native geometry tests are synthetic algebra and parser
+checks, not native model executions.
 
-- `tests/test_compare_baseline.py`
-- `tests/test_intel_integration_audit.py`
-- `tests/test_native_hybrid_geometry.py` (synthetic dry-pressure algebra only; not a native model run)
-- `tests/test_operational_comparison_prep.py`
-- `tests/test_operational_shadow_compare.py`
-- `tests/test_output_transaction.py`
-- `tests/test_qbal_real_input_manifest.py`
-- `tests/test_real_manufactured_balance_generation.py`
-- `tests/test_shadow_validator.py`
-
-The NumPy/netCDF4 tests use pinned binary wheels only. The tests create their
+The local setup example below installs selected NumPy/netCDF4 binary wheels.
+The tests create their
 own temporary inputs and do not read site operational trees, credentials,
 deployment targets, or self-hosted-runner state.
 
-The dependency versions are pinned, but wheel hashes are not locked in this
-lane. It is a portable regression check, not a release receipt, reproducibility
+The setup example pins dependency versions, but not wheel hashes. It is a
+portable regression check, not a release receipt, reproducibility
 attestation, or supply-chain verification.
 
-This is a bounded Python contract lane, not a full scientific or operational
+This is a bounded contract test runner, not a full scientific or operational
 validation. It does not test:
 
 - Fortran compilation, linking, runtime behavior, or any `tests/*.f90`/`tests/*.f`
@@ -40,7 +35,7 @@ validation. It does not test:
 - Real operational inputs, production deployment, credentials, or scientific
   correctness claims beyond the checked Python contracts.
 
-Run the same lane locally from the repository root with an executable scratch
+Run the registered tests locally from the repository root with an executable scratch
 filesystem. This workspace mounts `/tmp` with `noexec`, so do not install binary
 extension wheels there:
 
