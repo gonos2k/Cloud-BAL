@@ -68,3 +68,7 @@ Four independent agents cover the Phi suite, PBL lineage/mixing, NC donor recons
 ## Published batch
 
 [PR #65](https://github.com/gonos2k/Cloud-BAL/pull/65) contains frozen implementation `3a6656fe184b4d25facbb24e93bcda3637c92bf1`, complete O0/O2 Phi mutation replays, 51 focused Python regressions and separately scoped native research evidence. [Graphify/KG maintenance](PR65_KG_MAINTENANCE_20261007.md) records separately dated graph deltas and derived audit updates. The follow-up metadata commit records publication and maintenance; it does not relabel prior failures or close the remaining physical gates.
+
+## Follow-up team audit
+
+The [independent PR65 reaudit](PR65_TEAM_REAUDIT_20261007.md) corrected preflight log-failure handling, receipt-bound regular-file validation and the pre-existing CI workflow wording. The [new maintenance record](PR66_KG_MAINTENANCE_20261007.md) follows the separately frozen validator fixes. These changes preserve the checked scientific gates and their remaining FAIL/OPEN conditions; no new native model execution or full physical acceptance is asserted.

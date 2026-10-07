@@ -71,4 +71,7 @@ for test_path in "${tests[@]}"; do
   "$python_bin" "$repo_root/$test_path"
 done
 
+echo "Running tests/test_pr65_observation_preflight_runner.sh"
+bash "$repo_root/tests/test_pr65_observation_preflight_runner.sh"
+
 echo "Portable Python contract tests passed"

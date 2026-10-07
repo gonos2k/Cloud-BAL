@@ -12,6 +12,7 @@ import hashlib
 import importlib.util
 import json
 import math
+import stat
 import struct
 from pathlib import Path
 from typing import Any
@@ -26,6 +27,13 @@ BOUND_NAMES = ("ims", "ime", "jms", "jme", "kms", "kme", "its", "ite", "jts", "j
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _is_regular_nonsymlink(path: Path) -> bool:
+    try:
+        return stat.S_ISREG(path.lstat().st_mode)
+    except FileNotFoundError:
+        return False
 
 
 def _read_exact(data: bytes, offset: int, size: int, label: str) -> tuple[bytes, int]:
@@ -201,6 +209,8 @@ def audit(geometry_path: Path, pre_path: Path, post_path: Path, receipt_path: Pa
     input_rows = {Path(row["path"]).name: row for row in receipt.get("inputs", [])}
     capture_hashes = {}
     for path in (geometry_path, pre_path, post_path):
+        if not _is_regular_nonsymlink(path):
+            raise ValueError(f"capture is missing or is not a regular non-symlink file: {path}")
         try:
             relative = path.resolve().relative_to(run_root.resolve()).as_posix()
         except ValueError as exc:
@@ -208,12 +218,14 @@ def audit(geometry_path: Path, pre_path: Path, post_path: Path, receipt_path: Pa
         row = output_rows.get(relative)
         if row is None:
             raise ValueError(f"capture is not a declared output: {relative}")
-        if sha256(path) != row.get("sha256") or path.stat().st_nlink != 1:
+        if (row.get("nlink") != 1 or sha256(path) != row.get("sha256")
+                or path.stat().st_nlink != 1):
             raise ValueError(f"capture hash/link does not match receipt: {relative}")
         capture_hashes[relative] = row["sha256"]
     executable = run_root / "wrf.exe"
     exe_row = input_rows.get("wrf.exe")
-    if (exe_row is None or Path(exe_row["path"]).resolve() != executable.resolve()
+    if (exe_row is None or not _is_regular_nonsymlink(executable)
+            or Path(exe_row["path"]).resolve() != executable.resolve()
             or exe_row.get("sha256_before") != exe_row.get("sha256_after")
             or executable.stat().st_nlink != 1
             or sha256(executable) != exe_row.get("sha256_before")):

@@ -6,8 +6,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from pathlib import Path
+import stat
 import sys
+from pathlib import Path
 
 import netCDF4
 import numpy as np
@@ -28,6 +29,13 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def is_regular_nonsymlink(path: Path) -> bool:
+    try:
+        return stat.S_ISREG(path.lstat().st_mode)
+    except FileNotFoundError:
+        return False
+
+
 def validate_run_receipt(run: Path, required_outputs: tuple[str, ...]) -> dict[str, object]:
     receipt_path = run / "run-isolation.json"
     receipt = json.loads(receipt_path.read_text())
@@ -42,8 +50,8 @@ def validate_run_receipt(run: Path, required_outputs: tuple[str, ...]) -> dict[s
     inputs = {Path(item["path"]).name: item for item in receipt["inputs"]}
     manifest = inputs.get("runtime_reference_manifest.json")
     manifest_path = run / "runtime_reference_manifest.json"
-    if (manifest is None or Path(manifest["path"]).resolve() != manifest_path.resolve()
-            or not manifest_path.is_file()):
+    if (manifest is None or not is_regular_nonsymlink(manifest_path)
+            or Path(manifest["path"]).resolve() != manifest_path.resolve()):
         raise ValueError(f"{run}: runtime reference manifest is missing or not receipt-bound")
     manifest_hash = sha256(manifest_path)
     if (manifest["sha256_before"] != manifest_hash
@@ -53,7 +61,7 @@ def validate_run_receipt(run: Path, required_outputs: tuple[str, ...]) -> dict[s
     for name in required_outputs:
         matches = [item for item in output_records if Path(item["path"]).name == name]
         path = run / name
-        if len(matches) != 1 or not path.is_file():
+        if len(matches) != 1 or not is_regular_nonsymlink(path):
             raise ValueError(f"{run}: required output {name} is absent from receipt")
         output = matches[0]
         declared_path = Path(output["path"])
