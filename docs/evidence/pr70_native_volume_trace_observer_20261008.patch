@@ -1,0 +1,115 @@
+--- /var/tmp/pr70_native_volume_trace_20261008_v3/source/selected_candidate_fbf_pr69_water.f90	2026-10-08 00:25:03.182184245 +0900
++++ /var/tmp/pr70_native_volume_trace_20261008_v3/source/module_mp_kdm6.f90	2026-10-08 00:24:56.754205964 +0900
+@@ -432,7 +432,24 @@
+      close(unit)
+    end subroutine pr69_write_water_checkpoint
+ 
+-    subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
++ 
++   subroutine pr70_write_progb_checkpoint(trace,phase,stage,lat,its,ite,kts,kte, &
++        qrs,brs,dtcld)
++     implicit none
++     logical,intent(in) :: trace
++     character(len=*),intent(in) :: phase
++     integer,intent(in) :: stage,lat,its,ite,kts,kte
++     real,intent(in) :: qrs(its:ite,kts:kte,3),brs(its:ite,kts:kte),dtcld
++     integer :: i,k
++     if(.not.trace) return
++     i=125
++     k=17
++     if(i.lt.its .or. i.gt.ite .or. k.lt.kts .or. k.gt.kte) return
++     write(*,*) 'PR70_PROGB',trim(phase),stage,lat,i,k,qrs(i,k,3), &
++          brs(i,k),dtcld,qrs(i,k,3).gt.1.e-9 .or. brs(i,k).gt.1.e-15
++   end subroutine pr70_write_progb_checkpoint
++
++   subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
+                     nn, nc, ni, nr, bg, diag_rhog,         &
+                     den, pii, p, delz,                     &
+                     delt,g, cpd, cpv, ccn0, rd, rv, t0c,   &
+@@ -1386,10 +1403,14 @@
+         enddo
+       enddo
+ 
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'PRE',1, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'POST',1, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+@@ -1489,10 +1510,14 @@
+           enddo
+         enddo
+ 
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'PRE',2, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'POST',2, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+@@ -1580,10 +1605,14 @@
+           enddo
+         enddo
+ 
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'PRE',3, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'POST',3, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+@@ -1729,10 +1758,14 @@
+         enddo
+       enddo
+ 
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'PRE',4, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'POST',4, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+@@ -1924,10 +1957,14 @@
+         enddo
+       enddo
+ 
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'PRE',5, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++      call pr70_write_progb_checkpoint(pr67_trace_this_call,'POST',5, &
++           lat,its,ite,kts,kte,qrs_tmp,brs,dtcld)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+@@ -2985,6 +3022,11 @@
+                  -nsacr(i,k)-ngacr(i,k))*dtcld
+ 
+             rain_bg_rates_feasible=.true.
++            if(pr67_trace_this_call .and. i.eq.125 .and. k.eq.17) &
++              write(*,*) 'PR70_PGDEP_DONOR',lat,i,k,qrs(i,k,3), &
++                   brs(i,k),dtcld,pgdep(i,k),rh(i,k,2),rhox(i,k), &
++                   qrs(i,k,3).gt.qcrmin .or. brs(i,k).gt.1.e-15, &
++                   rhox(i,k).ge.100. .and. rhox(i,k).le.900.
+             call kdm6_mass_volume_rate(pgdep(i,k),rhox(i,k), &
+                  rain_pgdep_bg_rate,rain_bg_rate_valid)
+             rain_bg_rates_feasible=rain_bg_rates_feasible.and.rain_bg_rate_valid

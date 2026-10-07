@@ -1,0 +1,43 @@
+{
+  "schema": "pr70_finite_only_temperature_reproduction_v1",
+  "session_day": "2026-10-08",
+  "timezone": "Asia/Seoul",
+  "recorded_utc": "2026-10-07T15:50:10.348037Z",
+  "captured_source_sha256": "97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa",
+  "pre_temperature_gate_patch_sha256": "beb2a3ff83647deb0d7405a1cdcee9fa43bf0791203c20f78511d6db632b65a7",
+  "pre_temperature_gate_patched_source_sha256": "644948ad23b802252f61d1fa53c865e0549bfc13e246c7477760d14cbf922b86",
+  "compiler": "ifx (IFX) 2026.0.0 20260331",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "compiler_flags": [
+    "-stand",
+    "f08",
+    "-warn",
+    "all",
+    "-check",
+    "all",
+    "-fpe0",
+    "-traceback",
+    "-O0",
+    "-fp-model",
+    "strict",
+    "-fimf-arch-consistency=true",
+    "-no-ftz"
+  ],
+  "scratch_work_dir": "/var/tmp/cloud_bal_pr70_temperature_repro_capture.cLEOpZ",
+  "observed": "With Q/N/BG and all process directions zero, finite-only fraction search accepted Tfixed=-1 K at alpha=1 with status FEASIBLE. The prior stored check also required only finite T.",
+  "result": "REPRODUCED",
+  "files_sha256": {
+    "source": "308d524708052f15ded2c556d53a4f345212567df0ff74c32fc848fe1dd4e3a7",
+    "helper": "08710715b7fe225098ae2661fb969805c51ab2842f7f08e8f6cb75bc60b31909",
+    "argv": "33dc3670b0574e9c1a8f58ed954ea5adf558362df2fe4c1228a86d64f35c0f93",
+    "compile_log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run_log": "6060a210ceb33c46f5b0760b61434d395b0f6c7b80927e85a6a068950b678c68"
+  },
+  "files": {
+    "source": "docs/evidence/pr70_temperature_repro_before_fix.f90",
+    "helper": "docs/evidence/pr70_temperature_repro_before_fix_helper.f90",
+    "argv": "docs/evidence/pr70_temperature_repro_before_fix_ifx_O0.argv",
+    "compile_log": "docs/evidence/pr70_temperature_repro_before_fix_ifx_O0_compile.log",
+    "run_log": "docs/evidence/pr70_temperature_repro_before_fix_ifx_O0.log"
+  }
+}

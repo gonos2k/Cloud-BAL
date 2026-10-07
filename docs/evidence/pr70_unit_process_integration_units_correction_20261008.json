@@ -1,0 +1,53 @@
+{
+  "schema": "pr70_unit_process_integration_units_correction_v1",
+  "status": "METADATA_ONLY_CORRECTION_NO_MODEL_RERUN",
+  "original_validation_receipt": "docs/evidence/pr70_unit_process_integration_validation_20261008.json",
+  "original_validation_receipt_sha256": "7b762890db93d2bc1874deac28018fa9dd595245c0a3977bcfe5776b7760b15b",
+  "original_run_scratch_dir": "/var/tmp/pr70_unit_process_integration.zrlAcq",
+  "original_runner_sha256": "24c8a129e3792b81c543ddfb0fa733d7e358b59f4eaf9ccb51f9c09345f565a0",
+  "corrected_runner_path": "tests/run_pr70_unit_process_integration.sh",
+  "corrected_runner_sha256": "07ddd6e0bff0a8108ff95828354d6b47da5d4690ab7b239e691b8cf3cef5ba3b",
+  "report_path": "docs/PR70_UNIT_PROCESS_INTEGRATION_20261008.md",
+  "report_sha256": "433e3bcf1194113c7d81bd6f6f60d0e2747849bd03ef40a4831bbbd69c95fffe",
+  "source_and_run_identity": {
+    "selected_source_sha256": "97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa",
+    "process_patch_sha256": "5f1b75925ec803838f5b3cfa81012336f4d21727073c5d8c0703fb70ddc37670",
+    "composed_source_sha256": "487afbf064b6a3598ecb12248224fc3b91c77e1b0ed921d0e0e8130cacb9b583"
+  },
+  "unit_mappings": [
+    {
+      "original_field": "cloud_lambda_m",
+      "corrected_field": "cloud_lambda_m_inv",
+      "unit": "m^-1",
+      "value": 100000.0
+    },
+    {
+      "original_field": "ice_lambda_m",
+      "corrected_field": "ice_lambda_m_inv",
+      "unit": "m^-1",
+      "value": 20000.0
+    },
+    {
+      "original_field": "rain_lambda_m",
+      "corrected_field": "rain_lambda_m_inv",
+      "unit": "m^-1",
+      "value": 5000.0
+    },
+    {
+      "original_field": "graupel_BG_kg_m3",
+      "corrected_field": "graupel_BG_m3_kg_dry",
+      "unit": "m^3/kg dry air",
+      "value": 5e-08
+    }
+  ],
+  "derived_graupel_bulk_density": {
+    "equation": "QG/BG",
+    "unit": "kg/m^3",
+    "value": 400.0
+  },
+  "numeric_inputs_changed": false,
+  "numeric_outputs_changed": false,
+  "source_changed": false,
+  "replay_performed": false,
+  "interpretation": "The original receipt remains the authority for the O0/O2 run. This record corrects only dimension labels; the runner source hash changed after the run, so its new hash is not attributed to the original execution."
+}

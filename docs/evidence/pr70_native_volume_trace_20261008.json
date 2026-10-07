@@ -1,0 +1,309 @@
+{
+  "build": {
+    "archive_member_count": 1,
+    "archive_member_sha256": "a17e69eaf97b8ae1f39a528e7e01ece975290745764965e50e513193feb2aea3",
+    "archive_sha256_after": "0d1748c70a55141174d6bdf0ce233857ec5d6690209761c267d6f1612697bfda",
+    "archive_sha256_before": "dd8ef95d5b0a548d239c11a27f94a9bc4856b6a9853463a7dfafc6de4c96cceb",
+    "base": "/var/tmp/pr70_native_volume_trace_20261008_v3/build",
+    "compile_argv": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz",
+      "-convert",
+      "big_endian",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/frame",
+      "-c",
+      "module_mp_kdm6.f90",
+      "-o",
+      "module_mp_kdm6.o"
+    ],
+    "executable_sha256": "47c5b6702fc30f4905bfd2b850897c06bf5f391a65b5dc342b1fb5309dbfbc92",
+    "ifx": {
+      "ifx": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "version": "ifx (IFX) 2026.0.0 20260331"
+    },
+    "link_argv": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+      "-o",
+      "/var/tmp/pr70_native_volume_trace_20261008_v3/build/executable/wrf.exe",
+      "-O3",
+      "-ip",
+      "-fp-model",
+      "precise",
+      "-w",
+      "-ftz",
+      "-align",
+      "all",
+      "-fno-alias",
+      "-FR",
+      "-convert",
+      "big_endian",
+      "-ip",
+      "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+      "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+      "wrf.o",
+      "../main/module_wrf_top.o",
+      "libwrflib_pr65.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/fftpack/fftpack5/libfftpack.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib1/libio_grib1.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib_share/libio_grib_share.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_int/libwrfio_int.a",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/esmf_time_f90",
+      "-lesmf_time",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/RSL_LITE/librsl_lite.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/module_internal_header_util.o",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/pack_utils.o",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_netcdf",
+      "-lwrfio_nf",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-lnetcdff",
+      "-lnetcdf",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-lnetcdf",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-lnetcdff",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+      "-lnetcdf",
+      "-lnetcdf",
+      "-lm"
+    ],
+    "object_sha256": "a17e69eaf97b8ae1f39a528e7e01ece975290745764965e50e513193feb2aea3"
+  },
+  "fatal_semantics": "The controlled fatal rejection occurs before a post-call capture. It is not rollback and this run is not accepted native behavior or water-budget closure.",
+  "hashes": {
+    "audit_doc": "3a647ce6a45289cdb1de0013ea78a547c68b4e1d3c65a488bd7e82c8021bd39d",
+    "base_observer_source": "ee688498b32b7a1ccaf69858f62f4e457f7153df4fb8b965acfd069d8eefb425",
+    "build_receipt": "2bbd55ff10e2cf68899a20a485dcb0085c1785770452cc3cf3307841d0718205",
+    "input_receipt": "98b308e7e39d47cf989ca329ba09edf2ffe6f7212a18ddae18eb4f4fd3f36240",
+    "observer_patch": "39c3578051a495a0d0ecb8dbeba5df06b17c232efb74d45b61cebc75233287e6",
+    "pr69_native_receipt": "3b39e94f4d2249717d242526ab17066f0293b2d7eba8390bbfaecbfde960db9c",
+    "run_log": "40364660df7866208056eb844230e42ba7aab8abf0c79be01cd49f000c3d3b20",
+    "run_receipt": "bf747509ee3eed5d4763315d701ebaff8f82c3ec8c2d825ad5703cf53e065cbb",
+    "selected_source": "fbfa823b7cba54f0fdd5ffb1cfeaf58fc5722e845508f954e6c992a7aa32a594",
+    "source_audit": "78a9026a7b3568a22ec470411a158427fcf6e71b5e6844a8fb9547873fc0e7ed",
+    "trace_source": "5278f2df07216a3b6ba180d1e732cdaa7e7bc1194bac2e2e3261d338c12dfe5e"
+  },
+  "pgdep_donor": {
+    "brs": 1.5222057e-17,
+    "density_setup_gate": false,
+    "donor_density_qg_over_brs": 1000.0000656941437,
+    "donor_specific_volume_brs_over_qg": 0.0009999999343058607,
+    "dtcld": 20.0,
+    "i": 125,
+    "k": 17,
+    "lat": 2,
+    "mass_loss_rate_limit": -7.611029e-16,
+    "pgdep": -7.6110288e-16,
+    "pgdep_times_dtcld": -1.52220576e-14,
+    "post_sublimation_qg_before_source_cleanup": 3.999999999279835e-22,
+    "qg": 1.5222058e-14,
+    "rh_ice": 0.9806284,
+    "rhox_observed": 0.0,
+    "rhox_supported_100_900": false,
+    "source_generated_volume_rate_if_proportional": -7.6110285e-19
+  },
+  "progb_calls_before_pgdep": [
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "PRE",
+      "qg": 0.0,
+      "stage": 1
+    },
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "POST",
+      "qg": 0.0,
+      "stage": 1
+    },
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "PRE",
+      "qg": 0.0,
+      "stage": 2
+    },
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "POST",
+      "qg": 0.0,
+      "stage": 2
+    },
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "PRE",
+      "qg": 0.0,
+      "stage": 2
+    },
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "POST",
+      "qg": 0.0,
+      "stage": 2
+    },
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "PRE",
+      "qg": 0.0,
+      "stage": 3
+    },
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "POST",
+      "qg": 0.0,
+      "stage": 3
+    },
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "PRE",
+      "qg": 0.0,
+      "stage": 4
+    },
+    {
+      "brs": 0.0,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "POST",
+      "qg": 0.0,
+      "stage": 4
+    },
+    {
+      "brs": 1.5222057e-17,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "PRE",
+      "qg": 1.5222058e-14,
+      "stage": 5
+    },
+    {
+      "brs": 1.5222057e-17,
+      "density_setup_gate": false,
+      "dtcld": 20.0,
+      "i": 125,
+      "k": 17,
+      "lat": 2,
+      "phase": "POST",
+      "qg": 1.5222058e-14,
+      "stage": 5
+    }
+  ],
+  "review_limit": "QG/BG gives a donor density near 1000 kg m-3, outside ProgB_param's 100\u2013900 kg m-3 supported interval. The proportional debit identity is retained as an unvalidated relation and is not proposed as an accepted rule. Positive pgdep source-growth volume remains unsupported without a source density rule.",
+  "runtime": {
+    "command": [
+      "bash",
+      "-c",
+      "set -eo pipefail; source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/env/vars.sh --force >/dev/null 2>&1 || { source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/env/vars.sh >/dev/null 2>&1 || exit 1; }; export LD_LIBRARY_PATH=/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:${LD_LIBRARY_PATH:-}; source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh >/dev/null 2>&1 || exit 1; set -u; ulimit -s unlimited; export OMP_NUM_THREADS=68; env > launch_environment.txt; ldd ./wrf.exe > runtime_libraries.txt; exec ./wrf.exe > candidate_run.log 2>&1"
+    ],
+    "execution_date": "UTC 2026-10-07; workspace local date 2026-10-08",
+    "host_closure": "partial; exact retained-host build lineage not newly established",
+    "input_count": 101,
+    "input_integrity": "PASS",
+    "input_receipt_sha256": "98b308e7e39d47cf989ca329ba09edf2ffe6f7212a18ddae18eb4f4fd3f36240",
+    "lat_semantics": "The observer captured local KDM6 argument lat=2; no conversion to global j is asserted.",
+    "missing_required_outputs": [
+      "kdm6_first_call_post.raw"
+    ],
+    "output_isolation": "FAIL",
+    "rank_and_tile": "one task, one WRF tile (runtime log: task 0 of 1; tile 1)",
+    "returncode": 128,
+    "run_root": "/var/tmp/pr70_native_volume_trace_20261008_v3/run"
+  },
+  "schema": "pr70_native_volume_trace_receipt_v1",
+  "scope": "Observer-only matched research run; no physical process behavior changed.",
+  "source_order": {
+    "progb_call_sites": [
+      1389,
+      1492,
+      1583,
+      1732,
+      1927
+    ],
+    "qg_bg_creation_between_last_two_calls": {
+      "bg_write": "brs += pfrzdtr / denr",
+      "denr_source": {
+        "receipt": "scratch/pr70_unit_process_20261008/Cloud-BAL/docs/evidence/pr69_coupled_process_native_20261007.json",
+        "sha256": "3b39e94f4d2249717d242526ab17066f0293b2d7eba8390bbfaecbfde960db9c"
+      },
+      "interpretation": "The tiny donor pair is created by rain freezing between stage 4 and stage 5, not inferred from a prior rho value.",
+      "qg_write": "qg += pfrzdtr",
+      "retained_denr": 1000.0,
+      "source_lines": [
+        1897,
+        1898
+      ],
+      "stage4_qg_bg": [
+        0.0,
+        0.0
+      ],
+      "stage5_qg_bg": [
+        1.5222058e-14,
+        1.5222057e-17
+      ]
+    }
+  },
+  "status": "CONTROLLED_REJECTION_REPRODUCED_WITH_SOURCE_BOUND_CHECKPOINTS"
+}
