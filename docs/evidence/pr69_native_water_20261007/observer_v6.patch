@@ -1,0 +1,596 @@
+--- a/module_mp_kdm6_pr68_observer.f90
++++ b/module_mp_kdm6_pr69_water_v6.f90
+@@ -186,44 +186,106 @@
+      implicit none
+      integer, intent(in) :: i,j,k
+      pr68_rain_target = .false.
+-     select case (j)
+-     case (16)
+-       if ((i.eq.28.and.k.eq.240).or.(i.eq.48.and.k.eq.254).or. &
+-           (i.eq.23.and.k.eq.260).or.(i.eq.28.and.k.eq.265).or. &
+-           (i.eq.21.and.k.eq.266).or.(i.eq.25.and.k.eq.266).or. &
+-           (i.eq.28.and.k.eq.268).or.(i.eq.32.and.k.eq.272)) &
+-         pr68_rain_target = .true.
+-     case (17)
+-       if ((i.eq.148.and.k.eq.177).or.(i.eq.58.and.k.eq.188)) &
+-         pr68_rain_target = .true.
+-     case (18)
+-       if ((i.eq.169.and.k.eq.58).or.(i.eq.172.and.k.eq.64).or. &
+-           (i.eq.173.and.k.eq.64).or.(i.eq.187.and.k.eq.65).or. &
+-           (i.eq.188.and.k.eq.66).or.(i.eq.182.and.k.eq.69).or. &
+-           (i.eq.183.and.k.eq.70).or.(i.eq.167.and.k.eq.73).or. &
+-           (i.eq.179.and.k.eq.73).or.(i.eq.167.and.k.eq.76).or. &
+-           (i.eq.168.and.k.eq.78).or.(i.eq.184.and.k.eq.86).or. &
+-           (i.eq.184.and.k.eq.87).or.(i.eq.174.and.k.eq.88).or. &
+-           (i.eq.172.and.k.eq.104)) pr68_rain_target = .true.
+-     end select
++     if (       (i.eq.169.and.j.eq.59.and.k.eq.17) .or. &
++       (i.eq.172.and.j.eq.65.and.k.eq.17) .or. &
++       (i.eq.173.and.j.eq.65.and.k.eq.17) .or. &
++       (i.eq.187.and.j.eq.66.and.k.eq.17) .or. &
++       (i.eq.188.and.j.eq.67.and.k.eq.17) .or. &
++       (i.eq.182.and.j.eq.70.and.k.eq.17) .or. &
++       (i.eq.183.and.j.eq.71.and.k.eq.17) .or. &
++       (i.eq.167.and.j.eq.74.and.k.eq.17) .or. &
++       (i.eq.179.and.j.eq.74.and.k.eq.17) .or. &
++       (i.eq.167.and.j.eq.77.and.k.eq.17) .or. &
++       (i.eq.168.and.j.eq.79.and.k.eq.17) .or. &
++       (i.eq.184.and.j.eq.87.and.k.eq.17) .or. &
++       (i.eq.184.and.j.eq.88.and.k.eq.17) .or. &
++       (i.eq.174.and.j.eq.89.and.k.eq.17) .or. &
++       (i.eq.172.and.j.eq.105.and.k.eq.17) .or. &
++       (i.eq.148.and.j.eq.178.and.k.eq.16) .or. &
++       (i.eq.58.and.j.eq.189.and.k.eq.16) .or. &
++       (i.eq.28.and.j.eq.241.and.k.eq.15) .or. &
++       (i.eq.48.and.j.eq.255.and.k.eq.15) .or. &
++       (i.eq.23.and.j.eq.261.and.k.eq.15) .or. &
++       (i.eq.28.and.j.eq.266.and.k.eq.15) .or. &
++       (i.eq.21.and.j.eq.267.and.k.eq.15) .or. &
++       (i.eq.25.and.j.eq.267.and.k.eq.15) .or. &
++       (i.eq.28.and.j.eq.269.and.k.eq.15) .or. &
++       (i.eq.32.and.j.eq.273.and.k.eq.15)) pr68_rain_target = .true.
+    end function pr68_rain_target
+ 
+    subroutine pr68_write_rain_event(unit,event,i,j,k,loop,mstep,pending, &
+-        qr,nr,qc,nc,ni,nccn,temp,qcrmin,nrmin,praut,pracw,prevp,piacr, &
++        qr,nr,qc,nc,ni,nccn,temp,qcrmin,nrmin,dtcld,qr_trial,nr_trial, &
++        limiter_value,limiter_source, &
++        praut,pracw,prevp,piacr, &
+         pgacr,psacr,pmulrs,pmulrg,paacw,pseml,pgeml,nraut,nrcol,niacr, &
+         nraci,nsacr,ngacr,nseml,ngeml)
+      implicit none
+      integer,intent(in) :: unit,event,i,j,k,loop,mstep,pending
+-     real,intent(in) :: qr,nr,qc,nc,ni,nccn,temp,qcrmin,nrmin
++     real,intent(in) :: qr,nr,qc,nc,ni,nccn,temp,qcrmin,nrmin,dtcld,qr_trial,nr_trial
++     real,intent(in) :: limiter_value,limiter_source
+      real,intent(in) :: praut,pracw,prevp,piacr,pgacr,psacr,pmulrs,pmulrg
+      real,intent(in) :: paacw,pseml,pgeml,nraut,nrcol,niacr,nraci
+      real,intent(in) :: nsacr,ngacr,nseml,ngeml
+-     write(unit,'(a,1x,7(i0,1x),28(es24.16e3,1x))') 'PR68R001', &
++     write(unit,'(a,1x,7(i0,1x),33(es24.16e3,1x))') 'PR68R001', &
+        event,i,j,k,loop,mstep,pending,qr,nr,qc,nc,ni,nccn,temp,qcrmin,nrmin, &
++       dtcld,qr_trial,nr_trial,limiter_value,limiter_source, &
+        praut,pracw,prevp,piacr,pgacr,psacr,pmulrs,pmulrg,paacw,pseml,pgeml, &
+        nraut,nrcol,niacr,nraci,nsacr,ngacr,nseml,ngeml
+    end subroutine pr68_write_rain_event
+ 
++
++   subroutine pr69_write_water_checkpoint(unit,stage,j,jts,its,ite,kts,kte, &
++        q,qci,qrs,den,delz,fall,denr,dtcld)
++     implicit none
++     integer,intent(out) :: unit
++     integer,intent(in) :: stage,j,jts,its,ite,kts,kte
++     real,intent(in) :: q(its:ite,kts:kte),qci(its:ite,kts:kte,2)
++     real,intent(in) :: qrs(its:ite,kts:kte,3),den(its:ite,kts:kte)
++     real,intent(in) :: delz(its:ite,kts:kte)
++     real,optional,intent(in) :: fall(its:ite,kts:kte,4),denr,dtcld
++     integer :: i,k
++     double precision :: column(its:ite,6)
++     double precision :: bottom_fall(its:ite,4),bottom_delz(its:ite)
++     real :: record_dtcld,record_denr
++     do i=its,ite
++       column(i,:)=0.d0
++       do k=kts,kte
++         column(i,1)=column(i,1)+dble(q(i,k))*dble(den(i,k))*dble(delz(i,k))
++         column(i,2)=column(i,2)+dble(qci(i,k,1))*dble(den(i,k))*dble(delz(i,k))
++         column(i,3)=column(i,3)+dble(qrs(i,k,1))*dble(den(i,k))*dble(delz(i,k))
++         column(i,4)=column(i,4)+dble(qci(i,k,2))*dble(den(i,k))*dble(delz(i,k))
++         column(i,5)=column(i,5)+dble(qrs(i,k,2))*dble(den(i,k))*dble(delz(i,k))
++         column(i,6)=column(i,6)+dble(qrs(i,k,3))*dble(den(i,k))*dble(delz(i,k))
++       enddo
++     enddo
++     bottom_fall=0.d0
++     bottom_delz=0.d0
++     record_dtcld=0.
++     record_denr=0.
++     if(stage.ge.2) then
++       if(.not.present(fall) .or. .not.present(denr) .or. .not.present(dtcld)) return
++       record_dtcld=dtcld
++       record_denr=denr
++       do i=its,ite
++         bottom_fall(i,:)=dble(fall(i,kts,:))
++         bottom_delz(i)=dble(delz(i,kts))
++       enddo
++     endif
++     if(stage.eq.0 .and. j.eq.jts) then
++       open(newunit=unit,file='pr69_water.raw',access='stream',form='unformatted', &
++            status='replace',action='write')
++     else
++       open(newunit=unit,file='pr69_water.raw',access='stream',form='unformatted', &
++            status='old',position='append',action='write')
++     endif
++     write(unit) 'PR69W001'
++     write(unit) stage,j,its,ite,kts,kte
++     write(unit) record_dtcld,record_denr
++     write(unit) column
++     write(unit) bottom_fall,bottom_delz
++     close(unit)
++   end subroutine pr69_write_water_checkpoint
++
+     subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
+                     nn, nc, ni, nr, bg, diag_rhog,         &
+                     den, pii, p, delz,                     &
+@@ -771,7 +833,9 @@
+    real, dimension(its:ite)           :: delqi
+    real, dimension(its:ite)           :: tstepsnow, tstepgraup
+    integer :: pr67_unit
++   integer :: pr69_unit
+    integer :: pr68_unit
++   real :: pr68_qr_trial,pr68_nr_trial
+    real                               :: gfac, sfac
+    real, dimension(its:ite,kts:kte)   :: difa
+    double precision   :: pinuc,ninuc
+@@ -868,6 +932,10 @@
+                position='append',action='write')
+         endif
+       endif
++   if(pr67_trace_this_call) call pr69_write_water_checkpoint( &
++        pr69_unit,0,lat,jts,its,ite,kts,kte,q(its:ite,kts:kte), &
++        qci(its:ite,kts:kte,:),qrs,den(its:ite,kts:kte), &
++        delz(its:ite,kts:kte))
+    do k = kts, kte
+      do i = its, ite
+        qci(i,k,1) = max(qci(i,k,1),0.0)
+@@ -888,17 +956,38 @@
+      enddo
+    enddo
+ 
++   if(pr67_trace_this_call) call pr69_write_water_checkpoint( &
++        pr69_unit,1,lat,jts,its,ite,kts,kte,q(its:ite,kts:kte), &
++        qci(its:ite,kts:kte,:),qrs,den(its:ite,kts:kte), &
++        delz(its:ite,kts:kte))
+    do k = kts,kte
+      do i = its,ite
+        dend(i,k) = den(i,k)
+      enddo
+    enddo
++   do k = kts,kte
++     do i = its,ite
++       if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++         pr68_qr_trial = 0.0
++         pr68_nr_trial = 0.0
++       endif
++     enddo
++   enddo
++      do k = kts, kte
++        do i = its, ite
+           if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
+             call pr68_write_rain_event(pr68_unit,0,i,lat,k,0,0, &
+               0,qrs(i,k,1),nrs(i,k,1), &
+               qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
+           endif
++        enddo
++      enddo
+ 
+ 
+ 
+@@ -1263,12 +1352,6 @@
+           enddo
+         enddo
+ 
+-          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
+-            call pr68_write_rain_event(pr68_unit,1,i,lat,k,loop,n, &
+-              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+-              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+-          endif
+         do k = kts, kte
+           do i = its, ite
+           qrs_tmp(i,k,1) = qrs(i,k,1)
+@@ -1295,6 +1378,8 @@
+             workn(i,k,1) = workn(i,k,1)/delz(i,k)
+             work1(i,k,2) = work1(i,k,2)/delz(i,k)
+             work1(i,k,3) = work1(i,k,3)/delz(i,k)
++            work1(i,k,4) = work1(i,k,4)/delz(i,k)
++            workn(i,k,2) = workn(i,k,2)/delz(i,k)
+           enddo
+         enddo
+       enddo      
+@@ -1302,6 +1387,25 @@
+ 
+ 
+ 
++      do k = kts, kte
++        do i = its, ite
++          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            call pr68_write_rain_event(pr68_unit,1,i,lat,k,loop,n, &
++              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
++              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
++          endif
++        enddo
++      enddo
++      if(pr67_trace_this_call) call pr69_write_water_checkpoint( &
++           pr69_unit,2,lat,jts,its,ite,kts,kte,q(its:ite,kts:kte), &
++           qci(its:ite,kts:kte,:),qrs,dend,delz(its:ite,kts:kte), &
++           fall,denr,dtcld)
+       if (pr67_trace_this_call) then
+         open(newunit=pr67_unit,file='pr67_kdm6_process.raw', &
+              access='stream',form='unformatted',status='unknown',position='append')
+@@ -1313,12 +1417,6 @@
+         write(pr67_unit) qci(its:ite,kts:kte,2)
+         close(pr67_unit)
+       endif
+-          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
+-            call pr68_write_rain_event(pr68_unit,2,i,lat,k,loop,n, &
+-              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+-              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+-          endif
+       do n = 1, mstepmax_i
+         k = kte
+         do i = its, ite
+@@ -1352,6 +1450,10 @@
+           enddo
+         enddo 
+ 
++        if(pr67_trace_this_call .and. n.eq.1) &
++          call pr69_write_water_checkpoint(pr69_unit,3,lat,jts,its,ite, &
++               kts,kte,q(its:ite,kts:kte),qci(its:ite,kts:kte,:), &
++               qrs,dend,delz(its:ite,kts:kte),fall,denr,dtcld)
+         if (pr67_trace_this_call .and. n .eq. 1) then
+           open(newunit=pr67_unit,file='pr67_kdm6_process.raw', &
+                access='stream',form='unformatted',status='unknown',position='append')
+@@ -1390,6 +1492,21 @@
+        enddo
+       enddo 
+ 
++      do k = kts, kte
++        do i = its, ite
++          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            call pr68_write_rain_event(pr68_unit,2,i,lat,k,loop,n, &
++              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
++              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
++          endif
++        enddo
++      enddo
+       do k = kte, kts, -1
+         do i = its, ite
+           supcol = t0c-t(i,k)
+@@ -1704,6 +1821,21 @@
+           nci(i,k,2) = max(nci(i,k,2),0.0)
+         enddo
+       enddo
++      do k = kts, kte
++        do i = its, ite
++          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            call pr68_write_rain_event(pr68_unit,3,i,lat,k,loop,n, &
++              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
++              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
++          endif
++        enddo
++      enddo
+ 
+ 
+ 
+@@ -2718,20 +2850,24 @@
+ 
+ 
+ 
++            value = max(nrmin,nrs(i,k,1))
++            source = (-nraut(i,k)+nraci(i,k)+nrcol(i,k)+niacr(i,k)+nsacr(i,k)+ngacr(i,k))*dtcld
+           if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            pr68_qr_trial = qrs(i,k,1)+(praut(i,k)+pracw(i,k)+prevp(i,k)    &
++                           -piacr(i,k)-pgacr(i,k)-psacr(i,k)-pmulrs(i,k)    &
++                           -pmulrg(i,k))*dtcld
++            pr68_nr_trial = nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)-niacr(i,k)    &
++                           -nraci(i,k)-nsacr(i,k)-ngacr(i,k))*dtcld
+             call pr68_write_rain_event(pr68_unit,4,i,lat,k,loop,n, &
+               merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+               qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), ngacr(i,k), nseml(i,k), ngeml(i,k))
+-          endif
+-          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
+-            call pr68_write_rain_event(pr68_unit,8,i,lat,k,loop,n, &
+-              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+-              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), ngacr(i,k), nseml(i,k), ngeml(i,k))
++              nrmin,dtcld,pr68_qr_trial,pr68_nr_trial,value,source, &
++              praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), &
++              pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), &
++              0.0, 0.0, 0.0, nraut(i,k), &
++              nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), &
++              ngacr(i,k), 0.0, 0.0)
+           endif
+-            value = max(nrmin,nrs(i,k,1))
+-            source = (-nraut(i,k)+nraci(i,k)+nrcol(i,k)+niacr(i,k)+nsacr(i,k)+ngacr(i,k))*dtcld
+             if (source.gt.value) then
+               factor = value/source
+               nraci(i,k) = nraci(i,k)*factor
+@@ -2743,10 +2879,20 @@
+             endif
+ 
+           if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            pr68_qr_trial = qrs(i,k,1)+(praut(i,k)+pracw(i,k)+prevp(i,k)    &
++                           -piacr(i,k)-pgacr(i,k)-psacr(i,k)-pmulrs(i,k)    &
++                           -pmulrg(i,k))*dtcld
++            pr68_nr_trial = nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)-niacr(i,k)    &
++                           -nraci(i,k)-nsacr(i,k)-ngacr(i,k))*dtcld
+             call pr68_write_rain_event(pr68_unit,5,i,lat,k,loop,n, &
+               merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+               qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), ngacr(i,k), nseml(i,k), ngeml(i,k))
++              nrmin,dtcld,pr68_qr_trial,pr68_nr_trial,value,source, &
++              praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), &
++              pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), &
++              0.0, 0.0, 0.0, nraut(i,k), &
++              nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), &
++              ngacr(i,k), 0.0, 0.0)
+           endif
+             work2(i,k)=-(prevp(i,k)+psdep(i,k)+pgdep(i,k)+pinud(i,k)+pidep(i,k))
+ 
+@@ -2770,6 +2916,11 @@
+                           +pmulcg(i,k))*dtcld,0.)
+             nci(i,k,1) = max(nci(i,k,1)+(-nraut(i,k)-nccol(i,k)-nracw(i,k)     &
+                           -niacw(i,k)-naacw(i,k)-naacw(i,k))*dtcld,0.)
++            pr68_qr_trial = qrs(i,k,1)+(praut(i,k)+pracw(i,k)                 &
++                           +prevp(i,k)-piacr(i,k)-pgacr(i,k)                   &
++                           -psacr(i,k)-pmulrs(i,k)-pmulrg(i,k))*dtcld
++            pr68_nr_trial = nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)-niacr(i,k)      &
++                           -nraci(i,k)-nsacr(i,k)-ngacr(i,k))*dtcld
+             qrs(i,k,1) = max(qrs(i,k,1)+(praut(i,k)+pracw(i,k)                 &
+                            +prevp(i,k)-piacr(i,k)-pgacr(i,k)                   &
+                            -psacr(i,k)-pmulrs(i,k)-pmulrg(i,k))*dtcld,0.)
+@@ -2779,29 +2930,27 @@
+             call pr68_write_rain_event(pr68_unit,6,i,lat,k,loop,n, &
+               merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+               qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), ngacr(i,k), nseml(i,k), ngeml(i,k))
+-          endif
+-          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
+-            call pr68_write_rain_event(pr68_unit,10,i,lat,k,loop,n, &
+-              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+-              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), ngacr(i,k), nseml(i,k), ngeml(i,k))
++              nrmin,dtcld,pr68_qr_trial, pr68_nr_trial,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
+           endif
+             if(rain_full_evap_pending(i,k) .and. qrs(i,k,1).le.qcrmin) then
+               nci(i,k,3) = nci(i,k,3)+nrs(i,k,1)
+               nrs(i,k,1) = 0.
+             endif
+           if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
+-            call pr68_write_rain_event(pr68_unit,11,i,lat,k,loop,n, &
+-              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+-              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), ngacr(i,k), nseml(i,k), ngeml(i,k))
+-          endif
+-          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
+             call pr68_write_rain_event(pr68_unit,7,i,lat,k,loop,n, &
+               merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+               qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), ngacr(i,k), nseml(i,k), ngeml(i,k))
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
+           endif
+             qci(i,k,2) = max(qci(i,k,2)-(psaut(i,k)+praci(i,k)                 &
+                            +psaci(i,k)+pgaci(i,k)-pinud(i,k)-pidep(i,k)        &
+@@ -2899,6 +3048,21 @@
+             value = max(nrmin,nrs(i,k,1))
+             source = (-nraut(i,k)+nrcol(i,k)-nseml(i,k)-ngeml(i,k)             &
+                       )*dtcld
++          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            pr68_qr_trial = qrs(i,k,1)+(praut(i,k)+pracw(i,k)+prevp(i,k)    &
++                           +paacw(i,k)+paacw(i,k)-pseml(i,k)-pgeml(i,k))*dtcld
++            pr68_nr_trial = nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)                &
++                           +nseml(i,k)+ngeml(i,k))*dtcld
++            call pr68_write_rain_event(pr68_unit,8,i,lat,k,loop,n, &
++              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
++              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
++              nrmin,dtcld,pr68_qr_trial,pr68_nr_trial,value,source, &
++              praut(i,k), pracw(i,k), prevp(i,k), 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), &
++              nrcol(i,k), 0.0, 0.0, 0.0, &
++              0.0, nseml(i,k), ngeml(i,k))
++          endif
+             if (source.gt.value) then
+               factor = value/source
+               nraut(i,k) = nraut(i,k)*factor
+@@ -2908,10 +3072,19 @@
+             endif
+ 
+           if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            pr68_qr_trial = qrs(i,k,1)+(praut(i,k)+pracw(i,k)+prevp(i,k)    &
++                           +paacw(i,k)+paacw(i,k)-pseml(i,k)-pgeml(i,k))*dtcld
++            pr68_nr_trial = nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)                &
++                           +nseml(i,k)+ngeml(i,k))*dtcld
+             call pr68_write_rain_event(pr68_unit,9,i,lat,k,loop,n, &
+               merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+               qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,praut(i,k), pracw(i,k), prevp(i,k), piacr(i,k), pgacr(i,k), psacr(i,k), pmulrs(i,k), pmulrg(i,k), paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), nrcol(i,k), niacr(i,k), nraci(i,k), nsacr(i,k), ngacr(i,k), nseml(i,k), ngeml(i,k))
++              nrmin,dtcld,pr68_qr_trial,pr68_nr_trial,value,source, &
++              praut(i,k), pracw(i,k), prevp(i,k), 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              paacw(i,k), pseml(i,k), pgeml(i,k), nraut(i,k), &
++              nrcol(i,k), 0.0, 0.0, 0.0, &
++              0.0, nseml(i,k), ngeml(i,k))
+           endif
+             work2(i,k)=-(prevp(i,k)+psevp(i,k)+pgevp(i,k))
+ 
+@@ -2923,6 +3096,11 @@
+             q(i,k) = q(i,k)+work2(i,k)*dtcld
+             qci(i,k,1) = max(qci(i,k,1)-(praut(i,k)+pracw(i,k)                 &
+                     +paacw(i,k)+paacw(i,k))*dtcld,0.)
++            pr68_qr_trial = qrs(i,k,1)+(praut(i,k)+pracw(i,k)                 &
++                    +prevp(i,k)+paacw(i,k)+paacw(i,k)-pseml(i,k)               &
++                           -pgeml(i,k))*dtcld
++            pr68_nr_trial = nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)+nseml(i,k)      &
++                           +ngeml(i,k))*dtcld
+             qrs(i,k,1) = max(qrs(i,k,1)+(praut(i,k)+pracw(i,k)                 &
+                     +prevp(i,k)+paacw(i,k)+paacw(i,k)-pseml(i,k)               &
+                     -pgeml(i,k))*dtcld,0.)
+@@ -2934,10 +3112,32 @@
+                    -naacw(i,k)-naacw(i,k))*dtcld,0.)
+             nrs(i,k,1) = max(nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)+nseml(i,k)      &
+                            +ngeml(i,k))*dtcld,0.)
++          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            call pr68_write_rain_event(pr68_unit,10,i,lat,k,loop,n, &
++              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
++              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
++              nrmin,dtcld,pr68_qr_trial, pr68_nr_trial,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
++          endif
+             if(rain_full_evap_pending(i,k) .and. qrs(i,k,1).le.qcrmin) then
+               nci(i,k,3) = nci(i,k,3)+nrs(i,k,1)
+               nrs(i,k,1) = 0.
+             endif
++          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            call pr68_write_rain_event(pr68_unit,11,i,lat,k,loop,n, &
++              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
++              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
++          endif
+             brs(i,k) = max(brs(i,k)+(bgevp(i,k)+bgeml(i,k))*dtcld,0.)
+             xlf = xls-xl(i,k)
+             xlwork2 = -xl(i,k)*(prevp(i,k)+psevp(i,k)+pgevp(i,k))              &
+@@ -3073,12 +3273,6 @@
+           if(avedia(i,k,2).le.di82) then
+             nci(i,k,1) = nci(i,k,1)+nrs(i,k,1)
+             nrs(i,k,1) = 0.
+-          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
+-            call pr68_write_rain_event(pr68_unit,12,i,lat,k,loop,n, &
+-              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+-              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+-          endif
+ 
+ 
+ 
+@@ -3086,6 +3280,18 @@
+             qci(i,k,1) = qci(i,k,1)+qrs(i,k,1)
+             qrs(i,k,1) = 0.
+           endif
++          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            call pr68_write_rain_event(pr68_unit,12,i,lat,k,loop,n, &
++              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
++              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
++          endif
++
+         enddo
+       enddo
+ 
+@@ -3169,7 +3375,12 @@
+             call pr68_write_rain_event(pr68_unit,13,i,lat,k,loop,n, &
+               merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+               qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
+           endif
+            if(qrs(i,k,2).le.qcrmin)then
+               qrs(i,k,2) = 0.0
+@@ -3223,7 +3434,12 @@
+             call pr68_write_rain_event(pr68_unit,14,i,lat,k,loop,n, &
+               merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
+               qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
+-              nrmin,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
+           endif
+             if( nci(i,k,1).gt.ncmax ) then
+               lamdc_tmp(i,k) = lamdacmax
+@@ -3233,8 +3449,28 @@
+       enddo 
+    enddo                  
+ 
++      do k = kts, kte
++        do i = its, ite
++          if(pr67_trace_this_call .and. pr68_rain_target(i,lat,k)) then
++            call pr68_write_rain_event(pr68_unit,15,i,lat,k,loop,n, &
++              merge(1,0,rain_full_evap_pending(i,k)),qrs(i,k,1),nrs(i,k,1), &
++              qci(i,k,1),nci(i,k,1),nci(i,k,2),nci(i,k,3),t(i,k),qcrmin, &
++              nrmin,dtcld,0.0, 0.0,0.0,0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0, 0.0, &
++              0.0, 0.0, 0.0)
++          endif
++        enddo
++      enddo
+       if (pr67_trace_this_call) close(pr68_unit)
+ 
++      if(pr67_trace_this_call) call pr69_write_water_checkpoint( &
++           pr69_unit,4,lat,jts,its,ite,kts,kte,q(its:ite,kts:kte), &
++           qci(its:ite,kts:kte,:),qrs,dend,delz(its:ite,kts:kte), &
++           fall,denr,dtcld)
++
+    end subroutine kdm62d
+ 
+         REAL FUNCTION GAMMLN(x)

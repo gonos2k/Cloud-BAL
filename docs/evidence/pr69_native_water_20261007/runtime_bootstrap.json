@@ -1,0 +1,13 @@
+{
+  "schema": "pr69_runtime_bootstrap_check_v1",
+  "command": [
+    "bash",
+    "-c",
+    "set -eo pipefail; source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/env/vars.sh --force >/dev/null 2>&1 || { source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/env/vars.sh >/dev/null 2>&1 || exit 1; }; export LD_LIBRARY_PATH=/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:${LD_LIBRARY_PATH:-}; source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh >/dev/null 2>&1 || exit 1; set -u; ulimit -s unlimited; export OMP_NUM_THREADS=68;  ifx --version; command -v mpiifx; printf \"BOOTSTRAP_OK\\n\""
+  ],
+  "returncode": 0,
+  "stdout": "ifx (IFX) 2026.0.0 20260331\nCopyright (C) 1985-2026 Intel Corporation. All rights reserved.\n\n/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx\nBOOTSTRAP_OK\n",
+  "stderr": "",
+  "wrf_launched": false,
+  "result": "PASS"
+}

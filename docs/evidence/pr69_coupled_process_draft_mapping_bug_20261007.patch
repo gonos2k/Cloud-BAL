@@ -1,0 +1,348 @@
+--- module_mp_kdm6_combined_research.f90
++++ module_mp_kdm6_combined_research.f90
+@@ -181,6 +181,185 @@
+     contains
+ 
+ 
++    subroutine kdm6_rain_process_fraction(q_fixed,q_process,n_fixed,n_process, &
++         bg_fixed,bg_process,t_fixed,t_process,density,pidnr,qmin,ncmin, &
++         qcrmin,dmr,lambda_min,lambda_max,rho_min,rho_max,pidnc,dmc, &
++         lambda_c_min,lambda_c_max,pidni,dmi,lambda_i_min,lambda_i_max, &
++         fraction,feasible)
++      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
++      implicit none
++      real, intent(in) :: q_fixed(5),q_process(5),n_fixed(3),n_process(3)
++      real, intent(in) :: bg_fixed,bg_process,t_fixed,t_process,density,pidnr
++      real, intent(in) :: qmin,ncmin,qcrmin,dmr,lambda_min,lambda_max,rho_min,rho_max
++      real, intent(in) :: pidnc,dmc,lambda_c_min,lambda_c_max
++      real, intent(in) :: pidni,dmi,lambda_i_min,lambda_i_max
++      real, intent(out) :: fraction
++      logical, intent(out) :: feasible
++      real :: alpha_min,alpha_max,n_per_q_min,n_per_q_max
++      real :: n_per_q_c_min,n_per_q_c_max,n_per_q_i_min,n_per_q_i_max
++      real :: q_trial(5),n_trial(3),bg_trial,t_trial
++      integer :: i,step
++
++      feasible=.false.
++      fraction=0.0
++      if (.not.all(ieee_is_finite([q_fixed,q_process,n_fixed,n_process, &
++          bg_fixed,bg_process,t_fixed,t_process,density,pidnr,pidnc,pidni, &
++          qmin,ncmin,qcrmin,dmr,dmc,dmi,lambda_min,lambda_max, &
++          lambda_c_min,lambda_c_max,lambda_i_min,lambda_i_max,rho_min,rho_max]))) return
++      if (density.le.0.0 .or. pidnr.le.0.0 .or. pidnc.le.0.0 .or. pidni.le.0.0 .or. &
++          lambda_min.le.0.0 .or. lambda_max.lt.lambda_min .or. &
++          lambda_c_min.le.0.0 .or. lambda_c_max.lt.lambda_c_min .or. &
++          lambda_i_min.le.0.0 .or. lambda_i_max.lt.lambda_i_min .or. &
++          rho_min.le.0.0 .or. rho_max.lt.rho_min .or. &
++          qmin.lt.0.0 .or. ncmin.lt.0.0 .or. qcrmin.lt.0.0 .or. &
++          dmr.le.0.0 .or. dmc.le.0.0 .or. dmi.le.0.0) return
++
++      alpha_min=0.0
++      alpha_max=1.0
++      feasible=.true.
++      do i=1,5
++        call constrain_process_margin(q_fixed(i),q_process(i), &
++             alpha_min,alpha_max,feasible)
++      enddo
++      do i=1,3
++        call constrain_process_margin(n_fixed(i),n_process(i), &
++             alpha_min,alpha_max,feasible)
++      enddo
++      call constrain_process_margin(bg_fixed,bg_process,alpha_min,alpha_max,feasible)
++      n_per_q_min=density*lambda_min**dmr/pidnr
++      n_per_q_max=density*lambda_max**dmr/pidnr
++      n_per_q_c_min=density*lambda_c_min**dmc/pidnc
++      n_per_q_c_max=density*lambda_c_max**dmc/pidnc
++      n_per_q_i_min=density*lambda_i_min**dmi/pidni
++      n_per_q_i_max=density*lambda_i_max**dmi/pidni
++      if (.not.all(ieee_is_finite([n_per_q_min,n_per_q_max,n_per_q_c_min, &
++          n_per_q_c_max,n_per_q_i_min,n_per_q_i_max]))) then
++        feasible=.false.
++        return
++      endif
++      call constrain_process_margin(n_fixed(3)-n_per_q_min*q_fixed(3), &
++           n_process(3)-n_per_q_min*q_process(3),alpha_min,alpha_max,feasible)
++      call constrain_process_margin(n_per_q_max*q_fixed(3)-n_fixed(3), &
++           n_per_q_max*q_process(3)-n_process(3),alpha_min,alpha_max,feasible)
++      q_trial=q_fixed+alpha_max*q_process
++      n_trial=n_fixed+alpha_max*n_process
++      if (q_trial(1).gt.qmin .and. n_trial(1).gt.0.0) then
++        call constrain_process_margin(n_fixed(1)-n_per_q_c_min*q_fixed(1), &
++             n_process(1)-n_per_q_c_min*q_process(1), &
++             alpha_min,alpha_max,feasible)
++        call constrain_process_margin(n_per_q_c_max*q_fixed(1)-n_fixed(1), &
++             n_per_q_c_max*q_process(1)-n_process(1), &
++             alpha_min,alpha_max,feasible)
++      endif
++      if (q_trial(2).gt.qmin .and. n_trial(2).gt.0.0) then
++        call constrain_process_margin(n_fixed(2)-n_per_q_i_min*q_fixed(2), &
++             n_process(2)-n_per_q_i_min*q_process(2), &
++             alpha_min,alpha_max,feasible)
++        call constrain_process_margin(n_per_q_i_max*q_fixed(2)-n_fixed(2), &
++             n_per_q_i_max*q_process(2)-n_process(2), &
++             alpha_min,alpha_max,feasible)
++      endif
++      call constrain_process_margin(bg_fixed-q_fixed(5)/rho_max, &
++           bg_process-q_process(5)/rho_max,alpha_min,alpha_max,feasible)
++      call constrain_process_margin(q_fixed(5)/rho_min-bg_fixed, &
++           q_process(5)/rho_min-bg_process,alpha_min,alpha_max,feasible)
++      if (alpha_min.gt.alpha_max) feasible=.false.
++      if (.not.feasible) return
++
++      q_trial=q_fixed+alpha_max*q_process
++      n_trial=n_fixed+alpha_max*n_process
++      bg_trial=bg_fixed+alpha_max*bg_process
++      t_trial=t_fixed+alpha_max*t_process
++      if (alpha_min.gt.alpha_max) feasible=.false.
++      if (.not.feasible) return
++
++      fraction=max(0.0,min(1.0,alpha_max))
++      do step=1,8
++        q_trial=q_fixed+fraction*q_process
++        n_trial=n_fixed+fraction*n_process
++        bg_trial=bg_fixed+fraction*bg_process
++        t_trial=t_fixed+fraction*t_process
++        feasible=all(ieee_is_finite([q_trial,n_trial,bg_trial,t_trial]))
++        feasible=feasible .and. all(q_trial.ge.0.0) .and. all(n_trial.ge.0.0)
++        feasible=feasible .and. bg_trial.ge.0.0
++        do i=3,5
++          if (q_trial(i).gt.0.0 .and. q_trial(i).le.qcrmin) feasible=.false.
++        enddo
++        if (q_trial(1).gt.0.0 .and. q_trial(1).le.qmin) feasible=.false.
++        if (q_trial(2).gt.0.0 .and. q_trial(2).le.qmin) feasible=.false.
++        if (q_trial(1).le.qmin .and. n_trial(1).gt.0.0) feasible=.false.
++        if (q_trial(2).le.qmin .and. n_trial(2).gt.0.0) feasible=.false.
++        if (q_trial(1).gt.qmin .and. n_trial(1).le.0.0) feasible=.false.
++        if (q_trial(2).gt.qmin .and. n_trial(2).le.0.0) feasible=.false.
++        if (q_trial(3).gt.0.0) then
++          if (n_trial(3).lt.n_per_q_min*q_trial(3) .or. &
++              n_trial(3).gt.n_per_q_max*q_trial(3)) feasible=.false.
++        endif
++        if (q_trial(1).gt.qmin .and. n_trial(1).gt.0.0) then
++          if (n_trial(1).lt.n_per_q_c_min*q_trial(1) .or. &
++              n_trial(1).gt.n_per_q_c_max*q_trial(1)) feasible=.false.
++      endif
++        if (q_trial(2).gt.qmin .and. n_trial(2).gt.0.0) then
++          if (n_trial(2).lt.n_per_q_i_min*q_trial(2) .or. &
++              n_trial(2).gt.n_per_q_i_max*q_trial(2)) feasible=.false.
++      endif
++        if (bg_trial.lt.q_trial(5)/rho_max .or. &
++            bg_trial.gt.q_trial(5)/rho_min) feasible=.false.
++        if (feasible) exit
++        fraction=nearest(fraction,-1.0)
++        if (fraction.lt.alpha_min) exit
++      enddo
++      if (.not.feasible) fraction=0.0
++    end subroutine kdm6_rain_process_fraction
++
++    subroutine constrain_process_margin(margin_initial,margin_process, &
++         alpha_min,alpha_max,feasible)
++      implicit none
++      real, intent(in) :: margin_initial,margin_process
++      real, intent(inout) :: alpha_min,alpha_max
++      logical, intent(inout) :: feasible
++      real :: boundary
++
++      if (.not.feasible) return
++      if (margin_process.eq.0.0) then
++        if (margin_initial.lt.0.0) feasible=.false.
++      elseif (margin_process.gt.0.0) then
++        boundary=-margin_initial/margin_process
++        alpha_min=max(alpha_min,boundary)
++      else
++        boundary=-margin_initial/margin_process
++        alpha_max=min(alpha_max,boundary)
++      endif
++    end subroutine constrain_process_margin
++
++    real function kdm6_shared_pair_fraction(mass_rate_start,mass_rate_limited, &
++         number_rate_start,number_rate_limited)
++      use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
++      implicit none
++      real, intent(in) :: mass_rate_start,mass_rate_limited
++      real, intent(in) :: number_rate_start,number_rate_limited
++      kdm6_shared_pair_fraction=1.0
++      if (.not.all(ieee_is_finite([mass_rate_start,mass_rate_limited, &
++          number_rate_start,number_rate_limited]))) then
++        error stop 'KDM6 paired process limiter received a nonfinite rate'
++      endif
++      if (mass_rate_start.lt.0.0 .or. mass_rate_limited.lt.0.0 .or. &
++          number_rate_start.lt.0.0 .or. number_rate_limited.lt.0.0 .or. &
++          mass_rate_limited.gt.mass_rate_start .or. &
++          number_rate_limited.gt.number_rate_start) then
++        error stop 'KDM6 paired process limiter changed a nonnegative rate inconsistently'
++      endif
++      if (mass_rate_start.gt.0.0) then
++        kdm6_shared_pair_fraction=min(kdm6_shared_pair_fraction, &
++             mass_rate_limited/mass_rate_start)
++      endif
++      if (number_rate_start.gt.0.0) then
++        kdm6_shared_pair_fraction=min(kdm6_shared_pair_fraction, &
++             number_rate_limited/number_rate_start)
++      endif
++    end function kdm6_shared_pair_fraction
++
++
+     subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
+                     nn, nc, ni, nr, bg, diag_rhog,         &
+                     den, pii, p, delz,                     &
+@@ -755,6 +934,13 @@
+    double precision                   :: coeres, acrfac, vt2r, vt2s,vt2i,      &
+                                          pfrzdtr, nfrzdtr, pfrzdtc, nfrzdtc 
+    real                               :: factor, source, value, supice,xlwork2
++   real                               :: rain_bg_fixed,rain_bg_process
++   real                               :: rain_t_fixed,rain_t_process
++   real                               :: rain_process_alpha
++   real, dimension(5)                  :: rain_q_fixed,rain_q_process
++   real, dimension(3)                  :: rain_n_fixed,rain_n_process
++   real, dimension(its:ite,kts:kte,10) :: rain_pair_rate_start
++   logical                            :: rain_process_feasible,rain_stored_state_feasible
+ 
+    real                               :: cpmcal, xlcal, lamdac, diffus, &
+                                          viscos, xka, venfac, conden, diffac,  &
+@@ -2508,6 +2694,17 @@
+       do k = kts, kte
+         do i = its, ite
+ 
++          rain_pair_rate_start(i,k,1)=praut(i,k)
++          rain_pair_rate_start(i,k,2)=nraut(i,k)
++          rain_pair_rate_start(i,k,3)=praci(i,k)
++          rain_pair_rate_start(i,k,4)=nraci(i,k)
++          rain_pair_rate_start(i,k,5)=piacr(i,k)
++          rain_pair_rate_start(i,k,6)=niacr(i,k)
++          rain_pair_rate_start(i,k,7)=psacr(i,k)
++          rain_pair_rate_start(i,k,8)=nsacr(i,k)
++          rain_pair_rate_start(i,k,9)=pgacr(i,k)
++          rain_pair_rate_start(i,k,10)=ngacr(i,k)
++
+           delta2=0.
+           delta3=0.
+           if(qrs(i,k,1).lt.1.e-4 .and. qrs(i,k,2).lt.1.e-4) delta2=1.
+@@ -2643,17 +2840,92 @@
+ 
+ 
+ 
+-            value = max(nrmin,nrs(i,k,1))
+-            source = (-nraut(i,k)+nraci(i,k)+nrcol(i,k)+niacr(i,k)+nsacr(i,k)+ngacr(i,k))*dtcld
+-            if (source.gt.value) then
+-              factor = value/source
+-              nraci(i,k) = nraci(i,k)*factor
+-              nraut(i,k) = nraut(i,k)*factor
+-              nrcol(i,k) = nrcol(i,k)*factor
+-              niacr(i,k) = niacr(i,k)*factor
+-              nsacr(i,k) = nsacr(i,k)*factor
+-              ngacr(i,k) = ngacr(i,k)*factor
+-            endif
++            factor=kdm6_shared_pair_fraction(rain_pair_rate_start(i,k,1),praut(i,k), &
++                 rain_pair_rate_start(i,k,2),nraut(i,k))
++            praut(i,k)=rain_pair_rate_start(i,k,1)*factor
++            nraut(i,k)=rain_pair_rate_start(i,k,2)*factor
++            factor=kdm6_shared_pair_fraction(rain_pair_rate_start(i,k,3),praci(i,k), &
++                 rain_pair_rate_start(i,k,4),nraci(i,k))
++            praci(i,k)=rain_pair_rate_start(i,k,3)*factor
++            nraci(i,k)=rain_pair_rate_start(i,k,4)*factor
++            factor=kdm6_shared_pair_fraction(rain_pair_rate_start(i,k,5),piacr(i,k), &
++                 rain_pair_rate_start(i,k,6),niacr(i,k))
++            piacr(i,k)=rain_pair_rate_start(i,k,5)*factor
++            niacr(i,k)=rain_pair_rate_start(i,k,6)*factor
++            factor=kdm6_shared_pair_fraction(rain_pair_rate_start(i,k,7),psacr(i,k), &
++                 rain_pair_rate_start(i,k,8),nsacr(i,k))
++            psacr(i,k)=rain_pair_rate_start(i,k,7)*factor
++            nsacr(i,k)=rain_pair_rate_start(i,k,8)*factor
++            factor=kdm6_shared_pair_fraction(rain_pair_rate_start(i,k,9),pgacr(i,k), &
++                 rain_pair_rate_start(i,k,10),ngacr(i,k))
++            pgacr(i,k)=rain_pair_rate_start(i,k,9)*factor
++            ngacr(i,k)=rain_pair_rate_start(i,k,10)*factor
++
++            rain_q_fixed(1)=qci(i,k,1)-(pracw(i,k)+piacw(i,k)+2.*paacw(i,k) &
++                 +pmulcs(i,k)+pmulcg(i,k))*dtcld
++            rain_q_process(1)=-praut(i,k)*dtcld
++            rain_q_fixed(2)=qci(i,k,2)-(psaut(i,k)+psaci(i,k)+pgaci(i,k) &
++                 -pinud(i,k)-pidep(i,k)-piacw(i,k)-pmulcs(i,k)-pmulcg(i,k) &
++                 -pmulrs(i,k)-pmulrg(i,k))*dtcld
++            rain_q_process(2)=-praci(i,k)*dtcld
++            rain_q_fixed(3)=qrs(i,k,1)+(pracw(i,k)+prevp(i,k) &
++                 -pmulrs(i,k)-pmulrg(i,k))*dtcld
++            rain_q_process(3)=(praut(i,k)-piacr(i,k)-psacr(i,k)-pgacr(i,k))*dtcld
++            rain_q_fixed(4)=qrs(i,k,2)+(psdep(i,k)+psaut(i,k)+paacw(i,k) &
++                 -pgaut(i,k)+psaci(i,k)-pgacs(i,k)-pracs(i,k)*(1.-delta2))*dtcld
++            rain_q_process(4)=(piacr(i,k)*delta3+praci(i,k)*delta3 &
++                 +psacr(i,k)*delta2)*dtcld
++            rain_q_fixed(5)=qrs(i,k,3)+(pgdep(i,k)+pgaut(i,k) &
++                 +pracs(i,k)*(1.-delta2)+pgaci(i,k)+paacw(i,k)+pgacs(i,k))*dtcld
++            rain_q_process(5)=(piacr(i,k)*(1.-delta3)+praci(i,k)*(1.-delta3) &
++                 +psacr(i,k)*(1.-delta2)+pgacr(i,k))*dtcld
++
++            rain_n_fixed(1)=nci(i,k,1)+(-nccol(i,k)-nracw(i,k)-niacw(i,k) &
++                 -naacw(i,k)-naacw(i,k))*dtcld
++            rain_n_process(1)=-nraut(i,k)*dtcld
++            rain_n_fixed(2)=nci(i,k,2)+(-nsaci(i,k)-ngaci(i,k)+ninud(i,k) &
++                 +nmulcs(i,k)+nmulcg(i,k)+nmulrs(i,k)+nmulrg(i,k)-nsaut(i,k))*dtcld
++            rain_n_process(2)=(-nraci(i,k)-niacr(i,k))*dtcld
++            rain_n_fixed(3)=nrs(i,k,1)
++            rain_n_process(3)=(nraut(i,k)-nraci(i,k)-nrcol(i,k)-niacr(i,k) &
++                 -nsacr(i,k)-ngacr(i,k))*dtcld
++
++            rain_bg_fixed=brs(i,k)+(pgdep(i,k)/rhox(i,k)+bracs(i,k) &
++                 +bgaci(i,k)+baacw(i,k))*dtcld
++            rain_bg_process=(piacr(i,k)/denr+praci(i,k)/deni &
++                 +psacr(i,k)/denr+pgacr(i,k)/denr)*dtcld
++            xlf=xls-xl(i,k)
++            rain_t_fixed=t(i,k)-(-xls*(psdep(i,k)+pgdep(i,k)+pidep(i,k)+pinud(i,k)) &
++                 -xl(i,k)*prevp(i,k)-xlf*(paacw(i,k)+pmulcs(i,k)+pmulcg(i,k) &
++                 +pmulrs(i,k)+pmulrg(i,k)+piacw(i,k)+paacw(i,k)))*dtcld/cpm(i,k)
++            rain_t_process=xlf*(piacr(i,k)+psacr(i,k)+pgacr(i,k))*dtcld/cpm(i,k)
++            call kdm6_rain_process_fraction(rain_q_fixed,rain_q_process, &
++                 rain_n_fixed,rain_n_process,rain_bg_fixed,rain_bg_process, &
++                 rain_t_fixed,rain_t_process,den(i,k),pidnr,qmin,ncmin, &
++                 qcrmin,dmr,lamdarmin,lamdarmax,100.0,900.0,pidnc,dmc, &
++                 lamdacmin,lamdacmax,pidni,dmi,lamdaimin,lamdaimax, &
++                 factor,rain_process_feasible)
++            if (.not.rain_process_feasible) then
++              write(*,*) 'KDM6 cold process rejected at cell',i,k, &
++                   ' Qfixed/Qproc=',rain_q_fixed,rain_q_process, &
++                   ' Nfixed/Nproc=',rain_n_fixed,rain_n_process, &
++                   ' BGfixed/BGproc=',rain_bg_fixed,rain_bg_process, &
++                   ' Tfixed/Tproc=',rain_t_fixed,rain_t_process, &
++                   ' alpha=',factor
++              error stop 'KDM6 cold rain process rejected an infeasible moment state'
++            endif
++            rain_process_alpha=factor
++            praut(i,k) = praut(i,k)*factor
++            praci(i,k) = praci(i,k)*factor
++            piacr(i,k) = piacr(i,k)*factor
++            psacr(i,k) = psacr(i,k)*factor
++            pgacr(i,k) = pgacr(i,k)*factor
++            nraut(i,k) = nraut(i,k)*factor
++            nraci(i,k) = nraci(i,k)*factor
++            nrcol(i,k) = nrcol(i,k)*factor
++            niacr(i,k) = niacr(i,k)*factor
++            nsacr(i,k) = nsacr(i,k)*factor
++            ngacr(i,k) = ngacr(i,k)*factor
+ 
+             work2(i,k)=-(prevp(i,k)+psdep(i,k)+pgdep(i,k)+pinud(i,k)+pidep(i,k))
+ 
+@@ -2713,6 +2985,23 @@
+                       +piacw(i,k) +paacw(i,k)+pgacr(i,k)+psacr(i,k)) 
+             t(i,k) = t(i,k)-xlwork2/cpm(i,k)*dtcld
+ 
++            rain_q_fixed=[qci(i,k,1),qci(i,k,2),qrs(i,k,1),qrs(i,k,2),qrs(i,k,3)]
++            rain_q_process=0.0
++            rain_n_fixed=[nci(i,k,1),nci(i,k,2),nrs(i,k,1)]
++            rain_n_process=0.0
++            call kdm6_rain_process_fraction(rain_q_fixed,rain_q_process, &
++                 rain_n_fixed,rain_n_process,brs(i,k),0.0,t(i,k),0.0, &
++                 den(i,k),pidnr,qmin,ncmin,qcrmin,dmr,lamdarmin,lamdarmax, &
++                 100.0,900.0,pidnc,dmc,lamdacmin,lamdacmax,pidni,dmi, &
++                 lamdaimin,lamdaimax,factor,rain_stored_state_feasible)
++            if (.not.rain_stored_state_feasible) then
++              write(*,*) 'KDM6 stored cold endpoint rejected at cell',i,k, &
++                   ' accepted alpha=',rain_process_alpha, &
++                   ' Q=',rain_q_fixed,' N=',rain_n_fixed, &
++                   ' BG=',brs(i,k),' T=',t(i,k)
++              error stop 'KDM6 rejected an invalid stored process endpoint'
++            endif
++
+           else
+ 
+ 

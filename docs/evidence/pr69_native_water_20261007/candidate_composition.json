@@ -1,0 +1,65 @@
+{
+  "schema": "pr69_water_observer_composition_v1",
+  "status": "GENERATED_AND_USED_IN_GUARDED_CANDIDATE_RUN; REJECTED_UNSUPPORTED_BG_VOLUME_RATE; NO_COMPLETE_BUDGET_CAPTURE",
+  "selected_source": "/var/tmp/pr69_native_jointprocess_20261007_v3/source/selected_candidate_fbf.json.f90",
+  "selected_source_sha256": "fbfa823b7cba54f0fdd5ffb1cfeaf58fc5722e845508f954e6c992a7aa32a594",
+  "observer_source": "/var/tmp/pr69_native_jointprocess_20261007_v3/source/selected_candidate_fbf_pr69_water.f90",
+  "observer_source_sha256": "ee688498b32b7a1ccaf69858f62f4e457f7153df4fb8b965acfd069d8eefb425",
+  "composition_tool": "tools/pr69_prepare_water_observer.py",
+  "source_order_anchors": [
+    "entry before KDM6 cleanup",
+    "post cleanup after hydrometeor clamps and DEN-to-DEND copy",
+    "post mixed precipitation sedimentation before ice loop",
+    "post first ice sedimentation substep",
+    "KDM6 return"
+  ],
+  "runtime": "The final fbfa823b source was built and used in one guarded candidate attempt. It rejected the first selected KDM6 call at (i,k)=(125,17): pgdep=-7.6110288e-16 with rhox=0 made BG partner-rate support false, so the fraction helper and subsequent PSD/cutoff gates were skipped. j was not captured. Input integrity passed; the required post-call capture is absent. No successful candidate water-budget replay or closure claim is made.",
+  "superseded_compositions": [
+    {
+      "selected_source_sha256": "7d155b1c01f2eae1768566603a6b346a83121b970d4c5b5f52a1728112852126",
+      "observer_source_sha256": "7862dcfd0f9a9c710263cb02a5c63880c7bdd1f2149d2a81f3141c021fa581ac"
+    },
+    {
+      "selected_source_sha256": "5666f7f8d50e8f6c1a43640c02d3a3887bacd0ca9dd57e706cf6b35786e948bc",
+      "observer_source_sha256": "54c196f257f18c50e168df4ce40861cb5074225e81b51eb9ddb9927ed5bc0ebe"
+    },
+    {
+      "selected_source_sha256": "4aba497a509e9f789e642d70a51ce63dabdc514059a8c2a56ea2e1567af3121d",
+      "observer_source_sha256": "295e973e3202c51e59fe9a1d2be4443e9f0e03e6d27109b60ef0944f7de6d8ca"
+    },
+    {
+      "selected_source_sha256": "fda6206010139b48affe40b899606ad9201fcc5bd091c1f269c00e0dce77ff25",
+      "observer_source_sha256": "5659e86a8453b66ddd1688b8383167974bb285dbf4dc0eda9121bf4e3368e4ce"
+    }
+  ],
+  "prior_attempt": {
+    "path": "docs/evidence/pr69_coupled_process_native_prior_attempt_20261007.json",
+    "sha256": "610894f97354e953ecb59fea8842fad94bb7ea2a174b35c1b246395cc6de35e4",
+    "status": "REJECTED_WITH_DRAFT_MAPPING_BUG",
+    "selected_source_sha256": "fda6206010139b48affe40b899606ad9201fcc5bd091c1f269c00e0dce77ff25",
+    "source_path": "/var/tmp/pr69_native_jointprocess_20261007_v2/source/selected_candidate_fda620.f90",
+    "reason": "preacceptance graupel-volume fixed term read bracs/bgaci/baacw before source recomputation; fatal result cannot establish initial infeasibility."
+  },
+  "final_candidate_attempt": {
+    "path": "docs/evidence/pr69_coupled_process_native_20261007.json",
+    "sha256": "3b39e94f4d2249717d242526ab17066f0293b2d7eba8390bbfaecbfde960db9c",
+    "status": "REJECTED_UNSUPPORTED_BG_VOLUME_RATE",
+    "returncode": 128,
+    "location": {
+      "i": 125,
+      "j": "NOT_CAPTURED_IN_FATAL_MESSAGE",
+      "k": 17
+    },
+    "actual_rejection_reason": {
+      "control_flow": "rain_bg_rates_feasible is initialized true and ANDed with every returned validity flag; the first pgdep/rhox flag makes it false. The source then skips kdm6_rain_process_fraction, sets factor=0 and rain_process_feasible=false, and executes the controlled fatal rejection.",
+      "helper_result": "kdm6_mass_volume_rate returns volume_rate=0 and feasible=false because the mass rate is nonzero and density is not positive",
+      "operand": "pgdep=-7.6110288e-16, rhox=0"
+    },
+    "not_evaluated": "The printed ice endpoint is QI=6.4155747e-16 (below qmin) and NI=9.9821169e-5, but the fraction/PSD gate was skipped because BG rate support failed. It is not attributed as the actual rejection cause; other PSD/cutoff constraints were not evaluated in this run.",
+    "required_missing": [
+      "kdm6_first_call_post.raw"
+    ],
+    "input_integrity": "PASS",
+    "output_isolation": "FAIL"
+  }
+}

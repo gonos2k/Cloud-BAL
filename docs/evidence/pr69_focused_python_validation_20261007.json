@@ -1,0 +1,23 @@
+{
+  "schema": "pr69_focused_python_validation_v1",
+  "scope": "affected parser and execution-guard tests; full suite not run",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_pr69_water_budget.py",
+    "tests/test_pr69_water_observer_runner.py"
+  ],
+  "exit_code": 0,
+  "log_path": "/var/tmp/pr69_final_python_qe6j4nhq/pytest.log",
+  "log_sha256": "ebfc31e3b87e19c6754c302d77f23b12d1c198044c7bcd3fd1dead5b867fdc68",
+  "files_sha256": {
+    "tools/pr69_prepare_water_observer.py": "fba8bbe1cb6f502d6a55792df7cfef3cab5696bcdc689e53f20eb2e1ff3880c0",
+    "tools/pr69_run_water_observer.py": "327a216ec410d05bcd96d012cae2952eef88640bf775560bc47e486904b39fd2",
+    "tools/pr69_water_budget.py": "def4c928f2057f4201d75f9498afdcc5c400da8bd3d20c3b620c4eab41d1cb4b",
+    "tests/test_pr69_water_budget.py": "d995557085822b7b6b77efd102a03e3e246cccd01c41295ad437b1b514452afb",
+    "tests/test_pr69_water_observer_runner.py": "9c96fa68b317be6ed29a67be97ea2c13d36a3f032268b60502f5171137c1aea1",
+    "tests/run_python_contract_tests.sh": "c8500f2dda4ec5fe620b164371b7be307a3bad1debb1c602d93b631148077f20"
+  }
+}
