@@ -44,7 +44,7 @@ failed attempts keep their original source, executable, and artifact identities.
   no component contract is declared; the old radius mismatch remains rejected.
 - [x] Finish independent agent-team review, fix findings, and validate affected
   paths with Python and the pinned Intel profile in fresh scratch directories.
-- [ ] Freeze the source and update separately dated KLAPS50/Cloud-BAL
+- [x] Freeze the source and update separately dated KLAPS50/Cloud-BAL
   graph overlays and derived wiki audit for the reviewed PR.
 
 ## Physical approval gates
@@ -100,3 +100,6 @@ maintenance sources are preserved while research experiments run in copies.
   Python tests, a separate legacy transition-validator regression, successful
   PR63 stage-text verification, six exact target RK replays and the new QC
   source-channel replay. These are distinct from the native model executions.
+
+- [Maintained KG update](PR64_KG_UPDATE_20261007.md): frozen source overlay,
+  separately dated corpora, derived wiki audit and preserved content.
