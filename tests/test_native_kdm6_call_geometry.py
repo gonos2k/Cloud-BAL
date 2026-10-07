@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import struct
 import importlib.util
+import hashlib
+import json
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -15,6 +18,10 @@ _SPEC.loader.exec_module(_MODULE)
 ARRAY_NAMES, STAGES, audit, parse_geometry = (
     _MODULE.ARRAY_NAMES, _MODULE.STAGES, _MODULE.audit, _MODULE.parse_geometry
 )
+
+TRACE_FIELDS_3D = ("TH", "PII", "DEN", "P", "DELZ", "Q", "QC", "QR", "QI",
+                   "QS", "QG", "NN", "NC", "NI", "NR", "BG", "DIAGRHOG")
+TRACE_FIELDS_2D = ("XLAND",)
 
 
 BOUNDS = (0, 1, 0, 1, 1, 3, 0, 1, 0, 1, 1, 2)
@@ -34,11 +41,11 @@ ARRAYS = {
 
 
 def encode_record(stage: str, *, arrays=None, bounds=BOUNDS, extents=EXTENTS,
-                  timestep=1, dx=5000.0) -> bytes:
+                  timestep=1, dx=5000.0, dtm=20.0, dt=20.0) -> bytes:
     arrays = ARRAYS if arrays is None else arrays
     data = bytearray(b"PR63GEO2")
     data.extend(stage.encode("ascii"))
-    data.extend(struct.pack(">3i6f", timestep, 4, 2, 20.0, 20.0, dx, 5000.0, 9.81, 5000.0))
+    data.extend(struct.pack(">3i6f", timestep, 4, 2, dtm, dt, dx, 5000.0, 9.81, 5000.0))
     data.extend(struct.pack(">12i", *bounds))
     data.extend(struct.pack(">15i", *extents))
     for name in ARRAY_NAMES:
@@ -48,6 +55,56 @@ def encode_record(stage: str, *, arrays=None, bounds=BOUNDS, extents=EXTENTS,
 
 def valid_capture() -> bytes:
     return encode_record(STAGES[0]) + encode_record(STAGES[1])
+
+
+def encode_kdm_trace(stage: int, duration: float) -> bytes:
+    bounds = (0, 1, 0, 1, 1, 3, 0, 1, 0, 1, 1, 3, 0, 1, 0, 1, 1, 2)
+    data = bytearray(b"KDM6TRC1")
+    data.extend(struct.pack(">20i", stage, 1, *bounds))
+    data.extend(struct.pack(">5f", duration, 1.0, 1.0, 1.0, 1.0))
+    for name in TRACE_FIELDS_3D:
+        value = 50000.0 if name == "DELZ" else 100000.0 if name == "P" else 1.0
+        array = np.full((2, 3, 2), value, dtype=">f4")
+        data.extend(name.encode("ascii").ljust(8, b" "))
+        data.extend(array.tobytes())
+    for name in TRACE_FIELDS_2D:
+        array = np.ones((2, 2), dtype=">f4")
+        data.extend(name.encode("ascii").ljust(8, b" "))
+        data.extend(array.tobytes())
+    return bytes(data)
+
+
+def audit_fixture(root: Path, *, dtm: float, grid_dt: float, kdm_dt: float) -> tuple[Path, ...]:
+    arrays = {name: value.copy() for name, value in ARRAYS.items()}
+    arrays["c1h"][:] = -1.0
+    arrays["c3f"][:] = (1.0, 0.5, 0.0)
+    geometry = root / "pr63_geometry.raw"
+    pre = root / "kdm_pre.raw"
+    post = root / "kdm_post.raw"
+    executable = root / "wrf.exe"
+    receipt_path = root / "run-isolation.json"
+    geometry.write_bytes(
+        encode_record(STAGES[0], arrays=arrays, dtm=dtm, dt=grid_dt)
+        + encode_record(STAGES[1], arrays=arrays, dtm=dtm, dt=grid_dt)
+    )
+    pre.write_bytes(encode_kdm_trace(1, kdm_dt))
+    post.write_bytes(encode_kdm_trace(2, kdm_dt))
+    executable.write_bytes(b"synthetic executable identity")
+
+    def sha256(path: Path) -> str:
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+
+    receipt = {
+        "returncode": 0,
+        "input_integrity": "PASS",
+        "output_isolation": "PASS",
+        "inputs": [{"path": str(executable), "sha256_before": sha256(executable),
+                    "sha256_after": sha256(executable)}],
+        "outputs": [{"path": path.name, "sha256": sha256(path)}
+                    for path in (geometry, pre, post)],
+    }
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+    return geometry, pre, post, receipt_path
 
 
 class NativeGeometryParserTests(unittest.TestCase):
@@ -96,6 +153,21 @@ class NativeGeometryParserTests(unittest.TestCase):
     def test_pre_post_scalar_metadata_must_match(self):
         with self.assertRaisesRegex(ValueError, "scalar metadata differ"):
             parse_geometry(encode_record(STAGES[0]) + encode_record(STAGES[1], dx=10000.0))
+
+    def test_whole_audit_rejects_binary_call_duration_mismatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = audit_fixture(Path(tmp), dtm=20.0, grid_dt=25.0, kdm_dt=10.0)
+            with self.assertRaisesRegex(ValueError, "call-duration mismatch"):
+                audit(*paths)
+
+    def test_whole_audit_accepts_dtm_match_with_different_grid_dt_metadata(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = audit_fixture(Path(tmp), dtm=20.0, grid_dt=25.0, kdm_dt=20.0)
+            report = audit(*paths)
+        self.assertTrue(report["call_duration_identity"]["matched"])
+        self.assertEqual(report["call_duration_identity"]["host_dtm_s"], 20.0)
+        self.assertEqual(report["call_duration_identity"]["kdm6_delt_s"], 20.0)
+        self.assertEqual(report["call_duration_identity"]["grid_dt_s_metadata"], 25.0)
 
     def test_trailing_data_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "trailing bytes"):

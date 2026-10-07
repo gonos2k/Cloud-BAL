@@ -1,0 +1,222 @@
+{
+  "artifact": "PR64_QC_CHANNEL_SOURCE_20261007",
+  "baseline_artifact_comparison": {
+    "candidate_run.log": {
+      "baseline_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df",
+      "match": true,
+      "observer_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+    },
+    "kdm6_first_call_post.raw": {
+      "baseline_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+      "match": true,
+      "observer_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51"
+    },
+    "kdm6_first_call_pre.raw": {
+      "baseline_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "match": true,
+      "observer_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+    },
+    "namelist.output": {
+      "baseline_sha256": "ad2164d8d0db9eac8cf778e8a05b8e56ec68c9fa0a85f8a503c045ad075429d9",
+      "match": true,
+      "observer_sha256": "ad2164d8d0db9eac8cf778e8a05b8e56ec68c9fa0a85f8a503c045ad075429d9"
+    },
+    "pr61_cell_process.raw": {
+      "baseline_sha256": "baf2e04b1afce984ea0ddb56f328166dffb0f19063fbdb1baf4094c8f22e3cb5",
+      "match": true,
+      "observer_sha256": "baf2e04b1afce984ea0ddb56f328166dffb0f19063fbdb1baf4094c8f22e3cb5"
+    },
+    "pr62_extent_cells.txt": {
+      "baseline_sha256": "1fea469d3d9d62ee9680e0e3084010ba5f50657217b799e3dd71c5ff9721b626",
+      "match": true,
+      "observer_sha256": "1fea469d3d9d62ee9680e0e3084010ba5f50657217b799e3dd71c5ff9721b626"
+    },
+    "pr63_geometry.raw": {
+      "baseline_sha256": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+      "match": true,
+      "observer_sha256": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008"
+    },
+    "pr63_kdm_stages.raw": {
+      "baseline_sha256": "2c683e83ae0358d82af09f6791d182c0769dd4877e4b9010813a27f0d9c2aa42",
+      "match": true,
+      "observer_sha256": "2c683e83ae0358d82af09f6791d182c0769dd4877e4b9010813a27f0d9c2aa42"
+    },
+    "pr63_transition_stages.raw": {
+      "baseline_sha256": "3f51d87ab0320df86ce4e4cffc1b73acf36d2faf7ac1ba8eff3d145c8e8f9d89",
+      "match": true,
+      "observer_sha256": "3f51d87ab0320df86ce4e4cffc1b73acf36d2faf7ac1ba8eff3d145c8e8f9d89"
+    },
+    "wrfout_d01_2026-08-16_12:00:00": {
+      "baseline_sha256": "24d41f956840a3383f27c0e76a0cb673383c65bf61e1aee5a0921337f2243ec8",
+      "match": true,
+      "observer_sha256": "24d41f956840a3383f27c0e76a0cb673383c65bf61e1aee5a0921337f2243ec8"
+    }
+  },
+  "captured_target_channel": {
+    "QCCHAN": "QCCHAN",
+    "bl_pbl": "11",
+    "cu": "37",
+    "diff_opt": "1",
+    "i": "172",
+    "j": "76",
+    "k": "1",
+    "km_opt": "4",
+    "qc_moist_tend": "2.4263537488877773E-03",
+    "rkstep": "1",
+    "rqcblten": "2.4263537488877773E-03",
+    "rqccuten": "0.0000000000000000E+00",
+    "rqcncuten": "0.0000000000000000E+00",
+    "rqcnshten": "0.0000000000000000E+00",
+    "rqcshten": "0.0000000000000000E+00",
+    "shcu": "0"
+  },
+  "compiler": {
+    "compile_command": "docs/evidence/pr64_qc_channel_compile_command.txt",
+    "compile_command_sha256": "f5089ee9ad0f8e238786c2e2076601f5dd50a40546c2cd063a34f38097fce3c2",
+    "compile_cwd": "/var/tmp/pr64_qc_channel_20261007/build",
+    "compile_log_sha256": "9abe1ec1b698c1c88e0a12007fb5161d224409eedba91ee51fd55f89f79508fc",
+    "flags": [
+      "-O2",
+      "-fp-model strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz",
+      "-align all",
+      "-fno-alias",
+      "-convert big_endian",
+      "-real-size32",
+      "-i4"
+    ],
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "profile": "Cloud-BAL/tests/intel_toolchain.sh pinned Intel profile",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "documentation_sha256": "4c135ef091b7995bea6494c05ff2b22b09ce3812bcf9ef213f35b0880f8281c0",
+  "limitations": [
+    "One-rank, one-tile short research execution only.",
+    "No full host/parallel physics validation.",
+    "The specific PBL channel is identified; its internal parameterization origin remains open.",
+    "No donor-face values captured.",
+    "run_isolated_native verifies only declared paths and is not an OS sandbox.",
+    "No NC/QC physical code or floor was changed."
+  ],
+  "object_archive_executable": {
+    "advect_source_binding": "PR61 patched generated source SHA a1dc18bce40f84ad709d38fbe7b0658590e587d42528b1124f9c8b7e9c1830fa",
+    "archive_commands": "docs/evidence/pr64_qc_channel_archive_commands.txt",
+    "archive_commands_sha256": "f42e1b61147fe50cbb83564da122fdf593401bcfb35075b8c270b95b69f1beb2",
+    "archived_advect_member_sha256": "0b9be5ea72d428ef66d5876a3820681a82471e319bdcbe7fabf8f67d1c30316c",
+    "base_archive": "/var/tmp/pr64_transport_cause_20261007/solve_observer_pretend_carrier_link/libwrflib_base.a",
+    "base_archive_sha256": "624892091269d19b2d72c0c8a60fc9c47932f1ec1c8ba686b0c9a9fcaf59aae3",
+    "base_archived_advect_member_sha256": "0b9be5ea72d428ef66d5876a3820681a82471e319bdcbe7fabf8f67d1c30316c",
+    "base_archived_solve_member_sha256": "8670703c8229399709caaf5fb47e8c9dc865ad5def98cc7d4baaed6054bfd772",
+    "exe_link_product_sha256": "fb2de630e4bedb4e32703f294aee8774396df28813051cd890232428bab0dfbd",
+    "executable": "/var/tmp/pr64_qc_channel_20261007/run/wrf.exe",
+    "executable_equals_link_product": true,
+    "executable_sha256": "fb2de630e4bedb4e32703f294aee8774396df28813051cd890232428bab0dfbd",
+    "historical_solve_object_identity_claimed": false,
+    "link_command": "docs/evidence/pr64_qc_channel_link_command.txt",
+    "link_command_sha256": "170a2e7e9533df15049e6d6e8dcb66f2b6295876b2f52c545ce6313ccf6f1cb5",
+    "observer_archive": "/var/tmp/pr64_qc_channel_20261007/link/libwrflib_observer.a",
+    "observer_archive_sha256": "71241dcc4ad169365c47d1c303ec11ef5d4acade1bc577c360a5c4cf84f6351f",
+    "observer_archived_solve_member_sha256": "31ff7db3659959ad64d76692d171176aa6a6328c6b80982cc636de345d0c3e86",
+    "observer_solve_object": "/var/tmp/pr64_qc_channel_20261007/build/solve_em_pr64_qc_channel.o",
+    "observer_solve_object_sha256": "31ff7db3659959ad64d76692d171176aa6a6328c6b80982cc636de345d0c3e86",
+    "whole_host_clean_build_claimed": false
+  },
+  "observer_patch": {
+    "base_archive_sha256": "624892091269d19b2d72c0c8a60fc9c47932f1ec1c8ba686b0c9a9fcaf59aae3",
+    "base_source_path": "/var/tmp/pr63_native_transition_20261006/build_cutoff_v2/solve_em_pr63.f90",
+    "base_source_sha256": "e1ac0c895594b175f9ddb9c1f54906bfc50306eed128736b9923cce1ed687fdf",
+    "patch_replay_match": true,
+    "patch_replay_source_sha256": "72aa50d495fa13d58029189f643fba218c819f8d0911c5138997124d6e99459b",
+    "patched_source_sha256": "72aa50d495fa13d58029189f643fba218c819f8d0911c5138997124d6e99459b",
+    "path": "docs/evidence/pr64_qc_channel_observer.patch",
+    "private_full_source_committed": false,
+    "replay_command_file": "docs/evidence/pr64_qc_channel_patch_replay.txt",
+    "replay_command_file_sha256": "924799f4e6ff5166d7445b2bfc8b05c925a8966a8b0e3b62180982483d8929e2",
+    "sha256": "7d2c15385c3678ada7959e95216794bc46b74637d3ff6e14b23c2ebaa53406fd"
+  },
+  "physical_interpretation": {
+    "conclusion": "The target pre-advection positive QC tendency is exactly the PBL rqcblten channel for this case. DIFF_OPT=1 and the selected first_rk_step_part2 source encloses vertical and horizontal diffusion calls under DIFF_OPT==2, so those calls are skipped here.",
+    "pbl_scheme": "module_state_description.F defines SHINHONGSCHEME=11; module_physics_addtendc.F CASE (SHINHONGSCHEME) adds RQCBLTEN to moist_tendf(P_QC) through add_a2a.",
+    "qc_total_tendency": 0.0024263537488877773,
+    "rqcblten": 0.0024263537488877773,
+    "rqccuten": 0.0,
+    "rqcncuten": 0.0,
+    "rqcnshten": 0.0,
+    "rqcshten": 0.0,
+    "source_path": "first_rk_step_part2 calls update_phy_ten, which adds configured PBL/CU/SHCU channels into moist_tend; the target capture follows first_rk_step_part2. The actual internal PBL scheme process producing rqcblten is not resolved.",
+    "tendency_units": "Native tendency units accumulated directly by add_a2a and consumed by the carrier-coordinate RK update; not a standalone mixing-ratio rate."
+  },
+  "prior_observer": {
+    "base_generated_solve_source_sha256": "f77a4a1aee0d4b7d0335f3828b606610e713880210301491aa54e5457f7b1a57",
+    "evidence": "docs/evidence/PR64_NATIVE_TRANSPORT_CAUSE_20261007.json",
+    "prior_solve_object_sha256": "74582b547e993f39b3c15692ddcd21edb8f053181b67386546d1c19ea0654efd",
+    "sha256": "21840024ffdd03e0d4f06768f778794e8235c8e5963f3ccc5896aae812dbffad"
+  },
+  "replay": {
+    "actual_guarded_run_replay": "passed with 10 baseline artifact hashes and named stage rows matched",
+    "actual_replay_output_sha256": "49e413e1a31588d70791530fe7c1b7d5f87077b24a5e3d4a18f02b1a728456ca",
+    "focused_unit_tests": "8 tests passed",
+    "invocation": "python3 tools/pr64_qc_channel_replay.py /var/tmp/pr64_qc_channel_20261007/run /var/tmp/pr63_native_transition_20261006/run_transition_v2",
+    "patch_replay_command": "copy the hash-bound base generated source to a fresh /var/tmp directory; run `patch -p1 < docs/evidence/pr64_qc_channel_observer.patch`; verify patched source SHA 72aa50d495fa13d58029189f643fba218c819f8d0911c5138997124d6e99459b.",
+    "replay_passed": true,
+    "test_file": "tests/test_pr64_qc_channel_replay.py",
+    "test_file_sha256": "10c01d6f6e47f856c4a98d2d747dfc79b7c409c2bb080d17d22d2e5627e5d3d6",
+    "test_registered_in": "tests/run_python_contract_tests.sh",
+    "test_registration_sha256": "5fd993102ddc861d27299a1ad96fd12425bdcccefd1d5694bc1944a710b1b39a",
+    "tool": "tools/pr64_qc_channel_replay.py",
+    "tool_sha256": "685cbffb66459105cc3a7a1bab75dd6a656b7e5eb4ac4f444fa032b29a13b3f2"
+  },
+  "reproducibility": {
+    "all_recorded_command_files_hash_bound": true,
+    "archive_commands_file": "docs/evidence/pr64_qc_channel_archive_commands.txt",
+    "archive_link_cwd": "/var/tmp/pr64_qc_channel_20261007/link",
+    "compile_command_file": "docs/evidence/pr64_qc_channel_compile_command.txt",
+    "compile_cwd": "/var/tmp/pr64_qc_channel_20261007/build",
+    "guard_command_file": "docs/evidence/pr64_qc_channel_run_guard_command.json",
+    "link_command_file": "docs/evidence/pr64_qc_channel_link_command.txt",
+    "runtime_cwd": "/var/tmp/pr64_qc_channel_20261007/run"
+  },
+  "run": {
+    "changed_inputs": [],
+    "declared_input_count": 101,
+    "declared_output_count": 16,
+    "input_integrity": "PASS",
+    "output_isolation": "PASS",
+    "output_issues": [],
+    "path": "/var/tmp/pr64_qc_channel_20261007/run",
+    "raw_capture": "/var/tmp/pr64_qc_channel_20261007/run/pr64_qc_channels.raw",
+    "raw_capture_sha256": "71fd1d07758b9dfd318df112e2a5f05fd61875adadc1db2bf8e4b79a588cb7a7",
+    "receipt": "/var/tmp/pr64_qc_channel_20261007/run/run-isolation.json",
+    "receipt_sha256": "1d30489fb26106c7f0fd59ff3f1ad520388e1b19a949098932d20dda1834d362",
+    "returncode": 0,
+    "run_guard_command": "docs/evidence/pr64_qc_channel_run_guard_command.json",
+    "run_guard_command_sha256": "b3ee68bfaa44c9ffb77f6304bce6a2885ca9fc14651554780eb253a38db9a205"
+  },
+  "source_audit": {
+    "module_em.F": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/dyn_em/module_em.F",
+      "sha256": "7695bfb05a7f99763334a6e69523bbcc1de0f2c659177a18c10a6e1cf530a0c7"
+    },
+    "module_first_rk_step_part2.F": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/dyn_em/module_first_rk_step_part2.F",
+      "sha256": "c2559617bbd4602daf9f1b5703864af11eafadb489c82a91a452beb697db6e1d"
+    },
+    "module_physics_addtendc.F": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_physics_addtendc.F",
+      "sha256": "ecfe34c06bb3e91a5398a616a69a69a5aa155e73dc082ef0745421df46331894"
+    },
+    "module_state_description.F": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/frame/module_state_description.F",
+      "sha256": "1999492fe9985d148229a39ea7ed66d6d9c9821f4437a17292c28b3d2a8e755b"
+    }
+  },
+  "status": "channel_attribution_pass_for_target; full_physics_gate_FAIL_OPEN",
+  "target": {
+    "i": 172,
+    "j": 76,
+    "k": 1,
+    "rkstep": 1
+  }
+}

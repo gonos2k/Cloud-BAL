@@ -56,7 +56,50 @@ def fake_dump(*, timestep: int = 1, stage: int = 1) -> dict:
             "fields": fields}
 
 
+def stage_text() -> str:
+    return "\n".join(
+        f"STATE_STAGE {stage} 1 {rk} 0 0 0 {float(np.float32(1e-15))} 0 1.683979e-7 -1773.7578125 0 0"
+        for stage, rk in zip(replay.STAGE_SEQUENCE, replay.RK_SEQUENCE, strict=True)) + "\n"
+
+
 class TransitionReplayTests(unittest.TestCase):
+    def test_stage_text_separates_global_minimum_and_selected_moments(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "stages.raw"
+            path.write_text(stage_text().replace(" 0 1.683979e-7", " -2.15104792e-5 1.683979e-7"))
+            record = replay.read_stage_text(path)[1]
+        self.assertEqual(record["minimum_qc"], -2.15104792e-5)
+        self.assertEqual(record["selected_qc"], 1.683979e-7)
+        self.assertEqual(record["selected_nc"], -1773.7578125)
+
+    def test_stage_text_rejects_shifted_columns_and_invalid_headers(self) -> None:
+        invalid = (stage_text().replace(str(float(np.float32(1e-15))), "nan", 1),
+                   stage_text().replace(" 0 0\n", " 0\n", 1),
+                   stage_text().replace("PRE_RK", "RK_STAGE_END", 1),
+                   stage_text().replace("PRE_RK 1", "PRE_RK -1", 1))
+        for text in invalid:
+            with self.subTest(text=text[:60]), tempfile.TemporaryDirectory() as directory:
+                path = Path(directory) / "stages.raw"
+                path.write_text(text)
+                with self.assertRaises(ValueError):
+                    replay.read_stage_text(path)
+
+    def test_stage_text_counts_are_crosschecked_with_binary_masks(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            directory = Path(directory)
+            masks, pre, post, stages = (directory / name for name in
+                                        ("mask.bin", "pre.raw", "post.raw", "stages.raw"))
+            masks.write_bytes(mask_bytes())
+            pre.write_bytes(b"pre"); post.write_bytes(b"post")
+            stages.write_text(stage_text())
+            with patch.object(replay, "read_dump", side_effect=[fake_dump(stage=1), fake_dump(stage=2)]):
+                report = replay.summarize(masks, pre, post, stages)
+            self.assertTrue(report["stage_text"]["mask_headers_and_counts_match"])
+            stages.write_text(stage_text().replace("PRE_RK 1 0 0", "PRE_RK 1 0 1", 1))
+            with patch.object(replay, "read_dump", side_effect=[fake_dump(stage=1), fake_dump(stage=2)]):
+                with self.assertRaisesRegex(ValueError, "count mismatch: gap"):
+                    replay.summarize(masks, pre, post, stages)
+
     def test_reads_valid_header_and_mask_bits(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "mask.bin"

@@ -85,3 +85,18 @@ scale fitting was applied. Boundary/process fluxes and water/energy closure
 remain open even though contemporaneous geometry is now available.
 
 [KG update and separate corpus snapshots](PR63_KG_UPDATE_20261006.md) record the frozen implementation and extraction limits.
+
+
+## PR64 erratum — selected RK values and capture provenance (2026-10-07)
+
+The earlier target description above confuses the aggregate minimum QC with
+the selected moments. Successful matched PR63 stage captures show positive
+QC and negative NC at RK1/RK2, then positive QC with NC=0 at completed RK3.
+The following NC updates in the incomplete fine-cut run also produce negative
+NC at RK1/RK2; they do not leave NC zero. Fine cuts from that incomplete run
+must not be attributed to the successful matched runs.
+
+The independent aggregate negative-QC counts remain valid, including 23,494
+KDM6-entry cells. See the [full erratum and frozen capture hashes](
+PR63_NATIVE_STATE_TRANSITION_20261006.md#pr64-erratum--selected-rk-values-and-capture-provenance-2026-10-07).
+Original files and receipts are preserved. Physical approval remains FAIL/OPEN.

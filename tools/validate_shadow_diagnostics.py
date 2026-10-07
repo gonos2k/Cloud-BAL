@@ -3007,6 +3007,25 @@ def validate_thermo_extension(
             where=above,
         )
         expected_mass = np.where(geometry_changed, refreshed_mass, expected_mass)
+    if "physical_joint_candidate_v1" in getattr(dataset, "schema_extensions", "").split(","):
+        # canonicalize_contracted_thermo_storage refreshes only complete,
+        # numerically changed thermo cells on the same pressure geometry.
+        # The serialized component contract has its own independent replay;
+        # it does not relax this canonical mass identity or the stage budget.
+        require(not transition_mode and np.array_equal(candidate_domain, above)
+                and np.array_equal(candidate_geometry_mass, pressure_mass),
+                "contracted thermo fixed pressure geometry")
+        complete = above.copy()
+        changed = np.zeros(shape, dtype=bool)
+        for name in THERMO_FIELDS:
+            complete &= metadata["background"][name]["valid"] == 1
+            complete &= metadata["candidate"][name]["valid"] == 1
+            changed |= background[name] != candidate[name]
+        refreshed_mass = np.divide(
+            candidate_geometry_mass, 1.0 + np.sum(final_candidate_species, axis=0),
+            out=np.zeros_like(pressure_mass, dtype=np.float64), where=complete,
+        )
+        expected_mass = np.where(complete & changed, refreshed_mass, expected_mass)
     mass_tolerance = 128.0 * np.finfo(np.float64).eps * np.maximum(1.0, np.abs(expected_mass))
     require(np.all(np.abs(candidate_mass - expected_mass) <= mass_tolerance),
             "candidate dry-air mass identity")
@@ -6971,9 +6990,15 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             )
         validate_outer_extension(dataset, schema8, require)
         dimensions = {name: len(dim) for name, dim in dataset.dimensions.items()}
+        geometry_dimensions = {"x", "y", "z", "z_interface", "z_spacing"}
+        physical_dimensions = "physical_joint_candidate_v1" in extensions
+        if physical_dimensions:
+            geometry_dimensions.add("physical_component")
+            require(dimensions.get("physical_component") == 8,
+                    "physical contract component dimension")
         if schema6 or schema7 or schema8 or pressure_analysis_candidate_present:
             require(
-                set(dimensions) == {"x", "y", "z", "z_interface", "z_spacing"}
+                set(dimensions) == geometry_dimensions
                 and dimensions["x"] >= 1
                 and dimensions["y"] >= 1
                 and dimensions["z"] >= 2
@@ -6982,9 +7007,12 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                 "schema6 pressure geometry dimensions",
             )
         else:
+            expected_dimensions = {"x": 235, "y": 283, "z": 22,
+                                   "z_interface": 23, "z_spacing": 21}
+            if physical_dimensions:
+                expected_dimensions["physical_component"] = 8
             require(
-                dimensions
-                == {"x": 235, "y": 283, "z": 22, "z_interface": 23, "z_spacing": 21},
+                dimensions == expected_dimensions,
                 "pressure geometry dimensions",
             )
         expected_contract = (

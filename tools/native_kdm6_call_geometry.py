@@ -138,6 +138,12 @@ def _bound_header_match(geometry: dict[str, Any], kdm: dict[str, Any]) -> None:
             raise ValueError(f"KDM6 active tile outside solve_em tile: {lo}/{hi}")
     if kdm["itimestep"] != geometry["timestep"]:
         raise ValueError("KDM6/geometry timestep mismatch")
+    # In the selected solve_em source, microphysics_driver receives DT=dtm.
+    # KDM6's first-call trace records its incoming DELT argument as dt_s.
+    # Bind those two source arguments; geometry dt_s is grid%dt metadata and
+    # is not part of this call contract.
+    if kdm["params"]["dt_s"] != geometry["dtm_s"]:
+        raise ValueError("KDM6/geometry call-duration mismatch: KDM6 DELT != host DT=dtm")
     expected = [kb["ite"] - kb["its"] + 1, kb["jte"] - kb["jts"] + 1, kb["kte"] - kb["kts"] + 1]
     if kdm["active_shape_xyz"] != expected:
         raise ValueError("KDM6 active shape/header mismatch")
@@ -265,6 +271,15 @@ def audit(geometry_path: Path, pre_path: Path, post_path: Path, receipt_path: Pa
         "kdm6_active_tile_within_solve_em_tile": True,
         "kdm6_active_shape_xyz": kdm_pre["active_shape_xyz"],
         "kdm6_timestep": kdm_pre["itimestep"],
+        "call_duration_identity": {
+            "host_argument": "solve_em dtm passed as microphysics_driver DT",
+            "kdm6_argument": "KDM6 delt recorded as trace dt_s",
+            "host_dtm_s": pre_record["dtm_s"],
+            "kdm6_delt_s": kdm_pre["params"]["dt_s"],
+            "matched": True,
+            "grid_dt_s_metadata": pre_record["dt_s"],
+            "grid_dt_part_of_identity": False,
+        },
         "layer_dp_pa_minmax": [float(dp.min()), float(dp.max())],
         "max_layer_to_interface_dp_difference_pa": layer_residual,
         "max_column_dp_to_mu2_mub_difference_pa": column_residual,
