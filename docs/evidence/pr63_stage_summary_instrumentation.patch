@@ -1,0 +1,48 @@
+--- a/module_mp_kdm6_pr63.F
++++ b/module_mp_kdm6_pr63.F
+@@ -4315,12 +4315,19 @@
+     integer, intent(in) :: its,ite,kts,kte,lat,loop_id
+     real, intent(in) :: qrs(its:ite,kts:kte,3),brs(its:ite,kts:kte)
+     integer :: i,k,u,n_zero_mass_pos_volume,n_below_prog_guard,n_negative_mass,n_negative_volume
+-    real :: max_volume_at_zero_mass
++    integer :: n_qg_below_cutoff,n_ghost_below_cutoff
++    real :: max_volume_at_zero_mass,max_bg_below_cutoff
++    real(kind=8) :: sum_bg_below_cutoff,sum_bg_ghost
+     n_zero_mass_pos_volume=0
+     n_below_prog_guard=0
+     n_negative_mass=0
+     n_negative_volume=0
++    n_qg_below_cutoff=0
++    n_ghost_below_cutoff=0
+     max_volume_at_zero_mass=0.0
++    max_bg_below_cutoff=0.0
++    sum_bg_below_cutoff=0.0d0
++    sum_bg_ghost=0.0d0
+     do k=kts,kte
+       do i=its,ite
+         if (qrs(i,k,3) == 0.0 .and. brs(i,k) > 0.0) then
+@@ -4330,12 +4337,22 @@
+         endif
+         if (qrs(i,k,3) < 0.0) n_negative_mass=n_negative_mass+1
+         if (brs(i,k) < 0.0) n_negative_volume=n_negative_volume+1
++        if (qrs(i,k,3) <= qcrmin) then
++          n_qg_below_cutoff=n_qg_below_cutoff+1
++          sum_bg_below_cutoff=sum_bg_below_cutoff+dble(brs(i,k))
++          max_bg_below_cutoff=max(max_bg_below_cutoff,brs(i,k))
++          if (qrs(i,k,3) == 0.0 .and. brs(i,k) > 0.0) then
++            n_ghost_below_cutoff=n_ghost_below_cutoff+1
++            sum_bg_ghost=sum_bg_ghost+dble(brs(i,k))
++          endif
++        endif
+       enddo
+     enddo
+     open(newunit=u,file='pr63_kdm_stages.raw',access='stream',form='formatted', &
+          status='unknown',position='append',action='write')
+-    write(u,'(A,1X,A,2(1X,I0),4(1X,I0),1X,ES24.16)') 'GRAUPEL_STAGE',trim(stage),lat,loop_id, &
++    write(u,'(A,1X,A,2(1X,I0),6(1X,I0),4(1X,ES24.16))') 'GRAUPEL_STAGE',trim(stage),lat,loop_id, &
+          n_zero_mass_pos_volume,n_below_prog_guard,n_negative_mass, &
+-         n_negative_volume,max_volume_at_zero_mass
++         n_negative_volume,n_qg_below_cutoff,n_ghost_below_cutoff, &
++         max_volume_at_zero_mass,max_bg_below_cutoff,sum_bg_below_cutoff,sum_bg_ghost
+     close(u)
+   end subroutine pr63_graupel_stage

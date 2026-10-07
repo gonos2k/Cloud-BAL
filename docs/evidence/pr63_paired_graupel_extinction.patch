@@ -1,0 +1,10 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -3092,6 +3092,7 @@
+            endif
+            if(qrs(i,k,3).le.qcrmin)then
+               qrs(i,k,3) = 0.0
++              brs(i,k) = 0.0
+            endif
+ !v2.0
+ !v1.0     if(qci(i,k,1).le.qmin) qci(i,k,1) = 0.0

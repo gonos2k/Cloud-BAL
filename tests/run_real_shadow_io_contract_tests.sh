@@ -102,6 +102,7 @@ done
   cd "$test_tmp"
   ./test_real_shadow_io_contract
   python3 "$repo_root/tests/check_physical_contract_shadow.py" verified-physical-shadow.nc
+  python3 "$repo_root/tests/check_physical_contract_shadow.py" verified-nonzero-phase-shadow.nc
   python3 "$repo_root/tests/test_pressure_transition_payload.py" \
     transition-replay-same-domain.nc transition-replay-one-center.nc
   python3 "$repo_root/tests/check_full_transition_shadow.py" \
@@ -162,6 +163,7 @@ done
   cd "$o2_dir"
   ./test_real_shadow_io_contract
   python3 "$repo_root/tests/check_physical_contract_shadow.py" verified-physical-shadow.nc
+  python3 "$repo_root/tests/check_physical_contract_shadow.py" verified-nonzero-phase-shadow.nc
   python3 "$repo_root/tests/test_pressure_transition_payload.py" \
     transition-replay-same-domain.nc transition-replay-one-center.nc
   python3 "$repo_root/tests/check_full_transition_shadow.py" \

@@ -19,6 +19,9 @@ tests=(
   tests/test_native_ccn_stage_trace.py
   tests/test_native_mp37_aux.py
   tests/test_native_kdm6_trace.py
+  tests/test_native_kdm6_call_geometry.py
+  tests/test_pr63_transition_replay.py
+  tests/test_pr63_paired_bg_volume.py
   tests/test_operational_comparison_prep.py
   tests/test_operational_shadow_compare.py
   tests/test_output_transaction.py
@@ -38,6 +41,7 @@ tests=(
   tests/test_shadow_validator.py
   tests/test_cloud_provenance_receipt.py
   tests/test_candidate_endpoint_roundoff.py
+  tests/test_run_isolated_native.py
   tests/test_pressure_transition_payload.py
   tests/test_pressure_transition_reference.py
   tests/test_thermo_output_certificate.py

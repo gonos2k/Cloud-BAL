@@ -1,0 +1,182 @@
+{
+  "DEN_DELZ_area_mass_diagnostic_kg": 1.6213518543367404e+16,
+  "DEN_DELZ_area_relative_difference_vs_hybrid_mass": 0.0005855647241648221,
+  "audit_source_sha256": "d0c0810a892f9344fe541a298822d8700b6ab23ef7df3d29e62284747d995615",
+  "capture_hashes": {
+    "kdm6_first_call_post.raw": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+    "kdm6_first_call_pre.raw": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "pr63_geometry.raw": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008"
+  },
+  "executable_sha256": "2a412690a6c6b4acdacfbf66507fae53406b4a1170403133b801e88a868a4e4e",
+  "geometry_array_shapes": {
+    "c1h": [
+      40
+    ],
+    "c2h": [
+      40
+    ],
+    "c3f": [
+      40
+    ],
+    "c4f": [
+      40
+    ],
+    "dnw": [
+      40
+    ],
+    "msftx": [
+      245,
+      293
+    ],
+    "msfty": [
+      245,
+      293
+    ],
+    "mu1": [
+      245,
+      293
+    ],
+    "mu2": [
+      245,
+      293
+    ],
+    "mub": [
+      245,
+      293
+    ]
+  },
+  "geometry_arrays_finite": true,
+  "geometry_records": [
+    {
+      "bounds": {
+        "ime": 240,
+        "ims": -4,
+        "ite": 234,
+        "its": 1,
+        "jme": 288,
+        "jms": -4,
+        "jte": 282,
+        "jts": 1,
+        "kme": 40,
+        "kms": 1,
+        "kte": 39,
+        "kts": 1
+      },
+      "dt_s": 20.0,
+      "dtm_s": 20.0,
+      "dx_m": 5000.0,
+      "dy_m": 5000.0,
+      "extents": [
+        245,
+        293,
+        245,
+        293,
+        245,
+        293,
+        40,
+        40,
+        40,
+        40,
+        40,
+        245,
+        293,
+        245,
+        293
+      ],
+      "gravity_m_s2": 9.8100004196167,
+      "hybrid_opt": 2,
+      "p_top_pa": 5000.0,
+      "rkstep": 4,
+      "stage": "PRE_MICROPHYSICS",
+      "timestep": 1
+    },
+    {
+      "bounds": {
+        "ime": 240,
+        "ims": -4,
+        "ite": 234,
+        "its": 1,
+        "jme": 288,
+        "jms": -4,
+        "jte": 282,
+        "jts": 1,
+        "kme": 40,
+        "kms": 1,
+        "kte": 39,
+        "kts": 1
+      },
+      "dt_s": 20.0,
+      "dtm_s": 20.0,
+      "dx_m": 5000.0,
+      "dy_m": 5000.0,
+      "extents": [
+        245,
+        293,
+        245,
+        293,
+        245,
+        293,
+        40,
+        40,
+        40,
+        40,
+        40,
+        245,
+        293,
+        245,
+        293
+      ],
+      "gravity_m_s2": 9.8100004196167,
+      "hybrid_opt": 2,
+      "p_top_pa": 5000.0,
+      "rkstep": 4,
+      "stage": "POST_MICROPHYSICS",
+      "timestep": 1
+    }
+  ],
+  "identity_bound_interpretation": "The 0.01 Pa defaults are fixed numerical research-audit bounds for these recorded geometry identities. They are not physical tolerances, a proof of floating-point error bounds, or a criterion for scientific closure.",
+  "kdm6_active_shape_xyz": [
+    232,
+    280,
+    39
+  ],
+  "kdm6_active_tile_within_solve_em_tile": true,
+  "kdm6_memory_bounds_match_geometry": true,
+  "kdm6_timestep": 1,
+  "layer_dp_pa_minmax": [
+    444.2081743718756,
+    4809.189884507891
+  ],
+  "mapped_hybrid_dry_mass_kg": 1.6204030034989606e+16,
+  "max_column_dp_to_mu2_mub_difference_pa": 0.00010944342648144811,
+  "max_layer_to_interface_dp_difference_pa": 0.002499805738352734,
+  "pre_post_geometry_arrays_equal": {
+    "c1h": true,
+    "c2h": true,
+    "c3f": true,
+    "c4f": true,
+    "dnw": true,
+    "msftx": true,
+    "msfty": true,
+    "mu1": true,
+    "mu2": true,
+    "mub": true
+  },
+  "pressure_identity_tolerances_pa": {
+    "column": 0.01,
+    "layer": 0.01
+  },
+  "receipt_sha256": "bd8ea9ee3cdf475ae371ce9e2bd1cc637ea734c48601dde13a9cfb844a9458ae",
+  "receipt_status": {
+    "input_integrity": "PASS",
+    "output_isolation": "PASS",
+    "returncode": 0
+  },
+  "schema": "pr63_same_call_geometry_audit_v1",
+  "source_equations": {
+    "alternative_diagnostic_only": "sum(DEN*DELZ*DX*DY/(MSFTX*MSFTY)); not a closed mass budget",
+    "hybrid_dry_mass": "sum(dp_k*DX*DY/(MSFTX*MSFTY*g))",
+    "layer_pressure": "dp_k = -[C1H_k*(MU2+MUB)+C2H_k]*DNW_k"
+  },
+  "units_and_limits": "Units are inferred from source equations; PR63GEO2 has no unit strings. This checks same-call geometry consistency only. DEN*DELZ area mass is diagnostic and is not forced to match hybrid mass. One-rank/tile/timestep capture only; no source/boundary budget or physical approval."
+}

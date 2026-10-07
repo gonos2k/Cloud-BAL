@@ -1,0 +1,85 @@
+{
+  "scope": "selected Python regressions independently rerun by root; not full suite or physical approval",
+  "tests": [
+    {
+      "test": "test_run_isolated_native.py",
+      "exit_code": 0,
+      "log": "/var/tmp/pr63_root_test_run_isolated_native.py.log",
+      "log_sha256": "9be9ec006e4bd98323e488c002b83c12e0a9e1de8ea2b9bb545db13c0e293693",
+      "source_sha256": "8f0d4229070c7db9c243b4b445903b1b08525bee413d3c73c57b9a2366b6bf62"
+    },
+    {
+      "test": "test_shadow_validator.py",
+      "exit_code": 0,
+      "log": "/var/tmp/pr63_root_test_shadow_validator.py.log",
+      "log_sha256": "98ec571ef0145847bd5e80f8d1cb93cb018fb0d0d29ec658a8bc1373c22c02cc",
+      "source_sha256": "2411c252fa1ee660ab23105e633d0b22e8995ee273f229a2f1883e1370e9ec7d"
+    },
+    {
+      "test": "test_candidate_endpoint_roundoff.py",
+      "exit_code": 0,
+      "log": "/var/tmp/pr63_root_test_candidate_endpoint_roundoff.py.log",
+      "log_sha256": "7192f46013bf6516f732bc90e13c5cc5b995cbb640624dc0d42ab3b46a42d336",
+      "source_sha256": "243abd2752638c2ec2ca53cdacf76d501c80b3c23ec967c9027aee03b713fac4"
+    },
+    {
+      "test": "test_pressure_state_replay.py",
+      "exit_code": 0,
+      "log": "/var/tmp/pr63_root_test_pressure_state_replay.py.log",
+      "log_sha256": "4d2fc14f347ee9f465fc333fd49e00879613dc278092fe1b22f9ed3ccd7384f0",
+      "source_sha256": "27b885e75e7a2aba03ea9081341a7160ff8d1a8e3f177734e9c36ed81c2a3daf"
+    },
+    {
+      "test": "test_transition_state_validator.py",
+      "exit_code": 0,
+      "log": "/var/tmp/pr63_root_test_transition_state_validator.py.log",
+      "log_sha256": "b3cec522cb1929d186f984d9147894aac0f66b997c608873277dc844791a9032",
+      "source_sha256": "620a3def82f9d82261760f350f226e77028ea6cfe33297472b9a43490befbe50"
+    },
+    {
+      "test": "test_thermo_stage_budget.py",
+      "exit_code": 0,
+      "log": "/var/tmp/pr63_root_test_thermo_stage_budget.py.log",
+      "log_sha256": "10b2ece9e28e146ebd7f6958a4a7bd94e0dab37650a3bad67687b3274bc12ec7",
+      "source_sha256": "0a99c9cd155fb217028a7a547985da846df1fe354b1f3730dd30b14f2991f6cb"
+    },
+    {
+      "test": "test_pr63_transition_replay.py",
+      "exit_code": 0,
+      "log": "/var/tmp/pr63_root_test_pr63_transition_replay.py.log",
+      "log_sha256": "1a902fd4c537c33c9c15041b84a9ad5661cfe31a3f4d21f81c9f7ae7a631eec6",
+      "source_sha256": "8df8b2e689242ef9ade830dd33a0fe6a2a709ceb6f800ea42abdeadbdf2485e6"
+    },
+    {
+      "test": "test_native_kdm6_call_geometry.py",
+      "exit_code": 0,
+      "log": "/var/tmp/pr63_root_test_native_kdm6_call_geometry.py.log",
+      "log_sha256": "34a82a30511a2175a5286cff0751874e9220ce5fb08cab87b09cc04e220f6b31",
+      "source_sha256": "bc8625f2b4149e325bc61c5be59caf02cd0c29c289743dae266def1c96523f33"
+    },
+    {
+      "test": "test_pr63_paired_bg_volume.py",
+      "exit_code": 0,
+      "log": "/var/tmp/pr63_root_test_pr63_paired_bg_volume.py.log",
+      "log_sha256": "199ba496f288116d36c62f29346d4fbf0bd75745a1c893abfcbdaa4c6d5b1033",
+      "source_sha256": "eb084a9b838512d559c2be062968b7002610135bb14ca6416ec19798426cdb93"
+    }
+  ],
+  "implementation_sources": {
+    "tools/run_isolated_native.py": "f01bf3be9ac6f649fe8c350ddf445a582201d322dac5c80210e37a546484ebf1",
+    "tools/validate_shadow_diagnostics.py": "02bb85f50fd444071c73dfa467919b7c52f801349ec0369decaa01b6e6089f56",
+    "tools/pr63_transition_replay.py": "15dfa0f0d387efe44c68b968ef0a3864fb50aaddbbbedef86cd8be46a3594ac4",
+    "tools/native_kdm6_call_geometry.py": "d0c0810a892f9344fe541a298822d8700b6ab23ef7df3d29e62284747d995615",
+    "tools/pr63_paired_bg_volume.py": "f09be7e1ae309c088ef666a1039c9c40bd74a9c66c1ba8e642c5931f351b907a"
+  },
+  "result": "PASS_SCOPED",
+  "remaining_physical_status": "FAIL/OPEN",
+  "native_descriptor_replay": {
+    "exit_code": 0,
+    "report": "/var/tmp/pr63_root_paired_bg_volume.json",
+    "report_sha256": "cd7a939bbb59541a3bb3119fe55b8bd90f45c81252a4a2f380396f8309b37484",
+    "changed_cells": 2465,
+    "hybrid_carrier_weighted_delta_m3": 44.97818557873736,
+    "scope": "same-call mapped BG descriptor; not water/energy budget closure"
+  }
+}

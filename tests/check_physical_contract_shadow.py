@@ -62,7 +62,7 @@ with tempfile.TemporaryDirectory(prefix="physical-contract-readback-") as direct
     reject_mutation(
         "forged-source",
         lambda dataset: dataset["physical_source_increment"].__setitem__(
-            (*first_active(dataset), 0), 1.0
+            (*first_active(dataset), 0), 1000.0
         ),
         "independent eight-component local contract replay",
     )
@@ -127,6 +127,59 @@ with tempfile.TemporaryDirectory(prefix="physical-contract-readback-") as direct
     reject_mutation("missing-bundle", missing_bundle,
                     "physical contract increment bundle")
 
+    with netCDF4.Dataset(source) as dataset:
+        has_phase = "physical_internal_phase_increment" in dataset.variables
+
+    if has_phase:
+        def missing_phase_variable(dataset):
+            dataset.renameVariable("physical_internal_phase_increment", "detached_phase_increment")
+
+        reject_mutation("missing-phase-variable", missing_phase_variable,
+                        "complete physical internal phase contract")
+
+        def missing_phase_attribute(dataset):
+            dataset.delncattr("physical_internal_phase_contract")
+
+        reject_mutation("missing-phase-attribute", missing_phase_attribute,
+                        "complete physical internal phase contract")
+
+        def missing_phase_extension(dataset):
+            extensions = dataset.getncattr("schema_extensions").split(",")
+            dataset.setncattr("schema_extensions", ",".join(
+                token for token in extensions if token != "physical_internal_phase_v1"
+            ))
+
+        reject_mutation("missing-phase-extension", missing_phase_extension,
+                        "complete physical internal phase contract")
+
+        def duplicate_phase_extension(dataset):
+            dataset.setncattr("schema_extensions", dataset.getncattr("schema_extensions")
+                              + ",physical_internal_phase_v1")
+
+        reject_mutation("duplicate-phase-extension", duplicate_phase_extension,
+                        "physical internal phase extension uniqueness")
+
+        def nonstoichiometric_phase(dataset):
+            cell = first_active(dataset)
+            dataset["physical_internal_phase_increment"][(*cell, 2)] += 1.0
+
+        reject_mutation("phase-water-defect", nonstoichiometric_phase,
+                        "physical internal phase water stoichiometry")
+
+        def nonfinite_phase(dataset):
+            cell = first_active(dataset)
+            dataset["physical_internal_phase_increment"][(*cell, 1)] = np.inf
+
+        reject_mutation("nonfinite-phase", nonfinite_phase,
+                        "physical contract increments finite")
+
+        def phase_outside_coverage(dataset):
+            cell = first_active(dataset)
+            dataset["physical_contract_coverage"][cell] = 0
+
+        reject_mutation("phase-outside-coverage", phase_outside_coverage,
+                        "physical contract full atmospheric coverage")
+
     def detach_candidate_cloud_water(dataset):
         cell = first_active(dataset)
         before = physical_components(dataset, "physical_candidate", cell)
@@ -134,7 +187,12 @@ with tempfile.TemporaryDirectory(prefix="physical-contract-readback-") as direct
         new = np.nextafter(old, np.float32(np.inf))
         dataset["physical_candidate_cloud_water"][cell] = new
         after = physical_components(dataset, "physical_candidate", cell)
-        dataset["physical_source_increment"][(*cell, slice(None))] = after - before
+        source = after - before
+        if "physical_internal_phase_increment" in dataset.variables:
+            source -= np.asarray(dataset["physical_internal_phase_increment"][:], dtype=np.float64)[
+                (*cell, slice(None))
+            ]
+        dataset["physical_source_increment"][(*cell, slice(None))] = source
 
     reject_mutation("detached-candidate-bundle", detach_candidate_cloud_water,
                     "physical_candidate snapshot matches candidate_cloud_water")
@@ -147,11 +205,15 @@ with tempfile.TemporaryDirectory(prefix="physical-contract-readback-") as direct
                             for name in ("vapor", "cloud_water", "cloud_ice",
                                          "rain", "snow", "graupel")], dtype=np.float64)
         pressure_mass = float(dataset["pressure_mass_measure"][cell])
-        dataset["physical_candidate_dry_air_mass_measure"][cell] = (
-            pressure_mass / (1.0 + np.sum(species))
-        )
+        reconciled_mass = pressure_mass / (1.0 + np.sum(species))
+        dataset["physical_candidate_dry_air_mass_measure"][cell] = reconciled_mass
         after = physical_components(dataset, "physical_candidate", cell)
-        dataset["physical_source_increment"][(*cell, slice(None))] = after - before
+        source = after - before
+        if "physical_internal_phase_increment" in dataset.variables:
+            source -= np.asarray(dataset["physical_internal_phase_increment"][:], dtype=np.float64)[
+                (*cell, slice(None))
+            ]
+        dataset["physical_source_increment"][(*cell, slice(None))] = source
 
     reject_mutation("negative-vapor-candidate", negative_vapor_with_coherent_source,
                     "physical_candidate vapor range for physical contract")
@@ -159,7 +221,7 @@ with tempfile.TemporaryDirectory(prefix="physical-contract-readback-") as direct
     def coherent_candidate_species_change(dataset):
         cell = first_active(dataset)
         names = ("vapor", "cloud_water", "cloud_ice", "rain", "snow", "graupel")
-        before = physical_components(dataset, "physical_candidate", cell)
+        before = physical_components(dataset, "physical_background", cell)
         old = np.float32(dataset["physical_candidate_cloud_water"][cell])
         new = np.float32(old + np.float32(1.0e-5))
         dataset["physical_candidate_cloud_water"][cell] = new
@@ -167,11 +229,17 @@ with tempfile.TemporaryDirectory(prefix="physical-contract-readback-") as direct
         species = np.array([dataset[f"physical_candidate_{name}"][cell]
                             for name in names], dtype=np.float64)
         pressure_mass = float(dataset["pressure_mass_measure"][cell])
-        dataset["physical_candidate_dry_air_mass_measure"][cell] = (
-            pressure_mass / (1.0 + np.sum(species))
-        )
+        reconciled_mass = pressure_mass / (1.0 + np.sum(species))
+        dataset["physical_candidate_dry_air_mass_measure"][cell] = reconciled_mass
+        if "candidate_dry_air_mass_measure" in dataset.variables:
+            dataset["candidate_dry_air_mass_measure"][cell] = reconciled_mass
         after = physical_components(dataset, "physical_candidate", cell)
-        dataset["physical_source_increment"][(*cell, slice(None))] = after - before
+        source = after - before
+        if "physical_internal_phase_increment" in dataset.variables:
+            source -= np.asarray(dataset["physical_internal_phase_increment"][:], dtype=np.float64)[
+                (*cell, slice(None))
+            ]
+        dataset["physical_source_increment"][(*cell, slice(None))] = source
 
     coherent = Path(directory) / "coherent-candidate-species-change.nc"
     shutil.copyfile(source, coherent)
@@ -182,7 +250,6 @@ with tempfile.TemporaryDirectory(prefix="physical-contract-readback-") as direct
 
     def prescribed_half_kelvin_temperature_change(dataset):
         cell = first_active(dataset)
-        assert "candidate_temperature" not in dataset.variables
         species = np.array([
             dataset[f"physical_candidate_{name}"][cell]
             for name in ("vapor", "cloud_water", "cloud_ice", "rain", "snow", "graupel")
@@ -190,9 +257,11 @@ with tempfile.TemporaryDirectory(prefix="physical-contract-readback-") as direct
         mass = float(dataset["physical_candidate_dry_air_mass_measure"][cell])
         capacity = THERMO_CP_DRY + np.sum(THERMO_SPECIES_CP * species)
         old_temperature = np.float32(dataset["physical_candidate_temperature"][cell])
-        dataset["physical_candidate_temperature"][cell] = old_temperature + np.float32(0.5)
+        new_temperature = old_temperature + np.float32(0.5)
+        dataset["physical_candidate_temperature"][cell] = new_temperature
+        if "candidate_temperature" in dataset.variables:
+            dataset["candidate_temperature"][cell] = new_temperature
         dataset.setncattr("physical_contract_adjustable_variables", np.int32(1))
-        dataset["physical_tolerance"][(*cell, 7)] = 1.0e-7
         dataset["physical_source_increment"][(*cell, 7)] = mass * capacity * 0.5
 
     half_kelvin = Path(directory) / "prescribed-half-kelvin-reader-control.nc"

@@ -371,6 +371,7 @@ PROGRAM test_real_shadow_io_contract
   CALL test_cloud_qc_writer_replay(failures)
   CALL test_surface_boundary_serialization(failures)
   CALL test_pressure_transition_replay(failures)
+  CALL test_nonzero_phase_contract_shadow(failures)
 
   IF (failures/=0) THEN
     PRINT *,'Real SHADOW I/O contract tests failed:',failures
@@ -2919,6 +2920,205 @@ CONTAINS
       ERROR STOP 'physical writer fixture did not pass component evaluation'
     END IF
   END SUBROUTINE make_physical_result
+
+  SUBROUTINE test_nonzero_phase_contract_shadow(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: background,candidate,operational
+    TYPE(cloud_bal_pipeline_config) :: config
+    TYPE(cloud_bal_pipeline_result) :: result
+    TYPE(physical_joint_candidate_contract) :: contract
+    LOGICAL :: active(4,4,3)
+    INTEGER :: surface(4,4,3),status,reason,writer_status,cell(3)
+    REAL(real32) :: longitude(4,4),temperature32,vapor32,cloud32,trial_t32
+    REAL(real64) :: residual(4,4,3),extent,trial_t,mass,capacity,expected_dry_mass
+    REAL(real64) :: initial_species(6),predicted_species(6),species_ulp(6),energy_roundoff
+    INTEGER :: i,j,k,c
+    LOGICAL :: exists
+
+    CALL make_state(background,4,4,3)
+    background%temperature%value(1,1,1)=280.0_real32
+    background%vapor%value(1,1,1)=0.012_real32
+    background%cloud_water%value(1,1,1)=0.0002_real32
+    CALL refresh_dry_air_mass_measure(background,status)
+    CALL check(status==STATUS_OK,'nonzero phase background has canonical dry mass',failures)
+    IF (status/=STATUS_OK) RETURN
+    CALL validate_canonical_state(background,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    CALL check(status==STATUS_OK,'nonzero phase background passes canonical validation',failures)
+    IF (status/=STATUS_OK) RETURN
+
+    cell=[1,1,1]
+    initial_species=0.0_real64
+    initial_species(1)=REAL(background%vapor%value(cell(1),cell(2),cell(3)),real64)
+    initial_species(2)=REAL(background%cloud_water%value(cell(1),cell(2),cell(3)),real64)
+    initial_species(3)=REAL(background%cloud_ice%value(cell(1),cell(2),cell(3)),real64)
+    initial_species(4)=REAL(background%rain%value(cell(1),cell(2),cell(3)),real64)
+    initial_species(5)=REAL(background%snow%value(cell(1),cell(2),cell(3)),real64)
+    initial_species(6)=REAL(background%graupel%value(cell(1),cell(2),cell(3)),real64)
+    temperature32=background%temperature%value(cell(1),cell(2),cell(3))
+    extent=independent_liquid_phase_extent(REAL(background%pressure%value(cell(1),cell(2),cell(3)),real64), &
+      REAL(temperature32,real64),initial_species,0.8_real64)
+    CALL check(extent<0.0_real64,'independent oracle predeclares condensation extent',failures)
+    IF (extent>=0.0_real64) RETURN
+    trial_t=temperature32; predicted_species=initial_species
+    trial_t=temperature32-extent*(2.5e6_real64+ &
+      (1846.4_real64-4190.0_real64)*(temperature32-273.15_real64))/ &
+      (1004.5_real64+SUM([1846.4_real64,4190.0_real64,2106.0_real64, &
+      4190.0_real64,2106.0_real64,2106.0_real64]*initial_species)+ &
+      extent*(1846.4_real64-4190.0_real64))
+    predicted_species(1)=initial_species(1)+extent
+    predicted_species(2)=initial_species(2)-extent
+    trial_t32=REAL(trial_t,real32)
+    vapor32=REAL(predicted_species(1),real32)
+    cloud32=REAL(predicted_species(2),real32)
+
+    ALLOCATE(contract%coverage(4,4,3),contract%source_increment(8,4,4,3), &
+      contract%boundary_increment(8,4,4,3),contract%phase_increment(8,4,4,3), &
+      contract%physical_tolerance(8,4,4,3))
+    contract%contract_identity='independent-rh08-liquid-condensation-v1'
+    contract%adjustable_variables=IOR(PHYSICAL_ADJUST_TEMPERATURE, &
+      IOR(PHYSICAL_ADJUST_VAPOR,PHYSICAL_ADJUST_CLOUD_WATER))
+    contract%coverage=background%above_ground
+    contract%source_increment=0.0_real64
+    contract%boundary_increment=0.0_real64
+    contract%phase_increment=0.0_real64
+    contract%physical_tolerance=0.0_real64
+    mass=background%grid%dry_air_mass_measure(cell(1),cell(2),cell(3))
+    contract%phase_increment(PHYSICAL_COMPONENT_VAPOR,cell(1),cell(2),cell(3))=mass*extent
+    contract%phase_increment(PHYSICAL_COMPONENT_CLOUD_WATER,cell(1),cell(2),cell(3))=-mass*extent
+
+    ! Tolerances are fixed before invoking the producer. They bound the
+    ! canonical float32 storage of this independently solved phase transfer.
+    species_ulp(1)=REAL(SPACING(REAL(initial_species(1),real32)),real64)+ &
+      REAL(SPACING(vapor32),real64)
+    species_ulp(2)=REAL(SPACING(REAL(initial_species(2),real32)),real64)+ &
+      REAL(SPACING(cloud32),real64)
+    DO c=3,6
+      species_ulp(c)=2.0_real64*REAL(SPACING(REAL(initial_species(c),real32)),real64)
+    END DO
+    contract%physical_tolerance(PHYSICAL_COMPONENT_DRY_MASS_METRIC,cell(1),cell(2),cell(3))= &
+      2.0_real64*background%grid%pressure_mass_measure(cell(1),cell(2),cell(3))*SUM(species_ulp)
+    DO c=1,6
+      contract%physical_tolerance(c+1,cell(1),cell(2),cell(3))= &
+        2.0_real64*mass*species_ulp(c)
+    END DO
+    capacity=1004.5_real64+SUM([1846.4_real64,4190.0_real64,2106.0_real64, &
+      4190.0_real64,2106.0_real64,2106.0_real64]*predicted_species)
+    energy_roundoff=mass*(capacity*REAL(SPACING(trial_t32),real64)+ &
+      SUM(ABS([2.5e6_real64,0.0_real64,-3.5e5_real64,0.0_real64, &
+      -3.5e5_real64,-3.5e5_real64])*species_ulp))
+    contract%physical_tolerance(PHYSICAL_COMPONENT_ENTHALPY,cell(1),cell(2),cell(3))= &
+      4.0_real64*energy_roundoff
+
+    active=.FALSE.; active(cell(1),cell(2),cell(3))=.TRUE.
+    surface=SATURATION_LIQUID
+    config%requested_mode=MODE_SHADOW
+    config%maximum_outer_iterations=1
+    longitude=0.0_real32; residual=0.0_real64
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      thermo_active=active,thermo_surface=surface,target_rh=0.8_real64,physical_contract=contract)
+    CALL check(result%status==STATUS_OK .AND. &
+      result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_PASS, &
+      'pipeline accepts independently contracted nonzero phase candidate',failures)
+    IF (result%status/=STATUS_OK) RETURN
+    expected_dry_mass=candidate%grid%pressure_mass_measure(cell(1),cell(2),cell(3))/ &
+      (1.0_real64+SUM(REAL([candidate%vapor%value(cell(1),cell(2),cell(3)), &
+        candidate%cloud_water%value(cell(1),cell(2),cell(3)), &
+        candidate%cloud_ice%value(cell(1),cell(2),cell(3)),candidate%rain%value(cell(1),cell(2),cell(3)), &
+        candidate%snow%value(cell(1),cell(2),cell(3)),candidate%graupel%value(cell(1),cell(2),cell(3))],real64)))
+    CALL check(ABS(candidate%grid%dry_air_mass_measure(cell(1),cell(2),cell(3))-expected_dry_mass)<= &
+      2.0_real64*EPSILON(1.0_real64)*expected_dry_mass, &
+      'final stored dry mass is derived from pressure mass and stored water',failures)
+    CALL check(candidate%vapor%value(cell(1),cell(2),cell(3))==vapor32 .AND. &
+      candidate%cloud_water%value(cell(1),cell(2),cell(3))==cloud32 .AND. &
+      candidate%temperature%value(cell(1),cell(2),cell(3))==trial_t32, &
+      'pipeline candidate matches predeclared independent phase solution',failures)
+    CALL check(ALLOCATED(result%physical_contract%phase_increment) .AND. &
+      ALL(result%physical_contract%source_increment==0.0_real64) .AND. &
+      ALL(result%physical_contract%boundary_increment==0.0_real64), &
+      'internal phase remains distinct from external source and boundary',failures)
+    CALL check(pipeline_result_replays(background,candidate,result,config), &
+      'nonzero phase candidate replays through the canonical pipeline',failures)
+    IF (.NOT.pipeline_result_replays(background,candidate,result,config)) RETURN
+
+    CALL write_shadow_diagnostics('verified-nonzero-phase-shadow.nc',background,candidate,longitude, &
+      result,config,residual,residual,writer_status,operational)
+    CALL check(writer_status==STATUS_OK,'nonzero phase contract reaches actual SHADOW writer',failures)
+    INQUIRE(FILE='verified-nonzero-phase-shadow.nc',EXIST=exists)
+    CALL check(exists,'nonzero phase SHADOW file is published',failures)
+    IF (.NOT.exists) RETURN
+    CALL check_nonzero_phase_readback('verified-nonzero-phase-shadow.nc',extent,failures)
+  END SUBROUTINE test_nonzero_phase_contract_shadow
+
+  PURE REAL(real64) FUNCTION independent_liquid_phase_extent(pressure,temperature,species,target_rh)
+    REAL(real64), INTENT(IN) :: pressure,temperature,species(6),target_rh
+    REAL(real64) :: lo,hi,mid,capacity,delta_cp,latent,trial_t,value,tc,es,qsat
+    INTEGER :: iteration
+    capacity=1004.5_real64+SUM([1846.4_real64,4190.0_real64,2106.0_real64, &
+      4190.0_real64,2106.0_real64,2106.0_real64]*species)
+    delta_cp=1846.4_real64-4190.0_real64
+    latent=2.5e6_real64+delta_cp*(temperature-273.15_real64)
+    lo=-species(1); hi=species(2)
+    DO iteration=1,160
+      mid=lo+0.5_real64*(hi-lo)
+      trial_t=temperature-mid*latent/(capacity+mid*delta_cp)
+      tc=trial_t-273.15_real64
+      es=611.20_real64*EXP(17.67_real64*tc/(tc+243.5_real64))
+      qsat=0.622_real64*es/(pressure-es)
+      value=species(1)+mid-target_rh*qsat
+      IF (value>0.0_real64) THEN
+        hi=mid
+      ELSE
+        lo=mid
+      END IF
+    END DO
+    independent_liquid_phase_extent=lo+0.5_real64*(hi-lo)
+  END FUNCTION independent_liquid_phase_extent
+
+  SUBROUTINE check_nonzero_phase_readback(path,expected_extent,failures)
+    CHARACTER(LEN=*), INTENT(IN) :: path
+    REAL(real64), INTENT(IN) :: expected_extent
+    INTEGER, INTENT(INOUT) :: failures
+    INTEGER :: file_id,variable_id,rc
+    REAL(real64) :: phase(8,4,4,3),source(8,4,4,3),boundary(8,4,4,3),mass(4,4,3)
+    CHARACTER(LEN=64) :: phase_contract
+    rc=nf90_open(path,NF90_NOWRITE,file_id)
+    CALL check(rc==NF90_NOERR,'nonzero phase SHADOW readback opens',failures)
+    IF (rc/=NF90_NOERR) RETURN
+    rc=nf90_get_att(file_id,NF90_GLOBAL,'physical_internal_phase_contract',phase_contract)
+    CALL check(rc==NF90_NOERR .AND. TRIM(phase_contract)== &
+      'zero_dry_mass_zero_net_water_zero_mixture_enthalpy_v1', &
+      'phase stoichiometry declaration reads back',failures)
+    rc=nf90_inq_varid(file_id,'physical_internal_phase_increment',variable_id)
+    phase=HUGE(1.0_real64)
+    IF (rc==NF90_NOERR) rc=nf90_get_var(file_id,variable_id,phase)
+    rc=nf90_inq_varid(file_id,'physical_background_dry_air_mass_measure',variable_id)
+    mass=0.0_real64
+    IF (rc==NF90_NOERR) rc=nf90_get_var(file_id,variable_id,mass)
+    CALL check(rc==NF90_NOERR .AND. &
+      phase(PHYSICAL_COMPONENT_VAPOR,1,1,1)<0.0_real64 .AND. &
+      phase(PHYSICAL_COMPONENT_CLOUD_WATER,1,1,1)>0.0_real64 .AND. &
+      ABS(phase(PHYSICAL_COMPONENT_VAPOR,1,1,1)-expected_extent*mass(1,1,1))<1.0e-10_real64, &
+      'predeclared nonzero phase extents read back separately',failures)
+    CALL check(rc==NF90_NOERR .AND. &
+      ABS(phase(PHYSICAL_COMPONENT_CLOUD_WATER,1,1,1)+expected_extent*mass(1,1,1))<1.0e-10_real64 .AND. &
+      phase(PHYSICAL_COMPONENT_ENTHALPY,1,1,1)==0.0_real64, &
+      'phase ledger closes water and represented enthalpy',failures)
+    CALL check(rc==NF90_NOERR .AND. mass(1,1,1)>0.0_real64 .AND. &
+      ABS(phase(PHYSICAL_COMPONENT_DRY_MASS_METRIC,1,1,1))==0.0_real64, &
+      'phase extent is expressed as cell extensive mass',failures)
+    rc=nf90_inq_varid(file_id,'physical_source_increment',variable_id)
+    source=HUGE(1.0_real64)
+    IF (rc==NF90_NOERR) rc=nf90_get_var(file_id,variable_id,source)
+    CALL check(rc==NF90_NOERR .AND. ALL(source==0.0_real64), &
+      'nonzero phase does not masquerade as external source',failures)
+    rc=nf90_inq_varid(file_id,'physical_boundary_increment',variable_id)
+    boundary=HUGE(1.0_real64)
+    IF (rc==NF90_NOERR) rc=nf90_get_var(file_id,variable_id,boundary)
+    CALL check(rc==NF90_NOERR .AND. ALL(boundary==0.0_real64), &
+      'nonzero phase does not masquerade as boundary flux',failures)
+    rc=nf90_close(file_id)
+    CALL check(rc==NF90_NOERR,'nonzero phase SHADOW readback closes',failures)
+  END SUBROUTINE check_nonzero_phase_readback
 
   SUBROUTINE check_physical_contract_receipt(ncid,failures)
     INTEGER, INTENT(IN) :: ncid

@@ -1299,7 +1299,7 @@ CONTAINS
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(physical_joint_candidate_contract), INTENT(IN) :: contract
     TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
-    INTEGER :: component_dim,coverage_var,source_var,boundary_var,tolerance_var,nx,ny,nz,mass_var
+    INTEGER :: component_dim,coverage_var,source_var,boundary_var,phase_var,tolerance_var,nx,ny,nz,mass_var
     INTEGER(int32), ALLOCATABLE :: coverage(:,:,:)
     CHARACTER(LEN=1024) :: extensions
 
@@ -1314,6 +1314,9 @@ CONTAINS
         ANY(SHAPE(contract%source_increment)/=(/8,nx,ny,nz/)) .OR. &
         ANY(SHAPE(contract%boundary_increment)/=(/8,nx,ny,nz/)) .OR. &
         ANY(SHAPE(contract%physical_tolerance)/=(/8,nx,ny,nz/))) RETURN
+    IF (ALLOCATED(contract%phase_increment)) THEN
+      IF (ANY(SHAPE(contract%phase_increment)/=(/8,nx,ny,nz/))) RETURN
+    END IF
     IF (.NOT.put_thermo_field(ncid,dims,'physical_background_temperature',background%temperature) .OR. &
         .NOT.put_thermo_field(ncid,dims,'physical_candidate_temperature',candidate%temperature)) RETURN
     IF (.NOT.put_thermo_field(ncid,dims,'physical_background_vapor',background%vapor) .OR. &
@@ -1345,6 +1348,10 @@ CONTAINS
         (/component_dim,dims/),boundary_var))) RETURN
     IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_tolerance',NF90_DOUBLE, &
         (/component_dim,dims/),tolerance_var))) RETURN
+    IF (ALLOCATED(contract%phase_increment)) THEN
+      IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_internal_phase_increment',NF90_DOUBLE, &
+          (/component_dim,dims/),phase_var))) RETURN
+    END IF
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_contract_version', &
         'physical_joint_candidate_v1')) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_contract_identity', &
@@ -1367,8 +1374,15 @@ CONTAINS
         .NOT.nc_ok(nf90_put_att(ncid,source_var,'units','kg for components 1:7; J for component 8')) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,boundary_var,'units','kg for components 1:7; J for component 8')) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,tolerance_var,'units','kg for components 1:7; J for component 8'))) RETURN
+    IF (ALLOCATED(contract%phase_increment)) THEN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,phase_var,'units', &
+          'kg for components 1:7; J for component 8')) .OR. &
+          .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_internal_phase_contract', &
+          'zero_dry_mass_zero_net_water_zero_mixture_enthalpy_v1'))) RETURN
+    END IF
     IF (.NOT.nc_ok(nf90_get_att(ncid,NF90_GLOBAL,'schema_extensions',extensions))) RETURN
     extensions=TRIM(extensions)//',physical_joint_candidate_v1'
+    IF (ALLOCATED(contract%phase_increment)) extensions=TRIM(extensions)//',physical_internal_phase_v1'
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions',TRIM(extensions)))) RETURN
     IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
     ALLOCATE(coverage(nx,ny,nz))
@@ -1381,6 +1395,9 @@ CONTAINS
         .NOT.nc_ok(nf90_put_var(ncid,source_var,contract%source_increment)) .OR. &
         .NOT.nc_ok(nf90_put_var(ncid,boundary_var,contract%boundary_increment)) .OR. &
         .NOT.nc_ok(nf90_put_var(ncid,tolerance_var,contract%physical_tolerance))) RETURN
+    IF (ALLOCATED(contract%phase_increment)) THEN
+      IF (.NOT.nc_ok(nf90_put_var(ncid,phase_var,contract%phase_increment))) RETURN
+    END IF
     put_physical_contract_extension=.TRUE.
   END FUNCTION put_physical_contract_extension
 
@@ -2168,7 +2185,8 @@ CONTAINS
   SUBROUTINE validate_shadow_write_contract(state_in,candidate,operational_state, &
                                             result,config,status,reason,pressure_analysis_candidate)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,cloud_bal_pipeline_config, &
-      joint_candidate_evaluation,evaluate_joint_candidate,PHYSICAL_FEASIBILITY_PASS
+      joint_candidate_evaluation,evaluate_joint_candidate,PHYSICAL_FEASIBILITY_PASS, &
+      canonicalize_contracted_thermo_storage
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in,candidate,operational_state
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
@@ -2835,7 +2853,7 @@ CONTAINS
   END FUNCTION numerical_diagnostics_equal
 
   LOGICAL FUNCTION thermo_candidate_is_coherent(background,candidate,result)
-    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
+    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,canonicalize_contracted_thermo_storage
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
     TYPE(cloud_bal_state_type) :: proposal,expected
@@ -2845,7 +2863,7 @@ CONTAINS
     TYPE(pressure_analysis_budget) :: analysis,geometry
     REAL(real64) :: reported(10),recomputed(10)
     REAL(real64) :: reported_analysis(22),recomputed_analysis(22)
-    INTEGER :: status
+    INTEGER :: status,reason
 
     thermo_candidate_is_coherent=.FALSE.
     reported=[result%thermo_budget%species_change_kg, &
@@ -2917,6 +2935,10 @@ CONTAINS
       END IF
       IF (.NOT.stage_results_equal(geopotential_stage,result%geopotential)) RETURN
       expected=proposal
+    END IF
+    IF (ALLOCATED(result%physical_contract)) THEN
+      CALL canonicalize_contracted_thermo_storage(background,expected,status,reason)
+      IF (status/=STATUS_OK) RETURN
     END IF
     IF (.NOT.canonical_states_equal(expected,candidate,.TRUE.)) RETURN
     IF (ANY(expected%grid%dry_air_mass_measure/=candidate%grid%dry_air_mass_measure)) RETURN
