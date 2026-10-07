@@ -17,10 +17,40 @@ from native_kdm6_trace import read_dump
 
 MASK_MAGIC = b"PR63MSK1"
 MASK_HEADER_BYTES = 8 + 32 + 14 * 4 + 4
+STAGE_SEQUENCE = ("PRE_RK", "RK_STAGE_END", "RK_STAGE_END", "RK_STAGE_END",
+                  "PRE_MOIST_PREP", "POST_MOIST_PREP", "PRE_MICROPHYSICS",
+                  "POST_MICROPHYSICS")
+RK_SEQUENCE = (0, 1, 2, 3, 4, 4, 4, 4)
 
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def read_stage_text(path: Path) -> list[dict]:
+    """Name the frozen STATE_STAGE columns; minimum QC is not selected QC/NC."""
+    records = []
+    for number, line in enumerate(path.read_text(encoding="ascii").splitlines(), 1):
+        fields = line.split()
+        if len(fields) != 13 or fields[0] != "STATE_STAGE":
+            raise ValueError(f"invalid STATE_STAGE columns on line {number}")
+        integers = [int(value) for value in fields[2:7]]
+        values = [float(value) for value in fields[7:13]]
+        if integers[0] < 1 or min(integers[1:]) < 0:
+            raise ValueError(f"invalid STATE_STAGE integers on line {number}")
+        if values[0] <= 0 or not all(math.isfinite(value) for value in values):
+            raise ValueError(f"invalid STATE_STAGE values on line {number}")
+        records.append(dict(zip(
+            ("stage", "timestep", "rkstep", "gap", "negative_qc", "qg_zero_bg_positive",
+             "qmin", "minimum_qc", "selected_qc", "selected_nc", "selected_qg", "selected_bg"),
+            (fields[1], *integers, *values), strict=True)))
+    if tuple(record["stage"] for record in records) != STAGE_SEQUENCE or \
+            tuple(record["rkstep"] for record in records) != RK_SEQUENCE:
+        raise ValueError("unexpected STATE_STAGE sequence")
+    if any(record["timestep"] != records[0]["timestep"] or
+           record["qmin"] != records[0]["qmin"] for record in records[1:]):
+        raise ValueError("inconsistent STATE_STAGE headers")
+    return records
 
 
 def read_masks(path: Path) -> list[dict]:
@@ -74,13 +104,9 @@ def read_masks(path: Path) -> list[dict]:
         offset += nbytes
         records.append({"stage": stage, "timestep": timestep, "rkstep": rkstep,
                         "qmin": float(qmin), "bounds": bounds, "mask": mask})
-    expected = ["PRE_RK", "RK_STAGE_END", "RK_STAGE_END", "RK_STAGE_END",
-                "PRE_MOIST_PREP", "POST_MOIST_PREP", "PRE_MICROPHYSICS",
-                "POST_MICROPHYSICS"]
-    expected_rk = [0, 1, 2, 3, 4, 4, 4, 4]
-    if [record["stage"] for record in records] != expected:
+    if tuple(record["stage"] for record in records) != STAGE_SEQUENCE:
         raise ValueError("unexpected, duplicate, or missing transition-stage records")
-    if [record["rkstep"] for record in records] != expected_rk:
+    if tuple(record["rkstep"] for record in records) != RK_SEQUENCE:
         raise ValueError("unexpected RK-stage indices")
     reference = records[0]
     if any(record["timestep"] != reference["timestep"] or
@@ -107,7 +133,8 @@ def overlap_slices(a: dict, b: dict) -> tuple[tuple[slice, ...], tuple[slice, ..
     return slices(ab), slices(bb)
 
 
-def summarize(mask_path: Path, pre_path: Path, post_path: Path) -> dict:
+def summarize(mask_path: Path, pre_path: Path, post_path: Path,
+              stage_text_path: Path | None = None) -> dict:
     masks = read_masks(mask_path)
     pre, post = read_dump(pre_path), read_dump(post_path)
     if pre["stage"] != 1 or post["stage"] != 2:
@@ -190,7 +217,20 @@ def summarize(mask_path: Path, pre_path: Path, post_path: Path) -> dict:
              "qg_zero_bg_positive": int((record["mask"][overlap_slices(record, post)[0]] & 4 != 0).sum())}
             for record in masks],
     }
-    return {"schema": "pr63_transition_replay_v1", "counts": counts}
+    result = {"schema": "pr63_transition_replay_v1", "counts": counts}
+    if stage_text_path is not None:
+        text_records = read_stage_text(stage_text_path)
+        for text_record, mask_record, summary in zip(
+                text_records, masks, counts["stage_masks_full_tile"], strict=True):
+            for key in ("stage", "timestep", "rkstep", "qmin"):
+                if text_record[key] != mask_record[key]:
+                    raise ValueError(f"STATE_STAGE/mask header mismatch: {key}")
+            for key in ("gap", "negative_qc", "qg_zero_bg_positive"):
+                if text_record[key] != summary[key]:
+                    raise ValueError(f"STATE_STAGE/mask count mismatch: {key}")
+        result["stage_text"] = {"sha256": sha256(stage_text_path), "records": text_records,
+                                "mask_headers_and_counts_match": True}
+    return result
 
 
 def main() -> int:
@@ -198,9 +238,10 @@ def main() -> int:
     parser.add_argument("masks", type=Path)
     parser.add_argument("kdm_pre", type=Path)
     parser.add_argument("kdm_post", type=Path)
+    parser.add_argument("--stage-text", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    result = summarize(args.masks, args.kdm_pre, args.kdm_post)
+    result = summarize(args.masks, args.kdm_pre, args.kdm_post, args.stage_text)
     text = json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n"
     if args.output:
         args.output.write_text(text, encoding="utf-8")

@@ -1,0 +1,185 @@
+--- a/solve_em_pr63.f90
++++ b/solve_em_pr64_qc_channel.f90
+@@ -297,6 +297,9 @@
+ 
+ 
+    INTEGER :: pr63_u
++   INTEGER :: pr64_context_species,pr64_context_rk,pr64_context_qc,pr64_context_qnc
++   COMMON /PR64_ADVECT_CONTEXT/ pr64_context_species,pr64_context_rk, &
++        pr64_context_qc,pr64_context_qnc
+    INTEGER :: rc 
+    INTEGER :: number_of_small_timesteps, rk_step
+    INTEGER :: klevel,ijm,ijp,i,j,k,size1,size2    
+@@ -1023,6 +1026,13 @@
+                              , k_start , k_end                  &
+                             )
+ 
++       CALL pr64_qc_channels(rk_step, config_flags%bl_pbl_physics, &
++            config_flags%cu_physics, config_flags%shcu_physics, &
++            config_flags%diff_opt, config_flags%km_opt, &
++            ims, ime, jms, jme, kms, kme, &
++            moist_tend(ims,kms,jms,P_QC), grid%rqcblten, &
++            grid%rqccuten, grid%rqcshten, grid%rqcncuten, grid%rqcnshten)
++
+      END IF rk_step_is_one
+ 
+ 
+@@ -2636,6 +2646,8 @@
+ 
+            IF (grid%adv_moist_cond .or. im==p_qv ) THEN
+ 
++             pr64_context_qc=P_QC; pr64_context_qnc=P_QNC
++             pr64_context_species=im; pr64_context_rk=rk_step
+              !$OMP PARALLEL DO   &
+              !$OMP PRIVATE ( ij, tenddec )
+              moist_tile_loop_1: DO ij = 1 , grid%num_tiles
+@@ -2644,6 +2656,13 @@
+                tenddec = .false.
+ 
+ 
++               IF(im==P_QC) CALL pr64_host_cut('QC_PRE_TEND',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QC,P_QNC, &
++                    moist(ims,kms,jms,P_QC),scalar(ims,kms,jms,P_QNC), &
++                    moist_old(ims,kms,jms,P_QC),moist(ims,kms,jms,P_QC), &
++                    moist_tend(ims,kms,jms,P_QC),advect_tend,grid%msfty, &
++                    grid%c1h,grid%c2h,grid%mu_1,grid%mu_2,grid%mub,dt_rk)
+                CALL rk_scalar_tend (  im, im, config_flags, tenddec,         & 
+                            rk_step, dt_rk,                                   &
+                            grid%ru_m, grid%rv_m, grid%ww_m, wwE, wwI,        &
+@@ -2670,6 +2689,14 @@
+                            grid%i_start(ij), grid%i_end(ij), &
+                            grid%j_start(ij), grid%j_end(ij), &
+                            k_start    , k_end               )
++               IF (im==P_QC) CALL pr64_host_cut('QC_TEND',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QC,P_QNC, &
++                    moist(ims,kms,jms,P_QC),scalar(ims,kms,jms,P_QNC), &
++                    moist_old(ims,kms,jms,P_QC),moist(ims,kms,jms,P_QC), &
++                    moist_tend(ims,kms,jms,P_QC),advect_tend,grid%msfty, &
++                    grid%c1h,grid%c2h,grid%mu_1,grid%mu_2,grid%mub,dt_rk)
++
+ 
+                IF( rk_step == 1 .AND. config_flags%use_q_diabatic == 1 )THEN
+                IF( im.eq.p_qv .or. im.eq.p_qc )THEN
+@@ -2754,6 +2781,14 @@
+                                its=grid%i_start(ij), ite=grid%i_end(ij),               &
+                                jts=grid%j_start(ij), jte=grid%j_end(ij),               &
+                                kts=k_start    , kte=k_end                              )
++               IF (im==P_QC) CALL pr64_host_cut('QC_AFTER',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QC,P_QNC, &
++                    moist(ims,kms,jms,P_QC),scalar(ims,kms,jms,P_QNC), &
++                    moist_old(ims,kms,jms,P_QC),moist(ims,kms,jms,P_QC), &
++                    moist_tend(ims,kms,jms,P_QC),advect_tend,grid%msfty, &
++                    grid%c1h,grid%c2h,grid%mu_1,grid%mu_2,grid%mub,dt_rk)
++
+                IF( rk_step == rk_order .AND. config_flags%use_q_diabatic == 1 )THEN
+                IF( im.eq.p_qv .or. im.eq.p_qc )THEN
+                    CALL q_diabatic_subtr( im, im,            & 
+@@ -3043,12 +3078,21 @@
+      other_scalar_advance: IF (num_3d_s >= PARAM_FIRST_SCALAR)  THEN
+ 
+        scalar_variable_loop: do is = PARAM_FIRST_SCALAR, num_3d_s
++         pr64_context_qc=P_QC; pr64_context_qnc=P_QNC
++         pr64_context_species=is; pr64_context_rk=rk_step
+          !$OMP PARALLEL DO   &
+          !$OMP PRIVATE ( ij, tenddec )
+          scalar_tile_loop_1: DO ij = 1 , grid%num_tiles
+ 
+            CALL wrf_debug ( 200 , ' call rk_scalar_tend' )
+            tenddec = .false.
++           IF(is==P_QNC) CALL pr64_host_cut('NC_PRE_TEND',rk_step,ims,ime,jms,jme,kms,kme, &
++                grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QNC,P_QC, &
++                scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC), &
++                scalar_old(ims,kms,jms,P_QNC),scalar(ims,kms,jms,P_QNC), &
++                scalar_tend(ims,kms,jms,P_QNC),advect_tend,grid%msfty, &
++                grid%c1h,grid%c2h,grid%mu_1,grid%mu_2,grid%mub,dt_rk)
+            CALL rk_scalar_tend ( is, is, config_flags, tenddec,                   & 
+                                  rk_step, dt_rk,                                  &
+                                  grid%ru_m, grid%rv_m, grid%ww_m, wwE, wwI,       &
+@@ -3075,6 +3119,14 @@
+                                  grid%i_start(ij), grid%i_end(ij), &
+                                  grid%j_start(ij), grid%j_end(ij), &
+                                  k_start    , k_end               )
++           IF (is==P_QNC) CALL pr64_host_cut('NC_TEND',rk_step,ims,ime,jms,jme,kms,kme, &
++                grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QNC,P_QC, &
++                scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC), &
++                scalar_old(ims,kms,jms,P_QNC),scalar(ims,kms,jms,P_QNC), &
++                scalar_tend(ims,kms,jms,P_QNC),advect_tend,grid%msfty, &
++                grid%c1h,grid%c2h,grid%mu_1,grid%mu_2,grid%mub,dt_rk)
++
+ 
+            IF( rk_step == 1 ) THEN
+              IF ( config_flags%nested .OR. &
+@@ -3142,6 +3194,14 @@
+                                   its=grid%i_start(ij), ite=grid%i_end(ij),               &
+                                   jts=grid%j_start(ij), jte=grid%j_end(ij),               &
+                                   kts=k_start    , kte=k_end                              )
++           IF (is==P_QNC) CALL pr64_host_cut('NC_AFTER',rk_step,ims,ime,jms,jme,kms,kme, &
++                grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QNC,P_QC, &
++                scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC), &
++                scalar_old(ims,kms,jms,P_QNC),scalar(ims,kms,jms,P_QNC), &
++                scalar_tend(ims,kms,jms,P_QNC),advect_tend,grid%msfty, &
++                grid%c1h,grid%c2h,grid%mu_1,grid%mu_2,grid%mub,dt_rk)
++
+ 
+ 
+ 
+@@ -6103,3 +6163,53 @@
+        moist(172,1,76,pqc),scalar(172,1,76,pnc),moist(172,1,76,pqg),scalar(172,1,76,pbg)
+   close(u)
+ END SUBROUTINE pr63_transition_state
++
++SUBROUTINE pr64_host_cut(stage,rkstep,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++     species,partner_id,field,partner,old,new,tend,adv,msfty,c1,c2,muold,munew,mub,dt)
++  implicit none
++  character(len=*),intent(in)::stage
++  integer,intent(in)::rkstep,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte,species,partner_id
++  real,intent(in)::field(ims:ime,kms:kme,jms:jme),partner(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::old(ims:ime,kms:kme,jms:jme),new(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::tend(ims:ime,kms:kme,jms:jme),adv(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::msfty(ims:ime,jms:jme),c1(kms:kme),c2(kms:kme)
++  real,intent(in)::muold(ims:ime,jms:jme),munew(ims:ime,jms:jme),mub(ims:ime,jms:jme),dt
++  integer::i,j,u
++  if(rkstep<1 .or. rkstep>3) return
++  if(172<its .or. 172>ite .or. 76<jts .or. 76>jte .or. 1<kts .or. 1>kte) return
++  open(newunit=u,file='pr64_host_neighborhood.raw',status='unknown',position='append',action='write')
++  do j=max(75,jts),min(77,jte)
++    do i=max(171,its),min(173,ite)
++      write(u,'(A,1X,A,1X,I0,5(1X,I0),15(1X,ES24.16))') &
++          'HOST',trim(stage),rkstep,i,j,1,species,partner_id, &
++          field(i,1,j),partner(i,1,j),old(i,1,j),new(i,1,j), &
++          tend(i,1,j),adv(i,1,j),msfty(i,j),c1(1),c2(1), &
++          muold(i,j),munew(i,j),mub(i,j),dt, &
++          c1(1)*(muold(i,j)+mub(i,j))+c2(1), &
++          c1(1)*(munew(i,j)+mub(i,j))+c2(1)
++    enddo
++  enddo
++  close(u)
++END SUBROUTINE pr64_host_cut
++
++SUBROUTINE pr64_qc_channels(rkstep,bl,cu,shcu,diff_opt,km_opt, &
++     ims,ime,jms,jme,kms,kme,qc_tend,qc_bl,qc_cu,qc_sh,qnc_cu,qnc_sh)
++  implicit none
++  integer,intent(in)::rkstep,bl,cu,shcu,diff_opt,km_opt
++  integer,intent(in)::ims,ime,jms,jme,kms,kme
++  real,intent(in)::qc_tend(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::qc_bl(ims:ime,kms:kme,jms:jme),qc_cu(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::qc_sh(ims:ime,kms:kme,jms:jme)
++  real,intent(in)::qnc_cu(ims:ime,kms:kme,jms:jme),qnc_sh(ims:ime,kms:kme,jms:jme)
++  integer::i,j,u
++  if(172<ims .or. 172>ime .or. 76<jms .or. 76>jme .or. 1<kms .or. 1>kme) return
++  open(newunit=u,file='pr64_qc_channels.raw',status='unknown',position='append',action='write')
++  write(u,'(A)') 'QCCHAN rkstep i j k bl_pbl cu shcu diff_opt km_opt qc_moist_tend rqcblten rqccuten rqcshten rqcncuten rqcnshten'
++  do j=max(75,jms),min(77,jme)
++    do i=max(171,ims),min(173,ime)
++      write(u,'(A,1X,9(I0,1X),6(ES24.16,1X))') 'QCCHAN',rkstep,i,j,1,bl,cu,shcu,diff_opt,km_opt, &
++           qc_tend(i,1,j),qc_bl(i,1,j),qc_cu(i,1,j),qc_sh(i,1,j),qnc_cu(i,1,j),qnc_sh(i,1,j)
++    enddo
++  enddo
++  close(u)
++END SUBROUTINE pr64_qc_channels

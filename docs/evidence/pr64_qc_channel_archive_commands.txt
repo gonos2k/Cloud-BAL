@@ -1,0 +1,10 @@
+# Executed in fresh /var/tmp/pr64_qc_channel_20261007/link
+cp /var/tmp/pr64_transport_cause_20261007/solve_observer_pretend_carrier_link/libwrflib_base.a libwrflib_observer.a
+cp /var/tmp/pr64_transport_cause_20261007/solve_observer_pretend_carrier_link/wrf.o .
+cp /var/tmp/pr64_transport_cause_20261007/solve_observer_pretend_carrier_link/module_wrf_top.o .
+cp /var/tmp/pr64_qc_channel_20261007/build/solve_em_pr64_qc_channel.o solve_em.o
+cp libwrflib_observer.a libwrflib_observer.before.a
+ar d libwrflib_observer.a solve_em.o
+ar r libwrflib_observer.a solve_em.o
+ranlib libwrflib_observer.a
+ar p libwrflib_observer.a solve_em.o > archive_solve_em.o

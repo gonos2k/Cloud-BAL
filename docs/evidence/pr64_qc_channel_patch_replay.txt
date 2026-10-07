@@ -1,0 +1,13 @@
+# Apply the observer-only patch to the pinned PR63 generated solve source.
+mkdir -p /var/tmp/pr64_qc_channel_replay/source
+cp /var/tmp/pr63_native_transition_20261006/build_cutoff_v2/solve_em_pr63.f90 \
+  /var/tmp/pr64_qc_channel_replay/source/solve_em_pr63.f90
+cd /var/tmp/pr64_qc_channel_replay/source
+patch -p1 < /path/to/Cloud-BAL/docs/evidence/pr64_qc_channel_observer.patch
+sha256sum solve_em_pr63.f90
+# Expected patched-source SHA256:
+# 72aa50d495fa13d58029189f643fba218c819f8d0911c5138997124d6e99459b
+
+# Compile from a fresh external working directory using the exact pinned profile
+# and compiler flags recorded in pr64_qc_channel_compile_command.txt.
+# Archive, link, and run-guard commands are recorded in their companion files.

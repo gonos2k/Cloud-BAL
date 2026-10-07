@@ -22,6 +22,7 @@ BOUNDS = {"ids": 1, "ide": 2, "jds": 1, "jde": 2,
 def geometry() -> dict:
     return {"stage": "PRE_MICROPHYSICS", "timestep": 1,
             "bounds": BOUNDS.copy(), "dx_m": 10.0, "dy_m": 10.0,
+            "dtm_s": 20.0, "dt_s": 20.0,
             "gravity_m_s2": 10.0,
             "arrays": {"mu2": np.full((2, 2), 1000.0),
                        "mub": np.zeros((2, 2)),
@@ -41,7 +42,9 @@ def dump(stage: int, *, fields=None, bounds=None) -> dict:
     return {"stage": stage, "itimestep": 1,
             "bounds": BOUNDS.copy() if bounds is None else bounds,
             "active_shape_xyz": [2, 2, 2],
-            "params": (20.0, 1.0, 1.0, 1.0, 1.0), "fields": values}
+            "params": {"dt_s": 20.0, "ccn_number_m3": 1.0, "scale_h_m": 1.0,
+                       "qnccn_land_mult": 1.0, "qnccn_sea_mult": 1.0},
+            "fields": values}
 
 
 class PairedGraupelVolumeTests(unittest.TestCase):

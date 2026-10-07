@@ -73,3 +73,34 @@ The integrated mapped carrier is `1.6204030034989608e16 kg`. The alternative con
 ## Remaining physical gate
 
 The paired result establishes that, in this research execution, QG extinction at the existing terminal cutoff is paired with BG cleanup and removes 2,465 post-cutoff ghosts. It does not explain the 11 pre-cutoff ghosts, the one QC/NC return gap, transient negative-QC RK stages, full-domain source/flux attribution, or native energy closure. The configured KDM6 run is one rank/tile and 20 seconds. No BASE/HYDRO/COUPLED early-wave or forecast comparison is part of this trace. Full physical initialization remains **FAIL/OPEN**.
+
+
+## PR64 erratum — selected RK values and capture provenance (2026-10-07)
+
+The earlier selected-cell description above mislabels QC and NC. The raw
+writer emits the aggregate minimum QC before the selected `QC, NC, QG, BG`
+values. In both successful matched PR63 runs the target `(172,76,1)` has:
+
+| Completed stage | QC (kg/kg dry air) | NC (number/kg dry air) |
+|---|---:|---:|
+| PRE_RK | 0 | 0 |
+| RK1 end | +1.6839790362155327e-7 | -1773.7578125 |
+| RK2 end | +2.5137100578831451e-7 | -3662.8056640625 |
+| RK3 end | +5.0365269999019802e-7 | 0 |
+
+Thus the selected intermediate negative values belong to NC, not QC. The
+independent aggregate negative-QC counts, including 23,494 KDM6-entry cells,
+are unchanged. The finer `pr63_rk_update_cuts.raw` captures exist only in the
+incomplete `run_paired_v2b`; they are investigation leads, not successful
+matched-run evidence. In those cuts the following NC updates produce
+negative NC at RK1/RK2, rather than leaving NC zero. The successful matched
+stage captures establish the zero-NC gap after completed RK3, without yet
+identifying its first responsible donor, flux, tendency, or limiter.
+
+The successful control stage file SHA256 is
+`3f51d87ab0320df86ce4e4cffc1b73acf36d2faf7ac1ba8eff3d145c8e8f9d89`;
+the paired stage file SHA256 is
+`46283bca2a1666ac42ec3fae113264b9f5de8490edb21492767a8d6064a991cf`.
+Their original files and receipts are preserved. This correction does not
+resolve the physical acceptance failures or replace the original execution
+history. See [PR64 team review](PR64_TEAM_MATH_REVIEW_20261007.md).

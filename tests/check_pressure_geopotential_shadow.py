@@ -26,6 +26,15 @@ VARIABLES = {
 } | {"geopotential_support", "geopotential_reference_level"}
 
 
+def validate_phi_candidate(path: Path) -> dict:
+    summary, failures = validate(path)
+    assert not failures, failures
+    assert summary["pressure_geopotential_independently_validated"] is True
+    assert summary["pressure_geopotential_native_assessed"] is False
+    assert summary["pressure_analysis_candidate_promotion_eligible"] is False
+    return summary
+
+
 def set_attribute(path, name, value, field=None):
     with netCDF4.Dataset(path, "r+") as dataset:
         target = dataset if field is None else dataset[field]
@@ -37,6 +46,34 @@ def set_cell(path, field, index, value):
         dataset[field][index] = value
 
 
+def check_storage_contract(path: Path) -> None:
+    summary = validate_phi_candidate(path)
+    assert summary["pressure_geopotential_independently_validated"] is True
+    with netCDF4.Dataset(path) as dataset:
+        support = np.asarray(dataset["geopotential_support"][:]) == 1
+        contract = str(dataset.getncattr("pressure_geopotential_contract"))
+    attributes = SURFACE_ATTRIBUTES if contract == "pressure_hydrostatic_surface_increment_v1" else ATTRIBUTES
+
+    with tempfile.TemporaryDirectory(prefix="pressure-phi-storage-") as directory:
+        damaged = Path(directory) / "mutated.nc"
+        for dtype, dimensions in (("i2", ("z", "y", "x")),
+                                  ("i4", ("z", "x", "y"))):
+            rewrite_without(path, damaged, {"geopotential_support"})
+            with netCDF4.Dataset(damaged, "r+") as dataset:
+                variable = dataset.createVariable("geopotential_support", dtype, dimensions)
+                variable.setncattr("units", "1")
+                payload = support if dimensions == ("z", "y", "x") else support.transpose(0, 2, 1)
+                variable[...] = payload.astype(np.int32)
+            _, failures = validate(damaged)
+            assert failures, f"accepted malformed support storage: {dtype}, {dimensions}"
+
+        rewrite_without(path, damaged, attributes | VARIABLES)
+        historical, failures = validate(damaged)
+        assert historical["pressure_geopotential_independently_validated"] is False
+        assert historical["pressure_geopotential_native_assessed"] is False
+    print(f"PASS pressure geopotential normal replay/storage tail: {path.name}")
+
+
 def add_manufactured_source(path):
     with netCDF4.Dataset(path, "r+") as dataset:
         for state in ("background", "candidate"):
@@ -45,11 +82,7 @@ def add_manufactured_source(path):
 
 
 def check(path: Path) -> None:
-    summary, failures = validate(path)
-    assert not failures, failures
-    assert summary["pressure_geopotential_independently_validated"] is True
-    assert summary["pressure_geopotential_native_assessed"] is False
-    assert summary["pressure_analysis_candidate_promotion_eligible"] is False
+    summary = validate_phi_candidate(path)
     with netCDF4.Dataset(path) as dataset:
         contract = str(dataset.getncattr("pressure_geopotential_contract"))
         surface_variant = contract == "pressure_hydrostatic_surface_increment_v1"
@@ -188,25 +221,12 @@ def check(path: Path) -> None:
             reject(path, damaged, lambda output, n=name, v=value, f=field:
                    set_attribute(output, n, v, f), f"{field or 'global'} {name}")
 
-        # Same values with the wrong storage contract are not interchangeable.
-        for dtype, dimensions in (("i2", ("z", "y", "x")),
-                                  ("i4", ("z", "x", "y"))):
-            rewrite_without(path, damaged, {"geopotential_support"})
-            with netCDF4.Dataset(damaged, "r+") as dataset:
-                variable = dataset.createVariable("geopotential_support", dtype, dimensions)
-                variable.setncattr("units", "1")
-                variable[...] = support.astype(np.int32)
-            _, failures = validate(damaged)
-            assert failures, f"accepted malformed support storage: {dtype}, {dimensions}"
-
-        # Stripping the extension cannot gain a Phi claim; overall changes
-        # unsupported by the remaining fields may also reject the artifact.
-        rewrite_without(path, damaged, attributes | VARIABLES)
-        historical, failures = validate(damaged)
-        assert historical["pressure_geopotential_independently_validated"] is False
-        assert historical["pressure_geopotential_native_assessed"] is False
+        check_storage_contract(path)
     print(f"PASS pressure geopotential independent replay/mutations: {path.name}")
 
 
 if __name__ == "__main__":
-    check(Path(sys.argv[1]))
+    if len(sys.argv) == 3 and sys.argv[1] == "--storage-tail":
+        check_storage_contract(Path(sys.argv[2]))
+    else:
+        check(Path(sys.argv[1]))

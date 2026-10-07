@@ -1,0 +1,78 @@
+{
+  "capture_replay": {
+    "audit_source_sha256": "295907e78d06d8e17e3fa8d686447d02b4cad2724682db5891c0f9218a19381c",
+    "call_duration_identity": {
+      "grid_dt_part_of_identity": false,
+      "grid_dt_s_metadata": 20.0,
+      "host_argument": "solve_em dtm passed as microphysics_driver DT",
+      "host_dtm_s": 20.0,
+      "kdm6_argument": "KDM6 delt recorded as trace dt_s",
+      "kdm6_delt_s": 20.0,
+      "matched": true
+    },
+    "executable_sha256": "ee6d85d22597a1973dd551c9f33b3c5c7bb2f399a02300d6ad9da03a57c18155",
+    "geometry_records": [
+      {
+        "dtm_s": 20.0,
+        "grid_dt_s": 20.0,
+        "rkstep": 4,
+        "stage": "PRE_MICROPHYSICS",
+        "timestep": 1
+      },
+      {
+        "dtm_s": 20.0,
+        "grid_dt_s": 20.0,
+        "rkstep": 4,
+        "stage": "POST_MICROPHYSICS",
+        "timestep": 1
+      }
+    ],
+    "input_hashes": {
+      "geometry": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+      "kdm_post": "ff39f3f7b4cd8d0610328254bff3e3a3d193cff31542b7a6ab8ee3f9d78db0c5",
+      "kdm_pre": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "receipt": "0073caf9a11c4b2c66d528c769ee21ebba632d3a3bdcc92c0803e58a8a98a609"
+    },
+    "kdm6_timestep": 1,
+    "receipt_sha256": "0073caf9a11c4b2c66d528c769ee21ebba632d3a3bdcc92c0803e58a8a98a609",
+    "receipt_status": {
+      "input_integrity": "PASS",
+      "output_isolation": "PASS",
+      "returncode": 0
+    },
+    "result": "PASS",
+    "run_root": "/var/tmp/pr63_native_transition_20261006/run_pair_paired"
+  },
+  "date": "2026-10-07",
+  "limits": [
+    "KDM6 trace does not record RK step; association with geometry RK step 4 follows source placement and captured execution.",
+    "Replay covers one rank/tile and timestep 1 only.",
+    "Duration identity does not establish a mass or energy budget or scientific acceptance."
+  ],
+  "schema": "pr64_call_duration_evidence_v1",
+  "source_evidence": {
+    "host_source": {
+      "driver_call": "line 3794: DT=dtm",
+      "dtm_assignment": "line 583: dtm = grid%dt",
+      "path": "/var/tmp/pr63_native_transition_20261006/source/solve_em_pr63.F",
+      "sha256": "e35f2d343009240d5efbbf8c370c80dd6ef6d3493a70b14845091294408d1ea4"
+    },
+    "kdm6_source": {
+      "inner_call": "lines 345-350 passes delt to kdm62D",
+      "path": "/var/tmp/pr63_native_transition_20261006/build_paired_matched/paired/module_mp_kdm6.F",
+      "sha256": "099b4a744c4f11f30ba2b50c23b551d9edd196d58d9813885398d3861e3fa040",
+      "trace_capture": "lines 313-317 records incoming delt as dt_s"
+    },
+    "microphysics_driver": {
+      "kdm6_branch": "lines 2526-2550: CASE (KDM6SCHEME) passes DELT=dt to KDM6",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_microphysics_driver.F",
+      "sha256": "bcac98180bfb5e260271a5836d71c5936d47ab167e2164c37b328f37ec2c03f4"
+    },
+    "source_limit": "Maintained source explicitly shows host DT=dtm, driver KDM6 DELT=dt, and KDM6 trace captures incoming delt. The preserved run receipt does not bind the compiled microphysics_driver object to this source hash, so compiled object lineage remains unverified."
+  },
+  "validation": {
+    "command": "python3 -m unittest tests.test_native_kdm6_call_geometry tests.test_pr63_paired_bg_volume",
+    "mismatch_regression": "Whole audit on valid PR63GEO2 and KDM6TRC1 binaries rejects host dtm=20 s / KDM6 delt=10 s. Whole audit accepts dtm=20 s / KDM6 delt=20 s with independent grid_dt=25 s metadata.",
+    "result": "PASS: 16 tests"
+  }
+}

@@ -21,6 +21,7 @@ tests=(
   tests/test_native_kdm6_trace.py
   tests/test_native_kdm6_call_geometry.py
   tests/test_pr63_transition_replay.py
+  tests/test_pr64_qc_channel_replay.py
   tests/test_pr63_paired_bg_volume.py
   tests/test_operational_comparison_prep.py
   tests/test_operational_shadow_compare.py
