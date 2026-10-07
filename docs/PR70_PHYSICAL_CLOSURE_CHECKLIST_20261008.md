@@ -22,8 +22,8 @@ Overall scientific approval remains **FAIL/OPEN**. Research sources, manufacture
 - [x] Review and resolve scoped activity search, source-order and temperature guards with the four-agent team; unsupported native volume policy remains OPEN.
 - [x] Validate with pinned Intel `tests/intel_toolchain.sh` in fresh scratch, plus the four source-bound composition tests.
 - [x] Preserve original counterexamples, failed builds/runs and exact source/object/executable/input/output identities.
-- [ ] Commit, push and create PR after no unresolved scoped implementation blocker remains.
-- [ ] Incrementally refresh separately dated KLAPS50/Cloud-BAL graphs and derived wiki audit from the frozen implementation.
+- [x] Commit, push and create PR after no unresolved scoped implementation blocker remains.
+- [x] Incrementally refresh separately dated KLAPS50/Cloud-BAL graphs and derived wiki audit from the frozen implementation.
 
 ## Interpretation
 
@@ -32,3 +32,7 @@ Overall scientific approval remains **FAIL/OPEN**. Research sources, manufacture
 The cutoff policy is a declared candidate policy. Numerical species extinction must have a material/energy ledger, and gas density, dry carrier density and particle bulk density must retain their distinct roles. No result-dependent source, tolerance, density prior, moment floor, output substitution or damping change is introduced to pass a gate.
 
 Graph navigation uses the maintained PR69 overlay (7,685 Cloud-BAL nodes). The isolated checkout's inherited graph is not the source identity of this work. AST/Markdown structure and partial Fortran CALL extraction do not establish runtime or scientific correctness.
+
+## Publication completion
+
+PR [#70](https://github.com/gonos2k/Cloud-BAL/pull/70) is open and unmerged. Implementation and KG extraction are frozen at `0fc7cc00eff6d4d65816eb1defc9634bdce55187`. The subsequent publication commit only records completed checkboxes and immutable KG evidence; it does not replace the tested source or the frozen team-validation receipt.
