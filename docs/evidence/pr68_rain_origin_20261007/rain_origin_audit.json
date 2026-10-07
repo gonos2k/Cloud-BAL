@@ -1,0 +1,4398 @@
+{
+  "accepted_number_trial_vs_reserve": {
+    "at_or_above_nrmin_count": 0,
+    "below_nrmin_count": 25,
+    "maximum_nr_trial": 0.0,
+    "maximum_nrmin": 0.009999999776482582,
+    "minimum_nr_trial": -0.000244140625,
+    "minimum_nrmin": 0.009999999776482582,
+    "negative_count": 12,
+    "positive_count": 0,
+    "zero_count": 13
+  },
+  "branch_counts": {
+    "cold": 25,
+    "warm": 0
+  },
+  "cause": "The active temperature branch applies its aggregate rain-number limiter to the available NR. The reconstructed post-limit number trial is nonpositive while the independent QR mass trial remains positive; the source max(...,0) updates therefore yield QR-positive/NR-zero. The branch-specific donor and sink terms are reported without assigning the aggregate limiter to one constituent process. Subsequent transfer, threshold, slope-repair, and terminal checkpoints record whether that pair changes later in the call.",
+  "cells": [
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 169,
+        "j": 59,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 665963584.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 393071.15625,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -0.0001220703125,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0018058557761833072,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 4.515709952102043e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 4.515709952102043e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.6404113769531
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        169,
+        59,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 4.515709952102043e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.6404113769531,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 4.515709952102043e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 4.515709952102043e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 4.515709952102043e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 4.515709952102043e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 4.515709952102043e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 4.515709952102043e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -83.4825430214405,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 69.67168426513672,
+          "nraci": 34.586483001708984,
+          "nrcol": 0.5572794675827026,
+          "nsacr": 0.43362346291542053
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 105.24907019734383,
+        "post_limit_number_source_rate": 21.76652717590332,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -2.828334750848427e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 69.67168426513672,
+          "nraci": 34.586483001708984,
+          "nraut": 21.76652717590332,
+          "nrcol": 0.5572794675827026,
+          "nsacr": 0.43362346291542053,
+          "pgacr": 0.0,
+          "piacr": 5.086189958092291e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 7.414185461129819e-07,
+          "praut": 1.5890053646216984e-06,
+          "prevp": -5.253135260119279e-09,
+          "psacr": 6.731556823069695e-08
+        },
+        "post_limit_trial": {
+          "nr": -0.0001220703125,
+          "qr": 4.515709952102043e-05
+        },
+        "pre_limit": {
+          "limiter_source": 2000.62158203125,
+          "limiter_value": 1669.6507568359375,
+          "nr": 1669.6507568359375,
+          "nr_trial": -330.9708251953125,
+          "qr": 0.00010172379552386701,
+          "qr_trial": 4.515709952102043e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 172,
+        "j": 65,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 739136192.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 372976.40625,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -0.000244140625,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0022159249056130648,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 7.222589920274913e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 7.222589920274913e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.984375
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        172,
+        65,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 7.222589920274913e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.984375,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 7.222589920274913e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 7.222589920274913e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 7.222589920274913e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 7.222589920274913e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 7.222589920274913e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 7.222589920274913e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -113.0622045993805,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 68.7195816040039,
+          "nraci": 68.0842514038086,
+          "nrcol": 0.7443087697029114,
+          "nsacr": 0.6105861067771912
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 138.1587278842926,
+        "post_limit_number_source_rate": 25.09652328491211,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -3.2770722437902577e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 68.7195816040039,
+          "nraci": 68.0842514038086,
+          "nraut": 25.09652328491211,
+          "nrcol": 0.7443087697029114,
+          "nsacr": 0.6105861067771912,
+          "pgacr": 0.0,
+          "piacr": 6.888367352075875e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.2413116792231449e-06,
+          "praut": 2.515645064704586e-06,
+          "prevp": -2.2042533132093922e-08,
+          "psacr": 1.2361910251001973e-07
+        },
+        "post_limit_trial": {
+          "nr": -0.000244140625,
+          "qr": 7.222589920274913e-05
+        },
+        "pre_limit": {
+          "limiter_source": 3720.3544921875,
+          "limiter_value": 2261.243896484375,
+          "nr": 2261.243896484375,
+          "nr_trial": -1459.110595703125,
+          "qr": 0.0001377673470415175,
+          "qr_trial": 7.222589920274913e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 173,
+        "j": 65,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 739551552.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 383785.53125,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.002227195305749774,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 6.96752977091819e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 6.96752977091819e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.9357604980469
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        173,
+        65,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 6.96752977091819e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.9357604980469,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 6.96752977091819e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 6.96752977091819e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 6.96752977091819e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 6.96752977091819e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 6.96752977091819e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 6.96752977091819e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -98.77715927362442,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 72.60106658935547,
+          "nraci": 55.34431457519531,
+          "nrcol": 0.6869889497756958,
+          "nsacr": 0.770359456539154
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 129.40272957086563,
+        "post_limit_number_source_rate": 30.62557029724121,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -2.5343679341816028e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 72.60106658935547,
+          "nraci": 55.34431457519531,
+          "nraut": 30.62557029724121,
+          "nrcol": 0.6869889497756958,
+          "nsacr": 0.770359456539154,
+          "pgacr": 0.0,
+          "piacr": 6.0181328080943786e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.0885789833992021e-06,
+          "praut": 2.538650733185932e-06,
+          "prevp": -1.3818262978304574e-08,
+          "psacr": 1.296465796940538e-07
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 6.96752977091819e-05
+        },
+        "pre_limit": {
+          "limiter_source": 2687.8193359375,
+          "limiter_value": 1975.543212890625,
+          "nr": 1975.543212890625,
+          "nr_trial": -712.276123046875,
+          "qr": 0.00012036265979986638,
+          "qr_trial": 6.96752977091819e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 187,
+        "j": 66,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 749840256.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 383872.0625,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -0.0001220703125,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.002278622006997466,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 7.23814737284556e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 7.23814737284556e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.68109130859375
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        187,
+        66,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 7.23814737284556e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.68109130859375,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 7.23814737284556e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 7.23814737284556e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 7.23814737284556e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 7.23814737284556e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 7.23814737284556e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 7.23814737284556e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -89.20251235365868,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 78.04300689697266,
+          "nraci": 48.4265251159668,
+          "nrcol": 0.6669390797615051,
+          "nsacr": 0.318196564912796
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 127.45466765761375,
+        "post_limit_number_source_rate": 38.25215530395508,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -1.815416969863648e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 78.04300689697266,
+          "nraci": 48.4265251159668,
+          "nraut": 38.25215530395508,
+          "nrcol": 0.6669390797615051,
+          "nsacr": 0.318196564912796,
+          "pgacr": 0.0,
+          "piacr": 5.434490958577953e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.005436274681415e-06,
+          "praut": 2.6636723760020686e-06,
+          "prevp": -2.290140743710367e-09,
+          "psacr": 4.7744521225467906e-08
+        },
+        "post_limit_trial": {
+          "nr": -0.0001220703125,
+          "qr": 7.23814737284556e-05
+        },
+        "pre_limit": {
+          "limiter_source": 2039.154541015625,
+          "limiter_value": 1784.0501708984375,
+          "nr": 1784.0501708984375,
+          "nr_trial": -255.1043701171875,
+          "qr": 0.00010868981917155907,
+          "qr_trial": 7.23814737284556e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 188,
+        "j": 67,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 760788736.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 387281.75,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0023487736470997334,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 7.579570228699595e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 7.579570228699595e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.7682189941406
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        188,
+        67,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 7.579570228699595e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.7682189941406,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 7.579570228699595e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 7.579570228699595e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 7.579570228699595e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 7.579570228699595e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 7.579570228699595e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 7.579570228699595e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -88.1050552725792,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 82.43716430664062,
+          "nraci": 48.15267562866211,
+          "nrcol": 0.6958153247833252,
+          "nsacr": 0.5915557742118835
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 131.87721103429794,
+        "post_limit_number_source_rate": 43.77215576171875,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -1.578298205906492e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 82.43716430664062,
+          "nraci": 48.15267562866211,
+          "nraut": 43.77215576171875,
+          "nrcol": 0.6958153247833252,
+          "nsacr": 0.5915557742118835,
+          "pgacr": 0.0,
+          "piacr": 5.368083293433301e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.0244167469863896e-06,
+          "praut": 2.850323426173418e-06,
+          "prevp": -4.190904512313409e-09,
+          "psacr": 8.076418112068495e-08
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 7.579570228699595e-05
+        },
+        "pre_limit": {
+          "limiter_source": 1883.252685546875,
+          "limiter_value": 1762.10107421875,
+          "nr": 1762.10107421875,
+          "nr_trial": -121.151611328125,
+          "qr": 0.00010736166586866602,
+          "qr_trial": 7.579570228699595e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 182,
+        "j": 70,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 739193728.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 383690.5,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -0.000244140625,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0022400461602956057,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 8.34266102174297e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 8.34266102174297e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.5196533203125
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        182,
+        70,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 8.34266102174297e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.5196533203125,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 8.34266102174297e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 8.34266102174297e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 8.34266102174297e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 8.34266102174297e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 8.34266102174297e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 8.34266102174297e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -166.79955559968948,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 56.49092102050781,
+          "nraci": 123.02604675292969,
+          "nrcol": 0.903139591217041,
+          "nsacr": 0.8935826420783997
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 181.31369000673294,
+        "post_limit_number_source_rate": 14.514134407043457,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -5.9906644986895685e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 56.49092102050781,
+          "nraci": 123.02604675292969,
+          "nraut": 14.514134407043457,
+          "nrcol": 0.903139591217041,
+          "nsacr": 0.8935826420783997,
+          "pgacr": 0.0,
+          "piacr": 1.0161994396185037e-05,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.86311353900237e-06,
+          "praut": 2.610907358757686e-06,
+          "prevp": 4.655965391009431e-09,
+          "psacr": 3.0734696565559716e-07
+        },
+        "post_limit_trial": {
+          "nr": -0.000244140625,
+          "qr": 8.34266102174297e-05
+        },
+        "pre_limit": {
+          "limiter_source": 9850.1103515625,
+          "limiter_value": 3335.990966796875,
+          "nr": 3335.990966796875,
+          "nr_trial": -6514.119140625,
+          "qr": 0.00020323989156167954,
+          "qr_trial": 8.34266102174297e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 183,
+        "j": 71,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 746735232.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 379456.96875,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -0.000244140625,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0022718114778399467,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 7.49153841752559e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 7.49153841752559e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.57196044921875
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        183,
+        71,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 7.49153841752559e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.57196044921875,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 7.49153841752559e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 7.49153841752559e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 7.49153841752559e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 7.49153841752559e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 7.49153841752559e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 7.49153841752559e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -113.18666118383408,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 68.88642883300781,
+          "nraci": 69.17418670654297,
+          "nrcol": 0.7473262548446655,
+          "nsacr": 0.9663735032081604
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 139.7743152976036,
+        "post_limit_number_source_rate": 26.58765411376953,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -3.1500329223943524e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 68.88642883300781,
+          "nraci": 69.17418670654297,
+          "nraut": 26.58765411376953,
+          "nrcol": 0.7473262548446655,
+          "nsacr": 0.9663735032081604,
+          "pgacr": 0.0,
+          "piacr": 6.8958024712628685e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.2756083833664889e-06,
+          "praut": 2.6615289243636653e-06,
+          "prevp": 1.2137794103139754e-09,
+          "psacr": 1.92581538271952e-07
+        },
+        "post_limit_trial": {
+          "nr": -0.000244140625,
+          "qr": 7.49153841752559e-05
+        },
+        "pre_limit": {
+          "limiter_source": 3719.519287109375,
+          "limiter_value": 2263.733154296875,
+          "nr": 2263.733154296875,
+          "nr_trial": -1455.7861328125,
+          "qr": 0.00013791605306323618,
+          "qr_trial": 7.49153841752559e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 167,
+        "j": 74,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 732660736.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 428922.125,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.002186255995184183,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 5.41994086233899e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 5.41994086233899e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.7403869628906
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        167,
+        74,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 5.41994086233899e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.7403869628906,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 5.41994086233899e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 5.41994086233899e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 5.41994086233899e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 5.41994086233899e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 5.41994086233899e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 5.41994086233899e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -99.61470246315002,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 77.33428192138672,
+          "nraci": 46.93545150756836,
+          "nrcol": 0.7370789051055908,
+          "nsacr": 5.709778785705566
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 130.71659111976624,
+        "post_limit_number_source_rate": 31.10188865661621,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -3.35733466716448e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 77.33428192138672,
+          "nraci": 46.93545150756836,
+          "nraut": 31.10188865661621,
+          "nrcol": 0.7370789051055908,
+          "nsacr": 5.709778785705566,
+          "pgacr": 0.0,
+          "piacr": 6.067305093893083e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.0766992772914818e-06,
+          "praut": 2.4401163045695284e-06,
+          "prevp": -1.4529466518808931e-08,
+          "psacr": 7.923156886135985e-07
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 5.41994086233899e-05
+        },
+        "pre_limit": {
+          "limiter_source": 2566.284423828125,
+          "limiter_value": 1992.2939453125,
+          "nr": 1992.2939453125,
+          "nr_trial": -573.990478515625,
+          "qr": 0.00012134610005887225,
+          "qr_trial": 5.41994086233899e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 179,
+        "j": 74,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 773843456.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 389029.4375,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -0.000244140625,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0024343994446098804,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 7.336497947108e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 7.336497947108e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.66943359375
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        179,
+        74,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 7.336497947108e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.66943359375,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 7.336497947108e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 7.336497947108e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 7.336497947108e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 7.336497947108e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 7.336497947108e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 7.336497947108e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -106.95736873149872,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 76.09452056884766,
+          "nraci": 61.72746658325195,
+          "nrcol": 0.7794288396835327,
+          "nsacr": 4.5791850090026855
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 143.18060100078583,
+        "post_limit_number_source_rate": 36.22323226928711,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -2.847585963694499e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 76.09452056884766,
+          "nraci": 61.72746658325195,
+          "nraut": 36.22323226928711,
+          "nrcol": 0.7794288396835327,
+          "nsacr": 4.5791850090026855,
+          "pgacr": 0.0,
+          "piacr": 6.515835593745578e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.2925416967846104e-06,
+          "praut": 3.1017293622426223e-06,
+          "prevp": -2.7046127559771094e-09,
+          "psacr": 7.233168162201764e-07
+        },
+        "post_limit_trial": {
+          "nr": -0.000244140625,
+          "qr": 7.336497947108e-05
+        },
+        "pre_limit": {
+          "limiter_source": 3006.75439453125,
+          "limiter_value": 2139.147216796875,
+          "nr": 2139.147216796875,
+          "nr_trial": -867.607177734375,
+          "qr": 0.00013031670823693275,
+          "qr_trial": 7.336497947108e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 167,
+        "j": 77,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 368169344.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 106242.3515625,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -3.0517578125e-05,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0005577862611971796,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 3.4317999961785972e-06,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 3.4317999961785972e-06,
+        "supported_rate_fields": [],
+        "temperature_k": 272.5809020996094
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        167,
+        77,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 3.4317999961785972e-06
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.5809020996094,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 3.4317999961785972e-06
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 3.4317999961785972e-06
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 3.4317999961785972e-06
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 3.4317999961785972e-06
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 3.4317999961785972e-06
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 3.4317999961785972e-06
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -20.267065103165805,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 8.083674430847168,
+          "nraci": 13.827049255371094,
+          "nrcol": 0.03378971293568611,
+          "nsacr": 0.008509970270097256
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 21.953023369424045,
+        "post_limit_number_source_rate": 1.6859582662582397,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -1.0630216524254443e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 8.083674430847168,
+          "nraci": 13.827049255371094,
+          "nraut": 1.6859582662582397,
+          "nrcol": 0.03378971293568611,
+          "nsacr": 0.008509970270097256,
+          "pgacr": 0.0,
+          "piacr": 1.234611772815697e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 5.4435986385215074e-08,
+          "praut": 1.194865006937107e-07,
+          "prevp": -6.711047828567018e-10,
+          "psacr": 1.6612619058165023e-09
+        },
+        "post_limit_trial": {
+          "nr": -3.0517578125e-05,
+          "qr": 3.4317999961785972e-06
+        },
+        "pre_limit": {
+          "limiter_source": 471.5777893066406,
+          "limiter_value": 405.34130859375,
+          "nr": 405.34130859375,
+          "nr_trial": -66.23648071289062,
+          "qr": 2.4692235456313938e-05,
+          "qr_trial": 3.4317999961785972e-06
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 168,
+        "j": 79,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 616964992.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 446355.875,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0015747430734336376,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 2.2269909095484763e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 2.2269909095484763e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.6755065917969
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        168,
+        79,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 2.2269909095484763e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.6755065917969,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 2.2269909095484763e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 2.2269909095484763e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 2.2269909095484763e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 2.2269909095484763e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 2.2269909095484763e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 2.2269909095484763e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -90.09601598978043,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 68.27157592773438,
+          "nraci": 30.63059425354004,
+          "nrcol": 0.5873966813087463,
+          "nsacr": 5.337838172912598
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 104.82740503549576,
+        "post_limit_number_source_rate": 14.731389045715332,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -4.372658700013687e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 68.27157592773438,
+          "nraci": 30.63059425354004,
+          "nraut": 14.731389045715332,
+          "nrcol": 0.5873966813087463,
+          "nsacr": 5.337838172912598,
+          "pgacr": 0.0,
+          "piacr": 5.486153895617463e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 6.956014999559557e-07,
+          "praut": 1.1837820466098492e-06,
+          "prevp": -1.4620659349873222e-08,
+          "psacr": 7.512676916121563e-07
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 2.2269909095484763e-05
+        },
+        "pre_limit": {
+          "limiter_source": 2377.94189453125,
+          "limiter_value": 1801.9202880859375,
+          "nr": 1801.9202880859375,
+          "nr_trial": -576.0216064453125,
+          "qr": 0.00010972307791234925,
+          "qr_trial": 2.2269909095484763e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 184,
+        "j": 87,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 748572992.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 412975.34375,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.002301339292898774,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 7.950712461024523e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 7.950712461024523e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.6542053222656
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        184,
+        87,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 7.950712461024523e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.6542053222656,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 7.950712461024523e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 7.950712461024523e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 7.950712461024523e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 7.950712461024523e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 7.950712461024523e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 7.950712461024523e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -133.51714956760406,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 71.15316772460938,
+          "nraci": 84.1679916381836,
+          "nrcol": 0.9101152420043945,
+          "nsacr": 1.3900238275527954
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 157.62129843235016,
+        "post_limit_number_source_rate": 24.104148864746094,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -4.158996503300649e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 71.15316772460938,
+          "nraci": 84.1679916381836,
+          "nraut": 24.104148864746094,
+          "nrcol": 0.9101152420043945,
+          "nsacr": 1.3900238275527954,
+          "pgacr": 0.0,
+          "piacr": 8.134352356137242e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.5275568330253009e-06,
+          "praut": 2.7556279746931978e-06,
+          "prevp": -1.4178024310140813e-09,
+          "psacr": 3.064111524508917e-07
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 7.950712461024523e-05
+        },
+        "pre_limit": {
+          "limiter_source": 5010.83251953125,
+          "limiter_value": 2670.343017578125,
+          "nr": 2670.343017578125,
+          "nr_trial": -2340.489501953125,
+          "qr": 0.00016268705076072365,
+          "qr_trial": 7.950712461024523e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 184,
+        "j": 88,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 752540608.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 411213.875,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0023201669100672007,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 8.246357901953161e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 8.246357901953161e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.625732421875
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        184,
+        88,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 8.246357901953161e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.625732421875,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 8.246357901953161e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 8.246357901953161e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 8.246357901953161e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 8.246357901953161e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 8.246357901953161e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 8.246357901953161e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -117.37722167372704,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 76.56468963623047,
+          "nraci": 69.76612091064453,
+          "nrcol": 0.860796332359314,
+          "nsacr": 0.11522790789604187
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 147.30683478713036,
+        "post_limit_number_source_rate": 29.92961311340332,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -3.027922285389617e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 76.56468963623047,
+          "nraci": 69.76612091064453,
+          "nraut": 29.92961311340332,
+          "nrcol": 0.860796332359314,
+          "nsacr": 0.11522790789604187,
+          "pgacr": 0.0,
+          "piacr": 7.1511012720293365e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.3516488479581312e-06,
+          "praut": 2.795409955069772e-06,
+          "prevp": -1.621876383195442e-10,
+          "psacr": 2.371762874986416e-08
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 8.246357901953161e-05
+        },
+        "pre_limit": {
+          "limiter_source": 3598.894287109375,
+          "limiter_value": 2347.54443359375,
+          "nr": 2347.54443359375,
+          "nr_trial": -1251.349853515625,
+          "qr": 0.00014302202907856554,
+          "qr_trial": 8.246357901953161e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 174,
+        "j": 89,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 691638848.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 460100.90625,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0019420046592131257,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 4.235797678120434e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 4.235797678120434e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 272.2829895019531
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        174,
+        89,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 4.235797678120434e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.2829895019531,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 4.235797678120434e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 4.235797678120434e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 4.235797678120434e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 4.235797678120434e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 4.235797678120434e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 4.235797678120434e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -92.24933981895447,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 78.28272247314453,
+          "nraci": 34.604801177978516,
+          "nrcol": 0.6870033740997314,
+          "nsacr": 4.770796298980713
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 118.34532332420349,
+        "post_limit_number_source_rate": 26.095983505249023,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -3.4969094431236414e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 78.28272247314453,
+          "nraci": 34.604801177978516,
+          "nraut": 26.095983505249023,
+          "nrcol": 0.6870033740997314,
+          "nsacr": 4.770796298980713,
+          "pgacr": 0.0,
+          "piacr": 5.614808287646156e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 8.775364790380991e-07,
+          "praut": 1.8717277043833747e-06,
+          "prevp": 3.393011871466456e-09,
+          "psacr": 6.347583507704257e-07
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 4.235797678120434e-05
+        },
+        "pre_limit": {
+          "limiter_source": 2174.155517578125,
+          "limiter_value": 1844.98681640625,
+          "nr": 1844.98681640625,
+          "nr_trial": -329.168701171875,
+          "qr": 0.00011229616211494431,
+          "qr_trial": 4.235797678120434e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 172,
+        "j": 105,
+        "k": 17,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 485033248.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 155561.609375,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0009401415009051561,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 7.229418770293705e-06,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 7.229418770293705e-06,
+        "supported_rate_fields": [],
+        "temperature_k": 271.2751159667969
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        172,
+        105,
+        17
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 7.229418770293705e-06
+        },
+        "branch": "cold",
+        "branch_temperature_k": 271.2751159667969,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 7.229418770293705e-06
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 7.229418770293705e-06
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 7.229418770293705e-06
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 7.229418770293705e-06
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 7.229418770293705e-06
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 7.229418770293705e-06
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -17.324856251478195,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 16.15151023864746,
+          "nraci": 6.226951599121094,
+          "nrcol": 0.02616742253303528,
+          "nsacr": 0.6272105574607849
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 23.031839817762375,
+        "post_limit_number_source_rate": 5.70698356628418,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -6.896569468839431e-07,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 16.15151023864746,
+          "nraci": 6.226951599121094,
+          "nraut": 5.70698356628418,
+          "nrcol": 0.02616742253303528,
+          "nsacr": 0.6272105574607849,
+          "pgacr": 0.0,
+          "piacr": 1.0511278105695965e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 7.689502723451369e-08,
+          "praut": 3.714060596848867e-07,
+          "prevp": -1.5948311560265438e-09,
+          "psacr": 8.523539207772046e-08
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 7.229418770293705e-06
+        },
+        "pre_limit": {
+          "limiter_source": 371.6688232421875,
+          "limiter_value": 346.49713134765625,
+          "nr": 346.49713134765625,
+          "nr_trial": -25.17169189453125,
+          "qr": 2.102255712088663e-05,
+          "qr_trial": 7.229418770293705e-06
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 148,
+        "j": 178,
+        "k": 16,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 625493312.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 384031.46875,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -0.0001220703125,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0017371376743540168,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 4.263487062416971e-05,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 4.263487062416971e-05,
+        "supported_rate_fields": [],
+        "temperature_k": 273.1284484863281
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        148,
+        178,
+        16
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 4.263487062416971e-05
+        },
+        "branch": "cold",
+        "branch_temperature_k": 273.1284484863281,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 4.263487062416971e-05
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 4.263487062416971e-05
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 4.263487062416971e-05
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 4.263487062416971e-05
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 4.263487062416971e-05
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 4.263487062416971e-05
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -79.74332839250565,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 70.26570129394531,
+          "nraci": 29.86638069152832,
+          "nrcol": 0.581000030040741,
+          "nsacr": 0.5504814386367798
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 101.26356345415115,
+        "post_limit_number_source_rate": 21.520235061645508,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -2.705472817332577e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 70.26570129394531,
+          "nraci": 29.86638069152832,
+          "nraut": 21.520235061645508,
+          "nrcol": 0.581000030040741,
+          "nsacr": 0.5504814386367798,
+          "pgacr": 0.0,
+          "piacr": 4.837216238229303e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 7.372015033979551e-07,
+          "praut": 1.4814914948146907e-06,
+          "prevp": -7.121678358146255e-09,
+          "psacr": 7.982789895777387e-08
+        },
+        "post_limit_trial": {
+          "nr": -0.0001220703125,
+          "qr": 4.263487062416971e-05
+        },
+        "pre_limit": {
+          "limiter_source": 1809.986572265625,
+          "limiter_value": 1594.8665771484375,
+          "nr": 1594.8665771484375,
+          "nr_trial": -215.119873046875,
+          "qr": 9.674432658357546e-05,
+          "qr_trial": 4.263487062416971e-05
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 58,
+        "j": 189,
+        "k": 16,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 531748960.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 516402.5,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0015825903974473476,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 5.352776497602463e-06,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 5.352776497602463e-06,
+        "supported_rate_fields": [],
+        "temperature_k": 272.0404052734375
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        58,
+        189,
+        16
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 5.352776497602463e-06
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.0404052734375,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 5.352776497602463e-06
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 5.352776497602463e-06
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 5.352776497602463e-06
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 5.352776497602463e-06
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 5.352776497602463e-06
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 5.352776497602463e-06
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -142.29158329963684,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 83.28571319580078,
+          "nraci": 56.563926696777344,
+          "nrcol": 1.197404146194458,
+          "nsacr": 22.272045135498047
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 163.31908917427063,
+        "post_limit_number_source_rate": 21.02750587463379,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -8.329903174342235e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 83.28571319580078,
+          "nraci": 56.563926696777344,
+          "nraut": 21.02750587463379,
+          "nrcol": 1.197404146194458,
+          "nsacr": 22.272045135498047,
+          "pgacr": 0.0,
+          "piacr": 8.597542546340264e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.53135761138401e-06,
+          "praut": 2.1706589450332103e-06,
+          "prevp": -8.41002005813607e-08,
+          "psacr": 3.35027698383783e-06
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 5.352776497602463e-06
+        },
+        "pre_limit": {
+          "limiter_source": 4862.03271484375,
+          "limiter_value": 2845.83154296875,
+          "nr": 2845.83154296875,
+          "nr_trial": -2016.201171875,
+          "qr": 0.00017195084365084767,
+          "qr_trial": 5.352776497602463e-06
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 28,
+        "j": 241,
+        "k": 15,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 422188832.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 566859.4375,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0009814983932301402,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 1.7727688828017563e-06,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 1.7727688828017563e-06,
+        "supported_rate_fields": [],
+        "temperature_k": 272.4346618652344
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        28,
+        241,
+        15
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 1.7727688828017563e-06
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.4346618652344,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 1.7727688828017563e-06
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 1.7727688828017563e-06
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 1.7727688828017563e-06
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 1.7727688828017563e-06
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 1.7727688828017563e-06
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 1.7727688828017563e-06
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -44.10127002000809,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 43.571495056152344,
+          "nraci": 1.892266035079956,
+          "nrcol": 0.20684105157852173,
+          "nsacr": 8.34780502319336
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 54.01840716600418,
+        "post_limit_number_source_rate": 9.917137145996094,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -2.5590571821609842e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 43.571495056152344,
+          "nraci": 1.892266035079956,
+          "nraut": 9.917137145996094,
+          "nrcol": 0.20684105157852173,
+          "nsacr": 8.34780502319336,
+          "pgacr": 0.0,
+          "piacr": 2.647695509949699e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 2.78258426078537e-07,
+          "praut": 6.026315872986743e-07,
+          "prevp": -1.4807144843587139e-08,
+          "psacr": 7.774445407449093e-07
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 1.7727688828017563e-06
+        },
+        "pre_limit": {
+          "limiter_source": 892.7496948242188,
+          "limiter_value": 882.025390625,
+          "nr": 882.025390625,
+          "nr_trial": -10.7242431640625,
+          "qr": 5.295391019899398e-05,
+          "qr_trial": 1.7727688828017563e-06
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 48,
+        "j": 255,
+        "k": 15,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 513345280.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 434736.9375,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0012843582080677152,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 8.985662134364247e-06,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 8.985662134364247e-06,
+        "supported_rate_fields": [],
+        "temperature_k": 273.0448303222656
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        48,
+        255,
+        15
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 8.985662134364247e-06
+        },
+        "branch": "cold",
+        "branch_temperature_k": 273.0448303222656,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 8.985662134364247e-06
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 8.985662134364247e-06
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 8.985662134364247e-06
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 8.985662134364247e-06
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 8.985662134364247e-06
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 8.985662134364247e-06
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -55.14733797311783,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 52.781673431396484,
+          "nraci": 7.463748455047607,
+          "nrcol": 0.31719499826431274,
+          "nsacr": 7.600964069366455
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 68.16358095407486,
+        "post_limit_number_source_rate": 13.016242980957031,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -2.870448284397753e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 52.781673431396484,
+          "nraci": 7.463748455047607,
+          "nraut": 13.016242980957031,
+          "nrcol": 0.31719499826431274,
+          "nsacr": 7.600964069366455,
+          "pgacr": 0.0,
+          "piacr": 3.3197313769051107e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 4.055485476328613e-07,
+          "praut": 8.186634659068659e-07,
+          "prevp": -1.5330542169067485e-08,
+          "psacr": 7.595983788633021e-07
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 8.985662134364247e-06
+        },
+        "pre_limit": {
+          "limiter_source": 1152.380615234375,
+          "limiter_value": 1102.94677734375,
+          "nr": 1102.94677734375,
+          "nr_trial": -49.433837890625,
+          "qr": 6.639462662860751e-05,
+          "qr_trial": 8.985662134364247e-06
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 23,
+        "j": 261,
+        "k": 15,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 343460448.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 162852.6875,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0005566661711782217,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 2.168371793231927e-08,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 2.168371793231927e-08,
+        "supported_rate_fields": [],
+        "temperature_k": 272.3091125488281
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        23,
+        261,
+        15
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 2.168371793231927e-08
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.3091125488281,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 2.168371793231927e-08
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 2.168371793231927e-08
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 2.168371793231927e-08
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 2.168371793231927e-08
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 2.168371793231927e-08
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 2.168371793231927e-08
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -3.4639504556544125,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 3.374422788619995,
+          "nraci": 0.0401814803481102,
+          "nrcol": 0.0012623672373592854,
+          "nsacr": 0.048083819448947906
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 3.4639504556544125,
+        "post_limit_number_source_rate": 0.0,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -2.0633203712261405e-07,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 3.374422788619995,
+          "nraci": 0.0401814803481102,
+          "nraut": 0.0,
+          "nrcol": 0.0012623672373592854,
+          "nsacr": 0.048083819448947906,
+          "pgacr": 0.0,
+          "piacr": 2.0741622108744195e-07,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.0417286588904062e-08,
+          "praut": 0.0,
+          "prevp": -1.5415849707878237e-09,
+          "psacr": 7.791517653288338e-09
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 2.168371793231927e-08
+        },
+        "pre_limit": {
+          "limiter_source": 71.1170654296875,
+          "limiter_value": 69.27900695800781,
+          "nr": 69.27900695800781,
+          "nr_trial": -1.8380584716796875,
+          "qr": 4.148324478592258e-06,
+          "qr_trial": 2.168371793231927e-08
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 28,
+        "j": 266,
+        "k": 15,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 360744064.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 300312.8125,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -7.62939453125e-06,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0006169695989228785,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 1.9770141079789028e-08,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 1.9770141079789028e-08,
+        "supported_rate_fields": [],
+        "temperature_k": 272.1785888671875
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        28,
+        266,
+        15
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 1.9770141079789028e-08
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.1785888671875,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 1.9770141079789028e-08
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 1.9770141079789028e-08
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 1.9770141079789028e-08
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 1.9770141079789028e-08
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 1.9770141079789028e-08
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 1.9770141079789028e-08
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -5.603099254658446,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 5.4650702476501465,
+          "nraci": 0.02674032934010029,
+          "nrcol": 0.0033177619334310293,
+          "nsacr": 0.10797091573476791
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 5.603099254658446,
+        "post_limit_number_source_rate": 0.0,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -3.3468259252877886e-07,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 5.4650702476501465,
+          "nraci": 0.02674032934010029,
+          "nraut": 0.0,
+          "nrcol": 0.0033177619334310293,
+          "nsacr": 0.10797091573476791,
+          "pgacr": 0.0,
+          "piacr": 3.356711033575266e-07,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.8765113907193154e-08,
+          "praut": 0.0,
+          "prevp": -1.5476968595606877e-09,
+          "psacr": 1.622890621888473e-08
+        },
+        "post_limit_trial": {
+          "nr": -7.62939453125e-06,
+          "qr": 1.9770141079789028e-08
+        },
+        "pre_limit": {
+          "limiter_source": 114.89227294921875,
+          "limiter_value": 112.06198120117188,
+          "nr": 112.06198120117188,
+          "nr_trial": -2.8302993774414062,
+          "qr": 6.713421953463694e-06,
+          "qr_trial": 1.9770141079789028e-08
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 21,
+        "j": 267,
+        "k": 15,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 395406016.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 235989.421875,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -6.103515625e-05,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0009599387994967401,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 4.511970473686233e-06,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 4.511970473686233e-06,
+        "supported_rate_fields": [],
+        "temperature_k": 272.3915100097656
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        21,
+        267,
+        15
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 4.511970473686233e-06
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.3915100097656,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 4.511970473686233e-06
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 4.511970473686233e-06
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 4.511970473686233e-06
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 4.511970473686233e-06
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 4.511970473686233e-06
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 4.511970473686233e-06
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -35.91019156575203,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 28.045286178588867,
+          "nraci": 10.950606346130371,
+          "nrcol": 0.1089959442615509,
+          "nsacr": 6.341594219207764
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 45.44648268818855,
+        "post_limit_number_source_rate": 9.536291122436523,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -1.932438065566089e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 28.045286178588867,
+          "nraci": 10.950606346130371,
+          "nraut": 9.536291122436523,
+          "nrcol": 0.1089959442615509,
+          "nsacr": 6.341594219207764,
+          "pgacr": 0.0,
+          "piacr": 2.1580365228146547e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 2.4945592258518445e-07,
+          "praut": 7.338012437685393e-07,
+          "prevp": -2.7317637929513694e-08,
+          "psacr": 7.303410711756442e-07
+        },
+        "post_limit_trial": {
+          "nr": -6.103515625e-05,
+          "qr": 4.511970473686233e-06
+        },
+        "pre_limit": {
+          "limiter_source": 919.6139526367188,
+          "limiter_value": 718.2037963867188,
+          "nr": 718.2037963867188,
+          "nr_trial": -201.41015625,
+          "qr": 4.316072954679839e-05,
+          "qr_trial": 4.511970473686233e-06
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 25,
+        "j": 267,
+        "k": 15,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 405704736.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 304267.4375,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -3.814697265625e-06,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0007771610980853438,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 8.051665645325556e-08,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 8.051665645325556e-08,
+        "supported_rate_fields": [],
+        "temperature_k": 271.8497009277344
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        25,
+        267,
+        15
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 8.051665645325556e-08
+        },
+        "branch": "cold",
+        "branch_temperature_k": 271.8497009277344,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 8.051665645325556e-08
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 8.051665645325556e-08
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 8.051665645325556e-08
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 8.051665645325556e-08
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 8.051665645325556e-08
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 8.051665645325556e-08
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -3.143705580965616,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 3.0861005783081055,
+          "nraci": 0.004598833620548248,
+          "nrcol": 0.0010462856153026223,
+          "nsacr": 0.05195988342165947
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 3.143705580965616,
+        "post_limit_number_source_rate": 0.0,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -1.8413051838805927e-07,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 3.0861005783081055,
+          "nraci": 0.004598833620548248,
+          "nraut": 0.0,
+          "nrcol": 0.0010462856153026223,
+          "nsacr": 0.05195988342165947,
+          "pgacr": 0.0,
+          "piacr": 1.8815634916791169e-07,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 1.3191189474071052e-08,
+          "praut": 0.0,
+          "prevp": -1.0397855909616283e-09,
+          "psacr": 8.125573103257011e-09
+        },
+        "post_limit_trial": {
+          "nr": -3.814697265625e-06,
+          "qr": 8.051665645325556e-08
+        },
+        "pre_limit": {
+          "limiter_source": 64.0477066040039,
+          "limiter_value": 62.874107360839844,
+          "nr": 62.874107360839844,
+          "nr_trial": -1.1735992431640625,
+          "qr": 3.763126869671396e-06,
+          "qr_trial": 8.051665645325556e-08
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 28,
+        "j": 269,
+        "k": 15,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 449584704.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 674407.0625,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": -0.0001220703125,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.001061005867086351,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 1.469663402531296e-06,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 1.469663402531296e-06,
+        "supported_rate_fields": [],
+        "temperature_k": 272.4928283691406
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        28,
+        269,
+        15
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 1.469663402531296e-06
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.4928283691406,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 1.469663402531296e-06
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 1.469663402531296e-06
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 1.469663402531296e-06
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 1.469663402531296e-06
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 1.469663402531296e-06
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 1.469663402531296e-06
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -63.19068020582199,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 60.336822509765625,
+          "nraci": 2.9560561180114746,
+          "nrcol": 0.41199415922164917,
+          "nsacr": 9.701848983764648
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 73.4067217707634,
+        "post_limit_number_source_rate": 10.216041564941406,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -3.724073140531914e-06,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 60.336822509765625,
+          "nraci": 2.9560561180114746,
+          "nraut": 10.216041564941406,
+          "nrcol": 0.41199415922164917,
+          "nsacr": 9.701848983764648,
+          "pgacr": 0.0,
+          "piacr": 3.797556246354361e-06,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 4.124048302855954e-07,
+          "praut": 6.429903578464291e-07,
+          "prevp": -1.9978871890202754e-08,
+          "psacr": 9.619332104193745e-07
+        },
+        "post_limit_trial": {
+          "nr": -0.0001220703125,
+          "qr": 1.469663402531296e-06
+        },
+        "pre_limit": {
+          "limiter_source": 1323.5902099609375,
+          "limiter_value": 1263.8134765625,
+          "nr": 1263.8134765625,
+          "nr_trial": -59.77685546875,
+          "qr": 7.595112401759252e-05,
+          "qr_trial": 1.469663402531296e-06
+        }
+      }
+    },
+    {
+      "event_count": 12,
+      "events": [
+        "entry_after_nonnegative_clamp",
+        "after_rain_sedimentation",
+        "after_ice_sedimentation",
+        "after_freezing_transfer",
+        "cold_process_rates_before_limit",
+        "cold_process_rates_after_limit",
+        "after_cold_process_update",
+        "cold_full_evap_number_reclassification",
+        "after_rain_to_cloud_classification",
+        "after_final_qr_nr_threshold",
+        "after_rain_slope_number_repair",
+        "terminal_kdm62d_return"
+      ],
+      "first_bad_record": {
+        "dtcld": 20.0,
+        "event": 6,
+        "event_name": "after_cold_process_update",
+        "i": 32,
+        "j": 273,
+        "k": 15,
+        "limiter_source": 0.0,
+        "limiter_value": 0.0,
+        "loop": 1,
+        "mstep": 2,
+        "nc": 348763392.0,
+        "nccn": 100000000.0,
+        "ngacr": 0.0,
+        "ngeml": 0.0,
+        "ni": 184157.703125,
+        "niacr": 0.0,
+        "nr": 0.0,
+        "nr_trial": 0.0,
+        "nraci": 0.0,
+        "nraut": 0.0,
+        "nrcol": 0.0,
+        "nrmin": 0.009999999776482582,
+        "nsacr": 0.0,
+        "nseml": 0.0,
+        "paacw": 0.0,
+        "pending": 0,
+        "pgacr": 0.0,
+        "pgeml": 0.0,
+        "piacr": 0.0,
+        "pmulrg": 0.0,
+        "pmulrs": 0.0,
+        "pracw": 0.0,
+        "praut": 0.0,
+        "prevp": 0.0,
+        "psacr": 0.0,
+        "pseml": 0.0,
+        "qc": 0.0005761014763265848,
+        "qcrmin": 9.999999717180685e-10,
+        "qr": 1.0895860214077402e-08,
+        "qr_positive_nr_zero": true,
+        "qr_trial": 1.0895860214077402e-08,
+        "supported_rate_fields": [],
+        "temperature_k": 272.38641357421875
+      },
+      "first_qr_positive_nr_zero": "after_cold_process_update",
+      "i_j_k": [
+        32,
+        273,
+        15
+      ],
+      "loop_mstep_start": [
+        0,
+        0
+      ],
+      "loop_mstep_terminal": [
+        2,
+        2
+      ],
+      "process_limiter": {
+        "after_update": {
+          "nr": 0.0,
+          "qr": 1.0895860214077402e-08
+        },
+        "branch": "cold",
+        "branch_temperature_k": 272.38641357421875,
+        "dtcld": 20.0,
+        "later_checkpoints": {
+          "after_cold_process_update": {
+            "nr": 0.0,
+            "qr": 1.0895860214077402e-08
+          },
+          "after_final_qr_nr_threshold": {
+            "nr": 0.0,
+            "qr": 1.0895860214077402e-08
+          },
+          "after_rain_slope_number_repair": {
+            "nr": 0.0,
+            "qr": 1.0895860214077402e-08
+          },
+          "after_rain_to_cloud_classification": {
+            "nr": 0.0,
+            "qr": 1.0895860214077402e-08
+          },
+          "cold_full_evap_number_reclassification": {
+            "nr": 0.0,
+            "qr": 1.0895860214077402e-08
+          },
+          "terminal_kdm62d_return": {
+            "nr": 0.0,
+            "qr": 1.0895860214077402e-08
+          }
+        },
+        "number_state_and_trial_units": "# m^-3 (source-required internal convention)",
+        "number_tendency_units": "# m^-3 s^-1 (source-required internal convention)",
+        "post_limit_number_net_rate": -1.246193799932371,
+        "post_limit_number_sink_rates": {
+          "ngacr": 0.0,
+          "niacr": 1.2230929136276245,
+          "nraci": 0.0012011481449007988,
+          "nrcol": 0.00016497149772476405,
+          "nsacr": 0.02173476666212082
+        },
+        "post_limit_number_sink_terms": [
+          "nrcol",
+          "niacr",
+          "nraci",
+          "nsacr",
+          "ngacr"
+        ],
+        "post_limit_number_sink_total": 1.246193799932371,
+        "post_limit_number_source_rate": 0.0,
+        "post_limit_number_source_terms": [
+          "nraut"
+        ],
+        "post_limit_qr_mass_rate": -7.4106498028359e-08,
+        "post_limit_qr_mass_sink_terms": [
+          "piacr",
+          "pgacr",
+          "psacr",
+          "pmulrs",
+          "pmulrg"
+        ],
+        "post_limit_qr_mass_source_terms": [
+          "praut",
+          "pracw",
+          "prevp"
+        ],
+        "post_limit_rates": {
+          "ngacr": 0.0,
+          "niacr": 1.2230929136276245,
+          "nraci": 0.0012011481449007988,
+          "nraut": 0.0,
+          "nrcol": 0.00016497149772476405,
+          "nsacr": 0.02173476666212082,
+          "pgacr": 0.0,
+          "piacr": 7.465129669981252e-08,
+          "pmulrg": 0.0,
+          "pmulrs": 0.0,
+          "pracw": 3.886333477254311e-09,
+          "praut": 0.0,
+          "prevp": -3.2092085933133063e-11,
+          "psacr": 3.3094427198676613e-09
+        },
+        "post_limit_trial": {
+          "nr": 0.0,
+          "qr": 1.0895860214077402e-08
+        },
+        "pre_limit": {
+          "limiter_source": 25.39461898803711,
+          "limiter_value": 24.92387580871582,
+          "nr": 24.92387580871582,
+          "nr_trial": -0.47074317932128906,
+          "qr": 1.4930259339962504e-06,
+          "qr_trial": 1.0895860214077402e-08
+        }
+      }
+    }
+  ],
+  "control_executable_sha256": "050aef86ff880f6b25c0319d65e9d71c30d5adc1410a93245838fc1270ba0bb2",
+  "control_object_sha256": "3f27b52b41275d2774c3ff356235874ac9c5c0ce59f7d2962bcacb0aedc7ffc6",
+  "control_run_summary_sha256": "9bbe9a50f050c45efa87ef8161c9abecc31a921c446439f15ff47045a0dc5e86",
+  "first_bad_event_counts": {
+    "after_cold_process_update": 25,
+    "after_warm_process_update": 0
+  },
+  "interpretation_limit": "This establishes the source-path origin and captured native rate arithmetic for the selected 25 cells. It does not establish that QR-positive/NR-zero is physically admissible or prescribe a conservative repair.",
+  "number_unit_basis": {
+    "host_to_internal_adapter": "partial: the selected wrapper copies NR into NRS directly; the runtime host conversion path into this wrapper is not source-bound by this observer capture",
+    "internal_kdm6_state_and_trial": "# m^-3, inferred from the selected KDM6 process and PSD source formulas",
+    "internal_kdm6_tendencies": "# m^-3 s^-1",
+    "public_host_qnrain": "# kg^-1 per Registry/Registry.EM_COMMON QNRAIN definition",
+    "selected_kdm6_source_basis": "nraut=(3.5e9)*den*praut and n0r=nrs/(rslope*rslopemu*g1pmr); the number tendency is multiplied by dtcld before updating nrs"
+  },
+  "observer_capture_sha256": "518c7d0d54ce1a83f21578cca99909525e0426277537f8caf9b6e5ddbba744e9",
+  "observer_executable_sha256": "3b2a1026be7793401ab24e3f0e93795c680d894988ef446f9cf211b78d358527",
+  "observer_object_sha256": "5c79e5c19c282385e9f4779f98b832ad2972671c6031bbc2fb8ceb60b0fcfbc6",
+  "observer_run_summary_sha256": "60b43897bc7b1e7945353827e24209357ea437977935978efb3f2ffff7fa5fef",
+  "observer_source_sha256": "8429adf9182ee979219ffc43a84706d1cab3d81dab2fd35012b463454a13f5da",
+  "pre_post_state_neutrality": {
+    "kdm6_first_call_post.raw": "07f4706ca3a2613c64fd4b0cc4459880616a29a7504fa2891b81242bf782dc30",
+    "kdm6_first_call_pre.raw": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+  },
+  "schema": "pr68_kdm6_rain_origin_audit_v1",
+  "selected_generated_source_sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d",
+  "target_count": 25,
+  "target_manifest_sha256": "b3898b2d68d503b9355858646b960e17e616e0293de4c8b3709e727e8166e4bc"
+}

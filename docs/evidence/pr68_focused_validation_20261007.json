@@ -1,0 +1,86 @@
+{
+  "base_commit": "920c7048bc7376347aefed7eaef3ae50ee3946a9",
+  "checks": [
+    {
+      "argv": [
+        "bash",
+        "tests/run_pr68_native_contract_tests.sh"
+      ],
+      "log": "/var/tmp/pr68_final_validation.xzkma0wj/check_0.log",
+      "log_sha256": "a639fc9bfa8ecec88630ed2ec4b79ddf15b47ec40ef3e49990289e5606fa0345",
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "python3",
+        "tests/test_pr67_negative_qc_replay.py"
+      ],
+      "log": "/var/tmp/pr68_final_validation.xzkma0wj/check_1.log",
+      "log_sha256": "edb4e2159c923ea45a32656078835cdf531c3d7b414c670dd786978875cb0678",
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "py_compile",
+        "tools/pr68_carrier_budget_replay.py",
+        "tools/pr68_completed_qc_audit.py",
+        "tools/pr68_prepare_rain_observer.py",
+        "tools/pr68_rain_process_trace.py",
+        "tools/pr67_negative_qc_replay.py"
+      ],
+      "log": "/var/tmp/pr68_final_validation.xzkma0wj/check_2.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "returncode": 0
+    },
+    {
+      "argv": [
+        "bash",
+        "-n",
+        "tests/run_pr68_native_contract_tests.sh",
+        "tests/run_pr68_velocity_contract.sh",
+        "tests/run_python_contract_tests.sh"
+      ],
+      "log": "/var/tmp/pr68_final_validation.xzkma0wj/check_3.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "returncode": 0
+    }
+  ],
+  "fortran": "pinned Intel ifx 2026 O0/O2 direct velocity kernel and source wiring in fresh /var/tmp; not full canonical/WRF unit suite",
+  "full_unit_suite": "NOT_RUN",
+  "native_evidence": "separately bound research receipts; no native rerun by this focused runner",
+  "physical_approval": "FAIL_OPEN",
+  "prior_development_receipt": {
+    "path": "/var/tmp/pr68_final_validation.xzkma0wj/prior_development_receipt.json",
+    "scope": "earlier focused run before final nested-executable and unit metadata audit updates",
+    "sha256": "60d39fa4409b1b7534da09e814d43418d796ca7ec7b6c0c0f4dda45cfe567523"
+  },
+  "python_focused_tests": {
+    "carrier": 7,
+    "completed_qc": 5,
+    "prior_negative_qc_default": 3,
+    "rain": 9,
+    "total": 24
+  },
+  "recorded_utc": "2026-10-07T12:13:53.915658+00:00",
+  "schema": "pr68_focused_validation_v1",
+  "source_sha256": {
+    "docs/evidence/pr68_velocity_contract_20261007.patch": "63fc847396dc3a77b7075439d520b2bca542e7d283f6153c7dfcf7fc963823b4",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/run_pr68_native_contract_tests.sh": "7d8acc4827e0696b18e59f83e0be155ca2b4f67199ae49e669cbdfa26d3d5019",
+    "tests/run_pr68_velocity_contract.sh": "5f4ec04a153aa3f74f92716758858fec56ba40a7eb3575f584215e5204e9d2d9",
+    "tests/run_python_contract_tests.sh": "b6cac93b6a2393b3c75ca0e0dfcdecedc1dd1709c3772ed7a70253eca2364f96",
+    "tests/test_pr67_negative_qc_replay.py": "175d559550dde1e085ceec2923e1ff9360c89ad67b24a508a2924d52ddba95e8",
+    "tests/test_pr68_carrier_budget_replay.py": "941afe85a6a85b8c48aba1664f09b8b57889f0d24c18c87aead35085e18ed62a",
+    "tests/test_pr68_completed_qc_audit.py": "51ee1eff544467159be03d81433a7f22ad5e2ba78cd81618f6767b980bd1b12c",
+    "tests/test_pr68_rain_process_trace.py": "7297eb718658f879112663e131f1f50ab803127e387a9ef1652321d78e852ab9",
+    "tests/test_pr68_velocity_contract.f90": "f93e79d24978a21ce9f6ef44d70a32def5b2fd990aa24c5cdc3a474076646de0",
+    "tools/pr67_negative_qc_replay.py": "f40b53c399c5c4cd3c2e64eac4807d3e981c1748402fe4410bfa69df5b0bbe55",
+    "tools/pr68_carrier_budget_replay.py": "80d28263668e16f93889f7f130666c0059d264f60664fdb16646353251f61922",
+    "tools/pr68_completed_qc_audit.py": "9a02c22fa4be9b6fe6dc01b58dc6ca691d837329e01ac1c7d595de3af09906b4",
+    "tools/pr68_prepare_rain_observer.py": "19ac9c0e8a69d672c7afd29ab7cb6ce87d3e9d2f91c1001d799fcd9206852519",
+    "tools/pr68_rain_process_trace.py": "0e6b7929aff8cd95b48150ca154a92bc439998d252f0d3e3f260ff6451dab634"
+  },
+  "worktree_scope": "hash-pinned pre-commit candidate; final source freeze must match these file hashes"
+}

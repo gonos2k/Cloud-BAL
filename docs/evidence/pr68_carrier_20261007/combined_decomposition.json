@@ -1,0 +1,195 @@
+{
+  "decomposition": {
+    "carrier_choice_term_kg": 4617555.290740967,
+    "carrier_direct_array_roundoff_bound_kg": 28.25856130915284,
+    "carrier_direct_reduction_difference_kg": -0.0006753746420145035,
+    "carrier_direct_within_array_roundoff_bound": true,
+    "carrier_extended_identity_error_kg": 8.508150131092407e-07,
+    "direct_carrier_difference_term_kg": 4617555.291416341,
+    "hybrid_cell_delta_kg": -492401758.1081734,
+    "hybrid_float32_subtraction_effect_kg": 130.83994674682617,
+    "hybrid_global_delta_kg": -492401757.921875,
+    "hybrid_global_reduction_correction_kg": 0.18629837036132812,
+    "hybrid_post_kg": 92979920054222.56,
+    "hybrid_pre_kg": 92980412455980.48,
+    "hybrid_species_delta_sum_kg": -492401758.1081734,
+    "mapped_precipitation_kg": 498931427.55044574,
+    "native_cell_delta_kg": -497019313.39891434,
+    "native_cell_residual_kg": 1912114.1515313983,
+    "native_float32_subtraction_effect_kg": 130.93444061279297,
+    "native_global_delta_kg": -497019313.390625,
+    "native_global_reduction_correction_kg": 0.008289337158203125,
+    "native_post_kg": 93004361203131.56,
+    "native_pre_kg": 93004858222444.95,
+    "reconciliation_error_kg": 0.0,
+    "reconciliation_roundoff_bound_kg": 8.826018103031445e-06,
+    "reconciliation_within_bound": true,
+    "reported_hybrid_residual_kg": 6529669.628570735
+  },
+  "limits": [
+    "A carrier decomposition is algebraic attribution, not closure or scientific validation.",
+    "The native carrier is source-defined for local KDM6 sedimentation; its extension to all six water fields is diagnostic only.",
+    "No PBL matrix or tendency is changed by this replay."
+  ],
+  "schema": "pr68_carrier_budget_decomposition_v1",
+  "species": {
+    "Q": {
+      "hybrid_cell_delta_kg": 579310342695.7751,
+      "hybrid_legacy_float32_cell_delta_kg": 579310342695.7781,
+      "hybrid_post_kg": 89714266467371.47,
+      "hybrid_pre_kg": 89134956124675.5,
+      "native_cell_delta_kg": 579532808526.0051,
+      "native_legacy_float32_cell_delta_kg": 579532808526.0074,
+      "native_post_kg": 89736516854456.75,
+      "native_pre_kg": 89156984045930.73
+    },
+    "QC": {
+      "hybrid_cell_delta_kg": -703176146700.1261,
+      "hybrid_legacy_float32_cell_delta_kg": -703176146600.4028,
+      "hybrid_post_kg": 1382872778731.588,
+      "hybrid_pre_kg": 2086048925431.7136,
+      "native_cell_delta_kg": -703497571709.8658,
+      "native_legacy_float32_cell_delta_kg": -703497571610.0786,
+      "native_post_kg": 1383582642218.6162,
+      "native_pre_kg": 2087080213928.4841
+    },
+    "QG": {
+      "hybrid_cell_delta_kg": 22702071309.282505,
+      "hybrid_legacy_float32_cell_delta_kg": 22702071314.39791,
+      "hybrid_post_kg": 39502366363.811745,
+      "hybrid_pre_kg": 16800295054.529259,
+      "native_cell_delta_kg": 22718537004.94186,
+      "native_legacy_float32_cell_delta_kg": 22718537010.05927,
+      "native_post_kg": 39527632359.52669,
+      "native_pre_kg": 16809095354.584831
+    },
+    "QI": {
+      "hybrid_cell_delta_kg": -293955292614.5079,
+      "hybrid_legacy_float32_cell_delta_kg": -293955292613.954,
+      "hybrid_post_kg": 996680926646.073,
+      "hybrid_pre_kg": 1290636219260.5818,
+      "native_cell_delta_kg": -294200053831.1695,
+      "native_legacy_float32_cell_delta_kg": -294200053830.61505,
+      "native_post_kg": 997547175216.3738,
+      "native_pre_kg": 1291747229047.5425
+    },
+    "QR": {
+      "hybrid_cell_delta_kg": 39035724651.386116,
+      "hybrid_legacy_float32_cell_delta_kg": 39035724652.60364,
+      "hybrid_post_kg": 138853637010.8511,
+      "hybrid_pre_kg": 99817912359.46498,
+      "native_cell_delta_kg": 39049626472.765854,
+      "native_legacy_float32_cell_delta_kg": 39049626473.98189,
+      "native_post_kg": 138891423485.47968,
+      "native_pre_kg": 99841797012.71379
+    },
+    "QS": {
+      "hybrid_cell_delta_kg": 355590898900.08203,
+      "hybrid_legacy_float32_cell_delta_kg": 355590898924.30896,
+      "hybrid_post_kg": 707743878098.7738,
+      "hybrid_pre_kg": 352152979198.69165,
+      "native_cell_delta_kg": 355899634223.9236,
+      "native_legacy_float32_cell_delta_kg": 355899634248.1806,
+      "native_post_kg": 708295475394.8239,
+      "native_pre_kg": 352395841170.9004
+    }
+  },
+  "support": {
+    "active_i_j_k": {
+      "dtcld_s": 20.0,
+      "i": [
+        2,
+        233
+      ],
+      "j": [
+        2,
+        281
+      ],
+      "j_rows": 280,
+      "k": [
+        1,
+        39
+      ],
+      "process_records": 840
+    },
+    "capture_sha256": {
+      "kdm6_first_call_post.raw": "07f4706ca3a2613c64fd4b0cc4459880616a29a7504fa2891b81242bf782dc30",
+      "kdm6_first_call_pre.raw": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+      "pr63_geometry.raw": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+      "pr67_kdm6_process.raw": "4c9447daea830d8220aa5c67122b00b844eb80346fde32369547fa236c0a66d9"
+    },
+    "kdm6_itimestep": 1,
+    "maximum_native_to_hybrid_relative_difference": 0.0009534995036752834,
+    "provenance": {
+      "full_host_and_expanded_compiler_argv": "PARTIAL_NOT_ESTABLISHED",
+      "pr67_build_provenance_sha256": "5a82fcecc570af94479aca543e9ed1d55e33d64c3ceb4221b032138f92fd82ca",
+      "pr67_evidence_manifest_sha256": "eb1fdc15709404fbd7c585c6285f3f19e270997440e272f84bcae58e7ccb3999",
+      "receipt_bound_run_executable": {
+        "path": "/var/tmp/pr67_budget_capture_20261007/run_combined/wrf.exe",
+        "sha256": "517a4813dc3da539b9e2bbf2faf79fd55cef9c2936353ebc92f10129f8139919"
+      },
+      "receipt_declared_inputs": {
+        "count": 101,
+        "live_current_bytes_match_receipt": true,
+        "scope": "all declared input files in the preserved run tree; not full runtime process closure"
+      },
+      "reference_manifest_claims": {
+        "observer_executable_sha256": "fb2de630e4bedb4e32703f294aee8774396df28813051cd890232428bab0dfbd",
+        "observer_object_sha256": "31ff7db3659959ad64d76692d171176aa6a6328c6b80982cc636de345d0c3e86",
+        "source_observer_sha256": "72aa50d495fa13d58029189f643fba218c819f8d0911c5138997124d6e99459b"
+      },
+      "reference_manifest_executable_matches_receipt": false,
+      "reference_manifest_object_matches_selected_object": false,
+      "reference_manifest_role": "AUXILIARY_CONTROL_VARIANT_REFERENCE",
+      "reference_manifest_source_matches_selected_source": false,
+      "retained_native_source_reference": {
+        "matches_selected_combined_source": true,
+        "path": "/var/tmp/pr67_budget_capture_20261007/source/module_mp_kdm6_combined_research.f90",
+        "sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d"
+      },
+      "runtime_reference_manifest_sha256": "a0ef389fef3a6221c98862c7e05a498397b12cc38186613a811c5ff2b2b09b2f",
+      "selected_combined_source_object_executable": {
+        "binding": "MATCHES_IMMUTABLE_PR67_COMBINED_EVIDENCE",
+        "executable_sha256": "517a4813dc3da539b9e2bbf2faf79fd55cef9c2936353ebc92f10129f8139919",
+        "object_path": "/var/tmp/pr67_budget_capture_20261007/kdm_combined/module_mp_kdm6.o",
+        "object_sha256": "e846c95d926b1ad77df6ec2f2f45baf135a2bab670b05a695a4a148531506f78",
+        "source_sha256": "9efc09257a46102073b6d5a3d7cd12eb9ecd485526bc6e9cb349e4b2b037680d"
+      }
+    },
+    "receipt": {
+      "input_integrity": "PASS",
+      "output_isolation": "PASS",
+      "path": "/var/tmp/pr67_budget_capture_20261007/run_combined/run-isolation-pr67.json",
+      "returncode": 0,
+      "run_root": "/var/tmp/pr67_budget_capture_20261007/run_combined"
+    },
+    "scope": "one PR67 public KDM6 call, active tile only",
+    "status": "PASS_SCOPED_CAPTURE_AND_NUMERICAL_RECONCILIATION",
+    "time_step": {
+      "active_extent": {
+        "dtcld_s": 20.0,
+        "i": [
+          2,
+          233
+        ],
+        "j": [
+          2,
+          281
+        ],
+        "j_rows": 280,
+        "k": [
+          1,
+          39
+        ],
+        "process_records": 840
+      },
+      "kdm6_dt_s": 20.0
+    }
+  },
+  "unmeasured_terms": [
+    "Per-process internal water transfer closure for vapor, cloud, rain, snow, and graupel.",
+    "Float32 tendency/update rounding, nonnegative clipping, and substep accumulation effects separated from physical transfers.",
+    "A full source-level budget of all boundary, storage, and sedimentation terms over every KDM6 substep.",
+    "Independent validation that captured DEND*DELZ*area is the correct extensive carrier for all six-water state fields throughout the full call."
+  ]
+}

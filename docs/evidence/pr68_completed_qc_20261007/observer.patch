@@ -1,0 +1,163 @@
+--- solve_em_pr67_negativeqc_channels.f90
++++ solve_em_pr67_negativeqc_channels.f90
+@@ -979,6 +979,8 @@
+                              , restart_flag=restart_flag        &
+                              , feedback_is_ready=feedback_is_ready    &
+                             )
++       CALL pr68_capture_qc_stage('P1_POST',rk_step,ims,ime,jms,jme,kms,kme,ids,ide-1, &
++            jds,jde-1,k_start,k_end,moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+ 
+        IF ( config_flags%bl_pbl_physics == MYNNPBLSCHEME ) THEN
+ 
+@@ -1025,6 +1027,8 @@
+                              , ipsy, ipey, jpsy, jpey, kpsy, kpey    &
+                              , k_start , k_end                  &
+                             )
++       CALL pr68_capture_qc_stage('P2_POST',rk_step,ims,ime,jms,jme,kms,kme,ids,ide-1, &
++            jds,jde-1,k_start,k_end,moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+ 
+        CALL pr64_qc_channels(rk_step, config_flags%bl_pbl_physics, &
+             config_flags%cu_physics, config_flags%shcu_physics, &
+@@ -2656,6 +2660,10 @@
+                tenddec = .false.
+ 
+ 
++               IF(im==P_QC) CALL pr68_capture_qc_stage('RK_TEND_PRE',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                    moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+                IF(im==P_QC) CALL pr64_host_cut('QC_PRE_TEND',rk_step,ims,ime,jms,jme,kms,kme, &
+                     grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
+                     min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QC,P_QNC, &
+@@ -2689,6 +2697,10 @@
+                            grid%i_start(ij), grid%i_end(ij), &
+                            grid%j_start(ij), grid%j_end(ij), &
+                            k_start    , k_end               )
++               IF (im==P_QC) CALL pr68_capture_qc_stage('RK_TEND_POST',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                    moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+                IF (im==P_QC) CALL pr64_host_cut('QC_TEND',rk_step,ims,ime,jms,jme,kms,kme, &
+                     grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
+                     min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QC,P_QNC, &
+@@ -2700,6 +2712,10 @@
+ 
+                IF( rk_step == 1 .AND. config_flags%use_q_diabatic == 1 )THEN
+                IF( im.eq.p_qv .or. im.eq.p_qc )THEN
++                   IF(im==P_QC) CALL pr68_capture_qc_stage('QDIAB_PRE',rk_step,ims,ime,jms,jme,kms,kme, &
++                        grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                        min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                        moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+                    CALL q_diabatic_add  ( im, im,            & 
+                            dt_rk, grid%mut,                  &
+                            grid%c1h, grid%c2h,               &
+@@ -2711,6 +2727,10 @@
+                            grid%i_start(ij), grid%i_end(ij), &
+                            grid%j_start(ij), grid%j_end(ij), &
+                            k_start    , k_end               )
++                   IF(im==P_QC) CALL pr68_capture_qc_stage('QDIAB_POST',rk_step,ims,ime,jms,jme,kms,kme, &
++                        grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                        min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                        moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+                ENDIF
+                ENDIF
+ 
+@@ -2720,6 +2740,10 @@
+                IF( ( config_flags%specified .or. config_flags%nested ) .and. rk_step == 1 ) THEN 
+                  IF ( im .EQ. P_QV .OR. config_flags%nested .OR. &
+                     ( config_flags%specified .AND. config_flags%have_bcs_moist ) ) THEN
++                   IF(im==P_QC) CALL pr68_capture_qc_stage('RELAX_PRE',rk_step,ims,ime,jms,jme,kms,kme, &
++                        grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                        min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                        moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+                    CALL relax_bdy_scalar ( moist_tend(ims,kms,jms,im),            & 
+                                      moist(ims,kms,jms,im),  grid%mut,         &
+                                      grid%c1h, grid%c2h,                       &
+@@ -2736,7 +2760,15 @@
+                                      grid%i_start(ij), grid%i_end(ij),      &
+                                      grid%j_start(ij), grid%j_end(ij),      &
+                                      k_start, k_end                        )
+-
++                   IF(im==P_QC) CALL pr68_capture_qc_stage('RELAX_POST',rk_step,ims,ime,jms,jme,kms,kme, &
++                        grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                        min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                        moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
++
++                   IF(im==P_QC) CALL pr68_capture_qc_stage('SPEC_PRE',rk_step,ims,ime,jms,jme,kms,kme, &
++                        grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                        min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                        moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+                    CALL spec_bdy_scalar  ( moist_tend(ims,kms,jms,im),                &
+                                      moist_bxs(jms,kms,1,im),moist_bxe(jms,kms,1,im), &
+                                      moist_bys(ims,kms,1,im),moist_bye(ims,kms,1,im), &
+@@ -2750,6 +2782,10 @@
+                                      grid%i_start(ij), grid%i_end(ij),          &
+                                      grid%j_start(ij), grid%j_end(ij),          &
+                                      k_start, k_end                               )
++                   IF(im==P_QC) CALL pr68_capture_qc_stage('SPEC_POST',rk_step,ims,ime,jms,jme,kms,kme, &
++                        grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                        min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                        moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+                  ENDIF
+                ENDIF
+ 
+@@ -2772,6 +2808,10 @@
+                     grid%c1h,grid%c2h,grid%mu_1,grid%mu_2,grid%mub,dt_rk, &
+                     grid%rqcblten,grid%rqccuten,grid%rqcshten,grid%rqcncuten,grid%rqcnshten)
+ 
++               IF(im==P_QC) CALL pr68_capture_qc_stage('UPDATE_PRE',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                    moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+                CALL rk_update_scalar( scs=im, sce=im,                                  &
+                                scalar_1=moist_old(ims,kms,jms,im),                     &
+                                scalar_2=moist(ims,kms,jms,im),                         &
+@@ -2788,6 +2828,10 @@
+                                its=grid%i_start(ij), ite=grid%i_end(ij),               &
+                                jts=grid%j_start(ij), jte=grid%j_end(ij),               &
+                                kts=k_start    , kte=k_end                              )
++               IF (im==P_QC) CALL pr68_capture_qc_stage('UPDATE_POST',rk_step,ims,ime,jms,jme,kms,kme, &
++                    grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
++                    min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1), &
++                    moist(ims,kms,jms,P_QC),moist_tend(ims,kms,jms,P_QC))
+                IF (im==P_QC) CALL pr64_host_cut('QC_AFTER',rk_step,ims,ime,jms,jme,kms,kme, &
+                     grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
+                     min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QC,P_QNC, &
+@@ -6285,3 +6329,37 @@
+   enddo
+   close(u)
+ END SUBROUTINE pr64_qc_channels
++
++SUBROUTINE pr68_capture_qc_stage(stage,rkstep,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte,qc,tendency)
++  implicit none
++  character(len=*),intent(in)::stage
++  integer,intent(in)::rkstep,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte
++  real,intent(in)::qc(ims:ime,kms:kme,jms:jme),tendency(ims:ime,kms:kme,jms:jme)
++  integer,save::target_count=0
++  integer,save::target_i(23494),target_j(23494),target_k(23494)
++  logical,save::targets_loaded=.false.
++  integer::u,ioerr,n,i,j,k,m
++  if(rkstep<1.or.rkstep>3)return
++  if(.not.targets_loaded)then
++    open(newunit=u,file='pr68_target_qc_coords.txt',status='old',action='read',iostat=ioerr)
++    if(ioerr/=0)call wrf_error_fatal3('<stdin>',0,'PR68 target coordinate file unavailable')
++    read(u,*,iostat=ioerr)n
++    if(ioerr/=0.or.n/=23494)call wrf_error_fatal3('<stdin>',0,'PR68 target coordinate count invalid')
++    do m=1,n
++      read(u,*,iostat=ioerr)target_i(m),target_j(m),target_k(m)
++      if(ioerr/=0)call wrf_error_fatal3('<stdin>',0,'PR68 target coordinate row invalid')
++    enddo
++    close(u)
++    target_count=n
++    targets_loaded=.true.
++  endif
++!$OMP CRITICAL (pr68_qc_stage_log)
++  open(newunit=u,file='pr68_qc_stages.raw',status='unknown',position='append',action='write')
++  do m=1,target_count
++    i=target_i(m);j=target_j(m);k=target_k(m)
++    if(i<its.or.i>ite.or.j<jts.or.j>jte.or.k<kts.or.k>kte)cycle
++    write(u,'(A,1X,A,1X,4(I0,1X),2(ES24.16,1X))')'QC_STAGE',trim(stage),rkstep,i,j,k,qc(i,k,j),tendency(i,k,j)
++  enddo
++  close(u)
++!$OMP END CRITICAL (pr68_qc_stage_log)
++END SUBROUTINE pr68_capture_qc_stage

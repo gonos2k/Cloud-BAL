@@ -1,0 +1,253 @@
+--- module_mp_kdm6_combined_research.f90
++++ module_mp_kdm6_pr68_velocity_research.f90
+--- 
++++ 
+@@ -682,6 +682,8 @@
+    real, dimension(its:ite,kts:kte) :: falkb, fallb
+    real, dimension(its:ite,kts:kte)   :: dbs,dbg
+    double precision, dimension(its:ite,kts:kte,4) :: work1
++   double precision, dimension(its:ite,kts:kte,4) :: terminal_velocity_mass
++   double precision, dimension(its:ite,kts:kte,4) :: mass_velocity_rate
+    real, dimension(its:ite,kts:kte)   :: qci_tmp
+    real, dimension(its:ite,kts:kte,3) :: qrs_tmp
+    real, dimension(its:ite,kts:kte,3) :: avedia
+@@ -692,6 +694,8 @@
+    real, dimension(its:ite,kts:kte)   :: n0so, n0go
+    real, dimension(its:ite,kts:kte,2)   :: falln, falkn
+    double precision, dimension(its:ite,kts:kte,2)   :: workn
++   double precision, dimension(its:ite,kts:kte,2) :: terminal_velocity_number
++   double precision, dimension(its:ite,kts:kte,2) :: number_velocity_rate
+    real, dimension(its:ite,kts:kte)   :: worka, workr
+    real, dimension(its:ite,kts:kte)   :: den_tmp, delz_tmp
+    real, dimension(its:ite,kts:kte) :: nrs_tmp,nci_tmp
+@@ -1116,8 +1120,12 @@
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+-                   rslopeb,rslope2,rslope3,rslopemu,rsloped,work1,workn,its, &
++                   rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
++   call kdm6_velocity_rates(terminal_velocity_mass,terminal_velocity_number, &
++                            delz,mass_velocity_rate,number_velocity_rate, &
++                            ims,ime,kms,kme,its,ite,kts,kte)
++
+ 
+ 
+ 
+@@ -1127,14 +1135,8 @@
+       numdt_i = 1
+       do k = kte, kts, -1
+         do i = its, ite
+-          work1(i,k,1) = work1(i,k,1)/delz(i,k)
+-          work1(i,k,4) = work1(i,k,4)/delz(i,k)
+-          workn(i,k,1) = workn(i,k,1)/delz(i,k)
+-          workn(i,k,2) = workn(i,k,2)/delz(i,k)
+-          work1(i,k,2) = work1(i,k,2)/delz(i,k)
+-          work1(i,k,3) = work1(i,k,3)/delz(i,k)
+-          numdt(i)=max(nint(max(work1(i,k,1),workn(i,k,1),work1(i,k,2),work1(i,k,3))*dtcld+.5),1)
+-          numdt_i(i) = max(nint(max(work1(i,k,4),workn(i,k,2))*dtcld+.5),1)
++          numdt(i)=max(nint(max(mass_velocity_rate(i,k,1),number_velocity_rate(i,k,1),mass_velocity_rate(i,k,2),mass_velocity_rate(i,k,3))*dtcld+.5),1)
++          numdt_i(i) = max(nint(max(mass_velocity_rate(i,k,4),number_velocity_rate(i,k,2))*dtcld+.5),1)
+           if(numdt(i).ge.mstep(i)) mstep(i) = numdt(i)
+           if(numdt_i(i).ge.mstep_i(i)) mstep_i(i) = numdt_i(i)
+         enddo
+@@ -1149,19 +1151,19 @@
+         k = kte
+         do i = its, ite
+          if(n.le.mstep(i)) then
+-           falk(i,k,1) = dend(i,k)*qrs(i,k,1)*work1(i,k,1)/mstep(i)
+-           falkn(i,k,1) = nrs(i,k,1)*workn(i,k,1)/mstep(i)
++           falk(i,k,1) = dend(i,k)*qrs(i,k,1)*mass_velocity_rate(i,k,1)/mstep(i)
++           falkn(i,k,1) = nrs(i,k,1)*number_velocity_rate(i,k,1)/mstep(i)
+            fall(i,k,1) = fall(i,k,1)+falk(i,k,1)
+            falln(i,k,1) = falln(i,k,1)+falkn(i,k,1)
+            qrs(i,k,1) = max(qrs(i,k,1)-falk(i,k,1)*dtcld/dend(i,k),0.)
+            nrs(i,k,1) = max(nrs(i,k,1)-falkn(i,k,1)*dtcld,0.)
+-           falkb(i,k) = dend(i,k)*brs(i,k)*work1(i,k,3)/mstep(i)
++           falkb(i,k) = dend(i,k)*brs(i,k)*mass_velocity_rate(i,k,3)/mstep(i)
+            fallb(i,k) = fallb(i,k)+falkb(i,k)
+            brs(i,k) = max(brs(i,k)-falkb(i,k)*dtcld/dend(i,k),0.)
+-           falk(i,k,2) = dend(i,k)*qrs(i,k,2)*work1(i,k,2)/mstep(i)
++           falk(i,k,2) = dend(i,k)*qrs(i,k,2)*mass_velocity_rate(i,k,2)/mstep(i)
+            fall(i,k,2) = fall(i,k,2)+falk(i,k,2)
+            qrs(i,k,2) = max(qrs(i,k,2)-falk(i,k,2)*dtcld/dend(i,k),0.)
+-           falk(i,k,3) = dend(i,k)*qrs(i,k,3)*work1(i,k,3)/mstep(i)
++           falk(i,k,3) = dend(i,k)*qrs(i,k,3)*mass_velocity_rate(i,k,3)/mstep(i)
+            fall(i,k,3) = fall(i,k,3)+falk(i,k,3)
+            qrs(i,k,3) = max(qrs(i,k,3)-falk(i,k,3)*dtcld/dend(i,k),0.)
+          endif
+@@ -1170,8 +1172,8 @@
+        do k = kte_in-1,kts,-1
+          do i = its,ite
+            if(n.le.mstep(i)) then
+-             falk(i,k,1) = dend(i,k)*qrs(i,k,1)*work1(i,k,1)/mstep(i)
+-             falkn(i,k,1) = nrs(i,k,1)*workn(i,k,1)/mstep(i)
++             falk(i,k,1) = dend(i,k)*qrs(i,k,1)*mass_velocity_rate(i,k,1)/mstep(i)
++             falkn(i,k,1) = nrs(i,k,1)*number_velocity_rate(i,k,1)/mstep(i)
+              fall(i,k,1) = fall(i,k,1)+falk(i,k,1)
+              dqr(i,k) = min(falk(i,k,1)*dtcld/dend(i,k),qrs(i,k,1))
+              dqr(i,k+1) = min(falk(i,k+1,1)*delz(i,k+1)/delz(i,k)              &
+@@ -1182,19 +1184,19 @@
+                           nrs(i,k+1,1))
+              nrs(i,k,1) = max(nrs(i,k,1)-dnr(i,k)+dnr(i,k+1),0.)
+              qrs(i,k,1) = max(qrs(i,k,1)-dqr(i,k)+dqr(i,k+1),0.)
+-             falkb(i,k) = dend(i,k)*brs(i,k)*work1(i,k,3)/mstep(i)
++             falkb(i,k) = dend(i,k)*brs(i,k)*mass_velocity_rate(i,k,3)/mstep(i)
+              fallb(i,k) = fallb(i,k)+falkb(i,k)
+              dbg(i,k) = min(falkb(i,k)*dtcld/dend(i,k),brs(i,k))
+              dbg(i,k+1) = min(falkb(i,k+1)*delz(i,k+1)/delz(i,k)&
+                           *dtcld/dend(i,k),brs(i,k+1))
+              brs(i,k) = max(brs(i,k)-dbg(i,k)+dbg(i,k+1),0.)
+-             falk(i,k,2) = dend(i,k)*qrs(i,k,2)*work1(i,k,2)/mstep(i)
++             falk(i,k,2) = dend(i,k)*qrs(i,k,2)*mass_velocity_rate(i,k,2)/mstep(i)
+              fall(i,k,2) = fall(i,k,2)+falk(i,k,2)
+              dqs(i,k) = min(falk(i,k,2)*dtcld/dend(i,k),qrs(i,k,2))
+              dqs(i,k+1) = min(falk(i,k+1,2)*delz(i,k+1)/delz(i,k)              &
+                           *dtcld/dend(i,k),qrs(i,k+1,2))
+              qrs(i,k,2) = max(qrs(i,k,2)-dqs(i,k)+dqs(i,k+1),0.)
+-             falk(i,k,3) = dend(i,k)*qrs(i,k,3)*work1(i,k,3)/mstep(i)
++             falk(i,k,3) = dend(i,k)*qrs(i,k,3)*mass_velocity_rate(i,k,3)/mstep(i)
+              fall(i,k,3) = fall(i,k,3)+falk(i,k,3)
+              dqg(i,k) = min(falk(i,k,3)*dtcld/dend(i,k),qrs(i,k,3))
+              dqg(i,k+1) = min(falk(i,k+1,3)*delz(i,k+1)/delz(i,k)              &
+@@ -1221,19 +1223,13 @@
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+-                   rslopeb,rslope2,rslope3,rslopemu,rsloped,work1,workn,its, &
++                   rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
+-
+-        do k = kte, kts, -1
+-          do i = its, ite
+-            work1(i,k,1) = work1(i,k,1)/delz(i,k)
+-            workn(i,k,1) = workn(i,k,1)/delz(i,k)
+-            work1(i,k,2) = work1(i,k,2)/delz(i,k)
+-            work1(i,k,3) = work1(i,k,3)/delz(i,k)
+-            work1(i,k,4) = work1(i,k,4)/delz(i,k)
+-            workn(i,k,2) = workn(i,k,2)/delz(i,k)
+-          enddo
+-        enddo
++   call kdm6_velocity_rates(terminal_velocity_mass,terminal_velocity_number, &
++                            delz,mass_velocity_rate,number_velocity_rate, &
++                            ims,ime,kms,kme,its,ite,kts,kte)
++
++
+       enddo      
+ 
+ 
+@@ -1244,7 +1240,7 @@
+              access='stream',form='unformatted',status='unknown',position='append')
+         write(pr67_unit) 'PR67P001'
+         write(pr67_unit) 0,lat,its,ite,kts,kte,dtcld
+-        write(pr67_unit) work1(its:ite,kts:kte,4)
++        write(pr67_unit) mass_velocity_rate(its:ite,kts:kte,4)
+         write(pr67_unit) delz(its:ite,kts:kte)
+         write(pr67_unit) dend(its:ite,kts:kte)
+         write(pr67_unit) qci(its:ite,kts:kte,2)
+@@ -1254,8 +1250,8 @@
+         k = kte
+         do i = its, ite
+          if(n.le.mstep_i(i)) then
+-           falk(i,k,4) = dend(i,k)*qci(i,k,2)*work1(i,k,4)/mstep_i(i)
+-           falkn(i,k,2) = nci(i,k,2)*workn(i,k,2)/mstep_i(i)
++           falk(i,k,4) = dend(i,k)*qci(i,k,2)*mass_velocity_rate(i,k,4)/mstep_i(i)
++           falkn(i,k,2) = nci(i,k,2)*number_velocity_rate(i,k,2)/mstep_i(i)
+            fall(i,k,4) = fall(i,k,4)+falk(i,k,4)
+            falln(i,k,2) = falln(i,k,2)+falkn(i,k,2)
+            qci(i,k,2) = max(qci(i,k,2)-falk(i,k,4)*dtcld/dend(i,k),0.)
+@@ -1267,8 +1263,8 @@
+        do k = kte_in-1,kts,-1
+          do i = its,ite
+            if(n.le.mstep_i(i)) then
+-             falk(i,k,4) = dend(i,k)*qci(i,k,2)*work1(i,k,4)/mstep_i(i)
+-             falkn(i,k,2) = nci(i,k,2)*workn(i,k,2)/mstep_i(i)
++             falk(i,k,4) = dend(i,k)*qci(i,k,2)*mass_velocity_rate(i,k,4)/mstep_i(i)
++             falkn(i,k,2) = nci(i,k,2)*number_velocity_rate(i,k,2)/mstep_i(i)
+              fall(i,k,4) = fall(i,k,4)+falk(i,k,4)
+              dqi(i,k) = min(falk(i,k,4)*dtcld/dend(i,k),qci(i,k,2))
+              dqi(i,k+1) = min(falk(i,k+1,4)*delz(i,k+1)/delz(i,k)              &
+@@ -1310,15 +1306,13 @@
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+-                   rslopeb,rslope2,rslope3,rslopemu,rsloped,work1,workn,its, &
++                   rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
+-
+-       do k = kte, kts, -1
+-         do i = its, ite
+-            work1(i,k,4) = work1(i,k,4)/delz(i,k)
+-            workn(i,k,2) = workn(i,k,2)/delz(i,k)
+-         enddo
+-       enddo
++   call kdm6_velocity_rates(terminal_velocity_mass,terminal_velocity_number, &
++                            delz,mass_velocity_rate,number_velocity_rate, &
++                            ims,ime,kms,kme,its,ite,kts,kte)
++
++
+       enddo 
+ 
+       do k = kte, kts, -1
+@@ -1461,7 +1455,7 @@
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+-                   rslopeb,rslope2,rslope3,rslopemu,rsloped,work1,workn,its, &
++                   rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
+ 
+       do k = kts, kte
+@@ -1656,7 +1650,7 @@
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+-                   rslopeb,rslope2,rslope3,rslopemu,rsloped,work1,workn,its, &
++                   rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
+ 
+       do k = kts, kte
+@@ -2848,7 +2842,7 @@
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+-                   rslopeb,rslope2,rslope3,rslopemu,rsloped,work1,workn,its, &
++                   rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
+ 
+       do k = kts, kte
+@@ -2939,7 +2933,7 @@
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+-                   rslopeb,rslope2,rslope3,rslopemu,rsloped,work1,workn,its, &
++                   rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
+ 
+       do k = kts, kte
+@@ -3638,6 +3632,25 @@
+       enddo
+   END subroutine slope_kdm6
+ 
++      subroutine kdm6_velocity_rates(vt,vtn,delz,mass_rate,number_rate, &
++                                     ims,ime,kms,kme,its,ite,kts,kte)
++        implicit none
++        integer, intent(in) :: ims,ime,kms,kme,its,ite,kts,kte
++        double precision, intent(in) :: vt(its:ite,kts:kte,4)
++        double precision, intent(in) :: vtn(its:ite,kts:kte,2)
++        real, intent(in) :: delz(ims:ime,kms:kme)
++        double precision, intent(out) :: mass_rate(its:ite,kts:kte,4)
++        double precision, intent(out) :: number_rate(its:ite,kts:kte,2)
++        integer :: i,k
++
++        do k = kts, kte
++          do i = its, ite
++            mass_rate(i,k,:) = vt(i,k,:)/delz(i,k)
++            number_rate(i,k,:) = vtn(i,k,:)/delz(i,k)
++          enddo
++        enddo
++      end subroutine kdm6_velocity_rates
++
+       subroutine slope_rain(qrs,nrs,den,denfac,t,rslope,rslopeb,rslope2,rslope3,   &
+                             rsloped,rslopemu,vt,vtn,its,ite,kts,kte)
+   IMPLICIT NONE
