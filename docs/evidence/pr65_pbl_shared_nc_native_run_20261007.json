@@ -1,0 +1,66 @@
+{
+  "baseline_comparison": {
+    "pr64_qc_channels.raw": {
+      "byte_identical": true,
+      "enabled_run_sha256": "71fd1d07758b9dfd318df112e2a5f05fd61875adadc1db2bf8e4b79a588cb7a7",
+      "patchless_run3_sha256": "71fd1d07758b9dfd318df112e2a5f05fd61875adadc1db2bf8e4b79a588cb7a7"
+    },
+    "pr65_pbl_operator.raw": {
+      "byte_identical": true,
+      "enabled_run_sha256": "fa937f9d19540cec65059bf8f1d78c27e8a739cc26e015da0ea1bb5b9fa588a0",
+      "patchless_run3_sha256": "fa937f9d19540cec65059bf8f1d78c27e8a739cc26e015da0ea1bb5b9fa588a0"
+    }
+  },
+  "call_gate": {
+    "dtbl_seconds": 20.0,
+    "i": 172,
+    "j": 76,
+    "kte": 39,
+    "kts": 1,
+    "num_scalar": 6,
+    "p_qnc": 3,
+    "qnc_enabled": true,
+    "qnc_flag": true,
+    "scalar_pblmix": 0
+  },
+  "capture_semantics": {
+    "native_active_shinhong_call_observed": true,
+    "native_nc_solver_output_captured": false,
+    "native_post_call_scalar_tend_captured": false,
+    "nc_input_captured_before_call": true,
+    "same_operator_replay_is_counterfactual": true
+  },
+  "case": "guarded source-bound research run; isolated from maintained WRF source",
+  "executable_runpath": "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+  "limitations": [
+    "Historical archived PBL object is not closed to available source/compiler history.",
+    "del is interface-pressure thickness; equivalence to hybrid dry carrier is unproven.",
+    "Activation and sedimentation are separate and not included by common-air mixing.",
+    "This run does not establish full water/energy/process/boundary closure or the final physical initialization gate."
+  ],
+  "objects_and_executable": {
+    "libwrflib_pr65.a": "7c0aea89a75397b20f2b1d3ad6794ddd1ad9f353d37447d3ed5fe883fe8efb27",
+    "module_bl_shinhong.o": "d19cfa266517bcd756ba6f21a3d59be21158f63be1380a4561dce4133950191c",
+    "module_pbl_driver.o": "908b615f0666c462db762065a1a6c59bb6b74e63f697b6c7442ca68a8d15e88c",
+    "wrf_pr65_pbl_sharednc.exe": "6531901f26c3ce0ff77f71651659c835b8e3883035aef403d1b36357ad2473cc"
+  },
+  "run": {
+    "guard_returncode": 0,
+    "run_log_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df",
+    "run_root": "/var/tmp/pr65_pbl_lineage_20261007/run_sharednc_enabled",
+    "runtime_libraries_sha256": "6fd4233735b5596e1b62d56804a45988dc9abb51e4551a50e9780b8b2daf2dca"
+  },
+  "selected_native_output_hashes": {
+    "pr63_kdm_stages.raw": "ea4397600c0885c47d735b049871a5edf2b17fce956cd494a03923ca50b02d48",
+    "pr63_transition_stages.raw": "89317f9c3ab3f5939c57a913a94674e569b0c36892c9de91cfd6622e7588dbc9",
+    "pr64_qc_channels.raw": "71fd1d07758b9dfd318df112e2a5f05fd61875adadc1db2bf8e4b79a588cb7a7",
+    "pr65_pbl_nc.raw": "912562e50411a52646b1d216cea173cc933ed235812d23733828b51ed424a24f",
+    "pr65_pbl_operator.raw": "fa937f9d19540cec65059bf8f1d78c27e8a739cc26e015da0ea1bb5b9fa588a0"
+  },
+  "source_inputs": {
+    "module_bl_shinhong.f90": "45b85a416ba1ea4acdf265948db8bb05958df5529a380062b30705a18300e002",
+    "module_bl_shinhong_pr65.F": "0816dc6bb00ee232264ca94e7371198acd866a44c098f563fa224efa256de652",
+    "module_pbl_driver.f90": "18ab9b0c724247a14f4ebd612472cf79b05071be89a8f1bceab1f7d0d17a2b7a",
+    "module_pbl_driver_pr65.F": "b42e0a39dcc83cf306a99e30dceebea5a71568dd7e29e05c449203250878eaa5"
+  }
+}

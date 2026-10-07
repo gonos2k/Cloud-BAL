@@ -22,6 +22,10 @@ tests=(
   tests/test_native_kdm6_call_geometry.py
   tests/test_pr63_transition_replay.py
   tests/test_pr64_qc_channel_replay.py
+  tests/test_pr65_nc_donor_replay.py
+  tests/test_pr65_pbl_operator_replay.py
+  tests/test_pr65_pbl_domain_metrics.py
+  tests/test_pr65_samecall_budget_audit.py
   tests/test_pr63_paired_bg_volume.py
   tests/test_operational_comparison_prep.py
   tests/test_operational_shadow_compare.py

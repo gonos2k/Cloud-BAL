@@ -1,0 +1,38 @@
+--- a/module_pbl_driver_pr65.F
++++ b/module_pbl_driver_pr65.F
+@@ -791,6 +791,7 @@
+    INTEGER :: pr65_unit, pr65_k, pr65_iostat
+    LOGICAL :: pr65_qnc_enabled, pr65_qnc_flag
+    INTEGER :: pr65_scalar_pblmix
++   REAL :: pr65_scalar_tend_before
+ 
+    REAL,       DIMENSION( ims:ime, kms:kme, jms:jme ) ::v_phytmp
+    REAL,       DIMENSION( ims:ime, kms:kme, jms:jme ) ::u_phytmp
+@@ -1369,13 +1370,26 @@
+               ,DX=dx,DY=dy                                          &
+                                                                     )
+              IF (pr65_qnc_enabled) THEN
++               pr65_iostat = -1
++               IF (172.GE.its .AND. 172.LE.ite .AND. 76.GE.jts .AND. 76.LE.jte) THEN
++                 OPEN(NEWUNIT=pr65_unit,FILE='pr65_pbl_nc.raw',STATUS='UNKNOWN', &
++                      POSITION='APPEND',ACTION='WRITE',IOSTAT=pr65_iostat)
++               ENDIF
+                DO j=jts,jte
+                  DO k=kts,kte
+                    DO i=its,ite
+-                     scalar_tend(i,k,j,p_qnc) = scalar_tend(i,k,j,p_qnc) + rqncblten(i,k,j)
++                     IF (i.EQ.172 .AND. j.EQ.76) THEN
++                       pr65_scalar_tend_before = scalar_tend(i,k,j,p_qnc)
++                       scalar_tend(i,k,j,p_qnc) = pr65_scalar_tend_before + rqncblten(i,k,j)
++                       IF (pr65_iostat.EQ.0) WRITE(pr65_unit,'(A,",",I0,",",ES24.16E3,",",ES24.16E3,",",ES24.16E3)') &
++                            'NC_OUT',k,rqncblten(i,k,j),pr65_scalar_tend_before,scalar_tend(i,k,j,p_qnc)
++                     ELSE
++                       scalar_tend(i,k,j,p_qnc) = scalar_tend(i,k,j,p_qnc) + rqncblten(i,k,j)
++                     ENDIF
+                    ENDDO
+                  ENDDO
+                ENDDO
++               IF (pr65_iostat.EQ.0) CLOSE(pr65_unit)
+              ENDIF
+            ELSE
+                WRITE ( message , FMT = '(A,7(L1,1X))' )             &

@@ -1,0 +1,37 @@
+actual_grid=235x283x22
+retained_radar_echo_cells=70051
+valid_cloud_fraction_cells=0
+valid_cloud_type_cells=0
+quality_usable_cloud_pairs_above_threshold=0
+input_omega_target_cells=0
+input_omega_target_sigma_cells=0
+observationally_authorized_target_sigma_overlap_cells=0
+radar_los_present=F radar_count=0
+radar_los_usage_samples=UNAVAILABLE
+retained_observation_stage_status=20 reason=0
+radar_producer_changed_cells=70051
+radar_producer_rain_changed_cells=63136
+radar_producer_snow_changed_cells=15929
+radar_producer_graupel_changed_cells=13687
+producer_omega_target_cells=55010
+producer_omega_target_sigma_cells=0
+producer_authorized_target_sigma_overlap_cells=0
+radar_stage_species_change_kg_vapor= 9.9125390600912941E+008
+radar_stage_species_change_kg_cloud_liquid= 1.8380789662804857E+007
+radar_stage_species_change_kg_cloud_ice= 1.0860372951239946E+004
+radar_stage_species_change_kg_rain=-5.6982007556583817E+010
+radar_stage_species_change_kg_snow=-7.2634396117205368E+010
+radar_stage_species_change_kg_graupel=-6.5844829602478046E+009
+radar_stage_hydrometeor_mass_increment_kg=-1.3618249498400000E+011
+phi_preanalysis_requested_layers=18 assessable_layers=18
+phi_postanalysis_status=20 reason=0
+phi_changed_cells=0
+phi_hydrostatic_rms_before_m2_s2= 4.5311419733489466E+001
+phi_hydrostatic_rms_after_m2_s2= 4.5311419733489466E+001
+preflight_status=BLOCKED
+physical_contract_status=NOT_RUN: source_increment and boundary_increment require an authorized declaration; this preflight does not infer them from an endpoint
+wind_authority=BLOCKED: omega_target_sigma has no valid cell sharing dynamic evidence with omega_target
+analysis_admission=BLOCKED: derive_column_physics yields a separate producer state and aggregate budgets, but physical_joint_candidate_contract has no observation_analysis_increment array; source_increment remains an unauthenticated caller declaration
+moment_policy=BLOCKED: no admitted common-air QC/NC moment and donor/boundary policy is represented in Cloud-BAL candidate inputs
+next_required_fields=per-cell radar analysis increment separate from phase_increment; authorized omega_target_sigma; declared source/boundary authority; common-air moment policy
+candidate_approval=FAIL_OPEN: full-observation column and optional Phi research baseline only; phase, wind fit, joint mass/energy contract, and physical authority were not asserted

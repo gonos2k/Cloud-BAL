@@ -1,0 +1,691 @@
+{
+  "base_commit": "55924db4d9ae040c5234fdddeea2494882b0b64a",
+  "corpora": {
+    "Cloud-BAL": {
+      "added_ids": 169,
+      "communities": 513,
+      "cumulative_since_pr60_start_edges": 1430,
+      "cumulative_since_pr60_start_nodes": 771,
+      "delta_edges": 305,
+      "delta_nodes": 169,
+      "edges": 13807,
+      "extracted_edges": 492,
+      "extracted_nodes": 208,
+      "integrity": {
+        "context_variant_groups": 0,
+        "dangling_endpoint_edges": 0,
+        "directed_same_endpoint_collapsed_edges": 0,
+        "directed_unique_endpoint_pairs": 13807,
+        "effective_directed": false,
+        "exact_duplicate_edges": 0,
+        "input_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json",
+        "missing_endpoint_edges": 0,
+        "node_count": 7084,
+        "non_object_edges": 0,
+        "post_build_edge_count": 13807,
+        "post_build_error": "",
+        "post_build_graph_type": "Graph",
+        "post_build_node_count": 7084,
+        "raw_edge_count": 13807,
+        "relation_variant_groups": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0,
+        "source_file_variant_groups": 0,
+        "source_location_variant_groups": 0,
+        "undirected_same_endpoint_collapsed_edges": 0,
+        "undirected_unique_endpoint_pairs": 13807,
+        "unverified_node_count": 0,
+        "valid_candidate_edges": 13807
+      },
+      "nodes": 7084,
+      "previous_graph_sha256": "2619f863c925d7cd2a3d1479199e23142e07313c88beca3a9dd388a7bfe6eedc",
+      "removed_ids": 0,
+      "sha256": "3171cd2beb235f05b96c811dd010f8e1759c8e110faf3554ff52548094a8eea7",
+      "snapshot": "2026-10-07T06:41:44+00:00"
+    },
+    "KLAPS50": {
+      "added_ids": 169,
+      "communities": 2546,
+      "cumulative_since_pr60_start_edges": 1433,
+      "cumulative_since_pr60_start_nodes": 772,
+      "delta_edges": 306,
+      "delta_nodes": 169,
+      "edges": 72227,
+      "extracted_edges": 492,
+      "extracted_nodes": 208,
+      "integrity": {
+        "context_variant_groups": 0,
+        "dangling_endpoint_edges": 0,
+        "directed_same_endpoint_collapsed_edges": 0,
+        "directed_unique_endpoint_pairs": 72227,
+        "effective_directed": false,
+        "exact_duplicate_edges": 0,
+        "input_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/graph.json",
+        "missing_endpoint_edges": 0,
+        "node_count": 32916,
+        "non_object_edges": 0,
+        "post_build_edge_count": 72227,
+        "post_build_error": "",
+        "post_build_graph_type": "Graph",
+        "post_build_node_count": 32916,
+        "raw_edge_count": 72227,
+        "relation_variant_groups": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0,
+        "source_file_variant_groups": 0,
+        "source_location_variant_groups": 0,
+        "undirected_same_endpoint_collapsed_edges": 0,
+        "undirected_unique_endpoint_pairs": 72227,
+        "unverified_node_count": 0,
+        "valid_candidate_edges": 72227
+      },
+      "nodes": 32916,
+      "previous_graph_sha256": "79c576c4bfac299f4e43ee5bc0a008ced0ae581d5a4cbb1efc6b73b33f08a327",
+      "removed_ids": 0,
+      "sha256": "fe70cf002252b945fe2a9d0509fdce9c98d953750e69443161bbcb0f6f4ab2f2",
+      "snapshot": "2026-10-07T06:41:37+00:00"
+    }
+  },
+  "extraction": "Graphify AST and Markdown headings only; no semantic/LLM refresh",
+  "frozen_source_commit": "3a6656fe184b4d25facbb24e93bcda3637c92bf1",
+  "graphify_version": "graphify 0.9.53",
+  "limitations": [
+    "Graph counts are separate for overlapping KLAPS50 and Cloud-BAL corpora.",
+    "Markdown semantic extraction was not performed; Markdown contributes heading structure only.",
+    "Fortran cross-file CALL extraction is partial.",
+    "External native WRF research source trees were not extracted; their patch/evidence files are included only as selected repository paths.",
+    "Candidate overlay graphs and freshness are structural navigation evidence, not runtime or scientific validation.",
+    "Prior native failures/PR65 runtime evidence are preserved as separately scoped receipts."
+  ],
+  "mode": "guarded selected-path overlay extraction/build_merge, cluster-only, derived wiki sync",
+  "physical_approval": "FAIL_OPEN",
+  "pr": "https://github.com/gonos2k/Cloud-BAL/pull/65",
+  "previous_native_status": null,
+  "previous_pr64_kg_receipt_sha256": "4df22fc054c6a976a7b6f0fac431d6556bb1a6c187a4e71ebf10ead38c1bfa5b",
+  "prior_immutable_receipts": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr59_publish_kg_20261002/kg_receipt.json": "0e6ba4056e1edbcf542a35fe54c81fe88501245b63447324dd4c01c29655020a",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr59_publish_kg_20261002/update.py": "7c626b398f44a4013a607e2a5ae932528d2caaf41e37a479366aa80e0b146aa0",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr59_team_audit_20261006/kg_receipt.json": "b07681e59678761ded5e1bd986ff0fe7f57cfb35a345f92ffc96b58424bab7ef",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr59_team_audit_20261006/update_kg.py": "bfe6242618e8ca1b60ab1304221d1fd215476d7f23281b69e48963611c0b76e1",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr64_joint_transport_20261007/kg_receipt.json": "4df22fc054c6a976a7b6f0fac431d6556bb1a6c187a4e71ebf10ead38c1bfa5b",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr65_moment_followup_20261007/refresh_kg.py": "ba89c6f9eb4a1e2c2e046142d443c51709e4ac6a2bec2f6340079f2a6404d273",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr59_joint_diagnostic_20261002/Cloud-BAL/docs/evidence/pr59_current_lapsprep.json": "f6150857b78e5af1c5e77ff9e2a64608c46d44fc490a775d11fe5992f9fec1f9"
+  },
+  "private_profile_preservation": {
+    "Cloud-BAL": {
+      "incident_links": 133,
+      "nodes": 134,
+      "source_file": "config/cp01_private_host_profile.json",
+      "unchanged": true
+    },
+    "KLAPS50": {
+      "incident_links": 0,
+      "nodes": 0,
+      "source_file": "Cloud-BAL/config/cp01_private_host_profile.json",
+      "unchanged": true
+    }
+  },
+  "python_executable": "/home/korea_keun/.local/share/uv/tools/graphifyy/bin/python3",
+  "recorded_utc": "2026-10-07T06:41:50.475887+00:00",
+  "remaining_scientific_gates": [
+    "incoming joint-moment admissibility",
+    "same-call mapped water/energy closure",
+    "feasible mass-wind joint search",
+    "fixed-setting native time-response and independent observation validation"
+  ],
+  "schema": "pr65_selected_path_graphify_kg_receipt_v1",
+  "selected_path_count": 74,
+  "selected_paths": [
+    {
+      "base_sha256": "8dbb6071bc55c8b9bd8c4e0893021e410e29438c8a6c07749593639f4dab2ff9",
+      "candidate_sha256": "3f640c0e1af5d5a9ba694897a5aa8012162da58df043ec1e0cb367db25a48317",
+      "change": "M",
+      "maintained_before_sha256": null,
+      "path": ".gitattributes"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "16c83b0b5b8eed5c68b95e1cd033ee8a7712ae0133b120b9e8afd6a1e68e368e",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/PR65_CLOSURE_CHECKLIST_20261007.md"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "a3ee71d5d780d4d694884c6bda61a5b89c2811a7632247c659b1abe617e265f6",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/PR65_NC_DONOR_CAUSE_20261007.md"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "f4226d5690d0ef1390018f2323bd0d0501974b9aa6790ca999337f111b619c90",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/PR65_OBSERVATION_JOINT_PREFLIGHT_20261007.md"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "4b3341210e26a6fdc1c2cc9422ae79b3370f033de63db2e680b7968aa784a060",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/PR65_PBL_LINEAGE_SHARED_NC_20261007.md"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "b05fb5459847cb98012310601dece8a39fa99aa14a8d5f4cf47d3ffcb9617d2e",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/PR65_PHI_MUTATION_SUITE_20261007.md"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "94560bf522a281afc4acf7de9c4570113f8a3db770d942a9f10d77536ee16f98",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/PR65_SAMECALL_WATER_BUDGET_20261007.md"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "c920afbb97260200ef5df44263440b347c09966f0109f0a996bc84f7eab7c025",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/PR65_TEAM_REVIEW_20261007.md"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "50ed5d0d722944cfb4d3d964cb95ae59e941033cd6b46d1f7f9c5421fedee14c",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/PR65_NC_DONOR_CAUSE_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "9a4985ab4cf6ad72b5988b25c5b7c4935560aa32dd393f13fa6ea4d4d1ce1f64",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/PR65_SAMECALL_WATER_BUDGET_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "018f843e5702eefde9d42a80aa98711b6564600a6bd2a95bdfbeab6e003e473c",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_archive_members_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "e110d8b4a0e0547d98c838ceb40d6d499e65f74cf415c0efdfaac56585c1ecd8",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_final_focused_validation_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "0ac5a7a8b62b01356a740cc499a4352624205dc07fd141c58ef7175b853b3057",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_kdm6_member_binding_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "90bde17d6750126b3908b79ee6e4a9e69ae2535d03368469079abffdd947ae8f",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_lineage_evidence_sha256_20261007.txt"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "e851acc894f93562b07b78e3c9ad555455b41686232ff74e5c3923f570323085",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_nc_donor_compile.log"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "507b4d722d5bda4c07beece6638aaa6befbb0bf864cf5b7e3299f06b15708e89",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_nc_donor_faces_20261007.raw"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "11d7374e12a0e52e2a8e3f3a5e53aabe92937d989767fd2902d784253e0d8362",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_nc_donor_guard_command_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "d4f857f3f92c60d8c12fd53c8461647775cd4c60d1a94edca45666e658044ba5",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_nc_donor_observer.patch"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "21f62cb20db9402b83886f896f5948f7eadb79f8edf0c906f2670b8524934857",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_nc_donor_run_isolation_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "b33265943e0032c4dca1523afec3e8e5481db8fdfdda62d9e02e30a8ba9e8d75",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_nc_donor_source_patch_replay_20261007.txt"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "3b0e3be6a7f8fbb17f08f50495af90743d70c7608fb073a196e9daa97052da85",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_nc_host_updates_20261007.raw"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "9078ee36237a7494f572aa8b2b9d441e1971cd1019098127d203041fd4a4ce69",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_observation_joint_preflight_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "496fa0bfa5d304e333b46d246685e9be260265fc174f3fe8c742a056fd4faccb",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_observation_joint_preflight_20261007.log"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "f104bf04f1f835dc5f5293fdeffefa282013ef3c68e8bb871fd03a3b13c1ff6c",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_observation_joint_preflight_initial_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "20c23f275aa32012d52b5e735e42bed1e623fc69c52f775b015b8468e210587d",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_observation_joint_preflight_initial_20261007.log"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "2c5038168f55468147abb79c3161a201aad42383fa76ca84986170df4c02b47b",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_observation_joint_preflight_pre_runner_fix_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "99600a70b56779d6b7bd6b9b7248a588bf0e0286d03fdba82054a2f73777783f",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_observation_joint_preflight_pre_runner_fix_20261007.log"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "cff7bbc75183a5534175cee82ce90dd44fbcb22ccd2e4b4d5454e17f8bd4cd62",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_observer_objects_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "17d92c2a1ddf2dc77de7cf7dc75686b3700d3c9f15d649ef8e0d276687b28f32",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_observer_source_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "2f0bce8101f70f8230e267295cd7bb88abe353533c733c9fed3c1875bb54b257",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_patchless_objects_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "0c7d34136a48e1ff72fb15011c1f0f662473c89d3801e2dee4a252fab660de02",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_nc_run3_20261007.raw"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "912562e50411a52646b1d216cea173cc933ed235812d23733828b51ed424a24f",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_nc_sharednc_native_20261007.raw"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "be94b846e487a544852d24eb85702dad70e7997faa0de42415e2027702b673a1",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_nc_sharednc_postcapture_20261007.raw"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "ede93f770cfc7bd67d2bfa3d970eefe758fab1366c85dd10b60d3d25550bd067",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_nc_sharednc_postcapture_isolation_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "428739cb8ecff92e5039339e9b2a428dd4e0f76dbeecd334c17a63ec2cd6c3da",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_nc_sharednc_run_isolation_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "66e95f429a3d11d73e9890a4e23ff52eef401d943768dd15df751a0372fed0eb",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_operator_replay_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "fa937f9d19540cec65059bf8f1d78c27e8a739cc26e015da0ea1bb5b9fa588a0",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_operator_run3_20261007.raw"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "c84759908855a0619de679d36295f124c5f73f7336cabd63013f7bd3cb472de4",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_patchless_transition_replay_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "904224d5dac4384e4fb540fba787b503b787ecae940d034c503e8ccd4d541c42",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_shared_nc_domain_metrics_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "f7dd9cf09f3a4ca6a8f4ed89ade00303493940e49b671596ea384087adec55fe",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_shared_nc_native_run_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "3e3ddb4ee8a74600086712a97b1046f73ba6cc92a4d9e2f20e2c634825716f75",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_shared_nc_postcapture.patch"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "9aa279a5fb3b6cbc5149346d6203c44c53de8693f1f2c08f2cf6ec491a2da4fe",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_shared_nc_postcapture_guard_command_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "29498b469697af9d4d0e0d83a94ce87715361f87e725e1479ea3fd4c947cfcc8",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_shared_nc_postcapture_input_inventory_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "1935313d7224f6a0c6251c1b3a7625a094fba78877805f5cca161daf36f69694",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_shared_nc_postcapture_run_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "0d7246841a2e7edced52c0f0a501a40903f2091f9e60495876b023792ec31d3e",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_shared_nc_replay_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "c25bb8785f4f78115380ff9cc834d65e44874716a739776f9be08122c2fae808",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_shared_nc_research.patch"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "c2022f4e9eedf04bcc38a13f7fe03a5956bbd15f4595e05a8d3b793efecf799e",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_pbl_shared_nc_transition_replay_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "8b081a4f2cc3cfb791f1c3cfe048bc09563e0fdd73aa5424845aa51e5546efb2",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_20261007.sh"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "d8fb97da5457230e4c41a4d01fae1ce2baecca033e1b5a7853385d4cbd8d5062",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O0_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "0ec18d2170ab5eeabf3dbd199c2cd0283a20066acf74616fda7216ca6f7908a0",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O0_20261007.log"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "3e5ff8d646e3a7f07d8ae75d8118f84a1d2ad0bc4343b16cf0c9cffeedf31517",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O0_hash_post_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "3e5ff8d646e3a7f07d8ae75d8118f84a1d2ad0bc4343b16cf0c9cffeedf31517",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O0_hash_pre_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "0ec18d2170ab5eeabf3dbd199c2cd0283a20066acf74616fda7216ca6f7908a0",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O0_initial_20261007.log"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "46848dbd5159232b1792b80371d991805b2cb0fd3a7c0e9e1d8668b069d869ce",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O0_initial_orchestration_failure_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "e19d52106bb2d67e4ffa10d4621107ebdb099b64f2d0847666faf51a6890ff66",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O0_private_runner_20261007.sh"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "edb6af892ca7dc8abec5595ac66bf4712ce812dc0913da73dde9c867cf69b109",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O2_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "0ec18d2170ab5eeabf3dbd199c2cd0283a20066acf74616fda7216ca6f7908a0",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O2_20261007.log"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "84798d022b0563c619f81902c65e7729c13345bafe78fa8da0570c6d25870a83",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O2_hash_post_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "84798d022b0563c619f81902c65e7729c13345bafe78fa8da0570c6d25870a83",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_phi_mutation_suite_O2_hash_pre_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "592c43f0611b71a0bbb0b7f7140177ea3e763ca67a79ebf64eedb08a5349f94b",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_research_baseline_objects_20261007.sha256"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "7539831408c30b578835a2bc32421cd7b79159949699abc3f79d763622b35e5c",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "docs/evidence/pr65_run3_isolation_20261007.json"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "6a7df9286945c9bf6a9e44855f2bd16cdbadc3a366b5beffb9b4303b1f621296",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tests/pr65_observation_joint_preflight.f90"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "49e98e8ca8f50d8f6f24226a112095d32dc919e22ae3f26f578d43c073b4fb48",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tests/run_pr65_observation_joint_preflight.sh"
+    },
+    {
+      "base_sha256": "5fd993102ddc861d27299a1ad96fd12425bdcccefd1d5694bc1944a710b1b39a",
+      "candidate_sha256": "1351da0c91e2d8bc5c9a14a4a3d77af53a9e3e28a91b587fdb9b1f423ccc92f4",
+      "change": "M",
+      "maintained_before_sha256": "eccd0d8072833e31aa0c84f7bacd977c9f44f7ecf1b0bfab456f6d40477805ea",
+      "path": "tests/run_python_contract_tests.sh"
+    },
+    {
+      "base_sha256": "715222aa36833b4f3942d2c730739bec88980125ce568d39cd52e554d8274947",
+      "candidate_sha256": "87da0515a0b6ecdfc621a4d92091ae94bdc670bae3ce864f27b9bec4a0bfbb7d",
+      "change": "M",
+      "maintained_before_sha256": null,
+      "path": "tests/test_native_kdm6_call_geometry.py"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "61cf5b3c898736a17329d5e8740400168126e03d616e21cc1c51da02e12f1139",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tests/test_pr65_nc_donor_replay.py"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "113a9173bfc3745bff9aec9e395516d8c0d5ef49dca9eadc7928dfd8c2df37eb",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tests/test_pr65_pbl_domain_metrics.py"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "e55d773a325422acea31b4c365ec7e429e578a2b1354f6475f908b9f2c1e78f9",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tests/test_pr65_pbl_operator_replay.py"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "b260e8ea80c22a4a33c4507097e5fb22bf450a14bd504fa93f1f576ce231db40",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tests/test_pr65_samecall_budget_audit.py"
+    },
+    {
+      "base_sha256": "295907e78d06d8e17e3fa8d686447d02b4cad2724682db5891c0f9218a19381c",
+      "candidate_sha256": "cdc4d1dc0352cf9fb47ff77ca43dcbf16e827961960b2801c4ee728b8826dbec",
+      "change": "M",
+      "maintained_before_sha256": null,
+      "path": "tools/native_kdm6_call_geometry.py"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "415bcc3bfb188d0279236bbe346f8697177c8725c5e9e349f1553bc035225b2d",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tools/pr65_nc_donor_replay.py"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "e795e911a3a933b559919549a09be973a4fe443252529c59d0975afb5289355c",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tools/pr65_pbl_domain_metrics.py"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "df35600ad644f6155efff21963f8119b7c23c274599cab1684d36f66a050ef50",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tools/pr65_pbl_operator_replay.py"
+    },
+    {
+      "base_sha256": null,
+      "candidate_sha256": "3c0c5d4d17b187953bc9197b2cde99273a3551a3ec59c5d92c63261925aa34b6",
+      "change": "A",
+      "maintained_before_sha256": null,
+      "path": "tools/pr65_samecall_budget_audit.py"
+    }
+  ],
+  "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL",
+  "source_sync_sha256": "e6b9c18a209e037428de24b2178a1e766a8b35c89ab01f85781a547f70c355fe",
+  "wiki": {
+    "protected_unchanged": [
+      "wiki/hot.md",
+      "wiki/overview.md",
+      "wiki/.schema",
+      "wiki/.schema-proposals",
+      "wiki/entities",
+      "wiki/concepts",
+      "wiki/sources",
+      "wiki/decisions",
+      "wiki/heuristics",
+      "wiki/experiences",
+      "wiki/procedures",
+      "wiki/queries"
+    ],
+    "schema_and_content_pages_touched": false,
+    "updated": [
+      "graph-report.md",
+      "graph-report-klaps50.md",
+      "graph-report-cloud-bal.md",
+      "index.md#Graph-snapshot",
+      "log.md (append-only)"
+    ]
+  },
+  "wiki_sha256": {
+    "wiki/graph-report-cloud-bal.md": "e962016cee5f4355200b4b0c84a488a2a2826415347951d89f2716fe88eccdc2",
+    "wiki/graph-report-klaps50.md": "4ee008b67465097ddc9b48b4ec1bf226e8a1e9183558c52ab1215615e00b18ba",
+    "wiki/graph-report.md": "0b4aeab71061c15c03d116adc813be588cdd540d411ce381e174661e396b591d",
+    "wiki/index.md": "88b9d879dc23b3d035034b2cada6145476f913aa36e2c0692fd97f8a869023fa",
+    "wiki/log.md": "37ea6aca4df69ed5c7c39a4b306f41641140aac1b06212aba56c4365cfe81b4c"
+  }
+}

@@ -1,0 +1,387 @@
+{
+  "status": "BLOCKED",
+  "scope": "actual NE57 retained-observation producer stage plus one-column Phi research postanalysis; no phase or wind admission",
+  "preflight_exit": 0,
+  "run_directory": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh",
+  "compiler": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "version": "ifx (IFX) 2026.0.0 20260331",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "profile": "O0 pinned Cloud-BAL Intel profile"
+  },
+  "source_prebuild": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_state.f90",
+      "sha256": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_grid_geometry.f90",
+      "sha256": "3e2b75c5a64730a65dd4762a4ed9cc8fe82017ca95a11cf40690bfa4bca3e703"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_column_physics.f90",
+      "sha256": "fd5e924c645d8d73e88f34f38f9bf8bd62e0d8c5bd6eaa13eedeabbd882b6496"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_balance_operator.f90",
+      "sha256": "64631cf4df055b3de9198c87b4eb3650a10078c480dfc995e8de7bb691536747"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_pipeline.f90",
+      "sha256": "e9034c1595d69101e9cfee7034bbaa3b72c08f18d2f2114a41bfdeb41226ebf1"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_real_netcdf.f90",
+      "sha256": "4b099c85630fe4acfefc37ed474176d4c2b71a112f7a4fe5272a1c663f9633bc"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_pressure_analysis.f90",
+      "sha256": "c81ebce5b07998dbe26e7ef40c4dcf787e53550be0c7af106b5f5e31710b0396"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/pr65_observation_joint_preflight.f90",
+      "sha256": "056d89c4bc1d0196685ad1a4d9e4f55cc87cd2e918f662c024ea3ae9d37e1aed"
+    }
+  ],
+  "source_postbuild": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_state.f90",
+      "sha256": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_grid_geometry.f90",
+      "sha256": "3e2b75c5a64730a65dd4762a4ed9cc8fe82017ca95a11cf40690bfa4bca3e703"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_column_physics.f90",
+      "sha256": "fd5e924c645d8d73e88f34f38f9bf8bd62e0d8c5bd6eaa13eedeabbd882b6496"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_balance_operator.f90",
+      "sha256": "64631cf4df055b3de9198c87b4eb3650a10078c480dfc995e8de7bb691536747"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_pipeline.f90",
+      "sha256": "e9034c1595d69101e9cfee7034bbaa3b72c08f18d2f2114a41bfdeb41226ebf1"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_real_netcdf.f90",
+      "sha256": "4b099c85630fe4acfefc37ed474176d4c2b71a112f7a4fe5272a1c663f9633bc"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_pressure_analysis.f90",
+      "sha256": "c81ebce5b07998dbe26e7ef40c4dcf787e53550be0c7af106b5f5e31710b0396"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/pr65_observation_joint_preflight.f90",
+      "sha256": "056d89c4bc1d0196685ad1a4d9e4f55cc87cd2e918f662c024ea3ae9d37e1aed"
+    }
+  ],
+  "source_postrun": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_state.f90",
+      "sha256": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_grid_geometry.f90",
+      "sha256": "3e2b75c5a64730a65dd4762a4ed9cc8fe82017ca95a11cf40690bfa4bca3e703"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_column_physics.f90",
+      "sha256": "fd5e924c645d8d73e88f34f38f9bf8bd62e0d8c5bd6eaa13eedeabbd882b6496"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_balance_operator.f90",
+      "sha256": "64631cf4df055b3de9198c87b4eb3650a10078c480dfc995e8de7bb691536747"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_pipeline.f90",
+      "sha256": "e9034c1595d69101e9cfee7034bbaa3b72c08f18d2f2114a41bfdeb41226ebf1"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_real_netcdf.f90",
+      "sha256": "4b099c85630fe4acfefc37ed474176d4c2b71a112f7a4fe5272a1c663f9633bc"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_pressure_analysis.f90",
+      "sha256": "c81ebce5b07998dbe26e7ef40c4dcf787e53550be0c7af106b5f5e31710b0396"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/pr65_observation_joint_preflight.f90",
+      "sha256": "056d89c4bc1d0196685ad1a4d9e4f55cc87cd2e918f662c024ea3ae9d37e1aed"
+    }
+  ],
+  "actual_inputs_prebuild": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fua/wrf/2622806000600.fua",
+      "sha256": "29a5bbf0e638422c303ee6e992cc1f53529046624bae1037ea5b1b3b927903ff"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fsf/wrf/2622806000600.fsf",
+      "sha256": "06781a2d8e14844e26c1ec519d2880b00caf70a6cfcf196e5cb5e4259679e252"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260831_wind_multitime/results/baseline_202608161200/262281200.lw3",
+      "sha256": "9dc8b27c62f49fd788695494a7f6eab75229fcc5f92780dbc6f07d191ded91ff"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrz/262281200.vrz",
+      "sha256": "17f4a463f9d06327f5f28d25fd65b21340d8f62543c404401afbf505ee3412af"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrt/262281200.vrt",
+      "sha256": "00b53192b9111b6cb406b418080a0889855355a701e3bfa6167d36dc04ca4411"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/static.nest7grid",
+      "sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b"
+    }
+  ],
+  "actual_inputs_postbuild": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fua/wrf/2622806000600.fua",
+      "sha256": "29a5bbf0e638422c303ee6e992cc1f53529046624bae1037ea5b1b3b927903ff"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fsf/wrf/2622806000600.fsf",
+      "sha256": "06781a2d8e14844e26c1ec519d2880b00caf70a6cfcf196e5cb5e4259679e252"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260831_wind_multitime/results/baseline_202608161200/262281200.lw3",
+      "sha256": "9dc8b27c62f49fd788695494a7f6eab75229fcc5f92780dbc6f07d191ded91ff"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrz/262281200.vrz",
+      "sha256": "17f4a463f9d06327f5f28d25fd65b21340d8f62543c404401afbf505ee3412af"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrt/262281200.vrt",
+      "sha256": "00b53192b9111b6cb406b418080a0889855355a701e3bfa6167d36dc04ca4411"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/static.nest7grid",
+      "sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b"
+    }
+  ],
+  "actual_inputs_postrun": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fua/wrf/2622806000600.fua",
+      "sha256": "29a5bbf0e638422c303ee6e992cc1f53529046624bae1037ea5b1b3b927903ff"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fsf/wrf/2622806000600.fsf",
+      "sha256": "06781a2d8e14844e26c1ec519d2880b00caf70a6cfcf196e5cb5e4259679e252"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260831_wind_multitime/results/baseline_202608161200/262281200.lw3",
+      "sha256": "9dc8b27c62f49fd788695494a7f6eab75229fcc5f92780dbc6f07d191ded91ff"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrz/262281200.vrz",
+      "sha256": "17f4a463f9d06327f5f28d25fd65b21340d8f62543c404401afbf505ee3412af"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrt/262281200.vrt",
+      "sha256": "00b53192b9111b6cb406b418080a0889855355a701e3bfa6167d36dc04ca4411"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/static.nest7grid",
+      "sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b"
+    }
+  ],
+  "toolchain_and_runner_prebuild": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/run_pr65_observation_joint_preflight.sh",
+      "sha256": "51c4f4b5201f2f61823bb97970bb6994d14da9bbf1644c9edddbf8bf2225fd38"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/qbal_real_cases_20260816.tsv",
+      "sha256": "b6dba2f813773b09261280b5b865636594071b95957789f9aab1495ad2b4f29f"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh",
+      "sha256": "26084d08db985eadb61adc43c7f18821be9e75156b60f920de363ea51c70887e"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so",
+      "sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5",
+      "sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config",
+      "sha256": "e39004b972304d63c1b46fb065db754718d571430063819ddafdd7bd3612d8a5"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/lib/libnetcdff.a",
+      "sha256": "f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17c8a39"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/lib/libnetcdf.a",
+      "sha256": "f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288"
+    }
+  ],
+  "toolchain_and_runner_postrun": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/run_pr65_observation_joint_preflight.sh",
+      "sha256": "51c4f4b5201f2f61823bb97970bb6994d14da9bbf1644c9edddbf8bf2225fd38"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/qbal_real_cases_20260816.tsv",
+      "sha256": "b6dba2f813773b09261280b5b865636594071b95957789f9aab1495ad2b4f29f"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh",
+      "sha256": "26084d08db985eadb61adc43c7f18821be9e75156b60f920de363ea51c70887e"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so",
+      "sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5",
+      "sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config",
+      "sha256": "e39004b972304d63c1b46fb065db754718d571430063819ddafdd7bd3612d8a5"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/lib/libnetcdff.a",
+      "sha256": "f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17c8a39"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/lib/libnetcdf.a",
+      "sha256": "f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288"
+    }
+  ],
+  "objects_pre_run": [
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_state.o",
+      "sha256": "217898668a4a45bac7e3d5f7b02e115df80e72050b4b9a27425f41bf71fdde3f"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_grid_geometry.o",
+      "sha256": "4d0d18aaf2a30d7d35d09adcf4d8b77c2cf924abea06fe0f89485e05b6bbf55c"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_column_physics.o",
+      "sha256": "515c32addba0a7f08e67e6a4af7c8b36d37c486e7dd77712dcb163dd452e47f1"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_balance_operator.o",
+      "sha256": "fa09ba9e61b4bc914b35ab19794bf4064b7131d9883f53c4588153a8cea2e46b"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_pipeline.o",
+      "sha256": "c3d0a3e904101d9d07711192396c65217015d5a80e0ec135051526e2e9229bff"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_real_netcdf.o",
+      "sha256": "7607b3ce1c4d60522163a625be1a4855f6c70d538f429293786fe8f6fa7dea06"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_pressure_analysis.o",
+      "sha256": "642f860c4fb185519051ec39cd919a00545205508d85f5187f21a1bd86ba9756"
+    }
+  ],
+  "objects_postrun": [
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_state.o",
+      "sha256": "217898668a4a45bac7e3d5f7b02e115df80e72050b4b9a27425f41bf71fdde3f"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_grid_geometry.o",
+      "sha256": "4d0d18aaf2a30d7d35d09adcf4d8b77c2cf924abea06fe0f89485e05b6bbf55c"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_column_physics.o",
+      "sha256": "515c32addba0a7f08e67e6a4af7c8b36d37c486e7dd77712dcb163dd452e47f1"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_balance_operator.o",
+      "sha256": "fa09ba9e61b4bc914b35ab19794bf4064b7131d9883f53c4588153a8cea2e46b"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_pipeline.o",
+      "sha256": "c3d0a3e904101d9d07711192396c65217015d5a80e0ec135051526e2e9229bff"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_real_netcdf.o",
+      "sha256": "7607b3ce1c4d60522163a625be1a4855f6c70d538f429293786fe8f6fa7dea06"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_pressure_analysis.o",
+      "sha256": "642f860c4fb185519051ec39cd919a00545205508d85f5187f21a1bd86ba9756"
+    }
+  ],
+  "executable_sha256_pre_run": [
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/pr65_observation_joint_preflight",
+      "sha256": "48730db52ce31466a4366a901ebfebcc1ed6c353fc00c2072b91c14b376dfaa0"
+    }
+  ],
+  "executable_sha256_postrun": [
+    {
+      "path": "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/pr65_observation_joint_preflight",
+      "sha256": "48730db52ce31466a4366a901ebfebcc1ed6c353fc00c2072b91c14b376dfaa0"
+    }
+  ],
+  "toolchain_flags": "compiler=/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx\ncompiler_version=ifx (IFX) 2026.0.0 20260331\ncompiler_sha256=909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef\nprofile=O0\nnetcdf_config=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config\nnetcdf_fortran_archive=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/lib/libnetcdff.a\nnetcdf_c_archive=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/lib/libnetcdf.a\nprofile_flags=-stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz \nnetcdf_fortran_flags=-I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include \nnetcdf_link_flags=-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/lib -lnetcdff -L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/lib -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lnetcdf -lm -lnetcdf -lhdf5_hl -lhdf5 -lsz -lbz2 -lcurl -lz -ldl -lm -lpthread \n",
+  "commands": [
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx --version ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -c -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_state.f90 -o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_state.o ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -c -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_grid_geometry.f90 -o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_grid_geometry.o ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -c -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_column_physics.f90 -o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_column_physics.o ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -c -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_balance_operator.f90 -o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_balance_operator.o ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -c -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_pipeline.f90 -o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_pipeline.o ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -c -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_real_netcdf.f90 -o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_real_netcdf.o ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -c -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/src/common/cloud_bal_pressure_analysis.f90 -o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_pressure_analysis.o ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include -I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/include /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/pr65_observation_joint_preflight.f90 /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_state.o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_grid_geometry.o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_column_physics.o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_balance_operator.o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_pipeline.o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_real_netcdf.o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/cloud_bal_pressure_analysis.o -L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/lib -lnetcdff -L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/lib -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lnetcdf -lm -lnetcdf -lhdf5_hl -lhdf5 -lsz -lbz2 -lcurl -lz -ldl -lm -lpthread -o /var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/pr65_observation_joint_preflight ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/run_pr65_observation_joint_preflight.sh ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config --fflags ",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config --flibs ",
+    "/var/tmp/cloud_bal_pr65_observation_preflight.e6UIuh/pr65_observation_joint_preflight /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fua/wrf/2622806000600.fua /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fsf/wrf/2622806000600.fsf /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260831_wind_multitime/results/baseline_202608161200/262281200.lw3 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrz/262281200.vrz /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrt/262281200.vrt /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/static.nest7grid 1786881600 "
+  ],
+  "preflight_log_sha256": "20c23f275aa32012d52b5e735e42bed1e623fc69c52f775b015b8468e210587d",
+  "netcdf_and_intel_runtime_inputs": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so",
+      "sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5",
+      "sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config",
+      "sha256": "e39004b972304d63c1b46fb065db754718d571430063819ddafdd7bd3612d8a5"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/lib/libnetcdff.a",
+      "sha256": "f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17c8a39"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/lib/libnetcdf.a",
+      "sha256": "f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288"
+    }
+  ]
+}

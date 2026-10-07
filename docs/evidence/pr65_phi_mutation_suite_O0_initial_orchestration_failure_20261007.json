@@ -1,0 +1,24 @@
+{
+  "status": "READER_PASS_WRAPPER_FAIL",
+  "scope": "complete Phi reader suite result followed by failure of the mutable shell wrapper after test completion",
+  "profile_label": "O0",
+  "artifact_path": "/var/tmp/cloud_bal_pr64_actual_phase.f69Ky7/actual-ne57-phase_phi-shadow.nc",
+  "artifact_sha256_expected_from_preserved_PR64_receipt": "ba4e8466903492b905a6f042257d8183614c9536fe0c0211acab7fcef4951991",
+  "artifact_sha256_observed_after_run": "ba4e8466903492b905a6f042257d8183614c9536fe0c0211acab7fcef4951991",
+  "original_receipt_path": "/var/tmp/cloud_bal_pr64_actual_phase.f69Ky7/receipt.json",
+  "original_receipt_sha256_preserved": "1d9c2e4490a1bc08073eef822e394136e28401f03860922280e7b67be6f09f03",
+  "original_receipt_status": "FAIL_OPEN",
+  "reader_command": [
+    "/usr/bin/python3",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/check_pressure_geopotential_shadow.py",
+    "/var/tmp/cloud_bal_pr64_actual_phase.f69Ky7/actual-ne57-phase_phi-shadow.nc"
+  ],
+  "reader_result": "PASS; both final suite completion lines are preserved in full_mutation_suite.log",
+  "reader_exit_status_capture": "not persisted by wrapper",
+  "wrapper_exit_status": 2,
+  "wrapper_error": "Cloud-BAL/docs/evidence/pr65_phi_mutation_suite_20261007.sh: line 110: unexpected EOF while looking for matching '\"'",
+  "runner_sha256_observed_during_active_run_before_edit": "30eb4e893bab590977448fccc13b8c5b5480e6285b385ee6cab6c2f579d3d312",
+  "runner_pre_post_guard": "not captured; runner file was edited while the suite process was active",
+  "full_reader_log_path": "/var/tmp/cloud_bal_pr65_phi_mutations.O0.NJFOfg/full_mutation_suite.log",
+  "full_reader_log_sha256": "0ec18d2170ab5eeabf3dbd199c2cd0283a20066acf74616fda7216ca6f7908a0"
+}

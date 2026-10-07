@@ -1,0 +1,154 @@
+--- a/module_bl_shinhong_pr65.F
++++ b/module_bl_shinhong_pr65.F
+@@ -25,7 +25,7 @@
+                 !optional
+                   ctopo,ctopo2,                                                &
+                   wstar,delta,                                                 &
+-                  regime                                           )
++                  regime,qnc_scalar,qnc_enabled,p_qnc,rqncblten )
+ !-------------------------------------------------------------------------------
+    implicit none
+ !-------------------------------------------------------------------------------
+@@ -100,7 +100,7 @@
+ !-- kte         end index for k in tile
+ !-------------------------------------------------------------------------------
+ !
+-   integer,parameter ::  ndiff = 3
++   integer,parameter ::  max_ndiff = 4
+    real,parameter    ::  rcl = 1.0
+ !
+    integer,  intent(in   )   ::      ids,ide, jds,jde, kds,kde,                &
+@@ -175,6 +175,10 @@
+                                                                         delta
+    real,     dimension( ims:ime, jms:jme )                                   , &
+              intent(inout), optional    ::                             regime
++   real,     dimension(ims:,kms:,jms:,:), intent(in), optional :: qnc_scalar
++   logical, intent(in), optional :: qnc_enabled
++   integer, intent(in), optional :: p_qnc
++   real,     dimension(ims:ime,kms:kme,jms:jme), intent(out), optional :: rqncblten
+ !
+    real,     dimension( ims:ime, jms:jme )                                   , &
+              intent(in   ), optional    ::                              ctopo, &
+@@ -188,8 +192,8 @@
+ !
+ ! local
+ !
+-   integer ::  i,j,k
+-   real,     dimension( its:ite, kts:kte*ndiff )  ::                 rqvbl2dt, &
++   integer ::  i,j,k,nchannel
++   real,     dimension( its:ite, kts:kte*max_ndiff )  ::             rqvbl2dt, &
+                                                                          qv2d
+    real,     dimension( its:ite, kts:kte )        ::                      pdh
+    real,     dimension( its:ite, kts:kte+1 )      ::                     pdhi
+@@ -199,6 +203,16 @@
+                                                                         dtsfc, &
+                                                                         dqsfc
+ !
++   nchannel = 3
++   if (present(qnc_scalar)) then
++     if (present(qnc_enabled)) then
++       if (present(p_qnc)) then
++         if (present(rqncblten)) then
++           if (qnc_enabled .and. p_qnc.gt.0 .and. p_qnc.le.size(qnc_scalar,4)) nchannel = 4
++         endif
++       endif
++     endif
++   endif
+    qv2d(its:ite,:) = 0.0
+ !
+    do j = jts,jte
+@@ -213,6 +227,7 @@
+          qv2d(i,k) = qv3d(i,k,j)
+          qv2d(i,k+kte) = qc3d(i,k,j)
+          if(present(rqiblten)) qv2d(i,k+kte+kte) = qi3d(i,k,j)
++         if(nchannel.eq.4) qv2d(i,k+3*kte) = qnc_scalar(i,k,j,p_qnc)
+        enddo
+      enddo
+ !
+@@ -222,7 +237,7 @@
+              ,p2d=pdh(its,kts),p2di=pdhi(its,kts)                              &
+              ,pi2d=pi3d(ims,kms,j)                                             &
+              ,utnp=rublten(ims,kms,j),vtnp=rvblten(ims,kms,j)                  &
+-             ,ttnp=rthblten(ims,kms,j),qtnp=rqvbl2dt(its,kts),ndiff=ndiff      &
++             ,ttnp=rthblten(ims,kms,j),qtnp=rqvbl2dt(its,kts),ndiff=nchannel      &
+              ,cp=cp,g=g,rovcp=rovcp,rd=rd,rovg=rovg                            &
+              ,xlv=xlv,rv=rv                                                    &
+              ,ep1=ep1,ep2=ep2,karman=karman                                    &
+@@ -254,6 +269,7 @@
+          rqvblten(i,k,j) = rqvbl2dt(i,k)
+          rqcblten(i,k,j) = rqvbl2dt(i,k+kte)
+          if(present(rqiblten)) rqiblten(i,k,j) = rqvbl2dt(i,k+kte+kte)
++         if(nchannel.eq.4) rqncblten(i,k,j) = rqvbl2dt(i,k+3*kte)
+        enddo
+      enddo
+ !
+--- a/module_pbl_driver_pr65.F
++++ b/module_pbl_driver_pr65.F
+@@ -789,6 +789,8 @@
+ !  LOCAL  VAR
+ 
+    INTEGER :: pr65_unit, pr65_k, pr65_iostat
++   LOGICAL :: pr65_qnc_enabled, pr65_qnc_flag
++   INTEGER :: pr65_scalar_pblmix
+ 
+    REAL,       DIMENSION( ims:ime, kms:kme, jms:jme ) ::v_phytmp
+    REAL,       DIMENSION( ims:ime, kms:kme, jms:jme ) ::u_phytmp
+@@ -1301,13 +1303,31 @@
+                 PRESENT( rqiblten )                           .AND. &
+                 PRESENT( hol      ) ) THEN
+ !
+-             IF (PRESENT(scalar) .AND. p_qnc.GT.0 .AND. p_qnc.LE.num_scalar) THEN
++             pr65_qnc_enabled = .FALSE.
++             pr65_qnc_flag = .FALSE.
++             pr65_scalar_pblmix = -1
++             IF (PRESENT(f_qnc)) pr65_qnc_flag = f_qnc
++             IF (PRESENT(scalar_pblmix)) pr65_scalar_pblmix = scalar_pblmix
++             IF (PRESENT(scalar)) THEN
++               IF (PRESENT(scalar_tend)) THEN
++                 IF (PRESENT(f_qnc)) THEN
++                   IF (f_qnc .AND. p_qnc.GT.0 .AND. p_qnc.LE.num_scalar) pr65_qnc_enabled = .TRUE.
++                 ENDIF
++               ENDIF
++             ENDIF
++             ! The later generic scalar_pblmix path uses a different operator.
++             ! Keep Shinhong NC off there to prevent a second PBL mixing update.
++             IF (PRESENT(scalar_pblmix)) THEN
++               IF (scalar_pblmix.GT.0) pr65_qnc_enabled = .FALSE.
++             ENDIF
++             IF (pr65_qnc_enabled) THEN
+                IF (172.GE.its .AND. 172.LE.ite .AND. 76.GE.jts .AND. 76.LE.jte) THEN
+                  OPEN(NEWUNIT=pr65_unit,FILE='pr65_pbl_nc.raw',STATUS='UNKNOWN', &
+                       POSITION='APPEND',ACTION='WRITE',IOSTAT=pr65_iostat)
+                  IF (pr65_iostat.EQ.0) THEN
+-                   WRITE(pr65_unit,'(A,",",I0,",",I0,",",I0,",",I0,",",ES24.16E3,",",I0,",",I0)') &
+-                        'CALL',172,76,kts,kte,dtbl,p_qnc,num_scalar
++                   WRITE(pr65_unit,'(A,",",I0,",",I0,",",I0,",",I0,",",ES24.16E3,",",I0,",",I0,",",L1,",",I0,",",L1)') &
++                        'CALL',172,76,kts,kte,dtbl,p_qnc,num_scalar,pr65_qnc_enabled, &
++                        pr65_scalar_pblmix,pr65_qnc_flag
+                    DO pr65_k=kts,kte
+                      WRITE(pr65_unit,'(A,",",I0,",",ES24.16E3,",",ES24.16E3)') &
+                           'NC',pr65_k,qc_curr(172,pr65_k,76),scalar(172,pr65_k,76,p_qnc)
+@@ -1340,12 +1360,23 @@
+               ,EXCH_H=exch_h,REGIME=regime                          &
+ ! for grims shallow convection with shinhongpbl
+               ,WSTAR=wstar,DELTA=delta                              &
++              ,QNC_SCALAR=scalar,QNC_ENABLED=pr65_qnc_enabled        &
++              ,P_QNC=p_qnc,RQNCBLTEN=rqncblten                       &
+               ,TKE_PBL=tke_pbl,EL_PBL=el_pbl,CORF=f                 &
+               ,IDS=ids,IDE=ide,JDS=jds,JDE=jde,KDS=kds,KDE=kde      &
+               ,IMS=ims,IME=ime,JMS=jms,JME=jme,KMS=kms,KME=kme      &
+               ,ITS=its,ITE=ite,JTS=jts,JTE=jte,KTS=kts,KTE=kte      &
+               ,DX=dx,DY=dy                                          &
+                                                                     )
++             IF (pr65_qnc_enabled) THEN
++               DO j=jts,jte
++                 DO k=kts,kte
++                   DO i=its,ite
++                     scalar_tend(i,k,j,p_qnc) = scalar_tend(i,k,j,p_qnc) + rqncblten(i,k,j)
++                   ENDDO
++                 ENDDO
++               ENDDO
++             ENDIF
+            ELSE
+                WRITE ( message , FMT = '(A,7(L1,1X))' )             &
+                  'present: '//                                      &

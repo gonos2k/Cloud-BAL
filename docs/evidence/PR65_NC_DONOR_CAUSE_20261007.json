@@ -1,0 +1,778 @@
+{
+  "artifacts": {
+    "face_capture": "docs/evidence/pr65_nc_donor_faces_20261007.raw",
+    "face_capture_sha256": "507b4d722d5bda4c07beece6638aaa6befbb0bf864cf5b7e3299f06b15708e89",
+    "host_capture": "docs/evidence/pr65_nc_host_updates_20261007.raw",
+    "host_capture_sha256": "3b0e3be6a7f8fbb17f08f50495af90743d70c7608fb073a196e9daa97052da85",
+    "replay_test": "tests/test_pr65_nc_donor_replay.py",
+    "replay_tool": "tools/pr65_nc_donor_replay.py",
+    "source_patch": "docs/evidence/pr65_nc_donor_observer.patch"
+  },
+  "date": "2026-10-07",
+  "failed_and_excluded_attempts": [
+    {
+      "attempt": "First manual PR65 observer run reused a populated output tree. `pr62_extent_cells.txt` appended old rows (2264 lines versus baseline 566) and hash 2efaeaef3102af77ccace678e0e3d71c245408ebd8a63771635508f4faa14d43; that run is not valid equivalence evidence. Its donor-face raw is retained, but clean guarded replay is the authority."
+    },
+    {
+      "attempt": "First guarded rerun declared pr63_transition_masks.bin as input even though the model rewrites it; returncode 0, input_integrity FAIL, output_isolation PASS. Receipt retained at /var/tmp/pr65_nc_donors_20261007/run_guarded/run-isolation.json; receipt SHA-256 f67f828522b65839d02ff7e872c08e04e1091d1f045106b1d5a3bbb3e78fa84e. Final fresh run correctly declares the mask as output."
+    },
+    {
+      "attempt": "Earlier PD scalar probe captured only RK3; excluded from donor causality because the positive-definite path is final-stage only."
+    },
+    {
+      "attempt": "One initial compile/link command lacked Intel environment in PATH and failed with returncode 127; it produced no run evidence."
+    }
+  ],
+  "finding": {
+    "aggregate_negative_qc_entry_23494": {
+      "classification": "Existing stage reductions localize the aggregate onset only: active-overlap negative-QC counts are 0 at PRE_RK, 161526 at completed RK1, 395145 at completed RK2, and 23494 at completed RK3. The 23494 persists through pre/post moist preparation and pre-microphysics, then falls to 0 post-microphysics. The eventual KDM-entry cells are not identity-linked across stage masks, so their individual first-negative stage and causes remain unresolved.",
+      "full_tile_completed_stage_counts": {
+        "PRE_RK": 0,
+        "RK1": 163244,
+        "RK2": 399233,
+        "RK3": 23539
+      },
+      "active_overlap_completed_stage_counts": {
+        "PRE_RK": 0,
+        "RK1": 161526,
+        "RK2": 395145,
+        "RK3": 23494
+      },
+      "kdm_pipeline_counts": {
+        "KDM6_ENTRY": 23494,
+        "PRE_MOIST_PREP": 23494,
+        "POST_MOIST_PREP": 23494,
+        "PRE_MICROPHYSICS": 23494,
+        "POST_MICROPHYSICS": 0
+      },
+      "evidence": [
+        "docs/evidence/pr63_transition_v2_replay_20261006.json",
+        "docs/evidence/pr63_paired_graupel_cleanup_20261006.json"
+      ],
+      "namelist": {
+        "sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+        "moist_adv_opt": 1,
+        "scalar_adv_opt": 1
+      },
+      "operator_path": "QC uses the moisture transport loop. For non-ORIGINAL/non-WENO moist_adv_opt, generated solver calls rk_update_scalar_pd at rk_step==rk_order only. The RK update equation contains no nonnegative floor; this does not show whether transport or physics first made the eventual cells negative.",
+      "not_attributed_to": "The selected NC donor-face cause or the selected-target positive PBL QC tendency; neither is evidence for all aggregate QC cells.",
+      "next_capture": "Coordinate-bind the KDM-entry negative-QC mask and record those cells before/after each RK stage, advection tendency, separated PBL/other physics tendencies, carrier operands, option branch, and completed update. Classify first negative completed operator per eventual KDM-entry cell."
+    },
+    "carrier_updates": {
+      "rk1": {
+        "nc": {
+          "advect_tend": -25722700.0,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 0.0009068292215087366,
+          "den_new": 94929.859375,
+          "den_old": 94933.0859375,
+          "dt": 6.666666507720947,
+          "field": -1773.7578125,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -69.20040893554688,
+          "muold": -66.0234375,
+          "new": -1773.7578125,
+          "old": 0.0,
+          "partner": 1.6839790362155327e-07,
+          "predicted_new_from_logged_float32_fields": -1773.7578697514248,
+          "rk": 1,
+          "sc_tend": 0.0,
+          "species": 3
+        },
+        "qc": {
+          "advect_tend": -2.8979329727008007e-05,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 8.930960187984255e-14,
+          "den_new": 94929.859375,
+          "den_old": 94933.0859375,
+          "dt": 6.666666507720947,
+          "field": 1.6839790362155327e-07,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -69.20040893554688,
+          "muold": -66.0234375,
+          "new": 1.6839790362155327e-07,
+          "old": 0.0,
+          "partner": 0.0,
+          "predicted_new_from_logged_float32_fields": 1.683979168279153e-07,
+          "rk": 1,
+          "sc_tend": 0.0024263537488877773,
+          "species": 3
+        },
+        "shared_carrier_fields_match": true
+      },
+      "rk2": {
+        "nc": {
+          "advect_tend": -35411072.0,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 0.001868633004360476,
+          "den_new": 94928.6015625,
+          "den_old": 94933.0859375,
+          "dt": 10.0,
+          "field": -3662.8056640625,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -70.44757843017578,
+          "muold": -66.0234375,
+          "new": -3662.8056640625,
+          "old": 0.0,
+          "partner": 2.513710057883145e-07,
+          "predicted_new_from_logged_float32_fields": -3662.8056957978893,
+          "rk": 2,
+          "sc_tend": 0.0,
+          "species": 3
+        },
+        "qc": {
+          "advect_tend": -4.086306216777302e-05,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 1.3810488868206836e-13,
+          "den_new": 94928.6015625,
+          "den_old": 94933.0859375,
+          "dt": 10.0,
+          "field": 2.513710057883145e-07,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -70.44757843017578,
+          "muold": -66.0234375,
+          "new": 2.513710057883145e-07,
+          "old": 0.0,
+          "partner": -1773.7578125,
+          "predicted_new_from_logged_float32_fields": 2.513710137038582e-07,
+          "rk": 2,
+          "sc_tend": 0.0024263537488877773,
+          "species": 3
+        },
+        "shared_carrier_fields_match": true
+      },
+      "rk3": {
+        "nc": {
+          "advect_tend": 0.0,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 7.006492321624085e-46,
+          "den_new": 94920.515625,
+          "den_old": 94933.0859375,
+          "dt": 20.0,
+          "field": 0.0,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -78.42263793945312,
+          "muold": -66.0234375,
+          "new": 0.0,
+          "old": 0.0,
+          "partner": 5.03652699990198e-07,
+          "predicted_new_from_logged_float32_fields": 0.0,
+          "rk": 3,
+          "sc_tend": 0.0,
+          "species": 3
+        },
+        "qc": {
+          "advect_tend": -3.666835982585326e-05,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 2.758170712596121e-13,
+          "den_new": 94920.515625,
+          "den_old": 94933.0859375,
+          "dt": 20.0,
+          "field": 5.03652699990198e-07,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -78.42263793945312,
+          "muold": -66.0234375,
+          "new": 5.03652699990198e-07,
+          "old": 5.111713790029171e-07,
+          "partner": -3662.8056640625,
+          "predicted_new_from_logged_float32_fields": 5.036527162791773e-07,
+          "rk": 3,
+          "sc_tend": 0.0,
+          "species": 3
+        },
+        "shared_carrier_fields_match": true
+      }
+    },
+    "first_completed_violating_operator": "RK1 regular scalar-advection update of NC: target NC begins at 0 and completes RK1 at -1773.7578125; sc_tend=0. This is an internal RK-stage negative state; RK3 target NC is 0.",
+    "global_minimum_assessed": false,
+    "limiter_path": "scalar_adv_opt=1 is positive-definite scalar advection, but module_em.F calls advect_scalar_pd only when rk_step==rk_order (RK3). RK1 and RK2 execute regular advect_scalar. This observer captures NC final RK3 value as zero; it does not attribute that zero to a unique limiter action.",
+    "rk1_flux_reconstruction": {
+      "advect_tendency_binary32_roundoff_bound": 12.732349113960463,
+      "call": "NC",
+      "rdzw": -161.673828125,
+      "sum_tendency": -25722700.134643555,
+      "sum_tendency_binary32_roundoff_bound": 11.732349113960463,
+      "upper_interface_flux_error_bound": 0.04574548875817858,
+      "upper_interface_flux_from_linear_face": -159102.4485473947,
+      "vertical_face_fluxes": [
+        0.0,
+        -159102.4375
+      ],
+      "vertical_field": [
+        0.0,
+        21559104.0
+      ],
+      "vertical_rom": [
+        0.0,
+        -0.0167626291513443
+      ],
+      "vertical_weights": [
+        0.44025471806526184,
+        0.5597452521324158
+      ],
+      "x_face_flux_error_bounds": [
+        7.006492321624085e-46,
+        7.006492321624085e-46
+      ],
+      "x_face_fluxes": [
+        0.0,
+        0.0
+      ],
+      "x_flux5_from_donors": [
+        -0.0,
+        -0.0
+      ],
+      "x_tendency": -0.0,
+      "x_tendency_binary32_roundoff_bound": 7.006492321624085e-46,
+      "y_face_flux_error_bounds": [
+        7.006492321624085e-46,
+        592252.3560100193
+      ],
+      "y_face_fluxes": [
+        0.0,
+        0.0
+      ],
+      "y_flux5_from_donors": [
+        0.0,
+        0.0
+      ],
+      "y_tendency": -0.0,
+      "y_tendency_binary32_roundoff_bound": 7.006492321624085e-46,
+      "z_tendency": -25722700.134643555,
+      "z_tendency_binary32_roundoff_bound": 5.59957803503661
+    },
+    "rk2_flux_reconstruction": {
+      "advect_tendency_binary32_roundoff_bound": 19.820221426591676,
+      "call": "NC",
+      "rdzw": -161.673828125,
+      "sum_tendency": -35411070.49820083,
+      "sum_tendency_binary32_roundoff_bound": 17.820221426591676,
+      "upper_interface_flux_error_bound": 0.06120479973014073,
+      "upper_interface_flux_from_linear_face": -223896.56637178498,
+      "vertical_face_fluxes": [
+        0.0,
+        -223896.5625
+      ],
+      "vertical_field": [
+        -1773.7578125,
+        21526700.0
+      ],
+      "vertical_rom": [
+        0.0,
+        -0.023627156391739845
+      ],
+      "vertical_weights": [
+        0.44025471806526184,
+        0.5597452521324158
+      ],
+      "x_face_flux_error_bounds": [
+        31411.624101772573,
+        18242.77542830247
+      ],
+      "x_face_fluxes": [
+        4675581440.0,
+        2428474112.0
+      ],
+      "x_flux5_from_donors": [
+        4675581290.342887,
+        2428474244.9073243
+      ],
+      "x_tendency": 441291.6300855926,
+      "x_tendency_binary32_roundoff_bound": 0.34824504816968677,
+      "y_face_flux_error_bounds": [
+        10410.584330091737,
+        607338.7485272044
+      ],
+      "y_face_fluxes": [
+        -887940800.0,
+        -2649059840.0
+      ],
+      "y_flux5_from_donors": [
+        -887940900.847693,
+        -2649035113.1539803
+      ],
+      "y_tendency": 345852.235116904,
+      "y_tendency_binary32_roundoff_bound": 0.18123143630127583,
+      "z_tendency": -36198214.36340332,
+      "z_tendency_binary32_roundoff_bound": 8.472746283319522
+    },
+    "units": "QNC number per kg dry air; face advection tendency is in native tendency units and the carrier update yields the stored QNC number/kg value."
+  },
+  "guarded_run": {
+    "baseline_comparisons": {
+      "candidate_run.log": {
+        "baseline_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df",
+        "match": true,
+        "observer_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+      },
+      "kdm6_first_call_post.raw": {
+        "baseline_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51",
+        "match": true,
+        "observer_sha256": "c1601094ff2d5b0fb97212a3fc8a1ea9fb7291f2e4a70a971a220e034a8dbf51"
+      },
+      "kdm6_first_call_pre.raw": {
+        "baseline_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+        "match": true,
+        "observer_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+      },
+      "namelist.output": {
+        "baseline_sha256": "ad2164d8d0db9eac8cf778e8a05b8e56ec68c9fa0a85f8a503c045ad075429d9",
+        "match": true,
+        "observer_sha256": "ad2164d8d0db9eac8cf778e8a05b8e56ec68c9fa0a85f8a503c045ad075429d9"
+      },
+      "pr61_cell_process.raw": {
+        "baseline_sha256": "baf2e04b1afce984ea0ddb56f328166dffb0f19063fbdb1baf4094c8f22e3cb5",
+        "match": true,
+        "observer_sha256": "baf2e04b1afce984ea0ddb56f328166dffb0f19063fbdb1baf4094c8f22e3cb5"
+      },
+      "pr62_extent_cells.txt": {
+        "baseline_sha256": "1fea469d3d9d62ee9680e0e3084010ba5f50657217b799e3dd71c5ff9721b626",
+        "match": true,
+        "observer_sha256": "1fea469d3d9d62ee9680e0e3084010ba5f50657217b799e3dd71c5ff9721b626"
+      },
+      "pr63_geometry.raw": {
+        "baseline_sha256": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008",
+        "match": true,
+        "observer_sha256": "e551fcf9d6fa8be639505548a12568f77e381aa49a6e9358c4f343da2edcb008"
+      },
+      "pr63_kdm_stages.raw": {
+        "baseline_sha256": "2c683e83ae0358d82af09f6791d182c0769dd4877e4b9010813a27f0d9c2aa42",
+        "match": true,
+        "observer_sha256": "2c683e83ae0358d82af09f6791d182c0769dd4877e4b9010813a27f0d9c2aa42"
+      },
+      "pr63_transition_stages.raw": {
+        "baseline_sha256": "3f51d87ab0320df86ce4e4cffc1b73acf36d2faf7ac1ba8eff3d145c8e8f9d89",
+        "match": true,
+        "observer_sha256": "3f51d87ab0320df86ce4e4cffc1b73acf36d2faf7ac1ba8eff3d145c8e8f9d89"
+      },
+      "wrfout_d01_2026-08-16_12:00:00": {
+        "baseline_sha256": "24d41f956840a3383f27c0e76a0cb673383c65bf61e1aee5a0921337f2243ec8",
+        "match": true,
+        "observer_sha256": "24d41f956840a3383f27c0e76a0cb673383c65bf61e1aee5a0921337f2243ec8"
+      }
+    },
+    "baseline_equivalence": "PASS for ten listed historical observer/model artifacts; exact baseline files match byte-for-byte.",
+    "changed_inputs": [],
+    "command_record": "docs/evidence/pr65_nc_donor_guard_command_20261007.json",
+    "command_record_sha256": "11d7374e12a0e52e2a8e3f3a5e53aabe92937d989767fd2902d784253e0d8362",
+    "copy_method": "shutil.copytree with copy2; output paths removed; PR65 executable copied into new tree; inode audit found every copied file with nlink=1 before run.",
+    "declared_input_count": 101,
+    "declared_output_count": 18,
+    "important_input_hashes": {
+      "namelist.input": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "wrf.exe": "53d704da329058ea8fc8de044be9646a5ca470c0ddde8e2ee18a1ffcc49da3b3",
+      "wrfbdy_d01": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_d01": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+    },
+    "input_integrity": "PASS",
+    "observer_outputs": {
+      "pr64_host_neighborhood.raw": "3b0e3be6a7f8fbb17f08f50495af90743d70c7608fb073a196e9daa97052da85",
+      "pr65_nc_donor_faces.raw": "507b4d722d5bda4c07beece6638aaa6befbb0bf864cf5b7e3299f06b15708e89"
+    },
+    "output_isolation": "PASS",
+    "output_issues": [],
+    "receipt": "docs/evidence/pr65_nc_donor_run_isolation_20261007.json",
+    "receipt_sha256": "21f62cb20db9402b83886f896f5948f7eadb79f8edf0c906f2670b8524934857",
+    "returncode": 0,
+    "run_root": "/var/tmp/pr65_nc_donors_20261007/run_guarded_final",
+    "template_tree": "/var/tmp/pr64_qc_channel_20261007/run"
+  },
+  "limitations": [
+    "Only the selected target and RK1/RK2 face donors are captured; no domain-wide donor census or global-minimum attribution.",
+    "One-rank/one-tile 20-second research copy; no multi-tile/parallel or forecast/operational validation.",
+    "No physical floor, fabricated NC source, or PD rounding adjustment was applied.",
+    "The replay validates numerical captures but does not authenticate them without the separately recorded source patch, executable hash, and guarded run receipt.",
+    "No maintained model source/object/archive was modified.",
+    "The eventual KDM-entry negative-QC population is not identity-linked across stage masks; only aggregate stage counts and the likely next capture are reported."
+  ],
+  "replay": {
+    "completed_host_updates": {
+      "rk1": {
+        "nc": {
+          "advect_tend": -25722700.0,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 0.0009068292215087366,
+          "den_new": 94929.859375,
+          "den_old": 94933.0859375,
+          "dt": 6.666666507720947,
+          "field": -1773.7578125,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -69.20040893554688,
+          "muold": -66.0234375,
+          "new": -1773.7578125,
+          "old": 0.0,
+          "partner": 1.6839790362155327e-07,
+          "predicted_new_from_logged_float32_fields": -1773.7578697514248,
+          "rk": 1,
+          "sc_tend": 0.0,
+          "species": 3
+        },
+        "qc": {
+          "advect_tend": -2.8979329727008007e-05,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 8.930960187984255e-14,
+          "den_new": 94929.859375,
+          "den_old": 94933.0859375,
+          "dt": 6.666666507720947,
+          "field": 1.6839790362155327e-07,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -69.20040893554688,
+          "muold": -66.0234375,
+          "new": 1.6839790362155327e-07,
+          "old": 0.0,
+          "partner": 0.0,
+          "predicted_new_from_logged_float32_fields": 1.683979168279153e-07,
+          "rk": 1,
+          "sc_tend": 0.0024263537488877773,
+          "species": 3
+        },
+        "shared_carrier_fields_match": true
+      },
+      "rk2": {
+        "nc": {
+          "advect_tend": -35411072.0,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 0.001868633004360476,
+          "den_new": 94928.6015625,
+          "den_old": 94933.0859375,
+          "dt": 10.0,
+          "field": -3662.8056640625,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -70.44757843017578,
+          "muold": -66.0234375,
+          "new": -3662.8056640625,
+          "old": 0.0,
+          "partner": 2.513710057883145e-07,
+          "predicted_new_from_logged_float32_fields": -3662.8056957978893,
+          "rk": 2,
+          "sc_tend": 0.0,
+          "species": 3
+        },
+        "qc": {
+          "advect_tend": -4.086306216777302e-05,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 1.3810488868206836e-13,
+          "den_new": 94928.6015625,
+          "den_old": 94933.0859375,
+          "dt": 10.0,
+          "field": 2.513710057883145e-07,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -70.44757843017578,
+          "muold": -66.0234375,
+          "new": 2.513710057883145e-07,
+          "old": 0.0,
+          "partner": -1773.7578125,
+          "predicted_new_from_logged_float32_fields": 2.513710137038582e-07,
+          "rk": 2,
+          "sc_tend": 0.0024263537488877773,
+          "species": 3
+        },
+        "shared_carrier_fields_match": true
+      },
+      "rk3": {
+        "nc": {
+          "advect_tend": 0.0,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 7.006492321624085e-46,
+          "den_new": 94920.515625,
+          "den_old": 94933.0859375,
+          "dt": 20.0,
+          "field": 0.0,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -78.42263793945312,
+          "muold": -66.0234375,
+          "new": 0.0,
+          "old": 0.0,
+          "partner": 5.03652699990198e-07,
+          "predicted_new_from_logged_float32_fields": 0.0,
+          "rk": 3,
+          "sc_tend": 0.0,
+          "species": 3
+        },
+        "qc": {
+          "advect_tend": -3.666835982585326e-05,
+          "c1": 1.0134718418121338,
+          "c2": -1279.824951171875,
+          "completed_update_binary32_roundoff_bound": 2.758170712596121e-13,
+          "den_new": 94920.515625,
+          "den_old": 94933.0859375,
+          "dt": 20.0,
+          "field": 5.03652699990198e-07,
+          "msfty": 0.9819104671478271,
+          "mub": 95000.0,
+          "munew": -78.42263793945312,
+          "muold": -66.0234375,
+          "new": 5.03652699990198e-07,
+          "old": 5.111713790029171e-07,
+          "partner": -3662.8056640625,
+          "predicted_new_from_logged_float32_fields": 5.036527162791773e-07,
+          "rk": 3,
+          "sc_tend": 0.0,
+          "species": 3
+        },
+        "shared_carrier_fields_match": true
+      }
+    },
+    "face_call_order_per_stage": [
+      "QC moist scalar",
+      "NC scalar"
+    ],
+    "face_row_count": 12,
+    "flux_reconstruction": "source flux5 donor stencil and vertical linear face interpolation; comparison tolerances are binary32 forward-error bounds",
+    "global_minimum_assessed": false,
+    "interpretation": "The first completed target NC negativity is the RK1 regular scalar-advection update; RK1/RK2 do not invoke the final-stage positive-definite scalar path.",
+    "observer_source_authentication": "not performed by replay; bind capture to recorded patched source hash and run evidence",
+    "target": [
+      172,
+      76,
+      1
+    ],
+    "tendency_reconstruction": {
+      "rk1": {
+        "nc": {
+          "advect_tendency_binary32_roundoff_bound": 12.732349113960463,
+          "call": "NC",
+          "rdzw": -161.673828125,
+          "sum_tendency": -25722700.134643555,
+          "sum_tendency_binary32_roundoff_bound": 11.732349113960463,
+          "upper_interface_flux_error_bound": 0.04574548875817858,
+          "upper_interface_flux_from_linear_face": -159102.4485473947,
+          "vertical_face_fluxes": [
+            0.0,
+            -159102.4375
+          ],
+          "vertical_field": [
+            0.0,
+            21559104.0
+          ],
+          "vertical_rom": [
+            0.0,
+            -0.0167626291513443
+          ],
+          "vertical_weights": [
+            0.44025471806526184,
+            0.5597452521324158
+          ],
+          "x_face_flux_error_bounds": [
+            7.006492321624085e-46,
+            7.006492321624085e-46
+          ],
+          "x_face_fluxes": [
+            0.0,
+            0.0
+          ],
+          "x_flux5_from_donors": [
+            -0.0,
+            -0.0
+          ],
+          "x_tendency": -0.0,
+          "x_tendency_binary32_roundoff_bound": 7.006492321624085e-46,
+          "y_face_flux_error_bounds": [
+            7.006492321624085e-46,
+            592252.3560100193
+          ],
+          "y_face_fluxes": [
+            0.0,
+            0.0
+          ],
+          "y_flux5_from_donors": [
+            0.0,
+            0.0
+          ],
+          "y_tendency": -0.0,
+          "y_tendency_binary32_roundoff_bound": 7.006492321624085e-46,
+          "z_tendency": -25722700.134643555,
+          "z_tendency_binary32_roundoff_bound": 5.59957803503661
+        },
+        "qc": {
+          "call": "QC",
+          "rdzw": -161.673828125,
+          "sum_tendency": -2.8979329744410753e-05,
+          "sum_tendency_binary32_roundoff_bound": 1.3000615862366617e-11,
+          "vertical_face_fluxes": [
+            0.0,
+            -1.79245645881565e-07
+          ],
+          "vertical_field": [
+            0.0,
+            2.4288598069688305e-05
+          ],
+          "vertical_rom": [
+            0.0,
+            -0.0167626291513443
+          ],
+          "vertical_weights": [
+            0.44025471806526184,
+            0.5597452521324158
+          ],
+          "x_face_fluxes": [
+            0.0,
+            0.0
+          ],
+          "x_tendency": -0.0,
+          "x_tendency_binary32_roundoff_bound": 7.006492321624085e-46,
+          "y_face_fluxes": [
+            0.0,
+            0.0
+          ],
+          "y_tendency": -0.0,
+          "y_tendency_binary32_roundoff_bound": 7.006492321624085e-46,
+          "z_tendency": -2.8979329744410753e-05,
+          "z_tendency_binary32_roundoff_bound": 6.091403594103988e-12
+        }
+      },
+      "rk2": {
+        "nc": {
+          "advect_tendency_binary32_roundoff_bound": 19.820221426591676,
+          "call": "NC",
+          "rdzw": -161.673828125,
+          "sum_tendency": -35411070.49820083,
+          "sum_tendency_binary32_roundoff_bound": 17.820221426591676,
+          "upper_interface_flux_error_bound": 0.06120479973014073,
+          "upper_interface_flux_from_linear_face": -223896.56637178498,
+          "vertical_face_fluxes": [
+            0.0,
+            -223896.5625
+          ],
+          "vertical_field": [
+            -1773.7578125,
+            21526700.0
+          ],
+          "vertical_rom": [
+            0.0,
+            -0.023627156391739845
+          ],
+          "vertical_weights": [
+            0.44025471806526184,
+            0.5597452521324158
+          ],
+          "x_face_flux_error_bounds": [
+            31411.624101772573,
+            18242.77542830247
+          ],
+          "x_face_fluxes": [
+            4675581440.0,
+            2428474112.0
+          ],
+          "x_flux5_from_donors": [
+            4675581290.342887,
+            2428474244.9073243
+          ],
+          "x_tendency": 441291.6300855926,
+          "x_tendency_binary32_roundoff_bound": 0.34824504816968677,
+          "y_face_flux_error_bounds": [
+            10410.584330091737,
+            607338.7485272044
+          ],
+          "y_face_fluxes": [
+            -887940800.0,
+            -2649059840.0
+          ],
+          "y_flux5_from_donors": [
+            -887940900.847693,
+            -2649035113.1539803
+          ],
+          "y_tendency": 345852.235116904,
+          "y_tendency_binary32_roundoff_bound": 0.18123143630127583,
+          "z_tendency": -36198214.36340332,
+          "z_tendency_binary32_roundoff_bound": 8.472746283319522
+        },
+        "qc": {
+          "call": "QC",
+          "rdzw": -161.673828125,
+          "sum_tendency": -4.086305880834219e-05,
+          "sum_tendency_binary32_roundoff_bound": 3.787800070767646e-11,
+          "vertical_face_fluxes": [
+            0.0,
+            -2.531949121475918e-07
+          ],
+          "vertical_field": [
+            1.6839790362155327e-07,
+            2.412695721432101e-05
+          ],
+          "vertical_rom": [
+            0.0,
+            -0.023627156391739845
+          ],
+          "vertical_weights": [
+            0.44025471806526184,
+            0.5597452521324158
+          ],
+          "x_face_fluxes": [
+            -0.12069271504878998,
+            -0.11836333572864532
+          ],
+          "x_tendency": -4.5744837572542664e-07,
+          "x_tendency_binary32_roundoff_bound": 1.1207089984504645e-11,
+          "y_face_fluxes": [
+            0.08153390884399414,
+            0.07883824408054352
+          ],
+          "y_tendency": 5.293802760574766e-07,
+          "y_tendency_binary32_roundoff_bound": 7.537230282277004e-12,
+          "z_tendency": -4.0934990708674235e-05,
+          "z_tendency_binary32_roundoff_bound": 9.138737452642134e-12
+        }
+      }
+    }
+  },
+  "schema": "pr65_nc_donor_cause_evidence_v1",
+  "scope": "One-rank, one-tile, 20-second source-copy observer/replay at global (172,76,1); no physical transport/moment PASS.",
+  "source_lineage": {
+    "archived_advection_member_sha256_before_replacement": "0b9be5ea72d428ef66d5876a3820681a82471e319bdcbe7fabf8f67d1c30316c",
+    "base_generated_pr61_source": "/var/tmp/pr64_transport_cause_20261007/advect_face_observer/module_advect_em_faces.f90",
+    "base_generated_pr61_source_sha256": "a1dc18bce40f84ad709d38fbe7b0658590e587d42528b1124f9c8b7e9c1830fa",
+    "base_pr64_archive_sha256": "71241dcc4ad169365c47d1c303ec11ef5d4acade1bc577c360a5c4cf84f6351f",
+    "compiler": {
+      "compile_log": "docs/evidence/pr65_nc_donor_compile.log",
+      "compile_log_sha256": "e851acc894f93562b07b78e3c9ad555455b41686232ff74e5c3923f570323085",
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_warning": "ifx warned that -real-size32 is unknown and ignored; default REAL is 32-bit for this build. Other compiler remarks are retained in the compile log.",
+      "flags": [
+        "-O2",
+        "-fp-model strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "-align all",
+        "-fno-alias",
+        "-convert big_endian",
+        "-real-size32",
+        "-i4"
+      ],
+      "full_include_argv_persisted": false,
+      "profile": "Cloud-BAL/tests/intel_toolchain.sh pinned Intel profile",
+      "version": "ifx (IFX) 2026.0.0 20260331",
+      "working_directory": "/var/tmp/pr65_nc_donors_20261007/build"
+    },
+    "diagnostic_executable_sha256": "53d704da329058ea8fc8de044be9646a5ca470c0ddde8e2ee18a1ffcc49da3b3",
+    "instrumented_archive_sha256": "55b6ede90bf2f30a1c7fb74284618a1bac4bd34c80067649bef0f6ac7c0c5c79",
+    "instrumented_module_object_sha256": "1387f39b29c1c04d18ee48371cd01170fb46ffe5b68c2db8c72c398dc6cddf61",
+    "instrumented_source_sha256": "360148b1c68185f658192b0d2959cc6ba7f2e61255d73163a177c46be9e5550e",
+    "maintained_source_modified": false,
+    "observer_patch": "docs/evidence/pr65_nc_donor_observer.patch",
+    "observer_patch_sha256": "d4f857f3f92c60d8c12fd53c8461647775cd4c60d1a94edca45666e658044ba5",
+    "patch_replay": "`patch -s -p1 -d /var/tmp/pr65_nc_donors_20261007/patch_replay < docs/evidence/pr65_nc_donor_observer.patch` reproduces the instrumented source SHA-256."
+  }
+}

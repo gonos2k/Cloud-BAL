@@ -1,0 +1,76 @@
+{
+  "status": "PASS",
+  "scope": "complete pressure-geopotential independent replay and mutation suite on retained PR64 artifact; no rebuild",
+  "profile_label": "O0",
+  "artifact_path": "/var/tmp/cloud_bal_pr64_actual_phase.f69Ky7/actual-ne57-phase_phi-shadow.nc",
+  "artifact_sha256_pre": "ba4e8466903492b905a6f042257d8183614c9536fe0c0211acab7fcef4951991",
+  "artifact_sha256_post": "ba4e8466903492b905a6f042257d8183614c9536fe0c0211acab7fcef4951991",
+  "artifact_hash_guard_exit": 0,
+  "prior_full_run_receipt_path": "/var/tmp/cloud_bal_pr64_actual_phase.f69Ky7/receipt.json",
+  "prior_full_run_receipt_sha256_pre": "1d9c2e4490a1bc08073eef822e394136e28401f03860922280e7b67be6f09f03",
+  "prior_full_run_receipt_sha256_post": "1d9c2e4490a1bc08073eef822e394136e28401f03860922280e7b67be6f09f03",
+  "prior_full_run_receipt_preserved": true,
+  "runner_path": "/var/tmp/pr65_phi_mutation_suite_20261007.O0.private.sh",
+  "runner_sha256_pre": "e19d52106bb2d67e4ffa10d4621107ebdb099b64f2d0847666faf51a6890ff66",
+  "runner_sha256_post": "e19d52106bb2d67e4ffa10d4621107ebdb099b64f2d0847666faf51a6890ff66",
+  "suite_command": [
+    "/usr/bin/python3",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/check_pressure_geopotential_shadow.py",
+    "/var/tmp/cloud_bal_pr64_actual_phase.f69Ky7/actual-ne57-phase_phi-shadow.nc"
+  ],
+  "suite_exit": 0,
+  "full_hash_guard_exit": 0,
+  "hash_pre_manifest": "/var/tmp/cloud_bal_pr65_phi_mutations.O0.YXe96O/hash_pre.sha256",
+  "hash_post_manifest": "/var/tmp/cloud_bal_pr65_phi_mutations.O0.YXe96O/hash_post.sha256",
+  "suite_log": "/var/tmp/cloud_bal_pr65_phi_mutations.O0.YXe96O/full_mutation_suite.log",
+  "suite_log_sha256": "0ec18d2170ab5eeabf3dbd199c2cd0283a20066acf74616fda7216ca6f7908a0",
+  "tool_paths": [
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/check_pressure_geopotential_shadow.py",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/check_pressure_candidate_shadow.py",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tools/validate_shadow_diagnostics.py",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr65_moment_followup_20261007/Cloud-BAL/tests/netcdf_test_copy.py"
+  ],
+  "python": {
+    "path": "/usr/bin/python3",
+    "version": "3.12.3",
+    "platform": "Linux-6.8.0-100-generic-x86_64-with-glibc2.39"
+  },
+  "run_directory": "/var/tmp/cloud_bal_pr65_phi_mutations.O0.YXe96O",
+  "runtime_dependency_closure": {
+    "status": "PARTIAL",
+    "fingerprinted": "Python executable, Python package entry points, netCDF4 extension, NumPy extension, and listed reader/validator modules",
+    "not_fingerprinted": "Transitive bundled shared libraries loaded by netCDF4 (including HDF5, libnetcdf, compression, TLS, and related dependencies)",
+    "basis": "Independent review of the runtime hash manifest and ldd output"
+  },
+  "durable_evidence": {
+    "suite_log": {
+      "path": "Cloud-BAL/docs/evidence/pr65_phi_mutation_suite_O0_20261007.log",
+      "sha256": "0ec18d2170ab5eeabf3dbd199c2cd0283a20066acf74616fda7216ca6f7908a0"
+    },
+    "hash_pre_manifest": {
+      "path": "Cloud-BAL/docs/evidence/pr65_phi_mutation_suite_O0_hash_pre_20261007.sha256",
+      "sha256": "3e5ff8d646e3a7f07d8ae75d8118f84a1d2ad0bc4343b16cf0c9cffeedf31517"
+    },
+    "hash_post_manifest": {
+      "path": "Cloud-BAL/docs/evidence/pr65_phi_mutation_suite_O0_hash_post_20261007.sha256",
+      "sha256": "3e5ff8d646e3a7f07d8ae75d8118f84a1d2ad0bc4343b16cf0c9cffeedf31517"
+    },
+    "private_runner": {
+      "path": "Cloud-BAL/docs/evidence/pr65_phi_mutation_suite_O0_private_runner_20261007.sh",
+      "sha256": "e19d52106bb2d67e4ffa10d4621107ebdb099b64f2d0847666faf51a6890ff66"
+    },
+    "initial_wrapper_failure": {
+      "path": "Cloud-BAL/docs/evidence/pr65_phi_mutation_suite_O0_initial_orchestration_failure_20261007.json",
+      "sha256": "46848dbd5159232b1792b80371d991805b2cb0fd3a7c0e9e1d8668b069d869ce"
+    },
+    "initial_reader_log": {
+      "path": "Cloud-BAL/docs/evidence/pr65_phi_mutation_suite_O0_initial_20261007.log",
+      "sha256": "0ec18d2170ab5eeabf3dbd199c2cd0283a20066acf74616fda7216ca6f7908a0"
+    }
+  },
+  "earlier_o0_wrapper_attempt": {
+    "status": "READER_PASS_WRAPPER_FAIL",
+    "receipt_path": "/var/tmp/cloud_bal_pr65_phi_mutations.O0.NJFOfg/orchestration_failure.json",
+    "original_pr64_receipt_remains": "FAIL_OPEN"
+  }
+}

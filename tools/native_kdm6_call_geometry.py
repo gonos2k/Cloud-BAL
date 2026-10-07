@@ -154,6 +154,38 @@ def _require_finite_positive(values: np.ndarray, label: str) -> None:
         raise ValueError(f"{label} must be finite and positive")
 
 
+def active_geometry_measure(geometry: dict[str, Any], kdm: dict[str, Any]) -> dict[str, np.ndarray]:
+    """Return active-cell map area, hybrid layer dp, and dry-air mass weights."""
+    bounds = geometry["bounds"]
+    kdm_bounds = kdm["bounds"]
+    arrays = geometry["arrays"]
+    i0, i1 = kdm_bounds["its"] - bounds["ims"], kdm_bounds["ite"] - bounds["ims"] + 1
+    j0, j1 = kdm_bounds["jts"] - bounds["jms"], kdm_bounds["jte"] - bounds["jms"] + 1
+    mu = arrays["mu2"][i0:i1, j0:j1].T
+    mub = arrays["mub"][i0:i1, j0:j1].T
+    msftx = arrays["msftx"][i0:i1, j0:j1].T
+    msfty = arrays["msfty"][i0:i1, j0:j1].T
+    if np.any(msftx <= 0) or np.any(msfty <= 0):
+        raise ValueError("nonpositive active map factor")
+    with np.errstate(over="ignore", under="ignore", invalid="ignore", divide="ignore"):
+        area = geometry["dx_m"] * geometry["dy_m"] / (msftx * msfty)
+    _require_finite_positive(area, "active map area")
+
+    layers = np.arange(kdm_bounds["kts"], kdm_bounds["kte"] + 1) - bounds["kms"]
+    c1, c2 = arrays["c1h"][layers], arrays["c2h"][layers]
+    dnw = arrays["dnw"][layers]
+    # Source equation: dp_k = -[C1H_k*(MU2+MUB)+C2H_k]*DNW_k.
+    with np.errstate(over="ignore", under="ignore", invalid="ignore", divide="ignore"):
+        dp = -(c1[:, None, None] * (mu[None, :, :] + mub[None, :, :])
+               + c2[:, None, None]) * dnw[:, None, None]
+        dry_mass = dp * area[None, :, :] / geometry["gravity_m_s2"]
+    if not np.isfinite(dp).all() or np.any(dp <= 0):
+        raise ValueError("nonpositive or nonfinite active hybrid layer thickness")
+    _require_finite_positive(dry_mass, "hybrid dry-mass measure")
+    return {"mu": mu, "mub": mub, "area": area, "dp": dp,
+            "dry_mass": dry_mass, "layers": layers}
+
+
 def audit(geometry_path: Path, pre_path: Path, post_path: Path, receipt_path: Path,
           expected_executable_sha256: str | None = None,
           layer_tolerance_pa: float = 0.01,
@@ -200,32 +232,10 @@ def audit(geometry_path: Path, pre_path: Path, post_path: Path, receipt_path: Pa
     _bound_header_match(pre_record, kdm_pre)
     _bound_header_match(post_record, kdm_post)
 
-    b = pre_record["bounds"]
-    kb = kdm_pre["bounds"]
     arrays = pre_record["arrays"]
-    i0, i1 = kb["its"] - b["ims"], kb["ite"] - b["ims"] + 1
-    j0, j1 = kb["jts"] - b["jms"], kb["jte"] - b["jms"] + 1
-    mu = arrays["mu2"][i0:i1, j0:j1].T
-    mub = arrays["mub"][i0:i1, j0:j1].T
-    msftx = arrays["msftx"][i0:i1, j0:j1].T
-    msfty = arrays["msfty"][i0:i1, j0:j1].T
-    if np.any(msftx <= 0) or np.any(msfty <= 0):
-        raise ValueError("nonpositive active map factor")
-    with np.errstate(over="ignore", under="ignore", invalid="ignore", divide="ignore"):
-        area = pre_record["dx_m"] * pre_record["dy_m"] / (msftx * msfty)
-    _require_finite_positive(area, "active map area")
-    layers = np.arange(kb["kts"], kb["kte"] + 1) - b["kms"]
-    c1, c2 = arrays["c1h"][layers], arrays["c2h"][layers]
-    dnw = arrays["dnw"][layers]
-
-    # Source equation: dp_k = -[C1H_k*(MU2+MUB)+C2H_k]*DNW_k.
-    with np.errstate(over="ignore", under="ignore", invalid="ignore", divide="ignore"):
-        dp = -(c1[:, None, None] * (mu[None, :, :] + mub[None, :, :]) + c2[:, None, None]) * dnw[:, None, None]
-    if not np.isfinite(dp).all() or np.any(dp <= 0):
-        raise ValueError("nonpositive or nonfinite active hybrid layer thickness")
-    with np.errstate(over="ignore", under="ignore", invalid="ignore", divide="ignore"):
-        hybrid_mass = dp * area[None, :, :] / pre_record["gravity_m_s2"]
-    _require_finite_positive(hybrid_mass, "hybrid dry-mass measure")
+    measure = active_geometry_measure(pre_record, kdm_pre)
+    mu, mub, area = measure["mu"], measure["mub"], measure["area"]
+    dp, hybrid_mass, layers = measure["dp"], measure["dry_mass"], measure["layers"]
     hybrid_mass_total = float(hybrid_mass.sum())
     if not math.isfinite(hybrid_mass_total) or hybrid_mass_total <= 0:
         raise ValueError("hybrid dry-mass total must be finite and positive")
