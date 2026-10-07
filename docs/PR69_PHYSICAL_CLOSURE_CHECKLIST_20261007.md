@@ -31,8 +31,8 @@ Scientific approval remains **FAIL/OPEN** until the same candidate satisfies the
 - [x] Complete the scoped source-bound prototype and investigation; preserve draft mapping failures and the corrected native rejection separately.
 - [x] Review bounded-source process math, units, conservation, provenance and stored acceptance with the agent team; scientific and native gates remain separate.
 - [x] Validate affected paths with pinned Intel in fresh scratch and 12 focused Python tests; full suite is not claimed.
-- [ ] Commit, push and create the PR after scoped implementation review passes.
-- [ ] Refresh separately dated KLAPS50/Cloud-BAL graph/report/manifest snapshots and derived wiki audit from the frozen implementation; review metadata.
+- [x] Commit and push the reviewed implementation; [PR #69](https://github.com/gonos2k/Cloud-BAL/pull/69) is open.
+- [x] Refresh separately dated KLAPS50/Cloud-BAL graph/report/manifest snapshots and derived wiki audit from the frozen implementation; [receipt and limitations](PR69_KG_UPDATE_20261007.md).
 
 ## Admission order and remaining evidence
 
