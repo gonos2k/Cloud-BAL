@@ -18,7 +18,7 @@ Full physical initialization remains **FAIL/OPEN** until the physical gates belo
    - [x] Integrate the donor-control call on its own unchanged hybrid dry-air measure and record missing surface/process/energy terms.
 8. [ ] Compare BASE/HYDRO/COUPLED first-call and 10/30/60-minute responses with identical model, boundary, physics, damping and time step; retain observed clouds, rainfall and ascent.
 9. [x] Complete independent agent-team review, fix findings and validate affected changes using the pinned Intel profile in fresh scratch directories.
-10. [ ] Freeze reviewed source, update separately dated KLAPS50/Cloud-BAL Graphify corpora and derived KG audit, then commit, push and create the PR.
+10. [x] Freeze reviewed source, update separately dated KLAPS50/Cloud-BAL Graphify corpora and derived KG audit, then commit, push and create the PR.
 
 ## Evidence rules
 
@@ -64,3 +64,7 @@ Four independent agents cover the Phi suite, PBL lineage/mixing, NC donor recons
 5. Carry that valid candidate through native initialization and compare
    BASE/HYDRO/COUPLED first-call and 10/30/60-minute responses using fixed
    settings and independent cloud/rainfall observations.
+
+## Published batch
+
+[PR #65](https://github.com/gonos2k/Cloud-BAL/pull/65) contains frozen implementation `3a6656fe184b4d25facbb24e93bcda3637c92bf1`, complete O0/O2 Phi mutation replays, 51 focused Python regressions and separately scoped native research evidence. [Graphify/KG maintenance](PR65_KG_MAINTENANCE_20261007.md) records separately dated graph deltas and derived audit updates. The follow-up metadata commit records publication and maintenance; it does not relabel prior failures or close the remaining physical gates.
