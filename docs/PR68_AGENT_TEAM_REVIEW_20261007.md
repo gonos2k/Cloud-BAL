@@ -24,6 +24,7 @@ velocity/rain and carrier/QC agents cross-review each other's work.
 | An integration check during rain development used the old supported-rate test expectation. | Correct source-bound branch fixtures before the final registered runner; do not count the intermediate failed runner as PASS. |
 | Rain audit initially trusted limiter metadata and declared neutrality hashes. | Reconstruct the source limiter bound and aggregate in binary32; rehash live pre/post products and reject mutated files. |
 | QC inventory could accept repeated path entries despite a valid count. | Reject normalized duplicates, escapes, malformed hashes and changed live bytes; replay all 102 declared inputs. |
+| Automatic dated Graphify copies preceded final clustering and retained old report text. | Preserve the intermediates and initial receipt; copy final graph/report/manifest into separate dated corpus paths and issue a new final receipt with before/after hashes and corrective audit entry. Current graph/runtime evidence is unchanged. |
 | Registry host number/kg was initially assigned to internal rain-process rates. | Use selected-source volumetric number convention for internal arithmetic and retain host number/kg separately; inspected driver/wrapper pass the field directly and no density conversion was found there. Driver source/object lineage remains partial, so the runtime unit contract stays OPEN. |
 
 ## Acceptance boundaries
@@ -73,3 +74,9 @@ separately updated mass stays positive. No conservative process correction is
 claimed. These checks establish the selected source path, not physical approval.
 
 Publication and the separately dated Graphify/KG update follow the source freeze.
+
+## Publication metadata
+
+Implementation freeze `85717dcf78eb182402b0754671ba2185f933efb4` is published in [PR #68](https://github.com/gonos2k/Cloud-BAL/pull/68). The [KG follow-up](PR68_KG_FOLLOWUP_20261007.md) records separate graph snapshots, deltas and extraction limits. Metadata review is performed against this frozen implementation; graph freshness does not change FAIL/OPEN scientific approval.
+
+Final metadata correction passed two independent read-only reviews: all six dated graph/report/manifest files equal final current artifacts, all six preserved intermediate files match before hashes, final wiki hashes match, and the initial receipt remains unchanged. The helper checked protected-content preservation in-run; its initial receipt lacks individual protected-content digests for independent replay, as disclosed in the KG report.

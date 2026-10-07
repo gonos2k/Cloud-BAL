@@ -26,9 +26,9 @@ Previous failed candidates and receipts remain immutable.
 - [x] Finish source-bound unit, rain and completed-QC investigations; preserve unsuccessful attempts.
 - [x] Cross-review implementation, arithmetic, capture identity and evidence with the agent team.
 - [x] Address findings and run affected tests; report focused and whole-wrapper results separately.
-- [ ] Freeze reviewed changes, push the branch and create the PR.
-- [ ] Update separately dated KLAPS50 and Cloud-BAL Graphify snapshots and KG derived reports/log from the frozen source commit.
-- [ ] Review and publish the metadata follow-up.
+- [x] Freeze reviewed changes, push the branch and create [PR #68](https://github.com/gonos2k/Cloud-BAL/pull/68).
+- [x] Update separately dated KLAPS50 and Cloud-BAL Graphify snapshots and KG derived reports/log from the frozen source commit.
+- [x] Review and publish the metadata follow-up; dated-copy correction passed two independent reviews.
 
 ## Interpretation rules
 
@@ -61,3 +61,5 @@ The registered focused checks pass: 21 new Python tests, 3 prior default-path
 regressions, and the pinned Intel O0/O2 rate helper/source wiring. The full unit
 suite is NOT_RUN. These counts are separate from the matched native research
 runs; their process completion does not approve their invalid particle states.
+
+Graph/KG follow-up: [separate snapshots and limitations](PR68_KG_FOLLOWUP_20261007.md).
