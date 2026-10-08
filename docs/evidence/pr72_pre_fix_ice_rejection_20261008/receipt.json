@@ -1,0 +1,169 @@
+{
+  "build": {
+    "compile_argv": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz",
+      "-convert",
+      "big_endian",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/frame",
+      "-c",
+      "module_mp_kdm6.f90",
+      "-o",
+      "module_mp_kdm6.o"
+    ],
+    "executable_sha256": "da451a68bd0676d94adfb85d1c08e9c73453d5038da902ca8f00f0c73d57548a",
+    "host_scope": "partialhost: selected KDM6 recompiled and inserted into a fresh copy of retained host objects/archive",
+    "ifx": {
+      "ifx": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "version": "ifx (IFX) 2026.0.0 20260331"
+    },
+    "link_driver": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+    "link_driver_sha256": "9d8235d45ca2b09b5c6ffd1ba0b12cb728252aa1577ea80a240c6a2f5b69b0fb",
+    "object_sha256": "62eb3c49741c273c63511b7a1a9763659b8a897274fc2b9ec5eedd4948623437",
+    "receipt": {
+      "path": "docs/evidence/pr72_pre_fix_ice_rejection_20261008/partialhost_build_receipt.json",
+      "sha256": "c7d192f64628dfa39a36c2157128d828dcb50e7b8b67af7c73f284a4710d1e87"
+    }
+  },
+  "classification": "diagnostic-only partialhost observation; no physical acceptance or exact historical replay claim",
+  "first_observed_guarded_rejection": {
+    "coefficients_line": "PR72_ICE_REJECT_COEFFICIENTS   2.7100000000000000E+03   1.0000000000000000E+00   1.0840000000000000E+04   2.7100000000000000E+03   2.4000000000000000E+01   6.0000000000000000E+00   1.0000000000000000E+00   1.0000000000000000E+00   2.0000000000000000E+00   5.0000000000000000E+00   4.0000000000000000E+00   2.6179940795898438E+02   3.0000000000000000E+00   0.0000000000000000E+00",
+    "coordinate": {
+      "i": 83,
+      "k": 7,
+      "lat": 2
+    },
+    "dt": 20.0,
+    "rate": 137519748.96910655,
+    "sentinels_line": "PR72_ICE_REJECT_SENTINELS   1.8200000000000000E+06   5.4945053307164926E-07   5.4945053307164926E-07   1.0000000000000000E+00   1.0000000036274937E-15",
+    "slope_density_line": "PR72_ICE_REJECT_SLOPE_DENSITY   0.0000000000000000E+00   9.6591240000000000E+06   0.0000000000000000E+00   1.0379139184951782E+00   1.1013844013214111E+00   2.0964324951171875E+02   1.0000000000000000E+03",
+    "state_line": "PR72_ICE_REJECT_STATE   0.0000000000000000E+00   0.0000000000000000E+00   0.0000000000000000E+00   0.0000000000000000E+00",
+    "state_values_named": {
+      "avti": 2710.0,
+      "bimui1": 2.0,
+      "bvti": 1.0,
+      "cmi": 261.7994079589844,
+      "delz": 209.64324951171875,
+      "den_tmp": 1.0379139184951782,
+      "denfac": 1.1013844013214111,
+      "denr": 1000.0,
+      "dibimui1": 5.0,
+      "dimui1": 4.0,
+      "dmi": 3.0,
+      "g1pbimi": 1.0,
+      "g1pdibimi": 24.0,
+      "g1pdimi": 6.0,
+      "g1pmi": 1.0,
+      "lamdaimax": 1820000.0,
+      "mass_velocity_ice": 0.0,
+      "mass_velocity_rate_ice": 0.0,
+      "mui": 0.0,
+      "nci_channel_2": 0.0,
+      "nci_tmp": 0.0,
+      "number_velocity_ice": 28830087045.919334,
+      "number_velocity_rate_ice": 137519748.96910655,
+      "pvti": 10840.0,
+      "pvtin": 2710.0,
+      "qci_channel_2": 0.0,
+      "qci_tmp": 0.0,
+      "qmin": 1.0000000036274937e-15,
+      "rslope_ice": 0.0,
+      "rslopeb_ice": 9659124.0,
+      "rslopeibmax": 5.494505330716493e-07,
+      "rslopeimax": 5.494505330716493e-07,
+      "rslopeimmax": 1.0,
+      "rslopemu_ice": 0.0
+    },
+    "step_guard_line": "PR71_STEP_COUNT_REJECT_ICE i,k,rate,dt=          83           7",
+    "velocity_rate_line": "PR72_ICE_REJECT_VELOCITY_RATE   0.0000000000000000E+00   2.8830087045919334E+10   0.0000000000000000E+00   1.3751974896910655E+08"
+  },
+  "historical_reference": {
+    "note": "This is the preserved PR71 native receipt point. The instrumented rerun below observed a different first rejection.",
+    "receipt_path": "docs/evidence/pr71_guarded_native_integration_20261008.json",
+    "receipt_sha256": "2644c12fd8e56fd204caa2ca2ab530f80b22d39af2f669c8ebc900fe7af497af",
+    "reported_dt": 20.0,
+    "reported_location": {
+      "i": 107,
+      "k": 5
+    },
+    "reported_rate": 829940373.290303
+  },
+  "limitations": [
+    "Partialhost research executable; not a clean full-host build.",
+    "The first observed instrumented rerun rejection is at (lat=2,i=83,k=7), not the historical (i=107,k=5) point.",
+    "This receipt reports logged operands as captured and does not infer equality from rounded products.",
+    "Run stopped at the guarded substep-count rejection; expected later output files are unavailable.",
+    "No physics pass, full-fixture acceptance, or scientific closure is established."
+  ],
+  "probe_source": {
+    "instrumented_source": {
+      "path": "/var/tmp/pr72_ice_native_diagnostic_20261008/build_v5/source/module_mp_kdm6.f90",
+      "sha256": "56b9c50a25932f97e03a234764551b885f3271e1b13ee1702dba4faade86da33"
+    },
+    "patch": {
+      "path": "docs/evidence/pr72_pre_fix_ice_rejection_20261008/source_instrumentation.patch",
+      "sha256": "b1466286a1c6c669aca87502a0030b510e115203602493663da87fb5b7bd1f1a"
+    },
+    "patch_contract": "full unified diff from the starting observer source to the source used for build_v5; expands the rejection trace to the first failing coordinate and records the sentinel operands",
+    "starting_source": {
+      "path": "/var/tmp/pr72_ice_native_diagnostic_20261008/native_observer_v2.F",
+      "sha256": "3abcd04aaec36f5461d90cfa136c7c062d9da0cd2addab74ca9c5acd549e7751"
+    }
+  },
+  "run": {
+    "changed_inputs": [],
+    "input_integrity": "PASS",
+    "isolation_receipt": {
+      "path": "docs/evidence/pr72_pre_fix_ice_rejection_20261008/run_isolation_receipt.json",
+      "sha256": "1022814132878cf75425a0bca174c7656a05fae820c78f0e161c5be0a0968582"
+    },
+    "large_first_call_pretrace": {
+      "copied_byte_for_byte_from_baseline": true,
+      "path": "/var/tmp/pr72_ice_native_diag_run3_yk61s2bb/kdm6_first_call_pre.raw",
+      "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+    },
+    "logs": {
+      "rsl.error.0000": {
+        "path": "docs/evidence/pr72_pre_fix_ice_rejection_20261008/rsl.error.0000",
+        "sha256": "b055c24251208963fc7b942e532d96ed145f3584a1f417dcfc66776e2c577a54"
+      },
+      "rsl.out.0000": {
+        "path": "docs/evidence/pr72_pre_fix_ice_rejection_20261008/rsl.out.0000",
+        "sha256": "99dd149b004bed5cc4a0eae3dface4baa2ce16c8e9003505d9e838cfe0320ab1"
+      }
+    },
+    "output_isolation": "FAIL",
+    "output_issues": [
+      "file is unavailable: /var/tmp/pr72_ice_native_diag_run3_yk61s2bb/pr67_kdm6_process.raw",
+      "file is unavailable: /var/tmp/pr72_ice_native_diag_run3_yk61s2bb/pr69_water.raw"
+    ],
+    "reference_input_receipt_sha256": "bf747509ee3eed5d4763315d701ebaff8f82c3ec8c2d825ad5703cf53e065cbb",
+    "returncode": 128,
+    "run_command": [
+      "timeout",
+      "--signal=TERM",
+      "--kill-after=30s",
+      "900s",
+      "bash",
+      "-c",
+      "set -eo pipefail; source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/env/vars.sh --force >/dev/null 2>&1 || { source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/env/vars.sh >/dev/null 2>&1 || exit 1; }; export LD_LIBRARY_PATH=/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:${LD_LIBRARY_PATH:-}; source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh >/dev/null 2>&1 || exit 1; set -u; ulimit -s unlimited; export OMP_NUM_THREADS=68; env > launch_environment.txt; ldd ./wrf.exe > runtime_libraries.txt; exec ./wrf.exe > candidate_run.log 2>&1"
+    ],
+    "run_root": "/var/tmp/pr72_ice_native_diag_run3_yk61s2bb",
+    "staged_input_count": 100
+  },
+  "schema": "pr72_pre_fix_ice_rejection_probe_v1"
+}

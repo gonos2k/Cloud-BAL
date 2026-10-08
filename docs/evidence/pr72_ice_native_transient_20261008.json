@@ -1,0 +1,77 @@
+{
+  "baseline_pretrace_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+  "build_receipt": {
+    "path": "/var/tmp/pr72_transient_guard_v2_20261008/build_receipt.json",
+    "sha256": "9e7722da6ff9d5ba6af5c6ea8bced7b5dcfa998c610f86596d4a12f4b654310b"
+  },
+  "executable_sha256": "1d2686fa65ed8b3d94bacc06b7ad2bda01c87026de95c62fb966a32855cfc466",
+  "fatal": "ProgB transient PSD state rejected",
+  "first_transient_state": {
+    "den": 0.6716939806938171,
+    "denfac": 1.375583529472351,
+    "i": 125,
+    "k": 17,
+    "nci": 9.91182605503127e-05,
+    "nrs": 45.69884490966797,
+    "qci": 6.45591412919605e-16,
+    "qrs": [
+      1.1728167237379239e-06,
+      1.8331780665903352e-05,
+      1.5182015258678738e-14
+    ],
+    "status": "PROGB_TRANSIENT",
+    "temperature_k": 273.0863342285156
+  },
+  "input_integrity": "PASS",
+  "limitations": [
+    "partialhost uses retained host objects and external libraries",
+    "slope_kdm6 does not receive B, DELZ, dt or latitude, so these were not part of its direct guard trace",
+    "full scientific behavior remains FAIL_OPEN",
+    "instrumented run stops early, preventing expected pr69_water.raw output"
+  ],
+  "logs": {
+    "candidate_run.log": {
+      "path": "/var/tmp/pr72_transient_guard_run_v2_20261008/candidate_run.log",
+      "sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+    },
+    "kdm6_first_call_pre.raw": {
+      "path": "/var/tmp/pr72_transient_guard_run_v2_20261008/kdm6_first_call_pre.raw",
+      "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb"
+    },
+    "rsl.error.0000": {
+      "path": "/var/tmp/pr72_transient_guard_run_v2_20261008/rsl.error.0000",
+      "sha256": "081a1fb19c0209d75de0c04ae31b0b7e0ce76094c3c247a47da3550e6e63960c"
+    },
+    "rsl.out.0000": {
+      "path": "/var/tmp/pr72_transient_guard_run_v2_20261008/rsl.out.0000",
+      "sha256": "cf944a9a93f4146f267e2f18a48c8d11e8dc4307468c2a5c65c1a49068c794f3"
+    }
+  },
+  "object_sha256": "91379d7627e92454e6f16ea38fd76147223158cb5e9306911c44f02914064b52",
+  "output_isolation": "FAIL",
+  "output_issues": [
+    "declared output pr69_water.raw unavailable after early stop"
+  ],
+  "returncode": 128,
+  "run_root": "/var/tmp/pr72_transient_guard_run_v2_20261008",
+  "schema": "pr72_ice_native_transient_guard_v1",
+  "scope": "partialhost source instrumentation and native first-call rerun",
+  "source": {
+    "base_ice_fixed_source_sha256": "f396c9270791addcd4aed9fdc59f5a6d3f9287f1af8f759d3a0cbc36b1e78f85",
+    "guard_trace_patch": {
+      "path": "docs/evidence/pr72_transient_guard_trace_20261008.patch",
+      "sha256": "01ad415e0bb69b1934ffeb256fdbfaa7b5adc0489645df5152fce84f7b36c585"
+    },
+    "instrumenter": {
+      "path": "tools/pr72_instrument_transient_guard.py",
+      "sha256": "e5ee79ef9db485a137ccde966b6644bb0726ee57348db9e97152d9c339728224"
+    },
+    "path": "/var/tmp/pr72_transient_guard_v2_20261008/module_mp_kdm6.f90",
+    "sha256": "23b4a9935146a58c4f6ef7b41fec36f65d63a8784675f0f635272d94599ebc13"
+  },
+  "toolchain": {
+    "ifx": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  }
+}

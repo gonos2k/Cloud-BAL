@@ -1,0 +1,31 @@
+{
+  "schema": "pr72_live_ice_expression_replay_v1",
+  "scope": "New instrumented first-rejected point only; not historical i107/k5 replay",
+  "source_receipt": "docs/evidence/pr72_pre_fix_ice_rejection_20261008/receipt.json",
+  "source_receipt_sha256": "e89efd693ab67baee251be3418c515ebf627b0616bc33085a46ca5194475459a",
+  "coordinate": {
+    "i": 83,
+    "k": 7,
+    "lat": 2
+  },
+  "formula": "V_N = DBLE(pvtin)*rslopeb_ice*denfac; rate_N = V_N/DELZ",
+  "operands": {
+    "pvtin": 2710.0,
+    "rslopeb_ice": 9659124.0,
+    "denfac": 1.1013844013214111,
+    "delz": 209.64324951171875
+  },
+  "calculated_velocity": 28830087045.919334,
+  "recorded_velocity": 28830087045.919334,
+  "calculated_rate": 137519748.96910655,
+  "recorded_rate": 137519748.96910655,
+  "velocity_exact_binary64_match": true,
+  "rate_exact_binary64_match": true,
+  "absence_state": {
+    "qci_tmp": 0.0,
+    "nci_tmp": 0.0
+  },
+  "expected_absent_velocity": 0.0,
+  "expected_absent_slopeb": 5.494505330716493e-07,
+  "interpretation": "Actual expression consumes an unassigned ice slope moment and the overwritten zero-number velocity; coefficients and thickness are captured, not repaired by rate capping."
+}

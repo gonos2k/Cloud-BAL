@@ -1,0 +1,35 @@
+--- composed_checked.F
++++ composed_checked.F
+@@ -4478,6 +4478,7 @@
+             rslope2(i,k,3) = (rslope(i,k,3))*rslope(i,k,3)
+             rslope3(i,k,3) = (rslope2(i,k,3))*rslope(i,k,3)
+           endif
++          endif
+           if(qci(i,k) .le. qmin) then  
+             rslope(i,k,4) = rslopeimax
+             rslopeb(i,k,4) = rslopeibmax
+@@ -4494,7 +4495,6 @@
+             rslope2(i,k,4) = (rslope(i,k,4))*rslope(i,k,4)
+             rslope3(i,k,4) = (rslope2(i,k,4))*rslope(i,k,4)
+             endif
+-          endif
+           vt(i,k,1) = DBLE(pvtr)*rslopeb(i,k,1)*denfac(i,k)
+           vt(i,k,2) = DBLE(pvts)*rslopeb(i,k,2)*denfac(i,k)
+           if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
+@@ -4503,14 +4503,14 @@
+             vt(i,k,3) = 0.0
+           endif
+           vt(i,k,4) = DBLE(pvti)*rslopeb(i,k,4)*denfac(i,k)
++          vtn(i,k,1) = DBLE(pvtrn)*rslopeb(i,k,1)*denfac(i,k)
++          vtn(i,k,2) = DBLE(pvtin)*rslopeb(i,k,4)*denfac(i,k) 
+           if(qrs(i,k,1).le.0.0) vt(i,k,1) = 0.0 
+           if(qrs(i,k,2).le.0.0) vt(i,k,2) = 0.0
+           if(qrs(i,k,3).le.0.0) vt(i,k,3) = 0.0
+           if(qci(i,k).le.0.0) vt(i,k,4) = 0.0
+           if(nrs(i,k).le.0.0) vtn(i,k,1) = 0.0 
+           if(nci(i,k).le.0.0) vtn(i,k,2) = 0.0 
+-          vtn(i,k,1) = DBLE(pvtrn)*rslopeb(i,k,1)*denfac(i,k)
+-          vtn(i,k,2) = DBLE(pvtin)*rslopeb(i,k,4)*denfac(i,k) 
+         enddo
+       enddo
+   END subroutine slope_kdm6
