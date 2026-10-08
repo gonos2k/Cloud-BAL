@@ -1,0 +1,71 @@
+--- frozen_base.F
++++ checked_step_count.F
+@@ -184,6 +184,33 @@
+   real, parameter, private :: F2S =0.44 
+ 
+     contains
++
++    ! PR71_STEP_COUNT_CONTRACT_BEGIN
++    pure subroutine checked_substep_count(rate, timestep, count, valid)
++      double precision, intent(in) :: rate
++      real, intent(in) :: timestep
++      integer, intent(out) :: count
++      logical, intent(out) :: valid
++      double precision :: dt64, scaled_argument
++
++      count = 0
++      valid = .false.
++      if (.not. ieee_is_finite(rate)) return
++      if (.not. ieee_is_finite(timestep)) return
++      if (rate < 0.0d0) return
++      if (timestep <= 0.0) return
++      dt64 = real(timestep, kind=kind(rate))
++      if (dt64 > 1.0d0) then
++        if (rate > huge(rate) / dt64) return
++      end if
++      scaled_argument = rate * dt64 + 0.5d0
++      if (.not. (scaled_argument < real(huge(count), kind=kind(rate)) + 0.5d0)) return
++
++      ! Keep the original expression and minimum-one rule on valid inputs.
++      count = max(nint(rate * timestep + .5), 1)
++      valid = .true.
++    end subroutine checked_substep_count
++    ! PR71_STEP_COUNT_CONTRACT_END
+ 
+     pure elemental subroutine moist_to_dry_density(total_density, vapor_mixing_ratio, dry_density, valid)
+       real, intent(in) :: total_density, vapor_mixing_ratio
+@@ -1241,10 +1268,11 @@
+    double precision, dimension(its:ite,kts:kte,2)   :: workn
+    double precision, dimension(its:ite,kts:kte,2) :: terminal_velocity_number
+    double precision, dimension(its:ite,kts:kte,2) :: number_velocity_rate
++   double precision :: step_rate
+    real, dimension(its:ite,kts:kte)   :: worka, workr
+    real, dimension(its:ite,kts:kte)   :: den_tmp, delz_tmp, dry_carrier_density
+    real, dimension(its:ite,kts:kte) :: gas_density
+-   logical :: carrier_valid
++   logical :: carrier_valid, step_count_valid
+    real, dimension(its:ite,kts:kte) :: nrs_tmp,nci_tmp
+    real, dimension(its:ite,kts:kte)   :: lamdr_tmp, lamdc_tmp, lamdi_tmp
+    real, dimension(its:ite,kts:kte)   :: falkc, work1c, work2c
+@@ -1699,8 +1727,19 @@
+       numdt_i = 1
+       do k = kte, kts, -1
+         do i = its, ite
+-          numdt(i)=max(nint(max(mass_velocity_rate(i,k,1),number_velocity_rate(i,k,1),mass_velocity_rate(i,k,2),mass_velocity_rate(i,k,3))*dtcld+.5),1)
+-          numdt_i(i) = max(nint(max(mass_velocity_rate(i,k,4),number_velocity_rate(i,k,2))*dtcld+.5),1)
++          step_rate = max(mass_velocity_rate(i,k,1),number_velocity_rate(i,k,1), &
++                          mass_velocity_rate(i,k,2),mass_velocity_rate(i,k,3))
++          call checked_substep_count(step_rate, dtcld, numdt(i), step_count_valid)
++          if (.not. step_count_valid) then
++            write(*,*) 'PR71_STEP_COUNT_REJECT i,k,rate,dt=', i, k, step_rate, dtcld
++            error stop 'invalid PR71 KDM6 substep count'
++          endif
++          step_rate = max(mass_velocity_rate(i,k,4),number_velocity_rate(i,k,2))
++          call checked_substep_count(step_rate, dtcld, numdt_i(i), step_count_valid)
++          if (.not. step_count_valid) then
++            write(*,*) 'PR71_STEP_COUNT_REJECT_ICE i,k,rate,dt=', i, k, step_rate, dtcld
++            error stop 'invalid PR71 KDM6 ice substep count'
++          endif
+           if(numdt(i).ge.mstep(i)) mstep(i) = numdt(i)
+           if(numdt_i(i).ge.mstep_i(i)) mstep_i(i) = numdt_i(i)
+         enddo

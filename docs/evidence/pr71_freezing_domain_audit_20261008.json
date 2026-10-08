@@ -1,0 +1,184 @@
+{
+  "schema": "pr71_freezing_domain_audit_v1",
+  "date": "2026-10-08",
+  "decision": "NO_SUPPORTED_SIGNED_QG_BG_POLICY_FOR_FREEZING_CREATED_SUBTHRESHOLD_TRANSIENT",
+  "selected_generated_source": {
+    "path": "/var/tmp/pr70_native_volume_trace_20261008_v3/source/selected_candidate_fbf_pr69_water.f90",
+    "sha256": "ee688498b32b7a1ccaf69858f62f4e457f7153df4fb8b965acfd069d8eefb425",
+    "source_audit_receipt": "docs/evidence/pr70_volume_process_source_trace_20261008.json",
+    "observer_receipt": "docs/evidence/pr70_native_volume_trace_20261008.json",
+    "anchors": {
+      "qg_bg_input_copy": [
+        608,
+        647
+      ],
+      "rhox_initialization": 1259,
+      "cold_pgdep_gate": 2715,
+      "cold_pgdep_formula_and_mass_cap": [
+        2719,
+        2723
+      ],
+      "signed_volume_consumer": 2988,
+      "freezing_mass_volume_temperature_rain_updates": [
+        1884,
+        1898,
+        1899,
+        1900
+      ],
+      "selected_extinction_qg_bg": 3460,
+      "prog_b_definition": 3831,
+      "prog_b_intent_out": 3842,
+      "prog_b_gate_and_density_clamp": [
+        3864,
+        3866,
+        3868
+      ],
+      "prog_b_parameter_outputs": [
+        3874,
+        3918
+      ]
+    }
+  },
+  "maintained_source_artifact": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_mp_kdm6.F",
+    "sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a",
+    "origin_record": "tests/fixtures/kdm6_wrapper/origin.json",
+    "origin_relative_path": "phys/module_mp_kdm6.F",
+    "origin_scope": "Hash-pinned private serial-wrapper fixture; source content matches research-host module.",
+    "fixture_matches_selected_source_bytewise": false,
+    "comparison_limit": "Maintained host source was directly compared for relevant gates, freezing assignments, and terminal cutoff; observer receipt covers only the selected generated candidate.",
+    "fixture_path": "tests/fixtures/kdm6_wrapper/module_mp_kdm6.F",
+    "fixture_sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a",
+    "anchors": {
+      "cold_pgdep_gate_and_mass_cap": [
+        2335,
+        2342
+      ],
+      "freezing_qg_bg_temperature_rain_updates": [
+        1502,
+        1515,
+        1516,
+        1517,
+        1518
+      ],
+      "legacy_extinction_qg_only": 2925,
+      "prog_b_density_table_gate": [
+        3310,
+        3323
+      ],
+      "prog_b_outputs_intent_out": [
+        3301,
+        3305
+      ]
+    }
+  },
+  "domain": {
+    "qg": {
+      "source_name": "qrs(:,:,3)",
+      "units": "kg water per kg selected scheme reference mass (physical dry-air carrier identity not independently established)",
+      "property_threshold": 1e-09,
+      "basis_status": "Selected source mixing-ratio convention; PR69 carrier identity remains open."
+    },
+    "bg": {
+      "source_name": "brs",
+      "units": "m3 bulk particle volume per kg of the same selected scheme reference mass (physical dry-air carrier identity not independently established)",
+      "property_threshold": 1e-15,
+      "basis_status": "Inferred from source brs_min comment and QG/BG density relation; PR69 carrier identity remains open."
+    },
+    "density": {
+      "source_name": "rhox",
+      "units": "kg m-3",
+      "table_interval": [
+        100,
+        900
+      ],
+      "clamp_only_after_gate": true
+    },
+    "prog_b_gate": "QG > qcrmin OR BG > brs_min",
+    "pgdep_gate": "QG > 0 AND ifsat != 1",
+    "pgdep_sign": {
+      "negative": "sublimation QG to vapor",
+      "positive": "deposition vapor to QG"
+    },
+    "volume_conversion": "pgdep / rhox",
+    "fortran_outputs": {
+      "intent_out_count": 18,
+      "assigned_on_density_gate_false": false,
+      "names": [
+        "rhox",
+        "cmg",
+        "pidn0g",
+        "avtg",
+        "pvtg",
+        "precg2",
+        "bvtg",
+        "bvtg1",
+        "bvtg2",
+        "bvtg3",
+        "bvtg4",
+        "rslopegbmax",
+        "g1pbg",
+        "g3pbg",
+        "g4pbg",
+        "g5pbgo2",
+        "g1pdgbgmg",
+        "dgbgmug1"
+      ]
+    },
+    "pgdep_rate_units": "QG mixing-ratio units per second, conditional on selected source mixing-ratio convention; host carrier identity remains open."
+  },
+  "freezing_donor": {
+    "source_rule": [
+      "QG += pfrzdtr",
+      "BG += pfrzdtr / denr",
+      "T += xlf/cpm * pfrzdtr",
+      "QR -= pfrzdtr"
+    ],
+    "denr_kg_m3": 1000.0,
+    "matched_trace": {
+      "qg_over_bg_kg_m3": 1000.0000657,
+      "property_gate": false,
+      "dtcld_s": 20.0,
+      "rhox_observed": 0.0,
+      "global_j": "NOT_CAPTURED",
+      "qg_source_mixing_ratio": 1.5222058e-14,
+      "bg_source_volume_mixing_ratio": 1.5222057e-17,
+      "pgdep_source_tendency": -7.6110288e-16,
+      "tendency_units": "QG mixing-ratio units per second, conditional on selected source convention; physical carrier identity unresolved.",
+      "qg_bg_units": "QG and BG values use the same selected reference-mass basis; its physical carrier identity is unresolved."
+    },
+    "runtime_status": "CONTROLLED_FATAL_RETURN_128_NO_POST_CALL_CHECKPOINT",
+    "runtime_interpretation": "Observer/source-path evidence only; not accepted behavior or closure."
+  },
+  "extinction": {
+    "selected_generated_source": "QG <= qcrmin zeros both QG and BG at terminal cutoff",
+    "maintained_fixture": "QG <= qcrmin zeros QG without paired BG clear",
+    "interpretation": "Terminal cleanup does not authorize a pre-cutoff transient transfer policy."
+  },
+  "policy": {
+    "source_supported_signed_transfer": false,
+    "positive_deposition_incoming_volume_policy": "MISSING",
+    "freezing_created_subthreshold_transient_policy": "MISSING",
+    "justified_900_kg_m3_prior_or_clamp": false,
+    "supported_action": "Keep nonzero rate with undefined/nonpositive density fail-closed until a model policy and source-bound endpoint test exist.",
+    "precommit_gate_scope": "Can reject outside-domain endpoints; active domain follows QG > qcrmin OR BG > brs_min with valid positive paired density, but this cannot define the missing transition or incoming volume.",
+    "legacy_property_setup_gate": "QG > qcrmin OR BG > brs_min; a positive QG below qcrmin can still enter PSD setup if BG > brs_min."
+  },
+  "literature": [
+    {
+      "citation": "Lin, Farley, and Orville (1983)",
+      "doi": "10.1175/1520-0450(1983)022<1065:BPOTSF>2.0.CO;2",
+      "role": "Legacy bulk-scheme family background; does not support the selected transient rule."
+    },
+    {
+      "citation": "Jensen et al. (2024)",
+      "doi": "10.5194/gmd-17-7199-2024",
+      "role": "Different prognostic-density model with integrated-volume process assumptions; not transferable without explicit scientific policy."
+    }
+  ],
+  "limits": [
+    "Observer global j was not captured.",
+    "No accepted native endpoint, closure, or positive deposition material-density rule demonstrated.",
+    "Maintained host source was compared at relevant logic sites; native observer receipt pertains only to selected generated source."
+  ]
+}

@@ -1,0 +1,634 @@
+--- composed_pr70.F
++++ composed_pr70.F
+@@ -5,6 +5,10 @@
+    use module_mp_radar
+    use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
+    use module_model_constants, only : RE_QC_BG, RE_QI_BG, RE_QS_BG
++   integer, parameter, private :: PROGB_ABSENT = 0
++   integer, parameter, private :: PROGB_TRANSIENT = 1
++   integer, parameter, private :: PROGB_PSD_ACTIVE = 2
++   integer, parameter, private :: PROGB_UNSUPPORTED = 3
+ 
+ 
+ 
+@@ -753,6 +757,7 @@
+    logical :: pr67_trace_this_call
+    real, dimension(its:ite,kts:kte) :: brs
+    real, dimension(its:ite,kts:kte) :: rhox
++   integer, dimension(its:ite,kts:kte) :: progb_status
+    real, dimension(its:ite,kts:kte) :: cmg
+ 
+ 
+@@ -880,6 +885,7 @@
+                 ,snow(ims,j),snowncv(ims,j)                &
+                 ,graupel(ims,j),graupelncv(ims,j)          &
+                 ,pr67_trace_this_call                         &
++                ,progb_status                                 &
+                 )
+ 
+      do k = kts,kte
+@@ -919,7 +925,13 @@
+ #endif
+          nn(i,k,j) = number_value
+          bg(i,k,j) = brs(i,k)
+-         diag_rhog(i,k,j) = rhox(i,k)
++         if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++           diag_rhog(i,k,j) = rhox(i,k)
++         else if (progb_status(i,k) == PROGB_ABSENT) then
++           diag_rhog(i,k,j) = 0.0
++         else
++           error stop 'KDM6 invalid ProgB status at return'
++         endif
+        enddo
+      enddo
+ 
+@@ -936,7 +948,13 @@
+              n0so1d(k) = n0so(i,k)
+              n0go1d(k) = n0go(i,k)
+              qg1d(k) = qg(i,k,j)
+-             cmg1d(k) = cmg(i,k)
++             if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++               cmg1d(k) = cmg(i,k)
++             else if (progb_status(i,k) == PROGB_ABSENT) then
++               cmg1d(k) = 0.0
++             else
++               error stop 'KDM6 invalid ProgB status at return'
++             endif
+            enddo
+            call refl10cm_kdm6 (qv1d, qr1d, nr1d, qs1d, qg1d, n0so1d,&
+                               n0go1d, t1d, p1d, dBZ, kts, kte, i, j, cmg1d)
+@@ -1059,6 +1077,7 @@
+                    ,snow,snowncv                                  &
+                    ,graupel,graupelncv                            &
+                    ,pr67_trace_this_call                            &
++                   ,progb_status                                    &
+                     )
+ 
+     implicit none
+@@ -1179,6 +1198,7 @@
+    real, dimension(its:ite,kts:kte,3)     , intent(inout) :: nrs,nci
+    real, dimension(its:ite,kts:kte)       , intent(inout) :: brs
+    real, dimension(its:ite,kts:kte)       , intent(out) :: rhox
++   integer, dimension(its:ite,kts:kte)   , intent(out) :: progb_status
+    real, dimension(ims:ime,kms:kme)       , intent(inout) :: q
+    real, dimension(ims:ime)               , intent(inout) :: rain
+    real, dimension(ims:ime)               , intent(inout) :: rainncv
+@@ -1375,7 +1395,7 @@
+ 
+ 
+        nci(i,k,2) = min(max(nci(i,k,2),0.0),1.0e6)
+-       rhox(i,k) = max(rhox(i,k),0.0)
++       ! ProgB supplies density only when its status is active.
+        brs(i,k) = max(brs(i,k),0.0)
+      enddo
+    enddo
+@@ -1661,11 +1681,11 @@
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+-                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+-                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
++                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+    call kdm6_velocity_rates(terminal_velocity_mass,terminal_velocity_number, &
+                             delz,mass_velocity_rate,number_velocity_rate, &
+                             ims,ime,kms,kme,its,ite,kts,kte)
+@@ -1764,11 +1784,11 @@
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+-                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+-                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
++                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+    call kdm6_velocity_rates(terminal_velocity_mass,terminal_velocity_number, &
+                             delz,mass_velocity_rate,number_velocity_rate, &
+                             ims,ime,kms,kme,its,ite,kts,kte)
+@@ -1784,7 +1804,7 @@
+              access='stream',form='unformatted',status='unknown',position='append')
+         write(pr67_unit) 'PR67P001'
+         write(pr67_unit) 0,lat,its,ite,kts,kte,dtcld
+-        write(pr67_unit) work1(its:ite,kts:kte,4)
++        write(pr67_unit) mass_velocity_rate(its:ite,kts:kte,4)
+         write(pr67_unit) delz(its:ite,kts:kte)
+         write(pr67_unit) dend(its:ite,kts:kte)
+         write(pr67_unit) qci(its:ite,kts:kte,2)
+@@ -1847,11 +1867,11 @@
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+-                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+-                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
++                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+    call kdm6_velocity_rates(terminal_velocity_mass,terminal_velocity_number, &
+                             delz,mass_velocity_rate,number_velocity_rate, &
+                             ims,ime,kms,kme,its,ite,kts,kte)
+@@ -1864,7 +1884,11 @@
+           supcol = t0c-t(i,k)
+           if(supcol.lt.0.) xlf = xlf0
+           n0so(i,k) = (n0s)/g1pms/(rslopemu(i,k,2)) 
+-          n0go(i,k) = (n0g)/g1pmg/(rslopemu(i,k,3))  
++          if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++            n0go(i,k) = (n0g)/g1pmg/(rslopemu(i,k,3))
++          else
++            n0go(i,k) = 0.0
++          endif
+           n0sfac(i,k) = max(min(exp(alpha*supcol),n0smax/n0s),1.)
+           if(t(i,k).gt.t0c) then
+ 
+@@ -1896,7 +1920,7 @@
+ 
+ 
+ 
+-            if(qrs(i,k,3).gt.0.) then
++            if(progb_status(i,k)==PROGB_PSD_ACTIVE .and. qrs(i,k,3).gt.0.) then
+ 
+               coeres = (rslope2(i,k,3))*sqrt(rslope(i,k,3)*rslopeb(i,k,3))           &
+                        *rslopemu(i,k,3)
+@@ -1908,13 +1932,15 @@
+ 
+ 
+ 
+-              if(qrs(i,k,3).gt.qcrmin) then
++              if (progb_status(i,k) == PROGB_PSD_ACTIVE .and. qrs(i,k,3) .gt.qcrmin) then
+                 gfac = (rslope(i,k,3))*n0go(i,k)/qrs(i,k,3)
+                 nrs(i,k,1) = nrs(i,k,1) - gfac*pgmlt(i,k)
+               endif
+               qrs(i,k,3) = qrs(i,k,3) + pgmlt(i,k)
+               qrs(i,k,1) = qrs(i,k,1) - pgmlt(i,k)
+               t(i,k) = t(i,k) + xlf/cpm(i,k)*pgmlt(i,k)
++              if (progb_status(i,k) /= PROGB_PSD_ACTIVE) &
++                error stop 'ProgB status invalid for melting volume'
+               brs(i,k) = brs(i,k) + (pgmlt(i,k)/rhox(i,k))
+             endif
+ 
+@@ -1996,11 +2022,11 @@
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+-                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+-                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
++                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+ 
+       do k = kts, kte
+         do i = its, ite
+@@ -2191,11 +2217,11 @@
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+-                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+-                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
++                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+ 
+       do k = kts, kte
+         do i = its, ite
+@@ -2223,8 +2249,11 @@
+           n0c(i,k) = (muc+1)*nci(i,k,1)/(rslopec(i,k)*rslopecmu(i,k))
+           n0i(i,k) = nci(i,k,2)/(rslope(i,k,4)*rslopemu(i,k,4)*g1pmi)
+           n0so(i,k) = (n0s)/g1pms/(rslopemu(i,k,2))
+-          n0go(i,k) = (n0g)/g1pmg/(rslopemu(i,k,3))
+-
++          if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++            n0go(i,k) = (n0g)/g1pmg/(rslopemu(i,k,3))
++          else
++            n0go(i,k) = 0.0
++          endif
+           if(qrs(i,k,1).ge.qcrmin .and. nrs(i,k,1) .ge. nrmin) then
+             lamdr_tmp(i,k) = exp(log((((pidnr)*nrs(i,k,1))                       &
+                          /(dry_carrier_density(i,k)*qrs(i,k,1))))*(1./dmr))
+@@ -2430,7 +2459,11 @@
+           vt2i=DBLE(pvti)*rslopeb(i,k,4)*denfac(i,k)
+           vt2r=DBLE(pvtr)*rslopeb(i,k,1)*denfac(i,k)
+           vt2s=DBLE(pvts)*rslopeb(i,k,2)*denfac(i,k)
+-          vt2g(i,k)=DBLE(pvtg(i,k))*rslopeb(i,k,3)*denfac(i,k)
++          if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++            vt2g(i,k)=DBLE(pvtg(i,k))*rslopeb(i,k,3)*denfac(i,k)
++          else
++            vt2g(i,k)=0.0
++          endif
+           qsum(i,k) = max((qrs(i,k,2)+qrs(i,k,3)),1.e-15)
+           if(supcol.gt.0.) then
+ 
+@@ -2481,7 +2514,7 @@
+ 
+ 
+ 
+-            if(qrs(i,k,3).gt.qcrmin .and. qci(i,k,2).gt.qmin) then
++            if (progb_status(i,k) == PROGB_PSD_ACTIVE .and. qrs(i,k,3) .gt.qcrmin .and. qci(i,k,2).gt.qmin) then
+               eacgi = exp(0.07*(-supcol))
+                 acrfac=(g3pmg)*rslopemu(i,k,3)*rslope3(i,k,3)*g1pdimi*rsloped(i,k,4)*rslopemu(i,k,4)*rslope(i,k,4)&
+                      +(2.)*g2pmg*rslopemu(i,k,3)*rslope2(i,k,3)*g2pdimi*rsloped(i,k,4)*rslopemu(i,k,4)*rslope2(i,k,4)&
+@@ -2536,7 +2569,7 @@
+ 
+ 
+ 
+-             if(qrs(i,k,3).gt.qcrmin) then
++             if (progb_status(i,k) == PROGB_PSD_ACTIVE .and. qrs(i,k,3) .gt.qcrmin) then
+                eacgi = exp(0.07*(-supcol))
+                acrfac=(g3pmg)*rslopemu(i,k,3)*rslope3(i,k,3)*g1pmi*rslopemu(i,k,4)*rslope(i,k,4)&
+                      +(2.)*g2pmg*rslopemu(i,k,3)*rslope2(i,k,3)*g2pmi*rslopemu(i,k,4)*rslope2(i,k,4)&
+@@ -2576,7 +2609,7 @@
+ 
+ 
+ 
+-          if(qrs(i,k,3).gt.qcrmin .and. qci(i,k,1).gt.qmin) then
++          if(progb_status(i,k)==PROGB_PSD_ACTIVE .and. qrs(i,k,3).gt.qcrmin .and. qci(i,k,1).gt.qmin) then
+ 
+              pgacw(i,k) = min((rslope3(i,k,3))*rslopeb(i,k,3)*rslopemu(i,k,3)    &
+                          *qci(i,k,1)*pi*n0go(i,k)*avtg(i,k)*g3pbg(i,k)*.25*eacgc&
+@@ -2588,7 +2621,7 @@
+ 
+ 
+ 
+-          if(qrs(i,k,3).gt.qcrmin .and. nci(i,k,1).gt.ncmin) then
++          if(progb_status(i,k)==PROGB_PSD_ACTIVE .and. qrs(i,k,3).gt.qcrmin .and. nci(i,k,1).gt.ncmin) then
+            ngacw(i,k) = min((pi)*avtg(i,k)*.25*eacgc*n0go(i,k)*n0c(i,k)/(muc+1)&
+                        *g3pbg(i,k)*rslope3(i,k,3)*rslopeb(i,k,3)*rslopemu(i,k,3)&
+                        *rslopec(i,k)*rslopecmu(i,k)     &
+@@ -2717,7 +2750,7 @@
+ 
+ 
+ 
+-          if(qrs(i,k,3).gt.qcrmin .and. qrs(i,k,1).gt.qcrmin) then
++          if (progb_status(i,k) == PROGB_PSD_ACTIVE .and. qrs(i,k,3) .gt.qcrmin .and. qrs(i,k,1).gt.qcrmin) then
+ 
+ 
+ 
+@@ -2739,7 +2772,7 @@
+ 
+ 
+ 
+-          if(qrs(i,k,3).gt.qcrmin .and. nrs(i,k,1).gt.nrmin) then
++          if (progb_status(i,k) == PROGB_PSD_ACTIVE .and. qrs(i,k,3) .gt.qcrmin .and. nrs(i,k,1).gt.nrmin) then
+ 
+             acrfac = (g3pmg)*g1pmr*rslope3(i,k,3)*rslopemu(i,k,3)&
+                      *rslope(i,k,1)*rslopemu(i,k,1)                            &
+@@ -2867,7 +2900,7 @@
+ 
+ 
+ 
+-          if(qrs(i,k,3).gt.qcrmin .and. qrs(i,k,2).gt.qcrmin) then
++          if (progb_status(i,k) == PROGB_PSD_ACTIVE .and. qrs(i,k,3) .gt.qcrmin .and. qrs(i,k,2).gt.qcrmin) then
+             pgacs(i,k) = 0. 
+           endif
+           if(supcol.le.0) then
+@@ -2891,14 +2924,14 @@
+ 
+ 
+ 
+-            if(qrs(i,k,3).gt.0.)                                               &
++            if (progb_status(i,k) == PROGB_PSD_ACTIVE .and. qrs(i,k,3) .gt.0.)                                               &
+               pgeml(i,k) = min(max((cliq)*supcol*(paacw(i,k)+pgacr(i,k))/xlf &
+                           ,-(qrs(i,k,3))/dtcld),0.)
+ 
+ 
+ 
+ 
+-              if (qrs(i,k,3).gt.qcrmin) then
++              if (progb_status(i,k) == PROGB_PSD_ACTIVE .and. qrs(i,k,3) .gt.qcrmin) then
+                 gfac = (rslope(i,k,3))*n0go(i,k)/qrs(i,k,3)
+                 ngeml(i,k) = -gfac*pgeml(i,k)
+               endif
+@@ -2976,7 +3009,7 @@
+ 
+ 
+ 
+-            if(qrs(i,k,3).gt.0. .and. ifsat.ne.1) then
++            if(progb_status(i,k)==PROGB_PSD_ACTIVE .and. qrs(i,k,3).gt.0. .and. ifsat.ne.1) then
+ 
+               coeres = (rslope2(i,k,3))*sqrt(rslope(i,k,3)*rslopeb(i,k,3)) &
+                       *rslopemu(i,k,3)
+@@ -3035,7 +3068,7 @@
+ 
+ 
+ 
+-            if(qrs(i,k,3).gt.0. .and. rh(i,k,1).lt.1.) then
++            if(progb_status(i,k)==PROGB_PSD_ACTIVE .and. qrs(i,k,3).gt.0. .and. rh(i,k,1).lt.1.) then
+               coeres = (rslope2(i,k,3))*sqrt(rslope(i,k,3)*rslopeb(i,k,3))  &
+                       *rslopemu(i,k,3)
+               pgevp(i,k) =(rh(i,k,1)-1.)*((precg1)*n0go(i,k)*rslope2(i,k,3)        &
+@@ -3249,8 +3282,17 @@
+                  -nsacr(i,k)-ngacr(i,k))*dtcld
+ 
+             rain_bg_rates_feasible=.true.
+-            call kdm6_mass_volume_rate(pgdep(i,k),rhox(i,k), &
+-                 rain_pgdep_bg_rate,rain_bg_rate_valid)
++            if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++              call kdm6_mass_volume_rate(pgdep(i,k),rhox(i,k), &
++                   rain_pgdep_bg_rate,rain_bg_rate_valid)
++            else if (progb_status(i,k) == PROGB_ABSENT .and. &
++                     pgdep(i,k) == 0.0) then
++              rain_pgdep_bg_rate = 0.0
++              rain_bg_rate_valid = .true.
++            else
++              rain_pgdep_bg_rate = 0.0
++              rain_bg_rate_valid = .false.
++            endif
+             rain_bg_rates_feasible=rain_bg_rates_feasible.and.rain_bg_rate_valid
+             call kdm6_mass_volume_rate(pracs(i,k),dens, &
+                  rain_pracs_bg_rate,rain_bg_rate_valid)
+@@ -3307,7 +3349,8 @@
+                    ' Qfixed/Qproc=',rain_q_fixed,rain_q_process, &
+                    ' Nfixed/Nproc=',rain_n_fixed,rain_n_process, &
+                    ' BGfixed/BGproc=',rain_bg_fixed,rain_bg_process, &
+-                   ' BGinput/massRates/rho=',brs(i,k),pgdep(i,k),rhox(i,k), &
++                   ' BGinput/massRates/rho_status=',brs(i,k),pgdep(i,k), &
++                   progb_status(i,k), &
+                    pracs(i,k),dens,pgaci(i,k),deni,paacw(i,k),denr, &
+                    ' BGpartnerVolumeRates=',rain_pgdep_bg_rate, &
+                    rain_pracs_bg_rate,rain_pgaci_bg_rate,rain_paacw_bg_rate, &
+@@ -3484,8 +3527,16 @@
+ 
+ 
+ 
+-            bgevp(i,k)=pgevp(i,k)/rhox(i,k)
+-            bgeml(i,k)=pgeml(i,k)/rhox(i,k)
++            if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++              bgevp(i,k)=pgevp(i,k)/rhox(i,k)
++              bgeml(i,k)=pgeml(i,k)/rhox(i,k)
++            else if (progb_status(i,k) == PROGB_ABSENT .and. &
++                     pgevp(i,k) == 0.0 .and. pgeml(i,k) == 0.0) then
++              bgevp(i,k)=0.0
++              bgeml(i,k)=0.0
++            else
++              error stop 'ProgB status invalid for volume conversion'
++            endif
+ 
+             q(i,k) = q(i,k)+work2(i,k)*dtcld
+             qci(i,k,1) = max(qci(i,k,1)-(praut(i,k)+pracw(i,k)                 &
+@@ -3522,18 +3573,18 @@
+          qci_tmp(i,k) = qci(i,k,2)
+          nci_tmp(i,k) = nci(i,k,2)
+          nrs_tmp(i,k) = nrs(i,k,1)
+-         rhox(i,k) = max(rhox(i,k) ,0.)
++         ! The next ProgB call initializes density and status.
+        enddo
+      enddo
+ 
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+-                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+-                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
++                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+ 
+       do k = kts, kte
+         do i = its, ite
+@@ -3620,11 +3671,11 @@
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+-                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++                   ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+-                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax)
++                   ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+ 
+       do k = kts, kte
+         do i = its, ite
+@@ -3732,6 +3783,26 @@
+            if(qrs(i,k,3).le.qcrmin)then
+               qrs(i,k,3) = 0.0
+               brs(i,k) = 0.0
++              progb_status(i,k) = PROGB_ABSENT
++              n0go(i,k) = 0.0
++              rhox(i,k) = 0.0
++              cmg(i,k) = 0.0
++              pidn0g(i,k) = 0.0
++              avtg(i,k) = 0.0
++              pvtg(i,k) = 0.0
++              precg2(i,k) = 0.0
++              bvtg(i,k) = 0.0
++              bvtg1(i,k) = 0.0
++              bvtg2(i,k) = 0.0
++              bvtg3(i,k) = 0.0
++              bvtg4(i,k) = 0.0
++              rslopegbmax(i,k) = 0.0
++              g1pbg(i,k) = 0.0
++              g3pbg(i,k) = 0.0
++              g4pbg(i,k) = 0.0
++              g5pbgo2(i,k) = 0.0
++              g1pdgbgmg(i,k) = 0.0
++              dgbgmug1(i,k) = 0.0
+            endif
+ 
+ 
+@@ -4098,7 +4169,8 @@
+    SUBROUTINE ProgB_param(brs,qrs,rhox,its,ite,jts,jte,kts,kte,qcrmin             &
+                          ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2&
+                          ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax     &
+-                         ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1)
++                         ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
++  use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
+   implicit none
+   integer           :: i,k,sy, its,ite, jts,jte, kts,kte
+   real, intent(in)  ::qcrmin,dmg,mug,pi
+@@ -4107,11 +4179,13 @@
+   REAL, DIMENSION( its:ite , kts:kte,3), INTENT(IN) :: qrs
+   REAL, DIMENSION( its:ite , kts:kte), INTENT(INOUT):: brs   
+   REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: rhox    
++  INTEGER, DIMENSION( its:ite , kts:kte),INTENT(OUT) :: progb_status
+   REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: cmg,pidn0g
+   REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: avtg,pvtg,precg2
+   REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,&
+                                                        g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1
+   REAL ::tmp1,tmp2
++  DOUBLE PRECISION :: raw_density
+   real,dimension(9) :: Tbl,aTbl,bTbl
+   real, parameter   :: rho_min = 100.      
+   real, parameter   :: rho_max = 900.      
+@@ -4126,24 +4200,44 @@
+ 
+       do k = kts, kte
+         do i = its, ite
+-
+-
+-     if (qrs(i,k,3).gt. qcrmin .or. brs(i,k).gt. brs_min) then
+-
+-         rhox(i,k) = qrs(i,k,3)/brs(i,k)
+-
+-         if (rhox(i,k) .lt. rho_min .or. rhox(i,k) .gt. rho_max) then
+-          rhox(i,k) = min(rho_max,max(rho_min,rhox(i,k)))
+-         else
+-          rhox(i,k) = rhox(i,k)
+-         endif
+-
+-        if (rhox(i,k).ge. rho_min .and. rhox(i,k).le. rho_max) then
+-        brs(i,k)  = qrs(i,k,3)/rhox(i,k)
+-        cmg(i,k) = pi*rhox(i,k)/6
+-        pidn0g(i,k) =  cmg(i,k)*n0g*g1pdgmg/g1pmg
+-        endif
+-      endif
++          rhox(i,k) = 0.0
++          cmg(i,k) = 0.0
++          pidn0g(i,k) = 0.0
++          avtg(i,k) = 0.0
++          pvtg(i,k) = 0.0
++          precg2(i,k) = 0.0
++          bvtg(i,k) = 0.0
++          bvtg1(i,k) = 0.0
++          bvtg2(i,k) = 0.0
++          bvtg3(i,k) = 0.0
++          bvtg4(i,k) = 0.0
++          rslopegbmax(i,k) = 0.0
++          g1pbg(i,k) = 0.0
++          g3pbg(i,k) = 0.0
++          g4pbg(i,k) = 0.0
++          g5pbgo2(i,k) = 0.0
++          g1pdgbgmg(i,k) = 0.0
++          dgbgmug1(i,k) = 0.0
++          progb_status(i,k) = PROGB_UNSUPPORTED
++          if (.not. ieee_is_finite(qrs(i,k,3)) .or. &
++              .not. ieee_is_finite(brs(i,k))) cycle
++          if (qrs(i,k,3) == 0.0 .and. brs(i,k) == 0.0) then
++            progb_status(i,k) = PROGB_ABSENT
++            cycle
++          endif
++          if (qrs(i,k,3) <= 0.0 .or. brs(i,k) <= 0.0) cycle
++          if (qrs(i,k,3) <= qcrmin .and. brs(i,k) <= brs_min) then
++            progb_status(i,k) = PROGB_TRANSIENT
++            cycle
++          endif
++          raw_density = dble(qrs(i,k,3))/dble(brs(i,k))
++          if (.not. ieee_is_finite(raw_density)) cycle
++          if (raw_density < dble(rho_min) .or. &
++              raw_density > dble(rho_max)) cycle
++          rhox(i,k) = qrs(i,k,3)/brs(i,k)
++          cmg(i,k) = pi*rhox(i,k)/6
++          if (.not. ieee_is_finite(cmg(i,k)) .or. cmg(i,k) <= 0.0) cycle
++          pidn0g(i,k) = cmg(i,k)*n0g*g1pdgmg/g1pmg
+          if (cmg(i,k).gt. 0) then
+           if (rhox(i,k).ge. Tbl(1) .and. rhox(i,k).lt.Tbl(9)) then
+                   do sy = 1,8
+@@ -4185,16 +4279,56 @@
+                    precg2(i,k) = 4.*.31*avtg(i,k)**.5*g5pbgo2(i,k)
+          endif
+        endif
++          if (.not. ieee_is_finite(rhox(i,k)) .or. &
++              .not. ieee_is_finite(cmg(i,k)) .or. &
++              .not. ieee_is_finite(pidn0g(i,k)) .or. &
++              .not. ieee_is_finite(avtg(i,k)) .or. &
++              .not. ieee_is_finite(pvtg(i,k)) .or. &
++              .not. ieee_is_finite(precg2(i,k)) .or. &
++              .not. ieee_is_finite(bvtg(i,k)) .or. &
++              .not. ieee_is_finite(bvtg1(i,k)) .or. &
++              .not. ieee_is_finite(bvtg2(i,k)) .or. &
++              .not. ieee_is_finite(bvtg3(i,k)) .or. &
++              .not. ieee_is_finite(bvtg4(i,k)) .or. &
++              .not. ieee_is_finite(rslopegbmax(i,k)) .or. &
++              .not. ieee_is_finite(g1pbg(i,k)) .or. &
++              .not. ieee_is_finite(g3pbg(i,k)) .or. &
++              .not. ieee_is_finite(g4pbg(i,k)) .or. &
++              .not. ieee_is_finite(g5pbgo2(i,k)) .or. &
++              .not. ieee_is_finite(g1pdgbgmg(i,k)) .or. &
++              .not. ieee_is_finite(dgbgmug1(i,k))) then
++            rhox(i,k) = 0.0
++            cmg(i,k) = 0.0
++            pidn0g(i,k) = 0.0
++            avtg(i,k) = 0.0
++            pvtg(i,k) = 0.0
++            precg2(i,k) = 0.0
++            bvtg(i,k) = 0.0
++            bvtg1(i,k) = 0.0
++            bvtg2(i,k) = 0.0
++            bvtg3(i,k) = 0.0
++            bvtg4(i,k) = 0.0
++            rslopegbmax(i,k) = 0.0
++            g1pbg(i,k) = 0.0
++            g3pbg(i,k) = 0.0
++            g4pbg(i,k) = 0.0
++            g5pbgo2(i,k) = 0.0
++            g1pdgbgmg(i,k) = 0.0
++            dgbgmug1(i,k) = 0.0
++            cycle
++          endif
++          brs(i,k) = qrs(i,k,3)/rhox(i,k)
++          progb_status(i,k) = PROGB_PSD_ACTIVE
++        enddo
+       enddo
+-    enddo
+-
+   END subroutine ProgB_param
+ 
+       subroutine slope_kdm6(qrs,qci,nrs,nci,den,denfac,t,rslope,rslopeb,rslope2,rslope3, &
+                             rslopemu,rsloped,vt,vtn,its,ite,kts,kte,qmin,pidn0g,         &
+-                            pvtg,bvtg,rslopegbmax)
++                            pvtg,bvtg,rslopegbmax,progb_status)
+   IMPLICIT NONE
+   INTEGER       ::               its,ite, jts,jte, kts,kte
++  INTEGER, DIMENSION(its:ite,kts:kte), INTENT(IN) :: progb_status
+ 
+ 
+   REAL, DIMENSION( its:ite , kts:kte,3) ::   qrs                                 
+@@ -4240,6 +4374,13 @@
+ 
+       do k = kts, kte
+         do i = its, ite
++          if (progb_status(i,k) == PROGB_TRANSIENT) &
++            error stop 'ProgB transient PSD state rejected'
++          if (progb_status(i,k) == PROGB_UNSUPPORTED) &
++            error stop 'ProgB unsupported PSD state rejected'
++          if (progb_status(i,k) /= PROGB_ABSENT .and. &
++              progb_status(i,k) /= PROGB_PSD_ACTIVE) &
++            error stop 'ProgB invalid output status'
+           supcol = t0c-t(i,k)
+ 
+ 
+@@ -4275,7 +4416,15 @@
+             rslope2(i,k,2) = (rslope(i,k,2))*rslope(i,k,2)
+             rslope3(i,k,2) = (rslope2(i,k,2))*rslope(i,k,2)
+           endif
+-          if(qrs(i,k,3).le.qcrmin) then
++          if (progb_status(i,k) == PROGB_ABSENT) then
++            rslope(i,k,3) = 0.0
++            rslopeb(i,k,3) = 0.0
++            rslopemu(i,k,3) = 0.0
++            rsloped(i,k,3) = 0.0
++            rslope2(i,k,3) = 0.0
++            rslope3(i,k,3) = 0.0
++          else
++            if(qrs(i,k,3).le.qcrmin) then
+             rslope(i,k,3) = rslopegmax
+             rslopeb(i,k,3) = rslopegbmax(i,k)
+             rslopemu(i,k,3) = rslopegmmax
+@@ -4305,10 +4454,15 @@
+             rsloped(i,k,4) = (rslope(i,k,4))**dmi
+             rslope2(i,k,4) = (rslope(i,k,4))*rslope(i,k,4)
+             rslope3(i,k,4) = (rslope2(i,k,4))*rslope(i,k,4)
++            endif
+           endif
+           vt(i,k,1) = DBLE(pvtr)*rslopeb(i,k,1)*denfac(i,k)
+           vt(i,k,2) = DBLE(pvts)*rslopeb(i,k,2)*denfac(i,k)
+-          vt(i,k,3) = DBLE(pvtg(i,k))*rslopeb(i,k,3)*denfac(i,k)
++          if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++            vt(i,k,3) = DBLE(pvtg(i,k))*rslopeb(i,k,3)*denfac(i,k)
++          else
++            vt(i,k,3) = 0.0
++          endif
+           vt(i,k,4) = DBLE(pvti)*rslopeb(i,k,4)*denfac(i,k)
+           if(qrs(i,k,1).le.0.0) vt(i,k,1) = 0.0 
+           if(qrs(i,k,2).le.0.0) vt(i,k,2) = 0.0

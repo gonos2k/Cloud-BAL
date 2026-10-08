@@ -1,0 +1,64 @@
+{
+  "base_source": {
+    "path": "/var/tmp/pr71_same_source_native_20261008_v2/rebased/composed_pr71_base.F",
+    "sha256": "5de1884ab59e3de30a3e4ef1d8317405f1ba0591cf7ed9aa6fbca574d5233f41"
+  },
+  "candidate_source": {
+    "path": "/var/tmp/pr71_step_count_contract.gZPOwx/module_mp_kdm6_checked.F",
+    "sha256": "4afa186fb24746ceac56de84d6c2aba1904f7e4b6065a6bf23fdb3a5f3960958"
+  },
+  "generator": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr71_particle_contract_20261008/Cloud-BAL/tools/pr71_step_count_contract.py",
+    "sha256": "cf476e5ec8745b207da30c975add9cb7e3e46211110e627d52c2790abe44e2df"
+  },
+  "harness": {
+    "path": "/var/tmp/pr71_step_count_contract.gZPOwx/step_count_test.f90",
+    "sha256": "427047559b5b6919ccf7553b5dfc951845a537156a0abfe327cfd372d1da8a98"
+  },
+  "patch": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr71_particle_contract_20261008/Cloud-BAL/docs/evidence/pr71_step_count_contract_20261008.patch",
+    "sha256": "d26ad9882f5a7ba8e626e71ee54445342a0ed0be11f394f0825c64e27017cf33"
+  },
+  "profiles": {
+    "O0": {
+      "build_log": {
+        "path": "/var/tmp/pr71_step_count_contract.gZPOwx/O0/build.log",
+        "sha256": "2b227b33fcf634b9f0b9295774fbb7ef65d1f5b9511ad400a989633fe0453775"
+      },
+      "executable_sha256": "7c5a5d5d6fbb65fdd251971c7fc18dc8b1781401d011fc87b892a648973399a6",
+      "run_log": {
+        "path": "/var/tmp/pr71_step_count_contract.gZPOwx/O0/run.log",
+        "sha256": "e53ca19bb8aa53ffa7f37679c47a473705c0baaebf1b59731c4c44443ca148a1"
+      },
+      "run_output": "PR71_STEP_COUNT_CONTRACT_PASS"
+    },
+    "O2": {
+      "build_log": {
+        "path": "/var/tmp/pr71_step_count_contract.gZPOwx/O2/build.log",
+        "sha256": "0d728e963da42f010510b2c1151600ab774b19de4ce710d4a84ebce15d6359b6"
+      },
+      "executable_sha256": "e1c133c8c2990d1dfbe36765f9674c380f15db1437e5b93538205357b5e919dd",
+      "run_log": {
+        "path": "/var/tmp/pr71_step_count_contract.gZPOwx/O2/run.log",
+        "sha256": "e53ca19bb8aa53ffa7f37679c47a473705c0baaebf1b59731c4c44443ca148a1"
+      },
+      "run_output": "PR71_STEP_COUNT_CONTRACT_PASS"
+    }
+  },
+  "runner": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr71_particle_contract_20261008/Cloud-BAL/tests/run_pr71_step_count_contract.sh",
+    "sha256": "fbaf43ef498b23dca97a52477522a47996ca7bef8529a5cc52867bffe192a215"
+  },
+  "schema": "pr71_checked_step_count_v1",
+  "scope": "integer representability of the existing warm-rain and ice terminal-velocity substep counts; no physical CFL or velocity policy",
+  "source_audit": {
+    "output": "PR71_STEP_COUNT_SOURCE_AUDIT_PASS 4afa186fb24746ceac56de84d6c2aba1904f7e4b6065a6bf23fdb3a5f3960958",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr71_particle_contract_20261008/Cloud-BAL/tests/test_pr71_step_count_contract.py",
+    "sha256": "0631c6ffdd2e05b7ad187ee7766c6b0a0465ce832c67323699ab49e5670dba06"
+  },
+  "toolchain": {
+    "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  }
+}
