@@ -1,0 +1,68 @@
+{
+  "schema": "pr76_frozen_batch_publication_v1",
+  "status": "PASS_SCOPED",
+  "pr": "https://github.com/gonos2k/Cloud-BAL/pull/76",
+  "base_commit": "fd7e1be37075a7ba80ee3a0be080111a5be03a26",
+  "frozen_source_commit": "2f27b3fc680f5fad14b2efa2879ab5fddd5325f4",
+  "pr_state_at_recording": "OPEN",
+  "branch": "fix/pr76-degenerate-kkt",
+  "kg_receipt_sha256": "fc62678ea5eddf6d1254915297257f01ef46f49e649155015588cf80584d1711",
+  "previous_kg_receipt_sha256": "9d0855677dbc41d889379b3c98666b66d8279d608bf094032097f7556b45b8bd",
+  "bound_artifacts": {
+    "tools/pr73_joint_analysis.py": "95ab591455b40c821d978aaa30ea0c392a4ba1d106fd5a0617aee6aa16851eb0",
+    "tests/test_pr73_joint_analysis.py": "1ba9e7afc662fdfdcd3c1cfef7fefa71f6c24c35ebec3275cd06643bd6eca510",
+    "tests/test_pr76_degenerate_kkt_oracle.py": "9c3df77c106a7f879b375a1b8ced9f7d316fbbf9f4163141ff671d9c33986608",
+    "docs/evidence/pr76_degenerate_kkt_oracle_20261008.json": "c0f46473653e8f757ab7c7cc892c5b94016b3bfb078d8e2e82b074e7ff376621",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/receipt.json": "d6e3db1977b9de9faa24f6776d472700531fd8559c6a3f4ca4867da825a0e416",
+    "docs/evidence/pr76_degenerate_reproduction_20261008.json": "51ebcc0cde611dd64ce90f93e6c2f518e337555aa2a84146108439f093aa9fe1",
+    "docs/evidence/pr76_native_fp_policy_20261008.json": "496bb64e1d0379a17954afa7ca5d966d505b2ef7d497374e5a7e4d0a260f43fc",
+    "docs/pr76_native_fp_policy.md": "af13b32156276b093b7d2344d06b11bbcc0b276bfa3c1656d526334e95b20385",
+    "docs/evidence/pr76_native_root_checks_20261008.json": "3d0b455c998db09d8469fccb39e1501aa83035556177e5b30270cd07112a7c19",
+    "docs/evidence/pr76_team_review_20261008.json": "8151c431c6e58c745222c84909ad209df93ea7b7823fe9960a7e21a8ed855b35",
+    "docs/evidence/pr76_preservation_20261008.json": "2ce291d4b2a282cedef281a55f44590e6841adec99e1fe1a7bc72f4cc6e38e20",
+    "docs/evidence/pr76_kg_receipt_20261008.json": "fc62678ea5eddf6d1254915297257f01ef46f49e649155015588cf80584d1711"
+  },
+  "corpora": {
+    "Cloud-BAL": {
+      "snapshot": "2026-10-08T10:06:02+00:00",
+      "nodes": 8542,
+      "edges": 15847,
+      "communities": 686,
+      "delta_nodes": 76,
+      "delta_edges": 120,
+      "added_ids": 77,
+      "removed_ids": 1,
+      "sha256": "d0b63567b7a1ac702307be3d2b190a4085e341f27bed071db2db7ebb7259e8a1"
+    },
+    "KLAPS50": {
+      "snapshot": "2026-10-08T10:06:02+00:00",
+      "nodes": 34375,
+      "edges": 74275,
+      "communities": 2685,
+      "delta_nodes": 76,
+      "delta_edges": 121,
+      "added_ids": 77,
+      "removed_ids": 1,
+      "sha256": "c3fc024f378a473452cb0481fe9ef39cdfd65a2178fea3766186ed75ae8c730c"
+    }
+  },
+  "removed_node_interpretation": "One line-number-keyed rationale node moved from L212 to L323; same independent-row selection text remains. Each corpus has 77 added IDs, 1 removed ID, net +76.",
+  "protected_files": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_mp_kdm6.F": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_bl_shinhong.F": "99f44dbeb5e586b96be14424b8ab27c9986ffbd81f007f41fb8528d8ea466d56",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_pbl_driver.F": "90336e30296991fb397ffde87649a4bd20eaa2b7dc6e90639b043810c8420b56",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/config/cp01_private_host_profile.json": "196fa15e32364ab9355a7cf4dd141189fcb452c76499c6d251af6084a5d5231d"
+  },
+  "maintained_status_delta": {
+    "added": [
+      "?? graphify-out/2026-10-08-pr76-degenerate-kkt/"
+    ],
+    "removed": [],
+    "source_changes": false
+  },
+  "physical_approval": "FAIL_OPEN",
+  "native_candidate": "REJECTED",
+  "canonical_estimator_fixture": "UNBOUND/REJECTED",
+  "graph_scope": "68 frozen selected paths; AST/Markdown headings; partial cross-file Fortran CALL; external full model not extracted; no semantic refresh; overlapping corpora not summed",
+  "kg_independent_review_path": "docs/evidence/pr76_kg_independent_review_20261008.json"
+}

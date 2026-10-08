@@ -19,6 +19,30 @@ class JointAnalysisTest(unittest.TestCase):
     def setUp(self):
         self.declaration = json.loads(FIXTURE.read_text(encoding="utf-8"))
 
+    def degenerate_kkt_declaration(self):
+        declaration = copy.deepcopy(self.declaration)
+        declaration.pop("physical_reference", None)
+        declaration["state_fields"] = ["x", "z"]
+        declaration["background_state"] = [0.0, 0.0]
+        declaration["B"] = [[1.0, 0.0], [0.0, 1.0]]
+        declaration["observation"] = {
+            "H": [[1.0, 0.0], [0.0, 1.0]], "value": [-1.0, 1.0],
+            "R": [[1.0, 0.0], [0.0, 1.0]],
+        }
+        declaration["process_increments"] = {
+            "phase": [0.0, 0.0], "external_source": [0.0, 0.0],
+            "physical_boundary": [0.0, 0.0],
+        }
+        declaration["constraints"] = [{
+            "evidence_id": "manufactured:degenerate-equality",
+            "coefficients": [1.0, 1.0], "rhs": 0.0,
+        }]
+        declaration["state_bounds"] = [
+            {"field": "x", "lower": 0.0, "upper": 1.0},
+            {"field": "z", "lower": 0.0, "upper": 1.0},
+        ]
+        return declaration
+
     def test_objective_derives_increment_under_independent_constraints(self):
         result = joint.evaluate(self.declaration)
         self.assertEqual(result["status"], "MANUFACTURED_ALGORITHM_TRIAL")
@@ -152,6 +176,78 @@ class JointAnalysisTest(unittest.TestCase):
         with patch.object(joint, "_solve", side_effect=perturbed_solve):
             with self.assertRaisesRegex(ValueError, "KKT certificate did not pass"):
                 joint.evaluate(scalar)
+
+    def test_degenerate_corner_finds_equality_multiplier_independent_of_face_order(self):
+        declaration = self.degenerate_kkt_declaration()
+        permuted = copy.deepcopy(declaration)
+        permuted["state_fields"].reverse()
+        permuted["background_state"].reverse()
+        permuted["B"] = [row[::-1] for row in permuted["B"][::-1]]
+        permuted["observation"]["H"] = [row[::-1] for row in permuted["observation"]["H"][::-1]]
+        permuted["observation"]["value"].reverse()
+        permuted["observation"]["R"] = [row[::-1] for row in permuted["observation"]["R"][::-1]]
+        permuted["process_increments"] = {
+            key: values[::-1] for key, values in permuted["process_increments"].items()
+        }
+        permuted["constraints"][0]["coefficients"].reverse()
+        permuted["state_bounds"].reverse()
+
+        for case in (declaration, permuted):
+            result = joint.evaluate(case)
+            self.assertEqual(result["candidate_state"], [0.0, 0.0])
+            self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
+            self.assertEqual([bound["side"] for bound in result["kkt_diagnostics"]["active_bounds"]],
+                             ["lower", "lower"])
+            self.assertTrue(all(bound["multiplier"] >= 0.0
+                                for bound in result["kkt_diagnostics"]["active_bounds"]))
+            diagnostics = result["kkt_diagnostics"]
+            self.assertEqual(len(diagnostics["equality_rows_normalized"]),
+                             len(diagnostics["equality_multipliers_normalized"]))
+            lower = {bound["field"]: bound["multiplier"]
+                     for bound in diagnostics["active_bounds"]}
+            for index, field in enumerate(case["state_fields"]):
+                equality_term = sum(row[index] * multiplier for row, multiplier in zip(
+                    diagnostics["equality_rows_normalized"],
+                    diagnostics["equality_multipliers_normalized"]))
+                gradient = 1.0 if field == "x" else -1.0
+                self.assertAlmostEqual(gradient + equality_term - lower[field], 0.0, places=12)
+
+    def test_fixed_bound_leaves_equality_multiplier_freedom_for_other_active_bound(self):
+        declaration = self.degenerate_kkt_declaration()
+        declaration["state_bounds"][0] = {"field": "x", "lower": 0.0, "upper": 0.0}
+
+        result = joint.evaluate(declaration)
+
+        self.assertEqual(result["candidate_state"], [0.0, 0.0])
+        bounds = result["kkt_diagnostics"]["active_bounds"]
+        self.assertEqual([bound["side"] for bound in bounds], ["fixed", "lower"])
+        self.assertGreaterEqual(bounds[1]["multiplier"], 0.0)
+        self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
+
+    def test_degenerate_multiplier_certificate_accepts_scaled_redundant_equalities(self):
+        declaration = self.degenerate_kkt_declaration()
+        declaration["constraints"].append({
+            "evidence_id": "manufactured:scaled-degenerate-equality",
+            "coefficients": [-7.0, -7.0], "rhs": 0.0,
+        })
+
+        result = joint.evaluate(declaration)
+
+        self.assertEqual(result["candidate_state"], [0.0, 0.0])
+        self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
+        self.assertTrue(all(bound["multiplier"] >= 0.0
+                            for bound in result["kkt_diagnostics"]["active_bounds"]))
+
+    def test_multiplier_feasibility_rejects_a_false_corner_certificate(self):
+        gradient = [1.0, -2.0]
+        equality_rows = [[1.0, -1.0]]
+        active_sides = {0: -1, 1: -1}
+
+        certificate = joint._bound_multiplier_certificate(
+            gradient, equality_rows, active_sides, gradient_scale=3.0
+        )
+
+        self.assertIsNone(certificate)
 
     def test_feasible_fixed_bound_redundant_with_equality(self):
         fixed = copy.deepcopy(self.declaration)

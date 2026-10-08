@@ -1,0 +1,137 @@
+{
+  "schema": "pr76_team_review_v1",
+  "review_date": "2026-10-08",
+  "status": "PASS_SCOPED_NO_UNRESOLVED_IMPLEMENTATION_BLOCKER",
+  "review_scope": "Independent static review of degenerate KKT multiplier existence, rank/conditioning failure handling, exact oracle witness validation, pinned endpoint evidence, and paired native gradual-underflow diagnostics.",
+  "base_commit": "fd7e1be37075a7ba80ee3a0be080111a5be03a26",
+  "frozen_artifacts": {
+    "solver": {
+      "path": "tools/pr73_joint_analysis.py",
+      "sha256": "95ab591455b40c821d978aaa30ea0c392a4ba1d106fd5a0617aee6aa16851eb0"
+    },
+    "focused_solver_tests": {
+      "path": "tests/test_pr73_joint_analysis.py",
+      "sha256": "1ba9e7afc662fdfdcd3c1cfef7fefa71f6c24c35ebec3275cd06643bd6eca510"
+    },
+    "exact_oracle_tests": {
+      "path": "tests/test_pr76_degenerate_kkt_oracle.py",
+      "sha256": "9c3df77c106a7f879b375a1b8ced9f7d316fbbf9f4163141ff671d9c33986608"
+    },
+    "exact_oracle_receipt": {
+      "path": "docs/evidence/pr76_degenerate_kkt_oracle_20261008.json",
+      "sha256": "c0f46473653e8f757ab7c7cc892c5b94016b3bfb078d8e2e82b074e7ff376621"
+    },
+    "root_endpoint_receipt": {
+      "path": "docs/evidence/pr76_degenerate_endpoint_20261008/receipt.json",
+      "sha256": "d6e3db1977b9de9faa24f6776d472700531fd8559c6a3f4ca4867da825a0e416"
+    },
+    "reproduction_receipt": {
+      "path": "docs/evidence/pr76_degenerate_reproduction_20261008.json",
+      "sha256": "51ebcc0cde611dd64ce90f93e6c2f518e337555aa2a84146108439f093aa9fe1"
+    },
+    "native_fp_receipt": {
+      "path": "docs/evidence/pr76_native_fp_policy_20261008.json",
+      "sha256": "496bb64e1d0379a17954afa7ca5d966d505b2ef7d497374e5a7e4d0a260f43fc"
+    },
+    "native_fp_report": {
+      "path": "docs/pr76_native_fp_policy.md",
+      "sha256": "af13b32156276b093b7d2344d06b11bbcc0b276bfa3c1656d526334e95b20385"
+    },
+    "native_root_checks_receipt": {
+      "path": "docs/evidence/pr76_native_root_checks_20261008.json",
+      "sha256": "3d0b455c998db09d8469fccb39e1501aa83035556177e5b30270cd07112a7c19"
+    }
+  },
+  "numerical_review": {
+    "status": "NO_UNRESOLVED_BLOCKER_FOUND",
+    "multiplier_existence": "Projects objective gradient and signed active normals off the equality row space over nonfixed coordinates; searches nonnegative active-bound combinations; solves unrestricted equality multipliers; reconstructs stationarity on all nonfixed coordinates.",
+    "fixed_bounds": "Fixed-coordinate duals are unrestricted and absorb fixed-coordinate residuals.",
+    "rank_and_conditioning": "Ambiguous equality rank and failed Gram solves remain fail-closed as NUMERICAL_FAILURE; final stationarity residual is recomputed from the returned multipliers.",
+    "scope": "Exhaustive support search is bounded to the solver fixture limit of eight state variables; no large-scale LP claim.",
+    "coverage": [
+      "nonunique active lower-bound multipliers",
+      "fixed bounds with equality multiplier freedom",
+      "scaled redundant equality rows",
+      "state-coordinate permutations and dyadic unit scaling",
+      "feasible nonoptimal control excluded by exact objective/stationarity checks",
+      "existing wrong interior solution and wrong upper-bound sign rejection tests retained"
+    ],
+    "reviewer_reran_tests": false
+  },
+  "validation_review": {
+    "root_receipt": "docs/evidence/pr76_degenerate_endpoint_20261008/receipt.json",
+    "receipt_sha256": "d6e3db1977b9de9faa24f6776d472700531fd8559c6a3f4ca4867da825a0e416",
+    "python_test_functions": 68,
+    "python_result": "PASS",
+    "fresh_pinned_intel_profiles": ["O0", "O2"],
+    "endpoint_component_readback": "PASS_SCOPED",
+    "canonical_endpoint": "UNBOUND / REJECTED",
+    "physical_approval": "FAIL_OPEN",
+    "native_candidate": "RUNTIME_POLICY_RESEARCH / REJECTED / NOT_PHYSICALLY_APPROVED"
+  },
+  "native_fp_review": {
+    "receipt": "docs/evidence/pr76_native_fp_policy_20261008.json",
+    "receipt_sha256": "496bb64e1d0379a17954afa7ca5d966d505b2ef7d497374e5a7e4d0a260f43fc",
+    "report": "docs/pr76_native_fp_policy.md",
+    "status": "PASS_SCOPED_RUNTIME_POLICY_COMPARISON",
+    "same_inputs": true,
+    "same_pr74_pretrace_and_driver_capture": true,
+    "inherited_link_flag": "-ftz retained in both runs",
+    "mxcsr_policy": "Only FTZ bit 15 and DAZ bit 6 cleared at KDM6 entry; all other bits preserved at entry.",
+    "baseline": "NI conversion returned binary32 zero and failed validation at (i,call_lat_index,k)=(211,2,15).",
+    "treatment": "Same conversion returned binary32 0x00716F5A and passed; later stopped at orphan-number/volume validation.",
+    "thread_scope": "FTZ/DAZ clear persists on the KDM6 calling thread after return.",
+    "run_outcome": "Both exited 128 after only the initialization output; neither completed a model timestep or passed physical validation."
+  },
+  "native_root_checks": {
+    "receipt": "docs/evidence/pr76_native_root_checks_20261008.json",
+    "receipt_sha256": "3d0b455c998db09d8469fccb39e1501aa83035556177e5b30270cd07112a7c19",
+    "transform_tests": 3,
+    "transform_test_status": "PASS",
+    "bash_syntax_status": "PASS",
+    "included_in_analysis_test_count": false
+  },
+  "resolved_review_findings": [
+    "Replaced an infeasible exact-oracle negative control with a feasible nonoptimal control before final test freeze.",
+    "Fixed the native C helper symbol binding and added a positive KDM6-entry transform test before final native artifact freeze.",
+    "Clarified that the gradual-underflow MXCSR policy persists on KDM6 calling threads after the routine returns."
+  ],
+  "graph_review": {
+    "status": "PR75_MAINTAINED_SNAPSHOT_REVIEWED; PR76_INCREMENTAL_UPDATE_PENDING",
+    "maintained_pr75_snapshot": {
+      "graph_path": "../../../Cloud-BAL/graphify-out/graph.json",
+      "graph_sha256": "788f57ed9ce5162b87c44a173c9648cd529a585b882e082a358c39d01f1e2680",
+      "report_path": "../../../Cloud-BAL/graphify-out/GRAPH_REPORT.md",
+      "report_sha256": "2c33e023ce84dbb470b5a697e865698878949dfe54f72c52edb2b0087d9dfda3",
+      "report_date": "2026-10-08",
+      "nodes": 8466,
+      "edges": 15727,
+      "selected_overlay_commit": "978c2396e93b003002d2d6cb56dbabd01cbc3404",
+      "selected_overlay_base": "0492d8eab2f2cc9841a9359ddafc664e22737ff0",
+      "selected_overlay_committed_paths": 46,
+      "explain_node": "tools_pr73_joint_analysis_evaluate",
+      "explain_degree": 19,
+      "representative_connections": [
+        "calls _solve",
+        "calls _independent_constraint_indices",
+        "calls _exact_constraint_relation"
+      ],
+      "scope": "PR75 navigation snapshot; predates PR76 multiplier-search helper"
+    },
+    "separate_pr76_worktree_snapshot": {
+      "graph_path": "graphify-out/graph.json",
+      "graph_sha256": "d830da780a5034f09d38f5de919da698b4ad995040c8ae14bd9c28293b81f2f6",
+      "report_date": "2026-09-07",
+      "nodes": 1499,
+      "edges": 3094,
+      "built_from_commit": "66a63bd7",
+      "scope": "Stale scratch-worktree graph; kept separate from maintained PR75 snapshot"
+    },
+    "query_result": "Maintained PR75 graph explains the prior evaluate() implementation with 19 connections; source review remains authoritative for PR76 code.",
+    "graph_delta_claimed": false,
+    "root_incremental_update_pending": true,
+    "separate_read_only_kg_review_pending": true,
+    "runtime_or_scientific_validation_inferred": false
+  },
+  "unresolved_findings": []
+}
