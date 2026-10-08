@@ -126,4 +126,31 @@ PR74는 외부에서 2026-10-08 08:17:03 UTC에 main
 첫 구현 `d3b1a6e`와 해당 main의 tree는 동일하다. 병합 뒤의 rank 분류·정규화 순서
 보강, 최종 53개 시험과 endpoint 재읽기, 첫 KG의 publication 기록은
 `fix/pr75-analysis-rank-followup`의 별도 후속 PR로 게시한다.
-과거 PR74 receipt의 작성 당시 OPEN 표기는 그대로 보존한다.
+과거 PR74 publication receipt의 OPEN 표기는 게시 상태를 재확인하기 전의
+오래된 기록으로 보존한다. 해당 상태 필드를 현재 병합 상태의 근거로 사용하지 않는다.
+
+## 후속 PR75의 별도 Graphify/KG 완료
+
+후속 동결 커밋 `2f2685846d814d0131b862b6c0a0ab507aef7ae7`의 37개 변경경로를
+main `2e5f3b8` 기준으로 증분 추출했다. 첫 batch의 snapshot·receipt를
+보존하고 `2026-10-08-pr74-v2`에 별도 스냅샷을 두었다. 이 폴더의 후속 PR은
+[PR75](https://github.com/gonos2k/Cloud-BAL/pull/75)이며 과거 이름을 유지했다.
+
+| Corpus | 노드 | edge | 후속 delta |
+|---|---:|---:|---|
+| KLAPS50 | 34,242 | 74,076 | +13 nodes / +11 edges |
+| Cloud-BAL | 8,409 | 15,650 | +13 nodes / +11 edges |
+
+각 corpus에 16개 ID를 추가하고 3개를 교체했으며, missing/duplicate/collapsed
+edge는 0이다. wiki derived report/index/log를 동기화했고 schema·content·private
+profile·유지관리 native source는 보존했다. 두 corpus는 겹치므로 합산하지 않는다.
+추출은 AST와 Markdown heading에 한정되며, semantic refresh와 외부 native 전체
+추출을 수행하지 않았다. Fortran CALL 관계는 부분적이다. 최종 publication
+metadata는 이 frozen extraction 이후 별도로 기록하며 graph freshness를
+수치·런타임·과학적 수용 근거로 사용하지 않는다.
+
+- [후속 KG receipt](evidence/pr74_kg_followup_receipt_20261008.json)
+- [PR75 publication 및 보존](evidence/pr75_publication_20261008.json)
+- [후속 KG 독립 검토](evidence/pr74_kg_followup_independent_review_20261008.json)
+
+**종합: 두 P1 추정기 수정은 완료. native 후보 REJECTED, 전체 물리 초기화 FAIL/OPEN.**
