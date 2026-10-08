@@ -1,0 +1,2078 @@
+{
+  "call_sites": {
+    "ProgB_param": [
+      1681,
+      1784,
+      1867,
+      2022,
+      2217,
+      3580,
+      3671
+    ],
+    "slope_kdm6": [
+      1686,
+      1789,
+      1872,
+      2027,
+      2222,
+      3585,
+      3676
+    ]
+  },
+  "outputs": {
+    "avtg": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1218,
+        "source": "real, dimension(its:ite,kts:kte) :: avtg,pvtg,precg2"
+      },
+      {
+        "kind": "assignment",
+        "line": 1548,
+        "source": "avtg(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1682,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1785,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1868,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2023,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2218,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2615,
+        "source": "*qci(i,k,1)*pi*n0go(i,k)*avtg(i,k)*g3pbg(i,k)*.25*eacgc&"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2625,
+        "source": "ngacw(i,k) = min((pi)*avtg(i,k)*.25*eacgc*n0go(i,k)*n0c(i,k)/(muc+1)&"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3581,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3672,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "assignment",
+        "line": 3791,
+        "source": "avtg(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4170,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2&"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4184,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: avtg,pvtg,precg2"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4206,
+        "source": "avtg(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4246,
+        "source": "avtg(i,k)=aTbl(sy)+(rhox(i,k)-Tbl(sy))*(aTbl(sy+1)-aTbl(sy))*tmp2"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4259,
+        "source": "pvtg(i,k) = avtg(i,k)*g1pdgbgmg(i,k)/g1pdgmg"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4260,
+        "source": "precg2(i,k) = 4.*.31*avtg(i,k)**.5*g5pbgo2(i,k)"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4265,
+        "source": "avtg(i,k)=aTbl(9)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4278,
+        "source": "pvtg(i,k) = avtg(i,k)*g1pdgbgmg(i,k)/g1pdgmg"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4279,
+        "source": "precg2(i,k) = 4.*.31*avtg(i,k)**.5*g5pbgo2(i,k)"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4285,
+        "source": ".not. ieee_is_finite(avtg(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4303,
+        "source": "avtg(i,k) = 0.0"
+      }
+    ],
+    "bvtg": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1214,
+        "source": "real, dimension(its:ite,kts:kte) ::bvtg,rslopegbmax,dgbgmug1,  &"
+      },
+      {
+        "kind": "assignment",
+        "line": 1534,
+        "source": "bvtg(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1683,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1688,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1786,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1791,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1869,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1874,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2024,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2029,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2219,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2224,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3582,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3587,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3673,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3678,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3794,
+        "source": "bvtg(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4171,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax     &"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4185,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,&"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4209,
+        "source": "bvtg(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4247,
+        "source": "bvtg(i,k)=bTbl(sy)+(rhox(i,k)-Tbl(sy))*(bTbl(sy+1)-bTbl(sy))*tmp2"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4248,
+        "source": "bvtg1(i,k) = 1.+bvtg(i,k)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4249,
+        "source": "bvtg2(i,k) = 2.5+.5*bvtg(i,k)+mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4250,
+        "source": "bvtg3(i,k) = 3.+bvtg(i,k)+mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4251,
+        "source": "bvtg4(i,k) = 4.+bvtg(i,k)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4252,
+        "source": "dgbgmug1(i,k) = 1.+dmg + bvtg(i,k) + mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4258,
+        "source": "rslopegbmax(i,k) = rslopegmax ** bvtg(i,k)"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4266,
+        "source": "bvtg(i,k)=bTbl(9)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4267,
+        "source": "bvtg1(i,k) = 1.+bvtg(i,k)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4268,
+        "source": "bvtg2(i,k) = 2.5+.5*bvtg(i,k)+mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4269,
+        "source": "bvtg3(i,k) = 3.+bvtg(i,k)+mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4270,
+        "source": "bvtg4(i,k) = 4.+bvtg(i,k)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4271,
+        "source": "dgbgmug1(i,k) = 1.+dmg + bvtg(i,k) + mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4277,
+        "source": "rslopegbmax(i,k) = rslopegmax ** bvtg(i,k)"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4288,
+        "source": ".not. ieee_is_finite(bvtg(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4306,
+        "source": "bvtg(i,k) = 0.0"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4328,
+        "source": "pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4358,
+        "source": "REAL, DIMENSION(its:ite,kts:kte), intent(in)::bvtg,rslopegbmax"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4436,
+        "source": "rslopeb(i,k,3) = (rslope(i,k,3))**bvtg(i,k)"
+      }
+    ],
+    "bvtg1": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1215,
+        "source": "bvtg1,bvtg2,bvtg3,bvtg4,g1pdgbgmg, &"
+      },
+      {
+        "kind": "assignment",
+        "line": 1537,
+        "source": "bvtg1(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1683,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1786,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1869,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2024,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2219,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3582,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3673,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "assignment",
+        "line": 3795,
+        "source": "bvtg1(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4171,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax     &"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4185,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,&"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4210,
+        "source": "bvtg1(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4248,
+        "source": "bvtg1(i,k) = 1.+bvtg(i,k)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4253,
+        "source": "g1pbg(i,k) = rgmma(bvtg1(i,k))"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4267,
+        "source": "bvtg1(i,k) = 1.+bvtg(i,k)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4272,
+        "source": "g1pbg(i,k) = rgmma(bvtg1(i,k))"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4289,
+        "source": ".not. ieee_is_finite(bvtg1(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4307,
+        "source": "bvtg1(i,k) = 0.0"
+      }
+    ],
+    "bvtg2": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1215,
+        "source": "bvtg1,bvtg2,bvtg3,bvtg4,g1pdgbgmg, &"
+      },
+      {
+        "kind": "assignment",
+        "line": 1538,
+        "source": "bvtg2(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1683,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1786,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1869,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2024,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2219,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3582,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3673,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "assignment",
+        "line": 3796,
+        "source": "bvtg2(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4171,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax     &"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4185,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,&"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4211,
+        "source": "bvtg2(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4249,
+        "source": "bvtg2(i,k) = 2.5+.5*bvtg(i,k)+mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4256,
+        "source": "g5pbgo2(i,k) = rgmma(bvtg2(i,k))"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4268,
+        "source": "bvtg2(i,k) = 2.5+.5*bvtg(i,k)+mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4275,
+        "source": "g5pbgo2(i,k) = rgmma(bvtg2(i,k))"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4290,
+        "source": ".not. ieee_is_finite(bvtg2(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4308,
+        "source": "bvtg2(i,k) = 0.0"
+      }
+    ],
+    "bvtg3": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1215,
+        "source": "bvtg1,bvtg2,bvtg3,bvtg4,g1pdgbgmg, &"
+      },
+      {
+        "kind": "assignment",
+        "line": 1539,
+        "source": "bvtg3(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1683,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1786,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1869,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2024,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2219,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3582,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3673,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "assignment",
+        "line": 3797,
+        "source": "bvtg3(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4171,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax     &"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4185,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,&"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4212,
+        "source": "bvtg3(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4250,
+        "source": "bvtg3(i,k) = 3.+bvtg(i,k)+mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4254,
+        "source": "g3pbg(i,k) = rgmma(bvtg3(i,k))"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4269,
+        "source": "bvtg3(i,k) = 3.+bvtg(i,k)+mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4273,
+        "source": "g3pbg(i,k) = rgmma(bvtg3(i,k))"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4291,
+        "source": ".not. ieee_is_finite(bvtg3(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4309,
+        "source": "bvtg3(i,k) = 0.0"
+      }
+    ],
+    "bvtg4": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1215,
+        "source": "bvtg1,bvtg2,bvtg3,bvtg4,g1pdgbgmg, &"
+      },
+      {
+        "kind": "assignment",
+        "line": 1540,
+        "source": "bvtg4(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1683,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1786,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1869,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2024,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2219,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3582,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3673,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "assignment",
+        "line": 3798,
+        "source": "bvtg4(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4171,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax     &"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4185,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,&"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4213,
+        "source": "bvtg4(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4251,
+        "source": "bvtg4(i,k) = 4.+bvtg(i,k)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4255,
+        "source": "g4pbg(i,k) = rgmma(bvtg4(i,k))"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4270,
+        "source": "bvtg4(i,k) = 4.+bvtg(i,k)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4274,
+        "source": "g4pbg(i,k) = rgmma(bvtg4(i,k))"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4292,
+        "source": ".not. ieee_is_finite(bvtg4(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4310,
+        "source": "bvtg4(i,k) = 0.0"
+      }
+    ],
+    "cmg": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 761,
+        "source": "real, dimension(its:ite,kts:kte) :: cmg"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 870,
+        "source": "call kdm62D(t, q(ims,kms,j), qci, qrs, nci, nrs, brs, rhox, cmg  &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 952,
+        "source": "cmg1d(k) = cmg(i,k)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1064,
+        "source": ",brs, rhox, cmg, den, p, delz                  &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1217,
+        "source": "real, dimension(its:ite,kts:kte) :: cmg,pidn0g"
+      },
+      {
+        "kind": "assignment",
+        "line": 1546,
+        "source": "cmg(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1682,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1785,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1868,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2023,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2218,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3581,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3672,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "assignment",
+        "line": 3789,
+        "source": "cmg(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4170,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2&"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4183,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: cmg,pidn0g"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4204,
+        "source": "cmg(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4238,
+        "source": "cmg(i,k) = pi*rhox(i,k)/6"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4239,
+        "source": "if (.not. ieee_is_finite(cmg(i,k)) .or. cmg(i,k) <= 0.0) cycle"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4240,
+        "source": "pidn0g(i,k) = cmg(i,k)*n0g*g1pdgmg/g1pmg"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4241,
+        "source": "if (cmg(i,k).gt. 0) then"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4283,
+        "source": ".not. ieee_is_finite(cmg(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4301,
+        "source": "cmg(i,k) = 0.0"
+      }
+    ],
+    "dgbgmug1": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1214,
+        "source": "real, dimension(its:ite,kts:kte) ::bvtg,rslopegbmax,dgbgmug1,  &"
+      },
+      {
+        "kind": "assignment",
+        "line": 1536,
+        "source": "dgbgmug1(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1684,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1787,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1870,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2025,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2220,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3583,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3674,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3805,
+        "source": "dgbgmug1(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4172,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4186,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4220,
+        "source": "dgbgmug1(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4252,
+        "source": "dgbgmug1(i,k) = 1.+dmg + bvtg(i,k) + mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4257,
+        "source": "g1pdgbgmg(i,k)=rgmma(dgbgmug1(i,k))"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4271,
+        "source": "dgbgmug1(i,k) = 1.+dmg + bvtg(i,k) + mug"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4276,
+        "source": "g1pdgbgmg(i,k)=rgmma(dgbgmug1(i,k))"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4299,
+        "source": ".not. ieee_is_finite(dgbgmug1(i,k))) then"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4317,
+        "source": "dgbgmug1(i,k) = 0.0"
+      }
+    ],
+    "g1pbg": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1216,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2"
+      },
+      {
+        "kind": "assignment",
+        "line": 1542,
+        "source": "g1pbg(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1684,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1787,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1870,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2025,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2220,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3583,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3674,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3800,
+        "source": "g1pbg(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4172,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4186,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4215,
+        "source": "g1pbg(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4253,
+        "source": "g1pbg(i,k) = rgmma(bvtg1(i,k))"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4272,
+        "source": "g1pbg(i,k) = rgmma(bvtg1(i,k))"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4294,
+        "source": ".not. ieee_is_finite(g1pbg(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4312,
+        "source": "g1pbg(i,k) = 0.0"
+      }
+    ],
+    "g1pdgbgmg": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1215,
+        "source": "bvtg1,bvtg2,bvtg3,bvtg4,g1pdgbgmg, &"
+      },
+      {
+        "kind": "assignment",
+        "line": 1541,
+        "source": "g1pdgbgmg(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1684,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1787,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1870,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2025,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2220,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3583,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3674,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3804,
+        "source": "g1pdgbgmg(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4172,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4186,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4219,
+        "source": "g1pdgbgmg(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4257,
+        "source": "g1pdgbgmg(i,k)=rgmma(dgbgmug1(i,k))"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4259,
+        "source": "pvtg(i,k) = avtg(i,k)*g1pdgbgmg(i,k)/g1pdgmg"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4276,
+        "source": "g1pdgbgmg(i,k)=rgmma(dgbgmug1(i,k))"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4278,
+        "source": "pvtg(i,k) = avtg(i,k)*g1pdgbgmg(i,k)/g1pdgmg"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4298,
+        "source": ".not. ieee_is_finite(g1pdgbgmg(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4316,
+        "source": "g1pdgbgmg(i,k) = 0.0"
+      }
+    ],
+    "g3pbg": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1216,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2"
+      },
+      {
+        "kind": "assignment",
+        "line": 1543,
+        "source": "g3pbg(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1684,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1787,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1870,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2025,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2220,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2615,
+        "source": "*qci(i,k,1)*pi*n0go(i,k)*avtg(i,k)*g3pbg(i,k)*.25*eacgc&"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2626,
+        "source": "*g3pbg(i,k)*rslope3(i,k,3)*rslopeb(i,k,3)*rslopemu(i,k,3)&"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3583,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3674,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3801,
+        "source": "g3pbg(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4172,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4186,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4216,
+        "source": "g3pbg(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4254,
+        "source": "g3pbg(i,k) = rgmma(bvtg3(i,k))"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4273,
+        "source": "g3pbg(i,k) = rgmma(bvtg3(i,k))"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4295,
+        "source": ".not. ieee_is_finite(g3pbg(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4313,
+        "source": "g3pbg(i,k) = 0.0"
+      }
+    ],
+    "g4pbg": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1216,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2"
+      },
+      {
+        "kind": "assignment",
+        "line": 1544,
+        "source": "g4pbg(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1684,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1787,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1870,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2025,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2220,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3583,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3674,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3802,
+        "source": "g4pbg(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4172,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4186,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4217,
+        "source": "g4pbg(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4255,
+        "source": "g4pbg(i,k) = rgmma(bvtg4(i,k))"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4274,
+        "source": "g4pbg(i,k) = rgmma(bvtg4(i,k))"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4296,
+        "source": ".not. ieee_is_finite(g4pbg(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4314,
+        "source": "g4pbg(i,k) = 0.0"
+      }
+    ],
+    "g5pbgo2": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1216,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2"
+      },
+      {
+        "kind": "assignment",
+        "line": 1545,
+        "source": "g5pbgo2(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1684,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1787,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1870,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2025,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2220,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3583,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3674,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3803,
+        "source": "g5pbgo2(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4172,
+        "source": ",g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4186,
+        "source": "g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4218,
+        "source": "g5pbgo2(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4256,
+        "source": "g5pbgo2(i,k) = rgmma(bvtg2(i,k))"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4260,
+        "source": "precg2(i,k) = 4.*.31*avtg(i,k)**.5*g5pbgo2(i,k)"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4275,
+        "source": "g5pbgo2(i,k) = rgmma(bvtg2(i,k))"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4279,
+        "source": "precg2(i,k) = 4.*.31*avtg(i,k)**.5*g5pbgo2(i,k)"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4297,
+        "source": ".not. ieee_is_finite(g5pbgo2(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4315,
+        "source": "g5pbgo2(i,k) = 0.0"
+      }
+    ],
+    "pidn0g": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1217,
+        "source": "real, dimension(its:ite,kts:kte) :: cmg,pidn0g"
+      },
+      {
+        "kind": "assignment",
+        "line": 1547,
+        "source": "pidn0g(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1682,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1688,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1785,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1791,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1868,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1874,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2023,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2029,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2218,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2224,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3581,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3587,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3672,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3678,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3790,
+        "source": "pidn0g(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4170,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2&"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4183,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: cmg,pidn0g"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4205,
+        "source": "pidn0g(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4240,
+        "source": "pidn0g(i,k) = cmg(i,k)*n0g*g1pdgmg/g1pmg"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4284,
+        "source": ".not. ieee_is_finite(pidn0g(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4302,
+        "source": "pidn0g(i,k) = 0.0"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4327,
+        "source": "rslopemu,rsloped,vt,vtn,its,ite,kts,kte,qmin,pidn0g,         &"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4356,
+        "source": "REAL, DIMENSION(its:ite,kts:kte), intent(in)::pidn0g"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4371,
+        "source": "lamdag(x,y)= exp(log(((pidn0g(i,k))/(x*y)))*(1./(dmg+1)))"
+      }
+    ],
+    "precg2": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1218,
+        "source": "real, dimension(its:ite,kts:kte) :: avtg,pvtg,precg2"
+      },
+      {
+        "kind": "assignment",
+        "line": 1550,
+        "source": "precg2(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1682,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1785,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1868,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1929,
+        "source": "+(precg2(i,k))*n0go(i,k)*work2(i,k)*coeres)/dry_carrier_density(i,k)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2023,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2218,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3017,
+        "source": "+(precg2(i,k))*n0go(i,k)*work2(i,k)*coeres)/work1(i,k,2)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3075,
+        "source": "*rslopemu(i,k,3)+(precg2(i,k))*n0go(i,k)*work2(i,k)*coeres)/work1(i,k,1)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3581,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3672,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "assignment",
+        "line": 3793,
+        "source": "precg2(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4170,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2&"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4184,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: avtg,pvtg,precg2"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4208,
+        "source": "precg2(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4260,
+        "source": "precg2(i,k) = 4.*.31*avtg(i,k)**.5*g5pbgo2(i,k)"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4279,
+        "source": "precg2(i,k) = 4.*.31*avtg(i,k)**.5*g5pbgo2(i,k)"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4287,
+        "source": ".not. ieee_is_finite(precg2(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4305,
+        "source": "precg2(i,k) = 0.0"
+      }
+    ],
+    "pvtg": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1218,
+        "source": "real, dimension(its:ite,kts:kte) :: avtg,pvtg,precg2"
+      },
+      {
+        "kind": "assignment",
+        "line": 1549,
+        "source": "pvtg(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1682,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1688,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1785,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1791,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1868,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1874,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2023,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2029,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2218,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2224,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2463,
+        "source": "vt2g(i,k)=DBLE(pvtg(i,k))*rslopeb(i,k,3)*denfac(i,k)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3581,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3587,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3672,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3678,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3792,
+        "source": "pvtg(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4170,
+        "source": ",dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2&"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4184,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: avtg,pvtg,precg2"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4207,
+        "source": "pvtg(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4259,
+        "source": "pvtg(i,k) = avtg(i,k)*g1pdgbgmg(i,k)/g1pdgmg"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4278,
+        "source": "pvtg(i,k) = avtg(i,k)*g1pdgbgmg(i,k)/g1pdgmg"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4286,
+        "source": ".not. ieee_is_finite(pvtg(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4304,
+        "source": "pvtg(i,k) = 0.0"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4328,
+        "source": "pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4357,
+        "source": "REAL, DIMENSION(its:ite,kts:kte), intent(in)::pvtg"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4462,
+        "source": "vt(i,k,3) = DBLE(pvtg(i,k))*rslopeb(i,k,3)*denfac(i,k)"
+      }
+    ],
+    "rhox": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 759,
+        "source": "real, dimension(its:ite,kts:kte) :: rhox"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 870,
+        "source": "call kdm62D(t, q(ims,kms,j), qci, qrs, nci, nrs, brs, rhox, cmg  &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 929,
+        "source": "diag_rhog(i,k,j) = rhox(i,k)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1064,
+        "source": ",brs, rhox, cmg, den, p, delz                  &"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 1200,
+        "source": "real, dimension(its:ite,kts:kte)       , intent(out) :: rhox"
+      },
+      {
+        "kind": "assignment",
+        "line": 1551,
+        "source": "rhox(i,k) =0."
+      },
+      {
+        "kind": "output_actual_argument",
+        "line": 1681,
+        "source": "call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &"
+      },
+      {
+        "kind": "output_actual_argument",
+        "line": 1784,
+        "source": "call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &"
+      },
+      {
+        "kind": "output_actual_argument",
+        "line": 1867,
+        "source": "call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1944,
+        "source": "brs(i,k) = brs(i,k) + (pgmlt(i,k)/rhox(i,k))"
+      },
+      {
+        "kind": "output_actual_argument",
+        "line": 2022,
+        "source": "call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &"
+      },
+      {
+        "kind": "output_actual_argument",
+        "line": 2217,
+        "source": "call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3286,
+        "source": "call kdm6_mass_volume_rate(pgdep(i,k),rhox(i,k), &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3531,
+        "source": "bgevp(i,k)=pgevp(i,k)/rhox(i,k)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3532,
+        "source": "bgeml(i,k)=pgeml(i,k)/rhox(i,k)"
+      },
+      {
+        "kind": "output_actual_argument",
+        "line": 3580,
+        "source": "call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &"
+      },
+      {
+        "kind": "output_actual_argument",
+        "line": 3671,
+        "source": "call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &"
+      },
+      {
+        "kind": "assignment",
+        "line": 3788,
+        "source": "rhox(i,k) = 0.0"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4169,
+        "source": "SUBROUTINE ProgB_param(brs,qrs,rhox,its,ite,jts,jte,kts,kte,qcrmin             &"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4181,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: rhox"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4203,
+        "source": "rhox(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4237,
+        "source": "rhox(i,k) = qrs(i,k,3)/brs(i,k)"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4238,
+        "source": "cmg(i,k) = pi*rhox(i,k)/6"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4242,
+        "source": "if (rhox(i,k).ge. Tbl(1) .and. rhox(i,k).lt.Tbl(9)) then"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4244,
+        "source": "if (Tbl(sy).le. rhox(i,k) .and. Tbl(sy+1).gt.rhox(i,k)) then"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4246,
+        "source": "avtg(i,k)=aTbl(sy)+(rhox(i,k)-Tbl(sy))*(aTbl(sy+1)-aTbl(sy))*tmp2"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4247,
+        "source": "bvtg(i,k)=bTbl(sy)+(rhox(i,k)-Tbl(sy))*(bTbl(sy+1)-bTbl(sy))*tmp2"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4264,
+        "source": "else if (rhox(i,k).eq. Tbl(9)) then"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4282,
+        "source": "if (.not. ieee_is_finite(rhox(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4300,
+        "source": "rhox(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4320,
+        "source": "brs(i,k) = qrs(i,k,3)/rhox(i,k)"
+      }
+    ],
+    "rslopegbmax": [
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1214,
+        "source": "real, dimension(its:ite,kts:kte) ::bvtg,rslopegbmax,dgbgmug1,  &"
+      },
+      {
+        "kind": "assignment",
+        "line": 1535,
+        "source": "rslopegbmax(i,k) =0."
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1683,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1688,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1786,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1791,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1869,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 1874,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2024,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2029,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2219,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 2224,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3582,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3587,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3673,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &"
+      },
+      {
+        "kind": "consumer_read_status_gated",
+        "line": 3678,
+        "source": "ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "assignment",
+        "line": 3799,
+        "source": "rslopegbmax(i,k) = 0.0"
+      },
+      {
+        "kind": "producer_expression",
+        "line": 4171,
+        "source": ",bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax     &"
+      },
+      {
+        "kind": "declaration_or_interface",
+        "line": 4185,
+        "source": "REAL, DIMENSION( its:ite , kts:kte),INTENT(OUT)   :: bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,&"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4214,
+        "source": "rslopegbmax(i,k) = 0.0"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4258,
+        "source": "rslopegbmax(i,k) = rslopegmax ** bvtg(i,k)"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4277,
+        "source": "rslopegbmax(i,k) = rslopegmax ** bvtg(i,k)"
+      },
+      {
+        "kind": "finite_output_validation",
+        "line": 4293,
+        "source": ".not. ieee_is_finite(rslopegbmax(i,k)) .or. &"
+      },
+      {
+        "kind": "output_assignment",
+        "line": 4311,
+        "source": "rslopegbmax(i,k) = 0.0"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4328,
+        "source": "pvtg,bvtg,rslopegbmax,progb_status)"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4358,
+        "source": "REAL, DIMENSION(its:ite,kts:kte), intent(in)::bvtg,rslopegbmax"
+      },
+      {
+        "kind": "slope_consumer_status_checked_before_use",
+        "line": 4429,
+        "source": "rslopeb(i,k,3) = rslopegbmax(i,k)"
+      }
+    ]
+  },
+  "patch_sha256": "94ea6189c85cd0856a28aac2663ad70091c3259fc448d48bd021adf42ff9ae45",
+  "patched_source_sha256": "5de1884ab59e3de30a3e4ef1d8317405f1ba0591cf7ed9aa6fbca574d5233f41",
+  "source_sha256": "487afbf064b6a3598ecb12248224fc3b91c77e1b0ed921d0e0e8130cacb9b583"
+}

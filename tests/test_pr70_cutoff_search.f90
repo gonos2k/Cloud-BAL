@@ -84,7 +84,7 @@ program test_pr70_cutoff
   call require(feasible .and. alpha.eq.1.0,'temperature may cross above zero within the process interval')
   call search_with_temperature(1.0,-2.0)
   call require(feasible .and. alpha.lt.0.5 .and. 1.0+alpha*(-2.0).gt.0.0, &
-       'temperature search returns the greatest representable positive endpoint')
+       'temperature search returns a conservative valid positive endpoint')
   call require(1.0+0.5*(-2.0).eq.0.0,'temperature cutoff breakpoint is exactly zero')
   call kdm6_rain_process_state_valid(q_state,n_state,0.,0.,1.,pidnr, &
        qmin,10.,qcut,dmr,lmin,lmax,100.,900.,pidnc,dmc,lcmin,lcmax, &

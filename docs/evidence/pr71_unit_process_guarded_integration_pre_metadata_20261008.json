@@ -1,0 +1,739 @@
+{
+  "compiler": "ifx (IFX) 2026.0.0 20260331",
+  "compiler_flags": {
+    "O0": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "O2": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ]
+  },
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "composition": {
+    "base_composition_receipt": {
+      "output_source": "/tmp/pr71_compose_guarded_bdwhggmp/frozen_base.F",
+      "pr70_composed_source_sha256": "487afbf064b6a3598ecb12248224fc3b91c77e1b0ed921d0e0e8130cacb9b583",
+      "pr70_composition_log": "SELECTED_SOURCE_SHA256 97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa\nPROCESS_PATCH_SHA256 5f1b75925ec803838f5b3cfa81012336f4d21727073c5d8c0703fb70ddc37670\nPROCESS_PATCHED_SOURCE_SHA256 513804fa340db3011017ec21b7a0678d41b82875087625bfc2e8993e7f3e4692\nCOMPOSED_SOURCE_SHA256 487afbf064b6a3598ecb12248224fc3b91c77e1b0ed921d0e0e8130cacb9b583\nDENSITY_ROUTING_COUNTS {\"dry_carrier_density_references_including_initialization\": 64, \"gas_density_references\": 11, \"intentional_raw_den_alias_references\": 1, \"unresolved_qi0_retained\": 1}\n",
+      "pr70_density_role_inventory": {
+        "composed_source_sha256": "487afbf064b6a3598ecb12248224fc3b91c77e1b0ed921d0e0e8130cacb9b583",
+        "density_uses": [
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "dend(i,k) = den(i,k)",
+            "source_line_in_kdm62d": 338
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "den_tmp(i,k) = den(i,k)",
+            "source_line_in_kdm62d": 378
+          },
+          {
+            "action": "retain as gas_density",
+            "references": 1,
+            "role": "moist_gas_density_velocity_input",
+            "source": "call vsrec( tvec1(its), den(its,k), ite-its+1)",
+            "source_line_in_kdm62d": 414
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "rslopec(i,k) = 1./lamdac(qci(i,k,1),den(i,k),nci(i,k,1))",
+            "source_line_in_kdm62d": 588
+          },
+          {
+            "action": "retain moist DEN",
+            "references": 1,
+            "role": "moist_gas_ventilation",
+            "source": "work2(i,k) = venfac(p(i,k),t(i,k),den(i,k))",
+            "source_line_in_kdm62d": 824
+          },
+          {
+            "action": "retain moist DEN",
+            "references": 1,
+            "role": "thermal_conductivity_density_cancels",
+            "source": "psmlt(i,k) =(xka(t(i,k),den(i,k)))/xlf*(t0c-t(i,k))*n0sfac(i,k)       &",
+            "source_line_in_kdm62d": 829
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "+(precs2)*n0so(i,k)*work2(i,k)*coeres)/den(i,k)",
+            "source_line_in_kdm62d": 831
+          },
+          {
+            "action": "retain moist DEN",
+            "references": 1,
+            "role": "thermal_conductivity_density_cancels",
+            "source": "pgmlt(i,k) = (xka(t(i,k),den(i,k)))/xlf*(t0c-t(i,k))                   &",
+            "source_line_in_kdm62d": 853
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "+(precg2(i,k))*n0go(i,k)*work2(i,k)*coeres)/den(i,k)",
+            "source_line_in_kdm62d": 855
+          },
+          {
+            "action": "retain as gas_density",
+            "references": 1,
+            "role": "moist_gas_density_trace_input",
+            "source": "write(pr67_unit) den(its:ite,kts)",
+            "source_line_in_kdm62d": 927
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "rslopec(i,k) = 1./lamdac(qci(i,k,1),den(i,k),nci(i,k,1))",
+            "source_line_in_kdm62d": 983
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(den(i,k)*qrs(i,k,1))))*(1./dmr))",
+            "source_line_in_kdm62d": 995
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr",
+            "source_line_in_kdm62d": 999
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr",
+            "source_line_in_kdm62d": 1003
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(den(i,k)*qci(i,k,1))))*(1./dmc))",
+            "source_line_in_kdm62d": 1009
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc",
+            "source_line_in_kdm62d": 1013
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc",
+            "source_line_in_kdm62d": 1017
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(den(i,k)*qci(i,k,2))))*(1./dmi))",
+            "source_line_in_kdm62d": 1023
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni",
+            "source_line_in_kdm62d": 1027
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni",
+            "source_line_in_kdm62d": 1031
+          },
+          {
+            "action": "retain moist DEN",
+            "references": 2,
+            "role": "dynamic_viscosity",
+            "source": "difa(i,k) = ele2*t(i,k)*(1.+ele1/Rcn)/(viscos(t(i,k),den(i,k))*den(i,k))",
+            "source_line_in_kdm62d": 1045
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "pinuc = min((cmc)*difa(i,k)*2.*pi*Nic*n0c(i,k)/den(i,k)/(muc+1) &",
+            "source_line_in_kdm62d": 1046
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "pfrzdtc = min((cmc)*cmc*pfrz1*n0c(i,k)/den(i,k)/denr/(muc+1)       &",
+            "source_line_in_kdm62d": 1068
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "pfrzdtr = min((cmr)*cmr*pfrz1*n0r(i,k)/den(i,k)/denr          &",
+            "source_line_in_kdm62d": 1098
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "rslopec(i,k) = 1./lamdac(qci(i,k,1),den(i,k),nci(i,k,1))",
+            "source_line_in_kdm62d": 1164
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(den(i,k)*qrs(i,k,1))))*(1./dmr))",
+            "source_line_in_kdm62d": 1180
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr",
+            "source_line_in_kdm62d": 1184
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr",
+            "source_line_in_kdm62d": 1188
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(den(i,k)*qci(i,k,1))))*(1./dmc))",
+            "source_line_in_kdm62d": 1194
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc",
+            "source_line_in_kdm62d": 1198
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc",
+            "source_line_in_kdm62d": 1202
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(den(i,k)*qci(i,k,2))))*(1./dmi))",
+            "source_line_in_kdm62d": 1208
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni",
+            "source_line_in_kdm62d": 1212
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni",
+            "source_line_in_kdm62d": 1216
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "growth_latent_carrier",
+            "source": "work1(i,k,1) = diffac(xl(i,k),p(i,k),t(i,k),den(i,k),qs(i,k,1))",
+            "source_line_in_kdm62d": 1233
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "growth_latent_carrier",
+            "source": "work1(i,k,2) = diffac(xls,p(i,k),t(i,k),den(i,k),qs(i,k,2))",
+            "source_line_in_kdm62d": 1234
+          },
+          {
+            "action": "retain moist DEN",
+            "references": 1,
+            "role": "moist_gas_ventilation",
+            "source": "work2(i,k) = venfac(p(i,k),t(i,k),den(i,k))",
+            "source_line_in_kdm62d": 1235
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "lencon  = 2.7e-2*den(i,k)*qci(i,k,1)*(1.e20/16.*avedia(i,k,1) &",
+            "source_line_in_kdm62d": 1257
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nraut(i,k) = (3.5e9)*den(i,k)*praut(i,k)",
+            "source_line_in_kdm62d": 1267
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "pracw(i,k) = min(((cmc)/den(i,k))*ncrk1*nci(i,k,1)                      &",
+            "source_line_in_kdm62d": 1283
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "pracw(i,k) = min(((cmc)/den(i,k))*ncrk2*nci(i,k,1)                      &",
+            "source_line_in_kdm62d": 1291
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "praci(i,k)=(pi)*cmi*n0i(i,k)*n0r(i,k)*abs(vt2r-vt2i)/(4*den(i,k))*acrfac*eacri",
+            "source_line_in_kdm62d": 1396
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "piacr(i,k)=(pi)*cmr*n0i(i,k)*n0r(i,k)*abs(vt2i-vt2r)/(4*den(i,k))*acrfac*eacir",
+            "source_line_in_kdm62d": 1411
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "psaci(i,k)=(pi)*cmi*n0i(i,k)*n0so(i,k)*n0sfac(i,k)*abs(vt2s-vt2i)/(4*den(i,k))*acrfac*eacsi",
+            "source_line_in_kdm62d": 1426
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "pgaci(i,k)=(pi)*cmi*n0i(i,k)*n0go(i,k)*abs(vt2g(i,k)-vt2i)/(4*den(i,k))*acrfac*eacgi",
+            "source_line_in_kdm62d": 1440
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(4*den(i,k))*acrfac*eacrs",
+            "source_line_in_kdm62d": 1605
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(4*den(i,k))*acrfac*eacsr",
+            "source_line_in_kdm62d": 1641
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(4*den(i,k))*acrfac*eacgr",
+            "source_line_in_kdm62d": 1681
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nmulcs(i,k) = nmulcs(i,k)*den(i,k)",
+            "source_line_in_kdm62d": 1740
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nmulrs(i,k) = nmulrs(i,k)*den(i,k)",
+            "source_line_in_kdm62d": 1755
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nmulcg(i,k) = nmulcg(i,k)*den(i,k)",
+            "source_line_in_kdm62d": 1792
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nmulrg(i,k) = nmulrg(i,k)*den(i,k)",
+            "source_line_in_kdm62d": 1808
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "pinud(i,k) = ninud(i,k)/den(i,k)*Minud",
+            "source_line_in_kdm62d": 1875
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "ninud(i,k) = pinud(i,k)*den(i,k)/Minud",
+            "source_line_in_kdm62d": 1877
+          },
+          {
+            "action": "retain moist DEN pending equation units",
+            "references": 1,
+            "role": "unresolved_ice_threshold",
+            "source": "qi0 = 0.4632*10**(-6.0-0.0413*(-supcol))*den(i,k)",
+            "source_line_in_kdm62d": 1952
+          },
+          {
+            "action": "retain moist DEN pending equation units",
+            "references": 1,
+            "role": "unresolved_ice_threshold",
+            "source": "qi0 = 0.2316*10**(-4.0+0.0519*(-supcol))*den(i,k)",
+            "source_line_in_kdm62d": 1954
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nsaut(i,k) = min((psaut(i,k))*den(i,k)/Miaut,nci(i,k,2)/dtcld)",
+            "source_line_in_kdm62d": 1959
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_number_to_mass_process_gate",
+            "source": "den(i,k),pidnr,qmin,ncmin, &",
+            "source_line_in_kdm62d": 2239
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_number_to_mass_process_gate",
+            "source": "t(i,k),den(i,k),pidnr,qmin,ncmin,qcrmin,dmr,lamdarmin,lamdarmax, &",
+            "source_line_in_kdm62d": 2345
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "rslopec(i,k) = 1./lamdac(qci(i,k,1),den(i,k),nci(i,k,1))",
+            "source_line_in_kdm62d": 2500
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "(3.*den(i,k)),max(q(i,k),0.)/dtcld)",
+            "source_line_in_kdm62d": 2616
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(den(i,k)*qrs(i,k,1))))*(1./dmr))",
+            "source_line_in_kdm62d": 2691
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr",
+            "source_line_in_kdm62d": 2694
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr",
+            "source_line_in_kdm62d": 2697
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(den(i,k)*qci(i,k,1))))*(1./dmc))",
+            "source_line_in_kdm62d": 2702
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc",
+            "source_line_in_kdm62d": 2705
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc",
+            "source_line_in_kdm62d": 2708
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "/(den(i,k)*qci(i,k,2))))*(1./dmi))",
+            "source_line_in_kdm62d": 2713
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*lamdi_tmp(i,k)**dmi/pidni",
+            "source_line_in_kdm62d": 2716
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,2) = den(i,k)*qci(i,k,2)*lamdi_tmp(i,k)**dmi/pidni",
+            "source_line_in_kdm62d": 2719
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nrs(i,k,1) = den(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr",
+            "source_line_in_kdm62d": 2725
+          },
+          {
+            "action": "use dry carrier",
+            "references": 1,
+            "role": "dry_mass_number_carrier",
+            "source": "nci(i,k,1) = den(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc",
+            "source_line_in_kdm62d": 2729
+          }
+        ],
+        "process_patch_sha256": "5f1b75925ec803838f5b3cfa81012336f4d21727073c5d8c0703fb70ddc37670",
+        "process_patched_source_sha256": "513804fa340db3011017ec21b7a0678d41b82875087625bfc2e8993e7f3e4692",
+        "routing_counts": {
+          "dry_carrier_density_references_including_initialization": 64,
+          "gas_density_references": 11,
+          "intentional_raw_den_alias_references": 1,
+          "unresolved_qi0_retained": 1
+        },
+        "selected_source_sha256": "97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa",
+        "unit_role_counts": {
+          "dry_mass_number_carrier": 59,
+          "dry_number_to_mass_process_gate": 2,
+          "dynamic_viscosity": 2,
+          "growth_latent_carrier": 2,
+          "moist_gas_ventilation": 2,
+          "thermal_conductivity_density_cancels": 2,
+          "unresolved_ice_threshold": 2
+        },
+        "unit_transformer_sha256": "41698976205ea38c437b7ae3ad997c590e461d9ccf395fd1ec93c683fbdd2994"
+      },
+      "pr70_density_routing_counts": {
+        "dry_carrier_density_references_including_initialization": 64,
+        "gas_density_references": 11,
+        "intentional_raw_den_alias_references": 1,
+        "unresolved_qi0_retained": 1
+      },
+      "pr70_process_patch_sha256": "5f1b75925ec803838f5b3cfa81012336f4d21727073c5d8c0703fb70ddc37670",
+      "pr71_composed_source_sha256": "5de1884ab59e3de30a3e4ef1d8317405f1ba0591cf7ed9aa6fbca574d5233f41",
+      "pr71_output_validity_patch_sha256": "94ea6189c85cd0856a28aac2663ad70091c3259fc448d48bd021adf42ff9ae45",
+      "pr71_patch_application_log": "patching file composed_pr70.F\n",
+      "schema": "pr71_same_source_composition_v1",
+      "selected_source_sha256": "97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa"
+    },
+    "base_pr71_source_sha256": "5de1884ab59e3de30a3e4ef1d8317405f1ba0591cf7ed9aa6fbca574d5233f41",
+    "checked_source": "/var/tmp/pr71_unit_process_integration.t0nSPi/composed_pr71.F",
+    "checked_source_sha256": "6245969c87f6568cad3b6c6afddc0d1bdfe84a31baa1cee10a465b663c88d716",
+    "schema": "pr71_guarded_same_source_composition_v1",
+    "step_count_patch_application_log": "patching file frozen_base.F\n",
+    "step_count_patch_sha256": "7bc37047bf616b50ebb506f130a2f1f0535e0a5afc26bb26183a27ee188ebb24"
+  },
+  "files_sha256": {
+    "candidate_O0_build.log": "4a7d21a194236ef88c914588b952abb90667960d6b70cf0201d4c6b9e3f3cbd2",
+    "candidate_O0_cold_gate_markers.txt": "6847eb24e3e49448d4eac5c4265a26e4405a90051efea42c82768c0e82ad4c1b",
+    "candidate_O0_input_rows.txt": "7729e02dbbfbd370bb0e31aa767542c74d49b37aceb4fb6c003595aa9b25b136",
+    "candidate_O0_module_mp_kdm6.o": "35d60f12a813a2fb28c81faef5bfcf70973b4716d979a9cfe5cde42898d2168d",
+    "candidate_O0_pass_marker.txt": "196b81ea09f29df9f8590f4a0230ed746f1695f5e3962c49853a26df68e1166a",
+    "candidate_O0_run.log": "f5332fa7c3b74453ceee6d5e82c9d400a3fce556d9165eb0987a98c031af7e24",
+    "candidate_O0_test.exe": "e90c3ff4c7177cefe5f1223e4bb8c5e0201a6c353af74fa0e633903715492804",
+    "candidate_O2_build.log": "73fe9905b5ff46c2ea14d4c20e199596ced4776dfc610ee3946d93b3e65613e4",
+    "candidate_O2_cold_gate_markers.txt": "6847eb24e3e49448d4eac5c4265a26e4405a90051efea42c82768c0e82ad4c1b",
+    "candidate_O2_input_rows.txt": "7729e02dbbfbd370bb0e31aa767542c74d49b37aceb4fb6c003595aa9b25b136",
+    "candidate_O2_module_mp_kdm6.o": "ab194d218e94b87b3a531be98c1399853f36f3838b329b120d4be841dc8e2912",
+    "candidate_O2_pass_marker.txt": "196b81ea09f29df9f8590f4a0230ed746f1695f5e3962c49853a26df68e1166a",
+    "candidate_O2_run.log": "eabb544028118ccdfe24b97f252bae40ea15a89d4f39af92854324bb95cbefba",
+    "candidate_O2_test.exe": "f6c852e8f34f0037be14830ee60480644ac227f8630b14249d610c2c7ae4225b",
+    "candidate_fixed_volume_O0_build.log": "68f3efac39d7a662528f29c949ab204128c3920857d0936f3ccc68093f271766",
+    "candidate_fixed_volume_O0_cold_gate_markers.txt": "6847eb24e3e49448d4eac5c4265a26e4405a90051efea42c82768c0e82ad4c1b",
+    "candidate_fixed_volume_O0_input_rows.txt": "4bb535f90a51ba71da93e1a2b727c2021d966c39a10d88cb3579dceb3f3b0eb4",
+    "candidate_fixed_volume_O0_module_mp_kdm6.o": "1ccf5f9dde8e06a21749e3f447270531ab6bfc7c46975aa941a9295ba13812fe",
+    "candidate_fixed_volume_O0_pass_marker.txt": "196b81ea09f29df9f8590f4a0230ed746f1695f5e3962c49853a26df68e1166a",
+    "candidate_fixed_volume_O0_run.log": "65ad6c4ad6cf4f2935c0c4b3ac609008ee63927dc78ae717b11d3e35760f2b8b",
+    "candidate_fixed_volume_O0_test.exe": "8c874711100834c4ec36b9d25627ed04fe5b5bb1dbbd34c138a7eed68f04e759",
+    "candidate_fixed_volume_O2_build.log": "bb08816da5e19af42a70055be7d6c70e1d5089d4d7b6d57e52f18892b25b4142",
+    "candidate_fixed_volume_O2_cold_gate_markers.txt": "6847eb24e3e49448d4eac5c4265a26e4405a90051efea42c82768c0e82ad4c1b",
+    "candidate_fixed_volume_O2_input_rows.txt": "4bb535f90a51ba71da93e1a2b727c2021d966c39a10d88cb3579dceb3f3b0eb4",
+    "candidate_fixed_volume_O2_module_mp_kdm6.o": "84c260ef7d5fe8bac9943cee35fcec64f0f9101748bf0010469899e9b2e6e21f",
+    "candidate_fixed_volume_O2_pass_marker.txt": "196b81ea09f29df9f8590f4a0230ed746f1695f5e3962c49853a26df68e1166a",
+    "candidate_fixed_volume_O2_run.log": "405475632b430b5860691c635e881fcf02195e86a2aae49c539af393c8317a21",
+    "candidate_fixed_volume_O2_test.exe": "a2802cce9c908d48cbe6afae4b6ecd6e2fa44852c96a00eea20e0138da24b839",
+    "composed_source": "6245969c87f6568cad3b6c6afddc0d1bdfe84a31baa1cee10a465b663c88d716",
+    "composer": "95af8e6d3abfeb846045419532351e2f4773024812eb725967950a67ca0296e9",
+    "composer_tests": "8d49f976904c6b3a35b5d3b3348fb60cd34c430a4184db859a5344f58575d3c4",
+    "composition_receipt": "9c93eb47d9265f79ad7afc39fbd38d72db838851ad8867f9dfeb4d2e38057567",
+    "count_contract_generator": "a8a2fab6183a729169a2bd1230a3837314b025c31957f1c2efc0da38cc5efc6c",
+    "count_contract_tests": "9ed9b37cdd2dfe1fea8047dd6523d77c0ff8b3f181e460bc62479ca21f3ae979",
+    "direct_fixed_volume_O0_build.log": "63e9252a62fbd95507e1f67dd5a89c67aa5fa357c467573fe9ad99fcb1e2af39",
+    "direct_fixed_volume_O0_cold_gate_markers.txt": "6847eb24e3e49448d4eac5c4265a26e4405a90051efea42c82768c0e82ad4c1b",
+    "direct_fixed_volume_O0_input_rows.txt": "dca45b8e8535d40e937ce0939be7202295d19584a594421b3736ebc1a5e39128",
+    "direct_fixed_volume_O0_module_mp_kdm6.o": "71ae2869a33f93ff3e30541d2238ee5baffdecd6009b94c94ea42f79086e3b9a",
+    "direct_fixed_volume_O0_pass_marker.txt": "9a988ea96667f009134b202115a6138895358c31533f37712dbb13488d2e5644",
+    "direct_fixed_volume_O0_run.log": "d5fd66e505408e5ec31af736df2ea80056a58072c97d96e78735c79b509b8db2",
+    "direct_fixed_volume_O0_test.exe": "cfd04d696136ad51333ef22998dae926f7f1115603e170a8d95a0aad04812ee4",
+    "direct_fixed_volume_O2_build.log": "3dc0a8018d6555ceeab9254f4f4b93cb05779eea5c5ef5aed0357c39e1c8cea6",
+    "direct_fixed_volume_O2_cold_gate_markers.txt": "6847eb24e3e49448d4eac5c4265a26e4405a90051efea42c82768c0e82ad4c1b",
+    "direct_fixed_volume_O2_input_rows.txt": "dca45b8e8535d40e937ce0939be7202295d19584a594421b3736ebc1a5e39128",
+    "direct_fixed_volume_O2_module_mp_kdm6.o": "5f0e0a1384bc94981dce9e7aebcfb3095d0be7373ef6e8f0c7131c6d35ca5135",
+    "direct_fixed_volume_O2_pass_marker.txt": "9a988ea96667f009134b202115a6138895358c31533f37712dbb13488d2e5644",
+    "direct_fixed_volume_O2_run.log": "315fcd12bd4b2b28a8eb02aa0397200f69118a1249c5aafcb97427c4d1a3e1a3",
+    "direct_fixed_volume_O2_test.exe": "befe7c35260a09e07bdaa125011a3e2d5ae135b78749c5b5230ada08771e2a8a",
+    "direct_volume_O0_build.log": "0e9d28c30959052233f45a49c0796ad46c999433f403ce875cb84438db529d72",
+    "direct_volume_O0_cold_gate_markers.txt": "6847eb24e3e49448d4eac5c4265a26e4405a90051efea42c82768c0e82ad4c1b",
+    "direct_volume_O0_input_rows.txt": "1f35e4b59207b965ce8893931fc40133e5b9768481cc7646a7a5d707892bea93",
+    "direct_volume_O0_module_mp_kdm6.o": "ab2e17189ce8f68db3fd607bc178163612b92a5a5db37f66445e550a880a5b60",
+    "direct_volume_O0_pass_marker.txt": "9a988ea96667f009134b202115a6138895358c31533f37712dbb13488d2e5644",
+    "direct_volume_O0_run.log": "b573c69467f1ecfec2587aadbd310b4949c06c412c8ae2bbac9e32f093f9feb4",
+    "direct_volume_O0_test.exe": "91f36d53ffa40d4d1fc2055676b33a65441e6e0db16e29bc43c36e4302680d25",
+    "direct_volume_O2_build.log": "df796db2287982e10b72067b95dcd2b1f3754c5fd93c31b64d777d523a45010c",
+    "direct_volume_O2_cold_gate_markers.txt": "6847eb24e3e49448d4eac5c4265a26e4405a90051efea42c82768c0e82ad4c1b",
+    "direct_volume_O2_input_rows.txt": "1f35e4b59207b965ce8893931fc40133e5b9768481cc7646a7a5d707892bea93",
+    "direct_volume_O2_module_mp_kdm6.o": "dbef1ce255d999629f4fbcf7e554fd5b719a5f01bb0d07bedc2f8433d9d2ad75",
+    "direct_volume_O2_pass_marker.txt": "9a988ea96667f009134b202115a6138895358c31533f37712dbb13488d2e5644",
+    "direct_volume_O2_run.log": "1488c5b3eb3cf67ee70b6b0a066f9abff394ba5e62203104c9a69af41d8c0dd6",
+    "direct_volume_O2_test.exe": "0535ff562499d29dbaf8afd670a8c8d3929ebd4e459781e0a18a9a0c20d26f61",
+    "eos_absent_candidate_O0_build.log": "a07690d9e46f01ee4191d60d161b87b0ab8423bb1939fa24ff9bb1f92081cf1b",
+    "eos_absent_candidate_O0_cold_gate_markers.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "eos_absent_candidate_O0_input_rows.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "eos_absent_candidate_O0_module_mp_kdm6.o": "e32d2342bbd72a107d95a81362a306a4db9ae1d2f78df2a8563578401e7dc7c7",
+    "eos_absent_candidate_O0_pass_marker.txt": "524dca92b7adf813af7f5218dab13f9bf07e91cd4b98b60da645d05385699ba3",
+    "eos_absent_candidate_O0_run.log": "6d786e87e851e4dcba86da5134815e883ee450353f6a3d67edcf1e7aa73235bc",
+    "eos_absent_candidate_O0_test.exe": "c5483ef5c1df972bd731d0cf9712e4e62fbb1c1e3132b6289a9a7f5132a5281f",
+    "eos_absent_candidate_O2_build.log": "e4da95b934283e9bb673db6950101d7d807bf3164471f8af4699a7e3055e5a7d",
+    "eos_absent_candidate_O2_cold_gate_markers.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "eos_absent_candidate_O2_input_rows.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "eos_absent_candidate_O2_module_mp_kdm6.o": "bfa0ec4d57ce8da7c33c0619af1959b8e158081a6d8d0eb50cba5107ce467fab",
+    "eos_absent_candidate_O2_pass_marker.txt": "524dca92b7adf813af7f5218dab13f9bf07e91cd4b98b60da645d05385699ba3",
+    "eos_absent_candidate_O2_run.log": "5eb0f7b1a958995569008d5312bb13c43d4d0a1689895105697fe59bbba8d8ec",
+    "eos_absent_candidate_O2_test.exe": "d04ff96ee2ee46bc155c9657344f3e63cd65a35b12a2606e2c4d58ff47a611b9",
+    "eos_candidate_O0_build.log": "0061d25644ac8d781a2e8a0796f1adf7fb24e7e19e056cbaf7659dfd5ac00c7a",
+    "eos_candidate_O0_cold_gate_markers.txt": "bcbec1ced7f94a9010248e79888f32392a1d6bfd683d593bc057367f26af0108",
+    "eos_candidate_O0_input_rows.txt": "e798a35b7e2a90a8e74dd67cc0a2bd7da1a21432a77b11aba3596bd2cadae833",
+    "eos_candidate_O0_module_mp_kdm6.o": "25c32de78a556f95adaa3b0eb979db23abccbacb079197316cd2eb261d7de57e",
+    "eos_candidate_O0_pass_marker.txt": "196b81ea09f29df9f8590f4a0230ed746f1695f5e3962c49853a26df68e1166a",
+    "eos_candidate_O0_run.log": "f954ad3c049d47fcc2adbadaa7c14090917ae8e7d4ca1d701680810b1e88ce37",
+    "eos_candidate_O0_test.exe": "b7897c437b206c81be74eea32ce8ceddc18b278bbab54b035a90e148d7b2e781",
+    "eos_candidate_O2_build.log": "c5bd8e685729c4ab83fdd3b56294fa33402a550f6bc6abe0f433b0b00b520559",
+    "eos_candidate_O2_cold_gate_markers.txt": "bcbec1ced7f94a9010248e79888f32392a1d6bfd683d593bc057367f26af0108",
+    "eos_candidate_O2_input_rows.txt": "e798a35b7e2a90a8e74dd67cc0a2bd7da1a21432a77b11aba3596bd2cadae833",
+    "eos_candidate_O2_module_mp_kdm6.o": "2742f1090b1dc035449bad537ed121560856559ca3aa98d43550a5c279eb0101",
+    "eos_candidate_O2_pass_marker.txt": "196b81ea09f29df9f8590f4a0230ed746f1695f5e3962c49853a26df68e1166a",
+    "eos_candidate_O2_run.log": "db5c2b12249fd27625c7dfdc99519129e7eac18fe3dd8b4505c1c7e88bf98dca",
+    "eos_candidate_O2_test.exe": "963fb8fbb57a61a092001bccc6f47b9c5f26159743be84406a57316a7841b965",
+    "eos_direct_volume_O0_build.log": "334049fb1c0575225d7548eefb258492b275abc388921ff55760502e4517d574",
+    "eos_direct_volume_O0_cold_gate_markers.txt": "bcbec1ced7f94a9010248e79888f32392a1d6bfd683d593bc057367f26af0108",
+    "eos_direct_volume_O0_input_rows.txt": "4dc72bd4c2e4d1e5ca3e9253f88bee90585a5208c7f0a66cd08e7482cb9543d8",
+    "eos_direct_volume_O0_module_mp_kdm6.o": "fcd31ae8d07273efe7ed72eeeca0d021cf3ba5f1d4f59839ed01665e2af7d04a",
+    "eos_direct_volume_O0_pass_marker.txt": "9a988ea96667f009134b202115a6138895358c31533f37712dbb13488d2e5644",
+    "eos_direct_volume_O0_run.log": "e7ae80a5f25a2d7c2b821c91a7bcab334a06e1c0e2c0159d77a883e0146ca3e9",
+    "eos_direct_volume_O0_test.exe": "c1e1f4641030acf4f0b6b6ca26c4d904ca358b0c4d124c1e22b28685722ace6b",
+    "eos_direct_volume_O2_build.log": "4a9a0bd71d85f4bf70c083ebb08d9a2d3ef128ca0d1901ccaa2b58b26a10ddf7",
+    "eos_direct_volume_O2_cold_gate_markers.txt": "bcbec1ced7f94a9010248e79888f32392a1d6bfd683d593bc057367f26af0108",
+    "eos_direct_volume_O2_input_rows.txt": "4dc72bd4c2e4d1e5ca3e9253f88bee90585a5208c7f0a66cd08e7482cb9543d8",
+    "eos_direct_volume_O2_module_mp_kdm6.o": "dc3c4eb7c43b2c26d3b0e6c9f4de3365a4278266b4c084afa8a03e171e9e2188",
+    "eos_direct_volume_O2_pass_marker.txt": "9a988ea96667f009134b202115a6138895358c31533f37712dbb13488d2e5644",
+    "eos_direct_volume_O2_run.log": "c1d7fcffa885de991844a9e1da5d183a2eeeb4d87224403fbd412e650734f522",
+    "eos_direct_volume_O2_test.exe": "2c9eaf62bbcb44fc0f56ff7a65764d13b7523ba4d9c10b75f6e81e1e8d3f1c5e",
+    "guarded_composer_tests": "468cfaabeecc719b485f7125d8fb7861586e4bbadc745ebc4360bdcad45474fc",
+    "integration_test": "319e89a813410ff7ba552162462b5e99dab33d1557234d077e12bfa453807c32",
+    "intel_profile": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "output_contract_generator": "47fd37dec04a35466d73cbf342a8411d5539796007e7ebec2947328b3c2885c5",
+    "process_patch": "5f1b75925ec803838f5b3cfa81012336f4d21727073c5d8c0703fb70ddc37670",
+    "runner": "84404314ec5dcfa37cc4690640a561eded11fa44848e767c86a2886a0bfb068c",
+    "source": "97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa",
+    "step_count_patch": "7bc37047bf616b50ebb506f130a2f1f0535e0a5afc26bb26183a27ee188ebb24",
+    "validity_patch": "94ea6189c85cd0856a28aac2663ad70091c3259fc448d48bd021adf42ff9ae45"
+  },
+  "fixture": {
+    "cold_gate_acceptance_cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ]
+    ],
+    "eos_fixture": "PASS",
+    "eos_graupel_absent_fixture": "BLOCKED_INHERITED_N0I_DIVIDE (rain=0, qg=0, bg=0; cloud and ice positive; RHice=1.2; failure at kdm62d line 2067 before fixture outputs)",
+    "eos_state": {
+      "Rd": 287.04,
+      "dry_density_equation": "p/[Rd*T*(1+qv/epsilon)]",
+      "epsilon": 0.622,
+      "moist_DEN_equation": "rho_d*(1+qv)",
+      "pressure_pa": 90000.0,
+      "temperature_k": 250.0,
+      "vapor_source": "0.8 RH for active EOS case; 1.2 RH for graupel-absent consumer isolation, relative to the same KDM6 fpvs saturation pressure"
+    },
+    "preserved_density_cases_kg_m3": [
+      0.25,
+      0.5,
+      1.0,
+      2.0
+    ],
+    "unit_fixture": "PASS"
+  },
+  "recorded_utc": "2026-10-08T01:44:13.718944Z",
+  "schema": "pr71_unit_process_guarded_integration_v1",
+  "scratch_work_dir": "/var/tmp/pr71_unit_process_integration.t0nSPi"
+}

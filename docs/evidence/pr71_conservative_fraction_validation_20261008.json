@@ -1,0 +1,115 @@
+{
+  "schema": "pr71_conservative_fraction_validation_v1",
+  "session_day": "2026-10-08",
+  "recorded_utc": "2026-10-08T00:56:57.425568Z",
+  "compiler": "ifx (IFX) 2026.0.0 20260331",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "runtime_libraries": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120"
+  },
+  "flags": {
+    "O0": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "O2": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ]
+  },
+  "scratch_work_dir": "/var/tmp/cloud_bal_pr71_conservative.ZLLM5f",
+  "files_sha256": {
+    "captured_source": "97e9892ff527a318f6266140eecc03238485a68b050c61bbaca7ea94f28bfdaa",
+    "process_patch": "5f1b75925ec803838f5b3cfa81012336f4d21727073c5d8c0703fb70ddc37670",
+    "runner": "a1ff39771099d8fe0adad2787b64c5c1588e4ec718c90b91d473355264170e46",
+    "test": "82a2bf15e9aa1cfd641c453e2c79bec4db963af3eb3c3fbb53591b013107ff76",
+    "intel_profile": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "patched_source": "513804fa340db3011017ec21b7a0678d41b82875087625bfc2e8993e7f3e4692",
+    "extracted_helper": "47e969dde50410e3c708c1a49e49e76bc2592d6c2fcfae31b0164c51dddf1683",
+    "patch_log": "2488946ba6d9a34523e5690aa24c3a153b5f0bfe253877e87d3dfa9084ac9a09",
+    "O0_helper.compile_log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "O0_helper.compile_argv": "aa8071a3211c1d08b9d37d6edd3d9ac45a9b662c3e1fcc92a000be41868dd00a",
+    "O0_test.compile_log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "O0_test.compile_argv": "28ef5704adf031be00a9d13194b334f436fc9f25f8effdee14184b5731ff565c",
+    "O0_test.link_log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "O0_test.link_argv": "989ccef5dae8de70e729500c94fe818f58ee3e7f4cb9b09d34a29ace54ec9474",
+    "O0_test.run_log": "bbfee5e495a6bac09fea422af0a340b2f5e227d2f6dc55552793a6e9ae53871f",
+    "O0_test.run_argv": "e41cae420ada0dc81f7e0edcbe942ad8f5134c3f04dabef5f446da70190bc6b7",
+    "O0_executable": "35460e6005d22a70af8da77bf97a06eff860e9021a97892db0f74e1cd60a2632",
+    "O2_helper.compile_log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "O2_helper.compile_argv": "25e417218d7d25b698382039460a6dad230a90704c66a5e0a78658f3eb237dc8",
+    "O2_test.compile_log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "O2_test.compile_argv": "066e3aca0aca4107570d4d7b631c23c67fd29a216754480e83918f633b211b49",
+    "O2_test.link_log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "O2_test.link_argv": "fa77ad72008fd60e5dbc636aebf1b8e7ee2c657ed04be2b7e44368cfac32df19",
+    "O2_test.run_log": "bbfee5e495a6bac09fea422af0a340b2f5e227d2f6dc55552793a6e9ae53871f",
+    "O2_test.run_argv": "e41cae420ada0dc81f7e0edcbe942ad8f5134c3f04dabef5f446da70190bc6b7",
+    "O2_executable": "2846fa4478fe9bba98a989d0386b47536640b8032e040982a0e88a02a1368b7b"
+  },
+  "commands_argv": {
+    "O0/helper.compile.argv": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -c pr70_helper.f90",
+    "O0/test.compile.argv": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -c test_pr71_conservative_fraction.f90",
+    "O0/test.link.argv": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -o conservative.exe test_pr71_conservative_fraction.o pr70_helper.o",
+    "O0/test.run.argv": "./conservative.exe",
+    "O2/helper.compile.argv": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -c pr70_helper.f90",
+    "O2/test.compile.argv": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -c test_pr71_conservative_fraction.f90",
+    "O2/test.link.argv": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -o conservative.exe test_pr71_conservative_fraction.o pr70_helper.o",
+    "O2/test.run.argv": "./conservative.exe"
+  },
+  "case": {
+    "q_fixed_rain": 2.5142206538930623e-08,
+    "q_process_rain": -2.44809541527502e-08,
+    "qcrmin": 1e-09,
+    "number_moments": "both derived from the same 5000 m^-1 rain lambda and frozen PR70 pidnr",
+    "density": 1.0,
+    "temperature_kelvin": 270.0,
+    "result": {
+      "O0": {
+        "fraction": 0.9861627817153931,
+        "next_fraction": 0.9861628413200378,
+        "returned_qr": 1.000000082740371e-09,
+        "next_qr": 1.000000082740371e-09,
+        "returned_direct_predicate": "PASS",
+        "next_direct_predicate": "PASS"
+      },
+      "O2": {
+        "fraction": 0.9861627817153931,
+        "next_fraction": 0.9861628413200378,
+        "returned_qr": 1.000000082740371e-09,
+        "next_qr": 1.000000082740371e-09,
+        "returned_direct_predicate": "PASS",
+        "next_direct_predicate": "PASS"
+      }
+    },
+    "claim_scope": "returned float32 alpha and its immediate next float32 neighbor are both accepted by the direct stored-state predicate and store the same strictly-above-cutoff QR; this does not claim a global maximum under any candidate policy"
+  },
+  "checks": {
+    "exact_PR70_source_and_patch_identity": "PASS",
+    "extracted_helper_matches_frozen_PR70_sha256": "PASS",
+    "returned_candidate_direct_state_predicate_O0_O2": "PASS",
+    "next_float32_candidate_direct_state_predicate_O0_O2": "PASS",
+    "same_stored_rain_mass_for_adjacent_candidates_O0_O2": "PASS",
+    "pinned_Intel_ifx_O0_O2": "PASS"
+  }
+}
