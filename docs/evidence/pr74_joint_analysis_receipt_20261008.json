@@ -1,0 +1,54 @@
+{
+  "pull_request_scope": "PR74 certified small-analysis solver numerical fixes",
+  "base_commit": "1ae50a87b606614fafc0f647f517d4472efdfc05",
+  "status": "PASS",
+  "owned_files": [
+    "tools/pr73_joint_analysis.py",
+    "tests/test_pr73_joint_analysis.py",
+    "docs/PR74_CERTIFIED_ANALYSIS_20261008.md",
+    "docs/evidence/pr74_joint_analysis_receipt_20261008.json"
+  ],
+  "independent_oracle_file": "tests/test_pr74_independent_oracle.py",
+  "validation": [
+    {
+      "command": "python3 -m unittest tests/test_pr73_joint_analysis.py -v",
+      "result": "PASS",
+      "tests": 16
+    },
+    {
+      "command": "python3 -m unittest tests.test_pr74_independent_oracle -v",
+      "result": "PASS",
+      "tests": 4,
+      "oracle_cases": 396
+    },
+    {
+      "command": "python3 -m py_compile tools/pr73_joint_analysis.py",
+      "result": "PASS"
+    }
+  ],
+  "independent_review": {
+    "result": "PASS",
+    "coverage": [
+      "scalar closed-form box minima across signed targets and bounds",
+      "B=R=H=1 lower-bound roundoff regression",
+      "six-variable covariance-form oracle",
+      "partial U/V coordinate rescaling by 1000",
+      "active-bound equality degeneracy",
+      "outward-rounded decimal box-edge feasibility"
+    ],
+    "open_findings": []
+  },
+  "not_run_here": [
+    "pinned Intel Cloud-BAL endpoint writer O0/O2 integration; parent agent owns this validation",
+    "Graphify incremental update; excluded by the assigned solver-only task scope"
+  ],
+  "scope_limits": [
+    "manufactured algorithm fixture only",
+    "does not establish scientific validity or operational pipeline lineage",
+    "native physical validation retains its existing fail-open behavior"
+  ],
+  "final_source_sha256": {
+    "tools/pr73_joint_analysis.py": "02b2afda770760052813dc9f08cccc9fedc067ecea3966cd3e81b5cf024a360c",
+    "tests/test_pr73_joint_analysis.py": "965f07e61a5d70a25da82696262241fde38558ea8963bb80f329ed614339c247"
+  }
+}

@@ -43,11 +43,12 @@ def _read_exact(data: bytes, offset: int, size: int, label: str) -> tuple[bytes,
     return data[offset:end], end
 
 
-def parse_geometry(data: bytes) -> list[dict[str, Any]]:
-    """Parse the two fixed-position, big-endian PR63GEO2 stream records."""
+def parse_geometry(data: bytes, *, require_pair: bool = True) -> list[dict[str, Any]]:
+    """Parse PR63GEO2 records, optionally accepting a retained pre-call record."""
     offset = 0
     records = []
-    for expected_stage in STAGES:
+    expected_stages = STAGES if require_pair else STAGES[:1]
+    for expected_stage in expected_stages:
         magic, offset = _read_exact(data, offset, len(MAGIC), "magic")
         if magic != MAGIC:
             raise ValueError(f"wrong geometry magic at byte {offset - len(MAGIC)}")
@@ -111,17 +112,18 @@ def parse_geometry(data: bytes) -> list[dict[str, Any]]:
         })
     if offset != len(data):
         raise ValueError(f"unexpected trailing bytes: {len(data) - offset}")
-    pre, post = records
-    if (pre["timestep"], pre["rkstep"], pre["hybrid_opt"], pre["bounds"], pre["extents"]) != (
-        post["timestep"], post["rkstep"], post["hybrid_opt"], post["bounds"], post["extents"]
-    ):
-        raise ValueError("pre/post geometry headers differ")
-    scalar_names = ("dtm_s", "dt_s", "dx_m", "dy_m", "gravity_m_s2", "p_top_pa")
-    if any(pre[name] != post[name] for name in scalar_names):
-        raise ValueError("pre/post geometry scalar metadata differ")
-    for name in ARRAY_NAMES:
-        if not np.array_equal(pre["arrays"][name], post["arrays"][name]):
-            raise ValueError(f"geometry array changed across microphysics call: {name}")
+    if require_pair:
+        pre, post = records
+        if (pre["timestep"], pre["rkstep"], pre["hybrid_opt"], pre["bounds"], pre["extents"]) != (
+            post["timestep"], post["rkstep"], post["hybrid_opt"], post["bounds"], post["extents"]
+        ):
+            raise ValueError("pre/post geometry headers differ")
+        scalar_names = ("dtm_s", "dt_s", "dx_m", "dy_m", "gravity_m_s2", "p_top_pa")
+        if any(pre[name] != post[name] for name in scalar_names):
+            raise ValueError("pre/post geometry scalar metadata differ")
+        for name in ARRAY_NAMES:
+            if not np.array_equal(pre["arrays"][name], post["arrays"][name]):
+                raise ValueError(f"geometry array changed across microphysics call: {name}")
     return records
 
 

@@ -1,0 +1,206 @@
+{
+  "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "compiler_profile_script": "tests/intel_toolchain.sh",
+  "compiler_profile_script_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+  "durable_replay_artifacts": {
+    "captured_input": "metadata.json",
+    "directory": "docs/evidence/pr74_common_moment_audit_20261008/ni_conversion_probe",
+    "expanded_commands": "commands.json",
+    "hashes": {
+      "commands.json": "7a36dbfa1d7b6f326373acd9b79a7ce15a9d5ddcec3f7a3456338020ce2e0e50",
+      "metadata.json": "212e67d54fe1a152d99fc39c3578e528654fbd92bf760b2207d9de671dad39da",
+      "replay.f90": "2f2e5105ca394a67ea3a4b8eeb9c69d30951d37120f04df717198eaa95244798",
+      "replay_o0.log": "6f86bea77a99e71d189a1f4ae21c3f1dd87d7caccbf4e2b6034b1413d0e7fd73",
+      "replay_o0_ftz.log": "5062bc1ad80d87ba96070cd6828a97e11fe49c29dfae36600d967025a3a8a316",
+      "replay_o2.log": "6f86bea77a99e71d189a1f4ae21c3f1dd87d7caccbf4e2b6034b1413d0e7fd73",
+      "replay_o2_ftz.log": "5062bc1ad80d87ba96070cd6828a97e11fe49c29dfae36600d967025a3a8a316",
+      "source_helpers.f90": "c92967dc253627b0329e62f9f868cc042f525b34bf01afbd1b2fe196ef2704a8"
+    },
+    "logs": [
+      "replay_o0.log",
+      "replay_o2.log",
+      "replay_o0_ftz.log",
+      "replay_o2_ftz.log"
+    ],
+    "replay_program": "replay.f90",
+    "source_helpers": "source_helpers.f90"
+  },
+  "exact_source": {
+    "helper_sha256": "9519d84d2b0ac553b7db850f7035413212fdbd51523914a07b89524acab20984",
+    "path": "docs/evidence/pr73_native_first_violation_20261008_attempt2/instrumented_source.F",
+    "procedure_source": "moist_to_dry_density and specific_number_to_volume extracted verbatim from the receipt-bound PR73 instrumented source",
+    "sha256": "5b0cae169f37f9eb3cc5207419a87ae9e6bed5b0fec9c4a6c25473ef898df70e"
+  },
+  "interpretation": "The exact receipt-bound source helper, replayed on the captured first source-order NI value, is valid and preserves a nonzero subnormal result under prescribed strict no-ftz O0/O2 flags. Appending -ftz reproduces the native adapter invalid result by flushing that value to exact zero. The retained PR73 native link argv includes -ftz, which is a plausible runtime explanation for the QNI fatal. The QNI replay receipt does not yet serialize its linker argv; active MXCSR state was not captured, so attribution to this exact runtime mode remains inferred.",
+  "native_link_flag_evidence": {
+    "flag": "-ftz",
+    "observed_in_pr73_link_argv": true,
+    "qni_replay_receipt_serializes_link_argv": false,
+    "source_receipt": "docs/evidence/pr73_native_first_violation_20261008_attempt2/native_receipt.json",
+    "source_receipt_sha256": "5be57e83f5ebe8e7124e4f9d5bb7ab527bdf4ae495ff19a9b1bd4e532a10a355"
+  },
+  "probe_cell": {
+    "DEN": 0.7716183662414551,
+    "Q": 0.004646302200853825,
+    "field": "NI",
+    "i": 211,
+    "j": 2,
+    "k": 15,
+    "publicN": 1.356338643876034e-38,
+    "rho_d_python_f32": 0.7680497765541077,
+    "volume_python_f32": 1.041735647987705e-38
+  },
+  "runs": {
+    "pinned_compiler_with_native_link_ftz_sensitivity_O0": {
+      "argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "-ftz",
+        "source_helpers.f90",
+        "replay.f90",
+        "-o",
+        "replay_o0_ftz"
+      ],
+      "executable_sha256": "decad18d188b3392762509039c120a1fa9083bded0213490959128e0854d21fb",
+      "log_copy_matches": true,
+      "log_copy_sha256": "5062bc1ad80d87ba96070cd6828a97e11fe49c29dfae36600d967025a3a8a316",
+      "log_sha256": "5062bc1ad80d87ba96070cd6828a97e11fe49c29dfae36600d967025a3a8a316",
+      "output": "DEN= 7.7161836624145508E-001\nQ= 4.6463022008538246E-003\nN_PUBLIC= 1.3563386438760339E-038\nRHO_D= 7.6804977655410767E-001\nN_INTERNAL= 0.0000000000000000E+000\nVALID=F\n"
+    },
+    "pinned_compiler_with_native_link_ftz_sensitivity_O2": {
+      "argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "-ftz",
+        "source_helpers.f90",
+        "replay.f90",
+        "-o",
+        "replay_o2_ftz"
+      ],
+      "executable_sha256": "17fcdf1afd385dd9303798ef45def1a81ede3a9761c9a7654e721e3492eecf61",
+      "log_copy_matches": true,
+      "log_copy_sha256": "5062bc1ad80d87ba96070cd6828a97e11fe49c29dfae36600d967025a3a8a316",
+      "log_sha256": "5062bc1ad80d87ba96070cd6828a97e11fe49c29dfae36600d967025a3a8a316",
+      "output": "DEN= 7.7161836624145508E-001\nQ= 4.6463022008538246E-003\nN_PUBLIC= 1.3563386438760339E-038\nRHO_D= 7.6804977655410767E-001\nN_INTERNAL= 0.0000000000000000E+000\nVALID=F\n"
+    },
+    "pinned_strict_O0": {
+      "argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "source_helpers.f90",
+        "replay.f90",
+        "-o",
+        "replay_o0"
+      ],
+      "executable_sha256": "b4c79283450991701abd08d062ae09908651904a5ae07ac34e6ef053a387f200",
+      "log_copy_matches": true,
+      "log_copy_sha256": "6f86bea77a99e71d189a1f4ae21c3f1dd87d7caccbf4e2b6034b1413d0e7fd73",
+      "log_sha256": "6f86bea77a99e71d189a1f4ae21c3f1dd87d7caccbf4e2b6034b1413d0e7fd73",
+      "output": "DEN= 7.7161836624145508E-001\nQ= 4.6463022008538246E-003\nN_PUBLIC= 1.3563386438760339E-038\nRHO_D= 7.6804977655410767E-001\nN_INTERNAL= 1.0417356479877050E-038\nVALID=T\n"
+    },
+    "pinned_strict_O2": {
+      "argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "source_helpers.f90",
+        "replay.f90",
+        "-o",
+        "replay_o2"
+      ],
+      "executable_sha256": "dca290fab102371027a691bdfcaefee31d54b23879ea4fd1e161c4ae789784c7",
+      "log_copy_matches": true,
+      "log_copy_sha256": "6f86bea77a99e71d189a1f4ae21c3f1dd87d7caccbf4e2b6034b1413d0e7fd73",
+      "log_sha256": "6f86bea77a99e71d189a1f4ae21c3f1dd87d7caccbf4e2b6034b1413d0e7fd73",
+      "output": "DEN= 7.7161836624145508E-001\nQ= 4.6463022008538246E-003\nN_PUBLIC= 1.3563386438760339E-038\nRHO_D= 7.6804977655410767E-001\nN_INTERNAL= 1.0417356479877050E-038\nVALID=T\n"
+    }
+  },
+  "schema": "pr74_exact_ni_conversion_probe_v1",
+  "scratch_root": "/var/tmp/pr74_ni_conversion_helper_20261008",
+  "source_order": {
+    "cell_order": "j,k,i",
+    "first_possible_subnormal_product": {
+      "N_internal_ieee_gradual": 1.041735647987705e-38,
+      "N_public_unit": "number per kg dry air",
+      "conversion_failure_count_at_first_ftz_candidate": 1,
+      "earlier_ftz_zeroed_conversions_in_source_order": 0,
+      "field": "NI",
+      "gradual_internal_is_subnormal_float32": true,
+      "index": {
+        "i": 211,
+        "j": 2,
+        "k": 15
+      },
+      "internal_is_zero_with_ftz_replay": true,
+      "public_N_is_normal_float32": true,
+      "rho_d_kg_m3": 0.7680497765541077,
+      "source_adapter_valid_ftz": false,
+      "source_adapter_valid_noftz": true
+    },
+    "full_capture_potential_subnormal_products_if_ftz": {
+      "NC": 4331,
+      "NI": 2399,
+      "NN": 0,
+      "NR": 0,
+      "note": "full-active-capture counts; actual source-order execution stops at its first failed conversion"
+    },
+    "negative_or_nonfinite_NI_active_cells": 0,
+    "number_conversion_order": [
+      "NC",
+      "NI",
+      "NN",
+      "NR"
+    ],
+    "preceding_NC_conversion_same_cell": {
+      "N_internal_number_per_m3": 1.497663914376871e-22,
+      "N_public_number_per_kg_dry_air": 1.9499568726232311e-22,
+      "passes_before_NI": true
+    }
+  },
+  "status": "SOURCE_HELPER_REPLAYED_O0_O2"
+}

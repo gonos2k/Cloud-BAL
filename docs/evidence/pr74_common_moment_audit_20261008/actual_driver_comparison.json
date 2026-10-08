@@ -1,0 +1,1079 @@
+{
+  "NI_basis_diagnostic": {
+    "active_cells": 2533440,
+    "converted_internal_max": 1044323.625,
+    "converted_internal_min_positive_input": 1.3566741147283933e-39,
+    "earlier_zeroed_conversions_under_ftz": 0,
+    "first_subnormal_conversion_candidate": {
+      "NI_internal_number_per_m3": 1.041735647987705e-38,
+      "NI_public_number_per_kg_dry_air": 1.356338643876034e-38,
+      "index": {
+        "i": 211,
+        "j": 2,
+        "k": 15
+      },
+      "rho_d_kg_m3": 0.7680497765541077
+    },
+    "internal_unit": "number per m3",
+    "interpretation": "No negative or nonfinite NI exists in the active pretrace. Public NI is number per kg dry air; source converts with rho_d=DEN/(1+Q) to number per m3. At the first source-order subnormal product, (i=211,j=2,k=15), captured public NI=1.356338643876034e-38 kg-1 and rho_d=0.7680497765541077 kg m-3. The exact source helper is valid and nonzero under pinned strict no-ftz O0/O2; with -ftz it returns exact zero/invalid. Both final QNI O0/O2 link commands include -ftz, supporting this as the adapter fatal mechanism. Runtime MXCSR was not directly captured.",
+    "negative_cells": 0,
+    "negative_internal_number_cell_count": 0,
+    "negative_min_public_number_per_kg_dry_air": null,
+    "negative_public_number_absolute_sum_per_kg_dry_air": 0.0,
+    "nonfinite_cells": 0,
+    "positive_cells": 1002055,
+    "positive_internal_subnormal_cells_ieee_gradual_underflow": 2399,
+    "positive_public_max": 3289293.25,
+    "positive_public_min": 1.1755384917239137e-38,
+    "potential_subnormal_conversions_if_ftz_before_first_NI_failure": {
+      "NC": 0,
+      "NI": 1,
+      "NN": 0,
+      "NR": 0
+    },
+    "public_field": "NI",
+    "public_unit": "number per kg dry air",
+    "source_conversion": "NI_internal [m-3] = NI_public [kg-1 dry air] * rho_d [kg m-3]; rho_d=DEN/(1+Q)",
+    "source_order": "j,k,i; per cell conversion order NC, NI, NN, NR",
+    "whole_active_capture_subnormal_products_by_input_if_ftz": {
+      "NC": 4331,
+      "NI": 2399,
+      "NN": 0,
+      "NR": 0
+    },
+    "zero_cells": 1531385,
+    "zeroed_conversion_at_first_failure_under_ftz": 1
+  },
+  "baseline": {
+    "pretrace_matches_pr73_baseline": true,
+    "pretrace_path": "/var/tmp/pr73_native_first_violation.x3bvfn/run/kdm6_first_call_pre.raw",
+    "pretrace_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "receipt_path": "docs/evidence/pr73_native_first_violation_20261008_attempt2/native_receipt.json",
+    "receipt_sha256": "5be57e83f5ebe8e7124e4f9d5bb7ab527bdf4ae495ff19a9b1bd4e532a10a355"
+  },
+  "baseline_to_qni_pretrace_diff": {
+    "changed_field_count": 14,
+    "changed_fields": [
+      {
+        "changed_cells": 8,
+        "field": "TH",
+        "first_changed": {
+          "baseline": 493.7191162109375,
+          "index": {
+            "i": 188,
+            "j": 81,
+            "k": 39
+          },
+          "qni_driver": 493.7191467285156
+        },
+        "maximum_absolute_change": 3.0517578125e-05,
+        "maximum_change_index": {
+          "i": 188,
+          "j": 81,
+          "k": 39
+        }
+      },
+      {
+        "changed_cells": 14,
+        "field": "PII",
+        "first_changed": {
+          "baseline": 0.9927200675010681,
+          "index": {
+            "i": 48,
+            "j": 80,
+            "k": 4
+          },
+          "qni_driver": 0.9927199482917786
+        },
+        "maximum_absolute_change": 5.960464477539062e-07,
+        "maximum_change_index": {
+          "i": 181,
+          "j": 89,
+          "k": 29
+        }
+      },
+      {
+        "changed_cells": 11,
+        "field": "DEN",
+        "first_changed": {
+          "baseline": 1.103629469871521,
+          "index": {
+            "i": 48,
+            "j": 80,
+            "k": 4
+          },
+          "qni_driver": 1.103629231452942
+        },
+        "maximum_absolute_change": 5.960464477539062e-07,
+        "maximum_change_index": {
+          "i": 181,
+          "j": 89,
+          "k": 29
+        }
+      },
+      {
+        "changed_cells": 15,
+        "field": "P",
+        "first_changed": {
+          "baseline": 97475.1328125,
+          "index": {
+            "i": 48,
+            "j": 80,
+            "k": 4
+          },
+          "qni_driver": 97475.09375
+        },
+        "maximum_absolute_change": 0.0625,
+        "maximum_change_index": {
+          "i": 28,
+          "j": 92,
+          "k": 14
+        }
+      },
+      {
+        "changed_cells": 18,
+        "field": "DELZ",
+        "first_changed": {
+          "baseline": 408.9833984375,
+          "index": {
+            "i": 27,
+            "j": 43,
+            "k": 11
+          },
+          "qni_driver": 408.983154296875
+        },
+        "maximum_absolute_change": 0.0009765625,
+        "maximum_change_index": {
+          "i": 44,
+          "j": 153,
+          "k": 27
+        }
+      },
+      {
+        "changed_cells": 52,
+        "field": "Q",
+        "first_changed": {
+          "baseline": 0.00034478833549655974,
+          "index": {
+            "i": 223,
+            "j": 20,
+            "k": 25
+          },
+          "qni_driver": 0.00034478839370422065
+        },
+        "maximum_absolute_change": 3.725290298461914e-09,
+        "maximum_change_index": {
+          "i": 75,
+          "j": 85,
+          "k": 2
+        }
+      },
+      {
+        "changed_cells": 1417,
+        "field": "QC",
+        "first_changed": {
+          "baseline": 2.83982920512571e-10,
+          "index": {
+            "i": 232,
+            "j": 13,
+            "k": 15
+          },
+          "qni_driver": 2.8398297602372224e-10
+        },
+        "maximum_absolute_change": 2.3283064365386963e-10,
+        "maximum_change_index": {
+          "i": 212,
+          "j": 107,
+          "k": 20
+        }
+      },
+      {
+        "changed_cells": 53,
+        "field": "QR",
+        "first_changed": {
+          "baseline": 1.3065650819044095e-06,
+          "index": {
+            "i": 188,
+            "j": 78,
+            "k": 16
+          },
+          "qni_driver": 1.306564854530734e-06
+        },
+        "maximum_absolute_change": 1.4551915228366852e-11,
+        "maximum_change_index": {
+          "i": 189,
+          "j": 81,
+          "k": 14
+        }
+      },
+      {
+        "changed_cells": 1121,
+        "field": "QI",
+        "first_changed": {
+          "baseline": 1.9394972485139127e-14,
+          "index": {
+            "i": 231,
+            "j": 13,
+            "k": 24
+          },
+          "qni_driver": 1.9394970791073232e-14
+        },
+        "maximum_absolute_change": 5.820766091346741e-11,
+        "maximum_change_index": {
+          "i": 179,
+          "j": 88,
+          "k": 17
+        }
+      },
+      {
+        "changed_cells": 132,
+        "field": "QS",
+        "first_changed": {
+          "baseline": 1.6883650510654546e-12,
+          "index": {
+            "i": 188,
+            "j": 78,
+            "k": 24
+          },
+          "qni_driver": 1.6883458606870017e-12
+        },
+        "maximum_absolute_change": 7.275957614183426e-12,
+        "maximum_change_index": {
+          "i": 211,
+          "j": 106,
+          "k": 17
+        }
+      },
+      {
+        "changed_cells": 97,
+        "field": "NN",
+        "first_changed": {
+          "baseline": 1385086.625,
+          "index": {
+            "i": 222,
+            "j": 21,
+            "k": 8
+          },
+          "qni_driver": 1385083.125
+        },
+        "maximum_absolute_change": 512.0,
+        "maximum_change_index": {
+          "i": 177,
+          "j": 87,
+          "k": 2
+        }
+      },
+      {
+        "changed_cells": 1675415,
+        "field": "NC",
+        "first_changed": {
+          "baseline": 90146.109375,
+          "index": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qni_driver": 91102.921875
+        },
+        "maximum_absolute_change": 7206400.0,
+        "maximum_change_index": {
+          "i": 208,
+          "j": 84,
+          "k": 21
+        }
+      },
+      {
+        "changed_cells": 966757,
+        "field": "NI",
+        "first_changed": {
+          "baseline": 0.0,
+          "index": {
+            "i": 104,
+            "j": 2,
+            "k": 1
+          },
+          "qni_driver": 3.8173049035872155e-36
+        },
+        "maximum_absolute_change": 11499.203125,
+        "maximum_change_index": {
+          "i": 211,
+          "j": 233,
+          "k": 18
+        }
+      },
+      {
+        "changed_cells": 55,
+        "field": "NR",
+        "first_changed": {
+          "baseline": 11.211414337158203,
+          "index": {
+            "i": 188,
+            "j": 79,
+            "k": 17
+          },
+          "qni_driver": 11.211413383483887
+        },
+        "maximum_absolute_change": 0.000244140625,
+        "maximum_change_index": {
+          "i": 190,
+          "j": 82,
+          "k": 14
+        }
+      }
+    ],
+    "headers_match": true
+  },
+  "common_audit_O0_O2_identical": true,
+  "limits": [
+    "Partialhost research build with retained host objects; not a fresh full-physics build.",
+    "No completed timestep, post-call trace, water closure, energy closure, or physical validation.",
+    "Common audit is an input-state classification; the model stopped earlier in the NI unit adapter.",
+    "Geographic latitude/global-j mapping remains unclaimed."
+  ],
+  "ni_conversion_replay": {
+    "durable_replay_artifacts": "docs/evidence/pr74_common_moment_audit_20261008/ni_conversion_probe/",
+    "expanded_command_manifest_sha256": "7a36dbfa1d7b6f326373acd9b79a7ce15a9d5ddcec3f7a3456338020ce2e0e50",
+    "first_source_order_underflow_candidate": {
+      "field": "NI",
+      "gradual_internal_number_per_m3": 1.041735647987705e-38,
+      "index": {
+        "i": 211,
+        "j": 2,
+        "k": 15
+      },
+      "preceding_NC_internal_number_per_m3": 1.497663914376871e-22,
+      "public_N_number_per_kg_dry_air": 1.356338643876034e-38,
+      "rho_d_kg_m3": 0.7680497765541077
+    },
+    "native_link_flag": "Both final QNI O0/O2 link argv in the durable driver receipt include -ftz; QNI link argv hashes are recorded there.",
+    "native_runtime_mode_attribution": "The final QNI O0/O2 link commands explicitly include -ftz and the exact source helper with -ftz returns zero/invalid. Runtime MXCSR was not directly observed, so processor-state execution remains inferred from the link configuration.",
+    "receipt_path": "docs/evidence/pr74_common_moment_audit_20261008/ni_conversion_probe.json",
+    "receipt_sha256": "559003a56e6248ea11ffed3d332f01a6117a267f87d75877c959450584b82339",
+    "source_helper_exactly_matches_receipt_bound_PR73_source": true,
+    "strict_pinned_O0_O2_result": "nonzero subnormal internal NI; VALID=T",
+    "with_native_link_ftz_O0_O2_result": "internal NI rounds to zero; VALID=F"
+  },
+  "ordering": {
+    "actual_native_stop": "NI specific-to-volume input adapter before common paired-state preflight. Both final QNI profile link argv include -ftz; the exact source helper reproduces zero/invalid under that setting. Runtime MXCSR was not directly captured.",
+    "common_audit_first_violation": "Hypothetical earliest common paired-state predicate from the captured input: ice moment_only at (104,2,1), QI=0 and public NI=3.8173049035872155e-36. The observed native stop occurs earlier in the NI converter at (211,2,15) under the inferred FTZ runtime mode."
+  },
+  "qni_driver": {
+    "O0_O2_geometry_identical": true,
+    "O0_O2_pretrace_identical": true,
+    "driver_contract": "QNC and QNI enabled; routine returned; one QNI tendency added per each of 39 levels; DRIVER_BRANCH_COMPLETE recorded.",
+    "driver_records_O0": {
+      "ADD": 39,
+      "CALL": 1,
+      "DRIVER_BRANCH_COMPLETE": 1,
+      "STATE": 39
+    },
+    "evidence_path": "docs/evidence/pr74_shinhong_qni_driver_20261008.json",
+    "evidence_sha256": "d59066b8277c2fb86caa1cf18ae4bd8717293fc097466cf03e7304920e67c7dd",
+    "profiles": {
+      "O0": {
+        "actual_link": {
+          "archive_sha256": "3ddba2be0e657b3e5717f867d81805b73e5a15c3583bcbdcfc06de46802a6083",
+          "argv": [
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+            "-o",
+            "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O0/wrf.exe",
+            "-O3",
+            "-ip",
+            "-fp-model",
+            "precise",
+            "-w",
+            "-ftz",
+            "-align",
+            "all",
+            "-fno-alias",
+            "-FR",
+            "-convert",
+            "big_endian",
+            "-ip",
+            "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+            "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+            "wrf.o",
+            "../main/module_wrf_top.o",
+            "libwrflib_pr65.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/fftpack/fftpack5/libfftpack.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib1/libio_grib1.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib_share/libio_grib_share.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_int/libwrfio_int.a",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/esmf_time_f90",
+            "-lesmf_time",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/RSL_LITE/librsl_lite.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/module_internal_header_util.o",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/pack_utils.o",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_netcdf",
+            "-lwrfio_nf",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-lnetcdff",
+            "-lnetcdf",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-lnetcdf",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-lnetcdff",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+            "-lnetcdf",
+            "-lnetcdf",
+            "-lm"
+          ],
+          "argv_sha256": "751b7e0a27ee7cb430220dfbc9a67b829befdc31ae429919bc79281ab7843f83",
+          "executable_sha256": "e335af7d2ac03901fec445d3f4c5878df3595e8211eebf36dd92f73978138ca6",
+          "ftz_enabled": true,
+          "link_driver": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+          "link_driver_sha256": "9d8235d45ca2b09b5c6ffd1ba0b12cb728252aa1577ea80a240c6a2f5b69b0fb",
+          "link_log_path": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O0/build/link/main/pr74_link.log",
+          "link_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "driver_trace_path": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O0/run/pr74_qni_driver.raw",
+        "driver_trace_sha256": "a208b817d9061b44eeeb0ba25b46ed7296a68d801033dc6dd14d5c2180b03d44",
+        "geometry_path": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O0/run/pr63_geometry.raw",
+        "geometry_sha256": "766e18ab4caa89bc4e71fa9e589ce43268ddd3974c153276138bf4ea69a7c98e",
+        "input_count": 100,
+        "input_hashes_unchanged": true,
+        "native_fatal": "KDM6 invalid NI number basis input",
+        "pretrace_path": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O0/run/kdm6_first_call_pre.raw",
+        "pretrace_sha256": "a6d5667850f5712982d5980b0292ee876b21cab6010efd18ade75cce5dfa1eaa",
+        "rsl_error_sha256": "0a5b55a70758de468f98347040cb973a14fac7055229bb6579e8728c906f8429",
+        "run_exit_status": 128,
+        "work_dir": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O0"
+      },
+      "O2": {
+        "actual_link": {
+          "archive_sha256": "a3389e823a2bd10543af217d901db4c369c51797e37439117d1da32a845c9dbe",
+          "argv": [
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+            "-o",
+            "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O2/wrf.exe",
+            "-O3",
+            "-ip",
+            "-fp-model",
+            "precise",
+            "-w",
+            "-ftz",
+            "-align",
+            "all",
+            "-fno-alias",
+            "-FR",
+            "-convert",
+            "big_endian",
+            "-ip",
+            "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+            "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+            "wrf.o",
+            "../main/module_wrf_top.o",
+            "libwrflib_pr65.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/fftpack/fftpack5/libfftpack.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib1/libio_grib1.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib_share/libio_grib_share.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_int/libwrfio_int.a",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/esmf_time_f90",
+            "-lesmf_time",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/RSL_LITE/librsl_lite.a",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/module_internal_header_util.o",
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/pack_utils.o",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_netcdf",
+            "-lwrfio_nf",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-lnetcdff",
+            "-lnetcdf",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-lnetcdf",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-lnetcdff",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+            "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+            "-lnetcdf",
+            "-lnetcdf",
+            "-lm"
+          ],
+          "argv_sha256": "5084be49e08c1e225e033ea46b1aa3bba49deb1b09288352b343841b0e9603d6",
+          "executable_sha256": "8ac96abd22ad5becdb596e5b408ec7658b3586c41783b57c9cfd3ca17b7ac043",
+          "ftz_enabled": true,
+          "link_driver": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+          "link_driver_sha256": "9d8235d45ca2b09b5c6ffd1ba0b12cb728252aa1577ea80a240c6a2f5b69b0fb",
+          "link_log_path": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O2/build/link/main/pr74_link.log",
+          "link_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "driver_trace_path": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O2/run/pr74_qni_driver.raw",
+        "driver_trace_sha256": "a208b817d9061b44eeeb0ba25b46ed7296a68d801033dc6dd14d5c2180b03d44",
+        "geometry_path": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O2/run/pr63_geometry.raw",
+        "geometry_sha256": "766e18ab4caa89bc4e71fa9e589ce43268ddd3974c153276138bf4ea69a7c98e",
+        "input_count": 100,
+        "input_hashes_unchanged": true,
+        "native_fatal": "KDM6 invalid NI number basis input",
+        "pretrace_path": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O2/run/kdm6_first_call_pre.raw",
+        "pretrace_sha256": "a6d5667850f5712982d5980b0292ee876b21cab6010efd18ade75cce5dfa1eaa",
+        "rsl_error_sha256": "70cba3e53b26a7d2fd3762bc72c850676e5a6074a4e4ac7d6cdc25beb89186d5",
+        "run_exit_status": 128,
+        "work_dir": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O2"
+      }
+    },
+    "runner_receipt_path": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/receipt.json",
+    "runner_receipt_sha256": "d41f5e9dc0873b7ca83766bd0ec155a32f9dba0fc33f456b0998c6f971226b1f"
+  },
+  "same_call_common_audit": {
+    "first_violation": {
+      "i": 104,
+      "internal_moment": 4.203879250016142e-36,
+      "j": 2,
+      "k": 1,
+      "public_moment": 3.8173049035872155e-36,
+      "q_kg_kg": 0.0,
+      "species": "ice",
+      "state": "moment_only"
+    },
+    "geometry": {
+      "dry_mass_weight_source_equation": "dp_k*DX*DY/(MSFTX*MSFTY*g)",
+      "dry_mass_weight_total_kg": 1.6204030034989614e+16,
+      "path": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O0/run/pr63_geometry.raw",
+      "same_call_bounds_and_dt_verified": true,
+      "sha256": "766e18ab4caa89bc4e71fa9e589ce43268ddd3974c153276138bf4ea69a7c98e"
+    },
+    "global_counts": {
+      "absent": 7066897,
+      "active": 2742696,
+      "invalid": 23494,
+      "mass_only": 740,
+      "moment_only": 299933,
+      "negative": 23494,
+      "nonfinite": 0
+    },
+    "global_max_violation": {
+      "largest_mass_only_q_kg_kg": {
+        "location": {
+          "i": 2,
+          "j": 260,
+          "k": 21
+        },
+        "species": "cloud",
+        "value": 2.3206907506789776e-09
+      },
+      "largest_moment_only_internal_moment": {
+        "location": {
+          "i": 154,
+          "j": 170,
+          "k": 18
+        },
+        "species": "ice",
+        "value": 46.974788665771484
+      },
+      "most_negative_internal_moment": null,
+      "most_negative_q_kg_kg": {
+        "location": {
+          "i": 200,
+          "j": 207,
+          "k": 20
+        },
+        "species": "cloud",
+        "value": -4.586014483720646e-07
+      }
+    },
+    "global_same_carrier_mass_weighted_scale": {
+      "mass_only": {
+        "absolute_q_dry_air_mass_kg": 202.79141370121502,
+        "cells": 740
+      },
+      "moment_only": {
+        "absolute_q_dry_air_mass_kg": 0.0,
+        "cells": 299933
+      },
+      "negative": {
+        "absolute_q_dry_air_mass_kg": 2124452.419854706,
+        "cells": 23494
+      },
+      "nonfinite": {
+        "absolute_q_dry_air_mass_kg": 0.0,
+        "cells": 0
+      }
+    },
+    "scope": {
+      "bounds": {
+        "ide": 235,
+        "ids": 1,
+        "ime": 240,
+        "ims": -4,
+        "ite": 233,
+        "its": 2,
+        "jde": 283,
+        "jds": 1,
+        "jme": 288,
+        "jms": -4,
+        "jte": 281,
+        "jts": 2,
+        "kde": 40,
+        "kds": 1,
+        "kme": 40,
+        "kms": 1,
+        "kte": 39,
+        "kts": 1
+      },
+      "issue_counts_are_independent_predicates": true,
+      "positive_carrier_zero_equivalence": "exact: absent iff q == 0 and internal moment == 0; active iff both > 0",
+      "shape_jki": [
+        280,
+        39,
+        232
+      ]
+    },
+    "species": [
+      {
+        "counts": {
+          "absent": 2169849,
+          "active": 363553,
+          "invalid": 0,
+          "mass_only": 35,
+          "moment_only": 3,
+          "negative": 0,
+          "nonfinite": 0
+        },
+        "issues": {
+          "mass_only": {
+            "count": 35,
+            "first": {
+              "i": 99,
+              "j": 2,
+              "k": 11
+            }
+          },
+          "moment_only": {
+            "count": 3,
+            "first": {
+              "i": 103,
+              "j": 2,
+              "k": 19
+            }
+          },
+          "negative": {
+            "count": 0,
+            "first": null
+          },
+          "nonfinite": {
+            "count": 0,
+            "first": null
+          }
+        },
+        "max_violation": {
+          "largest_mass_only_q_kg_kg": 8.649002347649315e-11,
+          "largest_moment_only_internal_moment": 2.5823121418966366e-09,
+          "locations": {
+            "largest_mass_only_q": {
+              "i": 2,
+              "j": 209,
+              "k": 15
+            },
+            "largest_moment_only_internal_moment": {
+              "i": 103,
+              "j": 2,
+              "k": 19
+            },
+            "most_negative_internal_moment": null,
+            "most_negative_q": null
+          },
+          "most_negative_internal_moment": null,
+          "most_negative_q_kg_kg": null
+        },
+        "same_carrier_mass_weighted_scale": {
+          "mass_only": {
+            "absolute_q_dry_air_mass_kg": 2.2202022486761472,
+            "cells": 35
+          },
+          "moment_only": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 3
+          },
+          "negative": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 0
+          },
+          "nonfinite": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 0
+          }
+        },
+        "species": "rain",
+        "values": {
+          "internal_moment": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 30410.11328125,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 363556,
+            "zero": 2169884
+          },
+          "internal_moment_basis": "number_per_m3",
+          "public_moment": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 37047.7734375,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 363556,
+            "zero": 2169884
+          },
+          "public_moment_basis": "number_per_kg_dry_air",
+          "public_q_kg_kg": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 0.0023866286501288414,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 363588,
+            "zero": 2169852
+          }
+        }
+      },
+      {
+        "counts": {
+          "absent": 840306,
+          "active": 1528228,
+          "invalid": 23494,
+          "mass_only": 125,
+          "moment_only": 141287,
+          "negative": 23494,
+          "nonfinite": 0
+        },
+        "issues": {
+          "mass_only": {
+            "count": 125,
+            "first": {
+              "i": 143,
+              "j": 2,
+              "k": 1
+            }
+          },
+          "moment_only": {
+            "count": 141287,
+            "first": {
+              "i": 206,
+              "j": 2,
+              "k": 15
+            }
+          },
+          "negative": {
+            "count": 23494,
+            "first": {
+              "i": 185,
+              "j": 2,
+              "k": 11
+            }
+          },
+          "nonfinite": {
+            "count": 0,
+            "first": null
+          }
+        },
+        "max_violation": {
+          "largest_mass_only_q_kg_kg": 2.3206907506789776e-09,
+          "largest_moment_only_internal_moment": 12.012574195861816,
+          "locations": {
+            "largest_mass_only_q": {
+              "i": 2,
+              "j": 260,
+              "k": 21
+            },
+            "largest_moment_only_internal_moment": {
+              "i": 186,
+              "j": 193,
+              "k": 19
+            },
+            "most_negative_internal_moment": null,
+            "most_negative_q": {
+              "i": 200,
+              "j": 207,
+              "k": 20
+            }
+          },
+          "most_negative_internal_moment": null,
+          "most_negative_q_kg_kg": -4.586014483720646e-07
+        },
+        "same_carrier_mass_weighted_scale": {
+          "mass_only": {
+            "absolute_q_dry_air_mass_kg": 187.3471239084438,
+            "cells": 125
+          },
+          "moment_only": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 141287
+          },
+          "negative": {
+            "absolute_q_dry_air_mass_kg": 2124452.419854706,
+            "cells": 23494
+          },
+          "nonfinite": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 0
+          }
+        },
+        "species": "cloud",
+        "values": {
+          "internal_moment": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 733350912.0,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 1693009,
+            "zero": 840431
+          },
+          "internal_moment_basis": "number_per_m3",
+          "public_moment": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 1596812032.0,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 1693009,
+            "zero": 840431
+          },
+          "public_moment_basis": "number_per_kg_dry_air",
+          "public_q_kg_kg": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 0.006867829244583845,
+            "min": -4.586014483720646e-07,
+            "negative": 23494,
+            "nonfinite": 0,
+            "positive": 1528353,
+            "zero": 981593
+          }
+        }
+      },
+      {
+        "counts": {
+          "absent": 1530805,
+          "active": 843412,
+          "invalid": 0,
+          "mass_only": 580,
+          "moment_only": 158643,
+          "negative": 0,
+          "nonfinite": 0
+        },
+        "issues": {
+          "mass_only": {
+            "count": 580,
+            "first": {
+              "i": 209,
+              "j": 2,
+              "k": 22
+            }
+          },
+          "moment_only": {
+            "count": 158643,
+            "first": {
+              "i": 104,
+              "j": 2,
+              "k": 1
+            }
+          },
+          "negative": {
+            "count": 0,
+            "first": null
+          },
+          "nonfinite": {
+            "count": 0,
+            "first": null
+          }
+        },
+        "max_violation": {
+          "largest_mass_only_q_kg_kg": 1.9137880169495247e-10,
+          "largest_moment_only_internal_moment": 46.974788665771484,
+          "locations": {
+            "largest_mass_only_q": {
+              "i": 2,
+              "j": 177,
+              "k": 18
+            },
+            "largest_moment_only_internal_moment": {
+              "i": 154,
+              "j": 170,
+              "k": 18
+            },
+            "most_negative_internal_moment": null,
+            "most_negative_q": null
+          },
+          "most_negative_internal_moment": null,
+          "most_negative_q_kg_kg": null
+        },
+        "same_carrier_mass_weighted_scale": {
+          "mass_only": {
+            "absolute_q_dry_air_mass_kg": 13.224087544095088,
+            "cells": 580
+          },
+          "moment_only": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 158643
+          },
+          "negative": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 0
+          },
+          "nonfinite": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 0
+          }
+        },
+        "species": "ice",
+        "values": {
+          "internal_moment": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 1044323.625,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 1002055,
+            "zero": 1531385
+          },
+          "internal_moment_basis": "number_per_m3",
+          "public_moment": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 3289293.25,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 1002055,
+            "zero": 1531385
+          },
+          "public_moment_basis": "number_per_kg_dry_air",
+          "public_q_kg_kg": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 0.010083651170134544,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 843992,
+            "zero": 1689448
+          }
+        }
+      },
+      {
+        "counts": {
+          "absent": 2525937,
+          "active": 7503,
+          "invalid": 0,
+          "mass_only": 0,
+          "moment_only": 0,
+          "negative": 0,
+          "nonfinite": 0
+        },
+        "issues": {
+          "mass_only": {
+            "count": 0,
+            "first": null
+          },
+          "moment_only": {
+            "count": 0,
+            "first": null
+          },
+          "negative": {
+            "count": 0,
+            "first": null
+          },
+          "nonfinite": {
+            "count": 0,
+            "first": null
+          }
+        },
+        "max_violation": {
+          "largest_mass_only_q_kg_kg": null,
+          "largest_moment_only_internal_moment": null,
+          "locations": {
+            "largest_mass_only_q": null,
+            "largest_moment_only_internal_moment": null,
+            "most_negative_internal_moment": null,
+            "most_negative_q": null
+          },
+          "most_negative_internal_moment": null,
+          "most_negative_q_kg_kg": null
+        },
+        "same_carrier_mass_weighted_scale": {
+          "mass_only": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 0
+          },
+          "moment_only": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 0
+          },
+          "negative": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 0
+          },
+          "nonfinite": {
+            "absolute_q_dry_air_mass_kg": 0.0,
+            "cells": 0
+          }
+        },
+        "species": "graupel",
+        "values": {
+          "internal_moment": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 2.358732308493927e-05,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 7503,
+            "zero": 2525937
+          },
+          "internal_moment_basis": "specific_volume_m3_kg",
+          "public_moment": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 2.358732308493927e-05,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 7503,
+            "zero": 2525937
+          },
+          "public_moment_basis": "specific_volume_m3_kg",
+          "public_q_kg_kg": {
+            "count": 2533440,
+            "finite": 2533440,
+            "max": 0.009434928186237812,
+            "min": 0.0,
+            "negative": 0,
+            "nonfinite": 0,
+            "positive": 7503,
+            "zero": 2525937
+          }
+        }
+      }
+    ],
+    "trace": {
+      "dt_s": 20.0,
+      "path": "/var/tmp/pr74_shinhong_qni_driver.OBDivO/O0/run/kdm6_first_call_pre.raw",
+      "sha256": "a6d5667850f5712982d5980b0292ee876b21cab6010efd18ade75cce5dfa1eaa",
+      "stage": 1,
+      "timestep": 1
+    }
+  },
+  "same_call_geometry_comparison": {
+    "baseline_geometry_sha256": "5a12d2a0549523c57285d35e60905488ca0315fd460123093ae4d57ec7f8ff0c",
+    "differing_arrays": {
+      "mu2": {
+        "changed_values": 100,
+        "max_abs_difference": 0.000396728515625
+      }
+    },
+    "differing_scalar_headers": {},
+    "new_trace_geometry_bound_and_dt_match": true,
+    "qni_geometry_sha256": "766e18ab4caa89bc4e71fa9e589ce43268ddd3974c153276138bf4ea69a7c98e"
+  },
+  "schema": "pr74_qni_actual_driver_common_moment_comparison_v1",
+  "status": "AUDITED_PRETRACE_NATIVE_FATAL_BEFORE_COMMON_PREFLIGHT"
+}

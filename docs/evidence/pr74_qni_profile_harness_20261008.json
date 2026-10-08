@@ -1,0 +1,34 @@
+{
+  "assertion": "Independent QNI donor profile with QI/NI mean masses 0.8e-9 and 1.2e-9 kg, plus simultaneous NC channel; O0/O2 pass same operator tendency and driver-condition replay checks.",
+  "classification": "secondary actual Shinhong routine fixture with independent QI/QNI and NC+QNI channels; not host driver/runtime",
+  "compiler": {
+    "flags_source": "tests/intel_toolchain.sh pinned profile",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "fixture": "tests/test_pr74_shinhong_qni_driver.f90",
+  "fixture_sha256": "f0b18396722adf4d9ad7430c19ae3eb674ab6391e123854467d6fc4826ca4246",
+  "profiles": {
+    "O0": {
+      "build_log_sha256": "4dd1dd5e75ca4f133500d6ed79e92cf6135ac6d3c840dfdd67ce27713fffaed2",
+      "executable_sha256": "d27d9c8b91f8c566898b48afe2ab10f8b884775fde7fb91dd5739b3ec8a7195b",
+      "object_sha256": "661557574c564055021e7becd5c83c213a742f65ce05f83fc51b148602cd7922",
+      "observed": "PR74_SHINHONG_QNI_PROFILE_HARNESS_PASS   1.7552277853383202E-08   2.9140365600585938E+01   6.6509220353339060E-09   5.6558794975280762E+00",
+      "run_log_sha256": "940c7fbff434b58294bccbb248912191f9bb7a6a09e2978cc895784fd19cef5c"
+    },
+    "O2": {
+      "build_log_sha256": "c89e89681b7693c40a6c4397364dda3f7ba6247abc94a76658637e94bacb9175",
+      "executable_sha256": "954ae82d5369912dd1d3008b699383c97f4daa2ee8a820af90453b71131f747d",
+      "object_sha256": "3521be2ac500039e74c9990d1613c94448618f2ac700d18cb3c15b1be9bbe037",
+      "observed": "PR74_SHINHONG_QNI_PROFILE_HARNESS_PASS   1.7552277853383202E-08   2.9140365600585938E+01   6.6509220353339060E-09   5.6558794975280762E+00",
+      "run_log_sha256": "940c7fbff434b58294bccbb248912191f9bb7a6a09e2978cc895784fd19cef5c"
+    }
+  },
+  "runner": "tests/run_pr74_qni_profile_harness.sh",
+  "runner_sha256": "7397c1cf3dac88fc26ac19ae07a7a48d1387a6b7f0075a83363b605c969d059e",
+  "schema": "pr74_independent_qni_profile_harness_v1",
+  "source": "/var/tmp/pr73_pbl_research/source_after/module_bl_shinhong_pr65.F",
+  "source_sha256": "5fbe821bb3b82e406fee459e5b2d745156ea1a030b5f0ecd2c7191025f296553",
+  "toolchain_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "work_dir": "/var/tmp/pr74_qni_profile_harness.3zu7iq"
+}

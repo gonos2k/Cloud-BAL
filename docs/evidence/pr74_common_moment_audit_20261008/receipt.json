@@ -1,0 +1,565 @@
+{
+  "first_violation": {
+    "i": 133,
+    "internal_moment": 0.0,
+    "j": 2,
+    "k": 1,
+    "public_moment": 0.0,
+    "q_kg_kg": 3.5308575789291633e-35,
+    "species": "ice",
+    "state": "mass_only"
+  },
+  "geometry": {
+    "dry_mass_weight_source_equation": "dp_k*DX*DY/(MSFTX*MSFTY*g)",
+    "dry_mass_weight_total_kg": 1.6204030034989606e+16,
+    "path": "/var/tmp/pr73_native_first_violation.x3bvfn/run/pr63_geometry.raw",
+    "same_call_bounds_and_dt_verified": true,
+    "sha256": "5a12d2a0549523c57285d35e60905488ca0315fd460123093ae4d57ec7f8ff0c"
+  },
+  "global_counts": {
+    "absent": 7366338,
+    "active": 1992086,
+    "invalid": 23494,
+    "mass_only": 751350,
+    "moment_only": 492,
+    "negative": 23494,
+    "nonfinite": 0
+  },
+  "global_max_violation": {
+    "largest_mass_only_q_kg_kg": {
+      "location": {
+        "i": 197,
+        "j": 71,
+        "k": 24
+      },
+      "species": "ice",
+      "value": 0.008467670530080795
+    },
+    "largest_moment_only_internal_moment": {
+      "location": {
+        "i": 154,
+        "j": 170,
+        "k": 18
+      },
+      "species": "ice",
+      "value": 47.100250244140625
+    },
+    "most_negative_internal_moment": null,
+    "most_negative_q_kg_kg": {
+      "location": {
+        "i": 200,
+        "j": 207,
+        "k": 20
+      },
+      "species": "cloud",
+      "value": -4.586014483720646e-07
+    }
+  },
+  "global_same_carrier_mass_weighted_scale": {
+    "mass_only": {
+      "absolute_q_dry_air_mass_kg": 1729070776.4574912,
+      "cells": 751350
+    },
+    "moment_only": {
+      "absolute_q_dry_air_mass_kg": 0.0,
+      "cells": 492
+    },
+    "negative": {
+      "absolute_q_dry_air_mass_kg": 2124452.4197621904,
+      "cells": 23494
+    },
+    "nonfinite": {
+      "absolute_q_dry_air_mass_kg": 0.0,
+      "cells": 0
+    }
+  },
+  "native_first_violation_line": "KDM6_FIRST_VIOLATION|stage=KDM62D_INITIAL_PREFLIGHT|species=ice|state=mass_only|q=3.5308575789291633E-035|q_unit=kg kg-1|n=0.0000000000000000E+000|n_unit=m-3|b=null|b_unit=m3 kg-1|i=133|call_lat_index=2|k=1|scope_i=2:233|scope_k=1:39|index_origin=KDM62D_dummy_bounds|j_global_mapping=unclaimed",
+  "native_receipt": "docs/evidence/pr73_native_first_violation_20261008_attempt2/native_receipt.json",
+  "native_receipt_sha256": "5be57e83f5ebe8e7124e4f9d5bb7ab527bdf4ae495ff19a9b1bd4e532a10a355",
+  "schema": "pr74_common_moment_audit_v1",
+  "scope": {
+    "bounds": {
+      "ide": 235,
+      "ids": 1,
+      "ime": 240,
+      "ims": -4,
+      "ite": 233,
+      "its": 2,
+      "jde": 283,
+      "jds": 1,
+      "jme": 288,
+      "jms": -4,
+      "jte": 281,
+      "jts": 2,
+      "kde": 40,
+      "kds": 1,
+      "kme": 40,
+      "kms": 1,
+      "kte": 39,
+      "kts": 1
+    },
+    "issue_counts_are_independent_predicates": true,
+    "positive_carrier_zero_equivalence": "exact: absent iff q == 0 and internal moment == 0; active iff both > 0",
+    "shape_jki": [
+      280,
+      39,
+      232
+    ]
+  },
+  "scope_limits": [
+    "Trace records public Q and moments at KDM6 entry; it does not capture post-call state.",
+    "NC/NI/NR are public specific number per kg dry air; internal volume number is reproduced from the source dry-density conversion.",
+    "BG is retained as specific volume; it is not re-labeled as public number concentration.",
+    "The hybrid dry-air mass is a same-call carrier scale, not a closed hydrometeor budget or physical validation.",
+    "Native run is a controlled first rejection on a retained partialhost research build."
+  ],
+  "source_identity": {
+    "instrumented_source_path": "docs/evidence/pr73_native_first_violation_20261008_attempt2/instrumented_source.F",
+    "instrumented_source_receipt_hash_verified": true,
+    "instrumented_source_sha256": "5b0cae169f37f9eb3cc5207419a87ae9e6bed5b0fec9c4a6c25473ef898df70e",
+    "native_status": "CAPTURED_CONTROLLED_FIRST_REJECTION",
+    "source_sha256": "1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819"
+  },
+  "species": [
+    {
+      "counts": {
+        "absent": 2169849,
+        "active": 363553,
+        "invalid": 0,
+        "mass_only": 35,
+        "moment_only": 3,
+        "negative": 0,
+        "nonfinite": 0
+      },
+      "issues": {
+        "mass_only": {
+          "count": 35,
+          "first": {
+            "i": 99,
+            "j": 2,
+            "k": 11
+          }
+        },
+        "moment_only": {
+          "count": 3,
+          "first": {
+            "i": 103,
+            "j": 2,
+            "k": 19
+          }
+        },
+        "negative": {
+          "count": 0,
+          "first": null
+        },
+        "nonfinite": {
+          "count": 0,
+          "first": null
+        }
+      },
+      "max_violation": {
+        "largest_mass_only_q_kg_kg": 8.649002347649315e-11,
+        "largest_moment_only_internal_moment": 2.5823121418966366e-09,
+        "locations": {
+          "largest_mass_only_q": {
+            "i": 2,
+            "j": 209,
+            "k": 15
+          },
+          "largest_moment_only_internal_moment": {
+            "i": 103,
+            "j": 2,
+            "k": 19
+          },
+          "most_negative_internal_moment": null,
+          "most_negative_q": null
+        },
+        "most_negative_internal_moment": null,
+        "most_negative_q_kg_kg": null
+      },
+      "same_carrier_mass_weighted_scale": {
+        "mass_only": {
+          "absolute_q_dry_air_mass_kg": 2.2202022486761472,
+          "cells": 35
+        },
+        "moment_only": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 3
+        },
+        "negative": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 0
+        },
+        "nonfinite": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 0
+        }
+      },
+      "species": "rain",
+      "values": {
+        "internal_moment": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 30410.11328125,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 363556,
+          "zero": 2169884
+        },
+        "internal_moment_basis": "number_per_m3",
+        "public_moment": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 37047.7734375,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 363556,
+          "zero": 2169884
+        },
+        "public_moment_basis": "number_per_kg_dry_air",
+        "public_q_kg_kg": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 0.0023866286501288414,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 363588,
+          "zero": 2169852
+        }
+      }
+    },
+    {
+      "counts": {
+        "absent": 981585,
+        "active": 1200809,
+        "invalid": 23494,
+        "mass_only": 327544,
+        "moment_only": 8,
+        "negative": 23494,
+        "nonfinite": 0
+      },
+      "issues": {
+        "mass_only": {
+          "count": 327544,
+          "first": {
+            "i": 143,
+            "j": 2,
+            "k": 1
+          }
+        },
+        "moment_only": {
+          "count": 8,
+          "first": {
+            "i": 205,
+            "j": 126,
+            "k": 1
+          }
+        },
+        "negative": {
+          "count": 23494,
+          "first": {
+            "i": 185,
+            "j": 2,
+            "k": 11
+          }
+        },
+        "nonfinite": {
+          "count": 0,
+          "first": null
+        }
+      },
+      "max_violation": {
+        "largest_mass_only_q_kg_kg": 1.1335396266076714e-06,
+        "largest_moment_only_internal_moment": 11.9518461227417,
+        "locations": {
+          "largest_mass_only_q": {
+            "i": 182,
+            "j": 87,
+            "k": 1
+          },
+          "largest_moment_only_internal_moment": {
+            "i": 186,
+            "j": 193,
+            "k": 19
+          },
+          "most_negative_internal_moment": null,
+          "most_negative_q": {
+            "i": 200,
+            "j": 207,
+            "k": 20
+          }
+        },
+        "most_negative_internal_moment": null,
+        "most_negative_q_kg_kg": -4.586014483720646e-07
+      },
+      "same_carrier_mass_weighted_scale": {
+        "mass_only": {
+          "absolute_q_dry_air_mass_kg": 321358.6028615182,
+          "cells": 327544
+        },
+        "moment_only": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 8
+        },
+        "negative": {
+          "absolute_q_dry_air_mass_kg": 2124452.4197621904,
+          "cells": 23494
+        },
+        "nonfinite": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 0
+        }
+      },
+      "species": "cloud",
+      "values": {
+        "internal_moment": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 733333056.0,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 1206367,
+          "zero": 1327073
+        },
+        "internal_moment_basis": "number_per_m3",
+        "public_moment": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 1596813952.0,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 1206367,
+          "zero": 1327073
+        },
+        "public_moment_basis": "number_per_kg_dry_air",
+        "public_q_kg_kg": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 0.006867829244583845,
+          "min": -4.586014483720646e-07,
+          "negative": 23494,
+          "nonfinite": 0,
+          "positive": 1528353,
+          "zero": 981593
+        }
+      }
+    },
+    {
+      "counts": {
+        "absent": 1688967,
+        "active": 420221,
+        "invalid": 0,
+        "mass_only": 423771,
+        "moment_only": 481,
+        "negative": 0,
+        "nonfinite": 0
+      },
+      "issues": {
+        "mass_only": {
+          "count": 423771,
+          "first": {
+            "i": 133,
+            "j": 2,
+            "k": 1
+          }
+        },
+        "moment_only": {
+          "count": 481,
+          "first": {
+            "i": 102,
+            "j": 2,
+            "k": 15
+          }
+        },
+        "negative": {
+          "count": 0,
+          "first": null
+        },
+        "nonfinite": {
+          "count": 0,
+          "first": null
+        }
+      },
+      "max_violation": {
+        "largest_mass_only_q_kg_kg": 0.008467670530080795,
+        "largest_moment_only_internal_moment": 47.100250244140625,
+        "locations": {
+          "largest_mass_only_q": {
+            "i": 197,
+            "j": 71,
+            "k": 24
+          },
+          "largest_moment_only_internal_moment": {
+            "i": 154,
+            "j": 170,
+            "k": 18
+          },
+          "most_negative_internal_moment": null,
+          "most_negative_q": null
+        },
+        "most_negative_internal_moment": null,
+        "most_negative_q_kg_kg": null
+      },
+      "same_carrier_mass_weighted_scale": {
+        "mass_only": {
+          "absolute_q_dry_air_mass_kg": 1728749415.6344273,
+          "cells": 423771
+        },
+        "moment_only": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 481
+        },
+        "negative": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 0
+        },
+        "nonfinite": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 0
+        }
+      },
+      "species": "ice",
+      "values": {
+        "internal_moment": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 1044334.3125,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 420702,
+          "zero": 2112738
+        },
+        "internal_moment_basis": "number_per_m3",
+        "public_moment": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 3289295.0,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 420702,
+          "zero": 2112738
+        },
+        "public_moment_basis": "number_per_kg_dry_air",
+        "public_q_kg_kg": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 0.010083651170134544,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 843992,
+          "zero": 1689448
+        }
+      }
+    },
+    {
+      "counts": {
+        "absent": 2525937,
+        "active": 7503,
+        "invalid": 0,
+        "mass_only": 0,
+        "moment_only": 0,
+        "negative": 0,
+        "nonfinite": 0
+      },
+      "issues": {
+        "mass_only": {
+          "count": 0,
+          "first": null
+        },
+        "moment_only": {
+          "count": 0,
+          "first": null
+        },
+        "negative": {
+          "count": 0,
+          "first": null
+        },
+        "nonfinite": {
+          "count": 0,
+          "first": null
+        }
+      },
+      "max_violation": {
+        "largest_mass_only_q_kg_kg": null,
+        "largest_moment_only_internal_moment": null,
+        "locations": {
+          "largest_mass_only_q": null,
+          "largest_moment_only_internal_moment": null,
+          "most_negative_internal_moment": null,
+          "most_negative_q": null
+        },
+        "most_negative_internal_moment": null,
+        "most_negative_q_kg_kg": null
+      },
+      "same_carrier_mass_weighted_scale": {
+        "mass_only": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 0
+        },
+        "moment_only": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 0
+        },
+        "negative": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 0
+        },
+        "nonfinite": {
+          "absolute_q_dry_air_mass_kg": 0.0,
+          "cells": 0
+        }
+      },
+      "species": "graupel",
+      "values": {
+        "internal_moment": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 2.358732308493927e-05,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 7503,
+          "zero": 2525937
+        },
+        "internal_moment_basis": "specific_volume_m3_kg",
+        "public_moment": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 2.358732308493927e-05,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 7503,
+          "zero": 2525937
+        },
+        "public_moment_basis": "specific_volume_m3_kg",
+        "public_q_kg_kg": {
+          "count": 2533440,
+          "finite": 2533440,
+          "max": 0.009434928186237812,
+          "min": 0.0,
+          "negative": 0,
+          "nonfinite": 0,
+          "positive": 7503,
+          "zero": 2525937
+        }
+      }
+    }
+  ],
+  "status": "AUDITED_SAME_CALL_TRACE",
+  "trace": {
+    "dt_s": 20.0,
+    "path": "/var/tmp/pr73_native_first_violation.x3bvfn/run/kdm6_first_call_pre.raw",
+    "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "stage": 1,
+    "timestep": 1
+  }
+}
