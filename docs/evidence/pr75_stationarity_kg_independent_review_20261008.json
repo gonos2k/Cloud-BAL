@@ -1,0 +1,80 @@
+{
+  "schema": "pr75_stationarity_kg_independent_review_v1",
+  "review_date": "2026-10-08",
+  "status": "PASS_SCOPED_NO_UNRESOLVED_KG_BLOCKER",
+  "review_scope": "Read-only independent review of the frozen PR75 Graphify/KG receipt, separate dated corpora snapshots, preservation evidence, and publication metadata.",
+  "frozen_state": {
+    "pull_request": "https://github.com/gonos2k/Cloud-BAL/pull/75",
+    "pr_state_at_review": "OPEN",
+    "base_commit": "0492d8eab2f2cc9841a9359ddafc664e22737ff0",
+    "head_commit": "978c2396e93b003002d2d6cb56dbabd01cbc3404",
+    "publication_metadata_sha256": "e432d1bf49d609999f914a451acbf6b21f2adb7ed66d533f85ce09447d577e1a"
+  },
+  "kg_receipt": {
+    "path": "docs/evidence/pr75_stationarity_kg_receipt_20261008.json",
+    "sha256": "9d0855677dbc41d889379b3c98666b66d8279d608bf094032097f7556b45b8bd",
+    "maintained_copy_byte_match": true,
+    "graphify_source_paths": 46,
+    "dated_snapshot_directory": "2026-10-08-pr75-stationarity",
+    "separate_corpora": {
+      "KLAPS50": {
+        "nodes": 34299,
+        "edges": 74154,
+        "delta_nodes": 57,
+        "delta_edges": 78,
+        "removed_ids": 0,
+        "graph_sha256": "259b3c5127c5df7de4608eb1204ad06a56aa4bdfa259cd965001407cadcbf586"
+      },
+      "Cloud-BAL": {
+        "nodes": 8466,
+        "edges": 15727,
+        "delta_nodes": 57,
+        "delta_edges": 77,
+        "removed_ids": 0,
+        "graph_sha256": "788f57ed9ce5162b87c44a173c9648cd529a585b882e082a358c39d01f1e2680"
+      }
+    },
+    "integrity": {
+      "both_corpora_report_zero_missing_or_dangling_endpoints": true,
+      "both_corpora_report_zero_exact_duplicate_edges": true,
+      "both_corpora_report_zero_self_loops": true,
+      "dated_graph_report_manifest_hashes_match_receipt": true,
+      "candidate_source_hashes_match_frozen_commit_for_all_46_paths": true
+    }
+  },
+  "preservation_review": {
+    "prior_immutable_artifacts_verified": 62,
+    "automatic_snapshot_backups_verified": 10,
+    "rollback_backups_verified": 17,
+    "protected_wiki_artifacts_verified": 13,
+    "derived_wiki_artifacts_verified": 5,
+    "report_mirrors_match": true,
+    "wiki_log_is_append_only": true,
+    "prior_receipt_sha256": "ab14eeb2aa44b98ebd0d64fa31916011ed82550d7abdaa28b273fdcf325898b0",
+    "aggregate_audit_failures": 0
+  },
+  "publication_binding": {
+    "all_eight_bound_receipt_hashes_match": true,
+    "kg_receipt_copy_hash_matches": true,
+    "source_head_matches_frozen_implementation_commit": true,
+    "direct_github_state_matches_recorded_metadata": true,
+    "post_freeze_source_diff": "Checklist metadata/document update only; no source, test, or runtime artifact change observed.",
+    "physical_approval": "FAIL_OPEN",
+    "native_candidate": "REJECTED"
+  },
+  "reviewer_checks": [
+    "Compared all 46 selected source paths against the frozen commit and receipt candidate hashes.",
+    "Independently recomputed graph counts and deltas from the maintained graph files and compared dated snapshot hashes.",
+    "Checked graph node/edge integrity for duplicate identifiers, absent endpoints, self loops, and duplicate undirected relation edges.",
+    "Compared preserved snapshot, rollback, wiki, and prior evidence hashes to their immutable backups.",
+    "Checked publication metadata receipt bindings and PR head/base/state against the recorded frozen state."
+  ],
+  "limitations": [
+    "KLAPS50 and Cloud-BAL are overlapping corpora and their counts are reported separately.",
+    "Graphify extraction is structural: Markdown headings only; semantic Markdown extraction was not performed; cross-file Fortran CALL extraction is partial.",
+    "External native WRF research trees were not extracted; only selected repository patch/evidence paths are represented.",
+    "Graph freshness and integrity establish navigation evidence only; they do not establish runtime or scientific validity.",
+    "No tests or runtime validation were rerun as part of this read-only KG review; source/runtime receipts remain separately scoped, with physical approval FAIL_OPEN and native candidate REJECTED."
+  ],
+  "unresolved_kg_findings": []
+}

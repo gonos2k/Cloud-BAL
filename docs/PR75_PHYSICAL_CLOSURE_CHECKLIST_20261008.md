@@ -71,3 +71,28 @@ DAZ 활성도 관측됐지만 이 두 normal 피연산자에서 필요한 원인
 달랐다. 해당 receipt를 보존하고, 원 옵션을 복원한 최종 진단만 PR74와 같은 호출의
 근거로 쓴다. 최종 진단이 동일한 failure-time mode와 실제 거부 위치를 확보했으므로
 O2 진단 실행을 추가하지 않았다.
+
+## 동결 source의 Graphify/KG 완료
+
+[PR75](https://github.com/gonos2k/Cloud-BAL/pull/75)의 커밋
+`978c2396e93b003002d2d6cb56dbabd01cbc3404`에서 46개 변경경로를 증분 반영했다.
+KLAPS50과 Cloud-BAL은 `2026-10-08-pr75-stationarity`에 각각 별도 스냅샷을
+저장했다. 앞선 PR74/PR75 스냅샷·receipt와 wiki content/schema·private profile을
+보존하고 derived graph report/index/log만 동기화했다.
+
+| Corpus | 노드 | edge | 이번 delta |
+|---|---:|---:|---|
+| KLAPS50 | 34,299 | 74,154 | +57 nodes / +78 edges |
+| Cloud-BAL | 8,466 | 15,727 | +57 nodes / +77 edges |
+
+두 corpus는 겹치므로 수치를 합산하지 않는다. 구조 추출은 AST/Markdown heading에
+한정되며 semantic refresh나 외부 WRF/KDM6 tree 전체 추출을 하지 않았다.
+Fortran cross-file CALL 관계는 부분적이다. Metadata followup은 이 frozen source
+추출 뒤 별도로 기록하며 graph freshness를 수치·런타임·과학적 수용 근거로 쓰지 않는다.
+
+- [새 KG receipt](evidence/pr75_stationarity_kg_receipt_20261008.json)
+- [publication 및 보존](evidence/pr75_stationarity_publication_20261008.json)
+- [KG 독립 검토](evidence/pr75_stationarity_kg_independent_review_20261008.json)
+
+**이번 P1 인증 오거부는 해소했고 진단 native의 FP 기전도 직접 연결했다.
+실행 정책·Q/N/B 공동 갱신·동일 후보의 물/에너지/질량–바람/시간반응은 계속 OPEN이다.**
