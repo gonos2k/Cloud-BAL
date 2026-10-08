@@ -1,0 +1,44 @@
+{
+  "schema": "pr75_stationarity_independent_oracle_v1",
+  "review_scope": "Manufactured algorithm fixture stationarity and KKT certification only",
+  "status": {
+    "oracle_tests": "PASS",
+    "manufactured_runtime": "FAILOPEN_NOT_EVALUATED",
+    "native_acceptance": "REJECTED_NOT_ESTABLISHED",
+    "scientific_validation": "NOT_ESTABLISHED"
+  },
+  "inputs": {
+    "solver": {
+      "path": "tools/pr73_joint_analysis.py",
+      "sha256": "6efbf6753c68b8a7344fba4b823ce7b39d1c87ad13f350ea30055f878a6de991"
+    },
+    "independent_test": {
+      "path": "tests/test_pr75_stationarity_oracle.py",
+      "sha256": "30c9f4af322cce78d28b326fa20c56ed9a9182ffdd95f184d717d7d547912626"
+    }
+  },
+  "validation": {
+    "command": "python3 -m unittest tests.test_pr75_stationarity_oracle -v",
+    "result": "6 tests passed",
+    "case_counts": {
+      "scalar_bounded_analytic_cases": 396,
+      "decimal_80_digit_spd_covariance_cases": 128,
+      "fault_injection_wrong_interior_solution_rejected": 1,
+      "fault_injection_wrong_upper_bound_dual_sign_rejected": 1,
+      "coordinate_reexpression_with_active_bound_and_equality": 1,
+      "reported_scalar_reproduction_x_star_0_4": 1
+    },
+    "oracle_method": "Closed-form scalar minimizers and Decimal(80-digit) posterior covariance conditioning; independent of production precision-form KKT face enumeration"
+  },
+  "review_findings": [
+    "Stationarity normalization uses the sum of absolute objective and equality-multiplier operands before cancellation, separately for each normalized control coordinate.",
+    "The scalar J=0.5*x^2 + 0.5*(2*x-1)^2 case returns x=0.4 and passes its certificate.",
+    "Fault-injected incorrect interior solution and an upper face with a negative upper-bound multiplier both fail KKT certification.",
+    "A 1000x state-unit re-expression preserves the solution and reported active-lower/equality certificate."
+  ],
+  "limitations": [
+    "These are manufactured linear-algorithm fixtures; they do not establish runtime behavior in Cloud-BAL or a scientific forecast result.",
+    "The SPD oracle fixtures are deterministic and well conditioned; this review did not claim broad ill-conditioned covariance coverage.",
+    "No graph extraction or KG update was performed as part of this delegated independent test task."
+  ]
+}

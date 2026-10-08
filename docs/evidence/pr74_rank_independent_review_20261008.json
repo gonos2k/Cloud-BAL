@@ -1,0 +1,78 @@
+{
+  "schema": "pr74_rank_independent_review_v1",
+  "reviewed_at": "2026-10-08",
+  "scope": "Historical read-only review of intermediate b4 solver; superseded by final normalization correction, not a review of current source",
+  "status": "IMPLEMENTATION_READY",
+  "baseline_commit": "d3b1a6e17b2170c3de8bea3e5cdf402b60668114",
+  "implementation": {
+    "source": "tools/pr73_joint_analysis.py",
+    "source_sha256": "b4aadb54aa68361f883f31726c7a4b809cfcef29ff16f7eaed2daa612fc5197a",
+    "test_source": "tests/test_pr73_joint_analysis.py",
+    "test_source_sha256": "76401261772d38245ee29b4c1994f6973f56be3d12594ef756bd1423efb738b3",
+    "solver_validation_receipt": "docs/evidence/pr74_joint_analysis_receipt_20261008_rank_intermediate.json",
+    "solver_validation_receipt_sha256": "f34de3f515f823f83a110657a5f3b6c8d0e054f0047796fb40a375fe110bf7db",
+    "independent_case_review": "PASS: near-dependent feasible equalities classify NUMERICAL_FAILURE; exact conflicting original constraints classify INFEASIBLE; consistent duplicate constraints reduce correctly; decimal box edge remains NUMERICAL_FAILURE rather than an unsupported infeasibility claim.",
+    "test_suite_evidence": {
+      "focused_solver_tests": 17,
+      "independent_oracle_tests": 4,
+      "analytic_oracle_cases": 396,
+      "full_python_suite_tests": 52,
+      "full_python_suite_log": "docs/evidence/pr74_rank_endpoint_replay_20261008/python_tests.log",
+      "full_python_suite_log_sha256": "4a0e6e6490e5f3344dfe5692ffcdff5f5e762af7d42525afa497ed56fe52c611",
+      "full_python_suite_result": "PASS"
+    }
+  },
+  "pinned_intel_endpoint_replay": {
+    "receipt": "docs/evidence/pr74_rank_endpoint_replay_20261008/receipt.json",
+    "receipt_sha256": "0a50e657509fb98af0d887850eca407f712ee267b63e6fa459a16b8467001612",
+    "profile_script": "tests/intel_toolchain.sh",
+    "profile_script_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "scope": "New Python estimator source was connected to unchanged preserved pinned Intel O0/O2 endpoint binaries; each replay used fresh output directories and component readback.",
+    "profiles": {
+      "O0": {
+        "status": "PASS_ENDPOINT_REPLAY",
+        "preserved_executable": "/var/tmp/cloud_bal_pr73_joint_analysis.TRyXg8/test_real_shadow_io_contract",
+        "executable_sha256": "14ee9a843f3c77d5c2d9cc0d1b77a848adf94c4b32690ba14ce2fd35c394e0bf",
+        "new_output": "/var/tmp/pr74_rank_endpoint_O0.dfpi5hb7/pr73-estimated-analysis-shadow.nc",
+        "new_output_sha256": "b8e3f0caa289a812bbc2a6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+        "candidate_log_sha256": "49c53b64c606a5a4006607ea10ac9050cd325b58b16b6242ecd3336e43fd11df",
+        "readback_log_sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e",
+        "control_sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda",
+        "control_byte_identical_to_prior": true
+      },
+      "O2": {
+        "status": "PASS_ENDPOINT_REPLAY",
+        "preserved_executable": "/var/tmp/cloud_bal_pr73_joint_analysis.4UPMAy/test_real_shadow_io_contract",
+        "executable_sha256": "a27d75eba39f272f50842209222619872c1db2628a7961714361094ba147565f",
+        "new_output": "/var/tmp/pr74_rank_endpoint_O2._8pxzm2j/pr73-estimated-analysis-shadow.nc",
+        "new_output_sha256": "b8e3f0caa289a812bbc2a6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+        "candidate_log_sha256": "fc9666b996fde12a40b0720cf34fa110848b7e445f2a7f36fd8d64cde376e513",
+        "readback_log_sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e",
+        "control_sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda",
+        "control_byte_identical_to_prior": true
+      }
+    },
+    "retry_runtime_failure": {
+      "exit_status": 127,
+      "occurred_before_test_execution": true,
+      "reason": "Initial direct binary reuse lacked the pinned Intel runtime environment; loader could not find libimf.so.",
+      "retained_log": "docs/evidence/pr74_rank_endpoint_replay_20261008/attempt1_runtime_loader_failure.log",
+      "retained_log_sha256": "2791cf65398d659a6a37ff2e001a540c1d1fbd9249916deab9e16c43c37792bd",
+      "resolution": "Replay was repeated after sourcing tests/intel_toolchain.sh and passed for O0 and O2."
+    },
+    "fortran_recompiled_for_v2": false,
+    "production_pipeline_executed": false
+  },
+  "limits": {
+    "physical_approval": "FAIL_OPEN",
+    "native_candidate_status": "REJECTED",
+    "endpoint_replay_does_not_establish": [
+      "a new Fortran build of the v2 source",
+      "production pipeline execution",
+      "physical or scientific approval"
+    ],
+    "prior_frozen_kg_review_modified": false,
+    "followup_kg_overlay": "PENDING; review separately after the v2 incremental KG update"
+  },
+  "binding_check": "PASS: current source/test, receipt, pinned profile script, preserved O0/O2 binaries, fresh outputs, controls, logs, and test log match the recorded SHA-256 values; replay controls compare byte-for-byte with the prior controls."
+}

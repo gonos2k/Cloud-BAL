@@ -1,0 +1,121 @@
+{
+  "schema": "pr75_stationarity_root_validation_v1",
+  "status": "PASS_SCOPED",
+  "base_commit": "0492d8eab2f2cc9841a9359ddafc664e22737ff0",
+  "bound_sources": {
+    "tools/pr73_joint_analysis.py": "6efbf6753c68b8a7344fba4b823ce7b39d1c87ad13f350ea30055f878a6de991",
+    "tests/test_pr73_joint_analysis.py": "02250766fdbbe811a9860ce6a5d48c749b7c98e499f826e3ebebeaa16379441b",
+    "tests/test_pr75_stationarity_oracle.py": "30c9f4af322cce78d28b326fa20c56ed9a9182ffdd95f184d717d7d547912626",
+    "tests/test_pr74_independent_oracle.py": "e063d84ed6ef106cb4939787532700706081db230d66fd7d80a6463cb868e485",
+    "tests/run_pr73_joint_analysis.sh": "57d5d14b10703d14bcdcd80b6970d188fa559f0d3b0e3995c07ffb72a8550239",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/check_physical_contract_shadow.py": "8b26a2080c89c68f90943840d84db0e9a1c97944162a0f31d0861d2551865ff8",
+    "src/common/cloud_bal_pipeline.f90": "49f6978577862dd3577dfad77ba506fc7728e2afe9a71609079026acecaa7900",
+    "src/common/cloud_bal_real_netcdf.f90": "634f8b43bcc5466cbaf91f8a92343f743bcee6cdf2995befb09127f7a63d76ba",
+    "tests/test_real_shadow_io_contract.f90": "68d2afe8ac2cbe69888519c655146e941eafce0eaa320d0702bc15f33cb600dd"
+  },
+  "python_tests": {
+    "command": "python3 -m unittest tests.test_pr73_joint_analysis tests.test_pr74_independent_oracle tests.test_pr75_stationarity_oracle tests.test_pr74_common_moment_audit tests.test_native_kdm6_call_geometry tests.test_native_kdm6_trace -v",
+    "tests": 61,
+    "status": "PASS",
+    "log": "docs/evidence/pr75_stationarity_endpoint_20261008/python_tests.log",
+    "sha256": "75650b4d76bb3bbcc2c7da5d40b939206dc99aea85fab3ba87f3988fe2040dd7"
+  },
+  "pinned_intel": {
+    "O0": {
+      "status": "PASS_ENDPOINT_WRITER_READBACK",
+      "fresh_compile_scratch": "/var/tmp/cloud_bal_pr73_joint_analysis.uJpzfo",
+      "fresh_fortran_compilation": true,
+      "profile_environment": "tests/intel_toolchain.sh",
+      "executable_sha256": "14ee9a843f3c77d5c2d9cc0d1b77a848adf94c4b32690ba14ce2fd35c394e0bf",
+      "output_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "physical_control_sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda",
+      "retained_artifacts": {
+        "toolchain.txt": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O0/toolchain.txt",
+          "sha256": "44dace9b662bf845a51f4931adf0e5bf08e4b3d39d9e9457ed1f1e97f78cee8e"
+        },
+        "trial.json": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O0/trial.json",
+          "sha256": "d700480a77e6b4338bda5e94cfbb8a93fcbb13b7b8c6c65206f8650bafe79bf2"
+        },
+        "trial.control": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O0/trial.control",
+          "sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda"
+        },
+        "solver.json": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O0/solver.json",
+          "sha256": "d700480a77e6b4338bda5e94cfbb8a93fcbb13b7b8c6c65206f8650bafe79bf2"
+        },
+        "candidate.log": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O0/candidate.log",
+          "sha256": "1cb470663d4f42fb27b76f1f1f9ab886726fe70fee76c05d4fb4f40938dfd596"
+        },
+        "readback.log": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O0/readback.log",
+          "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+        },
+        "runner.log": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O0/runner.log",
+          "sha256": "972cc633caf123ec2abc98c1d2cf9842aa4baf0c03a8083fbe4916d3cb10e84b"
+        }
+      }
+    },
+    "O2": {
+      "status": "PASS_ENDPOINT_WRITER_READBACK",
+      "fresh_compile_scratch": "/var/tmp/cloud_bal_pr73_joint_analysis.BmWMqL",
+      "fresh_fortran_compilation": true,
+      "profile_environment": "tests/intel_toolchain.sh",
+      "executable_sha256": "a27d75eba39f272f50842209222619872c1db2628a7961714361094ba147565f",
+      "output_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "physical_control_sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda",
+      "retained_artifacts": {
+        "toolchain.txt": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O2/toolchain.txt",
+          "sha256": "dcbdc7d58172573700366226d34ba75aa1d3fca4a870f983f35a342d71c7e0d1"
+        },
+        "trial.json": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O2/trial.json",
+          "sha256": "d700480a77e6b4338bda5e94cfbb8a93fcbb13b7b8c6c65206f8650bafe79bf2"
+        },
+        "trial.control": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O2/trial.control",
+          "sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda"
+        },
+        "solver.json": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O2/solver.json",
+          "sha256": "d700480a77e6b4338bda5e94cfbb8a93fcbb13b7b8c6c65206f8650bafe79bf2"
+        },
+        "candidate.log": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O2/candidate.log",
+          "sha256": "fc9666b996fde12a40b0720cf34fa110848b7e445f2a7f36fd8d64cde376e513"
+        },
+        "readback.log": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O2/readback.log",
+          "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+        },
+        "runner.log": {
+          "path": "docs/evidence/pr75_stationarity_endpoint_20261008/O2/runner.log",
+          "sha256": "094dbbb0a451b0f218cb64c90af06eecc5259f894ff7861f034c764fb77434fc"
+        }
+      }
+    }
+  },
+  "canonical_diagnostic": {
+    "exit_status": 1,
+    "artifact_status": "UNBOUND",
+    "candidate_status": "REJECTED",
+    "report": "docs/evidence/pr75_stationarity_endpoint_20261008/canonical_diagnostic.json",
+    "sha256": "dce0e7f27844bb05d45719c16364c7d1c087cc9e37b6e9996c21bd3b555cbb00",
+    "log": "docs/evidence/pr75_stationarity_endpoint_20261008/canonical_diagnostic.log",
+    "log_sha256": "dce0e7f27844bb05d45719c16364c7d1c087cc9e37b6e9996c21bd3b555cbb00"
+  },
+  "limits": {
+    "scope": "manufactured estimator/endpoint evaluator/writer/component reader; actual Fortran compilations in fresh scratch",
+    "run_cloud_bal_pipeline_executed": false,
+    "actual_native_first_call_success": false,
+    "physical_approval": "FAIL_OPEN"
+  },
+  "pinned_intel_controls_byte_identical": true,
+  "team_review_path": "docs/evidence/pr75_team_review_20261008.json"
+}

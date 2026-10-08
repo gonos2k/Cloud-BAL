@@ -1,0 +1,87 @@
+{
+  "schema": "pr74_rank_endpoint_replay_v1",
+  "scope": "new Python estimator to endpoint writer using unchanged preserved pinned Intel O0/O2 binaries, fresh output directories, component readback; no new Fortran compile",
+  "profile_environment": "tests/intel_toolchain.sh sourced for pinned runtime",
+  "profile_script_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "profiles": {
+    "O0": {
+      "scratch": "/var/tmp/pr74_rank_endpoint_O0.dfpi5hb7",
+      "status": "PASS_ENDPOINT_REPLAY",
+      "prior_fresh_intel_build": "/var/tmp/cloud_bal_pr73_joint_analysis.TRyXg8",
+      "executable_sha256": "14ee9a843f3c77d5c2d9cc0d1b77a848adf94c4b32690ba14ce2fd35c394e0bf",
+      "preserved_binary_bytes_identical": true,
+      "new_solver_source_sha256": "b4aadb54aa68361f883f31726c7a4b809cfcef29ff16f7eaed2daa612fc5197a",
+      "control_identical_to_prior": true,
+      "netcdf_path": "/var/tmp/pr74_rank_endpoint_O0.dfpi5hb7/pr73-estimated-analysis-shadow.nc",
+      "netcdf_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "retained_artifacts": {
+        "solver.json": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O0/solver.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.json": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O0/trial.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.control": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O0/trial.control",
+          "sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda"
+        },
+        "candidate.log": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O0/candidate.log",
+          "sha256": "49c53b64c606a5a4006607ea10ac9050cd325b58b16b6242ecd3336e43fd11df"
+        },
+        "readback.log": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O0/readback.log",
+          "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+        }
+      }
+    },
+    "O2": {
+      "scratch": "/var/tmp/pr74_rank_endpoint_O2._8pxzm2j",
+      "status": "PASS_ENDPOINT_REPLAY",
+      "prior_fresh_intel_build": "/var/tmp/cloud_bal_pr73_joint_analysis.4UPMAy",
+      "executable_sha256": "a27d75eba39f272f50842209222619872c1db2628a7961714361094ba147565f",
+      "preserved_binary_bytes_identical": true,
+      "new_solver_source_sha256": "b4aadb54aa68361f883f31726c7a4b809cfcef29ff16f7eaed2daa612fc5197a",
+      "control_identical_to_prior": true,
+      "netcdf_path": "/var/tmp/pr74_rank_endpoint_O2._8pxzm2j/pr73-estimated-analysis-shadow.nc",
+      "netcdf_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "retained_artifacts": {
+        "solver.json": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O2/solver.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.json": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O2/trial.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.control": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O2/trial.control",
+          "sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda"
+        },
+        "candidate.log": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O2/candidate.log",
+          "sha256": "fc9666b996fde12a40b0720cf34fa110848b7e445f2a7f36fd8d64cde376e513"
+        },
+        "readback.log": {
+          "path": "docs/evidence/pr74_rank_endpoint_replay_20261008/O2/readback.log",
+          "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+        }
+      }
+    }
+  },
+  "python_tests": {
+    "tests": 52,
+    "log": "docs/evidence/pr74_rank_endpoint_replay_20261008/python_tests.log",
+    "sha256": "4a0e6e6490e5f3344dfe5692ffcdff5f5e762af7d42525afa497ed56fe52c611"
+  },
+  "prior_failed_attempt": {
+    "scratch": "/var/tmp/pr74_rank_endpoint_O0.u4hj0dd3",
+    "exit_status": 127,
+    "reason": "reused Intel binary launched without sourcing pinned runtime environment; libimf.so loader missing; no model/test execution",
+    "log_sha256": "2791cf65398d659a6a37ff2e001a540c1d1fbd9249916deab9e16c43c37792bd"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "pipeline_executed": false
+}

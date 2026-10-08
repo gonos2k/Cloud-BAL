@@ -5,6 +5,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import pr73_joint_analysis as joint
@@ -110,6 +111,48 @@ class JointAnalysisTest(unittest.TestCase):
                     "dual_sign_violation", "complementarity_residual"):
             self.assertLessEqual(result["kkt_diagnostics"][key], 1e-12)
 
+    def test_unconstrained_scalar_cancellation_uses_uncancelled_stationarity_scale(self):
+        scalar = copy.deepcopy(self.declaration)
+        scalar.pop("physical_reference", None)
+        scalar["state_fields"] = ["x"]
+        scalar["background_state"] = [0.0]
+        scalar["B"] = [[1.0]]
+        scalar["observation"] = {"H": [[2.0]], "value": [1.0], "R": [[1.0]]}
+        scalar["process_increments"] = {
+            "phase": [0.0], "external_source": [0.0], "physical_boundary": [0.0],
+        }
+        scalar["constraints"] = []
+        scalar["state_bounds"] = []
+
+        result = joint.evaluate(scalar)
+
+        self.assertAlmostEqual(result["candidate_state"][0], 0.4, places=14)
+        self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
+        self.assertLess(result["kkt_diagnostics"]["stationarity_residual"], 1e-15)
+
+    def test_stationarity_certificate_rejects_perturbed_unconstrained_solution(self):
+        scalar = copy.deepcopy(self.declaration)
+        scalar.pop("physical_reference", None)
+        scalar["state_fields"] = ["x"]
+        scalar["background_state"] = [0.0]
+        scalar["B"] = [[1.0]]
+        scalar["observation"] = {"H": [[2.0]], "value": [1.0], "R": [[1.0]]}
+        scalar["process_increments"] = {
+            "phase": [0.0], "external_source": [0.0], "physical_boundary": [0.0],
+        }
+        scalar["constraints"] = []
+        scalar["state_bounds"] = []
+        solve = joint._solve
+
+        def perturbed_solve(matrix, rhs):
+            solution = solve(matrix, rhs)
+            solution[0] += 1e-5
+            return solution
+
+        with patch.object(joint, "_solve", side_effect=perturbed_solve):
+            with self.assertRaisesRegex(ValueError, "KKT certificate did not pass"):
+                joint.evaluate(scalar)
+
     def test_feasible_fixed_bound_redundant_with_equality(self):
         fixed = copy.deepcopy(self.declaration)
         fixed["constraints"].append({
@@ -157,7 +200,7 @@ class JointAnalysisTest(unittest.TestCase):
         self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
         self.assertEqual(result["kkt_diagnostics"]["active_bounds"][0]["side"], "lower")
 
-    def test_box_feasibility_range_rounding_is_conservative(self):
+    def test_box_feasibility_rounding_does_not_claim_infeasibility(self):
         declaration = copy.deepcopy(self.declaration)
         declaration.pop("physical_reference", None)
         declaration["state_fields"] = ["x", "z"]
@@ -180,10 +223,8 @@ class JointAnalysisTest(unittest.TestCase):
             {"field": "z", "lower": 0.2, "upper": 1.0},
         ]
 
-        result = joint.evaluate(declaration)
-
-        self.assertAlmostEqual(sum(result["candidate_state"]), 0.3, places=14)
-        self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
+        with self.assertRaisesRegex(ValueError, "NUMERICAL_FAILURE"):
+            joint.evaluate(declaration)
 
     def test_finite_inputs_that_overflow_process_or_equality_arithmetic_are_numerical_failures(self):
         process_overflow = copy.deepcopy(self.declaration)
@@ -198,6 +239,50 @@ class JointAnalysisTest(unittest.TestCase):
         equality_overflow["constraints"][0]["coefficients"][1] = 1e200
         with self.assertRaisesRegex(ValueError, "NUMERICAL_FAILURE"):
             joint.evaluate(equality_overflow)
+
+    def test_near_dependent_feasible_equalities_are_not_declared_infeasible(self):
+        near_dependent = copy.deepcopy(self.declaration)
+        near_dependent.pop("physical_reference", None)
+        near_dependent["state_fields"] = ["x", "z"]
+        near_dependent["background_state"] = [0.0, 0.0]
+        near_dependent["B"] = [[1.0, 0.0], [0.0, 1.0]]
+        near_dependent["observation"] = {
+            "H": [[1.0, 0.0], [0.0, 1.0]], "value": [0.0, 0.0],
+            "R": [[1.0, 0.0], [0.0, 1.0]],
+        }
+        near_dependent["process_increments"] = {
+            "phase": [0.0, 0.0], "external_source": [0.0, 0.0],
+            "physical_boundary": [0.0, 0.0],
+        }
+        near_dependent["state_bounds"] = []
+        near_dependent["constraints"] = [
+            {"evidence_id": "manufactured:rank-row-1", "coefficients": [1.0, 0.0], "rhs": 1.0},
+            {"evidence_id": "manufactured:rank-row-2", "coefficients": [1.0, 1e-15], "rhs": 2.0},
+        ]
+
+        with self.assertRaisesRegex(ValueError, "NUMERICAL_FAILURE: equality rank is numerically ambiguous"):
+            joint.evaluate(near_dependent)
+
+    def test_scaled_equality_is_rank_checked_after_state_unit_normalization(self):
+        scalar = copy.deepcopy(self.declaration)
+        scalar.pop("physical_reference", None)
+        scalar["state_fields"] = ["x"]
+        scalar["background_state"] = [0.0]
+        scalar["B"] = [[1e30]]
+        scalar["observation"] = {"H": [[1e-15]], "value": [0.0], "R": [[1.0]]}
+        scalar["process_increments"] = {
+            "phase": [0.0], "external_source": [0.0], "physical_boundary": [0.0],
+        }
+        scalar["constraints"] = [{
+            "evidence_id": "manufactured:rescaled-scalar-equality",
+            "coefficients": [1e-15], "rhs": 0.3,
+        }]
+        scalar["state_bounds"] = [{"field": "x", "lower": 0.0, "upper": 1e15}]
+
+        result = joint.evaluate(scalar)
+
+        self.assertAlmostEqual(result["candidate_state"][0], 3e14, places=-1)
+        self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
 
     def test_common_unit_rescaling_preserves_solution(self):
         scaled = copy.deepcopy(self.declaration)

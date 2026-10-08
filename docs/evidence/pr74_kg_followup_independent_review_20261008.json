@@ -1,0 +1,101 @@
+{
+  "schema": "pr74_kg_followup_independent_review_v1",
+  "reviewed_at": "2026-10-08",
+  "status": "PASS_METADATA_AND_KG_BINDINGS",
+  "scope": "Read-only independent review of the PR75 frozen-source second Graphify/KG overlay, preservation evidence, and publication metadata.",
+  "pull_request": {
+    "url": "https://github.com/gonos2k/Cloud-BAL/pull/75",
+    "state_at_review": "OPEN",
+    "head_commit": "2f2685846d814d0131b862b6c0a0ab507aef7ae7",
+    "base_commit": "2e5f3b8f98aa2d9d0d8de2b5824dd12a950b7920",
+    "direct_metadata_command": "gh pr view 75 --repo gonos2k/Cloud-BAL --json number,state,headRefOid,baseRefOid,mergedAt,url",
+    "pr74_merge_correction": "Direct metadata records PR74 merged at 2026-10-08T08:17:03Z. The preserved PR74 publication receipt's OPEN_UNMERGED_AT_RECORDING field lacked a contemporaneous metadata check and is stale; the PR75 publication receipt preserves that history and adds this erratum."
+  },
+  "frozen_source": {
+    "base_tree_matches_pr73_commit": true,
+    "pr73_commit": "d3b1a6e17b2170c3de8bea3e5cdf402b60668114",
+    "base_tree_sha256_git": "9b2361ea7f2b696fa11ca800951c2a0ddd1819a5",
+    "frozen_source_commit": "2f2685846d814d0131b862b6c0a0ab507aef7ae7",
+    "selected_path_count": 37,
+    "selected_paths_match_frozen_commit": true,
+    "selected_paths_match_declared_base": true,
+    "source_sync": "Cloud-BAL/scratch/pr74_certified_analysis_followup_20261008/source_sync.json",
+    "source_sync_sha256": "9b63ed7b064863983453c1a24494bd9ca5838e9b1f442005b654e8053e7bec8a",
+    "maintained_source_changes_since_session_baseline": false,
+    "postfreeze_working_tree_changes": "Metadata and documentation receipts only; no solver or test source changes."
+  },
+  "maintained_receipt": {
+    "path": "Cloud-BAL/scratch/pr74_certified_analysis_followup_20261008/kg_receipt.json",
+    "sha256": "ab14eeb2aa44b98ebd0d64fa31916011ed82550d7abdaa28b273fdcf325898b0",
+    "copy": "docs/evidence/pr74_kg_followup_receipt_20261008.json",
+    "copy_sha256": "ab14eeb2aa44b98ebd0d64fa31916011ed82550d7abdaa28b273fdcf325898b0",
+    "apply_log": "/var/tmp/pr75_kg_apply.log",
+    "apply_log_sha256": "a88e3f0ed92ef4fee71a532877d5324c4f030625aa87cd1782ca906b7a6de717",
+    "mode": "guarded selected-path overlay extraction/build_merge, cluster-only, derived wiki sync",
+    "graphify": "0.9.53",
+    "recorded_snapshot_time": "2026-10-08T08:39:13+00:00"
+  },
+  "corpora": {
+    "KLAPS50": {
+      "nodes": 34242,
+      "edges": 74076,
+      "communities": 2691,
+      "delta_nodes": 13,
+      "delta_edges": 11,
+      "added_ids": 16,
+      "removed_ids": 3,
+      "graph_sha256": "8bf59a3a2214bbb7a42fe4c608b21051afa1ecee24082a1aac1dd12c4bd53ed6",
+      "v2_dated_snapshot": "graphify-out/2026-10-08-pr74-v2/graph.json",
+      "integrity_review": "PASS: zero dangling or missing endpoints, exact duplicates, self loops, unverified nodes, and same-endpoint collapse groups."
+    },
+    "Cloud-BAL": {
+      "nodes": 8409,
+      "edges": 15650,
+      "communities": 653,
+      "delta_nodes": 13,
+      "delta_edges": 11,
+      "added_ids": 16,
+      "removed_ids": 3,
+      "graph_sha256": "3b7bc538122162db0ad2a71b7f64451638da808841d8e4ca02dfe94fbc2c8a03",
+      "v2_dated_snapshot": "Cloud-BAL/graphify-out/2026-10-08-pr74-v2/graph.json",
+      "integrity_review": "PASS: zero dangling or missing endpoints, exact duplicates, self loops, unverified nodes, and same-endpoint collapse groups."
+    },
+    "scope_note": "KLAPS50 and Cloud-BAL counts are separate for overlapping corpora."
+  },
+  "preservation": {
+    "first_batch_receipt_sha256": "0b7c00ddb9ac96e235d0eedf347c0c2a75ece1fffb882e116edc99b235e0b644",
+    "first_batch_receipt_copy_sha256": "0b7c00ddb9ac96e235d0eedf347c0c2a75ece1fffb882e116edc99b235e0b644",
+    "first_batch_receipt_and_copy_identical": true,
+    "first_batch_dated_snapshots": "All six 2026-10-08-pr74 graph/report/manifest artifacts still match the first-batch receipt and are included in the verified prior immutable set.",
+    "prior_immutable_artifacts_verified": 54,
+    "automatic_snapshot_backup_artifacts_verified": 10,
+    "rollback_backups_verified": 17,
+    "protected_wiki_paths_verified": 13,
+    "wiki_reports_match_v2_dated_reports": true,
+    "wiki_log_append_only": true,
+    "protected_native_and_private_files_verified": 4,
+    "private_profile": {
+      "Cloud-BAL": {"nodes": 134, "incident_links": 133, "unchanged": true},
+      "KLAPS50": {"nodes": 0, "incident_links": 0, "unchanged": true}
+    }
+  },
+  "publication_receipt": {
+    "path": "docs/evidence/pr75_publication_20261008.json",
+    "sha256": "b2fcec0389b83bbabb4837906cefa70b4f24bc3dfd02ec255ad7829605124d71",
+    "all_bound_receipt_hashes_match": true,
+    "state": "OPEN_AT_RECORDING; independently rechecked OPEN at head 2f2685846d814d0131b862b6c0a0ab507aef7ae7 and base 2e5f3b8f98aa2d9d0d8de2b5824dd12a950b7920."
+  },
+  "limitations": [
+    "Graphify extracted AST and Markdown headings only; no semantic or LLM refresh occurred.",
+    "Fortran cross-file CALL extraction is partial.",
+    "External native WRF research source trees were not extracted; selected patch/evidence files remain repository paths only.",
+    "Graph snapshots establish structural navigation and freshness, not runtime or scientific validation."
+  ],
+  "physical_authority": {
+    "physical_approval": "FAIL_OPEN",
+    "native_candidate": "REJECTED",
+    "remaining_scientific_gates": "Unchanged and open; no physical approval was inferred from the KG update."
+  },
+  "review_findings": [],
+  "binding_check": "PASS: maintained receipt and copy, source sync, frozen selected paths, distinct v2 graph snapshots, wiki mirrors, historical first-batch receipt/snapshots, protected files, and publication metadata match the recorded hashes and counts."
+}

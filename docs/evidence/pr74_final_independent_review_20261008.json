@@ -1,0 +1,73 @@
+{
+  "schema": "pr74_final_independent_review_v1",
+  "reviewed_at": "2026-10-08",
+  "status": "PASS_ENDPOINT_REPLAY_BINDINGS",
+  "scope": "Read-only independent hash and evidence binding review for the final 97ef solver source, full Python suite, and unchanged pinned Intel O0/O2 endpoint replay.",
+  "implementation": {
+    "source": "tools/pr73_joint_analysis.py",
+    "source_sha256": "97ef288d5e32add28749bb2be36ee846e198ad38a3b048fac8797c614c8a5c12",
+    "test_source": "tests/test_pr73_joint_analysis.py",
+    "test_source_sha256": "da037c550b6c44be6803fe1c31339a7ecb514a3cf6be80e9534ea7dd1377900d",
+    "targeted_review": "PASS: the state-unit-scaled scalar equality regression returns 3e14 with KKT PASS.",
+    "targeted_test": "python3 -m unittest tests.test_pr73_joint_analysis.JointAnalysisTest.test_scaled_equality_is_rank_checked_after_state_unit_normalization -v"
+  },
+  "python_suite": {
+    "count": 53,
+    "status": "PASS",
+    "command": [
+      "python3", "-m", "unittest",
+      "tests.test_pr73_joint_analysis",
+      "tests.test_pr74_independent_oracle",
+      "tests.test_pr74_common_moment_audit",
+      "tests.test_native_kdm6_call_geometry",
+      "tests.test_native_kdm6_trace",
+      "-v"
+    ],
+    "log": "docs/evidence/pr74_final_endpoint_replay_20261008/python_tests.log",
+    "log_sha256": "5acc2a756ef90f4413a680880257b9b9cca4f57026ed41849127e54f301fafa6"
+  },
+  "endpoint_replay": {
+    "receipt": "docs/evidence/pr74_final_endpoint_replay_20261008/receipt.json",
+    "receipt_sha256": "ae252c2c04bdc2dae9523ea2bdc87f063e48d4be180db83b7b7c1ffb8556470d",
+    "profile_script": "tests/intel_toolchain.sh",
+    "profile_script_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "profiles": {
+      "O0": {
+        "status": "PASS_ENDPOINT_REPLAY",
+        "preserved_executable": "/var/tmp/cloud_bal_pr73_joint_analysis.TRyXg8/test_real_shadow_io_contract",
+        "executable_sha256": "14ee9a843f3c77d5c2d9cc0d1b77a848adf94c4b32690ba14ce2fd35c394e0bf",
+        "fresh_output": "/var/tmp/pr74_final_endpoint_O0.gyrsqmxp/pr73-estimated-analysis-shadow.nc",
+        "output_sha256": "b8e3f0caa289a812bbc2a6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+        "control_sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda",
+        "control_byte_identical_to_prior": true,
+        "candidate_log_sha256": "1a68a0e829930babac52b2b48b3b1ca75bfd79f4119b75eb8a2b018e6e7ebb9e",
+        "readback_log_sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+      },
+      "O2": {
+        "status": "PASS_ENDPOINT_REPLAY",
+        "preserved_executable": "/var/tmp/cloud_bal_pr73_joint_analysis.4UPMAy/test_real_shadow_io_contract",
+        "executable_sha256": "a27d75eba39f272f50842209222619872c1db2628a7961714361094ba147565f",
+        "fresh_output": "/var/tmp/pr74_final_endpoint_O2.0hh6mogg/pr73-estimated-analysis-shadow.nc",
+        "output_sha256": "b8e3f0caa289a812bbc2a6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+        "control_sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda",
+        "control_byte_identical_to_prior": true,
+        "candidate_log_sha256": "fc9666b996fde12a40b0720cf34fa110848b7e445f2a7f36fd8d64cde376e513",
+        "readback_log_sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+      }
+    },
+    "fortran_recompiled_for_final_source": false,
+    "production_pipeline_executed": false
+  },
+  "review_findings": [],
+  "limits": {
+    "physical_approval": "FAIL_OPEN",
+    "native_candidate": "REJECTED",
+    "endpoint_replay_is_not": [
+      "a rebuild of the Fortran source against the final Python solver",
+      "production pipeline validation",
+      "physical or scientific approval"
+    ],
+    "earlier_b4_replay": "Preserved as historical evidence and not used as validation of the final 97ef source."
+  },
+  "binding_check": "PASS: source/test hashes, Intel profile script, endpoint receipt, 53-test log, preserved O0/O2 binaries, fresh outputs, controls, and readback/candidate logs match the recorded SHA-256 values; both controls compare byte-for-byte with the prior controls."
+}
