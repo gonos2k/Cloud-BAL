@@ -24,8 +24,8 @@ PR72 fixes the PR71 ice-branch nesting regression and the separate rain/ice zero
 - [x] Four-agent implementation and independent omission review; resolve concrete findings.
 - [x] Focused pinned Intel O0/O2 tests in fresh scratch and relevant Python tests.
 - [x] Preserve operational inputs, historical evidence, maintained native source and private configuration.
-- [ ] Commit, push and create PR after implementation review and validation; no merge.
-- [ ] Separate dated KLAPS50/Cloud-BAL incremental Graphify snapshots; derived wiki reports, index and append-only audit.
+- [x] Commit, push and create PR after implementation review and validation; no merge.
+- [x] Separate dated KLAPS50/Cloud-BAL incremental Graphify snapshots; derived wiki reports, index and append-only audit.
 
 ## Acceptance boundaries
 
@@ -44,3 +44,14 @@ Ice, `QI=3.5308575789291633e-35 kg/kg dry air`, `NI=0 m⁻³`, `i=133`, `call_la
 - [Independent team review](PR73_INDEPENDENT_REVIEW_20261008.md): concrete implementation findings corrected; scientific gates remain open.
 
 Next physical closure requires source-bound completed PBL/RK diagnostics at the first mismatch, integration of the selected QNI transport with its driver/native build, a supported freezing/tiny-particle policy, and one accepted candidate with common-carrier water/energy, mass–wind, native delivery and time response. No accepted native candidate was produced in this batch.
+
+## Publication and KG audit
+
+[PR #73](https://github.com/gonos2k/Cloud-BAL/pull/73) is open and unmerged. Frozen implementation: `b4c78815ea2c784bc9e985ec928b76f057c1099f`. Publication, KG receipt and checklist followups are metadata outside that frozen selected-path extraction.
+
+| Corpus | Nodes / edges / communities | Batch delta nodes / edges |
+|---|---|---|
+| KLAPS50 | 34,113 / 73,920 / 2,675 | +192 / +285 |
+| Cloud-BAL | 8,280 / 15,494 / 642 | +191 / +284 |
+
+Both snapshots are separately dated `2026-10-08-pr73`; derived wiki reports, graph index and append-only audit are synchronized. Extraction covers 101 committed changed paths as overlays onto earlier graphs, AST/Markdown headings only, partial cross-file Fortran CALL edges. External WRF trees and semantic refresh are excluded. Graph deltas reflect structure and preserved evidence, not scientific completion.
