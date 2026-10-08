@@ -1,0 +1,47 @@
+{
+  "artifact_hashes": {
+    "analysis_fixture": "8e8d93dece2a5599812238b2afb6d544db6cf81f07b1d2e947bfac917335b5fc",
+    "analysis_replay_artifact": "79d45e6daf89dfe14286a5cd15f738d3b2dd9335cee3f731df20f74c89eadbd4",
+    "native_contract_test": "a93ad2107072f2b9a77bc0d3dc5e470605a0d11ac808dcc90e26ddc3406dade9",
+    "native_input_pair_audit_source": "6786a89e8c5140c9b5ba809dc92b48c423be86281b5f1a86300961c314c44468",
+    "native_input_pair_audit_test": "84828af2271589a6336d92c59be833cf5988e30c964771870c7e0329e38f9152",
+    "native_origin_receipt": "ab9f5a02bf38d5cbc21e995f749384896cf9300601eebec554c68c6e8b6d8bd9",
+    "physical_reader": "98b8cb9f94e58a0a04691f69c4cdebf1294bc60564c533a24d43bd304c90b5c8",
+    "review_document": "48aa392c9d69e1ad4c28b55bf7a2b3d1850d49ab909c76cb231524b38c4f2b41",
+    "roundtrip_checker": "12c7d41a611c1db0cca99ecda5c032c029e7127191aa5a96db75b45e691d7640",
+    "solver": "9efbe58e027e978aaadfce623d622e0cc13c9496ea4bca274bf2a540d0506f30",
+    "solver_output": "767ad240db1f1f1b4cdfdb147f16b54a65b20ae15d9c8b83e6a65a455e4f07ce",
+    "solver_test": "d1841cee74d419d82f1b094359a042dc7641f7b4650098ca37a53e4c34354e80",
+    "toolchain_profile": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "date": "2026-10-08",
+  "limits": [
+    "Manufactured algorithm fixture only; not actual 12 UTC evidence.",
+    "Full standalone artifact validation is not a pass.",
+    "No full physical conservation or native-process result established."
+  ],
+  "reviewer_run": {
+    "canonical_diagnostic_cli": {
+      "command": "python3 tools/validate_shadow_diagnostics.py /var/tmp/cloud_bal_pr73_joint_analysis.CmsI0Q/pr73-estimated-analysis-shadow.nc --json /var/tmp/pr73_independent_artifact_replay_20261008.json",
+      "exit_code": 1,
+      "result": "Artifact remains UNBOUND/INVALID as a complete standalone SHADOW diagnostic: its manufactured fixture does not include pressure geometry/support-radius/grid metadata and stage evidence. This does not negate the dedicated physical-contract API replay; it is not a full diagnostic acceptance."
+    },
+    "native_input_pair_audit_tests": {
+      "command": "python3 tests/test_pr73_native_input_pair_audit.py",
+      "exit_code": 0,
+      "result": "3 tests passed (named-axis coordinate selection, bounds rejection, WRF timestamp binding)"
+    },
+    "physical_contract_replay_and_mutations": {
+      "command": "python3 tests/check_physical_contract_shadow.py /var/tmp/cloud_bal_pr73_joint_analysis.CmsI0Q/pr73-estimated-analysis-shadow.nc",
+      "exit_code": 0,
+      "result": "Physical SHADOW contract readback and corruption checks passed; includes entire optional-analysis-group removal and legacy acceptance."
+    },
+    "solver_unit_tests": {
+      "command": "python3 tests/test_pr73_joint_analysis.py",
+      "exit_code": 0,
+      "result": "10 tests passed"
+    }
+  },
+  "schema": "pr73_independent_python_replay_v1",
+  "scope": "Independent Python-only verification. No native source/build execution performed by reviewer."
+}

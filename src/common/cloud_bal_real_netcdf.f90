@@ -1308,7 +1308,7 @@ CONTAINS
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(physical_joint_candidate_contract), INTENT(IN) :: contract
     TYPE(joint_candidate_evaluation), INTENT(IN) :: evaluation
-    INTEGER :: component_dim,coverage_var,source_var,boundary_var,phase_var,tolerance_var,nx,ny,nz,mass_var
+    INTEGER :: component_dim,coverage_var,source_var,boundary_var,phase_var,analysis_var,tolerance_var,nx,ny,nz,mass_var,i,j,k
     INTEGER(int32), ALLOCATABLE :: coverage(:,:,:)
     CHARACTER(LEN=1024) :: extensions
 
@@ -1325,6 +1325,19 @@ CONTAINS
         ANY(SHAPE(contract%physical_tolerance)/=(/8,nx,ny,nz/))) RETURN
     IF (ALLOCATED(contract%phase_increment)) THEN
       IF (ANY(SHAPE(contract%phase_increment)/=(/8,nx,ny,nz/))) RETURN
+    END IF
+    IF (ALLOCATED(contract%analysis_increment)) THEN
+      IF (ANY(SHAPE(contract%analysis_increment)/=(/8,nx,ny,nz/)) .OR. &
+          LEN_TRIM(contract%analysis_increment_identity)==0 .OR. &
+          LEN_TRIM(contract%analysis_increment_identity)>128 .OR. &
+          ANY(.NOT.ieee_is_finite(contract%analysis_increment)) .OR. &
+          ANY(contract%analysis_increment(1,:,:,:)/=0.0_real64)) RETURN
+      DO k=1,nz; DO j=1,ny; DO i=1,nx
+        IF (.NOT.contract%coverage(i,j,k) .AND. &
+            ANY(contract%analysis_increment(:,i,j,k)/=0.0_real64)) RETURN
+      END DO; END DO; END DO
+    ELSE IF (LEN_TRIM(contract%analysis_increment_identity)>0) THEN
+      RETURN
     END IF
     IF (.NOT.put_thermo_field(ncid,dims,'physical_background_temperature',background%temperature) .OR. &
         .NOT.put_thermo_field(ncid,dims,'physical_candidate_temperature',candidate%temperature)) RETURN
@@ -1361,6 +1374,10 @@ CONTAINS
       IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_internal_phase_increment',NF90_DOUBLE, &
           (/component_dim,dims/),phase_var))) RETURN
     END IF
+    IF (ALLOCATED(contract%analysis_increment)) THEN
+      IF (.NOT.nc_ok(nf90_def_var(ncid,'physical_analysis_increment',NF90_DOUBLE, &
+          (/component_dim,dims/),analysis_var))) RETURN
+    END IF
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_contract_version', &
         'physical_joint_candidate_v1')) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_contract_identity', &
@@ -1389,9 +1406,16 @@ CONTAINS
           .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_internal_phase_contract', &
           'zero_dry_mass_zero_net_water_zero_mixture_enthalpy_v1'))) RETURN
     END IF
+    IF (ALLOCATED(contract%analysis_increment)) THEN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,analysis_var,'units', &
+          'kg for components 1:7; J for component 8')) .OR. &
+          .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'physical_analysis_increment_identity', &
+          TRIM(contract%analysis_increment_identity)))) RETURN
+    END IF
     IF (.NOT.nc_ok(nf90_get_att(ncid,NF90_GLOBAL,'schema_extensions',extensions))) RETURN
     extensions=TRIM(extensions)//',physical_joint_candidate_v1'
     IF (ALLOCATED(contract%phase_increment)) extensions=TRIM(extensions)//',physical_internal_phase_v1'
+    IF (ALLOCATED(contract%analysis_increment)) extensions=TRIM(extensions)//',physical_analysis_increment_v1'
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions',TRIM(extensions)))) RETURN
     IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
     ALLOCATE(coverage(nx,ny,nz))
@@ -1406,6 +1430,9 @@ CONTAINS
         .NOT.nc_ok(nf90_put_var(ncid,tolerance_var,contract%physical_tolerance))) RETURN
     IF (ALLOCATED(contract%phase_increment)) THEN
       IF (.NOT.nc_ok(nf90_put_var(ncid,phase_var,contract%phase_increment))) RETURN
+    END IF
+    IF (ALLOCATED(contract%analysis_increment)) THEN
+      IF (.NOT.nc_ok(nf90_put_var(ncid,analysis_var,contract%analysis_increment))) RETURN
     END IF
     put_physical_contract_extension=.TRUE.
   END FUNCTION put_physical_contract_extension
@@ -2201,7 +2228,7 @@ CONTAINS
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
     INTEGER, INTENT(OUT) :: status,reason
     LOGICAL, INTENT(IN), OPTIONAL :: pressure_analysis_candidate
-    LOGICAL :: pressure_candidate,variable_geometry,transition,cloud_present
+    LOGICAL :: pressure_candidate,variable_geometry,transition,cloud_present,analysis_estimator_candidate
     INTEGER :: state_status,state_reason
     TYPE(pressure_analysis_budget) :: endpoint_budget
     TYPE(joint_candidate_evaluation) :: endpoint_evaluation
@@ -2211,6 +2238,9 @@ CONTAINS
     IF (ALLOCATED(result%physical_contract)) THEN
       IF (result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS) RETURN
     END IF
+    analysis_estimator_candidate=.FALSE.
+    IF (ALLOCATED(result%physical_contract)) &
+      analysis_estimator_candidate=ALLOCATED(result%physical_contract%analysis_increment)
     pressure_candidate=.FALSE.
     transition=ALLOCATED(result%pressure_transition_seed)
     ! Serialization binds a candidate to its producing pipeline. Independent
@@ -2229,6 +2259,9 @@ CONTAINS
       END IF
     END IF
     IF (PRESENT(pressure_analysis_candidate)) pressure_candidate=pressure_analysis_candidate
+    IF (analysis_estimator_candidate .AND. (transition .OR. pressure_candidate .OR. &
+        variable_geometry .OR. ALLOCATED(result%thermo_support) .OR. &
+        ALLOCATED(result%geopotential_support))) RETURN
     IF (config%requested_mode/=MODE_SHADOW .OR. &
         result%requested_mode/=MODE_SHADOW .OR. &
         (config%balance%target_authority/=TARGET_AUTHORITY_OBSERVATIONAL .AND. &
@@ -2370,7 +2403,8 @@ CONTAINS
     ! first so their dedicated reason code is preserved.
     IF (.NOT.canonical_states_equal(state_in,operational_state)) RETURN
     ! Cloud QC may change legitimately; the full replay below validates it.
-    IF (.NOT.transition .AND. .NOT.cloud_present .AND. .NOT.ALLOCATED(result%thermo_support)) THEN
+    IF (.NOT.analysis_estimator_candidate .AND. .NOT.transition .AND. .NOT.cloud_present .AND. &
+        .NOT.ALLOCATED(result%thermo_support)) THEN
       IF (.NOT.thermo_candidate_is_coherent(state_in,candidate,result)) RETURN
     END IF
     CALL validate_canonical_state(candidate,.FALSE.,.TRUE.,state_status,state_reason,.FALSE.)
@@ -2378,7 +2412,8 @@ CONTAINS
       reason=state_reason
       RETURN
     END IF
-    IF (.NOT.transition .AND. .NOT.cloud_present .AND. ALLOCATED(result%thermo_support)) THEN
+    IF (.NOT.analysis_estimator_candidate .AND. .NOT.transition .AND. .NOT.cloud_present .AND. &
+        ALLOCATED(result%thermo_support)) THEN
       IF (.NOT.thermo_candidate_is_coherent(state_in,candidate,result)) RETURN
     END IF
     CALL validate_canonical_state(operational_state,.FALSE.,.TRUE.,state_status, &
@@ -2404,11 +2439,11 @@ CONTAINS
     END IF
     ! Remap and cloud diagnostics need the full pipeline replay. The radar-only
     ! shortcut treats every no-echo diagnostic change as a precipitation change.
-    IF (.NOT.transition .AND. .NOT.cloud_present) THEN
+    IF (.NOT.analysis_estimator_candidate .AND. .NOT.transition .AND. .NOT.cloud_present) THEN
       IF (.NOT.candidate_result_is_coherent(state_in,candidate,result)) RETURN
     END IF
-    IF (transition .OR. config%maximum_outer_iterations>1 .OR. pressure_candidate .OR. &
-        variable_geometry .OR. cloud_present) THEN
+    IF (.NOT.analysis_estimator_candidate .AND. (transition .OR. config%maximum_outer_iterations>1 .OR. pressure_candidate .OR. &
+        variable_geometry .OR. cloud_present)) THEN
       IF (.NOT.pipeline_result_replays(state_in,candidate,result,config)) RETURN
     END IF
     IF (ALLOCATED(result%physical_contract)) THEN
@@ -2994,7 +3029,23 @@ CONTAINS
   LOGICAL FUNCTION pipeline_result_is_coherent(result)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    LOGICAL :: analysis_estimator_trial
     pipeline_result_is_coherent=.FALSE.
+    analysis_estimator_trial=ALLOCATED(result%physical_contract)
+    IF (analysis_estimator_trial) &
+      analysis_estimator_trial=ALLOCATED(result%physical_contract%analysis_increment)
+    IF (analysis_estimator_trial) THEN
+      ! A scoped estimator artifact must not manufacture successful producer
+      ! stage receipts. Require explicit blocked/unrun stage statuses instead.
+      IF (result%status/=STATUS_FAILED .OR. result%reason_code/=REASON_AUTHORITY .OR. &
+          result%column%status/=STATUS_FAILED .OR. result%column%reason_code/=REASON_AUTHORITY .OR. &
+          result%balance%status/=STATUS_FAILED .OR. result%balance%reason_code/=REASON_AUTHORITY .OR. &
+          result%overall%status/=STATUS_FAILED .OR. result%overall%reason_code/=REASON_AUTHORITY .OR. &
+          result%geopotential%status/=STATUS_FAILED .OR. &
+          result%geopotential%reason_code/=REASON_AUTHORITY) RETURN
+      pipeline_result_is_coherent=.TRUE.
+      RETURN
+    END IF
     IF (result%column%status/=STATUS_OK .OR. &
         result%column%reason_code/=REASON_NONE) RETURN
     IF (ALLOCATED(result%geopotential_support)) THEN

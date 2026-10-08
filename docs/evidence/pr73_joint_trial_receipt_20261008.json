@@ -1,0 +1,123 @@
+{
+  "actual_12utc_authority": false,
+  "broad_legacy_suite": {
+    "command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 tests/run_real_shadow_io_contract_tests.sh",
+    "exit_code": 0,
+    "scope": "pinned Intel O0/O2 SHADOW I/O, physical reader, prescribed pressure and legacy no-analysis compatibility"
+  },
+  "canonical_shadow_candidate_accepted": false,
+  "canonical_shadow_candidate_status": "INVALID_UNBOUND_REJECTED",
+  "canonical_validator_rejection_is_expected": true,
+  "created_utc": "2026-10-08",
+  "endpoint_evaluator_writer_and_independent_readback": true,
+  "endpoint_status": "READY_FOR_ENDPOINT_EVALUATION",
+  "evidence_class": "MANUFACTURED_ALGORITHM_AND_ENDPOINT_CONTRACT_FIXTURE",
+  "final_source_sha256": {
+    "docs/evidence/pr73_joint_fixture_20261008.json": "8e8d93dece2a5599812238b2afb6d544db6cf81f07b1d2e947bfac917335b5fc",
+    "src/common/cloud_bal_pipeline.f90": "49f6978577862dd3577dfad77ba506fc7728e2afe9a71609079026acecaa7900",
+    "src/common/cloud_bal_real_netcdf.f90": "634f8b43bcc5466cbaf91f8a92343f743bcee6cdf2995befb09127f7a63d76ba",
+    "tests/check_physical_contract_shadow.py": "8b26a2080c89c68f90943840d84db0e9a1c97944162a0f31d0861d2551865ff8",
+    "tests/run_pr73_joint_analysis.sh": "57d5d14b10703d14bcdcd80b6970d188fa559f0d3b0e3995c07ffb72a8550239",
+    "tests/test_pr73_joint_analysis.py": "506f68d206df5480a0bec4821f1270b48214a9910dc8ad4eb810a0c7235ce27d",
+    "tests/test_real_shadow_io_contract.f90": "68d2afe8ac2cbe69888519c655146e941eafce0eaa320d0702bc15f33cb600dd",
+    "tools/pr73_joint_analysis.py": "0a7bd3f94b17672a0c2d32475714ffc946a10bdda5f484af1345f23ebb89934b",
+    "tools/validate_shadow_diagnostics.py": "98b8cb9f94e58a0a04691f69c4cdebf1294bc60564c533a24d43bd304c90b5c8"
+  },
+  "legacy_no_analysis_payload_compatibility_checked": true,
+  "limitations": [
+    "Manufactured H/B/R/prior/observation/constraints only.",
+    "No production pipeline candidate proposal or full stage lineage.",
+    "No nonlinear PSD, full thermodynamic, dynamic mass/wind, storm-motion, or operational acceptance.",
+    "Analysis dry-mass increment is restricted to zero; net analysis water must close local fixed-pressure mass."
+  ],
+  "pinned_intel_runs": [
+    {
+      "accepted_shadow_candidate": false,
+      "candidate_fixture_exit": 0,
+      "candidate_log_sha256": "a86cbe3c4d18de3be8eb57ef64ea93d6bd0e03c139e5ee38d7d96c5981136584",
+      "canonical_diagnostic_cli": {
+        "artifact_decision": "UNBOUND",
+        "candidate_decision": "REJECTED",
+        "exit_code": 1,
+        "expected_rejection": true,
+        "promotion_eligible": false,
+        "report_sha256": "dce0e7f27844bb05d45719c16364c7d1c087cc9e37b6e9996c21bd3b555cbb00"
+      },
+      "compiled_source_sha256": {
+        "src/common/cloud_bal_pipeline.f90": "49f6978577862dd3577dfad77ba506fc7728e2afe9a71609079026acecaa7900",
+        "src/common/cloud_bal_real_netcdf.f90": "634f8b43bcc5466cbaf91f8a92343f743bcee6cdf2995befb09127f7a63d76ba",
+        "tests/check_physical_contract_shadow.py": "8b26a2080c89c68f90943840d84db0e9a1c97944162a0f31d0861d2551865ff8",
+        "tests/test_real_shadow_io_contract.f90": "68d2afe8ac2cbe69888519c655146e941eafce0eaa320d0702bc15f33cb600dd",
+        "tools/pr73_joint_analysis.py": "0a7bd3f94b17672a0c2d32475714ffc946a10bdda5f484af1345f23ebb89934b"
+      },
+      "compiler_receipt_sha256": "bac7e13ab7ba15b6c6548993824246d8e647f5fbc85cdaff97baf1e6fe716d59",
+      "netcdf_artifact_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "physical_contract_readback_exit": 0,
+      "pipeline_reason": 9,
+      "pipeline_stages_run": false,
+      "pipeline_status": -10,
+      "profile": "O0",
+      "readback_log_sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e",
+      "scratch_directory": "/var/tmp/cloud_bal_pr73_joint_analysis.9spLCv",
+      "trial_json_sha256": "111dccbc19e21e978fc37d7882fadbb3ab6ba29bb465c633c5ddc98ed7492c8f"
+    },
+    {
+      "accepted_shadow_candidate": false,
+      "candidate_fixture_exit": 0,
+      "candidate_log_sha256": "fc9666b996fde12a40b0720cf34fa110848b7e445f2a7f36fd8d64cde376e513",
+      "canonical_diagnostic_cli": {
+        "artifact_decision": "UNBOUND",
+        "candidate_decision": "REJECTED",
+        "exit_code": 1,
+        "expected_rejection": true,
+        "promotion_eligible": false,
+        "report_sha256": "dce0e7f27844bb05d45719c16364c7d1c087cc9e37b6e9996c21bd3b555cbb00"
+      },
+      "compiled_source_sha256": {
+        "src/common/cloud_bal_pipeline.f90": "49f6978577862dd3577dfad77ba506fc7728e2afe9a71609079026acecaa7900",
+        "src/common/cloud_bal_real_netcdf.f90": "634f8b43bcc5466cbaf91f8a92343f743bcee6cdf2995befb09127f7a63d76ba",
+        "tests/check_physical_contract_shadow.py": "8b26a2080c89c68f90943840d84db0e9a1c97944162a0f31d0861d2551865ff8",
+        "tests/test_real_shadow_io_contract.f90": "68d2afe8ac2cbe69888519c655146e941eafce0eaa320d0702bc15f33cb600dd",
+        "tools/pr73_joint_analysis.py": "0a7bd3f94b17672a0c2d32475714ffc946a10bdda5f484af1345f23ebb89934b"
+      },
+      "compiler_receipt_sha256": "3cb770bdd7247a0ba608394c6b7e54be2717906679cb7999cce862fccd27c549",
+      "netcdf_artifact_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "physical_contract_readback_exit": 0,
+      "pipeline_reason": 9,
+      "pipeline_stages_run": false,
+      "pipeline_status": -10,
+      "profile": "O2",
+      "readback_log_sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e",
+      "scratch_directory": "/var/tmp/cloud_bal_pr73_joint_analysis.6aBe6l",
+      "trial_json_sha256": "111dccbc19e21e978fc37d7882fadbb3ab6ba29bb465c633c5ddc98ed7492c8f"
+    }
+  ],
+  "pipeline_stage_status_in_artifacts": {
+    "meaning": "blocked/unrun; authority not established",
+    "reason": 9,
+    "status": -10
+  },
+  "python_unit_tests": {
+    "count": 12,
+    "solver_source_sha256": "0a7bd3f94b17672a0c2d32475714ffc946a10bdda5f484af1345f23ebb89934b",
+    "status": "PASS",
+    "test_source_sha256": "506f68d206df5480a0bec4821f1270b48214a9910dc8ad4eb810a0c7235ce27d"
+  },
+  "run_cloud_bal_pipeline_generated_candidate": false,
+  "schema_version": 1,
+  "scientific_approval": false,
+  "source_sha256": {
+    "docs/evidence/pr73_joint_fixture_20261008.json": "8e8d93dece2a5599812238b2afb6d544db6cf81f07b1d2e947bfac917335b5fc",
+    "src/common/cloud_bal_pipeline.f90": "49f6978577862dd3577dfad77ba506fc7728e2afe9a71609079026acecaa7900",
+    "src/common/cloud_bal_real_netcdf.f90": "634f8b43bcc5466cbaf91f8a92343f743bcee6cdf2995befb09127f7a63d76ba",
+    "tests/check_physical_contract_shadow.py": "8b26a2080c89c68f90943840d84db0e9a1c97944162a0f31d0861d2551865ff8",
+    "tests/run_pr73_joint_analysis.sh": "a31d28da2de28c3543b9cc9d7fd79a29e6eb85d9b430dcce7e8251c899706ab4",
+    "tests/test_pr73_joint_analysis.py": "506f68d206df5480a0bec4821f1270b48214a9910dc8ad4eb810a0c7235ce27d",
+    "tests/test_real_shadow_io_contract.f90": "68d2afe8ac2cbe69888519c655146e941eafce0eaa320d0702bc15f33cb600dd",
+    "tools/pr73_joint_analysis.py": "0a7bd3f94b17672a0c2d32475714ffc946a10bdda5f484af1345f23ebb89934b",
+    "tools/validate_shadow_diagnostics.py": "98b8cb9f94e58a0a04691f69c4cdebf1294bc60564c533a24d43bd304c90b5c8"
+  },
+  "trial_output": "docs/evidence/pr73_joint_trial_output_20261008.json",
+  "trial_output_sha256": "111dccbc19e21e978fc37d7882fadbb3ab6ba29bb465c633c5ddc98ed7492c8f",
+  "trial_status": "MANUFACTURED_ALGORITHM_TRIAL"
+}

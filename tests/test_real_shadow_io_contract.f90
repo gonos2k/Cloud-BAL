@@ -30,8 +30,16 @@ PROGRAM test_real_shadow_io_contract
   REAL(real64) :: residual(2,2,2)
   INTEGER :: failures,status,reason,ncid,rc
   LOGICAL :: pressure_request_file_exists
+  CHARACTER(LEN=512) :: pr73_control_path
 
   failures=0
+  IF (COMMAND_ARGUMENT_COUNT()==1) THEN
+    CALL GET_COMMAND_ARGUMENT(1,pr73_control_path)
+    CALL test_pr73_estimated_analysis_contract(TRIM(pr73_control_path),failures)
+    IF (failures/=0) ERROR STOP 'PR73 estimated-analysis contract fixture failed'
+    WRITE(*,'(A)') 'PR73 estimated-analysis physical contract fixture passed'
+    STOP 0
+  END IF
   CALL test_pressure_dispatch_request_scope(failures)
   CALL make_state(input)
   candidate=input
@@ -380,6 +388,158 @@ PROGRAM test_real_shadow_io_contract
   PRINT *,'Real SHADOW I/O contract tests passed'
 
 CONTAINS
+
+  SUBROUTINE test_pr73_estimated_analysis_contract(control_path,failures)
+    CHARACTER(LEN=*), INTENT(IN) :: control_path
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: background,candidate,operational
+    TYPE(cloud_bal_state_type) :: candidate_before,preflight_candidate,preflight_operational
+    TYPE(cloud_bal_pipeline_config) :: config
+    TYPE(cloud_bal_pipeline_result) :: result
+    TYPE(physical_joint_candidate_contract) :: contract
+    REAL(real64) :: background_values(6),candidate_values(6),analysis_values(8),tolerance_values(8)
+    REAL(real64) :: residual_before(4,4,3),residual_after(4,4,3)
+    REAL(real32) :: longitude(4,4)
+    INTEGER :: unit,io_status,i,j,k,eval_status,eval_reason,writer_status
+    LOGICAL :: exists
+    i=1; j=1; k=1
+    OPEN(NEWUNIT=unit,FILE=TRIM(control_path),STATUS='OLD',ACTION='READ',IOSTAT=io_status)
+    CALL check(io_status==0,'estimated-analysis control file opens',failures)
+    IF (io_status/=0) RETURN
+    READ(unit,*,IOSTAT=io_status) background_values
+    CALL check(io_status==0,'estimated-analysis background control reads',failures)
+    IF (io_status==0) READ(unit,*,IOSTAT=io_status) candidate_values
+    CALL check(io_status==0,'estimated-analysis candidate control reads',failures)
+    IF (io_status==0) READ(unit,*,IOSTAT=io_status) analysis_values
+    CALL check(io_status==0,'estimated-analysis component control reads',failures)
+    IF (io_status==0) READ(unit,*,IOSTAT=io_status) tolerance_values
+    CALL check(io_status==0,'estimated-analysis tolerance control reads',failures)
+    CLOSE(unit)
+    IF (io_status/=0) RETURN
+
+    CALL make_state(background,4,4,3)
+    background%temperature%value(i,j,k)=REAL(background_values(1),real32)
+    background%vapor%value(i,j,k)=REAL(background_values(2),real32)
+    background%cloud_water%value(i,j,k)=REAL(background_values(3),real32)
+    CALL refresh_dry_air_mass_measure(background,eval_status)
+    CALL check(eval_status==STATUS_OK,'estimated-analysis prior has canonical dry mass',failures)
+    IF (eval_status/=STATUS_OK) RETURN
+    candidate=background
+    candidate%temperature%value(i,j,k)=REAL(candidate_values(1),real32)
+    candidate%vapor%value(i,j,k)=REAL(candidate_values(2),real32)
+    candidate%cloud_water%value(i,j,k)=REAL(candidate_values(3),real32)
+    candidate%u%value(i,j,k)=REAL(candidate_values(4),real32)
+    candidate%v%value(i,j,k)=REAL(candidate_values(5),real32)
+    candidate%omega%value(i,j,k)=REAL(candidate_values(6),real32)
+    candidate%vapor%source(i,j,k)=IOR(candidate%vapor%source(i,j,k), &
+      IOR(SOURCE_CLOUD_ANALYSIS,SOURCE_COLUMN_PHYSICS))
+    candidate%cloud_water%source(i,j,k)=IOR(candidate%cloud_water%source(i,j,k), &
+      IOR(SOURCE_CLOUD_ANALYSIS,SOURCE_COLUMN_PHYSICS))
+    candidate%u%source(i,j,k)=IOR(candidate%u%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+    candidate%v%source(i,j,k)=IOR(candidate%v%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+    candidate%omega%source(i,j,k)=IOR(candidate%omega%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+    CALL refresh_dry_air_mass_measure(candidate,eval_status)
+    CALL check(eval_status==STATUS_OK,'estimated-analysis endpoint has canonical dry mass',failures)
+    IF (eval_status/=STATUS_OK) RETURN
+
+    ALLOCATE(contract%coverage(4,4,3),contract%source_increment(8,4,4,3), &
+      contract%boundary_increment(8,4,4,3),contract%phase_increment(8,4,4,3), &
+      contract%analysis_increment(8,4,4,3),contract%physical_tolerance(8,4,4,3))
+    contract%contract_identity='manufactured-HBR-joint-analysis-fixture-v1'
+    contract%analysis_increment_identity='manufactured:HBR-constrained-analysis-v1'
+    contract%adjustable_variables=IOR(PHYSICAL_ADJUST_TEMPERATURE,IOR(PHYSICAL_ADJUST_VAPOR, &
+      IOR(PHYSICAL_ADJUST_CLOUD_WATER,IOR(PHYSICAL_ADJUST_U, &
+      IOR(PHYSICAL_ADJUST_V,PHYSICAL_ADJUST_OMEGA)))))
+    contract%coverage=background%above_ground
+    contract%source_increment=0.0_real64
+    contract%boundary_increment=0.0_real64
+    contract%phase_increment=0.0_real64
+    contract%analysis_increment=0.0_real64
+    contract%physical_tolerance=0.0_real64
+    contract%analysis_increment(:,i,j,k)=analysis_values
+    contract%physical_tolerance(:,i,j,k)=tolerance_values
+    CALL make_result(result,4,4,3,background,candidate,config%balance)
+    CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+    CALL check(eval_status==STATUS_OK .AND. &
+      result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_PASS, &
+      'estimated analysis plus zero phase/source/boundary closes canonical physical components',failures)
+    IF (result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS) &
+      WRITE(*,'(A,4(I0,1X),ES24.15)') 'PR73 physical reject: ',eval_status,eval_reason, &
+        result%candidate_evaluation%physical_feasibility_reason, &
+        result%candidate_evaluation%physical_feasibility_failed_component, &
+        result%candidate_evaluation%physical_feasibility_residual_scaled
+    IF (eval_status/=STATUS_OK .OR. &
+        result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS) RETURN
+    result%physical_contract=contract
+    operational=background
+    config%requested_mode=MODE_SHADOW
+    longitude=0.0_real32; residual_before=0.0_real64; residual_after=0.0_real64
+
+    contract%analysis_increment_identity=''
+    CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+    CALL check(result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
+      'analysis increment requires its independent estimator identity',failures)
+    contract%analysis_increment_identity='manufactured:HBR-constrained-analysis-v1'
+    contract%analysis_increment(1,i,j,k)=1.0_real64
+    CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+    CALL check(result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
+      'analysis increment cannot change the canonical dry-mass metric',failures)
+    contract%analysis_increment(1,i,j,k)=0.0_real64
+    contract%analysis_increment(2,i,j,k)=analysis_values(2)+100.0_real64
+    CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+    CALL check(result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      result%candidate_evaluation%physical_feasibility_failed_component==PHYSICAL_COMPONENT_TOTAL_MASS, &
+      'endpoint assessment applies canonical analysis-water mass closure',failures)
+    result%physical_contract=contract
+    CALL write_shadow_diagnostics('pr73-invalid-analysis-mass.nc',background,candidate,longitude,result,config, &
+      residual_before,residual_after,writer_status,operational)
+    INQUIRE(FILE='pr73-invalid-analysis-mass.nc',EXIST=exists)
+    CALL check(writer_status/=STATUS_OK .AND. .NOT.exists, &
+      'writer rejects analysis-water mass defect before publication',failures)
+    candidate_before=candidate
+    CALL run_cloud_bal_pipeline(background,preflight_candidate,preflight_operational,result,config, &
+      physical_contract=contract)
+    CALL check(result%status==STATUS_FAILED .AND. &
+      result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      result%candidate_evaluation%physical_feasibility_failed_component==PHYSICAL_COMPONENT_TOTAL_MASS, &
+      'net analysis-water change fails canonical mass closure before endpoint replay',failures)
+    CALL check(canonical_states_equal(candidate,candidate_before), &
+      'failed analysis-mass preflight preserves the input candidate',failures)
+    contract%analysis_increment(2,i,j,k)=analysis_values(2)
+    contract%analysis_increment(8,i,j,k)=ieee_value(0.0_real64,ieee_quiet_nan)
+    CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+    CALL check(result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
+      'nonfinite estimator increment fails closed',failures)
+    contract%analysis_increment(8,i,j,k)=analysis_values(8)
+    contract%coverage(4,4,3)=.FALSE.
+    contract%analysis_increment(2,4,4,3)=1.0_real64
+    CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+    CALL check(result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
+      'analysis increment outside declared coverage fails closed',failures)
+    contract%coverage=background%above_ground
+    contract%analysis_increment(:,4,4,3)=0.0_real64
+
+    CALL make_result(result,4,4,3,background,candidate,config%balance)
+    CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+    result%physical_contract=contract
+    result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+    CALL initialize_stage_result(result%column,4,4,3,STATUS_FAILED,REASON_AUTHORITY)
+    CALL initialize_stage_result(result%balance,4,4,3,STATUS_FAILED,REASON_AUTHORITY)
+    CALL initialize_stage_result(result%geopotential,4,4,3,STATUS_FAILED,REASON_AUTHORITY)
+    CALL initialize_stage_result(result%overall,4,4,3,STATUS_FAILED,REASON_AUTHORITY)
+    CALL write_shadow_diagnostics('pr73-estimated-analysis-shadow.nc',background,candidate,longitude, &
+      result,config,residual_before,residual_after,writer_status,operational)
+    CALL check(writer_status==STATUS_OK,'blocked estimator candidate reaches the canonical SHADOW writer',failures)
+    INQUIRE(FILE='pr73-estimated-analysis-shadow.nc',EXIST=exists)
+    CALL check(writer_status==STATUS_OK .AND. exists,'estimated-analysis artifact is published',failures)
+  END SUBROUTINE test_pr73_estimated_analysis_contract
 
   SUBROUTINE test_pressure_analysis_candidate_shadow(failures)
     INTEGER, INTENT(INOUT) :: failures

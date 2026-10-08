@@ -41,17 +41,22 @@ MODULE cloud_bal_pipeline
     ! Caller supplied reference label for this declaration set. It does not
     ! authenticate the physical authority of the declared increments.
     CHARACTER(LEN=128) :: contract_identity=''
+    ! Optional estimator-produced analysis change in kg (components 1:7) and J
+    ! (component 8). It is independent of external source, boundary, and phase.
+    CHARACTER(LEN=128) :: analysis_increment_identity=''
     ! Caller-prescribed per-cell source and boundary increments in kg
     ! (components 1:7) and J (component 8), plus physical tolerances in those
-    ! units. The optional phase_increment is a separate internal exchange and
-    ! must have zero dry mass, net water, and represented mixture enthalpy.
+    ! units. Analysis increments are a separately identified estimator output;
+    ! optional phase increments are a separate internal exchange and must have
+    ! zero dry mass, net water, and represented mixture enthalpy.
     ! Component 1 is the canonical dry-mass metric, not physical gas source
     ! authority. Component 8 is represented mixture enthalpy only.
     ! Components 1:7 of source+boundary must have zero net total-mass
     ! increment per covered cell when pressure geometry is fixed. The
-    ! endpoint is compared against source, boundary, and the separately
-    ! constrained internal phase exchange. Source/boundary attribution,
-    ! observation fit, optimality and native conservation remain unassessed.
+    ! endpoint is compared against analysis, source, boundary, and the
+    ! separately constrained internal phase exchange. This ledger does not
+    ! authenticate analysis authority or assess its observation fit/optimality;
+    ! source/boundary attribution and native conservation remain unassessed.
     INTEGER :: adjustable_variables=0
     LOGICAL, ALLOCATABLE :: coverage(:,:,:)
     REAL(real64), ALLOCATABLE :: source_increment(:,:,:,:)
@@ -60,6 +65,7 @@ MODULE cloud_bal_pipeline
     ! the same order/units as source_increment; stoichiometry requires zero
     ! dry-mass, net-water, and represented-enthalpy exchange per cell.
     REAL(real64), ALLOCATABLE :: phase_increment(:,:,:,:)
+    REAL(real64), ALLOCATABLE :: analysis_increment(:,:,:,:)
     REAL(real64), ALLOCATABLE :: physical_tolerance(:,:,:,:)
   END TYPE physical_joint_candidate_contract
 
@@ -950,7 +956,7 @@ CONTAINS
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(physical_joint_candidate_contract), INTENT(IN) :: contract
     TYPE(joint_candidate_evaluation), INTENT(INOUT) :: evaluation
-    REAL(real64) :: source,boundary,phase,after_term,before_term
+    REAL(real64) :: analysis,source,boundary,phase,after_term,before_term
     REAL(real64) :: before_mass,after_mass,before_enthalpy,after_enthalpy,species_before(6),species_after(6)
     REAL(real64) :: scaled_residual
     INTEGER :: nx,ny,nz,i,j,k,c,shape3(3)
@@ -988,6 +994,30 @@ CONTAINS
         evaluation%physical_feasibility_reason=REASON_GATE
         RETURN
       END IF
+    END IF
+    IF (ALLOCATED(contract%analysis_increment)) THEN
+      IF (ANY(SHAPE(contract%analysis_increment)/=(/8,nx,ny,nz/)) .OR. &
+          LEN_TRIM(contract%analysis_increment_identity)==0 .OR. &
+          ANY(.NOT.ieee_is_finite(contract%analysis_increment))) THEN
+        evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+        evaluation%physical_feasibility_reason=REASON_SHAPE
+        RETURN
+      END IF
+      DO k=1,nz; DO j=1,ny; DO i=1,nx
+        IF (.NOT.contract%coverage(i,j,k) .AND. &
+            ANY(contract%analysis_increment(:,i,j,k)/=0.0_real64)) THEN
+          evaluation%physical_feasibility_reason=REASON_REQUIRED_COVERAGE
+          RETURN
+        END IF
+        IF (contract%analysis_increment(PHYSICAL_COMPONENT_DRY_MASS_METRIC,i,j,k)/=0.0_real64) THEN
+          evaluation%physical_feasibility_reason=REASON_GATE
+          RETURN
+        END IF
+      END DO; END DO; END DO
+    ELSE IF (LEN_TRIM(contract%analysis_increment_identity)>0) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+      evaluation%physical_feasibility_reason=REASON_AUTHORITY
+      RETURN
     END IF
     IF (ANY(background%above_ground .NEQV. candidate%above_ground) .OR. &
         ANY(background%surface_pressure%value/=candidate%surface_pressure%value) .OR. &
@@ -1043,6 +1073,13 @@ CONTAINS
       evaluation%physical_feasibility_reason=REASON_AUTHORITY
       RETURN
     END IF
+    CALL preflight_physical_mass_contract(background,contract,evaluation)
+    IF (evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED) RETURN
+    evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+    evaluation%physical_feasibility_reason=REASON_GATE
+    evaluation%physical_feasibility_failed_cell=0
+    evaluation%physical_feasibility_failed_component=0
+    evaluation%physical_feasibility_residual_scaled=0.0_real64
     IF (.NOT.field_arrays_match(background%temperature,shape3) .OR. &
         .NOT.field_arrays_match(candidate%temperature,shape3) .OR. &
         .NOT.field_arrays_match(background%vapor,shape3) .OR. &
@@ -1116,7 +1153,9 @@ CONTAINS
           after_term=after_mass*species_after(c-1)
           before_term=before_mass*species_before(c-1)
         END IF
-        IF (.NOT.increment_matches(after_term,before_term,source,boundary,phase, &
+        analysis=0.0_real64
+        IF (ALLOCATED(contract%analysis_increment)) analysis=contract%analysis_increment(c,i,j,k)
+        IF (.NOT.increment_matches(after_term,before_term,analysis,source,boundary,phase, &
             contract%physical_tolerance(c,i,j,k),scaled_residual)) THEN
           CALL record_physical_failure(evaluation,i,j,k,c,scaled_residual)
           RETURN
@@ -1159,7 +1198,7 @@ CONTAINS
     TYPE(physical_joint_candidate_contract), INTENT(IN) :: contract
     TYPE(joint_candidate_evaluation), INTENT(OUT) :: evaluation
     REAL(real64) :: scale,residual_scaled,tolerance_scaled,arithmetic_scaled,pressure_mass
-    REAL(real64) :: source(7),boundary(7),tolerance(7)
+    REAL(real64) :: analysis(7),source(7),boundary(7),tolerance(7)
     INTEGER :: i,j,k,nx,ny,nz
 
     evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_UNSUPPORTED
@@ -1191,6 +1230,33 @@ CONTAINS
         RETURN
       END IF
     END IF
+    IF (ALLOCATED(contract%analysis_increment)) THEN
+      IF (ANY(SHAPE(contract%analysis_increment)/=(/8,nx,ny,nz/)) .OR. &
+          LEN_TRIM(contract%analysis_increment_identity)==0 .OR. &
+          LEN_TRIM(contract%analysis_increment_identity)>128 .OR. &
+          ANY(.NOT.ieee_is_finite(contract%analysis_increment))) THEN
+        evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+        evaluation%physical_feasibility_reason=REASON_SHAPE
+        RETURN
+      END IF
+      IF (ANY(contract%analysis_increment(1,:,:,:)/=0.0_real64)) THEN
+        evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+        evaluation%physical_feasibility_reason=REASON_GATE
+        RETURN
+      END IF
+      DO k=1,nz; DO j=1,ny; DO i=1,nx
+        IF (.NOT.contract%coverage(i,j,k) .AND. &
+            ANY(contract%analysis_increment(:,i,j,k)/=0.0_real64)) THEN
+          evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+          evaluation%physical_feasibility_reason=REASON_REQUIRED_COVERAGE
+          RETURN
+        END IF
+      END DO; END DO; END DO
+    ELSE IF (LEN_TRIM(contract%analysis_increment_identity)>0) THEN
+      evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
+      evaluation%physical_feasibility_reason=REASON_AUTHORITY
+      RETURN
+    END IF
     IF (ANY(.NOT.ieee_is_finite(contract%source_increment(1:7,:,:,:))) .OR. &
         ANY(.NOT.ieee_is_finite(contract%boundary_increment(1:7,:,:,:))) .OR. &
         ANY(.NOT.ieee_is_finite(contract%physical_tolerance(1:7,:,:,:)))) THEN
@@ -1208,6 +1274,8 @@ CONTAINS
       IF (.NOT.state%above_ground(i,j,k) .OR. .NOT.contract%coverage(i,j,k)) CYCLE
       source=contract%source_increment(1:7,i,j,k)
       boundary=contract%boundary_increment(1:7,i,j,k)
+      analysis=0.0_real64
+      IF (ALLOCATED(contract%analysis_increment)) analysis=contract%analysis_increment(1:7,i,j,k)
       tolerance=contract%physical_tolerance(1:7,i,j,k)
       pressure_mass=state%grid%pressure_mass_measure(i,j,k)
       IF (.NOT.ieee_is_finite(pressure_mass)) THEN
@@ -1224,12 +1292,14 @@ CONTAINS
         evaluation%physical_feasibility_failed_component=PHYSICAL_COMPONENT_TOTAL_MASS
         RETURN
       END IF
-      scale=MAX(ABS(pressure_mass),MAXVAL(ABS(source)),MAXVAL(ABS(boundary)),MAXVAL(tolerance))
+      scale=MAX(ABS(pressure_mass),MAXVAL(ABS(analysis)),MAXVAL(ABS(source)), &
+        MAXVAL(ABS(boundary)),MAXVAL(tolerance))
       IF (scale==0.0_real64) CYCLE
-      residual_scaled=SUM(source/scale+boundary/scale)
+      residual_scaled=SUM(analysis/scale+source/scale+boundary/scale)
       tolerance_scaled=SUM(tolerance/scale)
       arithmetic_scaled=64.0_real64*EPSILON(1.0_real64)* &
-        (ABS(pressure_mass/scale)+SUM(ABS(source/scale))+SUM(ABS(boundary/scale)))
+        (ABS(pressure_mass/scale)+SUM(ABS(analysis/scale))+SUM(ABS(source/scale))+ &
+         SUM(ABS(boundary/scale)))
       IF (ABS(residual_scaled)>tolerance_scaled+arithmetic_scaled) THEN
         evaluation%physical_feasibility_status=PHYSICAL_FEASIBILITY_FAILED
         evaluation%physical_feasibility_reason=REASON_GATE
@@ -1366,23 +1436,24 @@ CONTAINS
     evaluation%physical_feasibility_residual_scaled=residual_scaled
   END SUBROUTINE record_physical_failure
 
-  LOGICAL FUNCTION increment_matches(after_term,before_term,source,boundary,phase,physical_tolerance, &
+  LOGICAL FUNCTION increment_matches(after_term,before_term,analysis,source,boundary,phase,physical_tolerance, &
                                      residual_scaled)
-    REAL(real64), INTENT(IN) :: after_term,before_term,source,boundary,phase,physical_tolerance
+    REAL(real64), INTENT(IN) :: after_term,before_term,analysis,source,boundary,phase,physical_tolerance
     REAL(real64), INTENT(OUT) :: residual_scaled
     REAL(real64) :: scale,tolerance_scaled
     increment_matches=.FALSE.
     residual_scaled=0.0_real64
-    IF (ANY(.NOT.ieee_is_finite([after_term,before_term,source,boundary,phase,physical_tolerance]))) RETURN
+    IF (ANY(.NOT.ieee_is_finite([after_term,before_term,analysis,source,boundary,phase,physical_tolerance]))) RETURN
     IF (physical_tolerance<0.0_real64) RETURN
-    scale=MAX(ABS(after_term),ABS(before_term),ABS(source),ABS(boundary),ABS(phase),physical_tolerance)
+    scale=MAX(ABS(after_term),ABS(before_term),ABS(analysis),ABS(source),ABS(boundary),ABS(phase),physical_tolerance)
     IF (scale==0.0_real64) THEN
       increment_matches=.TRUE.
       RETURN
     END IF
-    residual_scaled=after_term/scale-before_term/scale-source/scale-boundary/scale-phase/scale
+    residual_scaled=after_term/scale-before_term/scale-analysis/scale-source/scale-boundary/scale-phase/scale
     tolerance_scaled=physical_tolerance/scale+64.0_real64*EPSILON(1.0_real64)* &
-      (ABS(source/scale)+ABS(boundary/scale)+ABS(phase/scale)+ABS(after_term/scale)+ABS(before_term/scale))
+      (ABS(analysis/scale)+ABS(source/scale)+ABS(boundary/scale)+ABS(phase/scale)+ &
+       ABS(after_term/scale)+ABS(before_term/scale))
     increment_matches=ABS(residual_scaled)<=tolerance_scaled
   END FUNCTION increment_matches
 

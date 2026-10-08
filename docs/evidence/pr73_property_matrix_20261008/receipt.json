@@ -1,0 +1,75 @@
+{
+  "cases": {
+    "O0": {
+      "build_log_sha256": "2d10c979638f10e3beee1d42ce472799a007144e151e99df1c352029cf9e5dc8",
+      "executable_sha256": "e378acfe9dcc095e6574fcac8f02704d6f1dfc565ad4866b79578316a08fb386",
+      "instrumented_source_sha256": "3f168295ca6005bc14912fffbf0832efa24e6dde00f0a64b2f06c1cb0da2866d",
+      "object_sha256": "4e1d3a4e2bf90e9e188e3b52a94801a5729ac5e911d214448bc5ea481bdc4035",
+      "reentry_mask_records": 16,
+      "reference_mask_records": 16,
+      "result": "PASS",
+      "run_log": "/var/tmp/pr73_property_matrix.cPrgy2/O0/run.log",
+      "run_log_sha256": "cb24e25caaf0868bc5a4eed93d13501601f3f25881811774ecb78f1cb69f9c35"
+    },
+    "O2": {
+      "build_log_sha256": "2d10c979638f10e3beee1d42ce472799a007144e151e99df1c352029cf9e5dc8",
+      "executable_sha256": "3bce5e813ce6ee61ed893a38757614c35457052fcdd632ae5f03b7d4d9fb07ab",
+      "instrumented_source_sha256": "3f168295ca6005bc14912fffbf0832efa24e6dde00f0a64b2f06c1cb0da2866d",
+      "object_sha256": "ca2ba08d87ec3362756f19769ae39bec4c6486472682a6decec2e1b9917638ee",
+      "reentry_mask_records": 16,
+      "reference_mask_records": 16,
+      "result": "PASS",
+      "run_log": "/var/tmp/pr73_property_matrix.cPrgy2/O2/run.log",
+      "run_log_sha256": "d0e16c9a83079250046e29283f656335c462351c9fa1665e8f356acb5563600c"
+    }
+  },
+  "checked_actual_properties": [
+    "cloud slope moments",
+    "rain slope and number velocity",
+    "ice slope and number velocity",
+    "graupel status/density/properties/velocity"
+  ],
+  "classification": "actual KDM6 cloud/ice/rain/graupel property and terminal-velocity construction with test-only early return; no timestep/process completion",
+  "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+  "frozen_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/docs/evidence/pr72_combined_native_first_reject_20261008/frozen_combined_source.F",
+  "frozen_source_sha256": "1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819",
+  "limitations": [
+    "The source transform adds only a preprocessor-guarded capture and early return; production preprocessing has no hook.",
+    "The hook returns after terminal velocities are converted to rate arrays and before substep counting, rate application, or microphysical processes; this is a property-stage test, not a full-process success.",
+    "The first source n0 reconstruction occurs after physical rate application in this frozen source, so n0r/n0c/n0i are not captured by this early property test.",
+    "Graupel active state uses QG/BG=400 kg m-3; broader graupel density support is not established.",
+    "Properties are captured from the first active i,k cell and one j call in the test domain."
+  ],
+  "mask_count": 16,
+  "mask_order": [
+    "rain",
+    "cloud",
+    "ice",
+    "graupel"
+  ],
+  "optimization_profiles": [
+    "O0",
+    "O2"
+  ],
+  "per_mask_sequence": "clean reference, then active mask 15 followed by poisoned-output target re-entry; exact property record equality required",
+  "runner_sha256": "eea87a6e1f6c250eef991fba280c43398ac11da80d7912586ca626cae38a3906",
+  "schema": "pr73_actual_property_matrix_v1",
+  "source_composition": {
+    "change": "test-only poison of actual cloud/ProgB/slope/velocity-rate outputs, then capture and early return before substep/rate application",
+    "exposed_names": [],
+    "output": "/var/tmp/pr73_property_matrix.cPrgy2/property_matrix_source.F",
+    "output_sha256": "3f168295ca6005bc14912fffbf0832efa24e6dde00f0a64b2f06c1cb0da2866d",
+    "patch": "/var/tmp/pr73_property_matrix.cPrgy2/property_matrix_source.patch",
+    "patch_sha256": "e6fa6b95152a976ff121f62719913a99370ed389444a5547ec9e48c8610b1a7b",
+    "production_source_modified": false,
+    "schema": "pr73_property_matrix_source_v1",
+    "source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/docs/evidence/pr72_combined_native_first_reject_20261008/frozen_combined_source.F",
+    "source_sha256": "1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819"
+  },
+  "source_transform": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/tools/pr73_property_matrix_source.py",
+  "source_transform_sha256": "9e877640b49ff3383fa607d508799e3ace8b2d708bd9737d6bcc93cfc6319681",
+  "test_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/tests/test_pr73_property_matrix.f90",
+  "test_source_sha256": "451ebb9ff1ac3461a333a0073ae059e57c565033a7cef7a6985291f121b6615c",
+  "toolchain_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+}

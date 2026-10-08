@@ -1,0 +1,24 @@
+--- frozen_combined_source.F
++++ property_matrix_source.F
+@@ -1802,6 +1802,21 @@
+ 
+ 
+ 
++#ifdef TEST_PR73_PROPERTY_MATRIX
++          open(unit=97,file='pr73_property_capture.dat',status='replace',action='write')
++          do k=kts,kte
++            do i=its,ite
++              write(97,*) i,k,rslopec(i,k),rslopec2(i,k),rslopec3(i,k), &
++                   rslopecmu(i,k),rslopecd(i,k),rslope(i,k,:),rslopeb(i,k,:), &
++                   rslope2(i,k,:),rslope3(i,k,:),rsloped(i,k,:),rslopemu(i,k,:), &
++                   terminal_velocity_mass(i,k,:),terminal_velocity_number(i,k,:), &
++                   rhox(i,k),pidn0g(i,k),pvtg(i,k),bvtg(i,k),rslopegbmax(i,k), &
++                   progb_status(i,k),qrs(i,k,:),nrs(i,k,1),qci(i,k,:),nci(i,k,1:2),brs(i,k)
++            enddo
++          enddo
++          close(97)
++          return
++#endif
+       mstepmax = 1
+       mstepmax_i = 1
+       numdt = 1

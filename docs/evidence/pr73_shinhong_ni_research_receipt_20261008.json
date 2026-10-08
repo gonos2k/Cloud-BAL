@@ -1,0 +1,40 @@
+{
+  "base_source_sha256": {
+    "module_bl_shinhong_pr65.F": "0816dc6bb00ee232264ca94e7371198acd866a44c098f563fa224efa256de652",
+    "module_pbl_driver_pr65.F": "c0e958c94f5d4665eebf4d60dcca4940621a0a2f6371657ee472377a5de814e4"
+  },
+  "classification": "research-only source patch; not applied to maintained WRF source and not runtime-validated",
+  "compile_status": "Modified module compiles with pinned ifx; a manufactured O0/O2 routine-level same-operator test passes. Driver and coupled WRF runtime were not built.",
+  "compile_work_dir": "/var/tmp/pr73_shinhong_compile.9Q2QEJ",
+  "compiled_object": "/var/tmp/pr73_shinhong_compile.9Q2QEJ/module_bl_shinhong_pr65.o",
+  "compiled_object_sha256": "199e6909d36c94e8a04ae017328587c55d1816fb568b05b5ae44477c6ed26d07",
+  "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+  "modified_source_sha256": {
+    "module_bl_shinhong_pr65.F": "5fbe821bb3b82e406fee459e5b2d745156ea1a030b5f0ecd2c7191025f296553",
+    "module_pbl_driver_pr65.F": "5044fb264edd6be7ec7b9218602c7629a389eab87814f9e3dff18d1e68b1a232"
+  },
+  "open": [
+    "Actual-runtime QI/QNI tendency capture at cell (133,2,1).",
+    "Authentication of DEL as the native dry carrier.",
+    "Exact upstream producer of first mass-only QI.",
+    "Scientific validation/conservation of coupled WRF physics."
+  ],
+  "operator_test_profiles": {
+    "O0": "a4d6da8bb5805e41700a15e115cb0ed04f2814f626fbb9d71165818df662ac1e",
+    "O2": "b0b3a0a68d2073256be0aa80e734fce9b38e6fe7c451ee1cfe2593eb9e7d8153"
+  },
+  "operator_test_receipt": "docs/evidence/pr73_shinhong_ni_operator_20261008.json",
+  "operator_test_receipt_sha256": "0907b67a195ee474cd349d32d81cc15b3793cb2f852a8cd2c9fa4c08d1dcb271",
+  "operator_test_scope": "QI and scaled QNI (2**30 times QI, within an ice PSD mean-mass interval) receive proportionally matched, nonzero tendencies; division of QNI tendency by 2**30 matches QI exactly with QNI alone and when NC occupies channel 4 and QNI channel 5 simultaneously. Both channels create a positive recipient tendency from zero initial values, and a 60 s update remains nonnegative. Optional output halos are zeroed. A supplied disabled QNI output and QNI enabled without the optional paired QI tendency are both fully zeroed after sentinel initialization.",
+  "patch": "docs/evidence/pr73_shinhong_ni_research.patch",
+  "patch_sha256": "b70c6357aae4642062a6ff779f9e478899248d29c7bd0b74c5f3df0112aebc02",
+  "profile": "tests/intel_toolchain.sh O0 pinned profile",
+  "schema": "pr73_shinhong_ni_source_research_v1",
+  "source_contract": [
+    "QNI is appended as the next available channel to the same Shinhong vertical operator that carries QI (channel 5 when NC is enabled, channel 4 otherwise).",
+    "QNI channel offset is channel-1 so base channels and the pre-existing NC fourth channel retain slots 1..4.",
+    "QNI is gated by availability of the paired QI tendency and a positive p_qni; generic scalar PBL path disables this update to avoid double mixing.",
+    "Optional QNI tendency output is initialized to zero when supplied but disabled."
+  ]
+}
