@@ -26,8 +26,8 @@ Overall physical initialization approval remains **FAIL/OPEN**.
 - [x] Four-agent review of implementation, source domains, integrated execution and evidence; no unresolved implementation blocker within this research scope.
 - [x] Pinned Intel validation in fresh scratch; selected-source composition, native build/input identity and final artifact checks.
 - [x] Preserve prior inputs, evidence, failed runs, maintained native sources and private profile; see final preservation receipt.
-- [ ] Commit, push and open PR after scoped implementation blockers are resolved.
-- [ ] Incremental separate KLAPS50/Cloud-BAL snapshots, derived wiki reports and audit log.
+- [x] Commit `9337f235`, push and open [PR #71](https://github.com/gonos2k/Cloud-BAL/pull/71); remains open and unmerged.
+- [x] Graphify incremental overlay and kg-update: separate `2026-10-08-pr71` snapshots, derived wiki reports and append-only audit log; prior same-day snapshots preserved.
 
 ## Interpretation
 
@@ -50,3 +50,12 @@ That current metadata does not alter historical receipts or their source IDs.
 4. In parallel, construct a conditional joint atmospheric candidate from independently declared source, phase, background/observation errors, wind authority and boundaries. Deliver the identical candidate through WPS/real before BASE/HYDRO/COUPLED time-response comparisons.
 
 No current native run supports water/energy closure or an accepted joint initial state. The guard terminates execution rather than restoring preceding updates.
+
+## Publication and graph scope
+
+[PR #71](https://github.com/gonos2k/Cloud-BAL/pull/71) publishes the scoped research change. Structural extraction is frozen at implementation commit `9337f235ed01442e1fbb66b91c144682bf47aefc`. This final delivery-checkbox update and copied graph/publication receipts are metadata only and are excluded from that extraction.
+
+- KLAPS50: 33,797 nodes / 73,466 edges; batch delta +161 / +202.
+- Cloud-BAL: 7,965 nodes / 15,041 edges; batch delta +161 / +200.
+
+Both corpora retain separate dated snapshots and extraction limits: selected-path AST/Markdown headings only, no semantic refresh, partial cross-file Fortran CALL relations, and no extraction of the external native source tree. These graphs do not establish model or scientific validation. See the [KG receipt](evidence/pr71_graphify_kg_receipt_20261008.json).
