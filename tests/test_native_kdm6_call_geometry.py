@@ -115,6 +115,13 @@ class NativeGeometryParserTests(unittest.TestCase):
         self.assertEqual(records[0]["arrays"]["mu2"].shape, (2, 2))
         self.assertEqual(records[0]["timestep"], 1)
 
+    def test_retained_pre_geometry_record_can_be_audited_after_early_rejection(self):
+        records = parse_geometry(encode_record(STAGES[0]), require_pair=False)
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["stage"], "PRE_MICROPHYSICS")
+        with self.assertRaisesRegex(ValueError, "truncated"):
+            parse_geometry(encode_record(STAGES[0]))
+
     def test_active_hybrid_measure_matches_kdm_active_shape(self):
         records = parse_geometry(valid_capture())
         with tempfile.TemporaryDirectory() as tmp:

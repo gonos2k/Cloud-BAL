@@ -88,6 +88,28 @@ class JointAnalysisTest(unittest.TestCase):
         self.assertEqual(result["candidate_state"][1], 0.0046)
         self.assertGreaterEqual(result["candidate_state"][1], 0.0046)
 
+    def test_scalar_lower_bound_roundoff_keeps_exact_active_state_and_kkt_certificate(self):
+        scalar = copy.deepcopy(self.declaration)
+        scalar.pop("physical_reference", None)
+        scalar["state_fields"] = ["x"]
+        scalar["background_state"] = [0.0]
+        scalar["B"] = [[1.0]]
+        scalar["observation"] = {"H": [[1.0]], "value": [-0.7], "R": [[1.0]]}
+        scalar["process_increments"] = {
+            "phase": [0.0], "external_source": [0.0], "physical_boundary": [0.0],
+        }
+        scalar["constraints"] = []
+        scalar["state_bounds"] = [{"field": "x", "lower": 0.3, "upper": 1.3}]
+
+        result = joint.evaluate(scalar)
+
+        self.assertEqual(result["candidate_state"], [0.3])
+        self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
+        self.assertEqual(result["kkt_diagnostics"]["active_bounds"][0]["side"], "lower")
+        for key in ("primal_equality_residual", "primal_bound_violation", "stationarity_residual",
+                    "dual_sign_violation", "complementarity_residual"):
+            self.assertLessEqual(result["kkt_diagnostics"][key], 1e-12)
+
     def test_feasible_fixed_bound_redundant_with_equality(self):
         fixed = copy.deepcopy(self.declaration)
         fixed["constraints"].append({
@@ -98,6 +120,84 @@ class JointAnalysisTest(unittest.TestCase):
         fixed["state_bounds"][3] = {"field": "u", "lower": 2.0, "upper": 2.0}
         result = joint.evaluate(fixed)
         self.assertEqual(result["candidate_state"][3], 2.0)
+        scalar = copy.deepcopy(self.declaration)
+        scalar.pop("physical_reference", None)
+        scalar["state_fields"] = ["x"]
+        scalar["background_state"] = [0.0]
+        scalar["B"] = [[1.0]]
+        scalar["observation"] = {"H": [[1.0]], "value": [0.0], "R": [[1.0]]}
+        scalar["process_increments"] = {
+            "phase": [0.0], "external_source": [0.0], "physical_boundary": [0.0],
+        }
+        scalar["constraints"] = []
+        scalar["state_bounds"] = [{"field": "x", "lower": 0.3, "upper": 0.3}]
+        fixed_result = joint.evaluate(scalar)
+        self.assertEqual(fixed_result["candidate_state"], [0.3])
+        self.assertEqual(fixed_result["kkt_diagnostics"]["active_bounds"][0]["side"], "fixed")
+
+    def test_equality_at_active_lower_bound_is_not_treated_as_infeasible(self):
+        scalar = copy.deepcopy(self.declaration)
+        scalar.pop("physical_reference", None)
+        scalar["state_fields"] = ["x"]
+        scalar["background_state"] = [0.0]
+        scalar["B"] = [[1.0]]
+        scalar["observation"] = {"H": [[1.0]], "value": [-0.7], "R": [[1.0]]}
+        scalar["process_increments"] = {
+            "phase": [0.0], "external_source": [0.0], "physical_boundary": [0.0],
+        }
+        scalar["constraints"] = [{
+            "evidence_id": "manufactured:bound-equality",
+            "coefficients": [1.0], "rhs": 0.3,
+        }]
+        scalar["state_bounds"] = [{"field": "x", "lower": 0.3, "upper": 1.3}]
+
+        result = joint.evaluate(scalar)
+
+        self.assertEqual(result["candidate_state"], [0.3])
+        self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
+        self.assertEqual(result["kkt_diagnostics"]["active_bounds"][0]["side"], "lower")
+
+    def test_box_feasibility_range_rounding_is_conservative(self):
+        declaration = copy.deepcopy(self.declaration)
+        declaration.pop("physical_reference", None)
+        declaration["state_fields"] = ["x", "z"]
+        declaration["background_state"] = [0.0, 0.0]
+        declaration["B"] = [[1.0, 0.0], [0.0, 1.0]]
+        declaration["observation"] = {
+            "H": [[1.0, 0.0], [0.0, 1.0]], "value": [0.0, 0.0],
+            "R": [[1.0, 0.0], [0.0, 1.0]],
+        }
+        declaration["process_increments"] = {
+            "phase": [0.0, 0.0], "external_source": [0.0, 0.0],
+            "physical_boundary": [0.0, 0.0],
+        }
+        declaration["constraints"] = [{
+            "evidence_id": "manufactured:decimal-box-edge",
+            "coefficients": [1.0, 1.0], "rhs": 0.3,
+        }]
+        declaration["state_bounds"] = [
+            {"field": "x", "lower": 0.1, "upper": 1.0},
+            {"field": "z", "lower": 0.2, "upper": 1.0},
+        ]
+
+        result = joint.evaluate(declaration)
+
+        self.assertAlmostEqual(sum(result["candidate_state"]), 0.3, places=14)
+        self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
+
+    def test_finite_inputs_that_overflow_process_or_equality_arithmetic_are_numerical_failures(self):
+        process_overflow = copy.deepcopy(self.declaration)
+        process_overflow["process_increments"]["phase"][1] = 1e308
+        process_overflow["process_increments"]["external_source"][1] = 1e308
+        with self.assertRaisesRegex(ValueError, "NUMERICAL_FAILURE"):
+            joint.evaluate(process_overflow)
+
+        equality_overflow = copy.deepcopy(self.declaration)
+        equality_overflow["process_increments"]["phase"][1] = 1e200
+        equality_overflow["process_increments"]["external_source"][1] = 1e200
+        equality_overflow["constraints"][0]["coefficients"][1] = 1e200
+        with self.assertRaisesRegex(ValueError, "NUMERICAL_FAILURE"):
+            joint.evaluate(equality_overflow)
 
     def test_common_unit_rescaling_preserves_solution(self):
         scaled = copy.deepcopy(self.declaration)

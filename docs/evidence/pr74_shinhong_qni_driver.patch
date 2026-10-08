@@ -1,0 +1,62 @@
+--- /var/tmp/pr73_pbl_research/source_after/module_pbl_driver_pr65.F	2026-10-08 15:29:29.462143619 +0900
++++ docs/evidence/pr74_actual_driver_instrumented.F	2026-10-08 16:51:00.000000000 +0900
+@@ -788,7 +788,7 @@
+ 
+ !  LOCAL  VAR
+ 
+-   INTEGER :: pr65_unit, pr65_k, pr65_iostat
++   INTEGER :: pr65_unit, pr65_k, pr65_iostat, pr74_unit, pr74_iostat
+    LOGICAL :: pr65_qnc_enabled, pr65_qnc_flag, pr73_qni_enabled
+    INTEGER :: pr65_scalar_pblmix
+    REAL :: pr65_scalar_tend_before
+@@ -1380,6 +1380,22 @@
+               ,ITS=its,ITE=ite,JTS=jts,JTE=jte,KTS=kts,KTE=kte      &
+               ,DX=dx,DY=dy                                          &
+                                                                     )
++             ! Research-only observation of the actual selected driver call.
++             pr74_iostat = -1
++             IF (133.GE.its .AND. 133.LE.ite .AND. 2.GE.jts .AND. 2.LE.jte) THEN
++               OPEN(NEWUNIT=pr74_unit,FILE='pr74_qni_driver.raw',STATUS='UNKNOWN', &
++                    POSITION='APPEND',ACTION='WRITE',IOSTAT=pr74_iostat)
++               IF (pr74_iostat.EQ.0) THEN
++                 WRITE(pr74_unit,'(A,",",I0,",",I0,",",L1,",",L1,",",I0,",",I0)') &
++                      'CALL',133,2,pr73_qni_enabled,pr65_qnc_enabled,p_qni,num_scalar
++                 DO pr65_k=kts,kte
++                   WRITE(pr74_unit,'(A,",",I0,",",ES24.16E3,",",ES24.16E3,",",ES24.16E3,",",ES24.16E3)') &
++                        'STATE',pr65_k,qi_curr(133,pr65_k,2),qni_curr(133,pr65_k,2), &
++                        rqiblten(133,pr65_k,2),rqniblten(133,pr65_k,2)
++                 ENDDO
++                 CLOSE(pr74_unit)
++               ENDIF
++             ENDIF
+              IF (pr65_qnc_enabled) THEN
+                pr65_iostat = -1
+                IF (172.GE.its .AND. 172.LE.ite .AND. 76.GE.jts .AND. 76.LE.jte) THEN
+@@ -1404,13 +1420,27 @@
+              ENDIF
+              ! Accumulate QNI once; the generic scalar PBL path is disabled above.
+              IF (pr73_qni_enabled) THEN
++               pr74_iostat = -1
++               IF (133.GE.its .AND. 133.LE.ite .AND. 2.GE.jts .AND. 2.LE.jte) THEN
++                 OPEN(NEWUNIT=pr74_unit,FILE='pr74_qni_driver.raw',STATUS='UNKNOWN', &
++                      POSITION='APPEND',ACTION='WRITE',IOSTAT=pr74_iostat)
++               ENDIF
+                DO j=jts,jte
+                  DO k=kts,kte
+                    DO i=its,ite
++                     IF (i.EQ.133 .AND. j.EQ.2 .AND. pr74_iostat.EQ.0) THEN
++                       WRITE(pr74_unit,'(A,",",I0,",",ES24.16E3,",",ES24.16E3,",",ES24.16E3)') &
++                            'ADD',k,scalar_tend(i,k,j,p_qni),rqniblten(i,k,j), &
++                            scalar_tend(i,k,j,p_qni)+rqniblten(i,k,j)
++                     ENDIF
+                      scalar_tend(i,k,j,p_qni) = scalar_tend(i,k,j,p_qni) + rqniblten(i,k,j)
+                    ENDDO
+                  ENDDO
+                ENDDO
++               IF (pr74_iostat.EQ.0) THEN
++                 WRITE(pr74_unit,'(A)') 'DRIVER_BRANCH_COMPLETE'
++                 CLOSE(pr74_unit)
++               ENDIF
+              ENDIF
+            ELSE
+                WRITE ( message , FMT = '(A,7(L1,1X))' )             &

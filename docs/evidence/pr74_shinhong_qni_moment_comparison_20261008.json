@@ -1,0 +1,101 @@
+{
+  "actual_native_failure": {
+    "positive_NI_times_rho_d_underflow": "under investigation",
+    "stage": "wrapper unit adapter before common Q/N classifier",
+    "status": "KDM6 invalid NI number basis input; exit 128"
+  },
+  "baseline_pretrace_sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+  "baseline_receipt": "docs/evidence/pr74_common_moment_audit_20261008/receipt.json",
+  "baseline_receipt_sha256": "ba161d3a22fc5c595c8f5073bfd02aa345bdac11140d5302fb62f180527cc107",
+  "classification": "hypothetical common Q/N pair-predicate replay over actual-driver pre-call captures; distinct from the actual wrapper unit-adapter rejection before the common classifier",
+  "finding": "O0 and O2 QNI pretraces are byte-identical. The hypothetical common-predicate replay changes its earliest pair mismatch from baseline ice mass-only at (133,2,1), QI=3.5308575789291633e-35 and NI=0, to ice moment-only at (104,2,1), QI=0 and public NI=3.8173049035872155e-36. This is not the actual fatal site because the wrapper unit adapter rejects before classifier execution. No minimum, deletion, or density substitution was applied.",
+  "hypothetical_common_predicate_baseline_first_violation": {
+    "i": 133,
+    "internal_moment": 0.0,
+    "j": 2,
+    "k": 1,
+    "public_moment": 0.0,
+    "q_kg_kg": 3.5308575789291633e-35,
+    "species": "ice",
+    "state": "mass_only"
+  },
+  "hypothetical_common_predicate_qni_profiles": {
+    "O0": {
+      "first_violation": {
+        "i": 104,
+        "internal_moment": 4.203879250016142e-36,
+        "j": 2,
+        "k": 1,
+        "public_moment": 3.8173049035872155e-36,
+        "q_kg_kg": 0.0,
+        "species": "ice",
+        "state": "moment_only"
+      },
+      "geometry_path": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O0/run/pr63_geometry.raw",
+      "geometry_sha256": "766e18ab4caa89bc4e71fa9e589ce43268ddd3974c153276138bf4ea69a7c98e",
+      "global_counts": {
+        "absent": 7066897,
+        "active": 2742696,
+        "invalid": 23494,
+        "mass_only": 740,
+        "moment_only": 299933,
+        "negative": 23494,
+        "nonfinite": 0
+      },
+      "ice_counts": {
+        "absent": 1530805,
+        "active": 843412,
+        "invalid": 0,
+        "mass_only": 580,
+        "moment_only": 158643,
+        "negative": 0,
+        "nonfinite": 0
+      },
+      "pretrace_path": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O0/run/kdm6_first_call_pre.raw",
+      "pretrace_sha256": "a6d5667850f5712982d5980b0292ee876b21cab6010efd18ade75cce5dfa1eaa"
+    },
+    "O2": {
+      "first_violation": {
+        "i": 104,
+        "internal_moment": 4.203879250016142e-36,
+        "j": 2,
+        "k": 1,
+        "public_moment": 3.8173049035872155e-36,
+        "q_kg_kg": 0.0,
+        "species": "ice",
+        "state": "moment_only"
+      },
+      "geometry_path": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O2/run/pr63_geometry.raw",
+      "geometry_sha256": "766e18ab4caa89bc4e71fa9e589ce43268ddd3974c153276138bf4ea69a7c98e",
+      "global_counts": {
+        "absent": 7066897,
+        "active": 2742696,
+        "invalid": 23494,
+        "mass_only": 740,
+        "moment_only": 299933,
+        "negative": 23494,
+        "nonfinite": 0
+      },
+      "ice_counts": {
+        "absent": 1530805,
+        "active": 843412,
+        "invalid": 0,
+        "mass_only": 580,
+        "moment_only": 158643,
+        "negative": 0,
+        "nonfinite": 0
+      },
+      "pretrace_path": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O2/run/kdm6_first_call_pre.raw",
+      "pretrace_sha256": "a6d5667850f5712982d5980b0292ee876b21cab6010efd18ade75cce5dfa1eaa"
+    }
+  },
+  "limitations": [
+    "The array index j=2 is the KDM62D call index; global-j/geographic mapping remains unclaimed.",
+    "This report compares pre-call state only and does not close water, number, or energy budgets.",
+    "A changed first violation does not establish the physical producer or validate DEL as the native dry carrier.",
+    "The common-predicate first mismatch and distribution counts are hypothetical admission diagnostics over captured fields; the actual wrapper rejects before this classifier."
+  ],
+  "parser": "tools/pr74_common_moment_audit.py",
+  "parser_sha256": "ea8a1e6458acb282106bc2213d598dcab2e5e5ebb1e09be99a66870c0b408a96",
+  "schema": "pr74_qni_first_violation_comparison_v1"
+}

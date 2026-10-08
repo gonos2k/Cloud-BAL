@@ -1,0 +1,183 @@
+{
+  "schema": "pr74_root_validation_v1",
+  "base_commit": "1ae50a87b606614fafc0f647f517d4472efdfc05",
+  "source_sha256": {
+    "tools/pr73_joint_analysis.py": "02b2afda770760052813dc9f08cccc9fedc067ecea3966cd3e81b5cf024a360c",
+    "tests/test_pr73_joint_analysis.py": "965f07e61a5d70a25da82696262241fde38558ea8963bb80f329ed614339c247",
+    "tests/test_pr74_independent_oracle.py": "e063d84ed6ef106cb4939787532700706081db230d66fd7d80a6463cb868e485",
+    "tools/pr74_common_moment_audit.py": "ea8a1e6458acb282106bc2213d598dcab2e5e5ebb1e09be99a66870c0b408a96",
+    "tools/native_kdm6_call_geometry.py": "5f68edcb13d1d5e6033b77c44e992daed67b0b24ee260eba7e5048a68b8edaa0"
+  },
+  "python_focused_tests": {
+    "command": "python3 -m unittest tests.test_pr73_joint_analysis tests.test_pr74_independent_oracle tests.test_pr74_common_moment_audit tests.test_native_kdm6_call_geometry tests.test_native_kdm6_trace -v",
+    "tests": 51,
+    "exit_status": 0,
+    "log": "docs/evidence/pr74_endpoint_20261008/python_tests.log",
+    "sha256": "f52e99efebf549707561bb21bd42ebcbef0f763e3c994c14330765396356b5fc"
+  },
+  "pinned_intel_endpoint": {
+    "O0": {
+      "scratch": "/var/tmp/cloud_bal_pr73_joint_analysis.TRyXg8",
+      "exit_status": 0,
+      "runner_log_sha256": "baea404d9d37292cdd031a72d3a6368e330eabe642038e11381d2152a7b8eb26",
+      "toolchain": "docs/evidence/pr74_endpoint_20261008/O0/toolchain.txt",
+      "artifacts": {
+        "toolchain.txt": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O0/toolchain.txt",
+          "sha256": "3fb1f3c3a270ee4347c7e556a3ea3198912f9c8859b1b91c67d0a25de5a8a9d9"
+        },
+        "trial.json": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O0/trial.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.control": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O0/trial.control",
+          "sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda"
+        },
+        "candidate.log": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O0/candidate.log",
+          "sha256": "8e9ac3343aaeaaf1d9f92bd05e871b6cc1ae4dae0b3890f1e1bfaa8d3f59591a"
+        },
+        "readback.log": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O0/readback.log",
+          "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+        },
+        "solver.json": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O0/solver.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        }
+      },
+      "netcdf_artifact": {
+        "path": "/var/tmp/cloud_bal_pr73_joint_analysis.TRyXg8/pr73-estimated-analysis-shadow.nc",
+        "sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b"
+      },
+      "executable_sha256": "14ee9a843f3c77d5c2d9cc0d1b77a848adf94c4b32690ba14ce2fd35c394e0bf"
+    },
+    "O2": {
+      "scratch": "/var/tmp/cloud_bal_pr73_joint_analysis.4UPMAy",
+      "exit_status": 0,
+      "runner_log_sha256": "f7a0bfabb422a2c4636c76695fbb98b6ec7d93abd1464d31d6356c87684ca396",
+      "toolchain": "docs/evidence/pr74_endpoint_20261008/O2/toolchain.txt",
+      "artifacts": {
+        "toolchain.txt": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O2/toolchain.txt",
+          "sha256": "66ccff50c9a775b6d0c3ba23bbf3aa2537cd57803fe112627fc5e19692ea041b"
+        },
+        "trial.json": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O2/trial.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.control": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O2/trial.control",
+          "sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda"
+        },
+        "candidate.log": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O2/candidate.log",
+          "sha256": "fc9666b996fde12a40b0720cf34fa110848b7e445f2a7f36fd8d64cde376e513"
+        },
+        "readback.log": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O2/readback.log",
+          "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+        },
+        "solver.json": {
+          "path": "docs/evidence/pr74_endpoint_20261008/O2/solver.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        }
+      },
+      "netcdf_artifact": {
+        "path": "/var/tmp/cloud_bal_pr73_joint_analysis.4UPMAy/pr73-estimated-analysis-shadow.nc",
+        "sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b"
+      },
+      "executable_sha256": "a27d75eba39f272f50842209222619872c1db2628a7961714361094ba147565f"
+    }
+  },
+  "canonical_diagnostic": {
+    "exit_status": 1,
+    "artifact_decision": "UNBOUND",
+    "candidate_decision": "REJECTED",
+    "report": "docs/evidence/pr74_endpoint_20261008/canonical_diagnostic.json",
+    "sha256": "dce0e7f27844bb05d45719c16364c7d1c087cc9e37b6e9996c21bd3b555cbb00"
+  },
+  "scope_limits": [
+    "Manufactured estimator-to-endpoint evaluator/writer/component-reader; run_cloud_bal_pipeline not run.",
+    "WPS stubs used by endpoint build; no metgrid or real execution.",
+    "Canonical operational artifact remains INVALID/UNBOUND and REJECTED.",
+    "Intel O0 emits existing NetCDF array-temporary warnings; preserved logs contain them.",
+    "Native PBL research is recorded separately and not a successful physics step."
+  ],
+  "physical_approval": "FAIL/OPEN",
+  "actual_driver_native": {
+    "native_status": "REJECTED",
+    "driver_branch": "COMPLETED",
+    "physics_first_call": "NOT_COMPLETED",
+    "timestep": "NOT_COMPLETED",
+    "receipt": "docs/evidence/pr74_shinhong_qni_driver_20261008.json",
+    "receipt_sha256": "d59066b8277c2fb86caa1cf18ae4bd8717293fc097466cf03e7304920e67c7dd",
+    "local_capture_logs": {
+      "O0": {
+        "driver_capture.txt": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O0/run/pr74_qni_driver.raw",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O0/driver_capture.txt",
+          "sha256": "a208b817d9061b44eeeb0ba25b46ed7296a68d801033dc6dd14d5c2180b03d44"
+        },
+        "rsl.error.0000": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O0/run/rsl.error.0000",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O0/rsl.error.0000",
+          "sha256": "658d294a76cc6919721ff0ec446c083fba8f9d552088387042bf61f7db2dcf0c"
+        },
+        "candidate_run.log": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O0/run/candidate_run.log",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O0/candidate_run.log",
+          "sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+        },
+        "compile.log": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O0/compile/compile.log",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O0/compile.log",
+          "sha256": "d23ffa1f528320f7bb1a8677d2686dbfaa8051bd17c5a13b80c2f9cfa78d230a"
+        },
+        "link.log": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O0/build/link/main/pr74_link.log",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O0/link.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "O2": {
+        "driver_capture.txt": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O2/run/pr74_qni_driver.raw",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O2/driver_capture.txt",
+          "sha256": "a208b817d9061b44eeeb0ba25b46ed7296a68d801033dc6dd14d5c2180b03d44"
+        },
+        "rsl.error.0000": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O2/run/rsl.error.0000",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O2/rsl.error.0000",
+          "sha256": "c91feb97ff2930cca5d7bb281f6394d042bc5d59305876d814d8d3173f52842c"
+        },
+        "candidate_run.log": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O2/run/candidate_run.log",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O2/candidate_run.log",
+          "sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+        },
+        "compile.log": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O2/compile/compile.log",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O2/compile.log",
+          "sha256": "d23ffa1f528320f7bb1a8677d2686dbfaa8051bd17c5a13b80c2f9cfa78d230a"
+        },
+        "link.log": {
+          "source": "/var/tmp/pr74_shinhong_qni_driver.GvfcGi/O2/build/link/main/pr74_link.log",
+          "retained": "docs/evidence/pr74_driver_native_20261008/O2/link.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    "post_call_required_count": 4,
+    "post_call_missing_count": 4
+  },
+  "independent_review": {
+    "path": "docs/evidence/pr74_independent_final_review_20261008.json",
+    "binding_direction": "independent review binds this final root validation receipt"
+  },
+  "new_pretrace_audit": {
+    "path": "docs/evidence/pr74_common_moment_audit_20261008/actual_driver_comparison.json",
+    "sha256": "31fbdbbc635aee7c50587a4efa1502e5c6de3fd9fedc62caa304ef7aa50e8727"
+  }
+}

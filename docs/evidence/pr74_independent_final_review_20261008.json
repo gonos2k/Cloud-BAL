@@ -1,0 +1,63 @@
+{
+  "schema": "pr74_independent_final_review_v1",
+  "review_date": "2026-10-08",
+  "result": "SCOPED_PASS_WITH_OPEN_PHYSICAL_VALIDATION",
+  "solver": {
+    "source": "tools/pr73_joint_analysis.py",
+    "source_sha256": "02b2afda770760052813dc9f08cccc9fedc067ecea3966cd3e81b5cf024a360c",
+    "independent_oracle": "tests/test_pr74_independent_oracle.py",
+    "oracle_cases": 396,
+    "verified_cases": [
+      "reported scalar lower-bound optimum x=0.3",
+      "six-variable covariance-form oracle",
+      "partial U/V unit transform by 1000",
+      "active lower bound coincident with equality",
+      "outward-rounded box feasibility edge",
+      "fixed-width bound side label",
+      "normalized-control KKT stationarity and dual coordinates",
+      "finite-input process/equality overflow classification"
+    ],
+    "test_command": "python3 -m unittest tests.test_pr73_joint_analysis tests.test_pr74_independent_oracle tests.test_pr74_common_moment_audit tests.test_native_kdm6_call_geometry tests.test_native_kdm6_trace -v",
+    "tests_passed": 51
+  },
+  "root_validation": {
+    "receipt": "docs/evidence/pr74_validation_20261008.json",
+    "receipt_sha256": "9b241beb6bdff6918d5fc77550a3d95f7b07b4a2d8c817a9a7b43057cc9f12fb",
+    "endpoint_O0_O2": "PASS_MANUFACTURED_FIXTURE",
+    "canonical_diagnostic": "UNBOUND_REJECTED",
+    "physical_approval": "FAIL_OPEN"
+  },
+  "actual_qni_driver": {
+    "receipt": "docs/evidence/pr74_shinhong_qni_driver_20261008.json",
+    "receipt_sha256": "d59066b8277c2fb86caa1cf18ae4bd8717293fc097466cf03e7304920e67c7dd",
+    "runner": "tests/run_pr74_shinhong_qni_driver.sh",
+    "runner_sha256": "bd35fd5f27599fc9fab182e11b0c92f61ee8f1dd077c0995def2d8bf097f4be5",
+    "instrumented_driver_sha256": "342378285d929d06aa88b3c47b27c906bac05e560244162e4f946481ea4bd322",
+    "O0_O2_same_100_inputs": true,
+    "O0_O2_pretrace_and_geometry_match": true,
+    "qni_additions": 39,
+    "driver_branch_completed": true,
+    "reviewer_replay_receipt": "/var/tmp/pr74_shinhong_qni_driver.Ha40lo/receipt.json",
+    "reviewer_replay_receipt_sha256": "1d42ab5cc36fbcc03716aa12ef837285a6b5705837f6017244e21eb4d712a84f",
+    "native_exit_status": 128,
+    "native_failure": "KDM6 invalid NI number basis input",
+    "required_post_call_outputs_present": false,
+    "classification": "ACTUAL_SELECTED_PARTIALHOST_DRIVER_PATH_NOT_COMPLETED_TIMESTEP"
+  },
+  "moment_audit": {
+    "receipt": "docs/evidence/pr74_common_moment_audit_20261008/actual_driver_comparison.json",
+    "receipt_sha256": "31fbdbbc635aee7c50587a4efa1502e5c6de3fd9fedc62caa304ef7aa50e8727",
+    "ni_conversion_probe": "docs/evidence/pr74_common_moment_audit_20261008/ni_conversion_probe.json",
+    "ni_conversion_probe_sha256": "559003a56e6248ea11ffed3d332f01a6117a267f87d75877c959450584b82339",
+    "negative_or_nonfinite_public_ni_cells": 0,
+    "ftz_cause_status": "O0_O2_LINK_ARG_INCLUDES_FTZ_AND_EXACT_HELPER_REPLAY_MATCHES; RUNTIME_MXCSR_NOT_DIRECTLY_OBSERVED",
+    "hypothetical_common_pair_mismatch": "(104,2,1); not the observed native fatal site"
+  },
+  "open_limits": [
+    "Candidate O0/O2 link argv includes -ftz and exact-source helper replay reproduces the invalid conversion; runtime MXCSR is not directly observed.",
+    "Partialhost retains non-rebuilt host objects and did not complete a timestep.",
+    "Replay depends on external retained /var/tmp source, hostcopy, archive, dependencies, and inputs; hash checks do not make those artifacts portable.",
+    "At review time, PR74 evidence and implementation additions were untracked and must be included in the intended commit.",
+    "Physical closure and operational validation remain open."
+  ]
+}

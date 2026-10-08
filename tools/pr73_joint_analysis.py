@@ -84,7 +84,7 @@ def _solve(matrix: list[list[float]], rhs: list[float]) -> list[float]:
     return [augmented[i][-1] for i in range(n)]
 
 
-def _inverse(matrix: list[list[float]], name: str) -> list[list[float]]:
+def _cholesky(matrix: list[list[float]], name: str) -> list[list[float]]:
     n = len(matrix)
     if n == 0 or any(len(row) != n for row in matrix):
         raise ValueError(f"{name} must be square")
@@ -94,7 +94,6 @@ def _inverse(matrix: list[list[float]], name: str) -> list[list[float]]:
                 abs(matrix[i][j]), abs(matrix[j][i]), sys.float_info.min
             ):
                 raise ValueError(f"{name} must be symmetric")
-    # Cholesky makes positive definiteness an explicit input requirement.
     lower = [[0.0] * n for _ in range(n)]
     for i in range(n):
         for j in range(i + 1):
@@ -105,8 +104,47 @@ def _inverse(matrix: list[list[float]], name: str) -> list[list[float]]:
                 lower[i][j] = math.sqrt(value)
             else:
                 lower[i][j] = value / lower[j][j]
-    columns = [_solve(matrix, [1.0 if i == j else 0.0 for i in range(n)]) for j in range(n)]
-    return [[columns[j][i] for j in range(n)] for i in range(n)]
+    return lower
+
+
+def _forward_solve(lower: list[list[float]], rhs: list[float]) -> list[float]:
+    result = []
+    for i, row in enumerate(lower):
+        result.append((rhs[i] - _dot(row[:i], result)) / row[i])
+    return result
+
+
+def _backward_solve(lower: list[list[float]], rhs: list[float]) -> list[float]:
+    result = [0.0] * len(rhs)
+    for i in range(len(rhs) - 1, -1, -1):
+        result[i] = (rhs[i] - sum(lower[j][i] * result[j]
+                                  for j in range(i + 1, len(rhs)))) / lower[i][i]
+    return result
+
+
+def _cholesky_solve(lower: list[list[float]], rhs: list[float]) -> list[float]:
+    return _backward_solve(lower, _forward_solve(lower, rhs))
+
+
+def _factor_covariance(matrix: list[list[float]], name: str) -> tuple[list[float], list[list[float]], list[list[float]]]:
+    """Normalize covariance units, factor it, and form precision by factor solves."""
+    n = len(matrix)
+    if n == 0 or any(len(row) != n for row in matrix):
+        raise ValueError(f"{name} must be square")
+    if any(matrix[i][i] <= 0.0 for i in range(n)):
+        raise ValueError(f"{name} must be positive definite")
+    scales = [math.sqrt(matrix[i][i]) for i in range(n)]
+    normalized = [[matrix[i][j] / scales[i] / scales[j] for j in range(n)]
+                  for i in range(n)]
+    if any(not math.isfinite(value) for row in normalized for value in row):
+        raise ValueError(f"NUMERICAL_FAILURE: {name} normalization overflowed")
+    lower = _cholesky(normalized, name)
+    columns = [_cholesky_solve(lower, [1.0 if i == j else 0.0 for i in range(n)])
+               for j in range(n)]
+    precision = [[columns[j][i] for j in range(n)] for i in range(n)]
+    if any(not math.isfinite(value) for row in precision for value in row):
+        raise ValueError(f"NUMERICAL_FAILURE: {name} factor solve overflowed")
+    return scales, lower, precision
 
 
 def _dot(left: list[float], right: list[float]) -> float:
@@ -134,43 +172,51 @@ def _quadratic(matrix: list[list[float]], vector: list[float]) -> float:
     return _dot(vector, _matvec(matrix, vector))
 
 
-def _independent_constraints(rows: list[list[float]], targets: list[float]) -> tuple[list[list[float]], list[float]]:
-    """Drop consistent dependent rows and reject inconsistent equalities."""
+def _independent_constraint_indices(rows: list[list[float]], targets: list[float]) -> list[int]:
+    """Select original independent rows, rejecting inconsistent dependencies."""
     if not rows:
-        return [], []
-    augmented = [row[:] + [target] for row, target in zip(rows, targets)]
-    row_count = len(augmented)
-    variable_count = len(rows[0])
+        return []
     tolerance = 128.0 * sys.float_info.epsilon
-    pivot_row = 0
-    pivot_rows: list[int] = []
-    for column in range(variable_count):
-        selected = max(range(pivot_row, row_count),
-                       key=lambda index: abs(augmented[index][column]),
-                       default=pivot_row)
-        if pivot_row == row_count or abs(augmented[selected][column]) <= tolerance:
-            continue
-        augmented[pivot_row], augmented[selected] = augmented[selected], augmented[pivot_row]
-        divisor = augmented[pivot_row][column]
-        augmented[pivot_row] = [value / divisor for value in augmented[pivot_row]]
-        for index in range(row_count):
-            if index == pivot_row:
+    chosen: list[int] = []
+    for index, (row, target) in enumerate(zip(rows, targets)):
+        trial_rows = [rows[item] for item in chosen] + [row]
+        trial_targets = [targets[item] for item in chosen] + [target]
+        augmented = [item[:] + [value] for item, value in zip(trial_rows, trial_targets)]
+        row_count = len(augmented)
+        variable_count = len(row)
+        pivot_row = 0
+        rank = 0
+        for column in range(variable_count):
+            selected = max(range(pivot_row, row_count),
+                           key=lambda item: abs(augmented[item][column]), default=pivot_row)
+            if pivot_row == row_count or abs(augmented[selected][column]) <= tolerance:
                 continue
-            factor = augmented[index][column]
-            if factor:
-                augmented[index] = [left - factor * right
-                                    for left, right in zip(augmented[index], augmented[pivot_row])]
-        pivot_rows.append(pivot_row)
-        pivot_row += 1
-        if pivot_row == row_count:
-            break
-    target_scale = max(1.0, *(abs(target) for target in targets))
-    for row in augmented[pivot_row:]:
-        if max(abs(value) for value in row[:variable_count]) <= tolerance and \
-                abs(row[-1]) > tolerance * target_scale:
-            raise ValueError("declared linear constraints are inconsistent")
-    return ([augmented[index][:variable_count] for index in pivot_rows],
-            [augmented[index][-1] for index in pivot_rows])
+            augmented[pivot_row], augmented[selected] = augmented[selected], augmented[pivot_row]
+            divisor = augmented[pivot_row][column]
+            augmented[pivot_row] = [value / divisor for value in augmented[pivot_row]]
+            for item in range(row_count):
+                if item != pivot_row:
+                    factor = augmented[item][column]
+                    if factor:
+                        augmented[item] = [left - factor * right
+                                           for left, right in zip(augmented[item], augmented[pivot_row])]
+            pivot_row += 1
+            rank += 1
+            if pivot_row == row_count:
+                break
+        target_scale = max(1.0, *(abs(value) for value in trial_targets))
+        for residual in augmented[rank:]:
+            if max((abs(value) for value in residual[:variable_count]), default=0.0) <= tolerance and \
+                    abs(residual[-1]) > tolerance * target_scale:
+                raise ValueError("declared linear constraints are inconsistent")
+        if rank > len(chosen):
+            chosen.append(index)
+    return chosen
+
+
+def _independent_constraints(rows: list[list[float]], targets: list[float]) -> tuple[list[list[float]], list[float]]:
+    indices = _independent_constraint_indices(rows, targets)
+    return [rows[index] for index in indices], [targets[index] for index in indices]
 
 
 def _float32(value: float) -> float:
@@ -282,6 +328,11 @@ def evaluate(data: Any) -> dict[str, Any]:
     source = _vector(process.get("external_source"), "process_increments.external_source", n)
     boundary = _vector(process.get("physical_boundary"), "process_increments.physical_boundary", n)
     known = [phase[i] + source[i] + boundary[i] for i in range(n)]
+    if any(not math.isfinite(value) for value in known):
+        raise ValueError("NUMERICAL_FAILURE: process increments overflowed during accumulation")
+    background_with_process = [background[i] + known[i] for i in range(n)]
+    if any(not math.isfinite(value) for value in background_with_process):
+        raise ValueError("NUMERICAL_FAILURE: background plus process increments overflowed")
     prior_delta = [0.0] * n
 
     constraints = declaration.get("constraints", [])
@@ -294,8 +345,11 @@ def evaluate(data: Any) -> dict[str, Any]:
             raise ValueError("each constraint needs an independent evidence_id")
         coefficients = _vector(row.get("coefficients"), "constraint.coefficients", n)
         rhs = _number(row.get("rhs"), "constraint.rhs")
+        adjusted_rhs = rhs - _dot(coefficients, known)
+        if not math.isfinite(adjusted_rhs):
+            raise ValueError("NUMERICAL_FAILURE: adjusted equality target overflowed")
         C.append(coefficients)
-        d.append(rhs - _dot(coefficients, known))
+        d.append(adjusted_rhs)
 
     bounds = declaration.get("state_bounds", [])
     if not isinstance(bounds, list):
@@ -316,19 +370,68 @@ def evaluate(data: Any) -> dict[str, Any]:
             raise ValueError(f"invalid state bound for {field}")
         bound_map[index] = (lower, upper)
 
-    Binv = _inverse(B, "B")
-    Rinv = _inverse(R, "R")
-    Ht = _transpose(H)
-    Q = _add(Binv, _multiply(_multiply(Ht, Rinv), H))
-    background_with_process = [background[i] + known[i] for i in range(n)]
-    innovation = [y[i] - value for i, value in enumerate(_matvec(H, background_with_process))]
-    qrhs = _matvec(_multiply(Ht, Rinv), innovation)
-    # Scale the mixed-unit control vector by its prior standard deviation.
-    control_scale = [math.sqrt(B[i][i]) for i in range(n)]
-    Qscaled = [[Q[i][j] * control_scale[i] * control_scale[j] for j in range(n)]
-               for i in range(n)]
-    rhs_scaled = [qrhs[i] * control_scale[i] for i in range(n)]
-    Cscaled = [[row[i] * control_scale[i] for i in range(n)] for row in C]
+    for row, target in zip(C, d):
+        minimum = 0.0
+        maximum = 0.0
+        for i, coefficient in enumerate(row):
+            if coefficient == 0.0:
+                continue
+            lower, upper = bound_map.get(i, (None, None))
+            delta_lower = -math.inf
+            if lower is not None:
+                delta_lower = lower - background_with_process[i]
+                if not math.isfinite(delta_lower):
+                    raise ValueError("NUMERICAL_FAILURE: box feasibility range overflowed")
+                delta_lower = math.nextafter(delta_lower, -math.inf)
+            delta_upper = math.inf
+            if upper is not None:
+                delta_upper = upper - background_with_process[i]
+                if not math.isfinite(delta_upper):
+                    raise ValueError("NUMERICAL_FAILURE: box feasibility range overflowed")
+                delta_upper = math.nextafter(delta_upper, math.inf)
+            low_delta = delta_lower if coefficient >= 0.0 else delta_upper
+            high_delta = delta_upper if coefficient >= 0.0 else delta_lower
+            low_term = coefficient * low_delta
+            high_term = coefficient * high_delta
+            if math.isnan(low_term) or math.isnan(high_term):
+                raise ValueError("NUMERICAL_FAILURE: box feasibility range is indeterminate")
+            if (math.isfinite(low_delta) and not math.isfinite(low_term)) or \
+                    (math.isfinite(high_delta) and not math.isfinite(high_term)):
+                raise ValueError("NUMERICAL_FAILURE: box feasibility range overflowed")
+            if math.isfinite(low_term):
+                low_term = math.nextafter(low_term, -math.inf)
+            if math.isfinite(high_term):
+                high_term = math.nextafter(high_term, math.inf)
+            next_minimum = minimum + low_term
+            next_maximum = maximum + high_term
+            if math.isnan(next_minimum) or math.isnan(next_maximum):
+                raise ValueError("NUMERICAL_FAILURE: box feasibility range is indeterminate")
+            if (math.isfinite(minimum) and math.isfinite(low_term) and not math.isfinite(next_minimum)) or \
+                    (math.isfinite(maximum) and math.isfinite(high_term) and not math.isfinite(next_maximum)):
+                raise ValueError("NUMERICAL_FAILURE: box feasibility range overflowed")
+            if math.isfinite(next_minimum):
+                next_minimum = math.nextafter(next_minimum, -math.inf)
+            if math.isfinite(next_maximum):
+                next_maximum = math.nextafter(next_maximum, math.inf)
+            minimum, maximum = next_minimum, next_maximum
+        if target < minimum or target > maximum:
+            raise ValueError("INFEASIBLE: equality target is infeasible under its declared box range")
+
+    state_scale, _, Binv = _factor_covariance(B, "B")
+    observation_scale, _, Rinv = _factor_covariance(R, "R")
+    Hscaled = [[H[i][j] * state_scale[j] / observation_scale[i] for j in range(n)]
+               for i in range(m)]
+    innovation = [(y[i] - value) / observation_scale[i]
+                  for i, value in enumerate(_matvec(H, background_with_process))]
+    HtRinv = _multiply(_transpose(Hscaled), Rinv)
+    Qscaled = _add(Binv, _multiply(HtRinv, Hscaled))
+    rhs_scaled = _matvec(HtRinv, innovation)
+    Cscaled = [[row[i] * state_scale[i] for i in range(n)] for row in C]
+    if any(not math.isfinite(value) for matrix in (Hscaled, Qscaled, Cscaled)
+           for row in matrix for value in row) or any(
+               not math.isfinite(value) for vector in (innovation, rhs_scaled)
+               for value in vector):
+        raise ValueError("NUMERICAL_FAILURE: covariance normalization or objective assembly overflowed")
     normalized_constraints = []
     normalized_rhs = []
     for row, target in zip(Cscaled, d):
@@ -353,54 +456,159 @@ def evaluate(data: Any) -> dict[str, Any]:
         if upper is not None and upper != lower:
             choices.append(1)
         options.append(choices)
-    best: tuple[float, list[float]] | None = None
+    best: tuple[float, list[float], list[float], tuple[int, ...], list[float], list[list[float]]] | None = None
+    solved_faces = 0
     for face in itertools.product(*options):
-        rows = [row[:] for row in Cscaled]
-        rhs = dscaled[:]
-        for i, side in enumerate(face):
-            if side:
-                lower, upper = bound_map[i]
-                row = [0.0] * n
-                row[i] = 1.0
-                rows.append(row)
-                rhs.append(((lower if side == -1 else upper) - background[i] - known[i]) /
-                           control_scale[i])
+        active = [i for i, side in enumerate(face) if side]
+        free = [i for i in range(n) if not face[i]]
+        fixed_z = [0.0] * n
+        for i in active:
+            lower, upper = bound_map[i]
+            bound = lower if face[i] == -1 else upper
+            fixed_z[i] = (bound - background_with_process[i]) / state_scale[i]
+        reduced_rhs = [dscaled[k] - sum(Cscaled[k][i] * fixed_z[i] for i in active)
+                       for k in range(len(Cscaled))]
+        rows = [[row[i] for i in free] for row in Cscaled]
         try:
-            rows, rhs = _independent_constraints(rows, rhs)
+            basis_indices = _independent_constraint_indices(rows, reduced_rhs)
         except ValueError:
             continue
+        basis_full = [Cscaled[index] for index in basis_indices]
+        rows = [rows[index] for index in basis_indices]
+        reduced_rhs = [reduced_rhs[index] for index in basis_indices]
         k = len(rows)
-        kkt = [[0.0] * (n + k) for _ in range(n + k)]
-        target = rhs_scaled + rhs
+        if free:
+            kkt = [[0.0] * (len(free) + k) for _ in range(len(free) + k)]
+            target = [rhs_scaled[i] - sum(Qscaled[i][j] * fixed_z[j] for j in active)
+                      for i in free] + reduced_rhs
+            for a, i in enumerate(free):
+                for b, j in enumerate(free):
+                    kkt[a][b] = Qscaled[i][j]
+                for b in range(k):
+                    kkt[a][len(free) + b] = rows[b][a]
+                    kkt[len(free) + b][a] = rows[b][a]
+            try:
+                solution = _solve(kkt, target)
+            except ValueError:
+                continue
+            z = fixed_z[:]
+            for a, i in enumerate(free):
+                z[i] = solution[a]
+            equality_multipliers = solution[len(free):]
+        else:
+            if any(abs(value) > 128.0 * sys.float_info.epsilon * max(1.0, abs(value))
+                   for value in reduced_rhs):
+                continue
+            z = fixed_z[:]
+            equality_multipliers = []
+        solved_faces += 1
+        delta = [state_scale[i] * z[i] for i in range(n)]
+        state = background_with_process[:]
         for i in range(n):
-            for j in range(n):
-                kkt[i][j] = Qscaled[i][j]
-            for j in range(k):
-                kkt[i][n + j] = rows[j][i]
-                kkt[n + j][i] = rows[j][i]
-        try:
-            solution = _solve(kkt, target)
-        except ValueError:
-            continue
-        delta = [control_scale[i] * solution[i] for i in range(n)]
-        state = [background[i] + known[i] + delta[i] for i in range(n)]
-        if any(abs(_dot(row, delta) - target_value) > 64.0 * sys.float_info.epsilon *
-               (abs(target_value) + sum(abs(a * b) for a, b in zip(row, delta)))
-               for row, target_value in zip(C, d)):
+            state[i] += delta[i]
+        # Fixed coordinates are assigned from their declared bound after solving
+        # the reduced system, preserving exact equality without a final clip.
+        for i in active:
+            lower, upper = bound_map[i]
+            state[i] = lower if face[i] == -1 else upper
+            delta[i] = state[i] - background_with_process[i]
+            z[i] = delta[i] / state_scale[i]
+        equality_error = max((abs(_dot(row, delta) - target_value) /
+                              max(abs(target_value), sum(abs(a * b) for a, b in zip(row, delta)),
+                                  sys.float_info.min)
+                              for row, target_value in zip(C, d)), default=0.0)
+        if equality_error > 4096.0 * sys.float_info.epsilon:
             continue
         if any((bound_map[i][0] is not None and state[i] < bound_map[i][0]) or
                (bound_map[i][1] is not None and state[i] > bound_map[i][1])
                for i in bound_map):
             continue
-        cost = 0.5 * _quadratic(Binv, delta) + 0.5 * _quadratic(
-            Rinv, [value - target_value for value, target_value in zip(_matvec(H, state), y)])
+        residual_scaled = [(value - target_value) / observation_scale[i]
+                           for i, (value, target_value) in enumerate(zip(_matvec(H, state), y))]
+        cost = 0.5 * _quadratic(Binv, z) + 0.5 * _quadratic(Rinv, residual_scaled)
         if best is None or cost < best[0]:
-            best = (cost, delta)
+            best = (cost, delta, z, tuple(face), equality_multipliers, basis_full)
     if best is None:
-        raise ValueError("declared linear constraints and state bounds are infeasible")
+        raise ValueError("NUMERICAL_FAILURE: declared linear constraints and state bounds have no certified face")
 
     analysis = best[1]
-    candidate = [background[i] + known[i] + analysis[i] for i in range(n)]
+    candidate = [background_with_process[i] + analysis[i] for i in range(n)]
+    active = [i for i, side in enumerate(best[3]) if side]
+    for i in active:
+        lower, upper = bound_map[i]
+        candidate[i] = lower if best[3][i] == -1 else upper
+        analysis[i] = candidate[i] - background_with_process[i]
+    z = [analysis[i] / state_scale[i] for i in range(n)]
+    residual_scaled = [(value - target_value) / observation_scale[i]
+                       for i, (value, target_value) in enumerate(zip(_matvec(H, candidate), y))]
+    gradient = [value + term for value, term in zip(
+        _matvec(Binv, z), _matvec(_multiply(_transpose(Hscaled), Rinv), residual_scaled))]
+    lagrangian_gradient = gradient[:]
+    for row, multiplier in zip(best[5], best[4]):
+        for i in range(n):
+            lagrangian_gradient[i] += row[i] * multiplier
+    lower_duals = [0.0] * n
+    upper_duals = [0.0] * n
+    fixed_duals = [0.0] * n
+    for i in active:
+        if bound_map[i][0] == bound_map[i][1]:
+            fixed_duals[i] = -lagrangian_gradient[i]
+            lagrangian_gradient[i] = 0.0
+            continue
+        if best[3][i] == -1:
+            lower_duals[i] = lagrangian_gradient[i]
+        else:
+            upper_duals[i] = -lagrangian_gradient[i]
+        lagrangian_gradient[i] = 0.0
+    equality_residuals = [abs(_dot(row, analysis) - target) /
+                          max(abs(target), sum(abs(a * b) for a, b in zip(row, analysis)),
+                              sys.float_info.min) for row, target in zip(C, d)]
+    bound_violations = [max(0.0, lower - candidate[i]) if lower is not None else 0.0
+                        for i, (lower, _) in bound_map.items()]
+    bound_violations += [max(0.0, candidate[i] - upper) if upper is not None else 0.0
+                         for i, (_, upper) in bound_map.items()]
+    stationarity_scale = max((abs(value) + sum(abs(row[i] * multiplier)
+                                                for row, multiplier in zip(best[5], best[4]))
+                             for i, value in enumerate(gradient)), default=1.0)
+    dual_scale = max(stationarity_scale, sys.float_info.min)
+    dual_violation = max([0.0] + [max(0.0, -value) / dual_scale
+                                  for value in lower_duals + upper_duals])
+    complementarity = max([0.0] + [abs(lower_duals[i] * (candidate[i] - bound_map[i][0])) /
+                                    dual_scale for i in active if bound_map[i][0] is not None] +
+                          [abs(upper_duals[i] * (bound_map[i][1] - candidate[i])) /
+                           dual_scale for i in active if bound_map[i][1] is not None])
+    kkt_diagnostics = {
+        "status": "PASS",
+        "stationarity_coordinates": "normalized_control",
+        "equality_coordinates": "original_state_increment",
+        "primal_equality_residual": max(equality_residuals, default=0.0),
+        "primal_bound_violation": max(bound_violations, default=0.0),
+        "stationarity_residual": max((abs(value) for value in lagrangian_gradient), default=0.0) /
+        dual_scale,
+        "dual_sign_violation": dual_violation,
+        "complementarity_residual": complementarity,
+        "active_bounds": [
+            {"field": fields[i], "side": "fixed" if bound_map[i][0] == bound_map[i][1] else
+             "lower" if best[3][i] == -1 else "upper",
+             "multiplier": fixed_duals[i] if bound_map[i][0] == bound_map[i][1] else
+             lower_duals[i] if best[3][i] == -1 else upper_duals[i]}
+            for i in active
+        ],
+        "normalized_covariance_scales": {"state": state_scale, "observation": observation_scale},
+        "face_solves": solved_faces,
+    }
+    if max(kkt_diagnostics[key] for key in (
+            "primal_equality_residual", "primal_bound_violation", "stationarity_residual",
+            "dual_sign_violation", "complementarity_residual")) > 4096.0 * sys.float_info.epsilon:
+        kkt_diagnostics["status"] = "NUMERICAL_FAILURE"
+        raise ValueError("NUMERICAL_FAILURE: normalized-coordinate KKT certificate did not pass")
+    if any(not math.isfinite(value) for value in
+           (best[0], *candidate, *analysis, *gradient, *lagrangian_gradient,
+            *lower_duals, *upper_duals, *fixed_duals, *best[4],
+            *(item["multiplier"] for item in kkt_diagnostics["active_bounds"]),
+            kkt_diagnostics["primal_equality_residual"], kkt_diagnostics["stationarity_residual"],
+            kkt_diagnostics["dual_sign_violation"], kkt_diagnostics["complementarity_residual"])):
+        raise ValueError("NUMERICAL_FAILURE: nonfinite value in the original-coordinate KKT certificate")
     state_changes = [candidate[i] - background[i] for i in range(n)]
     # Preserve the names and units of the existing physical component contract.
     physical_components = {}
@@ -419,6 +627,7 @@ def evaluate(data: Any) -> dict[str, Any]:
         }
     result = {
         "status": "MANUFACTURED_ALGORITHM_TRIAL",
+        "kkt_diagnostics": kkt_diagnostics,
         "evidence_class": declaration["evidence_class"],
         "scope": "linear H/B/R objective with declared equality and box constraints",
         "objective_value": best[0],
@@ -484,7 +693,11 @@ def main() -> int:
         print(rendered, end="")
         return 0
     except (OSError, TypeError, ValueError, json.JSONDecodeError) as error:
-        print(json.dumps({"status": "INVALID_TRIAL", "error": str(error)}, indent=2))
+        message = str(error)
+        status = "NUMERICAL_FAILURE" if message.startswith("NUMERICAL_FAILURE:") else \
+            "INFEASIBLE" if "infeasible" in message.lower() or "inconsistent" in message.lower() else \
+            "INVALID_TRIAL"
+        print(json.dumps({"status": status, "error": message}, indent=2))
         return 2
 
 
