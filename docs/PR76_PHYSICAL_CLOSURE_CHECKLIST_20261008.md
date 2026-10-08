@@ -50,4 +50,13 @@ Overall physical initialization remains **FAIL/OPEN**. Estimator-fixture correct
 
 ## KG maintenance
 
-Pending the frozen code batch's incremental Graphify/KG update. KLAPS50 and Cloud-BAL will retain separate dated snapshots, old artifacts and derived report/index/log synchronization. Graph structure and freshness do not establish runtime or scientific validation.
+Completed the frozen code batch's guarded Graphify/KG update for commit `2f27b3fc680f5fad14b2efa2879ab5fddd5325f4` against `fd7e1be37075a7ba80ee3a0be080111a5be03a26`: 68 selected paths, separately dated `2026-10-08-pr76-degenerate-kkt` snapshots.
+
+| Corpus | Nodes | Edges | Delta nodes/edges |
+|---|---:|---:|---:|
+| KLAPS50 | 34,375 | 74,275 | +76 / +121 |
+| Cloud-BAL | 8,542 | 15,847 | +76 / +120 |
+
+Each has 77 added IDs and one removed line-number-keyed rationale ID: the unchanged independent-row-selection rationale moved from L212 to L323. Integrity diagnostics pass; prior snapshots/receipts, native sources, inputs and private-profile graph members remain preserved. Derived wiki reports/index/log were synchronized; ontology/content pages were not modified.
+
+AST and Markdown heading extraction only; cross-file Fortran CALL coverage is partial and external native source trees are not extracted. The overlapping corpus totals are not added together. This graph update supplies navigation evidence, not runtime or scientific validation. Receipt: `docs/evidence/pr76_kg_receipt_20261008.json`. The metadata appendix follows the frozen extraction; it does not change implementation or runtime evidence.

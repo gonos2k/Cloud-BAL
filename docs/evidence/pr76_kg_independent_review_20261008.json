@@ -1,0 +1,94 @@
+{
+  "schema": "pr76_kg_independent_review_v1",
+  "status": "PASS",
+  "reviewed_utc": "2026-10-08",
+  "scope": "Read-only verification of the frozen PR76 KG receipt, dated corpora, preservation evidence, and publication receipt.",
+  "bindings": {
+    "base_commit": "fd7e1be37075a7ba80ee3a0be080111a5be03a26",
+    "frozen_source_commit": "2f27b3fc680f5fad14b2efa2879ab5fddd5325f4",
+    "kg_receipt": {
+      "path": "docs/evidence/pr76_kg_receipt_20261008.json",
+      "sha256": "fc62678ea5eddf6d1254915297257f01ef46f49e649155015588cf80584d1711"
+    },
+    "publication_receipt": {
+      "path": "docs/evidence/pr76_publication_20261008.json",
+      "sha256": "e793649aa417a8e08558483b7de4ee35207043e91871656398ab633a1b62468b"
+    },
+    "prior_pr75_kg_receipt_sha256": "9d0855677dbc41d889379b3c98666b66d8279d608bf094032097f7556b45b8bd",
+    "pull_request": {
+      "url": "https://github.com/gonos2k/Cloud-BAL/pull/76",
+      "state": "OPEN",
+      "base_ref": "fd7e1be37075a7ba80ee3a0be080111a5be03a26",
+      "head_ref": "2f27b3fc680f5fad14b2efa2879ab5fddd5325f4"
+    }
+  },
+  "checks": {
+    "source_path_bindings": {
+      "status": "PASS",
+      "candidate_hashes_verified_via_git_show": 68,
+      "frozen_head_matches": true,
+      "base_hashes_verified": 3,
+      "base_paths_absent_as_declared": 65
+    },
+    "receipt_and_prior_artifact_integrity": {
+      "status": "PASS",
+      "prior_immutable_receipts_verified": 70,
+      "rollback_backups_verified": 17,
+      "prior_automatic_snapshot_backups_verified": 10,
+      "protected_publication_files_verified": 4
+    },
+    "derived_wiki": {
+      "status": "PASS",
+      "derived_file_hashes_verified": 5,
+      "log_is_append_only": true,
+      "schema_and_content_pages_touched": false,
+      "maintained_status_delta_reports_source_changes": false
+    },
+    "pull_request_publication": {
+      "status": "PASS",
+      "gh_pr_view_state": "OPEN",
+      "gh_base_and_head_match_receipts": true
+    }
+  },
+  "corpora": {
+    "Cloud-BAL": {
+      "snapshot_directory": "Cloud-BAL/graphify-out/2026-10-08-pr76-degenerate-kkt",
+      "graph_sha256": "d0b63567b7a1ac702307be3d2b190a4085e341f27bed071db2db7ebb7259e8a1",
+      "nodes": 8542,
+      "edges": 15847,
+      "delta_nodes": 76,
+      "delta_edges": 120,
+      "added_node_ids": 77,
+      "removed_node_ids": 1,
+      "dangling_endpoints": 0,
+      "self_loops": 0,
+      "dated_graph_report_and_manifest_hashes_match": true
+    },
+    "KLAPS50": {
+      "snapshot_directory": "graphify-out/2026-10-08-pr76-degenerate-kkt",
+      "graph_sha256": "c3fc024f378a473452cb0481fe9ef39cdfd65a2178fea3766186ed75ae8c730c",
+      "nodes": 34375,
+      "edges": 74275,
+      "delta_nodes": 76,
+      "delta_edges": 121,
+      "added_node_ids": 77,
+      "removed_node_ids": 1,
+      "dangling_endpoints": 0,
+      "self_loops": 0,
+      "dated_graph_report_and_manifest_hashes_match": true
+    }
+  },
+  "graph_delta_interpretation": {
+    "removed_node": "tools_pr73_joint_analysis_rationale_212",
+    "added_replacement_node": "tools_pr73_joint_analysis_rationale_323",
+    "shared_text": "Select independent rows; report numerically uncertain rank as failure.",
+    "interpretation": "The rationale line moved from L212 to L323 with unchanged text; the separately dated PR75 navigation bindings remain historical and are not expected to match the current PR76 graph."
+  },
+  "limitations": [
+    "Graphify 0.9.53 extracted AST and Markdown heading structure only; no semantic/LLM refresh was run.",
+    "Markdown semantic extraction was not performed, and Fortran cross-file CALL extraction is partial.",
+    "The two corpora overlap and their node/edge counts are reported separately.",
+    "Graph freshness provides structural navigation evidence only; it does not establish runtime or scientific validation.",
+    "Physical approval remains FAIL_OPEN; scientific gates recorded in the KG receipt remain open."
+  ]
+}
