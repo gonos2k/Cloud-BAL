@@ -61,3 +61,69 @@ Graphify와 KG는 frozen 변경의 관계를 별도로 갱신한다. KLAPS50과 
 스냅샷을 각각 날짜·delta와 함께 기록하며, 부분 Fortran CALL/Markdown heading
 추출과 외부 native 소스 미추출의 제한을 밝힌다. Graph freshness는 런타임이나
 과학적 검증의 근거가 아니다. 완료 후 KG receipt를 별도 publication 기록에 연결한다.
+
+## Graphify/KG 후속 완료
+
+동결 구현 커밋 `d3b1a6e17b2170c3de8bea3e5cdf402b60668114`의 67개 변경경로를
+Graphify 0.9.53으로 증분 반영하고 `kg-update`의 derived report/index/log를
+동기화했다. 각 corpus의 별도 `2026-10-08-pr74` 스냅샷을 보존했다.
+
+| Corpus | 노드 | edge | 이번 delta |
+|---|---:|---:|---|
+| KLAPS50 | 34,229 | 74,065 | +116 nodes / +145 edges |
+| Cloud-BAL | 8,396 | 15,639 | +116 nodes / +145 edges |
+
+Graph integrity의 missing/duplicate/collapsed edge는 0이다. 원래 dated snapshot,
+receipt, 보호 wiki·private-profile 노드를 보존했다. AST/Markdown heading만 추출했으며
+semantic refresh를 수행하지 않았다. Fortran cross-file CALL 추출은 부분적이고
+외부 native tree 전체를 추출하지 않았다. Corpus는 겹치므로 합산하지 않는다.
+
+[KG receipt](evidence/pr74_kg_receipt_20261008.json)와 publication 후속에
+근거를 고정한다. 이 갱신은 구조 탐색 근거이며 물리 판정은 **FAIL/OPEN**이다.
+
+## 최종 rank 분류 보강
+
+최종 코드의 near-dependent 등식 `C=[[1,0],[1,1e-15]], rhs=[1,2]`는
+수학적으로 가능한데 작은 floating pivot 때문에 미해결 상태가 된다. 이를
+`NUMERICAL_FAILURE`로 분류한다. 정확히 모순인 원래 C/rhs만 rational rank
+확인 후 `INFEASIBLE`로 보고한다. 정규화·face 제거 후의 반올림은 물리적
+모순의 증거로 사용하지 않는다. Decimal box-edge도 v2에서는 수치 실패로
+남을 수 있으며, v1의 허용 endpoint 기록을 수정하지 않았다.
+
+중간 b4 source의 52개 focused Python 시험과 독립 검토를 통과했다. 새 Python이
+만든 control은 이전 것과 바이트 동일했고, 이전 scratch에서 pinned Intel로
+컴파일한 O0/O2 binary를 고정하여 **새 출력경로에서** writer와 성분 reader를
+다시 통과했다. 새 Fortran 컴파일을 수행한 것으로 집계하지 않는다.
+
+- [rank v2 receipt](evidence/pr74_joint_analysis_receipt_20261008_v2.json)
+- [새 source endpoint replay](evidence/pr74_rank_endpoint_replay_20261008/receipt.json)
+- [첫 frozen graph의 독립 검토](evidence/pr74_kg_independent_review_20261008.json)
+
+첫 `d3b1a6e` 구현의 KG와 후속 rank 구현의 KG는 별도 스냅샷으로 연결한다.
+**동일 후보의 native 첫 호출·수지·질량–바람·시간반응은 계속 OPEN이다.**
+
+## 최종 정규화 순서와 source 검증
+
+등식의 floating rank 선택도 공분산 정규화 **뒤**에서 수행한다. 정규화 이전의
+고정 tolerance로 큰 단위변환을 오거부하는 경로를 제거했고, `x=0.3`와
+`x′=10^15 x`의 등가 문제를 공통 회귀시험에 추가했다. 최종 solver SHA
+`97ef288d5e32add28749bb2be36ee846e198ad38a3b048fac8797c614c8a5c12`에서
+53개 focused Python 시험이 통과했다. 최종 Python으로 생성한 control은 첫
+batch와 바이트 동일하며, pinned Intel O0/O2 보존 binary를 새 scratch에 복사해
+writer·성분 재읽기를 각각 다시 통과했다. Fortran은 이번 재생에서 재컴파일하지 않았다.
+
+- [최종 source endpoint와 53개 시험](evidence/pr74_final_endpoint_replay_20261008/receipt.json)
+- [최종 독립 검토](evidence/pr74_final_independent_review_20261008.json)
+- 중간 b4 receipt는 [원바이트 보존본](evidence/pr74_joint_analysis_receipt_20261008_rank_intermediate.json)으로 유지했다.
+
+이 결과는 제조 endpoint의 수치·직렬화 검증이다. 공통 pipeline 실행, 실제 native
+첫 호출 수용, 전체 물·에너지·질량–바람·초기 시간반응을 인증하지 않는다.
+
+## 게시 경계
+
+PR74는 외부에서 2026-10-08 08:17:03 UTC에 main
+`2e5f3b8f98aa2d9d0d8de2b5824dd12a950b7920`으로 병합됐다.
+첫 구현 `d3b1a6e`와 해당 main의 tree는 동일하다. 병합 뒤의 rank 분류·정규화 순서
+보강, 최종 53개 시험과 endpoint 재읽기, 첫 KG의 publication 기록은
+`fix/pr75-analysis-rank-followup`의 별도 후속 PR로 게시한다.
+과거 PR74 receipt의 작성 당시 OPEN 표기는 그대로 보존한다.

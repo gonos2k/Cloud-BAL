@@ -1,0 +1,96 @@
+{
+  "schema": "pr74_final_endpoint_replay_v1",
+  "scope": "Final Python estimator connected to unchanged preserved pinned Intel O0/O2 binaries in fresh scratch outputs; no new Fortran compilation",
+  "source_sha256": {
+    "tools/pr73_joint_analysis.py": "97ef288d5e32add28749bb2be36ee846e198ad38a3b048fac8797c614c8a5c12",
+    "tests/test_pr73_joint_analysis.py": "da037c550b6c44be6803fe1c31339a7ecb514a3cf6be80e9534ea7dd1377900d"
+  },
+  "python_tests": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_pr73_joint_analysis",
+      "tests.test_pr74_independent_oracle",
+      "tests.test_pr74_common_moment_audit",
+      "tests.test_native_kdm6_call_geometry",
+      "tests.test_native_kdm6_trace",
+      "-v"
+    ],
+    "tests": 53,
+    "status": "PASS",
+    "log": "docs/evidence/pr74_final_endpoint_replay_20261008/python_tests.log",
+    "sha256": "5acc2a756ef90f4413a680880257b9b9cca4f57026ed41849127e54f301fafa6"
+  },
+  "profiles": {
+    "O0": {
+      "status": "PASS_ENDPOINT_REPLAY",
+      "scratch": "/var/tmp/pr74_final_endpoint_O0.gyrsqmxp",
+      "prior_fresh_intel_build": "/var/tmp/cloud_bal_pr73_joint_analysis.TRyXg8",
+      "executable_sha256": "14ee9a843f3c77d5c2d9cc0d1b77a848adf94c4b32690ba14ce2fd35c394e0bf",
+      "preserved_binary_bytes_identical": true,
+      "control_identical_to_prior": true,
+      "netcdf_path": "/var/tmp/pr74_final_endpoint_O0.gyrsqmxp/pr73-estimated-analysis-shadow.nc",
+      "netcdf_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "retained_artifacts": {
+        "solver.json": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O0/solver.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.json": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O0/trial.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.control": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O0/trial.control",
+          "sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda"
+        },
+        "candidate.log": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O0/candidate.log",
+          "sha256": "1a68a0e829930babac52b2b48b3b1ca75bfd79f4119b75eb8a2b018e6e7ebb9e"
+        },
+        "readback.log": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O0/readback.log",
+          "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+        }
+      }
+    },
+    "O2": {
+      "status": "PASS_ENDPOINT_REPLAY",
+      "scratch": "/var/tmp/pr74_final_endpoint_O2.0hh6mogg",
+      "prior_fresh_intel_build": "/var/tmp/cloud_bal_pr73_joint_analysis.4UPMAy",
+      "executable_sha256": "a27d75eba39f272f50842209222619872c1db2628a7961714361094ba147565f",
+      "preserved_binary_bytes_identical": true,
+      "control_identical_to_prior": true,
+      "netcdf_path": "/var/tmp/pr74_final_endpoint_O2.0hh6mogg/pr73-estimated-analysis-shadow.nc",
+      "netcdf_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "retained_artifacts": {
+        "solver.json": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O2/solver.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.json": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O2/trial.json",
+          "sha256": "c0b771bc2382aa4343f8455aef11ded60c92b7c9beb7f6d16f1e1a36bcff3828"
+        },
+        "trial.control": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O2/trial.control",
+          "sha256": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda"
+        },
+        "candidate.log": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O2/candidate.log",
+          "sha256": "fc9666b996fde12a40b0720cf34fa110848b7e445f2a7f36fd8d64cde376e513"
+        },
+        "readback.log": {
+          "path": "docs/evidence/pr74_final_endpoint_replay_20261008/O2/readback.log",
+          "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+        }
+      }
+    }
+  },
+  "physical_approval": "FAIL_OPEN",
+  "native_candidate": "REJECTED",
+  "pipeline_executed": false,
+  "profile_script_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "independent_review_path": "docs/evidence/pr74_final_independent_review_20261008.json"
+}

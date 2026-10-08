@@ -1,0 +1,55 @@
+{
+  "pull_request_scope": "PR74 solver near-rank classification follow-up",
+  "supersedes": "docs/evidence/pr74_joint_analysis_receipt_20261008.json",
+  "status": "PASS",
+  "base_source_sha256": "02b2afda770760052813dc9f08cccc9fedc067ecea3966cd3e81b5cf024a360c",
+  "final_source_sha256": {
+    "tools/pr73_joint_analysis.py": "b4aadb54aa68361f883f31726c7a4b809cfcef29ff16f7eaed2daa612fc5197a",
+    "tests/test_pr73_joint_analysis.py": "76401261772d38245ee29b4c1994f6973f56be3d12594ef756bd1423efb738b3"
+  },
+  "validation": [
+    {
+      "command": "python3 -m unittest tests/test_pr73_joint_analysis.py -v",
+      "result": "PASS",
+      "tests": 17
+    },
+    {
+      "command": "python3 -m unittest tests.test_pr74_independent_oracle -v",
+      "result": "PASS",
+      "tests": 4,
+      "oracle_cases": 396
+    },
+    {
+      "command": "python3 -m py_compile tools/pr73_joint_analysis.py",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check -- tools/pr73_joint_analysis.py tests/test_pr73_joint_analysis.py",
+      "result": "PASS"
+    }
+  ],
+  "classification_policy": {
+    "exact_conflicting_original_constraints": "INFEASIBLE",
+    "exact_consistent_original_dependencies": "reduced",
+    "uncertain_rank_after_scaling_or_face_elimination": "NUMERICAL_FAILURE",
+    "near_dependent_feasible_example": "NUMERICAL_FAILURE",
+    "decimal_box_edge_without_certified_face": "NUMERICAL_FAILURE, not INFEASIBLE"
+  },
+  "pinned_intel_endpoint_validation": {
+    "source_sha256": "02b2afda770760052813dc9f08cccc9fedc067ecea3966cd3e81b5cf024a360c",
+    "applies_to_followup_source": false,
+    "owner": "parent agent"
+  },
+  "physical_authority_added": false,
+  "graph_update": "parent session maintenance",
+  "independent_review": {
+    "status": "PASS",
+    "verified_source_sha256": "b4aadb54aa68361f883f31726c7a4b809cfcef29ff16f7eaed2daa612fc5197a",
+    "verified_test_sha256": "76401261772d38245ee29b4c1994f6973f56be3d12594ef756bd1423efb738b3",
+    "review_command": "python -m unittest tests.test_pr73_joint_analysis tests.test_pr74_independent_oracle -v",
+    "review_receipt": "docs/evidence/pr74_kg_independent_review_20261008.json",
+    "review_receipt_sha256": "6e2d928d38db6eebda7d81a2bb4fda9b3c037a39095a531419cdf28a12bd4f26",
+    "graph_overlay_for_followup": "PENDING",
+    "open_findings": []
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "pull_request_scope": "PR74 solver near-rank classification follow-up",
+  "supersedes": "docs/evidence/pr74_joint_analysis_receipt_20261008.json",
+  "status": "PASS",
+  "base_source_sha256": "02b2afda770760052813dc9f08cccc9fedc067ecea3966cd3e81b5cf024a360c",
+  "final_source_sha256": {
+    "tools/pr73_joint_analysis.py": "97ef288d5e32add28749bb2be36ee846e198ad38a3b048fac8797c614c8a5c12",
+    "tests/test_pr73_joint_analysis.py": "da037c550b6c44be6803fe1c31339a7ecb514a3cf6be80e9534ea7dd1377900d"
+  },
+  "validation": [
+    {
+      "command": "python3 -m unittest tests/test_pr73_joint_analysis.py -v",
+      "result": "PASS",
+      "tests": 18
+    },
+    {
+      "command": "python3 -m unittest tests.test_pr74_independent_oracle -v",
+      "result": "PASS",
+      "tests": 4,
+      "oracle_cases": 396
+    },
+    {
+      "command": "python3 -m py_compile tools/pr73_joint_analysis.py",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check -- tools/pr73_joint_analysis.py tests/test_pr73_joint_analysis.py",
+      "result": "PASS"
+    }
+  ],
+  "classification_policy": {
+    "exact_conflicting_original_constraints": "INFEASIBLE",
+    "exact_consistent_original_dependencies": "reduced",
+    "uncertain_rank_after_scaling_or_face_elimination": "NUMERICAL_FAILURE",
+    "near_dependent_feasible_example": "NUMERICAL_FAILURE",
+    "decimal_box_edge_without_certified_face": "NUMERICAL_FAILURE, not INFEASIBLE",
+    "state_unit_scaled_equality": "PASS after covariance normalization"
+  },
+  "pinned_intel_endpoint_validation": {
+    "source_sha256": "02b2afda770760052813dc9f08cccc9fedc067ecea3966cd3e81b5cf024a360c",
+    "applies_to_followup_source": false,
+    "owner": "parent agent"
+  },
+  "prior_endpoint_replay": {
+    "source_sha256": "b4aadb54aa68361f883f31726c7a4b809cfcef29ff16f7eaed2daa612fc5197a",
+    "receipt": "docs/evidence/pr74_rank_endpoint_replay_20261008/receipt.json",
+    "applies_to_followup_source": false
+  },
+  "physical_authority_added": false,
+  "graph_update": "parent session maintenance",
+  "independent_review": {
+    "status": "PASS",
+    "verified_source_sha256": "97ef288d5e32add28749bb2be36ee846e198ad38a3b048fac8797c614c8a5c12",
+    "verified_test_sha256": "da037c550b6c44be6803fe1c31339a7ecb514a3cf6be80e9534ea7dd1377900d",
+    "reviewed_case": "state-unit-scaled scalar equality returns covariant 3e14 candidate with KKT PASS",
+    "review_command": "python3 -m unittest tests.test_pr73_joint_analysis.JointAnalysisTest.test_scaled_equality_is_rank_checked_after_state_unit_normalization -v",
+    "full_suite_command": "python -m unittest tests.test_pr73_joint_analysis tests.test_pr74_independent_oracle -v",
+    "review_receipt": "docs/evidence/pr74_final_independent_review_20261008.json",
+    "review_receipt_sha256": "1e2927d96fd95c5ca7f0a7aae6ec9e6fed7dc0377fc2ed92d177e7818c03d391",
+    "graph_overlay_for_followup": "PENDING",
+    "open_findings": []
+  },
+  "final_endpoint_replay": {
+    "receipt": "docs/evidence/pr74_final_endpoint_replay_20261008/receipt.json",
+    "sha256": "ae252c2c04bdc2dae9523ea2bdc87f063e48d4be180db83b7b7c1ffb8556470d",
+    "source_sha256": "97ef288d5e32add28749bb2be36ee846e198ad38a3b048fac8797c614c8a5c12",
+    "applies_to_followup_source": true,
+    "new_fortran_compile": false,
+    "pipeline_executed": false
+  }
+}

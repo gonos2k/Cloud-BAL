@@ -13,6 +13,7 @@ import math
 import os
 import struct
 import sys
+from fractions import Fraction
 from pathlib import Path
 from typing import Any
 
@@ -172,8 +173,43 @@ def _quadratic(matrix: list[list[float]], vector: list[float]) -> float:
     return _dot(vector, _matvec(matrix, vector))
 
 
+def _exact_constraint_relation(rows: list[list[float]], targets: list[float]) -> str:
+    """Classify an ambiguous small equality system using exact input floats."""
+    augmented = [[Fraction.from_float(value) for value in row] + [Fraction.from_float(target)]
+                 for row, target in zip(rows, targets)]
+    variable_count = len(rows[0]) if rows else 0
+
+    def rank(matrix: list[list[Fraction]], columns: int) -> int:
+        reduced = [row[:] for row in matrix]
+        pivot = 0
+        for column in range(columns):
+            selected = next((i for i in range(pivot, len(reduced))
+                             if reduced[i][column] != 0), None)
+            if selected is None:
+                continue
+            reduced[pivot], reduced[selected] = reduced[selected], reduced[pivot]
+            divisor = reduced[pivot][column]
+            for i in range(pivot + 1, len(reduced)):
+                factor = reduced[i][column] / divisor
+                if factor:
+                    reduced[i] = [left - factor * right
+                                  for left, right in zip(reduced[i], reduced[pivot])]
+            pivot += 1
+            if pivot == len(reduced):
+                break
+        return pivot
+
+    coefficient_rank = rank(augmented, variable_count)
+    augmented_rank = rank(augmented, variable_count + 1)
+    if augmented_rank > coefficient_rank:
+        return "inconsistent"
+    if coefficient_rank < len(rows):
+        return "dependent"
+    return "independent"
+
+
 def _independent_constraint_indices(rows: list[list[float]], targets: list[float]) -> list[int]:
-    """Select original independent rows, rejecting inconsistent dependencies."""
+    """Select independent rows; report numerically uncertain rank as failure."""
     if not rows:
         return []
     tolerance = 128.0 * sys.float_info.epsilon
@@ -204,11 +240,14 @@ def _independent_constraint_indices(rows: list[list[float]], targets: list[float
             rank += 1
             if pivot_row == row_count:
                 break
-        target_scale = max(1.0, *(abs(value) for value in trial_targets))
         for residual in augmented[rank:]:
-            if max((abs(value) for value in residual[:variable_count]), default=0.0) <= tolerance and \
-                    abs(residual[-1]) > tolerance * target_scale:
-                raise ValueError("declared linear constraints are inconsistent")
+            coefficient_residual = max((abs(value) for value in residual[:variable_count]), default=0.0)
+            if coefficient_residual <= tolerance:
+                relation = _exact_constraint_relation(trial_rows, trial_targets)
+                if relation == "inconsistent":
+                    raise ValueError("NUMERICAL_FAILURE: equality consistency is numerically ambiguous")
+                if relation == "independent":
+                    raise ValueError("NUMERICAL_FAILURE: equality rank is numerically ambiguous")
         if rank > len(chosen):
             chosen.append(index)
     return chosen
@@ -340,6 +379,7 @@ def evaluate(data: Any) -> dict[str, Any]:
         raise ValueError("constraints must be a list")
     C: list[list[float]] = []
     d: list[float] = []
+    declared_targets: list[float] = []
     for row in constraints:
         if not isinstance(row, dict) or not isinstance(row.get("evidence_id"), str) or not row["evidence_id"].strip():
             raise ValueError("each constraint needs an independent evidence_id")
@@ -350,6 +390,10 @@ def evaluate(data: Any) -> dict[str, Any]:
             raise ValueError("NUMERICAL_FAILURE: adjusted equality target overflowed")
         C.append(coefficients)
         d.append(adjusted_rhs)
+        declared_targets.append(rhs)
+
+    if _exact_constraint_relation(C, declared_targets) == "inconsistent":
+        raise ValueError("INFEASIBLE: declared linear constraints are inconsistent")
 
     bounds = declaration.get("state_bounds", [])
     if not isinstance(bounds, list):
