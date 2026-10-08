@@ -1,0 +1,17 @@
+--- module_mp_kdm6.f90
++++ module_mp_kdm6.f90
+@@ -4413,8 +4413,13 @@
+ 
+       do k = kts, kte
+         do i = its, ite
+-          if (progb_status(i,k) == PROGB_TRANSIENT) &
++          if (progb_status(i,k) == PROGB_TRANSIENT) then
++            write(*,'(A,1X,3(I0,1X),10(ES24.16,1X))') 'PR72_TRANSIENT_STATE', &
++              i,k,progb_status(i,k),qrs(i,k,1),qrs(i,k,2),qrs(i,k,3), &
++              qci(i,k),nrs(i,k),nci(i,k), &
++              den(i,k),denfac(i,k),t(i,k)
+             error stop 'ProgB transient PSD state rejected'
++          endif
+           if (progb_status(i,k) == PROGB_UNSUPPORTED) &
+             error stop 'ProgB unsupported PSD state rejected'
+           if (progb_status(i,k) /= PROGB_ABSENT .and. &

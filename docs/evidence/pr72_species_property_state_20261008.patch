@@ -1,0 +1,219 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -9,6 +9,11 @@
+    integer, parameter, private :: PROGB_TRANSIENT = 1
+    integer, parameter, private :: PROGB_PSD_ACTIVE = 2
+    integer, parameter, private :: PROGB_UNSUPPORTED = 3
++   integer, parameter, private :: SPECIES_ABSENT = 0
++   integer, parameter, private :: SPECIES_MASS_ONLY = 1
++   integer, parameter, private :: SPECIES_NUMBER_ONLY = 2
++   integer, parameter, private :: SPECIES_ACTIVE = 3
++   integer, parameter, private :: SPECIES_INVALID = 4
+ 
+ 
+ 
+@@ -185,6 +190,79 @@
+ 
+     contains
+ 
++    pure integer function classify_species_state(mass, number) result(state)
++      real, intent(in) :: mass, number
++      if (.not.ieee_is_finite(mass) .or. .not.ieee_is_finite(number)) then
++        state = SPECIES_INVALID
++      elseif (mass < 0.0 .or. number < 0.0) then
++        state = SPECIES_INVALID
++      elseif (mass == 0.0 .and. number == 0.0) then
++        state = SPECIES_ABSENT
++      elseif (mass > 0.0 .and. number == 0.0) then
++        state = SPECIES_MASS_ONLY
++      elseif (mass == 0.0 .and. number > 0.0) then
++        state = SPECIES_NUMBER_ONLY
++      else
++        state = SPECIES_ACTIVE
++      endif
++    end function classify_species_state
++
++    subroutine validate_kdm6_species_states(qci, qrs, nrs, nci, brs)
++      real, intent(in) :: qci(:,:,:), qrs(:,:,:), nrs(:,:,:), nci(:,:,:), brs(:,:)
++      integer :: i, k, state
++      do k=1,size(qrs,2)
++        do i=1,size(qrs,1)
++          state=classify_species_state(qrs(i,k,1),nrs(i,k,1))
++          call require_paired_state(state)
++          state=classify_species_state(qci(i,k,1),nci(i,k,1))
++          call require_paired_state(state)
++          state=classify_species_state(qci(i,k,2),nci(i,k,2))
++          call require_paired_state(state)
++          state=classify_species_state(qrs(i,k,3),brs(i,k))
++          call require_paired_state(state)
++        enddo
++      enddo
++    end subroutine validate_kdm6_species_states
++
++    subroutine validate_kdm6_slope_states(qci_current, qrs_current, nrs_current, &
++                                            nci_current, brs, qrs, nrs, qci, nci)
++      real, intent(in) :: qci_current(:,:,:), qrs_current(:,:,:), nrs_current(:,:,:)
++      real, intent(in) :: nci_current(:,:,:), brs(:,:), qrs(:,:,:), nrs(:,:), qci(:,:), nci(:,:)
++      integer :: i, k
++      do k=1,size(qrs,2)
++        do i=1,size(qrs,1)
++          call require_paired_state(classify_species_state(qrs_current(i,k,1),nrs_current(i,k,1)))
++          call require_paired_state(classify_species_state(qci_current(i,k,1),nci_current(i,k,1)))
++          call require_paired_state(classify_species_state(qci_current(i,k,2),nci_current(i,k,2)))
++          call require_paired_state(classify_species_state(qrs_current(i,k,3),brs(i,k)))
++          call require_paired_state(classify_species_state(qrs(i,k,1),nrs(i,k)))
++          call require_paired_state(classify_species_state(qci(i,k),nci(i,k)))
++          call require_paired_state(classify_species_state(qrs(i,k,3),brs(i,k)))
++        enddo
++      enddo
++    end subroutine validate_kdm6_slope_states
++
++    subroutine validate_local_species_states(qr, nr, qc, nc, qi, ni, qg, bg)
++      real, intent(in) :: qr, nr, qc, nc, qi, ni, qg, bg
++      call require_paired_state(classify_species_state(qr,nr))
++      call require_paired_state(classify_species_state(qc,nc))
++      call require_paired_state(classify_species_state(qi,ni))
++      call require_paired_state(classify_species_state(qg,bg))
++    end subroutine validate_local_species_states
++
++    subroutine require_paired_state(state)
++      integer, intent(in) :: state
++      select case(state)
++      case(SPECIES_ABSENT,SPECIES_ACTIVE)
++        return
++      case(SPECIES_MASS_ONLY)
++        error stop 'KDM6 unsupported positive mass without number/volume state'
++      case(SPECIES_NUMBER_ONLY)
++        error stop 'KDM6 orphan number/volume state without positive mass'
++      case default
++        error stop 'KDM6 invalid nonfinite or negative species state'
++      end select
++    end subroutine require_paired_state
+     ! PR71_STEP_COUNT_CONTRACT_BEGIN
+     pure subroutine checked_substep_count(rate, timestep, count, valid)
+       double precision, intent(in) :: rate
+@@ -1408,6 +1486,7 @@
+ 
+ 
+ 
++   call validate_kdm6_species_states(qci,qrs,nrs,nci,brs)
+    do k = kts, kte
+      do i = its, ite
+        qci(i,k,1) = max(qci(i,k,1),0.0)
+@@ -1711,6 +1790,8 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+@@ -1825,6 +1906,8 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+@@ -1908,6 +1991,8 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+@@ -2063,6 +2148,8 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+@@ -2101,9 +2188,18 @@
+             rslopecmu(i,k) = DBLE(rslopec(i,k))**muc
+             rslopecd(i,k) = (rslopec(i,k))**dmc
+           endif
+-          n0r(i,k) = nrs(i,k,1)/(rslope(i,k,1)*rslopemu(i,k,1)*g1pmr)
+-          n0c(i,k) = (muc+1)*nci(i,k,1)/(rslopec(i,k)*rslopecmu(i,k))
+-          n0i(i,k) = nci(i,k,2)/(rslope(i,k,4)*rslopemu(i,k,4)*g1pmi) 
++          call validate_local_species_states(qrs(i,k,1),nrs(i,k,1), &
++               qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
++               qrs(i,k,3),brs(i,k))
++          n0r(i,k) = 0.0
++          n0c(i,k) = 0.0
++          n0i(i,k) = 0.0
++          if (classify_species_state(qrs(i,k,1),nrs(i,k,1)) == SPECIES_ACTIVE) &
++            n0r(i,k) = nrs(i,k,1)/(rslope(i,k,1)*rslopemu(i,k,1)*g1pmr)
++          if (classify_species_state(qci(i,k,1),nci(i,k,1)) == SPECIES_ACTIVE) &
++            n0c(i,k) = (muc+1)*nci(i,k,1)/(rslopec(i,k)*rslopecmu(i,k))
++          if (classify_species_state(qci(i,k,2),nci(i,k,2)) == SPECIES_ACTIVE) &
++            n0i(i,k) = nci(i,k,2)/(rslope(i,k,4)*rslopemu(i,k,4)*g1pmi) 
+ 
+           if(qrs(i,k,1).ge.qcrmin .and. nrs(i,k,1) .ge. nrmin) then
+             lamdr_tmp(i,k) = exp(log((((pidnr)*nrs(i,k,1))                       &
+@@ -2258,6 +2354,8 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+@@ -2284,9 +2382,18 @@
+           endif
+ 
+ 
+-          n0r(i,k) = nrs(i,k,1)/(rslope(i,k,1)*rslopemu(i,k,1)*g1pmr)
+-          n0c(i,k) = (muc+1)*nci(i,k,1)/(rslopec(i,k)*rslopecmu(i,k))
+-          n0i(i,k) = nci(i,k,2)/(rslope(i,k,4)*rslopemu(i,k,4)*g1pmi)
++          call validate_local_species_states(qrs(i,k,1),nrs(i,k,1), &
++               qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
++               qrs(i,k,3),brs(i,k))
++          n0r(i,k) = 0.0
++          n0c(i,k) = 0.0
++          n0i(i,k) = 0.0
++          if (classify_species_state(qrs(i,k,1),nrs(i,k,1)) == SPECIES_ACTIVE) &
++            n0r(i,k) = nrs(i,k,1)/(rslope(i,k,1)*rslopemu(i,k,1)*g1pmr)
++          if (classify_species_state(qci(i,k,1),nci(i,k,1)) == SPECIES_ACTIVE) &
++            n0c(i,k) = (muc+1)*nci(i,k,1)/(rslopec(i,k)*rslopecmu(i,k))
++          if (classify_species_state(qci(i,k,2),nci(i,k,2)) == SPECIES_ACTIVE) &
++            n0i(i,k) = nci(i,k,2)/(rslope(i,k,4)*rslopemu(i,k,4)*g1pmi)
+           n0so(i,k) = (n0s)/g1pms/(rslopemu(i,k,2))
+           if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
+             n0go(i,k) = (n0g)/g1pmg/(rslopemu(i,k,3))
+@@ -3621,6 +3728,8 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+@@ -3712,6 +3821,8 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
+@@ -3868,6 +3979,9 @@
+               nci(i,k,1) = dry_carrier_density(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc
+             endif
+           endif
++          call validate_local_species_states(qrs(i,k,1),nrs(i,k,1), &
++               qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
++               qrs(i,k,3),brs(i,k))
+           if(qci(i,k,2).ge. qmin .and. nci(i,k,2) .ge. ncmin ) then
+             lamdi_tmp(i,k) = exp(log((((pidni)*nci(i,k,2))                       &
+                          /(dry_carrier_density(i,k)*qci(i,k,2))))*(1./dmi))

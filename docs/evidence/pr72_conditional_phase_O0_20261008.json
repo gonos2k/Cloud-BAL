@@ -1,0 +1,225 @@
+{
+  "status": "PASS_SCOPED",
+  "scope": "actual NE57 2026-08-16 12 UTC phase_only contract candidate",
+  "candidate_mode": "phase_only",
+  "independent_phi_readback_exit": null,
+  "artifact_path": "/var/tmp/cloud_bal_pr64_actual_phase.K2v3cQ/actual-ne57-phase_only-shadow.nc",
+  "analysis_configuration": {
+    "horizontal_support_radius_m": 10000.0,
+    "pressure_support_radius_pa": 20000.0,
+    "phi_reference_policy": null
+  },
+  "candidate_process_exit": 0,
+  "input_postrun_hash_guard_exit": 0,
+  "independent_readback_exit": 0,
+  "source_prepost_hash_guard_exit": 0,
+  "artifact_sha256": "d17c8383a41954fbcea7bcb20f145e5896fd6585d70629ef8f3807ed8381a23d",
+  "valid_time_epoch": 1786881600,
+  "grid": [
+    235,
+    283,
+    22
+  ],
+  "sample_cell_fortran_ijk": [
+    143,
+    191,
+    9
+  ],
+  "source_and_boundary": "predeclared zero; not authenticated physical authority",
+  "phase_policy": "single-cell liquid saturation adjustment to RH=1.0",
+  "observations": "radar reflectivity and LOS plus categorical cloud observations withheld in the scoped input using canonical missing radar encoding; all physical background fields retained",
+  "wind_driver": "UNAVAILABLE",
+  "downstream_wps_real_handoff": "UNAVAILABLE",
+  "inputs": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fua/wrf/2622806000600.fua",
+      "sha256": "29a5bbf0e638422c303ee6e992cc1f53529046624bae1037ea5b1b3b927903ff"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/fsf/wrf/2622806000600.fsf",
+      "sha256": "06781a2d8e14844e26c1ec519d2880b00caf70a6cfcf196e5cb5e4259679e252"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260831_wind_multitime/results/baseline_202608161200/262281200.lw3",
+      "sha256": "9dc8b27c62f49fd788695494a7f6eab75229fcc5f92780dbc6f07d191ded91ff"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrz/262281200.vrz",
+      "sha256": "17f4a463f9d06327f5f28d25fd65b21340d8f62543c404401afbf505ee3412af"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/vrt/262281200.vrt",
+      "sha256": "00b53192b9111b6cb406b418080a0889855355a701e3bfa6167d36dc04ca4411"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/static.nest7grid",
+      "sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b"
+    }
+  ],
+  "static_grid_sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b",
+  "compiler": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "version": "ifx (IFX) 2026.0.0 20260331",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "profile": "O0",
+    "flags": "-stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz "
+  },
+  "netcdf": {
+    "nf_config_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config",
+    "nf_config_sha256": "e39004b972304d63c1b46fb065db754718d571430063819ddafdd7bd3612d8a5",
+    "netcdf_fortran_archive_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/lib/libnetcdff.a",
+    "netcdf_fortran_archive_sha256": "f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17c8a39",
+    "netcdf_c_archive_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/lib/libnetcdf.a",
+    "netcdf_c_archive_sha256": "f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288"
+  },
+  "toolchain_recipe_sha256": "36408d621b07c114a305d7230e8f83ae4d3365d79936bd58f92289a7d1f08654",
+  "profile_input_pre_manifest_sha256": "b8034a4d801e91cb847d85f1714d02fac683fc53b2623943ebe115007ca53459",
+  "profile_input_post_manifest_sha256": "b8034a4d801e91cb847d85f1714d02fac683fc53b2623943ebe115007ca53459",
+  "profile_inputs": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh",
+      "sha256": "26084d08db985eadb61adc43c7f18821be9e75156b60f920de363ea51c70887e"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so",
+      "sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5",
+      "sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config",
+      "sha256": "e39004b972304d63c1b46fb065db754718d571430063819ddafdd7bd3612d8a5"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/lib/libnetcdff.a",
+      "sha256": "f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17c8a39"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/lib/libnetcdf.a",
+      "sha256": "f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tests/check_physical_contract_shadow.py",
+      "sha256": "df7f3e72424294c53cd22e339905f4afa4ddbc68cd4993edcbaa69119857c45c"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tests/check_pressure_geopotential_shadow.py",
+      "sha256": "dc58d1dddbbcc9b282037afc2bb9962ebd3c03b4d2aa6d2fc5d7584ffc8279bb"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tests/check_pressure_candidate_shadow.py",
+      "sha256": "ab156c1e69ccb0108f93071261cbcb631b87a2e81cbfbaae565b21e0b2a9612c"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tests/netcdf_test_copy.py",
+      "sha256": "403aa8d0e4dad08c89c5c79eba58292d5b2060c1afa8eb2119a18af971ab7891"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tools/validate_shadow_diagnostics.py",
+      "sha256": "a20a316d1b5352917e37383b499b21c2aa5084db4aeea3ae945d252843a1f600"
+    }
+  ],
+  "source_prebuild_manifest_sha256": "705306e50fe82806b372640480455cf82d5ff6233847c3d4d3d354ad2971d61f",
+  "source_postbuild_manifest_sha256": "705306e50fe82806b372640480455cf82d5ff6233847c3d4d3d354ad2971d61f",
+  "source_postrun_manifest_sha256": "705306e50fe82806b372640480455cf82d5ff6233847c3d4d3d354ad2971d61f",
+  "runner_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tests/run_pr64_actual_phase_candidate.sh",
+  "runner_sha256_prebuild": "9ebc133134cb61e305b6e492cf01de86d53d25a202eaf34d220996edb27e6bcb",
+  "runner_sha256_postrun": "9ebc133134cb61e305b6e492cf01de86d53d25a202eaf34d220996edb27e6bcb",
+  "independent_reader_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tests/check_physical_contract_shadow.py",
+  "independent_reader_sha256_pre_run": "df7f3e72424294c53cd22e339905f4afa4ddbc68cd4993edcbaa69119857c45c",
+  "independent_reader_sha256_post_run": "df7f3e72424294c53cd22e339905f4afa4ddbc68cd4993edcbaa69119857c45c",
+  "independent_phi_reader_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tests/check_pressure_geopotential_shadow.py",
+  "independent_phi_reader_sha256_pre_run": "dc58d1dddbbcc9b282037afc2bb9962ebd3c03b4d2aa6d2fc5d7584ffc8279bb",
+  "independent_phi_reader_sha256_post_run": "dc58d1dddbbcc9b282037afc2bb9962ebd3c03b4d2aa6d2fc5d7584ffc8279bb",
+  "source_files": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/src/common/cloud_bal_state.f90",
+      "sha256": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/src/common/cloud_bal_grid_geometry.f90",
+      "sha256": "3e2b75c5a64730a65dd4762a4ed9cc8fe82017ca95a11cf40690bfa4bca3e703"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/src/common/cloud_bal_column_physics.f90",
+      "sha256": "fd5e924c645d8d73e88f34f38f9bf8bd62e0d8c5bd6eaa13eedeabbd882b6496"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/src/common/cloud_bal_balance_operator.f90",
+      "sha256": "64631cf4df055b3de9198c87b4eb3650a10078c480dfc995e8de7bb691536747"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/src/common/cloud_bal_pipeline.f90",
+      "sha256": "e9034c1595d69101e9cfee7034bbaa3b72c08f18d2f2114a41bfdeb41226ebf1"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/src/common/cloud_bal_real_netcdf.f90",
+      "sha256": "d936dfee5c6dfa30ae664c97bfece042acdaeedf264d9be023089be0590b14a5"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/src/common/cloud_bal_pressure_analysis.f90",
+      "sha256": "c81ebce5b07998dbe26e7ef40c4dcf787e53550be0c7af106b5f5e31710b0396"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL/tests/test_pr64_actual_phase_candidate.f90",
+      "sha256": "919a13f1105eae90aa82f691e52b0cb918342b9ce399b260cb2c8094b3676dba"
+    }
+  ],
+  "objects": [
+    {
+      "path": "/var/tmp/cloud_bal_pr64_actual_phase.K2v3cQ/cloud_bal_state.o",
+      "sha256": "217898668a4a45bac7e3d5f7b02e115df80e72050b4b9a27425f41bf71fdde3f"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr64_actual_phase.K2v3cQ/cloud_bal_grid_geometry.o",
+      "sha256": "4d0d18aaf2a30d7d35d09adcf4d8b77c2cf924abea06fe0f89485e05b6bbf55c"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr64_actual_phase.K2v3cQ/cloud_bal_column_physics.o",
+      "sha256": "515c32addba0a7f08e67e6a4af7c8b36d37c486e7dd77712dcb163dd452e47f1"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr64_actual_phase.K2v3cQ/cloud_bal_balance_operator.o",
+      "sha256": "fa09ba9e61b4bc914b35ab19794bf4064b7131d9883f53c4588153a8cea2e46b"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr64_actual_phase.K2v3cQ/cloud_bal_pipeline.o",
+      "sha256": "c3d0a3e904101d9d07711192396c65217015d5a80e0ec135051526e2e9229bff"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr64_actual_phase.K2v3cQ/cloud_bal_real_netcdf.o",
+      "sha256": "f67fa70e1a3357ab60c40c7940497e097401a47f08459a21f62aa8b288d6ab58"
+    },
+    {
+      "path": "/var/tmp/cloud_bal_pr64_actual_phase.K2v3cQ/cloud_bal_pressure_analysis.o",
+      "sha256": "642f860c4fb185519051ec39cd919a00545205508d85f5187f21a1bd86ba9756"
+    }
+  ],
+  "object_prepost_manifest_sha256": {
+    "pre": "eebd50c8b32384e1551c994bdb75f442e68349c91d3043a1722ba11aa8c33a57",
+    "post": "eebd50c8b32384e1551c994bdb75f442e68349c91d3043a1722ba11aa8c33a57"
+  },
+  "executable_prepost_sha256": {
+    "pre": "8b93a31df8810f5a7647358404ca57928059f24a581a660701190dd55a136160",
+    "post": "8b93a31df8810f5a7647358404ca57928059f24a581a660701190dd55a136160"
+  },
+  "executable_sha256": "8b93a31df8810f5a7647358404ca57928059f24a581a660701190dd55a136160",
+  "candidate_log": {
+    "path": "docs/evidence/pr72_conditional_phase_O0_candidate.txt",
+    "sha256": "8de4e908a3295851fc881bd08e7b13d618b4d5e376f9900180b8353a4b1cf0e8"
+  },
+  "readback_log": {
+    "path": "docs/evidence/pr72_conditional_phase_O0_readback.txt",
+    "sha256": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e"
+  }
+}

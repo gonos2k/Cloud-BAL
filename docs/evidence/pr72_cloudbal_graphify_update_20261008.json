@@ -1,0 +1,34 @@
+{
+  "schema": "pr72_cloudbal_graphify_update_v1",
+  "recorded_date": "2026-10-08",
+  "source_directory": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr72_ice_state_20261008/Cloud-BAL",
+  "tool": "graphify 0.9.53",
+  "mode": "cli-update",
+  "extraction": {
+    "code_files_re_extracted": 188,
+    "code_files_total_scanned": 188,
+    "nodes_before": 1499,
+    "nodes_after": 7871,
+    "node_delta": 6372,
+    "edges_before": 3094,
+    "edges_after": 15149,
+    "edge_delta": 12055,
+    "communities_after": 579
+  },
+  "outputs": [
+    "graphify-out/graph.json",
+    "graphify-out/GRAPH_REPORT.md",
+    "graphify-out/graph.html",
+    "graphify-out/manifest.json",
+    "graphify-out/cache/stat-index.json",
+    "graphify-out/.graphify_root",
+    "graphify-out/.graphify_labels.json",
+    "graphify-out/.graphify_labels.json.sig"
+  ],
+  "wiki_sync": "skipped: this Cloud-BAL checkout has no wiki/ directory",
+  "limitations": [
+    "AST extraction only; graph freshness does not validate source behavior or scientific correctness.",
+    "Fortran CALL edges are partial across files; USE and definition relationships provide the more reliable backbone.",
+    "This Cloud-BAL snapshot is isolated from the KLAPS50 graph snapshot."
+  ]
+}

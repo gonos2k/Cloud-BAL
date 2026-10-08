@@ -1,0 +1,73 @@
+{
+  "schema": "pr72_independent_input_order_derivation_v1",
+  "classification": "independent inference from preserved first-call input trace and frozen validator source order; not a captured fatal coordinate",
+  "input_trace": {
+    "path": "/var/tmp/pr72_combined_native_final_run_20261008/kdm6_first_call_pre.raw",
+    "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "stage": 1,
+    "itimestep": 1,
+    "bounds": {
+      "its": 2,
+      "ite": 233,
+      "jts": 2,
+      "jte": 281,
+      "kts": 1,
+      "kte": 39
+    },
+    "field_order_in_memory": "j,k,i; active tile starts at jts,kts,its"
+  },
+  "parser": {
+    "path": "tools/native_kdm6_trace.py",
+    "sha256": "6a33128956352a1298943dba338dd56b06c1d7ea818067edd8c797457a8dd77b",
+    "function": "read_dump"
+  },
+  "validator_source": {
+    "path": "docs/evidence/pr72_combined_native_first_reject_20261008/frozen_combined_source.F",
+    "sha256": "1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819",
+    "line_range": "210-225",
+    "loops": "k ascending then i ascending in each per-j public call",
+    "species_order": [
+      "rain: QR/NR",
+      "cloud: QC/NC",
+      "ice: QI/NI",
+      "graupel: QG/BG"
+    ],
+    "conversion_helpers": {
+      "moist_to_dry_density": "293-303",
+      "specific_number_to_volume": "305-319"
+    }
+  },
+  "public_call_order": {
+    "source_lines": "927-981",
+    "loops": "j ascending; then k ascending; then i ascending to populate arrays, then one kdm62D call for that j",
+    "first_trace_j": 2
+  },
+  "first_unsupported_pair_in_that_order": {
+    "species": "ice",
+    "mass_field": "QI",
+    "moment_field": "NI",
+    "state": "mass_only",
+    "coordinate": {
+      "i": 133,
+      "k": 1,
+      "j": 2
+    },
+    "mass": 3.5308575789291633e-35,
+    "moment": 0.0,
+    "trace_offsets_jki": [
+      0,
+      0,
+      131
+    ],
+    "density_inputs": {
+      "DEN": 1.1236798763275146,
+      "Q": 0.02169645018875599,
+      "derived_dry_density": 1.0998177528381348,
+      "dry_density_source_lines": "293-303"
+    }
+  },
+  "prior_pairs_in_validator_order": "none; the first non-absent/non-active pair encountered is the ice mass-only pair above",
+  "number_basis_note": "At this cell public NI is exactly zero. The frozen source computes dry density as DEN/(1+Q); trace values are positive DEN and Q and yield positive dry density. specific_number_to_volume then computes NI_volume = NI_per_kg * dry_density, so the number remains exactly zero. The conversion accepts zero with finite positive density and does not resolve the pair.",
+  "policy_note": "This is exact paired-state admission (QI > 0, NI == 0), even though QI is tiny. It does not establish the physical importance of that mass or certify PSD validity.",
+  "earlier_nonactive_or_invalid_pair_in_call_order": "none"
+}

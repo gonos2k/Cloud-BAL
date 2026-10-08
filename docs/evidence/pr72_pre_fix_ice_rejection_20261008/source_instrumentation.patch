@@ -1,0 +1,20 @@
+--- native_observer_v2.F
++++ native_observer_v4.F
+@@ -1754,7 +1754,7 @@
+           step_rate = max(mass_velocity_rate(i,k,4),number_velocity_rate(i,k,2))
+           call checked_substep_count(step_rate, dtcld, numdt_i(i), step_count_valid)
+           if (.not. step_count_valid) then
+-            if (i == 107 .and. k == 5) then
++            if (.true.) then
+               write(*,'(A,1X,I0,1X,I0,1X,I0,1X,ES24.16,1X,ES24.16)') &
+                    'PR72_ICE_REJECT_LOCATION', lat, i, k, step_rate, dtcld
+               write(*,'(A,1X,4(ES24.16,1X))') 'PR72_ICE_REJECT_STATE', &
+@@ -1768,6 +1768,8 @@
+               write(*,'(A,1X,14(ES24.16,1X))') 'PR72_ICE_REJECT_COEFFICIENTS', &
+                    avti, bvti, pvti, pvtin, g1pdibimi, g1pdimi, g1pbimi, g1pmi, &
+                    bimui1, dibimui1, dimui1, cmi, dmi, mui
++              write(*,'(A,1X,5(ES24.16,1X))') 'PR72_ICE_REJECT_SENTINELS', &
++                   lamdaimax, rslopeimax, rslopeibmax, rslopeimmax, qmin
+             endif
+             write(*,*) 'PR71_STEP_COUNT_REJECT_ICE i,k,rate,dt=', i, k, step_rate, dtcld
+             error stop 'invalid PR71 KDM6 ice substep count'

@@ -1,0 +1,128 @@
+{
+  "schema": "pr72_independent_kg_metadata_review_v1",
+  "review_scope": "Read-only audit of the completed KG publication and metadata followup; no graph or wiki mutations performed by this review.",
+  "reviewed_utc": "2026-10-08",
+  "publication": {
+    "pr_url": "https://github.com/gonos2k/Cloud-BAL/pull/72",
+    "pr_state": "OPEN",
+    "merged": false,
+    "frozen_implementation_commit": "c9f7cf618bd195760465cede04c2bab159ecabdf",
+    "base_commit": "3523fa7cddbf5641f86c8abc081c1479d3862352",
+    "physical_approval": "FAIL_OPEN",
+    "native_candidate": "REJECTED",
+    "first_call_and_time_response_accepted": false,
+    "maintained_native_inputs_and_private_profile_modified": false
+  },
+  "kg_receipt": {
+    "path": "docs/evidence/pr72_graphify_kg_20261008.json",
+    "sha256": "1f99b6bc11bf80c74d8564738930958f697ebf4c7506712b34880cf060aad031",
+    "durable_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr72_ice_state_20261008/kg_receipt.json",
+    "durable_receipt_sha256": "1f99b6bc11bf80c74d8564738930958f697ebf4c7506712b34880cf060aad031",
+    "frozen_source_commit": "c9f7cf618bd195760465cede04c2bab159ecabdf",
+    "selected_path_count": 45,
+    "source_sync_sha256": "8f95a1ef2c80fddeaeeca3e0b0424e2370873bca4ba6368198f903c203b5e89d",
+    "graphify_version": "graphify 0.9.53",
+    "mode": "guarded selected-path overlay extraction/build_merge, cluster-only, derived wiki sync",
+    "physical_approval": "FAIL_OPEN"
+  },
+  "independent_checks": {
+    "all_frozen_commit_selected_path_hashes_match_receipt": {
+      "passed": true,
+      "checked": 45,
+      "commit": "c9f7cf618bd195760465cede04c2bab159ecabdf"
+    },
+    "dated_snapshot_and_wiki_report_index_log_and_prior_immutable_receipt_hashes": {
+      "passed": true,
+      "checked": 41,
+      "failed": 0
+    },
+    "protected_wiki_content_hashes_match_receipt": {
+      "passed": true,
+      "checked": 13,
+      "failed": 0,
+      "method": "same sorted path-and-file SHA-256 inventory algorithm as guarded refresh helper; two protected files hashed directly"
+    },
+    "maintained_selected_paths_unchanged_from_preupdate_state": {
+      "passed": true,
+      "checked": 45,
+      "changed": 0
+    },
+    "postfreeze_candidate_checkout_changes": [
+      "docs/PR72_PHYSICAL_CLOSURE_CHECKLIST_20261008.md (publication/KG checklist ticks only; frozen commit file hash matches selected-path receipt)",
+      "docs/evidence/pr72_graphify_kg_20261008.json (receipt copy)",
+      "docs/evidence/pr72_publication_20261008.json (publication metadata)"
+    ],
+    "postfreeze_metadata_scope": "These paths are recorded in publication metadata and excluded from the frozen 45-path graph extraction.",
+    "allowed_metadata_followup_paths": {
+      "paths": [
+        "docs/PR72_PHYSICAL_CLOSURE_CHECKLIST_20261008.md",
+        "docs/evidence/pr72_graphify_kg_20261008.json",
+        "docs/evidence/pr72_publication_20261008.json",
+        "docs/evidence/pr72_kg_review_20261008.json"
+      ],
+      "all_outside_frozen_extraction": true
+    }
+  },
+  "graph_snapshots": {
+    "snapshot_day": "2026-10-08",
+    "dated_directory": "2026-10-08-pr72",
+    "separate_corpora": true,
+    "KLAPS50": {
+      "nodes": 33921,
+      "edges": 73635,
+      "communities": 2649,
+      "delta_nodes": 124,
+      "delta_edges": 169,
+      "prior_graph_sha256": "b042556141d9fca7e0d7df840f2aa5d7f585980f6c274e2354f14e0827b823e7",
+      "graph_sha256": "d3a9b22e06707dce18bc31b96345004b9292607c217c16f0274b1cfb0bc48ffe"
+    },
+    "Cloud-BAL": {
+      "nodes": 8089,
+      "edges": 15210,
+      "communities": 627,
+      "delta_nodes": 124,
+      "delta_edges": 169,
+      "prior_graph_sha256": "1d4065768e56a2a05c121cf14e3e21d2959f71aa25e183cc878b7b20469cc3ef",
+      "graph_sha256": "2f7500f4de92f43d56d4bc5d86e17733f375b5f4c49a77cc752e71b7b07d5086"
+    },
+    "derived_wiki_outputs": [
+      "graph-report.md",
+      "graph-report-klaps50.md",
+      "graph-report-cloud-bal.md",
+      "index.md#Graph-snapshot",
+      "log.md (append-only)"
+    ],
+    "private_profile_preservation": {
+      "Cloud-BAL": {
+        "incident_links": 133,
+        "nodes": 134,
+        "source_file": "config/cp01_private_host_profile.json",
+        "unchanged": true
+      },
+      "KLAPS50": {
+        "incident_links": 0,
+        "nodes": 0,
+        "source_file": "Cloud-BAL/config/cp01_private_host_profile.json",
+        "unchanged": true
+      }
+    },
+    "prior_PR71_kg_receipt_sha256": "fe8c7ac19b73bdbb309d9fe4e16e7b7a3ceb91295e76bf90867b329c7de4133a",
+    "source_scope": {
+      "frozen_selected_paths": 45,
+      "combined_fortran_source_ast_nodes": 38,
+      "selected_source_and_test_evidence_included": true,
+      "external_native_source_trees_crawled": false
+    }
+  },
+  "limitations": [
+    "Extraction uses Graphify AST and Markdown headings; Markdown semantic extraction was not performed and cross-file Fortran CALL extraction is partial.",
+    "External native WRF research source trees were not extracted; selected repository patches and evidence represent them.",
+    "Graph freshness and structural integrity do not establish runtime behavior or scientific validation.",
+    "PR72 remains OPEN and unmerged; native candidate is REJECTED and physical approval remains FAIL_OPEN."
+  ],
+  "publication_receipt": {
+    "path": "docs/evidence/pr72_publication_20261008.json",
+    "sha256": "576d4417c3e03a4603773f21c053bb5706716a5044ab4c5592bbdec777e47683"
+  },
+  "checklist_sha256_after_metadata_followup": "939da66714f95ebf84d66a095a27cad918c4a4c6beb458cb8d849503885f9a2b"
+}
