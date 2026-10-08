@@ -1,0 +1,146 @@
+--- /var/tmp/pr73_pbl_research/source_before/module_bl_shinhong_pr65.F	2026-10-08 15:23:29.874810574 +0900
++++ /var/tmp/pr73_pbl_research/source_after/module_bl_shinhong_pr65.F	2026-10-08 15:29:29.462143619 +0900
+@@ -25,7 +25,8 @@
+                 !optional
+                   ctopo,ctopo2,                                                &
+                   wstar,delta,                                                 &
+-                  regime,qnc_scalar,qnc_enabled,p_qnc,rqncblten )
++                  regime,qnc_scalar,qnc_enabled,p_qnc,rqncblten,          &
++                  qni_scalar,qni_enabled,p_qni,rqniblten )
+ !-------------------------------------------------------------------------------
+    implicit none
+ !-------------------------------------------------------------------------------
+@@ -100,7 +101,7 @@
+ !-- kte         end index for k in tile
+ !-------------------------------------------------------------------------------
+ !
+-   integer,parameter ::  max_ndiff = 4
++   integer,parameter ::  max_ndiff = 5
+    real,parameter    ::  rcl = 1.0
+ !
+    integer,  intent(in   )   ::      ids,ide, jds,jde, kds,kde,                &
+@@ -179,6 +180,10 @@
+    logical, intent(in), optional :: qnc_enabled
+    integer, intent(in), optional :: p_qnc
+    real,     dimension(ims:ime,kms:kme,jms:jme), intent(out), optional :: rqncblten
++   real,     dimension(ims:ime,kms:kme,jms:jme), intent(in), optional :: qni_scalar
++   logical, intent(in), optional :: qni_enabled
++   integer, intent(in), optional :: p_qni
++   real,     dimension(ims:ime,kms:kme,jms:jme), intent(out), optional :: rqniblten
+ !
+    real,     dimension( ims:ime, jms:jme )                                   , &
+              intent(in   ), optional    ::                              ctopo, &
+@@ -192,7 +197,7 @@
+ !
+ ! local
+ !
+-   integer ::  i,j,k,nchannel
++   integer ::  i,j,k,nchannel,qnc_channel,qni_channel
+    real,     dimension( its:ite, kts:kte*max_ndiff )  ::             rqvbl2dt, &
+                                                                          qv2d
+    real,     dimension( its:ite, kts:kte )        ::                      pdh
+@@ -204,11 +209,30 @@
+                                                                         dqsfc
+ !
+    nchannel = 3
++   qnc_channel = 0
++   qni_channel = 0
++   if (present(rqniblten)) rqniblten = 0.0
+    if (present(qnc_scalar)) then
+      if (present(qnc_enabled)) then
+        if (present(p_qnc)) then
+          if (present(rqncblten)) then
+-           if (qnc_enabled .and. p_qnc.gt.0 .and. p_qnc.le.size(qnc_scalar,4)) nchannel = 4
++           if (qnc_enabled .and. p_qnc.gt.0 .and. p_qnc.le.size(qnc_scalar,4)) then
++             nchannel = nchannel+1
++             qnc_channel = nchannel
++           endif
++         endif
++       endif
++     endif
++   endif
++   ! Transport ice number with the same vertical operator used for QI.
++   if (present(qni_scalar)) then
++     if (present(qni_enabled)) then
++       if (present(p_qni)) then
++         if (present(rqniblten)) then
++           if (qni_enabled .and. p_qni.gt.0 .and. present(rqiblten)) then
++             nchannel = nchannel+1
++             qni_channel = nchannel
++           endif
+          endif
+        endif
+      endif
+@@ -227,7 +251,8 @@
+          qv2d(i,k) = qv3d(i,k,j)
+          qv2d(i,k+kte) = qc3d(i,k,j)
+          if(present(rqiblten)) qv2d(i,k+kte+kte) = qi3d(i,k,j)
+-         if(nchannel.eq.4) qv2d(i,k+3*kte) = qnc_scalar(i,k,j,p_qnc)
++         if(qnc_channel.gt.0) qv2d(i,k+(qnc_channel-1)*kte) = qnc_scalar(i,k,j,p_qnc)
++         if(qni_channel.gt.0) qv2d(i,k+(qni_channel-1)*kte) = qni_scalar(i,k,j)
+        enddo
+      enddo
+ !
+@@ -269,7 +294,8 @@
+          rqvblten(i,k,j) = rqvbl2dt(i,k)
+          rqcblten(i,k,j) = rqvbl2dt(i,k+kte)
+          if(present(rqiblten)) rqiblten(i,k,j) = rqvbl2dt(i,k+kte+kte)
+-         if(nchannel.eq.4) rqncblten(i,k,j) = rqvbl2dt(i,k+3*kte)
++         if(qnc_channel.gt.0) rqncblten(i,k,j) = rqvbl2dt(i,k+(qnc_channel-1)*kte)
++         if(qni_channel.gt.0) rqniblten(i,k,j) = rqvbl2dt(i,k+(qni_channel-1)*kte)
+        enddo
+      enddo
+ !
+--- /var/tmp/pr73_pbl_research/source_before/module_pbl_driver_pr65.F	2026-10-08 15:23:29.876810581 +0900
++++ /var/tmp/pr73_pbl_research/source_after/module_pbl_driver_pr65.F	2026-10-08 15:29:29.462143619 +0900
+@@ -789,7 +789,7 @@
+ !  LOCAL  VAR
+ 
+    INTEGER :: pr65_unit, pr65_k, pr65_iostat
+-   LOGICAL :: pr65_qnc_enabled, pr65_qnc_flag
++   LOGICAL :: pr65_qnc_enabled, pr65_qnc_flag, pr73_qni_enabled
+    INTEGER :: pr65_scalar_pblmix
+    REAL :: pr65_scalar_tend_before
+ 
+@@ -1321,6 +1321,15 @@
+              IF (PRESENT(scalar_pblmix)) THEN
+                IF (scalar_pblmix.GT.0) pr65_qnc_enabled = .FALSE.
+              ENDIF
++             pr73_qni_enabled = .FALSE.
++             IF (PRESENT(qni_curr) .AND. PRESENT(rqniblten) .AND. PRESENT(rqiblten) .AND. &
++                 PRESENT(scalar_tend) .AND. PRESENT(f_qni)) THEN
++               IF (f_qni .AND. p_qni.GT.0 .AND. p_qni.LE.num_scalar) pr73_qni_enabled = .TRUE.
++             ENDIF
++             ! The generic scalar_pblmix path would apply a second operator.
++             IF (PRESENT(scalar_pblmix)) THEN
++               IF (scalar_pblmix.GT.0) pr73_qni_enabled = .FALSE.
++             ENDIF
+              IF (pr65_qnc_enabled) THEN
+                IF (172.GE.its .AND. 172.LE.ite .AND. 76.GE.jts .AND. 76.LE.jte) THEN
+                  OPEN(NEWUNIT=pr65_unit,FILE='pr65_pbl_nc.raw',STATUS='UNKNOWN', &
+@@ -1363,6 +1372,8 @@
+               ,WSTAR=wstar,DELTA=delta                              &
+               ,QNC_SCALAR=scalar,QNC_ENABLED=pr65_qnc_enabled        &
+               ,P_QNC=p_qnc,RQNCBLTEN=rqncblten                       &
++              ,QNI_SCALAR=qni_curr,QNI_ENABLED=pr73_qni_enabled        &
++              ,P_QNI=p_qni,RQNIBLTEN=rqniblten                       &
+               ,TKE_PBL=tke_pbl,EL_PBL=el_pbl,CORF=f                 &
+               ,IDS=ids,IDE=ide,JDS=jds,JDE=jde,KDS=kds,KDE=kde      &
+               ,IMS=ims,IME=ime,JMS=jms,JME=jme,KMS=kms,KME=kme      &
+@@ -1391,6 +1402,16 @@
+                ENDDO
+                IF (pr65_iostat.EQ.0) CLOSE(pr65_unit)
+              ENDIF
++             ! Accumulate QNI once; the generic scalar PBL path is disabled above.
++             IF (pr73_qni_enabled) THEN
++               DO j=jts,jte
++                 DO k=kts,kte
++                   DO i=its,ite
++                     scalar_tend(i,k,j,p_qni) = scalar_tend(i,k,j,p_qni) + rqniblten(i,k,j)
++                   ENDDO
++                 ENDDO
++               ENDDO
++             ENDIF
+            ELSE
+                WRITE ( message , FMT = '(A,7(L1,1X))' )             &
+                  'present: '//                                      &

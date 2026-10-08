@@ -1,0 +1,149 @@
+{
+  "analysis_increment": [
+    0.0,
+    0.0005970149253731342,
+    -0.0005970149253731342,
+    -0.1147301895965,
+    3.0520175012153623,
+    0.0
+  ],
+  "background_state": [
+    280.0,
+    0.004,
+    0.001,
+    2.0,
+    -1.0,
+    -0.1
+  ],
+  "candidate_state": [
+    280.0,
+    0.004597014925373134,
+    0.0004029850746268658,
+    1.8852698104035,
+    2.0520175012153623,
+    -0.1
+  ],
+  "cloud_bal_component_contract": {
+    "analysis_increment_retained_separately": true,
+    "component_order": {
+      "cloud_ice": 4,
+      "cloud_water": 3,
+      "dry_mass_metric": 1,
+      "enthalpy": 8,
+      "graupel": 7,
+      "rain": 5,
+      "snow": 6,
+      "vapor": 2
+    },
+    "identity": "manufactured:change-authority-v1",
+    "status": "READY_FOR_ENDPOINT_EVALUATION"
+  },
+  "evidence_class": "MANUFACTURED_ALGORITHM_FIXTURE",
+  "external_source_increment": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "objective_value": 10.154360973450691,
+  "observation_fit": [
+    0.004597014925373134,
+    2.77277588721439,
+    0.07185221195916378
+  ],
+  "observation_operator": [
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.6,
+      0.8,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.2,
+      -0.1,
+      1.0
+    ]
+  ],
+  "phase_increment": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "physical_analysis_increment": [
+    0.0,
+    5330658.452094078,
+    -5330662.072089829,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    13241069472878.375
+  ],
+  "physical_boundary_increment": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "physical_components": {
+    "cloud_water": {
+      "analysis_change_kg_per_kg": -0.0005970149253731342,
+      "component_index": 3,
+      "external_source_change_kg_per_kg": 0.0,
+      "phase_change_kg_per_kg": 0.0,
+      "physical_boundary_change_kg_per_kg": 0.0,
+      "physical_contract_status": "NOT_EVALUATED_BY_PYTHON_SOLVER",
+      "state_change_kg_per_kg": -0.0005970149253731342
+    },
+    "vapor": {
+      "analysis_change_kg_per_kg": 0.0005970149253731342,
+      "component_index": 2,
+      "external_source_change_kg_per_kg": 0.0,
+      "phase_change_kg_per_kg": 0.0,
+      "physical_boundary_change_kg_per_kg": 0.0,
+      "physical_contract_status": "NOT_EVALUATED_BY_PYTHON_SOLVER",
+      "state_change_kg_per_kg": 0.0005970149253731339
+    }
+  },
+  "physical_tolerance": [
+    19.32608423205171,
+    16.63129475676334,
+    2.5986398057442717,
+    5.004798216559523e-35,
+    5.004798216559523e-35,
+    5.004798216559523e-35,
+    5.004798216559523e-35,
+    1189671438.5060928
+  ],
+  "scientific_approval": false,
+  "scope": "linear H/B/R objective with declared equality and box constraints",
+  "state_fields": [
+    "temperature",
+    "vapor",
+    "cloud_water",
+    "u",
+    "v",
+    "omega"
+  ],
+  "status": "MANUFACTURED_ALGORITHM_TRIAL"
+}

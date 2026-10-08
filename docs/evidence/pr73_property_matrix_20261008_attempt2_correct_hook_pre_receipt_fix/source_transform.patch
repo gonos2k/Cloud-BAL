@@ -1,0 +1,65 @@
+--- frozen_combined_source.F
++++ property_matrix_source.F
+@@ -1753,6 +1753,10 @@
+         enddo
+       enddo
+ 
++#ifdef TEST_PR73_PROPERTY_MATRIX
++          rslopec=-777.0; rslopec2=-777.0; rslopec3=-777.0
++          rslopecmu=-777.0; rslopecd=-777.0
++#endif
+       do k = kts, kte
+         do i = its, ite
+           if(qci(i,k,1).le.qmin .or. nci(i,k,1).le.ncmin ) then
+@@ -1785,6 +1789,12 @@
+         enddo
+       enddo
+ 
++#ifdef TEST_PR73_PROPERTY_MATRIX
++   rhox=-777.0; cmg=-777.0; pidn0g=-777.0; avtg=-777.0; pvtg=-777.0; precg2=-777.0
++   bvtg=-777.0; bvtg1=-777.0; bvtg2=-777.0; bvtg3=-777.0; bvtg4=-777.0
++   rslopegbmax=-777.0; g1pbg=-777.0; g3pbg=-777.0; g4pbg=-777.0; g5pbgo2=-777.0
++   g1pdgbgmg=-777.0; dgbgmug1=-777.0; progb_status=-777
++#endif
+    call ProgB_param(brs,qrs_tmp,rhox,its,ite,jts,jte,kts,kte,qcrmin          &
+                    ,dmg,mug,cmg,pi,pidn0g,g1pdgmg,g1pmg,n0g,avtg,pvtg,precg2 &
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+@@ -1792,9 +1802,16 @@
+ 
+    call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
+         qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
++#ifdef TEST_PR73_PROPERTY_MATRIX
++   rslope=-777.0; rslopeb=-777.0; rslope2=-777.0; rslope3=-777.0; rsloped=-777.0
++   rslopemu=-777.0; terminal_velocity_mass=-777.0; terminal_velocity_number=-777.0
++#endif
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+                    rslopeb,rslope2,rslope3,rslopemu,rsloped,terminal_velocity_mass,terminal_velocity_number,its, &
+                    ite,kts,kte,qmin,pidn0g,pvtg,bvtg,rslopegbmax,progb_status)
++#ifdef TEST_PR73_PROPERTY_MATRIX
++   mass_velocity_rate=-777.0; number_velocity_rate=-777.0
++#endif
+    call kdm6_velocity_rates(terminal_velocity_mass,terminal_velocity_number, &
+                             delz,mass_velocity_rate,number_velocity_rate, &
+                             ims,ime,kms,kme,its,ite,kts,kte)
+@@ -1802,6 +1819,21 @@
+ 
+ 
+ 
++#ifdef TEST_PR73_PROPERTY_MATRIX
++          open(unit=97,file='pr73_property_capture.dat',status='replace',action='write')
++          do k=kts,kte
++            do i=its,ite
++              write(97,*) i,k,rslopec(i,k),rslopec2(i,k),rslopec3(i,k), &
++                   rslopecmu(i,k),rslopecd(i,k),rslope(i,k,:),rslopeb(i,k,:), &
++                   rslope2(i,k,:),rslope3(i,k,:),rsloped(i,k,:),rslopemu(i,k,:), &
++                   terminal_velocity_mass(i,k,:),terminal_velocity_number(i,k,:), &
++                   rhox(i,k),pidn0g(i,k),pvtg(i,k),bvtg(i,k),rslopegbmax(i,k), &
++                   progb_status(i,k),qrs(i,k,:),nrs(i,k,1),qci(i,k,:),nci(i,k,1:2),brs(i,k)
++            enddo
++          enddo
++          close(97)
++          return
++#endif
+       mstepmax = 1
+       mstepmax_i = 1
+       numdt = 1

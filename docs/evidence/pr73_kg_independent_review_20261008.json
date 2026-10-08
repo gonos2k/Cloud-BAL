@@ -1,0 +1,191 @@
+{
+  "base_commit": "e9a0e38a8ada142426a0b645f1598265611cf9d4",
+  "check_only_helper": "Refused its clean-worktree guard because the root metadata follow-up was already present (updated physical-closure checklist and separate KG/publication sidecars); no apply mode was run. Equivalent selected-blob, graph, wiki, preservation, and scope checks were performed read-only.",
+  "checks": [
+    {
+      "check": "frozen_source_head",
+      "detail": "HEAD=b4c78815ea2c784bc9e985ec928b76f057c1099f; commit=b4c78815ea2c784bc9e985ec928b76f057c1099f",
+      "status": "PASS"
+    },
+    {
+      "check": "selected_commit_paths",
+      "detail": "101 selected blobs exactly match e9a0e38a8ada142426a0b645f1598265611cf9d4..b4c78815ea2c784bc9e985ec928b76f057c1099f",
+      "status": "PASS"
+    },
+    {
+      "check": "source_blob_hash_bindings",
+      "detail": "101 base/candidate blob pairs; mismatches=[]",
+      "status": "PASS"
+    },
+    {
+      "check": "source_sync_binding",
+      "detail": "9ae413f8143108780a85e981c6de12965acd8eec988b15e06210f6d46c0e0153",
+      "status": "PASS"
+    },
+    {
+      "check": "KLAPS50_graph_hash_counts",
+      "detail": "sha256=b3a5a91d08739ef7b27b96affa600e2e1bff1a3c2de2acb2fcd5433fa4524cf0; nodes=34113; edges=73920; communities=2675",
+      "status": "PASS"
+    },
+    {
+      "check": "KLAPS50_dated_report_manifest",
+      "detail": "",
+      "status": "PASS"
+    },
+    {
+      "check": "KLAPS50_delta_predecessor",
+      "detail": "delta=192 nodes/285 edges; prior sha=d3a9b22e06707dce18bc31b96345004b9292607c217c16f0274b1cfb0bc48ffe",
+      "status": "PASS"
+    },
+    {
+      "check": "KLAPS50_graph_integrity",
+      "detail": "dangling=0; missing=0; duplicates=0; self-loops=0; unverified=0",
+      "status": "PASS"
+    },
+    {
+      "check": "Cloud-BAL_graph_hash_counts",
+      "detail": "sha256=df0308c5ada5779da8fa83924eb0476b21001b956613c9917158ed9486641c36; nodes=8280; edges=15494; communities=642",
+      "status": "PASS"
+    },
+    {
+      "check": "Cloud-BAL_dated_report_manifest",
+      "detail": "",
+      "status": "PASS"
+    },
+    {
+      "check": "Cloud-BAL_delta_predecessor",
+      "detail": "delta=191 nodes/284 edges; prior sha=2f7500f4de92f43d56d4bc5d86e17733f375b5f4c49a77cc752e71b7b07d5086",
+      "status": "PASS"
+    },
+    {
+      "check": "Cloud-BAL_graph_integrity",
+      "detail": "dangling=0; missing=0; duplicates=0; self-loops=0; unverified=0",
+      "status": "PASS"
+    },
+    {
+      "check": "prior_auto_snapshot_Cloud-BAL",
+      "detail": "5 original files restored byte-identically",
+      "status": "PASS"
+    },
+    {
+      "check": "prior_auto_snapshot_KLAPS50",
+      "detail": "5 original files restored byte-identically",
+      "status": "PASS"
+    },
+    {
+      "check": "prior_immutable_evidence",
+      "detail": "38 paths; mismatches=[]",
+      "status": "PASS"
+    },
+    {
+      "check": "prior_PR72_receipt",
+      "detail": "1f99b6bc11bf80c74d8564738930958f697ebf4c7506712b34880cf060aad031",
+      "status": "PASS"
+    },
+    {
+      "check": "protected_wiki_tree",
+      "detail": "13 files/directories unchanged; mismatches=[]",
+      "status": "PASS"
+    },
+    {
+      "check": "derived_wiki_hashes",
+      "detail": "5 report/index/log files; mismatches=[]",
+      "status": "PASS"
+    },
+    {
+      "check": "derived_report_mirrors",
+      "detail": "",
+      "status": "PASS"
+    },
+    {
+      "check": "dated_separate_index",
+      "detail": "KLAPS50 and Cloud-BAL retain separate snapshot counts/deltas",
+      "status": "PASS"
+    },
+    {
+      "check": "append_only_log",
+      "detail": "prior backup prefix preserved; current hash=e56d400488634bfa91b3ff75c189ffeccbfd067ba2049112ca9cb722a8b5d490",
+      "status": "PASS"
+    },
+    {
+      "check": "private_profile_graph_preservation",
+      "detail": "Cloud-BAL 134 nodes/133 incident edges unchanged vs PR72; KLAPS50 0/0; profile paths excluded from selected inputs",
+      "status": "PASS"
+    },
+    {
+      "check": "protected_native_and_private_files",
+      "detail": "2 files hash-match publication sidecar",
+      "status": "PASS"
+    },
+    {
+      "check": "copied_receipt_identity",
+      "detail": "df53dd8b127c9e32b3619564dccff37341e377e775eaf240b2b7979ee48fd5ee",
+      "status": "PASS"
+    },
+    {
+      "check": "publication_metadata_consistency",
+      "detail": "",
+      "status": "PASS"
+    },
+    {
+      "check": "physical_scope_limitations",
+      "detail": "scientific approval remains FAIL_OPEN; semantic extraction and Fortran call limits retained",
+      "status": "PASS"
+    },
+    {
+      "check": "metadata_followup_diff_scope",
+      "detail": "Only the updated physical-closure checklist, copied KG receipt, publication metadata, and independent KG review are outside frozen implementation commit: [\" M docs/PR73_PHYSICAL_CLOSURE_CHECKLIST_20261008.md\", \"?? docs/evidence/pr73_kg_independent_review_20261008.json\", \"?? docs/evidence/pr73_kg_receipt_20261008.json\", \"?? docs/evidence/pr73_publication_20261008.json\"]",
+      "status": "PASS"
+    },
+    {
+      "check": "publication_PR_state",
+      "detail": "publication sidecar says open/unmerged; public page showed Open at review time",
+      "status": "PASS"
+    }
+  ],
+  "copied_kg_receipt_sha256": "df53dd8b127c9e32b3619564dccff37341e377e775eaf240b2b7979ee48fd5ee",
+  "corpora": {
+    "Cloud-BAL": {
+      "communities": 642,
+      "delta_edges": 284,
+      "delta_nodes": 191,
+      "edges": 15494,
+      "graph_sha256": "df0308c5ada5779da8fa83924eb0476b21001b956613c9917158ed9486641c36",
+      "nodes": 8280,
+      "prior_graph_sha256": "2f7500f4de92f43d56d4bc5d86e17733f375b5f4c49a77cc752e71b7b07d5086"
+    },
+    "KLAPS50": {
+      "communities": 2675,
+      "delta_edges": 285,
+      "delta_nodes": 192,
+      "edges": 73920,
+      "graph_sha256": "b3a5a91d08739ef7b27b96affa600e2e1bff1a3c2de2acb2fcd5433fa4524cf0",
+      "nodes": 34113,
+      "prior_graph_sha256": "d3a9b22e06707dce18bc31b96345004b9292607c217c16f0274b1cfb0bc48ffe"
+    }
+  },
+  "created_utc": "2026-10-08T06:58:05.477714+00:00",
+  "external_PR_state_at_review": "OPEN",
+  "failed_checks": [],
+  "frozen_source_commit": "b4c78815ea2c784bc9e985ec928b76f057c1099f",
+  "graph_mutations_by_reviewer": false,
+  "kg_receipt_sha256": "df53dd8b127c9e32b3619564dccff37341e377e775eaf240b2b7979ee48fd5ee",
+  "limitations": [
+    "Graph counts are separate for overlapping KLAPS50 and Cloud-BAL corpora.",
+    "Markdown semantic extraction was not performed; Markdown contributes heading structure only.",
+    "Fortran cross-file CALL extraction is partial.",
+    "External native WRF research source trees were not extracted; their patch/evidence files are included only as selected repository paths.",
+    "Candidate overlay graphs and freshness are structural navigation evidence, not runtime or scientific validation.",
+    "Prior native failures/PR65 runtime and PR73 state-transition-evidence evidence are preserved as separately scoped receipts."
+  ],
+  "native_status": "REJECTED",
+  "pr": "https://github.com/gonos2k/Cloud-BAL/pull/73",
+  "prior_immutable_paths_checked": 38,
+  "protected_wiki_entries_checked": 13,
+  "publication_receipt_sha256": "40960808a7befbc4bb8882fc6890f8b3ba3715eedcb1bc4e9db31a1e52a5ea04",
+  "review_status": "PASS_WITH_READ_ONLY_GUARD_NOTE",
+  "schema": "pr73_kg_independent_review_v1",
+  "scientific_status": "FAIL_OPEN",
+  "selected_paths": 101,
+  "source_sync_sha256": "9ae413f8143108780a85e981c6de12965acd8eec988b15e06210f6d46c0e0153"
+}

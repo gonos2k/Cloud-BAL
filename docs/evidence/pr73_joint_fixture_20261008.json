@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "evidence_class": "MANUFACTURED_ALGORITHM_FIXTURE",
+  "physical_reference": {
+    "pressure_mass_measure_kg": 8973502674.205769,
+    "grid_cell": [1, 1, 1],
+    "grid_dimensions": [4, 4, 3],
+    "geometry_source": "tests/test_real_shadow_io_contract.f90 make_state: dx=2000 m, dy=2200 m, dp=20000 Pa"
+  },
+  "state_fields": ["temperature", "vapor", "cloud_water", "u", "v", "omega"],
+  "background_state": [280, 0.004, 0.001, 2.0, -1.0, -0.1],
+  "B": [
+    [0.25, 0, 0, 0, 0, 0],
+    [0, 0.00000004, 0, 0, 0, 0],
+    [0, 0, 0.00000004, 0, 0, 0],
+    [0, 0, 0, 4, 0, 0],
+    [0, 0, 0, 0, 4, 0],
+    [0, 0, 0, 0, 0, 0.04]
+  ],
+  "observation": {
+    "H": [
+      [0, 1, 0, 0, 0, 0],
+      [0, 0, 0, 0.6, 0.8, 0],
+      [0, 0, 0, 0.2, -0.1, 1]
+    ],
+    "value": [0.0046, 2.8, 0.05],
+    "R": [
+      [0.0000000001, 0, 0],
+      [0, 0.04, 0],
+      [0, 0, 0.01]
+    ]
+  },
+  "authorities": {
+    "H": {"evidence_id": "manufactured:H-v1"},
+    "B": {"evidence_id": "manufactured:B-v1"},
+    "R": {"evidence_id": "manufactured:R-v1"},
+    "background_prior": {"evidence_id": "manufactured:prior-v1"},
+    "analysis_change": {"evidence_id": "manufactured:change-authority-v1"},
+    "physical_processes": {"evidence_id": "manufactured:process-ledger-v1"}
+  },
+  "process_increments": {
+    "phase": [0, 0, 0, 0, 0, 0],
+    "external_source": [0, 0, 0, 0, 0, 0],
+    "physical_boundary": [0, 0, 0, 0, 0, 0]
+  },
+  "constraints": [
+    {
+      "name": "one-cell total-water increment",
+      "coefficients": [0, 1, 1, 0, 0, 0],
+      "rhs": 0,
+      "evidence_id": "manufactured:water-constraint-v1"
+    },
+    {
+      "name": "manufactured zero-omega analysis increment",
+      "coefficients": [0, 0, 0, 0, 0, 1],
+      "rhs": 0,
+      "evidence_id": "manufactured:omega-constraint-v1"
+    }
+  ],
+  "state_bounds": [
+    {"field": "temperature", "lower": 180, "upper": 330},
+    {"field": "vapor", "lower": 0, "upper": 0.02},
+    {"field": "cloud_water", "lower": 0, "upper": 0.02},
+    {"field": "u", "lower": -20, "upper": 20},
+    {"field": "v", "lower": -20, "upper": 20},
+    {"field": "omega", "lower": -1, "upper": 1}
+  ]
+}

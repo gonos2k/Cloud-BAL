@@ -388,6 +388,9 @@ PHYSICAL_CONTRACT_VARIABLES = frozenset((
 PHYSICAL_PHASE_EXTENSION = "physical_internal_phase_v1"
 PHYSICAL_PHASE_VARIABLE = "physical_internal_phase_increment"
 PHYSICAL_PHASE_ATTRIBUTE = "physical_internal_phase_contract"
+PHYSICAL_ANALYSIS_EXTENSION = "physical_analysis_increment_v1"
+PHYSICAL_ANALYSIS_VARIABLE = "physical_analysis_increment"
+PHYSICAL_ANALYSIS_ATTRIBUTE = "physical_analysis_increment_identity"
 PHYSICAL_CONTRACT_ATTRIBUTES = frozenset((
     "physical_contract_version", "physical_contract_identity",
     "physical_contract_adjustable_variables", "physical_contract_component_order",
@@ -6125,13 +6128,19 @@ def validate_physical_joint_contract(dataset, above, require) -> bool:
     phase_declared = PHYSICAL_PHASE_EXTENSION in extensions
     phase_signalled = (phase_declared or PHYSICAL_PHASE_VARIABLE in dataset.variables
                        or PHYSICAL_PHASE_ATTRIBUTE in dataset.ncattrs())
-    present = declared or phase_signalled or bool(PHYSICAL_CONTRACT_ATTRIBUTES & set(dataset.ncattrs())) \
+    analysis_declared = PHYSICAL_ANALYSIS_EXTENSION in extensions
+    analysis_signalled = (analysis_declared or PHYSICAL_ANALYSIS_VARIABLE in dataset.variables
+                          or PHYSICAL_ANALYSIS_ATTRIBUTE in dataset.ncattrs())
+    present = declared or phase_signalled or analysis_signalled \
+        or bool(PHYSICAL_CONTRACT_ATTRIBUTES & set(dataset.ncattrs())) \
         or bool(PHYSICAL_CONTRACT_VARIABLES & set(dataset.variables))
     if not present:
         return False
     require(declared, "physical joint candidate extension")
     require(extensions.count(PHYSICAL_PHASE_EXTENSION) <= 1,
             "physical internal phase extension uniqueness")
+    require(extensions.count(PHYSICAL_ANALYSIS_EXTENSION) <= 1,
+            "physical analysis increment extension uniqueness")
     if phase_signalled:
         require(phase_declared and PHYSICAL_PHASE_VARIABLE in dataset.variables
                 and PHYSICAL_PHASE_ATTRIBUTE in dataset.ncattrs(),
@@ -6139,6 +6148,10 @@ def validate_physical_joint_contract(dataset, above, require) -> bool:
         require(getattr(dataset, PHYSICAL_PHASE_ATTRIBUTE, "") ==
                 "zero_dry_mass_zero_net_water_zero_mixture_enthalpy_v1",
                 "physical internal phase stoichiometry")
+    if analysis_signalled:
+        require(analysis_declared and PHYSICAL_ANALYSIS_VARIABLE in dataset.variables
+                and PHYSICAL_ANALYSIS_ATTRIBUTE in dataset.ncattrs(),
+                "complete physical analysis increment contract")
     require(PHYSICAL_CONTRACT_ATTRIBUTES <= set(dataset.ncattrs()),
             "physical joint candidate attributes")
     require(PHYSICAL_CONTRACT_VARIABLES <= set(dataset.variables),
@@ -6226,8 +6239,34 @@ def validate_physical_joint_contract(dataset, above, require) -> bool:
                 require(False, "physical internal phase increment values")
     if not phase_valid:
         return True
+    analysis = np.zeros_like(tolerances)
+    analysis_valid = True
+    if analysis_signalled:
+        variable = dataset.variables.get(PHYSICAL_ANALYSIS_VARIABLE)
+        valid = (variable is not None
+                 and variable.dimensions == ("z", "y", "x", "physical_component")
+                 and variable.shape == (*shape, 8)
+                 and np.dtype(variable.dtype) == np.dtype(np.float64)
+                 and getattr(variable, "units", "") ==
+                 "kg for components 1:7; J for component 8"
+                 and "scale_factor" not in variable.ncattrs()
+                 and "add_offset" not in variable.ncattrs())
+        require(valid, "physical analysis increment structure")
+        analysis_valid = valid
+        if valid:
+            identity = getattr(dataset, PHYSICAL_ANALYSIS_ATTRIBUTE, "")
+            require(isinstance(identity, str) and bool(identity.strip()) and len(identity) <= 128,
+                    "physical analysis increment identity")
+            try:
+                analysis = values(variable).astype(np.float64)
+            except (RuntimeError, ValueError, TypeError):
+                analysis_valid = False
+                require(False, "physical analysis increment values")
+    if not analysis_valid:
+        return True
     finite_arrays = all(np.all(np.isfinite(array)) for array in arrays)
-    finite_arrays = finite_arrays and bool(np.all(np.isfinite(phase)))
+    finite_arrays = (finite_arrays and bool(np.all(np.isfinite(phase)))
+                     and bool(np.all(np.isfinite(analysis))))
     require(finite_arrays, "physical contract increments finite")
     require(np.all(tolerances >= 0.0), "physical tolerance nonnegative")
     if not finite_arrays or np.any(tolerances < 0.0):
@@ -6247,6 +6286,11 @@ def validate_physical_joint_contract(dataset, above, require) -> bool:
                 "physical internal phase water stoichiometry")
         require(np.all(phase[~coverage] == 0.0),
                 "physical internal phase outside coverage")
+    if analysis_signalled:
+        require(np.all(analysis[..., 0] == 0.0),
+                "physical analysis dry-mass increment is zero")
+        require(np.all(analysis[~coverage] == 0.0),
+                "physical analysis increment outside coverage")
     adjustable = exact_scalar_int32(getattr(dataset, "physical_contract_adjustable_variables", None))
     require(adjustable is not None and adjustable >= 0 and adjustable < (1 << 11),
             "physical contract adjustable variables")
@@ -6455,14 +6499,32 @@ def validate_physical_joint_contract(dataset, above, require) -> bool:
 
     before, after = component_state
     source, boundary = sources
-    scale = np.maximum.reduce((np.abs(after), np.abs(before), np.abs(source),
+    mass_terms = analysis[..., :7] + source[..., :7] + boundary[..., :7]
+    try:
+        pressure_mass = values(dataset["pressure_mass_measure"]).astype(np.float64)
+    except (RuntimeError, ValueError, TypeError):
+        require(False, "physical contract pressure mass values")
+        return True
+    mass_scale = np.maximum.reduce((np.abs(pressure_mass),
+                                    np.max(np.abs(mass_terms), axis=-1),
+                                    np.sum(tolerances[..., :7], axis=-1)))
+    mass_safe_scale = np.where(mass_scale == 0.0, 1.0, mass_scale)
+    mass_residual = np.sum(mass_terms / mass_safe_scale[..., None], axis=-1)
+    mass_tolerance = (np.sum(tolerances[..., :7] / mass_safe_scale[..., None], axis=-1)
+                      + 64.0 * np.finfo(np.float64).eps * (
+                          np.abs(pressure_mass / mass_safe_scale)
+                          + np.sum(np.abs(mass_terms / mass_safe_scale[..., None]), axis=-1)
+                      ))
+    require(np.all(np.abs(mass_residual[above]) <= mass_tolerance[above]),
+            "physical analysis/source/boundary total mass closure")
+    scale = np.maximum.reduce((np.abs(after), np.abs(before), np.abs(analysis), np.abs(source),
                                np.abs(boundary), np.abs(phase), tolerances))
     safe_scale = np.where(scale == 0.0, 1.0, scale)
-    residual_scaled = (after / safe_scale - before / safe_scale - source / safe_scale
+    residual_scaled = (after / safe_scale - before / safe_scale - analysis / safe_scale - source / safe_scale
                        - boundary / safe_scale - phase / safe_scale)
     tolerance_scaled = tolerances / safe_scale + 64.0 * np.finfo(np.float64).eps * (
         np.abs(source / safe_scale) + np.abs(boundary / safe_scale)
-        + np.abs(phase / safe_scale)
+        + np.abs(phase / safe_scale) + np.abs(analysis / safe_scale)
         + np.abs(after / safe_scale) + np.abs(before / safe_scale)
     )
     require(np.all(np.abs(residual_scaled[above]) <= tolerance_scaled[above]),
@@ -7104,9 +7166,12 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
                 "physical joint candidate extension uniqueness")
         require(extensions.count(PHYSICAL_PHASE_EXTENSION) <= 1,
                 "physical internal phase extension uniqueness")
+        require(extensions.count(PHYSICAL_ANALYSIS_EXTENSION) <= 1,
+                "physical analysis increment extension uniqueness")
         extensions_without_physical = [
             token for token in extensions
-            if token not in ("physical_joint_candidate_v1", PHYSICAL_PHASE_EXTENSION)
+            if token not in ("physical_joint_candidate_v1", PHYSICAL_PHASE_EXTENSION,
+                             PHYSICAL_ANALYSIS_EXTENSION)
         ]
         # Phi is a dedicated optional pressure-candidate group.  Its contract
         # is identified by its own attributes and variables, so historical

@@ -1,0 +1,519 @@
+{
+  "case": {
+    "expected_wrfinput_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+    "source_input_hash_binding": "verified exact SHA-256 of retained staged 12 UTC WRF input",
+    "valid_time_utc": "2026-08-16T12:00:00Z",
+    "wrfinput_Times": "2026-08-16_12:00:00",
+    "wrfinput_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+  },
+  "classification": "source-order diagnosis from preserved first-call trace and staged input; no repair authority",
+  "first_unpaired_pair": {
+    "active_array_offset_jki": [
+      0,
+      0,
+      131
+    ],
+    "coordinate_ijk": {
+      "i": 133,
+      "j": 2,
+      "k": 1
+    },
+    "mass": 3.5308575789291633e-35,
+    "mass_field": "QI",
+    "moment": 0.0,
+    "moment_field": "NI",
+    "species": "ice",
+    "state": "mass_only"
+  },
+  "frozen_kdm6_source": {
+    "path": "docs/evidence/pr72_combined_native_first_reject_20261008/frozen_combined_source.F",
+    "sha256": "1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819",
+    "validation_loop_order": "j ascending, then k ascending, then i ascending; species order rain, cloud, ice, graupel"
+  },
+  "pbl_source_context": {
+    "carrier_limit": "Existing PR65 evidence states DEL is interface-pressure thickness and not authenticated as native hybrid dry carrier.",
+    "patch_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/docs/evidence/pr65_pbl_shared_nc_research.patch",
+    "patch_sha256": "c25bb8785f4f78115380ff9cc834d65e44874716a739776f9be08122c2fae808",
+    "postcapture_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/docs/evidence/pr65_pbl_shared_nc_postcapture_run_20261007.json",
+    "postcapture_receipt_sha256": "1935313d7224f6a0c6251c1b3a7625a094fba78877805f5cca161daf36f69694",
+    "runtime_scope": "PR65 selected-call capture validates NC accumulation, not QI/QNI tendencies at the PR73 first-mismatch cell.",
+    "source_contract": "The PR65 Shinhong path carries QI in its shared vertical operator; its research NC extension carries NC through a fourth channel. The source path does not include QNI in that operator."
+  },
+  "same_column_vertical_evidence": {
+    "active_k_bounds": {
+      "kte": 39,
+      "kts": 1
+    },
+    "interpretation": "The column pattern is consistent with QI transport from paired ice aloft without matched QNI, but the stored artifacts do not capture the producer immediately before this KDM6 call.",
+    "levels": [
+      {
+        "k": 1,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 3.5308575789291633e-35,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 2,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 1.8669873515591447e-33,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 3,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 9.513901731946586e-32,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 4,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 7.700635280372386e-31,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 5,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 8.516162039842931e-30,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 6,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 1.1991382705258005e-28,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 7,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 2.8537247394944207e-27,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 8,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 9.352415650152734e-26,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 9,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 5.435937551529861e-24,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 10,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 3.6593111691540537e-22,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 11,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 2.1595226870141768e-20,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 12,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 1.4946618069386582e-18,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 13,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 9.630667995585849e-17,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 14,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 2.6128922955809914e-16,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 15,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 9.27370051410914e-13,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 16,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 1.507270599564875e-13,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 17,
+        "staged_QICE": 4.3538460886338726e-05,
+        "staged_QNICE": 175033.09375,
+        "trace_NI": 176203.578125,
+        "trace_QI": 4.456070382730104e-05,
+        "trace_pair_state": "active"
+      },
+      {
+        "k": 18,
+        "staged_QICE": 0.00013253740326035768,
+        "staged_QNICE": 317945.40625,
+        "trace_NI": 316714.96875,
+        "trace_QI": 0.00013319744903128594,
+        "trace_pair_state": "active"
+      },
+      {
+        "k": 19,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 6.929783821105957,
+        "trace_QI": 5.660616864133772e-09,
+        "trace_pair_state": "active"
+      },
+      {
+        "k": 20,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 4.4080611014650495e-13,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 21,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 144.965087890625,
+        "trace_QI": 6.001686259082817e-09,
+        "trace_pair_state": "active"
+      },
+      {
+        "k": 22,
+        "staged_QICE": 1.90255343568424e-06,
+        "staged_QNICE": 45139.125,
+        "trace_NI": 44701.671875,
+        "trace_QI": 1.8990737089552567e-06,
+        "trace_pair_state": "active"
+      },
+      {
+        "k": 23,
+        "staged_QICE": 2.687093683562125e-06,
+        "staged_QNICE": 55873.45703125,
+        "trace_NI": 55441.9375,
+        "trace_QI": 2.6869061002798844e-06,
+        "trace_pair_state": "active"
+      },
+      {
+        "k": 24,
+        "staged_QICE": 7.055365927044477e-07,
+        "staged_QNICE": 29807.353515625,
+        "trace_NI": 29879.1953125,
+        "trace_QI": 7.145160338950518e-07,
+        "trace_pair_state": "active"
+      },
+      {
+        "k": 25,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.30081430077552795,
+        "trace_QI": 9.96498890348807e-13,
+        "trace_pair_state": "active"
+      },
+      {
+        "k": 26,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 1.3139045407228878e-08,
+        "trace_QI": 3.937912023020202e-16,
+        "trace_pair_state": "active"
+      },
+      {
+        "k": 27,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 2.5245932806120343e-25,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 28,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 2.437601711500733e-31,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 29,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 2.5020417256584072e-37,
+        "trace_pair_state": "mass_only"
+      },
+      {
+        "k": 30,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      },
+      {
+        "k": 31,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      },
+      {
+        "k": 32,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      },
+      {
+        "k": 33,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      },
+      {
+        "k": 34,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      },
+      {
+        "k": 35,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      },
+      {
+        "k": 36,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      },
+      {
+        "k": 37,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      },
+      {
+        "k": 38,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      },
+      {
+        "k": 39,
+        "staged_QICE": 0.0,
+        "staged_QNICE": 0.0,
+        "trace_NI": 0.0,
+        "trace_QI": 0.0,
+        "trace_pair_state": "absent"
+      }
+    ],
+    "staged_active_levels": [
+      17,
+      18,
+      22,
+      23,
+      24
+    ],
+    "trace_mass_only_levels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      20,
+      27,
+      28,
+      29
+    ]
+  },
+  "same_coordinate_staged_fields": {
+    "QCLOUD": {
+      "available": true,
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "units": "kg kg-1",
+      "value": 3.8898151615285315e-06
+    },
+    "QGRAUP": {
+      "available": true,
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "units": "kg kg-1",
+      "value": 0.0
+    },
+    "QIB": {
+      "available": true,
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "units": "m(3) kg(-1)",
+      "value": 0.0
+    },
+    "QICE": {
+      "available": true,
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "units": "kg kg-1",
+      "value": 0.0
+    },
+    "QNCLOUD": {
+      "available": true,
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "units": "  kg(-1)",
+      "value": 3452687.0
+    },
+    "QNICE": {
+      "available": true,
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "units": "  kg-1",
+      "value": 0.0
+    },
+    "QNRAIN": {
+      "available": true,
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "units": "  kg(-1)",
+      "value": 10.70198917388916
+    },
+    "QRAIN": {
+      "available": true,
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "units": "kg kg-1",
+      "value": 6.894252919664723e-07
+    }
+  },
+  "schema": "pr73_native_first_unpaired_input_v1",
+  "staged_wrf_input": {
+    "path": "/var/tmp/pr72_combined_native_final_run_20261008/wrfinput_d01",
+    "sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+    "valid_time_utc": "2026-08-16T12:00:00Z"
+  },
+  "trace": {
+    "bounds": {
+      "ide": 235,
+      "ids": 1,
+      "ime": 240,
+      "ims": -4,
+      "ite": 233,
+      "its": 2,
+      "jde": 283,
+      "jds": 1,
+      "jme": 288,
+      "jms": -4,
+      "jte": 281,
+      "jts": 2,
+      "kde": 40,
+      "kds": 1,
+      "kme": 40,
+      "kms": 1,
+      "kte": 39,
+      "kts": 1
+    },
+    "path": "/var/tmp/pr72_combined_native_final_run_20261008/kdm6_first_call_pre.raw",
+    "sha256": "d2331e90aee601dd9a1aa2549230fa7f388231ce224e53fdf60cb4b4b9b7e2bb",
+    "stage": 1,
+    "timestep": 1
+  },
+  "upstream_origin": {
+    "authority_limit": "This comparison does not establish a repair rule or authorize a mass floor, deletion, or graupel density change.",
+    "finding": "At the first mismatch coordinate the staged WRF input has QICE=0 and QNICE=0; the first KDM6 input has positive QI and zero NI. The vertical column has paired ice aloft and trace-only mass-only ice below.",
+    "producer_status": "PBL QI transport without QNI is a source-consistent candidate, but the exact producer is OPEN without a source-bound pre/post PBL or RK trace at this column."
+  }
+}

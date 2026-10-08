@@ -1,0 +1,74 @@
+{
+  "cases": {
+    "O0": {
+      "build_log_sha256": "48f9dbbaef6a1334230a2ba957696528fc475fb1cf8dcefbd9271aa70f11d508",
+      "executable_sha256": "4a605c018ed45b652c635e6f65294fd1022c2e1b9f833b0732303aa738064d7a",
+      "instrumented_source_sha256": "1e53c74f0dde97d833fbfee0f11dda38e6bea076a11dc5834f9def88ca8063cd",
+      "object_sha256": "7364773b408eabad87e335bd73cb55626c219701a4d36d7f1ba0c3b77a6f8bff",
+      "reentry_mask_records": 16,
+      "reference_mask_records": 16,
+      "result": "PASS",
+      "run_log": "/var/tmp/pr73_property_matrix.MZwVCI/O0/run.log",
+      "run_log_sha256": "c142edc11cb43f80f4aa92a9a61d02007da3158cd9391de674783101ac2df80a"
+    },
+    "O2": {
+      "build_log_sha256": "48f9dbbaef6a1334230a2ba957696528fc475fb1cf8dcefbd9271aa70f11d508",
+      "executable_sha256": "299e677fc9deb3666fc03133b981192a46d4245a90dd45cdf7e4ba24e6aa2b6c",
+      "instrumented_source_sha256": "1e53c74f0dde97d833fbfee0f11dda38e6bea076a11dc5834f9def88ca8063cd",
+      "object_sha256": "0e5943424fef956a9590c1a0f756ff2724a5f293020c62fb22636d43719bbf67",
+      "reentry_mask_records": 16,
+      "reference_mask_records": 16,
+      "result": "PASS",
+      "run_log": "/var/tmp/pr73_property_matrix.MZwVCI/O2/run.log",
+      "run_log_sha256": "d0e16c9a83079250046e29283f656335c462351c9fa1665e8f356acb5563600c"
+    }
+  },
+  "checked_actual_properties": [
+    "cloud slope moments",
+    "rain slope and number velocity",
+    "ice slope and number velocity",
+    "graupel status/density/properties/velocity"
+  ],
+  "classification": "test-only early return after actual KDM6 property and n0 reconstruction; no timestep/process completion",
+  "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+  "frozen_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/docs/evidence/pr72_combined_native_first_reject_20261008/frozen_combined_source.F",
+  "frozen_source_sha256": "1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819",
+  "limitations": [
+    "The source transform adds only a preprocessor-guarded capture and early return; production preprocessing has no hook.",
+    "The hook returns after terminal velocities are converted to rates and before substep/rate application and microphysical processes; this is a property-stage test, not a full-process success.",
+    "Graupel active state uses QG/BG=400 kg m-3; broader graupel density support is not established.",
+    "Properties are captured from the first active i,k cell and one j call in the test domain."
+  ],
+  "mask_count": 16,
+  "mask_order": [
+    "rain",
+    "cloud",
+    "ice",
+    "graupel"
+  ],
+  "optimization_profiles": [
+    "O0",
+    "O2"
+  ],
+  "per_mask_sequence": "clean reference, then active mask 15 followed by poisoned-output target re-entry; exact property record equality required",
+  "runner_sha256": "02688d136917b333d4281f34c87a950f4da7b8f04d440fbf8690ed58d2fde05a",
+  "schema": "pr73_actual_property_matrix_v1",
+  "source_composition": {
+    "change": "one preprocessor-guarded capture and early return after actual property routines and velocity construction, before substep/rate processing",
+    "exposed_names": [],
+    "output": "/var/tmp/pr73_property_matrix.MZwVCI/property_matrix_source.F",
+    "output_sha256": "1e53c74f0dde97d833fbfee0f11dda38e6bea076a11dc5834f9def88ca8063cd",
+    "patch": "/var/tmp/pr73_property_matrix.MZwVCI/property_matrix_source.patch",
+    "patch_sha256": "b09cf48ce5889a9d0fff59b59ea459186870f2914807854b09d80e1075f61cf9",
+    "production_source_modified": false,
+    "schema": "pr73_property_matrix_source_v1",
+    "source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/docs/evidence/pr72_combined_native_first_reject_20261008/frozen_combined_source.F",
+    "source_sha256": "1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819"
+  },
+  "source_transform": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/tools/pr73_property_matrix_source.py",
+  "source_transform_sha256": "ff44b5020291a27b652d375efbf79d76128818bee9c9cf84b1437566db2aae98",
+  "test_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/tests/test_pr73_property_matrix.f90",
+  "test_source_sha256": "451ebb9ff1ac3461a333a0073ae059e57c565033a7cef7a6985291f121b6615c",
+  "toolchain_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+}

@@ -1,0 +1,42 @@
+{
+  "missing_required_post_call_outputs": [
+    "pr67_kdm6_process.raw",
+    "pr69_water.raw",
+    "kdm6_first_call_post.raw",
+    "wrfout_d01_2026-08-16_12:00:20"
+  ],
+  "model_step_completion_evidence": "NOT_ESTABLISHED",
+  "native_declared_output_isolation": "PASS",
+  "native_receipt": "docs/evidence/pr73_native_first_violation_20261008_attempt2/native_receipt.json",
+  "native_receipt_sha256": "5be57e83f5ebe8e7124e4f9d5bb7ab527bdf4ae495ff19a9b1bd4e532a10a355",
+  "native_returncode": 128,
+  "native_run_root": "/var/tmp/pr73_native_first_violation.x3bvfn/run",
+  "native_run_status": "CAPTURED_CONTROLLED_FIRST_REJECTION",
+  "native_status": "REJECTED",
+  "required_output_guard_status": "FAIL",
+  "required_post_call_outputs": [
+    {
+      "path": "pr67_kdm6_process.raw",
+      "rationale": "KDM6 process observer output after the initial species preflight.",
+      "status": "MISSING"
+    },
+    {
+      "path": "pr69_water.raw",
+      "rationale": "Native water-budget observer output expected after the relevant KDM6 call.",
+      "status": "MISSING"
+    },
+    {
+      "path": "kdm6_first_call_post.raw",
+      "rationale": "KDM6 post-call trace written only after the KDM6 call returns.",
+      "status": "MISSING"
+    },
+    {
+      "path": "wrfout_d01_2026-08-16_12:00:20",
+      "rationale": "Configured 20-second history endpoint for the 20-second run; requires the model step to finish.",
+      "status": "MISSING"
+    }
+  ],
+  "schema": "pr73_native_completion_audit_v1",
+  "scope_note": "The original native receipt guarded the prior run's produced-output list. This independent audit checks post-call completion outputs even when the model exits early.",
+  "status": "INCOMPLETE_REQUIRED_POST_CALL_OUTPUTS"
+}

@@ -1,0 +1,43 @@
+{
+  "cases": {
+    "O0": {
+      "executable_sha256": "9926c7527aebb3beec72fa203e1ca824727d49b781afe0fd78a55e54d2ff0f4e",
+      "exit_status": 128,
+      "first_violation_line": "KDM6_FIRST_VIOLATION|stage=KDM62D_INITIAL_PREFLIGHT|species=ice|state=mass_only|q=1.9999999494757503E-005|q_unit=kg kg-1|n=0.0000000000000000E+000|n_unit=m-3|b=null|b_unit=m3 kg-1|i=1|call_lat_index=0|k=1|scope_i=1:3|scope_k=1:1|index_origin=KDM62D_dummy_bounds|j_global_mapping=unclaimed",
+      "object_sha256": "75614c80f4b63de60c9b76c63a8f04e9f1b298d5383a32c085e42c76a7dc7767",
+      "run_log": "/var/tmp/pr73_first_violation.KxJ3fb/ice_mass_only_O0/run.log",
+      "run_log_sha256": "9f26272f605745d2d519ea43520bba216caa18a4f6ff54fcd8090f6b632ed0d8"
+    },
+    "O2": {
+      "executable_sha256": "ace0a7cea4989b9b7c2d05b018f2df3a4e1ba574b1a4f403206f8aa8e9ff5fef",
+      "exit_status": 128,
+      "first_violation_line": "KDM6_FIRST_VIOLATION|stage=KDM62D_INITIAL_PREFLIGHT|species=ice|state=mass_only|q=1.9999999494757503E-005|q_unit=kg kg-1|n=0.0000000000000000E+000|n_unit=m-3|b=null|b_unit=m3 kg-1|i=1|call_lat_index=0|k=1|scope_i=1:3|scope_k=1:1|index_origin=KDM62D_dummy_bounds|j_global_mapping=unclaimed",
+      "object_sha256": "31a0acebbb4c18c4b681cf3d367c01f2575840e716f01b38b9ffe393951e38bc",
+      "run_log": "/var/tmp/pr73_first_violation.KxJ3fb/ice_mass_only_O2/run.log",
+      "run_log_sha256": "9f26272f605745d2d519ea43520bba216caa18a4f6ff54fcd8090f6b632ed0d8"
+    }
+  },
+  "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "composition": {
+    "first_only": true,
+    "geographic_latitude": "unavailable; global-j mapping is not claimed",
+    "indices": "Fortran model indices; assumed-shape storage offset from explicit lower bounds",
+    "loop_scope": "i=its:ite, k=kts:kte; lat argument recorded as call_lat_index",
+    "stage": "KDM62D_INITIAL_PREFLIGHT",
+    "units": {
+      "b": "m3 kg-1",
+      "n": "m-3",
+      "q": "kg kg-1"
+    }
+  },
+  "instrumented_source_sha256": "5b0cae169f37f9eb3cc5207419a87ae9e6bed5b0fec9c4a6c25473ef898df70e",
+  "limitations": [
+    "Intel wrapper fixture only; no fresh partialhost native run was performed by this receipt.",
+    "call_lat_index is captured from KDM62D lat; global-j mapping is unclaimed.",
+    "This records a controlled state rejection, not a completed model timestep or physical validation."
+  ],
+  "schema": "pr73_first_violation_intel_receipt_v1",
+  "source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr73_state_transition_20261008/Cloud-BAL/docs/evidence/pr72_combined_native_first_reject_20261008/frozen_combined_source.F",
+  "source_sha256": "1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819",
+  "status": "PASS_SCOPED_TEST_FIXTURE"
+}

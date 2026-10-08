@@ -1,0 +1,38 @@
+{
+  "assertion": "QI and scaled QNI (2**30 times QI, within an ice PSD mean-mass interval) receive proportionally matched, nonzero tendencies; division of QNI tendency by 2**30 matches QI exactly with QNI alone and when NC occupies channel 4 and QNI channel 5 simultaneously. Both channels create a positive recipient tendency from zero initial values, and a 60 s update remains nonnegative. Optional output halos are zeroed. A supplied disabled QNI output and QNI enabled without the optional paired QI tendency are both fully zeroed after sentinel initialization.",
+  "classification": "pinned-ifx numerical routine test on research source; not coupled WRF runtime validation",
+  "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+  "fixture_sha256": "f180d8c50d40c380af8e799cbb7a948101f787692fd9d2a09e93f863f80ed4a8",
+  "limitations": [
+    "The test calls the selected Shinhong routine with a manufactured profile; it does not build the WRF driver or validate native QI/QNI at (133,2,1).",
+    "It does not establish the production dry-air carrier or whole-scheme conservation."
+  ],
+  "optimization_profiles": [
+    "O0 strict with runtime checks",
+    "O2 strict"
+  ],
+  "patch_sha256": "b70c6357aae4642062a6ff779f9e478899248d29c7bd0b74c5f3df0112aebc02",
+  "profiles": {
+    "O0": {
+      "build_log_sha256": "a296eb2df6f268117a3bb96b4e181fbb6e109205e9674ac5e3efa056b8112184",
+      "executable_sha256": "ba6fe52eaebe5b5d119cdad312b651132b37a335a142e32fb25643e9f3685563",
+      "module_object_sha256": "a4d6da8bb5805e41700a15e115cb0ed04f2814f626fbb9d71165818df662ac1e",
+      "observed": "PR73_SHINHONG_QNI_SAME_OPERATOR_PASS   1.7552277853383202E-08   0.0000000000000000E+00   6.6509220353339060E-09   6.6509220353339060E-09",
+      "run_log_sha256": "062bd248a4500172e2b7f278043f71f028ecc1435fb9dffd4aea32a9fd3a9d2c"
+    },
+    "O2": {
+      "build_log_sha256": "c89e89681b7693c40a6c4397364dda3f7ba6247abc94a76658637e94bacb9175",
+      "executable_sha256": "63154bc497a57a5158b19eb9350120ac9fabf361dd0f5fc0d646d17bd9a1ef57",
+      "module_object_sha256": "b0b3a0a68d2073256be0aa80e734fce9b38e6fe7c451ee1cfe2593eb9e7d8153",
+      "observed": "PR73_SHINHONG_QNI_SAME_OPERATOR_PASS   1.7552277853383202E-08   0.0000000000000000E+00   6.6509220353339060E-09   6.6509220353339060E-09",
+      "run_log_sha256": "062bd248a4500172e2b7f278043f71f028ecc1435fb9dffd4aea32a9fd3a9d2c"
+    }
+  },
+  "runner_sha256": "6958a119a8336856decb8586f45570e9268f17b0139e4e5df768ceb6acb045be",
+  "schema": "pr73_shinhong_qni_same_operator_v1",
+  "source": "/var/tmp/pr73_pbl_research/source_after/module_bl_shinhong_pr65.F",
+  "source_sha256": "5fbe821bb3b82e406fee459e5b2d745156ea1a030b5f0ecd2c7191025f296553",
+  "toolchain_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "work_dir": "/var/tmp/pr73_shinhong_ni_operator.U3t5FD"
+}

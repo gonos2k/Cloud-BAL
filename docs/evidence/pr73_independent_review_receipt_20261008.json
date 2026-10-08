@@ -1,0 +1,104 @@
+{
+  "base_commit": "e9a0e38a8ada142426a0b645f1598265611cf9d4",
+  "date": "2026-10-08",
+  "evidence_hashes": {
+    "docs/PR73_INDEPENDENT_REVIEW_20261008.md": "016a2fa01bfafaa0c39e6bcb8c92195e6d8b438811bad73e8b44b8f227ec4a7a",
+    "docs/PR73_JOINT_ANALYSIS_20261008.md": "eadfa9befca00a40c56ceb29efd2abdd52b4749ef90fad1969fe702418faba43",
+    "docs/PR73_PROPERTY_MATRIX_20261008.md": "749326bdab7a85c6e86f1545eb93ed740f23b0955da512c4a5691b01a381b9f7",
+    "docs/PR73_SPECIES_STATE_TRANSITIONS_20261008.md": "c11ee3407145c0c85e1829fe72212a590595676be656403883e0c6d53161c2cc",
+    "docs/evidence/pr73_independent_replay_20261008.json": "ee4a6a796186d0c28705bf25cec7b7e6056004e5c30f7da09da2c764be0352cf",
+    "docs/evidence/pr73_independent_validator_replay_20261008.json": "dce0e7f27844bb05d45719c16364c7d1c087cc9e37b6e9996c21bd3b555cbb00",
+    "docs/evidence/pr73_joint_fixture_20261008.json": "8e8d93dece2a5599812238b2afb6d544db6cf81f07b1d2e947bfac917335b5fc",
+    "docs/evidence/pr73_joint_trial_output_20261008.json": "111dccbc19e21e978fc37d7882fadbb3ab6ba29bb465c633c5ddc98ed7492c8f",
+    "docs/evidence/pr73_joint_trial_receipt_20261008.json": "bb4e364526f2d65a9d99724a19fcf8ff28a6fc2061414eedf83526db3a52b687",
+    "docs/evidence/pr73_native_first_violation_20261008_attempt2/completion_audit.json": "941b2d609477821443e5fab7d992bad663ce7dccc77a822c2d9e3cd236ca2c23",
+    "docs/evidence/pr73_native_first_violation_20261008_attempt2/native_receipt.json": "5be57e83f5ebe8e7124e4f9d5bb7ab527bdf4ae495ff19a9b1bd4e532a10a355",
+    "docs/evidence/pr73_property_matrix_20261008/receipt.json": "ba2628dfd5006b1e0bbde79de1d43db6fa3ca207d622321cd970b77c787598d2",
+    "docs/evidence/pr73_shinhong_ni_operator_20261008.json": "0907b67a195ee474cd349d32d81cc15b3793cb2f852a8cd2c9fa4c08d1dcb271",
+    "docs/evidence/pr73_shinhong_ni_research.patch": "b70c6357aae4642062a6ff779f9e478899248d29c7bd0b74c5f3df0112aebc02",
+    "docs/evidence/pr73_shinhong_ni_research_receipt_20261008.json": "a4866e3ac075838cd0ab994d73652d439af03ebba6e76de3ed44ffa8ace1b798",
+    "docs/evidence/pr73_species_native_origin_20261008.json": "ab9f5a02bf38d5cbc21e995f749384896cf9300601eebec554c68c6e8b6d8bd9",
+    "src/common/cloud_bal_pipeline.f90": "49f6978577862dd3577dfad77ba506fc7728e2afe9a71609079026acecaa7900",
+    "src/common/cloud_bal_real_netcdf.f90": "634f8b43bcc5466cbaf91f8a92343f743bcee6cdf2995befb09127f7a63d76ba",
+    "tests/check_physical_contract_shadow.py": "8b26a2080c89c68f90943840d84db0e9a1c97944162a0f31d0861d2551865ff8",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/run_pr73_joint_analysis.sh": "57d5d14b10703d14bcdcd80b6970d188fa559f0d3b0e3995c07ffb72a8550239",
+    "tests/run_pr73_property_matrix.sh": "eea87a6e1f6c250eef991fba280c43398ac11da80d7912586ca626cae38a3906",
+    "tests/test_pr73_joint_analysis.py": "506f68d206df5480a0bec4821f1270b48214a9910dc8ad4eb810a0c7235ce27d",
+    "tests/test_pr73_native_input_pair_audit.py": "84828af2271589a6336d92c59be833cf5988e30c964771870c7e0329e38f9152",
+    "tests/test_pr73_property_matrix.f90": "451ebb9ff1ac3461a333a0073ae059e57c565033a7cef7a6985291f121b6615c",
+    "tests/test_real_shadow_io_contract.f90": "68d2afe8ac2cbe69888519c655146e941eafce0eaa320d0702bc15f33cb600dd",
+    "tools/pr73_joint_analysis.py": "0a7bd3f94b17672a0c2d32475714ffc946a10bdda5f484af1345f23ebb89934b",
+    "tools/pr73_native_input_pair_audit.py": "6786a89e8c5140c9b5ba809dc92b48c423be86281b5f1a86300961c314c44468",
+    "tools/pr73_property_matrix_source.py": "9e877640b49ff3383fa607d508799e3ace8b2d708bd9737d6bcc93cfc6319681",
+    "tools/validate_shadow_diagnostics.py": "98b8cb9f94e58a0a04691f69c4cdebf1294bc60564c533a24d43bd304c90b5c8"
+  },
+  "findings": [
+    {
+      "id": "joint_analysis_objective",
+      "status": "PYTHON_12_PASS_AND_PINNED_INTEL_ENDPOINT_FIXTURE_PASS_WITH_LIMITS",
+      "summary": "H/B/R constrained objective derives its increment, including equality reduction, bounds and infeasibility cases. Pinned O0/O2 endpoint/writer/readback fixture passes; it is manufactured and does not run the production pipeline."
+    },
+    {
+      "id": "endpoint_writer_acceptance_boundary",
+      "status": "NO_BYPASS_FOUND_STANDARD_VALIDATOR_REJECTS_FIXTURE",
+      "summary": "Writer only allows estimator-only artifact with exact FAILED/AUTHORITY pipeline/stage receipts and recomputes endpoint budget/evaluation. Physical-contract reader passes. Canonical diagnostic CLI returns INVALID/UNBOUND, candidate REJECTED because this fixture lacks operational geometry/support/stage evidence and has failed pipeline status."
+    },
+    {
+      "id": "species_property_matrix",
+      "status": "PINNED_O0_O2_PROPERTY_STAGE_PASS_FULL_MODULE_OPEN",
+      "summary": "Actual KDM6 property-stage 16-mask references and active-to-target reentry pass under O0/O2. Hook precedes n0 reconstruction, substep counting, rate application and microphysics; does not establish complete process."
+    },
+    {
+      "id": "species_full_module_matrix",
+      "status": "INCOMPLETE",
+      "summary": "Full KDM6 module probe stopped at mask 5 with ProgB unsupported PSD state after masks 0\u20134; masks 6\u201315 and O2 remain open."
+    },
+    {
+      "id": "first_native_failure",
+      "status": "CAPTURED_REJECTION",
+      "summary": "Direct first violation: ice mass_only QI=3.5308575789291633e-35 kg kg-1, NI=0 m-3 at i=133, call_lat_index=2, k=1. Partialhost rejected at admission; post-call outputs missing and step completion not established."
+    },
+    {
+      "id": "shinhong_qni",
+      "status": "LOCAL_O0_O2_ROUTINE_PASS_WITH_LIMITS",
+      "summary": "Correct channel offsets, optional output initialization and QI-tendency gate tested locally. No driver accumulation/coupled-host test; DEL dry-carrier equivalence and exact upstream cause remain unproven."
+    },
+    {
+      "id": "rollback_index_remapping",
+      "status": "NO_PR73_REGRESSION_FOUND",
+      "summary": "Static review found no PR73 change to staged commit/remap routines and no defect."
+    },
+    {
+      "id": "density_policy",
+      "status": "NO_NEW_PR73_CAP_FLOOR_OR_DELETION",
+      "summary": "PR73 additions do not add arbitrary density cap/floor/deletion; paired-positive classification is not full PSD validation."
+    }
+  ],
+  "limitations": [
+    "No actual 12 UTC candidate or operational authority established.",
+    "Full KDM6 process, full-mask module coverage, conservation, energy, observation fit, and native 12 UTC approval are not established.",
+    "Property-stage hook excludes n0 reconstruction and subsequent rate/process application.",
+    "Graph freshness/runtime/scientific validity not inferred."
+  ],
+  "review_status": "IMPLEMENTATION_REVIEW_SIGNED_OFF; SCIENTIFIC_STATUS_REJECTED_FAIL_OPEN",
+  "reviewer_test_results": {
+    "canonical_diagnostic_cli": "INVALID/UNBOUND; candidate REJECTED for manufactured endpoint fixture; missing operational geometry/support/stage metadata and pipeline_status FAILED",
+    "joint_analysis_python": "12 tests passed",
+    "native_input_pair_audit_python": "3 tests passed",
+    "physical_contract_artifact_replay": "PASS, including malformed extension/value cases and complete optional group removal / legacy acceptance",
+    "pinned_intel_joint_endpoint_fixture": "Owner receipt: O0/O2 pass; reviewer inspected receipt/artifact; not rerun by reviewer",
+    "pinned_intel_property_matrix": "Owner receipt: O0/O2 16-mask property-stage pass; reviewer inspected receipt; not rerun by reviewer"
+  },
+  "reviewer_tests_run": true,
+  "schema": "pr73_independent_review_v1",
+  "scope": [
+    "canonical standalone validator replay",
+    "current Python tests",
+    "endpoint writer acceptance boundary",
+    "provenance and evidence review",
+    "rollback/index remapping review",
+    "scientific-scope review",
+    "source review"
+  ]
+}
