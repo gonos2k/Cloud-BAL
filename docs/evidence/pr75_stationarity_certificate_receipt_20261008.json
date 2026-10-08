@@ -1,0 +1,74 @@
+{
+  "pull_request_scope": "PR75 KKT stationarity self-normalization follow-up",
+  "base_commit": "0492d8eab2f2cc9841a9359ddafc664e22737ff0",
+  "status": "PASS_SCOPED",
+  "owned_files": [
+    "tools/pr73_joint_analysis.py",
+    "tests/test_pr73_joint_analysis.py",
+    "docs/PR75_STATIONARITY_CERTIFICATE_20261008.md",
+    "docs/evidence/pr75_stationarity_certificate_receipt_20261008.json"
+  ],
+  "reproduction": {
+    "case": "B=1, R=1, H=2, background=0, observation=1, no equalities or bounds",
+    "closed_form_candidate_state": [
+      0.4
+    ],
+    "observed_candidate_state": [
+      0.4
+    ],
+    "stationarity_residual": 1.3877787807814457e-16,
+    "kkt_status": "PASS"
+  },
+  "change": {
+    "stationarity_scale": "per-coordinate sum of absolute uncancelled background-gradient, expanded observation-gradient, and equality-multiplier operands",
+    "tolerance_increased": false,
+    "final_clipping_added": false,
+    "nonfinite_scale": "controlled NUMERICAL_FAILURE"
+  },
+  "validation": [
+    {
+      "command": "python3 -m unittest tests.test_pr73_joint_analysis -v",
+      "result": "PASS",
+      "tests": 20
+    },
+    {
+      "command": "python3 -m py_compile tools/pr73_joint_analysis.py",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check -- tools/pr73_joint_analysis.py tests/test_pr73_joint_analysis.py docs/PR75_STATIONARITY_CERTIFICATE_20261008.md",
+      "result": "PASS"
+    }
+  ],
+  "independent_review": {
+    "status": "PASS_SCOPED",
+    "receipt": "docs/evidence/pr75_stationarity_independent_20261008.json",
+    "sha256": "e190f21b2d426ee0973c548286e77e601b5ce306fe05b323d20b548f1f7f8b80",
+    "scope": "independent 396 scalar and 128 Decimal covariance fixtures plus wrong-solution/dual rejection; final team review separately recorded"
+  },
+  "pinned_intel_endpoint_validation": {
+    "status": "NOT_RUN_BY_THIS_TASK",
+    "owner": "parent task owner",
+    "source_hash_applies": false
+  },
+  "graph_update": "parent session KG maintenance",
+  "scope_limits": [
+    "manufactured small linear H/B/R optimization only",
+    "no physical authority added",
+    "native REJECTED / physics FAIL_OPEN status remains unchanged",
+    "graph freshness does not establish runtime or scientific validation"
+  ],
+  "final_source_sha256": {
+    "tools/pr73_joint_analysis.py": "6efbf6753c68b8a7344fba4b823ce7b39d1c87ad13f350ea30055f878a6de991",
+    "tests/test_pr73_joint_analysis.py": "02250766fdbbe811a9860ce6a5d48c749b7c98e499f826e3ebebeaa16379441b",
+    "docs/PR75_STATIONARITY_CERTIFICATE_20261008.md": "4af94fddbb9fbc6d26737ba212d4af9a9488479b2d0c5f916f315e96f3c6bdc3"
+  },
+  "root_pinned_intel_endpoint_validation": {
+    "status": "PASS_SCOPED",
+    "receipt": "docs/evidence/pr75_stationarity_endpoint_20261008/receipt.json",
+    "sha256": "bee2fef42ffb22b9f2bc216a8c5f966ce02a6dbf377c3c259e8cc9b00ea7b98b",
+    "source_hash_applies": true,
+    "fresh_fortran_compile": true,
+    "production_pipeline_executed": false
+  }
+}

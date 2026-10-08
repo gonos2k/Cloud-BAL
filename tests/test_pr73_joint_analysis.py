@@ -5,6 +5,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import pr73_joint_analysis as joint
@@ -109,6 +110,48 @@ class JointAnalysisTest(unittest.TestCase):
         for key in ("primal_equality_residual", "primal_bound_violation", "stationarity_residual",
                     "dual_sign_violation", "complementarity_residual"):
             self.assertLessEqual(result["kkt_diagnostics"][key], 1e-12)
+
+    def test_unconstrained_scalar_cancellation_uses_uncancelled_stationarity_scale(self):
+        scalar = copy.deepcopy(self.declaration)
+        scalar.pop("physical_reference", None)
+        scalar["state_fields"] = ["x"]
+        scalar["background_state"] = [0.0]
+        scalar["B"] = [[1.0]]
+        scalar["observation"] = {"H": [[2.0]], "value": [1.0], "R": [[1.0]]}
+        scalar["process_increments"] = {
+            "phase": [0.0], "external_source": [0.0], "physical_boundary": [0.0],
+        }
+        scalar["constraints"] = []
+        scalar["state_bounds"] = []
+
+        result = joint.evaluate(scalar)
+
+        self.assertAlmostEqual(result["candidate_state"][0], 0.4, places=14)
+        self.assertEqual(result["kkt_diagnostics"]["status"], "PASS")
+        self.assertLess(result["kkt_diagnostics"]["stationarity_residual"], 1e-15)
+
+    def test_stationarity_certificate_rejects_perturbed_unconstrained_solution(self):
+        scalar = copy.deepcopy(self.declaration)
+        scalar.pop("physical_reference", None)
+        scalar["state_fields"] = ["x"]
+        scalar["background_state"] = [0.0]
+        scalar["B"] = [[1.0]]
+        scalar["observation"] = {"H": [[2.0]], "value": [1.0], "R": [[1.0]]}
+        scalar["process_increments"] = {
+            "phase": [0.0], "external_source": [0.0], "physical_boundary": [0.0],
+        }
+        scalar["constraints"] = []
+        scalar["state_bounds"] = []
+        solve = joint._solve
+
+        def perturbed_solve(matrix, rhs):
+            solution = solve(matrix, rhs)
+            solution[0] += 1e-5
+            return solution
+
+        with patch.object(joint, "_solve", side_effect=perturbed_solve):
+            with self.assertRaisesRegex(ValueError, "KKT certificate did not pass"):
+                joint.evaluate(scalar)
 
     def test_feasible_fixed_bound_redundant_with_equality(self):
         fixed = copy.deepcopy(self.declaration)

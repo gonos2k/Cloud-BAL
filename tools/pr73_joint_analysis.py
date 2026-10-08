@@ -585,8 +585,10 @@ def evaluate(data: Any) -> dict[str, Any]:
     z = [analysis[i] / state_scale[i] for i in range(n)]
     residual_scaled = [(value - target_value) / observation_scale[i]
                        for i, (value, target_value) in enumerate(zip(_matvec(H, candidate), y))]
-    gradient = [value + term for value, term in zip(
-        _matvec(Binv, z), _matvec(_multiply(_transpose(Hscaled), Rinv), residual_scaled))]
+    background_gradient = _matvec(Binv, z)
+    weighted_residual = _matvec(Rinv, residual_scaled)
+    observation_gradient = _matvec(_transpose(Hscaled), weighted_residual)
+    gradient = [value + term for value, term in zip(background_gradient, observation_gradient)]
     lagrangian_gradient = gradient[:]
     for row, multiplier in zip(best[5], best[4]):
         for i in range(n):
@@ -611,9 +613,17 @@ def evaluate(data: Any) -> dict[str, Any]:
                         for i, (lower, _) in bound_map.items()]
     bound_violations += [max(0.0, candidate[i] - upper) if upper is not None else 0.0
                          for i, (_, upper) in bound_map.items()]
-    stationarity_scale = max((abs(value) + sum(abs(row[i] * multiplier)
-                                                for row, multiplier in zip(best[5], best[4]))
-                             for i, value in enumerate(gradient)), default=1.0)
+    stationarity_operands = []
+    for i in range(n):
+        terms = [abs(Binv[i][j] * z[j]) for j in range(n)]
+        terms.extend(abs(Hscaled[k][i] * Rinv[k][m] * residual_scaled[m])
+                     for k in range(len(Hscaled)) for m in range(len(residual_scaled)))
+        terms.extend(abs(row[i] * multiplier)
+                     for row, multiplier in zip(best[5], best[4]))
+        stationarity_operands.append(sum(terms))
+    if any(not math.isfinite(value) for value in stationarity_operands):
+        raise ValueError("NUMERICAL_FAILURE: stationarity operand scale overflowed")
+    stationarity_scale = max(stationarity_operands, default=0.0)
     dual_scale = max(stationarity_scale, sys.float_info.min)
     dual_violation = max([0.0] + [max(0.0, -value) / dual_scale
                                   for value in lower_duals + upper_duals])

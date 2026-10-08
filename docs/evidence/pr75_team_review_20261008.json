@@ -1,0 +1,139 @@
+{
+  "schema": "pr75_team_review_v1",
+  "review_date": "2026-10-08",
+  "status": "PASS_SCOPED_NO_UNRESOLVED_REVIEW_BLOCKER",
+  "review_scope": "PR74 latest solver plus PR75 stationarity and rank follow-up; read-only source/evidence review",
+  "source_hashes": {
+    "tools/pr73_joint_analysis.py": "6efbf6753c68b8a7344fba4b823ce7b39d1c87ad13f350ea30055f878a6de991",
+    "tests/test_pr73_joint_analysis.py": "02250766fdbbe811a9860ce6a5d48c749b7c98e499f826e3ebebeaa16379441b"
+  },
+  "numerical_review": {
+    "status": "NO_UNRESOLVED_BLOCKER_FOUND",
+    "p1_case": {
+      "inputs": "B=R=1, H=2, background=0, observation=1, no equalities or bounds",
+      "closed_form_state": 0.4,
+      "stationarity_scale": "absolute uncancelled background-gradient, expanded observation-gradient, and equality-multiplier operands",
+      "tolerance_inflated": false
+    },
+    "checks": {
+      "lower_upper_fixed_dual_conventions": "reviewed; preserved",
+      "primal_bound_coordinates": "original state units",
+      "stationarity_dual_coordinates": "normalized control",
+      "active_bound_assignment": "exact declared bound before complementarity check",
+      "nonfinite_scale": "controlled NUMERICAL_FAILURE",
+      "covariance_normalization_before_rank": true,
+      "active_face_rank_coordinates": "normalized control"
+    },
+    "coverage_observed": [
+      "scalar cancellation regression",
+      "perturbed interior-solution rejection",
+      "wrong upper-bound dual-sign rejection",
+      "396 scalar box oracle cases",
+      "128 Decimal covariance/equality oracle cases",
+      "state-unit re-expression of active-bound/equality certificate"
+    ],
+    "owner_reported_validation": {
+      "focused_solver_tests": 20,
+      "focused_solver_result": "PASS",
+      "py_compile": "PASS",
+      "reviewer_reran_tests": false
+    },
+    "independent_oracle_review": {
+      "receipt": "docs/evidence/pr75_stationarity_independent_20261008.json",
+      "status": "PASS",
+      "oracle_tests": 6,
+      "ill_conditioned_covariance_coverage": "not claimed; deterministic SPD cases are well conditioned"
+    }
+  },
+  "graph_review": {
+    "path": "Cloud-BAL/graphify-out/graph.json",
+    "sha256": "3b7bc538122162db0ad2a71b7f64451638da808841d8e4ca02dfe94fbc2c8a03",
+    "nodes": 8409,
+    "edges": 15650,
+    "evaluate_extracted_connections": 19,
+    "snapshot_scope": "pre-PR75; no PR75 graph delta represented",
+    "extraction_limits": [
+      "new PR75 stationarity implementation is not in this snapshot",
+      "new PR75 oracle test is not in this snapshot"
+    ],
+    "runtime_or_science_validation_inferred": false
+  },
+  "native_fp_diagnostic_review": {
+    "status": "PASS_SCOPED",
+    "receipt": "docs/evidence/pr75_native_fp_O0_20261008.json",
+    "receipt_sha256": "fd547009d3e9059bfad46fe1d1c4775f6c8371412e110ad42751f06f79922aae",
+    "report": "docs/pr75_native_fp_runtime.md",
+    "report_sha256": "43795ae3d5f4388f08fca5fece5b98358746ed5e646395dc2ad8d6f73feaa99e",
+    "raw_capture": "docs/evidence/pr75_native_fp_O0_20261008.raw",
+    "raw_capture_sha256": "71f7c6426b8d723f62cf0d18bf19a525a8af7f266039195a6672f50ad2fefd27",
+    "diagnostic_run": "O0 diagnostics-only partialhost; exited 128 at expected NI adapter rejection before completing a timestep",
+    "same_call_binding": {
+      "coordinate": "i=211, j=2, k=15",
+      "j_semantics": "wrapper call_lat_index; no global-j mapping claimed",
+      "prior_pr74_o0_driver_capture_hash_matches": true,
+      "prior_pr74_o0_pretrace_hash_matches": true,
+      "public_ni_binary32": "0093B134",
+      "dry_density_binary32": "3F449EE9",
+      "adapter_output_binary32": "00000000",
+      "adapter_valid": false
+    },
+    "runtime_fp_state": {
+      "mxcsr_before": "0x00009FFD",
+      "mxcsr_after": "0x00009FFD",
+      "thread_id_before": 4081559,
+      "thread_id_after": 4081559,
+      "ftz_set": true,
+      "daz_set": true,
+      "helper_changed_mxcsr": false,
+      "status_bits_0_to_5_before_after": "0x3D",
+      "sticky_status_flags_attribution": "These flags were already set before conversion; the capture does not attribute them to this call."
+    },
+    "preservation": {
+      "staged_input_count": 100,
+      "staged_inputs_unchanged": true,
+      "incoming_archive_unchanged": true
+    },
+    "preserved_nonfinal_attempt": {
+      "receipt": "docs/evidence/pr75_native_fp_first_attempt_20261008.json",
+      "receipt_sha256": "0e6898eb28b61e33880b28c62aea5f8678e433d8726413d565473725ef14ccce",
+      "classification": "superseded; omitted -convert big_endian, so pretrace hash differed",
+      "used_for_final_runtime_attribution": false,
+      "staged_input_hashes_match_final": true
+    },
+    "retained_verification": {
+      "receipt": "docs/evidence/pr75_native_fp_retained_20261008/receipt.json",
+      "receipt_sha256": "099315799243a667a30cd1929ae65f64c1deb065430a2cbfae85dca099e24902",
+      "final_receipt_hash_bound": true,
+      "source_only_diagnostic_patch_retained": true,
+      "root_transform_tests": 2,
+      "root_transform_test_status": "PASS",
+      "py_compile": "PASS",
+      "bash_n": "PASS",
+      "reviewer_reran_tests": false
+    },
+    "scope_limits": [
+      "partial-host diagnostics-only run, not full clean native validation",
+      "main-startup MXCSR not captured",
+      "other-thread MXCSR not captured",
+      "no new O2 runtime-state capture"
+    ]
+  },
+  "parent_endpoint_validation_review": {
+    "receipt": "docs/evidence/pr75_stationarity_endpoint_20261008/receipt.json",
+    "receipt_sha256": "bee2fef42ffb22b9f2bc216a8c5f966ce02a6dbf377c3c259e8cc9b00ea7b98b2",
+    "status": "PASS_SCOPED",
+    "solver_hash_matches_reviewed_source": true,
+    "pinned_intel_profiles": ["O0", "O2"],
+    "fresh_compile_scratch": true,
+    "writer_readback": "PASS",
+    "focused_and_adjacent_python_tests": 61,
+    "canonical_endpoint": "UNBOUND / REJECTED",
+    "physical_approval": "FAIL_OPEN"
+  },
+  "authority": {
+    "scientific_approval": "FAIL_OPEN",
+    "native_candidate_status": "REJECTED",
+    "physical_authority_added": false
+  },
+  "unresolved_findings": []
+}

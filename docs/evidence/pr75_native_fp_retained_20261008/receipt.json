@@ -1,0 +1,74 @@
+{
+  "schema": "pr75_native_fp_root_retained_validation_v1",
+  "native_receipt": "docs/evidence/pr75_native_fp_O0_20261008.json",
+  "native_receipt_sha256": "fd547009d3e9059bfad46fe1d1c4775f6c8371412e110ad42751f06f79922aae",
+  "source_only_patch": {
+    "path": "docs/evidence/pr75_native_fp_retained_20261008/diagnostic.patch",
+    "sha256": "714d8a15923ab32dbb4d4406ee5de8d1357e86af89469c30a9a1af3d6527395c"
+  },
+  "retained_files": {
+    "compile.log": {
+      "origin": "/var/tmp/pr75_native_fp_O0.16jBq0/O0/compile/compile.log",
+      "path": "docs/evidence/pr75_native_fp_retained_20261008/compile.log",
+      "sha256": "b8930103dd4059ccf5386fed59dfb582393ed829e2beabd061ef5861dcfc0ed6"
+    },
+    "candidate_run.log": {
+      "origin": "/var/tmp/pr75_native_fp_O0.16jBq0/O0/run/candidate_run.log",
+      "path": "docs/evidence/pr75_native_fp_retained_20261008/candidate_run.log",
+      "sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+    },
+    "rsl.error.0000": {
+      "origin": "/var/tmp/pr75_native_fp_O0.16jBq0/O0/run/rsl.error.0000",
+      "path": "docs/evidence/pr75_native_fp_retained_20261008/rsl.error.0000",
+      "sha256": "7467e37489a283442d2c91dd858fc19910cbdcd59121859af9c52b4fa30844a0"
+    },
+    "diagnostic.patch": {
+      "path": "docs/evidence/pr75_native_fp_retained_20261008/diagnostic.patch",
+      "sha256": "714d8a15923ab32dbb4d4406ee5de8d1357e86af89469c30a9a1af3d6527395c"
+    }
+  },
+  "root_tests": {
+    "command": "PYTHONPATH=tests python3 -m unittest tests.test_pr75_native_fp_transform -v",
+    "test_functions": 2,
+    "status": "PASS",
+    "log": "docs/evidence/pr75_native_fp_retained_20261008/transform_tests.log",
+    "sha256": "9f43886c042ec28572e5a3b477a871773c72e36196608a4966d9bb4d5bee3a00"
+  },
+  "static_checks": {
+    "py_compile": "PASS",
+    "bash_n": "PASS"
+  },
+  "bound_sources": {
+    "tests/pr75_native_fp_run.py": "3e37ecde1f7cde3e68e4f64cb5a5861c6d18cd7f0814f3a452c72e5e3cd0f8c1",
+    "tests/pr75_native_fp_transform.py": "68c30baccf2ba0ce2bcf3b0f6f4cc3f69e5d002f2b31f760086b734c1ba6b11b",
+    "tests/pr75_native_fp_mxcsr.c": "843c3a3c9eaea2126dd915d96dd1113e5fa58f30433e714aa26808b191ffc8ba",
+    "tests/run_pr75_native_fp_O0.sh": "5afb7a5061047d217354c040bb20ca4d60e87828846225a6e9e091ff8f0d01e7",
+    "tests/test_pr75_native_fp_transform.py": "5882cbad534f2b9a1b38c6ed258e97e5300a1e781dd5ebcd5dca7dfa71c45a92"
+  },
+  "runtime": {
+    "conversion_valid": false,
+    "converted_ni_binary32": "00000000",
+    "converted_ni_m_inverse3": 0.0,
+    "daz_enabled_before": true,
+    "dry_density_binary32": "3F449EE9",
+    "dry_density_kg_m3": 0.7680497765541077,
+    "ftz_enabled_before": true,
+    "i": 211,
+    "j": 2,
+    "j_semantics": "wrapper call_lat_index; global-j mapping unclaimed",
+    "k": 15,
+    "mxcsr_after": "0x00009FFD",
+    "mxcsr_before": "0x00009FFD",
+    "mxcsr_unchanged": true,
+    "public_ni_binary32": "0093B134",
+    "public_ni_kg_inverse": 1.356338643876034e-38,
+    "same_thread": true,
+    "thread_id_after": 4081559,
+    "thread_id_before": 4081559
+  },
+  "run_exit_status": 128,
+  "pretrace_and_driver_match_pr74": true,
+  "native_candidate": "REJECTED",
+  "physical_approval": "FAIL_OPEN",
+  "team_review_path": "docs/evidence/pr75_team_review_20261008.json"
+}
