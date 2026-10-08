@@ -29,8 +29,8 @@ PR71 was merged at `2026-10-08T02:42:38Z` (11:42:38 KST). Earlier open/unmerged 
 - [x] Four-agent source, arithmetic, runtime identity and omission review.
 - [x] Focused pinned Intel O0/O2 validation in fresh scratch, including poisoned outputs and active/absent transitions.
 - [x] Preserve PR70/PR71 evidence, operational inputs, maintained native source and private profile.
-- [ ] Commit, push and open the reviewed PR; no merge.
-- [ ] Separate dated KLAPS50/Cloud-BAL Graphify overlays, derived wiki reports and audit log.
+- [x] Commit, push and open the reviewed PR; no merge.
+- [x] Separate dated KLAPS50/Cloud-BAL Graphify overlays, derived wiki reports and audit log.
 
 ## Interpretation
 
@@ -41,3 +41,12 @@ The historical n0i receipt is not rewritten. New causal evidence corrects the ea
 The same combined research source has SHA-256 `1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819`. [Species validation](evidence/pr72_species_property_state_20261008.json) and [combined native rejection](evidence/pr72_combined_native_first_reject_20261008/receipt.json) bind it separately. The native run preserves all 100 staged inputs and pretrace `d2331e90…b9e7bb`, but returns 128 before required post-call capture. The strict pair rule changes research admission; it does not repair PBL/RK moment generation, freezing policy, water/energy balance, or provide rollback.
 
 Python validation: six new declaration checks and two existing guarded-composer checks pass. The conditional single-cell phase/readback run uses pinned Intel O0; it is a repeat of the narrow background baseline, not a retained-observation or joint-wind candidate.
+
+## Publication and KG record
+
+Implementation commit `c9f7cf618bd195760465cede04c2bab159ecabdf` is published as [PR #72](https://github.com/gonos2k/Cloud-BAL/pull/72), OPEN and unmerged. The root-owned overlay extracts its 45 selected paths; later checklist ticks and delivery receipts are metadata outside that frozen extraction.
+
+- KLAPS50: 33,921 nodes / 73,635 edges / 2,649 communities; delta +124 nodes / +169 edges.
+- Cloud-BAL: 8,089 nodes / 15,210 edges / 627 communities; delta +124 nodes / +169 edges.
+- Separate dated snapshots `2026-10-08-pr72`, derived wiki reports/index and appended audit log are recorded in [the KG receipt](evidence/pr72_graphify_kg_20261008.json). Prior dated snapshots, protected wiki content and private-profile graph remain unchanged.
+- Extraction uses AST and Markdown headings, with partial cross-file Fortran calls. A selected source snapshot in repository evidence is included; external native source trees were not crawled. The overlay is not a full candidate extraction, runtime verification, or scientific approval.
