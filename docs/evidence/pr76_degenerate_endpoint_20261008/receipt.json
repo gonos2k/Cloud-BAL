@@ -1,0 +1,79 @@
+{
+  "schema": "pr76_degenerate_root_validation_v1",
+  "status": "PASS_SCOPED",
+  "base_commit": "fd7e1be37075a7ba80ee3a0be080111a5be03a26",
+  "python": {
+    "exit_status": 0,
+    "test_functions": 68,
+    "command": "python3 -m unittest tests.test_pr73_joint_analysis tests.test_pr74_independent_oracle tests.test_pr75_stationarity_oracle tests.test_pr76_degenerate_kkt_oracle tests.test_pr74_common_moment_audit tests.test_native_kdm6_call_geometry tests.test_native_kdm6_trace -v"
+  },
+  "profiles": {
+    "O0": {
+      "scratch": "/var/tmp/cloud_bal_pr73_joint_analysis.T2hp98",
+      "exit_status": 0,
+      "fresh_compilation": true,
+      "compiler_profile": "tests/intel_toolchain.sh",
+      "executable_sha256": "14ee9a843f3c77d5c2d9cc0d1b77a848adf94c4b32690ba14ce2fd35c394e0bf",
+      "artifact_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "endpoint_and_component_readback": "PASS_SCOPED"
+    },
+    "O2": {
+      "scratch": "/var/tmp/cloud_bal_pr73_joint_analysis.LxczN6",
+      "exit_status": 0,
+      "fresh_compilation": true,
+      "compiler_profile": "tests/intel_toolchain.sh",
+      "executable_sha256": "a27d75eba39f272f50842209222619872c1db2628a7961714361094ba147565f",
+      "artifact_sha256": "b8e3f0caa289a812bbc2ba6fd391e7152840c0bc1b912e8cd6719d9255c96f5b",
+      "endpoint_and_component_readback": "PASS_SCOPED"
+    }
+  },
+  "canonical": {
+    "exit_status": 1,
+    "artifact_decision": "UNBOUND",
+    "candidate_decision": "REJECTED",
+    "run_cloud_bal_pipeline_executed": false,
+    "scope": "estimator fixture endpoint and component writer/readback, not production pipeline"
+  },
+  "sources_sha256": {
+    "tools/pr73_joint_analysis.py": "95ab591455b40c821d978aaa30ea0c392a4ba1d106fd5a0617aee6aa16851eb0",
+    "tests/test_pr73_joint_analysis.py": "1ba9e7afc662fdfdcd3c1cfef7fefa71f6c24c35ebec3275cd06643bd6eca510",
+    "tests/test_pr76_degenerate_kkt_oracle.py": "9c3df77c106a7f879b375a1b8ced9f7d316fbbf9f4163141ff671d9c33986608",
+    "tests/test_pr74_independent_oracle.py": "e063d84ed6ef106cb4939787532700706081db230d66fd7d80a6463cb868e485",
+    "tests/test_pr75_stationarity_oracle.py": "30c9f4af322cce78d28b326fa20c56ed9a9182ffdd95f184d717d7d547912626",
+    "tests/run_pr73_joint_analysis.sh": "57d5d14b10703d14bcdcd80b6970d188fa559f0d3b0e3995c07ffb72a8550239",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/test_real_shadow_io_contract.f90": "68d2afe8ac2cbe69888519c655146e941eafce0eaa320d0702bc15f33cb600dd",
+    "tests/check_physical_contract_shadow.py": "8b26a2080c89c68f90943840d84db0e9a1c97944162a0f31d0861d2551865ff8",
+    "tools/validate_shadow_diagnostics.py": "98b8cb9f94e58a0a04691f69c4cdebf1294bc60564c533a24d43bd304c90b5c8",
+    "docs/evidence/pr73_joint_fixture_20261008.json": "8e8d93dece2a5599812238b2afb6d544db6cf81f07b1d2e947bfac917335b5fc",
+    "src/common/cloud_bal_pipeline.f90": "49f6978577862dd3577dfad77ba506fc7728e2afe9a71609079026acecaa7900",
+    "src/common/cloud_bal_grid_geometry.f90": "3e2b75c5a64730a65dd4762a4ed9cc8fe82017ca95a11cf40690bfa4bca3e703",
+    "src/common/cloud_bal_pressure_analysis.f90": "c81ebce5b07998dbe26e7ef40c4dcf787e53550be0c7af106b5f5e31710b0396",
+    "src/common/cloud_bal_column_physics.f90": "fd5e924c645d8d73e88f34f38f9bf8bd62e0d8c5bd6eaa13eedeabbd882b6496",
+    "src/common/cloud_bal_balance_operator.f90": "64631cf4df055b3de9198c87b4eb3650a10078c480dfc995e8de7bb691536747",
+    "src/common/cloud_bal_real_netcdf.f90": "634f8b43bcc5466cbaf91f8a92343f743bcee6cdf2995befb09127f7a63d76ba",
+    "src/common/cloud_bal_wps_adapter.f90": "f063f9b3605fe2504b6d364f858cef82605105a0888825cd795ea03c7c65eacb",
+    "src/common/cloud_bal_state.f90": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61"
+  },
+  "retained_sha256": {
+    "docs/evidence/pr76_degenerate_endpoint_20261008/python_tests.log": "32292fa8437a16b513624cb2a519b91f29010850509f861b05d2daee9f910706",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/canonical_diagnostic.json": "dce0e7f27844bb05d45719c16364c7d1c087cc9e37b6e9996c21bd3b555cbb00",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/canonical_diagnostic.log": "dce0e7f27844bb05d45719c16364c7d1c087cc9e37b6e9996c21bd3b555cbb00",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O0/toolchain.txt": "f5c497d32aeb435e0e456ab00705dd5e741c200eedc008c6fcc93db75c97fc7f",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O0/trial.json": "294252e8e87fbeaaf3ba70215d52dd8dbd72c8a45115d7e62aa5fbd2d3619cc6",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O0/trial.control": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O0/solver.json": "294252e8e87fbeaaf3ba70215d52dd8dbd72c8a45115d7e62aa5fbd2d3619cc6",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O0/candidate.log": "eea7afaf75e7a7e2f17d32ae5196deb8eeb2eb5d6ba4902a7de31ea2192a9ef3",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O0/readback.log": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O0/runner.log": "3ebd318f5c768bf63d69911df4ce2715f5c99a3f6ac0164a697144ac0d270373",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O2/toolchain.txt": "b298ba5a637f97381c942673f86590c753bb589f5802097be56bbd3980dd018f",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O2/trial.json": "294252e8e87fbeaaf3ba70215d52dd8dbd72c8a45115d7e62aa5fbd2d3619cc6",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O2/trial.control": "4a95d21a2c732de7879b945beef9f44b44e73de88d3b98935c34f13a8809dbda",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O2/solver.json": "294252e8e87fbeaaf3ba70215d52dd8dbd72c8a45115d7e62aa5fbd2d3619cc6",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O2/candidate.log": "fc9666b996fde12a40b0720cf34fa110848b7e445f2a7f36fd8d64cde376e513",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O2/readback.log": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e",
+    "docs/evidence/pr76_degenerate_endpoint_20261008/O2/runner.log": "1091bf9902b2bbfe7838cd45ce41a8a340ea8427b6424bf648bd172783d2a198"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "native_policy": "Separate receipt; not included in 68 Python test count or endpoint verdict"
+}
