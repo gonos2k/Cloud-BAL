@@ -173,6 +173,117 @@ def _quadratic(matrix: list[list[float]], vector: list[float]) -> float:
     return _dot(vector, _matvec(matrix, vector))
 
 
+def _project_from_rows(vector: list[float], rows: list[list[float]]) -> list[float]:
+    """Project a vector off the row space using modified Gram-Schmidt."""
+    orthogonal = []
+    for row in rows:
+        scale = max((abs(value) for value in row), default=0.0)
+        residual = [value / scale for value in row] if scale else row[:]
+        for basis in orthogonal:
+            coefficient = _dot(residual, basis)
+            residual = [value - coefficient * unit for value, unit in zip(residual, basis)]
+        norm = math.sqrt(_dot(residual, residual))
+        if norm > 128.0 * sys.float_info.epsilon:
+            orthogonal.append([value / norm for value in residual])
+    projected = vector[:]
+    for basis in orthogonal:
+        coefficient = _dot(projected, basis)
+        projected = [value - coefficient * unit for value, unit in zip(projected, basis)]
+    return projected
+
+
+def _bound_multiplier_certificate(gradient: list[float], equality_rows: list[list[float]],
+                                 active_sides: dict[int, int], gradient_scale: float
+                                 ) -> tuple[list[float], list[float], list[float], list[float]] | None:
+    """Find equality and bound multipliers, including freedom hidden by fixed faces."""
+    n = len(gradient)
+    fixed = {index for index, side in active_sides.items() if side == 2}
+    coordinates = [index for index in range(n) if index not in fixed]
+    reduced_rows = [[row[index] for index in coordinates] for row in equality_rows]
+    independent = _independent_constraint_indices(reduced_rows, [0.0] * len(reduced_rows))
+    rows = [reduced_rows[index] for index in independent]
+    reduced_gradient = [gradient[index] for index in coordinates]
+    columns = []
+    active = []
+    for index, side in active_sides.items():
+        if side == 2:
+            continue
+        normal = [0.0] * len(coordinates)
+        normal[coordinates.index(index)] = -1.0 if side == -1 else 1.0
+        columns.append(_project_from_rows(normal, rows))
+        active.append((index, side))
+    target = [-value for value in _project_from_rows(reduced_gradient, rows)]
+    scale = max(gradient_scale, sys.float_info.min)
+    tolerance = 4096.0 * sys.float_info.epsilon
+    duals = None
+    for count in range(min(len(coordinates), len(active)) + 1):
+        for chosen in itertools.combinations(range(len(active)), count):
+            if count == 0:
+                candidate = []
+            else:
+                selected = [columns[index] for index in chosen]
+                gram = [[_dot(left, right) for right in selected] for left in selected]
+                rhs = [_dot(column, target) for column in selected]
+                try:
+                    candidate = _solve(gram, rhs)
+                except ValueError:
+                    continue
+            if any(value < -tolerance * scale for value in candidate):
+                continue
+            reconstructed = [sum(columns[index][i] * max(0.0, value)
+                                 for index, value in zip(chosen, candidate))
+                             for i in range(len(target))]
+            residual = [left - right for left, right in zip(reconstructed, target)]
+            if math.sqrt(_dot(residual, residual)) <= tolerance * scale:
+                duals = [0.0] * len(active)
+                for index, value in zip(chosen, candidate):
+                    duals[index] = max(0.0, value)
+                break
+        if duals is not None:
+            break
+    if duals is None:
+        return None
+
+    active_normalized = reduced_gradient[:]
+    lower = [0.0] * n
+    upper = [0.0] * n
+    fixed_duals = [0.0] * n
+    for (index, side), multiplier in zip(active, duals):
+        active_normalized[coordinates.index(index)] += (-1.0 if side == -1 else 1.0) * multiplier
+        (lower if side == -1 else upper)[index] = multiplier
+    if rows:
+        gram = [[_dot(left, right) for right in rows] for left in rows]
+        rhs = [-_dot(row, active_normalized) for row in rows]
+        try:
+            reduced_multipliers = _solve(gram, rhs)
+        except ValueError:
+            return None
+        equality_multipliers = [0.0] * len(equality_rows)
+        for index, multiplier in zip(independent, reduced_multipliers):
+            equality_multipliers[index] = multiplier
+    else:
+        equality_multipliers = [0.0] * len(equality_rows)
+    lagrangian = gradient[:]
+    for row, multiplier in zip(equality_rows, equality_multipliers):
+        for index in range(n):
+            lagrangian[index] += row[index] * multiplier
+    for index, side in active_sides.items():
+        if side == 2:
+            fixed_duals[index] = -lagrangian[index]
+            lagrangian[index] = 0.0
+        elif side == -1:
+            lagrangian[index] -= lower[index]
+        else:
+            lagrangian[index] += upper[index]
+    residual_scale = max(gradient_scale,
+                         *(abs(value) for row, multiplier in zip(equality_rows, equality_multipliers)
+                           for value in (item * multiplier for item in row)),
+                         sys.float_info.min)
+    if max((abs(value) for value in lagrangian), default=0.0) > tolerance * residual_scale:
+        return None
+    return equality_multipliers, lower, upper, fixed_duals
+
+
 def _exact_constraint_relation(rows: list[list[float]], targets: list[float]) -> str:
     """Classify an ambiguous small equality system using exact input floats."""
     augmented = [[Fraction.from_float(value) for value in row] + [Fraction.from_float(target)]
@@ -500,7 +611,7 @@ def evaluate(data: Any) -> dict[str, Any]:
         if upper is not None and upper != lower:
             choices.append(1)
         options.append(choices)
-    best: tuple[float, list[float], list[float], tuple[int, ...], list[float], list[list[float]]] | None = None
+    best: tuple[float, list[float], list[float], tuple[int, ...]] | None = None
     solved_faces = 0
     for face in itertools.product(*options):
         active = [i for i, side in enumerate(face) if side]
@@ -517,7 +628,6 @@ def evaluate(data: Any) -> dict[str, Any]:
             basis_indices = _independent_constraint_indices(rows, reduced_rhs)
         except ValueError:
             continue
-        basis_full = [Cscaled[index] for index in basis_indices]
         rows = [rows[index] for index in basis_indices]
         reduced_rhs = [reduced_rhs[index] for index in basis_indices]
         k = len(rows)
@@ -538,13 +648,11 @@ def evaluate(data: Any) -> dict[str, Any]:
             z = fixed_z[:]
             for a, i in enumerate(free):
                 z[i] = solution[a]
-            equality_multipliers = solution[len(free):]
         else:
             if any(abs(value) > 128.0 * sys.float_info.epsilon * max(1.0, abs(value))
                    for value in reduced_rhs):
                 continue
             z = fixed_z[:]
-            equality_multipliers = []
         solved_faces += 1
         delta = [state_scale[i] * z[i] for i in range(n)]
         state = background_with_process[:]
@@ -571,14 +679,14 @@ def evaluate(data: Any) -> dict[str, Any]:
                            for i, (value, target_value) in enumerate(zip(_matvec(H, state), y))]
         cost = 0.5 * _quadratic(Binv, z) + 0.5 * _quadratic(Rinv, residual_scaled)
         if best is None or cost < best[0]:
-            best = (cost, delta, z, tuple(face), equality_multipliers, basis_full)
+            best = (cost, delta, z, tuple(face))
     if best is None:
         raise ValueError("NUMERICAL_FAILURE: declared linear constraints and state bounds have no certified face")
 
     analysis = best[1]
     candidate = [background_with_process[i] + analysis[i] for i in range(n)]
-    active = [i for i, side in enumerate(best[3]) if side]
-    for i in active:
+    face_active = [i for i, side in enumerate(best[3]) if side]
+    for i in face_active:
         lower, upper = bound_map[i]
         candidate[i] = lower if best[3][i] == -1 else upper
         analysis[i] = candidate[i] - background_with_process[i]
@@ -589,23 +697,36 @@ def evaluate(data: Any) -> dict[str, Any]:
     weighted_residual = _matvec(Rinv, residual_scaled)
     observation_gradient = _matvec(_transpose(Hscaled), weighted_residual)
     gradient = [value + term for value, term in zip(background_gradient, observation_gradient)]
+    active_sides = {}
+    for index, (lower, upper) in bound_map.items():
+        if lower is not None and upper == lower and candidate[index] == lower:
+            active_sides[index] = 2
+        elif lower is not None and candidate[index] == lower:
+            active_sides[index] = -1
+        elif upper is not None and candidate[index] == upper:
+            active_sides[index] = 1
+    objective_gradient_scale = max((sum(abs(Binv[i][j] * z[j]) for j in range(n)) +
+                                    sum(abs(Hscaled[k][i] * Rinv[k][m] * residual_scaled[m])
+                                        for k in range(len(Hscaled))
+                                        for m in range(len(residual_scaled)))
+                                    for i in range(n)), default=0.0)
+    certificate = _bound_multiplier_certificate(gradient, Cscaled, active_sides,
+                                                objective_gradient_scale)
+    if certificate is None:
+        raise ValueError("NUMERICAL_FAILURE: normalized-coordinate KKT certificate did not pass")
+    equality_multipliers, lower_duals, upper_duals, fixed_duals = certificate
     lagrangian_gradient = gradient[:]
-    for row, multiplier in zip(best[5], best[4]):
+    for row, multiplier in zip(Cscaled, equality_multipliers):
         for i in range(n):
             lagrangian_gradient[i] += row[i] * multiplier
-    lower_duals = [0.0] * n
-    upper_duals = [0.0] * n
-    fixed_duals = [0.0] * n
-    for i in active:
-        if bound_map[i][0] == bound_map[i][1]:
+    for i, side in active_sides.items():
+        if side == 2:
             fixed_duals[i] = -lagrangian_gradient[i]
             lagrangian_gradient[i] = 0.0
-            continue
-        if best[3][i] == -1:
-            lower_duals[i] = lagrangian_gradient[i]
+        elif side == -1:
+            lagrangian_gradient[i] -= lower_duals[i]
         else:
-            upper_duals[i] = -lagrangian_gradient[i]
-        lagrangian_gradient[i] = 0.0
+            lagrangian_gradient[i] += upper_duals[i]
     equality_residuals = [abs(_dot(row, analysis) - target) /
                           max(abs(target), sum(abs(a * b) for a, b in zip(row, analysis)),
                               sys.float_info.min) for row, target in zip(C, d)]
@@ -619,7 +740,7 @@ def evaluate(data: Any) -> dict[str, Any]:
         terms.extend(abs(Hscaled[k][i] * Rinv[k][m] * residual_scaled[m])
                      for k in range(len(Hscaled)) for m in range(len(residual_scaled)))
         terms.extend(abs(row[i] * multiplier)
-                     for row, multiplier in zip(best[5], best[4]))
+                     for row, multiplier in zip(Cscaled, equality_multipliers))
         stationarity_operands.append(sum(terms))
     if any(not math.isfinite(value) for value in stationarity_operands):
         raise ValueError("NUMERICAL_FAILURE: stationarity operand scale overflowed")
@@ -628,9 +749,11 @@ def evaluate(data: Any) -> dict[str, Any]:
     dual_violation = max([0.0] + [max(0.0, -value) / dual_scale
                                   for value in lower_duals + upper_duals])
     complementarity = max([0.0] + [abs(lower_duals[i] * (candidate[i] - bound_map[i][0])) /
-                                    dual_scale for i in active if bound_map[i][0] is not None] +
+                                    dual_scale for i, side in active_sides.items()
+                                    if side == -1 and bound_map[i][0] is not None] +
                           [abs(upper_duals[i] * (bound_map[i][1] - candidate[i])) /
-                           dual_scale for i in active if bound_map[i][1] is not None])
+                           dual_scale for i, side in active_sides.items()
+                           if side == 1 and bound_map[i][1] is not None])
     kkt_diagnostics = {
         "status": "PASS",
         "stationarity_coordinates": "normalized_control",
@@ -639,14 +762,17 @@ def evaluate(data: Any) -> dict[str, Any]:
         "primal_bound_violation": max(bound_violations, default=0.0),
         "stationarity_residual": max((abs(value) for value in lagrangian_gradient), default=0.0) /
         dual_scale,
+        "equality_rows_normalized": Cscaled,
+        "equality_targets_normalized": dscaled,
+        "equality_multipliers_normalized": equality_multipliers,
         "dual_sign_violation": dual_violation,
         "complementarity_residual": complementarity,
         "active_bounds": [
-            {"field": fields[i], "side": "fixed" if bound_map[i][0] == bound_map[i][1] else
-             "lower" if best[3][i] == -1 else "upper",
-             "multiplier": fixed_duals[i] if bound_map[i][0] == bound_map[i][1] else
-             lower_duals[i] if best[3][i] == -1 else upper_duals[i]}
-            for i in active
+            {"field": fields[i], "side": "fixed" if side == 2 else
+             "lower" if side == -1 else "upper",
+             "multiplier": fixed_duals[i] if side == 2 else
+             lower_duals[i] if side == -1 else upper_duals[i]}
+            for i, side in active_sides.items()
         ],
         "normalized_covariance_scales": {"state": state_scale, "observation": observation_scale},
         "face_solves": solved_faces,
@@ -658,7 +784,7 @@ def evaluate(data: Any) -> dict[str, Any]:
         raise ValueError("NUMERICAL_FAILURE: normalized-coordinate KKT certificate did not pass")
     if any(not math.isfinite(value) for value in
            (best[0], *candidate, *analysis, *gradient, *lagrangian_gradient,
-            *lower_duals, *upper_duals, *fixed_duals, *best[4],
+            *lower_duals, *upper_duals, *fixed_duals, *equality_multipliers,
             *(item["multiplier"] for item in kkt_diagnostics["active_bounds"]),
             kkt_diagnostics["primal_equality_residual"], kkt_diagnostics["stationarity_residual"],
             kkt_diagnostics["dual_sign_violation"], kkt_diagnostics["complementarity_residual"])):

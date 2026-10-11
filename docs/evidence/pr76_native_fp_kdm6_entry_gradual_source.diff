@@ -1,0 +1,89 @@
+--- /var/tmp/pr73_native_first_violation.x3bvfn/build/source/module_mp_kdm6.f90
++++ kdm6_entry_gradual/module_mp_kdm6.f90
+@@ -4,7 +4,20 @@
+ 
+    use module_mp_radar
+    use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
++   use, intrinsic :: iso_c_binding, only : c_int
+    use module_model_constants, only : RE_QC_BG, RE_QI_BG, RE_QS_BG
++   interface
++      function pr75_read_fp_state(thread_id) bind(C, name='pr75_read_fp_state') result(mxcsr)
++        import :: c_int
++        integer(c_int) :: thread_id
++        integer(c_int) :: mxcsr
++      end function pr75_read_fp_state
++   function pr76_apply_gradual(after, thread_id) bind(C, name='pr76_apply_gradual') result(mxcsr)
++     import :: c_int
++     integer(c_int) :: after, thread_id
++     integer(c_int) :: mxcsr
++   end function pr76_apply_gradual
++   end interface
+    integer, parameter, private :: PROGB_ABSENT = 0
+    integer, parameter, private :: PROGB_TRANSIENT = 1
+    integer, parameter, private :: PROGB_PSD_ACTIVE = 2
+@@ -885,10 +898,24 @@
+    real, dimension(kts:kte) :: re_qc, re_qi, re_qs
+    real, dimension(ims:ime,kms:kme) :: dry_density
+    real :: number_value
++   integer(c_int) :: pr75_thread_before, pr75_thread_after
++   integer(c_int) :: pr75_mxcsr_before, pr75_mxcsr_after
++   integer :: pr75_unit, pr75_open_status
++   integer :: pr76_target_unit, pr76_target_status
+    logical :: number_valid
+ 
+    real :: z_sum
+-
++   integer(c_int) :: pr76_mxcsr_before, pr76_mxcsr_after, pr76_thread_id
++   integer :: pr76_unit, pr76_open_status
++
++   pr76_mxcsr_before = pr76_apply_gradual(pr76_mxcsr_after, pr76_thread_id)
++   open(newunit=pr76_unit, file='pr76_thread_entry.raw', status='unknown', &
++        position='append', action='write', iostat=pr76_open_status)
++   if (pr76_open_status == 0) then
++     write(pr76_unit,'(A,2(",",Z8.8),",",I0)') 'KDM6_ENTRY', &
++          pr76_mxcsr_before, pr76_mxcsr_after, pr76_thread_id
++     close(pr76_unit)
++   endif
+    pr67_trace_this_call = .not. pr67_trace_complete
+    if (pr67_trace_this_call) then
+      call kdm6_trace_dump(1,itimestep,ids,ide,jds,jde,kds,kde, &
+@@ -943,7 +970,39 @@
+ #endif
+          nci(i,k,1) = number_value
+ #ifndef TEST_DIRECT_VOLUME
++         pr75_mxcsr_before = pr75_read_fp_state(pr75_thread_before)
+          call specific_number_to_volume(ni(i,k,j), dry_density(i,k), number_value, number_valid)
++         pr75_mxcsr_after = pr75_read_fp_state(pr75_thread_after)
++         if (i == 211 .and. j == 2 .and. k == 15) then
++           open(newunit=pr76_target_unit, file='pr76_target_call.raw', status='unknown', &
++                position='append', action='write', iostat=pr76_target_status)
++           if (pr76_target_status == 0) then
++             write(pr76_target_unit,'(A,3(",",I0),3(",",ES24.16E3),",",L1)') &
++                  'TARGET_CALL', i, j, k, ni(i,k,j), dry_density(i,k), number_value, number_valid
++             write(pr76_target_unit,'(A,4(",",Z8.8))') 'TARGET_BITS', &
++                  pr75_mxcsr_before, pr75_mxcsr_after, transfer(ni(i,k,j),0), &
++                  transfer(dry_density(i,k),0)
++             write(pr76_target_unit,'(A,",",Z8.8)') 'RESULT_BITS', transfer(number_value,0)
++             write(pr76_target_unit,'(A,",",I0,",",I0)') 'THREAD_IDS', &
++                  pr75_thread_before, pr75_thread_after
++             close(pr76_target_unit)
++           endif
++         endif
++         if (.not. number_valid) then
++           open(newunit=pr75_unit, file='pr75_native_fp.raw', status='unknown', &
++                position='append', action='write', iostat=pr75_open_status)
++           if (pr75_open_status == 0) then
++             write(pr75_unit,'(A,",",I0,",",I0,",",I0,",",ES24.16E3,",",ES24.16E3,",",ES24.16E3,",",L1)') &
++                  'NI_ADAPTER_FAILURE', i, j, k, ni(i,k,j), dry_density(i,k), number_value, &
++                  number_valid
++             write(pr75_unit,'(A,6(",",Z8.8))') &
++                  'BITS_AND_STATE', pr75_mxcsr_before, pr75_mxcsr_after, &
++                  transfer(ni(i,k,j),0), transfer(dry_density(i,k),0), &
++                  transfer(number_value,0), pr75_thread_before
++             write(pr75_unit,'(A,",",I0)') 'THREAD_AFTER', pr75_thread_after
++             close(pr75_unit)
++           endif
++         endif
+          if (.not. number_valid) error stop 'KDM6 invalid NI number basis input'
+ #else
+          number_value = ni(i,k,j)

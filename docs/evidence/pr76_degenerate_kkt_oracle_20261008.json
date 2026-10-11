@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "evidence_id": "pr76-degenerate-kkt-independent-oracle-20261008",
+  "date_utc": "2026-10-08",
+  "evidence_class": "MANUFACTURED_ALGORITHM_FIXTURE",
+  "base_commit": "fd7e1be37075a7ba80ee3a0be080111a5be03a26",
+  "solver_source": {
+    "path": "tools/pr73_joint_analysis.py",
+    "sha256": "95ab591455b40c821d978aaa30ea0c392a4ba1d106fd5a0617aee6aa16851eb0"
+  },
+  "oracle_test": {
+    "path": "tests/test_pr76_degenerate_kkt_oracle.py",
+    "sha256": "9c3df77c106a7f879b375a1b8ced9f7d316fbbf9f4163141ff671d9c33986608"
+  },
+  "test_command": "python3 -m unittest tests.test_pr76_degenerate_kkt_oracle -v",
+  "test_result": {
+    "unittest_methods_passed": 3,
+    "unittest_methods_failed": 0,
+    "exact_solver_witness_cases": 162,
+    "feasible_nonoptimal_control_cases": 1,
+    "solver_witness_cases_passed": 162,
+    "solver_witness_cases_failed": 0,
+    "nonoptimal_control_rejected_by_exact_reference": true
+  },
+  "oracle_method": {
+    "arithmetic": "Python fractions.Fraction over exact decimal representations of dyadic fixture values",
+    "reference": "Direct exact evaluation of the declared quadratic objective and primal/KKT witness; does not enumerate solver faces or call its linear algebra",
+    "returned_certificate_check": "Recomputes the objective gradient from the candidate; checks returned normalized equality rows and multipliers, bound multiplier signs, primal feasibility, and normalized stationarity",
+    "strict_convexity": "All witness covariance matrices B and R are diagonal positive definite; the exact KKT witness therefore proves the unique global minimizer"
+  },
+  "case_coverage": {
+    "singleton_equality_and_bound": {
+      "cases": 2,
+      "permutations": ["x,y", "y,x"],
+      "matrices": "B=R=H=I",
+      "observation": [-1, 1],
+      "equality": {"coefficients": [1, 1], "rhs": 0},
+      "bounds": {"x": [0, 1], "y": [0, 1]},
+      "exact_optimum": [0, 0],
+      "exact_objective": "1",
+      "one_valid_certificate": {
+        "equality_multiplier": "1",
+        "lower_bound_multipliers": ["2", "0"]
+      }
+    },
+    "mixed_face_witnesses": {
+      "cases": 160,
+      "construction": "Deterministic dyadic KKT witnesses with known states, equality and bound multipliers; three face patterns vary active lower, upper, fixed and interior coordinates",
+      "face_pattern_counts": {
+        "two_lower_one_fixed_one_upper": 54,
+        "two_upper_one_fixed_one_lower": 53,
+        "one_lower_one_upper_one_fixed_one_interior": 53
+      },
+      "equality_rows": "One equality and an exact redundant duplicate",
+      "variable_orders": "All 24 permutations cycled across the collection",
+      "unit_scales": "Per-coordinate powers of two from 1/8 through 8, cycled deterministically",
+      "gradient_and_multiplier_values": "Deterministic dyadic values; equality and active-bound multipliers include zero and positive values"
+    },
+    "negative_control": {
+      "cases": 1,
+      "point": ["1/2", "0", "1", "1/2"],
+      "status": "Exactly feasible under the duplicate equalities and all bounds, but has nonzero interior stationarity residual and strictly larger exact objective than the certified witness"
+    }
+  },
+  "scope": {
+    "supports": "Independent numerical regression for degenerate equality-plus-bound KKT certification in the manufactured linear H/B/R quadratic estimator",
+    "does_not_establish": [
+      "Cloud-BAL runtime behavior",
+      "physical or scientific validity",
+      "production pipeline candidate eligibility",
+      "native compiler or executable validation"
+    ]
+  }
+}
