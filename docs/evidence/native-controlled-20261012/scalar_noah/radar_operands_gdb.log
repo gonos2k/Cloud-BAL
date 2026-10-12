@@ -1,0 +1,39 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+Catchpoint 1 (exec)
+warning: Probes-based dynamic linker interface failed.
+Reverting to original interface.
+process 3470120 is executing new program: /var/tmp/native-controlled-noah-both-scalar-final/run_gradual/wrf.exe
+
+Catchpoint 1 (exec'd /var/tmp/native-controlled-noah-both-scalar-final/run_gradual/wrf.exe), 0x00007ffff7fe4540 in _start () from /lib64/ld-linux-x86-64.so.2
+Breakpoint 2 at 0x4182a0
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/liblber.so.2
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/libbrotlidec.so.1
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/libbrotlicommon.so.1
+POLICY_AT_WRF_INIT mxcsr=0x1900
+ starting wrf task            0  of            1
+
+Program received signal SIGFPE, Arithmetic exception.
+0x0000000002696763 in module_mp_radar_mp_radar_init_ ()
+TRAP_STATE mxcsr=0x1936
+rip            0x2696763           0x2696763 <module_mp_radar_mp_radar_init_+3747>
+rax            0x7b6c840           129419328
+xmm0           {v8_bfloat16 = {0x0, 0x3f80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v8_half = {0x0, 0x3f80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v4_float = {0x3f800000, 0x0, 0x0, 0x0}, v2_double = {0x3f800000, 0x0}, v16_int8 = {0x0, 0x0, 0x80, 0x3f, 0x0 <repeats 12 times>}, v8_int16 = {0x0, 0x3f80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v4_int32 = {0x3f800000, 0x0, 0x0, 0x0}, v2_int64 = {0x3f800000, 0x0}, uint128 = 0x3f800000}
+mxcsr          0x1936              [ DE ZE UE PE DM UM PM ]
+0x7b6c840 <module_mp_radar_mp_xam_g_>:	0x00000000
+=> 0x2696763 <module_mp_radar_mp_radar_init_+3747>:	divss  (%rax),%xmm0
+#0  0x0000000002696763 in module_mp_radar_mp_radar_init_ ()
+#1  0x00000000025218d3 in module_mp_kdm6_mp_kdm6init_ ()
+#2  0x0000000002e4714f in module_physics_init_mp_mp_init_ ()
+#3  0x0000000002e2e6df in module_physics_init_mp_phy_init_ ()
+#4  0x00000000022dc252 in start_domain_em_ ()
+#5  0x000000000208db20 in start_domain_ ()
+#6  0x0000000001389e2a in med_initialdata_input_ ()
+#7  0x00000000004186d4 in module_wrf_top_mp_wrf_init_ ()
+#8  0x0000000000417df8 in MAIN__ ()

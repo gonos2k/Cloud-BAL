@@ -20,6 +20,8 @@ MODULE cloud_bal_balance_operator
   INTEGER, PARAMETER, PUBLIC :: TARGET_AUTHORITY_MODEL_DYNAMICS = 2
   INTEGER, PARAMETER, PUBLIC :: BOUNDARY_INCREMENT_BASELINE_FIXED = 0
   INTEGER, PARAMETER, PUBLIC :: BOUNDARY_INCREMENT_HOMOGENEOUS_MODEL = 1
+  INTEGER, PARAMETER, PUBLIC :: DIAGNOSTIC_REASON_ALLOCATION = 11
+  INTEGER, PARAMETER, PUBLIC :: DIAGNOSTIC_REASON_INCOMPATIBLE_BOUNDARY = 12
 
   TYPE, PUBLIC :: balance_operator_config
     INTEGER :: target_authority = TARGET_AUTHORITY_OBSERVATIONAL
@@ -95,6 +97,7 @@ MODULE cloud_bal_balance_operator
   PUBLIC :: balance_beta_active
   PUBLIC :: state_continuity_residual
   PUBLIC :: state_dry_air_mass_flux_divergence
+  PUBLIC :: diagnose_stationary_omega
   PUBLIC :: target_response_failure_fraction
   PUBLIC :: geostrophic_residual
   PUBLIC :: assess_pressure_geostrophic_change
@@ -1641,6 +1644,184 @@ CONTAINS
       divergence=0.0_real64; status=STATUS_FAILED
     END IF
   END SUBROUTINE state_dry_air_mass_flux_divergence
+
+  SUBROUTINE diagnose_stationary_omega(state,control_mask,candidate,maximum_residual, &
+      maximum_boundary_mismatch,status,reason)
+    ! Diagnose center omega from the maintained finite-volume dry-air flux
+    ! equation, under the explicit stationary-tendency assumption. The input
+    ! top/bottom omega boundaries are fixed. Incompatible column fluxes fail;
+    ! no column mean or boundary flux is altered to force closure.
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    LOGICAL, INTENT(IN) :: control_mask(:,:,:)
+    TYPE(cloud_bal_state_type), INTENT(OUT) :: candidate
+    REAL(real64), INTENT(OUT) :: maximum_residual,maximum_boundary_mismatch
+    INTEGER, INTENT(OUT) :: status,reason
+    TYPE(balance_operator_type) :: op
+    TYPE(cloud_bal_state_type) :: zero_omega,proposed
+    REAL(real64), ALLOCATABLE :: fraction(:,:,:),residual(:,:,:),divergence(:,:,:)
+    REAL(real64), ALLOCATABLE :: intercept(:),slope(:),weight(:),background(:)
+    INTEGER :: nx,ny,nz,i,j,k,kfirst,klast,local_status,local_reason,n,alloc_status
+    REAL(real64) :: column_sum,absolute_sum,max_absolute_sum,max_face_flux
+    REAL(real64) :: tolerance,face_flux,left_coef,right_coef
+    REAL(real64) :: numerator,denominator,initial_value,final_residual,omega_value
+
+    candidate=state; maximum_residual=0.0_real64; maximum_boundary_mismatch=0.0_real64
+    max_absolute_sum=0.0_real64; max_face_flux=0.0_real64
+    status=STATUS_FAILED; reason=REASON_AUTHORITY
+    nx=state%grid%nx; ny=state%grid%ny; nz=state%grid%nz
+    IF (nx<1 .OR. ny<1 .OR. nz<2) RETURN
+    IF (ANY(SHAPE(control_mask)/=(/nx,ny,nz/))) THEN
+      reason=REASON_SHAPE; RETURN
+    END IF
+    IF (.NOT.ANY(control_mask)) THEN
+      reason=REASON_REQUIRED_COVERAGE; RETURN
+    END IF
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,local_status,local_reason,.FALSE.)
+    IF (local_status/=STATUS_OK) THEN
+      reason=local_reason; RETURN
+    END IF
+    CALL build_diagnostic_balance_operator(state,op,local_status,local_reason)
+    IF (local_status/=STATUS_OK) THEN
+      reason=local_reason; RETURN
+    END IF
+    IF (ANY(control_mask .AND. .NOT.op%cell_usable)) THEN
+      reason=REASON_REQUIRED_COVERAGE; RETURN
+    END IF
+    ALLOCATE(fraction(nx,ny,nz),residual(nx,ny,nz),divergence(nx,ny,nz), &
+      intercept(nz),slope(nz),weight(nz),background(nz),STAT=alloc_status)
+    IF (alloc_status/=0) THEN
+      reason=DIAGNOSTIC_REASON_ALLOCATION; RETURN
+    END IF
+    fraction=0.0_real64
+    WHERE(state%above_ground)
+      fraction=state%grid%dry_air_mass_measure/state%grid%pressure_mass_measure
+    END WHERE
+    proposed=state
+    zero_omega=state
+    zero_omega%omega%value=0.0_real32
+    CALL state_continuity_residual(op,zero_omega,residual,local_status,fraction,control_mask)
+    IF (local_status/=STATUS_OK) THEN
+      reason=REASON_REQUIRED_COVERAGE; RETURN
+    END IF
+
+    DO j=1,ny; DO i=1,nx
+      IF (.NOT.ANY(control_mask(i,j,:))) CYCLE
+      IF (.NOT.state%omega_bottom_boundary%valid(i,j) .OR. &
+          .NOT.state%omega_top_boundary%valid(i,j)) THEN
+        reason=REASON_REQUIRED_COVERAGE; RETURN
+      END IF
+      kfirst=0; klast=0
+      DO k=1,nz
+        IF (.NOT.op%cell_usable(i,j,k)) CYCLE
+        IF (kfirst==0) kfirst=k
+        klast=k
+      END DO
+      IF (kfirst==0 .OR. ANY(.NOT.op%cell_usable(i,j,kfirst:klast))) THEN
+        reason=REASON_REQUIRED_COVERAGE; RETURN
+      END IF
+      IF (ANY(.NOT.control_mask(i,j,kfirst:klast))) THEN
+        reason=REASON_REQUIRED_COVERAGE; RETURN
+      END IF
+      IF (COUNT(control_mask(i,j,:))/=klast-kfirst+1) THEN
+        reason=REASON_REQUIRED_COVERAGE; RETURN
+      END IF
+      n=klast-kfirst+1
+
+      ! The residual with omega zero contains horizontal carrier flux and the
+      ! declared fixed vertical boundary fluxes. Its column sum is the exact
+      ! compatibility condition for stationary continuity.
+      column_sum=SUM(residual(i,j,kfirst:klast)*op%volume(i,j,kfirst:klast))
+      absolute_sum=SUM(ABS(residual(i,j,kfirst:klast)*op%volume(i,j,kfirst:klast)))
+      max_absolute_sum=MAX(max_absolute_sum,absolute_sum)
+      maximum_boundary_mismatch=MAX(maximum_boundary_mismatch,ABS(column_sum))
+      tolerance=128.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64,absolute_sum)
+      IF (ABS(column_sum)>tolerance) THEN
+        reason=DIAGNOSTIC_REASON_INCOMPATIBLE_BOUNDARY; RETURN
+      END IF
+
+      ! Internal upward face fluxes follow directly from finite-volume
+      ! continuity: F(k)=F(k-1)+residual(k)*cell_mass.
+      face_flux=0.0_real64
+      max_face_flux=MAX(max_face_flux,ABS(REAL(state%omega_bottom_boundary%value(i,j),real64)* &
+        op%dx(i,j)*op%dy(i,j)/GRAVITY*fraction(i,j,kfirst)))
+      max_face_flux=MAX(max_face_flux,ABS(REAL(state%omega_top_boundary%value(i,j),real64)* &
+        op%dx(i,j)*op%dy(i,j)/GRAVITY*fraction(i,j,klast)))
+      intercept=0.0_real64; slope=0.0_real64
+      intercept(kfirst)=0.0_real64; slope(kfirst)=1.0_real64
+      DO k=kfirst,klast-1
+        face_flux=face_flux+residual(i,j,k)*op%volume(i,j,k)
+        max_face_flux=MAX(max_face_flux,ABS(face_flux))
+        left_coef=op%pface_area(i,j,k)*op%pleft_weight(i,j,k)*fraction(i,j,k)
+        right_coef=op%pface_area(i,j,k)*op%pright_weight(i,j,k)*fraction(i,j,k+1)
+        IF (left_coef<=0.0_real64 .OR. right_coef<=0.0_real64) THEN
+          reason=REASON_RANGE; RETURN
+        END IF
+        slope(k+1)=-left_coef*slope(k)/right_coef
+        intercept(k+1)=(face_flux/op%pface_area(i,j,k)- &
+          op%pleft_weight(i,j,k)*fraction(i,j,k)*intercept(k))/ &
+          (op%pright_weight(i,j,k)*fraction(i,j,k+1))
+      END DO
+
+      ! One center value is free because only n-1 interior face fluxes are
+      ! constrained. Choose the mass-weighted least-change value from the
+      ! supplied background omega, then retain that diagnosed spatial profile.
+      numerator=0.0_real64; denominator=0.0_real64
+      DO k=kfirst,klast
+        weight(k)=op%volume(i,j,k)*fraction(i,j,k)
+        background(k)=REAL(state%omega%value(i,j,k),real64)
+        numerator=numerator+weight(k)*slope(k)*(background(k)-intercept(k))
+        denominator=denominator+weight(k)*slope(k)*slope(k)
+      END DO
+      IF (.NOT.ieee_is_finite(denominator) .OR. denominator<=TINY(1.0_real64)) THEN
+        reason=REASON_RANGE; RETURN
+      END IF
+      initial_value=numerator/denominator
+      DO k=kfirst,klast
+        omega_value=intercept(k)+slope(k)*initial_value
+        IF (.NOT.ieee_is_finite(omega_value) .OR. ABS(omega_value)>REAL(HUGE(0.0_real32),real64)) THEN
+          reason=REASON_NONFINITE; RETURN
+        END IF
+        proposed%omega%value(i,j,k)=REAL(omega_value,real32)
+        IF (.NOT.ieee_is_finite(proposed%omega%value(i,j,k))) THEN
+          reason=REASON_NONFINITE; RETURN
+        END IF
+        proposed%omega%source(i,j,k)=IOR(state%omega%source(i,j,k),SOURCE_COLUMN_PHYSICS)
+      END DO
+    END DO; END DO
+
+    CALL validate_canonical_state(proposed,.FALSE.,.FALSE.,local_status,local_reason,.FALSE.)
+    IF (local_status/=STATUS_OK) THEN
+      candidate=state; reason=local_reason; RETURN
+    END IF
+    CALL state_dry_air_mass_flux_divergence(op,proposed,divergence,local_status)
+    IF (local_status/=STATUS_OK) THEN
+      candidate=state; reason=REASON_REQUIRED_COVERAGE; RETURN
+    END IF
+    final_residual=MAXVAL(ABS(PACK(divergence,control_mask)))
+    maximum_residual=final_residual
+    ! Include both center contributions at each internal face. They may be
+    ! individually large while nearly cancelling in the net face flux, so the
+    ! stored-float residual bound must reflect their representation error too.
+    DO j=1,ny; DO i=1,nx
+      IF (.NOT.ANY(control_mask(i,j,:))) CYCLE
+      DO k=1,nz-1
+        IF (.NOT.control_mask(i,j,k) .OR. .NOT.control_mask(i,j,k+1)) CYCLE
+        left_coef=op%pface_area(i,j,k)*op%pleft_weight(i,j,k)*fraction(i,j,k)
+        right_coef=op%pface_area(i,j,k)*op%pright_weight(i,j,k)*fraction(i,j,k+1)
+        max_face_flux=MAX(max_face_flux,ABS(left_coef*REAL(proposed%omega%value(i,j,k),real64))+ &
+          ABS(right_coef*REAL(proposed%omega%value(i,j,k+1),real64)))
+      END DO
+    END DO; END DO
+    ! Float32 output cannot satisfy the real64 equations exactly. Bound the
+    ! reread residual by representational roundoff in the actual vertical-flux scale.
+    tolerance=64.0_real64*REAL(EPSILON(1.0_real32),real64)*MAX(1.0_real64, &
+      MAX(max_face_flux,max_absolute_sum))
+    IF (.NOT.ieee_is_finite(final_residual) .OR. final_residual>tolerance) THEN
+      candidate=state; reason=REASON_SOLVER; RETURN
+    END IF
+    candidate=proposed
+    status=STATUS_OK; reason=REASON_NONE
+  END SUBROUTINE diagnose_stationary_omega
 
   SUBROUTINE state_continuity_residual(op,state,residual,status,dry_air_fraction,evaluation_mask)
     TYPE(balance_operator_type), INTENT(IN) :: op

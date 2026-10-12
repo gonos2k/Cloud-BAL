@@ -1,0 +1,60 @@
+{
+  "schema": "native_controlled_process_count_v1",
+  "scope": "2026-10-12 native startup diagnostics in docs/evidence/native-controlled-20261012; excludes older preserved PR61/PR77 runs",
+  "wrf_exec_starts_total": 10,
+  "eligible_paired_comparisons": {
+    "count": 2,
+    "wrf_exec_starts": 4,
+    "pairs": [
+      {
+        "name": "same-executable FTZ/DAZ-only policy contrast",
+        "starts": 2,
+        "processes": [
+          "gradual_policy_gdb.log",
+          "ftz_daz_policy_gdb.log"
+        ]
+      },
+      {
+        "name": "both-Noah-objects strict O0 plus -no-vec diagnostic contrast",
+        "starts": 2,
+        "processes": [
+          "scalar_noah/gradual_gdb.log",
+          "scalar_noah/ftz_daz_gdb.log"
+        ]
+      }
+    ]
+  },
+  "unpaired_wrf_exec_probes": [
+    {
+      "name": "pre-policy Noah trap capture",
+      "starts": 1,
+      "evidence": "prepolicy_gdb5.log"
+    },
+    {
+      "name": "gradual policy-arm replay",
+      "starts": 1,
+      "evidence": "gradual_replay_gdb.log"
+    },
+    {
+      "name": "Noah-driver-only scalar diagnostic",
+      "starts": 1,
+      "evidence_outside_final_receipt": "/var/tmp/native-controlled-noah-scalar-check/run_gradual/gdb.log"
+    },
+    {
+      "name": "initial both-Noah scalar gradual probe",
+      "starts": 1,
+      "evidence_outside_final_receipt": "/var/tmp/native-controlled-noah-both-scalar-check/run_gradual/gdb.log"
+    },
+    {
+      "name": "frozen scalar gradual radar operand replay",
+      "starts": 1,
+      "evidence": "scalar_noah/radar_operands_gdb.log"
+    }
+  ],
+  "wrf_exec_started_before_wrf_init_then_exited": 1,
+  "preinit_evidence": "prepolicy_gdb4_startup_exit.log",
+  "gdb_attempt_logs_without_wrf_exec": 6,
+  "noexec_attempts_counted_as_wrf_starts": false,
+  "time_integration_reached": false,
+  "source_or_physics_changed": false
+}

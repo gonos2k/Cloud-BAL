@@ -129,6 +129,11 @@ boundary are explicitly test-only, and every artifact states science authority
 
 ## Multi-radar balanced initialization planning
 
+The [current execution checklist](docs/FAST_COMPLETION_CHECKLIST_20261012.md)
+puts the CP06-A spatial producer and the controlled native baseline in parallel,
+then tracks joint-state updates, delivery, and the same candidate's time response.
+It preserves the existing physical and promotion gates.
+
 The added CP02 work diagnoses localized vertical motion before time integration,
 using the existing radar-informed horizontal analysis and hydrometeors.
 The [plan](docs/CP02_MULTI_RADAR_BALANCED_INITIALIZATION_PLAN_20260914.md),

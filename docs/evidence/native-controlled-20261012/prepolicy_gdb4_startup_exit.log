@@ -1,0 +1,82 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+Catchpoint 1 (exec)
+warning: Probes-based dynamic linker interface failed.
+Reverting to original interface.
+process 3446706 is executing new program: /var/tmp/native-controlled-diagnostic/wrf.exe
+
+Catchpoint 1 (exec'd /var/tmp/native-controlled-diagnostic/wrf.exe), 0x000015555553b540 in _start () from /lib64/ld-linux-x86-64.so.2
+Symbols from "/var/tmp/native-controlled-diagnostic/wrf.exe".
+Native process:
+	Using the running image of child process 3446706.
+	While running this, GDB does not access memory from...
+Local exec file:
+	`/var/tmp/native-controlled-diagnostic/wrf.exe', file type elf64-x86-64.
+	Entry point: 0x417c30
+	0x0000000000400350 - 0x000000000040036c is .interp
+	0x0000000000400370 - 0x0000000000400390 is .note.gnu.property
+	0x0000000000400390 - 0x00000000004003b4 is .note.gnu.build-id
+	0x00000000004003b4 - 0x00000000004003d4 is .note.ABI-tag
+	0x00000000004003d8 - 0x0000000000402738 is .hash
+	0x0000000000402738 - 0x0000000000404188 is .gnu.hash
+	0x0000000000404188 - 0x000000000040b4f0 is .dynsym
+	0x000000000040b4f0 - 0x000000000041172e is .dynstr
+	0x000000000041172e - 0x00000000004120cc is .gnu.version
+	0x00000000004120d0 - 0x00000000004121c0 is .gnu.version_r
+	0x00000000004121c0 - 0x0000000000412310 is .rela.dyn
+	0x0000000000412310 - 0x00000000004142f0 is .rela.plt
+	0x0000000000415000 - 0x000000000041501b is .init
+	0x0000000000415020 - 0x0000000000416570 is .plt
+	0x0000000000416570 - 0x00000000004165a0 is .plt.got
+	0x00000000004165a0 - 0x0000000003ac788d is .text
+	0x0000000003ac7890 - 0x0000000003ac789d is .fini
+	0x0000000003ac8000 - 0x0000000003d03ee0 is .rodata
+	0x0000000003d03ee0 - 0x0000000003d104ed is .trace
+	0x0000000003d104f0 - 0x0000000003d4a9fc is .eh_frame_hdr
+	0x0000000003d4aa00 - 0x0000000003eae060 is .eh_frame
+	0x0000000003eaf048 - 0x0000000003eaf04c is .tbss
+	0x0000000003eaf048 - 0x0000000003eaf058 is .init_array
+	0x0000000003eaf058 - 0x0000000003eaf060 is .fini_array
+	0x0000000003eaf060 - 0x0000000003eaf820 is .data.rel.ro
+	0x0000000003eaf820 - 0x0000000003eafa90 is .dynamic
+	0x0000000003eafa90 - 0x0000000003eaffe8 is .got
+	0x0000000003eaffe8 - 0x0000000003eb0aa0 is .got.plt
+	0x0000000003eb0ac0 - 0x0000000003fcf048 is .data
+	0x0000000003fcf080 - 0x0000000031c73ab8 is .bss
+	0x000015555551c2a8 - 0x000015555551c2c8 is .note.gnu.property in /lib64/ld-linux-x86-64.so.2
+	0x000015555551c2c8 - 0x000015555551c2ec is .note.gnu.build-id in /lib64/ld-linux-x86-64.so.2
+	0x000015555551c2f0 - 0x000015555551c42c is .hash in /lib64/ld-linux-x86-64.so.2
+	0x000015555551c430 - 0x000015555551c590 is .gnu.hash in /lib64/ld-linux-x86-64.so.2
+	0x000015555551c590 - 0x000015555551c950 is .dynsym in /lib64/ld-linux-x86-64.so.2
+	0x000015555551c950 - 0x000015555551cc1a is .dynstr in /lib64/ld-linux-x86-64.so.2
+	0x000015555551cc1a - 0x000015555551cc6a is .gnu.version in /lib64/ld-linux-x86-64.so.2
+	0x000015555551cc70 - 0x000015555551cd5c is .gnu.version_d in /lib64/ld-linux-x86-64.so.2
+	0x000015555551cd60 - 0x000015555551cda8 is .rela.dyn in /lib64/ld-linux-x86-64.so.2
+	0x000015555551cda8 - 0x000015555551cdc0 is .relr.dyn in /lib64/ld-linux-x86-64.so.2
+	0x000015555551d000 - 0x0000155555547195 is .text in /lib64/ld-linux-x86-64.so.2
+	0x0000155555548000 - 0x000015555554e4b0 is .rodata in /lib64/ld-linux-x86-64.so.2
+	0x000015555554e4b0 - 0x000015555554e4b1 is .stapsdt.base in /lib64/ld-linux-x86-64.so.2
+	0x000015555554e4b4 - 0x000015555554edf0 is .eh_frame_hdr in /lib64/ld-linux-x86-64.so.2
+	0x000015555554edf0 - 0x00001555555518dc is .eh_frame in /lib64/ld-linux-x86-64.so.2
+	0x0000155555552360 - 0x0000155555553e58 is .data.rel.ro in /lib64/ld-linux-x86-64.so.2
+	0x0000155555553e58 - 0x0000155555553fd8 is .dynamic in /lib64/ld-linux-x86-64.so.2
+	0x0000155555553fd8 - 0x0000155555554000 is .got in /lib64/ld-linux-x86-64.so.2
+	0x0000155555554000 - 0x0000155555555104 is .data in /lib64/ld-linux-x86-64.so.2
+	0x0000155555555110 - 0x00001555555552d8 is .bss in /lib64/ld-linux-x86-64.so.2
+Breakpoint 2 at 0x417dc3
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/liblber.so.2
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/libbrotlidec.so.1
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/libbrotlicommon.so.1
+
+Breakpoint 2, 0x0000000000417dc3 in MAIN__ ()
+mxcsr          0x1900              [ DM UM PM ]
+ starting wrf task            0  of            1
+[Inferior 1 (process 3446706) exited with code 035]
+/var/tmp/native-controlled-gdb4.gdb:11: Error in sourced command file:
+The program has no registers now.
