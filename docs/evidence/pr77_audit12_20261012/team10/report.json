@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "team": "team10_publication",
+  "root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL",
+  "base_commit": "9701ef23f04576d875508a0882d0e0af67282587",
+  "scope": [
+    "cloud_bal_stage_coordinator",
+    "transaction publication and recovery",
+    "detached runtime and Landlock",
+    "producer source/input/link manifests",
+    "compiler audit",
+    "E01/E06 gates",
+    "source/executable/output binding"
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "priority": "P1",
+      "classification": "reproducible_defect",
+      "file": "tools/e01_completion_gate.py",
+      "line": 97,
+      "title": "Symlinked directories evade the E01 fresh-output inventory",
+      "scenario": "A generated namespace directory such as runroot/lapsprd/lco is a symlink to a directory containing a stale product. pathlib rglob does not recurse through the symlink, and inventory skips the directory because is_file() is false.",
+      "consequence": "assert_fresh_generated_namespace accepts a runroot with preexisting generated output; a producer following that directory can access or write outside the intended runroot.",
+      "probe": "Reproduced under /var/tmp/cloud_bal_audit12_e01.7nO7e1: inventory returned {}, and the freshness gate accepted the stale lco hidden under a symlinked directory.",
+      "existing_test": "tests/test_e01_completion_gate.py:126-134 tests only a regular stale product; no symlink-directory test.",
+      "next_check": "Reject symlink directories in a no-follow walk and add a test for a nested stale product behind lapsprd/lco symlink.",
+      "coverage": "Targeted E01 tests passed; additional safe failure probe reproduced bypass."
+    },
+    {
+      "id": "F2",
+      "priority": "P1",
+      "classification": "unimplemented_integration_closure",
+      "file": "tools/e01_completion_gate.py",
+      "line": 170,
+      "title": "E01 executable hash check returns no launch-bound object",
+      "scenario": "bind_producer_executable hashes a pathname and returns the digest. A later path-based exec can run replacement bytes after the check. Repository search found no E01 orchestration caller that binds the checked object through exec.",
+      "consequence": "The helper proves a file was present with expected bytes at check time but does not yet prove the stage executed those bytes.",
+      "existing_test": "tests/test_e01_completion_gate.py:136-150 covers missing and mismatched producer paths, not path replacement before exec.",
+      "next_check": "Integrate E01 launch with sealed memfd binding and a launch receipt tied to the actual stage, or retain E01 as NOT_RUN until orchestration exists.",
+      "coverage": "Static review and repository caller search only; no production E01 launch was run."
+    }
+  ],
+  "transaction_review": {
+    "status": "no_defect_found_in_reviewed_scope",
+    "existing_tests": "Targeted coordinator and transaction recovery tests passed (47 tests total with E01).",
+    "risk_limit": "No broad native rerun or real publication; local syscall tests do not establish filesystem crash/power-loss guarantees."
+  },
+  "compiler_audit": {
+    "status": "static_and_fixture_review_only",
+    "tests": "tests/test_intel_integration_audit.py: 22 passed",
+    "actual_pinned_intel_audit_run": false,
+    "actual_compile_run": false
+  },
+  "graphify": {
+    "queried_existing_graph": true,
+    "graph_nodes": 1499,
+    "refreshed": false,
+    "reason": "Read-only audit scope",
+    "freshness_limit": "Existing manifest is stale relative to the PR77 working tree and lacks manifest entries for stage coordinator, detached runtime/Landlock, E01 gate, and stage-off validator; graph used for navigation only."
+  },
+  "exclusions": [
+    "No source/model/evidence edits",
+    "No publication or external messaging",
+    "No Cloud-BAL native rerun",
+    "No compiler invocation or pinned Intel build",
+    "No live operational-tree compiler audit"
+  ]
+}

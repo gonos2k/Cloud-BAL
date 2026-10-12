@@ -1,0 +1,79 @@
+ INCREMENT face maxima U/V/omega and wind bound    8.00000000000000     
+   8.00000000000000        4.00000000000000        11.3137084989848     
+ QBAL wind increment bound rejected    11.31371    
+ QBAL wind increment bound rejected    10.00001    
+ INCREMENT face maxima U/V/omega and wind bound    10.0000095367432     
+  0.000000000000000E+000  0.000000000000000E+000   10.0000095367432     
+ QBAL wind increment bound rejected    10.00001    
+ INCREMENT face maxima U/V/omega and wind bound    10.0000000000000     
+  1.000000047497451E-003   5.00000010000000        10.0000000500000     
+ INCREMENT face maxima U/V/omega and wind bound   0.000000000000000E+000
+  0.000000000000000E+000   5.09999990463257       0.000000000000000E+000
+ QBAL omega increment rejected    5.100000    
+ INCREMENT face maxima U/V/omega and wind bound    12.0000000000000     
+   12.0000000000000       0.000000000000000E+000   16.9705627484771     
+ QBAL wind increment bound rejected    16.97056    
+ INCREMENT face maxima U/V/omega and wind bound    12.0000000000000     
+  0.000000000000000E+000  0.000000000000000E+000   12.0000000000000     
+ QBAL wind increment bound rejected    12.00000    
+ QBAL omega increment rejected    5.100000    
+ QBAL forced continuity reduction rejected   1.1000000E-04  1.9000001E-04
+ QBAL background continuity gate rejected   1.9999999E-05  2.9999999E-05
+ QBAL geostrophic residual rejected   1.2000000E-02
+ QBAL acceptance has non-finite/invalid input
+ QBAL acceptance tests passed
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(3): warning #5194: Source line truncated.
+c Measure every stored face, independent of the pressure-row support mask.
+------------------------------------------------------------------------^
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(28): warning #5194: Source line truncated.
+c Unchanged terrain sentinels contribute zero; validity transitions fail.
+------------------------------------------------------------------------^
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(1): warning #7373: Fixed form source is an obsolescent feature in Fortran 2008.
+      subroutine qbal_increment_maxima(u0,v0,om0,u1,v1,om1,
+^
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(10): warning #6916: Fortran 2008 does not allow this length specification.   [4]
+      real*4 u0(nx,ny,nz),v0(nx,ny,nz),om0(nx,ny,nz)
+-----------^
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(13): warning #6916: Fortran 2008 does not allow this length specification.   [8]
+      real*8 maxu,maxv,maxom,windbound
+-----------^
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(68): warning #6916: Fortran 2008 does not allow this length specification.   [4]
+      real*4 maxwind,maxomega,cont_background,cont_max_background
+-----------^
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(71): warning #6916: Fortran 2008 does not allow this length specification.   [4]
+      real*4 forced_rms_limit,forced_max_limit
+-----------^
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(73): warning #6916: Fortran 2008 does not allow this length specification.   [4]
+      real*4 wind_increment_limit,omega_increment_limit
+-----------^
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(152): warning #6916: Fortran 2008 does not allow this length specification.   [4]
+      real*4 omega(nx,ny,nz)
+-----------^
+/var/tmp/qbal_gate.ttLXNh/qbal_acceptance.f(176): warning #6916: Fortran 2008 does not allow this length specification.   [4]
+      real*4 ps(nx,ny),p(nz)
+-----------^
+ INCREMENT face maxima U/V/omega and wind bound    8.00000000000000     
+   8.00000000000000        4.00000000000000        11.3137084989848     
+ QBAL wind increment bound rejected    11.31371    
+ QBAL wind increment bound rejected    10.00001    
+ INCREMENT face maxima U/V/omega and wind bound    10.0000095367432     
+  0.000000000000000E+000  0.000000000000000E+000   10.0000095367432     
+ QBAL wind increment bound rejected    10.00001    
+ INCREMENT face maxima U/V/omega and wind bound    10.0000000000000     
+  1.000000047497451E-003   5.00000010000000        10.0000000500000     
+ INCREMENT face maxima U/V/omega and wind bound   0.000000000000000E+000
+  0.000000000000000E+000   5.09999990463257       0.000000000000000E+000
+ QBAL omega increment rejected    5.100000    
+ INCREMENT face maxima U/V/omega and wind bound    12.0000000000000     
+   12.0000000000000       0.000000000000000E+000   16.9705627484771     
+ QBAL wind increment bound rejected    16.97056    
+ INCREMENT face maxima U/V/omega and wind bound    12.0000000000000     
+  0.000000000000000E+000  0.000000000000000E+000   12.0000000000000     
+ QBAL wind increment bound rejected    12.00000    
+ QBAL omega increment rejected    5.100000    
+ QBAL forced continuity reduction rejected   1.1000000E-04  1.9000001E-04
+ QBAL background continuity gate rejected   1.9999999E-05  2.9999999E-05
+ QBAL geostrophic residual rejected   1.2000000E-02
+ QBAL acceptance has non-finite/invalid input
+ QBAL acceptance tests passed
+QBAL single-path, background-omega, common-gate and rollback checks passed

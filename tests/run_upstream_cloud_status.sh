@@ -5,7 +5,7 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(cd "$repo_root/.." && pwd)
+workspace_root=$(realpath -e "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
 main_source="$repo_root/src/upstream/laps_cloud.f"
 sub_source="$repo_root/src/upstream/laps_cloud_sub.f"
 stub_source="$repo_root/tests/test_upstream_cloud_status.f"
@@ -20,7 +20,7 @@ include_root="$workspace_root/klaps-v5.0_/src/include"
 
 . "$repo_root/tests/intel_toolchain.sh"
 
-scratch_root="$repo_root/scratch"
+scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
 mkdir -p "$scratch_root"
 test_tmp=$(mktemp -d "$scratch_root/upstream_cloud_status.XXXXXX")
 if [[ ${CLOUD_BAL_KEEP_TEST_OUTPUT:-0} == 1 ]]; then

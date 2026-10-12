@@ -1,0 +1,119 @@
+{
+  "schema": "cloud_bal_native_fp_audit_v1",
+  "team": "Team04/12",
+  "date": "2026-10-12",
+  "target": "scratch/pr77_native_state_20261012/Cloud-BAL",
+  "source_base": "9701ef23f04576d875508a0882d0e0af67282587",
+  "read_only": true,
+  "native_or_broad_rerun_performed": false,
+  "overall": "No C helper, Intel pin, archive-member selection, or error-capture defect found. Already-clear startup bits are expected idempotent behavior; the run has no direct startup bit-toggle evidence and fails before KDM6. Later/external thread FP policy and portable native build closure remain open; scientific acceptance remains open.",
+  "findings": [
+    {
+      "id": "E1",
+      "priority": "P1 interpretation/evidence limit",
+      "category": [
+        "missing evidence"
+      ],
+      "title": "Startup rows show an idempotent no-op; no call-bound result",
+      "source": [
+        {
+          "file": "tests/pr77_native_state_run.py",
+          "lines": "24-26"
+        },
+        {
+          "file": "tests/pr76_native_fp_run.py",
+          "lines": "118-132, 290-297"
+        }
+      ],
+      "assessment": "The checker correctly validates the desired postcondition and preserves every non-FTZ/DAZ bit. Already-clear input is a valid idempotent case and is expected under the compiled -no-ftz profile; this is not a checker defect.",
+      "evidence": {
+        "receipt": "docs/evidence/pr77_native_state_20261012.json",
+        "startup_trace_sha256": "5a452aa8a4abc12e363fe89be625471c73ebde5915f589c2700a865c23abcb2b",
+        "main_mxcsr": "0x00001920",
+        "worker_mxcsr": "0x00001900",
+        "rows": 69,
+        "unique_workers": 68,
+        "all_rows_before_equals_after": true,
+        "all_rows_ftz_daz_before": "clear",
+        "control_helper": "0x0000DFFF -> 0x00005FBF",
+        "kdm6_entry_arm": "0x00009FFD -> 0x00001FBD",
+        "startup_exit_status": -6,
+        "startup_failure": "forrtl: error (65): floating invalid",
+        "startup_failure_source": "rsl.error.0000",
+        "startup_pretrace_matches": false,
+        "startup_driver_capture_matches": false
+      },
+      "next_check": "Keep the result scoped to observed initial state and pre-KDM6 initialization failure. If startup policy at KDM6 matters, collect call-bound artifacts under a matched main build/profile."
+    },
+    {
+      "id": "P1",
+      "priority": "P2 follow-up",
+      "category": [
+        "open policy"
+      ],
+      "title": "Later and external thread FP state remains unassessed",
+      "source": [
+        {
+          "file": "tests/pr77_native_state_run.py",
+          "lines": "133-141"
+        }
+      ],
+      "assessment": "Initial main and OpenMP team observation does not establish state of later thread pools or external libraries.",
+      "next_check": "If required as runtime policy, observe relevant later thread-pool creation and KDM6 call state; define where policy must be reapplied."
+    },
+    {
+      "id": "P2",
+      "priority": "P2 reproducibility",
+      "category": [
+        "missing portable build closure"
+      ],
+      "title": "Native build depends on ephemeral external /var/tmp inputs",
+      "source": [
+        {
+          "file": "tests/pr77_native_state_run.py",
+          "lines": "71-83"
+        }
+      ],
+      "assessment": "Hashes bind the captured run, but clean-host replay needs external PR73/PR74 source and build artifacts at retained temporary paths; full inherited archive and executable are not copied to the repository evidence tree.",
+      "next_check": "For portable replay, retain or formally provision the pinned inputs and complete native build closure."
+    }
+  ],
+  "verified": [
+    "Pinned Intel profile checks environment/compiler/runtime hashes and versions.",
+    "Copied .f90 sources explicitly receive -fpp; synchronized observers receive -qopenmp.",
+    "Archive is copied, replacement members are unique and byte-equal to compiled objects, inherited link argv selects the copied archive.",
+    "Signal exit status and forrtl failures are captured from RSL and combined run logs.",
+    "KDM6-entry arm input, pretrace, and driver capture hashes bind to the pinned PR74 evidence.",
+    "Already-clear startup rows are valid idempotent policy observations, not a defect."
+  ],
+  "reproducibility_limit": "Receipt references ephemeral /var/tmp PR73/PR74 inputs; complete inherited archive and executable are not retained in the source evidence tree.",
+  "graphify": {
+    "maintained_graph": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json",
+    "report_date": "2026-10-08",
+    "nodes": 8542,
+    "edges": 15847,
+    "selected_overlay": "2f27b3fc680f5fad14b2efa2879ab5fddd5325f4",
+    "overlay_base": "fd7e1be37075a7ba80ee3a0be080111a5be03a26",
+    "target_PR77_included": false,
+    "extraction_limits": [
+      "Persistent graph combines earlier snapshots and selected overlays, not full candidate extraction.",
+      "Cross-file Fortran CALL extraction is partial.",
+      "External WRF source trees were excluded."
+    ],
+    "assessment": "Graph query surfaced PR75/76 runners, helper, Intel profile, and closure evidence. Source proof for PR77 came from manual source and receipt inspection. Graph freshness is navigation evidence, not runtime/scientific validation; no refresh in read-only audit."
+  },
+  "coverage": [
+    "PR75/76/77 native runners and source transforms",
+    "C MXCSR helper and isolated control source",
+    "Pinned Intel toolchain profile",
+    "Archive member replacement and inherited link selection",
+    "Preprocessing and OpenMP startup instrumentation",
+    "Error capture, receipt, and retained native output artifacts"
+  ],
+  "excluded": [
+    "Scientific acceptance and model-state correctness beyond the captured validators",
+    "Whole-host FP behavior after startup and external library/thread pools",
+    "Independent native rerun and broad regression suite"
+  ],
+  "next_priority": "Clarify and encode whether startup receipt shows an actual FTZ/DAZ transition; maintain explicit pre-KDM6 rejection scope."
+}

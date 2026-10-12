@@ -4,8 +4,8 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(cd "$repo_root/.." && pwd)
-scratch_root="$repo_root/scratch"
+workspace_root=$(realpath -e "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
+scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
 mkdir -p "$scratch_root"
 test_tmp=$(mktemp -d "$scratch_root/lapsprep_vapor_tests.XXXXXX")
 if [[ ${CLOUD_BAL_KEEP_TEST_OUTPUT:-0} == 1 ]]; then

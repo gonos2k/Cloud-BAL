@@ -1,0 +1,90 @@
+{
+  "objective": "Durable evidence for the blocked estimator-endpoint pipeline integration",
+  "source_worktree": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL",
+  "source_revision": "9701ef23f04576d875508a0882d0e0af67282587",
+  "final_source_sha256": {
+    "src/common/cloud_bal_pipeline.f90": "93c4e0f4dccddc2e4e1912ac71a890f49bccb57a5e702ea1f9e1b56d7e223e99",
+    "src/common/cloud_bal_real_netcdf.f90": "825939cf0552203cd7f34d6af853faf3a1fe348510d2bb81818898baefbf6a84",
+    "tests/test_real_shadow_io_contract.f90": "5a1435fd06f98ba95f69ba6e979ff55c855b394d3b42d36df21151d4a51b3e2a"
+  },
+  "runs": {
+    "pr73_o0": {
+      "command_argv": [
+        "bash",
+        "tests/run_pr73_joint_analysis.sh"
+      ],
+      "environment": {
+        "PR73_PROFILE": "O0",
+        "CLOUD_BAL_WORKSPACE_ROOT": "default /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50",
+        "CLOUD_BAL_TEST_SCRATCH_ROOT": "default /var/tmp"
+      },
+      "exit_code": 0,
+      "profile": "pinned Intel ifx 2026.0.0, O0 strict profile",
+      "scratch_run_directory": "/var/tmp/cloud_bal_pr73_joint_analysis.oevPdH",
+      "archived_directory": "docs/evidence/pr77_pipeline_20261012/O0",
+      "pipeline_sha256_at_build": "93c4e0f4dccddc2e4e1912ac71a890f49bccb57a5e702ea1f9e1b56d7e223e99"
+    },
+    "pr73_o2": {
+      "command_argv": [
+        "bash",
+        "tests/run_pr73_joint_analysis.sh"
+      ],
+      "environment": {
+        "PR73_PROFILE": "O2",
+        "CLOUD_BAL_WORKSPACE_ROOT": "default /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50",
+        "CLOUD_BAL_TEST_SCRATCH_ROOT": "default /var/tmp"
+      },
+      "exit_code": 0,
+      "profile": "pinned Intel ifx 2026.0.0, O2 strict profile",
+      "scratch_run_directory": "/var/tmp/cloud_bal_pr73_joint_analysis.764F1w",
+      "archived_directory": "docs/evidence/pr77_pipeline_20261012/O2",
+      "pipeline_sha256_at_build": "93c4e0f4dccddc2e4e1912ac71a890f49bccb57a5e702ea1f9e1b56d7e223e99"
+    },
+    "real_shadow_o0_o2": {
+      "command_argv": [
+        "bash",
+        "tests/run_real_shadow_io_contract_tests.sh"
+      ],
+      "environment": {
+        "CLOUD_BAL_WORKSPACE_ROOT": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50",
+        "CLOUD_BAL_TEST_SCRATCH_ROOT": "default /var/tmp",
+        "CLOUD_BAL_KEEP_TEST_ARTIFACTS": "unset; script cleanup removed the scratch directory"
+      },
+      "exit_code": 0,
+      "profile": "pinned Intel ifx 2026.0.0 O0 and O2 builds; pinned NetCDF inputs verified by the script",
+      "scratch_run_directory": "/var/tmp/cloud_bal_real_shadow.Hayf6o",
+      "terminal_result": "Real SHADOW I/O contract suite passed with pinned Intel/NetCDF inputs (20260816T120000Z)",
+      "raw_stdout_retained": false,
+      "stdout_note": "The run returned terminal output through the tool, but no raw stdout log was written or retained; this record preserves only the observed final result."
+    }
+  },
+  "fixture_scope": {
+    "grid": "4x4x3 manufactured estimator endpoint",
+    "result": "The declared component physical feasibility assessment passed and the endpoint reached the canonical writer through run_cloud_bal_pipeline.",
+    "limits": [
+      "Pipeline and producer receipts remain FAILED/REASON_AUTHORITY; operational output remains the background.",
+      "This is component assessment and blocked SHADOW serialization only; it is not estimator production, observation-fit or optimality approval, spatial mass-wind continuity approval, or native acceptance."
+    ],
+    "canonical_readback": {
+      "path": "docs/evidence/pr77_estimator_canonical_20261012.json",
+      "artifact_decision": "UNBOUND",
+      "candidate_decision": "REJECTED",
+      "artifact_sha256": "214ee1797e6573dd50f5dd0ff73107386f7db22b0fef552d915acebf50df4494",
+      "report_sha256": "7f8a0346e9919bda29f9ed04a55b7ee0ebae1fb5381816467f87af7e7b1287dd"
+    }
+  },
+  "archived_files_sha256": {
+    "O0/candidate.log": "794b0fd99fab67d7634ffdc4fd68c414d06a26953582b6caad43642d48605fa1",
+    "O0/readback.log": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e",
+    "O0/solver.json": "294252e8e87fbeaaf3ba70215d52dd8dbd72c8a45115d7e62aa5fbd2d3619cc6",
+    "O0/toolchain.txt": "8d54a8d87204c5592aa4a4cd2f9ad5c0754713cbddef0d4e322dffbe086a5aec",
+    "O0/pr73-estimated-analysis-shadow.nc": "214ee1797e6573dd50f5dd0ff73107386f7db22b0fef552d915acebf50df4494",
+    "O2/candidate.log": "fc9666b996fde12a40b0720cf34fa110848b7e445f2a7f36fd8d64cde376e513",
+    "O2/readback.log": "207fd6f6b72ac26a305801dc86cf6e3f6ed6a1ecf42b113344e06de4f4e18c2e",
+    "O2/solver.json": "294252e8e87fbeaaf3ba70215d52dd8dbd72c8a45115d7e62aa5fbd2d3619cc6",
+    "O2/toolchain.txt": "6344c2cf4aeeaf4d8db68b06b72ebfd17f95547edf0611e973ad2965d1263421",
+    "O2/pr73-estimated-analysis-shadow.nc": "214ee1797e6573dd50f5dd0ff73107386f7db22b0fef552d915acebf50df4494"
+  },
+  "validation_note": "The current O0 PR73 run was repeated after source freeze so its recorded pipeline source hash matches O2 and the final source. The earlier O0 run, whose pipeline hash differed, is not archived here.",
+  "commit_created_at_recording": false
+}

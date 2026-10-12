@@ -1,0 +1,71 @@
+{
+  "team": "01",
+  "scope": "Cloud-BAL canonical pipeline orchestration, OFF/SHADOW authority, estimator inlet, rollback and stage-result coherence",
+  "tree": "scratch/pr77_native_state_20261012/Cloud-BAL",
+  "base_commit": "9701ef2",
+  "read_only": true,
+  "tests_run": [],
+  "graph": {
+    "path": "Cloud-BAL/graphify-out/2026-10-08-pr76-degenerate-kkt/graph.json",
+    "snapshot_utc": "2026-10-08T10:05:56+00:00",
+    "selected_overlay": "2f27b3fc680f5fad14b2efa2879ab5fddd5325f4",
+    "overlay_base": "fd7e1be37075a7ba80ee3a0be080111a5be03a26",
+    "committed_changed_paths": 68,
+    "node_count": 8542,
+    "link_count": 15847,
+    "json_link_key": "links",
+    "json_edges_key_count": 0,
+    "limitation": "Persistent graph combines earlier corpus snapshots and selected overlays, is not a full candidate-tree extraction, and has partial cross-file Fortran CALL extraction. PR77 audited worktree is based on 9701ef2 plus current worktree changes. Graph was used for navigation only; source verified directly."
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "class": "static receipt-coherence issue; not runtime reproduced",
+      "priority": "P2",
+      "location": [
+        "src/common/cloud_bal_pipeline.f90:292-300",
+        "src/common/cloud_bal_pipeline.f90:301-446",
+        "src/common/cloud_bal_pipeline.f90:465-575",
+        "src/common/cloud_bal_pipeline.f90:465-472",
+        "src/common/cloud_bal_pipeline.f90:552-575"
+      ],
+      "triggers": [
+        "Invalid requested mode, physical preflight rejection, malformed/manufactured target or boundary, unresolved model target, invalid optional arguments or ranges before producer dispatch.",
+        "Beta construction failure after column/geopotential stages but before balance operator invocation."
+      ],
+      "source_behavior": "Producer stages are initialized STATUS_OK. Many early exits set top-level and overall failure but leave not-run producer receipts successful. Guards at lines 326-357 also leave overall at its initial FAILED/REASON_AUTHORITY; wrong-shaped omega_target or omega_target_sigma therefore gives top-level FAILED/REASON_SHAPE versus overall FAILED/REASON_AUTHORITY. Beta construction failure at 564-575 resets overall and changed masks but leaves balance STATUS_OK although balance has not run. The same skipped-stage issue occurs after column failure at 465-472 (balance remains STATUS_OK) and geopotential failure at 552-559 (balance remains STATUS_OK).",
+      "consequence": "Consumers may interpret skipped producer work as successful and may see conflicting failure reasons. Inspected rollback retains candidate and operational state at input.",
+      "existing_evidence": "tests/test_real_shadow_io_contract.f90:327-341 tests related writer authority rejection, and 467-474 tests the estimator receipt branch which explicitly marks stages failed; no assertions found for pre-stage or beta-failure receipts.",
+      "next_check": "With pinned Intel profile in a fresh scratch directory, add/run focused malformed target-shape and beta-failure fixtures asserting top-level, overall, producer receipts, and exact candidate/operational rollback. No fixture/test was run in this audit."
+    },
+    {
+      "id": "F2",
+      "class": "explicit capability boundary / missing implementation if in-repo estimator required; scientific evidence gap",
+      "priority": "P1 for any usable estimator-product claim; otherwise informational boundary",
+      "location": [
+        "src/common/cloud_bal_pipeline.f90:40-70",
+        "src/common/cloud_bal_pipeline.f90:265-272",
+        "src/common/cloud_bal_pipeline.f90:686-771",
+        "src/common/cloud_bal_pipeline.f90:82-107"
+      ],
+      "trigger": "No external caller supplies estimator_candidate",
+      "consequence": "pipeline assesses a caller-supplied endpoint only and blocks operational authority; no estimator production, observation-fit or optimality assessment, or independent native/source-boundary conservation proof",
+      "existing_evidence": "tests/test_real_shadow_io_contract.f90:463-474,623-629 uses a fixture endpoint; contract comments expressly leave authority/source-boundary/native conservation unassessed; source call-site search found no production caller passing the optional endpoint",
+      "next_check": "If needed, identify and wire an estimator producer and collect independent observation-fit, optimality, native conservation, and source/boundary evidence; otherwise maintain endpoint-only labeling."
+    }
+  ],
+  "files_covered": [
+    "src/common/cloud_bal_pipeline.f90 (full dispatch, all early returns, estimator evaluator, and result assignment paths)",
+    "src/common/cloud_bal_pressure_analysis.f90 (full named experiment dispatch and wrapper result logic)",
+    "src/common/cloud_bal_state.f90 (stage_result definition, defaults, initializer only)",
+    "src/common/cloud_bal_real_netcdf.f90 (estimator call-site search only; writer body excluded)",
+    "tests/test_real_shadow_io_contract.f90 (related pipeline and writer receipt assertions inspected only)"
+  ],
+  "explicit_exclusions": [
+    "writer implementation/publication internals (team 09)",
+    "physics algorithms",
+    "estimator algorithm design",
+    "full-tree integration and runtime validation",
+    "scientific validation"
+  ]
+}

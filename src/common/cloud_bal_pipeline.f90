@@ -252,7 +252,7 @@ CONTAINS
   SUBROUTINE run_cloud_bal_pipeline(state_in,candidate_out,operational_out, &
                                     result,config,thermo_active,thermo_surface,target_rh, &
                                     geopotential_support,geopotential_reference_level,requested_surface_pressure, &
-                                    pressure_transition_seed,physical_contract)
+                                    pressure_transition_seed,physical_contract,estimator_candidate)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in
     TYPE(cloud_bal_state_type), INTENT(OUT) :: candidate_out,operational_out
     TYPE(cloud_bal_pipeline_result), INTENT(OUT) :: result
@@ -267,6 +267,9 @@ CONTAINS
     REAL(real64), INTENT(IN), OPTIONAL :: requested_surface_pressure(:,:)
     TYPE(cloud_bal_state_type), INTENT(IN), OPTIONAL :: pressure_transition_seed
     TYPE(physical_joint_candidate_contract), INTENT(IN), OPTIONAL :: physical_contract
+    ! External estimator endpoint. This is independently evaluated and remains
+    ! a blocked diagnostic candidate; it is not a pipeline-generated analysis.
+    TYPE(cloud_bal_state_type), INTENT(IN), OPTIONAL :: estimator_candidate
     TYPE(cloud_bal_state_type) :: column_candidate,geopotential_candidate,balance_candidate,evaluation
     TYPE(cloud_bal_state_type) :: transition_prior,transition_candidate
     TYPE(stage_result) :: transition_result
@@ -307,7 +310,8 @@ CONTAINS
       result%status=STATUS_OK; result%reason_code=REASON_NONE
       RETURN
     END IF
-    IF (PRESENT(physical_contract) .AND. .NOT.PRESENT(requested_surface_pressure)) THEN
+    IF (PRESENT(physical_contract) .AND. .NOT.PRESENT(requested_surface_pressure) .AND. &
+        .NOT.PRESENT(estimator_candidate)) THEN
       CALL preflight_physical_mass_contract(state_in,physical_contract,trial_evaluation)
       IF (trial_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED) THEN
         result%candidate_evaluation=trial_evaluation
@@ -362,6 +366,38 @@ CONTAINS
         CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_AUTHORITY)
         RETURN
       END IF
+    END IF
+
+    IF (PRESENT(estimator_candidate)) THEN
+      CALL evaluate_estimator_candidate(state_in,estimator_candidate,operational_out,result,config, &
+        thermo_active,thermo_surface,target_rh,geopotential_support,geopotential_reference_level, &
+        requested_surface_pressure,pressure_transition_seed,physical_contract, &
+        candidate_out,localization_status,validation_reason)
+      result%status=STATUS_FAILED
+      result%reason_code=REASON_AUTHORITY
+      result%column%changed=.FALSE.; result%column%status=STATUS_FAILED
+      result%column%reason_code=REASON_AUTHORITY
+      result%geopotential%changed=.FALSE.; result%geopotential%status=STATUS_FAILED
+      result%geopotential%reason_code=REASON_AUTHORITY
+      result%balance%changed=.FALSE.; result%balance%status=STATUS_FAILED
+      result%balance%reason_code=REASON_AUTHORITY
+      result%overall%changed=.FALSE.; result%overall%status=STATUS_FAILED
+      result%overall%reason_code=REASON_AUTHORITY
+      IF (localization_status/=STATUS_OK) THEN
+        candidate_out=state_in
+        operational_out=state_in
+        result%status=STATUS_FAILED
+        result%reason_code=validation_reason
+        result%candidate_budget=pressure_analysis_budget()
+        IF (.NOT.result%candidate_evaluation%canonical_accounting_assessed) &
+          result%candidate_evaluation=joint_candidate_evaluation()
+        result%overall%reason_code=validation_reason
+        RETURN
+      END IF
+      ! Keep the endpoint ledger while stage receipts explicitly say that the
+      ! regular column and balance producers did not generate this candidate.
+      result%analysis_budget=result%candidate_budget
+      RETURN
     END IF
 
     IF (PRESENT(geopotential_support).NEQV.PRESENT(geopotential_reference_level)) THEN
@@ -647,6 +683,93 @@ CONTAINS
     IF (PRESENT(pressure_transition_seed)) result%pressure_transition_seed=pressure_transition_seed
   END SUBROUTINE run_cloud_bal_pipeline
 
+  SUBROUTINE evaluate_estimator_candidate(background,proposed,operational,result,config, &
+      thermo_active,thermo_surface,target_rh,geopotential_support,geopotential_reference_level, &
+      requested_surface_pressure,pressure_transition_seed,physical_contract,candidate,status,reason)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,proposed
+    TYPE(cloud_bal_state_type), INTENT(OUT) :: operational,candidate
+    TYPE(cloud_bal_state_type) :: metadata_reference
+    TYPE(cloud_bal_pipeline_result), INTENT(INOUT) :: result
+    TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
+    LOGICAL, INTENT(IN), OPTIONAL :: thermo_active(:,:,:),geopotential_support(:,:,:)
+    INTEGER, INTENT(IN), OPTIONAL :: thermo_surface(:,:,:),geopotential_reference_level(:,:)
+    REAL(real64), INTENT(IN), OPTIONAL :: target_rh,requested_surface_pressure(:,:)
+    TYPE(cloud_bal_state_type), INTENT(IN), OPTIONAL :: pressure_transition_seed
+    TYPE(physical_joint_candidate_contract), INTENT(IN), OPTIONAL :: physical_contract
+    INTEGER, INTENT(OUT) :: status,reason
+    TYPE(pressure_analysis_budget) :: endpoint_budget
+    TYPE(joint_candidate_evaluation) :: endpoint_evaluation
+    INTEGER :: state_status,state_reason
+
+    status=STATUS_FAILED
+    reason=REASON_AUTHORITY
+    candidate=background
+    operational=background
+    IF (config%maximum_outer_iterations/=1) RETURN
+    IF (PRESENT(thermo_active) .OR. PRESENT(thermo_surface) .OR. PRESENT(target_rh) .OR. &
+        PRESENT(geopotential_support) .OR. PRESENT(geopotential_reference_level) .OR. &
+        PRESENT(requested_surface_pressure) .OR. PRESENT(pressure_transition_seed)) RETURN
+    IF (.NOT.PRESENT(physical_contract)) RETURN
+    IF (.NOT.ALLOCATED(physical_contract%analysis_increment) .OR. &
+        LEN_TRIM(physical_contract%analysis_increment_identity)==0) RETURN
+    IF (config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS) THEN
+      IF (.NOT.ANY(target_is_resolved(background,TARGET_AUTHORITY_MODEL_DYNAMICS)) .OR. &
+          .NOT.boundary_contract_valid(background)) RETURN
+    END IF
+    CALL validate_canonical_state(background,.FALSE.,.FALSE.,state_status,state_reason,.FALSE.)
+    IF (state_status/=STATUS_OK) THEN
+      reason=state_reason
+      RETURN
+    END IF
+    CALL validate_canonical_state(proposed,.FALSE.,.FALSE.,state_status,state_reason,.FALSE.)
+    IF (state_status/=STATUS_OK) THEN
+      reason=state_reason
+      RETURN
+    END IF
+    IF (state_has_manufactured_source(background) .OR. &
+        state_has_manufactured_source(proposed)) RETURN
+    IF (proposed%grid%nx/=background%grid%nx .OR. proposed%grid%ny/=background%grid%ny .OR. &
+        proposed%grid%nz/=background%grid%nz) THEN
+      reason=REASON_SHAPE
+      RETURN
+    END IF
+    ! Exact identity after restoring estimator-adjustable fields preserves all
+    ! observation, support, boundary, radar, and grid metadata at this boundary.
+    metadata_reference=proposed
+    metadata_reference%temperature=background%temperature
+    metadata_reference%vapor=background%vapor
+    metadata_reference%cloud_water=background%cloud_water
+    metadata_reference%cloud_ice=background%cloud_ice
+    metadata_reference%rain=background%rain
+    metadata_reference%snow=background%snow
+    metadata_reference%graupel=background%graupel
+    metadata_reference%u=background%u
+    metadata_reference%v=background%v
+    metadata_reference%omega=background%omega
+    metadata_reference%geopotential=background%geopotential
+    metadata_reference%grid%dry_air_mass_measure=background%grid%dry_air_mass_measure
+    IF (.NOT.canonical_states_equal(background,metadata_reference)) THEN
+      reason=REASON_METADATA
+      RETURN
+    END IF
+    CALL evaluate_joint_candidate(background,proposed,config%balance,endpoint_budget, &
+      endpoint_evaluation,state_status,state_reason,physical_contract=physical_contract, &
+      estimator_candidate=.TRUE.)
+    IF (state_status/=STATUS_OK) THEN
+      reason=state_reason
+      RETURN
+    END IF
+    result%candidate_budget=endpoint_budget
+    result%candidate_evaluation=endpoint_evaluation
+    IF (endpoint_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS) THEN
+      reason=REASON_GATE
+      RETURN
+    END IF
+    candidate=proposed
+    status=STATUS_OK
+    reason=REASON_NONE
+  END SUBROUTINE evaluate_estimator_candidate
+
   SUBROUTINE canonicalize_contracted_thermo_storage(background,candidate,status,reason)
     TYPE(cloud_bal_state_type), INTENT(IN) :: background
     TYPE(cloud_bal_state_type), INTENT(INOUT) :: candidate
@@ -774,7 +897,7 @@ CONTAINS
   END SUBROUTINE account_candidate_endpoint
 
   SUBROUTINE evaluate_joint_candidate(background,candidate,balance_config,budget,evaluation,status,reason, &
-                                      physical_contract)
+                                      physical_contract,estimator_candidate)
     ! Re-evaluate the existing pressure-grid diagnostics on the same final
     ! candidate used for the endpoint ledger. Missing physical-time sources,
     ! boundary fluxes and independent observation operators remain unassessed.
@@ -784,6 +907,9 @@ CONTAINS
     TYPE(joint_candidate_evaluation), INTENT(OUT) :: evaluation
     INTEGER, INTENT(OUT) :: status,reason
     TYPE(physical_joint_candidate_contract), INTENT(IN), OPTIONAL :: physical_contract
+    ! Enables estimator provenance checks only after the caller has gated that
+    ! endpoint; it never changes physical feasibility or authority receipts.
+    LOGICAL, INTENT(IN), OPTIONAL :: estimator_candidate
     TYPE(balance_operator_type) :: op,diagnostic_op
     REAL(real64), ALLOCATABLE :: continuity(:,:,:)
     LOGICAL, ALLOCATABLE :: changed_domain(:,:,:),requested_domain(:,:,:),domain_union(:,:,:)
@@ -801,7 +927,7 @@ CONTAINS
     CALL account_candidate_endpoint(background,candidate,budget,status,reason)
     IF (status/=STATUS_OK) RETURN
     IF (PRESENT(physical_contract)) &
-      CALL assess_physical_joint_candidate(background,candidate,physical_contract,evaluation)
+      CALL assess_physical_joint_candidate(background,candidate,physical_contract,evaluation,estimator_candidate)
     ALLOCATE(evaluation%diagnostic_changed_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
       evaluation%diagnostic_requested_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
       evaluation%diagnostic_continuity_assessable_mask(candidate%grid%nx,candidate%grid%ny,candidate%grid%nz), &
@@ -952,10 +1078,11 @@ CONTAINS
     END IF
   END SUBROUTINE evaluate_joint_candidate
 
-  SUBROUTINE assess_physical_joint_candidate(background,candidate,contract,evaluation)
+  SUBROUTINE assess_physical_joint_candidate(background,candidate,contract,evaluation,estimator_candidate)
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(physical_joint_candidate_contract), INTENT(IN) :: contract
     TYPE(joint_candidate_evaluation), INTENT(INOUT) :: evaluation
+    LOGICAL, INTENT(IN), OPTIONAL :: estimator_candidate
     REAL(real64) :: analysis,source,boundary,phase,after_term,before_term
     REAL(real64) :: before_mass,after_mass,before_enthalpy,after_enthalpy,species_before(6),species_after(6)
     REAL(real64) :: scaled_residual
@@ -1099,27 +1226,27 @@ CONTAINS
       RETURN
     END IF
     IF (.NOT.adjusted_field_allowed(background%temperature,candidate%temperature,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_TEMPERATURE) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_TEMPERATURE,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%vapor,candidate%vapor,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_VAPOR) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_VAPOR,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%cloud_water,candidate%cloud_water,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_CLOUD_WATER) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_CLOUD_WATER,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%cloud_ice,candidate%cloud_ice,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_CLOUD_ICE) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_CLOUD_ICE,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%rain,candidate%rain,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_RAIN) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_RAIN,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%snow,candidate%snow,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_SNOW) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_SNOW,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%graupel,candidate%graupel,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_GRAUPEL) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_GRAUPEL,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%u,candidate%u,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_U) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_U,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%v,candidate%v,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_V) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_V,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%omega,candidate%omega,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_OMEGA) .OR. &
+        contract%adjustable_variables,PHYSICAL_ADJUST_OMEGA,estimator_candidate) .OR. &
         .NOT.adjusted_field_allowed(background%geopotential,candidate%geopotential,shape3, &
-        contract%adjustable_variables,PHYSICAL_ADJUST_GEOPOTENTIAL)) THEN
+        contract%adjustable_variables,PHYSICAL_ADJUST_GEOPOTENTIAL,estimator_candidate)) THEN
       evaluation%physical_feasibility_reason=REASON_AUTHORITY
       RETURN
     END IF
@@ -1311,14 +1438,21 @@ CONTAINS
     END DO; END DO; END DO
   END SUBROUTINE preflight_physical_mass_contract
 
-  LOGICAL FUNCTION adjusted_field_allowed(background,candidate,expected_shape,adjustable_variables,variable_bit)
+  LOGICAL FUNCTION adjusted_field_allowed(background,candidate,expected_shape,adjustable_variables,variable_bit, &
+                                           estimator_candidate)
     TYPE(field3d), INTENT(IN) :: background,candidate
     INTEGER, INTENT(IN) :: expected_shape(3),adjustable_variables,variable_bit
+    LOGICAL, INTENT(IN), OPTIONAL :: estimator_candidate
     LOGICAL :: background_present,candidate_present
-    INTEGER(int32), PARAMETER :: stage_sources=IOR(SOURCE_COLUMN_PHYSICS,SOURCE_BALANCE_OPERATOR)
-    INTEGER(int32), PARAMETER :: allowed_source_additions=IOR(stage_sources, &
+    INTEGER(int32) :: stage_sources
+    INTEGER(int32), PARAMETER :: allowed_source_additions=IOR(IOR(SOURCE_COLUMN_PHYSICS, &
+      SOURCE_BALANCE_OPERATOR), &
       IOR(SOURCE_RADAR_DBZ,SOURCE_CLOUD_ANALYSIS))
     adjusted_field_allowed=.FALSE.
+    stage_sources=IOR(SOURCE_COLUMN_PHYSICS,SOURCE_BALANCE_OPERATOR)
+    IF (PRESENT(estimator_candidate)) THEN
+      IF (estimator_candidate) stage_sources=IOR(stage_sources,SOURCE_CLOUD_ANALYSIS)
+    END IF
     background_present=field3d_any_allocated(background)
     candidate_present=field3d_any_allocated(candidate)
     IF (.NOT.background_present .AND. .NOT.candidate_present) THEN
@@ -1877,5 +2011,79 @@ CONTAINS
       ANY(IAND(state%omega_top_boundary%source,SOURCE_MANUFACTURED_TEST)/=0) .OR. &
       ANY(IAND(state%omega_bottom_boundary%source,SOURCE_MANUFACTURED_TEST)/=0)
   END FUNCTION boundary_has_manufactured_source
+
+  LOGICAL FUNCTION radar_los_has_manufactured_source(los)
+    TYPE(radar_los_observation_set), INTENT(IN) :: los
+    radar_los_has_manufactured_source=.FALSE.
+    IF (ALLOCATED(los%vrad%source)) &
+      radar_los_has_manufactured_source=ANY(IAND(los%vrad%source,SOURCE_MANUFACTURED_TEST)/=0)
+    IF (ALLOCATED(los%nyquist%source)) &
+      radar_los_has_manufactured_source=radar_los_has_manufactured_source .OR. &
+        ANY(IAND(los%nyquist%source,SOURCE_MANUFACTURED_TEST)/=0)
+    IF (ALLOCATED(los%sigma_vrad%source)) &
+      radar_los_has_manufactured_source=radar_los_has_manufactured_source .OR. &
+        ANY(IAND(los%sigma_vrad%source,SOURCE_MANUFACTURED_TEST)/=0)
+    IF (ALLOCATED(los%colocated_dbz%source)) &
+      radar_los_has_manufactured_source=radar_los_has_manufactured_source .OR. &
+        ANY(IAND(los%colocated_dbz%source,SOURCE_MANUFACTURED_TEST)/=0)
+    IF (ALLOCATED(los%spectrum_width%source)) &
+      radar_los_has_manufactured_source=radar_los_has_manufactured_source .OR. &
+        ANY(IAND(los%spectrum_width%source,SOURCE_MANUFACTURED_TEST)/=0)
+  END FUNCTION radar_los_has_manufactured_source
+
+  LOGICAL FUNCTION state_has_manufactured_source(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    state_has_manufactured_source= &
+      field3d_has_manufactured_source(state%pressure) .OR. &
+      field3d_has_manufactured_source(state%temperature) .OR. &
+      field3d_has_manufactured_source(state%vapor) .OR. &
+      field3d_has_manufactured_source(state%u) .OR. &
+      field3d_has_manufactured_source(state%v) .OR. &
+      field3d_has_manufactured_source(state%omega) .OR. &
+      field3d_has_manufactured_source(state%omega_target) .OR. &
+      field3d_has_manufactured_source(state%omega_target_sigma) .OR. &
+      field3d_has_manufactured_source(state%geopotential) .OR. &
+      field3d_has_manufactured_source(state%cloud_fraction) .OR. &
+      field3d_has_manufactured_source(state%radar_reflectivity) .OR. &
+      integer_field3d_has_manufactured_source(state%cloud_type) .OR. &
+      integer_field3d_has_manufactured_source(state%precipitation_phase) .OR. &
+      integer_field3d_has_manufactured_source(state%lightning_support) .OR. &
+      field3d_has_manufactured_source(state%cloud_water) .OR. &
+      field3d_has_manufactured_source(state%cloud_ice) .OR. &
+      field3d_has_manufactured_source(state%rain) .OR. &
+      field3d_has_manufactured_source(state%snow) .OR. &
+      field3d_has_manufactured_source(state%graupel) .OR. &
+      field3d_has_manufactured_source(state%vt_z_mean) .OR. &
+      field3d_has_manufactured_source(state%vt_z_sigma) .OR. &
+      field2d_has_manufactured_source(state%surface_pressure) .OR. &
+      field2d_has_manufactured_source(state%surface_temperature) .OR. &
+      field2d_has_manufactured_source(state%surface_vapor) .OR. &
+      field2d_has_manufactured_source(state%surface_height) .OR. &
+      field2d_has_manufactured_source(state%latitude) .OR. &
+      field2d_has_manufactured_source(state%omega_top_boundary) .OR. &
+      field2d_has_manufactured_source(state%omega_bottom_boundary) .OR. &
+      radar_los_has_manufactured_source(state%radar_los)
+  END FUNCTION state_has_manufactured_source
+
+  LOGICAL FUNCTION field3d_has_manufactured_source(field)
+    TYPE(field3d), INTENT(IN) :: field
+    field3d_has_manufactured_source=.FALSE.
+    IF (ALLOCATED(field%source)) &
+      field3d_has_manufactured_source=ANY(IAND(field%source,SOURCE_MANUFACTURED_TEST)/=0)
+  END FUNCTION field3d_has_manufactured_source
+
+  LOGICAL FUNCTION field2d_has_manufactured_source(field)
+    TYPE(field2d), INTENT(IN) :: field
+    field2d_has_manufactured_source=.FALSE.
+    IF (ALLOCATED(field%source)) &
+      field2d_has_manufactured_source=ANY(IAND(field%source,SOURCE_MANUFACTURED_TEST)/=0)
+  END FUNCTION field2d_has_manufactured_source
+
+  LOGICAL FUNCTION integer_field3d_has_manufactured_source(field)
+    TYPE(integer_field3d), INTENT(IN) :: field
+    integer_field3d_has_manufactured_source=.FALSE.
+    IF (ALLOCATED(field%source)) &
+      integer_field3d_has_manufactured_source=ANY(IAND(field%source,SOURCE_MANUFACTURED_TEST)/=0)
+  END FUNCTION integer_field3d_has_manufactured_source
 
 END MODULE cloud_bal_pipeline

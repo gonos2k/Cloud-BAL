@@ -1,0 +1,129 @@
+{
+  "team": "Team08/12 read-only Cloud-BAL WPS/metgrid/real/native handoff audit",
+  "source_snapshot": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL",
+    "commit": "9701ef23f04576d875508a0882d0e0af67282587",
+    "state": "base commit with PR77 working-tree changes"
+  },
+  "graph_snapshots": [
+    {
+      "corpus": "KLAPS50",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/graph.json",
+      "built_at_commit": "d79b97ea2f4d90ea439ef129cabf014ac73464f1",
+      "report_date": "2026-10-08",
+      "nodes": 34375,
+      "edges": 74275,
+      "use": "navigation only; no PR77 nodes"
+    },
+    {
+      "corpus": "Cloud-BAL",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json",
+      "built_at_commit": "f837bad0bdf1050a34975d93b178b7dee4420094",
+      "report_date": "2026-10-08",
+      "nodes": 8542,
+      "edges": 15847,
+      "use": "navigation only; no PR77 receipt nodes"
+    }
+  ],
+  "findings": [
+    {
+      "id": "T08-01",
+      "kind": "conditional handoff authority gap",
+      "priority": "P1 if direct-QV handoff is claimed",
+      "trigger": "Metgrid omits FLAG_QV, real omits use_sh_qv, or a competing SH path takes precedence.",
+      "impact": "The candidate QV field may be ignored and vapor reconstructed from retained/background RH and temperature.",
+      "evidence": [
+        "src/lapsprep/module_lapsprep_wps.f90:111-114",
+        "src/lapsprep/module_lapsprep_wps.f90:323-335",
+        "src/common/cloud_bal_wps_adapter.f90:813-815",
+        "tools/check_native_hybrid_geometry.py:234-238"
+      ],
+      "authority_gap": "No authenticated production metgrid table, real namelist, or executable path proves QV selection.",
+      "next_check": "Bind active metgrid flags and real use_sh_qv configuration/executable to a staged met_em\u2192wrfinput pair; read back vapor and compare to candidate QV."
+    },
+    {
+      "id": "T08-02",
+      "kind": "conditional handoff authority gap",
+      "priority": "P1 if source-grid pressure preservation is claimed",
+      "trigger": "Candidate PSFC/SOILHGT omitted by metgrid flags or real uses a pressure option other than sfcp_to_sfcp.",
+      "impact": "real may replace or terrain-adjust PSFC, so the candidate pressure solve no longer describes initialized host columns.",
+      "evidence": [
+        "src/lapsprep/module_lapsprep_wps.f90:117-119",
+        "src/lapsprep/module_lapsprep_wps.f90:358-366",
+        "src/lapsprep/module_lapsprep_wps.f90:409-419",
+        "tools/check_native_hybrid_geometry.py:234-238"
+      ],
+      "authority_gap": "No production metgrid flags, real namelist, or authenticated binary selection is available.",
+      "next_check": "Run focused metgrid/real handoff with the deployed flags and namelist; compare PSFC, SOILHGT, terrain mask and hybrid pressure in wrfinput."
+    },
+    {
+      "id": "T08-03",
+      "kind": "native candidate acceptance blocker / evidence limit",
+      "priority": "P1 if PR77 is described as accepted operational WRF handoff",
+      "trigger": "Claiming PR77 proves the manufactured estimator endpoint was handed into WRF and accepted at native first call.",
+      "impact": "The receipt binds real partialhost experiments, but not the estimator artifact to a WRF input; both native arms reject/fail and candidate/science acceptance are explicitly false.",
+      "evidence": [
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:17-30",
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:55-64",
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:112-125",
+        "docs/evidence/pr77_native_state_20261012.json:26-42",
+        "docs/evidence/pr77_native_state_20261012.json:79-88",
+        "docs/evidence/pr77_native_state_20261012.json:598-608",
+        "docs/evidence/pr77_native_state_20261012/kdm6_entry_gradual/pr77_native_species.raw:1",
+        "docs/evidence/pr77_native_state_20261012/host_startup_plus_kdm6_gradual/rsl.error.0000:48"
+      ],
+      "authority_gap": "Hashes bind experiment harnesses, compiler, selected copied sources/archives/executable, staged input set and output captures. They do not bind the manufactured endpoint\u2019s bytes, provenance, or variable/grid/time meaning through staging/readback to the KDM6 first-call capture; host source closure remains partial and sourced from retained /var/tmp copies.",
+      "next_check": "Create an authority-bearing receipt chaining endpoint artifact and semantics through a specific staged WRF input and readback to first-call state; bind complete host source/link closure; rerun only after candidate is fixed.",
+      "classification_note": "Not a source defect: current progress/evidence accurately leave acceptance and science open."
+    },
+    {
+      "id": "T08-04",
+      "kind": "producer provenance / scientific validation gap",
+      "priority": "P2 conditional",
+      "trigger": "A candidate\u2019s dimensions and units validate while variables were derived at different grid locations, eta indices, or from inconsistent derivatives.",
+      "impact": "The W mapper can produce silently incorrect native W from a dimensionally valid but semantically misaligned payload.",
+      "evidence": [
+        "src/common/cloud_bal_native_w_consumer.f90:246-268",
+        "src/common/cloud_bal_native_w_consumer.f90:344-375",
+        "src/common/cloud_bal_native_w_consumer.f90:541-553",
+        "src/common/cloud_bal_native_velocity.f90:1-7",
+        "src/common/cloud_bal_native_velocity.f90:121-129"
+      ],
+      "authority_gap": "No native increment producer/writer was found under src; consumer checks units/layout/time/grid but not derivative provenance or cross-field consistency. Current fixtures cannot establish actual producer semantics.",
+      "next_check": "Bind actual candidate generator and document field locations/order/source; independently check pressure/height derivatives and U/V destaggering on an actual payload."
+    },
+    {
+      "id": "T08-05",
+      "kind": "semantics risk",
+      "priority": "P3",
+      "trigger": "Compare or combine legacy omega-to-W diagnostic conversions with state-layer/native kinematic W as if they represented one quantity.",
+      "impact": "Different assumptions (fixed 8 km scale height vs moist density/gravity or native chain-rule mapping) can produce different W interpretations.",
+      "evidence": [
+        "src/lib/vertical_motion_conversions.f:29-52",
+        "src/upstream/get_cloud_deriv.f:659-662",
+        "src/common/cloud_bal_radar_downdraft.f90:442-460",
+        "src/common/cloud_bal_state.f90:809-839",
+        "src/common/cloud_bal_native_velocity.f90:121-129"
+      ],
+      "authority_gap": "No single semantic selector labels all consumers\u2019 W meaning; this may be intentional if diagnostic/native-state contracts are distinct.",
+      "next_check": "Trace each consumer contract and compare on representative T/Q/P/omega cases before claiming equivalence."
+    }
+  ],
+  "source_trace_result": "No static pressure-level/unit conversion defect found in the requested lapsprep\u2192WPS-array path. WPS pressure hPa\u2192Pa; adapter checks pressure-coordinate correspondence. Vapor and six hydrometeor species use dry-air kg/kg. Surface PSFC is Pa, terrain/height is m. SH-to-mixing-ratio, surface MR scaling and hydrometeor dry-density conversion are explicit.",
+  "coverage": [
+    "src/lapsprep and cloud_bal_wps_adapter",
+    "moisture carrier and WPS/metgrid/real field contracts",
+    "native velocity and W consumer",
+    "native hybrid geometry/auxiliary contract at source and tool/checker level",
+    "selected PR77 receipts and linked NE57/WRF host provenance",
+    "separate maintained KLAPS50 and Cloud-BAL graph navigation"
+  ],
+  "exclusions": [
+    "No edits",
+    "No tests/compilation or large metgrid/real/native reruns",
+    "No production WPS table, metgrid, real namelist or deployed executable authentication",
+    "No complete external WRF source/link closure audit; references under /var/tmp were treated as pinned retained experiment inputs"
+  ],
+  "graph_extraction_limits": "Maintained graphs are separately dated 2026-10-08 snapshots. They predate the 2026-10-12 PR77 receipt set and do not contain PR77 nodes. Query traversal was broad/truncated and used only to locate source/doc relationships; exact claims above were verified in source or receipts. The isolated PR77 snapshot carries a separate, older 1499-node graph built from commit 66a63bd; it was not substituted for the maintained Cloud-BAL graph. Graph freshness does not establish runtime or scientific validation.",
+  "graph_delta": "No graph updates were run because this was a read-only audit. No corpus comparison/merge was attempted; KLAPS50 (34,375 nodes / 74,275 edges) and Cloud-BAL (8,542 / 15,847) remain separate snapshots. PR77 additions are not represented in either graph."
+}

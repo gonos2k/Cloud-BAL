@@ -3,7 +3,9 @@ set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 . "$repo_root/tests/intel_toolchain.sh"
-test_tmp=$(mktemp -d "$repo_root/scratch/pressure_wps_mapping.XXXXXX")
+scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
+mkdir -p "$scratch_root"
+test_tmp=$(mktemp -d "$scratch_root/pressure_wps_mapping.XXXXXX")
 trap 'rm -rf "$test_tmp"' EXIT
 # Resolve modules only in this fresh build directory, not in the caller's tree.
 cd "$test_tmp"

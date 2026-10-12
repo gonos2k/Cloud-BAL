@@ -133,6 +133,17 @@ class E01GateTest(unittest.TestCase):
         with self.assertRaises(GATE.GateError):
             GATE.assert_fresh_generated_namespace(GATE.inventory(self.root))
 
+    def test_symlinked_generated_directory_is_rejected(self) -> None:
+        outside = self.root / "producer-target"
+        outside.mkdir()
+        (outside / "262281200.lco").write_bytes(b"stale COM")
+        generated = self.root / "lapsprd"
+        generated.mkdir()
+        (generated / "lco").symlink_to(outside, target_is_directory=True)
+
+        with self.assertRaisesRegex(GATE.GateError, "inventory contains unsafe path"):
+            GATE.assert_fresh_generated_namespace(GATE.inventory(self.root))
+
     def test_missing_producer_is_rejected_by_hash_binding(self) -> None:
         producer = self.root / "build/klps_anal_temp.exe"
         producer.parent.mkdir()

@@ -1,0 +1,110 @@
+{
+  "audit_id": "team03_transport_pbl_audit_20261012",
+  "date": "2026-10-12",
+  "mode": "read_only_static_plus_archived_evidence",
+  "cloud_bal_snapshot": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL",
+    "base_commit": "9701ef23f04576d875508a0882d0e0af67282587",
+    "graph_nodes": 1499,
+    "graph_links": 3094,
+    "graph_query_vocab": ["ice", "scalar", "transport", "state", "cloud", "pipeline"],
+    "graph_query_result_nodes": 322,
+    "graph_contains_upstream_pbl_symbols": false,
+    "graph_delta": "none; read-only audit; no maintained corpus source changed",
+    "extraction_limitations": "Graph describes the Cloud-BAL assessment corpus and does not include the external hostcopy or Shinhong research source."
+  },
+  "findings": [
+    {
+      "id": "T03-1",
+      "title": "Shinhong NC/NI paired transport is research-only in inspected source set",
+      "classification": "missing_implementation_in_inspected_host_snapshot",
+      "priority": "P1 conditional",
+      "trigger": "Shinhong PBL selected while paired QNC and/or QNI fields are active",
+      "evidence": [
+        "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_bl_shinhong.F:9-29,103-104,202-217",
+        "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_pbl_driver.F:1294-1330",
+        "/var/tmp/pr73_pbl_research/source_after/module_bl_shinhong_pr65.F:179-186,211-238,249-256,291-299",
+        "/var/tmp/pr73_pbl_research/source_after/module_pbl_driver_pr65.F:1324-1332,1350-1376,1383-1414"
+      ],
+      "uncertainty": "Only the retained requested hostcopy and research copy were compared; production source-tree equivalence was not established.",
+      "next_check": "Bind production/generated sources and archive member; verify each paired tendency is applied exactly once."
+    },
+    {
+      "id": "T03-2",
+      "title": "PBL matrix is DEL-weighted rather than dry-air-mass-weighted",
+      "classification": "archived_same_call_runtime_and_replay",
+      "priority": "P1 for dry-carrier conservation claim",
+      "trigger": "Interpreting Shinhong QC/QI or specific NC/NI conservation as dry-air-carrier conservation",
+      "evidence": [
+        "Research source: /var/tmp/pr73_pbl_research/source_after/module_bl_shinhong_pr65.F:637,1301-1334",
+        "Driver passes P8W as P3DI: /var/tmp/pr73_pbl_research/source_after/module_pbl_driver_pr65.F:1350-1354",
+        "docs/PR67_PBL_SAMECALL_CARRIER_20261007.md",
+        "docs/evidence/pr67_pbl_samecall_carrier_20261007.json"
+      ],
+      "measurements": {
+        "max_abs_DEL_minus_dry_dp_pa": 60.60180541283444,
+        "max_relative_difference": 0.018595620520700108,
+        "dry_matrix_left_residual_kg": 220058,
+        "dry_relative_residual": 8.77e-7,
+        "DEL_matrix_left_residual_kg": 984.8,
+        "DEL_relative_residual": 3.89e-9
+      },
+      "uncertainty": "Selected research call; hybrid coefficients linked to immutable input rather than captured live; not a domain or clean-host validation.",
+      "next_check": "Replay production-bound matrix with same dry-air carrier used by host and report per-column residuals."
+    },
+    {
+      "id": "T03-3",
+      "title": "No local fail-closed geometry or scalar positivity validation in Shinhong solve",
+      "classification": "static_source_limitation",
+      "priority": "P2 conditional robustness",
+      "trigger": "Nonpositive/nonfinite DEL, pressure difference, layer spacing, diffusivity, or scalar input",
+      "evidence": ["/var/tmp/pr73_pbl_research/source_after/module_bl_shinhong_pr65.F:637,1301-1321,1387,1403-1444"],
+      "assessment": "Selected archived matrix is an M-matrix for positive geometry and diffusivity. This conditional property does not guarantee positivity under invalid geometry, boundary forcing, or subsequent RK tendencies.",
+      "uncertainty": "No malformed-geometry execution or whole-domain matrix sweep was performed.",
+      "next_check": "Add focused source-bound invalid-geometry and positive-input preservation checks without tendency clipping."
+    },
+    {
+      "id": "T03-4",
+      "title": "QI and QNI use separate RK/advection scheme controls without shared pair limiter",
+      "classification": "conditional_coupling_gap_static",
+      "priority": "P2",
+      "trigger": "moist_adv_opt and scalar_adv_opt select different operators or limiter behavior",
+      "evidence": [
+        "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/solve_em.f90:2625-2667,3038-3077,3121-3151",
+        "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_em.F:1269-1349",
+        "/var/tmp/pr73_pbl_research/source_after/module_pbl_driver_pr65.F:1405-1414"
+      ],
+      "uncertainty": "No selected-config scheme comparison or completed same-candidate timestep was available.",
+      "next_check": "Capture actual options and compare same-stage carrier-weighted pair tendencies and post-RK admissibility."
+    },
+    {
+      "id": "T03-5",
+      "title": "PR77 failure is at KDM6 entry and does not localize PBL origin",
+      "classification": "reproduced_gate_and_evidence_boundary",
+      "priority": "P1 end-to-end acceptance",
+      "trigger": "Attributing the latest pre-microphysics state gap to PBL or claiming completed physics from entry capture",
+      "evidence": [
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md",
+        "docs/evidence/pr77_native_state_20261012.json",
+        "docs/PR74_QNI_ACTUAL_DRIVER_MOMENT_COMPARISON_20261008.md"
+      ],
+      "latest_first_entry": {
+        "species": "ice",
+        "indices": {"i": 104, "call_lat_index": 2, "k": 1},
+        "QI": 0,
+        "NI_internal_m3": 4.2038792500161422e-36,
+        "NI_public_per_kg_dry_air": 3.8173049035872155e-36,
+        "completed_kdm6": false
+      },
+      "uncertainty": "PR67, PR74, and PR77 are distinct runs; stage-bound provenance from PBL through this entry cell is unavailable.",
+      "next_check": "Capture one source-bound candidate through PBL, RK, KDM6 entry and return, preserving per-stage cell identity."
+    }
+  ],
+  "coverage": {
+    "included": ["host Shinhong and PBL driver", "PR73 research Shinhong and driver", "physics tendency bridge", "RK/advection scheme dispatch", "PR67/PR74/PR77 archived evidence"],
+    "excluded": ["internal microphysics origin", "compiler and FP build audit", "domain budget audit", "startup thread FP policy", "new builds or runs", "source changes"],
+    "validation_performed": ["Graphify read-only query", "source line tracing", "existing report and JSON inspection"],
+    "validation_not_performed": ["compile", "runtime rerun", "whole-domain matrix replay"]
+  },
+  "overall_status": "OPEN; no completed same-candidate host timestep or paired dry-carrier closure"
+}

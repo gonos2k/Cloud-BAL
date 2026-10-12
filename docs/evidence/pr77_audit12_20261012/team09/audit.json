@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-12",
+  "checkout": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL",
+  "head": "9701ef23f04576d875508a0882d0e0af67282587",
+  "graphify": {
+    "snapshot_report_date": "2026-10-08",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-08-pr76-degenerate-kkt",
+    "graph_nodes": 8542,
+    "graph_edges": 15847,
+    "selected_candidate_overlay": "2f27b3fc680f5fad14b2efa2879ab5fddd5325f4 against fd7e1be37075a7ba80ee3a0be080111a5be03a26; 68 committed changed paths only",
+    "snapshot": "2026-10-08T10:05:56+00:00",
+    "delta": "The maintained absolute Cloud-BAL graph is the selected PR76 overlay. It is a persistent graph combining prior corpus snapshots and the selected overlay, not a full extraction of the PR77 candidate; this audit makes no new graph delta claim.",
+    "extraction_limitations": "AST/Markdown headings only; cross-file Fortran CALL extraction partial. Native research source copies are represented by patch/evidence files; external WRF source trees excluded. Graph is navigation context only; freshness is not runtime/scientific validation."
+  },
+  "validation": {
+    "artifact": "docs/evidence/pr77_pipeline_20261012/O0/pr73-estimated-analysis-shadow.nc",
+    "baseline_standalone_failures": 15,
+    "baseline_failure_examples": [
+      "column_status",
+      "pipeline status",
+      "rejection reason",
+      "balance changed mask",
+      "column changed mask",
+      "acceptance failure bitset"
+    ],
+    "source_quality_mutation_added_failures": [],
+    "time_mutation_added_failures": [],
+    "mutation_scope": "Copied only to /var/tmp; source artifact unchanged.",
+    "execution": "Python validator probe only. No Intel compilation or writer test suite was run; no duplicate full writer suite. No source/input/evidence edits.",
+    "baseline": {
+      "numerical_decision": "INVALID",
+      "artifact_decision": "UNBOUND",
+      "candidate_decision": "REJECTED",
+      "failure_count": 15,
+      "failure_examples": [
+        "column_status",
+        "pipeline status",
+        "rejection reason",
+        "balance changed mask",
+        "column changed mask",
+        "acceptance failure bitset"
+      ]
+    },
+    "interpretation": "The probe artifact is already numerically INVALID and candidate REJECTED. Zero additional failures demonstrates missing validation coverage only; it does not reproduce false acceptance. The suggested verified-physical-shadow.nc was absent from /var/tmp/cloud_bal_pr73_joint_analysis.oevPdH, whose file list retained only pr73-estimated-analysis-shadow.nc. Other historical verified-physical-shadow.nc fixtures also fail the current validator (5 pre-existing metadata failures) and were not treated as passing evidence."
+  },
+  "coverage": [
+    "Fortran write_shadow_diagnostics admission contract and estimator branch",
+    "physical joint contract serialization and independent validator replay",
+    "stage status coherence and standalone decision policy",
+    "focused source/quality and valid_time mutation probes"
+  ],
+  "exclusions": [
+    "Full input reader validation and all source/quality contracts on upstream ingestion",
+    "General mask and corruption matrix beyond estimator physical metadata mutations",
+    "Pinned Intel compile/run (not needed for the targeted Python validator probes)",
+    "Full writer suite, intentionally not duplicated"
+  ],
+  "findings": [
+    {
+      "id": "A12-01",
+      "severity": "P2",
+      "classification": "missing validation coverage; false acceptance not reproduced",
+      "title": "Physical estimator snapshot source, quality, and time metadata lack validator checks",
+      "trigger": "On a writer-produced estimator diagnostic, alter physical_candidate_vapor_source and physical_candidate_vapor_quality to 2147483647, or set physical_candidate_vapor.valid_time to 1 while leaving all numerical arrays untouched.",
+      "expected": "The validator reports a source/quality bit or valid-time identity failure for the physical candidate snapshot, or explicitly declares these attributes outside the assessment contract.",
+      "actual": "The validator source omits _quality, _source and valid_time from physical snapshot required fields/checks. On the available PR73 estimator artifact, setting physical_candidate_vapor_source and _quality to 2147483647, or setting physical_candidate_vapor.valid_time=1, added no failures. However, the artifact baseline was already numerical INVALID / UNBOUND / REJECTED with 15 failures, so this probe does not reproduce false acceptance.",
+      "evidence": [
+        {
+          "file": "src/common/cloud_bal_real_netcdf.f90",
+          "lines": "1342-1355",
+          "detail": "Writer stores physical background/candidate thermofields through put_thermo_field."
+        },
+        {
+          "file": "src/common/cloud_bal_real_netcdf.f90",
+          "lines": "2152-2184",
+          "detail": "put_thermo_field serializes value, valid, quality, source, units, and valid_time."
+        },
+        {
+          "file": "tools/validate_shadow_diagnostics.py",
+          "lines": "6311-6342",
+          "detail": "Physical-state required bundle contains values, valid arrays and dry mass only."
+        },
+        {
+          "file": "tools/validate_shadow_diagnostics.py",
+          "lines": "6354-6387",
+          "detail": "Snapshot equality compares values and valid arrays, not quality/source/time."
+        }
+      ],
+      "impact": "The physical-contract validator does not assess serialized source/quality/time consistency. The available mutation probe does not establish that an otherwise numerically passing artifact would be accepted; treat this as missing validation coverage pending a numerically passing fixture.",
+      "next_check": "Add a focused validator corruption case for physical candidate source, quality, and valid_time; decide whether each is part of the physical assessment receipt and cross-bind it to the canonical candidate or reject unsupported attributes."
+    },
+    {
+      "id": "A12-02",
+      "severity": "P2",
+      "classification": "receipt completeness gap; intended standalone rejection is confirmed",
+      "title": "Estimator blocked stage receipts are only partly preserved in NetCDF",
+      "trigger": "Serialize the estimator endpoint through write_shadow_diagnostics.",
+      "expected": "If the artifact is intended to preserve producer receipts, persist enough stage status/reason fields to reconstruct the in-memory blocked FAILED/AUTHORITY decision, including overall and geopotential receipts.",
+      "actual": "The writer stores pipeline_status/reason, column_status, and balance_status. It does not store column_reason, balance_reason, overall status/reason, or geopotential status/reason. In-memory writer admission checks these receipts for coherence before writing. The standalone validator requires column_status OK, pipeline status DEGRADED/OK, and rejection reason GATE; it therefore rejects this FAILED/AUTHORITY estimator artifact as intended by the stated standalone policy.",
+      "evidence": [
+        {
+          "file": "src/common/cloud_bal_real_netcdf.f90",
+          "lines": "3035-3053",
+          "detail": "In-memory estimator coherence requires pipeline, column, balance, overall, and geopotential FAILED/AUTHORITY."
+        },
+        {
+          "file": "src/common/cloud_bal_real_netcdf.f90",
+          "lines": "4143-4147",
+          "detail": "Serialized stage metadata is limited to pipeline status/reason, column status, and balance status."
+        },
+        {
+          "file": "tools/validate_shadow_diagnostics.py",
+          "lines": "7221-7253",
+          "detail": "Standalone validator retains accepted/degraded producer assumptions and rejects failed authority status."
+        },
+        {
+          "file": "tools/validate_shadow_diagnostics.py",
+          "lines": "8446-8458",
+          "detail": "Standalone output remains UNBOUND and candidate is REJECTED unless accepted and failure-free."
+        }
+      ],
+      "reproduction": "Available PR73 estimator artifact has pipeline_status=-10, pipeline_reason=9, column_status=-10, balance_status=-10, physical feasibility PASS, and physical_analysis_increment_v1. Current standalone validation returns numerical INVALID, artifact UNBOUND, candidate REJECTED with 15 failures. The mentioned verified-physical-shadow.nc was not present in that OEV run directory.",
+      "impact": "The NetCDF alone cannot serve as a complete status/reason receipt for all in-memory estimator stages. No standalone admission occurs; its rejection is expected.",
+      "next_check": "Add an explicit estimator receipt schema/extension if downstream reviewers need to distinguish a deliberately blocked estimator assessment from an ordinary failed producer result, and assert round-trip status/reason coherence. Keep standalone candidate decision REJECTED/UNBOUND."
+    }
+  ]
+}

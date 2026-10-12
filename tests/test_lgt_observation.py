@@ -6,13 +6,14 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-WORKSPACE = REPO_ROOT.parent
+WORKSPACE = Path(os.environ.get("CLOUD_BAL_WORKSPACE_ROOT", str(REPO_ROOT.parent))).resolve()
 SPEC_PATH = REPO_ROOT / "tests/original_upstream_replay_20260816.json"
 TOOL_PATH = REPO_ROOT / "tools/original_upstream_replay.py"
 MODULE_SPEC = importlib.util.spec_from_file_location("original_replay", TOOL_PATH)

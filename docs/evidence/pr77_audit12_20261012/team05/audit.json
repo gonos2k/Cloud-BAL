@@ -1,0 +1,91 @@
+{
+  "schema": "cloud_bal_team05_accounting_audit_v1",
+  "date": "2026-10-12",
+  "target": {
+    "snapshot": "scratch/pr77_native_state_20261012/Cloud-BAL",
+    "base": "9701ef2 per assignment",
+    "mode": "read-only"
+  },
+  "summary": "No exact accounting conservation or rollback counterexample reproduced. Internal accounting tests passed. PR69 native DEND carrier is not established as physical dry-air water mass; physical water/energy closure remains unsupported.",
+  "findings": [
+    {
+      "id": "T05-01",
+      "classification": "independent_scientific_evidence_missing",
+      "priority": "P1_for_physical_closure_claim",
+      "reproduced_defect": false,
+      "location": [
+        {"file": "Cloud-BAL/tools/pr69_water_budget.py", "lines": "278-288,304-322"},
+        {"file": "Cloud-BAL/docs/PR69_NATIVE_WATER_BUDGET_20261007.md", "lines": "56-80,107-153"},
+        {"file": "Cloud-BAL/docs/evidence/pr69_native_water_20261007/native_water_budget.json", "lines": null}
+      ],
+      "trigger_or_equation": "All six dry-air-specific Q fields are integrated on captured DEND*DELZ*DX*DY/(MSFTX*MSFTY). Bottom export replays sum(FALL*DELZ/DENR*DTCLD*1000)*area.",
+      "evidence": {
+        "return_storage_plus_export_source_carrier_units": 1912114.1129459739,
+        "interval_residuals_source_carrier_units": {
+          "entry_to_cleanup": 2126112.8452148438,
+          "cleanup_to_mixed_sedimentation": -3398.492053568363,
+          "mixed_sedimentation_to_first_ice": 104.240234375,
+          "first_ice_to_return": -210704.49463272095
+        },
+        "geometry_DEN_DELZ_area_relative_difference_from_hybrid_dry_mass": 0.0005855647241648221,
+        "native_energy_status": "UNSUPPORTED"
+      },
+      "practical_consequence": "The captured arithmetic and provenance do not establish physical water-mass closure or whole-model conservation. The nonzero residual remains an unresolved source-carrier measure.",
+      "tested_controls": [
+        "Pinned-Intel scoped budget and phase tests passed.",
+        "PR69 capture parser/provenance contract tests passed.",
+        "Prior evidence explicitly labels the measure source-carrier-equivalent and identifies density-basis, energy, boundary, timestep, and compile-argv limits."
+      ],
+      "next_check": "Trace selected-call DEN/DEND routing against the dry-air Q basis; instrument and independently review all water source/sink/boundary terms and complete energy/work/kinetic terms before a physical closure claim."
+    },
+    {
+      "id": "T05-02",
+      "classification": "static_scope_limit_with_independent_reconstruction_evidence_missing",
+      "priority": "P2",
+      "reproduced_defect": false,
+      "location": [
+        {"file": "Cloud-BAL/src/common/cloud_bal_column_physics.f90", "lines": "582-1123; key equations at 827-858, 886-1027, 1031-1042"},
+        {"file": "Cloud-BAL/tests/test_pressure_domain_transition.f90", "lines": "142-166,254-319"}
+      ],
+      "trigger_or_equation": "New boundary dry mass = A*delta_PS/g/(1+sum(six represented water ratios)); donor state comes from the explicit prior and enters the pressure-overlap remap.",
+      "practical_consequence": "An accepted endpoint pressure-mass identity validates the caller-supplied transition proposal and state arithmetic. It does not validate whether prior temperature/species represent the real newly activated boundary layer.",
+      "tested_controls": [
+        "Activation/removal mass, species, enthalpy, geometry identities passed an independent test oracle.",
+        "Invalid geometry, missing new-cell fields, authority violations, multiple-center jumps, and removals reject with original candidate and zero budget."
+      ],
+      "next_check": "Obtain independent source or analysis evidence for the boundary-layer prior profile and assess representativeness against the selected host transition."
+    }
+  ],
+  "validation": {
+    "profile": "Cloud-BAL/tests/intel_toolchain.sh pinned Intel ifx 2026, CLOUD_BAL_FREE_FLAGS",
+    "scratch": "/var/tmp/cloud_bal_audit12/team05/build.t6Ine8",
+    "fortran_tests": {
+      "test_pressure_domain_budget": "PASS",
+      "test_pressure_domain_transition": "PASS",
+      "test_pressure_column_remap": "PASS",
+      "test_pressure_thermo_state": "PASS",
+      "test_pressure_phase_transfer": "PASS",
+      "test_water_phase_transfer": "PASS"
+    },
+    "python_tests": {
+      "test_pr63_transition_replay.py": "PASS (13 tests)",
+      "test_pr69_water_budget.py": "PASS",
+      "test_pr68_carrier_budget_replay.py": "PASS (7 tests)"
+    },
+    "full_model_or_broad_suite": "NOT RUN",
+    "warnings": "Intel runtime reported array-temporary diagnostics in test oracle routines; no test failures."
+  },
+  "graphify": {
+    "navigation": "Queried maintained KLAPS50 graph for pressure-analysis accounting and PR63/68/69 carrier ledgers.",
+    "klaps50_snapshot": {"date": "2026-10-08T10:05:49Z", "nodes": 34375, "edges": 74275},
+    "cloud_bal_snapshot": {"date": "2026-10-08T10:05:56Z", "nodes": 8542, "edges": 15847},
+    "overlay": "PR72 selected overlay 2f27b3f against fd7e1be; PR77 not a full extraction.",
+    "pr77_graph_delta": "UNMEASURED; no graph update in read-only audit.",
+    "limitations": ["Cross-file Fortran call extraction is partial.", "Native research source copies are represented via evidence/patch files.", "Graph freshness does not prove runtime or scientific validity."]
+  },
+  "coverage": {
+    "included": ["cloud_bal_column_physics mass/water/enthalpy budgets", "pressure-domain transition and remap", "internal phase transfer accounting and rollback", "geometry carrier equations", "PR63 transition replay", "PR68 carrier decomposition", "PR69 water replay and evidence", "targeted associated tests"],
+    "excluded": ["particle-process internals outside ledger interfaces", "wind/mass solver", "writer/output transaction", "pipeline orchestration", "full KDM6 kinetics", "other boundaries/timesteps/domains", "full model run", "independent scientific validation"]
+  },
+  "deliverables": ["/var/tmp/cloud_bal_audit12/team05/audit.md", "/var/tmp/cloud_bal_audit12/team05/audit.json"]
+}

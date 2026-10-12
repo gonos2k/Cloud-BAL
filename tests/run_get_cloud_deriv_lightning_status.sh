@@ -13,7 +13,7 @@ overlay="$repo_root/src/upstream/get_cloud_deriv.f"
 
 . "$repo_root/tests/intel_toolchain.sh"
 
-scratch_root="$repo_root/scratch"
+scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
 mkdir -p "$scratch_root"
 test_tmp=$(mktemp -d "$scratch_root/get_cloud_deriv_lightning.XXXXXX")
 if [[ ${CLOUD_BAL_KEEP_TEST_OUTPUT:-0} == 1 ]]; then

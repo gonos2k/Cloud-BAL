@@ -1,0 +1,192 @@
+{
+  "schema": "pr77_scoped_validation_v1",
+  "date": "2026-10-12",
+  "base_commit": "9701ef23f04576d875508a0882d0e0af67282587",
+  "commit_binding": "The commit containing this receipt binds its bytes; source hashes below bind tested working-tree overrides of the base. No self-referential final SHA is asserted.",
+  "toolchain": "Pinned Intel profile tests/intel_toolchain.sh; fresh external scratch; no GNU/ifort substitute",
+  "checks": {
+    "python_regression": {
+      "status": "PASS",
+      "tests": 43,
+      "command": "PYTHONPATH=tests python3 -m unittest tests/test_pr73_joint_analysis.py tests/test_pr74_independent_oracle.py tests/test_pr76_degenerate_kkt_oracle.py tests/test_pr75_native_fp_transform.py tests/test_pr76_native_fp_transform.py tests/test_pr77_native_state_transform.py tests/test_pr77_native_state_receipt.py",
+      "log": "docs/evidence/pr77_validation_20261012/pr77_python_final_20261012.log"
+    },
+    "e01_symlink_regression": {
+      "status": "PASS",
+      "tests": 12,
+      "command": "python3 -m unittest tests/test_e01_completion_gate.py",
+      "independent_team_review": "team_review",
+      "log": "docs/evidence/pr77_validation_20261012/pr77_e01_review_20261012.log"
+    },
+    "pipeline_endpoint_o0_o2": {
+      "status": "PASS_SCOPED",
+      "receipt": "docs/evidence/pr77_pipeline_validation_20261012.json",
+      "scope": "Manufactured endpoint assessment, rollback, blocked SHADOW writer/readback; no producer or native acceptance"
+    },
+    "canonical_validator": {
+      "status": "EXPECTED_REJECTION",
+      "exit_code": 1,
+      "receipt": "docs/evidence/pr77_estimator_canonical_20261012.json",
+      "artifact": "UNBOUND",
+      "candidate": "REJECTED"
+    },
+    "native": {
+      "status": "COLLECTION_COMPLETE_CANDIDATES_REJECTED",
+      "harness_exit_code": 0,
+      "receipt": "docs/evidence/pr77_native_state_20261012.json",
+      "kdm6_entry_exit_code": 128,
+      "startup_exit_code": -6,
+      "scope": "Two copied partialhost builds, identical 100 inputs, unchanged entry validator; startup profile differs from inherited main"
+    },
+    "intel_preprocessing_probe": {
+      "status": "PASS",
+      "profiles": [
+        "O0",
+        "O2"
+      ],
+      "without_fpp_selected_branch": 2,
+      "with_fpp_selected_branch": 1,
+      "artifacts": "docs/evidence/pr77_preprocess_probe_20261012"
+    },
+    "intel_c_fp_policy_o2": {
+      "status": "PASS",
+      "log": "docs/evidence/pr77_validation_20261012/pr77_fp_helper_O2_20261012.log"
+    },
+    "full_unit": {
+      "status": "PASS_SEGMENTED",
+      "uninterrupted_final_whole_script_pass": false,
+      "broad_whole_script_exit_code": 1,
+      "broad_log": "docs/evidence/pr77_validation_20261012/pr77_unit_verified_20261012.log",
+      "broad_stop": "Lightning fixture workspace lookup; 6 LGT failures after 37 replay tests passed",
+      "repaired_replay": {
+        "exit_code": 0,
+        "replay_tests": 37,
+        "lightning_tests": 6,
+        "log": "docs/evidence/pr77_validation_20261012/pr77_original_upstream_replay_20261012.log"
+      },
+      "original_remaining_suffix": {
+        "exit_code": 0,
+        "first_command": "bash \"$repo_root/tests/run_upstream_temperature_status.sh\"",
+        "script": "docs/evidence/pr77_validation_20261012/pr77_unit_tail_20261012.sh",
+        "log": "docs/evidence/pr77_validation_20261012/pr77_unit_tail_verified_20261012.log",
+        "fresh_dependencies": "Pinned Intel external scratch state, grid, column physics, balance operator, pipeline, localization and wind modes"
+      },
+      "corrected_runner_rechecks": [
+        {
+          "runner": "tests/run_contract_regressions.sh",
+          "exit_code": 0,
+          "log": "docs/evidence/pr77_validation_20261012/pr77_contract_regressions_20261012.log"
+        },
+        {
+          "runner": "tests/run_qbal_acceptance_tests.sh",
+          "exit_code": 0,
+          "log": "docs/evidence/pr77_validation_20261012/pr77_qbal_acceptance_20261012.log"
+        },
+        {
+          "runner": "tests/run_legacy_shadow_adapter_test.sh",
+          "exit_code": 0,
+          "log": "docs/evidence/pr77_validation_20261012/pr77_legacy_shadow_adapter_20261012.log"
+        }
+      ],
+      "changes_after_broad_suite_manifest": [
+        "tests/run_contract_regressions.sh",
+        "tests/run_legacy_shadow_adapter_test.sh",
+        "tests/run_qbal_acceptance_tests.sh",
+        "tests/test_e01_completion_gate.py",
+        "tests/test_lgt_observation.py",
+        "tools/e01_completion_gate.py"
+      ],
+      "core_physics_source_unchanged": true,
+      "earlier_failures_retained": [
+        "pr77_unit_tests_20261012.log",
+        "pr77_unit_final_20261012.log",
+        "pr77_unit_tail_bootstrap_failure_20261012.log"
+      ]
+    },
+    "audit12": {
+      "status": "COMPLETED_SCOPED",
+      "teams": 12,
+      "manifest": "docs/evidence/pr77_audit12_20261012/manifest.json",
+      "raw_entries": 44
+    },
+    "shell_and_diff": {
+      "status": "PASS",
+      "changed_legacy_runners": 19,
+      "new_native_runners": 1,
+      "diff_scope": "Source and authored docs, excluding byte-preserved docs/evidence runtime logs and team reports (their native whitespace is retained)"
+    }
+  },
+  "tested_source_sha256": {
+    "src/common/cloud_bal_pipeline.f90": "93c4e0f4dccddc2e4e1912ac71a890f49bccb57a5e702ea1f9e1b56d7e223e99",
+    "src/common/cloud_bal_real_netcdf.f90": "825939cf0552203cd7f34d6af853faf3a1fe348510d2bb81818898baefbf6a84",
+    "tests/pr76_native_fp_run.py": "68db8c4ccb367f63598fa51d466fd63821380d831d75d0a63fd09452d0247b13",
+    "tests/pr77_native_state_run.py": "ea347ac99f35c275a5b170ac1c4c828c35e79c99dcecc90729cf300a02cf07d4",
+    "tests/pr77_native_state_transform.py": "35b6140be1798f698ca46222a55ff5c19ed0c35229436a133a90e18128f18ff0",
+    "tests/run_cloud_bal_stage_payload.sh": "1f7bb5c09e6486a0707c33577ded9c24430e15d70c8d04955ca47578c7d039e0",
+    "tests/run_contract_regressions.sh": "63f04458735d4413ee505abed488836ff44e537c760991aed4cafc4ba558cc58",
+    "tests/run_get_cloud_deriv_lightning_status.sh": "eaf4d92e932f1e9a82336f64ffd3affb17e7dbd9fcfc286d8d7298470d4f78be",
+    "tests/run_lapsprep_vapor.sh": "308bfd88a6499cec8c9d144bb7053ed65d370f5fa8bebc54c5bccf0b31b2c426",
+    "tests/run_legacy_shadow_adapter_test.sh": "34e0437bf039c4b2aa193a5ffb9a6a5cd1c9df7d3a25d2c5cfef79cf3bcbd26a",
+    "tests/run_pr77_native_state.sh": "5fffde23cd2c7856a90483266f77b93edceb0e608d684a22f82a02a8ccefec6c",
+    "tests/run_pressure_radar_reference.sh": "8f213d104761ef348e5ba12ba21cfd5c409b1b0d55468a8da479266b0d8b9e1c",
+    "tests/run_pressure_wps_mapping.sh": "0208a8bfc7bae0cd5efd5c7dcb395bf9ed4c1be285b6ee0287724a1f74eba551",
+    "tests/run_previous_surface_qc.sh": "ab1bd637a6c3d2d01129ac9321b49da8e9fe6536e7aea34a4355e2013e6048da",
+    "tests/run_qbal_acceptance_tests.sh": "e9d75f9ff17fc44a6e2853d4a1e76ca96ea7d38ef73e296ac42a2381621c558f",
+    "tests/run_qbal_balcon_tests.sh": "5115637af82fd35f10903fbdab70f863c0deb9e20a81f36bd7c90eda518db809",
+    "tests/run_qbal_nonlin_tests.sh": "0bd9f0bb5a41d02c52d5e610c33b8498bf0383b77581255ddeef08714fc87119",
+    "tests/run_qbal_operator_tests.sh": "893ca59fc2d777a0aafbadadcc7957e3bd0e3e2641277fca19762d7c8d9f377b",
+    "tests/run_surface_observation_reader.sh": "41035b64b265e2e66cae912e48e1ca22808c7449f1b6f71172f59e0ab66d036f",
+    "tests/run_upstream_cloud_status.sh": "e8e672240df99644e77d57d5bd44cf1913a3e69a85c2d46ab48d044ed4dda7c7",
+    "tests/run_upstream_derived_status.sh": "82c87da2e0f2a76934cd61c1f00d35e7fc2c46e33c8b613c30d86fbbddf48c67",
+    "tests/run_upstream_humidity_status.sh": "a0a0637e8264192de4a52730028782cfac06a7230a083e531b1b276ef3ccb1fa",
+    "tests/run_upstream_surface_status.sh": "8e255d5525b24c72d2f4a8ff8a6288c9876264094baf2784e896867398397b7b",
+    "tests/run_upstream_temperature_status.sh": "6bf781aa3d44ad407cb09e8c20c23544edc1643e259efbf6b333a704e3f105f7",
+    "tests/run_upstream_wind_status.sh": "d09219b103ee0289d0c9009470ef2f5d7af5c21933738183013b6e8f41ac2f08",
+    "tests/test_e01_completion_gate.py": "e67a887086fc7b5830b3060b345eb9221e5c1d59c54854a6f540533dd1b0bd0e",
+    "tests/test_lgt_observation.py": "523df0aa3f6e7cc9a1f0f5fccc728be82dfaddf1826900d16145953085a05d6c",
+    "tests/test_pr77_native_state_receipt.py": "d8db2da87ffe203108a03c93c596b6226af6df1c775b46a12f7e8fdf2c036ba0",
+    "tests/test_pr77_native_state_transform.py": "d2c79b085d1018f8328cf51bf3f99f9c59a026eb980bd3625d4dac280704d8aa",
+    "tests/test_real_shadow_io_contract.f90": "5a1435fd06f98ba95f69ba6e979ff55c855b394d3b42d36df21151d4a51b3e2a",
+    "tools/e01_completion_gate.py": "3e5e90d789352163e164a686cafe2a354e00c4f8f97edcdd78861fdb0b04d18e"
+  },
+  "artifact_sha256": {
+    "docs/evidence/pr77_estimator_canonical_20261012.json": "7f8a0346e9919bda29f9ed04a55b7ee0ebae1fb5381816467f87af7e7b1287dd",
+    "docs/evidence/pr77_native_state_20261012.json": "a2d8b212c85126b3f62fc381e00df6b486f825098ae827cc2c182c1ca95c4a88",
+    "docs/evidence/pr77_native_state_pre_summary_fix_20261012.json": "86ab8de6770838f867c521317ceb33cbecc2a9dab684dd1c9c9b032ca3fca22a",
+    "docs/evidence/pr77_native_state_serial_observer_20261012.json": "495145d93000e5172867bda43891999fe8431be0a855ba792b44a2b49b00ab54",
+    "docs/evidence/pr77_pipeline_validation_20261012.json": "83102dc76e2e7fde56ab092091ba6282fd3727bec82c1af9a8bd6dbf6c6289f7",
+    "docs/evidence/pr77_validation_20261012/pr77_unit_tests_20261012.log": "be6a98ece65d448000008bfdef7ae6163f5ab86f4790a3be3fcf16bee3b103ea",
+    "docs/evidence/pr77_validation_20261012/pr77_unit_tail_20261012.sh": "69bede184fb7641d49fe3a50960d9c01b887cece0f64ead234b3d4595c2907b1",
+    "docs/evidence/pr77_validation_20261012/pr77_qbal_acceptance_20261012.log": "4a93af8590376a98b998302d4eb1f75247ca840122d6e90dfa8ed6738097eca2",
+    "docs/evidence/pr77_validation_20261012/source_inputs_final.json": "7e104bc61319dda9ce6f7f214bec7c52ff33d3f1892691856b5c2c22784b2f07",
+    "docs/evidence/pr77_validation_20261012/pr77_unit_verified_20261012.log": "78b4cb80583bf6b2b4407365ce2d51dd3f413d020b015d92a37ec27fb12ea1e9",
+    "docs/evidence/pr77_validation_20261012/pr77_original_upstream_replay_20261012.log": "2e020ef21b97a6d26082b24cc6ce38bfa363de5ed03d577b4ef7972f15916447",
+    "docs/evidence/pr77_validation_20261012/pr77_legacy_shadow_adapter_20261012.log": "03189596b72ed16df491c47df57caa4a1f826fc2aaab4e9f74d2759c1f28d185",
+    "docs/evidence/pr77_validation_20261012/pr77_contract_regressions_20261012.log": "2beaabe941513d9f74a278b0d6065a734aa27867fe191ba994f821edf7552d8f",
+    "docs/evidence/pr77_validation_20261012/pr77_unit_final_20261012.log": "5af6243f297ee1a844e0ff732c65b44eef96e18c8ef698b83692738a84f73bc6",
+    "docs/evidence/pr77_validation_20261012/pr77_python_final_20261012.log": "7d77be6c4dcef2be5d0800afdda0987d8d9e08024a196f51fa9459d08d86eff6",
+    "docs/evidence/pr77_validation_20261012/pr77_preprocess_probe_20261012.log": "073ede8aa23f20d1fbde34ee89181b87bbd09995bd05979faaddffc0d0a45556",
+    "docs/evidence/pr77_validation_20261012/pr77_estimator_canonical_20261012.log": "7f8a0346e9919bda29f9ed04a55b7ee0ebae1fb5381816467f87af7e7b1287dd",
+    "docs/evidence/pr77_validation_20261012/pr77_e01_review_20261012.log": "29fceb8d7649d683e100f876ff5698d8dc259e274ced8f3049c966dfc05ce98a",
+    "docs/evidence/pr77_validation_20261012/pr77_fp_helper_O2_20261012.log": "1ba0d7f8fa0d68b172288d1f1f9126a457df5d760fefcfa247a939eb2d5b0182",
+    "docs/evidence/pr77_validation_20261012/source_inputs_before_broad_suite.json": "1ad3fff34c462695024ae4ffebe818b02a8318780adfd6048b550b12e70307d1",
+    "docs/evidence/pr77_validation_20261012/pr77_unit_tail_bootstrap_failure_20261012.log": "ca9690ce64d1225c295dde03355b5eaa5e5236a2574f573cbeff6c8e43410945",
+    "docs/evidence/pr77_validation_20261012/pr77_unit_tail_verified_20261012.log": "976a8feaca8849bae23507fb8beacdc92a7806bd5301b93d67ca05676542b396",
+    "docs/evidence/pr77_validation_20261012/pr77_native_state_synchronized_20261012.log": "69654b6169876d9db322197d33629e2e6d8482ace03ecaa7999d17ff2be3205c",
+    "docs/evidence/pr77_audit12_20261012/manifest.json": "ed5b6c1fa1345264bc1f97ffd398c03732e42adf06a8d8284d32019966e3e03b"
+  },
+  "count_policy": "Do not add overlapping suite/test/manufactured-state counts. Team executions remain separate in raw reports.",
+  "scientific_decision": {
+    "batch": "PASS_SCOPED",
+    "native_candidates": "REJECTED",
+    "initialization": "OPEN",
+    "same_candidate_gates_open": [
+      "real spatial generation",
+      "native first call",
+      "dry mass/water/energy budgets",
+      "spatial mass-wind",
+      "WPS/metgrid/real handoff",
+      "short-time response and independent observations"
+    ]
+  }
+}

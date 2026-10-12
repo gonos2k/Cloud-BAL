@@ -73,7 +73,10 @@ def verify_control_helper(work_root: Path, helper: Path, check: Path, icx: Path)
 def compile_and_link(mode: str, case: Path, *, gradual: bool,
                      source: Path, archive_source: Path, pr73: dict,
                      pr74: dict, flags: list[str], ifx: Path, icx: Path,
-                     repo: Path) -> dict:
+                     repo: Path, source_transform=None,
+                     host_main_source: Path | None = None,
+                     preprocess_source: bool = True,
+                     openmp_observers: bool = False) -> dict:
     compile_dir = case / "compile"
     link_dir = case / "build/link/main"
     run_dir = case / "run"
@@ -84,7 +87,8 @@ def compile_and_link(mode: str, case: Path, *, gradual: bool,
                     copy_function=shutil.copy2)
     archive = link_dir / archive_source.name
     source_copy = compile_dir / "module_mp_kdm6.f90"
-    source_copy.write_text(transform(source.read_text(), gradual=gradual))
+    source_copy.write_text(source_transform(source.read_text()) if source_transform
+                           else transform(source.read_text(), gradual=gradual))
     helper = repo / "tests/pr76_native_fp_policy.c"
     helper_copy = compile_dir / helper.name
     shutil.copy2(helper, helper_copy)
@@ -93,8 +97,15 @@ def compile_and_link(mode: str, case: Path, *, gradual: bool,
                     "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/frame"]
     compile_argv = [str(ifx), *flags, "-convert", "big_endian", *include_args,
                     "-free", "-c", str(source_copy)]
+    if preprocess_source:
+        compile_argv.insert(compile_argv.index("-c"), "-fpp")
+    if openmp_observers:
+        compile_argv.insert(compile_argv.index("-c"), "-qopenmp")
     pinned_compile_argv = pr73["build_artifacts"]["compile_argv"]
-    if compile_argv[:compile_argv.index("-c")] != pinned_compile_argv[:pinned_compile_argv.index("-c")]:
+    compile_prefix = compile_argv[:compile_argv.index("-c")]
+    added_flags = (["-fpp"] if preprocess_source else []) + (["-qopenmp"] if openmp_observers else [])
+    normalized_prefix = [arg for arg in compile_prefix if arg not in added_flags]
+    if normalized_prefix != pinned_compile_argv[:pinned_compile_argv.index("-c")]:
         raise SystemExit("KDM6 compile options differ from pinned O0 options")
     helper_object = compile_dir / "pr76_native_fp_policy.o"
     c_compile_argv = [str(icx), "-O0", "-c", str(helper_copy), "-o", str(helper_object)]
@@ -103,6 +114,22 @@ def compile_and_link(mode: str, case: Path, *, gradual: bool,
                        stdout=log, stderr=subprocess.STDOUT)
         subprocess.run(c_compile_argv, cwd=compile_dir, check=True,
                        stdout=log, stderr=subprocess.STDOUT)
+
+    main_build = None
+    if host_main_source is not None:
+        main_copy = compile_dir / "wrf.f90"
+        shutil.copy2(host_main_source, main_copy)
+        main_object = link_dir / "wrf.o"
+        main_includes = [arg for arg in pr74["profiles"]["O0"]["compile_argv"][1]
+                         if arg.startswith("-I")]
+        main_argv = [str(ifx), *flags, "-qopenmp", "-free", *main_includes,
+                     "-c", str(main_copy), "-o", str(main_object)]
+        with (compile_dir / "main_compile.log").open("wb") as log:
+            subprocess.run(main_argv, cwd=compile_dir, check=True,
+                           stdout=log, stderr=subprocess.STDOUT)
+        main_build = {"compile_argv": main_argv,
+                      "source_sha256": sha256(main_copy),
+                      "object_sha256": sha256(main_object)}
 
     archive_before = sha256(archive)
     subprocess.run(["/usr/bin/ar", "r", str(archive),
@@ -127,8 +154,12 @@ def compile_and_link(mode: str, case: Path, *, gradual: bool,
     old_output = link_argv[2]
     executable = case / "wrf.exe"
     link_argv[link_argv.index(old_output)] = str(executable)
+    if host_main_source is not None or openmp_observers:
+        link_argv.append("-qopenmp")
     normalized = list(link_argv)
     normalized[normalized.index(str(executable))] = old_output
+    if host_main_source is not None or openmp_observers:
+        normalized.pop()
     if normalized != inherited:
         raise SystemExit("link argv changed beyond the scratch executable path")
     if not any(Path(item).name == archive.name and (link_dir / item).resolve() == archive.resolve()
@@ -193,7 +224,7 @@ def compile_and_link(mode: str, case: Path, *, gradual: bool,
     required_post_call_outputs = pr74["profiles"]["O0"]["required_post_call_outputs"]
     missing_post_call_outputs = [name for name in required_post_call_outputs
                                  if not (run_dir / name).is_file()]
-    failure_markers = ("kdm6 invalid ", "kdm6 orphan ", "error stop", "fatal")
+    failure_markers = ("kdm6 invalid ", "kdm6 orphan ", "error stop", "fatal", "forrtl: error")
     failure_sources = [("rsl.error.0000", rsl_error.read_text(errors="replace") if rsl_error.is_file() else ""),
                        ("candidate_run.log", log_text)]
     first_failure_source = None
@@ -240,13 +271,18 @@ def compile_and_link(mode: str, case: Path, *, gradual: bool,
                     "helper_object_sha256": object_hashes["pr76_native_fp_policy.o"],
                     "transformed_object_sha256": object_hashes["module_mp_kdm6.o"]},
         "toolchain": {"ifx_compile_argv": compile_argv, "icx_compile_argv": c_compile_argv,
-                      "compile_prefix_matches_pinned": True},
+                      "compile_prefix_matches_pinned": not added_flags,
+                      "compile_prefix_matches_except_recorded_additions": True,
+                      "added_compile_flags": added_flags,
+                      "explicit_preprocessing_added": preprocess_source,
+                      "host_main_build": main_build},
         "archive": {"incoming_path": str(archive_source),
                     "incoming_sha256": sha256(archive_source),
                     "scratch_sha256_before_replace": archive_before,
                     "scratch_sha256_after_replace": sha256(archive),
                     "incoming_unchanged": sha256(archive_source) == EXPECTED["native_archive_o0"]},
-        "link": {"argv": link_argv, "non_output_arguments_unchanged": True,
+        "link": {"argv": link_argv, "non_output_arguments_unchanged": host_main_source is None and not openmp_observers,
+                 "openmp_link_added": host_main_source is not None or openmp_observers,
                  "inherited_ftz_flags": [x for x in link_argv if x in ("-ftz", "-no-ftz")],
                  "executable_sha256": sha256(executable)},
         "inputs": {"count": len(input_before), "before": input_before, "after": input_after,

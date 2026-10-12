@@ -95,9 +95,11 @@ def inventory(root: Path) -> dict[str, str]:
     root = root.resolve(strict=True)
     result: dict[str, str] = {}
     for path in sorted(root.rglob("*")):
+        if path.is_symlink():
+            raise GateError(f"inventory contains unsafe path: {path}")
         if not path.is_file():
             continue
-        if path.is_symlink() or path.stat().st_nlink != 1:
+        if path.stat().st_nlink != 1:
             raise GateError(f"inventory contains unsafe file: {path}")
         result[path.relative_to(root).as_posix()] = sha256_file(path)
     return result

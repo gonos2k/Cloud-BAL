@@ -1,0 +1,19 @@
+WORK_ROOT /var/tmp/pr77_native_state.QZiRCC
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK
+PR77_NATIVE_CASE kdm6_entry_gradual 128 KDM6 orphan number/volume state without positive mass
+Traceback (most recent call last):
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL/tests/pr77_native_state_run.py", line 123, in <module>
+    "toolchain": {"ifx_path": str(ifx), "ifx_version": ifx_version, "ifx_sha256": sha256(ifx),
+                 ^^^^^^
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL/tests/pr77_native_state_run.py", line 77, in main
+    main_source = Path("/var/tmp/pr61_ccn_origin_20261006/hostcopy/main/wrf.f90")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL/tests/pr76_native_fp_run.py", line 118, in compile_and_link
+    subprocess.run(main_argv, cwd=compile_dir, check=True,
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx', '-stand', 'f08', '-warn', 'all', '-check', 'all', '-fpe0', '-traceback', '-O0', '-fp-model', 'strict', '-fimf-arch-consistency=true', '-no-ftz', '-qopenmp', '-free', '-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/main', '-c', '/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90', '-o', '/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/build/link/main/wrf.o']' returned non-zero exit status 1.

@@ -1,0 +1,120 @@
+{
+  "audit": "Team06/12 spatial mass-wind balance audit",
+  "date": "2026-10-12",
+  "checkout": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL",
+    "head": "9701ef23f04576d875508a0882d0e0af67282587",
+    "scope": "base 9701ef23 + PR77 candidate working tree; read-only"
+  },
+  "classification_note": "Static source and equation audit only; no targeted Intel probe was required or run. No broad tests or native runs were run. A manufactured small-solver result is not spatial/native approval.",
+  "graphify": {
+    "used": "Maintained KLAPS50 graph via scoped graphify queries",
+    "snapshot": "Cloud-BAL report 2026-10-08; report states graph combines earlier corpus and selected overlays, AST/Markdown-heading extraction, partial cross-file Fortran CALL extraction.",
+    "delta": "No graph update was made: audit is read-only and candidate checkout graph is not the maintained source graph. The graph locates cloud_bal_balance_operator, qbalpe.f, balcon(), leib_sub(), continuity_metrics(), and candidate pipeline relationships; source paths above decide the findings."
+  },
+  "findings": [
+    {
+      "id": "T06-01",
+      "category": "missing_implementation",
+      "priority": "P1",
+      "title": "Native qbalpe path does not invoke the pressure-overlap balance operator",
+      "evidence": [
+        {
+          "file": "Cloud-BAL/src/balance/qbalpe.f",
+          "lines": "43-44, 694, 1098-1127, 1809-1841",
+          "observation": "qbalpe_stag dispatches to BALCON; BALCON dispatches to leib_sub/qbal_continuity_setup. BALCON imports cloud_bal_wind_modes, not cloud_bal_balance_operator."
+        },
+        {
+          "file": "Cloud-BAL/src/balance/qbalpe.f",
+          "lines": "1937-1989, 3101-3189",
+          "observation": "The native legacy continuity equation is centered finite differences with one dx(i,j), dy(i,j), and level dp(k), on a global p(nz) grid. It has no pressure-interface overlap segments or pressure_mass_measure."
+        },
+        {
+          "file": "Cloud-BAL/src/common/cloud_bal_pipeline.f90",
+          "lines": "578-579",
+          "observation": "The separate candidate pipeline calls apply_localized_balance, which uses cloud_bal_balance_operator."
+        }
+      ],
+      "trigger": "Run qbalpe_stag on its normal input; the actual BALCON continuity correction follows the legacy staggered leib_sub path, while the candidate pipeline uses the separate A-grid pressure-overlap operator.",
+      "equation": "Legacy D(u,v,omega) = (u_e-u_w)/dx + (v_n-v_s)/dy + (omega_lower-omega_upper)/dp. Candidate D is assembled from shared pressure-overlap face fluxes, A=M^-1 D S, with M=area*cell_dp/g.",
+      "consequence": "A closure or manufactured test of cloud_bal_balance_operator does not establish the discrete continuity, adjoint, dry-mass metric, or boundary behavior of the operational/native qbalpe correction. No equivalence result covers varying cell thickness, nonmatching vertical interfaces, or actual native geometry.",
+      "next_check": "Either route the intended native producer through the pressure-overlap operator with ABI/frame/IO review, or construct an independent native-grid comparison proving legacy-vs-candidate face flux and residual equivalence on actual KLAPS geometry. Then validate the selected path with real native inputs.",
+      "basis": "static_source"
+    },
+    {
+      "id": "T06-02",
+      "category": "static_reproduced_diagnostic_limitation",
+      "priority": "P2",
+      "title": "Wind-mode diagnostics scale the physical increment divergence by influence a second time",
+      "evidence": [
+        {
+          "file": "Cloud-BAL/src/common/cloud_bal_wind_modes.f90",
+          "lines": "53-68",
+          "observation": "The routine differentiates u1-u0/v1-v0 and then multiplies both divergence and vorticity by influence(i,j,k)."
+        },
+        {
+          "file": "Cloud-BAL/src/balance/qbalpe.f",
+          "lines": "1696-1698, 1723-1729",
+          "observation": "BALCON passes the already-produced candidate wind fields and influence to the diagnostic; the resulting RMS/profile values are printed."
+        },
+        {
+          "file": "Cloud-BAL/tests/test_cloud_bal_core.f90",
+          "lines": "334-369",
+          "observation": "Manufactured mode checks use influence=1 everywhere, so they do not exercise the amplitude bias."
+        }
+      ],
+      "trigger": "Use a constant nonzero divergent or rotational increment with influence=0.5 over its diagnostic support. The routine reports half the true discrete mode amplitude; a varying influence also changes the reported spatial mode field without changing u1-u0/v1-v0.",
+      "equation": "Implemented diagnostic is beta * div(delta u), while mode of the stored increment is div(delta u). If beta is intended as an increment taper, the physical increment itself must be tapered first and then differentiated; otherwise this is an extra factor.",
+      "consequence": "Printed divergent/rotational RMS and vertical profiles are localization-weighted diagnostics, not the unweighted modes of the accepted output increment. Do not use them as quantitative spatial mass-wind closure evidence. BALCON currently prints them and does not use these values in qbal_candidate_acceptance.",
+      "next_check": "Clarify metric intent; if it should describe the returned increment, remove the extra weighting and add a beta<1 constant-mode test plus a localized nonuniform-grid fixture.",
+      "basis": "static_algebra_reproduction"
+    },
+    {
+      "id": "T06-03",
+      "category": "missing_physical_closure_evidence",
+      "priority": "P1",
+      "title": "Dry-air divergence remains a diagnostic on the pressure metric, without a dry-mass tendency equation",
+      "evidence": [
+        {
+          "file": "Cloud-BAL/src/common/cloud_bal_balance_operator.f90",
+          "lines": "1608-1643",
+          "observation": "state_dry_air_mass_flux_divergence forms dry-air fractions, calls state_continuity_residual with the same pressure volume, and multiplies the result by pressure mass to return D F_d in kg/s."
+        },
+        {
+          "file": "Cloud-BAL/src/common/cloud_bal_balance_operator.f90",
+          "lines": "1680-1738",
+          "observation": "Interior dry carrier fluxes use pressure-overlap shared faces and interpolate f_d*u or f_d*v; omega vertical flux is multiplied by local dry fraction."
+        },
+        {
+          "file": "Cloud-BAL/docs/NATIVE_MASS_FRAME_CONTRACT.md",
+          "lines": "578-601",
+          "observation": "The contract says the routine supplies D F_d only; dot(m_d)+D F_d and native mass-coordinate reconstruction remain open."
+        }
+      ],
+      "trigger": "A candidate has nonzero water/hydrometeor loading or differing dry fractions, and a verifier asks whether the wind field conserves dry-air mass. Calling the current routine yields flux divergence, not the complete tendency-plus-flux residual.",
+      "equation": "The balance metric remains M_p=A*cell_dp/g; the dry-air fraction is f_d=M_d/M_p. The available diagnostic is D F_d. The required closure is dot(M_d)+D F_d=0 with consistent same-carrier native boundaries and tendencies.",
+      "consequence": "Pressure-mass projection/continuity does not alone certify dry-air mass-wind balance. Boundary dry fraction is also extrapolated from the nearest cell (operator lines 1739-1742), an explicit assumption rather than observed boundary composition.",
+      "next_check": "Using the same candidate and carrier, reconstruct native dry mass per cell and its physical tendency, replay all shared-face and boundary dry fluxes, and evaluate the complete cell residual on actual native inputs.",
+      "basis": "static_source_and_contract"
+    }
+  ],
+  "coverage": [
+    "cloud_bal_balance_operator continuity fluxes, adjoint metric, pressure-volume metric, component rows and pressure face geometry",
+    "cloud_bal_grid_geometry pressure overlap partitioning and cumulative horizontal localization metric",
+    "cloud_bal_wind_modes and BALCON usage",
+    "qbalpe_stag -> BALCON -> leib_sub -> qbal_continuity_setup / qbal_divergence_value call chain",
+    "pressure vs dry-air mass measures and D F_d scope",
+    "candidate geostrophic and hydrostatic diagnostic flow"
+  ],
+  "exclusions": [
+    "generic candidate, budget, estimator, authority, and pipeline gates assigned to other audit teams",
+    "source edits, test execution, native model execution, and operational/scientific acceptance",
+    "independent proof of actual KLAPS grid projection metrics or meteorological benefit"
+  ],
+  "no_defect_observed_static": [
+    "Modern A operator uses paired, oppositely signed shared-face contributions divided by cell pressure mass measure; apply_adjoint_metric matches that operator under its pressure-volume weighted inner product.",
+    "Modern solver correction has no top/bottom omega increment faces; the base-state diagnostic includes supplied valid top/bottom omega boundaries and explicit zero-gradient lateral domain fluxes.",
+    "Candidate evaluation separately computes geostrophic residual and interior hydrostatic residual. This supports compatibility assessment, but does not establish scientific compatibility on real/native data."
+  ],
+  "probe_results": []
+}
