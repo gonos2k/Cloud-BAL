@@ -1,0 +1,194 @@
+{
+  "schema": "cp06a_background_prior_batch_validation_v1",
+  "date": "2026-10-12",
+  "base_commit": "a444a788e8e7301354bec14c3708aacddb8f31d3",
+  "source_binding": "All compiled common physics sources and pinned libraries match the final source bytes. Executed driver/verifier originals are archived by hash; a post-run log parser correction and compile-only driver classification fix are versioned separately. This is not a full generation/publication transaction.",
+  "changed_source_sha256": {
+    "src/common/cloud_bal_balance_operator.f90": "31a1975b07c629e276efd23bc0fe173cd4366bd7d080c645049a5ed6903de156",
+    "src/common/cloud_bal_column_physics.f90": "1a09a9fa6ab5949da7d78818390f0ab42deb47bbc0324cbcd4c4a7663f31c96e",
+    "src/common/cloud_bal_pipeline.f90": "e11d7026d125afbb148dbc723409bac98ee14857755e0db12dcfe40c3e0e4bf1",
+    "src/common/cloud_bal_real_netcdf.f90": "fc5bb3743ae17ff07a5848340ec03a18b23aeec6a8c0c094a2353ea6cc807a62",
+    "tests/pr78_cp06a_spatial.f90": "c3fc5d1a595b5a20c63afdec311df3c275b24c46407acfbfc0dce5ddd4e38761",
+    "tests/pr78_cp06a_spatial_receipt.py": "7d0c41492fe936ed7c51ddbcd8619d35a514600a383182ec92e89791fe7a64bc",
+    "tests/pr78_native_fp_runtime_choice.py": "4320f341ad54789b72816d034f6fd494df20d2bcba58caa06d92908fba9104c5",
+    "tests/pr78_native_fp_runtime_run.py": "09e038d1e48fe51a8222b3b00ae97f6dcdd95baa4ae9334cdbd80aa903bcb51f",
+    "tests/run_background_continuity_balance.sh": "5c2dfba7de49cfd5ed77dd99ece58df5e7a75f4a67c07c9446ff4d8c6ace0ca7",
+    "tests/run_pr78_cp06a_spatial.sh": "e29642ea9698cec3ae4f67d9acd924cb6c0eea7a9de9f864c8fa8df74555fc4e",
+    "tests/run_pr78_native_fp_runtime_choice.sh": "592e37d23f6a3a3d091b116af52e59852c9fb5533ac1d8e376449e7ff79d0bc7",
+    "tests/run_unit_tests.sh": "6e28d23e4cd742a4f573094bd9f92f863a25aea3798fada71fa47bc5c8af13ee",
+    "tests/test_background_continuity_balance.f90": "1db41a5b947d7ed8620332b3e9d9c6af619b8cba537ee7160886d66135d3e1fe",
+    "tests/test_pr78_native_fp_runtime_choice.py": "e1afdcd38519432751aea6d7a53632a7d5e547bc0c5ead85ed4c45a9c623beff",
+    "tests/test_pressure_geostrophic_assessment.f90": "30c4910d494658baaee570584c82771d9584263818c93d77cf6eaffc90135d41"
+  },
+  "checks": {
+    "scoped_unit": {
+      "status": "PASS",
+      "scope": "Pinned Intel O0/O2 background continuity, geostrophic diagnostic guard, and legacy endpoint writer/readback/corruption; native runtime-choice Python six tests; shell syntax and diff checks. Full run_unit_tests.sh was not executed in this batch. Post-run logging driver compile-only O0/O2; corrected parser verified on original actual logs."
+    },
+    "earlier_full_shadow": {
+      "status": "PASS_EARLIER_SOURCE",
+      "scope": "The full real SHADOW I/O O0/O2 suite ran before the final optional geostrophic diagnostic-support change. It is not presented as a final-source full-suite run."
+    },
+    "cp06a_real_scope": {
+      "status": "PASS_SCOPED",
+      "scope": "Real nonzero regional pressure-level producer, writer replay and stored-state readback under the declared background tendency prior. No independently rebuilt full flux stencil, native or scientific authority.",
+      "receipt": "cp06a_joint_20261012/final/producer_receipt.json",
+      "sha256": "f4ca47a3dd9c6832be33d6228cc401dfefe75349aec81ff075aec6f14bfda690"
+    },
+    "native_pair_error": {
+      "status": "REJECTED",
+      "error": "Both same-executable arms abort with floating invalid before KDM6; initial FTZ/DAZ are already clear in both, so no causal FP-policy contrast.",
+      "receipt": "cp06a_native_controlled_20261012.json",
+      "sha256": "6dfa18448485ac6e8e4ff8b0c4a6877d5f6170211121f3dc06239765a0383a71"
+    }
+  },
+  "failed_attempts": {
+    "v1": "Authority rejection before the solve; distinct original support variant retained.",
+    "v2_mixed_source": "O0 pressure-provenance rejection and O2 geostrophic writer rejection retained. Source drift is explicit; this is not a frozen O0/O2 comparison or accepted artifact."
+  },
+  "artifact_flags": {
+    "O0": {
+      "coupled": {
+        "science_assessed": 0,
+        "physical_continuity_assessed": 0,
+        "dry_air_mass_tendency_assessed": 0,
+        "candidate_evaluation_observation_fit_assessed": 0,
+        "pressure_geostrophic_science_assessed": 0,
+        "original_full_geostrophic_rms": 0.0006533182855682618,
+        "candidate_full_geostrophic_rms": 0.006792153972382788,
+        "pressure_geostrophic_units": "m s-2",
+        "pressure_geostrophic_scope": "balance_support_union_phi_support_horizontal_cross_halo_v1",
+        "pressure_geostrophic_requested_cells": 900,
+        "pressure_geostrophic_evaluated_cells": 900,
+        "max_abs_temperature_increment": 2.209136962890625,
+        "max_abs_vapor_increment": 0.0009306222200393677,
+        "max_abs_geopotential_increment": 142.52734375
+      },
+      "hydro": {
+        "science_assessed": 0,
+        "physical_continuity_assessed": 0,
+        "dry_air_mass_tendency_assessed": 0,
+        "candidate_evaluation_observation_fit_assessed": 0,
+        "pressure_geostrophic_science_assessed": 0,
+        "original_full_geostrophic_rms": 0.0005821697001535605,
+        "candidate_full_geostrophic_rms": 0.009913698432836309,
+        "pressure_geostrophic_units": "m s-2",
+        "pressure_geostrophic_scope": "balance_support_union_phi_support_horizontal_cross_halo_v1",
+        "pressure_geostrophic_requested_cells": 420,
+        "pressure_geostrophic_evaluated_cells": 420,
+        "max_abs_temperature_increment": 2.209136962890625,
+        "max_abs_vapor_increment": 0.0009306222200393677,
+        "max_abs_geopotential_increment": 142.52734375
+      }
+    },
+    "O2": {
+      "coupled": {
+        "science_assessed": 0,
+        "physical_continuity_assessed": 0,
+        "dry_air_mass_tendency_assessed": 0,
+        "candidate_evaluation_observation_fit_assessed": 0,
+        "pressure_geostrophic_science_assessed": 0,
+        "original_full_geostrophic_rms": 0.0006533182855682618,
+        "candidate_full_geostrophic_rms": 0.006792153972382788,
+        "pressure_geostrophic_units": "m s-2",
+        "pressure_geostrophic_scope": "balance_support_union_phi_support_horizontal_cross_halo_v1",
+        "pressure_geostrophic_requested_cells": 900,
+        "pressure_geostrophic_evaluated_cells": 900,
+        "max_abs_temperature_increment": 2.209136962890625,
+        "max_abs_vapor_increment": 0.0009306222200393677,
+        "max_abs_geopotential_increment": 142.52734375
+      },
+      "hydro": {
+        "science_assessed": 0,
+        "physical_continuity_assessed": 0,
+        "dry_air_mass_tendency_assessed": 0,
+        "candidate_evaluation_observation_fit_assessed": 0,
+        "pressure_geostrophic_science_assessed": 0,
+        "original_full_geostrophic_rms": 0.0005821697001535605,
+        "candidate_full_geostrophic_rms": 0.009913698432836309,
+        "pressure_geostrophic_units": "m s-2",
+        "pressure_geostrophic_scope": "balance_support_union_phi_support_horizontal_cross_halo_v1",
+        "pressure_geostrophic_requested_cells": 420,
+        "pressure_geostrophic_evaluated_cells": 420,
+        "max_abs_temperature_increment": 2.209136962890625,
+        "max_abs_vapor_increment": 0.0009306222200393677,
+        "max_abs_geopotential_increment": 142.52734375
+      }
+    }
+  },
+  "canonical_validation": {
+    "numerical_decision": "INVALID",
+    "artifact_decision": "UNBOUND",
+    "candidate_decision": "REJECTED",
+    "physical_continuity_assessed": false,
+    "dry_air_mass_continuity_assessed": false,
+    "science_assessed": false,
+    "failures": [
+      "horizontal_support_radius_m",
+      "pressure_support_radius_pa",
+      "dry-air flux contract",
+      "independent geostrophic validation support",
+      "independent geostrophic stencil support",
+      "pressure geostrophic requested cell count",
+      "pressure geostrophic evaluated cell count",
+      "column changed mask must equal persisted stage evidence",
+      "no-target solver reason",
+      "no-target solver iterations",
+      "no-target wind change",
+      "full-state residual reconstruction",
+      "continuity_background_rms",
+      "continuity_background_max",
+      "continuity_candidate_rms",
+      "continuity_candidate_max",
+      "continuity_projected_increment_rms",
+      "continuity_proposed_increment_rms",
+      "acceptance failure bitset",
+      "candidate decision",
+      "flux_input independent radar ledger",
+      "flux_suspended independent radar ledger",
+      "flux_terrain_intercept independent radar ledger",
+      "flux_observation_blocked independent radar ledger",
+      "flux_no_echo_blocked independent radar ledger",
+      "transport substeps independent radar ledger"
+    ],
+    "exit_code": 1,
+    "scope": "O0 closed COUPLED file; ordinary validator does not implement this named supported-prior/retrieval contract. All rejection flags and failures preserved; no validator criteria weakened."
+  },
+  "independent_review": "docs/CP06_A_TEAM_REVIEW_20261012.md; final source/artifact review before commit",
+  "checkpoint_state": {
+    "CP06-A": "IN_PROGRESS / NOT_RUN",
+    "CP06": "IN_PROGRESS / NOT_RUN",
+    "FG1": "OPEN",
+    "science_authority": "NONE",
+    "operational_publication": "NONE"
+  },
+  "remaining": [
+    "Independent full shared-face flux-stencil reconstruction",
+    "Observation-fit/error, phase and trajectory assumptions",
+    "Controlled native baseline and Q/N/B updates",
+    "Same candidate WPS/metgrid/real handoff",
+    "Physical time water/energy/dry-mass budgets and 10/30/60-minute response"
+  ],
+  "archive_manifest": {
+    "path": "cp06a_joint_20261012/manifest.json",
+    "sha256": "09298cc692a31c7e90c7bc925ca0d7bf1b462ab2da7dc99b9bc4cba7bb4019e3"
+  },
+  "data_policy": "NetCDF candidates and support binary snapshots stay in external private scratch. Original inputs, maintained dirty source, model physics and operational current are preserved.",
+  "execution_auxiliary_versions": {
+    "pr78_cp06a_spatial.f90": {
+      "executed_archive": "cp06a_joint_20261012/final/executed_pr78_cp06a_spatial.f90",
+      "executed_sha256": "adc52372cff3f322b534670b8520e4e49f016825817b59c4a61fe3e3c3e4a41a",
+      "final_sha256": "c3fc5d1a595b5a20c63afdec311df3c275b24c46407acfbfc0dce5ddd4e38761"
+    },
+    "pr78_cp06a_spatial_receipt.py": {
+      "executed_archive": "cp06a_joint_20261012/final/executed_pr78_cp06a_spatial_receipt.py",
+      "executed_sha256": "aa292bfc026f1bd549b1663091de0022a74d9696610acbc68730624134de05a4",
+      "final_sha256": "7d0c41492fe936ed7c51ddbcd8619d35a514600a383182ec92e89791fe7a64bc"
+    }
+  },
+  "post_run_fixes": {
+    "scope": "Comma-separated log field parsing and writer-status-dependent written label only; no common physics, experiment, thresholds, or original verification criteria change.",
+    "validation": "Corrected parser AST equals the separately hashed successful post-run verifier function; actual O0/O2 logs correctly expose 476 coupled/0 hydro wind cells. Final driver compile-only Intel O0/O2 PASS using original profile module interfaces in fresh scratch. Scientific computation was not rerun.",
+    "compile_log": "cp06a_joint_20261012/checks/driver_logging_compile.log"
+  }
+}

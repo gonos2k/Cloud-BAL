@@ -1,0 +1,132 @@
+warning: Probes-based dynamic linker interface failed.
+Reverting to original interface.
+process 3579172 is executing new program: /var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/run/wrf.exe
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/liblber.so.2
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/libbrotlidec.so.1
+warning: could not find '.gnu_debugaltlink' file for /lib/x86_64-linux-gnu/libbrotlicommon.so.1
+ starting wrf task            0  of            1
+
+Program received signal SIGFPE, Arithmetic exception.
+0x000000000362872d in module_sf_noahdrv::lsminit (vegfra=..., snow=..., snowc=..., snowh=..., canwat=..., smstav=..., smstot=..., sfcrunoff=..., udrunoff=..., acsnow=..., acsnom=..., ivgtyp=..., isltyp=..., tslb=..., smois=..., sh2o=..., zs=..., dzs=..., mminlu=..., snoalb=..., fndsoilw=.TRUE., fndsnowh=.TRUE., rdmaxalb=.TRUE., num_soil_layers=92367200, restart=.TRUE., allowed_to_read=.TRUE., irr_rand_field=..., irr_ph=92367036, irr_freq=92367032, ids=-22652, ide=-22608, jds=-22672, jde=-22604, kds=-22760, kde=-22752, ims=-22656, ime=-22676, jms=-22660, jme=-22680, kms=-22748, kme=-22740, its=-2022713472, ite=-2022713504, jts=-2022713536, jte=-2022713568, kts=-22756, kte=-22744, _mminlu=24) at /var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_sf_noahdrv.f90:1840
+1840	                 ((TSLB(I,NS,J)-T0)/TSLB(I,NS,J)) )**(-1/BX) )*SMCMAX
+#0  0x000000000362872d in module_sf_noahdrv::lsminit (vegfra=..., snow=..., snowc=..., snowh=..., canwat=..., smstav=..., smstot=..., sfcrunoff=..., udrunoff=..., acsnow=..., acsnom=..., ivgtyp=..., isltyp=..., tslb=..., smois=..., sh2o=..., zs=..., dzs=..., mminlu=..., snoalb=..., fndsoilw=.TRUE., fndsnowh=.TRUE., rdmaxalb=.TRUE., num_soil_layers=92367200, restart=.TRUE., allowed_to_read=.TRUE., irr_rand_field=..., irr_ph=92367036, irr_freq=92367032, ids=-22652, ide=-22608, jds=-22672, jde=-22604, kds=-22760, kde=-22752, ims=-22656, ime=-22676, jms=-22660, jme=-22680, kms=-22748, kme=-22740, its=-2022713472, ite=-2022713504, jts=-2022713536, jte=-2022713568, kts=-22756, kte=-22744, _mminlu=24) at /var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_sf_noahdrv.f90:1840
+1840	                 ((TSLB(I,NS,J)-T0)/TSLB(I,NS,J)) )**(-1/BX) )*SMCMAX
+mminsl = 'STAS', ' ' <repeats 252 times>
+err_message = '\000' <repeats 80 times>
+VEGFRA$1$lowerbound = -4
+SNOW$1$lowerbound = -4
+SNOWC$1$lowerbound = -4
+SNOWH$1$lowerbound = -4
+CANWAT$1$lowerbound = -4
+SMSTAV$1$lowerbound = -4
+SMSTOT$1$lowerbound = -4
+SFCRUNOFF$1$lowerbound = -4
+UDRUNOFF$1$lowerbound = -4
+ACSNOW$1$lowerbound = -4
+ACSNOM$1$lowerbound = -4
+IVGTYP$1$lowerbound = -4
+ISLTYP$1$lowerbound = -4
+TSLB$1$lowerbound = -4
+SMOIS$1$lowerbound = -4
+SH2O$1$lowerbound = -4
+SNOALB$1$lowerbound = -4
+IRR_RAND_FIELD$1$lowerbound = -4
+RAND_TMP$1$lowerbound = -4
+VEGFRA$2$lowerbound = -4
+SNOW$2$lowerbound = -4
+SNOWC$2$lowerbound = -4
+SNOWH$2$lowerbound = -4
+CANWAT$2$lowerbound = -4
+SMSTAV$2$lowerbound = -4
+SMSTOT$2$lowerbound = -4
+SFCRUNOFF$2$lowerbound = -4
+UDRUNOFF$2$lowerbound = -4
+ACSNOW$2$lowerbound = -4
+ACSNOM$2$lowerbound = -4
+IVGTYP$2$lowerbound = -4
+ISLTYP$2$lowerbound = -4
+TSLB$3$lowerbound = -4
+SMOIS$3$lowerbound = -4
+SH2O$3$lowerbound = -4
+SNOALB$2$lowerbound = -4
+IRR_RAND_FIELD$2$lowerbound = -4
+RAND_TMP$2$lowerbound = -4
+VEGFRA$2$upperbound = <optimized out>
+SNOW$2$upperbound = <optimized out>
+SNOWC$2$upperbound = <optimized out>
+SNOWH$2$upperbound = <optimized out>
+CANWAT$2$upperbound = <optimized out>
+SMSTAV$2$upperbound = <optimized out>
+SMSTOT$2$upperbound = <optimized out>
+SFCRUNOFF$2$upperbound = <optimized out>
+UDRUNOFF$2$upperbound = <optimized out>
+ACSNOW$2$upperbound = <optimized out>
+ACSNOM$2$upperbound = <optimized out>
+IVGTYP$2$upperbound = <optimized out>
+ISLTYP$2$upperbound = <optimized out>
+TSLB$3$upperbound = <optimized out>
+SMOIS$3$upperbound = <optimized out>
+SH2O$3$upperbound = <optimized out>
+SNOALB$2$upperbound = <optimized out>
+IRR_RAND_FIELD$2$upperbound = <optimized out>
+RAND_TMP$2$upperbound = <optimized out>
+MY_SEEDS$1$lowerbound = <optimized out>
+VEGFRA$1$upperbound = <optimized out>
+SNOW$1$upperbound = <optimized out>
+SNOWC$1$upperbound = <optimized out>
+SNOWH$1$upperbound = <optimized out>
+CANWAT$1$upperbound = <optimized out>
+SMSTAV$1$upperbound = <optimized out>
+SMSTOT$1$upperbound = <optimized out>
+SFCRUNOFF$1$upperbound = <optimized out>
+UDRUNOFF$1$upperbound = <optimized out>
+ACSNOW$1$upperbound = <optimized out>
+ACSNOM$1$upperbound = <optimized out>
+IVGTYP$1$upperbound = <optimized out>
+ISLTYP$1$upperbound = <optimized out>
+TSLB$1$upperbound = <optimized out>
+SMOIS$1$upperbound = <optimized out>
+SH2O$1$upperbound = <optimized out>
+SNOALB$1$upperbound = <optimized out>
+IRR_RAND_FIELD$1$upperbound = <optimized out>
+RAND_TMP$1$upperbound = <optimized out>
+rand_tmp = <optimized out>
+MY_SEEDS$1$upperbound = <optimized out>
+my_seeds = <optimized out>
+i = <optimized out>
+j = <error reading variable j (Cannot access memory at address 0x1)>
+itf = <error reading variable itf (Cannot access memory at address 0xea)>
+jtf = <error reading variable jtf (Cannot access memory at address 0x11a)>
+errflag = <optimized out>
+bx = <optimized out>
+smcmax = 0.439999998
+psisat = <optimized out>
+fk = <optimized out>
+TSLB$2$upperbound = <optimized out>
+SMOIS$2$upperbound = <optimized out>
+SH2O$2$upperbound = <optimized out>
+ZS$1$upperbound = <optimized out>
+DZS$1$upperbound = <optimized out>
+MMINLU.len = <optimized out>
+free = <optimized out>
+l = <optimized out>
+ns = <optimized out>
+$1 = <optimized out>
+$2 = <optimized out>
+Cannot access memory at address 0x1
+$3 = <optimized out>
+$4 = 0.439999998
+$5 = <optimized out>
+$6 = -18130147.1174358343778
+value has been optimized out
+#0  0x000000000362872d in module_sf_noahdrv::lsminit (vegfra=..., snow=..., snowc=..., snowh=..., canwat=..., smstav=..., smstot=..., sfcrunoff=..., udrunoff=..., acsnow=..., acsnom=..., ivgtyp=..., isltyp=..., tslb=..., smois=..., sh2o=..., zs=..., dzs=..., mminlu=..., snoalb=..., fndsoilw=.TRUE., fndsnowh=.TRUE., rdmaxalb=.TRUE., num_soil_layers=92367200, restart=.TRUE., allowed_to_read=.TRUE., irr_rand_field=..., irr_ph=92367036, irr_freq=92367032, ids=-22652, ide=-22608, jds=-22672, jde=-22604, kds=-22760, kde=-22752, ims=-22656, ime=-22676, jms=-22660, jme=-22680, kms=-22748, kme=-22740, its=-2022713472, ite=-2022713504, jts=-2022713536, jte=-2022713568, kts=-22756, kte=-22744, _mminlu=24) at /var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_sf_noahdrv.f90:1840
+#1  0x0000000002e37671 in module_physics_init_mp_bl_init_ ()
+#2  0x0000000002e2d61d in module_physics_init_mp_phy_init_ ()
+#3  0x00000000022dc382 in start_domain_em_ ()
+#4  0x000000000208dc50 in start_domain_ ()
+#5  0x0000000001389f5a in med_initialdata_input_ ()
+#6  0x0000000000418804 in module_wrf_top_mp_wrf_init_ ()
+#7  0x0000000000417dc8 in MAIN__ ()
+mxcsr          0x1933              [ IE DE UE PE DM UM PM ]

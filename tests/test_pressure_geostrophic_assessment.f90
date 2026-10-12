@@ -14,6 +14,7 @@ PROGRAM test_pressure_geostrophic_assessment
   CALL test_zero_evaluable_partial_stencil_rejection(failures)
   CALL test_partial_terrain_invalid_phi_rejection(failures)
   CALL test_explicit_phi_support_without_target(failures)
+  CALL test_background_prior_wind_diagnostic(failures)
   CALL test_equality_repeat_and_wind_authority(failures)
   CALL test_required_phi_metadata_rejection(failures)
   CALL test_phi_nonfinite_rejection(failures)
@@ -427,6 +428,35 @@ CONTAINS
       repeat_before==before .AND. repeat_after==after, &
       'repeated diagnostic call is deterministic',failures)
   END SUBROUTINE test_explicit_phi_support_without_target
+
+  SUBROUTINE test_background_prior_wind_diagnostic(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: background,candidate
+    TYPE(balance_operator_config) :: cfg
+    LOGICAL :: phi_request(4,4,3),wind_support(4,4,3)
+    LOGICAL, ALLOCATABLE :: support(:,:,:)
+    REAL(real64) :: before,after
+    INTEGER :: status
+
+    CALL make_dry_state(background)
+    background%balance_beta=0.0_real32
+    candidate=background
+    phi_request=.FALSE.; phi_request(2,2,2)=.TRUE.
+    wind_support=.FALSE.; wind_support(2:3,2:3,2)=.TRUE.
+    candidate%u%value(2,2,2)=candidate%u%value(2,2,2)+0.25_real32
+    candidate%u%source(2,2,2)=IOR(candidate%u%source(2,2,2),SOURCE_BALANCE_OPERATOR)
+    CALL assess_pressure_geostrophic_change(background,candidate,cfg,phi_request, &
+      support,before,after,status)
+    CALL check(status/=STATUS_OK,'ordinary no-target diagnostic cannot grant wind support',failures)
+    CALL assess_pressure_geostrophic_change(background,candidate,cfg,phi_request, &
+      support,before,after,status,diagnostic_wind_support=wind_support)
+    CALL check(status==STATUS_OK .AND. before/=after, &
+      'explicit prior wind support reports the final geostrophic change',failures)
+    candidate%v%value(1,1,2)=candidate%v%value(1,1,2)+0.5_real32
+    CALL assess_pressure_geostrophic_change(background,candidate,cfg,phi_request, &
+      support,before,after,status,diagnostic_wind_support=wind_support)
+    CALL check(status/=STATUS_OK,'prior diagnostic rejects winds outside its declared support',failures)
+  END SUBROUTINE test_background_prior_wind_diagnostic
 
   SUBROUTINE test_equality_repeat_and_wind_authority(failures)
     INTEGER, INTENT(INOUT) :: failures

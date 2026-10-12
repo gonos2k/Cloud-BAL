@@ -18,7 +18,7 @@ MODULE cloud_bal_real_netcdf
     physical_boundary_contract_valid,model_boundary_increment_contract_valid, &
     TARGET_AUTHORITY_OBSERVATIONAL,BOUNDARY_INCREMENT_HOMOGENEOUS_MODEL, &
     TARGET_AUTHORITY_MODEL_DYNAMICS,target_is_resolved, &
-    balance_operator_type,build_balance_operator,state_dry_air_mass_flux_divergence, &
+    balance_operator_type,build_balance_operator,build_diagnostic_balance_operator,state_dry_air_mass_flux_divergence, &
     state_continuity_residual,assess_pressure_geostrophic_change
   IMPLICIT NONE
   PRIVATE
@@ -993,11 +993,19 @@ CONTAINS
         ANY(.NOT.ieee_is_finite(residual_before)) .OR. &
         ANY(.NOT.ieee_is_finite(residual_after))) RETURN
     IF (ALLOCATED(result%geopotential_support)) THEN
-      CALL assess_pressure_geostrophic_change(state_in,candidate,config%balance, &
-        result%geopotential_support,geostrophic_support, &
-        reference_geostrophic_rms,final_geostrophic_rms,status,geostrophic_stencil_support, &
-        allow_surface_pressure_geometry=ALLOCATED(result%requested_surface_pressure), &
-        transition_seed=result%pressure_transition_seed)
+      IF (config%background_continuity_prior) THEN
+        IF (.NOT.ALLOCATED(result%background_control_support)) RETURN
+        CALL assess_pressure_geostrophic_change(state_in,candidate,config%balance, &
+          result%geopotential_support,geostrophic_support, &
+          reference_geostrophic_rms,final_geostrophic_rms,status,geostrophic_stencil_support, &
+          diagnostic_wind_support=result%background_control_support)
+      ELSE
+        CALL assess_pressure_geostrophic_change(state_in,candidate,config%balance, &
+          result%geopotential_support,geostrophic_support, &
+          reference_geostrophic_rms,final_geostrophic_rms,status,geostrophic_stencil_support, &
+          allow_surface_pressure_geometry=ALLOCATED(result%requested_surface_pressure), &
+          transition_seed=result%pressure_transition_seed)
+      END IF
       IF (status/=STATUS_OK) THEN
         WRITE(*,'(A)') 'shadow_write_geostrophic_assessment_failed'
         RETURN
@@ -1233,6 +1241,10 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_var(ncid,varid(37),mask))) GOTO 900
     IF (.NOT.put_thermo_field(ncid,(/xdim,ydim,zdim/),'omega_target_sigma', &
       candidate%omega_target_sigma)) GOTO 900
+    IF (ALLOCATED(result%analysis_support)) THEN
+      IF (.NOT.put_thermo_field(ncid,(/xdim,ydim,zdim/),'original_omega_target_sigma', &
+        state_in%omega_target_sigma)) GOTO 900
+    END IF
     IF (ALLOCATED(result%thermo_support)) THEN
       IF (.NOT.put_thermo_extension(ncid,(/xdim,ydim,zdim/), &
         state_in,candidate,result)) GOTO 900
@@ -1275,7 +1287,7 @@ CONTAINS
         state_in,candidate,result,config)) GOTO 900
       IF (ALLOCATED(result%thermo_support)) THEN
         IF (.NOT.put_dry_air_flux_extension(ncid,(/xdim,ydim,zdim/),state_in,candidate,config, &
-          variable_geometry)) GOTO 900
+          variable_geometry,ALLOCATED(result%analysis_support))) GOTO 900
       END IF
       IF (ALLOCATED(geostrophic_support)) THEN
         IF (.NOT.put_pressure_geostrophic_extension(ncid,(/xdim,ydim,zdim/), &
@@ -1286,6 +1298,7 @@ CONTAINS
     END IF
     IF (.NOT.put_interior_hydrostatic_assessment(ncid,(/xdim,ydim,zdim/),zspacing_dim, &
       candidate,result%candidate_evaluation)) GOTO 900
+    IF (.NOT.put_supported_analysis_extension(ncid,(/xdim,ydim,zdim/),result,config)) GOTO 900
     IF (ALLOCATED(result%physical_contract)) THEN
       IF (.NOT.put_physical_contract_extension(ncid,(/xdim,ydim,zdim/), &
         state_in,candidate,result%physical_contract,result%candidate_evaluation)) GOTO 900
@@ -1301,6 +1314,57 @@ CONTAINS
     rc=nf90_close(ncid)
     CALL delete_failed_shadow_file(path)
   END SUBROUTINE write_shadow_diagnostics
+
+  LOGICAL FUNCTION put_supported_analysis_extension(ncid,dims,result,config)
+    INTEGER, INTENT(IN) :: ncid,dims(3)
+    TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
+    CHARACTER(LEN=40), PARAMETER :: names(3)=[CHARACTER(LEN=40) :: &
+      'analysis_support','background_control_support','background_validation_shell']
+    INTEGER :: ids(3),n,i
+    INTEGER(int32), ALLOCATABLE :: mask(:,:,:)
+
+    put_supported_analysis_extension=.FALSE.
+    IF (.NOT.ALLOCATED(result%analysis_support)) THEN
+      put_supported_analysis_extension=.NOT.config%background_continuity_prior
+      RETURN
+    END IF
+    n=1
+    IF (config%background_continuity_prior) THEN
+      IF (.NOT.ALLOCATED(result%background_control_support) .OR. &
+          .NOT.ALLOCATED(result%background_validation_shell)) RETURN
+      n=3
+    END IF
+    ALLOCATE(mask,SOURCE=MERGE(1_int32,0_int32,result%analysis_support))
+    IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'supported_analysis_contract', &
+      'pressure_observation_retrieval_v1'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'background_continuity_prior', &
+      MERGE(1,0,config%background_continuity_prior)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'precipitation_transport_enabled', &
+      MERGE(1,0,config%column%transport_precipitation)))) RETURN
+    IF (config%background_continuity_prior) THEN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'dry_mass_tendency_prior', &
+        'frozen_background_minus_dry_flux_divergence_kg_s-1'))) RETURN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'background_prior_metric', &
+        'existing_kappa_u_v_omega_not_observational_covariance'))) RETURN
+    END IF
+    DO i=1,n
+      IF (.NOT.nc_ok(nf90_def_var(ncid,TRIM(names(i)),NF90_INT,dims,ids(i)))) RETURN
+      IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,ids(i),1,1,1))) RETURN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,ids(i),'units','1'))) RETURN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,ids(i),'mask_encoding','0=outside,1=inside'))) RETURN
+    END DO
+    IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(ncid,ids(1),mask))) RETURN
+    IF (n==3) THEN
+      mask=MERGE(1_int32,0_int32,result%background_control_support)
+      IF (.NOT.nc_ok(nf90_put_var(ncid,ids(2),mask))) RETURN
+      mask=MERGE(1_int32,0_int32,result%background_validation_shell)
+      IF (.NOT.nc_ok(nf90_put_var(ncid,ids(3),mask))) RETURN
+    END IF
+    put_supported_analysis_extension=.TRUE.
+  END FUNCTION put_supported_analysis_extension
 
   LOGICAL FUNCTION put_physical_contract_extension(ncid,dims,background,candidate,contract,evaluation)
     USE cloud_bal_pipeline, ONLY: physical_joint_candidate_contract,joint_candidate_evaluation
@@ -1729,12 +1793,12 @@ CONTAINS
     END ASSOCIATE
   END FUNCTION put_pressure_transition_extension
 
-  LOGICAL FUNCTION put_dry_air_flux_extension(ncid,dims,background,candidate,config,variable_geometry)
+  LOGICAL FUNCTION put_dry_air_flux_extension(ncid,dims,background,candidate,config,variable_geometry,supported_analysis)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_config
     INTEGER, INTENT(IN) :: ncid,dims(3)
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
-    LOGICAL, INTENT(IN) :: variable_geometry
+    LOGICAL, INTENT(IN) :: variable_geometry,supported_analysis
     TYPE(balance_operator_type) :: background_op,candidate_op
     TYPE(cloud_bal_state_type) :: background_for_flux
     REAL(real64), ALLOCATABLE :: before(:,:,:),after(:,:,:),original_continuity(:,:,:)
@@ -1748,9 +1812,15 @@ CONTAINS
     ! A prescribed PSFC request owns candidate geometry, so each state must be
     ! evaluated with its own pressure-coordinate operator. The legacy path
     ! intentionally keeps its fixed-geometry behavior unchanged.
-    CALL build_balance_operator(candidate,config%balance,candidate_op,status,reason)
+    IF (supported_analysis) THEN
+      CALL build_diagnostic_balance_operator(candidate,candidate_op,status,reason)
+    ELSE
+      CALL build_balance_operator(candidate,config%balance,candidate_op,status,reason)
+    END IF
     IF (status/=STATUS_OK) RETURN
-    IF (variable_geometry) THEN
+    IF (supported_analysis) THEN
+      CALL build_diagnostic_balance_operator(background,background_op,status,reason)
+    ELSE IF (variable_geometry) THEN
       ! Keep the candidate-side diagnostic support mask while rebuilding the
       ! original operator on original pressure geometry.
       background_for_flux=background
@@ -1777,6 +1847,7 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
     dry_flux_contract=PRESSURE_DRY_AIR_FLUX_CONTRACT_FIXED
     IF (variable_geometry) dry_flux_contract=PRESSURE_DRY_AIR_FLUX_CONTRACT_STATE
+    IF (supported_analysis) dry_flux_contract='pressure_observation_full_domain_dry_air_flux_v1'
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'dry_air_flux_contract', &
       TRIM(dry_flux_contract)))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'dry_air_flux_boundary', &
@@ -2439,11 +2510,12 @@ CONTAINS
     END IF
     ! Remap and cloud diagnostics need the full pipeline replay. The radar-only
     ! shortcut treats every no-echo diagnostic change as a precipitation change.
-    IF (.NOT.analysis_estimator_candidate .AND. .NOT.transition .AND. .NOT.cloud_present) THEN
+    IF (.NOT.analysis_estimator_candidate .AND. .NOT.transition .AND. .NOT.cloud_present .AND. &
+        .NOT.ALLOCATED(result%analysis_support)) THEN
       IF (.NOT.candidate_result_is_coherent(state_in,candidate,result)) RETURN
     END IF
     IF (.NOT.analysis_estimator_candidate .AND. (transition .OR. config%maximum_outer_iterations>1 .OR. pressure_candidate .OR. &
-        variable_geometry .OR. cloud_present)) THEN
+        variable_geometry .OR. cloud_present .OR. ALLOCATED(result%analysis_support))) THEN
       IF (.NOT.pipeline_result_replays(state_in,candidate,result,config)) RETURN
     END IF
     IF (ALLOCATED(result%physical_contract)) THEN
@@ -2606,7 +2678,21 @@ CONTAINS
     REAL(real64), INTENT(IN), OPTIONAL :: requested_surface_pressure(:,:)
     TYPE(cloud_bal_state_type), INTENT(IN), OPTIONAL :: pressure_transition_seed
 
-    IF (ALLOCATED(receipt%physical_contract)) THEN
+    IF (ALLOCATED(receipt%analysis_support) .AND. config%background_continuity_prior) THEN
+      IF (.NOT.ALLOCATED(receipt%background_control_support) .OR. &
+          .NOT.ALLOCATED(receipt%background_validation_shell)) RETURN
+      CALL run_cloud_bal_pipeline(background,candidate,operational,replay_result,config, &
+        thermo_active,thermo_surface,target_rh,geopotential_support, &
+        geopotential_reference_level,requested_surface_pressure,pressure_transition_seed, &
+        analysis_support=receipt%analysis_support, &
+        background_control_support=receipt%background_control_support, &
+        background_validation_shell=receipt%background_validation_shell)
+    ELSE IF (ALLOCATED(receipt%analysis_support)) THEN
+      CALL run_cloud_bal_pipeline(background,candidate,operational,replay_result,config, &
+        thermo_active,thermo_surface,target_rh,geopotential_support, &
+        geopotential_reference_level,requested_surface_pressure,pressure_transition_seed, &
+        analysis_support=receipt%analysis_support)
+    ELSE IF (ALLOCATED(receipt%physical_contract)) THEN
       CALL run_cloud_bal_pipeline(background,candidate,operational,replay_result,config, &
         thermo_active,thermo_surface,target_rh,geopotential_support, &
         geopotential_reference_level,requested_surface_pressure,pressure_transition_seed, &

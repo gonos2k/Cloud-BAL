@@ -91,6 +91,7 @@ MODULE cloud_bal_balance_operator
   PUBLIC :: apply_balance_correction
   PUBLIC :: apply_normal_operator
   PUBLIC :: apply_localized_balance
+  PUBLIC :: apply_background_continuity_balance
   PUBLIC :: continuity_norms
   PUBLIC :: balance_beta_active
   PUBLIC :: state_continuity_residual
@@ -110,6 +111,439 @@ MODULE cloud_bal_balance_operator
   PUBLIC :: include_lateral_face_stencil
 
 CONTAINS
+
+  ! Research-only continuity projection against a frozen background dry-air
+  ! flux tendency. The background is a prior reference, never a zero target.
+  SUBROUTINE apply_background_continuity_balance(background,input,state_out,result,config, &
+      control_support,validation_shell)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,input
+    TYPE(cloud_bal_state_type), INTENT(OUT) :: state_out
+    TYPE(stage_result), INTENT(OUT) :: result
+    TYPE(balance_operator_config), INTENT(IN) :: config
+    LOGICAL, INTENT(IN) :: control_support(:,:,:),validation_shell(:,:,:)
+    TYPE(balance_operator_type) :: diagnostic_op,op
+    TYPE(cloud_bal_state_type) :: candidate
+    REAL(real64), ALLOCATABLE :: background_flux(:,:,:),input_flux(:,:,:)
+    REAL(real64), ALLOCATABLE :: b(:,:,:),lambda(:,:,:),du(:,:,:),dv(:,:,:),domega(:,:,:)
+    REAL(real64), ALLOCATABLE :: work_u(:,:,:),work_v(:,:,:),work_o(:,:,:),final_flux(:,:,:)
+    REAL(real64), ALLOCATABLE :: background_fraction(:,:,:),input_fraction(:,:,:)
+    REAL(real64) :: initial_rms,initial_max,outside_rms,outside_max,final_rms,final_max
+    REAL(real64) :: wind_increment,omega_increment
+    INTEGER :: status,reason,iterations,solver_reason,i,j,k
+
+    CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_SHAPE)
+    IF (.NOT.config_valid(config) .OR. &
+        config%target_authority/=TARGET_AUTHORITY_OBSERVATIONAL) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+      RETURN
+    END IF
+    CALL validate_canonical_state(background,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(input,state_out,result,status,reason)
+      RETURN
+    END IF
+    CALL validate_canonical_state(input,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(input,state_out,result,status,reason)
+      RETURN
+    END IF
+    IF (.NOT.background_prior_boundary_contract_valid(background) .OR. &
+        .NOT.background_prior_boundary_contract_valid(input) .OR. &
+        .NOT.model_boundary_increment_contract_valid(background,input)) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+      RETURN
+    END IF
+    IF (.NOT.same_continuity_geometry(background,input)) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_METADATA)
+      RETURN
+    END IF
+    CALL build_diagnostic_balance_operator(input,diagnostic_op,status,reason)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(input,state_out,result,status,reason)
+      RETURN
+    END IF
+    IF (ANY(SHAPE(control_support)/=(/diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz/)) .OR. &
+        ANY(SHAPE(validation_shell)/=(/diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz/))) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_SHAPE)
+      RETURN
+    END IF
+    IF (.NOT.background_source_is_authoritative(background,diagnostic_op)) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+      RETURN
+    END IF
+    IF (.NOT.ANY(control_support) .OR. ANY(control_support .AND. .NOT.diagnostic_op%cell_usable) .OR. &
+        ANY(validation_shell .AND. .NOT.diagnostic_op%cell_usable) .OR. &
+        ANY(control_support .AND. .NOT.validation_shell) .OR. &
+        .NOT.control_shell_covers_faces(diagnostic_op,control_support,validation_shell)) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_METADATA)
+      RETURN
+    END IF
+    ALLOCATE(background_flux(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      input_flux(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      final_flux(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      b(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      lambda(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      du(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      dv(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      domega(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      work_u(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      work_v(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      work_o(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      background_fraction(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz), &
+      input_fraction(diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz))
+    background_fraction=0.0_real64; input_fraction=0.0_real64
+    WHERE(background%above_ground)
+      background_fraction=background%grid%dry_air_mass_measure/ &
+        background%grid%pressure_mass_measure
+    END WHERE
+    WHERE(input%above_ground)
+      input_fraction=input%grid%dry_air_mass_measure/input%grid%pressure_mass_measure
+    END WHERE
+    IF (ANY(.NOT.validation_shell .AND. input_fraction/=background_fraction)) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_DEGRADED,REASON_GATE)
+      RETURN
+    END IF
+    CALL state_dry_air_mass_flux_divergence(diagnostic_op,background,background_flux,status)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_NONFINITE)
+      RETURN
+    END IF
+    CALL state_dry_air_mass_flux_divergence(diagnostic_op,input,input_flux,status)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_NONFINITE)
+      RETURN
+    END IF
+    b=0.0_real64
+    WHERE(diagnostic_op%cell_usable)
+      b=(input_flux-background_flux)/diagnostic_op%volume
+    END WHERE
+    CALL masked_residual_norm(b,.NOT.validation_shell,outside_rms,outside_max)
+    IF (outside_rms>1.0e-12_real64 .OR. outside_max>1.0e-12_real64) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_DEGRADED,REASON_GATE)
+      RETURN
+    END IF
+    WHERE(.NOT.validation_shell) b=0.0_real64
+    CALL masked_residual_norm(b,validation_shell,initial_rms,initial_max)
+    IF (.NOT.ieee_is_finite(initial_rms) .OR. .NOT.ieee_is_finite(initial_max)) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_NONFINITE)
+      RETURN
+    END IF
+    IF (initial_rms<=config%solver_absolute_tolerance .AND. &
+        initial_max<=config%solver_absolute_tolerance) THEN
+      state_out=input
+      CALL initialize_stage_result(result,diagnostic_op%nx,diagnostic_op%ny, &
+        diagnostic_op%nz,STATUS_OK,REASON_NONE)
+      RETURN
+    END IF
+
+    op=diagnostic_op
+    CALL configure_background_operator(op,input,config,control_support,validation_shell)
+    IF (op%ncomponent<=0 .OR. .NOT.compatibility_ok(op,b,config)) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_SOLVER)
+      result%numerical%solver_reason=SOLVER_INCOMPATIBLE_RHS
+      RETURN
+    END IF
+    du=0.0_real64; dv=0.0_real64; domega=0.0_real64
+    CALL solve_normal_equation(op,b,config,lambda,du,dv,domega,iterations,status, &
+      solver_reason,final_rms,final_max)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_SOLVER)
+      result%numerical%solver_reason=solver_reason
+      result%numerical%solver_iterations=iterations
+      RETURN
+    END IF
+    CALL apply_balance_correction(op,lambda,du,dv,domega,status)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_NONFINITE)
+      RETURN
+    END IF
+    candidate=input
+    wind_increment=0.0_real64; omega_increment=0.0_real64
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (du(i,j,k)/=0.0_real64) THEN
+        candidate%u%value(i,j,k)=REAL(REAL(input%u%value(i,j,k),real64)+du(i,j,k),real32)
+        IF (.NOT.ieee_is_finite(candidate%u%value(i,j,k))) THEN
+          CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_NONFINITE)
+          RETURN
+        END IF
+        du(i,j,k)=REAL(candidate%u%value(i,j,k),real64)-REAL(input%u%value(i,j,k),real64)
+        IF (du(i,j,k)/=0.0_real64) &
+          candidate%u%source(i,j,k)=IOR(candidate%u%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+      END IF
+      IF (dv(i,j,k)/=0.0_real64) THEN
+        candidate%v%value(i,j,k)=REAL(REAL(input%v%value(i,j,k),real64)+dv(i,j,k),real32)
+        IF (.NOT.ieee_is_finite(candidate%v%value(i,j,k))) THEN
+          CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_NONFINITE)
+          RETURN
+        END IF
+        dv(i,j,k)=REAL(candidate%v%value(i,j,k),real64)-REAL(input%v%value(i,j,k),real64)
+        IF (dv(i,j,k)/=0.0_real64) &
+          candidate%v%source(i,j,k)=IOR(candidate%v%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+      END IF
+      IF (domega(i,j,k)/=0.0_real64) THEN
+        candidate%omega%value(i,j,k)= &
+          REAL(REAL(input%omega%value(i,j,k),real64)+domega(i,j,k),real32)
+        IF (.NOT.ieee_is_finite(candidate%omega%value(i,j,k))) THEN
+          CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_NONFINITE)
+          RETURN
+        END IF
+        domega(i,j,k)=REAL(candidate%omega%value(i,j,k),real64)- &
+          REAL(input%omega%value(i,j,k),real64)
+        IF (domega(i,j,k)/=0.0_real64) &
+          candidate%omega%source(i,j,k)=IOR(candidate%omega%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+      END IF
+      wind_increment=MAX(wind_increment,HYPOT(du(i,j,k),dv(i,j,k)))
+      omega_increment=MAX(omega_increment,ABS(domega(i,j,k)))
+    END DO; END DO; END DO
+    IF (wind_increment>MIN(config%maximum_wind_increment,10.0_real64) .OR. &
+        omega_increment>MIN(config%maximum_omega_increment,5.0_real64)) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_DEGRADED,REASON_GATE)
+      result%numerical%max_wind_increment=wind_increment
+      result%numerical%max_omega_increment=omega_increment
+      RETURN
+    END IF
+    CALL validate_canonical_state(candidate,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK .OR. &
+        .NOT.model_boundary_increment_contract_valid(input,candidate) .OR. &
+        .NOT.model_boundary_increment_contract_valid(background,candidate)) THEN
+      IF (status==STATUS_OK) reason=REASON_AUTHORITY
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,reason)
+      RETURN
+    END IF
+    CALL state_dry_air_mass_flux_divergence(diagnostic_op,candidate,final_flux,status)
+    IF (status/=STATUS_OK) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_FAILED,REASON_NONFINITE)
+      RETURN
+    END IF
+    WHERE(validation_shell)
+      final_flux=(final_flux-background_flux)/diagnostic_op%volume
+    ELSEWHERE
+      final_flux=0.0_real64
+    END WHERE
+    CALL masked_residual_norm(final_flux,validation_shell,final_rms,final_max)
+    IF (.NOT.ieee_is_finite(final_rms) .OR. .NOT.ieee_is_finite(final_max) .OR. &
+        final_rms>MAX(2.0e-3_real64*initial_rms,1.0e-12_real64) .OR. &
+        final_max>MAX(2.0e-3_real64*initial_max,1.0e-12_real64)) THEN
+      CALL reject_candidate(input,state_out,result,STATUS_DEGRADED,REASON_GATE)
+      result%numerical%continuity_background_rms=initial_rms
+      result%numerical%continuity_background_max=initial_max
+      result%numerical%continuity_candidate_rms=final_rms
+      result%numerical%continuity_candidate_max=final_max
+      result%numerical%max_wind_increment=wind_increment
+      result%numerical%max_omega_increment=omega_increment
+      result%numerical%solver_iterations=iterations
+      result%numerical%solver_reason=solver_reason
+      RETURN
+    END IF
+    CALL initialize_stage_result(result,op%nx,op%ny,op%nz,STATUS_OK,REASON_NONE)
+    result%changed=control_support .AND. &
+      ((du/=0.0_real64) .OR. (dv/=0.0_real64) .OR. (domega/=0.0_real64))
+    result%numerical%continuity_background_rms=initial_rms
+    result%numerical%continuity_background_max=initial_max
+    result%numerical%continuity_candidate_rms=final_rms
+    result%numerical%continuity_candidate_max=final_max
+    result%numerical%continuity_proposed_increment_rms=initial_rms
+    result%numerical%continuity_projected_increment_rms=final_rms
+    result%numerical%max_wind_increment=wind_increment
+    result%numerical%max_omega_increment=omega_increment
+    result%numerical%solver_iterations=iterations
+    result%numerical%solver_reason=solver_reason
+    state_out=candidate
+  END SUBROUTINE apply_background_continuity_balance
+
+  SUBROUTINE configure_background_operator(op,state,config,control_support,validation_shell)
+    TYPE(balance_operator_type), INTENT(INOUT) :: op
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    TYPE(balance_operator_config), INTENT(IN) :: config
+    LOGICAL, INTENT(IN) :: control_support(:,:,:),validation_shell(:,:,:)
+    REAL(real64), ALLOCATABLE :: fraction(:,:,:)
+    INTEGER :: i,j,k
+
+    op%cell_active=validation_shell
+    ! The background-prior path authorizes a fixed projection boundary, not
+    ! physical boundary observations or an omega target.
+    op%physical_boundary_authorized=background_prior_boundary_contract_valid(state)
+    op%ku=0.0_real64; op%kv=0.0_real64; op%ko=0.0_real64
+    op%omega_authorized=.FALSE.
+    ALLOCATE(fraction(op%nx,op%ny,op%nz))
+    fraction=0.0_real64
+    WHERE(state%above_ground)
+      fraction=state%grid%dry_air_mass_measure/state%grid%pressure_mass_measure
+    END WHERE
+    op%xleft_weight=op%xleft_weight*fraction(1:op%nx-1,:,:)
+    op%xright_weight=op%xright_weight*fraction(2:op%nx,:,:)
+    op%yleft_weight=op%yleft_weight*fraction(:,1:op%ny-1,:)
+    op%yright_weight=op%yright_weight*fraction(:,2:op%ny,:)
+    op%pleft_weight=op%pleft_weight*fraction(:,:,1:op%nz-1)
+    op%pright_weight=op%pright_weight*fraction(:,:,2:op%nz)
+    WHERE(control_support)
+      op%ku=config%kappa_u
+      op%kv=config%kappa_v
+    END WHERE
+    IF (op%nz>2) THEN
+      WHERE(control_support(:,:,2:op%nz-1))
+        op%ko(:,:,2:op%nz-1)=config%kappa_omega
+        op%omega_authorized(:,:,2:op%nz-1)=.TRUE.
+      END WHERE
+    END IF
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (op%ku(i,j,k)>0.0_real64) THEN
+        IF (i==1 .OR. i==op%nx) THEN
+          op%ku(i,j,k)=0.0_real64
+        ELSE IF (.NOT.(control_support(i-1,j,k) .AND. control_support(i+1,j,k))) THEN
+          op%ku(i,j,k)=0.0_real64
+        END IF
+      END IF
+      IF (op%kv(i,j,k)>0.0_real64) THEN
+        IF (j==1 .OR. j==op%ny) THEN
+          op%kv(i,j,k)=0.0_real64
+        ELSE IF (.NOT.(control_support(i,j-1,k) .AND. control_support(i,j+1,k))) THEN
+          op%kv(i,j,k)=0.0_real64
+        END IF
+      END IF
+    END DO; END DO; END DO
+    CALL set_lateral_segment_activity(op)
+    op%pface_active=.FALSE.
+    DO k=1,op%nz-1; DO j=1,op%ny; DO i=1,op%nx
+      op%pface_active(i,j,k)=op%cell_active(i,j,k) .AND. &
+        op%cell_active(i,j,k+1) .AND. &
+        (op%ko(i,j,k)>0.0_real64 .OR. op%ko(i,j,k+1)>0.0_real64)
+    END DO; END DO; END DO
+    CALL label_components(op)
+  END SUBROUTINE configure_background_operator
+
+  PURE LOGICAL FUNCTION same_continuity_geometry(left,right)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: left,right
+    same_continuity_geometry=.FALSE.
+    IF (left%grid%nx/=right%grid%nx .OR. left%grid%ny/=right%grid%ny .OR. &
+        left%grid%nz/=right%grid%nz .OR. left%grid%grid_id/=right%grid%grid_id) RETURN
+    IF (left%pressure%valid_time/=right%pressure%valid_time .OR. &
+        ANY(left%pressure%value/=right%pressure%value) .OR. &
+        ANY(left%above_ground .NEQV. right%above_ground)) RETURN
+    IF (ANY(left%grid%dx/=right%grid%dx) .OR. ANY(left%grid%dy/=right%grid%dy) .OR. &
+        ANY(left%grid%pressure_interface/=right%grid%pressure_interface) .OR. &
+        ANY(left%grid%cell_dp/=right%grid%cell_dp) .OR. &
+        ANY(left%grid%level_spacing_dp/=right%grid%level_spacing_dp) .OR. &
+        ANY(left%grid%pressure_mass_measure/=right%grid%pressure_mass_measure)) RETURN
+    same_continuity_geometry=.TRUE.
+  END FUNCTION same_continuity_geometry
+
+  PURE LOGICAL FUNCTION background_source_is_authoritative(state,op)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    TYPE(balance_operator_type), INTENT(IN) :: op
+    INTEGER(int32), PARAMETER :: generated_bits= &
+      SOURCE_COLUMN_PHYSICS+SOURCE_BALANCE_OPERATOR+SOURCE_MANUFACTURED_TEST
+    INTEGER(int32), PARAMETER :: wind_sources=SOURCE_BACKGROUND_MODEL+SOURCE_ANALYZED_WIND
+    INTEGER(int32), PARAMETER :: vapor_sources=SOURCE_BACKGROUND_MODEL+SOURCE_OUTPUT_ADAPTER
+    INTEGER(int32), PARAMETER :: water_sources= &
+      SOURCE_BACKGROUND_MODEL+SOURCE_CLOUD_ANALYSIS+SOURCE_OUTPUT_ADAPTER
+    background_source_is_authoritative=.FALSE.
+    ! The input-derived operator must never read an invalid background value
+    ! as a frozen prior merely because that value happens to be finite.
+    IF (ANY(op%cell_usable .AND. .NOT.cell_is_usable(state%pressure%valid, &
+        state%pressure%quality,state%pressure%source)) .OR. &
+        ANY(op%cell_usable .AND. .NOT.cell_is_usable(state%u%valid, &
+        state%u%quality,state%u%source)) .OR. &
+        ANY(op%cell_usable .AND. .NOT.cell_is_usable(state%v%valid, &
+        state%v%quality,state%v%source)) .OR. &
+        ANY(op%cell_usable .AND. .NOT.cell_is_usable(state%omega%valid, &
+        state%omega%quality,state%omega%source))) RETURN
+    IF (ANY(IAND(state%pressure%source,generated_bits)/=0_int32) .OR. &
+        ANY(IAND(state%u%source,generated_bits)/=0_int32) .OR. &
+        ANY(IAND(state%v%source,generated_bits)/=0_int32) .OR. &
+        ANY(IAND(state%omega%source,generated_bits)/=0_int32) .OR. &
+        ANY(IAND(state%vapor%source,generated_bits)/=0_int32) .OR. &
+        ANY(IAND(state%cloud_water%source,generated_bits)/=0_int32) .OR. &
+        ANY(IAND(state%cloud_ice%source,generated_bits)/=0_int32) .OR. &
+        ANY(IAND(state%rain%source,generated_bits)/=0_int32) .OR. &
+        ANY(IAND(state%snow%source,generated_bits)/=0_int32) .OR. &
+        ANY(IAND(state%graupel%source,generated_bits)/=0_int32)) RETURN
+    IF (ANY(op%cell_usable .AND. &
+        .NOT.source_has_allowed_provenance(state%pressure%source, &
+          IOR(SOURCE_BACKGROUND_MODEL,SOURCE_OUTPUT_ADAPTER))) .OR. &
+        ANY(op%cell_usable .AND. &
+        .NOT.source_has_allowed_provenance(state%u%source,wind_sources)) .OR. &
+        ANY(op%cell_usable .AND. &
+        .NOT.source_has_allowed_provenance(state%v%source,wind_sources)) .OR. &
+        ANY(op%cell_usable .AND. &
+        .NOT.source_has_allowed_provenance(state%omega%source,wind_sources)) .OR. &
+        ANY(op%cell_usable .AND. &
+        .NOT.source_has_allowed_provenance(state%vapor%source,vapor_sources))) RETURN
+    IF (ANY(op%cell_usable .AND. cell_is_usable(state%cloud_water%valid, &
+        state%cloud_water%quality,state%cloud_water%source) .AND. &
+        .NOT.source_has_allowed_provenance(state%cloud_water%source,water_sources)) .OR. &
+        ANY(op%cell_usable .AND. cell_is_usable(state%cloud_ice%valid, &
+        state%cloud_ice%quality,state%cloud_ice%source) .AND. &
+        .NOT.source_has_allowed_provenance(state%cloud_ice%source,water_sources)) .OR. &
+        ANY(op%cell_usable .AND. cell_is_usable(state%rain%valid, &
+        state%rain%quality,state%rain%source) .AND. &
+        .NOT.source_has_allowed_provenance(state%rain%source,water_sources)) .OR. &
+        ANY(op%cell_usable .AND. cell_is_usable(state%snow%valid, &
+        state%snow%quality,state%snow%source) .AND. &
+        .NOT.source_has_allowed_provenance(state%snow%source,water_sources)) .OR. &
+        ANY(op%cell_usable .AND. cell_is_usable(state%graupel%valid, &
+        state%graupel%quality,state%graupel%source) .AND. &
+        .NOT.source_has_allowed_provenance(state%graupel%source,water_sources))) RETURN
+    background_source_is_authoritative=.TRUE.
+  END FUNCTION background_source_is_authoritative
+
+  PURE ELEMENTAL LOGICAL FUNCTION source_has_allowed_provenance(source,allowed_sources)
+    INTEGER(int32), INTENT(IN) :: source,allowed_sources
+    INTEGER(int32), PARAMETER :: forbidden= &
+      SOURCE_COLUMN_PHYSICS+SOURCE_BALANCE_OPERATOR+SOURCE_MANUFACTURED_TEST
+    source_has_allowed_provenance=IAND(source,allowed_sources)/=0_int32 .AND. &
+      IAND(source,forbidden)==0_int32
+  END FUNCTION source_has_allowed_provenance
+
+  PURE LOGICAL FUNCTION control_shell_covers_faces(op,control,shell)
+    TYPE(balance_operator_type), INTENT(IN) :: op
+    LOGICAL, INTENT(IN) :: control(:,:,:),shell(:,:,:)
+    INTEGER :: i,j,k,s,left_level,right_level
+    control_shell_covers_faces=.FALSE.
+    IF (ANY(control .AND. .NOT.shell)) RETURN
+    DO j=1,op%ny; DO i=1,op%nx-1
+      DO s=op%xface_start(i,j),op%xface_start(i,j)+op%xface_count(i,j)-1
+        left_level=op%xseg_left(s); right_level=op%xseg_right(s)
+        IF (control(i,j,left_level) .AND. .NOT.shell(i+1,j,right_level)) RETURN
+        IF (control(i+1,j,right_level) .AND. .NOT.shell(i,j,left_level)) RETURN
+      END DO
+    END DO; END DO
+    DO j=1,op%ny-1; DO i=1,op%nx
+      DO s=op%yface_start(i,j),op%yface_start(i,j)+op%yface_count(i,j)-1
+        left_level=op%yseg_left(s); right_level=op%yseg_right(s)
+        IF (control(i,j,left_level) .AND. .NOT.shell(i,j+1,right_level)) RETURN
+        IF (control(i,j+1,right_level) .AND. .NOT.shell(i,j,left_level)) RETURN
+      END DO
+    END DO; END DO
+    DO k=1,op%nz-1; DO j=1,op%ny; DO i=1,op%nx
+      IF (control(i,j,k) .AND. op%cell_usable(i,j,k+1) .AND. .NOT.shell(i,j,k+1)) RETURN
+      IF (control(i,j,k+1) .AND. op%cell_usable(i,j,k) .AND. .NOT.shell(i,j,k)) RETURN
+    END DO; END DO; END DO
+    control_shell_covers_faces=.TRUE.
+  END FUNCTION control_shell_covers_faces
+
+  SUBROUTINE masked_residual_norm(residual,mask,rms_value,max_value)
+    REAL(real64), INTENT(IN) :: residual(:,:,:)
+    LOGICAL, INTENT(IN) :: mask(:,:,:)
+    REAL(real64), INTENT(OUT) :: rms_value,max_value
+    REAL(real64) :: sum_squares,value
+    INTEGER :: i,j,k,sample_count
+    rms_value=HUGE(1.0_real64); max_value=HUGE(1.0_real64)
+    IF (ANY(SHAPE(residual)/=SHAPE(mask))) RETURN
+    sample_count=COUNT(mask)
+    IF (sample_count<=0) THEN
+      rms_value=0.0_real64; max_value=0.0_real64; RETURN
+    END IF
+    IF (ANY(mask .AND. .NOT.ieee_is_finite(residual))) RETURN
+    sum_squares=0.0_real64; max_value=0.0_real64
+    DO k=1,SIZE(residual,3); DO j=1,SIZE(residual,2); DO i=1,SIZE(residual,1)
+      IF (.NOT.mask(i,j,k)) CYCLE
+      value=ABS(residual(i,j,k))
+      sum_squares=sum_squares+value*value
+      max_value=MAX(max_value,value)
+    END DO; END DO; END DO
+    rms_value=SQRT(sum_squares/REAL(sample_count,real64))
+  END SUBROUTINE masked_residual_norm
 
   PURE INTEGER(int64) FUNCTION active_balance_cell_count(op) RESULT(active_cells)
     TYPE(balance_operator_type), INTENT(IN) :: op
@@ -1943,7 +2377,7 @@ CONTAINS
   SUBROUTINE assess_pressure_geostrophic_change(background,candidate,config, &
                                                 geopotential_support,support, &
                                                 before_rms,after_rms,status,stencil_support, &
-                                                allow_surface_pressure_geometry,transition_seed)
+                                                allow_surface_pressure_geometry,transition_seed,diagnostic_wind_support)
     TYPE(cloud_bal_state_type), INTENT(IN), TARGET :: background
     TYPE(cloud_bal_state_type), INTENT(IN) :: candidate
     TYPE(balance_operator_config), INTENT(IN) :: config
@@ -1954,6 +2388,9 @@ CONTAINS
     LOGICAL, ALLOCATABLE, INTENT(OUT), OPTIONAL :: stencil_support(:,:,:)
     LOGICAL, INTENT(IN), OPTIONAL :: allow_surface_pressure_geometry
     TYPE(cloud_bal_state_type), INTENT(IN), OPTIONAL :: transition_seed
+    ! Explicit support of a separately replayed background-prior producer.
+    ! This changes diagnostic coverage only, never balance acceptance.
+    LOGICAL, INTENT(IN), OPTIONAL :: diagnostic_wind_support(:,:,:)
     TYPE(balance_operator_type) :: op
     TYPE(cloud_bal_state_type), TARGET :: diagnostic_baseline
     TYPE(cloud_bal_state_type), POINTER :: diagnostic_reference
@@ -2000,7 +2437,16 @@ CONTAINS
 
     ! The candidate operator supplies the canonical geometry and usability;
     ! only its diagnostic cell mask is changed below.
-    CALL build_balance_operator(candidate,config,op,state_status,reason)
+    IF (PRESENT(diagnostic_wind_support)) THEN
+      IF (variable_geometry .OR. PRESENT(transition_seed)) RETURN
+      IF (ANY(SHAPE(diagnostic_wind_support)/=[nx,ny,nz])) RETURN
+      CALL build_diagnostic_balance_operator(candidate,op,state_status,reason)
+      IF (state_status/=STATUS_OK) RETURN
+      IF (ANY(diagnostic_wind_support .AND. .NOT.op%cell_usable)) RETURN
+      op%cell_active=diagnostic_wind_support
+    ELSE
+      CALL build_balance_operator(candidate,config,op,state_status,reason)
+    END IF
     IF (state_status/=STATUS_OK) RETURN
     ALLOCATE(wind_change_allowed(nx,ny,nz))
     wind_change_allowed=op%cell_active .OR. new_cells
@@ -3090,6 +3536,40 @@ CONTAINS
       ALL(state%omega_top_boundary%source==SOURCE_BOUNDARY_CONDITION) .AND. &
       ALL(state%omega_bottom_boundary%source==SOURCE_BOUNDARY_CONDITION)
   END FUNCTION physical_boundary_contract_valid
+
+  PURE LOGICAL FUNCTION background_prior_boundary_contract_valid(state)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER(int32), PARAMETER :: copied_quality= &
+      IOR(QUALITY_LEGACY_PROVENANCE,QUALITY_BOUNDARY_INTERIOR_COPY)
+    INTEGER :: i,j,k,bottom_level
+
+    background_prior_boundary_contract_valid=physical_boundary_contract_valid(state)
+    IF (background_prior_boundary_contract_valid) RETURN
+    background_prior_boundary_contract_valid=.FALSE.
+    IF (.NOT.boundary_contract_valid(state)) RETURN
+    IF (ANY(state%omega_top_boundary%source/=SOURCE_ANALYZED_WIND) .OR. &
+        ANY(state%omega_bottom_boundary%source/=SOURCE_ANALYZED_WIND) .OR. &
+        ANY(state%omega_top_boundary%quality/=copied_quality) .OR. &
+        ANY(state%omega_bottom_boundary%quality/=copied_quality)) RETURN
+    DO j=1,state%grid%ny; DO i=1,state%grid%nx
+      IF (.NOT.cell_is_usable(state%omega%valid(i,j,state%grid%nz), &
+          state%omega%quality(i,j,state%grid%nz),state%omega%source(i,j,state%grid%nz), &
+          state%omega%valid_time,state%pressure%valid_time)) RETURN
+      IF (state%omega_top_boundary%value(i,j)/= &
+          state%omega%value(i,j,state%grid%nz)) RETURN
+      bottom_level=0
+      DO k=1,state%grid%nz
+        IF (.NOT.state%above_ground(i,j,k)) CYCLE
+        IF (.NOT.cell_is_usable(state%omega%valid(i,j,k),state%omega%quality(i,j,k), &
+            state%omega%source(i,j,k),state%omega%valid_time,state%pressure%valid_time)) CYCLE
+        bottom_level=k
+        EXIT
+      END DO
+      IF (bottom_level==0) RETURN
+      IF (state%omega_bottom_boundary%value(i,j)/=state%omega%value(i,j,bottom_level)) RETURN
+    END DO; END DO
+    background_prior_boundary_contract_valid=.TRUE.
+  END FUNCTION background_prior_boundary_contract_valid
 
   PURE LOGICAL FUNCTION model_boundary_increment_contract_valid(state_in,state_out)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in,state_out

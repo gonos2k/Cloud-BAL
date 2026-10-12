@@ -126,6 +126,8 @@ done
 
 "$test_tmp/test_balance_operator"
 
+bash "$repo_root/tests/run_background_continuity_balance.sh"
+
 for profile in checked optimized; do
   partial_flags=("${CLOUD_BAL_FREE_FLAGS[@]}")
   if [[ $profile == optimized ]]; then
