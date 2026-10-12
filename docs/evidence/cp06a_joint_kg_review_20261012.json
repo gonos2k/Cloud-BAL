@@ -1,0 +1,101 @@
+{
+  "schema": "cp06a_joint_kg_independent_review_v1",
+  "review_status": "PASS",
+  "review_scope": "Read-only independent verification of the CP06A joint Graphify/KG apply receipt and compact publication package. No science/runtime revalidation claimed.",
+  "reviewed_utc": "2026-10-12",
+  "source": {
+    "frozen_commit": "08e2ae0ef8d6ceb1b5eec1dc741f890cea15235f",
+    "selected_path_count": 101,
+    "selected_candidate_sha_matches_frozen_worktree_and_overlay": true,
+    "maintained_before_hashes_match": true,
+    "source_pre_post_manifests_identical": true,
+    "source_sync_path_count": 101,
+    "source_sync_sha256": "6d6442300f2e350ce7fc076fa0a46b2e3bf27b3d65c0ee319a43bc85a12faa67",
+    "worktree_note": "The frozen commit remains 08e2ae0; after commit, only the compact publication evidence package appears as untracked documentation/evidence in that worktree. Selected source bytes and source_pre/source_post manifests are unchanged."
+  },
+  "publication": {
+    "receipt_path": "docs/evidence/cp06a_joint_kg_20261012.json",
+    "receipt_sha256": "ef087032c0e75089ca3ed6d7fdfad312e274a86a0ec934f285004d7f542e25ff",
+    "archive_manifest_path": "docs/evidence/cp06a_joint_kg_20261012/archive_manifest.json",
+    "archive_manifest_sha256": "7317279807110b74e91dea73523718edcabdfc5a6ce9027b5400d3bc93f17ef5",
+    "archived_file_count": 14,
+    "archived_files_match_manifest": true,
+    "helper_sha256": "f2e09f8d48b23b22000d2962a5dd36ae86169fe2a0cd3846f4919aec1e6e93e5",
+    "source_sync_sha256": "6d6442300f2e350ce7fc076fa0a46b2e3bf27b3d65c0ee319a43bc85a12faa67",
+    "preservation_checks": {
+      "automatic_snapshots_restored": true,
+      "maintained_selected_source_unchanged": true,
+      "prior_immutable_receipts": true,
+      "rollback_backups_verified": true,
+      "selected_source_hashes": true,
+      "source_clean_frozen_commit": true,
+      "wiki_protected_content_unchanged": true
+    }
+  },
+  "preservation": {
+    "protected_wiki_content_digests_match": true,
+    "private_profile_preservation_matches_receipt": true,
+    "prior_immutable_receipts_match": true,
+    "rollback_and_prior_automatic_snapshot_backups_match": true,
+    "source_sync_current_maintained_before_hashes_match": true,
+    "reviewed_frozen_source_commit": "08e2ae0ef8d6ceb1b5eec1dc741f890cea15235f"
+  },
+  "graphs": {
+    "dated_snapshot_directory": "2026-10-12-cp06a-joint",
+    "Cloud-BAL": {
+      "nodes": 9013,
+      "edges": 16449,
+      "delta_nodes": 228,
+      "delta_edges": 368,
+      "removed_ids": 4,
+      "snapshot_sha256": "4adfdf209f9cb12890ebc19a31bff1f48650a51ce72d3d8625de5d8a085f6f7b",
+      "report_sha256": "88d28ead295cf2fd04ac401cee1e7810e9c382d8e01f2d447ba322a61ec47428"
+    },
+    "KLAPS50": {
+      "nodes": 34840,
+      "edges": 74876,
+      "delta_nodes": 228,
+      "delta_edges": 371,
+      "removed_ids": 4,
+      "snapshot_sha256": "3281107a1c8dca1f7dba488453b34c509e001a99308293e2bd0db6955682219f",
+      "report_sha256": "f7d0c1561a59955c76aae514a13968fe9e0290fce2a1351d2c6b6e8e5331b1b2"
+    },
+    "integrity": "Both corpora match receipt node/edge counts; receipt diagnostics report zero dangling/missing endpoints, duplicate edges, collapsed edges, and self-loops.",
+    "extraction_limitations": [
+      "Graph counts are separate for overlapping KLAPS50 and Cloud-BAL corpora.",
+      "Markdown semantic extraction was not performed; Markdown contributes heading structure only.",
+      "Fortran cross-file CALL extraction is partial.",
+      "External source trees and runtime artifacts outside selected repository paths are not represented.",
+      "Candidate overlay graphs and freshness are structural navigation evidence, not runtime or scientific validation.",
+      "The prior PR77 receipt chain remains immutable; this structural update does not establish end-to-end runtime or scientific acceptance."
+    ],
+    "extraction_mode": "Graphify AST and Markdown headings only; no semantic/LLM refresh"
+  },
+  "science_and_acceptance": {
+    "physical_approval": "FAIL_OPEN",
+    "same_candidate_integration_conditions_open": [
+      "Real spatial joint candidate generated from independent observation/background contracts",
+      "Valid first native call",
+      "Same-carrier dry-mass, water, and energy closure",
+      "Spatial mass-wind compatibility at cells and shared faces",
+      "Meaning-preserving WPS/metgrid/real handoff",
+      "Fixed-setting short-time response and independent observation signal preservation"
+    ],
+    "remaining_scientific_gates": [
+      "incoming joint-moment admissibility",
+      "same-call mapped water/energy closure",
+      "feasible mass-wind joint search",
+      "fixed-setting native time-response and independent observation validation"
+    ],
+    "remaining_acceptance_gates": [
+      "Whole host/thread FP policy",
+      "Completed Q/N/B state",
+      "PBL DEL versus dry carrier",
+      "Freezing and transient QG/BG",
+      "First native call",
+      "Water and energy closure"
+    ],
+    "promotion_claimed": false
+  },
+  "reviewer": "Independent PR78/PR79 team review"
+}

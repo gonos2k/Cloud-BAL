@@ -306,7 +306,10 @@ CP05의 단독 수송 fixture는 T01/T02의 전체 결합 보존이나 V02의 �
 
 진입: CP00 격리 범위, CP01의 필요한 분석 계약, CP03/04/05의 해당 등압면 범위 증거.
 CP02 전체 완료나 native 왕복은 요구하지 않는다. 실제 관측 기반 후보를 검사하며,
-제조해는 별도 시험 경로에만 남긴다. 하위 상태는 현재 `PLANNED / NOT_RUN`이다.
+제조해는 별도 시험 경로에만 남긴다. 하위 상태는 현재 `IN_PROGRESS / NOT_RUN`이다.
+2026-10-12의 [배경 경향 prior 공간 producer](CP06_A_JOINT_PRODUCER_20261012.md)는
+실제 자료의 비영 후보를 공통 경로에서 생성하는 격리 범위 증거다. 독립 flux stencil,
+관측 적합성·오차 가정, phase/trajectory 및 후단 native 검증을 완료한 CP06-A PASS는 아니다.
 실행 전에 사례·입력·허용 변수/support·관측 target 권한·threshold가 정해진 격리 실험
 승인 근거를 A receipt에 연결한다. 이번 순서 변경 GO만으로 미확정 실제 target이나
 범위를 승인한 것으로 간주하지 않는다. 승인 범위가 없으면 그 실자료 결합 실행은 보류한다.

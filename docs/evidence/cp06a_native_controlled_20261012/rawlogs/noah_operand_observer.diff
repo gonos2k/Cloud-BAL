@@ -1,0 +1,41 @@
+--- /var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_sf_noahdrv.f90
++++ /var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/compile/module_sf_noahdrv_observed.f90
+@@ -1,4 +1,5 @@
+ MODULE module_sf_noahdrv
++USE, INTRINSIC :: ieee_arithmetic, only : ieee_is_finite
+ 
+ 
+   USE module_sf_noahlsm,  only: SFLX, XLF, XLV, CP, R_D, RHOWATER, NATURAL, SHDTBL, LUTYPE, SLTYPE, STBOLT, &
+@@ -1836,6 +1837,32 @@
+               SMCMAX = MAXSMC(ISLTYP(I,J))
+               PSISAT = SATPSI(ISLTYP(I,J))
+               IF ( BX >  BLIM ) BX = BLIM
++              BLOCK
++                INTEGER :: PR78_UNIT, PR78_IOS
++                LOGICAL :: PR78_FINITE, PR78_NONPOSITIVE_BASE
++                PR78_FINITE = ieee_is_finite(TSLB(I,NS,J)) .AND. &
++                     ieee_is_finite(T0) .AND. ieee_is_finite(BX) .AND. &
++                     ieee_is_finite(PSISAT) .AND. ieee_is_finite(SMCMAX) .AND. &
++                     ieee_is_finite(HLICE) .AND. ieee_is_finite(GRAV)
++                PR78_NONPOSITIVE_BASE = .FALSE.
++                IF (PR78_FINITE) THEN
++                  IF (TSLB(I,NS,J) > 0.0 .AND. PSISAT /= 0.0) THEN
++                    IF (PSISAT > 0.0 .AND. TSLB(I,NS,J) >= T0) &
++                         PR78_NONPOSITIVE_BASE = .TRUE.
++                    IF (PSISAT < 0.0 .AND. TSLB(I,NS,J) <= T0) &
++                         PR78_NONPOSITIVE_BASE = .TRUE.
++                  END IF
++                END IF
++                OPEN(NEWUNIT=PR78_UNIT, FILE='pr78_noah_fk_operands.raw', &
++                     STATUS='UNKNOWN', POSITION='APPEND', ACTION='WRITE', IOSTAT=PR78_IOS)
++                IF (PR78_IOS == 0) THEN
++                  WRITE(PR78_UNIT,'(A,3(",",I0),7(",",ES24.16E3),2(",",L1))') &
++                       'PR78_NOAH_FK', I, NS, J, TSLB(I,NS,J), T0, BX, PSISAT, &
++                       SMCMAX, HLICE, GRAV, PR78_FINITE, PR78_NONPOSITIVE_BASE
++                  FLUSH(PR78_UNIT)
++                  CLOSE(PR78_UNIT)
++                END IF
++              END BLOCK
+               FK=(( (HLICE/(GRAV*(-PSISAT))) *                              &
+                  ((TSLB(I,NS,J)-T0)/TSLB(I,NS,J)) )**(-1/BX) )*SMCMAX
+               IF (FK < 0.02) FK = 0.02

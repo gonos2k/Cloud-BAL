@@ -1,0 +1,97 @@
+{
+  "command": [
+    "pinned Graphify Python",
+    "/var/tmp/cp06a_joint_refresh_kg.py",
+    "--commit",
+    "08e2ae0ef8d6ceb1b5eec1dc741f890cea15235f",
+    "--pr-url",
+    "https://github.com/gonos2k/Cloud-BAL/pull/79",
+    "--validation-receipt",
+    "docs/evidence/pr78_validation_20261012.json",
+    "--apply"
+  ],
+  "corpora": {
+    "Cloud-BAL": {
+      "added_ids": 232,
+      "communities": 734,
+      "delta_edges": 368,
+      "delta_nodes": 228,
+      "edges": 16449,
+      "nodes": 9013,
+      "previous_graph_sha256": "5de5427f6540ff59f89769c3a1de5a913bf00b95d22126f7bc952dcdac15e9af",
+      "removed_ids": 4,
+      "sha256": "4adfdf209f9cb12890ebc19a31bff1f48650a51ce72d3d8625de5d8a085f6f7b"
+    },
+    "KLAPS50": {
+      "added_ids": 232,
+      "communities": 2753,
+      "delta_edges": 371,
+      "delta_nodes": 228,
+      "edges": 74876,
+      "nodes": 34840,
+      "previous_graph_sha256": "c9633468c49dedc172a59f3d3e5e6192c5e2117ed8420a384f7039fab84cf64d",
+      "removed_ids": 4,
+      "sha256": "3281107a1c8dca1f7dba488453b34c509e001a99308293e2bd0db6955682219f"
+    }
+  },
+  "exit_code": 0,
+  "helper_sha256": "f2e09f8d48b23b22000d2962a5dd36ae86169fe2a0cd3846f4919aec1e6e93e5",
+  "kg_receipt_sha256": "ef087032c0e75089ca3ed6d7fdfad312e274a86a0ec934f285004d7f542e25ff",
+  "private_profile_preservation": {
+    "Cloud-BAL": {
+      "incident_links": 133,
+      "nodes": 134,
+      "source_file": "config/cp01_private_host_profile.json",
+      "unchanged": true
+    },
+    "KLAPS50": {
+      "incident_links": 0,
+      "nodes": 0,
+      "source_file": "Cloud-BAL/config/cp01_private_host_profile.json",
+      "unchanged": true
+    }
+  },
+  "schema": "cp06a_joint_kg_apply_summary_v1",
+  "validation_receipt_binding": {
+    "checks": {
+      "scoped_unit": {
+        "status": "PASS"
+      }
+    },
+    "cp06a_evidence": {
+      "cp06a_real_scopes": [
+        {
+          "path": "checks.cp06a_real_scope",
+          "value": {
+            "receipt": "cp06a_joint_20261012/final/producer_receipt.json",
+            "scope": "Real nonzero regional pressure-level producer, writer replay and stored-state readback under the declared background tendency prior. No independently rebuilt full flux stencil, native or scientific authority.",
+            "sha256": "f4ca47a3dd9c6832be33d6228cc401dfefe75349aec81ff075aec6f14bfda690",
+            "status": "PASS_SCOPED"
+          }
+        }
+      ],
+      "native_pair_errors": [
+        {
+          "path": "checks.native_pair_error",
+          "value": {
+            "error": "Both same-executable arms abort with floating invalid before KDM6; initial FTZ/DAZ are already clear in both, so no causal FP-policy contrast.",
+            "receipt": "cp06a_native_controlled_20261012.json",
+            "sha256": "6dfa18448485ac6e8e4ff8b0c4a6877d5f6170211121f3dc06239765a0383a71",
+            "status": "REJECTED"
+          }
+        }
+      ]
+    },
+    "path": "docs/evidence/pr78_validation_20261012.json",
+    "sha256": "f59fc45fcbcd7c42b322573cce5b729f7d7382476732159256584db4cfcc8ff2",
+    "source_commit": "08e2ae0ef8d6ceb1b5eec1dc741f890cea15235f",
+    "summary": "CP06A scoped-unit status `PASS`; recorded real-scope and native-pair error fields {\"cp06a_real_scopes\":[{\"path\":\"checks.cp06a_real_scope\",\"value\":{\"receipt\":\"cp06a_joint_20261012/final/producer_receipt.json\",\"scope\":\"Real nonzero regional pressure-level producer, writer replay and stored-state readback under the declared background tendency prior. No independently rebuilt full flux stencil, native or scientific authority.\",\"sha256\":\"f4ca47a3dd9c6832be33d6228cc401dfefe75349aec81ff075aec6f14bfda690\",\"status\":\"PASS_SCOPED\"}}],\"native_pair_errors\":[{\"path\":\"checks.native_pair_error\",\"value\":{\"error\":\"Both same-executable arms abort with floating invalid before KDM6; initial FTZ/DAZ are already clear in both, so no causal FP-policy contrast.\",\"receipt\":\"cp06a_native_controlled_20261012.json\",\"sha256\":\"6dfa18448485ac6e8e4ff8b0c4a6877d5f6170211121f3dc06239765a0383a71\",\"status\":\"REJECTED\"}}]}. Full details are in the bound validation receipt."
+  },
+  "wiki_sha256": {
+    "wiki/graph-report-cloud-bal.md": "88d28ead295cf2fd04ac401cee1e7810e9c382d8e01f2d447ba322a61ec47428",
+    "wiki/graph-report-klaps50.md": "f7d0c1561a59955c76aae514a13968fe9e0290fce2a1351d2c6b6e8e5331b1b2",
+    "wiki/graph-report.md": "eb15713925f005c8eebf52915db01291547e8dbde422d81b22b10005cdb43149",
+    "wiki/index.md": "d8b30aa2bc464ba6e5448dd14dc68fe44940feb65a404d3383d61ca681d010e3",
+    "wiki/log.md": "41532ddc813ab94308a5f143bc1d73798c52c46c76862f5e87ec7cb9b9e0ed58"
+  }
+}

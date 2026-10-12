@@ -71,6 +71,9 @@ MODULE cloud_bal_pipeline
 
   TYPE, PUBLIC :: cloud_bal_pipeline_config
     INTEGER :: requested_mode=MODE_OFF
+    ! Explicit pressure-analysis prior, not an observational omega target or
+    ! paired native-model target. It preserves the frozen background tendency.
+    LOGICAL :: background_continuity_prior=.FALSE.
     REAL(real64) :: horizontal_support_radius_m=12000.0_real64
     REAL(real64) :: pressure_support_radius_pa=30000.0_real64
     TYPE(column_physics_config) :: column
@@ -156,6 +159,9 @@ MODULE cloud_bal_pipeline
     REAL(real64), ALLOCATABLE :: requested_surface_pressure(:,:)
     TYPE(cloud_bal_state_type), ALLOCATABLE :: pressure_transition_seed
     LOGICAL, ALLOCATABLE :: thermo_support(:,:,:)
+    LOGICAL, ALLOCATABLE :: analysis_support(:,:,:)
+    LOGICAL, ALLOCATABLE :: background_control_support(:,:,:)
+    LOGICAL, ALLOCATABLE :: background_validation_shell(:,:,:)
     INTEGER, ALLOCATABLE :: thermo_surface(:,:,:)
     LOGICAL, ALLOCATABLE :: geopotential_support(:,:,:)
     INTEGER, ALLOCATABLE :: geopotential_reference_level(:,:)
@@ -252,7 +258,8 @@ CONTAINS
   SUBROUTINE run_cloud_bal_pipeline(state_in,candidate_out,operational_out, &
                                     result,config,thermo_active,thermo_surface,target_rh, &
                                     geopotential_support,geopotential_reference_level,requested_surface_pressure, &
-                                    pressure_transition_seed,physical_contract,estimator_candidate)
+                                    pressure_transition_seed,physical_contract,estimator_candidate, &
+                                    analysis_support,background_control_support,background_validation_shell)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in
     TYPE(cloud_bal_state_type), INTENT(OUT) :: candidate_out,operational_out
     TYPE(cloud_bal_pipeline_result), INTENT(OUT) :: result
@@ -270,6 +277,9 @@ CONTAINS
     ! External estimator endpoint. This is independently evaluated and remains
     ! a blocked diagnostic candidate; it is not a pipeline-generated analysis.
     TYPE(cloud_bal_state_type), INTENT(IN), OPTIONAL :: estimator_candidate
+    LOGICAL, INTENT(IN), OPTIONAL :: analysis_support(:,:,:)
+    LOGICAL, INTENT(IN), OPTIONAL :: background_control_support(:,:,:)
+    LOGICAL, INTENT(IN), OPTIONAL :: background_validation_shell(:,:,:)
     TYPE(cloud_bal_state_type) :: column_candidate,geopotential_candidate,balance_candidate,evaluation
     TYPE(cloud_bal_state_type) :: transition_prior,transition_candidate
     TYPE(stage_result) :: transition_result
@@ -308,6 +318,37 @@ CONTAINS
       CALL initialize_stage_result(result%overall,MAX(0,nx),MAX(0,ny),MAX(0,nz), &
                                    STATUS_OK,REASON_NONE)
       result%status=STATUS_OK; result%reason_code=REASON_NONE
+      RETURN
+    END IF
+    IF (config%background_continuity_prior .OR. PRESENT(analysis_support)) THEN
+      ! The new producer requires a fixed domain and pristine observation
+      ! inputs. It cannot reinterpret an external endpoint or pressure change.
+      result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+      IF (.NOT.PRESENT(analysis_support) .OR. PRESENT(estimator_candidate) .OR. &
+          PRESENT(requested_surface_pressure) .OR. PRESENT(pressure_transition_seed) .OR. &
+          PRESENT(physical_contract)) RETURN
+      IF (config%balance%target_authority/=TARGET_AUTHORITY_OBSERVATIONAL) RETURN
+      IF (ANY(SHAPE(analysis_support)/=shape3)) THEN
+        result%reason_code=REASON_SHAPE
+        RETURN
+      END IF
+      IF (.NOT.ALLOCATED(state_in%above_ground)) RETURN
+      IF (ANY(SHAPE(state_in%above_ground)/=shape3)) RETURN
+      IF (ANY(analysis_support .AND. .NOT.state_in%above_ground)) RETURN
+      IF (config%background_continuity_prior) THEN
+        IF (.NOT.PRESENT(background_control_support) .OR. &
+            .NOT.PRESENT(background_validation_shell)) RETURN
+        IF (ANY(SHAPE(background_control_support)/=shape3) .OR. &
+            ANY(SHAPE(background_validation_shell)/=shape3)) THEN
+          result%reason_code=REASON_SHAPE
+          RETURN
+        END IF
+        IF (ANY(analysis_support .AND. .NOT.background_control_support)) RETURN
+      ELSE IF (PRESENT(background_control_support) .OR. PRESENT(background_validation_shell)) THEN
+        RETURN
+      END IF
+    ELSE IF (PRESENT(background_control_support) .OR. PRESENT(background_validation_shell)) THEN
+      result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
       RETURN
     END IF
     IF (PRESENT(physical_contract) .AND. .NOT.PRESENT(requested_surface_pressure) .AND. &
@@ -456,11 +497,13 @@ CONTAINS
       IF (config%maximum_outer_iterations==1) THEN
         CALL derive_column_physics(state_in,column_candidate,result%column, &
           config%column,thermo_active,thermo_surface,target_rh,result%thermo_budget,proposal_budget, &
-          model_dynamics_target=config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS)
+          model_dynamics_target=config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS, &
+          analysis_support=analysis_support,background_continuity_prior=PRESENT(analysis_support))
       ELSE
         CALL derive_column_physics(state_in,column_candidate,result%column, &
           config%column,thermo_active,thermo_surface,target_rh,result%thermo_budget,proposal_budget,evaluation, &
-          model_dynamics_target=config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS)
+          model_dynamics_target=config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS, &
+          analysis_support=analysis_support,background_continuity_prior=PRESENT(analysis_support))
       END IF
       IF (result%column%status/=STATUS_OK) THEN
         result%column%changed=.FALSE.
@@ -561,22 +604,29 @@ CONTAINS
         column_candidate=geopotential_candidate
       END IF
 
-      CALL build_compact_balance_beta(column_candidate,config%horizontal_support_radius_m, &
-                                      config%pressure_support_radius_pa,localization_status, &
-                                      config%balance%target_authority)
-      IF (localization_status/=STATUS_OK) THEN
-        candidate_out=state_in; operational_out=state_in
-        result%thermo_budget=water_phase_budget()
-        result%column%changed=.FALSE.
-        result%balance%changed=.FALSE.
-        result%geopotential%changed=.FALSE.
-        result%status=STATUS_FAILED; result%reason_code=REASON_RANGE
-        CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_RANGE)
-        RETURN
+      IF (config%background_continuity_prior) THEN
+        CALL apply_background_continuity_balance(state_in,column_candidate,balance_candidate, &
+          result%balance,config%balance,background_control_support,background_validation_shell)
+      ELSE IF (PRESENT(analysis_support)) THEN
+        ! HYDRO is the same retrieval/thermo/geometry producer with no wind
+        ! adjustment. A zero innovation is not a coupled-balance certificate.
+        balance_candidate=column_candidate
+        CALL initialize_stage_result(result%balance,nx,ny,nz,STATUS_OK,REASON_NONE)
+      ELSE
+        CALL build_compact_balance_beta(column_candidate,config%horizontal_support_radius_m, &
+          config%pressure_support_radius_pa,localization_status,config%balance%target_authority)
+        IF (localization_status/=STATUS_OK) THEN
+          candidate_out=state_in; operational_out=state_in
+          result%thermo_budget=water_phase_budget()
+          result%column%changed=.FALSE.
+          result%balance%changed=.FALSE.
+          result%geopotential%changed=.FALSE.
+          result%status=STATUS_FAILED; result%reason_code=REASON_RANGE
+          CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_RANGE)
+          RETURN
+        END IF
+        CALL apply_localized_balance(column_candidate,balance_candidate,result%balance,config%balance)
       END IF
-
-      CALL apply_localized_balance(column_candidate,balance_candidate, &
-                                   result%balance,config%balance)
       IF (result%balance%status/=STATUS_OK) THEN
         candidate_out=state_in; operational_out=state_in
         result%thermo_budget=water_phase_budget()
@@ -669,6 +719,11 @@ CONTAINS
         result%thermo_surface=thermo_surface
         result%thermo_target_rh=target_rh
       END IF
+    END IF
+    IF (PRESENT(analysis_support)) result%analysis_support=analysis_support
+    IF (config%background_continuity_prior) THEN
+      result%background_control_support=background_control_support
+      result%background_validation_shell=background_validation_shell
     END IF
     IF (PRESENT(geopotential_support)) THEN
       IF (ANY(geopotential_support)) THEN

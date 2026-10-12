@@ -1,0 +1,479 @@
+{
+  "created_utc_date": "2026-10-12",
+  "excluded_artifacts": [
+    "Original host/model inputs and namelist/data files",
+    "Large NetCDF/model data, including the cited approximately 182 MB file",
+    "Diagnostic executables, objects, archives, and copied runtime libraries (their paths and SHA-256 values are recorded instead)"
+  ],
+  "noah_operand_observer": {
+    "actual_trace_format": "Captured build wrote decimal operands and two flags; it predates the later harness extension that also emits binary32 bit columns. The decimal output is preserved verbatim.",
+    "archive_before_observer_replacement_sha256": "195679a8c1349a9cb057adeed43c1019bd94172203ab57062ba7dc1b23ca7dd2",
+    "build_relationship": "Observer-only source is a copy of the inherited Noah driver in the separate O3/-ip/-fp-model precise/-ftz/-g strict diagnostic archive. Original FK equation is unchanged. This is not the pair executable.",
+    "current_harness_source_at_packaging": {
+      "path": "tests/pr78_native_fp_runtime_run.py",
+      "sha256": "09e038d1e48fe51a8222b3b00ae97f6dcdd95baa4ae9334cdbd80aa903bcb51f"
+    },
+    "fk_expression": "FK=(( (HLICE/(GRAV*(-PSISAT))) * ((TSLB(I,NS,J)-T0)/TSLB(I,NS,J)) )**(-1/BX) )*SMCMAX",
+    "observer_archive_path": "/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/operand_observer/build/link/main/libwrflib_pr65.a",
+    "observer_archive_sha256": "da49a0f947a2c3cb02ef68a43991cfd8204880cddb240e12e4240993bc32313e",
+    "observer_compile_argv_reconstructed_from_runner": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "-g",
+      "-c",
+      "-O3",
+      "-ip",
+      "-fp-model",
+      "precise",
+      "-w",
+      "-ftz",
+      "-align",
+      "all",
+      "-fno-alias",
+      "-FR",
+      "-convert",
+      "big_endian",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/external/esmf_time_f90",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/main",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/external/io_netcdf",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/external/io_int",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/frame",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/share",
+      "-I/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/compile",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/wrftladj",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/chem",
+      "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/inc",
+      "-I/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/deps/netcdf-intel/include",
+      "-I/include",
+      "-real-size",
+      "32",
+      "-i4",
+      "/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/compile/module_sf_noahdrv_observed.f90",
+      "-o",
+      "/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/compile/module_sf_noahdrv_observed.o"
+    ],
+    "observer_diff_path": "rawlogs/noah_operand_observer.diff",
+    "observer_diff_sha256": "59ce6096b49af2efe124c0be378aeffa5eaa9b1ac8da7bad29039530b6903448",
+    "observer_executable_path": "/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/operand_observer/wrf_noah_operand_observer.exe",
+    "observer_executable_sha256": "b2f641dc606c3942d3ea7b1bc052654509962393fc3aeb9951daac6992862431",
+    "observer_link_argv_reconstructed_from_runner": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+      "-o",
+      "/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/operand_observer/wrf_noah_operand_observer.exe",
+      "-O3",
+      "-ip",
+      "-fp-model",
+      "precise",
+      "-w",
+      "-ftz",
+      "-align",
+      "all",
+      "-fno-alias",
+      "-FR",
+      "-convert",
+      "big_endian",
+      "-ip",
+      "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+      "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+      "wrf.o",
+      "../main/module_wrf_top.o",
+      "libwrflib_pr65.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/fftpack/fftpack5/libfftpack.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib1/libio_grib1.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib_share/libio_grib_share.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_int/libwrfio_int.a",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/esmf_time_f90",
+      "-lesmf_time",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/RSL_LITE/librsl_lite.a",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/module_internal_header_util.o",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/pack_utils.o",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_netcdf",
+      "-lwrfio_nf",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-lnetcdff",
+      "-lnetcdf",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-lnetcdf",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-lnetcdff",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+      "-lnetcdf",
+      "-lnetcdf",
+      "-lm",
+      "-qopenmp"
+    ],
+    "observer_object_path": "/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/compile/module_sf_noahdrv_observed.o",
+    "observer_object_sha256": "4575b727402aa973debe3cfbe3c2cabb1f4dd27e0d97c5f0f2d915b5841b54d7",
+    "observer_source_durable_copy": "cp06a_native_controlled_20261012/rawlogs/noah_operand_observer_source.f90",
+    "observer_source_path": "/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/compile/module_sf_noahdrv_observed.f90",
+    "observer_source_sha256": "fe9d4488e47b0a469d829cc83d779da8ff18e13c939e0d5c1cea5ce8267cd389",
+    "observer_trace": {
+      "bytes": 202,
+      "path": "rawlogs/noah_fk_operands.raw",
+      "sha256": "f7b32b89eb141b435313debd4d694e9b2561579b7fb35a3fbfd551a323924354"
+    },
+    "original_noah_source_path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_sf_noahdrv.f90",
+    "original_noah_source_sha256": "eff3c4f13662ce01ddc9b49c3b345687451f91b01783d771ad129be8e5a886fb",
+    "physics_scheme_or_lsm_changed": false,
+    "record": {
+      "all_operands_finite": true,
+      "bx": 5.5,
+      "coefficient_hlice_over_grav_times_minus_psisat": -155232.51860053578,
+      "full_base_is_positive": true,
+      "full_power_base_before_exponent": 191.1500635494363,
+      "grav": 9.8100004196167,
+      "hlice": 333500.0,
+      "i": 138,
+      "j": 197,
+      "nonpositive_base_by_observer_sign_check": false,
+      "psisat": 0.21899999678134918,
+      "smcmax": 0.4399999976158142,
+      "soil_layer": 4,
+      "t0": 273.1499938964844,
+      "temperature_ratio": -0.0012313790001779728,
+      "tslb": 272.8140563964844
+    },
+    "separate_diagnostic_from_same_executable_pair": true,
+    "strict_noah_gdb_diagnostic": {
+      "diagnostic_archive_sha256_before_and_after_replacing_both_noah_objects": [
+        "ab4d59a252770b0673922f7bdd71d5fe60cce736042089f4451206e04963e6a4",
+        "195679a8c1349a9cb057adeed43c1019bd94172203ab57062ba7dc1b23ca7dd2"
+      ],
+      "diagnostic_executable_sha256": "7dbbb89710b03780bcf2be473c331e1e8f134eabc7903b07aa29f2405a8f33d7",
+      "diagnostic_objects": [
+        {
+          "path": "/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/compile/module_sf_noahlsm.o",
+          "sha256": "baffff40f03d3ca4c0d1285f627cac65257f3dc79652e1a027b86b27c471a63f"
+        },
+        {
+          "path": "/var/tmp/pr78_native_fp_runtime.t1RInz/noah_strict_diagnostic/compile/module_sf_noahdrv.o",
+          "sha256": "f3ae1e09c71b0f5cb04b10ec8daf3e59eb3c7b8dce6dd8d658ea01a8081d14aa"
+        }
+      ],
+      "gdb_trace": {
+        "bytes": 7066,
+        "path": "rawlogs/noah_o3_gdb_invalid.raw",
+        "sha256": "1bb6dd546e732ef1fb53e3d8ebe58d4e46cca70f8e2b12afc2a30f2febbc1023"
+      },
+      "optimization_and_fp_profile": "original host -O3 -ip -fp-model precise -ftz plus -g; inherited non-Noah objects stay unchanged",
+      "source_line": [
+        {
+          "line": 1839,
+          "text": "              FK=(( (HLICE/(GRAV*(-PSISAT))) *                              &"
+        },
+        {
+          "line": 1840,
+          "text": "                 ((TSLB(I,NS,J)-T0)/TSLB(I,NS,J)) )**(-1/BX) )*SMCMAX"
+        },
+        {
+          "line": 1841,
+          "text": "              IF (FK < 0.02) FK = 0.02"
+        }
+      ],
+      "thread_count": 1,
+      "trap_policy_changed": false
+    }
+  },
+  "overall_result": {
+    "ftz_daz_causality_established_by_local_pair": false,
+    "native_candidate_status": "REJECTED",
+    "native_validation_complete": false,
+    "noah_physics_modified": false,
+    "reached_kdm6_or_time_integration": false
+  },
+  "primary_simd_lane_diagnosis_from_open_pr78": {
+    "attribution_limit": "This external PR78 evidence is distinct from the local t1RInz receipt, executable, and observer. Do not combine their hashes or describe it as generated by this package run.",
+    "branch_head": "1d44398bcbef7f0bdba2bbcb2149d6abfcfbb2c0",
+    "evidence_files_at_branch_head": {
+      "diagnostic_receipt": {
+        "git_blob_sha1": "138a0e9912e54668711dffcdde0160e8b92b97a8",
+        "repository_path": "docs/evidence/native-controlled-20261012/receipt.json"
+      },
+      "disassembly": {
+        "git_blob_sha1": "12387e28326846b91b26f5e289ca9b645727a81d",
+        "repository_path": "docs/evidence/native-controlled-20261012/noah_divps_disassembly.txt"
+      },
+      "ftz_daz_policy_error": {
+        "git_blob_sha1": "fec4baff7fb27efe6d99804b2a9e2c55c92710f3",
+        "repository_path": "docs/evidence/native-controlled-20261012/ftz_daz_policy_rsl.error.0000"
+      },
+      "ftz_daz_policy_gdb": {
+        "git_blob_sha1": "176ecb50df93638f0da40e68be16551d254805d9",
+        "repository_path": "docs/evidence/native-controlled-20261012/ftz_daz_policy_gdb.log"
+      },
+      "gradual_policy_error": {
+        "git_blob_sha1": "6298a2c697936f262aa872d5380688e1492316ed",
+        "repository_path": "docs/evidence/native-controlled-20261012/gradual_policy_rsl.error.0000"
+      },
+      "gradual_policy_gdb": {
+        "git_blob_sha1": "1c232b82874d1fe8f7df66f339513bd077ba3826",
+        "repository_path": "docs/evidence/native-controlled-20261012/gradual_policy_gdb.log"
+      }
+    },
+    "evidence_repository": "https://github.com/gonos2k/Cloud-BAL",
+    "finding": "Separate existing same-executable FTZ/DAZ pair traps on the same DIVPS with identical operands; lanes 2 and 3 are unused 0/0. MOVAPS/SHUFPS/MULSS consume the scalar result lanes while ignoring those upper lanes. This is linked evidence from the open PR, not a run performed for this package.",
+    "pr_url": "https://github.com/gonos2k/Cloud-BAL/pull/78"
+  },
+  "rawlogs": {
+    "clear_ftz_daz_fortran_error": {
+      "bytes": 3803,
+      "path": "cp06a_native_controlled_20261012/rawlogs/clear_ftz_daz_rsl.error.0000",
+      "sha256": "b19d47b1e5e6dc12e68fa8176823d434d0188748f68ada18cab011ebe182b91c"
+    },
+    "clear_ftz_daz_startup": {
+      "bytes": 108,
+      "path": "cp06a_native_controlled_20261012/rawlogs/clear_ftz_daz_startup_fp.raw",
+      "sha256": "2af34eb32839eb1b7b84ec49b57a62819b158ddcd4d72ecd6ed53dc099a00026"
+    },
+    "clear_ftz_daz_stdout": {
+      "bytes": 49,
+      "path": "cp06a_native_controlled_20261012/rawlogs/clear_ftz_daz_stdout.raw",
+      "sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+    },
+    "noah_o3_gdb_trap": {
+      "bytes": 7066,
+      "path": "cp06a_native_controlled_20261012/rawlogs/noah_o3_gdb_invalid.raw",
+      "sha256": "1bb6dd546e732ef1fb53e3d8ebe58d4e46cca70f8e2b12afc2a30f2febbc1023"
+    },
+    "noah_observer_stdout": {
+      "bytes": 49,
+      "path": "cp06a_native_controlled_20261012/rawlogs/noah_observer_stdout.raw",
+      "sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+    },
+    "noah_operand_observer_source": {
+      "bytes": 189237,
+      "path": "cp06a_native_controlled_20261012/rawlogs/noah_operand_observer_source.f90",
+      "sha256": "fe9d4488e47b0a469d829cc83d779da8ff18e13c939e0d5c1cea5ce8267cd389"
+    },
+    "noah_operand_observer_source_diff": {
+      "bytes": 2191,
+      "path": "cp06a_native_controlled_20261012/rawlogs/noah_operand_observer.diff",
+      "sha256": "59ce6096b49af2efe124c0be378aeffa5eaa9b1ac8da7bad29039530b6903448"
+    },
+    "noah_operand_trace": {
+      "bytes": 202,
+      "path": "cp06a_native_controlled_20261012/rawlogs/noah_fk_operands.raw",
+      "sha256": "f7b32b89eb141b435313debd4d694e9b2561579b7fb35a3fbfd551a323924354"
+    },
+    "pair_compile_log": {
+      "bytes": 31028,
+      "path": "cp06a_native_controlled_20261012/rawlogs/pair_compile.raw",
+      "sha256": "5f6e372bab120d65b8dfd9aa0875b2672b92eca707a3df7e4241411710df7cb4"
+    },
+    "preserve_fortran_error": {
+      "bytes": 3803,
+      "path": "cp06a_native_controlled_20261012/rawlogs/preserve_rsl.error.0000",
+      "sha256": "ae852bf71b8d2324a691d0dd191be6921584beba786c0c3d633f60e6a8b24e2a"
+    },
+    "preserve_startup": {
+      "bytes": 108,
+      "path": "cp06a_native_controlled_20261012/rawlogs/preserve_startup_fp.raw",
+      "sha256": "40ea35779f847111aac6ecd0dfe0a5ee13fad8d27771feb62bc6aa16da81b0db"
+    },
+    "preserve_stdout": {
+      "bytes": 49,
+      "path": "cp06a_native_controlled_20261012/rawlogs/preserve_stdout.raw",
+      "sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+    },
+    "runner_receipt": {
+      "bytes": 72549,
+      "path": "cp06a_native_controlled_20261012/rawlogs/pr78_native_fp_runtime_choice.receipt.json",
+      "sha256": "61c09c67dd6e0a97c655d76ce034ad3e70ef67115085c280186278587c3c0d50"
+    }
+  },
+  "runtime_choice_pair": {
+    "arms": {
+      "CLEAR_FTZ_DAZ": {
+        "exe_sha256": "e86a043cae66fd7548f6452522d106aaf7a01ae6053a938c92f63c15663853b7",
+        "exit_status": -6,
+        "first_failure_line": "forrtl: error (65): floating invalid",
+        "input_preservation_passed": true,
+        "kdm6_entry_observed": false,
+        "rsl_error_path": "rawlogs/clear_ftz_daz_rsl.error.0000",
+        "rsl_error_sha256": "b19d47b1e5e6dc12e68fa8176823d434d0188748f68ada18cab011ebe182b91c",
+        "startup_record_path": "rawlogs/clear_ftz_daz_startup_fp.raw",
+        "startup_records": [
+          {
+            "after": "0x00001920",
+            "before": "0x00001920",
+            "stage": "MAIN_STARTUP",
+            "thread_id": 3578715
+          },
+          {
+            "after": "0x00001920",
+            "before": "0x00001920",
+            "stage": "OMP_STARTUP_TEAM",
+            "thread_id": 3578715
+          }
+        ],
+        "stdout_path": "rawlogs/clear_ftz_daz_stdout.raw",
+        "stdout_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+      },
+      "PRESERVE": {
+        "exe_sha256": "e86a043cae66fd7548f6452522d106aaf7a01ae6053a938c92f63c15663853b7",
+        "exit_status": -6,
+        "first_failure_line": "forrtl: error (65): floating invalid",
+        "input_preservation_passed": true,
+        "kdm6_entry_observed": false,
+        "rsl_error_path": "rawlogs/preserve_rsl.error.0000",
+        "rsl_error_sha256": "ae852bf71b8d2324a691d0dd191be6921584beba786c0c3d633f60e6a8b24e2a",
+        "startup_record_path": "rawlogs/preserve_startup_fp.raw",
+        "startup_records": [
+          {
+            "after": "0x00001920",
+            "before": "0x00001920",
+            "stage": "MAIN_STARTUP",
+            "thread_id": 3578687
+          },
+          {
+            "after": "0x00001920",
+            "before": "0x00001920",
+            "stage": "OMP_STARTUP_TEAM",
+            "thread_id": 3578687
+          }
+        ],
+        "stdout_path": "rawlogs/preserve_stdout.raw",
+        "stdout_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+      }
+    },
+    "build": {
+      "archive_path": "/var/tmp/pr78_native_fp_runtime.t1RInz/build/build/link/main/libwrflib_pr65.a",
+      "archive_sha256": "ab4d59a252770b0673922f7bdd71d5fe60cce736042089f4451206e04963e6a4",
+      "compile_argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "-fpp",
+        "-qopenmp",
+        "-convert",
+        "big_endian",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/frame",
+        "-free",
+        "-c",
+        "/var/tmp/pr78_native_fp_runtime.t1RInz/build/compile/module_mp_kdm6.f90"
+      ],
+      "executable_path": "/var/tmp/pr78_native_fp_runtime.t1RInz/build/wrf.exe",
+      "executable_sha256": "e86a043cae66fd7548f6452522d106aaf7a01ae6053a938c92f63c15663853b7",
+      "host_main_transformed_source_sha256": "f7b9aeba3f99f9b26684728348cb1b0a92a3524de1e3ed7d1914fae8f1f0a6e7",
+      "ifx_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "ifx_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "ifx_version": "ifx (IFX) 2026.0.0 20260331",
+      "kdm6_preprocessed_source_sha256": "4bf02ef4f4599695bd2b84c3e894078bedcd929346cf95718e8cbc72834444bf",
+      "kdm6_transformed_source_sha256": "b5144c477bca2ddcf493a8ee629353ca35f90cd2b29186412b2f64b5fc58092d",
+      "link_argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+        "-o",
+        "/var/tmp/pr78_native_fp_runtime.t1RInz/build/wrf.exe",
+        "-O3",
+        "-ip",
+        "-fp-model",
+        "precise",
+        "-w",
+        "-ftz",
+        "-align",
+        "all",
+        "-fno-alias",
+        "-FR",
+        "-convert",
+        "big_endian",
+        "-ip",
+        "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+        "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+        "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+        "wrf.o",
+        "../main/module_wrf_top.o",
+        "libwrflib_pr65.a",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/fftpack/fftpack5/libfftpack.a",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib1/libio_grib1.a",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib_share/libio_grib_share.a",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_int/libwrfio_int.a",
+        "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/esmf_time_f90",
+        "-lesmf_time",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/RSL_LITE/librsl_lite.a",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/module_internal_header_util.o",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/pack_utils.o",
+        "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_netcdf",
+        "-lwrfio_nf",
+        "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+        "-lnetcdff",
+        "-lnetcdf",
+        "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+        "-lnetcdf",
+        "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+        "-lnetcdff",
+        "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+        "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+        "-lnetcdf",
+        "-lnetcdf",
+        "-lm",
+        "-qopenmp"
+      ],
+      "main_compile_argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "-qopenmp",
+        "-free",
+        "-I.",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/external/esmf_time_f90",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/main",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/external/io_netcdf",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/external/io_int",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/frame",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/share",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/wrftladj",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/chem",
+        "-I/var/tmp/pr61_ccn_origin_20261006/hostcopy/inc",
+        "-c",
+        "/var/tmp/pr78_native_fp_runtime.t1RInz/build/compile/wrf.f90",
+        "-o",
+        "/var/tmp/pr78_native_fp_runtime.t1RInz/build/build/link/main/wrf.o"
+      ],
+      "object_sha256": {
+        "module_mp_kdm6.o": "2400d979827934f136f438735cbf61d464e177c3e1108fd79a855da27711e551",
+        "pr76_native_fp_policy.o": "c50eec74138a906596372c37b2887ed10347eb51148ca6d72d9d93605f039424",
+        "wrf.o": "c4bbad9aff1a37e17da614bbdb3c77ee11c690c3b651a74d52e81f287d28a1ec"
+      },
+      "one_rank_one_thread": true,
+      "trap_policy": "Inherited -fpe0; unchanged in both arms"
+    },
+    "interpretation": "Both arms were REJECTED by invalid floating point before KDM6. Initial MXCSR was 0x1920 in both arms, with FTZ/DAZ already clear; the selected runtime states were therefore identical and this pair establishes no FTZ/DAZ causal contrast.",
+    "runner_receipt": {
+      "bytes": 72549,
+      "path": "rawlogs/pr78_native_fp_runtime_choice.receipt.json",
+      "sha256": "61c09c67dd6e0a97c655d76ce034ad3e70ef67115085c280186278587c3c0d50"
+    },
+    "source_run_root": "/var/tmp/pr78_native_fp_runtime.t1RInz",
+    "source_worktree": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr78_cp06a_20261012/Cloud-BAL"
+  },
+  "schema": "cp06a_native_controlled_startup_diagnostics_v1",
+  "scope": "Compact evidence package for the isolated background-prior batch native runtime-choice baseline and a separate Noah operand observer. Local pr78 filenames are retained batch identifiers; the separately linked open PR78 is prior external evidence. This does not package model inputs or large NetCDF data."
+}

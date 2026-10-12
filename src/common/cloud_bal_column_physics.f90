@@ -34,6 +34,9 @@ MODULE cloud_bal_column_physics
     SOURCE_RADAR_DBZ+SOURCE_CLOUD_ANALYSIS
 
   TYPE, PUBLIC :: column_physics_config
+    ! Static observation retrieval is an explicit analysis ablation. It is not
+    ! a precipitation transport step and reports no transport ledger.
+    LOGICAL :: transport_precipitation=.TRUE.
     REAL(real64) :: cloud_fraction_threshold=0.01_real64
     REAL(real64) :: radar_wavelength_m=0.10_real64
     REAL(real64) :: minimum_dbz=0.0_real64
@@ -159,7 +162,7 @@ CONTAINS
 
   SUBROUTINE derive_column_physics(state_in,state_out,result,config, &
                                    thermo_active,thermo_surface,target_rh,thermo_budget,analysis_budget,evaluation_state, &
-                                   model_dynamics_target)
+                                   model_dynamics_target,analysis_support,background_continuity_prior)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in
     TYPE(cloud_bal_state_type), INTENT(OUT) :: state_out
     TYPE(stage_result), INTENT(OUT) :: result
@@ -171,6 +174,8 @@ CONTAINS
     TYPE(pressure_analysis_budget), INTENT(OUT), OPTIONAL :: analysis_budget
     TYPE(cloud_bal_state_type), INTENT(IN), OPTIONAL :: evaluation_state
     LOGICAL, INTENT(IN), OPTIONAL :: model_dynamics_target
+    LOGICAL, INTENT(IN), OPTIONAL :: analysis_support(:,:,:)
+    LOGICAL, INTENT(IN), OPTIONAL :: background_continuity_prior
     TYPE(pressure_analysis_budget) :: proposal_budget
     TYPE(water_phase_budget) :: internal_budget
     TYPE(cloud_bal_state_type) :: thermo_candidate
@@ -188,6 +193,7 @@ CONTAINS
     REAL(real64), ALLOCATABLE :: zlinear(:,:,:)
     REAL(real64) :: ledger_error,input_water,output_water
     INTEGER :: nx,ny,nz,status,reason
+    LOGICAL :: background_prior
     LOGICAL :: cloud_available,has_cloud,has_radar,has_cloud_contradiction,thermo_requested
     LOGICAL :: use_model_dynamic_target
 
@@ -235,6 +241,27 @@ CONTAINS
       RETURN
     END IF
     nx=state_in%grid%nx; ny=state_in%grid%ny; nz=state_in%grid%nz
+    background_prior=.FALSE.
+    IF (PRESENT(background_continuity_prior)) background_prior=background_continuity_prior
+    IF (PRESENT(analysis_support)) THEN
+      IF (ANY(SHAPE(analysis_support)/=[nx,ny,nz])) THEN
+        CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_SHAPE)
+        RETURN
+      END IF
+      IF (ANY(analysis_support .AND. .NOT.state_in%above_ground)) THEN
+        CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_REQUIRED_COVERAGE)
+        RETURN
+      END IF
+      IF (PRESENT(thermo_active)) THEN
+        IF (ANY(thermo_active .AND. .NOT.analysis_support)) THEN
+          CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+          RETURN
+        END IF
+      END IF
+    ELSE IF (.NOT.cfg%transport_precipitation .OR. background_prior) THEN
+      CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+      RETURN
+    END IF
     IF (.NOT.radar_field_contract_valid(state_in) .OR. &
         .NOT.precipitation_phase_contract_valid(state_in)) THEN
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_RADAR_CONTRACT)
@@ -354,6 +381,13 @@ CONTAINS
         CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_RADAR_CONTRACT)
         RETURN
       END IF
+      IF (PRESENT(analysis_support)) THEN
+        radar_observed=radar_observed .AND. analysis_support
+        WHERE(.NOT.analysis_support)
+          rain=0.0_real64; snow=0.0_real64; graupel=0.0_real64
+          zlinear=0.0_real64; phase=PHASE_UNKNOWN; phase_uncertain=.FALSE.
+        END WHERE
+      END IF
       IF (ANY(radar_observed .AND. .NOT.w_valid)) THEN
         ! Missing air motion is never inserted into trajectory arithmetic.
         CALL reject_candidate(state_in,state_out,result,STATUS_DEGRADED, &
@@ -363,7 +397,8 @@ CONTAINS
       radar_no_echo=state_in%above_ground .AND. radar_no_echo_cell( &
         state_in%radar_reflectivity%value,state_in%radar_reflectivity%valid, &
         state_in%radar_reflectivity%quality,state_in%radar_reflectivity%source)
-      CALL transport_precipitation_flux(evaluation%grid,evaluation%pressure%value, &
+      IF (cfg%transport_precipitation) THEN
+        CALL transport_precipitation_flux(evaluation%grid,evaluation%pressure%value, &
         evaluation%temperature%value,evaluation%vapor%value,evaluation%u%value, &
         evaluation%v%value,w_background,w_valid,state_in%above_ground, &
         radar_observed,phase,zlinear,rain,snow,graupel,cfg,ledger,status, &
@@ -381,6 +416,16 @@ CONTAINS
         result%numerical%flux_microphysical_loss=ledger%microphysical_loss
         RETURN
       END IF
+      END IF
+      IF (PRESENT(analysis_support)) THEN
+        ! A transport arrival outside the prescribed domain rejects the whole
+        ! proposal. It is never silently discarded or relabeled boundary loss.
+        IF (ANY(.NOT.analysis_support .AND. &
+            (rain>0.0_real64 .OR. snow>0.0_real64 .OR. graupel>0.0_real64))) THEN
+          CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+          RETURN
+        END IF
+      END IF
     END IF
 
     radar_derived=radar_observed .OR. rain>0.0_real64 .OR. snow>0.0_real64 .OR. &
@@ -396,6 +441,8 @@ CONTAINS
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_NONFINITE)
       RETURN
     END IF
+    IF (PRESENT(analysis_support)) &
+      CALL retain_column_support(state_in,candidate,analysis_support)
     ! Freeze the analysis ledger BEFORE internal phase exchange. Condensation
     ! cannot be counted as a new radar water increment. The retrieval remains
     ! a pressure-fixed diagnostic, not native dry-mass/pressure closure.
@@ -426,7 +473,7 @@ CONTAINS
       RETURN
     END IF
     w_target=w_background
-    IF (has_cloud) THEN
+    IF (has_cloud .AND. .NOT.background_prior) THEN
       CALL build_cloud_targets(candidate,cfg,w_valid,w_target,status)
       IF (status/=STATUS_OK) THEN
         CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_GATE)
@@ -440,7 +487,7 @@ CONTAINS
       snow=REAL(candidate%snow%value,real64)
       graupel=REAL(candidate%graupel%value,real64)
     END WHERE
-    IF (has_radar .AND. .NOT.use_model_dynamic_target) THEN
+    IF (has_radar .AND. .NOT.use_model_dynamic_target .AND. .NOT.background_prior) THEN
       CALL add_loading_downdraft(candidate,cfg,radar_observed,rain,snow,graupel, &
         w_background,w_target,status)
       IF (status/=STATUS_OK) THEN
@@ -450,7 +497,7 @@ CONTAINS
     END IF
     CALL publish_column_diagnostics(state_in,candidate,cfg,w_target,w_valid, &
       radar_observed,radar_derived,phase_uncertain,zlinear,rain,snow,graupel, &
-      use_model_dynamic_target,status)
+      use_model_dynamic_target .OR. background_prior,status)
     IF (status/=STATUS_OK) THEN
       CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_NONFINITE)
       RETURN
@@ -463,7 +510,11 @@ CONTAINS
     CALL initialize_stage_result(candidate_result,nx,ny,nz,STATUS_OK,REASON_NONE)
     candidate_result%changed=column_changed_mask(state_in,candidate)
     candidate_result%coverage%required=SIZE(candidate_result%changed)
-    IF (use_model_dynamic_target) THEN
+    IF (background_prior) THEN
+      candidate_result%coverage%required=COUNT(analysis_support,KIND=int64)
+      candidate_result%coverage%usable=COUNT(analysis_support .AND. &
+        (radar_observed .OR. candidate%obs_support/=0_int32),KIND=int64)
+    ELSE IF (use_model_dynamic_target) THEN
       candidate_result%coverage%usable=COUNT(model_dynamic_target_is_resolved( &
         candidate%omega_target%value,candidate%omega_target%valid, &
         candidate%omega_target%quality,candidate%omega_target%source))
@@ -472,8 +523,9 @@ CONTAINS
     END IF
     candidate_result%coverage%excluded=candidate_result%coverage%required- &
                                        candidate_result%coverage%usable
-    candidate_result%coverage%usable_fraction=REAL(candidate_result%coverage%usable,real64)/ &
-                                              REAL(candidate_result%coverage%required,real64)
+    IF (candidate_result%coverage%required>0_int64) &
+      candidate_result%coverage%usable_fraction=REAL(candidate_result%coverage%usable,real64)/ &
+                                                REAL(candidate_result%coverage%required,real64)
     ledger_error=ledger%input-(ledger%deposited+ledger%suspended+ &
       ledger%boundary_exit+ledger%terrain_intercept+ledger%observation_blocked+ &
       ledger%no_echo_blocked+ledger%microphysical_loss)
@@ -496,6 +548,35 @@ CONTAINS
     IF (PRESENT(thermo_budget)) thermo_budget=internal_budget
     IF (PRESENT(analysis_budget)) analysis_budget=proposal_budget
   END SUBROUTINE derive_column_physics
+
+  SUBROUTINE retain_column_support(background,candidate,support)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background
+    TYPE(cloud_bal_state_type), INTENT(INOUT) :: candidate
+    LOGICAL, INTENT(IN) :: support(:,:,:)
+    ! Observation metadata and support outside the request are immutable.
+    CALL retain_field_support(background%cloud_fraction,candidate%cloud_fraction,support)
+    WHERE(.NOT.support)
+      candidate%cloud_type%value=background%cloud_type%value
+      candidate%cloud_type%valid=background%cloud_type%valid
+      candidate%cloud_type%quality=background%cloud_type%quality
+      candidate%cloud_type%source=background%cloud_type%source
+      candidate%obs_support=background%obs_support
+      candidate%hydro_support=background%hydro_support
+      candidate%grid%dry_air_mass_measure=background%grid%dry_air_mass_measure
+    END WHERE
+  END SUBROUTINE retain_column_support
+
+  SUBROUTINE retain_field_support(background,candidate,support)
+    TYPE(field3d), INTENT(IN) :: background
+    TYPE(field3d), INTENT(INOUT) :: candidate
+    LOGICAL, INTENT(IN) :: support(:,:,:)
+    WHERE(.NOT.support)
+      candidate%value=background%value
+      candidate%valid=background%valid
+      candidate%quality=background%quality
+      candidate%source=background%source
+    END WHERE
+  END SUBROUTINE retain_field_support
 
   SUBROUTINE account_pressure_analysis(background,candidate,budget,status,allow_geometry_change,allow_domain_change)
     ! Caller contract: validated states with identical pressure centers;
