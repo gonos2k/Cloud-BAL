@@ -1,0 +1,111 @@
+--- a/solve_em_pr64_qc_channel.f90
++++ b/solve_em_pr64_qc_channel.f90
+@@ -87,6 +87,7 @@
+    USE module_firebrand_spotting, ONLY : firebrand_spotting_em_driver
+ 
+    IMPLICIT NONE
++   EXTERNAL pr82_nc_boundary
+ 
+    
+ 
+@@ -696,6 +697,8 @@
+         ims,ime,jms,jme,kms,kme,grid%i_start(1),min(grid%i_end(1),ide-1), &
+         grid%j_start(1),min(grid%j_end(1),jde-1),k_start,min(k_end,kde-1), &
+         P_QC,P_QG,P_QNC,P_QIB,moist,scalar)
++   call pr82_nc_boundary('PRE_RK',grid%itimestep,0,grid%xtime,ims,ime,jms,jme,kms,kme, &
++        scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC))
+    Runge_Kutta_loop:  DO rk_step = 1, rk_order
+ 
+    
+@@ -795,6 +798,8 @@
+ 
+      END DO
+      !$OMP END PARALLEL DO
++     call pr82_nc_boundary('POST_RK_STEP_PREP',grid%itimestep,rk_step,grid%xtime,ims,ime,jms,jme,kms,kme, &
++          scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC))
+ 
+ 
+ 
+@@ -948,6 +953,8 @@
+ 
+        IF (coupler_on) CALL cpl_settime( curr_secs2 )
+ 
++       call pr82_nc_boundary('PRE_PHYSICS_PBL',grid%itimestep,rk_step,grid%xtime,ims,ime,jms,jme,kms,kme, &
++            scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC))
+        CALL first_rk_step_part1 (    grid, config_flags         &
+                              , moist , moist_tend               &
+                              , chem  , chem_tend                &
+@@ -980,6 +987,8 @@
+                              , feedback_is_ready=feedback_is_ready    &
+                             )
+ 
++       call pr82_nc_boundary('POST_PHYSICS_PBL',grid%itimestep,rk_step,grid%xtime,ims,ime,jms,jme,kms,kme, &
++            scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC))
+        IF ( config_flags%bl_pbl_physics == MYNNPBLSCHEME ) THEN
+ 
+ 
+@@ -3086,6 +3095,8 @@
+ 
+            CALL wrf_debug ( 200 , ' call rk_scalar_tend' )
+            tenddec = .false.
++           IF(is==P_QNC) CALL pr82_nc_boundary('PRE_NC_TEND',grid%itimestep,rk_step,grid%xtime,ims,ime,jms,jme,kms,kme, &
++                scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC))
+            IF(is==P_QNC) CALL pr64_host_cut('NC_PRE_TEND',rk_step,ims,ime,jms,jme,kms,kme, &
+                 grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
+                 min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QNC,P_QC, &
+@@ -3119,6 +3130,8 @@
+                                  grid%i_start(ij), grid%i_end(ij), &
+                                  grid%j_start(ij), grid%j_end(ij), &
+                                  k_start    , k_end               )
++           IF (is==P_QNC) CALL pr82_nc_boundary('POST_NC_TEND',grid%itimestep,rk_step,grid%xtime,ims,ime,jms,jme,kms,kme, &
++                scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC))
+            IF (is==P_QNC) CALL pr64_host_cut('NC_TEND',rk_step,ims,ime,jms,jme,kms,kme, &
+                 grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
+                 min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QNC,P_QC, &
+@@ -3176,6 +3189,8 @@
+ 
+            CALL wrf_debug ( 200 , ' call rk_update_scalar' )
+            tenddec = .false.
++           IF (is==P_QNC) CALL pr82_nc_boundary('PRE_NC_UPDATE',grid%itimestep,rk_step,grid%xtime,ims,ime,jms,jme,kms,kme, &
++                scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC))
+            CALL rk_update_scalar( scs=is, sce=is,                                         &
+                                   scalar_1=scalar_old(ims,kms,jms,is),                    &
+                                   scalar_2=scalar(ims,kms,jms,is),                        &
+@@ -3194,6 +3209,8 @@
+                                   its=grid%i_start(ij), ite=grid%i_end(ij),               &
+                                   jts=grid%j_start(ij), jte=grid%j_end(ij),               &
+                                   kts=k_start    , kte=k_end                              )
++           IF (is==P_QNC) CALL pr82_nc_boundary('POST_NC_UPDATE',grid%itimestep,rk_step,grid%xtime,ims,ime,jms,jme,kms,kme, &
++                scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC))
+            IF (is==P_QNC) CALL pr64_host_cut('NC_AFTER',rk_step,ims,ime,jms,jme,kms,kme, &
+                 grid%i_start(ij),min(grid%i_end(ij),ide-1),grid%j_start(ij), &
+                 min(grid%j_end(ij),jde-1),k_start,min(k_end,kde-1),P_QNC,P_QC, &
+@@ -4557,6 +4574,8 @@
+ 
+ 
+      if (grid%itimestep.eq.1) then
++       call pr82_nc_boundary('PRE_MICROPHYSICS',grid%itimestep,rk_step,grid%xtime,ims,ime,jms,jme,kms,kme, &
++            scalar(ims,kms,jms,P_QNC),moist(ims,kms,jms,P_QC))
+        call pr63_transition_state('PRE_MICROPHYSICS',grid%itimestep,rk_step, &
+             ims,ime,jms,jme,kms,kme,grid%i_start(1),min(grid%i_end(1),ide-1), &
+             grid%j_start(1),min(grid%j_end(1),jde-1),k_start,min(k_end,kde-1), &
+@@ -6213,3 +6232,19 @@
+   enddo
+   close(u)
+ END SUBROUTINE pr64_qc_channels
++
++SUBROUTINE pr82_nc_boundary(stage,itimestep,rkstep,xtime,ims,ime,jms,jme,kms,kme,qnc,qc)
++  implicit none
++  character(len=*),intent(in)::stage
++  integer,intent(in)::itimestep,rkstep,ims,ime,jms,jme,kms,kme
++  real,intent(in)::xtime,qnc(ims:ime,kms:kme,jms:jme),qc(ims:ime,kms:kme,jms:jme)
++  integer::u
++  integer::qnc_bits,qc_bits
++  if (4<ims .or. 4>ime .or. 2<jms .or. 2>jme .or. 22<kms .or. 22>kme) return
++  qnc_bits=transfer(qnc(4,22,2),qnc_bits)
++  qc_bits=transfer(qc(4,22,2),qc_bits)
++  open(newunit=u,file='pr82_nc_boundaries.raw',status='unknown',position='append',action='write')
++  write(u,'(A,1X,I0,1X,I0,1X,I0,1X,I0,1X,I0,1X,ES24.16,1X,Z8.8,1X,Z8.8,1X,ES24.16,1X,ES24.16)') &
++       trim(stage),itimestep,rkstep,4,2,22,xtime,qnc_bits,qc_bits,qnc(4,22,2),qc(4,22,2)
++  close(u)
++END SUBROUTINE pr82_nc_boundary

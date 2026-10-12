@@ -1,0 +1,36 @@
+{
+  "boundary_csv": {
+    "path": "docs/evidence/pr82_native_stage_trace_pr80clean_20261012.raw",
+    "records": 19,
+    "sha256": "bf8e7e1ae7eea26c451ce6cb6c0c38fc22aa368ca93d2ee4ddff9d08727b524a",
+    "source_path": "/var/tmp/pr82_native_stage_trace_run2/run/pr82_nc_boundaries.raw"
+  },
+  "rejection_csv": {
+    "path": "docs/evidence/pr82_native_rejection_pr80clean_20261012.csv",
+    "records": 1,
+    "sha256": "918e8e7ed5e2e3096efba97897c5deed3837fcd6cbbdb17caaf24036f548579c",
+    "source_path": "/var/tmp/pr82_native_stage_trace_run2/run/number_basis_rejection.raw"
+  },
+  "replay": {
+    "candidate_executable": "/var/tmp/pr82_native_stage_trace_build1/wrf_pr82_stage.exe",
+    "candidate_executable_sha256": "d1d2cce0a60e180066a9abfe923f7dcb3d79a8993c3cb45438b28f3fb741c003",
+    "copy_source_count": 109,
+    "input_run": "/var/tmp/pr80_kdm6_radar_contract.nsUNuj/run",
+    "input_snapshot_unchanged": true,
+    "wrfbdy_d01_sha256": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+    "wrfinput_d01_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+  },
+  "run_root": "/var/tmp/pr82_native_stage_trace_run2",
+  "runner_sha256": {
+    "patches/pr82_native_nc_boundary_trace.patch": "8a365b69931e15bb24e7b96ae0661a16c7aa036113750319dc68e83c48b908f1",
+    "patches/pr82_number_conversion_rejection_trace.patch": "b26de4f2df3b745fa9a70ac92ebcd69463eb8538381ba8a906e998f464546a06",
+    "tests/pr81_native_case_copy.py": "3b3000c920bff3dde1d05a109f51e651c092be41853e29b0bc050904c503bcb8",
+    "tests/pr81_native_first_step.gdb": "02485bc14d0a2b45e158696afa852d0511b5b4e39279d91148e62912d84d607d",
+    "tests/pr82_native_number_origin.py": "5473e65ff91176e3193349546eba2d817df16209da5a93eb58932224118e2ca6",
+    "tests/run_pr81_native_first_step.sh": "3bbb65de0ee6ffdff7f0dd65df9e565c899e8d406895760d15c5042315c42ba8",
+    "tests/run_pr82_native_number_trace.sh": "a9de0c4d62e59ad51ba347d5fd474957be09d9ffd08cca2e08ea1198b55fa9c8",
+    "tools/run_isolated_native.py": "2ccb6b96584b3504742bef371411b49fb6d0c2bca0ff16a6d8a716794ba88d45"
+  },
+  "schema": "pr82_native_stage_raw_package_v1",
+  "scope": "exact selected-cell stage boundary rows and first shared conversion rejection from fresh PR80 replay"
+}

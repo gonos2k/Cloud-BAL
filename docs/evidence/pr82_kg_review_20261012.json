@@ -1,0 +1,112 @@
+{
+  "schema": "pr82_kg_independent_review_v1",
+  "reviewed_utc": "2026-10-12",
+  "source_commit": "fa32489b795be26e98ff2e5390dfb9ff14f8045f",
+  "pr": "https://github.com/gonos2k/Cloud-BAL/pull/82",
+  "result": "PASS",
+  "checks": {
+    "candidate_commit_matches_receipt": true,
+    "retained_receipt_alias_exact": true,
+    "manifest_source_binding": true,
+    "archive_sha_matches_manifest": true,
+    "archive_crc_clean": true,
+    "archive_has_exact_four_manifest_members": true,
+    "archive_members_match_manifest_and_retained_bytes": true,
+    "119_prior_immutable_pins_match": true,
+    "maintained_627_source_snapshot_matches": true,
+    "13_protected_wiki_hashes_match": true,
+    "private_profile_134_nodes_133_links_unchanged": true,
+    "source_status_only_new_kg_package": true,
+    "science_and_physical_gates_not_escalated": true,
+    "six_separately_dated_graph_artifacts_match": true,
+    "five_derived_wiki_outputs_match": true
+  },
+  "observed": {
+    "receipt_sha256": "9fa76209359c9e3d20e50f3196703ed5443f5fd90ab77b6b1ac35672b0a7ce0d",
+    "manifest_sha256": "e4e57ec6e1c866feb4db8d6e29b9b19c0e373c6a1dd65d67e5b882f61ef7bc32",
+    "archive_sha256": "e9a0f44c867d56d6ea92f3b52b049a83b6a2b97d22142d8885578aebc33425e8",
+    "archive_member_count": 4,
+    "prior_immutable_pin_count": 119,
+    "maintained_source_entry_count": 627,
+    "maintained_source_snapshot_sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f",
+    "protected_wiki_path_count": 13,
+    "protected_wiki_failures": [],
+    "dated_graph_artifacts": [
+      {
+        "corpus": "Cloud-BAL",
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-12-observation-native/GRAPH_REPORT.md",
+        "sha256": "d4dc5e478947103743b20f322938223c6b494dd2700fae95da90ca0321c8914f",
+        "matches_receipt": true
+      },
+      {
+        "corpus": "Cloud-BAL",
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-12-observation-native/graph.json",
+        "sha256": "864ed1a38197f908fa0666727643a612739112751031e500a6b81849c781d06f",
+        "matches_receipt": true
+      },
+      {
+        "corpus": "Cloud-BAL",
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-12-observation-native/manifest.json",
+        "sha256": "532dc388fdf9e300b8b4a31ee590e09cadc3ce1d19ed97ae2862825e54c4a2c8",
+        "matches_receipt": true
+      },
+      {
+        "corpus": "KLAPS50",
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-12-observation-native/GRAPH_REPORT.md",
+        "sha256": "5209a0b149975ed7773a5007d99cdab2abbba3a5c3af744f7bf336c14b48fc41",
+        "matches_receipt": true
+      },
+      {
+        "corpus": "KLAPS50",
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-12-observation-native/graph.json",
+        "sha256": "3e5476cb26043a8b43ff69cc6588cd9e24fb90959db2601f867cfa24eb381236",
+        "matches_receipt": true
+      },
+      {
+        "corpus": "KLAPS50",
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-12-observation-native/manifest.json",
+        "sha256": "e0eecbc5aa8d8d5f51392ec8dd84328e16885628a91148dac640eccec7476424",
+        "matches_receipt": true
+      }
+    ],
+    "derived_wiki_sha256_match": {
+      "wiki/graph-report-cloud-bal.md": true,
+      "wiki/graph-report-klaps50.md": true,
+      "wiki/graph-report.md": true,
+      "wiki/index.md": true,
+      "wiki/log.md": true
+    },
+    "private_profile_nodes": 134,
+    "private_profile_incident_links": 133,
+    "candidate_git_status": [
+      "?? docs/evidence/pr82_kg_20261012.json",
+      "?? docs/evidence/pr82_kg_20261012/"
+    ],
+    "source_commit_kg_owned_untracked_paths_only": [
+      "?? docs/evidence/pr82_kg_20261012.json",
+      "?? docs/evidence/pr82_kg_20261012/"
+    ],
+    "graph_deltas": {
+      "Cloud-BAL": {
+        "delta_nodes": 160,
+        "delta_edges": 272,
+        "nodes": 9546,
+        "edges": 17349,
+        "sha256": "864ed1a38197f908fa0666727643a612739112751031e500a6b81849c781d06f"
+      },
+      "KLAPS50": {
+        "delta_nodes": 161,
+        "delta_edges": 274,
+        "nodes": 35374,
+        "edges": 75779,
+        "sha256": "3e5476cb26043a8b43ff69cc6588cd9e24fb90959db2601f867cfa24eb381236"
+      }
+    },
+    "extraction_limits": "Graphify AST and Markdown headings only; no semantic/LLM refresh; unsupported/binary selected files are hash-bound but not parsed",
+    "physical_approval": "FAIL_OPEN",
+    "same13_handoff": "PASS_SCOPED_IO_PHYSICAL_TRANSFER_OPEN",
+    "first_microphysics": "REJECTED_OPEN",
+    "observation_fit": "PENDING_EVIDENCE"
+  },
+  "scope_note": "Review verifies package/source/graph/wiki integrity and preservation bindings only. Graph freshness is structural evidence, not runtime or scientific validation; physical approval remains FAIL_OPEN, same13 is scoped I/O with physical transfer OPEN, and first microphysics remains REJECTED."
+}

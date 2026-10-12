@@ -5,9 +5,11 @@ from __future__ import annotations
 
 import hashlib
 import json
-import shutil
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
+from run_isolated_native import copy_detached_input
 
 
 MUTABLE_RUN_FILES = {
@@ -53,29 +55,20 @@ def copy_case(source: Path, executable: Path, destination: Path) -> dict[str, st
             continue
         if path.suffix == ".exe" or path.name.startswith(OUTPUT_PREFIXES):
             continue
-        shutil.copy2(path, destination / path.name)
-    shutil.copy2(executable, destination / "wrf.exe")
+        copy_detached_input(path, destination / path.name)
+    copy_detached_input(executable, destination / "wrf.exe")
 
     source_after = snapshot_files(source)
     if source_after != source_before:
         raise RuntimeError("source case changed while it was copied")
-    source_executable = source / "wrf.exe"
-    if ((destination / "wrf.exe").stat().st_dev,
-            (destination / "wrf.exe").stat().st_ino) == (
-            source_executable.stat().st_dev, source_executable.stat().st_ino):
-        raise RuntimeError("candidate executable shares an inode with the source case")
-    for name in source_before:
-        copied = destination / name
-        if copied.exists() and (copied.stat().st_dev, copied.stat().st_ino) == (
-                (source / name).stat().st_dev, (source / name).stat().st_ino):
-            raise RuntimeError(f"copied case file shares a source inode: {name}")
     return source_before
 
 
 def main() -> int:
     source, executable, destination, snapshot_path = map(Path, sys.argv[1:])
     before = copy_case(source, executable, destination)
-    snapshot_path.write_text(json.dumps({"pre": before}, indent=2) + "\n")
+    with snapshot_path.open("x") as stream:
+        stream.write(json.dumps({"pre": before}, indent=2) + "\n")
     return 0
 
 

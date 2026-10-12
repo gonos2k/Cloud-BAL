@@ -16,6 +16,7 @@ MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 IsolationError = MODULE.IsolationError
 run_isolated = MODULE.run_isolated
+copy_detached_input = MODULE.copy_detached_input
 
 
 class IsolatedNativeRunTests(unittest.TestCase):
@@ -29,6 +30,39 @@ class IsolatedNativeRunTests(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.temp.cleanup()
+
+    def test_copy_detaches_hardlinked_source_and_preserves_executable_mode(self) -> None:
+        retained_alias = self.root / "retained_alias"
+        os.link(self.input, retained_alias)
+        self.input.chmod(0o755)
+        copied = self.run / "wrf.exe"
+        digest = copy_detached_input(self.input, copied)
+        self.assertEqual(digest, MODULE._sha256(self.input))
+        self.assertEqual(copied.stat().st_nlink, 1)
+        self.assertNotEqual(copied.stat().st_ino, self.input.stat().st_ino)
+        self.assertTrue(copied.stat().st_mode & 0o111)
+        copied.write_bytes(b"candidate executable")
+        self.assertEqual(self.input.read_bytes(), b"retained input")
+        self.assertEqual(retained_alias.read_bytes(), b"retained input")
+
+    def test_copy_rejects_existing_destination_without_modifying_either_file(self) -> None:
+        copied = self.run / "wrf.exe"
+        copied.write_bytes(b"previous candidate")
+        with self.assertRaisesRegex(IsolationError, "already exists"):
+            copy_detached_input(self.input, copied)
+        self.assertEqual(copied.read_bytes(), b"previous candidate")
+        self.assertEqual(self.input.read_bytes(), b"retained input")
+
+    def test_copy_rejects_source_and_destination_symlinks(self) -> None:
+        linked_source = self.root / "source_link"
+        linked_source.symlink_to(self.input)
+        with self.assertRaisesRegex(IsolationError, "non-symlink"):
+            copy_detached_input(linked_source, self.run / "wrf.exe")
+        target = self.run / "dangling_destination"
+        target.symlink_to(self.root / "missing")
+        with self.assertRaisesRegex(IsolationError, "already exists"):
+            copy_detached_input(self.input, target)
+        self.assertTrue(target.is_symlink())
 
     def _command(self, marker: Path, output: str) -> list[str]:
         code = (

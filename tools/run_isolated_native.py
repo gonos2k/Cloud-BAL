@@ -14,6 +14,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import stat
 import subprocess
 import sys
@@ -83,6 +84,40 @@ def _run_root(path: Path) -> Path:
     if root != absolute or not root.is_dir():
         raise IsolationError("run root is not a directory")
     return root
+
+
+def copy_detached_input(source: Path, destination: Path) -> str:
+    """Read a retained regular input into a new, single-link file.
+
+    A retained source may have other hardlinks. Never write through it or reuse
+    a destination inode, even when replacing a research executable.
+    """
+    identity = _regular_file_identity(source)
+    expected = _sha256(source)
+    parent = _run_root(destination.parent)
+    target = _output_path(parent, destination.name)
+    created = False
+    try:
+        descriptor = os.open(source, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        with os.fdopen(descriptor, "rb") as original:
+            source_info = os.fstat(original.fileno())
+            if (source_info.st_dev, source_info.st_ino, source_info.st_nlink) != identity:
+                raise IsolationError(f"source identity changed before copying: {source}")
+            descriptor = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+            created = True
+            with os.fdopen(descriptor, "wb") as copied:
+                shutil.copyfileobj(original, copied, length=1024 * 1024)
+                os.fchmod(copied.fileno(), stat.S_IMODE(source_info.st_mode) & 0o777)
+        copied_identity = _single_link_input(target)
+        if copied_identity[:2] == identity[:2] or _sha256(target) != expected:
+            raise IsolationError(f"copied input identity or bytes differ: {target}")
+        if _regular_file_identity(source) != identity or _sha256(source) != expected:
+            raise IsolationError(f"source input changed while copying: {source}")
+        return expected
+    except (OSError, IsolationError):
+        if created:
+            target.unlink()
+        raise
 
 
 def _output_parent(root: Path, candidate: Path) -> None:
