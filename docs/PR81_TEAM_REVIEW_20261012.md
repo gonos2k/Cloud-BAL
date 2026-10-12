@@ -60,3 +60,8 @@ remain OPEN. The 12 UTC NC rejection occurs after same-cell positive finite dry
 density validation; exact NC/conversion/cell operands are still uncaptured.
 These are explicitly reported limits, not reclassified as completed tests or
 hidden by weaker acceptance gates. The PR must not claim science approval.
+
+The final KG package received a separate independent post-apply review. Its four
+ZIP members match retained originals; alias/manifest/dated graph/wiki hashes and
+all 110 immutable pins pass, with the active maintained-source snapshot unchanged.
+See [the review receipt](evidence/pr81_kg_review_20261012.json).

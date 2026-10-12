@@ -146,3 +146,17 @@ predicate needs operand/cell/stage tracing and an origin fix before accepting a
 first call. Same-candidate carrier/time/domain accounting and BASE/HYDRO/COUPLED
 10/30/60-minute response remain OPEN. Science approval and promotion remain
 false. Graph freshness records source navigation only, not these validations.
+
+## Structural maintenance
+
+Selected-path Graphify/KG update is bound to frozen source `064cdda8ef989b221717651859677655e900d95f`.
+Separate `2026-10-12-thermo-firststep` snapshots contain KLAPS50 35,213 nodes
+(+176), 75,505 edges (+277), and Cloud-BAL 9,386 nodes (+176), 17,077 edges
+(+276). The 627 active maintained source/doc/config entries, private profile,
+protected wiki content, and all 110 previous immutable pins are preserved.
+AST/Markdown-heading extraction does not refresh semantics; Fortran cross-file
+CALL coverage is partial and six opaque selected files are hash-bound only.
+[Receipt](evidence/pr81_kg_20261012.json) and
+[independent review](evidence/pr81_kg_review_20261012.json) bind the compact
+archive and separate derived wiki reports/index/log. Approval stays `FAIL_OPEN`;
+this maintenance establishes neither runtime nor scientific acceptance.
