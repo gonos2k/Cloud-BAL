@@ -1,0 +1,36 @@
+{
+  "accepted_receipt_path": "docs/evidence/pr82_native_conversion_scale_pr80clean_corrected_20261012.json",
+  "accepted_receipt_sha256": "06d32d1086e0269e24564a4d3390e74c4053f9f0effa794e0ba034e2f014224a",
+  "argv": [
+    "/usr/bin/python3",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tests/pr82_native_conversion_scale.py",
+    "/var/tmp/pr82_native_stage_trace_run2/run/kdm6_first_call_pre.raw",
+    "/var/tmp/pr82_native_conversion_scale_rootfinal_v2_20261012.json"
+  ],
+  "behavioral_tests": {
+    "cases": [
+      "ambient CCN with empty condensates and no snow field",
+      "invalid-density/negative-number priority and separate minimum-subnormal conversion failure"
+    ],
+    "count": 2,
+    "status": "PASS"
+  },
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL",
+  "exit_status": 0,
+  "opened_inputs_sha256_after": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tests/pr82_native_conversion_scale.py": "e4e6f3f8219403a07d273194ec6e700f3b1383888e3f6e1581f72d01d7bf8410",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tests/test_pr82_native_conversion_scale.py": "f5d6a9a4060ed0731b532756a81ab2a4bb3ecc10c1a56f97790ee6fe760f7587",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tools/native_kdm6_trace.py": "6a33128956352a1298943dba338dd56b06c1d7ea818067edd8c797457a8dd77b",
+    "/var/tmp/pr82_native_stage_trace_run2/run/kdm6_first_call_pre.raw": "f085b24f784b7a0c1ccfba840d64d5908243072cbeb745250284b5e9a4a39212"
+  },
+  "opened_inputs_sha256_before": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tests/pr82_native_conversion_scale.py": "e4e6f3f8219403a07d273194ec6e700f3b1383888e3f6e1581f72d01d7bf8410",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tests/test_pr82_native_conversion_scale.py": "f5d6a9a4060ed0731b532756a81ab2a4bb3ecc10c1a56f97790ee6fe760f7587",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tools/native_kdm6_trace.py": "6a33128956352a1298943dba338dd56b06c1d7ea818067edd8c797457a8dd77b",
+    "/var/tmp/pr82_native_stage_trace_run2/run/kdm6_first_call_pre.raw": "f085b24f784b7a0c1ccfba840d64d5908243072cbeb745250284b5e9a4a39212"
+  },
+  "output_bytes_equal_to_corrected_clean_receipt": true,
+  "output_sha256": "06d32d1086e0269e24564a4d3390e74c4053f9f0effa794e0ba034e2f014224a",
+  "schema": "pr82_native_scale_focused_execution_v1",
+  "scope": "offline captured12UTCtile; no newphysics/model execution or same13claim"
+}

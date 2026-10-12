@@ -77,6 +77,10 @@ pressure_transition_fixture="$test_tmp/pressure_transition_remap_fixture.txt"
 bash "$repo_root/tests/run_thermo_density_prior.sh"
 python3 "$repo_root/tests/test_cp06a_thermo_density_readback.py"
 python3 "$repo_root/tests/test_pr81_native_case_copy.py"
+python3 "$repo_root/tests/test_run_isolated_native.py"
+python3 "$repo_root/tests/test_pr82_observation_signal_readback.py"
+python3 "$repo_root/tests/test_archive_member_hashes.py"
+python3 "$repo_root/tests/test_pr82_native_conversion_scale.py"
 
 for hydrostatic_build in checked optimized; do
   saturation_fixture="$test_tmp/saturation_reference_${hydrostatic_build}.txt"

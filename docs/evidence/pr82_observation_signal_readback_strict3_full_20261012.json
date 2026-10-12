@@ -1,0 +1,2549 @@
+{
+  "case_id": "20260816T130000Z",
+  "frozen_common_footprint_and_signal": {
+    "above_ground_sha256": "aa0cf0ab04a908b3fd55b4728b24c5b828dad911ceb0b8232e3c5a15bf310d70",
+    "analysis_support_cells": 162,
+    "analysis_support_sha256": "002a74a5834874dbb56dfc7dfa7b17d6f07655e8a6df0338a57847a278473139",
+    "grid_kji": [
+      22,
+      283,
+      235
+    ],
+    "lwc_observed_min_mean_max_kg_m3": [
+      0.0,
+      8.966596248799718e-05,
+      0.0032385853119194508
+    ],
+    "lwc_operator_sha256": "879c972eba09456e1eb685a7f1ff6947e5a9a0de78aa520bec4add5485cbd894",
+    "lwc_positive_cells": 407924,
+    "lwc_valid_above_ground_cells": 1294696,
+    "lwc_valid_sha256": "aa0cf0ab04a908b3fd55b4728b24c5b828dad911ceb0b8232e3c5a15bf310d70",
+    "lwc_value_sha256": "539bd6d6e590634f2a9acbdce4fcfae04061d2674968b8006c60e730223e0bf4",
+    "lwc_zero_cells": 886772,
+    "radar_echo_cells": 67567,
+    "radar_echo_dbz_minmax": [
+      0.7561615109443665,
+      51.99095153808594
+    ],
+    "radar_echo_mask_sha256": "660bd87d0791b5fbe9f8e540e0b3721253e71f0dc94355734ca09bd12f4905e6",
+    "radar_missing_cells": 0,
+    "radar_no_echo_cells": 1227129,
+    "radar_no_echo_mask_sha256": "e73d00bbdab128a754757b888d671415b8c59a286166b50ef3cb60231a997823",
+    "valid_time_epoch": 1786885200
+  },
+  "inputs": {
+    "candidate_files": {
+      "oldcoupled_pr78_o2": {
+        "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/coupled.nc",
+        "sha256": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260"
+      },
+      "pr78_o0_coupled": {
+        "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O0/coupled.nc",
+        "sha256": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260"
+      },
+      "pr78_o0_hydro": {
+        "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O0/hydro.nc",
+        "sha256": "5e69e8b1c2f36119cead2ca4b6ca632a8898a2fa1082d9faa9dd1ea5075b7535"
+      },
+      "pr78_o2_hydro": {
+        "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/hydro.nc",
+        "sha256": "5e69e8b1c2f36119cead2ca4b6ca632a8898a2fa1082d9faa9dd1ea5075b7535"
+      },
+      "pr80_o0_retained": {
+        "path": "/var/tmp/pr80_force_retained.QrG2Yk/O0/retained_wind_v1.bin.pipeline.nc",
+        "sha256": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd"
+      },
+      "pr80_o2_retained": {
+        "path": "/var/tmp/pr80_force_retained.QrG2Yk/O2/retained_wind_v1.bin.pipeline.nc",
+        "sha256": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd"
+      },
+      "pr81_final": {
+        "path": "/var/tmp/pr81_joint_thermo.HbL5ry/O2/joint_candidate.nc",
+        "sha256": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1"
+      }
+    },
+    "input_declaration": "/var/tmp/pr78_cp06a_spatial.V9LYrN/inputs.json",
+    "input_declaration_sha256": "f655339a0bd682b14df9afde0fb007a5124327f9771fd0c9630f801836c2480e",
+    "lwc_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_maintained_derived_O0_qej27s72/matched_control_chain13_O0.b07iv296/prepared/lapsprd/lwc/262281300.lwc",
+    "lwc_sha256": "9e70f80275cb2cf48b3db9dd189fba04936d6587fa57bf15692100548b242cca",
+    "readback_tool": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tools/pr82_observation_signal_readback.py",
+      "sha256": "e8248b893ad0bcc7e56fdf6cb211a9416d09d474e8456405e1e8b6a3503c193d"
+    }
+  },
+  "modeled_unit_contract": {
+    "candidate_dry_air_mass_measure": "kg dryair",
+    "pre_density_dry_mass_vector": "kg; explicit exception because this saved vector stores absolute cell mass",
+    "pressure": "Pa; required on every opened candidate before EOS",
+    "temperature": "K; required on the selected background/candidate/pre-density state",
+    "vapor_and_five_condensates": "kg kg-1 dryair"
+  },
+  "radar_fit": {
+    "reason": "No candidate-state-to-dBZ forward operator or radar LOS observation table is declared in retained inputs; echo/no-echo summaries below are signal-stratified state diagnostics only.",
+    "status": "not_computed"
+  },
+  "schema": "pr82_observation_signal_readback_v2",
+  "source_operator": {
+    "equation": "H(x)=rho_d(p,T,qv)*qc; rho_d=p/[287.05*T*(1+qv/0.622)]",
+    "fit_scope": "unweighted raw-unit consistency residual only; no R, covariance, or independent observation-fit claim",
+    "name": "direct_dry_air_cloud_water_to_volumetric_LWC",
+    "observation_product": "processed LWC analysis product, not independent raw observation",
+    "source": "src/common/cloud_bal_real_netcdf.f90 read_real_shadow_state/read_and_assign_hydrometeor/dry_density",
+    "source_lines": "499-503, 4021-4056, 4371-4378",
+    "units": {
+      "H": "kg m-3",
+      "residual": "kg m-3",
+      "y": "kg m-3"
+    }
+  },
+  "states": [
+    {
+      "dry_air_and_total_moist_mass_kg": {
+        "domain": {
+          "dry_air_mass": 1.6241993263035754e+16,
+          "total_moist_air_mass": 1.6332084884145108e+16,
+          "total_water_mass": 90091621109353.31
+        },
+        "lwc_product": {
+          "dry_air_mass": 1.6241993263035754e+16,
+          "total_moist_air_mass": 1.6332084884145108e+16,
+          "total_water_mass": 90091621109353.31
+        },
+        "radar_echo": {
+          "dry_air_mass": 827458304597970.0,
+          "total_moist_air_mass": 837529253985178.6,
+          "total_water_mass": 10070949387208.594
+        },
+        "radar_no_echo": {
+          "dry_air_mass": 1.5414534958437788e+16,
+          "total_moist_air_mass": 1.5494555630159932e+16,
+          "total_water_mass": 80020671722144.72
+        }
+      },
+      "hydrometeor_and_vapor": {
+        "cloud_ice": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 966424077456.901,
+            "volume_mean_concentration_kg_m3": 2.3700771571298565e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 966424077456.901,
+            "volume_mean_concentration_kg_m3": 2.3700771571298565e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 162990611143.1724,
+            "volume_mean_concentration_kg_m3": 0.00016334812248449524
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 803433466313.7284,
+            "volume_mean_concentration_kg_m3": 2.0197809076897357e-05
+          }
+        },
+        "cloud_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1884986041735.6516,
+            "volume_mean_concentration_kg_m3": 4.6227763393296984e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1884986041735.6516,
+            "volume_mean_concentration_kg_m3": 4.6227763393296984e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 428776840070.94934,
+            "volume_mean_concentration_kg_m3": 0.0004297173395398867
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1456209201664.703,
+            "volume_mean_concentration_kg_m3": 3.660817810613799e-05
+          }
+        },
+        "graupel": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 7346946671.803795,
+            "volume_mean_concentration_kg_m3": 1.8017794555899762e-07
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 7346946671.803795,
+            "volume_mean_concentration_kg_m3": 1.8017794555899762e-07
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 405675188.88933,
+            "volume_mean_concentration_kg_m3": 4.0656501610025963e-07
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 6941271482.914465,
+            "volume_mean_concentration_kg_m3": 1.744991739092845e-07
+          }
+        },
+        "ice_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1349695506864.1978,
+            "volume_mean_concentration_kg_m3": 3.310019446449788e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1349695506864.1978,
+            "volume_mean_concentration_kg_m3": 3.310019446449788e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 231826757849.32275,
+            "volume_mean_concentration_kg_m3": 0.00023233525766150172
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1117868749014.8738,
+            "volume_mean_concentration_kg_m3": 2.810251316667951e-05
+          }
+        },
+        "liquid_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 2002920530620.1135,
+            "volume_mean_concentration_kg_m3": 4.912001167914656e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 2002920530620.1135,
+            "volume_mean_concentration_kg_m3": 4.912001167914656e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 501385983047.95605,
+            "volume_mean_concentration_kg_m3": 0.0005024857468568204
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1501534547572.1577,
+            "volume_mean_concentration_kg_m3": 3.774762862863543e-05
+          }
+        },
+        "rain": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 117934488884.4618,
+            "volume_mean_concentration_kg_m3": 2.892248285849575e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 117934488884.4618,
+            "volume_mean_concentration_kg_m3": 2.892248285849575e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 72609142977.00674,
+            "volume_mean_concentration_kg_m3": 7.276840731693371e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 45325345907.45508,
+            "volume_mean_concentration_kg_m3": 1.1394505224974418e-06
+          }
+        },
+        "snow": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 375924482735.4925,
+            "volume_mean_concentration_kg_m3": 9.219244947640306e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 375924482735.4925,
+            "volume_mean_concentration_kg_m3": 9.219244947640306e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 68430471517.261055,
+            "volume_mean_concentration_kg_m3": 6.858057016090624e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 307494011218.23126,
+            "volume_mean_concentration_kg_m3": 7.730204915872877e-06
+          }
+        },
+        "total_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 90091621109353.31,
+            "volume_mean_concentration_kg_m3": 0.0022094243947435037
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 90091621109353.31,
+            "volume_mean_concentration_kg_m3": 0.0022094243947435037
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 10070949387208.594,
+            "volume_mean_concentration_kg_m3": 0.010093039485518936
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 80020671722144.72,
+            "volume_mean_concentration_kg_m3": 0.002011669064601599
+          }
+        },
+        "vapor": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 86739005071869.0,
+            "volume_mean_concentration_kg_m3": 0.0021272041885998594
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 86739005071869.0,
+            "volume_mean_concentration_kg_m3": 0.0021272041885998594
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 9337736646311.312,
+            "volume_mean_concentration_kg_m3": 0.00935821848100061
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 77401268425557.73,
+            "volume_mean_concentration_kg_m3": 0.0019458189228062851
+          }
+        }
+      },
+      "label": "Xbackground",
+      "lwc_analysis_product_residual_kg_m3": {
+        "all_valid_above_ground": {
+          "bias": 3.159931063555e-15,
+          "count": 1294696,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9140069922769508e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2881201842478672e-11,
+          "p99_9_abs": 8.07759632749325e-11,
+          "p99_abs": 4.048129894989297e-11,
+          "rmse": 7.87167687574898e-12
+        },
+        "analysis_support": {
+          "bias": -1.2964767037282731e-12,
+          "count": 162,
+          "count_abs_gt_1e-6": 0,
+          "mae": 7.96249781265195e-12,
+          "max_abs": 8.694595586035414e-11,
+          "p95_abs": 4.411276896066141e-11,
+          "p99_9_abs": 8.612705812492522e-11,
+          "p99_abs": 8.089249647728889e-11,
+          "rmse": 1.9637421122080433e-11
+        },
+        "interpretation": "source-linked direct state consistency against an analyzed LWC input product; not independent observation fit",
+        "outside_analysis_support": {
+          "bias": 3.3225696152162744e-15,
+          "count": 1294534,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9132500747198206e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2877246499481093e-11,
+          "p99_9_abs": 8.076199068860599e-11,
+          "p99_abs": 4.0472468070071995e-11,
+          "rmse": 7.869103690561228e-12
+        },
+        "positive_lwc_only": {
+          "bias": 1.002919688044931e-14,
+          "count": 407924,
+          "count_abs_gt_1e-6": 0,
+          "mae": 6.074801180791025e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 3.1369544429508246e-11,
+          "p99_9_abs": 9.489721562771391e-11,
+          "p99_abs": 6.242655050878177e-11,
+          "rmse": 1.4023665131907472e-11
+        }
+      }
+    },
+    {
+      "dry_air_and_total_moist_mass_kg": {
+        "domain": {
+          "dry_air_mass": 1.6241993495548334e+16,
+          "total_moist_air_mass": 1.6332084884145098e+16,
+          "total_water_mass": 90091388596764.66
+        },
+        "lwc_product": {
+          "dry_air_mass": 1.6241993495548334e+16,
+          "total_moist_air_mass": 1.6332084884145098e+16,
+          "total_water_mass": 90091388596764.66
+        },
+        "radar_echo": {
+          "dry_air_mass": 827458537110548.9,
+          "total_moist_air_mass": 837529253985168.8,
+          "total_water_mass": 10070716874619.934
+        },
+        "radar_no_echo": {
+          "dry_air_mass": 1.5414534958437788e+16,
+          "total_moist_air_mass": 1.5494555630159932e+16,
+          "total_water_mass": 80020671722144.72
+        }
+      },
+      "hydrometeor_and_vapor": {
+        "cloud_ice": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 966424210650.1676,
+            "volume_mean_concentration_kg_m3": 2.3700775750777285e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 966424210650.1676,
+            "volume_mean_concentration_kg_m3": 2.3700775750777285e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 162990744336.43896,
+            "volume_mean_concentration_kg_m3": 0.00016334851312215136
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 803433466313.7284,
+            "volume_mean_concentration_kg_m3": 2.0197809076897357e-05
+          }
+        },
+        "cloud_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1884728480423.4446,
+            "volume_mean_concentration_kg_m3": 4.6221448690288507e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1884728480423.4446,
+            "volume_mean_concentration_kg_m3": 4.6221448690288507e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 428519278758.7426,
+            "volume_mean_concentration_kg_m3": 0.0004294598893599153
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1456209201664.703,
+            "volume_mean_concentration_kg_m3": 3.660817810613799e-05
+          }
+        },
+        "graupel": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161478184e-07
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161478184e-07
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 350547553.1937182,
+            "volume_mean_concentration_kg_m3": 3.5131701389500637e-07
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 6941271482.914465,
+            "volume_mean_concentration_kg_m3": 1.744991739092845e-07
+          }
+        },
+        "ice_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1349507919354.5781,
+            "volume_mean_concentration_kg_m3": 3.3095595306954496e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1349507919354.5781,
+            "volume_mean_concentration_kg_m3": 3.3095595306954496e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 231639170339.7031,
+            "volume_mean_concentration_kg_m3": 0.000232147624148128
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1117868749014.8738,
+            "volume_mean_concentration_kg_m3": 2.810251316667951e-05
+          }
+        },
+        "liquid_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 2002615513779.9966,
+            "volume_mean_concentration_kg_m3": 4.911253327893758e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 2002615513779.9966,
+            "volume_mean_concentration_kg_m3": 4.911253327893758e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 501080966207.83936,
+            "volume_mean_concentration_kg_m3": 0.0005021808515390809
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1501534547572.1577,
+            "volume_mean_concentration_kg_m3": 3.774762862863543e-05
+          }
+        },
+        "rain": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 117887033356.5518,
+            "volume_mean_concentration_kg_m3": 2.8910845886490637e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 117887033356.5518,
+            "volume_mean_concentration_kg_m3": 2.8910845886490637e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 72561687449.09673,
+            "volume_mean_concentration_kg_m3": 7.272096217916557e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 45325345907.45508,
+            "volume_mean_concentration_kg_m3": 1.1394505224974418e-06
+          }
+        },
+        "snow": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 375791889668.30194,
+            "volume_mean_concentration_kg_m3": 9.215993564562422e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 375791889668.30194,
+            "volume_mean_concentration_kg_m3": 9.215993564562422e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 68297878450.070465,
+            "volume_mean_concentration_kg_m3": 6.844779401208163e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 307494011218.23126,
+            "volume_mean_concentration_kg_m3": 7.730204915872877e-06
+          }
+        },
+        "total_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 90091388596764.66,
+            "volume_mean_concentration_kg_m3": 0.0022094187776727577
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 90091388596764.66,
+            "volume_mean_concentration_kg_m3": 0.0022094187776727577
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 10070716874619.934,
+            "volume_mean_concentration_kg_m3": 0.01009282235160364
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 80020671722144.72,
+            "volume_mean_concentration_kg_m3": 0.002011669064601599
+          }
+        },
+        "vapor": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 86739265163630.08,
+            "volume_mean_concentration_kg_m3": 0.0021272106490868655
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 86739265163630.08,
+            "volume_mean_concentration_kg_m3": 0.0021272106490868655
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 9337996738072.389,
+            "volume_mean_concentration_kg_m3": 0.009358493875916429
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 77401268425557.73,
+            "volume_mean_concentration_kg_m3": 0.0019458189228062851
+          }
+        }
+      },
+      "label": "Xpre-density",
+      "lwc_analysis_product_residual_kg_m3": {
+        "all_valid_above_ground": {
+          "bias": -1.4582513515301451e-08,
+          "count": 1294696,
+          "count_abs_gt_1e-6": 63,
+          "mae": 1.4584429893254506e-08,
+          "max_abs": 0.000870762080755171,
+          "p95_abs": 1.28887920708377e-11,
+          "p99_9_abs": 8.142198341010494e-11,
+          "p99_abs": 4.057512242860995e-11,
+          "rmse": 2.8970513439028465e-06
+        },
+        "analysis_support": {
+          "bias": -0.0001165427544406547,
+          "count": 162,
+          "count_abs_gt_1e-6": 63,
+          "mae": 0.00011654275480126437,
+          "max_abs": 0.000870762080755171,
+          "p95_abs": 0.000681442951341206,
+          "p99_9_abs": 0.0008704259543673118,
+          "p99_abs": 0.0008681045130896258,
+          "rmse": 0.0002589897569340297
+        },
+        "interpretation": "source-linked direct state consistency against an analyzed LWC input product; not independent observation fit",
+        "outside_analysis_support": {
+          "bias": 3.3225696152162744e-15,
+          "count": 1294534,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9132500747198206e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2877246499481093e-11,
+          "p99_9_abs": 8.076199068860599e-11,
+          "p99_abs": 4.0472468070071995e-11,
+          "rmse": 7.869103690561228e-12
+        },
+        "positive_lwc_only": {
+          "bias": -4.628293975889315e-08,
+          "count": 407924,
+          "count_abs_gt_1e-6": 63,
+          "mae": 4.6289022085185136e-08,
+          "max_abs": 0.000870762080755171,
+          "p95_abs": 3.143162999839909e-11,
+          "p99_9_abs": 9.954523320877744e-11,
+          "p99_abs": 6.274210119332215e-11,
+          "rmse": 5.161197360882576e-06
+        }
+      }
+    },
+    {
+      "dry_air_and_total_moist_mass_kg": {
+        "domain": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "lwc_product": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "radar_echo": {
+          "dry_air_mass": 827458537468469.2,
+          "total_moist_air_mass": 837529253985197.2,
+          "total_water_mass": 10070716516728.008
+        },
+        "radar_no_echo": {
+          "dry_air_mass": 1.5414534958437788e+16,
+          "total_moist_air_mass": 1.5494555630159932e+16,
+          "total_water_mass": 80020671722144.72
+        }
+      },
+      "hydrometeor_and_vapor": {
+        "cloud_ice": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 162990744330.64273,
+            "volume_mean_concentration_kg_m3": 0.00016334851305464172
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 803433466313.7284,
+            "volume_mean_concentration_kg_m3": 2.0197809076897357e-05
+          }
+        },
+        "cloud_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 428519279603.43506,
+            "volume_mean_concentration_kg_m3": 0.00042945989004424434
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1456209201664.703,
+            "volume_mean_concentration_kg_m3": 3.660817810613799e-05
+          }
+        },
+        "graupel": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 350547553.1937182,
+            "volume_mean_concentration_kg_m3": 3.513170137623054e-07
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 6941271482.914465,
+            "volume_mean_concentration_kg_m3": 1.744991739092845e-07
+          }
+        },
+        "ice_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 231639177274.14084,
+            "volume_mean_concentration_kg_m3": 0.0002321476310100992
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1117868749014.8738,
+            "volume_mean_concentration_kg_m3": 2.810251316667951e-05
+          }
+        },
+        "liquid_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 501080596724.7777,
+            "volume_mean_concentration_kg_m3": 0.0005021804810553088
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1501534547572.1577,
+            "volume_mean_concentration_kg_m3": 3.774762862863543e-05
+          }
+        },
+        "rain": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 72561317121.3427,
+            "volume_mean_concentration_kg_m3": 7.272059101106448e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 45325345907.45508,
+            "volume_mean_concentration_kg_m3": 1.1394505224974418e-06
+          }
+        },
+        "snow": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 68297885390.30441,
+            "volume_mean_concentration_kg_m3": 6.844780094169517e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 307494011218.23126,
+            "volume_mean_concentration_kg_m3": 7.730204915872877e-06
+          }
+        },
+        "total_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 10070716516728.008,
+            "volume_mean_concentration_kg_m3": 0.010092821989113829
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 80020671722144.72,
+            "volume_mean_concentration_kg_m3": 0.002011669064601599
+          }
+        },
+        "vapor": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 9337996742729.088,
+            "volume_mean_concentration_kg_m3": 0.009358493877048419
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 77401268425557.73,
+            "volume_mean_concentration_kg_m3": 0.0019458189228062851
+          }
+        }
+      },
+      "label": "pr78_o0_hydro",
+      "lwc_analysis_product_residual_kg_m3": {
+        "all_valid_above_ground": {
+          "bias": -1.4582476364043611e-08,
+          "count": 1294696,
+          "count_abs_gt_1e-6": 63,
+          "mae": 1.4584392741996674e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 1.28887920708377e-11,
+          "p99_9_abs": 8.142198341010494e-11,
+          "p99_abs": 4.057512242860995e-11,
+          "rmse": 2.8970428977522796e-06
+        },
+        "analysis_support": {
+          "bias": -0.00011654245752963673,
+          "count": 162,
+          "count_abs_gt_1e-6": 63,
+          "mae": 0.0001165424578902464,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 0.0006814394440255207,
+          "p99_9_abs": 0.0008704192668014806,
+          "p99_abs": 0.0008681016536596294,
+          "rmse": 0.0002589890018675077
+        },
+        "interpretation": "source-linked direct state consistency against an analyzed LWC input product; not independent observation fit",
+        "outside_analysis_support": {
+          "bias": 3.3225696152162744e-15,
+          "count": 1294534,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9132500747198206e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2877246499481093e-11,
+          "p99_9_abs": 8.076199068860599e-11,
+          "p99_abs": 4.0472468070071995e-11,
+          "rmse": 7.869103690561228e-12
+        },
+        "positive_lwc_only": {
+          "bias": -4.6282821845789454e-08,
+          "count": 407924,
+          "count_abs_gt_1e-6": 63,
+          "mae": 4.628890417208144e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 3.143162999839909e-11,
+          "p99_9_abs": 9.954523320877744e-11,
+          "p99_abs": 6.274210119332215e-11,
+          "rmse": 5.161182313772655e-06
+        }
+      }
+    },
+    {
+      "dry_air_and_total_moist_mass_kg": {
+        "domain": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "lwc_product": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "radar_echo": {
+          "dry_air_mass": 827458537468469.2,
+          "total_moist_air_mass": 837529253985197.2,
+          "total_water_mass": 10070716516728.008
+        },
+        "radar_no_echo": {
+          "dry_air_mass": 1.5414534958437788e+16,
+          "total_moist_air_mass": 1.5494555630159932e+16,
+          "total_water_mass": 80020671722144.72
+        }
+      },
+      "hydrometeor_and_vapor": {
+        "cloud_ice": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 162990744330.64273,
+            "volume_mean_concentration_kg_m3": 0.00016334851305464172
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 803433466313.7284,
+            "volume_mean_concentration_kg_m3": 2.0197809076897357e-05
+          }
+        },
+        "cloud_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 428519279603.43506,
+            "volume_mean_concentration_kg_m3": 0.00042945989004424434
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1456209201664.703,
+            "volume_mean_concentration_kg_m3": 3.660817810613799e-05
+          }
+        },
+        "graupel": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 350547553.1937182,
+            "volume_mean_concentration_kg_m3": 3.513170137623054e-07
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 6941271482.914465,
+            "volume_mean_concentration_kg_m3": 1.744991739092845e-07
+          }
+        },
+        "ice_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 231639177274.14084,
+            "volume_mean_concentration_kg_m3": 0.0002321476310100992
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1117868749014.8738,
+            "volume_mean_concentration_kg_m3": 2.810251316667951e-05
+          }
+        },
+        "liquid_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 501080596724.7777,
+            "volume_mean_concentration_kg_m3": 0.0005021804810553088
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1501534547572.1577,
+            "volume_mean_concentration_kg_m3": 3.774762862863543e-05
+          }
+        },
+        "rain": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 72561317121.3427,
+            "volume_mean_concentration_kg_m3": 7.272059101106448e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 45325345907.45508,
+            "volume_mean_concentration_kg_m3": 1.1394505224974418e-06
+          }
+        },
+        "snow": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 68297885390.30441,
+            "volume_mean_concentration_kg_m3": 6.844780094169517e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 307494011218.23126,
+            "volume_mean_concentration_kg_m3": 7.730204915872877e-06
+          }
+        },
+        "total_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 10070716516728.008,
+            "volume_mean_concentration_kg_m3": 0.010092821989113829
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 80020671722144.72,
+            "volume_mean_concentration_kg_m3": 0.002011669064601599
+          }
+        },
+        "vapor": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 9337996742729.088,
+            "volume_mean_concentration_kg_m3": 0.009358493877048419
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 77401268425557.73,
+            "volume_mean_concentration_kg_m3": 0.0019458189228062851
+          }
+        }
+      },
+      "label": "pr78_o0_coupled",
+      "lwc_analysis_product_residual_kg_m3": {
+        "all_valid_above_ground": {
+          "bias": -1.4582476364043611e-08,
+          "count": 1294696,
+          "count_abs_gt_1e-6": 63,
+          "mae": 1.4584392741996674e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 1.28887920708377e-11,
+          "p99_9_abs": 8.142198341010494e-11,
+          "p99_abs": 4.057512242860995e-11,
+          "rmse": 2.8970428977522796e-06
+        },
+        "analysis_support": {
+          "bias": -0.00011654245752963673,
+          "count": 162,
+          "count_abs_gt_1e-6": 63,
+          "mae": 0.0001165424578902464,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 0.0006814394440255207,
+          "p99_9_abs": 0.0008704192668014806,
+          "p99_abs": 0.0008681016536596294,
+          "rmse": 0.0002589890018675077
+        },
+        "interpretation": "source-linked direct state consistency against an analyzed LWC input product; not independent observation fit",
+        "outside_analysis_support": {
+          "bias": 3.3225696152162744e-15,
+          "count": 1294534,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9132500747198206e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2877246499481093e-11,
+          "p99_9_abs": 8.076199068860599e-11,
+          "p99_abs": 4.0472468070071995e-11,
+          "rmse": 7.869103690561228e-12
+        },
+        "positive_lwc_only": {
+          "bias": -4.6282821845789454e-08,
+          "count": 407924,
+          "count_abs_gt_1e-6": 63,
+          "mae": 4.628890417208144e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 3.143162999839909e-11,
+          "p99_9_abs": 9.954523320877744e-11,
+          "p99_abs": 6.274210119332215e-11,
+          "rmse": 5.161182313772655e-06
+        }
+      }
+    },
+    {
+      "dry_air_and_total_moist_mass_kg": {
+        "domain": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "lwc_product": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "radar_echo": {
+          "dry_air_mass": 827458537468469.2,
+          "total_moist_air_mass": 837529253985197.2,
+          "total_water_mass": 10070716516728.008
+        },
+        "radar_no_echo": {
+          "dry_air_mass": 1.5414534958437788e+16,
+          "total_moist_air_mass": 1.5494555630159932e+16,
+          "total_water_mass": 80020671722144.72
+        }
+      },
+      "hydrometeor_and_vapor": {
+        "cloud_ice": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 162990744330.64273,
+            "volume_mean_concentration_kg_m3": 0.00016334851305464172
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 803433466313.7284,
+            "volume_mean_concentration_kg_m3": 2.0197809076897357e-05
+          }
+        },
+        "cloud_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 428519279603.43506,
+            "volume_mean_concentration_kg_m3": 0.00042945989004424434
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1456209201664.703,
+            "volume_mean_concentration_kg_m3": 3.660817810613799e-05
+          }
+        },
+        "graupel": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 350547553.1937182,
+            "volume_mean_concentration_kg_m3": 3.513170137623054e-07
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 6941271482.914465,
+            "volume_mean_concentration_kg_m3": 1.744991739092845e-07
+          }
+        },
+        "ice_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 231639177274.14084,
+            "volume_mean_concentration_kg_m3": 0.0002321476310100992
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1117868749014.8738,
+            "volume_mean_concentration_kg_m3": 2.810251316667951e-05
+          }
+        },
+        "liquid_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 501080596724.7777,
+            "volume_mean_concentration_kg_m3": 0.0005021804810553088
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1501534547572.1577,
+            "volume_mean_concentration_kg_m3": 3.774762862863543e-05
+          }
+        },
+        "rain": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 72561317121.3427,
+            "volume_mean_concentration_kg_m3": 7.272059101106448e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 45325345907.45508,
+            "volume_mean_concentration_kg_m3": 1.1394505224974418e-06
+          }
+        },
+        "snow": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 68297885390.30441,
+            "volume_mean_concentration_kg_m3": 6.844780094169517e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 307494011218.23126,
+            "volume_mean_concentration_kg_m3": 7.730204915872877e-06
+          }
+        },
+        "total_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 10070716516728.008,
+            "volume_mean_concentration_kg_m3": 0.010092821989113829
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 80020671722144.72,
+            "volume_mean_concentration_kg_m3": 0.002011669064601599
+          }
+        },
+        "vapor": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 9337996742729.088,
+            "volume_mean_concentration_kg_m3": 0.009358493877048419
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 77401268425557.73,
+            "volume_mean_concentration_kg_m3": 0.0019458189228062851
+          }
+        }
+      },
+      "label": "pr78_o2_hydro",
+      "lwc_analysis_product_residual_kg_m3": {
+        "all_valid_above_ground": {
+          "bias": -1.4582476364043611e-08,
+          "count": 1294696,
+          "count_abs_gt_1e-6": 63,
+          "mae": 1.4584392741996674e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 1.28887920708377e-11,
+          "p99_9_abs": 8.142198341010494e-11,
+          "p99_abs": 4.057512242860995e-11,
+          "rmse": 2.8970428977522796e-06
+        },
+        "analysis_support": {
+          "bias": -0.00011654245752963673,
+          "count": 162,
+          "count_abs_gt_1e-6": 63,
+          "mae": 0.0001165424578902464,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 0.0006814394440255207,
+          "p99_9_abs": 0.0008704192668014806,
+          "p99_abs": 0.0008681016536596294,
+          "rmse": 0.0002589890018675077
+        },
+        "interpretation": "source-linked direct state consistency against an analyzed LWC input product; not independent observation fit",
+        "outside_analysis_support": {
+          "bias": 3.3225696152162744e-15,
+          "count": 1294534,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9132500747198206e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2877246499481093e-11,
+          "p99_9_abs": 8.076199068860599e-11,
+          "p99_abs": 4.0472468070071995e-11,
+          "rmse": 7.869103690561228e-12
+        },
+        "positive_lwc_only": {
+          "bias": -4.6282821845789454e-08,
+          "count": 407924,
+          "count_abs_gt_1e-6": 63,
+          "mae": 4.628890417208144e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 3.143162999839909e-11,
+          "p99_9_abs": 9.954523320877744e-11,
+          "p99_abs": 6.274210119332215e-11,
+          "rmse": 5.161182313772655e-06
+        }
+      }
+    },
+    {
+      "dry_air_and_total_moist_mass_kg": {
+        "domain": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "lwc_product": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "radar_echo": {
+          "dry_air_mass": 827458537468469.2,
+          "total_moist_air_mass": 837529253985197.2,
+          "total_water_mass": 10070716516728.008
+        },
+        "radar_no_echo": {
+          "dry_air_mass": 1.5414534958437788e+16,
+          "total_moist_air_mass": 1.5494555630159932e+16,
+          "total_water_mass": 80020671722144.72
+        }
+      },
+      "hydrometeor_and_vapor": {
+        "cloud_ice": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 162990744330.64273,
+            "volume_mean_concentration_kg_m3": 0.00016334851305464172
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 803433466313.7284,
+            "volume_mean_concentration_kg_m3": 2.0197809076897357e-05
+          }
+        },
+        "cloud_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 428519279603.43506,
+            "volume_mean_concentration_kg_m3": 0.00042945989004424434
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1456209201664.703,
+            "volume_mean_concentration_kg_m3": 3.660817810613799e-05
+          }
+        },
+        "graupel": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 350547553.1937182,
+            "volume_mean_concentration_kg_m3": 3.513170137623054e-07
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 6941271482.914465,
+            "volume_mean_concentration_kg_m3": 1.744991739092845e-07
+          }
+        },
+        "ice_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 231639177274.14084,
+            "volume_mean_concentration_kg_m3": 0.0002321476310100992
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1117868749014.8738,
+            "volume_mean_concentration_kg_m3": 2.810251316667951e-05
+          }
+        },
+        "liquid_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 501080596724.7777,
+            "volume_mean_concentration_kg_m3": 0.0005021804810553088
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1501534547572.1577,
+            "volume_mean_concentration_kg_m3": 3.774762862863543e-05
+          }
+        },
+        "rain": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 72561317121.3427,
+            "volume_mean_concentration_kg_m3": 7.272059101106448e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 45325345907.45508,
+            "volume_mean_concentration_kg_m3": 1.1394505224974418e-06
+          }
+        },
+        "snow": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 68297885390.30441,
+            "volume_mean_concentration_kg_m3": 6.844780094169517e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 307494011218.23126,
+            "volume_mean_concentration_kg_m3": 7.730204915872877e-06
+          }
+        },
+        "total_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 10070716516728.008,
+            "volume_mean_concentration_kg_m3": 0.010092821989113829
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 80020671722144.72,
+            "volume_mean_concentration_kg_m3": 0.002011669064601599
+          }
+        },
+        "vapor": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 9337996742729.088,
+            "volume_mean_concentration_kg_m3": 0.009358493877048419
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 77401268425557.73,
+            "volume_mean_concentration_kg_m3": 0.0019458189228062851
+          }
+        }
+      },
+      "label": "oldcoupled_pr78_o2",
+      "lwc_analysis_product_residual_kg_m3": {
+        "all_valid_above_ground": {
+          "bias": -1.4582476364043611e-08,
+          "count": 1294696,
+          "count_abs_gt_1e-6": 63,
+          "mae": 1.4584392741996674e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 1.28887920708377e-11,
+          "p99_9_abs": 8.142198341010494e-11,
+          "p99_abs": 4.057512242860995e-11,
+          "rmse": 2.8970428977522796e-06
+        },
+        "analysis_support": {
+          "bias": -0.00011654245752963673,
+          "count": 162,
+          "count_abs_gt_1e-6": 63,
+          "mae": 0.0001165424578902464,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 0.0006814394440255207,
+          "p99_9_abs": 0.0008704192668014806,
+          "p99_abs": 0.0008681016536596294,
+          "rmse": 0.0002589890018675077
+        },
+        "interpretation": "source-linked direct state consistency against an analyzed LWC input product; not independent observation fit",
+        "outside_analysis_support": {
+          "bias": 3.3225696152162744e-15,
+          "count": 1294534,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9132500747198206e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2877246499481093e-11,
+          "p99_9_abs": 8.076199068860599e-11,
+          "p99_abs": 4.0472468070071995e-11,
+          "rmse": 7.869103690561228e-12
+        },
+        "positive_lwc_only": {
+          "bias": -4.6282821845789454e-08,
+          "count": 407924,
+          "count_abs_gt_1e-6": 63,
+          "mae": 4.628890417208144e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 3.143162999839909e-11,
+          "p99_9_abs": 9.954523320877744e-11,
+          "p99_abs": 6.274210119332215e-11,
+          "rmse": 5.161182313772655e-06
+        }
+      }
+    },
+    {
+      "dry_air_and_total_moist_mass_kg": {
+        "domain": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "lwc_product": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "radar_echo": {
+          "dry_air_mass": 827458537468469.2,
+          "total_moist_air_mass": 837529253985197.2,
+          "total_water_mass": 10070716516728.008
+        },
+        "radar_no_echo": {
+          "dry_air_mass": 1.5414534958437788e+16,
+          "total_moist_air_mass": 1.5494555630159932e+16,
+          "total_water_mass": 80020671722144.72
+        }
+      },
+      "hydrometeor_and_vapor": {
+        "cloud_ice": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 162990744330.64273,
+            "volume_mean_concentration_kg_m3": 0.00016334851305464172
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 803433466313.7284,
+            "volume_mean_concentration_kg_m3": 2.0197809076897357e-05
+          }
+        },
+        "cloud_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 428519279603.43506,
+            "volume_mean_concentration_kg_m3": 0.00042945989004424434
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1456209201664.703,
+            "volume_mean_concentration_kg_m3": 3.660817810613799e-05
+          }
+        },
+        "graupel": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 350547553.1937182,
+            "volume_mean_concentration_kg_m3": 3.513170137623054e-07
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 6941271482.914465,
+            "volume_mean_concentration_kg_m3": 1.744991739092845e-07
+          }
+        },
+        "ice_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 231639177274.14084,
+            "volume_mean_concentration_kg_m3": 0.0002321476310100992
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1117868749014.8738,
+            "volume_mean_concentration_kg_m3": 2.810251316667951e-05
+          }
+        },
+        "liquid_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 501080596724.7777,
+            "volume_mean_concentration_kg_m3": 0.0005021804810553088
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1501534547572.1577,
+            "volume_mean_concentration_kg_m3": 3.774762862863543e-05
+          }
+        },
+        "rain": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 72561317121.3427,
+            "volume_mean_concentration_kg_m3": 7.272059101106448e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 45325345907.45508,
+            "volume_mean_concentration_kg_m3": 1.1394505224974418e-06
+          }
+        },
+        "snow": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 68297885390.30441,
+            "volume_mean_concentration_kg_m3": 6.844780094169517e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 307494011218.23126,
+            "volume_mean_concentration_kg_m3": 7.730204915872877e-06
+          }
+        },
+        "total_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 10070716516728.008,
+            "volume_mean_concentration_kg_m3": 0.010092821989113829
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 80020671722144.72,
+            "volume_mean_concentration_kg_m3": 0.002011669064601599
+          }
+        },
+        "vapor": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 9337996742729.088,
+            "volume_mean_concentration_kg_m3": 0.009358493877048419
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 77401268425557.73,
+            "volume_mean_concentration_kg_m3": 0.0019458189228062851
+          }
+        }
+      },
+      "label": "pr80_o0_retained",
+      "lwc_analysis_product_residual_kg_m3": {
+        "all_valid_above_ground": {
+          "bias": -1.4582476364043611e-08,
+          "count": 1294696,
+          "count_abs_gt_1e-6": 63,
+          "mae": 1.4584392741996674e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 1.28887920708377e-11,
+          "p99_9_abs": 8.142198341010494e-11,
+          "p99_abs": 4.057512242860995e-11,
+          "rmse": 2.8970428977522796e-06
+        },
+        "analysis_support": {
+          "bias": -0.00011654245752963673,
+          "count": 162,
+          "count_abs_gt_1e-6": 63,
+          "mae": 0.0001165424578902464,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 0.0006814394440255207,
+          "p99_9_abs": 0.0008704192668014806,
+          "p99_abs": 0.0008681016536596294,
+          "rmse": 0.0002589890018675077
+        },
+        "interpretation": "source-linked direct state consistency against an analyzed LWC input product; not independent observation fit",
+        "outside_analysis_support": {
+          "bias": 3.3225696152162744e-15,
+          "count": 1294534,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9132500747198206e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2877246499481093e-11,
+          "p99_9_abs": 8.076199068860599e-11,
+          "p99_abs": 4.0472468070071995e-11,
+          "rmse": 7.869103690561228e-12
+        },
+        "positive_lwc_only": {
+          "bias": -4.6282821845789454e-08,
+          "count": 407924,
+          "count_abs_gt_1e-6": 63,
+          "mae": 4.628890417208144e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 3.143162999839909e-11,
+          "p99_9_abs": 9.954523320877744e-11,
+          "p99_abs": 6.274210119332215e-11,
+          "rmse": 5.161182313772655e-06
+        }
+      }
+    },
+    {
+      "dry_air_and_total_moist_mass_kg": {
+        "domain": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "lwc_product": {
+          "dry_air_mass": 1.6241993495906254e+16,
+          "total_moist_air_mass": 1.6332084884145126e+16,
+          "total_water_mass": 90091388238872.72
+        },
+        "radar_echo": {
+          "dry_air_mass": 827458537468469.2,
+          "total_moist_air_mass": 837529253985197.2,
+          "total_water_mass": 10070716516728.008
+        },
+        "radar_no_echo": {
+          "dry_air_mass": 1.5414534958437788e+16,
+          "total_moist_air_mass": 1.5494555630159932e+16,
+          "total_water_mass": 80020671722144.72
+        }
+      },
+      "hydrometeor_and_vapor": {
+        "cloud_ice": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 966424210644.3715,
+            "volume_mean_concentration_kg_m3": 2.370077575041607e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 162990744330.64273,
+            "volume_mean_concentration_kg_m3": 0.00016334851305464172
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 803433466313.7284,
+            "volume_mean_concentration_kg_m3": 2.0197809076897357e-05
+          }
+        },
+        "cloud_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1884728481268.1375,
+            "volume_mean_concentration_kg_m3": 4.6221448710576694e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 428519279603.43506,
+            "volume_mean_concentration_kg_m3": 0.00042945989004424434
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1456209201664.703,
+            "volume_mean_concentration_kg_m3": 3.660817810613799e-05
+          }
+        },
+        "graupel": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882599161312894e-07
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 350547553.1937182,
+            "volume_mean_concentration_kg_m3": 3.513170137623054e-07
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 6941271482.914465,
+            "volume_mean_concentration_kg_m3": 1.744991739092845e-07
+          }
+        },
+        "ice_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1349507926289.0159,
+            "volume_mean_concentration_kg_m3": 3.30955954767101e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 231639177274.14084,
+            "volume_mean_concentration_kg_m3": 0.0002321476310100992
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1117868749014.8738,
+            "volume_mean_concentration_kg_m3": 2.810251316667951e-05
+          }
+        },
+        "liquid_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 2002615144296.9353,
+            "volume_mean_concentration_kg_m3": 4.9112524217209e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 501080596724.7777,
+            "volume_mean_concentration_kg_m3": 0.0005021804810553088
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1501534547572.1577,
+            "volume_mean_concentration_kg_m3": 3.774762862863543e-05
+          }
+        },
+        "rain": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 117886663028.79778,
+            "volume_mean_concentration_kg_m3": 2.891075506632304e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 72561317121.3427,
+            "volume_mean_concentration_kg_m3": 7.272059101106448e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 45325345907.45508,
+            "volume_mean_concentration_kg_m3": 1.1394505224974418e-06
+          }
+        },
+        "snow": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 375791896608.5359,
+            "volume_mean_concentration_kg_m3": 9.215993734680888e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 68297885390.30441,
+            "volume_mean_concentration_kg_m3": 6.844780094169517e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 307494011218.23126,
+            "volume_mean_concentration_kg_m3": 7.730204915872877e-06
+          }
+        },
+        "total_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 90091388238872.72,
+            "volume_mean_concentration_kg_m3": 0.002209418768875324
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 10070716516728.008,
+            "volume_mean_concentration_kg_m3": 0.010092821989113829
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 80020671722144.72,
+            "volume_mean_concentration_kg_m3": 0.002011669064601599
+          }
+        },
+        "vapor": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 86739265168286.78,
+            "volume_mean_concentration_kg_m3": 0.0021272106491814053
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 9337996742729.088,
+            "volume_mean_concentration_kg_m3": 0.009358493877048419
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 77401268425557.73,
+            "volume_mean_concentration_kg_m3": 0.0019458189228062851
+          }
+        }
+      },
+      "label": "pr80_o2_retained",
+      "lwc_analysis_product_residual_kg_m3": {
+        "all_valid_above_ground": {
+          "bias": -1.4582476364043611e-08,
+          "count": 1294696,
+          "count_abs_gt_1e-6": 63,
+          "mae": 1.4584392741996674e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 1.28887920708377e-11,
+          "p99_9_abs": 8.142198341010494e-11,
+          "p99_abs": 4.057512242860995e-11,
+          "rmse": 2.8970428977522796e-06
+        },
+        "analysis_support": {
+          "bias": -0.00011654245752963673,
+          "count": 162,
+          "count_abs_gt_1e-6": 63,
+          "mae": 0.0001165424578902464,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 0.0006814394440255207,
+          "p99_9_abs": 0.0008704192668014806,
+          "p99_abs": 0.0008681016536596294,
+          "rmse": 0.0002589890018675077
+        },
+        "interpretation": "source-linked direct state consistency against an analyzed LWC input product; not independent observation fit",
+        "outside_analysis_support": {
+          "bias": 3.3225696152162744e-15,
+          "count": 1294534,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9132500747198206e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2877246499481093e-11,
+          "p99_9_abs": 8.076199068860599e-11,
+          "p99_abs": 4.0472468070071995e-11,
+          "rmse": 7.869103690561228e-12
+        },
+        "positive_lwc_only": {
+          "bias": -4.6282821845789454e-08,
+          "count": 407924,
+          "count_abs_gt_1e-6": 63,
+          "mae": 4.628890417208144e-08,
+          "max_abs": 0.0008707550389783719,
+          "p95_abs": 3.143162999839909e-11,
+          "p99_9_abs": 9.954523320877744e-11,
+          "p99_abs": 6.274210119332215e-11,
+          "rmse": 5.161182313772655e-06
+        }
+      }
+    },
+    {
+      "dry_air_and_total_moist_mass_kg": {
+        "domain": {
+          "dry_air_mass": 1.624199332159121e+16,
+          "total_moist_air_mass": 1.6332084884145108e+16,
+          "total_water_mass": 90091562553898.19
+        },
+        "lwc_product": {
+          "dry_air_mass": 1.624199332159121e+16,
+          "total_moist_air_mass": 1.6332084884145108e+16,
+          "total_water_mass": 90091562553898.19
+        },
+        "radar_echo": {
+          "dry_air_mass": 827458363153425.1,
+          "total_moist_air_mass": 837529253985178.6,
+          "total_water_mass": 10070890831753.465
+        },
+        "radar_no_echo": {
+          "dry_air_mass": 1.5414534958437788e+16,
+          "total_moist_air_mass": 1.5494555630159932e+16,
+          "total_water_mass": 80020671722144.72
+        }
+      },
+      "hydrometeor_and_vapor": {
+        "cloud_ice": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 966424210650.1676,
+            "volume_mean_concentration_kg_m3": 2.3700775294266385e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 966424210650.1676,
+            "volume_mean_concentration_kg_m3": 2.3700775294266385e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 162990744336.43896,
+            "volume_mean_concentration_kg_m3": 0.00016334838454585158
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 803433466313.7284,
+            "volume_mean_concentration_kg_m3": 2.0197809076897357e-05
+          }
+        },
+        "cloud_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1884728384235.6406,
+            "volume_mean_concentration_kg_m3": 4.622144544106877e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1884728384235.6406,
+            "volume_mean_concentration_kg_m3": 4.622144544106877e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 428519182570.9384,
+            "volume_mean_concentration_kg_m3": 0.00042945945492085574
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1456209201664.703,
+            "volume_mean_concentration_kg_m3": 3.660817810613799e-05
+          }
+        },
+        "graupel": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882598817033703e-07
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 7291819036.108183,
+            "volume_mean_concentration_kg_m3": 1.7882598817033703e-07
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 350547553.1937182,
+            "volume_mean_concentration_kg_m3": 3.513167373633084e-07
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 6941271482.914465,
+            "volume_mean_concentration_kg_m3": 1.744991739092845e-07
+          }
+        },
+        "ice_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 1349507919704.6829,
+            "volume_mean_concentration_kg_m3": 3.309559467807196e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 1349507919704.6829,
+            "volume_mean_concentration_kg_m3": 3.309559467807196e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 231639170689.80798,
+            "volume_mean_concentration_kg_m3": 0.00023214744176894774
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1117868749014.8738,
+            "volume_mean_concentration_kg_m3": 2.810251316667951e-05
+          }
+        },
+        "liquid_total": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 2002615347375.9998,
+            "volume_mean_concentration_kg_m3": 4.911252825203584e-05
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 2002615347375.9998,
+            "volume_mean_concentration_kg_m3": 4.911252825203584e-05
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 501080799803.84235,
+            "volume_mean_concentration_kg_m3": 0.0005021802894890026
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 1501534547572.1577,
+            "volume_mean_concentration_kg_m3": 3.774762862863543e-05
+          }
+        },
+        "rain": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 117886963140.35905,
+            "volume_mean_concentration_kg_m3": 2.8910828109670654e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 117886963140.35905,
+            "volume_mean_concentration_kg_m3": 2.8910828109670654e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 72561617232.904,
+            "volume_mean_concentration_kg_m3": 7.272083456814686e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 45325345907.45508,
+            "volume_mean_concentration_kg_m3": 1.1394505224974418e-06
+          }
+        },
+        "snow": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 375791890018.4068,
+            "volume_mean_concentration_kg_m3": 9.21599339563522e-06
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 375791890018.4068,
+            "volume_mean_concentration_kg_m3": 9.21599339563522e-06
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 68297878800.175354,
+            "volume_mean_concentration_kg_m3": 6.844774048573287e-05
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 307494011218.23126,
+            "volume_mean_concentration_kg_m3": 7.730204915872877e-06
+          }
+        },
+        "total_water": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 90091562553898.19,
+            "volume_mean_concentration_kg_m3": 0.0022094230012747605
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 90091562553898.19,
+            "volume_mean_concentration_kg_m3": 0.0022094230012747605
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 10070890831753.465,
+            "volume_mean_concentration_kg_m3": 0.010092988746090279
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 80020671722144.72,
+            "volume_mean_concentration_kg_m3": 0.002011669064601599
+          }
+        },
+        "vapor": {
+          "domain": {
+            "cells": 1294696,
+            "mass_kg": 86739439286817.52,
+            "volume_mean_concentration_kg_m3": 0.002127214878344653
+          },
+          "lwc_product": {
+            "cells": 1294696,
+            "mass_kg": 86739439286817.52,
+            "volume_mean_concentration_kg_m3": 0.002127214878344653
+          },
+          "radar_echo": {
+            "cells": 67567,
+            "mass_kg": 9338170861259.814,
+            "volume_mean_concentration_kg_m3": 0.009358661014832329
+          },
+          "radar_no_echo": {
+            "cells": 1227129,
+            "mass_kg": 77401268425557.73,
+            "volume_mean_concentration_kg_m3": 0.0019458189228062851
+          }
+        }
+      },
+      "label": "Xfinal",
+      "lwc_analysis_product_residual_kg_m3": {
+        "all_valid_above_ground": {
+          "bias": -1.461135167725075e-08,
+          "count": 1294696,
+          "count_abs_gt_1e-6": 64,
+          "mae": 1.4616026567189529e-08,
+          "max_abs": 0.0008715247449416282,
+          "p95_abs": 1.2890016392588452e-11,
+          "p99_9_abs": 8.145696674144424e-11,
+          "p99_abs": 4.057977556412583e-11,
+          "rmse": 2.9032903065373615e-06
+        },
+        "analysis_support": {
+          "bias": -0.00011677322760684677,
+          "count": 162,
+          "count_abs_gt_1e-6": 64,
+          "mae": 0.00011679527385902351,
+          "max_abs": 0.0008715247449416282,
+          "p95_abs": 0.0006834060312824635,
+          "p99_9_abs": 0.0008711954340858169,
+          "p99_abs": 0.000868935489544959,
+          "rmse": 0.0002595475059085676
+        },
+        "interpretation": "source-linked direct state consistency against an analyzed LWC input product; not independent observation fit",
+        "outside_analysis_support": {
+          "bias": 3.3225696152162744e-15,
+          "count": 1294534,
+          "count_abs_gt_1e-6": 0,
+          "mae": 1.9132500747198206e-12,
+          "max_abs": 1.4115372542686244e-10,
+          "p95_abs": 1.2877246499481093e-11,
+          "p99_9_abs": 8.076199068860599e-11,
+          "p99_abs": 4.0472468070071995e-11,
+          "rmse": 7.869103690561228e-12
+        },
+        "positive_lwc_only": {
+          "bias": -4.637446821253432e-08,
+          "count": 407924,
+          "count_abs_gt_1e-6": 64,
+          "mae": 4.6389305685456205e-08,
+          "max_abs": 0.0008715247449416282,
+          "p95_abs": 3.1434337197013676e-11,
+          "p99_9_abs": 9.98193646333756e-11,
+          "p99_abs": 6.277780038865814e-11,
+          "rmse": 5.172312289015165e-06
+        }
+      }
+    }
+  ]
+}

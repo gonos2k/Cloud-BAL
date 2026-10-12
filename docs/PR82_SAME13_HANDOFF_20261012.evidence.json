@@ -1,0 +1,485 @@
+{
+  "actual_lapsprep_capture": {
+    "caller_inventory_sha256": "ee5c4e56384d4830d4979875f6db1416e28987d3673358d0373e73f60a550603",
+    "executable_sha256": "10e311de9d7f01d40546bdc4d0601bf259724cb5f6c0b0a47e02497fecb7c325",
+    "ifx_profile": "2026.0 O2 pinned Cloud-BAL producer profile",
+    "run_root": "/var/tmp/pr82_same13_lapsprep_capture.WA4vyK",
+    "runner_source_manifest_verified": true,
+    "same_run_legacy_wps_records": 108,
+    "same_run_legacy_wps_sha256": "5d060e325812d7ec0c955d2e0a8fb0cafeba77439964b4b1dd41fa2564e1111d",
+    "snow_cover_claim": "none",
+    "snow_record_written": false
+  },
+  "candidate": {
+    "candidate_id": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1",
+    "grid_id": "NE57_LAPS_PRESSURE",
+    "path": "/var/tmp/pr81_joint_thermo.HbL5ry/O2/joint_candidate.nc",
+    "sha256": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1",
+    "shape_x_y_z": [
+      235,
+      283,
+      22
+    ],
+    "spacing_m": [
+      5000,
+      5000
+    ],
+    "valid_time_utc": "2026-08-16T13:00:00Z"
+  },
+  "candidate_promoted": false,
+  "candidate_wps": {
+    "bytes": 62572040,
+    "candidate_fields_exact_float32_above_ground": {
+      "HGT": 1294696,
+      "QC": 1294696,
+      "QG": 1294696,
+      "QI": 1294696,
+      "QR": 1294696,
+      "QS": 1294696,
+      "QV": 1294696,
+      "TT": 1294696,
+      "UU": 1294696,
+      "VV": 1294696
+    },
+    "endianness": "big",
+    "hydrometeor_zero_fill_is_observation": false,
+    "legacy_surface_hydrometeor_zero_fills": [
+      "QC",
+      "QI",
+      "QR",
+      "QS",
+      "QG"
+    ],
+    "records": 235,
+    "run_root": "/var/tmp/pr82_same13_candidate_wps.qtOhZL",
+    "same_run_ancillary_fields_exact": [
+      "RH",
+      "PMSL",
+      "PSFC",
+      "SKINTEMP"
+    ],
+    "sha256": "d73b3356430b64b98997b720e9e7549033ac9a5e4d35be798dff2d1dfdb0dbce",
+    "status": "PASS_SCOPED_SAME13_CANDIDATE_WPS_READBACK",
+    "surface_winds_retained_and_asserted": [
+      "UU",
+      "VV"
+    ]
+  },
+  "limitations": [
+    "No SNOWCOVR record is emitted by the existing WPS writer; no snow observation is claimed.",
+    "Metgrid QV offset comparisons are exploratory diagnostics and not an interpolation acceptance oracle.",
+    "14 UTC retained boundary metgrid source has no direct QV field, so all boundary-time QV source provenance is not identical.",
+    "Native initial wrfout readback passes, but first KDM6 call rejects positive cloud water without its number/volume state; no number-moment initialization was applied.",
+    "Scientific approval and operational authorization remain open."
+  ],
+  "metgrid": {
+    "build_root": "/var/tmp/pr82_same13_metgrid_be.final20261012",
+    "candidate_metgrid_flags": {
+      "FLAG_PSFC": 1,
+      "FLAG_QC": 1,
+      "FLAG_QG": 1,
+      "FLAG_QI": 1,
+      "FLAG_QR": 1,
+      "FLAG_QS": 1,
+      "FLAG_QV": 1,
+      "FLAG_SOILHGT": 1
+    },
+    "direct_candidate_qv_exploratory_offsets": {
+      "acceptance_criterion": false,
+      "pressure_levels_all_offsets": [
+        {
+          "cell_count": 1319760,
+          "exact_cell_count": 66,
+          "max_abs_error": 0.005458008497953415,
+          "mean_abs_error": 5.404193947420248e-05,
+          "shift_x": 0,
+          "shift_y": 0
+        },
+        {
+          "cell_count": 1319760,
+          "exact_cell_count": 61,
+          "max_abs_error": 0.0056121814996004105,
+          "mean_abs_error": 6.513877318794963e-05,
+          "shift_x": 1,
+          "shift_y": 0
+        },
+        {
+          "cell_count": 1319760,
+          "exact_cell_count": 62,
+          "max_abs_error": 0.005572354421019554,
+          "mean_abs_error": 6.481233621359783e-05,
+          "shift_x": 0,
+          "shift_y": 1
+        },
+        {
+          "cell_count": 1319760,
+          "exact_cell_count": 65,
+          "max_abs_error": 0.005596570670604706,
+          "mean_abs_error": 5.35041389170803e-05,
+          "shift_x": 1,
+          "shift_y": 1
+        }
+      ],
+      "surface_all_offsets": [
+        {
+          "cell_count": 65988,
+          "exact_cell_count": 1,
+          "max_abs_error": 0.0012358836829662323,
+          "mean_abs_error": 0.00011227050431288592,
+          "shift_x": 0,
+          "shift_y": 0
+        },
+        {
+          "cell_count": 65988,
+          "exact_cell_count": 0,
+          "max_abs_error": 0.001586897298693657,
+          "mean_abs_error": 0.00012146422058915653,
+          "shift_x": 1,
+          "shift_y": 0
+        },
+        {
+          "cell_count": 65988,
+          "exact_cell_count": 1,
+          "max_abs_error": 0.0015999265015125275,
+          "mean_abs_error": 0.00012072486986524194,
+          "shift_x": 0,
+          "shift_y": 1
+        },
+        {
+          "cell_count": 65988,
+          "exact_cell_count": 1,
+          "max_abs_error": 0.0012522414326667786,
+          "mean_abs_error": 0.00011096200848721664,
+          "shift_x": 1,
+          "shift_y": 1
+        }
+      ]
+    },
+    "geogrid_container_conversion": "NetCDF4 to NetCDF3 classic, all 60 variable values/dimensions/types/attributes exact",
+    "mass_grid": [
+      234,
+      282
+    ],
+    "metgrid_executable_sha256": "f96632837016bda00946e0a5cfeaaac3372eba972e4e9451e0e4e88ee8399c37",
+    "operational_metgrid_table_sha256": "44f1a43af35441957d0bef3a6220831aad1cf56ebc765d64d08e20f439a63b44",
+    "output_bytes": 146582708,
+    "output_sha256": "e635b4083c22258907338c06104c4ba8ef02a819e6b76a5c4f6cc567b067cd60",
+    "pressure_levels": 21,
+    "profile": "pinned ifx 2026.0 O2 big-endian; current runner/effective builder source hashes equal pre/post",
+    "real_qv_selection": {
+      "metgrid_FLAG_QV": 1,
+      "metgrid_QV_source": "same-time PR81 candidate WPS QV profile and surface",
+      "real_namelist_use_sh_qv": true,
+      "selection_scope": "input/configuration provenance only; not a physics validation"
+    },
+    "retained_build_artifacts_verified": 412,
+    "run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr82_same13_metgrid_candidate.final20261012",
+    "source_geogrid_sha256": "4886c00de56d05cbbee5303d3082d882f70098a168d82a8bc3e1af674aa16872",
+    "source_pin": "retained WPS v4.6 source set; 32 source hashes verified",
+    "status": "PASS_SCOPED_SAME13_PINNED_INTEL_METGRID_READBACK",
+    "time": "2026-08-16_13:00:00"
+  },
+  "native_initialization": {
+    "candidate_to_initial_wrfo_state_differences": {
+      "MUB": {
+        "changed_cells": 53,
+        "max_abs_difference_pa": 0.0078125
+      },
+      "PH_plus_PHB": {
+        "changed_cells_from_real_input": 3137,
+        "max_absolute_change_from_real_input": 0.046875
+      },
+      "W": {
+        "changed_cells": 1476306,
+        "max_abs_difference_m_s": 0.603326141834259
+      },
+      "exact_unchanged_fields": [
+        "QVAPOR",
+        "QCLOUD",
+        "QICE",
+        "QRAIN",
+        "QSNOW",
+        "QGRAUP",
+        "U",
+        "V",
+        "T",
+        "PH"
+      ],
+      "number_fields": {
+        "QNCCN": {
+          "changed_cells": 2573532,
+          "initial_output_positive_cells": 2573532,
+          "input_positive_cells": 0,
+          "max_abs_difference": 5041587200.0
+        },
+        "QNCLOUD": {
+          "changed_cells": 0,
+          "initial_output_positive_cells": 0,
+          "input_positive_cells": 0,
+          "max_abs_difference": 0.0
+        },
+        "QNICE": {
+          "changed_cells": 0,
+          "initial_output_positive_cells": 0,
+          "input_positive_cells": 0,
+          "max_abs_difference": 0.0
+        },
+        "QNRAIN": {
+          "changed_cells": 0,
+          "initial_output_positive_cells": 0,
+          "input_positive_cells": 0,
+          "max_abs_difference": 0.0
+        }
+      },
+      "physical_P_plus_PB": {
+        "changed_cells_from_real_input": 773326,
+        "max": 102869.453125,
+        "max_absolute_change_from_real_input_pa": 2.84375,
+        "min": 5280.03173828125,
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ]
+      }
+    },
+    "comparison_to_12_utc": "Distinct from the separate 12 UTC NC-positive-to-zero conversion trace: at 13 UTC the real input starts with zero QNCLOUD and positive QCLOUD at the first observed KDM6 cloud cell.",
+    "field_readback_path": "/var/tmp/pr82_same13_native_init_candidate.final4_20261012/independent_initial_readback.final.json",
+    "field_readback_script_sha256": "61bc92a506c9e33de8bf6771c41d3f528e196e5b8633ccfb4e20dde8df2f6c98",
+    "first_native_species_observer": {
+      "bytes": 209,
+      "counts_line": "PR77_COUNTS,2,2,233,1,39,8025,1023,0,0,0,3064,5885,0,0,99,6360,2688,0,0,0,9048,0,0,0,0",
+      "first_line": "PR77_FIRST,KDM62D_ENTRY,cloud,1,2,2,1,367330, 1.1636248586910369E-007, 0.0000000000000000E+000,33F9E2F4,00000000,00001932",
+      "scope": "first KDM6 diagnostic observation; not a native moment initialization or acceptance gate",
+      "sha256": "63dc875158397db1fcb2947a4c791d8476c8170aeb47b3ebbc3962ea9b9c29c0"
+    },
+    "first_step_rejection": "KDM6 unsupported positive mass without number/volume state",
+    "first_step_status": "REJECTED_KDM6_UNSUPPORTED_NUMBER_BASIS",
+    "initial_wrfout_sha256": "519b991978f2f14b925470e3f90a5bdf5f3a5ee8e3abb8f359cec6d122a345eb",
+    "input_hydromass_and_number_moment_summary": {
+      "QCLOUD": {
+        "max": 0.00640183687210083,
+        "min": 0.0,
+        "positive_cells": 973831,
+        "units": "kg kg-1",
+        "zero_cells": 1599701
+      },
+      "QGRAUP": {
+        "max": 0.005818620324134827,
+        "min": 0.0,
+        "positive_cells": 1010,
+        "units": "kg kg-1",
+        "zero_cells": 2572522
+      },
+      "QICE": {
+        "max": 0.00993315503001213,
+        "min": 0.0,
+        "positive_cells": 249167,
+        "units": "kg kg-1",
+        "zero_cells": 2324365
+      },
+      "QRAIN": {
+        "max": 0.0022620633244514465,
+        "min": 0.0,
+        "positive_cells": 207316,
+        "units": "kg kg-1",
+        "zero_cells": 2366216
+      },
+      "QSNOW": {
+        "max": 0.015988271683454514,
+        "min": 0.0,
+        "positive_cells": 139323,
+        "units": "kg kg-1",
+        "zero_cells": 2434209
+      },
+      "QVAPOR": {
+        "max": 0.022663475945591927,
+        "min": 1.2136382565586246e-07,
+        "positive_cells": 2573532,
+        "units": "kg kg-1",
+        "zero_cells": 0
+      }
+    },
+    "input_number_moment_summary": {
+      "QNCCN": {
+        "max": 0.0,
+        "min": 0.0,
+        "positive_cells": 0,
+        "units": "  kg(-1)",
+        "zero_cells": 2573532
+      },
+      "QNCLOUD": {
+        "max": 0.0,
+        "min": 0.0,
+        "positive_cells": 0,
+        "units": "  kg(-1)",
+        "zero_cells": 2573532
+      },
+      "QNICE": {
+        "max": 0.0,
+        "min": 0.0,
+        "positive_cells": 0,
+        "units": "  kg-1",
+        "zero_cells": 2573532
+      },
+      "QNRAIN": {
+        "max": 0.0,
+        "min": 0.0,
+        "positive_cells": 0,
+        "units": "  kg(-1)",
+        "zero_cells": 2573532
+      }
+    },
+    "input_output_isolation": {
+      "input_integrity": "PASS",
+      "native_trace_output_integrity": "PASS",
+      "output_isolation": "PASS",
+      "sources_unchanged": true
+    },
+    "native_component_versions": {
+      "native_diagnostic_exe": "WRF v4.8 nine-object PR81 diagnostic component; not an identity claim",
+      "real_exe": "WRF V4.6.0"
+    },
+    "native_executable_scope": "retained PR81 nine-object WRF v4.8 diagnostic build; not the WRF v4.6 real.exe",
+    "native_executable_sha256": "a805a1afff42021f322337c69d4e0818faf30e677f625f9a9d1b308728b32c00",
+    "native_namelist_change": {
+      "interval_seconds": "preserved from real.exe 13-15 detached config",
+      "physics_and_use_sh_qv_sfcp_to_sfcp": "preserved",
+      "run_seconds": {
+        "effective": "20",
+        "purpose": "enter one existing native initialization/first-step interval",
+        "source": "0"
+      },
+      "time_control_end": {
+        "effective": "2026-08-16 13:00:20",
+        "source": "2026-08-16 15:00:00"
+      },
+      "time_control_start": "retained 2026-08-16 13:00:00",
+      "use_input_w": "not set in namelist; inherited source default retained"
+    },
+    "native_returncode": 128,
+    "native_startup_QNCCN_changes": {
+      "changed_cells": 2573532,
+      "exact_equal_input_output": false,
+      "initial_output_max": 5041587200.0,
+      "initial_output_min": 0.00031573078013025224,
+      "initial_output_positive_cells": 2573532,
+      "scope": "observed native startup behavior; not a candidate N-field observation or science acceptance"
+    },
+    "no_manual_N_overrides_or_synthetic_candidate_values_applied": true,
+    "physics_and_use_sh_qv_sfcp_to_sfcp_preserved": true,
+    "retained_runner_receipt_path": "/var/tmp/pr82_same13_native_init_candidate.final4_20261012/pr82_same13_native_initialization.json",
+    "run_root": "/var/tmp/pr82_same13_native_init_candidate.final4_20261012",
+    "status": "PASS_SCOPED_INITIALIZATION_READBACK",
+    "use_input_w": "not set by candidate namelist; inherited source default preserved",
+    "use_input_w_source_default": false,
+    "use_input_w_source_evidence": {
+      "meaning": "no direct pressure-level omega-to-W mapping; the retained source default is false",
+      "path": "docs/evidence/pr81_wrf_initialization_readback_20261012.json",
+      "registry_source_sha256": "b01855ed80569be04bbd99e43ea1672a60e35590db00145c839b8f74cfd9b07f",
+      "sha256": "8062e7006e6315bf649969f876a762fb40976ac2b8637f5efb106c7312c038aa",
+      "start_em_source_sha256": "6be17d3a4252065cf972dcf59bf3510cd29be35f898694e38187aa525cf27ac9"
+    },
+    "wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "wrfinput_sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb"
+  },
+  "operational_authority": "NONE",
+  "real": {
+    "T_semantics": "perturbation potential temperature theta minus base theta; stored units K do not make T an absolute temperature",
+    "available_number_moment_fields": [
+      "QNCCN",
+      "QNCLOUD",
+      "QNICE",
+      "QNRAIN"
+    ],
+    "boundary_namelist_delta": {
+      "end": "2026-08-16_15:00:00",
+      "interval_seconds": 3600,
+      "run_seconds": 0,
+      "start": "2026-08-16_13:00:00"
+    },
+    "direct_QV_at_14_utc": false,
+    "executable_sha256": "fa76d4bb17c0c63ecfed12a09ed912ba149248c1378f45b1938b16d2f729bdff",
+    "finite_nonnegative_qvapor": true,
+    "mass_grid_levels": [
+      234,
+      282,
+      39
+    ],
+    "namelist_sha256": "62857360c047e0ed8e8d10286fd7d0286adf35866f1491248019fe1733b89400",
+    "native_model_startup_tested": true,
+    "number_moment_fields_verified": [
+      "QNCCN",
+      "QNCLOUD",
+      "QNICE",
+      "QNRAIN"
+    ],
+    "physical_pressure_p_plus_pb_pa": {
+      "max": 102869.453125,
+      "min": 5280.03173828125,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "physics_and_use_sh_qv_sfcp_to_sfcp_preserved": true,
+    "required_fields_verified": [
+      "QVAPOR",
+      "QCLOUD",
+      "QICE",
+      "QRAIN",
+      "QSNOW",
+      "QGRAUP",
+      "PSFC",
+      "P",
+      "PB",
+      "T",
+      "PH",
+      "PHB",
+      "U",
+      "V",
+      "W",
+      "MU",
+      "MUB"
+    ],
+    "run_root": "/var/tmp/pr82_same13_real_boundary_candidate.final2_20261012",
+    "same_time_boundary_authority": "retained genuine legacy 14/15 UTC metgrid products; no retimed 12 UTC input",
+    "sfcp_to_sfcp": true,
+    "single_time_start_wrfinput_sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+    "staggered_vertical_levels": 40,
+    "status": "PASS_SCOPED_SAME13_REAL_READBACK",
+    "time": "2026-08-16_13:00:00",
+    "use_sh_qv": true,
+    "wrfbdy_anchor_time": "2026-08-16_13:00:00",
+    "wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "wrfinput_fields_exact_to_single_time_real": [
+      "MU",
+      "MUB",
+      "P",
+      "PB",
+      "PH",
+      "PHB",
+      "PSFC",
+      "QCLOUD",
+      "QGRAUP",
+      "QICE",
+      "QNCCN",
+      "QNCLOUD",
+      "QNICE",
+      "QNRAIN",
+      "QRAIN",
+      "QSNOW",
+      "QVAPOR",
+      "T",
+      "U",
+      "V",
+      "W"
+    ],
+    "wrfinput_sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb"
+  },
+  "science_authority": "NONE",
+  "status": "PASS_SCOPED_SAME13_CANDIDATE_WPS_METGRID_REAL_WRFINIT_READBACK"
+}

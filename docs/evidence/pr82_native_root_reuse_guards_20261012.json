@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "case": "existing_directory",
+      "retained_identity_unchanged": true,
+      "returncode": 2,
+      "script": "tests/native-controlled-20261012/run_native_controlled.sh",
+      "script_sha256": "0d764bd31e245554357a0f8fa96886b77768d4129c0c3cbfa002a62fe979aa5e",
+      "stderr": "refusing to reuse controlled run root: /var/tmp/pr82_reuse_guard_5wh5o9i4/run"
+    },
+    {
+      "case": "dangling_symlink",
+      "retained_identity_unchanged": true,
+      "returncode": 2,
+      "script": "tests/native-controlled-20261012/run_native_controlled.sh",
+      "script_sha256": "0d764bd31e245554357a0f8fa96886b77768d4129c0c3cbfa002a62fe979aa5e",
+      "stderr": "refusing to reuse controlled run root: /var/tmp/pr82_reuse_guard_gtpr02wp/run"
+    },
+    {
+      "case": "existing_directory",
+      "retained_identity_unchanged": true,
+      "returncode": 2,
+      "script": "tests/run_pr81_native_first_step.sh",
+      "script_sha256": "3bbb65de0ee6ffdff7f0dd65df9e565c899e8d406895760d15c5042315c42ba8",
+      "stderr": "refusing to reuse native run root: /var/tmp/pr82_reuse_guard_4p6zlnr5/run"
+    },
+    {
+      "case": "dangling_symlink",
+      "retained_identity_unchanged": true,
+      "returncode": 2,
+      "script": "tests/run_pr81_native_first_step.sh",
+      "script_sha256": "3bbb65de0ee6ffdff7f0dd65df9e565c899e8d406895760d15c5042315c42ba8",
+      "stderr": "refusing to reuse native run root: /var/tmp/pr82_reuse_guard_oaw76tkf/run"
+    }
+  ],
+  "schema": "pr82_native_root_reuse_guards_v1"
+}

@@ -9,7 +9,15 @@ source /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh \
 
 input_run=${PR81_NATIVE_INPUT_RUN:-/var/tmp/pr80_kdm6_radar_contract.nsUNuj/run}
 executable=${PR81_NATIVE_EXE:?set PR81_NATIVE_EXE to the executable under investigation}
-run_root=${1:-$(mktemp -d /var/tmp/pr81_native_first_step.XXXXXX)}
+if (($# > 0)); then
+  run_root=$1
+  if [[ -e "$run_root" || -L "$run_root" ]]; then
+    printf 'refusing to reuse native run root: %s\n' "$run_root" >&2
+    exit 2
+  fi
+else
+  run_root=$(mktemp -d /var/tmp/pr81_native_first_step.XXXXXX)
+fi
 run_dir="$run_root/run"
 [[ -x "$executable" ]] || { printf 'candidate executable missing: %s\n' "$executable" >&2; exit 2; }
 mkdir -p "$run_root"

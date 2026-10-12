@@ -1,0 +1,221 @@
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -900,6 +900,8 @@
+    real :: number_value
+    integer(c_int) :: pr75_thread_before, pr75_thread_after
+    integer(c_int) :: pr75_mxcsr_before, pr75_mxcsr_after
++   integer(c_int) :: pr82_mxcsr_before, pr82_mxcsr_after
++   integer(c_int) :: pr82_thread_before, pr82_thread_after
+    integer :: pr75_unit, pr75_open_status
+    integer :: pr76_target_unit, pr76_target_status
+    logical :: number_valid
+@@ -963,61 +965,57 @@
+          qrs(i,k,2) = qs(i,k,j)
+          qrs(i,k,3) = qg(i,k,j)
+ #ifndef TEST_DIRECT_VOLUME
++         pr82_mxcsr_before = pr75_read_fp_state(pr82_thread_before)
+          call specific_number_to_volume(nc(i,k,j), dry_density(i,k), number_value, number_valid)
+-         if (.not. number_valid) error stop 'KDM6 invalid NC number basis input'
++         pr82_mxcsr_after = pr75_read_fp_state(pr82_thread_after)
++         if (.not. number_valid) then
++           call log_number_conversion_rejection('NC', 'INPUT', i, j, k, nc(i,k,j), &
++                dry_density(i,k), number_value, 1, pr82_mxcsr_before, &
++                pr82_mxcsr_after, pr82_thread_before, pr82_thread_after)
++           error stop 'KDM6 invalid NC number basis input'
++         endif
+ #else
+          number_value = nc(i,k,j)
+ #endif
+          nci(i,k,1) = number_value
+ #ifndef TEST_DIRECT_VOLUME
+-         pr75_mxcsr_before = pr75_read_fp_state(pr75_thread_before)
++         pr82_mxcsr_before = pr75_read_fp_state(pr82_thread_before)
+          call specific_number_to_volume(ni(i,k,j), dry_density(i,k), number_value, number_valid)
+-         pr75_mxcsr_after = pr75_read_fp_state(pr75_thread_after)
+-         if (i == 211 .and. j == 2 .and. k == 15) then
+-           open(newunit=pr76_target_unit, file='pr76_target_call.raw', status='unknown', &
+-                position='append', action='write', iostat=pr76_target_status)
+-           if (pr76_target_status == 0) then
+-             write(pr76_target_unit,'(A,3(",",I0),3(",",ES24.16E3),",",L1)') &
+-                  'TARGET_CALL', i, j, k, ni(i,k,j), dry_density(i,k), number_value, number_valid
+-             write(pr76_target_unit,'(A,4(",",Z8.8))') 'TARGET_BITS', &
+-                  pr75_mxcsr_before, pr75_mxcsr_after, transfer(ni(i,k,j),0), &
+-                  transfer(dry_density(i,k),0)
+-             write(pr76_target_unit,'(A,",",Z8.8)') 'RESULT_BITS', transfer(number_value,0)
+-             write(pr76_target_unit,'(A,",",I0,",",I0)') 'THREAD_IDS', &
+-                  pr75_thread_before, pr75_thread_after
+-             close(pr76_target_unit)
+-           endif
+-         endif
++         pr82_mxcsr_after = pr75_read_fp_state(pr82_thread_after)
+          if (.not. number_valid) then
+-           open(newunit=pr75_unit, file='pr75_native_fp.raw', status='unknown', &
+-                position='append', action='write', iostat=pr75_open_status)
+-           if (pr75_open_status == 0) then
+-             write(pr75_unit,'(A,",",I0,",",I0,",",I0,",",ES24.16E3,",",ES24.16E3,",",ES24.16E3,",",L1)') &
+-                  'NI_ADAPTER_FAILURE', i, j, k, ni(i,k,j), dry_density(i,k), number_value, &
+-                  number_valid
+-             write(pr75_unit,'(A,6(",",Z8.8))') &
+-                  'BITS_AND_STATE', pr75_mxcsr_before, pr75_mxcsr_after, &
+-                  transfer(ni(i,k,j),0), transfer(dry_density(i,k),0), &
+-                  transfer(number_value,0), pr75_thread_before
+-             write(pr75_unit,'(A,",",I0)') 'THREAD_AFTER', pr75_thread_after
+-             close(pr75_unit)
+-           endif
++           call log_number_conversion_rejection('NI', 'INPUT', i, j, k, ni(i,k,j), &
++                dry_density(i,k), number_value, 1, pr82_mxcsr_before, &
++                pr82_mxcsr_after, pr82_thread_before, pr82_thread_after)
++           error stop 'KDM6 invalid NI number basis input'
+          endif
+-         if (.not. number_valid) error stop 'KDM6 invalid NI number basis input'
+ #else
+          number_value = ni(i,k,j)
+ #endif
+          nci(i,k,2) = number_value
+ #ifndef TEST_DIRECT_VOLUME
++         pr82_mxcsr_before = pr75_read_fp_state(pr82_thread_before)
+          call specific_number_to_volume(nn(i,k,j), dry_density(i,k), number_value, number_valid)
+-         if (.not. number_valid) error stop 'KDM6 invalid NN number basis input'
++         pr82_mxcsr_after = pr75_read_fp_state(pr82_thread_after)
++         if (.not. number_valid) then
++           call log_number_conversion_rejection('NN', 'INPUT', i, j, k, nn(i,k,j), &
++                dry_density(i,k), number_value, 1, pr82_mxcsr_before, &
++                pr82_mxcsr_after, pr82_thread_before, pr82_thread_after)
++           error stop 'KDM6 invalid NN number basis input'
++         endif
+ #else
+          number_value = nn(i,k,j)
+ #endif
+          nci(i,k,3) = number_value
+ #ifndef TEST_DIRECT_VOLUME
++         pr82_mxcsr_before = pr75_read_fp_state(pr82_thread_before)
+          call specific_number_to_volume(nr(i,k,j), dry_density(i,k), number_value, number_valid)
+-         if (.not. number_valid) error stop 'KDM6 invalid NR number basis input'
++         pr82_mxcsr_after = pr75_read_fp_state(pr82_thread_after)
++         if (.not. number_valid) then
++           call log_number_conversion_rejection('NR', 'INPUT', i, j, k, nr(i,k,j), &
++                dry_density(i,k), number_value, 1, pr82_mxcsr_before, &
++                pr82_mxcsr_after, pr82_thread_before, pr82_thread_after)
++           error stop 'KDM6 invalid NR number basis input'
++         endif
+ #else
+          number_value = nr(i,k,j)
+ #endif
+@@ -1061,29 +1059,57 @@
+          qs(i,k,j) = qrs(i,k,2)
+          qg(i,k,j) = qrs(i,k,3)
+ #ifndef TEST_DIRECT_VOLUME
++         pr82_mxcsr_before = pr75_read_fp_state(pr82_thread_before)
+          call volume_number_to_specific(nrs(i,k,1), dry_density(i,k), number_value, number_valid)
+-         if (.not. number_valid) error stop 'KDM6 invalid NR number basis output'
++         pr82_mxcsr_after = pr75_read_fp_state(pr82_thread_after)
++         if (.not. number_valid) then
++           call log_number_conversion_rejection('NR', 'OUTPUT', i, j, k, nrs(i,k,1), &
++                dry_density(i,k), number_value, 2, pr82_mxcsr_before, &
++                pr82_mxcsr_after, pr82_thread_before, pr82_thread_after)
++           error stop 'KDM6 invalid NR number basis output'
++         endif
+ #else
+          number_value = nrs(i,k,1)
+ #endif
+          nr(i,k,j) = number_value
+ #ifndef TEST_DIRECT_VOLUME
++         pr82_mxcsr_before = pr75_read_fp_state(pr82_thread_before)
+          call volume_number_to_specific(nci(i,k,1), dry_density(i,k), number_value, number_valid)
+-         if (.not. number_valid) error stop 'KDM6 invalid NC number basis output'
++         pr82_mxcsr_after = pr75_read_fp_state(pr82_thread_after)
++         if (.not. number_valid) then
++           call log_number_conversion_rejection('NC', 'OUTPUT', i, j, k, nci(i,k,1), &
++                dry_density(i,k), number_value, 2, pr82_mxcsr_before, &
++                pr82_mxcsr_after, pr82_thread_before, pr82_thread_after)
++           error stop 'KDM6 invalid NC number basis output'
++         endif
+ #else
+          number_value = nci(i,k,1)
+ #endif
+          nc(i,k,j) = number_value
+ #ifndef TEST_DIRECT_VOLUME
++         pr82_mxcsr_before = pr75_read_fp_state(pr82_thread_before)
+          call volume_number_to_specific(nci(i,k,2), dry_density(i,k), number_value, number_valid)
+-         if (.not. number_valid) error stop 'KDM6 invalid NI number basis output'
++         pr82_mxcsr_after = pr75_read_fp_state(pr82_thread_after)
++         if (.not. number_valid) then
++           call log_number_conversion_rejection('NI', 'OUTPUT', i, j, k, nci(i,k,2), &
++                dry_density(i,k), number_value, 2, pr82_mxcsr_before, &
++                pr82_mxcsr_after, pr82_thread_before, pr82_thread_after)
++           error stop 'KDM6 invalid NI number basis output'
++         endif
+ #else
+          number_value = nci(i,k,2)
+ #endif
+          ni(i,k,j) = number_value
+ #ifndef TEST_DIRECT_VOLUME
++         pr82_mxcsr_before = pr75_read_fp_state(pr82_thread_before)
+          call volume_number_to_specific(nci(i,k,3), dry_density(i,k), number_value, number_valid)
+-         if (.not. number_valid) error stop 'KDM6 invalid NN number basis output'
++         pr82_mxcsr_after = pr75_read_fp_state(pr82_thread_after)
++         if (.not. number_valid) then
++           call log_number_conversion_rejection('NN', 'OUTPUT', i, j, k, nci(i,k,3), &
++                dry_density(i,k), number_value, 2, pr82_mxcsr_before, &
++                pr82_mxcsr_after, pr82_thread_before, pr82_thread_after)
++           error stop 'KDM6 invalid NN number basis output'
++         endif
+ #else
+          number_value = nci(i,k,3)
+ #endif
+@@ -1168,6 +1194,55 @@
+      pr67_trace_complete = .true.
+    endif
+ 
++   contains
++
++    pure function number_conversion_error_class(input_value, dry_density, result_value, direction) result(error_class)
++      real, intent(in) :: input_value, dry_density, result_value
++      integer, intent(in) :: direction
++      character(len=24) :: error_class
++      error_class = 'UNCLASSIFIED'
++      if (.not. ieee_is_finite(input_value)) then
++        error_class = 'NONFINITE_INPUT'
++      else if (.not. ieee_is_finite(dry_density)) then
++        error_class = 'NONFINITE_DENSITY'
++      else if (input_value < 0.0) then
++        error_class = 'NEGATIVE_INPUT'
++      else if (dry_density <= 0.0) then
++        error_class = 'NONPOSITIVE_DENSITY'
++      else if (direction == 1 .and. dry_density > 1.0 .and. &
++               real(input_value,8) > real(huge(input_value),8) / real(dry_density,8)) then
++        error_class = 'OVERFLOW_GUARD'
++      else if (direction == 2 .and. dry_density < 1.0 .and. &
++               real(input_value,8) > real(huge(input_value),8) * real(dry_density,8)) then
++        error_class = 'OVERFLOW_GUARD'
++      else if (.not. ieee_is_finite(result_value)) then
++        error_class = 'NONFINITE_RESULT'
++      else if (input_value > 0.0 .and. result_value == 0.0) then
++        error_class = 'POSITIVE_TO_ZERO'
++      endif
++    end function number_conversion_error_class
++
++    subroutine log_number_conversion_rejection(species, stage, i, j, k, input_value, &
++                                                dry_density, result_value, direction, &
++                                                mxcsr_before, mxcsr_after, thread_before, thread_after)
++      character(len=*), intent(in) :: species, stage
++      integer, intent(in) :: i, j, k, direction
++      real, intent(in) :: input_value, dry_density, result_value
++      integer(c_int), intent(in) :: mxcsr_before, mxcsr_after, thread_before, thread_after
++      integer :: unit, io_status
++      character(len=24) :: error_class
++      error_class = number_conversion_error_class(input_value, dry_density, result_value, direction)
++      open(newunit=unit, file='number_basis_rejection.raw', status='unknown', &
++           position='append', action='write', iostat=io_status)
++      if (io_status == 0) then
++        write(unit,'(A,",",A,",",A,3(",",I0),5(",",Z8.8),2(",",I0),",",A)') &
++             'NUMBER_BASIS_REJECT', species, stage, i, j, k, &
++             transfer(input_value,0), transfer(dry_density,0), transfer(result_value,0), &
++             mxcsr_before, mxcsr_after, thread_before, thread_after, trim(error_class)
++        close(unit)
++      endif
++    end subroutine log_number_conversion_rejection
++
+    end subroutine kdm6
+ 
+    subroutine kdm6_trace_dump(stage,itimestep,ids,ide,jds,jde,kds,kde, &

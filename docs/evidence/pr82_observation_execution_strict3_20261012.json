@@ -1,0 +1,102 @@
+{
+  "command": {
+    "argv": [
+      "/usr/bin/python3",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tools/pr82_observation_signal_readback.py",
+      "--input-json",
+      "/var/tmp/pr78_cp06a_spatial.V9LYrN/inputs.json",
+      "--pr81-final",
+      "/var/tmp/pr81_joint_thermo.HbL5ry/O2/joint_candidate.nc",
+      "--pr78-o0-hydro",
+      "/var/tmp/pr78_cp06a_spatial.V9LYrN/O0/hydro.nc",
+      "--pr78-o0-coupled",
+      "/var/tmp/pr78_cp06a_spatial.V9LYrN/O0/coupled.nc",
+      "--pr78-o2-hydro",
+      "/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/hydro.nc",
+      "--pr78-o2-coupled",
+      "/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/coupled.nc",
+      "--pr80-o0",
+      "/var/tmp/pr80_force_retained.QrG2Yk/O0/retained_wind_v1.bin.pipeline.nc",
+      "--pr80-o2",
+      "/var/tmp/pr80_force_retained.QrG2Yk/O2/retained_wind_v1.bin.pipeline.nc",
+      "--output",
+      "/var/tmp/pr82_observation_signal_replay_strict3_20261012.json"
+    ],
+    "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "wrote /var/tmp/pr82_observation_signal_replay_strict3_20261012.json"
+  },
+  "comparison_to_strict2": "All numerical/state results and frozen footprint equal; schema, tool SHA binding, and modeled-unit contract intentionally added.",
+  "environment": {
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "MKL_NUM_THREADS": null,
+    "NUMEXPR_NUM_THREADS": null,
+    "OMP_NUM_THREADS": "68",
+    "OPENBLAS_NUM_THREADS": "68",
+    "PATH": "/home/korea_keun/.local/bin:/home/korea_keun/.nvm/versions/node/v24.18.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/cuda/bin:/home/korea_keun/.codex/packages/app-server-daemon/releases/0.162.1-x86_64-unknown-linux-musl/codex-path:/home/korea_keun/.codex/tmp/arg0/codex-arg0BcR7N2:/home/korea_keun/.codex/tmp/arg0/codex-arg0zf6g41:/home/korea_keun/.nvm/versions/node/v24.18.0/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/opt/mellanox/doca/tools/:/opt/mellanox/doca/tools/",
+    "PYTHONPATH": null,
+    "TZ": "Asia/Seoul"
+  },
+  "files_sha256_after": {
+    "candidate:pr78_o0_coupled": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260",
+    "candidate:pr78_o0_hydro": "5e69e8b1c2f36119cead2ca4b6ca632a8898a2fa1082d9faa9dd1ea5075b7535",
+    "candidate:pr78_o2_coupled": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260",
+    "candidate:pr78_o2_hydro": "5e69e8b1c2f36119cead2ca4b6ca632a8898a2fa1082d9faa9dd1ea5075b7535",
+    "candidate:pr80_o0_retained": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd",
+    "candidate:pr80_o2_retained": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd",
+    "candidate:pr81_final": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1",
+    "input_declaration": "f655339a0bd682b14df9afde0fb007a5124327f9771fd0c9630f801836c2480e",
+    "lwc_product": "9e70f80275cb2cf48b3db9dd189fba04936d6587fa57bf15692100548b242cca",
+    "readback_tool": "e8248b893ad0bcc7e56fdf6cb211a9416d09d474e8456405e1e8b6a3503c193d",
+    "source_H": "153df8431f890be7df2648230337c5e4160f7eecc1b77403f86a21e4a5c0c514",
+    "strict2_compact_receipt": "9c047c1d3676c0959db5cef6e278426e18540a1719752e3449c1a23997d28c07",
+    "strict2_full_receipt": "9167b486ed94547d055ba17875c15d5354b26ca09f33eabf2f843e6e44e030a2"
+  },
+  "files_sha256_before": {
+    "candidate:pr78_o0_coupled": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260",
+    "candidate:pr78_o0_hydro": "5e69e8b1c2f36119cead2ca4b6ca632a8898a2fa1082d9faa9dd1ea5075b7535",
+    "candidate:pr78_o2_coupled": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260",
+    "candidate:pr78_o2_hydro": "5e69e8b1c2f36119cead2ca4b6ca632a8898a2fa1082d9faa9dd1ea5075b7535",
+    "candidate:pr80_o0_retained": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd",
+    "candidate:pr80_o2_retained": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd",
+    "candidate:pr81_final": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1",
+    "input_declaration": "f655339a0bd682b14df9afde0fb007a5124327f9771fd0c9630f801836c2480e",
+    "lwc_product": "9e70f80275cb2cf48b3db9dd189fba04936d6587fa57bf15692100548b242cca",
+    "readback_tool": "e8248b893ad0bcc7e56fdf6cb211a9416d09d474e8456405e1e8b6a3503c193d",
+    "source_H": "153df8431f890be7df2648230337c5e4160f7eecc1b77403f86a21e4a5c0c514",
+    "strict2_compact_receipt": "9c047c1d3676c0959db5cef6e278426e18540a1719752e3449c1a23997d28c07",
+    "strict2_full_receipt": "9167b486ed94547d055ba17875c15d5354b26ca09f33eabf2f843e6e44e030a2"
+  },
+  "readback_tool": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/tools/pr82_observation_signal_readback.py",
+    "sha256": "e8248b893ad0bcc7e56fdf6cb211a9416d09d474e8456405e1e8b6a3503c193d"
+  },
+  "replay_output": {
+    "byte_equal_to_strict3_full": true,
+    "path": "/var/tmp/pr82_observation_signal_replay_strict3_20261012.json",
+    "sha256": "230dae0cc206c2627ccc92629e450426fa64a20044dc5dff09b007d9621eef11",
+    "strict3_full_receipt_sha256": "230dae0cc206c2627ccc92629e450426fa64a20044dc5dff09b007d9621eef11"
+  },
+  "result": "controlled replay succeeded; all opened candidate, source-H, input, and readback tool hashes unchanged",
+  "runtime": {
+    "netCDF4_version": "1.7.4",
+    "numpy_version": "1.26.4",
+    "python_executable": "/usr/bin/python3",
+    "python_version": "3.12.3 (main, Nov  6 2025, 13:44:16) [GCC 13.3.0]"
+  },
+  "schema": "pr82_observation_execution_receipt_v2",
+  "source_H": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr82_observation_native_20261012/Cloud-BAL/src/common/cloud_bal_real_netcdf.f90",
+    "sha256": "153df8431f890be7df2648230337c5e4160f7eecc1b77403f86a21e4a5c0c514"
+  },
+  "strict3_compact_receipt": {
+    "path": "docs/evidence/pr82_observation_signal_readback_strict3_compact_20261012.json",
+    "sha256": "cdfad206fa2ea0decf655782db25c1c6b787e751bd26e2560d7f5cb263a385e6"
+  },
+  "strict3_full_receipt": {
+    "path": "docs/evidence/pr82_observation_signal_readback_strict3_full_20261012.json",
+    "sha256": "230dae0cc206c2627ccc92629e450426fa64a20044dc5dff09b007d9621eef11"
+  }
+}

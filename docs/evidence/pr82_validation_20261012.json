@@ -1,0 +1,129 @@
+{
+  "changed_code_sha256": {
+    "patches/pr82_native_nc_boundary_trace.patch": "8a365b69931e15bb24e7b96ae0661a16c7aa036113750319dc68e83c48b908f1",
+    "patches/pr82_number_conversion_rejection_trace.patch": "b26de4f2df3b745fa9a70ac92ebcd69463eb8538381ba8a906e998f464546a06",
+    "tests/build_pr82_native_number_trace_candidate.sh": "fbf6b360f03d174acadac7f868c1c2c6dfc964c132ade458b8c4141fe7e8eab6",
+    "tests/build_pr82_same13_metgrid_be.sh": "1204fc21d7b550e92d6d81dbd78dd42ce7f4a92de0102864d0e56906d4a2c230",
+    "tests/native-controlled-20261012/run_native_controlled.sh": "0d764bd31e245554357a0f8fa96886b77768d4129c0c3cbfa002a62fe979aa5e",
+    "tests/pr81_native_case_copy.py": "3b3000c920bff3dde1d05a109f51e651c092be41853e29b0bc050904c503bcb8",
+    "tests/pr82_candidate_wps_hook.f90": "23de7ce67763b2d97aceec96cd6a92e0a5a1db60c2bfbf6e3d58466575049815",
+    "tests/pr82_candidate_wps_readback.py": "9b4f3707cce7bd2809fa0c977df74ebfcf9acd13c524926d5b2a0f50737bb028",
+    "tests/pr82_convert_geogrid_classic.py": "95bef76ea472ede96089002ba855ee15b7e2975d6a804546ef3faa1041080c5d",
+    "tests/pr82_native_conversion_scale.py": "e4e6f3f8219403a07d273194ec6e700f3b1383888e3f6e1581f72d01d7bf8410",
+    "tests/pr82_native_number_origin.py": "5473e65ff91176e3193349546eba2d817df16209da5a93eb58932224118e2ca6",
+    "tests/pr82_number_trace_helpers.f90": "ec0aeca087dbdc4785e0637977bc8528d70c08f62d564871f9bb53aa5146f2af",
+    "tests/pr82_same13_metgrid_readback.py": "2af124973edb17e3701a8a1014c07c0657014078f3731b2613df20af73f16770",
+    "tests/pr82_same13_native_readback.py": "61bc92a506c9e33de8bf6771c41d3f528e196e5b8633ccfb4e20dde8df2f6c98",
+    "tests/pr82_same13_real_boundary_readback.py": "18a9842afeee07a5142ec706cf1366ebbc15534fda645e5f4894ae1f3c0b71ef",
+    "tests/pr82_same13_real_readback.py": "53e90d696974c9b61d7ae761025530d70d51f34a1f1bedde0a180e05ef4d57f0",
+    "tests/run_pr81_native_first_step.sh": "3bbb65de0ee6ffdff7f0dd65df9e565c899e8d406895760d15c5042315c42ba8",
+    "tests/run_pr82_native_number_trace.sh": "a9de0c4d62e59ad51ba347d5fd474957be09d9ffd08cca2e08ea1198b55fa9c8",
+    "tests/run_pr82_number_trace_helpers.sh": "082fbd1795e7b7151827d1ae5b4da80eb660dd0603740823c8199cb9735686ae",
+    "tests/run_pr82_same13_candidate_wps.sh": "594ab6fe5596e1f088c44e5127029a4c5a9b0369696e825317a311c25c58f4a4",
+    "tests/run_pr82_same13_lapsprep_capture.sh": "780b80f57defeee180294f8222a74f633c6cf6f930a2d5485392469c87dc49fa",
+    "tests/run_pr82_same13_native_initialization.py": "8997183e89cac38ba1bf9a1c1f68239033dc4a5305dd0c1c391d125c99510b65",
+    "tests/run_pr82_same13_pinned_metgrid.sh": "e6c1bc0458bda2295fbb194c586b9eed1d3c9e00b4a637de6c77a9210a105e39",
+    "tests/run_pr82_same13_real.sh": "c00c8072000a106e3a31987879986531fe673621d7546423c12bc61aabff2a35",
+    "tests/run_pr82_same13_real_boundary.sh": "16f8eec73f3acd0637614eaf92c587a29c5351e6f95dab406306b5aa60f34cf9",
+    "tests/run_unit_tests.sh": "f4db79b458ccd8988444a2ddda59fe2d811cc52f9edc3a503ac649dd53c86273",
+    "tests/test_archive_member_hashes.py": "9f742a99bdd020b703487d7a6de54623d2f1f8c5e807ed820805f4312fc974ec",
+    "tests/test_pr82_native_conversion_scale.py": "f5d6a9a4060ed0731b532756a81ab2a4bb3ecc10c1a56f97790ee6fe760f7587",
+    "tests/test_pr82_observation_signal_readback.py": "8e45b87c8d65e4615cdddcfa5ef45c5c52e72ab93775099a45f9cf3a0c129988",
+    "tests/test_run_isolated_native.py": "1e7b21463a52e2a22f554b28e91b0151592c33268a95758a8af2aaafec2462d7",
+    "tools/archive_member_hashes.py": "7717b79a946dac249a3fb0b45b06c12619e78903215664a44aa9de4311479734",
+    "tools/pr82_observation_signal_readback.py": "e8248b893ad0bcc7e56fdf6cb211a9416d09d474e8456405e1e8b6a3503c193d",
+    "tools/run_isolated_native.py": "2ccb6b96584b3504742bef371411b49fb6d0c2bca0ff16a6d8a716794ba88d45"
+  },
+  "checks": {
+    "component_versions": {
+      "metgrid": "WPS4.6 pinned32source ifxO2 explicitbig-endian profile",
+      "native": "retainednine-object partialhostWRF4.8; inheritedcomponentdifferenceexplicit",
+      "real": "retainedifx REAL_EM4.6.0"
+    },
+    "cp06a_real_scopes": {
+      "alpha_background_weight": 0.5,
+      "analyzed_LWC_input_consistency_assessed": true,
+      "candidate_byte_identical_replay": true,
+      "candidate_id": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1",
+      "first_microphysics_complete": false,
+      "fixed_162cell_LWC_RMSE_kg_m3": {
+        "pr80": 0.0002589890018675077,
+        "pr81_final": 0.0002595475059085676,
+        "pr81_pre_density": 0.0002589897569340297
+      },
+      "independent_observation_fit_assessed": false,
+      "meaning_preserving_full_moment_and_omega_transfer_assessed": false,
+      "native_initialization_status": "PASS_SCOPED_INITIALIZATION_READBACK",
+      "same13_candidate_wps_metgrid_real_wrfinitialization_io": "PASS_SCOPED_SAME13_CANDIDATE_WPS_METGRID_REAL_WRFINIT_READBACK",
+      "status": "PASS_SCOPED_RESEARCH_IO",
+      "valid_time": "2026-08-16T13:00:00Z"
+    },
+    "native_pair_errors": {
+      "same13utc": {
+        "ambient_CCN_initialized_by_native": true,
+        "cloud_ice_rain_moments_constructed_by_experiment": false,
+        "first_kdm6_observed_cloud_mass_bits": "33F9E2F4",
+        "first_kdm6_observed_cloud_number_bits": "00000000",
+        "first_microphysics_complete": false,
+        "first_step": "REJECTED_KDM6_UNSUPPORTED_NUMBER_BASIS",
+        "initialization_readback": "PASS_SCOPED",
+        "input_output_isolation": "PASS",
+        "native_returncode": 128
+      },
+      "separate_12utc": {
+        "FTZ_DAZ_clear": true,
+        "density_bits": "3EE46C18",
+        "exact_tendency_geometry_operands_captured": false,
+        "first_microphysics_complete": false,
+        "first_modified_NC_state": "RK2 post rk_update_scalar: 0x80000010; RK3 post update: 0x00000001",
+        "product_bits": "00000000"
+      },
+      "status": "REJECTED_OPEN"
+    },
+    "readback_limits": [
+      "Metgrid QV offsets are exploratory, not an interpolation oracle.",
+      "14UTC legacy boundary has no directQV; declaredboundaryinput/configurationprovenance differs bytime.",
+      "Genericinitializationchecker does not certifyanalysisidentity; the outer hash chain binds it.",
+      "One-off fresh readbacks have no guarantee against a concurrent outputpath race; current artifacts and hashes are aligned.",
+      "Native namelist source copy/hash and real boundary contract align, but source namelist is not separately sampled in native pre/post map.",
+      "Wholehost source rebuild and fulltransitive link provenance remain open."
+    ],
+    "scoped_unit": {
+      "canonical_full_launcher_exit": 0,
+      "final_all_files_in_one_full_run": false,
+      "frozen_snapshot_path": "/var/tmp/pr82_final_canonical_v2_20261012",
+      "inventory_entries": 1771,
+      "inventory_sha256": "4c69440437147d1e4efc377e90c7217d64825a6e17986212ea9917ebc50eba5d",
+      "later_focused_checks": {
+        "ambient_ccn_and_classifier_priority": 2,
+        "case_copy": 2,
+        "fresh_reusable_KDM6_build": "pinned ifx O0 PASS; ordered373rows and two track_driver occurrences preserved",
+        "isolated_native": 13,
+        "native_root_reuse_guards": 4,
+        "number_classification": "pinned source excerpt Intel O0/O2 PASS",
+        "observation_readback": 11,
+        "ordered_archive_members": 1
+      },
+      "log_sha256": "1d4f418b2846dfde2b0d26e854570ecba604b24dfed3e78af9cec30ab9496fb4",
+      "source_pre_post_equal": true,
+      "status": "PASS_FROZEN_FULL_PLUS_FOCUSED_FINAL"
+    }
+  },
+  "evidence_sha256": {
+    "docs/PR82_SAME13_HANDOFF_20261012.evidence.json": "ea44e980b636a86bef27ee8d196ddc95159166c3e06ae44e5142b3c401f06705",
+    "docs/evidence/pr82_canonical_unit_20261012.json": "7c1939936cce6609bc6f27566f50cabd3b7a994fd0cc7385c5da33b3ed088c46",
+    "docs/evidence/pr82_native_conversion_scale_pr80clean_corrected_20261012.json": "06d32d1086e0269e24564a4d3390e74c4053f9f0effa794e0ba034e2f014224a",
+    "docs/evidence/pr82_native_number_build_guarded_20261012.json": "65485e23328bc01e850e3b7a3399ae35b35f5fd8d0d6b2f1a75363846716615b",
+    "docs/evidence/pr82_native_stage_trace_pr80clean_20261012.json": "9a8c97adba20a3dd34a3de971ed568d7770516f85446e1e473bc0dbf410a2c1b",
+    "docs/evidence/pr82_observation_execution_strict3_20261012.json": "6ee97037ec7eab57a7fae444247332ed2a4bbeb158590f602e0fdebaa0910102",
+    "docs/evidence/pr82_observation_signal_readback_strict3_full_20261012.json": "230dae0cc206c2627ccc92629e450426fa64a20044dc5dff09b007d9621eef11",
+    "docs/evidence/pr82_same13_execution_20261012.zip": "405b1f584bcdf4b95c52f72dbea198d36984b856b1decd418b2c2a2189f3bf0f"
+  },
+  "initial_shock_reduction": "NOT_ASSESSED",
+  "promotion_authorized": false,
+  "same_candidate_water_energy_drymass_time_closure": "OPEN",
+  "schema": "pr82_observation_native_validation_v1",
+  "science_assessed": false,
+  "source_base_commit": "2e0bddec26afdf3b675f0b5f24b812b70a001e38",
+  "source_identity": "Per-file hashes and actual frozen execution overlays; base SHA alone does not identify changed code."
+}
