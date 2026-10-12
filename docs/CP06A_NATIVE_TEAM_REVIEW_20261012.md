@@ -44,3 +44,8 @@ open. The present evidence supports an analytical producer test and two
 negative actual/native diagnostics. It does not support observed omega
 authority, joint H/B/R estimation, native acceptance, time response, or
 promotion. The detailed stage gates remain in the [execution checklist](FAST_COMPLETION_CHECKLIST_20261012.md).
+
+Source, runner, and review-document whitespace checks pass. The full patch's
+whitespace check reports retained trailing spaces in raw disassembly, compiler
+argv, and source excerpts; those evidence bytes are preserved and hashed.
+They are not silently normalized to obtain a clean full-patch whitespace check.
