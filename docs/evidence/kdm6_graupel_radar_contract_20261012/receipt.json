@@ -1,0 +1,207 @@
+{
+  "actual_wrf_startup": {
+    "QGRAUP_positive_cells_gt_1e-9": 1468,
+    "REFL_10CM_nonzero_cells_in_QGRAUP_active": 0,
+    "candidate_initial_output": "wrfout_d01_2026-08-16_12:00:00",
+    "first_failure": "forrtl: error (65): floating invalid",
+    "first_failure_symbol_map": {
+      "0000000000417CB5": {
+        "function": "_start",
+        "source_location": "??:?"
+      },
+      "0000000000417DCD": {
+        "function": "main",
+        "source_location": "??:?"
+      },
+      "0000000000417E32": {
+        "function": "MAIN__",
+        "source_location": "??:?"
+      },
+      "0000000000418843": {
+        "function": "module_wrf_top_mp_wrf_run_",
+        "source_location": "??:?"
+      },
+      "00000000005922BA": {
+        "function": "module_integrate_mp_integrate_",
+        "source_location": "??:?"
+      },
+      "0000000001225BC4": {
+        "function": "solve_interface_",
+        "source_location": "??:?"
+      },
+      "0000000001429218": {
+        "function": "solve_em_",
+        "source_location": "??:?"
+      },
+      "00000000021B8990": {
+        "function": "module_big_step_utilities_em_mp_calc_ww_cp_",
+        "source_location": "??:?"
+      },
+      "0000000002208610": {
+        "function": "module_em_mp_rk_step_prep_",
+        "source_location": "??:?"
+      }
+    },
+    "independent_readback_same_scratch_root": "/var/tmp/pr80_kdm6_radar_contract.nsUNuj; native_executable_sha256=d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af",
+    "initial_output_sha256": "3b473df29c5ba3cc139574fbe51875d979edc12e1e6aa4e4b22bb79d588517a9",
+    "initialization_readback_receipt": "docs/evidence/pr80_wrf_initialization_readback_20261012.json",
+    "initialization_readback_receipt_sha256": "fa8b9794daf6febd2263a2ed26abe480d9cd9456bac20b2dd049218bb37f24e5",
+    "input_preservation_passed": true,
+    "namelist_physics": {
+      "mp_physics": 37,
+      "namelist_sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "start_date": "2026-08-16_12:00:00"
+    },
+    "namelist_sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+    "native_executable_sha256": "d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af",
+    "paths_not_runtime_tested": [
+      "restart",
+      "nested domains",
+      "DFI backward integration",
+      "multi-tile repeated WRF physics initialization"
+    ],
+    "preserved_input_sha256": {
+      "namelist.input": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "wrfbdy_d01": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_d01": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+    },
+    "profile": "cold start, single domain, one rank and one thread; namelist start 2026-08-16 12 UTC, mp_physics=37 (KDM6)",
+    "readback_conclusion": {
+      "PH_plus_PHB_changed_cells": 0,
+      "P_plus_PB_changed_cells": 770649,
+      "P_plus_PB_max_abs_difference_Pa": 0.0390625,
+      "QNCCN_changed_cells": 2573532,
+      "QNCCN_max_abs_difference_kg_1": 5029232640.0,
+      "W_changed_cells": 1476306,
+      "W_max_abs_difference_m_s": 0.6027584075927734,
+      "dry_mass_change_kg": 0.0,
+      "first_physics_call_assessed": false,
+      "initialization_qlqn_graupel_volume_assessed": false,
+      "water_change_kg": 0.0
+    },
+    "rsl_error_sha256": "98d9e4ff07f6c9bf54024e94d3c2c243c0d0e6d798c87a21d22df56c3ee2483b",
+    "runtime_path_evidence": "The output timestamp and successful startup after linking the KDM6 variable-init call are runtime evidence that initialization completed; the detailed source call graph above is static evidence, not a direct trace.",
+    "same_candidate_different_scratch_attempt": "Final readback uses nsUNuj executable d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af. The earlier RFQ55J executable has a different hash and is a separate build artifact.",
+    "same_case_wet_branch_observed": false,
+    "startup_reached_initial_output": true,
+    "stdout_sha256": "1436a6db28418193df4284b9053b9c954343fd5b90dda1e6ab25a6423ffd58df"
+  },
+  "baseline": {
+    "archive_sha256": "747fab43af5d46187d549fe45d8501bbb88d744d358a8a423ec948a276633f26",
+    "executable_sha256": "618b0bac7ce39b6c3ab686bf795d0503a5fed688ecab4dcbec7ab004b50b86f2",
+    "fp_policy": "same gradual scalar baseline; no trap mask changes",
+    "noah_profile": "both Noah objects rebuilt together, strict O0 plus -no-vec, -fpe0 retained"
+  },
+  "contract": {
+    "density_bounds_kg_m3": [
+      100,
+      900
+    ],
+    "fixed_vs_local": "Other schemes initialize global fixed xam_g before legacy zero-argument radar_init. KDM6 uses QG/BG-derived local cmg per level and skips global a_g reciprocals while preserving exponent setup.",
+    "radar_mass_law": "m_g(D)=a_g D^b_g; local a_g=cmg=pi*(QG/BG)/6, b_g=dmg=3",
+    "scoped_pass": true,
+    "wet_path": "The same local coefficient drives lambda, Rayleigh reflectivity, and wet particle size/inverse. No fallback density or floor."
+  },
+  "initialization_call_graph_static_evidence": {
+    "dyn_em/start_em.F": {
+      "excerpt": "1019-1021 DFI backward-stage guard; 1024 CALL phy_init; 1307-1309 DFI backward guard end",
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/start_em.F",
+      "sha256": "6be17d3a4252065cf972dcf59bf3510cd29be35f898694e38187aa525cf27ac9"
+    },
+    "main/module_wrf_top.F": {
+      "excerpt": "414: CALL med_initialdata_input( head_grid , config_flags )",
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/main/module_wrf_top.F",
+      "sha256": "3a6645ae7e4c64b8757987924c9fe661344c307c6de447cdc6fd063d09b1683c"
+    },
+    "phys/module_mp_kdm6.F": {
+      "excerpt": "kdm6init sets xbm_g=dmg and xmu_g=mug, leaves xam_g without assignment, calls radar_init_variable_graupel; call site at retained source lines 3280-3285",
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_mp_kdm6.F",
+      "sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a"
+    },
+    "phys/module_physics_init.F": {
+      "excerpt": "1758 CALL mp_init; 4720 CASE(KDM6SCHEME); 4721-4722 CALL kdm6init with model constants/config hail option",
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_physics_init.F",
+      "sha256": "0118e81fee1a749938654bf26112a5d8e91ff64ce5189344d5f8b8e9fa8eb57a"
+    },
+    "share/mediation_wrfmain.F": {
+      "excerpt": "133 cold-start CALL start_domain(grid,.TRUE.); 142-152 restart-file read; 166 CALL start_domain(grid,.TRUE.)",
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/share/mediation_wrfmain.F",
+      "sha256": "91b92d4c21536c3f9df8ac175c2e5410d31e3b7b5af66f7d00b9bd56872dce25"
+    },
+    "share/module_model_constants.F": {
+      "excerpt": "24 cpv=4*r_v; 27 cliq=4190; 58 rhowater=1000; 59 rhosnow=100; 60 rhoair0=1.28",
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/share/module_model_constants.F",
+      "sha256": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062"
+    },
+    "share/start_domain.F": {
+      "excerpt": "58 CALL start_domain_em(grid,allowed_to_read)",
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/share/start_domain.F",
+      "sha256": "469b09d0459b143d812c2f268bb1f1aabecca4c047b419354c869195a87f7ebd"
+    }
+  },
+  "limits": [
+    "Legacy zero-argument caller symbols remain in the inherited archive; inactive schemes were not run.",
+    "Focused consumer testing verifies the compiled physical call domain; it does not establish a physical initial field or forecast.",
+    "A graph refresh or successful radar_init does not establish a physical initial field or forecast.",
+    "Static source call graph does not prove restart, nested-domain, DFI, or multi-tile runtime coverage.",
+    "The actual native start and Cloud analysis candidate are different times: 12 UTC versus 13 UTC.",
+    "Full Q/N/B initialization cannot be assessed because the initial output exports no graupel-volume field.",
+    "Restart, nested-domain, DFI-backward, and multi-tile repeat paths are not runtime covered; the source call graph is static evidence."
+  ],
+  "native_build": {
+    "candidate_archive_sha256": "89b4072b37e21b985cf4a10406f16164d20aeb0a76af7be675a4d337c510fe0c",
+    "candidate_executable_sha256": "d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af",
+    "inactive_legacy_callers_recompiled_or_run": false,
+    "kdm6_object_sha256": "01c219330415f8a8e8ecd3ee263754a1129e5153116f0aa9c1b3ca658f7f2e74",
+    "legacy_zero_argument_symbol_preserved": true,
+    "radar_object_sha256": "6bc78217f991bcaabb06e24781aa09e9606d87ee576fa23e5f6cf6913c89223b",
+    "scratch_root": "/var/tmp/pr80_kdm6_radar_contract.nsUNuj"
+  },
+  "physical_consumer_test": {
+    "driver_object_sha256": "7c4b2a0a716a35b24c4bd3eeefd19f0e666544d09ef987da43c6e7c6ee4961dd",
+    "driver_source_sha256": "7d8d56ba659c083a42a0668a90bdfd3908b1fbcba18ca130855eb99dbb57de6b",
+    "executable_sha256": "90313520f2905885e48b65fa47969bd97c5fcf4df84bfa5a6c346766de4b8789",
+    "global_xam_g_before_initializer": 0.0,
+    "graupel_density_states_kg_m3": [
+      200.0,
+      700.0
+    ],
+    "inactive_legacy_callers_recompiled_or_run": false,
+    "initialization_calls": 2,
+    "initializer": "calls actual kdm6init twice with WRF constants/options; both calls dispatch to radar_init_variable_graupel",
+    "pass": true,
+    "scope": "actual refl10cm_kdm6 dry and wet graupel consumer with ProgB_param QG/BG state",
+    "stdout": "KDM6_RADAR_CONSUMER_PASS   1.04719757E+02   3.66519165E+02   3.02967968E+01   2.68405628E+01",
+    "stdout_sha256": "89daac8bed14398c2a6b313ae75c34bddffb4b2decabecaaa8f93ebf2d59d5f0",
+    "wrf_constants": {
+      "allowed_to_read": true,
+      "ccn_conc_note": "kdm6init declares ccn0 but does not reference it",
+      "ccn_conc_passed_to_kdm6init": 0.0,
+      "cliq": 4190.0,
+      "cpv": "4*461.6",
+      "hail_opt": 0,
+      "rhoair0": 1.28,
+      "rhosnow": 100.0,
+      "rhowater": 1000.0
+    },
+    "zero_coefficient_absent_graupel_checked": true
+  },
+  "recorded_utc": "2026-10-12T06:32:51Z",
+  "schema": "kdm6_graupel_radar_contract_receipt_v2",
+  "scope": "fresh copied partial host; fixed strict O0/no-vec Noah archive; one rank and thread",
+  "source_provenance": {
+    "kdm6_original": "1fbd9d5cbc32dc5772682078b4efc63b3dafb28a79499e318faf9520fc55e819",
+    "kdm6_patched": "a5e8ce7a05d147b05556aa7521c22c0991812711fe675409feec889e43a761e7",
+    "kdm6_patched_sha256": "a5e8ce7a05d147b05556aa7521c22c0991812711fe675409feec889e43a761e7",
+    "kdm6_pr77_transformed_before_patch": "0575ece19473618adcfb1a937f92eb98a2f6155c8460452ac01c816760989981",
+    "patch": "c6dd8f985d78bda86de06bdef135dbe0f5c9832777723317aaf381c030588e23",
+    "patch_sha256": "c6dd8f985d78bda86de06bdef135dbe0f5c9832777723317aaf381c030588e23",
+    "radar_original": "aa99da858be41efa579966680708d230123a7417560af0eb2e24f4c94e253688",
+    "radar_patched": "ccbabfb1717ab5f26982934b3c6b846d0abaaeb2a9128ed2f52e688d669c47fa",
+    "radar_patched_sha256": "ccbabfb1717ab5f26982934b3c6b846d0abaaeb2a9128ed2f52e688d669c47fa"
+  },
+  "toolchain": {
+    "ifx_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "ifx_version": "ifx (IFX) 2026.0.0 20260331"
+  }
+}

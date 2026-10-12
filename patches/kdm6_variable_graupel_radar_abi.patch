@@ -1,0 +1,73 @@
+--- a/module_mp_radar.F
++++ b/module_mp_radar.F
+@@ -26,6 +26,8 @@
+ 
+       PUBLIC :: rayleigh_soak_wetgraupel
+       PUBLIC :: radar_init
++      PUBLIC :: radar_init_variable_graupel
++      PRIVATE :: radar_init_core
+       PRIVATE :: m_complex_water_ray
+       PRIVATE :: m_complex_ice_maetzler
+       PRIVATE :: m_complex_maxwellgarnett
+@@ -70,8 +72,19 @@
+ !+---+-----------------------------------------------------------------+
+ 
+       subroutine radar_init
+-
+-      IMPLICIT NONE
++      IMPLICIT NONE
++      call radar_init_core(.false.)
++      end subroutine radar_init
++
++      subroutine radar_init_variable_graupel
++      IMPLICIT NONE
++      call radar_init_core(.true.)
++      end subroutine radar_init_variable_graupel
++
++      subroutine radar_init_core(variable_graupel_mass)
++
++      IMPLICIT NONE
++      LOGICAL, INTENT(IN) :: variable_graupel_mass
+       INTEGER:: n
+       PI5 = 3.14159*3.14159*3.14159*3.14159*3.14159
+       lamda4 = lamda_radar*lamda_radar*lamda_radar*lamda_radar
+@@ -178,12 +191,14 @@
+       xoams = 1./xam_s
+       xobms = 1./xbm_s
+       xocms = xoams**xobms
+-      xoamg = 1./xam_g
+       xobmg = 1./xbm_g
+-      xocmg = xoamg**xobmg
+-
+-
+-      end subroutine radar_init
++      IF (.NOT.variable_graupel_mass) THEN
++         xoamg = 1./xam_g
++         xocmg = xoamg**xobmg
++      ENDIF
++
++
++      end subroutine radar_init_core
+ 
+ !+---+-----------------------------------------------------------------+
+ !+---+-----------------------------------------------------------------+
+--- a/module_mp_kdm6.F
++++ b/module_mp_kdm6.F
+@@ -4314,7 +4314,7 @@
+    xam_i = cmi
+    xbm_i = dmi
+    xmu_i = mui
+-   call radar_init
++   call radar_init_variable_graupel
+ 
+ 
+   END SUBROUTINE kdm6init
+@@ -5108,7 +5108,7 @@
+            lamg = 1./ilamg(k)
+            do n = 1, nrbins
+               x = xam_g(k) * xxDg(n)**xbm_g
+-              call rayleigh_soak_wetgraupel (x,DBLE(xocmg),DBLE(xobmg), &
++              call rayleigh_soak_wetgraupel (x,DBLE((1./xam_g(k))**xobmg),DBLE(xobmg), &
+                     fmelt_g, melt_outside_g, m_w_0, m_i_0, lamda_radar, &
+                     CBACK, mixingrulestring_g, matrixstring_g,          &
+                     inclusionstring_g, hoststring_g,                    &

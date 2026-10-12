@@ -355,6 +355,62 @@ def compare(baseline, candidate, gravity):
     return report
 
 
+def compare_initialization(initial_input, initial_output, gravity):
+    """Inspect same-time WRF initialization, without certifying a physics call.
+
+    WRF can recompute pressure, vertical motion, and aerosol moments before
+    writing its initial output. T is perturbation potential temperature; MU
+    and PH are perturbations, so their sign alone is not a physical validity
+    criterion. Keep the existing hybrid dry-mass/water comparison separate.
+    """
+    report = compare(initial_input, initial_output, gravity)
+    fields = {}
+    mass = ('Time', 'bottom_top', 'south_north', 'west_east')
+    vertical = ('Time', 'bottom_top_stag', 'south_north', 'west_east')
+    horizontal = ('Time', 'south_north', 'west_east')
+    expected = {'P': (mass, 'Pa'), 'PB': (mass, 'Pa'),
+                'PH': (vertical, 'm2 s-2'), 'PHB': (vertical, 'm2 s-2'),
+                'U': (('Time', 'bottom_top', 'south_north', 'west_east_stag'), 'm s-1'),
+                'V': (('Time', 'bottom_top', 'south_north_stag', 'west_east'), 'm s-1'),
+                'W': (vertical, 'm s-1'), 'T': (mass, 'K'),
+                'MU': (horizontal, 'Pa'), 'MUB': (horizontal, 'Pa')}
+    required = tuple(expected)
+    with netCDF4.Dataset(initial_input) as before, netCDF4.Dataset(initial_output) as after:
+        moments = sorted(name for name in set(before.variables) | set(after.variables)
+                         if name.startswith(('QN', 'BGR', 'BSNOW')))
+        for name in (*required, *WATER_SPECIES, *moments):
+            if name not in before.variables or name not in after.variables:
+                if name in required or name in WATER_SPECIES:
+                    raise ValueError(f'{name}: required initialization field missing')
+                fields[name] = dict(available_both=False)
+                continue
+            source, result = before[name], after[name]
+            if source.dimensions != result.dimensions or source.units != result.units:
+                raise ValueError(f'{name}: initialization dimensions/units mismatch')
+            if name in expected:
+                dimensions, units = expected[name]
+                if source.dimensions != dimensions or source.units.strip() != units:
+                    raise ValueError(f'{name}: expected WRF dimensions/units missing')
+            x, y = finite(source[0], name), finite(result[0], name)
+            if x.shape != y.shape:
+                raise ValueError(f'{name}: initialization shape mismatch')
+            fields[name] = dict(units=source.units, exact_equal=bool(np.array_equal(x, y)),
+                                changed_cells=int(np.count_nonzero(x != y)),
+                                maximum_absolute_difference=float(np.max(np.abs(y - x))))
+        for a, b in (('P', 'PB'), ('PH', 'PHB')):
+            x = finite(before[a][0], a) + finite(before[b][0], b)
+            y = finite(after[a][0], a) + finite(after[b][0], b)
+            fields[f'{a}+{b}'] = dict(changed_cells=int(np.count_nonzero(x != y)),
+                                     maximum_absolute_difference=float(np.max(np.abs(y - x))))
+    if [digest(initial_input), digest(initial_output)] != [report['baseline_sha256'], report['candidate_sha256']]:
+        raise ValueError('initialization input changed during inspection')
+    report.update(comparison_scope='SAME_TIME_WRF_INPUT_TO_INITIAL_OUTPUT',
+                  initialization_fields=fields, first_physics_call_assessed=False,
+                  microphysics_moment_contract_assessed=False,
+                  same_analysis_candidate_assessed=False)
+    return report
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('input', type=Path)
@@ -364,13 +420,17 @@ if __name__ == '__main__':
                         help='compare native dry mass and water on the same grid/time')
     mode.add_argument('--metgrid', type=Path,
                       help='replay the direct-QV/TAVGSFC sfcprs2 host pressure profile')
+    mode.add_argument('--initial-input', type=Path,
+                      help='compare wrfinput with same-time WRF initial output')
     parser.add_argument('--gas-constant', type=float,
                         help='explicit host Rd; required with --metgrid')
     args = parser.parse_args()
     if (args.metgrid is not None) != (args.gas_constant is not None):
         parser.error('--metgrid and --gas-constant must be supplied together')
     try:
-        if args.metgrid:
+        if args.initial_input:
+            report = compare_initialization(args.initial_input, args.input, args.gravity)
+        elif args.metgrid:
             report = inspect_host_pressure(args.metgrid, args.input, args.gravity, args.gas_constant)
         else:
             report = (compare(args.baseline, args.input, args.gravity) if args.baseline

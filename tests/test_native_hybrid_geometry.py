@@ -133,6 +133,54 @@ def _mutate_species(path, value):
 
 
 class HybridOracleTest(unittest.TestCase):
+    def test_initialization_tracks_motion_even_when_mass_is_unchanged(self):
+        with tempfile.TemporaryDirectory() as temp:
+            initial, output = Path(temp) / 'input.nc', Path(temp) / 'output.nc'
+            write_native_pair(initial, output)
+            with self.assertRaisesRegex(ValueError, 'required initialization field missing'):
+                native.compare_initialization(initial, output, 10.)
+            for path in (initial, output):
+                with netCDF4.Dataset(path, 'a') as ds:
+                    ds.createDimension('west_east_stag', 3)
+                    ds.createDimension('south_north_stag', 2)
+                    for name, units in [('P', 'Pa'), ('PB', 'Pa'), ('PH', 'm2 s-2'),
+                                        ('PHB', 'm2 s-2'), ('U', 'm s-1'),
+                                        ('V', 'm s-1'), ('W', 'm s-1'), ('T', 'K')]:
+                        level = 'bottom_top_stag' if name in ('PH', 'PHB', 'W') else 'bottom_top'
+                        row = 'south_north_stag' if name == 'V' else 'south_north'
+                        column = 'west_east_stag' if name == 'U' else 'west_east'
+                        field = ds.createVariable(name, 'f4', ('Time', level, row, column))
+                        field.units = units
+                        field[:] = 0.
+            with netCDF4.Dataset(output, 'a') as ds:
+                ds['W'][0, 1, 0, 0] = .5
+            report = native.compare_initialization(initial, output, 10.)
+            self.assertEqual(report['dry_mass_change_kg'], 0.)
+            self.assertEqual(report['water_change_kg'], 0.)
+            self.assertEqual(report['initialization_fields']['W']['changed_cells'], 1)
+            self.assertEqual(report['initialization_fields']['W']['maximum_absolute_difference'], .5)
+            self.assertFalse(report['first_physics_call_assessed'])
+            with netCDF4.Dataset(output, 'a') as ds:
+                ds['W'][0, 1, 0, 0] = np.nan
+            with self.assertRaisesRegex(ValueError, 'W: nonfinite input'):
+                native.compare_initialization(initial, output, 10.)
+            with netCDF4.Dataset(output, 'a') as ds:
+                ds['W'][0, 1, 0, 0] = .5
+            for path in (initial, output):
+                with netCDF4.Dataset(path, 'a') as ds:
+                    ds['P'].units = 'hPa'
+            with self.assertRaisesRegex(ValueError, 'P: expected WRF dimensions/units missing'):
+                native.compare_initialization(initial, output, 10.)
+            for path in (initial, output):
+                with netCDF4.Dataset(path, 'a') as ds:
+                    ds['P'].units = 'Pa'
+                    ds.renameVariable('U', 'U_old')
+                    field = ds.createVariable('U', 'f4', ('Time', 'bottom_top', 'south_north', 'west_east'))
+                    field.units = 'm s-1'
+                    field[:] = 0.
+            with self.assertRaisesRegex(ValueError, 'U: expected WRF dimensions/units missing'):
+                native.compare_initialization(initial, output, 10.)
+
     def test_literal_columns_and_asymmetric_impulse(self):
         result = native.hybrid_geometry(**fixture())
         np.testing.assert_allclose(result['dp_pa'][:, 0], [[15, 25], [40, 50], [25, 25]], rtol=0, atol=1e-10)

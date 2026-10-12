@@ -1,0 +1,173 @@
+{
+  "archive": {
+    "bytes": 250837,
+    "exact_member_set": true,
+    "graph_json_or_backups_included": false,
+    "large_runtime_arrays_included": false,
+    "manifest_sha256": "e8c939e384dc18c53c029bd691dc12157eae1a186d4b3763a963e3d4d9c99311",
+    "matches_manifest": true,
+    "members": [
+      {
+        "bytes": 1604230,
+        "matches_original": true,
+        "name": "cloud_bal_extraction.json",
+        "sha256": "03bd1b44571808da59b8b051fa86b910f767d080dd9a246e2f3ddf7239523619"
+      },
+      {
+        "bytes": 1726146,
+        "matches_original": true,
+        "name": "klaps50_extraction.json",
+        "sha256": "5c613744e70627eb55742a04399d799cf17d78e9c9e2d6f3042472ff7890b3b6"
+      },
+      {
+        "bytes": 42475,
+        "matches_original": true,
+        "name": "refresh_kg.py",
+        "sha256": "78196ad2178080c60a7cb0323f4f5dee92ec5db8b30b914315af1b8c31d59870"
+      },
+      {
+        "bytes": 168889,
+        "matches_original": true,
+        "name": "reports/Cloud-BAL.md",
+        "sha256": "fb42e079faf98a318bb6930d6cbd54bf4744ec61aba2e74a04c0dddfc423ce83"
+      },
+      {
+        "bytes": 333671,
+        "matches_original": true,
+        "name": "reports/KLAPS50.md",
+        "sha256": "9e96fa333760f3c31c98e94b0a196ebaec5798c12677bbef06d5df10cc0f6e3a"
+      }
+    ],
+    "path": "docs/evidence/pr80_force_init_kg_20261012/full_outputs.zip",
+    "sha256": "3248f17879cc722d806610ba89ea61218f54503f6c2e7b3e476b7a2ad8af2bbd"
+  },
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "communities": 771,
+      "delta_edges": 352,
+      "delta_nodes": 197,
+      "edges": 16801,
+      "nodes": 9210,
+      "sha256": "8d5fdda0778f4e954922cd723b852ac4f014137a0a2a7bc96224accebc158beb"
+    },
+    "KLAPS50": {
+      "communities": 2775,
+      "delta_edges": 352,
+      "delta_nodes": 197,
+      "edges": 75228,
+      "nodes": 35037,
+      "sha256": "6d4070bc63e32f635181bc107d816ef33461995ebe7632825528d661a8d0f658"
+    }
+  },
+  "limitations": [
+    "Graphify 0.9.53 selected-path AST/Markdown-heading extraction only; no semantic refresh.",
+    "Fortran cross-file CALL extraction is partial; corpus counts overlap and are separate.",
+    "Graph freshness is navigation evidence, not runtime or scientific validation."
+  ],
+  "native_scope": {
+    "executable_sha256": "d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af",
+    "first_physics_call_assessed": false,
+    "microphysics_moment_contract_assessed": false,
+    "same_analysis_candidate_assessed": false
+  },
+  "physical_approval": "FAIL_OPEN",
+  "pr": "https://github.com/gonos2k/Cloud-BAL/pull/80",
+  "preservation": {
+    "dated_snapshots_match_receipt_and_live": {
+      "Cloud-BAL": {
+        "GRAPH_REPORT.md": {
+          "live_sha256": "fb42e079faf98a318bb6930d6cbd54bf4744ec61aba2e74a04c0dddfc423ce83",
+          "matches_receipt_and_live": true,
+          "sha256": "fb42e079faf98a318bb6930d6cbd54bf4744ec61aba2e74a04c0dddfc423ce83"
+        },
+        "graph.json": {
+          "live_sha256": "8d5fdda0778f4e954922cd723b852ac4f014137a0a2a7bc96224accebc158beb",
+          "matches_receipt_and_live": true,
+          "sha256": "8d5fdda0778f4e954922cd723b852ac4f014137a0a2a7bc96224accebc158beb"
+        },
+        "manifest.json": {
+          "live_sha256": "8b80ae90025fc626288ba7cb121d58aaaae81b8110097863805c3f1881f11ee3",
+          "matches_receipt_and_live": true,
+          "sha256": "8b80ae90025fc626288ba7cb121d58aaaae81b8110097863805c3f1881f11ee3"
+        }
+      },
+      "KLAPS50": {
+        "GRAPH_REPORT.md": {
+          "live_sha256": "9e96fa333760f3c31c98e94b0a196ebaec5798c12677bbef06d5df10cc0f6e3a",
+          "matches_receipt_and_live": true,
+          "sha256": "9e96fa333760f3c31c98e94b0a196ebaec5798c12677bbef06d5df10cc0f6e3a"
+        },
+        "graph.json": {
+          "live_sha256": "6d4070bc63e32f635181bc107d816ef33461995ebe7632825528d661a8d0f658",
+          "matches_receipt_and_live": true,
+          "sha256": "6d4070bc63e32f635181bc107d816ef33461995ebe7632825528d661a8d0f658"
+        },
+        "manifest.json": {
+          "live_sha256": "1dfb8bd32e49b6aa9cff3bcd242c07fe7de4564350714c3386dcaa919bc89402",
+          "matches_receipt_and_live": true,
+          "sha256": "1dfb8bd32e49b6aa9cff3bcd242c07fe7de4564350714c3386dcaa919bc89402"
+        }
+      }
+    },
+    "immutable_mismatches": [],
+    "index_change_limited_to_graph_snapshot_section": true,
+    "log_append_only_byte_prefix": true,
+    "previous_receipt_archive_and_dated_artifact_pins": 101,
+    "private_profile": {
+      "Cloud-BAL": {
+        "incident_links": 133,
+        "nodes": 134,
+        "source_file": "config/cp01_private_host_profile.json",
+        "unchanged": true
+      },
+      "KLAPS50": {
+        "incident_links": 0,
+        "nodes": 0,
+        "source_file": "Cloud-BAL/config/cp01_private_host_profile.json",
+        "unchanged": true
+      }
+    },
+    "wiki_hashes_match_receipt": {
+      "wiki/graph-report-cloud-bal.md": {
+        "matches_receipt": true,
+        "sha256": "fb42e079faf98a318bb6930d6cbd54bf4744ec61aba2e74a04c0dddfc423ce83"
+      },
+      "wiki/graph-report-klaps50.md": {
+        "matches_receipt": true,
+        "sha256": "9e96fa333760f3c31c98e94b0a196ebaec5798c12677bbef06d5df10cc0f6e3a"
+      },
+      "wiki/graph-report.md": {
+        "matches_receipt": true,
+        "sha256": "430d453831c959a5785d5ebda2b8093b7bbc4b5c2cae2443ca2ceb0fab64b24f"
+      },
+      "wiki/index.md": {
+        "matches_receipt": true,
+        "sha256": "18d30a97b0349c77f246b3a7e1598c7496a834605933985298cf8391fb34b945"
+      },
+      "wiki/log.md": {
+        "matches_receipt": true,
+        "sha256": "f13bd8ce85ce742a0e2a30a73a32f0548b776a3f89f9a0c2d4a471ad4c90ac0a"
+      }
+    }
+  },
+  "review_status": "PASS",
+  "schema": "pr80_kg_independent_review_v1",
+  "scientific_acceptance_claimed": false,
+  "scope": "Independent read-only verification of PR80 compact selected-path KG package and preservation guards.",
+  "source_code_unchanged": true,
+  "source_commit": "1100a84d76c8abc6b12bd24ca17c0b0ae007579c",
+  "source_head": "1100a84d76c8abc6b12bd24ca17c0b0ae007579c",
+  "source_receipt": {
+    "matches_maintained_apply_receipt": true,
+    "path": "docs/evidence/pr80_kg_20261012.json",
+    "sha256": "74ddb3e177d8d77ad2579a8fa3f3af7363ecebc9241a61c7ccf126045f463581"
+  },
+  "source_sync": {
+    "candidate_hashes_match": true,
+    "maintained_source_paths_unchanged": true,
+    "matches_receipt": true,
+    "selected_paths": 29,
+    "sha256": "a74972bc4c59bcc6bfc41ec472793a9b912ac42082d0e7c13abfe1052c746e6d"
+  },
+  "tracked_source_diff": []
+}

@@ -9,7 +9,8 @@ PROGRAM test_real_shadow_io_contract
   USE cloud_bal_balance_operator, ONLY: TARGET_AUTHORITY_OBSERVATIONAL, &
                                         TARGET_AUTHORITY_MANUFACTURED_TEST, &
                                         balance_operator_config,balance_operator_type,build_balance_operator, &
-                                        state_continuity_residual
+                                        state_continuity_residual,build_diagnostic_balance_operator, &
+                                        geostrophic_residual
   USE cloud_bal_real_netcdf, ONLY: validate_shadow_write_contract, &
                                    write_shadow_diagnostics,pipeline_result_replays, &
                                    put_pressure_transition_extension, &
@@ -41,6 +42,7 @@ PROGRAM test_real_shadow_io_contract
     STOP 0
   END IF
   CALL test_pressure_dispatch_request_scope(failures)
+  CALL test_force_prior_pipeline_writer(failures)
   CALL make_state(input)
   candidate=input
   operational=input
@@ -3066,6 +3068,146 @@ CONTAINS
       state%geopotential%valid=.FALSE.; state%geopotential%quality=QUALITY_RAW_MISSING; state%geopotential%source=0_int32
     END WHERE
   END SUBROUTINE mask_transition_replay_state
+
+  SUBROUTINE test_force_prior_pipeline_writer(test_failures)
+    INTEGER, INTENT(INOUT) :: test_failures
+    TYPE(cloud_bal_state_type) :: background,proposed,operational,bad_background
+    TYPE(cloud_bal_state_type) :: bad_candidate,bad_operational
+    TYPE(cloud_bal_pipeline_config) :: force_config
+    TYPE(cloud_bal_pipeline_config) :: bad_config
+    TYPE(cloud_bal_pipeline_result) :: force_result,forged,bad_result
+    TYPE(balance_operator_type) :: force_operator
+    LOGICAL :: analysis(4,4,3),control(4,4,3),shell(4,4,3),force_mask(4,4,3)
+    LOGICAL :: wrong_shape(3,4,3)
+    REAL(real32) :: lon(4,4),stored_u(4,4,3)
+    REAL(real64) :: cont(4,4,3),geo(4,4,3)
+    INTEGER :: local_status,local_reason,local_ncid,local_rc,local_var
+    INTEGER(int32) :: stored_mask(4,4,3)
+    REAL(real64) :: stored_force_rms
+    CHARACTER(LEN=128) :: force_contract
+    INTEGER :: diagnostic_version
+
+    CALL make_state(background,4,4,3)
+    background%latitude%value=36.0_real32
+    background%latitude%valid=.TRUE.
+    background%latitude%quality=0_int32
+    background%latitude%source=SOURCE_BACKGROUND_MODEL
+    background%geopotential%value=0.0_real32
+    background%geopotential%valid=.TRUE.
+    background%geopotential%quality=0_int32
+    background%geopotential%source=SOURCE_BACKGROUND_MODEL
+    analysis=background%above_ground
+    control=background%above_ground
+    shell=background%above_ground
+    force_mask=background%above_ground
+    lon=0.0_real32; cont=0.0_real64; geo=0.0_real64
+    force_config%requested_mode=MODE_SHADOW
+    force_config%background_continuity_prior=.TRUE.
+    force_config%force_prior_enabled=.TRUE.
+    CALL build_diagnostic_balance_operator(background,force_operator,local_status,local_reason)
+    CALL geostrophic_residual(background,force_operator,stored_force_rms,local_status,force_mask,local_reason)
+    CALL check(local_status==STATUS_OK .AND. stored_force_rms>0.0_real64, &
+      'force fixture has a finite nonzero background force reference',test_failures)
+    CALL run_cloud_bal_pipeline(background,proposed,operational,force_result,force_config, &
+      analysis_support=analysis,background_control_support=control, &
+      background_validation_shell=shell,force_support=force_mask)
+    CALL check(force_result%status==STATUS_OK .AND. force_result%force_prior_applied .AND. &
+      force_result%force_prior%background_force_rms>0.0_real64, &
+      'force pipeline retains a nonzero background reference',test_failures)
+    IF (force_result%status/=STATUS_OK .OR. .NOT.force_result%force_prior_applied) RETURN
+    CALL check(ALL(force_result%force_prior_support .EQV. force_mask) .AND. &
+      ALL(force_result%pre_force_u==background%u%value) .AND. &
+      ALL(force_result%pre_force_v==background%v%value) .AND. &
+      ALL(force_result%pre_force_omega==background%omega%value), &
+      'force receipt retains exact support and pre-force wind state',test_failures)
+    bad_config=force_config
+    bad_config%force_prior_enabled=.FALSE.
+    CALL run_cloud_bal_pipeline(background,bad_candidate,bad_operational,bad_result,bad_config, &
+      analysis_support=analysis,background_control_support=control, &
+      background_validation_shell=shell,force_support=force_mask)
+    CALL check(bad_result%status==STATUS_FAILED .AND. &
+      canonical_states_equal(background,bad_candidate) .AND. &
+      canonical_states_equal(background,bad_operational), &
+      'disabled force feature rejects an unexpected support mask without publishing state',test_failures)
+    bad_config=force_config
+    bad_config%background_continuity_prior=.FALSE.
+    wrong_shape=.TRUE.
+    CALL run_cloud_bal_pipeline(background,bad_candidate,bad_operational,bad_result,bad_config, &
+      analysis_support=analysis,force_support=wrong_shape)
+    CALL check(bad_result%status==STATUS_FAILED .AND. &
+      canonical_states_equal(background,bad_candidate) .AND. &
+      canonical_states_equal(background,bad_operational), &
+      'force feature without its background prior fails closed',test_failures)
+    bad_background=background
+    bad_background%geopotential%valid(2,2,2)=.FALSE.
+    bad_background%geopotential%quality(2,2,2)=QUALITY_RAW_MISSING
+    bad_background%geopotential%source(2,2,2)=0_int32
+    CALL run_cloud_bal_pipeline(bad_background,bad_candidate,bad_operational,bad_result,force_config, &
+      analysis_support=analysis,background_control_support=control, &
+      background_validation_shell=shell,force_support=force_mask)
+    CALL check(bad_result%status/=STATUS_OK .AND. &
+      canonical_states_equal(bad_background,bad_candidate) .AND. &
+      canonical_states_equal(bad_background,bad_operational) .AND. &
+      .NOT.bad_result%force_prior_applied .AND. &
+      .NOT.ALLOCATED(bad_result%force_prior_support), &
+      'late force-reference failure rolls the complete pipeline back to background',test_failures)
+    CALL check(pipeline_result_replays(background,proposed,force_result,force_config), &
+      'force-enabled pipeline result replays through the writer authority check',test_failures)
+    forged=force_result
+    forged%force_prior%candidate_objective=forged%force_prior%candidate_objective+1.0_real64
+    CALL check(.NOT.pipeline_result_replays(background,proposed,forged,force_config), &
+      'force replay rejects forged diagnostics',test_failures)
+    forged=force_result
+    forged%force_prior%candidate_objective=ieee_value(0.0_real64,ieee_quiet_nan)
+    CALL check(.NOT.pipeline_result_replays(background,proposed,forged,force_config), &
+      'force replay rejects nonfinite diagnostics',test_failures)
+    forged=force_result
+    forged%pre_force_u(2,2,2)=forged%pre_force_u(2,2,2)+0.25_real32
+    CALL check(.NOT.pipeline_result_replays(background,proposed,forged,force_config), &
+      'force replay rejects forged pre-force winds',test_failures)
+    forged=force_result
+    forged%pre_force_u(2,2,2)=ieee_value(0.0_real32,ieee_quiet_nan)
+    CALL check(.NOT.pipeline_result_replays(background,proposed,forged,force_config), &
+      'force replay rejects nonfinite pre-force winds',test_failures)
+    forged=force_result
+    forged%force_prior_support=.FALSE.
+    CALL check(.NOT.pipeline_result_replays(background,proposed,forged,force_config), &
+      'force replay rejects an empty support mask',test_failures)
+
+    CALL write_shadow_diagnostics('force-prior-shadow.nc',background,proposed,lon, &
+      force_result,force_config,cont,geo,local_status,operational)
+    CALL check(local_status==STATUS_OK,'force-prior candidate reaches the SHADOW writer',test_failures)
+    IF (local_status/=STATUS_OK) RETURN
+    local_rc=nf90_open('force-prior-shadow.nc',NF90_NOWRITE,local_ncid)
+    CALL check(local_rc==NF90_NOERR,'force-prior writer output can be reopened',test_failures)
+    IF (local_rc/=NF90_NOERR) RETURN
+    local_rc=nf90_get_att(local_ncid,NF90_GLOBAL,'force_prior_background_rms',stored_force_rms)
+    CALL check(local_rc==NF90_NOERR .AND. stored_force_rms== &
+      force_result%force_prior%background_force_rms,'force-prior diagnostic is serialized exactly',test_failures)
+    local_rc=nf90_get_att(local_ncid,NF90_GLOBAL,'force_prior_contract',force_contract)
+    CALL check(local_rc==NF90_NOERR .AND. TRIM(force_contract)== &
+      'cp06a_background_geostrophic_force_prior_v1', &
+      'force-prior research contract is serialized by name',test_failures)
+    local_rc=nf90_get_att(local_ncid,NF90_GLOBAL,'diagnostic_schema_version',diagnostic_version)
+    CALL check(local_rc==NF90_NOERR .AND. diagnostic_version==9, &
+      'force-prior extension advances the diagnostic schema',test_failures)
+    local_rc=nf90_inq_varid(local_ncid,'force_prior_support',local_var)
+    CALL check(local_rc==NF90_NOERR,'force-prior mask is serialized',test_failures)
+    IF (local_rc==NF90_NOERR) THEN
+      local_rc=nf90_get_var(local_ncid,local_var,stored_mask)
+      CALL check(local_rc==NF90_NOERR .AND. ALL(stored_mask==1_int32), &
+        'serialized force support matches the declared footprint',test_failures)
+    END IF
+    local_rc=nf90_inq_varid(local_ncid,'pre_force_u',local_var)
+    CALL check(local_rc==NF90_NOERR,'pre-force wind is serialized',test_failures)
+    IF (local_rc==NF90_NOERR) THEN
+      local_rc=nf90_get_var(local_ncid,local_var,stored_u)
+      CALL check(local_rc==NF90_NOERR .AND. ALL(stored_u==force_result%pre_force_u), &
+        'serialized pre-force wind matches the replay receipt',test_failures)
+    END IF
+    local_rc=nf90_close(local_ncid)
+    CALL check(local_rc==NF90_NOERR,'force-prior writer output closes cleanly',test_failures)
+  END SUBROUTINE test_force_prior_pipeline_writer
 
   SUBROUTINE make_state(state,nx_in,ny_in,nz_in)
     TYPE(cloud_bal_state_type), INTENT(OUT) :: state
