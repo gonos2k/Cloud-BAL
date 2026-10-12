@@ -1,0 +1,336 @@
+{
+  "baseline": {
+    "archive_sha256": "89b4072b37e21b985cf4a10406f16164d20aeb0a76af7be675a4d337c510fe0c",
+    "executable_sha256": "d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af",
+    "gdb_log": {
+      "path": "/var/tmp/pr81_native_baseline_safe/gdb.log",
+      "sha256": "fa20b22c40683e310a067df3785cae7dd466f8bfac4113d9892e7bb182c95791"
+    },
+    "input_sha256": {
+      "namelist.input": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "wrfbdy_d01": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_d01": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+    },
+    "result": "reproduces PR80 packed-SIMD padding-lane invalid operation in calc_ww_cp; negative control.",
+    "rsl_error": {
+      "path": "/var/tmp/pr81_native_baseline_safe/run/rsl.error.0000",
+      "sha256": "7592439642f7531209662e72b984f5df05218ec5f9bf8cbf445379d38b780c32"
+    },
+    "run_root": "/var/tmp/pr81_native_baseline_safe",
+    "source_snapshot": {
+      "path": "/var/tmp/pr81_native_baseline_safe/source_snapshot.json",
+      "sha256": "a10744a4257e9f3608049f33aa6b3d8ed2cf4bf315269203202e963d3e5337a0"
+    }
+  },
+  "candidate": {
+    "archive": {
+      "path": "/var/tmp/pr81_native_ksas_smallstep_build1/link/main/libwrflib_pr81.a",
+      "sha256": "ac1366ac4574e2667196cac3c960907db52aedce6dfa137178d7254fa5eb37dd"
+    },
+    "base_archive_sha256": "89b4072b37e21b985cf4a10406f16164d20aeb0a76af7be675a4d337c510fe0c",
+    "build_audit": {
+      "path": "/var/tmp/pr81_native_ksas_smallstep_build1/pr81_native_build.json",
+      "sha256": "131451b41a38660754e78e655b158a6946a4a071640d55159ce14734c133327a"
+    },
+    "build_helper": {
+      "path": "tests/build_pr81_native_first_step_candidate.sh",
+      "sha256": "40d407e942804f5896b0d13523d8483faeec38377c60b79806bdc3d9105e8f0a"
+    },
+    "executable": {
+      "path": "/var/tmp/pr81_native_ksas_smallstep_build1/wrf_pr81.exe",
+      "sha256": "a805a1afff42021f322337c69d4e0818faf30e677f625f9a9d1b308728b32c00"
+    },
+    "fresh_scratch_guard_test": {
+      "command": "tests/build_pr81_native_first_step_candidate.sh /var/tmp/pr81_native_ksas_smallstep_build1",
+      "expected_status": 2,
+      "observed_status": 2,
+      "stderr": "refusing to reuse build scratch: /var/tmp/pr81_native_ksas_smallstep_build1",
+      "stderr_sha256": "31558dcd7600ae3e49a31078a43f6b9cabe324de93415ce4bcb79b54daad8aa9",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "gdb_log": {
+      "path": "/var/tmp/pr81_native_ksas_smallstep_run1/gdb.log",
+      "sha256": "261597a22235f99ccd214bdc223446e0b5af676441ad37400e8edb667a12b9f5"
+    },
+    "input_sha256": {
+      "namelist.input": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+      "wrfbdy_d01": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+      "wrfinput_d01": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739"
+    },
+    "link_hash_closure_limitation": "Selected-only rebuild from the retained PR80 archive; nine changed archive members and their source/object hashes are pinned. All unselected archive members and the retained wrf.o/module_wrf_top.o link inputs are inherited, not independently recompiled from source in this audit.",
+    "result": "passes the observed KSAS, diffusion and small-step padding-lane traps, then stops at KDM6 invalid NC number basis input; first microphysics call remains open.",
+    "rsl_error": {
+      "path": "/var/tmp/pr81_native_ksas_smallstep_run1/run/rsl.error.0000",
+      "sha256": "ca6ac1007c6c1a904c9679a0b525724e0707b697a2b339b2a013d555c466fe9b"
+    },
+    "run_root": "/var/tmp/pr81_native_ksas_smallstep_run1",
+    "selected_object_count": 9,
+    "selected_objects": [
+      {
+        "archive_member": "module_big_step_utilities_em.o",
+        "generated_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_big_step_utilities_em.f90",
+        "generated_source_sha256": "d8c11bd9b3dd0fd717c14899c53ffe7ca37c4d768128c4dac750429f7fb4bf3a",
+        "name": "module_big_step_utilities_em",
+        "object": "/var/tmp/pr81_native_ksas_smallstep_build1/compile/module_big_step_utilities_em.o",
+        "object_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+        "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_big_step_utilities_em.F",
+        "source_sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c"
+      },
+      {
+        "archive_member": "module_radiation_driver.o",
+        "generated_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_radiation_driver.f90",
+        "generated_source_sha256": "4547f36be87fb39964696894d44edf01387ad08f35d84e99d47c5137c1e698a5",
+        "name": "module_radiation_driver",
+        "object": "/var/tmp/pr81_native_ksas_smallstep_build1/compile/module_radiation_driver.o",
+        "object_sha256": "2b7f6281fa9d268e3f9e7bd90c8c21bb151b90a8c51f215cd350775b06c28afe",
+        "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_radiation_driver.F",
+        "source_sha256": "8a6cbead85cd610d0cea53f71987de82e95d4cd54d6740b9dcaf6995189ab9e9"
+      },
+      {
+        "archive_member": "module_ra_rrtmg_lw.o",
+        "generated_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_ra_rrtmg_lw.f90",
+        "generated_source_sha256": "ee0bd4a482a3e1ea8fda403c5a50d467e0ad49c6503af040a25428f8b1c13a6a",
+        "name": "module_ra_rrtmg_lw",
+        "object": "/var/tmp/pr81_native_ksas_smallstep_build1/compile/module_ra_rrtmg_lw.o",
+        "object_sha256": "c8f678d40e40469cf98ec555b0a4d129eb420c0395e2e328ac7b3ab4518b1647",
+        "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_ra_rrtmg_lw.F",
+        "source_sha256": "97950adb65a67ab8bb460cbd2efade8a225e655ba48fd4cc5227569aa9764088"
+      },
+      {
+        "archive_member": "sf_sfclayrev.o",
+        "generated_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/physics_mmm/sf_sfclayrev.f90",
+        "generated_source_sha256": "569ed08bf7c3c89de7e78df1108e09941a03d953d67a65148b7b795c7666f365",
+        "name": "sf_sfclayrev",
+        "object": "/var/tmp/pr81_native_ksas_smallstep_build1/compile/sf_sfclayrev.o",
+        "object_sha256": "175e2795711dc86003977ba679de9ffb8e2412bd402d23605efe11462df99993",
+        "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/physics_mmm/sf_sfclayrev.F90",
+        "source_sha256": "82e2371c9f27274bf3dff04c4aa82f4e30743ea2041462ac7b2bf5a87ae19285"
+      },
+      {
+        "archive_member": "module_sf_urban.o",
+        "generated_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_sf_urban.f90",
+        "generated_source_sha256": "ed80df4cc2b8d07c2d2b88bce890d948ce986506f1087b05baea2c3e22e09b3d",
+        "name": "module_sf_urban",
+        "object": "/var/tmp/pr81_native_ksas_smallstep_build1/compile/module_sf_urban.o",
+        "object_sha256": "327bfdd3a5ce5740d2217cb7c3f26001a4d23a262a28b3d8c414a638b7e2b431",
+        "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_sf_urban.F",
+        "source_sha256": "83bdfa95fefe99181d2afbc0b051b707954cbd70ee5a7dba249931cd89716bf2"
+      },
+      {
+        "archive_member": "module_bl_fogdes.o",
+        "generated_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_bl_fogdes.f90",
+        "generated_source_sha256": "62360bf90623fa522c3fc62ca651edcacea4112c940d2d7085d0e59abcf26c77",
+        "name": "module_bl_fogdes",
+        "object": "/var/tmp/pr81_native_ksas_smallstep_build1/compile/module_bl_fogdes.o",
+        "object_sha256": "7ee3959442289345cc2ff0c369c56b67735f7cd673c2ae23209e24db81121bc0",
+        "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_bl_fogdes.F",
+        "source_sha256": "94d6b4ed3f82c6d7ca9b14107ee07af8ace058dd65f7e07ab5fa0ab8ea1b0ed7"
+      },
+      {
+        "archive_member": "module_cu_ksas.o",
+        "generated_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_cu_ksas.f90",
+        "generated_source_sha256": "75e146df00fd7f11a0adedbd6f2c95c1745bf3c516c8803653cfb7343a3b9cf6",
+        "name": "module_cu_ksas",
+        "object": "/var/tmp/pr81_native_ksas_smallstep_build1/compile/module_cu_ksas.o",
+        "object_sha256": "2401dbef637f3f981004ee7b2e35636ee6324df03d9e6fafcc65477a8845c4da",
+        "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_cu_ksas.F",
+        "source_sha256": "5a100344bc248670b0207732541cb293de2fc95a5794866ada0abee2334a51a2"
+      },
+      {
+        "archive_member": "module_diffusion_em.o",
+        "generated_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_diffusion_em.f90",
+        "generated_source_sha256": "08cd5ccce479a0de3cdafa280c1f5ce73e0d9066fe0141d2d08b12fb8b450183",
+        "name": "module_diffusion_em",
+        "object": "/var/tmp/pr81_native_ksas_smallstep_build1/compile/module_diffusion_em.o",
+        "object_sha256": "ccc90bdaa05d2c97d946b01e595e280f05079a680ce56d6a9037863ad091c585",
+        "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_diffusion_em.F",
+        "source_sha256": "a7d4570c97e51c635e86a0dbd628c6846457ac5b93d5a7af798b118c7d8d2d54"
+      },
+      {
+        "archive_member": "module_small_step_em.o",
+        "generated_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_small_step_em.f90",
+        "generated_source_sha256": "a6f4b9243e83e40dd356920d5d92b89fb72233541613eaab197ff3c45b4028d9",
+        "name": "module_small_step_em",
+        "object": "/var/tmp/pr81_native_ksas_smallstep_build1/compile/module_small_step_em.o",
+        "object_sha256": "e8bb1ba3c362f6ea6ae05f3b3cefcc9016af91edc7d3f721caae83fdc84be16c",
+        "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_small_step_em.F",
+        "source_sha256": "cabf1a177d50fb0096db79644af20cfe6d75217dbe63ab406a7e29bb54c17634"
+      }
+    ],
+    "source_snapshot": {
+      "path": "/var/tmp/pr81_native_ksas_smallstep_run1/source_snapshot.json",
+      "sha256": "a10744a4257e9f3608049f33aa6b3d8ed2cf4bf315269203202e963d3e5337a0"
+    }
+  },
+  "copy_safety": {
+    "baseline_original_run_wrf_exe_sha256": "d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af",
+    "candidate_run_exe_sha256": "a805a1afff42021f322337c69d4e0818faf30e677f625f9a9d1b308728b32c00",
+    "case_copy_scope": "Copies regular flat files only from the case directory; skips directories, previous outputs/logs and executable-suffixed files, then installs candidate executable as a fresh wrf.exe inode.",
+    "prior_hardlink_mutation_incident_documented": true,
+    "restored_pr80_original_run": {
+      "claim": "post-restoration read-only verification; old hardlink-mutated candidate runs excluded as executable identity evidence",
+      "file_sha256": {
+        "namelist.input": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+        "wrf.exe": "d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af",
+        "wrfbdy_d01": "64ab86c004af0f81b221c89c5bfb6ff57aef7410c7f5542ce93c00c7f732009d",
+        "wrfinput_d01": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+        "wrfout_d01_2026-08-16_12:00:00": "3b473df29c5ba3cc139574fbe51875d979edc12e1e6aa4e4b22bb79d588517a9"
+      },
+      "path": "/var/tmp/pr80_kdm6_radar_contract.nsUNuj/run",
+      "wrf_exe_device": 58,
+      "wrf_exe_inode": 7444413261,
+      "wrf_exe_link_count": 1
+    },
+    "safe_baseline_run_exe_sha256": "d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af",
+    "source_snapshot_unchanged": true
+  },
+  "focused_ksas_test": {
+    "bad_wc_O0_log": {
+      "path": "/var/tmp/pr81_ksas_timescale_test5/bad_wc_O0.log",
+      "sha256": "94d5a38598be77593d4781b8fbd74cb4e2cd05bb006b1b531988ab2db90de9c9"
+    },
+    "bad_wc_O2_log": {
+      "path": "/var/tmp/pr81_ksas_timescale_test5/bad_wc_O2.log",
+      "sha256": "94d5a38598be77593d4781b8fbd74cb4e2cd05bb006b1b531988ab2db90de9c9"
+    },
+    "case_copy_regression": {
+      "helper": {
+        "path": "tests/pr81_native_case_copy.py",
+        "sha256": "b8675881e92279191f95c699de64b715333b33f684c00b928d30ee07f492460d"
+      },
+      "result": "PASS 2 tests",
+      "test": {
+        "path": "tests/test_pr81_native_case_copy.py",
+        "sha256": "db363d96f9a04d3093d39031a641d3bc6439b2689cdd9285b7ad03c53ac5ea19"
+      }
+    },
+    "compile_O0_log": {
+      "path": "/var/tmp/pr81_ksas_timescale_test5/compile_O0.log",
+      "sha256": "a6a005446c83e762721b3e51c1d56f2c3aee07973f19f299c084a8f3661a4d64"
+    },
+    "compile_O2_log": {
+      "path": "/var/tmp/pr81_ksas_timescale_test5/compile_O2.log",
+      "sha256": "a6a005446c83e762721b3e51c1d56f2c3aee07973f19f299c084a8f3661a4d64"
+    },
+    "compile_working_directory": "/var/tmp/pr81_ksas_timescale_test5",
+    "exe_O0": {
+      "path": "/var/tmp/pr81_ksas_timescale_test5/test_O0.exe",
+      "sha256": "2b61d0e6e79172f2e35846948f2ddb7ae0fc44a7ff0fe5a5445983730adbc65d"
+    },
+    "exe_O2": {
+      "path": "/var/tmp/pr81_ksas_timescale_test5/test_O2.exe",
+      "sha256": "e1e10492f1379d0894099e55038f30c8bad5912309d760bacbdb43324898c8ca"
+    },
+    "patch": {
+      "path": "patches/controlled.cu_ksas_inactive_timescale.patch",
+      "sha256": "aacf8209de6fa5ca5f9073df0c2110f994ded83bab4894240fb28e2884a5b7ae"
+    },
+    "patch_whitespace_attribute": {
+      "attribute": "patches/controlled.cu_ksas_inactive_timescale.patch -whitespace",
+      "existing_context_trailing_space_lines": [
+        26,
+        27,
+        42,
+        44
+      ],
+      "git_check_attr": "unset",
+      "patch_sha256_preserved": "aacf8209de6fa5ca5f9073df0c2110f994ded83bab4894240fb28e2884a5b7ae",
+      "policy": "Whitespace is present only in context copied from the pinned source; retained to preserve the hash-bound patch. Added lines are clean."
+    },
+    "result": "PASS O0 and O2; inactive wc=0, active upper/lower clamps, active wc=0 fatal.",
+    "scratch_root": "/var/tmp/pr81_ksas_timescale_test5",
+    "script": {
+      "path": "tests/test_pr81_ksas_inactive_timescale.sh",
+      "sha256": "f5f13d23659383415da5c349ebe70f426e5565dd5583626fb43fd19e1d238e77"
+    }
+  },
+  "input_policy": {
+    "fpe_policy_changed": false,
+    "namelist_input_sha256": "0bc3b9c1e8f4bb1898de6627dbf4c464d4f43a2bc451c88a0c7d306fc3f660b8",
+    "scheme_version_changed": false,
+    "use_input_w_changed": false
+  },
+  "kdm6_predicate_review": {
+    "actual_call_operands": {
+      "dry_density": null,
+      "i": null,
+      "j": null,
+      "k": null,
+      "known_status": "NC, i/k/j, and converted number were not captured. The prior density check proves finite positive dry_density at the same cell; exact NC admissibility/conversion failure remains unknown.",
+      "nc": null,
+      "number_per_m3": null
+    },
+    "driver_binding": "host driver passes NC=qnc_curr, DEN=rho, Q=qv_curr; the record is before the failing call and cannot prove exact cell values at that call.",
+    "initialization_readback": {
+      "file": {
+        "path": "/var/tmp/pr81_native_ksas_smallstep_run1/run/wrfout_d01_2026-08-16_12:00:00",
+        "sha256": "6405df6049111f51b99b571e1281b3550e685edfe9404e5f0c61eee1a1f5934d"
+      },
+      "finite_count": 2573532,
+      "interpretation": "wrfout initialization record only; not KDM6 failure-cell operands",
+      "max_finite": 1597347200.0,
+      "min_finite": 0.0,
+      "negative_count": 0,
+      "nonfinite_count": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "  kg(-1)",
+      "variable": "QNCLOUD",
+      "zero_count": 1633359
+    },
+    "preceding_density_check": "The program passed moist_to_dry_density at this same loop cell before it reached the NC error stop. Therefore DEN and Q were finite, DEN > 0, Q >= 0, and dry_density was finite and > 0 at the failing cell; density validity did not cause this stop.",
+    "remaining_failure_classes_after_preceding_check": [
+      "NC non-finite",
+      "NC < 0",
+      "finite positive NC rejected by multiplication overflow guard",
+      "finite positive NC converted to zero by underflow"
+    ],
+    "source": {
+      "archive_member": "module_mp_kdm6.o",
+      "archive_member_sha256": "01c219330415f8a8e8ecd3ee263754a1129e5153116f0aa9c1b3ca658f7f2e74",
+      "archive_member_sha256_matches_candidate_and_pr80_base": true,
+      "call_lines": "958-971",
+      "driver_call_lines": "2526-2550",
+      "driver_sha256": "bcac98180bfb5e260271a5836d71c5936d47ab167e2164c37b328f37ec2c03f4",
+      "driver_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_microphysics_driver.F",
+      "helper_lines": "318-332",
+      "initialization_sha256": "a4bb2497d0c70588f45da06fe9754b56597245033fec7b4bb51beba05901ce2c",
+      "initialization_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_initialize_real.F",
+      "kdm6_invalid_nc_predicate": "specific_number_to_volume returns invalid if NC or dry rho non-finite; NC < 0 or dry rho <= 0; product overflow check; product non-finite; or NC>0 multiplied by dry rho underflows to zero.",
+      "kdm6_snapshot_sha256": "a5e8ce7a05d147b05556aa7521c22c0991812711fe675409feec889e43a761e7",
+      "kdm6_snapshot_source": "/var/tmp/pr80_kdm6_radar_contract.nsUNuj/compile/module_mp_kdm6.F",
+      "qnc_interpolation_lines": "2024-2039"
+    },
+    "validity_alternatives": [
+      "NC finite",
+      "dry density finite",
+      "NC >= 0",
+      "dry density > 0",
+      "multiplication does not overflow",
+      "converted number is finite",
+      "positive NC does not underflow to zero after multiplication"
+    ]
+  },
+  "ksas_scalar_diagnostic": {
+    "captured": {
+      "cnvflg": false,
+      "dividend_float": -631.03125,
+      "dividend_hex": "0xc41dc200",
+      "divisor_float": 0.0,
+      "divisor_hex": "0x00000000",
+      "i": 1,
+      "wc": 0.0
+    },
+    "gdb_log": {
+      "path": "/var/tmp/pr81_native_ksas_debug_exact_operands/gdb.log",
+      "sha256": "37ed955ef562915d1c9c2ec8a98a55d10c9d9d8b7febdc7e240b3dd25d699743"
+    },
+    "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_cu_ksas.f90:1977"
+  },
+  "schema": "pr81-native-first-step-evidence-v1",
+  "scope": "Native first-step investigation evidence; no new model replay in this report update."
+}

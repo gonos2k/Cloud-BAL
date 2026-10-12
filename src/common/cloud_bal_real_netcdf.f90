@@ -12,6 +12,7 @@ MODULE cloud_bal_real_netcdf
     run_cloud_bal_pipeline
   USE cloud_bal_column_physics, ONLY: column_changed_mask,column_config_valid, &
     saturation_adjust_pressure_state,water_phase_budget,pressure_analysis_budget,account_pressure_analysis, &
+    apply_thermodynamic_density_prior, &
     apply_pressure_hydrostatic_increment,PHASE_UNKNOWN,PHASE_RAIN,PHASE_SNOW, &
     PHASE_FREEZING_RAIN,PHASE_SLEET,validate_optional_cloud_pair,precipitation_phase_contract_valid
   USE cloud_bal_balance_operator, ONLY: balance_beta_active,boundary_contract_valid, &
@@ -1303,6 +1304,9 @@ CONTAINS
       IF (.NOT.put_physical_contract_extension(ncid,(/xdim,ydim,zdim/), &
         state_in,candidate,result%physical_contract,result%candidate_evaluation)) GOTO 900
     END IF
+    IF (config%thermo_density_prior%enabled) THEN
+      IF (.NOT.put_thermo_density_extension(ncid,(/xdim,ydim,zdim/),result,config)) GOTO 900
+    END IF
     IF (config%force_prior_enabled) THEN
       IF (.NOT.put_force_prior_extension(ncid,(/xdim,ydim,zdim/),result)) GOTO 900
     END IF
@@ -1369,6 +1373,103 @@ CONTAINS
     put_supported_analysis_extension=.TRUE.
   END FUNCTION put_supported_analysis_extension
 
+  LOGICAL FUNCTION thermo_density_receipt_valid(result,config,shape3)
+    TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
+    INTEGER, INTENT(IN) :: shape3(3)
+    TYPE(pressure_analysis_budget) :: zero,budget
+    REAL(real64) :: values(32),controls(3)
+    thermo_density_receipt_valid=.FALSE.
+    IF (config%thermo_density_prior%enabled .NEQV. result%thermo_density_prior_applied) RETURN
+    budget=result%thermo_analysis_budget
+    values=[budget%species_change_kg,budget%mixing_ratio_change_kg, &
+      budget%dry_mass_redistribution_kg,budget%species_arithmetic_scale_kg, &
+      budget%dry_air_change_kg,budget%enthalpy_change_j,budget%geometry_mass_change_kg, &
+      budget%enthalpy_composition_change_j,budget%enthalpy_mass_metric_change_j, &
+      budget%enthalpy_arithmetic_scale_j,budget%total_mass_error_kg,budget%max_cell_mass_error_kg]
+    IF (ANY(.NOT.ieee_is_finite(values))) RETURN
+    IF (.NOT.config%thermo_density_prior%enabled) THEN
+      IF (ALLOCATED(result%pre_density_temperature) .OR. ALLOCATED(result%pre_density_vapor) .OR. &
+          ALLOCATED(result%pre_density_condensates) .OR. ALLOCATED(result%pre_density_dry_mass)) RETURN
+      IF (.NOT.pressure_analysis_budgets_equal(zero,budget)) RETURN
+    ELSE
+      controls=[config%thermo_density_prior%background_weight, &
+        config%thermo_density_prior%max_temperature_increment,config%thermo_density_prior%max_vapor_increment]
+      IF (ANY(.NOT.ieee_is_finite(controls))) RETURN
+      IF (controls(1)<0.0_real64 .OR. controls(1)>1.0_real64 .OR. &
+          controls(2)<=0.0_real64 .OR. controls(2)>200.0_real64 .OR. &
+          controls(3)<=0.0_real64 .OR. controls(3)>0.2_real64) RETURN
+      IF (.NOT.ALLOCATED(result%analysis_support) .OR. .NOT.ALLOCATED(result%thermo_support) .OR. &
+          .NOT.ALLOCATED(result%geopotential_support)) RETURN
+      IF (.NOT.ALLOCATED(result%pre_density_temperature) .OR. .NOT.ALLOCATED(result%pre_density_vapor) .OR. &
+          .NOT.ALLOCATED(result%pre_density_condensates) .OR. .NOT.ALLOCATED(result%pre_density_dry_mass)) RETURN
+      IF (ANY(SHAPE(result%pre_density_temperature)/=shape3) .OR. &
+          ANY(SHAPE(result%pre_density_vapor)/=shape3)) RETURN
+      IF (ANY(SHAPE(result%analysis_support)/=shape3) .OR. &
+          ANY(SHAPE(result%thermo_support)/=shape3) .OR. &
+          ANY(SHAPE(result%geopotential_support)/=shape3)) RETURN
+      IF (ANY(SHAPE(result%pre_density_condensates)/=[5,COUNT(result%analysis_support)])) RETURN
+      IF (SIZE(result%pre_density_dry_mass)/=COUNT(result%analysis_support)) RETURN
+      IF (ANY(.NOT.ieee_is_finite(result%pre_density_temperature)) .OR. &
+          ANY(.NOT.ieee_is_finite(result%pre_density_vapor)) .OR. &
+          ANY(.NOT.ieee_is_finite(result%pre_density_condensates)) .OR. &
+          ANY(.NOT.ieee_is_finite(result%pre_density_dry_mass))) RETURN
+      IF (ANY(result%pre_density_dry_mass<=0.0_real64)) RETURN
+      IF (budget%accounted_cells<0_int64 .OR. budget%incomplete_background_cells/=0_int64 .OR. &
+          budget%incomplete_candidate_cells/=0_int64) RETURN
+    END IF
+    thermo_density_receipt_valid=.TRUE.
+  END FUNCTION thermo_density_receipt_valid
+
+  LOGICAL FUNCTION put_thermo_density_extension(ncid,dims,result,config)
+    INTEGER, INTENT(IN) :: ncid,dims(3)
+    TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
+    INTEGER :: lengths(3),i,t_var,q_var,species_dim,cell_dim,condensate_var,mass_var
+    CHARACTER(LEN=1024) :: extensions
+    put_thermo_density_extension=.FALSE.
+    DO i=1,3
+      IF (.NOT.nc_ok(nf90_inquire_dimension(ncid,dims(i),len=lengths(i)))) RETURN
+    END DO
+    IF (.NOT.thermo_density_receipt_valid(result,config,lengths)) RETURN
+    IF (.NOT.nc_ok(nf90_get_att(ncid,NF90_GLOBAL,'schema_extensions',extensions))) RETURN
+    IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
+    extensions=TRIM(extensions)//',cp06a_background_alpha_blend_v2'
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions',TRIM(extensions)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'thermo_density_prior_contract', &
+      'cp06a_background_alpha_blend_v2'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'thermo_density_prior_background_weight', &
+      config%thermo_density_prior%background_weight))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'thermo_density_prior_max_temperature_increment_k', &
+      config%thermo_density_prior%max_temperature_increment))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'thermo_density_prior_max_vapor_increment_kg_kg', &
+      config%thermo_density_prior%max_vapor_increment))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'thermo_density_prior_observation_covariance_assessed',0))) RETURN
+    IF (.NOT.put_candidate_endpoint(ncid,result%thermo_analysis_budget,'thermo_density_analysis')) RETURN
+    IF (.NOT.nc_ok(nf90_def_dim(ncid,'density_condensate_species',5,species_dim)) .OR. &
+        .NOT.nc_ok(nf90_def_dim(ncid,'density_analysis_cell',COUNT(result%analysis_support),cell_dim))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'thermo_preprior_dry_air_mass_measure',NF90_DOUBLE,[cell_dim],mass_var))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,mass_var,'units','kg'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,mass_var,'cell_order','analysis_support:k,j,i;i_fastest'))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'thermo_preprior_condensates',NF90_FLOAT, &
+      [species_dim,cell_dim],condensate_var))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,condensate_var,'units','kg kg-1 dryair')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,condensate_var,'species_order','cloud_water,cloud_ice,rain,snow,graupel')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,condensate_var,'cell_order','analysis_support:k,j,i;i_fastest'))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'thermo_preprior_temperature',NF90_FLOAT,dims,t_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'thermo_preprior_vapor',NF90_FLOAT,dims,q_var))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,t_var,'units','K')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,q_var,'units','kg kg-1 dryair'))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,t_var,1,1,1)) .OR. &
+        .NOT.nc_ok(nf90_def_var_deflate(ncid,q_var,1,1,1))) RETURN
+    IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(ncid,t_var,result%pre_density_temperature)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,q_var,result%pre_density_vapor)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,condensate_var,result%pre_density_condensates)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,mass_var,result%pre_density_dry_mass))) RETURN
+    put_thermo_density_extension=.TRUE.
+  END FUNCTION put_thermo_density_extension
+
   LOGICAL FUNCTION put_force_prior_extension(ncid,dims,result)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
     USE cloud_bal_balance_operator, ONLY: force_prior_diagnostics
@@ -1394,6 +1495,7 @@ CONTAINS
         ANY(SHAPE(result%pre_force_omega)/=dimension_lengths)) RETURN
     diagnostics=result%force_prior
     IF (diagnostics%status/=STATUS_OK .OR. diagnostics%reason/=REASON_NONE) RETURN
+    IF (diagnostics%backtracking_steps<0 .OR. diagnostics%backtracking_steps>20) RETURN
     IF (nf90_get_att(ncid,NF90_GLOBAL,'schema_extensions',extensions)/=NF90_NOERR) RETURN
     IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'diagnostic_schema_version',9))) RETURN
@@ -1447,6 +1549,8 @@ CONTAINS
       diagnostics%maximum_omega_increment)) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_solver_iterations', &
       diagnostics%solver_iterations)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_backtracking_steps', &
+      diagnostics%backtracking_steps)) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_status',diagnostics%status)) .OR. &
         .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_reason',diagnostics%reason))) RETURN
     IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
@@ -2046,42 +2150,47 @@ CONTAINS
     put_radar_reconstruction_inputs=.TRUE.
   END FUNCTION put_radar_reconstruction_inputs
 
-  LOGICAL FUNCTION put_candidate_endpoint(ncid,budget)
+  LOGICAL FUNCTION put_candidate_endpoint(ncid,budget,attribute_prefix)
     INTEGER, INTENT(IN) :: ncid
     TYPE(pressure_analysis_budget), INTENT(IN) :: budget
 
+    CHARACTER(LEN=*), INTENT(IN), OPTIONAL :: attribute_prefix
+    CHARACTER(LEN=:), ALLOCATABLE :: prefix
+
+    prefix='candidate_endpoint'
+    IF (PRESENT(attribute_prefix)) prefix=attribute_prefix
     put_candidate_endpoint=.FALSE.
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_contract', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_contract', &
       'signed_represented_mixture_endpoint_v2'))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_species_change_kg', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_species_change_kg', &
       budget%species_change_kg))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_mixing_ratio_change_kg', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_mixing_ratio_change_kg', &
       budget%mixing_ratio_change_kg))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_dry_mass_redistribution_kg', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_dry_mass_redistribution_kg', &
       budget%dry_mass_redistribution_kg))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_species_arithmetic_scale_kg', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_species_arithmetic_scale_kg', &
       budget%species_arithmetic_scale_kg))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_dry_air_change_kg', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_dry_air_change_kg', &
       budget%dry_air_change_kg))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_change_j', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_enthalpy_change_j', &
       budget%enthalpy_change_j))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_geometry_mass_change_kg', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_geometry_mass_change_kg', &
       budget%geometry_mass_change_kg))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_composition_change_j', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_enthalpy_composition_change_j', &
       budget%enthalpy_composition_change_j))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_mass_metric_change_j', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_enthalpy_mass_metric_change_j', &
       budget%enthalpy_mass_metric_change_j))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_enthalpy_arithmetic_scale_j', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_enthalpy_arithmetic_scale_j', &
       budget%enthalpy_arithmetic_scale_j))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_total_mass_error_kg', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_total_mass_error_kg', &
       budget%total_mass_error_kg))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_max_cell_mass_error_kg', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_max_cell_mass_error_kg', &
       budget%max_cell_mass_error_kg))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_accounted_cells', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_accounted_cells', &
       budget%accounted_cells))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_incomplete_background_cells', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_incomplete_background_cells', &
       budget%incomplete_background_cells))) RETURN
-    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'candidate_endpoint_incomplete_candidate_cells', &
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,TRIM(prefix)//'_incomplete_candidate_cells', &
       budget%incomplete_candidate_cells))) RETURN
     put_candidate_endpoint=.TRUE.
   END FUNCTION put_candidate_endpoint
@@ -2399,6 +2508,7 @@ CONTAINS
     REAL(real64) :: flux_terms(7),flux_accounted,flux_error,flux_limit
 
     status=STATUS_FAILED; reason=REASON_AUTHORITY
+    IF (.NOT.thermo_density_receipt_valid(result,config,[state_in%grid%nx,state_in%grid%ny,state_in%grid%nz])) RETURN
     IF (config%force_prior_enabled .NEQV. result%force_prior_applied) RETURN
     IF (config%force_prior_enabled) THEN
       IF (.NOT.config%background_continuity_prior .OR. &
@@ -2582,7 +2692,7 @@ CONTAINS
     ! Cloud QC may change legitimately; the full replay below validates it.
     IF (.NOT.analysis_estimator_candidate .AND. .NOT.transition .AND. .NOT.cloud_present .AND. &
         .NOT.ALLOCATED(result%thermo_support)) THEN
-      IF (.NOT.thermo_candidate_is_coherent(state_in,candidate,result)) RETURN
+      IF (.NOT.thermo_candidate_is_coherent(state_in,candidate,result,config)) RETURN
     END IF
     CALL validate_canonical_state(candidate,.FALSE.,.TRUE.,state_status,state_reason,.FALSE.)
     IF (state_status/=STATUS_OK) THEN
@@ -2591,7 +2701,7 @@ CONTAINS
     END IF
     IF (.NOT.analysis_estimator_candidate .AND. .NOT.transition .AND. .NOT.cloud_present .AND. &
         ALLOCATED(result%thermo_support)) THEN
-      IF (.NOT.thermo_candidate_is_coherent(state_in,candidate,result)) RETURN
+      IF (.NOT.thermo_candidate_is_coherent(state_in,candidate,result,config)) RETURN
     END IF
     CALL validate_canonical_state(operational_state,.FALSE.,.TRUE.,state_status, &
                                   state_reason,.FALSE.)
@@ -2657,6 +2767,7 @@ CONTAINS
     ! Producer replay verifies lineage, not an independent scientific oracle.
     ! Every trial remains anchored to the supplied immutable background.
     pipeline_result_replays=.FALSE.
+    IF (.NOT.thermo_density_receipt_valid(result,config,[background%grid%nx,background%grid%ny,background%grid%nz])) RETURN
     IF (config%force_prior_enabled .NEQV. result%force_prior_applied) RETURN
     IF (config%force_prior_enabled) THEN
       IF (.NOT.config%background_continuity_prior .OR. &
@@ -2746,6 +2857,14 @@ CONTAINS
         .NOT.stage_results_equal(replay_result%overall,result%overall)) RETURN
     IF (.NOT.pressure_analysis_budgets_equal(replay_result%analysis_budget,result%analysis_budget)) RETURN
     IF (.NOT.pressure_analysis_budgets_equal(replay_result%candidate_budget,result%candidate_budget)) RETURN
+    IF (.NOT.pressure_analysis_budgets_equal(replay_result%thermo_analysis_budget, &
+      result%thermo_analysis_budget)) RETURN
+    IF (result%thermo_density_prior_applied) THEN
+      IF (ANY(replay_result%pre_density_temperature/=result%pre_density_temperature) .OR. &
+          ANY(replay_result%pre_density_vapor/=result%pre_density_vapor) .OR. &
+          ANY(replay_result%pre_density_condensates/=result%pre_density_condensates) .OR. &
+          ANY(replay_result%pre_density_dry_mass/=result%pre_density_dry_mass)) RETURN
+    END IF
     IF (.NOT.joint_candidate_evaluations_equal(replay_result%candidate_evaluation, &
       result%candidate_evaluation)) RETURN
     IF (ANY(replay_result%thermo_budget%species_change_kg/=result%thermo_budget%species_change_kg) .OR. &
@@ -2821,6 +2940,7 @@ CONTAINS
         ANY(.NOT.ieee_is_finite(right_values))) RETURN
     force_prior_diagnostics_equal=ALL(left_values==right_values) .AND. &
       left%solver_iterations==right%solver_iterations .AND. &
+      left%backtracking_steps==right%backtracking_steps .AND. &
       left%status==right%status .AND. left%reason==right%reason
   END FUNCTION force_prior_diagnostics_equal
 
@@ -3161,15 +3281,16 @@ CONTAINS
       left%target_response_failure_fraction==right%target_response_failure_fraction
   END FUNCTION numerical_diagnostics_equal
 
-  LOGICAL FUNCTION thermo_candidate_is_coherent(background,candidate,result)
+  LOGICAL FUNCTION thermo_candidate_is_coherent(background,candidate,result,config)
     USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result,canonicalize_contracted_thermo_storage
     TYPE(cloud_bal_state_type), INTENT(IN) :: background,candidate
     TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    TYPE(cloud_bal_pipeline_config), INTENT(IN) :: config
     TYPE(cloud_bal_state_type) :: proposal,expected
     TYPE(stage_result) :: stage
     TYPE(stage_result) :: geopotential_stage
     TYPE(water_phase_budget) :: budget
-    TYPE(pressure_analysis_budget) :: analysis,geometry
+    TYPE(pressure_analysis_budget) :: analysis,geometry,density_analysis
     REAL(real64) :: reported(10),recomputed(10)
     REAL(real64) :: reported_analysis(22),recomputed_analysis(22)
     INTEGER :: status,reason
@@ -3231,6 +3352,13 @@ CONTAINS
     CALL saturation_adjust_pressure_state(proposal,expected,stage, &
       result%thermo_support,result%thermo_target_rh,budget,result%thermo_surface)
     IF (stage%status/=STATUS_OK) RETURN
+    IF (config%thermo_density_prior%enabled) THEN
+      CALL apply_thermodynamic_density_prior(background,expected,proposal,stage,config%thermo_density_prior, &
+        result%analysis_support,result%thermo_support,result%thermo_surface,result%thermo_target_rh,density_analysis)
+      IF (stage%status/=STATUS_OK) RETURN
+      IF (.NOT.pressure_analysis_budgets_equal(density_analysis,result%thermo_analysis_budget)) RETURN
+      expected=proposal
+    END IF
     IF (ALLOCATED(result%geopotential_support)) THEN
       IF (ALLOCATED(result%requested_surface_pressure)) THEN
         CALL apply_pressure_hydrostatic_increment(background,expected,proposal, &

@@ -2,7 +2,25 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(realpath -e "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
+ncgen_relative_path=klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-c-gcc/install/bin/ncgen
+ncgen_expected_sha256=b83acc5e06621d9e15c3e92b7c1592ca6fcf5d62593c95d8f87fa76cbcfb549e
+if [[ -n ${CLOUD_BAL_WORKSPACE_ROOT:-} ]]; then
+  workspace_root=$(realpath -e "$CLOUD_BAL_WORKSPACE_ROOT")
+else
+  git_common_dir=$(git -C "$repo_root" rev-parse --path-format=absolute --git-common-dir)
+  workspace_root=$(realpath -e "$(dirname "$(dirname "$git_common_dir")")")
+fi
+ncgen_path=$workspace_root/$ncgen_relative_path
+if [[ ! -x $ncgen_path ]]; then
+  printf 'pinned ncgen is missing from workspace root: %s\n' "$workspace_root" >&2
+  exit 2
+fi
+ncgen_sha256=$(sha256sum "$ncgen_path" | cut -d' ' -f1)
+if [[ $ncgen_sha256 != "$ncgen_expected_sha256" ]]; then
+  printf 'pinned ncgen hash mismatch at %s: %s\n' "$ncgen_path" "$ncgen_sha256" >&2
+  exit 2
+fi
+export CLOUD_BAL_WORKSPACE_ROOT=$workspace_root
 test_scratch_root=${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}
 mkdir -p "$test_scratch_root"
 test_tmp=$(mktemp -d "$test_scratch_root/unit_tests.XXXXXX")
@@ -55,6 +73,10 @@ pressure_transition_fixture="$test_tmp/pressure_transition_remap_fixture.txt"
   -o "$test_tmp/test_thermo_column"
 
 "$test_tmp/test_thermo_column"
+
+bash "$repo_root/tests/run_thermo_density_prior.sh"
+python3 "$repo_root/tests/test_cp06a_thermo_density_readback.py"
+python3 "$repo_root/tests/test_pr81_native_case_copy.py"
 
 for hydrostatic_build in checked optimized; do
   saturation_fixture="$test_tmp/saturation_reference_${hydrostatic_build}.txt"
