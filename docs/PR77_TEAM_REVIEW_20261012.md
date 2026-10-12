@@ -42,3 +42,18 @@ and three corrected scratch-runner checks are preserved explicitly.
 The review does not establish an accepted native initialization or scientific
 forecast improvement. The manufactured endpoint remains blocked SHADOW
 evidence, and both native experiments remain rejected.
+
+Final publication review independently verified the 31 tested-source hashes,
+24 validation-artifact hashes and 24 team-report hashes. Every linked artifact
+was staged before the source commit. Whitespace checks cover source and
+authored documentation; byte-preserved runtime evidence and team reports keep
+their original formatting. The subsequent KG receipt is bound to source
+commit `feb0710f90ce33249b9fd29cb3a90f92cba6b7a7`; its maintained graphs and
+derived wiki artifacts receive a separate metadata review.
+
+The independent `kg_maintenance` follow-up passed: all 158 frozen paths, both
+graph deltas/integrity checks, private-profile identities, 78 earlier immutable
+hashes and 13 protected wiki hashes were verified. An ambiguous number-moment
+shorthand was clarified with an append-only log entry; the original receipt
+and log prefix are preserved. The final closure and ten archived derivative
+hashes pass; physical approval remains `FAIL_OPEN`.
