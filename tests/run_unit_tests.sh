@@ -141,6 +141,15 @@ for profile in checked optimized; do
   "$test_tmp/test_balance_partial_faces"
 done
 
+"$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
+  -module "$test_tmp" -I "$test_tmp" \
+  "$repo_root/src/common/cloud_bal_state.f90" \
+  "$repo_root/src/common/cloud_bal_grid_geometry.f90" \
+  "$repo_root/src/common/cloud_bal_balance_operator.f90" \
+  "$repo_root/tests/test_stationary_omega_diagnosis.f90" \
+  -o "$test_tmp/test_stationary_omega_diagnosis"
+"$test_tmp/test_stationary_omega_diagnosis"
+
 for pipeline_test in test_pipeline test_prebalance_wind reproduction_probe; do
   "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
     -module "$test_tmp" -I "$test_tmp" \

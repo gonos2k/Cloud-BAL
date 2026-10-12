@@ -1,0 +1,27 @@
+
+/var/tmp/native-controlled-build/wrf.exe:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000003628480 <module_sf_noahdrv_mp_lsminit_+0xfd0>:
+ 3628480:	e0 79                	loopne 36284fb <module_sf_noahdrv_mp_lsminit_+0x104b>
+ 3628482:	4a 00 0f             	rex.WX add %cl,(%rdi)
+ 3628485:	28 d8                	sub    %bl,%al
+ 3628487:	f3 0f 58 1d bd 79 4a 	addss  0x4a79bd(%rip),%xmm3        # 3acfe4c <__unnamed_20+0x1c>
+ 362848e:	00 
+ 362848f:	0f 28 25 4a 27 4d 00 	movaps 0x4d274a(%rip),%xmm4        # 3afabe0 <strlit.12+0x950>
+ 3628496:	f3 0f 10 e3          	movss  %xmm3,%xmm4
+ 362849a:	0f 14 c2             	unpcklps %xmm2,%xmm0
+ 362849d:	0f 5e e0             	divps  %xmm0,%xmm4
+ 36284a0:	0f 28 c4             	movaps %xmm4,%xmm0
+ 36284a3:	0f c6 c4 55          	shufps $0x55,%xmm4,%xmm0
+ 36284a7:	f3 0f 59 c4          	mulss  %xmm4,%xmm0
+ 36284ab:	4d 89 d4             	mov    %r10,%r12
+ 36284ae:	e8 5d d4 de fc       	call   415910 <powf@plt>
+ 36284b3:	f3 0f 10 4b 30       	movss  0x30(%rbx),%xmm1
+ 36284b8:	f3 0f 59 c8          	mulss  %xmm0,%xmm1
+ 36284bc:	f3                   	repz
+ 36284bd:	0f                   	.byte 0xf
+ 36284be:	10                   	.byte 0x10
+ 36284bf:	05                   	.byte 0x5

@@ -1,0 +1,51 @@
+{
+  "base_main": "a444a788e8e7301354bec14c3708aacddb8f31d3",
+  "toolchain": "tests/intel_toolchain.sh pinned ifx 2026.0",
+  "profiles": [
+    "O0 checked strict",
+    "O2 strict"
+  ],
+  "command_exit_code": 0,
+  "test_programs": [
+    "test_balance_operator",
+    "test_balance_partial_faces",
+    "test_pipeline",
+    "test_prebalance_wind"
+  ],
+  "test_processes": 8,
+  "fortran_compile_or_link_commands": 18,
+  "source_sha256": {
+    "src/common/cloud_bal_state.f90": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61",
+    "src/common/cloud_bal_column_physics.f90": "fd5e924c645d8d73e88f34f38f9bf8bd62e0d8c5bd6eaa13eedeabbd882b6496",
+    "src/common/cloud_bal_grid_geometry.f90": "3e2b75c5a64730a65dd4762a4ed9cc8fe82017ca95a11cf40690bfa4bca3e703",
+    "src/common/cloud_bal_balance_operator.f90": "878a499c9ec35d081e38ec0be291036706d88364cfc7d8592fd49f19c422bbf7",
+    "src/common/cloud_bal_pipeline.f90": "93c4e0f4dccddc2e4e1912ac71a890f49bccb57a5e702ea1f9e1b56d7e223e99",
+    "tests/test_balance_operator.f90": "ee7f12f5dd78a1245f2631942ebaf205d313c4db8ba4079ba15828991515949d",
+    "tests/test_balance_partial_faces.f90": "5bfa8ffed040dc8f404109857518a9155a0204054ba373d0307b4da0658cbc7e",
+    "tests/test_pipeline.f90": "3381e75199742ca9732604d620b6b3d7df27c84036fdf9150ba86ad0b5315d15",
+    "tests/test_prebalance_wind.f90": "515170428c1c284d6377518ac9628147fd55b6859c04482c8d6afd8500c23132"
+  },
+  "executable_sha256": {
+    "O0/test_balance_operator": "2827aebeb24190e6f6eedecf52c242c09d96fb45c0465f6de70898c5d6a9df57",
+    "O0/test_balance_partial_faces": "a575747f6ac92162a28c4d8f18b4f4c38e089db2aea6e75b10cd372ac128afaa",
+    "O0/test_pipeline": "6f94b27a96085e0273911d6dba7940f62a8029133ddd63038970ca608d2f0425",
+    "O0/test_prebalance_wind": "ea1625063bf95e19c52f878f14453a1ec6c785f5e6d7a116b54070a3a743e4cd",
+    "O2/test_balance_operator": "05781e912d87863552413179ae27b48d9685423b2ea65e2debea0d0d2c07ad5c",
+    "O2/test_balance_partial_faces": "34abb6416ec3affe5f212eb76ee47a83adb05cc478417ac2d47274605235101c",
+    "O2/test_pipeline": "931c90870bc3254eb64afcea121958c1eaead01f573410275e18024047dd2d8c",
+    "O2/test_prebalance_wind": "248afc2387244f460d7ad1ca94c34f7ecfcb76327702e8bd0a5136187266f0b5"
+  },
+  "local_scratch": "/var/tmp/cloudbal-cp06a-regression.i2XoJA",
+  "compressed_log_sha256": "fbfcb82b3bc76bff02d5c880a228ca2a78b3880ec0df5aeac1ef3846da99320b",
+  "limits": [
+    "These existing regression programs do not call the new stationary omega producer. Its focused tests and actual-input trial are recorded separately.",
+    "No complete run_unit_tests.sh run is claimed.",
+    "Array temporary warnings in checked partial-face tests are retained in the log."
+  ],
+  "final_batch": true,
+  "prior_attempt": {
+    "test_processes": 8,
+    "scope": "same existing regressions before final representation-tolerance review",
+    "receipt_retained_at": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/cloudbal-cp06a-run-20261012/regression-preliminary-receipt.json"
+  }
+}

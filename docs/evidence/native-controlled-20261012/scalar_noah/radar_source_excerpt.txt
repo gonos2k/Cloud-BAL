@@ -1,0 +1,53 @@
+  3267	!+---+-----------------------------------------------------------------+
+  3268	!..Set these variables needed for computing radar reflectivity.  These
+  3269	!.. get used within radar_init to create other variables used in the
+  3270	!.. radar module.
+  3271	   xam_c = cmc
+  3272	   xbm_c = dmc
+  3273	   xmu_c = muc
+  3274	   xam_r = cmr 
+  3275	   xbm_r = dmr 
+  3276	   xmu_r = mur 
+  3277	   xam_s = cms 
+  3278	   xbm_s = dms 
+  3279	   xmu_s = mus 
+  3280	   xbm_g = dmg 
+  3281	   xmu_g = mug 
+  3282	   xam_i = cmi
+  3283	   xbm_i = dmi
+  3284	   xmu_i = mui
+  3285	   call radar_init
+  3286	!+---+-----------------------------------------------------------------+
+  3287	!
+
+   168	      xcge(1) = 1. + xbm_g
+   169	      xcge(2) = 1. + xmu_g
+   170	      xcge(3) = 1. + xbm_g + xmu_g
+   171	      xcge(4) = 1. + 2.*xbm_g + xmu_g
+   172	      do n = 1, 4
+   173	         xcgg(n) = WGAMMA(xcge(n))
+   174	      enddo
+   175	      xogg2 = 1./xcgg(2)
+   176	
+   177	      xobmr = 1./xbm_r
+   178	      xoams = 1./xam_s
+   179	      xobms = 1./xbm_s
+   180	      xocms = xoams**xobms
+   181	      xoamg = 1./xam_g
+   182	      xobmg = 1./xbm_g
+   183	      xocmg = xoamg**xobmg
+   184	
+
+  3971	          if (L_qg(k) .and. L_qg(k_0) ) then
+  3972	           fmelt_g = MAX(0.005d0, MIN(1.0d0-rg(k)/rg(k_0), 0.99d0))
+  3973	           eta = 0.d0
+  3974	           lamg = 1./ilamg(k)
+  3975	           do n = 1, nrbins
+  3976	              x = xam_g(k) * xxDg(n)**xbm_g
+  3977	              call rayleigh_soak_wetgraupel (x,DBLE(xocmg),DBLE(xobmg), &
+  3978	                    fmelt_g, melt_outside_g, m_w_0, m_i_0, lamda_radar, &
+  3979	                    CBACK, mixingrulestring_g, matrixstring_g,          &
+  3980	                    inclusionstring_g, hoststring_g,                    &
+  3981	                    hostmatrixstring_g, hostinclusionstring_g)
+  3982	              f_d = N0_g(k)*xxDg(n)**xmu_g * DEXP(-lamg*xxDg(n))
+  3983	              eta = eta + f_d * CBACK * simpson(n) * xdtg(n)

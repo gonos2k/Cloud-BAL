@@ -1,0 +1,117 @@
+{
+  "arms": {
+    "ftz_daz": {
+      "instruction": "divps %xmm0,%xmm4",
+      "mxcsr_after": "0x9940",
+      "mxcsr_at_trap": "0x9971",
+      "mxcsr_before": "0x1900",
+      "pc": "0x362849d",
+      "runtime_policy": "set FTZ and DAZ only immediately before wrf_init",
+      "signal": "SIGFPE invalid",
+      "trap_xmm0_lanes": [
+        "0x43886833",
+        "0xc0097f39",
+        "0x00000000",
+        "0x00000000"
+      ],
+      "trap_xmm4_lanes": [
+        "0xbeac0000",
+        "0x48a2d780",
+        "0x00000000",
+        "0x00000000"
+      ]
+    },
+    "gradual": {
+      "instruction": "divps %xmm0,%xmm4",
+      "mxcsr_at_trap": "0x1933",
+      "mxcsr_at_wrf_init": "0x1900",
+      "pc": "0x362849d",
+      "runtime_policy": "clear FTZ and DAZ",
+      "signal": "SIGFPE invalid",
+      "trap_xmm0_lanes": [
+        "0x43886833",
+        "0xc0097f39",
+        "0x00000000",
+        "0x00000000"
+      ],
+      "trap_xmm4_lanes": [
+        "0xbeac0000",
+        "0x48a2d780",
+        "0x00000000",
+        "0x00000000"
+      ]
+    }
+  },
+  "build": {
+    "compiler_profile": "pinned Cloud-BAL O0/-fpe0/-traceback/-fp-model strict/-fimf-arch-consistency=true/-no-ftz; OpenMP enabled",
+    "executable": "/var/tmp/native-controlled-build/wrf.exe",
+    "ifx_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "ifx_version": "ifx (IFX) 2026.0.0 20260331",
+    "inherited_library_archive_sha256": "3ddba2be0e657b3e5717f867d81805b73e5a15c3583bcbdcfc06de46802a6083",
+    "kdm6_explicit_fpp": true,
+    "main_fpp_vs_retained_no_fpp_text_equal": true,
+    "main_object_sha256": "3f351bcc0b05025c9f0f9838c9733dde088e675cfb674d926fc155b797105371",
+    "main_preprocessed_with_fpp": true,
+    "sha256": "a4275a4f98ebe0dc2504d47348173145b653842a3a13313e809a8ec0f04035d3"
+  },
+  "claim": "one-rank, one-thread same-executable startup FTZ/DAZ-only contrast; invalid trap persists before KDM6",
+  "evidence_files": {
+    "build_hashes.txt": "93f4153df65890642526065e4ba0cc4e231c43c6fb7fcd74cb71124204a53c53",
+    "main_compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ftz_daz_policy_gdb.log": "f93ad5260ac1a777506d2f6ccd4df3288867b84a46f8b7fb8f5ed29f1f453034",
+    "gradual_policy_gdb.log": "9ffb16a6233376d3dbf7028318ebd97fa37ba98904d41933a825db0cf77fefe1",
+    "ftz_daz_policy_rsl.error.0000": "8fd3ef23f91cd7427c586cd02eee2460b9b534e1016f99377471537e256ced51",
+    "gradual_policy_rsl.error.0000": "5dbea7d2fa20d07da1b41242379792b7c386a579adb35413b29e793d2e2eb49f"
+  },
+  "execution": {
+    "exception_trap": "unchanged; -fpe0 held fixed",
+    "input_set": {
+      "ftz_daz": {
+        "gdb_log_sha256": "f93ad5260ac1a777506d2f6ccd4df3288867b84a46f8b7fb8f5ed29f1f453034",
+        "input_count": 100,
+        "input_hashes_unchanged": true,
+        "rsl_error_sha256": "8fd3ef23f91cd7427c586cd02eee2460b9b534e1016f99377471537e256ced51"
+      },
+      "gradual": {
+        "gdb_log_sha256": "9ffb16a6233376d3dbf7028318ebd97fa37ba98904d41933a825db0cf77fefe1",
+        "input_count": 100,
+        "input_hashes_unchanged": true,
+        "rsl_error_sha256": "5dbea7d2fa20d07da1b41242379792b7c386a579adb35413b29e793d2e2eb49f"
+      }
+    },
+    "launcher": "direct WRF process under GDB; no MPI launcher",
+    "model_source_changed": false,
+    "ranks": 1,
+    "same_executable_for_both_arms": true,
+    "threads": 1
+  },
+  "instruction_source_mapping": {
+    "dead_lane_evidence": "Immediately after DIVPS, MOVAPS copies the result, SHUFPS selects lane 1 into low lane, and MULSS consumes only low lane; lanes 2 and 3 are 0/0 and not used by this scalar result.",
+    "expression": "FK=((HLICE/(GRAV*(-PSISAT)))*((TSLB(I,NS,J)-T0)/TSLB(I,NS,J)))**(-1/BX)*SMCMAX",
+    "function": "module_sf_noahdrv_mp_lsminit_",
+    "interpretation": "Compiler-packed SIMD evaluation for Noah FK performs 0/0 in unused upper lanes, raising invalid under both FTZ/DAZ policies; the intended low-lane quotient is finite.",
+    "offset": "0xfed",
+    "operand_values": {
+      "GRAV_times_minus_PSiSAT": "0xc0097f39 = -2.1483901",
+      "HLICE": "0x48a2d780 = 333500.0",
+      "TSLB": "0x43886833 = 272.8140564",
+      "TSLB_minus_T0": "0xbeac0000 = -0.3359375"
+    },
+    "retained_object": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_sf_noahdrv.o",
+    "same_offset_in_retained_object": "0x8f2d",
+    "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys/module_sf_noahdrv.F",
+    "source_lines": "1978-1979",
+    "lane_arithmetic": {
+      "divps_lane_0": "(TSLB - T0) / TSLB = -0.3359375 / 272.8140564; finite",
+      "divps_lane_1": "HLICE / (GRAV * (-PSISAT)) = 333500.0 / -2.1483901; finite",
+      "divps_lanes_2_3": "0.0 / 0.0; invalid exception source",
+      "post_divps_use": "MOVAPS copies quotient vector; SHUFPS selects quotient lane 1 into scalar low lane; MULSS consumes quotient lane 0 and lane 1 only. Lanes 2 and 3 do not feed FK."
+    }
+  },
+  "limits": [
+    "The model aborts at Noah initialization before KDM6; this does not validate the native candidate or cloud physics.",
+    "The FTZ/DAZ arm is a runtime-only diagnostic override at WRF initialization; compiler and link settings, including -fpe0, are identical.",
+    "Noah object is inherited from pinned PR61 partial-host archive and uses its preserved compile profile; only WRF main was rebuilt to scope -fpp, with identical .text."
+  ],
+  "schema": "native_controlled_fp_policy_trap_v1"
+}
