@@ -33,6 +33,15 @@ MODULE cloud_bal_column_physics
   INTEGER(int32), PARAMETER :: PHASE_EVIDENCE_BITS= &
     SOURCE_RADAR_DBZ+SOURCE_CLOUD_ANALYSIS
 
+  TYPE, PUBLIC :: thermodynamic_density_prior_config
+    ! Explicit research control, not a calibrated observation covariance.
+    ! The target blends the retrieved and immutable-background p/rho_total.
+    LOGICAL :: enabled=.FALSE.
+    REAL(real64) :: background_weight=0.0_real64
+    REAL(real64) :: max_temperature_increment=0.0_real64
+    REAL(real64) :: max_vapor_increment=0.0_real64
+  END TYPE thermodynamic_density_prior_config
+
   TYPE, PUBLIC :: column_physics_config
     ! Static observation retrieval is an explicit analysis ablation. It is not
     ! a precipitation transport step and reports no transport ledger.
@@ -157,12 +166,15 @@ MODULE cloud_bal_column_physics
   PUBLIC :: remap_pressure_column
   PUBLIC :: flux_ledger_closes
   PUBLIC :: column_config_valid
+  PUBLIC :: apply_thermodynamic_density_prior
 
 CONTAINS
 
   SUBROUTINE derive_column_physics(state_in,state_out,result,config, &
                                    thermo_active,thermo_surface,target_rh,thermo_budget,analysis_budget,evaluation_state, &
-                                   model_dynamics_target,analysis_support,background_continuity_prior)
+                                   model_dynamics_target,analysis_support,background_continuity_prior, &
+                                   density_prior,thermo_analysis_budget,pre_density_temperature,pre_density_vapor,pre_density_condensates, &
+                                   pre_density_dry_mass)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in
     TYPE(cloud_bal_state_type), INTENT(OUT) :: state_out
     TYPE(stage_result), INTENT(OUT) :: result
@@ -176,7 +188,15 @@ CONTAINS
     LOGICAL, INTENT(IN), OPTIONAL :: model_dynamics_target
     LOGICAL, INTENT(IN), OPTIONAL :: analysis_support(:,:,:)
     LOGICAL, INTENT(IN), OPTIONAL :: background_continuity_prior
+    TYPE(thermodynamic_density_prior_config), INTENT(IN), OPTIONAL :: density_prior
+    TYPE(pressure_analysis_budget), INTENT(OUT), OPTIONAL :: thermo_analysis_budget
+    REAL(real32), ALLOCATABLE, INTENT(OUT), OPTIONAL :: pre_density_temperature(:,:,:),pre_density_vapor(:,:,:)
+    REAL(real32), ALLOCATABLE, INTENT(OUT), OPTIONAL :: pre_density_condensates(:,:)
+    REAL(real64), ALLOCATABLE, INTENT(OUT), OPTIONAL :: pre_density_dry_mass(:)
+    REAL(real64), ALLOCATABLE :: density_dry_mass(:)
+    REAL(real32), ALLOCATABLE :: density_temperature(:,:,:),density_vapor(:,:,:),density_condensates(:,:)
     TYPE(pressure_analysis_budget) :: proposal_budget
+    TYPE(pressure_analysis_budget) :: density_budget
     TYPE(water_phase_budget) :: internal_budget
     TYPE(cloud_bal_state_type) :: thermo_candidate
     TYPE(stage_result) :: thermo_result
@@ -201,6 +221,8 @@ CONTAINS
     use_model_dynamic_target=.FALSE.
     IF (PRESENT(model_dynamics_target)) use_model_dynamic_target=model_dynamics_target
     internal_budget=water_phase_budget()
+    density_budget=pressure_analysis_budget()
+    IF (PRESENT(thermo_analysis_budget)) thermo_analysis_budget=density_budget
     IF (PRESENT(thermo_budget)) thermo_budget=internal_budget
     IF (PRESENT(analysis_budget)) analysis_budget=pressure_analysis_budget()
     thermo_requested=PRESENT(thermo_active) .OR. PRESENT(thermo_surface) .OR. PRESENT(target_rh)
@@ -462,6 +484,30 @@ CONTAINS
       END IF
       candidate=thermo_candidate
     END IF
+    IF (PRESENT(density_prior)) THEN
+      IF (density_prior%enabled) THEN
+        IF (.NOT.PRESENT(analysis_support) .OR. .NOT.thermo_requested) THEN
+          CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+          RETURN
+        END IF
+        CALL apply_thermodynamic_density_prior(state_in,candidate,thermo_candidate,thermo_result, &
+          density_prior,analysis_support,thermo_active,thermo_surface,target_rh,density_budget)
+        IF (thermo_result%status/=STATUS_OK) THEN
+          CALL reject_candidate(state_in,state_out,result,thermo_result%status,thermo_result%reason_code)
+          RETURN
+        END IF
+        density_dry_mass=PACK(candidate%grid%dry_air_mass_measure,analysis_support)
+        density_temperature=candidate%temperature%value
+        density_vapor=candidate%vapor%value
+        ALLOCATE(density_condensates(5,COUNT(analysis_support)))
+        density_condensates(1,:)=PACK(candidate%cloud_water%value,analysis_support)
+        density_condensates(2,:)=PACK(candidate%cloud_ice%value,analysis_support)
+        density_condensates(3,:)=PACK(candidate%rain%value,analysis_support)
+        density_condensates(4,:)=PACK(candidate%snow%value,analysis_support)
+        density_condensates(5,:)=PACK(candidate%graupel%value,analysis_support)
+        candidate=thermo_candidate
+      END IF
+    END IF
     ! Diagnostics consume final stored thermodynamics and precipitation, while
     ! observed/zlinear retain the original reconstruction lineage. This is one
     ! ordered pass, not a converged thermo/trajectory/balance outer iteration.
@@ -547,7 +593,155 @@ CONTAINS
     result=candidate_result
     IF (PRESENT(thermo_budget)) thermo_budget=internal_budget
     IF (PRESENT(analysis_budget)) analysis_budget=proposal_budget
+    IF (PRESENT(thermo_analysis_budget)) thermo_analysis_budget=density_budget
+    IF (ALLOCATED(density_temperature)) THEN
+      IF (PRESENT(pre_density_temperature)) pre_density_temperature=density_temperature
+      IF (PRESENT(pre_density_vapor)) pre_density_vapor=density_vapor
+      IF (PRESENT(pre_density_condensates)) pre_density_condensates=density_condensates
+      IF (PRESENT(pre_density_dry_mass)) pre_density_dry_mass=density_dry_mass
+    END IF
   END SUBROUTINE derive_column_physics
+
+  SUBROUTINE apply_thermodynamic_density_prior(background,proposal,candidate,result,config, &
+      support,saturated,surface,target_rh,budget)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,proposal
+    TYPE(cloud_bal_state_type), INTENT(OUT) :: candidate
+    TYPE(stage_result), INTENT(OUT) :: result
+    TYPE(thermodynamic_density_prior_config), INTENT(IN) :: config
+    LOGICAL, INTENT(IN) :: support(:,:,:),saturated(:,:,:)
+    INTEGER, INTENT(IN) :: surface(:,:,:)
+    REAL(real64), INTENT(IN) :: target_rh
+    TYPE(pressure_analysis_budget), INTENT(OUT) :: budget
+    TYPE(cloud_bal_state_type) :: work
+    TYPE(stage_result) :: stage
+    TYPE(pressure_analysis_budget) :: analysis
+    REAL(real64) :: before(6),after(6),reference(6),pressure,initial_t,temperature,target,alpha
+    REAL(real64) :: lo,hi,mid,alo,ahi,weight,stored_t,storage_error
+    INTEGER :: nx,ny,nz,i,j,k,n,status,reason,reservoir
+    LOGICAL :: solve_vapor
+
+    ! This is a separate analysis transaction. Condensates, observations and
+    ! boundaries are immutable; water/enthalpy changes are never phase sources.
+    CALL reject_candidate(proposal,candidate,result,STATUS_FAILED,REASON_SHAPE)
+    budget=pressure_analysis_budget()
+    nx=proposal%grid%nx; ny=proposal%grid%ny; nz=proposal%grid%nz
+    IF (ANY(SHAPE(support)/=[nx,ny,nz]) .OR. ANY(SHAPE(saturated)/=[nx,ny,nz]) .OR. &
+        ANY(SHAPE(surface)/=[nx,ny,nz])) RETURN
+    IF (background%grid%nx/=nx .OR. background%grid%ny/=ny .OR. background%grid%nz/=nz) RETURN
+    result%reason_code=REASON_RANGE
+    IF (.NOT.ieee_is_finite(config%background_weight) .OR. &
+        .NOT.ieee_is_finite(config%max_temperature_increment) .OR. &
+        .NOT.ieee_is_finite(config%max_vapor_increment) .OR. .NOT.ieee_is_finite(target_rh)) RETURN
+    weight=config%background_weight
+    IF (weight<0.0_real64 .OR. weight>1.0_real64 .OR. target_rh<0.0_real64 .OR. target_rh>1.0_real64) RETURN
+    IF (config%max_temperature_increment<=0.0_real64 .OR. config%max_temperature_increment>200.0_real64 .OR. &
+        config%max_vapor_increment<=0.0_real64 .OR. config%max_vapor_increment>0.2_real64) RETURN
+    CALL validate_canonical_state(proposal,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK) THEN
+      result%reason_code=reason; RETURN
+    END IF
+    CALL validate_canonical_state(background,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK) THEN
+      result%reason_code=reason; RETURN
+    END IF
+    result%reason_code=REASON_AUTHORITY
+    IF (ANY(support .AND. .NOT.proposal%above_ground) .OR. ANY(saturated .AND. .NOT.support)) RETURN
+    IF (ANY(saturated .AND. surface/=SATURATION_LIQUID .AND. surface/=SATURATION_ICE)) RETURN
+    IF (ANY(background%above_ground .NEQV. proposal%above_ground)) RETURN
+    IF (ANY(background%pressure%value/=proposal%pressure%value)) RETURN
+    IF (.NOT.hydrostatic_fields_available(background) .OR. .NOT.hydrostatic_fields_available(proposal)) RETURN
+    CALL initialize_stage_result(stage,nx,ny,nz,STATUS_OK,REASON_NONE)
+    work=proposal
+    IF (config%enabled .AND. weight>0.0_real64) THEN
+      DO k=1,nz; DO j=1,ny; DO i=1,nx
+        IF (.NOT.support(i,j,k)) CYCLE
+        result%reason_code=REASON_REQUIRED_COVERAGE
+        IF (.NOT.hydrostatic_cell_available(background,i,j,k) .OR. &
+            .NOT.hydrostatic_cell_available(proposal,i,j,k)) RETURN
+        IF (.NOT.cell_is_usable(background%temperature%valid(i,j,k), &
+            background%temperature%quality(i,j,k),background%temperature%source(i,j,k)) .OR. &
+            .NOT.cell_is_usable(background%vapor%valid(i,j,k), &
+            background%vapor%quality(i,j,k),background%vapor%source(i,j,k))) RETURN
+        IF (.NOT.cell_is_usable(proposal%temperature%valid(i,j,k), &
+            proposal%temperature%quality(i,j,k),proposal%temperature%source(i,j,k)) .OR. &
+            .NOT.cell_is_usable(proposal%vapor%valid(i,j,k), &
+            proposal%vapor%quality(i,j,k),proposal%vapor%source(i,j,k))) RETURN
+        initial_t=REAL(proposal%temperature%value(i,j,k),real64)
+        pressure=REAL(proposal%pressure%value(i,j,k),real64)
+        before=REAL([proposal%vapor%value(i,j,k),proposal%cloud_water%value(i,j,k), &
+          proposal%cloud_ice%value(i,j,k),proposal%rain%value(i,j,k), &
+          proposal%snow%value(i,j,k),proposal%graupel%value(i,j,k)],real64)
+        reference=REAL([background%vapor%value(i,j,k),background%cloud_water%value(i,j,k), &
+          background%cloud_ice%value(i,j,k),background%rain%value(i,j,k), &
+          background%snow%value(i,j,k),background%graupel%value(i,j,k)],real64)
+        alpha=hydrostatic_pressure_alpha(pressure,initial_t,before)
+        target=hydrostatic_pressure_alpha(pressure,REAL(background%temperature%value(i,j,k),real64),reference)
+        result%reason_code=REASON_RANGE
+        IF (alpha<=0.0_real64 .OR. target<=0.0_real64) RETURN
+        target=(1.0_real64-weight)*alpha+weight*target
+        after=before
+        reservoir=2
+        IF (surface(i,j,k)==SATURATION_ICE) reservoir=3
+        temperature=initial_t*target/alpha
+        solve_vapor=saturated(i,j,k) .AND. before(reservoir)>0.0_real64
+        IF (saturated(i,j,k) .AND. .NOT.solve_vapor) THEN
+          ! Empty reservoirs permit subsaturation. If the fixed-vapor trial
+          ! violates it, vapor is an analysis control on the active boundary.
+          solve_vapor=.NOT.saturation_is_closed(pressure,temperature,after,target_rh,surface(i,j,k),0.0_real64)
+        END IF
+        IF (solve_vapor) THEN
+          lo=MAX(150.0_real64,initial_t-config%max_temperature_increment)
+          hi=MIN(350.0_real64,initial_t+config%max_temperature_increment)
+          after(1)=target_rh*saturation_mixing_ratio(lo,pressure,surface(i,j,k)==SATURATION_ICE)
+          alo=hydrostatic_pressure_alpha(pressure,lo,after)
+          after(1)=target_rh*saturation_mixing_ratio(hi,pressure,surface(i,j,k)==SATURATION_ICE)
+          ahi=hydrostatic_pressure_alpha(pressure,hi,after)
+          result%reason_code=REASON_SOLVER
+          IF (target<alo .OR. target>ahi) RETURN
+          DO n=1,64
+            mid=0.5_real64*(lo+hi)
+            after(1)=target_rh*saturation_mixing_ratio(mid,pressure,surface(i,j,k)==SATURATION_ICE)
+            IF (hydrostatic_pressure_alpha(pressure,mid,after)<target) THEN
+              lo=mid
+            ELSE
+              hi=mid
+            END IF
+          END DO
+          temperature=0.5_real64*(lo+hi)
+          after(1)=target_rh*saturation_mixing_ratio(temperature,pressure,surface(i,j,k)==SATURATION_ICE)
+        ELSE
+          temperature=initial_t*target/alpha
+        END IF
+        stored_t=REAL(REAL(temperature,real32),real64)
+        after(1)=REAL(REAL(after(1),real32),real64)
+        result%reason_code=REASON_GATE
+        IF (ABS(stored_t-initial_t)>config%max_temperature_increment .OR. &
+            ABS(after(1)-before(1))>config%max_vapor_increment) RETURN
+        storage_error=REAL(EPSILON(1.0_real32),real64)
+        IF (saturated(i,j,k)) THEN
+          IF (.NOT.saturation_is_closed(pressure,stored_t,after,target_rh,surface(i,j,k),storage_error)) RETURN
+        END IF
+        alpha=hydrostatic_pressure_alpha(pressure,stored_t,after)
+        IF (ABS(alpha-target)>8.0_real64*storage_error*ABS(target)) RETURN
+        CALL store_thermo_value(work%temperature,i,j,k,REAL(stored_t,real32))
+        CALL store_thermo_value(work%vapor,i,j,k,REAL(after(1),real32))
+        stage%changed(i,j,k)=stored_t/=initial_t .OR. after(1)/=before(1)
+      END DO; END DO; END DO
+      CALL refresh_dry_air_mass_measure(work,status)
+      IF (status/=STATUS_OK) RETURN
+      WHERE(.NOT.support) work%grid%dry_air_mass_measure=proposal%grid%dry_air_mass_measure
+      CALL validate_canonical_state(work,.FALSE.,.FALSE.,status,reason,.FALSE.)
+      IF (status/=STATUS_OK) THEN
+        result%reason_code=reason; RETURN
+      END IF
+    END IF
+    CALL account_pressure_analysis(proposal,work,analysis,status)
+    IF (status/=STATUS_OK) RETURN
+    stage%coverage%required=COUNT(support,KIND=int64)
+    stage%coverage%usable=stage%coverage%required
+    IF (stage%coverage%required>0_int64) stage%coverage%usable_fraction=1.0_real64
+    candidate=work; result=stage; budget=analysis
+  END SUBROUTINE apply_thermodynamic_density_prior
 
   SUBROUTINE retain_column_support(background,candidate,support)
     TYPE(cloud_bal_state_type), INTENT(IN) :: background

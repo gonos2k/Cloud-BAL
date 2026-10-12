@@ -1,0 +1,80 @@
+{
+  "schema": "pr81_thermo_native_validation_v1",
+  "source_base_commit": "624bb3d920b373430825fe64b478f8e70f0b4f1c",
+  "source_identity": "Individual source hashes and frozen overlays, not base SHA alone",
+  "core_source_sha256": {
+    "src/common/cloud_bal_balance_operator.f90": "710c8f7899bc7463b7ca6923de8cb500c9e29d2b5c6f8bf3e502f38642be6fc6",
+    "src/common/cloud_bal_column_physics.f90": "d17e97bb573381529ab3228ac54fb897a792f55e9c663c4aac54521fdc5c733a",
+    "src/common/cloud_bal_pipeline.f90": "e1bad8706277d3dda95d941b6f3b0e19864f8f18d263b164d6db4d0718579770",
+    "src/common/cloud_bal_real_netcdf.f90": "153df8431f890be7df2648230337c5e4160f7eecc1b77403f86a21e4a5c0c514"
+  },
+  "checks": {
+    "scoped_unit": {
+      "status": "PASS",
+      "canonical_full_launcher_exit": 0,
+      "working_directory": "/var/tmp/pr81_final_canonical_20261012",
+      "overlay_count": 23,
+      "overlay_sha256": "5d916a2dcffc9c09d2fae273948f9f1652142314b9dd2cc013eb779b30c23134",
+      "source_pre_post_equal": true,
+      "inventory_entries": 551,
+      "inventory_sha256": "a8ca18de878e2aa66111d80ded683746dccdd9f7999e73d58eb2a02fdd01f87d",
+      "log_sha256": "d5993ad4fc7c9911f0b0fa2dce77f35c1dfc0b9bab428e062ca9d1aaf5ccd23d",
+      "new_fixtures": {
+        "thermo_density": "Intel O0/O2 PASS",
+        "force_storage_backtracking": "Intel O0/O2 PASS",
+        "independent_readback": 5,
+        "native_case_copy": 2
+      },
+      "later_native_builder_gdb_runner_versions_in_full_run": false
+    },
+    "cp06a_real_scopes": {
+      "status": "PASS_SCOPED",
+      "valid_time": "2026-08-16T13:00:00Z",
+      "profile": "pinned Intel O2 only",
+      "candidate_sha256": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1",
+      "writer_producer_replay": true,
+      "independent_readback_sha256": "78d9563d43174c5939caca042ac49aa87584f5e42b2699e6a917e41cfdb2c043",
+      "continuity_rms_s-1": 1.1778621031811604e-10,
+      "continuity_external_gate_s-1": 2.339591491450392e-10,
+      "force_rms_m_s2": 0.0033084235951090545,
+      "force_background_ratio": 5.0640303022153415,
+      "observation_fit_assessed": false,
+      "observation_covariance_assessed": false,
+      "all_wind_pressure_metadata_certified": false
+    },
+    "native_pair_errors": {
+      "status": "OPEN",
+      "valid_time": "2026-08-16T12:00:00Z",
+      "same_13utc_candidate": false,
+      "baseline": "calc_ww_cp packed inactive SIMD lane invalid reproduced",
+      "candidate": "KDM6 invalid NC number basis input after nine selected diagnostic objects and KSAS scalar source correction",
+      "candidate_error_is_sigfpe": false,
+      "first_microphysics_complete": false,
+      "exact_nc_operand_and_coordinate_captured": false,
+      "source_case_preserved_files": 109,
+      "whole_host_clean_build_assessed": false,
+      "full_link_input_hash_closure": false,
+      "receipt_sha256": "ffeec6dd758ab49da88fc0766c6dcb260c977cbbad68d46bfef6ae8b22de50e6",
+      "initialization_receipt_sha256": "8062e7006e6315bf649969f876a762fb40976ac2b8637f5efb106c7312c038aa",
+      "same_cell_dry_density_validated": true,
+      "ksas_source_excerpt_O0_O2": "PASS",
+      "copy_helpers": "2/2 PASS",
+      "existing_build_scratch_rejected": true
+    },
+    "native_helpers": {
+      "status": "PASS_SCOPED",
+      "later_helper_source_sha256": {
+        "tests/build_pr81_native_first_step_candidate.sh": "40d407e942804f5896b0d13523d8483faeec38377c60b79806bdc3d9105e8f0a",
+        "tests/run_pr81_native_first_step.sh": "8652cdc4b8240c2be4da1c6b37edb92e7d057d4a2e1d7ee3f04c7b7eb51908a7",
+        "tests/pr81_native_first_step.gdb": "02485bc14d0a2b45e158696afa852d0511b5b4e39279d91148e62912d84d607d",
+        "tests/test_pr81_ksas_inactive_timescale.sh": "f5f13d23659383415da5c349ebe70f426e5565dd5583626fb43fd19e1d238e77"
+      },
+      "full_unit_coverage": false
+    }
+  },
+  "science_assessed": false,
+  "promotion_authorized": false,
+  "same13_native_handoff": "OPEN_NOT_RUN",
+  "initial_shock_reduction": "NOT_ASSESSED",
+  "same_candidate_water_energy_drymass_time_closure": "OPEN"
+}

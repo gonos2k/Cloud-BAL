@@ -80,6 +80,7 @@ MODULE cloud_bal_pipeline
     REAL(real64) :: horizontal_support_radius_m=12000.0_real64
     REAL(real64) :: pressure_support_radius_pa=30000.0_real64
     TYPE(column_physics_config) :: column
+    TYPE(thermodynamic_density_prior_config) :: thermo_density_prior
     TYPE(balance_operator_config) :: balance
     ! One preserves the legacy single pass; larger values request a fixed point.
     INTEGER :: maximum_outer_iterations=1
@@ -152,6 +153,12 @@ MODULE cloud_bal_pipeline
     TYPE(stage_result) :: balance
     TYPE(stage_result) :: overall
     TYPE(water_phase_budget) :: thermo_budget
+    ! A separate prior ledger; it is not a phase budget or observation covariance.
+    TYPE(pressure_analysis_budget) :: thermo_analysis_budget
+    LOGICAL :: thermo_density_prior_applied=.FALSE.
+    REAL(real32), ALLOCATABLE :: pre_density_temperature(:,:,:),pre_density_vapor(:,:,:)
+    REAL(real32), ALLOCATABLE :: pre_density_condensates(:,:)
+    REAL(real64), ALLOCATABLE :: pre_density_dry_mass(:)
     TYPE(pressure_analysis_budget) :: analysis_budget
     TYPE(pressure_analysis_budget) :: geometry_budget
     ! Endpoint accounting for the one final candidate, including all stages.
@@ -307,6 +314,8 @@ CONTAINS
     result%outer_iterations=0; result%outer_converged=.FALSE.
     result%outer_max_abs_delta=0.0_real64
     result%thermo_budget=water_phase_budget()
+    result%thermo_analysis_budget=pressure_analysis_budget()
+    result%thermo_density_prior_applied=.FALSE.
     result%analysis_budget=pressure_analysis_budget()
     result%geometry_budget=pressure_analysis_budget()
     result%candidate_budget=pressure_analysis_budget()
@@ -389,6 +398,36 @@ CONTAINS
         result%status=STATUS_FAILED
         result%reason_code=REASON_GATE
         CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_GATE)
+        RETURN
+      END IF
+    END IF
+    IF (config%thermo_density_prior%enabled) THEN
+      IF (.NOT.PRESENT(analysis_support) .OR. .NOT.PRESENT(thermo_active) .OR. &
+          .NOT.PRESENT(thermo_surface) .OR. .NOT.PRESENT(target_rh) .OR. &
+          .NOT.PRESENT(geopotential_support) .OR. .NOT.PRESENT(geopotential_reference_level) .OR. &
+          PRESENT(estimator_candidate) .OR. PRESENT(requested_surface_pressure) .OR. &
+          PRESENT(pressure_transition_seed) .OR. PRESENT(physical_contract)) THEN
+        result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+        CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_AUTHORITY)
+        RETURN
+      END IF
+      IF (ANY(SHAPE(analysis_support)/=shape3) .OR. ANY(SHAPE(thermo_active)/=shape3) .OR. &
+          ANY(SHAPE(thermo_surface)/=shape3) .OR. ANY(SHAPE(geopotential_support)/=shape3) .OR. &
+          ANY(SHAPE(geopotential_reference_level)/=(/nx,ny/))) THEN
+        result%status=STATUS_FAILED; result%reason_code=REASON_SHAPE
+        CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_SHAPE)
+        RETURN
+      END IF
+      IF (.NOT.ANY(analysis_support) .OR. .NOT.ANY(thermo_active) .OR. &
+          .NOT.ANY(geopotential_support)) THEN
+        result%status=STATUS_FAILED; result%reason_code=REASON_REQUIRED_COVERAGE
+        CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_REQUIRED_COVERAGE)
+        RETURN
+      END IF
+      IF (ANY(thermo_active .AND. .NOT.analysis_support) .OR. &
+          ANY(thermo_active .AND. .NOT.geopotential_support)) THEN
+        result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+        CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_AUTHORITY)
         RETURN
       END IF
     END IF
@@ -528,17 +567,26 @@ CONTAINS
         CALL derive_column_physics(state_in,column_candidate,result%column, &
           config%column,thermo_active,thermo_surface,target_rh,result%thermo_budget,proposal_budget, &
           model_dynamics_target=config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS, &
-          analysis_support=analysis_support,background_continuity_prior=PRESENT(analysis_support))
+          analysis_support=analysis_support,background_continuity_prior=PRESENT(analysis_support), &
+          density_prior=config%thermo_density_prior,thermo_analysis_budget=result%thermo_analysis_budget, &
+          pre_density_temperature=result%pre_density_temperature,pre_density_vapor=result%pre_density_vapor, &
+          pre_density_condensates=result%pre_density_condensates, &
+          pre_density_dry_mass=result%pre_density_dry_mass)
       ELSE
         CALL derive_column_physics(state_in,column_candidate,result%column, &
           config%column,thermo_active,thermo_surface,target_rh,result%thermo_budget,proposal_budget,evaluation, &
           model_dynamics_target=config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS, &
-          analysis_support=analysis_support,background_continuity_prior=PRESENT(analysis_support))
+          analysis_support=analysis_support,background_continuity_prior=PRESENT(analysis_support), &
+          density_prior=config%thermo_density_prior,thermo_analysis_budget=result%thermo_analysis_budget, &
+          pre_density_temperature=result%pre_density_temperature,pre_density_vapor=result%pre_density_vapor, &
+          pre_density_condensates=result%pre_density_condensates, &
+          pre_density_dry_mass=result%pre_density_dry_mass)
       END IF
       IF (result%column%status/=STATUS_OK) THEN
         result%column%changed=.FALSE.
         result%balance%changed=.FALSE.
         result%thermo_budget=water_phase_budget()
+        CALL clear_thermo_density_prior_receipt(result)
         result%status=result%column%status
         result%reason_code=result%column%reason_code
         result%overall=result%column
@@ -625,6 +673,7 @@ CONTAINS
         IF (result%geopotential%status/=STATUS_OK) THEN
           candidate_out=state_in
           result%thermo_budget=water_phase_budget()
+          CALL clear_thermo_density_prior_receipt(result)
           result%column%changed=.FALSE.; result%balance%changed=.FALSE.
           result%status=result%geopotential%status
           result%reason_code=result%geopotential%reason_code
@@ -648,6 +697,7 @@ CONTAINS
         IF (localization_status/=STATUS_OK) THEN
           candidate_out=state_in; operational_out=state_in
           result%thermo_budget=water_phase_budget()
+          CALL clear_thermo_density_prior_receipt(result)
           result%column%changed=.FALSE.
           result%balance%changed=.FALSE.
           result%geopotential%changed=.FALSE.
@@ -660,6 +710,7 @@ CONTAINS
       IF (result%balance%status/=STATUS_OK) THEN
         candidate_out=state_in; operational_out=state_in
         result%thermo_budget=water_phase_budget()
+        CALL clear_thermo_density_prior_receipt(result)
         result%column%changed=.FALSE.
         result%balance%changed=.FALSE.
         result%geopotential%changed=.FALSE.
@@ -675,6 +726,7 @@ CONTAINS
         IF (localization_status/=STATUS_OK) THEN
           candidate_out=state_in; operational_out=state_in
           result%thermo_budget=water_phase_budget()
+          CALL clear_thermo_density_prior_receipt(result)
           result%candidate_budget=pressure_analysis_budget()
           result%status=STATUS_FAILED; result%reason_code=validation_reason
           CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,validation_reason)
@@ -688,6 +740,7 @@ CONTAINS
            trial_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS)) THEN
         candidate_out=state_in; operational_out=state_in
         result%thermo_budget=water_phase_budget()
+        CALL clear_thermo_density_prior_receipt(result)
         result%candidate_budget=pressure_analysis_budget()
         result%candidate_evaluation=trial_evaluation
         result%column%changed=.FALSE.; result%balance%changed=.FALSE.
@@ -713,6 +766,7 @@ CONTAINS
       IF (localization_status/=STATUS_OK) THEN
         candidate_out=state_in
         result%thermo_budget=water_phase_budget()
+        CALL clear_thermo_density_prior_receipt(result)
         result%column%changed=.FALSE.; result%balance%changed=.FALSE.
         result%geopotential%changed=.FALSE.
         result%status=STATUS_FAILED; result%reason_code=REASON_RANGE
@@ -723,6 +777,7 @@ CONTAINS
     IF (config%maximum_outer_iterations>1 .AND. .NOT.result%outer_converged) THEN
       candidate_out=state_in
       result%thermo_budget=water_phase_budget()
+      CALL clear_thermo_density_prior_receipt(result)
       result%candidate_budget=pressure_analysis_budget()
       result%candidate_evaluation=joint_candidate_evaluation()
       result%column%changed=.FALSE.; result%balance%changed=.FALSE.
@@ -746,6 +801,7 @@ CONTAINS
       IF (force_diagnostics%status/=STATUS_OK) THEN
         candidate_out=state_in; operational_out=state_in
         result%thermo_budget=water_phase_budget()
+        CALL clear_thermo_density_prior_receipt(result)
         result%analysis_budget=pressure_analysis_budget()
         result%geometry_budget=pressure_analysis_budget()
         result%candidate_budget=pressure_analysis_budget()
@@ -768,6 +824,7 @@ CONTAINS
       IF (.NOT.canonical_states_equal(nonwind_check,balance_candidate)) THEN
         candidate_out=state_in; operational_out=state_in
         result%thermo_budget=water_phase_budget()
+        CALL clear_thermo_density_prior_receipt(result)
         result%analysis_budget=pressure_analysis_budget()
         result%geometry_budget=pressure_analysis_budget()
         result%candidate_budget=pressure_analysis_budget()
@@ -786,6 +843,7 @@ CONTAINS
       IF (localization_status/=STATUS_OK) THEN
         candidate_out=state_in; operational_out=state_in
         result%thermo_budget=water_phase_budget()
+        CALL clear_thermo_density_prior_receipt(result)
         result%analysis_budget=pressure_analysis_budget()
         result%geometry_budget=pressure_analysis_budget()
         result%candidate_budget=pressure_analysis_budget()
@@ -820,6 +878,7 @@ CONTAINS
     result%overall=result%balance
     result%overall%changed=result%column%changed .OR. result%balance%changed .OR. result%geopotential%changed
     result%status=STATUS_OK; result%reason_code=REASON_NONE
+    result%thermo_density_prior_applied=config%thermo_density_prior%enabled
 
     ! Persist only an accepted explicit request; failures retain no permission
     ! for a downstream writer to serialize thermodynamic changes.
@@ -2250,5 +2309,15 @@ CONTAINS
     IF (ALLOCATED(field%source)) &
       integer_field3d_has_manufactured_source=ANY(IAND(field%source,SOURCE_MANUFACTURED_TEST)/=0)
   END FUNCTION integer_field3d_has_manufactured_source
+
+  SUBROUTINE clear_thermo_density_prior_receipt(result)
+    TYPE(cloud_bal_pipeline_result), INTENT(INOUT) :: result
+    result%thermo_analysis_budget=pressure_analysis_budget()
+    result%thermo_density_prior_applied=.FALSE.
+    IF (ALLOCATED(result%pre_density_temperature)) DEALLOCATE(result%pre_density_temperature)
+    IF (ALLOCATED(result%pre_density_vapor)) DEALLOCATE(result%pre_density_vapor)
+    IF (ALLOCATED(result%pre_density_condensates)) DEALLOCATE(result%pre_density_condensates)
+    IF (ALLOCATED(result%pre_density_dry_mass)) DEALLOCATE(result%pre_density_dry_mass)
+  END SUBROUTINE clear_thermo_density_prior_receipt
 
 END MODULE cloud_bal_pipeline

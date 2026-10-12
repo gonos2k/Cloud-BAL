@@ -101,6 +101,7 @@ MODULE cloud_bal_balance_operator
     REAL(real64) :: maximum_wind_increment=0.0_real64
     REAL(real64) :: maximum_omega_increment=0.0_real64
     INTEGER :: solver_iterations=0
+    INTEGER :: backtracking_steps=0
     INTEGER :: status=STATUS_FAILED
     INTEGER :: reason=REASON_NONE
   END TYPE force_prior_diagnostics
@@ -461,10 +462,11 @@ CONTAINS
     REAL(real64) :: candidate_rms,candidate_max,projected_rms,projected_max
     REAL(real64) :: input_objective,candidate_objective,input_normalized,candidate_normalized
     REAL(real64) :: background_force_rms,input_force_rms,candidate_force_rms
-    REAL(real64) :: slope,curvature,alpha,alpha_cap,delta_u,delta_v,root,disc,wind_cap,omega_cap
+    REAL(real64) :: slope,curvature,alpha,trial_alpha,alpha_cap,delta_u,delta_v,root,disc,wind_cap,omega_cap
     REAL(real64) :: limit_rms,limit_max,wind_increment,omega_increment,eps_scale
     INTEGER :: status,reason,iterations,solver_reason,i,j,k
-    INTEGER :: coriolis_status
+    INTEGER :: coriolis_status,trial_number
+    LOGICAL :: retry_constraint,accepted
 
     diagnostics=force_prior_diagnostics()
     state_out=input
@@ -722,89 +724,90 @@ CONTAINS
       diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
       RETURN
     END IF
-    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
-      IF (.NOT.control_support(i,j,k)) CYCLE
-      candidate%u%value(i,j,k)=REAL(REAL(input%u%value(i,j,k),real64)+ &
-        alpha*direction_u(i,j,k),real32)
-      candidate%v%value(i,j,k)=REAL(REAL(input%v%value(i,j,k),real64)+ &
-        alpha*direction_v(i,j,k),real32)
-      IF (.NOT.ieee_is_finite(candidate%u%value(i,j,k)) .OR. &
-          .NOT.ieee_is_finite(candidate%v%value(i,j,k))) THEN
+    accepted=.FALSE.
+    DO trial_number=0,20
+      trial_alpha=alpha
+      IF (trial_number>0) trial_alpha=alpha*0.5_real64**trial_number
+      diagnostics%backtracking_steps=trial_number
+      candidate=input
+      DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+        IF (.NOT.control_support(i,j,k)) CYCLE
+        candidate%u%value(i,j,k)=REAL(REAL(input%u%value(i,j,k),real64)+ &
+          trial_alpha*direction_u(i,j,k),real32)
+        candidate%v%value(i,j,k)=REAL(REAL(input%v%value(i,j,k),real64)+ &
+          trial_alpha*direction_v(i,j,k),real32)
+        IF (.NOT.ieee_is_finite(candidate%u%value(i,j,k)) .OR. &
+            .NOT.ieee_is_finite(candidate%v%value(i,j,k))) THEN
+          diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_NONFINITE
+          RETURN
+        END IF
+        IF (candidate%u%value(i,j,k)/=input%u%value(i,j,k)) &
+          candidate%u%source(i,j,k)=IOR(input%u%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+        IF (candidate%v%value(i,j,k)/=input%v%value(i,j,k)) &
+          candidate%v%source(i,j,k)=IOR(input%v%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+      END DO; END DO; END DO
+      CALL validate_canonical_state(candidate,.FALSE.,.FALSE.,status,reason,.FALSE.)
+      IF (status/=STATUS_OK .OR. &
+          .NOT.model_boundary_increment_contract_valid(background,candidate)) THEN
+        diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_AUTHORITY
+        RETURN
+      END IF
+      CALL state_dry_air_mass_flux_divergence(diagnostic_op,candidate,candidate_flux,status)
+      IF (status/=STATUS_OK) THEN
         diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_NONFINITE
         RETURN
       END IF
-      IF (candidate%u%value(i,j,k)/=input%u%value(i,j,k)) &
-        candidate%u%source(i,j,k)=IOR(input%u%source(i,j,k),SOURCE_BALANCE_OPERATOR)
-      IF (candidate%v%value(i,j,k)/=input%v%value(i,j,k)) &
-        candidate%v%source(i,j,k)=IOR(input%v%source(i,j,k),SOURCE_BALANCE_OPERATOR)
-    END DO; END DO; END DO
-    CALL validate_canonical_state(candidate,.FALSE.,.FALSE.,status,reason,.FALSE.)
-    IF (status/=STATUS_OK .OR. &
-        .NOT.model_boundary_increment_contract_valid(background,candidate)) THEN
-      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_AUTHORITY
-      RETURN
-    END IF
-    CALL state_dry_air_mass_flux_divergence(diagnostic_op,candidate,candidate_flux,status)
-    IF (status/=STATUS_OK) THEN
-      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_NONFINITE
-      RETURN
-    END IF
-    r_candidate=0.0_real64
-    WHERE(diagnostic_op%cell_usable)
-      r_candidate=(candidate_flux-background_flux)/diagnostic_op%volume
-    END WHERE
-    CALL masked_residual_norm(r_candidate,.NOT.validation_shell,outside_rms,outside_max)
-    IF (outside_rms>1.0e-12_real64 .OR. outside_max>1.0e-12_real64) THEN
+      r_candidate=0.0_real64
+      WHERE(diagnostic_op%cell_usable)
+        r_candidate=(candidate_flux-background_flux)/diagnostic_op%volume
+      END WHERE
+      CALL masked_residual_norm(r_candidate,.NOT.validation_shell,outside_rms,outside_max)
+      WHERE(.NOT.validation_shell) r_candidate=0.0_real64
+      CALL masked_residual_norm(r_candidate,validation_shell,candidate_rms,candidate_max)
+      diagnostics%continuity_candidate_rms=candidate_rms
+      diagnostics%continuity_candidate_max=candidate_max
+
+      CALL force_prior_objective(background,candidate,diagnostic_op,control_support,force_support, &
+        ru_background,rv_background,candidate_objective,candidate_normalized,candidate_force_rms, &
+        gradient_u,gradient_v,status,reason)
+      IF (status/=STATUS_OK) THEN
+        diagnostics%status=status; diagnostics%reason=reason
+        RETURN
+      END IF
+      diagnostics%candidate_objective=candidate_objective
+      diagnostics%candidate_normalized_force_rms=candidate_normalized
+      diagnostics%candidate_force_rms=candidate_force_rms
+      eps_scale=64.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64,ABS(input_objective))
+      retry_constraint=outside_rms>1.0e-12_real64 .OR. outside_max>1.0e-12_real64 .OR. &
+        candidate_rms>limit_rms .OR. candidate_max>limit_max .OR. &
+        candidate_objective>=input_objective-eps_scale .OR. &
+        candidate_force_rms>input_force_rms+ &
+          64.0_real64*REAL(EPSILON(1.0_real32),real64)*MAX(input_force_rms,background_force_rms)
+
+      diagnostics%maximum_wind_increment=0.0_real64
+      diagnostics%maximum_omega_increment=0.0_real64
+      DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+        IF (control_support(i,j,k)) diagnostics%maximum_wind_increment= &
+          MAX(diagnostics%maximum_wind_increment, &
+            HYPOT(REAL(candidate%u%value(i,j,k),real64)-REAL(background%u%value(i,j,k),real64), &
+                  REAL(candidate%v%value(i,j,k),real64)-REAL(background%v%value(i,j,k),real64)))
+        diagnostics%maximum_omega_increment=MAX(diagnostics%maximum_omega_increment, &
+          ABS(REAL(candidate%omega%value(i,j,k),real64)- &
+              REAL(background%omega%value(i,j,k),real64)))
+      END DO; END DO; END DO
+      retry_constraint=retry_constraint .OR. diagnostics%maximum_wind_increment>10.0_real64 .OR. &
+        diagnostics%maximum_omega_increment>5.0_real64
+      IF (.NOT.retry_constraint) THEN
+        state_out=candidate
+        diagnostics%status=STATUS_OK; diagnostics%reason=REASON_NONE
+        accepted=.TRUE.
+        EXIT
+      END IF
+    END DO
+    IF (.NOT.accepted) THEN
+      state_out=input
       diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
-      RETURN
     END IF
-    WHERE(.NOT.validation_shell) r_candidate=0.0_real64
-    CALL masked_residual_norm(r_candidate,validation_shell,candidate_rms,candidate_max)
-    diagnostics%continuity_candidate_rms=candidate_rms
-    diagnostics%continuity_candidate_max=candidate_max
-    IF (candidate_rms>limit_rms .OR. candidate_max>limit_max) THEN
-      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
-      RETURN
-    END IF
-    CALL force_prior_objective(background,candidate,diagnostic_op,control_support,force_support, &
-      ru_background,rv_background,candidate_objective,candidate_normalized,candidate_force_rms, &
-      gradient_u,gradient_v,status,reason)
-    IF (status/=STATUS_OK) THEN
-      diagnostics%status=status; diagnostics%reason=reason
-      RETURN
-    END IF
-    diagnostics%candidate_objective=candidate_objective
-    diagnostics%candidate_normalized_force_rms=candidate_normalized
-    diagnostics%candidate_force_rms=candidate_force_rms
-    eps_scale=64.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64,ABS(input_objective))
-    IF (candidate_objective>=input_objective-eps_scale) THEN
-      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
-      RETURN
-    END IF
-    IF (candidate_force_rms>input_force_rms+ &
-        64.0_real64*REAL(EPSILON(1.0_real32),real64)* &
-        MAX(input_force_rms,background_force_rms)) THEN
-      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
-      RETURN
-    END IF
-    diagnostics%maximum_wind_increment=0.0_real64
-    diagnostics%maximum_omega_increment=0.0_real64
-    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
-      IF (control_support(i,j,k)) diagnostics%maximum_wind_increment= &
-        MAX(diagnostics%maximum_wind_increment, &
-          HYPOT(REAL(candidate%u%value(i,j,k),real64)-REAL(background%u%value(i,j,k),real64), &
-                REAL(candidate%v%value(i,j,k),real64)-REAL(background%v%value(i,j,k),real64)))
-      diagnostics%maximum_omega_increment=MAX(diagnostics%maximum_omega_increment, &
-        ABS(REAL(candidate%omega%value(i,j,k),real64)- &
-            REAL(background%omega%value(i,j,k),real64)))
-    END DO; END DO; END DO
-    IF (diagnostics%maximum_wind_increment>10.0_real64 .OR. &
-        diagnostics%maximum_omega_increment>5.0_real64) THEN
-      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
-      RETURN
-    END IF
-    state_out=candidate
-    diagnostics%status=STATUS_OK; diagnostics%reason=REASON_NONE
   END SUBROUTINE apply_background_force_prior_refinement
 
   SUBROUTINE force_prior_objective(background,state,op,control_support,force_support, &

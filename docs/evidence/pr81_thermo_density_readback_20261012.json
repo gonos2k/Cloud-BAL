@@ -1,0 +1,201 @@
+{
+  "candidate": {
+    "path": "/var/tmp/pr81_joint_thermo.HbL5ry/O2/joint_candidate.nc",
+    "sha256": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1"
+  },
+  "contract": "cp06a_background_alpha_blend_v2",
+  "controls": {
+    "background_alpha_weight": 0.5,
+    "max_temperature_increment_k": 5.0,
+    "max_vapor_increment_kg_kg": 0.005
+  },
+  "density_adjustment_analysis_budget": {
+    "accounted_cells": 1294696,
+    "dry_air_change_kg": -173957123.87774467,
+    "dry_mass_redistribution_kg": [
+      -2587635.873726898,
+      -96187.80424732326,
+      0.0,
+      -70216.19271327475,
+      350.10489146135177,
+      0.0
+    ],
+    "enthalpy_arithmetic_scale_j": 1.1616716180513813e+21,
+    "enthalpy_change_j": 629906496212194.1,
+    "enthalpy_composition_change_j": 639277802255318.2,
+    "enthalpy_mass_metric_change_j": -9371306043124.855,
+    "enthalpy_split_error_j": 0.73046875,
+    "geometry_mass_change_kg": 0.0,
+    "incomplete_background_cells": 0,
+    "incomplete_candidate_cells": 0,
+    "max_cell_mass_error_kg": 10.192932996549644,
+    "mixing_ratio_change_kg": [
+      176710823.2976298,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "species_arithmetic_scale_kg": [
+      173478889675245.28,
+      3769456974494.2383,
+      1932848421300.3308,
+      235774066713.10803,
+      751583780036.8052,
+      14583638072.216368
+    ],
+    "species_change_kg": [
+      174123187.42390296,
+      -96187.80424733128,
+      0.0,
+      -70216.19271327078,
+      350.10489146073814,
+      0.0
+    ],
+    "support_cells": 162,
+    "total_mass_error_kg": 9.654089152812958
+  },
+  "density_budget_replay": {
+    "candidate_dry_air_mass": "candidate_dry_air_mass_measure over the full domain",
+    "domain": "union of pre/post above_ground cells; this contract has unchanged geometry",
+    "endpoint_residual_used_as_source": false,
+    "preprior_dry_air_mass": "saved thermo_preprior_dry_air_mass_measure on analysis_support; final candidate_dry_air_mass_measure outside support per producer restore contract",
+    "traversal": "Fortran account_pressure_analysis order: k,j,i"
+  },
+  "fixed_condensates": {
+    "condensates_are_prior_degrees_of_freedom": false,
+    "snapshot_equal_to_final_in_analysis_support": true,
+    "snapshot_shape": [
+      162,
+      5
+    ]
+  },
+  "independent_continuity": {
+    "control_500": {
+      "background_rms_s-1": 2.9956203264423572e-05,
+      "candidate_minus_background_max_abs_s-1": 5.526279691004608e-10,
+      "candidate_minus_background_rms_s-1": 1.649006944453625e-10,
+      "candidate_rms_s-1": 2.995622283350421e-05,
+      "cells": 500
+    },
+    "validation_shell_980": {
+      "background_rms_s-1": 3.1505521484621535e-05,
+      "candidate_minus_background_max_abs_s-1": 5.526279691004608e-10,
+      "candidate_minus_background_rms_s-1": 1.1778621031811604e-10,
+      "candidate_rms_s-1": 3.1505530977862926e-05,
+      "cells": 980
+    }
+  },
+  "independent_force": {
+    "accepted_backtracking_halvings": 0,
+    "accepted_objective_strictly_decreased": true,
+    "background_rms_m_s2": 0.000653318285568262,
+    "backtracking_halving_limit": 20,
+    "builder": "tools/cp06a_state_force_flux.py",
+    "candidate_over_background": 5.0640303022153415,
+    "candidate_rms_m_s2": 0.0033084235951090545,
+    "fixed_mask_cells": 900,
+    "force_prior_reason": 0,
+    "force_prior_status": 20,
+    "objective_candidate": 99145.20204314594,
+    "objective_input": 106673.93806958203,
+    "pipeline_solver_residual_fraction": 0.001,
+    "pre_refinement_rms_m_s2": 0.0034312485204617206,
+    "wind_pressure_metadata_limit": "force replay uses persisted pressure centers, geopotential, and co-located wind fields; no separate wind-pressure coordinate or wind observation covariance is stored"
+  },
+  "independent_solution": {
+    "alpha_blend_error_max_m2_s2": 0.004384838524856605,
+    "alpha_blend_error_rms_m2_s2": 0.0018085867267513317,
+    "temperature_error_max_k": 1.5229340647238132e-05,
+    "temperature_increment_max_k": 0.761077880859375,
+    "vapor_error_max_kg_kg": 8.574049387144456e-10,
+    "vapor_increment_max_kg_kg": 0.000730615109205246,
+    "warm_temperature_min_max_k": [
+      273.2759094238281,
+      297.4307861328125
+    ],
+    "warm_vapor_min_max_kg_kg": [
+      0.007054644171148539,
+      0.019882474094629288
+    ]
+  },
+  "internal_saturation_phase_ledger": {
+    "validation_scope": "producer-replayed internal saturation ledger; not independently recomputed here",
+    "values": {
+      "thermo_contract": "explicit_cloud_saturation_mixture_v1",
+      "thermo_enthalpy_error_j": 232129423.125,
+      "thermo_phase_change_j": 634792365849133.6,
+      "thermo_sensible_change_j": -634792133719710.5,
+      "thermo_species_change_kg": [
+        257879371.45569962,
+        -257879381.1097964,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "thermo_target_rh": 1.0,
+      "thermo_water_error_kg": -9.654096782207489
+    }
+  },
+  "interpretation": {
+    "force_residual_is_source": false,
+    "observation_covariance_assessed": false,
+    "observation_fit_assessed": false,
+    "prior_type": "predeclared equal-weight background-alpha research control",
+    "science_pass": false
+  },
+  "persisted_budget_max_abs_difference": {
+    "accounted_cells": 0.0,
+    "dry_air_change_kg": 0.0,
+    "dry_mass_redistribution_kg": 0.0,
+    "enthalpy_arithmetic_scale_j": 96600064.0,
+    "enthalpy_change_j": 0.0,
+    "enthalpy_composition_change_j": 0.0,
+    "enthalpy_mass_metric_change_j": 0.0,
+    "geometry_mass_change_kg": 0.0,
+    "incomplete_background_cells": 0.0,
+    "incomplete_candidate_cells": 0.0,
+    "max_cell_mass_error_kg": 0.0,
+    "mixing_ratio_change_kg": 0.0,
+    "species_arithmetic_scale_kg": 39.0,
+    "species_change_kg": 0.0,
+    "total_mass_error_kg": 0.0
+  },
+  "preprior_source": {
+    "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/coupled.nc",
+    "sha256": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260"
+  },
+  "retention": {
+    "observation_and_phase_observation_metadata_bitwise_equal_to_retained_source": true,
+    "preprior_condensate_values_saved": 810,
+    "preprior_dry_air_mass_values_saved": 162,
+    "preprior_temperature_cells_saved": 162,
+    "preprior_thermodynamics_compared_to_old_candidate": false,
+    "preprior_vapor_cells_saved": 162,
+    "reason": "outer feedback rederives the immediate pre-prior state for this candidate"
+  },
+  "schema": "cp06a_thermo_density_readback_v1",
+  "support": {
+    "analysis_cells": 162,
+    "saturation_cells": 69
+  },
+  "v1_failure_preserved_as_diagnostic": {
+    "fixed_vapor_temperature_k": 273.4305091199962,
+    "float32_closure_upper_kg_kg": 0.0071350293762071915,
+    "interpretation": "v1 fixed-qv alpha update violates the empty-reservoir supersaturation inequality; v2 binds the inequality only when needed",
+    "liquid_or_ice_reservoir_kg_kg": 0.0,
+    "preprior_source_kind": "thermo_preprior arrays in v2 candidate",
+    "pressure_pa": 55000.0,
+    "retained_vapor_kg_kg": 0.007137023378163576,
+    "supersaturation_excess_kg_kg": 2.0118938770415096e-06,
+    "target_rh_saturation_vapor_kg_kg": 0.007135011484286535,
+    "thermo_index_kji": [
+      11,
+      18,
+      134
+    ],
+    "v1_fixed_vapor_failure_found": true
+  }
+}

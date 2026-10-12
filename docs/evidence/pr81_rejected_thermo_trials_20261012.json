@@ -1,0 +1,47 @@
+{
+  "schema": "pr81_preserved_rejected_trials_v1",
+  "attempts": [
+    {
+      "experiment": "v1_rejected_column",
+      "run_root": "/var/tmp/pr81_joint_thermo.EBzxnM",
+      "receipt": null,
+      "run_log": "pipeline_status=-10,reason=7,column_status=-10,column_reason=7\n",
+      "source_inventory_sha256": "bbd67ea324dab1cded6559aa98ef0e57c951668030b322e71ddd682792f20399"
+    },
+    {
+      "experiment": "v2_force_gate_rejected",
+      "run_root": "/var/tmp/pr81_joint_thermo.yzJn46",
+      "receipt": "retained_candidate=/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/coupled.nc\nsource_head=624bb3d920b373430825fe64b478f8e70f0b4f1c\nsource_snapshot_identity=pre_post_hashes_equal\ninput_snapshot_identity=pre_post_hashes_equal\ncompiler_profile=Intel O2 pinned\nartifact_scope=single joint thermo-density/Phi/continuity trial plus rejected-trial rollback\nscience_authority=NONE\nexit_status=0\nrun_log_sha256=d8a089041532862df5ec0fd87138776542cfe625342bd87f11abf41a48e2824a\ne423a69d3c04d34c846408d2d6f3eb25a08a9a2d3d09352ad24acc0d7c874450  /var/tmp/pr81_joint_thermo.yzJn46/O2/pr81-joint-thermo\n",
+      "run_log": "pipeline_status=10,reason=7,column_status=20,column_reason=0\nforce_prior_status=10\nforce_prior_reason=7\nforce_prior_input_geostrophic_rms=  3.4312485203989410E-03\nforce_prior_candidate_geostrophic_rms=  0.0000000000000000E+00\nforce_prior_input_objective=  1.0667393805413757E+05\nforce_prior_candidate_objective=  0.0000000000000000E+00\nforce_prior_shared_flux_candidate_rms=  2.3482573795782823E-10\nforce_prior_shared_flux_candidate_max=  1.0338622240622990E-09\nforce_prior_input_stage_background_rms=  1.1697957457251960E-07\nforce_prior_input_stage_candidate_rms=  2.3395234102527681E-10\noutcome=REJECTED_AT_FROZEN_FORCE_GATE\natomic_rollback=T\nscience_authority=NONE\n0\n",
+      "source_inventory_sha256": "32900f1d95e1fa07857f61b3a0dffe16e8c84740d6dc3c842aa5c96ab3b57b5e"
+    },
+    {
+      "experiment": "v3_force_gate_rejected",
+      "run_root": "/var/tmp/pr81_joint_thermo.t9LrLR",
+      "receipt": "retained_candidate=/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/coupled.nc\nsource_head=624bb3d920b373430825fe64b478f8e70f0b4f1c\nsource_snapshot_identity=pre_post_hashes_equal\ninput_snapshot_identity=pre_post_hashes_equal\ncompiler_profile=Intel O2 pinned\nartifact_scope=single joint thermo-density/Phi/continuity trial plus rejected-trial rollback\nscience_authority=NONE\nexit_status=128\nrun_log_sha256=f4a9a1db136ed671345055977e015eae769378f5ccc0ed022ce377f55df0243c\nd30a1fdc6a97cd27e8d055a3f7fac98e50d89cd6aa3814d024769ebd34f6b634  /var/tmp/pr81_joint_thermo.t9LrLR/O2/pr81-joint-thermo\n",
+      "run_log": "pipeline_status=10,reason=7,column_status=20,column_reason=0\nforce_prior_status=10\nforce_prior_reason=7\nforce_prior_input_geostrophic_rms=  3.4312485203989410E-03\nforce_prior_candidate_geostrophic_rms=  3.4312484020086278E-03\nforce_prior_input_objective=  1.0667393805413757E+05\nforce_prior_candidate_objective=  1.0667393044749551E+05\nforce_prior_shared_flux_candidate_rms=  2.3471997393997733E-10\nforce_prior_shared_flux_candidate_max=  1.0455298588027528E-09\nforce_prior_input_stage_background_rms=  1.1697957457251960E-07\nforce_prior_input_stage_candidate_rms=  2.3395234102527681E-10\noutcome=REJECTED_AT_FROZEN_FORCE_GATE\natomic_rollback=T\nscience_authority=NONE\nretained joint trial had no accepted stored-state force candidate\n",
+      "source_inventory_sha256": "65b853240307570ebc43c1f500f50525b64c1a78f7b812e345498e2a14c45c1f"
+    }
+  ],
+  "v1_independent_counterexample": {
+    "classification": "infeasible under fixed condensates, retained qv, and the saturation upper inequality",
+    "fixed_vapor_temperature_k": 273.4305106485674,
+    "float32_closure_upper_kg_kg": 0.0071350301748863984,
+    "interpretation": "v1 fixed-qv alpha update violates the empty-reservoir supersaturation inequality; v2 binds the inequality only when needed",
+    "liquid_or_ice_reservoir_kg_kg": 0.0,
+    "preprior_source_kind": "candidate arrays in retained preprior NetCDF",
+    "preprior_source_path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O0/coupled.nc",
+    "pressure_pa": 55000.0,
+    "prior_contract": "cp06a_background_alpha_blend_v1",
+    "prior_weight": 0.5,
+    "retained_vapor_kg_kg": 0.007137023378163576,
+    "supersaturation_excess_kg_kg": 2.0110951996369156e-06,
+    "target_rh_saturation_vapor_kg_kg": 0.007135012282963939,
+    "thermo_index_kji": [
+      11,
+      18,
+      134
+    ],
+    "v1_fixed_vapor_failure_found": true
+  }
+}

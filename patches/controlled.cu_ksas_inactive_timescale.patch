@@ -1,0 +1,44 @@
+--- a/phys/module_cu_ksas.F
++++ b/phys/module_cu_ksas.F
+@@ -1973,10 +1973,15 @@
+ ! calculate critical cloud work function
+ !
+    do i = its,ite
+-     tem = zi(i,ktcon1(i)) - zi(i,kbcon1(i))
+-     dtconv(i) = tfac * tem / wc(i)
+-     dtconv(i) = max(dtconv(i),dtmin)
+-     dtconv(i) = min(dtconv(i),dtmax)
++     if (cnvflg(i)) then
++       if (wc(i) <= 0.) call wrf_error_fatal('KSAS active convection has nonpositive wc')
++       tem = zi(i,ktcon1(i)) - zi(i,kbcon1(i))
++       dtconv(i) = tfac * tem / wc(i)
++       dtconv(i) = max(dtconv(i),dtmin)
++       dtconv(i) = min(dtconv(i),dtmax)
++     else
++       dtconv(i) = 0.
++     endif
+ !    dtconv(i) = max(1800., dt2)
+    enddo
+ !
+--- a/phys/module_cu_ksas.f90
++++ b/phys/module_cu_ksas.f90
+@@ -1973,10 +1973,15 @@
+ 
+ 
+    do i = its,ite
+-     tem = zi(i,ktcon1(i)) - zi(i,kbcon1(i))
+-     dtconv(i) = tfac * tem / wc(i)
+-     dtconv(i) = max(dtconv(i),dtmin)
+-     dtconv(i) = min(dtconv(i),dtmax)
++     if (cnvflg(i)) then
++       if (wc(i) <= 0.) call wrf_error_fatal('KSAS active convection has nonpositive wc')
++       tem = zi(i,ktcon1(i)) - zi(i,kbcon1(i))
++       dtconv(i) = tfac * tem / wc(i)
++       dtconv(i) = max(dtconv(i),dtmin)
++       dtconv(i) = min(dtconv(i),dtmax)
++     else
++       dtconv(i) = 0.
++     endif
+ 
+    enddo
+ 

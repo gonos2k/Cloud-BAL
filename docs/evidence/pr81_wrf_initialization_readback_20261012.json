@@ -1,0 +1,214 @@
+{
+  "schema": "pr81_nineobject_init_readback_receipt_v1",
+  "tool": "tools/check_native_hybrid_geometry.py",
+  "tool_sha256": "e2e4bdf6c80b2dab00f31075057a2bd0cc0a588a199dbcce9026105817046e2f",
+  "tool_changed": false,
+  "native_evidence": "pr81_native_first_step_20261012.json",
+  "executable_sha256": "a805a1afff42021f322337c69d4e0818faf30e677f625f9a9d1b308728b32c00",
+  "start_em_source_sha256": "6be17d3a4252065cf972dcf59bf3510cd29be35f898694e38187aa525cf27ac9",
+  "registry_source_sha256": "b01855ed80569be04bbd99e43ea1672a60e35590db00145c839b8f74cfd9b07f",
+  "start_em_w_source_lines": "1484-1543",
+  "registry_use_input_w_default_line": 3074,
+  "command": [
+    "python3",
+    "tools/check_native_hybrid_geometry.py",
+    "/var/tmp/pr81_native_ksas_smallstep_run1/run/wrfout_d01_2026-08-16_12:00:00",
+    "--initial-input",
+    "/var/tmp/pr81_native_ksas_smallstep_run1/run/wrfinput_d01",
+    "--gravity",
+    "9.81"
+  ],
+  "exit_status": 0,
+  "readback": {
+    "dry_mass_change_kg": 0.0,
+    "water_by_species": {
+      "QVAPOR": {
+        "baseline_kg": 90478790689804.03,
+        "candidate_kg": 90478790689804.03,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QCLOUD": {
+        "baseline_kg": 2102552755478.643,
+        "candidate_kg": 2102552755478.643,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QICE": {
+        "baseline_kg": 1320254788129.5476,
+        "candidate_kg": 1320254788129.5476,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QRAIN": {
+        "baseline_kg": 100504281608.47388,
+        "candidate_kg": 100504281608.47388,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QSNOW": {
+        "baseline_kg": 365172992726.3861,
+        "candidate_kg": 365172992726.3861,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QGRAUP": {
+        "baseline_kg": 16800295687.53668,
+        "candidate_kg": 16800295687.53668,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      }
+    },
+    "conservation_assessed": false,
+    "valid_time": "2026-08-16_12:00:00",
+    "water_change_kg": 0.0,
+    "promotion_eligible": false,
+    "artifact_class": "DIAGNOSTIC",
+    "comparison_scope": "SAME_TIME_WRF_INPUT_TO_INITIAL_OUTPUT",
+    "gravity_assumption_m_s2": 9.81,
+    "baseline_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+    "candidate_sha256": "6405df6049111f51b99b571e1281b3550e685edfe9404e5f0c61eee1a1f5934d",
+    "input_unchanged": true,
+    "initialization_fields": {
+      "P": {
+        "units": "Pa",
+        "exact_equal": false,
+        "changed_cells": 770649,
+        "maximum_absolute_difference": 0.0390625
+      },
+      "PB": {
+        "units": "Pa",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "PH": {
+        "units": "m2 s-2",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "PHB": {
+        "units": "m2 s-2",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "U": {
+        "units": "m s-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "V": {
+        "units": "m s-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "W": {
+        "units": "m s-1",
+        "exact_equal": false,
+        "changed_cells": 1476306,
+        "maximum_absolute_difference": 0.6027584075927734
+      },
+      "T": {
+        "units": "K",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "MU": {
+        "units": "Pa",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "MUB": {
+        "units": "Pa",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QVAPOR": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QCLOUD": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QICE": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QRAIN": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QSNOW": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QGRAUP": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QNCCN": {
+        "units": "  kg(-1)",
+        "exact_equal": false,
+        "changed_cells": 2573532,
+        "maximum_absolute_difference": 5029232640.0
+      },
+      "QNCLOUD": {
+        "units": "  kg(-1)",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QNICE": {
+        "units": "  kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QNRAIN": {
+        "units": "  kg(-1)",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "P+PB": {
+        "changed_cells": 770649,
+        "maximum_absolute_difference": 0.0390625
+      },
+      "PH+PHB": {
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      }
+    },
+    "first_physics_call_assessed": false,
+    "microphysics_moment_contract_assessed": false,
+    "same_analysis_candidate_assessed": false
+  },
+  "same13_candidate_consumed": false,
+  "first_call_validated": false
+}
