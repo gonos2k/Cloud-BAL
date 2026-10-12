@@ -1,0 +1,3491 @@
+ncgen bridge tests passed
+ Canonical state tests passed
+ Pressure geometry oracle passed: 6 columns, 5 atomic rejection cases
+ Direct validators rejected 9 NaN geometry mutations without trapping
+ Scope: pressure diagnostic only; native partial-face and dry mass NOT assessed
+ Pressure partial-face oracle passed: sparse partition, cross-level and independ
+ ent tables
+ Scope: pressure geometry; balance/native flux integration is not assessed
+ Column physics tests passed
+ Thermodynamic column tests passed
+SATURATION REFERENCE FIXTURES PASS
+  fifteen valid cases; one invalid atomic case
+Independent saturation reference: fifteen valid / one rejected cases passed
+ Hydrostatic increment tests passed
+ Thermodynamic constraint tests passed
+ Pressure hydrostatic-state tests passed
+ Pressure geometry-budget tests passed
+ Pressure-column remap tests passed
+Pressure-transition reference tests passed
+ Pressure domain-budget tests passed
+forrtl: warning (406): fort: (1): In call to MIXTURE_ENTHALPY, an array temporary was created for argument #2
+
+Image              PC                Routine            Line        Source             
+test_pressure_dom  00000000006A2EC5  test_transition           145  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000694C5F  test_pressure_dom          26  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000076492D5771CA  Unknown               Unknown  Unknown
+libc.so.6          000076492D57728B  __libc_start_main     Unknown  Unknown
+test_pressure_dom  0000000000406C85  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to MIXTURE_ENTHALPY, an array temporary was created for argument #2
+
+Image              PC                Routine            Line        Source             
+test_pressure_dom  00000000006A2EC5  test_transition           145  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000694C5F  test_pressure_dom          26  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000076492D5771CA  Unknown               Unknown  Unknown
+libc.so.6          000076492D57728B  __libc_start_main     Unknown  Unknown
+test_pressure_dom  0000000000406C85  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to MIXTURE_ENTHALPY, an array temporary was created for argument #2
+
+Image              PC                Routine            Line        Source             
+test_pressure_dom  00000000006A37F3  test_transition           149  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000694C5F  test_pressure_dom          26  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000076492D5771CA  Unknown               Unknown  Unknown
+libc.so.6          000076492D57728B  __libc_start_main     Unknown  Unknown
+test_pressure_dom  0000000000406C85  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to MIXTURE_ENTHALPY, an array temporary was created for argument #2
+
+Image              PC                Routine            Line        Source             
+test_pressure_dom  00000000006A37F3  test_transition           149  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000694C5F  test_pressure_dom          26  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000076492D5771CA  Unknown               Unknown  Unknown
+libc.so.6          000076492D57728B  __libc_start_main     Unknown  Unknown
+test_pressure_dom  0000000000406C85  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to MIXTURE_ENTHALPY, an array temporary was created for argument #2
+
+Image              PC                Routine            Line        Source             
+test_pressure_dom  00000000006A37F3  test_transition           149  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000694C5F  test_pressure_dom          26  test_pressure_domain_transition.f90
+test_pressure_dom  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000076492D5771CA  Unknown               Unknown  Unknown
+libc.so.6          000076492D57728B  __libc_start_main     Unknown  Unknown
+test_pressure_dom  0000000000406C85  Unknown               Unknown  Unknown
+ Pressure-domain transition tests passed
+Independent surface-pressure remap reference: two successful cases passed (max remap/storage-refresh mass defect 0.269143 kg); max Phi storage error 0
+Whole-state replay matches both Fortran transition fixtures
+Pressure-state replay tests passed
+transition geostrophic RMS before=   3.9479607633478048E-01 after=   3.9479607633478048E-01 requested=32 support=32 stencil=32
+ Pressure geostrophic assessment tests passed
+SATURATION REFERENCE FIXTURES PASS
+  fifteen valid cases; one invalid atomic case
+Independent saturation reference: fifteen valid / one rejected cases passed
+ Hydrostatic increment tests passed
+ Thermodynamic constraint tests passed
+ Pressure hydrostatic-state tests passed
+ Pressure geometry-budget tests passed
+ Pressure-column remap tests passed
+Pressure-transition reference tests passed
+ Pressure domain-budget tests passed
+ Pressure-domain transition tests passed
+Independent surface-pressure remap reference: two successful cases passed (max remap/storage-refresh mass defect 0.269143 kg); max Phi storage error 0
+Whole-state replay matches both Fortran transition fixtures
+Pressure-state replay tests passed
+transition geostrophic RMS before=   3.9479607633478048E-01 after=   3.9479607633478048E-01 requested=32 support=32 stencil=32
+ Pressure geostrophic assessment tests passed
+ Pressure thermo-state tests passed
+ Water phase transfer tests passed
+forrtl: warning (406): fort: (1): In call to CHECK_CELL_ORACLE, an array temporary was created for argument #6
+
+Image              PC                Routine            Line        Source             
+test_pressure_pha  00000000006A536F  test_mixed_transf          91  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000694C2E  test_pressure_pha          15  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF1CA  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF28B  __libc_start_main     Unknown  Unknown
+test_pressure_pha  0000000000406C85  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to CHECK_CELL_ORACLE, an array temporary was created for argument #6
+
+Image              PC                Routine            Line        Source             
+test_pressure_pha  00000000006A536F  test_mixed_transf          91  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000694C2E  test_pressure_pha          15  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF1CA  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF28B  __libc_start_main     Unknown  Unknown
+test_pressure_pha  0000000000406C85  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to CHECK_CELL_ORACLE, an array temporary was created for argument #6
+
+Image              PC                Routine            Line        Source             
+test_pressure_pha  00000000006A536F  test_mixed_transf          91  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000694C2E  test_pressure_pha          15  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF1CA  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF28B  __libc_start_main     Unknown  Unknown
+test_pressure_pha  0000000000406C85  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to CHECK_CELL_ORACLE, an array temporary was created for argument #6
+
+Image              PC                Routine            Line        Source             
+test_pressure_pha  00000000006A536F  test_mixed_transf          91  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000694C2E  test_pressure_pha          15  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF1CA  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF28B  __libc_start_main     Unknown  Unknown
+test_pressure_pha  0000000000406C85  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to CHECK_CELL_ORACLE, an array temporary was created for argument #6
+
+Image              PC                Routine            Line        Source             
+test_pressure_pha  00000000006A536F  test_mixed_transf          91  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000694C2E  test_pressure_pha          15  test_pressure_phase_transfer.f90
+test_pressure_pha  0000000000406D9D  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF1CA  Unknown               Unknown  Unknown
+libc.so.6          000073C8E1EDF28B  __libc_start_main     Unknown  Unknown
+test_pressure_pha  0000000000406C85  Unknown               Unknown  Unknown
+ Pressure phase-transfer tests passed
+ Balance operator tests passed
+forrtl: warning (406): fort: (1): In call to DENSE_HORIZONTAL_RESIDUAL, an array temporary was created for argument #3
+
+Image              PC                Routine            Line        Source             
+test_balance_part  000000000068DEB8  test_diagnostic_c         460  test_balance_partial_faces.f90
+test_balance_part  0000000000630180  test_balance_part          17  test_balance_partial_faces.f90
+test_balance_part  0000000000405D6D  Unknown               Unknown  Unknown
+libc.so.6          000075A9A1CD91CA  Unknown               Unknown  Unknown
+libc.so.6          000075A9A1CD928B  __libc_start_main     Unknown  Unknown
+test_balance_part  0000000000405C55  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to DENSE_HORIZONTAL_RESIDUAL, an array temporary was created for argument #4
+
+Image              PC                Routine            Line        Source             
+test_balance_part  000000000068E565  test_diagnostic_c         460  test_balance_partial_faces.f90
+test_balance_part  0000000000630180  test_balance_part          17  test_balance_partial_faces.f90
+test_balance_part  0000000000405D6D  Unknown               Unknown  Unknown
+libc.so.6          000075A9A1CD91CA  Unknown               Unknown  Unknown
+libc.so.6          000075A9A1CD928B  __libc_start_main     Unknown  Unknown
+test_balance_part  0000000000405C55  Unknown               Unknown  Unknown
+ Balance partial-face tests passed: cross-level flux, dry flux, adjoint, support
+ , components, final state
+ Balance partial-face tests passed: cross-level flux, dry flux, adjoint, support
+ , components, final state
+ Cloud-BAL pipeline authority tests passed
+Pre-balance wind tests passed
+experiment=cloud_bal_reproduction_v2
+fixture=synthetic_4x4x3_sband_reflectivity_no_radar_los
+off_status=20
+off_candidate_core_value_differences=0
+off_operational_core_value_differences=0
+shadow_status=20
+shadow_column_status=20
+shadow_balance_status=20
+shadow_acceptance_failures=0
+shadow_operational_core_value_differences=0
+shadow_candidate_core_value_differences=3
+shadow_changed_cells=3
+shadow_positive_beta_cells=0
+shadow_active_support_cells=0
+shadow_hydrometeor_cells=3
+shadow_max_horizontal_wind_increment_ms= 0.0000000000000000E+000
+shadow_max_omega_increment_pas= 0.0000000000000000E+000
+shadow_target_response_failure_fraction= 0.0000000000000000E+000
+shadow_outside_active_support_wind_increment_ms= 0.0000000000000000E+000
+shadow_outside_active_support_omega_increment_pas= 0.0000000000000000E+000
+active_support_internal_face_continuity_background_rms= 0.0000000000000000E+000
+proposed_increment_continuity_rms= 0.0000000000000000E+000
+projected_increment_continuity_rms= 0.0000000000000000E+000
+active_support_internal_face_continuity_final_to_forced_ratio= 0.0000000000000000E+000
+radar_interface_flux_input= 1.1805104882176713E+004
+radar_interface_flux_deposited= 7.8700699214511424E+003
+radar_interface_flux_boundary_exit= 3.9350349607255703E+003
+radar_interface_flux_ledger_error= 0.0000000000000000E+000
+failure_count=0
+Cloud-BAL output transaction tests passed
+Cloud-BAL baseline comparator tests passed
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.344s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.098s
+
+OK
+Shadow diagnostic validator tests passed
+..........
+----------------------------------------------------------------------
+Ran 10 tests in 0.004s
+
+OK
+Invalid WIND_COORDINATE: UNSET
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  50000.0 Min:      1.0 Max:      1.0
+Level (Pa): 100000.0 Min:      1.0 Max:      1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:       1.0 Max:       1.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 100000.0 Min:      1.00 Max:      1.00
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  50000.0 Min:      1.0 Max:      1.0
+Level (Pa): 100000.0 Min:      1.0 Max:      1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:       1.0 Max:       1.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 100000.0 Min:      1.00 Max:      1.00
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  50000.0 Min:      1.0 Max:      1.0
+Level (Pa): 100000.0 Min:      1.0 Max:      1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:       1.0 Max:       1.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 100000.0 Min:      1.00 Max:      1.00
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  50000.0 Min:      1.0 Max:      1.0
+Level (Pa): 100000.0 Min:      1.0 Max:      1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:       1.0 Max:       1.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 100000.0 Min:      1.00 Max:      1.00
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  50000.0 Min:      1.0 Max:      1.0
+Level (Pa): 100000.0 Min:      1.0 Max:      1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:       1.0 Max:       1.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 100000.0 Min:      1.00 Max:      1.00
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:20.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  50000.0 Min:      1.0 Max:      1.0
+Level (Pa): 100000.0 Min:      1.0 Max:      1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:       1.0 Max:       1.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 100000.0 Min:      1.00 Max:      1.00
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:59.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  50000.0 Min:   1.0 Max:   1.0
+Level (Pa): 100000.0 Min:   1.0 Max:   1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  50000.0 Min:      1.0 Max:      1.0
+Level (Pa): 100000.0 Min:      1.0 Max:      1.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:       1.0 Max:       1.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 100000.0 Min:       1.0 Max:       1.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 100000.0 Min:      1.00 Max:      1.00
+ WPS writer status tests passed
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  85000.0 Min: 251.1 Max: 251.3
+Level (Pa):  70000.0 Min: 253.1 Max: 253.3
+Level (Pa): 200100.0 Min: 254.1 Max: 254.3
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  85000.0 Min:  11.1 Max:  13.2
+Level (Pa):  70000.0 Min:  31.1 Max:  33.2
+Level (Pa): 200100.0 Min:  41.1 Max:  43.2
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  85000.0 Min: -13.2 Max: -11.1
+Level (Pa):  70000.0 Min: -33.2 Max: -31.1
+Level (Pa): 200100.0 Min: -43.2 Max: -41.1
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  85000.0 Min:  42.0 Max:  45.0
+Level (Pa):  70000.0 Min:  62.0 Max:  65.0
+Level (Pa): 200100.0 Min:  72.0 Max:  75.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  85000.0 Min:   1110.0 Max:   1320.0
+Level (Pa):  70000.0 Min:   3110.0 Max:   3320.0
+Level (Pa): 200100.0 Min:   4110.0 Max:   4320.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:    4110.0 Max:    4320.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     281.1 Max:     283.2
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  100110.0 Max:  100320.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90110.0 Max:   90320.0
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  85000.0 Min: 251.1 Max: 251.3
+Level (Pa):  70000.0 Min: 253.1 Max: 253.3
+Level (Pa): 200100.0 Min: 254.1 Max: 254.3
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  85000.0 Min:  11.1 Max:  13.2
+Level (Pa):  70000.0 Min:  31.1 Max:  33.2
+Level (Pa): 200100.0 Min:  41.1 Max:  43.2
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  85000.0 Min: -13.2 Max: -11.1
+Level (Pa):  70000.0 Min: -33.2 Max: -31.1
+Level (Pa): 200100.0 Min: -43.2 Max: -41.1
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  85000.0 Min:  42.0 Max:  45.0
+Level (Pa):  70000.0 Min:  62.0 Max:  65.0
+Level (Pa): 200100.0 Min:  72.0 Max:  75.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  85000.0 Min:   1110.0 Max:   1320.0
+Level (Pa):  70000.0 Min:   3110.0 Max:   3320.0
+Level (Pa): 200100.0 Min:   4110.0 Max:   4320.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:    4110.0 Max:    4320.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     281.1 Max:     283.2
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  100110.0 Max:  100320.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90110.0 Max:   90320.0
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  85000.0 Min: 251.1 Max: 251.3
+Level (Pa):  70000.0 Min: 253.1 Max: 253.3
+Level (Pa): 200100.0 Min: 254.1 Max: 254.3
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  85000.0 Min:  11.1 Max:  13.2
+Level (Pa):  70000.0 Min:  31.1 Max:  33.2
+Level (Pa): 200100.0 Min:  41.1 Max:  43.2
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  85000.0 Min: -13.2 Max: -11.1
+Level (Pa):  70000.0 Min: -33.2 Max: -31.1
+Level (Pa): 200100.0 Min: -43.2 Max: -41.1
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  85000.0 Min:  42.0 Max:  45.0
+Level (Pa):  70000.0 Min:  62.0 Max:  65.0
+Level (Pa): 200100.0 Min:  72.0 Max:  75.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  85000.0 Min:   1110.0 Max:   1320.0
+Level (Pa):  70000.0 Min:   3110.0 Max:   3320.0
+Level (Pa): 200100.0 Min:   4110.0 Max:   4320.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:    4110.0 Max:    4320.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     281.1 Max:     283.2
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  100110.0 Max:  100320.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90110.0 Max:   90320.0
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  85000.0 Min: 0.000120 Max: 0.000150
+Level (Pa):  70000.0 Min: 0.000320 Max: 0.000350
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  85000.0 Min: 0.000420 Max: 0.000450
+Level (Pa):  70000.0 Min: 0.001220 Max: 0.001250
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  85000.0 Min: 0.000220 Max: 0.000250
+Level (Pa):  70000.0 Min: 0.000620 Max: 0.000650
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  85000.0 Min: 0.000320 Max: 0.000350
+Level (Pa):  70000.0 Min: 0.000920 Max: 0.000950
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  85000.0 Min: 0.000520 Max: 0.000550
+Level (Pa):  70000.0 Min: 0.001520 Max: 0.001550
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  85000.0 Min: 251.1 Max: 251.3
+Level (Pa):  70000.0 Min: 253.1 Max: 253.3
+Level (Pa): 200100.0 Min: 254.1 Max: 254.3
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  85000.0 Min:  11.1 Max:  13.2
+Level (Pa):  70000.0 Min:  31.1 Max:  33.2
+Level (Pa): 200100.0 Min:  41.1 Max:  43.2
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  85000.0 Min: -13.2 Max: -11.1
+Level (Pa):  70000.0 Min: -33.2 Max: -31.1
+Level (Pa): 200100.0 Min: -43.2 Max: -41.1
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  85000.0 Min:  42.0 Max:  45.0
+Level (Pa):  70000.0 Min:  62.0 Max:  65.0
+Level (Pa): 200100.0 Min:  72.0 Max:  75.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  85000.0 Min:   1110.0 Max:   1320.0
+Level (Pa):  70000.0 Min:   3110.0 Max:   3320.0
+Level (Pa): 200100.0 Min:   4110.0 Max:   4320.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:    4110.0 Max:    4320.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     281.1 Max:     283.2
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  100110.0 Max:  100320.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90110.0 Max:   90320.0
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  85000.0 Min: 0.000120 Max: 0.000150
+Level (Pa):  70000.0 Min: 0.000320 Max: 0.000350
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  85000.0 Min: 0.000420 Max: 0.000450
+Level (Pa):  70000.0 Min: 0.001220 Max: 0.001250
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  85000.0 Min: 0.000220 Max: 0.000250
+Level (Pa):  70000.0 Min: 0.000620 Max: 0.000650
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  85000.0 Min: 0.000320 Max: 0.000350
+Level (Pa):  70000.0 Min: 0.000920 Max: 0.000950
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  85000.0 Min: 0.000520 Max: 0.000550
+Level (Pa):  70000.0 Min: 0.001520 Max: 0.001550
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  85000.0 Min: 251.1 Max: 251.3
+Level (Pa):  70000.0 Min: 253.1 Max: 253.3
+Level (Pa): 200100.0 Min: 254.1 Max: 254.3
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  85000.0 Min:  11.1 Max:  13.2
+Level (Pa):  70000.0 Min:  31.1 Max:  33.2
+Level (Pa): 200100.0 Min:  41.1 Max:  43.2
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  85000.0 Min: -13.2 Max: -11.1
+Level (Pa):  70000.0 Min: -33.2 Max: -31.1
+Level (Pa): 200100.0 Min: -43.2 Max: -41.1
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  85000.0 Min:  42.0 Max:  45.0
+Level (Pa):  70000.0 Min:  62.0 Max:  65.0
+Level (Pa): 200100.0 Min:  72.0 Max:  75.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  85000.0 Min:   1110.0 Max:   1320.0
+Level (Pa):  70000.0 Min:   3110.0 Max:   3320.0
+Level (Pa): 200100.0 Min:   4110.0 Max:   4320.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:    4110.0 Max:    4320.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     281.1 Max:     283.2
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  100110.0 Max:  100320.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90110.0 Max:   90320.0
+ Rejected vapor input: invalid shape
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  85000.0 Min: 251.1 Max: 251.3
+Level (Pa):  70000.0 Min: 253.1 Max: 253.3
+Level (Pa): 200100.0 Min: 254.1 Max: 254.3
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  85000.0 Min:  11.1 Max:  13.2
+Level (Pa):  70000.0 Min:  31.1 Max:  33.2
+Level (Pa): 200100.0 Min:  41.1 Max:  43.2
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  85000.0 Min: -13.2 Max: -11.1
+Level (Pa):  70000.0 Min: -33.2 Max: -31.1
+Level (Pa): 200100.0 Min: -43.2 Max: -41.1
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  85000.0 Min:  42.0 Max:  45.0
+Level (Pa):  70000.0 Min:  62.0 Max:  65.0
+Level (Pa): 200100.0 Min:  72.0 Max:  75.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  85000.0 Min:   1110.0 Max:   1320.0
+Level (Pa):  70000.0 Min:   3110.0 Max:   3320.0
+Level (Pa): 200100.0 Min:   4110.0 Max:   4320.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:    4110.0 Max:    4320.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     281.1 Max:     283.2
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  100110.0 Max:  100320.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90110.0 Max:   90320.0
+ Rejected vapor input: NaN
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  85000.0 Min: 251.1 Max: 251.3
+Level (Pa):  70000.0 Min: 253.1 Max: 253.3
+Level (Pa): 200100.0 Min: 254.1 Max: 254.3
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  85000.0 Min:  11.1 Max:  13.2
+Level (Pa):  70000.0 Min:  31.1 Max:  33.2
+Level (Pa): 200100.0 Min:  41.1 Max:  43.2
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  85000.0 Min: -13.2 Max: -11.1
+Level (Pa):  70000.0 Min: -33.2 Max: -31.1
+Level (Pa): 200100.0 Min: -43.2 Max: -41.1
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  85000.0 Min:  42.0 Max:  45.0
+Level (Pa):  70000.0 Min:  62.0 Max:  65.0
+Level (Pa): 200100.0 Min:  72.0 Max:  75.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  85000.0 Min:   1110.0 Max:   1320.0
+Level (Pa):  70000.0 Min:   3110.0 Max:   3320.0
+Level (Pa): 200100.0 Min:   4110.0 Max:   4320.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:    4110.0 Max:    4320.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     281.1 Max:     283.2
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  100110.0 Max:  100320.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90110.0 Max:   90320.0
+ Rejected vapor input: Inf
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  85000.0 Min: 251.1 Max: 251.3
+Level (Pa):  70000.0 Min: 253.1 Max: 253.3
+Level (Pa): 200100.0 Min: 254.1 Max: 254.3
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  85000.0 Min:  11.1 Max:  13.2
+Level (Pa):  70000.0 Min:  31.1 Max:  33.2
+Level (Pa): 200100.0 Min:  41.1 Max:  43.2
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  85000.0 Min: -13.2 Max: -11.1
+Level (Pa):  70000.0 Min: -33.2 Max: -31.1
+Level (Pa): 200100.0 Min: -43.2 Max: -41.1
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  85000.0 Min:  42.0 Max:  45.0
+Level (Pa):  70000.0 Min:  62.0 Max:  65.0
+Level (Pa): 200100.0 Min:  72.0 Max:  75.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  85000.0 Min:   1110.0 Max:   1320.0
+Level (Pa):  70000.0 Min:   3110.0 Max:   3320.0
+Level (Pa): 200100.0 Min:   4110.0 Max:   4320.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:    4110.0 Max:    4320.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     281.1 Max:     283.2
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  100110.0 Max:  100320.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90110.0 Max:   90320.0
+ Rejected vapor input: negative
+ WPS vapor writer tests passed
+WPS vapor records, legacy bytes, invalid-input rollback, and input contract passed
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  65000.0 Min: 310.0 Max: 343.0
+Level (Pa):  80000.0 Min: 305.0 Max: 338.0
+Level (Pa):  95000.0 Min: 261.0 Max: 333.0
+Level (Pa): 200100.0 Min: 279.0 Max: 283.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  65000.0 Min:  27.2 Max:  34.2
+Level (Pa):  80000.0 Min:  26.8 Max:  33.8
+Level (Pa):  95000.0 Min:  -0.8 Max:  33.4
+Level (Pa): 200100.0 Min:   3.0 Max:   3.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  65000.0 Min: -16.6 Max: -12.6
+Level (Pa):  80000.0 Min: -17.4 Max: -13.4
+Level (Pa):  95000.0 Min: -18.2 Max:   3.5
+Level (Pa): 200100.0 Min:  -4.0 Max:  -4.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  65000.0 Min:     65.0 Max:     73.2
+Level (Pa):  80000.0 Min:     62.0 Max:     70.3
+Level (Pa):  95000.0 Min:     16.5 Max:     67.3
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     290.0 Max:     290.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90000.0 Max:  100700.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  65000.0 Min: 0.001720 Max: 0.002060
+Level (Pa):  80000.0 Min: 0.001590 Max: 0.001930
+Level (Pa):  95000.0 Min: 0.000170 Max: 0.001800
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  65000.0 Min: 0.001850 Max: 0.002190
+Level (Pa):  80000.0 Min: 0.001710 Max: 0.002050
+Level (Pa):  95000.0 Min: 0.000280 Max: 0.001910
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  65000.0 Min: 0.001900 Max: 0.002250
+Level (Pa):  80000.0 Min: 0.001780 Max: 0.002130
+Level (Pa):  95000.0 Min: 0.000370 Max: 0.002010
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  65000.0 Min: 0.002020 Max: 0.002370
+Level (Pa):  80000.0 Min: 0.001890 Max: 0.002240
+Level (Pa):  95000.0 Min: 0.000480 Max: 0.002110
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  65000.0 Min: 0.002080 Max: 0.002460
+Level (Pa):  80000.0 Min: 0.001970 Max: 0.002350
+Level (Pa):  95000.0 Min: 0.000590 Max: 0.002240
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  65000.0 Min: 267.0 Max: 274.0
+Level (Pa):  80000.0 Min: 263.0 Max: 270.0
+Level (Pa):  95000.0 Min: 259.0 Max: 266.0
+Level (Pa): 200100.0 Min: 278.0 Max: 281.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  65000.0 Min:  -0.9 Max:   4.6
+Level (Pa):  80000.0 Min:  -1.6 Max:   3.9
+Level (Pa):  95000.0 Min:  -2.3 Max:   3.2
+Level (Pa): 200100.0 Min:   3.0 Max:   3.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  65000.0 Min:   1.5 Max:   4.8
+Level (Pa):  80000.0 Min:   2.1 Max:   5.4
+Level (Pa):  95000.0 Min:   2.7 Max:   6.0
+Level (Pa): 200100.0 Min:  -4.0 Max:  -4.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  65000.0 Min:     20.1 Max:     24.1
+Level (Pa):  80000.0 Min:     17.7 Max:     21.7
+Level (Pa):  95000.0 Min:     15.4 Max:     19.4
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     290.0 Max:     290.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90000.0 Max:  100000.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  65000.0 Min: 0.000220 Max: 0.000260
+Level (Pa):  80000.0 Min: 0.000190 Max: 0.000230
+Level (Pa):  95000.0 Min: 0.000160 Max: 0.000200
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  65000.0 Min: 0.000350 Max: 0.000390
+Level (Pa):  80000.0 Min: 0.000310 Max: 0.000350
+Level (Pa):  95000.0 Min: 0.000270 Max: 0.000310
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  65000.0 Min: 0.000400 Max: 0.000450
+Level (Pa):  80000.0 Min: 0.000380 Max: 0.000430
+Level (Pa):  95000.0 Min: 0.000360 Max: 0.000410
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  65000.0 Min: 0.000520 Max: 0.000570
+Level (Pa):  80000.0 Min: 0.000490 Max: 0.000540
+Level (Pa):  95000.0 Min: 0.000460 Max: 0.000510
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  65000.0 Min: 0.000580 Max: 0.000660
+Level (Pa):  80000.0 Min: 0.000570 Max: 0.000650
+Level (Pa):  95000.0 Min: 0.000560 Max: 0.000640
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  65000.0 Min: 310.0 Max: 343.0
+Level (Pa):  80000.0 Min: 305.0 Max: 338.0
+Level (Pa):  95000.0 Min: 261.0 Max: 333.0
+Level (Pa): 200100.0 Min: 279.0 Max: 283.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  65000.0 Min:  27.2 Max:  34.2
+Level (Pa):  80000.0 Min:  26.8 Max:  33.8
+Level (Pa):  95000.0 Min:  -0.8 Max:  33.4
+Level (Pa): 200100.0 Min:   3.0 Max:   3.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  65000.0 Min: -16.6 Max: -12.6
+Level (Pa):  80000.0 Min: -17.4 Max: -13.4
+Level (Pa):  95000.0 Min: -18.2 Max:   3.5
+Level (Pa): 200100.0 Min:  -4.0 Max:  -4.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  65000.0 Min:     65.0 Max:     73.2
+Level (Pa):  80000.0 Min:     62.0 Max:     70.3
+Level (Pa):  95000.0 Min:     16.5 Max:     67.3
+Level (Pa): 200100.0 Min:    111.0 Max:    132.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     111.0 Max:     132.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     290.0 Max:     290.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90000.0 Max:  100700.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  65000.0 Min: 0.001720 Max: 0.002060
+Level (Pa):  80000.0 Min: 0.001590 Max: 0.001930
+Level (Pa):  95000.0 Min: 0.000170 Max: 0.001800
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  65000.0 Min: 0.001850 Max: 0.002190
+Level (Pa):  80000.0 Min: 0.001710 Max: 0.002050
+Level (Pa):  95000.0 Min: 0.000280 Max: 0.001910
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  65000.0 Min: 0.001900 Max: 0.002250
+Level (Pa):  80000.0 Min: 0.001780 Max: 0.002130
+Level (Pa):  95000.0 Min: 0.000370 Max: 0.002010
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  65000.0 Min: 0.002020 Max: 0.002370
+Level (Pa):  80000.0 Min: 0.001890 Max: 0.002240
+Level (Pa):  95000.0 Min: 0.000480 Max: 0.002110
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  65000.0 Min: 0.002080 Max: 0.002460
+Level (Pa):  80000.0 Min: 0.001970 Max: 0.002350
+Level (Pa):  95000.0 Min: 0.000590 Max: 0.002240
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  95000.0 Min: 261.0 Max: 333.0
+Level (Pa):  80000.0 Min: 305.0 Max: 338.0
+Level (Pa):  65000.0 Min: 310.0 Max: 343.0
+Level (Pa): 200100.0 Min: 279.0 Max: 283.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  95000.0 Min:  -0.8 Max:  33.4
+Level (Pa):  80000.0 Min:  26.8 Max:  33.8
+Level (Pa):  65000.0 Min:  27.2 Max:  34.2
+Level (Pa): 200100.0 Min:   3.0 Max:   3.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  95000.0 Min: -18.2 Max:   3.5
+Level (Pa):  80000.0 Min: -17.4 Max: -13.4
+Level (Pa):  65000.0 Min: -16.6 Max: -12.6
+Level (Pa): 200100.0 Min:  -4.0 Max:  -4.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  95000.0 Min:     16.5 Max:     67.3
+Level (Pa):  80000.0 Min:     62.0 Max:     70.3
+Level (Pa):  65000.0 Min:     65.0 Max:     73.2
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     290.0 Max:     290.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90000.0 Max:  100700.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  95000.0 Min: 0.000170 Max: 0.001800
+Level (Pa):  80000.0 Min: 0.001590 Max: 0.001930
+Level (Pa):  65000.0 Min: 0.001720 Max: 0.002060
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  95000.0 Min: 0.000280 Max: 0.001910
+Level (Pa):  80000.0 Min: 0.001710 Max: 0.002050
+Level (Pa):  65000.0 Min: 0.001850 Max: 0.002190
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  95000.0 Min: 0.000370 Max: 0.002010
+Level (Pa):  80000.0 Min: 0.001780 Max: 0.002130
+Level (Pa):  65000.0 Min: 0.001900 Max: 0.002250
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  95000.0 Min: 0.000480 Max: 0.002110
+Level (Pa):  80000.0 Min: 0.001890 Max: 0.002240
+Level (Pa):  65000.0 Min: 0.002020 Max: 0.002370
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  95000.0 Min: 0.000590 Max: 0.002240
+Level (Pa):  80000.0 Min: 0.001970 Max: 0.002350
+Level (Pa):  65000.0 Min: 0.002080 Max: 0.002460
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            1
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):   5000.0 Min: 292.0 Max: 292.0
+Level (Pa):  10000.0 Min: 291.0 Max: 291.0
+Level (Pa):  15000.0 Min: 290.0 Max: 290.0
+Level (Pa):  20000.0 Min: 289.0 Max: 289.0
+Level (Pa):  25000.0 Min: 288.0 Max: 288.0
+Level (Pa):  30000.0 Min: 287.0 Max: 287.0
+Level (Pa):  35000.0 Min: 286.0 Max: 286.0
+Level (Pa):  40000.0 Min: 285.0 Max: 285.0
+Level (Pa):  45000.0 Min: 284.0 Max: 284.0
+Level (Pa):  50000.0 Min: 283.0 Max: 283.0
+Level (Pa):  55000.0 Min: 282.0 Max: 282.0
+Level (Pa):  60000.0 Min: 281.0 Max: 281.0
+Level (Pa):  65000.0 Min: 280.0 Max: 280.0
+Level (Pa):  70000.0 Min: 279.0 Max: 279.0
+Level (Pa):  75000.0 Min: 278.0 Max: 278.0
+Level (Pa):  80000.0 Min: 277.0 Max: 277.0
+Level (Pa):  85000.0 Min: 276.0 Max: 276.0
+Level (Pa):  90000.0 Min: 275.0 Max: 275.0
+Level (Pa):  95000.0 Min: 274.0 Max: 274.0
+Level (Pa): 100000.0 Min: 273.0 Max: 273.0
+Level (Pa): 200100.0 Min: 280.0 Max: 280.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):   5000.0 Min:   5.0 Max:   5.0
+Level (Pa):  10000.0 Min:   5.0 Max:   5.0
+Level (Pa):  15000.0 Min:   5.0 Max:   5.0
+Level (Pa):  20000.0 Min:   5.0 Max:   5.0
+Level (Pa):  25000.0 Min:   5.0 Max:   5.0
+Level (Pa):  30000.0 Min:   5.0 Max:   5.0
+Level (Pa):  35000.0 Min:   5.0 Max:   5.0
+Level (Pa):  40000.0 Min:   5.0 Max:   5.0
+Level (Pa):  45000.0 Min:   5.0 Max:   5.0
+Level (Pa):  50000.0 Min:   5.0 Max:   5.0
+Level (Pa):  55000.0 Min:   5.0 Max:   5.0
+Level (Pa):  60000.0 Min:   5.0 Max:   5.0
+Level (Pa):  65000.0 Min:   5.0 Max:   5.0
+Level (Pa):  70000.0 Min:   5.0 Max:   5.0
+Level (Pa):  75000.0 Min:   5.0 Max:   5.0
+Level (Pa):  80000.0 Min:   5.0 Max:   5.0
+Level (Pa):  85000.0 Min:   5.0 Max:   5.0
+Level (Pa):  90000.0 Min:   5.0 Max:   5.0
+Level (Pa):  95000.0 Min:   5.0 Max:   5.0
+Level (Pa): 100000.0 Min:   5.0 Max:   5.0
+Level (Pa): 200100.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):   5000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  10000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  15000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  20000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  25000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  30000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  35000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  40000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  45000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  50000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  55000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  60000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  65000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  70000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  75000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  80000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  85000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  90000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  95000.0 Min:  -2.0 Max:  -2.0
+Level (Pa): 100000.0 Min:  -2.0 Max:  -2.0
+Level (Pa): 200100.0 Min:   2.0 Max:   2.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):   5000.0 Min:  55.0 Max:  55.0
+Level (Pa):  10000.0 Min:  55.0 Max:  55.0
+Level (Pa):  15000.0 Min:  55.0 Max:  55.0
+Level (Pa):  20000.0 Min:  55.0 Max:  55.0
+Level (Pa):  25000.0 Min:  55.0 Max:  55.0
+Level (Pa):  30000.0 Min:  55.0 Max:  55.0
+Level (Pa):  35000.0 Min:  55.0 Max:  55.0
+Level (Pa):  40000.0 Min:  55.0 Max:  55.0
+Level (Pa):  45000.0 Min:  55.0 Max:  55.0
+Level (Pa):  50000.0 Min:  55.0 Max:  55.0
+Level (Pa):  55000.0 Min:  55.0 Max:  55.0
+Level (Pa):  60000.0 Min:  55.0 Max:  55.0
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  70000.0 Min:  55.0 Max:  55.0
+Level (Pa):  75000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  85000.0 Min:  55.0 Max:  55.0
+Level (Pa):  90000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa): 100000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):   5000.0 Min:   2243.4 Max:   2243.4
+Level (Pa):  10000.0 Min:   2141.4 Max:   2141.4
+Level (Pa):  15000.0 Min:   2039.4 Max:   2039.4
+Level (Pa):  20000.0 Min:   1937.5 Max:   1937.5
+Level (Pa):  25000.0 Min:   1835.5 Max:   1835.5
+Level (Pa):  30000.0 Min:   1733.5 Max:   1733.5
+Level (Pa):  35000.0 Min:   1631.5 Max:   1631.5
+Level (Pa):  40000.0 Min:   1529.6 Max:   1529.6
+Level (Pa):  45000.0 Min:   1427.6 Max:   1427.6
+Level (Pa):  50000.0 Min:   1325.6 Max:   1325.6
+Level (Pa):  55000.0 Min:   1223.7 Max:   1223.7
+Level (Pa):  60000.0 Min:   1121.7 Max:   1121.7
+Level (Pa):  65000.0 Min:   1019.7 Max:   1019.7
+Level (Pa):  70000.0 Min:    917.7 Max:    917.7
+Level (Pa):  75000.0 Min:    815.8 Max:    815.8
+Level (Pa):  80000.0 Min:    713.8 Max:    713.8
+Level (Pa):  85000.0 Min:    611.8 Max:    611.8
+Level (Pa):  90000.0 Min:    509.9 Max:    509.9
+Level (Pa):  95000.0 Min:    407.9 Max:    407.9
+Level (Pa): 100000.0 Min:    305.9 Max:    305.9
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     280.0 Max:     280.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:  100000.0 Max:  100000.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            1
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa): 100000.0 Min: 273.0 Max: 273.0
+Level (Pa):  95000.0 Min: 274.0 Max: 274.0
+Level (Pa):  90000.0 Min: 275.0 Max: 275.0
+Level (Pa):  85000.0 Min: 276.0 Max: 276.0
+Level (Pa):  80000.0 Min: 277.0 Max: 277.0
+Level (Pa):  75000.0 Min: 278.0 Max: 278.0
+Level (Pa):  70000.0 Min: 279.0 Max: 279.0
+Level (Pa):  65000.0 Min: 280.0 Max: 280.0
+Level (Pa):  60000.0 Min: 281.0 Max: 281.0
+Level (Pa):  55000.0 Min: 282.0 Max: 282.0
+Level (Pa):  50000.0 Min: 283.0 Max: 283.0
+Level (Pa):  45000.0 Min: 284.0 Max: 284.0
+Level (Pa):  40000.0 Min: 285.0 Max: 285.0
+Level (Pa):  35000.0 Min: 286.0 Max: 286.0
+Level (Pa):  30000.0 Min: 287.0 Max: 287.0
+Level (Pa):  25000.0 Min: 288.0 Max: 288.0
+Level (Pa):  20000.0 Min: 289.0 Max: 289.0
+Level (Pa):  15000.0 Min: 290.0 Max: 290.0
+Level (Pa):  10000.0 Min: 291.0 Max: 291.0
+Level (Pa):   5000.0 Min: 292.0 Max: 292.0
+Level (Pa): 200100.0 Min: 280.0 Max: 280.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa): 100000.0 Min:   5.0 Max:   5.0
+Level (Pa):  95000.0 Min:   5.0 Max:   5.0
+Level (Pa):  90000.0 Min:   5.0 Max:   5.0
+Level (Pa):  85000.0 Min:   5.0 Max:   5.0
+Level (Pa):  80000.0 Min:   5.0 Max:   5.0
+Level (Pa):  75000.0 Min:   5.0 Max:   5.0
+Level (Pa):  70000.0 Min:   5.0 Max:   5.0
+Level (Pa):  65000.0 Min:   5.0 Max:   5.0
+Level (Pa):  60000.0 Min:   5.0 Max:   5.0
+Level (Pa):  55000.0 Min:   5.0 Max:   5.0
+Level (Pa):  50000.0 Min:   5.0 Max:   5.0
+Level (Pa):  45000.0 Min:   5.0 Max:   5.0
+Level (Pa):  40000.0 Min:   5.0 Max:   5.0
+Level (Pa):  35000.0 Min:   5.0 Max:   5.0
+Level (Pa):  30000.0 Min:   5.0 Max:   5.0
+Level (Pa):  25000.0 Min:   5.0 Max:   5.0
+Level (Pa):  20000.0 Min:   5.0 Max:   5.0
+Level (Pa):  15000.0 Min:   5.0 Max:   5.0
+Level (Pa):  10000.0 Min:   5.0 Max:   5.0
+Level (Pa):   5000.0 Min:   5.0 Max:   5.0
+Level (Pa): 200100.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa): 100000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  95000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  90000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  85000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  80000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  75000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  70000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  65000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  60000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  55000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  50000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  45000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  40000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  35000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  30000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  25000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  20000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  15000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  10000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):   5000.0 Min:  -2.0 Max:  -2.0
+Level (Pa): 200100.0 Min:   2.0 Max:   2.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa): 100000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa):  90000.0 Min:  55.0 Max:  55.0
+Level (Pa):  85000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  75000.0 Min:  55.0 Max:  55.0
+Level (Pa):  70000.0 Min:  55.0 Max:  55.0
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  60000.0 Min:  55.0 Max:  55.0
+Level (Pa):  55000.0 Min:  55.0 Max:  55.0
+Level (Pa):  50000.0 Min:  55.0 Max:  55.0
+Level (Pa):  45000.0 Min:  55.0 Max:  55.0
+Level (Pa):  40000.0 Min:  55.0 Max:  55.0
+Level (Pa):  35000.0 Min:  55.0 Max:  55.0
+Level (Pa):  30000.0 Min:  55.0 Max:  55.0
+Level (Pa):  25000.0 Min:  55.0 Max:  55.0
+Level (Pa):  20000.0 Min:  55.0 Max:  55.0
+Level (Pa):  15000.0 Min:  55.0 Max:  55.0
+Level (Pa):  10000.0 Min:  55.0 Max:  55.0
+Level (Pa):   5000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa): 100000.0 Min:    305.9 Max:    305.9
+Level (Pa):  95000.0 Min:    407.9 Max:    407.9
+Level (Pa):  90000.0 Min:    509.9 Max:    509.9
+Level (Pa):  85000.0 Min:    611.8 Max:    611.8
+Level (Pa):  80000.0 Min:    713.8 Max:    713.8
+Level (Pa):  75000.0 Min:    815.8 Max:    815.8
+Level (Pa):  70000.0 Min:    917.7 Max:    917.7
+Level (Pa):  65000.0 Min:   1019.7 Max:   1019.7
+Level (Pa):  60000.0 Min:   1121.7 Max:   1121.7
+Level (Pa):  55000.0 Min:   1223.7 Max:   1223.7
+Level (Pa):  50000.0 Min:   1325.6 Max:   1325.6
+Level (Pa):  45000.0 Min:   1427.6 Max:   1427.6
+Level (Pa):  40000.0 Min:   1529.6 Max:   1529.6
+Level (Pa):  35000.0 Min:   1631.5 Max:   1631.5
+Level (Pa):  30000.0 Min:   1733.5 Max:   1733.5
+Level (Pa):  25000.0 Min:   1835.5 Max:   1835.5
+Level (Pa):  20000.0 Min:   1937.5 Max:   1937.5
+Level (Pa):  15000.0 Min:   2039.4 Max:   2039.4
+Level (Pa):  10000.0 Min:   2141.4 Max:   2141.4
+Level (Pa):   5000.0 Min:   2243.4 Max:   2243.4
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     280.0 Max:     280.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:  100000.0 Max:  100000.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+Pressure/WPS mapping tests passed
+PASS pressure-candidate WPS values, full 22-level selection, and opt-in SOILHGT
+ Host vapor pressure tests passed
+ source_host_failed_target_cap=   99872.8725527519       1.000000000000000E-003
+ source_host_failed_pressure=   100000.000000000        65000.0000000000     
+   80000.0000000000        95000.0000000000     
+ source_host_failed_temperature=   283.000000000000        252.000000000000     
+   264.000000000000        276.000000000000     
+ source_host_failed_vapor=  1.000000070780516E-002  3.000000026077032E-003
+  6.000000052154064E-003  8.999999612569809E-003
+ source_host_failed_height=   100.000000000000        2520.00000000000     
+   1612.00000000000        706.000000000000     
+ source_host_failed_height_response=  0.000000000000000E+000
+   8224.02818823585        8224.02818823585        8224.02818823585     
+ source_host_failed_target_cap=   94924.1327081836        1000.00000000000     
+ source_host_failed_pressure=   95050.0000000000        65000.0000000000     
+   80000.0000000000        95000.0000000000     
+ source_host_failed_temperature=   280.000000000000        250.000000000000     
+   260.000000000000        270.000000000000     
+ source_host_failed_vapor=  0.000000000000000E+000  0.000000000000000E+000
+  0.000000000000000E+000  0.000000000000000E+000
+ source_host_failed_height=   100.000000000000        2500.00000000000     
+   1600.00000000000        700.000000000000     
+ source_host_failed_height_response=  0.000000000000000E+000
+   8047.14279523092        8047.14279523092        8047.14279523092     
+ source_host_failed_target_cap=   94874.0862816235        1000.00000000000     
+ source_host_failed_pressure=   94999.1250000000        65000.0000000000     
+   80000.0000000000        95000.0000000000     
+ source_host_failed_temperature=   280.000000000000        250.000000000000     
+   260.000000000000        270.000000000000     
+ source_host_failed_vapor=  1.000000070780516E-002  4.000000189989805E-003
+  6.000000052154064E-003  8.000000379979610E-003
+ source_host_failed_height=   100.000000000000        2500.00000000000     
+   1600.00000000000        700.000000000000     
+ source_host_failed_height_response=  0.000000000000000E+000
+   7939.33067878833        7939.33067878833       0.000000000000000E+000
+Source-host pressure request tests passed
+Pressure transition-prior tests passed
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  65000.0 Min: 310.0 Max: 343.0
+Level (Pa):  80000.0 Min: 305.0 Max: 338.0
+Level (Pa):  95000.0 Min: 261.0 Max: 333.0
+Level (Pa): 200100.0 Min: 279.0 Max: 283.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  65000.0 Min:  27.2 Max:  34.2
+Level (Pa):  80000.0 Min:  26.8 Max:  33.8
+Level (Pa):  95000.0 Min:  -0.8 Max:  33.4
+Level (Pa): 200100.0 Min:   3.0 Max:   3.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  65000.0 Min: -16.6 Max: -12.6
+Level (Pa):  80000.0 Min: -17.4 Max: -13.4
+Level (Pa):  95000.0 Min: -18.2 Max:   3.5
+Level (Pa): 200100.0 Min:  -4.0 Max:  -4.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  65000.0 Min:     65.0 Max:     73.2
+Level (Pa):  80000.0 Min:     62.0 Max:     70.3
+Level (Pa):  95000.0 Min:     16.5 Max:     67.3
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     290.0 Max:     290.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90000.0 Max:  100700.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  65000.0 Min: 0.001720 Max: 0.002060
+Level (Pa):  80000.0 Min: 0.001590 Max: 0.001930
+Level (Pa):  95000.0 Min: 0.000170 Max: 0.001800
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  65000.0 Min: 0.001850 Max: 0.002190
+Level (Pa):  80000.0 Min: 0.001710 Max: 0.002050
+Level (Pa):  95000.0 Min: 0.000280 Max: 0.001910
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  65000.0 Min: 0.001900 Max: 0.002250
+Level (Pa):  80000.0 Min: 0.001780 Max: 0.002130
+Level (Pa):  95000.0 Min: 0.000370 Max: 0.002010
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  65000.0 Min: 0.002020 Max: 0.002370
+Level (Pa):  80000.0 Min: 0.001890 Max: 0.002240
+Level (Pa):  95000.0 Min: 0.000480 Max: 0.002110
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  65000.0 Min: 0.002080 Max: 0.002460
+Level (Pa):  80000.0 Min: 0.001970 Max: 0.002350
+Level (Pa):  95000.0 Min: 0.000590 Max: 0.002240
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  65000.0 Min: 267.0 Max: 274.0
+Level (Pa):  80000.0 Min: 263.0 Max: 270.0
+Level (Pa):  95000.0 Min: 259.0 Max: 266.0
+Level (Pa): 200100.0 Min: 278.0 Max: 281.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  65000.0 Min:  -0.9 Max:   4.6
+Level (Pa):  80000.0 Min:  -1.6 Max:   3.9
+Level (Pa):  95000.0 Min:  -2.3 Max:   3.2
+Level (Pa): 200100.0 Min:   3.0 Max:   3.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  65000.0 Min:   1.5 Max:   4.8
+Level (Pa):  80000.0 Min:   2.1 Max:   5.4
+Level (Pa):  95000.0 Min:   2.7 Max:   6.0
+Level (Pa): 200100.0 Min:  -4.0 Max:  -4.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  65000.0 Min:     20.1 Max:     24.1
+Level (Pa):  80000.0 Min:     17.7 Max:     21.7
+Level (Pa):  95000.0 Min:     15.4 Max:     19.4
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     290.0 Max:     290.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90000.0 Max:  100000.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  65000.0 Min: 0.000220 Max: 0.000260
+Level (Pa):  80000.0 Min: 0.000190 Max: 0.000230
+Level (Pa):  95000.0 Min: 0.000160 Max: 0.000200
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  65000.0 Min: 0.000350 Max: 0.000390
+Level (Pa):  80000.0 Min: 0.000310 Max: 0.000350
+Level (Pa):  95000.0 Min: 0.000270 Max: 0.000310
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  65000.0 Min: 0.000400 Max: 0.000450
+Level (Pa):  80000.0 Min: 0.000380 Max: 0.000430
+Level (Pa):  95000.0 Min: 0.000360 Max: 0.000410
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  65000.0 Min: 0.000520 Max: 0.000570
+Level (Pa):  80000.0 Min: 0.000490 Max: 0.000540
+Level (Pa):  95000.0 Min: 0.000460 Max: 0.000510
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  65000.0 Min: 0.000580 Max: 0.000660
+Level (Pa):  80000.0 Min: 0.000570 Max: 0.000650
+Level (Pa):  95000.0 Min: 0.000560 Max: 0.000640
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  65000.0 Min: 310.0 Max: 343.0
+Level (Pa):  80000.0 Min: 305.0 Max: 338.0
+Level (Pa):  95000.0 Min: 261.0 Max: 333.0
+Level (Pa): 200100.0 Min: 279.0 Max: 283.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  65000.0 Min:  27.2 Max:  34.2
+Level (Pa):  80000.0 Min:  26.8 Max:  33.8
+Level (Pa):  95000.0 Min:  -0.8 Max:  33.4
+Level (Pa): 200100.0 Min:   3.0 Max:   3.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  65000.0 Min: -16.6 Max: -12.6
+Level (Pa):  80000.0 Min: -17.4 Max: -13.4
+Level (Pa):  95000.0 Min: -18.2 Max:   3.5
+Level (Pa): 200100.0 Min:  -4.0 Max:  -4.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  65000.0 Min:     65.0 Max:     73.2
+Level (Pa):  80000.0 Min:     62.0 Max:     70.3
+Level (Pa):  95000.0 Min:     16.5 Max:     67.3
+Level (Pa): 200100.0 Min:    111.0 Max:    132.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     111.0 Max:     132.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     290.0 Max:     290.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90000.0 Max:  100700.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  65000.0 Min: 0.001720 Max: 0.002060
+Level (Pa):  80000.0 Min: 0.001590 Max: 0.001930
+Level (Pa):  95000.0 Min: 0.000170 Max: 0.001800
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  65000.0 Min: 0.001850 Max: 0.002190
+Level (Pa):  80000.0 Min: 0.001710 Max: 0.002050
+Level (Pa):  95000.0 Min: 0.000280 Max: 0.001910
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  65000.0 Min: 0.001900 Max: 0.002250
+Level (Pa):  80000.0 Min: 0.001780 Max: 0.002130
+Level (Pa):  95000.0 Min: 0.000370 Max: 0.002010
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  65000.0 Min: 0.002020 Max: 0.002370
+Level (Pa):  80000.0 Min: 0.001890 Max: 0.002240
+Level (Pa):  95000.0 Min: 0.000480 Max: 0.002110
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  65000.0 Min: 0.002080 Max: 0.002460
+Level (Pa):  80000.0 Min: 0.001970 Max: 0.002350
+Level (Pa):  95000.0 Min: 0.000590 Max: 0.002240
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            3
+ NY =            2
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):  95000.0 Min: 261.0 Max: 333.0
+Level (Pa):  80000.0 Min: 305.0 Max: 338.0
+Level (Pa):  65000.0 Min: 310.0 Max: 343.0
+Level (Pa): 200100.0 Min: 279.0 Max: 283.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):  95000.0 Min:  -0.8 Max:  33.4
+Level (Pa):  80000.0 Min:  26.8 Max:  33.8
+Level (Pa):  65000.0 Min:  27.2 Max:  34.2
+Level (Pa): 200100.0 Min:   3.0 Max:   3.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):  95000.0 Min: -18.2 Max:   3.5
+Level (Pa):  80000.0 Min: -17.4 Max: -13.4
+Level (Pa):  65000.0 Min: -16.6 Max: -12.6
+Level (Pa): 200100.0 Min:  -4.0 Max:  -4.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):  95000.0 Min:     16.5 Max:     67.3
+Level (Pa):  80000.0 Min:     62.0 Max:     70.3
+Level (Pa):  65000.0 Min:     65.0 Max:     73.2
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     290.0 Max:     290.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:   90000.0 Max:  100700.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):  95000.0 Min: 0.000170 Max: 0.001800
+Level (Pa):  80000.0 Min: 0.001590 Max: 0.001930
+Level (Pa):  65000.0 Min: 0.001720 Max: 0.002060
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):  95000.0 Min: 0.000280 Max: 0.001910
+Level (Pa):  80000.0 Min: 0.001710 Max: 0.002050
+Level (Pa):  65000.0 Min: 0.001850 Max: 0.002190
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):  95000.0 Min: 0.000370 Max: 0.002010
+Level (Pa):  80000.0 Min: 0.001780 Max: 0.002130
+Level (Pa):  65000.0 Min: 0.001900 Max: 0.002250
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):  95000.0 Min: 0.000480 Max: 0.002110
+Level (Pa):  80000.0 Min: 0.001890 Max: 0.002240
+Level (Pa):  65000.0 Min: 0.002020 Max: 0.002370
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):  95000.0 Min: 0.000590 Max: 0.002240
+Level (Pa):  80000.0 Min: 0.001970 Max: 0.002350
+Level (Pa):  65000.0 Min: 0.002080 Max: 0.002460
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            1
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa):   5000.0 Min: 292.0 Max: 292.0
+Level (Pa):  10000.0 Min: 291.0 Max: 291.0
+Level (Pa):  15000.0 Min: 290.0 Max: 290.0
+Level (Pa):  20000.0 Min: 289.0 Max: 289.0
+Level (Pa):  25000.0 Min: 288.0 Max: 288.0
+Level (Pa):  30000.0 Min: 287.0 Max: 287.0
+Level (Pa):  35000.0 Min: 286.0 Max: 286.0
+Level (Pa):  40000.0 Min: 285.0 Max: 285.0
+Level (Pa):  45000.0 Min: 284.0 Max: 284.0
+Level (Pa):  50000.0 Min: 283.0 Max: 283.0
+Level (Pa):  55000.0 Min: 282.0 Max: 282.0
+Level (Pa):  60000.0 Min: 281.0 Max: 281.0
+Level (Pa):  65000.0 Min: 280.0 Max: 280.0
+Level (Pa):  70000.0 Min: 279.0 Max: 279.0
+Level (Pa):  75000.0 Min: 278.0 Max: 278.0
+Level (Pa):  80000.0 Min: 277.0 Max: 277.0
+Level (Pa):  85000.0 Min: 276.0 Max: 276.0
+Level (Pa):  90000.0 Min: 275.0 Max: 275.0
+Level (Pa):  95000.0 Min: 274.0 Max: 274.0
+Level (Pa): 100000.0 Min: 273.0 Max: 273.0
+Level (Pa): 200100.0 Min: 280.0 Max: 280.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa):   5000.0 Min:   5.0 Max:   5.0
+Level (Pa):  10000.0 Min:   5.0 Max:   5.0
+Level (Pa):  15000.0 Min:   5.0 Max:   5.0
+Level (Pa):  20000.0 Min:   5.0 Max:   5.0
+Level (Pa):  25000.0 Min:   5.0 Max:   5.0
+Level (Pa):  30000.0 Min:   5.0 Max:   5.0
+Level (Pa):  35000.0 Min:   5.0 Max:   5.0
+Level (Pa):  40000.0 Min:   5.0 Max:   5.0
+Level (Pa):  45000.0 Min:   5.0 Max:   5.0
+Level (Pa):  50000.0 Min:   5.0 Max:   5.0
+Level (Pa):  55000.0 Min:   5.0 Max:   5.0
+Level (Pa):  60000.0 Min:   5.0 Max:   5.0
+Level (Pa):  65000.0 Min:   5.0 Max:   5.0
+Level (Pa):  70000.0 Min:   5.0 Max:   5.0
+Level (Pa):  75000.0 Min:   5.0 Max:   5.0
+Level (Pa):  80000.0 Min:   5.0 Max:   5.0
+Level (Pa):  85000.0 Min:   5.0 Max:   5.0
+Level (Pa):  90000.0 Min:   5.0 Max:   5.0
+Level (Pa):  95000.0 Min:   5.0 Max:   5.0
+Level (Pa): 100000.0 Min:   5.0 Max:   5.0
+Level (Pa): 200100.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa):   5000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  10000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  15000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  20000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  25000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  30000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  35000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  40000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  45000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  50000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  55000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  60000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  65000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  70000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  75000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  80000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  85000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  90000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  95000.0 Min:  -2.0 Max:  -2.0
+Level (Pa): 100000.0 Min:  -2.0 Max:  -2.0
+Level (Pa): 200100.0 Min:   2.0 Max:   2.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa):   5000.0 Min:  55.0 Max:  55.0
+Level (Pa):  10000.0 Min:  55.0 Max:  55.0
+Level (Pa):  15000.0 Min:  55.0 Max:  55.0
+Level (Pa):  20000.0 Min:  55.0 Max:  55.0
+Level (Pa):  25000.0 Min:  55.0 Max:  55.0
+Level (Pa):  30000.0 Min:  55.0 Max:  55.0
+Level (Pa):  35000.0 Min:  55.0 Max:  55.0
+Level (Pa):  40000.0 Min:  55.0 Max:  55.0
+Level (Pa):  45000.0 Min:  55.0 Max:  55.0
+Level (Pa):  50000.0 Min:  55.0 Max:  55.0
+Level (Pa):  55000.0 Min:  55.0 Max:  55.0
+Level (Pa):  60000.0 Min:  55.0 Max:  55.0
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  70000.0 Min:  55.0 Max:  55.0
+Level (Pa):  75000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  85000.0 Min:  55.0 Max:  55.0
+Level (Pa):  90000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa): 100000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa):   5000.0 Min:   2243.4 Max:   2243.4
+Level (Pa):  10000.0 Min:   2141.4 Max:   2141.4
+Level (Pa):  15000.0 Min:   2039.4 Max:   2039.4
+Level (Pa):  20000.0 Min:   1937.5 Max:   1937.5
+Level (Pa):  25000.0 Min:   1835.5 Max:   1835.5
+Level (Pa):  30000.0 Min:   1733.5 Max:   1733.5
+Level (Pa):  35000.0 Min:   1631.5 Max:   1631.5
+Level (Pa):  40000.0 Min:   1529.6 Max:   1529.6
+Level (Pa):  45000.0 Min:   1427.6 Max:   1427.6
+Level (Pa):  50000.0 Min:   1325.6 Max:   1325.6
+Level (Pa):  55000.0 Min:   1223.7 Max:   1223.7
+Level (Pa):  60000.0 Min:   1121.7 Max:   1121.7
+Level (Pa):  65000.0 Min:   1019.7 Max:   1019.7
+Level (Pa):  70000.0 Min:    917.7 Max:    917.7
+Level (Pa):  75000.0 Min:    815.8 Max:    815.8
+Level (Pa):  80000.0 Min:    713.8 Max:    713.8
+Level (Pa):  85000.0 Min:    611.8 Max:    611.8
+Level (Pa):  90000.0 Min:    509.9 Max:    509.9
+Level (Pa):  95000.0 Min:    407.9 Max:    407.9
+Level (Pa): 100000.0 Min:    305.9 Max:    305.9
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     280.0 Max:     280.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:  100000.0 Max:  100000.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ grid_type
+ mercator                                                                       
+                                                      
+ GRIBPREP VERSION =           5
+ SOURCE = LAPS ANALYSIS                   
+ HDATE = 2026-09-01_03:32:00.0000
+ XFCST =   0.0000000E+00
+ NX =            2
+ NY =            1
+ IPROJ =            1
+ KNOWNLOC = SWCORNER
+ STARTLAT =    30.00000    
+ STARTLON =    120.0000    
+ DX =    1.000000    
+ DY =    1.000000    
+ XLONC =    126.0000    
+ TRUELAT1 =    30.00000    
+ TRUELAT2 =    60.00000    
+ FIELD = TT       
+ UNITS = K                        
+ DESC =  Temperature                                   
+Level (Pa): 100000.0 Min: 273.0 Max: 273.0
+Level (Pa):  95000.0 Min: 274.0 Max: 274.0
+Level (Pa):  90000.0 Min: 275.0 Max: 275.0
+Level (Pa):  85000.0 Min: 276.0 Max: 276.0
+Level (Pa):  80000.0 Min: 277.0 Max: 277.0
+Level (Pa):  75000.0 Min: 278.0 Max: 278.0
+Level (Pa):  70000.0 Min: 279.0 Max: 279.0
+Level (Pa):  65000.0 Min: 280.0 Max: 280.0
+Level (Pa):  60000.0 Min: 281.0 Max: 281.0
+Level (Pa):  55000.0 Min: 282.0 Max: 282.0
+Level (Pa):  50000.0 Min: 283.0 Max: 283.0
+Level (Pa):  45000.0 Min: 284.0 Max: 284.0
+Level (Pa):  40000.0 Min: 285.0 Max: 285.0
+Level (Pa):  35000.0 Min: 286.0 Max: 286.0
+Level (Pa):  30000.0 Min: 287.0 Max: 287.0
+Level (Pa):  25000.0 Min: 288.0 Max: 288.0
+Level (Pa):  20000.0 Min: 289.0 Max: 289.0
+Level (Pa):  15000.0 Min: 290.0 Max: 290.0
+Level (Pa):  10000.0 Min: 291.0 Max: 291.0
+Level (Pa):   5000.0 Min: 292.0 Max: 292.0
+Level (Pa): 200100.0 Min: 280.0 Max: 280.0
+ FIELD = UU       
+ UNITS = m s{-1}                  
+ DESC =  U                                             
+Level (Pa): 100000.0 Min:   5.0 Max:   5.0
+Level (Pa):  95000.0 Min:   5.0 Max:   5.0
+Level (Pa):  90000.0 Min:   5.0 Max:   5.0
+Level (Pa):  85000.0 Min:   5.0 Max:   5.0
+Level (Pa):  80000.0 Min:   5.0 Max:   5.0
+Level (Pa):  75000.0 Min:   5.0 Max:   5.0
+Level (Pa):  70000.0 Min:   5.0 Max:   5.0
+Level (Pa):  65000.0 Min:   5.0 Max:   5.0
+Level (Pa):  60000.0 Min:   5.0 Max:   5.0
+Level (Pa):  55000.0 Min:   5.0 Max:   5.0
+Level (Pa):  50000.0 Min:   5.0 Max:   5.0
+Level (Pa):  45000.0 Min:   5.0 Max:   5.0
+Level (Pa):  40000.0 Min:   5.0 Max:   5.0
+Level (Pa):  35000.0 Min:   5.0 Max:   5.0
+Level (Pa):  30000.0 Min:   5.0 Max:   5.0
+Level (Pa):  25000.0 Min:   5.0 Max:   5.0
+Level (Pa):  20000.0 Min:   5.0 Max:   5.0
+Level (Pa):  15000.0 Min:   5.0 Max:   5.0
+Level (Pa):  10000.0 Min:   5.0 Max:   5.0
+Level (Pa):   5000.0 Min:   5.0 Max:   5.0
+Level (Pa): 200100.0 Min:   1.0 Max:   1.0
+ FIELD = VV       
+ UNITS = m s{-1}                  
+ DESC =  V                                             
+Level (Pa): 100000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  95000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  90000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  85000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  80000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  75000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  70000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  65000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  60000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  55000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  50000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  45000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  40000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  35000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  30000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  25000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  20000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  15000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):  10000.0 Min:  -2.0 Max:  -2.0
+Level (Pa):   5000.0 Min:  -2.0 Max:  -2.0
+Level (Pa): 200100.0 Min:   2.0 Max:   2.0
+ FIELD = RH       
+ UNITS = %                        
+ DESC =  Relative humidity                             
+Level (Pa): 100000.0 Min:  55.0 Max:  55.0
+Level (Pa):  95000.0 Min:  55.0 Max:  55.0
+Level (Pa):  90000.0 Min:  55.0 Max:  55.0
+Level (Pa):  85000.0 Min:  55.0 Max:  55.0
+Level (Pa):  80000.0 Min:  55.0 Max:  55.0
+Level (Pa):  75000.0 Min:  55.0 Max:  55.0
+Level (Pa):  70000.0 Min:  55.0 Max:  55.0
+Level (Pa):  65000.0 Min:  55.0 Max:  55.0
+Level (Pa):  60000.0 Min:  55.0 Max:  55.0
+Level (Pa):  55000.0 Min:  55.0 Max:  55.0
+Level (Pa):  50000.0 Min:  55.0 Max:  55.0
+Level (Pa):  45000.0 Min:  55.0 Max:  55.0
+Level (Pa):  40000.0 Min:  55.0 Max:  55.0
+Level (Pa):  35000.0 Min:  55.0 Max:  55.0
+Level (Pa):  30000.0 Min:  55.0 Max:  55.0
+Level (Pa):  25000.0 Min:  55.0 Max:  55.0
+Level (Pa):  20000.0 Min:  55.0 Max:  55.0
+Level (Pa):  15000.0 Min:  55.0 Max:  55.0
+Level (Pa):  10000.0 Min:  55.0 Max:  55.0
+Level (Pa):   5000.0 Min:  55.0 Max:  55.0
+Level (Pa): 200100.0 Min:  55.0 Max:  55.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height                                        
+Level (Pa): 100000.0 Min:    305.9 Max:    305.9
+Level (Pa):  95000.0 Min:    407.9 Max:    407.9
+Level (Pa):  90000.0 Min:    509.9 Max:    509.9
+Level (Pa):  85000.0 Min:    611.8 Max:    611.8
+Level (Pa):  80000.0 Min:    713.8 Max:    713.8
+Level (Pa):  75000.0 Min:    815.8 Max:    815.8
+Level (Pa):  70000.0 Min:    917.7 Max:    917.7
+Level (Pa):  65000.0 Min:   1019.7 Max:   1019.7
+Level (Pa):  60000.0 Min:   1121.7 Max:   1121.7
+Level (Pa):  55000.0 Min:   1223.7 Max:   1223.7
+Level (Pa):  50000.0 Min:   1325.6 Max:   1325.6
+Level (Pa):  45000.0 Min:   1427.6 Max:   1427.6
+Level (Pa):  40000.0 Min:   1529.6 Max:   1529.6
+Level (Pa):  35000.0 Min:   1631.5 Max:   1631.5
+Level (Pa):  30000.0 Min:   1733.5 Max:   1733.5
+Level (Pa):  25000.0 Min:   1835.5 Max:   1835.5
+Level (Pa):  20000.0 Min:   1937.5 Max:   1937.5
+Level (Pa):  15000.0 Min:   2039.4 Max:   2039.4
+Level (Pa):  10000.0 Min:   2141.4 Max:   2141.4
+Level (Pa):   5000.0 Min:   2243.4 Max:   2243.4
+Level (Pa): 200100.0 Min:    100.0 Max:    100.0
+ FIELD = HGT      
+ UNITS = m                        
+ DESC =  Height of topography                          
+Level (Pa): 200100.0 Min:     100.0 Max:     100.0
+ FIELD = SKINTEMP 
+ UNITS = K                        
+ DESC =  Skin temperature                              
+Level (Pa): 200100.0 Min:     280.0 Max:     280.0
+ FIELD = PMSL     
+ UNITS = Pa                       
+ DESC =  Sea-level pressure                            
+Level (Pa): 201300.0 Min:  101000.0 Max:  101000.0
+ FIELD = PSFC     
+ UNITS = Pa                       
+ DESC =  Surface pressure                              
+Level (Pa): 200100.0 Min:  100000.0 Max:  100000.0
+ FIELD = SNOWCOVR 
+ UNITS = (DIMENSIONLESS)          
+ DESC =  Snow cover flag                               
+Level (Pa): 200100.0 Min:      0.00 Max:      0.00
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QC       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud liquid water mixing ratio               
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QI       
+ UNITS = kg kg{-1}                
+ DESC =  Cloud ice mixing ratio                        
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QR       
+ UNITS = kg kg{-1}                
+ DESC =  Rain water mixing ratio                       
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QS       
+ UNITS = kg kg{-1}                
+ DESC =  Snow mixing ratio                             
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 100000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  95000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  90000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  85000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  80000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  75000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  70000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  65000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  60000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  55000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  50000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  45000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  40000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  35000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  30000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  25000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  20000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  15000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):  10000.0 Min: 0.000000 Max: 0.000000
+Level (Pa):   5000.0 Min: 0.000000 Max: 0.000000
+ FIELD = QG       
+ UNITS = kg kg{-1}                
+ DESC =  Graupel mixing ratio                          
+Level (Pa): 200100.0 Min: 0.000000 Max: 0.000000
+Pressure/WPS mapping tests passed
+PASS pressure-candidate WPS values, full 22-level selection, and opt-in SOILHGT
+ Host vapor pressure tests passed
+ source_host_failed_target_cap=   99872.8725527519       1.000000000000000E-003
+ source_host_failed_pressure=   100000.000000000        65000.0000000000     
+   80000.0000000000        95000.0000000000     
+ source_host_failed_temperature=   283.000000000000        252.000000000000     
+   264.000000000000        276.000000000000     
+ source_host_failed_vapor=  1.000000070780516E-002  3.000000026077032E-003
+  6.000000052154064E-003  8.999999612569809E-003
+ source_host_failed_height=   100.000000000000        2520.00000000000     
+   1612.00000000000        706.000000000000     
+ source_host_failed_height_response=  0.000000000000000E+000
+   8224.02818823585        8224.02818823585        8224.02818823585     
+ source_host_failed_target_cap=   94924.1327081836        1000.00000000000     
+ source_host_failed_pressure=   95050.0000000000        65000.0000000000     
+   80000.0000000000        95000.0000000000     
+ source_host_failed_temperature=   280.000000000000        250.000000000000     
+   260.000000000000        270.000000000000     
+ source_host_failed_vapor=  0.000000000000000E+000  0.000000000000000E+000
+  0.000000000000000E+000  0.000000000000000E+000
+ source_host_failed_height=   100.000000000000        2500.00000000000     
+   1600.00000000000        700.000000000000     
+ source_host_failed_height_response=  0.000000000000000E+000
+   8047.14279523092        8047.14279523092        8047.14279523092     
+ source_host_failed_target_cap=   94874.0862816235        1000.00000000000     
+ source_host_failed_pressure=   94999.1250000000        65000.0000000000     
+   80000.0000000000        95000.0000000000     
+ source_host_failed_temperature=   280.000000000000        250.000000000000     
+   260.000000000000        270.000000000000     
+ source_host_failed_vapor=  1.000000070780516E-002  4.000000189989805E-003
+  6.000000052154064E-003  8.000000379979610E-003
+ source_host_failed_height=   100.000000000000        2500.00000000000     
+   1600.00000000000        700.000000000000     
+ source_host_failed_height_response=  0.000000000000000E+000
+   7939.33067878833        7939.33067878833       0.000000000000000E+000
+Source-host pressure request tests passed
+Pressure transition-prior tests passed
+pinned NetCDF Fortran/C archives are unavailable

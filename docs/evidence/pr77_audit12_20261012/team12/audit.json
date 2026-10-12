@@ -1,0 +1,144 @@
+{
+  "audit_id": "team12_cloud_bal_completion_science_20261012",
+  "date": "2026-10-12",
+  "mode": "read_only",
+  "source": {
+    "path": "scratch/pr77_native_state_20261012/Cloud-BAL",
+    "base_revision": "9701ef23f04576d875508a0882d0e0af67282587",
+    "overlay_status": "uncommitted PR77 working-tree overlay"
+  },
+  "decision": {
+    "same_candidate_conditions": "OPEN",
+    "native_candidate_status": "REJECTED",
+    "overall_physical_initialization": "OPEN",
+    "science_assessed": false,
+    "checkpoint_state": {
+      "CP00": "COMPLETE/PASS scoped research/engineering",
+      "CP01": "COMPLETE/PASS scoped research contract/small tests",
+      "CP02": "IN_PROGRESS/NOT_RUN",
+      "CP03-CP09": "PLANNED/NOT_RUN"
+    }
+  },
+  "findings": [
+    {
+      "id": "A12-01",
+      "severity": "BLOCKER",
+      "claim": "No real observation-authorized spatial joint candidate is generated; PR77 assesses/serializes an externally estimated endpoint only.",
+      "evidence": [
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:9-29",
+        "docs/evidence/pr77_estimator_canonical_20261012.json: numerical_decision=INVALID, candidate=REJECTED, science_assessed=false",
+        "docs/PR72_JOINT_CANDIDATE_PREFLIGHT_20261008.md:5-26"
+      ],
+      "next_check": "Generate from independently authorized exact-time H/B/R sources, errors, boundaries, moments and wind prior through common pipeline; bind identity and hashes."
+    },
+    {
+      "id": "A12-02",
+      "severity": "BLOCKER",
+      "claim": "Both PR77 native arms reject before a valid completed first call.",
+      "evidence": [
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:58-96",
+        "docs/evidence/pr77_native_state_20261012.json: profiles.kdm6_entry_gradual.run_exit_status=128",
+        "docs/evidence/pr77_native_state_20261012.json: profiles.kdm6_entry_gradual.pre_call_moment_audit.first_violation",
+        "docs/evidence/pr77_native_state_20261012.json: profiles.*.required_post_call_outputs=false"
+      ],
+      "next_check": "Resolve pre-call species invalidity without repair-by-floor/deletion/rescaling, then rerun and retain full post-call evidence; diagnose startup floating-invalid separately."
+    },
+    {
+      "id": "A12-03",
+      "severity": "BLOCKER",
+      "claim": "Same-carrier dry-mass, water and energy/enthalpy closure is not evidenced.",
+      "evidence": [
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:20-29",
+        "docs/PR76_PHYSICAL_CLOSURE_CHECKLIST_20261008.md:33-37",
+        "docs/evidence/pr77_native_state_20261012.json: science_assessed=false"
+      ],
+      "next_check": "Close and independently recompute all storage/source/boundary/cleanup/precipitation-enthalpy terms for the same candidate, carrier, interval and region after native readback."
+    },
+    {
+      "id": "A12-04",
+      "severity": "BLOCKER",
+      "claim": "Neighboring spatial mass-wind cell/shared-face closure is not shown by the one-cell endpoint fixture or solver tests.",
+      "evidence": [
+        "docs/PR76_PHYSICAL_CLOSURE_CHECKLIST_20261008.md:37-39",
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:9-19,112-125"
+      ],
+      "next_check": "Use a multi-cell observation-driven candidate and verify cell continuity and shared-face closure in transformed native geometry."
+    },
+    {
+      "id": "A12-05",
+      "severity": "BLOCKER",
+      "claim": "No same-candidate WPS/metgrid/real handoff; PR77 native input set is separate from the manufactured estimator endpoint.",
+      "evidence": [
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:58-61,112-115",
+        "docs/evidence/pr77_native_state_20261012.json: scope, profiles.*.inputs, input_preservation_passed",
+        "docs/PR72_JOINT_CANDIDATE_PREFLIGHT_20261008.md:45-58"
+      ],
+      "next_check": "Pass one accepted candidate unchanged by identity through WPS, metgrid, real and native readback."
+    },
+    {
+      "id": "A12-06",
+      "severity": "BLOCKER",
+      "claim": "Fixed-setting BASE/HYDRO/COUPLED short-time response and independent observational validation are not run.",
+      "evidence": [
+        "docs/PR76_PHYSICAL_CLOSURE_CHECKLIST_20261008.md:38-41",
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:121-125"
+      ],
+      "next_check": "After successful same-candidate handoff, preregister metrics and run first-call plus 10/30/60-minute comparisons against independent cloud/rain/ascent observations."
+    },
+    {
+      "id": "A12-07",
+      "severity": "MAJOR",
+      "claim": "Checkpoint prose §8 incorrectly says all eight checkpoints after CP00/01 are PLANNED/NOT_RUN, while CP02 ledger is IN_PROGRESS/NOT_RUN.",
+      "evidence": [
+        "docs/CLOUD_BAL_FINAL_GOALS_CHECKPOINTS_20260907.md:498-509",
+        "docs/CLOUD_BAL_CHECKPOINTS_20260907.tsv: CP02 row"
+      ],
+      "next_check": "Revise prose to say CP02 IN_PROGRESS/NOT_RUN and CP03-09 PLANNED/NOT_RUN."
+    },
+    {
+      "id": "A12-08",
+      "severity": "MAJOR",
+      "claim": "PR77 progress report refers to a missing validation receipt path.",
+      "evidence": [
+        "docs/PR77_INTEGRATION_PROGRESS_20261012.md:100-101 points to pr77_validation_20261012.json",
+        "docs/evidence/pr77_pipeline_validation_20261012.json exists and describes blocked estimator-endpoint integration"
+      ],
+      "next_check": "Confirm intended receipt, correct link, and verify its hashes/check inventory match the claims."
+    },
+    {
+      "id": "A12-09",
+      "severity": "MAJOR",
+      "claim": "Maintained KG provenance is current only through the 2026-10-08 PR76 snapshot; no PR77 dated overlay/report/log receipt is present, and the isolated query graph predates the overlay.",
+      "evidence": [
+        "wiki/graph-report-cloud-bal.md: Graph Freshness section",
+        "wiki/log.md: latest Cloud-BAL maintenance entries",
+        "graphify-out/2026-10-08-pr76-degenerate-kkt",
+        "Graphify query on isolated worktree: inherited graph has 1499 nodes"
+      ],
+      "next_check": "Write a separately dated Cloud-BAL selected-path overlay and sync report/log; record extraction limits/deltas, with no scientific/runtime implication."
+    }
+  ],
+  "count_interpretation": {
+    "finding": "No count conflation observed in PR77 text.",
+    "evidence": "PR77_INTEGRATION_PROGRESS_20261012.md:68-77 labels 68 startup rows and moment-pair totals as state/thread counts, not tests or completed physics calls; PR76 checklist line 14 scopes 68 Python methods to solver tests."
+  },
+  "kg_navigation": {
+    "used": true,
+    "command": "graphify query scoped to native/scientific acceptance evidence",
+    "graph_scope": "inherited isolated 1499-node graph, predates PR77 overlay",
+    "authority": "navigation only; source and retained receipts authoritative"
+  },
+  "coverage": [
+    "README, SCIENTIFIC_BASIS, RELEASE_CHECKLIST, NO_GO closure",
+    "CP00-CP09 checkpoint ledger and current-goals section",
+    "PR62-PR77 physical closure and selected review/evidence documents",
+    "PR77 native state, estimator diagnostic and pipeline validation receipts",
+    "maintained Cloud-BAL graph report and wiki log provenance"
+  ],
+  "exclusions": [
+    "No tests or native experiments run",
+    "No exhaustive independent reparse of every historical receipt",
+    "No independent scientific recalculation or runtime validation",
+    "KLAPS50 and Cloud-BAL graphs remain separately maintained snapshots"
+  ]
+}

@@ -18,7 +18,7 @@ caller_source="$repo_root/src/sfc/laps_sfc.f"
 
 . "$repo_root/tests/intel_toolchain.sh"
 
-scratch_root="$repo_root/scratch"
+scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
 mkdir -p "$scratch_root"
 test_tmp=$(mktemp -d "$scratch_root/previous_surface_qc.XXXXXX")
 if [[ ${CLOUD_BAL_KEEP_TEST_OUTPUT:-0} == 1 ]]; then

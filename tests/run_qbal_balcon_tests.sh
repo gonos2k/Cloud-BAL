@@ -2,9 +2,11 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+workspace_root=$(realpath -e "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
 . "$repo_root/tests/intel_toolchain.sh"
-mkdir -p "$repo_root/scratch"
-build_root=$(mktemp -d "$repo_root/scratch/qbal_balcon.XXXXXX")
+scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
+mkdir -p "$scratch_root"
+build_root=$(mktemp -d "$scratch_root/qbal_balcon.XXXXXX")
 cleanup() {
   if [[ "${CLOUD_BAL_KEEP_TEST_OUTPUT:-0}" == 1 ]]; then
     printf 'BALCON test scratch: %s\n' "$build_root"
@@ -18,7 +20,7 @@ qbal_source="$repo_root/src/balance/qbalpe.f"
 wind_source="$repo_root/src/common/cloud_bal_wind_modes.f90"
 balcon_test_source="$repo_root/tests/test_qbal_balcon.f90"
 reverse_test_source="$repo_root/tests/test_qbal_reverse_output.f90"
-utility_root="$repo_root/../klaps-v5.0_/src/lib"
+utility_root="$workspace_root/klaps-v5.0_/src/lib"
 qbal_source_hash=$(sha256sum "$qbal_source" | awk '{print $1}')
 core_source="$build_root/qbal_core.f"
 awk '/^[[:space:]]*subroutine diagnose\(/ {capture=1} capture {print}' \
@@ -74,20 +76,20 @@ for flag in "${CLOUD_BAL_FIXED_72_FLAGS[@]}"; do
 done
 
 input_hashes="$build_root/input_hashes.json"
-python3 - "$input_hashes" "$repo_root" "$build_root" "$CLOUD_BAL_FC" \
+python3 - "$input_hashes" "$repo_root" "$workspace_root" "$build_root" "$CLOUD_BAL_FC" \
   "$cloud_bal_imf" "$cloud_bal_intlc" "$cloud_bal_setvars" "$cloud_bal_fc_version" <<'PY'
 import hashlib
 import json
 from pathlib import Path
 import sys
 
-output, root, scratch, compiler, imf, intlc, setvars, version = sys.argv[1:]
+output, root, workspace, scratch, compiler, imf, intlc, setvars, version = sys.argv[1:]
 files = [
     root + "/src/balance/qbalpe.f", root + "/src/common/cloud_bal_wind_modes.f90",
     root + "/tests/test_qbal_balcon.f90", root + "/tests/test_qbal_reverse_output.f90",
     root + "/tests/run_qbal_balcon_tests.sh", root + "/tests/intel_toolchain.sh",
-    root + "/../klaps-v5.0_/src/lib/move.f", root + "/../klaps-v5.0_/src/lib/zero.f",
-    root + "/../klaps-v5.0_/src/lib/array_diagnosis.f", scratch + "/qbal_core.f",
+    workspace + "/klaps-v5.0_/src/lib/move.f", workspace + "/klaps-v5.0_/src/lib/zero.f",
+    workspace + "/klaps-v5.0_/src/lib/array_diagnosis.f", scratch + "/qbal_core.f",
     scratch + "/final_projection_bypass.f", scratch + "/reverse_phi_assignment_omitted.f",
     scratch + "/agrid_no_horizontal.f90", scratch + "/agrid_omega_sign.f90",
     compiler, imf, intlc, setvars,

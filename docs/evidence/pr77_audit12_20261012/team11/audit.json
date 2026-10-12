@@ -1,0 +1,71 @@
+{
+  "schema": "cloud_bal_test_portability_audit_v1",
+  "date": "2026-10-12",
+  "source_worktree": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL",
+  "source_base": "9701ef23f04576d875508a0882d0e0af67282587",
+  "audit_mode": "read-only; no tests rerun; no project edits",
+  "coverage": {
+    "transform_tests": "5 Python unittest methods over synthetic KDM6 and WRF main fixtures; anchor presence, placement/order, and negative anchor cases",
+    "startup_receipt_tests": "2 Python unittest methods; malformed/incomplete/duplicate rows, unique team IDs, main membership, FTZ/DAZ-only mask",
+    "native_diagnostic": "Two O0 partial-host cases, same 100 staged inputs, KDM6-entry gradual policy in both, treatment additionally applies policy to rebuilt host main and initial 68-thread OpenMP team; reuses pinned research archive and compiles copied KDM6 with explicit -fpp and observer -qopenmp",
+    "manufactured_endpoint": "Small fixed synthetic assessment inlet and NetCDF writer/readback at O0/O2; canonical standalone validator remains UNBOUND/REJECTED and science_assessed=false",
+    "ci": "git ls-files finds no workflow tracked in the PR77 target or maintained checkout; PR77 target has no .github/workflows/contract-ci.yml. A separate maintained directory has an untracked workflow of that name, with portable Python tests only and no pinned Intel/native checks."
+  },
+  "findings": [
+    {
+      "id": "T11-01",
+      "severity": "medium",
+      "kind": "test_coverage_gap",
+      "summary": "Native species observer rows are retained but not parsed or asserted by the runner.",
+      "location": "tests/pr77_native_state_run.py:102-117",
+      "reproduction": "Inspect the runtime receipt path; PR77_FIRST and PR77_COUNTS text is stored, but no semantic assertion checks presence, stage, coordinates, or agreement with the separate pretrace oracle.",
+      "next_check": "Add a fail-closed parser/assertion against an independent pretrace record if the native harness is used as a regression gate."
+    },
+    {
+      "id": "T11-03",
+      "severity": "medium",
+      "kind": "reproducibility_gap",
+      "summary": "Intel Fortran is pinned, but the C compiler and MPI/runtime environment are not pinned to the same level in the receipt.",
+      "location": "tests/intel_toolchain.sh:33-63; tests/pr76_native_fp_run.py:39-52; tests/run_pr77_native_state.sh:5-7; tests/pr77_native_state_run.py:124-130",
+      "reproduction": "icx is accepted by a generic Intel banner prefix; external vars.sh and final runtime library environment are not hashed into the PR77 receipt.",
+      "next_check": "Record/check expected icx version+SHA and hash the MPI setup/runtime dependency environment for stronger rebuild closure."
+    },
+    {
+      "id": "T11-04",
+      "severity": "low",
+      "kind": "test_independence_gap",
+      "summary": "Transform unit fixtures mirror the transformer's anchor strings, so those checks establish structural placement but not independent Fortran semantics.",
+      "location": "tests/test_pr77_native_state_transform.py:11-45",
+      "reproduction": "The test source is synthesized from the same fixed anchor lines used in pr77_native_state_transform.py.",
+      "next_check": "Retain actual copied-source compilation/runtime evidence; consider a small actual-source anchor integration check."
+    }
+  ],
+  "implementation_defects_found": [],
+  "native_outcome": {
+    "kdm6_entry_gradual": "REJECTED; exit 128; ice number-only state at (104, call_lat_index 2, 1), mass 0, internal number 4.2038792500161422e-36 m^-3",
+    "startup_plus_kdm6_entry_gradual": "REJECTED; Intel floating invalid error 65 before KDM6; rebuilt-main compile/profile confounds causal attribution to FTZ/DAZ",
+    "acceptance_claim": false,
+    "science_assessed": false
+  },
+  "count_interpretation": {
+    "entry_slice": "PR77_COUNTS classifies 9,048 cells per species for rain/cloud/ice/graupel over i=2..233, k=1..39",
+    "same_call_pretrace": "299,933 number-only, 740 mass-only, and 23,494 negative/invalid state pairs on the captured research input; not error rates or completed physics-call counts"
+  },
+  "graphify": {
+    "graph_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json",
+    "built_at_commit": "f837bad0bdf1050a34975d93b178b7dee4420094",
+    "graph_nodes": 8542,
+    "graph_edges": 15847,
+    "graph_report_date": "2026-10-08",
+    "selected_overlay": "2f27b3fc680f5fad14b2efa2879ab5fddd5325f4",
+    "overlay_base": "fd7e1be37075a7ba80ee3a0be080111a5be03a26",
+    "extraction_limits": "Report is a combined graph with cluster-only stats, partial cross-file Fortran CALL extraction, and omitted external native source trees. It is a selected PR76 overlay, not a full extraction of PR77 candidate tree.",
+    "local_scratch_graph": "1499 nodes, 3094 edges, 2026-09-07 snapshot; not used as maintained graph evidence.",
+    "update": "No update performed because audit is read-only."
+  },
+  "validation_segments": "Parent-confirmed segmentation: broad prefix reached only LGT workspace-path failure; repaired LGT test and original replay37/6 passed; final original source-tail unit commands through qbal fixed72 compile exited 0; three path-only runner corrections rechecked separately exit 0. Preserve earlier failed attempts as history, not open defects. No full/native rerun.",
+  "interpretation": {
+    "runner_exit_code": "Exit 0 intentionally means diagnostic evidence collection completed. Receipt fields physical_pass=false, native_candidate_accepted=false, science_assessed=false make it non-acceptance evidence; this is not an implementation defect.",
+    "runner_gate_gap": "Expected runtime failure signatures are not enforced, so callers must interpret exit 0 as collection completion only."
+  }
+}

@@ -1,0 +1,470 @@
+UNIT_TAIL_SCRATCH /var/tmp/pr77_unit_tail.Fvb29h
+UPSTREAM_MAIN_CASE_PASS time o0
+UPSTREAM_MAIN_CASE_PASS dim o0
+UPSTREAM_MAIN_CASE_PASS invaliddim o0
+UPSTREAM_MAIN_CASE_PASS invaliddim_y o0
+UPSTREAM_MAIN_CASE_PASS dim_z o0
+UPSTREAM_MAIN_CASE_PASS invaliddim_z o0
+UPSTREAM_MAIN_CASE_PASS lt1 o0
+UPSTREAM_MAIN_CASE_PASS success o0
+UPSTREAM_MAIN_CASE_PASS time o2
+UPSTREAM_MAIN_CASE_PASS dim o2
+UPSTREAM_MAIN_CASE_PASS invaliddim o2
+UPSTREAM_MAIN_CASE_PASS invaliddim_y o2
+UPSTREAM_MAIN_CASE_PASS dim_z o2
+UPSTREAM_MAIN_CASE_PASS invaliddim_z o2
+UPSTREAM_MAIN_CASE_PASS lt1 o2
+UPSTREAM_MAIN_CASE_PASS success o2
+UPSTREAM_TEMPERATURE_STATUS_TEST_PASS
+UPSTREAM_SURFACE_MAIN_CASE_PASS config_failure o0
+UPSTREAM_SURFACE_MAIN_CASE_PASS domain_failure o0
+UPSTREAM_SURFACE_MAIN_CASE_PASS success o0
+UPSTREAM_SURFACE_MAIN_CASE_PASS config_failure o2
+UPSTREAM_SURFACE_MAIN_CASE_PASS domain_failure o2
+UPSTREAM_SURFACE_MAIN_CASE_PASS success o2
+UPSTREAM_SURFACE_STATUS_TEST_PASS
+ Could not open file: 
+ /var/tmp/surface_observation_reader.3lpweb/o0/runtime/lso/262281200.lso        
+                                                                                
+                                                                                
+                    
+  ++ ERROR opening LSO file in READ_SURFACE_DATA ++
+ Invalid LSO input or summary output failure
+ Invalid LSO input or summary output failure
+ no obs in file 
+ /var/tmp/surface_observation_reader.3lpweb/o0/runtime/lso/262281200.lso        
+                                                                                
+                                                                                
+                     returning
+ Invalid LSO input or summary output failure
+ Invalid LSO input or summary output failure
+ Invalid LSO input or summary output failure
+ Invalid LSO input or summary output failure
+           1         STATION-TEST
+ Invalid LSO input or summary output failure
+           1         STATION-TEST
+ Invalid LSO input or summary output failure
+           1         STATION-TEST
+           2         STATION-TEST
+           1         STATION-TEST
+           2         STATION-TEST
+           1         STATION-TEST
+           2         STATION-TEST
+ Invalid LSO input or summary output failure
+ Could not open file: 
+ /var/tmp/surface_observation_reader.3lpweb/o0/runtime/lso/262281200.lso        
+                                                                                
+                                                                                
+                    
+  ++ ERROR opening LSO file in READ_SURFACE_DATA ++
+           1         STATION-TEST
+           2         STATION-TEST
+           1         STATION-TEST
+           2         STATION-TEST
+SURFACE_READER_TEST_PASS
+ Could not open file: 
+ /var/tmp/surface_observation_reader.3lpweb/o2/runtime/lso/262281200.lso        
+                                                                                
+                                                                                
+                    
+  ++ ERROR opening LSO file in READ_SURFACE_DATA ++
+ Invalid LSO input or summary output failure
+ Invalid LSO input or summary output failure
+ no obs in file 
+ /var/tmp/surface_observation_reader.3lpweb/o2/runtime/lso/262281200.lso        
+                                                                                
+                                                                                
+                     returning
+ Invalid LSO input or summary output failure
+ Invalid LSO input or summary output failure
+ Invalid LSO input or summary output failure
+ Invalid LSO input or summary output failure
+           1         STATION-TEST
+ Invalid LSO input or summary output failure
+           1         STATION-TEST
+ Invalid LSO input or summary output failure
+           1         STATION-TEST
+           2         STATION-TEST
+           1         STATION-TEST
+           2         STATION-TEST
+           1         STATION-TEST
+           2         STATION-TEST
+ Invalid LSO input or summary output failure
+ Could not open file: 
+ /var/tmp/surface_observation_reader.3lpweb/o2/runtime/lso/262281200.lso        
+                                                                                
+                                                                                
+                    
+  ++ ERROR opening LSO file in READ_SURFACE_DATA ++
+           1         STATION-TEST
+           2         STATION-TEST
+           1         STATION-TEST
+           2         STATION-TEST
+SURFACE_READER_TEST_PASS
+surface observation reader tests passed (O0/O2)
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS reader_missing 0
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS reader_corrupt -2
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS reader_unknown -2
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS current_missing 0
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS previous_missing 0
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  BKG T    check
+  BKG TD   check
+  BKG MSLP check
+  ** qc of surface data complete. ** 
+QC_CASE_PASS normal_with_background 1
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ missing/sfcqc.log.AIL1                                                         
+                                                                                
+                                                                                
+                    
+QC_CASE_PASS log_open_failure -2
+QC_TEST_PASS
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS reader_missing 0
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS reader_corrupt -2
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS reader_unknown -2
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS current_missing 0
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  ** qc of surface data complete. ** 
+QC_CASE_PASS previous_missing 0
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ logs/sfcqc.log.0001                                                            
+                                                                                
+                                                                                
+                    
+  BKG T    check
+  BKG TD   check
+  BKG MSLP check
+  ** qc of surface data complete. ** 
+QC_CASE_PASS normal_with_background 1
+ 
+  Subroutine qc_data...
+  opening log file for sfc qc:
+ missing/sfcqc.log.AIL1                                                         
+                                                                                
+                                                                                
+                    
+QC_CASE_PASS log_open_failure -2
+QC_TEST_PASS
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  Calling read_surface_data for 262281200
+  Normal completion of new READ_SURFACE_OLD
+LSO_CASE_PASS data_success 1
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  Calling read_surface_data for 262281200
+  ERROR.  LSO reader returned status           -1
+LSO_CASE_PASS data_missing -1
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  Calling read_surface_data for 262281200
+  ERROR.  LSO reader returned status            0
+LSO_CASE_PASS data_corrupt 0
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  Calling read_surface_data for 262281200
+  ERROR.  LSO reader returned status           77
+LSO_CASE_PASS data_unknown 0
+  Subroutine read_surface_old...
+  infile = short
+  ERROR. Invalid LSO filename
+LSO_CASE_PASS short_filename 0
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  ERROR. Invalid LSO time 262281200
+LSO_CASE_PASS invalid_time 0
+LSO_TEST_PASS
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  Calling read_surface_data for 262281200
+  Normal completion of new READ_SURFACE_OLD
+LSO_CASE_PASS data_success 1
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  Calling read_surface_data for 262281200
+  ERROR.  LSO reader returned status           -1
+LSO_CASE_PASS data_missing -1
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  Calling read_surface_data for 262281200
+  ERROR.  LSO reader returned status            0
+LSO_CASE_PASS data_corrupt 0
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  Calling read_surface_data for 262281200
+  ERROR.  LSO reader returned status           77
+LSO_CASE_PASS data_unknown 0
+  Subroutine read_surface_old...
+  infile = short
+  ERROR. Invalid LSO filename
+LSO_CASE_PASS short_filename 0
+  Subroutine read_surface_old...
+  infile = previous/262281200.lso
+  ERROR. Invalid LSO time 262281200
+LSO_CASE_PASS invalid_time 0
+LSO_TEST_PASS
+QC_CALLER_TEST_PASS o0
+QC_CALLER_TEST_PASS o2
+previous surface QC and LSO reader tests passed (O0/O2)
+UPSTREAM_HUMIDITY_CASE_PASS configbad o0
+UPSTREAM_HUMIDITY_CASE_PASS griddim0 o0
+UPSTREAM_HUMIDITY_CASE_PASS cycle0 o0
+UPSTREAM_HUMIDITY_CASE_PASS missingfile o0
+UPSTREAM_HUMIDITY_CASE_PASS malformedheader o0
+UPSTREAM_HUMIDITY_CASE_PASS truncatedtime o0
+UPSTREAM_HUMIDITY_CASE_PASS parsefail o0
+UPSTREAM_HUMIDITY_CASE_PASS timemismatch o0
+UPSTREAM_HUMIDITY_CASE_PASS untouchedjstatus o0
+UPSTREAM_HUMIDITY_CASE_PASS onlyLH3 o0
+UPSTREAM_HUMIDITY_CASE_PASS onlyLH4 o0
+UPSTREAM_HUMIDITY_CASE_PASS lq3only o0
+UPSTREAM_HUMIDITY_CASE_PASS fullsuccess o0
+UPSTREAM_HUMIDITY_CASE_PASS configbad o2
+UPSTREAM_HUMIDITY_CASE_PASS griddim0 o2
+UPSTREAM_HUMIDITY_CASE_PASS cycle0 o2
+UPSTREAM_HUMIDITY_CASE_PASS missingfile o2
+UPSTREAM_HUMIDITY_CASE_PASS malformedheader o2
+UPSTREAM_HUMIDITY_CASE_PASS truncatedtime o2
+UPSTREAM_HUMIDITY_CASE_PASS parsefail o2
+UPSTREAM_HUMIDITY_CASE_PASS timemismatch o2
+UPSTREAM_HUMIDITY_CASE_PASS untouchedjstatus o2
+UPSTREAM_HUMIDITY_CASE_PASS onlyLH3 o2
+UPSTREAM_HUMIDITY_CASE_PASS onlyLH4 o2
+UPSTREAM_HUMIDITY_CASE_PASS lq3only o2
+UPSTREAM_HUMIDITY_CASE_PASS fullsuccess o2
+UPSTREAM_HUMIDITY_STATUS_TEST_PASS
+UPSTREAM_DERIVED_MAIN_CASE_PASS time_failure o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS grid_failure o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS dim_failure o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS missing_failure o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS invalid_x o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS invalid_y o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS invalid_z o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS untouched o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS other_success o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS lco_failure o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS lco_only o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS full_success o0
+UPSTREAM_DERIVED_MAIN_CASE_PASS time_failure o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS grid_failure o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS dim_failure o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS missing_failure o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS invalid_x o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS invalid_y o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS invalid_z o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS untouched o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS other_success o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS lco_failure o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS lco_only o2
+UPSTREAM_DERIVED_MAIN_CASE_PASS full_success o2
+UPSTREAM_DERIVED_STATUS_TEST_PASS
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS absent o0
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS truncated o0
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS validzero o0
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS positive o0
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS malformed o0
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS invalid_negative o0
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS native_missing_mixed o0
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS absent o2
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS truncated o2
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS validzero o2
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS positive o2
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS malformed o2
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS invalid_negative o2
+GET_CLOUD_DERIV_LIGHTNING_CASE_PASS native_missing_mixed o2
+GET_CLOUD_DERIV_LIGHTNING_STATUS_TEST_PASS
+UPSTREAM_CLOUD_MAIN_CASE_PASS time_failure o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS grid_failure o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS dim_failure o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS pirep_failure o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS maxstns_failure o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS invalid_x o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS invalid_y o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS invalid_z o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS negative_pirep o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS zero_pirep o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS zero_maxstns o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS sum_overflow o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS untouched o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS only_lc3 o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS only_lcb o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS only_lcv o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS optional_only o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS missing_lc3 o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS missing_lcb o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS missing_lcv o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS required_triple o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS full_success o0
+UPSTREAM_CLOUD_MAIN_CASE_PASS time_failure o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS grid_failure o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS dim_failure o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS pirep_failure o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS maxstns_failure o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS invalid_x o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS invalid_y o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS invalid_z o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS negative_pirep o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS zero_pirep o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS zero_maxstns o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS sum_overflow o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS untouched o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS only_lc3 o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS only_lcb o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS only_lcv o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS optional_only o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS missing_lc3 o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS missing_lcb o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS missing_lcv o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS required_triple o2
+UPSTREAM_CLOUD_MAIN_CASE_PASS full_success o2
+UPSTREAM_CLOUD_STATUS_TEST_PASS
+UPSTREAM_WIND_CASE_PASS time_failure o0
+UPSTREAM_WIND_CASE_PASS grid_failure o0
+UPSTREAM_WIND_CASE_PASS dim_failure o0
+UPSTREAM_WIND_CASE_PASS invalid_x o0
+UPSTREAM_WIND_CASE_PASS invalid_y o0
+UPSTREAM_WIND_CASE_PASS invalid_z o0
+UPSTREAM_WIND_CASE_PASS logopenfail o0
+UPSTREAM_WIND_CASE_PASS logunset o0
+UPSTREAM_WIND_CASE_PASS maxradars_failure o0
+UPSTREAM_WIND_CASE_PASS obs_failure o0
+UPSTREAM_WIND_CASE_PASS missing_failure o0
+UPSTREAM_WIND_CASE_PASS i2_missing_failure o0
+UPSTREAM_WIND_CASE_PASS negative_metadata o0
+UPSTREAM_WIND_CASE_PASS negative_radars o0
+UPSTREAM_WIND_CASE_PASS zero_radars o0
+UPSTREAM_WIND_CASE_PASS untouched o0
+UPSTREAM_WIND_CASE_PASS lwm_only o0
+UPSTREAM_WIND_CASE_PASS wrong_time o0
+UPSTREAM_WIND_CASE_PASS no_products o0
+UPSTREAM_WIND_CASE_PASS lw3_only o0
+UPSTREAM_WIND_CASE_PASS full o0
+UPSTREAM_WIND_CASE_PASS time_failure o2
+UPSTREAM_WIND_CASE_PASS grid_failure o2
+UPSTREAM_WIND_CASE_PASS dim_failure o2
+UPSTREAM_WIND_CASE_PASS invalid_x o2
+UPSTREAM_WIND_CASE_PASS invalid_y o2
+UPSTREAM_WIND_CASE_PASS invalid_z o2
+UPSTREAM_WIND_CASE_PASS logopenfail o2
+UPSTREAM_WIND_CASE_PASS logunset o2
+UPSTREAM_WIND_CASE_PASS maxradars_failure o2
+UPSTREAM_WIND_CASE_PASS obs_failure o2
+UPSTREAM_WIND_CASE_PASS missing_failure o2
+UPSTREAM_WIND_CASE_PASS i2_missing_failure o2
+UPSTREAM_WIND_CASE_PASS negative_metadata o2
+UPSTREAM_WIND_CASE_PASS negative_radars o2
+UPSTREAM_WIND_CASE_PASS zero_radars o2
+UPSTREAM_WIND_CASE_PASS untouched o2
+UPSTREAM_WIND_CASE_PASS lwm_only o2
+UPSTREAM_WIND_CASE_PASS wrong_time o2
+UPSTREAM_WIND_CASE_PASS no_products o2
+UPSTREAM_WIND_CASE_PASS lw3_only o2
+UPSTREAM_WIND_CASE_PASS full o2
+UPSTREAM_WIND_STATUS_TEST_PASS
+cloud_bal_stage_payload: PASS
+stage payload receipt: /var/tmp/stage_payload_tests.qd6Cvy/receipt.txt
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL/src/balance/qbalpe.f(49): error #7002: Error in opening the compiled module file.  Check INCLUDE paths.   [CLOUD_BAL_LOCALIZATION]
+      use cloud_bal_localization, only: build_compact_influence_3d
+----------^
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL/src/balance/qbalpe.f(311): error #6406: Conflicting attributes or multiple declaration of name.   [BUILD_COMPACT_INFLUENCE_3D]
+      call build_compact_influence_3d(omo_valid,p,dx,dy,
+-----------^
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL/src/balance/qbalpe.f(49): error #6580: Name in only-list does not exist or is not accessible.   [BUILD_COMPACT_INFLUENCE_3D]
+      use cloud_bal_localization, only: build_compact_influence_3d
+----------------------------------------^
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL/src/balance/qbalpe.f(1127): error #7002: Error in opening the compiled module file.  Check INCLUDE paths.   [CLOUD_BAL_WIND_MODES]
+      use cloud_bal_wind_modes, only: diagnose_wind_increment_modes
+----------^
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL/src/balance/qbalpe.f(1127): error #6580: Name in only-list does not exist or is not accessible.   [DIAGNOSE_WIND_INCREMENT_MODES]
+      use cloud_bal_wind_modes, only: diagnose_wind_increment_modes
+--------------------------------------^
+compilation aborted for /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL/src/balance/qbalpe.f (code 1)

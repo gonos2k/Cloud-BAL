@@ -7,7 +7,7 @@ if (( $# > 1 )) || [[ ${1:-} != '' && ${1:-} != --with-real-inputs ]]; then
 fi
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(cd "$repo_root/.." && pwd)
+workspace_root=$(realpath -e "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
 source_file="$repo_root/src/upstream/read_surface_obs.f"
 test_source="$repo_root/tests/test_surface_observation_reader.f90"
 include_root="$workspace_root/klaps-v5.0_/src/include"
@@ -19,8 +19,9 @@ include_root="$workspace_root/klaps-v5.0_/src/include"
 
 . "$repo_root/tests/intel_toolchain.sh"
 
-mkdir -p "$repo_root/scratch"
-test_tmp=$(mktemp -d "$repo_root/scratch/surface_observation_reader.XXXXXX")
+scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
+mkdir -p "$scratch_root"
+test_tmp=$(mktemp -d "$scratch_root/surface_observation_reader.XXXXXX")
 if [[ ${CLOUD_BAL_KEEP_TEST_OUTPUT:-0} == 1 ]]; then
   trap 'printf "surface observation reader artifacts retained: %s\n" "$test_tmp"' EXIT
 else

@@ -392,7 +392,7 @@ CONTAINS
   SUBROUTINE test_pr73_estimated_analysis_contract(control_path,failures)
     CHARACTER(LEN=*), INTENT(IN) :: control_path
     INTEGER, INTENT(INOUT) :: failures
-    TYPE(cloud_bal_state_type) :: background,candidate,operational
+    TYPE(cloud_bal_state_type) :: background,candidate,operational,estimator_endpoint,bad_endpoint,bad_background
     TYPE(cloud_bal_state_type) :: candidate_before,preflight_candidate,preflight_operational
     TYPE(cloud_bal_pipeline_config) :: config
     TYPE(cloud_bal_pipeline_result) :: result
@@ -401,7 +401,8 @@ CONTAINS
     REAL(real64) :: residual_before(4,4,3),residual_after(4,4,3)
     REAL(real32) :: longitude(4,4)
     INTEGER :: unit,io_status,i,j,k,eval_status,eval_reason,writer_status
-    LOGICAL :: exists
+    LOGICAL :: exists,unsupported_thermo(4,4,3)
+    INTEGER :: unsupported_surface(4,4,3)
     i=1; j=1; k=1
     OPEN(NEWUNIT=unit,FILE=TRIM(control_path),STATUS='OLD',ACTION='READ',IOSTAT=io_status)
     CALL check(io_status==0,'estimated-analysis control file opens',failures)
@@ -431,13 +432,14 @@ CONTAINS
     candidate%u%value(i,j,k)=REAL(candidate_values(4),real32)
     candidate%v%value(i,j,k)=REAL(candidate_values(5),real32)
     candidate%omega%value(i,j,k)=REAL(candidate_values(6),real32)
-    candidate%vapor%source(i,j,k)=IOR(candidate%vapor%source(i,j,k), &
-      IOR(SOURCE_CLOUD_ANALYSIS,SOURCE_COLUMN_PHYSICS))
-    candidate%cloud_water%source(i,j,k)=IOR(candidate%cloud_water%source(i,j,k), &
-      IOR(SOURCE_CLOUD_ANALYSIS,SOURCE_COLUMN_PHYSICS))
-    candidate%u%source(i,j,k)=IOR(candidate%u%source(i,j,k),SOURCE_BALANCE_OPERATOR)
-    candidate%v%source(i,j,k)=IOR(candidate%v%source(i,j,k),SOURCE_BALANCE_OPERATOR)
-    candidate%omega%source(i,j,k)=IOR(candidate%omega%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+    ! The endpoint carries estimator provenance; these source bits do not say
+    ! that the canonical column or balance stages produced it.
+    candidate%temperature%source(i,j,k)=IOR(candidate%temperature%source(i,j,k),SOURCE_CLOUD_ANALYSIS)
+    candidate%vapor%source(i,j,k)=IOR(candidate%vapor%source(i,j,k),SOURCE_CLOUD_ANALYSIS)
+    candidate%cloud_water%source(i,j,k)=IOR(candidate%cloud_water%source(i,j,k),SOURCE_CLOUD_ANALYSIS)
+    candidate%u%source(i,j,k)=IOR(candidate%u%source(i,j,k),SOURCE_CLOUD_ANALYSIS)
+    candidate%v%source(i,j,k)=IOR(candidate%v%source(i,j,k),SOURCE_CLOUD_ANALYSIS)
+    candidate%omega%source(i,j,k)=IOR(candidate%omega%source(i,j,k),SOURCE_CLOUD_ANALYSIS)
     CALL refresh_dry_air_mass_measure(candidate,eval_status)
     CALL check(eval_status==STATUS_OK,'estimated-analysis endpoint has canonical dry mass',failures)
     IF (eval_status/=STATUS_OK) RETURN
@@ -458,12 +460,18 @@ CONTAINS
     contract%physical_tolerance=0.0_real64
     contract%analysis_increment(:,i,j,k)=analysis_values
     contract%physical_tolerance(:,i,j,k)=tolerance_values
-    CALL make_result(result,4,4,3,background,candidate,config%balance)
-    CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
-      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
-    CALL check(eval_status==STATUS_OK .AND. &
+    estimator_endpoint=candidate
+    config%requested_mode=MODE_SHADOW
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      physical_contract=contract,estimator_candidate=estimator_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_AUTHORITY .AND. &
+      result%column%status==STATUS_FAILED .AND. result%balance%status==STATUS_FAILED .AND. &
+      result%overall%status==STATUS_FAILED .AND. &
+      canonical_states_equal(candidate,estimator_endpoint) .AND. &
+      canonical_states_equal(operational,background) .AND. &
+      result%candidate_evaluation%canonical_accounting_assessed .AND. &
       result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_PASS, &
-      'estimated analysis plus zero phase/source/boundary closes canonical physical components',failures)
+      'canonical pipeline retains and evaluates the nonzero estimator endpoint as blocked SHADOW output',failures)
     IF (result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS) &
       WRITE(*,'(A,4(I0,1X),ES24.15)') 'PR73 physical reject: ',eval_status,eval_reason, &
         result%candidate_evaluation%physical_feasibility_reason, &
@@ -471,26 +479,113 @@ CONTAINS
         result%candidate_evaluation%physical_feasibility_residual_scaled
     IF (eval_status/=STATUS_OK .OR. &
         result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS) RETURN
-    result%physical_contract=contract
-    operational=background
-    config%requested_mode=MODE_SHADOW
     longitude=0.0_real32; residual_before=0.0_real64; residual_after=0.0_real64
 
+    CALL evaluate_joint_candidate(background,estimator_endpoint,config%balance,result%candidate_budget, &
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+    CALL check(result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
+      'allocated analysis increments do not authorize estimator provenance by themselves',failures)
+
+    bad_endpoint=estimator_endpoint
+    bad_endpoint%grid%nx=bad_endpoint%grid%nx+1
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      physical_contract=contract,estimator_candidate=bad_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code/=REASON_NONE .AND. &
+      canonical_states_equal(candidate,background) .AND. &
+      canonical_states_equal(operational,background), &
+      'estimator shape failure rolls back candidate and operational state',failures)
+
+    bad_endpoint=estimator_endpoint
+    bad_endpoint%obs_support(i,j,k)=bad_endpoint%obs_support(i,j,k)+1
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      physical_contract=contract,estimator_candidate=bad_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_METADATA .AND. &
+      canonical_states_equal(candidate,background) .AND. &
+      canonical_states_equal(operational,background), &
+      'estimator support metadata change rolls back candidate and operational state',failures)
+
+    bad_endpoint=estimator_endpoint
+    bad_endpoint%omega_top_boundary%source(i,j)=IOR( &
+      bad_endpoint%omega_top_boundary%source(i,j),SOURCE_MANUFACTURED_TEST)
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      physical_contract=contract,estimator_candidate=bad_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_AUTHORITY .AND. &
+      canonical_states_equal(candidate,background) .AND. &
+      canonical_states_equal(operational,background), &
+      'estimator boundary provenance change rolls back candidate and operational state',failures)
+
+    bad_endpoint=estimator_endpoint
+    bad_endpoint%temperature%source(i,j,k)=IOR(bad_endpoint%temperature%source(i,j,k), &
+      SOURCE_MANUFACTURED_TEST)
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      physical_contract=contract,estimator_candidate=bad_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code/=REASON_NONE .AND. &
+      canonical_states_equal(candidate,background) .AND. &
+      canonical_states_equal(operational,background), &
+      'manufactured estimator provenance rolls back candidate and operational state',failures)
+
+    bad_background=background
+    bad_background%temperature%source(i,j,k)=IOR(bad_background%temperature%source(i,j,k), &
+      SOURCE_MANUFACTURED_TEST)
+    CALL run_cloud_bal_pipeline(bad_background, candidate, operational, result, config, &
+      physical_contract=contract,estimator_candidate=estimator_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_AUTHORITY .AND. &
+      canonical_states_equal(candidate,bad_background) .AND. &
+      canonical_states_equal(operational,bad_background), &
+      'manufactured core background provenance blocks estimator assessment',failures)
+
+    bad_endpoint=estimator_endpoint
+    contract%analysis_increment_identity=''
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      physical_contract=contract,estimator_candidate=bad_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_AUTHORITY .AND. &
+      canonical_states_equal(candidate,background) .AND. &
+      canonical_states_equal(operational,background), &
+      'missing independent estimator identity rolls back candidate and operational state',failures)
+    contract%analysis_increment_identity='manufactured:HBR-constrained-analysis-v1'
+
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      estimator_candidate=estimator_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_AUTHORITY .AND. &
+      canonical_states_equal(candidate,background) .AND. &
+      canonical_states_equal(operational,background), &
+      'estimator endpoint requires its independent physical contract',failures)
+
+    contract%analysis_increment(2,i,j,k)=analysis_values(2)+100.0_real64
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      physical_contract=contract,estimator_candidate=estimator_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. &
+      result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
+      canonical_states_equal(candidate,background) .AND. &
+      canonical_states_equal(operational,background), &
+      'estimator component mismatch fails the endpoint gate and rolls back',failures)
+    contract%analysis_increment(2,i,j,k)=analysis_values(2)
+
+    unsupported_thermo=.FALSE.; unsupported_surface=SATURATION_LIQUID
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      thermo_active=unsupported_thermo,thermo_surface=unsupported_surface,target_rh=1.0_real64, &
+      physical_contract=contract,estimator_candidate=estimator_endpoint)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_AUTHORITY .AND. &
+      canonical_states_equal(candidate,background) .AND. &
+      canonical_states_equal(operational,background), &
+      'estimator endpoint rejects a combined thermo request atomically',failures)
+
+    candidate=estimator_endpoint
     contract%analysis_increment_identity=''
     CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
-      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract,estimator_candidate=.TRUE.)
     CALL check(result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
       'analysis increment requires its independent estimator identity',failures)
     contract%analysis_increment_identity='manufactured:HBR-constrained-analysis-v1'
     contract%analysis_increment(1,i,j,k)=1.0_real64
     CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
-      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract,estimator_candidate=.TRUE.)
     CALL check(result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
       'analysis increment cannot change the canonical dry-mass metric',failures)
     contract%analysis_increment(1,i,j,k)=0.0_real64
     contract%analysis_increment(2,i,j,k)=analysis_values(2)+100.0_real64
     CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
-      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract,estimator_candidate=.TRUE.)
     CALL check(result%candidate_evaluation%physical_feasibility_status==PHYSICAL_FEASIBILITY_FAILED .AND. &
       result%candidate_evaluation%physical_feasibility_failed_component==PHYSICAL_COMPONENT_TOTAL_MASS, &
       'endpoint assessment applies canonical analysis-water mass closure',failures)
@@ -512,28 +607,21 @@ CONTAINS
     contract%analysis_increment(2,i,j,k)=analysis_values(2)
     contract%analysis_increment(8,i,j,k)=ieee_value(0.0_real64,ieee_quiet_nan)
     CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
-      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract,estimator_candidate=.TRUE.)
     CALL check(result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
       'nonfinite estimator increment fails closed',failures)
     contract%analysis_increment(8,i,j,k)=analysis_values(8)
     contract%coverage(4,4,3)=.FALSE.
     contract%analysis_increment(2,4,4,3)=1.0_real64
     CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
-      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
+      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract,estimator_candidate=.TRUE.)
     CALL check(result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS, &
       'analysis increment outside declared coverage fails closed',failures)
     contract%coverage=background%above_ground
     contract%analysis_increment(:,4,4,3)=0.0_real64
 
-    CALL make_result(result,4,4,3,background,candidate,config%balance)
-    CALL evaluate_joint_candidate(background,candidate,config%balance,result%candidate_budget, &
-      result%candidate_evaluation,eval_status,eval_reason,physical_contract=contract)
-    result%physical_contract=contract
-    result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
-    CALL initialize_stage_result(result%column,4,4,3,STATUS_FAILED,REASON_AUTHORITY)
-    CALL initialize_stage_result(result%balance,4,4,3,STATUS_FAILED,REASON_AUTHORITY)
-    CALL initialize_stage_result(result%geopotential,4,4,3,STATUS_FAILED,REASON_AUTHORITY)
-    CALL initialize_stage_result(result%overall,4,4,3,STATUS_FAILED,REASON_AUTHORITY)
+    CALL run_cloud_bal_pipeline(background,candidate,operational,result,config, &
+      physical_contract=contract,estimator_candidate=estimator_endpoint)
     CALL write_shadow_diagnostics('pr73-estimated-analysis-shadow.nc',background,candidate,longitude, &
       result,config,residual_before,residual_after,writer_status,operational)
     CALL check(writer_status==STATUS_OK,'blocked estimator candidate reaches the canonical SHADOW writer',failures)

@@ -1,0 +1,79 @@
+{
+  "schema": "cloud_bal_team07_estimator_audit_v1",
+  "date": "2026-10-12",
+  "source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr77_native_state_20261012/Cloud-BAL",
+  "base": "9701ef23f04576d875508a0882d0e0af67282587+PR77",
+  "scope": [
+    "tools/pr73_joint_analysis.py",
+    "tests/test_pr73_joint_analysis.py",
+    "tests/test_pr74_independent_oracle.py",
+    "docs/evidence/pr73_joint_fixture_20261008.json",
+    "PR77 estimator inlet scope documentation"
+  ],
+  "coverage": {
+    "graphify": "Queried the maintained graph for estimator/objective/oracle relationships; exact estimator Python symbol was not surfaced in that query, so direct source inspection followed. The graph is navigation only.",
+    "source": "Read-only trace of declaration validation, covariance normalization, process increments, box/equality constraints, face enumeration, KKT certification, physical contract mapping, and CLI serialization.",
+    "tests": "python3 -m unittest tests.test_pr73_joint_analysis tests.test_pr74_independent_oracle -v: 28 passed, including 396 scalar-box oracle cases.",
+    "probes": "Read-only Python probes in /var/tmp/ command context; no project source, input, evidence, or graph files changed.",
+    "exclusions": ["No native/compiler/pipeline rerun; root reports related regression checks passed.", "No real meteorological observations, spatial generation, operational assimilation, or scientific acceptance audit." ]
+  },
+  "findings": [
+    {
+      "id": "T07-NUM-01",
+      "classification": "unsupported_numerical_class",
+      "priority": "P3",
+      "location": [
+        {"file": "tools/pr73_joint_analysis.py", "line": 74},
+        {"file": "tools/pr73_joint_analysis.py", "line": 645}
+      ],
+      "trigger": "Two-state identity observation operator, B=I, no constraints/bounds, y=[1,0], and valid SPD R=[[1,1-1e-14],[1-1e-14,1]]. The R condition number is about 2e14; nearby rho=1-1e-13 succeeds.",
+      "expected": "For the declared strictly convex Gaussian objective, the minimizer is (I+R)^-1 y, approximately [2/3,-1/3], with a valid KKT certificate.",
+      "actual": "evaluate raises ValueError: NUMERICAL_FAILURE: declared linear constraints and state bounds have no certified face. The face KKT solve uses a fixed 1e-13 relative pivot cutoff; the valid SPD input is therefore outside the current numerically supported class, and no incorrect candidate is emitted.",
+      "status": "Reproduced fail-closed limitation, not a false result or a physical-candidate defect.",
+      "next_check": "If the estimator's intended envelope includes near-singular observation covariance, add a declared conditioning envelope and/or a stable scaled symmetric-indefinite solver with an independent high-precision oracle. Otherwise document the numerical envelope for this small manufactured fixture."
+    },
+    {
+      "id": "T07-SCOPE-01",
+      "classification": "missing_real_data_spatial_implementation",
+      "priority": "P1_gate",
+      "location": [
+        {"file": "tools/pr73_joint_analysis.py", "line": 4},
+        {"file": "tools/pr73_joint_analysis.py", "line": 603},
+        {"file": "tools/pr73_joint_analysis.py", "line": 824},
+        {"file": "docs/PR77_INTEGRATION_PROGRESS_20261012.md", "line": 8}
+      ],
+      "trigger": "Treating the manufactured H/B/R optimum or the common pipeline inlet as an actual spatially generated Cloud-BAL estimate.",
+      "expected": "A spatial producer should construct an endpoint from authenticated real background, observation/operator/error covariance, and prior/change authorities, then bind that exact endpoint to downstream assessment.",
+      "actual": "The Python tool identifies itself as an algorithm fixture, limits state dimension to eight and enumerates declared box faces. PR77 documentation states the inlet assesses an externally estimated endpoint and does not reconstruct it using column/balance producers or authenticate real H/B/R authorities. The contract remains NOT_PIPELINE_GENERATED_CANDIDATE for fixture-only output.",
+      "status": "Missing implementation, not an estimator regression.",
+      "next_check": "Produce one common spatial endpoint from real authorized inputs, bind producer/optimum identity, and demonstrate same-candidate pipeline and downstream handoff."
+    },
+    {
+      "id": "T07-SCI-01",
+      "classification": "missing_scientific_evidence",
+      "priority": "P1_gate",
+      "location": [
+        {"file": "tools/pr73_joint_analysis.py", "line": 809},
+        {"file": "tools/pr73_joint_analysis.py", "line": 830},
+        {"file": "docs/PR77_INTEGRATION_PROGRESS_20261012.md", "line": 26}
+      ],
+      "trigger": "Interpreting MANUFACTURED_ALGORITHM_TRIAL, KKT PASS, physical endpoint evaluation readiness, or graph freshness as scientific/operational approval.",
+      "expected": "Scientific assessment requires real independent authority, assessed physical continuity/closure, valid native first-call behavior, and operational/WPS/metgrid/real handoff evidence.",
+      "actual": "The tool emits scientific_approval=false. PR77 retains FAILED/REASON_AUTHORITY and the canonical validator remains UNBOUND/REJECTED with science_assessed=false; native candidates are REJECTED and the common spatial handoff is still open.",
+      "status": "Evidence gate remains open; the software labels accurately preserve this limit.",
+      "next_check": "Close the recorded PR77 evidence gates on the same authorized spatial candidate; do not infer closure from this fixture or graph freshness."
+    }
+  ],
+  "negative_findings": [
+    "No actual wrong optimum, covariance-unit rescaling defect, equality/bound acceptance defect, or false KKT PASS reproduced in the declared small well-conditioned fixture class.",
+    "H, B, R, background prior, and analysis change each require nonempty evidence_id declarations; this enforces provenance labels, not cryptographic authentication or authority truth.",
+    "Normalization, SPD checks, scaled equality reduction, dependent/inconsistent-row handling, exact active-bound assignment, multiplier-sign checks, stationarity, complementarity, and finite-value gates were source-reviewed; covered regression cases passed.",
+    "PR76 degenerate-corner/multiplier issue is fixed and its tests pass; not carried as an open finding."
+  ],
+  "graphify_notes": {
+    "existing_graph": "graphify-out/graph.json (1499 nodes)",
+    "query_result": "Broad query surfaced covariance/constraint and unrelated balance/operator/test nodes but did not directly surface tools/pr73_joint_analysis.py. Direct source review resolved the relationship.",
+    "limitations": "Graph extraction is incomplete for this specific estimator file; graph edges are not runtime or scientific evidence.",
+    "delta": "No graph refresh or graph mutation was performed because this is a read-only audit with no code batch."
+  }
+}

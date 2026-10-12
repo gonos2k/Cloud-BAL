@@ -1,0 +1,304 @@
+--- pinned_PR73_kdm6
++++ host_startup_plus_kdm6_gradual/module_mp_kdm6.f90
+@@ -4,7 +4,20 @@
+ 
+    use module_mp_radar
+    use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
++   use, intrinsic :: iso_c_binding, only : c_int
+    use module_model_constants, only : RE_QC_BG, RE_QI_BG, RE_QS_BG
++   interface
++      function pr75_read_fp_state(thread_id) bind(C, name='pr75_read_fp_state') result(mxcsr)
++        import :: c_int
++        integer(c_int) :: thread_id
++        integer(c_int) :: mxcsr
++      end function pr75_read_fp_state
++   function pr76_apply_gradual(after, thread_id) bind(C, name='pr76_apply_gradual') result(mxcsr)
++     import :: c_int
++     integer(c_int) :: after, thread_id
++     integer(c_int) :: mxcsr
++   end function pr76_apply_gradual
++   end interface
+    integer, parameter, private :: PROGB_ABSENT = 0
+    integer, parameter, private :: PROGB_TRANSIENT = 1
+    integer, parameter, private :: PROGB_PSD_ACTIVE = 2
+@@ -885,10 +898,24 @@
+    real, dimension(kts:kte) :: re_qc, re_qi, re_qs
+    real, dimension(ims:ime,kms:kme) :: dry_density
+    real :: number_value
++   integer(c_int) :: pr75_thread_before, pr75_thread_after
++   integer(c_int) :: pr75_mxcsr_before, pr75_mxcsr_after
++   integer :: pr75_unit, pr75_open_status
++   integer :: pr76_target_unit, pr76_target_status
+    logical :: number_valid
+ 
+    real :: z_sum
+-
++   integer(c_int) :: pr76_mxcsr_before, pr76_mxcsr_after, pr76_thread_id
++   integer :: pr76_unit, pr76_open_status
++
++   pr76_mxcsr_before = pr76_apply_gradual(pr76_mxcsr_after, pr76_thread_id)
++   open(newunit=pr76_unit, file='pr76_thread_entry.raw', status='unknown', &
++        position='append', action='write', iostat=pr76_open_status)
++   if (pr76_open_status == 0) then
++     write(pr76_unit,'(A,2(",",Z8.8),",",I0)') 'KDM6_ENTRY', &
++          pr76_mxcsr_before, pr76_mxcsr_after, pr76_thread_id
++     close(pr76_unit)
++   endif
+    pr67_trace_this_call = .not. pr67_trace_complete
+    if (pr67_trace_this_call) then
+      call kdm6_trace_dump(1,itimestep,ids,ide,jds,jde,kds,kde, &
+@@ -943,7 +970,39 @@
+ #endif
+          nci(i,k,1) = number_value
+ #ifndef TEST_DIRECT_VOLUME
++         pr75_mxcsr_before = pr75_read_fp_state(pr75_thread_before)
+          call specific_number_to_volume(ni(i,k,j), dry_density(i,k), number_value, number_valid)
++         pr75_mxcsr_after = pr75_read_fp_state(pr75_thread_after)
++         if (i == 211 .and. j == 2 .and. k == 15) then
++           open(newunit=pr76_target_unit, file='pr76_target_call.raw', status='unknown', &
++                position='append', action='write', iostat=pr76_target_status)
++           if (pr76_target_status == 0) then
++             write(pr76_target_unit,'(A,3(",",I0),3(",",ES24.16E3),",",L1)') &
++                  'TARGET_CALL', i, j, k, ni(i,k,j), dry_density(i,k), number_value, number_valid
++             write(pr76_target_unit,'(A,4(",",Z8.8))') 'TARGET_BITS', &
++                  pr75_mxcsr_before, pr75_mxcsr_after, transfer(ni(i,k,j),0), &
++                  transfer(dry_density(i,k),0)
++             write(pr76_target_unit,'(A,",",Z8.8)') 'RESULT_BITS', transfer(number_value,0)
++             write(pr76_target_unit,'(A,",",I0,",",I0)') 'THREAD_IDS', &
++                  pr75_thread_before, pr75_thread_after
++             close(pr76_target_unit)
++           endif
++         endif
++         if (.not. number_valid) then
++           open(newunit=pr75_unit, file='pr75_native_fp.raw', status='unknown', &
++                position='append', action='write', iostat=pr75_open_status)
++           if (pr75_open_status == 0) then
++             write(pr75_unit,'(A,",",I0,",",I0,",",I0,",",ES24.16E3,",",ES24.16E3,",",ES24.16E3,",",L1)') &
++                  'NI_ADAPTER_FAILURE', i, j, k, ni(i,k,j), dry_density(i,k), number_value, &
++                  number_valid
++             write(pr75_unit,'(A,6(",",Z8.8))') &
++                  'BITS_AND_STATE', pr75_mxcsr_before, pr75_mxcsr_after, &
++                  transfer(ni(i,k,j),0), transfer(dry_density(i,k),0), &
++                  transfer(number_value,0), pr75_thread_before
++             write(pr75_unit,'(A,",",I0)') 'THREAD_AFTER', pr75_thread_after
++             close(pr75_unit)
++           endif
++         endif
+          if (.not. number_valid) error stop 'KDM6 invalid NI number basis input'
+ #else
+          number_value = ni(i,k,j)
+@@ -1486,6 +1545,7 @@
+ 
+ 
+ 
++   call pr77_scan_entry_state(qci,qrs,nrs,nci,brs,its,ite,kts,kte,lat)
+    call validate_kdm6_species_states(qci,qrs,nrs,nci,brs)
+    do k = kts, kte
+      do i = its, ite
+@@ -1790,6 +1850,9 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call pr77_scan_slope_state(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp,its,ite,kts,kte,lat, &
++        'KDM62D_SLOPE_01')
+    call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
+         qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+@@ -1906,6 +1969,9 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call pr77_scan_slope_state(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp,its,ite,kts,kte,lat, &
++        'KDM62D_SLOPE_02')
+    call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
+         qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+@@ -1991,6 +2057,9 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call pr77_scan_slope_state(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp,its,ite,kts,kte,lat, &
++        'KDM62D_SLOPE_03')
+    call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
+         qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+@@ -2148,6 +2217,9 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call pr77_scan_slope_state(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp,its,ite,kts,kte,lat, &
++        'KDM62D_SLOPE_04')
+    call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
+         qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+@@ -2188,6 +2260,9 @@
+             rslopecmu(i,k) = DBLE(rslopec(i,k))**muc
+             rslopecd(i,k) = (rslopec(i,k))**dmc
+           endif
++          call pr77_scan_local_state(qrs(i,k,1),nrs(i,k,1), &
++               qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
++               qrs(i,k,3),brs(i,k),i,k,lat,'KDM62D_LOCAL_01')
+           call validate_local_species_states(qrs(i,k,1),nrs(i,k,1), &
+                qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
+                qrs(i,k,3),brs(i,k))
+@@ -2354,6 +2429,9 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call pr77_scan_slope_state(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp,its,ite,kts,kte,lat, &
++        'KDM62D_SLOPE_05')
+    call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
+         qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+@@ -2382,6 +2460,9 @@
+           endif
+ 
+ 
++          call pr77_scan_local_state(qrs(i,k,1),nrs(i,k,1), &
++               qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
++               qrs(i,k,3),brs(i,k),i,k,lat,'KDM62D_LOCAL_02')
+           call validate_local_species_states(qrs(i,k,1),nrs(i,k,1), &
+                qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
+                qrs(i,k,3),brs(i,k))
+@@ -3728,6 +3809,9 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call pr77_scan_slope_state(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp,its,ite,kts,kte,lat, &
++        'KDM62D_SLOPE_06')
+    call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
+         qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+@@ -3821,6 +3905,9 @@
+                    ,bvtg,bvtg1,bvtg2,bvtg3,bvtg4,rslopegbmax,rslopegmax      &
+                    ,g1pbg,g3pbg,g4pbg,g5pbgo2,g1pdgbgmg,dgbgmug1,progb_status)
+ 
++   call pr77_scan_slope_state(qci,qrs,nrs,nci,brs, &
++        qrs_tmp,nrs_tmp,qci_tmp,nci_tmp,its,ite,kts,kte,lat, &
++        'KDM62D_SLOPE_07')
+    call validate_kdm6_slope_states(qci,qrs,nrs,nci,brs, &
+         qrs_tmp,nrs_tmp,qci_tmp,nci_tmp)
+    call slope_kdm6(qrs_tmp,qci_tmp,nrs_tmp,nci_tmp,den_tmp,denfac,t,rslope,  &
+@@ -3979,6 +4066,9 @@
+               nci(i,k,1) = dry_carrier_density(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc
+             endif
+           endif
++          call pr77_scan_local_state(qrs(i,k,1),nrs(i,k,1), &
++               qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
++               qrs(i,k,3),brs(i,k),i,k,lat,'KDM62D_LOCAL_03')
+           call validate_local_species_states(qrs(i,k,1),nrs(i,k,1), &
+                qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
+                qrs(i,k,3),brs(i,k))
+@@ -5237,4 +5327,106 @@
+       end subroutine effectRad_kdm6
+ 
+ 
++    subroutine pr77_scan_entry_state(qci,qrs,nrs,nci,brs,its,ite,kts,kte,lat)
++      real, intent(in) :: qci(:,:,:),qrs(:,:,:),nrs(:,:,:),nci(:,:,:),brs(:,:)
++      integer, intent(in) :: its,ite,kts,kte,lat
++      integer :: i,k,counts(5,4),unit,ios
++      counts=0
++      do k=1,size(qrs,2)
++        do i=1,size(qrs,1)
++          call pr77_count_state(qrs(i,k,1),nrs(i,k,1),counts(:,1), &
++               'rain',its+i-1,kts+k-1,lat,'KDM62D_ENTRY')
++          call pr77_count_state(qci(i,k,1),nci(i,k,1),counts(:,2), &
++               'cloud',its+i-1,kts+k-1,lat,'KDM62D_ENTRY')
++          call pr77_count_state(qci(i,k,2),nci(i,k,2),counts(:,3), &
++               'ice',its+i-1,kts+k-1,lat,'KDM62D_ENTRY')
++          call pr77_count_state(qrs(i,k,3),brs(i,k),counts(:,4), &
++               'graupel',its+i-1,kts+k-1,lat,'KDM62D_ENTRY')
++        enddo
++      enddo
++!$omp critical(pr77_species_log)
++      open(newunit=unit,file='pr77_native_species.raw', &
++           status='unknown',position='append',action='write',iostat=ios)
++      if (ios == 0) then
++        write(unit,'(A,5(",",I0),20(",",I0))') 'PR77_COUNTS', &
++             lat,its,ite,kts,kte,counts(:,1),counts(:,2),counts(:,3),counts(:,4)
++        close(unit)
++      endif
++!$omp end critical(pr77_species_log)
++    end subroutine pr77_scan_entry_state
++
++    subroutine pr77_scan_slope_state(qci_current,qrs_current,nrs_current,nci_current, &
++        brs,qrs,nrs,qci,nci,its,ite,kts,kte,lat,stage)
++      real, intent(in) :: qci_current(:,:,:),qrs_current(:,:,:),nrs_current(:,:,:)
++      real, intent(in) :: nci_current(:,:,:),brs(:,:),qrs(:,:,:),nrs(:,:),qci(:,:),nci(:,:)
++      integer, intent(in) :: its,ite,kts,kte,lat
++      character(len=*), intent(in) :: stage
++      integer :: i,k
++      do k=1,size(qrs,2)
++        do i=1,size(qrs,1)
++          call pr77_record_first(qrs_current(i,k,1),nrs_current(i,k,1), &
++               'rain',its+i-1,kts+k-1,lat,stage)
++          call pr77_record_first(qci_current(i,k,1),nci_current(i,k,1), &
++               'cloud',its+i-1,kts+k-1,lat,stage)
++          call pr77_record_first(qci_current(i,k,2),nci_current(i,k,2), &
++               'ice',its+i-1,kts+k-1,lat,stage)
++          call pr77_record_first(qrs_current(i,k,3),brs(i,k), &
++               'graupel',its+i-1,kts+k-1,lat,stage)
++          call pr77_record_first(qrs(i,k,1),nrs(i,k), &
++               'rain_candidate',its+i-1,kts+k-1,lat,stage)
++          call pr77_record_first(qci(i,k),nci(i,k), &
++               'ice_candidate',its+i-1,kts+k-1,lat,stage)
++          call pr77_record_first(qrs(i,k,3),brs(i,k), &
++               'graupel_candidate',its+i-1,kts+k-1,lat,stage)
++        enddo
++      enddo
++    end subroutine pr77_scan_slope_state
++
++    subroutine pr77_scan_local_state(qr,nr,qc,nc,qi,ni,qg,bg,i,k,lat,stage)
++      real, intent(in) :: qr,nr,qc,nc,qi,ni,qg,bg
++      integer, intent(in) :: i,k,lat
++      character(len=*), intent(in) :: stage
++      call pr77_record_first(qr,nr,'rain',i,k,lat,stage)
++      call pr77_record_first(qc,nc,'cloud',i,k,lat,stage)
++      call pr77_record_first(qi,ni,'ice',i,k,lat,stage)
++      call pr77_record_first(qg,bg,'graupel',i,k,lat,stage)
++    end subroutine pr77_scan_local_state
++
++    subroutine pr77_count_state(mass,moment,counts,species,i,k,lat,stage)
++      real, intent(in) :: mass,moment
++      integer, intent(inout) :: counts(5)
++      character(len=*), intent(in) :: species,stage
++      integer, intent(in) :: i,k,lat
++      integer :: state
++      state=classify_species_state(mass,moment)
++      counts(state+1)=counts(state+1)+1
++      call pr77_record_first(mass,moment,species,i,k,lat,stage)
++    end subroutine pr77_count_state
++
++    subroutine pr77_record_first(mass,moment,species,i,k,lat,stage)
++      real, intent(in) :: mass,moment
++      character(len=*), intent(in) :: species,stage
++      integer, intent(in) :: i,k,lat
++      integer, save :: written=0
++      integer :: state,unit,ios,thread_id
++      integer(c_int) :: mxcsr
++      state=classify_species_state(mass,moment)
++      if (state == SPECIES_ABSENT .or. state == SPECIES_ACTIVE) return
++!$omp critical(pr77_species_log)
++      if (written == 0) then
++        mxcsr=pr75_read_fp_state(thread_id)
++        open(newunit=unit,file='pr77_native_species.raw',status='unknown', &
++             position='append',action='write',iostat=ios)
++        if (ios == 0) then
++          write(unit,'(A,",",A,",",A,5(",",I0),2(",",ES24.16E3), &
++               3(",",Z8.8))') 'PR77_FIRST',trim(stage),trim(species), &
++               state,i,lat,k,thread_id,mass,moment,transfer(mass,0), &
++               transfer(moment,0),mxcsr
++          close(unit)
++          written=1
++        endif
++      endif
++!$omp end critical(pr77_species_log)
++    end subroutine pr77_record_first
++
+ END MODULE module_mp_kdm6

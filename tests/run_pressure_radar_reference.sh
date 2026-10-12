@@ -12,15 +12,17 @@ fi
 
 # The caller may provide an owned scratch directory so an independent Python
 # checker can consume both compiler artifacts after this script returns.  The
-# default is a fresh directory under Cloud-BAL/scratch; only the private build
+# default is a fresh directory under the configured test scratch root; only the private build
 # directory is removed by this script.
+scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
+mkdir -p "$scratch_root"
 if [[ $# -eq 1 ]]; then
   output_dir=$1
   mkdir -p "$output_dir"
 else
-  output_dir=$(mktemp -d "$repo_root/scratch/radar_reference.XXXXXX")
+  output_dir=$(mktemp -d "$scratch_root/radar_reference.XXXXXX")
 fi
-build_dir=$(mktemp -d "$repo_root/scratch/radar_reference_build.XXXXXX")
+build_dir=$(mktemp -d "$scratch_root/radar_reference_build.XXXXXX")
 trap 'rm -rf "$build_dir"' EXIT
 
 source_file="$repo_root/tests/test_pressure_radar_reference.f90"

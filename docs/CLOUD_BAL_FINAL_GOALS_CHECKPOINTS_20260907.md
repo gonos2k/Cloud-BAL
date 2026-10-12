@@ -501,7 +501,8 @@ CP01은 **COMPLETE / PASS (격리 연구 계약·소규모 시험 범위)**로 �
 [종료 매트릭스](CP01_CONTRACT_EXIT_MATRIX_20260909.md)와
 [완료 감사](CP01_COMPLETION_AUDIT_20260909.md)에 여섯 조건의 red/green 검토와 증거를 결합했다.
 실제 13 UTC native 입력은 계속 NO_AUTHORITY이며, native 실행 승인이나 NAS 게시 준비 완료가 아니다.
-이는 CP03/04/02 전체 종료가 아니며 나머지 8개 상위 단계는 `PLANNED / NOT_RUN`이다.
+이는 CP03/04/02 전체 종료가 아니다. 현재 체크포인트 원장에서 CP02는
+`IN_PROGRESS / NOT_RUN`, CP03–CP09는 `PLANNED / NOT_RUN`이다.
 [CP00 실행 기록](CP00_EXECUTION_RECORD_20260907.md)에 portable CI 구현과 pinned ifx 로컬 unit suite
 통과를 기록했다. 이는 dirty worktree의 제한된 실행 증거이며 clean release·native E2E·예보 검증이 아니다.
 이번 순서 조정은 사용자의 GO에 따른 격리 연구 계획 변경이다. 운영 설정·ACTIVE 권한과

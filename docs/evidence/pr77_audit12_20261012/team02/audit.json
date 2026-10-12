@@ -1,0 +1,78 @@
+{
+  "schema": "cloud_bal_audit12_team02_v1",
+  "date": "2026-10-12",
+  "scope": ["Q/N/B microphysics contracts", "PSD", "particle creation/extinction", "phase transfers", "local process transactions"],
+  "source_base": "9701ef2+frozenPR77",
+  "selected_research_source": "/var/tmp/pr73_native_first_violation.x3bvfn/build/source/module_mp_kdm6.f90",
+  "classification_policy": "Separate reproduced native outcomes, source-verified static triggers, and missing evidence/implementation.",
+  "native_summary": {
+    "kdm6_entry_arm": "REJECTED; exit 128; first actual entry violation ice number-only at i=104, call_lat_index=2, k=1; QI=0; public NI=3.8173049035872155e-36 # kg^-1 dryair; internal NI=4.2038792500161422e-36 m^-3.",
+    "startup_plus_entry_arm": "REJECTED; signal 6 / exit -6; Intel floating-invalid during host initialization before KDM6.",
+    "post_call_outputs": "Absent in both arms: kdm6_first_call_post.raw, pr67_kdm6_process.raw, pr69_water.raw, wrfout_d01_2026-08-16_12:00:20.",
+    "entry_class_counts": {"moment_only": 299933, "mass_only": 740, "negative_or_invalid": 23494, "nonfinite": 0},
+    "actual_fatal_species": "ice",
+    "graupel_coord_reclassification": false,
+    "preprocess_note": "PR77 copied .f90 observer compiles now pass -fpp; measured converted NI is not overwritten by the test branch."
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "class": "reproduced_native_rejection",
+      "priority": "P1",
+      "title": "Actual KDM6-entry orphan ice number",
+      "location": "/var/tmp/pr73_native_first_violation.x3bvfn/build/source/module_mp_kdm6.f90:193",
+      "trigger": "QI=0 and NI>0 at actual KDM6 entry, first at (i,call_lat_index,k)=(104,2,1).",
+      "impact": "Strict species preflight rejects before PSD/process; no post-call state or water/energy evidence. Upstream cause is outside Team 02 scope."
+    },
+    {
+      "id": "F2",
+      "class": "static_source_risk",
+      "priority": "P1",
+      "title": "Cloud freezing can move Q without transferring N",
+      "location": "/var/tmp/pr73_native_first_violation.x3bvfn/build/source/module_mp_kdm6.f90:2277",
+      "trigger": "Supercooled QC>qmin, positive pfrzdtc, NC<=ncmin, and surviving QI>qmin.",
+      "impact": "Creates ice mass with NI unchanged; local species validation can terminate the call. No targeted dynamic reproduction in this audit."
+    },
+    {
+      "id": "F3",
+      "class": "static_source_risk_with_historical_observer",
+      "priority": "P1",
+      "title": "Rain freezing uses graupel density 1000 outside PSD support",
+      "location": "/var/tmp/pr73_native_first_violation.x3bvfn/build/source/module_mp_kdm6.f90:2307",
+      "trigger": "Positive pfrzdtr writes QG+=E and BG+=E/denr with denr=1000 kg m^-3; pair survives qcrmin cleanup.",
+      "impact": "QG/BG=1000 kg m^-3 exceeds selected ProgB 100–900 domain and can produce unsupported PSD/fatal. Earlier matched observer is historical and is not PR77's actual fatal."
+    },
+    {
+      "id": "F4",
+      "class": "static_source_behavior",
+      "priority": "P1",
+      "title": "Mass cutoff cleanup has no compensating water/heat transfer",
+      "location": "/var/tmp/pr73_native_first_violation.x3bvfn/build/source/module_mp_kdm6.f90:3918",
+      "trigger": "Positive QC/QI<=qmin or QR/QS/QG<=qcrmin.",
+      "impact": "Zeros condensate and associated descriptors with no vapor/other-phase or temperature update; per-cell loss is bounded by cutoff but aggregate conservation impact is unmeasured."
+    },
+    {
+      "id": "F5",
+      "class": "missing_rollback_contract",
+      "priority": "P2",
+      "title": "Cold process trial guard is not whole-call rollback atomicity",
+      "location": "/var/tmp/pr73_native_first_violation.x3bvfn/build/source/module_mp_kdm6.f90:3473",
+      "trigger": "Trial endpoint is accepted then state is applied in place; post-write endpoint error stop or later process fatal.",
+      "impact": "No snapshot restoration or recoverable status; fatal stops model and no post-call outputs are produced. In-memory earlier column/precipitation effects are not proven serialized."
+    }
+  ],
+  "graph": {
+    "maintained_snapshot": "Cloud-BAL/graphify-out/graph.json, 2026-10-08-pr76-degenerate-kkt",
+    "nodes": 8542,
+    "edges": 15847,
+    "graph_delta": "None; read-only queries, no refresh.",
+    "extraction_limitations": "AST and Markdown headings only; partial cross-file Fortran CALL extraction; no semantic refresh; external frozen native source tree not extracted.",
+    "role": "Navigation only; not runtime or scientific validation."
+  },
+  "coverage": {
+    "read": ["PR61-PR73 reports and selected receipts", "PR76 closure checklist", "PR77 integration note and native receipts", "KDM6 wrapper fixture README", "frozen selected KDM6 source", "maintained Cloud-BAL graph"],
+    "not_run": ["tests", "compiles", "native runs", "broad suites"],
+    "excluded": ["upstream PBL/advection/RK cause (Team 03)", "FP/toolchain/startup diagnosis (Team 04)"],
+    "workspace_mutations": "None; only /var/tmp/cloud_bal_audit12_20261012/team02/audit.md and audit.json created."
+  }
+}

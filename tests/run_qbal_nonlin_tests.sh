@@ -4,8 +4,9 @@ set -euo pipefail
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 . "$repo_root/tests/intel_toolchain.sh"
 
-mkdir -p "$repo_root/scratch"
-build_root=$(mktemp -d "$repo_root/scratch/qbal_nonlin.XXXXXX")
+scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
+mkdir -p "$scratch_root"
+build_root=$(mktemp -d "$scratch_root/qbal_nonlin.XXXXXX")
 keep_output=${CLOUD_BAL_KEEP_TEST_OUTPUT:-0}
 cleanup() {
   if [[ "$keep_output" == 1 ]]; then

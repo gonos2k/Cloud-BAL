@@ -2447,8 +2447,14 @@ CONTAINS
       IF (.NOT.pipeline_result_replays(state_in,candidate,result,config)) RETURN
     END IF
     IF (ALLOCATED(result%physical_contract)) THEN
-      CALL evaluate_joint_candidate(state_in,candidate,config%balance,endpoint_budget, &
-        endpoint_evaluation,state_status,state_reason,physical_contract=result%physical_contract)
+      IF (analysis_estimator_candidate) THEN
+        CALL evaluate_joint_candidate(state_in,candidate,config%balance,endpoint_budget, &
+          endpoint_evaluation,state_status,state_reason,physical_contract=result%physical_contract, &
+          estimator_candidate=.TRUE.)
+      ELSE
+        CALL evaluate_joint_candidate(state_in,candidate,config%balance,endpoint_budget, &
+          endpoint_evaluation,state_status,state_reason,physical_contract=result%physical_contract)
+      END IF
     ELSE
       CALL evaluate_joint_candidate(state_in,candidate,config%balance,endpoint_budget, &
         endpoint_evaluation,state_status,state_reason)

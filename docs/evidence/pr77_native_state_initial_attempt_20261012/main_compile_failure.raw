@@ -1,0 +1,40 @@
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(6): error #7002: Error in opening the compiled module file.  Check INCLUDE paths.   [MODULE_MACHINE]
+   USE module_wrf_top, only : wrf_init, wrf_dfi, wrf_run, wrf_finalize
+-------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(24): error #6683: A kind type parameter must be a compile-time constant.   [C_INT]
+        integer(c_int) :: after, thread_id, mxcsr
+----------------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(53): error #6683: A kind type parameter must be a compile-time constant.   [C_INT]
+    INTEGER(c_int) :: mxcsr_before, mxcsr_after
+------------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(54): error #6683: A kind type parameter must be a compile-time constant.   [C_INT]
+    INTEGER(c_int) :: thread_id
+------------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(35): error #6406: Conflicting attributes or multiple declaration of name.   [WRF_INIT]
+  CALL wrf_init
+-------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(38): error #6406: Conflicting attributes or multiple declaration of name.   [WRF_DFI]
+  CALL wrf_dfi
+-------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(42): error #6406: Conflicting attributes or multiple declaration of name.   [WRF_RUN]
+  CALL wrf_run
+-------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(46): error #6406: Conflicting attributes or multiple declaration of name.   [WRF_FINALIZE]
+  CALL wrf_finalize
+-------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(6): error #6580: Name in only-list does not exist or is not accessible.   [WRF_INIT]
+   USE module_wrf_top, only : wrf_init, wrf_dfi, wrf_run, wrf_finalize
+------------------------------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(6): error #6580: Name in only-list does not exist or is not accessible.   [WRF_DFI]
+   USE module_wrf_top, only : wrf_init, wrf_dfi, wrf_run, wrf_finalize
+----------------------------------------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(6): error #6580: Name in only-list does not exist or is not accessible.   [WRF_RUN]
+   USE module_wrf_top, only : wrf_init, wrf_dfi, wrf_run, wrf_finalize
+-------------------------------------------------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(6): error #6580: Name in only-list does not exist or is not accessible.   [WRF_FINALIZE]
+   USE module_wrf_top, only : wrf_init, wrf_dfi, wrf_run, wrf_finalize
+----------------------------------------------------------^
+/var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90(7): error #6580: Name in only-list does not exist or is not accessible.   [C_INT]
+   USE, INTRINSIC :: iso_c_binding, only : c_int
+-------------------------------------------^
+compilation aborted for /var/tmp/pr77_native_state.QZiRCC/host_startup_plus_kdm6_gradual/compile/wrf.f90 (code 1)
