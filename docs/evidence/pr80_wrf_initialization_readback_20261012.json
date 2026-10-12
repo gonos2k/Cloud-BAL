@@ -1,0 +1,233 @@
+{
+  "schema": "wrf_initialization_readback_v1",
+  "base_commit": "3d2bf4c315020a0841da338f9a95839a549f7f39",
+  "tool_sha256": "e2e4bdf6c80b2dab00f31075057a2bd0cc0a588a199dbcce9026105817046e2f",
+  "tool": "tools/check_native_hybrid_geometry.py",
+  "command": [
+    "python",
+    "tools/check_native_hybrid_geometry.py",
+    "/var/tmp/pr80_kdm6_radar_contract.nsUNuj/run/wrfout_d01_2026-08-16_12:00:00",
+    "--initial-input",
+    "/var/tmp/pr80_kdm6_radar_contract.nsUNuj/run/wrfinput_d01",
+    "--gravity",
+    "9.81"
+  ],
+  "readback": {
+    "dry_mass_change_kg": 0.0,
+    "water_by_species": {
+      "QVAPOR": {
+        "baseline_kg": 90478790689804.03,
+        "candidate_kg": 90478790689804.03,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QCLOUD": {
+        "baseline_kg": 2102552755478.643,
+        "candidate_kg": 2102552755478.643,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QICE": {
+        "baseline_kg": 1320254788129.5476,
+        "candidate_kg": 1320254788129.5476,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QRAIN": {
+        "baseline_kg": 100504281608.47388,
+        "candidate_kg": 100504281608.47388,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QSNOW": {
+        "baseline_kg": 365172992726.3861,
+        "candidate_kg": 365172992726.3861,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      },
+      "QGRAUP": {
+        "baseline_kg": 16800295687.53668,
+        "candidate_kg": 16800295687.53668,
+        "change_kg": 0.0,
+        "composition_change_kg": 0.0,
+        "mass_metric_change_kg": 0.0
+      }
+    },
+    "conservation_assessed": false,
+    "valid_time": "2026-08-16_12:00:00",
+    "water_change_kg": 0.0,
+    "promotion_eligible": false,
+    "artifact_class": "DIAGNOSTIC",
+    "comparison_scope": "SAME_TIME_WRF_INPUT_TO_INITIAL_OUTPUT",
+    "gravity_assumption_m_s2": 9.81,
+    "baseline_sha256": "aecc4885da1d612e57ec8c603b6c85df6a89e3c53cda5a4a302ec65d33866739",
+    "candidate_sha256": "3b473df29c5ba3cc139574fbe51875d979edc12e1e6aa4e4b22bb79d588517a9",
+    "input_unchanged": true,
+    "initialization_fields": {
+      "P": {
+        "units": "Pa",
+        "exact_equal": false,
+        "changed_cells": 770649,
+        "maximum_absolute_difference": 0.0390625
+      },
+      "PB": {
+        "units": "Pa",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "PH": {
+        "units": "m2 s-2",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "PHB": {
+        "units": "m2 s-2",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "U": {
+        "units": "m s-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "V": {
+        "units": "m s-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "W": {
+        "units": "m s-1",
+        "exact_equal": false,
+        "changed_cells": 1476306,
+        "maximum_absolute_difference": 0.6027584075927734
+      },
+      "T": {
+        "units": "K",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "MU": {
+        "units": "Pa",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "MUB": {
+        "units": "Pa",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QVAPOR": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QCLOUD": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QICE": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QRAIN": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QSNOW": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QGRAUP": {
+        "units": "kg kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QNCCN": {
+        "units": "  kg(-1)",
+        "exact_equal": false,
+        "changed_cells": 2573532,
+        "maximum_absolute_difference": 5029232640.0
+      },
+      "QNCLOUD": {
+        "units": "  kg(-1)",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QNICE": {
+        "units": "  kg-1",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "QNRAIN": {
+        "units": "  kg(-1)",
+        "exact_equal": true,
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      },
+      "P+PB": {
+        "changed_cells": 770649,
+        "maximum_absolute_difference": 0.0390625
+      },
+      "PH+PHB": {
+        "changed_cells": 0,
+        "maximum_absolute_difference": 0.0
+      }
+    },
+    "first_physics_call_assessed": false,
+    "microphysics_moment_contract_assessed": false,
+    "same_analysis_candidate_assessed": false
+  },
+  "initialization_call_chain": {
+    "kind": "source_trace_with_runtime_initial_output_checkpoint_not_instruction_trace",
+    "steps": [
+      "wrf_init",
+      "med_initialdata_input",
+      "start_domain",
+      "start_domain_em",
+      "phy_init",
+      "mp_init KDM6SCHEME",
+      "kdm6init",
+      "radar_init_variable_graupel"
+    ],
+    "inherited_host_source_sha256": {
+      "main/module_wrf_top.F": "3a6645ae7e4c64b8757987924c9fe661344c307c6de447cdc6fd063d09b1683c",
+      "share/mediation_wrfmain.F": "91b92d4c21536c3f9df8ac175c2e5410d31e3b7b5af66f7d00b9bd56872dce25",
+      "share/start_domain.F": "469b09d0459b143d812c2f268bb1f1aabecca4c047b419354c869195a87f7ebd",
+      "dyn_em/start_em.F": "6be17d3a4252065cf972dcf59bf3510cd29be35f898694e38187aa525cf27ac9",
+      "phys/module_physics_init.F": "0118e81fee1a749938654bf26112a5d8e91ff64ce5189344d5f8b8e9fa8eb57a"
+    }
+  },
+  "limitations": [
+    "The underlying native run rebuilds selected objects in a copied partial host, not the full WRF source tree.",
+    "The native case is 12 UTC, separate from the retained CP06-A 13 UTC analysis candidate.",
+    "Restart, nests, DFI, later thread initialization and first completed microphysics are not exercised by this cold-start readback.",
+    "No exported graupel volume field is available here; finite exported moments do not certify the full Q/N/B contract.",
+    "Conservation, same-candidate handoff, physical-time budgets and forecast improvement remain unassessed."
+  ],
+  "native_executable_sha256": "d85baa306069780818cb9c39c295a6b19787bd96db3e8381401ef68fabf8a5af"
+}

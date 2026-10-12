@@ -74,6 +74,9 @@ MODULE cloud_bal_pipeline
     ! Explicit pressure-analysis prior, not an observational omega target or
     ! paired native-model target. It preserves the frozen background tendency.
     LOGICAL :: background_continuity_prior=.FALSE.
+    ! Research-only geostrophic force prior, valid only after the background
+    ! continuity-prior stage has converged.
+    LOGICAL :: force_prior_enabled=.FALSE.
     REAL(real64) :: horizontal_support_radius_m=12000.0_real64
     REAL(real64) :: pressure_support_radius_pa=30000.0_real64
     TYPE(column_physics_config) :: column
@@ -162,6 +165,10 @@ MODULE cloud_bal_pipeline
     LOGICAL, ALLOCATABLE :: analysis_support(:,:,:)
     LOGICAL, ALLOCATABLE :: background_control_support(:,:,:)
     LOGICAL, ALLOCATABLE :: background_validation_shell(:,:,:)
+    TYPE(force_prior_diagnostics) :: force_prior
+    LOGICAL :: force_prior_applied=.FALSE.
+    LOGICAL, ALLOCATABLE :: force_prior_support(:,:,:)
+    REAL(real32), ALLOCATABLE :: pre_force_u(:,:,:),pre_force_v(:,:,:),pre_force_omega(:,:,:)
     INTEGER, ALLOCATABLE :: thermo_surface(:,:,:)
     LOGICAL, ALLOCATABLE :: geopotential_support(:,:,:)
     INTEGER, ALLOCATABLE :: geopotential_reference_level(:,:)
@@ -259,7 +266,8 @@ CONTAINS
                                     result,config,thermo_active,thermo_surface,target_rh, &
                                     geopotential_support,geopotential_reference_level,requested_surface_pressure, &
                                     pressure_transition_seed,physical_contract,estimator_candidate, &
-                                    analysis_support,background_control_support,background_validation_shell)
+                                    analysis_support,background_control_support,background_validation_shell, &
+                                    force_support)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state_in
     TYPE(cloud_bal_state_type), INTENT(OUT) :: candidate_out,operational_out
     TYPE(cloud_bal_pipeline_result), INTENT(OUT) :: result
@@ -280,7 +288,10 @@ CONTAINS
     LOGICAL, INTENT(IN), OPTIONAL :: analysis_support(:,:,:)
     LOGICAL, INTENT(IN), OPTIONAL :: background_control_support(:,:,:)
     LOGICAL, INTENT(IN), OPTIONAL :: background_validation_shell(:,:,:)
+    LOGICAL, INTENT(IN), OPTIONAL :: force_support(:,:,:)
     TYPE(cloud_bal_state_type) :: column_candidate,geopotential_candidate,balance_candidate,evaluation
+    TYPE(cloud_bal_state_type) :: force_candidate,nonwind_check
+    TYPE(force_prior_diagnostics) :: force_diagnostics
     TYPE(cloud_bal_state_type) :: transition_prior,transition_candidate
     TYPE(stage_result) :: transition_result
     TYPE(pressure_analysis_budget) :: proposal_budget,geometry_budget,trial_budget
@@ -320,6 +331,14 @@ CONTAINS
       result%status=STATUS_OK; result%reason_code=REASON_NONE
       RETURN
     END IF
+    IF (config%force_prior_enabled .AND. .NOT.config%background_continuity_prior) THEN
+      result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (PRESENT(force_support) .NEQV. config%force_prior_enabled) THEN
+      result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+      RETURN
+    END IF
     IF (config%background_continuity_prior .OR. PRESENT(analysis_support)) THEN
       ! The new producer requires a fixed domain and pristine observation
       ! inputs. It cannot reinterpret an external endpoint or pressure change.
@@ -344,6 +363,17 @@ CONTAINS
           RETURN
         END IF
         IF (ANY(analysis_support .AND. .NOT.background_control_support)) RETURN
+        IF (config%force_prior_enabled) THEN
+          IF (ANY(SHAPE(force_support)/=shape3)) THEN
+            result%reason_code=REASON_SHAPE
+            RETURN
+          END IF
+          IF (.NOT.ANY(force_support) .OR. &
+              ANY(force_support .AND. .NOT.background_validation_shell)) THEN
+            result%reason_code=REASON_METADATA
+            RETURN
+          END IF
+        END IF
       ELSE IF (PRESENT(background_control_support) .OR. PRESENT(background_validation_shell)) THEN
         RETURN
       END IF
@@ -700,6 +730,86 @@ CONTAINS
       result%status=STATUS_FAILED; result%reason_code=REASON_SOLVER
       CALL initialize_stage_result(result%overall,nx,ny,nz,STATUS_FAILED,REASON_SOLVER)
       RETURN
+    END IF
+    IF (config%force_prior_enabled) THEN
+      ALLOCATE(result%force_prior_support(nx,ny,nz),result%pre_force_u(nx,ny,nz), &
+        result%pre_force_v(nx,ny,nz),result%pre_force_omega(nx,ny,nz))
+      result%force_prior_support=force_support
+      result%pre_force_u=balance_candidate%u%value
+      result%pre_force_v=balance_candidate%v%value
+      result%pre_force_omega=balance_candidate%omega%value
+      CALL apply_background_force_prior_refinement(state_in,balance_candidate,force_candidate, &
+        config%balance,background_control_support,background_validation_shell,force_support, &
+        result%balance%numerical%continuity_background_rms, &
+        result%balance%numerical%continuity_background_max,force_diagnostics)
+      result%force_prior=force_diagnostics
+      IF (force_diagnostics%status/=STATUS_OK) THEN
+        candidate_out=state_in; operational_out=state_in
+        result%thermo_budget=water_phase_budget()
+        result%analysis_budget=pressure_analysis_budget()
+        result%geometry_budget=pressure_analysis_budget()
+        result%candidate_budget=pressure_analysis_budget()
+        result%candidate_evaluation=joint_candidate_evaluation()
+        result%column%changed=.FALSE.; result%balance%changed=.FALSE.
+        result%geopotential%changed=.FALSE.
+        result%balance%status=force_diagnostics%status
+        result%balance%reason_code=force_diagnostics%reason
+        result%overall=result%balance
+        result%overall%changed=.FALSE.
+        result%status=force_diagnostics%status
+        result%reason_code=force_diagnostics%reason
+        DEALLOCATE(result%force_prior_support,result%pre_force_u, &
+          result%pre_force_v,result%pre_force_omega)
+        RETURN
+      END IF
+      nonwind_check=force_candidate
+      nonwind_check%u=balance_candidate%u
+      nonwind_check%v=balance_candidate%v
+      IF (.NOT.canonical_states_equal(nonwind_check,balance_candidate)) THEN
+        candidate_out=state_in; operational_out=state_in
+        result%thermo_budget=water_phase_budget()
+        result%analysis_budget=pressure_analysis_budget()
+        result%geometry_budget=pressure_analysis_budget()
+        result%candidate_budget=pressure_analysis_budget()
+        result%candidate_evaluation=joint_candidate_evaluation()
+        result%column%changed=.FALSE.; result%balance%changed=.FALSE.
+        result%geopotential%changed=.FALSE.
+        result%balance%status=STATUS_FAILED; result%balance%reason_code=REASON_AUTHORITY
+        result%overall=result%balance; result%overall%changed=.FALSE.
+        result%status=STATUS_FAILED; result%reason_code=REASON_AUTHORITY
+        DEALLOCATE(result%force_prior_support,result%pre_force_u, &
+          result%pre_force_v,result%pre_force_omega)
+        RETURN
+      END IF
+      CALL evaluate_joint_candidate(state_in,force_candidate,config%balance,trial_budget, &
+        trial_evaluation,localization_status,validation_reason)
+      IF (localization_status/=STATUS_OK) THEN
+        candidate_out=state_in; operational_out=state_in
+        result%thermo_budget=water_phase_budget()
+        result%analysis_budget=pressure_analysis_budget()
+        result%geometry_budget=pressure_analysis_budget()
+        result%candidate_budget=pressure_analysis_budget()
+        result%candidate_evaluation=joint_candidate_evaluation()
+        result%column%changed=.FALSE.; result%balance%changed=.FALSE.
+        result%geopotential%changed=.FALSE.
+        result%balance%status=STATUS_FAILED; result%balance%reason_code=validation_reason
+        result%overall=result%balance; result%overall%changed=.FALSE.
+        result%status=STATUS_FAILED; result%reason_code=validation_reason
+        DEALLOCATE(result%force_prior_support,result%pre_force_u, &
+          result%pre_force_v,result%pre_force_omega)
+        RETURN
+      END IF
+      balance_candidate=force_candidate
+      result%force_prior_applied=.TRUE.
+      result%balance%changed=field_change_vector(state_in%u,balance_candidate%u) .OR. &
+        field_change_vector(state_in%v,balance_candidate%v) .OR. &
+        field_change_vector(state_in%omega,balance_candidate%omega)
+      result%balance%numerical%continuity_candidate_rms= &
+        force_diagnostics%continuity_candidate_rms
+      result%balance%numerical%continuity_candidate_max= &
+        force_diagnostics%continuity_candidate_max
+      result%balance%numerical%max_wind_increment=force_diagnostics%maximum_wind_increment
+      result%balance%numerical%max_omega_increment=force_diagnostics%maximum_omega_increment
     END IF
     ! The last successful block trial was re-evaluated before acceptance.
     candidate_out=balance_candidate

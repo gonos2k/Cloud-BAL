@@ -1303,6 +1303,9 @@ CONTAINS
       IF (.NOT.put_physical_contract_extension(ncid,(/xdim,ydim,zdim/), &
         state_in,candidate,result%physical_contract,result%candidate_evaluation)) GOTO 900
     END IF
+    IF (config%force_prior_enabled) THEN
+      IF (.NOT.put_force_prior_extension(ncid,(/xdim,ydim,zdim/),result)) GOTO 900
+    END IF
     rc=nf90_close(ncid)
     IF (rc==NF90_NOERR) THEN
       status=STATUS_OK
@@ -1365,6 +1368,96 @@ CONTAINS
     END IF
     put_supported_analysis_extension=.TRUE.
   END FUNCTION put_supported_analysis_extension
+
+  LOGICAL FUNCTION put_force_prior_extension(ncid,dims,result)
+    USE cloud_bal_pipeline, ONLY: cloud_bal_pipeline_result
+    USE cloud_bal_balance_operator, ONLY: force_prior_diagnostics
+    INTEGER, INTENT(IN) :: ncid,dims(3)
+    TYPE(cloud_bal_pipeline_result), INTENT(IN) :: result
+    INTEGER :: support_var,u_var,v_var,omega_var
+    INTEGER :: dimension_lengths(3),i
+    INTEGER(int32), ALLOCATABLE :: support(:,:,:)
+    CHARACTER(LEN=1024) :: extensions
+    TYPE(force_prior_diagnostics) :: diagnostics
+
+    put_force_prior_extension=.FALSE.
+    IF (.NOT.result%force_prior_applied .OR. &
+        .NOT.ALLOCATED(result%force_prior_support) .OR. &
+        .NOT.ALLOCATED(result%pre_force_u) .OR. .NOT.ALLOCATED(result%pre_force_v) .OR. &
+        .NOT.ALLOCATED(result%pre_force_omega)) RETURN
+    DO i=1,3
+      IF (.NOT.nc_ok(nf90_inquire_dimension(ncid,dims(i),len=dimension_lengths(i)))) RETURN
+    END DO
+    IF (ANY(SHAPE(result%force_prior_support)/=dimension_lengths) .OR. &
+        ANY(SHAPE(result%pre_force_u)/=dimension_lengths) .OR. &
+        ANY(SHAPE(result%pre_force_v)/=dimension_lengths) .OR. &
+        ANY(SHAPE(result%pre_force_omega)/=dimension_lengths)) RETURN
+    diagnostics=result%force_prior
+    IF (diagnostics%status/=STATUS_OK .OR. diagnostics%reason/=REASON_NONE) RETURN
+    IF (nf90_get_att(ncid,NF90_GLOBAL,'schema_extensions',extensions)/=NF90_NOERR) RETURN
+    IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'diagnostic_schema_version',9))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_contract', &
+      'cp06a_background_geostrophic_force_prior_v1'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_background_reference', &
+      'immutable_nonzero_background_geostrophic_residual'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_scales', &
+      'wind=4_m_s;force=abs_coriolis_per_s_times_4_m_s'))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_scales_are_observation_covariance',0))) RETURN
+    extensions=TRIM(extensions)//',cp06a_background_geostrophic_force_prior_v1'
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'schema_extensions',TRIM(extensions)))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var(ncid,'force_prior_support',NF90_INT,dims,support_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'pre_force_u',NF90_FLOAT,dims,u_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'pre_force_v',NF90_FLOAT,dims,v_var)) .OR. &
+        .NOT.nc_ok(nf90_def_var(ncid,'pre_force_omega',NF90_FLOAT,dims,omega_var))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,support_var,'units','1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,support_var,'mask_encoding','0=outside,1=inside')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,u_var,'units','m s-1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,v_var,'units','m s-1')) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,omega_var,'units','Pa s-1'))) RETURN
+    IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,support_var,1,1,1)) .OR. &
+        .NOT.nc_ok(nf90_def_var_deflate(ncid,u_var,1,1,1)) .OR. &
+        .NOT.nc_ok(nf90_def_var_deflate(ncid,v_var,1,1,1)) .OR. &
+        .NOT.nc_ok(nf90_def_var_deflate(ncid,omega_var,1,1,1))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_background_rms', &
+      diagnostics%background_force_rms)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_input_rms', &
+      diagnostics%input_force_rms)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_candidate_rms', &
+      diagnostics%candidate_force_rms)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_input_objective', &
+      diagnostics%input_objective)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_candidate_objective', &
+      diagnostics%candidate_objective)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_input_normalized_rms', &
+      diagnostics%input_normalized_force_rms)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_candidate_normalized_rms', &
+      diagnostics%candidate_normalized_force_rms)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_continuity_candidate_rms', &
+      diagnostics%continuity_candidate_rms)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_continuity_candidate_max', &
+      diagnostics%continuity_candidate_max)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_projected_increment_rms', &
+      diagnostics%projected_increment_rms)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_projected_increment_max', &
+      diagnostics%projected_increment_max)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_max_wind_increment', &
+      diagnostics%maximum_wind_increment)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_max_omega_increment', &
+      diagnostics%maximum_omega_increment)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_solver_iterations', &
+      diagnostics%solver_iterations)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_status',diagnostics%status)) .OR. &
+        .NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'force_prior_reason',diagnostics%reason))) RETURN
+    IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
+    ALLOCATE(support(dims(1),dims(2),dims(3)))
+    support=MERGE(1_int32,0_int32,result%force_prior_support)
+    IF (.NOT.nc_ok(nf90_put_var(ncid,support_var,support)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,u_var,result%pre_force_u)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,v_var,result%pre_force_v)) .OR. &
+        .NOT.nc_ok(nf90_put_var(ncid,omega_var,result%pre_force_omega))) RETURN
+    put_force_prior_extension=.TRUE.
+  END FUNCTION put_force_prior_extension
 
   LOGICAL FUNCTION put_physical_contract_extension(ncid,dims,background,candidate,contract,evaluation)
     USE cloud_bal_pipeline, ONLY: physical_joint_candidate_contract,joint_candidate_evaluation
@@ -2306,6 +2399,19 @@ CONTAINS
     REAL(real64) :: flux_terms(7),flux_accounted,flux_error,flux_limit
 
     status=STATUS_FAILED; reason=REASON_AUTHORITY
+    IF (config%force_prior_enabled .NEQV. result%force_prior_applied) RETURN
+    IF (config%force_prior_enabled) THEN
+      IF (.NOT.config%background_continuity_prior .OR. &
+          .NOT.ALLOCATED(result%analysis_support) .OR. &
+          .NOT.ALLOCATED(result%force_prior_support) .OR. &
+          .NOT.ALLOCATED(result%pre_force_u) .OR. &
+          .NOT.ALLOCATED(result%pre_force_v) .OR. &
+          .NOT.ALLOCATED(result%pre_force_omega)) RETURN
+    ELSE IF (ALLOCATED(result%force_prior_support) .OR. &
+             ALLOCATED(result%pre_force_u) .OR. ALLOCATED(result%pre_force_v) .OR. &
+             ALLOCATED(result%pre_force_omega)) THEN
+      RETURN
+    END IF
     IF (ALLOCATED(result%physical_contract)) THEN
       IF (result%candidate_evaluation%physical_feasibility_status/=PHYSICAL_FEASIBILITY_PASS) RETURN
     END IF
@@ -2551,6 +2657,32 @@ CONTAINS
     ! Producer replay verifies lineage, not an independent scientific oracle.
     ! Every trial remains anchored to the supplied immutable background.
     pipeline_result_replays=.FALSE.
+    IF (config%force_prior_enabled .NEQV. result%force_prior_applied) RETURN
+    IF (config%force_prior_enabled) THEN
+      IF (.NOT.config%background_continuity_prior .OR. &
+          .NOT.ALLOCATED(result%analysis_support) .OR. &
+          .NOT.ALLOCATED(result%force_prior_support) .OR. &
+          .NOT.ALLOCATED(result%pre_force_u) .OR. &
+          .NOT.ALLOCATED(result%pre_force_v) .OR. &
+          .NOT.ALLOCATED(result%pre_force_omega)) RETURN
+      IF (result%force_prior%status/=STATUS_OK .OR. &
+          result%force_prior%reason/=REASON_NONE) RETURN
+      IF (ANY(SHAPE(result%force_prior_support)/=SHAPE(background%above_ground)) .OR. &
+          ANY(SHAPE(result%pre_force_u)/=SHAPE(background%above_ground)) .OR. &
+          ANY(SHAPE(result%pre_force_v)/=SHAPE(background%above_ground)) .OR. &
+          ANY(SHAPE(result%pre_force_omega)/=SHAPE(background%above_ground))) RETURN
+      IF (.NOT.ALLOCATED(result%background_control_support) .OR. &
+          .NOT.ALLOCATED(result%background_validation_shell)) RETURN
+      IF (ANY(result%force_prior_support .AND. &
+          .NOT.result%background_validation_shell)) RETURN
+      IF (ANY(.NOT.ieee_is_finite(result%pre_force_u)) .OR. &
+          ANY(.NOT.ieee_is_finite(result%pre_force_v)) .OR. &
+          ANY(.NOT.ieee_is_finite(result%pre_force_omega))) RETURN
+    ELSE IF (ALLOCATED(result%force_prior_support) .OR. &
+             ALLOCATED(result%pre_force_u) .OR. ALLOCATED(result%pre_force_v) .OR. &
+             ALLOCATED(result%pre_force_omega)) THEN
+      RETURN
+    END IF
     IF (ALLOCATED(result%thermo_support).NEQV.ALLOCATED(result%thermo_surface)) RETURN
     IF (ALLOCATED(result%geopotential_support).NEQV. &
         ALLOCATED(result%geopotential_reference_level)) RETURN
@@ -2657,10 +2789,40 @@ CONTAINS
                                          result%geopotential%numerical)) RETURN
     IF (.NOT.numerical_diagnostics_equal(replay_result%overall%numerical, &
                                          result%overall%numerical)) RETURN
+    IF (replay_result%force_prior_applied .NEQV. result%force_prior_applied) RETURN
+    IF (result%force_prior_applied) THEN
+      IF (.NOT.force_prior_diagnostics_equal(replay_result%force_prior,result%force_prior)) RETURN
+      IF (ANY(replay_result%force_prior_support .NEQV. result%force_prior_support) .OR. &
+          ANY(replay_result%pre_force_u/=result%pre_force_u) .OR. &
+          ANY(replay_result%pre_force_v/=result%pre_force_v) .OR. &
+          ANY(replay_result%pre_force_omega/=result%pre_force_omega)) RETURN
+    END IF
     IF (.NOT.canonical_states_equal(background,operational)) RETURN
     IF (.NOT.canonical_states_equal(replay,candidate)) RETURN
     pipeline_result_replays=.TRUE.
   END FUNCTION pipeline_result_replays
+
+  LOGICAL FUNCTION force_prior_diagnostics_equal(left,right)
+    USE cloud_bal_balance_operator, ONLY: force_prior_diagnostics
+    TYPE(force_prior_diagnostics), INTENT(IN) :: left,right
+    REAL(real64) :: left_values(13),right_values(13)
+    left_values=[left%background_force_rms,left%input_force_rms,left%candidate_force_rms, &
+      left%input_objective,left%candidate_objective,left%input_normalized_force_rms, &
+      left%candidate_normalized_force_rms,left%continuity_candidate_rms, &
+      left%continuity_candidate_max,left%projected_increment_rms, &
+      left%projected_increment_max,left%maximum_wind_increment,left%maximum_omega_increment]
+    right_values=[right%background_force_rms,right%input_force_rms,right%candidate_force_rms, &
+      right%input_objective,right%candidate_objective,right%input_normalized_force_rms, &
+      right%candidate_normalized_force_rms,right%continuity_candidate_rms, &
+      right%continuity_candidate_max,right%projected_increment_rms, &
+      right%projected_increment_max,right%maximum_wind_increment,right%maximum_omega_increment]
+    force_prior_diagnostics_equal=.FALSE.
+    IF (ANY(.NOT.ieee_is_finite(left_values)) .OR. &
+        ANY(.NOT.ieee_is_finite(right_values))) RETURN
+    force_prior_diagnostics_equal=ALL(left_values==right_values) .AND. &
+      left%solver_iterations==right%solver_iterations .AND. &
+      left%status==right%status .AND. left%reason==right%reason
+  END FUNCTION force_prior_diagnostics_equal
 
   SUBROUTINE run_pipeline_replay(background,candidate,operational,replay_result,config,receipt, &
       thermo_active,thermo_surface,target_rh,geopotential_support,geopotential_reference_level, &
@@ -2681,12 +2843,23 @@ CONTAINS
     IF (ALLOCATED(receipt%analysis_support) .AND. config%background_continuity_prior) THEN
       IF (.NOT.ALLOCATED(receipt%background_control_support) .OR. &
           .NOT.ALLOCATED(receipt%background_validation_shell)) RETURN
-      CALL run_cloud_bal_pipeline(background,candidate,operational,replay_result,config, &
-        thermo_active,thermo_surface,target_rh,geopotential_support, &
-        geopotential_reference_level,requested_surface_pressure,pressure_transition_seed, &
-        analysis_support=receipt%analysis_support, &
-        background_control_support=receipt%background_control_support, &
-        background_validation_shell=receipt%background_validation_shell)
+      IF (config%force_prior_enabled) THEN
+        IF (.NOT.ALLOCATED(receipt%force_prior_support)) RETURN
+        CALL run_cloud_bal_pipeline(background,candidate,operational,replay_result,config, &
+          thermo_active,thermo_surface,target_rh,geopotential_support, &
+          geopotential_reference_level,requested_surface_pressure,pressure_transition_seed, &
+          analysis_support=receipt%analysis_support, &
+          background_control_support=receipt%background_control_support, &
+          background_validation_shell=receipt%background_validation_shell, &
+          force_support=receipt%force_prior_support)
+      ELSE
+        CALL run_cloud_bal_pipeline(background,candidate,operational,replay_result,config, &
+          thermo_active,thermo_surface,target_rh,geopotential_support, &
+          geopotential_reference_level,requested_surface_pressure,pressure_transition_seed, &
+          analysis_support=receipt%analysis_support, &
+          background_control_support=receipt%background_control_support, &
+          background_validation_shell=receipt%background_validation_shell)
+      END IF
     ELSE IF (ALLOCATED(receipt%analysis_support)) THEN
       CALL run_cloud_bal_pipeline(background,candidate,operational,replay_result,config, &
         thermo_active,thermo_surface,target_rh,geopotential_support, &

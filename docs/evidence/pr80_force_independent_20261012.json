@@ -1,0 +1,538 @@
+{
+  "assessment_limits": {
+    "candidate_authority": "diagnostic comparison only; pressure-force growth is reported without declaring scientific pass/fail.",
+    "native_runtime": "NOT_ASSESSED; the new builder is Python/NumPy/NetCDF, with no Fortran change or Cloud-BAL runtime claim.",
+    "observation_fit": "NOT_ASSESSED. The frozen force-prior objective is a wind increment plus force-residual prior, not a licensed observation fit. No omega target or uncertainty was synthesized or treated as an observation.",
+    "retained_force_refinement": "Wind-only force-prior diagnostic. This is not a scientific acceptance result, observation-fit evaluation, or native/time validation."
+  },
+  "builder": {
+    "independent_adjoint_check": {
+      "absolute_error": 1.1368683772161603e-13,
+      "fixture": "2x2x2 NetCDF state/geometry",
+      "identity": "dot(dual, independent_flux(state)) = dot(independent_flux_adjoint(dual), [u,v,omega])",
+      "lhs": -382.61547011466706,
+      "rhs": -382.61547011466695
+    },
+    "path": "tools/cp06a_state_force_flux.py",
+    "sha256": "c080592827e9a988e4c9b1014976ac28e8c5c6ab2414e67682ce0647dcfece49",
+    "test_methods": [
+      {
+        "checks": "builder divergence equals hand-assembled oriented x/y/vertical faces; internal pair terms cancel; global sum equals signed domain boundary flux",
+        "fixture": "2x2x2 NetCDF state, pressure interfaces, pressure/dry mass measures, cell thickness, interior and perimeter fluxes",
+        "name": "face_signs_and_global_boundary_integral"
+      },
+      {
+        "checks": "builder face contributions match hand-assembled overlap extents, pressure-level pairing, and oriented signs",
+        "fixture": "2x1x2 NetCDF state with shifted layer interfaces and three shared pressure-overlap segments",
+        "name": "staggered_pressure_overlap"
+      },
+      {
+        "checks": "A(U0+deltaU,V0+deltaV)-A(U0,V0)=A(deltaU,deltaV)",
+        "fixture": "same NetCDF geometry and dry fraction; distinct baseline and delta U/V states, zero cell omega",
+        "name": "fixed_geometry_wind_action_linearity"
+      },
+      {
+        "checks": "dot(dual,A(state winds)) equals dot(A_transpose(dual),state winds), cell omega controls included; top/bottom boundary omega set to zero",
+        "fixture": "same NetCDF geometry and nonuniform dual vector",
+        "name": "builder_transpose_duality"
+      },
+      {
+        "checks": "little-endian shape header, x-fastest U/V layout, 11 float64 diagnostics, and strict file-size rejection",
+        "fixture": "small synthetic stream-v1 bytes",
+        "name": "stream_v1_reader"
+      }
+    ],
+    "test_result": "5 Python tests passed against the actual NetCDF-backed builder: hand-assembled oriented face signs/global boundary integral, staggered pressure-overlap partition, fixed-geometry wind-action linearity, builder transpose duality, and stream-v1 reader layout/size validation.",
+    "tests_path": "tests/test_cp06a_state_force_flux.py",
+    "tests_sha256": "677470fb2580157b475380fbf097d6005f111a439e5d353a4c4a2312aae2534e"
+  },
+  "common_force_mask": {
+    "cells": 900,
+    "coupled_coverage": "900/900",
+    "coverage_failure": "none",
+    "hydro_coverage": "900/900",
+    "source": "coupled.nc::geostrophic_validation_support"
+  },
+  "contract": "pr80_cp06a_independent_state_force_flux_v2",
+  "created_utc": "2026-10-12",
+  "independent_flux_invariants": {
+    "adjoint": "Exercised on actual builder transpose with raw cell-flux pairing; fixture absolute dot-product mismatch 1.14e-13. This is builder evidence, separate from production Fortran test evidence.",
+    "composition_rounding_diagnostic": "Authoritative Md comes from retained state mass measure. The optional species-based dry fraction reconstructs Md and differs at max relative dry fraction 8.85e-10; its maximum divergence difference is 0.0182 kg/s, 7.10e-10 relative to maximum state divergence, and its maximum Md discrepancy is 0.00443 of source consistency tolerance. This secondary reconstruction is reported separately and is not substituted for state Md.",
+    "fixed_geometry_linearity": "Exercised on actual builder with fixed pressure geometry and dry fraction.",
+    "global_integral": "The sum of cell divergence equals signed lateral plus top/bottom boundary flux; roundoff closure is retained in result records. Retained O0 closure is 1.0967254638671875e-4 kg/s absolute on -1.1775881076103973e9 kg/s summed boundary flux (relative 9.31e-14).",
+    "internal_face_signs": "Each reconstructed interior pressure-overlap face adds its oriented flux to one cell and subtracts the same flux from its neighbor; separate x/y and vertical pair sums are exactly zero in the full retained evaluation."
+  },
+  "inputs": {
+    "coupled_O0": {
+      "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O0/coupled.nc",
+      "sha256": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260"
+    },
+    "coupled_O2": {
+      "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/coupled.nc",
+      "sha256": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260"
+    },
+    "hydro_O0": {
+      "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O0/hydro.nc",
+      "sha256": "5e69e8b1c2f36119cead2ca4b6ca632a8898a2fa1082d9faa9dd1ea5075b7535"
+    },
+    "hydro_O2": {
+      "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/hydro.nc",
+      "sha256": "5e69e8b1c2f36119cead2ca4b6ca632a8898a2fa1082d9faa9dd1ea5075b7535"
+    }
+  },
+  "profile_review": {
+    "core_pipeline_writer_review": "No direct failure found in read-only review of frozen force core, pipeline gates/rollback, writer atomicity, masks, and producer replay. New force stage preserves nonzero background force reference, projects wind increments through A/A^T, checks post-REAL32 continuity, and keeps nonwind fields fixed at that stage. Pipeline resets candidate/operational state and clears force receipt fields on failure; writer uses NOCLOBBER and removes only a newly-created failed product; replay matches support, diagnostics, preforce winds and full candidate.",
+    "native_abi_and_init_receipt_review": "Patch preserves the legacy zero-argument radar_init symbol while KDM6 dispatches to radar_init_variable_graupel. Receipt correctly scopes this to a copied partial host, one cold start/time-zero 12UTC output and focused compiled consumer; inactive legacy calls, full-host xocmg closure, complete graupel Q/N/B, first-step/forecast and same 13UTC Cloud-BAL candidate linkage remain unclaimed.",
+    "review_status": "no code-level blocker found; scientific/native validation explicitly remains open"
+  },
+  "results": {
+    "COUPLED": {
+      "force": {
+        "all": {
+          "cells": 900,
+          "coriolis_rms": 3.9361078301251095e-08,
+          "coriolis_u_mean": 1.2846198209085257e-08,
+          "coriolis_v_mean": -2.014795346415545e-09,
+          "cross_term_mean": 3.628978078643894e-11,
+          "pressure_gradient_rms": 0.006785863370178915,
+          "pressure_gradient_x_mean": 9.637352644315595e-22,
+          "pressure_gradient_y_mean": 2.8912057932946785e-20,
+          "reconstruction_max": 1.7136806215789175e-18,
+          "total_force_rms": 0.006785866044217645,
+          "total_u_mean": 1.2846198209087453e-08,
+          "total_v_mean": -2.014795346384845e-09
+        },
+        "interior": {
+          "cells": 500,
+          "coriolis_rms": 5.280842804957364e-08,
+          "coriolis_u_mean": 2.3123156776353466e-08,
+          "coriolis_v_mean": -3.62663162354798e-09,
+          "cross_term_mean": 6.53216054155901e-11,
+          "pressure_gradient_rms": 0.009104191069047524,
+          "pressure_gradient_x_mean": 2.6020852139652105e-20,
+          "pressure_gradient_y_mean": -2.949029909160572e-20,
+          "reconstruction_max": 1.7136806215789175e-18,
+          "total_force_rms": 0.009104194656646948,
+          "total_u_mean": 2.3123156776383436e-08,
+          "total_v_mean": -3.6266316235343543e-09
+        },
+        "phi_changed_cells_on_fixed_support": 163,
+        "phi_internal_stencils": {
+          "cells": 68,
+          "coriolis_rms": 6.656915888367117e-08,
+          "coriolis_u_mean": 4.169792155916819e-08,
+          "coriolis_v_mean": 1.329607794220645e-08,
+          "cross_term_mean": -5.479456274428359e-10,
+          "pressure_gradient_rms": 0.01284415117779966,
+          "pressure_gradient_x_mean": -0.009662853285845588,
+          "pressure_gradient_y_mean": 0.003384293141084559,
+          "reconstruction_max": 1.7136806215789175e-18,
+          "total_force_rms": 0.012844129847404084,
+          "total_u_mean": -0.009662811587924027,
+          "total_v_mean": 0.0033843064371625016
+        },
+        "phi_support_cells": 180,
+        "phi_support_edge_stencils": {
+          "cells": 201,
+          "coriolis_rms": 7.122989809205807e-08,
+          "coriolis_u_mean": 3.96818369599039e-08,
+          "coriolis_v_mean": -9.89482225551489e-09,
+          "cross_term_mean": 3.47866195890089e-10,
+          "pressure_gradient_rms": 0.0122626798192721,
+          "pressure_gradient_x_mean": 0.003269024992226368,
+          "pressure_gradient_y_mean": -0.0011449349930037313,
+          "reconstruction_max": 1.6688104160461316e-18,
+          "total_force_rms": 0.012262694003409399,
+          "total_u_mean": 0.003269064674063328,
+          "total_v_mean": -0.0011449448878259867
+        },
+        "validation_support_boundary": {
+          "cells": 400,
+          "coriolis_rms": 0.0,
+          "coriolis_u_mean": 0.0,
+          "coriolis_v_mean": 0.0,
+          "cross_term_mean": 0.0,
+          "pressure_gradient_rms": 0.0,
+          "pressure_gradient_x_mean": 0.0,
+          "pressure_gradient_y_mean": 0.0,
+          "reconstruction_max": 0.0,
+          "total_force_rms": 0.0,
+          "total_u_mean": 0.0,
+          "total_v_mean": 0.0
+        }
+      },
+      "independent_flux": {
+        "OFF_background": {
+          "boundary_sum_kg_s": -1177588107.6103973,
+          "global_boundary_closure_kg_s": 0.00010967254638671875,
+          "global_boundary_closure_relative_to_boundary": 9.313319799846661e-14,
+          "global_sum_kg_s": -1177588107.6102877,
+          "internal_lateral_face_pair_sum_kg_s": 0.0,
+          "internal_vertical_face_pair_sum_kg_s": 0.0,
+          "lateral_boundary_kg_s": [
+            -83849634583.05666,
+            35945225199.64879,
+            -35992770440.74528,
+            60567920393.49268
+          ],
+          "top_bottom_boundary_kg_s": [
+            19452895518.423077,
+            2698775804.6269794
+          ],
+          "usable_cells": 1294696
+        },
+        "OFF_persisted_divergence_max_abs_difference_kg_s": 5.116453394293785e-08,
+        "OFF_persisted_divergence_rms_difference_kg_s": 2.2477774232330507e-09,
+        "candidate": {
+          "boundary_sum_kg_s": -1177588107.6103973,
+          "global_boundary_closure_kg_s": 0.00010967254638671875,
+          "global_boundary_closure_relative_to_boundary": 9.313319799846661e-14,
+          "global_sum_kg_s": -1177588107.6102877,
+          "internal_lateral_face_pair_sum_kg_s": 0.0,
+          "internal_vertical_face_pair_sum_kg_s": 0.0,
+          "lateral_boundary_kg_s": [
+            -83849634583.05666,
+            35945225199.64879,
+            -35992770440.74528,
+            60567920393.49268
+          ],
+          "top_bottom_boundary_kg_s": [
+            19452895518.423077,
+            2698775804.6269794
+          ],
+          "usable_cells": 1294696
+        },
+        "composition_reconstruction": {
+          "divergence_max_abs_difference_kg_s": 0.018209704663604498,
+          "divergence_max_relative_to_state_max": 7.09530837257983e-10,
+          "divergence_rms_difference_kg_s": 5.0436825490644316e-05,
+          "divergence_rms_relative_to_state_rms": 6.234797993006589e-11,
+          "dry_fraction_max_abs_difference": 8.681544372279859e-10,
+          "dry_fraction_max_relative_difference": 8.850227503450707e-10,
+          "dry_fraction_rms_difference": 2.617565096741188e-12,
+          "dry_mass_error_max_over_source_consistency_tolerance": 0.004425113716175578
+        },
+        "persisted_divergence_max_abs_difference_kg_s": 5.116453394293785e-08,
+        "persisted_divergence_rms_difference_kg_s": 2.247819262401055e-09
+      },
+      "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O0/coupled.nc",
+      "sha256": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260",
+      "shared_mask_cells": 900,
+      "source_geostrophic_rms": {
+        "OFF_background": {
+          "all": [
+            0.000653318285568262,
+            900
+          ],
+          "interior": [
+            0.0005883313853310613,
+            500
+          ],
+          "validation_support_boundary": [
+            0.0007264217000979615,
+            400
+          ]
+        },
+        "candidate": {
+          "all": [
+            0.006792153972382789,
+            900
+          ],
+          "interior": [
+            0.00908943833595349,
+            500
+          ],
+          "validation_support_boundary": [
+            0.0007264217000979615,
+            400
+          ]
+        }
+      }
+    },
+    "HYDRO": {
+      "force": {
+        "all": {
+          "cells": 900,
+          "coriolis_rms": 0.0,
+          "coriolis_u_mean": 0.0,
+          "coriolis_v_mean": 0.0,
+          "cross_term_mean": 0.0,
+          "pressure_gradient_rms": 0.006785863370178915,
+          "pressure_gradient_x_mean": 9.637352644315595e-22,
+          "pressure_gradient_y_mean": 2.8912057932946785e-20,
+          "reconstruction_max": 0.0,
+          "total_force_rms": 0.006785863370178915,
+          "total_u_mean": 9.637352644315595e-22,
+          "total_v_mean": 2.8912057932946785e-20
+        },
+        "interior": {
+          "cells": 500,
+          "coriolis_rms": 0.0,
+          "coriolis_u_mean": 0.0,
+          "coriolis_v_mean": 0.0,
+          "cross_term_mean": 0.0,
+          "pressure_gradient_rms": 0.009104191069047524,
+          "pressure_gradient_x_mean": 2.6020852139652105e-20,
+          "pressure_gradient_y_mean": -2.949029909160572e-20,
+          "reconstruction_max": 0.0,
+          "total_force_rms": 0.009104191069047524,
+          "total_u_mean": 2.6020852139652105e-20,
+          "total_v_mean": -2.949029909160572e-20
+        },
+        "phi_changed_cells_on_fixed_support": 163,
+        "phi_internal_stencils": {
+          "cells": 68,
+          "coriolis_rms": 0.0,
+          "coriolis_u_mean": 0.0,
+          "coriolis_v_mean": 0.0,
+          "cross_term_mean": 0.0,
+          "pressure_gradient_rms": 0.01284415117779966,
+          "pressure_gradient_x_mean": -0.009662853285845588,
+          "pressure_gradient_y_mean": 0.003384293141084559,
+          "reconstruction_max": 0.0,
+          "total_force_rms": 0.01284415117779966,
+          "total_u_mean": -0.009662853285845588,
+          "total_v_mean": 0.003384293141084559
+        },
+        "phi_support_cells": 180,
+        "phi_support_edge_stencils": {
+          "cells": 201,
+          "coriolis_rms": 0.0,
+          "coriolis_u_mean": 0.0,
+          "coriolis_v_mean": 0.0,
+          "cross_term_mean": 0.0,
+          "pressure_gradient_rms": 0.0122626798192721,
+          "pressure_gradient_x_mean": 0.003269024992226368,
+          "pressure_gradient_y_mean": -0.0011449349930037313,
+          "reconstruction_max": 0.0,
+          "total_force_rms": 0.0122626798192721,
+          "total_u_mean": 0.003269024992226368,
+          "total_v_mean": -0.0011449349930037313
+        },
+        "validation_support_boundary": {
+          "cells": 400,
+          "coriolis_rms": 0.0,
+          "coriolis_u_mean": 0.0,
+          "coriolis_v_mean": 0.0,
+          "cross_term_mean": 0.0,
+          "pressure_gradient_rms": 0.0,
+          "pressure_gradient_x_mean": 0.0,
+          "pressure_gradient_y_mean": 0.0,
+          "reconstruction_max": 0.0,
+          "total_force_rms": 0.0,
+          "total_u_mean": 0.0,
+          "total_v_mean": 0.0
+        }
+      },
+      "independent_flux": {
+        "OFF_background": {
+          "boundary_sum_kg_s": -1177588107.6103973,
+          "global_boundary_closure_kg_s": 0.00010967254638671875,
+          "global_boundary_closure_relative_to_boundary": 9.313319799846661e-14,
+          "global_sum_kg_s": -1177588107.6102877,
+          "internal_lateral_face_pair_sum_kg_s": 0.0,
+          "internal_vertical_face_pair_sum_kg_s": 0.0,
+          "lateral_boundary_kg_s": [
+            -83849634583.05666,
+            35945225199.64879,
+            -35992770440.74528,
+            60567920393.49268
+          ],
+          "top_bottom_boundary_kg_s": [
+            19452895518.423077,
+            2698775804.6269794
+          ],
+          "usable_cells": 1294696
+        },
+        "OFF_persisted_divergence_max_abs_difference_kg_s": 5.116453394293785e-08,
+        "OFF_persisted_divergence_rms_difference_kg_s": 2.2477774232330507e-09,
+        "candidate": {
+          "boundary_sum_kg_s": -1177588107.6103973,
+          "global_boundary_closure_kg_s": 0.00010967254638671875,
+          "global_boundary_closure_relative_to_boundary": 9.313319799846661e-14,
+          "global_sum_kg_s": -1177588107.6102877,
+          "internal_lateral_face_pair_sum_kg_s": 0.0,
+          "internal_vertical_face_pair_sum_kg_s": 0.0,
+          "lateral_boundary_kg_s": [
+            -83849634583.05666,
+            35945225199.64879,
+            -35992770440.74528,
+            60567920393.49268
+          ],
+          "top_bottom_boundary_kg_s": [
+            19452895518.423077,
+            2698775804.6269794
+          ],
+          "usable_cells": 1294696
+        },
+        "composition_reconstruction": {
+          "divergence_max_abs_difference_kg_s": 0.018216074910014868,
+          "divergence_max_relative_to_state_max": 7.0977905030441e-10,
+          "divergence_rms_difference_kg_s": 5.0443996890771766e-05,
+          "divergence_rms_relative_to_state_rms": 6.235684587660874e-11,
+          "dry_fraction_max_abs_difference": 8.681544372279859e-10,
+          "dry_fraction_max_relative_difference": 8.850227503450707e-10,
+          "dry_fraction_rms_difference": 2.617565096741188e-12,
+          "dry_mass_error_max_over_source_consistency_tolerance": 0.004425113716175578
+        },
+        "persisted_divergence_max_abs_difference_kg_s": 5.116453394293785e-08,
+        "persisted_divergence_rms_difference_kg_s": 2.247758167009721e-09
+      },
+      "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O0/hydro.nc",
+      "sha256": "5e69e8b1c2f36119cead2ca4b6ca632a8898a2fa1082d9faa9dd1ea5075b7535",
+      "shared_mask_cells": 900,
+      "source_geostrophic_rms": {
+        "OFF_background": {
+          "all": [
+            0.000653318285568262,
+            900
+          ],
+          "interior": [
+            0.0005883313853310613,
+            500
+          ],
+          "validation_support_boundary": [
+            0.0007264217000979615,
+            400
+          ]
+        },
+        "candidate": {
+          "all": [
+            0.006792151535097832,
+            900
+          ],
+          "interior": [
+            0.009089435057649004,
+            500
+          ],
+          "validation_support_boundary": [
+            0.0007264217000979615,
+            400
+          ]
+        }
+      }
+    }
+  },
+  "scope": "Independent retrospective diagnostic on retained OFF-background/HYDRO/COUPLED pressure states; no runtime/native/scientific acceptance claim.",
+  "source_binding": {
+    "comparison": "Frozen and merged source routine definitions were checked directly; persisted divergence and operator coefficients are not builder inputs.",
+    "comparison_revision": "3d2bf4c",
+    "construction": "Rebuild lateral pressure-overlap segments, pressure-center vertical weights, shared-face fluxes and perimeter/top/bottom terms from retained geometry and state fields. State dry-air mass measure divided by pressure mass measure and state winds are the independent flux inputs. Persisted divergence is read only after construction as a comparison target; no persisted operator coefficients are read.",
+    "geometry_source": "src/common/cloud_bal_grid_geometry.f90::partition_pressure_face",
+    "geostrophic_stencil": "On each requested fixed-mask cell: require above-ground and usable finite pressure/U/V; select the forward x/y neighbor if usable, else backward; then require geopotential valid, quality outside the excluded bits 0b111, and positive source at center and both selected neighbors. RMS is sqrt(sum(ru^2+rv^2)/(2*N)).",
+    "independent_builder_inputs": [
+      "pressure_interface",
+      "pressure",
+      "pressure_mass_measure",
+      "dry_air_mass_measure or candidate_dry_air_mass_measure",
+      "cell_dp",
+      "above_ground",
+      "U/V/omega state fields",
+      "top/bottom omega boundary values and validity",
+      "grid dx/dy"
+    ],
+    "metadata_limit": "Retained NetCDF exports geopotential valid/quality/source arrays but does not export pressure/U/V valid/quality/source arrays; independent reconstruction uses retained pressure/U/V numeric values plus above_ground for pressure/U/V usability. The Fortran source routine checks their state masks. The fixed mask had full 900/900 stencil coverage for OFF, HYDRO, and COUPLED, so no rows were dropped.",
+    "operator_definitions_sha256": {
+      "build_lateral_face_geometry": "db5cbb35bd6c50ced6848a0ebf2e86235c2e3feed2fdf2162396a6d3478d1192",
+      "geostrophic_cell_usable": "377bfce05e896f240cbef26f95ba26d04dfdaaa3a210d242667da6d777df788f",
+      "geostrophic_residual": "f9b7dad1fb4a520712369e15fc1ccaaba4dfda4a51932e881c102a72beef68a5",
+      "initialize_balance_geometry": "afd9952b8911379e775b084649145505ac07e15e7d0171e963a2d0797e25d106",
+      "state_continuity_residual": "1f5ee20d650e6cd1c1f354ba8d7312570b11bf39ab2b2d2f40627e663e226743",
+      "state_dry_air_mass_flux_divergence": "9ba3a78268a77c11c0b32c055afee309a5f6b8a87eaa8bb9bc15fffd714c1c9f"
+    },
+    "operator_diff": "Direct comparison of the frozen producer source (revision 08e2ae0, SHA-256 31a1975b07c629e276efd23bc0fe173cd4366bd7d080c645049a5ed6903de156) and merged comparison revision 3d2bf4c showed the six bound routine definitions byte-identical. The new Python analysis edits no Fortran source.",
+    "persisted_arrays_policy": "Persisted divergence and candidate force arrays are not inputs to independently constructed dry flux; persisted divergence is read only after the builder returns as a comparison target. No saved operator coefficients are read.",
+    "producer_matches_frozen_revision": "08e2ae0",
+    "producer_source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr78_cp06a_20261012/Cloud-BAL/src/common/cloud_bal_balance_operator.f90",
+    "producer_source_sha256": "31a1975b07c629e276efd23bc0fe173cd4366bd7d080c645049a5ed6903de156",
+    "source_math": {
+      "boundary_signs": "At x/y minima the perimeter flux is negative outward-normal coordinate flux; maxima are positive. Top omega boundary is negative and bottom omega boundary positive in the vertical divergence, with boundary dry fraction taken from adjacent cell.",
+      "cell_force": "r_u = -f*v + dPhi/dx; r_v = f*u + dPhi/dy. Candidate-minus-OFF exactly separates into (d/dx,d/dy) delta-Phi plus (-f*delta-v, f*delta-u). RMS is sqrt(sum(ru^2+rv^2)/(2*N)).",
+      "horizontal_shared_face": "F_x = 0.5*(dy_L+dy_R)*Delta_p/g * (dx_R/(dx_L+dx_R)*u_L*Md_L/Mp_L + dx_L/(dx_L+dx_R)*u_R*Md_R/Mp_R); the y face is analogous with x width and v. Retained dx/dy are uniform to source contract tolerance, so these weights reduce to 1/2.",
+      "vertical_shared_face": "F_p = dx*dy/g * (p_L-interface - p_center_R)/(p_center_L-p_center_R)*omega_L*Md_L/Mp_L + complementary pressure-center weight times omega_R*Md_R/Mp_R."
+    }
+  },
+  "tests_run": {
+    "command": "python -m unittest tests/test_cp06a_state_force_flux.py -v",
+    "result": "5 passed",
+    "syntax": "python -m py_compile tools/cp06a_state_force_flux.py",
+    "whitespace": "git diff --check tools/cp06a_state_force_flux.py tests/test_cp06a_state_force_flux.py docs/evidence/pr80_force_independent_20261012.json"
+  },
+  "wind_refinement_evaluator": {
+    "binary_contract": "int32 LE [1,nx,ny,nz], absolute float32 U then V with x-fastest Fortran stream order, then eleven float64 diagnostics",
+    "command": "python tools/cp06a_state_force_flux.py /path/to/coupled.nc --evaluate-wind-artifact /path/to/retained_wind_v1.bin --output result.json",
+    "evaluation": "strictly validates schema and dimensions; evaluates source geostrophic RMS on same 900 mask and independent state/geometry dry-flux RMS on 900 force, 500 control, and 980 shell masks; reports before/after/increment and global flux integral",
+    "final_run_binding": {
+      "base_revision": "3d2bf4c315020a0841da338f9a95839a549f7f39",
+      "input_post_manifest_sha256": "0f8329651d8065d81e4b69e22c63acaf60e7304666f4d6a8be27af20ed40b669",
+      "input_pre_manifest_sha256": "0f8329651d8065d81e4b69e22c63acaf60e7304666f4d6a8be27af20ed40b669",
+      "input_pre_post_equal": true,
+      "profile_pair_runner_exit_status": 0,
+      "retained_worktree_source_post_manifest_sha256": "c03cf5beb3e8efcfa724179b6b7fad2b464241a32e4f1cc48c4cfe62feb3433e",
+      "retained_worktree_source_pre_manifest_sha256": "c03cf5beb3e8efcfa724179b6b7fad2b464241a32e4f1cc48c4cfe62feb3433e",
+      "retained_worktree_source_pre_post_equal": true,
+      "source_input_archive_sha256_manifest": "b0d2ba8810e805ef06ba4ae1306fe5df45b2b2b3bf5fd8566a47ceb836da6ea4",
+      "source_snapshot_post_manifest_sha256": "30d244532e21ad3d28bed2ce5b92d2d62f77b1da041d30eaacd9834fd7f49daf",
+      "source_snapshot_pre_manifest_sha256": "30d244532e21ad3d28bed2ce5b92d2d62f77b1da041d30eaacd9834fd7f49daf",
+      "source_snapshot_pre_post_equal": true,
+      "worktree_source_changed_during_run": false
+    },
+    "final_run_root": "/var/tmp/pr80_force_retained.QrG2Yk",
+    "profiles": {
+      "O0": {
+        "OFF_relative_shell_residual_rms_max_s1": [
+          1.9653995981581095e-10,
+          1.2788818878277077e-09
+        ],
+        "executable_sha256": "6d7cb28d1631407427af73f1be1812c220520ad74cc093aa9eaab2b7764ae961",
+        "producer_replay": true,
+        "runner_exit_status": 0,
+        "source_force_rms_before_after_m_s2": [
+          0.006792153972382789,
+          0.006666653880818734
+        ],
+        "wind_artifact_sha256": "d9eef85986946154d6c6dead5d3db47f5f47131bc06a45dbdad6432ee409f1bd",
+        "wind_increment_shell_rms_max_s1": [
+          2.18320703305734e-11,
+          1.372003778771609e-10
+        ],
+        "writer_netcdf_sha256": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd",
+        "writer_roundtrip": true,
+        "writer_status": 20
+      },
+      "O2": {
+        "OFF_relative_shell_residual_rms_max_s1": [
+          1.9653995981581095e-10,
+          1.2788818878277077e-09
+        ],
+        "executable_sha256": "167ca06c5e417768eed4364a72e132179ed52148cf49299b852c822b4a8c0ff2",
+        "producer_replay": true,
+        "runner_exit_status": 0,
+        "source_force_rms_before_after_m_s2": [
+          0.006792153972382789,
+          0.006666653880818734
+        ],
+        "wind_artifact_sha256": "d9eef85986946154d6c6dead5d3db47f5f47131bc06a45dbdad6432ee409f1bd",
+        "wind_increment_shell_rms_max_s1": [
+          2.18320703305734e-11,
+          1.372003778771609e-10
+        ],
+        "writer_netcdf_sha256": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd",
+        "writer_roundtrip": true,
+        "writer_status": 20
+      },
+      "binary_sha256_both": "d9eef85986946154d6c6dead5d3db47f5f47131bc06a45dbdad6432ee409f1bd",
+      "cross_profile_artifact_and_writer_bytes_equal": true,
+      "limitations": [
+        "Component comparison cannot reconstruct retained vt_z_mean, vt_z_sigma, precipitation_phase because those fields are absent from input NetCDF; driver reports their exact unavailable-cell metadata differences. Full pipeline output is assessed through serialized physical/geometry fields and wind metadata.",
+        "Wind-only force-prior diagnostic; not science acceptance, observation-fit evaluation, native handoff, or forecast validation."
+      ],
+      "pair_status": "FINAL_IDENTICAL_O0_O2_ARTIFACTS",
+      "science_authority": "NONE",
+      "writer_netcdf_sha256_both": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd"
+    },
+    "scope": "diagnostic only; does not evaluate observations or establish scientific/native acceptance",
+    "status": "FINAL_O0_O2_COMPLETE; immutable source and input manifest pre/post hashes match; both pinned Intel profiles exited 0, full producer/writer status OK, producer replay and writer roundtrip passed.",
+    "tool_sha256": "cc9b9e54facb1d7ac25c9828b9185a006fe3c4d80206bda02005dc47cf4b64d4"
+  }
+}

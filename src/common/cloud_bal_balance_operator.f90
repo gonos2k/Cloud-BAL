@@ -86,6 +86,25 @@ MODULE cloud_bal_balance_operator
     LOGICAL, ALLOCATABLE :: omega_authorized(:,:,:)
   END TYPE balance_operator_snapshot
 
+  TYPE, PUBLIC :: force_prior_diagnostics
+    REAL(real64) :: background_force_rms=0.0_real64
+    REAL(real64) :: input_force_rms=0.0_real64
+    REAL(real64) :: candidate_force_rms=0.0_real64
+    REAL(real64) :: input_objective=0.0_real64
+    REAL(real64) :: candidate_objective=0.0_real64
+    REAL(real64) :: input_normalized_force_rms=0.0_real64
+    REAL(real64) :: candidate_normalized_force_rms=0.0_real64
+    REAL(real64) :: continuity_candidate_rms=0.0_real64
+    REAL(real64) :: continuity_candidate_max=0.0_real64
+    REAL(real64) :: projected_increment_rms=0.0_real64
+    REAL(real64) :: projected_increment_max=0.0_real64
+    REAL(real64) :: maximum_wind_increment=0.0_real64
+    REAL(real64) :: maximum_omega_increment=0.0_real64
+    INTEGER :: solver_iterations=0
+    INTEGER :: status=STATUS_FAILED
+    INTEGER :: reason=REASON_NONE
+  END TYPE force_prior_diagnostics
+
   PUBLIC :: build_balance_operator
   PUBLIC :: build_diagnostic_balance_operator
   PUBLIC :: apply_continuity_operator
@@ -94,6 +113,7 @@ MODULE cloud_bal_balance_operator
   PUBLIC :: apply_normal_operator
   PUBLIC :: apply_localized_balance
   PUBLIC :: apply_background_continuity_balance
+  PUBLIC :: apply_background_force_prior_refinement
   PUBLIC :: continuity_norms
   PUBLIC :: balance_beta_active
   PUBLIC :: state_continuity_residual
@@ -414,6 +434,454 @@ CONTAINS
     END DO; END DO; END DO
     CALL label_components(op)
   END SUBROUTINE configure_background_operator
+
+  ! Refine the continuity-prior wind in the homogeneous continuity nullspace.
+  ! The force prior is the immutable, generally nonzero background residual;
+  ! this routine only penalizes force changes from that reference.
+  SUBROUTINE apply_background_force_prior_refinement(background,input,state_out,config, &
+      control_support,validation_shell,force_support,original_continuity_rms, &
+      original_continuity_max,diagnostics)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,input
+    TYPE(cloud_bal_state_type), INTENT(OUT) :: state_out
+    TYPE(balance_operator_config), INTENT(IN) :: config
+    LOGICAL, INTENT(IN) :: control_support(:,:,:),validation_shell(:,:,:),force_support(:,:,:)
+    REAL(real64), INTENT(IN) :: original_continuity_rms,original_continuity_max
+    TYPE(force_prior_diagnostics), INTENT(OUT) :: diagnostics
+    TYPE(balance_operator_type) :: diagnostic_op,op
+    TYPE(balance_operator_config) :: projector_config
+    TYPE(cloud_bal_state_type) :: candidate
+    REAL(real64), ALLOCATABLE :: r_input(:,:,:),r_candidate(:,:,:)
+    REAL(real64), ALLOCATABLE :: background_flux(:,:,:),input_flux(:,:,:),candidate_flux(:,:,:)
+    REAL(real64), ALLOCATABLE :: ru_background(:,:,:),rv_background(:,:,:)
+    REAL(real64), ALLOCATABLE :: gradient_u(:,:,:),gradient_v(:,:,:),direction_u(:,:,:),direction_v(:,:,:)
+    REAL(real64), ALLOCATABLE :: rhs(:,:,:),lambda(:,:,:),work_u(:,:,:),work_v(:,:,:),work_o(:,:,:)
+    REAL(real64), ALLOCATABLE :: adj_u(:,:,:),adj_v(:,:,:),adj_o(:,:,:),zero(:,:,:),projected_residual(:,:,:)
+    REAL(real64), ALLOCATABLE :: background_fraction(:,:,:),input_fraction(:,:,:)
+    REAL(real64) :: input_rms,input_max,outside_rms,outside_max
+    REAL(real64) :: candidate_rms,candidate_max,projected_rms,projected_max
+    REAL(real64) :: input_objective,candidate_objective,input_normalized,candidate_normalized
+    REAL(real64) :: background_force_rms,input_force_rms,candidate_force_rms
+    REAL(real64) :: slope,curvature,alpha,alpha_cap,delta_u,delta_v,root,disc,wind_cap,omega_cap
+    REAL(real64) :: limit_rms,limit_max,wind_increment,omega_increment,eps_scale
+    INTEGER :: status,reason,iterations,solver_reason,i,j,k
+    INTEGER :: coriolis_status
+
+    diagnostics=force_prior_diagnostics()
+    state_out=input
+    status=STATUS_FAILED; reason=REASON_SHAPE
+    IF (.NOT.config_valid(config) .OR. &
+        config%target_authority/=TARGET_AUTHORITY_OBSERVATIONAL) THEN
+      diagnostics%status=status; diagnostics%reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    IF (.NOT.ieee_is_finite(original_continuity_rms) .OR. &
+        .NOT.ieee_is_finite(original_continuity_max) .OR. &
+        original_continuity_rms<0.0_real64 .OR. original_continuity_max<0.0_real64) THEN
+      diagnostics%status=status; diagnostics%reason=REASON_RANGE
+      RETURN
+    END IF
+    CALL validate_canonical_state(background,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=status; diagnostics%reason=reason
+      RETURN
+    END IF
+    CALL validate_canonical_state(input,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=status; diagnostics%reason=reason
+      RETURN
+    END IF
+    IF (.NOT.background_prior_boundary_contract_valid(background) .OR. &
+        .NOT.boundary_contract_valid(input) .OR. &
+        .NOT.model_boundary_increment_contract_valid(background,input) .OR. &
+        .NOT.same_continuity_geometry(background,input) .OR. &
+        .NOT.pressure_geostrophic_fixed_identity(background,input)) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    CALL build_diagnostic_balance_operator(input,diagnostic_op,status,reason)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=status; diagnostics%reason=reason
+      RETURN
+    END IF
+    IF (ANY(SHAPE(control_support)/=(/diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz/)) .OR. &
+        ANY(SHAPE(validation_shell)/=(/diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz/)) .OR. &
+        ANY(SHAPE(force_support)/=(/diagnostic_op%nx,diagnostic_op%ny,diagnostic_op%nz/))) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_SHAPE
+      RETURN
+    END IF
+    IF (.NOT.background_source_is_authoritative(background,diagnostic_op) .OR. &
+        .NOT.ANY(control_support) .OR. .NOT.ANY(force_support) .OR. &
+        ANY(control_support .AND. .NOT.diagnostic_op%cell_usable) .OR. &
+        ANY(validation_shell .AND. .NOT.diagnostic_op%cell_usable) .OR. &
+        ANY(force_support .AND. .NOT.diagnostic_op%cell_usable) .OR. &
+        ANY(control_support .AND. .NOT.validation_shell) .OR. &
+        ANY(force_support .AND. .NOT.validation_shell) .OR. &
+        .NOT.control_shell_covers_faces(diagnostic_op,control_support,validation_shell)) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_METADATA
+      RETURN
+    END IF
+    op=diagnostic_op
+    CALL configure_background_operator(op,input,config,control_support,validation_shell)
+    ! The configured operator uses the candidate's current dry-air fractions,
+    ! while its homogeneous correction keeps the validated background boundary
+    ! flux fixed.  The candidate's first usable center omega may have changed;
+    ! that does not revoke authority of the exact copied boundary metadata.
+    op%physical_boundary_authorized=background_prior_boundary_contract_valid(background) .AND. &
+      boundary_contract_valid(input) .AND. model_boundary_increment_contract_valid(background,input)
+    IF (op%ncomponent<=0) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_SOLVER
+      RETURN
+    END IF
+    ALLOCATE(r_input(op%nx,op%ny,op%nz),r_candidate(op%nx,op%ny,op%nz), &
+      background_flux(op%nx,op%ny,op%nz),input_flux(op%nx,op%ny,op%nz), &
+      candidate_flux(op%nx,op%ny,op%nz),background_fraction(op%nx,op%ny,op%nz), &
+      input_fraction(op%nx,op%ny,op%nz),ru_background(op%nx,op%ny,op%nz), &
+      rv_background(op%nx,op%ny,op%nz),gradient_u(op%nx,op%ny,op%nz), &
+      gradient_v(op%nx,op%ny,op%nz),direction_u(op%nx,op%ny,op%nz), &
+      direction_v(op%nx,op%ny,op%nz),rhs(op%nx,op%ny,op%nz), &
+      lambda(op%nx,op%ny,op%nz),work_u(op%nx,op%ny,op%nz), &
+      work_v(op%nx,op%ny,op%nz),work_o(op%nx,op%ny,op%nz), &
+      adj_u(op%nx,op%ny,op%nz),adj_v(op%nx,op%ny,op%nz), &
+      adj_o(op%nx,op%ny,op%nz),zero(op%nx,op%ny,op%nz), &
+      projected_residual(op%nx,op%ny,op%nz))
+    background_fraction=0.0_real64; input_fraction=0.0_real64
+    WHERE(background%above_ground)
+      background_fraction=background%grid%dry_air_mass_measure/background%grid%pressure_mass_measure
+    END WHERE
+    WHERE(input%above_ground)
+      input_fraction=input%grid%dry_air_mass_measure/input%grid%pressure_mass_measure
+    END WHERE
+    IF (ANY(.NOT.validation_shell .AND. input_fraction/=background_fraction)) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    CALL state_dry_air_mass_flux_divergence(diagnostic_op,background,background_flux,status)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_NONFINITE
+      RETURN
+    END IF
+    CALL state_dry_air_mass_flux_divergence(diagnostic_op,input,input_flux,status)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_NONFINITE
+      RETURN
+    END IF
+    r_input=0.0_real64
+    WHERE(diagnostic_op%cell_usable)
+      r_input=(input_flux-background_flux)/diagnostic_op%volume
+    END WHERE
+    CALL masked_residual_norm(r_input,.NOT.validation_shell,outside_rms,outside_max)
+    IF (outside_rms>1.0e-12_real64 .OR. outside_max>1.0e-12_real64) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    WHERE(.NOT.validation_shell) r_input=0.0_real64
+    CALL masked_residual_norm(r_input,validation_shell,input_rms,input_max)
+    limit_rms=MAX(2.0e-3_real64*original_continuity_rms,1.0e-12_real64)
+    limit_max=MAX(2.0e-3_real64*original_continuity_max,1.0e-12_real64)
+    IF (input_rms>limit_rms .OR. input_max>limit_max) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    CALL geostrophic_residual(background,diagnostic_op,background_force_rms,status, &
+      force_support,reason=reason,residual_u=ru_background,residual_v=rv_background)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=status; diagnostics%reason=reason
+      RETURN
+    END IF
+    diagnostics%background_force_rms=background_force_rms
+    CALL force_prior_objective(background,input,diagnostic_op,control_support,force_support, &
+      ru_background,rv_background,input_objective,input_normalized,input_force_rms, &
+      gradient_u,gradient_v,status,reason)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=status; diagnostics%reason=reason
+      RETURN
+    END IF
+    diagnostics%input_force_rms=input_force_rms
+    diagnostics%input_objective=input_objective
+    diagnostics%input_normalized_force_rms=input_normalized
+    candidate=input
+    candidate_objective=input_objective
+    candidate_normalized=input_normalized
+    candidate_force_rms=input_force_rms
+    wind_cap=MIN(10.0_real64,config%maximum_wind_increment)*config%increment_headroom
+    omega_cap=MIN(5.0_real64,config%maximum_omega_increment)*config%increment_headroom
+    diagnostics%maximum_wind_increment=0.0_real64
+    diagnostics%maximum_omega_increment=0.0_real64
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (control_support(i,j,k)) THEN
+        wind_increment=HYPOT(REAL(input%u%value(i,j,k),real64)- &
+          REAL(background%u%value(i,j,k),real64),REAL(input%v%value(i,j,k),real64)- &
+          REAL(background%v%value(i,j,k),real64))
+        diagnostics%maximum_wind_increment=MAX(diagnostics%maximum_wind_increment,wind_increment)
+      END IF
+      omega_increment=ABS(REAL(input%omega%value(i,j,k),real64)- &
+                           REAL(background%omega%value(i,j,k),real64))
+      diagnostics%maximum_omega_increment=MAX(diagnostics%maximum_omega_increment,omega_increment)
+    END DO; END DO; END DO
+    IF (diagnostics%maximum_wind_increment>wind_cap .OR. &
+        diagnostics%maximum_omega_increment>omega_cap) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    IF (input_objective<=64.0_real64*EPSILON(1.0_real64)) THEN
+      diagnostics%candidate_force_rms=input_force_rms
+      diagnostics%candidate_normalized_force_rms=input_normalized
+      diagnostics%candidate_objective=input_objective
+      diagnostics%continuity_candidate_rms=input_rms
+      diagnostics%continuity_candidate_max=input_max
+      diagnostics%status=STATUS_OK; diagnostics%reason=REASON_NONE
+      RETURN
+    END IF
+
+    ! K-precondition the objective gradient, then project it with the same
+    ! pressure-overlap A, adjoint, and CR solve used by the prior operator.
+    op%ko=0.0_real64; op%omega_authorized=.FALSE.; op%pface_active=.FALSE.
+    direction_u=0.0_real64; direction_v=0.0_real64
+    WHERE(control_support)
+      direction_u=-op%ku*gradient_u
+      direction_v=-op%kv*gradient_v
+    END WHERE
+    zero=0.0_real64
+    CALL apply_continuity_operator(op,direction_u,direction_v,zero,rhs,status)
+    IF (status/=STATUS_OK .OR. .NOT.compatibility_ok(op,rhs,config)) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_SOLVER
+      RETURN
+    END IF
+    projector_config=config
+    projector_config%solver_residual_fraction=MIN(config%solver_residual_fraction,1.0e-10_real64)
+    projector_config%solver_absolute_tolerance=MIN(config%solver_absolute_tolerance,1.0e-14_real64)
+    work_u=0.0_real64; work_v=0.0_real64; work_o=0.0_real64
+    CALL solve_normal_equation(op,rhs,projector_config,lambda,work_u,work_v,work_o, &
+      iterations,status,solver_reason,projected_rms,projected_max)
+    diagnostics%solver_iterations=iterations
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_SOLVER
+      RETURN
+    END IF
+    CALL apply_adjoint_metric(op,lambda,adj_u,adj_v,adj_o,status)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_NONFINITE
+      RETURN
+    END IF
+    direction_u=direction_u-op%ku*adj_u
+    direction_v=direction_v-op%kv*adj_v
+    zero=0.0_real64
+    CALL apply_continuity_operator(op,direction_u,direction_v,zero,projected_residual,status)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_NONFINITE
+      RETURN
+    END IF
+    CALL continuity_norms(op,projected_residual,projected_rms,projected_max)
+    diagnostics%projected_increment_rms=projected_rms
+    diagnostics%projected_increment_max=projected_max
+    CALL continuity_norms(op,rhs,input_rms,input_max)
+    IF (projected_rms>MAX(1.0e-10_real64*input_rms,1.0e-13_real64) .OR. &
+        projected_max>MAX(1.0e-10_real64*input_max,1.0e-13_real64)) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    slope=SUM(gradient_u*direction_u+gradient_v*direction_v,MASK=control_support)
+    curvature=SUM((direction_u/4.0_real64)**2+(direction_v/4.0_real64)**2, &
+                  MASK=control_support)
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (.NOT.force_support(i,j,k)) CYCLE
+      CALL coriolis_parameter(input,i,j,delta_u,coriolis_status)
+      IF (coriolis_status/=STATUS_OK .OR. delta_u==0.0_real64) THEN
+        diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_RANGE
+        RETURN
+      END IF
+      delta_v=ABS(delta_u)*4.0_real64
+      curvature=curvature+((-delta_u*direction_v(i,j,k))/delta_v)**2+ &
+                            (( delta_u*direction_u(i,j,k))/delta_v)**2
+    END DO; END DO; END DO
+    IF (.NOT.ieee_is_finite(slope) .OR. .NOT.ieee_is_finite(curvature) .OR. &
+        slope>=0.0_real64 .OR. curvature<=0.0_real64) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    alpha=-slope/curvature
+    alpha_cap=HUGE(1.0_real64)
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (.NOT.control_support(i,j,k)) CYCLE
+      delta_u=REAL(input%u%value(i,j,k),real64)-REAL(background%u%value(i,j,k),real64)
+      delta_v=REAL(input%v%value(i,j,k),real64)-REAL(background%v%value(i,j,k),real64)
+      IF (HYPOT(delta_u,delta_v)>wind_cap) THEN
+        diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+        RETURN
+      END IF
+      disc=direction_u(i,j,k)**2+direction_v(i,j,k)**2
+      IF (disc<=0.0_real64) CYCLE
+      root=delta_u*direction_u(i,j,k)+delta_v*direction_v(i,j,k)
+      disc=root*root+disc*(wind_cap*wind_cap-delta_u*delta_u-delta_v*delta_v)
+      IF (disc<0.0_real64) CYCLE
+      alpha_cap=MIN(alpha_cap,(-root+SQRT(disc))/ &
+        (direction_u(i,j,k)**2+direction_v(i,j,k)**2))
+    END DO; END DO; END DO
+    alpha=MIN(alpha,alpha_cap)
+    IF (.NOT.ieee_is_finite(alpha) .OR. alpha<=0.0_real64) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (.NOT.control_support(i,j,k)) CYCLE
+      candidate%u%value(i,j,k)=REAL(REAL(input%u%value(i,j,k),real64)+ &
+        alpha*direction_u(i,j,k),real32)
+      candidate%v%value(i,j,k)=REAL(REAL(input%v%value(i,j,k),real64)+ &
+        alpha*direction_v(i,j,k),real32)
+      IF (.NOT.ieee_is_finite(candidate%u%value(i,j,k)) .OR. &
+          .NOT.ieee_is_finite(candidate%v%value(i,j,k))) THEN
+        diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_NONFINITE
+        RETURN
+      END IF
+      IF (candidate%u%value(i,j,k)/=input%u%value(i,j,k)) &
+        candidate%u%source(i,j,k)=IOR(input%u%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+      IF (candidate%v%value(i,j,k)/=input%v%value(i,j,k)) &
+        candidate%v%source(i,j,k)=IOR(input%v%source(i,j,k),SOURCE_BALANCE_OPERATOR)
+    END DO; END DO; END DO
+    CALL validate_canonical_state(candidate,.FALSE.,.FALSE.,status,reason,.FALSE.)
+    IF (status/=STATUS_OK .OR. &
+        .NOT.model_boundary_increment_contract_valid(background,candidate)) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_AUTHORITY
+      RETURN
+    END IF
+    CALL state_dry_air_mass_flux_divergence(diagnostic_op,candidate,candidate_flux,status)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=STATUS_FAILED; diagnostics%reason=REASON_NONFINITE
+      RETURN
+    END IF
+    r_candidate=0.0_real64
+    WHERE(diagnostic_op%cell_usable)
+      r_candidate=(candidate_flux-background_flux)/diagnostic_op%volume
+    END WHERE
+    CALL masked_residual_norm(r_candidate,.NOT.validation_shell,outside_rms,outside_max)
+    IF (outside_rms>1.0e-12_real64 .OR. outside_max>1.0e-12_real64) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    WHERE(.NOT.validation_shell) r_candidate=0.0_real64
+    CALL masked_residual_norm(r_candidate,validation_shell,candidate_rms,candidate_max)
+    diagnostics%continuity_candidate_rms=candidate_rms
+    diagnostics%continuity_candidate_max=candidate_max
+    IF (candidate_rms>limit_rms .OR. candidate_max>limit_max) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    CALL force_prior_objective(background,candidate,diagnostic_op,control_support,force_support, &
+      ru_background,rv_background,candidate_objective,candidate_normalized,candidate_force_rms, &
+      gradient_u,gradient_v,status,reason)
+    IF (status/=STATUS_OK) THEN
+      diagnostics%status=status; diagnostics%reason=reason
+      RETURN
+    END IF
+    diagnostics%candidate_objective=candidate_objective
+    diagnostics%candidate_normalized_force_rms=candidate_normalized
+    diagnostics%candidate_force_rms=candidate_force_rms
+    eps_scale=64.0_real64*EPSILON(1.0_real64)*MAX(1.0_real64,ABS(input_objective))
+    IF (candidate_objective>=input_objective-eps_scale) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    IF (candidate_force_rms>input_force_rms+ &
+        64.0_real64*REAL(EPSILON(1.0_real32),real64)* &
+        MAX(input_force_rms,background_force_rms)) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    diagnostics%maximum_wind_increment=0.0_real64
+    diagnostics%maximum_omega_increment=0.0_real64
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (control_support(i,j,k)) diagnostics%maximum_wind_increment= &
+        MAX(diagnostics%maximum_wind_increment, &
+          HYPOT(REAL(candidate%u%value(i,j,k),real64)-REAL(background%u%value(i,j,k),real64), &
+                REAL(candidate%v%value(i,j,k),real64)-REAL(background%v%value(i,j,k),real64)))
+      diagnostics%maximum_omega_increment=MAX(diagnostics%maximum_omega_increment, &
+        ABS(REAL(candidate%omega%value(i,j,k),real64)- &
+            REAL(background%omega%value(i,j,k),real64)))
+    END DO; END DO; END DO
+    IF (diagnostics%maximum_wind_increment>10.0_real64 .OR. &
+        diagnostics%maximum_omega_increment>5.0_real64) THEN
+      diagnostics%status=STATUS_DEGRADED; diagnostics%reason=REASON_GATE
+      RETURN
+    END IF
+    state_out=candidate
+    diagnostics%status=STATUS_OK; diagnostics%reason=REASON_NONE
+  END SUBROUTINE apply_background_force_prior_refinement
+
+  SUBROUTINE force_prior_objective(background,state,op,control_support,force_support, &
+      ru_background,rv_background,objective,normalized_force_rms,force_rms, &
+      gradient_u,gradient_v,status,reason)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: background,state
+    TYPE(balance_operator_type), INTENT(IN) :: op
+    LOGICAL, INTENT(IN) :: control_support(:,:,:),force_support(:,:,:)
+    REAL(real64), INTENT(IN) :: ru_background(:,:,:),rv_background(:,:,:)
+    REAL(real64), INTENT(OUT) :: objective,normalized_force_rms,force_rms
+    REAL(real64), INTENT(OUT) :: gradient_u(:,:,:),gradient_v(:,:,:)
+    INTEGER, INTENT(OUT) :: status,reason
+    REAL(real64), ALLOCATABLE :: ru(:,:,:),rv(:,:,:)
+    REAL(real64) :: du,dv,dru,drv,f,sigma_force,force_sum,normalized_sum
+    INTEGER :: i,j,k,n
+
+    objective=HUGE(1.0_real64); normalized_force_rms=HUGE(1.0_real64)
+    force_rms=HUGE(1.0_real64); gradient_u=0.0_real64; gradient_v=0.0_real64
+    status=STATUS_FAILED; reason=REASON_SHAPE
+    IF (ANY(SHAPE(control_support)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(force_support)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(gradient_u)/=(/op%nx,op%ny,op%nz/)) .OR. &
+        ANY(SHAPE(gradient_v)/=(/op%nx,op%ny,op%nz/))) RETURN
+    ALLOCATE(ru(op%nx,op%ny,op%nz),rv(op%nx,op%ny,op%nz))
+    CALL geostrophic_residual(state,op,force_rms,status,force_support,reason,ru,rv)
+    IF (status/=STATUS_OK) RETURN
+    objective=0.0_real64; force_sum=0.0_real64; normalized_sum=0.0_real64; n=0
+    DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+      IF (control_support(i,j,k)) THEN
+        du=REAL(state%u%value(i,j,k),real64)-REAL(background%u%value(i,j,k),real64)
+        dv=REAL(state%v%value(i,j,k),real64)-REAL(background%v%value(i,j,k),real64)
+        objective=objective+0.5_real64*((du/4.0_real64)**2+(dv/4.0_real64)**2)
+        gradient_u(i,j,k)=du/16.0_real64
+        gradient_v(i,j,k)=dv/16.0_real64
+      END IF
+      IF (.NOT.force_support(i,j,k)) CYCLE
+      CALL coriolis_parameter(state,i,j,f,status)
+      IF (status/=STATUS_OK .OR. f==0.0_real64) THEN
+        status=STATUS_FAILED; reason=REASON_RANGE; RETURN
+      END IF
+      sigma_force=ABS(f)*4.0_real64
+      dru=ru(i,j,k)-ru_background(i,j,k)
+      drv=rv(i,j,k)-rv_background(i,j,k)
+      objective=objective+0.5_real64*((dru/sigma_force)**2+(drv/sigma_force)**2)
+      gradient_u(i,j,k)=gradient_u(i,j,k)+f*drv/(sigma_force*sigma_force)
+      gradient_v(i,j,k)=gradient_v(i,j,k)-f*dru/(sigma_force*sigma_force)
+      force_sum=force_sum+ru(i,j,k)**2+rv(i,j,k)**2
+      normalized_sum=normalized_sum+(dru/sigma_force)**2+(drv/sigma_force)**2
+      n=n+2
+    END DO; END DO; END DO
+    IF (n<=0 .OR. .NOT.ieee_is_finite(objective) .OR. &
+        .NOT.ieee_is_finite(force_sum) .OR. .NOT.ieee_is_finite(normalized_sum)) THEN
+      status=STATUS_FAILED; reason=REASON_NONFINITE; RETURN
+    END IF
+    force_rms=SQRT(force_sum/REAL(n,real64))
+    normalized_force_rms=SQRT(normalized_sum/REAL(n,real64))
+    IF (.NOT.ieee_is_finite(force_rms) .OR. .NOT.ieee_is_finite(normalized_force_rms)) THEN
+      status=STATUS_FAILED; reason=REASON_NONFINITE; RETURN
+    END IF
+    status=STATUS_OK; reason=REASON_NONE
+  END SUBROUTINE force_prior_objective
+
+  SUBROUTINE coriolis_parameter(state,i,j,value,status)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    INTEGER, INTENT(IN) :: i,j
+    REAL(real64), INTENT(OUT) :: value
+    INTEGER, INTENT(OUT) :: status
+    REAL(real64) :: pi
+    value=0.0_real64; status=STATUS_FAILED
+    IF (i<1 .OR. i>state%grid%nx .OR. j<1 .OR. j>state%grid%ny) RETURN
+    IF (.NOT.cell_is_usable(state%latitude%valid(i,j),state%latitude%quality(i,j), &
+        state%latitude%source(i,j))) RETURN
+    pi=ACOS(-1.0_real64)
+    value=1.458423e-4_real64*SIN(REAL(state%latitude%value(i,j),real64)*pi/180.0_real64)
+    IF (.NOT.ieee_is_finite(value)) RETURN
+    status=STATUS_OK
+  END SUBROUTINE coriolis_parameter
 
   PURE LOGICAL FUNCTION same_continuity_geometry(left,right)
     TYPE(cloud_bal_state_type), INTENT(IN) :: left,right
@@ -2408,19 +2876,29 @@ CONTAINS
     status=STATUS_OK
   END SUBROUTINE state_continuity_residual
 
-  SUBROUTINE geostrophic_residual(state,op,rms_value,status,evaluation_mask,reason)
+  SUBROUTINE geostrophic_residual(state,op,rms_value,status,evaluation_mask,reason, &
+                                  residual_u,residual_v)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     TYPE(balance_operator_type), INTENT(IN) :: op
     REAL(real64), INTENT(OUT) :: rms_value
     INTEGER, INTENT(OUT) :: status
     LOGICAL, INTENT(IN), OPTIONAL :: evaluation_mask(:,:,:)
     INTEGER, INTENT(OUT), OPTIONAL :: reason
+    REAL(real64), INTENT(OUT), OPTIONAL :: residual_u(:,:,:),residual_v(:,:,:)
     INTEGER :: i,j,k,ix,jy,n,validation_status,validation_reason,reason_code
     REAL(real64) :: f,dphidx,dphidy,ru,rv,total,pi,term,limit
     status=STATUS_FAILED; rms_value=0.0_real64; total=0.0_real64; n=0
     reason_code=REASON_SHAPE
     IF (PRESENT(reason)) reason=reason_code
+    IF (PRESENT(residual_u)) residual_u=0.0_real64
+    IF (PRESENT(residual_v)) residual_v=0.0_real64
     IF (.NOT.diagnostic_operator_shapes_valid(op)) RETURN
+    IF (PRESENT(residual_u)) THEN
+      IF (ANY(SHAPE(residual_u)/=(/op%nx,op%ny,op%nz/))) RETURN
+    END IF
+    IF (PRESENT(residual_v)) THEN
+      IF (ANY(SHAPE(residual_v)/=(/op%nx,op%ny,op%nz/))) RETURN
+    END IF
     IF (PRESENT(evaluation_mask)) THEN
       IF (ANY(SHAPE(evaluation_mask)/=(/op%nx,op%ny,op%nz/))) RETURN
     END IF
@@ -2523,6 +3001,8 @@ CONTAINS
         RETURN
       END IF
       total=total+term; n=n+2
+      IF (PRESENT(residual_u)) residual_u(i,j,k)=ru
+      IF (PRESENT(residual_v)) residual_v(i,j,k)=rv
     END DO; END DO; END DO
     IF (n==0) THEN
       reason_code=REASON_REQUIRED_COVERAGE

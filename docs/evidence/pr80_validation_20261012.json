@@ -1,0 +1,110 @@
+{
+  "actual_force_profiles": {
+    "O0": {
+      "compiler_profile": [
+        "profile=O0",
+        "compiler=/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "compiler_version=ifx (IFX) 2026.0.0 20260331",
+        "compiler_sha256=909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+        "netcdf_fortran_config=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config",
+        "netcdf_fortran_sha256=f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17c8a39",
+        "netcdf_c_sha256=f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288"
+      ],
+      "executable_sha256": "6d7cb28d1631407427af73f1be1812c220520ad74cc093aa9eaab2b7764ae961",
+      "exit_status": 0,
+      "netcdf_sha256": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd",
+      "producer_replay": true,
+      "wind_sha256": "d9eef85986946154d6c6dead5d3db47f5f47131bc06a45dbdad6432ee409f1bd",
+      "writer_roundtrip": true,
+      "writer_status": 20
+    },
+    "O2": {
+      "compiler_profile": [
+        "profile=O2",
+        "compiler=/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "compiler_version=ifx (IFX) 2026.0.0 20260331",
+        "compiler_sha256=909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+        "netcdf_fortran_config=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config",
+        "netcdf_fortran_sha256=f610d7ebedf48d17023e9b8377d74d93542bde40d091ec7a5518bb30d17c8a39",
+        "netcdf_c_sha256=f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1afd1d07e5985c288"
+      ],
+      "executable_sha256": "167ca06c5e417768eed4364a72e132179ed52148cf49299b852c822b4a8c0ff2",
+      "exit_status": 0,
+      "netcdf_sha256": "3b4af43b45b002eb4044b96f7daf92d75aaefb41b3adb56430c4c463a9c289fd",
+      "producer_replay": true,
+      "wind_sha256": "d9eef85986946154d6c6dead5d3db47f5f47131bc06a45dbdad6432ee409f1bd",
+      "writer_roundtrip": true,
+      "writer_status": 20
+    }
+  },
+  "base_commit": "3d2bf4c315020a0841da338f9a95839a549f7f39",
+  "checks": {
+    "native_pair_errors": "Separate 12 UTC pinned partial-host candidate reaches WRF initial output, then floating invalid in calc_ww_cp/rk_step_prep; no same-analysis-candidate native first-call acceptance",
+    "real_cp06a_scopes": {
+      "case": "2026-08-16T13:00:00Z",
+      "science_assessed": false,
+      "scope": "FIXED900_FORCE_PRIOR_AND_FROZEN_DRY_FLUX_GATE",
+      "status": "PASS_SCOPED"
+    },
+    "scoped_unit": {
+      "pinned_intel_force_nullspace": "O0/O2 PASS",
+      "pinned_intel_pressure_overlap_faces": "O0/O2 PASS: production dry-flux/action/adjoint/shared-face tests",
+      "pinned_intel_writer_final": "O0/O2 PASS including rollback/replay/NaN guards",
+      "pinned_real_reader_writer_suite": "PASS before final NaN guard; final focused writer rebuilt O0/O2 afterward",
+      "python_host_pressure": 5,
+      "python_independent_state_flux": 5,
+      "python_native_geometry": 11,
+      "status": "PASS_SCOPED"
+    },
+    "whole_unit_script": {
+      "reason": "Pinned ncgen required at line 13 is unavailable; no GNU Fortran substitution",
+      "status": "NOT_RUN"
+    }
+  },
+  "evidence": {
+    "docs/evidence/kdm6_graupel_radar_contract_20261012/receipt.json": "4b0c0cb3951cbf3366e91fd978daa05124049fcfaddacffcadcf9d07bc9b6d76",
+    "docs/evidence/pr80_force_independent_20261012.json": "67147d1380d151b433ec6ab4d778e2911e8547075ac1560f97fc76cbf30fb470",
+    "docs/evidence/pr80_force_producer_20261012/manifest.json": "3dc4595975e7e955161e2fde4a08edbe88123c9b43431b65f43fd061395df90e",
+    "docs/evidence/pr80_force_producer_20261012/runs.zip": "da74d8ddbc28f2f87b80c854f222524acb6d0e814e8e2da2421b4f8b4396ac0e",
+    "docs/evidence/pr80_wrf_initialization_readback_20261012.json": "fa8b9794daf6febd2263a2ed26abe480d9cd9456bac20b2dd049218bb37f24e5"
+  },
+  "force": {
+    "background_rms_m_s2": 0.0006533182855682618,
+    "candidate_objective": 410985.92317114543,
+    "candidate_rms_m_s2": 0.006666653880818735,
+    "cap_limited": true,
+    "cells": 900,
+    "continuity_max_s_1": 1.2788818875561513e-09,
+    "continuity_rms_s_1": 1.9653995981066488e-10,
+    "hard_wind_cap_m_s": 10,
+    "input_objective": 426497.2325210719,
+    "input_rms_m_s2": 0.006792153972382788,
+    "maximum_total_wind_increment_m_s": 9.500000589
+  },
+  "forecast_shock_assessed": false,
+  "limitations": [
+    "Force scales are a declared background research prior, not observation covariance.",
+    "Force remains about 10.2 times background; wind-only refinement reaches its cap.",
+    "Original artifact omits candidate wind metadata, candidate phase and terminal velocity; retained component probe cannot authenticate a complete state.",
+    "Independent saved-state comparison covers exported fields; the full producer checks nonwind state internally and writer replays that full generated state.",
+    "Native 12 UTC initialization and pressure-analysis 13 UTC candidate are separate.",
+    "Physical-time mass/water/energy closure, observation-fit/trajectory, same-candidate native handoff and initial time response remain open."
+  ],
+  "native_same_candidate_accepted": false,
+  "promotion_eligible": false,
+  "schema": "cp06a_force_init_validation_v1",
+  "scientific_gate": "OPEN",
+  "source_and_input_pre_post_equal": true,
+  "source_sha256": {
+    "docs/CP06_A_FORCE_PRIOR_SPEC_20261012.md": "1b7bda6720da205dc312193c2bd864c0c9c8546ac44734541a570edca3e8a9aa",
+    "src/common/cloud_bal_balance_operator.f90": "05c5deac9b916d92cef82b8e9dbea0e1adc34c6a23aa2c9795a03308db14fa44",
+    "src/common/cloud_bal_pipeline.f90": "e6213676b0dd725907eaa179fb5badd0f8ae9a9eeeefe006f4c6b5ab91e88d78",
+    "src/common/cloud_bal_real_netcdf.f90": "8164547ff1f3c45d73ec67358662c54590fa26b2db796a65098a0eae72467944",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/pr80_force_retained.f90": "eb2ee293e69c43b19b177e9a32aaae6df94d7f2f1539a2c22ad5d53a8dedb8dc",
+    "tests/run_pr80_force_retained.sh": "5b2ec0ac8b4128c05a4fdc414542966604d525e203b94473e31a07b7824ff83e",
+    "tools/check_native_hybrid_geometry.py": "e2e4bdf6c80b2dab00f31075057a2bd0cc0a588a199dbcce9026105817046e2f",
+    "tools/cp06a_state_force_flux.py": "cc9b9e54facb1d7ac25c9828b9185a006fe3c4d80206bda02005dc47cf4b64d4"
+  },
+  "worktree_source_pre_post_equal": true
+}
