@@ -1,0 +1,367 @@
+{
+  "assessment": {
+    "engineering_metadata_blocker_found": false,
+    "kg_metadata_review": "PASS",
+    "remaining_status": "PR84 first native KDM6 call rejected at NC conversion (return code 128); physical approval FAIL_OPEN and science/acceptance gates remain open.",
+    "runtime_or_scientific_validation_established": false,
+    "source_and_graph_hash_bindings": "PASS"
+  },
+  "base_commit": "4975df9e69f34a5f0a54df5c0e83b48ba4f98510",
+  "compact_archive": {
+    "manifest_path": "docs/evidence/pr84_kg_20261013/manifest.json",
+    "manifest_sha256": "1f2fbec12acb25fca66662617c3868d824d90ba8c5ddd30600942240000b3c8f",
+    "member_count": 4,
+    "members": [
+      {
+        "name": "cloud_bal_diagnose.json",
+        "retained_source_byte_match": true,
+        "sha256": "4ecc3d8ae5f3a959c155dfc928dcb52aca64da24f000483c2738769c6f61c6de",
+        "size_bytes": 3188
+      },
+      {
+        "name": "kg_receipt.json",
+        "retained_source_byte_match": true,
+        "sha256": "3c10c7e34620359969f538aff10954747154ac03a2e8d7cf17152cdca96ac6e4",
+        "size_bytes": 74293
+      },
+      {
+        "name": "klaps50_diagnose.json",
+        "retained_source_byte_match": true,
+        "sha256": "dad95c89b379e7156b845d83e50275b86942eb287613fb3e9540d7f28f628cf0",
+        "size_bytes": 3178
+      },
+      {
+        "name": "source_sync.json",
+        "retained_source_byte_match": true,
+        "sha256": "807250a6da562f2b84a6e645b643f103a952f3eedfb8938493c26c09b85dfe22",
+        "size_bytes": 12782
+      }
+    ],
+    "path": "docs/evidence/pr84_kg_20261013/evidence.zip",
+    "sha256": "af198b0312e2730e61427f54e33fd82fbb72cba228ba3978c81bcfa514b1237c"
+  },
+  "derived_wiki_outputs": {
+    "all_current_hashes_match_receipt": true,
+    "checks": [
+      {
+        "matches": true,
+        "path": "wiki/graph-report-cloud-bal.md",
+        "sha256": "2fabc17851f907704d9828a7aa262f11246903ff6156a960aeb970ccff8f041b"
+      },
+      {
+        "matches": true,
+        "path": "wiki/graph-report-klaps50.md",
+        "sha256": "b6f7639f8a5ae3ab0817935d7fb70330b11c5b924ba199be339f33e2e5e155f8"
+      },
+      {
+        "matches": true,
+        "path": "wiki/graph-report.md",
+        "sha256": "fa4068e4739ac8f93a84e6c570cfd1ef64cecaa5904f9f474b698ef6abf8038e"
+      },
+      {
+        "matches": true,
+        "path": "wiki/index.md",
+        "sha256": "f5c8cb324ed98978e3d6022538c9af6a1491f24f01825288803f5c780103e65a"
+      },
+      {
+        "matches": true,
+        "path": "wiki/log.md",
+        "sha256": "b8af58a3cf3375efa13d36577582245c8eac6d43c567e9d2d1aca385a8484cf3"
+      }
+    ],
+    "count": 5,
+    "updated": [
+      "graph-report.md",
+      "graph-report-klaps50.md",
+      "graph-report-cloud-bal.md",
+      "index.md#Graph-snapshot",
+      "log.md (append-only)"
+    ]
+  },
+  "findings": [
+    {
+      "finding": "Receipt hash, external maintained copy, compact ZIP manifest and all four archive members match byte-for-byte and by size/SHA.",
+      "severity": "pass"
+    },
+    {
+      "finding": "All 137 prior immutable receipt pins, the PR83 moment-initialization dated graphs, and 13 protected wiki-content hashes remain unchanged.",
+      "severity": "pass"
+    },
+    {
+      "finding": "Both live and new dated graph outputs plus five derived wiki outputs match receipt hashes; Cloud-BAL and KLAPS50 graph integrity records report no invalid/dangling/duplicate/self-loop edges.",
+      "severity": "pass"
+    },
+    {
+      "finding": "Graph refresh used Graphify AST and Markdown headings; Markdown semantic extraction was not run and Fortran cross-file CALL extraction is partial. Graph freshness establishes structural navigation only.",
+      "severity": "limitation"
+    },
+    {
+      "finding": "The bound PR84 integration remains non-scientific: OFF/COUPLED return 128 at NC conversion; physical approval is FAIL_OPEN and operational/science authority is NONE.",
+      "severity": "limitation"
+    }
+  ],
+  "frozen_source_commit": "ae038cfd7800923c7e7c24401231a30173bcd583",
+  "graph_results": [
+    {
+      "added_ids": 147,
+      "communities": 886,
+      "corpus": "Cloud-BAL",
+      "dated_snapshot_files": [
+        {
+          "matches": true,
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-13-ice-representation/GRAPH_REPORT.md",
+          "sha256": "2fabc17851f907704d9828a7aa262f11246903ff6156a960aeb970ccff8f041b"
+        },
+        {
+          "matches": true,
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-13-ice-representation/graph.json",
+          "sha256": "cedc22fcc6860660eee5ea62218985ed3cc7303d422f3d42c302d44af5e4448a"
+        },
+        {
+          "matches": true,
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-13-ice-representation/manifest.json",
+          "sha256": "5892f545db664bb529f280a08013d5d94f2405072a4185c2c866d9700e3c98ba"
+        }
+      ],
+      "delta_edges": 274,
+      "delta_nodes": 138,
+      "edge_count": 18242,
+      "live_sha256": "cedc22fcc6860660eee5ea62218985ed3cc7303d422f3d42c302d44af5e4448a",
+      "node_count": 10113,
+      "preserved_moment_snapshot_sha256": {
+        "GRAPH_REPORT.md": "0673490e41243b9410564b34d16fa7a43664b7bcd875bafa96c9ff2825c196e4",
+        "graph.json": "7bcb22c6437d7a07bf2956fcbc250860fec190e7610d1fd7090b12ecb8f30aac",
+        "manifest.json": "3c84971c29cef5cc52c84cc10a68d1fd12508ad321e4733c2a1b513d35acda40"
+      },
+      "private_profile_incident_links": 133,
+      "private_profile_nodes": 134,
+      "receipt_integrity_findings": {
+        "context_variant_groups": 0,
+        "dangling_endpoint_edges": 0,
+        "directed_same_endpoint_collapsed_edges": 0,
+        "directed_unique_endpoint_pairs": 18242,
+        "effective_directed": false,
+        "exact_duplicate_edges": 0,
+        "input_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json",
+        "missing_endpoint_edges": 0,
+        "node_count": 10113,
+        "non_object_edges": 0,
+        "post_build_edge_count": 18242,
+        "post_build_error": "",
+        "post_build_graph_type": "Graph",
+        "post_build_node_count": 10113,
+        "raw_edge_count": 18242,
+        "relation_variant_groups": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0,
+        "source_file_variant_groups": 0,
+        "source_location_variant_groups": 0,
+        "undirected_same_endpoint_collapsed_edges": 0,
+        "undirected_unique_endpoint_pairs": 18242,
+        "unverified_node_count": 0,
+        "valid_candidate_edges": 18242
+      },
+      "removed_ids": 9
+    },
+    {
+      "added_ids": 147,
+      "communities": 2898,
+      "corpus": "KLAPS50",
+      "dated_snapshot_files": [
+        {
+          "matches": true,
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-13-ice-representation/GRAPH_REPORT.md",
+          "sha256": "b6f7639f8a5ae3ab0817935d7fb70330b11c5b924ba199be339f33e2e5e155f8"
+        },
+        {
+          "matches": true,
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-13-ice-representation/graph.json",
+          "sha256": "004ec038867a6a1cb75d0630be378f7218136026b78c47a620a9222ae45cd842"
+        },
+        {
+          "matches": true,
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-13-ice-representation/manifest.json",
+          "sha256": "fe001d71105b61e6fff76ae0715d3bce490d9bb0ad5c5ec7b024ed73c29e4609"
+        }
+      ],
+      "delta_edges": 276,
+      "delta_nodes": 138,
+      "edge_count": 76674,
+      "live_sha256": "004ec038867a6a1cb75d0630be378f7218136026b78c47a620a9222ae45cd842",
+      "node_count": 35941,
+      "preserved_moment_snapshot_sha256": {
+        "GRAPH_REPORT.md": "083f769a6c725f9ca34c7feb9f1a6974ddb25273e10d2117099b321693909bd2",
+        "graph.json": "aa0644409a97eea71e024fa5f69c3a168e842d3a5a0bc453ddc398764aea9ca6",
+        "manifest.json": "6e1004e71bb1010e408280ed467f2adfb3a2992c53b470bf68227d6f19647e6e"
+      },
+      "private_profile_incident_links": 0,
+      "private_profile_nodes": 0,
+      "receipt_integrity_findings": {
+        "context_variant_groups": 0,
+        "dangling_endpoint_edges": 0,
+        "directed_same_endpoint_collapsed_edges": 0,
+        "directed_unique_endpoint_pairs": 76674,
+        "effective_directed": false,
+        "exact_duplicate_edges": 0,
+        "input_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/graph.json",
+        "missing_endpoint_edges": 0,
+        "node_count": 35941,
+        "non_object_edges": 0,
+        "post_build_edge_count": 76674,
+        "post_build_error": "",
+        "post_build_graph_type": "Graph",
+        "post_build_node_count": 35941,
+        "raw_edge_count": 76674,
+        "relation_variant_groups": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0,
+        "source_file_variant_groups": 0,
+        "source_location_variant_groups": 0,
+        "undirected_same_endpoint_collapsed_edges": 0,
+        "undirected_unique_endpoint_pairs": 76674,
+        "unverified_node_count": 0,
+        "valid_candidate_edges": 76674
+      },
+      "removed_ids": 9
+    }
+  ],
+  "maintained_source_snapshot": {
+    "entry_count": 627,
+    "matches_receipt": true,
+    "receipt_verified_pre_post_equal": true,
+    "scope": "active src/, tests/, docs/, config/ in KLAPS50 and Cloud-BAL; immediate tracked root files; remaining wiki content is separately protected by page/directory hashes",
+    "sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f",
+    "symlink_entries": 0
+  },
+  "native_and_validation_bindings": {
+    "candidate_gates": {
+      "first_completed_KDM6_call": "OPEN_REJECTED_NC_INPUT_CONVERSION",
+      "independent_observation_fit": "OPEN",
+      "moment_file_generation": "PASS_SCOPED",
+      "physical_approval": "FAIL_OPEN",
+      "public_pre_call_state_after_RK": "REJECTED",
+      "same_carrier_water_energy_mass_wind_budget": "OPEN",
+      "short_time_response": "NOT_RUN",
+      "target_moments_through_wrf_init": "PASS_SCOPED"
+    },
+    "integration_receipt_sha256": "66685a9c0fb6fa6b80112588fa741e85d7a52b73cccb443781530a89820a3031",
+    "native_returncodes": {
+      "COUPLED": 128,
+      "OFF": 128
+    },
+    "operational_authority": "NONE",
+    "physical_approval": "FAIL_OPEN",
+    "science_authority": "NONE",
+    "validation_receipt_sha256": "39a143f5253b1d924b0655df3175a6d7464ddde4e03d769460430d5c53b34368"
+  },
+  "previous_immutable_pins": {
+    "all_current_bytes_match_recorded_sha256": true,
+    "count": 137,
+    "includes_prior_dated_moment_snapshot": true
+  },
+  "protected_wiki_content": {
+    "all_current_hashes_match_receipt": true,
+    "checks": [
+      {
+        "matches": true,
+        "path": "wiki/.research-queue",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "matches": true,
+        "path": "wiki/.schema",
+        "sha256": "9c58618297b5a3678f59c906f56e37d142684ce769a0282ec9c56f04ff20c83b"
+      },
+      {
+        "matches": true,
+        "path": "wiki/.schema-proposals",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "matches": true,
+        "path": "wiki/concepts",
+        "sha256": "6301589c68de8d4819605c3ee696c19d5250799954116b1845c15d1fce651d9b"
+      },
+      {
+        "matches": true,
+        "path": "wiki/decisions",
+        "sha256": "a63e12061465313fc513c4314d8bf3575ac9d7c955781c1bab08c4a670982a6f"
+      },
+      {
+        "matches": true,
+        "path": "wiki/entities",
+        "sha256": "8342ab91481152f1e1a8c4314ac103989d084696093f553b11c8361818c27b71"
+      },
+      {
+        "matches": true,
+        "path": "wiki/experiences",
+        "sha256": "df0cc15f1cc32ddc4459533a91d2107420631f8fac84cbf77147ebc4a26d4b33"
+      },
+      {
+        "matches": true,
+        "path": "wiki/heuristics",
+        "sha256": "3986fc5534839ca819b3ababb674e282a8a7173e6a5852222fa32cd66aa8ce15"
+      },
+      {
+        "matches": true,
+        "path": "wiki/hot.md",
+        "sha256": "94111a1e72a77659f0b0562913a4be98500d8c74add08d41c1d37bb5a26399df"
+      },
+      {
+        "matches": true,
+        "path": "wiki/overview.md",
+        "sha256": "4073e92cb6e8d90808cf9ffb0dfb6432c83d17dbad5cf5080e206a01e37cc8a5"
+      },
+      {
+        "matches": true,
+        "path": "wiki/procedures",
+        "sha256": "eef8f201173dd5436309e2768809dc8917c46bf25dbce2be1ef8d449a4967358"
+      },
+      {
+        "matches": true,
+        "path": "wiki/queries",
+        "sha256": "3b5ab1d0c6a2a4fc4f31ec5b12cf7fae93035319ce7e7e00b7d2b21e3d7c1d2d"
+      },
+      {
+        "matches": true,
+        "path": "wiki/sources",
+        "sha256": "3eb3c6ac50f4905d5a8b8a525be63a85f9685ac7d3376a363be264068bc151e9"
+      }
+    ],
+    "path_count": 13,
+    "schema_and_content_pages_touched": false
+  },
+  "receipt": {
+    "copies_match": true,
+    "external_copy_sha256": "3c10c7e34620359969f538aff10954747154ac03a2e8d7cf17152cdca96ac6e4",
+    "external_maintained_copy": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr84_ice_representation_20261013/kg_receipt.json",
+    "graphify_version": "graphify 0.9.53",
+    "mode": "guarded selected-path overlay extraction/build_merge, cluster-only, derived wiki sync",
+    "path": "docs/evidence/pr84_kg_20261013.json",
+    "schema": "pr84_ice_representation_selected_path_graphify_kg_receipt_v1",
+    "sha256": "3c10c7e34620359969f538aff10954747154ac03a2e8d7cf17152cdca96ac6e4"
+  },
+  "review_scope": "Independent read-only audit of the post-apply Graphify/KG receipt and compact evidence archive. Only this review JSON is newly written.",
+  "schema": "pr84_kg_postapply_review_v1",
+  "source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr84_ice_representation_20261013/Cloud-BAL",
+  "source_delta": {
+    "additions": 33,
+    "diff_exactly_matches_receipt_selected_paths": true,
+    "modifications": 6,
+    "selected_path_count": 39,
+    "source_worktree_head_matches_frozen_commit": true,
+    "working_tree_only_untracked_KG_alias_and_bundle": [
+      "?? docs/evidence/pr84_kg_20261013.json",
+      "?? docs/evidence/pr84_kg_20261013/"
+    ]
+  },
+  "structural_extraction_limitations": [
+    "Graph counts are separate for overlapping KLAPS50 and Cloud-BAL corpora.",
+    "Markdown semantic extraction was not performed; Markdown contributes heading structure only.",
+    "Fortran cross-file CALL extraction is partial.",
+    "External source trees and runtime artifacts outside selected repository paths are not represented.",
+    "Candidate overlay graphs and freshness are structural navigation evidence, not runtime or scientific validation.",
+    "Non-extractable or binary selected paths are recorded by SHA-256 and passed to the pinned Graphify extractor, which returns no extractor for their suffix; their contents are not parsed.",
+    "The preceding PR83 receipt chain remains immutable; this structural update does not establish end-to-end runtime or scientific acceptance."
+  ]
+}
