@@ -1,6 +1,15 @@
 # Cloud-BAL 우선 실행 체크리스트
 
-기준: PR77 main `a444a788e8e7301354bec14c3708aacddb8f31d3`.
+최신 checkpoint: PR83 main `4975df9e69f34a5f0a54df5c0e83b48ba4f98510` 이후 PR84 연구 작업.
+
+- 실제 13 UTC 비영 공간 producer와 T/q–Phi/continuity 구성은 PR79–81에서 실행됐다. 관측·과학 수용은 OPEN이다.
+- 동일 WPS–real–WRF 전달과 OFF 대조는 PR82–83 범위에서 확보됐다.
+- PR84는 공통 고얼음량 원인 지도, source-compatible v2의 저장된 OFF/COUPLED Q/N/B와 초기화 readback을 확보했다. 첫 RK 뒤 공개 pre 상태가 부적합하며 NC 변환에서 두 모델 실행이 종료코드 128로 거부됐다.
+- 다음 우선순위는 완료된 PBL/이류/RK의 공동 Q/N/B 갱신과 같은 후보의 수지다. 첫 KDM6 완료와 10/30/60분 비교는 아직 OPEN/NOT_RUN이다.
+
+최신 상세 상태와 근거: [PR84 integration](PR84_INTEGRATION_PROGRESS_20261013.md). 아래 PR77–78 결과는 당시 중간 실행의 역사이며 현재 후보 미구현 여부를 대신하지 않는다.
+
+원래 순서·중간 실험 기준: PR77 main `a444a788e8e7301354bec14c3708aacddb8f31d3`.
 이 목록은 작업 순서를 정한다. 기존 물리·승격 종료 조건을 대체하지 않는다.
 상태는 아래 결과 파일로 갱신하며, 시험 수나 완료 항목 비율을 완성도로 사용하지 않는다.
 

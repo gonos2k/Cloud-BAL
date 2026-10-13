@@ -88,6 +88,10 @@ python3 "$repo_root/tests/test_pr83_same13_native_transaction.py"
 python3 "$repo_root/tests/test_pr83_rk_operands_patch.py"
 python3 "$repo_root/tests/test_pr83_native_pair_readback.py"
 python3 "$repo_root/tests/test_pr83_off_runner_contract.py"
+python3 "$repo_root/tests/test_pr84_ice_cap_pair_audit.py"
+python3 "$repo_root/tests/test_pr84_native_moment_policy.py"
+python3 "$repo_root/tests/test_pr84_same13_boundary_contract.py"
+python3 "$repo_root/tests/test_pr84_shared_runner_contract.py"
 
 for hydrostatic_build in checked optimized; do
   saturation_fixture="$test_tmp/saturation_reference_${hydrostatic_build}.txt"

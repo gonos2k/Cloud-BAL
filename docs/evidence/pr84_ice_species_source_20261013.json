@@ -1,0 +1,143 @@
+{
+  "schema": "pr84_ice_species_source_trace_v1",
+  "date": "2026-10-13",
+  "scope": "read-only source and retained-input provenance trace; no implementation or runtime experiment",
+  "decision": {
+    "supported_mass_category_mapping": "LAPS ICE content -> canonical cloud_ice -> LAPSPREP/WPS QI -> WRF QICE",
+    "separate_reservoirs": {
+      "LAPS RAI": "rain -> QR/QRAIN",
+      "LAPS SNO": "snow -> QS/QSNOW",
+      "LAPS PIC": "precipitating ice -> graupel -> QG/QGRAUP"
+    },
+    "not_established": [
+      "particle habit or size distribution of LAPS ICE",
+      "a valid QNICE number basis for high QICE mass",
+      "overlap of PR83's 2305 cap-infeasible cells with the 162 analysis-support columns",
+      "complete native microphysics validity or scientific validation"
+    ],
+    "no_mass_reclassification": true,
+    "legacy_lapsprep_ice_cap_changed": false
+  },
+  "maintained_graphs_read_only": {
+    "cloud_bal": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json",
+      "nodes": 9975,
+      "sha256": "7bcb22c6437d7a07bf2956fcbc250860fec190e7610d1fd7090b12ecb8f30aac",
+      "query": "LAPS deriv cloud ICE Smith Feddes, precipitating PIC, snow SNO and LAPSPREP WPS fields QI QS QG mapping",
+      "summary": "surfaced lapsprep, lapsprep_wps, cloud_bal_lapsprep_adapter and related pressure/WPS nodes"
+    },
+    "klaps50": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/graph.json",
+      "nodes": 35803,
+      "sha256": "aa0644409a97eea71e024fa5f69c3a168e842d3a5a0bc453ddc398764aea9ca6",
+      "query": "get_cloud_deriv iflag_slwc=13 get_sfm_1d cice cloud ice content PIC precipitating ice SNO source LAPS Smith Feddes",
+      "summary": "surfaced klaps-v5.0_/src/lib/get_cloud_deriv.f and source-analysis-related nodes"
+    },
+    "dated_snapshot_status": "No maintained graph was updated by this documentation-only trace. The main Cloud-BAL and KLAPS50 snapshots remain separately dated and byte-identical to the recorded current hashes above; no graph delta was generated.",
+    "extraction_limitations": [
+      "Graph retrieval is only an index. One broad KLAPS query was truncated at its node budget.",
+      "Exact species semantics below come from direct source lines and actual NetCDF metadata/data, not graph labels.",
+      "The worktree graph has SHA-256 d830da780a5034f09d38f5de919da698b4ad995040c8ae14bd9c28293b81f2f6 and is stale relative to maintained Cloud-BAL; it was not treated as authority or modified."
+    ]
+  },
+  "pr81_retained_actual_13z_input_inventory": {
+    "case_id": "20260816T130000Z",
+    "valid_time_utc": "2026-08-16T13:00:00Z",
+    "archive": "/var/tmp/pr81_joint_thermo.HbL5ry/inputs.json.archive",
+    "archive_sha256": "f655339a0bd682b14df9afde0fb007a5124327f9771fd0c9630f801836c2480e",
+    "static_nest7grid_sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b",
+    "actual_processed_products": {
+      "lwc": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_maintained_derived_O0_qej27s72/matched_control_chain13_O0.b07iv296/prepared/lapsprd/lwc/262281300.lwc",
+        "sha256": "9e70f80275cb2cf48b3db9dd189fba04936d6587fa57bf15692100548b242cca",
+        "inventory_sha256_match": true
+      },
+      "lsx": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_maintained_derived_O0_qej27s72/matched_control_chain13_O0.b07iv296/prepared/lapsprd/lsx/262281300.lsx",
+        "sha256": "482bd19494fde9625097a580fae3702752c2899776338a74b8d406e1e9a8125d",
+        "inventory_sha256_match": true
+      },
+      "lt1": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_maintained_derived_O0_qej27s72/matched_control_chain13_O0.b07iv296/prepared/lapsprd/lt1/262281300.lt1",
+        "sha256": "3c8a1bf0be2149826a6050101e8371d072e7511be194f66f2c86dcb74a7186dd"
+      },
+      "lq3": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_maintained_derived_O0_qej27s72/matched_control_chain13_O0.b07iv296/prepared/lapsprd/lq3/262281300.lq3",
+        "sha256": "ea5ec2ead8fed2572279080ab36b90492eb9487e48672f7cf913486018bade95"
+      }
+    },
+    "actual_lwc_product": {
+      "format": "NetCDF3 classic, NUWG",
+      "title": "LAPS lwc file - cloud liquid, ice and hydrometeor concentration",
+      "dims": {"record": 1, "z": 22, "y": 283, "x": 235},
+      "record_valtime_epoch": 1786885200,
+      "record_reftime_epoch": 1786885200,
+      "species_metadata": {
+        "ice": {
+          "long_name": "cloud ice",
+          "units": "kg/meter**3",
+          "LAPS_var": "ICE",
+          "LAPS_units": "KG/M**3",
+          "comment": "Cloud Ice Content - LAPS Smith Feddes"
+        },
+        "sno": {"long_name": "snow content", "units": "kg/meter**3", "comment": "Snow Content"},
+        "rai": {"long_name": "rain content", "units": "kg/meter**3", "comment": "Rain Content"},
+        "pic": {"long_name": "precipitating ice content", "units": "kg/meter**3", "comment": "Precipitating Ice Content"},
+        "pcn": {"long_name": "precipitate content", "units": "kg/meter**3", "comment": "Precipitate Content"}
+      },
+      "observed_arrays": {
+        "total_cells_each_species": 1461010,
+        "ice": {"positive_cells": 104392, "positive_fraction": 0.0713493859, "minimum": 0.0, "maximum_kg_m3": 0.003383725183084607, "positive_median_kg_m3": 0.00004947417619405314, "positive_p95_kg_m3": 0.0018859892617911099},
+        "sno": {"positive_cells": 70486, "maximum_kg_m3": 0.013199282810091972},
+        "rai": {"positive_cells": 93088, "maximum_kg_m3": 0.002319224178791046},
+        "pic": {"positive_cells": 245, "maximum_kg_m3": 0.004294540733098984},
+        "pcn": {"positive_cells": 163819, "maximum_kg_m3": 0.013199282810091972}
+      },
+      "method": "Read the archived product as NetCDF; for each field, count finite values > 0 and summarize positive values. These are mass concentrations, not mixing ratios."
+    },
+    "actual_lsx_product": {
+      "format": "NetCDF3 classic, NUWG",
+      "title": "LAPS lsx file - LAPS surface",
+      "dims": {"record": 1, "z": 1, "y": 283, "x": 235},
+      "variables": ["u", "v", "p", "pp", "t", "td", "vv", "rh", "msl", "tad", "th", "the", "ps", "vor", "mr", "mrc", "div", "tha", "mra", "spd", "css", "vis", "fwx", "hi", "tgd"],
+      "hydrometeor_variables_present": false,
+      "interpretation": "LSX supplies surface state and diagnostics. LWC is the separate upper-air cloud/hydrometeor product."
+    }
+  },
+  "source_line_map": [
+    {"file": "klaps-v5.0_/src/deriv/laps_deriv_sub.f", "sha256": "3ef7f5364f999e6c83aeeaea99bb7a9ea0fb602c5af8fe650b341f1e190f3c03", "lines": "558-581", "evidence": "Calls get_cloud_deriv with iflag_slwc=13 and separate slwc,cice arrays."},
+    {"file": "klaps-v5.0_/src/lib/get_cloud_deriv.f", "sha256": "eddc921ceea61cd10e792b88aa43d27b99e447a80ddadee0316b553dbd3f24ba", "lines": "60-78,482-535,552-592", "evidence": "Flag 13 is New Smith-Feddes LWC; calls get_sfm_1d for slwc and cice separately and copies the two outputs independently."},
+    {"file": "klaps-v5.0_/src/lib/smf_wisp92.f", "sha256": "6253b743e983f7342a6ad46d5364600062ccd97ac53abfd1b3bd68ce9a51c579", "lines": "39-53", "evidence": "Documents Smith-Feddes output and linear modeled liquid/ice dilution from -10 C to -30 C."},
+    {"file": "klaps-v5.0_/src/deriv/cloud_deriv_subs.f", "sha256": "a9e5129bd1c7f96824d992d44c7bb432230387601cd278a2f23f7dd1ded65a54", "lines": "184-204", "evidence": "Thin cloud insertion creates separate cice/slwc according to the temperature thresholds."},
+    {"file": "klaps-v5.0_/src/deriv/laps_deriv_sub.f", "sha256": "3ef7f5364f999e6c83aeeaea99bb7a9ea0fb602c5af8fe650b341f1e190f3c03", "lines": "925-974", "evidence": "Converts liquid/ice contents to kg/m3 and writes ICE, RAI, SNO, PIC as separate variables with separate comments."},
+    {"file": "klaps-v5.0_/src/lapsprep/lapsprep.f90", "sha256": "d159c382295fd11d4281176c1978513c0c7e1523194dd31e6817727e20411e14", "lines": "156-161,584-625", "evidence": "Scales all hydrometeors by 2/dx; limits ice input concentration to autoconv_ice2sno before dividing by density; separately converts snow and precipitating ice."},
+    {"file": "klaps-v5.0_/src/lapsprep/module_constants.f90", "sha256": "787247d2330974faeed39cedd15ff884e2c1bc110b35e91752c24637f533422e", "lines": "46-51", "evidence": "Defines the current autoconversion bounds in kg/m3, including autoconv_ice2sno=0.0005."},
+    {"file": "klaps-v5.0_/src/lapsprep/module_lapsprep_netcdf.f90", "sha256": "e0b58aa7c151998d0d9dfb0f854e572ace5ae325281dd57cdf47d88d30406128", "lines": "328-348", "evidence": "Labels output ice as cloud ice mixing ratio, sno as precipitating snow, rai as precipitating rain, and pic as precipitating ice, units kg/kg."},
+    {"file": "klaps-v5.0_/src/lapsprep/module_lapsprep_wps.f90", "sha256": "d99250d2b602f3c58e332b573441842246bd2e5fb2a558efa6102d5e3f978bc4", "lines": "82-107,484-502,525-552,558-579,591-614", "evidence": "Writes ice to QI, rain to QR, snow to QS, and precipitating ice/graupel to QG separately."},
+    {"file": "Cloud-BAL/src/common/cloud_bal_real_netcdf.f90", "sha256": "153df8431f890be7df2648230337c5e4160f7eecc1b77403f86a21e4a5c0c514", "lines": "269-307,327-336,499-512,4021-4065", "evidence": "Uses LSX for surface temperature; reads the five LWC hydrometeors independently, checks kg/m3 units, maps ice to cloud_ice, divides contents by dry-air density, and reverses source vertical order."}
+  ],
+  "retained_high_ice_evidence": {
+    "same13_native_moment_prior": "docs/evidence/pr83_same13_native_20261013/pr83_same13_native_moment_prior.json",
+    "source_input_sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+    "positive_mass_cells": {"QICE": 244498},
+    "independent_cap_audit": {
+      "file": "docs/evidence/pr83_independent_ice_cap_20261013.json",
+      "full_array_infeasible_cells": 2326,
+      "active_interior_infeasible_cells": 2305,
+      "declared_internal_cap_m3": 1000000.0,
+      "source_policy_note": "This source envelope is a moment-feasibility diagnostic and is not evidence that source QICE should be moved to another mass reservoir."
+    },
+    "observation_support": {
+      "file": "docs/evidence/pr82_observation_signal_readback_strict3_full_20261012.json",
+      "horizontal_analysis_support_cells": 162
+    },
+    "interpretation": "Same-13 retained evidence says all five input hydromass fields remain exactly equal through native initialization; QICE is full-domain state while observation support is limited. This supports inheritance as a possibility. Exact overlap of high/infeasible cells and support columns was not calculated in this trace."
+  },
+  "validation": {
+    "source_read": true,
+    "actual_input_hashes_checked_against_archived_inventory": true,
+    "actual_netcdf_metadata_and_species_statistics_inspected": true,
+    "compiler_or_model_run_performed": false,
+    "graph_snapshot_updated": false
+  }
+}

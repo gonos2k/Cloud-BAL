@@ -51,6 +51,16 @@ GRID_ATTRIBUTES = (
     "TRUELAT2", "STAND_LON",
 )
 EXPECTED_POLICY_SHA256 = "dde8df58f840d2fb11579876450749964ea2a54e36a68856c92bc979f46bae2a"
+EXPECTED_PR84_POLICY_SHA256 = "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92"
+PR84_POLICY_SCHEMA = "pr84_same13_native_moment_policy_v2"
+PR84_QICE_PIDNI_F32 = 1570.79638671875
+PR84_QICE_PIDNI_F32_HEX = "44c4597c"
+PR84_QICE_LAMBDA_MIN_M1 = 9080.0
+PR84_QICE_DMI = 3.0
+PR84_SOURCE_INPUTS = {
+    "OFF": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+    "COUPLED": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+}
 
 
 def sha256(path: Path) -> str:
@@ -125,6 +135,9 @@ def _record_delta(before: np.ndarray, after: np.ndarray) -> dict[str, Any]:
 
 
 def _validate_policy(policy: dict[str, Any]) -> None:
+    if policy.get("schema") == PR84_POLICY_SCHEMA:
+        _validate_pr84_policy(policy)
+        return
     if policy.get("schema") != "pr83_same13_native_moment_policy_v1":
         raise ValueError("unsupported PR83 moment policy schema")
     if policy.get("declared_before_experiment") is not True:
@@ -142,6 +155,75 @@ def _validate_policy(policy: dict[str, Any]) -> None:
             raise ValueError(f"policy bulk-volume units mismatch for {moment}")
     if policy.get("species", {}).get("QSNOW", {}).get("target_moment") is not None:
         raise ValueError("policy must retain QSNOW as mass-only")
+
+
+def _validate_pr84_policy(policy: dict[str, Any]) -> None:
+    if (policy.get("policy_id") != "SAME13_KDM6_NATIVE_MOMENT_PRIOR_20261013_V2"
+            or policy.get("declared_before_experiment") is not True):
+        raise ValueError("unsupported or undeclared PR84 v2 policy")
+    if policy.get("status") != "RESEARCH_PRIOR_NOT_OPERATIONAL_OR_SCIENCE_APPROVAL":
+        raise ValueError("PR84 v2 policy authority status changed")
+    if policy.get("prior", {}).get("active_domain_mode") != "FULL_NATIVE_HORIZONTAL":
+        raise ValueError("PR84 v2 requires the full native horizontal domain")
+    ice = policy.get("species", {}).get("QICE", {})
+    if ice.get("internal_number_cap_mode") != "SOURCE_PSD_COMPATIBLE_ENTRY_GUARD":
+        raise ValueError("PR84 v2 QICE cap mode mismatch")
+    authorized = policy.get("preflight", {}).get("authorized_source_inputs")
+    observed = {entry.get("role"): entry.get("sha256") for entry in authorized or []
+                if isinstance(entry, dict)}
+    if not isinstance(authorized, list) or len(authorized) != 2 or observed != PR84_SOURCE_INPUTS:
+        raise ValueError("PR84 v2 authorized source input pair mismatch")
+    if (policy.get("preflight", {}).get("expected_source_valid_time") != TIME
+            or policy["preflight"].get(
+                "expected_input_spatial_shape_bottom_top_south_north_west_east") != [39, 282, 234]):
+        raise ValueError("PR84 v2 input identity mismatch")
+    pidni = ice.get("source_pidni_binary32_value")
+    pidni_hex = ice.get("source_pidni_binary32_hex")
+    lambda_min = ice.get("lambda_min_m-1")
+    if (pidni is None or pidni_hex is None or lambda_min is None
+            or ice.get("shape_exponent_d") != PR84_QICE_DMI):
+        raise ValueError("PR84 v2 QICE source constants are missing")
+    actual_hex = f"{int(np.asarray(np.float32(pidni)).view(np.uint32)):08x}"
+    if (str(pidni_hex).lower().removeprefix("0x") != actual_hex
+            or actual_hex != PR84_QICE_PIDNI_F32_HEX
+            or float(pidni) != PR84_QICE_PIDNI_F32
+            or float(lambda_min) != PR84_QICE_LAMBDA_MIN_M1):
+        raise ValueError("PR84 v2 QICE PIDNI value/hex mismatch")
+
+
+def _active_slices(dataset: netCDF4.Dataset, policy: dict[str, Any]) -> tuple[slice, ...]:
+    if (policy.get("schema") == PR84_POLICY_SCHEMA
+            and policy["prior"].get("active_domain_mode") == "FULL_NATIVE_HORIZONTAL"):
+        return (slice(None),) * 4
+    if (dataset.variables["QCLOUD"].shape[-2] > 2
+            and dataset.variables["QCLOUD"].shape[-1] > 2):
+        return (slice(None), slice(None), slice(1, -1), slice(1, -1))
+    return (slice(None),) * 4
+
+
+def _float32_ceiling(bounds: np.ndarray) -> np.ndarray:
+    """Least finite float32 values not below nonnegative float64 bounds."""
+    bounds = np.asarray(bounds, dtype=np.float64)
+    if not np.isfinite(bounds).all() or np.any(bounds < 0.0):
+        raise ValueError("PR84 QICE number floor is invalid")
+    with np.errstate(over="ignore", invalid="ignore"):
+        rounded = bounds.astype(np.float32)
+    low = rounded.astype(np.float64) < bounds
+    rounded[low] = np.nextafter(rounded[low], np.float32(np.inf), dtype=np.float32)
+    if not np.isfinite(rounded).all():
+        raise ValueError("PR84 QICE number floor overflows float32")
+    return rounded
+
+
+def _mean_particle_mass_bounds(policy: dict[str, Any], mass_name: str,
+                               declaration: dict[str, Any]) -> list[float]:
+    if mass_name == "QICE" and policy.get("schema") == PR84_POLICY_SCHEMA:
+        pidni = float(np.float32(declaration["source_pidni_binary32_value"]))
+        exponent = float(declaration["shape_exponent_d"])
+        lambda_min = float(declaration["lambda_min_m-1"])
+        lambda_max = float(declaration["lambda_max_m-1"])
+        return [pidni / lambda_max**exponent, pidni / lambda_min**exponent]
+    return declaration["particle_mean_mass_bounds_kg"]
 
 
 def _check_metadata(dataset: netCDF4.Dataset, policy: dict[str, Any], label: str,
@@ -183,11 +265,12 @@ def _check_metadata(dataset: netCDF4.Dataset, policy: dict[str, Any], label: str
 
 
 def _validate_moments(dataset: netCDF4.Dataset, policy: dict[str, Any]) -> dict[str, Any]:
-    report: dict[str, Any] = {}
-    active = (slice(None), slice(None), slice(None), slice(None))
-    if (dataset.variables["QCLOUD"].shape[-2] > 2
-            and dataset.variables["QCLOUD"].shape[-1] > 2):
-        active = (slice(None), slice(None), slice(1, -1), slice(1, -1))
+    report: dict[str, Any] = {
+        "active_domain_mode": ("FULL_NATIVE_HORIZONTAL"
+                               if policy.get("schema") == PR84_POLICY_SCHEMA
+                               else "NATIVE_INTERIOR_HORIZONTAL")
+    }
+    active = _active_slices(dataset, policy)
     inverse_density = np.add(values(dataset.variables["AL"]).astype(np.float32),
                              values(dataset.variables["ALB"]).astype(np.float32),
                              dtype=np.float32)[active]
@@ -207,7 +290,7 @@ def _validate_moments(dataset: netCDF4.Dataset, policy: dict[str, Any]) -> dict[
             raise ValueError(f"{moment_name}: positive-mass support has unresolved zero moments")
         declaration = policy["species"][mass_name]
         if kind == "number":
-            bounds = declaration["particle_mean_mass_bounds_kg"]
+            bounds = _mean_particle_mass_bounds(policy, mass_name, declaration)
             ratio = mass[valid] / moment[valid]
             bad = (ratio < bounds[0]) | (ratio > bounds[1])
             if np.any(bad):
@@ -216,15 +299,67 @@ def _validate_moments(dataset: netCDF4.Dataset, policy: dict[str, Any]) -> dict[
             internal_number = np.multiply(moment[valid].astype(np.float32), rho, dtype=np.float32)
             if not np.isfinite(internal_number).all() or np.any(internal_number <= 0.0):
                 raise ValueError(f"{moment_name}: native number underflows or is non-finite")
-            cap = declaration["internal_number_cap_number_m-3"]
-            if np.any(internal_number.astype(np.float64) > cap):
+            if mass_name == "QICE" and policy.get("schema") == PR84_POLICY_SCHEMA:
+                pidni = float(np.float32(declaration["source_pidni_binary32_value"]))
+                lambda_min = float(declaration["lambda_min_m-1"])
+                density_valid = dry_density[valid]
+                public_min64 = mass[valid] * (lambda_min ** PR84_QICE_DMI) / pidni
+                internal_min64 = density_valid.astype(np.float64) * public_min64
+                internal_floor = _float32_ceiling(internal_min64)
+                public_floor = _float32_ceiling(public_min64)
+                while True:
+                    roundtrip = np.multiply(public_floor, density_valid, dtype=np.float32)
+                    needs_step = roundtrip < internal_floor
+                    if not np.any(needs_step):
+                        break
+                    public_floor[needs_step] = np.nextafter(
+                        public_floor[needs_step], np.float32(np.inf), dtype=np.float32
+                    )
+                    if not np.isfinite(public_floor).all():
+                        raise ValueError("QNICE source-compatible floor overflows float32")
+                while True:
+                    predecessor = np.nextafter(
+                        public_floor, np.float32(-np.inf), dtype=np.float32
+                    )
+                    predecessor_roundtrip = np.multiply(
+                        predecessor, density_valid, dtype=np.float32
+                    )
+                    can_step_down = ((predecessor.astype(np.float64) >= public_min64)
+                                     & (predecessor_roundtrip >= internal_floor))
+                    if not np.any(can_step_down):
+                        break
+                    public_floor[can_step_down] = predecessor[can_step_down]
+                if np.any(moment[valid].astype(np.float64) < public_min64):
+                    raise ValueError("QNICE: public number is below the source PSD floor")
+                if np.any(moment[valid].astype(np.float32) < public_floor):
+                    raise ValueError("QNICE: public number is below the source PSD floor")
+                cap_values = np.maximum(
+                    np.float32(1.0e6),
+                    np.multiply(public_floor, density_valid, dtype=np.float32),
+                )
+                cap = float(cap_values.max(initial=np.float32(0.0)))
+                over_cap = internal_number > cap_values
+            else:
+                cap = declaration["internal_number_cap_number_m-3"]
+                over_cap = internal_number.astype(np.float64) > cap
+            if np.any(over_cap):
                 raise ValueError(f"{moment_name}: native internal number exceeds source cap")
             physical = {
                 "mean_particle_mass_bounds_kg": bounds,
                 "internal_number_cap_number_m-3": cap,
+                "internal_number_cap_mode": declaration.get("internal_number_cap_mode", "FIXED_SOURCE_CAP"),
                 "maximum_native_internal_number_m-3": float(internal_number.max(initial=0.0)),
                 "validated_cells": int(np.count_nonzero(valid)),
             }
+            if mass_name == "QICE" and policy.get("schema") == PR84_POLICY_SCHEMA:
+                physical["derived_cap_min_number_m-3"] = float(cap_values.min())
+                physical["derived_cap_max_number_m-3"] = float(cap_values.max())
+                physical["derived_cap_formula"] = (
+                    "max(1e6, float32(minimal_QNICE_float32 * dry_density_float32))"
+                )
+            if mass_name == "QICE" and policy.get("schema") == PR84_POLICY_SCHEMA:
+                physical["derived_cap_min_number_m-3"] = float(cap_values.min(initial=np.float32(0.0)))
+                physical["derived_cap_max_number_m-3"] = float(cap_values.max(initial=np.float32(0.0)))
         else:
             density = mass[valid] / moment[valid]
             if np.any((density < declaration["bulk_density_min_kg_m-3"]) |
@@ -316,8 +451,11 @@ def validate_candidate_input(source_path: Path, candidate_path: Path,
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     policy = json.loads(policy_path.read_text(encoding="utf-8"))
     _validate_policy(policy)
-    if sha256(policy_path) != EXPECTED_POLICY_SHA256:
-        raise ValueError("PR83 same13 policy bytes differ from the reviewed declaration")
+    is_pr84 = policy.get("schema") == PR84_POLICY_SCHEMA
+    expected_policy_hash = (EXPECTED_PR84_POLICY_SHA256 if is_pr84
+                            else EXPECTED_POLICY_SHA256)
+    if expected_policy_hash is None or sha256(policy_path) != expected_policy_hash:
+        raise ValueError("same13 moment policy bytes differ from the frozen declaration")
     if receipt.get("schema") != "pr83_same13_native_moment_prior_receipt_v1":
         raise ValueError("candidate receipt schema is not PR83 same13")
     if receipt.get("status") != "RESEARCH_PRIOR_CREATED":
@@ -330,6 +468,13 @@ def validate_candidate_input(source_path: Path, candidate_path: Path,
     if receipt.get("initializer_sha256") != sha256(initializer):
         raise ValueError("candidate receipt initializer hash mismatch")
     expected_source = policy.get("preflight", {}).get("expected_source_input_sha256")
+    if is_pr84:
+        source_role = receipt.get("source_input_role")
+        expected_source = PR84_SOURCE_INPUTS.get(source_role)
+        if receipt.get("policy_schema") != PR84_POLICY_SCHEMA:
+            raise ValueError("PR84 prior receipt does not bind the v2 policy schema")
+        if expected_source is None:
+            raise ValueError("PR84 prior receipt has an unauthorized source role")
     if expected_source != sha256(source_path):
         raise ValueError("source wrfinput does not match the declared same13 identity")
     if receipt.get("source_input_sha256") != sha256(source_path):
@@ -372,6 +517,8 @@ def validate_candidate_input(source_path: Path, candidate_path: Path,
     return {
         "source_wrfinput_sha256": sha256(source_path),
         "candidate_wrfinput_sha256": sha256(candidate_path),
+        "moment_prior_policy_schema": policy["schema"],
+        "source_input_role": receipt.get("source_input_role"),
         "time": TIME,
         "candidate_target_moment_deltas": moment_changes,
         "candidate_moment_validity": moment_validity,
@@ -493,6 +640,8 @@ def build_report(source_path: Path, candidate_path: Path, native_path: Path,
         "source_wrfinput_sha256": sha256(source_path),
         "candidate_wrfinput_sha256": sha256(candidate_path),
         "native_initial_wrfo_sha256": sha256(native_path),
+        "moment_prior_policy_schema": policy["schema"],
+        "source_input_role": candidate_input_report["source_input_role"],
         "candidate_target_moment_deltas": moment_changes,
         "candidate_moment_validity": candidate_input_report["candidate_moment_validity"],
         "preserved_Q_and_Tq_fields": ["QVAPOR", "T", "QCLOUD", "QICE", "QRAIN", "QSNOW", "QGRAUP"],

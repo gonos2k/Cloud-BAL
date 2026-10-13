@@ -1,0 +1,238 @@
+{
+  "base_commit": "4975df9e69f34a5f0a54df5c0e83b48ba4f98510",
+  "evidence_checks": {
+    "canonical_full_validation": {
+      "exit_code": 0,
+      "scope": "entire launcher on frozen snapshot; final initializer policy-hash guard/diagnostic edits validated separately, not asserted part of this launcher run",
+      "snapshot_bytes_unchanged": true,
+      "snapshot_file_count": 2016,
+      "snapshot_git_commit": "b0cd8bf71339e1d21daf67fb30280b5794e3dc3b",
+      "status": "PASS"
+    },
+    "current_integration_bindings": {
+      "archive_manifest_sha256_matches": true,
+      "debugger_receipt_sha256_matches": true,
+      "final_files_currently_match_validation_records": true,
+      "integration_json_sha256": "66685a9c0fb6fa6b80112588fa741e85d7a52b73cccb443781530a89820a3031",
+      "validation_receipt_sha256_matches": true
+    },
+    "debugger_actual_operand_capture": {
+      "actual_input": {
+        "DAZ": false,
+        "FTZ": false,
+        "MXCSR": "0x1932",
+        "NC": "0x00000001",
+        "dry_density": "0x3EF895E0",
+        "helper_result": "0x00000000",
+        "rounding": "nearest, ties to even",
+        "valid": "0x00000000"
+      },
+      "archive_sha256": "826647d38c5a551d6f9d627021c04a7d730732d5007b793ca5207dfec8ff06c9",
+      "branch_attribution": {
+        "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "caller_function": "module_mp_kdm6_mp_kdm6_",
+        "candidate_input_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+        "executable_sha256": "4912d0f5c6b91d8e57bd0ff91adab2938ed4f74b9e8fa417903202dbf1c9d55a",
+        "helper_call_return_pc": "0x25b834f",
+        "invalid_branch_pc": "0x25b83ce",
+        "message": "KDM6 invalid NC number basis input",
+        "message_address": "0x4580030",
+        "namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4"
+      },
+      "member_count": 6,
+      "members": [
+        {
+          "bytes": 2524,
+          "name": "caller_NC_false_branch.txt",
+          "retained_source_byte_match": true,
+          "sha256": "33ff25849d43a11de57d3a88baaefde5f2d859d4b01e2c22ab5325be309dac73"
+        },
+        {
+          "bytes": 960,
+          "name": "capture.gdb",
+          "retained_source_byte_match": true,
+          "sha256": "8135a01d05b2809c887476db918bff74d1dd582002ef8ec3602e0f5cac607a5e"
+        },
+        {
+          "bytes": 2372,
+          "name": "gdb_transcript.txt",
+          "retained_source_byte_match": true,
+          "sha256": "74dfa8c1e8ec34de182b04b327fb1f27d607874beec51801390cd4a6a8344993"
+        },
+        {
+          "bytes": 879,
+          "name": "launch_environment.txt",
+          "retained_source_byte_match": true,
+          "sha256": "a29d94436478057122b298100c27517bd6fdaf0937ee64116de769e9ca53c648"
+        },
+        {
+          "bytes": 11533,
+          "name": "source_snapshot_after.json",
+          "retained_source_byte_match": true,
+          "sha256": "ac8b1f43aa57e8d69c1e8a7309f8049c644548fa77e38d430e7245a2911f38e1"
+        },
+        {
+          "bytes": 11333,
+          "name": "source_snapshot_before.json",
+          "retained_source_byte_match": true,
+          "sha256": "edc4e8fc13c786eae6572ecbb9ce461db58243ea38f953766ba28f292f2c5ff7"
+        }
+      ],
+      "receipt_path": "docs/evidence/pr84_nc_operand_debugger_20261013.json",
+      "receipt_sha256": "745ce74cd59e0340a1fc29d579a4d491d22e2cfd1b3cf3c335d19951eb889517",
+      "scope_limitations": {
+        "coordinate": "NOT_OBSERVED",
+        "full_model_call_or_timestep_completed": false,
+        "science_authority": "NONE",
+        "termination": "GDB quit after actual helper returned output zero/valid false, before error-stop or a complete timestep"
+      },
+      "source_hash_maps_before_after_equal": true,
+      "source_snapshot_file_count": 120
+    },
+    "first_unit_attempt": {
+      "exit_code": 1,
+      "not_counted_as_pass": true,
+      "original_log": "/var/tmp/pr84_canonical_validation_awsuc09w/unit.log",
+      "sha256": "5ed9285b4bca302508a8b0467eaba542995b31182527e9e8d236a5a6a66bdd8a",
+      "status": "ABORTED_MISSING_SNAPSHOT_GIT_METADATA"
+    },
+    "focused_validation": {
+      "compressed_log_sha256": "8d14b7f79114cab9a35bae3e54e1c75ad1c7df8eec01c8eb40b8814bfc3cb63e",
+      "current_recorded_file_hashes_match_validation": [
+        {
+          "matches_validation_final_hash": true,
+          "path": "docs/FAST_COMPLETION_CHECKLIST_20261012.md",
+          "sha256": "5d44c42e87144ae3292db01b70eba3396bb65d989e5ddb88347054117b36ac16"
+        },
+        {
+          "matches_validation_final_hash": true,
+          "path": "docs/PR84_FIRST_CONSUMPTION_SUPPORT_20261013.md",
+          "sha256": "026364567816f76f9740ad8acf009fba1a16b3cb6f2098d20f30ff20735727ba"
+        },
+        {
+          "matches_validation_final_hash": true,
+          "path": "docs/PR84_NATIVE_ICE_CONTRACT_20261013.md",
+          "sha256": "35df5f5676ebd82696cb10515218477992c2a2956fe343edea7ac4b11c3effd2"
+        },
+        {
+          "matches_validation_final_hash": true,
+          "path": "docs/PR84_NATIVE_MOMENT_INITIALIZATION_20261013.md",
+          "sha256": "ccc9887d970238e544d2d9f7cff1877e08c47141e98a78afbdb5491bf9fa146d"
+        },
+        {
+          "matches_validation_final_hash": true,
+          "path": "tests/test_pr84_native_moment_policy.py",
+          "sha256": "d5f0d10a089b0257c44f7a723c30154b39f2d8b9c4fa1d002e7ccb10b01ec733"
+        },
+        {
+          "matches_validation_final_hash": true,
+          "path": "tools/initialize_native_moments.py",
+          "sha256": "6091d91614a65cf73a5389eb48d9d3c1c4cae38ecbf5484bc957074ad8b8a13b"
+        }
+      ],
+      "exit_code": 0,
+      "modules": [
+        "test_pr84_native_moment_policy",
+        "test_initialize_native_moments",
+        "test_pr83_moment_candidate_readback",
+        "test_pr84_shared_runner_contract",
+        "test_pr84_same13_boundary_contract",
+        "test_pr84_ice_cap_pair_audit"
+      ],
+      "status": "PASS",
+      "tests": 43,
+      "uncompressed_log_sha256": "4effdd33619b97dc22710966b9230c4948d0c59536cbf774edb1d256e0c8eb34"
+    },
+    "matched_native_archive": {
+      "all_member_hashes_sizes_and_retained_sources_match": true,
+      "archive_excludes_private_model_netcdf_full_binary_traces_and_executables": "private model NetCDF inputs/output, full binary traces and executables retained externally by SHA; no model-state binaries uploaded",
+      "archive_sha256": "591bda9d8d74bbc487104a99935b6a75e79930d7422e9f51be9ed99cf1f5e290",
+      "manifest_sha256": "8764e7911e2fabf2c1a494fff1e24b0fce34f20e2fe63a953a8015c943e9789b",
+      "member_count": 26
+    }
+  },
+  "findings": [
+    {
+      "finding": "Debugger archive contains six members, all receipt-listed and hash/size/retained-source consistent.",
+      "severity": "informational"
+    },
+    {
+      "finding": "Actual NC=1 at density 0x3EF895E0 returns output 0 and valid=false under MXCSR 0x1932; disassembly ties the caller false branch to the KDM6 invalid NC diagnostic.",
+      "severity": "limitation"
+    },
+    {
+      "finding": "The debugger quit at the helper return. Coordinates were not observed, the fatal diagnostic was not executed in this replay, and no complete KDM6 call or physical timestep was established.",
+      "severity": "limitation"
+    },
+    {
+      "finding": "OFF and COUPLED production arms remain return code 128; first completed KDM6 call, budgets, observation fit, and short-time response remain unvalidated/open.",
+      "severity": "limitation"
+    }
+  ],
+  "prior_review_preserved": {
+    "path": "/var/tmp/pr84_team_publication_review_20261013.json",
+    "sha256": "7b0318ffbbcbe8c9297112156ef89543654a86b84bb45746da303300edabb9f7"
+  },
+  "publication_assessment": {
+    "engineering_publication_blocker_found": false,
+    "remaining_publication_limitation": "Evidence supports implementation/build/test provenance and the diagnosed native rejection; it does not support an operational or scientifically validated result.",
+    "science_or_physical_validation_pass_claimed": false
+  },
+  "repository": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr84_ice_representation_20261013/Cloud-BAL",
+  "review_scope": "Read-only publication evidence and binding audit; no repository files edited.",
+  "reviewed_artifacts": [
+    {
+      "path": "docs/PR84_INTEGRATION_PROGRESS_20261013.md",
+      "sha256": "992cea6d47ac00a65818a6947dd0fdeec0b5630bcd39e91d8eb66b6ead6e9f21"
+    },
+    {
+      "path": "docs/evidence/pr84_integration_20261013.json",
+      "sha256": "66685a9c0fb6fa6b80112588fa741e85d7a52b73cccb443781530a89820a3031"
+    },
+    {
+      "path": "docs/evidence/pr84_validation_20261013.json",
+      "sha256": "39a143f5253b1d924b0655df3175a6d7464ddde4e03d769460430d5c53b34368"
+    },
+    {
+      "path": "docs/FAST_COMPLETION_CHECKLIST_20261012.md",
+      "sha256": "5d44c42e87144ae3292db01b70eba3396bb65d989e5ddb88347054117b36ac16"
+    },
+    {
+      "path": "docs/evidence/pr84_matched_native_archive_20261013.json",
+      "sha256": "8764e7911e2fabf2c1a494fff1e24b0fce34f20e2fe63a953a8015c943e9789b"
+    },
+    {
+      "path": "docs/evidence/pr84_matched_native_20261013.zip",
+      "sha256": "591bda9d8d74bbc487104a99935b6a75e79930d7422e9f51be9ed99cf1f5e290"
+    }
+  ],
+  "schema": "pr84_team_publication_review_final_v1",
+  "scientific_and_operational_status": {
+    "completed_RK_stage_scope": {
+      "path": "pr63_transition_stages.raw in each archived native arm",
+      "scope": "completed RK scalar stages followed by public pre-call capture; no full physical timestep or microphysics post-state",
+      "stages": [
+        "RK_STAGE_END 1",
+        "RK_STAGE_END 2",
+        "RK_STAGE_END 3",
+        "PRE_MOIST_PREP",
+        "POST_MOIST_PREP",
+        "PRE_MICROPHYSICS"
+      ]
+    },
+    "first_completed_KDM6_call": "OPEN_REJECTED_NC_INPUT_CONVERSION",
+    "independent_observation_fit": "OPEN",
+    "interpretation": "The debugger establishes the actual helper return and false branch for the captured OFF input on the bound executable. It does not observe the coordinate or complete KDM6/the timestep. Both matched native arms remain exit 128 at NC input conversion; scientific and physical gates remain open.",
+    "native_model_returncodes": {
+      "COUPLED": 128,
+      "OFF": 128
+    },
+    "operational_authority": "NONE",
+    "physical_approval": "FAIL_OPEN",
+    "pre_call_post_state_created": false,
+    "public_pre_call_state_after_RK": "REJECTED",
+    "same_carrier_water_energy_mass_wind_budget": "OPEN",
+    "science_authority": "NONE",
+    "short_time_response": "NOT_RUN"
+  }
+}
