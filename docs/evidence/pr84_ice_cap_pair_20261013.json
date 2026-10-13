@@ -1,0 +1,750 @@
+{
+  "schema": "pr84_ice_cap_pair_audit_v1",
+  "artifact_class": "READ_ONLY_RESEARCH_DIAGNOSTIC",
+  "threshold_kg_m3": 0.0020982746387428605,
+  "formula": "500*pi*1e6/9080**3",
+  "gravity_assumption_m_s2": 9.81,
+  "binding": {
+    "control_record": "docs/evidence/pr83_same13_off_control_20261013/pr83_same13_off_control_record.json",
+    "control_record_sha256": "91d416ea4484b0eaf638e3d87eb682ef6c48100ec5cabbe8f28d9d4a8dc3a5cf",
+    "expected_artifact_sha256": {
+      "off_real": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+      "xa_real": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+      "off_init": "4bac4abe8367b1e9354c448302d1ffcd621e07d838baaa490b9cd7ae07fdc708",
+      "xa_init": "519b991978f2f14b925470e3f90a5bdf5f3a5ee8e3abb8f359cec6d122a345eb"
+    }
+  },
+  "temperature_convention_evidence": {
+    "wrf_source": "Registry/Registry.EM_COMMON maps NetCDF T to th_phy_m_t0 (perturbation dry potential temperature theta-T0), and internal t to NetCDF THM; THM is option-dependent.",
+    "registry_sha256": "b01855ed80569be04bbd99e43ea1672a60e35590db00145c839b8f74cfd9b07f",
+    "wrf_density_source_sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c",
+    "wrf_start_source_sha256": "6be17d3a4252065cf972dcf59bf3510cd29be35f898694e38187aa525cf27ac9",
+    "use_theta_m": 1,
+    "real_input_density_crosscheck": "Both real inputs show the dry-theta EOS density agreeing with source REAL32 reciprocal(AL+ALB) to max relative error below 3.4e-7; the alternate moist-theta interpretation has about 3.65e-2 maximum relative error.",
+    "stored_output_interpretation": "Source/registry supports T as dry theta, but no output AL/ALB carrier exists to classify post-output cap from the actual carrier. Both EOS sensitivities are retained."
+  },
+  "stages": {
+    "off_real": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/wrfinput_d01",
+      "sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+      "valid_time": "2026-08-16_13:00:00",
+      "shape_zyx": [
+        39,
+        282,
+        234
+      ],
+      "density_basis": "WRF source REAL32 reciprocal(AL+ALB)",
+      "source_density_available": true,
+      "use_theta_m": 1,
+      "qi_positive_full": 249167,
+      "qi_positive_interior": 244498,
+      "cap_classification_assessed": true,
+      "violations_full": 2326,
+      "violations_interior": 2305,
+      "qi_sum_mixing_ratio_cells": 104.06209043794601,
+      "qi_positive_mass_density_kg_m3": 51.10891043777727,
+      "dry_density_kg_m3": {
+        "min": 0.08369996398687363,
+        "p10": 0.12213127315044403,
+        "median": 0.535429060459137,
+        "p90": 1.0950010895729065,
+        "max": 1.1726703643798828
+      },
+      "eos_validation_against_source_density": {
+        "stored_T_as_dry_theta": {
+          "median_absolute_relative_density_error": 4.893950938613588e-08,
+          "maximum_absolute_relative_density_error": 3.3864173568624763e-07
+        },
+        "stored_T_as_moist_theta": {
+          "median_absolute_relative_density_error": 0.002255148520009338,
+          "maximum_absolute_relative_density_error": 0.036451047809444644
+        }
+      },
+      "qi_mass_concentration_kg_m3": {
+        "min": 0.0,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "max": 0.003208567884715796
+      },
+      "excess_concentration_kg_m3": {
+        "min": 7.739462508458278e-08,
+        "p10": 4.821188159082144e-05,
+        "median": 0.0003115359801916665,
+        "p90": 0.0007304396288172347,
+        "max": 0.0011102932459729356
+      },
+      "temperature_k_at_violations": {
+        "min": 221.33266748775017,
+        "p10": 239.11026179069495,
+        "median": 254.1574919475774,
+        "p90": 269.03928326104324,
+        "max": 272.51240703149875
+      },
+      "height_m_at_violations": {
+        "min": 5249.922751019368,
+        "p10": 6016.084711072885,
+        "median": 8394.221059505606,
+        "p90": 10750.090986557083,
+        "max": 12883.470709097859
+      },
+      "latitude_at_violations": {
+        "min": 33.95383834838867,
+        "p10": 34.40616416931152,
+        "median": 35.19716835021973,
+        "p90": 42.49499702453613,
+        "max": 43.78398132324219
+      },
+      "longitude_at_violations": {
+        "min": 119.52145385742188,
+        "p10": 120.83248901367188,
+        "median": 130.73382568359375,
+        "p90": 132.9434814453125,
+        "max": 133.3936767578125
+      },
+      "integrated_excess_kg": 16576660683.391218,
+      "dry_carrier_weighted_excess_kg": 16576660683.39122,
+      "eos_density_sensitivity": {
+        "stored_T_as_dry_theta": {
+          "density_kg_m3": {
+            "min": 0.08369996554462655,
+            "p10": 0.12213126921392956,
+            "median": 0.5354290225567322,
+            "p90": 1.0950011030927311,
+            "max": 1.1726704308919782
+          },
+          "exceedances_full": 2326,
+          "exceedances_interior": 2305,
+          "temperature_k_at_exceedances": {
+            "min": 221.33266748775017,
+            "p10": 239.11026179069495,
+            "median": 254.1574919475774,
+            "p90": 269.03928326104324,
+            "max": 272.51240703149875
+          },
+          "height_m_at_exceedances": {
+            "min": 5249.922751019368,
+            "p10": 6016.084711072885,
+            "median": 8394.221059505606,
+            "p90": 10750.090986557083,
+            "max": 12883.470709097859
+          },
+          "latitude_at_exceedances": {
+            "min": 33.95383834838867,
+            "p10": 34.40616416931152,
+            "median": 35.19716835021973,
+            "p90": 42.49499702453613,
+            "max": 43.78398132324219
+          },
+          "longitude_at_exceedances": {
+            "min": 119.52145385742188,
+            "p10": 120.83248901367188,
+            "median": 130.73382568359375,
+            "p90": 132.9434814453125,
+            "max": 133.3936767578125
+          },
+          "integrated_excess_kg_using_native_hybrid_dry_mass": 16576661897.639374,
+          "dry_carrier_weighted_excess_kg": 16576661897.639374
+        },
+        "stored_T_as_moist_theta": {
+          "density_kg_m3": {
+            "min": 0.08370038590564713,
+            "p10": 0.12213205640723085,
+            "median": 0.5363157800976663,
+            "p90": 1.1245200530433024,
+            "max": 1.2055589244457643
+          },
+          "exceedances_full": 2383,
+          "exceedances_interior": 2361,
+          "temperature_k_at_exceedances": {
+            "min": 221.29393957623515,
+            "p10": 238.8727992844628,
+            "median": 254.92174176258376,
+            "p90": 266.65499681878146,
+            "max": 269.63567391019143
+          },
+          "height_m_at_exceedances": {
+            "min": 5249.427999171763,
+            "p10": 6015.271486365953,
+            "median": 8388.852255351681,
+            "p90": 10749.944253312946,
+            "max": 12883.470709097859
+          },
+          "latitude_at_exceedances": {
+            "min": 33.95383834838867,
+            "p10": 34.407464599609376,
+            "median": 35.213165283203125,
+            "p90": 42.49305038452148,
+            "max": 43.78398132324219
+          },
+          "longitude_at_exceedances": {
+            "min": 119.52145385742188,
+            "p10": 120.84179077148437,
+            "median": 130.73855590820312,
+            "p90": 132.93861083984376,
+            "max": 133.3936767578125
+          },
+          "integrated_excess_kg_using_native_hybrid_dry_mass": 17004056592.540396,
+          "dry_carrier_weighted_excess_kg": 17004056592.540396
+        }
+      }
+    },
+    "xa_real": {
+      "path": "/var/tmp/pr82_same13_real_boundary_candidate.final2_20261012/wrfinput_d01",
+      "sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+      "valid_time": "2026-08-16_13:00:00",
+      "shape_zyx": [
+        39,
+        282,
+        234
+      ],
+      "density_basis": "WRF source REAL32 reciprocal(AL+ALB)",
+      "source_density_available": true,
+      "use_theta_m": 1,
+      "qi_positive_full": 249167,
+      "qi_positive_interior": 244498,
+      "cap_classification_assessed": true,
+      "violations_full": 2326,
+      "violations_interior": 2305,
+      "qi_sum_mixing_ratio_cells": 104.062101071012,
+      "qi_positive_mass_density_kg_m3": 51.10891935364828,
+      "dry_density_kg_m3": {
+        "min": 0.08369996398687363,
+        "p10": 0.12213127315044403,
+        "median": 0.535429060459137,
+        "p90": 1.0950010895729065,
+        "max": 1.1726703643798828
+      },
+      "eos_validation_against_source_density": {
+        "stored_T_as_dry_theta": {
+          "median_absolute_relative_density_error": 4.893814275956368e-08,
+          "maximum_absolute_relative_density_error": 3.3864173568624763e-07
+        },
+        "stored_T_as_moist_theta": {
+          "median_absolute_relative_density_error": 0.002255148520009338,
+          "maximum_absolute_relative_density_error": 0.036451047809444644
+        }
+      },
+      "qi_mass_concentration_kg_m3": {
+        "min": 0.0,
+        "p10": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "max": 0.003208567884715796
+      },
+      "excess_concentration_kg_m3": {
+        "min": 7.739462508458278e-08,
+        "p10": 4.821188159082144e-05,
+        "median": 0.0003115359801916665,
+        "p90": 0.0007304396288172347,
+        "max": 0.0011102932459729356
+      },
+      "temperature_k_at_violations": {
+        "min": 221.33266748775017,
+        "p10": 239.11026179069495,
+        "median": 254.1574919475774,
+        "p90": 269.03928326104324,
+        "max": 272.51240703149875
+      },
+      "height_m_at_violations": {
+        "min": 5249.922751019368,
+        "p10": 6016.084711072885,
+        "median": 8394.221059505606,
+        "p90": 10750.090986557083,
+        "max": 12883.470709097859
+      },
+      "latitude_at_violations": {
+        "min": 33.95383834838867,
+        "p10": 34.40616416931152,
+        "median": 35.19716835021973,
+        "p90": 42.49499702453613,
+        "max": 43.78398132324219
+      },
+      "longitude_at_violations": {
+        "min": 119.52145385742188,
+        "p10": 120.83248901367188,
+        "median": 130.73382568359375,
+        "p90": 132.9434814453125,
+        "max": 133.3936767578125
+      },
+      "integrated_excess_kg": 16576660683.391218,
+      "dry_carrier_weighted_excess_kg": 16576660683.39122,
+      "eos_density_sensitivity": {
+        "stored_T_as_dry_theta": {
+          "density_kg_m3": {
+            "min": 0.08369996554462655,
+            "p10": 0.12213126921392956,
+            "median": 0.5354290225567322,
+            "p90": 1.0950011030927311,
+            "max": 1.1726704308919782
+          },
+          "exceedances_full": 2326,
+          "exceedances_interior": 2305,
+          "temperature_k_at_exceedances": {
+            "min": 221.33266748775017,
+            "p10": 239.11026179069495,
+            "median": 254.1574919475774,
+            "p90": 269.03928326104324,
+            "max": 272.51240703149875
+          },
+          "height_m_at_exceedances": {
+            "min": 5249.922751019368,
+            "p10": 6016.084711072885,
+            "median": 8394.221059505606,
+            "p90": 10750.090986557083,
+            "max": 12883.470709097859
+          },
+          "latitude_at_exceedances": {
+            "min": 33.95383834838867,
+            "p10": 34.40616416931152,
+            "median": 35.19716835021973,
+            "p90": 42.49499702453613,
+            "max": 43.78398132324219
+          },
+          "longitude_at_exceedances": {
+            "min": 119.52145385742188,
+            "p10": 120.83248901367188,
+            "median": 130.73382568359375,
+            "p90": 132.9434814453125,
+            "max": 133.3936767578125
+          },
+          "integrated_excess_kg_using_native_hybrid_dry_mass": 16576661897.639374,
+          "dry_carrier_weighted_excess_kg": 16576661897.639374
+        },
+        "stored_T_as_moist_theta": {
+          "density_kg_m3": {
+            "min": 0.08370038590564713,
+            "p10": 0.12213205640723085,
+            "median": 0.5363157800976663,
+            "p90": 1.1245200530433024,
+            "max": 1.2055589244457643
+          },
+          "exceedances_full": 2383,
+          "exceedances_interior": 2361,
+          "temperature_k_at_exceedances": {
+            "min": 221.29393957623515,
+            "p10": 238.8727992844628,
+            "median": 254.92174176258376,
+            "p90": 266.65499681878146,
+            "max": 269.63567391019143
+          },
+          "height_m_at_exceedances": {
+            "min": 5249.427999171763,
+            "p10": 6015.271486365953,
+            "median": 8388.852255351681,
+            "p90": 10749.944253312946,
+            "max": 12883.470709097859
+          },
+          "latitude_at_exceedances": {
+            "min": 33.95383834838867,
+            "p10": 34.407464599609376,
+            "median": 35.213165283203125,
+            "p90": 42.49305038452148,
+            "max": 43.78398132324219
+          },
+          "longitude_at_exceedances": {
+            "min": 119.52145385742188,
+            "p10": 120.84179077148437,
+            "median": 130.73855590820312,
+            "p90": 132.93861083984376,
+            "max": 133.3936767578125
+          },
+          "integrated_excess_kg_using_native_hybrid_dry_mass": 17004056592.540396,
+          "dry_carrier_weighted_excess_kg": 17004056592.540396
+        }
+      }
+    },
+    "off_init": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013d/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "4bac4abe8367b1e9354c448302d1ffcd621e07d838baaa490b9cd7ae07fdc708",
+      "valid_time": "2026-08-16_13:00:00",
+      "shape_zyx": [
+        39,
+        282,
+        234
+      ],
+      "density_basis": "EOS dry-theta sensitivity only; source AL+ALB unavailable",
+      "source_density_available": false,
+      "use_theta_m": 1,
+      "qi_positive_full": 249167,
+      "qi_positive_interior": 244498,
+      "cap_classification_assessed": false,
+      "violations_full": null,
+      "violations_interior": null,
+      "qi_sum_mixing_ratio_cells": 104.06209043794601,
+      "qi_positive_mass_density_kg_m3": 51.10891110569975,
+      "dry_density_kg_m3": null,
+      "eos_validation_against_source_density": null,
+      "qi_mass_concentration_kg_m3": null,
+      "excess_concentration_kg_m3": null,
+      "temperature_k_at_violations": null,
+      "height_m_at_violations": null,
+      "latitude_at_violations": null,
+      "longitude_at_violations": null,
+      "integrated_excess_kg": null,
+      "dry_carrier_weighted_excess_kg": null,
+      "eos_density_sensitivity": {
+        "stored_T_as_dry_theta": {
+          "density_kg_m3": {
+            "min": 0.08369996554462655,
+            "p10": 0.12213126921392956,
+            "median": 0.5354290225567322,
+            "p90": 1.0950012244915042,
+            "max": 1.1726704308919782
+          },
+          "exceedances_full": 2326,
+          "exceedances_interior": 2305,
+          "temperature_k_at_exceedances": {
+            "min": 221.33266748775017,
+            "p10": 239.1102566565604,
+            "median": 254.1574919475774,
+            "p90": 269.03928631563497,
+            "max": 272.51240703149875
+          },
+          "height_m_at_exceedances": {
+            "min": 5249.922751019368,
+            "p10": 6016.084711072885,
+            "median": 8394.221059505606,
+            "p90": 10750.090986557083,
+            "max": 12883.470709097859
+          },
+          "latitude_at_exceedances": {
+            "min": 33.95383834838867,
+            "p10": 34.40616416931152,
+            "median": 35.19716835021973,
+            "p90": 42.49499702453613,
+            "max": 43.78398132324219
+          },
+          "longitude_at_exceedances": {
+            "min": 119.52145385742188,
+            "p10": 120.83248901367188,
+            "median": 130.73382568359375,
+            "p90": 132.9434814453125,
+            "max": 133.3936767578125
+          },
+          "integrated_excess_kg_using_native_hybrid_dry_mass": 16576662013.182621,
+          "dry_carrier_weighted_excess_kg": 16576662013.182623
+        },
+        "stored_T_as_moist_theta": {
+          "density_kg_m3": {
+            "min": 0.08370038590564713,
+            "p10": 0.12213205640723085,
+            "median": 0.5363157800976663,
+            "p90": 1.1245200530433024,
+            "max": 1.2055589244457643
+          },
+          "exceedances_full": 2383,
+          "exceedances_interior": 2361,
+          "temperature_k_at_exceedances": {
+            "min": 221.29393957623515,
+            "p10": 238.8727992844628,
+            "median": 254.92174176258376,
+            "p90": 266.65499681878146,
+            "max": 269.63567391019143
+          },
+          "height_m_at_exceedances": {
+            "min": 5249.427999171763,
+            "p10": 6015.271486365953,
+            "median": 8388.852255351681,
+            "p90": 10749.944253312946,
+            "max": 12883.470709097859
+          },
+          "latitude_at_exceedances": {
+            "min": 33.95383834838867,
+            "p10": 34.407464599609376,
+            "median": 35.213165283203125,
+            "p90": 42.49305038452148,
+            "max": 43.78398132324219
+          },
+          "longitude_at_exceedances": {
+            "min": 119.52145385742188,
+            "p10": 120.84179077148437,
+            "median": 130.73855590820312,
+            "p90": 132.93861083984376,
+            "max": 133.3936767578125
+          },
+          "integrated_excess_kg_using_native_hybrid_dry_mass": 17004056722.97312,
+          "dry_carrier_weighted_excess_kg": 17004056722.97312
+        }
+      }
+    },
+    "xa_init": {
+      "path": "/var/tmp/pr82_same13_native_init_candidate.final4_20261012/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "519b991978f2f14b925470e3f90a5bdf5f3a5ee8e3abb8f359cec6d122a345eb",
+      "valid_time": "2026-08-16_13:00:00",
+      "shape_zyx": [
+        39,
+        282,
+        234
+      ],
+      "density_basis": "EOS dry-theta sensitivity only; source AL+ALB unavailable",
+      "source_density_available": false,
+      "use_theta_m": 1,
+      "qi_positive_full": 249167,
+      "qi_positive_interior": 244498,
+      "cap_classification_assessed": false,
+      "violations_full": null,
+      "violations_interior": null,
+      "qi_sum_mixing_ratio_cells": 104.062101071012,
+      "qi_positive_mass_density_kg_m3": 51.10892002071371,
+      "dry_density_kg_m3": null,
+      "eos_validation_against_source_density": null,
+      "qi_mass_concentration_kg_m3": null,
+      "excess_concentration_kg_m3": null,
+      "temperature_k_at_violations": null,
+      "height_m_at_violations": null,
+      "latitude_at_violations": null,
+      "longitude_at_violations": null,
+      "integrated_excess_kg": null,
+      "dry_carrier_weighted_excess_kg": null,
+      "eos_density_sensitivity": {
+        "stored_T_as_dry_theta": {
+          "density_kg_m3": {
+            "min": 0.08369996554462655,
+            "p10": 0.12213126921392956,
+            "median": 0.5354290225567322,
+            "p90": 1.0950012244915042,
+            "max": 1.1726704308919782
+          },
+          "exceedances_full": 2326,
+          "exceedances_interior": 2305,
+          "temperature_k_at_exceedances": {
+            "min": 221.33266748775017,
+            "p10": 239.1102566565604,
+            "median": 254.1574919475774,
+            "p90": 269.03928631563497,
+            "max": 272.51240703149875
+          },
+          "height_m_at_exceedances": {
+            "min": 5249.922751019368,
+            "p10": 6016.084711072885,
+            "median": 8394.221059505606,
+            "p90": 10750.090986557083,
+            "max": 12883.470709097859
+          },
+          "latitude_at_exceedances": {
+            "min": 33.95383834838867,
+            "p10": 34.40616416931152,
+            "median": 35.19716835021973,
+            "p90": 42.49499702453613,
+            "max": 43.78398132324219
+          },
+          "longitude_at_exceedances": {
+            "min": 119.52145385742188,
+            "p10": 120.83248901367188,
+            "median": 130.73382568359375,
+            "p90": 132.9434814453125,
+            "max": 133.3936767578125
+          },
+          "integrated_excess_kg_using_native_hybrid_dry_mass": 16576662013.182621,
+          "dry_carrier_weighted_excess_kg": 16576662013.182623
+        },
+        "stored_T_as_moist_theta": {
+          "density_kg_m3": {
+            "min": 0.08370038590564713,
+            "p10": 0.12213205640723085,
+            "median": 0.5363157800976663,
+            "p90": 1.1245200530433024,
+            "max": 1.2055589244457643
+          },
+          "exceedances_full": 2383,
+          "exceedances_interior": 2361,
+          "temperature_k_at_exceedances": {
+            "min": 221.29393957623515,
+            "p10": 238.8727992844628,
+            "median": 254.92174176258376,
+            "p90": 266.65499681878146,
+            "max": 269.63567391019143
+          },
+          "height_m_at_exceedances": {
+            "min": 5249.427999171763,
+            "p10": 6015.271486365953,
+            "median": 8388.852255351681,
+            "p90": 10749.944253312946,
+            "max": 12883.470709097859
+          },
+          "latitude_at_exceedances": {
+            "min": 33.95383834838867,
+            "p10": 34.407464599609376,
+            "median": 35.213165283203125,
+            "p90": 42.49305038452148,
+            "max": 43.78398132324219
+          },
+          "longitude_at_exceedances": {
+            "min": 119.52145385742188,
+            "p10": 120.84179077148437,
+            "median": 130.73855590820312,
+            "p90": 132.93861083984376,
+            "max": 133.3936767578125
+          },
+          "integrated_excess_kg_using_native_hybrid_dry_mass": 17004056722.97312,
+          "dry_carrier_weighted_excess_kg": 17004056722.97312
+        }
+      }
+    }
+  },
+  "pairs": [
+    {
+      "left": "OFF real MAINT",
+      "right": "Xa coupled real",
+      "common_full": 2326,
+      "new_in_right_full": 0,
+      "resolved_from_left_full": 0,
+      "common_interior": 2305,
+      "new_in_right_interior": 0,
+      "resolved_from_left_interior": 0,
+      "integrated_candidate_only_excess_kg": 0.0,
+      "dry_carrier_weighted_candidate_only_excess_kg": 0.0,
+      "integrated_resolved_excess_kg": 0.0,
+      "dry_carrier_weighted_resolved_excess_kg": 0.0,
+      "qi_right_minus_left": {
+        "nonzero_cells": 104,
+        "sum": 1.0633065973486566e-05,
+        "min": -2.2011809051036835e-06,
+        "max": 5.441717803478241e-06,
+        "max_abs": 5.441717803478241e-06
+      },
+      "density_right_minus_left": {
+        "nonzero_cells": 754,
+        "sum": 0.06165897846221924,
+        "min": -0.00034046173095703125,
+        "max": 0.0030707716941833496,
+        "max_abs": 0.0030707716941833496
+      },
+      "delta_integrated_excess_kg": 0.0,
+      "delta_dry_air_weighted_excess_kg": 0.0,
+      "temperature_change_at_any_changed_qi": {
+        "min": -0.12850718072547807,
+        "p10": -0.060169430365476714,
+        "median": -0.0007047738978371854,
+        "p90": -3.7729830182797383e-06,
+        "max": 0.006703864551809602
+      },
+      "height_change_at_any_changed_qi": {
+        "min": -11.811528414884378,
+        "p10": -9.71843941131392,
+        "median": -3.3274799311925563,
+        "p90": 0.028052529306205568,
+        "max": 0.8722365570847614
+      }
+    }
+  ],
+  "initial_output_eos_sensitivity_pairs": [
+    {
+      "density_interpretation": "stored_T_as_dry_theta",
+      "actual_post_output_cap_classification_assessed": false,
+      "common_exceedances_full": 2326,
+      "new_in_Xa_full": 0,
+      "resolved_from_OFF_full": 0,
+      "common_exceedances_interior": 2305,
+      "new_in_Xa_interior": 0,
+      "resolved_from_OFF_interior": 0,
+      "candidate_only_integrated_excess_kg_using_hybrid_dry_mass": 0.0,
+      "resolved_integrated_excess_kg_using_hybrid_dry_mass": 0.0,
+      "candidate_only_dry_carrier_weighted_excess_kg": 0.0,
+      "resolved_dry_carrier_weighted_excess_kg": 0.0,
+      "qi_Xa_minus_OFF": {
+        "nonzero_cells": 104,
+        "sum": 1.0633065973486566e-05,
+        "min": -2.2011809051036835e-06,
+        "max": 5.441717803478241e-06,
+        "max_abs": 5.441717803478241e-06
+      },
+      "eos_density_Xa_minus_OFF": {
+        "nonzero_cells": 769,
+        "sum": 0.061654779567184945,
+        "min": -0.0003405639302784813,
+        "max": 0.003070817628872513,
+        "max_abs": 0.003070817628872513
+      },
+      "temperature_change_at_changed_qi": {
+        "min": -0.12850718072547807,
+        "p10": -0.060177755001245704,
+        "median": -0.0007047738978371854,
+        "p90": -3.7729830182797383e-06,
+        "max": 0.006710575413649167
+      },
+      "height_change_at_changed_qi": {
+        "min": -11.811528414884378,
+        "p10": -9.71843941131392,
+        "median": -3.3274799311925563,
+        "p90": 0.028052529306205568,
+        "max": 0.8722365570847614
+      },
+      "delta_integrated_excess_kg_using_hybrid_dry_mass": 0.0,
+      "delta_dry_carrier_weighted_excess_kg": 0.0
+    },
+    {
+      "density_interpretation": "stored_T_as_moist_theta",
+      "actual_post_output_cap_classification_assessed": false,
+      "common_exceedances_full": 2383,
+      "new_in_Xa_full": 0,
+      "resolved_from_OFF_full": 0,
+      "common_exceedances_interior": 2361,
+      "new_in_Xa_interior": 0,
+      "resolved_from_OFF_interior": 0,
+      "candidate_only_integrated_excess_kg_using_hybrid_dry_mass": 0.0,
+      "resolved_integrated_excess_kg_using_hybrid_dry_mass": 0.0,
+      "candidate_only_dry_carrier_weighted_excess_kg": 0.0,
+      "resolved_dry_carrier_weighted_excess_kg": 0.0,
+      "qi_Xa_minus_OFF": {
+        "nonzero_cells": 104,
+        "sum": 1.0633065973486566e-05,
+        "min": -2.2011809051036835e-06,
+        "max": 5.441717803478241e-06,
+        "max_abs": 5.441717803478241e-06
+      },
+      "eos_density_Xa_minus_OFF": {
+        "nonzero_cells": 769,
+        "sum": 0.14330738126682596,
+        "min": -0.000347498581659611,
+        "max": 0.0055296421033222964,
+        "max_abs": 0.0055296421033222964
+      },
+      "temperature_change_at_changed_qi": {
+        "min": -0.11748532722418759,
+        "p10": -0.056925133908731586,
+        "median": -0.0006647754816810902,
+        "p90": -2.2110771226379815e-06,
+        "max": 0.006806600455604439
+      },
+      "height_change_at_changed_qi": {
+        "min": -11.811528414884378,
+        "p10": -9.71843941131392,
+        "median": -3.3274799311925563,
+        "p90": 0.028052529306205568,
+        "max": 0.8722365570847614
+      },
+      "delta_integrated_excess_kg_using_hybrid_dry_mass": 0.0,
+      "delta_dry_carrier_weighted_excess_kg": 0.0
+    }
+  ],
+  "limitations": [
+    "Initial output AL/ALB is unavailable; post-output actual carrier density and actual cap classification are NOT ASSESSED. The two EOS reconstructions are sensitivity diagnostics only; hybrid dry mass uses check_native_hybrid_geometry.",
+    "No model execution, compilation, promotion, or mutation was performed."
+  ],
+  "full_map": {
+    "path": "/var/tmp/pr84_ice_cap_pair_map_20261013.npz",
+    "sha256": "fcb2d9ecf4bde2b0154f8476474f918ca19734cc02f369f9f945e4cd453b237a",
+    "format": "compressed NPZ; mass fields WRF [k,j,i], coordinates [j,i]"
+  },
+  "input_hashes_before_after_identical": true,
+  "input_hashes_before_after": {
+    "off_real": {
+      "before": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+      "after": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730"
+    },
+    "xa_real": {
+      "before": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+      "after": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb"
+    },
+    "off_init": {
+      "before": "4bac4abe8367b1e9354c448302d1ffcd621e07d838baaa490b9cd7ae07fdc708",
+      "after": "4bac4abe8367b1e9354c448302d1ffcd621e07d838baaa490b9cd7ae07fdc708"
+    },
+    "xa_init": {
+      "before": "519b991978f2f14b925470e3f90a5bdf5f3a5ee8e3abb8f359cec6d122a345eb",
+      "after": "519b991978f2f14b925470e3f90a5bdf5f3a5ee8e3abb8f359cec6d122a345eb"
+    }
+  }
+}

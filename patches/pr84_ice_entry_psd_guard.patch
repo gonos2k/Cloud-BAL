@@ -1,0 +1,115 @@
+--- a/phys/module_mp_kdm6.F
++++ b/phys/module_mp_kdm6.F
+@@ -201,8 +201,82 @@
+   real, parameter, private :: F1S= 0.66 
+   real, parameter, private :: F2S =0.44 
+ 
++    private :: pr84_ice_entry_ceiling
++
+     contains
+ 
++    ! PR84_KDM6_ICE_ENTRY_CEILING_BEGIN
++    pure subroutine pr84_ice_entry_ceiling(qice, dry_density, lambda_min, shape_exponent, &
++                                           pidni_value, upper_limit, valid, public_minimum_out)
++      use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
++      real, intent(in) :: qice, dry_density, lambda_min, shape_exponent, pidni_value
++      real, intent(out) :: upper_limit
++      logical, intent(out) :: valid
++      real, optional, intent(out) :: public_minimum_out
++      real :: minimum_internal, minimum_public, roundtrip_internal, previous_public
++      double precision :: minimum_internal_exact, minimum_public_exact
++      integer :: step
++
++      upper_limit = 0.0
++      valid = .false.
++      if (present(public_minimum_out)) public_minimum_out = 0.0
++      if (.not. all(ieee_is_finite([qice, dry_density, lambda_min, shape_exponent, pidni_value]))) return
++      if (qice < 0.0 .or. dry_density <= 0.0 .or. lambda_min <= 0.0 .or. &
++          shape_exponent <= 0.0 .or. pidni_value <= 0.0) return
++
++      minimum_public_exact = dble(qice) * dble(lambda_min)**dble(shape_exponent) / dble(pidni_value)
++      minimum_internal_exact = dble(dry_density) * minimum_public_exact
++      if (.not. ieee_is_finite(minimum_public_exact) .or. &
++          .not. ieee_is_finite(minimum_internal_exact) .or. &
++          minimum_public_exact < 0.0d0 .or. minimum_internal_exact < 0.0d0 .or. &
++          minimum_public_exact > dble(huge(upper_limit)) .or. &
++          minimum_internal_exact > dble(huge(upper_limit))) return
++
++      minimum_internal = real(minimum_internal_exact)
++      if (dble(minimum_internal) < minimum_internal_exact) then
++        if (minimum_internal >= huge(minimum_internal)) return
++        minimum_internal = nearest(minimum_internal, 1.0)
++      endif
++      if (.not. ieee_is_finite(minimum_internal)) return
++
++      minimum_public = real(minimum_public_exact)
++      if (dble(minimum_public) < minimum_public_exact) then
++        if (minimum_public >= huge(minimum_public)) return
++        minimum_public = nearest(minimum_public, 1.0)
++      endif
++      if (.not. ieee_is_finite(minimum_public)) return
++
++      ! Find the smallest stored REAL32 public N that meets both source PSD bounds.
++      do step = 1, 8
++        roundtrip_internal = minimum_public * dry_density
++        if (.not. ieee_is_finite(roundtrip_internal)) return
++        if (roundtrip_internal >= minimum_internal) exit
++        if (minimum_public >= huge(minimum_public)) return
++        previous_public = nearest(minimum_public, 1.0)
++        if (previous_public <= minimum_public .or. .not. ieee_is_finite(previous_public)) return
++        minimum_public = previous_public
++      enddo
++      if (step > 8) return
++      roundtrip_internal = minimum_public * dry_density
++      if (.not. ieee_is_finite(roundtrip_internal) .or. roundtrip_internal < minimum_internal) return
++      do step = 1, 8
++        if (minimum_public <= 0.0) exit
++        previous_public = nearest(minimum_public, -1.0)
++        if (previous_public < 0.0 .or. dble(previous_public) < minimum_public_exact) exit
++        if (.not. ieee_is_finite(previous_public)) return
++        if (previous_public * dry_density < minimum_internal) exit
++        minimum_public = previous_public
++      enddo
++      roundtrip_internal = minimum_public * dry_density
++      if (.not. ieee_is_finite(roundtrip_internal) .or. &
++          dble(minimum_public) < minimum_public_exact .or. roundtrip_internal < minimum_internal) return
++
++      if (present(public_minimum_out)) public_minimum_out = minimum_public
++      upper_limit = max(1.0e6, roundtrip_internal)
++      valid = ieee_is_finite(upper_limit)
++    end subroutine pr84_ice_entry_ceiling
++    ! PR84_KDM6_ICE_ENTRY_CEILING_END
++
+     pure integer function classify_species_state(mass, number) result(state)
+       real, intent(in) :: mass, number
+       if (.not.ieee_is_finite(mass) .or. .not.ieee_is_finite(number)) then
+@@ -1409,7 +1483,8 @@
+    real, dimension(its:ite,kts:kte)   :: worka, workr
+    real, dimension(its:ite,kts:kte)   :: den_tmp, delz_tmp, dry_carrier_density
+    real, dimension(its:ite,kts:kte) :: gas_density
+-   logical :: carrier_valid, step_count_valid
++   logical :: carrier_valid, step_count_valid, ice_entry_ceiling_valid
++   real :: ice_entry_number_ceiling, ice_entry_public_minimum
+    real, dimension(its:ite,kts:kte) :: nrs_tmp,nci_tmp
+    real, dimension(its:ite,kts:kte)   :: lamdr_tmp, lamdc_tmp, lamdi_tmp
+    real, dimension(its:ite,kts:kte)   :: falkc, work1c, work2c
+@@ -1561,7 +1636,6 @@
+        nci(i,k,3) = min(max(nci(i,k,3),1.e8),2.e10)
+ 
+ 
+-       nci(i,k,2) = min(max(nci(i,k,2),0.0),1.0e6)
+        ! ProgB supplies density only when its status is active.
+        brs(i,k) = max(brs(i,k),0.0)
+      enddo
+@@ -1572,6 +1646,11 @@
+      do i = its,ite
+        call moist_to_dry_density(gas_density(i,k), q(i,k), dry_carrier_density(i,k), carrier_valid)
+        if (.not. carrier_valid) error stop 'KDM6 invalid dry carrier density'
++       call pr84_ice_entry_ceiling(qci(i,k,2), dry_carrier_density(i,k), lamdaimin, &
++                                   dmi, pidni, ice_entry_number_ceiling, ice_entry_ceiling_valid, &
++                                   ice_entry_public_minimum)
++       if (.not. ice_entry_ceiling_valid) error stop 'KDM6 invalid ice entry number ceiling'
++       nci(i,k,2) = min(max(nci(i,k,2),0.0), ice_entry_number_ceiling)
+        dend(i,k) = dry_carrier_density(i,k)
+      enddo
+    enddo

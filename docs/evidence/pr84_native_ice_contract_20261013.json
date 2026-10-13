@@ -1,0 +1,224 @@
+{
+  "schema": "pr84_native_ice_contract_v2",
+  "status": "SOURCE_CONTRACT_AND_FOCUSED_NATIVE_BUILD_NO_MODEL_RUN",
+  "graphify_navigation": {
+    "maintained_snapshot": "Cloud-BAL Graphify9975",
+    "graph_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json",
+    "graph_sha256": "7bcb22c6437d7a07bf2956fcbc250860fec190e7610d1fd7090b12ecb8f30aac",
+    "node_count": 9975,
+    "query": "KDM6 module ice number PSD and snow conversion consumers",
+    "traversal": "BFS depth=2; 8 nodes surfaced",
+    "nodes_surfaced": [
+      "kdm6() wrapper fixture",
+      "module_mp_kdm6",
+      "transform_consumers()",
+      "ConversionScaleTests",
+      "ice2vapor()",
+      "PSD and transition evidence",
+      "set_snow_source()"
+    ],
+    "result": "The maintained graph points to wrapper/conversion and evidence topics but omits the externally retained KIM-meso KDM6 runtime source examined here.",
+    "extraction_limit": "Source equations and call relationships were confirmed from the external hash-bound KDM6 source; graph freshness does not establish runtime or scientific validation."
+  },
+  "authority": {
+    "policy_path": "docs/PR83_NATIVE_MOMENT_POLICY_20261013.json",
+    "policy_sha256": "dde8df58f840d2fb11579876450749964ea2a54e36a68856c92bc979f46bae2a",
+    "prior_receipt_path": "docs/evidence/pr83_same13_native_20261013/pr83_same13_native_moment_prior.json",
+    "prior_receipt_sha256": "732cbb3cc8c389341c3a3ef2e088a8f8fb52b0f4f16b2110fc71e82aa0b54505",
+    "actual_source_path": "/var/tmp/pr80_kdm6_radar_contract.nsUNuj/compile/module_mp_kdm6.F",
+    "actual_source_sha256": "a5e8ce7a05d147b05556aa7521c22c0991812711fe675409feec889e43a761e7",
+    "upstream_comparison_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_mp_kdm6.F",
+    "upstream_comparison_sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a",
+    "retained_archive_path": "/var/tmp/pr81_native_ksas_smallstep_build1/link/main/libwrflib_pr81.a",
+    "retained_archive_sha256": "ac1366ac4574e2667196cac3c960907db52aedce6dfa137178d7254fa5eb37dd",
+    "retained_member": "module_mp_kdm6.o",
+    "retained_member_sha256": "01c219330415f8a8e8ecd3ee263754a1129e5153116f0aa9c1b3ca658f7f2e74",
+    "retained_executable_path": "/var/tmp/pr81_native_ksas_smallstep_build1/wrf_pr81.exe",
+    "retained_executable_sha256": "a805a1afff42021f322337c69d4e0818faf30e677f625f9a9d1b308728b32c00",
+    "build_receipt_path": "/var/tmp/pr81_native_ksas_smallstep_build1/pr81_native_build.json",
+    "readback_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr81_joint_20261012/Cloud-BAL/docs/evidence/pr81_wrf_initialization_readback_20261012.json",
+    "readback_receipt_sha256": "8062e7006e6315bf649969f876a762fb40976ac2b8637f5efb106c7312c038aa",
+    "runtime_scope": "Source, archive, member and executable identities are inherited from and cross-referenced to the PR83 source and readback receipts. No retained executable launch or runtime observation was performed for PR84."
+  },
+  "ice_psd_and_cap": {
+    "internal_ice_number_units": "m-3",
+    "public_ni_basis": "number per kg dry air; the KDM6 wrapper multiplies by dry density at input and divides by dry density at output",
+    "ice_lambda_min_m-1": 9080,
+    "dmi": 3,
+    "mui": 0,
+    "ice_density_kg_m-3": 500,
+    "pidni": "pi*500 for d=3, mu=0 generalized-gamma mass coefficient",
+    "entry_cap_internal_number_m-3": 1000000,
+    "entry_cap_source_location": "actual source line 1564; upstream line 762 includes the comment that the bound prevents very large ice number from homogeneous droplet freezing",
+    "pre_reconstruction_consumers": "After entry clamp, den_tmp is set to dry_carrier_density (line 1615); slope_kdm6 computes a clamped lambda and number fall speed without rewriting nci, then kdm6_velocity_rates and the first ice sedimentation updates use the capped nci (lines 1815-2029).",
+    "projection_source_location": "actual source lines 2307-2318 and 4075-4083",
+    "projection_equation": "if derived lambda is at/below 9080, clamp lambda to 9080 and set NI=dry_density*QI*lambda^3/pidni",
+    "entry_cap_is_persistent": false,
+    "lambda_min_is_mass_ceiling": "It is a source PSD slope clamp and implies a maximum representable mean particle mass within that PSD branch, but it is not an independent QI rejection condition.",
+    "threshold_ice_mass_at_cap_kg_m-3": 0.002098274638742861,
+    "threshold_ice_mass_at_cap_g_m-3": 2.098274638742861,
+    "same13_infeasible_active_cells_under_pr83_joint_prior": 2305,
+    "pr83_example_cell_wrf_i_j_k": [
+      195,
+      73,
+      17
+    ],
+    "pr83_example_qice_kg_kg": 0.0033685904927551746,
+    "pr83_example_minimum_internal_ni_m-3": 1095670.895959,
+    "conclusion": "The joint lambda interval plus entry NI cap is a selected PR83 prior domain. The actual KDM6 consumer clips incoming NI then restores the lambda endpoint from QI, allowing post-projection NI above 1e6; this PR83 rejection does not establish native rejection of those QI masses."
+  },
+  "first_process_order_implication": {
+    "finding": "Entry-clipped NI is used by ice number fall/sedimentation before the first mass-based PSD normalization at lines 2307-2318.",
+    "source_compatible_entry_floor_candidate": "max(1e6, smallest REAL32 public NI roundtrip that satisfies REAL64 public PSD minimum and upward-rounded REAL32 internal source floor)",
+    "interpretation": "The implemented guard clips only incoming internal NI to max(1e6, minimal source-PSD-valid public REAL32 NI multiplied by source dry density). This preserves the low-IWC homogeneous-freezing guard while preventing high-IWC source-valid NI from being clipped before sedimentation. It changes no QI, temperature, class, slope endpoint, or process rate.",
+    "constraints": [
+      "Use the source REAL32 arithmetic/order and verify finite/range before use.",
+      "Do not alter QI, temperature, or hydrometeor class.",
+      "Validate against the exact first slope calculation and later lambda reconstruction.",
+      "This is source compatibility, not observation-backed initialization or scientific prior evidence."
+    ],
+    "implementation_authority": "Root authorized the focused native correction. Implemented in the PR84 patch; source/build scope is limited to the entry numerical guard and focused tests."
+  },
+  "number_sources_and_sinks": {
+    "interface_bridge": "actual source lines 974-1010 and 1078-1083",
+    "entry_clamp": "nci(:,:,2) is clipped once at KDM6 entry; no output-side 1e6 clamp found",
+    "additional_sources": [
+      "Cloud-to-ice nucleation number ninuc (line 2342)",
+      "Cloud/rain freezing number sources nfrzdtc and nfrzdtr (line 2372 and following rain-freezing block)",
+      "Deposition nucleation number ninud (cold-process number update)"
+    ],
+    "sinks_and_resets": [
+      "Ice sedimentation (lines 2006-2029)",
+      "Ice autoconversion number nsaut (lines 3268-3269)",
+      "Ice collected by rain, snow, and graupel: nraci, nsaci, ngaci (lines 2760-2807)",
+      "Ice collecting rain removes rain number through niacr (lines 2777-2779)",
+      "Ice melting into cloud transfers its number to cloud and zeros ice number (lines 2145-2150)",
+      "200 um ice-to-snow branch zeros ice number (lines 3847-3851)",
+      "Near-zero cleanup zeros ice number when QI<=qmin (lines 4009-4011)"
+    ]
+  },
+  "ice_to_snow": {
+    "process_rate": {
+      "name": "psaut",
+      "source_lines": "3259-3269",
+      "predicate": "Within supcol>0; QI>0 and NI>0",
+      "qi0": "Piecewise temperature/supcol expression with branch T=255.66 K; implementation multiplies the expression by gas_density",
+      "mass_rate": "min(max(0,alpha1*(QI-qi0)),QI/dt), alpha1=0.005*exp(0.025*supcol)",
+      "assumed_ice_mass_kg_per_particle": "pi*500*(125e-6)^3/6",
+      "number_sink_rate": "min(psaut*dry_density/Miaut,NI/dt)",
+      "mass_ledger": "QI decreases by psaut*dt; QSNOW increases by psaut*dt",
+      "number_ledger": "NI decreases by nsaut*dt; no prognostic snow number receives a number transfer",
+      "enthalpy": "Final temperature expression excludes psaut; transfer is solid ice to solid snow and does not change temperature in this source branch",
+      "initialization_reuse": "Not a static mass threshold. It is a time-dependent tendency subject to thermal, PSD, dt, and coupled-rate constraints."
+    },
+    "size_conversion": {
+      "source_lines": "3842-3851",
+      "predicate": "QI>=qmin, T<273.15 K, diagnosed avedia>=200e-6 m",
+      "ledger": "All QI transfers to QSNOW; QI and NI set to zero; no snow number or temperature change",
+      "diagnosed_mean_diameter": "rslope_i*(Gamma(4)/Gamma(1))^(1/3)",
+      "maximum_given_lambda_min_um": 181.7,
+      "condition_reachable_under_configured_lambda_min": false,
+      "reachability_status": "Algebraic source-based inference only; no runtime call was run."
+    },
+    "other_ice_collectors": {
+      "psaci": "Ice mass/number collection into snow",
+      "pgaci": "Ice mass/number collection into graupel",
+      "praci": "Rain collection of ice; mass is partitioned to snow/graupel through delta3, and ice number is sunk",
+      "initialization_reuse": "Collection tendencies require existing collector states and rates; not unconditional initial redistributions."
+    }
+  },
+  "v2_choices": [
+    {
+      "id": "source_derived_entry_floor",
+      "choice": "Use max(1e6, R32(QN_min*rho)) as the internal entry ceiling. QN_min is the smallest REAL32 public number satisfying both the REAL64 source PSD minimum and R32(QN_min*rho) >= ceil_R32(rho64*public_min64). The source helper uses bounded NEAREST searches and fail-closes on invalid/range conditions.",
+      "tradeoff": "Smallest source-aligned adjustment identified; changes only NI. It requires source-level implementation/review and is not evidence that the selected NI prior is physically observed.",
+      "status": "IMPLEMENTED_AS_FOCUSED_PR84_ENTRY_GUARD; NO_MODEL_RUN"
+    },
+    {
+      "id": "native_psd_projection",
+      "choice": "Represent affected ice with the source lambda endpoint and validate the source-equivalent post-projection state, allowing internal NI above 1e6 after the single entry clamp.",
+      "tradeoff": "Matches actual source moment projection and preserves QI; requires explicit change to PR83's cap-intersection prior contract, but leaves first-sedimentation NI clipping unless source order is changed."
+    },
+    {
+      "id": "strict_prior_gate",
+      "choice": "Retain PR83 joint lambda/cap admission and reject the transaction.",
+      "tradeoff": "Keeps the declared research prior unchanged; label failure as prior-domain infeasibility rather than native KDM6 rejection."
+    },
+    {
+      "id": "separately_justified_mass_transfer",
+      "choice": "Only consider QI-to-QSNOW transfer under independently justified physics and conservation criteria.",
+      "tradeoff": "The 200um criterion is unreachable under the configured lambda bound; psaut is a tendency and cannot be converted into excess-cap transfer without an additional time/state/energy policy."
+    }
+  ],
+  "limitations": [
+    "No full KDM6 call on a weather input or model run was performed; only actual kdm6init parameter capture and exact-helper focused tests ran.",
+    "The observed PR83 transaction was blocked before writing a candidate and native launch; PR84 does not reinterpret it as successful native validation.",
+    "The qi0 formula's dimensional and observational validity was not independently established.",
+    "Graphify is navigation only; source relationships were verified against the external hash-bound KDM6 source and actual source initialization was confirmed with a test-only accessor."
+  ],
+  "native_guard_build": {
+    "receipt_path": "docs/evidence/pr84_native_ice_guard_build_20261013.json",
+    "receipt_sha256": "0040ea6e86c08caac78526fb0db276dc045d150646b5ccb247d660679c3efce1",
+    "patch_path": "patches/pr84_ice_entry_psd_guard.patch",
+    "patch_sha256": "e95d97ec37f3d20367335ff8477e144fb53c8fadb25f5f8b7644a7c246f891ae",
+    "scratch": "/var/tmp/pr84_ice_entry_guard_final_1efgtcsn",
+    "production_source_sha256": "f7fb216c82822162c30148829f207deeee5900e46e01ad9082ac58c802a181d9",
+    "production_object_sha256": "e097b7e70566275d5cd82c211d91e4658091c78ea1b41eb9ffef35bc1159d006",
+    "candidate_archive_sha256": "7c1ea24fb3baa4d7c4d977920378a6c53f929077b07300754f4d3844a2b3e7da",
+    "candidate_executable_sha256": "4912d0f5c6b91d8e57bd0ff91adab2938ed4f74b9e8fa417903202dbf1c9d55a",
+    "archive_member_rows": 373,
+    "archive_order_preserved": true,
+    "changed_archive_members": [
+      "module_mp_kdm6.o"
+    ],
+    "profile": "Pinned Intel 2026.0 ifx audit profile, -O0 KDM6 module compile; unchanged PR81 O3 link profile. This is the active executable binding.",
+    "test_only_actual_kdm6init_accessor": true,
+    "actual_source_parameters": {
+      "pidni_real32": 1570.79638671875,
+      "pidni_bits": "0x44C4597C",
+      "lambda_min_real32": 9080.0,
+      "lambda_min_bits": "0x460DE000",
+      "dmi_real32": 3.0,
+      "dmi_bits": "0x40400000",
+      "mui_real32": 0.0,
+      "mui_bits": "0x00000000",
+      "pi_real32": 3.1415927410125732,
+      "pi_bits": "0x40490FDB",
+      "cmi_real32": 261.7994079589844,
+      "cmi_bits": "0x4382E653",
+      "g1pdimi_real32": 6.0,
+      "g1pmi_real32": 1.0
+    },
+    "probe_results": {
+      "actual_input_wrf_ijk": [
+        195,
+        73,
+        17
+      ],
+      "actual_high_public_ni_min_bits": "0x49C3F90E",
+      "actual_high_internal_cap_bits": "0x4985BFB7",
+      "synthetic_one_ulp_public_ni_min_bits": "0x48B6D4B2",
+      "low_iwc_public_ni_min_bits": "0x454685DA",
+      "low_iwc_internal_cap_bits": "0x49742400",
+      "helper_cases": "PASS O0 and O2; includes invalid and overflow fail-closed cases"
+    },
+    "model_run": false,
+    "focused_probe_receipt_path": "docs/evidence/pr84_native_ice_guard_o0_o2_20261013.json",
+    "focused_probe_receipt_sha256": "d83983360873ca8898220e2799b7869a70aa9b1fecb1d9f0dbb71091b082d9e6",
+    "preprocess_receipt_path": "docs/evidence/pr84_native_ice_preprocess_20261013.json",
+    "preprocess_receipt_sha256": "0c9d1fd664ebf36f6fbf65e5e884f005973a0fb1dea92ecded590953e78a6b93",
+    "preprocessed_production_source_sha256": "aa2b90fb82b3108b5446dbe7ffdb77bcf5403a8f0e7c3e955732d1f801b7f83b",
+    "supplementary_same_source_rebuild": {
+      "receipt_path": "docs/evidence/pr84_native_ice_guard_build_supplement_20261013.json",
+      "receipt_sha256": "e6e7b3a3cc2ac64cec655ede6120f9407241cbd18e7f0e31f948a059be0752a8",
+      "scratch": "/var/tmp/pr84_ice_entry_guard_final_txhbv08k",
+      "production_source_sha256": "f7fb216c82822162c30148829f207deeee5900e46e01ad9082ac58c802a181d9",
+      "production_object_sha256": "4cc2612f97ef61931736c6c075e806cb7e1fb522a92ed2866413f95d48f4fb89",
+      "candidate_archive_sha256": "ca7bc37f82d6454940d2dc6e74d262755d3212df4f1062014a20e6d35c020fd1",
+      "candidate_executable_sha256": "9c59f03e9bd9f7b014aab4edd325ffdd5032d372b46422ebcea07c0c6f63b2ad",
+      "relation": "Same patched source bytes, different scratch build, object, archive, executable, and builder receipt. Supplemental only; active executable binding remains the primary receipt above.",
+      "builder_sha256": "af6a0fc718830fd9d08fae91f4d22f541285fd3130a6116b18ed3d1b5f104162"
+    },
+    "primary_builder_provenance_note": "Primary receipt records builder SHA 69e85ccb5a7678084c97f137143c5b9f5a4f60b854fe99e3c35dba40520a91ba. Those exact builder bytes were not present among retained scratch copies. Current builder SHA af6a0fc718830fd9d08fae91f4d22f541285fd3130a6116b18ed3d1b5f104162 is bound only to the supplementary rebuild, not claimed as the primary builder."
+  }
+}

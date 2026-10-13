@@ -20,6 +20,10 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from run_isolated_native import copy_detached_input, run_isolated
+from pr84_same13_boundary_contract import summarize_boundary
+
+
+EXPECTED_RETAINED_BOUNDARY_SHA256 = "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7"
 
 
 def sha256(path: Path) -> str:
@@ -99,6 +103,63 @@ def write_initialization_receipt(run_dir: Path, record: dict[str, object],
     return path
 
 
+def validate_v2_launch_contract(real_case: Path, executable: Path,
+                                receipt_path: Path, policy_path: Path) -> tuple[dict, dict]:
+    """Preflight the V2 prior, consumer binary, and unchanged real boundary."""
+    from pr83_moment_candidate_readback import (
+        EXPECTED_PR84_POLICY_SHA256, PR84_POLICY_SCHEMA,
+        _validate_policy, validate_candidate_input,
+    )
+
+    policy_path = policy_path.resolve(strict=True)
+    receipt_path = receipt_path.resolve(strict=True)
+    policy = json.loads(policy_path.read_text(encoding="utf-8"))
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    _validate_policy(policy)
+    if policy.get("schema") != PR84_POLICY_SCHEMA:
+        raise ValueError("PR84 launch requires the frozen v2 moment policy")
+    if EXPECTED_PR84_POLICY_SHA256 is None or sha256(policy_path) != EXPECTED_PR84_POLICY_SHA256:
+        raise ValueError("PR84 v2 policy bytes differ from the frozen declaration")
+    if receipt.get("schema") != "pr83_same13_native_moment_prior_receipt_v1":
+        raise ValueError("alternate wrfinput requires a PR83 same13 moment-prior receipt")
+    if receipt.get("status") != "RESEARCH_PRIOR_CREATED":
+        raise ValueError("PR84 alternate wrfinput receipt is not a completed prior")
+    if receipt.get("policy_schema") != PR84_POLICY_SCHEMA:
+        raise ValueError("PR84 prior receipt does not bind the v2 policy schema")
+    if receipt.get("policy_id") != policy.get("policy_id"):
+        raise ValueError("PR84 prior receipt names a different policy")
+    if receipt.get("policy_sha256") != sha256(policy_path):
+        raise ValueError("PR84 prior receipt policy hash mismatch")
+    source = real_case / "wrfinput_d01"
+    if receipt.get("source_input_sha256") != sha256(source):
+        raise ValueError("PR84 prior receipt is not bound to this same13 real input")
+    if Path(receipt["source_input"]).resolve(strict=True) != source.resolve(strict=True):
+        raise ValueError("PR84 prior receipt source path differs from this same13 real input")
+    if receipt.get("output_input") is None:
+        raise ValueError("PR84 prior receipt has no candidate input")
+    candidate = Path(receipt["output_input"]).resolve(strict=True)
+    if receipt.get("output_input_sha256") != sha256(candidate):
+        raise ValueError("PR84 prior input hash differs from its receipt")
+    if receipt.get("all_other_variables_unchanged") is not True or \
+            receipt.get("changed_nonmoment_variables") != []:
+        raise ValueError("PR84 prior does not prove exact nonmoment preservation")
+    source_meta = policy.get("source", {})
+    expected_executable = source_meta.get("runtime_consumer_executable_sha256")
+    if not expected_executable or sha256(executable) != expected_executable:
+        raise ValueError("PR84 runtime executable differs from the policy-bound consumer")
+    boundary = summarize_boundary(real_case / "wrfbdy_d01")
+    if (boundary.get("status") != "PASS_RETAINED_EMPTY_BOUNDARY"
+            or boundary.get("support_pass") is not True
+            or boundary.get("field_count_observed") != 80
+            or not boundary.get("all_boundary_carriers_zero")
+            or boundary.get("sha256_before") != EXPECTED_RETAINED_BOUNDARY_SHA256
+            or boundary.get("sha256_after") != EXPECTED_RETAINED_BOUNDARY_SHA256
+            or boundary.get("read_only_integrity") is not True):
+        raise ValueError("PR84 real wrfbdy does not pass the unchanged 80-field boundary contract")
+    preflight = validate_candidate_input(source, candidate, receipt_path, policy_path)
+    return receipt, {"candidate": preflight, "boundary": boundary}
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--runtime-case", type=Path, required=True,
@@ -152,6 +213,14 @@ def run_initialization(args: argparse.Namespace, *,
                                 flags=re.IGNORECASE | re.MULTILINE)
         if any(value.lower() in rejected for value in configured):
             raise ValueError(f"same13 prior path does not cover enabled {flag}")
+    prevalidated_v2: tuple[dict, dict] | None = None
+    if args.initialized_input_receipt is not None and args.initialized_input_policy is not None:
+        policy_probe = json.loads(args.initialized_input_policy.read_text(encoding="utf-8"))
+        if policy_probe.get("schema") == "pr84_same13_native_moment_policy_v2":
+            prevalidated_v2 = validate_v2_launch_contract(
+                real_case, executable, args.initialized_input_receipt,
+                args.initialized_input_policy,
+            )
     cold_start_scope_guard = {
         "status": "PASS",
         "source_namelist_sha256": source_namelist_sha,
@@ -200,6 +269,7 @@ def run_initialization(args: argparse.Namespace, *,
     prior_receipt_path: Path | None = None
     prior_policy_path: Path | None = None
     prior_receipt: dict[str, object] | None = None
+    prior_policy: dict[str, object] | None = None
     prior_candidate_preflight: dict[str, object] | None = None
     if args.initialized_input_receipt is not None:
         if args.initialized_input_policy is None:
@@ -208,40 +278,45 @@ def run_initialization(args: argparse.Namespace, *,
         prior_receipt = json.loads(prior_receipt_path.read_text())
         prior_policy_path = args.initialized_input_policy.resolve(strict=True)
         prior_policy = json.loads(prior_policy_path.read_text())
-        if prior_receipt.get("schema") != "pr83_same13_native_moment_prior_receipt_v1":
-            raise ValueError("alternate wrfinput requires a PR83 same13 moment-prior receipt")
-        if prior_receipt.get("status") != "RESEARCH_PRIOR_CREATED":
-            raise ValueError("alternate wrfinput receipt is not a completed prior")
-        if prior_receipt.get("source_input_sha256") != sha256(wrfinput_source):
-            raise ValueError("PR83 prior receipt is not bound to this same13 real input")
-        if Path(prior_receipt["source_input"]).resolve(strict=True) != wrfinput_source.resolve(strict=True):
-            raise ValueError("PR83 prior receipt source path differs from this same13 real input")
-        if prior_receipt.get("policy_id") != prior_policy.get("policy_id"):
-            raise ValueError("PR83 prior receipt names a different policy")
-        if prior_receipt.get("policy_sha256") != sha256(prior_policy_path):
-            raise ValueError("PR83 prior receipt policy hash differs from the declared policy")
-        wrfinput_source = Path(prior_receipt["output_input"]).resolve(strict=True)
-        if sha256(wrfinput_source) != prior_receipt.get("output_input_sha256"):
-            raise ValueError("PR83 prior input hash differs from its receipt")
-        if prior_receipt.get("all_other_variables_unchanged") is not True:
-            raise ValueError("PR83 prior receipt does not prove nonmoment field preservation")
-        if prior_receipt.get("changed_nonmoment_variables") != []:
-            raise ValueError("PR83 prior changed nonmoment fields")
-        field_receipts = prior_receipt.get("field_prior_receipts")
-        if not isinstance(field_receipts, dict) or set(field_receipts) != {
-            "QNCLOUD", "QNICE", "QNRAIN", "QIB"
-        }:
-            raise ValueError("PR83 prior receipt does not cover every declared Q/N/B field")
-        for name, result in field_receipts.items():
-            if (not isinstance(result, dict)
-                    or result.get("positive_mass_without_representable_moment") != 0):
-                raise ValueError(f"PR83 prior receipt leaves unresolved positive mass: {name}")
-        from pr83_moment_candidate_readback import validate_candidate_input
+        if prevalidated_v2 is not None:
+            prior_receipt = prevalidated_v2[0]
+            prior_candidate_preflight = prevalidated_v2[1]["candidate"]
+            wrfinput_source = Path(prior_receipt["output_input"]).resolve(strict=True)
+        else:
+            if prior_receipt.get("schema") != "pr83_same13_native_moment_prior_receipt_v1":
+                raise ValueError("alternate wrfinput requires a PR83 same13 moment-prior receipt")
+            if prior_receipt.get("status") != "RESEARCH_PRIOR_CREATED":
+                raise ValueError("alternate wrfinput receipt is not a completed prior")
+            if prior_receipt.get("source_input_sha256") != sha256(wrfinput_source):
+                raise ValueError("PR83 prior receipt is not bound to this same13 real input")
+            if Path(prior_receipt["source_input"]).resolve(strict=True) != wrfinput_source.resolve(strict=True):
+                raise ValueError("PR83 prior receipt source path differs from this same13 real input")
+            if prior_receipt.get("policy_id") != prior_policy.get("policy_id"):
+                raise ValueError("PR83 prior receipt names a different policy")
+            if prior_receipt.get("policy_sha256") != sha256(prior_policy_path):
+                raise ValueError("PR83 prior receipt policy hash differs from the declared policy")
+            wrfinput_source = Path(prior_receipt["output_input"]).resolve(strict=True)
+            if sha256(wrfinput_source) != prior_receipt.get("output_input_sha256"):
+                raise ValueError("PR83 prior input hash differs from its receipt")
+            if prior_receipt.get("all_other_variables_unchanged") is not True:
+                raise ValueError("PR83 prior receipt does not prove nonmoment field preservation")
+            if prior_receipt.get("changed_nonmoment_variables") != []:
+                raise ValueError("PR83 prior changed nonmoment fields")
+            field_receipts = prior_receipt.get("field_prior_receipts")
+            if not isinstance(field_receipts, dict) or set(field_receipts) != {
+                "QNCLOUD", "QNICE", "QNRAIN", "QIB"
+            }:
+                raise ValueError("PR83 prior receipt does not cover every declared Q/N/B field")
+            for name, result in field_receipts.items():
+                if (not isinstance(result, dict)
+                        or result.get("positive_mass_without_representable_moment") != 0):
+                    raise ValueError(f"PR83 prior receipt leaves unresolved positive mass: {name}")
+            from pr83_moment_candidate_readback import validate_candidate_input
 
-        prior_candidate_preflight = validate_candidate_input(
-            real_case / "wrfinput_d01", wrfinput_source,
-            prior_receipt_path, prior_policy_path,
-        )
+            prior_candidate_preflight = validate_candidate_input(
+                real_case / "wrfinput_d01", wrfinput_source,
+                prior_receipt_path, prior_policy_path,
+            )
     candidate_inputs = {
         "wrfinput_d01": wrfinput_source,
         "wrfbdy_d01": real_case / "wrfbdy_d01",
@@ -254,7 +329,7 @@ def run_initialization(args: argparse.Namespace, *,
 
     if prior_receipt_path is None and sha256(run_dir / "wrfinput_d01") != required_baseline_input:
         raise ValueError(f"{control_role} real wrfinput hash differs from its reviewed artifact")
-    if sha256(run_dir / "wrfbdy_d01") != "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7":
+    if sha256(run_dir / "wrfbdy_d01") != EXPECTED_RETAINED_BOUNDARY_SHA256:
         raise ValueError("same-13 real wrfbdy hash differs from reviewed artifact")
 
     inputs = [path for path in sorted(run_dir.iterdir()) if path.is_file()]
@@ -293,17 +368,32 @@ def run_initialization(args: argparse.Namespace, *,
         "intel_setvars_sha256": sha256(Path("/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh")),
         "mpi_vars_sha256": sha256(Path("/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh")),
         "wrf_static_runtime_library": "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
-        "native_source_component": "retained PR81 nine-object WRF v4.8 diagnostic build; not the WRF v4.6 real.exe",
+        "native_source_component": (
+            "PR84 KDM6 source-PSD entry-guard build derived from the retained PR81 nine-object WRF v4.8 diagnostic build"
+            if prior_policy is not None and prior_policy.get("schema") == "pr84_same13_native_moment_policy_v2"
+            else "retained PR81 nine-object WRF v4.8 diagnostic build; not the WRF v4.6 real.exe"
+        ),
         "candidate_real_directory": str(real_case),
-        "initialization_control": ("MODE_OFF mass-only native control; no PR83 moment prior was applied"
-                                   if control_role == "MODE_OFF_MASS_ONLY" else None),
-        "moment_prior_status": "NOT_APPLIED" if control_role == "MODE_OFF_MASS_ONLY" else None,
+        "initialization_control": (
+            "MODE_OFF mass-only native control; no moment prior was applied"
+            if control_role == "MODE_OFF_MASS_ONLY" and prior_receipt_path is None else
+            "same13 native initialization with a declared moment prior"
+            if prior_receipt_path is not None else None
+        ),
+        "moment_prior_status": (
+            "NOT_APPLIED" if control_role == "MODE_OFF_MASS_ONLY" and prior_receipt_path is None
+            else "APPLIED_RESEARCH_PRIOR" if prior_receipt_path is not None else None
+        ),
         "native_off_chain_sources": ({name: {"path": str(path), "sha256": sha256(path)}
                                       for name, path in (chain_artifacts or {}).items()}
                                      if control_role == "MODE_OFF_MASS_ONLY" else None),
         "candidate_input_prior_receipt": str(prior_receipt_path) if prior_receipt_path else None,
         "candidate_input_prior_receipt_sha256": sha256(prior_receipt_path) if prior_receipt_path else None,
         "candidate_input_prior_status": prior_receipt.get("status") if prior_receipt_path else None,
+        "candidate_input_source_role": prior_receipt.get("source_input_role") if prior_receipt_path else None,
+        "candidate_input_policy_schema": prior_policy.get("schema") if prior_policy_path else None,
+        "candidate_input_boundary_preflight": (prevalidated_v2[1]["boundary"]
+                                               if prevalidated_v2 is not None else None),
         "candidate_input_prelaunch_validation": prior_candidate_preflight,
         "candidate_wrfinput_sha256": sha256(run_dir / "wrfinput_d01"),
         "candidate_wrfbdy_sha256": sha256(run_dir / "wrfbdy_d01"),

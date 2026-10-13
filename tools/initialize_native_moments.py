@@ -30,6 +30,12 @@ EXPECTED_VALID_TIME = "2026-08-16_12:00:00"
 PR83_EXPECTED_POLICY_SHA256 = "dde8df58f840d2fb11579876450749964ea2a54e36a68856c92bc979f46bae2a"
 PR83_EXPECTED_INPUT_SHA256 = "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb"
 PR83_EXPECTED_VALID_TIME = "2026-08-16_13:00:00"
+PR84_EXPECTED_POLICY_SHA256 = "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92"
+PR84_EXPECTED_SOURCE_INPUTS = {
+    "OFF": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+    "COUPLED": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+}
+PR84_POLICY_SCHEMA = "pr84_same13_native_moment_policy_v2"
 PR83_BOUND_SOURCE = (
     "Selected KDM6 source PSD parameterization and source-exact same-time WRF AL+ALB density; "
     "see docs/PR83_NATIVE_MOMENT_POLICY_20261013.json"
@@ -193,6 +199,12 @@ def _validate_same13_policy_file(path: Path) -> dict[str, Any]:
         raise InitializationError(f"INVALID_POLICY_FILE:{error}") from error
     if not isinstance(policy, dict):
         raise InitializationError("POLICY_ROOT_MUST_BE_OBJECT")
+    if policy.get("schema") == PR84_POLICY_SCHEMA:
+        if file_sha256(path) != PR84_EXPECTED_POLICY_SHA256:
+            raise InitializationError("PR84_POLICY_HASH_MISMATCH")
+        _validate_pr84_policy_contract(policy)
+        _validate_pr84_evidence_bindings(policy)
+        return policy
     if (policy.get("schema") != "pr83_same13_native_moment_policy_v1"
             or policy.get("policy_id") != "SAME13_KDM6_NATIVE_MOMENT_PRIOR_20261013"
             or policy.get("declared_before_experiment") is not True):
@@ -235,6 +247,203 @@ def _validate_same13_policy_file(path: Path) -> dict[str, Any]:
             raise InitializationError(f"WRF_SOURCE_HASH_MISMATCH:{path_key}")
     _check_same13_policy_implementation(policy)
     return policy
+
+
+def _validate_pr84_policy_contract(policy: dict[str, Any]) -> None:
+    """Validate the v2 scope and exact source pair without changing frozen v1."""
+    if (policy.get("policy_id") != "SAME13_KDM6_NATIVE_MOMENT_PRIOR_20261013_V2"
+            or policy.get("declared_before_experiment") is not True):
+        raise InitializationError("UNSUPPORTED_OR_UNDECLARED_PR84_POLICY")
+    prior = policy.get("prior", {})
+    if prior.get("active_domain_mode") != "FULL_NATIVE_HORIZONTAL":
+        raise InitializationError("PR84_ACTIVE_DOMAIN_MODE_MISMATCH")
+    species = policy.get("species", {})
+    ice = species.get("QICE", {})
+    if ice.get("internal_number_cap_mode") != "SOURCE_PSD_COMPATIBLE_ENTRY_GUARD":
+        raise InitializationError("PR84_QICE_CAP_MODE_MISMATCH")
+    preflight = policy.get("preflight", {})
+    authorized = preflight.get("authorized_source_inputs")
+    if (not isinstance(authorized, list) or len(authorized) != 2
+            or any(not isinstance(entry, dict) or set(entry) != {"role", "sha256"}
+                   for entry in authorized)):
+        raise InitializationError("PR84_SOURCE_PAIR_MISSING")
+    observed = {entry["role"]: entry["sha256"] for entry in authorized}
+    if observed != PR84_EXPECTED_SOURCE_INPUTS:
+        raise InitializationError("PR84_SOURCE_PAIR_MISMATCH")
+    if (preflight.get("expected_source_valid_time") != PR83_EXPECTED_VALID_TIME
+            or preflight.get("expected_input_spatial_shape_bottom_top_south_north_west_east")
+            != [39, 282, 234]):
+        raise InitializationError("PR84_INPUT_IDENTITY_MISMATCH")
+    required_values = (
+        ice.get("source_pidni_binary32_value"),
+        ice.get("source_pidni_binary32_hex"),
+        species.get("QICE", {}).get("lambda_min_m-1"),
+    )
+    if any(value is None for value in required_values):
+        raise InitializationError("PR84_QICE_SOURCE_PARAMETERS_MISSING")
+    pidni_value, pidni_hex, lambda_min = required_values
+    if (not math.isfinite(float(pidni_value)) or float(pidni_value) <= 0.0
+            or not isinstance(pidni_hex, str) or not math.isfinite(float(lambda_min))
+            or float(lambda_min) <= 0.0):
+        raise InitializationError("PR84_QICE_SOURCE_PARAMETERS_INVALID")
+    try:
+        declared_bits = int(pidni_hex.lower().removeprefix("0x"), 16)
+    except ValueError as error:
+        raise InitializationError("PR84_QICE_PIDNI_HEX_INVALID") from error
+    actual_bits = int(np.asarray(np.float32(pidni_value)).view(np.uint32))
+    if declared_bits != actual_bits:
+        raise InitializationError("PR84_QICE_PIDNI_VALUE_HEX_MISMATCH")
+    if ice.get("shape_exponent_d") != 3:
+        raise InitializationError("PR84_QICE_SHAPE_EXPONENT_MISMATCH")
+    try:
+        _check_same13_policy_implementation(policy)
+    except InitializationError as error:
+        raise InitializationError(f"PR84_SPECIES_IMPLEMENTATION_MISMATCH:{error}") from error
+
+
+def _validate_pr84_evidence_bindings(policy: dict[str, Any]) -> None:
+    """Verify fresh retained-consumer, source-parameter, and density bindings."""
+    source = policy["source"]
+    for path_key, hash_key in (
+        ("kdm6_source_path", "kdm6_source_sha256"),
+        ("upstream_formula_comparison_path", "upstream_formula_comparison_sha256"),
+        ("model_constants_path", "model_constants_sha256"),
+        ("driver_path", "driver_sha256"),
+        ("runtime_consumer_source_path", "runtime_consumer_source_sha256"),
+        ("runtime_consumer_executable_path", "runtime_consumer_executable_sha256"),
+        ("runtime_consumer_archive_path", "runtime_consumer_archive_sha256"),
+        ("runtime_consumer_build_receipt_path", "runtime_consumer_build_receipt_sha256"),
+    ):
+        if file_sha256(Path(source[path_key])) != source[hash_key]:
+            raise InitializationError(f"PR84_MODEL_SOURCE_HASH_MISMATCH:{path_key}")
+    member = subprocess.run(
+        ["ar", "p", source["runtime_consumer_archive_path"],
+         source["runtime_consumer_object_member"]],
+        check=True, capture_output=True,
+    ).stdout
+    if hashlib.sha256(member).hexdigest() != source["runtime_consumer_object_member_sha256"]:
+        raise InitializationError("PR84_MODEL_SOURCE_HASH_MISMATCH:runtime_consumer_object_member")
+    if source.get("runtime_consumer_readback_status") != "NOT_RUN":
+        raise InitializationError("PR84_RUNTIME_READBACK_STATUS_MISMATCH")
+    native_build = policy["native_build"]
+    if file_sha256(Path(native_build["receipt_path"])) != native_build["receipt_sha256"]:
+        raise InitializationError("PR84_NATIVE_BUILD_RECEIPT_HASH_MISMATCH")
+    if file_sha256(Path(native_build["actual_parameter_dump_path"])) != native_build[
+            "actual_parameter_dump_sha256"]:
+        raise InitializationError("PR84_PARAMETER_DUMP_HASH_MISMATCH")
+    if file_sha256(Path(native_build["profile_path"])) != native_build["profile_sha256"]:
+        raise InitializationError("PR84_TOOLCHAIN_PROFILE_HASH_MISMATCH")
+    try:
+        receipt = json.loads(Path(native_build["receipt_path"]).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise InitializationError(f"PR84_INVALID_NATIVE_BUILD_RECEIPT:{error}") from error
+    if (receipt.get("schema") != native_build["schema"]
+            or receipt.get("model_run") is not False
+            or receipt.get("production_source_sha256") != source["runtime_consumer_source_sha256"]
+            or receipt.get("candidate_archive_sha256") != source["runtime_consumer_archive_sha256"]
+            or receipt.get("production_executable_sha256")
+            != source["runtime_consumer_executable_sha256"]
+            or receipt.get("production_object_sha256")
+            != source["runtime_consumer_object_member_sha256"]
+            or receipt.get("production_link_dependencies_sha256", {}).get(
+                source["runtime_consumer_archive_path"]
+            ) != source["runtime_consumer_archive_sha256"]):
+        raise InitializationError("PR84_NATIVE_BUILD_IDENTITY_MISMATCH")
+    parameters = receipt.get("test_accessor", {}).get("actual_kdm6init_output", {})
+    source_parameters = receipt.get("native_source_parameters", {})
+    declared_parameters = native_build.get("actual_kdm6init_output", {})
+    for parameter in ("pidni", "lambda_min", "dmi", "mui"):
+        observed = parameters.get(parameter, {})
+        source_observed = source_parameters.get(parameter, {})
+        declared = declared_parameters.get(parameter, {})
+        if observed != declared or source_observed != declared:
+            raise InitializationError(f"PR84_KDM6_PARAMETER_MISMATCH:{parameter}")
+    ice = policy["species"]["QICE"]
+    if (ice["source_pidni_binary32_value"] != parameters["pidni"]["real32"]
+            or ice["source_pidni_binary32_hex"].lower()
+            != parameters["pidni"]["bits"].lower()
+            or ice["lambda_min_m-1"] != parameters["lambda_min"]["real32"]
+            or ice["shape_exponent_d"] != int(parameters["dmi"]["real32"])
+            or ice["source_shape_parameter_mu"] != int(parameters["mui"]["real32"])):
+        raise InitializationError("PR84_QICE_POLICY_PARAMETER_BINDING_MISMATCH")
+    dump_text = Path(native_build["actual_parameter_dump_path"]).read_text(encoding="utf-8")
+    for name, parameter in (("PIDNI", "pidni"), ("LAMBDA_MIN", "lambda_min"),
+                            ("DMI", "dmi"), ("MUI", "mui")):
+        bits = parameters[parameter]["bits"].removeprefix("0x").upper()
+        if f"PR84_{name}|" not in dump_text or f"|{bits}" not in dump_text:
+            raise InitializationError(f"PR84_PARAMETER_DUMP_CONTENT_MISMATCH:{name}")
+    density_source = policy["density_source"]
+    for path_key, hash_key in (
+        ("wrf_source_start_path", "wrf_source_start_sha256"),
+        ("wrf_source_density_path", "wrf_source_density_sha256"),
+    ):
+        if file_sha256(Path(density_source[path_key])) != density_source[hash_key]:
+            raise InitializationError(f"PR84_WRF_SOURCE_HASH_MISMATCH:{path_key}")
+
+
+def _pr84_float32_ceiling(values: np.ndarray) -> np.ndarray:
+    """Return the least finite REAL32 value not below each REAL64 bound."""
+    bounds = np.asarray(values, dtype=np.float64)
+    if not np.all(np.isfinite(bounds)) or np.any(bounds < 0.0):
+        raise InitializationError("PR84_INVALID_PUBLIC_NUMBER_FLOOR")
+    with np.errstate(over="ignore", invalid="ignore"):
+        rounded = bounds.astype(np.float32)
+    rounded_up = rounded.astype(np.float64) < bounds
+    rounded[rounded_up] = np.nextafter(
+        rounded[rounded_up], np.float32(np.inf), dtype=np.float32
+    )
+    if not np.all(np.isfinite(rounded)):
+        raise InitializationError("PR84_PUBLIC_NUMBER_FLOOR_OVERFLOW")
+    predecessor = np.nextafter(rounded, np.float32(-np.inf), dtype=np.float32)
+    if np.any(predecessor.astype(np.float64) >= bounds):
+        raise InitializationError("PR84_NONMINIMAL_PUBLIC_NUMBER_FLOOR")
+    if np.any(rounded.astype(np.float64) < bounds):
+        raise InitializationError("PR84_PUBLIC_NUMBER_FLOOR_ROUNDING_FAILURE")
+    return rounded
+
+
+def _pr84_qice_entry_guard(
+    mass: np.ndarray, density: np.ndarray, *, pidni: float, lambda_min: float
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Build minimal REAL32 QNICE meeting the public and internal PSD floors."""
+    qice = np.asarray(mass, dtype=np.float64)
+    rho = np.asarray(density, dtype=np.float32)
+    if qice.shape != rho.shape:
+        raise InitializationError("PR84_QICE_GUARD_SHAPE_MISMATCH")
+    if (not np.all(np.isfinite(qice)) or np.any(qice < 0.0)
+            or not np.all(np.isfinite(rho)) or np.any(rho <= 0.0)
+            or not math.isfinite(pidni) or pidni <= 0.0
+            or not math.isfinite(lambda_min) or lambda_min <= 0.0):
+        raise InitializationError("PR84_INVALID_QICE_GUARD_INPUT")
+    # QNICE is per kg dry air. Keep this source-parameter bound in REAL64;
+    # only the stored public moment and native multiplication are REAL32.
+    qn_floor_real64 = qice * (float(lambda_min) ** 3) / float(pidni)
+    qn_floor = _pr84_float32_ceiling(qn_floor_real64)
+    internal_floor_real64 = rho.astype(np.float64) * qn_floor_real64
+    internal_floor = _pr84_float32_ceiling(internal_floor_real64)
+    reachable_number = np.multiply(qn_floor, rho, dtype=np.float32)
+    for _ in range(8):
+        shortfall = reachable_number < internal_floor
+        if not np.any(shortfall):
+            break
+        qn_floor[shortfall] = np.nextafter(
+            qn_floor[shortfall], np.float32(np.inf), dtype=np.float32
+        )
+        reachable_number[shortfall] = np.multiply(
+            qn_floor[shortfall], rho[shortfall], dtype=np.float32
+        )
+    if np.any(reachable_number < internal_floor):
+        raise InitializationError("PR84_QICE_INTERNAL_FLOOR_UNREPRESENTABLE")
+    if not np.all(np.isfinite(reachable_number)):
+        raise InitializationError("PR84_QICE_INTERNAL_CAP_OVERFLOW")
+    predecessor = np.nextafter(qn_floor, np.float32(-np.inf), dtype=np.float32)
+    predecessor_number = np.multiply(predecessor, rho, dtype=np.float32)
+    nonminimal = ((predecessor.astype(np.float64) >= qn_floor_real64)
+                  & (predecessor_number >= internal_floor))
+    if np.any(nonminimal):
+        raise InitializationError("PR84_QICE_PUBLIC_NUMBER_FLOOR_NONMINIMAL")
+    cap = np.maximum(np.float32(1.0e6), reachable_number).astype(np.float32)
+    return qn_floor, internal_floor, cap
 
 
 def _check_same13_policy_implementation(policy: dict[str, Any]) -> None:
@@ -336,6 +545,13 @@ def _same13_dry_density(dataset: Dataset) -> np.ndarray:
     return density
 
 
+def _same13_active_slice(policy: dict[str, Any]) -> tuple[slice, slice, slice]:
+    if (policy.get("schema") == PR84_POLICY_SCHEMA
+            and policy["prior"].get("active_domain_mode") == "FULL_NATIVE_HORIZONTAL"):
+        return (slice(None), slice(None), slice(None))
+    return (slice(None), slice(1, -1), slice(1, -1))
+
+
 def _check_same13_input_metadata(dataset: Dataset) -> None:
     if "Time" not in dataset.dimensions or len(dataset.dimensions["Time"]) != 1:
         raise InitializationError("EXPECTED_ONE_TIME_RECORD")
@@ -363,9 +579,11 @@ def _check_same13_input_metadata(dataset: Dataset) -> None:
 
 
 def _same13_preflight(
-    arrays: dict[str, np.ndarray], density: np.ndarray
+    arrays: dict[str, np.ndarray], density: np.ndarray,
+    policy: dict[str, Any] | None = None,
 ) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], dict[str, Any]]:
-    active_slice = (slice(None), slice(1, -1), slice(1, -1))
+    is_pr84 = policy is not None and policy.get("schema") == PR84_POLICY_SCHEMA
+    active_slice = _same13_active_slice(policy or {})
     active_density = density[active_slice]
     updated: dict[str, np.ndarray] = {}
     masks: dict[str, np.ndarray] = {}
@@ -376,12 +594,36 @@ def _same13_preflight(
         existing = arrays[spec["moment"]][active_slice]
         if np.any((mass == 0.0) & (existing != 0.0)):
             raise InitializationError(f"PR83_CONFLICTING_ZERO_MASS:{mass_name}")
+        pidn = spec["pidn"]
+        lambda_min = spec["lambda_min"]
+        internal_cap: float | np.ndarray = spec["internal_cap"]
+        qice_floor = None
+        preparation_cap = internal_cap
+        if is_pr84 and mass_name == "QICE":
+            ice_policy = policy["species"]["QICE"]
+            pidn = float(np.float32(ice_policy["source_pidni_binary32_value"]))
+            lambda_min = float(ice_policy["lambda_min_m-1"])
+            qice_floor, _, internal_cap = _pr84_qice_entry_guard(
+                mass, active_density, pidni=pidn, lambda_min=lambda_min
+            )
+            # Keep the existing midpoint/cap path for low ice. High-mass cells
+            # are replaced below by the exact minimum PSD-compatible REAL32 QN.
+            preparation_cap = spec["internal_cap"]
         result, counts = _prepare_moments(
             mass, existing, active_density,
-            threshold=0.0, lambda_min=spec["lambda_min"],
+            threshold=0.0, lambda_min=lambda_min,
             lambda_max=spec["lambda_max"], power=spec["power"],
-            pidn=spec["pidn"], internal_cap=spec["internal_cap"],
+            pidn=pidn, internal_cap=preparation_cap,
         )
+        if qice_floor is not None:
+            high_ice_new = ((mass > 0.0) & (existing == 0.0)
+                            & (internal_cap > np.float32(1.0e6)))
+            result[high_ice_new] = qice_floor[high_ice_new]
+            eligible = (mass > 0.0) & (existing == 0.0)
+            counts["initialized_cells"] = int(np.count_nonzero(eligible & (result != 0.0)))
+            counts["left_unchanged_infeasible_cells"] = int(
+                np.count_nonzero(eligible & (result == 0.0))
+            )
         positive_mass_missing = (mass > 0.0) & (result == 0.0)
         infeasible_count = int(np.count_nonzero(positive_mass_missing))
         if infeasible_count:
@@ -390,7 +632,7 @@ def _same13_preflight(
             k, j, i = (int(value) for value in first)
             minimum_internal_numbers = (
                 mass[positive_mass_missing] * active_density[positive_mass_missing]
-                * spec["lambda_min"] ** spec["power"] / spec["pidn"]
+                * lambda_min ** spec["power"] / pidn
             )
             maximum_at = locations[int(np.argmax(minimum_internal_numbers))]
             max_k, max_j, max_i = (int(value) for value in maximum_at)
@@ -423,18 +665,45 @@ def _same13_preflight(
             "positive_mass_without_representable_moment": infeasible_count,
             "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion",
         }
+        if is_pr84 and mass_name == "QICE":
+            reports[spec["moment"]].update({
+                "internal_number_cap_mode": "SOURCE_PSD_COMPATIBLE_ENTRY_GUARD",
+                "low_ice_internal_number_cap_m-3": 1.0e6,
+                "source_lambda_min_m-1": lambda_min,
+                "source_pidni_binary32": float(np.float32(pidn)),
+                "source_pidni_binary32_hex": f"0x{int(np.asarray(np.float32(pidn)).view(np.uint32)):08x}",
+                "high_mass_minimum_qnice_cells": int(np.count_nonzero(
+                    (mass > 0.0) & (existing == 0.0)
+                    & (internal_cap > np.float32(1.0e6))
+                )),
+                "high_mass_qnice_policy": (
+                    "least REAL32 public number at or above the exact REAL64 "
+                    "source lambda_min PSD bound"
+                ),
+                "entry_cap_formula": (
+                    "max(1e6, REAL32(QNICE_minimum_REAL32 * dry_density_REAL32)); "
+                    "QNICE satisfies public and REAL32 internal PSD floors"
+                ),
+            })
         if not infeasible_count:
+            m_min = spec["m_min"]
+            m_max = spec["m_max"]
+            if is_pr84 and mass_name == "QICE":
+                m_min = pidn / spec["lambda_max"] ** spec["power"]
+                m_max = pidn / lambda_min ** spec["power"]
             reports[spec["moment"]]["preflight"] = _validate_mass_prior(
                 mass, result, mass > 0.0,
-                m_min=spec["m_min"], m_max=spec["m_max"],
-                bound_source=PR83_BOUND_SOURCE,
+                m_min=m_min, m_max=m_max,
+                bound_source=("PR84 exact retained KDM6 REAL32 PIDNI and lambda bounds"
+                              if is_pr84 and mass_name == "QICE" else PR83_BOUND_SOURCE),
             )
             internal_number = result.astype(np.float32) * active_density.astype(np.float32)
             if np.any((mass > 0.0) & (internal_number == 0.0)):
                 raise InitializationError(
                     f"PR83_PRIOR_INTERNAL_NUMBER_UNREPRESENTABLE:{spec['moment']}"
                 )
-            if np.any(internal_number > np.float32(spec["internal_cap"])):
+            applicable_cap = internal_cap if isinstance(internal_cap, np.ndarray) else np.float32(internal_cap)
+            if np.any(internal_number > applicable_cap):
                 raise InitializationError(
                     f"PR83_EXISTING_MOMENT_EXCEEDS_SOURCE_CAP:{spec['moment']}"
                 )
@@ -477,7 +746,8 @@ def _same13_preflight(
             report["preflight_outcome"] = "PROPOSED_ONLY_GLOBAL_REJECTION"
             report["count_semantics"] = "proposed preflight only; complete initialization rejected"
         raise InitializationError(
-            "PR83_SOURCE_CAP_INFEASIBLE:" + ";".join(blockers),
+            ("PR84_SOURCE_CAP_INFEASIBLE:" if is_pr84 else
+             "PR83_SOURCE_CAP_INFEASIBLE:") + ";".join(blockers),
             diagnostics=reports,
         )
     return updated, masks, reports
@@ -493,12 +763,14 @@ def _same13_evidence_hashes(
         "initializer": file_sha256(initializer_path),
     }
     source_metadata = policy["source"]
-    for key in (
+    source_keys = [
         "kdm6_source_path", "upstream_formula_comparison_path", "model_constants_path",
         "driver_path", "runtime_consumer_source_path", "runtime_consumer_executable_path",
         "runtime_consumer_archive_path", "runtime_consumer_build_receipt_path",
-        "runtime_consumer_readback_receipt_path",
-    ):
+    ]
+    if policy.get("schema") != PR84_POLICY_SCHEMA:
+        source_keys.append("runtime_consumer_readback_receipt_path")
+    for key in source_keys:
         hashes[key] = file_sha256(Path(source_metadata[key]))
     density_source = policy["density_source"]
     for key in ("wrf_source_start_path", "wrf_source_density_path"):
@@ -528,11 +800,19 @@ def initialize_same13_copy(
             or receipt_file.exists()):
         raise InitializationError("OUTPUT_AND_RECEIPT_MUST_BE_NEW_PATHS")
     policy = _validate_same13_policy_file(policy_file)
+    is_pr84 = policy.get("schema") == PR84_POLICY_SCHEMA
     policy_hash = file_sha256(policy_file)
     initializer_path = Path(__file__).resolve()
     initializer_hash = file_sha256(initializer_path)
     source_hash = file_sha256(source)
-    if source_hash != PR83_EXPECTED_INPUT_SHA256:
+    if is_pr84:
+        if source_hash not in PR84_EXPECTED_SOURCE_INPUTS.values():
+            raise InitializationError("PR84_SOURCE_INPUT_HASH_MISMATCH")
+        source_role = next(
+            role for role, digest in PR84_EXPECTED_SOURCE_INPUTS.items()
+            if digest == source_hash
+        )
+    elif source_hash != PR83_EXPECTED_INPUT_SHA256:
         raise InitializationError("PR83_SOURCE_INPUT_HASH_MISMATCH")
     evidence_hashes_before = _same13_evidence_hashes(
         source, policy_file, initializer_path, policy
@@ -570,12 +850,15 @@ def initialize_same13_copy(
             for name in sorted(required)
         }
 
+    active_slice = _same13_active_slice(policy)
     try:
-        updated, initialized_masks, field_reports = _same13_preflight(arrays, density)
+        updated, initialized_masks, field_reports = _same13_preflight(arrays, density, policy)
     except InitializationError as error:
         # A physical infeasibility is a completed preflight result. Retain an
         # explicit receipt while leaving both the source and output untouched.
-        if not str(error).startswith("PR83_SOURCE_CAP_INFEASIBLE:"):
+        cap_failure_prefix = ("PR84_SOURCE_CAP_INFEASIBLE:" if is_pr84 else
+                              "PR83_SOURCE_CAP_INFEASIBLE:")
+        if not str(error).startswith(cap_failure_prefix):
             raise
         evidence_hashes_after = _same13_evidence_hashes(
             source, policy_file, initializer_path, policy
@@ -612,16 +895,19 @@ def initialize_same13_copy(
             "source_density": {
                 "formula": "real32 reciprocal of real32 AL + ALB",
                 "basis": "dry_air",
-                "active_min_kg_m-3": float(np.min(density[:, 1:-1, 1:-1])),
-                "active_max_kg_m-3": float(np.max(density[:, 1:-1, 1:-1])),
+                "active_min_kg_m-3": float(np.min(density[active_slice])),
+                "active_max_kg_m-3": float(np.max(density[active_slice])),
             },
             "same13_input_positive_mass_counts": {
-                name: int(np.count_nonzero(arrays[name][:, 1:-1, 1:-1] > 0.0)
+                name: int(np.count_nonzero(arrays[name][active_slice] > 0.0)
                           ) for name in ("QCLOUD", "QICE", "QRAIN", "QGRAUP")
             },
             "committed_initialized_cells": 0,
             "limited_scope": "No complete prior was written because at least one positive mass has no moment satisfying both source PSD bounds and the native cap.",
         }
+        if is_pr84:
+            receipt["policy_schema"] = PR84_POLICY_SCHEMA
+            receipt["source_input_role"] = source_role
         _write_receipt(receipt_file, receipt)
         return receipt
 
@@ -633,7 +919,6 @@ def initialize_same13_copy(
     temporary = Path(temporary_name)
     try:
         shutil.copy2(source, temporary)
-        active_slice = (slice(None), slice(1, -1), slice(1, -1))
         with Dataset(temporary, "r+") as candidate:
             for moment, values in updated.items():
                 full = np.array(candidate.variables[moment][0], copy=True)
@@ -666,11 +951,29 @@ def initialize_same13_copy(
             for mass_name, spec in SPECIES.items():
                 stored = _read_unmasked(candidate.variables[spec["moment"]], spec["moment"])
                 active_mass = arrays[mass_name][active_slice].astype(np.float64)
+                m_min, m_max = spec["m_min"], spec["m_max"]
+                bound_source = PR83_BOUND_SOURCE
+                if is_pr84 and mass_name == "QICE":
+                    ice_policy = policy["species"]["QICE"]
+                    pidni = float(np.float32(ice_policy["source_pidni_binary32_value"]))
+                    lambda_min = float(ice_policy["lambda_min_m-1"])
+                    m_min = pidni / spec["lambda_max"] ** spec["power"]
+                    m_max = pidni / lambda_min ** spec["power"]
+                    bound_source = "PR84 exact retained KDM6 REAL32 PIDNI and lambda bounds"
                 _validate_mass_prior(
                     active_mass, stored[active_slice], active_mass > 0.0,
-                    m_min=spec["m_min"], m_max=spec["m_max"],
-                    bound_source=PR83_BOUND_SOURCE,
+                    m_min=m_min, m_max=m_max,
+                    bound_source=bound_source,
                 )
+                if is_pr84 and mass_name == "QICE":
+                    _, _, qice_cap = _pr84_qice_entry_guard(
+                        active_mass, density[active_slice], pidni=pidni,
+                        lambda_min=lambda_min,
+                    )
+                    internal_number = (stored[active_slice].astype(np.float32)
+                                       * density[active_slice].astype(np.float32))
+                    if np.any(internal_number > qice_cap):
+                        raise InitializationError("PR84_QICE_READBACK_CAP_VIOLATION")
             graupel_mass = arrays["QGRAUP"][active_slice].astype(np.float64)
             volume = _read_unmasked(candidate.variables["QIB"], "QIB")[active_slice]
             _validate_bulk_prior(
@@ -708,8 +1011,8 @@ def initialize_same13_copy(
         "source_density": {
             "formula": "real32 reciprocal of real32 AL + ALB",
             "basis": "dry_air",
-            "active_min_kg_m-3": float(np.min(density[:, 1:-1, 1:-1])),
-            "active_max_kg_m-3": float(np.max(density[:, 1:-1, 1:-1])),
+                "active_min_kg_m-3": float(np.min(density[active_slice])),
+                "active_max_kg_m-3": float(np.max(density[active_slice])),
         },
         "field_prior_receipts": field_reports,
         "committed_initialized_cells": {
@@ -720,6 +1023,9 @@ def initialize_same13_copy(
         "changed_nonmoment_variables": [],
         "limited_scope": "Explicit same-13UTC research PSD/density prior only; no observation recovery, forecast acceptance, or operational authority is implied.",
     }
+    if is_pr84:
+        receipt["policy_schema"] = PR84_POLICY_SCHEMA
+        receipt["source_input_role"] = source_role
     try:
         _write_receipt(receipt_file, receipt)
     except BaseException:

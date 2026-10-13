@@ -1,0 +1,72 @@
+{
+  "schema": "pr84_native_ice_guard_o0_o2_probe_v1",
+  "scratch": "/var/tmp/pr84_ice_guard_o0_o2_c5od_qn1",
+  "model_run": false,
+  "source_path": "/var/tmp/pr80_kdm6_radar_contract.nsUNuj/compile/module_mp_kdm6.F",
+  "source_sha256": "a5e8ce7a05d147b05556aa7521c22c0991812711fe675409feec889e43a761e7",
+  "patch_sha256": "e95d97ec37f3d20367335ff8477e144fb53c8fadb25f5f8b7644a7c246f891ae",
+  "patched_source_sha256": "f7fb216c82822162c30148829f207deeee5900e46e01ad9082ac58c802a181d9",
+  "extracted_helper_module_sha256": "5997e499d83da12ea9433ec808b5cb95dbfe0abef85d4182be9ba58bccbb8aca",
+  "driver_sha256": "8a72c50ddb1b1e1db87b46e5994d5f8227529877a2ffd49dcc38c5bfbc289e31",
+  "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "profile": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr84_ice_representation_20261013/Cloud-BAL/tests/intel_toolchain.sh",
+  "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "native_parameters": {
+    "pidni_real32": 1570.79638671875,
+    "pidni_bits": "0x44C4597C",
+    "lambda_min_real32": 9080.0,
+    "lambda_min_bits": "0x460DE000"
+  },
+  "results": {
+    "-O0": {
+      "argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "/var/tmp/pr84_ice_guard_o0_o2_c5od_qn1/source/pr84_exact_extracted_helper.F90",
+        "/var/tmp/pr84_ice_guard_o0_o2_c5od_qn1/source/pr84_helper_probe_driver.F90",
+        "-o",
+        "/var/tmp/pr84_ice_guard_o0_o2_c5od_qn1/O0/probe.exe"
+      ],
+      "argv_nul_sha256": "d9ea47816e91e6c76b58dc79825c96f35d9099e60db47f8e47263d8f4bc117fe",
+      "executable_sha256": "6c991b276e67fffbf960e884af79006fa2fc0069fabbe24bf5123a47db706d2a",
+      "stdout": "PR84 helper cases PASS\n"
+    },
+    "-O2": {
+      "argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "/var/tmp/pr84_ice_guard_o0_o2_c5od_qn1/source/pr84_exact_extracted_helper.F90",
+        "/var/tmp/pr84_ice_guard_o0_o2_c5od_qn1/source/pr84_helper_probe_driver.F90",
+        "-o",
+        "/var/tmp/pr84_ice_guard_o0_o2_c5od_qn1/O2/probe.exe"
+      ],
+      "argv_nul_sha256": "03b2278d3f077f89c2300a4562f8913ea8d77a6670b63bcde3bd2b506f8dcef0",
+      "executable_sha256": "28f27d47eb82f5609b7591fa634396e31ef4b4317e278ee95702eb94b2809437",
+      "stdout": "PR84 helper cases PASS\n"
+    }
+  }
+}

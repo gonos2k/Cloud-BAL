@@ -1,0 +1,275 @@
+{
+  "actual_NC_helper_failure_observation": {
+    "receipt": "docs/evidence/pr84_nc_operand_debugger_20261013.json",
+    "receipt_sha256": "745ce74cd59e0340a1fc29d579a4d491d22e2cfd1b3cf3c335d19951eb889517",
+    "scope": "actual OFF matching conditional helper return; not a complete model timestep or an observed coordinate"
+  },
+  "archive_manifest": "docs/evidence/pr84_matched_native_archive_20261013.json",
+  "archive_manifest_sha256": "8764e7911e2fabf2c1a494fff1e24b0fce34f20e2fe63a953a8015c943e9789b",
+  "arms": {
+    "COUPLED": {
+      "NC_conversion_estimate": {
+        "conversion_error_class_counts": {
+          "NEGATIVE_INPUT": 0,
+          "NONFINITE_DENSITY": 0,
+          "NONFINITE_INPUT": 0,
+          "NONFINITE_RESULT": 0,
+          "NONPOSITIVE_DENSITY": 0,
+          "OVERFLOW_GUARD": 0,
+          "POSITIVE_TO_ZERO": 4011
+        },
+        "independent_float64_product_at_or_below_half_minimum": 4011,
+        "mass_pair": "QC",
+        "positive_mass_zero_number": 9,
+        "positive_number_zero_mass": 136770,
+        "public_number_positive": 1781063
+      },
+      "candidate_input_readback": "PASS",
+      "candidate_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "failure": "KDM6 invalid NC number basis input",
+      "final_candidate_path": "/var/tmp/pr84_same13_COUPLED_final_rebuild_20261013/wrfinput_d01",
+      "final_initializer_sha256": "6091d91614a65cf73a5389eb48d9d3c1c4cae38ecbf5484bc957074ad8b8a13b",
+      "final_prior_receipt": "/var/tmp/pr84_same13_COUPLED_final_rebuild_20261013/moment_prior_receipt.json",
+      "final_prior_receipt_sha256": "64bc0cd3fffec7b72f324364b06449cc5719871380266fe0de0f9d6f8399720d",
+      "final_producer_replayed_executed_input_bytes": true,
+      "first_call_post_trace": "NOT_CREATED",
+      "first_call_pre_trace": {
+        "bytes": 195542592,
+        "path": "/var/tmp/pr84_same13_COUPLED_native_20261013a/kdm6_first_call_pre.raw",
+        "sha256": "23a82d46810e73018f1a72d7387deba6a4a7c281e465566104fb12d3bf7f33bb"
+      },
+      "first_step_gate": "REJECTED_OR_ABORTED",
+      "initialization_gate": "PASS_SCOPED_INITIALIZATION_READBACK",
+      "initialized_input_support": "FULL_NATIVE_HORIZONTAL INCLUDING OUTER DONOR RING",
+      "input_integrity": "PASS",
+      "model_returncode": 128,
+      "moment_initialization_counts": {
+        "QIB": 1010,
+        "QNCLOUD": 973831,
+        "QNICE": 249167,
+        "QNRAIN": 207316
+      },
+      "native_run_directory": "/var/tmp/pr84_same13_COUPLED_native_20261013a",
+      "native_run_receipt_sha256": "10cb675ce2812ab852f637a7da6d64b4f71afd4301326dbf3e6af8cc3b2298dc",
+      "output_isolation": "PASS",
+      "pre_state_domains": {
+        "QC": {
+          "mass_field": "QC",
+          "maximum_missing_moment_mass_kg_kg_dry": 6.619171002040555e-26,
+          "maximum_orphan_moment_specific": 1.2454168796539307,
+          "moment_field": "NC",
+          "most_negative_mass_kg_kg_dry": -5.213007057136565e-07,
+          "negative_mass": 21852,
+          "negative_moment": 0,
+          "positive_mass_zero_moment": 9,
+          "positive_moment_zero_mass": 136770
+        },
+        "QG": {
+          "mass_field": "QG",
+          "maximum_missing_moment_mass_kg_kg_dry": null,
+          "maximum_orphan_moment_specific": null,
+          "moment_field": "BG",
+          "most_negative_mass_kg_kg_dry": null,
+          "negative_mass": 0,
+          "negative_moment": 0,
+          "positive_mass_zero_moment": 0,
+          "positive_moment_zero_mass": 0
+        },
+        "QI": {
+          "mass_field": "QI",
+          "maximum_missing_moment_mass_kg_kg_dry": 4.5803159876012245e-11,
+          "maximum_orphan_moment_specific": 9.449166297912598,
+          "moment_field": "NI",
+          "most_negative_mass_kg_kg_dry": null,
+          "negative_mass": 0,
+          "negative_moment": 0,
+          "positive_mass_zero_moment": 589,
+          "positive_moment_zero_mass": 154761
+        },
+        "QR": {
+          "mass_field": "QR",
+          "maximum_missing_moment_mass_kg_kg_dry": null,
+          "maximum_orphan_moment_specific": null,
+          "moment_field": "NR",
+          "most_negative_mass_kg_kg_dry": null,
+          "negative_mass": 0,
+          "negative_moment": 0,
+          "positive_mass_zero_moment": 0,
+          "positive_moment_zero_mass": 0
+        }
+      },
+      "scope": "offline REAL32 representability estimate over the captured KDM6 active tile; no model rerun",
+      "source_and_candidate_nonmoments_unchanged": true,
+      "source_input": "/var/tmp/pr82_same13_real_boundary_candidate.final2_20261012/wrfinput_d01",
+      "source_input_sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+      "source_integrity_pass": true,
+      "static_runtime_source_file_count": 96,
+      "target_N_B_preserved_through_wrf_init": true,
+      "wrf_init_moment_readback": "PASS_SCOPED_MOMENT_CANDIDATE_READBACK"
+    },
+    "OFF": {
+      "NC_conversion_estimate": {
+        "conversion_error_class_counts": {
+          "NEGATIVE_INPUT": 0,
+          "NONFINITE_DENSITY": 0,
+          "NONFINITE_INPUT": 0,
+          "NONFINITE_RESULT": 0,
+          "NONPOSITIVE_DENSITY": 0,
+          "OVERFLOW_GUARD": 0,
+          "POSITIVE_TO_ZERO": 4025
+        },
+        "independent_float64_product_at_or_below_half_minimum": 4025,
+        "mass_pair": "QC",
+        "positive_mass_zero_number": 9,
+        "positive_number_zero_mass": 136782,
+        "public_number_positive": 1781073
+      },
+      "candidate_input_readback": "PASS",
+      "candidate_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "failure": "KDM6 invalid NC number basis input",
+      "final_candidate_path": "/var/tmp/pr84_same13_OFF_final_rebuild_20261013/wrfinput_d01",
+      "final_initializer_sha256": "6091d91614a65cf73a5389eb48d9d3c1c4cae38ecbf5484bc957074ad8b8a13b",
+      "final_prior_receipt": "/var/tmp/pr84_same13_OFF_final_rebuild_20261013/moment_prior_receipt.json",
+      "final_prior_receipt_sha256": "5a9366973b85fa0071bc0303d25abc2f4bfba66b5bc69934932bcfb489513a6c",
+      "final_producer_replayed_executed_input_bytes": true,
+      "first_call_post_trace": "NOT_CREATED",
+      "first_call_pre_trace": {
+        "bytes": 195542592,
+        "path": "/var/tmp/pr84_same13_OFF_native_20261013a/kdm6_first_call_pre.raw",
+        "sha256": "403ff42668a3f9d1f2da978ed04da0cd028bd5611124516b5b4ee3174cec1691"
+      },
+      "first_step_gate": "REJECTED_OR_ABORTED",
+      "initialization_gate": "PASS_SCOPED_INITIALIZATION_READBACK",
+      "initialized_input_support": "FULL_NATIVE_HORIZONTAL INCLUDING OUTER DONOR RING",
+      "input_integrity": "PASS",
+      "model_returncode": 128,
+      "moment_initialization_counts": {
+        "QIB": 1022,
+        "QNCLOUD": 973831,
+        "QNICE": 249167,
+        "QNRAIN": 207316
+      },
+      "native_run_directory": "/var/tmp/pr84_same13_OFF_native_20261013a",
+      "native_run_receipt_sha256": "72e67c2cad6029724100f6881ca7278a99b3febe341602eb96f60bb53076a9c9",
+      "output_isolation": "PASS",
+      "pre_state_domains": {
+        "QC": {
+          "mass_field": "QC",
+          "maximum_missing_moment_mass_kg_kg_dry": 6.619171002040555e-26,
+          "maximum_orphan_moment_specific": 1.2454168796539307,
+          "moment_field": "NC",
+          "most_negative_mass_kg_kg_dry": -5.213007057136565e-07,
+          "negative_mass": 21859,
+          "negative_moment": 0,
+          "positive_mass_zero_moment": 9,
+          "positive_moment_zero_mass": 136782
+        },
+        "QG": {
+          "mass_field": "QG",
+          "maximum_missing_moment_mass_kg_kg_dry": null,
+          "maximum_orphan_moment_specific": null,
+          "moment_field": "BG",
+          "most_negative_mass_kg_kg_dry": null,
+          "negative_mass": 0,
+          "negative_moment": 0,
+          "positive_mass_zero_moment": 0,
+          "positive_moment_zero_mass": 0
+        },
+        "QI": {
+          "mass_field": "QI",
+          "maximum_missing_moment_mass_kg_kg_dry": 4.5803159876012245e-11,
+          "maximum_orphan_moment_specific": 9.449166297912598,
+          "moment_field": "NI",
+          "most_negative_mass_kg_kg_dry": null,
+          "negative_mass": 0,
+          "negative_moment": 0,
+          "positive_mass_zero_moment": 594,
+          "positive_moment_zero_mass": 154756
+        },
+        "QR": {
+          "mass_field": "QR",
+          "maximum_missing_moment_mass_kg_kg_dry": null,
+          "maximum_orphan_moment_specific": null,
+          "moment_field": "NR",
+          "most_negative_mass_kg_kg_dry": null,
+          "negative_mass": 0,
+          "negative_moment": 0,
+          "positive_mass_zero_moment": 0,
+          "positive_moment_zero_mass": 0
+        }
+      },
+      "scope": "offline REAL32 representability estimate over the captured KDM6 active tile; no model rerun",
+      "source_and_candidate_nonmoments_unchanged": true,
+      "source_input": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/wrfinput_d01",
+      "source_input_sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+      "source_integrity_pass": true,
+      "static_runtime_source_file_count": 96,
+      "target_N_B_preserved_through_wrf_init": true,
+      "wrf_init_moment_readback": "PASS_SCOPED_MOMENT_CANDIDATE_READBACK"
+    }
+  },
+  "base_commit": "4975df9e69f34a5f0a54df5c0e83b48ba4f98510",
+  "candidate_scientific_gates": {
+    "first_completed_KDM6_call": "OPEN_REJECTED_NC_INPUT_CONVERSION",
+    "independent_observation_fit": "OPEN",
+    "moment_file_generation": "PASS_SCOPED",
+    "physical_approval": "FAIL_OPEN",
+    "public_pre_call_state_after_RK": "REJECTED",
+    "same_carrier_water_energy_mass_wind_budget": "OPEN",
+    "short_time_response": "NOT_RUN",
+    "target_moments_through_wrf_init": "PASS_SCOPED"
+  },
+  "completed_RK_stage_evidence": {
+    "path": "pr63_transition_stages.raw in each archived native arm",
+    "scope": "completed RK scalar stages followed by public pre-call capture; no full physical timestep or microphysics post-state",
+    "stages": [
+      "RK_STAGE_END 1",
+      "RK_STAGE_END 2",
+      "RK_STAGE_END 3",
+      "PRE_MOIST_PREP",
+      "POST_MOIST_PREP",
+      "PRE_MICROPHYSICS"
+    ]
+  },
+  "limits": [
+    "original active-build builder bytes unavailable; exact source/parameter/argv/object/archive/exe and independent checks are retained",
+    "supplemental current-builder rebuild is a different executable, not active-run evidence",
+    "final initializer replay byte-identical; native runs used earlier initializer source, not the final source",
+    "full native pretrace stored externally by hash; no post trace or complete model call",
+    "raw source semantics/PSD prior do not establish measured particle size or covariance",
+    "counts at initialized full grid and post-RK active tile have different support; do not compare them as rates"
+  ],
+  "matched_configuration": {
+    "boundary_Q_N_B_CCN_B_BT_arrays": 80,
+    "boundary_carriers": "retained all-zero source forcing; not independently observed cloud inflow",
+    "dt_s": 20.0,
+    "input_w_option": "unchanged; no use_input_w override",
+    "physics": "unchanged, KDM6=37 and ShinHong PBL=11",
+    "rank": 1,
+    "requested_duration_s": 20,
+    "same_boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "same_executable": true,
+    "same_namelist": true,
+    "thread": 1,
+    "version_scope": "retained real v4.6 and partial-host WRF v4.8; not a full same-version host rebuild"
+  },
+  "native_executable_path": "/var/tmp/pr84_ice_entry_guard_final_1efgtcsn/wrf_pr84.exe",
+  "native_executable_sha256": "4912d0f5c6b91d8e57bd0ff91adab2938ed4f74b9e8fa417903202dbf1c9d55a",
+  "native_ice_guard_runtime_consumption": "NOT_REACHED: wrapper NC conversion rejects before KDM62D entry; helper O0/O2 tests are separate",
+  "operational_authority": "NONE",
+  "policy_path": "docs/PR84_NATIVE_MOMENT_POLICY_20261013.json",
+  "policy_sha256": "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92",
+  "preserved_PR83_v1_policy_sha256": "dde8df58f840d2fb11579876450749964ea2a54e36a68856c92bc979f46bae2a",
+  "schema": "pr84_matched_moment_integration_v1",
+  "science_authority": "NONE",
+  "source_cap_map": {
+    "candidate_only": 0,
+    "full_common": 2326,
+    "interior_common": 2305,
+    "resolved": 0,
+    "same_carrier_excess_difference": 0.0
+  },
+  "valid_time": "2026-08-16_13:00:00",
+  "validation_receipt": "docs/evidence/pr84_validation_20261013.json",
+  "validation_receipt_sha256": "39a143f5253b1d924b0655df3175a6d7464ddde4e03d769460430d5c53b34368"
+}

@@ -1,0 +1,225 @@
+{
+  "schema": "pr84_same13_native_moment_policy_v2",
+  "policy_id": "SAME13_KDM6_NATIVE_MOMENT_PRIOR_20261013_V2",
+  "declared_before_experiment": true,
+  "scope": "Full native-horizontal same-time research moment-prior construction on the paired OFF and COUPLED 2026-08-16 13:00 UTC WRF inputs. Includes perimeter moments; boundary/donor-period forcing remains a separate contract.",
+  "status": "RESEARCH_PRIOR_NOT_OPERATIONAL_OR_SCIENCE_APPROVAL",
+  "prior": {
+    "mass_units": "kg kg-1",
+    "mass_basis": "dry_air",
+    "number_units": "kg-1",
+    "number_basis": "dry_air",
+    "volume_units": "m3 kg-1",
+    "volume_basis": "dry_air",
+    "center_policy": "For each positive-mass cell with an exactly zero moment, use the geometric midpoint of the source-supported lambda interval after intersecting its upper endpoint with the per-cell source internal-number cap. QIB uses QGRAUP divided by the explicitly declared 400 kg m-3 bulk-density center.",
+    "fill_policy": "Fill every exact positive mass, including values below native process cutoffs; preserve exact zero mass as zero moment; never floor/delete mass. Preserve an existing nonzero moment only when it passes the source PSD/density validator and native cap.",
+    "uncertainty": "Declared source-admissibility envelope and deterministic prior center, not a statistical uncertainty or recovered observation. Mean particle mass bounds apply to the gamma PSD mean, not each particle.",
+    "active_domain": "All 39 mass levels and all native horizontal cells, including perimeter, initialized through the native order-5 donor selection. Boundary/donor-period forcing is defined by the separate same13 boundary contract.",
+    "source_cap_failure": "If any positive mass has no number satisfying both source PSD bounds and its source-compatible entry guard, reject the complete initialization before writing an output input. Do not relax source bounds, alter Q, or floor moments.",
+    "native_process_scope": "Positive-mass moment construction uses exact Q>0, while native KDM6 process predicates impose additional species cutoffs. This prior does not claim every initialized cell is process-active or that all native physical admission constraints are met.",
+    "active_domain_mode": "FULL_NATIVE_HORIZONTAL"
+  },
+  "source": {
+    "model": "Source-equation reference for KDM6 PSD bounds; actual retained same13 consumer is separately bound below.",
+    "kdm6_source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/ccn_native_start.j2U4Rf/phys/module_mp_kdm6.F",
+    "kdm6_source_sha256": "9f34e893e814872138f8d8402095be0cc76fbf0700c6095f69d7f530c05bcdae",
+    "upstream_formula_comparison_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_mp_kdm6.F",
+    "upstream_formula_comparison_sha256": "02c9dc1f6711c9785d3c5841cbf2c14ebc454fa4628466407ae7f8879e965c5a",
+    "formula_comparison": "Source equations and constants are bound to the selected KDM6 source, upstream formula comparison, WRF model constants, and driver. No 12 UTC first-call density trace is used.",
+    "kdm6_source_ranges": "private wrapper lines 320-327; parameters lines 57-100 and 131-135; PSD inversions lines 1372-1408; pidn formulas lines 3105-3163; graupel density range lines 3283-3310",
+    "model_constants_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/share/module_model_constants.F",
+    "model_constants_sha256": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+    "water_density_source": "module_model_constants.F:58, rhowater=1000 kg m-3",
+    "driver_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_microphysics_driver.F",
+    "driver_sha256": "bcac98180bfb5e260271a5836d71c5936d47ab167e2164c37b328f37ec2c03f4",
+    "driver_density_binding": "module_microphysics_driver.F:2552 passes QMIN=epsilon and DENR=rhowater to KDM6; module_model_constants.F:10 defines epsilon=1e-15",
+    "runtime_consumer_source_path": "/var/tmp/pr84_ice_entry_guard_final_1efgtcsn/module_mp_kdm6.production.F",
+    "runtime_consumer_source_sha256": "f7fb216c82822162c30148829f207deeee5900e46e01ad9082ac58c802a181d9",
+    "runtime_consumer_executable_sha256": "4912d0f5c6b91d8e57bd0ff91adab2938ed4f74b9e8fa417903202dbf1c9d55a",
+    "runtime_consumer_scope": "Fresh PR84 retained same-13 KDM6 consumer built from the pinned PR81 nine-object WRF v4.8 component. Full source/profile/dependency/argv provenance and actual kdm6init parameter accessor are in the bound build receipt. Runtime consumer readback and model run are not performed.",
+    "runtime_consumer_parameter_locations": "Actual parameter values returned from test-only accessor calling kdm6init; see bound native build receipt and actual_parameter_dump.txt.",
+    "runtime_consumer_executable_path": "/var/tmp/pr84_ice_entry_guard_final_1efgtcsn/wrf_pr84.exe",
+    "runtime_consumer_archive_path": "/var/tmp/pr84_ice_entry_guard_final_1efgtcsn/link/main/libwrflib_pr84.a",
+    "runtime_consumer_archive_sha256": "7c1ea24fb3baa4d7c4d977920378a6c53f929077b07300754f4d3844a2b3e7da",
+    "runtime_consumer_object_member": "module_mp_kdm6.o",
+    "runtime_consumer_object_member_sha256": "e097b7e70566275d5cd82c211d91e4658091c78ea1b41eb9ffef35bc1159d006",
+    "runtime_consumer_build_receipt_path": "/var/tmp/pr84_ice_entry_guard_final_1efgtcsn/receipt.json",
+    "runtime_consumer_build_receipt_sha256": "0040ea6e86c08caac78526fb0db276dc045d150646b5ccb247d660679c3efce1",
+    "runtime_native_branch_thresholds": {
+      "QCLOUD_driver_qmin_kg_kg-1": 1e-15,
+      "QICE_native_process_predicate_kg_kg-1": "QI >= 1e-14",
+      "QRAIN_qcrmin_kg_kg-1": 1e-09,
+      "QRAIN_nrmin_internal_number_m-3": 0.01,
+      "threshold_role": "Native process branch predicates differ from research fill cutoff (exact Q > 0); all exact positive mass is proposed for initialization."
+    },
+    "runtime_consumer_readback_status": "NOT_RUN"
+  },
+  "density_source": {
+    "input_fields": [
+      "AL",
+      "ALB"
+    ],
+    "units": "m3 kg-1",
+    "formula": "alt = real32(AL + ALB) in source operation order; rho_dry = real32(1.0) / alt",
+    "kdm6_density_bridge": "KDM6 source forms moist density from 1/alt*(1+QV), then the dry-carrier relation divides by (1+QV); AL+ALB is the source inverse dry-density quantity used for the same-time prior/cap.",
+    "wrf_source_start_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/dyn_em/start_em.F",
+    "wrf_source_start_sha256": "6be17d3a4252065cf972dcf59bf3510cd29be35f898694e38187aa525cf27ac9",
+    "wrf_source_density_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/dyn_em/module_big_step_utilities_em.F",
+    "wrf_source_density_sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c",
+    "thermodynamic_crosscheck": "WRF p_phy=p+pb; pi_phy=(p/p1000mb)**(r_d/cp); t_phy=(T+300)*pi_phy. Pinned constants are r_d=287, cp=7*r_d/2=1004.5, r_v=461.6, p0=p1000mb=100000 Pa. This is a consistency cross-check only; source AL+ALB is authoritative for the native cap."
+  },
+  "species": {
+    "QCLOUD": {
+      "target_moment": "QNCLOUD",
+      "shape_exponent_d": 3,
+      "shape_parameter_mu": 2,
+      "lambda_min_m-1": 12000,
+      "lambda_max_m-1": 500000,
+      "internal_number_cap_number_m-3": 50000000000.0,
+      "pidn_formula": "cmc*Gamma(1 + dmc/(muc+1)); cmc=pi*rhowater/6",
+      "public_number_formula": "NC = QCLOUD*lambda^dmc/pidnc",
+      "particle_mean_mass_bounds_kg": [
+        4.188790204786391e-15,
+        3.0300855069345996e-10
+      ]
+    },
+    "QRAIN": {
+      "target_moment": "QNRAIN",
+      "shape_exponent_d": 3,
+      "shape_parameter_mu": 1,
+      "lambda_min_m-1": 961,
+      "lambda_max_m-1": 35000,
+      "internal_number_cap_number_m-3": 50000000.0,
+      "pidn_formula": "cmr*Gamma(dmr+mur+1)/Gamma(mur+1); cmr=pi*rhowater/6",
+      "public_number_formula": "NR = QRAIN*lambda^dmr/pidnr",
+      "particle_mean_mass_bounds_kg": [
+        2.930931921716425e-10,
+        1.4159232106169906e-05
+      ]
+    },
+    "QICE": {
+      "target_moment": "QNICE",
+      "shape_exponent_d": 3,
+      "shape_parameter_mu": 0,
+      "ice_particle_density_kg_m-3": 500,
+      "lambda_min_m-1": 9080.0,
+      "lambda_max_m-1": 1820000,
+      "internal_number_cap_number_m-3": 1000000.0,
+      "pidn_formula": "cmi*Gamma(dmi+mui+1)/Gamma(mui+1); cmi=pi*500/6",
+      "public_number_formula": "NI = QICE*lambda^dmi/pidni",
+      "particle_mean_mass_bounds_kg": [
+        2.605587805918249e-16,
+        2.098274638742861e-09
+      ],
+      "internal_number_cap_mode": "SOURCE_PSD_COMPATIBLE_ENTRY_GUARD",
+      "source_pidni_binary32_value": 1570.79638671875,
+      "source_pidni_binary32_hex": "0x44C4597C",
+      "source_shape_parameter_mu": 0,
+      "source_shape_exponent_d": 3,
+      "source_parameter_source": "Actual-source test-only accessor called kdm6init in the patched retained KDM6 source; output and separately hashed parameter dump are bound in native_build.",
+      "entry_cap_formula": "max(1e6, REAL32(QNICE_minimum_REAL32 * dry_density_REAL32)); QNICE satisfies exact REAL64 public PSD floor and REAL32 internal floor."
+    },
+    "QGRAUP": {
+      "target_moment": "QIB",
+      "bulk_density_prior_center_kg_m-3": 400,
+      "bulk_density_min_kg_m-3": 100,
+      "bulk_density_max_kg_m-3": 900,
+      "source_lines": "ProgB_param defines rho_mid=400 kg m-3 as default density and rho_min/rho_max=[100,900] kg m-3. The separate zero-BG fallback sets rhox=rho_max=900 and is not this prior.",
+      "public_volume_formula": "BG = QGRAUP/400"
+    },
+    "QSNOW": {
+      "target_moment": null,
+      "treatment": "Preserved mass-only field; selected MP37 interface has no corresponding prognostic native snow number or bulk-volume input moment."
+    }
+  },
+  "preflight": {
+    "expected_source_valid_time": "2026-08-16_13:00:00",
+    "expected_input_spatial_shape_bottom_top_south_north_west_east": [
+      39,
+      282,
+      234
+    ],
+    "requires_finite_nonnegative_mass_fields": true,
+    "requires_finite_positive_source_dry_density": true,
+    "requires_one_time_record_and_mp_physics_37": true,
+    "requires_unmodified_source_file": true,
+    "requires_output_path_not_to_exist": true,
+    "no_12_utc_trace_or_first_call_proxy": true,
+    "native_launch_authority": "NONE",
+    "initializer_fill_thresholds": {
+      "QCLOUD": "exact Q>0",
+      "QRAIN": "exact Q>0",
+      "QICE": "exact Q>0",
+      "QGRAUP": "exact Q>0"
+    },
+    "incomplete_scope": "This constructor builds same-time moments across the full native horizontal domain, including perimeter. It does not create boundary/donor-period forcing, validate a real copy with independent runtime readback, prove native physical admission, or authorize a model launch.",
+    "authorized_source_inputs": [
+      {
+        "role": "OFF",
+        "sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730"
+      },
+      {
+        "role": "COUPLED",
+        "sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb"
+      }
+    ],
+    "no_12_utc_number_copy": true,
+    "preserve_all_nonmoment_fields": true,
+    "initialize_all_native_horizontal_cells": true,
+    "candidate_input_readback_before_research_launch": "REQUIRED: independent full-horizontal Q/N/B, retained boundary and executable binding checks.",
+    "runtime_consumer_readback": "Produced by the authorized research launch; required before first-call or scientific acceptance."
+  },
+  "native_build": {
+    "receipt_path": "/var/tmp/pr84_ice_entry_guard_final_1efgtcsn/receipt.json",
+    "receipt_sha256": "0040ea6e86c08caac78526fb0db276dc045d150646b5ccb247d660679c3efce1",
+    "schema": "pr84_native_ice_entry_guard_build_v2",
+    "candidate_source_sha256": "f7fb216c82822162c30148829f207deeee5900e46e01ad9082ac58c802a181d9",
+    "candidate_object_sha256": "e097b7e70566275d5cd82c211d91e4658091c78ea1b41eb9ffef35bc1159d006",
+    "candidate_archive_sha256": "7c1ea24fb3baa4d7c4d977920378a6c53f929077b07300754f4d3844a2b3e7da",
+    "candidate_executable_sha256": "4912d0f5c6b91d8e57bd0ff91adab2938ed4f74b9e8fa417903202dbf1c9d55a",
+    "actual_parameter_dump_path": "/var/tmp/pr84_ice_entry_guard_final_1efgtcsn/actual_parameter_dump.txt",
+    "actual_parameter_dump_sha256": "804b579e8e28627b7bd39c2bd7b8dd2e323ade5d38d5e2d3cd870df39ef88422",
+    "actual_kdm6init_output": {
+      "pidni": {
+        "real32": 1570.79638671875,
+        "bits": "0x44C4597C"
+      },
+      "lambda_min": {
+        "real32": 9080.0,
+        "bits": "0x460DE000"
+      },
+      "dmi": {
+        "real32": 3.0,
+        "bits": "0x40400000"
+      },
+      "mui": {
+        "real32": 0.0,
+        "bits": "0x00000000"
+      }
+    },
+    "actual_high_ice_fixture": {
+      "wrf_ijk": [
+        195,
+        73,
+        17
+      ],
+      "qice_real32": 0.0033685904927551746,
+      "qice_bits": "0x3B5CC392",
+      "source_rho_real32": 0.6824867725372314,
+      "source_rho_bits": "0x3F2EB774",
+      "minimum_qnice_bits": "0x49C3F90E",
+      "entry_cap_bits": "0x4985BFB7"
+    },
+    "low_mass_fixture": {
+      "minimum_qnice_bits": "0x454685DA",
+      "entry_cap_bits": "0x49742400"
+    },
+    "one_ulp_public_floor_fixture": {
+      "minimum_qnice_bits": "0x48B6D4B2"
+    },
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr84_ice_representation_20261013/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "model_run": false,
+    "runtime_consumer_readback_status": "NOT_RUN"
+  }
+}

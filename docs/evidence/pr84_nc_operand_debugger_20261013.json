@@ -1,0 +1,67 @@
+{
+  "DAZ": false,
+  "FTZ": false,
+  "NC_input_hex": "0x00000001",
+  "actual_coordinates": "NOT_OBSERVED: executable has no local/line debug info; public trace loop-order prediction is separate",
+  "archive": "docs/evidence/pr84_nc_operand_debugger_20261013.zip",
+  "archive_sha256": "826647d38c5a551d6f9d627021c04a7d730732d5007b793ca5207dfec8ff06c9",
+  "artifact_class": "RESEARCH_DIAGNOSTIC",
+  "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+  "caller_function": "module_mp_kdm6_mp_kdm6_",
+  "caller_invalid_branch_PC": "0x25b83ce",
+  "caller_return_pc": "0x25b834f",
+  "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+  "conditional_stop_scope": "first matching helper input equal to minimum positive REAL32 and density <=0.5; return at NC callsite",
+  "debugger_case": "/var/tmp/pr84_nc_operand_gdb_return2_20261013/case",
+  "dry_density_hex": "0x3EF895E0",
+  "effective_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+  "excluded_attempts": "earlier multithread, entry-only/finish-command-list, and unguarded-return breakpoint attempts are not this controlled proof",
+  "helper_call_function_offset": 27258,
+  "invalid_branch_message": "KDM6 invalid NC number basis input",
+  "invalid_branch_message_address": "0x4580030",
+  "mxcsr_before_multiply_hex": "0x1932",
+  "native_executable_sha256": "4912d0f5c6b91d8e57bd0ff91adab2938ed4f74b9e8fa417903202dbf1c9d55a",
+  "rank": 1,
+  "result_hex": "0x00000000",
+  "rounding": "nearest, ties to even",
+  "schema": "pr84_nc_actual_helper_return_v1",
+  "science_authority": "NONE",
+  "script_and_transcript_members": {
+    "caller_NC_false_branch.txt": {
+      "bytes": 2524,
+      "retained_source": "/var/tmp/pr84_nc_operand_gdb_return2_20261013/caller_NC_false_branch_root.txt",
+      "sha256": "33ff25849d43a11de57d3a88baaefde5f2d859d4b01e2c22ab5325be309dac73"
+    },
+    "capture.gdb": {
+      "bytes": 960,
+      "retained_source": "/var/tmp/pr84_nc_operand_gdb_return2_20261013/case/capture.gdb",
+      "sha256": "8135a01d05b2809c887476db918bff74d1dd582002ef8ec3602e0f5cac607a5e"
+    },
+    "gdb_transcript.txt": {
+      "bytes": 2372,
+      "retained_source": "/var/tmp/pr84_nc_operand_gdb_return2_20261013/case/gdb_transcript.txt",
+      "sha256": "74dfa8c1e8ec34de182b04b327fb1f27d607874beec51801390cd4a6a8344993"
+    },
+    "launch_environment.txt": {
+      "bytes": 879,
+      "retained_source": "/var/tmp/pr84_nc_operand_gdb_return2_20261013/case/launch_environment.txt",
+      "sha256": "a29d94436478057122b298100c27517bd6fdaf0937ee64116de769e9ca53c648"
+    },
+    "source_snapshot_after.json": {
+      "bytes": 11533,
+      "retained_source": "/var/tmp/pr84_nc_operand_gdb_return2_20261013/source_snapshot_after_root.json",
+      "sha256": "ac8b1f43aa57e8d69c1e8a7309f8049c644548fa77e38d430e7245a2911f38e1"
+    },
+    "source_snapshot_before.json": {
+      "bytes": 11333,
+      "retained_source": "/var/tmp/pr84_nc_operand_gdb_return2_20261013/source_snapshot.json",
+      "sha256": "edc4e8fc13c786eae6572ecbb9ce461db58243ea38f953766ba28f292f2c5ff7"
+    }
+  },
+  "source_case": "/var/tmp/pr84_same13_OFF_native_20261013a",
+  "source_file_count": 120,
+  "source_files_before_after_equal": true,
+  "termination": "GDB quit after actual helper returned output zero/valid false, before error-stop or a complete timestep",
+  "thread": 1,
+  "valid_logical_hex": "0x00000000"
+}

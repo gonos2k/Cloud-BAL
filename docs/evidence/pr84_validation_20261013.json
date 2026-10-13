@@ -1,0 +1,85 @@
+{
+  "base_commit": "4975df9e69f34a5f0a54df5c0e83b48ba4f98510",
+  "checks": {
+    "canonical_full": {
+      "exit_code": 0,
+      "final_file_differences_since_snapshot": {
+        "docs/FAST_COMPLETION_CHECKLIST_20261012.md": {
+          "final_sha256": "5d44c42e87144ae3292db01b70eba3396bb65d989e5ddb88347054117b36ac16",
+          "snapshot_sha256": "c984323f7b6ad9d38170e5907a040358d8a514d8fd27f491e28a1dd85e6b777c"
+        },
+        "docs/PR84_FIRST_CONSUMPTION_SUPPORT_20261013.md": {
+          "final_sha256": "026364567816f76f9740ad8acf009fba1a16b3cb6f2098d20f30ff20735727ba",
+          "snapshot_sha256": "304fe61d1bbfa4455161162946e6229a4a28a6df1268d96f876f2e0a6cf5cf0c"
+        },
+        "docs/PR84_NATIVE_ICE_CONTRACT_20261013.md": {
+          "final_sha256": "35df5f5676ebd82696cb10515218477992c2a2956fe343edea7ac4b11c3effd2",
+          "snapshot_sha256": "94605703af7f8510a7d978ab48e138678644efdcbd7909bd3911d26e49fc1ad3"
+        },
+        "docs/PR84_NATIVE_MOMENT_INITIALIZATION_20261013.md": {
+          "final_sha256": "ccc9887d970238e544d2d9f7cff1877e08c47141e98a78afbdb5491bf9fa146d",
+          "snapshot_sha256": "a63e8092b99e209f922299a5fd745cba9a948303bbd24b415e99ec22b4cc1649"
+        },
+        "tests/test_pr84_native_moment_policy.py": {
+          "final_sha256": "d5f0d10a089b0257c44f7a723c30154b39f2d8b9c4fa1d002e7ccb10b01ec733",
+          "snapshot_sha256": "7cde64f6b19ed032cacf7ffe4231822713bd38b60230b6adcf138b5d57bb1059"
+        },
+        "tools/initialize_native_moments.py": {
+          "final_sha256": "6091d91614a65cf73a5389eb48d9d3c1c4cae38ecbf5484bc957074ad8b8a13b",
+          "snapshot_sha256": "df86e162be253b5df2119bb773fb7dfb06b103d17d99dad3781b6a54f4ab55b9"
+        }
+      },
+      "manifest_path": "/var/tmp/pr84_canonical_final_y_84c2_d/snapshot_manifest.json",
+      "manifest_sha256": "a682e946f7feaba8066ba0ed083df38a407cd78b0c982749c1e1e4ba15b60088",
+      "original_log_sha256": "d5fba3b697a6ed343f5dd5257b7aca901f63a079b0802d595474916341985c11",
+      "scope": "entire launcher on frozen snapshot; final initializer policy-hash guard/diagnostic edits validated separately, not asserted part of this launcher run",
+      "snapshot_bytes_unchanged": true,
+      "snapshot_file_count": 2016,
+      "snapshot_git_commit": "b0cd8bf71339e1d21daf67fb30280b5794e3dc3b",
+      "snapshot_path": "/var/tmp/pr84_canonical_final_y_84c2_d/source",
+      "status": "PASS"
+    },
+    "final_focused": {
+      "exit_code": 0,
+      "modules": [
+        "test_pr84_native_moment_policy",
+        "test_initialize_native_moments",
+        "test_pr83_moment_candidate_readback",
+        "test_pr84_shared_runner_contract",
+        "test_pr84_same13_boundary_contract",
+        "test_pr84_ice_cap_pair_audit"
+      ],
+      "original_log_sha256": "4effdd33619b97dc22710966b9230c4948d0c59536cbf774edb1d256e0c8eb34",
+      "status": "PASS",
+      "tests": 43
+    },
+    "first_unit_attempt": {
+      "exit_code": 1,
+      "not_counted_as_pass": true,
+      "original_log": "/var/tmp/pr84_canonical_validation_awsuc09w/unit.log",
+      "sha256": "5ed9285b4bca302508a8b0467eaba542995b31182527e9e8d236a5a6a66bdd8a",
+      "status": "ABORTED_MISSING_SNAPSHOT_GIT_METADATA"
+    },
+    "native_helper_o0_o2": {
+      "receipt": "docs/evidence/pr84_native_ice_guard_o0_o2_20261013.json",
+      "receipt_sha256": "d83983360873ca8898220e2799b7869a70aa9b1fecb1d9f0dbb71091b082d9e6",
+      "status": "PASS"
+    },
+    "scoped_unit": {
+      "status": "PASS_FROZEN_FULL_PLUS_FINAL_FOCUSED"
+    }
+  },
+  "cp06a_real_scope": {
+    "candidate_valid_time": "2026-08-16_13:00:00",
+    "native_transfer": "same-stage OFF/COUPLED, declared v2 moments, scoped init readback only",
+    "pressure_level_producer": "retained unchanged PR81 candidate; no new CP06A solver/observation-fit or force claim"
+  },
+  "native_pair_errors": {
+    "10_30_60min": "NOT_RUN",
+    "COUPLED": "NC_INPUT_CONVERSION_REJECTED_EXIT_128",
+    "OFF": "NC_INPUT_CONVERSION_REJECTED_EXIT_128",
+    "first_microphysics_complete": false
+  },
+  "schema": "pr84_validation_v1",
+  "science_authority": "NONE"
+}
