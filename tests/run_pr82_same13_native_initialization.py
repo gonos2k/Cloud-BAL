@@ -30,6 +30,20 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def provenance_paths(initialized_input_policy: Path | None = None) -> dict[str, Path]:
+    paths = {
+        "runner": Path(__file__).resolve(),
+        "isolated_runtime_helper": ROOT / "tools/run_isolated_native.py",
+        "initialization_readback_checker": ROOT / "tools/check_native_hybrid_geometry.py",
+        "intel_setvars": Path("/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh"),
+        "mpi_vars": Path("/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh"),
+    }
+    if initialized_input_policy is not None:
+        paths["native_moment_initializer"] = ROOT / "tools/initialize_native_moments.py"
+        paths["native_moment_policy"] = initialized_input_policy.resolve(strict=True)
+    return paths
+
+
 def replace_once(text: str, pattern: str, replacement: str, label: str) -> str:
     updated, count = re.subn(pattern, replacement, text, flags=re.IGNORECASE | re.MULTILINE)
     if count != 1:
@@ -66,7 +80,26 @@ def write_new(path: Path, payload: bytes) -> None:
         os.fsync(stream.fileno())
 
 
-def main() -> int:
+def initialization_receipt_contract(control_role: str, has_prior: bool) -> tuple[str, str]:
+    """Return the schema and filename consumed by each native-run path."""
+    if has_prior:
+        return "pr83_same13_native_initialization_v1", "pr83_same13_native_initialization.json"
+    if control_role == "MODE_OFF_MASS_ONLY":
+        return "pr83_same13_off_native_initialization_v1", "pr83_same13_off_native_initialization.json"
+    return "pr82_same13_native_initialization_v1", "pr82_same13_native_initialization.json"
+
+
+def write_initialization_receipt(run_dir: Path, record: dict[str, object],
+                                 control_role: str, has_prior: bool) -> Path:
+    schema, filename = initialization_receipt_contract(control_role, has_prior)
+    receipt = dict(record)
+    receipt["schema"] = schema
+    path = run_dir / filename
+    write_new(path, (json.dumps(receipt, indent=2, sort_keys=True, allow_nan=False) + "\n").encode())
+    return path
+
+
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--runtime-case", type=Path, required=True,
                         help="retained source-bound diagnostic runtime and physics tables")
@@ -74,7 +107,23 @@ def main() -> int:
                         help="same-13 real.exe run containing wrfinput and 13-15 wrfbdy")
     parser.add_argument("--executable", type=Path, required=True)
     parser.add_argument("--run-dir", type=Path, required=True)
-    args = parser.parse_args()
+    parser.add_argument("--initialized-input-receipt", type=Path,
+                        help="verified PR83 same13 prior receipt authorizing an alternate copied wrfinput")
+    parser.add_argument("--initialized-input-policy", type=Path,
+                        help="declared policy bound by the PR83 prior receipt")
+    return parser
+
+
+def run_initialization(args: argparse.Namespace, *,
+                       required_baseline_input: str = "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+                       control_role: str = "PR82_MASS_ONLY",
+                       required_source_namelist_sha: str | None = None,
+                       allow_prior: bool = True,
+                       chain_artifacts: dict[str, Path] | None = None,
+                       runner_source: Path | None = None) -> int:
+    if not allow_prior and (args.initialized_input_receipt is not None or
+                            args.initialized_input_policy is not None):
+        raise ValueError(f"{control_role} cannot accept a PR83 prior receipt or candidate input")
     runtime = args.runtime_case.resolve(strict=True)
     real_case = args.real_case.resolve(strict=True)
     executable = args.executable.resolve(strict=True)
@@ -84,6 +133,9 @@ def main() -> int:
     for name in ("wrfinput_d01", "wrfbdy_d01", "namelist.input"):
         if not (real_case / name).is_file():
             raise FileNotFoundError(real_case / name)
+    source_namelist_sha = sha256(real_case / "namelist.input")
+    if required_source_namelist_sha is not None and source_namelist_sha != required_source_namelist_sha:
+        raise ValueError(f"{control_role} requires its reviewed source namelist")
     original_nml, effective_nml = effective_namelist(real_case / "namelist.input")
     if "use_sh_qv                           = .true." not in original_nml:
         raise ValueError("expected unchanged direct-QV real configuration")
@@ -91,6 +143,28 @@ def main() -> int:
         raise ValueError("expected retained sfcp_to_sfcp physics/configuration")
     if "mp_physics                          = 37," not in original_nml:
         raise ValueError("unexpected microphysics selection")
+    if not re.search(r"^\s*max_dom\s*=\s*1\s*,", original_nml, flags=re.IGNORECASE | re.MULTILINE):
+        raise ValueError("same13 prior path is restricted to its declared single domain")
+    for flag, rejected in (("restart", {".true.", "1"}),
+                           ("cycling", {".true.", "1"}),
+                           ("dfi_opt", {"1", "2", "3", "4"})):
+        configured = re.findall(rf"^\s*{flag}\s*=\s*([^,\s]+)", original_nml,
+                                flags=re.IGNORECASE | re.MULTILINE)
+        if any(value.lower() in rejected for value in configured):
+            raise ValueError(f"same13 prior path does not cover enabled {flag}")
+    cold_start_scope_guard = {
+        "status": "PASS",
+        "source_namelist_sha256": source_namelist_sha,
+        "max_dom": 1,
+        "restart": "disabled; no enabled assignment in source namelist; source-bound WRF default",
+        "cycling": "disabled; no enabled assignment in source namelist; source-bound WRF default",
+        "dfi_opt": "disabled; no enabled assignment in source namelist; source-bound WRF default",
+        "scope": "single-domain same13 cold-start; no restart/nesting/cycling/DFI extension",
+    }
+    if required_source_namelist_sha is None and args.initialized_input_receipt is not None and \
+            cold_start_scope_guard["source_namelist_sha256"] != \
+            "59e949a1a9feffec06204f8abc9b090b3c294e1a501e9f9599cbfc10503646f6":
+        raise ValueError("PR83 prior path requires the reviewed same13 cold-start namelist")
 
     run_dir.mkdir(parents=True)
     # Copy only runtime tables and static inputs. Replace all date-bound files
@@ -100,9 +174,11 @@ def main() -> int:
         "namelist.input.original", "wrf.exe", "rsl.error.0000", "rsl.out.0000",
         "candidate_run.log",
     }
+    if control_role == "MODE_OFF_MASS_ONLY":
+        excluded.add("namelist.input.source")
     excluded_prefixes = ("wrfout", "wrfrst", "wrfdiag")
     trace_outputs = {
-        "kdm6_first_call_pre.raw", "pr63_geometry.raw", "pr63_transition_masks.bin",
+        "kdm6_first_call_pre.raw", "kdm6_first_call_post.raw", "pr63_geometry.raw", "pr63_transition_masks.bin",
         "pr63_transition_stages.raw", "pr64_host_neighborhood.raw", "pr64_qc_channels.raw",
         "pr65_nc_donor_faces.raw", "pr65_pbl_nc.raw", "pr65_pbl_operator.raw",
         "pr74_qni_driver.raw", "pr76_target_call.raw", "pr76_thread_entry.raw",
@@ -120,8 +196,54 @@ def main() -> int:
     }
     if copied_hashes != source_snapshot:
         raise AssertionError("detached static runtime copy differs from retained source")
+    wrfinput_source = real_case / "wrfinput_d01"
+    prior_receipt_path: Path | None = None
+    prior_policy_path: Path | None = None
+    prior_receipt: dict[str, object] | None = None
+    prior_candidate_preflight: dict[str, object] | None = None
+    if args.initialized_input_receipt is not None:
+        if args.initialized_input_policy is None:
+            raise ValueError("PR83 alternate input also requires its declared policy")
+        prior_receipt_path = args.initialized_input_receipt.resolve(strict=True)
+        prior_receipt = json.loads(prior_receipt_path.read_text())
+        prior_policy_path = args.initialized_input_policy.resolve(strict=True)
+        prior_policy = json.loads(prior_policy_path.read_text())
+        if prior_receipt.get("schema") != "pr83_same13_native_moment_prior_receipt_v1":
+            raise ValueError("alternate wrfinput requires a PR83 same13 moment-prior receipt")
+        if prior_receipt.get("status") != "RESEARCH_PRIOR_CREATED":
+            raise ValueError("alternate wrfinput receipt is not a completed prior")
+        if prior_receipt.get("source_input_sha256") != sha256(wrfinput_source):
+            raise ValueError("PR83 prior receipt is not bound to this same13 real input")
+        if Path(prior_receipt["source_input"]).resolve(strict=True) != wrfinput_source.resolve(strict=True):
+            raise ValueError("PR83 prior receipt source path differs from this same13 real input")
+        if prior_receipt.get("policy_id") != prior_policy.get("policy_id"):
+            raise ValueError("PR83 prior receipt names a different policy")
+        if prior_receipt.get("policy_sha256") != sha256(prior_policy_path):
+            raise ValueError("PR83 prior receipt policy hash differs from the declared policy")
+        wrfinput_source = Path(prior_receipt["output_input"]).resolve(strict=True)
+        if sha256(wrfinput_source) != prior_receipt.get("output_input_sha256"):
+            raise ValueError("PR83 prior input hash differs from its receipt")
+        if prior_receipt.get("all_other_variables_unchanged") is not True:
+            raise ValueError("PR83 prior receipt does not prove nonmoment field preservation")
+        if prior_receipt.get("changed_nonmoment_variables") != []:
+            raise ValueError("PR83 prior changed nonmoment fields")
+        field_receipts = prior_receipt.get("field_prior_receipts")
+        if not isinstance(field_receipts, dict) or set(field_receipts) != {
+            "QNCLOUD", "QNICE", "QNRAIN", "QIB"
+        }:
+            raise ValueError("PR83 prior receipt does not cover every declared Q/N/B field")
+        for name, result in field_receipts.items():
+            if (not isinstance(result, dict)
+                    or result.get("positive_mass_without_representable_moment") != 0):
+                raise ValueError(f"PR83 prior receipt leaves unresolved positive mass: {name}")
+        from pr83_moment_candidate_readback import validate_candidate_input
+
+        prior_candidate_preflight = validate_candidate_input(
+            real_case / "wrfinput_d01", wrfinput_source,
+            prior_receipt_path, prior_policy_path,
+        )
     candidate_inputs = {
-        "wrfinput_d01": real_case / "wrfinput_d01",
+        "wrfinput_d01": wrfinput_source,
         "wrfbdy_d01": real_case / "wrfbdy_d01",
         "wrf.exe": executable,
     }
@@ -130,22 +252,20 @@ def main() -> int:
     write_new(run_dir / "namelist.input", effective_nml.encode())
     write_new(run_dir / "namelist.input.source", original_nml.encode())
 
-    if sha256(run_dir / "wrfinput_d01") != "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb":
-        raise ValueError("same-13 real wrfinput hash differs from reviewed artifact")
+    if prior_receipt_path is None and sha256(run_dir / "wrfinput_d01") != required_baseline_input:
+        raise ValueError(f"{control_role} real wrfinput hash differs from its reviewed artifact")
     if sha256(run_dir / "wrfbdy_d01") != "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7":
         raise ValueError("same-13 real wrfbdy hash differs from reviewed artifact")
 
     inputs = [path for path in sorted(run_dir.iterdir()) if path.is_file()]
     outputs = ["wrfout_d01_2026-08-16_13:00:00", "rsl.error.0000", "rsl.out.0000",
                "candidate_run.log", "namelist.output"]
-    provenance_paths = {
-        "runner": Path(__file__).resolve(),
-        "isolated_runtime_helper": ROOT / "tools/run_isolated_native.py",
-        "initialization_readback_checker": ROOT / "tools/check_native_hybrid_geometry.py",
-        "intel_setvars": Path("/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh"),
-        "mpi_vars": Path("/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh"),
-    }
-    provenance_before = {name: sha256(path) for name, path in provenance_paths.items()}
+    source_provenance_paths = provenance_paths(prior_policy_path)
+    source_provenance_paths["shared_native_initialization_runner"] = Path(__file__).resolve()
+    source_provenance_paths["runner"] = (runner_source or Path(__file__)).resolve()
+    if chain_artifacts:
+        source_provenance_paths.update(chain_artifacts)
+    provenance_before = {name: sha256(path) for name, path in source_provenance_paths.items()}
     source_candidate_hashes = {name: sha256(path) for name, path in candidate_inputs.items()}
     runtime_setup = (
         '. /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh --force '
@@ -161,8 +281,9 @@ def main() -> int:
         ["/bin/bash", "-c", runtime_setup],
         reserved_outputs=sorted(trace_outputs),
     )
+    receipt_schema, _ = initialization_receipt_contract(control_role, prior_receipt_path is not None)
     record: dict[str, object] = {
-        "schema": "pr82_same13_native_initialization_v1",
+        "schema": receipt_schema,
         "artifact_class": "RESEARCH_DIAGNOSTIC",
         "science_authority": "NONE",
         "operational_authority": "NONE",
@@ -174,12 +295,23 @@ def main() -> int:
         "wrf_static_runtime_library": "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
         "native_source_component": "retained PR81 nine-object WRF v4.8 diagnostic build; not the WRF v4.6 real.exe",
         "candidate_real_directory": str(real_case),
+        "initialization_control": ("MODE_OFF mass-only native control; no PR83 moment prior was applied"
+                                   if control_role == "MODE_OFF_MASS_ONLY" else None),
+        "moment_prior_status": "NOT_APPLIED" if control_role == "MODE_OFF_MASS_ONLY" else None,
+        "native_off_chain_sources": ({name: {"path": str(path), "sha256": sha256(path)}
+                                      for name, path in (chain_artifacts or {}).items()}
+                                     if control_role == "MODE_OFF_MASS_ONLY" else None),
+        "candidate_input_prior_receipt": str(prior_receipt_path) if prior_receipt_path else None,
+        "candidate_input_prior_receipt_sha256": sha256(prior_receipt_path) if prior_receipt_path else None,
+        "candidate_input_prior_status": prior_receipt.get("status") if prior_receipt_path else None,
+        "candidate_input_prelaunch_validation": prior_candidate_preflight,
         "candidate_wrfinput_sha256": sha256(run_dir / "wrfinput_d01"),
         "candidate_wrfbdy_sha256": sha256(run_dir / "wrfbdy_d01"),
         "wrfinput_time": "2026-08-16_13:00:00",
         "wrfbdy_authority": "genuine retained legacy boundary states at 13, 14, 15 UTC; candidate science identity is only at 13 UTC",
         "boundary_source_contains_12_utc": False,
         "native_namelist_source_sha256": sha256(real_case / "namelist.input"),
+        "cold_start_scope_guard": cold_start_scope_guard,
         "native_namelist_effective_sha256": sha256(run_dir / "namelist.input"),
         "native_namelist_change": {
             "run_seconds": {"source": "0", "effective": "20", "purpose": "enter one existing native initialization/first-step interval"},
@@ -230,7 +362,9 @@ def main() -> int:
                         "units": getattr(initial_input.variables[name], "units", None),
                     }
                 record["same13_input_hydromass_and_number_moments"] = {
-                    "positive_mass_and_zero_numbers_are_not_a_microphysics_pass": True,
+                    "positive_mass_and_zero_numbers_are_not_a_microphysics_pass": (
+                        prior_receipt_path is None
+                    ),
                     "hydromass_fields": physical,
                     "available_number_moment_fields": number_moments,
                     "initial_wrfo_hydromass_matches_input": all(
@@ -250,7 +384,7 @@ def main() -> int:
     log_tail = log_path.read_text(errors="replace")[-12000:] if log_path.exists() else ""
     rsl_error = run_dir / "rsl.error.0000"
     rsl_text = rsl_error.read_text(errors="replace") if rsl_error.exists() else ""
-    provenance_after = {name: sha256(path) for name, path in provenance_paths.items()}
+    provenance_after = {name: sha256(path) for name, path in source_provenance_paths.items()}
     candidate_hashes_after = {name: sha256(path) for name, path in candidate_inputs.items()}
     source_runtime_after = {name: sha256(runtime / name) for name in source_snapshot}
     record["runner_and_runtime_source_hashes_after"] = provenance_after
@@ -303,8 +437,8 @@ def main() -> int:
             "counts_line": next((line for line in lines if line.startswith("PR77_COUNTS,")), None),
             "scope": "first KDM6 diagnostic observation; not a native moment initialization or acceptance gate",
         }
-    record_path = run_dir / "pr82_same13_native_initialization.json"
-    write_new(record_path, (json.dumps(record, indent=2, sort_keys=True, allow_nan=False) + "\n").encode())
+    record_path = write_initialization_receipt(
+        run_dir, record, control_role, prior_receipt_path is not None)
     print(json.dumps({
         "run_dir": str(run_dir), "initialization_gate": record["initialization_gate"],
         "first_step_gate": record["first_step_gate"],
@@ -313,6 +447,10 @@ def main() -> int:
         "receipt": str(record_path),
     }, sort_keys=True))
     return 0 if record["initialization_gate"] == "PASS_SCOPED_INITIALIZATION_READBACK" else 1
+
+
+def main() -> int:
+    return run_initialization(build_parser().parse_args())
 
 
 if __name__ == "__main__":

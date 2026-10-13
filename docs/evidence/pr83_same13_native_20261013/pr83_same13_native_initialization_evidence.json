@@ -1,0 +1,166 @@
+{
+  "artifact_class": "RESEARCH_DIAGNOSTIC",
+  "does_not_claim_start_em_source_hook": true,
+  "first_call_post_readback": "unavailable unless candidate supplies both pre and post stages",
+  "independent_readback": {
+    "checker": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_moment_initialization_20261013/Cloud-BAL/tests/pr83_moment_candidate_readback.py",
+    "status": "NOT_RUN_POLICY_REJECTED_BEFORE_NATIVE_LAUNCH"
+  },
+  "initialization_path": "one pre-run copied-wrfinput transaction before untouched WRF startup",
+  "initializer_sha256": "6d5db11a58bc27ae6a3693551b127fc5653d672333a561986683aea6fa763a31",
+  "native_executable": "/var/tmp/pr82_same13_native_init_candidate.final4_20261012/wrf.exe",
+  "native_executable_sha256": "a805a1afff42021f322337c69d4e0818faf30e677f625f9a9d1b308728b32c00",
+  "native_first_call_trace": {},
+  "native_launch_attempted": false,
+  "native_output_directory_created": false,
+  "native_process_exit_status": null,
+  "native_run_receipt": null,
+  "native_run_receipt_sha256": null,
+  "native_run_scope": "same13 cold-start, one rank, one thread; no restart/nest/DFI extension",
+  "native_status": "SKIPPED_SOURCE_CAP_INFEASIBLE",
+  "operational_authority": "NONE",
+  "policy_diagnostics": {
+    "QIB": {
+      "committed_initialized_cells": 0,
+      "count_semantics": "proposed preflight only; complete initialization rejected",
+      "density_center_kg_m-3": 400.0,
+      "density_support_kg_m-3": [
+        100.0,
+        900.0
+      ],
+      "eligible_missing_cells": 1010,
+      "initialized_cells": 1010,
+      "output_written": false,
+      "positive_mass_without_representable_moment": 0,
+      "preflight": {
+        "bound_source": "Selected KDM6 source PSD parameterization and source-exact same-time WRF AL+ALB density; see docs/PR83_NATIVE_MOMENT_POLICY_20261013.json",
+        "checked_count": 2533440,
+        "mutated_input": false,
+        "reason": "WITHIN_DECLARED_DENSITY_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "PASS_SCOPED",
+        "uncertainty_description": "Source rho_min..rho_max is an admissibility envelope, not a statistical sigma; rho_mid is the declared research center.",
+        "valid": true,
+        "violation_count": 0
+      },
+      "preflight_outcome": "PROPOSED_ONLY_GLOBAL_REJECTION",
+      "preserved_existing_nonzero_cells": 0,
+      "proposed_initialized_cells": 1010,
+      "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion"
+    },
+    "QNCLOUD": {
+      "cap_rounding_policy": "Stored number is checked with stored DEN and exact source cap; an over-cap stored value is stepped toward zero by one representable native dtype value until admissible.",
+      "committed_initialized_cells": 0,
+      "count_semantics": "proposed preflight only; complete initialization rejected",
+      "eligible_missing_cells": 960289,
+      "initialized_cells": 960289,
+      "left_unchanged_infeasible_cells": 0,
+      "output_written": false,
+      "positive_mass_without_representable_moment": 0,
+      "preflight": {
+        "bound_source": "Selected KDM6 source PSD parameterization and source-exact same-time WRF AL+ALB density; see docs/PR83_NATIVE_MOMENT_POLICY_20261013.json",
+        "checked_count": 960289,
+        "mutated_input": false,
+        "reason": "WITHIN_DECLARED_PARTICLE_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "PASS_SCOPED",
+        "uncertainty_description": "Source-parameter admissibility envelope, not statistical sigma. Gamma PSD individual diameter support is unbounded; derived particle-mass limits describe the mean particle mass implied by lambda, not every particle.",
+        "valid": true,
+        "violation_count": 0
+      },
+      "preflight_outcome": "PROPOSED_ONLY_GLOBAL_REJECTION",
+      "preserved_existing_nonzero_cells": 0,
+      "prior_center_lambda_m-1_range": [
+        49412.11900079232,
+        77459.66692414833
+      ],
+      "proposed_initialized_cells": 960289,
+      "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion",
+      "source_lambda_max_m-1": 500000.0,
+      "source_lambda_min_m-1": 12000.0
+    },
+    "QNICE": {
+      "cap_rounding_policy": "Stored number is checked with stored DEN and exact source cap; an over-cap stored value is stepped toward zero by one representable native dtype value until admissible.",
+      "committed_initialized_cells": 0,
+      "count_semantics": "proposed preflight only; complete initialization rejected",
+      "eligible_missing_cells": 244498,
+      "first_infeasible_active_kji_zero_based": [
+        16,
+        71,
+        193
+      ],
+      "first_infeasible_mass_kg_kg-1": 0.0033685904927551746,
+      "first_infeasible_minimum_internal_number_m-3": 1095670.8959593067,
+      "first_infeasible_wrf_ijk_one_based": [
+        195,
+        73,
+        17
+      ],
+      "initialized_cells": 242193,
+      "left_unchanged_infeasible_cells": 2305,
+      "maximum_infeasible_wrf_ijk_one_based": [
+        191,
+        66,
+        26
+      ],
+      "maximum_minimum_internal_number_m-3": 1529145.8160301384,
+      "output_written": false,
+      "positive_mass_without_representable_moment": 2305,
+      "preflight_outcome": "PROPOSED_ONLY_GLOBAL_REJECTION",
+      "preserved_existing_nonzero_cells": 0,
+      "prior_center_lambda_m-1_range": [
+        9080.02949615825,
+        128551.93503016591
+      ],
+      "proposed_initialized_cells": 242193,
+      "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion",
+      "source_lambda_max_m-1": 1820000.0,
+      "source_lambda_min_m-1": 9080.0
+    },
+    "QNRAIN": {
+      "cap_rounding_policy": "Stored number is checked with stored DEN and exact source cap; an over-cap stored value is stepped toward zero by one representable native dtype value until admissible.",
+      "committed_initialized_cells": 0,
+      "count_semantics": "proposed preflight only; complete initialization rejected",
+      "eligible_missing_cells": 205577,
+      "initialized_cells": 205577,
+      "left_unchanged_infeasible_cells": 0,
+      "output_written": false,
+      "positive_mass_without_representable_moment": 0,
+      "preflight": {
+        "bound_source": "Selected KDM6 source PSD parameterization and source-exact same-time WRF AL+ALB density; see docs/PR83_NATIVE_MOMENT_POLICY_20261013.json",
+        "checked_count": 205577,
+        "mutated_input": false,
+        "reason": "WITHIN_DECLARED_PARTICLE_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "PASS_SCOPED",
+        "uncertainty_description": "Source-parameter admissibility envelope, not statistical sigma. Gamma PSD individual diameter support is unbounded; derived particle-mass limits describe the mean particle mass implied by lambda, not every particle.",
+        "valid": true,
+        "violation_count": 0
+      },
+      "preflight_outcome": "PROPOSED_ONLY_GLOBAL_REJECTION",
+      "preserved_existing_nonzero_cells": 0,
+      "prior_center_lambda_m-1_range": [
+        5799.5689494996095,
+        5799.5689494996095
+      ],
+      "proposed_initialized_cells": 205577,
+      "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion",
+      "source_lambda_max_m-1": 35000.0,
+      "source_lambda_min_m-1": 961.0
+    }
+  },
+  "policy_evidence_integrity": "PASS_PRE_POST_HASHES_IDENTICAL",
+  "policy_failure": "PR83_SOURCE_CAP_INFEASIBLE:QNICE:2305:first_wrf_ijk=195,73,17:minimum_internal_number_m-3=1095670.9",
+  "policy_receipt": "/var/tmp/pr83_same13_native_initialization_candidate.final3_20261013/pr83_same13_native_moment_prior.json",
+  "policy_receipt_sha256": "732cbb3cc8c389341c3a3ef2e088a8f8fb52b0f4f16b2110fc71e82aa0b54505",
+  "policy_sha256": "dde8df58f840d2fb11579876450749964ea2a54e36a68856c92bc979f46bae2a",
+  "policy_status": "BLOCKED_SOURCE_CAP_INFEASIBLE",
+  "prior_candidate_input": null,
+  "prior_candidate_input_sha256": null,
+  "schema": "pr83_same13_native_initialization_evidence_v1",
+  "science_authority": "NONE",
+  "source_input": "/var/tmp/pr82_same13_real_boundary_candidate.final2_20261012/wrfinput_d01",
+  "source_input_sha256_after": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+  "source_input_sha256_before": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+  "source_input_unchanged_by_prior": true
+}

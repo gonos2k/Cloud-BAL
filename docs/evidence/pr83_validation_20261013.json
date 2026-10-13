@@ -1,0 +1,122 @@
+{
+  "archive_manifest": "docs/evidence/pr83_execution_20261013/manifest.json",
+  "artifact_class": "RESEARCH_DIAGNOSTIC",
+  "base": "2fd3b6e999fbbfa38dcbb22101b7215bc88e6e24",
+  "checks": {
+    "code_hashes": {
+      "patches/pr83_rk_operands_trace.patch": "2bcb654a2e6ea32285008e5d48be1f78528e5d1b6aae236743abf537e9510a70",
+      "tests/build_pr83_rk_operands_observer.sh": "d1d587c695444c20751f079b0a042c934f37ad25d851dc99b5f87fd15c8315e6",
+      "tests/pr82_same13_native_readback.py": "45869f60f3bf30c70886ee258f0c99acb698f55c51a7aab43a3e7b67b4865ee6",
+      "tests/pr83_moment_candidate_readback.py": "90dfffe140469cf9d4672984f989116dc979d1e687c148ce6aa58c313b4ae32a",
+      "tests/pr83_off_candidate_wps_hook.f90": "77500bfa3c4ed208aa3baec75ce6188c6e464136f62fcd55a3dbf3deb27d65c3",
+      "tests/pr83_same13_native_pair_readback.py": "dcaf884337378a96101defeb4e00c5735827c739c1c2f56a9121f7f7f2546426",
+      "tests/pr83_same13_off_driver.f90": "dbd451ad384727fe2306a03e507c27d30a0f2a798c5356c8dabd5374d5ab9075",
+      "tests/pr83_same13_off_wps_readback.py": "0a0650b627eb1963ee94899ede3b082078db95c14ada4fc3489e3c30c0aed93c",
+      "tests/run_pr82_same13_native_initialization.py": "dd72d68ba000ea3136c80e1c9e0914d0221504e51ce3669d6b1f9f7a5c8adf35",
+      "tests/run_pr83_same13_native_initialization.py": "61a0318a79bdac10255f7ce3e0e619289529e4577f73a0eceea8ab8056070d6b",
+      "tests/run_pr83_same13_off_native_initialization.py": "57edd4c0942059d68cad7e53ebfc79cb04ecc578564cf2253bd9078361ffc991",
+      "tests/run_pr83_same13_off_real_boundary.sh": "b85de6d17234728fde6b62bb88a9573b3b4d3b825ad6ecfb4fa2bb20888307a9",
+      "tests/run_pr83_same13_off_wps.sh": "a5eca2ab5fdf04c2f885b521694e4de137738c4c7b77d7b284472eacadb225db",
+      "tests/run_unit_tests.sh": "b0c0339c5520e283890118eee43005b097b61749879168dd546e68b113f6581c",
+      "tests/test_initialize_native_moments.py": "534b639976f6d064280b41a35c49062643e0019be676a36790261d73ef34c64a",
+      "tests/test_pr82_same13_native_readback.py": "044395ff74fecff146ab040a0fd574160c433dd9578a7ecee2e588647c33f2ea",
+      "tests/test_pr83_moment_candidate_readback.py": "f669e1bf4ab8637faf7d0b71ee4d74fabc048b9635e1b1d1c34b53287243f4e2",
+      "tests/test_pr83_native_pair_readback.py": "995581396261b9cc34960bcaaaedcdab9dc3dcd4d748e0685af9a28e9e879155",
+      "tests/test_pr83_off_runner_contract.py": "e3cb6370f3e715ed2d2d3525f18f10f64bc0f1c871b1b4bec4c5b86592ea1878",
+      "tests/test_pr83_rk_operands_patch.py": "c7af0c34207a1c36774a85d0885ea9a0dcfeea7b9cda14cd13f122b57e5091c1",
+      "tests/test_pr83_same13_native_transaction.py": "c6dbedca4246da6d17d1ab6ef08dba95b15279eb28c84b2186d48fa7aec7e554",
+      "tools/initialize_native_moments.py": "6d5db11a58bc27ae6a3693551b127fc5653d672333a561986683aea6fa763a31"
+    },
+    "cp06a_real_scopes": {
+      "new_moment_prior": "2305 active QICE cells infeasible under actual-source PSD/cap; no candidate written or native launch",
+      "new_physical_candidate_acceptance": "OPEN",
+      "retained_13utc_analysis": "PR81 actual O2 candidate unchanged; no alpha-weight/wind-cap change",
+      "same13_off_control": "235 records -> metgrid -> retained real -> native initial output; PASS_SCOPED_IO, first KDM6 rejected",
+      "same13_transfer_operator_comparison": "Xa-Xb native initial-state diagnostics only; physics/continuity/energy/boundary closure unassessed"
+    },
+    "limits": [
+      "Canonical whole suite binds an unchanged 1845-file snapshot; final later helpers have focused checks.",
+      "Same13 real4.6/native partial4.8 combination retained; not unified/full transitive host certification.",
+      "MODE_OFF WPS validation checks post-mapper serialization, not independent canonical remapping.",
+      "Executed OFF runner hash recorded but original bytes unavailable; pre-refactor later snapshot is labeled separately.",
+      "PSD research prior is interior-only, no boundary/donor forcing or all-process admission claim.",
+      "No first KDM6 pre/post success, physical-time water/energy closure or 10/30/60-minute science pass."
+    ],
+    "native_pair_errors": {
+      "12utc_rk_observer": "actual advective product/sc_tend/scalar/carrier operands captured; donor/limiter cause open",
+      "mass_only_first_kdm6": "REJECTED_UNSUPPORTED_POSITIVE_MASS_WITHOUT_MOMENTS",
+      "misbound_exploratory_field_report": "Excluded; replaced by exact OFF receipt/input/output-bound readback",
+      "new_moment_initialized_native": "NOT_RUN_SOURCE_CAP_CONFLICT",
+      "off_control_initialization": "PASS_SCOPED_INITIALIZATION_READBACK",
+      "paired_frame_and_inventory": "PASS_SCOPED_Xa_MINUS_Xb",
+      "retained_pr82_coupled_initialization": "PASS_SCOPED_INITIALIZATION_READBACK"
+    },
+    "scoped_unit": {
+      "all_final_files_full_suite": false,
+      "focused_final_checks": [
+        {
+          "exit_status": 0,
+          "path": "tests/test_initialize_native_moments.py",
+          "sha256": "534b639976f6d064280b41a35c49062643e0019be676a36790261d73ef34c64a"
+        },
+        {
+          "exit_status": 0,
+          "path": "tests/test_pr82_same13_native_readback.py",
+          "sha256": "044395ff74fecff146ab040a0fd574160c433dd9578a7ecee2e588647c33f2ea"
+        },
+        {
+          "exit_status": 0,
+          "path": "tests/test_pr83_moment_candidate_readback.py",
+          "sha256": "f669e1bf4ab8637faf7d0b71ee4d74fabc048b9635e1b1d1c34b53287243f4e2"
+        },
+        {
+          "exit_status": 0,
+          "path": "tests/test_pr83_same13_native_transaction.py",
+          "sha256": "c6dbedca4246da6d17d1ab6ef08dba95b15279eb28c84b2186d48fa7aec7e554"
+        },
+        {
+          "exit_status": 0,
+          "path": "tests/test_pr83_rk_operands_patch.py",
+          "sha256": "c7af0c34207a1c36774a85d0885ea9a0dcfeea7b9cda14cd13f122b57e5091c1"
+        },
+        {
+          "exit_status": 0,
+          "path": "tests/test_pr83_native_pair_readback.py",
+          "sha256": "995581396261b9cc34960bcaaaedcdab9dc3dcd4d748e0685af9a28e9e879155"
+        },
+        {
+          "exit_status": 0,
+          "path": "tests/test_pr83_off_runner_contract.py",
+          "sha256": "e3cb6370f3e715ed2d2d3525f18f10f64bc0f1c871b1b4bec4c5b86592ea1878"
+        }
+      ],
+      "focused_log_sha256": "23aeefd04f6c9f32b07cd543d07614832b655abf144a1427e33fb731d176cc51",
+      "frozen_exit_status": 0,
+      "frozen_file_count": 1845,
+      "frozen_inventory_rechecked": true,
+      "full_wrf_host": false,
+      "launcher_log_sha256": "8c301f3140c3243126278ef1665a3fc90070ec46601367bac635fea4a6b7aa8d",
+      "paths_changed_after_freeze": [
+        "docs/PR83_SAME13_NATIVE_INITIALIZATION_20261013.md",
+        "tests/build_pr83_rk_operands_observer.sh",
+        "tests/pr82_same13_native_readback.py",
+        "tests/pr83_moment_candidate_readback.py",
+        "tests/pr83_same13_off_driver.f90",
+        "tests/pr83_same13_off_wps_readback.py",
+        "tests/run_pr82_same13_native_initialization.py",
+        "tests/run_pr83_same13_native_initialization.py",
+        "tests/run_pr83_same13_off_wps.sh",
+        "tests/run_unit_tests.sh",
+        "tests/test_pr82_same13_native_readback.py",
+        "tests/test_pr83_moment_candidate_readback.py",
+        "tests/test_pr83_rk_operands_patch.py",
+        "tests/test_pr83_same13_native_transaction.py"
+      ],
+      "source_inventory_sha256": "a10b7d83227efd8875232962d27a8527e750607da88ab4c3a5741e1d98b0b2b3",
+      "status": "PASS_FROZEN_CANONICAL_PLUS_FOCUSED_FINAL_HELPERS"
+    }
+  },
+  "operational_authority": "NONE",
+  "schema": "pr83_validation_v1",
+  "science_authority": "NONE"
+}

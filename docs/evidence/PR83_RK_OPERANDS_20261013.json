@@ -1,0 +1,423 @@
+{
+  "binary32_decode": "IEEE-754 binary32 decoded from the captured 8-hex-digit TRANSFER bit patterns; raw bits remain authoritative.",
+  "build": {
+    "archive_order_preserved": true,
+    "candidate_archive_sha256": "81c57f2dbee174da64847e2a58fb1f1185f66ef68952231b2f20ee4fbfcc2155",
+    "candidate_executable_path": "/var/tmp/pr83_rk_operand_build_20261013_7/wrf_pr83_rk_operands.exe",
+    "candidate_executable_sha256": "3c6d8552166de4b554021a10fa94846be068c9752448673810f445f29e3fc0d9",
+    "candidate_object_sha256": "4129f7764f43b0f9a3e0e528b208416f7ba86ec58fb2ca43e24d22d3f7b71116",
+    "ifx_real_size_option": [
+      "-real-size",
+      "32"
+    ],
+    "module_em_archive_slot_one_based": 338,
+    "module_em_archive_slot_zero_based": 337,
+    "module_files_hashed": 640,
+    "pre_post_dependency_hashes_match": true,
+    "receipt_path": "/var/tmp/pr83_rk_operand_build_20261013_7/pr83_rk_operands_observer_build.json",
+    "receipt_sha256": "e50d4a666a0cbf041eeb76fee2a2e247516e51523dde053ed6c19869cdb8b64c"
+  },
+  "interpretation_limit": "The records show the actual advect_tend*msfty product, sc_tend addition, scalar_1/scalar_2 bit patterns, RK coefficients/carriers, and resulting quotient output. They locate the requested zero \u2192 negative subnormal \u2192 positive minimum-subnormal transition. They do not establish why KDM6 later rejects its number-basis input, nor validate a physical initialization.",
+  "observation_site": {
+    "i": 4,
+    "j": 2,
+    "k": 22,
+    "scalar_index_im": 3,
+    "scalar_symbol": "p_qnc / QNCLOUD"
+  },
+  "observed_transition": {
+    "rk2_advect_tend_bits": "800244AA",
+    "rk2_rk3_scalar_1_input_bits": "00000000",
+    "rk2_sc_tend_bits": "00000000",
+    "rk2_scalar_2_binary32": -2.2420775429197073e-44,
+    "rk2_scalar_2_bits": "80000010",
+    "rk2_tendency_bits": "8002413D",
+    "rk3_advect_tend_bits": "000009E3",
+    "rk3_sc_tend_bits": "00000000",
+    "rk3_scalar_2_input_bits": "80000010",
+    "rk3_scalar_2_output_binary32": 1.401298464324817e-45,
+    "rk3_scalar_2_output_bits": "00000001",
+    "rk3_tendency_bits": "000009D4"
+  },
+  "rk_steps": {
+    "1": {
+      "advective_tendency_products_bits": [
+        "00000000",
+        "00000000"
+      ],
+      "raw_records": [
+        {
+          "advect_tend_binary32": 0.0,
+          "advect_tend_bits": "00000000",
+          "im": 3,
+          "msfty_binary32": 0.9941002130508423,
+          "msfty_bits": "3F7E7D5A",
+          "product_binary32": 0.0,
+          "product_bits": "00000000",
+          "record": "PR83_RK_PRODUCT",
+          "rk_step": 1
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_TENDENCY",
+          "rk_step": 1,
+          "sc_tend_binary32": 0.0,
+          "sc_tend_bits": "00000000",
+          "tendency_binary32": 0.0,
+          "tendency_bits": "00000000"
+        },
+        {
+          "c1_binary32": 0.5344555377960205,
+          "c1_bits": "3F08D214",
+          "c2_binary32": 44226.72265625,
+          "c2_bits": "472CC2B9",
+          "dt_binary32": 6.666666507720947,
+          "dt_bits": "40D55555",
+          "im": 3,
+          "mu_base_binary32": 94976.0625,
+          "mu_base_bits": "47B98008",
+          "mu_new_binary32": -145.56141662597656,
+          "mu_new_bits": "C3118FB9",
+          "mu_old_binary32": -144.46875,
+          "mu_old_bits": "C3107800",
+          "munew_binary32": 94830.5,
+          "munew_bits": "47B93740",
+          "muold_binary32": 94831.59375,
+          "muold_bits": "47B937CC",
+          "record": "PR83_RK_INPUT",
+          "rk_step": 1,
+          "scalar_1_binary32": 0.0,
+          "scalar_1_bits": "00000000",
+          "scalar_2_binary32": 0.0,
+          "scalar_2_bits": "00000000",
+          "tendency_binary32": 0.0,
+          "tendency_bits": "00000000"
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_OUTPUT",
+          "rk_step": 1,
+          "scalar_2_output_binary32": 0.0,
+          "scalar_2_output_bits": "00000000"
+        },
+        {
+          "advect_tend_binary32": 0.0,
+          "advect_tend_bits": "00000000",
+          "im": 3,
+          "msfty_binary32": 0.9941002130508423,
+          "msfty_bits": "3F7E7D5A",
+          "product_binary32": 0.0,
+          "product_bits": "00000000",
+          "record": "PR83_RK_PRODUCT",
+          "rk_step": 1
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_TENDENCY",
+          "rk_step": 1,
+          "sc_tend_binary32": 0.0,
+          "sc_tend_bits": "00000000",
+          "tendency_binary32": 0.0,
+          "tendency_bits": "00000000"
+        },
+        {
+          "c1_binary32": 0.5344555377960205,
+          "c1_bits": "3F08D214",
+          "c2_binary32": 44226.72265625,
+          "c2_bits": "472CC2B9",
+          "dt_binary32": 6.666666507720947,
+          "dt_bits": "40D55555",
+          "im": 3,
+          "mu_base_binary32": 94976.0625,
+          "mu_base_bits": "47B98008",
+          "mu_new_binary32": -145.56141662597656,
+          "mu_new_bits": "C3118FB9",
+          "mu_old_binary32": -144.46875,
+          "mu_old_bits": "C3107800",
+          "munew_binary32": 94830.5,
+          "munew_bits": "47B93740",
+          "muold_binary32": 94831.59375,
+          "muold_bits": "47B937CC",
+          "record": "PR83_RK_INPUT",
+          "rk_step": 1,
+          "scalar_1_binary32": 0.0,
+          "scalar_1_bits": "00000000",
+          "scalar_2_binary32": 0.0,
+          "scalar_2_bits": "00000000",
+          "tendency_binary32": 0.0,
+          "tendency_bits": "00000000"
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_OUTPUT",
+          "rk_step": 1,
+          "scalar_2_output_binary32": 0.0,
+          "scalar_2_output_bits": "00000000"
+        }
+      ],
+      "scalar_2_outputs_bits": [
+        "00000000",
+        "00000000"
+      ]
+    },
+    "2": {
+      "advective_tendency_products_bits": [
+        "00000000",
+        "8002413D"
+      ],
+      "raw_records": [
+        {
+          "advect_tend_binary32": 0.0,
+          "advect_tend_bits": "00000000",
+          "im": 3,
+          "msfty_binary32": 0.9941002130508423,
+          "msfty_bits": "3F7E7D5A",
+          "product_binary32": 0.0,
+          "product_bits": "00000000",
+          "record": "PR83_RK_PRODUCT",
+          "rk_step": 2
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_TENDENCY",
+          "rk_step": 2,
+          "sc_tend_binary32": 0.0,
+          "sc_tend_bits": "00000000",
+          "tendency_binary32": 0.0,
+          "tendency_bits": "00000000"
+        },
+        {
+          "c1_binary32": 0.5344555377960205,
+          "c1_bits": "3F08D214",
+          "c2_binary32": 44226.72265625,
+          "c2_bits": "472CC2B9",
+          "dt_binary32": 10.0,
+          "dt_bits": "41200000",
+          "im": 3,
+          "mu_base_binary32": 94976.0625,
+          "mu_base_bits": "47B98008",
+          "mu_new_binary32": -146.2088165283203,
+          "mu_new_bits": "C3123575",
+          "mu_old_binary32": -144.46875,
+          "mu_old_bits": "C3107800",
+          "munew_binary32": 94829.8515625,
+          "munew_bits": "47B936ED",
+          "muold_binary32": 94831.59375,
+          "muold_bits": "47B937CC",
+          "record": "PR83_RK_INPUT",
+          "rk_step": 2,
+          "scalar_1_binary32": 0.0,
+          "scalar_1_bits": "00000000",
+          "scalar_2_binary32": 0.0,
+          "scalar_2_bits": "00000000",
+          "tendency_binary32": 0.0,
+          "tendency_bits": "00000000"
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_OUTPUT",
+          "rk_step": 2,
+          "scalar_2_output_binary32": 0.0,
+          "scalar_2_output_bits": "00000000"
+        },
+        {
+          "advect_tend_binary32": -2.0830301672188406e-40,
+          "advect_tend_bits": "800244AA",
+          "im": 3,
+          "msfty_binary32": 0.9941002130508423,
+          "msfty_bits": "3F7E7D5A",
+          "product_binary32": -2.070740779686712e-40,
+          "product_bits": "8002413D",
+          "record": "PR83_RK_PRODUCT",
+          "rk_step": 2
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_TENDENCY",
+          "rk_step": 2,
+          "sc_tend_binary32": 0.0,
+          "sc_tend_bits": "00000000",
+          "tendency_binary32": -2.070740779686712e-40,
+          "tendency_bits": "8002413D"
+        },
+        {
+          "c1_binary32": 0.5344555377960205,
+          "c1_bits": "3F08D214",
+          "c2_binary32": 44226.72265625,
+          "c2_bits": "472CC2B9",
+          "dt_binary32": 10.0,
+          "dt_bits": "41200000",
+          "im": 3,
+          "mu_base_binary32": 94976.0625,
+          "mu_base_bits": "47B98008",
+          "mu_new_binary32": -146.2088165283203,
+          "mu_new_bits": "C3123575",
+          "mu_old_binary32": -144.46875,
+          "mu_old_bits": "C3107800",
+          "munew_binary32": 94829.8515625,
+          "munew_bits": "47B936ED",
+          "muold_binary32": 94831.59375,
+          "muold_bits": "47B937CC",
+          "record": "PR83_RK_INPUT",
+          "rk_step": 2,
+          "scalar_1_binary32": 0.0,
+          "scalar_1_bits": "00000000",
+          "scalar_2_binary32": 0.0,
+          "scalar_2_bits": "00000000",
+          "tendency_binary32": -2.070740779686712e-40,
+          "tendency_bits": "8002413D"
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_OUTPUT",
+          "rk_step": 2,
+          "scalar_2_output_binary32": -2.2420775429197073e-44,
+          "scalar_2_output_bits": "80000010"
+        }
+      ],
+      "scalar_2_outputs_bits": [
+        "00000000",
+        "80000010"
+      ]
+    },
+    "3": {
+      "advective_tendency_products_bits": [
+        "00000000",
+        "000009D4"
+      ],
+      "raw_records": [
+        {
+          "advect_tend_binary32": 0.0,
+          "advect_tend_bits": "00000000",
+          "im": 3,
+          "msfty_binary32": 0.9941002130508423,
+          "msfty_bits": "3F7E7D5A",
+          "product_binary32": 0.0,
+          "product_bits": "00000000",
+          "record": "PR83_RK_PRODUCT",
+          "rk_step": 3
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_TENDENCY",
+          "rk_step": 3,
+          "sc_tend_binary32": 0.0,
+          "sc_tend_bits": "00000000",
+          "tendency_binary32": 0.0,
+          "tendency_bits": "00000000"
+        },
+        {
+          "c1_binary32": 0.5344555377960205,
+          "c1_bits": "3F08D214",
+          "c2_binary32": 44226.72265625,
+          "c2_bits": "472CC2B9",
+          "dt_binary32": 20.0,
+          "dt_bits": "41A00000",
+          "im": 3,
+          "mu_base_binary32": 94976.0625,
+          "mu_base_bits": "47B98008",
+          "mu_new_binary32": -150.7581329345703,
+          "mu_new_bits": "C316C215",
+          "mu_old_binary32": -144.46875,
+          "mu_old_bits": "C3107800",
+          "munew_binary32": 94825.3046875,
+          "munew_bits": "47B934A7",
+          "muold_binary32": 94831.59375,
+          "muold_bits": "47B937CC",
+          "record": "PR83_RK_INPUT",
+          "rk_step": 3,
+          "scalar_1_binary32": 0.0,
+          "scalar_1_bits": "00000000",
+          "scalar_2_binary32": 0.0,
+          "scalar_2_bits": "00000000",
+          "tendency_binary32": 0.0,
+          "tendency_bits": "00000000"
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_OUTPUT",
+          "rk_step": 3,
+          "scalar_2_output_binary32": 0.0,
+          "scalar_2_output_bits": "00000000"
+        },
+        {
+          "advect_tend_binary32": 3.546686413206112e-42,
+          "advect_tend_bits": "000009E3",
+          "im": 3,
+          "msfty_binary32": 0.9941002130508423,
+          "msfty_bits": "3F7E7D5A",
+          "product_binary32": 3.52566693624124e-42,
+          "product_bits": "000009D4",
+          "record": "PR83_RK_PRODUCT",
+          "rk_step": 3
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_TENDENCY",
+          "rk_step": 3,
+          "sc_tend_binary32": 0.0,
+          "sc_tend_bits": "00000000",
+          "tendency_binary32": 3.52566693624124e-42,
+          "tendency_bits": "000009D4"
+        },
+        {
+          "c1_binary32": 0.5344555377960205,
+          "c1_bits": "3F08D214",
+          "c2_binary32": 44226.72265625,
+          "c2_bits": "472CC2B9",
+          "dt_binary32": 20.0,
+          "dt_bits": "41A00000",
+          "im": 3,
+          "mu_base_binary32": 94976.0625,
+          "mu_base_bits": "47B98008",
+          "mu_new_binary32": -150.7581329345703,
+          "mu_new_bits": "C316C215",
+          "mu_old_binary32": -144.46875,
+          "mu_old_bits": "C3107800",
+          "munew_binary32": 94825.3046875,
+          "munew_bits": "47B934A7",
+          "muold_binary32": 94831.59375,
+          "muold_bits": "47B937CC",
+          "record": "PR83_RK_INPUT",
+          "rk_step": 3,
+          "scalar_1_binary32": 0.0,
+          "scalar_1_bits": "00000000",
+          "scalar_2_binary32": -2.2420775429197073e-44,
+          "scalar_2_bits": "80000010",
+          "tendency_binary32": 3.52566693624124e-42,
+          "tendency_bits": "000009D4"
+        },
+        {
+          "im": 3,
+          "record": "PR83_RK_OUTPUT",
+          "rk_step": 3,
+          "scalar_2_output_binary32": 1.401298464324817e-45,
+          "scalar_2_output_bits": "00000001"
+        }
+      ],
+      "scalar_2_outputs_bits": [
+        "00000000",
+        "00000001"
+      ]
+    }
+  },
+  "run": {
+    "error": "KDM6 invalid NC number basis input",
+    "outcome": "kdm6_input_error_stop",
+    "receipt_path": "/var/tmp/pr83_rk_operand_run_20261013_4/pr82_native_run.json",
+    "receipt_sha256": "a7be06c886dcc75ea483a029f0a8abba6b60de905e2a5f0bb261bd896ee2b78b",
+    "rsl_out_path": "/var/tmp/pr83_rk_operand_run_20261013_4/run/rsl.out.0000",
+    "rsl_out_sha256": "fe7f0768ef3d99eb72ccb3c9fcc495438090e57569bc6a6d69f2eff27cb27efd",
+    "source_input_snapshot_sha256": "a10744a4257e9f3608049f33aa6b3d8ed2cf4bf315269203202e963d3e5337a0",
+    "source_input_unchanged": true
+  },
+  "schema": "pr83_rk_operands_trace_evidence_v1",
+  "scope": "Diagnostic observation at the pinned native RK scalar update only; no numerical algorithm change and no causal claim about downstream KDM6 rejection.",
+  "source": {
+    "patch_path": "patches/pr83_rk_operands_trace.patch",
+    "patch_sha256": "2bcb654a2e6ea32285008e5d48be1f78528e5d1b6aae236743abf537e9510a70",
+    "patched_source_sha256": "09bbbb79767ef9f44e00e6485468d22a221b50a34f5664398eb0ee852d9818b1",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/dyn_em/module_em.F",
+    "sha256": "7695bfb05a7f99763334a6e69523bbcc1de0f2c659177a18c10a6e1cf530a0c7"
+  }
+}
