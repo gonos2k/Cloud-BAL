@@ -9,6 +9,7 @@ import math
 import os
 import shutil
 import sys
+import subprocess
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -21,10 +22,18 @@ from hydrometeor_moments import validate_bulk_volume, validate_mass_number
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_POLICY = ROOT / "docs/PR61_NATIVE_MOMENT_POLICY_20261006.json"
+DEFAULT_PR83_POLICY = ROOT / "docs/PR83_NATIVE_MOMENT_POLICY_20261013.json"
 EXPECTED_POLICY_SHA256 = "20fd53ec626cbb4e192583f99777b5f7f56d580959171c240b804c38873517b3"
 EXPECTED_INPUT_SHA256 = "397daf0387d522243167f5e48831f7415bea07f00c22e5674ef89f73db1a2c0c"
 EXPECTED_TRACE_SHA256 = "aa01a611b81cf041961748a945e91b4d52aa6704c9fea4398ec7cbe9138139b2"
 EXPECTED_VALID_TIME = "2026-08-16_12:00:00"
+PR83_EXPECTED_POLICY_SHA256 = "dde8df58f840d2fb11579876450749964ea2a54e36a68856c92bc979f46bae2a"
+PR83_EXPECTED_INPUT_SHA256 = "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb"
+PR83_EXPECTED_VALID_TIME = "2026-08-16_13:00:00"
+PR83_BOUND_SOURCE = (
+    "Selected KDM6 source PSD parameterization and source-exact same-time WRF AL+ALB density; "
+    "see docs/PR83_NATIVE_MOMENT_POLICY_20261013.json"
+)
 EXPECTED_TRACE_BOUNDS = {
     "ids": 1, "ide": 235, "jds": 1, "jde": 283, "kds": 1, "kde": 40,
     "ims": -4, "ime": 240, "jms": -4, "jme": 288, "kms": 1, "kme": 40,
@@ -71,6 +80,10 @@ _SHA = set("0123456789abcdef")
 
 class InitializationError(ValueError):
     """The source input cannot support this explicitly scoped prior."""
+
+    def __init__(self, message: str, *, diagnostics: dict[str, Any] | None = None):
+        super().__init__(message)
+        self.diagnostics = diagnostics or {}
 
 
 def file_sha256(path: Path) -> str:
@@ -171,6 +184,562 @@ def _validate_policy_file(path: Path) -> dict[str, Any]:
         raise InitializationError("POLICY_HASH_MISMATCH")
     _check_policy_implementation(policy)
     return policy
+
+
+def _validate_same13_policy_file(path: Path) -> dict[str, Any]:
+    try:
+        policy = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise InitializationError(f"INVALID_POLICY_FILE:{error}") from error
+    if not isinstance(policy, dict):
+        raise InitializationError("POLICY_ROOT_MUST_BE_OBJECT")
+    if (policy.get("schema") != "pr83_same13_native_moment_policy_v1"
+            or policy.get("policy_id") != "SAME13_KDM6_NATIVE_MOMENT_PRIOR_20261013"
+            or policy.get("declared_before_experiment") is not True):
+        raise InitializationError("UNSUPPORTED_OR_UNDECLARED_PR83_POLICY")
+    if file_sha256(path) != PR83_EXPECTED_POLICY_SHA256:
+        raise InitializationError("PR83_POLICY_HASH_MISMATCH")
+    source = policy["source"]
+    for path_key, hash_key in (
+        ("kdm6_source_path", "kdm6_source_sha256"),
+        ("upstream_formula_comparison_path", "upstream_formula_comparison_sha256"),
+        ("model_constants_path", "model_constants_sha256"),
+        ("driver_path", "driver_sha256"),
+        ("runtime_consumer_source_path", "runtime_consumer_source_sha256"),
+    ):
+        source_path = Path(source[path_key])
+        if file_sha256(source_path) != source[hash_key]:
+            raise InitializationError(f"MODEL_SOURCE_HASH_MISMATCH:{path_key}")
+    for path_key, hash_key in (
+        ("runtime_consumer_executable_path", "runtime_consumer_executable_sha256"),
+        ("runtime_consumer_archive_path", "runtime_consumer_archive_sha256"),
+        ("runtime_consumer_build_receipt_path", "runtime_consumer_build_receipt_sha256"),
+        ("runtime_consumer_readback_receipt_path", "runtime_consumer_readback_receipt_sha256"),
+    ):
+        if file_sha256(Path(source[path_key])) != source[hash_key]:
+            raise InitializationError(f"MODEL_SOURCE_HASH_MISMATCH:{path_key}")
+    member = subprocess.run(
+        ["ar", "p", source["runtime_consumer_archive_path"],
+         source["runtime_consumer_object_member"]],
+        check=True, capture_output=True,
+    ).stdout
+    if hashlib.sha256(member).hexdigest() != source["runtime_consumer_object_member_sha256"]:
+        raise InitializationError("MODEL_SOURCE_HASH_MISMATCH:runtime_consumer_object_member")
+    density_source = policy["density_source"]
+    for path_key, hash_key in (
+        ("wrf_source_start_path", "wrf_source_start_sha256"),
+        ("wrf_source_density_path", "wrf_source_density_sha256"),
+    ):
+        source_path = Path(density_source[path_key])
+        if file_sha256(source_path) != density_source[hash_key]:
+            raise InitializationError(f"WRF_SOURCE_HASH_MISMATCH:{path_key}")
+    _check_same13_policy_implementation(policy)
+    return policy
+
+
+def _check_same13_policy_implementation(policy: dict[str, Any]) -> None:
+    declared_species = policy["species"]
+    if set(declared_species) != set(SPECIES) | {"QGRAUP", "QSNOW"}:
+        raise InitializationError("PR83_POLICY_IMPLEMENTATION_MISMATCH:species_inventory")
+    formulae = {
+        "QCLOUD": "cmc*Gamma(1 + dmc/(muc+1)); cmc=pi*rhowater/6",
+        "QRAIN": "cmr*Gamma(dmr+mur+1)/Gamma(mur+1); cmr=pi*rhowater/6",
+        "QICE": "cmi*Gamma(dmi+mui+1)/Gamma(mui+1); cmi=pi*500/6",
+    }
+    gamma_shape = {"QCLOUD": (1000.0, 2.0, True),
+                   "QRAIN": (1000.0, 1.0, False),
+                   "QICE": (500.0, 0.0, False)}
+    fields = (
+        ("moment", "target_moment"),
+        ("power", "shape_exponent_d"),
+        ("lambda_min", "lambda_min_m-1"),
+        ("lambda_max", "lambda_max_m-1"),
+        ("internal_cap", "internal_number_cap_number_m-3"),
+        ("m_min", "particle_mean_mass_bounds_kg", 0),
+        ("m_max", "particle_mean_mass_bounds_kg", 1),
+    )
+    for mass_name, spec in SPECIES.items():
+        declared = declared_species[mass_name]
+        for field in fields:
+            if len(field) == 2:
+                code_key, policy_key = field
+                expected = declared[policy_key]
+            else:
+                code_key, policy_key, index = field
+                expected = declared[policy_key][index]
+            if spec[code_key] != expected:
+                raise InitializationError(
+                    f"PR83_POLICY_IMPLEMENTATION_MISMATCH:{mass_name}.{code_key}"
+                )
+        if declared["pidn_formula"] != formulae[mass_name]:
+            raise InitializationError(
+                f"PR83_POLICY_IMPLEMENTATION_MISMATCH:{mass_name}.pidn_formula"
+            )
+        particle_density, mu, generalized = gamma_shape[mass_name]
+        cm = math.pi * particle_density / 6.0
+        expected_pidn = (
+            cm * math.gamma(1.0 + spec["power"] / (mu + 1.0))
+            if generalized else
+            cm * math.gamma(spec["power"] + mu + 1.0) / math.gamma(mu + 1.0)
+        )
+        if not math.isclose(spec["pidn"], expected_pidn, rel_tol=16 * sys.float_info.epsilon):
+            raise InitializationError(
+                f"PR83_POLICY_IMPLEMENTATION_MISMATCH:{mass_name}.pidn"
+            )
+        derived = (spec["pidn"] / spec["lambda_max"] ** spec["power"],
+                   spec["pidn"] / spec["lambda_min"] ** spec["power"])
+        declared_bounds = declared["particle_mean_mass_bounds_kg"]
+        if any(not math.isclose(a, b, rel_tol=16 * sys.float_info.epsilon)
+               for a, b in zip(derived, declared_bounds)):
+            raise InitializationError(
+                f"PR83_POLICY_IMPLEMENTATION_MISMATCH:{mass_name}.mean_mass_bounds"
+            )
+    graupel = declared_species["QGRAUP"]
+    for field, policy_field in (
+        ("moment", "target_moment"),
+        ("threshold", "source_active_mass_threshold_kg_kg-1"),
+        ("rho_center", "bulk_density_prior_center_kg_m-3"),
+        ("rho_min", "bulk_density_min_kg_m-3"),
+        ("rho_max", "bulk_density_max_kg_m-3"),
+    ):
+        expected = graupel.get(policy_field)
+        if expected is None and field == "threshold":
+            continue
+        if GRAUPEL[field] != expected:
+            raise InitializationError(
+                f"PR83_POLICY_IMPLEMENTATION_MISMATCH:QGRAUP.{field}"
+            )
+    if declared_species["QSNOW"].get("target_moment") is not None:
+        raise InitializationError("PR83_POLICY_IMPLEMENTATION_MISMATCH:QSNOW")
+
+
+def _same13_dry_density(dataset: Dataset) -> np.ndarray:
+    """Return the source-exact real32 dry-carrier density from AL + ALB."""
+    for name in ("AL", "ALB"):
+        if name not in dataset.variables:
+            raise InitializationError(f"MISSING_DENSITY_FIELD:{name}")
+        variable = dataset.variables[name]
+        if variable.dimensions != DIMENSIONS:
+            raise InitializationError(f"MALFORMED_DIMENSIONS:{name}")
+        if _canonical_units(variable) != "m3 kg-1":
+            raise InitializationError(f"SERIALIZED_UNITS_MISMATCH:{name}")
+    al = _read_unmasked(dataset.variables["AL"], "AL").astype(np.float32)
+    alb = _read_unmasked(dataset.variables["ALB"], "ALB").astype(np.float32)
+    inverse_density = np.add(al, alb, dtype=np.float32)
+    if (not np.all(np.isfinite(inverse_density))
+            or np.any(inverse_density <= 0.0)):
+        raise InitializationError("INVALID_INVERSE_DRY_AIR_DENSITY")
+    with np.errstate(divide="ignore", invalid="ignore", over="ignore"):
+        density = np.divide(np.float32(1.0), inverse_density, dtype=np.float32)
+    if not np.all(np.isfinite(density)) or np.any(density <= 0.0):
+        raise InitializationError("INVALID_DRY_AIR_DENSITY")
+    return density
+
+
+def _check_same13_input_metadata(dataset: Dataset) -> None:
+    if "Time" not in dataset.dimensions or len(dataset.dimensions["Time"]) != 1:
+        raise InitializationError("EXPECTED_ONE_TIME_RECORD")
+    physics = np.asarray(getattr(dataset, "MP_PHYSICS", None))
+    if physics.ndim != 0 or physics.dtype.kind not in "ifu" or physics.item() != 37:
+        raise InitializationError("UNSUPPORTED_MP_PHYSICS")
+    if "Times" not in dataset.variables:
+        raise InitializationError("MISSING_VALID_TIME")
+    time_value = b"".join(np.asarray(dataset["Times"][:]).reshape(-1)).decode("ascii")
+    if time_value != PR83_EXPECTED_VALID_TIME:
+        raise InitializationError("VALID_TIME_MISMATCH")
+    expected_units = {
+        "QCLOUD": "kg kg-1", "QICE": "kg kg-1", "QRAIN": "kg kg-1",
+        "QGRAUP": "kg kg-1", "QNCLOUD": "kg-1", "QNICE": "kg-1",
+        "QNRAIN": "kg-1", "QIB": "m3 kg-1", "QNCCN": "kg-1",
+        "AL": "m3 kg-1", "ALB": "m3 kg-1",
+    }
+    for name, expected in expected_units.items():
+        if name not in dataset.variables:
+            raise InitializationError(f"MISSING_FIELDS:{name}")
+        if _canonical_units(dataset.variables[name]) != expected:
+            raise InitializationError(f"SERIALIZED_UNITS_MISMATCH:{name}")
+        if dataset.variables[name].shape != (1, 39, 282, 234):
+            raise InitializationError(f"SERIALIZED_SHAPE_MISMATCH:{name}")
+
+
+def _same13_preflight(
+    arrays: dict[str, np.ndarray], density: np.ndarray
+) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], dict[str, Any]]:
+    active_slice = (slice(None), slice(1, -1), slice(1, -1))
+    active_density = density[active_slice]
+    updated: dict[str, np.ndarray] = {}
+    masks: dict[str, np.ndarray] = {}
+    reports: dict[str, Any] = {}
+    blockers: list[str] = []
+    for mass_name, spec in SPECIES.items():
+        mass = arrays[mass_name][active_slice].astype(np.float64)
+        existing = arrays[spec["moment"]][active_slice]
+        if np.any((mass == 0.0) & (existing != 0.0)):
+            raise InitializationError(f"PR83_CONFLICTING_ZERO_MASS:{mass_name}")
+        result, counts = _prepare_moments(
+            mass, existing, active_density,
+            threshold=0.0, lambda_min=spec["lambda_min"],
+            lambda_max=spec["lambda_max"], power=spec["power"],
+            pidn=spec["pidn"], internal_cap=spec["internal_cap"],
+        )
+        positive_mass_missing = (mass > 0.0) & (result == 0.0)
+        infeasible_count = int(np.count_nonzero(positive_mass_missing))
+        if infeasible_count:
+            locations = np.argwhere(positive_mass_missing)
+            first = locations[0]
+            k, j, i = (int(value) for value in first)
+            minimum_internal_numbers = (
+                mass[positive_mass_missing] * active_density[positive_mass_missing]
+                * spec["lambda_min"] ** spec["power"] / spec["pidn"]
+            )
+            maximum_at = locations[int(np.argmax(minimum_internal_numbers))]
+            max_k, max_j, max_i = (int(value) for value in maximum_at)
+            min_internal_number = float(minimum_internal_numbers[0])
+            max_internal_number = float(np.max(minimum_internal_numbers))
+            reports[spec["moment"]] = {
+                **counts,
+                "positive_mass_without_representable_moment": infeasible_count,
+                "first_infeasible_active_kji_zero_based": [k, j, i],
+                "first_infeasible_wrf_ijk_one_based": [i + 2, j + 2, k + 1],
+                "first_infeasible_mass_kg_kg-1": float(mass[k, j, i]),
+                "first_infeasible_minimum_internal_number_m-3": min_internal_number,
+                "maximum_minimum_internal_number_m-3": max_internal_number,
+                "maximum_infeasible_wrf_ijk_one_based": [max_i + 2, max_j + 2, max_k + 1],
+            }
+            blockers.append(
+                f"{spec['moment']}:{infeasible_count}:"
+                f"first_wrf_ijk={i + 2},{j + 2},{k + 1}:"
+                f"minimum_internal_number_m-3={min_internal_number:.9g}"
+            )
+        mask = result != existing
+        full = np.array(arrays[spec["moment"]], copy=True)
+        full[active_slice] = result
+        updated[spec["moment"]] = full
+        masks[spec["moment"]] = mask
+        infeasibility_details = reports.get(spec["moment"], {})
+        reports[spec["moment"]] = {
+            **counts,
+            **infeasibility_details,
+            "positive_mass_without_representable_moment": infeasible_count,
+            "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion",
+        }
+        if not infeasible_count:
+            reports[spec["moment"]]["preflight"] = _validate_mass_prior(
+                mass, result, mass > 0.0,
+                m_min=spec["m_min"], m_max=spec["m_max"],
+                bound_source=PR83_BOUND_SOURCE,
+            )
+            internal_number = result.astype(np.float32) * active_density.astype(np.float32)
+            if np.any((mass > 0.0) & (internal_number == 0.0)):
+                raise InitializationError(
+                    f"PR83_PRIOR_INTERNAL_NUMBER_UNREPRESENTABLE:{spec['moment']}"
+                )
+            if np.any(internal_number > np.float32(spec["internal_cap"])):
+                raise InitializationError(
+                    f"PR83_EXISTING_MOMENT_EXCEEDS_SOURCE_CAP:{spec['moment']}"
+                )
+
+    mass = arrays["QGRAUP"][active_slice].astype(np.float64)
+    existing = arrays["QIB"][active_slice]
+    if np.any((mass == 0.0) & (existing != 0.0)):
+        raise InitializationError("PR83_CONFLICTING_ZERO_MASS:QGRAUP")
+    active = (mass > 0.0) & (existing == 0.0)
+    result = np.array(existing, copy=True)
+    result[active] = (mass[active] / GRAUPEL["rho_center"]).astype(existing.dtype)
+    if np.any((mass > 0.0) & (result == 0.0)):
+        raise InitializationError("PR83_UNREPRESENTABLE_POSITIVE_GRAUPEL_MASS")
+    if np.any((mass == 0.0) & (result != 0.0)):
+        raise InitializationError("PR83_CONFLICTING_ZERO_GRAUPEL_MASS")
+    volume_report = _validate_bulk_prior(
+        mass, result, np.ones(mass.shape, dtype=bool),
+        bound_source=PR83_BOUND_SOURCE,
+    )
+    full_volume = np.array(arrays["QIB"], copy=True)
+    full_volume[active_slice] = result
+    updated["QIB"] = full_volume
+    masks["QIB"] = active
+    reports["QIB"] = {
+        "eligible_missing_cells": int(np.count_nonzero(active)),
+        "initialized_cells": int(np.count_nonzero(active)),
+        "preserved_existing_nonzero_cells": int(np.count_nonzero(existing > 0.0)),
+        "positive_mass_without_representable_moment": 0,
+        "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion",
+        "density_center_kg_m-3": GRAUPEL["rho_center"],
+        "density_support_kg_m-3": [GRAUPEL["rho_min"], GRAUPEL["rho_max"]],
+        "preflight": volume_report,
+    }
+    if blockers:
+        for report in reports.values():
+            proposed = int(report.get("initialized_cells", 0))
+            report["proposed_initialized_cells"] = proposed
+            report["committed_initialized_cells"] = 0
+            report["output_written"] = False
+            report["preflight_outcome"] = "PROPOSED_ONLY_GLOBAL_REJECTION"
+            report["count_semantics"] = "proposed preflight only; complete initialization rejected"
+        raise InitializationError(
+            "PR83_SOURCE_CAP_INFEASIBLE:" + ";".join(blockers),
+            diagnostics=reports,
+        )
+    return updated, masks, reports
+
+
+def _same13_evidence_hashes(
+    source: Path, policy_file: Path, initializer_path: Path, policy: dict[str, Any]
+) -> dict[str, str]:
+    """Hash all consumed input and source evidence before/after preflight."""
+    hashes = {
+        "source_input": file_sha256(source),
+        "policy": file_sha256(policy_file),
+        "initializer": file_sha256(initializer_path),
+    }
+    source_metadata = policy["source"]
+    for key in (
+        "kdm6_source_path", "upstream_formula_comparison_path", "model_constants_path",
+        "driver_path", "runtime_consumer_source_path", "runtime_consumer_executable_path",
+        "runtime_consumer_archive_path", "runtime_consumer_build_receipt_path",
+        "runtime_consumer_readback_receipt_path",
+    ):
+        hashes[key] = file_sha256(Path(source_metadata[key]))
+    density_source = policy["density_source"]
+    for key in ("wrf_source_start_path", "wrf_source_density_path"):
+        hashes[key] = file_sha256(Path(density_source[key]))
+    member = subprocess.run(
+        ["ar", "p", source_metadata["runtime_consumer_archive_path"],
+         source_metadata["runtime_consumer_object_member"]],
+        check=True, capture_output=True,
+    ).stdout
+    hashes["runtime_consumer_object_member"] = hashlib.sha256(member).hexdigest()
+    return hashes
+
+
+def initialize_same13_copy(
+    source_path: str | Path,
+    output_path: str | Path,
+    receipt_path: str | Path,
+    *,
+    policy_path: str | Path,
+) -> dict[str, Any]:
+    """Initialize a same-13UTC copy, failing closed if any positive Q is infeasible."""
+    source = Path(source_path).resolve()
+    output = Path(output_path).resolve()
+    receipt_file = Path(receipt_path).resolve()
+    policy_file = Path(policy_path).resolve()
+    if (source == output or output == receipt_file or output.exists()
+            or receipt_file.exists()):
+        raise InitializationError("OUTPUT_AND_RECEIPT_MUST_BE_NEW_PATHS")
+    policy = _validate_same13_policy_file(policy_file)
+    policy_hash = file_sha256(policy_file)
+    initializer_path = Path(__file__).resolve()
+    initializer_hash = file_sha256(initializer_path)
+    source_hash = file_sha256(source)
+    if source_hash != PR83_EXPECTED_INPUT_SHA256:
+        raise InitializationError("PR83_SOURCE_INPUT_HASH_MISMATCH")
+    evidence_hashes_before = _same13_evidence_hashes(
+        source, policy_file, initializer_path, policy
+    )
+
+    required = {
+        "QCLOUD", "QICE", "QRAIN", "QGRAUP", "QNCLOUD", "QNICE",
+        "QNRAIN", "QIB", "QNCCN", "AL", "ALB",
+    }
+    with Dataset(source, "r") as original:
+        _check_same13_input_metadata(original)
+        missing = sorted(required - set(original.variables))
+        if missing:
+            raise InitializationError(f"MISSING_FIELDS:{','.join(missing)}")
+        arrays = {
+            name: _read_unmasked(original.variables[name], name)
+            for name in required
+        }
+        density = _same13_dry_density(original)
+        if any(value.shape != arrays["QCLOUD"].shape for value in arrays.values()):
+            raise InitializationError("MOMENT_FIELD_SHAPE_MISMATCH")
+        for name in ("QCLOUD", "QICE", "QRAIN", "QGRAUP"):
+            if np.any(arrays[name] < 0.0):
+                raise InitializationError(f"NEGATIVE_MASS_FIELD:{name}")
+        for name in ("QCLOUD", "QICE", "QRAIN", "QGRAUP"):
+            moment = SPECIES.get(name, {}).get("moment", "QIB")
+            if np.any((arrays[name] == 0.0) & (arrays[moment] != 0.0)):
+                raise InitializationError(f"PR83_CONFLICTING_ZERO_MASS:{name}")
+        variable_hashes_before = {
+            name: variable_sha256(variable)
+            for name, variable in original.variables.items()
+        }
+        consumed_variable_hashes = {
+            name: variable_hashes_before[name]
+            for name in sorted(required)
+        }
+
+    try:
+        updated, initialized_masks, field_reports = _same13_preflight(arrays, density)
+    except InitializationError as error:
+        # A physical infeasibility is a completed preflight result. Retain an
+        # explicit receipt while leaving both the source and output untouched.
+        if not str(error).startswith("PR83_SOURCE_CAP_INFEASIBLE:"):
+            raise
+        evidence_hashes_after = _same13_evidence_hashes(
+            source, policy_file, initializer_path, policy
+        )
+        if evidence_hashes_after != evidence_hashes_before:
+            raise InitializationError("PR83_EVIDENCE_CHANGED_DURING_PREFLIGHT") from error
+        if file_sha256(source) != source_hash:
+            raise InitializationError("PR83_SOURCE_INPUT_CHANGED_DURING_PREFLIGHT") from error
+        for report in error.diagnostics.values():
+            proposed = int(report.get("initialized_cells", 0))
+            report["proposed_initialized_cells"] = proposed
+            report["committed_initialized_cells"] = 0
+            report["output_written"] = False
+            report["preflight_outcome"] = "PROPOSED_ONLY_GLOBAL_REJECTION"
+            report["count_semantics"] = "proposed preflight only; complete initialization rejected"
+        receipt = {
+            "schema": "pr83_same13_native_moment_prior_receipt_v1",
+            "policy_id": policy["policy_id"],
+            "policy_sha256": policy_hash,
+            "initializer_sha256": initializer_hash,
+            "status": "BLOCKED_SOURCE_CAP_INFEASIBLE",
+            "native_launch_authority": "NONE",
+            "source_input": str(source),
+            "source_input_sha256": source_hash,
+            "source_input_unchanged": file_sha256(source) == source_hash,
+            "evidence_integrity": "PASS_PRE_POST_HASHES_IDENTICAL",
+            "evidence_sha256_before": evidence_hashes_before,
+            "evidence_sha256_after": evidence_hashes_after,
+            "consumed_variable_sha256": consumed_variable_hashes,
+            "output_input": None,
+            "output_input_created": False,
+            "failure": str(error),
+            "field_prior_preflight": error.diagnostics,
+            "source_density": {
+                "formula": "real32 reciprocal of real32 AL + ALB",
+                "basis": "dry_air",
+                "active_min_kg_m-3": float(np.min(density[:, 1:-1, 1:-1])),
+                "active_max_kg_m-3": float(np.max(density[:, 1:-1, 1:-1])),
+            },
+            "same13_input_positive_mass_counts": {
+                name: int(np.count_nonzero(arrays[name][:, 1:-1, 1:-1] > 0.0)
+                          ) for name in ("QCLOUD", "QICE", "QRAIN", "QGRAUP")
+            },
+            "committed_initialized_cells": 0,
+            "limited_scope": "No complete prior was written because at least one positive mass has no moment satisfying both source PSD bounds and the native cap.",
+        }
+        _write_receipt(receipt_file, receipt)
+        return receipt
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{output.name}.", suffix=".tmp", dir=output.parent
+    )
+    os.close(descriptor)
+    temporary = Path(temporary_name)
+    try:
+        shutil.copy2(source, temporary)
+        active_slice = (slice(None), slice(1, -1), slice(1, -1))
+        with Dataset(temporary, "r+") as candidate:
+            for moment, values in updated.items():
+                full = np.array(candidate.variables[moment][0], copy=True)
+                full[active_slice] = values[active_slice]
+                candidate.variables[moment][0] = full
+        with Dataset(source, "r") as original, Dataset(temporary, "r") as candidate:
+            _check_same13_input_metadata(candidate)
+            if file_sha256(source) != source_hash:
+                raise InitializationError("PR83_SOURCE_INPUT_CHANGED_DURING_INITIALIZATION")
+            after_hashes = {
+                name: variable_sha256(variable)
+                for name, variable in candidate.variables.items()
+            }
+            changed_other = [
+                name for name, before_hash in variable_hashes_before.items()
+                if name not in updated and after_hashes[name] != before_hash
+            ]
+            if changed_other:
+                raise InitializationError(f"UNEXPECTED_FIELD_CHANGES:{','.join(changed_other)}")
+            for moment, expected_values in updated.items():
+                actual_values = _read_unmasked(candidate.variables[moment], moment)
+                if not np.array_equal(actual_values, expected_values):
+                    raise InitializationError(f"UNEXPECTED_MOMENT_CHANGES:{moment}")
+                outside_active = np.ones(actual_values.shape, dtype=bool)
+                outside_active[active_slice] = False
+                if not np.array_equal(
+                    actual_values[outside_active], arrays[moment][outside_active]
+                ):
+                    raise InitializationError(f"OUTER_RING_MOMENT_CHANGED:{moment}")
+            for mass_name, spec in SPECIES.items():
+                stored = _read_unmasked(candidate.variables[spec["moment"]], spec["moment"])
+                active_mass = arrays[mass_name][active_slice].astype(np.float64)
+                _validate_mass_prior(
+                    active_mass, stored[active_slice], active_mass > 0.0,
+                    m_min=spec["m_min"], m_max=spec["m_max"],
+                    bound_source=PR83_BOUND_SOURCE,
+                )
+            graupel_mass = arrays["QGRAUP"][active_slice].astype(np.float64)
+            volume = _read_unmasked(candidate.variables["QIB"], "QIB")[active_slice]
+            _validate_bulk_prior(
+                graupel_mass, volume, np.ones(volume.shape, dtype=bool),
+                bound_source=PR83_BOUND_SOURCE,
+            )
+        os.replace(temporary, output)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+    try:
+        if file_sha256(source) != source_hash:
+            raise InitializationError("PR83_SOURCE_INPUT_CHANGED_DURING_INITIALIZATION")
+        if file_sha256(policy_file) != policy_hash:
+            raise InitializationError("PR83_POLICY_CHANGED_DURING_INITIALIZATION")
+        _validate_same13_policy_file(policy_file)
+        if file_sha256(initializer_path) != initializer_hash:
+            raise InitializationError("PR83_INITIALIZER_CHANGED_DURING_INITIALIZATION")
+    except BaseException:
+        output.unlink(missing_ok=True)
+        raise
+    receipt = {
+        "schema": "pr83_same13_native_moment_prior_receipt_v1",
+        "policy_id": policy["policy_id"],
+        "policy_sha256": policy_hash,
+        "initializer_sha256": initializer_hash,
+        "status": "RESEARCH_PRIOR_CREATED",
+        "native_launch_authority": "NONE",
+        "source_input": str(source),
+        "source_input_sha256": source_hash,
+        "consumed_variable_sha256": consumed_variable_hashes,
+        "output_input": str(output),
+        "output_input_sha256": file_sha256(output),
+        "source_input_unchanged": file_sha256(source) == source_hash,
+        "source_density": {
+            "formula": "real32 reciprocal of real32 AL + ALB",
+            "basis": "dry_air",
+            "active_min_kg_m-3": float(np.min(density[:, 1:-1, 1:-1])),
+            "active_max_kg_m-3": float(np.max(density[:, 1:-1, 1:-1])),
+        },
+        "field_prior_receipts": field_reports,
+        "committed_initialized_cells": {
+            name: int(report.get("initialized_cells", 0))
+            for name, report in field_reports.items()
+        },
+        "all_other_variables_unchanged": True,
+        "changed_nonmoment_variables": [],
+        "limited_scope": "Explicit same-13UTC research PSD/density prior only; no observation recovery, forecast acceptance, or operational authority is implied.",
+    }
+    try:
+        _write_receipt(receipt_file, receipt)
+    except BaseException:
+        output.unlink(missing_ok=True)
+        raise
+    return receipt
+
+
+def _write_receipt(path: Path, receipt: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=path.parent
+    )
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            json.dump(receipt, stream, indent=2, sort_keys=True)
+            stream.write("\n")
+        os.replace(temporary_name, path)
+    finally:
+        Path(temporary_name).unlink(missing_ok=True)
 
 
 def _verify_source_identities(policy: dict[str, Any]) -> None:
@@ -336,6 +905,8 @@ def _validate_bulk_prior(
     mass: np.ndarray,
     volume: np.ndarray,
     initialized: np.ndarray,
+    *,
+    bound_source: str = BOUND_SOURCE,
 ) -> dict[str, Any]:
     if not np.any(initialized):
         return {"status": "NOT_RUN", "reason": "EMPTY_INITIALIZED_MASK",
@@ -346,7 +917,7 @@ def _validate_bulk_prior(
         mass_basis="dry_air", volume_basis="dry_air",
         bulk_density_min_kg_m3=GRAUPEL["rho_min"],
         bulk_density_max_kg_m3=GRAUPEL["rho_max"],
-        bound_source=BOUND_SOURCE,
+        bound_source=bound_source,
         uncertainty_description="Source rho_min..rho_max is an admissibility envelope, not a statistical sigma; rho_mid is the declared research center.",
     )
     if report["status"] != "PASS_SCOPED":
@@ -637,21 +1208,32 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--denominator-trace", type=Path, required=True)
+    parser.add_argument("--denominator-trace", type=Path)
     parser.add_argument("--policy", type=Path, default=DEFAULT_POLICY)
+    parser.add_argument("--same13-policy", type=Path)
     parser.add_argument("--receipt", type=Path, required=True)
     args = parser.parse_args()
     try:
-        receipt = initialize_copy(
-            args.source, args.output, args.denominator_trace,
-            args.receipt,
-            policy_path=args.policy,
-        )
+        if args.same13_policy is not None:
+            receipt = initialize_same13_copy(
+                args.source, args.output, args.receipt,
+                policy_path=args.same13_policy,
+            )
+        else:
+            if args.denominator_trace is None:
+                parser.error("--denominator-trace is required for the frozen PR61 mode")
+            receipt = initialize_copy(
+                args.source, args.output, args.denominator_trace,
+                args.receipt,
+                policy_path=args.policy,
+            )
     except (OSError, RuntimeError, ValueError, TypeError, IndexError) as error:
         parser.error(str(error))
-    print(f"{receipt['status']}: {receipt['output_input']}")
-    print(f"sha256: {receipt['output_input_sha256']}")
-    return 0
+    output = receipt.get("output_input") or "no candidate written"
+    print(f"{receipt['status']}: {output}")
+    if receipt.get("output_input_sha256"):
+        print(f"sha256: {receipt['output_input_sha256']}")
+    return 2 if receipt["status"] == "BLOCKED_SOURCE_CAP_INFEASIBLE" else 0
 
 
 if __name__ == "__main__":

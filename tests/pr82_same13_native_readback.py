@@ -23,6 +23,35 @@ def time_string(ds: netCDF4.Dataset) -> str:
     return b"".join(ds.variables["Times"][0].tolist()).decode("ascii")
 
 
+def unmasked_values(variable: netCDF4.Variable) -> np.ndarray:
+    raw = variable[:]
+    if np.any(np.ma.getmaskarray(raw)):
+        raise ValueError(f"{variable.name}: masked values are forbidden")
+    values = np.asarray(raw)
+    for attribute in ("_FillValue", "missing_value"):
+        if not hasattr(variable, attribute):
+            continue
+        fill = np.asarray(getattr(variable, attribute))
+        if np.any(values == fill):
+            raise ValueError(f"{variable.name}: explicit {attribute} value is forbidden")
+    if not np.isfinite(values).all():
+        raise ValueError(f"{variable.name}: non-finite field")
+    return values
+
+
+def bind_run_receipt(run: dict[str, object], input_path: Path,
+                     output_path: Path) -> dict[str, str]:
+    """Bind the readback pair to exact candidate and initial-output bytes."""
+    expected_input = run.get("candidate_wrfinput_sha256")
+    expected_output = run.get("initial_wrfo_sha256")
+    actual_input, actual_output = sha256(input_path), sha256(output_path)
+    if not isinstance(expected_input, str) or actual_input != expected_input:
+        raise ValueError("run receipt candidate wrfinput hash does not match readback input")
+    if not isinstance(expected_output, str) or actual_output != expected_output:
+        raise ValueError("run receipt initial wrfout hash does not match readback output")
+    return {"input_sha256": actual_input, "initial_wrfo_sha256": actual_output}
+
+
 def field_record(variable: netCDF4.Variable, expected_dims: tuple[str, ...], units: str | None,
                  expected_units: str | None) -> dict[str, object]:
     if variable.dimensions != expected_dims:
@@ -32,9 +61,7 @@ def field_record(variable: netCDF4.Variable, expected_dims: tuple[str, ...], uni
         raise ValueError(f"{variable.name}: units {actual_units!r} != {expected_units!r}")
     if units is not None and actual_units != units:
         raise ValueError(f"{variable.name}: input/output unit mismatch")
-    values = np.asarray(variable[:], dtype=np.float32)
-    if not np.isfinite(values).all():
-        raise ValueError(f"{variable.name}: non-finite field")
+    values = np.asarray(unmasked_values(variable), dtype=np.float32)
     return {"dimensions": list(variable.dimensions), "shape": list(values.shape),
             "units": actual_units,
             "min": float(values.min()), "max": float(values.max()),
@@ -50,6 +77,8 @@ def main() -> int:
     if report_path.exists() or report_path.is_symlink():
         raise SystemExit(f"refusing to overwrite readback output: {report_path}")
     run = json.loads(receipt_path.read_text())
+    receipt_sha256 = sha256(receipt_path)
+    bound_hashes = bind_run_receipt(run, input_path, output_path)
     if run.get("initialization_gate") != "PASS_SCOPED_INITIALIZATION_READBACK":
         raise SystemExit("native isolated initialization receipt is not passing")
     if run.get("run_isolation", {}).get("input_integrity") != "PASS" or \
@@ -92,7 +121,10 @@ def main() -> int:
                 expected_units = None
             input_state = field_record(source_var, dims, None, expected_units)
             output_state = field_record(output_var, dims, input_state["units"], expected_units)
-            a, b = np.asarray(source_var[:]), np.asarray(output_var[:])
+            a = unmasked_values(source_var)
+            b = unmasked_values(output_var)
+            if a.shape != b.shape:
+                raise ValueError(f"{name}: source/output shape mismatch: {a.shape} != {b.shape}")
             diff = np.asarray(b, dtype=np.float64) - np.asarray(a, dtype=np.float64)
             fields[name] = {
                 "input": input_state, "initial_wrfo": output_state,
@@ -131,8 +163,8 @@ def main() -> int:
             "science_authority": "NONE",
             "operational_authority": "NONE",
             "valid_time": output_time,
-            "input_sha256": sha256(input_path),
-            "initial_wrfo_sha256": sha256(output_path),
+            "run_receipt_sha256": receipt_sha256,
+            **bound_hashes,
             "native_wrftitle": getattr(initial, "TITLE", None),
             "physics_mp_physics": int(getattr(initial, "MP_PHYSICS")),
             "fields": fields,
@@ -155,6 +187,10 @@ def main() -> int:
                 "native_trace_output_integrity": run.get("native_trace_output_integrity"),
             },
         }
+    if (sha256(receipt_path) != receipt_sha256 or
+            sha256(input_path) != bound_hashes["input_sha256"] or
+            sha256(output_path) != bound_hashes["initial_wrfo_sha256"]):
+        raise ValueError("run receipt or readback input/output changed during inspection")
     report_path.write_text(json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + "\n")
     print(json.dumps({"status": report["status"], "time": output_time,
                       "first_step_gate": report["native_first_step_gate"],

@@ -1,0 +1,195 @@
+{
+  "artifact_class": "RESEARCH_DIAGNOSTIC",
+  "authority": {
+    "operational": "NONE",
+    "science": "NONE"
+  },
+  "evidence": {
+    "canonical_mapped_witness": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_same13_off_20261013f/build/canonical_mapped_witness.raw",
+      "role": "same-run mapped MODE_OFF background, emitted before WPS writer; independent parser matched all 235 serialized records",
+      "sha256": "4324b48c3d140ed5430ffecbe8b5ff54352ca86b7c228f3456d9979c1454faa6"
+    },
+    "initial_field_readback": {
+      "initial_wrfo_sha256": "4bac4abe8367b1e9354c448302d1ffcd621e07d838baaa490b9cd7ae07fdc708",
+      "input_sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013d/independent_initial_readback.bound.json",
+      "run_receipt_sha256": "689c8384a254a7e5761dbec9933e31477225cb074542742c24c792d5d3d9aad5",
+      "sha256": "1fa3cff4b89637a3c055741cff7556a14d2830d01274c58adddab0c6e343816e"
+    },
+    "metgrid_readback": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_metgrid_20261013c/readback.json",
+      "sha256": "9e9d384701b5d3ae1f8da27e4836dc4217ef6b4c70493401e12935dcf531daf5"
+    },
+    "misbound_exploratory_readback": {
+      "embedded_initial_wrfo_sha256": "519b991978f2f14b925470e3f90a5bdf5f3a5ee8e3abb8f359cec6d122a345eb",
+      "embedded_input_sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+      "explanation": "This older report paired PR82 Xa files while located in the OFF _d directory; it is not evidence for OFF Xb. No model artifact is implicated.",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013d/independent_initial_readback.final.json",
+      "sha256": "c00d431d00350809e5dc1d8b0d22d2a8eabba57bca943bbf8d8ce74c9fbf14cf",
+      "status": "MISBOUND_EXPLORATORY_ONLY"
+    },
+    "native_initialization_receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013d/pr83_same13_off_native_initialization.json",
+      "sha256": "689c8384a254a7e5761dbec9933e31477225cb074542742c24c792d5d3d9aad5"
+    },
+    "native_source_namelist_guard": {
+      "current_runner_sha256": "57edd4c0942059d68cad7e53ebfc79cb04ecc578564cf2253bd9078361ffc991",
+      "focused_guard_test_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_moment_initialization_20261013/Cloud-BAL/tests/test_pr83_off_runner_contract.py",
+      "focused_guard_test_result": "5 unittest cases pass: source hash acceptance/rejection, OFF wrapper pins, prior-input rejection, and production receipt-writer regression for the successful-prior PR83 filename/schema contract; actual run namelist bytes are bound to the reviewed SHA in the native receipt",
+      "focused_guard_test_sha256": "e3cb6370f3e715ed2d2d3525f18f10f64bc0f1c871b1b4bec4c5b86592ea1878",
+      "native_run_source_namelist_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013d/namelist.input.source",
+      "native_run_source_namelist_sha256": "59e949a1a9feffec06204f8abc9b090b3c294e1a501e9f9599cbfc10503646f6",
+      "shared_common_runner_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_moment_initialization_20261013/Cloud-BAL/tests/run_pr82_same13_native_initialization.py",
+      "shared_common_runner_sha256": "dd72d68ba000ea3136c80e1c9e0914d0221504e51ce3669d6b1f9f7a5c8adf35"
+    },
+    "paired_native_readback": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013d/paired_native_readback.v2.json",
+      "sha256": "8c41d7e2eb641aeeb3a330e1e9e8e97e76658ec236fa9a40f22ebc188f43bdef"
+    },
+    "paired_source_initial_field_readback": {
+      "initial_wrfo_sha256": "519b991978f2f14b925470e3f90a5bdf5f3a5ee8e3abb8f359cec6d122a345eb",
+      "input_sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+      "path": "/var/tmp/pr83_pr82_native_readback_reread_20261013.bound.json",
+      "sha256": "a10500fdd84f1c0899f6c9eadff85265a42d3e75c222df90d62486074ca29412"
+    },
+    "paired_source_native_initialization_receipt": {
+      "path": "/var/tmp/pr82_same13_native_init_candidate.final4_20261012/pr82_same13_native_initialization.json",
+      "sha256": "2b681dad6abb38ce8780896be1acb30c57a4894db46673fde45b12ae43b165cc"
+    },
+    "pr83_prior_source_cap_preflight": {
+      "path": "/var/tmp/pr83_same13_native_policycheck_20261013c/preflight.json",
+      "result": "BLOCKED_SOURCE_CAP_INFEASIBLE; no candidate output created",
+      "sha256": "732cbb3cc8c389341c3a3ef2e088a8f8fb52b0f4f16b2110fc71e82aa0b54505"
+    },
+    "pre_refactor_off_runner_archive": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_moment_initialization_20261013/Cloud-BAL/docs/evidence/pr83_same13_off_control_20261013/run_pr83_same13_off_native_initialization.pre_refactor.py",
+      "role": "truthful archive of the pre-refactor workspace source; this does not match the executed runner hash recorded by _20261013d",
+      "sha256": "ea0b26859c8f9d682bd5f47885e6bf2a6e999d588e2db00b2faf4491b792c3ae"
+    },
+    "real_boundary_readback": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/boundary_readback.json",
+      "sha256": "4db5ac5979e818f7c86c028be6abbd1e080034087e05391c954f6dec59b6f045"
+    },
+    "real_input_contract": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/input_contract.json",
+      "sha256": "68c080fc8d57d7c4872edd7d855dec2bdb1c0dc43f66d6b068787c91491ff149"
+    },
+    "receipt_bound_P2_checker": {
+      "binding": "receipt candidate_wrfinput_sha256 and initial_wrfo_sha256 must match readback input/output; receipt and files are rehashed after inspection",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_moment_initialization_20261013/Cloud-BAL/tests/pr82_same13_native_readback.py",
+      "sha256": "45869f60f3bf30c70886ee258f0c99acb698f55c51a7aab43a3e7b67b4865ee6"
+    },
+    "receipt_bound_P2_swap_test": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_moment_initialization_20261013/Cloud-BAL/tests/test_pr82_same13_native_readback.py",
+      "result": "4 unittest cases pass, including rejection when receipt-bound initial output is swapped",
+      "sha256": "044395ff74fecff146ab040a0fd574160c433dd9578a7ecee2e588647c33f2ea"
+    },
+    "wps_readback": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_same13_off_20261013f/build/readback.json",
+      "sha256": "f2ff0a72cf05b0d48bc1c1e76e3c2018b79e48334d8fd228f6ed01097af3e315"
+    }
+  },
+  "historical_c_wps_reference": {
+    "readback_path": "/var/tmp/pr83_same13_off_20261013c/build/readback.final.json",
+    "readback_sha256": "e304226608bb81098849001293d53bc6315e162ce5357d79c24493cf5977727b",
+    "role": "historical WPS replay; bytes match final _20261013f WPS, but final current readback is _20261013f with mapped witness",
+    "wps_path": "/var/tmp/pr83_same13_off_20261013c/build/same13_off.wps",
+    "wps_sha256": "f6e54602dea6fa6c867cbf226efd969d70f1f18526962f4b3dcb13a3189f9da1"
+  },
+  "initialization": {
+    "all_source_hashes_unchanged": true,
+    "complete_moment_candidate": false,
+    "executed_runner_source_limitation": {
+      "executed_runner_sha256": "b84f384456e1c785a7bb15cdf5d0558c1d6694487859fa85780edb8205287cbe",
+      "note": "The _20261013d run receipt records this hash before and after, but no exact source bytes were retained or found. The archived pre-refactor workspace file is separately hash-pinned and is not asserted to reproduce the executed source.",
+      "source_bytes_available": "false"
+    },
+    "first_kdm6_gate": "REJECTED_KDM6_UNSUPPORTED_NUMBER_BASIS",
+    "first_kdm6_rejection": "KDM6 unsupported positive mass without number/volume state",
+    "initial_wrfo_sha256": "4bac4abe8367b1e9354c448302d1ffcd621e07d838baaa490b9cd7ae07fdc708",
+    "native_runner_provenance_note": "Native _20261013d run binds runner SHA b84f384456e1c785a7bb15cdf5d0558c1d6694487859fa85780edb8205287cbe before/after; current runner adds an unconditional source-namelist pin, validated separately by the focused guard test. Actual native_run_source_namelist_sha256 remains the reviewed exact value.",
+    "postrun_shared_runner_refactor": {
+      "model_rerun": "false; only CLI/import/syntax and focused API tests were run after refactor",
+      "off_wrapper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_moment_initialization_20261013/Cloud-BAL/tests/run_pr83_same13_off_native_initialization.py",
+      "off_wrapper_sha256": "57edd4c0942059d68cad7e53ebfc79cb04ecc578564cf2253bd9078361ffc991",
+      "shared_runner_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr83_moment_initialization_20261013/Cloud-BAL/tests/run_pr82_same13_native_initialization.py",
+      "shared_runner_sha256": "dd72d68ba000ea3136c80e1c9e0914d0221504e51ce3669d6b1f9f7a5c8adf35",
+      "successful_prior_receipt_contract": "production writer emits pr83_same13_native_initialization_v1 at pr83_same13_native_initialization.json; verified by focused regression"
+    },
+    "prior_receipt_used": false,
+    "status": "PASS_SCOPED_INITIALIZATION_READBACK"
+  },
+  "interpretation": "This control confirms the scoped MODE_OFF WRF startup readback and matched-grid native initial-output comparison. KDM6 rejects the mass-only input because positive hydrometeor mass lacks number/volume state; the control does not validate a successful Q/N/B prior, candidate physics, conservation, or operational suitability.",
+  "mode": "MODE_OFF",
+  "packaging_audit": {
+    "classification": "WORKTREE_ISOLATION_CORRECTION",
+    "detail": "The two newly authored MODE_OFF documentation artifacts were initially written under the maintained Cloud-BAL tree, then moved to this isolated PR83 worktree after preserving their byte hashes. The maintained copies are absent. No source, input, runtime output, native receipt, prior receipt, or graph snapshot was changed by the correction. The control record was subsequently refreshed to point to the final _20261013f WPS witness/readback, _20261013d native receipt and Xb output, v2 paired inventory, same13 PR82 reread, and blocked prior preflight. The preserved historical _c/_b outputs are identified separately. An older _d-located readback was found to embed PR82 Xa hashes; it is retained and explicitly marked MISBOUND_EXPLORATORY_ONLY. The current OFF initial field readback was rerun against the _d receipt, OFF input, and OFF wrfout with receipt/file hash binding. Shared native-runner extraction is post-model; the current pre-refactor OFF source is archived at its actual SHA, and the executed _20261013d source hash b84f... is recorded as unavailable source bytes rather than reconstructed. The P2 field readback now binds input/output SHA-256 to the supplied native run receipt and rechecks all three sources after inspection; actual OFF _d and actual PR82 _final4 readbacks both passed with their matching receipts. The OFF runner is now a thin wrapper over the shared native initializer; only API/CLI/focused tests ran after this refactor. A receipt-contract regression also verifies that a successful prior writes the PR83 schema at the exact filename consumed by the PR83 reader. The successful-prior regression exercises the same production receipt-writer used by the shared runner, then reads back the expected PR83 receipt schema and basename. The shared runner keeps PR82 runtime-copy behavior unchanged; the OFF wrapper alone excludes its prior namelist.input.source before writing the pinned effective namelist.",
+    "moved_artifacts_sha256": {
+      "docs/PR83_SAME13_OFF_CONTROL_20261013.md": "a0b90a0618a561d872151834367985886a4e5f81b22920d7dacaf4720610c0f1",
+      "pre_refresh_control_record_sha256": "8b2cd5ca734d08fc60c07b7e46b24a566359fb6ae2fc87dd2a883a9188c641ce"
+    },
+    "scientific_or_physical_failure": false
+  },
+  "paired_native_control": {
+    "Xa": "/var/tmp/pr82_same13_native_init_candidate.final4_20261012/wrfout_d01_2026-08-16_13:00:00",
+    "Xa_role": "PR82_COUPLED_ANALYSIS_MASS_ONLY_INITIAL_STATE; this is not a valid Q/N/B prior",
+    "Xa_sha256": "519b991978f2f14b925470e3f90a5bdf5f3a5ee8e3abb8f359cec6d122a345eb",
+    "Xb": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013d/wrfout_d01_2026-08-16_13:00:00",
+    "Xb_role": "MODE_OFF_MASS_ONLY_CONTROL",
+    "Xb_sha256": "4bac4abe8367b1e9354c448302d1ffcd621e07d838baaa490b9cd7ae07fdc708",
+    "candidate_promoted": false,
+    "changed_cell_counts": {
+      "P": 718,
+      "PH": 1378,
+      "QCLOUD": 430,
+      "QGRAUP": 73,
+      "QICE": 104,
+      "QRAIN": 312,
+      "QSNOW": 79,
+      "QVAPOR": 434,
+      "T": 717,
+      "U": 2334,
+      "V": 2417
+    },
+    "comparison": "M(Xa)-M(Xb) for same-time native initial output fields; matching carrier grid, center/stagger coordinates, units, and positive finite P+PB validated",
+    "dry_mass_six_water_inventory": {
+      "classification": "same-grid native initial-state transfer/composition diagnostic, not physical-time closure; boundary flux and energy closure remain open",
+      "field_delta_direction": "Xa minus Xb",
+      "gravity_assumption_m_s2": 9.81,
+      "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013d/paired_native_readback.v2.json",
+      "receipt_sha256": "8c41d7e2eb641aeeb3a330e1e9e8e97e76658ec236fa9a40f22ebc188f43bdef"
+    },
+    "historical_b_duplicate": {
+      "native_initialization_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013b/pr83_same13_off_native_initialization.json",
+      "native_wrfo_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_native_20261013b/wrfout_d01_2026-08-16_13:00:00",
+      "native_wrfo_sha256": "4bac4abe8367b1e9354c448302d1ffcd621e07d838baaa490b9cd7ae07fdc708",
+      "role": "earlier byte-identical control run; superseded for current readback links by _20261013d"
+    },
+    "status": "PASS_SCOPED_SAME13_NATIVE_MODE_OFF_PAIR_READBACK",
+    "wps_readback_scope": "All 235 serialized records independently match same-run post-mapper/pre-writer witness. This does not independently reconstruct canonical pre-map values; source-to-mapper evidence remains MODE_OFF state identity plus retained mapper regression."
+  },
+  "purpose": "Same-carrier, same-time native initialization I/O control; no complete Q/N/B prior was applied.",
+  "role": "ROLE_OFF_MASS_ONLY_CONTROL",
+  "schema": "pr83_same13_off_mass_only_control_record_v1",
+  "scope": {
+    "boundary": "genuine retained 13/14/15 UTC boundary states; no 12 UTC boundary data",
+    "cold_start": "single domain, 13 UTC cold start; restart/nesting/cycling/DFI disabled by source-bound guard",
+    "execution_processes": 1,
+    "namelist_guard": "The _20261013d native run used the exact pinned 59e949...46f6 source namelist; current runner additionally rejects any different source hash before launch, verified by two focused unittest cases. No model rerun was made for this guard-only change.",
+    "native_interval": "20-second startup/first interval from 13:00:00; original source end 15:00:00 and 3600-second interval recorded",
+    "physics": "MP_PHYSICS=37; source physics, use_sh_qv, sfcp_to_sfcp retained; one rank and OMP_NUM_THREADS=1",
+    "threads_per_process": 1
+  },
+  "source_artifacts": {
+    "effective_native_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+    "metgrid_sha256": "5c896259727e224658434b7896b1c04187cd903190d87b8fc790a75dda856e02",
+    "native_executable_sha256": "a805a1afff42021f322337c69d4e0818faf30e677f625f9a9d1b308728b32c00",
+    "real_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "real_wrfinput_sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+    "same13_wps_product_sha256": "f6e54602dea6fa6c867cbf226efd969d70f1f18526962f4b3dcb13a3189f9da1",
+    "source_namelist_sha256": "59e949a1a9feffec06204f8abc9b090b3c294e1a501e9f9599cbfc10503646f6"
+  },
+  "status": "PASS_SCOPED_CONTROL_INITIALIZATION_AND_PAIRED_READBACK",
+  "valid_time": "2026-08-16_13:00:00"
+}

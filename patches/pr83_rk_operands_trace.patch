@@ -1,0 +1,105 @@
+--- a/dyn_em/module_em.F
++++ b/dyn_em/module_em.F
+@@ -18,7 +18,7 @@
+   USE module_ieva_em, only: advect_u_implicit, advect_v_implicit, advect_w_implicit, advect_s_implicit, advect_ph_implicit, &
+                             chk_ieva, ww_split, calc_mut_new
+   USE module_state_description, only: param_first_scalar, p_qr, p_qv, p_qc, p_qg, p_qi, p_qs, tiedtkescheme,ntiedtkescheme, heldsuarez, &
+-        positivedef, gdscheme, g3scheme, gfscheme, kfetascheme, mskfscheme, monotonic, wenopd_scalar, weno_scalar, weno_mom
++        positivedef, gdscheme, g3scheme, gfscheme, kfetascheme, mskfscheme, monotonic, wenopd_scalar, weno_scalar, weno_mom, p_qnc
+ 
+    USE module_damping_em, only: held_suarez_damp
+ 
+@@ -1697,6 +1697,12 @@
+        DO  i = i_start,i_end
+           ! scalar was coupled with my
+            tendency(i,k,j) = advect_tend(i,k,j) * msfty(i,j)
++           IF (im==p_qnc .AND. i==4 .AND. j==2 .AND. k==22) THEN
++             WRITE(6,'(A,2(1X,I0),3(1X,Z8.8))') 'PR83_RK_PRODUCT', rk_step, im, &
++               TRANSFER(advect_tend(i,k,j),0), TRANSFER(msfty(i,j),0), &
++               TRANSFER(tendency(i,k,j),0)
++             FLUSH(6)
++           ENDIF
+        ENDDO
+        ENDDO
+        ENDDO
+@@ -1705,6 +1711,11 @@
+        DO  k = k_start_spc,k_end_spc
+        DO  i = i_start_spc,i_end_spc
+            tendency(i,k,j) = tendency(i,k,j) + sc_tend(i,k,j,im)
++           IF (im==p_qnc .AND. i==4 .AND. j==2 .AND. k==22) THEN
++             WRITE(6,'(A,2(1X,I0),2(1X,Z8.8))') 'PR83_RK_TENDENCY', rk_step, im, &
++               TRANSFER(sc_tend(i,k,j,im),0), TRANSFER(tendency(i,k,j),0)
++             FLUSH(6)
++           ENDIF
+        ENDDO
+        ENDDO
+        ENDDO
+@@ -1720,8 +1731,21 @@
+       DO  i = its, min(ite,ide-1)
+ 
+         scalar_1(i,k,j,im) = scalar_2(i,k,j,im)
++        IF (im==p_qnc .AND. i==4 .AND. j==2 .AND. k==22) THEN
++          WRITE(6,'(A,2(1X,I0),11(1X,Z8.8))') 'PR83_RK_INPUT', rk_step, im, &
++            TRANSFER(scalar_1(i,k,j,im),0), TRANSFER(scalar_2(i,k,j,im),0), &
++            TRANSFER(dt,0), TRANSFER(c1(k),0), TRANSFER(c2(k),0), &
++            TRANSFER(muold(i),0), TRANSFER(munew(i),0), TRANSFER(tendency(i,k,j),0), &
++            TRANSFER(mu_old(i,j),0), TRANSFER(mu_new(i,j),0), TRANSFER(mu_base(i,j),0)
++          FLUSH(6)
++        ENDIF
+         scalar_2(i,k,j,im) = ((c1(k)*muold(i)+c2(k))*scalar_1(i,k,j,im)   &
+                              + dt*tendency(i,k,j))/(c1(k)*munew(i)+c2(k))
++        IF (im==p_qnc .AND. i==4 .AND. j==2 .AND. k==22) THEN
++          WRITE(6,'(A,2(1X,I0),1(1X,Z8.8))') 'PR83_RK_OUTPUT', rk_step, im, &
++            TRANSFER(scalar_2(i,k,j,im),0)
++          FLUSH(6)
++        ENDIF
+ 
+       ENDDO
+       ENDDO
+@@ -1748,6 +1772,12 @@
+        DO  i = i_start,i_end
+            ! scalar was coupled with my
+            tendency(i,k,j) = advect_tend(i,k,j) * msfty(i,j)
++           IF (im==p_qnc .AND. i==4 .AND. j==2 .AND. k==22) THEN
++             WRITE(6,'(A,2(1X,I0),3(1X,Z8.8))') 'PR83_RK_PRODUCT', rk_step, im, &
++               TRANSFER(advect_tend(i,k,j),0), TRANSFER(msfty(i,j),0), &
++               TRANSFER(tendency(i,k,j),0)
++             FLUSH(6)
++           ENDIF
+        ENDDO
+        ENDDO
+        ENDDO
+@@ -1756,6 +1786,11 @@
+        DO  k = k_start_spc,k_end_spc
+        DO  i = i_start_spc,i_end_spc
+            tendency(i,k,j) = tendency(i,k,j) + sc_tend(i,k,j,im)
++           IF (im==p_qnc .AND. i==4 .AND. j==2 .AND. k==22) THEN
++             WRITE(6,'(A,2(1X,I0),2(1X,Z8.8))') 'PR83_RK_TENDENCY', rk_step, im, &
++               TRANSFER(sc_tend(i,k,j,im),0), TRANSFER(tendency(i,k,j),0)
++             FLUSH(6)
++           ENDIF
+        ENDDO
+        ENDDO
+        ENDDO
+@@ -1770,8 +1805,21 @@
+       DO  k = kts, min(kte,kde-1)
+       DO  i = its, min(ite,ide-1)
+ 
++        IF (im==p_qnc .AND. i==4 .AND. j==2 .AND. k==22) THEN
++          WRITE(6,'(A,2(1X,I0),11(1X,Z8.8))') 'PR83_RK_INPUT', rk_step, im, &
++            TRANSFER(scalar_1(i,k,j,im),0), TRANSFER(scalar_2(i,k,j,im),0), &
++            TRANSFER(dt,0), TRANSFER(c1(k),0), TRANSFER(c2(k),0), &
++            TRANSFER(muold(i),0), TRANSFER(munew(i),0), TRANSFER(tendency(i,k,j),0), &
++            TRANSFER(mu_old(i,j),0), TRANSFER(mu_new(i,j),0), TRANSFER(mu_base(i,j),0)
++          FLUSH(6)
++        ENDIF
+         scalar_2(i,k,j,im) = ((c1(k)*muold(i)+c2(k))*scalar_1(i,k,j,im)   &
+                              + dt*tendency(i,k,j))/(c1(k)*munew(i)+c2(k))
++        IF (im==p_qnc .AND. i==4 .AND. j==2 .AND. k==22) THEN
++          WRITE(6,'(A,2(1X,I0),1(1X,Z8.8))') 'PR83_RK_OUTPUT', rk_step, im, &
++            TRANSFER(scalar_2(i,k,j,im),0)
++          FLUSH(6)
++        ENDIF
+ 
+       ENDDO
+       ENDDO

@@ -53,6 +53,228 @@ class NativeMomentInitializationTests(unittest.TestCase):
         self.assertEqual(report["left_unchanged_infeasible_cells"], 1)
         self.assertLessEqual(result[0] * density[0], np.float32(1.0e6))
 
+    def test_same13_prior_fills_positive_subthreshold_mass_without_a_floor(self):
+        mass = np.array([1.0e-30, 0.0], dtype=np.float32)
+        existing = np.zeros(2, dtype=np.float32)
+        result, report = initializer._prepare_moments(
+            mass, existing, np.ones(2, dtype=np.float32),
+            threshold=0.0, lambda_min=1.0, lambda_max=100.0,
+            power=3, pidn=1.0, internal_cap=1.0e6,
+        )
+        self.assertGreater(result[0], 0.0)
+        self.assertEqual(result[1], 0.0)
+        self.assertEqual(report["initialized_cells"], 1)
+        self.assertEqual(report["research_fill_cutoff"], "strict mass > declared threshold")
+
+    def test_same13_density_uses_real32_al_plus_alb_inverse(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            path = Path(temporary_directory) / "same13-density.nc"
+            with Dataset(path, "w") as dataset:
+                for name, length in zip(initializer.DIMENSIONS, (1, 2, 2, 2)):
+                    dataset.createDimension(name, length)
+                for name, value in (("AL", 2.0), ("ALB", 0.5)):
+                    variable = dataset.createVariable(name, "f4", initializer.DIMENSIONS)
+                    variable.units = "m3 kg-1"
+                    variable[:] = value
+                density = initializer._same13_dry_density(dataset)
+        expected = np.float32(1.0) / (np.float32(2.0) + np.float32(0.5))
+        np.testing.assert_array_equal(density, np.full((2, 2, 2), expected, dtype="f4"))
+
+    def test_same13_preflight_rejects_mass_number_cap_conflict_without_mutation(self):
+        shape = (1, 3, 3)
+        arrays = {
+            name: np.zeros(shape, dtype=np.float32)
+            for name in (
+                "QCLOUD", "QICE", "QRAIN", "QGRAUP", "QNCLOUD", "QNICE",
+                "QNRAIN", "QIB", "QNCCN", "AL", "ALB",
+            )
+        }
+        arrays["QICE"][0, 1, 1] = 1.0e-2
+        before = {name: values.copy() for name, values in arrays.items()}
+        with self.assertRaisesRegex(
+            initializer.InitializationError, "PR83_SOURCE_CAP_INFEASIBLE:QNICE:1"
+        ) as caught:
+            initializer._same13_preflight(arrays, np.ones(shape, dtype=np.float32))
+        self.assertEqual(
+            caught.exception.diagnostics["QNICE"]["positive_mass_without_representable_moment"],
+            1,
+        )
+        for name, values in arrays.items():
+            np.testing.assert_array_equal(values, before[name])
+
+    def test_same13_blocked_preflight_writes_receipt_without_candidate(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "same13-source.nc"
+            output = root / "candidate.nc"
+            receipt_path = root / "preflight.json"
+            with Dataset(source, "w") as dataset:
+                for name, length in zip(initializer.DIMENSIONS, (1, 3, 3, 3)):
+                    dataset.createDimension(name, length)
+                for name in (
+                    "QCLOUD", "QICE", "QRAIN", "QGRAUP", "QNCLOUD", "QNICE",
+                    "QNRAIN", "QIB", "QNCCN", "AL", "ALB",
+                ):
+                    variable = dataset.createVariable(name, "f4", initializer.DIMENSIONS)
+                    variable.units = "m3 kg-1" if name in ("AL", "ALB", "QIB") else (
+                        "kg-1" if name in ("QNCLOUD", "QNICE", "QNRAIN", "QNCCN")
+                        else "kg kg-1"
+                    )
+                    variable[:] = 0.0
+                dataset["QICE"][0, 1, 1, 1] = 1.0e-2
+                dataset["AL"][:] = 1.0
+            source_hash = initializer.file_sha256(source)
+            with (
+                mock.patch.object(initializer, "PR83_EXPECTED_INPUT_SHA256", source_hash),
+                mock.patch.object(initializer, "_validate_same13_policy_file",
+                                  return_value={"policy_id": "fixture-policy"}),
+                mock.patch.object(initializer, "_same13_evidence_hashes",
+                                  return_value={"fixture": "stable"}),
+                mock.patch.object(initializer, "_check_same13_input_metadata"),
+            ):
+                result = initializer.initialize_same13_copy(
+                    source, output, receipt_path,
+                    policy_path=initializer.DEFAULT_PR83_POLICY,
+                )
+            self.assertEqual(result["status"], "BLOCKED_SOURCE_CAP_INFEASIBLE")
+            self.assertFalse(output.exists())
+            self.assertTrue(result["source_input_unchanged"])
+            self.assertFalse(result["output_input_created"])
+            self.assertEqual(result["evidence_integrity"], "PASS_PRE_POST_HASHES_IDENTICAL")
+            self.assertEqual(result["committed_initialized_cells"], 0)
+            self.assertEqual(
+                result["field_prior_preflight"]["QNICE"][
+                    "positive_mass_without_representable_moment"
+                ],
+                1,
+            )
+            self.assertEqual(
+                result["field_prior_preflight"]["QNICE"]["committed_initialized_cells"],
+                0,
+            )
+            self.assertEqual(json.loads(receipt_path.read_text())["status"],
+                             "BLOCKED_SOURCE_CAP_INFEASIBLE")
+
+    def test_same13_successful_copy_initializes_and_reads_back_all_moments(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "same13-source.nc"
+            output = root / "candidate.nc"
+            receipt_path = root / "prior-receipt.json"
+            shape = (1, 1, 4, 4)
+            field_names = (
+                "QCLOUD", "QICE", "QRAIN", "QGRAUP", "QNCLOUD", "QNICE",
+                "QNRAIN", "QIB", "QNCCN", "AL", "ALB", "T", "QVAPOR",
+            )
+            with Dataset(source, "w") as dataset:
+                for name, length in zip(initializer.DIMENSIONS, shape):
+                    dataset.createDimension(name, length)
+                dataset.createDimension("DateStrLen", 19)
+                dataset.MP_PHYSICS = 37
+                times = dataset.createVariable("Times", "S1", ("Time", "DateStrLen"))
+                times[0] = np.asarray(list(b"2026-08-16_13:00:00"), dtype="S1")
+                units = {
+                    "QNCLOUD": "kg(-1)", "QNICE": "kg(-1)", "QNRAIN": "kg(-1)",
+                    "QNCCN": "kg(-1)", "QIB": "m(3) kg(-1)",
+                    "AL": "m(3) kg(-1)", "ALB": "m(3) kg(-1)",
+                }
+                for name in field_names:
+                    variable = dataset.createVariable(name, "f4", initializer.DIMENSIONS)
+                    variable.units = units.get(name, "kg kg-1")
+                    variable[:] = 0.0
+                active = (0, 0, slice(1, 3), slice(1, 3))
+                dataset["QCLOUD"][active] = 1.0e-6
+                dataset["QICE"][active] = 1.0e-7
+                dataset["QRAIN"][active] = 1.0e-7
+                dataset["QGRAUP"][active] = 1.0e-3
+                dataset["AL"][:] = 0.75
+                dataset["ALB"][:] = 0.25
+                dataset["T"][:] = 275.0
+                dataset["QVAPOR"][:] = 0.004
+                # A valid same-time background cloud moment must be retained exactly.
+                cloud_lambda = 1.0e5
+                cloud_pidn = initializer.SPECIES["QCLOUD"]["pidn"]
+                background_nc = 1.0e-6 * cloud_lambda**3 / cloud_pidn
+                dataset["QNCLOUD"][0, 0, 1, 1] = background_nc
+                source_variable_hashes = {
+                    name: initializer.variable_sha256(dataset.variables[name])
+                    for name in dataset.variables
+                }
+                source_fields = {
+                    name: np.asarray(dataset.variables[name][:]).copy()
+                    for name in field_names
+                }
+            source_hash = initializer.file_sha256(source)
+            with (
+                mock.patch.object(initializer, "PR83_EXPECTED_INPUT_SHA256", source_hash),
+                mock.patch.object(initializer, "_validate_same13_policy_file",
+                                  return_value={"policy_id": "fixture-policy"}),
+                mock.patch.object(initializer, "_same13_evidence_hashes",
+                                  return_value={"fixture": "stable"}),
+                mock.patch.object(initializer, "_check_same13_input_metadata"),
+            ):
+                receipt = initializer.initialize_same13_copy(
+                    source, output, receipt_path,
+                    policy_path=initializer.DEFAULT_PR83_POLICY,
+                )
+
+            self.assertEqual(receipt["status"], "RESEARCH_PRIOR_CREATED")
+            self.assertTrue(receipt["all_other_variables_unchanged"])
+            self.assertEqual(receipt["source_input_sha256"], source_hash)
+            self.assertEqual(receipt["committed_initialized_cells"]["QNCLOUD"], 3)
+            self.assertEqual(receipt["committed_initialized_cells"]["QNICE"], 4)
+            self.assertEqual(receipt["committed_initialized_cells"]["QNRAIN"], 4)
+            self.assertEqual(receipt["committed_initialized_cells"]["QIB"], 4)
+            with Dataset(output, "r") as candidate:
+                for name in ("QCLOUD", "QICE", "QRAIN", "QGRAUP", "QNCCN", "T", "QVAPOR", "AL", "ALB"):
+                    np.testing.assert_array_equal(candidate[name][:], source_fields[name])
+                for name in ("QNCLOUD", "QNICE", "QNRAIN", "QIB"):
+                    result = np.asarray(candidate[name][:])
+                    self.assertTrue(np.all(result[0, 0, 1:3, 1:3] > 0.0))
+                    np.testing.assert_array_equal(result[0, 0, 0, :], source_fields[name][0, 0, 0, :])
+                    np.testing.assert_array_equal(result[0, 0, -1, :], source_fields[name][0, 0, -1, :])
+                    np.testing.assert_array_equal(result[0, 0, :, 0], source_fields[name][0, 0, :, 0])
+                    np.testing.assert_array_equal(result[0, 0, :, -1], source_fields[name][0, 0, :, -1])
+                self.assertEqual(
+                    candidate["QNCLOUD"][0, 0, 1, 1], np.float32(background_nc)
+                )
+                rho = np.float32(1.0) / np.add(
+                    np.asarray(candidate["AL"][0], dtype=np.float32),
+                    np.asarray(candidate["ALB"][0], dtype=np.float32),
+                    dtype=np.float32,
+                )
+                for mass_name, moment_name, cap in (
+                    ("QCLOUD", "QNCLOUD", 5.0e10),
+                    ("QICE", "QNICE", 1.0e6),
+                    ("QRAIN", "QNRAIN", 5.0e7),
+                ):
+                    number_internal = candidate[moment_name][0] * rho
+                    self.assertTrue(np.all(number_internal[:, 1:3, 1:3] <= cap))
+                    report = receipt["field_prior_receipts"][moment_name]["preflight"]
+                    self.assertEqual(report["status"], "PASS_SCOPED")
+                np.testing.assert_allclose(
+                    candidate["QGRAUP"][0, 0, 1:3, 1:3]
+                    / candidate["QIB"][0, 0, 1:3, 1:3],
+                    400.0, rtol=1e-6,
+                )
+                for name in source_variable_hashes:
+                    if name not in {"QNCLOUD", "QNICE", "QNRAIN", "QIB"}:
+                        self.assertEqual(
+                            initializer.variable_sha256(candidate.variables[name]),
+                            source_variable_hashes[name],
+                        )
+            saved_receipt = json.loads(receipt_path.read_text())
+            self.assertEqual(saved_receipt["output_input_sha256"], receipt["output_input_sha256"])
+
+    def test_same13_policy_is_separate_from_frozen_pr61_policy(self):
+        policy = initializer._validate_same13_policy_file(initializer.DEFAULT_PR83_POLICY)
+        self.assertEqual(policy["policy_id"], "SAME13_KDM6_NATIVE_MOMENT_PRIOR_20261013")
+        self.assertEqual(policy["preflight"]["expected_source_valid_time"], "2026-08-16_13:00:00")
+        self.assertEqual(
+            policy["density_source"]["formula"],
+            "alt = real32(AL + ALB) in source operation order; rho_dry = real32(1.0) / alt",
+        )
+
     def test_empty_validation_mask_is_not_reported_as_pass(self):
         report = initializer._validate_mass_prior(
             np.array([0.0]), np.array([0.0]), np.array([False]),

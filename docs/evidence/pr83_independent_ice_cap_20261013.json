@@ -1,0 +1,38 @@
+{
+  "active_interior_infeasible_cells": 2305,
+  "declared_internal_cap_m3": 1000000.0,
+  "declared_lambda_min_m1": 9080,
+  "declared_maximum_mean_mass_kg": 2.098274638742861e-09,
+  "density_operation": "real32 AL+ALB followed by real32 reciprocal",
+  "derivation": "n_v >= rho_d*r_i*lambda_min^3/pidni; feasible only if this lower bound <= cap",
+  "first_active_infeasible_cell": {
+    "dry_density_kg_m3": 0.6824867725372314,
+    "independent_80decimal_source_formula": "1095670.8959593068239624241310518911072538062226179293116603394073221782182217444",
+    "minimum_internal_number_m3": 1095670.8959593067,
+    "qice_kg_kg_dry": 0.0033685904927551746,
+    "wrf_ijk_one_based": [
+      195,
+      73,
+      17
+    ]
+  },
+  "full_array_infeasible_cells": 2326,
+  "maximum_active_minimum_cell": {
+    "dry_density_kg_m3": 0.3230159878730774,
+    "independent_80decimal_source_formula": "1529145.8160301385101078186499836287333490283226279009169093797085661182963136528",
+    "minimum_internal_number_m3": 1529145.8160301386,
+    "qice_kg_kg_dry": 0.00993315503001213,
+    "wrf_ijk_one_based": [
+      191,
+      66,
+      26
+    ]
+  },
+  "no_mass_or_moment_modified": true,
+  "schema": "pr83_independent_ice_cap_necessity_v1",
+  "science_assessed": false,
+  "scope": "actual NetCDF state and independent algebra of the declared source envelope; no initializer import, native Fortran coefficient-bit or model execution claim",
+  "source": "/var/tmp/pr82_same13_real_boundary_candidate.final2_20261012/wrfinput_d01",
+  "source_sha256_after": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+  "source_sha256_before": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb"
+}

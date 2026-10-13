@@ -81,6 +81,13 @@ python3 "$repo_root/tests/test_run_isolated_native.py"
 python3 "$repo_root/tests/test_pr82_observation_signal_readback.py"
 python3 "$repo_root/tests/test_archive_member_hashes.py"
 python3 "$repo_root/tests/test_pr82_native_conversion_scale.py"
+python3 "$repo_root/tests/test_initialize_native_moments.py"
+python3 "$repo_root/tests/test_pr82_same13_native_readback.py"
+python3 "$repo_root/tests/test_pr83_moment_candidate_readback.py"
+python3 "$repo_root/tests/test_pr83_same13_native_transaction.py"
+python3 "$repo_root/tests/test_pr83_rk_operands_patch.py"
+python3 "$repo_root/tests/test_pr83_native_pair_readback.py"
+python3 "$repo_root/tests/test_pr83_off_runner_contract.py"
 
 for hydrostatic_build in checked optimized; do
   saturation_fixture="$test_tmp/saturation_reference_${hydrostatic_build}.txt"
