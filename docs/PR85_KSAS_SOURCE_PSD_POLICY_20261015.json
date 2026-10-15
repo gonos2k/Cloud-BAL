@@ -1,0 +1,59 @@
+{
+  "schema": "pr85_ksas_process_source_psd_v1",
+  "policy_id": "SAME13_KSAS_CONDENSATE_BIRTH_PRIOR_20261015_V1",
+  "status": "CONDITIONAL_RESEARCH_SOURCE_PRIOR_NOT_OPERATIONAL_OR_SCIENCE_APPROVAL",
+  "scope": "Explicit process-paired number source for positive KSAS QC/QI mass packets in the authorized same13 MP37 experiment.",
+  "source": {
+    "cumulus_scheme": "KSASSCHEME",
+    "wrapper_source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_cu_ksas.F",
+    "wrapper_source_sha256": "5a100344bc248670b0207732541cb293de2fc95a5794866ada0abee2334a51a2",
+    "tendency_coupling_source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_physics_addtendc.F",
+    "tendency_coupling_source_sha256": "ecfe34c06bb3e91a5398a616a69a69a5aa155e73dc082ef0745421df46331894",
+    "native_process_behavior": "The selected KSAS wrapper returns QC/QI mass tendencies and no corresponding NC/NI tendencies. Positive source packets receive an explicit number source before calculate_phy_tend applies the same mu-coordinate coupling.",
+    "observed_attribution": "The closed diagnostic candidate found 346 positive KSAS QI source cells, zero negative QI source cells, and no KSAS QNI source. At the four zero-base QI/NI failures, aggregate QI source exactly equaled rqicuten and aggregate QNI source was zero. This is source attribution for that run, not scientific validation."
+  },
+  "basis": {
+    "mass_rate": "kg kg-dry-air-1 s-1",
+    "number_rate": "number kg-dry-air-1 s-1",
+    "conversion": "N_source = Q_source / mbar_source",
+    "coupling": "Add N_source to scalar_tend(P_QNC/P_QNI) before calculate_phy_tend; native calculate_phy_tend then applies the same (c1*mu+c2) factor as other scalar tendencies.",
+    "scope": "Only the explicit positive KSAS process mass packet is converted. Existing PBL/other-process number tendencies remain independently additive; no aggregate residual is used."
+  },
+  "source_priors": {
+    "QCLOUD": {
+      "target_moment": "QNC",
+      "d": 3,
+      "mu": 2,
+      "lambda_interval_m-1": [
+        12000,
+        500000
+      ],
+      "mean_particle_mass_policy_bounds_kg": [
+        4.188790204786391e-15,
+        3.0300855069345996e-10
+      ],
+      "center_rule": "geometric mean of declared mean-particle-mass bounds; equivalently PIDN/(sqrt(lambda_min*lambda_max))^d under the frozen QCLOUD source equations",
+      "mbar_kg": 1.126605187770448e-12
+    },
+    "QICE": {
+      "target_moment": "QNI",
+      "d": 3,
+      "mu": 0,
+      "lambda_interval_m-1": [
+        9080.0,
+        1820000
+      ],
+      "source_pidni_real32": 1570.79638671875,
+      "source_pidni_bits": "0x44C4597C",
+      "center_rule": "source REAL32 PIDNI/(sqrt(lambda_min*lambda_max))^d",
+      "mbar_kg": 7.39407819089854e-13
+    }
+  },
+  "limitations": {
+    "research_prior_only": true,
+    "not_observed_particle_distribution": true,
+    "not_scientific_acceptance": true,
+    "negative_ksas_mass_sources": "No negative KSAS QI source was observed in the attribution run. If a negative source occurs, pair its sink using the pre-source N/Q state or reject the process packet; do not silently omit or floor moments.",
+    "ledger": "pr85_cumulus_source.raw records process Q rate, proposed N rate, the actual REAL32 scalar-tendency delta, timestep, cell, and applied source center (or pre-source N/Q for a sink). The ledger is not a conservation closure or observational PSD measurement."
+  }
+}

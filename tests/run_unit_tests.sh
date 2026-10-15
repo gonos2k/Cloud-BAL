@@ -41,6 +41,14 @@ pressure_transition_fixture="$test_tmp/pressure_transition_remap_fixture.txt"
 
 "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
   -module "$test_tmp" -I "$test_tmp" \
+  "$repo_root/src/common/cloud_bal_joint_transport.f90" \
+  "$repo_root/tests/test_joint_qnb_transport.f90" \
+  -o "$test_tmp/test_joint_qnb_transport"
+python3 "$repo_root/tests/test_pr85_native_air_operator.py"
+"$test_tmp/test_joint_qnb_transport"
+
+"$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
+  -module "$test_tmp" -I "$test_tmp" \
   "$repo_root/src/common/cloud_bal_state.f90" \
   "$repo_root/tests/test_pressure_geometry_oracle.f90" \
   -o "$test_tmp/test_pressure_geometry_oracle"
@@ -90,6 +98,23 @@ python3 "$repo_root/tests/test_pr83_native_pair_readback.py"
 python3 "$repo_root/tests/test_pr83_off_runner_contract.py"
 python3 "$repo_root/tests/test_pr84_ice_cap_pair_audit.py"
 python3 "$repo_root/tests/test_pr84_native_moment_policy.py"
+PR85_ICE_TRANSITION_FIXTURE="$repo_root/tests/fixtures/pr85_kdm6_ice_transition_source_form.F90" \
+  python3 "$repo_root/tests/test_pr85_ice_transition_regression.py"
+python3 "$repo_root/tests/test_pr85_fogdes_qn_regression.py"
+python3 "$repo_root/tests/test_pr85_pbl_packet_quantization.py"
+python3 "$repo_root/tests/test_pr85_kdm6_ice_sedimentation.py"
+python3 "$repo_root/tests/test_pr85_kdm6_graupel_sedimentation.py"
+python3 "$repo_root/tests/test_pr85_kdm6_subthreshold_melt.py"
+python3 "$repo_root/tests/test_pr85_kdm6_freezing_packet.py"
+python3 "$repo_root/tests/test_pr85_kdm6_rain_freezing_packet.py"
+python3 "$repo_root/tests/test_pr85_kdm6_cold_process.py"
+python3 "$repo_root/tests/test_pr85_kdm6_warm_process.py"
+python3 "$repo_root/tests/test_pr85_kdm6_density_bridge.py"
+python3 "$repo_root/tests/test_pr85_kdm6_graupel_cache.py"
+python3 "$repo_root/tests/test_pr85_kdm6_psd_boundary.py"
+python3 "$repo_root/tests/test_pr85_consumer_build_contract.py"
+python3 "$repo_root/tests/test_pr85_joint_stage_trace.py"
+bash "$repo_root/tests/test_pr85_ksas_source_helper.sh"
 python3 "$repo_root/tests/test_pr84_same13_boundary_contract.py"
 python3 "$repo_root/tests/test_pr84_shared_runner_contract.py"
 

@@ -1,0 +1,74 @@
+--- a/dyn_em/module_first_rk_step_part2.F
++++ b/dyn_em/module_first_rk_step_part2.F
+@@ -64,6 +64,7 @@
+ 
+ 
+     IMPLICIT NONE
++    EXTERNAL :: pr85_pbl_tendency_dump
+ 
+     TYPE ( domain ), INTENT(INOUT) :: grid
+     TYPE ( grid_config_rec_type ), INTENT(IN) :: config_flags
+@@ -819,6 +820,21 @@
+        !$OMP END PARALLEL DO
+ BENCH_END(update_phy_ten_tim)
+ 
++      ! Diagnostic-only attribution of the selected KSAS mass source.  These
++      ! five process arrays are raw convective tendencies; no state is changed.
++      IF (grid%itimestep == 1 .AND. rk_step == 1 .AND. grid%num_tiles == 1) THEN
++#ifdef DM_PARALLEL
++        IF (mytask == 0) THEN
++#endif
++          CALL pr85_pbl_tendency_dump('CUMULUS_PROCESS_TEND',grid%itimestep,1, &
++               ims,ime,jms,jme,kms,kme,grid%i_start(1),MIN(grid%i_end(1),ide-1), &
++               grid%j_start(1),MIN(grid%j_end(1),jde-1),k_start,MIN(k_end,kde-1), &
++               grid%rqvcuten,grid%rqccuten,grid%rqicuten,grid%rqcncuten,grid%rqincuten)
++#ifdef DM_PARALLEL
++        END IF
++#endif
++      END IF
++
+       IF (grid%skebs_on==1) then
+           !$OMP PARALLEL DO   &
+           !$OMP PRIVATE ( ij )
+@@ -1083,6 +1099,20 @@
+          DO ij = 1 , grid%num_tiles
+ 
+            CALL wrf_debug ( 200 , ' call horizontal_diffusion_2' )
++           IF (grid%itimestep == 1 .AND. rk_step == 1 .AND. grid%num_tiles == 1) THEN
++#ifdef DM_PARALLEL
++             IF (mytask == 0) THEN
++#endif
++               CALL pr85_pbl_tendency_dump('PRE_HORIZONTAL_DIFFUSION',grid%itimestep,1, &
++                    ims,ime,jms,jme,kms,kme,grid%i_start(ij),MIN(grid%i_end(ij),ide-1), &
++                    grid%j_start(ij),MIN(grid%j_end(ij),jde-1),k_start,MIN(k_end,kde-1), &
++                    moist_tend(ims,kms,jms,P_QV),moist_tend(ims,kms,jms,P_QC), &
++                    moist_tend(ims,kms,jms,P_QI),scalar_tend(ims,kms,jms,P_QNC), &
++                    scalar_tend(ims,kms,jms,P_QNI))
++#ifdef DM_PARALLEL
++             END IF
++#endif
++           END IF
+            CALL horizontal_diffusion_2( t_tendf, ru_tendf, rv_tendf, rw_tendf, &
+                                       tke_tend,                              &
+                                       moist_tend, num_moist,                  &
+@@ -1106,6 +1136,20 @@
+                                       grid%i_start(ij), grid%i_end(ij),      &
+                                       grid%j_start(ij), grid%j_end(ij),      &
+                                       k_start    , k_end                    )
++           IF (grid%itimestep == 1 .AND. rk_step == 1 .AND. grid%num_tiles == 1) THEN
++#ifdef DM_PARALLEL
++             IF (mytask == 0) THEN
++#endif
++               CALL pr85_pbl_tendency_dump('POST_HORIZONTAL_DIFFUSION',grid%itimestep,1, &
++                    ims,ime,jms,jme,kms,kme,grid%i_start(ij),MIN(grid%i_end(ij),ide-1), &
++                    grid%j_start(ij),MIN(grid%j_end(ij),jde-1),k_start,MIN(k_end,kde-1), &
++                    moist_tend(ims,kms,jms,P_QV),moist_tend(ims,kms,jms,P_QC), &
++                    moist_tend(ims,kms,jms,P_QI),scalar_tend(ims,kms,jms,P_QNC), &
++                    scalar_tend(ims,kms,jms,P_QNI))
++#ifdef DM_PARALLEL
++             END IF
++#endif
++           END IF
+          ENDDO
+          !$OMP END PARALLEL DO
+ BENCH_END(hor_diff_tim)

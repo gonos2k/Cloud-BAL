@@ -1,0 +1,312 @@
+--- a/phys/module_bl_fogdes.F
++++ b/phys/module_bl_fogdes.F
+@@ -159,6 +159,213 @@
+ 
+   END SUBROUTINE bl_fogdes
+ 
++! Conditional PR85 research entry point. The legacy bl_fogdes interface above
++! remains unchanged for all existing callers and non-KDM6 microphysics.
++  SUBROUTINE bl_fogdes_qn(                                             &
++       vdfg,qc_curr,qnc_curr,qv_curr,t_curr,dtbl,rho,dz8w,             &
++       grav_settling,dqc,dqnc,                                         &
++       ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme,               &
++       its,ite,jts,jte,kts,kte,ground_q_sink,ground_n_sink)
++    INTEGER,INTENT(IN) :: ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme
++    INTEGER,INTENT(IN) :: its,ite,jts,jte,kts,kte,grav_settling
++    REAL,INTENT(IN) :: vdfg(ims:ime,jms:jme),dtbl
++    REAL,INTENT(IN) :: qc_curr(ims:ime,kms:kme,jms:jme)
++    REAL,INTENT(IN) :: qnc_curr(ims:ime,kms:kme,jms:jme)
++    REAL,INTENT(IN) :: qv_curr(ims:ime,kms:kme,jms:jme),t_curr(ims:ime,kms:kme,jms:jme)
++    REAL,INTENT(IN) :: rho(ims:ime,kms:kme,jms:jme),dz8w(ims:ime,kms:kme,jms:jme)
++    REAL,INTENT(INOUT) :: dqc(ims:ime,kms:kme,jms:jme),dqnc(ims:ime,kms:kme,jms:jme)
++    REAL,INTENT(OUT) :: ground_q_sink(ims:ime,jms:jme),ground_n_sink(ims:ime,jms:jme)
++    REAL :: grav_scale
++    grav_scale=MIN(REAL(grav_settling),1.0)
++    CALL fogdes_qn_stokes_flux(vdfg,qc_curr,qnc_curr,qv_curr,t_curr,dtbl,grav_scale,rho,dz8w,dqc,dqnc, &
++         ground_q_sink,ground_n_sink,ims,ime,jms,jme,kms,kme,kde,its,ite,jts,jte,kts,kte)
++  END SUBROUTINE bl_fogdes_qn
++
++  SUBROUTINE fogdes_qn_stokes_flux(vdfg,qc,qnc,qv,temp,dt,grav_scale,rho,dz,dqc,dqnc, &
++       ground_q_sink,ground_n_sink,ims,ime,jms,jme,kms,kme,kde,      &
++       its,ite,jts,jte,kts,kte)
++    USE, INTRINSIC :: iso_fortran_env, ONLY: real64
++    USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
++    EXTERNAL :: wrf_error_fatal
++    INTEGER,INTENT(IN) :: ims,ime,jms,jme,kms,kme,kde,its,ite,jts,jte,kts,kte
++    REAL,INTENT(IN) :: qc(ims:ime,kms:kme,jms:jme),qnc(ims:ime,kms:kme,jms:jme)
++    REAL,INTENT(IN) :: qv(ims:ime,kms:kme,jms:jme),temp(ims:ime,kms:kme,jms:jme)
++    REAL,INTENT(IN) :: vdfg(ims:ime,jms:jme),dt,grav_scale
++    REAL,INTENT(IN) :: rho(ims:ime,kms:kme,jms:jme),dz(ims:ime,kms:kme,jms:jme)
++    REAL,INTENT(INOUT) :: dqc(ims:ime,kms:kme,jms:jme),dqnc(ims:ime,kms:kme,jms:jme)
++    REAL,INTENT(OUT) :: ground_q_sink(ims:ime,jms:jme),ground_n_sink(ims:ime,jms:jme)
++    REAL(real64),PARAMETER :: mu_shape=2.0_real64
++    ! Existing joint-Q/N cloud mean-mass cone endpoints (numerical policy).
++    REAL(real64),PARAMETER :: mmin=4.188790204786391e-15_real64
++    REAL(real64),PARAMETER :: mmax=3.0300855069345996e-10_real64
++    REAL(real64),PARAMETER :: alpha=mu_shape+1.0_real64
++    REAL(real64) :: dryrho,cmc,lambda3,lambda_inv2,mu_dyn,a,vn,vq
++    REAL(real64) :: fq(kms:kte+1),fn(kms:kte+1),dq(kms:kte),dn(kms:kte)
++    REAL(real64) :: base_dq(kms:kte),base_dn(kms:kte)
++    REAL(real64) :: theta,lo,hi
++    REAL(real64) :: qvalue,nvalue,meanmass,lower_tol,upper_tol
++    REAL(real64) :: applied_q,applied_n,ground_q,ground_n,residual_q,residual_n
++    REAL(real64) :: increment_q,increment_n
++    INTEGER :: i,j,k,ktop,iteration,budget_unit,io_status
++    LOGICAL :: feasible
++
++    IF (.NOT.ieee_is_finite(dt) .OR. dt<=0.0) &
++      CALL wrf_error_fatal('FogDES paired Stokes settling requires positive timestep')
++    IF (.NOT.ieee_is_finite(grav_scale) .OR. grav_scale<0.0) &
++      CALL wrf_error_fatal('FogDES paired Stokes settling requires valid scale')
++    IF (.NOT.ALL(ieee_is_finite(vdfg))) &
++      CALL wrf_error_fatal('FogDES paired Stokes settling received nonfinite VDFG')
++    cmc=acos(-1.0_real64)*REAL(rhowater,real64)/6.0_real64
++    ground_q_sink=0.0
++    ground_n_sink=0.0
++    ktop=MIN(kte,kde-1)
++    OPEN(NEWUNIT=budget_unit,FILE='pr85_fogdes_budget.raw',STATUS='UNKNOWN', &
++         POSITION='APPEND',ACTION='WRITE',IOSTAT=io_status)
++    IF (io_status/=0) CALL wrf_error_fatal('FogDES paired Q/N budget file open failed')
++    WRITE(budget_unit,'(a,1x,1p,es24.16,1x,6i8)') &
++      'PR85_FOGDES_BUDGET_META',REAL(dt,real64),its,ite,jts,jte,kts,ktop
++    WRITE(budget_unit,'(a)') &
++      'PR85_FOGDES_BUDGET_UNITS local_rho_dry_times_dz Q_kg_per_m2 N_per_m2 residual=committed_plus_ground'
++    IF (ktop<kts) THEN
++      CLOSE(budget_unit,IOSTAT=io_status)
++      IF (io_status/=0) CALL wrf_error_fatal('FogDES paired Q/N budget file close failed')
++      RETURN
++    ENDIF
++    DO j=jts,jte
++      DO i=its,ite
++        fq=0.0_real64; fn=0.0_real64; dq=0.0_real64; dn=0.0_real64
++        DO k=kts,ktop
++          IF (.NOT.ieee_is_finite(qc(i,k,j)) .OR. .NOT.ieee_is_finite(qnc(i,k,j)) .OR. &
++              .NOT.ieee_is_finite(qv(i,k,j)) .OR. .NOT.ieee_is_finite(temp(i,k,j)) .OR. &
++              .NOT.ieee_is_finite(rho(i,k,j)) .OR. .NOT.ieee_is_finite(dz(i,k,j)) .OR. &
++              .NOT.ieee_is_finite(dqc(i,k,j)) .OR. .NOT.ieee_is_finite(dqnc(i,k,j))) &
++            CALL wrf_error_fatal('FogDES paired Stokes settling received nonfinite input')
++          base_dq(k)=REAL(dqc(i,k,j),real64)
++          base_dn(k)=REAL(dqnc(i,k,j),real64)
++          dryrho=REAL(rho(i,k,j)/(1.0+qv(i,k,j)),real64)
++          IF (qv(i,k,j)<=-1.0 .OR. dryrho<=0.0 .OR. dz(i,k,j)<=0.0 .OR. temp(i,k,j)<=0.0) &
++            CALL wrf_error_fatal('FogDES paired Stokes settling requires positive state')
++          IF (qc(i,k,j)<0.0 .OR. qnc(i,k,j)<0.0) &
++            CALL wrf_error_fatal('FogDES paired Stokes settling received negative Q/N')
++          IF (qc(i,k,j)==0.0 .AND. qnc(i,k,j)==0.0) CYCLE
++          IF (qc(i,k,j)<=0.0 .OR. qnc(i,k,j)<=0.0) &
++            CALL wrf_error_fatal('FogDES paired Stokes settling requires both cloud moments')
++          ! Gamma PSD: alpha=muc+1=3; Q,N use the same cell PSD, not one speed.
++          lambda3=cmc*gamma(1.0_real64+3.0_real64/alpha)* &
++                   REAL(qnc(i,k,j),real64)/REAL(qc(i,k,j),real64)
++          IF (lambda3<=0.0_real64) &
++            CALL wrf_error_fatal('FogDES paired Stokes settling has invalid PSD slope')
++          lambda_inv2=lambda3**(-2.0_real64/3.0_real64)
++          mu_dyn=1.496e-6_real64*REAL(temp(i,k,j),real64)* &
++                  SQRT(REAL(temp(i,k,j),real64))/(REAL(temp(i,k,j),real64)+120.0_real64)
++          a=(REAL(rhowater,real64)-REAL(rho(i,k,j),real64))*REAL(g,real64)/ &
++             (18.0_real64*mu_dyn)
++          IF (a<0.0_real64) CALL wrf_error_fatal('FogDES paired Stokes settling has invalid gas density')
++          vn=a*lambda_inv2*gamma(1.0_real64+2.0_real64/alpha)
++          vq=a*lambda_inv2*gamma(1.0_real64+5.0_real64/alpha)/ &
++               gamma(1.0_real64+3.0_real64/alpha)
++          ! Ground deposition remains a separate bulk VDFG process. For this
++          ! bottom face, use VDFG for both moments; atmospheric faces use VQ/VN.
++          IF (k==kts) THEN
++            IF (vdfg(i,j)<0.0) &
++              CALL wrf_error_fatal('FogDES bulk ground deposition speed must be nonnegative')
++            fq(k)=REAL(grav_scale,real64)*dryrho*REAL(qc(i,k,j),real64)*REAL(vdfg(i,j),real64)
++            fn(k)=REAL(grav_scale,real64)*dryrho*REAL(qnc(i,k,j),real64)*REAL(vdfg(i,j),real64)
++            CYCLE
++          ENDIF
++          fq(k)=REAL(grav_scale,real64)*dryrho*REAL(qc(i,k,j),real64)*vq
++          fn(k)=REAL(grav_scale,real64)*dryrho*REAL(qnc(i,k,j),real64)*vn
++          IF (.NOT.ieee_is_finite(fq(k)) .OR. .NOT.ieee_is_finite(fn(k))) &
++            CALL wrf_error_fatal('FogDES paired Stokes settling produced nonfinite face flux')
++        ENDDO
++        ! Top boundary is closed; lower boundary is VDFG bulk deposition.
++        DO k=kts,ktop
++          dryrho=REAL(rho(i,k,j)/(1.0+qv(i,k,j)),real64)
++          dq(k)=(fq(k+1)-fq(k))/(dryrho*REAL(dz(i,k,j),real64))
++          dn(k)=(fn(k+1)-fn(k))/(dryrho*REAL(dz(i,k,j),real64))
++          IF (.NOT.ieee_is_finite(dq(k)) .OR. .NOT.ieee_is_finite(dn(k))) &
++            CALL wrf_error_fatal('FogDES paired Stokes settling produced nonfinite tendency')
++        ENDDO
++        theta=1.0_real64
++        CALL candidate(theta,feasible)
++        IF (.NOT.feasible) THEN
++          CALL candidate(0.0_real64,feasible)
++          IF (.NOT.feasible) CALL wrf_error_fatal('FogDES paired Q/N state outside cloud PSD cone')
++          lo=0.0_real64; hi=1.0_real64
++          DO iteration=1,48
++            theta=0.5_real64*(lo+hi)
++            CALL candidate(theta,feasible)
++            IF (feasible) THEN
++              lo=theta
++            ELSE
++              hi=theta
++            ENDIF
++          ENDDO
++          theta=lo
++        ENDIF
++        CALL candidate(theta,feasible)
++        IF (.NOT.feasible) CALL wrf_error_fatal('FogDES paired Q/N face factor failed')
++        applied_q=0.0_real64; applied_n=0.0_real64
++        ground_q=dt*theta*fq(kts); ground_n=dt*theta*fn(kts)
++        DO k=kts,ktop
++          dqc(i,k,j)=REAL(base_dq(k)+theta*dq(k))
++          dqnc(i,k,j)=REAL(base_dn(k)+theta*dn(k))
++          dryrho=REAL(rho(i,k,j)/(1.0+qv(i,k,j)),real64)
++          increment_q=REAL(dqc(i,k,j)-REAL(base_dq(k)),real64)
++          increment_n=REAL(dqnc(i,k,j)-REAL(base_dn(k)),real64)
++          applied_q=applied_q+REAL(dt,real64)*dryrho*REAL(dz(i,k,j),real64)*increment_q
++          applied_n=applied_n+REAL(dt,real64)*dryrho*REAL(dz(i,k,j),real64)*increment_n
++        ENDDO
++        residual_q=applied_q+ground_q
++        residual_n=applied_n+ground_n
++        IF (.NOT.ALL(ieee_is_finite([applied_q,applied_n,ground_q,ground_n,residual_q,residual_n]))) &
++          CALL wrf_error_fatal('FogDES paired Q/N process budget is nonfinite')
++        ! Local rho_dry*dz layer inventory; this is not native hybrid-Md closure.
++        IF (theta*SUM(ABS(fq(kts:ktop+1)))>0.0_real64 .OR. &
++            theta*SUM(ABS(fn(kts:ktop+1)))>0.0_real64) &
++          WRITE(budget_unit,'(a,2i8,1x,1p,7es24.16)') 'PR85_FOGDES_BUDGET',i,j,theta, &
++            ground_q,ground_n,applied_q,applied_n,residual_q,residual_n
++        ! Exact bottom sink for the atmosphere column over this timestep.
++        IF (.NOT.ieee_is_finite(dt*theta*fq(kts)) .OR. &
++            .NOT.ieee_is_finite(dt*theta*fn(kts)) .OR. &
++            dt*theta*fq(kts)>REAL(HUGE(0.0),real64) .OR. &
++            dt*theta*fn(kts)>REAL(HUGE(0.0),real64)) &
++          CALL wrf_error_fatal('FogDES paired ground ledger is nonfinite')
++        ground_q_sink(i,j)=REAL(dt*theta*fq(kts))
++        ground_n_sink(i,j)=REAL(dt*theta*fn(kts))
++      ENDDO
++    ENDDO
++    CLOSE(budget_unit,IOSTAT=io_status)
++    IF (io_status/=0) CALL wrf_error_fatal('FogDES paired Q/N budget file close failed')
++  CONTAINS
++    SUBROUTINE candidate(scale,ok)
++      REAL(real64),INTENT(IN) :: scale
++      LOGICAL,INTENT(OUT) :: ok
++      INTEGER :: kk
++      REAL :: stored_dq,stored_dn,qstate32,nstate32
++      ok=.FALSE.
++      DO kk=kts,ktop
++        stored_dq=REAL(base_dq(kk)+scale*dq(kk))
++        stored_dn=REAL(base_dn(kk)+scale*dn(kk))
++        IF (.NOT.ieee_is_finite(stored_dq) .OR. .NOT.ieee_is_finite(stored_dn)) RETURN
++        qstate32=qc(i,kk,j)+dt*stored_dq
++        nstate32=qnc(i,kk,j)+dt*stored_dn
++        qvalue=REAL(qstate32,real64)
++        nvalue=REAL(nstate32,real64)
++        IF (.NOT.ieee_is_finite(qvalue) .OR. .NOT.ieee_is_finite(nvalue)) RETURN
++        IF (qvalue<0.0_real64 .OR. nvalue<0.0_real64) RETURN
++        IF (qvalue==0.0_real64 .AND. nvalue==0.0_real64) CYCLE
++        IF (qvalue<=0.0_real64 .OR. nvalue<=0.0_real64) RETURN
++        meanmass=qvalue/nvalue
++        IF (.NOT.ieee_is_finite(meanmass) .OR. &
++            qvalue>REAL(HUGE(0.0),real64) .OR. nvalue>REAL(HUGE(0.0),real64)) RETURN
++        lower_tol=8.0_real64*REAL(SPACING(REAL(mmin)),real64)
++        upper_tol=8.0_real64*REAL(SPACING(REAL(mmax)),real64)
++        IF (meanmass<mmin-lower_tol .OR. meanmass>mmax+upper_tol) RETURN
++      ENDDO
++      ok=.TRUE.
++    END SUBROUTINE candidate
++  END SUBROUTINE fogdes_qn_stokes_flux
+ ! ==================================================================
+ 
+ END MODULE module_bl_fogdes
+--- a/phys/module_pbl_driver.F
++++ b/phys/module_pbl_driver.F
+@@ -145,7 +145,7 @@
+ !
+ ! FASDAS
+ !
+-              ,QNORM, fasdas           &
++              ,QNORM, fasdas, mp_physics &
+ !
+ ! END FASDAS
+ !
+@@ -405,6 +405,7 @@
+ 
+ 
+    INTEGER,    INTENT(IN   )    ::     bl_pbl_physics, ra_lw_physics,sf_sfclay_physics,sf_urban_physics,windfarm_opt
++   INTEGER,    INTENT(IN   )    ::     mp_physics
+    INTEGER,    INTENT(IN   )    ::     ysu_topdown_pblmix
+    INTEGER,    OPTIONAL,  INTENT(IN   )    ::     shinhong_tke_diag
+    INTEGER,    OPTIONAL,  INTENT(IN   )    ::     scalar_pblmix, tracer_pblmix
+@@ -792,6 +793,7 @@
+    LOGICAL :: pr65_qnc_enabled, pr65_qnc_flag, pr73_qni_enabled
+    INTEGER :: pr65_scalar_pblmix
+    REAL :: pr65_scalar_tend_before
++   REAL, DIMENSION( ims:ime, jms:jme ) :: fogdes_ground_q_sink,fogdes_ground_n_sink
+ 
+    REAL,       DIMENSION( ims:ime, kms:kme, jms:jme ) ::v_phytmp
+    REAL,       DIMENSION( ims:ime, kms:kme, jms:jme ) ::u_phytmp
+@@ -1298,6 +1300,15 @@
+ 
+       CASE (SHINHONGSCHEME)
+         CALL wrf_debug(100,'in SHINHONG PBL')
++        IF (mp_physics .EQ. 37) THEN
++          IF (PRESENT(BLDT)) THEN
++            IF (BLDT .NE. 0.) CALL wrf_error_fatal( &
++                 'PR85 KDM6 Shinhong packet gate requires BLDT=0')
++          ELSEIF (STEPBL .NE. 1) THEN
++            CALL wrf_error_fatal( &
++                 'PR85 KDM6 Shinhong packet gate requires BLDT=0 or STEPBL=1')
++          ENDIF
++        ENDIF
+            IF ( PRESENT( qv_curr )  .AND. PRESENT( qc_curr )  .AND. &
+                 PRESENT( qi_curr )                            .AND. &
+                 PRESENT( rqvblten ) .AND. PRESENT( rqcblten ) .AND. &
+@@ -1373,6 +1384,7 @@
+               ,QNC_SCALAR=scalar,QNC_ENABLED=pr65_qnc_enabled        &
+               ,P_QNC=p_qnc,RQNCBLTEN=rqncblten                       &
+               ,QNI_SCALAR=qni_curr,QNI_ENABLED=pr73_qni_enabled        &
++              ,PR85_PACKET_ENABLED=(mp_physics .EQ. 37)                  &
+               ,P_QNI=p_qni,RQNIBLTEN=rqniblten                       &
+               ,TKE_PBL=tke_pbl,EL_PBL=el_pbl,CORF=f                 &
+               ,IDS=ids,IDE=ide,JDS=jds,JDE=jde,KDS=kds,KDE=kde      &
+@@ -2309,14 +2321,26 @@
+    IF (grav_settling .GE. 1) THEN
+       IF ( PRESENT(vdfg) .AND. PRESENT(qc_curr)) THEN
+          !NOTE 1: vdfg is calculated in the surface driver.
+-         !NOTE 2: as of now, only qc_curr settles, not # conc.
+-
+-          CALL bl_fogdes(                                        &
+-               vdfg,qc_curr,dtbl,rho,dz8w,grav_settling,RQCBLTEN,&
+-               ids,ide, jds,jde, kds,kde,                        &
+-               ims,ime, jms,jme, kms,kme,                        &
+-               i_start(ij),i_end(ij),                            &
+-               j_start(ij),j_end(ij),kts,kte                     )
++         ! KDM6 uses a conditional paired-Q/N research closure; other MPs keep
++         ! the original FogDES water-only path. VDFG remains the boundary sink.
++          IF (mp_physics .EQ. 37) THEN
++             IF (PRESENT(qnc_curr) .AND. flag_qnc .AND. PRESENT(qv_curr) .AND. &
++                 PRESENT(rqcblten) .AND. &
++                 PRESENT(scalar_tend) .AND. p_qnc.GT.0 .AND. p_qnc.LE.num_scalar) THEN
++               CALL bl_fogdes_qn(vdfg,qc_curr,qnc_curr,qv_curr,t_phy,dtbl,rho,dz8w, &
++                    grav_settling,RQCBLTEN,scalar_tend(ims,kms,jms,p_qnc),       &
++                    ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme,            &
++                    i_start(ij),i_end(ij),j_start(ij),j_end(ij),kts,kte,        &
++                    ground_q_sink=fogdes_ground_q_sink,                         &
++                    ground_n_sink=fogdes_ground_n_sink)
++             ELSE
++               CALL wrf_error_fatal('KDM6 FogDES requires paired cloud mass/number state and tendencies')
++             ENDIF
++          ELSE
++             CALL bl_fogdes(vdfg,qc_curr,dtbl,rho,dz8w,grav_settling,RQCBLTEN, &
++                  ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme,           &
++                  i_start(ij),i_end(ij),j_start(ij),j_end(ij),kts,kte)
++          ENDIF
+       ELSE
+           CALL wrf_error_fatal('Missing args for bl_fogdes in pbl driver')
+       ENDIF
+--- a/dyn_em/module_first_rk_step_part1.F
++++ b/dyn_em/module_first_rk_step_part1.F
+@@ -1381,6 +1381,7 @@
+       CALL pbl_driver(                                                              &
+      &         AKHS=grid%akhs          ,AKMS=grid%akms                              &
+      &        ,BL_PBL_PHYSICS=config_flags%bl_pbl_physics                           &
++     &        ,MP_PHYSICS=config_flags%mp_physics                                      &
+      &        ,WINDFARM_OPT=config_flags%windfarm_opt,power=grid%power              &
+      &        ,windfarm_wake_model=config_flags%windfarm_wake_model          & ! Yulong add for WLM
+      &        ,windfarm_overlap_method=config_flags%windfarm_overlap_method  & ! Yulong add for WLM

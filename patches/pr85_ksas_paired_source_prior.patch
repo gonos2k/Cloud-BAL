@@ -1,0 +1,176 @@
+--- a/dyn_em/module_first_rk_step_part2.F
++++ b/dyn_em/module_first_rk_step_part2.F
+@@ -134,6 +134,14 @@
+     REAL :: scale_factor
+     INTEGER, DIMENSION( ims:ime, jms:jme ) :: shadowmask 
+     INTEGER                             :: ij
++    INTEGER :: pr85_src_i, pr85_src_j, pr85_src_k, pr85_src_unit
++    INTEGER :: pr85_src_nc, pr85_src_ni, pr85_src_ncsink, pr85_src_nisink
++    INTEGER :: pr85_src_process, pr85_src_status, pr85_src_qindex, pr85_src_nindex
++    CHARACTER(LEN=16) :: pr85_src_label
++    REAL :: pr85_src_qrate, pr85_src_nrate, pr85_src_mbar_prior, pr85_src_effective_mbar
++    REAL :: pr85_src_tend_before, pr85_src_tend_delta
++    REAL, PARAMETER :: pr85_mbar_cloud = 1.126605187770448E-12
++    REAL, PARAMETER :: pr85_mbar_ice = 7.39407819089854E-13
+     INTEGER  num_roof_layers
+     INTEGER  num_wall_layers
+     INTEGER  num_road_layers
+@@ -381,6 +389,89 @@
+                            grid%VERTSTRUCC,grid%VERTSTRUCS,grid%VERTAMPT       )
+       ENDIF !spp_lsm
+ 
++! Add each KSAS condensate mass packet as an explicit paired number packet.
++! Positive sources use the frozen source PSD center; negative sources remove
++! number in proportion to the pre-source N/Q pair. calculate_phy_tend applies
++! the same mu coupling to both process rates.
++      IF ( config_flags%mp_physics == 37 .AND. &
++           config_flags%cu_physics == KSASSCHEME .AND. &
++           grid%num_tiles == 1 .AND. &
++           P_QNC >= PARAM_FIRST_SCALAR .AND. P_QNI >= PARAM_FIRST_SCALAR ) THEN
++        pr85_src_nc = 0
++        pr85_src_ni = 0
++        pr85_src_ncsink = 0
++        pr85_src_nisink = 0
++        OPEN(NEWUNIT=pr85_src_unit,FILE='pr85_cumulus_source.raw', &
++             ACCESS='STREAM',FORM='FORMATTED',STATUS='UNKNOWN', &
++             POSITION='APPEND',ACTION='WRITE')
++        WRITE(pr85_src_unit,'(a,2(i0,1x),3(es24.16e3,1x))') &
++             'PR85_CUMULUS_SOURCE_V1',grid%itimestep,rk_step,grid%dt, &
++             pr85_mbar_cloud,pr85_mbar_ice
++        DO pr85_src_j = grid%j_start(1), MIN(grid%j_end(1),jde-1)
++          DO pr85_src_k = k_start, MIN(k_end,kde-1)
++            DO pr85_src_i = grid%i_start(1), MIN(grid%i_end(1),ide-1)
++              DO pr85_src_process = 1, 2
++                IF (pr85_src_process == 1) THEN
++                  pr85_src_qindex = P_QC
++                  pr85_src_nindex = P_QNC
++                  pr85_src_qrate = grid%rqccuten(pr85_src_i,pr85_src_k,pr85_src_j)
++                  pr85_src_mbar_prior = pr85_mbar_cloud
++                  pr85_src_label = 'KSAS_QC'
++                ELSE
++                  pr85_src_qindex = P_QI
++                  pr85_src_nindex = P_QNI
++                  pr85_src_qrate = grid%rqicuten(pr85_src_i,pr85_src_k,pr85_src_j)
++                  pr85_src_mbar_prior = pr85_mbar_ice
++                  pr85_src_label = 'KSAS_QI'
++                END IF
++                IF (pr85_src_qrate /= 0.0) THEN
++                  pr85_src_tend_before = &
++                       scalar_tend(pr85_src_i,pr85_src_k,pr85_src_j,pr85_src_nindex)
++                  CALL pr85_apply_ksas_source(pr85_src_qrate, &
++                       moist(pr85_src_i,pr85_src_k,pr85_src_j,pr85_src_qindex), &
++                       scalar(pr85_src_i,pr85_src_k,pr85_src_j,pr85_src_nindex), &
++                       pr85_src_mbar_prior, &
++                       scalar_tend(pr85_src_i,pr85_src_k,pr85_src_j,pr85_src_nindex), &
++                       pr85_src_nrate,pr85_src_effective_mbar,pr85_src_status)
++                  pr85_src_tend_delta = &
++                       scalar_tend(pr85_src_i,pr85_src_k,pr85_src_j,pr85_src_nindex) - &
++                       pr85_src_tend_before
++                  IF (pr85_src_status /= 0) THEN
++                    CALL wrf_error_fatal('PR85 invalid KSAS paired source packet')
++                  END IF
++                  IF (pr85_src_qrate > 0.0) THEN
++                    IF (pr85_src_process == 1) THEN
++                      pr85_src_nc = pr85_src_nc + 1
++                    ELSE
++                      pr85_src_ni = pr85_src_ni + 1
++                    END IF
++                  ELSE
++                    IF (pr85_src_process == 1) THEN
++                      pr85_src_ncsink = pr85_src_ncsink + 1
++                    ELSE
++                      pr85_src_nisink = pr85_src_nisink + 1
++                    END IF
++                    IF (pr85_src_process == 1) THEN
++                      pr85_src_label = 'KSAS_QC_SINK'
++                    ELSE
++                      pr85_src_label = 'KSAS_QI_SINK'
++                    END IF
++                  END IF
++                  WRITE(pr85_src_unit,'(a,4(i0,1x),5(es24.16e3,1x))') &
++                       TRIM(pr85_src_label),grid%itimestep,pr85_src_i,pr85_src_j,pr85_src_k, &
++                       grid%dt,pr85_src_qrate,pr85_src_nrate,pr85_src_tend_delta, &
++                       pr85_src_effective_mbar
++                END IF
++              END DO
++            END DO
++          END DO
++        END DO
++        WRITE(pr85_src_unit,'(a,6(i0,1x))') &
++             'SUMMARY',grid%itimestep,rk_step,pr85_src_nc,pr85_src_ncsink, &
++             pr85_src_ni,pr85_src_nisink
++        CLOSE(pr85_src_unit)
++      END IF
++
+ ! calculate_phy_tend
+ 
+ BENCH_START(cal_phy_tend)
+@@ -1160,5 +1251,68 @@
+ 
+   END SUBROUTINE first_rk_step_part2
+ 
++  SUBROUTINE pr85_apply_ksas_source(qrate,qbase,nbase,mbar,ntend,nrate,effective_mbar,status)
++    USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
++    IMPLICIT NONE
++    REAL, INTENT(IN) :: qrate,qbase,nbase,mbar
++    REAL, INTENT(INOUT) :: ntend
++    REAL, INTENT(OUT) :: nrate,effective_mbar
++    INTEGER, INTENT(OUT) :: status
++    INTEGER, PARAMETER :: dp = SELECTED_REAL_KIND(15,307)
++    REAL(KIND=dp) :: dq,dqbase,dnbase,dmbar,dntend,dnrate,dupdated,deffective_mbar
++    REAL :: nrate32,updated32
++
++    status = 0
++    nrate = 0.0
++    effective_mbar = mbar
++    IF (.NOT. ieee_is_finite(qrate) .OR. .NOT. ieee_is_finite(qbase) .OR. &
++        .NOT. ieee_is_finite(nbase) .OR. .NOT. ieee_is_finite(mbar) .OR. &
++        .NOT. ieee_is_finite(ntend) .OR. qbase < 0.0 .OR. nbase < 0.0 .OR. mbar <= 0.0) THEN
++      status = 1
++      RETURN
++    END IF
++
++    dq = REAL(qrate,KIND=dp)
++    dqbase = REAL(qbase,KIND=dp)
++    dnbase = REAL(nbase,KIND=dp)
++    dmbar = REAL(mbar,KIND=dp)
++    IF (dq > 0.0_dp) THEN
++      dnrate = dq / dmbar
++    ELSE IF (dq < 0.0_dp) THEN
++      IF (dqbase <= 0.0_dp .OR. dnbase <= 0.0_dp) THEN
++        status = 2
++        RETURN
++      END IF
++      dnrate = dq * dnbase / dqbase
++      deffective_mbar = dqbase / dnbase
++    ELSE
++      RETURN
++    END IF
++    IF (dq > 0.0_dp) deffective_mbar = dmbar
++    IF (.NOT. ieee_is_finite(deffective_mbar) .OR. deffective_mbar <= 0.0_dp .OR. &
++        deffective_mbar > REAL(HUGE(effective_mbar),KIND=dp)) THEN
++      status = 5
++      RETURN
++    END IF
++    effective_mbar = REAL(deffective_mbar)
++
++    dntend = REAL(ntend,KIND=dp)
++    dupdated = dntend + dnrate
++    IF (.NOT. ieee_is_finite(dnrate) .OR. .NOT. ieee_is_finite(dupdated) .OR. &
++        ABS(dnrate) > REAL(HUGE(nrate32),KIND=dp) .OR. &
++        ABS(dupdated) > REAL(HUGE(updated32),KIND=dp)) THEN
++      status = 3
++      RETURN
++    END IF
++    nrate32 = REAL(dnrate)
++    updated32 = REAL(dupdated)
++    IF (dnrate /= 0.0_dp .AND. nrate32 == 0.0) THEN
++      status = 4
++      RETURN
++    END IF
++    nrate = nrate32
++    ntend = updated32
++  END SUBROUTINE pr85_apply_ksas_source
++
+ END MODULE module_first_rk_step_part2
+ 

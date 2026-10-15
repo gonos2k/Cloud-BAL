@@ -1,0 +1,268 @@
+--- a/module_bl_shinhong.F
++++ b/module_bl_shinhong.F
+@@ -26,7 +26,7 @@
+                   ctopo,ctopo2,                                                &
+                   wstar,delta,                                                 &
+                   regime,qnc_scalar,qnc_enabled,p_qnc,rqncblten,          &
+-                  qni_scalar,qni_enabled,p_qni,rqniblten )
++                  qni_scalar,qni_enabled,p_qni,rqniblten,pr85_packet_enabled )
+ !-------------------------------------------------------------------------------
+    implicit none
+ !-------------------------------------------------------------------------------
+@@ -182,6 +182,7 @@
+    real,     dimension(ims:ime,kms:kme,jms:jme), intent(out), optional :: rqncblten
+    real,     dimension(ims:ime,kms:kme,jms:jme), intent(in), optional :: qni_scalar
+    logical, intent(in), optional :: qni_enabled
++   logical, intent(in), optional :: pr85_packet_enabled
+    integer, intent(in), optional :: p_qni
+    real,     dimension(ims:ime,kms:kme,jms:jme), intent(out), optional :: rqniblten
+ !
+@@ -198,6 +199,7 @@
+ ! local
+ !
+    integer ::  i,j,k,nchannel,qnc_channel,qni_channel
++   logical :: pr85_packet_active
+    real,     dimension( its:ite, kts:kte*max_ndiff )  ::             rqvbl2dt, &
+                                                                          qv2d
+    real,     dimension( its:ite, kts:kte )        ::                      pdh
+@@ -208,6 +210,8 @@
+                                                                         dtsfc, &
+                                                                         dqsfc
+ !
++   pr85_packet_active = .false.
++   if (present(pr85_packet_enabled)) pr85_packet_active = pr85_packet_enabled
+    nchannel = 3
+    qnc_channel = 0
+    qni_channel = 0
+@@ -263,6 +267,8 @@
+              ,pi2d=pi3d(ims,kms,j)                                             &
+              ,utnp=rublten(ims,kms,j),vtnp=rvblten(ims,kms,j)                  &
+              ,ttnp=rthblten(ims,kms,j),qtnp=rqvbl2dt(its,kts),ndiff=nchannel      &
++             ,qnc_channel=qnc_channel,qni_channel=qni_channel                  &
++             ,pr85_packet_enabled=pr85_packet_active                           &
+              ,cp=cp,g=g,rovcp=rovcp,rd=rd,rovg=rovg                            &
+              ,xlv=xlv,rv=rv                                                    &
+              ,ep1=ep1,ep2=ep2,karman=karman                                    &
+@@ -306,7 +312,7 @@
+ !
+ !-------------------------------------------------------------------------------
+    subroutine shinhong2d(j,ux,vx,tx,qx,p2d,p2di,pi2d,                          &
+-                  utnp,vtnp,ttnp,qtnp,ndiff,                                   &
++                  utnp,vtnp,ttnp,qtnp,ndiff,qnc_channel,qni_channel,            &
+                   cp,g,rovcp,rd,rovg,ep1,ep2,karman,xlv,rv,                    &
+                   dz8w2d,psfcpa,                                               &
+                   znt,ust,hpbl,psim,psih,                                      &
+@@ -322,7 +328,7 @@
+                   dx,dy,                                                       &
+                   ids,ide, jds,jde, kds,kde,                                   &
+                   ims,ime, jms,jme, kms,kme,                                   &
+-                  its,ite, jts,jte, kts,kte,                                   &
++                  its,ite, jts,jte, kts,kte,pr85_packet_enabled,                 &
+                 !optional
+                   regime )
+ !-------------------------------------------------------------------------------
+@@ -390,8 +396,9 @@
+    integer,  intent(in   )   ::     ids,ide, jds,jde, kds,kde,                 &
+                                     ims,ime, jms,jme, kms,kme,                 &
+                                     its,ite, jts,jte, kts,kte,                 &
+-                                    j,ndiff
++                                    j,ndiff,qnc_channel,qni_channel
+    integer,  intent(in   )   ::     shinhong_tke_diag
++   logical,  intent(in   )   ::     pr85_packet_enabled
+ !
+    real,     intent(in   )   ::     dt,rcl,cp,g,rovcp,rovg,rd,xlv,rv
+    real,     intent(in   )   ::     ep1,ep2,karman
+@@ -467,6 +474,16 @@
+    integer ::  klpbl, kqc, kqi
+    integer ::  pr65_unit, pr65_k, pr65_iostat
+    real :: pr65_lower, pr65_upper
++   real(kind=8) :: pr85_lo64(kts:kte),pr85_diag64(kts:kte),pr85_up64(kts:kte)
++   real(kind=8) :: pr85_rhs64(kts:kte),pr85_sol64(kts:kte,2)
++   real(kind=8) :: pr85_cp64(kts:kte),pr85_dp64(kts:kte),pr85_den64
++   real(kind=8) :: pr85_qrate64,pr85_nrate64,pr85_qlegacy64,pr85_nlegacy64
++   real(kind=8) :: pr85_qres64,pr85_nres64
++   real(kind=8) :: pr85_minmass64,pr85_maxmass64
++   logical :: pr85_reject_pair,pr85_bad_roundtrip
++   integer :: pr85_pair,pr85_member,pr85_qchannel,pr85_nchannel,pr85_ich
++   integer :: pr85_ledger_unit,pr85_ledger_iostat
++   external :: wrf_error_fatal
+    integer ::  lmh,lmxl
+ !
+    real    ::  dt2,rdt,spdk2,fm,fh,hol1,gamfac,vpert,prnum,prnum0
+@@ -1386,6 +1403,97 @@
+ !
+    call tridin_ysu(al,ad,cu,r3,au,f3,its,ite,kts,kte,ndiff)
+ !
++! Reconstruct only positive, zero-base QC/QNC and QI/QNI transfers in
++! REAL64 from the exact REAL32 common operator and RHS. If the exact pair is
++! in cone but its REAL32 RK storage is not, keep both PBL tendencies at zero
++! and record the pressure-coordinate residual.
++! This is a representation ledger, not a physical column-mass conversion.
++!
++   if (pr85_packet_enabled) then
++   do pr85_pair=1,2
++     pr85_qchannel=2
++     pr85_nchannel=qnc_channel
++     if(pr85_pair.eq.2) then
++       pr85_qchannel=3
++       pr85_nchannel=qni_channel
++     endif
++     if(pr85_nchannel.le.0 .or. pr85_nchannel.gt.ndiff) cycle
++     do i=its,ite
++       do k=kts,kte
++         pr85_lo64(k)=0.d0
++         if(k.gt.kts) pr85_lo64(k)=real(al(i,k-1),8)
++         pr85_diag64(k)=real(ad(i,k),8)
++         pr85_up64(k)=real(cu(i,k),8)
++       enddo
++       do pr85_member=1,2
++         pr85_ich=pr85_qchannel
++         if(pr85_member.eq.2) pr85_ich=pr85_nchannel
++         do k=kts,kte
++           pr85_rhs64(k)=real(r3(i,k,pr85_ich),8)
++         enddo
++         call pr85_tridin64(kts,kte,pr85_lo64,pr85_diag64,pr85_up64, &
++                            pr85_rhs64,pr85_sol64(:,pr85_member), &
++                            pr85_cp64,pr85_dp64,pr85_den64)
++       enddo
++       do k=kts,kte
++         if(qx(i,k+(pr85_qchannel-1)*kte).ne.0. .or. &
++            qx(i,k+(pr85_nchannel-1)*kte).ne.0.) cycle
++         pr85_qrate64=(pr85_sol64(k,1)- &
++              real(qx(i,k+(pr85_qchannel-1)*kte),8))*real(rdt,8)
++         pr85_nrate64=(pr85_sol64(k,2)- &
++              real(qx(i,k+(pr85_nchannel-1)*kte),8))*real(rdt,8)
++         if(pr85_qrate64.le.0.d0 .or. pr85_nrate64.le.0.d0) cycle
++         pr85_qlegacy64=real((f3(i,k,pr85_qchannel)- &
++              qx(i,k+(pr85_qchannel-1)*kte))*rdt,8)
++         pr85_nlegacy64=real((f3(i,k,pr85_nchannel)- &
++              qx(i,k+(pr85_nchannel-1)*kte))*rdt,8)
++         if(pr85_pair.eq.1) then
++           pr85_minmass64=4.188790204786391d-15
++           pr85_maxmass64=3.0300855069345996d-10
++         else
++           pr85_minmass64=2.605587805918249d-16
++           pr85_maxmass64=2.098274638742861d-09
++         endif
++         pr85_bad_roundtrip=pr85_packet_roundtrip( &
++                qx(i,k+(pr85_qchannel-1)*kte), &
++                qx(i,k+(pr85_nchannel-1)*kte),pr85_qrate64,pr85_nrate64, &
++                pr85_qlegacy64,pr85_nlegacy64,real(dt,8), &
++                pr85_minmass64,pr85_maxmass64)
++         pr85_reject_pair=pr85_bad_roundtrip
++         pr85_qres64=0.d0
++         pr85_nres64=0.d0
++         if(pr85_reject_pair) then
++           pr85_qres64=pr85_qrate64
++           pr85_nres64=pr85_nrate64
++         endif
++         if(.not.pr85_reject_pair) cycle
++         f3(i,k,pr85_qchannel)=qx(i,k+(pr85_qchannel-1)*kte)
++         f3(i,k,pr85_nchannel)=qx(i,k+(pr85_nchannel-1)*kte)
++         open(newunit=pr85_ledger_unit,file='pr85_pbl_packet_residual.raw', &
++              status='unknown',position='append',action='write', &
++              iostat=pr85_ledger_iostat)
++         if(pr85_ledger_iostat.ne.0) &
++           call wrf_error_fatal('PR85 PBL packet ledger open failed')
++         write(pr85_ledger_unit,'(A,",",I0,",",I0,",",I0,",",I0, &
++              ",",7(ES24.16E3,","),A)',iostat=pr85_ledger_iostat) &
++              'CNUM_PAIR',j,i,k,pr85_pair,del(i,k),pr85_qrate64, &
++              pr85_nrate64,pr85_qlegacy64,pr85_nlegacy64, &
++              del(i,k)*pr85_qres64,del(i,k)*pr85_nres64, &
++              ' units=DEL:Pa;Q:kg_water kg_dry-1 s-1;'// &
++              'N:kg_dry-1 s-1;residuals:Pa-weighted,not-kg'
++         if(pr85_ledger_iostat.ne.0) then
++           close(pr85_ledger_unit)
++           call wrf_error_fatal('PR85 PBL packet ledger write failed')
++         endif
++         close(pr85_ledger_unit,iostat=pr85_ledger_iostat)
++         if(pr85_ledger_iostat.ne.0) &
++           call wrf_error_fatal('PR85 PBL packet ledger close failed')
++       enddo
++     enddo
++   enddo
++   endif
++!
++!
+    if(172.ge.its.and.172.le.ite.and.j.eq.76) then
+      open(newunit=pr65_unit,file='pr65_pbl_operator.raw',status='unknown', &
+           position='append',action='write',iostat=pr65_iostat)
+@@ -1782,6 +1890,78 @@
+ !-------------------------------------------------------------------------------
+ !
+ !-------------------------------------------------------------------------------
++!-------------------------------------------------------------------------------
++!
++!-------------------------------------------------------------------------------
++   logical function pr85_packet_roundtrip(qbase,nbase,qrate,nrate, &
++                                         qlegacy,nlegacy,dt,mmin,mmax)
++! Reject a zero-base import only when the exact shared solve is PSD-valid but
++! a REAL32 tendency followed by an RK3 update stores an invalid pair.
++     use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
++     implicit none
++     real, intent(in) :: qbase,nbase
++     real(kind=8), intent(in) :: qrate,nrate,qlegacy,nlegacy,dt,mmin,mmax
++     real(kind=8), parameter :: rk_fraction(3)=[1.d0/3.d0,0.5d0,1.d0]
++     real(kind=8) :: qexact,nexact,qstored,nstored,mean_exact,mean_stored
++     real(kind=8) :: lower_tol,upper_tol
++     integer :: stage
++     pr85_packet_roundtrip=.false.
++     if(qbase.ne.0. .or. nbase.ne.0.) return
++     if(qrate.le.0.d0 .or. nrate.le.0.d0) return
++     lower_tol=8.d0*abs(real(spacing(real(mmin)),8))
++     upper_tol=8.d0*abs(real(spacing(real(mmax)),8))
++     do stage=1,3
++       qexact=real(qbase,8)+rk_fraction(stage)*dt*qrate
++       nexact=real(nbase,8)+rk_fraction(stage)*dt*nrate
++       if(.not.ieee_is_finite(qexact).or..not.ieee_is_finite(nexact)) return
++       if(qexact.le.0.d0.or.nexact.le.0.d0) return
++       mean_exact=qexact/nexact
++       if(mean_exact.lt.mmin-lower_tol.or.mean_exact.gt.mmax+upper_tol) return
++       qstored=real(real(qbase,8)+rk_fraction(stage)*dt*qlegacy)
++       nstored=real(real(nbase,8)+rk_fraction(stage)*dt*nlegacy)
++       if(.not.ieee_is_finite(qstored).or..not.ieee_is_finite(nstored)) then
++         pr85_packet_roundtrip=.true.
++         return
++       endif
++       if(qstored.le.0.d0.or.nstored.le.0.d0) then
++         pr85_packet_roundtrip=.true.
++         return
++       endif
++       mean_stored=qstored/nstored
++       if(mean_stored.lt.mmin-lower_tol.or.mean_stored.gt.mmax+upper_tol) then
++         pr85_packet_roundtrip=.true.
++         return
++       endif
++     enddo
++   end function pr85_packet_roundtrip
++!-------------------------------------------------------------------------------
++!
++!-------------------------------------------------------------------------------
++   subroutine pr85_tridin64(kts,kte,cl,cm,cu,rhs,sol,cprime,dprime,denom)
++! Solve the REAL32 common tridiagonal system in REAL64 without changing it.
++     implicit none
++     integer, intent(in) :: kts,kte
++     real(kind=8), intent(in) :: cl(kts:kte),cm(kts:kte),cu(kts:kte)
++     real(kind=8), intent(in) :: rhs(kts:kte)
++     real(kind=8), intent(out) :: sol(kts:kte),cprime(kts:kte),dprime(kts:kte)
++     real(kind=8), intent(out) :: denom
++     integer :: kk
++     denom=cm(kts)
++     cprime(kts)=cu(kts)/denom
++     dprime(kts)=rhs(kts)/denom
++     do kk=kts+1,kte
++       denom=cm(kk)-cl(kk)*cprime(kk-1)
++       if(kk.lt.kte) cprime(kk)=cu(kk)/denom
++       dprime(kk)=(rhs(kk)-cl(kk)*dprime(kk-1))/denom
++     enddo
++     sol(kte)=dprime(kte)
++     do kk=kte-1,kts,-1
++       sol(kk)=dprime(kk)-cprime(kk)*sol(kk+1)
++     enddo
++   end subroutine pr85_tridin64
++!-------------------------------------------------------------------------------
++!
++!-------------------------------------------------------------------------------
+    subroutine tridin_ysu(cl,cm,cu,r2,au,f2,its,ite,kts,kte,nt)
+ !-------------------------------------------------------------------------------
+    implicit none

@@ -1,0 +1,3651 @@
+--- a/phys/module_mp_kdm6.F
++++ b/phys/module_mp_kdm6.F
+@@ -22,6 +22,10 @@
+    integer, parameter, private :: PROGB_TRANSIENT = 1
+    integer, parameter, private :: PROGB_PSD_ACTIVE = 2
+    integer, parameter, private :: PROGB_UNSUPPORTED = 3
++   integer, parameter, private :: PR85_SED_ICE = 1
++   integer, parameter, private :: PR85_SED_GRAUPEL = 2
++   ! Native ice PSD reconstruction is skipped below the 1.e-14 REAL32 gate.
++   real, parameter, private :: PR85_ICE_NATIVE_INACTIVE_MAX = NEAREST(1.e-14,-1.0)
+    integer, parameter, private :: SPECIES_ABSENT = 0
+    integer, parameter, private :: SPECIES_MASS_ONLY = 1
+    integer, parameter, private :: SPECIES_NUMBER_ONLY = 2
+@@ -110,6 +114,7 @@
+    real, parameter, private :: pfrz1   = 100.
+    real, parameter, private :: pfrz2   = 0.66
+    real, parameter, private :: qcrmin  = 1.e-9
++   real, parameter, private :: pr85_brs_min = 1.e-15
+ 
+ 
+    real, parameter, private :: nrmin   = 1.e-2
+@@ -202,9 +207,42 @@
+   real, parameter, private :: F2S =0.44 
+ 
+     private :: pr84_ice_entry_ceiling
++    private :: kdm6_refresh_graupel_intercept
+ 
+     contains
+ 
++    pure subroutine kdm6_refresh_graupel_intercept(status,n0g,g1pmg,slope_mu,n0go,valid)
++      integer, intent(in) :: status
++      real, intent(in) :: n0g,g1pmg
++      real(kind=8), intent(in) :: slope_mu
++      real, intent(out) :: n0go
++      logical, intent(out) :: valid
++      real(kind=8) :: ratio64,intercept64
++      real :: ratio32
++
++      n0go=0.0
++      valid=.false.
++      if (status.eq.PROGB_ABSENT) then
++        valid=.true.
++        return
++      endif
++      if (status.ne.PROGB_PSD_ACTIVE) return
++      if (.not.ieee_is_finite(n0g) .or. .not.ieee_is_finite(g1pmg) .or. &
++          .not.ieee_is_finite(slope_mu)) return
++      if (n0g.le.0.0 .or. g1pmg.le.0.0 .or. slope_mu.le.0.0d0) return
++      ratio64=real(n0g,8)/real(g1pmg,8)
++      if (.not.ieee_is_finite(ratio64) .or. ratio64.gt.real(huge(0.0),8)) return
++      ratio32=real(ratio64)
++      if (.not.ieee_is_finite(ratio32) .or. ratio32.le.0.0) return
++      if (slope_mu.le.real(ratio32,8)/real(huge(0.0),8)) return
++      intercept64=real(ratio32,8)/slope_mu
++      if (.not.ieee_is_finite(intercept64) .or. intercept64.le.0.0d0 .or. &
++          intercept64.gt.real(huge(0.0),8)) return
++      n0go=real(intercept64)
++      valid=ieee_is_finite(n0go) .and. n0go.gt.0.0
++      if (.not.valid) n0go=0.0
++    end subroutine kdm6_refresh_graupel_intercept
++
+     ! PR84_KDM6_ICE_ENTRY_CEILING_BEGIN
+     pure subroutine pr84_ice_entry_ceiling(qice, dry_density, lambda_min, shape_exponent, &
+                                            pidni_value, upper_limit, valid, public_minimum_out)
+@@ -389,6 +427,26 @@
+       valid = ieee_is_finite(dry_density) .and. dry_density > 0.0
+     end subroutine moist_to_dry_density
+ 
++    pure elemental subroutine dry_to_gas_density(dry_density, vapor_mixing_ratio, &
++                                                  gas_density, valid)
++      real, intent(in) :: dry_density, vapor_mixing_ratio
++      real, intent(out) :: gas_density
++      logical, intent(out) :: valid
++      double precision :: gas_density64
++
++      gas_density = 0.0
++      valid = .false.
++      if (.not. ieee_is_finite(dry_density) .or. .not. ieee_is_finite(vapor_mixing_ratio)) return
++      if (dry_density <= 0.0 .or. vapor_mixing_ratio < 0.0) return
++      gas_density64 = real(dry_density,kind=kind(gas_density64)) * &
++                      (1.0d0 + real(vapor_mixing_ratio,kind=kind(gas_density64)))
++      if (.not. ieee_is_finite(gas_density64)) return
++      if (gas_density64 <= 0.0d0 .or. &
++          gas_density64 > real(huge(gas_density),kind=kind(gas_density64))) return
++      gas_density = real(gas_density64)
++      valid = ieee_is_finite(gas_density) .and. gas_density > 0.0
++    end subroutine dry_to_gas_density
++
+     pure elemental subroutine specific_number_to_volume(number_per_kg, dry_density, number_per_m3, valid)
+       real, intent(in) :: number_per_kg, dry_density
+       real, intent(out) :: number_per_m3
+@@ -445,7 +503,8 @@
+          bg_fixed,bg_process,t_fixed,t_process,rain_cleanup_pending,density,pidnr,qmin,ncmin, &
+          qcrmin,dmr,lambda_min,lambda_max,rho_min,rho_max,pidnc,dmc, &
+          lambda_c_min,lambda_c_max,pidni,dmi,lambda_i_min,lambda_i_max, &
+-         fraction,feasible,search_status)
++         fraction,feasible,search_status,vapor_fixed,vapor_process,consumer_pair_only, &
++         ice_transient_mass_limit)
+       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+       implicit none
+       real, intent(in) :: q_fixed(5),q_process(5),n_fixed(3),n_process(3)
+@@ -457,18 +516,28 @@
+       real, intent(out) :: fraction
+       logical, intent(out) :: feasible
+       integer, intent(out) :: search_status
++      real, intent(in), optional :: vapor_fixed,vapor_process
++      logical, intent(in), optional :: consumer_pair_only
++      real, intent(in), optional :: ice_transient_mass_limit
+       ! 0=FEASIBLE, 1=NO_FEASIBLE_STEP, 2=SEARCH_FAILURE.
+       integer, parameter :: feasible_status=0,no_step_status=1,search_failure_status=2
+       real(kind=8) :: breaks(16),lower,upper,alpha,midpoint,best
++      real(kind=8) :: valid_alpha,invalid_alpha,bracket_midpoint,probe_alpha
++      real(kind=8) :: midpoint_invalid_alpha,upper_invalid_alpha
+       real(kind=8) :: rain_min,rain_max,cloud_min,cloud_max,ice_min,ice_max
+-      real(kind=8) :: q0(5),dq(5),n0(3),dn(3),bg0,dbg
+-      real :: q_trial(5),n_trial(3),bg_trial,t_trial,trial
++      real(kind=8) :: ice_transient_limit
++      real(kind=8) :: q0(5),dq(5),n0(3),dn(3),bg0,dbg,qv0,dqv
++      real :: q_trial(5),n_trial(3),bg_trial,t_trial,qv_trial,trial
+       integer :: count_breaks,i,j,walks
+-      logical :: interval_valid,step_valid,search_failed
++      logical :: interval_valid,step_valid,search_failed,interval_mid_valid
++      logical :: interval_lower_valid,midpoint_tested_invalid,probe_valid
++      logical :: pair_only
+ 
+       feasible=.false.
+       fraction=0.0
+       search_status=search_failure_status
++      pair_only=.false.
++      if (present(consumer_pair_only)) pair_only=consumer_pair_only
+       if (.not.all(ieee_is_finite([q_fixed,q_process,n_fixed,n_process, &
+           bg_fixed,bg_process,t_fixed,t_process,density,pidnr,pidnc,pidni, &
+           qmin,ncmin,qcrmin,dmr,dmc,dmi,lambda_min,lambda_max, &
+@@ -481,6 +550,20 @@
+           qmin.lt.0.0 .or. ncmin.lt.0.0 .or. qcrmin.lt.0.0 .or. &
+           dmr.le.0.0 .or. dmc.le.0.0 .or. dmi.le.0.0 .or. &
+           dmr.gt.8.0 .or. dmc.gt.8.0 .or. dmi.gt.8.0) return
++      if (present(vapor_fixed) .neqv. present(vapor_process)) return
++      ice_transient_limit=0.0d0
++      if (present(ice_transient_mass_limit)) then
++        if (.not.ieee_is_finite(ice_transient_mass_limit) .or. &
++            ice_transient_mass_limit.lt.0.0 .or. &
++            ice_transient_mass_limit.gt.PR85_ICE_NATIVE_INACTIVE_MAX) return
++        ice_transient_limit=real(ice_transient_mass_limit,8)
++      endif
++      qv0=0.0d0; dqv=0.0d0
++      if (present(vapor_fixed)) then
++        if (.not.all(ieee_is_finite([vapor_fixed,vapor_process]))) return
++        if (vapor_fixed.lt.0.0) return
++        qv0=real(vapor_fixed,8); dqv=real(vapor_process,8)
++      endif
+ 
+       rain_min=real(density,8)*real(lambda_min,8)**real(dmr,8)/real(pidnr,8)
+       rain_max=real(density,8)*real(lambda_max,8)**real(dmr,8)/real(pidnr,8)
+@@ -500,16 +583,18 @@
+       breaks(1)=0.0d0; breaks(2)=1.0d0
+       do i=1,5
+         call add_breakpoint(q0(i),dq(i),0.0d0)
+-        if (i.le.2) then
+-          call add_breakpoint(q0(i),dq(i),real(qmin,8))
+-        else
+-          call add_breakpoint(q0(i),dq(i),real(qcrmin,8))
+-        endif
+       enddo
+       do i=1,3
+         call add_breakpoint(n0(i),dn(i),0.0d0)
+       enddo
++      if (present(ice_transient_mass_limit)) &
++        call add_breakpoint(q0(2),dq(2),ice_transient_limit)
+       call add_breakpoint(real(t_fixed,8),real(t_process,8),0.0d0)
++      if (present(vapor_fixed)) call add_breakpoint(qv0,dqv,0.0d0)
++      if (pair_only) then
++        call add_breakpoint(q0(5),dq(5),real(qcrmin,8))
++        call add_breakpoint(bg0,dbg,real(1.0e-15,8))
++      endif
+       call sort_breakpoints()
+ 
+       best=0.0d0
+@@ -527,11 +612,32 @@
+         midpoint=lower+(upper-lower)/2.0d0
+         call interval_constraints(midpoint,lower,upper,interval_valid)
+         if (.not.interval_valid) cycle
++        interval_mid_valid=.false.
++        interval_lower_valid=.false.
++        midpoint_tested_invalid=.false.
++        midpoint=lower+(upper-lower)/2.0d0
++        trial=real(midpoint)
++        alpha=real(trial,8)
++        if (trial.gt.0.0 .and. alpha.ge.lower .and. alpha.le.upper) then
++          call validate_trial(trial,step_valid)
++          if (step_valid) then
++            best=max(best,real(trial,8))
++            valid_alpha=real(trial,8)
++            interval_mid_valid=.true.
++          else
++            midpoint_invalid_alpha=real(trial,8)
++            midpoint_tested_invalid=.true.
++          endif
++        endif
+         trial=real(lower)
+         alpha=real(trial,8)
+         if (trial.gt.0.0 .and. alpha.ge.lower .and. alpha.le.upper) then
+           call validate_trial(trial,step_valid)
+-          if (step_valid) best=max(best,real(trial,8))
++          if (step_valid) then
++            best=max(best,real(trial,8))
++            interval_lower_valid=.true.
++            if (.not.interval_mid_valid) valid_alpha=real(trial,8)
++          endif
+         endif
+         trial=real(upper)
+         alpha=real(trial,8)
+@@ -551,6 +657,59 @@
+           if (real(trial,8).le.lower) exit
+           if (walks.ge.32) then
+             search_failed=.true.
++            upper_invalid_alpha=real(trial,8)
++            if (interval_mid_valid) then
++              invalid_alpha=upper_invalid_alpha
++              call refine_valid_interval(valid_alpha,invalid_alpha)
++            else
++              if (interval_lower_valid) then
++                if (midpoint_tested_invalid) then
++                  invalid_alpha=midpoint_invalid_alpha
++                else
++                  invalid_alpha=upper_invalid_alpha
++                endif
++                call refine_valid_interval(valid_alpha,invalid_alpha)
++              else
++                ! Stored REAL32 rounding may reject the interval midpoint even
++                ! when smaller positive fractions still preserve a valid state.
++                ! Probe toward the lower edge; any refinement starts from a
++                ! trial that passed the exact stored-state validator.
++                probe_valid=.false.
++                if (midpoint_tested_invalid) then
++                  probe_alpha=midpoint_invalid_alpha
++                else
++                  probe_alpha=upper_invalid_alpha
++                endif
++                invalid_alpha=probe_alpha
++                do j=1,32
++                  probe_alpha=lower+(probe_alpha-lower)/2.0d0
++                  trial=real(probe_alpha)
++                  alpha=real(trial,8)
++                  if (trial.le.0.0 .or. alpha.le.lower .or. alpha.ge.invalid_alpha) exit
++                  call validate_trial(trial,step_valid)
++                  if (step_valid) then
++                    valid_alpha=alpha
++                    best=max(best,alpha)
++                    probe_valid=.true.
++                    exit
++                  endif
++                  invalid_alpha=alpha
++                enddo
++                if (.not.probe_valid) then
++                  trial=nearest(real(lower),1.0)
++                  alpha=real(trial,8)
++                  if (trial.gt.0.0 .and. alpha.gt.lower .and. alpha.lt.upper) then
++                    call validate_trial(trial,step_valid)
++                    if (step_valid) then
++                      valid_alpha=alpha
++                      best=max(best,alpha)
++                      probe_valid=.true.
++                    endif
++                  endif
++                endif
++                if (probe_valid) call refine_valid_interval(valid_alpha,invalid_alpha)
++              endif
++            endif
+             exit
+           endif
+           trial=nearest(trial,-1.0)
+@@ -558,7 +717,7 @@
+         enddo
+       enddo
+ 
+-      if (search_failed) then
++      if (search_failed .and. best.le.0.0d0) then
+         search_status=search_failure_status
+         return
+       endif
+@@ -577,6 +736,25 @@
+       search_status=feasible_status
+ 
+     contains
++      subroutine refine_valid_interval(valid,invalid)
++        real(kind=8), intent(inout) :: valid,invalid
++        real(kind=8) :: candidate
++        integer :: refinement
++        do refinement=1,32
++          bracket_midpoint=valid+(invalid-valid)/2.0d0
++          trial=real(bracket_midpoint)
++          candidate=real(trial,8)
++          if (candidate.le.valid .or. candidate.ge.invalid) exit
++          call validate_trial(trial,step_valid)
++          if (step_valid) then
++            valid=candidate
++            best=max(best,candidate)
++          else
++            invalid=candidate
++          endif
++        enddo
++      end subroutine refine_valid_interval
++
+       subroutine add_breakpoint(initial,slope,cutoff)
+         real(kind=8), intent(in) :: initial,slope,cutoff
+         real(kind=8) :: root
+@@ -628,10 +806,48 @@
+         enddo
+         call clip(bg0,dbg,lo,hi,valid_interval)
+         call clip(real(t_fixed,8),real(t_process,8),lo,hi,valid_interval)
++        if (present(vapor_fixed)) call clip(qv0,dqv,lo,hi,valid_interval)
+         if (.not.valid_interval) return
+ 
+-        if (qm(3).gt.real(qcrmin,8)) then
+-          call clip(q0(3)-real(qcrmin,8),dq(3),lo,hi,valid_interval)
++        if (pair_only) then
++          do m=1,3
++            if (qm(m).gt.0.0d0 .and. nm(m).gt.0.0d0) then
++              call clip(q0(m),dq(m),lo,hi,valid_interval)
++              call clip(n0(m),dn(m),lo,hi,valid_interval)
++            elseif (m.eq.3 .and. qm(m).eq.0.0d0 .and. nm(m).gt.0.0d0 .and. &
++                    rain_cleanup_pending) then
++              call clip(q0(m),dq(m),lo,hi,valid_interval)
++              call clip(n0(m),dn(m),lo,hi,valid_interval)
++            elseif (qm(m).eq.0.0d0 .and. nm(m).eq.0.0d0) then
++              call clip(q0(m),dq(m),lo,hi,valid_interval)
++              call clip(-q0(m),-dq(m),lo,hi,valid_interval)
++              call clip(n0(m),dn(m),lo,hi,valid_interval)
++              call clip(-n0(m),-dn(m),lo,hi,valid_interval)
++            else
++              valid_interval=.false.
++            endif
++          enddo
++          call clip(q0(4),dq(4),lo,hi,valid_interval)
++          if (qm(5).gt.0.0d0 .and. bm.gt.0.0d0) then
++            call clip(q0(5),dq(5),lo,hi,valid_interval)
++            call clip(bg0-q0(5)/real(rho_max,8),dbg-dq(5)/real(rho_max,8),lo,hi,valid_interval)
++            call clip(q0(5)/real(rho_min,8)-bg0,dq(5)/real(rho_min,8)-dbg,lo,hi,valid_interval)
++            if (qm(5).le.real(qcrmin,8) .and. bm.le.real(1.0e-15,8)) valid_interval=.false.
++          elseif (qm(5).eq.0.0d0 .and. bm.eq.0.0d0) then
++            call clip(q0(5),dq(5),lo,hi,valid_interval)
++            call clip(-q0(5),-dq(5),lo,hi,valid_interval)
++            call clip(bg0,dbg,lo,hi,valid_interval)
++            call clip(-bg0,-dbg,lo,hi,valid_interval)
++          else
++            valid_interval=.false.
++          endif
++          if (lo.gt.hi) valid_interval=.false.
++          if (.not.ieee_is_finite(bm)) valid_interval=.false.
++          return
++        endif
++
++        if (qm(3).gt.0.0d0 .and. nm(3).gt.0.0d0) then
++          call clip(q0(3),dq(3),lo,hi,valid_interval)
+           call clip(n0(3)-rain_min*q0(3),dn(3)-rain_min*dq(3),lo,hi,valid_interval)
+           call clip(rain_max*q0(3)-n0(3),rain_max*dq(3)-dn(3),lo,hi,valid_interval)
+         elseif (qm(3).eq.0.0d0) then
+@@ -644,9 +860,9 @@
+         else
+           valid_interval=.false.
+         endif
+-        cloud_active=qm(1).gt.real(qmin,8) .and. nm(1).gt.0.0d0
++        cloud_active=qm(1).gt.0.0d0 .and. nm(1).gt.0.0d0
+         if (cloud_active) then
+-          call clip(q0(1)-real(qmin,8),dq(1),lo,hi,valid_interval)
++          call clip(q0(1),dq(1),lo,hi,valid_interval)
+           call clip(n0(1),dn(1),lo,hi,valid_interval)
+           call clip(n0(1)-cloud_min*q0(1),dn(1)-cloud_min*dq(1),lo,hi,valid_interval)
+           call clip(cloud_max*q0(1)-n0(1),cloud_max*dq(1)-dn(1),lo,hi,valid_interval)
+@@ -658,12 +874,15 @@
+         else
+           valid_interval=.false.
+         endif
+-        ice_active=qm(2).gt.real(qmin,8) .and. nm(2).gt.0.0d0
++        ice_active=qm(2).gt.0.0d0 .and. nm(2).gt.0.0d0
+         if (ice_active) then
+-          call clip(q0(2)-real(qmin,8),dq(2),lo,hi,valid_interval)
++          call clip(q0(2),dq(2),lo,hi,valid_interval)
+           call clip(n0(2),dn(2),lo,hi,valid_interval)
+-          call clip(n0(2)-ice_min*q0(2),dn(2)-ice_min*dq(2),lo,hi,valid_interval)
+-          call clip(ice_max*q0(2)-n0(2),ice_max*dq(2)-dn(2),lo,hi,valid_interval)
++          if (.not.present(ice_transient_mass_limit) .or. &
++              qm(2).gt.ice_transient_limit) then
++            call clip(n0(2)-ice_min*q0(2),dn(2)-ice_min*dq(2),lo,hi,valid_interval)
++            call clip(ice_max*q0(2)-n0(2),ice_max*dq(2)-dn(2),lo,hi,valid_interval)
++          endif
+         elseif (qm(2).eq.0.0d0 .and. nm(2).eq.0.0d0) then
+           call clip(q0(2),dq(2),lo,hi,valid_interval)
+           call clip(-q0(2),-dq(2),lo,hi,valid_interval)
+@@ -673,8 +892,8 @@
+           valid_interval=.false.
+         endif
+         do m=4,5
+-          if (qm(m).gt.real(qcrmin,8)) then
+-            call clip(q0(m)-real(qcrmin,8),dq(m),lo,hi,valid_interval)
++          if (qm(m).gt.0.0d0) then
++            call clip(q0(m),dq(m),lo,hi,valid_interval)
+           elseif (qm(m).eq.0.0d0) then
+             call clip(q0(m),dq(m),lo,hi,valid_interval)
+             call clip(-q0(m),-dq(m),lo,hi,valid_interval)
+@@ -720,11 +939,18 @@
+         n_trial=n_fixed+a*n_process
+         bg_trial=bg_fixed+a*bg_process
+         t_trial=t_fixed+a*t_process
++        if (present(vapor_fixed)) qv_trial=vapor_fixed+a*vapor_process
+         is_valid=all(ieee_is_finite([q_trial,n_trial,bg_trial,t_trial]))
++        if (present(vapor_fixed)) is_valid=is_valid.and.ieee_is_finite(qv_trial)
+         if (.not.is_valid) return
+         if (any(q_trial.lt.0.0) .or. any(n_trial.lt.0.0) .or. bg_trial.lt.0.0) then
+           is_valid=.false.; return
+         endif
++        if (present(vapor_fixed)) then
++          if (qv_trial.lt.0.0) then
++            is_valid=.false.; return
++          endif
++        endif
+         if (t_trial.le.0.0) then
+           is_valid=.false.
+           return
+@@ -732,14 +958,14 @@
+         call kdm6_rain_process_state_valid(q_trial,n_trial,bg_trial,t_trial,density,pidnr, &
+              qmin,ncmin,qcrmin,dmr,lambda_min,lambda_max,rho_min,rho_max, &
+              pidnc,dmc,lambda_c_min,lambda_c_max,pidni,dmi,lambda_i_min, &
+-             lambda_i_max,is_valid,rain_cleanup_pending)
++             lambda_i_max,is_valid,rain_cleanup_pending,pair_only,ice_transient_mass_limit)
+       end subroutine validate_trial
+     end subroutine kdm6_rain_process_fraction
+ 
+ subroutine kdm6_rain_process_state_valid(q,n,bg,temperature,density,pidnr,qmin,ncmin, &
+          qcrmin,dmr,lambda_min,lambda_max,rho_min,rho_max,pidnc,dmc, &
+          lambda_c_min,lambda_c_max,pidni,dmi,lambda_i_min,lambda_i_max,valid, &
+-         allow_rain_number_at_zero)
++         allow_rain_number_at_zero,consumer_pair_only,ice_transient_mass_limit)
+       use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
+       implicit none
+       real, intent(in) :: q(5),n(3),bg,temperature,density,pidnr,qmin,ncmin,qcrmin,dmr
+@@ -747,7 +973,10 @@
+       real, intent(in) :: lambda_c_min,lambda_c_max,pidni,dmi,lambda_i_min,lambda_i_max
+       logical, intent(out) :: valid
+       logical, intent(in), optional :: allow_rain_number_at_zero
+-      real(kind=8) :: rain_min,rain_max,cloud_min,cloud_max,ice_min,ice_max
++      logical, intent(in), optional :: consumer_pair_only
++      real, intent(in), optional :: ice_transient_mass_limit
++      real(kind=8) :: rain_min,rain_max,cloud_min,cloud_max,ice_min,ice_max,ice_transient_limit
++      logical :: pair_only
+ 
+       valid=.false.
+       if (.not.all(ieee_is_finite([q,n,bg,temperature,density,pidnr,qmin,ncmin,qcrmin,dmr, &
+@@ -760,8 +989,46 @@
+           lambda_i_max.lt.lambda_i_min .or. rho_min.le.0.0 .or. rho_max.lt.rho_min .or. &
+           dmr.le.0.0 .or. dmc.le.0.0 .or. dmi.le.0.0 .or. &
+           dmr.gt.8.0 .or. dmc.gt.8.0 .or. dmi.gt.8.0) return
++      ice_transient_limit=0.0d0
++      if (present(ice_transient_mass_limit)) then
++        if (.not.ieee_is_finite(ice_transient_mass_limit) .or. &
++            ice_transient_mass_limit.lt.0.0 .or. ice_transient_mass_limit.gt.PR85_ICE_NATIVE_INACTIVE_MAX) return
++        ice_transient_limit=real(ice_transient_mass_limit,8)
++      endif
+       if (temperature.le.0.0) return
+       if (any(q.lt.0.0) .or. any(n.lt.0.0) .or. bg.lt.0.0) return
++      pair_only=.false.
++      if (present(consumer_pair_only)) pair_only=consumer_pair_only
++      if (pair_only) then
++        if (q(1).eq.0.0) then
++          if (n(1).ne.0.0) return
++        elseif (n(1).le.0.0) then
++          return
++        endif
++        if (q(2).eq.0.0) then
++          if (n(2).ne.0.0) return
++        elseif (n(2).le.0.0) then
++          return
++        endif
++        if (q(3).eq.0.0) then
++          if (n(3).ne.0.0) then
++            if (.not.present(allow_rain_number_at_zero)) return
++            if (.not.allow_rain_number_at_zero) return
++          endif
++        elseif (n(3).le.0.0) then
++          return
++        endif
++        if (q(5).eq.0.0) then
++          if (bg.ne.0.0) return
++        else
++          if (bg.le.0.0) return
++          if (real(q(5),8)/real(bg,8).lt.real(rho_min,8) .or. &
++              real(q(5),8)/real(bg,8).gt.real(rho_max,8)) return
++          if (q(5).le.qcrmin .and. bg.le.1.0e-15) return
++        endif
++        valid=.true.
++        return
++      endif
+       rain_min=real(density,8)*real(lambda_min,8)**real(dmr,8)/real(pidnr,8)
+       rain_max=real(density,8)*real(lambda_max,8)**real(dmr,8)/real(pidnr,8)
+       cloud_min=real(density,8)*real(lambda_c_min,8)**real(dmc,8)/real(pidnc,8)
+@@ -772,30 +1039,29 @@
+       if (max(rain_max,cloud_max,ice_max).gt.real(huge(0.0),8)) return
+       if (q(1).eq.0.0) then
+         if (n(1).ne.0.0) return
+-      elseif (q(1).le.qmin .or. n(1).le.0.0) then
++      elseif (q(1).le.0.0 .or. n(1).le.0.0) then
+         return
+       elseif (real(n(1),8).lt.cloud_min*q(1) .or. real(n(1),8).gt.cloud_max*q(1)) then
+         return
+       endif
+       if (q(2).eq.0.0) then
+         if (n(2).ne.0.0) return
+-      elseif (q(2).le.qmin .or. n(2).le.0.0) then
+-        return
+-      elseif (real(n(2),8).lt.ice_min*q(2) .or. real(n(2),8).gt.ice_max*q(2)) then
++      elseif (q(2).le.0.0 .or. n(2).le.0.0) then
+         return
++      elseif (q(2).gt.ice_transient_limit) then
++        if (real(n(2),8).lt.ice_min*q(2) .or. real(n(2),8).gt.ice_max*q(2)) return
+       endif
+       if (q(3).eq.0.0) then
+         if (n(3).ne.0.0) then
+           if (.not.present(allow_rain_number_at_zero)) return
+           if (.not.allow_rain_number_at_zero) return
+         endif
+-      elseif (q(3).le.qcrmin .or. n(3).le.0.0) then
++      elseif (q(3).le.0.0 .or. n(3).le.0.0) then
+         return
+       elseif (real(n(3),8).lt.rain_min*q(3) .or. real(n(3),8).gt.rain_max*q(3)) then
+         return
+       endif
+-      if ((q(4).ne.0.0 .and. q(4).le.qcrmin) .or. &
+-          (q(5).ne.0.0 .and. q(5).le.qcrmin)) return
++      if (q(4).lt.0.0 .or. q(5).lt.0.0) return
+       if (real(bg,8).lt.real(q(5),8)/real(rho_max,8) .or. &
+           real(bg,8).gt.real(q(5),8)/real(rho_min,8)) return
+       valid=.true.
+@@ -849,6 +1115,7 @@
+     end function kdm6_shared_pair_fraction
+ 
+ 
++    ! Host DEN is dry-air density. Number moments and KDM6 inventories use it directly.
+     subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
+                     nn, nc, ni, nr, bg, diag_rhog,         &
+                     den, pii, p, delz,                     &
+@@ -1029,8 +1296,11 @@
+      do k = kts,kte
+        do i = its,ite
+          t(i,k) = th(i,k,j)*pii(i,k,j)
+-         call moist_to_dry_density(den(i,k,j), q(i,k,j), dry_density(i,k), number_valid)
+-         if (.not. number_valid) error stop 'KDM6 invalid moist-to-dry density'
++         if (.not. ieee_is_finite(den(i,k,j)) .or. .not. ieee_is_finite(q(i,k,j))) &
++           error stop 'KDM6 invalid dry-density input'
++         if (den(i,k,j) <= 0.0 .or. q(i,k,j) < 0.0) error stop 'KDM6 invalid dry-density input'
++         ! The host contract supplies dry-air density here; retain it exactly.
++         dry_density(i,k) = den(i,k,j)
+          qci(i,k,1) = qc(i,k,j)
+          qci(i,k,2) = qi(i,k,j)
+          qrs(i,k,1) = qr(i,k,j)
+@@ -1483,7 +1753,9 @@
+    real, dimension(its:ite,kts:kte)   :: worka, workr
+    real, dimension(its:ite,kts:kte)   :: den_tmp, delz_tmp, dry_carrier_density
+    real, dimension(its:ite,kts:kte) :: gas_density
+-   logical :: carrier_valid, step_count_valid, ice_entry_ceiling_valid
++   logical :: carrier_valid, step_count_valid, ice_entry_ceiling_valid, pr85_ice_valid
++   logical :: pr85_g_valid
++   logical :: graupel_cache_valid
+    real :: ice_entry_number_ceiling, ice_entry_public_minimum
+    real, dimension(its:ite,kts:kte) :: nrs_tmp,nci_tmp
+    real, dimension(its:ite,kts:kte)   :: lamdr_tmp, lamdc_tmp, lamdi_tmp
+@@ -1518,7 +1790,50 @@
+    real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+    real, dimension(its:ite)           :: delqi
+    real, dimension(its:ite)           :: tstepsnow, tstepgraup
+-   integer :: pr67_unit
++   integer :: pr67_unit, pr85_ice_unit, pr85_ice_ios
++   integer :: pr85_g_unit, pr85_g_ios
++   integer :: pr85_melt_unit, pr85_melt_ios, pr85_trace_unit, pr85_trace_ios
++   integer :: pr85_melt_route, pr85_freeze_unit, pr85_freeze_ios
++   integer :: pr85_rf_unit, pr85_rf_ios
++   double precision, dimension(kts:kte) :: pr85_ice_qrate, pr85_ice_nrate
++   double precision, dimension(kts:kte) :: pr85_g_qrate, pr85_g_brate
++   double precision :: pr85_freeze_mass_request, pr85_freeze_number_request
++   double precision :: pr85_freeze_mass_approved, pr85_freeze_number_approved
++   double precision :: pr85_freeze_fraction, pr85_freeze_t_candidate
++   real :: pr85_freeze_t_before, pr85_freeze_t_after
++   real :: pr85_freeze_qc_before, pr85_freeze_nc_before
++   real :: pr85_freeze_qi_before, pr85_freeze_ni_before
++   real :: pr85_freeze_qc_after, pr85_freeze_nc_after
++   real :: pr85_freeze_qi_after, pr85_freeze_ni_after
++   logical :: pr85_freeze_base_valid, pr85_freeze_accepted
++   logical :: pr85_freeze_ice_transient_base
++   double precision :: pr85_rf_mass_request,pr85_rf_number_request,pr85_rf_volume_request
++   double precision :: pr85_rf_mass_approved,pr85_rf_number_approved,pr85_rf_volume_approved
++   double precision :: pr85_rf_fraction,pr85_rf_t_candidate
++   real :: pr85_rf_qr_before,pr85_rf_nr_before,pr85_rf_qg_before,pr85_rf_bg_before
++   real :: pr85_rf_t_before,pr85_rf_qr_after,pr85_rf_nr_after,pr85_rf_qg_after,pr85_rf_bg_after
++   real :: pr85_rf_t_after
++   logical :: pr85_rf_base_valid,pr85_rf_accepted
++   double precision :: pr85_melt_number_request, pr85_melt_mass_request
++   double precision :: pr85_melt_number_actual, pr85_melt_mass_actual
++   double precision :: pr85_melt_number_residual, pr85_melt_mass_residual
++   double precision :: pr85_melt_qc_delta, pr85_melt_nc_delta
++   double precision :: pr85_melt_qr_delta, pr85_melt_nr_delta
++   real :: pr85_melt_q_before, pr85_melt_t_before, pr85_melt_mean_mass
++   real :: pr85_melt_qc_before, pr85_melt_nc_before, pr85_melt_qr_before
++   real :: pr85_melt_nr_before, pr85_melt_qc_after, pr85_melt_nc_after
++   real :: pr85_melt_qr_after, pr85_melt_nr_after, pr85_melt_requested_q
++   real :: pr85_melt_qs_after, pr85_melt_t_after
++   double precision :: pr85_melt_qs_candidate, pr85_melt_t_candidate
++   real :: pr85_trace_qi, pr85_trace_qs, pr85_trace_ni, pr85_trace_diameter
++   real :: pr85_trace_t_before
++   double precision :: pr85_trace_removed_qi, pr85_trace_snow_gain
++   logical :: pr85_melt_accepted
++   external :: pr85_kdm6_paired_sediment_column
++   external :: pr85_kdm6_subthreshold_melt
++   external :: pr85_kdm6_freezing_packet
++   external :: pr85_kdm6_rain_freezing_packet
++   external :: pr85_kdm6_psd_bound_number
+    real                               :: gfac, sfac
+    real, dimension(its:ite,kts:kte)   :: difa
+    double precision   :: pinuc,ninuc
+@@ -1544,7 +1859,25 @@
+    real                               :: factor, source, value, supice,xlwork2
+    real                               :: rain_bg_fixed,rain_bg_process
+    real                               :: rain_t_fixed,rain_t_process
+-   real                               :: rain_process_alpha
++   real                               :: rain_process_alpha,rain_aut_alpha
++   real, dimension(5)                 :: rain_aut_q_process,rain_q_process_request
++   real, dimension(5)                 :: rain_ng_q_process,rain_g_q_process
++   real, dimension(3)                 :: rain_aut_n_process,rain_n_process_request
++   real, dimension(3)                 :: rain_ng_n_process,rain_g_n_process
++   real, dimension(5)                 :: rain_q_before,rain_ng_aut_q_fixed
++   real, dimension(3)                 :: rain_n_before,rain_ng_aut_n_fixed
++   real                               :: rain_bg_before,rain_t_before,rain_qv_before
++   real                               :: rain_ng_aut_bg_fixed,rain_ng_aut_t_fixed,rain_ng_aut_qv_fixed
++   real                               :: rain_ng_alpha,rain_g_alpha
++   real                               :: rain_ng_bg_process,rain_g_bg_process
++   real                               :: rain_ng_t_process,rain_g_t_process
++   real                               :: rain_ng_qv_process,rain_g_qv_process
++   real                               :: rain_qv_stage,rain_qv_after
++   real                               :: rain_bg_after,rain_t_after,rain_ccn3_after
++   real                               :: rain_ccn3_before,rain_n_ccn_transfer
++   real, dimension(5)                 :: rain_q_after
++   real, dimension(3)                 :: rain_n_after
++   real                               :: rain_bg_process_request,rain_t_process_request
+    real                               :: rain_pgdep_bg_rate,rain_pracs_bg_rate
+    real                               :: rain_pgaci_bg_rate,rain_paacw_bg_rate
+    real                               :: rain_piacr_bg_rate,rain_praci_bg_rate
+@@ -1552,9 +1885,42 @@
+    logical                            :: rain_bg_rates_feasible,rain_bg_rate_valid
+    real, dimension(5)                  :: rain_q_fixed,rain_q_process
+    real, dimension(3)                  :: rain_n_fixed,rain_n_process
++   real, dimension(5)                  :: rain_warm_q_process,rain_warm_q_after
++   real, dimension(3)                  :: rain_warm_n_process,rain_warm_n_after
++   real, dimension(16)                 :: rain_warm_rate_base,rain_warm_rate_trial
++   real                               :: rain_warm_bg_process,rain_warm_t_process
++   real                               :: rain_warm_qv_process,rain_warm_alpha
++   real                               :: rain_warm_bg_after,rain_warm_t_after,rain_warm_qv_after
++   real                               :: rain_warm_xlf,rain_warm_xlwork2
++   integer                            :: rain_warm_retry
++   logical                            :: rain_warm_feasible,rain_warm_state_valid
++   logical                            :: rain_warm_rate_noop,rain_warm_state_noop
++   logical                            :: rain_warm_abort
++   integer                            :: pr85_warm_unit,pr85_warm_ios,rain_warm_search_status
+    real, dimension(its:ite,kts:kte,10) :: rain_pair_rate_start
++   real, dimension(41) :: rain_composite_rate_base
++   real :: rain_ng_alpha_initial,rain_aut_alpha_initial,rain_g_alpha_initial
++   real :: rain_composite_gamma
++   integer :: rain_composite_retry,rain_composite_rate_index
++   logical :: rain_composite_valid
+    logical                            :: rain_process_feasible,rain_stored_state_feasible
+-   integer                            :: rain_process_search_status
++   logical                            :: rain_composite_stored_noop
++   logical                            :: rain_aut_feasible,rain_aut_base_valid
++   logical                            :: rain_ng_feasible,rain_ng_base_valid
++   integer                            :: rain_process_search_status,rain_aut_search_status
++   integer                            :: rain_ng_search_status
++   integer                            :: pr85_cold_unit,pr85_cold_ios
++   integer                            :: pr85_psd_unit,pr85_psd_ios
++   integer                            :: pr85_cutoff_unit,pr85_cutoff_ios
++   integer                            :: pr85_cutoff_mask,pr85_cutoff_status_before
++   real, dimension(5)                  :: pr85_cutoff_q_before,pr85_cutoff_q_after
++   real, dimension(3)                  :: pr85_cutoff_n_before,pr85_cutoff_n_after
++   real                               :: pr85_cutoff_bg_before,pr85_cutoff_bg_after
++   real                               :: pr85_cutoff_t_before,pr85_cutoff_t_after
++   real                               :: pr85_cutoff_qv_before,pr85_cutoff_qv_after
++   real                               :: pr85_psd_legacy,pr85_psd_directed,pr85_psd_before
++   real(8)                            :: pr85_psd_exact_min,pr85_psd_exact_max
++   logical                            :: pr85_psd_valid,pr85_psd_native_available
+ 
+    real                               :: cpmcal, xlcal, lamdac, diffus, &
+                                          viscos, xka, venfac, conden, diffac,  &
+@@ -1616,10 +1982,6 @@
+    kdim = kte-kts+1
+ 
+    kte_in = kte
+-   gas_density = den(its:ite,kts:kte)
+-
+-
+-
+    call pr77_scan_entry_state(qci,qrs,nrs,nci,brs,its,ite,kts,kte,lat)
+    call validate_kdm6_species_states(qci,qrs,nrs,nci,brs)
+    do k = kts, kte
+@@ -1641,11 +2003,12 @@
+      enddo
+    enddo
+ 
+-! PR69 research split: DEN remains moist gas density; dry carrier follows Q and number moments.
++! PR85 density bridge: DEN is dry-air density; gas density is reconstructed with Q.
+    do k = kts,kte
+      do i = its,ite
+-       call moist_to_dry_density(gas_density(i,k), q(i,k), dry_carrier_density(i,k), carrier_valid)
+-       if (.not. carrier_valid) error stop 'KDM6 invalid dry carrier density'
++       call dry_to_gas_density(den(i,k), q(i,k), gas_density(i,k), carrier_valid)
++       if (.not. carrier_valid) error stop 'KDM6 invalid dry-to-gas density conversion'
++       dry_carrier_density(i,k) = den(i,k)
+        call pr84_ice_entry_ceiling(qci(i,k,2), dry_carrier_density(i,k), lamdaimin, &
+                                    dmi, pidni, ice_entry_number_ceiling, ice_entry_ceiling_valid, &
+                                    ice_entry_public_minimum)
+@@ -1715,9 +2078,75 @@
+    dtcld = delt/loops
+    if(delt.le.dtcldcr) dtcld = delt
+ 
+-   do loop = 1,loops
++   open(newunit=pr85_cold_unit,file='pr85_kdm6_cold_budget.raw', &
++        form='formatted',status='unknown',position='append',action='write', &
++        iostat=pr85_cold_ios)
++   if (pr85_cold_ios.ne.0) error stop 'PR85 cold budget open failed'
++   write(pr85_cold_unit,'(a)',iostat=pr85_cold_ios) &
++        '# PR85_KDM6_COLD fields: i,lat,k,loop,ngSearchStatus,autSearchStatus,gSearchStatus,compositeRetry,storedNoop; '// &
++        'then dtcld,rhoDry,compositeGamma,scaledRates(41) REAL32,alphaNG,alphaAUT,alphaG; '// &
++        'Qbefore(5),QafterNG_AUT(5),QGrequest(5),Qafter(5); Nbefore(3),NafterNG_AUT(3),NGrequest(3),Nafter(3); '// &
++        'BGbefore,BGafterNG_AUT,BGrequest,BGafter; Tbefore,TafterNG_AUT,TGrequest,Tafter; '// &
++        'QVbefore,QVafterNG_AUT,QVGrequest,QVafter; CCN3before,CCN3transfer,CCN3after; '// &
++        'NG proposal/approved/withheld: Q(5),N(3),BG,T,QV; AUT proposal/approved/withheld: Q(5),N(3),BG,T,QV; '// &
++        'G proposal/approved/withheld: Q(5),N(3),BG,T,QV; '// &
++        'stored-minus-approved R32 residuals Q(5),N(3),CCN3,BG,T,QV; Q kg/kgdry, N #/m3, B m3/kgdry, QV kg/kgdry, T K'
++   if (pr85_cold_ios.ne.0) error stop 'PR85 cold budget header failed'
++   open(newunit=pr85_warm_unit,file='pr85_kdm6_warm_budget.raw', &
++        form='formatted',status='unknown',position='append',action='write', &
++        iostat=pr85_warm_ios)
++   if (pr85_warm_ios.ne.0) error stop 'PR85 warm budget open failed'
++   write(pr85_warm_unit,'(a)',iostat=pr85_warm_ios) &
++        '# PR85_KDM6_WARM i,lat,k,loop,searchStatus,retry,progbStatus,rateNoop,stateNoop; '// &
++        'retry 0=full helper fraction,1-32=adjacent REAL32 steps downward,33-56=halving; '// &
++        'dtcld,rhoDry,cpm,xl,xlf,rhox,alpha; '// &
++        'postcapPrimitiveRates(16),scaledREAL32PrimitiveRates(16); '// &
++        'Qbefore(5),Qafter(5),Nbefore(3),Nafter(3),BGbefore,BGafter,Tbefore,Tafter,QVbefore,QVafter,CCN3before,CCN3after; '// &
++        'requestedPostcapQ(5),requestedPostcapN(3),requestedBG,T,QV; '// &
++        'admittedAlphaQ(5),N(3),BG,T,QV; storedDeltaQ(5),N(3),BG,T,QV; '// &
++        'storedMinusAdmittedQ(5),N(3),BG,T,QV; units Q/QV kg/kgdry, N #/m3, B m3/kgdry, T K, rates per second'
++   if (pr85_warm_ios.ne.0) error stop 'PR85 warm budget header failed'
++   open(newunit=pr85_cutoff_unit,file='pr85_kdm6_cutoff_budget.raw', &
++        form='formatted',status='unknown',position='append',action='write', &
++        iostat=pr85_cutoff_ios)
++   if (pr85_cutoff_ios.ne.0) error stop 'PR85 cutoff budget open failed'
++   write(pr85_cutoff_unit,'(a)',iostat=pr85_cutoff_ios) &
++        '# PR85_KDM6_CUTOFF row order: i,lat,k,loop,thresholdMask; '// &
++        'rhoDry,qmin,qcrmin; '// &
++        'Qbefore(5),Qafter(5),Nbefore(3),Nafter(3),Bbefore,Bafter,Tbefore,Tafter,QVbefore,QVafter; '// &
++        'progbBefore,progbAfter; thresholdMask bits 1=QC,2=QI,4=QR,8=QS,16=QG when at/below cutoff; '// &
++        'Q kg/kgdry, N #/m3, B m3/kgdry, rho kg/m3, T K, QV kg/kgdry; '// &
++        'rows only when the existing qmin/qcrmin cleanup changes Q/N/B state'
++   if (pr85_cutoff_ios.ne.0) error stop 'PR85 cutoff budget header failed'
++   pr85_psd_unit=-1
++   if (pr67_trace_this_call) then
++     open(newunit=pr85_psd_unit,file='pr85_kdm6_psd_boundary.raw', &
++          form='formatted',status='unknown',position='append',action='write', &
++          iostat=pr85_psd_ios)
++     if (pr85_psd_ios.ne.0) error stop 'PR85 PSD boundary ledger open failed'
++     write(pr85_psd_unit,'(a)',iostat=pr85_psd_ios) &
++          '# PR85_KDM6_PSD_BOUNDARY species,stage,i,lat,k,side,Q,rhoDry,lambdaMin,lambdaMax,Nbefore,Nnative,Ndirected; '// &
++          'nativeDelta,storageCorrection,exactNmin,exactNmax,legacyAvailable; '// &
++          'Q kg/kgdry, rho kg/m3, lambda m-1, N #/m3; unavailable native numeric fields are zero'
++     if (pr85_psd_ios.ne.0) error stop 'PR85 PSD boundary ledger header failed'
++   endif
+ 
++   do loop = 1,loops
+ 
++     if (pr67_trace_this_call) then
++       open(newunit=pr85_trace_unit,file='pr85_ice_transition_branch.raw', &
++            form='formatted',status='unknown',position='append',action='write', &
++            iostat=pr85_trace_ios)
++       if (pr85_trace_ios.ne.0) error stop 'PR85 transition trace open failed'
++       write(pr85_trace_unit,'(a)',iostat=pr85_trace_ios) &
++            '# PR85_ICE_TRANSITION: rows follow a per-loop KDM6 reach marker; '// &
++            'event fields i,lat,k,loop,dtcld,Tbefore,Tafter,Dm,preQI,preQS,preNI,executedQI,removedQI, '// &
++            'storedSnowGain,postQI,postQS,postNI'
++       if (pr85_trace_ios.ne.0) error stop 'PR85 transition trace header failed'
++       write(pr85_trace_unit,'(a,6i8,1p,1es24.16)',iostat=pr85_trace_ios) &
++            'PR85_ICE_TRANSITION_LOOP',loop,lat,its,ite,kts,kte,dtcld
++       if (pr85_trace_ios.ne.0) error stop 'PR85 transition loop marker failed'
++     endif
+ 
+      do i = its,ite
+        mstep(i) = 1
+@@ -1973,7 +2402,35 @@
+         if(mstepmax_i.le.mstep_i(i)) mstepmax_i = mstep_i(i)
+       enddo
+ 
++      pr85_g_unit = 0
++      pr85_g_ios = 0
++      if (pr67_trace_this_call) then
++        open(newunit=pr85_g_unit,file='pr85_graupel_sedimentation_budget.raw', &
++             form='formatted',status='unknown',position='append',action='write',iostat=pr85_g_ios)
++        if (pr85_g_ios /= 0) error stop 'PR85 graupel sedimentation ledger open failed'
++        write(pr85_g_unit,'(a)',iostat=pr85_g_ios) &
++          '# PR85_G_SED: i,lat,substep,nlevels; proposed/approved/withheld Q kg m-2, B m3 m-2; '// &
++          'ground sink Q/B; stored delta Q/B on local dend*delz basis; R32 residual Q/B'
++        if (pr85_g_ios /= 0) error stop 'PR85 graupel sedimentation ledger header failed'
++      endif
+       do n = 1, mstepmax
++        do i = its, ite
++          pr85_g_qrate(kts:kte) = 0.0d0
++          pr85_g_brate(kts:kte) = 0.0d0
++          if (n.le.mstep(i)) then
++            call pr85_kdm6_paired_sediment_column(kts,kte,i,lat,n,dtcld,mstep(i), &
++                 dend(i,kts:kte),delz(i,kts:kte),mass_velocity_rate(i,kts:kte,3), &
++                 mass_velocity_rate(i,kts:kte,3),qrs(i,kts:kte,3),brs(i,kts:kte), &
++                 PR85_SED_GRAUPEL,qcrmin,pr85_brs_min,100.0,900.0, &
++                 pr85_g_qrate(kts:kte),pr85_g_brate(kts:kte), &
++                 pr85_g_unit,pr67_trace_this_call,pr85_g_valid)
++            if (.not.pr85_g_valid) error stop 'PR85 graupel sedimentation packet rejected'
++            do k = kts, kte
++              falk(i,k,3) = REAL(pr85_g_qrate(k))
++              falkb(i,k) = REAL(pr85_g_brate(k))
++            enddo
++          endif
++        enddo
+         k = kte
+         do i = its, ite
+          if(n.le.mstep(i)) then
+@@ -1983,15 +2440,11 @@
+            falln(i,k,1) = falln(i,k,1)+falkn(i,k,1)
+            qrs(i,k,1) = max(qrs(i,k,1)-falk(i,k,1)*dtcld/dend(i,k),0.)
+            nrs(i,k,1) = max(nrs(i,k,1)-falkn(i,k,1)*dtcld,0.)
+-           falkb(i,k) = dend(i,k)*brs(i,k)*mass_velocity_rate(i,k,3)/mstep(i)
+            fallb(i,k) = fallb(i,k)+falkb(i,k)
+-           brs(i,k) = max(brs(i,k)-falkb(i,k)*dtcld/dend(i,k),0.)
+            falk(i,k,2) = dend(i,k)*qrs(i,k,2)*mass_velocity_rate(i,k,2)/mstep(i)
+            fall(i,k,2) = fall(i,k,2)+falk(i,k,2)
+            qrs(i,k,2) = max(qrs(i,k,2)-falk(i,k,2)*dtcld/dend(i,k),0.)
+-           falk(i,k,3) = dend(i,k)*qrs(i,k,3)*mass_velocity_rate(i,k,3)/mstep(i)
+            fall(i,k,3) = fall(i,k,3)+falk(i,k,3)
+-           qrs(i,k,3) = max(qrs(i,k,3)-falk(i,k,3)*dtcld/dend(i,k),0.)
+          endif
+        enddo
+ 
+@@ -2010,24 +2463,14 @@
+                           nrs(i,k+1,1))
+              nrs(i,k,1) = max(nrs(i,k,1)-dnr(i,k)+dnr(i,k+1),0.)
+              qrs(i,k,1) = max(qrs(i,k,1)-dqr(i,k)+dqr(i,k+1),0.)
+-             falkb(i,k) = dend(i,k)*brs(i,k)*mass_velocity_rate(i,k,3)/mstep(i)
+              fallb(i,k) = fallb(i,k)+falkb(i,k)
+-             dbg(i,k) = min(falkb(i,k)*dtcld/dend(i,k),brs(i,k))
+-             dbg(i,k+1) = min(falkb(i,k+1)*delz(i,k+1)/delz(i,k)&
+-                          *dtcld/dend(i,k),brs(i,k+1))
+-             brs(i,k) = max(brs(i,k)-dbg(i,k)+dbg(i,k+1),0.)
+              falk(i,k,2) = dend(i,k)*qrs(i,k,2)*mass_velocity_rate(i,k,2)/mstep(i)
+              fall(i,k,2) = fall(i,k,2)+falk(i,k,2)
+              dqs(i,k) = min(falk(i,k,2)*dtcld/dend(i,k),qrs(i,k,2))
+              dqs(i,k+1) = min(falk(i,k+1,2)*delz(i,k+1)/delz(i,k)              &
+                           *dtcld/dend(i,k),qrs(i,k+1,2))
+              qrs(i,k,2) = max(qrs(i,k,2)-dqs(i,k)+dqs(i,k+1),0.)
+-             falk(i,k,3) = dend(i,k)*qrs(i,k,3)*mass_velocity_rate(i,k,3)/mstep(i)
+              fall(i,k,3) = fall(i,k,3)+falk(i,k,3)
+-             dqg(i,k) = min(falk(i,k,3)*dtcld/dend(i,k),qrs(i,k,3))
+-             dqg(i,k+1) = min(falk(i,k+1,3)*delz(i,k+1)/delz(i,k)              &
+-                          *dtcld/dend(i,k),qrs(i,k+1,3))
+-             qrs(i,k,3) = max(qrs(i,k,3)-dqg(i,k)+dqg(i,k+1),0.)
+             endif
+           enddo
+         enddo
+@@ -2061,9 +2504,10 @@
+                             ims,ime,kms,kme,its,ite,kts,kte)
+ 
+ 
+-      enddo      
+-
+-
++      enddo
++      if (pr67_trace_this_call) close(pr85_g_unit,iostat=pr85_g_ios)
++      if (pr67_trace_this_call .and. pr85_g_ios /= 0) &
++        error stop 'PR85 graupel sedimentation ledger close failed'
+ 
+ 
+       if (pr67_trace_this_call) then
+@@ -2077,38 +2521,34 @@
+         write(pr67_unit) qci(its:ite,kts:kte,2)
+         close(pr67_unit)
+       endif
++      pr85_ice_unit = 0
++      pr85_ice_ios = 0
++      if (pr67_trace_this_call) then
++        open(newunit=pr85_ice_unit,file='pr85_ice_sedimentation_budget.raw', &
++             form='formatted',status='unknown',position='append',action='write',iostat=pr85_ice_ios)
++        if (pr85_ice_ios /= 0) error stop 'PR85 ice sedimentation ledger open failed'
++        write(pr85_ice_unit,'(a)',iostat=pr85_ice_ios) &
++          '# PR85_ICE_SED: cell_i,lat,substep,nlevels; proposed/approved/withheld Q kg m-2, N # m-2; '// &
++          'ground sink Q/N; stored delta Q/N on local dend*delz basis; R32 residual Q/N'
++        if (pr85_ice_ios /= 0) error stop 'PR85 ice sedimentation ledger header failed'
++      endif
+       do n = 1, mstepmax_i
+-        k = kte
+         do i = its, ite
+-         if(n.le.mstep_i(i)) then
+-           falk(i,k,4) = dend(i,k)*qci(i,k,2)*mass_velocity_rate(i,k,4)/mstep_i(i)
+-           falkn(i,k,2) = nci(i,k,2)*number_velocity_rate(i,k,2)/mstep_i(i)
+-           fall(i,k,4) = fall(i,k,4)+falk(i,k,4)
+-           falln(i,k,2) = falln(i,k,2)+falkn(i,k,2)
+-           qci(i,k,2) = max(qci(i,k,2)-falk(i,k,4)*dtcld/dend(i,k),0.)
+-           nci(i,k,2) = max(nci(i,k,2)-falkn(i,k,2)*dtcld,0.)
+-         endif
+-       enddo
+-
+-
+-       do k = kte_in-1,kts,-1
+-         do i = its,ite
+-           if(n.le.mstep_i(i)) then
+-             falk(i,k,4) = dend(i,k)*qci(i,k,2)*mass_velocity_rate(i,k,4)/mstep_i(i)
+-             falkn(i,k,2) = nci(i,k,2)*number_velocity_rate(i,k,2)/mstep_i(i)
+-             fall(i,k,4) = fall(i,k,4)+falk(i,k,4)
+-             dqi(i,k) = min(falk(i,k,4)*dtcld/dend(i,k),qci(i,k,2))
+-             dqi(i,k+1) = min(falk(i,k+1,4)*delz(i,k+1)/delz(i,k)              &
+-                          *dtcld/dend(i,k),qci(i,k+1,2))
+-             falln(i,k,2) = falln(i,k,2)+falkn(i,k,2)
+-             dni(i,k) = min(falkn(i,k,2)*dtcld,nci(i,k,2))
+-             dni(i,k+1) = min(falkn(i,k+1,2)*delz(i,k+1)/delz(i,k)*dtcld,      &
+-                          nci(i,k+1,2))
+-             nci(i,k,2) = max(nci(i,k,2)-dni(i,k)+dni(i,k+1),0.)
+-             qci(i,k,2) = max(qci(i,k,2)-dqi(i,k)+dqi(i,k+1),0.)
+-            endif
+-          enddo
+-        enddo 
++          if (n.le.mstep_i(i)) then
++            call pr85_kdm6_paired_sediment_column(kts,kte,i,lat,n,dtcld,mstep_i(i), &
++                 dend(i,kts:kte),delz(i,kts:kte),mass_velocity_rate(i,kts:kte,4), &
++                 number_velocity_rate(i,kts:kte,2),qci(i,kts:kte,2),nci(i,kts:kte,2), &
++                 PR85_SED_ICE,0.0,0.0,0.0,0.0,pr85_ice_qrate,pr85_ice_nrate, &
++                 pr85_ice_unit,pr67_trace_this_call,pr85_ice_valid)
++            if (.not.pr85_ice_valid) error stop 'PR85 ice sedimentation packet rejected'
++            do k = kts, kte
++              falk(i,k,4) = REAL(pr85_ice_qrate(k))
++              falkn(i,k,2) = REAL(pr85_ice_nrate(k))
++              fall(i,k,4) = fall(i,k,4)+falk(i,k,4)
++              falln(i,k,2) = falln(i,k,2)+falkn(i,k,2)
++            enddo
++          endif
++        enddo
+ 
+         if (pr67_trace_this_call .and. n .eq. 1) then
+           open(newunit=pr67_unit,file='pr67_kdm6_process.raw', &
+@@ -2150,6 +2590,9 @@
+ 
+ 
+       enddo 
++      if (pr67_trace_this_call) close(pr85_ice_unit,iostat=pr85_ice_ios)
++      if (pr67_trace_this_call .and. pr85_ice_ios /= 0) &
++        error stop 'PR85 ice sedimentation ledger close failed'
+ 
+       do k = kte, kts, -1
+         do i = its, ite
+@@ -2180,13 +2623,119 @@
+ 
+ 
+ 
+-              if(qrs(i,k,2).gt.qcrmin) then
+-                sfac = (rslope(i,k,2))*n0so(i,k)*n0sfac(i,k)/qrs(i,k,2)
+-                nrs(i,k,1) = nrs(i,k,1) - sfac*psmlt(i,k)
++              if (psmlt(i,k).lt.0.) then
++                pr85_melt_q_before = qrs(i,k,2)
++                pr85_melt_t_before = t(i,k)
++                pr85_melt_qc_before = qci(i,k,1)
++                pr85_melt_nc_before = nci(i,k,1)
++                pr85_melt_qr_before = qrs(i,k,1)
++                pr85_melt_nr_before = nrs(i,k,1)
++                pr85_melt_requested_q = -psmlt(i,k)
++                pr85_melt_mean_mass = cms*(g1pdsms/g1pms)*rsloped(i,k,2)
++                pr85_melt_route = 2
++                pr85_melt_accepted = .TRUE.
++                if (qrs(i,k,2).gt.qcrmin) then
++                  ! Preserve the native active-snow mass, number, and heat updates.
++                  sfac = (rslope(i,k,2))*n0so(i,k)*n0sfac(i,k)/qrs(i,k,2)
++                  nrs(i,k,1) = nrs(i,k,1) - sfac*psmlt(i,k)
++                  pr85_melt_number_request = -DBLE(sfac)*DBLE(psmlt(i,k))
++                  qrs(i,k,2) = qrs(i,k,2) + psmlt(i,k)
++                  qrs(i,k,1) = qrs(i,k,1) - psmlt(i,k)
++                  t(i,k) = t(i,k) + xlf/cpm(i,k)*psmlt(i,k)
++                else
++                  call pr85_kdm6_subthreshold_melt(qci(i,k,1),nci(i,k,1), &
++                       qrs(i,k,1),nrs(i,k,1),dry_carrier_density(i,k),delz(i,k), &
++                       pr85_melt_requested_q,pr85_melt_mean_mass, &
++                       pidnc/lamdacmax**dmc,pidnc/lamdacmin**dmc, &
++                       pidnr/lamdarmax**dmr,pidnr/lamdarmin**dmr, &
++                       pr85_melt_qc_after,pr85_melt_nc_after, &
++                       pr85_melt_qr_after,pr85_melt_nr_after, &
++                       pr85_melt_number_request,pr85_melt_route,pr85_melt_accepted)
++                  if (pr85_melt_accepted .and. pr85_melt_route.ne.0) then
++                    if (.not.ieee_is_finite(pr85_melt_t_before) .or. &
++                        .not.ieee_is_finite(xlf) .or. .not.ieee_is_finite(cpm(i,k)) .or. &
++                        cpm(i,k).le.0.0) then
++                      pr85_melt_accepted=.false.
++                    else
++                      pr85_melt_qs_candidate=DBLE(qrs(i,k,2))+DBLE(psmlt(i,k))
++                      pr85_melt_t_candidate=DBLE(pr85_melt_t_before)+ &
++                          (DBLE(xlf)/DBLE(cpm(i,k)))*DBLE(psmlt(i,k))
++                      if (.not.ieee_is_finite(pr85_melt_qs_candidate) .or. &
++                          pr85_melt_qs_candidate.lt.0.0d0 .or. &
++                          pr85_melt_qs_candidate.gt.DBLE(HUGE(0.0)) .or. &
++                          .not.ieee_is_finite(pr85_melt_t_candidate) .or. &
++                          pr85_melt_t_candidate.le.0.0d0 .or. &
++                          pr85_melt_t_candidate.gt.DBLE(HUGE(0.0))) then
++                        pr85_melt_accepted=.false.
++                      else
++                        pr85_melt_qs_after=REAL(pr85_melt_qs_candidate)
++                        pr85_melt_t_after=REAL(pr85_melt_t_candidate)
++                        if (.not.ieee_is_finite(pr85_melt_qs_after) .or. &
++                            .not.ieee_is_finite(pr85_melt_t_after) .or. &
++                            pr85_melt_qs_after.lt.0.0 .or. &
++                            pr85_melt_qs_after.ge.pr85_melt_q_before .or. &
++                            pr85_melt_t_after.le.0.0) pr85_melt_accepted=.false.
++                      endif
++                    endif
++                    if (pr85_melt_accepted) then
++                      qci(i,k,1) = pr85_melt_qc_after
++                      nci(i,k,1) = pr85_melt_nc_after
++                      qrs(i,k,1) = pr85_melt_qr_after
++                      nrs(i,k,1) = pr85_melt_nr_after
++                      qrs(i,k,2) = pr85_melt_qs_after
++                      t(i,k) = pr85_melt_t_after
++                    else
++                      pr85_melt_route = 0
++                      pr85_melt_qc_after=pr85_melt_qc_before
++                      pr85_melt_nc_after=pr85_melt_nc_before
++                      pr85_melt_qr_after=pr85_melt_qr_before
++                      pr85_melt_nr_after=pr85_melt_nr_before
++                      pr85_melt_qs_after=pr85_melt_q_before
++                      pr85_melt_t_after=pr85_melt_t_before
++                    endif
++                  else
++                    pr85_melt_route = 0
++                    pr85_melt_qs_after=pr85_melt_q_before
++                    pr85_melt_t_after=pr85_melt_t_before
++                  endif
++                endif
++                if (pr67_trace_this_call) then
++                  pr85_melt_mass_request = DBLE(dry_carrier_density(i,k))* &
++                       DBLE(delz(i,k))*DBLE(pr85_melt_requested_q)
++                  pr85_melt_qc_delta = DBLE(qci(i,k,1))-DBLE(pr85_melt_qc_before)
++                  pr85_melt_nc_delta = DBLE(nci(i,k,1))-DBLE(pr85_melt_nc_before)
++                  pr85_melt_qr_delta = DBLE(qrs(i,k,1))-DBLE(pr85_melt_qr_before)
++                  pr85_melt_nr_delta = DBLE(nrs(i,k,1))-DBLE(pr85_melt_nr_before)
++                  pr85_melt_mass_actual = DBLE(dry_carrier_density(i,k))*DBLE(delz(i,k))* &
++                       (pr85_melt_qc_delta+pr85_melt_qr_delta)
++                  pr85_melt_number_actual = DBLE(delz(i,k))* &
++                       (pr85_melt_nc_delta+pr85_melt_nr_delta)
++                  pr85_melt_mass_residual = pr85_melt_mass_actual-pr85_melt_mass_request
++                  pr85_melt_number_residual = pr85_melt_number_actual- &
++                       pr85_melt_number_request*DBLE(delz(i,k))
++                  open(newunit=pr85_melt_unit,file='pr85_kdm6_melt_budget.raw', &
++                       form='formatted',status='unknown',position='append',action='write', &
++                       iostat=pr85_melt_ios)
++                  if (pr85_melt_ios.ne.0) error stop 'PR85 melt ledger open failed'
++                  write(pr85_melt_unit,'(a)',iostat=pr85_melt_ios) &
++                       '# PR85_MELT: i,lat,k,loop,route; dtcld,T before/after; Qs before/after kg/kg-dry; '// &
++                       'source mean kg/particle; proposed mass kg/m2, number #/m2; '// &
++                       'stored dQC,dNC,dQR,dNR; actual minus proposed mass/number; accepted flag'
++                  if (pr85_melt_ios.ne.0) error stop 'PR85 melt ledger header failed'
++                  write(pr85_melt_unit,'(a,5i8,1p,14es24.16,1x,l1)',iostat=pr85_melt_ios) &
++                       'PR85_MELT',i,lat,k,loop,pr85_melt_route,dtcld,pr85_melt_t_before, &
++                       t(i,k),pr85_melt_q_before,qrs(i,k,2),pr85_melt_mean_mass, &
++                       pr85_melt_mass_request,pr85_melt_number_request*DBLE(delz(i,k)), &
++                       pr85_melt_qc_delta,pr85_melt_nc_delta,pr85_melt_qr_delta, &
++                       pr85_melt_nr_delta,pr85_melt_mass_residual,pr85_melt_number_residual, &
++                       pr85_melt_accepted
++                  if (pr85_melt_ios.ne.0) error stop 'PR85 melt ledger write failed'
++                  close(pr85_melt_unit,iostat=pr85_melt_ios)
++                  if (pr85_melt_ios.ne.0) error stop 'PR85 melt ledger close failed'
++                endif
++                if (.not.pr85_melt_accepted .or. pr85_melt_route.eq.0) &
++                  error stop 'PR85 positive snowmelt has no supported liquid pair'
+               endif
+-              qrs(i,k,2) = qrs(i,k,2) + psmlt(i,k)
+-              qrs(i,k,1) = qrs(i,k,1) - psmlt(i,k)
+-              t(i,k) = t(i,k) + xlf/cpm(i,k)*psmlt(i,k)
+             endif
+ 
+ 
+@@ -2361,11 +2910,25 @@
+             n0r(i,k) = (1./g1pmr)*DBLE(nrs(i,k,1))*lamdr_tmp(i,k)**(mur+1)
+             if(lamdr_tmp(i,k) .le. lamdarmin) then
+               lamdr_tmp(i,k) = lamdarmin
+-              nrs(i,k,1) = dry_carrier_density(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr
++              pr85_psd_before = nrs(i,k,1)
++              call pr85_kdm6_psd_bound_number(qrs(i,k,1),dry_carrier_density(i,k),lamdr_tmp(i,k), &
++                   lamdarmin,lamdarmax,pidnr,dmr,1, &
++                   'rain','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nrs(i,k,1) = pr85_psd_directed
+               n0r(i,k) = (1./g1pmr)*DBLE(nrs(i,k,1))*lamdr_tmp(i,k)**(mur+1)
+             elseif(lamdr_tmp(i,k) .ge. lamdarmax) then
+               lamdr_tmp(i,k) = lamdarmax
+-              nrs(i,k,1) = dry_carrier_density(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr
++              pr85_psd_before = nrs(i,k,1)
++              call pr85_kdm6_psd_bound_number(qrs(i,k,1),dry_carrier_density(i,k),lamdr_tmp(i,k), &
++                   lamdarmin,lamdarmax,pidnr,dmr,2, &
++                   'rain','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nrs(i,k,1) = pr85_psd_directed
+               n0r(i,k) = (1./g1pmr)*DBLE(nrs(i,k,1))*lamdr_tmp(i,k)**(mur+1)
+             endif
+           endif
+@@ -2375,11 +2938,25 @@
+               n0c(i,k) = (muc+1)*DBLE(nci(i,k,1))*lamdc_tmp(i,k)**(muc+1)
+             if(lamdc_tmp(i,k) .le. lamdacmin) then
+               lamdc_tmp(i,k) = lamdacmin
+-              nci(i,k,1) = dry_carrier_density(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc
++              pr85_psd_before = nci(i,k,1)
++              call pr85_kdm6_psd_bound_number(qci(i,k,1),dry_carrier_density(i,k),lamdc_tmp(i,k), &
++                   lamdacmin,lamdacmax,pidnc,dmc,1, &
++                   'cloud','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,1) = pr85_psd_directed
+               n0c(i,k) = (muc+1)*DBLE(nci(i,k,1))*lamdc_tmp(i,k)**(muc+1)
+             elseif(lamdc_tmp(i,k) .ge. lamdacmax) then
+               lamdc_tmp(i,k) = lamdacmax
+-              nci(i,k,1) = dry_carrier_density(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc
++              pr85_psd_before = nci(i,k,1)
++              call pr85_kdm6_psd_bound_number(qci(i,k,1),dry_carrier_density(i,k),lamdc_tmp(i,k), &
++                   lamdacmin,lamdacmax,pidnc,dmc,2, &
++                   'cloud','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,1) = pr85_psd_directed
+               n0c(i,k) = (muc+1)*DBLE(nci(i,k,1))*lamdc_tmp(i,k)**(muc+1)
+             endif
+           endif
+@@ -2389,11 +2966,25 @@
+             n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             if(lamdi_tmp(i,k) .le. lamdaimin) then
+               lamdi_tmp(i,k) = lamdaimin
+-              nci(i,k,2) = dry_carrier_density(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni
++              pr85_psd_before = nci(i,k,2)
++              call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
++                   lamdaimin,lamdaimax,pidni,dmi,1, &
++                   'ice','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,2) = pr85_psd_directed
+               n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             elseif(lamdi_tmp(i,k) .ge. lamdaimax) then
+               lamdi_tmp(i,k) = lamdaimax
+-              nci(i,k,2) = dry_carrier_density(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni
++              pr85_psd_before = nci(i,k,2)
++              call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
++                   lamdaimin,lamdaimax,pidni,dmi,2, &
++                   'ice','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,2) = pr85_psd_directed
+               n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             endif
+           endif
+@@ -2414,15 +3005,104 @@
+ 
+ 
+ 
+-            if (nci(i,k,1) .gt. ncmin) then
++            ninuc = 0.0d0
++            if (nci(i,k,1) .gt. 0.0) then
+               ninuc = min((difa(i,k))*2.*pi*Nic*n0c(i,k)/(muc+1) &
+                       *g1pmc*rslopecmu(i,k)*rslopec2(i,k)*dtcld,nci(i,k,1))
+-              nci(i,k,1) = nci(i,k,1)-(ninuc)
+-              nci(i,k,2) = nci(i,k,2)+(ninuc)
+             endif
+-            qci(i,k,1) = qci(i,k,1)-(pinuc)
+-            qci(i,k,2) = qci(i,k,2)+(pinuc)
+-            t(i,k) = t(i,k) + xlf/cpm(i,k)*pinuc 
++            if (pinuc.ne.0.0d0 .or. ninuc.ne.0.0d0) then
++              pr85_freeze_ice_transient_base = qci(i,k,2).gt.0.0 .and. &
++                  qci(i,k,2).le.PR85_ICE_NATIVE_INACTIVE_MAX
++              pr85_freeze_t_before = t(i,k)
++              pr85_freeze_qc_before = qci(i,k,1)
++              pr85_freeze_nc_before = nci(i,k,1)
++              pr85_freeze_qi_before = qci(i,k,2)
++              pr85_freeze_ni_before = nci(i,k,2)
++              pr85_freeze_mass_request = pinuc
++              pr85_freeze_number_request = ninuc
++              call pr85_kdm6_freezing_packet(qci(i,k,1),nci(i,k,1), &
++                   qci(i,k,2),nci(i,k,2),dry_carrier_density(i,k), &
++                   DBLE(PR85_ICE_NATIVE_INACTIVE_MAX), &
++                   pr85_freeze_mass_request,pr85_freeze_number_request, &
++                   DBLE(pidnc)/(DBLE(lamdacmax)**DBLE(dmc)), &
++                   DBLE(pidnc)/(DBLE(lamdacmin)**DBLE(dmc)), &
++                   DBLE(pidni)/(DBLE(lamdaimax)**DBLE(dmi)), &
++                   DBLE(pidni)/(DBLE(lamdaimin)**DBLE(dmi)), &
++                   pr85_freeze_qc_after,pr85_freeze_nc_after, &
++                   pr85_freeze_qi_after,pr85_freeze_ni_after, &
++                   pr85_freeze_mass_approved,pr85_freeze_number_approved, &
++                   pr85_freeze_fraction,pr85_freeze_base_valid,pr85_freeze_accepted)
++              if (pr85_freeze_accepted) then
++                if (.not.ieee_is_finite(pr85_freeze_t_before) .or. &
++                    .not.ieee_is_finite(xlf) .or. .not.ieee_is_finite(cpm(i,k)) .or. &
++                    cpm(i,k).le.0.0) then
++                  pr85_freeze_accepted=.false.
++                  pr85_freeze_base_valid=.false.
++                else
++                  pr85_freeze_t_candidate=DBLE(pr85_freeze_t_before)+ &
++                      (DBLE(xlf)/DBLE(cpm(i,k)))*pr85_freeze_mass_approved
++                  if (.not.ieee_is_finite(pr85_freeze_t_candidate) .or. &
++                      pr85_freeze_t_candidate.le.0.0d0 .or. &
++                      pr85_freeze_t_candidate.gt.DBLE(HUGE(0.0))) then
++                    pr85_freeze_accepted=.false.
++                    pr85_freeze_base_valid=.false.
++                  else
++                    pr85_freeze_t_after=REAL(pr85_freeze_t_candidate)
++                    if (.not.ieee_is_finite(pr85_freeze_t_after) .or. &
++                        pr85_freeze_t_after.le.0.0) then
++                      pr85_freeze_accepted=.false.
++                      pr85_freeze_base_valid=.false.
++                    else
++                      qci(i,k,1)=pr85_freeze_qc_after
++                      nci(i,k,1)=pr85_freeze_nc_after
++                      qci(i,k,2)=pr85_freeze_qi_after
++                      nci(i,k,2)=pr85_freeze_ni_after
++                      t(i,k)=pr85_freeze_t_after
++                    endif
++                  endif
++                endif
++                if (.not.pr85_freeze_accepted) then
++                  pr85_freeze_fraction=0.0d0
++                  pr85_freeze_mass_approved=0.0d0
++                  pr85_freeze_number_approved=0.0d0
++                  pr85_freeze_qc_after=pr85_freeze_qc_before
++                  pr85_freeze_nc_after=pr85_freeze_nc_before
++                  pr85_freeze_qi_after=pr85_freeze_qi_before
++                  pr85_freeze_ni_after=pr85_freeze_ni_before
++                  pr85_freeze_t_after=pr85_freeze_t_before
++                endif
++              else
++                pr85_freeze_t_after=pr85_freeze_t_before
++              endif
++              open(newunit=pr85_freeze_unit,file='pr85_kdm6_freezing_budget.raw', &
++                   status='unknown',position='append',action='write',iostat=pr85_freeze_ios)
++              if (pr85_freeze_ios.ne.0) error stop 'PR85 freezing ledger open failed'
++              write(pr85_freeze_unit,'(a,3i8,1x,3l1,1p,25e24.16)',iostat=pr85_freeze_ios) &
++                   'PINU',i,lat,k,pr85_freeze_accepted,pr85_freeze_base_valid, &
++                   pr85_freeze_ice_transient_base,pr85_freeze_fraction, &
++                   pr85_freeze_mass_request,pr85_freeze_number_request, &
++                   pr85_freeze_mass_approved,pr85_freeze_number_approved, &
++                   pr85_freeze_mass_request-pr85_freeze_mass_approved, &
++                   pr85_freeze_number_request-pr85_freeze_number_approved, &
++                   DBLE(pr85_freeze_qc_before),DBLE(pr85_freeze_nc_before), &
++                   DBLE(pr85_freeze_qi_before),DBLE(pr85_freeze_ni_before), &
++                   DBLE(qci(i,k,1)),DBLE(nci(i,k,1)),DBLE(qci(i,k,2)),DBLE(nci(i,k,2)), &
++                   DBLE(pr85_freeze_t_before),DBLE(t(i,k)), &
++                   DBLE(dry_carrier_density(i,k))*(DBLE(pr85_freeze_qc_before)-DBLE(qci(i,k,1))), &
++                   DBLE(dry_carrier_density(i,k))*(DBLE(qci(i,k,2))-DBLE(pr85_freeze_qi_before)), &
++                   DBLE(dry_carrier_density(i,k))*((DBLE(qci(i,k,2))-DBLE(pr85_freeze_qi_before))- &
++                       (DBLE(pr85_freeze_qc_before)-DBLE(qci(i,k,1)))), &
++                   DBLE(pr85_freeze_nc_before)-DBLE(nci(i,k,1)), &
++                   DBLE(nci(i,k,2))-DBLE(pr85_freeze_ni_before), &
++                   (DBLE(nci(i,k,2))-DBLE(pr85_freeze_ni_before))- &
++                       (DBLE(pr85_freeze_nc_before)-DBLE(nci(i,k,1))), &
++                   DBLE(dry_carrier_density(i,k)),DBLE(qmin)
++              if (pr85_freeze_ios.ne.0) error stop 'PR85 freezing ledger write failed'
++              close(pr85_freeze_unit,iostat=pr85_freeze_ios)
++              if (pr85_freeze_ios.ne.0) error stop 'PR85 freezing ledger close failed'
++              if (.not.pr85_freeze_base_valid) &
++                   error stop 'PR85 invalid cloud-ice freezing packet base'
++            endif
+           endif
+ 
+ 
+@@ -2440,19 +3120,105 @@
+ 
+ 
+ 
+-            if(nci(i,k,1).gt.ncmin) then
+-
++            nfrzdtc = 0.0
++            if(nci(i,k,1).gt.0.0) then
+               nfrzdtc = min((cmc)*pfrz1*n0c(i,k)/denr/(muc+1)        &
+-                       *(exp(pfrz2*supcolt)-1.)*g1pdcomuc1*rslopecmu(i,k)       &  
++                       *(exp(pfrz2*supcolt)-1.)*g1pdcomuc1*rslopecmu(i,k)       &
+                        *rslopec(i,k)*rslopecd(i,k)*dtcld,nci(i,k,1))
+-
+-
+-              nci(i,k,1) = nci(i,k,1)-(nfrzdtc) 
+-              nci(i,k,2) = nci(i,k,2)+(nfrzdtc)
+             endif
+-            qci(i,k,1) = qci(i,k,1)-(pfrzdtc)
+-            qci(i,k,2) = qci(i,k,2)+(pfrzdtc)
+-            t(i,k) = t(i,k) + xlf/cpm(i,k)*(pfrzdtc)
++            if (pfrzdtc.ne.0.0 .or. nfrzdtc.ne.0.0) then
++              pr85_freeze_ice_transient_base = qci(i,k,2).gt.0.0 .and. &
++                  qci(i,k,2).le.PR85_ICE_NATIVE_INACTIVE_MAX
++              pr85_freeze_t_before = t(i,k)
++              pr85_freeze_qc_before = qci(i,k,1)
++              pr85_freeze_nc_before = nci(i,k,1)
++              pr85_freeze_qi_before = qci(i,k,2)
++              pr85_freeze_ni_before = nci(i,k,2)
++              pr85_freeze_mass_request = DBLE(pfrzdtc)
++              pr85_freeze_number_request = DBLE(nfrzdtc)
++              call pr85_kdm6_freezing_packet(qci(i,k,1),nci(i,k,1), &
++                   qci(i,k,2),nci(i,k,2),dry_carrier_density(i,k), &
++                   DBLE(PR85_ICE_NATIVE_INACTIVE_MAX), &
++                   pr85_freeze_mass_request,pr85_freeze_number_request, &
++                   DBLE(pidnc)/(DBLE(lamdacmax)**DBLE(dmc)), &
++                   DBLE(pidnc)/(DBLE(lamdacmin)**DBLE(dmc)), &
++                   DBLE(pidni)/(DBLE(lamdaimax)**DBLE(dmi)), &
++                   DBLE(pidni)/(DBLE(lamdaimin)**DBLE(dmi)), &
++                   pr85_freeze_qc_after,pr85_freeze_nc_after, &
++                   pr85_freeze_qi_after,pr85_freeze_ni_after, &
++                   pr85_freeze_mass_approved,pr85_freeze_number_approved, &
++                   pr85_freeze_fraction,pr85_freeze_base_valid,pr85_freeze_accepted)
++              if (pr85_freeze_accepted) then
++                if (.not.ieee_is_finite(pr85_freeze_t_before) .or. &
++                    .not.ieee_is_finite(xlf) .or. .not.ieee_is_finite(cpm(i,k)) .or. &
++                    cpm(i,k).le.0.0) then
++                  pr85_freeze_accepted=.false.
++                  pr85_freeze_base_valid=.false.
++                else
++                  pr85_freeze_t_candidate=DBLE(pr85_freeze_t_before)+ &
++                      (DBLE(xlf)/DBLE(cpm(i,k)))*pr85_freeze_mass_approved
++                  if (.not.ieee_is_finite(pr85_freeze_t_candidate) .or. &
++                      pr85_freeze_t_candidate.le.0.0d0 .or. &
++                      pr85_freeze_t_candidate.gt.DBLE(HUGE(0.0))) then
++                    pr85_freeze_accepted=.false.
++                    pr85_freeze_base_valid=.false.
++                  else
++                    pr85_freeze_t_after=REAL(pr85_freeze_t_candidate)
++                    if (.not.ieee_is_finite(pr85_freeze_t_after) .or. &
++                        pr85_freeze_t_after.le.0.0) then
++                      pr85_freeze_accepted=.false.
++                      pr85_freeze_base_valid=.false.
++                    else
++                      qci(i,k,1)=pr85_freeze_qc_after
++                      nci(i,k,1)=pr85_freeze_nc_after
++                      qci(i,k,2)=pr85_freeze_qi_after
++                      nci(i,k,2)=pr85_freeze_ni_after
++                      t(i,k)=pr85_freeze_t_after
++                    endif
++                  endif
++                endif
++                if (.not.pr85_freeze_accepted) then
++                  pr85_freeze_fraction=0.0d0
++                  pr85_freeze_mass_approved=0.0d0
++                  pr85_freeze_number_approved=0.0d0
++                  pr85_freeze_qc_after=pr85_freeze_qc_before
++                  pr85_freeze_nc_after=pr85_freeze_nc_before
++                  pr85_freeze_qi_after=pr85_freeze_qi_before
++                  pr85_freeze_ni_after=pr85_freeze_ni_before
++                  pr85_freeze_t_after=pr85_freeze_t_before
++                endif
++              else
++                pr85_freeze_t_after=pr85_freeze_t_before
++              endif
++              open(newunit=pr85_freeze_unit,file='pr85_kdm6_freezing_budget.raw', &
++                   status='unknown',position='append',action='write',iostat=pr85_freeze_ios)
++              if (pr85_freeze_ios.ne.0) error stop 'PR85 freezing ledger open failed'
++              write(pr85_freeze_unit,'(a,3i8,1x,3l1,1p,25e24.16)',iostat=pr85_freeze_ios) &
++                   'PFRZ',i,lat,k,pr85_freeze_accepted,pr85_freeze_base_valid, &
++                   pr85_freeze_ice_transient_base,pr85_freeze_fraction, &
++                   pr85_freeze_mass_request,pr85_freeze_number_request, &
++                   pr85_freeze_mass_approved,pr85_freeze_number_approved, &
++                   pr85_freeze_mass_request-pr85_freeze_mass_approved, &
++                   pr85_freeze_number_request-pr85_freeze_number_approved, &
++                   DBLE(pr85_freeze_qc_before),DBLE(pr85_freeze_nc_before), &
++                   DBLE(pr85_freeze_qi_before),DBLE(pr85_freeze_ni_before), &
++                   DBLE(qci(i,k,1)),DBLE(nci(i,k,1)),DBLE(qci(i,k,2)),DBLE(nci(i,k,2)), &
++                   DBLE(pr85_freeze_t_before),DBLE(t(i,k)), &
++                   DBLE(dry_carrier_density(i,k))*(DBLE(pr85_freeze_qc_before)-DBLE(qci(i,k,1))), &
++                   DBLE(dry_carrier_density(i,k))*(DBLE(qci(i,k,2))-DBLE(pr85_freeze_qi_before)), &
++                   DBLE(dry_carrier_density(i,k))*((DBLE(qci(i,k,2))-DBLE(pr85_freeze_qi_before))- &
++                       (DBLE(pr85_freeze_qc_before)-DBLE(qci(i,k,1)))), &
++                   DBLE(pr85_freeze_nc_before)-DBLE(nci(i,k,1)), &
++                   DBLE(nci(i,k,2))-DBLE(pr85_freeze_ni_before), &
++                   (DBLE(nci(i,k,2))-DBLE(pr85_freeze_ni_before))- &
++                       (DBLE(pr85_freeze_nc_before)-DBLE(nci(i,k,1))), &
++                   DBLE(dry_carrier_density(i,k)),DBLE(qmin)
++              if (pr85_freeze_ios.ne.0) error stop 'PR85 freezing ledger write failed'
++              close(pr85_freeze_unit,iostat=pr85_freeze_ios)
++              if (pr85_freeze_ios.ne.0) error stop 'PR85 freezing ledger close failed'
++              if (.not.pr85_freeze_base_valid) &
++                   error stop 'PR85 invalid cloud-ice freezing packet base'
++            endif
+           endif
+ 
+ 
+@@ -2467,16 +3233,105 @@
+ 
+ 
+ 
++            nfrzdtr = 0.0
+             if(nrs(i,k,1).gt.nrmin) then
+               nfrzdtr = min((cmr)/denr*pfrz1*n0r(i,k)*(exp(pfrz2*supcolt)-1.)     &
+                        *g1pdrmr*rslope(i,k,1)*rsloped(i,k,1)*rslopemu(i,k,1) &
+-                       *dtcld, nrs(i,k,1)) 
+-              nrs(i,k,1) = nrs(i,k,1) - nfrzdtr
++                       *dtcld, nrs(i,k,1))
++            endif
++            if (pfrzdtr.ne.0.0 .or. nfrzdtr.ne.0.0) then
++              pr85_rf_qr_before=qrs(i,k,1)
++              pr85_rf_nr_before=nrs(i,k,1)
++              pr85_rf_qg_before=qrs(i,k,3)
++              pr85_rf_bg_before=brs(i,k)
++              pr85_rf_t_before=t(i,k)
++              pr85_rf_mass_request=DBLE(pfrzdtr)
++              pr85_rf_number_request=DBLE(nfrzdtr)
++              pr85_rf_volume_request=DBLE(pfrzdtr)/DBLE(denr)
++              call pr85_kdm6_rain_freezing_packet(qrs(i,k,1),nrs(i,k,1), &
++                   qrs(i,k,3),brs(i,k),dry_carrier_density(i,k), &
++                   pr85_rf_mass_request,pr85_rf_number_request,pr85_rf_volume_request, &
++                   DBLE(pidnr)/(DBLE(lamdarmax)**DBLE(dmr)), &
++                   DBLE(pidnr)/(DBLE(lamdarmin)**DBLE(dmr)),100.0d0,900.0d0, &
++                   pr85_rf_qr_after,pr85_rf_nr_after,pr85_rf_qg_after,pr85_rf_bg_after, &
++                   pr85_rf_mass_approved,pr85_rf_number_approved,pr85_rf_volume_approved, &
++                   pr85_rf_fraction,pr85_rf_base_valid,pr85_rf_accepted)
++              pr85_rf_t_after=pr85_rf_t_before
++              if (pr85_rf_accepted) then
++                if (.not.ieee_is_finite(pr85_rf_t_before) .or. &
++                    .not.ieee_is_finite(xlf) .or. .not.ieee_is_finite(cpm(i,k)) .or. &
++                    cpm(i,k).le.0.0) then
++                  pr85_rf_accepted=.false.
++                  pr85_rf_base_valid=.false.
++                else
++                  pr85_rf_t_candidate=DBLE(pr85_rf_t_before)+ &
++                      (DBLE(xlf)/DBLE(cpm(i,k)))*pr85_rf_mass_approved
++                  if (.not.ieee_is_finite(pr85_rf_t_candidate) .or. &
++                      pr85_rf_t_candidate.le.0.0d0 .or. &
++                      pr85_rf_t_candidate.gt.DBLE(HUGE(0.0))) then
++                    pr85_rf_accepted=.false.
++                    pr85_rf_base_valid=.false.
++                  else
++                    pr85_rf_t_after=REAL(pr85_rf_t_candidate)
++                    if (.not.ieee_is_finite(pr85_rf_t_after) .or. pr85_rf_t_after.le.0.0) then
++                      pr85_rf_accepted=.false.
++                      pr85_rf_base_valid=.false.
++                    else
++                      qrs(i,k,1)=pr85_rf_qr_after
++                      nrs(i,k,1)=pr85_rf_nr_after
++                      qrs(i,k,3)=pr85_rf_qg_after
++                      brs(i,k)=pr85_rf_bg_after
++                      t(i,k)=pr85_rf_t_after
++                    endif
++                  endif
++                endif
++              endif
++              if (.not.pr85_rf_accepted) then
++                pr85_rf_fraction=0.0d0
++                pr85_rf_mass_approved=0.0d0
++                pr85_rf_number_approved=0.0d0
++                pr85_rf_volume_approved=0.0d0
++                pr85_rf_qr_after=pr85_rf_qr_before
++                pr85_rf_nr_after=pr85_rf_nr_before
++                pr85_rf_qg_after=pr85_rf_qg_before
++                pr85_rf_bg_after=pr85_rf_bg_before
++                pr85_rf_t_after=pr85_rf_t_before
++              endif
++              open(newunit=pr85_rf_unit,file='pr85_rain_freezing_budget.raw', &
++                   form='formatted',status='unknown',position='append',action='write',iostat=pr85_rf_ios)
++              if (pr85_rf_ios.ne.0) error stop 'PR85 rain-freezing ledger open failed'
++              write(pr85_rf_unit,'(a)',iostat=pr85_rf_ios) &
++                   '# PR85_RAIN_FREEZE: i,lat,k,loop,accepted,base_valid,theta; proposed/approved/withheld '// &
++                   'dQR kg/kg-dry, dNR #/m3, dBG m3/kg-dry; before/after QR,NR,QG,BG; T K; '// &
++                   'actual rain/graupel mass kg/m3 and residual; actual/approved number and volume '// &
++                   'deltas; final graupel density kg/m3'
++              if (pr85_rf_ios.ne.0) error stop 'PR85 rain-freezing ledger header failed'
++              write(pr85_rf_unit,'(a,4i8,1x,2l1,1p,28e24.16)',iostat=pr85_rf_ios) &
++                   'PR85_RAIN_FREEZE',i,lat,k,loop,pr85_rf_accepted,pr85_rf_base_valid,pr85_rf_fraction, &
++                   pr85_rf_mass_request,pr85_rf_number_request,pr85_rf_volume_request, &
++                   pr85_rf_mass_approved,pr85_rf_number_approved,pr85_rf_volume_approved, &
++                   pr85_rf_mass_request-pr85_rf_mass_approved, &
++                   pr85_rf_number_request-pr85_rf_number_approved, &
++                   pr85_rf_volume_request-pr85_rf_volume_approved, &
++                   DBLE(pr85_rf_qr_before),DBLE(pr85_rf_nr_before), &
++                   DBLE(pr85_rf_qg_before),DBLE(pr85_rf_bg_before), &
++                   DBLE(qrs(i,k,1)),DBLE(nrs(i,k,1)),DBLE(qrs(i,k,3)),DBLE(brs(i,k)), &
++                   DBLE(pr85_rf_t_before),DBLE(t(i,k)), &
++                   DBLE(dry_carrier_density(i,k))*(DBLE(pr85_rf_qr_before)-DBLE(qrs(i,k,1))), &
++                   DBLE(dry_carrier_density(i,k))*(DBLE(qrs(i,k,3))-DBLE(pr85_rf_qg_before)), &
++                   DBLE(dry_carrier_density(i,k))*((DBLE(pr85_rf_qr_before)+DBLE(pr85_rf_qg_before))- &
++                       (DBLE(qrs(i,k,1))+DBLE(qrs(i,k,3)))), &
++                   DBLE(pr85_rf_nr_before)-DBLE(nrs(i,k,1)), &
++                   (DBLE(pr85_rf_nr_before)-DBLE(nrs(i,k,1)))-pr85_rf_number_approved, &
++                   DBLE(brs(i,k))-DBLE(pr85_rf_bg_before), &
++                   (DBLE(brs(i,k))-DBLE(pr85_rf_bg_before))-pr85_rf_volume_approved, &
++                   DBLE(qrs(i,k,3))/MAX(DBLE(brs(i,k)),TINY(1.0d0))
++              if (pr85_rf_ios.ne.0) error stop 'PR85 rain-freezing ledger write failed'
++              close(pr85_rf_unit,iostat=pr85_rf_ios)
++              if (pr85_rf_ios.ne.0) error stop 'PR85 rain-freezing ledger close failed'
++              if (.not.pr85_rf_base_valid) &
++                   error stop 'PR85 invalid rain-graupel freezing base'
+             endif
+-            qrs(i,k,3) = qrs(i,k,3) + pfrzdtr
+-            brs(i,k) = brs(i,k) + (pfrzdtr/denr)
+-            t(i,k) = t(i,k) + xlf/cpm(i,k)*pfrzdtr
+-            qrs(i,k,1) = qrs(i,k,1) - pfrzdtr
+           endif
+         enddo
+       enddo
+@@ -2566,11 +3421,25 @@
+             n0r(i,k) = (1./g1pmr)*DBLE(nrs(i,k,1))*lamdr_tmp(i,k)**(mur+1)
+             if(lamdr_tmp(i,k) .le. lamdarmin) then
+               lamdr_tmp(i,k) = lamdarmin
+-              nrs(i,k,1) = dry_carrier_density(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr
++              pr85_psd_before = nrs(i,k,1)
++              call pr85_kdm6_psd_bound_number(qrs(i,k,1),dry_carrier_density(i,k),lamdr_tmp(i,k), &
++                   lamdarmin,lamdarmax,pidnr,dmr,1, &
++                   'rain','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nrs(i,k,1) = pr85_psd_directed
+               n0r(i,k) = (1./g1pmr)*DBLE(nrs(i,k,1))*lamdr_tmp(i,k)**(mur+1)
+             elseif(lamdr_tmp(i,k) .ge. lamdarmax) then
+               lamdr_tmp(i,k) = lamdarmax
+-              nrs(i,k,1) = dry_carrier_density(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr
++              pr85_psd_before = nrs(i,k,1)
++              call pr85_kdm6_psd_bound_number(qrs(i,k,1),dry_carrier_density(i,k),lamdr_tmp(i,k), &
++                   lamdarmin,lamdarmax,pidnr,dmr,2, &
++                   'rain','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nrs(i,k,1) = pr85_psd_directed
+               n0r(i,k) = (1./g1pmr)*DBLE(nrs(i,k,1))*lamdr_tmp(i,k)**(mur+1)
+             endif
+           endif
+@@ -2580,11 +3449,25 @@
+               n0c(i,k) = (muc+1)*DBLE(nci(i,k,1))*lamdc_tmp(i,k)**(muc+1)
+             if(lamdc_tmp(i,k) .le. lamdacmin) then
+               lamdc_tmp(i,k) = lamdacmin
+-              nci(i,k,1) = dry_carrier_density(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc
++              pr85_psd_before = nci(i,k,1)
++              call pr85_kdm6_psd_bound_number(qci(i,k,1),dry_carrier_density(i,k),lamdc_tmp(i,k), &
++                   lamdacmin,lamdacmax,pidnc,dmc,1, &
++                   'cloud','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,1) = pr85_psd_directed
+               n0c(i,k) = (muc+1)*DBLE(nci(i,k,1))*lamdc_tmp(i,k)**(muc+1)
+             elseif(lamdc_tmp(i,k) .ge. lamdacmax) then
+               lamdc_tmp(i,k) = lamdacmax
+-              nci(i,k,1) = dry_carrier_density(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc
++              pr85_psd_before = nci(i,k,1)
++              call pr85_kdm6_psd_bound_number(qci(i,k,1),dry_carrier_density(i,k),lamdc_tmp(i,k), &
++                   lamdacmin,lamdacmax,pidnc,dmc,2, &
++                   'cloud','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,1) = pr85_psd_directed
+               n0c(i,k) = (muc+1)*DBLE(nci(i,k,1))*lamdc_tmp(i,k)**(muc+1)
+             endif
+           endif
+@@ -2594,11 +3477,25 @@
+             n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             if(lamdi_tmp(i,k) .le. lamdaimin) then
+               lamdi_tmp(i,k) = lamdaimin
+-              nci(i,k,2) = dry_carrier_density(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni
++              pr85_psd_before = nci(i,k,2)
++              call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
++                   lamdaimin,lamdaimax,pidni,dmi,1, &
++                   'ice','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,2) = pr85_psd_directed
+               n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             elseif(lamdi_tmp(i,k) .ge. lamdaimax) then
+               lamdi_tmp(i,k) = lamdaimax
+-              nci(i,k,2) = dry_carrier_density(i,k)*qci(i,k,2)*(lamdi_tmp(i,k)**dmi)/pidni
++              pr85_psd_before = nci(i,k,2)
++              call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
++                   lamdaimin,lamdaimax,pidni,dmi,2, &
++                   'ice','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,2) = pr85_psd_directed
+               n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             endif
+           endif
+@@ -3558,34 +4455,65 @@
+             pgacr(i,k)=rain_pair_rate_start(i,k,9)*factor
+             ngacr(i,k)=rain_pair_rate_start(i,k,10)*factor
+ 
+-            rain_q_fixed(1)=qci(i,k,1)-(pracw(i,k)+piacw(i,k)+2.*paacw(i,k) &
+-                 +pmulcs(i,k)+pmulcg(i,k))*dtcld
+-            rain_q_process(1)=-praut(i,k)*dtcld
+-            rain_q_fixed(2)=qci(i,k,2)-(psaut(i,k)+psaci(i,k)+pgaci(i,k) &
+-                 -pinud(i,k)-pidep(i,k)-piacw(i,k)-pmulcs(i,k)-pmulcg(i,k) &
+-                 -pmulrs(i,k)-pmulrg(i,k))*dtcld
+-            rain_q_process(2)=-praci(i,k)*dtcld
+-            rain_q_fixed(3)=qrs(i,k,1)+(pracw(i,k)+prevp(i,k) &
+-                 -pmulrs(i,k)-pmulrg(i,k))*dtcld
+-            rain_q_process(3)=(praut(i,k)-piacr(i,k)-psacr(i,k)-pgacr(i,k))*dtcld
+-            rain_q_fixed(4)=qrs(i,k,2)+(psdep(i,k)+psaut(i,k)+paacw(i,k) &
+-                 -pgaut(i,k)+psaci(i,k)-pgacs(i,k)-pracs(i,k)*(1.-delta2))*dtcld
+-            rain_q_process(4)=(piacr(i,k)*delta3+praci(i,k)*delta3 &
+-                 +psacr(i,k)*delta2)*dtcld
+-            rain_q_fixed(5)=qrs(i,k,3)+(pgdep(i,k)+pgaut(i,k) &
+-                 +pracs(i,k)*(1.-delta2)+pgaci(i,k)+paacw(i,k)+pgacs(i,k))*dtcld
+-            rain_q_process(5)=(piacr(i,k)*(1.-delta3)+praci(i,k)*(1.-delta3) &
+-                 +psacr(i,k)*(1.-delta2)+pgacr(i,k))*dtcld
+-
+-            rain_n_fixed(1)=nci(i,k,1)+(-nccol(i,k)-nracw(i,k)-niacw(i,k) &
+-                 -naacw(i,k)-naacw(i,k))*dtcld
+-            rain_n_process(1)=-nraut(i,k)*dtcld
+-            rain_n_fixed(2)=nci(i,k,2)+(-nsaci(i,k)-ngaci(i,k)+ninud(i,k) &
+-                 +nmulcs(i,k)+nmulcg(i,k)+nmulrs(i,k)+nmulrg(i,k)-nsaut(i,k))*dtcld
+-            rain_n_process(2)=(-nraci(i,k)-niacr(i,k))*dtcld
+-            rain_n_fixed(3)=nrs(i,k,1)
+-            rain_n_process(3)=(nraut(i,k)-nraci(i,k)-nrcol(i,k)-niacr(i,k) &
+-                 -nsacr(i,k)-ngacr(i,k))*dtcld
++            rain_q_before=[qci(i,k,1),qci(i,k,2),qrs(i,k,1),qrs(i,k,2),qrs(i,k,3)]
++            rain_n_before=[nci(i,k,1),nci(i,k,2),nrs(i,k,1)]
++            rain_bg_before=brs(i,k)
++            rain_t_before=t(i,k)
++            rain_qv_before=q(i,k)
++            rain_ccn3_before=nci(i,k,3)
++            rain_n_ccn_transfer=0.0
++            rain_ng_q_process(1)=-(pracw(i,k)+piacw(i,k)+pmulcs(i,k)+pmulcg(i,k))*dtcld
++            rain_ng_q_process(2)=(-psaut(i,k)-psaci(i,k)+pinud(i,k)+pidep(i,k) &
++                 +piacw(i,k)+pmulcs(i,k)+pmulcg(i,k)+pmulrs(i,k)+pmulrg(i,k))*dtcld
++            rain_ng_q_process(3)=(pracw(i,k)+prevp(i,k)-pmulrs(i,k)-pmulrg(i,k))*dtcld
++            rain_ng_q_process(4)=(psdep(i,k)+psaut(i,k)+psaci(i,k))*dtcld
++            rain_ng_q_process(5)=0.0
++            rain_ng_n_process(1)=(-nccol(i,k)-nracw(i,k)-niacw(i,k))*dtcld
++            rain_ng_n_process(2)=(-nsaci(i,k)+ninud(i,k)+nmulcs(i,k)+nmulcg(i,k) &
++                 +nmulrs(i,k)+nmulrg(i,k)-nsaut(i,k))*dtcld
++            rain_ng_n_process(3)=-nrcol(i,k)*dtcld
++            rain_ng_bg_process=0.0
++            rain_ng_qv_process=-(prevp(i,k)+psdep(i,k)+pidep(i,k)+pinud(i,k))*dtcld
++            xlf=xls-xl(i,k)
++            rain_ng_t_process=(xls*(psdep(i,k)+pidep(i,k)+pinud(i,k)) &
++                 +xl(i,k)*prevp(i,k)+xlf*(piacw(i,k)+pmulcs(i,k)+pmulcg(i,k) &
++                 +pmulrs(i,k)+pmulrg(i,k)))*dtcld/cpm(i,k)
++
++            rain_q_fixed=rain_q_before
++            rain_n_fixed=rain_n_before
++            rain_bg_fixed=rain_bg_before
++            rain_t_fixed=rain_t_before
++            call kdm6_rain_process_fraction(rain_q_fixed,rain_ng_q_process, &
++                 rain_n_fixed,rain_ng_n_process,rain_bg_fixed,rain_ng_bg_process, &
++                 rain_t_fixed,rain_ng_t_process,rain_full_evap_pending(i,k), &
++                 dry_carrier_density(i,k),pidnr,qmin,ncmin,qcrmin,dmr, &
++                 lamdarmin,lamdarmax,100.0,900.0,pidnc,dmc,lamdacmin, &
++                 lamdacmax,pidni,dmi,lamdaimin,lamdaimax,rain_ng_alpha, &
++                 rain_ng_feasible,rain_ng_search_status,rain_qv_before,rain_ng_qv_process, &
++                 ice_transient_mass_limit=PR85_ICE_NATIVE_INACTIVE_MAX)
++            if (.not.rain_ng_feasible) then
++              if (rain_ng_search_status.eq.1) then
++                call kdm6_rain_process_state_valid(rain_q_fixed,rain_n_fixed, &
++                     rain_bg_fixed,rain_t_fixed,dry_carrier_density(i,k),pidnr, &
++                     qmin,ncmin,qcrmin,dmr,lamdarmin,lamdarmax,100.0,900.0, &
++                     pidnc,dmc,lamdacmin,lamdacmax,pidni,dmi,lamdaimin, &
++                     lamdaimax,rain_ng_base_valid,rain_full_evap_pending(i,k), &
++                     ice_transient_mass_limit=PR85_ICE_NATIVE_INACTIVE_MAX)
++                if (.not.rain_ng_base_valid .or. rain_qv_before.lt.0.0 .or. &
++                    .not.ieee_is_finite(rain_qv_before)) &
++                  error stop 'KDM6 invalid base before nongraupel admission'
++                rain_ng_alpha=0.0
++              else
++                error stop 'KDM6 nongraupel admission search failed'
++              endif
++            endif
++            rain_q_fixed=rain_q_before+rain_ng_alpha*rain_ng_q_process
++            rain_n_fixed=rain_n_before+rain_ng_alpha*rain_ng_n_process
++            rain_bg_fixed=rain_bg_before+rain_ng_alpha*rain_ng_bg_process
++            rain_t_fixed=rain_t_before+rain_ng_alpha*rain_ng_t_process
++            rain_qv_stage=rain_qv_before+rain_ng_alpha*rain_ng_qv_process
++            if (.not.ieee_is_finite(rain_qv_stage) .or. rain_qv_stage.lt.0.0) &
++              error stop 'KDM6 invalid stored vapor after nongraupel admission'
+ 
+             rain_bg_rates_feasible=.true.
+             if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
+@@ -3621,28 +4549,110 @@
+             call kdm6_mass_volume_rate(pgacr(i,k),denr, &
+                  rain_pgacr_bg_rate,rain_bg_rate_valid)
+             rain_bg_rates_feasible=rain_bg_rates_feasible.and.rain_bg_rate_valid
+-            rain_bg_fixed=brs(i,k)+(rain_pgdep_bg_rate+rain_pracs_bg_rate &
+-                 +rain_pgaci_bg_rate+rain_paacw_bg_rate)*dtcld
+-            rain_bg_process=(rain_piacr_bg_rate+rain_praci_bg_rate &
+-                 +rain_psacr_bg_rate+rain_pgacr_bg_rate)*dtcld
+-            xlf=xls-xl(i,k)
+-            rain_t_fixed=t(i,k)-(-xls*(psdep(i,k)+pgdep(i,k)+pidep(i,k)+pinud(i,k)) &
+-                 -xl(i,k)*prevp(i,k)-xlf*(paacw(i,k)+pmulcs(i,k)+pmulcg(i,k) &
+-                 +pmulrs(i,k)+pmulrg(i,k)+piacw(i,k)+paacw(i,k)))*dtcld/cpm(i,k)
+-            rain_t_process=xlf*(piacr(i,k)+psacr(i,k)+pgacr(i,k))*dtcld/cpm(i,k)
++            rain_bg_fixed=rain_bg_before
++            rain_g_bg_process=(rain_pgdep_bg_rate+rain_pgaci_bg_rate &
++                 +rain_pracs_bg_rate*(1.-delta2)+rain_paacw_bg_rate &
++                 +rain_piacr_bg_rate*(1.-delta3)+rain_praci_bg_rate*(1.-delta3) &
++                 +rain_psacr_bg_rate*(1.-delta2)+rain_pgacr_bg_rate)*dtcld
++            rain_t_fixed=rain_t_before+rain_ng_alpha*rain_ng_t_process
++            rain_g_t_process=(xls*pgdep(i,k)+xlf*(2.*paacw(i,k)+piacr(i,k) &
++                 +psacr(i,k)+pgacr(i,k)))*dtcld/cpm(i,k)
++
++            if (pgaut(i,k).ne.0.0 .or. pgacs(i,k).ne.0.0) &
++              error stop 'KDM6 unsupported graupel mass source without volume partner'
++
++            rain_g_q_process(1)=-2.*paacw(i,k)*dtcld
++            rain_g_q_process(2)=-(praci(i,k)+pgaci(i,k))*dtcld
++            rain_g_q_process(3)=-(piacr(i,k)+psacr(i,k)+pgacr(i,k))*dtcld
++            rain_g_q_process(4)=(paacw(i,k)-pgaut(i,k)-pgacs(i,k) &
++                 +piacr(i,k)*delta3+praci(i,k)*delta3+psacr(i,k)*delta2 &
++                 -pracs(i,k)*(1.-delta2))*dtcld
++            rain_g_q_process(5)=(pgdep(i,k)+pgaut(i,k)+pgaci(i,k)+pgacs(i,k) &
++                 +piacr(i,k)*(1.-delta3)+praci(i,k)*(1.-delta3) &
++                 +psacr(i,k)*(1.-delta2)+pracs(i,k)*(1.-delta2) &
++                 +paacw(i,k)+pgacr(i,k))*dtcld
++            rain_g_n_process(1)=-2.*naacw(i,k)*dtcld
++            rain_g_n_process(2)=-(nraci(i,k)+niacr(i,k)+ngaci(i,k))*dtcld
++            rain_g_n_process(3)=-(nraci(i,k)+niacr(i,k)+nsacr(i,k)+ngacr(i,k))*dtcld
++            rain_g_qv_process=-pgdep(i,k)*dtcld
++
++            rain_aut_q_process=0.0
++            rain_aut_n_process=0.0
++            rain_aut_q_process(1)=-praut(i,k)*dtcld
++            rain_aut_q_process(3)= praut(i,k)*dtcld
++            rain_aut_n_process(1)=-nraut(i,k)*dtcld
++            rain_aut_n_process(3)= nraut(i,k)*dtcld
++            call kdm6_rain_process_fraction(rain_q_fixed,rain_aut_q_process, &
++                 rain_n_fixed,rain_aut_n_process,rain_bg_fixed,0.0, &
++                 rain_t_fixed,0.0,rain_full_evap_pending(i,k), &
++                 dry_carrier_density(i,k),pidnr,qmin,ncmin,qcrmin,dmr, &
++                 lamdarmin,lamdarmax,100.0,900.0,pidnc,dmc,lamdacmin, &
++                 lamdacmax,pidni,dmi,lamdaimin,lamdaimax,rain_aut_alpha, &
++                 rain_aut_feasible,rain_aut_search_status,rain_qv_stage,0.0, &
++                 ice_transient_mass_limit=PR85_ICE_NATIVE_INACTIVE_MAX)
++            if (.not.rain_aut_feasible) then
++              if (rain_aut_search_status.eq.1) then
++                call kdm6_rain_process_state_valid(rain_q_fixed,rain_n_fixed, &
++                     rain_bg_fixed,rain_t_fixed,dry_carrier_density(i,k),pidnr, &
++                     qmin,ncmin,qcrmin,dmr,lamdarmin,lamdarmax,100.0,900.0, &
++                     pidnc,dmc,lamdacmin,lamdacmax,pidni,dmi,lamdaimin, &
++                     lamdaimax,rain_aut_base_valid,rain_full_evap_pending(i,k), &
++                     ice_transient_mass_limit=PR85_ICE_NATIVE_INACTIVE_MAX)
++                if (.not.rain_aut_base_valid) &
++                  error stop 'KDM6 invalid base before rain autoconversion'
++                rain_aut_alpha=0.0
++              else
++                error stop 'KDM6 rain autoconversion admission search failed'
++              endif
++            endif
++            praut(i,k)=praut(i,k)*rain_aut_alpha
++            nraut(i,k)=nraut(i,k)*rain_aut_alpha
++            rain_q_fixed=rain_q_fixed+rain_aut_alpha*rain_aut_q_process
++            rain_n_fixed=rain_n_fixed+rain_aut_alpha*rain_aut_n_process
++            rain_qv_stage=rain_qv_stage+rain_aut_alpha*0.0
++            rain_ng_aut_q_fixed=rain_q_fixed
++            rain_ng_aut_n_fixed=rain_n_fixed
++            rain_ng_aut_bg_fixed=rain_bg_fixed
++            rain_ng_aut_t_fixed=rain_t_fixed
++            rain_ng_aut_qv_fixed=rain_qv_stage
++            rain_q_process_request=rain_g_q_process
++            rain_n_process_request=rain_g_n_process
++            rain_bg_process_request=rain_g_bg_process
++            rain_t_process_request=rain_g_t_process
+             if (rain_bg_rates_feasible) then
+-              call kdm6_rain_process_fraction(rain_q_fixed,rain_q_process, &
+-                   rain_n_fixed,rain_n_process,rain_bg_fixed,rain_bg_process, &
+-                   rain_t_fixed,rain_t_process,rain_full_evap_pending(i,k), &
++              call kdm6_rain_process_fraction(rain_q_fixed,rain_g_q_process, &
++                   rain_n_fixed,rain_g_n_process,rain_bg_fixed,rain_g_bg_process, &
++                   rain_t_fixed,rain_g_t_process,rain_full_evap_pending(i,k), &
+                    dry_carrier_density(i,k),pidnr,qmin,ncmin, &
+                    qcrmin,dmr,lamdarmin,lamdarmax,100.0,900.0,pidnc,dmc, &
+                    lamdacmin,lamdacmax,pidni,dmi,lamdaimin,lamdaimax, &
+-                   factor,rain_process_feasible,rain_process_search_status)
++                   rain_g_alpha,rain_process_feasible,rain_process_search_status, &
++                   rain_qv_stage,rain_g_qv_process,ice_transient_mass_limit=PR85_ICE_NATIVE_INACTIVE_MAX)
+             else
+               factor=0.0
++              rain_g_alpha=0.0
+               rain_process_feasible=.false.
+               rain_process_search_status=2
+             endif
++            if (.not.rain_process_feasible .and. rain_bg_rates_feasible .and. &
++                rain_process_search_status.eq.1) then
++              call kdm6_rain_process_state_valid(rain_q_fixed,rain_n_fixed, &
++                   rain_bg_fixed,rain_t_fixed,dry_carrier_density(i,k),pidnr, &
++                   qmin,ncmin,qcrmin,dmr,lamdarmin,lamdarmax,100.0,900.0, &
++                   pidnc,dmc,lamdacmin,lamdacmax,pidni,dmi,lamdaimin, &
++                   lamdaimax,rain_aut_base_valid,rain_full_evap_pending(i,k), &
++                   ice_transient_mass_limit=PR85_ICE_NATIVE_INACTIVE_MAX)
++              if (rain_aut_base_valid .and. ieee_is_finite(rain_qv_stage) .and. &
++                  rain_qv_stage.ge.0.0) then
++                factor=0.0
++                rain_g_alpha=0.0
++                rain_process_feasible=.true.
++                write(*,*) 'KDM6 cold process deferred at alpha=0, cell/loop',i,k,loop, &
++                     ' Qprocess=',rain_q_process_request, &
++                     ' Nprocess=',rain_n_process_request, &
++                     ' BG/Tprocess=',rain_bg_process_request,rain_t_process_request
++              endif
++            endif
+             if (.not.rain_process_feasible) then
+               if (.not.rain_bg_rates_feasible) then
+                 write(*,*) 'KDM6 cold process status=UNSUPPORTED_VOLUME_RATE at cell',i,k
+@@ -3665,92 +4675,353 @@
+                    ' alpha=',factor
+               error stop 'KDM6 cold rain process rejected an infeasible moment state'
+             endif
+-            rain_process_alpha=factor
+-            praut(i,k) = praut(i,k)*factor
++            factor=rain_g_alpha
++            rain_process_alpha=rain_g_alpha
++            rain_q_process=rain_g_q_process
++            rain_n_process=rain_g_n_process
++            rain_bg_process=rain_g_bg_process
++            rain_t_process=rain_g_t_process
++            pracw(i,k)=pracw(i,k)*rain_ng_alpha
++            piacw(i,k)=piacw(i,k)*rain_ng_alpha
++            pmulcs(i,k)=pmulcs(i,k)*rain_ng_alpha
++            pmulcg(i,k)=pmulcg(i,k)*rain_ng_alpha
++            pmulrs(i,k)=pmulrs(i,k)*rain_ng_alpha
++            pmulrg(i,k)=pmulrg(i,k)*rain_ng_alpha
++            prevp(i,k)=prevp(i,k)*rain_ng_alpha
++            psdep(i,k)=psdep(i,k)*rain_ng_alpha
++            pidep(i,k)=pidep(i,k)*rain_ng_alpha
++            pinud(i,k)=pinud(i,k)*rain_ng_alpha
++            psaut(i,k)=psaut(i,k)*rain_ng_alpha
++            psaci(i,k)=psaci(i,k)*rain_ng_alpha
++            nccol(i,k)=nccol(i,k)*rain_ng_alpha
++            nracw(i,k)=nracw(i,k)*rain_ng_alpha
++            niacw(i,k)=niacw(i,k)*rain_ng_alpha
++            ninud(i,k)=ninud(i,k)*rain_ng_alpha
++            nmulcs(i,k)=nmulcs(i,k)*rain_ng_alpha
++            nmulcg(i,k)=nmulcg(i,k)*rain_ng_alpha
++            nmulrs(i,k)=nmulrs(i,k)*rain_ng_alpha
++            nmulrg(i,k)=nmulrg(i,k)*rain_ng_alpha
++            nsaci(i,k)=nsaci(i,k)*rain_ng_alpha
++            nsaut(i,k)=nsaut(i,k)*rain_ng_alpha
++            nrcol(i,k)=nrcol(i,k)*rain_ng_alpha
++            paacw(i,k) = paacw(i,k)*factor
++            naacw(i,k) = naacw(i,k)*factor
++            pracs(i,k) = pracs(i,k)*factor
+             praci(i,k) = praci(i,k)*factor
+             piacr(i,k) = piacr(i,k)*factor
+             psacr(i,k) = psacr(i,k)*factor
+             pgacr(i,k) = pgacr(i,k)*factor
+-            nraut(i,k) = nraut(i,k)*factor
++            pgdep(i,k) = pgdep(i,k)*factor
++            pgaci(i,k) = pgaci(i,k)*factor
++            pgaut(i,k) = pgaut(i,k)*factor
++            pgacs(i,k) = pgacs(i,k)*factor
+             nraci(i,k) = nraci(i,k)*factor
+-            nrcol(i,k) = nrcol(i,k)*factor
+             niacr(i,k) = niacr(i,k)*factor
+             nsacr(i,k) = nsacr(i,k)*factor
+             ngacr(i,k) = ngacr(i,k)*factor
+-
+-            work2(i,k)=-(prevp(i,k)+psdep(i,k)+pgdep(i,k)+pinud(i,k)+pidep(i,k))
+-
+-
+-
+-              biacr(i,k) = piacr(i,k)/denr
+-              baacw(i,k) = paacw(i,k)/denr
+-              bsacr(i,k) = psacr(i,k)/denr
+-              braci(i,k) = praci(i,k)/deni
+-              bracs(i,k) = pracs(i,k)/dens
+-              bsaci(i,k) = psaci(i,k)/deni
+-              bsaut(i,k) = psaut(i,k)/deni
+-              bgaci(i,k) = pgaci(i,k)/deni
+-              bgacr(i,k) = pgacr(i,k)/denr
++            ngaci(i,k) = ngaci(i,k)*factor
++            rain_ng_alpha_initial=rain_ng_alpha
++            rain_aut_alpha_initial=rain_aut_alpha
++            rain_g_alpha_initial=rain_g_alpha
++            rain_composite_rate_base=[ &
++                 pracw(i,k), piacw(i,k), pmulcs(i,k), pmulcg(i,k), pmulrs(i,k), &
++                 pmulrg(i,k), prevp(i,k), psdep(i,k), pidep(i,k), pinud(i,k), &
++                 psaut(i,k), psaci(i,k), nccol(i,k), nracw(i,k), niacw(i,k), &
++                 ninud(i,k), nmulcs(i,k), nmulcg(i,k), nmulrs(i,k), nmulrg(i,k), &
++                 nsaci(i,k), nsaut(i,k), nrcol(i,k), praut(i,k), nraut(i,k), &
++                 paacw(i,k), naacw(i,k), pracs(i,k), praci(i,k), piacr(i,k), &
++                 psacr(i,k), pgacr(i,k), pgdep(i,k), pgaci(i,k), pgaut(i,k), &
++                 pgacs(i,k), nraci(i,k), niacr(i,k), nsacr(i,k), ngacr(i,k), &
++                 ngaci(i,k) ]
++            rain_composite_gamma=1.0
++            do rain_composite_retry=0,24
++              rain_ng_alpha=rain_ng_alpha_initial*rain_composite_gamma
++              rain_aut_alpha=rain_aut_alpha_initial*rain_composite_gamma
++              rain_g_alpha=rain_g_alpha_initial*rain_composite_gamma
++              rain_process_alpha=rain_g_alpha
++              rain_composite_rate_index=0
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pracw(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              piacw(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pmulcs(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pmulcg(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pmulrs(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pmulrg(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              prevp(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              psdep(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pidep(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pinud(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              psaut(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              psaci(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nccol(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nracw(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              niacw(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              ninud(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nmulcs(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nmulcg(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nmulrs(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nmulrg(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nsaci(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nsaut(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nrcol(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              praut(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nraut(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              paacw(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              naacw(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pracs(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              praci(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              piacr(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              psacr(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pgacr(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pgdep(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pgaci(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pgaut(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              pgacs(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nraci(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              niacr(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              nsacr(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              ngacr(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              rain_composite_rate_index=rain_composite_rate_index+1
++              ngaci(i,k)=rain_composite_rate_base(rain_composite_rate_index)*rain_composite_gamma
++              call kdm6_mass_volume_rate(pgdep(i,k),rhox(i,k), &
++                   rain_pgdep_bg_rate,rain_bg_rate_valid)
++              if (.not.rain_bg_rate_valid) error stop 'KDM6 invalid scaled graupel deposition volume'
++              biacr(i,k)=piacr(i,k)*(1.-delta3)/denr
++              baacw(i,k)=paacw(i,k)/denr
++              bsacr(i,k)=psacr(i,k)*(1.-delta2)/denr
++              braci(i,k)=praci(i,k)*(1.-delta3)/deni
++              bracs(i,k)=pracs(i,k)*(1.-delta2)/dens
++              bgaci(i,k)=pgaci(i,k)/deni
++              bgacr(i,k)=pgacr(i,k)/denr
+               bsdep(i,k)=psdep(i,k)/dens
++              rain_composite_valid=.true.
++              rain_ng_aut_q_fixed=rain_q_before+rain_ng_alpha*rain_ng_q_process
++              rain_ng_aut_n_fixed=rain_n_before+rain_ng_alpha*rain_ng_n_process
++              rain_ng_aut_bg_fixed=rain_bg_before+rain_ng_alpha*rain_ng_bg_process
++              rain_ng_aut_t_fixed=rain_t_before+rain_ng_alpha*rain_ng_t_process
++              rain_ng_aut_qv_fixed=rain_qv_before+rain_ng_alpha*rain_ng_qv_process
++              rain_ng_aut_q_fixed=rain_ng_aut_q_fixed+rain_aut_alpha*rain_aut_q_process
++              rain_ng_aut_n_fixed=rain_ng_aut_n_fixed+rain_aut_alpha*rain_aut_n_process
++              rain_ng_aut_qv_fixed=rain_ng_aut_qv_fixed+rain_aut_alpha*0.0
++              rain_qv_stage=rain_ng_aut_qv_fixed
++
++            ! Build the exact native-order REAL32 transaction in local values first.
++            ! No cloud/rain/ice/snow/graupel, number, vapor, heat, or volume state is
++            ! committed until the complete candidate passes all paired-state checks.
++            work2(i,k)=-(prevp(i,k)+psdep(i,k)+pgdep(i,k)+pinud(i,k)+pidep(i,k))
++            rain_qv_after=q(i,k)+work2(i,k)*dtcld
++            rain_q_after(1)=qci(i,k,1)-(praut(i,k)+pracw(i,k)+piacw(i,k) &
++                          +paacw(i,k)+paacw(i,k)+pmulcs(i,k)+pmulcg(i,k))*dtcld
++            rain_n_after(1)=nci(i,k,1)+(-nraut(i,k)-nccol(i,k)-nracw(i,k) &
++                          -niacw(i,k)-naacw(i,k)-naacw(i,k))*dtcld
++            rain_q_after(3)=qrs(i,k,1)+(praut(i,k)+pracw(i,k)+prevp(i,k) &
++                           -piacr(i,k)-pgacr(i,k)-psacr(i,k)-pmulrs(i,k)-pmulrg(i,k))*dtcld
++            rain_n_after(3)=nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)-niacr(i,k) &
++                           -nraci(i,k)-nsacr(i,k)-ngacr(i,k))*dtcld
++            rain_q_after(2)=qci(i,k,2)-(psaut(i,k)+praci(i,k)+psaci(i,k)+pgaci(i,k) &
++                           -pinud(i,k)-pidep(i,k)-piacw(i,k)-pmulcs(i,k)-pmulcg(i,k) &
++                           -pmulrs(i,k)-pmulrg(i,k))*dtcld
++            rain_n_after(2)=nci(i,k,2)+(-nraci(i,k)-nsaci(i,k)-ngaci(i,k)-niacr(i,k) &
++                           +ninud(i,k)+nmulcs(i,k)+nmulcg(i,k)+nmulrs(i,k)+nmulrg(i,k) &
++                           -nsaut(i,k))*dtcld
++            rain_q_after(4)=qrs(i,k,2)+(psdep(i,k)+psaut(i,k)+paacw(i,k)-pgaut(i,k) &
++                           +piacr(i,k)*delta3+praci(i,k)*delta3+psaci(i,k)-pgacs(i,k) &
++                           -pracs(i,k)*(1.-delta2)+psacr(i,k)*delta2)*dtcld
++            rain_q_after(5)=qrs(i,k,3)+(pgdep(i,k)+pgaut(i,k)+piacr(i,k)*(1.-delta3) &
++                           +praci(i,k)*(1.-delta3)+psacr(i,k)*(1.-delta2) &
++                           +pracs(i,k)*(1.-delta2)+pgaci(i,k)+paacw(i,k)+pgacr(i,k) &
++                           +pgacs(i,k))*dtcld
++            rain_bg_after=brs(i,k)+(rain_pgdep_bg_rate+biacr(i,k)+braci(i,k) &
++                           +bsacr(i,k)+bracs(i,k)+bgaci(i,k)+baacw(i,k)+bgacr(i,k))*dtcld
++            xlf=xls-xl(i,k)
++            xlwork2=-xls*(psdep(i,k)+pgdep(i,k)+pidep(i,k)+pinud(i,k)) &
++                    -xl(i,k)*prevp(i,k)-xlf*(piacr(i,k)+paacw(i,k)+pmulcs(i,k) &
++                    +pmulcg(i,k)+pmulrs(i,k)+pmulrg(i,k)+piacw(i,k)+paacw(i,k) &
++                    +pgacr(i,k)+psacr(i,k))
++            if (.not.ieee_is_finite(cpm(i,k)) .or. cpm(i,k).le.0.0) &
++              error stop 'KDM6 cold transaction has invalid heat capacity'
++            rain_t_after=t(i,k)-xlwork2/cpm(i,k)*dtcld
++            rain_ccn3_after=rain_ccn3_before
++            rain_n_ccn_transfer=0.0
++            rain_composite_valid=all(ieee_is_finite([rain_qv_after,rain_q_after, &
++                 rain_n_after,rain_bg_after,rain_t_after,rain_ccn3_after]))
++            if (rain_composite_valid) then
++              rain_composite_valid=rain_qv_after.ge.0.0 .and. all(rain_q_after.ge.0.0) &
++                   .and. all(rain_n_after.ge.0.0) .and. rain_bg_after.ge.0.0 &
++                   .and. rain_t_after.gt.0.0 .and. rain_ccn3_after.ge.0.0
++            endif
++            ! Move orphan rain number only when REAL32 mass is exactly exhausted;
++            ! positive subthreshold rain keeps its paired number moment.
++            if (rain_full_evap_pending(i,k) .and. rain_q_after(3).eq.0.0) then
++              rain_n_ccn_transfer=rain_n_after(3)
++              rain_ccn3_after=rain_ccn3_after+rain_n_ccn_transfer
++              rain_n_after(3)=0.0
++              if (.not.ieee_is_finite(rain_ccn3_after)) rain_composite_valid=.false.
++            endif
++            if (rain_composite_valid) then
++              call kdm6_rain_process_state_valid(rain_q_after,rain_n_after,rain_bg_after, &
++                   rain_t_after,dry_carrier_density(i,k),pidnr,qmin,ncmin,qcrmin,dmr, &
++                   lamdarmin,lamdarmax,100.0,900.0,pidnc,dmc,lamdacmin,lamdacmax, &
++                   pidni,dmi,lamdaimin,lamdaimax,rain_stored_state_feasible, &
++                   rain_full_evap_pending(i,k),ice_transient_mass_limit=PR85_ICE_NATIVE_INACTIVE_MAX)
++              rain_composite_valid=rain_stored_state_feasible
++            endif
++            if (rain_composite_valid) exit
++            if (rain_composite_retry.eq.24) &
++              error stop 'KDM6 composite backtracking exhausted without valid state'
++            if (rain_composite_retry.eq.23) then
++              rain_composite_gamma=0.0
++            else
++              rain_composite_gamma=0.5*rain_composite_gamma
++            endif
++            enddo
++            factor=rain_g_alpha
++            rain_composite_stored_noop=( &
++                 (rain_ng_alpha.gt.0.0 .and. &
++                  (any(rain_ng_q_process.ne.0.0) .or. any(rain_ng_n_process.ne.0.0) .or. &
++                   rain_ng_bg_process.ne.0.0 .or. rain_ng_t_process.ne.0.0 .or. &
++                   rain_ng_qv_process.ne.0.0)) .or. &
++                 (rain_aut_alpha.gt.0.0 .and. &
++                  (any(rain_aut_q_process.ne.0.0) .or. any(rain_aut_n_process.ne.0.0))) .or. &
++                 (rain_g_alpha.gt.0.0 .and. &
++                  (any(rain_q_process_request.ne.0.0) .or. any(rain_n_process_request.ne.0.0) .or. &
++                   rain_bg_process_request.ne.0.0 .or. rain_t_process_request.ne.0.0 .or. &
++                   rain_g_qv_process.ne.0.0))) .and. &
++                 all(rain_composite_rate_base*rain_composite_gamma.eq.0.0)
++
++            ! Commit the validated REAL32 transaction atomically.
++            q(i,k)=rain_qv_after
++            qci(i,k,1)=rain_q_after(1)
++            qci(i,k,2)=rain_q_after(2)
++            qrs(i,k,1)=rain_q_after(3)
++            qrs(i,k,2)=rain_q_after(4)
++            qrs(i,k,3)=rain_q_after(5)
++            nci(i,k,1)=rain_n_after(1)
++            nci(i,k,2)=rain_n_after(2)
++            nrs(i,k,1)=rain_n_after(3)
++            nci(i,k,3)=rain_ccn3_after
++            brs(i,k)=rain_bg_after
++            t(i,k)=rain_t_after
+ 
+-
+-            q(i,k) = q(i,k)+work2(i,k)*dtcld 
+-            qci(i,k,1) = max(qci(i,k,1)-(praut(i,k)+pracw(i,k)                 &
+-                          +piacw(i,k) +paacw(i,k)+paacw(i,k)+pmulcs(i,k)       &
+-                          +pmulcg(i,k))*dtcld,0.)
+-            nci(i,k,1) = max(nci(i,k,1)+(-nraut(i,k)-nccol(i,k)-nracw(i,k)     &
+-                          -niacw(i,k)-naacw(i,k)-naacw(i,k))*dtcld,0.)
+-            qrs(i,k,1) = max(qrs(i,k,1)+(praut(i,k)+pracw(i,k)                 &
+-                           +prevp(i,k)-piacr(i,k)-pgacr(i,k)                   &
+-                           -psacr(i,k)-pmulrs(i,k)-pmulrg(i,k))*dtcld,0.)
+-            nrs(i,k,1) = max(nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)-niacr(i,k)      &
+-                           -nraci(i,k)-nsacr(i,k)-ngacr(i,k))*dtcld,0.)
+-            if(rain_full_evap_pending(i,k) .and. qrs(i,k,1).le.qcrmin) then
+-              nci(i,k,3) = nci(i,k,3)+nrs(i,k,1)
+-              nrs(i,k,1) = 0.
+-            endif
+-            qci(i,k,2) = max(qci(i,k,2)-(psaut(i,k)+praci(i,k)                 &
+-                           +psaci(i,k)+pgaci(i,k)-pinud(i,k)-pidep(i,k)        &
+-                           -piacw(i,k)-pmulcs(i,k)-pmulcg(i,k)-pmulrs(i,k)     &
+-                           -pmulrg(i,k))*dtcld,0.)
+-            nci(i,k,2) = max(nci(i,k,2)+(-nraci(i,k)-nsaci(i,k)-ngaci(i,k)     &
+-                           -niacr(i,k)+ninud(i,k)+nmulcs(i,k)+nmulcg(i,k)      &
+-                           +nmulrs(i,k)+nmulrg(i,k)-nsaut(i,k))*dtcld,0.)
+-            qrs(i,k,2) = max(qrs(i,k,2)+(psdep(i,k)+psaut(i,k)+paacw(i,k)      &
+-                           -pgaut(i,k)+piacr(i,k)*delta3                       &
+-                           +praci(i,k)*delta3+psaci(i,k)-pgacs(i,k)            &
+-                           -pracs(i,k)*(1.-delta2)+psacr(i,k)*delta2)          &
+-                           *dtcld,0.)
+-            qrs(i,k,3) = max(qrs(i,k,3)+(pgdep(i,k)+pgaut(i,k)                 &
+-                           +piacr(i,k)*(1.-delta3)                             &
+-                           +praci(i,k)*(1.-delta3)+psacr(i,k)*(1.-delta2)      &
+-                           +pracs(i,k)*(1.-delta2)+pgaci(i,k)+paacw(i,k)       &
+-                           +pgacr(i,k)+pgacs(i,k))*dtcld,0.)
+-            brs(i,k) = max(brs(i,k)+(rain_pgdep_bg_rate+biacr(i,k)           &
+-                           +braci(i,k)+bsacr(i,k)+bracs(i,k)+bgaci(i,k)        &
+-                           +baacw(i,k)+bgacr(i,k))*dtcld,0.)
+-            xlf = xls-xl(i,k)
+-            xlwork2 = -xls*(psdep(i,k)+pgdep(i,k)+pidep(i,k)+pinud(i,k))       &
+-                      -xl(i,k)*prevp(i,k)-xlf*(piacr(i,k)+paacw(i,k)           &
+-                      +pmulcs(i,k)+pmulcg(i,k)+pmulrs(i,k)+pmulrg(i,k)         &
+-                      +piacw(i,k) +paacw(i,k)+pgacr(i,k)+psacr(i,k)) 
+-            t(i,k) = t(i,k)-xlwork2/cpm(i,k)*dtcld
+-
+-            rain_q_fixed=[qci(i,k,1),qci(i,k,2),qrs(i,k,1),qrs(i,k,2),qrs(i,k,3)]
+-            rain_q_process=0.0
+-            rain_n_fixed=[nci(i,k,1),nci(i,k,2),nrs(i,k,1)]
+-            rain_n_process=0.0
+-            call kdm6_rain_process_state_valid(rain_q_fixed,rain_n_fixed,brs(i,k), &
++            call kdm6_rain_process_state_valid(rain_q_after,rain_n_after,brs(i,k), &
+                  t(i,k),dry_carrier_density(i,k),pidnr,qmin,ncmin,qcrmin,dmr,lamdarmin,lamdarmax, &
+                  100.0,900.0,pidnc,dmc,lamdacmin,lamdacmax,pidni,dmi, &
+-                 lamdaimin,lamdaimax,rain_stored_state_feasible)
++                 lamdaimin,lamdaimax,rain_stored_state_feasible, &
++                 ice_transient_mass_limit=PR85_ICE_NATIVE_INACTIVE_MAX)
+             if (.not.rain_stored_state_feasible) then
+               write(*,*) 'KDM6 stored cold endpoint status=INVALID_STORED_STATE at cell',i,k, &
+                    ' accepted alpha=',rain_process_alpha, &
+-                   ' Q=',rain_q_fixed,' N=',rain_n_fixed, &
++                   ' Q=',rain_q_after,' N=',rain_n_after, &
+                    ' BG=',brs(i,k),' T=',t(i,k)
+               error stop 'KDM6 rejected an invalid stored process endpoint'
+             endif
++            write(pr85_cold_unit,'(a,8i8,1x,l1,1p,*(1x,e24.16))',iostat=pr85_cold_ios) &
++                 'PR85_KDM6_COLD',i,lat,k,loop,rain_ng_search_status, &
++                 rain_aut_search_status,rain_process_search_status,rain_composite_retry, &
++                 rain_composite_stored_noop,dtcld,dry_carrier_density(i,k),rain_composite_gamma, &
++                 rain_composite_rate_base*rain_composite_gamma, &
++                 rain_ng_alpha,rain_aut_alpha,rain_process_alpha, &
++                 rain_q_before,rain_ng_aut_q_fixed,rain_q_process_request,rain_q_after, &
++                 rain_n_before,rain_ng_aut_n_fixed,rain_n_process_request,rain_n_after, &
++                 rain_bg_before,rain_ng_aut_bg_fixed,rain_bg_process_request,brs(i,k), &
++                 rain_t_before,rain_ng_aut_t_fixed,rain_t_process_request,t(i,k), &
++                 rain_qv_before,rain_ng_aut_qv_fixed,rain_g_qv_process,rain_qv_after, &
++                 rain_ccn3_before,rain_n_ccn_transfer,rain_ccn3_after, &
++                 rain_ng_q_process,rain_ng_alpha*rain_ng_q_process, &
++                 (1.0-rain_ng_alpha)*rain_ng_q_process, &
++                 rain_ng_n_process,rain_ng_alpha*rain_ng_n_process, &
++                 (1.0-rain_ng_alpha)*rain_ng_n_process, &
++                 rain_ng_bg_process,rain_ng_alpha*rain_ng_bg_process, &
++                 (1.0-rain_ng_alpha)*rain_ng_bg_process, &
++                 rain_ng_t_process,rain_ng_alpha*rain_ng_t_process, &
++                 (1.0-rain_ng_alpha)*rain_ng_t_process, &
++                 rain_ng_qv_process,rain_ng_alpha*rain_ng_qv_process, &
++                 (1.0-rain_ng_alpha)*rain_ng_qv_process, &
++                 rain_aut_q_process,rain_aut_alpha*rain_aut_q_process, &
++                 (1.0-rain_aut_alpha)*rain_aut_q_process, &
++                 rain_aut_n_process,rain_aut_alpha*rain_aut_n_process, &
++                 (1.0-rain_aut_alpha)*rain_aut_n_process, &
++                 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0, &
++                 rain_q_process_request,rain_g_alpha*rain_q_process_request, &
++                 (1.0-rain_g_alpha)*rain_q_process_request, &
++                 rain_n_process_request,rain_g_alpha*rain_n_process_request, &
++                 (1.0-rain_g_alpha)*rain_n_process_request, &
++                 rain_bg_process_request,rain_g_alpha*rain_bg_process_request, &
++                 (1.0-rain_g_alpha)*rain_bg_process_request, &
++                 rain_t_process_request,rain_g_alpha*rain_t_process_request, &
++                 (1.0-rain_g_alpha)*rain_t_process_request, &
++                 rain_g_qv_process,rain_g_alpha*rain_g_qv_process, &
++                 (1.0-rain_g_alpha)*rain_g_qv_process, &
++                 DBLE(qci(i,k,1))-(DBLE(rain_q_before(1))+DBLE(rain_ng_alpha)*DBLE(rain_ng_q_process(1)) &
++                    +DBLE(rain_aut_alpha)*DBLE(rain_aut_q_process(1)) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_q_process_request(1))), &
++                 DBLE(qci(i,k,2))-(DBLE(rain_q_before(2))+DBLE(rain_ng_alpha)*DBLE(rain_ng_q_process(2)) &
++                    +DBLE(rain_aut_alpha)*DBLE(rain_aut_q_process(2)) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_q_process_request(2))), &
++                 DBLE(qrs(i,k,1))-(DBLE(rain_q_before(3))+DBLE(rain_ng_alpha)*DBLE(rain_ng_q_process(3)) &
++                    +DBLE(rain_aut_alpha)*DBLE(rain_aut_q_process(3)) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_q_process_request(3))), &
++                 DBLE(qrs(i,k,2))-(DBLE(rain_q_before(4))+DBLE(rain_ng_alpha)*DBLE(rain_ng_q_process(4)) &
++                    +DBLE(rain_aut_alpha)*DBLE(rain_aut_q_process(4)) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_q_process_request(4))), &
++                 DBLE(qrs(i,k,3))-(DBLE(rain_q_before(5))+DBLE(rain_ng_alpha)*DBLE(rain_ng_q_process(5)) &
++                    +DBLE(rain_aut_alpha)*DBLE(rain_aut_q_process(5)) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_q_process_request(5))), &
++                 DBLE(nci(i,k,1))-(DBLE(rain_n_before(1))+DBLE(rain_ng_alpha)*DBLE(rain_ng_n_process(1)) &
++                    +DBLE(rain_aut_alpha)*DBLE(rain_aut_n_process(1)) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_n_process_request(1))), &
++                 DBLE(nci(i,k,2))-(DBLE(rain_n_before(2))+DBLE(rain_ng_alpha)*DBLE(rain_ng_n_process(2)) &
++                    +DBLE(rain_aut_alpha)*DBLE(rain_aut_n_process(2)) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_n_process_request(2))), &
++                 DBLE(nrs(i,k,1))-(DBLE(rain_n_before(3))+DBLE(rain_ng_alpha)*DBLE(rain_ng_n_process(3)) &
++                    +DBLE(rain_aut_alpha)*DBLE(rain_aut_n_process(3)) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_n_process_request(3))-DBLE(rain_n_ccn_transfer)), &
++                 DBLE(nci(i,k,3))-(DBLE(rain_ccn3_before)+DBLE(rain_n_ccn_transfer)), &
++                 DBLE(brs(i,k))-(DBLE(rain_bg_before)+DBLE(rain_g_alpha)*DBLE(rain_bg_process_request)), &
++                 DBLE(t(i,k))-(DBLE(rain_t_before)+DBLE(rain_ng_alpha)*DBLE(rain_ng_t_process) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_t_process_request)), &
++                 DBLE(q(i,k))-(DBLE(rain_qv_before)+DBLE(rain_ng_alpha)*DBLE(rain_ng_qv_process) &
++                    +DBLE(rain_g_alpha)*DBLE(rain_g_qv_process))
++            if (pr85_cold_ios.ne.0) error stop 'PR85 cold budget write failed'
+ 
+           else
+ 
+@@ -3843,30 +5114,223 @@
+             else
+               error stop 'ProgB status invalid for volume conversion'
+             endif
++            if (pgacs(i,k).ne.0.0) &
++              error stop 'KDM6 unsupported warm graupel source without volume partner'
+ 
+-            q(i,k) = q(i,k)+work2(i,k)*dtcld
+-            qci(i,k,1) = max(qci(i,k,1)-(praut(i,k)+pracw(i,k)                 &
+-                    +paacw(i,k)+paacw(i,k))*dtcld,0.)
+-            qrs(i,k,1) = max(qrs(i,k,1)+(praut(i,k)+pracw(i,k)                 &
+-                    +prevp(i,k)+paacw(i,k)+paacw(i,k)-pseml(i,k)               &
+-                    -pgeml(i,k))*dtcld,0.)
+-            qrs(i,k,2) = max(qrs(i,k,2)+(psevp(i,k)-pgacs(i,k)                 &
+-                    +pseml(i,k))*dtcld,0.)
+-            qrs(i,k,3) = max(qrs(i,k,3)+(pgacs(i,k)+pgevp(i,k)                 &
+-                    +pgeml(i,k))*dtcld,0.)
+-            nci(i,k,1) = max(nci(i,k,1)+(-nraut(i,k)-nccol(i,k)-nracw(i,k)     &
+-                   -naacw(i,k)-naacw(i,k))*dtcld,0.)
+-            nrs(i,k,1) = max(nrs(i,k,1)+(nraut(i,k)-nrcol(i,k)+nseml(i,k)      &
+-                           +ngeml(i,k))*dtcld,0.)
+-            if(rain_full_evap_pending(i,k) .and. qrs(i,k,1).le.qcrmin) then
+-              nci(i,k,3) = nci(i,k,3)+nrs(i,k,1)
+-              nrs(i,k,1) = 0.
+-            endif
+-            brs(i,k) = max(brs(i,k)+(bgevp(i,k)+bgeml(i,k))*dtcld,0.)
+-            xlf = xls-xl(i,k)
+-            xlwork2 = -xl(i,k)*(prevp(i,k)+psevp(i,k)+pgevp(i,k))              &
+-                      -xlf*(pseml(i,k)+pgeml(i,k))
+-            t(i,k) = t(i,k)-xlwork2/cpm(i,k)*dtcld
++            rain_q_before=[qci(i,k,1),qci(i,k,2),qrs(i,k,1),qrs(i,k,2),qrs(i,k,3)]
++            rain_n_before=[nci(i,k,1),nci(i,k,2),nrs(i,k,1)]
++            rain_bg_before=brs(i,k)
++            rain_t_before=t(i,k)
++            rain_qv_before=q(i,k)
++            rain_ccn3_before=nci(i,k,3)
++            rain_warm_rate_base=[praut(i,k),pracw(i,k),paacw(i,k),nraut(i,k), &
++                 nccol(i,k),nracw(i,k),naacw(i,k),prevp(i,k),pseml(i,k), &
++                 pgeml(i,k),psevp(i,k),pgacs(i,k),pgevp(i,k),nrcol(i,k), &
++                 nseml(i,k),ngeml(i,k)]
++            rain_warm_q_process(1)=-(rain_warm_rate_base(1)+rain_warm_rate_base(2) &
++                 +rain_warm_rate_base(3)+rain_warm_rate_base(3))*dtcld
++            rain_warm_q_process(2)=0.0
++            rain_warm_q_process(3)=(rain_warm_rate_base(1)+rain_warm_rate_base(2) &
++                 +rain_warm_rate_base(8)+rain_warm_rate_base(3)+rain_warm_rate_base(3) &
++                 -rain_warm_rate_base(9)-rain_warm_rate_base(10))*dtcld
++            rain_warm_q_process(4)=(rain_warm_rate_base(11)-rain_warm_rate_base(12) &
++                 +rain_warm_rate_base(9))*dtcld
++            rain_warm_q_process(5)=(rain_warm_rate_base(12)+rain_warm_rate_base(13) &
++                 +rain_warm_rate_base(10))*dtcld
++            rain_warm_n_process(1)=-(rain_warm_rate_base(4)+rain_warm_rate_base(5) &
++                 +rain_warm_rate_base(6)+rain_warm_rate_base(7)+rain_warm_rate_base(7))*dtcld
++            rain_warm_n_process(2)=0.0
++            rain_warm_n_process(3)=(rain_warm_rate_base(4)-rain_warm_rate_base(14) &
++                 +rain_warm_rate_base(15)+rain_warm_rate_base(16))*dtcld
++            rain_warm_bg_process=(bgevp(i,k)+bgeml(i,k))*dtcld
++            rain_warm_xlf=xls-xl(i,k)
++            rain_warm_xlwork2=-xl(i,k)*(rain_warm_rate_base(8)+rain_warm_rate_base(11) &
++                 +rain_warm_rate_base(13))-rain_warm_xlf*(rain_warm_rate_base(9) &
++                 +rain_warm_rate_base(10))
++            rain_warm_t_process=-rain_warm_xlwork2/cpm(i,k)*dtcld
++            rain_warm_qv_process=work2(i,k)*dtcld
++
++            call kdm6_rain_process_fraction(rain_q_before,rain_warm_q_process, &
++                 rain_n_before,rain_warm_n_process,rain_bg_before,rain_warm_bg_process, &
++                 rain_t_before,rain_warm_t_process,rain_full_evap_pending(i,k), &
++                 dry_carrier_density(i,k),pidnr,qmin,ncmin,qcrmin,dmr, &
++                 lamdarmin,lamdarmax,100.0,900.0,pidnc,dmc,lamdacmin, &
++                 lamdacmax,pidni,dmi,lamdaimin,lamdaimax,rain_warm_alpha, &
++                 rain_warm_feasible,rain_warm_search_status,rain_qv_before, &
++                 rain_warm_qv_process,consumer_pair_only=.true.)
++            if (.not.rain_warm_feasible) then
++              if (rain_warm_search_status.ne.1) &
++                error stop 'KDM6 warm process admission search failed'
++              call kdm6_rain_process_state_valid(rain_q_before,rain_n_before, &
++                   rain_bg_before,rain_t_before,dry_carrier_density(i,k),pidnr, &
++                   qmin,ncmin,qcrmin,dmr,lamdarmin,lamdarmax,100.0,900.0, &
++                   pidnc,dmc,lamdacmin,lamdacmax,pidni,dmi,lamdaimin, &
++                   lamdaimax,rain_warm_state_valid,rain_full_evap_pending(i,k),.true.)
++              if (.not.rain_warm_state_valid .or. rain_qv_before.lt.0.0 .or. &
++                  .not.ieee_is_finite(rain_qv_before)) &
++                error stop 'KDM6 invalid base before warm process admission'
++              rain_warm_alpha=0.0
++            endif
++
++            rain_warm_abort=.false.
++            rain_warm_state_valid=.false.
++            do rain_warm_retry=0,56
++              if (rain_warm_retry.gt.0) then
++                if (rain_warm_retry.le.32) then
++                  rain_warm_alpha=nearest(rain_warm_alpha,-1.0)
++                else
++                  rain_warm_alpha=0.5*rain_warm_alpha
++                endif
++              endif
++              if (rain_warm_alpha.le.0.0) exit
++              rain_warm_rate_trial=rain_warm_alpha*rain_warm_rate_base
++              rain_warm_q_after(1)=rain_q_before(1)-(rain_warm_rate_trial(1) &
++                   +rain_warm_rate_trial(2)+rain_warm_rate_trial(3) &
++                   +rain_warm_rate_trial(3))*dtcld
++              rain_warm_q_after(2)=rain_q_before(2)
++              rain_warm_q_after(3)=rain_q_before(3)+(rain_warm_rate_trial(1) &
++                   +rain_warm_rate_trial(2)+rain_warm_rate_trial(8) &
++                   +rain_warm_rate_trial(3)+rain_warm_rate_trial(3) &
++                   -rain_warm_rate_trial(9)-rain_warm_rate_trial(10))*dtcld
++              rain_warm_q_after(4)=rain_q_before(4)+(rain_warm_rate_trial(11) &
++                   -rain_warm_rate_trial(12)+rain_warm_rate_trial(9))*dtcld
++              rain_warm_q_after(5)=rain_q_before(5)+(rain_warm_rate_trial(12) &
++                   +rain_warm_rate_trial(13)+rain_warm_rate_trial(10))*dtcld
++              rain_warm_n_after(1)=rain_n_before(1)-(rain_warm_rate_trial(4) &
++                   +rain_warm_rate_trial(5)+rain_warm_rate_trial(6) &
++                   +rain_warm_rate_trial(7)+rain_warm_rate_trial(7))*dtcld
++              rain_warm_n_after(2)=rain_n_before(2)
++              rain_warm_n_after(3)=rain_n_before(3)+(rain_warm_rate_trial(4) &
++                   -rain_warm_rate_trial(14)+rain_warm_rate_trial(15) &
++                   +rain_warm_rate_trial(16))*dtcld
++              if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++                rain_warm_bg_after=rain_bg_before+(rain_warm_rate_trial(13)/rhox(i,k) &
++                     +rain_warm_rate_trial(10)/rhox(i,k))*dtcld
++              else
++                rain_warm_bg_after=rain_bg_before
++              endif
++              rain_warm_xlwork2=-xl(i,k)*(rain_warm_rate_trial(8) &
++                   +rain_warm_rate_trial(11)+rain_warm_rate_trial(13)) &
++                   -rain_warm_xlf*(rain_warm_rate_trial(9)+rain_warm_rate_trial(10))
++              rain_warm_t_after=rain_t_before-rain_warm_xlwork2/cpm(i,k)*dtcld
++              work2(i,k)=-(rain_warm_rate_trial(8)+rain_warm_rate_trial(11) &
++                   +rain_warm_rate_trial(13))
++              rain_warm_qv_after=rain_qv_before+work2(i,k)*dtcld
++              rain_ccn3_after=rain_ccn3_before
++              if (rain_full_evap_pending(i,k) .and. rain_warm_q_after(3).eq.0.0) then
++                rain_ccn3_after=rain_ccn3_after+rain_warm_n_after(3)
++                rain_warm_n_after(3)=0.0
++              endif
++              rain_warm_state_valid=all(ieee_is_finite([rain_warm_q_after, &
++                   rain_warm_n_after,rain_warm_bg_after,rain_warm_t_after, &
++                   rain_warm_qv_after,rain_ccn3_after]))
++              if (rain_warm_state_valid) then
++                call kdm6_rain_process_state_valid(rain_warm_q_after,rain_warm_n_after, &
++                     rain_warm_bg_after,rain_warm_t_after,dry_carrier_density(i,k),pidnr, &
++                     qmin,ncmin,qcrmin,dmr,lamdarmin,lamdarmax,100.0,900.0, &
++                     pidnc,dmc,lamdacmin,lamdacmax,pidni,dmi,lamdaimin, &
++                     lamdaimax,rain_warm_state_valid,rain_full_evap_pending(i,k),.true.)
++              endif
++              if (rain_warm_state_valid .and. rain_warm_qv_after.ge.0.0 .and. &
++                  rain_ccn3_after.ge.0.0) exit
++              rain_warm_state_valid=.false.
++            enddo
++            if (.not.rain_warm_state_valid) then
++              call kdm6_rain_process_state_valid(rain_q_before,rain_n_before, &
++                   rain_bg_before,rain_t_before,dry_carrier_density(i,k),pidnr, &
++                   qmin,ncmin,qcrmin,dmr,lamdarmin,lamdarmax,100.0,900.0, &
++                   pidnc,dmc,lamdacmin,lamdacmax,pidni,dmi,lamdaimin, &
++                   lamdaimax,rain_warm_state_valid,rain_full_evap_pending(i,k),.true.)
++              if (.not.rain_warm_state_valid .or. rain_qv_before.lt.0.0 .or. &
++                  .not.ieee_is_finite(rain_qv_before) .or. rain_ccn3_before.lt.0.0) &
++                error stop 'KDM6 warm process has no valid stored endpoint'
++              rain_warm_alpha=0.0
++              rain_warm_rate_trial=0.0
++              rain_warm_q_after=rain_q_before
++              rain_warm_n_after=rain_n_before
++              rain_warm_bg_after=rain_bg_before
++              rain_warm_t_after=rain_t_before
++              rain_warm_qv_after=rain_qv_before
++              rain_ccn3_after=rain_ccn3_before
++              rain_warm_search_status=2
++              rain_warm_abort=.true.
++            endif
++            if (rain_warm_abort .and. rain_warm_retry.gt.56) rain_warm_retry=56
++            rain_warm_rate_noop=all(rain_warm_rate_trial.eq.0.0)
++            rain_warm_state_noop=all(rain_warm_q_after.eq.rain_q_before) .and. &
++                 all(rain_warm_n_after.eq.rain_n_before) .and. &
++                 rain_warm_bg_after.eq.rain_bg_before .and. &
++                 rain_warm_t_after.eq.rain_t_before .and. &
++                 rain_warm_qv_after.eq.rain_qv_before .and. &
++                 rain_ccn3_after.eq.rain_ccn3_before
++            write(pr85_warm_unit,'(a,7i8,1x,2l1,1p,*(1x,e24.16))',iostat=pr85_warm_ios) &
++                 'WARM',i,lat,k,loop,rain_warm_search_status,rain_warm_retry, &
++                 progb_status(i,k),rain_warm_rate_noop,rain_warm_state_noop, &
++                 dtcld,dry_carrier_density(i,k),cpm(i,k),xl(i,k),rain_warm_xlf, &
++                 rhox(i,k),rain_warm_alpha,rain_warm_rate_base,rain_warm_rate_trial, &
++                 rain_q_before,rain_warm_q_after,rain_n_before,rain_warm_n_after, &
++                 rain_bg_before,rain_warm_bg_after,rain_t_before,rain_warm_t_after, &
++                 rain_qv_before,rain_warm_qv_after,rain_ccn3_before,rain_ccn3_after, &
++                 rain_warm_q_process,rain_warm_n_process,rain_warm_bg_process, &
++                 rain_warm_t_process,rain_warm_qv_process, &
++                 rain_warm_alpha*rain_warm_q_process, &
++                 rain_warm_alpha*rain_warm_n_process, &
++                 rain_warm_alpha*rain_warm_bg_process, &
++                 rain_warm_alpha*rain_warm_t_process, &
++                 rain_warm_alpha*rain_warm_qv_process, &
++                 real(rain_warm_q_after,8)-real(rain_q_before,8), &
++                 real(rain_warm_n_after,8)-real(rain_n_before,8), &
++                 real(rain_warm_bg_after,8)-real(rain_bg_before,8), &
++                 real(rain_warm_t_after,8)-real(rain_t_before,8), &
++                 real(rain_warm_qv_after,8)-real(rain_qv_before,8), &
++                 (real(rain_warm_q_after,8)-real(rain_q_before,8)) &
++                    -real(rain_warm_alpha,8)*real(rain_warm_q_process,8), &
++                 (real(rain_warm_n_after,8)-real(rain_n_before,8)) &
++                    -real(rain_warm_alpha,8)*real(rain_warm_n_process,8), &
++                 (real(rain_warm_bg_after,8)-real(rain_bg_before,8)) &
++                    -real(rain_warm_alpha,8)*real(rain_warm_bg_process,8), &
++                 (real(rain_warm_t_after,8)-real(rain_t_before,8)) &
++                    -real(rain_warm_alpha,8)*real(rain_warm_t_process,8), &
++                 (real(rain_warm_qv_after,8)-real(rain_qv_before,8)) &
++                    -real(rain_warm_alpha,8)*real(rain_warm_qv_process,8)
++            if (pr85_warm_ios.ne.0) error stop 'PR85 warm budget write failed'
++            if (rain_warm_abort) error stop 'KDM6 warm native endpoint search failed'
++            praut(i,k)=rain_warm_rate_trial(1)
++            pracw(i,k)=rain_warm_rate_trial(2)
++            paacw(i,k)=rain_warm_rate_trial(3)
++            nraut(i,k)=rain_warm_rate_trial(4)
++            nccol(i,k)=rain_warm_rate_trial(5)
++            nracw(i,k)=rain_warm_rate_trial(6)
++            naacw(i,k)=rain_warm_rate_trial(7)
++            prevp(i,k)=rain_warm_rate_trial(8)
++            pseml(i,k)=rain_warm_rate_trial(9)
++            pgeml(i,k)=rain_warm_rate_trial(10)
++            psevp(i,k)=rain_warm_rate_trial(11)
++            pgacs(i,k)=rain_warm_rate_trial(12)
++            pgevp(i,k)=rain_warm_rate_trial(13)
++            nrcol(i,k)=rain_warm_rate_trial(14)
++            nseml(i,k)=rain_warm_rate_trial(15)
++            ngeml(i,k)=rain_warm_rate_trial(16)
++            qci(i,k,1)=rain_warm_q_after(1)
++            qci(i,k,2)=rain_warm_q_after(2)
++            qrs(i,k,1)=rain_warm_q_after(3)
++            qrs(i,k,2)=rain_warm_q_after(4)
++            qrs(i,k,3)=rain_warm_q_after(5)
++            nci(i,k,1)=rain_warm_n_after(1)
++            nci(i,k,2)=rain_warm_n_after(2)
++            nrs(i,k,1)=rain_warm_n_after(3)
++            nci(i,k,3)=rain_ccn3_after
++            brs(i,k)=rain_warm_bg_after
++            t(i,k)=rain_warm_t_after
++            q(i,k)=rain_warm_qv_after
++            work2(i,k)=-(prevp(i,k)+psevp(i,k)+pgevp(i,k))
++            if (progb_status(i,k) == PROGB_PSD_ACTIVE) then
++              bgevp(i,k)=pgevp(i,k)/rhox(i,k)
++              bgeml(i,k)=pgeml(i,k)/rhox(i,k)
++            else
++              bgevp(i,k)=0.0
++              bgeml(i,k)=0.0
++            endif
+           endif
+         enddo
+       enddo
+@@ -3925,9 +5389,24 @@
+ 
+         if (qci(i,k,2).ge. qmin .and.t(i,k).lt.273.15) then
+         if (avedia(i,k,3).ge. 200.e-6) then
++           pr85_trace_qi = qci(i,k,2)
++           pr85_trace_qs = qrs(i,k,2)
++           pr85_trace_t_before = t(i,k)
++           pr85_trace_ni = nci(i,k,2)
++           pr85_trace_diameter = avedia(i,k,3)
+            qrs(i,k,2) = qrs(i,k,2) + qci(i,k,2)
+            qci(i,k,2) = 0.
+            nci(i,k,2) = 0.
++           if (pr67_trace_this_call) then
++             pr85_trace_removed_qi = dble(pr85_trace_qi)-dble(qci(i,k,2))
++             pr85_trace_snow_gain = dble(qrs(i,k,2))-dble(pr85_trace_qs)
++             write(pr85_trace_unit,'(a,4i8,1p,13es24.16)',iostat=pr85_trace_ios) &
++                  'PR85_ICE_TRANSITION',i,lat,k,loop,dtcld,pr85_trace_t_before,t(i,k), &
++                  pr85_trace_diameter,pr85_trace_qi,pr85_trace_qs,pr85_trace_ni, &
++                  pr85_trace_qi,pr85_trace_removed_qi,pr85_trace_snow_gain,qci(i,k,2), &
++                  qrs(i,k,2),nci(i,k,2)
++             if (pr85_trace_ios.ne.0) error stop 'PR85 transition trace write failed'
++           endif
+         end if
+         end if
+        enddo
+@@ -4081,6 +5560,19 @@
+       do k = kts, kte
+         do i = its, ite
+ 
++           pr85_cutoff_q_before=[qci(i,k,1),qci(i,k,2),qrs(i,k,1),qrs(i,k,2),qrs(i,k,3)]
++           pr85_cutoff_n_before=[nci(i,k,1),nci(i,k,2),nrs(i,k,1)]
++           pr85_cutoff_bg_before=brs(i,k)
++           pr85_cutoff_t_before=t(i,k)
++           pr85_cutoff_qv_before=q(i,k)
++           pr85_cutoff_status_before=progb_status(i,k)
++           pr85_cutoff_mask=0
++           if(qci(i,k,1).le.qmin) pr85_cutoff_mask=pr85_cutoff_mask+1
++           if(qci(i,k,2).le.qmin) pr85_cutoff_mask=pr85_cutoff_mask+2
++           if(qrs(i,k,1).le.qcrmin) pr85_cutoff_mask=pr85_cutoff_mask+4
++           if(qrs(i,k,2).le.qcrmin) pr85_cutoff_mask=pr85_cutoff_mask+8
++           if(qrs(i,k,3).le.qcrmin) pr85_cutoff_mask=pr85_cutoff_mask+16
++
+            if(qci(i,k,1).le.qmin)then
+               qci(i,k,1) = 0.0
+               nci(i,k,1) = 0.0
+@@ -4121,6 +5613,26 @@
+               dgbgmug1(i,k) = 0.0
+            endif
+ 
++           pr85_cutoff_q_after=[qci(i,k,1),qci(i,k,2),qrs(i,k,1),qrs(i,k,2),qrs(i,k,3)]
++           pr85_cutoff_n_after=[nci(i,k,1),nci(i,k,2),nrs(i,k,1)]
++           pr85_cutoff_bg_after=brs(i,k)
++           pr85_cutoff_t_after=t(i,k)
++           pr85_cutoff_qv_after=q(i,k)
++           if (any(pr85_cutoff_q_after.ne.pr85_cutoff_q_before) .or. &
++               any(pr85_cutoff_n_after.ne.pr85_cutoff_n_before) .or. &
++               pr85_cutoff_bg_after.ne.pr85_cutoff_bg_before) then
++             write(pr85_cutoff_unit,'(a,5i8,1p,25es24.16,2i8)',iostat=pr85_cutoff_ios) &
++                  'PR85_KDM6_CUTOFF',i,lat,k,loop,pr85_cutoff_mask, &
++                  dry_carrier_density(i,k),qmin,qcrmin, &
++                  pr85_cutoff_q_before,pr85_cutoff_q_after, &
++                  pr85_cutoff_n_before,pr85_cutoff_n_after, &
++                  pr85_cutoff_bg_before,pr85_cutoff_bg_after, &
++                  pr85_cutoff_t_before,pr85_cutoff_t_after, &
++                  pr85_cutoff_qv_before,pr85_cutoff_qv_after, &
++                  pr85_cutoff_status_before,progb_status(i,k)
++             if (pr85_cutoff_ios.ne.0) error stop 'PR85 cutoff budget write failed'
++           endif
++
+ 
+ 
+           if(qrs(i,k,1).ge.qcrmin .and. nrs(i,k,1) .ge. nrmin) then
+@@ -4128,10 +5640,24 @@
+                          /(dry_carrier_density(i,k)*qrs(i,k,1))))*(1./dmr))
+             if(lamdr_tmp(i,k) .le. lamdarmin) then
+               lamdr_tmp(i,k) = lamdarmin
+-              nrs(i,k,1) = dry_carrier_density(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr
++              pr85_psd_before = nrs(i,k,1)
++              call pr85_kdm6_psd_bound_number(qrs(i,k,1),dry_carrier_density(i,k),lamdr_tmp(i,k), &
++                   lamdarmin,lamdarmax,pidnr,dmr,1, &
++                   'rain','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nrs(i,k,1) = pr85_psd_directed
+             elseif(lamdr_tmp(i,k) .ge. lamdarmax) then
+               lamdr_tmp(i,k) = lamdarmax 
+-              nrs(i,k,1) = dry_carrier_density(i,k)*qrs(i,k,1)*lamdr_tmp(i,k)**dmr/pidnr
++              pr85_psd_before = nrs(i,k,1)
++              call pr85_kdm6_psd_bound_number(qrs(i,k,1),dry_carrier_density(i,k),lamdr_tmp(i,k), &
++                   lamdarmin,lamdarmax,pidnr,dmr,2, &
++                   'rain','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nrs(i,k,1) = pr85_psd_directed
+             endif
+           endif
+           if(qci(i,k,1).ge.qmin .and. nci(i,k,1) .ge. ncmin ) then
+@@ -4139,10 +5665,24 @@
+                          /(dry_carrier_density(i,k)*qci(i,k,1))))*(1./dmc))
+             if(lamdc_tmp(i,k) .le. lamdacmin) then
+               lamdc_tmp(i,k) = lamdacmin
+-              nci(i,k,1) = dry_carrier_density(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc
++              pr85_psd_before = nci(i,k,1)
++              call pr85_kdm6_psd_bound_number(qci(i,k,1),dry_carrier_density(i,k),lamdc_tmp(i,k), &
++                   lamdacmin,lamdacmax,pidnc,dmc,1, &
++                   'cloud','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,1) = pr85_psd_directed
+             elseif(lamdc_tmp(i,k) .ge. lamdacmax) then
+               lamdc_tmp(i,k) = lamdacmax
+-              nci(i,k,1) = dry_carrier_density(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc
++              pr85_psd_before = nci(i,k,1)
++              call pr85_kdm6_psd_bound_number(qci(i,k,1),dry_carrier_density(i,k),lamdc_tmp(i,k), &
++                   lamdacmin,lamdacmax,pidnc,dmc,2, &
++                   'cloud','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,1) = pr85_psd_directed
+             endif
+           endif
+           call pr77_scan_local_state(qrs(i,k,1),nrs(i,k,1), &
+@@ -4156,10 +5696,24 @@
+                          /(dry_carrier_density(i,k)*qci(i,k,2))))*(1./dmi))
+             if(lamdi_tmp(i,k) .le. lamdaimin) then
+               lamdi_tmp(i,k) = lamdaimin
+-              nci(i,k,2) = dry_carrier_density(i,k)*qci(i,k,2)*lamdi_tmp(i,k)**dmi/pidni
++              pr85_psd_before = nci(i,k,2)
++              call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
++                   lamdaimin,lamdaimax,pidni,dmi,1, &
++                   'ice','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,2) = pr85_psd_directed
+             elseif(lamdi_tmp(i,k) .ge. lamdaimax) then
+               lamdi_tmp(i,k) = lamdaimax
+-              nci(i,k,2) = dry_carrier_density(i,k)*qci(i,k,2)*lamdi_tmp(i,k)**dmi/pidni
++              pr85_psd_before = nci(i,k,2)
++              call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
++                   lamdaimin,lamdaimax,pidni,dmi,2, &
++                   'ice','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
++                   pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
++              if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
++              nci(i,k,2) = pr85_psd_directed
+             endif
+           endif
+             nci(i,k,3) = min(max(nci(i,k,3),1.e8),2.e10)
+@@ -4171,9 +5725,26 @@
+               lamdc_tmp(i,k) = lamdacmax
+               nci(i,k,1) = dry_carrier_density(i,k)*qci(i,k,1)*lamdc_tmp(i,k)**dmc/pidnc
+             endif
++            call kdm6_refresh_graupel_intercept(progb_status(i,k),n0g,g1pmg, &
++                 rslopemu(i,k,3),n0go(i,k),graupel_cache_valid)
++            if (.not.graupel_cache_valid) error stop 'KDM6 final graupel intercept cache invalid'
+         enddo
+       enddo 
+-   enddo                  
++      if (pr67_trace_this_call) then
++        close(pr85_trace_unit,iostat=pr85_trace_ios)
++        if (pr85_trace_ios.ne.0) error stop 'PR85 transition trace close failed'
++      endif
++   enddo
++   if (pr67_trace_this_call) then
++     close(pr85_psd_unit,iostat=pr85_psd_ios)
++     if (pr85_psd_ios.ne.0) error stop 'PR85 PSD boundary ledger close failed'
++   endif
++   close(pr85_cold_unit,iostat=pr85_cold_ios)
++   if (pr85_cold_ios.ne.0) error stop 'PR85 cold budget close failed'
++   close(pr85_warm_unit,iostat=pr85_warm_ios)
++   if (pr85_warm_ios.ne.0) error stop 'PR85 warm budget close failed'
++   close(pr85_cutoff_unit,iostat=pr85_cutoff_ios)
++   if (pr85_cutoff_ios.ne.0) error stop 'PR85 cutoff budget close failed'
+ 
+    end subroutine kdm62d
+ 
+@@ -4454,6 +6025,7 @@
+    rslopesdmax = (rslopesmax) ** dms
+    rslopegdmax = (rslopegmax) ** dmg
+    rslopec2max = (rslopecmax) * rslopecmax
++   rslopecdmax = (rslopecmax) ** dmc
+    rsloper2max = (rslopermax) * rslopermax
+    rslopes2max = (rslopesmax) * rslopesmax
+    rslopeg2max = (rslopegmax) * rslopegmax
+@@ -5509,3 +7081,982 @@
+     end subroutine pr77_record_first
+ 
+ END MODULE module_mp_kdm6
++
++SUBROUTINE pr85_kdm6_paired_sediment_column(kts,kte,cell_i,lat,substep,dt,mstep, &
++dry_density,delz,mass_rate,second_rate,qstate,second_state,mode,q_active_min, &
++second_active_min,density_min,density_max,approved_q_rate,approved_second_rate, &
++budget_unit,trace,valid)
++USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64
++USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
++IMPLICIT NONE
++INTEGER, INTENT(IN) :: kts,kte,cell_i,lat,substep,mstep,budget_unit
++INTEGER, PARAMETER :: PR85_SED_ICE=1, PR85_SED_GRAUPEL=2
++REAL(real32), INTENT(IN) :: dt,dry_density(kts:kte),delz(kts:kte)
++REAL(real64), INTENT(IN) :: mass_rate(kts:kte),second_rate(kts:kte)
++REAL(real32), INTENT(INOUT) :: qstate(kts:kte),second_state(kts:kte)
++INTEGER, INTENT(IN) :: mode
++REAL(real32), INTENT(IN) :: q_active_min,second_active_min,density_min,density_max
++REAL(real64), INTENT(OUT) :: approved_q_rate(kts:kte),approved_second_rate(kts:kte)
++LOGICAL, INTENT(IN) :: trace
++LOGICAL, INTENT(OUT) :: valid
++
++REAL(real32) :: qwork(kts:kte),nwork(kts:kte),second_carrier(kts:kte)
++REAL(real32) :: qd_store,nd_store,qr_store,nr_store
++REAL(real64) :: qproposal(kts:kte),nproposal(kts:kte)
++REAL(real64) :: theta,dt64
++REAL(real64) :: proposed_q_sum,proposed_n_sum,approved_q_sum,approved_n_sum
++REAL(real64) :: ground_q,ground_n,ground_approved_q,ground_approved_n
++REAL(real64) :: stored_delta_q,stored_delta_n,residual_q,residual_n
++REAL(real64) :: qd_inventory,nd_inventory
++INTEGER :: k,iteration,io_status,nlevels
++LOGICAL :: candidate_valid,full_empty_unpaired
++
++valid=.FALSE.
++approved_q_rate=0.0_real64
++approved_second_rate=0.0_real64
++IF (mode/=PR85_SED_ICE .AND. mode/=PR85_SED_GRAUPEL) RETURN
++IF (mode==PR85_SED_GRAUPEL) THEN
++  IF (.NOT.ALL(ieee_is_finite([q_active_min,second_active_min,density_min,density_max]))) RETURN
++  IF (q_active_min<0.0_real32 .OR. second_active_min<0.0_real32 .OR. &
++      density_min<=0.0_real32 .OR. density_max<=density_min) RETURN
++ENDIF
++IF (kts>kte .OR. mstep<1 .OR. .NOT.ieee_is_finite(dt) .OR. dt<=0.0_real32) RETURN
++nlevels=kte-kts+1
++dt64=REAL(dt,real64)
++IF (.NOT.ALL(ieee_is_finite(dry_density)) .OR. .NOT.ALL(ieee_is_finite(delz)) .OR. &
++.NOT.ALL(ieee_is_finite(mass_rate)) .OR. .NOT.ALL(ieee_is_finite(second_rate)) .OR. &
++.NOT.ALL(ieee_is_finite(qstate)) .OR. .NOT.ALL(ieee_is_finite(second_state))) RETURN
++IF (ANY(dry_density<=0.0_real32) .OR. ANY(delz<=0.0_real32) .OR. &
++ANY(mass_rate<0.0_real64) .OR. ANY(second_rate<0.0_real64)) RETURN
++DO k=kts,kte
++  second_carrier(k)=1.0_real32
++  IF (mode==PR85_SED_GRAUPEL) second_carrier(k)=dry_density(k)
++  IF (.NOT.ieee_is_finite(second_carrier(k)) .OR. second_carrier(k)<=0.0_real32) RETURN
++  IF (mode==PR85_SED_GRAUPEL) THEN
++    IF (.NOT.graupel_state_valid(qstate(k),second_state(k),q_active_min, &
++         second_active_min,density_min,density_max)) RETURN
++  ELSE
++    IF (.NOT.paired(qstate(k),second_state(k))) RETURN
++  ENDIF
++ENDDO
++
++qwork=qstate
++nwork=second_state
++proposed_q_sum=0.0_real64
++proposed_n_sum=0.0_real64
++approved_q_sum=0.0_real64
++approved_n_sum=0.0_real64
++ground_q=0.0_real64
++ground_n=0.0_real64
++ground_approved_q=0.0_real64
++ground_approved_n=0.0_real64
++qproposal=0.0_real64
++nproposal=0.0_real64
++! The source passes V/DELZ rates (s-1); multiplying by DELZ below forms
++! column packets in kg m-2 and mode-specific second-moment area units.
++DO k=kts,kte
++qproposal(k)=REAL(dry_density(k),real64)*REAL(qstate(k),real64)*mass_rate(k)* &
++REAL(delz(k),real64)*dt64/REAL(mstep,real64)
++nproposal(k)=REAL(second_state(k),real64)*second_rate(k)* &
++REAL(second_carrier(k),real64)*REAL(delz(k),real64)*dt64/REAL(mstep,real64)
++IF (.NOT.ieee_is_finite(qproposal(k)) .OR. .NOT.ieee_is_finite(nproposal(k)) .OR. &
++qproposal(k)<0.0_real64 .OR. nproposal(k)<0.0_real64) RETURN
++proposed_q_sum=proposed_q_sum+qproposal(k)
++proposed_n_sum=proposed_n_sum+nproposal(k)
++ENDDO
++
++! Flux proposals are frozen from each level's current R32 state. G faces
++! follow the native top-down sweep; ice retains its established bottom-up order.
++IF (mode==PR85_SED_GRAUPEL) THEN
++  DO k=kte-1,kts,-1
++    CALL commit_face(k+1,k,.TRUE.)
++    IF (.NOT.candidate_valid) RETURN
++  ENDDO
++  CALL commit_face(kts,0,.FALSE.)
++  IF (.NOT.candidate_valid) RETURN
++ELSE
++  CALL commit_face(kts,0,.FALSE.)
++  IF (.NOT.candidate_valid) RETURN
++  DO k=kts,kte-1
++    CALL commit_face(k+1,k,.TRUE.)
++    IF (.NOT.candidate_valid) RETURN
++  ENDDO
++ENDIF
++
++stored_delta_q=0.0_real64
++stored_delta_n=0.0_real64
++DO k=kts,kte
++qd_inventory=REAL(dry_density(k),real64)*REAL(delz(k),real64)
++nd_inventory=REAL(second_carrier(k),real64)*REAL(delz(k),real64)
++stored_delta_q=stored_delta_q+(REAL(qwork(k),real64)-REAL(qstate(k),real64))*qd_inventory
++stored_delta_n=stored_delta_n+(REAL(nwork(k),real64)-REAL(second_state(k),real64))*nd_inventory
++ENDDO
++residual_q=stored_delta_q+ground_approved_q
++residual_n=stored_delta_n+ground_approved_n
++IF (.NOT.ALL(ieee_is_finite([stored_delta_q,stored_delta_n,residual_q,residual_n]))) RETURN
++
++IF (trace) THEN
++IF (mode==PR85_SED_GRAUPEL) THEN
++  WRITE(budget_unit,'(a,4i8,1p,12es24.16)',IOSTAT=io_status) &
++  'PR85_G_SED',cell_i,lat,substep,nlevels,proposed_q_sum,approved_q_sum, &
++  proposed_q_sum-approved_q_sum,proposed_n_sum,approved_n_sum, &
++  proposed_n_sum-approved_n_sum,ground_approved_q,ground_approved_n,stored_delta_q,stored_delta_n, &
++  residual_q,residual_n
++ELSE
++WRITE(budget_unit,'(a,4i8,1p,12es24.16)',IOSTAT=io_status) &
++'PR85_ICE_SED',cell_i,lat,substep,nlevels,proposed_q_sum,approved_q_sum, &
++proposed_q_sum-approved_q_sum,proposed_n_sum,approved_n_sum, &
++proposed_n_sum-approved_n_sum,ground_approved_q,ground_approved_n,stored_delta_q,stored_delta_n, &
++residual_q,residual_n
++ENDIF
++IF (io_status/=0) ERROR STOP 'PR85 paired sedimentation ledger write failed'
++ENDIF
++qstate=qwork
++second_state=nwork
++valid=.TRUE.
++
++CONTAINS
++
++PURE LOGICAL FUNCTION paired(q,n)
++REAL(real32), INTENT(IN) :: q,n
++paired=.FALSE.
++IF (.NOT.ieee_is_finite(q) .OR. .NOT.ieee_is_finite(n)) RETURN
++IF (q<0.0_real32 .OR. n<0.0_real32) RETURN
++paired=(q==0.0_real32 .AND. n==0.0_real32) .OR. &
++(q>0.0_real32 .AND. n>0.0_real32)
++END FUNCTION paired
++
++PURE LOGICAL FUNCTION graupel_state_valid(q,b,qmin,bmin,rhomin,rhomax)
++REAL(real32), INTENT(IN) :: q,b,qmin,bmin,rhomin,rhomax
++REAL(real64) :: density
++graupel_state_valid=.FALSE.
++IF (.NOT.ieee_is_finite(q) .OR. .NOT.ieee_is_finite(b)) RETURN
++IF (q<0.0_real32 .OR. b<0.0_real32) RETURN
++IF (q==0.0_real32 .AND. b==0.0_real32) THEN
++  graupel_state_valid=.TRUE.; RETURN
++ENDIF
++IF (q<=0.0_real32 .OR. b<=0.0_real32) RETURN
++IF (q<=qmin .AND. b<=bmin) RETURN
++density=REAL(q,real64)/REAL(b,real64)
++graupel_state_valid=ieee_is_finite(density) .AND. &
++  density>=REAL(rhomin,real64) .AND. density<=REAL(rhomax,real64)
++END FUNCTION graupel_state_valid
++
++SUBROUTINE add_partition_point(points,count,base,change,target)
++REAL(real64), INTENT(INOUT) :: points(16)
++INTEGER, INTENT(INOUT) :: count
++REAL(real64), INTENT(IN) :: base,change,target
++REAL(real64) :: root
++IF (.NOT.ieee_is_finite(base) .OR. .NOT.ieee_is_finite(change) .OR. &
++    .NOT.ieee_is_finite(target) .OR. change==0.0_real64) RETURN
++root=(target-base)/change
++IF (.NOT.ieee_is_finite(root) .OR. root<=0.0_real64 .OR. root>=1.0_real64) RETURN
++IF (count>=SIZE(points)) RETURN
++count=count+1
++points(count)=root
++END SUBROUTINE add_partition_point
++
++SUBROUTINE search_graupel_partitions(donor,receiver,pq,pn,has_receiver,factor,qd,nd,qr,nr,ok)
++INTEGER, INTENT(IN) :: donor,receiver
++REAL(real64), INTENT(IN) :: pq,pn
++LOGICAL, INTENT(IN) :: has_receiver
++REAL(real64), INTENT(OUT) :: factor
++REAL(real32), INTENT(OUT) :: qd,nd,qr,nr
++LOGICAL, INTENT(OUT) :: ok
++REAL(real64) :: points(16),qchange(2),bchange(2),qbase(2),bbase(2)
++REAL(real64) :: qden,bden,left,right,trials(3),trial
++REAL(real32) :: qt,nt,rt,st
++INTEGER :: count,endpoint,index,j
++LOGICAL :: trial_ok,unpaired
++points=0.0_real64; count=2; points(1)=0.0_real64; points(2)=1.0_real64
++qden=REAL(dry_density(donor),real64)*REAL(delz(donor),real64)
++bden=REAL(second_carrier(donor),real64)*REAL(delz(donor),real64)
++CALL safe_ratio(pq,qden,qchange(1),trial_ok)
++IF (.NOT.trial_ok) THEN
++  factor=0.0_real64; qd=qwork(donor); nd=nwork(donor); qr=0.; nr=0.; ok=.FALSE.; RETURN
++ENDIF
++CALL safe_ratio(pn,bden,bchange(1),trial_ok)
++IF (.NOT.trial_ok) THEN
++  factor=0.0_real64; qd=qwork(donor); nd=nwork(donor); qr=0.; nr=0.; ok=.FALSE.; RETURN
++ENDIF
++qbase(1)=REAL(qwork(donor),real64); bbase(1)=REAL(nwork(donor),real64)
++IF (has_receiver) THEN
++  qden=REAL(dry_density(receiver),real64)*REAL(delz(receiver),real64)
++  bden=REAL(second_carrier(receiver),real64)*REAL(delz(receiver),real64)
++  CALL safe_ratio(pq,qden,qchange(2),trial_ok)
++  IF (.NOT.trial_ok) THEN
++    factor=0.0_real64; qd=qwork(donor); nd=nwork(donor); qr=qwork(receiver); nr=nwork(receiver); ok=.FALSE.; RETURN
++  ENDIF
++  CALL safe_ratio(pn,bden,bchange(2),trial_ok)
++  IF (.NOT.trial_ok) THEN
++    factor=0.0_real64; qd=qwork(donor); nd=nwork(donor); qr=qwork(receiver); nr=nwork(receiver); ok=.FALSE.; RETURN
++  ENDIF
++  qbase(2)=REAL(qwork(receiver),real64); bbase(2)=REAL(nwork(receiver),real64)
++ENDIF
++DO endpoint=1,1+MERGE(1,0,has_receiver)
++  IF (endpoint==1) THEN
++    qchange(endpoint)=-qchange(endpoint); bchange(endpoint)=-bchange(endpoint)
++  ENDIF
++  CALL add_partition_point(points,count,qbase(endpoint),qchange(endpoint),REAL(q_active_min,real64))
++  CALL add_partition_point(points,count,bbase(endpoint),bchange(endpoint),REAL(second_active_min,real64))
++  CALL add_partition_point(points,count,qbase(endpoint)-REAL(density_min,real64)*bbase(endpoint), &
++       qchange(endpoint)-REAL(density_min,real64)*bchange(endpoint),0.0_real64)
++  CALL add_partition_point(points,count,qbase(endpoint)-REAL(density_max,real64)*bbase(endpoint), &
++       qchange(endpoint)-REAL(density_max,real64)*bchange(endpoint),0.0_real64)
++  IF (endpoint==1) THEN
++    qchange(endpoint)=-qchange(endpoint); bchange(endpoint)=-bchange(endpoint)
++  ENDIF
++ENDDO
++DO index=2,count
++  trial=points(index); j=index-1
++  DO WHILE (j>=1)
++    IF (points(j)<=trial) EXIT
++    points(j+1)=points(j); j=j-1
++  ENDDO
++  points(j+1)=trial
++ENDDO
++DO index=count-1,1,-1
++  left=points(index); right=points(index+1)
++  IF (right<=left) CYCLE
++  trials(1)=0.75_real64*left+0.25_real64*right
++  trials(2)=0.5_real64*(left+right)
++  trials(3)=0.25_real64*left+0.75_real64*right
++  DO j=1,3
++    trial=trials(j)
++    IF (trial<=0.0_real64 .OR. trial>=1.0_real64) CYCLE
++    CALL candidate(donor,receiver,pq,pn,trial,has_receiver,qt,nt,rt,st,trial_ok,unpaired)
++    IF (trial_ok) THEN
++      factor=trial; qd=qt; nd=nt; qr=rt; nr=st; ok=.TRUE.; RETURN
++    ENDIF
++  ENDDO
++ENDDO
++CALL candidate(donor,receiver,pq,pn,0.0_real64,has_receiver,qd,nd,qr,nr,ok,unpaired)
++IF (ok) factor=0.0_real64
++END SUBROUTINE search_graupel_partitions
++
++SUBROUTINE commit_face(donor,receiver,has_receiver)
++INTEGER, INTENT(IN) :: donor,receiver
++LOGICAL, INTENT(IN) :: has_receiver
++REAL(real64) :: pq,pn,theta_local
++REAL(real32) :: qd,nd,qr,nr
++LOGICAL :: accepted,unpaired
++pq=qproposal(donor); pn=nproposal(donor)
++CALL approve_packet(donor,receiver,pq,pn,has_receiver,theta_local,qd,nd,qr,nr,accepted,unpaired)
++IF (.NOT.accepted .AND. mode==PR85_SED_GRAUPEL) THEN
++  CALL search_graupel_partitions(donor,receiver,pq,pn,has_receiver,theta_local,qd,nd,qr,nr,accepted)
++ELSE IF (.NOT.accepted .AND. unpaired) THEN
++  theta_local=0.0_real64; accepted=.TRUE.
++  qd=qwork(donor); nd=nwork(donor); qr=0.; nr=0.
++  IF (has_receiver) THEN
++    qr=qwork(receiver); nr=nwork(receiver)
++  ENDIF
++ELSE IF (.NOT.accepted) THEN
++  CALL backtrack_packet(donor,receiver,pq,pn,has_receiver,theta_local,qd,nd,qr,nr,accepted)
++ENDIF
++candidate_valid=accepted
++IF (.NOT.accepted) RETURN
++qwork(donor)=qd; nwork(donor)=nd
++approved_q_sum=approved_q_sum+theta_local*pq
++approved_n_sum=approved_n_sum+theta_local*pn
++approved_q_rate(donor)=theta_local*pq/(dt64*REAL(delz(donor),real64))
++approved_second_rate(donor)=theta_local*pn/(dt64*REAL(delz(donor),real64))
++IF (has_receiver) THEN
++  qwork(receiver)=qr; nwork(receiver)=nr
++ELSE
++  ground_approved_q=ground_approved_q+theta_local*pq
++  ground_approved_n=ground_approved_n+theta_local*pn
++ENDIF
++END SUBROUTINE commit_face
++
++SUBROUTINE candidate(donor,receiver,pq,pn,factor,has_receiver,qd,nd,qr,nr,ok,empty_receiver_unpaired)
++INTEGER, INTENT(IN) :: donor,receiver
++REAL(real64), INTENT(IN) :: pq,pn,factor
++LOGICAL, INTENT(IN) :: has_receiver
++REAL(real32), INTENT(OUT) :: qd,nd,qr,nr
++LOGICAL, INTENT(OUT) :: ok,empty_receiver_unpaired
++REAL(real64) :: qden,nden,qd64,nd64,qr64,nr64,qchange,nchange,r32max
++REAL(real64) :: donor_q_den,donor_n_den,receiver_q_den,receiver_n_den
++REAL(real64) :: packet_q,packet_n,donor_q_loss,donor_n_loss,receiver_q_gain,receiver_n_gain
++REAL(real64) :: donor_q_tol,donor_n_tol,receiver_q_tol,receiver_n_tol
++LOGICAL :: ratio_valid
++qd=qwork(donor); nd=nwork(donor)
++qr=0.0_real32; nr=0.0_real32
++IF (has_receiver) THEN
++  qr=qwork(receiver); nr=nwork(receiver)
++ENDIF
++ok=.FALSE.; empty_receiver_unpaired=.FALSE.
++r32max=REAL(HUGE(0.0_real32),real64)
++qden=REAL(dry_density(donor),real64)*REAL(delz(donor),real64)
++nden=REAL(second_carrier(donor),real64)*REAL(delz(donor),real64)
++donor_q_den=qden; donor_n_den=nden
++CALL safe_ratio(factor*pq,qden,qchange,ratio_valid)
++IF (.NOT.ratio_valid) RETURN
++CALL safe_ratio(factor*pn,nden,nchange,ratio_valid)
++IF (.NOT.ratio_valid) RETURN
++qd64=REAL(qwork(donor),real64)-qchange
++nd64=REAL(nwork(donor),real64)-nchange
++IF (.NOT.ieee_is_finite(qd64) .OR. .NOT.ieee_is_finite(nd64)) RETURN
++IF (qd64<0.0_real64 .OR. nd64<0.0_real64) RETURN
++IF (ABS(qd64)>r32max .OR. ABS(nd64)>r32max) RETURN
++IF (has_receiver) THEN
++qden=REAL(dry_density(receiver),real64)*REAL(delz(receiver),real64)
++nden=REAL(second_carrier(receiver),real64)*REAL(delz(receiver),real64)
++  receiver_q_den=qden; receiver_n_den=nden
++  CALL safe_ratio(factor*pq,qden,qchange,ratio_valid)
++  IF (.NOT.ratio_valid) RETURN
++  CALL safe_ratio(factor*pn,nden,nchange,ratio_valid)
++  IF (.NOT.ratio_valid) RETURN
++  IF (qchange>HUGE(0.0_real64)-REAL(qwork(receiver),real64) .OR. &
++      nchange>HUGE(0.0_real64)-REAL(nwork(receiver),real64)) RETURN
++  qr64=REAL(qwork(receiver),real64)+qchange
++  nr64=REAL(nwork(receiver),real64)+nchange
++  IF (.NOT.ieee_is_finite(qr64) .OR. .NOT.ieee_is_finite(nr64)) RETURN
++  IF (ABS(qr64)>r32max .OR. ABS(nr64)>r32max) RETURN
++ENDIF
++qd=REAL(qd64,real32); nd=REAL(nd64,real32)
++IF (has_receiver) THEN
++  qr=REAL(qr64,real32); nr=REAL(nr64,real32)
++  IF (qwork(receiver)==0.0_real32 .AND. nwork(receiver)==0.0_real32) &
++    empty_receiver_unpaired=(qr>0.0_real32 .NEQV. nr>0.0_real32)
++ENDIF
++IF (mode==PR85_SED_GRAUPEL) THEN
++  IF (.NOT.graupel_state_valid(qd,nd,q_active_min,second_active_min,density_min,density_max)) RETURN
++  IF (has_receiver) THEN
++    IF (.NOT.graupel_state_valid(qr,nr,q_active_min,second_active_min,density_min,density_max)) RETURN
++  ENDIF
++ELSE
++  IF (.NOT.paired(qd,nd)) RETURN
++  IF (has_receiver) THEN
++    IF (.NOT.paired(qr,nr)) RETURN
++  ENDIF
++ENDIF
++IF (factor>0.0_real64 .AND. pq>0.0_real64) THEN
++  packet_q=factor*pq
++  donor_q_loss=(REAL(qwork(donor),real64)-REAL(qd,real64))*donor_q_den
++  donor_q_tol=0.5_real64*REAL(ulp32(qd),real64)*donor_q_den + &
++              32.0_real64*EPSILON(1.0_real64)*MAX(packet_q,ABS(donor_q_loss))
++  IF (donor_q_loss<=0.0_real64 .OR. ABS(donor_q_loss-packet_q)>donor_q_tol) RETURN
++  IF (has_receiver) THEN
++    receiver_q_gain=(REAL(qr,real64)-REAL(qwork(receiver),real64))*receiver_q_den
++    receiver_q_tol=0.5_real64*REAL(ulp32(qr),real64)*receiver_q_den + &
++                   32.0_real64*EPSILON(1.0_real64)*MAX(packet_q,ABS(receiver_q_gain))
++    IF (receiver_q_gain<=0.0_real64 .OR. ABS(receiver_q_gain-packet_q)>receiver_q_tol) RETURN
++  ENDIF
++ENDIF
++IF (factor>0.0_real64 .AND. pn>0.0_real64) THEN
++  packet_n=factor*pn
++  donor_n_loss=(REAL(nwork(donor),real64)-REAL(nd,real64))*donor_n_den
++  donor_n_tol=0.5_real64*REAL(ulp32(nd),real64)*donor_n_den + &
++              32.0_real64*EPSILON(1.0_real64)*MAX(packet_n,ABS(donor_n_loss))
++  IF (donor_n_loss<=0.0_real64 .OR. ABS(donor_n_loss-packet_n)>donor_n_tol) RETURN
++  IF (has_receiver) THEN
++    receiver_n_gain=(REAL(nr,real64)-REAL(nwork(receiver),real64))*receiver_n_den
++    receiver_n_tol=0.5_real64*REAL(ulp32(nr),real64)*receiver_n_den + &
++                   32.0_real64*EPSILON(1.0_real64)*MAX(packet_n,ABS(receiver_n_gain))
++    IF (receiver_n_gain<=0.0_real64 .OR. ABS(receiver_n_gain-packet_n)>receiver_n_tol) RETURN
++  ENDIF
++ENDIF
++IF (mode==PR85_SED_GRAUPEL) THEN
++  ok=graupel_state_valid(qd,nd,q_active_min,second_active_min,density_min,density_max)
++  IF (has_receiver) ok=ok .AND. graupel_state_valid(qr,nr,q_active_min, &
++       second_active_min,density_min,density_max)
++ELSE
++  ok=paired(qd,nd)
++  IF (has_receiver) ok=ok .AND. paired(qr,nr)
++ENDIF
++END SUBROUTINE candidate
++
++PURE REAL(real32) FUNCTION ulp32(value)
++REAL(real32), INTENT(IN) :: value
++REAL(real32) :: above,below,up_gap,down_gap
++ulp32=NEAREST(0.0_real32,1.0_real32)
++IF (value==HUGE(0.0_real32)) THEN
++  below=NEAREST(value,-1.0_real32)
++  ulp32=value-below
++  RETURN
++ENDIF
++above=NEAREST(value,1.0_real32)
++below=NEAREST(value,-1.0_real32)
++up_gap=above-value
++down_gap=value-below
++ulp32=MAX(up_gap,down_gap)
++END FUNCTION ulp32
++
++PURE SUBROUTINE safe_ratio(numerator,denominator,ratio,ok)
++REAL(real64), INTENT(IN) :: numerator,denominator
++REAL(real64), INTENT(OUT) :: ratio
++LOGICAL, INTENT(OUT) :: ok
++ratio=0.0_real64; ok=.FALSE.
++IF (.NOT.ieee_is_finite(numerator) .OR. .NOT.ieee_is_finite(denominator)) RETURN
++IF (numerator<0.0_real64 .OR. denominator<=0.0_real64) RETURN
++IF (denominator<1.0_real64) THEN
++  IF (numerator>HUGE(0.0_real64)*denominator) RETURN
++ENDIF
++ratio=numerator/denominator
++ok=ieee_is_finite(ratio)
++END SUBROUTINE safe_ratio
++
++SUBROUTINE approve_packet(donor,receiver,pq,pn,has_receiver,factor,qd,nd,qr,nr,ok,empty_receiver_unpaired)
++INTEGER, INTENT(IN) :: donor,receiver
++REAL(real64), INTENT(IN) :: pq,pn
++LOGICAL, INTENT(IN) :: has_receiver
++REAL(real64), INTENT(OUT) :: factor
++REAL(real32), INTENT(OUT) :: qd,nd,qr,nr
++LOGICAL, INTENT(OUT) :: ok,empty_receiver_unpaired
++factor=1.0_real64
++CALL candidate(donor,receiver,pq,pn,factor,has_receiver,qd,nd,qr,nr,ok,empty_receiver_unpaired)
++END SUBROUTINE approve_packet
++
++SUBROUTINE backtrack_packet(donor,receiver,pq,pn,has_receiver,factor,qd,nd,qr,nr,ok)
++INTEGER, INTENT(IN) :: donor,receiver
++REAL(real64), INTENT(IN) :: pq,pn
++LOGICAL, INTENT(IN) :: has_receiver
++REAL(real64), INTENT(OUT) :: factor
++REAL(real32), INTENT(OUT) :: qd,nd,qr,nr
++LOGICAL, INTENT(OUT) :: ok
++REAL(real64) :: lower,upper,middle
++REAL(real32) :: qdt,ndt,qrt,nrt
++LOGICAL :: trial_ok,empty_receiver_unpaired
++lower=0.0_real64; upper=1.0_real64
++qd=qwork(donor); nd=nwork(donor)
++qr=0.0_real32; nr=0.0_real32
++IF (has_receiver) THEN
++qr=qwork(receiver); nr=nwork(receiver)
++ENDIF
++IF (mode==PR85_SED_GRAUPEL) THEN
++  CALL search_graupel_partitions(donor,receiver,pq,pn,has_receiver,factor,qd,nd,qr,nr,ok)
++  RETURN
++ENDIF
++factor=0.0_real64; ok=.TRUE.
++DO iteration=1,64
++middle=0.5_real64*(lower+upper)
++CALL candidate(donor,receiver,pq,pn,middle,has_receiver,qdt,ndt,qrt,nrt, &
++trial_ok,empty_receiver_unpaired)
++IF (trial_ok) THEN
++lower=middle; qd=qdt; nd=ndt; qr=qrt; nr=nrt
++ELSE
++upper=middle
++ENDIF
++ENDDO
++factor=lower
++IF (factor>0.0_real64 .AND. qd==qwork(donor) .AND. nd==nwork(donor)) THEN
++IF (.NOT.has_receiver) THEN
++factor=0.0_real64
++ELSE IF (qr==qwork(receiver) .AND. nr==nwork(receiver)) THEN
++factor=0.0_real64
++ENDIF
++ENDIF
++END SUBROUTINE backtrack_packet
++
++END SUBROUTINE pr85_kdm6_paired_sediment_column
++
++SUBROUTINE pr85_kdm6_subthreshold_melt(qcloud,ncloud,qrain,nrain,dry_density, &
++delz,qmelt,snow_mean_mass,cloud_min,cloud_max,rain_min,rain_max, &
++qcloud_after,ncloud_after,qrain_after,nrain_after,number_requested, &
++route,accepted)
++USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64
++USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
++IMPLICIT NONE
++REAL(real32), INTENT(IN) :: qcloud,ncloud,qrain,nrain,dry_density,delz,qmelt
++REAL(real32), INTENT(IN) :: snow_mean_mass,cloud_min,cloud_max,rain_min,rain_max
++REAL(real32), INTENT(OUT) :: qcloud_after,ncloud_after,qrain_after,nrain_after
++REAL(real64), INTENT(OUT) :: number_requested
++INTEGER, INTENT(OUT) :: route
++LOGICAL, INTENT(OUT) :: accepted
++
++REAL(real64) :: source_mass,source_number
++REAL(real64) :: mean_mass,r32max
++REAL(real32) :: qstored,nstored
++LOGICAL :: source_fits_cloud,source_fits_rain
++
++qcloud_after=qcloud
++ncloud_after=ncloud
++qrain_after=qrain
++nrain_after=nrain
++number_requested=0.0_real64
++route=0
++accepted=.FALSE.
++IF (.NOT.ALL(ieee_is_finite([qcloud,ncloud,qrain,nrain,dry_density,delz,qmelt, &
++    snow_mean_mass,cloud_min,cloud_max,rain_min,rain_max]))) RETURN
++IF (MIN(qcloud,ncloud,qrain,nrain)<0.0_real32 .OR. dry_density<=0.0_real32 .OR. &
++    delz<=0.0_real32 .OR. qmelt<0.0_real32 .OR. snow_mean_mass<=0.0_real32 .OR. &
++    cloud_min<=0.0_real32 .OR. cloud_max<cloud_min .OR. rain_min<=0.0_real32 .OR. &
++    rain_max<rain_min) RETURN
++IF (.NOT.paired(qcloud,ncloud) .OR. .NOT.paired(qrain,nrain)) RETURN
++IF (qmelt==0.0_real32) THEN
++  accepted=.TRUE.
++  RETURN
++ENDIF
++
++source_mass=REAL(snow_mean_mass,real64)
++source_number=REAL(dry_density,real64)*REAL(qmelt,real64)/source_mass
++IF (.NOT.ieee_is_finite(source_number) .OR. source_number<=0.0_real64) RETURN
++number_requested=source_number
++source_fits_cloud=snow_mean_mass>=cloud_min .AND. snow_mean_mass<=cloud_max
++source_fits_rain=snow_mean_mass>=rain_min .AND. snow_mean_mass<=rain_max
++r32max=REAL(HUGE(0.0_real32),real64)
++
++IF (source_fits_cloud) THEN
++  CALL try_category(qcloud,ncloud,cloud_min,cloud_max,ok=accepted, &
++       qstored=qstored,nstored=nstored)
++  IF (accepted) THEN
++    route=1
++    qcloud_after=qstored
++    ncloud_after=nstored
++    RETURN
++  ENDIF
++ENDIF
++IF (source_fits_rain) THEN
++  CALL try_category(qrain,nrain,rain_min,rain_max,ok=accepted, &
++       qstored=qstored,nstored=nstored)
++  IF (accepted) THEN
++    route=2
++    qrain_after=qstored
++    nrain_after=nstored
++    RETURN
++  ENDIF
++ENDIF
++route=0
++accepted=.FALSE.
++
++CONTAINS
++
++SUBROUTINE try_category(qold,nold,mean_min,mean_max,ok,qstored,nstored)
++REAL(real32), INTENT(IN) :: qold,nold,mean_min,mean_max
++LOGICAL, INTENT(OUT) :: ok
++REAL(real32), INTENT(OUT) :: qstored,nstored
++REAL(real64) :: qtrial,ntrial
++qstored=qold
++nstored=nold
++ok=.FALSE.
++qtrial=REAL(qold,real64)+REAL(qmelt,real64)
++ntrial=REAL(nold,real64)+source_number
++IF (.NOT.ieee_is_finite(qtrial) .OR. .NOT.ieee_is_finite(ntrial)) RETURN
++IF (qtrial<=0.0_real64 .OR. ntrial<=0.0_real64 .OR. &
++    qtrial>r32max .OR. ntrial>r32max) RETURN
++mean_mass=REAL(dry_density,real64)*qtrial/ntrial
++IF (.NOT.ieee_is_finite(mean_mass) .OR. &
++    mean_mass<REAL(mean_min,real64) .OR. mean_mass>REAL(mean_max,real64)) RETURN
++qstored=REAL(qtrial,real32)
++nstored=REAL(ntrial,real32)
++IF (.NOT.ieee_is_finite(qstored) .OR. .NOT.ieee_is_finite(nstored)) RETURN
++IF (.NOT.paired(qstored,nstored)) RETURN
++mean_mass=REAL(dry_density,real64)*REAL(qstored,real64)/REAL(nstored,real64)
++IF (.NOT.ieee_is_finite(mean_mass) .OR. &
++    mean_mass<REAL(mean_min,real64) .OR. mean_mass>REAL(mean_max,real64)) RETURN
++ok=.TRUE.
++END SUBROUTINE try_category
++
++PURE LOGICAL FUNCTION paired(q,n)
++REAL(real32), INTENT(IN) :: q,n
++paired=(q==0.0_real32 .AND. n==0.0_real32) .OR. &
++       (q>0.0_real32 .AND. n>0.0_real32)
++END FUNCTION paired
++
++END SUBROUTINE pr85_kdm6_subthreshold_melt
++
++SUBROUTINE pr85_kdm6_freezing_packet(qcloud,ncloud,qice,nice,dry_density,ice_transient_mass_limit, &
++mass_requested,number_requested,cloud_min,cloud_max,ice_min,ice_max, &
++qcloud_after,ncloud_after,qice_after,nice_after,mass_approved, &
++number_approved,fraction,base_valid,accepted)
++USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64
++USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
++IMPLICIT NONE
++REAL(real32), INTENT(IN) :: qcloud,ncloud,qice,nice,dry_density
++REAL(real64), INTENT(IN) :: ice_transient_mass_limit
++REAL(real64), INTENT(IN) :: mass_requested,number_requested
++REAL(real64), INTENT(IN) :: cloud_min,cloud_max,ice_min,ice_max
++REAL(real32), INTENT(OUT) :: qcloud_after,ncloud_after,qice_after,nice_after
++REAL(real64), INTENT(OUT) :: mass_approved,number_approved,fraction
++LOGICAL, INTENT(OUT) :: base_valid,accepted
++
++REAL(real64) :: theta
++REAL(real32) :: qct,nct,qit,nit
++LOGICAL :: feasible,found
++INTEGER :: attempt
++
++qcloud_after=qcloud
++ncloud_after=ncloud
++qice_after=qice
++nice_after=nice
++mass_approved=0.0_real64
++number_approved=0.0_real64
++fraction=0.0_real64
++base_valid=.FALSE.
++accepted=.FALSE.
++IF (.NOT.ALL(ieee_is_finite([qcloud,ncloud,qice,nice,dry_density]))) RETURN
++IF (.NOT.ieee_is_finite(ice_transient_mass_limit)) RETURN
++IF (.NOT.ALL(ieee_is_finite([mass_requested,number_requested,cloud_min,cloud_max, &
++    ice_min,ice_max]))) RETURN
++IF (MIN(qcloud,ncloud,qice,nice)<0.0_real32 .OR. dry_density<=0.0_real32 .OR. &
++    ice_transient_mass_limit<0.0_real64 .OR. &
++    mass_requested<0.0_real64 .OR. number_requested<0.0_real64 .OR. &
++    cloud_min<=0.0_real64 .OR. cloud_max<cloud_min .OR. &
++    ice_min<=0.0_real64 .OR. ice_max<ice_min) RETURN
++IF (MIN(cloud_min,ice_min)<REAL(TINY(0.0_real32),real64) .OR. &
++    MAX(cloud_max,ice_max)>REAL(HUGE(0.0_real32),real64)) RETURN
++IF (.NOT.paired(qcloud,ncloud) .OR. .NOT.paired(qice,nice)) RETURN
++IF (.NOT.in_cone(qcloud,ncloud,dry_density,cloud_min,cloud_max)) RETURN
++IF (qice>0.0_real32 .AND. REAL(qice,real64)<=ice_transient_mass_limit) THEN
++  ! Native KDM6 skips ice PSD reconstruction below the 1.e-14 mass gate.
++  ! Admit only that source-bounded base category;
++  ! candidate endpoints still pass the strict ice cone below.
++ELSE
++  IF (.NOT.in_cone(qice,nice,dry_density,ice_min,ice_max)) RETURN
++ENDIF
++base_valid=.TRUE.
++IF (mass_requested==0.0_real64 .AND. number_requested==0.0_real64) THEN
++  accepted=.TRUE.
++  RETURN
++ENDIF
++IF (mass_requested<=0.0_real64 .OR. number_requested<=0.0_real64) RETURN
++
++! Full source proposal is preferred. If storage/PSD constraints require it,
++! deterministic halving seeks a representable paired fraction.
++theta=1.0_real64
++found=.FALSE.
++DO attempt=0,48
++  CALL candidate(theta,qct,nct,qit,nit,feasible)
++  IF (feasible) THEN
++    found=.TRUE.
++    EXIT
++  ENDIF
++  theta=theta*0.5_real64
++ENDDO
++IF (.NOT.found) RETURN
++qcloud_after=qct
++ncloud_after=nct
++qice_after=qit
++nice_after=nit
++fraction=theta
++mass_approved=theta*mass_requested
++number_approved=theta*number_requested
++accepted=.TRUE.
++
++CONTAINS
++
++SUBROUTINE candidate(scale,qco,nco,qio,nio,ok)
++REAL(real64), INTENT(IN) :: scale
++REAL(real32), INTENT(OUT) :: qco,nco,qio,nio
++LOGICAL, INTENT(OUT) :: ok
++REAL(real64) :: qcd,ncd,qid,nid,r32max,mass_amount,number_amount
++qco=qcloud; nco=ncloud; qio=qice; nio=nice
++ok=.FALSE.
++r32max=REAL(HUGE(0.0_real32),real64)
++qcd=REAL(qcloud,real64)-scale*mass_requested
++ncd=REAL(ncloud,real64)-scale*number_requested
++qid=REAL(qice,real64)+scale*mass_requested
++nid=REAL(nice,real64)+scale*number_requested
++IF (.NOT.ALL(ieee_is_finite([qcd,ncd,qid,nid]))) RETURN
++IF (MIN(qcd,ncd,qid,nid)<0.0_real64 .OR. MAX(qcd,ncd,qid,nid)>r32max) RETURN
++qco=REAL(qcd,real32); nco=REAL(ncd,real32)
++qio=REAL(qid,real32); nio=REAL(nid,real32)
++IF (.NOT.ALL(ieee_is_finite([qco,nco,qio,nio]))) RETURN
++IF (.NOT.paired(qco,nco) .OR. .NOT.paired(qio,nio)) RETURN
++! A positive packet must be stored on both sides for each moment.
++IF (qco>=qcloud .OR. nco>=ncloud .OR. qio<=qice .OR. nio<=nice) RETURN
++mass_amount=scale*mass_requested
++number_amount=scale*number_requested
++IF (.NOT.change_matches_packet(REAL(qcloud,real64)-REAL(qco,real64), &
++    mass_amount,qco)) RETURN
++IF (.NOT.change_matches_packet(REAL(qio,real64)-REAL(qice,real64), &
++    mass_amount,qio)) RETURN
++IF (.NOT.change_matches_packet(REAL(ncloud,real64)-REAL(nco,real64), &
++    number_amount,nco)) RETURN
++IF (.NOT.change_matches_packet(REAL(nio,real64)-REAL(nice,real64), &
++    number_amount,nio)) RETURN
++IF (.NOT.in_cone(qco,nco,dry_density,cloud_min,cloud_max) .OR. &
++    .NOT.in_cone(qio,nio,dry_density,ice_min,ice_max)) RETURN
++ok=.TRUE.
++END SUBROUTINE candidate
++
++PURE LOGICAL FUNCTION change_matches_packet(actual,requested,new_value)
++REAL(real64), INTENT(IN) :: actual,requested
++REAL(real32), INTENT(IN) :: new_value
++REAL(real64) :: tolerance
++! The old REAL32 endpoint is exact in REAL64; only the new stored endpoint
++! rounds, so use half an ULP at the new endpoint.
++tolerance=0.5_real64*endpoint_ulp(new_value)+ &
++          32.0_real64*EPSILON(0.0_real64)* &
++          MAX(ABS(actual),ABS(requested),ABS(REAL(new_value,real64)))
++change_matches_packet=ABS(actual-requested)<=tolerance
++END FUNCTION change_matches_packet
++
++PURE REAL(real64) FUNCTION endpoint_ulp(value)
++REAL(real32), INTENT(IN) :: value
++REAL(real32) :: next_value
++IF (value<TINY(0.0_real32)) THEN
++  next_value=NEAREST(value,1.0_real32)
++  endpoint_ulp=REAL(next_value,real64)-REAL(value,real64)
++ELSE
++  endpoint_ulp=REAL(SPACING(value),real64)
++ENDIF
++END FUNCTION endpoint_ulp
++
++PURE LOGICAL FUNCTION paired(q,n)
++REAL(real32), INTENT(IN) :: q,n
++paired=(q==0.0_real32 .AND. n==0.0_real32) .OR. &
++       (q>0.0_real32 .AND. n>0.0_real32)
++END FUNCTION paired
++
++PURE LOGICAL FUNCTION in_cone(q,n,rho,mmin,mmax)
++REAL(real32), INTENT(IN) :: q,n,rho
++REAL(real64), INTENT(IN) :: mmin,mmax
++REAL(real64) :: mean_mass,lo_tol,hi_tol
++in_cone=.FALSE.
++IF (q==0.0_real32 .AND. n==0.0_real32) THEN
++  in_cone=.TRUE.
++  RETURN
++ENDIF
++IF (q<=0.0_real32 .OR. n<=0.0_real32) RETURN
++mean_mass=REAL(rho,real64)*REAL(q,real64)/REAL(n,real64)
++lo_tol=8.0_real64*REAL(SPACING(REAL(mmin,real32)),real64)
++hi_tol=8.0_real64*REAL(SPACING(REAL(mmax,real32)),real64)
++in_cone=ieee_is_finite(mean_mass) .AND. &
++        mean_mass>=mmin-lo_tol .AND. mean_mass<=mmax+hi_tol
++END FUNCTION in_cone
++
++END SUBROUTINE pr85_kdm6_freezing_packet
++
++SUBROUTINE pr85_kdm6_rain_freezing_packet(qrain,nrain,qgraupel,vgraupel, &
++dry_density,mass_requested,number_requested,volume_requested, &
++rain_min,rain_max,graupel_density_min,graupel_density_max, &
++qrain_after,nrain_after,qgraupel_after,vgraupel_after, &
++mass_approved,number_approved,volume_approved,fraction,base_valid,accepted)
++USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64
++USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
++IMPLICIT NONE
++REAL(real32), INTENT(IN) :: qrain,nrain,qgraupel,vgraupel,dry_density
++REAL(real64), INTENT(IN) :: mass_requested,number_requested,volume_requested
++REAL(real64), INTENT(IN) :: rain_min,rain_max,graupel_density_min,graupel_density_max
++REAL(real32), INTENT(OUT) :: qrain_after,nrain_after,qgraupel_after,vgraupel_after
++REAL(real64), INTENT(OUT) :: mass_approved,number_approved,volume_approved,fraction
++LOGICAL, INTENT(OUT) :: base_valid,accepted
++REAL(real64) :: theta
++REAL(real32) :: qrt,nrt,qgt,vgt
++LOGICAL :: feasible,found
++INTEGER :: attempt
++
++qrain_after=qrain; nrain_after=nrain
++qgraupel_after=qgraupel; vgraupel_after=vgraupel
++mass_approved=0.0_real64; number_approved=0.0_real64
++volume_approved=0.0_real64; fraction=0.0_real64
++base_valid=.FALSE.; accepted=.FALSE.
++IF (.NOT.ALL(ieee_is_finite([qrain,nrain,qgraupel,vgraupel,dry_density]))) RETURN
++IF (.NOT.ALL(ieee_is_finite([mass_requested,number_requested,volume_requested, &
++    rain_min,rain_max,graupel_density_min,graupel_density_max]))) RETURN
++IF (MIN(qrain,nrain,qgraupel,vgraupel)<0.0_real32 .OR. dry_density<=0.0_real32) RETURN
++IF (MIN(mass_requested,number_requested,volume_requested)<0.0_real64) RETURN
++IF (rain_min<=0.0_real64 .OR. rain_max<rain_min .OR. &
++    graupel_density_min<=0.0_real64 .OR. graupel_density_max<graupel_density_min) RETURN
++IF (MIN(rain_min,graupel_density_min)<REAL(TINY(0.0_real32),real64) .OR. &
++    MAX(rain_max,graupel_density_max)>REAL(HUGE(0.0_real32),real64)) RETURN
++IF (.NOT.paired(qrain,nrain) .OR. .NOT.paired(qgraupel,vgraupel)) RETURN
++IF (.NOT.rain_cone(qrain,nrain,dry_density,rain_min,rain_max) .OR. &
++    .NOT.graupel_cone(qgraupel,vgraupel,graupel_density_min,graupel_density_max)) RETURN
++base_valid=.TRUE.
++IF (mass_requested==0.0_real64 .AND. number_requested==0.0_real64 .AND. &
++    volume_requested==0.0_real64) THEN
++  accepted=.TRUE.
++  RETURN
++ENDIF
++! This source process is one coupled mass/number/volume packet. A missing
++! moment proposal cannot be repaired with a floor or a post-process remap.
++IF (mass_requested<=0.0_real64 .OR. number_requested<=0.0_real64 .OR. &
++    volume_requested<=0.0_real64) RETURN
++
++theta=1.0_real64
++found=.FALSE.
++DO attempt=0,48
++  CALL candidate(theta,qrt,nrt,qgt,vgt,feasible)
++  IF (feasible) THEN
++    found=.TRUE.
++    EXIT
++  ENDIF
++  theta=theta*0.5_real64
++ENDDO
++IF (.NOT.found) RETURN
++qrain_after=qrt; nrain_after=nrt
++qgraupel_after=qgt; vgraupel_after=vgt
++fraction=theta
++mass_approved=theta*mass_requested
++number_approved=theta*number_requested
++volume_approved=theta*volume_requested
++accepted=.TRUE.
++
++CONTAINS
++
++SUBROUTINE candidate(scale,qro,nro,qgo,vgo,ok)
++REAL(real64), INTENT(IN) :: scale
++REAL(real32), INTENT(OUT) :: qro,nro,qgo,vgo
++LOGICAL, INTENT(OUT) :: ok
++REAL(real64) :: qr64,nr64,qg64,vg64,r32max
++qro=qrain; nro=nrain; qgo=qgraupel; vgo=vgraupel
++ok=.FALSE.
++r32max=REAL(HUGE(0.0_real32),real64)
++qr64=REAL(qrain,real64)-scale*mass_requested
++nr64=REAL(nrain,real64)-scale*number_requested
++qg64=REAL(qgraupel,real64)+scale*mass_requested
++vg64=REAL(vgraupel,real64)+scale*volume_requested
++IF (.NOT.ALL(ieee_is_finite([qr64,nr64,qg64,vg64]))) RETURN
++IF (MIN(qr64,nr64,qg64,vg64)<0.0_real64 .OR. &
++    MAX(qr64,nr64,qg64,vg64)>r32max) RETURN
++qro=REAL(qr64,real32); nro=REAL(nr64,real32)
++qgo=REAL(qg64,real32); vgo=REAL(vg64,real32)
++IF (.NOT.ALL(ieee_is_finite([qro,nro,qgo,vgo]))) RETURN
++IF (.NOT.paired(qro,nro) .OR. .NOT.paired(qgo,vgo)) RETURN
++! Do not approve a transfer unless all four source/receiver changes are stored.
++IF (qro>=qrain .OR. nro>=nrain .OR. qgo<=qgraupel .OR. vgo<=vgraupel) RETURN
++IF (.NOT.change_matches(REAL(qrain,real64)-REAL(qro,real64), &
++    scale*mass_requested,qro)) RETURN
++IF (.NOT.change_matches(REAL(nrain,real64)-REAL(nro,real64), &
++    scale*number_requested,nro)) RETURN
++IF (.NOT.change_matches(REAL(qgo,real64)-REAL(qgraupel,real64), &
++    scale*mass_requested,qgo)) RETURN
++IF (.NOT.change_matches(REAL(vgo,real64)-REAL(vgraupel,real64), &
++    scale*volume_requested,vgo)) RETURN
++IF (.NOT.rain_cone(qro,nro,dry_density,rain_min,rain_max) .OR. &
++    .NOT.graupel_cone(qgo,vgo,graupel_density_min,graupel_density_max)) RETURN
++ok=.TRUE.
++END SUBROUTINE candidate
++
++PURE LOGICAL FUNCTION change_matches(actual,requested,new_value)
++REAL(real64), INTENT(IN) :: actual,requested
++REAL(real32), INTENT(IN) :: new_value
++REAL(real64) :: tolerance
++! The old REAL32 endpoint is exact in REAL64. Only the new stored endpoint
++! rounds, so the storage allowance is half an ULP at that endpoint.
++tolerance=0.5_real64*endpoint_ulp(new_value)+32.0_real64*EPSILON(0.0_real64)* &
++          MAX(ABS(actual),ABS(requested),ABS(REAL(new_value,real64)))
++change_matches=ABS(actual-requested)<=tolerance
++END FUNCTION change_matches
++
++PURE REAL(real64) FUNCTION endpoint_ulp(value)
++REAL(real32), INTENT(IN) :: value
++REAL(real32) :: next_value
++IF (value>=HUGE(value)) THEN
++  endpoint_ulp=REAL(SPACING(value),real64)
++ELSEIF (value<TINY(value)) THEN
++  next_value=NEAREST(value,1.0_real32)
++  endpoint_ulp=REAL(next_value,real64)-REAL(value,real64)
++ELSE
++  endpoint_ulp=REAL(SPACING(value),real64)
++ENDIF
++END FUNCTION endpoint_ulp
++
++PURE LOGICAL FUNCTION paired(q,n)
++REAL(real32), INTENT(IN) :: q,n
++paired=(q==0.0_real32 .AND. n==0.0_real32) .OR. &
++       (q>0.0_real32 .AND. n>0.0_real32)
++END FUNCTION paired
++
++PURE LOGICAL FUNCTION rain_cone(q,n,rho,mmin,mmax)
++REAL(real32), INTENT(IN) :: q,n,rho
++REAL(real64), INTENT(IN) :: mmin,mmax
++REAL(real64) :: mean_mass,lo_tol,hi_tol
++rain_cone=.FALSE.
++IF (q==0.0_real32 .AND. n==0.0_real32) THEN
++  rain_cone=.TRUE.; RETURN
++ENDIF
++IF (q<=0.0_real32 .OR. n<=0.0_real32) RETURN
++mean_mass=REAL(rho,real64)*REAL(q,real64)/REAL(n,real64)
++lo_tol=8.0_real64*REAL(SPACING(REAL(mmin,real32)),real64)
++hi_tol=8.0_real64*REAL(SPACING(REAL(mmax,real32)),real64)
++rain_cone=ieee_is_finite(mean_mass) .AND. mean_mass>=mmin-lo_tol .AND. mean_mass<=mmax+hi_tol
++END FUNCTION rain_cone
++
++PURE LOGICAL FUNCTION graupel_cone(q,v,rho_min,rho_max)
++REAL(real32), INTENT(IN) :: q,v
++REAL(real64), INTENT(IN) :: rho_min,rho_max
++REAL(real64) :: density
++graupel_cone=.FALSE.
++IF (q==0.0_real32 .AND. v==0.0_real32) THEN
++  graupel_cone=.TRUE.; RETURN
++ENDIF
++IF (q<=0.0_real32 .OR. v<=0.0_real32) RETURN
++density=REAL(q,real64)/REAL(v,real64)
++! ProgB_param tests QG/BG against exact [100,900] bounds; match that
++! consumer predicate so an admitted endpoint cannot fail on the next call.
++graupel_cone=ieee_is_finite(density) .AND. &
++             density>=rho_min .AND. density<=rho_max
++END FUNCTION graupel_cone
++
++END SUBROUTINE pr85_kdm6_rain_freezing_packet
++
++
++SUBROUTINE pr85_kdm6_psd_bound_number(q,rho,lambda,lambda_min,lambda_max,pid,exponent,side, &
++species,stage,cell_i,lat,k,number_before,legacy_available,trace,ledger_unit,native_number,directed_number, &
++exact_min,exact_max,valid)
++USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
++IMPLICIT NONE
++REAL, INTENT(IN) :: q,rho,lambda,lambda_min,lambda_max,pid,exponent,number_before
++INTEGER, INTENT(IN) :: side,cell_i,lat,k,ledger_unit
++CHARACTER(*), INTENT(IN) :: species,stage
++LOGICAL, INTENT(OUT) :: legacy_available
++LOGICAL, INTENT(IN) :: trace
++REAL, INTENT(OUT) :: native_number,directed_number
++REAL(8), INTENT(OUT) :: exact_min,exact_max
++LOGICAL, INTENT(OUT) :: valid
++REAL(8) :: q64,rho64,lambda64,lmin64,lmax64,pid64,exp64
++REAL(8) :: native_product,native_power,native_predivide,native_exact
++REAL(8) :: huge32_safe,storage_correction,native_delta
++REAL :: rounded_bound
++INTEGER :: io_status
++
++valid=.FALSE.
++legacy_available=.FALSE.
++native_number=number_before
++directed_number=number_before
++exact_min=0.0D0
++exact_max=0.0D0
++IF (.NOT.ALL(ieee_is_finite([q,rho,lambda,lambda_min,lambda_max,pid,exponent,number_before]))) RETURN
++IF (q<=0.0 .OR. rho<=0.0 .OR. lambda<=0.0 .OR. lambda_min<=0.0 .OR. &
++    lambda_max<lambda_min .OR. pid<=0.0 .OR. exponent/=3.0 .OR. (side/=1 .AND. side/=2)) RETURN
++IF (side==1 .AND. lambda/=lambda_min) RETURN
++IF (side==2 .AND. lambda/=lambda_max) RETURN
++q64=DBLE(q); rho64=DBLE(rho); lambda64=DBLE(lambda)
++lmin64=DBLE(lambda_min); lmax64=DBLE(lambda_max); pid64=DBLE(pid); exp64=DBLE(exponent)
++! This operation order matches state_valid's R64 lambda-bound predicate.
++exact_min=(rho64*lmin64**3)/pid64*q64
++exact_max=(rho64*lmax64**3)/pid64*q64
++IF (.NOT.ALL(ieee_is_finite([exact_min,exact_max]))) RETURN
++IF (exact_min<=0.0D0 .OR. exact_max<exact_min) RETURN
++IF (exact_min>DBLE(HUGE(1.0)) .OR. exact_max>DBLE(HUGE(1.0))) RETURN
++rounded_bound=REAL(MERGE(exact_min,exact_max,side==1))
++IF (.NOT.ieee_is_finite(rounded_bound) .OR. rounded_bound<=0.0) RETURN
++IF (side==1) THEN
++  IF (DBLE(rounded_bound)<exact_min) rounded_bound=NEAREST(rounded_bound,1.0)
++ELSE
++  IF (DBLE(rounded_bound)>exact_max) rounded_bound=NEAREST(rounded_bound,-1.0)
++ENDIF
++IF (.NOT.ieee_is_finite(rounded_bound) .OR. rounded_bound<=0.0) RETURN
++IF (DBLE(rounded_bound)<exact_min .OR. DBLE(rounded_bound)>exact_max) RETURN
++! Preflight every REAL32 intermediate in the legacy source formula before evaluating it.
++! If this reset cannot be represented by the existing REAL32 expression, fail closed.
++native_product=rho64*q64
++native_power=lambda64**exp64
++native_predivide=native_product*native_power
++native_exact=native_predivide/pid64
++huge32_safe=DBLE(NEAREST(HUGE(1.0),-1.0))
++directed_number=rounded_bound
++IF (ALL(ieee_is_finite([native_product,native_power,native_predivide,native_exact])) .AND. &
++    native_product<=huge32_safe .AND. native_power<=huge32_safe .AND. &
++    native_predivide<=huge32_safe .AND. native_exact<=huge32_safe) THEN
++  native_number=rho*q*lambda**exponent/pid
++  legacy_available=.TRUE.
++  storage_correction=DBLE(directed_number)-DBLE(native_number)
++  native_delta=DBLE(native_number)-DBLE(number_before)
++ELSE
++  native_number=0.0
++  storage_correction=0.0D0
++  native_delta=0.0D0
++ENDIF
++valid=.TRUE.
++IF (trace) THEN
++  WRITE(ledger_unit,'(A,",",A,",",A,4(",",I0),1P,11(",",ES24.16E3),",",L1)',IOSTAT=io_status) &
++       'PR85_KDM6_PSD_BOUNDARY',species,stage,cell_i,lat,k,side, &
++       q,rho,lambda_min,lambda_max,number_before,native_number,directed_number, &
++       native_delta,storage_correction,exact_min,exact_max,legacy_available
++  IF (io_status/=0) ERROR STOP 'PR85 PSD boundary ledger write failed'
++ENDIF
++END SUBROUTINE pr85_kdm6_psd_bound_number

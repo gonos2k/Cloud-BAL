@@ -1,0 +1,221 @@
+{
+  "schema": "pr85_joint_moment_update_research_policy_v1",
+  "authority": "CONDITIONAL_RESEARCH_ONLY",
+  "case_time": "2026-08-16T13:00:00Z",
+  "scope": {
+    "microphysics": "MP37 KDM6",
+    "pbl": "Shinhong common QV/QC/QI/QNC/QNI mixing",
+    "domain_rank_thread_tile_counts": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "rk_order": 3,
+    "vertical_advection": "explicit; implicit vertical advection rejected",
+    "pbl_cadence": "BLDT=0, or absent BLDT with STEPBL=1; DTBL must equal model DT",
+    "native_window_seconds": 20,
+    "excluded": [
+      "restart",
+      "nesting",
+      "cycling",
+      "DFI",
+      "forecast or operational approval"
+    ]
+  },
+  "initial_state": {
+    "moment_policy": "PR84_NATIVE_MOMENT_POLICY_20261013.json",
+    "moment_policy_sha256": "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92",
+    "OFF_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+    "COUPLED_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+    "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "modification": "No new initialization, mass adjustment, T/q adjustment, cap increase, or species reassignment."
+  },
+  "air_transport": {
+    "method": "Shared old-time upwind donor-cell faces for QC/QNC, QI/QNI, QR/QNR, QG/QIB; QS and ambient QNN retain distinct single-field semantics.",
+    "carrier": "c1h*(mu+mub)+c2h, with native map factors and signed eta flux",
+    "acceptance": "Full transport fraction must equal one; a required global reduction is rejected. No final-state clipping or moment regeneration.",
+    "limitation": "First-order research replacement for selected scalar transport, not preservation of the native high-order RK advection scheme."
+  },
+  "pbl_representation": {
+    "operator": "Existing PR74 common implicit operator; REAL64 witness uses its REAL32 coefficients and RHS, including sequence-associated lower diagonal al(k-1).",
+    "eligible_packet": "Only exact-zero Q/N bases with a strictly positive, in-cone unrounded common-solve import.",
+    "admission": "At RK3 fractions 1/3, 1/2 and 1, compare the unrounded packet with the stored REAL32 candidate from the legacy tendencies. Withhold both channels only for a representation-caused invalid stored pair.",
+    "preservation": "Existing particles and other-process tendencies remain unchanged; a genuinely invalid ideal source remains visible to admission checks.",
+    "ledger": "pr85_pbl_packet_residual.raw records omitted proposed imports and legacy rates. Positive omitted quantities use DEL pressure weights, not native kilograms; a numerical state-change term has the opposite sign relative to the unrounded proposal. Ledger I/O failure aborts the run."
+  },
+  "fogdes": {
+    "atmosphere": "Conditional generalized-gamma alpha=3 cloud PSD with distinct Stokes-integrated mass and number speeds, VQ/VN=5/3; shared donor-approved face factor.",
+    "ground": "Separate VDFG bulk deposition for both moments; no atmospheric equal-speed assumption.",
+    "ledger": "pr85_fogdes_budget.raw separates ground sinks from stored REAL32 tendency residuals using local rho_dry*dz. This is not hybrid-coordinate whole-model mass closure."
+  },
+  "cumulus": {
+    "policy": "PR85_KSAS_SOURCE_PSD_POLICY_20261015.json",
+    "method": "Explicit process-specific number birth from each positive KSAS QC/QI mass packet before native carrier coupling; negative packets use pre-source N/Q.",
+    "ledger": "pr85_cumulus_source.raw distinguishes proposed number source from the actual REAL32 additive increment."
+  },
+  "state_admission": {
+    "predicate": "Shared joint_moment_is_valid for stored REAL32 values, separate endpoint 8-ULP ratio tolerances, and positive representable moment-per-volume conversion under round-to-nearest.",
+    "QIB": "Specific rime volume, not particle count. QG/QIB has bulk-density units; QIB*rho_dry is a volume fraction.",
+    "transaction": "Commit the complete grouped candidate only after all required pairs and single fields pass."
+  },
+  "open_assessments": [
+    "Completed native RK and KDM6 calls require separate execution evidence.",
+    "Native water, dry mass and energy closure require actual carrier weights, boundaries, physical processes and numerical terms.",
+    "Short-time matched OFF/HYDRO/COUPLED response, independent observations and forecast efficacy are unassessed."
+  ],
+  "ice_sedimentation": {
+    "method": "Use native distinct mass and number fall rates with REAL64 local face packets. Approve donor and receiver stored states together, using a shared factor per face rather than a column-wide reduction.",
+    "carrier": "Ice mass: rho_dry*dz*QI; internal number: dz*NCI. NCI is already number per cubic metre.",
+    "admission": "Native internal finite, nonnegative pairedness; this stage does not impose additional PSD lambda bounds. The independent completed-state reader retains its separate PSD diagnostics.",
+    "representation": "When either channel cannot be stored at an empty receiver, defer both face transfers and retain the donor packet. Positive approved components must change the donor and receiver stored endpoints; an unrepresented donor loss cannot fund a receiver gain. No post-update number erasure or mass floor.",
+    "ledger": "pr85_ice_sedimentation_budget.raw distinguishes proposed, approved and withheld packets, ground sinks and actual REAL32 inventory residuals. Ordinary nonzero endpoint rounding is explicitly retained as a numerical residual, not claimed to be exact stored conservation. Local sedimentation diagnostics do not establish hybrid-coordinate whole-model water or energy closure."
+  },
+  "small_snow_melt": {
+    "status": "DECLARED_CONDITIONAL_RESEARCH_RULE",
+    "eligibility": "Existing positive snow-melt packet with 0 < snow mixing ratio <= native qcrmin. Active larger-donor legacy melt remains a separate unchanged branch.",
+    "donor_mean_mass": "cms * Gamma(1+dms+mus)/Gamma(1+mus) * rslope_s**dms, from the native diagnosed snow PSD, mass-normalized to the actual melting packet.",
+    "number_birth": "rho_dry * melted_dry_mixing_ratio / donor_mean_particle_mass; one melted donor particle supplies one liquid product particle, without an arbitrary number floor or inferred observation.",
+    "liquid_product": "Select cloud when the donor mean mass is representable by the native cloud moment interval; otherwise rain when representable by its distinct native rain interval. If neither interval supports it, reject the candidate. This is a declared bulk representation rule, not a reconstructed full size spectrum.",
+    "phase_accounting": "Use the same approved snow mass loss and latent-heat change; record destination mass/number increments and their actual REAL32 storage residuals. No phase-source relabeling of numerical roundoff.",
+    "limits": "Does not establish observation fit, general mixed-phase kinetics, or native global water/energy closure. The strict post-call state/PSD reader is retained.",
+    "admission": "Positive melt with no supported stored liquid pair is logged with unchanged snow/liquid/temperature state, then rejected. A zero-melt no-op is separate. The process does not silently skip a rejected positive melt."
+  },
+  "freezing": {
+    "status": "DECLARED_CONDITIONAL_RESEARCH_RULE",
+    "processes": [
+      "contact nucleation pinuc/ninuc",
+      "cloud immersion freezing pfrzdtc/nfrzdtc"
+    ],
+    "rates": "Retain existing mass and number rate formulas and donor-availability limits. A positive particle donor permits its number-rate calculation; ncmin is not an independent permission to transfer mass without number.",
+    "joint_admission": "Use one fraction for the proposed cloud-to-ice mass, particle count and latent-temperature update. Validate stored donor and receiver pairs against their separate cloud and ice mean-mass intervals with the existing eight-REAL32-ULP endpoint convention.",
+    "representation": "A positive source component must change both donor and receiver stored channels. If the coupled packet cannot be represented, defer all its mass/count/latent updates together and record the whole proposal as withheld. One-zero stored proposal is also deferred; it is not filled with an arbitrary number.",
+    "failure": "Invalid source state, nonfinite/negative proposal or invalid parameters reject the process. A valid base with no admitted halving trial is a logged zero-fraction source packet, not physical evidence that the freezing rate is zero.",
+    "ledger": "pr85_kdm6_freezing_budget.raw separates proposed, approved and withheld mass/count with actual stored changes and numerical residuals. It does not establish whole-model water, particle or energy closure.",
+    "unchanged": "Deep-cold whole-cloud transfer already moves both moments and is retained.",
+    "rounding": "Each stored endpoint delta is compared to its approved packet using half the new endpoint REAL32 ULP plus the explicit REAL64 operation allowance. The old stored REAL32 input is exactly represented in REAL64 and does not supply another rounding term.",
+    "inactive_ice_base": "The source stage-1 count reconstruction runs only for QI >= REAL32(1e-14). A positive paired base below this threshold may skip only the base ice PSD cone; the caller supplies DBLE(NEAREST(REAL32(1e-14),-1.0)) as the exact inclusive maximum. Equality at the source threshold remains active and must satisfy the strict cone. Each admitted endpoint retains strict cloud/ice cones and paired representable donor/receiver changes. No count floor, reconstruction or cleanup is added. Deferring such a base does not prove final-state validity."
+  },
+  "kdm6_initialization": {
+    "derived_cloud_size_coefficient": "Initialize rslopecdmax = rslopecmax**dmc in kdm6init alongside its second and third powers. The previous source read this SAVE variable without assigning it.",
+    "effect": "This changes a previously observed zero immersion-freezing mass rate to its computed positive value. It is a physics-affecting missing-initialization correction, not a diagnostic-only change or floor."
+  },
+  "rain_freezing": {
+    "status": "DECLARED_CONDITIONAL_RESEARCH_PROCESS_LIMITER",
+    "proposal": "Retain native rain freezing mass and number rate formulas. With a positive rain number donor, calculate the number rate rather than using nrmin as permission to transfer mass independently. Proposed graupel volume is frozen_mass/denr, with denr=1000 kg/m3.",
+    "joint_admission": "Apply one fraction to rain mass/count loss, graupel mass/volume gain and latent warming. Require valid stored rain PSD, graupel density in the existing 100..900 kg/m3 interval, finite positive candidate temperature and representable paired endpoint changes before committing any field.",
+    "empty_receiver": "A proposed 1000 kg/m3 packet cannot enter an absent graupel reservoir within the supported density cone at any positive fraction. Defer the entire process packet and report it as withheld. This changes the effective process transfer; it is not a claim that physical rain freezing vanishes.",
+    "existing_receiver": "A preexisting supported graupel mixture can admit a limited common fraction if its final density and stored rain PSD remain valid. No receiver-volume clamp, density-cap increase, species reassignment, or final-state erasure.",
+    "ledger": "Separate proposed, approved and withheld rain mass/count and graupel volume from actual REAL32 endpoint changes and numerical residuals. Deferred latent warming is also excluded from the committed temperature change.",
+    "limits": "A conditional supported-state limiter, not a validated general freezing parameterization or scientific acceptance. Whole-model water and energy closure require separate native evidence."
+  },
+  "cold_process_admission": {
+    "status": "DECLARED_CONDITIONAL_RESEARCH_REACTION_GROUPS",
+    "problem": "The old feasibility solve scaled selected rain rates but retained PAACW graupel birth in its fixed inventory. An unsupported fixed QG/BG endpoint could not be repaired by adjusting those selected rates.",
+    "graupel_related_reaction": "PAACW removes twice its mass from cloud and twice NAACW from cloud number, adds one mass part to snow and one to graupel, adds PAACW/denr to graupel volume, and releases fusion heat for both mass parts. These linked effects share a single admitted fraction. PRACS and the snow/rain collection partners also share their complete routed mass/volume changes.",
+    "branch_consistency": "Use (1-delta3) for both QG mass and volume from PIACR/PRACI; use (1-delta2) for both QG mass and volume from PSACR/PRACS. PRACS volume uses native snow density DENS=100; PRACI uses native ice density DENI=500; liquid contributions retain DENR=1000. Snow-routed mass does not create graupel volume.",
+    "independent_autoconversion": "Cloud-to-rain PRAUT/NRAUT is a separate paired reaction. Its stored endpoint requires its own feasibility test before being retained independently of a deferred graupel group. An invalid fixed endpoint is rejected; unvalidated full autoconversion is not silently accepted.",
+    "limits": "Rate admission affects physical transfers and their heat. It is not evidence of observation agreement or a validated replacement parameterization. Unsupported particle states are not repaired by floors, density clamping, species relabeling, or arbitrary source deletion.",
+    "group_order": "Sequential provisional states: non-graupel process group (NG), cloud-to-rain autoconversion (AUT), then graupel/precipitation interaction group (G). Fixed order is a declared research splitting policy, not a proof of globally maximal accepted reaction throughput.",
+    "NG_rates": [
+      "pracw",
+      "piacw",
+      "pmulcs",
+      "pmulcg",
+      "pmulrs",
+      "pmulrg",
+      "prevp",
+      "psdep",
+      "pidep",
+      "pinud",
+      "psaut",
+      "psaci",
+      "nccol",
+      "nracw",
+      "niacw",
+      "ninud",
+      "nmulcs",
+      "nmulcg",
+      "nmulrs",
+      "nmulrg",
+      "nsaci",
+      "nsaut",
+      "nrcol"
+    ],
+    "AUT_rates": [
+      "praut",
+      "nraut"
+    ],
+    "G_rates": [
+      "pgdep",
+      "pgaut",
+      "pgaci",
+      "pgacs",
+      "paacw",
+      "naacw",
+      "pracs",
+      "praci",
+      "nraci",
+      "piacr",
+      "niacr",
+      "psacr",
+      "nsacr",
+      "pgacr",
+      "ngacr",
+      "ngaci"
+    ],
+    "vapor_guard": "NG proposed dQV=-dt*(prevp+psdep+pidep+pinud); G proposed dQV=-dt*pgdep; AUT dQV=0. G uses the remaining provisional QV after NG, and the complete stored endpoint is checked before any global field commit. Signed PREVP retains its sign.",
+    "transaction": "Form the actual REAL32 composite QV, five condensates, three number moments, graupel volume and temperature in local candidates using the admitted primitive rates. Reject invalid stored endpoints before committing state; no post-hoc PSD reconstruction or clipping to make the candidate pass.",
+    "dormant_rates": "PGaut and PGacs have no nonzero production in the bound source. Positive future activation requires an explicit volume partner; it is outside this declared closure.",
+    "stored_composite_search": "Rebuild the exact native-order REAL32 transaction from pristine primitive rates for each bounded common-factor trial over the three admitted group fractions. Recompute paired volume conversions after scaling. Validate QV, Q/N/B and temperature before state commit; record actual admitted fraction products and common retries. No independent number adjustment or tolerance relaxation.",
+    "evaporation_number_return": "Pending complete rain evaporation returns surviving rain number to CCN only for exact stored QR==0. Positive subthreshold QR retains its valid paired NR; the separate native paired threshold cleanup remains a numerical term, not internal phase conversion.",
+    "stored_rate_accounting": "Record all 41 actual scaled REAL32 primitive rates and an explicit stored-noop flag when every selected primitive rate rounds to zero. Separately derive an unchanged stored-state flag from the pre/post endpoints: nonzero primitive rates can still leave all stored endpoints unchanged. Positive alpha alone does not establish positive stored transfer. Preserve ideal admitted increments and their actual stored-state residuals; neither establishes global physical closure.",
+    "stored_interval_search": "A REAL32 alpha ULP can be far smaller than one stored-state quantum. Check the interval midpoint and lower endpoint; if neither supplies a valid seed, make bounded probes toward the lower edge and test its next representable positive value. Refine only from an independently validated positive stored candidate. This covers both subnormal mass plateaus and ordinary PSD-boundary rounding. SEARCH_FAILURE remains explicit if no validated positive candidate is established; no global maximum throughput or positive stored transfer is inferred from alpha alone.",
+    "inactive_ice_domain": "Explicit opt-in permits only a finite 0 <= ice_transient_mass_limit <= NEAREST(REAL32(1e-14),-1.0), the greatest REAL32 value below the native stage-2 PSD reconstruction gate. Positive paired QI at or below the supplied limit may bypass the active ice PSD cone in this intermediate stage; equality at REAL32(1e-14) and larger ice remain strict. The search partitions at the exact limit and validates actual stored candidates. Omitted/default mode, cloud/rain/graupel, finite/nonnegative state, vapor and temperature checks remain strict. This source-native stage domain does not certify that an inactive pair lies inside the PSD interval; completed public-state acceptance is a separate strict gate."
+  },
+  "native_density_boundary": {
+    "status": "SOURCE_AND_EXECUTED_OBJECT_BOUND_CORRECTION",
+    "public_kdm6_DEN": "Dry-air density from the actual moist_physics_prep_em assignment rho=1/(AL+ALB), passed unchanged through microphysics_driver. The earlier phy_prep moist rho is not the KDM6 entry value.",
+    "public_number_conversion": "Multiply public number per kg dry air by the actual dry DEN; divide by that same stored dry carrier on return. Do not divide this DEN by 1+QV a second time.",
+    "internal_gas_density": "Construct rho_gas=rho_dry*(1+QV) with finite, positive and representable checks for the gas-density-dependent material calculations; retain the original dry carrier directly rather than a rounded dry-to-gas-to-dry roundtrip.",
+    "stage_observation": "PR85QND2 records normalize active AL+ALB directly to dry density at every completed stage. Legacy PR85QNB1 records do not certify their density basis from their format alone.",
+    "native_air_validation": "Use the active native AL+ALB dry-density carrier for number conversion admission, independent of the changing preparation meaning of grid%rho.",
+    "historical_scope": "PR83/84 policy bytes and receipts remain unchanged. Their bridge statement citing the earlier moist phy_prep formula is superseded for this actual call path. Prior RK pair/PSD diagnostics remain version-bound; their old density-conversion interpretation is not scientific certification.",
+    "effect": "A physical carrier correction, not a floating-point mode change or density floor. It affects volumetric moments, caps and gas-density-dependent rates; final host execution requires its own validation."
+  },
+  "native_psd_boundary_storage": {
+    "scope": "Only the existing min/max lambda-crossing reconstruction branches: rain/cloud/ice at three native stages. Preserve original gates, constants and process order; no change to mass, settling rates, separate hard-count branches, entry ceiling, or cleanup.",
+    "equation": "Internal volume number target = rho_dry * Q * lambda_boundary^3 / PIDN. Native mass exponents are 3.",
+    "storage": "Evaluate source-derived lower/upper thresholds in REAL64 using the same order as the state predicate, choose an inward REAL32 boundary value, and verify both bounds before assignment. Reject an unrepresentable interval; do not add a particle-count floor.",
+    "accounting": "Record species, native stage and cell; pre-count; native formula candidate if safely available; REAL64 target; directed stored count; full native PSD count adjustment and additional storage correction separately. Number is m-3; this is neither an integrated particle budget nor physical nucleation.",
+    "physics": "Differential mass/count settling is retained. PSD representation can change number at these existing native closure sites. A legal stored boundary fixes the consumer domain; it does not validate the physical accuracy of the source PSD assumptions."
+  },
+  "warm_process_admission": {
+    "status": "IMPLEMENTED_CONDITIONAL_RESEARCH_RUNTIME_PENDING_FINAL_HOST",
+    "observed_cause": "After the native cloud-mass availability limiter, REAL32 arithmetic left QC=-2^-33 kg/kg dry while NC=399584 per m3. Independent max(...,0) writes created a cloud orphan.",
+    "proposal": "Retain the existing warm-process formulas and native availability caps. Treat the post-cap mass/count/volume/vapor/heat rates as one coupled proposal, and apply a common admitted factor. Rebuild actual native-order REAL32 endpoint trials from pristine post-cap rates before an atomic commit.",
+    "consumer_domain": "Finite nonnegative fields; each cloud/ice/rain mass-number pair absent or positive; positive temperature and nonnegative vapor. Graupel must be absent or lie in the exact density 100..900 kg/m3 and non-TRANSIENT domain of the following ProgB/slope consumer. Do not impose the cold helper's stricter cloud/ice/rain PSD cone on this warm route; existing later PSD reconstruction remains separate.",
+    "preservation": "Existing QI/NI are retained with zero warm-process increments. Preserve the two PAACW contributions in both cloud/rain mass and cloud-number terms. Warm PGACS is zero in the bound producer; a nonzero activation without a volume partner is unsupported.",
+    "accounting": "pr85_kdm6_warm_budget.raw records requested post-cap and actual scaled primitive rates, pre/post state, approved factors and actual storage residuals. The common restriction changes effective physical transfers and latent heating. Positive alpha, zero stored endpoint change and all-zero scaled rates are distinct. No integrated native water/energy or scientific acceptance is inferred.",
+    "stored_search": "Test the helper fraction in the exact native-order REAL32 transaction; then at most 32 adjacent positive REAL32 fractions toward zero, followed by at most 24 halvings. Accept only an independently validated stored candidate. Exhaustion or fraction underflow is explicit SEARCH_FAILURE before commit; it is not a proof that no feasible state exists. This bounded continuation does not claim a global maximum admitted fraction.",
+    "captured_rounding_case": "At the separately captured warm boundary, one adjacent REAL32 step below the helper fraction gives valid stored QC/NC and retains more than 0.9999999 of that proposed fraction. This scalar source-form result does not establish a completed native call."
+  },
+  "existing_native_cutoff": {
+    "status": "UNCHANGED_NATIVE_CLEANUP_WITH_NEW_OBSERVATION",
+    "thresholds": "Existing cloud/ice Q <= qmin and rain/snow/graupel Q <= qcrmin assignments are unchanged. Paired species clear their number or volume alongside mass; snow has no number in this interface.",
+    "physical_meaning": "These assignments do not transfer removed condensate to vapor or compensate temperature. Record them as numerical cleanup, never as physical phase conversion or conservation evidence.",
+    "ledger": "pr85_kdm6_cutoff_budget.raw writes only rows with an actual Q/N/B change. Actual row order is tag, five integers i/lat/k/loop/mask, 25 REAL32 source values (rhoDry,qmin,qcrmin,Qbefore5,Qafter5,Nbefore3,Nafter3,Bbefore/after,Tbefore/after,QVbefore/after), then two integer ProgB statuses. Mask bits 1/2/4/8/16 mark qualifying cloud/ice/rain/snow/graupel thresholds and may also mark already-zero channels.",
+    "limits": "Before/after differences are local quantities per dry-air mass or volume. Native geometric cell weights, carrier, time and boundaries are still required for global water/particle/energy closure."
+  },
+  "graupel_sedimentation": {
+    "status": "IMPLEMENTED_CONDITIONAL_RESEARCH_FINAL_HOST_PENDING",
+    "observed_failure": "At SLOPE_02 after graupel sedimentation, the previously empty (i=42,call_lat=235,k=11) receiver contains QG=4.433608631593776e-14 kg/kgdry and BG=1.1084024331841518e-16 m3/kgdry. Its density is supported (~400 kg/m3), but both values are below the next consumer's absolute activity thresholds. Exact substep face rates were not captured.",
+    "transport": "Retain the native same mass-velocity rate for QG and BG and native per-substep slope/velocity feedback. Use common donor-approved packets at each shared vertical face; preserve the graupel top-down face order.",
+    "carrier": "Operate directly on stored specific QG and BG. Column inventories are rhoDry*dz*QG [kg/m2] and rhoDry*dz*BG [m3/m2]. The ice path uses internal NI*dz [number/m2] and retains its distinct mass/count speeds; no REAL32 BG-to-volumetric-to-BG roundtrip.",
+    "consumer_domain": "Each consumed stored pair must be exact absent (0,0), or positive with QG/BG in [100,900] kg/m3 and outside the native TRANSIENT region QG<=qcrmin AND BG<=REAL32(1e-15). Do not make the slope routine consume transient or unsupported PSD states.",
+    "admission": "Apply one face factor to both components and validate stored donor and receiver together. Partition the disconnected absent/transient/active domain; ordinary monotone bisection is insufficient. Withheld packets remain at the donor; no density clamp, moment reconstruction, species reassignment or new cutoff.",
+    "scope_limit": "This conditional numerical/process limiter can withhold small sedimentation packets at an empty receiver instead of allowing their accumulation. No unresolved reservoir or maximal-throughput result is claimed; effective settling and subsequent forecasts require independent scientific assessment.",
+    "ground": "Keep integrated ground packets separate from the original tendency accumulators. With rate=v/dz, packet=rho*moment*rate*dz*dtcld/mstep. The legacy fall/fallb increment is the approved packet divided by dtcld*donor_dz, preserving its source convention.",
+    "ledger": "pr85_graupel_sedimentation_budget.raw separates proposed, approved and withheld mass/volume packets, ground sinks, actual stored inventory changes and REAL32 residuals. Volume is m3/m2, not a particle count; local column accounting does not establish native global water or energy closure."
+  }
+}

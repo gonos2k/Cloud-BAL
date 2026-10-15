@@ -1,0 +1,18 @@
+--- a/dyn_em/solve_em.F
++++ b/dyn_em/solve_em.F
+@@ -2971,6 +2971,15 @@
+      ENDIF other_scalar_advance
+ 
+      IF ( config_flags%mp_physics == 37 ) THEN
++       IF ( rk_order /= 3 ) THEN
++         CALL wrf_error_fatal('PR85 grouped Q/N/B update requires RK order 3')
++       END IF
++       IF ( grid%num_tiles /= 1 ) THEN
++         CALL wrf_error_fatal('PR85 grouped Q/N/B update requires one tile')
++       END IF
++       IF ( config_flags%zadvect_implicit /= 0 ) THEN
++         CALL wrf_error_fatal('PR85 grouped Q/N/B update requires explicit vertical advection')
++       END IF
+        DO ij = 1 , grid%num_tiles
+          IF ( rk_step == 1 ) THEN
+            CALL pr85_joint_stage_dump('PRE_RK', grid%itimestep, 0,          &
