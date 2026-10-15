@@ -1,0 +1,67 @@
+{
+  "schema": "pr85_publication_team_review_v1",
+  "reviewed_at_utc": "2026-10-15",
+  "status": "PASS_SCOPED_PUBLICATION_NO_BLOCKER",
+  "scope": "Read-only publication review of final PR85 source delta, final integration/document wording, v17 closed-run audit binding, and compact evidence archive integrity.",
+  "repository": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr85_joint_moment_update_20261013/Cloud-BAL",
+    "head": "042e354c04f433abf90331276f5872fef7c93dd5",
+    "frozen_v17_file_count": 2094,
+    "post_freeze_changed_files": [
+      "docs/PR85_JOINT_MOMENT_UPDATE_20261015.md",
+      "docs/evidence/pr85_integration_20261015.json"
+    ],
+    "missing_frozen_files": []
+  },
+  "artifacts": {
+    "markdown": {
+      "path": "docs/PR85_JOINT_MOMENT_UPDATE_20261015.md",
+      "sha256": "247eb25312496b60ce0f70bd8d06ffd1b69096028c2e483012f33887d5ab34f5"
+    },
+    "integration": {
+      "path": "docs/evidence/pr85_integration_20261015.json",
+      "sha256": "ae0d92ec38ac586dacd5f0d0d6627fdaf0696050a4c0bc719339fea087f0aac5"
+    },
+    "zip": {
+      "path": "docs/evidence/pr85_execution_20261015.zip",
+      "sha256": "4731accef85aeab4eaaf2dbb2a0342c66b7edd819db63f6a6895d73951c5f0fc",
+      "bytes": 1493885,
+      "members": 175,
+      "crc_test": "PASS",
+      "source_map_entries": 172,
+      "all_origin_and_archive_copy_hashes": "PASS",
+      "archive_copy_and_origin_hashes": "PASS"
+    },
+    "zip_manifest": {
+      "path": "docs/evidence/pr85_execution_manifest_20261015.json",
+      "sha256": "460aeb29841cfe10bb0ea02afd4ffc18061ce68c66ab5bd63cf31a1e5c3e4736",
+      "internal_manifest_sha256": "bbf843f451d89d8effadf9d735ebc8492e268bd95b5412c47da126c2aa93e7df"
+    },
+    "closed_trace_audit": {
+      "path": "/var/tmp/pr85_closed_trace_audit_v17_20261015.json",
+      "sha256": "5c4adab387b59c386d9a255ccdc1816c07e0909b8774bdf6ce72459ceaa47fbc",
+      "status": "PASS_SCOPED",
+      "strict_stage_parser": "PASS",
+      "native_pre_post_bitmatch": "PASS",
+      "process_attribution": "RECORDED_UNASSESSED"
+    },
+    "OFF_run_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+    "COUPLED_run_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+    "build_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+    "executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "ledger_identity_binding_sha256": "9512b9ffe3fdb178ba2901c63cca2edae569301f6712a4cc4a9a91daaaa7a7dc",
+    "run_receipts": {
+      "OFF": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "COUPLED": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675"
+    }
+  },
+  "review_findings": {
+    "publication_blockers": [],
+    "status_wording": "Actual v17 OFF and COUPLED each completed one 20-second first model step and full first KDM6 call; audit is PASS_SCOPED. Process attribution remains RECORDED_UNASSESSED and scientific gates remain open.",
+    "historical_results": "v16 incompleteness is explicitly preserved as historical due missing PR67 receipt trace; v13 and earlier mismatched-constant replays remain scoped historical evidence.",
+    "scope_limits": "One domain/rank/thread/tile partial-host configuration; selected eight-member replacement, not full WRF rebuild. No global water/number/energy closure, forecast efficacy, observation fit, or 10/30/60-minute comparison is claimed.",
+    "source_stability": "All 2,094 frozen v17 files remain present. Only final Markdown and integration JSON differ from frozen v17; no production source or test drift.",
+    "run_receipt_binding": "Both arm receipt hashes, input hashes, model return code, first-step status, PR67 process trace hash, and shared executable hash independently match the v17 strict audit bindings."
+  },
+  "errors": []
+}

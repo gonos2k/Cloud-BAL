@@ -104,7 +104,8 @@ def write_initialization_receipt(run_dir: Path, record: dict[str, object],
 
 
 def validate_v2_launch_contract(real_case: Path, executable: Path,
-                                receipt_path: Path, policy_path: Path) -> tuple[dict, dict]:
+                                receipt_path: Path, policy_path: Path,
+                                consumer_build_receipt: Path | None = None) -> tuple[dict, dict]:
     """Preflight the V2 prior, consumer binary, and unchanged real boundary."""
     from pr83_moment_candidate_readback import (
         EXPECTED_PR84_POLICY_SHA256, PR84_POLICY_SCHEMA,
@@ -145,7 +146,11 @@ def validate_v2_launch_contract(real_case: Path, executable: Path,
         raise ValueError("PR84 prior does not prove exact nonmoment preservation")
     source_meta = policy.get("source", {})
     expected_executable = source_meta.get("runtime_consumer_executable_sha256")
-    if not expected_executable or sha256(executable) != expected_executable:
+    consumer_binding = None
+    if consumer_build_receipt is not None:
+        from pr85_consumer_build_contract import validate_consumer_build
+        consumer_binding = validate_consumer_build(consumer_build_receipt, executable, expected_executable)
+    elif not expected_executable or sha256(executable) != expected_executable:
         raise ValueError("PR84 runtime executable differs from the policy-bound consumer")
     boundary = summarize_boundary(real_case / "wrfbdy_d01")
     if (boundary.get("status") != "PASS_RETAINED_EMPTY_BOUNDARY"
@@ -157,7 +162,7 @@ def validate_v2_launch_contract(real_case: Path, executable: Path,
             or boundary.get("read_only_integrity") is not True):
         raise ValueError("PR84 real wrfbdy does not pass the unchanged 80-field boundary contract")
     preflight = validate_candidate_input(source, candidate, receipt_path, policy_path)
-    return receipt, {"candidate": preflight, "boundary": boundary}
+    return receipt, {"candidate": preflight, "boundary": boundary, "consumer_build": consumer_binding}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -172,6 +177,8 @@ def build_parser() -> argparse.ArgumentParser:
                         help="verified PR83 same13 prior receipt authorizing an alternate copied wrfinput")
     parser.add_argument("--initialized-input-policy", type=Path,
                         help="declared policy bound by the PR83 prior receipt")
+    parser.add_argument("--consumer-build-receipt", type=Path,
+                        help="explicit PR85 transport build binding; the frozen moment prior is retained")
     return parser
 
 
@@ -214,13 +221,20 @@ def run_initialization(args: argparse.Namespace, *,
         if any(value.lower() in rejected for value in configured):
             raise ValueError(f"same13 prior path does not cover enabled {flag}")
     prevalidated_v2: tuple[dict, dict] | None = None
+    consumer_build_receipt = getattr(args, "consumer_build_receipt", None)
+    if consumer_build_receipt is not None and (args.initialized_input_receipt is None or
+                                              args.initialized_input_policy is None):
+        raise ValueError("transport-consumer binding requires the frozen v2 input prior")
     if args.initialized_input_receipt is not None and args.initialized_input_policy is not None:
         policy_probe = json.loads(args.initialized_input_policy.read_text(encoding="utf-8"))
         if policy_probe.get("schema") == "pr84_same13_native_moment_policy_v2":
             prevalidated_v2 = validate_v2_launch_contract(
                 real_case, executable, args.initialized_input_receipt,
                 args.initialized_input_policy,
+                consumer_build_receipt,
             )
+    if consumer_build_receipt is not None and prevalidated_v2 is None:
+        raise ValueError("transport-consumer binding requires the frozen v2 input prior")
     cold_start_scope_guard = {
         "status": "PASS",
         "source_namelist_sha256": source_namelist_sha,
@@ -249,9 +263,23 @@ def run_initialization(args: argparse.Namespace, *,
     trace_outputs = {
         "kdm6_first_call_pre.raw", "kdm6_first_call_post.raw", "pr63_geometry.raw", "pr63_transition_masks.bin",
         "pr63_transition_stages.raw", "pr64_host_neighborhood.raw", "pr64_qc_channels.raw",
+        "pr67_kdm6_process.raw",
         "pr65_nc_donor_faces.raw", "pr65_pbl_nc.raw", "pr65_pbl_operator.raw",
         "pr74_qni_driver.raw", "pr76_target_call.raw", "pr76_thread_entry.raw",
         "pr77_host_fp.raw", "pr77_native_species.raw", "stdout.raw",
+        "pr85_joint_moment_stages.raw",
+        "pr85_joint_transport_budget.raw", "pr85_joint_source_failure.raw",
+        "pr85_fogdes_budget.raw", "pr85_pbl_packet_residual.raw",
+        "pr85_cumulus_source.raw",
+        "pr85_ice_sedimentation_budget.raw",
+        "pr85_graupel_sedimentation_budget.raw",
+        "pr85_kdm6_melt_budget.raw", "pr85_ice_transition_branch.raw",
+        "pr85_kdm6_freezing_budget.raw",
+        "pr85_rain_freezing_budget.raw",
+        "pr85_kdm6_cold_budget.raw",
+        "pr85_kdm6_warm_budget.raw",
+        "pr85_kdm6_cutoff_budget.raw",
+        "pr85_kdm6_psd_boundary.raw",
     }
     source_snapshot: dict[str, str] = {}
     for source in sorted(runtime.iterdir()):
@@ -338,6 +366,9 @@ def run_initialization(args: argparse.Namespace, *,
     source_provenance_paths = provenance_paths(prior_policy_path)
     source_provenance_paths["shared_native_initialization_runner"] = Path(__file__).resolve()
     source_provenance_paths["runner"] = (runner_source or Path(__file__)).resolve()
+    if consumer_build_receipt is not None:
+        source_provenance_paths["consumer_build_receipt"] = consumer_build_receipt.resolve(strict=True)
+        source_provenance_paths["consumer_build_contract"] = ROOT / "tools/pr85_consumer_build_contract.py"
     if chain_artifacts:
         source_provenance_paths.update(chain_artifacts)
     provenance_before = {name: sha256(path) for name, path in source_provenance_paths.items()}
@@ -369,6 +400,8 @@ def run_initialization(args: argparse.Namespace, *,
         "mpi_vars_sha256": sha256(Path("/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh")),
         "wrf_static_runtime_library": "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
         "native_source_component": (
+            "PR85 explicit common-moment transport build of the retained PR84 diagnostic host"
+            if consumer_build_receipt is not None else
             "PR84 KDM6 source-PSD entry-guard build derived from the retained PR81 nine-object WRF v4.8 diagnostic build"
             if prior_policy is not None and prior_policy.get("schema") == "pr84_same13_native_moment_policy_v2"
             else "retained PR81 nine-object WRF v4.8 diagnostic build; not the WRF v4.6 real.exe"
@@ -395,6 +428,8 @@ def run_initialization(args: argparse.Namespace, *,
         "candidate_input_boundary_preflight": (prevalidated_v2[1]["boundary"]
                                                if prevalidated_v2 is not None else None),
         "candidate_input_prelaunch_validation": prior_candidate_preflight,
+        "consumer_build_binding": (prevalidated_v2[1]["consumer_build"]
+                                   if prevalidated_v2 is not None else None),
         "candidate_wrfinput_sha256": sha256(run_dir / "wrfinput_d01"),
         "candidate_wrfbdy_sha256": sha256(run_dir / "wrfbdy_d01"),
         "wrfinput_time": "2026-08-16_13:00:00",

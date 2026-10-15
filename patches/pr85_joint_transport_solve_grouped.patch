@@ -1,0 +1,191 @@
+--- a/dyn_em/solve_em.F
++++ b/dyn_em/solve_em.F
+@@ -85,6 +85,7 @@
+    USE module_firebrand_spotting, ONLY : firebrand_spotting_em_driver
+ 
+    IMPLICIT NONE
++   EXTERNAL :: pr85_joint_stage_dump
+ 
+    !  Input data.
+ 
+@@ -1850,7 +1851,10 @@
+        DO ij = 1 , grid%num_tiles
+          CALL wrf_debug ( 200 , ' call rk_update_scalar_pd' )
+          DO im = PARAM_FIRST_SCALAR, num_3d_m
+-           CALL rk_update_scalar_pd( im, im,                                   &
++           IF ( config_flags%mp_physics /= 37 .OR. &
++               ( im /= P_QC .AND. im /= P_QI .AND. im /= P_QR .AND. &
++                 im /= P_QG .AND. im /= P_QS ) ) THEN
++             CALL rk_update_scalar_pd( im, im,                                   &
+                                      moist_old(ims,kms,jms,im),                &
+                                      moist_tend(ims,kms,jms,im),               &
+                                      grid%c1h, grid%c2h,                       &
+@@ -1862,6 +1866,7 @@
+                                      grid%i_start(ij), grid%i_end(ij),         &
+                                      grid%j_start(ij), grid%j_end(ij),         &
+                                      k_start    , k_end                       )
++           ENDIF
+          ENDDO
+        END DO
+        !$OMP END PARALLEL DO
+@@ -1913,7 +1918,10 @@
+        DO ij = 1 , grid%num_tiles
+          CALL wrf_debug ( 200 , ' call rk_update_scalar_pd' )
+          DO im = PARAM_FIRST_SCALAR, num_3d_s
+-           CALL rk_update_scalar_pd( im, im,                                  &
++           IF ( config_flags%mp_physics /= 37 .OR. &
++               ( im /= P_QNN .AND. im /= P_QNC .AND. im /= P_QNI .AND. &
++                 im /= P_QNR .AND. im /= P_QIB ) ) THEN
++             CALL rk_update_scalar_pd( im, im,                                  &
+                                      scalar_old(ims,kms,jms,im),              &
+                                      scalar_tend(ims,kms,jms,im),             &
+                                      grid%c1h, grid%c2h,                      &
+@@ -1925,6 +1933,7 @@
+                                      grid%i_start(ij), grid%i_end(ij),        &
+                                      grid%j_start(ij), grid%j_end(ij),        &
+                                      k_start    , k_end                      )
++           ENDIF
+          ENDDO
+        ENDDO
+        !$OMP END PARALLEL DO
+@@ -2301,6 +2310,9 @@
+                tenddec = .false.
+ 
+ BENCH_START(update_scal_tim)
++               IF ( config_flags%mp_physics /= 37 .OR. &
++                    ( im /= P_QC .AND. im /= P_QI .AND. im /= P_QR .AND. &
++                      im /= P_QG .AND. im /= P_QS ) ) THEN
+                CALL rk_update_scalar( scs=im, sce=im,                                  &
+                                scalar_1=moist_old(ims,kms,jms,im),                     &
+                                scalar_2=moist(ims,kms,jms,im),                         &
+@@ -2317,6 +2329,7 @@
+                                its=grid%i_start(ij), ite=grid%i_end(ij),               &
+                                jts=grid%j_start(ij), jte=grid%j_end(ij),               &
+                                kts=k_start    , kte=k_end                              )
++               ENDIF
+                IF( rk_step == rk_order .AND. config_flags%use_q_diabatic == 1 )THEN
+                IF( im.eq.p_qv .or. im.eq.p_qc )THEN
+                    CALL q_diabatic_subtr( im, im,            & 
+@@ -2848,6 +2861,9 @@
+ 
+            CALL wrf_debug ( 200 , ' call rk_update_scalar' )
+            tenddec = .false.
++           IF ( config_flags%mp_physics /= 37 .OR. &
++                ( is /= P_QNN .AND. is /= P_QNC .AND. is /= P_QNI .AND. &
++                  is /= P_QNR .AND. is /= P_QIB ) ) THEN
+            CALL rk_update_scalar( scs=is, sce=is,                                         &
+                                   scalar_1=scalar_old(ims,kms,jms,is),                    &
+                                   scalar_2=scalar(ims,kms,jms,is),                        &
+@@ -2866,6 +2882,7 @@
+                                   its=grid%i_start(ij), ite=grid%i_end(ij),               &
+                                   jts=grid%j_start(ij), jte=grid%j_end(ij),               &
+                                   kts=k_start    , kte=k_end                              )
++           ENDIF
+ 
+ ! bound the aerosol fields (greater than 0) when using first guess aerosol
+ ! as fields may be highly heterogeneous compared to climatology
+@@ -2953,6 +2970,38 @@
+ 
+      ENDIF other_scalar_advance
+ 
++     IF ( config_flags%mp_physics == 37 ) THEN
++       DO ij = 1 , grid%num_tiles
++         IF ( rk_step == 1 ) THEN
++           CALL pr85_joint_stage_dump('PRE_RK', grid%itimestep, 0,          &
++                ims,ime,jms,jme,kms,kme,                                    &
++                max(ids+1,grid%i_start(ij)),min(ide-2,grid%i_end(ij)),      &
++                max(jds+1,grid%j_start(ij)),min(jde-2,grid%j_end(ij)),      &
++                k_start,min(k_end,kde-1),grid%al,grid%alb,                          &
++                moist(ims,kms,jms,P_QV),moist(ims,kms,jms,P_QC),            &
++                moist(ims,kms,jms,P_QI),moist(ims,kms,jms,P_QR),             &
++                moist(ims,kms,jms,P_QS),moist(ims,kms,jms,P_QG),             &
++                scalar(ims,kms,jms,P_QNN),scalar(ims,kms,jms,P_QNC),         &
++                scalar(ims,kms,jms,P_QNI),scalar(ims,kms,jms,P_QNR),         &
++                scalar(ims,kms,jms,P_QIB))
++         ENDIF
++         CALL rk_update_joint_moments(                                      &
++              moist_old, moist, scalar_old, scalar,                         &
++              moist_tend, scalar_tend, num_3d_m, num_3d_s,                   &
++              (/ P_QC, P_QI, P_QR, P_QG /),                                 &
++              (/ P_QNC, P_QNI, P_QNR, P_QIB /),                             &
++              P_QS, P_QNN,                                                   &
++              grid%ru_m, grid%rv_m, wwE,                                    &
++              grid%mu_1, grid%mu_2, grid%mub, grid%c1h, grid%c2h,            &
++              grid%msftx, grid%msfty, grid%rdx, grid%rdy, grid%rdnw,        &
++              grid%al, grid%alb, dt_rk, rk_step,            &
++              grid%itimestep, grid%spec_zone, ids, ide, jds, jde, kds, kde,                 &
++              ims, ime, jms, jme, kms, kme,                                 &
++              grid%i_start(ij), grid%i_end(ij),                             &
++              grid%j_start(ij), grid%j_end(ij), k_start, k_end )
++       ENDDO
++     ENDIF
++
+  !  update the pressure and density at the new time level
+ 
+      !$OMP PARALLEL DO   &
+@@ -3455,6 +3504,21 @@
+ !
+ !**********************************************************
+ 
++     IF ( config_flags%mp_physics == 37 ) THEN
++       DO ij = 1 , grid%num_tiles
++         CALL pr85_joint_stage_dump('RK_STAGE_END', grid%itimestep, rk_step, &
++              ims,ime,jms,jme,kms,kme,                                      &
++              max(ids+1,grid%i_start(ij)),min(ide-2,grid%i_end(ij)),        &
++              max(jds+1,grid%j_start(ij)),min(jde-2,grid%j_end(ij)),        &
++              k_start,min(k_end,kde-1),grid%al,grid%alb,                            &
++              moist(ims,kms,jms,P_QV),moist(ims,kms,jms,P_QC),              &
++              moist(ims,kms,jms,P_QI),moist(ims,kms,jms,P_QR),               &
++              moist(ims,kms,jms,P_QS),moist(ims,kms,jms,P_QG),               &
++              scalar(ims,kms,jms,P_QNN),scalar(ims,kms,jms,P_QNC),           &
++              scalar(ims,kms,jms,P_QNI),scalar(ims,kms,jms,P_QNR),           &
++              scalar(ims,kms,jms,P_QIB))
++       ENDDO
++     ENDIF
+    END DO Runge_Kutta_loop
+ !  grid%dmudt=grid%mu_2 - grid%mu_1
+ 
+@@ -3692,6 +3756,21 @@
+ 
+      CALL wrf_debug ( 200 , ' call microphysics_driver' )
+ 
++     IF ( config_flags%mp_physics == 37 ) THEN
++       DO ij = 1 , grid%num_tiles
++         CALL pr85_joint_stage_dump('PRE_KDM6', grid%itimestep, 0,          &
++              ims,ime,jms,jme,kms,kme,                                      &
++              max(ids+1,grid%i_start(ij)),min(ide-2,grid%i_end(ij)),        &
++              max(jds+1,grid%j_start(ij)),min(jde-2,grid%j_end(ij)),        &
++              k_start,min(k_end,kde-1),grid%al,grid%alb,                            &
++              moist(ims,kms,jms,P_QV),moist(ims,kms,jms,P_QC),              &
++              moist(ims,kms,jms,P_QI),moist(ims,kms,jms,P_QR),               &
++              moist(ims,kms,jms,P_QS),moist(ims,kms,jms,P_QG),               &
++              scalar(ims,kms,jms,P_QNN),scalar(ims,kms,jms,P_QNC),           &
++              scalar(ims,kms,jms,P_QNI),scalar(ims,kms,jms,P_QNR),           &
++              scalar(ims,kms,jms,P_QIB))
++       ENDDO
++     ENDIF
+      grid%sr = 0.
+      specified_bdy = config_flags%specified .OR. config_flags%nested
+      channel_bdy = config_flags%specified .AND. config_flags%periodic_x
+@@ -3990,6 +4069,21 @@
+       &        ,pert_thom_ni=config_flags%pert_thom_ni  )
+                                                                           
+ BENCH_END(micro_driver_tim)
++     IF ( config_flags%mp_physics == 37 ) THEN
++       DO ij = 1 , grid%num_tiles
++         CALL pr85_joint_stage_dump('POST_KDM6', grid%itimestep, 0,         &
++              ims,ime,jms,jme,kms,kme,                                      &
++              max(ids+1,grid%i_start(ij)),min(ide-2,grid%i_end(ij)),        &
++              max(jds+1,grid%j_start(ij)),min(jde-2,grid%j_end(ij)),        &
++              k_start,min(k_end,kde-1),grid%al,grid%alb,                            &
++              moist(ims,kms,jms,P_QV),moist(ims,kms,jms,P_QC),              &
++              moist(ims,kms,jms,P_QI),moist(ims,kms,jms,P_QR),               &
++              moist(ims,kms,jms,P_QS),moist(ims,kms,jms,P_QG),               &
++              scalar(ims,kms,jms,P_QNN),scalar(ims,kms,jms,P_QNC),           &
++              scalar(ims,kms,jms,P_QNI),scalar(ims,kms,jms,P_QNR),           &
++              scalar(ims,kms,jms,P_QIB))
++       ENDDO
++     ENDIF
+ 
+ #if 0
+ BENCH_START(microswap_2)

@@ -1,0 +1,343 @@
+{
+  "schema": "pr85_joint_moment_update_integration_v1",
+  "recorded_day": "2026-10-15",
+  "authority": "CONDITIONAL_RESEARCH_ONLY",
+  "base_commit": "042e354c04f433abf90331276f5872fef7c93dd5",
+  "case_time": "2026-08-16T13:00:00Z",
+  "policy": "docs/PR85_JOINT_UPDATE_POLICY_20261015.json",
+  "scope": {
+    "domains": 1,
+    "mpi_ranks": 1,
+    "threads": 1,
+    "tiles": 1,
+    "integration_window_seconds": 20,
+    "host_build": "Eight selected replacement archive members against preserved partial-host PR84 build; not a full clean WRF rebuild."
+  },
+  "initialization": {
+    "status": "PASS_SCOPED",
+    "policy_unchanged": true,
+    "OFF_input_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+    "COUPLED_input_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
+  },
+  "diagnostic_replay": {
+    "scope": "Full serialized public KDM6 pretrace replay, not a new full-host run. Exact captured fields and scalars are checked separately from nonserialized host constants.",
+    "latest_candidate": "v20k8b O0 and true O2",
+    "status": "PASS_SCOPED_COMPONENT_FIRST_CALL",
+    "cause": "Full-tile public-call component replay completed with exact retained caller constants and unchanged serialized OFF input. Strict post-state readback passed separately. This is not an actual WRF model-step result.",
+    "constant_audit": {
+      "status": "MATERIAL_ASSUMPTION_MISMATCH_FOUND",
+      "affected": "v13 through v16c fast public-call replay",
+      "difference": "Some nonserialized caller constants differed, including CICE; exact source/object-matched host constants are required for a successor replay.",
+      "scope": "Byte-identical pretrace arrays/scalars do not make the full calls identical. Previous diagnostics locate reproducible source defects under their explicit replay configuration; they are not proof of the same later host trajectory."
+    },
+    "corrected_constants_successor": {
+      "revision": "v17b",
+      "status": "REJECTED_COLD_PROCESS_NO_FEASIBLE_STEP",
+      "rain_freezing_unsupported_packet": "DEFERRED_WITH_UNCHANGED_STATE",
+      "location": {
+        "i": 126,
+        "call_lat_index": 2,
+        "k": 17
+      },
+      "limitation": "Cold-process fixed and process inventories require separate component decomposition; this is not the earlier PFRZ commit failure."
+    },
+    "candidate_manifest_sha256": "158fbae58283f19a68fab0a21cb42acb4a4779c5b9bff5b651f5ad26c004787b",
+    "source_sha256": "b5e61526dc1e3d3384b9c87a423affc1cc2182faa18a904468114ec52b6781b8",
+    "exact_host_constants": "Imported retained module_model_constants; the former nonserialized-constant mismatch is corrected in this replay.",
+    "actual_host_run": false,
+    "post_call_dump_created": true,
+    "source_scope": "KDM6-only component replacement against the unchanged v13 archive; final eight-member actual host execution is recorded separately in latest_actual_host.",
+    "earlier_density_boundary_storage_failure": "At the existing first ice-lambda reset, the native REAL32 expression rounded below its own exact number bound. v20i uses directed stored boundary construction at the 18 existing min/max-lambda branches, retaining differential settling and original branch gates.",
+    "partial_ice_transition": {
+      "explicit_events": 146,
+      "loop_markers": 51,
+      "source": "v20i component replay",
+      "independent_report_sha256": "336ce5ab80c19f5c799a3390690ae95b1138fc98e29e65f3698f5bbfaf96d5c3",
+      "scope": "Observed source branch events before later RC128. Not inferred from the number of initialized high-ice cells. Stored QI+QS residuals are independently differenced in REAL64; no integrated kg or global closure claim."
+    },
+    "directed_psd_boundary": {
+      "rows": 1023,
+      "invalid_directed_endpoints": 0,
+      "native_formula_or_delta_mismatches": 0,
+      "legacy_native_outside_exact_cone": 783,
+      "directed_values_different_from_legacy": 791,
+      "report_sha256": "336ce5ab80c19f5c799a3390690ae95b1138fc98e29e65f3698f5bbfaf96d5c3",
+      "scope": "Independent partial-ledger validation of existing closure sites, not complete post-call validation."
+    },
+    "prior_v20i_search_diagnostic_sha256": "c8d232e0fdbe324549ac8d99f0ff4382d6fe21585f984b800cd82e64d8483937",
+    "diagnostic_receipt_status": "CLOSED_RC0",
+    "closed_receipt_sha256": "5aa940bdd7b6c2f2c437551b75bed3cc20863392a2f377b5cbc34ceb15f27949",
+    "prior_k4_failed_base": {
+      "actual_capture_sha256": "7e991187c136c8ada0702e763a8de67ae1a1050015fb2d2a0e0c45e7f0feb4c7",
+      "location": [
+        21,
+        233,
+        15,
+        1
+      ],
+      "QI": 9.897212058730036e-17,
+      "NI_per_m3": 2.4629827066746657e-08,
+      "failed_predicate": "active ice lower-N bound on a positive paired sub-qmin native inactive state",
+      "supersession": "Earlier k4 v1-v3 receipts mis-mapped the last successful cold row and did not capture this failed call. Preserved with explicit corrections; none establishes an orphan at the fatal cell."
+    },
+    "cutoff_partial_readback": {
+      "source": "v20k6 closed rejected component replay",
+      "changed_rows": 178617,
+      "invalid_cleanup_rows": 0,
+      "temperature_and_vapor_unchanged": true,
+      "report_sha256": "c862f006556df50d15dea21d5820263a399a16a5c8a55ca60684e46f83aec5df",
+      "scope": "Local source-bound numerical cleanup; no completed-call or global physical budget claim. Full report digest is recorded in the evidence package map."
+    },
+    "prior_k6_failed_graupel_consumer": {
+      "source_sha256": "3941af2cccdb2a37578532a2704f6e9a03070f6cf67d524045a60260b3a6502c",
+      "manifest_sha256": "3c192b805540707463f3d1184f5ea17e217c980e1c5d926413451e0e1854db8a",
+      "closed_receipt_sha256": "8f1317e534739dca4f7c758f73a8327d988f95167918b833997fe0a9ea2b7335",
+      "actual_capture_sha256": "14382e1efd48391e95b8959466865c5e229419c1130c727c5a7cd83408337805",
+      "location": [
+        42,
+        235,
+        11
+      ],
+      "phase": "SLOPE_02 after graupel sedimentation",
+      "state": "Positive density-supported QG/BG, both below the next consumer activity thresholds. Exact face/substep rate was not captured."
+    },
+    "failed_freezing_base": {
+      "location": [
+        24,
+        241,
+        15
+      ],
+      "tag": "PFRZ",
+      "flags": "FFF: accepted, base_valid, inactive_base",
+      "QI": 1.2412583862906864e-15,
+      "NI_per_m3": 2.3417695160787844e-07,
+      "rho_dry_kg_m3": 0.7712181806564331,
+      "qmin": 1.0000000036274937e-15,
+      "identity": "Original ledger writes and closes this flagged row immediately before the base-valid fatal. It is the failed call, not an inferred adjacent cell."
+    },
+    "prior_k7a_freezing_base_failure": {
+      "latest_candidate": "v20k7a",
+      "status": "REJECTED_FREEZING_BASE_DOMAIN",
+      "cause": "Paired ice after differential settling is below the native stage1 count-closure threshold REAL32(1e-14), but above qmin. The freezing helper incorrectly requires its strict active PSD cone for this skipped-closure base. No candidate packet or temperature change was committed.",
+      "candidate_manifest_sha256": "a811d74c87efc1679b3068c81e3ad5e10c3b2ed223ed5db3c34ced5c390d8214",
+      "source_sha256": "cc2b7afdba44e38dffbbf032b7590cb49511ee4b06d1049b6dbd6a2bafeae689",
+      "closed_receipt_sha256": "24caa9533c9f60967136abe469b645edcb2dd6a2a50bb13caf3286f4dbe479f1",
+      "failed_freezing_base": {
+        "location": [
+          24,
+          241,
+          15
+        ],
+        "tag": "PFRZ",
+        "flags": "FFF: accepted, base_valid, inactive_base",
+        "QI": 1.2412583862906864e-15,
+        "NI_per_m3": 2.3417695160787844e-07,
+        "rho_dry_kg_m3": 0.7712181806564331,
+        "qmin": 1.0000000036274937e-15,
+        "identity": "Original ledger writes and closes this flagged row immediately before the base-valid fatal. It is the failed call, not an inferred adjacent cell."
+      }
+    },
+    "component_post_state": {
+      "status": "PASS_SCOPED_STATE",
+      "cells": 2533440,
+      "report_sha256": "5fb39b127267742f20fbc3374caf1ff10109349a511ed56b81a4d8e4383e9e07",
+      "negative_or_orphan_or_outside_8ulp_cone": 0,
+      "number_volume_conversion_errors": 0,
+      "scope": "Closed O0 public post-state; build/run binding and full host step remain separate."
+    },
+    "O2_closed_receipt_sha256": "c2d7ca49df57602237f2a706a8c4dcb3927ec65d50687ce449a3e12d65eb1e16",
+    "O0_O2_post_dump_sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+    "O0_O2_post_byte_identical": true
+  },
+  "validation": {
+    "whole_canonical_snapshot": "v9",
+    "whole_canonical_status": "PASS",
+    "whole_canonical_exit": 0,
+    "whole_canonical_manifest_sha256": "847ee79a2ad489c1f7670cb926060131ed1c6cc4ddd548156de06d75e73bb686",
+    "whole_canonical_receipt_sha256": "84410e6cbbb641aba9c06f087b293f8cae99b6d9a5a4d40161787d0f281a3b5a",
+    "limitation": "Later native process changes require their own focused and actual compile/runtime evidence; the v9 full suite does not validate all final source bytes.",
+    "latest_kdm6_full_module": "Pinned Intel O0 and true O2 compile/source-form/component checks pass; component post dumps are byte-identical. Final unchanged-physics v17 eight-member partial-host build and both same13 20-second actual runs pass the independent strict closed-run audit.",
+    "final_focused_snapshot": "v16; all commands exit0, source hashes and frozen Git head/status unchanged",
+    "final_focused_receipt_sha256": "dafe47c6750f0f8726d1d78f1bb1f121b1370fe94a2168f22a8547e30b034838",
+    "profile_scope_correction_sha256": "76b256abe30460bd2301f69ded9b786d1de7a4d45c4487b72851773b56d155d6",
+    "profile_correction": "Six earlier nominal O2 harnesses retained -check all; their original PASS is checked-build evidence. The corrected harnesses use the pinned optimized reproduction profile. The final frozen v16 focused validation passes with proper O0/true O2 scopes; original records remain preserved.",
+    "latest_test_bundle_manifest_sha256": "2aa8b6f9488b5d2e6eb9aedb9748d9104aef2e11159b89de9b95209483e9062f",
+    "current_candidate_source_sha256": "b5e61526dc1e3d3384b9c87a423affc1cc2182faa18a904468114ec52b6781b8",
+    "current_candidate_patch_sha256": "fb802e3a801d693491ee03c47f4fc6b318edb5cdb398c156dea3bdca2155ccd0",
+    "current_candidate_compile_receipt_sha256": "fa22e70403f848072ab0600549950e4064a9fa11a99740b7913da19a061318b9",
+    "current_candidate_focused_bundle_scope": "Pinned Intel O0 and true O2 source-form fixtures. No full private KDM baseline is bundled in the repository; compact procedure/patch/source contracts bind portable tests.",
+    "final_focused_manifest_sha256": "7a5d72c76b539d5a0c60d6850d7adbf6d0bf5223a6e606d2cbfd2e51be4564bb",
+    "final_focused_files": 2094,
+    "final_focused_commands": 17,
+    "collector_delta_validation_sha256": "ab597f107b0307eabfd380a8e009f7c9064fd2693f343727bf4dc98fe9aa54bb",
+    "actual_run_frozen_manifest_sha256": "1cd256eb9e1b0652736aadfea974229edd6bcafdbaffaba384207a028b55b730",
+    "actual_run_frozen_files": 2094,
+    "source_team_review_sha256": "d7bb195e3e7369a9a661b1db41a8ccd18172415d98f6d1b8b1e61371931db039"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "candidate_scientific_gates": {
+    "independent_observation_fit": "OPEN",
+    "native_dry_air_water_energy_closure": "OPEN",
+    "native_force_and_mass_wind_acceptance": "OPEN",
+    "matched_OFF_HYDRO_COUPLED_10_30_60_minute_response": "NOT_RUN",
+    "forecast_efficacy": "NOT_ASSESSED"
+  },
+  "evidence_package": {
+    "schema": "pr85_execution_evidence_zip_v1",
+    "path": "docs/evidence/pr85_execution_20261015.zip",
+    "bytes": 1493885,
+    "sha256": "4731accef85aeab4eaaf2dbb2a0342c66b7edd819db63f6a6895d73951c5f0fc",
+    "members": 175,
+    "manifest_sha256": "bbf843f451d89d8effadf9d735ebc8492e268bd95b5412c47da126c2aa93e7df",
+    "origin_and_copy_hashes_verified": true,
+    "scope": "Compact receipts, audit tools and logs; full private input arrays, raw traces, KDM baseline and binaries remain outside Git, hash-referenced."
+  },
+  "graph_limit": "Structural graph freshness does not establish native runtime or scientific acceptance.",
+  "native_density_contract": {
+    "status": "CORRECTED_AND_VALIDATED_SCOPED",
+    "audit_sha256": "d45f036e9844243c80934dfb87382aa1bcf77bbaa5ae9006fce2cc61c38b597a",
+    "public_DEN_basis": "DRY_AIR",
+    "old_conversion": "DEN/(1+QV) applied an extra conversion",
+    "maximum_relative_density_change_percent": 2.216,
+    "correction_status": "IMPLEMENTED_AND_VALIDATED_IN_FOCUSED_COMPONENT_AND_ACTUAL_V17_FIRST_STEP",
+    "runtime_AL_ALB_readback": "PASS_SCOPED_PR85QND2_ALL_RECORDED_ACTIVE_STATES",
+    "historical_diagnosis_status": "SOURCE_AND_EXECUTED_OBJECT_BOUND_MISMATCH_CONFIRMED"
+  },
+  "historical_actual_host_v13": {
+    "revision": "v13",
+    "model_return_code": 128,
+    "first_call": "REJECTED_INTERNAL_RAIN_MASS_WITHOUT_NUMBER",
+    "location": {
+      "i": 180,
+      "call_lat_index": 2,
+      "k": 16
+    },
+    "post_call_dump_created": false,
+    "bound_audit_sha256": "7c19967655940b29fa8997e7b80e4d484ea64ea25a3e369f319193636d391c9b"
+  },
+  "historical_air_update_density_scope_v13": {
+    "status": "PASS_SCOPED_V13",
+    "stages": [
+      "PRE_RK",
+      "RK1",
+      "RK2",
+      "RK3",
+      "PRE_KDM6"
+    ],
+    "active_cells_per_field": 2533440,
+    "all_air_transport_fractions": 1.0,
+    "independent_public_pretrace_bit_mismatches": 0,
+    "strict_full_trace_status": "INCOMPLETE_MISSING_POST_KDM6",
+    "density_basis_limitation": "The v13 PR85QNB1 records preserve the historical declaration. They cannot establish strict admission under the new source-bound PR85QND2 dry-density contract."
+  },
+  "completed_air_updates": {
+    "status": "PASS_SCOPED",
+    "revision": "v17",
+    "stages": [
+      "PRE_RK",
+      "RK1",
+      "RK2",
+      "RK3",
+      "PRE_KDM6",
+      "POST_KDM6"
+    ],
+    "active_cells_per_field": 2533440,
+    "all_air_transport_fractions": 1.0,
+    "strict_full_trace_status": "PASS",
+    "density_contract": "PR85QND2 authoritative native AL+ALB dry density",
+    "independent_public_pre_and_post_bit_mismatches": 0,
+    "fields_per_native_dump": 12,
+    "audit_sha256": "5c4adab387b59c386d9a255ccdc1816c07e0909b8774bdf6ce72459ceaa47fbc"
+  },
+  "latest_actual_host": {
+    "status": "PASS_SCOPED_FIRST_CALL_AND_FIRST_STEP",
+    "revision": "v17",
+    "integration_seconds": 20,
+    "first_call": "COMPLETED",
+    "post_call_dump_created": true,
+    "build_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+    "executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "archive_sha256": "102faf532e0d0cb361e8cf0ce2098224c0b7ef09aaa008cf4a421e1584059911",
+    "replaced_archive_members": [
+      "module_bl_shinhong.o",
+      "module_pbl_driver.o",
+      "module_em.o",
+      "module_first_rk_step_part1.o",
+      "module_first_rk_step_part2.o",
+      "module_mp_kdm6.o",
+      "solve_em.o",
+      "module_bl_fogdes.o"
+    ],
+    "bound_audit_sha256": "5c4adab387b59c386d9a255ccdc1816c07e0909b8774bdf6ce72459ceaa47fbc",
+    "arms": {
+      "OFF": {
+        "run_receipt_path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr83_same13_native_initialization.json",
+        "run_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+        "model_return_code": 0,
+        "initialization_gate": "PASS_SCOPED_INITIALIZATION_READBACK",
+        "first_step_gate": "PASS",
+        "native_trace_output_integrity": "PASS",
+        "input_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+        "initial_wrfo_sha256": "ae7253d7261d8292c7de8a3b2a3f39b1798bf1a59599042901b892d2ebcb887c",
+        "first_call_pre": {
+          "bytes": 195542592,
+          "sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847"
+        },
+        "first_call_post": {
+          "bytes": 195542592,
+          "sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177"
+        },
+        "pr67_process_trace": {
+          "bytes": 83442240,
+          "sha256": "b0a4c23cf2f8c089168057276390f4d1f9ca6a27663bd849290f7e404b2b812e"
+        }
+      },
+      "COUPLED": {
+        "run_receipt_path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr83_same13_native_initialization.json",
+        "run_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+        "model_return_code": 0,
+        "initialization_gate": "PASS_SCOPED_INITIALIZATION_READBACK",
+        "first_step_gate": "PASS",
+        "native_trace_output_integrity": "PASS",
+        "input_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+        "initial_wrfo_sha256": "4716ceda093b3b01ff4363be7c56dabedf2ed585b3a4d9bce4ea8012ced88663",
+        "first_call_pre": {
+          "bytes": 195542592,
+          "sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd"
+        },
+        "first_call_post": {
+          "bytes": 195542592,
+          "sha256": "67c65cc6c36950b6b051791bd022d52021d2b2d785cbaeee12279ccad5b6cc6e"
+        },
+        "pr67_process_trace": {
+          "bytes": 83442240,
+          "sha256": "de494913c850b0bc477e3068b5e35ac931ac130e7536015fed045776e89a7c7f"
+        }
+      }
+    },
+    "process_attribution": "RECORDED_UNASSESSED",
+    "limitation": "One domain/rank/thread/tile partial-host cold start. Normal exit and strict state admission do not establish global budgets or scientific forecast acceptance."
+  },
+  "historical_actual_host_v16": {
+    "status": "MODEL_COMPLETED_BUT_ORIGINAL_RECEIPT_INVENTORY_INCOMPLETE",
+    "model_return_codes": {
+      "OFF": 0,
+      "COUPLED": 0
+    },
+    "strict_state_and_density_and_native_dump_bitmatches": "PASS",
+    "missing_inventory_member": "pr67_kdm6_process.raw",
+    "audit_sha256": "4ff14e3bfdf216afa2c915635948469e406375ac65ee47c1b65ff9c620c92737",
+    "resolution": "Added process trace to common reserved/collected outputs and reran both arms with fresh v17 build and run receipts. Original v16 receipts and failed overall audit retained unchanged."
+  },
+  "local_process_diagnostics": {
+    "scope": "Source-bound local/unweighted state and packet diagnostics; no native hybrid-carrier global conservation claim. Cold ledger AUT block has two zero padding columns omitted from its original header; source-bound decoder addendum records actual offsets.",
+    "OFF_v16_binding_sha256": "36e652b72a5e52649b3f987270a7d4230d1e6630fd5c70006cdda356e71515ac",
+    "COUPLED_v16_receipt_sha256": "3d4fe1452e341588685fb0f6639ead6bc6e1eec1260cc9838c0857b7af7de39e",
+    "200um_actual_OFF_events": 7065,
+    "200um_actual_COUPLED_events": 7066,
+    "transition_not_exactly_storage_neutral": "One event per arm removes QI without a positive representable QS gain. Local source residual is recorded; no exact stored/global mass closure claim.",
+    "remaining": "Carrier-weighted integration of all phase, boundary, settling and numerical-cleanup terms.",
+    "v17_same_arm_ledger_identity_binding_sha256": "9512b9ffe3fdb178ba2901c63cca2edae569301f6712a4cc4a9a91daaaa7a7dc",
+    "raw_integrity": "Root v3 closed-run audit independently rehashes every run-receipted trace. The ledger identity binder compares those receipt hashes with decoded v16 diagnostics without reparsing identical bulk data."
+  }
+}

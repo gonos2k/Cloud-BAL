@@ -1,0 +1,61 @@
+--- a/dyn_em/solve_em.F
++++ b/dyn_em/solve_em.F
+@@ -2999,6 +2999,58 @@
+               ims, ime, jms, jme, kms, kme,                                 &
+               grid%i_start(ij), grid%i_end(ij),                             &
+               grid%j_start(ij), grid%j_end(ij), k_start, k_end )
++
++         ! The stock calls above prepare the donor halo before this update.
++         ! Refresh the grouped fields now that their interior RK state is committed,
++         ! so the next stage sees paired boundary values from the same donor state.
++         IF (config_flags%specified .AND. .NOT. config_flags%have_bcs_moist) THEN
++           CALL flow_dep_bdy(moist(ims,kms,jms,P_QC),grid%ru_m,grid%rv_m,config_flags, &
++                grid%spec_zone,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++           CALL flow_dep_bdy(moist(ims,kms,jms,P_QI),grid%ru_m,grid%rv_m,config_flags, &
++                grid%spec_zone,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++           CALL flow_dep_bdy(moist(ims,kms,jms,P_QR),grid%ru_m,grid%rv_m,config_flags, &
++                grid%spec_zone,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++           CALL flow_dep_bdy(moist(ims,kms,jms,P_QS),grid%ru_m,grid%rv_m,config_flags, &
++                grid%spec_zone,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++           CALL flow_dep_bdy(moist(ims,kms,jms,P_QG),grid%ru_m,grid%rv_m,config_flags, &
++                grid%spec_zone,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++         END IF
++         IF (config_flags%specified) THEN
++           CALL flow_dep_bdy_qnn(scalar(ims,kms,jms,P_QNN),grid%ru_m,grid%rv_m, &
++                config_flags,grid%spec_zone,grid%ccn_conc,grid%scale_h, &
++                grid%qnn_land_mult,grid%qnn_sea_mult,dz8w,grid%xland, &
++                ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++           IF (.NOT. config_flags%have_bcs_scalar) THEN
++             CALL flow_dep_bdy(scalar(ims,kms,jms,P_QNC),grid%ru_m,grid%rv_m,config_flags, &
++                  grid%spec_zone,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                  ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                  grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++             CALL flow_dep_bdy(scalar(ims,kms,jms,P_QNI),grid%ru_m,grid%rv_m,config_flags, &
++                  grid%spec_zone,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                  ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                  grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++             CALL flow_dep_bdy(scalar(ims,kms,jms,P_QNR),grid%ru_m,grid%rv_m,config_flags, &
++                  grid%spec_zone,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                  ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                  grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++             CALL flow_dep_bdy(scalar(ims,kms,jms,P_QIB),grid%ru_m,grid%rv_m,config_flags, &
++                  grid%spec_zone,ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++                  ips,ipe,jps,jpe,kps,kpe,grid%i_start(ij),grid%i_end(ij), &
++                  grid%j_start(ij),grid%j_end(ij),k_start,k_end)
++           END IF
++         END IF
+        ENDDO
+      ENDIF
+ 

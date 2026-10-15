@@ -1,3 +1,11 @@
+> **Superseded interpretation (2026-10-13):** The historical claim below that
+> the 200 µm ice-to-snow branch is unreachable and the maximum diameter is
+> 181.7 µm is incorrect. The pinned source permits up to 200.123413307504 µm,
+> so the transition is reachable. See the [PR85 correction record](PR85_ICE_TRANSITION_CORRECTION_20261013.md)
+> and its [machine-readable record](PR85_ICE_TRANSITION_CORRECTION_20261013.json).
+> This notice supersedes those interpretations only; the PR84 JSON receipt is
+> preserved byte-for-byte as historical evidence.
+
 # PR84 native KDM6 ice representation contract
 
 ## Finding

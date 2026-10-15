@@ -1,0 +1,79 @@
+{
+  "schema": "pr85_kdm6_ice_transition_interpretation_correction_v1",
+  "date": "2026-10-13",
+  "supersedes_interpretation_only": "docs/evidence/pr84_native_ice_contract_20261013.json#size_conversion.maximum_given_lambda_min_um",
+  "preserved_prior_receipt": "docs/evidence/pr84_native_ice_contract_20261013.json",
+  "source": {
+    "path": "/var/tmp/pr84_ice_entry_guard_final_1efgtcsn/compile/module_mp_kdm6.F",
+    "sha256": "f7fb216c82822162c30148829f207deeee5900e46e01ad9082ac58c802a181d9"
+  },
+  "source_parameters": {
+    "dmi": 3.0,
+    "mui": 0.0,
+    "lambda_min_m-1": 9080.0,
+    "lambda_max_m-1": 1820000.0,
+    "snow_transition_diameter_m": 0.0002
+  },
+  "corrected_interpretation": {
+    "mean_diameter_expression": "rslope_i*(Gamma(4)/Gamma(1))**(1/3)",
+    "gamma_ratio": 6.0,
+    "maximum_diameter_formula": "6**(1/3)/9080",
+    "maximum_diameter_um": 200.123413307504,
+    "largest_lambda_for_threshold_m-1": 9085.602964160698,
+    "threshold_reachable": true,
+    "reachability_interval_m-1": [
+      9080.0,
+      9085.602964160698
+    ],
+    "branch_predicate": "QI >= qmin and T < 273.15 K and avedia >= 200e-6 m",
+    "mass_and_number_effect": "Add all remaining QI to QS; set QI and NI to zero; no snow-number or temperature transfer.",
+    "interpretation_limit": "This existing runtime PSD transition does not authorize static species remapping."
+  },
+  "correction": {
+    "prior_value_um": 181.7,
+    "prior_reachability_claim": false,
+    "cause": "The prior evaluation miscomputed the maximum implied by lambda_min=9080 m-1.",
+    "prior_receipt_modified": false
+  },
+  "regression": {
+    "test": "tests/test_pr85_ice_transition_regression.py",
+    "tool": "tools/pr85_ice_transition_regression.py",
+    "source_form_expressions": [
+      "slope_kdm6 moment-derived ice slope and source clamp",
+      "preceding QI and NI sedimentation updates",
+      "source mean-diameter assignment",
+      "existing conditional QI-to-QS transfer"
+    ],
+    "cases": [
+      {
+        "lambda_m-1": 9080.0,
+        "diameter_um_o0": 200.12338,
+        "QI_QS_NI_before": [0.00090000004, 0.00019999999, 428923.84],
+        "QI_QS_NI_after": [0.0, 0.0011, 0.0],
+        "transfer": true
+      },
+      {
+        "lambda_m-1": 9085.5,
+        "diameter_um_o0": 200.00223,
+        "QI_QS_NI_before": [0.00090000004, 0.00019999999, 429703.75],
+        "QI_QS_NI_after": [0.0, 0.0011, 0.0],
+        "transfer": true
+      },
+      {
+        "lambda_m-1": 9085.61,
+        "diameter_um_o0": 199.99974,
+        "QI_QS_NI_before": [0.00090000004, 0.00019999999, 429719.34],
+        "QI_QS_NI_after": [0.00090000004, 0.00019999999, 429719.34],
+        "transfer": false
+      }
+    ],
+    "compiler_profile": "tests/intel_toolchain.sh",
+    "compiler": "Intel ifx 2026.0",
+    "optimization_levels": ["-O0", "-O2"],
+    "runtime_model_call": false
+  },
+  "graphify": {
+    "navigation_query": "Cloud-BAL KDM6 ice slope lambda_i_min DMI ice snow transfer QI QS NI",
+    "limitation": "The maintained graph did not expose the external pinned KDM6 source path; source review and compiled source-form regression are authoritative."
+  }
+}

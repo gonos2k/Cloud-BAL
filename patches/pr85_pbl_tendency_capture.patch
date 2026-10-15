@@ -1,0 +1,24 @@
+--- a/module_pbl_driver.F
++++ b/module_pbl_driver.F
+@@ -228,6 +228,7 @@
+    !
+ !------------------------------------------------------------------
+    IMPLICIT NONE
++   EXTERNAL :: pr85_pbl_tendency_dump
+ !======================================================================
+ ! Grid structure in physics part of WRF
+ !----------------------------------------------------------------------
+@@ -1380,6 +1381,13 @@
+               ,ITS=its,ITE=ite,JTS=jts,JTE=jte,KTS=kts,KTE=kte      &
+               ,DX=dx,DY=dy                                          &
+                                                                     )
++             IF (pr65_qnc_enabled .AND. pr73_qni_enabled .AND. &
++                 PRESENT(rqvblten) .AND. PRESENT(rqcblten) .AND. &
++                 PRESENT(rqiblten) .AND. PRESENT(rqniblten)) THEN
++               CALL pr85_pbl_tendency_dump('POST_PBL_TEND',itimestep,0, &
++                    ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++                    rqvblten,rqcblten,rqiblten,rqncblten,rqniblten)
++             ENDIF
+              ! Research-only observation of the actual selected driver call.
+              pr74_iostat = -1
+              IF (133.GE.its .AND. 133.LE.ite .AND. 2.GE.jts .AND. 2.LE.jte) THEN
