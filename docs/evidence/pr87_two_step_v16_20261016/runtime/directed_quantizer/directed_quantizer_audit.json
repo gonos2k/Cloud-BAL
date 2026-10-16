@@ -1,0 +1,366 @@
+{
+  "algorithm": "After original store rejects, hold ordinary R32 N fixed. Form feasible Q interval from both R64 and R32 products N*rho plus strict specific-mass bounds; clamp q64, round to R32 and direct at most one neighbor into interval. If unchanged store validator still rejects due endpoint arithmetic, try one additional neighbor toward q64, still inside interval. Accept only unchanged validator success, exact unchanged N, and zero adjustment.",
+  "arithmetic_limit": "Interval endpoint division/multiplication is finite-precision R64 arithmetic. The selected value is always rechecked by the unchanged store validator; one bounded extra neighbor is allowed only inside the computed interval. If rounding still prevents acceptance, the routine rejects. This prototype does not prove endpoint arithmetic for all possible inputs.",
+  "compiler": {
+    "imf_sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8",
+    "intlc_sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "profile_path": "tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "constraints": "No N adjustment/reseed, no floor, no altered validator or tolerance, no unbounded search. Fallback only normal Q and positive N candidates that pass continuous validity and strict R64 volume check.",
+  "controls": [
+    {
+      "adjustment": 0,
+      "control": "CONTROL_LOWER",
+      "directed_store_valid": true,
+      "n": 1.0,
+      "original_store_valid": true,
+      "q": 0.5,
+      "unchanged": true
+    },
+    {
+      "adjustment": 0,
+      "control": "CONTROL_UPPER",
+      "directed_store_valid": true,
+      "n": 1.0,
+      "original_store_valid": true,
+      "q": 1.0,
+      "unchanged": true
+    }
+  ],
+  "input_bindings": {
+    "caller_sha256": "cf5d451c83c883a1b14e6adbd6d097312fa503762acb00ec0ead5e5c6cff04af",
+    "exact_preexisting_module_v16_generated_prefix_sha256": "7052f067b3c84cb247b8245ce8979064c63577dd7aaa851cc6db191aff095f51",
+    "native_coefficients": {
+      "derived_exact_volume_bounds_are_per_cell_density": true,
+      "lambda_max_real32": 35000.0,
+      "lambda_min_real32": 961.0,
+      "lower_specific_mass_q_over_n": 2.9309320335276967e-10,
+      "pidnr_real32": 12566.37109375,
+      "power_real32": 3.0,
+      "upper_specific_mass_q_over_n": 1.4159232646326343e-05
+    },
+    "prior_v16_audit_sha256": "5efe06f68e8a9413bcfe3a67aceb51c2308ff13a989a45ee1f6c1bb6e08da74a",
+    "source_module_sha256": "ffdce6170547fd0416d6073d4542a6a7e6dc4c316d4d04f4dc76a117a58efe19",
+    "stages_pre_rk_gz_sha256": "47f8d3d2604c6d4f5842878a40097ad1f5ba69c64ab7ebdcedff120a2eb44c62",
+    "stages_source_failure_raw_sha256": "42588e2eb65a9882efe801acc2a7dfb427f123f284b3797fbd9d22f8f9528b08"
+  },
+  "rows": [
+    {
+      "cell_ijk": [
+        58,
+        193,
+        16
+      ],
+      "directed_adjustment": 0,
+      "directed_n_r32": 339.87847900390625,
+      "directed_q_r32": 9.961608071762384e-08,
+      "directed_store_valid": true,
+      "dual_r32_r64_volume_products_strictly_valid": true,
+      "exact_specific_mass_bounds_valid": true,
+      "n64": 339.87846703161586,
+      "n_r32_ordinary": 339.87847900390625,
+      "n_signed_delta_from_n64": 1.1972290394623997e-05,
+      "one_down_valid": false,
+      "one_up_valid": false,
+      "ordinary_valid": false,
+      "q64": 9.961606919207173e-08,
+      "q_r32_one_down": 9.961605940134177e-08,
+      "q_r32_one_up": 9.961607361219649e-08,
+      "q_r32_ordinary": 9.961606650676913e-08,
+      "q_r32_two_down": 9.961605229591441e-08,
+      "q_r32_two_up": 9.961608071762384e-08,
+      "q_signed_delta_from_q64": 1.1525552114059084e-14,
+      "q_signed_delta_in_r32_ulps": 1.6220772564411163,
+      "rho_r32": 0.7696942090988159,
+      "selected_is_plus_two_neighbor": true,
+      "selected_q_inside_interval": true,
+      "strict_q_interval_from_dual_volume_products_and_specific_mass": [
+        9.96160765251487e-08,
+        0.0048124184556958514
+      ],
+      "two_down_valid": false,
+      "two_up_valid": true
+    },
+    {
+      "cell_ijk": [
+        163,
+        194,
+        13
+      ],
+      "directed_adjustment": 0,
+      "directed_n_r32": 670.819091796875,
+      "directed_q_r32": 1.9661253247704735e-07,
+      "directed_store_valid": true,
+      "dual_r32_r64_volume_products_strictly_valid": true,
+      "exact_specific_mass_bounds_valid": true,
+      "n64": 670.819065535788,
+      "n_r32_ordinary": 670.819091796875,
+      "n_signed_delta_from_n64": 2.6261086986778537e-05,
+      "one_down_valid": false,
+      "one_up_valid": false,
+      "ordinary_valid": false,
+      "q64": 1.9661251031826745e-07,
+      "q_r32_one_down": 1.966124898444832e-07,
+      "q_r32_one_up": 1.9661251826619264e-07,
+      "q_r32_ordinary": 1.9661250405533792e-07,
+      "q_r32_two_down": 1.966124756336285e-07,
+      "q_r32_two_up": 1.9661253247704735e-07,
+      "q_signed_delta_from_q64": 2.2158779899778588e-14,
+      "q_signed_delta_in_r32_ulps": 1.5592855140566826,
+      "rho_r32": 0.9019019603729248,
+      "selected_is_plus_two_neighbor": true,
+      "selected_q_inside_interval": true,
+      "strict_q_interval_from_dual_volume_products_and_specific_mass": [
+        1.9661251894701387e-07,
+        0.0094982835843493
+      ],
+      "two_down_valid": false,
+      "two_up_valid": true
+    },
+    {
+      "cell_ijk": [
+        180,
+        60,
+        19
+      ],
+      "directed_adjustment": 0,
+      "directed_n_r32": 167.1339111328125,
+      "directed_q_r32": 4.898581806855873e-08,
+      "directed_store_valid": true,
+      "dual_r32_r64_volume_products_strictly_valid": true,
+      "exact_specific_mass_bounds_valid": true,
+      "n64": 167.13390494057893,
+      "n_r32_ordinary": 167.1339111328125,
+      "n_signed_delta_from_n64": 6.1922335703457065e-06,
+      "one_down_valid": false,
+      "one_up_valid": false,
+      "ordinary_valid": false,
+      "q64": 4.898581216317689e-08,
+      "q_r32_one_down": 4.898580741041769e-08,
+      "q_r32_one_up": 4.898581451584505e-08,
+      "q_r32_ordinary": 4.898581096313137e-08,
+      "q_r32_two_down": 4.8985803857704013e-08,
+      "q_r32_two_up": 4.898581806855873e-08,
+      "q_signed_delta_from_q64": 5.905381835815006e-15,
+      "q_signed_delta_in_r32_ulps": 1.6622172147035599,
+      "rho_r32": 0.6172311305999756,
+      "selected_is_plus_two_neighbor": true,
+      "selected_q_inside_interval": true,
+      "strict_q_interval_from_dual_volume_products_and_specific_mass": [
+        4.8985814590884824e-08,
+        0.0023664879308199246
+      ],
+      "two_down_valid": false,
+      "two_up_valid": true
+    },
+    {
+      "cell_ijk": [
+        198,
+        72,
+        17
+      ],
+      "directed_adjustment": 0,
+      "directed_n_r32": 1456.82958984375,
+      "directed_q_r32": 4.269869009476679e-07,
+      "directed_store_valid": true,
+      "dual_r32_r64_volume_products_strictly_valid": true,
+      "exact_specific_mass_bounds_valid": true,
+      "n64": 1456.8295642804505,
+      "n_r32_ordinary": 1456.82958984375,
+      "n_signed_delta_from_n64": 2.556329945946345e-05,
+      "one_down_valid": false,
+      "one_up_valid": false,
+      "ordinary_valid": false,
+      "q64": 4.269868479884148e-07,
+      "q_r32_one_down": 4.269868156825396e-07,
+      "q_r32_one_up": 4.2698687252595846e-07,
+      "q_r32_ordinary": 4.2698684410424903e-07,
+      "q_r32_two_down": 4.2698678726083017e-07,
+      "q_r32_two_up": 4.269869009476679e-07,
+      "q_signed_delta_from_q64": 5.295925308999435e-14,
+      "q_signed_delta_in_r32_ulps": 1.863338066264987,
+      "rho_r32": 0.7218068838119507,
+      "selected_is_plus_two_neighbor": true,
+      "selected_q_inside_interval": true,
+      "strict_q_interval_from_dual_volume_products_and_specific_mass": [
+        4.2698687401705954e-07,
+        0.02062758908864984
+      ],
+      "two_down_valid": false,
+      "two_up_valid": true
+    },
+    {
+      "cell_ijk": [
+        200,
+        64,
+        18
+      ],
+      "directed_adjustment": 0,
+      "directed_n_r32": 8.508179664611816,
+      "directed_q_r32": 2.493689921223563e-09,
+      "directed_store_valid": true,
+      "dual_r32_r64_volume_products_strictly_valid": true,
+      "exact_specific_mass_bounds_valid": true,
+      "n64": 8.508179261762791,
+      "n_r32_ordinary": 8.508179664611816,
+      "n_signed_delta_from_n64": 4.028490252494521e-07,
+      "one_down_valid": false,
+      "one_up_valid": false,
+      "ordinary_valid": false,
+      "q64": 2.4936895240761577e-09,
+      "q_r32_one_down": 2.4936892550897483e-09,
+      "q_r32_one_up": 2.493689699178958e-09,
+      "q_r32_ordinary": 2.493689477134353e-09,
+      "q_r32_two_down": 2.4936890330451433e-09,
+      "q_r32_two_up": 2.493689921223563e-09,
+      "q_signed_delta_from_q64": 3.9714740533298315e-16,
+      "q_signed_delta_in_r32_ulps": 1.7885929066687822,
+      "rho_r32": 0.6695162057876587,
+      "selected_is_plus_two_neighbor": true,
+      "selected_q_inside_interval": true,
+      "strict_q_interval_from_dual_volume_products_and_specific_mass": [
+        2.493689735722919e-09,
+        0.00012046929526798155
+      ],
+      "two_down_valid": false,
+      "two_up_valid": true
+    },
+    {
+      "cell_ijk": [
+        205,
+        60,
+        17
+      ],
+      "directed_adjustment": 0,
+      "directed_n_r32": 22.486927032470703,
+      "directed_q_r32": 6.590766155056826e-09,
+      "directed_store_valid": true,
+      "dual_r32_r64_volume_products_strictly_valid": true,
+      "exact_specific_mass_bounds_valid": true,
+      "n64": 22.486926930505142,
+      "n_r32_ordinary": 22.486927032470703,
+      "n_signed_delta_from_n64": 1.0196556132768819e-07,
+      "one_down_valid": false,
+      "one_up_valid": false,
+      "ordinary_valid": false,
+      "q64": 6.590765463312722e-09,
+      "q_r32_one_down": 6.590764822789197e-09,
+      "q_r32_one_up": 6.5907657109676165e-09,
+      "q_r32_ordinary": 6.590765266878407e-09,
+      "q_r32_two_down": 6.590764378699987e-09,
+      "q_r32_two_up": 6.590766155056826e-09,
+      "q_signed_delta_from_q64": 6.917441040895115e-16,
+      "q_signed_delta_in_r32_ulps": 1.5576692447066307,
+      "rho_r32": 0.7217721343040466,
+      "selected_is_plus_two_neighbor": true,
+      "selected_q_inside_interval": true,
+      "strict_q_interval_from_dual_volume_products_and_specific_mass": [
+        6.590765848762861e-09,
+        0.0003183976313537175
+      ],
+      "two_down_valid": false,
+      "two_up_valid": true
+    },
+    {
+      "cell_ijk": [
+        213,
+        135,
+        15
+      ],
+      "directed_adjustment": 0,
+      "directed_n_r32": 376.3921203613281,
+      "directed_q_r32": 1.1031798408112081e-07,
+      "directed_store_valid": true,
+      "dual_r32_r64_volume_products_strictly_valid": true,
+      "exact_specific_mass_bounds_valid": true,
+      "n64": 376.3921103191002,
+      "n_r32_ordinary": 376.3921203613281,
+      "n_signed_delta_from_n64": 1.0042227927442582e-05,
+      "one_down_valid": false,
+      "one_up_valid": false,
+      "ordinary_valid": false,
+      "q64": 1.1031797134540133e-07,
+      "q_r32_one_down": 1.1031796276483874e-07,
+      "q_r32_one_up": 1.1031797697569345e-07,
+      "q_r32_ordinary": 1.103179698702661e-07,
+      "q_r32_two_down": 1.1031795565941138e-07,
+      "q_r32_two_up": 1.1031798408112081e-07,
+      "q_signed_delta_from_q64": 1.2735719481041421e-14,
+      "q_signed_delta_in_r32_ulps": 1.792393172159791,
+      "rho_r32": 0.8224080204963684,
+      "selected_is_plus_two_neighbor": true,
+      "selected_q_inside_interval": true,
+      "strict_q_interval_from_dual_volume_products_and_specific_mass": [
+        1.1031797724887444e-07,
+        0.0053294235984401115
+      ],
+      "two_down_valid": false,
+      "two_up_valid": true
+    },
+    {
+      "cell_ijk": [
+        214,
+        140,
+        14
+      ],
+      "directed_adjustment": 0,
+      "directed_n_r32": 133.3653564453125,
+      "directed_q_r32": 3.9088483561044995e-08,
+      "directed_store_valid": true,
+      "dual_r32_r64_volume_products_strictly_valid": true,
+      "exact_specific_mass_bounds_valid": true,
+      "n64": 133.36534935807205,
+      "n_r32_ordinary": 133.3653564453125,
+      "n_signed_delta_from_n64": 7.0872404478450335e-06,
+      "one_down_valid": false,
+      "one_up_valid": false,
+      "ordinary_valid": false,
+      "q64": 3.908847777574592e-08,
+      "q_r32_one_down": 3.908847290290396e-08,
+      "q_r32_one_up": 3.9088480008331317e-08,
+      "q_r32_ordinary": 3.908847645561764e-08,
+      "q_r32_two_down": 3.908846935019028e-08,
+      "q_r32_two_up": 3.9088483561044995e-08,
+      "q_signed_delta_from_q64": 5.785299073378618e-15,
+      "q_signed_delta_in_r32_ulps": 1.6284169219434261,
+      "rho_r32": 0.8705090880393982,
+      "selected_is_plus_two_neighbor": true,
+      "selected_q_inside_interval": true,
+      "strict_q_interval_from_dual_volume_products_and_specific_mass": [
+        3.90884801144364e-08,
+        0.001888351108869418
+      ],
+      "two_down_valid": false,
+      "two_up_valid": true
+    }
+  ],
+  "runs": {
+    "O0": {
+      "compile_log_sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126",
+      "executable_sha256": "52172ef1971ecc885f5a1c24e3f286d75b21e574afda7db54388a6d45170b3c2",
+      "exit_status": 0,
+      "scratch_path": "/var/tmp/pr87_v16_quantizer_probe/directed_final_O0",
+      "stdout_sha256": "88759b2d1940b1a52ac93298068345b2e0873ac9a4bcdc1921202d1adeeea0b5"
+    },
+    "O2": {
+      "compile_log_sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126",
+      "executable_sha256": "d0605955c4492707893026b1492d5e2dadb0da0f28aa4c4fdfd7699e67e13c38",
+      "exit_status": 0,
+      "scratch_path": "/var/tmp/pr87_v16_quantizer_probe/directed_final_O2",
+      "stdout_sha256": "88759b2d1940b1a52ac93298068345b2e0873ac9a4bcdc1921202d1adeeea0b5"
+    }
+  },
+  "runs_byte_identical_stdout": true,
+  "schema": "pr87_v16_directed_q_quantizer_isolated_probe_v1",
+  "scope": "Isolated exact-module caller only; no production kernel/source edits and no native rerun.",
+  "summary": {
+    "all_selected_plus_two_neighbor": true,
+    "candidate_count": 8,
+    "directed_acceptances": 8,
+    "unchanged_controls_valid": true
+  }
+}

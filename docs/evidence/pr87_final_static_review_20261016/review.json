@@ -1,0 +1,105 @@
+{
+  "schema": "pr87_static_review_v1",
+  "date": "2026-10-16",
+  "status": "static_review_no_concrete_blocker_found",
+  "native_run_status": "not_certified_by_this_review",
+  "scope": [
+    "joint transport transactionality and validation",
+    "paired source/carry cadence and shared-face transport",
+    "rain, cloud, ice, and graupel producer integrations",
+    "FogDES and PBL source payload/correction flow",
+    "REAL128 horizontal diffusion intermediate experiment",
+    "focused source and numerical regression tests"
+  ],
+  "review_findings": [],
+  "limits": [
+    "Signed storage deltas are pressure-coordinate numerical representation terms and do not prove kg, energy, or complete physical conservation.",
+    "Shared face fluxes support conservation before storage; R32 representation and producer corrections require separate budget interpretation.",
+    "REAL128 helper timing is approximately 135.7x REAL64 for the measured 64x64x39 active region over 12 calls; this is not a full-model runtime measurement.",
+    "The tested witnesses and parameter bindings do not establish a universal cone-preservation guarantee or scientific approval.",
+    "Matched native run completion and strict completed-stage audits are not certified by this static review."
+  ],
+  "validation": {
+    "focused_review_tests": {
+      "result": "42 passed",
+      "elapsed_seconds": 18.48,
+      "log": "focused_tests.log",
+      "log_sha256": "427b9e11b1a5889c8d2f0a20dd8f558ebe501a23f712a6220c89a6d49202255b"
+    },
+    "full_suite_log": {
+      "result": "194 passed",
+      "elapsed_seconds": 62.83,
+      "path": "/var/tmp/pr87_v42_focused_tests.log",
+      "sha256": "e31e7f58e49e91ad32f1b29c3ea74a5875dda8cf981b3d8c50d3021bbb6e09d3"
+    },
+    "v42_overlay_build": {
+      "status": "PASS_OVERLAY_BUILD",
+      "identity": "source-mapped partial native overlay; not a clean build",
+      "executable_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+      "receipt_path": "../pr87_two_step_v42_20261016/build_receipt.json",
+      "receipt_sha256": "a28f9a99af74d080c38b986fdc12f941845b34a93a41515089632df5137dd680"
+    },
+    "matched_native_run": "pending/not assessed here"
+  },
+  "sources": {
+    "src/common/cloud_bal_joint_transport.f90": "60917061915e0452251c27db7b5d4e97061729605c3218cd291c2cbc3e519e74",
+    "tests/test_joint_qnb_transport.f90": "7dc11cc77ed9dc36fc96fea719378b8e1eefb6c802509b312f80d9dd2b5104a6",
+    "tools/pr87_prepare_native_cycle.py": "aee34633f0581f2c1d105222d4a2eb429c379e3ca60fa8436fbc9347d3176b44",
+    "tools/pr87_all_pair_diffusion_precision.py": "90732185626f1ec04655924ef16872d5be12617ca2cc2a149447db83aaf960eb",
+    "tools/pr87_horizontal_diffusion64.f90": "0a8b2865fff3d7ad6592e0d1bc1d3f7b51970de13ac9ea128066b7cba655bfe3",
+    "tools/pr87_pbl_source_payload.py": "c779b334f4446887e43648a93dcdd6cc68bb81aa75b2042bd2e78b583938b804",
+    "tools/pr87_pbl_source_precision.py": "2b7160ab141f2016f8e8b632864065945851d3cd8257d959582043d312e1b3ec",
+    "tools/pr87_fogdes_source_contract.py": "075ed2dec77efe1a772dfdbcf81aa95f870717eeff5307e624449221139b874b",
+    "tools/pr87_rain_sedimentation.py": "e09f15793093aaacbc4ea20fe65511d8d5ab49f7371058d120986f6e704520e7",
+    "tools/pr87_ice_sublimation.py": "d721f4f415e8abb012751528dee1df75f851bca1135acd9edeff9f821ea1c171",
+    "tools/pr87_cloud_source_contract.py": "9b0cd69bd3c45ad80d64765630b4a7f67335fa67ccc938481325ddea9e26930b",
+    "tools/pr87_graupel_source_contract.py": "ce6ec2ef1c688be7b1b742d6862659c855257b9dc0821a7af6ebe948c53898d5",
+    "tools/pr87_graupel_process_domain.py": "5cba1755c85f567fc9db00ae4d57e0fb65fe0efeeb65398bd5fc27df5b99cc60",
+    "tools/pr87_rain_storage_contract.py": "e4f336c06e9a054a16aae7c3cb2845d7ba4c0a47430d1333dd923da666def98a",
+    "tools/pr87_rain_density_storage.py": "2eee158e220da5066c88d6899efbc64334189c830d26ad50482d1924e776efa3",
+    "tools/pr87_cloud_diffusion_precision.py": "efbb3610968d9ef80c8deccce069e997f194e02ee74bb3522237524132df3f5d",
+    "tools/pr87_physical_source_capture.py": "2f5bb09165326a41811e2d8c55a8182ce2f8bd2d97869da252014a7efab788e5",
+    "tools/pr87_rain_diffusion_precision.py": "373f82bb806f9be59be80018e4a40ac3231ca888aefc073abc962ab275ab15f6",
+    "tests/test_pr87_diffusion_intermediate_precision.py": "b8edf146a580ca2005f11cde44e0be9c0d41d72fe2986eadf6355cd666e11af7",
+    "tests/test_pr87_diffusion_intermediate_precision.f90": "46447737eee2f2601391a4152eca9a8702b7542d04db77e6692418d19e4aedf0",
+    "V42 native_update.f90": "d997a6393552465132ee7a743d59f5f37214e6521781dae928c44d6621001503",
+    "V42 module_em_pr85.F": "5eb415ca23119460ae3dd766d9acea0f4c99b96ad576100efb95c3bb4d402a6c",
+    "V42 solve_em.F": "e78f0a3981c399e5c4326bd550d55a6ca5522d297f8c44c0d60a18ac3768b2b3",
+    "V42 module_mp_kdm6.F": "bdb1882afed860068cecbb6c7b958eef0938cadbd4225222ba7522e28ecc071a",
+    "V42 module_bl_fogdes.F": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+    "V42 module_bl_shinhong.F": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+    "V42 module_pbl_driver.F": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+    "V42 module_microphysics_zero_out.F": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0"
+  },
+  "diffusion_benchmark": {
+    "region": "64x64x39 active cells",
+    "calls": 12,
+    "real64_seconds": 0.01320,
+    "real128_seconds": 1.7916,
+    "ratio": 135.727,
+    "scope": "isolated stencil helper only",
+    "benchmark_source_sha256": "97652d45d121a4c642124a6ba9fe4cf18c9aeeb9b7ac8fa6698c86b937078880",
+    "archived_reproduction_inputs": {
+      "baseline_helper": {
+        "path": "benchmark_baseline.f90",
+        "sha256": "da22fc9c0947aa37b2374297adb12597c6df1d7dc20d484dbbf6696805994345"
+      },
+      "real128_helper": {
+        "path": "benchmark_real128.f90",
+        "sha256": "af9a54b9f3e51d085ef3a11b2dd52c6b5a9a6f755a8720866e34c740415f79de"
+      },
+      "driver": {
+        "path": "benchmark_driver.f90",
+        "sha256": "97652d45d121a4c642124a6ba9fe4cf18c9aeeb9b7ac8fa6698c86b937078880"
+      },
+      "transform": {
+        "path": "diffusion_transform.py",
+        "sha256": "90732185626f1ec04655924ef16872d5be12617ca2cc2a149447db83aaf960eb"
+      },
+      "captured_replay": {
+        "path": "v41_graupel_replay.json",
+        "sha256": "027df0edf37e3bd81a6f2af8f7018afe52306210712a20456d269463d9ab76ae"
+      }
+    }
+  }
+}

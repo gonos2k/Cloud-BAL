@@ -1,0 +1,43 @@
+{
+  "schema": "pr87_v13_warm_endpoint_component_diagnostic_receipt_v1",
+  "status": "REPRODUCED_WARM_ENDPOINT_FATAL",
+  "scope": "isolated full-tile first-call KDM6 component replay; no host initialization; diagnostic-only KDM6 copy; no state predicates or physical updates changed",
+  "base_preprocessed_source": "/var/tmp/pr87_joint_cycle_build_20261016_v13/preprocessed/module_mp_kdm6.f90",
+  "base_preprocessed_sha256": "52c3cab9ec72113ef66c01046abf79febaba7aeabeb5a7bae7b632ced254f31e",
+  "diagnostic_source": "/var/tmp/pr87_v13_warm_endpoint_diag_20261016/source/module_mp_kdm6_warm_diag.f90",
+  "diagnostic_source_sha256": "b53fc7f1a5ffb4ddb48e331f404c6a3939fe5534bbe04ec79986ff007acfaf0d",
+  "input_gzip": "/var/tmp/pr87_joint_OFF_40s_v13_20261016/run/kdm6_first_call_pre.raw.gz",
+  "input_raw_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+  "diagnostic_object": "/var/tmp/pr87_v13_warm_endpoint_diag_20261016/compile/module_mp_kdm6_warm_diag.o",
+  "diagnostic_object_sha256": "601f267d7a8dd3799c85610e7f01d79e09faa117fa1e925330e8622253915ec9",
+  "executable": "/var/tmp/pr87_v13_warm_endpoint_diag_20261016/replay/replay_diag.exe",
+  "executable_sha256": "e2ad9cc09eae53c772ee6e3ea55b0d38711f43c4fd346936265259b52459a17a",
+  "link_argv": "/var/tmp/pr87_v13_warm_endpoint_diag_20261016/logs/link_argv.json",
+  "link_argv_sha256": "2a3d98e8b26c16c0edd426f4afe9cd58735910c145b3a5bb37e74306f9feb31f",
+  "v13_overlay_archive": "/var/tmp/pr87_joint_cycle_build_20261016_v13/link/main/libwrflib_pr87_overlay.a",
+  "v13_archive_sha256": "20d5ac4fc3485c7ce94968c4af34c6774907dd83bfa0c089a3ee29d6fc6936bb",
+  "driver_object": "/var/tmp/pr85_kdm6_fast_replay_v20k7a_20261015a/driver.o",
+  "observer_objects": [
+    "/var/tmp/pr85_native_joint_candidate_20261015v17/compile/pr85_joint_stage_observer.o",
+    "/var/tmp/pr87_joint_cycle_build_20261016_v13/compile/pr87_extra_observer.o"
+  ],
+  "compile_log_sha256": "901cc80d417ee32dbe115c8b0529a32b3e32c3cddf58d40af933675efc052eaf",
+  "filtered_run_log": "/var/tmp/pr87_v13_warm_endpoint_diag_20261016/logs/warm_failure_payload.txt",
+  "filtered_run_log_sha256": "675d67de759cdabec6184942ac8e76a4b3d62e4780719d168b2dcc092bbb7e52",
+  "component_replay_returncode": 128,
+  "omp_threads": 1,
+  "stack_limit": "unlimited",
+  "warm_failure": {
+    "timestep": 1,
+    "lat": 2,
+    "i": 46,
+    "k": 3,
+    "loop": 1,
+    "initial_search_status": 1,
+    "initial_feasible": false,
+    "initial_fraction": 0.0,
+    "retry_loop_last_index": 0,
+    "last_trial_retry": -1,
+    "interpretation": "NO_FEASIBLE_STEP returned fraction=0; retry body was skipped, base state remained unchanged, and caller reported warm endpoint fatal after its abort path."
+  }
+}

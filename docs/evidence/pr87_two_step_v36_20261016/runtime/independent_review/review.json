@@ -1,0 +1,241 @@
+{
+  "candidate": {
+    "build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v36/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "5924ddbe1cabe5edd59284deac746861235d697e923347171056d02014b6f9d1",
+    "build_status": "PASS_OVERLAY_BUILD",
+    "compiler": "ifx (IFX) 2026.0.0 20260331",
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v36/wrf_pr87_overlay.exe",
+    "executable_sha256": "4c71f59c1c80564b24df0e887fa58f88e825b42aa4b1fa684babbc91c5068117",
+    "full_clean_build": false,
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "source_directory": "/var/tmp/pr87_joint_cycle_sources_20261016_v36",
+    "source_member": {
+      "candidate_source_sha256": "1418f37ec081fe28aff6f72f23c79699f7e57711ed288e6e94beff12557d7f5e",
+      "generated_source_sha256": "49ec8e4863a743475f4f0f0c501f3cdd37aa4294efb0bc7976b2a66a30e19e98",
+      "name": "module_mp_kdm6.o",
+      "object_sha256": "e42fce15f5612e9a345aee561146b6ae19c519acf4c7c6b3b3d85f3f943c210d"
+    },
+    "source_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+    "sources_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v36/sources.json",
+    "sources_manifest_sha256": "90dff1ff696e68b863c2eeb631b3ab099266d17a033c9c9e13fe489c98935e19",
+    "static_review": "No concrete blocker in V36 proof-based REAL32 stored-rain interval exclusion. It is limited to full-PSD mode, excludes only an interval whose inward representable endpoints prove every stored endpoint fails the strict rain interval, and leaves uncertain/zero-endpoint trials to existing exact gates. Existing final state gates and G=0 deferral are preserved."
+  },
+  "interpretation": "The strict completed-state audit passes all completed endpoint gates through timestep 2 RK_STAGE_END(3) and PRE_KDM6, and passes timestep 1 POST_KDM6 in both arms. Timestep 2 POST_KDM6 is absent. Timestep 2 early scalar-Q negative predictor rows are recorded separately and are not described as completed full-step states. Runtime acceptance criterion for matched 40 seconds is not met; this is not full scientific approval.",
+  "reviewed_at_utc": "2026-10-16T11:34:57.375067+00:00",
+  "runs": {
+    "COUPLED": {
+      "baseline_parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "candidate_build_unchanged": true,
+      "candidate_namelist_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "changed_original_inputs": [],
+      "changed_staged_inputs": [],
+      "executed_executable_sha256": "4c71f59c1c80564b24df0e887fa58f88e825b42aa4b1fa684babbc91c5068117",
+      "expected_executed_executable_sha256": "4c71f59c1c80564b24df0e887fa58f88e825b42aa4b1fa684babbc91c5068117",
+      "fatal_line": "ProgB unsupported PSD state rejected",
+      "fatal_location": "rsl.error.0000.gz tail; model terminated after completed timestep 1",
+      "final_completed_step": 1,
+      "frozen_parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "intermediate_note": "Timestep 2 PRE_RK / RK1 / RK2 contain negative scalar Q predictor cells; the audited completed RK3, PRE_KDM6, and POST_KDM6 states are evaluated separately. No POST_KDM6 exists at timestep 2.",
+      "maximum_seen_timestep": 2,
+      "model_timestamps": [
+        {
+          "elapsed_seconds": 225.78006,
+          "timestamp": "2026-08-16_13:00:20"
+        }
+      ],
+      "post_kdm6_timesteps": [
+        1
+      ],
+      "processing_errors": [],
+      "receipt": "/var/tmp/pr87_joint_COUPLED_40s_v36_20261016/receipt.json",
+      "receipt_sha256": "c4e57b20c5984f9da8520f6183338d7d99fc9a5b4ba6790edfe9cbd7b3274998",
+      "returncode": 128,
+      "run_root": "/var/tmp/pr87_joint_COUPLED_40s_v36_20261016",
+      "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+      "stage_counts": {
+        "POST_KDM6": 1,
+        "PRE_KDM6": 2,
+        "PRE_RK": 2,
+        "RK_STAGE_END": 6
+      },
+      "stage_record_count": 11,
+      "status": "INCOMPLETE",
+      "strict_audit_path": "/var/tmp/pr87_v36_COUPLED_strict_audit.json",
+      "strict_audit_sha256": "81f94a5fca767f70e1757bf5fb416837dd9e8ecb8fd0a2da54b814b1dda6d5c2",
+      "strict_audit_status": "INCOMPLETE",
+      "strict_endpoint_rows": [
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_source_coefficient_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_source_coefficient_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "POST_KDM6",
+          "strict_source_coefficient_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_source_coefficient_violations": {},
+          "timestep": 2
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_source_coefficient_violations": {},
+          "timestep": 2
+        }
+      ],
+      "strict_timestep_count": 2,
+      "wall_seconds": 305.18494439683855
+    },
+    "OFF": {
+      "baseline_parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "candidate_build_unchanged": true,
+      "candidate_namelist_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "changed_original_inputs": [],
+      "changed_staged_inputs": [],
+      "executed_executable_sha256": "4c71f59c1c80564b24df0e887fa58f88e825b42aa4b1fa684babbc91c5068117",
+      "expected_executed_executable_sha256": "4c71f59c1c80564b24df0e887fa58f88e825b42aa4b1fa684babbc91c5068117",
+      "fatal_line": "ProgB unsupported PSD state rejected",
+      "fatal_location": "rsl.error.0000.gz tail; model terminated after completed timestep 1",
+      "final_completed_step": 1,
+      "frozen_parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "intermediate_note": "Timestep 2 PRE_RK / RK1 / RK2 contain negative scalar Q predictor cells; the audited completed RK3, PRE_KDM6, and POST_KDM6 states are evaluated separately. No POST_KDM6 exists at timestep 2.",
+      "maximum_seen_timestep": 2,
+      "model_timestamps": [
+        {
+          "elapsed_seconds": 225.3015,
+          "timestamp": "2026-08-16_13:00:20"
+        }
+      ],
+      "post_kdm6_timesteps": [
+        1
+      ],
+      "processing_errors": [],
+      "receipt": "/var/tmp/pr87_joint_OFF_40s_v36_20261016/receipt.json",
+      "receipt_sha256": "bfe8b05596628f2a4bd7a49843eae2d09d8f1c2cffcc1961f29fcab5d3304509",
+      "returncode": 128,
+      "run_root": "/var/tmp/pr87_joint_OFF_40s_v36_20261016",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "stage_counts": {
+        "POST_KDM6": 1,
+        "PRE_KDM6": 2,
+        "PRE_RK": 2,
+        "RK_STAGE_END": 6
+      },
+      "stage_record_count": 11,
+      "status": "INCOMPLETE",
+      "strict_audit_path": "/var/tmp/pr87_v36_OFF_strict_audit.json",
+      "strict_audit_sha256": "43bd3dc1479ff9774f11e9a2820ee03e6b8645861ba9a35fb6cd70b7027d237e",
+      "strict_audit_status": "INCOMPLETE",
+      "strict_endpoint_rows": [
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_source_coefficient_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_source_coefficient_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "POST_KDM6",
+          "strict_source_coefficient_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_source_coefficient_violations": {},
+          "timestep": 2
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_source_coefficient_violations": {},
+          "timestep": 2
+        }
+      ],
+      "strict_timestep_count": 2,
+      "wall_seconds": 304.3670642413199
+    }
+  },
+  "runtime_summary": {
+    "completed_post_kdm6_count_each": 1,
+    "reason": "ProgB unsupported PSD state rejected before timestep 2 POST_KDM6; both runs return 128.",
+    "required_40s_success": false,
+    "status": "INCOMPLETE_BOTH_ARMS"
+  },
+  "schema": "pr87_v36_independent_review_v1"
+}

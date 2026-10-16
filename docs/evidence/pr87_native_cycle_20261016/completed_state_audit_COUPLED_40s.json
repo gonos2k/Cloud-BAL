@@ -1,0 +1,2235 @@
+{
+  "completed_post_kdm6_timestep_count": 1,
+  "consumer_build_binding": {
+    "candidate_archive_path": "/var/tmp/pr87_joint_cycle_build_20261016_v2/link/main/libwrflib_pr87_overlay.a",
+    "candidate_archive_sha256": "b1505cd091611d36e4bce3427d95c5553da80233b369d69bacba3f7e4d7c0404",
+    "candidate_executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v2/wrf_pr87_overlay.exe",
+    "candidate_executable_sha256": "0ee83b88eb94112ad152b8f780e81e3c996cc86f2d70cba4095a89e6839fc8da",
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "full_clean_build": false,
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "parent_executable_path": "/var/tmp/pr85_native_joint_candidate_20261015v17/wrf_pr85.exe",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "parent_receipt_path": "/var/tmp/pr85_native_joint_candidate_20261015v17/pr85_native_transport_build.json",
+    "parent_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+    "receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v2/pr87_native_overlay_build.json",
+    "receipt_sha256": "95a82d7089657e85b96aeafafe8476de6b67339772017d39048e713dac3cca63",
+    "schema": "pr87_native_overlay_build_v1",
+    "status": "PASS_BOUND_PARTIAL_OVERLAY"
+  },
+  "density_contract": {
+    "formula_for_v2": "DEN is real32(1)/(AL+ALB), authoritative dry-air density; use DEN directly.",
+    "policy_sha256": "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92",
+    "source_helper": "pr85_joint_stage_trace._dry_density"
+  },
+  "input": {
+    "bytes": 396666083,
+    "decoded_sha256": "5d4a8cc077f215eaf0c6e1ae1c9cb3184eb90bce681e48ad9438dec3825afa29",
+    "path": "/var/tmp/pr87_joint_COUPLED_40s_20261016/run/pr85_joint_moment_stages.raw.gz",
+    "sha256": "db36d236f79e479ed429ff929b88f28ace7b8e6bbafdec5b87c0347eba720254"
+  },
+  "schema": "pr87_completed_state_audit_v1",
+  "scope": "Independent completed-state Q/N/B, PSD-cone, dry-density conversion, and entry-cap checks per timestep; rules are delegated to PR85 helpers.",
+  "state_record_count": 7,
+  "state_stage_counts": {
+    "POST_KDM6": 1,
+    "PRE_KDM6": 1,
+    "PRE_RK": 2,
+    "RK_STAGE_END": 3
+  },
+  "status": "INCOMPLETE",
+  "timestep_audits": [
+    {
+      "completed_post_kdm6": true,
+      "completed_state_summaries": [
+        {
+          "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+          "number_conversion": {
+            "BG": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific volume moment"
+            },
+            "NC": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NI": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NN": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NR": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            }
+          },
+          "pairs": {
+            "cloud": {
+              "feasible_cone": {
+                "bounds": [
+                  4.188790204786391e-15,
+                  3.0300855069345996e-10
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 960289
+              },
+              "mass": "QC",
+              "moment": "NC",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "graupel": {
+              "feasible_cone": {
+                "bounds": [
+                  100,
+                  900
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 1010
+              },
+              "mass": "QG",
+              "moment": "BG",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "ice": {
+              "feasible_cone": {
+                "bounds": [
+                  2.6055879053180625e-16,
+                  2.0982747187893314e-09
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 244498
+              },
+              "mass": "QI",
+              "moment": "NI",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "rain": {
+              "feasible_cone": {
+                "bounds": [
+                  2.930931921716425e-10,
+                  1.4159232106169906e-05
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 205577
+              },
+              "mass": "QR",
+              "moment": "NR",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            }
+          },
+          "rkstep": 0,
+          "source_entry_cap_diagnostics": {
+            "NC": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 769637952.0,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 960289,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000000.0
+            },
+            "NI": {
+              "persistent_fixed_cap_applied": false,
+              "role": "PR84 source entry guard is a PSD-compatible pre-consumption cap; not a persistent post-operator invariant"
+            },
+            "NR": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 30785.837890625,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 205577,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000.0
+            }
+          },
+          "stage": "PRE_RK",
+          "stats": {
+            "BG": {
+              "finite": 2533440,
+              "max": 1.4546551028615795e-05,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1010,
+              "size": 2533440,
+              "zero": 2532430
+            },
+            "DEN": {
+              "finite": 2533440,
+              "max": 1.2076181173324585,
+              "min": 0.09184066206216812,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NC": {
+              "finite": 2533440,
+              "max": 1496070912.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 960289,
+              "size": 2533440,
+              "zero": 1573151
+            },
+            "NI": {
+              "finite": 2533440,
+              "max": 4733963.5,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 244498,
+              "size": 2533440,
+              "zero": 2288942
+            },
+            "NN": {
+              "finite": 2533440,
+              "max": 5041587200.0,
+              "min": 0.00031573078013025224,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NR": {
+              "finite": 2533440,
+              "max": 35114.140625,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 205577,
+              "size": 2533440,
+              "zero": 2327863
+            },
+            "Q": {
+              "finite": 2533440,
+              "max": 0.022662781178951263,
+              "min": 1.2182420050521614e-07,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "QC": {
+              "finite": 2533440,
+              "max": 0.00640183687210083,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 960289,
+              "size": 2533440,
+              "zero": 1573151
+            },
+            "QG": {
+              "finite": 2533440,
+              "max": 0.005818620324134827,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1010,
+              "size": 2533440,
+              "zero": 2532430
+            },
+            "QI": {
+              "finite": 2533440,
+              "max": 0.00993315503001213,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 244498,
+              "size": 2533440,
+              "zero": 2288942
+            },
+            "QR": {
+              "finite": 2533440,
+              "max": 0.0022620633244514465,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 205577,
+              "size": 2533440,
+              "zero": 2327863
+            },
+            "QS": {
+              "finite": 2533440,
+              "max": 0.015988271683454514,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 134945,
+              "size": 2533440,
+              "zero": 2398495
+            }
+          },
+          "violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          }
+        },
+        {
+          "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+          "number_conversion": {
+            "BG": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific volume moment"
+            },
+            "NC": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NI": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NN": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NR": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            }
+          },
+          "pairs": {
+            "cloud": {
+              "feasible_cone": {
+                "bounds": [
+                  4.188790204786391e-15,
+                  3.0300855069345996e-10
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 1574440
+              },
+              "mass": "QC",
+              "moment": "NC",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "graupel": {
+              "feasible_cone": {
+                "bounds": [
+                  100,
+                  900
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 2536
+              },
+              "mass": "QG",
+              "moment": "BG",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "ice": {
+              "feasible_cone": {
+                "bounds": [
+                  2.6055879053180625e-16,
+                  2.0982747187893314e-09
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                "exact_outside_bound_cells": 28,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 1.7204007402728749e-16,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 813792
+              },
+              "mass": "QI",
+              "moment": "NI",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "rain": {
+              "feasible_cone": {
+                "bounds": [
+                  2.930931921716425e-10,
+                  1.4159232106169906e-05
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 275963
+              },
+              "mass": "QR",
+              "moment": "NR",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            }
+          },
+          "rkstep": 1,
+          "source_entry_cap_diagnostics": {
+            "NC": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 714974272.0,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 1574440,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000000.0
+            },
+            "NI": {
+              "persistent_fixed_cap_applied": false,
+              "role": "PR84 source entry guard is a PSD-compatible pre-consumption cap; not a persistent post-operator invariant"
+            },
+            "NR": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 29265.21484375,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 275963,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000.0
+            }
+          },
+          "stage": "RK_STAGE_END",
+          "stats": {
+            "BG": {
+              "finite": 2533440,
+              "max": 1.4408172319235746e-05,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2536,
+              "size": 2533440,
+              "zero": 2530904
+            },
+            "DEN": {
+              "finite": 2533440,
+              "max": 1.1660442352294922,
+              "min": 0.08365040272474289,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NC": {
+              "finite": 2533440,
+              "max": 1492595968.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1574440,
+              "size": 2533440,
+              "zero": 959000
+            },
+            "NI": {
+              "finite": 2533440,
+              "max": 4732528.5,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 813792,
+              "size": 2533440,
+              "zero": 1719648
+            },
+            "NN": {
+              "finite": 2533440,
+              "max": 5039951872.0,
+              "min": 0.00034190871519967914,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NR": {
+              "finite": 2533440,
+              "max": 34925.46484375,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 275963,
+              "size": 2533440,
+              "zero": 2257477
+            },
+            "Q": {
+              "finite": 2533440,
+              "max": 0.022662781178951263,
+              "min": 1.2182420050521614e-07,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "QC": {
+              "finite": 2533440,
+              "max": 0.006376285571604967,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1574440,
+              "size": 2533440,
+              "zero": 959000
+            },
+            "QG": {
+              "finite": 2533440,
+              "max": 0.005763269029557705,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2536,
+              "size": 2533440,
+              "zero": 2530904
+            },
+            "QI": {
+              "finite": 2533440,
+              "max": 0.009930144064128399,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 813792,
+              "size": 2533440,
+              "zero": 1719648
+            },
+            "QR": {
+              "finite": 2533440,
+              "max": 0.00224990863353014,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 275963,
+              "size": 2533440,
+              "zero": 2257477
+            },
+            "QS": {
+              "finite": 2533440,
+              "max": 0.015649646520614624,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 185337,
+              "size": 2533440,
+              "zero": 2348103
+            }
+          },
+          "violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          }
+        },
+        {
+          "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+          "number_conversion": {
+            "BG": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific volume moment"
+            },
+            "NC": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NI": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NN": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NR": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            }
+          },
+          "pairs": {
+            "cloud": {
+              "feasible_cone": {
+                "bounds": [
+                  4.188790204786391e-15,
+                  3.0300855069345996e-10
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 1574440
+              },
+              "mass": "QC",
+              "moment": "NC",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "graupel": {
+              "feasible_cone": {
+                "bounds": [
+                  100,
+                  900
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 2536
+              },
+              "mass": "QG",
+              "moment": "BG",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "ice": {
+              "feasible_cone": {
+                "bounds": [
+                  2.6055879053180625e-16,
+                  2.0982747187893314e-09
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                "exact_outside_bound_cells": 26,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 1.4292969816384676e-16,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 813792
+              },
+              "mass": "QI",
+              "moment": "NI",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "rain": {
+              "feasible_cone": {
+                "bounds": [
+                  2.930931921716425e-10,
+                  1.4159232106169906e-05
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 275959
+              },
+              "mass": "QR",
+              "moment": "NR",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            }
+          },
+          "rkstep": 2,
+          "source_entry_cap_diagnostics": {
+            "NC": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 714273280.0,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 1574440,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000000.0
+            },
+            "NI": {
+              "persistent_fixed_cap_applied": false,
+              "role": "PR84 source entry guard is a PSD-compatible pre-consumption cap; not a persistent post-operator invariant"
+            },
+            "NR": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 29275.0703125,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 275959,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000.0
+            }
+          },
+          "stage": "RK_STAGE_END",
+          "stats": {
+            "BG": {
+              "finite": 2533440,
+              "max": 1.4346255738928448e-05,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2536,
+              "size": 2533440,
+              "zero": 2530904
+            },
+            "DEN": {
+              "finite": 2533440,
+              "max": 1.1638531684875488,
+              "min": 0.08370563387870789,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NC": {
+              "finite": 2533440,
+              "max": 1490850432.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1574440,
+              "size": 2533440,
+              "zero": 959000
+            },
+            "NI": {
+              "finite": 2533440,
+              "max": 4731857.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 813792,
+              "size": 2533440,
+              "zero": 1719648
+            },
+            "NN": {
+              "finite": 2533440,
+              "max": 5039147008.0,
+              "min": 0.000341807899530977,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NR": {
+              "finite": 2533440,
+              "max": 34836.6015625,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 275959,
+              "size": 2533440,
+              "zero": 2257481
+            },
+            "Q": {
+              "finite": 2533440,
+              "max": 0.022662408649921417,
+              "min": 1.2206734822939325e-07,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "QC": {
+              "finite": 2533440,
+              "max": 0.006363465916365385,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1574440,
+              "size": 2533440,
+              "zero": 959000
+            },
+            "QG": {
+              "finite": 2533440,
+              "max": 0.005738501902669668,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2536,
+              "size": 2533440,
+              "zero": 2530904
+            },
+            "QI": {
+              "finite": 2533440,
+              "max": 0.009928734973073006,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 813792,
+              "size": 2533440,
+              "zero": 1719648
+            },
+            "QR": {
+              "finite": 2533440,
+              "max": 0.0022441840264946222,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 275959,
+              "size": 2533440,
+              "zero": 2257481
+            },
+            "QS": {
+              "finite": 2533440,
+              "max": 0.015518705360591412,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 185302,
+              "size": 2533440,
+              "zero": 2348138
+            }
+          },
+          "violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          }
+        },
+        {
+          "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+          "number_conversion": {
+            "BG": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific volume moment"
+            },
+            "NC": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NI": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NN": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NR": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            }
+          },
+          "pairs": {
+            "cloud": {
+              "feasible_cone": {
+                "bounds": [
+                  4.188790204786391e-15,
+                  3.0300855069345996e-10
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 1574440
+              },
+              "mass": "QC",
+              "moment": "NC",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "graupel": {
+              "feasible_cone": {
+                "bounds": [
+                  100,
+                  900
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 2537
+              },
+              "mass": "QG",
+              "moment": "BG",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "ice": {
+              "feasible_cone": {
+                "bounds": [
+                  2.6055879053180625e-16,
+                  2.0982747187893314e-09
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                "exact_outside_bound_cells": 35,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 1.8427980930295298e-16,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 813792
+              },
+              "mass": "QI",
+              "moment": "NI",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "rain": {
+              "feasible_cone": {
+                "bounds": [
+                  2.930931921716425e-10,
+                  1.4159232106169906e-05
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 276035
+              },
+              "mass": "QR",
+              "moment": "NR",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            }
+          },
+          "rkstep": 3,
+          "source_entry_cap_diagnostics": {
+            "NC": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 712017216.0,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 1574440,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000000.0
+            },
+            "NI": {
+              "persistent_fixed_cap_applied": false,
+              "role": "PR84 source entry guard is a PSD-compatible pre-consumption cap; not a persistent post-operator invariant"
+            },
+            "NR": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 29264.4296875,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 276035,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000.0
+            }
+          },
+          "stage": "RK_STAGE_END",
+          "stats": {
+            "BG": {
+              "finite": 2533440,
+              "max": 1.4179305253492203e-05,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2537,
+              "size": 2533440,
+              "zero": 2530903
+            },
+            "DEN": {
+              "finite": 2533440,
+              "max": 1.163761854171753,
+              "min": 0.08372926712036133,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NC": {
+              "finite": 2533440,
+              "max": 1485534848.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1574440,
+              "size": 2533440,
+              "zero": 959000
+            },
+            "NI": {
+              "finite": 2533440,
+              "max": 4730199.5,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 813792,
+              "size": 2533440,
+              "zero": 1719648
+            },
+            "NN": {
+              "finite": 2533440,
+              "max": 5036712448.0,
+              "min": 0.0003414501261431724,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NR": {
+              "finite": 2533440,
+              "max": 34568.84375,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 276035,
+              "size": 2533440,
+              "zero": 2257405
+            },
+            "Q": {
+              "finite": 2533440,
+              "max": 0.022661332041025162,
+              "min": 2.984522140536683e-08,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "QC": {
+              "finite": 2533440,
+              "max": 0.006324520334601402,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1574440,
+              "size": 2533440,
+              "zero": 959000
+            },
+            "QG": {
+              "finite": 2533440,
+              "max": 0.005671721883118153,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2537,
+              "size": 2533440,
+              "zero": 2530903
+            },
+            "QI": {
+              "finite": 2533440,
+              "max": 0.009925257414579391,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 813792,
+              "size": 2533440,
+              "zero": 1719648
+            },
+            "QR": {
+              "finite": 2533440,
+              "max": 0.002226935001090169,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 276035,
+              "size": 2533440,
+              "zero": 2257405
+            },
+            "QS": {
+              "finite": 2533440,
+              "max": 0.015228267759084702,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 185232,
+              "size": 2533440,
+              "zero": 2348208
+            }
+          },
+          "violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          }
+        },
+        {
+          "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+          "number_conversion": {
+            "BG": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific volume moment"
+            },
+            "NC": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NI": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NN": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NR": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            }
+          },
+          "pairs": {
+            "cloud": {
+              "feasible_cone": {
+                "bounds": [
+                  4.188790204786391e-15,
+                  3.0300855069345996e-10
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 1574440
+              },
+              "mass": "QC",
+              "moment": "NC",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "graupel": {
+              "feasible_cone": {
+                "bounds": [
+                  100,
+                  900
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 2537
+              },
+              "mass": "QG",
+              "moment": "BG",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "ice": {
+              "feasible_cone": {
+                "bounds": [
+                  2.6055879053180625e-16,
+                  2.0982747187893314e-09
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                "exact_outside_bound_cells": 35,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 1.8427980930295298e-16,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 813792
+              },
+              "mass": "QI",
+              "moment": "NI",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "rain": {
+              "feasible_cone": {
+                "bounds": [
+                  2.930931921716425e-10,
+                  1.4159232106169906e-05
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 276035
+              },
+              "mass": "QR",
+              "moment": "NR",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            }
+          },
+          "rkstep": 0,
+          "source_entry_cap_diagnostics": {
+            "NC": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 712017216.0,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 1574440,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000000.0
+            },
+            "NI": {
+              "persistent_fixed_cap_applied": false,
+              "role": "PR84 source entry guard is a PSD-compatible pre-consumption cap; not a persistent post-operator invariant"
+            },
+            "NR": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 29264.4296875,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 276035,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000.0
+            }
+          },
+          "stage": "PRE_KDM6",
+          "stats": {
+            "BG": {
+              "finite": 2533440,
+              "max": 1.4179305253492203e-05,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2537,
+              "size": 2533440,
+              "zero": 2530903
+            },
+            "DEN": {
+              "finite": 2533440,
+              "max": 1.163761854171753,
+              "min": 0.08372926712036133,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NC": {
+              "finite": 2533440,
+              "max": 1485534848.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1574440,
+              "size": 2533440,
+              "zero": 959000
+            },
+            "NI": {
+              "finite": 2533440,
+              "max": 4730199.5,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 813792,
+              "size": 2533440,
+              "zero": 1719648
+            },
+            "NN": {
+              "finite": 2533440,
+              "max": 5036712448.0,
+              "min": 0.0003414501261431724,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NR": {
+              "finite": 2533440,
+              "max": 34568.84375,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 276035,
+              "size": 2533440,
+              "zero": 2257405
+            },
+            "Q": {
+              "finite": 2533440,
+              "max": 0.022661332041025162,
+              "min": 2.984522140536683e-08,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "QC": {
+              "finite": 2533440,
+              "max": 0.006324520334601402,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1574440,
+              "size": 2533440,
+              "zero": 959000
+            },
+            "QG": {
+              "finite": 2533440,
+              "max": 0.005671721883118153,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2537,
+              "size": 2533440,
+              "zero": 2530903
+            },
+            "QI": {
+              "finite": 2533440,
+              "max": 0.009925257414579391,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 813792,
+              "size": 2533440,
+              "zero": 1719648
+            },
+            "QR": {
+              "finite": 2533440,
+              "max": 0.002226935001090169,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 276035,
+              "size": 2533440,
+              "zero": 2257405
+            },
+            "QS": {
+              "finite": 2533440,
+              "max": 0.015228267759084702,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 185232,
+              "size": 2533440,
+              "zero": 2348208
+            }
+          },
+          "violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          }
+        },
+        {
+          "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+          "number_conversion": {
+            "BG": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific volume moment"
+            },
+            "NC": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NI": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NN": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NR": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            }
+          },
+          "pairs": {
+            "cloud": {
+              "feasible_cone": {
+                "bounds": [
+                  4.188790204786391e-15,
+                  3.0300855069345996e-10
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 230468
+              },
+              "mass": "QC",
+              "moment": "NC",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "graupel": {
+              "feasible_cone": {
+                "bounds": [
+                  100,
+                  900
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 1712
+              },
+              "mass": "QG",
+              "moment": "BG",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "ice": {
+              "feasible_cone": {
+                "bounds": [
+                  2.6055879053180625e-16,
+                  2.0982747187893314e-09
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                "exact_outside_bound_cells": 2063,
+                "maximum_exact_lower_residual": 1.6866083304934864e-24,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 374985
+              },
+              "mass": "QI",
+              "moment": "NI",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "rain": {
+              "feasible_cone": {
+                "bounds": [
+                  2.930931921716425e-10,
+                  1.4159232106169906e-05
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                "exact_outside_bound_cells": 13,
+                "maximum_exact_lower_residual": 4.080709488091326e-18,
+                "maximum_exact_upper_residual": 1.0408766472976179e-12,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 272119
+              },
+              "mass": "QR",
+              "moment": "NR",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            }
+          },
+          "rkstep": 0,
+          "source_entry_cap_diagnostics": {
+            "NC": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 5399271424.0,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 230468,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000000.0
+            },
+            "NI": {
+              "persistent_fixed_cap_applied": false,
+              "role": "PR84 source entry guard is a PSD-compatible pre-consumption cap; not a persistent post-operator invariant"
+            },
+            "NR": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 317678.90625,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 272119,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000.0
+            }
+          },
+          "stage": "POST_KDM6",
+          "stats": {
+            "BG": {
+              "finite": 2533440,
+              "max": 1.545476152386982e-05,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1712,
+              "size": 2533440,
+              "zero": 2531728
+            },
+            "DEN": {
+              "finite": 2533440,
+              "max": 1.163761854171753,
+              "min": 0.08372926712036133,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NC": {
+              "finite": 2533440,
+              "max": 4797161472.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 230468,
+              "size": 2533440,
+              "zero": 2302972
+            },
+            "NI": {
+              "finite": 2533440,
+              "max": 905207616.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 374985,
+              "size": 2533440,
+              "zero": 2158455
+            },
+            "NN": {
+              "finite": 2533440,
+              "max": 4783939072.0,
+              "min": 86360440.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NR": {
+              "finite": 2533440,
+              "max": 465978.90625,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 272119,
+              "size": 2533440,
+              "zero": 2261321
+            },
+            "Q": {
+              "finite": 2533440,
+              "max": 0.022661514580249786,
+              "min": 2.984524627436258e-08,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "QC": {
+              "finite": 2533440,
+              "max": 0.006100955884903669,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 230468,
+              "size": 2533440,
+              "zero": 2302972
+            },
+            "QG": {
+              "finite": 2533440,
+              "max": 0.007083600386977196,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1712,
+              "size": 2533440,
+              "zero": 2531728
+            },
+            "QI": {
+              "finite": 2533440,
+              "max": 0.008382127620279789,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 374985,
+              "size": 2533440,
+              "zero": 2158455
+            },
+            "QR": {
+              "finite": 2533440,
+              "max": 0.0037780674174427986,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 272119,
+              "size": 2533440,
+              "zero": 2261321
+            },
+            "QS": {
+              "finite": 2533440,
+              "max": 0.017780892550945282,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 281222,
+              "size": 2533440,
+              "zero": 2252218
+            }
+          },
+          "violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          }
+        }
+      ],
+      "density_contract_verified": true,
+      "first_recorded_state_violation": null,
+      "observed_post_kdm6": true,
+      "required_rkstep_sequence_complete": true,
+      "required_state_sequence_complete": true,
+      "state_record_count": 6,
+      "state_stage_sequence": [
+        "PRE_RK",
+        "RK_STAGE_END",
+        "RK_STAGE_END",
+        "RK_STAGE_END",
+        "PRE_KDM6",
+        "POST_KDM6"
+      ],
+      "status": "PASS",
+      "timestep": 1
+    },
+    {
+      "completed_post_kdm6": false,
+      "completed_state_summaries": [
+        {
+          "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+          "number_conversion": {
+            "BG": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific volume moment"
+            },
+            "NC": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NI": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NN": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            },
+            "NR": {
+              "negative_input": 0,
+              "nonfinite_input": 0,
+              "nonfinite_or_nonpositive_dry_density": 0,
+              "nonfinite_result": 0,
+              "overflow_guard": 0,
+              "positive_to_zero": 0,
+              "product_at_or_below_half_minimum_subnormal": 0,
+              "quantity": "specific number moment"
+            }
+          },
+          "pairs": {
+            "cloud": {
+              "feasible_cone": {
+                "bounds": [
+                  4.188790204786391e-15,
+                  3.0300855069345996e-10
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 230468
+              },
+              "mass": "QC",
+              "moment": "NC",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "graupel": {
+              "feasible_cone": {
+                "bounds": [
+                  100,
+                  900
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                "exact_outside_bound_cells": 0,
+                "maximum_exact_lower_residual": 0.0,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 1712
+              },
+              "mass": "QG",
+              "moment": "BG",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "ice": {
+              "feasible_cone": {
+                "bounds": [
+                  2.6055879053180625e-16,
+                  2.0982747187893314e-09
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                "exact_outside_bound_cells": 2063,
+                "maximum_exact_lower_residual": 1.6866083304934864e-24,
+                "maximum_exact_upper_residual": 0.0,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 374985
+              },
+              "mass": "QI",
+              "moment": "NI",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            },
+            "rain": {
+              "feasible_cone": {
+                "bounds": [
+                  2.930931921716425e-10,
+                  1.4159232106169906e-05
+                ],
+                "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                "exact_outside_bound_cells": 13,
+                "maximum_exact_lower_residual": 4.080709488091326e-18,
+                "maximum_exact_upper_residual": 1.0408766472976179e-12,
+                "outside_beyond_8_float32_ulp_cells": 0,
+                "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                "ratio_name": "mass/moment",
+                "valid_positive_pair_cells": 272119
+              },
+              "mass": "QR",
+              "moment": "NR",
+              "negative_mass": 0,
+              "negative_moment": 0,
+              "nonfinite_mass_or_moment": 0,
+              "positive_mass_zero_moment": 0,
+              "positive_moment_zero_mass": 0
+            }
+          },
+          "rkstep": 0,
+          "source_entry_cap_diagnostics": {
+            "NC": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 5592570368.0,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 230468,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000000.0
+            },
+            "NI": {
+              "persistent_fixed_cap_applied": false,
+              "role": "PR84 source entry guard is a PSD-compatible pre-consumption cap; not a persistent post-operator invariant"
+            },
+            "NR": {
+              "cells_above_source_cap": 0,
+              "max_finite_internal_number_m-3": 336101.9375,
+              "nonfinite_internal_number_cells": 0,
+              "paired_mass_positive_cells": 272119,
+              "role": "source entry-consumption diagnostic; not a persistent post-operator invariant",
+              "source_cap_number_m-3": 50000000.0
+            }
+          },
+          "stage": "PRE_RK",
+          "stats": {
+            "BG": {
+              "finite": 2533440,
+              "max": 1.545476152386982e-05,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1712,
+              "size": 2533440,
+              "zero": 2531728
+            },
+            "DEN": {
+              "finite": 2533440,
+              "max": 1.200648307800293,
+              "min": 0.08981930464506149,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NC": {
+              "finite": 2533440,
+              "max": 4797161472.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 230468,
+              "size": 2533440,
+              "zero": 2302972
+            },
+            "NI": {
+              "finite": 2533440,
+              "max": 905207616.0,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 374985,
+              "size": 2533440,
+              "zero": 2158455
+            },
+            "NN": {
+              "finite": 2533440,
+              "max": 4783939072.0,
+              "min": 86360440.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 2533440,
+              "size": 2533440,
+              "zero": 0
+            },
+            "NR": {
+              "finite": 2533440,
+              "max": 465978.90625,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 272119,
+              "size": 2533440,
+              "zero": 2261321
+            },
+            "Q": {
+              "finite": 2533440,
+              "max": 0.022660795599222183,
+              "min": -1.4526547431614745e-07,
+              "negative": 4,
+              "nonfinite": 0,
+              "positive": 2533436,
+              "size": 2533440,
+              "zero": 0
+            },
+            "QC": {
+              "finite": 2533440,
+              "max": 0.006100955884903669,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 230468,
+              "size": 2533440,
+              "zero": 2302972
+            },
+            "QG": {
+              "finite": 2533440,
+              "max": 0.007083600386977196,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 1712,
+              "size": 2533440,
+              "zero": 2531728
+            },
+            "QI": {
+              "finite": 2533440,
+              "max": 0.008382127620279789,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 374985,
+              "size": 2533440,
+              "zero": 2158455
+            },
+            "QR": {
+              "finite": 2533440,
+              "max": 0.0037780674174427986,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 272119,
+              "size": 2533440,
+              "zero": 2261321
+            },
+            "QS": {
+              "finite": 2533440,
+              "max": 0.017780892550945282,
+              "min": 0.0,
+              "negative": 0,
+              "nonfinite": 0,
+              "positive": 268352,
+              "size": 2533440,
+              "zero": 2265088
+            }
+          },
+          "violations": {
+            "fields": {
+              "Q": {
+                "negative": 4,
+                "nonfinite": 0
+              }
+            },
+            "number_conversion": {},
+            "pairs": {}
+          }
+        }
+      ],
+      "density_contract_verified": true,
+      "first_recorded_state_violation": {
+        "fields": {
+          "Q": {
+            "negative": 4,
+            "nonfinite": 0
+          }
+        },
+        "number_conversion": {},
+        "pairs": {},
+        "rkstep": 0,
+        "stage": "PRE_RK",
+        "state_index": 0
+      },
+      "observed_post_kdm6": false,
+      "required_rkstep_sequence_complete": false,
+      "required_state_sequence_complete": false,
+      "state_record_count": 1,
+      "state_stage_sequence": [
+        "PRE_RK"
+      ],
+      "status": "INCOMPLETE",
+      "timestep": 2
+    }
+  ],
+  "timestep_ids_contiguous_from_one": true,
+  "trace_timestep_count": 2,
+  "trace_timesteps": [
+    1,
+    2
+  ]
+}

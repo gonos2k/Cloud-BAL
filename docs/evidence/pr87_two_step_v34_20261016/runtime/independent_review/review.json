@@ -1,0 +1,351 @@
+{
+  "candidate": {
+    "build_receipt": "/var/tmp/pr87_joint_cycle_build_20261016_v34/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "4e7333f4b0c312f3dab2c832d528609c79c3672db97979cf674df0dd747637c9",
+    "build_status": "PASS_OVERLAY_BUILD",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "executable_sha256": "5da2d108c60d9c67e019d8be43b152cccd7b167befe6d3518f2e3f8f6d3088af",
+    "kdm6_sha256": "2b10d9f15caa6c91a541428b19a6187bab7d75080e1ab67ae94b2435f7d928ce",
+    "module_em_candidate_sha256": "e48607da8943caaf86f53c5fc04ff5ba2a2c75e32706142c97c3f9b8fdb70c70",
+    "native_update_sha256": "d997a6393552465132ee7a743d59f5f37214e6521781dae928c44d6621001503",
+    "source_manifest": "/var/tmp/pr87_joint_cycle_sources_20261016_v34/sources.json",
+    "source_manifest_sha256": "b70f6476e32cae360666183b810d3d254c4f1bea71111919848b4641a9d4adfb"
+  },
+  "gate_limitations": [
+    "T2 PRE_RK and RK1/RK2 are intermediate, non-gated states; they show negative-Q predictors and exact volume diagnostic counts.",
+    "No second POST_KDM6 endpoint exists in either arm."
+  ],
+  "overall_runtime_status": "INCOMPLETE both arms: T1 reaches POST_KDM6; T2 reaches RK3 and PRE_KDM6 strict gates then fails during KDM6 cold rain process before POST_KDM6.",
+  "runs": {
+    "COUPLED": {
+      "audit_sha256": "75821177352b00f9d58c05dc0f34a534588e72520e9e6b7fa6b2a0dade174a61",
+      "candidate_executable_actual": "5da2d108c60d9c67e019d8be43b152cccd7b167befe6d3518f2e3f8f6d3088af",
+      "candidate_executable_expected": "5da2d108c60d9c67e019d8be43b152cccd7b167befe6d3518f2e3f8f6d3088af",
+      "candidate_namelist_actual": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_namelist_expected": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "completed_post_kdm6_timesteps": 1,
+      "decoded_sha256": "013ecd5ca349e265133a0a45db0abc77486a47f331bc1f18c97802ac6b811142",
+      "fatal_observed": true,
+      "observed_gates": [
+        {
+          "field_violations": {},
+          "gate": false,
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": false,
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": false,
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 0,
+          "stage": "POST_KDM6",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "gate": false,
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_violations": {
+            "cloud": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 54
+            },
+            "rain": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 101
+            }
+          },
+          "timestep": 2
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "gate": false,
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 2
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 5,
+              "nonfinite": 0
+            }
+          },
+          "gate": false,
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 2
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 2
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_violations": {},
+          "timestep": 2
+        }
+      ],
+      "parent_executable_actual": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "parent_executable_expected": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "preflight_sha256": "28878c47f6a2236758f0013eb43e284c0b16fa076875ff77421caeed632d7281",
+      "receipt_sha256": "5406432b07402629fc3f8b4a24b5724d1f2cb4933747dda688650e7f9f4b5c0b",
+      "stage_counts": {
+        "POST_KDM6": 1,
+        "PRE_KDM6": 2,
+        "PRE_RK": 2,
+        "RK_STAGE_END": 6
+      },
+      "state_records": 11,
+      "status": "INCOMPLETE",
+      "timestep_sequences": [
+        {
+          "stages": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6",
+            "POST_KDM6"
+          ],
+          "status": "PASS",
+          "timestep": 1
+        },
+        {
+          "stages": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6"
+          ],
+          "status": "INCOMPLETE",
+          "timestep": 2
+        }
+      ],
+      "trace_gzip_sha256": "5f78e9e808bfa0a5ade352fcda9bdc991866e7be945ebe84aceddcd817724325",
+      "unchanged_frozen_input_mismatches": [],
+      "unchanged_frozen_inputs_checked": 99
+    },
+    "OFF": {
+      "audit_sha256": "08cef146e2dc2c9e8a3d23991e523f33b90174981b93b18c995a4bd16cded525",
+      "candidate_executable_actual": "5da2d108c60d9c67e019d8be43b152cccd7b167befe6d3518f2e3f8f6d3088af",
+      "candidate_executable_expected": "5da2d108c60d9c67e019d8be43b152cccd7b167befe6d3518f2e3f8f6d3088af",
+      "candidate_namelist_actual": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_namelist_expected": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "completed_post_kdm6_timesteps": 1,
+      "decoded_sha256": "5b4b0d3693cbbed23ebce6571e6b043150e60bddc98160d5c89b867ff67b7b97",
+      "fatal_observed": true,
+      "observed_gates": [
+        {
+          "field_violations": {},
+          "gate": false,
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": false,
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": false,
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 0,
+          "stage": "POST_KDM6",
+          "strict_violations": {},
+          "timestep": 1
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "gate": false,
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_violations": {
+            "cloud": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 54
+            },
+            "rain": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 100
+            }
+          },
+          "timestep": 2
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "gate": false,
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 2
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 5,
+              "nonfinite": 0
+            }
+          },
+          "gate": false,
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 2
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_violations": {},
+          "timestep": 2
+        },
+        {
+          "field_violations": {},
+          "gate": true,
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_violations": {},
+          "timestep": 2
+        }
+      ],
+      "parent_executable_actual": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "parent_executable_expected": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "preflight_sha256": "57ffaf8f4ed7ea36e6a415f61d3d372e113f13187472dace1030d0e2ad39573e",
+      "receipt_sha256": "95112801ae99f19de45c125dbbaf8b6685119c317a6b27afa15e6aede34162b1",
+      "stage_counts": {
+        "POST_KDM6": 1,
+        "PRE_KDM6": 2,
+        "PRE_RK": 2,
+        "RK_STAGE_END": 6
+      },
+      "state_records": 11,
+      "status": "INCOMPLETE",
+      "timestep_sequences": [
+        {
+          "stages": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6",
+            "POST_KDM6"
+          ],
+          "status": "PASS",
+          "timestep": 1
+        },
+        {
+          "stages": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6"
+          ],
+          "status": "INCOMPLETE",
+          "timestep": 2
+        }
+      ],
+      "trace_gzip_sha256": "5df550aea84c81775e90dfaaf9d5c474ac7cd588ea98b98c06143da4aa1999cc",
+      "unchanged_frozen_input_mismatches": [],
+      "unchanged_frozen_inputs_checked": 99
+    }
+  },
+  "schema": "pr87_v34_independent_runtime_review_v1",
+  "static_review": [
+    "The stale uninitialized REAL32 finiteness check was replaced by a finiteness check on assigned source_rate64 after raw source and paired PBL deltas are combined. The gate precedes source-rate use; finite arithmetic is unchanged.",
+    "The KDM6 graupel-domain source remains V33 SHA 2b10d9f15caa6c91a541428b19a6187bab7d75080e1ab67ae94b2435f7d928ce."
+  ]
+}

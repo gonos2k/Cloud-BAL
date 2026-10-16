@@ -6,7 +6,7 @@ PROGRAM pr85_kdm6_ice_sedimentation_source
     SUBROUTINE pr85_kdm6_paired_sediment_column(kts,kte,cell_i,lat,substep,dt,mstep, &
         dry_density,delz,mass_rate,second_rate,qice,nice,mode,q_active_min,second_active_min, &
         density_min,density_max,approved_q_rate,approved_second_rate, &
-        budget_unit,trace,valid)
+        budget_unit,trace,valid,rain_pidn,rain_power,rain_lambda_min,rain_lambda_max)
       USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64
       INTEGER, INTENT(IN) :: kts,kte,cell_i,lat,substep,mstep,mode,budget_unit
       REAL(real32), INTENT(IN) :: dt
@@ -17,6 +17,7 @@ PROGRAM pr85_kdm6_ice_sedimentation_source
       REAL(real64), INTENT(OUT) :: approved_q_rate(kts:kte),approved_second_rate(kts:kte)
       LOGICAL, INTENT(IN) :: trace
       LOGICAL, INTENT(OUT) :: valid
+      REAL(real32), INTENT(IN) :: rain_pidn,rain_power,rain_lambda_min,rain_lambda_max
     END SUBROUTINE pr85_kdm6_paired_sediment_column
   END INTERFACE
   INTEGER :: failures
@@ -54,7 +55,7 @@ CONTAINS
     qbefore=q; nbefore=n
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,2,120,2,1,20.0_real32,1, &
-      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.TRUE.,valid)
+      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.TRUE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     IF (.NOT.valid .OR. ANY(q/=qbefore) .OR. ANY(n/=nbefore)) THEN
       PRINT '(a)','FAIL recorded underflow: unrepresentable Q plus positive N was not withheld atomically'
@@ -77,7 +78,7 @@ CONTAINS
     qbefore=q; nbefore=n
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,2,121,2,1,1.0_real32,1, &
-      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid)
+      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     IF (.NOT.valid .OR. ANY(q/=qbefore) .OR. ANY(n/=nbefore)) THEN
       PRINT '(a)','FAIL mirrored empty-receiver N underflow was not withheld atomically'
@@ -113,7 +114,7 @@ CONTAINS
     n0=SUM(REAL(n,real64)*REAL(dz,real64))
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,3,17,4,1,1.0_real32,1, &
-      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.TRUE.,valid)
+      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.TRUE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     REWIND(unit)
     READ(unit,'(a)') line
     READ(line,*) tag,ci,lat,substep,nlevels,ledger_values
@@ -162,7 +163,7 @@ CONTAINS
     vrq=2.0_real64; vrn=1.0_real64
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,2,18,4,1,1.0_real32,1, &
-      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid)
+      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     IF (.NOT.valid .OR. ANY(q<0.0_real32) .OR. ANY(n<0.0_real32) .OR. &
         ANY((q==0.0_real32).NEQV.(n==0.0_real32)) .OR. fq(2)>=2.0e-5_real64) THEN
@@ -186,7 +187,7 @@ CONTAINS
     qbefore=q; nbefore=n
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,2,122,2,1,1.0_real32,1, &
-      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid)
+      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     IF (.NOT.valid .OR. .NOT.ALL(ieee_is_finite(q)) .OR. .NOT.ALL(ieee_is_finite(n)) .OR. &
         ANY(q/=qbefore) .OR. ANY(n/=nbefore) .OR. ANY(fq/=0.0_real64) .OR. ANY(fn/=0.0_real64)) THEN
@@ -208,7 +209,7 @@ CONTAINS
     qbefore=q; nbefore=n
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,2,124,2,1,1.0_real32,1, &
-      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid)
+      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     IF (.NOT.valid .OR. ANY(q/=qbefore) .OR. ANY(n/=nbefore) .OR. &
         ANY(fq/=0.0_real64) .OR. ANY(fn/=0.0_real64)) THEN
@@ -231,7 +232,7 @@ CONTAINS
     qbefore=q; nbefore=n
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,1,123,2,1,1.0_real32,1, &
-      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid)
+      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     IF (.NOT.valid .OR. ANY(q/=qbefore) .OR. ANY(n/=nbefore) .OR. &
         ANY(fq/=0.0_real64) .OR. ANY(fn/=0.0_real64)) THEN
@@ -255,7 +256,7 @@ CONTAINS
     rho(2)=ieee_value(0.0_real32,ieee_quiet_nan)
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,2,19,4,1,1.0_real32,1, &
-      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid)
+      rho,dz,vrq,vrn,q,n,1,0.0_real32,0.0_real32,0.0_real32,0.0_real32,fq,fn,unit,.FALSE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     IF (valid .OR. ANY(q/=qbefore) .OR. ANY(n/=nbefore)) THEN
       PRINT '(a)','FAIL invalid input did not reject atomically'

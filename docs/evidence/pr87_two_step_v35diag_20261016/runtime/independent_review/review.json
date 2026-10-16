@@ -1,0 +1,229 @@
+{
+  "candidate": {
+    "KDM6_source_sha256": "14ea245c40a12cb668fc0a834bda724d664380985ecf3ec0f4ce79d4064c1cf0",
+    "build_receipt": "/var/tmp/pr87_joint_cycle_build_20261016_v35diag/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "01c50b4695f980496788cf33a88ffcef477974c63d51bc4f15465e281827fdc7",
+    "build_status": "PASS_OVERLAY_BUILD",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "executable_sha256": "3db695aaac8c7e6329d6ad6c16742cffc8fd154d8c9f12f5bce4de5ce31a0f3b",
+    "parent_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+    "source_dir": "/var/tmp/pr87_joint_cycle_sources_20261016_v35diag",
+    "sources_json_sha256": "92fd37e1af00dfeb6528b5fbe47a00106d3f89e87d2d28cbb8303d98031e24c6"
+  },
+  "diagnostic_review": [
+    "V35 adds three stdout writes and FLUSH only within the existing `not rain_process_feasible` branch before the existing failure handling. Physical source fields, search inputs, branch condition, and KDM6 transformations are unchanged.",
+    "The write records have 9 integer metadata fields, 26 expanded state scalars, and 16 configuration scalars."
+  ],
+  "failure_context": {
+    "config": [
+      "PR87_GSEARCH_FAIL_CONFIG    9.61000000000000000E+02    3.50000000000000000E+04    1.00000000000000000E+02    9.00000000000000000E+02    5.23598815917968750E+02    3.00000000000000000E+00    1.20000000000000000E+04    5.00000000000000000E+05    1.57079638671875000E+03    3.00000000000000000E+00    9.08000000000000000E+03    1.82000000000000000E+06    6.93657808005809784E-03    0.00000000000000000E+00    9.99999897748375319E-15    0.00000000000000000E+00"
+    ],
+    "interpretation": "One failure context was logged: timestep 2, latitude 63, i=204, k=17, loop 1, process substep 2, status 2; pending extinction flags are both false. This is diagnostic context only, not a process-level causal determination.",
+    "metadata": [
+      "PR87_GSEARCH_FAIL_META 2 63 204 17 1 2 2 0 0"
+    ],
+    "state": [
+      "PR87_GSEARCH_FAIL_STATE    2.75130406953394413E-03    4.56007721368223429E-04    1.32635504996869713E-05    2.69387441221624613E-04    0.00000000000000000E+00   -9.26974962567328475E-07   -1.73324687935405564E-10   -4.06129146313105593E-07    8.07716446615813766E-07    5.25560949427017476E-07    5.58627648000000000E+08    2.54149421875000000E+05    3.08175820312500000E+04   -1.88002562500000000E+05   -3.78579254150390625E+02   -4.52747161865234375E+02    0.00000000000000000E+00    7.42865213787524681E-10    2.72615295410156250E+02    4.60103998193517327E-04    6.80995941162109375E-01    1.25663710937500000E+04    1.00000000362749373E-15    1.00000000000000000E+01    9.99999971718068537E-10    3.00000000000000000E+00"
+    ]
+  },
+  "first_timestep_equivalence": {
+    "all_headers_geometry_fields_bitwise_equal": true,
+    "baseline": "V34 OFF",
+    "baseline_trace_sha256": "5df550aea84c81775e90dfaaf9d5c474ac7cd588ea98b98c06143da4aa1999cc",
+    "candidate_trace_sha256": "5df550aea84c81775e90dfaaf9d5c474ac7cd588ea98b98c06143da4aa1999cc",
+    "fields_per_record": 12,
+    "records_compared": 6,
+    "stages": [
+      "PRE_RK",
+      "RK1",
+      "RK2",
+      "RK3",
+      "PRE_KDM6",
+      "POST_KDM6"
+    ]
+  },
+  "limitations": [
+    "Only OFF V35diag was run.",
+    "The run fails before second POST_KDM6; no 40-second completion.",
+    "The failure row does not establish the upstream origin of the candidate source state."
+  ],
+  "runtime": {
+    "arm": "OFF",
+    "audit_path": "/var/tmp/pr87_v35diag_OFF_strict_audit.json",
+    "audit_sha256": "3ce1edefb0cd160a5796adccbd17043c99b55345e8401c3d3b6b599bfc741432",
+    "audit_status": "INCOMPLETE",
+    "candidate_executable_actual": "3db695aaac8c7e6329d6ad6c16742cffc8fd154d8c9f12f5bce4de5ce31a0f3b",
+    "candidate_executable_expected": "3db695aaac8c7e6329d6ad6c16742cffc8fd154d8c9f12f5bce4de5ce31a0f3b",
+    "candidate_namelist_actual": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+    "candidate_namelist_expected": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+    "completed_post_kdm6_timesteps": 1,
+    "failure_rows": {
+      "PR87_GSEARCH_FAIL_CONFIG": [
+        "PR87_GSEARCH_FAIL_CONFIG    9.61000000000000000E+02    3.50000000000000000E+04    1.00000000000000000E+02    9.00000000000000000E+02    5.23598815917968750E+02    3.00000000000000000E+00    1.20000000000000000E+04    5.00000000000000000E+05    1.57079638671875000E+03    3.00000000000000000E+00    9.08000000000000000E+03    1.82000000000000000E+06    6.93657808005809784E-03    0.00000000000000000E+00    9.99999897748375319E-15    0.00000000000000000E+00"
+      ],
+      "PR87_GSEARCH_FAIL_META": [
+        "PR87_GSEARCH_FAIL_META 2 63 204 17 1 2 2 0 0"
+      ],
+      "PR87_GSEARCH_FAIL_STATE": [
+        "PR87_GSEARCH_FAIL_STATE    2.75130406953394413E-03    4.56007721368223429E-04    1.32635504996869713E-05    2.69387441221624613E-04    0.00000000000000000E+00   -9.26974962567328475E-07   -1.73324687935405564E-10   -4.06129146313105593E-07    8.07716446615813766E-07    5.25560949427017476E-07    5.58627648000000000E+08    2.54149421875000000E+05    3.08175820312500000E+04   -1.88002562500000000E+05   -3.78579254150390625E+02   -4.52747161865234375E+02    0.00000000000000000E+00    7.42865213787524681E-10    2.72615295410156250E+02    4.60103998193517327E-04    6.80995941162109375E-01    1.25663710937500000E+04    1.00000000362749373E-15    1.00000000000000000E+01    9.99999971718068537E-10    3.00000000000000000E+00"
+      ]
+    },
+    "fatal": "KDM6 cold rain process rejected an infeasible moment state",
+    "parent_executable_actual": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "parent_executable_expected": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "preflight_sha256": "91924655307e69d43da8ccc44a7c576cc151b6182a4e91be817dd169afb12776",
+    "records": 11,
+    "run_root": "/var/tmp/pr87_joint_OFF_40s_v35diag_20261016",
+    "stage_counts": {
+      "POST_KDM6": 1,
+      "PRE_KDM6": 2,
+      "PRE_RK": 2,
+      "RK_STAGE_END": 6
+    },
+    "stage_gate_summary": [
+      {
+        "field_violations": {},
+        "gate": false,
+        "rkstep": 0,
+        "stage": "PRE_RK",
+        "strict_source_violations": {},
+        "timestep": 1
+      },
+      {
+        "field_violations": {},
+        "gate": false,
+        "rkstep": 1,
+        "stage": "RK_STAGE_END",
+        "strict_source_violations": {},
+        "timestep": 1
+      },
+      {
+        "field_violations": {},
+        "gate": false,
+        "rkstep": 2,
+        "stage": "RK_STAGE_END",
+        "strict_source_violations": {},
+        "timestep": 1
+      },
+      {
+        "field_violations": {},
+        "gate": true,
+        "rkstep": 3,
+        "stage": "RK_STAGE_END",
+        "strict_source_violations": {},
+        "timestep": 1
+      },
+      {
+        "field_violations": {},
+        "gate": true,
+        "rkstep": 0,
+        "stage": "PRE_KDM6",
+        "strict_source_violations": {},
+        "timestep": 1
+      },
+      {
+        "field_violations": {},
+        "gate": true,
+        "rkstep": 0,
+        "stage": "POST_KDM6",
+        "strict_source_violations": {},
+        "timestep": 1
+      },
+      {
+        "field_violations": {
+          "Q": {
+            "negative": 4,
+            "nonfinite": 0
+          }
+        },
+        "gate": false,
+        "rkstep": 0,
+        "stage": "PRE_RK",
+        "strict_source_violations": {
+          "cloud": {
+            "real32_density_times_number_volume_ratio_outside_exact_bounds": 54
+          },
+          "rain": {
+            "real32_density_times_number_volume_ratio_outside_exact_bounds": 100
+          }
+        },
+        "timestep": 2
+      },
+      {
+        "field_violations": {
+          "Q": {
+            "negative": 4,
+            "nonfinite": 0
+          }
+        },
+        "gate": false,
+        "rkstep": 1,
+        "stage": "RK_STAGE_END",
+        "strict_source_violations": {},
+        "timestep": 2
+      },
+      {
+        "field_violations": {
+          "Q": {
+            "negative": 5,
+            "nonfinite": 0
+          }
+        },
+        "gate": false,
+        "rkstep": 2,
+        "stage": "RK_STAGE_END",
+        "strict_source_violations": {},
+        "timestep": 2
+      },
+      {
+        "field_violations": {},
+        "gate": true,
+        "rkstep": 3,
+        "stage": "RK_STAGE_END",
+        "strict_source_violations": {},
+        "timestep": 2
+      },
+      {
+        "field_violations": {},
+        "gate": true,
+        "rkstep": 0,
+        "stage": "PRE_KDM6",
+        "strict_source_violations": {},
+        "timestep": 2
+      }
+    ],
+    "status": "INCOMPLETE",
+    "stdout_gzip_sha256": "94fce40bd482647dd97b64559a8b0cf1f634dcf8ae4a7400579c8ddcaaa8f388",
+    "timestep_sequences": [
+      {
+        "stages": [
+          "PRE_RK",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "PRE_KDM6",
+          "POST_KDM6"
+        ],
+        "status": "PASS",
+        "timestep": 1
+      },
+      {
+        "stages": [
+          "PRE_RK",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "PRE_KDM6"
+        ],
+        "status": "INCOMPLETE",
+        "timestep": 2
+      }
+    ],
+    "trace_gzip_sha256": "5df550aea84c81775e90dfaaf9d5c474ac7cd588ea98b98c06143da4aa1999cc",
+    "unchanged_frozen_input_count_checked": 99,
+    "unchanged_frozen_input_mismatches": []
+  },
+  "schema": "pr87_v35diag_independent_review_v1",
+  "scope": "Read-only diagnostic/source/build review and first-step observational equivalence; no physics or policy change."
+}

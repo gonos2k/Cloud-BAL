@@ -1,0 +1,222 @@
+{
+  "schema": "pr87_independent_kg_review_v1",
+  "review_date": "2026-10-16",
+  "result": "PASS_SCOPED_KG_INTEGRITY",
+  "scope": "Read-only independent verification of PR87 guarded incremental Graphify/KG update, preservation receipts, and derived report metadata. No graph, source, protected wiki, or private profile content was modified.",
+  "pr": "https://github.com/gonos2k/Cloud-BAL/pull/87",
+  "frozen_source_commit": "482a4a9f693b442c9a0ab7a84d32526cf561e92c",
+  "base_commit": "c84cbd3a0bc366112afe9ebad1087a220eb23b46",
+  "receipt": {
+    "path": "docs/evidence/pr87_kg_20261016/kg_receipt.json",
+    "sha256": "b30f72e0f13132bb6d0e70c4a284a9452c0a16fda098e1c78b4eb2fdcccbaeb0",
+    "canonical_copy_matches": true
+  },
+  "selected_paths": {
+    "count": 3299,
+    "source_sync_count": 3299,
+    "base_to_frozen_diff_count": 3299,
+    "diff_equals_selection": true,
+    "frozen_candidate_sha256_mismatches": 0,
+    "extractable_ast_or_markdown_heading": 694,
+    "hash_only_unsupported_or_binary": 2605,
+    "source_sync_sha256": "430d5af81b2d2071fcbd74996c1026962c72883681aa332fdb46e97032c5f75d",
+    "frozen_head": "482a4a9f693b442c9a0ab7a84d32526cf561e92c"
+  },
+  "corpora": {
+    "Cloud-BAL": {
+      "active_graph_sha256": "827e59a5838ee1506aef7009923fd71240f8cb5829da4487ead27c8b3faaab92",
+      "receipt_graph_sha256": "827e59a5838ee1506aef7009923fd71240f8cb5829da4487ead27c8b3faaab92",
+      "active_matches_receipt": true,
+      "dated_graph_sha256": "827e59a5838ee1506aef7009923fd71240f8cb5829da4487ead27c8b3faaab92",
+      "dated_report_sha256": "53870761fd6da1e81ef9630878be1ef3a9c0deff406dac108b7da5320003eb62",
+      "dated_manifest_sha256": "a0025d07b5b47250adbfeca27ff70a8c7c1a3e90c62bc3487a6ac3bcdb429729",
+      "dated_graph_matches_active": true,
+      "snapshot_utc": "2026-10-16T13:25:49+00:00",
+      "nodes": 11796,
+      "edges": 21117,
+      "communities": 1052,
+      "delta_nodes": 1176,
+      "delta_edges": 2054,
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "missing_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "self_loop_edges": 0
+      },
+      "integrity_all_zero": true
+    },
+    "KLAPS50": {
+      "active_graph_sha256": "49a8165e27cc0dd4c8e6d9df6f49864611bcf73e39ef47e3c7b97715e082f2ae",
+      "receipt_graph_sha256": "49a8165e27cc0dd4c8e6d9df6f49864611bcf73e39ef47e3c7b97715e082f2ae",
+      "active_matches_receipt": true,
+      "dated_graph_sha256": "49a8165e27cc0dd4c8e6d9df6f49864611bcf73e39ef47e3c7b97715e082f2ae",
+      "dated_report_sha256": "0aee65eb571fb4f827ad3f3875b4cdd5f53f9281ac86f1ba7ed4161f6f540267",
+      "dated_manifest_sha256": "40af03c7af6845064943a87f7b9e9add98c77b18b5beb9c33176117ed49875df",
+      "dated_graph_matches_active": true,
+      "snapshot_utc": "2026-10-16T13:25:49+00:00",
+      "nodes": 37624,
+      "edges": 79566,
+      "communities": 3070,
+      "delta_nodes": 1176,
+      "delta_edges": 2056,
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "missing_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "self_loop_edges": 0
+      },
+      "integrity_all_zero": true
+    }
+  },
+  "preservation": {
+    "maintained_source_entry_count": 627,
+    "maintained_source_sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f",
+    "maintained_source_verified_pre_post_equal": true,
+    "protected_wiki_hashes": {
+      "wiki/.research-queue": {
+        "expected_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "actual_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "matches": true
+      },
+      "wiki/.schema": {
+        "expected_sha256": "9c58618297b5a3678f59c906f56e37d142684ce769a0282ec9c56f04ff20c83b",
+        "actual_sha256": "9c58618297b5a3678f59c906f56e37d142684ce769a0282ec9c56f04ff20c83b",
+        "matches": true
+      },
+      "wiki/.schema-proposals": {
+        "expected_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "actual_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "matches": true
+      },
+      "wiki/concepts": {
+        "expected_sha256": "6301589c68de8d4819605c3ee696c19d5250799954116b1845c15d1fce651d9b",
+        "actual_sha256": "6301589c68de8d4819605c3ee696c19d5250799954116b1845c15d1fce651d9b",
+        "matches": true
+      },
+      "wiki/decisions": {
+        "expected_sha256": "a63e12061465313fc513c4314d8bf3575ac9d7c955781c1bab08c4a670982a6f",
+        "actual_sha256": "a63e12061465313fc513c4314d8bf3575ac9d7c955781c1bab08c4a670982a6f",
+        "matches": true
+      },
+      "wiki/entities": {
+        "expected_sha256": "8342ab91481152f1e1a8c4314ac103989d084696093f553b11c8361818c27b71",
+        "actual_sha256": "8342ab91481152f1e1a8c4314ac103989d084696093f553b11c8361818c27b71",
+        "matches": true
+      },
+      "wiki/experiences": {
+        "expected_sha256": "df0cc15f1cc32ddc4459533a91d2107420631f8fac84cbf77147ebc4a26d4b33",
+        "actual_sha256": "df0cc15f1cc32ddc4459533a91d2107420631f8fac84cbf77147ebc4a26d4b33",
+        "matches": true
+      },
+      "wiki/heuristics": {
+        "expected_sha256": "3986fc5534839ca819b3ababb674e282a8a7173e6a5852222fa32cd66aa8ce15",
+        "actual_sha256": "3986fc5534839ca819b3ababb674e282a8a7173e6a5852222fa32cd66aa8ce15",
+        "matches": true
+      },
+      "wiki/hot.md": {
+        "expected_sha256": "94111a1e72a77659f0b0562913a4be98500d8c74add08d41c1d37bb5a26399df",
+        "actual_sha256": "94111a1e72a77659f0b0562913a4be98500d8c74add08d41c1d37bb5a26399df",
+        "matches": true
+      },
+      "wiki/overview.md": {
+        "expected_sha256": "4073e92cb6e8d90808cf9ffb0dfb6432c83d17dbad5cf5080e206a01e37cc8a5",
+        "actual_sha256": "4073e92cb6e8d90808cf9ffb0dfb6432c83d17dbad5cf5080e206a01e37cc8a5",
+        "matches": true
+      },
+      "wiki/procedures": {
+        "expected_sha256": "eef8f201173dd5436309e2768809dc8917c46bf25dbce2be1ef8d449a4967358",
+        "actual_sha256": "eef8f201173dd5436309e2768809dc8917c46bf25dbce2be1ef8d449a4967358",
+        "matches": true
+      },
+      "wiki/queries": {
+        "expected_sha256": "3b5ab1d0c6a2a4fc4f31ec5b12cf7fae93035319ce7e7e00b7d2b21e3d7c1d2d",
+        "actual_sha256": "3b5ab1d0c6a2a4fc4f31ec5b12cf7fae93035319ce7e7e00b7d2b21e3d7c1d2d",
+        "matches": true
+      },
+      "wiki/sources": {
+        "expected_sha256": "3eb3c6ac50f4905d5a8b8a525be63a85f9685ac7d3376a363be264068bc151e9",
+        "actual_sha256": "3eb3c6ac50f4905d5a8b8a525be63a85f9685ac7d3376a363be264068bc151e9",
+        "matches": true
+      }
+    },
+    "protected_wiki_all_match": true,
+    "private_profile": {
+      "Cloud-BAL": {
+        "incident_links": 133,
+        "nodes": 134,
+        "source_file": "config/cp01_private_host_profile.json",
+        "unchanged": true
+      },
+      "KLAPS50": {
+        "incident_links": 0,
+        "nodes": 0,
+        "source_file": "Cloud-BAL/config/cp01_private_host_profile.json",
+        "unchanged": true
+      }
+    },
+    "private_profile_actual_nodes_and_links": {
+      "Cloud-BAL": {
+        "nodes": 134,
+        "incident_links": 133
+      },
+      "KLAPS50": {
+        "nodes": 0,
+        "incident_links": 0
+      }
+    },
+    "prior_immutable_pins": {
+      "current_count": 164,
+      "previous_pr86_count": 155,
+      "previous_pr86_subset_preserved": true,
+      "all_current_pins_present_and_matching": true
+    },
+    "rollback_backup_count": 17,
+    "rollback_backups_all_match": true,
+    "automatic_snapshot_backups_and_membership_match": true,
+    "wiki_derived_hashes_match": true,
+    "wiki_derived_hashes": {
+      "wiki/graph-report-cloud-bal.md": "53870761fd6da1e81ef9630878be1ef3a9c0deff406dac108b7da5320003eb62",
+      "wiki/graph-report-klaps50.md": "0aee65eb571fb4f827ad3f3875b4cdd5f53f9281ac86f1ba7ed4161f6f540267",
+      "wiki/graph-report.md": "481eda2115ee2fc605e706d0aeea02592db8059951e63ee13c1f5cfa7880bd9a",
+      "wiki/index.md": "be7a37bfcd8a5d4a1bed65cdcb84ef3e955dc68168b78f121ba86e0397656544",
+      "wiki/log.md": "830e0ef2a3493e71fe1df411e84f854407f1f8906e9f452550b8a2ab5dd39df4"
+    },
+    "schema_content_pages_touched": false,
+    "updated_wiki_paths": [
+      "graph-report.md",
+      "graph-report-klaps50.md",
+      "graph-report-cloud-bal.md",
+      "index.md#Graph-snapshot",
+      "log.md (append-only)"
+    ]
+  },
+  "integration_binding": {
+    "path": "docs/evidence/pr87_integration_20261016.json",
+    "sha256": "95594b5088b47b7dd1e606eba4b36ce5625d2b2792ce969b11ed856a09d266ec",
+    "expected_sha256": "95594b5088b47b7dd1e606eba4b36ce5625d2b2792ce969b11ed856a09d266ec",
+    "matches": true,
+    "source_commit": "482a4a9f693b442c9a0ab7a84d32526cf561e92c",
+    "physical_approval": "FAIL_OPEN",
+    "60_seconds": "INCOMPLETE_T3_PROGB_TRANSIENT",
+    "600_seconds": "NOT_RUN_KNOWN_T3_PROGB_FAILURE",
+    "water_budget_for_new_candidate": "OPEN",
+    "overall_interpretation": "KG update integrity passes within scope; scientific acceptance remains FAIL_OPEN with candidate gates open/incomplete."
+  },
+  "limits": [
+    "The two maintained corpora overlap; their graph counts and deltas are independent and must not be summed as unique content.",
+    "This is an incremental persistent graph with earlier corpus state plus the selected overlay, not a full candidate-tree extraction.",
+    "Extraction uses Graphify AST and Markdown headings only, with no semantic/LLM refresh; Fortran cross-file CALL relationships are partial.",
+    "2,605 unsupported or binary selected paths are hash-bound only; external model trees and full private runtime arrays are outside this graph.",
+    "Structural integrity and graph freshness do not establish native runtime completion, conservation, observation retention, or scientific approval."
+  ],
+  "blockers": [],
+  "verification": {
+    "receipt_hash_and_copied_artifacts_match": true,
+    "base_to_frozen_selection_and_per_path_hashes_match": true,
+    "separate_dated_corpora_and_active_hashes_match": true,
+    "preserved_source_private_wiki_pins_and_backups_match": true,
+    "integration_document_bound_to_frozen_commit": true,
+    "structural_integrity_zero_for_both_corpora": true,
+    "all_scoped_checks_pass": true
+  }
+}

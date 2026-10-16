@@ -1,0 +1,83 @@
+{
+  "arithmetic_check": "REAL64 operand-scale bound: 64*epsilon*active_cells*sum(abs(proposal,represented))",
+  "groups": [
+    {
+      "cells": 2533440,
+      "changed_cells": 706886,
+      "column_rows": 36088,
+      "invariants_verified": true,
+      "l1_delta": [
+        0.237720199466899,
+        210042935075.847
+      ],
+      "later_source": {
+        "aggregation_claim": false,
+        "dt_later_source_amount": [
+          -3.60123922446217,
+          -5088415965400.65
+        ],
+        "max_abs_r64_identity_residual": [
+          2.775557561562891e-17,
+          0.000244140625
+        ]
+      },
+      "max_abs_delta": [
+        2.214689448010176e-05,
+        24503360.0
+      ],
+      "pair": 1,
+      "proposal": [
+        847.298048410662,
+        -3.246891752199577e+16
+      ],
+      "represented": [
+        847.297674658524,
+        -3.246891631642986e+16
+      ],
+      "rk": 3,
+      "signed_delta": [
+        -0.0003737521384767839,
+        1205566097.6376
+      ],
+      "timestep": 2,
+      "unreported_amounts_equal_within_roundoff": true,
+      "unreported_equal_source_amount": [
+        129.82950366306102,
+        834670095432284.0
+      ]
+    }
+  ],
+  "later_source_amounts_are_separately_reported_not_aggregated": true,
+  "native_run_binding": {
+    "arm": "OFF",
+    "candidate_build_receipt": "/var/tmp/pr87_joint_cycle_build_20261016_v10/pr87_native_overlay_build.json",
+    "candidate_build_receipt_sha256": "2a3bf857db09a16d6f375ea60861e4b8f93b8b9be54a612fd0871b0c98b21004",
+    "candidate_executable_sha256": "08958980d8225417c1551922a5b2cb8c1841d7411b6836d770a111900d963b0b",
+    "candidate_namelist_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+    "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+    "completed_model_steps": 1,
+    "ledger_receipt_bytes_match": true,
+    "observed_stop_context": "PR85 invalid rain-graupel freezing base at i=114, lat=2, k=18 after RK3/PRE_KDM6",
+    "preflight_path": "/var/tmp/pr87_joint_OFF_40s_v10_20261016/preflight.json",
+    "preflight_sha256": "2684cf7b236b6119ab4fdcacccf2c2057e53b8321683d12781701628a56a2cf9",
+    "returncode": 128,
+    "run_identity": "PR87 selected-object native candidate",
+    "run_receipt_path": "/var/tmp/pr87_joint_OFF_40s_v10_20261016/receipt.json",
+    "run_receipt_sha256": "cb78860615c86058e0167750fa3b3a92fa931918d8ea9720a879b7e425a25084",
+    "run_status": "INCOMPLETE",
+    "scope": "only step 2 RK3 source-representation group was emitted; run window INCOMPLETE after step 1; no completed step 2",
+    "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+    "termination_log_path": "/var/tmp/pr87_joint_OFF_40s_v10_20261016/run/rsl.error.0000.gz",
+    "termination_log_sha256": "818b0b6ebfe9e1af3874301187bb99832a09748703f8ac5e06ce8fdabace5fa4",
+    "wall_seconds": 358.26717499271035
+  },
+  "physical_mass_or_energy_claim": false,
+  "quantity_basis": "pressure_carrier_amounts",
+  "schema": "pr87_source_representation_summary_v1",
+  "source_ledger_decoded_sha256": "b11abf73ec42685cf9829a8603ee8fdf0825605548424e4322965cc7a9a1288f",
+  "source_ledger_is_gzip": true,
+  "source_ledger_path": "/var/tmp/pr87_joint_OFF_40s_v10_20261016/run/pr87_source_representation.raw.gz",
+  "source_ledger_sha256": "42c086b48e68322b672924088fa3cc901e6f982eab365a714b09f29a208e7a53",
+  "status": "PASS"
+}

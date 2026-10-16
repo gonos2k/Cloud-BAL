@@ -1,0 +1,153 @@
+{
+  "consumer_source_cone": {
+    "dmc": 3.0,
+    "lambda_c_max": 500000.0,
+    "lambda_c_min": 12000.0,
+    "mean_mass_bounds_kg_per_particle": {
+      "max": 3.0300857402660227e-10,
+      "min": 4.18879052734375e-15
+    },
+    "source_pidnc_real32": 523.5988159179688,
+    "target_continuous_nc_volume": 2.7098428995709963e-12,
+    "target_converted_nc_volume_r32": 2.7098429836863724e-12,
+    "target_converted_nc_volume_r32_bits": "2c3eb031",
+    "target_mass_below_source_min_by": 9.425641417160842e-23,
+    "target_q_over_n_kg_per_particle": 4.188790433087336e-15,
+    "target_relative_below_source_min": -2.250205966003449e-08,
+    "target_strict_upper_volume_bound": 2.7098428385939497e-12,
+    "volume_number_equation": "Nvol bounds = DEN * lambda^d / PIDNC * QC; compare continuous NC_specific*DEN and converted R32 product separately."
+  },
+  "coordinate": {
+    "array_order": "stage arrays are (i,k,j), Fortran i fastest",
+    "i": 89,
+    "j_stage_and_wrapper_lat": 14,
+    "k": 18
+  },
+  "first_positive_pair_stage": "step2 RK_STAGE_END rk=3",
+  "history_OFF_and_COUPLED_identical": true,
+  "identities": {
+    "COUPLED": {
+      "receipt_path": "/var/tmp/pr87_joint_COUPLED_40s_v22b_20261016/receipt.json",
+      "receipt_sha256": "7ce909e668430f4ef1c274e65b5c03e03319bfb8f0ef2c09ad8b4b183900a0a8",
+      "stage_raw_path": "/var/tmp/pr87_v22b_completed_audit_20261016/COUPLED/pr85_joint_moment_stages.raw",
+      "stage_raw_sha256": "335f606e26b1aefb2419d9a2631fa7c065c21e61062e5a1aa5aed2afb09c8dcc"
+    },
+    "OFF": {
+      "receipt_path": "/var/tmp/pr87_joint_OFF_40s_v22b_20261016/receipt.json",
+      "receipt_sha256": "5d9e5191248ece71df52a79adb80be2b4591dd14ca2c26966aa08f606ef705c7",
+      "stage_raw_path": "/var/tmp/pr87_v22b_completed_audit_20261016/OFF/pr85_joint_moment_stages.raw",
+      "stage_raw_sha256": "f03ff901d75707303658a75f37791a59052eed37cfe49374e97060ef596b3db6"
+    },
+    "build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v22b/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "14a48380d664730bca3f314765b5bb1961099801a92e20b7cb5ec5fddac5b5dc",
+    "kdm6_source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v22b/module_mp_kdm6.F",
+    "kdm6_source_sha256": "245e8a46bf11ba7e85137a81547f7e02b7f2bc429a293cbd3a34f61fc7b4a24d",
+    "module_em_source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v22b/module_em_pr85.F",
+    "module_em_source_sha256": "2395efa838831824c0ab2aabf759219ccbf3e1df71fa937db7873c1aca1d0ac2",
+    "native_update_fragment_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v22b/native_update.f90",
+    "native_update_fragment_sha256": "e2abb1809b6fa49ab56ebc82ecc205f9fca6f9dba28192ce49ed1136d32b648e",
+    "overlay_executable_sha256": "70d13c645f76f9b5ed4e32a19f61d0672bd027fdc6fa566db41b9e2e08d0f2b4",
+    "source_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v22b/sources.json",
+    "source_manifest_sha256": "53140258768db6deb824d0a0f89f1bc3ab5d4bb6c8cc28bbc305c9bbbdf65675"
+  },
+  "producer_cone": {
+    "first_crossing_interpretation": "Pair is zero/zero through RK2, then RK3 first produces a positive pair whose mean mass is inside the native_update PI64-based interval but below KDM6 REAL32 PIDNC strict lower bound. It remains identical at PRE_KDM6. The R32 NC-volume conversion adds a small excess but does not cause the cone crossing: the continuous NC_specific*DEN product is already above the exact KDM6 upper NC-volume bound.",
+    "implied_pidnc_for_cloud_max": 523.5987755982989,
+    "implied_pidnc_for_cloud_min": 523.598775598299,
+    "maxmass_cloud_real64_literal": 3.0300855069345996e-10,
+    "minmass_cloud_real64_literal": 4.188790204786391e-15,
+    "source": "native_update.f90 lines 95-100; emitted generated_fragment_sha256 matches source hash",
+    "source_vs_producer_lower_bound_gap": 3.2255735841278577e-22,
+    "target_q_over_n_inside_producer_interval": true
+  },
+  "schema": "pr87_v22b_target_cloud_first_crossing_v1",
+  "scope": "Offline stage replay at wrapper lat/j=14, i=89, k=18; no model run or edits performed for this report.",
+  "stage_history": [
+    {
+      "nc_bits": "00000000",
+      "nc_specific": 0.0,
+      "pair_active": false,
+      "qc": 0.0,
+      "qc_bits": "00000000",
+      "rho": 0.6282913088798523,
+      "rho_bits": "3f20d7b3",
+      "rk": 0,
+      "stage": "POST_KDM6",
+      "step": 1
+    },
+    {
+      "nc_bits": "00000000",
+      "nc_specific": 0.0,
+      "pair_active": false,
+      "qc": 0.0,
+      "qc_bits": "00000000",
+      "rho": 0.6688075065612793,
+      "rho_bits": "3f2b36f8",
+      "rk": 0,
+      "stage": "PRE_RK",
+      "step": 2
+    },
+    {
+      "nc_bits": "00000000",
+      "nc_specific": 0.0,
+      "pair_active": false,
+      "qc": 0.0,
+      "qc_bits": "00000000",
+      "rho": 0.6274383664131165,
+      "rho_bits": "3f209fcd",
+      "rk": 1,
+      "stage": "RK_STAGE_END",
+      "step": 2
+    },
+    {
+      "nc_bits": "00000000",
+      "nc_specific": 0.0,
+      "pair_active": false,
+      "qc": 0.0,
+      "qc_bits": "00000000",
+      "rho": 0.6267552971839905,
+      "rho_bits": "3f207309",
+      "rk": 2,
+      "stage": "RK_STAGE_END",
+      "step": 2
+    },
+    {
+      "nc_bits": "2c97b2db",
+      "nc_specific": 4.311535069939643e-12,
+      "nc_volume_r32": 2.7098429836863724e-12,
+      "nc_volume_r32_bits": "2c3eb031",
+      "nc_volume_r64": 2.7098428995709963e-12,
+      "pair_active": true,
+      "q_over_n_mass": 4.188790433087336e-15,
+      "qc": 1.8060116852883713e-26,
+      "qc_bits": "14b2dbd6",
+      "rho": 0.6285099983215332,
+      "rho_bits": "3f20e608",
+      "rk": 3,
+      "source_cloud_cone_valid": false,
+      "source_cloud_volume_bound_lower": 3.746086740072276e-17,
+      "source_cloud_volume_bound_upper": 2.7098428385939497e-12,
+      "stage": "RK_STAGE_END",
+      "step": 2
+    },
+    {
+      "nc_bits": "2c97b2db",
+      "nc_specific": 4.311535069939643e-12,
+      "nc_volume_r32": 2.7098429836863724e-12,
+      "nc_volume_r32_bits": "2c3eb031",
+      "nc_volume_r64": 2.7098428995709963e-12,
+      "pair_active": true,
+      "q_over_n_mass": 4.188790433087336e-15,
+      "qc": 1.8060116852883713e-26,
+      "qc_bits": "14b2dbd6",
+      "rho": 0.6285099983215332,
+      "rho_bits": "3f20e608",
+      "rk": 0,
+      "source_cloud_cone_valid": false,
+      "source_cloud_volume_bound_lower": 3.746086740072276e-17,
+      "source_cloud_volume_bound_upper": 2.7098428385939497e-12,
+      "stage": "PRE_KDM6",
+      "step": 2
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "scope": "V41 captured graupel stencil replay and isolated REAL128-intermediate experiment; not full-model validation",
+  "capture": {
+    "review_json_sha256": "027df0edf37e3bd81a6f2af8f7018afe52306210712a20456d269463d9ab76ae",
+    "source_failure_gzip_sha256": "c2289610a3a3fdb5ff273b83801c98ce71798213c06e2b8e2dd45d76c5876e34",
+    "candidate": "V41diag OFF 60s, frozen V39 physics",
+    "location": {"step": 3, "rk": 1, "i": 154, "j": 77, "k": 17, "pair": "QG/BG"},
+    "upper_density_bound": 900,
+    "nonzero_donor": "i+ at (155,77,17)",
+    "donor_qg_r32": 2.274890675835195e-6,
+    "donor_bg_r32": 2.52765630648355e-9,
+    "donor_ratio": 900.0,
+    "other_direct_stencil_values": 0,
+    "base_and_air_rates": 0,
+    "r64_increment_qg": 8.212150880350765e-6,
+    "r64_increment_bg": 9.124612089278627e-9,
+    "r64_increment_qg_minus_900_bg": 1.6940658945086007e-21,
+    "r128_increment_qg": 8.212150880350764e-6,
+    "r128_increment_bg": 9.124612089278627e-9,
+    "r128_increment_qg_minus_900_bg": 0.0,
+    "full_candidate_r64_qg_minus_900_bg": 1.0339757656912846e-25,
+    "full_candidate_r128_qg_minus_900_bg": -1.0339757656912846e-25,
+    "strict_store_result": {"r64": "reject", "r128": "accept"},
+    "independent_pinned_intel_replay": "O0 and O2 reproduced the captured R64 increment and boundary crossing"
+  },
+  "real128_variant": {
+    "input_em_sha256": "e48607da8943caaf86f53c5fc04ff5ba2a2c75e32706142c97c3f9b8fdb70c70",
+    "embedded_helper_sha256": "0a8b2865fff3d7ad6592e0d1bc1d3f7b51970de13ac9ea128066b7cba655bfe3",
+    "transform_sha256": "90732185626f1ec04655924ef16872d5be12617ca2cc2a149447db83aaf960eb",
+    "api": "REAL32 inputs and REAL64 output unchanged; scalar REAL128 accumulator; no full-field REAL128 workspace",
+    "manufactured_exact_boundary_cases": 13,
+    "weighted_conservation": {
+      "r64_q_residual": -5.910592896599061e-22,
+      "r128_q_residual": 2.475256992557156e-22,
+      "q_absolute_weighted_sum": 2.21560524064468e-5,
+      "r64_bg_residual": -1.1953840143433578e-24,
+      "r128_bg_residual": -2.7623465272346624e-25,
+      "bg_absolute_weighted_sum": 2.46178319796127e-8,
+      "claim_limit": "both inside fixture roundoff envelope; R128 magnitude smaller in this fixture only; conversion to R64 means not exact and no universal bound is claimed"
+    }
+  },
+  "timing": {
+    "compiler": "pinned Intel ifx 2026.0.0",
+    "flags_profile": "CLOUD_BAL_REPRO_FLAGS (-O2, strict floating point)",
+    "grid_active_cells": "64x64x39",
+    "calls_each": 12,
+    "same_r32_inputs": true,
+    "scope": "helper stencil only; not a full-model runtime estimate",
+    "r64_seconds": 0.0132,
+    "r128_seconds": 1.7916,
+    "ratio": 135.727,
+    "baseline_helper_sha256": "da22fc9c0947aa37b2374297adb12597c6df1d7dc20d484dbbf6696805994345",
+    "widened_helper_sha256": "af9a54b9f3e51d085ef3a11b2dd52c6b5a9a6f755a8720866e34c740415f79de",
+    "benchmark_source_sha256": "97652d45d121a4c642124a6ba9fe4cf18c9aeeb9b7ac8fa6698c86b937078880"
+  },
+  "validation": {
+    "pytest_test": "tests/test_pr87_diffusion_intermediate_precision.py",
+    "pytest_result": "2 passed; pinned Intel O0/O2 compile and runtime markers verified",
+    "pytest_wrapper_sha256": "b8edf146a580ca2005f11cde44e0be9c0d41d72fe2986eadf6355cd666e11af7",
+    "fortran_test_sha256": "46447737eee2f2601391a4152eca9a8702b7542d04db77e6692418d19e4aedf0",
+    "fixture_gzip_sha256": "b297ca4f2ece7563acf289f6f6dbec44ad9ddbd563cb74dc6021dbdf4868e1c5"
+  }
+}

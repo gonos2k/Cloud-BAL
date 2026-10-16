@@ -1,0 +1,68 @@
+{
+  "schema": "pr87_v29_source_stage_independent_review_v1",
+  "scope": "Independent numerical reproduction of the first failed source-stage row. Confirms the paired-store contract rejection mechanism, not a full scientific or two-step approval.",
+  "bindings": {
+    "candidate_source_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v29diag/sources.json",
+    "candidate_source_manifest_sha256": "555bb6dae1029c9b84a2fbeae9be8315db4e61584397feee0f13df47a5d23dc4",
+    "native_update_sha256": "41752cb83ad9a62123ff5121777ce61ab7cb8ba68a1417a5972af1a0b0259007",
+    "module_em_sha256": "938295169c196d8b6fdc5c4fcffbee60700a87ce43a193d3340d4d3b10edda9b",
+    "kernel_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v29diag/composition_kernel.f90",
+    "kernel_sha256": "19d0259c423a3035a418174292c14d8671d778ebfe48a604cc80923c2f854541",
+    "build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v29diag/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "26cab8742de6f45692b373a01291d3fd9c34cbf2364bfd0e7494aa7559409b10",
+    "candidate_executable_sha256": "ee74a9b4c19594b6954d228c8d375d87b97705032207ed03bd29f663c7679230",
+    "run_receipt_path": "/var/tmp/pr87_joint_OFF_40s_v29diag_20261016/receipt.json",
+    "run_receipt_sha256": "e66baf19c78e10052038c277e528db2e276c019a289324900245ecde1d477a4e",
+    "source_failure_path": "/var/tmp/pr87_joint_OFF_40s_v29diag_20261016/run/pr85_joint_source_failure.raw.gz",
+    "source_failure_sha256": "aba0c80c809db84bda97ef352948aad0408e72ff0b239e1a94c8d2027ffd5eae"
+  },
+  "failed_source_stage": {
+    "arm": "OFF",
+    "timestep": 2,
+    "rk_stage": 3,
+    "pair": 1,
+    "i": 106,
+    "j": 55,
+    "k": 6,
+    "q1_r32_bits": "0x34785000",
+    "q1_r32": 2.31259036809206e-07,
+    "n1_r32": 55209024.0,
+    "dt": 20.0,
+    "source_rate_q64": -5.733295348804535e-13,
+    "source_rate_n64": -136.871687787338,
+    "candidate_q64": 2.312475702185084e-07,
+    "candidate_n64": 55206286.56624425,
+    "rho_r32_bits": "0x3f92c8ca",
+    "rho_r32": 1.1467525959014893,
+    "minimum_mass": 4.18879052734375e-15,
+    "volume_number_bounds": [
+      3784554940.6823435,
+      273766995130377.84
+    ],
+    "source_row_file_sha256": "aba0c80c809db84bda97ef352948aad0408e72ff0b239e1a94c8d2027ffd5eae"
+  },
+  "independent_kernel_replay": {
+    "program_path": "/var/tmp/pr87_v29_source_stage_kernel_replay_20261016/O0/replay.f90",
+    "program_sha256": "4c485675986e6ea5f802b21223cf042ecbb7ce73fc653687b0bb94200d34e64b",
+    "profiles": {
+      "O0": {
+        "returncode": 0,
+        "log_path": "/var/tmp/pr87_v29_source_stage_kernel_replay_20261016/O0/run.log",
+        "log_sha256": "3972deb35444dfc7ca3ad1e5903789476bf3095916640c0091d9518132193bae",
+        "output": "ratio=  4.1887905273437498E-15\nminimum=  4.1887905273437498E-15\ncontinuous_volume_slack_upper= -7.4505805969238281E-09\nstore_valid=F BF800000 BF800000 0\nPASS source-stage continuous volume rejection confirmed"
+      },
+      "O2": {
+        "returncode": 0,
+        "log_path": "/var/tmp/pr87_v29_source_stage_kernel_replay_20261016/O2/run.log",
+        "log_sha256": "3972deb35444dfc7ca3ad1e5903789476bf3095916640c0091d9518132193bae",
+        "output": "ratio=  4.1887905273437498E-15\nminimum=  4.1887905273437498E-15\ncontinuous_volume_slack_upper= -7.4505805969238281E-09\nstore_valid=F BF800000 BF800000 0\nPASS source-stage continuous volume rejection confirmed"
+      }
+    },
+    "result": "ratio and minimum compare equal in REAL64; N64*rho - upper_volume_bound*Q64 = -7.4505805969238281e-9; the exact candidate fails the kernel continuous volume contract and joint_moment_store returns valid=false before storage adjustment."
+  },
+  "interpretation": {
+    "fog_candidate": "Ratio-only evaluation rounds Q/N to the exact lower bound and therefore accepts the candidate.",
+    "kernel_candidate": "The kernel additionally requires N64*rho to lie within exact volume bounds. The upper-product inequality misses by one REAL64 ULP, so this is a continuous-contract failure, not a REAL32-only rounding failure.",
+    "recommendation": "Add a regression with these exact operands proving ratio equality can coexist with continuous volume rejection; ensure FogDES uses the kernel-equivalent linear product inequalities before accepting theta. Keep the final joint store unchanged."
+  }
+}

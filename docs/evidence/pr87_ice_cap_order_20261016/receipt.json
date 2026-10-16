@@ -1,0 +1,11 @@
+{
+  "scope": "V39 ice sublimation cap-order correction and source-extracted regression",
+  "input_source_sha256": "6a7f6e154390ad6d5da8ca18ea4115ad66effa5b1dbdbf73754edd357b6b4293",
+  "transformed_source_sha256": "faa81931252f6f28cc74ca3367a5c721668fe9ca0f01225641fb495a93ca6959",
+  "transform_function": "correct_ice_sublimation_cap_order",
+  "profiles": {
+    "O0": "PR87 V39 capped sublimation cases PASS",
+    "O2": "PR87 V39 capped sublimation cases PASS"
+  },
+  "pytest": "python3 -m pytest -q tests/test_pr87_ice_sublimation.py: 4 passed"
+}

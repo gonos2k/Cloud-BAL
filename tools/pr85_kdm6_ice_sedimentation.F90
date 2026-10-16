@@ -1,12 +1,12 @@
 SUBROUTINE pr85_kdm6_paired_sediment_column(kts,kte,cell_i,lat,substep,dt,mstep, &
 dry_density,delz,mass_rate,second_rate,qstate,second_state,mode,q_active_min, &
 second_active_min,density_min,density_max,approved_q_rate,approved_second_rate, &
-budget_unit,trace,valid)
+budget_unit,trace,valid,rain_pidn,rain_power,rain_lambda_min,rain_lambda_max)
 USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64
 USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
 IMPLICIT NONE
 INTEGER, INTENT(IN) :: kts,kte,cell_i,lat,substep,mstep,budget_unit
-INTEGER, PARAMETER :: PR85_SED_ICE=1, PR85_SED_GRAUPEL=2
+INTEGER, PARAMETER :: PR85_SED_ICE=1, PR85_SED_GRAUPEL=2, PR87_SED_RAIN=3
 REAL(real32), INTENT(IN) :: dt,dry_density(kts:kte),delz(kts:kte)
 REAL(real64), INTENT(IN) :: mass_rate(kts:kte),second_rate(kts:kte)
 REAL(real32), INTENT(INOUT) :: qstate(kts:kte),second_state(kts:kte)
@@ -15,10 +15,12 @@ REAL(real32), INTENT(IN) :: q_active_min,second_active_min,density_min,density_m
 REAL(real64), INTENT(OUT) :: approved_q_rate(kts:kte),approved_second_rate(kts:kte)
 LOGICAL, INTENT(IN) :: trace
 LOGICAL, INTENT(OUT) :: valid
+REAL(real32), INTENT(IN) :: rain_pidn,rain_power,rain_lambda_min,rain_lambda_max
 
 REAL(real32) :: qwork(kts:kte),nwork(kts:kte),second_carrier(kts:kte)
 REAL(real32) :: qd_store,nd_store,qr_store,nr_store
 REAL(real64) :: qproposal(kts:kte),nproposal(kts:kte)
+REAL(real64) :: rain_n_min(kts:kte),rain_n_max(kts:kte)
 REAL(real64) :: theta,dt64
 REAL(real64) :: proposed_q_sum,proposed_n_sum,approved_q_sum,approved_n_sum
 REAL(real64) :: ground_q,ground_n,ground_approved_q,ground_approved_n
@@ -30,11 +32,21 @@ LOGICAL :: candidate_valid,full_empty_unpaired
 valid=.FALSE.
 approved_q_rate=0.0_real64
 approved_second_rate=0.0_real64
-IF (mode/=PR85_SED_ICE .AND. mode/=PR85_SED_GRAUPEL) RETURN
+IF (mode/=PR85_SED_ICE .AND. mode/=PR85_SED_GRAUPEL .AND. mode/=PR87_SED_RAIN) RETURN
 IF (mode==PR85_SED_GRAUPEL) THEN
   IF (.NOT.ALL(ieee_is_finite([q_active_min,second_active_min,density_min,density_max]))) RETURN
   IF (q_active_min<0.0_real32 .OR. second_active_min<0.0_real32 .OR. &
       density_min<=0.0_real32 .OR. density_max<=density_min) RETURN
+ENDIF
+IF (mode==PR87_SED_RAIN) THEN
+  IF (.NOT.ALL(ieee_is_finite([rain_pidn,rain_power,rain_lambda_min,rain_lambda_max]))) RETURN
+  IF (rain_pidn<=0.0_real32 .OR. rain_power<=0.0_real32 .OR. rain_power>8.0_real32 .OR. &
+      rain_lambda_min<=0.0_real32 .OR. rain_lambda_max<rain_lambda_min) RETURN
+  ! Match NG's d<=8 domain and keep both lambda**d powers in normal R32 range.
+  IF (REAL(rain_power,real64)*LOG(REAL(rain_lambda_min,real64))< &
+      LOG(REAL(TINY(0.0_real32),real64)) .OR. &
+      REAL(rain_power,real64)*LOG(REAL(rain_lambda_max,real64))> &
+      LOG(REAL(HUGE(0.0_real32),real64)) ) RETURN
 ENDIF
 IF (kts>kte .OR. mstep<1 .OR. .NOT.ieee_is_finite(dt) .OR. dt<=0.0_real32) RETURN
 nlevels=kte-kts+1
@@ -48,7 +60,17 @@ DO k=kts,kte
   second_carrier(k)=1.0_real32
   IF (mode==PR85_SED_GRAUPEL) second_carrier(k)=dry_density(k)
   IF (.NOT.ieee_is_finite(second_carrier(k)) .OR. second_carrier(k)<=0.0_real32) RETURN
-  IF (mode==PR85_SED_GRAUPEL) THEN
+  IF (mode==PR87_SED_RAIN) THEN
+    rain_n_min(k)=REAL(dry_density(k),real64)* &
+         REAL(rain_lambda_min,real64)**REAL(rain_power,real64)/REAL(rain_pidn,real64)
+    rain_n_max(k)=REAL(dry_density(k),real64)* &
+         REAL(rain_lambda_max,real64)**REAL(rain_power,real64)/REAL(rain_pidn,real64)
+    IF (.NOT.ALL(ieee_is_finite([rain_n_min(k),rain_n_max(k)])) .OR. &
+        rain_n_min(k)<=0.0_real64 .OR. &
+        rain_n_max(k)<rain_n_min(k) .OR. &
+        rain_n_max(k)>REAL(HUGE(0.0_real32),real64)) RETURN
+    IF (.NOT.rain_state_valid32(qstate(k),second_state(k),rain_n_min(k),rain_n_max(k))) RETURN
+  ELSE IF (mode==PR85_SED_GRAUPEL) THEN
     IF (.NOT.graupel_state_valid(qstate(k),second_state(k),q_active_min, &
          second_active_min,density_min,density_max)) RETURN
   ELSE
@@ -83,7 +105,7 @@ ENDDO
 
 ! Flux proposals are frozen from each level's current R32 state. G faces
 ! follow the native top-down sweep; ice retains its established bottom-up order.
-IF (mode==PR85_SED_GRAUPEL) THEN
+IF (mode==PR85_SED_GRAUPEL .OR. mode==PR87_SED_RAIN) THEN
   DO k=kte-1,kts,-1
     CALL commit_face(k+1,k,.TRUE.)
     IF (.NOT.candidate_valid) RETURN
@@ -118,6 +140,13 @@ IF (mode==PR85_SED_GRAUPEL) THEN
   proposed_q_sum-approved_q_sum,proposed_n_sum,approved_n_sum, &
   proposed_n_sum-approved_n_sum,ground_approved_q,ground_approved_n,stored_delta_q,stored_delta_n, &
   residual_q,residual_n
+ELSE IF (mode==PR87_SED_RAIN) THEN
+  WRITE(budget_unit,'(a,4i8,1p,12es24.16)',IOSTAT=io_status) &
+  'PR87_RAIN_SED',cell_i,lat,substep,nlevels,proposed_q_sum,approved_q_sum, &
+  proposed_q_sum-approved_q_sum,proposed_n_sum,approved_n_sum, &
+  proposed_n_sum-approved_n_sum,ground_approved_q,ground_approved_n,stored_delta_q,stored_delta_n, &
+  residual_q,residual_n
+  IF (io_status/=0) ERROR STOP 'PR87 paired rain sedimentation ledger write failed'
 ELSE
 WRITE(budget_unit,'(a,4i8,1p,12es24.16)',IOSTAT=io_status) &
 'PR85_ICE_SED',cell_i,lat,substep,nlevels,proposed_q_sum,approved_q_sum, &
@@ -157,6 +186,34 @@ density=REAL(q,real64)/REAL(b,real64)
 graupel_state_valid=ieee_is_finite(density) .AND. &
   density>=REAL(rhomin,real64) .AND. density<=REAL(rhomax,real64)
 END FUNCTION graupel_state_valid
+
+PURE LOGICAL FUNCTION rain_state_valid32(q,n,n_min,n_max)
+REAL(real32), INTENT(IN) :: q,n
+REAL(real64), INTENT(IN) :: n_min,n_max
+rain_state_valid32=.FALSE.
+IF (.NOT.ieee_is_finite(q) .OR. .NOT.ieee_is_finite(n) .OR. &
+    .NOT.ALL(ieee_is_finite([n_min,n_max]))) RETURN
+IF (q<0.0_real32 .OR. n<0.0_real32 .OR. n_min<=0.0_real64 .OR. n_max<n_min) RETURN
+IF (.NOT.paired(q,n)) RETURN
+IF (q==0.0_real32 .AND. n==0.0_real32) THEN
+  rain_state_valid32=.TRUE.; RETURN
+ENDIF
+  ! NG admission uses these strict R64 count bounds; do not add a storage tolerance.
+  rain_state_valid32=REAL(n,real64)>=n_min*REAL(q,real64) .AND. &
+  REAL(n,real64)<=n_max*REAL(q,real64)
+END FUNCTION rain_state_valid32
+
+PURE LOGICAL FUNCTION rain_state_valid64(q,n,n_min,n_max)
+REAL(real64), INTENT(IN) :: q,n,n_min,n_max
+rain_state_valid64=.FALSE.
+IF (.NOT.ALL(ieee_is_finite([q,n,n_min,n_max]))) RETURN
+IF (q<0.0_real64 .OR. n<0.0_real64 .OR. n_min<=0.0_real64 .OR. n_max<n_min) RETURN
+IF ((q==0.0_real64) .NEQV. (n==0.0_real64)) RETURN
+IF (q==0.0_real64 .AND. n==0.0_real64) THEN
+  rain_state_valid64=.TRUE.; RETURN
+ENDIF
+rain_state_valid64=n>=n_min*q .AND. n<=n_max*q
+END FUNCTION rain_state_valid64
 
 SUBROUTINE add_partition_point(points,count,base,change,target)
 REAL(real64), INTENT(INOUT) :: points(16)
@@ -340,6 +397,15 @@ IF (mode==PR85_SED_GRAUPEL) THEN
   IF (has_receiver) THEN
     IF (.NOT.graupel_state_valid(qr,nr,q_active_min,second_active_min,density_min,density_max)) RETURN
   ENDIF
+ELSE IF (mode==PR87_SED_RAIN) THEN
+  IF (.NOT.rain_state_valid64(qd64,nd64,rain_n_min(donor),rain_n_max(donor))) RETURN
+  IF (has_receiver) THEN
+    IF (.NOT.rain_state_valid64(qr64,nr64,rain_n_min(receiver),rain_n_max(receiver))) RETURN
+  ENDIF
+  IF (.NOT.rain_state_valid32(qd,nd,rain_n_min(donor),rain_n_max(donor))) RETURN
+  IF (has_receiver) THEN
+    IF (.NOT.rain_state_valid32(qr,nr,rain_n_min(receiver),rain_n_max(receiver))) RETURN
+  ENDIF
 ELSE
   IF (.NOT.paired(qd,nd)) RETURN
   IF (has_receiver) THEN
@@ -376,6 +442,9 @@ IF (mode==PR85_SED_GRAUPEL) THEN
   ok=graupel_state_valid(qd,nd,q_active_min,second_active_min,density_min,density_max)
   IF (has_receiver) ok=ok .AND. graupel_state_valid(qr,nr,q_active_min, &
        second_active_min,density_min,density_max)
+ELSE IF (mode==PR87_SED_RAIN) THEN
+  ok=rain_state_valid32(qd,nd,rain_n_min(donor),rain_n_max(donor))
+  IF (has_receiver) ok=ok .AND. rain_state_valid32(qr,nr,rain_n_min(receiver),rain_n_max(receiver))
 ELSE
   ok=paired(qd,nd)
   IF (has_receiver) ok=ok .AND. paired(qr,nr)

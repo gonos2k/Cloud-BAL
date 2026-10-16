@@ -1,0 +1,80 @@
+{
+  "artifacts": {
+    "build_receipt.json": {
+      "sha256": "82217fa255fbb1aae964d65fa773de1b9faf72f2f50187c680a9876cf306b0cf",
+      "size_bytes": 1233964,
+      "source_path": "/var/tmp/pr87_joint_cycle_build_20261016_v14/pr87_native_overlay_build.json"
+    },
+    "focused_v14.log": {
+      "sha256": "523bc8de35db4a19f17fe397760136b873aa0e79aeb75bc652f61f5c62adf087",
+      "size_bytes": 212,
+      "source_path": "/var/tmp/pr87_focused_v14.log"
+    },
+    "module_em_pr85.F.gz": {
+      "compressed_sha256": "2a9bf711f74d5e1f514c340ffadd91c8481dfabf55f19e713187cee539f2d146",
+      "compressed_size_bytes": 28310,
+      "encoding": "gzip; decoded bytes hash is sha256",
+      "sha256": "86360c01b00b8a7b8804a93aae3bc47e4bf63b389dd66c269736c6036768baaa",
+      "size_bytes": 182407,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v14/module_em_pr85.F"
+    },
+    "module_mp_kdm6.F.gz": {
+      "compressed_sha256": "42a60d791c2d651394e1f505826a14b2cdcfba38c0d70d3572db2092efa0af2e",
+      "compressed_size_bytes": 58656,
+      "encoding": "gzip; decoded bytes hash is sha256",
+      "sha256": "4f530c3795cfcb58a195b3dd855c16e2faa7f57376ed777ff61dac21f87d32e4",
+      "size_bytes": 364412,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v14/module_mp_kdm6.F"
+    },
+    "native_update.f90.gz": {
+      "compressed_sha256": "69ee862bf23ff78a5fce9ddee968978b2dfd6ed2408759adff8f6b71372dd2ec",
+      "compressed_size_bytes": 7269,
+      "encoding": "gzip; decoded bytes hash is sha256",
+      "sha256": "4a1175d2f4a007672ab5d47d95316237889661665f323d046a7ff71bfa333b01",
+      "size_bytes": 30437,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v14/native_update.f90"
+    },
+    "pr87_cloud_cycle_support.f90.gz": {
+      "compressed_sha256": "57ec3b50cd100469105478eee00d47b1b40376cb5992e8c0fa4201fae9f9a635",
+      "compressed_size_bytes": 1769,
+      "encoding": "gzip; decoded bytes hash is sha256",
+      "sha256": "4de0f1ddc5c0ee50cce42c728c15792bf28b7a86024bfd93cbebb8a5d38360fc",
+      "size_bytes": 5865,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v14/pr87_cloud_cycle_support.f90"
+    },
+    "source_later_stage_ifx_o0_o2_v13.json": {
+      "sha256": "beac27781a1e74867a44d197185546655d7b673b7b6910ca7431478dc78d1ce1",
+      "size_bytes": 28287,
+      "source_path": "/var/tmp/pr87_source_later_stage_ifx_o0_o2_v13.json"
+    },
+    "source_v13.log": {
+      "sha256": "cea9e21f009904d01962d72f068f16303762ac8918a280ad99464920d71ddf34",
+      "size_bytes": 64,
+      "source_path": "/var/tmp/pr87_source_v13.log"
+    },
+    "sources.json": {
+      "sha256": "27bb9a494bd360540a6e064bbe9ac3dd56601f6f38c51f20ca90f6c151f4c77b",
+      "size_bytes": 11780,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v14/sources.json"
+    }
+  },
+  "build_directory": "/var/tmp/pr87_joint_cycle_build_20261016_v14",
+  "build_receipt_sha256": "82217fa255fbb1aae964d65fa773de1b9faf72f2f50187c680a9876cf306b0cf",
+  "focused_python_status": "104 passed (see focused_v14.log)",
+  "parent_v13_module_mp_kdm6_sha256": "f9652dc7208bb81edd57a23de53c58d3b23a531967ea46c0ec7aa510e0599a98",
+  "reused_exact_native_fragment_fixture": {
+    "identity_note": "The fragment receipt predates V14. Reuse is justified only for the unchanged native_update fragment, joint transport kernel, and support source; V14 module_mp_kdm6 differs from V13 and is covered by the separate V14 build receipt and focused source tests.",
+    "kernel_sha256": "ffdce6170547fd0416d6073d4542a6a7e6dc4c316d4d04f4dc76a117a58efe19",
+    "log": "source_v13.log",
+    "log_sha256": "cea9e21f009904d01962d72f068f16303762ac8918a280ad99464920d71ddf34",
+    "native_update_sha256": "4a1175d2f4a007672ab5d47d95316237889661665f323d046a7ff71bfa333b01",
+    "receipt": "source_later_stage_ifx_o0_o2_v13.json",
+    "receipt_sha256": "beac27781a1e74867a44d197185546655d7b673b7b6910ca7431478dc78d1ce1",
+    "support_sha256": "4de0f1ddc5c0ee50cce42c728c15792bf28b7a86024bfd93cbebb8a5d38360fc"
+  },
+  "schema": "pr87_two_step_v14_compact_evidence_v1",
+  "scope": "source/build plus focused source and unchanged exact native-fragment O0/O2 validation only; active V14 runtime artifacts excluded",
+  "source_directory": "/var/tmp/pr87_joint_cycle_sources_20261016_v14",
+  "source_manifest_sha256": "27bb9a494bd360540a6e064bbe9ac3dd56601f6f38c51f20ca90f6c151f4c77b",
+  "v14_module_mp_kdm6_sha256": "4f530c3795cfcb58a195b3dd855c16e2faa7f57376ed777ff61dac21f87d32e4"
+}

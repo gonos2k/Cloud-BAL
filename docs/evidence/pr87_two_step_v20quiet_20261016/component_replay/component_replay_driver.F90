@@ -1,0 +1,315 @@
+PROGRAM replay_one_column
+  USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64
+  USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
+  USE cloud_bal_joint_transport, ONLY: joint_moment_store
+  IMPLICIT NONE
+  INTEGER, PARAMETER :: kts=1, kte=39, nlevels=39
+  INTEGER, PARAMETER :: cell_i=109, lat=5, substep=1, mstep=2
+  INTEGER, PARAMETER :: mode=3
+  REAL(real32), PARAMETER :: dt=2.00000000000000000E+01_real32
+  REAL(real32), PARAMETER :: pidn=1.25663710937500000E+04_real32, power=3.00000000000000000E+00_real32
+  REAL(real32), PARAMETER :: lambda_min=9.61000000000000000E+02_real32, lambda_max=3.50000000000000000E+04_real32
+  REAL(real32), PARAMETER :: qcrmin=9.99999971718068537E-10_real32, nrmin=9.99999977648258209E-03_real32
+  REAL(real32) :: rho(kts:kte),delz(kts:kte),q(kts:kte),num(kts:kte)
+  REAL(real64) :: qrate(kts:kte),nrate(kts:kte),approved_q(kts:kte),approved_n(kts:kte)
+  REAL(real64) :: n_min,n_max,min_ratio,max_ratio,volume_bounds(2),continuous_q,continuous_n
+  REAL(real32) :: store_q,store_n,stored_volume_n
+  INTEGER :: adjustment,k_adjust
+  LOGICAL :: store_valid
+  INTEGER :: k,u
+  LOGICAL :: valid,pair_ok,cone_ok
+  rho=[ &
+  1.12573313713073730E+00_real32, &
+  1.11981570720672607E+00_real32, &
+  1.11225771903991699E+00_real32, &
+  1.10282278060913086E+00_real32, &
+  1.09099900722503662E+00_real32, &
+  1.07619178295135498E+00_real32, &
+  1.05757093429565430E+00_real32, &
+  1.03512549400329590E+00_real32, &
+  1.00816798210144043E+00_real32, &
+  9.77445244789123535E-01_real32, &
+  9.43735480308532715E-01_real32, &
+  9.06830251216888428E-01_real32, &
+  8.64503145217895508E-01_real32, &
+  8.19182395935058594E-01_real32, &
+  7.72594749927520752E-01_real32, &
+  7.25025475025177002E-01_real32, &
+  6.76455795764923096E-01_real32, &
+  6.28796041011810303E-01_real32, &
+  5.74420273303985596E-01_real32, &
+  5.27317583560943604E-01_real32, &
+  4.85367983579635620E-01_real32, &
+  4.45569604635238647E-01_real32, &
+  4.08979177474975586E-01_real32, &
+  3.75908166170120239E-01_real32, &
+  3.46752494573593140E-01_real32, &
+  3.20622801780700684E-01_real32, &
+  2.95748919248580933E-01_real32, &
+  2.72250831127166748E-01_real32, &
+  2.50774890184402466E-01_real32, &
+  2.28661894798278809E-01_real32, &
+  2.08090931177139282E-01_real32, &
+  1.89397111535072327E-01_real32, &
+  1.72348231077194214E-01_real32, &
+  1.53856843709945679E-01_real32, &
+  1.37355178594589233E-01_real32, &
+  1.22629106044769287E-01_real32, &
+  1.09487883746623993E-01_real32, &
+  9.77610647678375244E-02_real32, &
+  8.72959643602371216E-02_real32 ]
+  delz=[ &
+  5.30872688293457031E+01_real32, &
+  6.78475646972656250E+01_real32, &
+  8.63027191162109375E+01_real32, &
+  1.09109069824218750E+02_real32, &
+  1.36904235839843750E+02_real32, &
+  1.70222229003906250E+02_real32, &
+  2.09379821777343750E+02_real32, &
+  2.54144897460937500E+02_real32, &
+  3.03851806640625000E+02_real32, &
+  3.56766967773437500E+02_real32, &
+  4.10363891601562500E+02_real32, &
+  4.62106445312500000E+02_real32, &
+  5.10927246093750000E+02_real32, &
+  5.56691162109375000E+02_real32, &
+  6.05614013671875000E+02_real32, &
+  6.57593261718750000E+02_real32, &
+  7.12765625000000000E+02_real32, &
+  7.69009277343750000E+02_real32, &
+  8.29628417968750000E+02_real32, &
+  8.13062011718750000E+02_real32, &
+  7.94715820312500000E+02_real32, &
+  7.78855468750000000E+02_real32, &
+  7.63406250000000000E+02_real32, &
+  7.47230468750000000E+02_real32, &
+  7.28677734375000000E+02_real32, &
+  7.08687500000000000E+02_real32, &
+  6.90896484375000000E+02_real32, &
+  6.74923828125000000E+02_real32, &
+  6.58915039062500000E+02_real32, &
+  6.49841796875000000E+02_real32, &
+  6.42149414062500000E+02_real32, &
+  6.34458984375000000E+02_real32, &
+  6.26986328125000000E+02_real32, &
+  6.31593750000000000E+02_real32, &
+  6.36205078125000000E+02_real32, &
+  6.40822265625000000E+02_real32, &
+  6.45435546875000000E+02_real32, &
+  6.50041015625000000E+02_real32, &
+  6.54634765625000000E+02_real32 ]
+  q=[ &
+  7.02497300153481774E-06_real32, &
+  1.15063494376954623E-05_real32, &
+  1.72699728864245117E-05_real32, &
+  2.44253096752800047E-05_real32, &
+  3.20407998515293002E-05_real32, &
+  3.72172507923096418E-05_real32, &
+  3.75898162019439042E-05_real32, &
+  3.81638237740844488E-05_real32, &
+  4.00646458729170263E-05_real32, &
+  4.16017792304046452E-05_real32, &
+  4.17639676015824080E-05_real32, &
+  4.27523700636811554E-05_real32, &
+  4.20274736825376749E-05_real32, &
+  4.26274164055939764E-05_real32, &
+  4.58971517218742520E-05_real32, &
+  8.39720232761465013E-05_real32, &
+  3.51265880453865975E-05_real32, &
+  3.76453357375794440E-08_real32, &
+  5.07889771905745135E-11_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32 ]
+  num=[ &
+  7.70018463134765625E+01_real32, &
+  1.55135635375976562E+02_real32, &
+  2.55282852172851562E+02_real32, &
+  3.81592529296875000E+02_real32, &
+  5.28084594726562500E+02_real32, &
+  6.37223449707031250E+02_real32, &
+  6.30599182128906250E+02_real32, &
+  6.23480102539062500E+02_real32, &
+  6.35227478027343750E+02_real32, &
+  6.35988647460937500E+02_real32, &
+  6.07966003417968750E+02_real32, &
+  5.93974975585937500E+02_real32, &
+  5.47067810058593750E+02_real32, &
+  6.46447998046875000E+02_real32, &
+  1.04422961425781250E+03_real32, &
+  1.52739355468750000E+03_real32, &
+  3.74635498046875000E+02_real32, &
+  8.01886291503906250E+01_real32, &
+  9.95390489697456360E-02_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32, &
+  0.00000000000000000E+00_real32 ]
+  qrate=[ &
+  6.59672688991362194E-02_real64, &
+  4.89127620242818181E-02_real64, &
+  3.75899468842036399E-02_real64, &
+  2.93641617620208975E-02_real64, &
+  2.31377326311439820E-02_real64, &
+  1.84868763943155170E-02_real64, &
+  1.51774778031214443E-02_real64, &
+  1.26603295160660195E-02_real64, &
+  1.07437417316312706E-02_real64, &
+  9.31010527546503354E-03_real64, &
+  8.27103142542564077E-03_real64, &
+  7.50976869155304486E-03_real64, &
+  6.99267063912078265E-03_real64, &
+  6.24329471685586539E-03_real64, &
+  5.22472915441724549E-03_real64, &
+  5.18739665857132198E-03_real64, &
+  5.61181290021819674E-03_real64, &
+  1.28935684176958803E-03_real64, &
+  1.24937002702362712E-03_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64 ]
+  nrate=[ &
+  3.09996408350583542E-02_real64, &
+  2.29853089313399248E-02_real64, &
+  1.76644398330471422E-02_real64, &
+  1.37989412512592516E-02_real64, &
+  1.08729891849814794E-02_real64, &
+  8.68743754212634479E-03_real64, &
+  7.13226981396217815E-03_real64, &
+  5.94939997366896855E-03_real64, &
+  5.04874827263855890E-03_real64, &
+  4.37504726953728915E-03_real64, &
+  3.88676093163276178E-03_real64, &
+  3.52902486456520281E-03_real64, &
+  3.28602778177831479E-03_real64, &
+  2.93387761960967530E-03_real64, &
+  2.45522863005040231E-03_real64, &
+  2.43768517278723437E-03_real64, &
+  2.63712879498319156E-03_real64, &
+  6.05900466551007391E-04_real64, &
+  5.87109679605467543E-04_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64, &
+  0.00000000000000000E+00_real64 ]
+  OPEN(NEWUNIT=u,FILE='helper_ledger.raw',STATUS='REPLACE',ACTION='WRITE')
+  DO k=kts,kte
+    n_min=REAL(rho(k),real64)*REAL(lambda_min,real64)**REAL(power,real64)/REAL(pidn,real64)
+    n_max=REAL(rho(k),real64)*REAL(lambda_max,real64)**REAL(power,real64)/REAL(pidn,real64)
+    pair_ok=ieee_is_finite(q(k)).AND.ieee_is_finite(num(k))
+    cone_ok=.FALSE.
+    IF (pair_ok .AND. q(k)>=0.0_real32 .AND. num(k)>=0.0_real32) THEN
+      cone_ok=(q(k)==0.0_real32 .AND. num(k)==0.0_real32) .OR. &
+        (q(k)>0.0_real32 .AND. num(k)>0.0_real32 .AND. &
+         REAL(num(k),real64)>=n_min*REAL(q(k),real64) .AND. &
+         REAL(num(k),real64)<=n_max*REAL(q(k),real64))
+    END IF
+    WRITE(*,'(a,1x,i0,1x,2(es25.17e3,1x),2(l1,1x),2(es25.17e3,1x))') &
+      'PR87_REPLAY_LEVEL',k,q(k),num(k),pair_ok,cone_ok,n_min,n_max
+  END DO
+  k_adjust=19
+  continuous_q=REAL(q(k_adjust),real64)
+  continuous_n=1.73286095261573792E-01_real64
+  min_ratio=REAL(pidn,real64)/REAL(lambda_max,real64)**REAL(power,real64)
+  max_ratio=REAL(pidn,real64)/REAL(lambda_min,real64)**REAL(power,real64)
+  volume_bounds(1)=REAL(rho(k_adjust),real64)*REAL(lambda_min,real64)**REAL(power,real64)/REAL(pidn,real64)
+  volume_bounds(2)=REAL(rho(k_adjust),real64)*REAL(lambda_max,real64)**REAL(power,real64)/REAL(pidn,real64)
+  CALL joint_moment_store(continuous_q,continuous_n,rho(k_adjust),min_ratio,max_ratio,.TRUE., &
+      store_q,store_n,adjustment,store_valid,allow_normal_q_adjustment=.TRUE., &
+      allow_joint_quantum_absence=.TRUE.,volume_number_bounds=volume_bounds)
+  stored_volume_n=REAL(REAL(store_n,real64)*REAL(rho(k_adjust),real64),real32)
+  WRITE(*,'(a,1x,l1,1x,i0,1x,5(es25.17e3,1x))') 'PR87_STORE_RESULT',store_valid,adjustment, &
+      continuous_q,continuous_n,store_q,store_n,stored_volume_n
+  IF (.NOT.store_valid) ERROR STOP 'joint_moment_store failed on captured continuous pair'
+  IF (stored_volume_n/=num(k_adjust)) ERROR STOP 'stored public N does not reproduce captured helper volume N'
+  q(k_adjust)=store_q
+  DO k=kts,kte
+    n_min=REAL(rho(k),real64)*REAL(lambda_min,real64)**REAL(power,real64)/REAL(pidn,real64)
+    n_max=REAL(rho(k),real64)*REAL(lambda_max,real64)**REAL(power,real64)/REAL(pidn,real64)
+    pair_ok=ieee_is_finite(q(k)).AND.ieee_is_finite(num(k))
+    cone_ok=.FALSE.
+    IF (pair_ok .AND. q(k)>=0.0_real32 .AND. num(k)>=0.0_real32) THEN
+      cone_ok=(q(k)==0.0_real32 .AND. num(k)==0.0_real32) .OR. &
+        (q(k)>0.0_real32 .AND. num(k)>0.0_real32 .AND. &
+         REAL(num(k),real64)>=n_min*REAL(q(k),real64) .AND. &
+         REAL(num(k),real64)<=n_max*REAL(q(k),real64))
+    END IF
+    WRITE(*,'(a,1x,i0,1x,2(es25.17e3,1x),2(l1,1x))') &
+      'PR87_ADJUSTED_LEVEL',k,q(k),num(k),pair_ok,cone_ok
+  END DO
+  CALL pr85_kdm6_paired_sediment_column(kts,kte,cell_i,lat,substep,dt,mstep, &
+    rho,delz,qrate,nrate,q,num,mode,qcrmin,nrmin,0.0_real32,0.0_real32, &
+    approved_q,approved_n,u,.TRUE.,valid,pidn,power,lambda_min,lambda_max)
+  CLOSE(u)
+  WRITE(*,'(a,1x,l1)') 'PR87_REPLAY_RESULT_VALID',valid
+  DO k=kts,kte
+    WRITE(*,'(a,1x,i0,1x,2(es25.17e3,1x),2(es25.17e3,1x))') &
+      'PR87_REPLAY_POST',k,q(k),num(k),approved_q(k),approved_n(k)
+  END DO
+END PROGRAM replay_one_column

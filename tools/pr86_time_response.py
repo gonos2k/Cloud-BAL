@@ -24,10 +24,58 @@ import numpy as np
 RUNTIME = Path("/var/tmp/pr85_same13_{arm}_joint_v17_20261015a")
 RUN_RECEIPT = Path("/var/tmp/pr85_evidence_bundle_20261015/actual_v17_{arm}_run_receipt.json")
 DEFAULT_OUT = Path("/var/tmp/pr86_budget_response_20261016")
+INTEL_PROFILE = Path(__file__).resolve().parents[1] / "tests/intel_toolchain.sh"
 STATE_MAGIC, TENDENCY_MAGIC = b"PR85QND2", b"PR85PLB1"
 STATE_FIELDS = ("DEN", "Q", "QC", "QI", "QR", "QS", "QG", "NN", "NC", "NI", "NR", "BG")
 TENDENCY_FIELDS = ("QV_TEND", "QC_TEND", "QI_TEND", "QNC_TEND", "QNI_TEND")
 SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 30: "10min"}
+SNAPSHOT_SECONDS = tuple(timestep * 20 for timestep in SNAPSHOTS)
+
+
+def snapshot_schedule(duration: int) -> dict[int, str]:
+    """Select frozen milestones through duration and include its final step."""
+    if duration <= 0 or duration % 20:
+        raise ValueError("duration must be a positive multiple of the frozen 20-second timestep")
+    seconds_to_label = {timestep * 20: label for timestep, label in SNAPSHOTS.items()}
+    seconds = {value for value in SNAPSHOT_SECONDS if value <= duration}
+    seconds.add(duration)
+    return {value // 20: seconds_to_label.get(value, f"{value}s")
+            for value in sorted(seconds)}
+
+
+def _fatal_lines(stage: Path) -> tuple[list[str], list[str]]:
+    """Return fatal log lines, including bare research-kernel rejection messages."""
+    fatal = []
+    issues = []
+    for name in ("candidate_run.log", "rsl.error.0000", "rsl.out.0000"):
+        path = stage / name
+        if not path.exists():
+            path = stage / f"{name}.gz"
+        if not path.exists():
+            continue
+        opener = gzip.open if path.suffix == ".gz" else open
+        try:
+            with opener(path, "rt", errors="replace") as stream:
+                for line in stream:
+                    generic_fatal = re.search(r"fatal|error stop|segmentation|signal", line, re.I)
+                    kdm6_rejection = (name == "rsl.error.0000" and re.match(
+                        r"^\s*(?:KDM6|PR87|ProgB)\b.*\b(?:invalid|unsupported|failed|requires|no valid|rejected)\b",
+                        line, re.I))
+                    if generic_fatal or kdm6_rejection:
+                        fatal.append(line.rstrip())
+        except Exception as exc:
+            issues.append(f"fatal scan {path.name}: {exc}")
+    return fatal, issues
+
+
+def model_end_time(start_text: str, duration: int) -> str:
+    start = re.search(r"start_year\s*=\s*(\d+).*?start_month\s*=\s*(\d+).*?start_day\s*=\s*(\d+)"
+                      r".*?start_hour\s*=\s*(\d+).*?start_minute\s*=\s*(\d+).*?start_second\s*=\s*(\d+)",
+                      start_text, re.S)
+    if not start:
+        raise ValueError("namelist start timestamp missing")
+    timestamp = dt.datetime(*map(int, start.groups())) + dt.timedelta(seconds=duration)
+    return timestamp.strftime("%Y-%m-%d_%H:%M:%S")
 
 
 def sha256(path: Path) -> str:
@@ -36,6 +84,39 @@ def sha256(path: Path) -> str:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def _candidate_build_binding(path: Path) -> dict:
+    path = path.resolve()
+    receipt = json.loads(path.read_text())
+    if receipt.get("schema") != "pr87_native_overlay_build_v1" or \
+            receipt.get("status") != "PASS_OVERLAY_BUILD" or receipt.get("full_clean_build") is not False:
+        raise ValueError("candidate build receipt is not a passing PR87 overlay")
+    profile_path = Path(receipt["compiler_profile_path"])
+    profile_sha = receipt["compiler_profile_sha256"]
+    if sha256(INTEL_PROFILE) != profile_sha or sha256(profile_path) != profile_sha:
+        raise ValueError("candidate build Intel profile identity mismatch")
+    executable = Path(receipt["executable_path"])
+    executable_sha = receipt["executable_sha256"]
+    if sha256(executable) != executable_sha:
+        raise ValueError("candidate build executable hash mismatch")
+    with executable.open("rb") as stream:
+        if stream.read(4) != b"\x7fELF":
+            raise ValueError("candidate build executable is not ELF")
+    return {"receipt_path": str(path), "receipt_sha256": sha256(path),
+            "schema": receipt["schema"], "status": receipt["status"],
+            "identity": receipt["identity"], "profile_path": str(profile_path),
+            "profile_sha256": profile_sha, "executable_path": str(executable),
+            "executable_sha256": executable_sha}
+
+
+def _staged_expected_hash(name: str, input_hashes: dict, candidate_build: dict | None,
+                          candidate_namelist_sha256: str | None = None) -> str:
+    if name == "wrf.exe" and candidate_build:
+        return candidate_build["executable_sha256"]
+    if name == "namelist.input" and candidate_namelist_sha256:
+        return candidate_namelist_sha256
+    return input_hashes[name]
 
 
 def edit_namelist(text: str, seconds: int) -> str:
@@ -68,8 +149,9 @@ def _field_stats(values: np.ndarray) -> dict:
             "max": float(selected.max()) if selected.size else None}
 
 
-def read_time_snapshots(path: Path) -> dict:
+def read_time_snapshots(path: Path, duration: int | None = None) -> dict:
     """Stream the stage trace and retain only selected POST_KDM6 snapshots."""
+    selected_snapshots = snapshot_schedule(duration) if duration is not None else SNAPSHOTS
     snapshots, timesteps, completed, duplicate_post = {}, set(), set(), set()
     count = 0
     opener = gzip.open if path.suffix == ".gz" else open
@@ -93,7 +175,7 @@ def read_time_snapshots(path: Path) -> dict:
                      (bounds[7] - bounds[6] + 1))
             if cells <= 0:
                 raise ValueError("invalid active stage-trace bounds")
-            is_snapshot = magic == STATE_MAGIC and label == "POST_KDM6" and timestep in SNAPSHOTS
+            is_snapshot = magic == STATE_MAGIC and label == "POST_KDM6" and timestep in selected_snapshots
             digest = hashlib.sha256(magic + label_raw + header)
             fields = {}
             names = STATE_FIELDS if magic == STATE_MAGIC else TENDENCY_FIELDS
@@ -105,7 +187,7 @@ def read_time_snapshots(path: Path) -> dict:
                 if is_snapshot:
                     fields[field] = _field_stats(np.frombuffer(raw, dtype=">f4"))
             if is_snapshot:
-                key = SNAPSHOTS[timestep]
+                key = selected_snapshots[timestep]
                 if key not in snapshots:
                     snapshots[key] = {
                         "timestep": timestep, "model_seconds": 20 * timestep,
@@ -129,9 +211,9 @@ def _projected_step_bytes(receipt: dict, runtime: Path) -> int:
     return per_step + 64 * 1024 * 1024
 
 
-def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85) -> dict:
-    if duration <= 0 or duration % 20:
-        raise ValueError("duration must be a positive multiple of the frozen 20-second timestep")
+def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
+            candidate_build_path: Path | None = None) -> dict:
+    snapshot_schedule(duration)
     runtime, receipt_path = Path(str(RUNTIME).format(arm=arm)), Path(str(RUN_RECEIPT).format(arm=arm))
     receipt = json.loads(receipt_path.read_text())
     inputs = {Path(row["path"]).name: row["sha256_after"] for row in receipt["run_isolation"]["inputs"]}
@@ -145,6 +227,8 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85) -
     bad = [n for n, h in inputs.items() if not (runtime / n).is_file() or sha256(runtime / n) != h]
     if bad:
         raise ValueError(f"{arm}: frozen inputs changed: {bad}")
+    candidate_build = (_candidate_build_binding(candidate_build_path)
+                       if candidate_build_path is not None else None)
     namelist = runtime / "namelist.input"
     original_namelist = namelist.read_text()
     edited = edit_namelist(original_namelist, duration)
@@ -159,10 +243,11 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85) -
         "expected_timesteps": steps, "runtime_dir": str(runtime), "source_receipt": str(receipt_path),
         "source_receipt_sha256": sha256(receipt_path),
         "executable_sha256": sha256(exe), "candidate_wrfinput_sha256": receipt["candidate_wrfinput_sha256"],
+        "baseline_frozen_executable_sha256": sha256(exe), "candidate_build": candidate_build,
         "candidate_wrfbdy_sha256": receipt["candidate_wrfbdy_sha256"], "input_file_count": len(inputs),
         "input_hashes": inputs, "source_namelist_sha256": sha256(namelist),
         "candidate_namelist_sha256": hashlib.sha256(edited.encode()).hexdigest(),
-        "namelist_changes": {"runtime_seconds": duration, "end_time": "2026-08-16_13:10:00",
+        "namelist_changes": {"runtime_seconds": duration, "end_time": model_end_time(original_namelist, duration),
                              "history_interval_minutes": 1}, "namelist_diff": namelist_diff,
         "namelist_text": edited,
         "first_v17_step_seconds": 662.69806,
@@ -181,6 +266,13 @@ def _stage(prepared: dict, out: Path) -> Path:
     for name in prepared["input_hashes"]:
         if name not in {"namelist.input", "namelist.input.source"}:
             os.link(runtime / name, stage / name)
+    candidate_build = prepared.get("candidate_build")
+    if candidate_build:
+        staged_executable = stage / "wrf.exe"
+        staged_executable.unlink()
+        shutil.copy2(candidate_build["executable_path"], staged_executable)
+        if sha256(staged_executable) != candidate_build["executable_sha256"]:
+            raise ValueError("staged candidate executable hash mismatch")
     shutil.copy2(runtime / "namelist.input.source", stage / "namelist.input.source")
     (stage / "namelist.input").write_text(prepared["namelist_text"])
     (stage / "namelist.input.diff").write_text(prepared["namelist_diff"])
@@ -243,35 +335,52 @@ def _compress_closed(stage: Path) -> list[dict]:
     return result
 
 
-def finalize_existing_run(arm: str, out: Path, duration: int) -> dict:
+def finalize_existing_run(arm: str, out: Path, duration: int,
+                          candidate_build_path: Path | None = None) -> dict:
     """Rebuild a strict receipt from closed run files without rerunning WRF."""
+    schedule = snapshot_schedule(duration)
     preflight = json.loads((out / "preflight.json").read_text())
     original = json.loads((out / "receipt.json").read_text()) if (out / "receipt.json").exists() else {}
     stage = out / "run"
     issues = []
+    candidate_build = preflight.get("candidate_build")
+    candidate_build_unchanged = True
+    if candidate_build_path is not None and (not candidate_build or
+                                              Path(candidate_build["receipt_path"]) != candidate_build_path.resolve()):
+        issues.append("candidate build path differs from preflight")
+        candidate_build_unchanged = False
+    if candidate_build:
+        try:
+            if _candidate_build_binding(Path(candidate_build["receipt_path"])) != candidate_build:
+                issues.append("candidate build identity changed after preflight")
+                candidate_build_unchanged = False
+        except Exception as exc:
+            issues.append(f"candidate build validation: {exc}")
+            candidate_build_unchanged = False
+    if original.get("candidate_build") != candidate_build:
+        issues.append("launch candidate build identity differs from preflight")
+        candidate_build_unchanged = False
+    try:
+        executed_executable_sha256 = sha256(stage / "wrf.exe")
+    except OSError:
+        executed_executable_sha256 = None
+        issues.append("staged executable is missing")
+    expected_executable_sha256 = (candidate_build["executable_sha256"] if candidate_build
+                                  else preflight.get("executable_sha256"))
+    if executed_executable_sha256 != expected_executable_sha256:
+        issues.append("staged executable hash differs from preflight")
     try:
         times = _model_times(stage)
     except Exception as exc:
         times = []
         issues.append(f"model time parsing: {exc}")
-    fatal = []
-    for name in ("candidate_run.log", "rsl.error.0000", "rsl.out.0000"):
-        path = stage / name
-        if not path.exists():
-            path = stage / f"{name}.gz"
-        if path.exists():
-            opener = gzip.open if path.suffix == ".gz" else open
-            try:
-                with opener(path, "rt", errors="replace") as stream:
-                    fatal.extend(line.rstrip() for line in stream
-                                 if re.search(r"fatal|error stop|segmentation|signal", line, re.I))
-            except Exception as exc:
-                issues.append(f"fatal scan {path.name}: {exc}")
+    fatal, fatal_scan_issues = _fatal_lines(stage)
+    issues.extend(fatal_scan_issues)
     trace = stage / "pr85_joint_moment_stages.raw"
     if not trace.exists():
         trace = stage / "pr85_joint_moment_stages.raw.gz"
     try:
-        snapshots = read_time_snapshots(trace) if trace.is_file() else {
+        snapshots = read_time_snapshots(trace, duration) if trace.is_file() else {
             "record_count": 0, "timesteps": [], "completed_post_kdm6_timesteps": [], "snapshots": {}}
     except Exception as exc:
         snapshots = {"record_count": 0, "timesteps": [],
@@ -290,7 +399,8 @@ def finalize_existing_run(arm: str, out: Path, duration: int) -> dict:
             continue
         if name == "namelist.input":
             expected = preflight["candidate_namelist_sha256"]
-        if sha256(staged) != expected:
+        if sha256(staged) != _staged_expected_hash(
+                name, input_hashes, candidate_build, preflight.get("candidate_namelist_sha256")):
             changed_stage.append(name)
     source = Path(preflight["runtime_dir"])
     source_after = {}
@@ -315,7 +425,8 @@ def finalize_existing_run(arm: str, out: Path, duration: int) -> dict:
                 completed == list(range(1, duration // 20 + 1)) and not duplicate_post and
                 not fatal and not issues and
                 not changed_stage and not changed_original and source_receipt_unchanged and
-                set(SNAPSHOTS.values()).issubset(snapshots["snapshots"]))
+                candidate_build_unchanged and
+                set(schedule.values()).issubset(snapshots["snapshots"]))
     compressed = original.get("compressed_outputs", [])
     for row in compressed:
         path = stage / row["compressed_path"]
@@ -346,6 +457,13 @@ def finalize_existing_run(arm: str, out: Path, duration: int) -> dict:
         "final_completed_step": max(completed) if completed else None,
         "duplicate_post_kdm6_timesteps": duplicate_post,
         "changed_staged_inputs": changed_stage, "changed_original_inputs": changed_original,
+        "baseline_frozen_executable_sha256": preflight.get("baseline_frozen_executable_sha256",
+                                                           preflight.get("executable_sha256")),
+        "executed_executable_sha256": executed_executable_sha256,
+        "expected_executed_executable_sha256": expected_executable_sha256,
+        "candidate_build": candidate_build,
+        "candidate_build_unchanged": candidate_build_unchanged,
+        "pr87_probe": original.get("pr87_probe"),
         "source_inputs_after_sha256": source_after, "processing_errors": issues,
         "source_receipt_sha256": source_receipt_sha,
         "source_receipt_unchanged": source_receipt_unchanged,
@@ -369,9 +487,11 @@ def finalize_existing_run(arm: str, out: Path, duration: int) -> dict:
     return receipt
 
 
-def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: float) -> dict:
+def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: float,
+        candidate_build_path: Path | None = None) -> dict:
+    schedule = snapshot_schedule(duration)
     out.mkdir(parents=True, exist_ok=False)
-    prepared = prepare(arm, duration, out, safety_fraction)
+    prepared = prepare(arm, duration, out, safety_fraction, candidate_build_path)
     (out / "preflight.json").write_text(json.dumps({k: v for k, v in prepared.items()
                                                      if k != "namelist_text"}, indent=2) + "\n")
     if prepared["disk_guard"]["status"] != "PASS":
@@ -379,6 +499,15 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     if not execute:
         return {k: v for k, v in prepared.items() if k not in {"namelist_text", "input_hashes"}}
     stage = _stage(prepared, out)
+    candidate_build = prepared.get("candidate_build")
+    expected_executable_sha256 = (candidate_build["executable_sha256"] if candidate_build
+                                  else prepared["executable_sha256"])
+    executed_executable_sha256 = sha256(stage / "wrf.exe")
+    if executed_executable_sha256 != expected_executable_sha256:
+        raise RuntimeError("staged executable hash differs from preflight")
+    if candidate_build and _candidate_build_binding(Path(candidate_build["receipt_path"])) != candidate_build:
+        raise RuntimeError("candidate build identity changed after preflight")
+    pr87_probe = os.environ.get("PR87_PROBE")
     command = ["/bin/bash", "-c", ". /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh --force >/dev/null 2>&1; . /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh >/dev/null 2>&1; export OMP_NUM_THREADS=1 OMP_DYNAMIC=FALSE; export LD_LIBRARY_PATH=/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:${LD_LIBRARY_PATH:-}; ulimit -s unlimited; ./wrf.exe > candidate_run.log 2>&1"]
     start = time.monotonic()
     with (stage / "launcher.stdout").open("wb") as stdout, (stage / "launcher.stderr").open("wb") as stderr:
@@ -390,16 +519,11 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     except Exception as exc:
         times = []
         processing_errors.append(f"model time parsing: {exc}")
-    fatal = []
-    for name in ("candidate_run.log", "rsl.error.0000", "rsl.out.0000"):
-        path = stage / name
-        if path.exists():
-            with path.open(errors="replace") as stream:
-                fatal.extend(line.rstrip() for line in stream
-                             if re.search(r"fatal|error stop|segmentation|signal", line, re.I))
+    fatal, fatal_scan_issues = _fatal_lines(stage)
+    processing_errors.extend(fatal_scan_issues)
     trace = stage / "pr85_joint_moment_stages.raw"
     try:
-        snapshots = read_time_snapshots(trace) if trace.is_file() else {
+        snapshots = read_time_snapshots(trace, duration) if trace.is_file() else {
             "record_count": 0, "timesteps": [], "completed_post_kdm6_timesteps": [],
             "duplicate_post_kdm6_timesteps": [], "snapshots": {}}
     except Exception as exc:
@@ -420,8 +544,8 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     stage_hashes["namelist.input"] = sha256(stage / "namelist.input")
     stage_hashes["namelist.input.source"] = sha256(stage / "namelist.input.source")
     changed_stage = [name for name, digest in stage_hashes.items()
-                     if digest != (prepared["candidate_namelist_sha256"] if name == "namelist.input"
-                                   else inputs[name])]
+                     if digest != _staged_expected_hash(
+                         name, inputs, candidate_build, prepared["candidate_namelist_sha256"])]
     original_after = {name: sha256(Path(prepared["runtime_dir"]) / name) for name in inputs}
     changed_original = [name for name, digest in original_after.items() if digest != inputs[name]]
     start_time = dt.datetime(2026, 8, 16, 13)
@@ -430,12 +554,24 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     actual_times = [row["timestamp"] for row in times]
     completed_steps = snapshots.get("completed_post_kdm6_timesteps", [])
     duplicate_post = snapshots.get("duplicate_post_kdm6_timesteps", [])
+    candidate_build_unchanged = True
+    if candidate_build:
+        try:
+            candidate_build_unchanged = (
+                _candidate_build_binding(Path(candidate_build["receipt_path"])) == candidate_build)
+        except Exception as exc:
+            candidate_build_unchanged = False
+            processing_errors.append(f"candidate build validation: {exc}")
     complete = (process.returncode == 0 and actual_times == expected_times and
                 completed_steps == list(range(1, duration // 20 + 1)) and not duplicate_post and not fatal and
                 not processing_errors and not changed_stage and not changed_original and
                 sha256(Path(prepared["source_receipt"])) == prepared["source_receipt_sha256"] and
-                set(SNAPSHOTS.values()).issubset(snapshots.get("snapshots", {})))
+                executed_executable_sha256 == expected_executable_sha256 and
+                candidate_build_unchanged and
+                set(schedule.values()).issubset(snapshots.get("snapshots", {})))
     receipt = {"arm": arm, "status": "COMPLETE" if complete else "INCOMPLETE",
+               "run_identity": ("PR87 selected-object native candidate" if candidate_build
+                                else "PR86 frozen executable run"),
                "returncode": process.returncode, "wall_seconds": elapsed, "model_timestamps": times,
                "timestep_count": len(times), "earliest_fatal": fatal[0] if fatal else None,
                "fatal_lines": fatal[:100], "snapshots": snapshots,
@@ -446,6 +582,11 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
                "changed_staged_inputs": changed_stage, "changed_original_inputs": changed_original,
                "source_inputs_after_sha256": original_after, "processing_errors": processing_errors,
                "frozen_executable_sha256": prepared["executable_sha256"],
+               "baseline_frozen_executable_sha256": prepared["baseline_frozen_executable_sha256"],
+               "executed_executable_sha256": executed_executable_sha256,
+               "expected_executed_executable_sha256": expected_executable_sha256,
+               "candidate_build": candidate_build, "candidate_build_unchanged": candidate_build_unchanged,
+               "pr87_probe": pr87_probe,
                "source_receipt_sha256": prepared["source_receipt_sha256"],
                "candidate_wrfinput_sha256": prepared["candidate_wrfinput_sha256"],
                "candidate_wrfbdy_sha256": prepared["candidate_wrfbdy_sha256"],
@@ -462,13 +603,18 @@ def main() -> int:
     parser.add_argument("--duration-seconds", type=int, default=600)
     parser.add_argument("--execute", action="store_true", help="launch after hash and disk checks")
     parser.add_argument("--finalize", action="store_true", help="receipt a completed run directory without relaunch")
+    parser.add_argument("--candidate-build", type=Path,
+                        help="explicit PR87 overlay build receipt; default uses frozen PR86 executable")
     parser.add_argument("--safety-fraction", type=float, default=0.85)
     args = parser.parse_args()
-    if args.duration_seconds <= 0 or args.duration_seconds % 20:
-        parser.error("--duration-seconds must be a positive multiple of 20")
+    try:
+        snapshot_schedule(args.duration_seconds)
+    except ValueError as exc:
+        parser.error(f"--duration-seconds {exc}")
     out = args.output or DEFAULT_OUT / args.arm
-    result = (finalize_existing_run(args.arm, out, args.duration_seconds) if args.finalize else
-              run(args.arm, out, args.duration_seconds, args.execute, args.safety_fraction))
+    result = (finalize_existing_run(args.arm, out, args.duration_seconds, args.candidate_build) if args.finalize else
+              run(args.arm, out, args.duration_seconds, args.execute, args.safety_fraction,
+                  args.candidate_build))
     print(json.dumps({k: v for k, v in result.items() if k != "input_hashes"}, indent=2))
     return 0
 

@@ -1,0 +1,790 @@
+{
+  "density_helper_procedure_sha256": "69a96690cef0f4f7d5ae3b70c910839b9d51aa51ccc67dcb6b66f00a522a13a6",
+  "density_helper_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr85_joint_stage_observer.f90",
+  "density_helper_source_sha256": "ea50fe2b380d2d5572da42f97261afe19eabdfef194edbfa5e4abc6360ee33bb",
+  "extracted_procedure": "rk_update_joint_moments",
+  "extracted_procedure_sha256": "da16326874ff01dd01906890fedb7591c88112bc1eb937f8594f15b527e99f62",
+  "fixture_contract": {
+    "cloud_bounds": {
+      "maximum_particle_mass": 3.0300855069345996e-10,
+      "minimum_particle_mass": 4.188790204786391e-15
+    },
+    "density": "DEN=1 from AL=1, ALB=0 using source-matched helper",
+    "dimensions": {
+      "active_i": [
+        2,
+        3
+      ],
+      "active_j": [
+        2,
+        2
+      ],
+      "active_k": [
+        1,
+        1
+      ],
+      "i": [
+        1,
+        5
+      ],
+      "j": [
+        1,
+        4
+      ],
+      "k": [
+        1,
+        2
+      ]
+    },
+    "dry_carrier": "old/new=1 via c1=1,c2=0,muold=munew=0,mub=1",
+    "dyadic_cases_in_units_of_minimum_mass_times_1e8": {
+      "baseline": {
+        "old_cloud_mass": [
+          1.0,
+          1.5
+        ],
+        "old_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "source_cloud_mass": [
+          0.0,
+          0.0
+        ],
+        "source_first_fallback_selected": false,
+        "theta1_result_cloud_mass": [
+          1.0,
+          1.375
+        ]
+      },
+      "invalid_endpoint": {
+        "expected_final_cloud_mass": [
+          0.75,
+          1.25
+        ],
+        "expected_result": "reject before commit and preserve q2/n2",
+        "final_endpoint_passes_psd_cone": false,
+        "old_cloud_mass": [
+          1.5,
+          1.5
+        ],
+        "source_cloud_mass": [
+          -1.0,
+          0.0
+        ],
+        "source_prepared_mass": [
+          0.5,
+          1.5
+        ]
+      },
+      "negative_donor": {
+        "expected_result": "reject before commit and preserve q2/n2",
+        "old_cloud_mass": [
+          1.5,
+          1.5
+        ],
+        "source_cloud_mass": [
+          -1.625,
+          0.0
+        ],
+        "source_prepared_mass": [
+          -0.125,
+          1.5
+        ]
+      },
+      "no_air": {
+        "baseline_weighted_q_over_n_gap_r32_ulp": 8.160412680357695,
+        "carrier": 92363.85,
+        "dt": 20.0,
+        "expected": "baseline theta=1 rejects; source-first stage is accepted within existing 8-ULP bound and bit-equal to the no-air final state",
+        "intensive_r32_stored_q_over_n_gap_r32_ulp": 7.263443915173411,
+        "kind": "manufactured no-air regression using supplied numeric fixture; not a native-cell replay",
+        "ledger_units": "pressure-carrier amounts; original dt*coupled source versus W*(staged-old), signed delta, L1, and max absolute delta; no kg or energy interpretation",
+        "old_n": 8961516.0,
+        "old_q": 3.7537916e-08,
+        "raw_n_source": "REAL32(REAL32(-72988600)/W)",
+        "raw_q_source": "REAL32(REAL32(-3.059018638396083e-7)/W)"
+      },
+      "source_first": {
+        "completed_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "completed_fallback_cloud_mass": [
+          1.09375,
+          1.03125
+        ],
+        "completed_mass_sum": 2.125,
+        "old_cloud_mass": [
+          1.0,
+          1.5
+        ],
+        "old_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "original_theta1_cloud_mass": [
+          1.125,
+          0.875
+        ],
+        "selected_pair": "cloud (Q index 2, N index 1)",
+        "source_cloud_mass": [
+          0.125,
+          -0.5
+        ],
+        "source_first_fallback_selected": true,
+        "source_prepared_mass": [
+          1.125,
+          1.0
+        ]
+      },
+      "stale_payload_rejections": {
+        "stale_carrier": "reject before commit",
+        "stale_source_ref": "reject before commit",
+        "stale_step": "reject before commit"
+      },
+      "virtual_donor": {
+        "completed_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "completed_fallback_cloud_mass": [
+          1.03125,
+          1.34375
+        ],
+        "completed_mass_sum": 2.375,
+        "final_endpoint_passes_psd_cone": true,
+        "intermediate_outside_psd_cone": true,
+        "old_cloud_mass": [
+          1.5,
+          1.5
+        ],
+        "old_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "original_theta1_cloud_mass": [
+          0.875,
+          1.5
+        ],
+        "source_cloud_mass": [
+          -0.625,
+          0.0
+        ],
+        "source_first_fallback_selected": true,
+        "source_prepared_mass": [
+          0.875,
+          1.5
+        ]
+      }
+    },
+    "explicit_source_payload": {
+      "carrier_and_step": "captured carrier equals old carrier at each active cell; source step must match itimestep",
+      "coupled_source_arrays": "captured extensive Q/N tendencies, REAL32, 4-D pair dimension 2; compared to qt/nt",
+      "raw_source_arrays": "raw intensive Q/N source rates, REAL32, 4-D pair dimension 2"
+    },
+    "horizontal_flux": "ru=+0.25 on all x faces; rv=ww=0; dt=1",
+    "registry": {
+      "nindex": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "nmoist": 6,
+      "nnindex": 5,
+      "nscalar": 5,
+      "qindex": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "qsindex": 6
+    }
+  },
+  "generated_fixture_sha256": "e19c50a7e883ecc897afabc1f9ada9fc2f93d4863ff1ad448e4d023739bf0485",
+  "kernel_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+  "kernel_sha256": "4149f75aa94d5ca917dc3acfb17db36342f454122459251aa007ea78d30cc9bb",
+  "pinned_profile": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+  "pinned_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "proposal_path": "/var/tmp/pr87_native_v10_proposed.f90",
+  "proposal_sha256": "b0a467b8f96728cb0b98cae014edb78df68edc995d5bab40138e8ef405651bf4",
+  "results": {
+    "O0": {
+      "compile_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/compile.log",
+      "compile_log_sha256": "1665b721d180042b7857621ce6c4b6be4dacea1bae7aa34819bfe6484c6c64ea",
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "executable": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/source_first_fixture.exe",
+      "executable_sha256": "db5eb48709969e55e0b11a30cdcfcb3f9effa12f4ac54ce56c7af0ced7d5af48",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "modes": {
+        "baseline": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/baseline/pr85_joint_transport_budget.raw",
+          "budget_sha256": "0fee2e98ae0be4ff8c79db0fd678b1985178e9f5f4f60121b0da5643b535397a",
+          "fallback_flags": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/baseline/run.log",
+          "run_log_sha256": "13f63c6d00dd14eb05bb523324f3a9af39317a8d2fbc4b1d9696d038ddaab18f",
+          "source_representation_pressure_amounts": null,
+          "status": "PASS"
+        },
+        "invalid_endpoint": {
+          "q2_n2_at_fatal": [
+            6.28318503004266e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/invalid_endpoint/run.log",
+          "run_log_sha256": "e0c787839dcfaa79b4901bf68b957ab616ed19dfc2be9409eb516cf82347ffdf",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": true,
+          "transport_budget_sha256": "6a6f39724c77352ec06ac0f4f068616e6bf197e69ca52dcbd628c1d855592523"
+        },
+        "later_cadence": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/later_cadence/pr85_joint_transport_budget.raw",
+          "budget_sha256": "d115454166e8b20bf72de7d115aa1b6a790421143318fcbb716fb36110e3e509",
+          "fallback_flags": [
+            [
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              true,
+              false,
+              false,
+              false
+            ]
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/later_cadence/run.log",
+          "run_log_sha256": "fa49d3fad3ccd3c5a01b62d712cc459e0cc67582dab9997c58265f52dc74dac8",
+          "source_representation_pressure_amounts": {
+            "delta": [
+              0.0003694557037674556,
+              292107.509375095
+            ],
+            "l1": [
+              0.0003694557037674556,
+              292107.509375095
+            ],
+            "later_source_amount": [
+              0.0003694554,
+              369455.4
+            ],
+            "later_source_identity_residual_max": [
+              0.0,
+              0.0
+            ],
+            "max_abs": [
+              0.0001847278518837278,
+              146053.754687548
+            ],
+            "proposal": [
+              -1.223607455358433e-05,
+              -2919544000.0
+            ],
+            "represented": [
+              0.0003572196292138713,
+              -2919251892.49062
+            ]
+          },
+          "status": "PASS"
+        },
+        "later_no_air": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/later_no_air/pr85_joint_transport_budget.raw",
+          "budget_sha256": "d2d834fae4927c3a4652a9bbaf7c5f8ed7336f8f70ef33b8e128ed08c6b812b1",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/later_no_air/run.log",
+          "run_log_sha256": "945d4bb4151bdf6660e52b8521894436ee2f65cfec3e587a281aaaa1e67c8c80",
+          "source_representation_pressure_amounts": {
+            "delta": [
+              0.0003694557037674556,
+              292107.509375095
+            ],
+            "l1": [
+              0.0003694557037674556,
+              292107.509375095
+            ],
+            "later_source_amount": [
+              0.0003694554,
+              369455.4
+            ],
+            "later_source_identity_residual_max": [
+              0.0,
+              0.0
+            ],
+            "max_abs": [
+              0.0001847278518837278,
+              146053.754687548
+            ],
+            "proposal": [
+              -1.223607455358433e-05,
+              -2919544000.0
+            ],
+            "represented": [
+              0.0003572196292138713,
+              -2919251892.49062
+            ]
+          },
+          "status": "PASS"
+        },
+        "negative_donor": {
+          "q2_n2_at_fatal": [
+            6.28318503004266e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/negative_donor/run.log",
+          "run_log_sha256": "b56e8cdc369c050ea39b0055799c14205cd70d3226362a373272876589e656fa",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "no_air": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/no_air/pr85_joint_transport_budget.raw",
+          "budget_sha256": "d2d834fae4927c3a4652a9bbaf7c5f8ed7336f8f70ef33b8e128ed08c6b812b1",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/no_air/run.log",
+          "run_log_sha256": "d781e48958548cd1f66fada2639a37a1345a66aa4815e3666813e008b25dd30a",
+          "source_representation_pressure_amounts": {
+            "delta": [
+              3.037674556338743e-10,
+              -77347.890625
+            ],
+            "l1": [
+              3.037674556338743e-10,
+              77347.890625
+            ],
+            "max_abs": [
+              1.518837278169372e-10,
+              38673.9453125
+            ],
+            "proposal": [
+              -1.223607455358433e-05,
+              -2919544000.0
+            ],
+            "represented": [
+              -1.22357707861287e-05,
+              -2919621347.89062
+            ]
+          },
+          "status": "PASS"
+        },
+        "nonfinite_later": {
+          "q2_n2_at_fatal": [
+            4.188790114767471e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/nonfinite_later/run.log",
+          "run_log_sha256": "664cb87ba50c981c4f326fe7816e0a9efeb5ab1814094d7ab47216172dcf772e",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "source_first": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/source_first/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/source_first/run.log",
+          "run_log_sha256": "ef82b28b4031e99acf9a071c11e83f44dd165958d63d72b38d6d2dec77f2adbe",
+          "source_representation_pressure_amounts": null,
+          "status": "PASS"
+        },
+        "stale_carrier": {
+          "q2_n2_at_fatal": [
+            4.188790114767471e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/stale_carrier/run.log",
+          "run_log_sha256": "bafece45b7529a6e51acd900d6dfdf05ae8ef15f9bf0578994172e677fb74ec2",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "stale_source_ref": {
+          "q2_n2_at_fatal": [
+            4.188790114767471e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/stale_source_ref/run.log",
+          "run_log_sha256": "6e5b0dd90e793e7cc71dc28c12f58f7a7a7b2d7f49fc820ec7821864e229a2cb",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "stale_step": {
+          "q2_n2_at_fatal": [
+            4.188790114767471e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/stale_step/run.log",
+          "run_log_sha256": "691db8a231562cf46bdc6656b7cd594f3f6e9672e491d04ae12adab8086a86c1",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "virtual_donor": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/virtual_donor/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O0/virtual_donor/run.log",
+          "run_log_sha256": "3383f771652eae0176746f5ce2eeb9b83dc1f3ee38bf56ea78cb26175d6e0201",
+          "source_representation_pressure_amounts": null,
+          "status": "PASS"
+        }
+      }
+    },
+    "O2": {
+      "compile_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/compile.log",
+      "compile_log_sha256": "1665b721d180042b7857621ce6c4b6be4dacea1bae7aa34819bfe6484c6c64ea",
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "executable": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/source_first_fixture.exe",
+      "executable_sha256": "2fb6ee3fb631aaae0af3eba62d1c3bda7446469d6c8e6b35d77b98ff4ed5556f",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "modes": {
+        "baseline": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/baseline/pr85_joint_transport_budget.raw",
+          "budget_sha256": "0fee2e98ae0be4ff8c79db0fd678b1985178e9f5f4f60121b0da5643b535397a",
+          "fallback_flags": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/baseline/run.log",
+          "run_log_sha256": "13f63c6d00dd14eb05bb523324f3a9af39317a8d2fbc4b1d9696d038ddaab18f",
+          "source_representation_pressure_amounts": null,
+          "status": "PASS"
+        },
+        "invalid_endpoint": {
+          "q2_n2_at_fatal": [
+            6.28318503004266e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/invalid_endpoint/run.log",
+          "run_log_sha256": "e0c787839dcfaa79b4901bf68b957ab616ed19dfc2be9409eb516cf82347ffdf",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": true,
+          "transport_budget_sha256": "6a6f39724c77352ec06ac0f4f068616e6bf197e69ca52dcbd628c1d855592523"
+        },
+        "later_cadence": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/later_cadence/pr85_joint_transport_budget.raw",
+          "budget_sha256": "d115454166e8b20bf72de7d115aa1b6a790421143318fcbb716fb36110e3e509",
+          "fallback_flags": [
+            [
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              false,
+              false,
+              false,
+              false
+            ],
+            [
+              true,
+              false,
+              false,
+              false
+            ]
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/later_cadence/run.log",
+          "run_log_sha256": "fa49d3fad3ccd3c5a01b62d712cc459e0cc67582dab9997c58265f52dc74dac8",
+          "source_representation_pressure_amounts": {
+            "delta": [
+              0.0003694557037674556,
+              292107.509375095
+            ],
+            "l1": [
+              0.0003694557037674556,
+              292107.509375095
+            ],
+            "later_source_amount": [
+              0.0003694554,
+              369455.4
+            ],
+            "later_source_identity_residual_max": [
+              0.0,
+              0.0
+            ],
+            "max_abs": [
+              0.0001847278518837278,
+              146053.754687548
+            ],
+            "proposal": [
+              -1.223607455358433e-05,
+              -2919544000.0
+            ],
+            "represented": [
+              0.0003572196292138713,
+              -2919251892.49062
+            ]
+          },
+          "status": "PASS"
+        },
+        "later_no_air": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/later_no_air/pr85_joint_transport_budget.raw",
+          "budget_sha256": "d2d834fae4927c3a4652a9bbaf7c5f8ed7336f8f70ef33b8e128ed08c6b812b1",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/later_no_air/run.log",
+          "run_log_sha256": "945d4bb4151bdf6660e52b8521894436ee2f65cfec3e587a281aaaa1e67c8c80",
+          "source_representation_pressure_amounts": {
+            "delta": [
+              0.0003694557037674556,
+              292107.509375095
+            ],
+            "l1": [
+              0.0003694557037674556,
+              292107.509375095
+            ],
+            "later_source_amount": [
+              0.0003694554,
+              369455.4
+            ],
+            "later_source_identity_residual_max": [
+              0.0,
+              0.0
+            ],
+            "max_abs": [
+              0.0001847278518837278,
+              146053.754687548
+            ],
+            "proposal": [
+              -1.223607455358433e-05,
+              -2919544000.0
+            ],
+            "represented": [
+              0.0003572196292138713,
+              -2919251892.49062
+            ]
+          },
+          "status": "PASS"
+        },
+        "negative_donor": {
+          "q2_n2_at_fatal": [
+            6.28318503004266e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/negative_donor/run.log",
+          "run_log_sha256": "b56e8cdc369c050ea39b0055799c14205cd70d3226362a373272876589e656fa",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "no_air": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/no_air/pr85_joint_transport_budget.raw",
+          "budget_sha256": "d2d834fae4927c3a4652a9bbaf7c5f8ed7336f8f70ef33b8e128ed08c6b812b1",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/no_air/run.log",
+          "run_log_sha256": "d781e48958548cd1f66fada2639a37a1345a66aa4815e3666813e008b25dd30a",
+          "source_representation_pressure_amounts": {
+            "delta": [
+              3.037674556338743e-10,
+              -77347.890625
+            ],
+            "l1": [
+              3.037674556338743e-10,
+              77347.890625
+            ],
+            "max_abs": [
+              1.518837278169372e-10,
+              38673.9453125
+            ],
+            "proposal": [
+              -1.223607455358433e-05,
+              -2919544000.0
+            ],
+            "represented": [
+              -1.22357707861287e-05,
+              -2919621347.89062
+            ]
+          },
+          "status": "PASS"
+        },
+        "nonfinite_later": {
+          "q2_n2_at_fatal": [
+            4.188790114767471e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/nonfinite_later/run.log",
+          "run_log_sha256": "664cb87ba50c981c4f326fe7816e0a9efeb5ab1814094d7ab47216172dcf772e",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "source_first": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/source_first/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/source_first/run.log",
+          "run_log_sha256": "ef82b28b4031e99acf9a071c11e83f44dd165958d63d72b38d6d2dec77f2adbe",
+          "source_representation_pressure_amounts": null,
+          "status": "PASS"
+        },
+        "stale_carrier": {
+          "q2_n2_at_fatal": [
+            4.188790114767471e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/stale_carrier/run.log",
+          "run_log_sha256": "bafece45b7529a6e51acd900d6dfdf05ae8ef15f9bf0578994172e677fb74ec2",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "stale_source_ref": {
+          "q2_n2_at_fatal": [
+            4.188790114767471e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/stale_source_ref/run.log",
+          "run_log_sha256": "6e5b0dd90e793e7cc71dc28c12f58f7a7a7b2d7f49fc820ec7821864e229a2cb",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "stale_step": {
+          "q2_n2_at_fatal": [
+            4.188790114767471e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/stale_step/run.log",
+          "run_log_sha256": "691db8a231562cf46bdc6656b7cd594f3f6e9672e491d04ae12adab8086a86c1",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "virtual_donor": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/virtual_donor/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_jaricpe3/O2/virtual_donor/run.log",
+          "run_log_sha256": "3383f771652eae0176746f5ce2eeb9b83dc1f3ee38bf56ea78cb26175d6e0201",
+          "source_representation_pressure_amounts": null,
+          "status": "PASS"
+        }
+      }
+    }
+  },
+  "runner_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_source_first_fallback_regression.py",
+  "runner_sha256": "1bf46fa39f0864860bc9de6a3ddc3f7efaf4885d21d88309ac3083a2efb03a33",
+  "schema": "pr87_explicit_intensive_source_payload_ifx_v2",
+  "scratch": "/var/tmp/pr87_source_first_fixture_jaricpe3",
+  "status": "PASS_O0_O2"
+}

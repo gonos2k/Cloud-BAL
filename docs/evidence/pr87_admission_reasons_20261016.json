@@ -1,0 +1,397 @@
+{
+  "activity_denominator": "Only AUT/G rows with nonzero Q/QV proposal vector and pre-composite alpha below 1 are emitted. Proposal activity is half-L1 Q+QV vector activity times frozen first-call rhoDry*DELZ*MAPFAC_M area. Category share divides by the group emitted-row proposal activity. Rejected activity is (1-alpha)*proposal activity; approved activity is alpha*proposal activity. Alpha=1 rows and later shared composite gamma backtracking are outside this report.",
+  "arms": {
+    "COUPLED": {
+      "arm": "COUPLED",
+      "candidate_receipt": {
+        "arm": "COUPLED",
+        "build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v2/pr87_native_overlay_build.json",
+        "build_receipt_sha256": "95a82d7089657e85b96aeafafe8476de6b67339772017d39048e713dac3cca63",
+        "candidate_first_call_capture_sha256": {
+          "kdm6_first_call_post.raw": "67c65cc6c36950b6b051791bd022d52021d2b2d785cbaeee12279ccad5b6cc6e",
+          "kdm6_first_call_pre.raw": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd"
+        },
+        "candidate_run_returncode": 1,
+        "candidate_run_status": "INCOMPLETE",
+        "completed_window": "FIRST_CALL_CAPTURE_ONLY_RUN_INCOMPLETE",
+        "frozen_source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+        "kdm6_reason_source_sha256": "dc0e9c20997f8fb34a6a164a707338a4a5d8817acbaab5a64efcb842e61e38d2",
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_20261016/receipt.json",
+        "preflight_path": "/var/tmp/pr87_joint_COUPLED_40s_20261016/preflight.json",
+        "preflight_sha256": "8116a1e73e85774c8c1086521ee1a0c2fb5cbd8d16a94621bd7f7c9a400d0969",
+        "raw_bytes": 23516020,
+        "raw_compressed_path": "/var/tmp/pr87_joint_COUPLED_40s_20261016/run/pr87_admission_reason.raw.gz",
+        "raw_compressed_sha256": "13f3d4f429e830d3cb5c875aa7dce3448dc20d9bf181daa8ee9d40a07dabf714",
+        "raw_sha256": "a059572f09a1b7d01ea8b79038396e9e2ebd72519a3b89ae48becd5836f45634",
+        "sha256": "b8dea1ca3f8848289b9987ce586e7dcffc15e710b58b56869b54b437b099dfc2"
+      },
+      "candidate_run_returncode": 1,
+      "candidate_run_root": "/var/tmp/pr87_joint_COUPLED_40s_20261016",
+      "candidate_run_status": "INCOMPLETE",
+      "classification": "first failed FULL-proposal endpoint check; not the unique active-bound certificate",
+      "completed_window": "FIRST_CALL_CAPTURE_ONLY_RUN_INCOMPLETE",
+      "groups": {
+        "AUT": {
+          "activity_measure": "half-L1 Q+QV activity weighted by frozen rhoDry*DELZ*area, among emitted alpha<1 rows",
+          "approved_activity_kg": 102129539.96342102,
+          "approved_over_emitted_proposal": 0.00810066369545917,
+          "emitted_proposal_activity_kg": 12607552146.704939,
+          "records": 46838,
+          "rejected_activity_kg": 12505422606.741518,
+          "rejected_over_emitted_proposal": 0.9918993363045409,
+          "rows_by_reason_status": {
+            "endpoint=6:RAIN|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 102129539.96342102,
+              "approved_over_emitted_proposal": 0.21812033493467825,
+              "emitted_proposal_activity_kg": 468225669.9908623,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.03713850750268251,
+              "records": 958,
+              "rejected_activity_kg": 366096130.0274416,
+              "rejected_over_emitted_proposal": 0.7818796650653225
+            },
+            "endpoint=6:RAIN|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 12139326476.714083,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.962861492497318,
+              "records": 45880,
+              "rejected_activity_kg": 12139326476.714083,
+              "rejected_over_emitted_proposal": 1.0
+            }
+          }
+        },
+        "G": {
+          "activity_measure": "half-L1 Q+QV activity weighted by frozen rhoDry*DELZ*area, among emitted alpha<1 rows",
+          "approved_activity_kg": 1892970163.0008485,
+          "approved_over_emitted_proposal": 0.04143947723154521,
+          "emitted_proposal_activity_kg": 45680358186.561584,
+          "records": 122851,
+          "rejected_activity_kg": 43787388023.56066,
+          "rejected_over_emitted_proposal": 0.9585605227684532,
+          "rows_by_reason_status": {
+            "endpoint=2:DONORNEGATIVE|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 310453625.32724327,
+              "approved_over_emitted_proposal": 0.5487027853193708,
+              "emitted_proposal_activity_kg": 565795606.7172954,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.01238597132725074,
+              "records": 130,
+              "rejected_activity_kg": 255341981.39005187,
+              "rejected_over_emitted_proposal": 0.4512972146806288
+            },
+            "endpoint=2:DONORNEGATIVE|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 248502211.96438995,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.005440023279797645,
+              "records": 402,
+              "rejected_activity_kg": 248502211.96438995,
+              "rejected_over_emitted_proposal": 1.0
+            },
+            "endpoint=3:ORPHAN|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 261564011.75277165,
+              "approved_over_emitted_proposal": 0.5323249313160624,
+              "emitted_proposal_activity_kg": 491361565.7754544,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.010756517358482643,
+              "records": 57,
+              "rejected_activity_kg": 229797554.02268276,
+              "rejected_over_emitted_proposal": 0.4676750686839376
+            },
+            "endpoint=3:ORPHAN|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 497152838.9119018,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.010883295548635957,
+              "records": 654,
+              "rejected_activity_kg": 497152838.9119018,
+              "rejected_over_emitted_proposal": 1.0
+            },
+            "endpoint=5:PSDCLOUD|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 2397350.954229269,
+              "approved_over_emitted_proposal": 0.09769620001316069,
+              "emitted_proposal_activity_kg": 24538835.22497621,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.0005371857007941574,
+              "records": 1,
+              "rejected_activity_kg": 22141484.270746943,
+              "rejected_over_emitted_proposal": 0.9023037999868393
+            },
+            "endpoint=6:RAIN|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 387778615.08793855,
+              "approved_over_emitted_proposal": 0.22969091300427283,
+              "emitted_proposal_activity_kg": 1688262761.5343447,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.03695817696173416,
+              "records": 142,
+              "rejected_activity_kg": 1300484146.4464066,
+              "rejected_over_emitted_proposal": 0.7703090869957274
+            },
+            "endpoint=6:RAIN|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 3011672572.3573084,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.0659292678935975,
+              "records": 1244,
+              "rejected_activity_kg": 3011672572.3573084,
+              "rejected_over_emitted_proposal": 1.0
+            },
+            "endpoint=7:ICE|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 26.110115295341764,
+              "approved_over_emitted_proposal": 1.1942363161418935e-05,
+              "emitted_proposal_activity_kg": 2186344.104799396,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 4.7861798628421934e-05,
+              "records": 2,
+              "rejected_activity_kg": 2186317.9946841006,
+              "rejected_over_emitted_proposal": 0.9999880576368386
+            },
+            "endpoint=7:ICE|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 576700647.7844518,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.012624696273815728,
+              "records": 240,
+              "rejected_activity_kg": 576700647.7844518,
+              "rejected_over_emitted_proposal": 1.0
+            },
+            "endpoint=9:BULKDENSITY|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 930776533.7685498,
+              "approved_over_emitted_proposal": 0.1681283547994262,
+              "emitted_proposal_activity_kg": 5536106832.657393,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.12119228159393079,
+              "records": 348,
+              "rejected_activity_kg": 4605330298.888848,
+              "rejected_over_emitted_proposal": 0.8318716452005747
+            },
+            "endpoint=9:BULKDENSITY|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 33038077969.529728,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.7232447222633424,
+              "records": 119631,
+              "rejected_activity_kg": 33038077969.529728,
+              "rejected_over_emitted_proposal": 1.0
+            }
+          }
+        }
+      },
+      "records": 169689,
+      "same_cell_weighting": {
+        "mapping": "reason (i,lat,k) maps directly to frozen first-call (i,j,k) with j=lat",
+        "native_hybrid_mass_same_call_capture": false,
+        "proposal_activity": "reported half-L1 Q plus QV specific vector activity * frozen-call rhoDry * DELZ * exact frozen MAPFAC_M area"
+      }
+    },
+    "OFF": {
+      "arm": "OFF",
+      "candidate_receipt": {
+        "arm": "OFF",
+        "build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v2/pr87_native_overlay_build.json",
+        "build_receipt_sha256": "95a82d7089657e85b96aeafafe8476de6b67339772017d39048e713dac3cca63",
+        "candidate_first_call_capture_sha256": {
+          "kdm6_first_call_post.raw": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+          "kdm6_first_call_pre.raw": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847"
+        },
+        "candidate_run_returncode": 1,
+        "candidate_run_status": "INCOMPLETE",
+        "completed_window": "FIRST_CALL_CAPTURE_ONLY_RUN_INCOMPLETE",
+        "frozen_source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+        "kdm6_reason_source_sha256": "dc0e9c20997f8fb34a6a164a707338a4a5d8817acbaab5a64efcb842e61e38d2",
+        "path": "/var/tmp/pr87_joint_OFF_40s_20261016/receipt.json",
+        "preflight_path": "/var/tmp/pr87_joint_OFF_40s_20261016/preflight.json",
+        "preflight_sha256": "ceea8d8c78503a3e0dfebe01eadc304a93ab426a79553cf114da4c260826dd4e",
+        "raw_bytes": 23514225,
+        "raw_compressed_path": "/var/tmp/pr87_joint_OFF_40s_20261016/run/pr87_admission_reason.raw.gz",
+        "raw_compressed_sha256": "7e2791219a314d9474a9ff9e8f0e7ff0141d3a306a2d77341b04493d68ce32bf",
+        "raw_sha256": "b4e63bbc619f90933bcf8d29d9cb7f84fff1b736dc64fe6532b728cfb4f62d5a",
+        "sha256": "525812ebf6e0e9a82accc7ddd97ff673f98397b9ea53e91d6f889006c8142503"
+      },
+      "candidate_run_returncode": 1,
+      "candidate_run_root": "/var/tmp/pr87_joint_OFF_40s_20261016",
+      "candidate_run_status": "INCOMPLETE",
+      "classification": "first failed FULL-proposal endpoint check; not the unique active-bound certificate",
+      "completed_window": "FIRST_CALL_CAPTURE_ONLY_RUN_INCOMPLETE",
+      "groups": {
+        "AUT": {
+          "activity_measure": "half-L1 Q+QV activity weighted by frozen rhoDry*DELZ*area, among emitted alpha<1 rows",
+          "approved_activity_kg": 101393303.2012907,
+          "approved_over_emitted_proposal": 0.008042417593579647,
+          "emitted_proposal_activity_kg": 12607316397.277618,
+          "records": 46831,
+          "rejected_activity_kg": 12505923094.076328,
+          "rejected_over_emitted_proposal": 0.9919575824064204,
+          "rows_by_reason_status": {
+            "endpoint=6:RAIN|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 101393303.2012907,
+              "approved_over_emitted_proposal": 0.21685780936899324,
+              "emitted_proposal_activity_kg": 467556614.61453515,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.03708613315324566,
+              "records": 958,
+              "rejected_activity_kg": 366163311.4132448,
+              "rejected_over_emitted_proposal": 0.7831421906310074
+            },
+            "endpoint=6:RAIN|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 12139759782.663092,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.962913866846755,
+              "records": 45873,
+              "rejected_activity_kg": 12139759782.663092,
+              "rejected_over_emitted_proposal": 1.0
+            }
+          }
+        },
+        "G": {
+          "activity_measure": "half-L1 Q+QV activity weighted by frozen rhoDry*DELZ*area, among emitted alpha<1 rows",
+          "approved_activity_kg": 1892970163.0008485,
+          "approved_over_emitted_proposal": 0.041427165840696986,
+          "emitted_proposal_activity_kg": 45693933547.856735,
+          "records": 122845,
+          "rejected_activity_kg": 43800963384.85582,
+          "rejected_over_emitted_proposal": 0.9585728341593015,
+          "rows_by_reason_status": {
+            "endpoint=2:DONORNEGATIVE|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 310453625.32724327,
+              "approved_over_emitted_proposal": 0.5487027853193708,
+              "emitted_proposal_activity_kg": 565795606.7172954,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.01238229153821304,
+              "records": 130,
+              "rejected_activity_kg": 255341981.39005187,
+              "rejected_over_emitted_proposal": 0.4512972146806288
+            },
+            "endpoint=2:DONORNEGATIVE|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 248515197.0375974,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.005438691260346833,
+              "records": 402,
+              "rejected_activity_kg": 248515197.0375974,
+              "rejected_over_emitted_proposal": 1.0
+            },
+            "endpoint=3:ORPHAN|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 261564011.75277165,
+              "approved_over_emitted_proposal": 0.5323249313160624,
+              "emitted_proposal_activity_kg": 491361565.7754544,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.010753321669294142,
+              "records": 57,
+              "rejected_activity_kg": 229797554.02268276,
+              "rejected_over_emitted_proposal": 0.4676750686839376
+            },
+            "endpoint=3:ORPHAN|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 497123665.8950228,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.010879423750515352,
+              "records": 651,
+              "rejected_activity_kg": 497123665.8950228,
+              "rejected_over_emitted_proposal": 1.0
+            },
+            "endpoint=5:PSDCLOUD|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 2397350.954229269,
+              "approved_over_emitted_proposal": 0.09769620001316069,
+              "emitted_proposal_activity_kg": 24538835.22497621,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.0005370261065240946,
+              "records": 1,
+              "rejected_activity_kg": 22141484.270746943,
+              "rejected_over_emitted_proposal": 0.9023037999868393
+            },
+            "endpoint=6:RAIN|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 387778615.08793855,
+              "approved_over_emitted_proposal": 0.22969091300427283,
+              "emitted_proposal_activity_kg": 1688262761.5343447,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.036947196935150535,
+              "records": 142,
+              "rejected_activity_kg": 1300484146.4464066,
+              "rejected_over_emitted_proposal": 0.7703090869957274
+            },
+            "endpoint=6:RAIN|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 3012972565.491456,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.06593813076599922,
+              "records": 1249,
+              "rejected_activity_kg": 3012972565.491456,
+              "rejected_over_emitted_proposal": 1.0
+            },
+            "endpoint=7:ICE|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 26.110115295341764,
+              "approved_over_emitted_proposal": 1.1942363161418935e-05,
+              "emitted_proposal_activity_kg": 2186344.104799396,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 4.784757920894613e-05,
+              "records": 2,
+              "rejected_activity_kg": 2186317.9946841006,
+              "rejected_over_emitted_proposal": 0.9999880576368386
+            },
+            "endpoint=7:ICE|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 576700652.548767,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.012620945665462784,
+              "records": 240,
+              "rejected_activity_kg": 576700652.548767,
+              "rejected_over_emitted_proposal": 1.0
+            },
+            "endpoint=9:BULKDENSITY|vapor=0|status=0:FEASIBLE_SEARCH": {
+              "approved_activity_kg": 930776533.7685498,
+              "approved_over_emitted_proposal": 0.1681283547994262,
+              "emitted_proposal_activity_kg": 5536106832.657393,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.1211562761796213,
+              "records": 348,
+              "rejected_activity_kg": 4605330298.888848,
+              "rejected_over_emitted_proposal": 0.8318716452005747
+            },
+            "endpoint=9:BULKDENSITY|vapor=0|status=1:NO_FEASIBLE_STEP": {
+              "approved_activity_kg": 0.0,
+              "approved_over_emitted_proposal": 0.0,
+              "emitted_proposal_activity_kg": 33050369520.870087,
+              "full_evap_pending_records": 0,
+              "proposal_activity_fraction": 0.7232988485496737,
+              "records": 119623,
+              "rejected_activity_kg": 33050369520.870087,
+              "rejected_over_emitted_proposal": 1.0
+            }
+          }
+        }
+      },
+      "records": 169676,
+      "same_cell_weighting": {
+        "mapping": "reason (i,lat,k) maps directly to frozen first-call (i,j,k) with j=lat",
+        "native_hybrid_mass_same_call_capture": false,
+        "proposal_activity": "reported half-L1 Q plus QV specific vector activity * frozen-call rhoDry * DELZ * exact frozen MAPFAC_M area"
+      }
+    }
+  },
+  "diagnostic_scope": "first KDM6 call only; candidate run windows remained incomplete after one completed timestep",
+  "endpoint_classification": "first failed FULL-proposal endpoint check by the exact source validator, with a separate vapor endpoint check; not the unique active-bound certificate at admitted alpha",
+  "limitations": [
+    "Candidate model runs returned INCOMPLETE/nonzero after one completed timestep. First-call reason data are diagnostic only; this does not validate or promote the requested 40-second native window.",
+    "Candidate first-call pre and post dumps were verified byte-identical to the corresponding frozen v17 OFF/COUPLED captures, and raw/compressed artifact hashes matched the run receipts.",
+    "Mass is the PR86 half-L1 Q plus QV vector-activity proxy, not primitive gross reaction mass.",
+    "Same-call host hybrid dry-air mass geometry was not captured; weights use exact frozen PR86 geometry only after capture hash checks.",
+    "Full-proposal endpoint reasons do not identify the active bound that selected alpha; a full proposal can fail one endpoint check while another constraint controls the allowed interval."
+  ],
+  "probe_tool_sha256": "cae8172faf541d045732c52f6733534f153db5356fe5f52d2a6bca492c39bb12",
+  "schema": "pr87_admission_reasons_v1",
+  "summarizer_sha256": "2c1176ddd636b454ab624bb2ff96558f6babe604b8f2a0c1de4cd71b6408dda6"
+}

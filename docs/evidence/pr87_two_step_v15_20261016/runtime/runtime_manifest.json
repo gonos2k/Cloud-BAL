@@ -1,0 +1,273 @@
+{
+  "schema": "pr87_v15_runtime_evidence_v1",
+  "scope": "closed matched 40s arm receipts; incomplete after timestep-1 completion and step-2 RK1 rain pair rejection",
+  "build": {
+    "receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v15/pr87_native_overlay_build.json",
+    "receipt_sha256": "588a4dea2cd92d36f612aa8552c659310058c8ddab1d488dd8687452f6a45853",
+    "status": "PASS_OVERLAY_BUILD",
+    "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v15/wrf_pr87_overlay.exe",
+    "executable_sha256": "20e2c3b537a08e1259eaff783ac7d4caffa3633535270cc4b8fd34420775184e",
+    "source_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v15/sources.json",
+    "source_manifest_sha256": "a8f1130489b8a5e7a32a0a266bd91fad8a706d6b69bc8aab9785babf3e19abc6",
+    "source_tree": "/var/tmp/pr87_joint_cycle_sources_20261016_v15"
+  },
+  "first_kdm6_pre_match_to_v17": {
+    "OFF": {
+      "source_path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/kdm6_first_call_pre.raw",
+      "bytes": 195542592,
+      "sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847"
+    },
+    "COUPLED": {
+      "source_path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/kdm6_first_call_pre.raw",
+      "bytes": 195542592,
+      "sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd"
+    }
+  },
+  "arms": {
+    "OFF": {
+      "status": "INCOMPLETE",
+      "returncode": 1,
+      "run_identity": "PR87 selected-object native candidate",
+      "wall_seconds": 324.92145772092044,
+      "model_timestamps": [
+        {
+          "timestamp": "2026-08-16_13:00:20",
+          "elapsed_seconds": 279.18112
+        }
+      ],
+      "expected_model_timestamps": [
+        "2026-08-16_13:00:20",
+        "2026-08-16_13:00:40"
+      ],
+      "timestep_count": 1,
+      "maximum_seen_timestep": 2,
+      "final_completed_step": 1,
+      "completed_post_kdm6_timesteps": [
+        1
+      ],
+      "earliest_fatal": "-------------- FATAL CALLED ---------------",
+      "fatal_lines": [
+        "-------------- FATAL CALLED ---------------",
+        "-------------- FATAL CALLED ---------------"
+      ],
+      "candidate_build": {
+        "receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v15/pr87_native_overlay_build.json",
+        "receipt_sha256": "588a4dea2cd92d36f612aa8552c659310058c8ddab1d488dd8687452f6a45853",
+        "schema": "pr87_native_overlay_build_v1",
+        "status": "PASS_OVERLAY_BUILD",
+        "identity": "PR87 source-mapped partial native overlay; not a clean build",
+        "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+        "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+        "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v15/wrf_pr87_overlay.exe",
+        "executable_sha256": "20e2c3b537a08e1259eaff783ac7d4caffa3633535270cc4b8fd34420775184e"
+      },
+      "executable_sha256": "20e2c3b537a08e1259eaff783ac7d4caffa3633535270cc4b8fd34420775184e",
+      "candidate_namelist_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "preflight_expected_timesteps": 2,
+      "preflight_duration_seconds": 40,
+      "preflight_timestep_seconds": 20,
+      "preflight_v17_first_step_seconds": 662.69806,
+      "preflight_source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "preflight_input_file_count": 101,
+      "kdm6_first_call_pre": {
+        "path": "kdm6_first_call_pre.raw",
+        "sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+        "bytes": 195542592,
+        "compressed_path": "kdm6_first_call_pre.raw.gz",
+        "compressed_sha256": "df1ae7abf009b8eec6ea933328d902b7f106e14aedecbf26aa6d555c22f3d839",
+        "compressed_bytes": 82008092
+      },
+      "joint_source_failure": {
+        "path": "pr85_joint_source_failure.raw",
+        "sha256": "78ab5a3738a0ecbf29ac5a303cb24618083158c75378a8b54017b756eee7dafb",
+        "bytes": 203696,
+        "compressed_path": "pr85_joint_source_failure.raw.gz",
+        "compressed_sha256": "1305266643781b4eb1e7becf83a64ce88488530a1a3a6f28fc8011d54e2aa00e",
+        "compressed_bytes": 58513
+      },
+      "rsl_error": {
+        "path": "rsl.error.0000",
+        "sha256": "abcb4364676fd88b809e8d7fd522114faa7b974437218ad65d41e30254a3f6e5",
+        "bytes": 45152,
+        "compressed_path": "rsl.error.0000.gz",
+        "compressed_sha256": "05c78651d4b200bd2e3426ab0055920aae17f546aee8bd2d273f06b52a74259d",
+        "compressed_bytes": 2413
+      },
+      "runtime_reference_manifest": {
+        "source_path": "/var/tmp/pr87_joint_OFF_40s_v15_20261016/run/runtime_reference_manifest.json",
+        "bytes": 5847,
+        "sha256": "a0ef389fef3a6221c98862c7e05a498397b12cc38186613a811c5ff2b2b09b2f"
+      },
+      "archived_files": {
+        "OFF_receipt.json": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/OFF_receipt.json",
+          "bytes": 48686,
+          "sha256": "62948063e1e0e4649622930ae388c584869eb8cda6bd36bbbe6736d27191fc49"
+        },
+        "OFF_preflight.json": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/OFF_preflight.json",
+          "bytes": 12720,
+          "sha256": "6865cfeede4a75419e76c1fc254670321337557c821f00470c703d393043bb34"
+        },
+        "OFF_runtime_reference_manifest.json": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/OFF_runtime_reference_manifest.json",
+          "bytes": 5847,
+          "sha256": "a0ef389fef3a6221c98862c7e05a498397b12cc38186613a811c5ff2b2b09b2f"
+        },
+        "OFF_cloud_cycle.log": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/OFF_cloud_cycle.log",
+          "bytes": 2014,
+          "sha256": "b6e3822d0b32de98c69c78d38f3cec0463966fdb882af3b06a976adf6842fed9"
+        },
+        "OFF_rsl.error.0000.gz": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/OFF_rsl.error.0000.gz",
+          "bytes": 2413,
+          "sha256": "05c78651d4b200bd2e3426ab0055920aae17f546aee8bd2d273f06b52a74259d"
+        }
+      }
+    },
+    "COUPLED": {
+      "status": "INCOMPLETE",
+      "returncode": 1,
+      "run_identity": "PR87 selected-object native candidate",
+      "wall_seconds": 324.42345055937767,
+      "model_timestamps": [
+        {
+          "timestamp": "2026-08-16_13:00:20",
+          "elapsed_seconds": 278.38049
+        }
+      ],
+      "expected_model_timestamps": [
+        "2026-08-16_13:00:20",
+        "2026-08-16_13:00:40"
+      ],
+      "timestep_count": 1,
+      "maximum_seen_timestep": 2,
+      "final_completed_step": 1,
+      "completed_post_kdm6_timesteps": [
+        1
+      ],
+      "earliest_fatal": "-------------- FATAL CALLED ---------------",
+      "fatal_lines": [
+        "-------------- FATAL CALLED ---------------",
+        "-------------- FATAL CALLED ---------------"
+      ],
+      "candidate_build": {
+        "receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v15/pr87_native_overlay_build.json",
+        "receipt_sha256": "588a4dea2cd92d36f612aa8552c659310058c8ddab1d488dd8687452f6a45853",
+        "schema": "pr87_native_overlay_build_v1",
+        "status": "PASS_OVERLAY_BUILD",
+        "identity": "PR87 source-mapped partial native overlay; not a clean build",
+        "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+        "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+        "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v15/wrf_pr87_overlay.exe",
+        "executable_sha256": "20e2c3b537a08e1259eaff783ac7d4caffa3633535270cc4b8fd34420775184e"
+      },
+      "executable_sha256": "20e2c3b537a08e1259eaff783ac7d4caffa3633535270cc4b8fd34420775184e",
+      "candidate_namelist_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "preflight_expected_timesteps": 2,
+      "preflight_duration_seconds": 40,
+      "preflight_timestep_seconds": 20,
+      "preflight_v17_first_step_seconds": 662.69806,
+      "preflight_source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+      "preflight_input_file_count": 101,
+      "kdm6_first_call_pre": {
+        "path": "kdm6_first_call_pre.raw",
+        "sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+        "bytes": 195542592,
+        "compressed_path": "kdm6_first_call_pre.raw.gz",
+        "compressed_sha256": "f89d2b950f8b5f9af2cc0ca56183388f11b55eb8ee785a93d0b429ab856a080c",
+        "compressed_bytes": 82008028
+      },
+      "joint_source_failure": {
+        "path": "pr85_joint_source_failure.raw",
+        "sha256": "78ab5a3738a0ecbf29ac5a303cb24618083158c75378a8b54017b756eee7dafb",
+        "bytes": 203696,
+        "compressed_path": "pr85_joint_source_failure.raw.gz",
+        "compressed_sha256": "1305266643781b4eb1e7becf83a64ce88488530a1a3a6f28fc8011d54e2aa00e",
+        "compressed_bytes": 58513
+      },
+      "rsl_error": {
+        "path": "rsl.error.0000",
+        "sha256": "ac0fbe69d1a0c01d9f5d87a0982f720fcad760464b22ae3f646a2df68b653544",
+        "bytes": 45152,
+        "compressed_path": "rsl.error.0000.gz",
+        "compressed_sha256": "cf4f7c1058d2e293a12aef32338b526d57a61c2a37cccb4a482de002bd3a31ea",
+        "compressed_bytes": 2413
+      },
+      "runtime_reference_manifest": {
+        "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v15_20261016/run/runtime_reference_manifest.json",
+        "bytes": 5847,
+        "sha256": "a0ef389fef3a6221c98862c7e05a498397b12cc38186613a811c5ff2b2b09b2f"
+      },
+      "archived_files": {
+        "COUPLED_receipt.json": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/COUPLED_receipt.json",
+          "bytes": 48690,
+          "sha256": "b0afec063e3b6b1e5aaa597df0cdf7eaaaf2523bcf243964a06e5e7805a9f05f"
+        },
+        "COUPLED_preflight.json": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/COUPLED_preflight.json",
+          "bytes": 12736,
+          "sha256": "964bbb649be685ac5b438a04db117115799ad8b0ba340cab51f5aa3920fa0d94"
+        },
+        "COUPLED_runtime_reference_manifest.json": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/COUPLED_runtime_reference_manifest.json",
+          "bytes": 5847,
+          "sha256": "a0ef389fef3a6221c98862c7e05a498397b12cc38186613a811c5ff2b2b09b2f"
+        },
+        "COUPLED_cloud_cycle.log": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/COUPLED_cloud_cycle.log",
+          "bytes": 2014,
+          "sha256": "b6e3822d0b32de98c69c78d38f3cec0463966fdb882af3b06a976adf6842fed9"
+        },
+        "COUPLED_rsl.error.0000.gz": {
+          "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v15_20261016/runtime/COUPLED_rsl.error.0000.gz",
+          "bytes": 2413,
+          "sha256": "cf4f7c1058d2e293a12aef32338b526d57a61c2a37cccb4a482de002bd3a31ea"
+        }
+      }
+    }
+  },
+  "runtime_events": {
+    "OFF": {
+      "cloud_cycle_log_path": "runtime/OFF_cloud_cycle.log",
+      "cloud_cycle_log_sha256": "b6e3822d0b32de98c69c78d38f3cec0463966fdb882af3b06a976adf6842fed9",
+      "last_cloud_events": [
+        "PR87_CLOUD STEP_BEGIN 2 1 234 1 282 1 39 0 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+        "PR87_FIRST STEP_BEGIN 2 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+        "PR87_PROBE STEP_BEGIN 2 230 70 3   8.4692146629095078E-09   2.0218758750000000E+06 32118000 49F6CF9F",
+        "PR87_CLOUD FOGDES_INPUT 2 1 234 1 282 1 39 0 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+        "PR87_FIRST FOGDES_INPUT 2 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+        "PR87_PROBE FOGDES_INPUT 2 230 70 3   8.4692146629095078E-09   2.0218758750000000E+06 32118000 49F6CF9F"
+      ],
+      "interpretation": "step 1 POST_KDM6 and STEP_END observed; step 2 STEP_BEGIN and FOGDES_INPUT observed; second timestep did not complete"
+    },
+    "COUPLED": {
+      "cloud_cycle_log_path": "runtime/COUPLED_cloud_cycle.log",
+      "cloud_cycle_log_sha256": "b6e3822d0b32de98c69c78d38f3cec0463966fdb882af3b06a976adf6842fed9",
+      "last_cloud_events": [
+        "PR87_CLOUD STEP_BEGIN 2 1 234 1 282 1 39 0 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+        "PR87_FIRST STEP_BEGIN 2 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+        "PR87_PROBE STEP_BEGIN 2 230 70 3   8.4692146629095078E-09   2.0218758750000000E+06 32118000 49F6CF9F",
+        "PR87_CLOUD FOGDES_INPUT 2 1 234 1 282 1 39 0 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+        "PR87_FIRST FOGDES_INPUT 2 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+        "PR87_PROBE FOGDES_INPUT 2 230 70 3   8.4692146629095078E-09   2.0218758750000000E+06 32118000 49F6CF9F"
+      ],
+      "interpretation": "step 1 POST_KDM6 and STEP_END observed; step 2 STEP_BEGIN and FOGDES_INPUT observed; second timestep did not complete"
+    }
+  },
+  "source_failure_rows": {
+    "path": "runtime/full_failure_rows.json",
+    "sha256": "1cbc6683c3c995707acd3f19027b137bbf022e81058c57002db74bdd57c1b5fa",
+    "rows": 131,
+    "timestep": 2,
+    "rk": 1,
+    "pair": 3,
+    "note": "FULL-candidate rain rejections; separate source/air numerical audit is owned by another reviewer"
+  }
+}

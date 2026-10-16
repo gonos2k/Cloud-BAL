@@ -1,0 +1,47 @@
+{
+  "schema": "pr87_v10_second_call_rain_freezing_source_review_v1",
+  "status": "SOURCE_REVIEW_ONLY",
+  "candidate": "v10",
+  "run_arm": "OFF",
+  "timestep": 2,
+  "coordinate": {"i": 114, "j": 2, "k": 18, "kdm6_loop": 1},
+  "pre_kdm6": {
+    "stage": "PRE_KDM6",
+    "q_rain_kg_per_kg_dry": 8.150976005261157e-10,
+    "n_rain_host_number_per_kg_dry": 2.780961751937866,
+    "dry_density_kg_per_m3": 0.6247655153274536,
+    "mean_particle_mass_kg": 2.9309917692e-10,
+    "lower_bound_kg": 2.9309320335e-10,
+    "cone_status": "inside_lower_bound"
+  },
+  "freezing_packet": {
+    "path": "/var/tmp/pr87_joint_OFF_40s_v10_20261016/run/pr85_rain_freezing_budget.raw.gz",
+    "row": "PR85_RAIN_FREEZE 114 2 18 1 FF",
+    "q_rain_kg_per_kg_dry": 7.9431267119289828e-10,
+    "n_rain_number_per_m3": 1.7165578603744507,
+    "dry_density_kg_per_m3": 0.625029444694519,
+    "mean_particle_mass_kg": 2.8910133e-10,
+    "lower_bound_kg": 2.9309320335e-10,
+    "base_valid": false,
+    "accepted": false
+  },
+  "trace_limitation": {
+    "first_call_trace_only": true,
+    "source": "/var/tmp/pr87_joint_cycle_sources_20261016_v10/module_mp_kdm6.F",
+    "source_sha256": "dc0e9c20997f8fb34a6a164a707338a4a5d8817acbaab5a64efcb842e61e38d2",
+    "guard_locations": {
+      "pr67_trace_this_call_assignment_line": 1337,
+      "pr67_trace_complete_saved_flag_set_line": 1589,
+      "cutoff_rows_written_at_loop_end_line": 5719
+    },
+    "meaning": "First-call cutoff rows do not establish second-call pre-state. No per-process second-call snapshot captures the state between call entry and the rain-freezing packet."
+  },
+  "source_path_review": {
+    "host_number_conversion": "Wrapper converts host number-per-kg-dry to internal number-per-m3 before the 2-D KDM6 call.",
+    "rain_sedimentation": "Internal QR and NR are independently updated by mass and number sedimentation fluxes at module_mp_kdm6.F lines 2537-2561.",
+    "other_pre_freeze_candidates": "At recorded T≈269.995 K the melt branches are inactive. The sub-qcrmin rain pair does not enter the PSD boundary-number correction.",
+    "conclusion": "PRE_KDM6 pair is valid; the freezing-time internal pair is below the lower cone bound. Sedimentation lies in the source interval and changes both moments, but captured evidence does not prove the exact incremental source of the cone crossing. Do not claim the second-call cell began empty or invalid."
+  },
+  "science_status": "OPEN",
+  "runtime_acceptance_status": "NOT_ASSESSED_BY_THIS_SOURCE_REVIEW"
+}

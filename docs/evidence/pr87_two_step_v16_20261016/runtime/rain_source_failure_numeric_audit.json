@@ -1,0 +1,371 @@
+{
+  "arms": {
+    "COUPLED": {
+      "air_tendency_capture": {
+        "interpretation": "The V16 ledger preserves the actual R64 tendency values at the failure probe precision; listed values are Fortran formatted decimals.",
+        "representation": "REAL64 values emitted directly from air_tendency in V16; no REAL32 casts or R32 rounding-bin inference used."
+      },
+      "arm": "COUPLED",
+      "continuous_specific_mass_ratio": {
+        "air_tendency_only": {
+          "above_upper": 0,
+          "below_lower": 0,
+          "exact_cone_outside": 0,
+          "lower_8ulp_absolute_tolerance": 2.220446049250313e-16,
+          "maximum_ratio_over_lower_bound": 2.930932085408865e-10,
+          "maximum_relative_to_lower": 1.7701252463808714e-08,
+          "minimum_ratio_over_lower_bound": 2.9309320377316317e-10,
+          "minimum_relative_to_lower": 1.4343337628730524e-09,
+          "n": 12,
+          "outside_8_float32_ulp_tolerance": 0,
+          "outside_exact_but_within_8_ulp": 0,
+          "upper_8ulp_absolute_tolerance": 7.275957614183426e-12
+        },
+        "combined_source_plus_direct_r64_air": {
+          "above_upper": 2,
+          "below_lower": 55,
+          "exact_cone_outside": 57,
+          "lower_8ulp_absolute_tolerance": 2.220446049250313e-16,
+          "maximum_ratio_over_lower_bound": 1.415923315044405e-05,
+          "maximum_relative_to_lower": 48308.66050550775,
+          "minimum_ratio_over_lower_bound": 2.930931767219343e-10,
+          "minimum_relative_to_lower": -9.086132013447212e-08,
+          "n": 65,
+          "outside_8_float32_ulp_tolerance": 0,
+          "outside_exact_but_within_8_ulp": 57,
+          "upper_8ulp_absolute_tolerance": 7.275957614183426e-12
+        },
+        "source_weighted_no_air": {
+          "above_upper": 2,
+          "below_lower": 58,
+          "exact_cone_outside": 60,
+          "lower_8ulp_absolute_tolerance": 2.220446049250313e-16,
+          "maximum_ratio_over_lower_bound": 1.4159233150444041e-05,
+          "maximum_relative_to_lower": 48308.66050550772,
+          "minimum_ratio_over_lower_bound": 2.930931767219341e-10,
+          "minimum_relative_to_lower": -9.086132068958364e-08,
+          "n": 63,
+          "outside_8_float32_ulp_tolerance": 0,
+          "outside_exact_but_within_8_ulp": 60,
+          "upper_8ulp_absolute_tolerance": 7.275957614183426e-12
+        }
+      },
+      "first_post_state_crosscheck": {
+        "both_zero": 65,
+        "cells": 65,
+        "interpretation": "compares prior timestep POST_KDM6 QR/NR with each step-2 RK1 failure base at matching i,j,k; does not substitute for step-2 PRE_RK state",
+        "mismatch_vs_failure_base": 0,
+        "missing_stage_cells": [],
+        "n_zero": 65,
+        "post_record_count": 1,
+        "q_zero": 65
+      },
+      "full_rows": 65,
+      "native_r32_coefficients": {
+        "exact_lower_mean_mass": 2.9309320335276967e-10,
+        "exact_upper_mean_mass": 1.4159232646326343e-05,
+        "lambda_max": 35000.0,
+        "lambda_min": 961.0,
+        "lower_8_ulp_tolerance": 2.220446049250313e-16,
+        "pidnr": 12566.37109375,
+        "power": 3.0,
+        "upper_8_ulp_tolerance": 7.275957614183426e-12
+      },
+      "rate_sign_counts": {
+        "air_only": {
+          "negative": 0,
+          "positive": 12,
+          "zero": 53
+        },
+        "combined": {
+          "negative": 0,
+          "positive": 65,
+          "zero": 0
+        },
+        "source_only": {
+          "negative": 0,
+          "positive": 63,
+          "zero": 2
+        }
+      },
+      "record_precision_checks": {
+        "combined_ratio_matches_qfull_over_nfull_from_printed_rates": {
+          "all_within_1e-14": true,
+          "max_absolute_relative_difference": 4.107825191113079e-15
+        },
+        "full_qn_ratio_uses_printed_candidate_fields_because_dt_text_is_coarse": true,
+        "full_writer_sentinel_invalid_stored_pair_count": 65,
+        "source_rate_tokens_identify_real32_values": true,
+        "starting_pair_is_zero_for_all_full_rows": true
+      },
+      "recorded_rate_token_checks": {
+        "air_qn_are_direct_real64_tendencies_in_v16_source": true,
+        "air_qn_decimal_token_is_used_as_reported_real64": true,
+        "full_rows": 65,
+        "meaning": "The ledger decimal text is rounded; these checks allow at most half a unit in its last printed decimal digit before confirming the token identifies its declared REAL32 value.",
+        "source_and_air_rates_are_declared_real32_widened_in_v16_source": true,
+        "source_qn_tokens_round_to_real32": {
+          "ns": 65,
+          "qs": 65
+        }
+      },
+      "relative_margin_summary": {
+        "air_tendency_only": {
+          "max": 1.7701252463808714e-08,
+          "mean": 7.160059674789683e-09,
+          "min": 1.4343337628730524e-09
+        },
+        "combined_minus_source_ratio_relative": {
+          "max": 7.129242085568421e-08,
+          "mean": 2.821506185657176e-10,
+          "min": -9.296980918449549e-08
+        },
+        "combined_source_plus_direct_r64_air": {
+          "max": 48308.66050550775,
+          "mean": 1486.4203147398139,
+          "min": -9.086132013447212e-08
+        },
+        "source_weighted_no_air": {
+          "max": 48308.66050550772,
+          "mean": 1533.6082612389596,
+          "min": -9.086132068958364e-08
+        }
+      },
+      "scope": {
+        "pair_index": 3,
+        "pair_name": "rain",
+        "rk": 1,
+        "timestep": 2
+      },
+      "source_air_pair_overlap": {
+        "both_nonzero": 10,
+        "mixed_sign_component": 0,
+        "source_nonzero_air_zero": 53,
+        "source_zero_air_nonzero": 2,
+        "source_zero_air_zero": 0
+      }
+    },
+    "OFF": {
+      "air_tendency_capture": {
+        "interpretation": "The V16 ledger preserves the actual R64 tendency values at the failure probe precision; listed values are Fortran formatted decimals.",
+        "representation": "REAL64 values emitted directly from air_tendency in V16; no REAL32 casts or R32 rounding-bin inference used."
+      },
+      "arm": "OFF",
+      "continuous_specific_mass_ratio": {
+        "air_tendency_only": {
+          "above_upper": 0,
+          "below_lower": 0,
+          "exact_cone_outside": 0,
+          "lower_8ulp_absolute_tolerance": 2.220446049250313e-16,
+          "maximum_ratio_over_lower_bound": 2.930932085408865e-10,
+          "maximum_relative_to_lower": 1.7701252463808714e-08,
+          "minimum_ratio_over_lower_bound": 2.9309320377316317e-10,
+          "minimum_relative_to_lower": 1.4343337628730524e-09,
+          "n": 12,
+          "outside_8_float32_ulp_tolerance": 0,
+          "outside_exact_but_within_8_ulp": 0,
+          "upper_8ulp_absolute_tolerance": 7.275957614183426e-12
+        },
+        "combined_source_plus_direct_r64_air": {
+          "above_upper": 2,
+          "below_lower": 55,
+          "exact_cone_outside": 57,
+          "lower_8ulp_absolute_tolerance": 2.220446049250313e-16,
+          "maximum_ratio_over_lower_bound": 1.415923315044405e-05,
+          "maximum_relative_to_lower": 48308.66050550775,
+          "minimum_ratio_over_lower_bound": 2.930931767219343e-10,
+          "minimum_relative_to_lower": -9.086132013447212e-08,
+          "n": 65,
+          "outside_8_float32_ulp_tolerance": 0,
+          "outside_exact_but_within_8_ulp": 57,
+          "upper_8ulp_absolute_tolerance": 7.275957614183426e-12
+        },
+        "source_weighted_no_air": {
+          "above_upper": 2,
+          "below_lower": 58,
+          "exact_cone_outside": 60,
+          "lower_8ulp_absolute_tolerance": 2.220446049250313e-16,
+          "maximum_ratio_over_lower_bound": 1.4159233150444041e-05,
+          "maximum_relative_to_lower": 48308.66050550772,
+          "minimum_ratio_over_lower_bound": 2.930931767219341e-10,
+          "minimum_relative_to_lower": -9.086132068958364e-08,
+          "n": 63,
+          "outside_8_float32_ulp_tolerance": 0,
+          "outside_exact_but_within_8_ulp": 60,
+          "upper_8ulp_absolute_tolerance": 7.275957614183426e-12
+        }
+      },
+      "first_post_state_crosscheck": {
+        "both_zero": 65,
+        "cells": 65,
+        "interpretation": "compares prior timestep POST_KDM6 QR/NR with each step-2 RK1 failure base at matching i,j,k; does not substitute for step-2 PRE_RK state",
+        "mismatch_vs_failure_base": 0,
+        "missing_stage_cells": [],
+        "n_zero": 65,
+        "post_record_count": 1,
+        "q_zero": 65
+      },
+      "full_rows": 65,
+      "native_r32_coefficients": {
+        "exact_lower_mean_mass": 2.9309320335276967e-10,
+        "exact_upper_mean_mass": 1.4159232646326343e-05,
+        "lambda_max": 35000.0,
+        "lambda_min": 961.0,
+        "lower_8_ulp_tolerance": 2.220446049250313e-16,
+        "pidnr": 12566.37109375,
+        "power": 3.0,
+        "upper_8_ulp_tolerance": 7.275957614183426e-12
+      },
+      "rate_sign_counts": {
+        "air_only": {
+          "negative": 0,
+          "positive": 12,
+          "zero": 53
+        },
+        "combined": {
+          "negative": 0,
+          "positive": 65,
+          "zero": 0
+        },
+        "source_only": {
+          "negative": 0,
+          "positive": 63,
+          "zero": 2
+        }
+      },
+      "record_precision_checks": {
+        "combined_ratio_matches_qfull_over_nfull_from_printed_rates": {
+          "all_within_1e-14": true,
+          "max_absolute_relative_difference": 4.107825191113079e-15
+        },
+        "full_qn_ratio_uses_printed_candidate_fields_because_dt_text_is_coarse": true,
+        "full_writer_sentinel_invalid_stored_pair_count": 65,
+        "source_rate_tokens_identify_real32_values": true,
+        "starting_pair_is_zero_for_all_full_rows": true
+      },
+      "recorded_rate_token_checks": {
+        "air_qn_are_direct_real64_tendencies_in_v16_source": true,
+        "air_qn_decimal_token_is_used_as_reported_real64": true,
+        "full_rows": 65,
+        "meaning": "The ledger decimal text is rounded; these checks allow at most half a unit in its last printed decimal digit before confirming the token identifies its declared REAL32 value.",
+        "source_and_air_rates_are_declared_real32_widened_in_v16_source": true,
+        "source_qn_tokens_round_to_real32": {
+          "ns": 65,
+          "qs": 65
+        }
+      },
+      "relative_margin_summary": {
+        "air_tendency_only": {
+          "max": 1.7701252463808714e-08,
+          "mean": 7.160059674789683e-09,
+          "min": 1.4343337628730524e-09
+        },
+        "combined_minus_source_ratio_relative": {
+          "max": 7.129242085568421e-08,
+          "mean": 2.821506185657176e-10,
+          "min": -9.296980918449549e-08
+        },
+        "combined_source_plus_direct_r64_air": {
+          "max": 48308.66050550775,
+          "mean": 1486.4203147398139,
+          "min": -9.086132013447212e-08
+        },
+        "source_weighted_no_air": {
+          "max": 48308.66050550772,
+          "mean": 1533.6082612389596,
+          "min": -9.086132068958364e-08
+        }
+      },
+      "scope": {
+        "pair_index": 3,
+        "pair_name": "rain",
+        "rk": 1,
+        "timestep": 2
+      },
+      "source_air_pair_overlap": {
+        "both_nonzero": 10,
+        "mixed_sign_component": 0,
+        "source_nonzero_air_zero": 53,
+        "source_zero_air_nonzero": 2,
+        "source_zero_air_zero": 0
+      }
+    }
+  },
+  "build_receipt_sha256": "76683e7edd31a057503246fc0ed619fcfba3ce943d0251fc9c792df58dbbfe60",
+  "first_post_stage": {
+    "COUPLED": {
+      "bytes": 396668335,
+      "compressed_sha256": "7ec76370a022d0c59e38bd87537cec12ed207bb4a61c7b70897946f66b0bcb64",
+      "matched_cell_count": 65,
+      "missing_cells": [],
+      "path": "/var/tmp/pr87_joint_COUPLED_40s_v16_20261016/run/pr85_joint_moment_stages.raw.gz",
+      "post_kdm6_step1_records": 1,
+      "target_cell_count": 65
+    },
+    "OFF": {
+      "bytes": 396667952,
+      "compressed_sha256": "47f8d3d2604c6d4f5842878a40097ad1f5ba69c64ab7ebdcedff120a2eb44c62",
+      "matched_cell_count": 65,
+      "missing_cells": [],
+      "path": "/var/tmp/pr87_joint_OFF_40s_v16_20261016/run/pr85_joint_moment_stages.raw.gz",
+      "post_kdm6_step1_records": 1,
+      "target_cell_count": 65
+    },
+    "off_coupled_hash_match": false
+  },
+  "interpretation_limits": [
+    "The diagnosis is only for emitted p3 FULL failures at timestep 2/RK1.",
+    "Each recorded starting QR/NR is zero; ratios of source and air terms cancel the common positive dt/new-carrier factor.",
+    "Air rates in the failure record are widened REAL32 casts of REAL64 air_tendency outputs. The actual unrounded rates cannot be recovered from this ledger.",
+    "Independent cast-bin interval results are possibility bounds, not proof of the actual air_tendency pair.",
+    "No global kg totals or completed 40-second run claim."
+  ],
+  "kdm6_source_sha256": "cacefe3d99d744c26203068791e83a991fa6db2d6e33a5a4ba950fa4f24fe738",
+  "parser_contract": {
+    "list_directed_full_numeric_fields": 20,
+    "source_failure_full_records": 65,
+    "source_failure_other_source_records": 582,
+    "wrapped_physical_lines_joined_until_next_record_tag": true
+  },
+  "physical_mean_mass_ratio": "Q/N, native source contract kg per particle (dry-specific number); lower=PIDNR/lambda_max^power, upper=PIDNR/lambda_min^power",
+  "receipts": {
+    "COUPLED": {
+      "candidate_build_receipt_sha256": "76683e7edd31a057503246fc0ed619fcfba3ce943d0251fc9c792df58dbbfe60",
+      "candidate_executable_sha256": "0886693c1355e195620cbc845c3381cd30d09ec64f28e48f21af031e690beb29",
+      "path": "/var/tmp/pr87_joint_COUPLED_40s_v16_20261016/receipt.json",
+      "returncode": 1,
+      "sha256": "ab54a3e503ce69c93e98c386828025da999acd834cc199f7b2dce26f3995b667",
+      "status": "INCOMPLETE"
+    },
+    "OFF": {
+      "candidate_build_receipt_sha256": "76683e7edd31a057503246fc0ed619fcfba3ce943d0251fc9c792df58dbbfe60",
+      "candidate_executable_sha256": "0886693c1355e195620cbc845c3381cd30d09ec64f28e48f21af031e690beb29",
+      "path": "/var/tmp/pr87_joint_OFF_40s_v16_20261016/receipt.json",
+      "returncode": 1,
+      "sha256": "c8707fe3c3b2b31ae22cdc2a53f37f3acc1b3f7505d546baffb01abd3e5413fe",
+      "status": "INCOMPLETE"
+    }
+  },
+  "run_arms": "OFF and COUPLED each closed INCOMPLETE with returncode 1; ledger rows were byte-identical",
+  "schema": "pr87_v16_rain_source_failure_numeric_audit_v1",
+  "scope": "closed V16 first failure only; no physics change; no promotion of incomplete 40-second run",
+  "source_emitter_module_em_pr85_sha256": "7052f067b3c84cb247b8245ce8979064c63577dd7aaa851cc6db191aff095f51",
+  "source_failure_ledgers": {
+    "COUPLED": {
+      "bytes": 51988,
+      "compressed_sha256": "42588e2eb65a9882efe801acc2a7dfb427f123f284b3797fbd9d22f8f9528b08",
+      "full_count": 65,
+      "parsed_full_count": 65,
+      "path": "/var/tmp/pr87_joint_COUPLED_40s_v16_20261016/run/pr85_joint_source_failure.raw.gz",
+      "source_count": 582
+    },
+    "OFF": {
+      "bytes": 51988,
+      "compressed_sha256": "42588e2eb65a9882efe801acc2a7dfb427f123f284b3797fbd9d22f8f9528b08",
+      "full_count": 65,
+      "parsed_full_count": 65,
+      "path": "/var/tmp/pr87_joint_OFF_40s_v16_20261016/run/pr85_joint_source_failure.raw.gz",
+      "source_count": 582
+    }
+  }
+}

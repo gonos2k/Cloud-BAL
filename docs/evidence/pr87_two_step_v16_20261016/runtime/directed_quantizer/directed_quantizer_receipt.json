@@ -1,0 +1,136 @@
+{
+  "algorithm_scope": "After original store rejects, hold ordinary R32 N fixed. Form feasible Q interval from both R64 and R32 products N*rho plus strict specific-mass bounds; clamp q64, round to R32 and direct at most one neighbor into interval. If unchanged store validator still rejects due endpoint arithmetic, try one additional neighbor toward q64, still inside interval. Accept only unchanged validator success, exact unchanged N, and zero adjustment.",
+  "caller": {
+    "sha256": "cf5d451c83c883a1b14e6adbd6d097312fa503762acb00ec0ead5e5c6cff04af"
+  },
+  "compiler": {
+    "imf_sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8",
+    "intlc_sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "profile_path": "tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "compiler_flags": {
+    "O0": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "O2": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ]
+  },
+  "files": {
+    "O0_compile_log": {
+      "bytes": 748,
+      "decoded_bytes": 3207,
+      "decoded_sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126",
+      "path": "O0_compile.log.gz",
+      "sha256": "0e6583f00e3e4bcb3fc7ee1bb56162560373573c177900de803601fbc61973e3"
+    },
+    "O0_stdout": {
+      "bytes": 1030,
+      "decoded_bytes": 3028,
+      "decoded_sha256": "88759b2d1940b1a52ac93298068345b2e0873ac9a4bcdc1921202d1adeeea0b5",
+      "path": "O0_stdout.txt.gz",
+      "sha256": "ca5952a0462a45002fbf10575997420dbc7a09af370c6caf0611ec503de5cfba"
+    },
+    "O2_compile_log": {
+      "bytes": 748,
+      "decoded_bytes": 3207,
+      "decoded_sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126",
+      "path": "O2_compile.log.gz",
+      "sha256": "0e6583f00e3e4bcb3fc7ee1bb56162560373573c177900de803601fbc61973e3"
+    },
+    "O2_stdout": {
+      "bytes": 1030,
+      "decoded_bytes": 3028,
+      "decoded_sha256": "88759b2d1940b1a52ac93298068345b2e0873ac9a4bcdc1921202d1adeeea0b5",
+      "path": "O2_stdout.txt.gz",
+      "sha256": "ca5952a0462a45002fbf10575997420dbc7a09af370c6caf0611ec503de5cfba"
+    },
+    "caller": {
+      "bytes": 2751,
+      "decoded_bytes": 9334,
+      "decoded_sha256": "cf5d451c83c883a1b14e6adbd6d097312fa503762acb00ec0ead5e5c6cff04af",
+      "path": "directed_quantizer_probe.f90.gz",
+      "sha256": "a639a978aede2453355a3bc3141bf80a8083ee12006b004c5f678e1eb329f7b9"
+    },
+    "source_module": {
+      "bytes": 4240,
+      "decoded_bytes": 24199,
+      "decoded_sha256": "ffdce6170547fd0416d6073d4542a6a7e6dc4c316d4d04f4dc76a117a58efe19",
+      "path": "cloud_bal_joint_transport.f90.gz",
+      "sha256": "49a174dd45a80843b07572d71a5a8f75c8400e4874ca7811ad3213237bc95f24"
+    },
+    "summarizer": {
+      "bytes": 2779,
+      "decoded_bytes": 7082,
+      "decoded_sha256": "5bfeefe82494558cad40b69b8490527b2e04588862ba15a71d7fe6db2db87b78",
+      "path": "summarize_directed.py.gz",
+      "sha256": "1af7741d296f2e3deff07c750e176554d5234c4967715fb46e46dcffb345f1c3"
+    }
+  },
+  "limitations": "Interval endpoint division/multiplication is finite-precision R64 arithmetic. The selected value is always rechecked by the unchanged store validator; one bounded extra neighbor is allowed only inside the computed interval. If rounding still prevents acceptance, the routine rejects. This prototype does not prove endpoint arithmetic for all possible inputs.",
+  "prior_audit_binding": {
+    "path": "../quantizer_limiter/audit.json",
+    "sha256": "5efe06f68e8a9413bcfe3a67aceb51c2308ff13a989a45ee1f6c1bb6e08da74a"
+  },
+  "result": {
+    "all_selected_plus_two_neighbor": true,
+    "candidate_count": 8,
+    "directed_acceptances": 8,
+    "unchanged_controls_valid": true
+  },
+  "runs": {
+    "O0": {
+      "compile_log_sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126",
+      "executable_sha256": "52172ef1971ecc885f5a1c24e3f286d75b21e574afda7db54388a6d45170b3c2",
+      "exit_status": 0,
+      "fresh_scratch_path": "/var/tmp/pr87_v16_quantizer_probe/directed_final_O0",
+      "stdout_sha256": "88759b2d1940b1a52ac93298068345b2e0873ac9a4bcdc1921202d1adeeea0b5"
+    },
+    "O2": {
+      "compile_log_sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126",
+      "executable_sha256": "d0605955c4492707893026b1492d5e2dadb0da0f28aa4c4fdfd7699e67e13c38",
+      "exit_status": 0,
+      "fresh_scratch_path": "/var/tmp/pr87_v16_quantizer_probe/directed_final_O2",
+      "stdout_sha256": "88759b2d1940b1a52ac93298068345b2e0873ac9a4bcdc1921202d1adeeea0b5"
+    }
+  },
+  "runs_byte_identical_stdout": true,
+  "runtime_inputs": {
+    "PRE_RK_stage_gz_sha256": "47f8d3d2604c6d4f5842878a40097ad1f5ba69c64ab7ebdcedff120a2eb44c62",
+    "source_failure_raw_sha256": "42588e2eb65a9882efe801acc2a7dfb427f123f284b3797fbd9d22f8f9528b08"
+  },
+  "schema": "pr87_v16_directed_q_quantizer_receipt_v1",
+  "scope": "Isolated exact-module caller only; no production kernel/source edits and no native rerun.",
+  "source_module": {
+    "bytes": 24199,
+    "generated_module_em_pr85_sha256": "7052f067b3c84cb247b8245ce8979064c63577dd7aaa851cc6db191aff095f51",
+    "matches_v16_generated_module_prefix": true,
+    "sha256": "ffdce6170547fd0416d6073d4542a6a7e6dc4c316d4d04f4dc76a117a58efe19"
+  }
+}

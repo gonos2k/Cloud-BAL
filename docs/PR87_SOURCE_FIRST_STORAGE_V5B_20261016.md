@@ -1,0 +1,9 @@
+# PR87 v5b Source-First Storage Run Evidence — 2026-10-16
+
+The actual OFF and COUPLED v5b launches both emitted first-timestep `JOINT_STORAGE` diagnostics at RK 1–3, then ended before any timestep completed. Both receipts are `INCOMPLETE` with return code 128; their `rsl.error.0000` tails report `ProgB transient PSD state rejected`. These records are partial actual-run evidence, not a completed 40-second comparison or a committed model timestep.
+
+The paired native joint-transport ledger records 2,533,440 cells, theta=1.0, and feasible=T at RK 1–3 in both arms; rejected pressure-coordinate Q and moment are zero. This ledger has no separate alpha field. At RK 1 and 2, both arms report zero storage adjustments for all four pair indices. At RK 3, OFF reports 6,649 adjustments for pair 1 and 10,333 for pair 2; COUPLED reports 6,639 and 10,334. The emitted `STORED_PAIR` row counts match the corresponding header counts for every step/RK/pair, with no duplicate coordinates. Pair 1 spans i=2–233, j=2–281, k=1–33; pair 2 spans the same i/j bounds and k=1–39. Every emitted row has positive proposal Q and moment values stored as zero. Signed pressure-coordinate storage deltas are included per RK and pair in the evidence JSON; they are not converted to kilograms or interpreted as energy closure.
+
+The candidate first-call pre-state hashes differ from the corresponding saved v17 hashes. No candidate first-call post-state snapshot was emitted before failure, so the candidate pre/post comparison is incomplete. The evidence JSON binds run, preflight, build, source manifest, and raw ledger hashes. Launcher output files are hashed, but launch-time source provenance is absent.
+
+See [the compact evidence record](evidence/pr87_source_first_storage_v5b_20261016.json) for arm-specific hashes, step/RK/pair deltas, storage adjustment reconciliation, and scope.
