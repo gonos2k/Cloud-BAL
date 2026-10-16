@@ -1,0 +1,739 @@
+{
+  "arms": {
+    "COUPLED": {
+      "active_bounds": {
+        "ite": 233,
+        "its": 2,
+        "jte": 281,
+        "jts": 2,
+        "kte": 39,
+        "kts": 1
+      },
+      "arm": "COUPLED",
+      "identity": {
+        "first_call_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+        "ledger_files": {
+          "pr85_graupel_sedimentation_budget.raw": {
+            "bytes": 26169586,
+            "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_graupel_sedimentation_budget.raw",
+            "sha256": "afb2c433c28eb86974b5366f739734f1c4bf50a5ae910a3e14c7e2539b51de1d"
+          },
+          "pr85_ice_sedimentation_budget.raw": {
+            "bytes": 21678440,
+            "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_ice_sedimentation_budget.raw",
+            "sha256": "212b559c6a27d473a947efdad00d1f14997e1f6d2d19bd109a9610117b982102"
+          },
+          "pr85_kdm6_cold_budget.raw": {
+            "bytes": 7939324008,
+            "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_kdm6_cold_budget.raw",
+            "sha256": "8cbc7bea93465962ca6d11f652d060b1fa5295e53c3d6624a29d12587606298e"
+          },
+          "pr85_kdm6_warm_budget.raw": {
+            "bytes": 2802031008,
+            "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_kdm6_warm_budget.raw",
+            "sha256": "86c1b0a69f7e687c58bd93aa6db52c57c04cb3cba946ee05f9d620872d0934a7"
+          },
+          "pr85_rain_freezing_budget.raw": {
+            "bytes": 7705813,
+            "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_rain_freezing_budget.raw",
+            "sha256": "3d884cbdda67369f8f71ce82dccd0afae5d38d3bc1a24ba7dd42b8b158cd2148"
+          }
+        }
+      },
+      "limitations": [
+        "Frozen PR85 v17 first-call records only; no model reruns or physics changes.",
+        "Weighted process vectors measure source-logged candidate activity and suppression, not a complete physical water, number, carrier, or energy closure.",
+        "The cold temperature ledger has no source-matched heat capacity term; its heat quantities remain K kg diagnostics.",
+        "The warm cpm-weighted temperature diagnostic omits full total-enthalpy terms and is not an energy closure.",
+        "The geometry uses captured first-call DEN and DELZ with initial-wrfout MAPFAC_M area; same-call hybrid MU geometry was not captured."
+      ],
+      "process_activity": {
+        "AUT": {
+          "count_number": {
+            "applied": 1.9832826626748997e+18,
+            "applied_over_proposed": 0.022100152238845126,
+            "deferred": 8.775739609550995e+19,
+            "deferred_over_proposed": 0.9778998477098664,
+            "proposed": 8.974067876278752e+19
+          },
+          "heat_abs": {
+            "applied": 0.0,
+            "applied_over_proposed": null,
+            "deferred": 0.0,
+            "deferred_over_proposed": null,
+            "proposed": 0.0
+          },
+          "heat_signed": {
+            "applied": 0.0,
+            "applied_over_proposed": null,
+            "deferred": 0.0,
+            "deferred_over_proposed": null,
+            "proposed": 0.0
+          },
+          "mass_kg": {
+            "applied": 633251328.6852975,
+            "applied_over_proposed": 0.048065498862012716,
+            "deferred": 12541506943.793428,
+            "deferred_over_proposed": 0.9519345012450875,
+            "proposed": 13174758271.067707
+          }
+        },
+        "G": {
+          "count_number": {
+            "applied": 2.3932086730074064e+21,
+            "applied_over_proposed": 0.12404538799602359,
+            "deferred": 1.68997994088429e+22,
+            "deferred_over_proposed": 0.8759546120525027,
+            "proposed": 1.929300808091409e+22
+          },
+          "heat_abs": {
+            "applied": 2527593152009.7554,
+            "applied_over_proposed": 0.14904543005743362,
+            "deferred": 14430948627134.543,
+            "deferred_over_proposed": 0.8509545701838085,
+            "proposed": 16958541775053.184
+          },
+          "heat_signed": {
+            "applied": 2527266049485.014,
+            "applied_over_proposed": 0.14902902030640397,
+            "deferred": 14430948162073.479,
+            "deferred_over_proposed": 0.8509709799348388,
+            "proposed": 16958214207467.445
+          },
+          "mass_kg": {
+            "applied": 7732782462.329261,
+            "applied_over_proposed": 0.14912257286101221,
+            "deferred": 44122428423.70895,
+            "deferred_over_proposed": 0.8508774273002655,
+            "proposed": 51855210877.67512
+          }
+        },
+        "NG": {
+          "count_number": {
+            "applied": 1.7607865705163848e+22,
+            "applied_over_proposed": 0.7070054967828879,
+            "deferred": 7.296984092027999e+21,
+            "deferred_over_proposed": 0.2929945031036957,
+            "proposed": 2.4904849800016467e+22
+          },
+          "heat_abs": {
+            "applied": 49271750257197.13,
+            "applied_over_proposed": 0.8403497701087355,
+            "deferred": 9360681144285.299,
+            "deferred_over_proposed": 0.15965022972798296,
+            "proposed": 58632431411056.03
+          },
+          "heat_signed": {
+            "applied": 22280339681998.523,
+            "applied_over_proposed": 0.7327001144978262,
+            "deferred": 8128198877378.211,
+            "deferred_over_proposed": 0.2672998855994961,
+            "proposed": 30408538556417.305
+          },
+          "mass_kg": {
+            "applied": 70028812497.25565,
+            "applied_over_proposed": 0.7567519109650053,
+            "deferred": 22509853686.373974,
+            "deferred_over_proposed": 0.24324808868312214,
+            "proposed": 92538666216.19144
+          }
+        },
+        "WARM": {
+          "count_number": {
+            "applied": 8.01917536119426e+21,
+            "applied_over_proposed": 0.9999999898690567,
+            "deferred": 81241815840853.56,
+            "deferred_over_proposed": 1.0130943813865963e-08,
+            "proposed": 8.019175442436072e+21
+          },
+          "heat_abs": {
+            "applied": 5745410281940535.0,
+            "applied_over_proposed": 0.9999999982551419,
+            "deferred": 10024922.540248154,
+            "deferred_over_proposed": 1.7448575525175773e-09,
+            "proposed": 5745410291965461.0
+          },
+          "heat_signed": {
+            "applied": -5737405372594173.0,
+            "applied_over_proposed": null,
+            "deferred": -10024922.540248154,
+            "deferred_over_proposed": null,
+            "proposed": -5737405382619099.0
+          },
+          "mass_kg": {
+            "applied": 31411395539.399628,
+            "applied_over_proposed": 0.9999999921893187,
+            "deferred": 245.3443966758295,
+            "deferred_over_proposed": 7.810681141236933e-09,
+            "proposed": 31411395784.74403
+          }
+        }
+      },
+      "rain_freezing": {
+        "absent_graupel_receiver": {
+          "applied_mass_kg": 0.0,
+          "proposed_mass_kg": 417.4123150693066,
+          "records": 7419,
+          "withheld_mass_kg": 417.4123150693066
+        },
+        "activity": {
+          "applied": {
+            "count_number": 74887252.28363203,
+            "mass_kg": 39.29185762376883
+          },
+          "deferred": {
+            "count_number": 850550460.2025186,
+            "mass_kg": 448.9017593059778
+          },
+          "proposed": {
+            "count_number": 925437712.4861507,
+            "mass_kg": 488.19361692974644
+          }
+        },
+        "deferred_count_proposed_ratio": 0.9190791003292371,
+        "deferred_mass_proposed_ratio": 0.9195158308892373,
+        "observed_temperature_increment": {
+          "absolute_Kkg": 0.0,
+          "signed_Kkg": 0.0
+        },
+        "proposed_count_applied_ratio": 0.0809208996707628,
+        "proposed_mass_applied_ratio": 0.08048416911076313,
+        "temperature_limit": "Only observed approved \u0394T is logged; proposed heat cannot be reconstructed because source-matched xlf/cpm are absent from this ledger."
+      },
+      "record_counts": {
+        "cold": 1510488,
+        "rain_freeze": 7729,
+        "warm": 1022952
+      },
+      "run_root": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a",
+      "same_cell_weighting": {
+        "coordinate_mapping": "ledger (i,j,k) maps directly to active call array slot (j-jts,k-kts,i-its)",
+        "count": "MAPFAC_M-area * DELZ; ledger N #/m3 is volume weighted",
+        "mass": "rhoDry * DELZ * MAPFAC_M-area; ledger Q and QV kg/kgdry are dry-mass weighted",
+        "native_hybrid_mass_same_call_capture": false,
+        "rhoDry_crosscheck": "exact REAL32 ledger value equals the same-cell first-call DEN readback"
+      },
+      "sedimentation": {
+        "GRAUPEL": {
+          "applied_mass_over_proposed": 0.9999999999995809,
+          "deferred_mass_over_proposed": 4.192119397465934e-13,
+          "records": 78926,
+          "secondary_inventory": "volume_m3",
+          "values": {
+            "applied": {
+              "count_number": 0.0,
+              "mass_kg": 1580414546.1605673,
+              "second_inventory": 3951036.3799091806
+            },
+            "deferred": {
+              "count_number": 0.0,
+              "mass_kg": 0.0006625286474999812,
+              "second_inventory": 1.6563807985708665e-06
+            },
+            "proposed": {
+              "count_number": 0.0,
+              "mass_kg": 1580414546.1612296,
+              "second_inventory": 3951036.379910837
+            }
+          }
+        },
+        "ICE": {
+          "applied_count_over_proposed": 0.9999999612186776,
+          "applied_mass_over_proposed": 0.99999999183362,
+          "deferred_count_over_proposed": 3.8781328841066884e-08,
+          "deferred_mass_over_proposed": 8.16638238697522e-09,
+          "records": 64960,
+          "secondary_inventory": "count_number",
+          "values": {
+            "applied": {
+              "count_number": 9.054836744418901e+18,
+              "mass_kg": 43263789327.53225,
+              "second_inventory": 0.0
+            },
+            "deferred": {
+              "count_number": 351158615005.8804,
+              "mass_kg": 353.3086500434186,
+              "second_inventory": 0.0
+            },
+            "proposed": {
+              "count_number": 9.054837095577458e+18,
+              "mass_kg": 43263789680.8408,
+              "second_inventory": 0.0
+            }
+          }
+        }
+      },
+      "source_vector_activity_definition": {
+        "cold_heat": "absolute or signed source-logged temperature increment times dry-air mass (K kg); no energy conversion claimed",
+        "count": "L1 of process N(3), weighted by same-cell geometric volume; this is a count-vector activity proxy",
+        "deferred": "cold source-withheld vector; warm request minus admitted vector",
+        "mass": "half L1 of the process Q(5) and QV component vector, weighted by same-cell dry-air mass; this is a vector-activity proxy, not independent primitive-process gross mass",
+        "ratios": "applied/proposed and deferred/proposed for the matching process and metric; null when proposal activity is zero",
+        "warm_heat": "cpm * source-logged temperature increment times dry-air mass (J proxy); not a total-enthalpy or closure claim"
+      },
+      "spatial_map": {
+        "axes": "(j,i); one-based i and j arrays included",
+        "fields": [
+          "AUT_applied_count_number",
+          "AUT_applied_heat_abs",
+          "AUT_applied_heat_signed",
+          "AUT_applied_mass_kg",
+          "AUT_deferred_count_number",
+          "AUT_deferred_heat_abs",
+          "AUT_deferred_heat_signed",
+          "AUT_deferred_mass_kg",
+          "AUT_proposed_count_number",
+          "AUT_proposed_heat_abs",
+          "AUT_proposed_heat_signed",
+          "AUT_proposed_mass_kg",
+          "G_applied_count_number",
+          "G_applied_heat_abs",
+          "G_applied_heat_signed",
+          "G_applied_mass_kg",
+          "G_deferred_count_number",
+          "G_deferred_heat_abs",
+          "G_deferred_heat_signed",
+          "G_deferred_mass_kg",
+          "G_proposed_count_number",
+          "G_proposed_heat_abs",
+          "G_proposed_heat_signed",
+          "G_proposed_mass_kg",
+          "NG_applied_count_number",
+          "NG_applied_heat_abs",
+          "NG_applied_heat_signed",
+          "NG_applied_mass_kg",
+          "NG_deferred_count_number",
+          "NG_deferred_heat_abs",
+          "NG_deferred_heat_signed",
+          "NG_deferred_mass_kg",
+          "NG_proposed_count_number",
+          "NG_proposed_heat_abs",
+          "NG_proposed_heat_signed",
+          "NG_proposed_mass_kg",
+          "WARM_applied_count_number",
+          "WARM_applied_heat_abs",
+          "WARM_applied_heat_signed",
+          "WARM_applied_mass_kg",
+          "WARM_deferred_count_number",
+          "WARM_deferred_heat_abs",
+          "WARM_deferred_heat_signed",
+          "WARM_deferred_mass_kg",
+          "WARM_proposed_count_number",
+          "WARM_proposed_heat_abs",
+          "WARM_proposed_heat_signed",
+          "WARM_proposed_mass_kg",
+          "cold_residual_absolute_water_kg",
+          "cold_residual_signed_water_kg",
+          "graupel_sedimentation_applied_count_number",
+          "graupel_sedimentation_applied_mass_kg",
+          "graupel_sedimentation_applied_second_inventory",
+          "graupel_sedimentation_deferred_count_number",
+          "graupel_sedimentation_deferred_mass_kg",
+          "graupel_sedimentation_deferred_second_inventory",
+          "graupel_sedimentation_proposed_count_number",
+          "graupel_sedimentation_proposed_mass_kg",
+          "graupel_sedimentation_proposed_second_inventory",
+          "ice_sedimentation_applied_count_number",
+          "ice_sedimentation_applied_mass_kg",
+          "ice_sedimentation_applied_second_inventory",
+          "ice_sedimentation_deferred_count_number",
+          "ice_sedimentation_deferred_mass_kg",
+          "ice_sedimentation_deferred_second_inventory",
+          "ice_sedimentation_proposed_count_number",
+          "ice_sedimentation_proposed_mass_kg",
+          "ice_sedimentation_proposed_second_inventory",
+          "rain_freeze_applied_count_number",
+          "rain_freeze_applied_mass_kg",
+          "rain_freeze_deferred_count_number",
+          "rain_freeze_deferred_mass_kg",
+          "rain_freeze_observed_heat_abs_Kkg",
+          "rain_freeze_observed_heat_signed_Kkg",
+          "rain_freeze_proposed_count_number",
+          "rain_freeze_proposed_mass_kg",
+          "warm_residual_absolute_water_kg",
+          "warm_residual_signed_water_kg"
+        ],
+        "path": "docs/evidence/pr86_process_budget_coupled_map.npz",
+        "sha256": "f08d99ba2595a66390a33810a8ab1ce6641681969daba1bc58a779f4846fa957"
+      },
+      "stored_minus_approved_water_residuals": {
+        "cold": {
+          "absolute_water_kg": 192055.08351451787,
+          "signed_water_kg": -3763.4658319892083
+        },
+        "warm": {
+          "absolute_water_kg": 490444.3606703492,
+          "signed_water_kg": -19378.938882316324
+        }
+      }
+    },
+    "OFF": {
+      "active_bounds": {
+        "ite": 233,
+        "its": 2,
+        "jte": 281,
+        "jts": 2,
+        "kte": 39,
+        "kts": 1
+      },
+      "arm": "OFF",
+      "identity": {
+        "first_call_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+        "ledger_files": {
+          "pr85_graupel_sedimentation_budget.raw": {
+            "bytes": 26169586,
+            "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr85_graupel_sedimentation_budget.raw",
+            "sha256": "00f2a915837eb51ae3fc4867fbd85847a5e10133525678b6b4b8fab1b339da67"
+          },
+          "pr85_ice_sedimentation_budget.raw": {
+            "bytes": 21678440,
+            "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr85_ice_sedimentation_budget.raw",
+            "sha256": "d901f9ca8330b1e69632dcb52add9860dbe443f28aa9995cbf38faf28eb85854"
+          },
+          "pr85_kdm6_cold_budget.raw": {
+            "bytes": 7939324008,
+            "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr85_kdm6_cold_budget.raw",
+            "sha256": "5e1dfaa01bbe68d4d8b3fbd78b3a5748115e8385b69a5316112fa4cd89037455"
+          },
+          "pr85_kdm6_warm_budget.raw": {
+            "bytes": 2802031008,
+            "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr85_kdm6_warm_budget.raw",
+            "sha256": "fda86d1ba82b80e8671c9efdd06f91adf958f0021bbc7b093ac7085d705cf992"
+          },
+          "pr85_rain_freezing_budget.raw": {
+            "bytes": 7712792,
+            "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr85_rain_freezing_budget.raw",
+            "sha256": "55fc563698dc8f7ec932b171c9b75635d1dfe0e156bcd85ec30da37c9b026be5"
+          }
+        }
+      },
+      "limitations": [
+        "Frozen PR85 v17 first-call records only; no model reruns or physics changes.",
+        "Weighted process vectors measure source-logged candidate activity and suppression, not a complete physical water, number, carrier, or energy closure.",
+        "The cold temperature ledger has no source-matched heat capacity term; its heat quantities remain K kg diagnostics.",
+        "The warm cpm-weighted temperature diagnostic omits full total-enthalpy terms and is not an energy closure.",
+        "The geometry uses captured first-call DEN and DELZ with initial-wrfout MAPFAC_M area; same-call hybrid MU geometry was not captured."
+      ],
+      "process_activity": {
+        "AUT": {
+          "count_number": {
+            "applied": 1.9852506115538555e+18,
+            "applied_over_proposed": 0.022121534184020665,
+            "deferred": 8.775764854438548e+19,
+            "deferred_over_proposed": 0.977878465764286,
+            "proposed": 8.974289916057844e+19
+          },
+          "heat_abs": {
+            "applied": 0.0,
+            "applied_over_proposed": null,
+            "deferred": 0.0,
+            "deferred_over_proposed": null,
+            "proposed": 0.0
+          },
+          "heat_signed": {
+            "applied": 0.0,
+            "applied_over_proposed": null,
+            "deferred": 0.0,
+            "deferred_over_proposed": null,
+            "proposed": 0.0
+          },
+          "mass_kg": {
+            "applied": 633549753.9773526,
+            "applied_over_proposed": 0.0480869292924572,
+            "deferred": 12541543007.645327,
+            "deferred_over_proposed": 0.9519130708217592,
+            "proposed": 13175092760.117867
+          }
+        },
+        "G": {
+          "count_number": {
+            "applied": 2.393208673002691e+21,
+            "applied_over_proposed": 0.12400644747872516,
+            "deferred": 1.6905857801176983e+22,
+            "deferred_over_proposed": 0.8759935525697856,
+            "proposed": 1.929906647324346e+22
+          },
+          "heat_abs": {
+            "applied": 2527593153437.4585,
+            "applied_over_proposed": 0.1490051312233418,
+            "deferred": 14435535118021.059,
+            "deferred_over_proposed": 0.850994869017835,
+            "proposed": 16963128267367.402
+          },
+          "heat_signed": {
+            "applied": 2527266050912.7173,
+            "applied_over_proposed": 0.14898872513105968,
+            "deferred": 14435534652959.994,
+            "deferred_over_proposed": 0.8510112751101179,
+            "proposed": 16962800699781.664
+          },
+          "mass_kg": {
+            "applied": 7732782466.528035,
+            "applied_over_proposed": 0.1490835438150168,
+            "deferred": 44136003785.08999,
+            "deferred_over_proposed": 0.8509164563462189,
+            "proposed": 51868786243.25492
+          }
+        },
+        "NG": {
+          "count_number": {
+            "applied": 1.7607180295062623e+22,
+            "applied_over_proposed": 0.7069685848088392,
+            "deferred": 7.298000319206051e+21,
+            "deferred_over_proposed": 0.29303141508980657,
+            "proposed": 2.490518061679292e+22
+          },
+          "heat_abs": {
+            "applied": 49271534210714.35,
+            "applied_over_proposed": 0.8403382597103773,
+            "deferred": 9361443204380.621,
+            "deferred_over_proposed": 0.1596617401257231,
+            "proposed": 58632977424704.89
+          },
+          "heat_signed": {
+            "applied": 22279111533223.37,
+            "applied_over_proposed": 0.7326763550044442,
+            "deferred": 8128736875064.35,
+            "deferred_over_proposed": 0.2673236450893013,
+            "proposed": 30407848405437.12
+          },
+          "mass_kg": {
+            "applied": 70028149814.81525,
+            "applied_over_proposed": 0.7567291655674682,
+            "deferred": 22512422132.082317,
+            "deferred_over_proposed": 0.24327083408548283,
+            "proposed": 92540571979.01367
+          }
+        },
+        "WARM": {
+          "count_number": {
+            "applied": 8.027451478329202e+21,
+            "applied_over_proposed": 0.9999999898795012,
+            "deferred": 81241815840853.56,
+            "deferred_over_proposed": 1.0120499044804588e-08,
+            "proposed": 8.027451559571016e+21
+          },
+          "heat_abs": {
+            "applied": 5764633717689022.0,
+            "applied_over_proposed": 0.9999999982609603,
+            "deferred": 10024922.540248154,
+            "deferred_over_proposed": 1.7390389422406001e-09,
+            "proposed": 5764633727713949.0
+          },
+          "heat_signed": {
+            "applied": -5756846716499441.0,
+            "applied_over_proposed": null,
+            "deferred": -10024922.540248154,
+            "deferred_over_proposed": null,
+            "proposed": -5756846726524367.0
+          },
+          "mass_kg": {
+            "applied": 31437799668.435505,
+            "applied_over_proposed": 0.9999999921958788,
+            "deferred": 245.3443966758295,
+            "deferred_over_proposed": 7.804121069181099e-09,
+            "proposed": 31437799913.779907
+          }
+        }
+      },
+      "rain_freezing": {
+        "absent_graupel_receiver": {
+          "applied_mass_kg": 0.0,
+          "proposed_mass_kg": 417.3712961407565,
+          "records": 7426,
+          "withheld_mass_kg": 417.3712961407565
+        },
+        "activity": {
+          "applied": {
+            "count_number": 74887252.28363203,
+            "mass_kg": 39.29185762376883
+          },
+          "deferred": {
+            "count_number": 850473030.1039258,
+            "mass_kg": 448.86074037742765
+          },
+          "proposed": {
+            "count_number": 925360282.387558,
+            "mass_kg": 488.1525980011963
+          }
+        },
+        "deferred_count_proposed_ratio": 0.9190723292225028,
+        "deferred_mass_proposed_ratio": 0.919509067892593,
+        "observed_temperature_increment": {
+          "absolute_Kkg": 0.0,
+          "signed_Kkg": 0.0
+        },
+        "proposed_count_applied_ratio": 0.08092767077749709,
+        "proposed_mass_applied_ratio": 0.0804909321074074,
+        "temperature_limit": "Only observed approved \u0394T is logged; proposed heat cannot be reconstructed because source-matched xlf/cpm are absent from this ledger."
+      },
+      "record_counts": {
+        "cold": 1510488,
+        "rain_freeze": 7736,
+        "warm": 1022952
+      },
+      "run_root": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a",
+      "same_cell_weighting": {
+        "coordinate_mapping": "ledger (i,j,k) maps directly to active call array slot (j-jts,k-kts,i-its)",
+        "count": "MAPFAC_M-area * DELZ; ledger N #/m3 is volume weighted",
+        "mass": "rhoDry * DELZ * MAPFAC_M-area; ledger Q and QV kg/kgdry are dry-mass weighted",
+        "native_hybrid_mass_same_call_capture": false,
+        "rhoDry_crosscheck": "exact REAL32 ledger value equals the same-cell first-call DEN readback"
+      },
+      "sedimentation": {
+        "GRAUPEL": {
+          "applied_mass_over_proposed": 0.9999999999995871,
+          "deferred_mass_over_proposed": 4.131761864979583e-13,
+          "records": 78926,
+          "secondary_inventory": "volume_m3",
+          "values": {
+            "applied": {
+              "count_number": 0.0,
+              "mass_kg": 1603503527.2532768,
+              "second_inventory": 4008758.8344734297
+            },
+            "deferred": {
+              "count_number": 0.0,
+              "mass_kg": 0.0006625294724268074,
+              "second_inventory": 1.6563708194754898e-06
+            },
+            "proposed": {
+              "count_number": 0.0,
+              "mass_kg": 1603503527.253939,
+              "second_inventory": 4008758.8344750856
+            }
+          }
+        },
+        "ICE": {
+          "applied_count_over_proposed": 0.9999999611915027,
+          "applied_mass_over_proposed": 0.9999999918306327,
+          "deferred_count_over_proposed": 3.880850398857469e-08,
+          "deferred_mass_over_proposed": 8.169369637539235e-09,
+          "records": 64960,
+          "secondary_inventory": "count_number",
+          "values": {
+            "applied": {
+              "count_number": 9.054826954270647e+18,
+              "mass_kg": 43263837225.46337,
+              "second_inventory": 0.0
+            },
+            "deferred": {
+              "count_number": 351404301608.1389,
+              "mass_kg": 353.4382811205073,
+              "second_inventory": 0.0
+            },
+            "proposed": {
+              "count_number": 9.054827305674888e+18,
+              "mass_kg": 43263837578.90155,
+              "second_inventory": 0.0
+            }
+          }
+        }
+      },
+      "source_vector_activity_definition": {
+        "cold_heat": "absolute or signed source-logged temperature increment times dry-air mass (K kg); no energy conversion claimed",
+        "count": "L1 of process N(3), weighted by same-cell geometric volume; this is a count-vector activity proxy",
+        "deferred": "cold source-withheld vector; warm request minus admitted vector",
+        "mass": "half L1 of the process Q(5) and QV component vector, weighted by same-cell dry-air mass; this is a vector-activity proxy, not independent primitive-process gross mass",
+        "ratios": "applied/proposed and deferred/proposed for the matching process and metric; null when proposal activity is zero",
+        "warm_heat": "cpm * source-logged temperature increment times dry-air mass (J proxy); not a total-enthalpy or closure claim"
+      },
+      "spatial_map": {
+        "axes": "(j,i); one-based i and j arrays included",
+        "fields": [
+          "AUT_applied_count_number",
+          "AUT_applied_heat_abs",
+          "AUT_applied_heat_signed",
+          "AUT_applied_mass_kg",
+          "AUT_deferred_count_number",
+          "AUT_deferred_heat_abs",
+          "AUT_deferred_heat_signed",
+          "AUT_deferred_mass_kg",
+          "AUT_proposed_count_number",
+          "AUT_proposed_heat_abs",
+          "AUT_proposed_heat_signed",
+          "AUT_proposed_mass_kg",
+          "G_applied_count_number",
+          "G_applied_heat_abs",
+          "G_applied_heat_signed",
+          "G_applied_mass_kg",
+          "G_deferred_count_number",
+          "G_deferred_heat_abs",
+          "G_deferred_heat_signed",
+          "G_deferred_mass_kg",
+          "G_proposed_count_number",
+          "G_proposed_heat_abs",
+          "G_proposed_heat_signed",
+          "G_proposed_mass_kg",
+          "NG_applied_count_number",
+          "NG_applied_heat_abs",
+          "NG_applied_heat_signed",
+          "NG_applied_mass_kg",
+          "NG_deferred_count_number",
+          "NG_deferred_heat_abs",
+          "NG_deferred_heat_signed",
+          "NG_deferred_mass_kg",
+          "NG_proposed_count_number",
+          "NG_proposed_heat_abs",
+          "NG_proposed_heat_signed",
+          "NG_proposed_mass_kg",
+          "WARM_applied_count_number",
+          "WARM_applied_heat_abs",
+          "WARM_applied_heat_signed",
+          "WARM_applied_mass_kg",
+          "WARM_deferred_count_number",
+          "WARM_deferred_heat_abs",
+          "WARM_deferred_heat_signed",
+          "WARM_deferred_mass_kg",
+          "WARM_proposed_count_number",
+          "WARM_proposed_heat_abs",
+          "WARM_proposed_heat_signed",
+          "WARM_proposed_mass_kg",
+          "cold_residual_absolute_water_kg",
+          "cold_residual_signed_water_kg",
+          "graupel_sedimentation_applied_count_number",
+          "graupel_sedimentation_applied_mass_kg",
+          "graupel_sedimentation_applied_second_inventory",
+          "graupel_sedimentation_deferred_count_number",
+          "graupel_sedimentation_deferred_mass_kg",
+          "graupel_sedimentation_deferred_second_inventory",
+          "graupel_sedimentation_proposed_count_number",
+          "graupel_sedimentation_proposed_mass_kg",
+          "graupel_sedimentation_proposed_second_inventory",
+          "ice_sedimentation_applied_count_number",
+          "ice_sedimentation_applied_mass_kg",
+          "ice_sedimentation_applied_second_inventory",
+          "ice_sedimentation_deferred_count_number",
+          "ice_sedimentation_deferred_mass_kg",
+          "ice_sedimentation_deferred_second_inventory",
+          "ice_sedimentation_proposed_count_number",
+          "ice_sedimentation_proposed_mass_kg",
+          "ice_sedimentation_proposed_second_inventory",
+          "rain_freeze_applied_count_number",
+          "rain_freeze_applied_mass_kg",
+          "rain_freeze_deferred_count_number",
+          "rain_freeze_deferred_mass_kg",
+          "rain_freeze_observed_heat_abs_Kkg",
+          "rain_freeze_observed_heat_signed_Kkg",
+          "rain_freeze_proposed_count_number",
+          "rain_freeze_proposed_mass_kg",
+          "warm_residual_absolute_water_kg",
+          "warm_residual_signed_water_kg"
+        ],
+        "path": "docs/evidence/pr86_process_budget_off_map.npz",
+        "sha256": "1ef07f3981c3b20390bc879a8b0c3e4b2049f51dace08e0f99abf37eca8c2642"
+      },
+      "stored_minus_approved_water_residuals": {
+        "cold": {
+          "absolute_water_kg": 192074.15275792812,
+          "signed_water_kg": -3737.4645571054975
+        },
+        "warm": {
+          "absolute_water_kg": 490466.6224686447,
+          "signed_water_kg": -19402.237609678632
+        }
+      }
+    }
+  },
+  "schema": "pr86_v17_first_call_process_budget_v1"
+}

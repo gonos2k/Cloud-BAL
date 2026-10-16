@@ -1,0 +1,184 @@
+{
+  "schema": "pr86_physical_validation_integration_v1",
+  "date": "2026-10-16",
+  "base_commit": "743e9f28bdd9f29d039c9b671d7bd24fbfb3ffa9",
+  "physical_approval": "FAIL_OPEN",
+  "physical_code_changed": false,
+  "baseline": {
+    "path": "docs/evidence/pr86_frozen_baseline_20261016.json",
+    "sha256": "3d2c96723589536a4a8f2a13f894b964d33bd9d305079a3f942ac3569f9c635e"
+  },
+  "initialization": {
+    "status": "PASS_SCOPED_INHERITED_PR85",
+    "scope": "Same OFF/COUPLED Q/N/B and T/q inputs; baseline identities unchanged."
+  },
+  "completed_air_updates": {
+    "status": "PASS_SCOPED_FIRST_20_SECONDS",
+    "scope": "PR85 completed RK3/KDM6 entry and exit gates remain inherited; no claim for later completed state."
+  },
+  "latest_actual_host": {
+    "requested_seconds": 600,
+    "timestep_seconds": 20,
+    "domains": 1,
+    "ranks": 1,
+    "threads": 1,
+    "tiles": 1,
+    "model_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "arms": {
+      "OFF": {
+        "path": "docs/evidence/pr86_time_response_OFF_20261016.json",
+        "sha256": "48d0a91f77f8937b4fecde35f45f047e626334e0fe6fd69a2c88ee1152e30076",
+        "status": "INCOMPLETE",
+        "returncode": 1,
+        "model_timestamps": [
+          {
+            "timestamp": "2026-08-16_13:00:20",
+            "elapsed_seconds": 660.26807
+          }
+        ],
+        "maximum_seen_timestep": 2,
+        "final_completed_step": 1,
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "fatal_physics_context": {
+          "message": "FogDES paired Stokes settling requires both cloud moments",
+          "source_condition": "FogDES guard accepts finite nonnegative QC/QNC with both cloud moments present; it fails when exactly one of QC/QNC is zero and the other is positive",
+          "cell_coordinates": "not captured in the runtime receipt; no coordinates or operator attribution inferred"
+        },
+        "changed_staged_inputs": [],
+        "changed_original_inputs": [],
+        "source_receipt_unchanged": true,
+        "launch_runner_source_sha256": null,
+        "launch_runner_source_sha256_status": "not recorded at launch; source hash unavailable",
+        "successor_collector_source_sha256": "c55ca65d813f521639bccd16f5ad9323f71f061fb70295a46399eb916a7823ef",
+        "first_call_baseline_water_map_comparison": {
+          "pre_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+          "post_sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+          "result": "byte-identical to PR85v17 baseline for first call only",
+          "verification_by": "root independent audit; matches docs/evidence/pr85_integration_20261015.json latest_actual_host.arms.OFF"
+        },
+        "completed_post_kdm6_timesteps": [
+          1
+        ],
+        "available_snapshots": [
+          "20s"
+        ]
+      },
+      "COUPLED": {
+        "path": "docs/evidence/pr86_time_response_COUPLED_20261016.json",
+        "sha256": "c366f8e8ffe2ee0e1016ee4aae4d5c293c74a957e5803a753d0be6a3d4edba80",
+        "status": "INCOMPLETE",
+        "returncode": 1,
+        "model_timestamps": [
+          {
+            "timestamp": "2026-08-16_13:00:20",
+            "elapsed_seconds": 660.49725
+          }
+        ],
+        "maximum_seen_timestep": 2,
+        "final_completed_step": 1,
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "fatal_physics_context": {
+          "message": "FogDES paired Stokes settling requires both cloud moments",
+          "source_condition": "FogDES guard accepts finite nonnegative QC/QNC with both cloud moments present; it fails when exactly one of QC/QNC is zero and the other is positive",
+          "cell_coordinates": "not captured in the runtime receipt; no coordinates or operator attribution inferred"
+        },
+        "changed_staged_inputs": [],
+        "changed_original_inputs": [],
+        "source_receipt_unchanged": true,
+        "launch_runner_source_sha256": "f0ff4e5e4c82a2f0b46c668079b8cdfafae67429ca68acd28d1bf407d76a5928",
+        "launch_runner_source_sha256_status": "recorded in launch_provenance.json",
+        "successor_collector_source_sha256": "c55ca65d813f521639bccd16f5ad9323f71f061fb70295a46399eb916a7823ef",
+        "first_call_baseline_water_map_comparison": {
+          "pre_sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+          "post_sha256": "67c65cc6c36950b6b051791bd022d52021d2b2d785cbaeee12279ccad5b6cc6e",
+          "result": "both first-call maps byte-identical to PR85v17 baseline; first call only",
+          "verification_by": "root independent audit; hashes match PR85v17 host state"
+        },
+        "completed_post_kdm6_timesteps": [
+          1
+        ],
+        "available_snapshots": [
+          "20s"
+        ]
+      }
+    },
+    "scope": "Exact frozen partial-host executable reused; only runtime duration/end time and history cadence differ; not a clean rebuild."
+  },
+  "first_call_water": {
+    "measure": "fixed-call dry DEN*DELZ*map area; not same-call host hybrid carrier",
+    "reports": {
+      "OFF": {
+        "path": "docs/evidence/pr86_water_OFF_20261016.json",
+        "sha256": "e528269cd5e937728de87c49068db925d316ef1c5dd4159f2ee551aa12eacfb9"
+      },
+      "COUPLED": {
+        "path": "docs/evidence/pr86_water_COUPLED_20261016.json",
+        "sha256": "1f496f5a6115323ee3904331c2a187992de2aa2d8c2cae85a9c516ef817e38ae"
+      }
+    },
+    "additional_terms": {
+      "path": "docs/evidence/pr86_water_terms_20261016.json",
+      "sha256": "fe2f1baff0f54404276d9561d1bf306b90c88c81ef2b6f3c4ebb2b1a27a10400"
+    },
+    "remaining_partial_residual_kg": {
+      "OFF": -16962.075555828906,
+      "COUPLED": -16751.474967941016
+    },
+    "status": "PARTIAL_OPEN"
+  },
+  "process_suppression": {
+    "report": {
+      "path": "docs/evidence/pr86_process_budget_20261016.json",
+      "sha256": "31a3ea8ab9d78376043a457dc626fe97c6f262fdc5a61f194a215bc3b1fd22eb"
+    },
+    "scope": "Half-L1 Q/QV vector activity for grouped cold/warm reactions; explicit mass for rain freezing; not primitive gross reaction rates or energy closure."
+  },
+  "response": {
+    "first_call": {
+      "path": "docs/evidence/pr86_matched_first_call_response_20261016.json",
+      "sha256": "fad83b955650c74e15473b72be9d9f5430f87f5c6503a09fb10dd7c8305daa6b"
+    },
+    "history": {
+      "path": "docs/evidence/pr86_matched_history_response_20261016.json",
+      "sha256": "7a1c8f3e5fb3a61880c5428f78b82d99af7aca8453bf54e5876cc12493fb1f24"
+    },
+    "missing_times_are_missing": true
+  },
+  "validation": {
+    "status": "PASS_SCOPED_PYTHON",
+    "test_count": 21,
+    "command": "python3 -m pytest -q tests/test_pr86_water_budget.py tests/test_pr86_process_budget.py tests/test_pr86_water_terms.py tests/test_pr86_time_response.py tests/test_pr86_compare_response.py",
+    "output": "Running 21 items in this shard\n.....................                                                    [100%]\n21 passed in 0.57s\n",
+    "log_sha256": "9a51b6adb2f7d27d1e97b62ecc4a6a26413fb798e97d35bfadca93634b38c026",
+    "source_hashes": {
+      "tools/pr86_compare_response.py": "0bb0e5652359bea546a1f166310108dadc9f582960d50f5208c6259c2a0e7bcb",
+      "tools/pr86_plot_budget.py": "6cd7d7687ddd65de729dccf4469e6d52f990660e18f5cd765f5b1e18f0b11296",
+      "tools/pr86_process_budget.py": "91661498ed46dbeeaf50488d4d8259ec22d2b402ecd6ef57a68263b7bb0a0287",
+      "tools/pr86_time_response.py": "c55ca65d813f521639bccd16f5ad9323f71f061fb70295a46399eb916a7823ef",
+      "tools/pr86_water_budget.py": "e6c00374e9730278b3c1545630af9aa3a6af4c68544c7f39dbda61f909337dc2",
+      "tools/pr86_water_terms.py": "65751f1d499dc63bdd22bff91820fb6e6734972b5c232ee720ebca3d2eccc6f3"
+    },
+    "fortran_compilation": "NOT_RUN_NO_FORTRAN_CHANGED",
+    "native_execution": "Frozen PR85 pinned-ifx partial-host executable, two matched extended attempts; not GNU or new clean host build."
+  },
+  "candidate_scientific_gates": {
+    "same_call_host_hybrid_carrier": "OPEN",
+    "complete_water_and_energy": "OPEN",
+    "primitive_process_attribution": "OPEN",
+    "native_force_and_continuity": "OPEN",
+    "independent_observation_fit": "OPEN",
+    "ten_minute_response": "INCOMPLETE",
+    "thirty_sixty_minutes": "NOT_RUN",
+    "initialization_shock_reduction": "UNVERIFIED"
+  },
+  "team_review": {
+    "path": "docs/PR86_TEAM_REVIEW_20261016.md",
+    "scope": "Independent source, unit, mapping, strict-gate and closed runtime evidence review; no scientific approval."
+  },
+  "limits": [
+    "First20s success is preserved separately from the later incomplete extension.",
+    "No absent-graupel birth density or first-order transport scheme is changed to force longer completion.",
+    "No physical-time budget includes the already applied analysis increment as a fresh source.",
+    "Maps and source relationships are diagnostics, not forecast skill."
+  ]
+}

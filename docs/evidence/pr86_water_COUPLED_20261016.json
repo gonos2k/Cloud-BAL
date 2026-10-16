@@ -1,0 +1,151 @@
+{
+  "schema": "pr86_first_call_water_v1",
+  "arm": "COUPLED",
+  "status": "ACCOUNTED_PARTIAL_BUDGET_OPEN",
+  "physical_approval": "FAIL_OPEN",
+  "measure": "fixed-call dry DEN * DELZ * DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+  "same_call_host_hybrid_measure": "NOT_CAPTURED_NOT_SUBSTITUTED",
+  "active_shape_jki": [
+    280,
+    39,
+    232
+  ],
+  "timestep": 1,
+  "call_seconds": 20.0,
+  "species": {
+    "Q": {
+      "before_kg": 88878263207011.19,
+      "after_kg": 89519702266635.73,
+      "cellwise_delta_kg": 641439059624.5663
+    },
+    "QC": {
+      "before_kg": 1955039817373.223,
+      "after_kg": 1268696100254.254,
+      "cellwise_delta_kg": -686343717118.9692
+    },
+    "QI": {
+      "before_kg": 994793059832.0204,
+      "after_kg": 704126259539.8717,
+      "cellwise_delta_kg": -290666800292.1488
+    },
+    "QR": {
+      "before_kg": 119853139460.43608,
+      "after_kg": 162550652305.92447,
+      "cellwise_delta_kg": 42697512845.48833
+    },
+    "QS": {
+      "before_kg": 383148511987.46985,
+      "after_kg": 673437918856.3605,
+      "cellwise_delta_kg": 290289406868.89075
+    },
+    "QG": {
+      "before_kg": 7770200514.623877,
+      "after_kg": 9665148280.793612,
+      "cellwise_delta_kg": 1894947766.169736
+    }
+  },
+  "public_moment_inventories": {
+    "NC": {
+      "unit": "particle count",
+      "before": 9.994108841526322e+23,
+      "after": 8.349537527688418e+23,
+      "delta": -1.6445713138379e+23
+    },
+    "NI": {
+      "unit": "particle count",
+      "before": 9.302480902768854e+20,
+      "after": 1.8615578103410702e+21,
+      "delta": 9.313097200641848e+20
+    },
+    "NR": {
+      "unit": "particle count",
+      "before": 1.860487251694442e+18,
+      "after": 5.491973752456776e+18,
+      "delta": 3.6314865007623357e+18
+    },
+    "NN": {
+      "unit": "particle count",
+      "before": 2.591866077521326e+24,
+      "after": 6.120166950566428e+24,
+      "delta": 3.5283008730451025e+24
+    },
+    "BG": {
+      "unit": "m3",
+      "before": 19425501.369850326,
+      "after": 19428878.16011637,
+      "delta": 3376.7902660449618
+    }
+  },
+  "water_delta_kg": -689590306.0033302,
+  "bottom_outflow_kg": 689506721.8029728,
+  "bottom_species_outflow_kg": {
+    "rain": 674129776.1524186,
+    "snow": 0.0,
+    "graupel": 15376945.650554257,
+    "ice": 2.4011524184717527e-17
+  },
+  "delta_plus_outflow_kg": -83584.20035743713,
+  "cutoff_delta_kg": -43711.22822306356,
+  "ice_to_snow_storage_delta_kg": -13.91645578148807,
+  "residual_after_recorded_numerical_terms_kg": -39859.055678592085,
+  "residual_over_bottom_outflow": -5.780807411763253e-05,
+  "ledger_rows": {
+    "pr85_kdm6_cutoff_budget.raw": 228035,
+    "pr85_ice_transition_branch.raw": 7066
+  },
+  "identities": {
+    "baseline": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr86_budget_response_20261016/Cloud-BAL/docs/evidence/pr85_integration_20261015.json",
+      "sha256": "ae0d92ec38ac586dacd5f0d0d6627fdaf0696050a4c0bc719339fea087f0aac5"
+    },
+    "receipt": {
+      "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr83_same13_native_initialization.json",
+      "sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+      "bytes": 101424
+    },
+    "kdm6_first_call_pre.raw": {
+      "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/kdm6_first_call_pre.raw",
+      "sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+      "bytes": 195542592
+    },
+    "kdm6_first_call_post.raw": {
+      "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/kdm6_first_call_post.raw",
+      "sha256": "67c65cc6c36950b6b051791bd022d52021d2b2d785cbaeee12279ccad5b6cc6e",
+      "bytes": 195542592
+    },
+    "initial_wrfo": {
+      "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "4716ceda093b3b01ff4363be7c56dabedf2ed585b3a4d9bce4ea8012ced88663",
+      "bytes": 83150135
+    },
+    "pr67_kdm6_process.raw": {
+      "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr67_kdm6_process.raw",
+      "sha256": "de494913c850b0bc477e3068b5e35ac931ac130e7536015fed045776e89a7c7f",
+      "bytes": 83442240
+    },
+    "pr85_kdm6_cutoff_budget.raw": {
+      "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_kdm6_cutoff_budget.raw",
+      "sha256": "bcd65091e47a5e5cfe4679947cff981ad9d380de9ab3cb531585a57ef4067882",
+      "bytes": 153576195
+    },
+    "pr85_ice_transition_branch.raw": {
+      "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_ice_transition_branch.raw",
+      "sha256": "4f0748325a22c939bfa586f29f1eed00aecb2ba0909a69268ac72c2bbaa9c3eb",
+      "bytes": 2652664
+    }
+  },
+  "map": {
+    "path": "docs/evidence/pr86_water_COUPLED_20261016.npz",
+    "sha256": "ef944eaaa7fcadf71f122a57bbf0af0c292f3d8099c63279a031d29fe14f6f3a"
+  },
+  "missing_terms": [
+    "other stored process-rounding and count/volume closure terms",
+    "same-call host hybrid dry mass and boundary reconciliation",
+    "complete thermodynamic/precipitation energy budget"
+  ],
+  "notes": [
+    "No analysis increment is added to this physical-time call budget.",
+    "Snow/graupel precipitation subsets are not added to total rainncv.",
+    "Recorded cleanup is numerical condensate removal, not phase transfer."
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "arms": {
+    "COUPLED": {
+      "additional_nonoverlap_signed_storage_changes_C_kg": {
+        "cold_stored_minus_approved_Q_plus_QV": -3763.4658319892083,
+        "graupel_sedimentation_R32_column_term": 1.7263943212050559,
+        "ice_sedimentation_R32_column_term": 33.27739620245993,
+        "rain_freezing_pair_storage_change": -0.17978686919814987,
+        "warm_stored_minus_approved_Q_plus_QV": -19378.938882316324
+      },
+      "arm": "COUPLED",
+      "balance_convention": "R = R0 - sum(C); positive C means stored water creation and negative C means storage loss",
+      "ledger_details": {
+        "rain_freezing": {
+          "identity": {
+            "bytes": 7705813,
+            "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_rain_freezing_budget.raw",
+            "sha256": "3d884cbdda67369f8f71ce82dccd0afae5d38d3bc1a24ba7dd42b8b158cd2148"
+          },
+          "rows": 7729,
+          "signed_storage_change_C_kg": -0.17978686919814987,
+          "source_term": "-values[22], with values[22] = rhoDry*((QR+QG)before-(QR+QG)after) (kg m-3); positive logger value is loss",
+          "volume_weight": "DELZ*map area (rhoDry already in logged kg/m3)"
+        },
+        "sedimentation": {
+          "GRAUPEL": {
+            "area_weight": "DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+            "identity": {
+              "bytes": 26169586,
+              "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_graupel_sedimentation_budget.raw",
+              "sha256": "afb2c433c28eb86974b5366f739734f1c4bf50a5ae910a3e14c7e2539b51de1d"
+            },
+            "rows": 78926,
+            "signed_storage_change_C_kg": 1.7263943212050559,
+            "source_term": "values[10] = residual_q = stored_delta_q + ground_approved_q (kg m-2); positive is creation"
+          },
+          "ICE": {
+            "area_weight": "DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+            "identity": {
+              "bytes": 21678440,
+              "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr85_ice_sedimentation_budget.raw",
+              "sha256": "212b559c6a27d473a947efdad00d1f14997e1f6d2d19bd109a9610117b982102"
+            },
+            "rows": 64960,
+            "signed_storage_change_C_kg": 33.27739620245993,
+            "source_term": "values[10] = residual_q = stored_delta_q + ground_approved_q (kg m-2); positive is creation"
+          }
+        }
+      },
+      "limitations": [
+        "These saved first-call diagnostic terms are applied to the earlier fixed DEN*DELZ*map-area remainder; no new model call was run.",
+        "Cold/warm, sedimentation, and rain-freezing signed storage changes are kept as separate source terms and are not folded into process proposals.",
+        "This remains an open partial budget; uncaptured host hybrid mass, other process residuals, boundaries, and thermodynamic terms remain unresolved."
+      ],
+      "measure": "fixed-call dry DEN * DELZ * DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+      "prior_remaining_after_cutoff_and_ice_transition_kg": -39859.055678592085,
+      "remaining_after_each_additive_piece_kg": {
+        "after_cold_and_warm": -16716.65096428655,
+        "after_ice_and_graupel_sedimentation": -16751.654754810213,
+        "after_rain_freezing": -16751.474967941016
+      }
+    },
+    "OFF": {
+      "additional_nonoverlap_signed_storage_changes_C_kg": {
+        "cold_stored_minus_approved_Q_plus_QV": -3737.4645571054975,
+        "graupel_sedimentation_R32_column_term": 6.5230191577677274,
+        "ice_sedimentation_R32_column_term": 37.53884631103918,
+        "rain_freezing_pair_storage_change": -0.17978686919814987,
+        "warm_stored_minus_approved_Q_plus_QV": -19402.237609678632
+      },
+      "arm": "OFF",
+      "balance_convention": "R = R0 - sum(C); positive C means stored water creation and negative C means storage loss",
+      "ledger_details": {
+        "rain_freezing": {
+          "identity": {
+            "bytes": 7712792,
+            "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr85_rain_freezing_budget.raw",
+            "sha256": "55fc563698dc8f7ec932b171c9b75635d1dfe0e156bcd85ec30da37c9b026be5"
+          },
+          "rows": 7736,
+          "signed_storage_change_C_kg": -0.17978686919814987,
+          "source_term": "-values[22], with values[22] = rhoDry*((QR+QG)before-(QR+QG)after) (kg m-3); positive logger value is loss",
+          "volume_weight": "DELZ*map area (rhoDry already in logged kg/m3)"
+        },
+        "sedimentation": {
+          "GRAUPEL": {
+            "area_weight": "DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+            "identity": {
+              "bytes": 26169586,
+              "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr85_graupel_sedimentation_budget.raw",
+              "sha256": "00f2a915837eb51ae3fc4867fbd85847a5e10133525678b6b4b8fab1b339da67"
+            },
+            "rows": 78926,
+            "signed_storage_change_C_kg": 6.5230191577677274,
+            "source_term": "values[10] = residual_q = stored_delta_q + ground_approved_q (kg m-2); positive is creation"
+          },
+          "ICE": {
+            "area_weight": "DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+            "identity": {
+              "bytes": 21678440,
+              "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr85_ice_sedimentation_budget.raw",
+              "sha256": "d901f9ca8330b1e69632dcb52add9860dbe443f28aa9995cbf38faf28eb85854"
+            },
+            "rows": 64960,
+            "signed_storage_change_C_kg": 37.53884631103918,
+            "source_term": "values[10] = residual_q = stored_delta_q + ground_approved_q (kg m-2); positive is creation"
+          }
+        }
+      },
+      "limitations": [
+        "These saved first-call diagnostic terms are applied to the earlier fixed DEN*DELZ*map-area remainder; no new model call was run.",
+        "Cold/warm, sedimentation, and rain-freezing signed storage changes are kept as separate source terms and are not folded into process proposals.",
+        "This remains an open partial budget; uncaptured host hybrid mass, other process residuals, boundaries, and thermodynamic terms remain unresolved."
+      ],
+      "measure": "fixed-call dry DEN * DELZ * DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+      "prior_remaining_after_cutoff_and_ice_transition_kg": -40057.89564401343,
+      "remaining_after_each_additive_piece_kg": {
+        "after_cold_and_warm": -16918.193477229295,
+        "after_ice_and_graupel_sedimentation": -16962.255342698103,
+        "after_rain_freezing": -16962.075555828906
+      }
+    }
+  },
+  "provenance": {
+    "prior_water_reports": {
+      "COUPLED": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr86_budget_response_20261016/Cloud-BAL/docs/evidence/pr86_water_COUPLED_20261016.json",
+        "sha256": "1f496f5a6115323ee3904331c2a187992de2aa2d8c2cae85a9c516ef817e38ae"
+      },
+      "OFF": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr86_budget_response_20261016/Cloud-BAL/docs/evidence/pr86_water_OFF_20261016.json",
+        "sha256": "e528269cd5e937728de87c49068db925d316ef1c5dd4159f2ee551aa12eacfb9"
+      }
+    },
+    "process_report": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr86_budget_response_20261016/Cloud-BAL/docs/evidence/pr86_process_budget_20261016.json",
+      "sha256": "31a3ea8ab9d78376043a457dc626fe97c6f262fdc5a61f194a215bc3b1fd22eb"
+    }
+  },
+  "schema": "pr86_first_call_additional_water_terms_v1"
+}
