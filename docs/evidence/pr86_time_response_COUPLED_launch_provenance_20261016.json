@@ -1,0 +1,21 @@
+{
+  "arm": "COUPLED",
+  "launch_runner_source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr86_budget_response_20261016/Cloud-BAL/tools/pr86_time_response.py",
+  "launch_runner_source_sha256": "f0ff4e5e4c82a2f0b46c668079b8cdfafae67429ca68acd28d1bf407d76a5928",
+  "preflight_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+  "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+  "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+  "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+  "duration_seconds": 600,
+  "timestep_seconds": 20,
+  "rank_count": 1,
+  "omp_threads": 1,
+  "tile_count": 1,
+  "namelist_changes": {
+    "runtime_seconds": 600,
+    "end_time": "2026-08-16_13:10:00",
+    "history_interval_minutes": 1
+  },
+  "executable_command": "./wrf.exe > candidate_run.log 2>&1",
+  "launcher_shell": "/bin/bash; pinned Intel setvars.sh and MPI 2021.18 env; ulimit -s unlimited"
+}

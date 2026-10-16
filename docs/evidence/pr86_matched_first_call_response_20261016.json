@@ -1,0 +1,274 @@
+{
+  "schema": "pr86_matched_first_call_response_v1",
+  "physical_approval": "FAIL_OPEN",
+  "scope": "Unweighted active-grid COUPLED minus OFF at first KDM6 boundaries, not a time-zero retention ratio or host final-step state.",
+  "identities": {
+    "OFF": {
+      "baseline": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr86_budget_response_20261016/Cloud-BAL/docs/evidence/pr85_integration_20261015.json",
+        "sha256": "ae0d92ec38ac586dacd5f0d0d6627fdaf0696050a4c0bc719339fea087f0aac5"
+      },
+      "receipt": {
+        "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr83_same13_native_initialization.json",
+        "sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+        "bytes": 101091
+      },
+      "kdm6_first_call_pre.raw": {
+        "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/kdm6_first_call_pre.raw",
+        "sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+        "bytes": 195542592
+      },
+      "kdm6_first_call_post.raw": {
+        "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/kdm6_first_call_post.raw",
+        "sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+        "bytes": 195542592
+      },
+      "initial_wrfo": {
+        "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/wrfout_d01_2026-08-16_13:00:00",
+        "sha256": "ae7253d7261d8292c7de8a3b2a3f39b1798bf1a59599042901b892d2ebcb887c",
+        "bytes": 83147875
+      }
+    },
+    "COUPLED": {
+      "baseline": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr86_budget_response_20261016/Cloud-BAL/docs/evidence/pr85_integration_20261015.json",
+        "sha256": "ae0d92ec38ac586dacd5f0d0d6627fdaf0696050a4c0bc719339fea087f0aac5"
+      },
+      "receipt": {
+        "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr83_same13_native_initialization.json",
+        "sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+        "bytes": 101424
+      },
+      "kdm6_first_call_pre.raw": {
+        "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/kdm6_first_call_pre.raw",
+        "sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+        "bytes": 195542592
+      },
+      "kdm6_first_call_post.raw": {
+        "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/kdm6_first_call_post.raw",
+        "sha256": "67c65cc6c36950b6b051791bd022d52021d2b2d785cbaeee12279ccad5b6cc6e",
+        "bytes": 195542592
+      },
+      "initial_wrfo": {
+        "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/wrfout_d01_2026-08-16_13:00:00",
+        "sha256": "4716ceda093b3b01ff4363be7c56dabedf2ed585b3a4d9bce4ea8012ced88663",
+        "bytes": 83150135
+      }
+    }
+  },
+  "records": [
+    {
+      "stage": "PRE_KDM6",
+      "timestep": 1,
+      "fields": {
+        "Q": {
+          "unit": "kg/kg dry",
+          "rms": 3.34896211792908e-06,
+          "mean": 2.0508044050777943e-08,
+          "max_abs": 0.0015550991520285606,
+          "off_rms": 0.008582178585485514,
+          "coupled_rms": 0.008582214092832607
+        },
+        "QC": {
+          "unit": "kg/kg dry",
+          "rms": 1.9280820613814577e-06,
+          "mean": -1.2178031428122773e-08,
+          "max_abs": 0.0008677458681631833,
+          "off_rms": 0.00029314340820124277,
+          "coupled_rms": 0.0002931160902828421
+        },
+        "QI": {
+          "unit": "kg/kg dry",
+          "rms": 1.358208551713362e-07,
+          "mean": 8.269107614766587e-13,
+          "max_abs": 5.578526179306209e-05,
+          "off_rms": 0.00030616550799515143,
+          "coupled_rms": 0.00030616390368724936
+        },
+        "QR": {
+          "unit": "kg/kg dry",
+          "rms": 8.68797668355925e-07,
+          "mean": -1.4685917126664675e-09,
+          "max_abs": 0.0002517500543035567,
+          "off_rms": 4.9036901956029405e-05,
+          "coupled_rms": 4.9014454671208664e-05
+        },
+        "QS": {
+          "unit": "kg/kg dry",
+          "rms": 1.1723811265261546e-06,
+          "mean": -4.3606049729237654e-09,
+          "max_abs": 0.0006313102057902142,
+          "off_rms": 0.00017363828966823468,
+          "coupled_rms": 0.00017362629207829598
+        },
+        "QG": {
+          "unit": "kg/kg dry",
+          "rms": 1.0467970035926367e-06,
+          "mean": -3.701323695878815e-09,
+          "max_abs": 0.0003894102410413325,
+          "off_rms": 2.054989666754083e-05,
+          "coupled_rms": 2.0471815531430755e-05
+        },
+        "NC": {
+          "unit": "number/kg dry",
+          "rms": 672264.2157889223,
+          "mean": -4624.131177009986,
+          "max_abs": 235951904.0,
+          "off_rms": 125416346.92685325,
+          "coupled_rms": 125407055.08644773
+        },
+        "NI": {
+          "unit": "number/kg dry",
+          "rms": 80.28880071805222,
+          "mean": 0.004503293055548652,
+          "max_abs": 30023.0625,
+          "off_rms": 203677.1307549259,
+          "coupled_rms": 203676.2913288173
+        },
+        "NR": {
+          "unit": "number/kg dry",
+          "rms": 13.48639584980819,
+          "mean": -0.022797026236901465,
+          "max_abs": 3907.9296875,
+          "off_rms": 761.2026798718273,
+          "coupled_rms": 760.8542294740215
+        },
+        "BG": {
+          "unit": "m3/kg dry",
+          "rms": 2.6169925401039148e-09,
+          "mean": -9.253309237917697e-12,
+          "max_abs": 9.735255162013345e-07,
+          "off_rms": 5.137474211389791e-08,
+          "coupled_rms": 5.11795392739934e-08
+        },
+        "P": {
+          "unit": "Pa",
+          "rms": 1.3018928891052306,
+          "mean": -0.0011791472575332354,
+          "max_abs": 231.34375,
+          "off_rms": 57721.352327340646,
+          "coupled_rms": 57721.350593822805
+        },
+        "T": {
+          "unit": "K",
+          "rms": 0.00399443271346744,
+          "mean": -2.100662265812995e-05,
+          "max_abs": 1.7128591342479922,
+          "off_rms": 255.94681459825435,
+          "coupled_rms": 255.9467907531526
+        }
+      }
+    },
+    {
+      "stage": "POST_KDM6",
+      "timestep": 1,
+      "fields": {
+        "Q": {
+          "unit": "kg/kg dry",
+          "rms": 1.454269542104794e-06,
+          "mean": 8.761697372068847e-09,
+          "max_abs": 0.0006138049066066742,
+          "off_rms": 0.008616980493409948,
+          "coupled_rms": 0.008616995962517606
+        },
+        "QC": {
+          "unit": "kg/kg dry",
+          "rms": 3.592956425991931e-07,
+          "mean": 3.0932434525735367e-10,
+          "max_abs": 0.00026906293351203203,
+          "off_rms": 0.00024068539803810324,
+          "coupled_rms": 0.00024068404421036677
+        },
+        "QI": {
+          "unit": "kg/kg dry",
+          "rms": 3.7285161744654247e-06,
+          "mean": -1.0833503594456758e-09,
+          "max_abs": 0.0030215121805667877,
+          "off_rms": 0.00023204796262012587,
+          "coupled_rms": 0.00023203910213427217
+        },
+        "QR": {
+          "unit": "kg/kg dry",
+          "rms": 9.96241713806189e-07,
+          "mean": -6.6571927650103915e-09,
+          "max_abs": 0.0003052482788916677,
+          "off_rms": 6.509778052239546e-05,
+          "coupled_rms": 6.502224216949724e-05
+        },
+        "QS": {
+          "unit": "kg/kg dry",
+          "rms": 4.152009902397216e-06,
+          "mean": -2.8746094710255792e-09,
+          "max_abs": 0.003424668131629005,
+          "off_rms": 0.00027675748650038894,
+          "coupled_rms": 0.00027675246287861636
+        },
+        "QG": {
+          "unit": "kg/kg dry",
+          "rms": 0.0,
+          "mean": 0.0,
+          "max_abs": 0.0,
+          "off_rms": 2.4722751232391447e-05,
+          "coupled_rms": 2.4722751232391447e-05
+        },
+        "NC": {
+          "unit": "number/kg dry",
+          "rms": 670794.2286413516,
+          "mean": -1222.803842601364,
+          "max_abs": 290818144.0,
+          "off_rms": 239781174.5329996,
+          "coupled_rms": 239779167.30581304
+        },
+        "NI": {
+          "unit": "number/kg dry",
+          "rms": 2536.397388934131,
+          "mean": 0.5760693428893832,
+          "max_abs": 1578714.75,
+          "off_rms": 3611900.2450585314,
+          "coupled_rms": 3611900.3242755546
+        },
+        "NR": {
+          "unit": "number/kg dry",
+          "rms": 123.0640649661642,
+          "mean": -0.06484643060946073,
+          "max_abs": 105095.34106445312,
+          "off_rms": 4033.2636346017857,
+          "coupled_rms": 4032.8664873649072
+        },
+        "BG": {
+          "unit": "m3/kg dry",
+          "rms": 0.0,
+          "mean": 0.0,
+          "max_abs": 0.0,
+          "off_rms": 5.061701828662578e-08,
+          "coupled_rms": 5.061701828662578e-08
+        },
+        "P": {
+          "unit": "Pa",
+          "rms": 1.3018928891052306,
+          "mean": -0.0011791472575332354,
+          "max_abs": 231.34375,
+          "off_rms": 57721.352327340646,
+          "coupled_rms": 57721.350593822805
+        },
+        "T": {
+          "unit": "K",
+          "rms": 0.0021474822362765747,
+          "mean": 8.90943796826045e-06,
+          "max_abs": 0.5720519970036548,
+          "off_rms": 255.87176442461305,
+          "coupled_rms": 255.87177460726255
+        }
+      }
+    }
+  ],
+  "unavailable": [
+    "U",
+    "V",
+    "W",
+    "geopotential",
+    "independent observation fit",
+    "transport-only diffusion",
+    "full energy closure"
+  ]
+}

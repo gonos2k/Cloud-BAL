@@ -1,0 +1,477 @@
+#!/usr/bin/env python3
+"""Safely stage and receipt PR85v17 multistep OFF/COUPLED runs."""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import difflib
+import gzip
+import hashlib
+import json
+import math
+import os
+import re
+import shutil
+import struct
+import subprocess
+import time
+from pathlib import Path
+
+import numpy as np
+
+
+RUNTIME = Path("/var/tmp/pr85_same13_{arm}_joint_v17_20261015a")
+RUN_RECEIPT = Path("/var/tmp/pr85_evidence_bundle_20261015/actual_v17_{arm}_run_receipt.json")
+DEFAULT_OUT = Path("/var/tmp/pr86_budget_response_20261016")
+STATE_MAGIC, TENDENCY_MAGIC = b"PR85QND2", b"PR85PLB1"
+STATE_FIELDS = ("DEN", "Q", "QC", "QI", "QR", "QS", "QG", "NN", "NC", "NI", "NR", "BG")
+TENDENCY_FIELDS = ("QV_TEND", "QC_TEND", "QI_TEND", "QNC_TEND", "QNI_TEND")
+SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 30: "10min"}
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def edit_namelist(text: str, seconds: int) -> str:
+    start = re.search(r"start_year\s*=\s*(\d+).*?start_month\s*=\s*(\d+).*?start_day\s*=\s*(\d+)"
+                      r".*?start_hour\s*=\s*(\d+).*?start_minute\s*=\s*(\d+).*?start_second\s*=\s*(\d+)",
+                      text, re.S)
+    if not start:
+        raise ValueError("namelist start timestamp missing")
+    y, mo, day, hour, minute, sec = map(int, start.groups())
+    end = dt.datetime(y, mo, day, hour, minute, sec) + dt.timedelta(seconds=seconds)
+    updates = {"run_days": "0", "run_hours": "0", "run_minutes": str(seconds // 60),
+               "run_seconds": str(seconds % 60), "end_year": str(end.year),
+               "end_month": f"{end.month:02}", "end_day": f"{end.day:02}",
+               "end_hour": f"{end.hour:02}", "end_minute": f"{end.minute:02}",
+               "end_second": f"{end.second:02}", "history_interval": "1"}
+    for name, value in updates.items():
+        text, count = re.subn(rf"(?m)^(\s*{name}\s*=\s*)[^,\n]+", rf"\g<1>{value}", text, count=1)
+        if count != 1:
+            raise ValueError(f"expected one {name} namelist value")
+    return text
+
+
+def _field_stats(values: np.ndarray) -> dict:
+    finite = np.isfinite(values)
+    selected = values[finite]
+    return {"cells": int(values.size), "finite": int(finite.sum()),
+            "nonfinite": int((~finite).sum()), "negative": int((values < 0).sum()),
+            "zero": int((values == 0).sum()),
+            "min": float(selected.min()) if selected.size else None,
+            "max": float(selected.max()) if selected.size else None}
+
+
+def read_time_snapshots(path: Path) -> dict:
+    """Stream the stage trace and retain only selected POST_KDM6 snapshots."""
+    snapshots, timesteps, completed, duplicate_post = {}, set(), set(), set()
+    count = 0
+    opener = gzip.open if path.suffix == ".gz" else open
+    with opener(path, "rb") as stream:
+        while magic := stream.read(8):
+            if len(magic) != 8:
+                raise ValueError("truncated stage trace magic")
+            label_raw, header = stream.read(32), stream.read(60)
+            if len(label_raw) != 32 or len(header) != 60:
+                raise ValueError("truncated stage trace header")
+            label = label_raw.decode("ascii").strip()
+            values = struct.unpack(">15i", header)
+            kind, timestep, rkstep = values[:3]
+            expected_kind = 1 if magic == STATE_MAGIC else 2 if magic == TENDENCY_MAGIC else -1
+            if kind != expected_kind or timestep <= 0:
+                raise ValueError(f"invalid trace record {count}: {label} timestep={timestep}")
+            timesteps.add(timestep)
+            count += 1
+            bounds = values[3:]
+            cells = ((bounds[9] - bounds[8] + 1) * (bounds[11] - bounds[10] + 1) *
+                     (bounds[7] - bounds[6] + 1))
+            if cells <= 0:
+                raise ValueError("invalid active stage-trace bounds")
+            is_snapshot = magic == STATE_MAGIC and label == "POST_KDM6" and timestep in SNAPSHOTS
+            digest = hashlib.sha256(magic + label_raw + header)
+            fields = {}
+            names = STATE_FIELDS if magic == STATE_MAGIC else TENDENCY_FIELDS
+            for field in names:
+                raw = stream.read(cells * 4)
+                if len(raw) != cells * 4:
+                    raise ValueError(f"truncated {label} {field} at timestep {timestep}")
+                digest.update(raw)
+                if is_snapshot:
+                    fields[field] = _field_stats(np.frombuffer(raw, dtype=">f4"))
+            if is_snapshot:
+                key = SNAPSHOTS[timestep]
+                if key not in snapshots:
+                    snapshots[key] = {
+                        "timestep": timestep, "model_seconds": 20 * timestep,
+                        "stage": label, "rkstep": rkstep, "active_cells": cells,
+                        "record_sha256": digest.hexdigest(), "fields": fields,
+                    }
+            if magic == STATE_MAGIC and label == "POST_KDM6":
+                if timestep in completed:
+                    duplicate_post.add(timestep)
+                completed.add(timestep)
+    return {"record_count": count, "timesteps": sorted(timesteps),
+            "completed_post_kdm6_timesteps": sorted(completed),
+            "duplicate_post_kdm6_timesteps": sorted(duplicate_post), "snapshots": snapshots}
+
+
+def _projected_step_bytes(receipt: dict, runtime: Path) -> int:
+    # First-call and KDM6 source traces are one-time guarded by pr67_trace_complete.
+    once = {"kdm6_first_call_pre.raw", "kdm6_first_call_post.raw", "pr67_kdm6_process.raw"}
+    per_step = sum(row["bytes"] for name, row in receipt["native_trace_outputs"].items() if name not in once)
+    per_step += (runtime / "rsl.error.0000").stat().st_size
+    return per_step + 64 * 1024 * 1024
+
+
+def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85) -> dict:
+    if duration <= 0 or duration % 20:
+        raise ValueError("duration must be a positive multiple of the frozen 20-second timestep")
+    runtime, receipt_path = Path(str(RUNTIME).format(arm=arm)), Path(str(RUN_RECEIPT).format(arm=arm))
+    receipt = json.loads(receipt_path.read_text())
+    inputs = {Path(row["path"]).name: row["sha256_after"] for row in receipt["run_isolation"]["inputs"]}
+    exe = runtime / "wrf.exe"
+    if sha256(exe) != receipt["native_executable_sha256"]:
+        raise ValueError(f"{arm}: frozen executable hash changed")
+    if sha256(runtime / "wrfinput_d01") != receipt["candidate_wrfinput_sha256"]:
+        raise ValueError(f"{arm}: candidate input hash changed")
+    if sha256(runtime / "wrfbdy_d01") != receipt["candidate_wrfbdy_sha256"]:
+        raise ValueError(f"{arm}: boundary hash changed")
+    bad = [n for n, h in inputs.items() if not (runtime / n).is_file() or sha256(runtime / n) != h]
+    if bad:
+        raise ValueError(f"{arm}: frozen inputs changed: {bad}")
+    namelist = runtime / "namelist.input"
+    original_namelist = namelist.read_text()
+    edited = edit_namelist(original_namelist, duration)
+    namelist_diff = "".join(difflib.unified_diff(
+        original_namelist.splitlines(keepends=True), edited.splitlines(keepends=True),
+        fromfile="v17/namelist.input", tofile="pr86/namelist.input"))
+    steps = math.ceil(duration / 20)
+    disk = shutil.disk_usage(out.parent if out.parent.exists() else Path("/var/tmp"))
+    projected = _projected_step_bytes(receipt, runtime) * steps
+    return {
+        "arm": arm, "duration_seconds": duration, "timestep_seconds": 20,
+        "expected_timesteps": steps, "runtime_dir": str(runtime), "source_receipt": str(receipt_path),
+        "source_receipt_sha256": sha256(receipt_path),
+        "executable_sha256": sha256(exe), "candidate_wrfinput_sha256": receipt["candidate_wrfinput_sha256"],
+        "candidate_wrfbdy_sha256": receipt["candidate_wrfbdy_sha256"], "input_file_count": len(inputs),
+        "input_hashes": inputs, "source_namelist_sha256": sha256(namelist),
+        "candidate_namelist_sha256": hashlib.sha256(edited.encode()).hexdigest(),
+        "namelist_changes": {"runtime_seconds": duration, "end_time": "2026-08-16_13:10:00",
+                             "history_interval_minutes": 1}, "namelist_diff": namelist_diff,
+        "namelist_text": edited,
+        "first_v17_step_seconds": 662.69806,
+        "disk_guard": {"free_bytes": disk.free, "per_step_projection_bytes": _projected_step_bytes(receipt, runtime),
+                       "active_run_projection_bytes": projected,
+                       "required_free_bytes": int(projected / safety_fraction),
+                       "safety_fraction": safety_fraction,
+                       "status": "PASS" if disk.free >= int(projected / safety_fraction) else "FAIL"},
+        "output": str(out),
+    }
+
+
+def _stage(prepared: dict, out: Path) -> Path:
+    runtime, stage = Path(prepared["runtime_dir"]), out / "run"
+    stage.mkdir(parents=True)
+    for name in prepared["input_hashes"]:
+        if name not in {"namelist.input", "namelist.input.source"}:
+            os.link(runtime / name, stage / name)
+    shutil.copy2(runtime / "namelist.input.source", stage / "namelist.input.source")
+    (stage / "namelist.input").write_text(prepared["namelist_text"])
+    (stage / "namelist.input.diff").write_text(prepared["namelist_diff"])
+    return stage
+
+
+def _model_times(stage: Path) -> list[dict]:
+    pattern = re.compile(r"Timing for main: time\s+(\S+)\s+on domain\s+\d+:\s+([0-9.Ee+\-]+) elapsed seconds")
+    logs = {}
+    for name in ("rsl.error.0000", "rsl.out.0000", "candidate_run.log"):
+        path = stage / name
+        if not path.exists():
+            path = stage / f"{name}.gz"
+        if path.exists():
+            opener = gzip.open if path.suffix == ".gz" else open
+            rows = []
+            with opener(path, "rt", errors="replace") as stream:
+                for line in stream:
+                    if match := pattern.search(line):
+                        rows.append({"timestamp": match.group(1),
+                                     "elapsed_seconds": float(match.group(2))})
+            if rows:
+                times = [row["timestamp"] for row in rows]
+                if len(times) != len(set(times)):
+                    raise ValueError(f"duplicate model timestamps within {path.name}")
+                logs[name] = rows
+    if not logs:
+        return []
+    primary_name, primary = next(iter(logs.items()))
+    primary_times = [row["timestamp"] for row in primary]
+    for name, rows in list(logs.items())[1:]:
+        if [row["timestamp"] for row in rows] != primary_times:
+            raise ValueError(f"model timestamp sequence differs between {primary_name} and {name}")
+    return primary
+
+
+def _compress_closed(stage: Path) -> list[dict]:
+    result = []
+    paths = list(stage.glob("*.raw")) + list(stage.glob("rsl.*")) + [stage / "candidate_run.log"]
+    for path in sorted(paths):
+        if not path.is_file():
+            continue
+        raw_sha, raw_bytes = sha256(path), path.stat().st_size
+        target = path.with_name(path.name + ".gz")
+        with path.open("rb") as source, target.open("xb") as target_stream:
+            with gzip.GzipFile(fileobj=target_stream, mode="wb", compresslevel=1, mtime=0) as gz:
+                shutil.copyfileobj(source, gz, 1024 * 1024)
+        digest, byte_count = hashlib.sha256(), 0
+        with gzip.open(target, "rb") as verified:
+            for block in iter(lambda: verified.read(1024 * 1024), b""):
+                digest.update(block)
+                byte_count += len(block)
+        if digest.hexdigest() != raw_sha or byte_count != raw_bytes:
+            target.unlink()
+            raise ValueError(f"compressed output failed integrity check: {path.name}")
+        result.append({"path": path.name, "sha256": raw_sha, "bytes": raw_bytes,
+                       "compressed_path": target.name, "compressed_sha256": sha256(target),
+                       "compressed_bytes": target.stat().st_size})
+        path.unlink()
+    return result
+
+
+def finalize_existing_run(arm: str, out: Path, duration: int) -> dict:
+    """Rebuild a strict receipt from closed run files without rerunning WRF."""
+    preflight = json.loads((out / "preflight.json").read_text())
+    original = json.loads((out / "receipt.json").read_text()) if (out / "receipt.json").exists() else {}
+    stage = out / "run"
+    issues = []
+    try:
+        times = _model_times(stage)
+    except Exception as exc:
+        times = []
+        issues.append(f"model time parsing: {exc}")
+    fatal = []
+    for name in ("candidate_run.log", "rsl.error.0000", "rsl.out.0000"):
+        path = stage / name
+        if not path.exists():
+            path = stage / f"{name}.gz"
+        if path.exists():
+            opener = gzip.open if path.suffix == ".gz" else open
+            try:
+                with opener(path, "rt", errors="replace") as stream:
+                    fatal.extend(line.rstrip() for line in stream
+                                 if re.search(r"fatal|error stop|segmentation|signal", line, re.I))
+            except Exception as exc:
+                issues.append(f"fatal scan {path.name}: {exc}")
+    trace = stage / "pr85_joint_moment_stages.raw"
+    if not trace.exists():
+        trace = stage / "pr85_joint_moment_stages.raw.gz"
+    try:
+        snapshots = read_time_snapshots(trace) if trace.is_file() else {
+            "record_count": 0, "timesteps": [], "completed_post_kdm6_timesteps": [], "snapshots": {}}
+    except Exception as exc:
+        snapshots = {"record_count": 0, "timesteps": [],
+                     "completed_post_kdm6_timesteps": [],
+                     "duplicate_post_kdm6_timesteps": [], "snapshots": {}}
+        issues.append(f"snapshot parse: {exc}")
+    input_hashes = preflight.get("input_hashes", {})
+    if not input_hashes:
+        input_hashes = {Path(row["path"]).name: row["sha256_after"] for row in json.loads(
+            Path(preflight["source_receipt"]).read_text())["run_isolation"]["inputs"]}
+    changed_stage = []
+    for name, expected in input_hashes.items():
+        staged = stage / name
+        if not staged.is_file():
+            changed_stage.append(name)
+            continue
+        if name == "namelist.input":
+            expected = preflight["candidate_namelist_sha256"]
+        if sha256(staged) != expected:
+            changed_stage.append(name)
+    source = Path(preflight["runtime_dir"])
+    source_after = {}
+    changed_original = []
+    for name, expected in input_hashes.items():
+        try:
+            digest = sha256(source / name)
+        except OSError:
+            digest = None
+        source_after[name] = digest
+        if digest != expected:
+            changed_original.append(name)
+    source_receipt_path = Path(preflight["source_receipt"])
+    source_receipt_sha = preflight.get("source_receipt_sha256") or sha256(source_receipt_path)
+    source_receipt_unchanged = sha256(source_receipt_path) == source_receipt_sha
+    expected_times = [(dt.datetime(2026, 8, 16, 13) + dt.timedelta(seconds=20 * i)).strftime("%Y-%m-%d_%H:%M:%S")
+                      for i in range(1, duration // 20 + 1)]
+    actual_times = [row["timestamp"] for row in times]
+    completed = snapshots.get("completed_post_kdm6_timesteps", [])
+    duplicate_post = snapshots.get("duplicate_post_kdm6_timesteps", [])
+    complete = (original.get("returncode") == 0 and actual_times == expected_times and
+                completed == list(range(1, duration // 20 + 1)) and not duplicate_post and
+                not fatal and not issues and
+                not changed_stage and not changed_original and source_receipt_unchanged and
+                set(SNAPSHOTS.values()).issubset(snapshots["snapshots"]))
+    compressed = original.get("compressed_outputs", [])
+    for row in compressed:
+        path = stage / row["compressed_path"]
+        digest, byte_count = hashlib.sha256(), 0
+        if not path.is_file() or sha256(path) != row["compressed_sha256"]:
+            issues.append(f"compressed file hash mismatch: {row['compressed_path']}")
+            continue
+        try:
+            with gzip.open(path, "rb") as stream:
+                for block in iter(lambda: stream.read(1024 * 1024), b""):
+                    digest.update(block)
+                    byte_count += len(block)
+        except OSError as exc:
+            issues.append(f"compressed file cannot be read: {row['compressed_path']}: {exc}")
+            continue
+        if byte_count != row["bytes"] or digest.hexdigest() != row["sha256"]:
+            issues.append(f"compressed payload hash mismatch: {row['compressed_path']}")
+    if issues:
+        complete = False
+    generated = [{"path": path.name, "bytes": path.stat().st_size, "sha256": sha256(path)}
+                 for path in sorted(stage.iterdir()) if path.is_file()]
+    receipt = {
+        **original, "arm": arm, "status": "COMPLETE" if complete else "INCOMPLETE",
+        "model_timestamps": times, "expected_model_timestamps": expected_times,
+        "timestep_count": len(times), "earliest_fatal": fatal[0] if fatal else None,
+        "fatal_lines": fatal[:100], "snapshots": snapshots,
+        "maximum_seen_timestep": max(snapshots["timesteps"]) if snapshots["timesteps"] else None,
+        "final_completed_step": max(completed) if completed else None,
+        "duplicate_post_kdm6_timesteps": duplicate_post,
+        "changed_staged_inputs": changed_stage, "changed_original_inputs": changed_original,
+        "source_inputs_after_sha256": source_after, "processing_errors": issues,
+        "source_receipt_sha256": source_receipt_sha,
+        "source_receipt_unchanged": source_receipt_unchanged,
+        "generated_files": generated,
+    }
+    receipt.pop("final_state_timestep", None)
+    launch_provenance_path = out / "launch_provenance.json"
+    launch_provenance = (json.loads(launch_provenance_path.read_text())
+                         if launch_provenance_path.is_file() else {})
+    launch_receipt_path = out / "receipt.launch.json"
+    receipt.update({
+        "launch_runner_source_sha256": launch_provenance.get("launch_runner_source_sha256"),
+        "launch_runner_source_sha256_status": (
+            "recorded in launch_provenance.json" if launch_provenance.get("launch_runner_source_sha256")
+            else "not recorded at launch; source hash unavailable"),
+        "successor_collector_source_sha256": sha256(Path(__file__).resolve()),
+        "successor_collector_source_path": str(Path(__file__).resolve()),
+        "launch_receipt_sha256": sha256(launch_receipt_path) if launch_receipt_path.is_file() else None,
+    })
+    (out / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
+    return receipt
+
+
+def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: float) -> dict:
+    out.mkdir(parents=True, exist_ok=False)
+    prepared = prepare(arm, duration, out, safety_fraction)
+    (out / "preflight.json").write_text(json.dumps({k: v for k, v in prepared.items()
+                                                     if k != "namelist_text"}, indent=2) + "\n")
+    if prepared["disk_guard"]["status"] != "PASS":
+        raise RuntimeError(f"{arm}: active-run disk guard failed; executable not launched")
+    if not execute:
+        return {k: v for k, v in prepared.items() if k not in {"namelist_text", "input_hashes"}}
+    stage = _stage(prepared, out)
+    command = ["/bin/bash", "-c", ". /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh --force >/dev/null 2>&1; . /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh >/dev/null 2>&1; export OMP_NUM_THREADS=1 OMP_DYNAMIC=FALSE; export LD_LIBRARY_PATH=/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:${LD_LIBRARY_PATH:-}; ulimit -s unlimited; ./wrf.exe > candidate_run.log 2>&1"]
+    start = time.monotonic()
+    with (stage / "launcher.stdout").open("wb") as stdout, (stage / "launcher.stderr").open("wb") as stderr:
+        process = subprocess.run(command, cwd=stage, stdout=stdout, stderr=stderr, check=False)
+    elapsed = time.monotonic() - start
+    processing_errors = []
+    try:
+        times = _model_times(stage)
+    except Exception as exc:
+        times = []
+        processing_errors.append(f"model time parsing: {exc}")
+    fatal = []
+    for name in ("candidate_run.log", "rsl.error.0000", "rsl.out.0000"):
+        path = stage / name
+        if path.exists():
+            with path.open(errors="replace") as stream:
+                fatal.extend(line.rstrip() for line in stream
+                             if re.search(r"fatal|error stop|segmentation|signal", line, re.I))
+    trace = stage / "pr85_joint_moment_stages.raw"
+    try:
+        snapshots = read_time_snapshots(trace) if trace.is_file() else {
+            "record_count": 0, "timesteps": [], "completed_post_kdm6_timesteps": [],
+            "duplicate_post_kdm6_timesteps": [], "snapshots": {}}
+    except Exception as exc:
+        snapshots = {"record_count": 0, "timesteps": [],
+                     "completed_post_kdm6_timesteps": [],
+                     "duplicate_post_kdm6_timesteps": [], "snapshots": {}}
+        processing_errors.append(f"snapshot parsing: {exc}")
+    try:
+        compressed = _compress_closed(stage)
+    except Exception as exc:
+        compressed = []
+        processing_errors.append(f"post-run compression: {exc}")
+    generated_files = [{"path": path.name, "bytes": path.stat().st_size, "sha256": sha256(path)}
+                       for path in sorted(stage.iterdir()) if path.is_file()]
+    inputs = prepared["input_hashes"]
+    stage_hashes = {name: sha256(stage / name) for name in inputs
+                    if name not in {"namelist.input", "namelist.input.source"}}
+    stage_hashes["namelist.input"] = sha256(stage / "namelist.input")
+    stage_hashes["namelist.input.source"] = sha256(stage / "namelist.input.source")
+    changed_stage = [name for name, digest in stage_hashes.items()
+                     if digest != (prepared["candidate_namelist_sha256"] if name == "namelist.input"
+                                   else inputs[name])]
+    original_after = {name: sha256(Path(prepared["runtime_dir"]) / name) for name in inputs}
+    changed_original = [name for name, digest in original_after.items() if digest != inputs[name]]
+    start_time = dt.datetime(2026, 8, 16, 13)
+    expected_times = [(start_time + dt.timedelta(seconds=20 * step)).strftime("%Y-%m-%d_%H:%M:%S")
+                      for step in range(1, duration // 20 + 1)]
+    actual_times = [row["timestamp"] for row in times]
+    completed_steps = snapshots.get("completed_post_kdm6_timesteps", [])
+    duplicate_post = snapshots.get("duplicate_post_kdm6_timesteps", [])
+    complete = (process.returncode == 0 and actual_times == expected_times and
+                completed_steps == list(range(1, duration // 20 + 1)) and not duplicate_post and not fatal and
+                not processing_errors and not changed_stage and not changed_original and
+                sha256(Path(prepared["source_receipt"])) == prepared["source_receipt_sha256"] and
+                set(SNAPSHOTS.values()).issubset(snapshots.get("snapshots", {})))
+    receipt = {"arm": arm, "status": "COMPLETE" if complete else "INCOMPLETE",
+               "returncode": process.returncode, "wall_seconds": elapsed, "model_timestamps": times,
+               "timestep_count": len(times), "earliest_fatal": fatal[0] if fatal else None,
+               "fatal_lines": fatal[:100], "snapshots": snapshots,
+               "maximum_seen_timestep": max(snapshots["timesteps"]) if snapshots["timesteps"] else None,
+               "final_completed_step": max(completed_steps) if completed_steps else None,
+               "duplicate_post_kdm6_timesteps": duplicate_post,
+               "expected_model_timestamps": expected_times,
+               "changed_staged_inputs": changed_stage, "changed_original_inputs": changed_original,
+               "source_inputs_after_sha256": original_after, "processing_errors": processing_errors,
+               "frozen_executable_sha256": prepared["executable_sha256"],
+               "source_receipt_sha256": prepared["source_receipt_sha256"],
+               "candidate_wrfinput_sha256": prepared["candidate_wrfinput_sha256"],
+               "candidate_wrfbdy_sha256": prepared["candidate_wrfbdy_sha256"],
+               "candidate_namelist_sha256": prepared["candidate_namelist_sha256"],
+               "generated_files": generated_files, "compressed_outputs": compressed}
+    (out / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
+    return receipt
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--arm", choices=("OFF", "COUPLED"), required=True)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--duration-seconds", type=int, default=600)
+    parser.add_argument("--execute", action="store_true", help="launch after hash and disk checks")
+    parser.add_argument("--finalize", action="store_true", help="receipt a completed run directory without relaunch")
+    parser.add_argument("--safety-fraction", type=float, default=0.85)
+    args = parser.parse_args()
+    if args.duration_seconds <= 0 or args.duration_seconds % 20:
+        parser.error("--duration-seconds must be a positive multiple of 20")
+    out = args.output or DEFAULT_OUT / args.arm
+    result = (finalize_existing_run(args.arm, out, args.duration_seconds) if args.finalize else
+              run(args.arm, out, args.duration_seconds, args.execute, args.safety_fraction))
+    print(json.dumps({k: v for k, v in result.items() if k != "input_hashes"}, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

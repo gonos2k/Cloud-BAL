@@ -1,0 +1,152 @@
+{
+  "schema": "pr86_independent_team_review_v1",
+  "review_date": "2026-10-16",
+  "scope": "source, unit, evidence, receipt, and scientific-scope review of PR86 Python accounting and response artifacts; no Fortran or model rerun",
+  "implementation_review": "PASS_SCOPED_NO_CODE_BLOCKERS",
+  "scientific_validation": "OPEN",
+  "runtime_review": [
+    {
+      "arm": "OFF",
+      "status": "INCOMPLETE",
+      "returncode": 1,
+      "model_timestamps": [
+        {
+          "timestamp": "2026-08-16_13:00:20",
+          "elapsed_seconds": 660.26807
+        }
+      ],
+      "completed_POST_KDM6_steps": [
+        1
+      ],
+      "maximum_seen_timestep": 2,
+      "final_completed_step": 1,
+      "stale_final_state_timestep_present": false,
+      "changed_staged_inputs": [],
+      "changed_original_inputs": [],
+      "source_receipt_unchanged": true,
+      "processing_errors": [],
+      "snapshots": [
+        "20s"
+      ],
+      "compressed_output_count": 28,
+      "launch_receipt_sha256": "b9f68b2039aef5904acb731740aefa7bba5d1fdd47880b59d4518c57128307a8",
+      "launch_runner_source_sha256": null,
+      "successor_collector_source_sha256": "c55ca65d813f521639bccd16f5ad9323f71f061fb70295a46399eb916a7823ef",
+      "first_call_pre_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+      "first_call_post_sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+      "first_call_prepost_match_PR85_baseline": true,
+      "final_receipt_sha256": "c444c850f866f94bd8c0bd0c9e912bc608f8cc72d49b09a8ac4a5362b1253db9",
+      "history_coverage": "only 13:00:00 initial history; 13:01 through 13:10 absent"
+    },
+    {
+      "arm": "COUPLED",
+      "status": "INCOMPLETE",
+      "returncode": 1,
+      "model_timestamps": [
+        {
+          "timestamp": "2026-08-16_13:00:20",
+          "elapsed_seconds": 660.49725
+        }
+      ],
+      "completed_POST_KDM6_steps": [
+        1
+      ],
+      "maximum_seen_timestep": 2,
+      "final_completed_step": 1,
+      "stale_final_state_timestep_present": false,
+      "changed_staged_inputs": [],
+      "changed_original_inputs": [],
+      "source_receipt_unchanged": true,
+      "processing_errors": [],
+      "snapshots": [
+        "20s"
+      ],
+      "compressed_output_count": 28,
+      "launch_receipt_sha256": "0b81d6692f1a7b1882a0f6502bf580cbd4ce4d84ccdee01380d4559bfbe33826",
+      "launch_runner_source_sha256": "f0ff4e5e4c82a2f0b46c668079b8cdfafae67429ca68acd28d1bf407d76a5928",
+      "successor_collector_source_sha256": "c55ca65d813f521639bccd16f5ad9323f71f061fb70295a46399eb916a7823ef",
+      "first_call_pre_sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+      "first_call_post_sha256": "67c65cc6c36950b6b051791bd022d52021d2b2d785cbaeee12279ccad5b6cc6e",
+      "first_call_prepost_match_PR85_baseline": true,
+      "final_receipt_sha256": "0ff6c9234c92faa43793af2968ba1f38e4ebfc17433d2af733ba37225f036b81",
+      "history_coverage": "only 13:00:00 initial history; 13:01 through 13:10 absent"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "pass",
+      "area": "weighted process maps",
+      "finding": "Cell mapping and units agree with same-call geometry; NPZ map sums agree with JSON process totals to approximately 5.6e-13 relative error. Mass/count activity are vector proxies, distinct from signed stored-minus-approved residuals."
+    },
+    {
+      "severity": "pass_with_scope_limit",
+      "area": "water-term accounting",
+      "finding": "Signed C convention and R=R0-sum(C) are consistent. Final partial residuals are OFF -16962.075555828906 kg and COUPLED -16751.474967941016 kg; the budget remains open."
+    },
+    {
+      "severity": "pass_with_scope_limit",
+      "area": "thermal labels",
+      "finding": "Cold heat remains K kg, warm heat is a cpm-weighted J proxy, and no total-energy closure is claimed. First-call physical temperature uses hash-bound TH*PII; history T remains perturbation potential temperature."
+    },
+    {
+      "severity": "pass_with_scope_limit",
+      "area": "first-call response",
+      "finding": "Receipt-bound PRE/POST comparisons include captured Q/N/B, pressure and physical temperature only. Uncaptured wind/geopotential and retention or observation-skill claims are omitted."
+    },
+    {
+      "severity": "pass",
+      "area": "strict runtime receipts",
+      "finding": "The duplicate-time gate is fixed. Both strict receipts explicitly remain INCOMPLETE after timestep-2 FogDES paired Stokes settling failure; one completed POST_KDM6 step is retained. No stale final_state_timestep remains, inputs/source receipts are unchanged, and output processing reports no errors."
+    },
+    {
+      "severity": "pass_with_scope_limit",
+      "area": "baseline identity",
+      "finding": "Each extended arm first-call PRE and POST dump hashes match the corresponding PR85v17 baseline. This establishes first-call identity only and does not override the subsequent runtime failure."
+    }
+  ],
+  "focused_tests": {
+    "command": "python3 -m pytest -q tests/test_pr86_water_budget.py tests/test_pr86_process_budget.py tests/test_pr86_water_terms.py tests/test_pr86_time_response.py tests/test_pr86_compare_response.py",
+    "result": "21 passed (0.57s)",
+    "integration_log_sha256": "9a51b6adb2f7d27d1e97b62ecc4a6a26413fb798e97d35bfadca93634b38c026"
+  },
+  "reviewed_sha256": {
+    "tools/pr86_process_budget.py": "91661498ed46dbeeaf50488d4d8259ec22d2b402ecd6ef57a68263b7bb0a0287",
+    "tools/pr86_water_terms.py": "65751f1d499dc63bdd22bff91820fb6e6734972b5c232ee720ebca3d2eccc6f3",
+    "tools/pr86_compare_response.py": "0bb0e5652359bea546a1f166310108dadc9f582960d50f5208c6259c2a0e7bcb",
+    "tools/pr86_time_response.py": "c55ca65d813f521639bccd16f5ad9323f71f061fb70295a46399eb916a7823ef",
+    "tools/pr86_water_budget.py": "e6c00374e9730278b3c1545630af9aa3a6af4c68544c7f39dbda61f909337dc2",
+    "tools/pr86_plot_budget.py": "6cd7d7687ddd65de729dccf4469e6d52f990660e18f5cd765f5b1e18f0b11296",
+    "tests/test_pr86_process_budget.py": "5a3f4397220a1b79c641a3c578216c969d49e5988b15d7c8fbf6ebf6adf105fa",
+    "tests/test_pr86_water_terms.py": "32eb234d69b248d5625a8c00bac49ae21c2c793211b7047835bd36ef6957fc3c",
+    "tests/test_pr86_compare_response.py": "c7365e527fe00d6b455260143d8ab5049e51fec19021f8e12bd58566e9c5baec",
+    "tests/test_pr86_time_response.py": "fe50e1bccaeb27d5cedb778efb85cb61cb6dfd92baf2c039438f6458550dc91d",
+    "tests/test_pr86_water_budget.py": "d769471997781abadbf457e65609e7aba133524ac199c5426f2ad656221fcbda",
+    "docs/evidence/pr86_process_budget_20261016.json": "31a3ea8ab9d78376043a457dc626fe97c6f262fdc5a61f194a215bc3b1fd22eb",
+    "docs/evidence/pr86_water_terms_20261016.json": "fe2f1baff0f54404276d9561d1bf306b90c88c81ef2b6f3c4ebb2b1a27a10400",
+    "docs/evidence/pr86_process_budget_off_map.npz": "1ef07f3981c3b20390bc879a8b0c3e4b2049f51dace08e0f99abf37eca8c2642",
+    "docs/evidence/pr86_process_budget_coupled_map.npz": "f08d99ba2595a66390a33810a8ab1ce6641681969daba1bc58a779f4846fa957",
+    "docs/evidence/pr86_water_OFF_20261016.json": "e528269cd5e937728de87c49068db925d316ef1c5dd4159f2ee551aa12eacfb9",
+    "docs/evidence/pr86_water_OFF_20261016.npz": "dfb07e1a535b43d715746c792e8814cce5071c4e2e1a3202d47b39a27fd073c8",
+    "docs/evidence/pr86_water_COUPLED_20261016.json": "1f496f5a6115323ee3904331c2a187992de2aa2d8c2cae85a9c516ef817e38ae",
+    "docs/evidence/pr86_water_COUPLED_20261016.npz": "ef944eaaa7fcadf71f122a57bbf0af0c292f3d8099c63279a031d29fe14f6f3a",
+    "docs/evidence/pr86_time_response_OFF_20261016.json": "48d0a91f77f8937b4fecde35f45f047e626334e0fe6fd69a2c88ee1152e30076",
+    "docs/evidence/pr86_time_response_COUPLED_20261016.json": "c366f8e8ffe2ee0e1016ee4aae4d5c293c74a957e5803a753d0be6a3d4edba80",
+    "docs/evidence/pr86_time_response_OFF_launch_20261016.json": "b9f68b2039aef5904acb731740aefa7bba5d1fdd47880b59d4518c57128307a8",
+    "docs/evidence/pr86_time_response_COUPLED_launch_20261016.json": "0b81d6692f1a7b1882a0f6502bf580cbd4ce4d84ccdee01380d4559bfbe33826",
+    "docs/evidence/pr86_time_response_COUPLED_launch_provenance_20261016.json": "649f12544195301640cd1e3254171a5a17023985edd9a910a40eaad293f71c81",
+    "docs/evidence/pr86_matched_first_call_response_20261016.json": "fad83b955650c74e15473b72be9d9f5430f87f5c6503a09fb10dd7c8305daa6b",
+    "docs/evidence/pr86_matched_history_response_20261016.json": "7a1c8f3e5fb3a61880c5428f78b82d99af7aca8453bf54e5876cc12493fb1f24",
+    "docs/evidence/pr86_integration_20261016.json": "79b83d0b6b57299320c6b74fa5b06cc14aab4b642a51d002f7130d53c741fb1e",
+    "docs/PR86_FIRST_CALL_WATER_20261016.md": "fcb28715362194ccda1affa1b1fa7fb3ad2855db53d7d34a9d288aaff6fd148c",
+    "docs/PR86_PROCESS_BUDGET_20261016.md": "2a89531646b6c403b162aae83efcc85f840e83194fdb5381f65a821f3e39273b",
+    "docs/PR86_TIME_RESPONSE_20261016.md": "b33f0b874db7f43acc8418f4fd0f18be6d8bb5ce1f83431a6b12fce0c60e241e",
+    "docs/PR86_FROZEN_BASELINE_AUDIT_20261016.md": "3f0957e6704032b775383618d70b4d26aed36f6351c14b6ad66fd4333f1fe612"
+  },
+  "limits": [
+    "Same-call native hybrid dry-air mass was not captured; budgets use fixed DEN*DELZ*map_area.",
+    "Remaining water residual is nonzero; no global water or energy closure is established.",
+    "Both ten-minute runs stopped at the timestep-2 FogDES guard; only 20-second completed-state data are available.",
+    "OFF launch runner source hash was not recorded at launch; successor collector hash is bound. COUPLED launch runner provenance is recorded.",
+    "No Fortran build or new model run was performed for this review."
+  ]
+}
