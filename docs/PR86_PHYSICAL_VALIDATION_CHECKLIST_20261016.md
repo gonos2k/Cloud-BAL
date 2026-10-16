@@ -57,8 +57,9 @@
 
 - [x] Complete team review, resolve implementation findings and run focused
   validation appropriate to the changed analysis/runner code.
-- [ ] Update selected maintained Graphify corpora, separate dated snapshots,
+- [x] Update selected maintained Graphify corpora, separate dated snapshots,
   derived wiki reports and append-only audit log. Structural freshness is
   not physical acceptance.
-- [ ] Commit, push and open a reviewable PR with explicit successful,
+- [x] Commit, push and open a reviewable PR with explicit successful,
   incomplete and scientific-open results.
+  Published as [PR #86](https://github.com/gonos2k/Cloud-BAL/pull/86).
