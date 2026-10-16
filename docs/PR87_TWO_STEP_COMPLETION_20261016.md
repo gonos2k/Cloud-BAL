@@ -316,3 +316,5 @@ Passing the completed Q/N/B/PSD gates does not certify every subsequent
 particle activity threshold or process input domain. The next investigation
 must identify the actual failing ProgB call and its producer from that fixed
 baseline; no density cap, number floor, or transient bypass was added here.
+
+[별도 KG 갱신 기록](PR87_KG_UPDATE_20261016.md)은 최종 물리·실행 근거와 그래프 freshness를 구분합니다.

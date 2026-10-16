@@ -23,3 +23,5 @@
 보류 과정의 물리적 영향은 계속 OPEN으로 둡니다. 실행·검사 근거는
 [통합 기록](evidence/pr87_integration_20261016.json)과
 [설명](PR87_TWO_STEP_COMPLETION_20261016.md)에 연결합니다.
+
+- [x] 최종 source commit의 별도 dated Graphify 증분 갱신과 파생 위키·감사 로그 동기화 — [KG 범위·delta·제한](PR87_KG_UPDATE_20261016.md)
