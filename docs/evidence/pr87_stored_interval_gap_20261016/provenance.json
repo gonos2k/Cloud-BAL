@@ -1,0 +1,97 @@
+{
+  "scope": "offline replay of the single V35 KDM6 failure row with frozen V34 fraction/state helper; no model launched",
+  "receipt": "/var/tmp/pr87_gsearch_replay_v35e/receipt.json",
+  "receipt_sha256": "f1165ca7d04a6267fb79523e4e60e5d76ae2bbcde3c2d38fbd1e795486170fcf",
+  "source_pins": {
+    "tool": {
+      "path": "/var/tmp/pr87_replay_gsearch_20261016.py",
+      "sha256": "2c6f99d521fa972f265d11a3f7758016bccad67110ca9a2774e24b99a6c2f110"
+    },
+    "input_log": {
+      "path": "/var/tmp/pr87_joint_OFF_40s_v35diag_20261016/run/rsl.out.0000.gz",
+      "sha256": "94fce40bd482647dd97b64559a8b0cf1f634dcf8ae4a7400579c8ddcaaa8f388"
+    },
+    "frozen_helper_source": {
+      "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v34/module_mp_kdm6.F",
+      "sha256": "2b10d9f15caa6c91a541428b19a6187bab7d75080e1ab67ae94b2435f7d928ce"
+    },
+    "compiler": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef"
+    },
+    "libimf": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so",
+      "sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8"
+    },
+    "libintlc": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5",
+      "sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120"
+    }
+  },
+  "ifx_version": "ifx (IFX) 2026.0.0 20260331",
+  "flags": {
+    "O0": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "O2": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ]
+  },
+  "generated_files_sha256": {
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0.F90": "c774b9b51d24425cad193750002b99c14f3b5efccbc7bea513718b6ea7d0c5f3",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0.compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0.compile.stderr": "db128a03bea9c7a38330535400db86b222e660660a1fdd8336ba0868c6044f79",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0.stdout": "6cdbb69054853e932c54da15a8a4ced11f0738de97a9afa4f028af42c1742496",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2.F90": "c774b9b51d24425cad193750002b99c14f3b5efccbc7bea513718b6ea7d0c5f3",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2.compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2.compile.stderr": "db128a03bea9c7a38330535400db86b222e660660a1fdd8336ba0868c6044f79",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2.stdout": "6cdbb69054853e932c54da15a8a4ced11f0738de97a9afa4f028af42c1742496",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0_diag.F90": "78fbc193f2e11ca02d31ce40b2ed9adf424d4710a5be97dc12e721a8524bfb85",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0_diag.compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0_diag.compile.stderr": "db128a03bea9c7a38330535400db86b222e660660a1fdd8336ba0868c6044f79",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0_diag.stdout": "c0413df9ffe672006fbb98dd17c4573f336ac6bc10db93bb5a764e928e69c372",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0_diag.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2_diag.F90": "78fbc193f2e11ca02d31ce40b2ed9adf424d4710a5be97dc12e721a8524bfb85",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2_diag.compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2_diag.compile.stderr": "db128a03bea9c7a38330535400db86b222e660660a1fdd8336ba0868c6044f79",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2_diag.stdout": "c0413df9ffe672006fbb98dd17c4573f336ac6bc10db93bb5a764e928e69c372",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2_diag.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "executables_sha256": {
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0": "f9f52da4305117cca824faffd0f35e96a3462c2a69c30d886b9756147d54ec49",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2": "2d957d5711676052e7c3d1758de114b52799bcc56c2231fd0524f6d02c5d1915",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O0_diag": "a98ca40cda5ba6fed4df817976f03b7424be90b86b4b0299229e210e1b10bbe8",
+    "/var/tmp/pr87_gsearch_replay_v35e/case1_O2_diag": "c58942428a1cb4e1997953f5a2ca7ce2467060792a8eb445e8e6a0b2501db59a"
+  },
+  "module_file_sha256": null,
+  "results": {
+    "O0": "GSEARCH_RAIN_ENVELOPE    1.34613922561935325E-06    1.51909224907131121E-06    1.34613935642846627E-06    1.51909216583590023E-06 6 6\nGSEARCH_RAIN_ENVELOPE_STATE    1.32635495901922695E-05    3.08175820312500000E+04    1.32635495901922695E-05    3.08175820312500000E+04    2.32347913009247208E+09    1.36749170269467868E-03    1.00000010950661213E-15\nGSEARCH_RAIN_ENVELOPE_BGHI    1.12848071392410458E-15\nCASE_META 2 63 204 17 1 2 2 0 6\nCASE_RESULT F    0.00000000000000000E+00 T F T T    0.00000000000000000E+00\n",
+    "O2": "GSEARCH_RAIN_ENVELOPE    1.34613922561935325E-06    1.51909224907131121E-06    1.34613935642846627E-06    1.51909216583590023E-06 6 6\nGSEARCH_RAIN_ENVELOPE_STATE    1.32635495901922695E-05    3.08175820312500000E+04    1.32635495901922695E-05    3.08175820312500000E+04    2.32347913009247208E+09    1.36749170269467868E-03    1.00000010950661213E-15\nGSEARCH_RAIN_ENVELOPE_BGHI    1.12848071392410458E-15\nCASE_META 2 63 204 17 1 2 2 0 6\nCASE_RESULT F    0.00000000000000000E+00 T F T T    0.00000000000000000E+00\n",
+    "O0_diagnostic": "DIAG_PRECONDITIONS_PASSED\nDIAG_UPPER_WALK_EXHAUSTED    1.34613922561935325E-06    1.51909224907131121E-06    1.51908852785709314E-06    3.20000000000000000E+01\nDIAG_NO_BEST_SEARCH_FAILED    0.00000000000000000E+00\nGSEARCH_RAIN_ENVELOPE    1.34613922561935325E-06    1.51909224907131121E-06    1.34613935642846627E-06    1.51909216583590023E-06 6 6\nGSEARCH_RAIN_ENVELOPE_STATE    1.32635495901922695E-05    3.08175820312500000E+04    1.32635495901922695E-05    3.08175820312500000E+04    2.32347913009247208E+09    1.36749170269467868E-03    1.00000010950661213E-15\nGSEARCH_RAIN_ENVELOPE_BGHI    1.12848071392410458E-15\nCASE_META 2 63 204 17 1 2 2 0 6\nCASE_RESULT F    0.00000000000000000E+00 T F T T    0.00000000000000000E+00\n",
+    "O2_diagnostic": "DIAG_PRECONDITIONS_PASSED\nDIAG_UPPER_WALK_EXHAUSTED    1.34613922561935325E-06    1.51909224907131121E-06    1.51908852785709314E-06    3.20000000000000000E+01\nDIAG_NO_BEST_SEARCH_FAILED    0.00000000000000000E+00\nGSEARCH_RAIN_ENVELOPE    1.34613922561935325E-06    1.51909224907131121E-06    1.34613935642846627E-06    1.51909216583590023E-06 6 6\nGSEARCH_RAIN_ENVELOPE_STATE    1.32635495901922695E-05    3.08175820312500000E+04    1.32635495901922695E-05    3.08175820312500000E+04    2.32347913009247208E+09    1.36749170269467868E-03    1.00000010950661213E-15\nGSEARCH_RAIN_ENVELOPE_BGHI    1.12848071392410458E-15\nCASE_META 2 63 204 17 1 2 2 0 6\nCASE_RESULT F    0.00000000000000000E+00 T F T T    0.00000000000000000E+00\n"
+  }
+}

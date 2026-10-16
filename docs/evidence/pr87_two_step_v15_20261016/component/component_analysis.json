@@ -1,0 +1,142 @@
+{
+  "schema": "pr87_v15_component_analysis_v1",
+  "scope": "Single completed first KDM6 call replay; not coupled native model runtime.",
+  "identities": {
+    "input_pre_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+    "component_post_sha256": "9de31a5d73070137ffdc0976b05b72ea87bfda309bd2a244f490feaf9f15f75e",
+    "v17_off_pre_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+    "v17_off_post_sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+    "pre_exact_matches_v17": true,
+    "fixed_DEN_DELZ_same_as_v17_pre": true,
+    "area_basis": "pr86_water_budget.load_call_measure(OFF frozen v17), enabled only after exact PRE identity and DEN/DELZ equality"
+  },
+  "public_rain_strict_gate": {
+    "active_cells": 2533440,
+    "zero_pairs": 2261246,
+    "positive_pairs": 272194,
+    "positive_pass_real64": 272194,
+    "positive_pass_actual_real32_product": 272194,
+    "positive_pass_both": 272194,
+    "orphan_cells": 0,
+    "negative_or_nonfinite_cells": 0,
+    "strict_gate_pass_cells": 2533440,
+    "strict_gate_fail_cells": 0,
+    "gate_definition": "QR=NR=0 or QR>0,NR>0 and both REAL64(DEN)*REAL64(NR) and actual REAL32(NR*DEN) satisfy exact source-derived bounds rho*lambda^3/pidnr times QR; no tolerance."
+  },
+  "public_store_ledger": {
+    "path": "/var/tmp/pr87_v15_final_component_20261016/run/pr87_rain_public_store.raw",
+    "rows": 169,
+    "adjustment_counts": {
+      "2": 169
+    },
+    "all_rows_timestep1": true,
+    "all_row_coordinates_in_active_support": true,
+    "same_cell_rho_DELZ_asserted": true,
+    "component_pre_equals_frozen_v17_pre": true,
+    "per_cell_specific_dq": {
+      "signed_sum": -2.8754087999516287e-10,
+      "L1_sum": 6.437816946203156e-10,
+      "max_abs": 2.3283064365386963e-10,
+      "min_signed": -2.3283064365386963e-10,
+      "max_signed": 7.275957614183426e-12
+    },
+    "per_cell_specific_dn": {
+      "signed_sum": 0.20808544698346587,
+      "L1_sum": 0.2081187397967934,
+      "max_abs": 0.015170465514529496,
+      "min_signed": -7.539870296113804e-06,
+      "max_signed": 0.015170465514529496
+    },
+    "weighted_by_rho_DELZ_area": {
+      "Q_kg": {
+        "signed_sum": -2.267316824436233,
+        "L1_sum": 6.558918964553893,
+        "max_abs": 2.235868443559698,
+        "min_signed": -2.235868443559698,
+        "max_signed": 0.09188247443660043
+      },
+      "N_count": {
+        "signed_sum": 2518714745.675042,
+        "L1_sum": 2519029865.371423,
+        "max_abs": 191576144.85176203,
+        "min_signed": -72405.23755402068,
+        "max_signed": 191576144.85176203
+      }
+    },
+    "all_adjustment_2_directed_oneULP": true
+  },
+  "component_post_vs_frozen_v17_post": {
+    "Q": {
+      "changed_cells": 36,
+      "max_abs_difference": 1.7969869077205658e-05,
+      "different_from_frozen_v17": true
+    },
+    "QC": {
+      "changed_cells": 589,
+      "max_abs_difference": 0.0003068455262109637,
+      "different_from_frozen_v17": true
+    },
+    "QI": {
+      "changed_cells": 19,
+      "max_abs_difference": 3.7040983443148434e-05,
+      "different_from_frozen_v17": true
+    },
+    "QR": {
+      "changed_cells": 91263,
+      "max_abs_difference": 3.896778798662126e-05,
+      "different_from_frozen_v17": true
+    },
+    "QS": {
+      "changed_cells": 34,
+      "max_abs_difference": 0.00015958398580551147,
+      "different_from_frozen_v17": true
+    },
+    "QG": {
+      "changed_cells": 40,
+      "max_abs_difference": 0.000138493487611413,
+      "different_from_frozen_v17": true
+    },
+    "NN": {
+      "changed_cells": 177,
+      "max_abs_difference": 512.0,
+      "different_from_frozen_v17": true
+    },
+    "NC": {
+      "changed_cells": 553,
+      "max_abs_difference": 81774784.0,
+      "different_from_frozen_v17": true
+    },
+    "NI": {
+      "changed_cells": 16,
+      "max_abs_difference": 93028.6875,
+      "different_from_frozen_v17": true
+    },
+    "NR": {
+      "changed_cells": 62410,
+      "max_abs_difference": 107209.8046875,
+      "different_from_frozen_v17": true
+    },
+    "BG": {
+      "changed_cells": 61,
+      "max_abs_difference": 2.2304070057543868e-07,
+      "different_from_frozen_v17": true
+    },
+    "TH": {
+      "changed_cells": 15,
+      "max_abs_difference": 0.0521240234375,
+      "different_from_frozen_v17": true
+    },
+    "PII": {
+      "changed_cells": 0,
+      "max_abs_difference": 0.0,
+      "different_from_frozen_v17": false
+    }
+  },
+  "limitations": [
+    "This replay executes one saved first-call input in a component driver, not WRF timestepping or the matched OFF/COUPLED native model runs.",
+    "The public-return ledger is sparse: only adjustment/non-identical-number rows are recorded; it does not enumerate unchanged cells.",
+    "Weighted sums use frozen v17 OFF map area only after exact pre-call trace identity and same-cell DEN/DELZ equality."
+  ],
+  "component_receipt_sha256": "d0183d95c3ae3c40ca4968494bb7aab5a7768419587754bd8fe32ac8805e52a7",
+  "component_build_provenance_sha256": "9938edc219fa0d3a711030efa55272c3772205bc53f25baea9f87470691d145c"
+}

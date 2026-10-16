@@ -1,0 +1,151 @@
+{
+  "compiler": {
+    "imf_sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8",
+    "intlc_sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "kernel": {
+    "path": "src/common/cloud_bal_joint_transport.f90",
+    "sha256": "19d0259c423a3035a418174292c14d8671d778ebfe48a604cc80923c2f854541"
+  },
+  "overflow_fixture": "rho=REAL32(1.7); continuous N=rho^-1*HUGE(REAL32)*(1-1e-9). Test asserts the R64 continuous validator accepts it, continuous N*rho <= HUGE(REAL32), and REAL(REAL(N,REAL32),REAL64)*rho > HUGE(REAL32), without forming the overflowing REAL32 product.",
+  "preserved_failed_runs": [
+    {
+      "classification": "FAIL",
+      "reason": "directed-Q grouped commit or signed storage budget is incorrect",
+      "run_log_archive": {
+        "bytes": 342,
+        "decoded_bytes": 1873,
+        "decoded_sha256": "6d1b57fcdcb5d06dc3635481b4e6ed97ca3ba9708784547eb0104a973eed55ac",
+        "path": "initial_signed_budget_assertion_O0_FAIL.log.gz",
+        "sha256": "824afdf43a993c650ed3885f249d9af103caeaef71b4d1d0eb2dab3f475ad7da"
+      },
+      "run_log_sha256": "6d1b57fcdcb5d06dc3635481b4e6ed97ca3ba9708784547eb0104a973eed55ac",
+      "scratch_path": "/var/tmp/pr87_directed_q_store_finalreview_O0",
+      "test_sha256": "25b8897d652f3274a6573b92ec57c3a17c47809ddcc3e41b8ec620c9c1bb2e14"
+    },
+    {
+      "classification": "FAIL",
+      "reason": "directed-Q grouped commit or signed storage budget is incorrect",
+      "run_log_archive": {
+        "bytes": 79,
+        "decoded_bytes": 64,
+        "decoded_sha256": "90ddf17a7264d98c3e68f4d6a2cb3f438d7e2d533395fd71909c26d0895549e2",
+        "path": "initial_signed_budget_assertion_O2_FAIL.log.gz",
+        "sha256": "9a5af782071c068dcf34b3097b9dadde59b971bf312a5c7b03e8a00238425b1e"
+      },
+      "run_log_sha256": "90ddf17a7264d98c3e68f4d6a2cb3f438d7e2d533395fd71909c26d0895549e2",
+      "scratch_path": "/var/tmp/pr87_directed_q_store_finalreview_O2",
+      "test_sha256": "25b8897d652f3274a6573b92ec57c3a17c47809ddcc3e41b8ec620c9c1bb2e14"
+    },
+    {
+      "classification": "FAIL",
+      "reason": "strict volume-number update failed or altered another pair",
+      "run_log_archive": {
+        "bytes": 366,
+        "decoded_bytes": 3074,
+        "decoded_sha256": "67dd234e91121e2c7736d3bf03a55be370e36806b271e2bb5dbfa1d453ca6786",
+        "path": "test_input_overwrite_O0_FAIL.log.gz",
+        "sha256": "f4e8976344577ff36b2cd41e8911e4e667cc5c6aa93bab48887b0adf4117e596"
+      },
+      "run_log_sha256": "67dd234e91121e2c7736d3bf03a55be370e36806b271e2bb5dbfa1d453ca6786",
+      "scratch_path": "/var/tmp/pr87_directed_q_store_release_O0",
+      "test_sha256": "ec8f14e86e99e870c72eecbe506a2d8c5ae9376d6afea72f178eed04003166a9"
+    }
+  ],
+  "prior_pass2_receipt": {
+    "note": "Preserved unchanged; its distinct earlier test hash/coverage is not relabeled as pass3.",
+    "path": "directed_kernel_ifx_o0_o2.json",
+    "sha256": "5d24485e2034b5defa726e78294fec35cfc6529a57ca15aa92e1c6b5e96d4076"
+  },
+  "profile": {
+    "path": "tests/intel_toolchain.sh",
+    "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "runs": {
+    "O0": {
+      "compile_log_archive": {
+        "bytes": 208,
+        "decoded_bytes": 396,
+        "decoded_sha256": "181bb7f947e8f096d37f3cc1f648e5dc588e0ade51f5d1a2d2f476db82817943",
+        "path": "directed_kernel_pass3_O0_compile.log.gz",
+        "sha256": "088eb746a49a0b07e595b7b6d40d27a3f00bc56e03f78a8f498a19a487840397"
+      },
+      "compile_log_sha256": "181bb7f947e8f096d37f3cc1f648e5dc588e0ade51f5d1a2d2f476db82817943",
+      "compiler_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "executable_sha256": "ede420e56d433677e38ac11a7e3a069f9e972dc857b69ec8243ad2862f42a09b",
+      "exit_status": 0,
+      "failure_text_found": false,
+      "pass_marker_found": true,
+      "run_log_archive": {
+        "bytes": 334,
+        "decoded_bytes": 3045,
+        "decoded_sha256": "33c6b2b1aa733a6027e20a912d9e46fb646455f03eaf7a84a590408359557ecd",
+        "path": "directed_kernel_pass3_O0_run.log.gz",
+        "sha256": "8d00643e0afdf2d35820bfb95ae657cd90e63119e0c9ff04040fcd5053ff3db7"
+      },
+      "run_log_sha256": "33c6b2b1aa733a6027e20a912d9e46fb646455f03eaf7a84a590408359557ecd",
+      "scratch_path": "/var/tmp/pr87_directed_q_store_pass3_O0"
+    },
+    "O2": {
+      "compile_log_archive": {
+        "bytes": 208,
+        "decoded_bytes": 396,
+        "decoded_sha256": "181bb7f947e8f096d37f3cc1f648e5dc588e0ade51f5d1a2d2f476db82817943",
+        "path": "directed_kernel_pass3_O2_compile.log.gz",
+        "sha256": "088eb746a49a0b07e595b7b6d40d27a3f00bc56e03f78a8f498a19a487840397"
+      },
+      "compile_log_sha256": "181bb7f947e8f096d37f3cc1f648e5dc588e0ade51f5d1a2d2f476db82817943",
+      "compiler_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "executable_sha256": "7dcaea929d10d53052de4136d09eb5ee7f4075b54befcc01c429adbdb5b39228",
+      "exit_status": 0,
+      "failure_text_found": false,
+      "pass_marker_found": true,
+      "run_log_archive": {
+        "bytes": 50,
+        "decoded_bytes": 30,
+        "decoded_sha256": "ddb78e0f56894b93c1366824e43a67064876d25a4c6e1915df6e3174707737c3",
+        "path": "directed_kernel_pass3_O2_run.log.gz",
+        "sha256": "1177f970f7ce0b5a38fac11985e6742d3f46fcd638fdcca062a6ba7a59d3b9c4"
+      },
+      "run_log_sha256": "ddb78e0f56894b93c1366824e43a67064876d25a4c6e1915df6e3174707737c3",
+      "scratch_path": "/var/tmp/pr87_directed_q_store_pass3_O2"
+    }
+  },
+  "schema": "pr87_v19_directed_q_store_focused_intel_o0_o2_pass3_v1",
+  "scope": "Focused directed-Q storage kernel regression only; fresh scratch O0 and O2; no native model rerun.",
+  "test": {
+    "V18_FULL_values": "Q/N are decimal reconstructions from formatted R64 FULL rows; rho is the matching R32 PRE_RK field.",
+    "path": "tests/test_joint_qnb_transport.f90",
+    "sha256": "7e6a471bc2362d4690d86ee1ed42c8394b268fc38fa71bf2af1ee390481697c9"
+  },
+  "verification": "Both pass3 runs exit 0, contain PASS test_joint_qnb_transport, and contain no error-stop or failure text."
+}

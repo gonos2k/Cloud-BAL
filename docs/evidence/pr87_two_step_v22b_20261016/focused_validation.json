@@ -1,0 +1,36 @@
+{
+  "schema": "pr87_pending_ice_sublimation_focused_validation_v1",
+  "status": "PASS_SCOPED",
+  "source_preimage_sha256": "8679f2e7c51940ab740bbe9e768dbb68156e9c655f459245f522f7983fb99eb9",
+  "generated_module_sha256": "245e8a46bf11ba7e85137a81547f7e02b7f2bc429a293cbd3a34f61fc7b4a24d",
+  "test_path": "tests/test_pr87_ice_sublimation.py",
+  "test_sha256": "8949ad8458d13ad7d919c4208d20e407d06df5c761e1b39c99529fd3894826f8",
+  "log_sha256": "a17ac8b0343c4ad9cf51b71bef575fc7f1942102054b915a15acf09f57129d0d",
+  "compiler_profile_path": "tests/intel_toolchain.sh",
+  "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "cases": [
+    "source pin and cold-only optional flag forwarding",
+    "strict and pair-only pending zero-Q search endpoints",
+    "strict completed orphan/negative/positive-Q zero-N rejection",
+    "source-order Q0x3E dt20 leavesQ0x2 withNretained",
+    "old earlyNreset state rejected",
+    "exact full approved endpoint requires N extinction",
+    "partial approved endpoint preserves N",
+    "strict partial search bounded by vapor at alpha0.5 preserves positiveQI andNI"
+  ],
+  "scope": "extracted native helpers plus source contracts in fresh scratch under pinned Intel O0/O2; complete selectedmodule build separate; no native completion or energy approval implied",
+  "focused_batch": {
+    "result": "26 passed",
+    "log": "pr87_v22b_final_focused.log",
+    "log_sha256": "27d8ccc9875d6590a22d0257ed7777b012dc039b6e33d1eb287615c5f13ac8a9",
+    "tests": [
+      "test_pr86_time_response.py",
+      "test_pr87_rain_density_storage.py",
+      "test_pr87_rain_volume_store.py",
+      "test_pr87_rain_public_store.py",
+      "test_pr87_rain_sedimentation.py",
+      "test_pr87_rain_sedimentation_kernel.py",
+      "test_pr87_ice_sublimation.py"
+    ]
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "build": {
+    "compiler": "ifx (IFX) 2026.0.0 20260331",
+    "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v38/wrf_pr87_overlay.exe",
+    "executable_sha256": "089edcbbc7d1665b707faf91584e9a0162003bda49da6d668c483d8794273e0f",
+    "kdm6_generated_sha256": "d6714965148b77623e15b7a58c8908e16392a3a342a482ed0f2a775298de94cd",
+    "kdm6_object_sha256": "9b400ddbb651a3457a7e235c54dc403bd007c7b63f1863c887855629714fc9a4",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "partial_overlay": true,
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v38/pr87_native_overlay_build.json",
+    "receipt_sha256": "109553031f6d613245050e8b4ef549187d11a5c0a2a6b72413e44746127d3b94",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "first20_comparison": {
+    "compared": "timestep 1 PRE_RK, RK_STAGE_END 1/2/3, PRE_KDM6; all 12 REAL32 fields bytewise",
+    "field_mismatches": 0,
+    "record_headers_matched": 8,
+    "state_records_matched": 5,
+    "v36_off_trace_sha256": "5df550aea84c81775e90dfaaf9d5c474ac7cd588ea98b98c06143da4aa1999cc",
+    "v38_off_trace_sha256": "f9eadf2b1c7093eb0bdda794ec22ea38be9092ba138cd6809805309e6b389138"
+  },
+  "interpretation": "Both arms fail inside KDM6 after the strict-valid T1 PRE_KDM6 state and before any POST_KDM6. The run does not meet the 40-second criterion. Static diff is confined to the intended BG rewrite removal; runtime failure shows this candidate is not accepted.",
+  "reviewed_at_utc": "2026-10-16T11:46:22.339398+00:00",
+  "runs": {
+    "COUPLED": {
+      "baseline_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "candidate_build_unchanged": true,
+      "changed_original_inputs": [],
+      "changed_staged_inputs": [],
+      "endpoint_gates": [
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_source_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_source_violations": {},
+          "timestep": 1
+        }
+      ],
+      "executed_executable_sha256": "089edcbbc7d1665b707faf91584e9a0162003bda49da6d668c483d8794273e0f",
+      "expected_executable_sha256": "089edcbbc7d1665b707faf91584e9a0162003bda49da6d668c483d8794273e0f",
+      "fatal": "KDM6 invalid nonfinite or negative species state",
+      "model_timestamps": [],
+      "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "post_kdm6_timesteps": [],
+      "processing_errors": [],
+      "receipt_path": "/var/tmp/pr87_joint_COUPLED_40s_v38_20261016/receipt.json",
+      "receipt_sha256": "5b72fdb18e1fdfdc63d55b898efefe36ce1251cf15211ddb4b603105d0764480",
+      "returncode": 128,
+      "stage_counts": {
+        "PRE_KDM6": 1,
+        "PRE_RK": 1,
+        "RK_STAGE_END": 3
+      },
+      "stage_record_count": 5,
+      "status": "INCOMPLETE",
+      "strict_audit_path": "/var/tmp/pr87_v38_COUPLED_strict_audit.json",
+      "strict_audit_sha256": "b0c017629be7cd0ea7b6a75111454f9e0363111808b510283a3e97d625b550ac",
+      "strict_audit_status": "INCOMPLETE",
+      "wall_seconds": 201.2441072370857
+    },
+    "OFF": {
+      "baseline_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "candidate_build_unchanged": true,
+      "changed_original_inputs": [],
+      "changed_staged_inputs": [],
+      "endpoint_gates": [
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_source_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_source_violations": {},
+          "timestep": 1
+        }
+      ],
+      "executed_executable_sha256": "089edcbbc7d1665b707faf91584e9a0162003bda49da6d668c483d8794273e0f",
+      "expected_executable_sha256": "089edcbbc7d1665b707faf91584e9a0162003bda49da6d668c483d8794273e0f",
+      "fatal": "KDM6 invalid nonfinite or negative species state",
+      "model_timestamps": [],
+      "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "post_kdm6_timesteps": [],
+      "processing_errors": [],
+      "receipt_path": "/var/tmp/pr87_joint_OFF_40s_v38_20261016/receipt.json",
+      "receipt_sha256": "10800ff476d4ac4678fd96de73a4e54dce785de9007151081945d6812621269f",
+      "returncode": 128,
+      "stage_counts": {
+        "PRE_KDM6": 1,
+        "PRE_RK": 1,
+        "RK_STAGE_END": 3
+      },
+      "stage_record_count": 5,
+      "status": "INCOMPLETE",
+      "strict_audit_path": "/var/tmp/pr87_v38_OFF_strict_audit.json",
+      "strict_audit_sha256": "e5bf9884a9779b0eea07eeb5e159c39758643ef724a27d222340048b16292217",
+      "strict_audit_status": "INCOMPLETE",
+      "wall_seconds": 200.21566029824317
+    }
+  },
+  "schema": "pr87_v38_independent_review_v1",
+  "source": {
+    "change_vs_v36": "exactly one deletion: brs(i,k) = qrs(i,k,3)/rhox(i,k) after ProgB; no other KDM6 source changes",
+    "kdm6_sha256": "a3490fea5bf4143e512606833198cb300136d9153f91e8a3c5dcc1a6465349ae",
+    "manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v38/sources.json",
+    "manifest_sha256": "5950b3b438820e23eae8a49371f9e1844570af95f952d493610f040dfd1a5e5b"
+  }
+}

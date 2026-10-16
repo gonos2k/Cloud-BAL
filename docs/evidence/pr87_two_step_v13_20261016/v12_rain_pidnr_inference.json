@@ -1,0 +1,41 @@
+{
+  "compressed_sha256": "42f971099dff89827e21f82190ebe3876948c6f8ef933dbc5287ea777439bd9d",
+  "compressed_size_bytes": 1223068,
+  "decoded_sha256": "c364c67367677a82ea6302430d214bbbad8ce91079cffe5b992eb9bbc1a4212c",
+  "decoded_size_bytes": 4901032,
+  "exact_row": "PR85_KDM6_PSD_BOUNDARY,rain,stage1,149,2,15,2, 1.8682182911788914E-008, 7.7721005678176880E-001, 9.6100000000000000E+002, 3.5000000000000000E+004, 9.3755325317382812E+001, 4.9540489196777344E+001, 4.9540485382080078E+001,-4.4214836120605469E+001,-3.8146972656250000E-006, 1.0254779199101660E-003, 4.9540488402941470E+001,T",
+  "identity": "exactNmax = (rhoDry * lambdaMax^3 / pidnr) * Q",
+  "inferred_pidnr_decimal": "12566.3710937500003083914725080822565197328834754665300240241",
+  "inferred_pidnr_real32": 12566.37109375,
+  "note": "Decimal reconstruction from printed REAL32 inputs and R64 exactNmax rounds to source REAL32 coefficient 12566.37109375.",
+  "row_fields": [
+    "tag",
+    "species",
+    "stage",
+    "i",
+    "lat",
+    "k",
+    "side",
+    "Q",
+    "rhoDry",
+    "lambdaMin",
+    "lambdaMax",
+    "Nbefore",
+    "Nnative",
+    "Ndirected",
+    "nativeDelta",
+    "storageCorrection",
+    "exactNmin",
+    "exactNmax",
+    "legacyAvailable"
+  ],
+  "schema": "pr87_v12_rain_pidnr_inference_v1",
+  "scope": "read-only inference from first row of closed V12diag OFF PSD-boundary ledger; not a V13 runtime result",
+  "source_path": "/var/tmp/pr87_joint_OFF_40s_v12diag_20261016/run/pr85_kdm6_psd_boundary.raw.gz",
+  "used_values": {
+    "Q": "1.8682182911788914E-8",
+    "exactNmax": "49.540488402941470",
+    "lambdaMax": "35000.000000000000",
+    "rhoDry": "0.77721005678176880"
+  }
+}

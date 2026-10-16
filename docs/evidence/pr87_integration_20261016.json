@@ -1,0 +1,382 @@
+{
+  "schema": "pr87_physical_validation_integration_v1",
+  "base_commit": "c84cbd3a0bc366112afe9ebad1087a220eb23b46",
+  "physical_approval": "FAIL_OPEN",
+  "initialization": {
+    "status": "PRESERVED",
+    "policy": "original PR84 OFF/COUPLED Q/N/B inputs and boundaries; not regenerated or reclassified",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943"
+  },
+  "completed_air_updates": {
+    "status": "TWO_NATIVE_STEPS_AND_COMPLETED_STATE_AUDIT_PASS_SCOPED",
+    "candidate": "V42",
+    "changes": [
+      "MP37 paired moisture preserved by host cleanup",
+      "atomic completed source/air pair storage with signed numerical representation ledger",
+      "source-first whole cloud/ice fallback on failed RK3 candidate only",
+      "REAL64 common-face air proposals retained directly for all pairs",
+      "strict selected-source rain sedimentation and public return domain",
+      "explicit REAL64 PBL source correction through actual driver and captured source carrier",
+      "shared all-pair REAL64 horizontal diffusion stencil",
+      "FogDES admission consumes corrected combined PBL/Fog source under exact selected cloud bounds",
+      "compact PBL diagnostics with separate unchanged-output evidence",
+      "same horizontal stencil with scalarREAL128 intermediates and R64 output"
+    ],
+    "air_theta_required": 1,
+    "no_number_floor": true,
+    "scope": "All6 JOINT_RKrows perarm theta1; allcompletedRK3/PRE/POST pair/unit/domainchecksPASS; intermediatenegativeQVpredictorsseparate"
+  },
+  "latest_actual_host": {
+    "candidate": "V42",
+    "build_receipt": "pr87_two_step_v42_20261016/build_receipt.json",
+    "runtime_manifest": "pr87_two_step_v42_20261016/runtime/runtime_manifest.json",
+    "independent_review": "pr87_two_step_v42_20261016/runtime/independent_review/review.json",
+    "independent_review_sha256": "b6530931a16aa4587729109f51bb638f15dc1d399e43887e9b7f020899efc98a",
+    "matched_arms": [
+      "OFF",
+      "COUPLED"
+    ],
+    "requested_seconds": 40,
+    "status": "COMPLETE",
+    "completed_seconds_per_arm": 40,
+    "completed_second_fogdes": true,
+    "completed_second_rk3": true,
+    "second_kdm6_completed": true,
+    "executable_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+    "strict_completed_state_audit": "PASS",
+    "strict_audit_scope": "completed RK3/PRE_KDM6/POST_KDM6: exact selected cloud/rain/G gates and unchanged global ice8-float32-ULP gate; exact ice diagnostic counts retained nongating",
+    "intermediate_qv_predictor_negatives_per_arm": {
+      "step2_PRE_RK": 4,
+      "step2_RK1": 4,
+      "step2_RK2": 5
+    },
+    "wall_seconds": {
+      "OFF": 353.24981405958533,
+      "COUPLED": 353.7646448779851
+    },
+    "scope": "selected-object pinned Intel O2 partialhost; two distinct completed POSTs, fullairtheta1, unchangedinputs; not scientific approval"
+  },
+  "validation": {
+    "focused_tests": {
+      "status": "PASS",
+      "count": 194,
+      "seconds": 62.83,
+      "log": "pr87_two_step_v42_20261016/pr87_v42_focused_tests.log",
+      "scope": "pinned Intel wrappers O0/O2; focused Python/Fortran tests; not canonical/full-clean-host"
+    },
+    "intel_profile": "tests/intel_toolchain.sh",
+    "native_exact_fragment_o0_o2": {
+      "status": "PASS_O0_O2",
+      "receipt": "pr87_two_step_v18_20261016/pr87_source_first_fallback_ifx_o0_o2_v18_diffusion_r4.json",
+      "meaning": "diffusion precision RKcadence/signedQ,Nledgers;stale/partial/nonfinite andzero-delta mutant reject; previousairprecisioncasesmaintained"
+    },
+    "cold_suppression": "pr87_cold_reasons_20261016.json",
+    "source_failure_history": "pr87_two_step_v15_20261016/runtime/runtime_manifest.json",
+    "contained_component_evidence": "pr87_component_containment_20261016.json",
+    "rain_diffusion_producer": {
+      "status": "PASS_SCOPED",
+      "evidence": "pr87_two_step_v17diag_20261016/",
+      "meaning": "one actual source stencil, defaultREAL bitreplay, sameR64equationandpinnedIntelhelper"
+    },
+    "historical_focused_tests": {
+      "status": "PASS",
+      "count": 115,
+      "log": "pr87_two_step_v18_20261016/pr87_focused_v18.log"
+    },
+    "progB_context": {
+      "review": "pr87_two_step_v32diag_20261016/runtime/independent_review/review.json",
+      "context": 6,
+      "call_lat": 62,
+      "i": 189,
+      "k": 17,
+      "QG_bits": "2B621F22",
+      "BG_bits": "2681EB95",
+      "precise_physical_reaction_attribution": "UNRESOLVED"
+    },
+    "uninitialized_rate_gate": {
+      "status": "FIXED_IN_V34",
+      "prior_candidate_stop": "pr87_two_step_v33_20261016/runtime/operator_stop.json",
+      "meaning": "final composition removes unassigned source_rate32 and validates assigned source_rate64; exact generated guard regression passes Intel O0/O2"
+    },
+    "stored_interval_gap": {
+      "status": "PASS_SCOPED",
+      "evidence": "pr87_stored_interval_gap_20261016/",
+      "meaning": "exact native G call reproduced; proven empty stored rain interval excluded, final constraints unchanged"
+    },
+    "progb_roundtrip": {
+      "status": "PASS_SCOPED",
+      "evidence": "pr87_progb_roundtrip_20261016/",
+      "actual_failure_causality": "V37_DIAGNOSTIC_CONFIRMED_CONTEXT6_REWRITE_TO_CONTEXT7_REJECTION",
+      "meaning": "source-extracted pinned Intel O0/O2 proves valid BG can be moved one ULP outside strict density range by redundant reciprocal rewrite; preserve prognostic B with same property outputs",
+      "runtime_evidence": "pr87_two_step_v37diag_20261016/runtime/independent_review/review.json"
+    },
+    "melt_test_wiring": {
+      "status": "FIXED",
+      "failed_log": "pr87_two_step_v39_20261016/pr87_v39_focused_tests.log",
+      "meaning": "invalid heat inputs were mistakenly sent to the ProgB-only executable; moved to extracted melt executable; final181 suite includes actual O0/O2 invalid-mode checks"
+    },
+    "previous_v39_focused_tests": {
+      "status": "PASS",
+      "count": 181,
+      "log": "pr87_two_step_v39_20261016/pr87_v39_focused_fixed_tests.log",
+      "scope": "single final focused Python suite; Fortran cases use pinned Intel O0/O2 in fresh scratch; not full canonical or full clean WRF"
+    },
+    "ice_extinction_completion": {
+      "status": "PASS_SCOPED_HELPER_AND_SOURCE_REVIEW",
+      "evidence": "pr87_ice_extinction_20261016/",
+      "v41_lineage": "pr87_two_step_v41diag_20261016/ice_lineage.json",
+      "meaning": "post-cap and aggregateeligibility; actualvalidstoredQI0-onlynumbertermination; nativeclosurepending"
+    },
+    "diffusion_intermediate_precision": {
+      "status": "PASS_SCOPED_REPLAY_AND_SOURCE_REVIEW",
+      "evidence": "pr87_graupel_r128_diffusion_20261016/review.json",
+      "isolated_helper_runtime_ratio": 135.7,
+      "meaning": "sameoperator, scalarREAL128intermediates/R64output; exactcapturedGboundarywitness; notuniversalcone/exactconservationproof"
+    }
+  },
+  "candidate_scientific_gates": {
+    "host_hybrid_carrier_closure": "OPEN",
+    "total_energy": "OPEN",
+    "water_budget_for_new_candidate": "OPEN",
+    "cold_process_physical_fidelity": "OPEN",
+    "first_order_transport_signal_retention": "OPEN",
+    "observation_retention": "OPEN",
+    "mass_wind_force_continuity_balance": "OPEN",
+    "initial_shock_reduction": "OPEN",
+    "60_seconds": "RUNNING_V42_SAME_EXECUTABLE",
+    "600_seconds": "NOT_RUN_PENDING_VALID_60S",
+    "native_inactive_ice_psd_policy": "OPEN",
+    "global_post_kdm6_ice_psd": "PASS_UNCHANGED_8_FLOAT32_ULP_ACCEPTANCE; exactsourcecountsremainnongating"
+  },
+  "historical_host_summaries": {
+    "V23c": {
+      "candidate": "V23c",
+      "build_receipt": "pr87_two_step_v23c_20261016/build_receipt.json",
+      "runtime_manifest": "pr87_two_step_v23c_20261016/runtime/runtime_manifest.json",
+      "matched_arms": [
+        "OFF",
+        "COUPLED"
+      ],
+      "requested_seconds": 40,
+      "status": "INCOMPLETE",
+      "completed_seconds_per_arm": 20,
+      "completed_second_fogdes": true,
+      "completed_second_rk3": false,
+      "second_kdm6_completed": false,
+      "failure": "PR87 full joint moment candidate infeasible; 223 strict continuous cloud candidates in secondRK1",
+      "classification": "pr87_two_step_v23c_20261016/runtime/cloud_full_classification.json",
+      "scope": "selected partialhost overlay; not full clean build; physical approval OPEN"
+    },
+    "V28b": {
+      "candidate": "V28b",
+      "build_receipt": "pr87_two_step_v28b_20261016/build_receipt.json",
+      "runtime_manifest": "pr87_two_step_v28b_20261016/runtime/runtime_manifest.json",
+      "matched_arms": [
+        "OFF",
+        "COUPLED"
+      ],
+      "requested_seconds": 40,
+      "status": "INCOMPLETE",
+      "completed_seconds_per_arm": 20,
+      "completed_second_fogdes": true,
+      "completed_second_rk3": false,
+      "second_kdm6_completed": false,
+      "failure": "PR87 corrected source-stage pair fails strict storage validation",
+      "failure_cause": "Unassigned until diagnostic operands are evaluated; no storage tolerance widened.",
+      "executable_sha256": "91d9a9aebae4c002d13584a33a05ee95d3256954f05b504dbb4ff04ab53f2f03",
+      "scope": "selected-object pinnedIntel audit partialhost, not fullcleanWRF; same original/staged inputs"
+    },
+    "V31": {
+      "candidate": "V31",
+      "build_receipt": "pr87_two_step_v31_20261016/build_receipt.json",
+      "runtime_manifest": "pr87_two_step_v31_20261016/runtime/runtime_manifest.json",
+      "matched_arms": [
+        "OFF",
+        "COUPLED"
+      ],
+      "requested_seconds": 40,
+      "status": "INCOMPLETE",
+      "completed_seconds_per_arm": 20,
+      "completed_second_fogdes": true,
+      "completed_second_rk3": true,
+      "second_kdm6_completed": false,
+      "failure": "ProgB transient PSD state rejected",
+      "scope": "selected-object pinned Intel partialhost; not full clean WRF; prior source-rate gate superseded by V34 correction"
+    },
+    "V34": {
+      "candidate": "V34",
+      "build_receipt": "pr87_two_step_v34_20261016/build_receipt.json",
+      "runtime_manifest": "pr87_two_step_v34_20261016/runtime/runtime_manifest.json",
+      "independent_review": "pr87_two_step_v34_20261016/runtime/independent_review/review.json",
+      "matched_arms": [
+        "OFF",
+        "COUPLED"
+      ],
+      "requested_seconds": 40,
+      "status": "INCOMPLETE",
+      "completed_seconds_per_arm": 20,
+      "completed_second_fogdes": true,
+      "completed_second_rk3": true,
+      "second_kdm6_completed": false,
+      "failure": "KDM6 cold rain process rejected an infeasible moment state",
+      "search_status": "SEARCH_FAILURE",
+      "i": 204,
+      "k": 17,
+      "call_lat": "NOT_CAPTURED",
+      "failure_cause": "UNRESOLVED_PENDING_EXACT_G_CALL_REPLAY",
+      "executable_sha256": "5da2d108c60d9c67e019d8be43b152cccd7b167befe6d3518f2e3f8f6d3088af",
+      "scope": "strict completed endpoint gates pass through second PRE_KDM6; selected-object pinned Intel O2 partial host, not full clean WRF"
+    },
+    "V35diag": {
+      "status": "INCOMPLETE",
+      "requested_seconds": 40,
+      "completed_seconds": 20,
+      "arms": [
+        "OFF"
+      ],
+      "diagnostic_only_of": "V34",
+      "replay": "pr87_stored_interval_gap_20261016/",
+      "independent_review": "pr87_two_step_v35diag_20261016/runtime/independent_review/review.json"
+    },
+    "V36": {
+      "candidate": "V36",
+      "build_receipt": "pr87_two_step_v36_20261016/build_receipt.json",
+      "runtime_manifest": "pr87_two_step_v36_20261016/runtime/runtime_manifest.json",
+      "matched_arms": [
+        "OFF",
+        "COUPLED"
+      ],
+      "requested_seconds": 40,
+      "status": "INCOMPLETE",
+      "completed_seconds_per_arm": 20,
+      "second_kdm6_completed": false,
+      "failure": "ProgB unsupported PSD state rejected",
+      "failure_context": "PENDING_EXACT_CAPTURE",
+      "executable_sha256": "4c71f59c1c80564b24df0e887fa58f88e825b42aa4b1fa684babbc91c5068117",
+      "scope": "selected-object pinned Intel O2 partialhost, not full clean WRF",
+      "independent_review": "pr87_two_step_v36_20261016/runtime/independent_review/review.json",
+      "completed_second_fogdes": true,
+      "completed_second_rk3": true
+    },
+    "V38": {
+      "candidate": "V38",
+      "status": "INCOMPLETE",
+      "requested_seconds": 40,
+      "completed_seconds_per_arm": 0,
+      "matched_arms": [
+        "OFF",
+        "COUPLED"
+      ],
+      "build_receipt": "pr87_two_step_v38_20261016/build_receipt.json",
+      "runtime_manifest": "pr87_two_step_v38_20261016/runtime/runtime_manifest.json",
+      "independent_review": "pr87_two_step_v38_20261016/runtime/independent_review/review.json",
+      "executable_sha256": "089edcbbc7d1665b707faf91584e9a0162003bda49da6d668c483d8794273e0f",
+      "failure": "KDM6 invalid nonfinite or negative species state",
+      "cause": "full graupel melt leaves negative BG after QG reaches exactzero; rounded diagnostic density subtraction no longer hidden by ProgB reciprocal rewrite",
+      "first_OFF_failure": {
+        "stage": "KDM62D_SLOPE_04",
+        "i": 137,
+        "call_lat": 16,
+        "k": 1,
+        "QG": 0,
+        "BG": -2.7755575615628914e-17
+      },
+      "scope": "first-step pre-KDM6 arrays are bytewise V36; new internal melt volume coupling is unresolved"
+    }
+  },
+  "observer_compaction": {
+    "candidate": "V27bcompact",
+    "runtime": "pr87_two_step_v27bcompact_20261016/runtime/observer_comparison.json",
+    "status": "PASS_SCOPED",
+    "scope": "OFFfirst20; KDM6pre/post andPOST20record identicaltoV26c; noI/Otimeattribution"
+  },
+  "v39_60s_extension": {
+    "status": "INCOMPLETE",
+    "returncodes": {
+      "OFF": 1,
+      "COUPLED": 1
+    },
+    "final_completed_step": 2,
+    "first_failure": "T3 RK1 full joint moment candidate infeasible",
+    "full_candidate_failures_per_arm": {
+      "ice": 255,
+      "graupel": 1
+    },
+    "review": "pr87_two_step_v39_20261016/runtime60/independent_review/pr87_v39_60s_review_20261016.json",
+    "scientific_approval": false
+  },
+  "v40diag": {
+    "status": "COMPLETE",
+    "returncode": 0,
+    "final_completed_step": 2,
+    "physical_changes_from_v39": false,
+    "actual_final13_ice_match": true,
+    "sedimentation_outlier_event_at_final13_coordinates": {
+      "none": 11,
+      "near_lower_crossing_then_larger_later_change": 2
+    },
+    "conclusion": "2/13 show a small lower crossing at ice sedimentation and a much larger later violation; 11/13 show no immediate ice-sedimentation outlier. No sole producer attribution.",
+    "evidence": "pr87_two_step_v40diag_20261016/runtime",
+    "causal_review": "pr87_two_step_v40diag_20261016/ice_sedimentation_causality.json"
+  },
+  "v41diag": {
+    "candidate": "V41diag",
+    "status": "INCOMPLETE",
+    "requested_seconds": 60,
+    "arms": [
+      "OFF"
+    ],
+    "source_manifest": "/var/tmp/pr87_joint_cycle_sources_20261016_v41diag/sources.json",
+    "executable_sha256": "4351ae924e963c80cf1245c1bb7756344ba4c6388ad566846e7f0829819e0657",
+    "physical_changes_from_v39": false,
+    "scope": "closed OFF-only read-only diagnosis; no changed physical candidate accepted",
+    "completed_seconds": 40,
+    "returncode": 1,
+    "runtime_manifest": "pr87_two_step_v41diag_20261016/runtime/runtime_manifest.json",
+    "first_call_prefix": "pr87_two_step_v41diag_20261016/first_call_prefix.json",
+    "cause": "T2 cold full ice-category exhaustion unavailable to pending search; T3 G diffusion R64 rounding at exact900 donor boundary"
+  },
+  "pending_host": {
+    "candidate": "V42",
+    "status": "RUNNING",
+    "requested_seconds": 60,
+    "arms": [
+      "OFF",
+      "COUPLED"
+    ],
+    "physical_changes_from_v39": [
+      "post-cap and aggregate cold ice extinction eligibility; number termination only at actual valid exact-zero stored QI",
+      "same horizontal diffusion stencil with scalar REAL128 intermediates and existing R32-input/R64-output API"
+    ],
+    "strict_endpoint_gates": "unchanged",
+    "scope": "same V42 executable/input matched60 extension;40closedcompleteandstrictPASS,60closurepending",
+    "source_manifest": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/sources.json",
+    "build_receipt": "pr87_two_step_v42_20261016/build_receipt.json",
+    "executable_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a"
+  },
+  "provenance_limitations": {
+    "v41_additive_lineage_inventory": "pr87_two_step_v41diag_20261016/lineage_archive_manifest.json",
+    "v41_provenance_incident": "pr87_two_step_v41diag_20261016/provenance_incident.json",
+    "scope": "original untracked frozen candidate inventory overwritten during later additive audit and unavailable; source/build/runtime receipts/artifacts separately verified; no original inventory hash claim"
+  },
+  "historical_v39_matched40": {
+    "candidate": "V39",
+    "build_receipt": "pr87_two_step_v39_20261016/build_receipt.json",
+    "runtime_manifest": "pr87_two_step_v39_20261016/runtime/runtime_manifest.json",
+    "independent_review": "pr87_two_step_v39_20261016/runtime/independent_review/review.json",
+    "matched_arms": [
+      "OFF",
+      "COUPLED"
+    ],
+    "requested_seconds": 40,
+    "status": "COMPLETE",
+    "completed_seconds_per_arm": 40,
+    "completed_second_fogdes": true,
+    "completed_second_rk3": true,
+    "second_kdm6_completed": true,
+    "executable_sha256": "2f58df49a4ee65ada9f4dcf574195a88b4f057c84fb26fbe3d2e29885a5a75a0",
+    "strict_completed_state_audit": "FAIL",
+    "strict_audit_failure": "13 ice pairs at timestep2 POST_KDM6 outside the global ice cone beyond8ULP in each arm; all below native inactive ice threshold, no checker change",
+    "scope": "selected-object pinned Intel O2 partialhost; two unique completed POSTs and unchanged inputs; native execution completion is not full PSD or scientific approval"
+  }
+}

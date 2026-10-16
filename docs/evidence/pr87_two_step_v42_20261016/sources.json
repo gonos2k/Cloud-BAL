@@ -1,0 +1,337 @@
+{
+  "schema": "pr87_native_cycle_sources_v1",
+  "parent_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+  "preserve_kdm6_joint_cleanup": true,
+  "source_overrides": {
+    "module_microphysics_zero_out.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_microphysics_zero_out.F",
+    "module_em.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_em_pr85.F",
+    "module_bl_shinhong.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_shinhong.F",
+    "module_bl_fogdes.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_fogdes.F",
+    "module_pbl_driver.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_pbl_driver.F",
+    "module_mp_kdm6.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_mp_kdm6.F",
+    "module_first_rk_step_part1.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part1.F",
+    "module_first_rk_step_part2.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part2.F",
+    "solve_em.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/solve_em.F"
+  },
+  "provenance": {
+    "module_microphysics_zero_out.o": {
+      "parent_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_microphysics_zero_out.F",
+      "parent_sha256": "a57268701b424b07a604ce93f733314183a29bfb39e7e6283f92f8668808fa4f",
+      "candidate_source": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_microphysics_zero_out.F",
+      "candidate_sha256": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0"
+    },
+    "module_em.o": {
+      "parent_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/compile/module_em_pr85.F",
+      "parent_sha256": "8444c5e168736101629664e45c1e595625ca0d0b0c88a28ed6689615060655ad",
+      "candidate_source": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_em_pr85.F",
+      "candidate_sha256": "5eb415ca23119460ae3dd766d9acea0f4c99b96ad576100efb95c3bb4d402a6c",
+      "joint_storage_components": {
+        "kernel_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+        "kernel_sha256": "60917061915e0452251c27db7b5d4e97061729605c3218cd291c2cbc3e519e74",
+        "patch_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/patches/pr87_joint_storage_update.patch",
+        "patch_sha256": "b96dd619f64838489acc1a49726656ba532372deb1a4e50e0111988cd996dcf2",
+        "generated_fragment_sha256": "d997a6393552465132ee7a743d59f5f37214e6521781dae928c44d6621001503",
+        "parent_components": {
+          "base_module_em_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/source/dyn_em/module_em.F",
+          "base_module_em_source_sha256": "7695bfb05a7f99763334a6e69523bbcc1de0f2c659177a18c10a6e1cf530a0c7",
+          "transport_kernel": "/var/tmp/pr85_frozen_validation_20261015_v17/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+          "transport_kernel_sha256": "0291a36603b585b310eefc7fe2b6de5635bd769855c72ddf728d0c031862418b",
+          "native_update_fragment": "/var/tmp/pr85_frozen_validation_20261015_v17/Cloud-BAL/tools/pr85_native_joint_update.f90",
+          "native_update_fragment_sha256": "e2186892418889a3a943181d827b83e2af3aac12eac3a770fca33e2314dea5eb",
+          "preprocessing_log_path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/compile_pass2.log",
+          "preprocessing_log_sha256": "e1581e5dc183e007256c9923fa4d48a44cf6e0a56ea7595c9d62807970a1ba80"
+        },
+        "source_first_donors": true,
+        "source_first_patch_sha256": "20d93df71aff18e6239433f412329b31475f87bf31af2523bed4163db31e4cff",
+        "deferred_kernel_replacement": true,
+        "composition_kernel_sha256": "19d0259c423a3035a418174292c14d8671d778ebfe48a604cc80923c2f854541"
+      },
+      "strict_rain_storage": {
+        "tools/pr87_rain_process_contract.py": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_process_contract.py",
+          "sha256": "7a709c82eb66c1101db4ec30cd9d96ecb5d01b8d7d7d589425ef4cc7fd8adbbc"
+        },
+        "tools/pr87_rain_storage_contract.py": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_storage_contract.py",
+          "sha256": "e4f336c06e9a054a16aae7c3cb2845d7ba4c0a47430d1333dd923da666def98a"
+        },
+        "tools/pr87_rain_public_store.f90": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_public_store.f90",
+          "sha256": "fdc3e4f115720e9996b0efa29180382d98dd8dcb5f881677fab7c224bde4e855"
+        }
+      }
+    },
+    "solve_em.o": {
+      "parent_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/source/dyn_em/solve_em.F",
+      "parent_sha256": "afd8e7a1180a523f86784d1740dcdbc4a9736c7bc1caeec6f1f46e4f6e4440dc",
+      "candidate_source": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/solve_em.F",
+      "candidate_sha256": "e78f0a3981c399e5c4326bd550d55a6ca5522d297f8c44c0d60a18ac3768b2b3"
+    },
+    "module_pbl_driver.o": {
+      "parent_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/source/phys/module_pbl_driver.F",
+      "parent_sha256": "7868add7fe350337f1cba15987fbfdc1dffd47523a421294b973ada4db585eaa",
+      "candidate_source": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_pbl_driver.F",
+      "candidate_sha256": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676"
+    },
+    "module_bl_fogdes.o": {
+      "parent_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/source/phys/module_bl_fogdes.F",
+      "parent_sha256": "aee27ecc6f259e94dfbb7cc8dad2ebd8cd97432d31363e268d1fedffa84bcc7d",
+      "candidate_source": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_fogdes.F",
+      "candidate_sha256": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be"
+    },
+    "module_mp_kdm6.o": {
+      "parent_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/source/phys/module_mp_kdm6.F",
+      "parent_sha256": "b5e61526dc1e3d3384b9c87a423affc1cc2182faa18a904468114ec52b6781b8",
+      "candidate_source": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_mp_kdm6.F",
+      "candidate_sha256": "bdb1882afed860068cecbb6c7b958eef0938cadbd4225222ba7522e28ecc071a",
+      "joint_rain_sedimentation": {
+        "parent_generated_source_sha256": "dc0e9c20997f8fb34a6a164a707338a4a5d8817acbaab5a64efcb842e61e38d2",
+        "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr85_kdm6_ice_sedimentation.F90",
+        "helper_sha256": "0caf7cfa5f10dc272d645c709e13c5539d640544e5fe6a44c2895c7c7d870ba3",
+        "generator_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_sedimentation.py",
+        "generator_sha256": "e09f15793093aaacbc4ea20fe65511d8d5ab49f7371058d120986f6e704520e7",
+        "policy": "native distinct mass/number speed proposals; one admitted face fraction; full rain PSD and separate moment/surface/storage budgets"
+      }
+    },
+    "module_first_rk_step_part2.o": {
+      "parent_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/source/dyn_em/module_first_rk_step_part2.F",
+      "parent_sha256": "f24a500ee25339f4d740d365cb6c628c3f53adbdbfa80917c816f173551f6d28",
+      "candidate_source": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part2.F",
+      "candidate_sha256": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082"
+    },
+    "module_first_rk_step_part1.o": {
+      "candidate_sha256": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef"
+    },
+    "module_bl_shinhong.o": {
+      "candidate_sha256": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3"
+    }
+  },
+  "diagnostic_changes": "read-only cloud boundary summaries, fatal coordinates, no repeated cold/warm rows",
+  "physical_change": "preserve scheme-committed paired moisture fields in host cleanup; atomic rain Q representation after updated density and all RK stage mutations; public N unchanged, strict source-derived conversion limits retained; defer ice count extinction until actual approved QI endpoint is zero; cold search pending exception never used for final storage; identify pending category extinction from post-cap sublimation and aggregate cold donor-exhaustion proposals; bind cloud producer mass/volume bounds to selected KDM6 REAL32 coefficient; strict cloud/rain stores and atomic post-density representation transaction; cloud/rain RK1 diffusion precision and explicit source-rate correction; explicit REAL64 shared-matrix PBL source correction for cloud and ice paired channels; extend the same horizontal stencil precision correction to all four paired categories; evaluate the same horizontal diffusion stencil with REAL128 intermediates and REAL64 output; strict endpoint checks unchanged; FogDES approves the actual combined PBL/FogDES source under the selected cloud cone; graupel process search and stored endpoint preserve the next ProgB activation domain; retain prognostic BG and jointly admit graupel melt mass, number, volume and temperature; exact source-derived QG/QIB producer and storage contract; rain RK1 horizontal-diffusion accumulator promoted before rounding; explicit REAL64 numerical rate correction across RK stages; retain direct REAL64 common-face air rates for all paired categories; strict source-coefficient rain sedimentation and continuous/stored public-basis completion; original warm pair-only domain with validated zero-step control; signed representation ledger; admissibility-selected RK3 whole-pair intensive R32 source stage then common air transport; explicit source-representation ledger; preserve admissible old map and QR/QG rates; explicit constrained REAL32 joint storage",
+  "joint_rain_sedimentation": {
+    "parent_generated_source_sha256": "dc0e9c20997f8fb34a6a164a707338a4a5d8817acbaab5a64efcb842e61e38d2",
+    "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr85_kdm6_ice_sedimentation.F90",
+    "helper_sha256": "0caf7cfa5f10dc272d645c709e13c5539d640544e5fe6a44c2895c7c7d870ba3",
+    "generator_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_sedimentation.py",
+    "generator_sha256": "e09f15793093aaacbc4ea20fe65511d8d5ab49f7371058d120986f6e704520e7",
+    "policy": "native distinct mass/number speed proposals; one admitted face fraction; full rain PSD and separate moment/surface/storage budgets"
+  },
+  "strict_completed_rain_storage": {
+    "tools/pr87_rain_process_contract.py": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_process_contract.py",
+      "sha256": "7a709c82eb66c1101db4ec30cd9d96ecb5d01b8d7d7d589425ef4cc7fd8adbbc"
+    },
+    "tools/pr87_rain_storage_contract.py": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_storage_contract.py",
+      "sha256": "e4f336c06e9a054a16aae7c3cb2845d7ba4c0a47430d1333dd923da666def98a"
+    },
+    "tools/pr87_rain_public_store.f90": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_public_store.f90",
+      "sha256": "fdc3e4f115720e9996b0efa29180382d98dd8dcb5f881677fab7c224bde4e855"
+    }
+  },
+  "extra_support_source": {
+    "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/pr87_cloud_cycle_support.f90",
+    "sha256": "98f9f546b6273609a261c8ec39c2cb578d301eaff7ce0b829bb6e2dad3aea348",
+    "components": {
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_cloud_cycle_observer.f90": "ebbb1c78c0a04b37df9d06382f8941e61d37e3c667a840085b9f259d3f25f59c",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_public_store.f90": "fdc3e4f115720e9996b0efa29180382d98dd8dcb5f881677fab7c224bde4e855",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_density_store.f90": "1b3f434f8a90507c290b5904f7e980c9655b2025fc814101a59ad59907ca1359",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_qn_density_store.f90": "12f2a741203f251a05ea9c1ba3b754cc23eebaf4fea94e6967e797a6ed598f57"
+    },
+    "scope": "read-only cycle observer plus physical/numerical public rain storage; not observer-only; atomic updated-density rain representation storage; atomic updated-density cloud/rain representation storage"
+  },
+  "nongraupel_base_failure_diagnostics": {
+    "parent_generated_source_sha256": "e7b4225681cfce25c7096ceb196108ffe8d2e5ee2e4e309e0b890cd6093d1b20",
+    "generator_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_kdm6_ng_base_diag.py",
+    "generator_sha256": "19d8b167da4aaee396edd8a7f5129cc942125fbb50abb6d4fe5ef943e14b6572",
+    "policy": "read-only exact state diagnostics immediately before unchanged nongraupel base rejection"
+  },
+  "rain_failure_diagnostics": {
+    "parent_generated_source_sha256": "cacefe3d99d744c26203068791e83a991fa6db2d6e33a5a4ba950fa4f24fe738",
+    "generator_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_sedimentation.py",
+    "generator_sha256": "e09f15793093aaacbc4ea20fe65511d8d5ab49f7371058d120986f6e704520e7",
+    "policy": "on rain-helper rejection only, write the failed column Q/N/rho/dz and velocity inputs then flush before the unchanged fatal"
+  },
+  "rain_diffusion_probe": null,
+  "rain_diffusion_precision": {
+    "parents_sha256": {
+      "module_em_pr85.F": "86904a0b0561688ba4d4e0df121942884335919bfb9e34dd92b98257f941151f",
+      "solve_em.F": "c2d0b35e8543f08ee1d474b14ef7863542676269dc0ebeb87bac9ed415cea5f8",
+      "native_update.f90": "716d3958970edeedd61eacf938272e94393ba9177807ecdffdd8b934143b836b"
+    },
+    "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_horizontal_diffusion64.f90",
+    "helper_sha256": "0a8b2865fff3d7ad6592e0d1bc1d3f7b51970de13ac9ea128066b7cba655bfe3",
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_diffusion_precision.py",
+    "transform_sha256": "373f82bb806f9be59be80018e4a40ac3231ca888aefc073abc962ab275ab15f6",
+    "scope": "RK1 rain diffusion accumulator precision, explicit same-step rate through all RK stages; signed numerical pressure-coordinate ledger"
+  },
+  "rain_updated_density_storage": {
+    "parent_solve_sha256": "bbc03db993ca1cab9c56dfe7f31bc6b7c791e3f6c285c1643b557493282dbf87",
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_density_storage.py",
+    "transform_sha256": "2eee158e220da5066c88d6899efbc64334189c830d26ad50482d1924e776efa3",
+    "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_rain_density_store.f90",
+    "helper_sha256": "1b3f434f8a90507c290b5904f7e980c9655b2025fc814101a59ad59907ca1359",
+    "scope": "MP37 final per-RK density/filter/boundary state before RK observer; public N unchanged; signed numerical representation ledger"
+  },
+  "ice_sublimation_pending": {
+    "parent_module_sha256": "8679f2e7c51940ab740bbe9e768dbb68156e9c655f459245f522f7983fb99eb9",
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_ice_sublimation.py",
+    "transform_sha256": "d721f4f415e8abb012751528dee1df75f851bca1135acd9edeff9f821ea1c171",
+    "scope": "cold pending full-ice sublimation only; NI remains through proposal/caps and positive-QI endpoints; actual full extinction cleared in local approved transaction before strict commit"
+  },
+  "ice_extinction_completion": {
+    "parent_sha256": "6a7f6e154390ad6d5da8ca18ea4115ad66effa5b1dbdbf73754edd357b6b4293",
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_ice_sublimation.py",
+    "transform_sha256": "d721f4f415e8abb012751528dee1df75f851bca1135acd9edeff9f821ea1c171",
+    "scope": "capture post-cap sublimation and aggregate NG/G donor-exhaustion eligibility; caps and physical rates unchanged; terminate remaining ice number only at exact approved zero ice mass"
+  },
+  "horizontal_diffusion_intermediate_precision": {
+    "parent_sha256": "e48607da8943caaf86f53c5fc04ff5ba2a2c75e32706142c97c3f9b8fdb70c70",
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_all_pair_diffusion_precision.py",
+    "transform_sha256": "90732185626f1ec04655924ef16872d5be12617ca2cc2a149447db83aaf960eb",
+    "scope": "same spatial diffusion operator with REAL128 intermediate geometry and accumulation; REAL32 inputs and REAL64 output/API unchanged; strict endpoint gates retained"
+  },
+  "cloud_source_contract": {
+    "parents_sha256": {
+      "module_em_pr85.F": "3a30e89eb0862d429b89df6c035afefe510461fd8d74d58036299f88907af9e3",
+      "solve_em.F": "fd48e553e12069f33e399d3bce78344a2c8e2b8968390616e23aef7d527c92d4",
+      "native_update.f90": "e2abb1809b6fa49ab56ebc82ecc205f9fca6f9dba28192ce49ed1136d32b648e",
+      "module_mp_kdm6.F": "245e8a46bf11ba7e85137a81547f7e02b7f2bc429a293cbd3a34f61fc7b4a24d"
+    },
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_cloud_source_contract.py",
+    "transform_sha256": "9b0cd69bd3c45ad80d64765630b4a7f67335fa67ccc938481325ddea9e26930b",
+    "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_qn_density_store.f90",
+    "helper_sha256": "12f2a741203f251a05ea9c1ba3b754cc23eebaf4fea94e6967e797a6ed598f57",
+    "cloud_pidnc_real32": 523.5988159179688,
+    "cloud_lambda": [
+      12000.0,
+      500000.0
+    ],
+    "scope": "source-derived cloud producer cone and per-pair strict volume storage; invalid continuous updates rejected before representation selection; joint cloud/rain public return; updated-density cloud/rain transaction leaves public N unchanged",
+    "support_public_store_symbol": "pr87_number_public_store (same scalar algorithm, shared cloud/rain source coefficients)"
+  },
+  "graupel_source_contract": {
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_graupel_source_contract.py",
+    "transform_sha256": "ce6ec2ef1c688be7b1b742d6862659c855257b9dc0821a7af6ebe948c53898d5",
+    "strict_mass_pairs": [
+      false,
+      false,
+      false,
+      true
+    ],
+    "bulk_density_bounds": [
+      100.0,
+      900.0
+    ],
+    "scope": "exact continuous and stored QG/QIB ratio; BG is specific volume, never number; directed Q representation only after valid continuous input"
+  },
+  "cloud_diffusion_precision": {
+    "parents_sha256": {
+      "module_em_pr85.F": "85117264a04fc752bcefcedf704139ee6d49d2f13a6c2c2834ef76221bfd59cb",
+      "solve_em.F": "b333a16fef56f669bfb88267a97999281d41a981e50a2c88e44b26cd481fd7d4",
+      "native_update.f90": "912acc254708b8ab0a38f13e0b41fdafbf22f9f2f4f4d1684e6d1f475e9baab3"
+    },
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_cloud_diffusion_precision.py",
+    "transform_sha256": "efbb3610968d9ef80c8deccce069e997f194e02ee74bb3522237524132df3f5d",
+    "scope": "same original horizontal diffusion call and REAL32 host tendencies; source-defined stencil in REAL64 for QC/QNC and QR/QNR; explicit signed rate correction before each grouped RK consumer; no flux or process cap"
+  },
+  "pbl_source_probe": null,
+  "pbl_source_precision": {
+    "parents_sha256": {
+      "em": "bf97496a1013b86ac0382fb9dfb22ad9e818af996d5bcb49bebcbdeec790f8b2",
+      "solve": "002fc11991f2d51e8e0c1102f1ea8c11443358abeb0cc7ffef481b9efa673122",
+      "part2": "007fcce0cdc51cf18c2d8c33de42ec1367c3419e3c2c38770ecf7be8800b44c8",
+      "pbl_driver": "c823766673868af27fee9eed3ab11b0d8735b3a5ca0cb2a30c6b65e50f92c5f9",
+      "shinhong": "a1895b765d4768208ed3b642d814fb41690c8325e78fd22a86e08f0a08ae8ed9",
+      "part1": "de0d6f270dbd2a8aea8bcadcbb6690fc3fc57e2fd4a14261916fb9bbd4dbf880",
+      "fragment": "da168838410ac7b90de0918b5c340ea0e2017e232c409964f12dc8abed61e296"
+    },
+    "transforms": {
+      "pr87_pbl_source_precision.py": "2b7160ab141f2016f8e8b632864065945851d3cd8257d959582043d312e1b3ec",
+      "pr87_pbl_source_payload.py": "c779b334f4446887e43648a93dcdd6cc68bb81aa75b2042bd2e78b583938b804"
+    },
+    "channels": [
+      "QC",
+      "QNC",
+      "QI",
+      "QNI"
+    ],
+    "scope": "shared stored PBL matrix/RHS REAL64 replay; explicit current-step intensive source delta; original packet withholding retained; no floor or relaxed bound"
+  },
+  "all_pair_diffusion_precision": {
+    "parents_sha256": {
+      "em": "9011e9da4c341b60906fa8163290ef3b41b493f21bff547acc4c41b6bfb1333f",
+      "solve": "2f6c3290f9888308f5e5b1f99f051c01ad7f30b49612adb083d6dc6fa5bc82bd",
+      "fragment": "66f5309e613997b219de44dac4cf2beaa54b4742ee38523b91c095a6eec5024d"
+    },
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_all_pair_diffusion_precision.py",
+    "transform_sha256": "90732185626f1ec04655924ef16872d5be12617ca2cc2a149447db83aaf960eb",
+    "channels": [
+      "QC",
+      "QNC",
+      "QI",
+      "QNI",
+      "QR",
+      "QNR",
+      "QG",
+      "QIB"
+    ],
+    "scope": "same stored stencil and original host calls; RK1 capture, current-step correction consumed once per RK endpoint; BG remains specific bulk volume; strict continuous/stored gates retained"
+  },
+  "compact_pbl_diagnostics": {
+    "parents_sha256": {
+      "shinhong": "3bd3b9ee0f1aec25eb8a65c2ada0df748d03f785d1a0a28ad2f9b1fccb9afb50",
+      "pbl_driver": "106674d12edc3c66b42b1148db40949a1dbe43c2d1ccf98bb6876403c8fccc85"
+    },
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_pbl_compact_diagnostics.py",
+    "transform_sha256": "9613e8d455a4bf55c99444be1609e3aa2265655b87c8b031aeca2b5cfafb66ef",
+    "scope": "diagnostic-only opt-in; same packet gate, f3, qtnp and REAL64 source delta; step/pair/column summaries replace per-cell file open/write/close; DEL-weighted rates are not kg"
+  },
+  "fogdes_source_contract": {
+    "parents_sha256": {
+      "fogdes": "6e3efe52abc669e51a01175ceaeba48e91b92d13f57b700a2cf8359a0e23b361",
+      "pbl_driver": "0f15fdbe7a3d1fdb07e7ba06dfcf1749e93d0aa4403876974158d3abd7b53458"
+    },
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_fogdes_source_contract.py",
+    "transform_sha256": "075ed2dec77efe1a772dfdbcf81aa95f870717eeff5307e624449221139b874b",
+    "cloud_pidnc_real32": 523.5988159179688,
+    "cloud_lambda": [
+      12000.0,
+      500000.0
+    ],
+    "scope": "same Stokes proposals; common column process fraction approves the combined PBL/FogDES REAL64 source under the selected strict cloud cone; REAL32 tendency pattern retained and correction residual replaced once; original optional-absent path retained"
+  },
+  "graupel_process_domain": {
+    "parent_sha256": "9cb8d19bf676771e5bfd717d07cdaf43b4bc63912b0b7869b977fbd0f2ac1397",
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_graupel_process_domain.py",
+    "transform_sha256": "5cba1755c85f567fc9db00ae4d57e0fb65fe0efeeb65398bd5fc27df5b99cc60",
+    "scope": "process search and stored endpoint use the existing ProgB graupel activity domain; preserve prognostic BG; graupel melt uses actual donor volume and one admitted Q/N/B/T fraction; strict thresholds retained"
+  },
+  "process_failure_context": {
+    "parent_sha256": "03dc6c3d96817187657212943f3aa1098480553514f90a5d16c74a873692e8b5",
+    "transform_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_process_failure_context.py",
+    "transform_sha256": "c5aa8b048362d8148ca2f9c392d522070f6191b3ab0bc59492923199117d23d0",
+    "scope": "failure-only exact actual G-search operands and coordinates; no source, rate, gate or state mutation"
+  },
+  "progb_failure_context": null,
+  "source_stage_failure_operands": true,
+  "source_stage_checks_actual_real64_rate": true,
+  "virtual_cloud_source_domain": "strict specific-Q/N cone; no volume conversion until the completed endpoint",
+  "admission_reason_probes": true,
+  "joint_subnormal_storage": false,
+  "source_first_grouped_donors": true,
+  "intensive_physical_source_capture": {
+    "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_physical_source_capture.py",
+    "helper_sha256": "2f5bb09165326a41811e2d8c55a8182ce2f8bd2d97869da252014a7efab788e5",
+    "interface": "explicit intensive Q/N, current coupled references, source carrier/timestep, and later weighted RK1 non-air additions; no saved cache",
+    "scope": "MP37 single tile; reject changed sources or mismatched source/old carrier"
+  },
+  "source_first_pair_indices": [
+    1,
+    2
+  ],
+  "source_first_trigger": "failed baseline full-store candidate, whole pair, single retry; any failed QR/QG forbids retry",
+  "joint_quantum_absence": true,
+  "joint_storage_policy": "opt-in constrained REAL32 storage, explicit joint quantum absence, and REAL64 rates; signed numerical ledger; not conservation preserving"
+}

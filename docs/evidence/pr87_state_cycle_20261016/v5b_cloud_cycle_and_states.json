@@ -1,0 +1,1745 @@
+{
+  "build_binding": {
+    "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v5b/wrf_pr87_overlay.exe",
+    "executable_sha256": "3631689bf1cddde4198d057489443d13a4d0bab94ee7aa53a4888e02fc6468ba",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "path": "/var/tmp/pr87_joint_cycle_build_20261016_v5b/pr87_native_overlay_build.json",
+    "sha256": "5a77e352c0015687bb92cd63238d069706c6a2c1f51c453b89f4087e04b5c45a"
+  },
+  "graupel_transient_input_audit": {
+    "path": "docs/evidence/pr87_state_cycle_20261016/v5b_graupel_transient_input.json",
+    "sha256": "6d421742e0db2b6cca40da79ee9b2864f988fcb2859a93350fb33d729e87e543"
+  },
+  "run_receipt_time_identity": {
+    "actual_model_timestamps_by_arm": {
+      "COUPLED": [],
+      "OFF": []
+    },
+    "completed_POST_KDM6_timestep_ids_by_arm": {
+      "COUPLED": [],
+      "OFF": []
+    },
+    "expected_model_timestamps": [
+      "2026-08-16_13:00:20",
+      "2026-08-16_13:00:40"
+    ]
+  },
+  "runs": {
+    "COUPLED": {
+      "actual_model_timestamps": [],
+      "candidate_build_unchanged": true,
+      "cloud_cycle": {
+        "fogdes_reject_marker_present": false,
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/run/pr87_cloud_cycle.log",
+        "records": [
+          {
+            "bounds": {
+              "i": [
+                1,
+                234
+              ],
+              "j": [
+                1,
+                282
+              ],
+              "k": [
+                1,
+                39
+              ]
+            },
+            "kind": "cloud_summary",
+            "mass_only": 0,
+            "negative_mass": 0,
+            "negative_number": 0,
+            "number_only": 0,
+            "reported_totals": [
+              "0.0000000000000000E+00",
+              "0.0000000000000000E+00"
+            ],
+            "stage": "STEP_BEGIN",
+            "timestep": 1
+          },
+          {
+            "kind": "first_call_summary",
+            "stage": "STEP_BEGIN",
+            "timestep": 1,
+            "values": [
+              "0",
+              "0",
+              "0",
+              "0.0000000000000000E+00",
+              "0.0000000000000000E+00"
+            ]
+          },
+          {
+            "coordinate": [
+              230,
+              70,
+              3
+            ],
+            "kind": "probe",
+            "n": 111344704.0,
+            "n_hex": "4CD45F88",
+            "q": 0.0001254415255971253,
+            "q_hex": "390388F4",
+            "stage": "STEP_BEGIN",
+            "timestep": 1
+          },
+          {
+            "bounds": {
+              "i": [
+                1,
+                234
+              ],
+              "j": [
+                1,
+                282
+              ],
+              "k": [
+                1,
+                39
+              ]
+            },
+            "kind": "cloud_summary",
+            "mass_only": 0,
+            "negative_mass": 0,
+            "negative_number": 0,
+            "number_only": 0,
+            "reported_totals": [
+              "0.0000000000000000E+00",
+              "0.0000000000000000E+00"
+            ],
+            "stage": "FOGDES_INPUT",
+            "timestep": 1
+          },
+          {
+            "kind": "first_call_summary",
+            "stage": "FOGDES_INPUT",
+            "timestep": 1,
+            "values": [
+              "0",
+              "0",
+              "0",
+              "0.0000000000000000E+00",
+              "0.0000000000000000E+00"
+            ]
+          },
+          {
+            "coordinate": [
+              230,
+              70,
+              3
+            ],
+            "kind": "probe",
+            "n": 111344704.0,
+            "n_hex": "4CD45F88",
+            "q": 0.0001254415255971253,
+            "q_hex": "390388F4",
+            "stage": "FOGDES_INPUT",
+            "timestep": 1
+          }
+        ],
+        "sha256": "0527c9c80d79fba438baffce881bf65bdb571b3de7eed979a1834f58bb31b30c"
+      },
+      "completed_state_audit": {
+        "exact_completed_POST_KDM6_ids": [],
+        "observed_completed_POST_KDM6_timesteps": 0,
+        "path": "docs/evidence/pr87_state_cycle_20261016/v5b_COUPLED_completed_states.json",
+        "sha256": "0994f53a8b49a52c23a56a78018a5f532b38b3327762ba8e8618b12bfeb099bd",
+        "states": [
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 960289
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1010
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 244498
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 205577
+              }
+            },
+            "rkstep": 0,
+            "stage": "PRE_RK",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1574440
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 2536
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 813792
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 275963
+              }
+            },
+            "rkstep": 1,
+            "stage": "RK_STAGE_END",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1574440
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 2536
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 813792
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 275959
+              }
+            },
+            "rkstep": 2,
+            "stage": "RK_STAGE_END",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1632919
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 3841
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 901521
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 312061
+              }
+            },
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1632919
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 3841
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 901521
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 312061
+              }
+            },
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          }
+        ],
+        "status": "INCOMPLETE",
+        "trace_timesteps": [
+          1
+        ]
+      },
+      "executed_executable_sha256": "3631689bf1cddde4198d057489443d13a4d0bab94ee7aa53a4888e02fc6468ba",
+      "expected_executable_sha256": "3631689bf1cddde4198d057489443d13a4d0bab94ee7aa53a4888e02fc6468ba",
+      "expected_model_timestamps": [
+        "2026-08-16_13:00:20",
+        "2026-08-16_13:00:40"
+      ],
+      "final_completed_step": null,
+      "maximum_seen_timestep": 1,
+      "returncode": 128,
+      "run_receipt_path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/receipt.json",
+      "run_receipt_sha256": "f7942dda271f5a4c88279894e210d0e3d7a887ea08c3010a9edc60836ad7d6a0",
+      "run_root": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016",
+      "run_status": "INCOMPLETE",
+      "runtime_failure": {
+        "interpretation": "No completed POST_KDM6 state or accepted model timestamp; the run is incomplete despite clean audited PRE_RK, RK1-3, and PRE_KDM6 states.",
+        "marker_lines": [
+          "ProgB transient PSD state rejected"
+        ],
+        "model_timestamps_accepted": [],
+        "rsl_error_path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/run/rsl.error.0000.gz",
+        "rsl_error_sha256": "3365f981b11fa381ad016cd3273299c3548651f82b6f79d458f02d4222773fe3"
+      },
+      "snapshot_summary": {
+        "completed_post_kdm6_timesteps": [],
+        "duplicate_post_kdm6_timesteps": [],
+        "record_count": 8,
+        "snapshots": {},
+        "timesteps": [
+          1
+        ]
+      },
+      "stage_trace": {
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/run/pr85_joint_moment_stages.raw.gz",
+        "sha256": "eebdd2a4b29f8619df397bf8df4c33010a235b82e353366db2be31c7dbf0b5f6",
+        "uncompressed_bytes": 761636480,
+        "uncompressed_sha256": "0c334a94572a5009f4309ea4b64f3b7bd7ee00bd4ad5b0c850d7abd3e5e19a0a"
+      },
+      "wall_seconds": 266.86982447467744
+    },
+    "OFF": {
+      "actual_model_timestamps": [],
+      "candidate_build_unchanged": true,
+      "cloud_cycle": {
+        "fogdes_reject_marker_present": false,
+        "path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/run/pr87_cloud_cycle.log",
+        "records": [
+          {
+            "bounds": {
+              "i": [
+                1,
+                234
+              ],
+              "j": [
+                1,
+                282
+              ],
+              "k": [
+                1,
+                39
+              ]
+            },
+            "kind": "cloud_summary",
+            "mass_only": 0,
+            "negative_mass": 0,
+            "negative_number": 0,
+            "number_only": 0,
+            "reported_totals": [
+              "0.0000000000000000E+00",
+              "0.0000000000000000E+00"
+            ],
+            "stage": "STEP_BEGIN",
+            "timestep": 1
+          },
+          {
+            "kind": "first_call_summary",
+            "stage": "STEP_BEGIN",
+            "timestep": 1,
+            "values": [
+              "0",
+              "0",
+              "0",
+              "0.0000000000000000E+00",
+              "0.0000000000000000E+00"
+            ]
+          },
+          {
+            "coordinate": [
+              230,
+              70,
+              3
+            ],
+            "kind": "probe",
+            "n": 111344704.0,
+            "n_hex": "4CD45F88",
+            "q": 0.0001254415255971253,
+            "q_hex": "390388F4",
+            "stage": "STEP_BEGIN",
+            "timestep": 1
+          },
+          {
+            "bounds": {
+              "i": [
+                1,
+                234
+              ],
+              "j": [
+                1,
+                282
+              ],
+              "k": [
+                1,
+                39
+              ]
+            },
+            "kind": "cloud_summary",
+            "mass_only": 0,
+            "negative_mass": 0,
+            "negative_number": 0,
+            "number_only": 0,
+            "reported_totals": [
+              "0.0000000000000000E+00",
+              "0.0000000000000000E+00"
+            ],
+            "stage": "FOGDES_INPUT",
+            "timestep": 1
+          },
+          {
+            "kind": "first_call_summary",
+            "stage": "FOGDES_INPUT",
+            "timestep": 1,
+            "values": [
+              "0",
+              "0",
+              "0",
+              "0.0000000000000000E+00",
+              "0.0000000000000000E+00"
+            ]
+          },
+          {
+            "coordinate": [
+              230,
+              70,
+              3
+            ],
+            "kind": "probe",
+            "n": 111344704.0,
+            "n_hex": "4CD45F88",
+            "q": 0.0001254415255971253,
+            "q_hex": "390388F4",
+            "stage": "FOGDES_INPUT",
+            "timestep": 1
+          }
+        ],
+        "sha256": "0527c9c80d79fba438baffce881bf65bdb571b3de7eed979a1834f58bb31b30c"
+      },
+      "completed_state_audit": {
+        "exact_completed_POST_KDM6_ids": [],
+        "observed_completed_POST_KDM6_timesteps": 0,
+        "path": "docs/evidence/pr87_state_cycle_20261016/v5b_OFF_completed_states.json",
+        "sha256": "dc4ec52a160f04fd4169cf34fb2f2d82fd763bacb236d856900a9ad6cb6e6dbf",
+        "states": [
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 960289
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1022
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 244498
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 205577
+              }
+            },
+            "rkstep": 0,
+            "stage": "PRE_RK",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1574440
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 2560
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 813800
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 275970
+              }
+            },
+            "rkstep": 1,
+            "stage": "RK_STAGE_END",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1574440
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 2560
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 813800
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 275964
+              }
+            },
+            "rkstep": 2,
+            "stage": "RK_STAGE_END",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1632914
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 3869
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 901534
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 312070
+              }
+            },
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "paired_QNB": {
+              "cloud": {
+                "mass_field": "QC",
+                "mass_only": 0,
+                "moment_field": "NC",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 1632914
+              },
+              "graupel": {
+                "mass_field": "QG",
+                "mass_only": 0,
+                "moment_field": "BG",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 3869
+              },
+              "ice": {
+                "mass_field": "QI",
+                "mass_only": 0,
+                "moment_field": "NI",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 901534
+              },
+              "rain": {
+                "mass_field": "QR",
+                "mass_only": 0,
+                "moment_field": "NR",
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "number_only": 0,
+                "outside_psd_beyond_8_float32_ulp": 0,
+                "positive_valid_pairs": 312070
+              }
+            },
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "strict_all_fields": {
+              "all_fields_finite": true,
+              "all_fields_nonnegative": true,
+              "field_count": 12,
+              "field_counts": {
+                "BG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "DEN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NN": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "NR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "Q": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QC": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QG": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QI": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QR": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                },
+                "QS": {
+                  "negative": 0,
+                  "nonfinite": 0,
+                  "size": 2533440
+                }
+              },
+              "field_names": [
+                "BG",
+                "DEN",
+                "NC",
+                "NI",
+                "NN",
+                "NR",
+                "Q",
+                "QC",
+                "QG",
+                "QI",
+                "QR",
+                "QS"
+              ]
+            },
+            "timestep": 1,
+            "violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            }
+          }
+        ],
+        "status": "INCOMPLETE",
+        "trace_timesteps": [
+          1
+        ]
+      },
+      "executed_executable_sha256": "3631689bf1cddde4198d057489443d13a4d0bab94ee7aa53a4888e02fc6468ba",
+      "expected_executable_sha256": "3631689bf1cddde4198d057489443d13a4d0bab94ee7aa53a4888e02fc6468ba",
+      "expected_model_timestamps": [
+        "2026-08-16_13:00:20",
+        "2026-08-16_13:00:40"
+      ],
+      "final_completed_step": null,
+      "maximum_seen_timestep": 1,
+      "returncode": 128,
+      "run_receipt_path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/receipt.json",
+      "run_receipt_sha256": "c8e80519a8c1fee344b45303c3f34d59a27b189edaac52e78a08c47080da078c",
+      "run_root": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016",
+      "run_status": "INCOMPLETE",
+      "runtime_failure": {
+        "interpretation": "No completed POST_KDM6 state or accepted model timestamp; the run is incomplete despite clean audited PRE_RK, RK1-3, and PRE_KDM6 states.",
+        "marker_lines": [
+          "ProgB transient PSD state rejected"
+        ],
+        "model_timestamps_accepted": [],
+        "rsl_error_path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/run/rsl.error.0000.gz",
+        "rsl_error_sha256": "16e2fc72bf02b18d9d4058542b0c5738284cd4d4d68b1bee79717f946d66aad0"
+      },
+      "snapshot_summary": {
+        "completed_post_kdm6_timesteps": [],
+        "duplicate_post_kdm6_timesteps": [],
+        "record_count": 8,
+        "snapshots": {},
+        "timesteps": [
+          1
+        ]
+      },
+      "stage_trace": {
+        "path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/run/pr85_joint_moment_stages.raw.gz",
+        "sha256": "dcf217d84e98c9b75768db7c97c7fd8025f02f3aee0e57daec0a8f8bb8f20c27",
+        "uncompressed_bytes": 761636480,
+        "uncompressed_sha256": "baa40c44ee6429e71ab89379dea2219a79a61a98fa4e8ff93219cf15ec995d5a"
+      },
+      "wall_seconds": 267.56827905774117
+    }
+  },
+  "schema": "pr87_v5b_cloud_cycle_and_closed_state_summary_v1",
+  "scope": "Offline all-field and Q/N/B audit of closed v5b streams. Trace completeness and strict model timestamp receipt are required; no partial stage is promoted to completed POST_KDM6."
+}

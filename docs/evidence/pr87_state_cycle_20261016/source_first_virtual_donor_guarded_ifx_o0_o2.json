@@ -1,0 +1,379 @@
+{
+  "density_helper_procedure_sha256": "69a96690cef0f4f7d5ae3b70c910839b9d51aa51ccc67dcb6b66f00a522a13a6",
+  "density_helper_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr85_joint_stage_observer.f90",
+  "density_helper_source_sha256": "ea50fe2b380d2d5572da42f97261afe19eabdfef194edbfa5e4abc6360ee33bb",
+  "extracted_procedure": "rk_update_joint_moments",
+  "extracted_procedure_sha256": "55bf09b6af8be4eb7902ba9bda64ea2ee88b8b62cc7a2e57d4aeb2eb8eed86b2",
+  "fixture_contract": {
+    "cloud_bounds": {
+      "maximum_particle_mass": 3.0300855069345996e-10,
+      "minimum_particle_mass": 4.188790204786391e-15
+    },
+    "density": "DEN=1 from AL=1, ALB=0 using source-matched helper",
+    "dimensions": {
+      "active_i": [
+        2,
+        3
+      ],
+      "active_j": [
+        2,
+        2
+      ],
+      "active_k": [
+        1,
+        1
+      ],
+      "i": [
+        1,
+        5
+      ],
+      "j": [
+        1,
+        4
+      ],
+      "k": [
+        1,
+        2
+      ]
+    },
+    "dry_carrier": "old/new=1 via c1=1,c2=0,muold=munew=0,mub=1",
+    "dyadic_cases_in_units_of_minimum_mass_times_1e8": {
+      "baseline": {
+        "old_cloud_mass": [
+          1.0,
+          1.5
+        ],
+        "old_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "source_cloud_mass": [
+          0.0,
+          0.0
+        ],
+        "source_first_fallback_selected": false,
+        "theta1_result_cloud_mass": [
+          1.0,
+          1.375
+        ]
+      },
+      "invalid_endpoint": {
+        "expected_final_cloud_mass": [
+          0.75,
+          1.25
+        ],
+        "expected_result": "reject before commit and preserve q2/n2",
+        "final_endpoint_passes_psd_cone": false,
+        "old_cloud_mass": [
+          1.5,
+          1.5
+        ],
+        "source_cloud_mass": [
+          -1.0,
+          0.0
+        ],
+        "source_prepared_mass": [
+          0.5,
+          1.5
+        ]
+      },
+      "negative_donor": {
+        "expected_result": "reject before commit and preserve q2/n2",
+        "old_cloud_mass": [
+          1.5,
+          1.5
+        ],
+        "source_cloud_mass": [
+          -1.625,
+          0.0
+        ],
+        "source_prepared_mass": [
+          -0.125,
+          1.5
+        ]
+      },
+      "source_first": {
+        "completed_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "completed_fallback_cloud_mass": [
+          1.09375,
+          1.03125
+        ],
+        "completed_mass_sum": 2.125,
+        "old_cloud_mass": [
+          1.0,
+          1.5
+        ],
+        "old_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "original_theta1_cloud_mass": [
+          1.125,
+          0.875
+        ],
+        "selected_pair": "cloud (Q index 2, N index 1)",
+        "source_cloud_mass": [
+          0.125,
+          -0.5
+        ],
+        "source_first_fallback_selected": true,
+        "source_prepared_mass": [
+          1.125,
+          1.0
+        ]
+      },
+      "virtual_donor": {
+        "completed_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "completed_fallback_cloud_mass": [
+          1.03125,
+          1.34375
+        ],
+        "completed_mass_sum": 2.375,
+        "final_endpoint_passes_psd_cone": true,
+        "intermediate_outside_psd_cone": true,
+        "old_cloud_mass": [
+          1.5,
+          1.5
+        ],
+        "old_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "original_theta1_cloud_mass": [
+          0.875,
+          1.5
+        ],
+        "source_cloud_mass": [
+          -0.625,
+          0.0
+        ],
+        "source_first_fallback_selected": true,
+        "source_prepared_mass": [
+          0.875,
+          1.5
+        ]
+      }
+    },
+    "horizontal_flux": "ru=+0.25 on all x faces; rv=ww=0; dt=1",
+    "registry": {
+      "nindex": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "nmoist": 6,
+      "nnindex": 5,
+      "nscalar": 5,
+      "qindex": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "qsindex": 6
+    }
+  },
+  "generated_fixture_sha256": "5dfcc43b612934bda9c2a72982b777e518750f840a549f6404b068918f0f0d7e",
+  "kernel_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+  "kernel_sha256": "4149f75aa94d5ca917dc3acfb17db36342f454122459251aa007ea78d30cc9bb",
+  "pinned_profile": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+  "pinned_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "proposal_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v8/native_update.f90",
+  "proposal_sha256": "035d3de7310191b340f486b116241757c4d4a87312278a37ae63a8b9f9f688b9",
+  "results": {
+    "O0": {
+      "compile_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/compile.log",
+      "compile_log_sha256": "2d289e1fc076c8aba08cc7f570a312631ac25a4d1ff58d7fb532574049d3a84e",
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "executable": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/source_first_fixture.exe",
+      "executable_sha256": "4cb5a5595663537fccb5c994c9aad6f450f0feba55749c94a881dfcdbe0cde55",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "modes": {
+        "baseline": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/baseline/pr85_joint_transport_budget.raw",
+          "budget_sha256": "0fee2e98ae0be4ff8c79db0fd678b1985178e9f5f4f60121b0da5643b535397a",
+          "fallback_flags": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/baseline/run.log",
+          "run_log_sha256": "13f63c6d00dd14eb05bb523324f3a9af39317a8d2fbc4b1d9696d038ddaab18f",
+          "status": "PASS"
+        },
+        "invalid_endpoint": {
+          "q2_n2_at_fatal": [
+            6.28318503004266e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/invalid_endpoint/run.log",
+          "run_log_sha256": "e0c787839dcfaa79b4901bf68b957ab616ed19dfc2be9409eb516cf82347ffdf",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": true,
+          "transport_budget_sha256": "6a6f39724c77352ec06ac0f4f068616e6bf197e69ca52dcbd628c1d855592523"
+        },
+        "negative_donor": {
+          "q2_n2_at_fatal": [
+            6.28318503004266e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/negative_donor/run.log",
+          "run_log_sha256": "66a00c91a1da14e5b0a217998605203d79e7a554af9ba59681f91ac5333fb571",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "source_first": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/source_first/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/source_first/run.log",
+          "run_log_sha256": "ef82b28b4031e99acf9a071c11e83f44dd165958d63d72b38d6d2dec77f2adbe",
+          "status": "PASS"
+        },
+        "virtual_donor": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/virtual_donor/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O0/virtual_donor/run.log",
+          "run_log_sha256": "3383f771652eae0176746f5ce2eeb9b83dc1f3ee38bf56ea78cb26175d6e0201",
+          "status": "PASS"
+        }
+      }
+    },
+    "O2": {
+      "compile_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/compile.log",
+      "compile_log_sha256": "2d289e1fc076c8aba08cc7f570a312631ac25a4d1ff58d7fb532574049d3a84e",
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "executable": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/source_first_fixture.exe",
+      "executable_sha256": "1db0085e98dd9d1f1361f2bc5f91c2fefb042d757a42fd508494f0b89ddffb4e",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "modes": {
+        "baseline": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/baseline/pr85_joint_transport_budget.raw",
+          "budget_sha256": "0fee2e98ae0be4ff8c79db0fd678b1985178e9f5f4f60121b0da5643b535397a",
+          "fallback_flags": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/baseline/run.log",
+          "run_log_sha256": "13f63c6d00dd14eb05bb523324f3a9af39317a8d2fbc4b1d9696d038ddaab18f",
+          "status": "PASS"
+        },
+        "invalid_endpoint": {
+          "q2_n2_at_fatal": [
+            6.28318503004266e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/invalid_endpoint/run.log",
+          "run_log_sha256": "e0c787839dcfaa79b4901bf68b957ab616ed19dfc2be9409eb516cf82347ffdf",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": true,
+          "transport_budget_sha256": "6a6f39724c77352ec06ac0f4f068616e6bf197e69ca52dcbd628c1d855592523"
+        },
+        "negative_donor": {
+          "q2_n2_at_fatal": [
+            6.28318503004266e-07,
+            6.28318503004266e-07,
+            100000000.0,
+            100000000.0
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/negative_donor/run.log",
+          "run_log_sha256": "66a00c91a1da14e5b0a217998605203d79e7a554af9ba59681f91ac5333fb571",
+          "status": "PASS_REJECTED_BEFORE_COMMIT",
+          "storage_ledger_absent": true,
+          "transport_budget_present_for_failed_retry": false,
+          "transport_budget_sha256": null
+        },
+        "source_first": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/source_first/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/source_first/run.log",
+          "run_log_sha256": "ef82b28b4031e99acf9a071c11e83f44dd165958d63d72b38d6d2dec77f2adbe",
+          "status": "PASS"
+        },
+        "virtual_donor": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/virtual_donor/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_pzkl08hp/O2/virtual_donor/run.log",
+          "run_log_sha256": "3383f771652eae0176746f5ce2eeb9b83dc1f3ee38bf56ea78cb26175d6e0201",
+          "status": "PASS"
+        }
+      }
+    }
+  },
+  "runner_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_source_first_fallback_regression.py",
+  "runner_sha256": "5c6a10c27cdcffbabcd834bb475558dae9f921d104a5d54ce83b3b717d02650d",
+  "schema": "pr87_source_first_virtual_donor_ifx_v1",
+  "scratch": "/var/tmp/pr87_source_first_fixture_pzkl08hp",
+  "status": "PASS_O0_O2"
+}

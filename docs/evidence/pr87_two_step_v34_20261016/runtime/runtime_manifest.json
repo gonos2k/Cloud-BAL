@@ -1,0 +1,194 @@
+{
+  "schema": "pr87_closed_matched_runtime_archive_v1",
+  "candidate": "v34",
+  "duration_seconds": 40,
+  "arms": {
+    "OFF": {
+      "status": "INCOMPLETE",
+      "returncode": 128,
+      "final_completed_step": 1,
+      "timestep_count": 1,
+      "earliest_fatal": "KDM6 cold rain process rejected an infeasible moment state",
+      "executed_executable_sha256": "5da2d108c60d9c67e019d8be43b152cccd7b167befe6d3518f2e3f8f6d3088af",
+      "changed_staged_inputs": [],
+      "changed_original_inputs": [],
+      "processing_errors": [],
+      "files": {
+        "receipt.json": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/receipt.json",
+          "sha256": "95112801ae99f19de45c125dbbaf8b6685119c317a6b27afa15e6aede34162b1",
+          "bytes": 50779
+        },
+        "preflight.json": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/preflight.json",
+          "sha256": "57ffaf8f4ed7ea36e6a415f61d3d372e113f13187472dace1030d0e2ad39573e",
+          "bytes": 12720
+        },
+        "pr87_joint_OFF_40s_v34_launch_20261016.json": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_launch_20261016.json",
+          "sha256": "bd0a4d5ccc03a801ab9519b933e2f7ce67efbf2360cc00de5265fbb8568180c5",
+          "bytes": 1243
+        },
+        "pr85_joint_transport_budget.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr85_joint_transport_budget.raw.gz",
+          "sha256": "7c161ea96643967c13dac692dc26558c4f87d9dd0d2d8aa9e6d45d8db0b25c88",
+          "bytes": 376
+        },
+        "pr87_rain_sedimentation_budget.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_rain_sedimentation_budget.raw.gz",
+          "sha256": "11f539b6dd9074f7bc22f95ebc354804ab0bf9d6e75f5049f9f8159ada738c1e",
+          "bytes": 5611711
+        },
+        "pr87_qn_density_storage.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_qn_density_storage.raw.gz",
+          "sha256": "5a06e5291c78419d3fb450c3a7be8c8257518fb729a4a61c4362675131e6e971",
+          "bytes": 27041
+        },
+        "pr87_qn_public_store.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_qn_public_store.raw.gz",
+          "sha256": "0af020f020ee6c541d2d7c9e2b14b7f89782b8243fe2607a92a863508ceb5f04",
+          "bytes": 31621
+        },
+        "pr87_ice_sublimation_pending.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_ice_sublimation_pending.raw.gz",
+          "sha256": "3ef0e857957b5d7467dc42254dd2ec26f2ee85498d5393974919b2a69f637912",
+          "bytes": 454
+        },
+        "pr87_cloud_cycle.log": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_cloud_cycle.log",
+          "sha256": "b6e3822d0b32de98c69c78d38f3cec0463966fdb882af3b06a976adf6842fed9",
+          "bytes": 2014
+        },
+        "pr87_all_pair_diffusion_precision.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_all_pair_diffusion_precision.raw.gz",
+          "sha256": "3ef9c4464b01a963fcfe4b4b507056b33a16b8ff888098616896acff2613ddd8",
+          "bytes": 1972
+        },
+        "pr87_pbl_source_correction.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_pbl_source_correction.raw.gz",
+          "sha256": "bb6416571d2d82f6c649a9139adc196686c56b389a2ed4f7216ca430de408c87",
+          "bytes": 1109
+        },
+        "pr87_pbl_packet_summary.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_pbl_packet_summary.raw.gz",
+          "sha256": "f06ed223ef59a83b69161be91dfad319c5f78d4e27d96b27877730a86770bd58",
+          "bytes": 124976
+        },
+        "pr87_joint_storage.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_joint_storage.raw.gz",
+          "sha256": "2ad7ef7cf9a2b723ff77ce7f52053ce954a656722654f6bebbb250c52ea724fc",
+          "bytes": 676093
+        },
+        "pr87_admission_reason.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr87_admission_reason.raw.gz",
+          "sha256": "0e7c41f03dc81ccfc027169bfc73503fa39cef6aa8df65f5076111ceafc4d86c",
+          "bytes": 6096754
+        },
+        "pr85_fogdes_budget.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/pr85_fogdes_budget.raw.gz",
+          "sha256": "0f35a71b9f3a68d424deb50b06e91a271f95ac1991ac7ed3a6b995034a052cb8",
+          "bytes": 25058179
+        },
+        "rsl.error.0000.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v34_20261016/run/rsl.error.0000.gz",
+          "sha256": "f1cf59b1ffa791386df75449c09c3807f19a619e8f1b11580f02d004a6569d62",
+          "bytes": 2313
+        }
+      }
+    },
+    "COUPLED": {
+      "status": "INCOMPLETE",
+      "returncode": 128,
+      "final_completed_step": 1,
+      "timestep_count": 1,
+      "earliest_fatal": "KDM6 cold rain process rejected an infeasible moment state",
+      "executed_executable_sha256": "5da2d108c60d9c67e019d8be43b152cccd7b167befe6d3518f2e3f8f6d3088af",
+      "changed_staged_inputs": [],
+      "changed_original_inputs": [],
+      "processing_errors": [],
+      "files": {
+        "receipt.json": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/receipt.json",
+          "sha256": "5406432b07402629fc3f8b4a24b5724d1f2cb4933747dda688650e7f9f4b5c0b",
+          "bytes": 50783
+        },
+        "preflight.json": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/preflight.json",
+          "sha256": "28878c47f6a2236758f0013eb43e284c0b16fa076875ff77421caeed632d7281",
+          "bytes": 12736
+        },
+        "pr87_joint_COUPLED_40s_v34_launch_20261016.json": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_launch_20261016.json",
+          "sha256": "97cd86b8af0768279ed85e5843c75b26e900269ee7e6c8ff2b7ba6d1f7193871",
+          "bytes": 1247
+        },
+        "pr85_joint_transport_budget.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr85_joint_transport_budget.raw.gz",
+          "sha256": "7c161ea96643967c13dac692dc26558c4f87d9dd0d2d8aa9e6d45d8db0b25c88",
+          "bytes": 376
+        },
+        "pr87_rain_sedimentation_budget.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_rain_sedimentation_budget.raw.gz",
+          "sha256": "ea15316f186d479fb03abacb4e7eba40c2c41b2f8672473ccd99946b45bf3d38",
+          "bytes": 5610911
+        },
+        "pr87_qn_density_storage.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_qn_density_storage.raw.gz",
+          "sha256": "965b8ba99b9971a913a03d541ef24ca0cb6446ce10a19237be1afb138d6f59e4",
+          "bytes": 26943
+        },
+        "pr87_qn_public_store.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_qn_public_store.raw.gz",
+          "sha256": "839f565084b561f538223aa16886605f4f64a5fbae03f8b29fc7a71aaac52456",
+          "bytes": 31649
+        },
+        "pr87_ice_sublimation_pending.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_ice_sublimation_pending.raw.gz",
+          "sha256": "3ef0e857957b5d7467dc42254dd2ec26f2ee85498d5393974919b2a69f637912",
+          "bytes": 454
+        },
+        "pr87_cloud_cycle.log": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_cloud_cycle.log",
+          "sha256": "b6e3822d0b32de98c69c78d38f3cec0463966fdb882af3b06a976adf6842fed9",
+          "bytes": 2014
+        },
+        "pr87_all_pair_diffusion_precision.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_all_pair_diffusion_precision.raw.gz",
+          "sha256": "126586af1750ce58bca12c4b917f1cf6c0678d156988fec171535f64ad51fe95",
+          "bytes": 1964
+        },
+        "pr87_pbl_source_correction.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_pbl_source_correction.raw.gz",
+          "sha256": "4c582cb2042fcb00efaeafe7476f9339074db9cf4168762b41297f95bd5940bc",
+          "bytes": 1104
+        },
+        "pr87_pbl_packet_summary.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_pbl_packet_summary.raw.gz",
+          "sha256": "c579de8d74ca303451b6b7ec51da41c4852f3879ede403b45ea3d8b598effe7a",
+          "bytes": 125008
+        },
+        "pr87_joint_storage.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_joint_storage.raw.gz",
+          "sha256": "ca531d96bd109d61f84aa8b156cba64cc3591b8b5e66a5e0c90a793168399eba",
+          "bytes": 675831
+        },
+        "pr87_admission_reason.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr87_admission_reason.raw.gz",
+          "sha256": "1776c163671f118862c3b749294d67fdc2eb6db41b7dc7914ded5386cd4df28b",
+          "bytes": 6097258
+        },
+        "pr85_fogdes_budget.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/pr85_fogdes_budget.raw.gz",
+          "sha256": "495fb6ba2d73505221eab1af965d46a68b41117f5fa7674645ef85deab468095",
+          "bytes": 25058328
+        },
+        "rsl.error.0000.gz": {
+          "source_path": "/var/tmp/pr87_joint_COUPLED_40s_v34_20261016/run/rsl.error.0000.gz",
+          "sha256": "00dc6fde06e3624f600a4750ca3784a08a71fd41f250c4ab0ed055a690d86e30",
+          "bytes": 2312
+        }
+      }
+    }
+  },
+  "scope": "closed receipts and sparse ledgers; full private stage arrays remain external and hash-bound"
+}

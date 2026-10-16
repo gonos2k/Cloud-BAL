@@ -1,0 +1,223 @@
+{
+  "conclusion": "Both v5b arms have one QG/BG pair meeting the exact source transient classifier in the first public KDM6 pre-call dump, at (41,237,13). The completed stage stream first contains that source-defined transient at RK stage 3 and carries it into PRE_KDM6. The corresponding v17 public pre-call dumps have zero such states in both arms and QG=BG=0 at this coordinate. Therefore this transient is present on entry to KDM6; it is not created later inside ProgB_param. The fatal source error stop is anonymous, so the public-state coordinate is not an independently instrumented fatal coordinate.",
+  "coordinate_convention": "Arrays decoded by native_kdm6_trace are sliced to active bounds; reported global coordinates use its/jts/kts plus the decoded i/j/k offsets.",
+  "runs": {
+    "COUPLED": {
+      "completed_stage_first_transient_counts": [
+        {
+          "first_transient": null,
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "transient_count": 0
+        },
+        {
+          "first_transient": null,
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "transient_count": 0
+        },
+        {
+          "first_transient": null,
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "transient_count": 0
+        },
+        {
+          "first_transient": {
+            "i": 41,
+            "j": 237,
+            "k": 13
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "transient_count": 1
+        },
+        {
+          "first_transient": {
+            "i": 41,
+            "j": 237,
+            "k": 13
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "transient_count": 1
+        }
+      ],
+      "graupel_sedimentation_budget": {
+        "max_lat": 236,
+        "meaning": "This recorded G_SED stream ends at latitude 236; the public KDM6 pre-state transient is at latitude 237.",
+        "min_lat": 2,
+        "next_public_kdm6_call_lat": 237,
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/run/pr85_graupel_sedimentation_budget.raw.gz",
+        "record_count": 67491,
+        "records_at_max_lat": 286,
+        "sha256": "03d6824f7ad573db6e38bc5fe449150d085e7b8520f65d7c3865247b7155b9f3"
+      },
+      "v17_public_pre": {
+        "decoded_sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+        "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/kdm6_first_call_pre.raw",
+        "positive_qg_bg_pair_count": 2537,
+        "qg_bg_at_v5b_transient_coordinate": {
+          "bg": 0.0,
+          "qg": 0.0
+        },
+        "sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+        "source_defined_graupel_transient_count": 0,
+        "stage": 1,
+        "timestep": 1
+      },
+      "v5b_minus_v17_public_pre": {
+        "bg_changed_cells": 3841,
+        "qg_changed_cells": 3840,
+        "v17_positive_bg_cells": 2537,
+        "v17_positive_qg_cells": 2537,
+        "v5b_positive_bg_cells": 3841,
+        "v5b_positive_qg_cells": 3841
+      },
+      "v5b_public_pre": {
+        "compressed_sha256": "85e44dca7ada08e0eb9fac62699c61e6b73ca5f253287ad78ed2cddc13380cbf",
+        "decoded_sha256": "95939a9885daf928d8ed8bc07d2c159e8000fa7e6b2e57d9dac26128e68a20cf",
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/run/kdm6_first_call_pre.raw.gz",
+        "positive_qg_bg_pair_count": 3841,
+        "source_defined_graupel_transient_count": 1,
+        "stage": 1,
+        "timestep": 1,
+        "transient_cells": [
+          {
+            "bg": 6.275527875166406e-16,
+            "i": 41,
+            "j": 237,
+            "k": 13,
+            "qg": 2.5102110060709615e-13
+          }
+        ]
+      }
+    },
+    "OFF": {
+      "completed_stage_first_transient_counts": [
+        {
+          "first_transient": null,
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "transient_count": 0
+        },
+        {
+          "first_transient": null,
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "transient_count": 0
+        },
+        {
+          "first_transient": null,
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "transient_count": 0
+        },
+        {
+          "first_transient": {
+            "i": 41,
+            "j": 237,
+            "k": 13
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "transient_count": 1
+        },
+        {
+          "first_transient": {
+            "i": 41,
+            "j": 237,
+            "k": 13
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "transient_count": 1
+        }
+      ],
+      "graupel_sedimentation_budget": {
+        "max_lat": 236,
+        "meaning": "This recorded G_SED stream ends at latitude 236; the public KDM6 pre-state transient is at latitude 237.",
+        "min_lat": 2,
+        "next_public_kdm6_call_lat": 237,
+        "path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/run/pr85_graupel_sedimentation_budget.raw.gz",
+        "record_count": 67491,
+        "records_at_max_lat": 286,
+        "sha256": "8df6b622c0f5aeeeda9dd2086d3108b99c97b777867ba977149ba9187883bd06"
+      },
+      "v17_public_pre": {
+        "decoded_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+        "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/kdm6_first_call_pre.raw",
+        "positive_qg_bg_pair_count": 2560,
+        "qg_bg_at_v5b_transient_coordinate": {
+          "bg": 0.0,
+          "qg": 0.0
+        },
+        "sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+        "source_defined_graupel_transient_count": 0,
+        "stage": 1,
+        "timestep": 1
+      },
+      "v5b_minus_v17_public_pre": {
+        "bg_changed_cells": 3869,
+        "qg_changed_cells": 3868,
+        "v17_positive_bg_cells": 2560,
+        "v17_positive_qg_cells": 2560,
+        "v5b_positive_bg_cells": 3869,
+        "v5b_positive_qg_cells": 3869
+      },
+      "v5b_public_pre": {
+        "compressed_sha256": "d6c94b614eff55f98051f94a2700f784a2800de1a10195f4ee2fb241c2883706",
+        "decoded_sha256": "02b021038370e1b952b3ed322860ce00b7c2447d7f1943a776f3e77fe80ecb3f",
+        "path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/run/kdm6_first_call_pre.raw.gz",
+        "positive_qg_bg_pair_count": 3869,
+        "source_defined_graupel_transient_count": 1,
+        "stage": 1,
+        "timestep": 1,
+        "transient_cells": [
+          {
+            "bg": 6.275527875166406e-16,
+            "i": 41,
+            "j": 237,
+            "k": 13,
+            "qg": 2.5102110060709615e-13
+          }
+        ]
+      }
+    }
+  },
+  "schema": "pr87_graupel_transient_input_audit_v1",
+  "scope": "Offline source-contract check of first KDM6 public pre-call state and completed RK stages; no fatal-site coordinate was emitted.",
+  "source_contract": {
+    "ProgB_classifier_lines": [
+      6275,
+      6285
+    ],
+    "ProgB_error_stop_lines": [
+      6431,
+      6434
+    ],
+    "graupel_threshold_constants": {
+      "brs_min": 1e-15,
+      "qcrmin": 1e-09,
+      "source_lines": [
+        116,
+        116
+      ],
+      "source_lines_brs_min": [
+        117,
+        117
+      ]
+    },
+    "interpretation": "At public KDM6 entry, a positive finite QG and BG satisfying QG<=qcrmin and BG<=brs_min already satisfy the source PROGB_TRANSIENT classifier. The error stop itself does not report coordinates.",
+    "public_pre_capture_call_lines": [
+      1337,
+      1343
+    ],
+    "public_pre_dump_writer_lines": [
+      1594,
+      1619
+    ],
+    "source_path": "/var/tmp/pr87_joint_cycle_build_20261016_v5b/source/overrides/module_mp_kdm6.F",
+    "source_sha256": "dc0e9c20997f8fb34a6a164a707338a4a5d8817acbaab5a64efcb842e61e38d2"
+  }
+}

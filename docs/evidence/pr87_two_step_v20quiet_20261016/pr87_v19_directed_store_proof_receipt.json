@@ -1,0 +1,99 @@
+{
+  "schema": "pr87_v19_directed_store_scoped_proof_v1",
+  "scope": "Offline source-defined proof of current joint_moment_store on all 50 continuous-valid/stored-volume-invalid step-2 PRE_KDM6 cases in each arm; not a model run or physical adapter validation.",
+  "inputs": {
+    "conversion_cases_json": {
+      "path": "/var/tmp/pr87_v19_strict_rain_conversion_all50.json",
+      "sha256": "49965cd33439f5c38dad96970266eb653f5c577c0ee1a164cb000289b3d7092d"
+    },
+    "extractor_copy": {
+      "path": "/var/tmp/pr87_v19_strict_rain_conversion_all50.py",
+      "sha256": "62eff6d2ecc4730172b5d974ec98cbebe30646bbf58c8805dcbf510bc099d430"
+    },
+    "stage_traces": {
+      "OFF": {
+        "path": "/var/tmp/pr87_joint_OFF_40s_v19_20261016/run/pr85_joint_moment_stages.raw.gz",
+        "sha256": "a149592a78e3c883ebca77f87e7ba9e75e9d3a1b6a98e37568fb1d0e8475bace",
+        "case_count": 50,
+        "continuous_invalid": 0,
+        "stored_volume_invalid": 50
+      },
+      "COUPLED": {
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v19_20261016/run/pr85_joint_moment_stages.raw.gz",
+        "sha256": "2a46248c9f3c07d4c2fc9230d0d2d93d62be747d7119d22046963c6100ce2845",
+        "case_count": 50,
+        "continuous_invalid": 0,
+        "stored_volume_invalid": 50
+      }
+    }
+  },
+  "tested_source": {
+    "path": "src/common/cloud_bal_joint_transport.f90",
+    "sha256": "19d0259c423a3035a418174292c14d8671d778ebfe48a604cc80923c2f854541"
+  },
+  "test_driver": {
+    "path": "/var/tmp/pr87_v19_directed_store_proof.f90",
+    "sha256": "a1de6c6e0575005861026bf879cf8250a21e5bf4de7d1a9542d5f56d4a1bc37b"
+  },
+  "compiler": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "version": "ifx (IFX) 2026.0.0 20260331",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "profile": "tests/intel_toolchain.sh (pinned)",
+    "setvars_sha256": "26084d08db985eadb61adc43c7f18821be9e75156b60f920de363ea51c70887e"
+  },
+  "builds": {
+    "O0": {
+      "scratch": "/var/tmp/pr87_v19_directed_store_O0_20261016",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "exit_status": 0,
+      "semantic_marker": "PASS cases=100",
+      "run_log_sha256": "c8d72d64c65932ea5c0ccd70e45b8e443ae2abf5301b2d955ed340f3dd760232"
+    },
+    "O2": {
+      "scratch": "/var/tmp/pr87_v19_directed_store_O2_20261016",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "exit_status": 0,
+      "semantic_marker": "PASS cases=100",
+      "run_log_sha256": "c8d72d64c65932ea5c0ccd70e45b8e443ae2abf5301b2d955ed340f3dd760232"
+    }
+  },
+  "result": {
+    "cases": 100,
+    "per_arm": 50,
+    "all_continuous_valid": true,
+    "all_store_calls_valid": true,
+    "all_used_adjustment_class_2": true,
+    "public_N_preserved_as_R32_rounding": true,
+    "both_R64_and_R32_rho_times_N_within_exact_bounds": true,
+    "signed_delta_Q_sum": -2.483997328574933e-12,
+    "signed_delta_Q_min": -1.8189894035458565e-12,
+    "signed_delta_Q_max": 1.1368683772161603e-13
+  }
+}

@@ -5,7 +5,7 @@ PROGRAM pr85_kdm6_graupel_sedimentation_source
     SUBROUTINE pr85_kdm6_paired_sediment_column(kts,kte,cell_i,lat,substep,dt,mstep, &
         dry_density,delz,mass_rate,second_rate,qstate,second_state,mode,q_active_min, &
         second_active_min,density_min,density_max,approved_q_rate,approved_second_rate, &
-        budget_unit,trace,valid)
+        budget_unit,trace,valid,rain_pidn,rain_power,rain_lambda_min,rain_lambda_max)
       USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64
       INTEGER, INTENT(IN) :: kts,kte,cell_i,lat,substep,mstep,mode,budget_unit
       REAL(real32), INTENT(IN) :: dt,dry_density(kts:kte),delz(kts:kte)
@@ -15,6 +15,7 @@ PROGRAM pr85_kdm6_graupel_sedimentation_source
       REAL(real64), INTENT(OUT) :: approved_q_rate(kts:kte),approved_second_rate(kts:kte)
       LOGICAL, INTENT(IN) :: trace
       LOGICAL, INTENT(OUT) :: valid
+      REAL(real32), INTENT(IN) :: rain_pidn,rain_power,rain_lambda_min,rain_lambda_max
     END SUBROUTINE pr85_kdm6_paired_sediment_column
   END INTERFACE
   INTEGER :: failures
@@ -45,7 +46,7 @@ CONTAINS
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,2,201,42,1,1.0_real32,1, &
       rho,dz,rate,b_rate,q,b,2,1.0e-9_real32,1.0e-15_real32, &
-      100.0_real32,900.0_real32,approved_q,approved_b,unit,.TRUE.,valid)
+      100.0_real32,900.0_real32,approved_q,approved_b,unit,.TRUE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     qinv1=SUM(REAL(rho,real64)*REAL(q,real64)*REAL(dz,real64))
     binv1=SUM(REAL(rho,real64)*REAL(b,real64)*REAL(dz,real64))
@@ -83,7 +84,7 @@ CONTAINS
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,2,235,42,2,20.0_real32,1, &
       rho,dz,rate,b_rate,q,b,2,1.0e-9_real32,1.0e-15_real32, &
-      100.0_real32,900.0_real32,approved_q,approved_b,unit,.TRUE.,valid)
+      100.0_real32,900.0_real32,approved_q,approved_b,unit,.TRUE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     IF (.NOT.valid .OR. ABS(requested_q-q_packet)>1.0e-6_real64*q_packet .OR. &
         ABS(requested_b-b_packet)>1.0e-6_real64*b_packet .OR. ANY(q/=q0) .OR. &
@@ -111,7 +112,7 @@ CONTAINS
       q0=q; b0=b
       CALL pr85_kdm6_paired_sediment_column(1,1,236+case_id,42,1,1.0_real32,1, &
         rho,dz,rate,brate,q,b,2,1.0e-9_real32,1.0e-15_real32, &
-        100.0_real32,900.0_real32,aq,ab,unit,.FALSE.,valid)
+        100.0_real32,900.0_real32,aq,ab,unit,.FALSE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
       IF (valid .OR. ANY(q/=q0) .OR. ANY(b/=b0) .OR. ANY(aq/=0.0_real64) .OR. &
           ANY(ab/=0.0_real64)) THEN
         PRINT '(a,i0)','FAIL invalid G base was not rejected atomically, case=',case_id
@@ -135,7 +136,7 @@ CONTAINS
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,1,241,42,1,1.0_real32,2, &
       rho,dz,rate,brate,q,b,2,1.0e-9_real32,1.0e-15_real32, &
-      100.0_real32,900.0_real32,aq,ab,unit,.TRUE.,valid)
+      100.0_real32,900.0_real32,aq,ab,unit,.TRUE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     qinv0=REAL(rho(1),real64)*REAL(q0(1),real64)*REAL(dz(1),real64)
     binv0=REAL(rho(1),real64)*REAL(b0(1),real64)*REAL(dz(1),real64)
@@ -167,7 +168,7 @@ CONTAINS
     OPEN(NEWUNIT=unit,STATUS='scratch',FORM='formatted')
     CALL pr85_kdm6_paired_sediment_column(1,1,245,42,1,1.0_real32,1, &
       rho,dz,rate,brate,q,b,99,0.0_real32,0.0_real32,0.0_real32,0.0_real32, &
-      aq,ab,unit,.FALSE.,valid)
+      aq,ab,unit,.FALSE.,valid,0.0_real32,0.0_real32,0.0_real32,0.0_real32)
     CLOSE(unit)
     IF (valid .OR. ANY(q/=q0) .OR. ANY(b/=b0) .OR. ANY(aq/=0.0_real64) .OR. &
         ANY(ab/=0.0_real64)) THEN

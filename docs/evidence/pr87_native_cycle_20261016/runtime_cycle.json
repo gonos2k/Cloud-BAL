@@ -1,0 +1,415 @@
+{
+  "arm": "OFF",
+  "build": {
+    "executable_path": "/var/tmp/pr87_cycle_diagnostic_build_20261016_v2/wrf_pr87_overlay.exe",
+    "executable_sha256": "a13557f53ad71bba759ea23a85c0bc5edd660c41fe54b7f7098e05e189ba5b96",
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "receipt_path": "/var/tmp/pr87_cycle_diagnostic_build_20261016_v2/pr87_native_overlay_build.json",
+    "receipt_sha256": "1145dafd961f9d6fbcfad2f81921a0773c84308d974a121eb51b57c3e276c879",
+    "schema": "pr87_native_overlay_build_v1",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "completed_model_timestep_count": 1,
+  "completed_state_audit": {
+    "path": "docs/evidence/pr87_native_cycle_20261016/completed_state_audit.json",
+    "sha256": "e153358619447d1309057815b79dd891a35ce247d83835d36d1ba6866cac2ba6",
+    "status": "PASS"
+  },
+  "coordinate_at_first_orphan_probe": [
+    230,
+    70,
+    3
+  ],
+  "cycle_log": {
+    "observations": [
+      {
+        "bounds": [
+          1,
+          234,
+          1,
+          282,
+          1,
+          39
+        ],
+        "first_QC": 0.0,
+        "first_QNC": 0.0,
+        "mass_only": 0,
+        "negative": 0,
+        "nonfinite": 0,
+        "number_only": 0,
+        "record": "PR87_CLOUD",
+        "stage": "STEP_BEGIN",
+        "timestep": 1
+      },
+      {
+        "QC": 0.0,
+        "QNC": 0.0,
+        "coordinate_ijk": [
+          0,
+          0,
+          0
+        ],
+        "record": "PR87_FIRST",
+        "stage": "STEP_BEGIN",
+        "timestep": 1
+      },
+      {
+        "QC": 0.0001254415255971253,
+        "QC_bits": "390388F4",
+        "QNC": 111344704.0,
+        "QNC_bits": "4CD45F88",
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_PROBE",
+        "stage": "STEP_BEGIN",
+        "timestep": 1
+      },
+      {
+        "bounds": [
+          1,
+          234,
+          1,
+          282,
+          1,
+          39
+        ],
+        "first_QC": 0.0,
+        "first_QNC": 0.0,
+        "mass_only": 0,
+        "negative": 0,
+        "nonfinite": 0,
+        "number_only": 0,
+        "record": "PR87_CLOUD",
+        "stage": "FOGDES_INPUT",
+        "timestep": 1
+      },
+      {
+        "QC": 0.0,
+        "QNC": 0.0,
+        "coordinate_ijk": [
+          0,
+          0,
+          0
+        ],
+        "record": "PR87_FIRST",
+        "stage": "FOGDES_INPUT",
+        "timestep": 1
+      },
+      {
+        "QC": 0.0001254415255971253,
+        "QC_bits": "390388F4",
+        "QNC": 111344704.0,
+        "QNC_bits": "4CD45F88",
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_PROBE",
+        "stage": "FOGDES_INPUT",
+        "timestep": 1
+      },
+      {
+        "bounds": [
+          1,
+          234,
+          1,
+          282,
+          1,
+          39
+        ],
+        "first_QC": 0.0,
+        "first_QNC": 0.0,
+        "mass_only": 0,
+        "negative": 0,
+        "nonfinite": 0,
+        "number_only": 0,
+        "record": "PR87_CLOUD",
+        "stage": "POST_KDM6_FULL_TILE",
+        "timestep": 1
+      },
+      {
+        "QC": 0.0,
+        "QNC": 0.0,
+        "coordinate_ijk": [
+          0,
+          0,
+          0
+        ],
+        "record": "PR87_FIRST",
+        "stage": "POST_KDM6_FULL_TILE",
+        "timestep": 1
+      },
+      {
+        "QC": 8.469214662909508e-09,
+        "QC_bits": "32118000",
+        "QNC": 2021875.875,
+        "QNC_bits": "49F6CF9F",
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_PROBE",
+        "stage": "POST_KDM6_FULL_TILE",
+        "timestep": 1
+      },
+      {
+        "bounds": [
+          2,
+          233,
+          2,
+          281,
+          1,
+          39
+        ],
+        "first_QC": 0.0,
+        "first_QNC": 2021875.875,
+        "mass_only": 0,
+        "negative": 0,
+        "nonfinite": 0,
+        "number_only": 6,
+        "record": "PR87_CLOUD",
+        "stage": "POST_HOST_CLEANUP",
+        "timestep": 1
+      },
+      {
+        "QC": 0.0,
+        "QNC": 2021875.875,
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_FIRST",
+        "stage": "POST_HOST_CLEANUP",
+        "timestep": 1
+      },
+      {
+        "QC": 0.0,
+        "QC_bits": "00000000",
+        "QNC": 2021875.875,
+        "QNC_bits": "49F6CF9F",
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_PROBE",
+        "stage": "POST_HOST_CLEANUP",
+        "timestep": 1
+      },
+      {
+        "bounds": [
+          1,
+          234,
+          1,
+          282,
+          1,
+          39
+        ],
+        "first_QC": 0.0,
+        "first_QNC": 2021875.875,
+        "mass_only": 0,
+        "negative": 0,
+        "nonfinite": 0,
+        "number_only": 6,
+        "record": "PR87_CLOUD",
+        "stage": "STEP_END",
+        "timestep": 1
+      },
+      {
+        "QC": 0.0,
+        "QNC": 2021875.875,
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_FIRST",
+        "stage": "STEP_END",
+        "timestep": 1
+      },
+      {
+        "QC": 0.0,
+        "QC_bits": "00000000",
+        "QNC": 2021875.875,
+        "QNC_bits": "49F6CF9F",
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_PROBE",
+        "stage": "STEP_END",
+        "timestep": 1
+      },
+      {
+        "bounds": [
+          1,
+          234,
+          1,
+          282,
+          1,
+          39
+        ],
+        "first_QC": 0.0,
+        "first_QNC": 2021875.875,
+        "mass_only": 0,
+        "negative": 0,
+        "nonfinite": 0,
+        "number_only": 6,
+        "record": "PR87_CLOUD",
+        "stage": "STEP_BEGIN",
+        "timestep": 2
+      },
+      {
+        "QC": 0.0,
+        "QNC": 2021875.875,
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_FIRST",
+        "stage": "STEP_BEGIN",
+        "timestep": 2
+      },
+      {
+        "QC": 0.0,
+        "QC_bits": "00000000",
+        "QNC": 2021875.875,
+        "QNC_bits": "49F6CF9F",
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_PROBE",
+        "stage": "STEP_BEGIN",
+        "timestep": 2
+      },
+      {
+        "bounds": [
+          1,
+          234,
+          1,
+          282,
+          1,
+          39
+        ],
+        "first_QC": 0.0,
+        "first_QNC": 2021875.875,
+        "mass_only": 0,
+        "negative": 0,
+        "nonfinite": 0,
+        "number_only": 6,
+        "record": "PR87_CLOUD",
+        "stage": "FOGDES_INPUT",
+        "timestep": 2
+      },
+      {
+        "QC": 0.0,
+        "QNC": 2021875.875,
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_FIRST",
+        "stage": "FOGDES_INPUT",
+        "timestep": 2
+      },
+      {
+        "QC": 0.0,
+        "QC_bits": "00000000",
+        "QNC": 2021875.875,
+        "QNC_bits": "49F6CF9F",
+        "coordinate_ijk": [
+          230,
+          70,
+          3
+        ],
+        "record": "PR87_PROBE",
+        "stage": "FOGDES_INPUT",
+        "timestep": 2
+      }
+    ],
+    "path": "/var/tmp/pr87_diagnostic_OFF_20261016/run/pr87_cloud_cycle.log",
+    "sha256": "7bd10c0f0b83d16dabc1e396acc709ac040725f3661dfb82aafa065e8d69cb87"
+  },
+  "effective_namelist": {
+    "mp_zero_out_all_default_source": "Registry default 0; effective namelist output prints 0",
+    "mp_zero_out_thresh_default_source": "Registry default 1.e-8; effective namelist output prints 9.9999999E-09",
+    "path": "/var/tmp/pr87_diagnostic_OFF_20261016/run/namelist.output",
+    "sha256": "497caef00a591ccfc3cd86af7df0ff112a173d6f38a03885bdd3235e8eb7fbe9",
+    "values": {
+      "MP_PHYSICS": "37",
+      "MP_ZERO_OUT": "2",
+      "MP_ZERO_OUT_ALL": "0",
+      "MP_ZERO_OUT_THRESH": "9.9999999E-09"
+    }
+  },
+  "fatal_log": {
+    "coordinate_recorded_in_rsl_out": true,
+    "fatal_has_explicit_coordinate": false,
+    "first_rejection": {
+      "QC": 0.0,
+      "QNC": 2021875.875,
+      "i": 230,
+      "j": 70,
+      "k": 3
+    },
+    "path": "/var/tmp/pr87_diagnostic_OFF_20261016/run/rsl.error.0000.gz",
+    "rsl_out_gzip_sha256": "b4c87c64e97a5ece3444140c6232143f8cf7f6b753fba0213156e34acdc6cd13",
+    "rsl_out_path": "/var/tmp/pr87_diagnostic_OFF_20261016/run/rsl.out.0000.gz",
+    "rsl_out_uncompressed_sha256": "0b9c98696d680e1d299f35a41846a628206ab2d9d8dc2072d29786218f6f8572",
+    "sha256": "2cdae89bdf04fc909670b7d409fa7685e00b02e54eb87e4e247bfa285e7d402e",
+    "source_lines": [
+      "PR87_FOGDES_REJECT 230 70 3   0.0000000000000000E+00   2.0218758750000000E+06",
+      "FogDES paired Stokes settling requires both cloud moments"
+    ],
+    "uncompressed_sha256": "f5b9ba4964a19e8019a905b6cf28d5bfbf8dd6b6d4f0c04e4d6e42839fc2aed6"
+  },
+  "final_completed_step": 1,
+  "first_call_identity_check": {
+    "baseline_OFF_input_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+    "baseline_OFF_post_sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+    "baseline_OFF_pre_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+    "baseline_evidence_path": "docs/evidence/pr86_frozen_baseline_20261016.json",
+    "baseline_evidence_sha256": "3d2c96723589536a4a8f2a13f894b964d33bd9d305079a3f942ac3569f9c635e",
+    "diagnostic_input_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+    "diagnostic_post_sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+    "diagnostic_pre_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+    "input_matches": true,
+    "post_matches": true,
+    "pre_matches": true
+  },
+  "interpretation": {
+    "fogdes_input2_number_only_cells": 6,
+    "limits": "The native run completed one model timestep then aborted during timestep 2 FogDES. The point probe, cycle summary, and explicit PR87_FOGDES_REJECT stdout record identify the first failing coordinate. This is a partial-host replacement research run, not a clean build.",
+    "native_supported_first_mismatch": "POST_HOST_CLEANUP timestep 1, at i=230,j=70,k=3, QC changes from 8.4692146629095078e-9 to exact zero while QNC remains 2021875.875; rsl.out also prints this exact FogDES rejection coordinate and values.",
+    "post_host_cleanup_count_scope": "The six count is over the diagnostic observer\u2019s k=1:39 physical subset; it is not the full k_start:k_end cleanup extent.",
+    "post_host_cleanup_number_only_cells": 6,
+    "post_host_cleanup_probe_vertical_extent": "Diagnostic v2 observer passed k_start:min(k_end,kde-1), so the reported k=1:39 cleanup state is only the FogDES physical subset; the actual zero_out routines receive k_start:k_end, which can reach k=40.",
+    "post_kdm6_full_tile_pairs_valid": true,
+    "step_end1_and_step_begin2_number_only_cells": 6,
+    "support_comparison": "In diagnostic v2, POST_KDM6_FULL_TILE and FOGDES_INPUT share i=1:234,j=1:282,k=1:39. The POST_HOST_CLEANUP observer sampled interior i=2:233,j=2:281,k=1:39, not the full zero_outa vertical extent (the cleanup call uses k_start:k_end). All six reported orphan coordinates lie in the sampled cleanup subset and in FogDES support. The k=40 cleanup level is outside FogDES physical support."
+  },
+  "maximum_seen_timestep": 2,
+  "native_fatal": "FogDES paired Stokes settling requires both cloud moments",
+  "returncode": 1,
+  "run_identity": "PR87 candidate overlay diagnostic",
+  "run_receipt": {
+    "path": "/var/tmp/pr87_diagnostic_OFF_20261016/receipt.json",
+    "sha256": "8c5a43d3ea34d9e37826a1f5c56a1d54e0386093e736ef587b8d0d04a4cc47e0"
+  },
+  "schema": "pr87_native_cycle_observation_v1",
+  "status": "INCOMPLETE",
+  "wall_seconds": 279.16072620637715
+}

@@ -1,0 +1,720 @@
+{
+  "arms": {
+    "COUPLED": {
+      "air_joint_transport": {
+        "all_full_theta1_and_feasible": true,
+        "budget_path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/pr85_joint_transport_budget.raw.gz",
+        "compressed_sha256": "7c161ea96643967c13dac692dc26558c4f87d9dd0d2d8aa9e6d45d8db0b25c88",
+        "receipt_compressed_sha256": "7c161ea96643967c13dac692dc26558c4f87d9dd0d2d8aa9e6d45d8db0b25c88",
+        "rows": [
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.08928265105439134,
+            "rkstep": 1,
+            "theta": 1.0,
+            "timestep_index": 1
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.135466488696665,
+            "rkstep": 2,
+            "theta": 1.0,
+            "timestep_index": 1
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.30500168382887,
+            "rkstep": 3,
+            "theta": 1.0,
+            "timestep_index": 1
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.09894263928368614,
+            "rkstep": 1,
+            "theta": 1.0,
+            "timestep_index": 2
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.142763497859774,
+            "rkstep": 2,
+            "theta": 1.0,
+            "timestep_index": 2
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.24687568825397,
+            "rkstep": 3,
+            "theta": 1.0,
+            "timestep_index": 2
+          }
+        ]
+      },
+      "completed_state_audit": {
+        "completed_post_kdm6_timestep_count": 2,
+        "density_contract": {
+          "formula_for_v2": "DEN is real32(1)/(AL+ALB), authoritative dry-air density; use DEN directly.",
+          "policy_sha256": "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92",
+          "source_helper": "pr85_joint_stage_trace._dry_density"
+        },
+        "gated_completed_endpoints": [
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 1719648,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 813792,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 43,
+              "real64_volume_ratio_outside_exact_bounds": 26,
+              "specific_ratio_outside_exact_bounds": 26
+            },
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 1
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 1719648,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 813792,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 43,
+              "real64_volume_ratio_outside_exact_bounds": 26,
+              "specific_ratio_outside_exact_bounds": 26
+            },
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 1
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 2169488,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 363952,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 40,
+              "real64_volume_ratio_outside_exact_bounds": 491,
+              "specific_ratio_outside_exact_bounds": 491
+            },
+            "rkstep": 0,
+            "stage": "POST_KDM6",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 1
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 1595032,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 938408,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 285,
+              "real64_volume_ratio_outside_exact_bounds": 262,
+              "specific_ratio_outside_exact_bounds": 262
+            },
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 2
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 1595032,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 938408,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 285,
+              "real64_volume_ratio_outside_exact_bounds": 262,
+              "specific_ratio_outside_exact_bounds": 262
+            },
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 2
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 2121913,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 411527,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 14,
+              "real64_volume_ratio_outside_exact_bounds": 326,
+              "specific_ratio_outside_exact_bounds": 326
+            },
+            "rkstep": 0,
+            "stage": "POST_KDM6",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 2
+          }
+        ],
+        "intermediate_predictor_qv_negative_records": [
+          {
+            "negative_cells": 4,
+            "rkstep": 0,
+            "stage": "PRE_RK",
+            "timestep": 2
+          },
+          {
+            "negative_cells": 4,
+            "rkstep": 1,
+            "stage": "RK_STAGE_END",
+            "timestep": 2
+          },
+          {
+            "negative_cells": 5,
+            "rkstep": 2,
+            "stage": "RK_STAGE_END",
+            "timestep": 2
+          }
+        ],
+        "path": "/var/tmp/pr87_v42_COUPLED_completed_state_audit.json",
+        "sha256": "631c7fdc22dd93f7e9272bcfb1aa46a2435c11205a16fe00abba91113ca0d7d9",
+        "state_stage_counts": {
+          "POST_KDM6": 2,
+          "PRE_KDM6": 2,
+          "PRE_RK": 2,
+          "RK_STAGE_END": 6
+        },
+        "status": "PASS",
+        "strict_source_coefficient_contract": {
+          "cloud_rain_bounds": "source REAL32 coefficients, exact Q/N bounds and both REAL64 and REAL32 rho*N volume checks; no ULP tolerance",
+          "coefficients": {
+            "cloud": {
+              "lambda_max_r32": 500000.0,
+              "lambda_min_r32": 12000.0,
+              "mass": "QC",
+              "number": "NC",
+              "pidn_r32": 523.5988159179688,
+              "power_r32": 3.0
+            },
+            "ice_diagnostic": {
+              "lambda_max_r32": 1820000.0,
+              "lambda_min_r32": 9080.0,
+              "mass": "QI",
+              "number": "NI",
+              "pidn_r32": 1570.79638671875,
+              "power_r32": 3.0
+            },
+            "rain": {
+              "lambda_max_r32": 35000.0,
+              "lambda_min_r32": 961.0,
+              "mass": "QR",
+              "number": "NR",
+              "pidn_r32": 12566.37109375,
+              "power_r32": 3.0
+            }
+          },
+          "gate_stages": [
+            [
+              "POST_KDM6",
+              0
+            ],
+            [
+              "PRE_KDM6",
+              0
+            ],
+            [
+              "RK_STAGE_END",
+              3
+            ]
+          ],
+          "graupel_bounds": "exact QG/BG in [100,900]; no ULP tolerance",
+          "ice": "additional exact source-coefficient diagnostic only; existing native ice acceptance remains separately declared"
+        },
+        "trace": {
+          "bytes": 612042180,
+          "decoded_sha256": "338e7bd81874d3e17be17c90577236be2838e7953a828b29c13ce4000c406a4b",
+          "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/pr85_joint_moment_stages.raw.gz",
+          "sha256": "5ac46842c7644ed5444ca10a01f49ea361fd9e2f4631a30c029f6f9ebf4e7e8c"
+        }
+      },
+      "model_times": {
+        "actual": [
+          {
+            "elapsed_seconds": 242.30043,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 107.92021,
+            "timestamp": "2026-08-16_13:00:40"
+          }
+        ],
+        "distinct_post_kdm6_timestep_ids": [
+          1,
+          2
+        ],
+        "expected": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40"
+        ]
+      },
+      "preflight": {
+        "arm": "COUPLED",
+        "candidate_build": {
+          "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v42/wrf_pr87_overlay.exe",
+          "executable_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+          "identity": "PR87 source-mapped partial native overlay; not a clean build",
+          "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+          "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+          "receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v42/pr87_native_overlay_build.json",
+          "receipt_sha256": "a28f9a99af74d080c38b986fdc12f941845b34a93a41515089632df5137dd680",
+          "schema": "pr87_native_overlay_build_v1",
+          "status": "PASS_OVERLAY_BUILD"
+        },
+        "candidate_namelist_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+        "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+        "duration_seconds": 40,
+        "input_hashes_sha256": "8b5c48ddf9896876d547174369874b280822c6361028fd391851e3935246a6dd",
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/preflight.json",
+        "runtime_dir": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a",
+        "sha256": "283a14c6705daf21c14a45b167375d9f408925167ce7c5e319ca04da8f343e24"
+      },
+      "receipt": {
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "earliest_fatal": null,
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/receipt.json",
+        "processing_errors": [],
+        "returncode": 0,
+        "sha256": "3511bf0d0ca4872e640e58077d31c9f0e33c40f45684d48e861756363aa4c60f",
+        "status": "COMPLETE",
+        "wall_seconds": 353.7646448779851
+      },
+      "runtime_root": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016"
+    },
+    "OFF": {
+      "air_joint_transport": {
+        "all_full_theta1_and_feasible": true,
+        "budget_path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/pr85_joint_transport_budget.raw.gz",
+        "compressed_sha256": "7c161ea96643967c13dac692dc26558c4f87d9dd0d2d8aa9e6d45d8db0b25c88",
+        "receipt_compressed_sha256": "7c161ea96643967c13dac692dc26558c4f87d9dd0d2d8aa9e6d45d8db0b25c88",
+        "rows": [
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.08928265105439134,
+            "rkstep": 1,
+            "theta": 1.0,
+            "timestep_index": 1
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.135466488696665,
+            "rkstep": 2,
+            "theta": 1.0,
+            "timestep_index": 1
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.30500168382887,
+            "rkstep": 3,
+            "theta": 1.0,
+            "timestep_index": 1
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.09894263928368614,
+            "rkstep": 1,
+            "theta": 1.0,
+            "timestep_index": 2
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.142763497859774,
+            "rkstep": 2,
+            "theta": 1.0,
+            "timestep_index": 2
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "max_cfl": 0.24687568825397,
+            "rkstep": 3,
+            "theta": 1.0,
+            "timestep_index": 2
+          }
+        ]
+      },
+      "completed_state_audit": {
+        "completed_post_kdm6_timestep_count": 2,
+        "density_contract": {
+          "formula_for_v2": "DEN is real32(1)/(AL+ALB), authoritative dry-air density; use DEN directly.",
+          "policy_sha256": "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92",
+          "source_helper": "pr85_joint_stage_trace._dry_density"
+        },
+        "gated_completed_endpoints": [
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 1719640,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 813800,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 43,
+              "real64_volume_ratio_outside_exact_bounds": 26,
+              "specific_ratio_outside_exact_bounds": 26
+            },
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 1
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 1719640,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 813800,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 43,
+              "real64_volume_ratio_outside_exact_bounds": 26,
+              "specific_ratio_outside_exact_bounds": 26
+            },
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 1
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 2169492,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 363948,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 40,
+              "real64_volume_ratio_outside_exact_bounds": 490,
+              "specific_ratio_outside_exact_bounds": 490
+            },
+            "rkstep": 0,
+            "stage": "POST_KDM6",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 1
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 1595045,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 938395,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 285,
+              "real64_volume_ratio_outside_exact_bounds": 262,
+              "specific_ratio_outside_exact_bounds": 262
+            },
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 2
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 1595045,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 938395,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 285,
+              "real64_volume_ratio_outside_exact_bounds": 262,
+              "specific_ratio_outside_exact_bounds": 262
+            },
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 2
+          },
+          {
+            "base_policy_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "ice_exact_source_diagnostic_counts_nongating": {
+              "absent_pair": 2121914,
+              "negative_pair": 0,
+              "nonfinite_pair_or_density": 0,
+              "nonpositive_density_with_present_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 411526,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 14,
+              "real64_volume_ratio_outside_exact_bounds": 325,
+              "specific_ratio_outside_exact_bounds": 325
+            },
+            "rkstep": 0,
+            "stage": "POST_KDM6",
+            "strict_cloud_rain_graupel_violations": {},
+            "timestep": 2
+          }
+        ],
+        "intermediate_predictor_qv_negative_records": [
+          {
+            "negative_cells": 4,
+            "rkstep": 0,
+            "stage": "PRE_RK",
+            "timestep": 2
+          },
+          {
+            "negative_cells": 4,
+            "rkstep": 1,
+            "stage": "RK_STAGE_END",
+            "timestep": 2
+          },
+          {
+            "negative_cells": 5,
+            "rkstep": 2,
+            "stage": "RK_STAGE_END",
+            "timestep": 2
+          }
+        ],
+        "path": "/var/tmp/pr87_v42_OFF_completed_state_audit.json",
+        "sha256": "ad4d1b3f007ea7ea345bb18c23c8c264f04842a663e80fbdb685f8b31c07a6ca",
+        "state_stage_counts": {
+          "POST_KDM6": 2,
+          "PRE_KDM6": 2,
+          "PRE_RK": 2,
+          "RK_STAGE_END": 6
+        },
+        "status": "PASS",
+        "strict_source_coefficient_contract": {
+          "cloud_rain_bounds": "source REAL32 coefficients, exact Q/N bounds and both REAL64 and REAL32 rho*N volume checks; no ULP tolerance",
+          "coefficients": {
+            "cloud": {
+              "lambda_max_r32": 500000.0,
+              "lambda_min_r32": 12000.0,
+              "mass": "QC",
+              "number": "NC",
+              "pidn_r32": 523.5988159179688,
+              "power_r32": 3.0
+            },
+            "ice_diagnostic": {
+              "lambda_max_r32": 1820000.0,
+              "lambda_min_r32": 9080.0,
+              "mass": "QI",
+              "number": "NI",
+              "pidn_r32": 1570.79638671875,
+              "power_r32": 3.0
+            },
+            "rain": {
+              "lambda_max_r32": 35000.0,
+              "lambda_min_r32": 961.0,
+              "mass": "QR",
+              "number": "NR",
+              "pidn_r32": 12566.37109375,
+              "power_r32": 3.0
+            }
+          },
+          "gate_stages": [
+            [
+              "POST_KDM6",
+              0
+            ],
+            [
+              "PRE_KDM6",
+              0
+            ],
+            [
+              "RK_STAGE_END",
+              3
+            ]
+          ],
+          "graupel_bounds": "exact QG/BG in [100,900]; no ULP tolerance",
+          "ice": "additional exact source-coefficient diagnostic only; existing native ice acceptance remains separately declared"
+        },
+        "trace": {
+          "bytes": 612037754,
+          "decoded_sha256": "7375f93f84aa68f74641944a01886ef1f942a0044c4352ac4bfe9619be5aad4a",
+          "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/pr85_joint_moment_stages.raw.gz",
+          "sha256": "9db10bd838fc3f387c63bf1e56cfdceda75d00bcdc27db17f21ef63d43746497"
+        }
+      },
+      "model_times": {
+        "actual": [
+          {
+            "elapsed_seconds": 243.26025,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 106.42056,
+            "timestamp": "2026-08-16_13:00:40"
+          }
+        ],
+        "distinct_post_kdm6_timestep_ids": [
+          1,
+          2
+        ],
+        "expected": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40"
+        ]
+      },
+      "preflight": {
+        "arm": "OFF",
+        "candidate_build": {
+          "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v42/wrf_pr87_overlay.exe",
+          "executable_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+          "identity": "PR87 source-mapped partial native overlay; not a clean build",
+          "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+          "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+          "receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v42/pr87_native_overlay_build.json",
+          "receipt_sha256": "a28f9a99af74d080c38b986fdc12f941845b34a93a41515089632df5137dd680",
+          "schema": "pr87_native_overlay_build_v1",
+          "status": "PASS_OVERLAY_BUILD"
+        },
+        "candidate_namelist_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+        "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+        "duration_seconds": 40,
+        "input_hashes_sha256": "a27c9edda114eca93e113d6c50459fa7fe4207518469afd7e98becc8bda1506b",
+        "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/preflight.json",
+        "runtime_dir": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a",
+        "sha256": "b6a0b673d57c477875fb341ab738a28111948faf7a848cd8f80b5312a7ed09d9"
+      },
+      "receipt": {
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "earliest_fatal": null,
+        "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/receipt.json",
+        "processing_errors": [],
+        "returncode": 0,
+        "sha256": "ddb68d9c9fd020ccc403ca9ddc3d340bda85bd2ee8e1e9bcdbea59161539d85d",
+        "status": "COMPLETE",
+        "wall_seconds": 353.24981405958533
+      },
+      "runtime_root": "/var/tmp/pr87_joint_OFF_40s_v42_20261016"
+    }
+  },
+  "build": {
+    "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v42/wrf_pr87_overlay.exe",
+    "executable_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+    "kdm6_source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_mp_kdm6.F",
+    "kdm6_source_sha256": "bdb1882afed860068cecbb6c7b958eef0938cadbd4225222ba7522e28ecc071a",
+    "parent_executable_path": "/var/tmp/pr85_native_joint_candidate_20261015v17/wrf_pr85.exe",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v42/pr87_native_overlay_build.json",
+    "receipt_sha256": "a28f9a99af74d080c38b986fdc12f941845b34a93a41515089632df5137dd680",
+    "source_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/sources.json",
+    "source_manifest_sha256": "422e1e3fefb51291e966c40c09755ae2d7e943b18dab870a1187cbf58253c88f",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "conclusion": {
+    "all_air_theta1": true,
+    "both_audits_pass": true,
+    "both_receipts_complete": true,
+    "completed_endpoint_checks_pass": true,
+    "intermediate_QV_note": "OFF and COUPLED each report 4 negative QV cells at step-2 PRE_RK and RK1, and 5 at RK2; RK3, PRE_KDM6, and POST_KDM6 completed endpoint gates pass.",
+    "intermediate_QV_predictor_negatives_present": true,
+    "two_distinct_POST_KDM6_per_arm": true
+  },
+  "method": {
+    "cloud_rain_graupel": "exact source coefficients, exact Q/N and both REAL64 and REAL32 rho*N volume checks; no ULP allowance",
+    "completed_state_audit": "tools/pr87_completed_state_audit.py --strict-source-coefficients",
+    "gate_stages": [
+      "RK_STAGE_END rkstep=3",
+      "PRE_KDM6",
+      "POST_KDM6"
+    ],
+    "ice": "unchanged PR85 pair acceptance, including its 8-float32-ULP criterion, is the gate; exact-source ice counts are nongating diagnostics",
+    "negative_QV": "PRE_RK/RK1/RK2 predictor counts are reported separately from completed endpoints"
+  },
+  "schema": "pr87_v42_independent_closure_review_v1",
+  "scope": "Independent post-closure audit of both matched V42 40-second runs; no source or runtime mutation.",
+  "status": "PASS"
+}

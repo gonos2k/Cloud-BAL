@@ -1,0 +1,131 @@
+{
+  "build": {
+    "compiler": "ifx (IFX) 2026.0.0 20260331",
+    "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v37diag/wrf_pr87_overlay.exe",
+    "executable_sha256": "6882045c7a7f098147aba6eb87bdad355ee4cc0a5da22cc7fb5ed414aafcc8cf",
+    "kdm6_generated_source_sha256": "4deaf2234f9c8e7720a39e60276acfb97109b1e0138a4faef6cb430a7060361a",
+    "kdm6_object_sha256": "1a1bfb26b198a426a5580a14d7315c6367305d40f0440f782ebde9f54d947707",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "partial_overlay": true,
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "receipt": "/var/tmp/pr87_joint_cycle_build_20261016_v37diag/pr87_native_overlay_build.json",
+    "receipt_sha256": "3e4983324fa03268c0bcd3f9f2734095193a482ab570bfe5a28cd628a0e8be55",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "failure_context_rows": [
+    "PR87_PROGB_POST_BG_RATIO 6 116 33 20 1  1.6532868612557650E-003  1.8369854615229997E-006  1.8369853478361620E-006  9.0000002624039394E+002  9.0000000000000000E+002 3AD8B31A 35F68E57 35F68E56",
+    "PR87_PROGB_UNSUPPORTED 7 116 33 20 3 1  1.6532868612557650E-003  1.8369853478361620E-006  9.0000002624039394E+002 3AD8B31A 35F68E56"
+  ],
+  "interpretation": "The diagnostic run is observational for timestep 1: all six states and twelve fields match V36 byte-for-byte. It closes INCOMPLETE before T2 POST_KDM6. At ProgB call context 6, the post-BG rewrite changes BG by one R32 ULP; Q/B becomes 900.00002624039394, above the strict upper 900 bound. Call context 7 then marks the same Q/B values unsupported. This locates the immediate unsupported input; it does not establish the broader physical cause beyond the measured rewrite sequence.",
+  "reviewed_at_utc": "2026-10-16T11:45:24.763475+00:00",
+  "runtime": {
+    "arm": "OFF",
+    "changed_original_inputs": [],
+    "changed_staged_inputs": [],
+    "completed_post_kdm6_timesteps": [
+      1
+    ],
+    "executable_matches_build": true,
+    "parent_and_baseline_exe_sha256": [
+      "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943"
+    ],
+    "receipt": "/var/tmp/pr87_joint_OFF_40s_v37diag_20261016/receipt.json",
+    "receipt_sha256": "074b31f67b8941d67f27738952218c71350914791a86bbd21f5d42307ca8c774",
+    "returncode": 128,
+    "status": "INCOMPLETE",
+    "strict_audit": {
+      "endpoint_gates": [
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_source_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_source_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "POST_KDM6",
+          "strict_source_violations": {},
+          "timestep": 1
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_source_violations": {},
+          "timestep": 2
+        },
+        {
+          "other_violations": {
+            "fields": {},
+            "number_conversion": {},
+            "pairs": {}
+          },
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_source_violations": {},
+          "timestep": 2
+        }
+      ],
+      "path": "/var/tmp/pr87_v37diag_OFF_strict_audit.json",
+      "sha256": "5de792eaf4500a61262d8a60a53dcb6073a0df3cadeba84a62a20953b30063c5",
+      "stage_counts": {
+        "POST_KDM6": 1,
+        "PRE_KDM6": 2,
+        "PRE_RK": 2,
+        "RK_STAGE_END": 6
+      },
+      "state_record_count": 11,
+      "status": "INCOMPLETE"
+    },
+    "wall_seconds": 302.3890892714262
+  },
+  "schema": "pr87_v37diag_independent_review_v1",
+  "source": {
+    "expected_v36_kdm6_sha256": "1418f37ec081fe28aff6f72f23c79699f7e57711ed288e6e94beff12557d7f5e",
+    "generator": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_progb_failure_context.py",
+    "generator_sha256": "5edf660537f542992b0264d2e30525f9f6a220d0f5a042765fc77e978fffe9e8",
+    "kdm6_candidate_sha256": "b25944b670388ee0d19f57222ffde185d8d6e5a9c64f59fa6d2d8bdd0d09ec0e",
+    "manifest": "/var/tmp/pr87_joint_cycle_sources_20261016_v37diag/sources.json",
+    "manifest_sha256": "f40ecd19a06a93b2cd59c830ca8c642a488a735c319b2bdf1fa3a5c2bb4e78b5",
+    "parent_v36_manifest_sha256": "90dff1ff696e68b863c2eeb631b3ab099266d17a033c9c9e13fe489c98935e19",
+    "physical_change": false,
+    "review": "Diagnostic adds optional per-call context and bounded failure-only writes; no process state, proposal, status decision, or physical threshold is changed."
+  },
+  "v36_vs_v37_first20_comparison": {
+    "field_mismatches": 0,
+    "method": "Streamed binary trace records in sequence; compared metadata and all REAL32 field bytes for every timestep-1 state record.",
+    "record_headers_matched": 16,
+    "state_fields_per_record": 12,
+    "timestep1_state_records_compared": 6,
+    "v36_trace": "/var/tmp/pr87_joint_OFF_40s_v36_20261016/run/pr85_joint_moment_stages.raw.gz",
+    "v36_trace_sha256": "5df550aea84c81775e90dfaaf9d5c474ac7cd588ea98b98c06143da4aa1999cc",
+    "v37_trace": "/var/tmp/pr87_joint_OFF_40s_v37diag_20261016/run/pr85_joint_moment_stages.raw.gz",
+    "v37_trace_sha256": "5df550aea84c81775e90dfaaf9d5c474ac7cd588ea98b98c06143da4aa1999cc"
+  }
+}

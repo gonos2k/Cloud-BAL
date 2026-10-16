@@ -1,0 +1,412 @@
+{
+  "candidate": {
+    "build_receipt": "/var/tmp/pr87_joint_cycle_build_20261016_v31/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "08934fa5063a0eaa3852a9986f7a48fb1adbe4bb38e03ea73dc8f273371f267f",
+    "build_status": "PASS_OVERLAY_BUILD",
+    "executable_sha256": "89bbfc35f1e886880601c72e4205f6c399f236209a90942b1ac3e8d86020b553",
+    "kernel_sha256": "60917061915e0452251c27db7b5d4e97061729605c3218cd291c2cbc3e519e74",
+    "module_em_source_sha256": "0c08149a9d3418408a02cf00f3bf56990b0898ccd8e45b6342a8701b536e7863",
+    "module_mp_kdm6_sha256": "9cb8d19bf676771e5bfd717d07cdaf43b4bc63912b0b7869b977fbd0f2ac1397",
+    "native_update_sha256": "ad1a620c7e61b7133417b2fb892da5a91e9972546a026b8d27d33fc63e47a78c",
+    "source_dir": "/var/tmp/pr87_joint_cycle_sources_20261016_v31",
+    "sources_json_sha256": "efbaa5e21f5002e030e94dfb5091c88864daf4ec9ae981e607c945ac4ed47570"
+  },
+  "causal_scope": "Incoming PRE_KDM6 step-2 census has zero tiny positive graupel cells under QG<=1e-9 and BG<=1e-15, with no invalid densities. This excludes attributing ProgB transient failure to such a tiny positive graupel state already present at KDM6 entry; it does not identify which internal process creates the rejected transient.",
+  "gate_summary": "For each arm, T1 RK3/PRE_KDM6/POST_KDM6 and T2 RK3/PRE_KDM6 strict gates have zero recorded field and strict-source violations. T2 PRE_RK is non-gated and records 4 negative Qs and cloud/rain REAL32 rho*N volume outliers; RK1/RK2 are non-gated predictors with negative-Q observations.",
+  "incoming_step2_graupel_census": {
+    "COUPLED": {
+      "decoded_sha256": "1c543ece33ad07f0be58e4f9e6c61f76eef6c8b656606dc904ef3443056bed7b",
+      "density_invalid_cells": 0,
+      "density_max": 1.1636160612106323,
+      "density_min": 0.08374450355768204,
+      "first_coordinate": null,
+      "incoming_transient_count": 0,
+      "scope": "specific-mixing-ratio census; incoming state only, not internal ProgB state",
+      "state": "PRE_KDM6 timestep 2",
+      "trace_sha256": "63f7a86d4daf2d4d646a272db5860c98e295f43d484e86763020102c2caa5cb8"
+    },
+    "OFF": {
+      "decoded_sha256": "912fe5e4b6086ee4b5f3a560ae66ccbf462719ccb08d4bd0f1c49e06bcd59f46",
+      "density_invalid_cells": 0,
+      "density_max": 1.1636160612106323,
+      "density_min": 0.08374450355768204,
+      "first_coordinate": null,
+      "incoming_transient_count": 0,
+      "scope": "specific-mixing-ratio census; incoming state only, not internal ProgB state",
+      "state": "PRE_KDM6 timestep 2",
+      "trace_sha256": "b0ce9cc5ea67a83cadf77120c94abbefd654c0e26ea6f7f02b0f5594f5860a59"
+    }
+  },
+  "overall_runtime_status": "INCOMPLETE both arms. Timestep 1 reaches POST_KDM6. Timestep 2 passes RK_STAGE_END step 3 and PRE_KDM6 strict gates, then fails inside ProgB before POST_KDM6.",
+  "runs": {
+    "COUPLED": {
+      "audit_path": "docs/evidence/pr87_two_step_v31_20261016/runtime/independent_review/COUPLED_strict_completed_state_audit.json",
+      "audit_sha256": "28aa7aa78e6304d0ed7d4795c67e4e69973d20834a388eebd849a39d021bb146",
+      "audit_status": "INCOMPLETE",
+      "candidate_executable_sha256_actual": "89bbfc35f1e886880601c72e4205f6c399f236209a90942b1ac3e8d86020b553",
+      "candidate_executable_sha256_expected": "89bbfc35f1e886880601c72e4205f6c399f236209a90942b1ac3e8d86020b553",
+      "candidate_namelist_sha256_actual": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_namelist_sha256_expected": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "completed_post_kdm6_timesteps": 1,
+      "duration_seconds": 40,
+      "exit_status": "INCOMPLETE/128",
+      "expected_timesteps": 2,
+      "fatal_observed": true,
+      "frozen_input_file_count": 101,
+      "observed_stage_gate_summary": [
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "POST_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {
+            "cloud": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 54
+            },
+            "rain": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 101
+            }
+          },
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 5,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        }
+      ],
+      "observed_state_records": 11,
+      "parent_executable_sha256_actual": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "parent_executable_sha256_expected": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "preflight_sha256": "5b1048a6ca4c4d440fa4fde3fb873f25ddd73a6427c90b38c9349206ba7dfeba",
+      "run_root": "/var/tmp/pr87_joint_COUPLED_40s_v31_20261016",
+      "runtime_receipt_sha256": null,
+      "stage_counts": {
+        "POST_KDM6": 1,
+        "PRE_KDM6": 2,
+        "PRE_RK": 2,
+        "RK_STAGE_END": 6
+      },
+      "timesteps": [
+        {
+          "completed_post_kdm6": true,
+          "stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6",
+            "POST_KDM6"
+          ],
+          "status": "PASS",
+          "timestep": 1
+        },
+        {
+          "completed_post_kdm6": false,
+          "stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6"
+          ],
+          "status": "INCOMPLETE",
+          "timestep": 2
+        }
+      ],
+      "trace_decoded_sha256": "1c543ece33ad07f0be58e4f9e6c61f76eef6c8b656606dc904ef3443056bed7b",
+      "trace_gzip_sha256": "63f7a86d4daf2d4d646a272db5860c98e295f43d484e86763020102c2caa5cb8",
+      "unchanged_frozen_input_mismatches": [],
+      "unchanged_frozen_inputs_checked": 99
+    },
+    "OFF": {
+      "audit_path": "docs/evidence/pr87_two_step_v31_20261016/runtime/independent_review/OFF_strict_completed_state_audit.json",
+      "audit_sha256": "ce0fddcb1c56c1d6ca655e6f2ffc22b812147dcd432395fc09a6b5a41e159f1d",
+      "audit_status": "INCOMPLETE",
+      "candidate_executable_sha256_actual": "89bbfc35f1e886880601c72e4205f6c399f236209a90942b1ac3e8d86020b553",
+      "candidate_executable_sha256_expected": "89bbfc35f1e886880601c72e4205f6c399f236209a90942b1ac3e8d86020b553",
+      "candidate_namelist_sha256_actual": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_namelist_sha256_expected": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "completed_post_kdm6_timesteps": 1,
+      "duration_seconds": 40,
+      "exit_status": "INCOMPLETE/128",
+      "expected_timesteps": 2,
+      "fatal_observed": true,
+      "frozen_input_file_count": 101,
+      "observed_stage_gate_summary": [
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "POST_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {
+            "cloud": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 54
+            },
+            "rain": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 100
+            }
+          },
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 5,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        }
+      ],
+      "observed_state_records": 11,
+      "parent_executable_sha256_actual": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "parent_executable_sha256_expected": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "preflight_sha256": "ee9949428268c8427abd19a6fd932193f8943b95b91fc4d984be5941fa9ddf0a",
+      "run_root": "/var/tmp/pr87_joint_OFF_40s_v31_20261016",
+      "runtime_receipt_sha256": null,
+      "stage_counts": {
+        "POST_KDM6": 1,
+        "PRE_KDM6": 2,
+        "PRE_RK": 2,
+        "RK_STAGE_END": 6
+      },
+      "timesteps": [
+        {
+          "completed_post_kdm6": true,
+          "stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6",
+            "POST_KDM6"
+          ],
+          "status": "PASS",
+          "timestep": 1
+        },
+        {
+          "completed_post_kdm6": false,
+          "stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6"
+          ],
+          "status": "INCOMPLETE",
+          "timestep": 2
+        }
+      ],
+      "trace_decoded_sha256": "912fe5e4b6086ee4b5f3a560ae66ccbf462719ccb08d4bd0f1c49e06bcd59f46",
+      "trace_gzip_sha256": "b0ce9cc5ea67a83cadf77120c94abbefd654c0e26ea6f7f02b0f5594f5860a59",
+      "unchanged_frozen_input_mismatches": [],
+      "unchanged_frozen_inputs_checked": 99
+    }
+  },
+  "schema": "pr87_v31_independent_runtime_review_v1",
+  "scope": "Static review of V31 transient source-validation change plus both matched 40-second runs; research-validation gate only.",
+  "static_scope_review": [
+    "V31 changes only the p1 source-first virtual source-stage call: it replaces volume_number_bounds with strict_mass_ratio=.TRUE.; final grouped update volume bounds and updated-density/public return volume checks are unchanged from V30.",
+    "The virtual donor is passed as specific paired Q/N to common-air transport; it is not converted to volume before the final grouped endpoint.",
+    "The source failure diagnostic format changed to 20 explicit scientific fields; no source arithmetic is changed by that diagnostic."
+  ]
+}

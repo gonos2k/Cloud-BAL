@@ -1,0 +1,151 @@
+{
+  "candidate_build_receipt": {
+    "executable_sha256": "3dec45f3286a436e6d339c373065159391056d1513a3ef34a8fdd5968e70e6f3",
+    "path": "/var/tmp/pr87_joint_cycle_build_20261016_v11b/pr87_native_overlay_build.json",
+    "sha256": "5111c5c96e15bf50193183ed3b4e2d0eed82084844621f02ae2b8ae409a8c210"
+  },
+  "date_utc": "2026-10-16",
+  "schema": "pr87-v11b-rain-ledger-summary-binding-v1",
+  "scope": "Ledger rows through failure during model timestep 2 only. Timestep 1 completed; timestep 2 ledger is partial. INCOMPLETE run receipts, return code 128. Values are unweighted sums of per-column area amounts, not domain totals or global kg.",
+  "source": {
+    "decoded_sha256": "b14092c4664392804c99b6e068d04456f67c8205fefa1a0e8aaedb93825315e3",
+    "path": "module_mp_kdm6.F.gz"
+  },
+  "summary_outputs": {
+    "COUPLED": {
+      "call_count": 284,
+      "decoded_ledger_sha256": "f1ff64086b8ee9cdde8092e380889ab8fb8200836569a8c2aed0637f9aac09ac",
+      "final_completed_step": 1,
+      "ledger_sha256": "ee8654a3022f08c0c3a53ec216338084b7fe6034da577c4e7aa8a2a43369567f",
+      "maximum_seen_timestep": 2,
+      "negative_withheld_roundoff_rows": 18060,
+      "path": "docs/evidence/pr87_two_step_v11b_20261016/COUPLED_rain_sedimentation.json",
+      "per_step": [
+        {
+          "calls": 280,
+          "columns": 64960,
+          "model_timestep": 1,
+          "residual_scale": {
+            "n_abs_storage_plus_surface_number_m2": 321801845.6286606,
+            "q_abs_storage_plus_surface_kg_m2": 51.82010048446905
+          },
+          "rows": 78926,
+          "sums_over_recorded_columns": {
+            "approved_n_number_m2": 7100048918.214318,
+            "approved_q_kg_m2": 978.346412579699,
+            "proposal_n_number_m2": 7100048918.33876,
+            "proposal_q_kg_m2": 978.3464125967613,
+            "residual_n_number_m2": -13.383816686244893,
+            "residual_q_kg_m2": 7.669754996374653e-07,
+            "stored_delta_n_number_m2": -160900893.40051842,
+            "stored_delta_q_kg_m2": -25.91004761181298,
+            "surface_n_number_m2": 160900880.01670176,
+            "surface_q_kg_m2": 25.91004837878848,
+            "withheld_n_number_m2": 0.12444230891593544,
+            "withheld_q_kg_m2": 1.7062433764818106e-08
+          }
+        },
+        {
+          "calls": 4,
+          "columns": 928,
+          "model_timestep": 2,
+          "residual_scale": {
+            "n_abs_storage_plus_surface_number_m2": 2416664.4458611803,
+            "q_abs_storage_plus_surface_kg_m2": 0.43675661882346123
+          },
+          "rows": 1127,
+          "sums_over_recorded_columns": {
+            "approved_n_number_m2": 57241441.27122741,
+            "approved_q_kg_m2": 7.4725049128228225,
+            "proposal_n_number_m2": 57375660.79084782,
+            "proposal_q_kg_m2": 7.472588851949214,
+            "residual_n_number_m2": -2.824639349078426,
+            "residual_q_kg_m2": -2.8666128539853787e-08,
+            "stored_delta_n_number_m2": -1208333.560255042,
+            "stored_delta_q_kg_m2": -0.21837832366117815,
+            "surface_n_number_m2": 1208330.735615693,
+            "surface_q_kg_m2": 0.21837829499504963,
+            "withheld_n_number_m2": 134219.51962041124,
+            "withheld_q_kg_m2": 8.39391263917743e-05
+          }
+        }
+      ],
+      "receipt_sha256": "d69696dab06a93c20465e520d20a4ec8bfa2d3a4c2881b7bdc5465c176463c90",
+      "return_code": 128,
+      "row_count": 80053,
+      "run_status": "INCOMPLETE",
+      "sha256": "b377934a5c580e9a256442f85f89f67c32a9e05504cca7ecf118ba66a1c73248",
+      "stale_header_tag_count": 284
+    },
+    "OFF": {
+      "call_count": 284,
+      "decoded_ledger_sha256": "b1a5a34d1fde10a697c29cc2504eb66bf2a0cd8b4562359f18ff5b92ebe0895b",
+      "final_completed_step": 1,
+      "ledger_sha256": "059cb34d498fa049f34049952508bb2a333a29db010352d5e07c436a8a9b349f",
+      "maximum_seen_timestep": 2,
+      "negative_withheld_roundoff_rows": 18061,
+      "path": "docs/evidence/pr87_two_step_v11b_20261016/OFF_rain_sedimentation.json",
+      "per_step": [
+        {
+          "calls": 280,
+          "columns": 64960,
+          "model_timestep": 1,
+          "residual_scale": {
+            "n_abs_storage_plus_surface_number_m2": 321799241.4085499,
+            "q_abs_storage_plus_surface_kg_m2": 51.819236558039826
+          },
+          "rows": 78926,
+          "sums_over_recorded_columns": {
+            "approved_n_number_m2": 7101629094.123646,
+            "approved_q_kg_m2": 978.5624148996864,
+            "proposal_n_number_m2": 7101629094.248089,
+            "proposal_q_kg_m2": 978.5624149167488,
+            "residual_n_number_m2": -19.946153189915268,
+            "residual_q_kg_m2": 3.655910428995761e-07,
+            "stored_delta_n_number_m2": -160899594.57163098,
+            "stored_delta_q_kg_m2": -25.90961584929135,
+            "surface_n_number_m2": 160899574.6254778,
+            "surface_q_kg_m2": 25.90961621488239,
+            "withheld_n_number_m2": 0.12444231104125289,
+            "withheld_q_kg_m2": 1.706243338312458e-08
+          }
+        },
+        {
+          "calls": 4,
+          "columns": 928,
+          "model_timestep": 2,
+          "residual_scale": {
+            "n_abs_storage_plus_surface_number_m2": 2416664.4472882464,
+            "q_abs_storage_plus_surface_kg_m2": 0.4367566190343554
+          },
+          "rows": 1127,
+          "sums_over_recorded_columns": {
+            "approved_n_number_m2": 57241441.24864178,
+            "approved_q_kg_m2": 7.472504911993022,
+            "proposal_n_number_m2": 57375660.76826219,
+            "proposal_q_kg_m2": 7.472588851119414,
+            "residual_n_number_m2": -2.8253080710261305,
+            "residual_q_kg_m2": -2.8844489291697567e-08,
+            "stored_delta_n_number_m2": -1208333.561302936,
+            "stored_delta_q_kg_m2": -0.21837832385580563,
+            "surface_n_number_m2": 1208330.735994865,
+            "surface_q_kg_m2": 0.21837829501131634,
+            "withheld_n_number_m2": 134219.51962041127,
+            "withheld_q_kg_m2": 8.393912639179373e-05
+          }
+        }
+      ],
+      "receipt_sha256": "4f7858e41a8a771c056855c07922686949ed2fdfa90d41f8a9665bd6e1fb7c2d",
+      "return_code": 128,
+      "row_count": 80053,
+      "run_status": "INCOMPLETE",
+      "sha256": "bccf94889dbb4ae33e6d23b684399e709d85b94ba9fa83d621f2b497ef41acde",
+      "stale_header_tag_count": 284
+    }
+  },
+  "summary_script": {
+    "compressed_sha256": "7bb524d042e24be776f422c80a2ad89278004f99ed75380a61131ae6e1c57aca",
+    "decoded_sha256": "0d9629ce0cd7762bded1b758fadb75ce8feece89f0a64a4d095b3fc0dd62aefd",
+    "path": "docs/evidence/pr87_two_step_v11b_20261016/pr87_rain_sed_summary.py.gz"
+  }
+}

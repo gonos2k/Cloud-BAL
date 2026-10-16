@@ -1,0 +1,88 @@
+{
+  "caller": {
+    "bytes": 5139,
+    "path": "quantizer_probe.f90",
+    "sha256": "3175817d8d3f4d7e39672165891868566d3d5329d8404b62f53d0a452aa2c6e8"
+  },
+  "compiler": {
+    "imf_sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8",
+    "intlc_sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "profile_path": "tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "compiler_flags": {
+    "O0": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "O2": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ]
+  },
+  "result_interpretation": "Both compiler modes produced byte-identical output. All eight candidates pass continuous exact checks; joint_moment_store returns invalid, while plus-two Q with ordinary stored N satisfies the same strict volume checks and joint stored predicate.",
+  "runs": {
+    "O0": {
+      "compile_log": {
+        "bytes": 3207,
+        "path": "O0/compile.log",
+        "sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126"
+      },
+      "executable_sha256": "eed17b1e60c7db9a3a0c2af5656e8ef3867afd1b2ceb39394962801e9d7edead",
+      "exit_status": 0,
+      "fresh_scratch_path": "/var/tmp/pr87_v16_quantizer_probe/final_O0",
+      "stdout": {
+        "bytes": 1480,
+        "path": "O0/run.txt",
+        "sha256": "d481259bab55528b9acee73ecac2ea1f55cb1530dbd218b094e863cf42611508"
+      }
+    },
+    "O2": {
+      "compile_log": {
+        "bytes": 3207,
+        "path": "O2/compile.log",
+        "sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126"
+      },
+      "executable_sha256": "aae37c7ec3a76f43a7c7a848dd7aed884742d565d807cf0896756c328372596f",
+      "exit_status": 0,
+      "fresh_scratch_path": "/var/tmp/pr87_v16_quantizer_probe/final_O2",
+      "stdout": {
+        "bytes": 1480,
+        "path": "O2/run.txt",
+        "sha256": "d481259bab55528b9acee73ecac2ea1f55cb1530dbd218b094e863cf42611508"
+      }
+    }
+  },
+  "schema": "pr87_v16_exact_cone_quantizer_probe_receipt_v1",
+  "scope": "isolated source-extracted store diagnostic; fresh scratch O0/O2; no native model run or model-source edits",
+  "source_module": {
+    "bytes": 24199,
+    "canonical_repo_path": "src/common/cloud_bal_joint_transport.f90",
+    "generated_module_em_pr85_sha256": "7052f067b3c84cb247b8245ce8979064c63577dd7aaa851cc6db191aff095f51",
+    "sha256": "ffdce6170547fd0416d6073d4542a6a7e6dc4c316d4d04f4dc76a117a58efe19",
+    "v16_generated_module_em_pr85_prefix_matches_byte_for_byte": true
+  }
+}

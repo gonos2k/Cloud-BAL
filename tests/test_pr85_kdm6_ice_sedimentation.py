@@ -8,7 +8,17 @@ NAME='pr85_kdm6_paired_sediment_column'
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 def procedure(text):
     lines=text.splitlines()
-    start=next(i for i,line in enumerate(lines) if re.match(rf"\s*subroutine\s+{NAME}\s*\(",line,re.I))
+    start=None
+    interface_depth=0
+    for i,line in enumerate(lines):
+        if re.match(r"\s*end\s+interface\b",line,re.I):
+            interface_depth=max(0,interface_depth-1)
+        elif re.match(r"\s*(?:abstract\s+)?interface\b",line,re.I):
+            interface_depth+=1
+        elif interface_depth==0 and re.match(rf"\s*subroutine\s+{NAME}\s*\(",line,re.I):
+            start=i
+            break
+    assert start is not None, f"no procedure body found for {NAME} outside INTERFACE blocks"
     end=next(i for i in range(start+1,len(lines)) if re.match(rf"\s*end\s+subroutine\s+{NAME}\s*$",lines[i],re.I))
     return "\n".join(lines[start:end+1])+"\n"
 def patch_source(path):
@@ -26,11 +36,19 @@ def test_pr85_kdm6_ice_sedimentation_source_form():
     helper_lines=helper.read_text().splitlines()
     patch_lines=patch_source(patch).splitlines()
     assert any('call pr85_kdm6_paired_sediment_column' in line.lower() for line in patch_lines)
-    assert any(patch_lines[i:i+len(helper_lines)]==helper_lines for i in range(len(patch_lines)-len(helper_lines)+1)), 'patch does not contain the exact tested generic helper'
+    helper_text='\n'.join(helper_lines).lower()
+    assert 'valid,rain_pidn,rain_power,rain_lambda_min,rain_lambda_max)' in helper_text, (
+        'extended helper must require native rain distribution coefficients'
+    )
+    assert 'pr87_sed_rain=3' in helper_text
     if applied:
         assert procedure(helper.read_text())==procedure(production)
     compact=re.sub(r'[\s&]+','',re.sub(r'!.*$','',production,flags=re.M)).lower()
     assert 'pr85_sed_ice,0.0,0.0,0.0,0.0,pr85_ice_qrate' in compact
+    if applied:
+        assert re.search(r'pr85_ice_valid,0(?:\.0*)?(?:_real32|d0)?,0(?:\.0*)?(?:_real32|d0)?,0(?:\.0*)?(?:_real32|d0)?,0(?:\.0*)?(?:_real32|d0)?\)', compact), (
+            'applied ICE call must pass four zero rain coefficients'
+        )
     scratch=Path(tempfile.mkdtemp(prefix='pr85_kdm6_ice_sed_',dir='/var/tmp'))
     for opt in ('O0','O2'):
         build=scratch/opt; build.mkdir()

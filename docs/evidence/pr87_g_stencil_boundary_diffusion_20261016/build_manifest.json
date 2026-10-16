@@ -1,0 +1,16 @@
+{
+  "schema": "pr87_g_stencil_boundary_build_manifest_v1",
+  "scratch_root": "/var/tmp/pr87_g_stencil_boundary",
+  "source_helper": "tools/pr87_horizontal_diffusion64.f90",
+  "driver": "witness.f90",
+  "compiler_invocations": {
+    "O0": "ifx ${CLOUD_BAL_FREE_FLAGS[@]} -I . -module . <helper> ../witness.f90 -o witness.exe",
+    "O2": "ifx ${CLOUD_BAL_REPRO_FLAGS[@]} -I . -module . <helper> ../witness.f90 -o witness.exe"
+  },
+  "compiler_profile_source": "tests/intel_toolchain.sh",
+  "compiler_profile_source_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+  "outputs": "O0.stdout and O2.stdout; both identical, SHA256 ae7fefb78885bc222575804f6f8cf7fb2c79f1550b0bae65aeb0bd29542d04cd",
+  "binary_policy": "executables are retained only in /var/tmp scratch and intentionally excluded from evidence archive"
+}

@@ -1,0 +1,226 @@
+{
+  "density_helper_procedure_sha256": "69a96690cef0f4f7d5ae3b70c910839b9d51aa51ccc67dcb6b66f00a522a13a6",
+  "density_helper_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr85_joint_stage_observer.f90",
+  "density_helper_source_sha256": "ea50fe2b380d2d5572da42f97261afe19eabdfef194edbfa5e4abc6360ee33bb",
+  "extracted_procedure": "rk_update_joint_moments",
+  "extracted_procedure_sha256": "e5930584037c7cb827640a54561263da335d9405dfd8b66ccf4a91429477d52a",
+  "fixture_contract": {
+    "cloud_bounds": {
+      "maximum_particle_mass": 3.0300855069345996e-10,
+      "minimum_particle_mass": 4.188790204786391e-15
+    },
+    "density": "DEN=1 from AL=1, ALB=0 using source-matched helper",
+    "dimensions": {
+      "active_i": [
+        2,
+        3
+      ],
+      "active_j": [
+        2,
+        2
+      ],
+      "active_k": [
+        1,
+        1
+      ],
+      "i": [
+        1,
+        5
+      ],
+      "j": [
+        1,
+        4
+      ],
+      "k": [
+        1,
+        2
+      ]
+    },
+    "dry_carrier": "old/new=1 via c1=1,c2=0,muold=munew=0,mub=1",
+    "dyadic_cases_in_units_of_minimum_mass_times_1e8": {
+      "baseline": {
+        "old_cloud_mass": [
+          1.0,
+          1.5
+        ],
+        "old_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "source_cloud_mass": [
+          0.0,
+          0.0
+        ],
+        "source_first_fallback_selected": false,
+        "theta1_result_cloud_mass": [
+          1.0,
+          1.375
+        ]
+      },
+      "source_first": {
+        "completed_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "completed_fallback_cloud_mass": [
+          1.09375,
+          1.03125
+        ],
+        "completed_mass_sum": 2.125,
+        "old_cloud_mass": [
+          1.0,
+          1.5
+        ],
+        "old_cloud_number": [
+          1.0,
+          1.0
+        ],
+        "original_theta1_cloud_mass": [
+          1.125,
+          0.875
+        ],
+        "selected_pair": "cloud (Q index 2, N index 1)",
+        "source_cloud_mass": [
+          0.125,
+          -0.5
+        ],
+        "source_first_fallback_selected": true,
+        "source_prepared_mass": [
+          1.125,
+          1.0
+        ]
+      }
+    },
+    "horizontal_flux": "ru=+0.25 on all x faces; rv=ww=0; dt=1",
+    "registry": {
+      "nindex": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "nmoist": 6,
+      "nnindex": 5,
+      "nscalar": 5,
+      "qindex": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "qsindex": 6
+    }
+  },
+  "generated_fixture_sha256": "a38961fed61ee6e1daa4abd79c4c5c52872e1b9c975f0051771e554bbd154052",
+  "kernel_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+  "kernel_sha256": "4149f75aa94d5ca917dc3acfb17db36342f454122459251aa007ea78d30cc9bb",
+  "pinned_profile": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+  "pinned_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "proposal_path": "/var/tmp/pr87_native_source_first_proposed.f90",
+  "proposal_sha256": "6f1068a8878bec2ebb78c5852433fdfe98df7c22110784a86b8ba89c7bef192a",
+  "results": {
+    "O0": {
+      "compile_log": "/var/tmp/pr87_source_first_fixture_foa376_m/O0/compile.log",
+      "compile_log_sha256": "7047755494deee50a16814078608159a22d3593d88d213b642d20d98038c1daa",
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "executable": "/var/tmp/pr87_source_first_fixture_foa376_m/O0/source_first_fixture.exe",
+      "executable_sha256": "a182f6505a96765c8fcb9c45c5fa123bc716b6a33c5df5a9501eb459a6cf978c",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "modes": {
+        "baseline": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_foa376_m/O0/baseline/pr85_joint_transport_budget.raw",
+          "budget_sha256": "0fee2e98ae0be4ff8c79db0fd678b1985178e9f5f4f60121b0da5643b535397a",
+          "fallback_flags": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_foa376_m/O0/baseline/run.log",
+          "run_log_sha256": "13f63c6d00dd14eb05bb523324f3a9af39317a8d2fbc4b1d9696d038ddaab18f",
+          "status": "PASS"
+        },
+        "source_first": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_foa376_m/O0/source_first/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_foa376_m/O0/source_first/run.log",
+          "run_log_sha256": "ef82b28b4031e99acf9a071c11e83f44dd165958d63d72b38d6d2dec77f2adbe",
+          "status": "PASS"
+        }
+      }
+    },
+    "O2": {
+      "compile_log": "/var/tmp/pr87_source_first_fixture_foa376_m/O2/compile.log",
+      "compile_log_sha256": "7047755494deee50a16814078608159a22d3593d88d213b642d20d98038c1daa",
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "executable": "/var/tmp/pr87_source_first_fixture_foa376_m/O2/source_first_fixture.exe",
+      "executable_sha256": "0a66db26770b2cc69a1da7ef151ecf5eab496a7c53969cf315e2f7362a4fb471",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "modes": {
+        "baseline": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_foa376_m/O2/baseline/pr85_joint_transport_budget.raw",
+          "budget_sha256": "0fee2e98ae0be4ff8c79db0fd678b1985178e9f5f4f60121b0da5643b535397a",
+          "fallback_flags": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_foa376_m/O2/baseline/run.log",
+          "run_log_sha256": "13f63c6d00dd14eb05bb523324f3a9af39317a8d2fbc4b1d9696d038ddaab18f",
+          "status": "PASS"
+        },
+        "source_first": {
+          "budget_path": "/var/tmp/pr87_source_first_fixture_foa376_m/O2/source_first/pr85_joint_transport_budget.raw",
+          "budget_sha256": "155bd6f87a371fbdeff60d90152938dfcd15c139a9d0bff360ec2026da753e75",
+          "fallback_flags": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "run_log": "/var/tmp/pr87_source_first_fixture_foa376_m/O2/source_first/run.log",
+          "run_log_sha256": "ef82b28b4031e99acf9a071c11e83f44dd165958d63d72b38d6d2dec77f2adbe",
+          "status": "PASS"
+        }
+      }
+    }
+  },
+  "schema": "pr87_source_first_exact_native_fragment_ifx_v1",
+  "scratch": "/var/tmp/pr87_source_first_fixture_foa376_m",
+  "status": "PASS_O0_O2"
+}

@@ -1,0 +1,98 @@
+{
+  "artifacts": {
+    "build_receipt.json": {
+      "sha256": "d68d83cfe70bb5ed3f037f40bfdabcc479fa5e3dbf632c76a312a89c09370690",
+      "size_bytes": 1233964,
+      "source_path": "/var/tmp/pr87_joint_cycle_build_20261016_v13/pr87_native_overlay_build.json"
+    },
+    "module_em.F.gz": {
+      "compressed_sha256": "04c52cefc652a0df2161dfc748246f8565a0d1a43f42a376f25bb9f308be64f2",
+      "compressed_size_bytes": 28310,
+      "encoding": "gzip; decoded bytes hash is sha256",
+      "sha256": "86360c01b00b8a7b8804a93aae3bc47e4bf63b389dd66c269736c6036768baaa",
+      "size_bytes": 182407,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v13/module_em_pr85.F"
+    },
+    "module_mp_kdm6.F.gz": {
+      "compressed_sha256": "451eb7e652a01af483982c1db4f01a60310612f61cb8d3606d9aff68256f4c14",
+      "compressed_size_bytes": 58592,
+      "encoding": "gzip; decoded bytes hash is sha256",
+      "sha256": "f9652dc7208bb81edd57a23de53c58d3b23a531967ea46c0ec7aa510e0599a98",
+      "size_bytes": 364232,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v13/module_mp_kdm6.F"
+    },
+    "native_update.f90.gz": {
+      "compressed_sha256": "eb8c0ca9d633b5f54449d6881dbdfa600d61836f75860223524d359ed0d25785",
+      "compressed_size_bytes": 7269,
+      "encoding": "gzip; decoded bytes hash is sha256",
+      "sha256": "4a1175d2f4a007672ab5d47d95316237889661665f323d046a7ff71bfa333b01",
+      "size_bytes": 30437,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v13/native_update.f90"
+    },
+    "pr87_cloud_cycle_support.f90.gz": {
+      "compressed_sha256": "da4bc7007f2097b49418462b1c68da2f1ba4da387578b5a3fdb816870b236cbe",
+      "compressed_size_bytes": 1769,
+      "encoding": "gzip; decoded bytes hash is sha256",
+      "sha256": "4de0f1ddc5c0ee50cce42c728c15792bf28b7a86024bfd93cbebb8a5d38360fc",
+      "size_bytes": 5865,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v13/pr87_cloud_cycle_support.f90"
+    },
+    "source_later_stage_ifx_o0_o2.json": {
+      "sha256": "beac27781a1e74867a44d197185546655d7b673b7b6910ca7431478dc78d1ce1",
+      "size_bytes": 28287,
+      "source_path": "/var/tmp/pr87_source_later_stage_ifx_o0_o2_v13.json"
+    },
+    "source_v13.log": {
+      "sha256": "cea9e21f009904d01962d72f068f16303762ac8918a280ad99464920d71ddf34",
+      "size_bytes": 64,
+      "source_path": "/var/tmp/pr87_source_v13.log"
+    },
+    "sources.json": {
+      "sha256": "059e5d30f489a65d34ce716f31baee90f3039fb24324506a539af274d57dbcf4",
+      "size_bytes": 11780,
+      "source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v13/sources.json"
+    }
+  },
+  "build_directory": "/var/tmp/pr87_joint_cycle_build_20261016_v13",
+  "build_receipt_sha256": "d68d83cfe70bb5ed3f037f40bfdabcc479fa5e3dbf632c76a312a89c09370690",
+  "build_source_rows": {
+    "module_em.o": {
+      "requested_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v13/module_em_pr85.F",
+      "requested_sha256": "86360c01b00b8a7b8804a93aae3bc47e4bf63b389dd66c269736c6036768baaa",
+      "staged_path": "/var/tmp/pr87_joint_cycle_build_20261016_v13/source/overrides/module_em.F",
+      "staged_sha256": "86360c01b00b8a7b8804a93aae3bc47e4bf63b389dd66c269736c6036768baaa"
+    },
+    "module_mp_kdm6.o": {
+      "requested_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v13/module_mp_kdm6.F",
+      "requested_sha256": "f9652dc7208bb81edd57a23de53c58d3b23a531967ea46c0ec7aa510e0599a98",
+      "staged_path": "/var/tmp/pr87_joint_cycle_build_20261016_v13/source/overrides/module_mp_kdm6.F",
+      "staged_sha256": "f9652dc7208bb81edd57a23de53c58d3b23a531967ea46c0ec7aa510e0599a98"
+    }
+  },
+  "fixture_log_text": "PASS_O0_O2: /var/tmp/pr87_source_later_stage_ifx_o0_o2_v13.json",
+  "fixture_receipt_status": "PASS_O0_O2",
+  "schema": "pr87_two_step_v13_compact_evidence_v1",
+  "scope": "source/build and isolated exact-fragment O0/O2 evidence only; no active V13 runtime artifacts",
+  "source_bindings": {
+    "module_em_pr85.F": {
+      "candidate_sha256": "86360c01b00b8a7b8804a93aae3bc47e4bf63b389dd66c269736c6036768baaa",
+      "parent_sha256": "8444c5e168736101629664e45c1e595625ca0d0b0c88a28ed6689615060655ad",
+      "parent_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/compile/module_em_pr85.F"
+    },
+    "module_mp_kdm6.F": {
+      "candidate_sha256": "f9652dc7208bb81edd57a23de53c58d3b23a531967ea46c0ec7aa510e0599a98",
+      "parent_sha256": "b5e61526dc1e3d3384b9c87a423affc1cc2182faa18a904468114ec52b6781b8",
+      "parent_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/source/phys/module_mp_kdm6.F"
+    },
+    "native_update.f90": {
+      "generated_fragment_sha256": "4a1175d2f4a007672ab5d47d95316237889661665f323d046a7ff71bfa333b01",
+      "sha256": "4a1175d2f4a007672ab5d47d95316237889661665f323d046a7ff71bfa333b01"
+    },
+    "pr87_cloud_cycle_support.f90": {
+      "scope": "read-only cycle observer plus physical/numerical public rain storage; not observer-only",
+      "sha256": "4de0f1ddc5c0ee50cce42c728c15792bf28b7a86024bfd93cbebb8a5d38360fc"
+    }
+  },
+  "source_directory": "/var/tmp/pr87_joint_cycle_sources_20261016_v13",
+  "source_manifest_sha256": "059e5d30f489a65d34ce716f31baee90f3039fb24324506a539af274d57dbcf4"
+}

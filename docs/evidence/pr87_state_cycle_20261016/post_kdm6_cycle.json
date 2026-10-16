@@ -1,0 +1,196 @@
+{
+  "schema": "pr87_post_kdm6_zero_out_cycle_v1",
+  "scope": "Saved timestep-1 POST_KDM6 state screened for the configured native moisture zero-out threshold.",
+  "cycle": [
+    "POST_KDM6(1)",
+    "microphysics_zero_outb/a",
+    "next PBL call / FogDES input"
+  ],
+  "comparison": {
+    "same_active_bounds": true,
+    "candidate_cells_exactly_equal": true
+  },
+  "arms": {
+    "OFF": {
+      "path": "/var/tmp/pr86_budget_response_20261016/OFF/run/pr85_joint_moment_stages.raw.gz",
+      "sha256": "e88d631e92809601b90f100511bd090e9f264730ad92185d488138d2f22dc0b9",
+      "stage": "POST_KDM6",
+      "timestep": 1,
+      "rkstep": 0,
+      "magic": "PR85QND2",
+      "bounds": {
+        "ims": -4,
+        "ime": 240,
+        "jms": -4,
+        "jme": 288,
+        "kms": 1,
+        "kme": 40,
+        "its": 2,
+        "ite": 233,
+        "jts": 2,
+        "jte": 281,
+        "kts": 1,
+        "kte": 39
+      },
+      "shape_jki": [
+        280,
+        39,
+        232
+      ],
+      "threshold": 1e-08,
+      "direct_zero_QC_positive_QNC_cells_at_snapshot": 0,
+      "positive_QC_below_threshold_with_positive_QNC_cells": 6,
+      "candidate_cells": [
+        {
+          "i": 230,
+          "j": 70,
+          "k": 3,
+          "POST_KDM6_QC": 8.469214662909508e-09,
+          "POST_KDM6_QNC": 2021875.875,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 2021875.875
+        },
+        {
+          "i": 231,
+          "j": 126,
+          "k": 15,
+          "POST_KDM6_QC": 6.082700565457344e-09,
+          "POST_KDM6_QNC": 1452137.5,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 1452137.5
+        },
+        {
+          "i": 159,
+          "j": 162,
+          "k": 4,
+          "POST_KDM6_QC": 4.894786798104178e-09,
+          "POST_KDM6_QNC": 509498.59375,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 509498.59375
+        },
+        {
+          "i": 141,
+          "j": 167,
+          "k": 3,
+          "POST_KDM6_QC": 4.2782630771398544e-09,
+          "POST_KDM6_QNC": 1021359.9375,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 1021359.9375
+        },
+        {
+          "i": 168,
+          "j": 184,
+          "k": 7,
+          "POST_KDM6_QC": 5.136826075613499e-09,
+          "POST_KDM6_QNC": 1226326.75,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 1226326.75
+        },
+        {
+          "i": 37,
+          "j": 249,
+          "k": 16,
+          "POST_KDM6_QC": 7.8580342233181e-10,
+          "POST_KDM6_QNC": 187596.71875,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 187596.71875
+        }
+      ],
+      "prediction_basis": "microphysics_zero_outa sets moist fields below mp_zero_out_thresh to zero; scalar QNC is only passed through zero_outa when mp_zero_out_all > 0",
+      "runtime_observation": false
+    },
+    "COUPLED": {
+      "path": "/var/tmp/pr86_budget_response_20261016/COUPLED/run/pr85_joint_moment_stages.raw.gz",
+      "sha256": "2f6fb41dd0c0deb49efe4890be0cd8578a0887163bfdeb31fa2c13589d8fa680",
+      "stage": "POST_KDM6",
+      "timestep": 1,
+      "rkstep": 0,
+      "magic": "PR85QND2",
+      "bounds": {
+        "ims": -4,
+        "ime": 240,
+        "jms": -4,
+        "jme": 288,
+        "kms": 1,
+        "kme": 40,
+        "its": 2,
+        "ite": 233,
+        "jts": 2,
+        "jte": 281,
+        "kts": 1,
+        "kte": 39
+      },
+      "shape_jki": [
+        280,
+        39,
+        232
+      ],
+      "threshold": 1e-08,
+      "direct_zero_QC_positive_QNC_cells_at_snapshot": 0,
+      "positive_QC_below_threshold_with_positive_QNC_cells": 6,
+      "candidate_cells": [
+        {
+          "i": 230,
+          "j": 70,
+          "k": 3,
+          "POST_KDM6_QC": 8.469214662909508e-09,
+          "POST_KDM6_QNC": 2021875.875,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 2021875.875
+        },
+        {
+          "i": 231,
+          "j": 126,
+          "k": 15,
+          "POST_KDM6_QC": 6.082700565457344e-09,
+          "POST_KDM6_QNC": 1452137.5,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 1452137.5
+        },
+        {
+          "i": 159,
+          "j": 162,
+          "k": 4,
+          "POST_KDM6_QC": 4.894786798104178e-09,
+          "POST_KDM6_QNC": 509498.59375,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 509498.59375
+        },
+        {
+          "i": 141,
+          "j": 167,
+          "k": 3,
+          "POST_KDM6_QC": 4.2782630771398544e-09,
+          "POST_KDM6_QNC": 1021359.9375,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 1021359.9375
+        },
+        {
+          "i": 168,
+          "j": 184,
+          "k": 7,
+          "POST_KDM6_QC": 5.136826075613499e-09,
+          "POST_KDM6_QNC": 1226326.75,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 1226326.75
+        },
+        {
+          "i": 37,
+          "j": 249,
+          "k": 16,
+          "POST_KDM6_QC": 7.8580342233181e-10,
+          "POST_KDM6_QNC": 187596.71875,
+          "predicted_after_zero_outa_QC": 0.0,
+          "predicted_after_zero_outa_QNC": 187596.71875
+        }
+      ],
+      "prediction_basis": "microphysics_zero_outa sets moist fields below mp_zero_out_thresh to zero; scalar QNC is only passed through zero_outa when mp_zero_out_all > 0",
+      "runtime_observation": false
+    }
+  },
+  "limitations": [
+    "The archive has no state dump after microphysics_zero_outa and no timestep-2 FogDES-entry field dump.",
+    "Candidate cells are predicted from source semantics; their timestep-2 values are not directly observed here.",
+    "FogDES loop support must be checked against the runtime tile bounds and vertical bounds."
+  ]
+}

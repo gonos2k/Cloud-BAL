@@ -1,0 +1,108 @@
+--- a/native_update.f90
++++ b/native_update.f90
+@@ -3,7 +3,7 @@
+      ru,rv,ww,muold,munew,mub,c1,c2,msftx,msfty,rdx,rdy,rdnw,al,alb,dt,rk,itimestep,spec_zone, &
+      ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte)
+   USE iso_fortran_env, ONLY: real32,real64
+-  USE cloud_bal_joint_transport, ONLY: joint_moment_is_valid, joint_qnb_update
++  USE cloud_bal_joint_transport, ONLY: joint_moment_is_valid, joint_moment_store, joint_qnb_update
+   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
+   IMPLICIT NONE
+   INTEGER,INTENT(IN) :: nmoist,nscalar,qindex(4),nindex(4),rk,itimestep,spec_zone
+@@ -24,7 +24,10 @@
+   REAL(real32),ALLOCATABLE :: snow_candidate(:),ccn_candidate(:)
+   REAL(real64) :: theta,rejected_q(4),rejected_n(4),minmass(4),maxmass(4),rate(2)
+   REAL(real64) :: outflow,cfl,maxcfl,weight,source_candidate(2)
+-  REAL(real32) :: source_stored(2)
++  REAL(real32) :: source_stored(2),full_stored(2)
++  REAL(real64) :: storage_delta_q(4),storage_delta_n(4)
++  INTEGER :: storage_adjustments(4),adjustment,full_failures
++  LOGICAL :: full_valid
+   INTEGER :: il,ih,jl,jh,kl,kh,i,j,k,p,cell,cells,u,iq,in,source_failures
+   LOGICAL :: feasible,density_valid
+   EXTERNAL :: pr85_pbl_tendency_dump,pr85_dry_density_from_al_alb
+@@ -107,7 +110,9 @@
+   IF (.NOT.ieee_is_finite(maxcfl).OR.maxcfl>1.0_real64) &
+     CALL wrf_error_fatal('PR85 common donor-cell carrier CFL exceeded')
+   CALL joint_qnb_update(qb,nb,qc,nc,qs,ns,qa,na,oldcarrier,newcarrier,drydensity, &
+-                       dt,minmass,maxmass,theta,rejected_q,rejected_n,feasible)
++                       dt,minmass,maxmass,theta,rejected_q,rejected_n,feasible, &
++                       joint_subnormal_storage=.TRUE.,storage_delta_q=storage_delta_q, &
++                       storage_delta_n=storage_delta_n,storage_adjustments=storage_adjustments)
+   OPEN(NEWUNIT=u,FILE='pr85_joint_transport_budget.raw',STATUS='UNKNOWN',POSITION='APPEND')
+   WRITE(u,*) 'JOINT_RK',rk,cells,maxcfl,theta,feasible
+   WRITE(u,*) 'REJECTED_PRESSURE_COORDINATE_Q',rejected_q
+@@ -115,7 +120,7 @@
+   CLOSE(u)
+   IF (.NOT.feasible) THEN
+     OPEN(NEWUNIT=u,FILE='pr85_joint_source_failure.raw',STATUS='UNKNOWN',POSITION='APPEND')
+-    cell=0; source_failures=0
++    cell=0; source_failures=0; full_failures=0
+     DO j=jl,jh
+     DO k=kl,kh
+     DO i=il,ih
+@@ -131,6 +136,19 @@
+               qb(cell,p),nb(cell,p),qs(cell,p),ns(cell,p),drydensity(cell),dt
+           CYCLE
+         END IF
++        ! Inspect the full proposed update separately from the source-only diagnostic.
++        source_candidate=(REAL(oldcarrier(cell),real64)* &
++          [REAL(qb(cell,p),real64),REAL(nb(cell,p),real64)]+REAL(dt,real64)* &
++          [REAL(qs(cell,p),real64)+REAL(qa(cell,p),real64), &
++           REAL(ns(cell,p),real64)+REAL(na(cell,p),real64)])/REAL(newcarrier(cell),real64)
++        CALL joint_moment_store(source_candidate(1),source_candidate(2),drydensity(cell), &
++             minmass(p),maxmass(p),.TRUE.,full_stored(1),full_stored(2),adjustment,full_valid)
++        IF (.NOT.full_valid) THEN
++          full_failures=full_failures+1
++          WRITE(u,*) 'FULL',itimestep,rk,p,i,j,k,oldcarrier(cell),newcarrier(cell), &
++              qb(cell,p),nb(cell,p),qs(cell,p),ns(cell,p),qa(cell,p),na(cell,p), &
++              source_candidate,full_stored,drydensity(cell),dt
++        END IF
+         source_candidate=(REAL(oldcarrier(cell),real64)* &
+           [REAL(qb(cell,p),real64),REAL(nb(cell,p),real64)]+REAL(dt,real64)* &
+           [REAL(qs(cell,p),real64),REAL(ns(cell,p),real64)])/REAL(newcarrier(cell),real64)
+@@ -153,14 +171,41 @@
+     END DO
+     END DO
+     WRITE(u,*) 'SOURCE_FAILURE_COUNT',source_failures
++    WRITE(u,*) 'FULL_FAILURE_COUNT',full_failures
+     CLOSE(u)
+-    IF (source_failures>0) &
+-      CALL wrf_error_fatal('PR85 source-only joint moment state infeasible')
+-    CALL wrf_error_fatal('PR85 grouped source-plus-transport candidate infeasible')
++    CALL wrf_error_fatal('PR87 full joint moment candidate infeasible; see source/full diagnostics')
+   END IF
+   IF (theta<=0.0_real64) CALL wrf_error_fatal('PR85 refusing zero common air transport')
+   IF (theta/=1.0_real64) &
+     CALL wrf_error_fatal('PR85 low-order donor map requires a conservative face limiter')
++  ! Additional joint storage rounding is a numerical term, not a physical source.
++  ! Signed aggregate deltas have pressure-coordinate units; no kg/energy closure is claimed.
++  OPEN(NEWUNIT=u,FILE='pr87_joint_storage.raw',STATUS='UNKNOWN',POSITION='APPEND')
++  WRITE(u,*) 'JOINT_STORAGE',itimestep,rk,cells,storage_adjustments
++  WRITE(u,*) 'STORAGE_DELTA_PRESSURE_Q',storage_delta_q
++  WRITE(u,*) 'STORAGE_DELTA_PRESSURE_MOMENT',storage_delta_n
++  IF (ANY(storage_adjustments>0)) THEN
++    cell=0
++    DO j=jl,jh
++    DO k=kl,kh
++    DO i=il,ih
++      cell=cell+1
++      DO p=1,4
++        source_candidate=(REAL(oldcarrier(cell),real64)* &
++          [REAL(qb(cell,p),real64),REAL(nb(cell,p),real64)]+REAL(dt,real64)* &
++          [REAL(qs(cell,p),real64)+theta*REAL(qa(cell,p),real64), &
++           REAL(ns(cell,p),real64)+theta*REAL(na(cell,p),real64)])/REAL(newcarrier(cell),real64)
++        source_stored=REAL(source_candidate,real32)
++        IF (qc(cell,p)/=source_stored(1).OR.nc(cell,p)/=source_stored(2)) &
++          WRITE(u,*) 'STORED_PAIR',itimestep,rk,p,i,j,k,oldcarrier(cell),newcarrier(cell), &
++              source_candidate,qc(cell,p),nc(cell,p),drydensity(cell), &
++              rdnw(k),msftx(i,j),msfty(i,j),rdx,rdy
++      END DO
++    END DO
++    END DO
++    END DO
++  END IF
++  CLOSE(u)
+   ! Commit the complete candidate only after all four pair columns pass.
+   cell=0
+   DO j=jl,jh

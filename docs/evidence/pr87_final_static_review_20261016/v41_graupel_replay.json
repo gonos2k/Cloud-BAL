@@ -1,0 +1,64 @@
+{
+  "candidate": "V41diag OFF 60s diagnostic-only build, frozen V39 physics",
+  "runtime": {
+    "receipt": "/var/tmp/pr87_joint_OFF_60s_v41diag_20261016/receipt.json",
+    "receipt_sha256": "f459c84231dff298e90859c9b8f186f54ad600c73b8c9febfb3b38e8f52e00a0",
+    "source_failure_raw": "/var/tmp/pr87_joint_OFF_60s_v41diag_20261016/run/pr85_joint_source_failure.raw.gz",
+    "source_failure_raw_sha256": "c2289610a3a3fdb5ff273b83801c98ce71798213c06e2b8e2dd45d76c5876e34",
+    "source": {
+      "module_em_sha256": "592cd66eebd492ff882b732651e856050b7d82f87f1565bb4579a1caef714c07",
+      "native_update_sha256": "d6847d9724986a5273eae2f7421cb2cd0b88e6e70779efda2a96d3bbb0f7b713"
+    }
+  },
+  "target": {
+    "step": 3,
+    "rk": 1,
+    "pair": "QG/BG",
+    "i": 154,
+    "j": 77,
+    "k": 17,
+    "strict_bound": "QG >= 900*BG"
+  },
+  "observed_stencil": {
+    "nonzero_donor": "i+",
+    "qg_donor_r32": 0.000002274890675835195,
+    "bg_donor_r32": 2.52765630648355e-9,
+    "donor_ratio": 900,
+    "other_direct_stencil_values": 0,
+    "old_r32_tendency_qg": 0.000008212150532926898,
+    "old_r32_tendency_bg": 9.124611288768847e-9,
+    "r64_diffusion_tendency_qg": 0.000008212150880350765,
+    "r64_diffusion_tendency_bg": 9.124612089278627e-9,
+    "r64_ratio": 900.0000000000001,
+    "r64_q_minus_900b": 1.6940658945086007e-21,
+    "full_source_component_row": "FULL_SOURCE_COMPONENTS 3 1 4 154 77 17 ...; base and air rates are zero."
+  },
+  "independent_replay": {
+    "profile": "pinned Intel ifx 2026.0.0, -fp-model strict, O0 and O2",
+    "helper_sha256": "0a8b2865fff3d7ad6592e0d1bc1d3f7b51970de13ac9ea128066b7cba655bfe3",
+    "result_o0": [
+      0.000008212150880350765,
+      9.124612089278627e-9,
+      900.0000000000001,
+      1.6940658945086007e-21
+    ],
+    "result_o2": [
+      0.000008212150880350765,
+      9.124612089278627e-9,
+      900.0000000000001,
+      1.6940658945086007e-21
+    ],
+    "conclusion": "Exact captured stencil and pinned helper replay reproduce the runtime increments at both optimization levels. The strict-bound crossing is from separate-channel R64 rounding of a donor pair exactly on QG=900*BG."
+  },
+  "diagnostic_tool": {
+    "path": "scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_graupel_diffusion_probe.py",
+    "sha256": "87309168ae03e8d60a7af5efa0b55ccf590ccee0a7de5b5f148092194cb4eedd",
+    "test_path": "scratch/pr87_two_step_20261016/Cloud-BAL/tests/test_pr87_graupel_diffusion_probe.py",
+    "test_sha256": "557f24211d6fc797ffb194f85ae8d20c9c4d4d57714b5c9551e51f45a64de997"
+  },
+  "assessment": {
+    "cause": "confirmed strict ratio crossing due independent R64 QG/BG stencil evaluation; no old base, air tendency, or other direct stencil donors contribute.",
+    "candidate_direction": "Evaluate a shared, cone-preserving paired stencil or equivalent slack-variable formulation for the active bound, with explicit numerical-representation accounting and full unchanged continuous/stored endpoint gates. A post-hoc local Q nudge risks breaking stencil conservation.",
+    "scope": "This diagnoses one strict-bound failure; it does not establish whole-run scientific validation or justify any bound/tolerance change."
+  }
+}

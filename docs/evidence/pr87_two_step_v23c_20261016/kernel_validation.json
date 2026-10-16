@@ -1,0 +1,33 @@
+{
+  "scope": "shared kernel complete original+new tests; notnative",
+  "builds": {
+    "O0": {
+      "cwd": "/var/tmp/pr87_v23b_kernel_final_7ngi4idd/O0",
+      "returncode": 0,
+      "log_sha256": "34d76a0c78187191a7f89d1e18de6323c74b845d7d5e751b496b010cc930c2ad",
+      "command": [
+        "bash",
+        "-c",
+        "source \"$1/tests/intel_toolchain.sh\" && if [[ \"$2\" == O0 ]]; then flags=(\"${CLOUD_BAL_FREE_FLAGS[@]}\"); else flags=(\"${CLOUD_BAL_REPRO_FLAGS[@]}\"); fi && \"$CLOUD_BAL_FC\" \"${flags[@]}\" -module . \"$1/src/common/cloud_bal_joint_transport.f90\" \"$1/tests/test_joint_qnb_transport.f90\" -o test.exe && ./test.exe",
+        "pr87-kernel",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL",
+        "O0"
+      ]
+    },
+    "O2": {
+      "cwd": "/var/tmp/pr87_v23b_kernel_final_7ngi4idd/O2",
+      "returncode": 0,
+      "log_sha256": "fe86df0dd3bfabd2cd63158132c1f0b56f7fbd7661064ee0330046d4c9a3e11a",
+      "command": [
+        "bash",
+        "-c",
+        "source \"$1/tests/intel_toolchain.sh\" && if [[ \"$2\" == O0 ]]; then flags=(\"${CLOUD_BAL_FREE_FLAGS[@]}\"); else flags=(\"${CLOUD_BAL_REPRO_FLAGS[@]}\"); fi && \"$CLOUD_BAL_FC\" \"${flags[@]}\" -module . \"$1/src/common/cloud_bal_joint_transport.f90\" \"$1/tests/test_joint_qnb_transport.f90\" -o test.exe && ./test.exe",
+        "pr87-kernel",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL",
+        "O2"
+      ]
+    }
+  },
+  "kernel_sha256": "a2ce75f3bb97bd8b186d1aa7f2447bce4b258ae002aa6307b3073811f2c1b8f7",
+  "test_sha256": "3fa010880cf9981b886673bea3b0650d5d37526d190db1235ece41a807bf9d58"
+}

@@ -1,0 +1,245 @@
+{
+  "schema": "pr87_v28b_independent_review_v1",
+  "scope": "Read-only independent source/build/runtime audit. Runtime validation did not reach the requested two-step completion; this record does not claim full-step or scientific approval.",
+  "candidate": {
+    "source_dir": "/var/tmp/pr87_joint_cycle_sources_20261016_v28b",
+    "source_manifest_sha256": "7f5e27a98164e9bcc7434ec21bd9cfa5cb7d10802dd15c3de0a277cfa2654a22",
+    "source_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v28b/sources.json",
+    "source_files": {
+      "native_update.f90": {
+        "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v28b/native_update.f90",
+        "sha256": "e0648072b3fe02ffcc408947a2f031b622be94a4ec5b3f14eae2a60d30d5df27"
+      },
+      "module_bl_fogdes.F": {
+        "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v28b/module_bl_fogdes.F",
+        "sha256": "f582b9d3214187a9d045ae0495a9e6809b0a93893d34186c46be5908a8c0e4e8"
+      },
+      "module_em_pr85.F": {
+        "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v28b/module_em_pr85.F",
+        "sha256": "8076b8a9c063911bcc4dcb8b3f74d8b8456aa805ad17f1d34bca1514dde66f25"
+      },
+      "solve_em.F": {
+        "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v28b/solve_em.F",
+        "sha256": "e78f0a3981c399e5c4326bd550d55a6ca5522d297f8c44c0d60a18ac3768b2b3"
+      }
+    },
+    "build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v28b/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "a6a65302f2e4ad3a850ec1534da1142dfed3dbef58d4396ec322be3c9fe06e02",
+    "build_status": "PASS_OVERLAY_BUILD",
+    "full_clean_build": false,
+    "executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v28b/wrf_pr87_overlay.exe",
+    "executable_sha256": "91d9a9aebae4c002d13584a33a05ee95d3256954f05b504dbb4ff04ab53f2f03",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "compiled_override_components": {
+      "module_bl_fogdes.o": {
+        "source_sha256": "f582b9d3214187a9d045ae0495a9e6809b0a93893d34186c46be5908a8c0e4e8",
+        "object_sha256": "be51937984b2cd3ee9c2eea2565ae08bee29a420e479b4f2fcaf7f9192ce7f1b"
+      },
+      "solve_em.o": {
+        "source_sha256": "e78f0a3981c399e5c4326bd550d55a6ca5522d297f8c44c0d60a18ac3768b2b3",
+        "object_sha256": "402cae7560934f940c27ba0574282f97fd72de2934bde71fa01769fc64e4df92"
+      }
+    },
+    "module_dependency_order_evidence": {
+      "module_bl_fogdes": {
+        "sha256": "768970bea0f5bafee9fc601f6c08320714265636097bb119d67064a2b0c797da",
+        "mtime_ns": 1792144771893991973
+      },
+      "module_pbl_driver": {
+        "sha256": "df49c3e07776025dca2e8f57577052e0b62a26f6b182ea0d30afcde5addc39d1",
+        "mtime_ns": 1792144773322988258
+      }
+    },
+    "dependency_order_result": "FogDES compile log timestamp precedes PBL driver compile log; both module interfaces were regenerated in this scratch build."
+  },
+  "runtime_result": {
+    "overall": "INCOMPLETE",
+    "arms": [
+      {
+        "arm": "OFF",
+        "run_status": "INCOMPLETE",
+        "returncode": 1,
+        "wall_seconds": 361.9756002742797,
+        "model_timestamps": [
+          {
+            "timestamp": "2026-08-16_13:00:20",
+            "elapsed_seconds": 282.50555
+          }
+        ],
+        "maximum_seen_timestep": 2,
+        "final_completed_step": 1,
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "fatal_lines": [
+          "-------------- FATAL CALLED ---------------",
+          "-------------- FATAL CALLED ---------------"
+        ],
+        "frozen_parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+        "executed_candidate_executable_sha256": "91d9a9aebae4c002d13584a33a05ee95d3256954f05b504dbb4ff04ab53f2f03",
+        "candidate_build_unchanged": true,
+        "changed_staged_inputs": [],
+        "changed_original_inputs": [],
+        "candidate_inputs_sha256": {
+          "wrfinput": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+          "wrfbdy": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+          "namelist": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0"
+        },
+        "run_receipt": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v28b_20261016/runtime/OFF/receipt.json",
+          "sha256": "78cb5bf055f0013d486b035c3c69712e51f5a87418881dabdb85e5a193ca7a49"
+        },
+        "trace": {
+          "path": "/var/tmp/pr87_joint_OFF_40s_v28b_20261016/run/pr85_joint_moment_stages.raw.gz",
+          "sha256": "250beb201801480b29a7696b6075499ffe0cd89d37d0dd6bac10bb3b6eb7a87e",
+          "decoded_sha256": "027b578f209a2a3de9e0e452c19f3e274ac0f10d4e3c95f283122adc687c3ca7",
+          "audit_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v28b_20261016/runtime/OFF/strict_completed_state_audit.json",
+          "audit_sha256": "a5ace234a3118dcc1aa8e1543295b70e8de2c06f04b0c5cdf77cebf10ea505a1",
+          "audit_status": "INCOMPLETE",
+          "state_record_count": 9,
+          "state_stage_counts": {
+            "POST_KDM6": 1,
+            "PRE_KDM6": 1,
+            "PRE_RK": 2,
+            "RK_STAGE_END": 5
+          },
+          "trace_timesteps": [
+            1,
+            2
+          ],
+          "step1_status": "PASS",
+          "step1_completed_post_kdm6": true,
+          "step2_status": "INCOMPLETE",
+          "step2_completed_post_kdm6": false,
+          "step2_recorded_stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END"
+          ],
+          "step2_recorded_states": [
+            {
+              "stage": "PRE_RK",
+              "rkstep": 0,
+              "strict_endpoint_gate_applies": false,
+              "strict_source_coefficient_violations": {
+                "cloud": {
+                  "real32_density_times_number_volume_ratio_outside_exact_bounds": 54
+                },
+                "rain": {
+                  "real32_density_times_number_volume_ratio_outside_exact_bounds": 100
+                }
+              }
+            },
+            {
+              "stage": "RK_STAGE_END",
+              "rkstep": 1,
+              "strict_endpoint_gate_applies": false,
+              "strict_source_coefficient_violations": {}
+            },
+            {
+              "stage": "RK_STAGE_END",
+              "rkstep": 2,
+              "strict_endpoint_gate_applies": false,
+              "strict_source_coefficient_violations": {}
+            }
+          ]
+        }
+      },
+      {
+        "arm": "COUPLED",
+        "run_status": "INCOMPLETE",
+        "returncode": 1,
+        "wall_seconds": 361.17479349114,
+        "model_timestamps": [
+          {
+            "timestamp": "2026-08-16_13:00:20",
+            "elapsed_seconds": 281.88257
+          }
+        ],
+        "maximum_seen_timestep": 2,
+        "final_completed_step": 1,
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "fatal_lines": [
+          "-------------- FATAL CALLED ---------------",
+          "-------------- FATAL CALLED ---------------"
+        ],
+        "frozen_parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+        "executed_candidate_executable_sha256": "91d9a9aebae4c002d13584a33a05ee95d3256954f05b504dbb4ff04ab53f2f03",
+        "candidate_build_unchanged": true,
+        "changed_staged_inputs": [],
+        "changed_original_inputs": [],
+        "candidate_inputs_sha256": {
+          "wrfinput": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+          "wrfbdy": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+          "namelist": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0"
+        },
+        "run_receipt": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v28b_20261016/runtime/COUPLED/receipt.json",
+          "sha256": "e9fd525598743ccdba1d39361c511932fe93bf3e8941794ae8c273a85de9b4ca"
+        },
+        "trace": {
+          "path": "/var/tmp/pr87_joint_COUPLED_40s_v28b_20261016/run/pr85_joint_moment_stages.raw.gz",
+          "sha256": "37fc81a0f0708ec50a1a408ba183a120fed6faf94cb9e0f2f90fefdf0d66d4ed",
+          "decoded_sha256": "28f51483a9e7148a212adb768db4071a77f94e9b4a1953673c42191027993c55",
+          "audit_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_two_step_v28b_20261016/runtime/COUPLED/strict_completed_state_audit.json",
+          "audit_sha256": "2538da49c50ce253077ede5f74b54270c95bcb2d414b260cd20e72be3d4341e4",
+          "audit_status": "INCOMPLETE",
+          "state_record_count": 9,
+          "state_stage_counts": {
+            "POST_KDM6": 1,
+            "PRE_KDM6": 1,
+            "PRE_RK": 2,
+            "RK_STAGE_END": 5
+          },
+          "trace_timesteps": [
+            1,
+            2
+          ],
+          "step1_status": "PASS",
+          "step1_completed_post_kdm6": true,
+          "step2_status": "INCOMPLETE",
+          "step2_completed_post_kdm6": false,
+          "step2_recorded_stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END"
+          ],
+          "step2_recorded_states": [
+            {
+              "stage": "PRE_RK",
+              "rkstep": 0,
+              "strict_endpoint_gate_applies": false,
+              "strict_source_coefficient_violations": {
+                "cloud": {
+                  "real32_density_times_number_volume_ratio_outside_exact_bounds": 54
+                },
+                "rain": {
+                  "real32_density_times_number_volume_ratio_outside_exact_bounds": 101
+                }
+              }
+            },
+            {
+              "stage": "RK_STAGE_END",
+              "rkstep": 1,
+              "strict_endpoint_gate_applies": false,
+              "strict_source_coefficient_violations": {}
+            },
+            {
+              "stage": "RK_STAGE_END",
+              "rkstep": 2,
+              "strict_endpoint_gate_applies": false,
+              "strict_source_coefficient_violations": {}
+            }
+          ]
+        }
+      }
+    ],
+    "common_fatal": "PR87 corrected source-stage pair fails strict storage validation",
+    "completed_extent": "Both arms wrote only 2026-08-16_13:00:20; timestep 1 has complete PRE_RK, RK1-3, PRE_KDM6, POST_KDM6 states. Timestep 2 has PRE_RK and RK1/RK2 records only; the RK3 source-stage operation fails before a completed RK3 state or timestep-2 KDM6 endpoint.",
+    "stage_audit_interpretation": "Strict exact source-coefficient audit passes all recorded timestep-1 gated endpoints. At timestep-2 PRE_RK, the audit reports real32 density-times-number product outside bounds in 54 cloud cells and 100 OFF / 101 COUPLED rain cells; that record is not an endpoint gate. Recorded timestep-2 RK1/RK2 states report no strict cloud/rain violations. No timestep-2 RK3, PRE_KDM6, or POST_KDM6 audit exists.",
+    "cause_scope": "The fatal establishes rejection of the corrected source-stage pair. V28b contains no failed-pair operands sufficient to attribute the rejection to a particular process or claim a completed-step physical failure."
+  },
+  "static_review": {
+    "compile_order_issue": "Resolved in V28b: module_bl_fogdes.mod and module_pbl_driver.mod are both regenerated, with FogDES compiled first.",
+    "fog_source_contract": "Optional correction sidecar is passed with named arguments and forwarded only when present. Candidate checks use reconstructed REAL64 source-plus-Fog tendency; accepted path stores the legacy REAL32 tendency and writes the residual correction sidecar. No static blocker found.",
+    "remaining_limit": "FogDES candidate acceptance does not itself prove final grouped-kernel density-weighted REAL32 storage; final grouped validation remains the authority."
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "schema": "pr87_native_zero_out_fogdes_cycle_o0_o2_v1",
+  "scratch": "/var/tmp/pr87_native_cycle_07ig7y3c",
+  "runtime_model_call": false,
+  "selected_POST_KDM6_cell": {
+    "QC": 8.469214662909508e-09,
+    "QNC": 2021875.875
+  },
+  "source_identity": {
+    "fogdes_source": "/var/tmp/pr85_native_joint_candidate_20261015v17/source/phys/module_bl_fogdes.F",
+    "fogdes_sha256": "aee27ecc6f259e94dfbb7cc8dad2ebd8cd97432d31363e268d1fedffa84bcc7d",
+    "zero_out_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/phys/module_microphysics_zero_out.F",
+    "zero_out_sha256": "a57268701b424b07a604ce93f733314183a29bfb39e7e6283f92f8668808fa4f",
+    "registry_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/KIM-rdps_kfarms_port/KIM_RDPS_MODL_V2026.2/Registry/Registry.EM_COMMON",
+    "registry_sha256": "4c8174711ed7ce50d4e04c3849254a77cbc963161aa42d6326ace4cf1fe0c700",
+    "overlay_generator": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_prepare_native_cycle.py",
+    "overlay_generator_sha256": "d2df0147b1e5c7e7f53ca6471dee48c8845a1f33a885e4509409426116929715",
+    "cycle_evidence": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_state_cycle_20261016/post_kdm6_cycle.json",
+    "cycle_evidence_sha256": "1c623d6df03d0e483a5332cf823f735c30f31b0cbb323206e9ef70e00b7c2c3b",
+    "fixture_helper_matches_pinned_fogdes_helper": true
+  },
+  "compiler_profile": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+  "ifx": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "source_mechanism": {
+    "host_cutoff": "Actual microphysics_zero_outa source with mp_zero_out=2 and pinned 1.e-8 threshold; mp_zero_out_all=0 leaves QNC scalar unprocessed.",
+    "preserved_case": "Applies the generator's optional paired-only species-loop skip to QC/QI/QR/QG; QV is still clamped and QS is still thresholded, then the same saved positive QC/QNC pair reaches the actual FogDES helper.",
+    "other_channel_probe": "With mp_zero_out_all=1, scalar cleanup called without the optional argument still thresholds a non-QNC scalar while preserving the positive QNC value.",
+    "boundary_policy": "The overlay leaves microphysics_zero_outb byte-for-byte unchanged, retaining its boundary nonnegativity clamp."
+  },
+  "results": {
+    "O0": {
+      "compile_argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "/var/tmp/pr87_native_cycle_07ig7y3c/pr87_native_cycle.F90",
+        "-o",
+        "/var/tmp/pr87_native_cycle_07ig7y3c/O0/pr87_native_cycle.exe"
+      ],
+      "executable_sha256": "974c87e3f655491f1642201e140d8c0ac83bfd4f7c2e5307e1104eb0ba2123e5",
+      "modes": {
+        "before": {
+          "returncode": 0,
+          "stdout": "PR87_FOGDES_ACCEPTED before\n"
+        },
+        "generic": {
+          "returncode": 87,
+          "stdout": "PR87_GENERIC_STATE   0.0000000000000000E+00   0.0000000000000000E+00   0.0000000000000000E+00   2.0218758750000000E+06\nPR87_EXPECTED_FOGDES_FATAL FogDES paired Stokes settling requires both cloud moments\n87\n"
+        },
+        "preserved": {
+          "returncode": 0,
+          "stdout": "PR87_PRESERVED_STATE   8.4692146629095078E-09   0.0000000000000000E+00   0.0000000000000000E+00   2.0218758750000000E+06\nPR87_FOGDES_ACCEPTED preserved\n"
+        }
+      }
+    },
+    "O2": {
+      "compile_argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "/var/tmp/pr87_native_cycle_07ig7y3c/pr87_native_cycle.F90",
+        "-o",
+        "/var/tmp/pr87_native_cycle_07ig7y3c/O2/pr87_native_cycle.exe"
+      ],
+      "executable_sha256": "d124d148a512ea7fd229d3b12ec5e0db502b487d0b52581adfc2517b5c0ebbd3",
+      "modes": {
+        "before": {
+          "returncode": 0,
+          "stdout": "PR87_FOGDES_ACCEPTED before\n"
+        },
+        "generic": {
+          "returncode": 87,
+          "stdout": "PR87_GENERIC_STATE   0.0000000000000000E+00   0.0000000000000000E+00   0.0000000000000000E+00   2.0218758750000000E+06\nPR87_EXPECTED_FOGDES_FATAL FogDES paired Stokes settling requires both cloud moments\n87\n"
+        },
+        "preserved": {
+          "returncode": 0,
+          "stdout": "PR87_PRESERVED_STATE   8.4692146629095078E-09   0.0000000000000000E+00   0.0000000000000000E+00   2.0218758750000000E+06\nPR87_FOGDES_ACCEPTED preserved\n"
+        }
+      }
+    }
+  }
+}

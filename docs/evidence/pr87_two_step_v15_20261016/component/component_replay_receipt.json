@@ -1,0 +1,233 @@
+{
+  "schema": "pr87_component_replay_receipt_v1",
+  "status": "PASS_FULL_FIRST_KDM6_COMPONENT",
+  "scope": "Single component replay only; not a coupled model run.",
+  "cwd": "/var/tmp/pr87_v15_final_component_20261016/run",
+  "containment": "All replay-generated relative fields and ledgers are contained in this private run directory. Earlier component attempts ran with the maintained KLAPS50 cwd and their mixed ledgers were quarantined; they are not evidence for this receipt.",
+  "input": {
+    "path": "/var/tmp/pr87_v13_warm_endpoint_diag_20261016/replay/kdm6_first_call_pre.raw",
+    "sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847"
+  },
+  "source": {
+    "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v15plain/module_mp_kdm6.F",
+    "sha256": "e7b4225681cfce25c7096ceb196108ffe8d2e5ee2e4e309e0b890cd6093d1b20",
+    "relation_to_v15_final": "Same physical source; final V15 additionally adds failure-only NG diagnostics."
+  },
+  "preprocessed_sha256": "4c7c4ca20c9fb1503656d843841465f4417599bc2ae79022f8c0e60d2fa12ac1",
+  "executable": {
+    "path": "/var/tmp/pr87_v15_final_component_20261016/link/replay_v15.exe",
+    "sha256": "660327f68e30f16a9e9ef50015aa4188ba1cf60736f19f84e97e22e70f12bcc4"
+  },
+  "stdout": {
+    "path": "/var/tmp/pr87_v15_final_component_20261016/run/stdout.log",
+    "sha256": "b4769622fc3ffd98de0067eac0ab2da9071059fda7870bbd0dbd6cec3a126443",
+    "completion_marker": "REPLAY COMPLETED FULL FIRST KDM6 CALL"
+  },
+  "run_outputs": [
+    {
+      "name": "kdm6_first_call_post.raw",
+      "bytes": 195542592
+    },
+    {
+      "name": "kdm6_first_call_pre.raw",
+      "bytes": 195542592
+    },
+    {
+      "name": "pr67_kdm6_process.raw",
+      "bytes": 83442240
+    },
+    {
+      "name": "pr76_target_call.raw",
+      "bytes": 194
+    },
+    {
+      "name": "pr76_thread_entry.raw",
+      "bytes": 37
+    },
+    {
+      "name": "pr77_native_species.raw",
+      "bytes": 24430
+    },
+    {
+      "name": "pr85_graupel_sedimentation_budget.raw",
+      "bytes": 26169586
+    },
+    {
+      "name": "pr85_ice_sedimentation_budget.raw",
+      "bytes": 21678440
+    },
+    {
+      "name": "pr85_ice_transition_branch.raw",
+      "bytes": 2652300
+    },
+    {
+      "name": "pr85_kdm6_cold_budget.raw",
+      "bytes": 199080
+    },
+    {
+      "name": "pr85_kdm6_cutoff_budget.raw",
+      "bytes": 153529758
+    },
+    {
+      "name": "pr85_kdm6_freezing_budget.raw",
+      "bytes": 329055555
+    },
+    {
+      "name": "pr85_kdm6_melt_budget.raw",
+      "bytes": 35413252
+    },
+    {
+      "name": "pr85_kdm6_psd_boundary.raw",
+      "bytes": 4901032
+    },
+    {
+      "name": "pr85_kdm6_warm_budget.raw",
+      "bytes": 165480
+    },
+    {
+      "name": "pr85_rain_freezing_budget.raw",
+      "bytes": 7712792
+    },
+    {
+      "name": "pr87_admission_reason.raw",
+      "bytes": 23514225
+    },
+    {
+      "name": "pr87_rain_public_store.raw",
+      "bytes": 54587
+    },
+    {
+      "name": "pr87_rain_sedimentation_budget.raw",
+      "bytes": 26399084
+    },
+    {
+      "name": "stdout.log",
+      "bytes": 33595413
+    }
+  ],
+  "not_claimed": [
+    "Coupled model validation",
+    "Multi-step completion",
+    "Uniformly separated evidence in earlier root-cwd attempts"
+  ],
+  "evidence_archive_path": "docs/evidence/pr87_two_step_v15_20261016/component",
+  "build_provenance_path": "docs/evidence/pr87_two_step_v15_20261016/component/component_build_provenance.json",
+  "component_source_archive": {
+    "path": "docs/evidence/pr87_two_step_v15_20261016/component/module_mp_kdm6_v15plain_component.F.gz",
+    "sha256": "0240e77e25f298c2e064d86f30db4c32b727fd6696c2f80e64477780436c6803",
+    "source_sha256": "e7b4225681cfce25c7096ceb196108ffe8d2e5ee2e4e309e0b890cd6093d1b20",
+    "source_bytes": 361694,
+    "compressed_bytes": 58321
+  },
+  "final_source_archive_not_used_for_this_replay": {
+    "path": "docs/evidence/pr87_two_step_v15_20261016/component/module_mp_kdm6_v15_final_failure_diagnostics.F.gz",
+    "sha256": "ed764b0f70b7c51c403ba5cf3de94013368608df4855dbee2841a2b44bf10b06",
+    "source_sha256": "cacefe3d99d744c26203068791e83a991fa6db2d6e33a5a4ba950fa4f24fe738",
+    "source_bytes": 362857,
+    "compressed_bytes": 58517
+  },
+  "generated_outputs": [
+    {
+      "name": "kdm6_first_call_post.raw",
+      "bytes": 195542592,
+      "sha256": "9de31a5d73070137ffdc0976b05b72ea87bfda309bd2a244f490feaf9f15f75e"
+    },
+    {
+      "name": "kdm6_first_call_pre.raw",
+      "bytes": 195542592,
+      "sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847"
+    },
+    {
+      "name": "pr67_kdm6_process.raw",
+      "bytes": 83442240,
+      "sha256": "97780c508bada06e9d49cd2b3580ad555d893bf32f030cd249c28dce21936a43"
+    },
+    {
+      "name": "pr76_target_call.raw",
+      "bytes": 194,
+      "sha256": "d3682a7555cf9bca3807e450b32fb4fde00beb0098628949459ea2923dddf239"
+    },
+    {
+      "name": "pr76_thread_entry.raw",
+      "bytes": 37,
+      "sha256": "e154e6020002f02ae6d823093fe66bb88750fac1a1a9b52fcf70d69dc339dbd1"
+    },
+    {
+      "name": "pr77_native_species.raw",
+      "bytes": 24430,
+      "sha256": "7e8cdd68e8a41c8350473bbbd6c54b9a512ab92a25daf3c4fd45b15441b5ffca"
+    },
+    {
+      "name": "pr85_graupel_sedimentation_budget.raw",
+      "bytes": 26169586,
+      "sha256": "00f2a915837eb51ae3fc4867fbd85847a5e10133525678b6b4b8fab1b339da67"
+    },
+    {
+      "name": "pr85_ice_sedimentation_budget.raw",
+      "bytes": 21678440,
+      "sha256": "d901f9ca8330b1e69632dcb52add9860dbe443f28aa9995cbf38faf28eb85854"
+    },
+    {
+      "name": "pr85_ice_transition_branch.raw",
+      "bytes": 2652300,
+      "sha256": "f562ab48620cf2abdd9f84a44dcd2fa7ffcc39b41c15d2f0e4d986c44b42da16"
+    },
+    {
+      "name": "pr85_kdm6_cold_budget.raw",
+      "bytes": 199080,
+      "sha256": "f3af9e2e2674208fa8f4ff2571ca8cc48cff58e553020ab215bbc1783af4390d"
+    },
+    {
+      "name": "pr85_kdm6_cutoff_budget.raw",
+      "bytes": 153529758,
+      "sha256": "497d1dc9375085178ac197fab3d90b8caaab7f2276e1af1ad9f143a823978766"
+    },
+    {
+      "name": "pr85_kdm6_freezing_budget.raw",
+      "bytes": 329055555,
+      "sha256": "a1c7ad367ea48dd8cf4cc7fe9c2b448df64937c7783eae00011e34b322f0d824"
+    },
+    {
+      "name": "pr85_kdm6_melt_budget.raw",
+      "bytes": 35413252,
+      "sha256": "768320c44c2dc93d5baf88e04d3b07a7e1eb73f2d6839a95a839e237667317d0"
+    },
+    {
+      "name": "pr85_kdm6_psd_boundary.raw",
+      "bytes": 4901032,
+      "sha256": "c364c67367677a82ea6302430d214bbbad8ce91079cffe5b992eb9bbc1a4212c"
+    },
+    {
+      "name": "pr85_kdm6_warm_budget.raw",
+      "bytes": 165480,
+      "sha256": "6657b019be592ba4d0830d79db6218ac05b1dc90a97c140a7b1ac71e34007e3e"
+    },
+    {
+      "name": "pr85_rain_freezing_budget.raw",
+      "bytes": 7712792,
+      "sha256": "cbe7a38ca7bc1e929e01cf2751407503337400239078b20358d2fdfd5aa4b4fe"
+    },
+    {
+      "name": "pr87_admission_reason.raw",
+      "bytes": 23514225,
+      "sha256": "2a84d17f8c4aeabff9c902ec45090a1530eeff03c5c58724740fc98387025e7a"
+    },
+    {
+      "name": "pr87_rain_public_store.raw",
+      "bytes": 54587,
+      "sha256": "62940a4d6e629d6b063aac02c0f78f641da653f72e4a026c15e880f567698982"
+    },
+    {
+      "name": "pr87_rain_sedimentation_budget.raw",
+      "bytes": 26399084,
+      "sha256": "13bff0efaf29cbb9f94d133b7277cf9d1aad1076623419615af03073ff5a7163"
+    },
+    {
+      "name": "stdout.log",
+      "bytes": 33595413,
+      "sha256": "b4769622fc3ffd98de0067eac0ab2da9071059fda7870bbd0dbd6cec3a126443"
+    }
+  ],
+  "archive_policy": "No raw arrays, large ledgers, object, executable, or full stdout are copied into docs evidence; only source, hashes, compact receipt, compile log, and success tail are included.",
+  "maintained_workspace_containment": "Earlier V13/V14/aborted preview component attempts wrote relative outputs in KLAPS50 and were quarantined by root; they are excluded from this source-bound isolated receipt."
+}

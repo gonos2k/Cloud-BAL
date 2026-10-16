@@ -1,0 +1,61 @@
+{
+  "schema": "pr87_closed_matched_runtime_archive_v1",
+  "candidate": "v20quiet",
+  "duration_seconds": 40,
+  "arms": {
+    "OFF": {
+      "status": "INCOMPLETE",
+      "returncode": 128,
+      "final_completed_step": 1,
+      "timestep_count": 1,
+      "earliest_fatal": "PR87 rain sedimentation packet rejected",
+      "executed_executable_sha256": "6e0c5d066258caa238f09b0c2398fd50c9ff818c9c12d7cd4d28da386e044383",
+      "changed_staged_inputs": [],
+      "changed_original_inputs": [],
+      "processing_errors": [],
+      "files": {
+        "receipt.json": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v20quiet_20261016/receipt.json",
+          "sha256": "8fcc6b0d17ff9ea64db3a26c14b09f79777233a92103f13cc38cb0f7ecf9111e",
+          "bytes": 49185
+        },
+        "preflight.json": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v20quiet_20261016/preflight.json",
+          "sha256": "53e10004a2726ed569abfa3359d10e55dbfd66631bb862fd1678c23fbde89233",
+          "bytes": 12735
+        },
+        "pr87_joint_OFF_40s_v20quiet_launch_20261016.json": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v20quiet_launch_20261016.json",
+          "sha256": "a75e9095fd0b81140d864e8a041dcdac8e9e3e0fffbdc5bc607444d57a0f9ab7",
+          "bytes": 845
+        },
+        "pr85_joint_transport_budget.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v20quiet_20261016/run/pr85_joint_transport_budget.raw.gz",
+          "sha256": "fc2c17dcf66e1340a2e1b86776d7843f6e9715a21f8c69a65b7265b0f35c7cc4",
+          "bytes": 374
+        },
+        "pr87_rain_diffusion_precision.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v20quiet_20261016/run/pr87_rain_diffusion_precision.raw.gz",
+          "sha256": "2ffd0d753b5038abc2eaff83c85e1ff2fa82c8a797430a5def08c9824bd391d2",
+          "bytes": 623
+        },
+        "pr87_rain_sedimentation_budget.raw.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v20quiet_20261016/run/pr87_rain_sedimentation_budget.raw.gz",
+          "sha256": "e6594587effa41614559a22bc0c1a2fc297dc8639db3799b91bf53d05770ece8",
+          "bytes": 4620880
+        },
+        "pr87_cloud_cycle.log": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v20quiet_20261016/run/pr87_cloud_cycle.log",
+          "sha256": "b6e3822d0b32de98c69c78d38f3cec0463966fdb882af3b06a976adf6842fed9",
+          "bytes": 2014
+        },
+        "rsl.error.0000.gz": {
+          "source_path": "/var/tmp/pr87_joint_OFF_40s_v20quiet_20261016/run/rsl.error.0000.gz",
+          "sha256": "444768daa4129ec886885b947d46822b9d33b33603cd7cc8bf7dab87291323d3",
+          "bytes": 2303
+        }
+      }
+    }
+  },
+  "scope": "closed receipts and sparse ledgers; full private stage arrays remain external and hash-bound"
+}

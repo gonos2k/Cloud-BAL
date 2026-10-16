@@ -1,0 +1,54 @@
+{
+  "candidate_build_receipt_sha256": "7ba54eb6f2de2ef9545c41d0b66f1bf0bddea30bd4b9d6ad1f55393fae84fa81",
+  "candidate_sources_manifest_sha256": "e52fde3b4d64625c77765a86bb9d8e0cf9cbfc7e6597e1610be38da835df7a6d",
+  "coupled60_source_failure_ledger_sha256": "a7bf559f1d3d3c1eb9c24c9ed0b14b4f8730c75d8aff25247aeb86b2f85563c6",
+  "generated_native_fragment_sha256": "d997a6393552465132ee7a743d59f5f37214e6521781dae928c44d6621001503",
+  "no_code_or_runtime_changes": true,
+  "off60_source_failure_ledger_sha256": "fd631bd3d5d25c46e5c3a0452dc0c3d9927a64b075d6ad3f8b71e89a0dc385e0",
+  "prefix_comparison": {
+    "COUPLED": {
+      "40s_records": 17,
+      "40s_sha256": "3c2a69422cedfce12fe4520fbf559eb8468512d0bddfe151ad25bb06f77e9e5f",
+      "60s_records": 20,
+      "60s_sha256": "f89b3842d3966d79fa015197d8d889e28c5726d37efa87a23e90cdcdd62d3bb6",
+      "first17_records_bitwise_identical": true
+    },
+    "OFF": {
+      "40s_records": 17,
+      "40s_sha256": "703d9c214d9c2c0e1105365fbf5cdf432058e2b5f8bdd340ac72067fd2fd72c4",
+      "60s_records": 20,
+      "60s_sha256": "31a0956ec17a3ff3e9985426a241486326ab8d8be6127736ea7705554b045449",
+      "first17_records_bitwise_identical": true
+    },
+    "method": "decoded stage trace record comparison: all stage metadata and every stored array compared bitwise across every record in 40-second trace vs same ordinal record in 60-second trace",
+    "scope_note": "17-record prefix contains complete stage histories for timesteps 1 and 2. The 60s traces append three timestep-3 pre-update tendency/state records."
+  },
+  "row": {
+    "air_b_rate64": 0.0,
+    "air_q_rate64": 0.0,
+    "arm": "OFF (matching COUPLED row byte-identical for these values)",
+    "base_bg": 0.0,
+    "base_qg": 0.0,
+    "candidate_bg": 6.49943661500707e-13,
+    "candidate_qg": 5.849492953506364e-10,
+    "candidate_ratio_qg_over_bg": 900.0000000000001,
+    "candidate_upper_residual_q_minus_900b": 1.0339757656912846e-25,
+    "dry_density_r32_printed": 0.7195977,
+    "dt_r32_printed": 6.666667,
+    "interpretation": "Strict 900 test rejects both source-only and full candidate. Pair base and air terms are zero; source rates themselves are already one binary64 representable step over 900. Not an air/source blend cancellation. Upstream origin of qg/bg source imbalance is not identified by this ledger.",
+    "newcarrier_r32_printed": 93593.88,
+    "oldcarrier_r32_printed": 93605.19,
+    "rate_ratio_qg_over_bg": 900.0000000000001,
+    "rate_upper_residual_q_minus_900b": 1.6940658945086007e-21,
+    "record": "FULL timestep=3, rk=1, pair=4, i=154,j=77,k=17",
+    "source_b_rate64": 9.124612089278627e-09,
+    "source_only_record": "SOURCE rk=1,pair=4,i=154,j=77,k=17",
+    "source_q_rate64": 8.212150880350765e-06,
+    "stored_pair_sentinel": [
+      -1.0,
+      -1.0
+    ]
+  },
+  "schema": "pr87_v39_60s_graupel_failure_independent_review_v1",
+  "strict_predicate": "joint_moment_store(... strict_mass_ratio=.TRUE.); strict_mass_ratio_valid64 computes ratio=q/b and requires <=900 exactly."
+}

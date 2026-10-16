@@ -1,0 +1,37 @@
+{
+  "review": "read-only numerical and source-policy review",
+  "reviewed_source": {
+    "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v9/native_update.f90",
+    "sha256": "28b0762b4192b66a0b8c55fe6101c01e84c4200fae400105cc82d6f0887f8609"
+  },
+  "no_air_receipt": {
+    "path": "docs/evidence/pr87_state_cycle_20261016/source_intensive_stage_ifx_o0_o2.json",
+    "sha256": "c51c1f57ace65f90b66437947e87fc2ab2ad4a0a67eb3fe0d83e489e01dcbeff",
+    "scope": "manufactured no-air fixture, not a native-cell replay",
+    "case": {
+      "carrier": 92363.85,
+      "dt": 20.0,
+      "baseline_weighted_ratio_gap_real32_ulps": 8.160412680357695,
+      "intensive_real32_stage_ratio_gap_real32_ulps": 7.263443915173411,
+      "expected": "baseline theta=1 rejects; source-first stage passes existing endpoint predicate and is bit-equal to the no-air committed state"
+    }
+  },
+  "finding": "No concrete algebraic or conservation blocker found under the declared final-endpoint validity policy.",
+  "source_first_contract": {
+    "source": "captured raw intensive REAL32 Q/N rates, with step, carrier, and coupled stored-rate identity checks",
+    "stage": "source_increment32 = REAL32(dt * raw_rate32); prepared32 = REAL32(base32 + source_increment32)",
+    "commit": "prepared pair is embedded in the candidate base, source-rate term is zeroed for the selected whole pair, and the common air operator uses the paired source-prepared donors",
+    "same_carrier_no_air_identity": "REAL64(W32 * prepared32) is exact for REAL32 operands; division by identical W reproduces prepared32",
+    "ledger": "proposal=dt64*stored_pressure_weighted_rate; represented=Wold64*(prepared-base); signed delta=represented-proposal; pressure-carrier amount units only"
+  },
+  "validity_scope": {
+    "virtual_intermediate": "prepared_donor_is_safe checks finite, range, nonnegative paired state, and number-volume representability; it does not require the virtual source-prepared Q/N ratio to lie in the PSD cone",
+    "committed_endpoint": "the common consumer retains its unchanged full continuous and stored PSD validation",
+    "quantum_case": "the existing joint storage policy is attempted only for the source-stage orphan/zero-quantum cases and requires its ideal continuous pair to pass the full cone predicate",
+    "interpretation": "This is a source-first split with a virtual intermediate that is not claimed to be PSD-realizable; no invalid intermediate is committed and no endpoint tolerance is relaxed. Acceptance assumes the committed endpoint is the validity boundary."
+  },
+  "limitations": [
+    "The no-air result is a manufactured component fixture, not an OFF/COUPLED native-cell replay.",
+    "The review does not establish 40-second runtime, scientific, or conservation validation for the complete model run."
+  ]
+}

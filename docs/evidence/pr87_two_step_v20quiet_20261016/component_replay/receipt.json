@@ -1,0 +1,176 @@
+{
+  "schema": "pr87_v20quiet_rain_component_replay_evidence_v1",
+  "scope": "single-column offline replay with the exact frozen V19 rain helper; captured sedimentation rates are held fixed across the Q-only counterfactual; not a native branch reproduction or model timestep pass",
+  "model_run": {
+    "run_receipt": "/var/tmp/pr87_joint_OFF_40s_v20quiet_20261016/receipt.json",
+    "run_receipt_sha256": "8fcc6b0d17ff9ea64db3a26c14b09f79777233a92103f13cc38cb0f7ecf9111e",
+    "status": "INCOMPLETE",
+    "returncode": 128,
+    "final_completed_step": 1,
+    "maximum_seen_timestep": 2,
+    "fatal": "PR87 rain sedimentation packet rejected",
+    "launch_receipt": "/var/tmp/pr87_joint_OFF_40s_v20quiet_launch_20261016.json",
+    "launch_receipt_sha256": "a75e9095fd0b81140d864e8a041dcdac8e9e3e0fffbdc5bc607444d57a0f9ab7",
+    "build_receipt": "/var/tmp/pr87_joint_cycle_build_20261016_v20quiet/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "e537964fcdfeb8e680e3380b8498a9f7b921597b0c6c57caf7dd835ea5a2ee28",
+    "source_manifest": "/var/tmp/pr87_joint_cycle_sources_20261016_v20diag/sources.json",
+    "source_manifest_sha256": "098a6bc5fa4fb66122782f211c6b44c7af993918f7fc63b06df8c1e0e30faa43",
+    "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+    "executed_executable_sha256": "6e0c5d066258caa238f09b0c2398fd50c9ff818c9c12d7cd4d28da386e044383"
+  },
+  "failure_capture": {
+    "path": "failure_rows.raw",
+    "sha256": "dd9238630f4d8ae6d40b0d4984986d4a2abfa8a20b5df036c6cb6ac4befebe55",
+    "record_sha256": "dd9238630f4d8ae6d40b0d4984986d4a2abfa8a20b5df036c6cb6ac4befebe55",
+    "header": {
+      "model_timestep": 2,
+      "i": 109,
+      "lat": 5,
+      "substep": 1,
+      "mstep": 2,
+      "dt": 20.0,
+      "pidn": 12566.37109375,
+      "dmr": 3.0,
+      "lambda_min": 961.0,
+      "lambda_max": 35000.0,
+      "qcrmin": 9.999999717180685e-10,
+      "nrmin": 0.009999999776482582
+    },
+    "level_count": 39
+  },
+  "baseline": {
+    "runs": {
+      "O0": {
+        "result_valid": false,
+        "strict_invalid_levels": [
+          19
+        ],
+        "stdout_sha256": "de012060473fba0c876b0f521a0b0328c3a6fe67c07238ca0d1990d0f02eebe6"
+      },
+      "O2": {
+        "result_valid": false,
+        "strict_invalid_levels": [
+          19
+        ],
+        "stdout_sha256": "de012060473fba0c876b0f521a0b0328c3a6fe67c07238ca0d1990d0f02eebe6"
+      }
+    },
+    "k19": {
+      "q": 5.0788977190574514e-11,
+      "n_helper_volume_r32": 0.09953904896974564,
+      "n_specific_public": 0.1732860952615738,
+      "n_specific_public_times_rho_r32": 0.09953904896974564,
+      "rho_r32": 0.5744202733039856,
+      "continuous_volume_n64": 0.0995390461999337,
+      "strict_n_upper": 0.09953904705024956,
+      "strict_n_excess": 1.919496075974969e-09
+    }
+  },
+  "joint_store_counterfactual": {
+    "module_source": "/var/tmp/pr87_joint_cycle_sources_20261016_v20diag/module_em_pr85.F",
+    "module_source_sha256": "2395efa838831824c0ab2aabf759219ccbf3e1df71fa937db7873c1aca1d0ac2",
+    "extracted_module_sha256": "19d0259c423a3035a418174292c14d8671d778ebfe48a604cc80923c2f854541",
+    "n_units": "source joint_moment_store input is specific public N; helper input remains captured volumetric N=REAL32(public_N*rho), asserted bitwise equal",
+    "continuous_input_q": 5.0788977190574514e-11,
+    "continuous_input_specific_n": 0.1732860952615738,
+    "stored_q": 5.0788980660021465e-11,
+    "stored_specific_n": 0.1732860952615738,
+    "q_adjustment_code": 2,
+    "q_delta": 3.469446951953614e-18,
+    "stored_helper_volume_n_r32": 0.09953904896974564,
+    "helper_volume_n_matches_capture": true,
+    "changed_state_fields": [
+      "Q at k=19 only"
+    ],
+    "captured_rate_arrays_changed": false,
+    "q_original_real32_hex_be": "2e5f5f4e",
+    "q_stored_real32_hex_be": "2e5f5f4f",
+    "strict_n_upper_before": 0.09953904705024956,
+    "strict_n_upper_after": 0.09953905384986361,
+    "strict_n_excess_before": 1.919496075974969e-09,
+    "strict_n_margin_after": 4.880117976391318e-09
+  },
+  "replay": {
+    "source_helper": "/var/tmp/pr87_joint_cycle_sources_20261016_v19/module_mp_kdm6.F",
+    "source_helper_module_sha256": "cacefe3d99d744c26203068791e83a991fa6db2d6e33a5a4ba950fa4f24fe738",
+    "helper_procedure_sha256": "ffba6621b5b0641ddc2d5a3175098a86ea979a031ee9ea0944c9faaa575fb5d9",
+    "driver": "component_replay_driver.F90",
+    "driver_sha256": "538e8dc049802713e6c7639c9be0240e15103a97816e1a9ce3dc9f0e3a6569cb",
+    "runs": {
+      "O0": {
+        "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "version": "ifx (IFX) 2026.0.0 20260331",
+        "flags": [
+          "-stand",
+          "f08",
+          "-warn",
+          "all",
+          "-check",
+          "all",
+          "-fpe0",
+          "-traceback",
+          "-O0",
+          "-fp-model",
+          "strict",
+          "-fimf-arch-consistency=true",
+          "-no-ftz"
+        ],
+        "executable_sha256": "de58ddb8e3f8b61d89b73e65efb0839346121d80ec211b9f19a2d9ed3b719ad9",
+        "compile_log_sha256": "3df76fd0f6da3bd3b41ef05527495d49a6c2bcb8ae9dd6ca05d9aee3a10f9eb6",
+        "stdout_sha256": "03b9176fa94adada07efc6a75f9262d1c0247ad2266b90e977647aa1226cfabb",
+        "result_valid": true,
+        "baseline_strict_invalid_levels": [
+          19
+        ],
+        "adjusted_strict_invalid_levels": []
+      },
+      "O2": {
+        "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "version": "ifx (IFX) 2026.0.0 20260331",
+        "flags": [
+          "-stand",
+          "f08",
+          "-warn",
+          "all",
+          "-fpe0",
+          "-traceback",
+          "-O2",
+          "-fp-model",
+          "strict",
+          "-fimf-arch-consistency=true",
+          "-no-ftz"
+        ],
+        "executable_sha256": "53ea9c3174b103956d6cf10894dc59807af2e74832836d9e5cc34443d9e4cfd3",
+        "compile_log_sha256": "d034a898db94133af258476789d56f02fa252c162e9f434fa86d7430445cca86",
+        "stdout_sha256": "03b9176fa94adada07efc6a75f9262d1c0247ad2266b90e977647aa1226cfabb",
+        "result_valid": true,
+        "baseline_strict_invalid_levels": [
+          19
+        ],
+        "adjusted_strict_invalid_levels": []
+      }
+    },
+    "packet_ledger": {
+      "proposed_q_packet": 0.019106500157332767,
+      "approved_q_packet": 0.01910649985493822,
+      "rejected_q_packet": 3.0239454690272893e-10,
+      "proposed_n_packet": 155677.07254668348,
+      "approved_n_packet": 155676.5877090223,
+      "rejected_n_packet": 0.48483766117715277,
+      "ground_q_packet": 0.00027694848695874585,
+      "ground_n_packet": 1267.20880982773,
+      "stored_delta_q": -0.00027694800940646975,
+      "stored_delta_n": -1267.2190736460034,
+      "residual_q": 4.77552276098147e-10,
+      "residual_n": -0.010263818273415382
+    },
+    "packet_ledger_source_sha256": "69bbef05b74f4aad639846062bc87576127d6fa018fef6e2043a5efb12439ddb"
+  },
+  "superseded_invalid_unit_trial": {
+    "path": "/var/tmp/pr87_second_call_component_replay_20261016/replay_i109_lat5_t2_n1_joint_store/receipt.json",
+    "sha256": "9276e09a5d1642490c9c2d68470e2b4ea23420774316088dcb905ce52774da3d",
+    "status": "EXCLUDED_INVALID_UNITS",
+    "reason": "passed volume N to joint_moment_store, whose API expects specific public N; no efficacy claim"
+  },
+  "selected_markers_sha256": "cebaa5e259aa83ec283f9c82f8ac8d22dc7661e3e83e347a97b4ddd5184e02ee"
+}
