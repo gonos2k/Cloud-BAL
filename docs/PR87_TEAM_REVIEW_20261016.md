@@ -54,7 +54,10 @@ cloud/rain/G checks and the unchanged global ice8-ULP criterion. Exact ice
 source counts remain nongating diagnostics. Step2 QV predictor negatives
 (4 PRE_RK, 4 RK1, 5 RK2 per arm) are recorded separately; completed endpoints pass.
 
-The same executable's matched60 extension is running. Historical V39 completed
+The same executable's matched60 extension is INCOMPLETE after two steps,
+with a third-step ProgB transient rejection. Independent review confirms the
+complete17-record40 prefix is byte-identical; T3 RK3/PRE gates pass but no
+T3 POST exists. Failure-cell operands are unavailable; no producer is asserted. Historical V39 completed
 execution40 but failed global ice PSD in13 cells per arm; its unchanged60
 extension failed at T3 RK1. Those outcomes remain preserved.
 

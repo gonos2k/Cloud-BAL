@@ -24,9 +24,19 @@ PSD theorem or scientific approval.
 | Completed Q/N/B, finite/unit, source-domain audit | PASS_SCOPED for both arms |
 | Common-air fraction | all six applications per arm theta=1 |
 | Step2 QV intermediate predictors | 4 PRE_RK, 4 RK1, 5 RK2 negative cells per arm; separately reported |
-| Same V42 60-second extension | RUNNING |
-| 600 seconds | NOT_RUN, pending valid60 |
+| Same V42 60-second extension | INCOMPLETE; third-step ProgB transient state rejection |
+| 600 seconds | NOT_RUN; known third-step failure |
 | Water/energy, host hybrid carrier, native mass–wind, observations, initial shock | OPEN |
+
+The same V42 matched60 attempt completes two steps, then both arms stop with
+`ProgB transient PSD state rejected` (exit128; no third POST_KDM6). Its closed
+receipts are preserved separately under `runtime60`. The independent audit
+confirms all17 records through40 seconds match each arm's complete40 run
+byte-for-byte. T3 RK3 and PRE_KDM6 also pass current completed-state gates;
+there is no T3 POST. PR77 has no failure-cell QG/BG record, so the exact call
+and producer remain unresolved. This is a longer-window failure, not a reversal
+of the two completed steps or a successful60 forecast. No600 run is launched
+against this known failure.
 
 Native wall times are 353.25 seconds OFF and 353.76 seconds COUPLED. These
 measure the whole selected run and do not isolate REAL128 overhead.
@@ -185,7 +195,7 @@ separately from intermediate RK predictors.
 
 ## Scientific gates remain open
 
-A valid repeated model step is a necessary condition, not scientific approval.
+The declared two-step acceptance is a necessary condition, not scientific approval.
 The original analysis inputs remain fixed; model process precision/admission
 and numerical transport have changed. Current candidate water/energy closure,
 host hybrid dry-mass accounting, pressure/Phi/face-flow/W balance, observation
@@ -296,3 +306,13 @@ The isolated 64×64×39 stencil benchmark (12 calls, pinned Intel O2) measured
 runtime attribution. The actual candidate runtime must be reported separately.
 The [captured replay and timing](evidence/pr87_graupel_r128_diffusion_20261016/review.md)
 records the scope and conservation residuals.
+
+
+## Longer-window boundary
+
+The [independent60 review](evidence/pr87_two_step_v42_20261016/runtime60/independent_review/review.json)
+retains the accepted two-step prefix and the later ProgB failure separately.
+Passing the completed Q/N/B/PSD gates does not certify every subsequent
+particle activity threshold or process input domain. The next investigation
+must identify the actual failing ProgB call and its producer from that fixed
+baseline; no density cap, number floor, or transient bypass was added here.

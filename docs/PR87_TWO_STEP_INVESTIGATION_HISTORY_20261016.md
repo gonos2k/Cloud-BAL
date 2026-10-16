@@ -997,5 +997,33 @@ The selected source, receipt, generator, and row-level replay are
 hash-bound in the [V41 replay](evidence/pr87_two_step_v41diag_20261016/ice_lineage.json)
 and [V41 lineage inventory](evidence/pr87_two_step_v41diag_20261016/lineage_archive_manifest.json).
 The [provenance incident record](evidence/pr87_two_step_v41diag_20261016/provenance_incident.json)
-documents that the prior frozen manifest could not be recovered. V42 follow-up
-is pending.
+documents that the prior frozen manifest could not be recovered. At the time
+this V41diag result was recorded, V42 follow-up was pending.
+
+
+## V42: matched 40-second run passes strict completed-state review
+
+Both matched V42 arms completed 40 seconds with return code 0, two distinct
+POST_KDM6 states, unchanged original and staged inputs, and all six JOINT_RK
+rows at theta=1. The independent review reports PASS for the completed-state
+audits: the exact selected cloud, rain, and graupel contracts pass, and the
+existing ice 8-ULP completed-state gate is unchanged and passes. Exact
+source-coefficient ice diagnostics are reported separately and do not replace
+or widen that gate. The review also records negative QV predictor counts of
+4 at T2 PRE_RK, 4 at RK1 end, and 5 at RK2 end; these are intermediate
+predictor diagnostics, separate from completed-state results.
+
+The review file is SHA-256
+`b6530931a16aa4587729109f51bb638f15dc1d399e43887e9b7f020899efc98a`.
+Receipts, preflights, launch records, runtime artifacts, and the independent
+completed-state audits are retained in the [V42 40-second archive](evidence/pr87_two_step_v42_20261016/runtime/).
+This is a selected-object pinned Intel partial-host validation, not a full
+clean WRF build or a general physical approval.
+
+The same-executable matched 60-second runs are INCOMPLETE in both arms, with
+return code 128 after completing timesteps 1 and 2. The earliest fatal is
+`ProgB transient PSD state rejected`; neither arm produces a timestep-3
+completed state. The 60-second receipts and runtime artifacts are retained in
+[the V42 60-second archive](evidence/pr87_two_step_v42_20261016/runtime60/).
+No producer attribution is claimed here. A 600-second run was not run while
+the timestep-3 failure remained.

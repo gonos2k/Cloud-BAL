@@ -54,7 +54,8 @@
       "OFF": 353.24981405958533,
       "COUPLED": 353.7646448779851
     },
-    "scope": "selected-object pinned Intel O2 partialhost; two distinct completed POSTs, fullairtheta1, unchangedinputs; not scientific approval"
+    "scope": "selected-object pinned Intel O2 partialhost; two distinct completed POSTs, fullairtheta1, unchangedinputs; not scientific approval",
+    "role": "accepted scoped40baseline; latestattempt60isINCOMPLETE"
   },
   "validation": {
     "focused_tests": {
@@ -122,13 +123,13 @@
       "scope": "single final focused Python suite; Fortran cases use pinned Intel O0/O2 in fresh scratch; not full canonical or full clean WRF"
     },
     "ice_extinction_completion": {
-      "status": "PASS_SCOPED_HELPER_AND_SOURCE_REVIEW",
+      "status": "PASS_SCOPED_HELPER_SOURCE_AND_NATIVE40",
       "evidence": "pr87_ice_extinction_20261016/",
       "v41_lineage": "pr87_two_step_v41diag_20261016/ice_lineage.json",
-      "meaning": "post-cap and aggregateeligibility; actualvalidstoredQI0-onlynumbertermination; nativeclosurepending"
+      "meaning": "post-cap and aggregate eligibility; actual valid storedQI0-only number termination; matched40 completed-stateauditPASS; longer60failslaterProgB"
     },
     "diffusion_intermediate_precision": {
-      "status": "PASS_SCOPED_REPLAY_AND_SOURCE_REVIEW",
+      "status": "PASS_SCOPED_REPLAY_SOURCE_AND_NATIVE40",
       "evidence": "pr87_graupel_r128_diffusion_20261016/review.json",
       "isolated_helper_runtime_ratio": 135.7,
       "meaning": "sameoperator, scalarREAL128intermediates/R64output; exactcapturedGboundarywitness; notuniversalcone/exactconservationproof"
@@ -143,8 +144,8 @@
     "observation_retention": "OPEN",
     "mass_wind_force_continuity_balance": "OPEN",
     "initial_shock_reduction": "OPEN",
-    "60_seconds": "RUNNING_V42_SAME_EXECUTABLE",
-    "600_seconds": "NOT_RUN_PENDING_VALID_60S",
+    "60_seconds": "INCOMPLETE_T3_PROGB_TRANSIENT",
+    "600_seconds": "NOT_RUN_KNOWN_T3_PROGB_FAILURE",
     "native_inactive_ice_psd_policy": "OPEN",
     "global_post_kdm6_ice_psd": "PASS_UNCHANGED_8_FLOAT32_ULP_ACCEPTANCE; exactsourcecountsremainnongating"
   },
@@ -336,24 +337,6 @@
     "first_call_prefix": "pr87_two_step_v41diag_20261016/first_call_prefix.json",
     "cause": "T2 cold full ice-category exhaustion unavailable to pending search; T3 G diffusion R64 rounding at exact900 donor boundary"
   },
-  "pending_host": {
-    "candidate": "V42",
-    "status": "RUNNING",
-    "requested_seconds": 60,
-    "arms": [
-      "OFF",
-      "COUPLED"
-    ],
-    "physical_changes_from_v39": [
-      "post-cap and aggregate cold ice extinction eligibility; number termination only at actual valid exact-zero stored QI",
-      "same horizontal diffusion stencil with scalar REAL128 intermediates and existing R32-input/R64-output API"
-    ],
-    "strict_endpoint_gates": "unchanged",
-    "scope": "same V42 executable/input matched60 extension;40closedcompleteandstrictPASS,60closurepending",
-    "source_manifest": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/sources.json",
-    "build_receipt": "pr87_two_step_v42_20261016/build_receipt.json",
-    "executable_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a"
-  },
   "provenance_limitations": {
     "v41_additive_lineage_inventory": "pr87_two_step_v41diag_20261016/lineage_archive_manifest.json",
     "v41_provenance_incident": "pr87_two_step_v41diag_20261016/provenance_incident.json",
@@ -378,5 +361,42 @@
     "strict_completed_state_audit": "FAIL",
     "strict_audit_failure": "13 ice pairs at timestep2 POST_KDM6 outside the global ice cone beyond8ULP in each arm; all below native inactive ice threshold, no checker change",
     "scope": "selected-object pinned Intel O2 partialhost; two unique completed POSTs and unchanged inputs; native execution completion is not full PSD or scientific approval"
-  }
+  },
+  "v42_60s_extension": {
+    "candidate": "V42",
+    "status": "INCOMPLETE",
+    "requested_seconds": 60,
+    "arms": [
+      "OFF",
+      "COUPLED"
+    ],
+    "physical_changes_from_v39": [
+      "post-cap and aggregate cold ice extinction eligibility; number termination only at actual valid exact-zero stored QI",
+      "same horizontal diffusion stencil with scalar REAL128 intermediates and existing R32-input/R64-output API"
+    ],
+    "strict_endpoint_gates": "unchanged",
+    "scope": "same V42 executable/input matched60; first two steps completed then later third-step ProgB transient rejection; no thirdPOST;40independentPASS remainsseparate",
+    "source_manifest": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/sources.json",
+    "build_receipt": "pr87_two_step_v42_20261016/build_receipt.json",
+    "executable_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+    "completed_seconds_per_arm": 40,
+    "completed_steps_per_arm": 2,
+    "returncode_per_arm": 128,
+    "earliest_fatal": "ProgB transient PSD state rejected",
+    "runtime_manifest": "pr87_two_step_v42_20261016/runtime60/runtime_manifest.json",
+    "independent_review": "pr87_two_step_v42_20261016/runtime60/independent_review/review.json",
+    "independent_review_sha256": "159fa2282744e73b689bdc8bbc9097a46fd562115d30bac3dbc41df0ab3012ec",
+    "first40_prefix": "PASS_BITWISE_ALL17_RECORDS_PER_ARM",
+    "strict_available_stage_checks": "steps1/2PASS;T3RK3andPRE_KDM6PASS;noT3POST",
+    "fatal_operands": "not captured: noPR77_FIRST; exactcallcoordinates/QG/BG unavailable",
+    "producer_cause": "UNRESOLVED"
+  },
+  "latest_actual_attempt": {
+    "candidate": "V42",
+    "requested_seconds": 60,
+    "status": "INCOMPLETE",
+    "detail": "v42_60s_extension"
+  },
+  "pull_request": "https://github.com/gonos2k/Cloud-BAL/pull/87",
+  "implementation_commit": "51e5f904d6329963a38677bdfb6d6b03a7f32210"
 }
