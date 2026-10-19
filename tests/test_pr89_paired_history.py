@@ -21,64 +21,124 @@ def _var(ds, name, dims, values, units):
     var.units = units
 
 
-def _history(path: Path, arm_shift: float, endpoint_shift: float, *, dx=2.0):
+def _history(path: Path, arm_shift: float, endpoint_shift: float, *, dx=2.0, records=2):
     with netCDF4.Dataset(path, "w") as ds:
-        dims = (("Time", 2), ("DateStrLen", 19), ("bottom_top", 2),
+        dims = (("Time", records), ("DateStrLen", 19), ("bottom_top", 2),
                 ("bottom_top_stag", 3), ("south_north", 4),
                 ("south_north_stag", 5), ("west_east", 5), ("west_east_stag", 6))
         for name, size in dims:
             ds.createDimension(name, size)
         ds.DX, ds.DY = dx, 3.0
         times = ds.createVariable("Times", "S1", ("Time", "DateStrLen"))
-        for record, timestamp in enumerate(("2026-08-16_13:00:00", "2026-08-16_13:01:00")):
+        timestamps = [(datetime(2026, 8, 16, 13, 0) + timedelta(seconds=60 * i)).strftime(
+            "%Y-%m-%d_%H:%M:%S") for i in range(records)]
+        for record, timestamp in enumerate(timestamps):
             times[record, :] = np.asarray(list(timestamp), dtype="S1")
         yx = ("Time", "south_north", "west_east")
         zyx = ("Time", "bottom_top", "south_north", "west_east")
         z = ("Time", "bottom_top")
         zstag = ("Time", "bottom_top_stag", "south_north", "west_east")
-        base = np.zeros((2, 4, 5))
-        base[1] = endpoint_shift
         for name, value, unit in (("MU", 1000.0, "Pa"), ("MUB", 0.0, "Pa"),
                                   ("MAPFAC_MX", 1.0, ""), ("MAPFAC_MY", 1.0, "")):
-            _var(ds, name, yx, np.full((2, 4, 5), value), unit)
-        _var(ds, "C1H", z, np.asarray([[1.0, 0.5]] * 2), "Dimensionless")
-        _var(ds, "C2H", z, np.asarray([[100.0, 200.0]] * 2), "Pa")
-        _var(ds, "DNW", z, np.asarray([[-0.5, -0.5]] * 2), "Dimensionless")
+            _var(ds, name, yx, np.full((records, 4, 5), value), unit)
+        _var(ds, "C1H", z, np.asarray([[1.0, 0.5]] * records), "Dimensionless")
+        _var(ds, "C2H", z, np.asarray([[100.0, 200.0]] * records), "Pa")
+        _var(ds, "DNW", z, np.asarray([[-0.5, -0.5]] * records), "Dimensionless")
         for name in paired.native.WATER:
-            values = np.full((2, 2, 4, 5), 0.01 + arm_shift)
-            values[1] += endpoint_shift
+            values = np.full((records, 2, 4, 5), 0.01 + arm_shift)
+            for record in range(1, records):
+                values[record] += endpoint_shift * record / (records - 1)
             _var(ds, name, zyx, values, "kg kg-1")
         for name in paired.native.MOMENTS:
-            values = np.full((2, 2, 4, 5), 2.0 + arm_shift)
-            values[1] += endpoint_shift
+            values = np.full((records, 2, 4, 5), 2.0 + arm_shift)
+            for record in range(1, records):
+                values[record] += endpoint_shift * record / (records - 1)
             _var(ds, name, zyx, values, "kg(-1)")
-        _var(ds, "QIB", zyx, np.full((2, 2, 4, 5), 1e-8 + arm_shift), "m(3) kg(-1)")
-        _var(ds, "P", zyx, np.full((2, 2, 4, 5), 10.0 + arm_shift), "Pa")
-        _var(ds, "PB", zyx, np.full((2, 2, 4, 5), 90000.0), "Pa")
-        _var(ds, "PH", zstag, np.full((2, 3, 4, 5), 1.0 + arm_shift), "m2 s-2")
-        _var(ds, "PHB", zstag, np.full((2, 3, 4, 5), 1000.0), "m2 s-2")
-        _var(ds, "T", zyx, np.full((2, 2, 4, 5), 0.25 + arm_shift), "K")
-        u = np.full((2, 2, 4, 6), arm_shift)
-        u[1] += endpoint_shift
-        v = np.full((2, 2, 5, 5), arm_shift)
-        v[1] += endpoint_shift
-        w = np.full((2, 3, 4, 5), arm_shift)
-        w[1] += endpoint_shift
+        _var(ds, "QIB", zyx, np.full((records, 2, 4, 5), 1e-8 + arm_shift), "m(3) kg(-1)")
+        _var(ds, "P", zyx, np.full((records, 2, 4, 5), 10.0 + arm_shift), "Pa")
+        _var(ds, "PB", zyx, np.full((records, 2, 4, 5), 90000.0), "Pa")
+        _var(ds, "PH", zstag, np.full((records, 3, 4, 5), 1.0 + arm_shift), "m2 s-2")
+        _var(ds, "PHB", zstag, np.full((records, 3, 4, 5), 1000.0), "m2 s-2")
+        _var(ds, "T", zyx, np.full((records, 2, 4, 5), 0.25 + arm_shift), "K")
+        u = np.full((records, 2, 4, 6), arm_shift)
+        v = np.full((records, 2, 5, 5), arm_shift)
+        w = np.full((records, 3, 4, 5), arm_shift)
+        for record in range(1, records):
+            u[record] += endpoint_shift * record / (records - 1)
+            v[record] += endpoint_shift * record / (records - 1)
+            w[record] += endpoint_shift * record / (records - 1)
         _var(ds, "U", ("Time", "bottom_top", "south_north", "west_east_stag"), u, "m s-1")
         _var(ds, "V", ("Time", "bottom_top", "south_north_stag", "west_east"), v, "m s-1")
         _var(ds, "W", zstag, w, "m s-1")
 
 
-def _receipt(path: Path, history: Path):
+def _receipt(path: Path, history: Path, endpoint=60):
     start = datetime(2026, 8, 16, 13, 0, 0)
     expected = [(start + timedelta(seconds=20 * i)).strftime("%Y-%m-%d_%H:%M:%S")
-                for i in (1, 2, 3)]
+                for i in range(1, endpoint // 20 + 1)]
     data = {"status": "COMPLETE", "returncode": 0, "expected_model_timestamps": expected,
             "model_timestamps": [{"timestamp": t} for t in expected],
             "generated_files": [{"path": history.name,
                                  "sha256": hashlib.sha256(history.read_bytes()).hexdigest()}]}
     path.write_text(json.dumps(data))
     return path
+
+
+def test_three_requested_history_times_are_receipt_bound_and_decomposed(tmp_path, monkeypatch):
+    monkeypatch.setattr(paired.native, "_constants", lambda _: (9.81, {"g_m_s2": 9.81}))
+    off, coupled = tmp_path / "off.nc", tmp_path / "coupled.nc"
+    _history(off, 0.0, 0.004, records=3)
+    _history(coupled, 0.002, 0.008, records=3)
+    result = paired._analyze(off, _receipt(tmp_path / "off.json", off, 120),
+                             coupled, _receipt(tmp_path / "coupled.json", coupled, 120),
+                             tmp_path / "unused.json",
+                             interval_seconds=60, requested_times_seconds=(0, 60, 120))
+    assert result["requested_elapsed_seconds"] == [0, 60, 120]
+    row = result["field_comparisons"]["QCLOUD"]
+    assert {key for key in row if key.startswith("deltaX_")} == {
+        "deltaX_T0_COUPLED_minus_OFF", "deltaX_T60_COUPLED_minus_OFF",
+        "deltaX_T120_COUPLED_minus_OFF"}
+    assert "delta_evolution_T120_minus_T0" in row
+    terms = result["temporal_carrier_decomposition_by_interval"]["QCLOUD"]
+    assert set(terms) == {"T0_to_T60", "T60_to_T120"}
+    assert terms["T60_to_T120"]["same_fixed_whole_native_grid"]["COUPLED_minus_OFF"][
+        "exact_identity_residual_max_abs"] < 1e-12
+
+
+def test_requested_elapsed_times_cannot_substitute_a_different_cadence(tmp_path, monkeypatch):
+    monkeypatch.setattr(paired.native, "_constants", lambda _: (9.81, {"g_m_s2": 9.81}))
+    off, coupled = tmp_path / "off.nc", tmp_path / "coupled.nc"
+    _history(off, 0.0, 0.004, records=3)
+    _history(coupled, 0.002, 0.008, records=3)
+    with pytest.raises(ValueError, match="declared history interval"):
+        paired._analyze(off, _receipt(tmp_path / "off.json", off, 120),
+                        coupled, _receipt(tmp_path / "coupled.json", coupled, 120),
+                        tmp_path / "unused.json", endpoint_seconds=120,
+                        interval_seconds=60, requested_times_seconds=(0, 30, 120))
+
+
+def test_explicit_endpoint_must_match_last_requested_time(tmp_path, monkeypatch):
+    monkeypatch.setattr(paired.native, "_constants", lambda _: (9.81, {"g_m_s2": 9.81}))
+    off, coupled = tmp_path / "off.nc", tmp_path / "coupled.nc"
+    _history(off, 0.0, 0.004, records=4)
+    _history(coupled, 0.002, 0.008, records=4)
+    with pytest.raises(ValueError, match="explicit endpoint must equal"):
+        paired._analyze(off, _receipt(tmp_path / "off.json", off, 180),
+                        coupled, _receipt(tmp_path / "coupled.json", coupled, 180),
+                        tmp_path / "unused.json", endpoint_seconds=180,
+                        interval_seconds=60, requested_times_seconds=(0, 60, 120))
+
+
+def test_legacy_endpoint_does_not_round_down_to_an_available_time(tmp_path, monkeypatch):
+    monkeypatch.setattr(paired.native, "_constants", lambda _: (9.81, {"g_m_s2": 9.81}))
+    off, coupled = tmp_path / "off.nc", tmp_path / "coupled.nc"
+    _history(off, 0.0, 0.004, records=3)
+    _history(coupled, 0.002, 0.008, records=3)
+    with pytest.raises(ValueError, match="integer number of history intervals"):
+        paired._analyze(off, _receipt(tmp_path / "off.json", off, 120),
+                        coupled, _receipt(tmp_path / "coupled.json", coupled, 120),
+                        tmp_path / "unused.json", endpoint_seconds=90,
+                        interval_seconds=60)
 
 
 @pytest.fixture

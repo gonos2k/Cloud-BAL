@@ -1,0 +1,18 @@
+# C7 completed runtime audit (180-second pair)
+
+This independent check binds each run receipt to its preflight, C7 source receipt, overlay build, executable and trace artifact. Both runs completed all nine model calls through 180 seconds. The executable is the partial overlay build recorded in the native build receipt, not a clean whole-model build.
+
+- **COUPLED:** COMPLETE, rc 0, 9/9 completed; run receipt SHA `72fe00aebe9db05270c747b974218114d3f3f83d1d7c6a87d4032b6399c5a0e0`, source receipt `8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675`, executable `5f5599e38759a9e2be27a9e7e0977370592c92cab328062d07eb359bddd19572`, trace payload `f2e12c5559aafc59c9604aa285aa7dfec6c8b803ac7b56f338b5cac7d653dbeb` / gzip `ac1bf866d3c758c82808a6b5ba9ff9a04d0f915717add1c8b7a7ebdb61bf77cd`. The strict state audit has 54 records (9 PRE_RK, 27 RK_STAGE_END, 9 PRE_KDM6, 9 POST_KDM6); density verification passed for all nine steps. Strict cloud/rain/graupel endpoint checks have no violations. The generic audit remains **FAIL** from ice only (231 8-ULP outliers across completed and intermediate state snapshots).
+- **OFF:** COMPLETE, rc 0, 9/9 completed; run receipt SHA `3dc5773680fb0d92cbdf2aeb0a8ebaa1739e11c6366152add51e949c6f767ab1`, source receipt `65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e`, executable `5f5599e38759a9e2be27a9e7e0977370592c92cab328062d07eb359bddd19572`, trace payload `59ffbe79d42089f4d15589864977ad693f3f2544f4f6ccab431271cc16b8acb8` / gzip `976d7b11d65677f4257d37a5d1d686e41982024ffa2d60f803546197f877d56b`. The strict state audit has 54 records (9 PRE_RK, 27 RK_STAGE_END, 9 PRE_KDM6, 9 POST_KDM6); density verification passed for all nine steps. Strict cloud/rain/graupel endpoint checks have no violations. The generic audit remains **FAIL** from ice only (233 8-ULP outliers across completed and intermediate state snapshots).
+
+## Generic ice gate and source-native split
+
+The existing generic 8-ULP state audit is preserved unchanged as `off_generic_completed_state_audit.json.gz` and `coupled_generic_completed_state_audit.json.gz`; both overall statuses are **FAIL**. Its outliers are ice only. A separate source-native classification applies `PR85_ICE_NATIVE_INACTIVE_MAX = NEAREST(1.e-14,-1.0)` using REAL32 nextafter-below semantics. It classifies every outlier as inactive, with zero active outliers in each arm. This classification does not waive, reclassify, or alter the generic audit result or tolerances. The separate counts include repeated carried state snapshots.
+
+## T8 public state capture
+
+The receipt-bound `POST_KDM6` stage record at global `(i,j,k)=(188,222,5)` in both arms records QR `3481DDEF` (`2.4189600367208186e-7 kg/kgdry`), public NR `3C8BF3B3` (`0.01708397828042507 #/kgdry`), and DEN `3F8E9DE1` (`1.114193081855774 kg/m3`). This is the state after the timestep-8 KDM6 call returned; it is separate from the internal PSD reconstruction event and does not establish a complete number budget. The parser binds the C7 raw/gzip stage artifact to each run receipt, decodes the existing 15-integer big-endian record header and STATE_FIELDS schema, and indexes the `(j,k,i)` array as `[222-jts,5-kts,188-its]`.
+
+The full receipt/source/executable/artifact bindings, per-state audit results, separate ice split, and target values are in `independent_runtime_audit.json`. The stream extractor is `independent_runtime_audit.py`. `SHA256SUMS` covers every file in this directory except itself.
+
+The completed 180-second pair does not establish global number closure, a full source-call count, physical acceptance, or completion of the still-open NR-cap budget.

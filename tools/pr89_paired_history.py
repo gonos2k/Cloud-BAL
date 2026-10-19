@@ -181,23 +181,10 @@ def _compare_field(off: np.ndarray, coupled: np.ndarray, grid: dict[str, Any],
     return {"shape": list(delta.shape), "scopes": scopes}
 
 
-def _evolution_field(off0: np.ndarray, off60: np.ndarray,
-                     coupled0: np.ndarray, coupled60: np.ndarray,
-                     grid: dict[str, Any], support: np.ndarray) -> dict[str, Any]:
-    initial = coupled0 - off0
-    endpoint = coupled60 - off60
-    change = endpoint - initial
-    return {"deltaX_T0_COUPLED_minus_OFF": _compare_field(off0, coupled0, grid, support),
-            "deltaX_T60_COUPLED_minus_OFF": _compare_field(off60, coupled60, grid, support),
-            "delta_evolution_T60_minus_T0": {
-                "shape": list(change.shape), "scopes": {
-                    scope: _stats(change, mask)
-                    for scope, mask in _scopes(change, grid, support).items()}}}
-
-
 def _carrier_rows(off0: dict[str, np.ndarray], off60: dict[str, np.ndarray],
                   coupled0: dict[str, np.ndarray], coupled60: dict[str, np.ndarray],
-                  grid: dict[str, Any], support: np.ndarray) -> dict[str, Any]:
+                  grid: dict[str, Any], support: np.ndarray,
+                  endpoint_label: str = "T60") -> dict[str, Any]:
     mass0_off, mass0_coupled = off0["DRY_MASS"], coupled0["DRY_MASS"]
     mass60_off, mass60_coupled = off60["DRY_MASS"], coupled60["DRY_MASS"]
     output = {}
@@ -226,7 +213,7 @@ def _carrier_rows(off0: dict[str, np.ndarray], off60: dict[str, np.ndarray],
                                  "COUPLED": {"extensive_change": _stats(coupled_temporal, mask),
                                              "mean_dry_mass_times_mixing_ratio_change": _stats(coupled_carrier, mask),
                                              "mean_mixing_ratio_times_dry_mass_change": _stats(coupled_mixing, mask)}},
-                             "delta_extensive_evolution_T60_minus_T0": {
+                             f"delta_extensive_evolution_{endpoint_label}_minus_T0": {
                                  "extensive_change": _stats(evolution, mask),
                                  "mean_dry_mass_times_mixing_ratio_contribution": _stats(evolution_carrier, mask),
                                  "mean_mixing_ratio_times_dry_mass_contribution": _stats(evolution_mixing, mask),
@@ -237,9 +224,42 @@ def _carrier_rows(off0: dict[str, np.ndarray], off60: dict[str, np.ndarray],
     return output
 
 
+def _temporal_carrier_rows(snapshots: dict[str, tuple[dict[str, np.ndarray], dict[str, np.ndarray]]],
+                           labels: list[str], grid: dict[str, Any],
+                           support: np.ndarray) -> dict[str, Any]:
+    output = {}
+    for name in TRACERS:
+        intervals = {}
+        for start, end in zip(labels, labels[1:]):
+            off_start, coupled_start = snapshots[start]
+            off_end, coupled_end = snapshots[end]
+            off_delta = _decomposition(off_start["DRY_MASS"], off_start[name],
+                                       off_end["DRY_MASS"], off_end[name])
+            coupled_delta = _decomposition(coupled_start["DRY_MASS"], coupled_start[name],
+                                           coupled_end["DRY_MASS"], coupled_end[name])
+            cross_arm = tuple(coupled - off for off, coupled in zip(off_delta, coupled_delta))
+            scopes = {}
+            for scope, mask in _scopes(cross_arm[0], grid, support).items():
+                scopes[scope] = {
+                    "OFF": {"extensive_change": _stats(off_delta[0], mask),
+                            "mean_dry_mass_times_mixing_ratio_change": _stats(off_delta[1], mask),
+                            "mean_mixing_ratio_times_dry_mass_change": _stats(off_delta[2], mask)},
+                    "COUPLED": {"extensive_change": _stats(coupled_delta[0], mask),
+                                "mean_dry_mass_times_mixing_ratio_change": _stats(coupled_delta[1], mask),
+                                "mean_mixing_ratio_times_dry_mass_change": _stats(coupled_delta[2], mask)},
+                    "COUPLED_minus_OFF": {"extensive_change": _stats(cross_arm[0], mask),
+                                          "mean_dry_mass_times_mixing_ratio_contribution": _stats(cross_arm[1], mask),
+                                          "mean_mixing_ratio_times_dry_mass_contribution": _stats(cross_arm[2], mask),
+                                          "exact_identity_residual_max_abs": _max_abs(cross_arm[0] - cross_arm[1] - cross_arm[2], mask)}}
+            intervals[f"{start}_to_{end}"] = scopes
+        output[name] = intervals
+    return output
+
+
 def _analyze(off_path: Path, off_receipt: Path, coupled_path: Path,
              coupled_receipt: Path, constants_receipt: Path,
-             endpoint_seconds: int = 60, interval_seconds: int = 60) -> dict[str, Any]:
+             endpoint_seconds: int | None = None, interval_seconds: int = 60,
+             requested_times_seconds: tuple[int, ...] | None = None) -> dict[str, Any]:
     gravity, constants_identity = native._constants(constants_receipt)
     off_idx, off_grid = _records(off_path)
     coupled_idx, coupled_grid = _records(coupled_path)
@@ -247,6 +267,22 @@ def _analyze(off_path: Path, off_receipt: Path, coupled_path: Path,
     if set(off_idx) != set(coupled_idx):
         raise ValueError("OFF and COUPLED history timestamps differ")
     times = sorted(off_idx)
+    if interval_seconds <= 0 or (endpoint_seconds is not None and endpoint_seconds <= 0):
+        raise ValueError("endpoint and history interval must be positive")
+    if requested_times_seconds is None:
+        endpoint_seconds = 60 if endpoint_seconds is None else endpoint_seconds
+        if endpoint_seconds % interval_seconds:
+            raise ValueError("requested endpoint must be an integer number of history intervals")
+        requested_times_seconds = tuple(range(0, endpoint_seconds + 1, interval_seconds))
+    if (len(requested_times_seconds) < 2 or requested_times_seconds[0] != 0
+            or any(b <= a for a, b in zip(requested_times_seconds, requested_times_seconds[1:]))):
+        raise ValueError("requested elapsed times must start at 0 and increase strictly")
+    if endpoint_seconds is not None and endpoint_seconds != requested_times_seconds[-1]:
+        raise ValueError("explicit endpoint must equal the last requested elapsed time")
+    endpoint_seconds = requested_times_seconds[-1]
+    intervals = tuple(b - a for a, b in zip(requested_times_seconds, requested_times_seconds[1:]))
+    if len(set(intervals)) != 1 or intervals[0] != interval_seconds:
+        raise ValueError("requested elapsed times must follow the declared history interval")
     off_window = native._receipt_window(off_receipt, [off_path], times, endpoint_seconds,
                                        interval_seconds, False)
     coupled_window = native._receipt_window(coupled_receipt, [coupled_path], times, endpoint_seconds,
@@ -255,15 +291,15 @@ def _analyze(off_path: Path, off_receipt: Path, coupled_path: Path,
         raise ValueError("OFF and COUPLED receipt-derived run origins differ")
     if off_window["run_completed_timestamp"] != coupled_window["run_completed_timestamp"]:
         raise ValueError("OFF and COUPLED receipt completed timestamps differ")
-    expected_times = [datetime.strptime(off_window["run_start_timestamp"], "%Y-%m-%d_%H:%M:%S")]
-    expected_times.append(expected_times[0] + timedelta(seconds=endpoint_seconds))
+    run_start = datetime.strptime(off_window["run_start_timestamp"], "%Y-%m-%d_%H:%M:%S")
+    expected_times = [run_start + timedelta(seconds=value) for value in requested_times_seconds]
     if times != expected_times:
-        raise ValueError("paired histories must contain exactly the receipt-bound elapsed T0/T60 endpoints")
+        raise ValueError("paired histories must contain exactly the declared receipt-bound elapsed times")
     geometry_match = _verify_static_geometry(off_path, coupled_path)
-    snapshots = {"T0": (_load_snapshot(off_path, off_idx, times[0], off_grid, gravity),
-                         _load_snapshot(coupled_path, coupled_idx, times[0], coupled_grid, gravity)),
-                 "T60": (_load_snapshot(off_path, off_idx, times[1], off_grid, gravity),
-                          _load_snapshot(coupled_path, coupled_idx, times[1], coupled_grid, gravity))}
+    labels = [f"T{seconds}" for seconds in requested_times_seconds]
+    snapshots = {label: (_load_snapshot(off_path, off_idx, when, off_grid, gravity),
+                         _load_snapshot(coupled_path, coupled_idx, when, coupled_grid, gravity))
+                 for label, when in zip(labels, times)}
     for label, pair in snapshots.items():
         for arm_index in (0, 1):
             pair[arm_index].update(_face_differences(pair[arm_index], off_grid["dx"], off_grid["dy"]))
@@ -316,13 +352,23 @@ def _analyze(off_path: Path, off_receipt: Path, coupled_path: Path,
             descriptors[name] = {"source_variables": list(source_names), "variables": off_vars,
                                  "exact_match_across_arms": True, **extra}
     for name in (*COMPARE_FIELDS, "DRY_MASS", "U_xface_difference_per_dx", "V_yface_difference_per_dy"):
-        row = _evolution_field(snapshots["T0"][0][name], snapshots["T60"][0][name],
-                               snapshots["T0"][1][name], snapshots["T60"][1][name], off_grid, water_support)
+        pairs = [(snapshots[label][0][name], snapshots[label][1][name]) for label in labels]
+        row = {f"deltaX_{label}_COUPLED_minus_OFF": _compare_field(off, coupled, off_grid, water_support)
+               for label, (off, coupled) in zip(labels, pairs)}
+        row[f"delta_evolution_{labels[-1]}_minus_T0"] = {
+            "shape": list((pairs[-1][1] - pairs[-1][0]).shape), "scopes": {
+                scope: _stats((pairs[-1][1] - pairs[-1][0]) - (pairs[0][1] - pairs[0][0]), mask)
+                for scope, mask in _scopes(pairs[-1][1] - pairs[-1][0], off_grid, water_support).items()}}
         row["descriptor"] = descriptors[name]
         fields[name] = row
+    carrier_rows = _carrier_rows(snapshots[labels[0]][0], snapshots[labels[-1]][0],
+                                 snapshots[labels[0]][1], snapshots[labels[-1]][1],
+                                 off_grid, water_support, labels[-1])
     return {"schema": "pr89_paired_history_diagnostics_v1", "status": "ACCOUNTED",
             "physical_approval": False,
-            "scope": "same-grid OFF versus COUPLED native history diagnostics at elapsed T0/T60; no observation fit or process closure",
+            "scope": f"same-grid OFF versus COUPLED native history diagnostics at elapsed {', '.join(labels)}; no observation fit or process closure",
+            "requested_elapsed_seconds": list(requested_times_seconds),
+            "available_elapsed_seconds": list(requested_times_seconds),
             "history_inputs": {"OFF": off_window, "COUPLED": coupled_window},
             "constants": constants_identity,
             "geometry": {"mass_grid_shape_south_north_west_east": list(off_grid["shape"]),
@@ -332,9 +378,9 @@ def _analyze(off_path: Path, off_receipt: Path, coupled_path: Path,
                              "same_fixed_interior_boundary_ring_excluded": "index 1:-1 on each horizontal axis; descriptive subset, not asserted to equal a model consumer or observation footprint",
                              "initial_native_analysis_water_support": support_info}},
             "field_comparisons": fields,
-            "endpoint_carrier_decomposition_T60": _carrier_rows(
-                snapshots["T0"][0], snapshots["T60"][0], snapshots["T0"][1], snapshots["T60"][1],
-                off_grid, water_support),
+            f"endpoint_carrier_decomposition_{labels[-1]}": carrier_rows,
+            "temporal_carrier_decomposition_by_interval": _temporal_carrier_rows(
+                snapshots, labels, off_grid, water_support),
             "staggered_wind_note": "U/V/W are reported on their native C-grid face arrays; no mass-point remap is used for paired differences.",
             "face_derivative_diagnostics": "computational-grid adjacent U/V face finite differences divided by DX/DY are compared on mass cells; no map-factor correction, physical divergence, full momentum equation, or continuity closure is claimed",
             "reflectivity_cloud_fraction": "not observations; no observation fit computed"}
@@ -345,9 +391,14 @@ def main() -> None:
     for name in ("off-history", "off-receipt", "coupled-history", "coupled-receipt",
                  "constants-receipt", "output"):
         parser.add_argument(f"--{name}", type=Path, required=True)
+    parser.add_argument("--endpoint-seconds", type=int)
+    parser.add_argument("--history-interval-seconds", type=int, default=60)
+    parser.add_argument("--requested-times-seconds", type=int, nargs="+")
     args = parser.parse_args()
     result = _analyze(args.off_history, args.off_receipt, args.coupled_history,
-                      args.coupled_receipt, args.constants_receipt)
+                      args.coupled_receipt, args.constants_receipt,
+                      args.endpoint_seconds, args.history_interval_seconds,
+                      tuple(args.requested_times_seconds) if args.requested_times_seconds else None)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
 

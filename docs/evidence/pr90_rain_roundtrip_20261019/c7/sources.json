@@ -1,0 +1,41 @@
+{
+  "schema": "pr90_native_sources_v1",
+  "identity": "PR90-C7",
+  "base_commit": "3bc7bb8df6a100b60c6f8908ad93a7c3d981f360",
+  "parent_manifest": "/var/tmp/pr89_sources_20261019_c5/sources.json",
+  "parent_manifest_sha256": "67d5bff1712704ce6b8a53df628c80f737d226e988f85e9826e782354382c851",
+  "source_overrides": {
+    "module_microphysics_zero_out.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_microphysics_zero_out.F",
+    "module_em.o": "/var/tmp/pr90_sources_c7_20261019/module_em.F",
+    "module_bl_shinhong.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_shinhong.F",
+    "module_bl_fogdes.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_fogdes.F",
+    "module_pbl_driver.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_pbl_driver.F",
+    "module_mp_kdm6.o": "/var/tmp/pr90_sources_c7_20261019/module_mp_kdm6.F",
+    "module_first_rk_step_part1.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part1.F",
+    "module_first_rk_step_part2.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part2.F",
+    "solve_em.o": "/var/tmp/pr87_followup_sources_20261019_v50/solve_em.F"
+  },
+  "source_sha256": {
+    "module_microphysics_zero_out.o": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+    "module_em.o": "090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b",
+    "module_bl_shinhong.o": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+    "module_bl_fogdes.o": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+    "module_pbl_driver.o": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+    "module_mp_kdm6.o": "983095a0aa0c76eab4efdda27f9435e61634e08e542ef9bd096aa4cf8004eca4",
+    "module_first_rk_step_part1.o": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+    "module_first_rk_step_part2.o": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+    "solve_em.o": "412183300ea8dd6af028ac1a5254f937477b054630db4eb1f5910a6bf974c3c5"
+  },
+  "extra_support_source": "/var/tmp/pr90_sources_c7_20261019/pr90_cycle_support.f90",
+  "extra_support_sha256": "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6",
+  "parent_support_source": "/var/tmp/pr89_native_build_20261019_c5/source/pr87_cloud_cycle_support.f90",
+  "parent_support_sha256": "98f9f546b6273609a261c8ec39c2cb578d301eaff7ce0b829bb6e2dad3aea348",
+  "maintained_core_sha256": "c8ecedde5cc8f9adedf6cf082054596ca1c0d6a3565d152c73d730c00cd678f3",
+  "public_store_helper_sha256": "e4d3c9c12cfa36d937fbfbb393031af6b612e45297ee57e0a53897f8c4009dae",
+  "column_summary_enabled": true,
+  "producer_trace_enabled": false,
+  "warm_output_contract_enabled": true,
+  "final_rain_bounds_enabled": true,
+  "physics_changed": true,
+  "scope": "selected-object partial host; warm packet output admission and exact final rain PSD reconstruction after the last number cap; no initial-input/prior/FP change"
+}

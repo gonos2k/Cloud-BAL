@@ -1,0 +1,853 @@
+{
+  "status": "D2_INCOMPLETE_T7_TARGET_PACKET",
+  "run_path": "/var/tmp/pr90_OFF_140s_d2_20261019",
+  "run_receipt_sha256": "a25df40c099f4475d30c11ea8bb2ffea4b4bd4b289a68e357d7e02fb7e6b3503",
+  "run": {
+    "status": "INCOMPLETE",
+    "returncode": 128,
+    "final_completed_step": 6,
+    "expected_model_timestamps": [
+      "2026-08-16_13:00:20",
+      "2026-08-16_13:00:40",
+      "2026-08-16_13:01:00",
+      "2026-08-16_13:01:20",
+      "2026-08-16_13:01:40",
+      "2026-08-16_13:02:00",
+      "2026-08-16_13:02:20"
+    ],
+    "model_timestamps": [
+      {
+        "timestamp": "2026-08-16_13:00:20",
+        "elapsed_seconds": 243.96361
+      },
+      {
+        "timestamp": "2026-08-16_13:00:40",
+        "elapsed_seconds": 108.97467
+      },
+      {
+        "timestamp": "2026-08-16_13:01:00",
+        "elapsed_seconds": 109.3858
+      },
+      {
+        "timestamp": "2026-08-16_13:01:20",
+        "elapsed_seconds": 111.72365
+      },
+      {
+        "timestamp": "2026-08-16_13:01:40",
+        "elapsed_seconds": 109.92426
+      },
+      {
+        "timestamp": "2026-08-16_13:02:00",
+        "elapsed_seconds": 117.81963
+      }
+    ]
+  },
+  "target": {
+    "step": 7,
+    "lat": 222,
+    "i": 193,
+    "k": 4,
+    "loop": 1
+  },
+  "source_sha256": "14c6145df549541fae2aab84e98ee480ba6ac8a7c769dd926a6d44f22451c35d",
+  "artifacts": {
+    "producer_trace": {
+      "path": "/var/tmp/pr90_OFF_140s_d2_20261019/run/pr90_t7_producer_trace.raw.gz",
+      "compressed_sha256": "3a4895ac30053629018e1da8bdb304afa87835a9347769b8723b2f069c5b1272",
+      "payload_sha256": "e32cf8765c965d7a6cd94b49f07e121e5e1ff0b2382e9fc501f6d3c93a1069ad"
+    },
+    "warm_ledger": {
+      "path": "/var/tmp/pr90_OFF_140s_d2_20261019/run/pr85_kdm6_warm_budget.raw.gz",
+      "compressed_sha256": "81a32c9fe409d0ff15f9bbf8d764c58ce564617cb99d7c4c8c3dd375f42d9045",
+      "payload_sha256": "0b43b0e67e16145e8d55d2092630b89a324ef04fbb2b186f502e33a118a7175c"
+    }
+  },
+  "trace_records": [
+    {
+      "stage": "ENTRY",
+      "step": 7,
+      "lat": 222,
+      "i": 193,
+      "k": 4,
+      "loop": 0,
+      "state_hex32": {
+        "rho": "3F904AFD",
+        "T": "4393553D",
+        "Qc": "3860E81C",
+        "Nc": "4D839342",
+        "Qi": "00000000",
+        "Ni": "00000000",
+        "Qr": "00000000",
+        "Nr": "00000000",
+        "Qs": "00000000",
+        "Qg": "00000000",
+        "Nccn": "4CC0E489",
+        "Bg": "00000000",
+        "Qv": "3C880774"
+      },
+      "status": -1
+    },
+    {
+      "stage": "POST_SED_PRE_STAGE1",
+      "step": 7,
+      "lat": 222,
+      "i": 193,
+      "k": 4,
+      "loop": 1,
+      "state_hex32": {
+        "rho": "3F904AFD",
+        "T": "4393553D",
+        "Qc": "3860E81C",
+        "Nc": "4D839342",
+        "Qi": "00000000",
+        "Ni": "00000000",
+        "Qr": "308D048E",
+        "Nr": "38AB5008",
+        "Qs": "00000000",
+        "Qg": "00000000",
+        "Nccn": "4CC0E489",
+        "Bg": "00000000",
+        "Qv": "3C880774"
+      },
+      "status": 0
+    },
+    {
+      "stage": "STAGE1_PSD_END",
+      "step": 7,
+      "lat": 222,
+      "i": 193,
+      "k": 4,
+      "loop": 1,
+      "state_hex32": {
+        "rho": "3F904AFD",
+        "T": "4393553D",
+        "Qc": "3860E81C",
+        "Nc": "4D839342",
+        "Qi": "00000000",
+        "Ni": "00000000",
+        "Qr": "308D048E",
+        "Nr": "38AB5008",
+        "Qs": "00000000",
+        "Qg": "00000000",
+        "Nccn": "4CC0E489",
+        "Bg": "00000000",
+        "Qv": "3C880774"
+      },
+      "status": 0
+    },
+    {
+      "stage": "AFTER_FREEZING",
+      "step": 7,
+      "lat": 222,
+      "i": 193,
+      "k": 4,
+      "loop": 1,
+      "state_hex32": {
+        "rho": "3F904AFD",
+        "T": "4393553D",
+        "Qc": "3860E81C",
+        "Nc": "4D839342",
+        "Qi": "00000000",
+        "Ni": "00000000",
+        "Qr": "308D048E",
+        "Nr": "38AB5008",
+        "Qs": "00000000",
+        "Qg": "00000000",
+        "Nccn": "4CC0E489",
+        "Bg": "00000000",
+        "Qv": "3C880774"
+      },
+      "status": 0
+    },
+    {
+      "stage": "STAGE2_PSD_END",
+      "step": 7,
+      "lat": 222,
+      "i": 193,
+      "k": 4,
+      "loop": 1,
+      "state_hex32": {
+        "rho": "3F904AFD",
+        "T": "4393553D",
+        "Qc": "3860E81C",
+        "Nc": "4D839342",
+        "Qi": "00000000",
+        "Ni": "00000000",
+        "Qr": "308D048E",
+        "Nr": "38AB5008",
+        "Qs": "00000000",
+        "Qg": "00000000",
+        "Nccn": "4CC0E489",
+        "Bg": "00000000",
+        "Qv": "3C880774"
+      },
+      "status": 0
+    },
+    {
+      "stage": "WARM_BEFORE_COMMIT",
+      "step": 7,
+      "lat": 222,
+      "i": 193,
+      "k": 4,
+      "loop": 1,
+      "state_hex32": {
+        "rho": "3F904AFD",
+        "T": "4393553D",
+        "Qc": "3860E81C",
+        "Nc": "4D839342",
+        "Qi": "00000000",
+        "Ni": "00000000",
+        "Qr": "308D048E",
+        "Nr": "38AB5008",
+        "Qs": "00000000",
+        "Qg": "00000000",
+        "Nccn": "4CC0E489",
+        "Bg": "00000000",
+        "Qv": "3C880774"
+      },
+      "status": 0
+    },
+    {
+      "stage": "WARM_AFTER_COMMIT",
+      "step": 7,
+      "lat": 222,
+      "i": 193,
+      "k": 4,
+      "loop": 1,
+      "state_hex32": {
+        "rho": "3F904AFD",
+        "T": "4393553D",
+        "Qc": "3860E81C",
+        "Nc": "4D839317",
+        "Qi": "00000000",
+        "Ni": "00000000",
+        "Qr": "308D0490",
+        "Nr": "38AB5008",
+        "Qs": "00000000",
+        "Qg": "00000000",
+        "Nccn": "4CC0E489",
+        "Bg": "00000000",
+        "Qv": "3C880774"
+      },
+      "status": 0
+    },
+    {
+      "stage": "PREFINAL_CUTOFF",
+      "step": 7,
+      "lat": 222,
+      "i": 193,
+      "k": 4,
+      "loop": 1,
+      "state_hex32": {
+        "rho": "3F904AFD",
+        "T": "43934D38",
+        "Qc": "37E74F36",
+        "Nc": "4D839317",
+        "Qi": "00000000",
+        "Ni": "00000000",
+        "Qr": "308D0490",
+        "Nr": "38AB5008",
+        "Qs": "00000000",
+        "Qg": "00000000",
+        "Nccn": "4CC0E489",
+        "Bg": "00000000",
+        "Qv": "3C883E14"
+      },
+      "status": 0
+    },
+    {
+      "stage": "FINAL_PSD_END",
+      "step": 7,
+      "lat": 222,
+      "i": 193,
+      "k": 4,
+      "loop": 1,
+      "state_hex32": {
+        "rho": "3F904AFD",
+        "T": "43934D38",
+        "Qc": "37E74F36",
+        "Nc": "4D839317",
+        "Qi": "00000000",
+        "Ni": "00000000",
+        "Qr": "308D0490",
+        "Nr": "38AB5008",
+        "Qs": "00000000",
+        "Qg": "00000000",
+        "Nccn": "4CC0E489",
+        "Bg": "00000000",
+        "Qv": "3C883E14"
+      },
+      "status": 0
+    }
+  ],
+  "warm_row_prefix": {
+    "search_status": 0,
+    "retry": 0,
+    "progb_status": 0,
+    "rate_noop": false,
+    "state_noop": false
+  },
+  "warm_fields": {
+    "parameters": {
+      "dtcld": {
+        "printed": "2.0000000000000000E+01",
+        "source_type": "REAL32",
+        "hex32": "41A00000"
+      },
+      "rho_dry": {
+        "printed": "1.1272884607315063E+00",
+        "source_type": "REAL32",
+        "hex32": "3F904AFD"
+      },
+      "cpm": {
+        "printed": "1.0184797973632812E+03",
+        "source_type": "REAL32",
+        "hex32": "447E9EB5"
+      },
+      "xl": {
+        "printed": "2.4495752500000000E+06",
+        "source_type": "REAL32",
+        "hex32": "4A15829D"
+      },
+      "xlf": {
+        "printed": "4.0042475000000000E+05",
+        "source_type": "REAL32",
+        "hex32": "48C38518"
+      },
+      "rhox": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "alpha": {
+        "printed": "1.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "3F800000"
+      }
+    },
+    "postcap_primitive_rates": {
+      "rate_01": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_02": {
+        "printed": "3.1104525513390703E-17",
+        "source_type": "REAL32",
+        "hex32": "240F71BE"
+      },
+      "rate_03": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_04": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_05": {
+        "printed": "6.9037666320800781E+01",
+        "source_type": "REAL32",
+        "hex32": "428A1349"
+      },
+      "rate_06": {
+        "printed": "1.6016406880225986E-04",
+        "source_type": "REAL32",
+        "hex32": "3927F1B7"
+      },
+      "rate_07": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_08": {
+        "printed": "-2.1575993809375962E-17",
+        "source_type": "REAL32",
+        "hex32": "A3C700E0"
+      },
+      "rate_09": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_10": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_11": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_12": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_13": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_14": {
+        "printed": "4.7385021537765489E-17",
+        "source_type": "REAL32",
+        "hex32": "245A865C"
+      },
+      "rate_15": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_16": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      }
+    },
+    "scaled_real32_primitive_rates": {
+      "rate_01": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_02": {
+        "printed": "3.1104525513390703E-17",
+        "source_type": "REAL32",
+        "hex32": "240F71BE"
+      },
+      "rate_03": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_04": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_05": {
+        "printed": "6.9037666320800781E+01",
+        "source_type": "REAL32",
+        "hex32": "428A1349"
+      },
+      "rate_06": {
+        "printed": "1.6016406880225986E-04",
+        "source_type": "REAL32",
+        "hex32": "3927F1B7"
+      },
+      "rate_07": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_08": {
+        "printed": "-2.1575993809375962E-17",
+        "source_type": "REAL32",
+        "hex32": "A3C700E0"
+      },
+      "rate_09": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_10": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_11": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_12": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_13": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_14": {
+        "printed": "4.7385021537765489E-17",
+        "source_type": "REAL32",
+        "hex32": "245A865C"
+      },
+      "rate_15": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "rate_16": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      }
+    },
+    "q_before": {
+      "Qc": {
+        "printed": "5.3621930419467390E-05",
+        "source_type": "REAL32",
+        "hex32": "3860E81C"
+      },
+      "Qi": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Qr": {
+        "printed": "1.0260394756045343E-09",
+        "source_type": "REAL32",
+        "hex32": "308D048E"
+      },
+      "Qs": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Qg": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      }
+    },
+    "q_after": {
+      "Qc": {
+        "printed": "5.3621930419467390E-05",
+        "source_type": "REAL32",
+        "hex32": "3860E81C"
+      },
+      "Qi": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Qr": {
+        "printed": "1.0260396976491393E-09",
+        "source_type": "REAL32",
+        "hex32": "308D0490"
+      },
+      "Qs": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Qg": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      }
+    },
+    "n_before": {
+      "Nc": {
+        "printed": "2.7593324800000000E+08",
+        "source_type": "REAL32",
+        "hex32": "4D839342"
+      },
+      "Ni": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Nr": {
+        "printed": "8.1688223872333765E-05",
+        "source_type": "REAL32",
+        "hex32": "38AB5008"
+      }
+    },
+    "n_after": {
+      "Nc": {
+        "printed": "2.7593187200000000E+08",
+        "source_type": "REAL32",
+        "hex32": "4D839317"
+      },
+      "Ni": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Nr": {
+        "printed": "8.1688223872333765E-05",
+        "source_type": "REAL32",
+        "hex32": "38AB5008"
+      }
+    },
+    "bulk_before": {
+      "BG": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "T": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "QV": {
+        "printed": "2.9466592407226562E+02",
+        "source_type": "REAL32",
+        "hex32": "4393553D"
+      },
+      "CCN3": {
+        "printed": "2.9466592407226562E+02",
+        "source_type": "REAL32",
+        "hex32": "4393553D"
+      }
+    },
+    "bulk_after": {
+      "BG": {
+        "printed": "1.6605116426944733E-02",
+        "source_type": "REAL32",
+        "hex32": "3C880774"
+      },
+      "T": {
+        "printed": "1.6605116426944733E-02",
+        "source_type": "REAL32",
+        "hex32": "3C880774"
+      },
+      "QV": {
+        "printed": "1.0113133600000000E+08",
+        "source_type": "REAL32",
+        "hex32": "4CC0E489"
+      },
+      "CCN3": {
+        "printed": "1.0113133600000000E+08",
+        "source_type": "REAL32",
+        "hex32": "4CC0E489"
+      }
+    },
+    "postcap_request_q": {
+      "Qc": {
+        "printed": "-6.2209053673759366E-16",
+        "source_type": "REAL32",
+        "hex32": "A6334E2E"
+      },
+      "Qi": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Qr": {
+        "printed": "1.9057063408029482E-16",
+        "source_type": "REAL32",
+        "hex32": "255BB686"
+      },
+      "Qs": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Qg": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      }
+    },
+    "postcap_request_n": {
+      "Nc": {
+        "printed": "-1.3807565917968750E+03",
+        "source_type": "REAL32",
+        "hex32": "C4AC9836"
+      },
+      "Ni": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Nr": {
+        "printed": "-9.4770048369486899E-16",
+        "source_type": "REAL32",
+        "hex32": "A68893FA"
+      }
+    },
+    "postcap_request_bulk": {
+      "BG": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "T": {
+        "printed": "-1.0378609863886945E-12",
+        "source_type": "REAL32",
+        "hex32": "AB9210E2"
+      },
+      "QV": {
+        "printed": "4.3151987618751924E-16",
+        "source_type": "REAL32",
+        "hex32": "25F8C118"
+      }
+    },
+    "admitted_alpha_q": {
+      "Qc": {
+        "printed": "-6.2209053673759366E-16",
+        "source_type": "REAL32",
+        "hex32": "A6334E2E"
+      },
+      "Qi": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Qr": {
+        "printed": "1.9057063408029482E-16",
+        "source_type": "REAL32",
+        "hex32": "255BB686"
+      },
+      "Qs": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Qg": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      }
+    },
+    "admitted_alpha_n": {
+      "Nc": {
+        "printed": "-1.3807565917968750E+03",
+        "source_type": "REAL32",
+        "hex32": "C4AC9836"
+      },
+      "Ni": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "Nr": {
+        "printed": "-9.4770048369486899E-16",
+        "source_type": "REAL32",
+        "hex32": "A68893FA"
+      }
+    },
+    "admitted_alpha_bulk": {
+      "BG": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL32",
+        "hex32": "00000000"
+      },
+      "T": {
+        "printed": "-1.0378609863886945E-12",
+        "source_type": "REAL32",
+        "hex32": "AB9210E2"
+      },
+      "QV": {
+        "printed": "4.3151987618751924E-16",
+        "source_type": "REAL32",
+        "hex32": "25F8C118"
+      }
+    },
+    "stored_delta_q": {
+      "Qc": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "Qi": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "Qr": {
+        "printed": "2.2204460492503131E-16",
+        "source_type": "REAL64"
+      },
+      "Qs": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "Qg": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      }
+    },
+    "stored_delta_n": {
+      "Nc": {
+        "printed": "-1.3760000000000000E+03",
+        "source_type": "REAL64"
+      },
+      "Ni": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "Nr": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      }
+    },
+    "stored_delta_bulk": {
+      "BG": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "T": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "QV": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      }
+    },
+    "stored_minus_admitted_q": {
+      "Qc": {
+        "printed": "6.2209053673759366E-16",
+        "source_type": "REAL64"
+      },
+      "Qi": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "Qr": {
+        "printed": "3.1473970844736487E-17",
+        "source_type": "REAL64"
+      },
+      "Qs": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "Qg": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      }
+    },
+    "stored_minus_admitted_n": {
+      "Nc": {
+        "printed": "4.7565917968750000E+00",
+        "source_type": "REAL64"
+      },
+      "Ni": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "Nr": {
+        "printed": "9.4770048369486899E-16",
+        "source_type": "REAL64"
+      }
+    },
+    "stored_minus_admitted_bulk": {
+      "BG": {
+        "printed": "0.0000000000000000E+00",
+        "source_type": "REAL64"
+      },
+      "T": {
+        "printed": "1.0378609863886945E-12",
+        "source_type": "REAL64"
+      },
+      "QV": {
+        "printed": "-4.3151987618751924E-16",
+        "source_type": "REAL64"
+      }
+    }
+  },
+  "r32_roundtrip": {
+    "source_format": "E24.16, source warm-row fields are REAL32 except explicitly converted stored deltas and residuals (REAL64)",
+    "r32_count": 85,
+    "max_fraction_of_nearest_float32_ulp": 8.192e-10,
+    "uniqueness_bound": "Every nonzero R32 printed value lies within 1/4 adjacent-binary32 spacing of recorded bit pattern; exact zero values were printed as zero."
+  }
+}

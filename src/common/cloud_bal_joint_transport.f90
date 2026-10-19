@@ -22,7 +22,8 @@ contains
   subroutine joint_moment_store(q64, n64, dry_density, minimum_ratio, maximum_ratio, &
                                 allow_subnormal, stored_q, stored_n, adjustment, valid, &
                                 allow_normal_q_adjustment, allow_joint_quantum_absence, &
-                                volume_number_bounds, strict_mass_ratio, inactive_mass_limit)
+                                volume_number_bounds, strict_mass_ratio, inactive_mass_limit, &
+                                failure_stage)
     ! Store an already valid continuous pair. Opt-in repairs preserve the
     ! continuous gate: subnormal Q underflow can store joint absence; legacy
     ! one-neighbor Q repair handles PSD rounding; strict-volume normal-Q repair
@@ -38,6 +39,7 @@ contains
     real(real64), intent(in), optional :: volume_number_bounds(2)
     logical, intent(in), optional :: strict_mass_ratio
     real(real64), intent(in), optional :: inactive_mass_limit
+    integer, intent(out), optional :: failure_stage
     real(real32) :: rounded_q, rounded_n, adjusted_q, directed_q
     real(real64) :: ratio, minimum_number, maximum_number, inactive_number_quantum_limit
     real(real32) :: number_volume32
@@ -50,6 +52,7 @@ contains
     stored_n = -1.0_real32
     adjustment = 0
     valid = .false.
+    if (present(failure_stage)) failure_stage = 1
     allow_normal = .false.
     allow_quantum_absence = .false.
     require_strict_mass = .false.
@@ -91,6 +94,7 @@ contains
                   stored_n=0.0_real32
                   adjustment=3
                   valid=.true.
+                  if (present(failure_stage)) failure_stage=0
                   return
                 end if
               end if
@@ -99,6 +103,7 @@ contains
         end if
       end if
     end if
+    if (present(failure_stage)) failure_stage = 2
     if (require_strict_mass) then
       if (.not. strict_mass_ratio_valid64(q64,n64,minimum_ratio,maximum_ratio)) return
       if (.not.ieee_is_finite(dry_density)) return
@@ -113,9 +118,11 @@ contains
         use_inactive_exact_store = .true.
       end if
     end if
+    if (present(failure_stage)) failure_stage = 3
     if (use_volume_contract) then
       if (.not. volume_number_contract_valid(q64,n64,dry_density,volume_number_bounds)) return
     end if
+    if (present(failure_stage)) failure_stage = 4
     if (abs(q64) > real(huge(0.0_real32),real64) .or. &
         abs(n64) > real(huge(0.0_real32),real64)) return
 
@@ -130,6 +137,7 @@ contains
       stored_n=rounded_n
       adjustment=0
       valid=.true.
+      if (present(failure_stage)) failure_stage=0
       return
     end if
     volume_valid = .true.
@@ -146,10 +154,12 @@ contains
       stored_q = rounded_q
       stored_n = rounded_n
       valid = .true.
+      if (present(failure_stage)) failure_stage=0
       return
     end if
     if ((use_volume_contract .or. require_strict_mass) .and. allow_normal .and. &
         q64 >= real(tiny(0.0_real32),real64) .and. rounded_n > 0.0_real32) then
+      if (present(failure_stage)) failure_stage = 5
       if (use_volume_contract) then
         call store_directed_q(q64,rounded_n,dry_density,minimum_ratio,maximum_ratio, &
             volume_number_bounds,.true.,require_strict_mass,directed_q,directed_valid)
@@ -162,6 +172,7 @@ contains
         stored_n = rounded_n
         adjustment = 2
         valid = .true.
+        if (present(failure_stage)) failure_stage=0
         return
       end if
     end if
@@ -170,6 +181,7 @@ contains
     if (q64 <= 0.0_real64) return
     if (.not. allow_normal .and. q64 >= real(tiny(0.0_real32),real64)) return
 
+    if (present(failure_stage)) failure_stage = 6
     if (allow_subnormal .and. q64 < real(tiny(0.0_real32),real64) .and. &
         rounded_q == 0.0_real32 .and. rounded_n > 0.0_real32) then
       stored_q = 0.0_real32
@@ -183,6 +195,7 @@ contains
         stored_n = -1.0_real32
         adjustment = 0
       end if
+      if (valid .and. present(failure_stage)) failure_stage=0
       return
     end if
 
@@ -240,6 +253,7 @@ contains
           stored_n = 0.0_real32
           adjustment = 3
           valid = .true.
+          if (present(failure_stage)) failure_stage=0
           return
         end if
       end if
@@ -249,6 +263,7 @@ contains
     stored_n = rounded_n
     adjustment = 2
     valid = .true.
+    if (present(failure_stage)) failure_stage=0
   end subroutine joint_moment_store
 
   subroutine store_directed_q(q64,rounded_n,dry_density,minimum_ratio,maximum_ratio, &

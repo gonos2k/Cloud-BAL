@@ -27,6 +27,9 @@ from pr89_process_consumer_contract import (  # noqa: E402
 
 
 V50_SOURCE = Path("/var/tmp/pr87_followup_sources_20261019_v50/module_em_pr85.F")
+C5_SOURCE = Path("/var/tmp/pr89_sources_20261019_c5/module_em_pr89.F")
+C5_SOURCE_SHA256 = "0d3b1fe91a01c747a2339487695d82c7109ad4df3da5cbc561ca338c1fecf91d"
+CURRENT_TRANSPORT_SHA256 = "c8ecedde5cc8f9adedf6cf082054596ca1c0d6a3565d152c73d730c00cd678f3"
 
 
 def _host_ice_store_call(transformed: str) -> str:
@@ -50,11 +53,18 @@ def _regression_source() -> tuple[str, str]:
     native = V50_SOURCE.read_text()
     assert hashlib.sha256(native.encode()).hexdigest() == V50_MODULE_EM_SHA256
     common = (ROOT / "src/common/cloud_bal_joint_transport.f90").read_text()
-    assert hashlib.sha256(common.encode()).hexdigest() == JOINT_TRANSPORT_SHA256
-    transformed = connect_ice_consumer(native, common)
+    assert hashlib.sha256(common.encode()).hexdigest() == CURRENT_TRANSPORT_SHA256
+    # Reproduce the historical transform with its frozen input; exercise its
+    # unchanged host call against the current maintained implementation below.
+    c5_source = C5_SOURCE.read_text()
+    assert hashlib.sha256(c5_source.encode()).hexdigest() == C5_SOURCE_SHA256
+    module_end = "end module cloud_bal_joint_transport\n"
+    frozen_common = c5_source[:c5_source.index(module_end) + len(module_end)]
+    assert hashlib.sha256(frozen_common.encode()).hexdigest() == JOINT_TRANSPORT_SHA256
+    transformed = connect_ice_consumer(native, frozen_common)
     assert "inactive_mass_limits=[0.0_real64," + ICE_LIMIT_EXPRESSION in transformed
-    assert transformed.startswith(common.rstrip() + "\n\n")
-    transformed_host = transformed[len(common.rstrip()) + 2 :]
+    assert transformed.startswith(frozen_common.rstrip() + "\n\n")
+    transformed_host = transformed[len(frozen_common.rstrip()) + 2 :]
     assert transformed_host.count("inactive_mass_limit=") == 5
     assert "inactive_mass_limit=MERGE(" in transformed_host
     host_call = _host_ice_store_call(transformed)
@@ -139,6 +149,8 @@ end program pr89_t5_ice_consumer
 
 def test_actual_host_store_flows_into_actual_full_ng_consumer() -> None:
     generated, transformed = _regression_source()
+    compiled_common = generated[:generated.index("end module cloud_bal_joint_transport\n") + len("end module cloud_bal_joint_transport\n")]
+    assert hashlib.sha256(compiled_common.encode()).hexdigest() == CURRENT_TRANSPORT_SHA256
     assert "inactive_mass_limit=REAL(NEAREST(1.e-14,-1.0),real64)" in generated
     assert "kdm6_rain_process_state_valid(q,n" in generated
     for optimization in ("O0", "O2"):

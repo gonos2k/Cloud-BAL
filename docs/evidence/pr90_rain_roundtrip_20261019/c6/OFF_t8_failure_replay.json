@@ -1,0 +1,110 @@
+{
+  "schema": "pr90_rain_failure_replay_v1",
+  "capture": {
+    "path": "/var/tmp/pr90_OFF_180s_c6_20261019/capture/rsl.out.0000",
+    "raw_sha256": "aac2f11ae44d506cdcb35238e86479a26a080980cccf8f5bc91c80c6be48fe2c",
+    "decoded_sha256": "aac2f11ae44d506cdcb35238e86479a26a080980cccf8f5bc91c80c6be48fe2c"
+  },
+  "event": {
+    "helper_stage": 4,
+    "core_stage": -1,
+    "reason": "internal_volume_precheck",
+    "input_hex": {
+      "q_internal": "3481DDEF",
+      "nvol_internal": "3C9BEEF8",
+      "dry_density": "3F8E9DE1",
+      "pidnr": "4644597C",
+      "power": "40400000",
+      "lambda_min": "44704000",
+      "lambda_max": "4708B800"
+    },
+    "derived_hex": [
+      "3E903BBDE0000000",
+      "3F917E7634ED5668",
+      "3F917E7640000000",
+      "3FF1D3BC20000000",
+      "3DF4242670FFE044",
+      "3EEDB1AE1DEBB1E9",
+      "40F33623769F6AB1",
+      "41EC52C7F45F148B",
+      "3F937DDF15DDB042",
+      "408CBC8954151927",
+      "3F937DDF0C565C80",
+      "3F937DDF00000000"
+    ],
+    "caller": {
+      "timestep": 8,
+      "j": 222,
+      "i": 188,
+      "k": 5,
+      "printed_values": [
+        "2.4189600E-07",
+        "1.9034848E-02",
+        "1.114193"
+      ]
+    }
+  },
+  "stage_trace": {
+    "initial_internal_volume_predicate": "failed",
+    "wrapper_prior_scalar_conversion": "completed",
+    "main_path_internal_quotient": "not_reached",
+    "failure_probe_internal_quotient": "computed",
+    "public_store": "not_reached",
+    "restore": "not_executed_until_public_store_valid",
+    "consumer": "not_executed_until_restore_valid"
+  },
+  "provenance": {
+    "preflight": {
+      "path": "/var/tmp/pr90_OFF_180s_c6_20261019/preflight.json",
+      "sha256": "3157a6746d0b393d12f28ae67921f11b7ddf8f2c0d4e7ce2d2873860904f315b"
+    },
+    "build_receipt": {
+      "path": "/var/tmp/pr90_native_build_c6_20261019/pr87_native_overlay_build.json",
+      "sha256": "2b663971a0b9040c8ea7f157ede2e7c529373d7df23263fe443684d1160b7515"
+    },
+    "closed_run_receipt": {
+      "path": "/var/tmp/pr90_OFF_180s_c6_20261019/receipt.json",
+      "sha256": "90269ded1c1b2d5e1305face195540dcac9c0cc3f91b789440f2f833788b07f8",
+      "status": "INCOMPLETE",
+      "returncode": 128,
+      "wall_seconds": 1024.8178299926221,
+      "capture_artifact": {
+        "path": "rsl.out.0000",
+        "sha256": "aac2f11ae44d506cdcb35238e86479a26a080980cccf8f5bc91c80c6be48fe2c",
+        "bytes": 173572923,
+        "compressed_path": "rsl.out.0000.gz",
+        "compressed_sha256": "d48f201985b4c2c67b175f460cadd82899e85ba47184709f3e8a92ae58d1fbc4",
+        "compressed_bytes": 36206792
+      }
+    },
+    "candidate_executable": {
+      "path": "/var/tmp/pr90_native_build_c6_20261019/wrf_pr87_overlay.exe",
+      "sha256": "787dbe92f909db2cf1488378ad534c4b8873b0113d3ded146055ba9aaf762660"
+    },
+    "compiler_profile": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    "compiled_sources": {
+      "module_em.o": {
+        "path": "/var/tmp/pr90_native_build_c6_20261019/source/overrides/module_em.F",
+        "sha256": "090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b"
+      },
+      "module_mp_kdm6.o": {
+        "path": "/var/tmp/pr90_native_build_c6_20261019/source/overrides/module_mp_kdm6.F",
+        "sha256": "c4e7c9ceaf61d346556b5fe1d1ce52a4c2e9a1d224ed7d28dc1180c90db0186c"
+      },
+      "support": {
+        "path": "/var/tmp/pr90_native_build_c6_20261019/source/pr90_cycle_support.f90",
+        "sha256": "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6"
+      }
+    },
+    "diagnostic_count": 12,
+    "wrapper_ordering": {
+      "legacy_scalar_conversion": "call volume_number_to_specific(nrs(i,k,1), dry_density(i,k), number_value, number_valid)",
+      "rain_public_store_call": "call pr87_number_public_store(qrs(i,k,1),nrs(i,k,1),dry_density(i,k), &",
+      "scalar_conversion_precedes_store": true
+    }
+  },
+  "replays": []
+}

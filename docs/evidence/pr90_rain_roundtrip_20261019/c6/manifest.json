@@ -1,0 +1,154 @@
+{
+  "artifacts": [
+    {
+      "bytes": 2892,
+      "path": "sources.json",
+      "sha256": "95a239a529d06c8fed9f464f243eff20ab6424620da9457285ed1cb081b0195b",
+      "source_path": "/var/tmp/pr90_sources_c6_20261019/sources.json"
+    },
+    {
+      "bytes": 847,
+      "path": "overrides.json",
+      "sha256": "33204cc4ad13859644a0a62ebc7b4b917908e6ed1e0e964b84f3c9c2061df310",
+      "source_path": "/var/tmp/pr90_sources_c6_20261019/overrides.json"
+    },
+    {
+      "bytes": 1518683,
+      "path": "build_receipt.json",
+      "sha256": "2b663971a0b9040c8ea7f157ede2e7c529373d7df23263fe443684d1160b7515",
+      "source_path": "/var/tmp/pr90_native_build_c6_20261019/pr87_native_overlay_build.json"
+    },
+    {
+      "bytes": 13083,
+      "path": "OFF_preflight.json",
+      "sha256": "3157a6746d0b393d12f28ae67921f11b7ddf8f2c0d4e7ce2d2873860904f315b",
+      "source_path": "/var/tmp/pr90_OFF_180s_c6_20261019/preflight.json"
+    },
+    {
+      "bytes": 58556,
+      "path": "OFF_run_receipt.json",
+      "sha256": "90269ded1c1b2d5e1305face195540dcac9c0cc3f91b789440f2f833788b07f8",
+      "source_path": "/var/tmp/pr90_OFF_180s_c6_20261019/receipt.json"
+    },
+    {
+      "bytes": 13099,
+      "path": "COUPLED_preflight.json",
+      "sha256": "da203a70f7bc91b3186d653474b015f933ac34321a745f68239401d2c69cc434",
+      "source_path": "/var/tmp/pr90_COUPLED_180s_c6_20261019/preflight.json"
+    },
+    {
+      "bytes": 58559,
+      "path": "COUPLED_run_receipt.json",
+      "sha256": "3c0c14fbb1ece6e136ff5838c396b7186b59ba5024b4144b29176cd67fba0b83",
+      "source_path": "/var/tmp/pr90_COUPLED_180s_c6_20261019/receipt.json"
+    },
+    {
+      "bytes": 4061,
+      "path": "OFF_t8_failure_replay.json",
+      "sha256": "e084d1738cc14a5efe1c581975502f967ecb7464602fa011295e5626c61196b4",
+      "source_path": "/var/tmp/pr90_OFF_180s_c6_20261019/pr90_t8_failure_replay.json"
+    },
+    {
+      "bytes": 1598,
+      "path": "failure_excerpt.md",
+      "sha256": "eea35ebd513559bc2d8b6125b1e13a6b9030ba22e20974d80969a1f0fe7591b7",
+      "source_path": "selected lines from receipt-bound OFF/COUPLED RSL gzip payloads"
+    }
+  ],
+  "base_commit": "3bc7bb8df6a100b60c6f8908ad93a7c3d981f360",
+  "build_receipt": {
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "executable_sha256": "787dbe92f909db2cf1488378ad534c4b8873b0113d3ded146055ba9aaf762660",
+    "full_clean_build": false,
+    "path": "build_receipt.json",
+    "sha256": "2b663971a0b9040c8ea7f157ede2e7c529373d7df23263fe443684d1160b7515",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "failure_provenance": {
+    "arms": {
+      "COUPLED": {
+        "rsl_compressed_sha256": "52ca8778e5d426b26831c6a4c01709080ec12a91e7ee950130711a5ba52d8660",
+        "rsl_path_in_receipt": "rsl.out.0000.gz",
+        "rsl_payload_bytes": 173583648,
+        "rsl_payload_sha256": "c2c67df29da2ba5bad1d2eeb79143adfe62b56ffb988cbeedeadab8963e532a7",
+        "run_receipt_sha256": "3c0c14fbb1ece6e136ff5838c396b7186b59ba5024b4144b29176cd67fba0b83"
+      },
+      "OFF": {
+        "rsl_compressed_sha256": "d48f201985b4c2c67b175f460cadd82899e85ba47184709f3e8a92ae58d1fbc4",
+        "rsl_path_in_receipt": "rsl.out.0000.gz",
+        "rsl_payload_bytes": 173572923,
+        "rsl_payload_sha256": "aac2f11ae44d506cdcb35238e86479a26a080980cccf8f5bc91c80c6be48fe2c",
+        "run_receipt_sha256": "90269ded1c1b2d5e1305face195540dcac9c0cc3f91b789440f2f833788b07f8"
+      }
+    },
+    "event": {
+      "caller": {
+        "i": 188,
+        "j": 222,
+        "k": 5,
+        "printed_values": [
+          "2.4189600E-07",
+          "1.9034848E-02",
+          "1.114193"
+        ],
+        "timestep": 8
+      },
+      "core_stage": -1,
+      "derived_hex": [
+        "3E903BBDE0000000",
+        "3F917E7634ED5668",
+        "3F917E7640000000",
+        "3FF1D3BC20000000",
+        "3DF4242670FFE044",
+        "3EEDB1AE1DEBB1E9",
+        "40F33623769F6AB1",
+        "41EC52C7F45F148B",
+        "3F937DDF15DDB042",
+        "408CBC8954151927",
+        "3F937DDF0C565C80",
+        "3F937DDF00000000"
+      ],
+      "helper_stage": 4,
+      "input_hex": {
+        "dry_density": "3F8E9DE1",
+        "lambda_max": "4708B800",
+        "lambda_min": "44704000",
+        "nvol_internal": "3C9BEEF8",
+        "pidnr": "4644597C",
+        "power": "40400000",
+        "q_internal": "3481DDEF"
+      },
+      "reason": "internal_volume_precheck"
+    }
+  },
+  "identity": "PR90-C6",
+  "outcome": {
+    "arms": {
+      "COUPLED": "INCOMPLETE",
+      "OFF": "INCOMPLETE"
+    },
+    "completed_steps": 7,
+    "failure_at_timestep": 8,
+    "interpretation": "The prior T7 location was passed; both arms then stopped at the T8 paired-store internal-volume precheck. No C7 result is represented.",
+    "requested_duration_seconds": 180,
+    "returncode": 128,
+    "status": "INCOMPLETE",
+    "timestep_seconds": 20
+  },
+  "schema": "pr90_c6_closed_run_archive_v1",
+  "source_manifest": {
+    "declared_source_sha256": {
+      "module_bl_fogdes.o": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+      "module_bl_shinhong.o": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+      "module_em.o": "090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b",
+      "module_first_rk_step_part1.o": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+      "module_first_rk_step_part2.o": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+      "module_microphysics_zero_out.o": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+      "module_mp_kdm6.o": "c4e7c9ceaf61d346556b5fe1d1ce52a4c2e9a1d224ed7d28dc1180c90db0186c",
+      "module_pbl_driver.o": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+      "solve_em.o": "412183300ea8dd6af028ac1a5254f937477b054630db4eb1f5910a6bf974c3c5"
+    },
+    "path": "sources.json",
+    "sha256": "95a239a529d06c8fed9f464f243eff20ab6424620da9457285ed1cb081b0195b"
+  }
+}
