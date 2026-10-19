@@ -1,0 +1,141 @@
+{
+  "compact_scope_check": "No full graph or AST payloads are staged; compact summaries bind the current full maintained report hashes. Receipt, source-sync manifest, diagnoses and historical preflight are separately listed.",
+  "corpora": {
+    "Cloud-BAL": {
+      "added_ids": 379,
+      "communities": 1079,
+      "delta_edges": 545,
+      "delta_nodes": 379,
+      "edges": 21662,
+      "graph_hash": "a684f6105f879dcf0229ccbb6891ab7f1b3d22df99bb21c919bf671dad81ca85",
+      "integrity_no_dangling_duplicate_or_self_loop": true,
+      "nodes": 12175,
+      "removed_ids": 0
+    },
+    "KLAPS50": {
+      "added_ids": 379,
+      "communities": 3115,
+      "delta_edges": 546,
+      "delta_nodes": 379,
+      "edges": 80112,
+      "graph_hash": "0830927fd4d096f260f007254b773cce8621c50f2e35120d9b411008bab89a3a",
+      "integrity_no_dangling_duplicate_or_self_loop": true,
+      "nodes": 38003,
+      "removed_ids": 0
+    }
+  },
+  "extraction_counts": {
+    "hash_only": 66,
+    "structurally_extracted": 139
+  },
+  "limitations": "This review checks publication metadata consistency with the guarded apply receipt and maintained reports. It does not establish physical acceptance or extend runtime validation.",
+  "native_validation_crosscheck": {
+    "60_second_arms": {
+      "COUPLED": {
+        "final_completed_step": 3,
+        "receipt": "runtime/v50_coupled60/receipt.json",
+        "returncode": 0,
+        "status": "COMPLETE"
+      },
+      "OFF": {
+        "final_completed_step": 3,
+        "receipt": "runtime/v50_off60/receipt.json",
+        "returncode": 0,
+        "status": "COMPLETE"
+      }
+    },
+    "60_second_status": "COMPLETE",
+    "focused_test_status": "PASS_FOCUSED",
+    "focused_tests_passed": 28,
+    "physical_approval": "FAIL_OPEN",
+    "remaining_scientific_gates": [
+      "incoming joint-moment admissibility",
+      "same-call mapped water/energy closure",
+      "feasible mass-wind joint search",
+      "fixed-setting native time-response and independent observation validation"
+    ]
+  },
+  "preservation": {
+    "maintained_source_entries": 627,
+    "maintained_source_equal_pre_post": true,
+    "private_profile": {
+      "Cloud-BAL": {
+        "incident_links": 133,
+        "nodes": 134,
+        "source_file": "config/cp01_private_host_profile.json",
+        "unchanged": true
+      },
+      "KLAPS50": {
+        "incident_links": 0,
+        "nodes": 0,
+        "source_file": "Cloud-BAL/config/cp01_private_host_profile.json",
+        "unchanged": true
+      }
+    },
+    "protected_wiki_unchanged": [
+      "wiki/hot.md",
+      "wiki/overview.md",
+      "wiki/.schema",
+      "wiki/.schema-proposals",
+      "wiki/.research-queue",
+      "wiki/entities",
+      "wiki/concepts",
+      "wiki/sources",
+      "wiki/decisions",
+      "wiki/heuristics",
+      "wiki/experiences",
+      "wiki/procedures",
+      "wiki/queries"
+    ],
+    "schema_content_pages_touched": false
+  },
+  "publication_report_sha256": "9c12e6a8c64f89b11011328911b417ecea28e4d1a1142da50a051be8cb410207",
+  "receipt_sha256": "1b1cc9031a6ca234df4be090e50b0475e99ee932a3f9e70d8958f9dc526314ce",
+  "result": "PASS_NO_BLOCKERS",
+  "reviewed_publication_dir": "/var/tmp/pr88_kg_publication_20261019",
+  "schema": "pr88_kg_publication_review_v1",
+  "selected_paths": 205,
+  "source_commit": "f32a80acfa44a968cd2095c8ef80ee1fe671dae2",
+  "staged_artifact_checks": [
+    {
+      "file": "kg_receipt.json",
+      "size_matches": true,
+      "source_hash_matches_manifest": true,
+      "staged_hash_matches_manifest": true
+    },
+    {
+      "file": "source_sync.json",
+      "size_matches": true,
+      "source_hash_matches_manifest": true,
+      "staged_hash_matches_manifest": true
+    },
+    {
+      "file": "klaps50_diagnose.json",
+      "size_matches": true,
+      "source_hash_matches_manifest": true,
+      "staged_hash_matches_manifest": true
+    },
+    {
+      "file": "cloud_bal_diagnose.json",
+      "size_matches": true,
+      "source_hash_matches_manifest": true,
+      "staged_hash_matches_manifest": true
+    },
+    {
+      "file": "preflight_review.md",
+      "size_matches": true,
+      "source_hash_matches_manifest": true,
+      "staged_hash_matches_manifest": true
+    },
+    {
+      "file": "KLAPS50_GRAPH_SUMMARY.md",
+      "full_report_hash_matches_manifest": true,
+      "summary_hash_matches_manifest": true
+    },
+    {
+      "file": "Cloud-BAL_GRAPH_SUMMARY.md",
+      "full_report_hash_matches_manifest": true,
+      "summary_hash_matches_manifest": true
+    }
+  ]
+}
