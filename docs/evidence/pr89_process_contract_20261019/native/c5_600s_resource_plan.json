@@ -1,0 +1,27 @@
+{
+  "schema": "pr89_paired600_resource_projection_v1",
+  "basis": "closed C5 complete120s receipts; retain per-run historical disk gate unchanged",
+  "arms": {
+    "OFF": {
+      "receipt_sha256": "199ae0f4eeed0ea0472150ae2d056351f8939c2835096b1e05bc1f9ec122ac33",
+      "observed_uncompressed_trace_bytes_120s": 9176819347,
+      "observed_other_files_bytes_120s": 990216020,
+      "observed_working_bytes_120s": 10167035367,
+      "projection_600s_with_factor3": 152505530505
+    },
+    "COUPLED": {
+      "receipt_sha256": "5989d07a9c9a4999c2d44ccc11160f597abfa46d29c92e60630651249cdecab3",
+      "observed_uncompressed_trace_bytes_120s": 9176876184,
+      "observed_other_files_bytes_120s": 990225340,
+      "observed_working_bytes_120s": 10167101524,
+      "projection_600s_with_factor3": 152506522860
+    }
+  },
+  "assumptions": "scale all observed raw and other120s bytes by600/120 and threefold activity/output margin; engineering estimate, not an output-size upper-bound proof",
+  "combined_projection_bytes": 305012053365,
+  "available_bytes": 581977018368,
+  "remaining_after_projection_bytes": 276964965003,
+  "reserve_floor_bytes": 80530636800,
+  "status": "PASS_PAIRED_ESTIMATE",
+  "monitoring": "check remaining space during execution; keep separate run directories and immutable build/inputs"
+}

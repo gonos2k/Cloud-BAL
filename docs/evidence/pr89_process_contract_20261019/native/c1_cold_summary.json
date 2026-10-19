@@ -1,0 +1,1308 @@
+{
+  "arms": {
+    "COUPLED": {
+      "arm": "COUPLED",
+      "attempt_status": "INCOMPLETE_120S_ATTEMPT__EVALUATED_80S_PREFIX",
+      "call_records": 1120,
+      "calls_per_timestep": {
+        "1": 280,
+        "2": 280,
+        "3": 280,
+        "4": 280
+      },
+      "completed_model_seconds": [
+        20,
+        40,
+        60,
+        80
+      ],
+      "completed_prefix_aggregate": {
+        "call_records": 1120,
+        "cell_transactions": 6049043,
+        "groups": {
+          "AUT": {
+            "applied_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.07717264362762677,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": null,
+                "status": "ZERO_DENOMINATOR"
+              }
+            },
+            "deferred_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.9228273563723715,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": null,
+                "status": "ZERO_DENOMINATOR"
+              }
+            },
+            "stages": {
+              "applied": {
+                "half_l1_kg_m2": 118.43951761379758,
+                "signed_kg_m2": 0.0
+              },
+              "deferred": {
+                "half_l1_kg_m2": 1416.2949691985425,
+                "signed_kg_m2": 0.0
+              },
+              "proposed": {
+                "half_l1_kg_m2": 1534.7344868123428,
+                "signed_kg_m2": 0.0
+              }
+            }
+          },
+          "G": {
+            "applied_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.12643058501085813,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": 0.32905527728018535,
+                "status": "OK"
+              }
+            },
+            "deferred_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.8735694149891418,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": 0.6709447227198153,
+                "status": "OK"
+              }
+            },
+            "stages": {
+              "applied": {
+                "half_l1_kg_m2": 1326.3262725627837,
+                "signed_kg_m2": -1.0582973606458123e-06
+              },
+              "deferred": {
+                "half_l1_kg_m2": 9164.22292839896,
+                "signed_kg_m2": -2.1578715742310157e-06
+              },
+              "proposed": {
+                "half_l1_kg_m2": 10490.549200961745,
+                "signed_kg_m2": -3.2161689348768256e-06
+              }
+            }
+          },
+          "NG": {
+            "applied_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.790398936191971,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": 0.48187908323623174,
+                "status": "OK"
+              }
+            },
+            "deferred_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.20960106380802807,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": 0.5181209167637709,
+                "status": "OK"
+              }
+            },
+            "stages": {
+              "applied": {
+                "half_l1_kg_m2": 6874.502418045365,
+                "signed_kg_m2": -9.934166083320553e-07
+              },
+              "deferred": {
+                "half_l1_kg_m2": 1823.007286567508,
+                "signed_kg_m2": -1.0681308688076715e-06
+              },
+              "proposed": {
+                "half_l1_kg_m2": 8697.509704612881,
+                "signed_kg_m2": -2.0615474771397213e-06
+              }
+            }
+          }
+        },
+        "raw_cell_rows": 0,
+        "unrecorded_transactions": 6049043
+      },
+      "completed_steps": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "duration_seconds_requested": 120,
+      "expected_timesteps": 6,
+      "measure_definition": "signed=sum(Q(5)+QV); half-L1=0.5*sum(abs(Q(5)),abs(QV)); per stage",
+      "per_timestep": {
+        "1": {
+          "call_records": 280,
+          "cell_transactions": 1510488,
+          "groups": {
+            "AUT": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.047773115559714405,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.9522268844402857,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 24.08947988537838,
+                  "signed_kg_m2": 0.0
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 480.1581414628156,
+                  "signed_kg_m2": 0.0
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 504.24762134819395,
+                  "signed_kg_m2": 0.0
+                }
+              }
+            },
+            "G": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.14883577441294205,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 5.432294928701516,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8511642255870575,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": -4.432294928701508,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 290.85728016289687,
+                  "signed_kg_m2": 1.3121018628398403e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 1663.3589108713816,
+                  "signed_kg_m2": -1.0705645604545511e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 1954.2161910342793,
+                  "signed_kg_m2": 2.415373023852872e-08
+                }
+              }
+            },
+            "NG": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.7554850398969544,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.562516019602315,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.2445149601030439,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.4374839803976877,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 2659.698210498111,
+                  "signed_kg_m2": -5.218272985480769e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 860.819165810069,
+                  "signed_kg_m2": -4.0583925736085053e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 3520.517376308186,
+                  "signed_kg_m2": -9.276665559089248e-07
+                }
+              }
+            }
+          },
+          "raw_cell_rows": 0,
+          "unrecorded_transactions": 1510488
+        },
+        "2": {
+          "call_records": 280,
+          "cell_transactions": 1512982,
+          "groups": {
+            "AUT": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.07627891580167269,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.923721084198327,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 28.423696285453598,
+                  "signed_kg_m2": 0.0
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 344.20478154131564,
+                  "signed_kg_m2": 0.0
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 372.62847782676937,
+                  "signed_kg_m2": 0.0
+                }
+              }
+            },
+            "G": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.15496019766317348,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.49943671508024273,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8450398023368275,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.5005632849197573,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 424.17082380061436,
+                  "signed_kg_m2": -1.0536361737958192e-06
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 2313.1180426127225,
+                  "signed_kg_m2": -1.0560128407475654e-06
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 2737.2888664133343,
+                  "signed_kg_m2": -2.1096490145433846e-06
+                }
+              }
+            },
+            "NG": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.7998544836784679,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.4258733332878538,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.20014551632153282,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.5741266667121474,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 1815.2728168751526,
+                  "signed_kg_m2": -2.7597844987659577e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 454.231016530715,
+                  "signed_kg_m2": -3.720509717966753e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 2269.503833405866,
+                  "signed_kg_m2": -6.480294216732703e-07
+                }
+              }
+            }
+          },
+          "raw_cell_rows": 0,
+          "unrecorded_transactions": 1512982
+        },
+        "3": {
+          "call_records": 280,
+          "cell_transactions": 1512461,
+          "groups": {
+            "AUT": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.08840852378477936,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.9115914762152215,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 30.151096317166978,
+                  "signed_kg_m2": 0.0
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 310.89176953326245,
+                  "signed_kg_m2": 0.0
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 341.0428658504291,
+                  "signed_kg_m2": 0.0
+                }
+              }
+            },
+            "G": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.1014541538756999,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 4.474212219921025,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8985458461243,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": -3.474212219921032,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 290.32631485286737,
+                  "signed_kg_m2": 2.9356780994833866e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 2571.3240342158433,
+                  "signed_kg_m2": -2.2795451412807058e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 2861.650349068711,
+                  "signed_kg_m2": 6.561329582026855e-08
+                }
+              }
+            },
+            "NG": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.818546338127969,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.6213430872164183,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.18145366187203082,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.3786569127835825,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 1341.3626518364813,
+                  "signed_kg_m2": -3.455593981346401e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 297.3505026370979,
+                  "signed_kg_m2": -2.1058970088040944e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 1638.7131544735796,
+                  "signed_kg_m2": -5.561490990150491e-07
+                }
+              }
+            }
+          },
+          "raw_cell_rows": 0,
+          "unrecorded_transactions": 1512461
+        },
+        "4": {
+          "call_records": 280,
+          "cell_transactions": 1513112,
+          "groups": {
+            "AUT": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.11292137747548975,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8870786225245104,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 35.77524512579849,
+                  "signed_kg_m2": 0.0
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 281.0402766611521,
+                  "signed_kg_m2": 0.0
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 316.81552178695057,
+                  "signed_kg_m2": 0.0
+                }
+              }
+            },
+            "G": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.10927096474206406,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.35897673578852995,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8907290352579365,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.6410232642114694,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 320.9718537464044,
+                  "signed_kg_m2": -4.2943918308231536e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 2616.421940699028,
+                  "signed_kg_m2": -7.668477633099263e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 2937.3937944454306,
+                  "signed_kg_m2": -1.1962869463922425e-06
+                }
+              }
+            },
+            "NG": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8340079643106577,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 2.133053466752714,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.1659920356893422,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": -1.1330534667527086,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 1058.1687388356263,
+                  "signed_kg_m2": 1.4994853822725717e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 210.60660158962574,
+                  "signed_kg_m2": -7.965093876973659e-08
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 1268.7753404252521,
+                  "signed_kg_m2": 7.02975994575202e-08
+                }
+              }
+            }
+          },
+          "raw_cell_rows": 0,
+          "unrecorded_transactions": 1513112
+        }
+      },
+      "process_receipt": {
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00",
+          "2026-08-16_13:01:20",
+          "2026-08-16_13:01:40",
+          "2026-08-16_13:02:00"
+        ],
+        "fatal_lines": [
+          "-------------- FATAL CALLED ---------------",
+          "-------------- FATAL CALLED ---------------"
+        ],
+        "final_completed_step": 4,
+        "returncode": 1,
+        "status": "INCOMPLETE"
+      },
+      "receipt_binding": {
+        "candidate_build_unchanged": true,
+        "executed_executable_sha256": "2b3e5eb4d75c91797a6f500ce0956671fdd974530212cb51ac83a65e29bbce9a",
+        "frozen_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+        "preflight_path": "/var/tmp/pr89_COUPLED_120s_c1_20261019/preflight.json",
+        "preflight_sha256": "dca8d9ac91dcdc75639dc8fd3f44851484e30da57bd36d83f87829fcdbbe2754",
+        "receipt_path": "/var/tmp/pr89_COUPLED_120s_c1_20261019/receipt.json",
+        "receipt_sha256": "25ce190e04cc5011485bf1c63bb33f5a5515e6f7a8fe727f6345be4526881139",
+        "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+        "summary_gzip_bytes": 225803,
+        "summary_gzip_sha256": "5fbcb6c82833fb86f28b261e433afc2596637b102b9eb1a1697da67336f5d24e",
+        "summary_path": "/var/tmp/pr89_COUPLED_120s_c1_20261019/run/pr89_kdm6_cold_summary.raw.gz",
+        "summary_uncompressed_bytes": 992320,
+        "summary_uncompressed_sha256": "64026177d1bf641e4feaccb867587e96174f30f4232c6f7a1462429a2b2b24d6"
+      },
+      "run_identity": "PR87 selected-object native candidate",
+      "timestep_seconds": 20,
+      "weight_units": "kg m-2 SUM_COLUMNS; no grid-area/global kg"
+    },
+    "OFF": {
+      "arm": "OFF",
+      "attempt_status": "INCOMPLETE_120S_ATTEMPT__EVALUATED_80S_PREFIX",
+      "call_records": 1120,
+      "calls_per_timestep": {
+        "1": 280,
+        "2": 280,
+        "3": 280,
+        "4": 280
+      },
+      "completed_model_seconds": [
+        20,
+        40,
+        60,
+        80
+      ],
+      "completed_prefix_aggregate": {
+        "call_records": 1120,
+        "cell_transactions": 6049042,
+        "groups": {
+          "AUT": {
+            "applied_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.0770062837759806,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": null,
+                "status": "ZERO_DENOMINATOR"
+              }
+            },
+            "deferred_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.922993716224018,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": null,
+                "status": "ZERO_DENOMINATOR"
+              }
+            },
+            "stages": {
+              "applied": {
+                "half_l1_kg_m2": 118.19940223977882,
+                "signed_kg_m2": 0.0
+              },
+              "deferred": {
+                "half_l1_kg_m2": 1416.7325077798398,
+                "signed_kg_m2": 0.0
+              },
+              "proposed": {
+                "half_l1_kg_m2": 1534.9319100196208,
+                "signed_kg_m2": 0.0
+              }
+            }
+          },
+          "G": {
+            "applied_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.12599732390895108,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": 0.4168352157651758,
+                "status": "OK"
+              }
+            },
+            "deferred_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.8740026760910489,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": 0.5831647842348255,
+                "status": "OK"
+              }
+            },
+            "stages": {
+              "applied": {
+                "half_l1_kg_m2": 1321.8825689535652,
+                "signed_kg_m2": -1.3267994400262043e-06
+              },
+              "deferred": {
+                "half_l1_kg_m2": 9169.471754641367,
+                "signed_kg_m2": -1.8562316231977313e-06
+              },
+              "proposed": {
+                "half_l1_kg_m2": 10491.354323594933,
+                "signed_kg_m2": -3.1830310632239314e-06
+              }
+            }
+          },
+          "NG": {
+            "applied_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.7904323808415663,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": 0.46879911075402586,
+                "status": "OK"
+              }
+            },
+            "deferred_over_proposed": {
+              "half_l1_kg_m2": {
+                "ratio": 0.2095676191584327,
+                "status": "OK"
+              },
+              "signed_kg_m2": {
+                "ratio": 0.5312008892459767,
+                "status": "OK"
+              }
+            },
+            "stages": {
+              "applied": {
+                "half_l1_kg_m2": 6874.30341934495,
+                "signed_kg_m2": -9.037353405868335e-07
+              },
+              "deferred": {
+                "half_l1_kg_m2": 1822.5865183192102,
+                "signed_kg_m2": -1.0240314146300224e-06
+              },
+              "proposed": {
+                "half_l1_kg_m2": 8696.88993766417,
+                "signed_kg_m2": -1.927766755216851e-06
+              }
+            }
+          }
+        },
+        "raw_cell_rows": 0,
+        "unrecorded_transactions": 6049042
+      },
+      "completed_steps": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "duration_seconds_requested": 120,
+      "expected_timesteps": 6,
+      "measure_definition": "signed=sum(Q(5)+QV); half-L1=0.5*sum(abs(Q(5)),abs(QV)); per stage",
+      "per_timestep": {
+        "1": {
+          "call_records": 280,
+          "cell_transactions": 1510488,
+          "groups": {
+            "AUT": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.04777001191536217,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.9522299880846378,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 24.088542406699315,
+                  "signed_kg_m2": 0.0
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 480.17221535444276,
+                  "signed_kg_m2": 0.0
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 504.2607577611421,
+                  "signed_kg_m2": 0.0
+                }
+              }
+            },
+            "G": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.1487951926812487,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 1.3717050210542763,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8512048073187508,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": -0.37170502105427594,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 290.8572803281506,
+                  "signed_kg_m2": 1.3121018542479367e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 1663.8918959522236,
+                  "signed_kg_m2": -3.5555373777354256e-08
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 1954.7491762803752,
+                  "signed_kg_m2": 9.565481164743938e-08
+                }
+              }
+            },
+            "NG": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.7555340901048481,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.5349440201318563,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.24446590989515032,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.46505597986814673,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 2659.927442458534,
+                  "signed_kg_m2": -4.927548683053708e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 860.6647813673989,
+                  "signed_kg_m2": -4.2837865176634634e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 3520.5922238259386,
+                  "signed_kg_m2": -9.211335200717144e-07
+                }
+              }
+            }
+          },
+          "raw_cell_rows": 0,
+          "unrecorded_transactions": 1510488
+        },
+        "2": {
+          "call_records": 280,
+          "cell_transactions": 1512982,
+          "groups": {
+            "AUT": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.07592582860414893,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.9240741713958508,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 28.2932006898439,
+                  "signed_kg_m2": 0.0
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 344.34943239032805,
+                  "signed_kg_m2": 0.0
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 372.64263308017206,
+                  "signed_kg_m2": 0.0
+                }
+              }
+            },
+            "G": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.15470556652632594,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.5101203430847753,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8452944334736749,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.48987965691522467,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 423.67293310227393,
+                  "signed_kg_m2": -1.0918066314805812e-06
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 2314.9029476187256,
+                  "signed_kg_m2": -1.0484856471575544e-06
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 2738.5758807209972,
+                  "signed_kg_m2": -2.140292278638136e-06
+                }
+              }
+            },
+            "NG": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.7999243879882402,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.3942615230094568,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.20007561201176052,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.6057384769905452,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 1814.9959792389618,
+                  "signed_kg_m2": -2.291678683193352e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 453.9634455431285,
+                  "signed_kg_m2": -3.520906490476735e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 2268.9594247820887,
+                  "signed_kg_m2": -5.812585173670075e-07
+                }
+              }
+            }
+          },
+          "raw_cell_rows": 0,
+          "unrecorded_transactions": 1512982
+        },
+        "3": {
+          "call_records": 280,
+          "cell_transactions": 1512461,
+          "groups": {
+            "AUT": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.0881400312400359,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.9118599687599649,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 30.067184137586427,
+                  "signed_kg_m2": 0.0
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 311.0625354072487,
+                  "signed_kg_m2": 0.0
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 341.1297195448348,
+                  "signed_kg_m2": 0.0
+                }
+              }
+            },
+            "G": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.10123797235176003,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 1.187767366673537,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8987620276482399,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": -0.18776736667353658,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 289.73274619944374,
+                  "signed_kg_m2": 1.9838250919101334e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 2572.165210357236,
+                  "signed_kg_m2": -3.136115908724363e-08
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 2861.89795655668,
+                  "signed_kg_m2": 1.670213501037696e-07
+                }
+              }
+            },
+            "NG": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8184677487943566,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.6443574553475291,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.18153225120564326,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.3556425446524723,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 1341.25957055481,
+                  "signed_kg_m2": -3.320318221211776e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 297.4849890574061,
+                  "signed_kg_m2": -1.8325952643953603e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 1638.7445596122163,
+                  "signed_kg_m2": -5.15291348560713e-07
+                }
+              }
+            }
+          },
+          "raw_cell_rows": 0,
+          "unrecorded_transactions": 1512461
+        },
+        "4": {
+          "call_records": 280,
+          "cell_transactions": 1513111,
+          "groups": {
+            "AUT": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.11281353872907832,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8871864612709219,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": null,
+                  "status": "ZERO_DENOMINATOR"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 35.750475005649115,
+                  "signed_kg_m2": 0.0
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 281.1483246278229,
+                  "signed_kg_m2": 0.0
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 316.8987996334719,
+                  "signed_kg_m2": 0.0
+                }
+              }
+            },
+            "G": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.10817622775859619,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.43249505051681514,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.8918237722414045,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 0.5675049494831845,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 317.619609323696,
+                  "signed_kg_m2": -5.645855031614308e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 2618.511700713196,
+                  "signed_kg_m2": -7.408294431755791e-07
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 2936.13131003689,
+                  "signed_kg_m2": -1.3054149463370103e-06
+                }
+              }
+            },
+            "NG": {
+              "applied_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.834089277389433,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": 1.6706499882349637,
+                  "status": "OK"
+                }
+              },
+              "deferred_over_proposed": {
+                "half_l1_kg_m2": {
+                  "ratio": 0.1659107226105672,
+                  "status": "OK"
+                },
+                "signed_kg_m2": {
+                  "ratio": -0.6706499882349594,
+                  "status": "OK"
+                }
+              },
+              "stages": {
+                "applied": {
+                  "half_l1_kg_m2": 1058.1204270926492,
+                  "signed_kg_m2": 1.5021921815905045e-07
+                },
+                "deferred": {
+                  "half_l1_kg_m2": 210.47330235127598,
+                  "signed_kg_m2": -6.030258737646671e-08
+                },
+                "proposed": {
+                  "half_l1_kg_m2": 1268.593729443925,
+                  "signed_kg_m2": 8.991663078258335e-08
+                }
+              }
+            }
+          },
+          "raw_cell_rows": 0,
+          "unrecorded_transactions": 1513111
+        }
+      },
+      "process_receipt": {
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00",
+          "2026-08-16_13:01:20",
+          "2026-08-16_13:01:40",
+          "2026-08-16_13:02:00"
+        ],
+        "fatal_lines": [
+          "-------------- FATAL CALLED ---------------",
+          "-------------- FATAL CALLED ---------------"
+        ],
+        "final_completed_step": 4,
+        "returncode": 1,
+        "status": "INCOMPLETE"
+      },
+      "receipt_binding": {
+        "candidate_build_unchanged": true,
+        "executed_executable_sha256": "2b3e5eb4d75c91797a6f500ce0956671fdd974530212cb51ac83a65e29bbce9a",
+        "frozen_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+        "preflight_path": "/var/tmp/pr89_OFF_120s_c1_20261019/preflight.json",
+        "preflight_sha256": "21a1d1d814ff20b0a2e190660369b027201d957b30bfd5501a3cc78ba64d9c88",
+        "receipt_path": "/var/tmp/pr89_OFF_120s_c1_20261019/receipt.json",
+        "receipt_sha256": "4bca8dc76092e012fe732c8d68e951b3b45dd875752e5156e8db77f163bd4271",
+        "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+        "summary_gzip_bytes": 225766,
+        "summary_gzip_sha256": "e57ef70e03e29f70a4377cc6ba521b5cc385294e752d4f03da61757c7c373a34",
+        "summary_path": "/var/tmp/pr89_OFF_120s_c1_20261019/run/pr89_kdm6_cold_summary.raw.gz",
+        "summary_uncompressed_bytes": 992320,
+        "summary_uncompressed_sha256": "884211e3e44c5468e16bbf5a7219c3778131886545bba65a2d589afcd48b0cbd"
+      },
+      "run_identity": "PR87 selected-object native candidate",
+      "timestep_seconds": 20,
+      "weight_units": "kg m-2 SUM_COLUMNS; no grid-area/global kg"
+    }
+  },
+  "coverage": {
+    "calls_per_completed_step": 280,
+    "completed_steps_per_arm": 4,
+    "expected_attempt_steps": 6,
+    "expected_call_records_per_arm": 1120
+  },
+  "definition": "For each group/stage, signed=sum(Q(5)+QV)*DEN*DELZ; half-L1=0.5*(sum(abs(Q(5)))+abs(QV))*DEN*DELZ; summed over columns.",
+  "interpretation_limits": [
+    "Diagnostics are same-call request activity, not reaction throughput or a closed conservation budget.",
+    "Column sums use actual same-call DEN*DELZ weights; no horizontal area is available in KDM62D.",
+    "Only the completed 80-second prefix of each incomplete 120-second attempt is evaluated.",
+    "Historical V17 rates are not copied or used as a baseline."
+  ],
+  "ratio_definition": "applied/proposed and deferred/proposed for signed and half-L1 totals; zero denominator is status ZERO_DENOMINATOR with null ratio.",
+  "schema": "pr89_c1_cold_process_summary_v1",
+  "scope": "Both requested 120-second runs are INCOMPLETE; cold summary covers only four completed 20-second steps (80-second prefix), 280 KDM6 call rows per completed step. No T5 call is included.",
+  "status": "EVALUATED_INCOMPLETE_120S_ATTEMPTS",
+  "weight_units": "kg m-2 SUM_COLUMNS; no horizontal area or global kg"
+}

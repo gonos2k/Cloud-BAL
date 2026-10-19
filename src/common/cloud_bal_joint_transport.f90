@@ -8,19 +8,21 @@ module cloud_bal_joint_transport
 
 contains
 
-  logical function joint_moment_is_valid(q, n, dry_density, minimum_ratio, maximum_ratio)
+  logical function joint_moment_is_valid(q, n, dry_density, minimum_ratio, maximum_ratio, &
+                                         inactive_mass_limit)
     ! Test one stored REAL32 pair with the same representation and endpoint
     ! tolerance used by the grouped candidate and its source-only diagnostic.
     real(real32), intent(in) :: q, n, dry_density
     real(real64), intent(in) :: minimum_ratio, maximum_ratio
+    real(real64), intent(in), optional :: inactive_mass_limit
     joint_moment_is_valid = joint_moment_is_valid64(real(q,real64), real(n,real64), &
-        dry_density, minimum_ratio, maximum_ratio)
+        dry_density, minimum_ratio, maximum_ratio, inactive_mass_limit)
   end function joint_moment_is_valid
 
   subroutine joint_moment_store(q64, n64, dry_density, minimum_ratio, maximum_ratio, &
                                 allow_subnormal, stored_q, stored_n, adjustment, valid, &
                                 allow_normal_q_adjustment, allow_joint_quantum_absence, &
-                                volume_number_bounds, strict_mass_ratio)
+                                volume_number_bounds, strict_mass_ratio, inactive_mass_limit)
     ! Store an already valid continuous pair. Opt-in repairs preserve the
     ! continuous gate: subnormal Q underflow can store joint absence; legacy
     ! one-neighbor Q repair handles PSD rounding; strict-volume normal-Q repair
@@ -35,11 +37,13 @@ contains
     logical, intent(in), optional :: allow_joint_quantum_absence
     real(real64), intent(in), optional :: volume_number_bounds(2)
     logical, intent(in), optional :: strict_mass_ratio
+    real(real64), intent(in), optional :: inactive_mass_limit
     real(real32) :: rounded_q, rounded_n, adjusted_q, directed_q
-    real(real64) :: ratio, minimum_number, maximum_number
+    real(real64) :: ratio, minimum_number, maximum_number, inactive_number_quantum_limit
     real(real32) :: number_volume32
     logical :: allow_normal, allow_quantum_absence, use_volume_contract, volume_valid
-    logical :: require_strict_mass, stored_mass_valid
+    logical :: require_strict_mass, stored_mass_valid, use_inactive_mass_limit
+    logical :: use_inactive_exact_store
     logical :: need_q_up, need_q_down, directed_valid
 
     stored_q = -1.0_real32
@@ -49,16 +53,65 @@ contains
     allow_normal = .false.
     allow_quantum_absence = .false.
     require_strict_mass = .false.
+    use_inactive_exact_store = .false.
+    use_inactive_mass_limit = present(inactive_mass_limit)
     use_volume_contract = present(volume_number_bounds)
     if (present(allow_normal_q_adjustment)) allow_normal = allow_normal_q_adjustment
     if (present(allow_joint_quantum_absence)) allow_quantum_absence = allow_joint_quantum_absence
     if (present(strict_mass_ratio)) require_strict_mass = strict_mass_ratio
+    if (use_inactive_mass_limit) then
+      if (.not.ieee_is_finite(inactive_mass_limit)) return
+      if (inactive_mass_limit<0.0_real64) return
+      if (inactive_mass_limit>0.0_real64) then
+        if (require_strict_mass .or. use_volume_contract) return
+      end if
+    end if
+    ! A declared joint-absence store may represent a positive inactive pair
+    ! when Q rounds to zero and N is bounded to one minimum-mass quantum.
+    ! This narrow fallback precedes continuous N*rho representability, which
+    ! is irrelevant once both stored moments are absent. Legacy-valid pairs
+    ! continue through their original storage policy below.
+    if (use_inactive_mass_limit) then
+      if (inactive_mass_limit>0.0_real64 .and. allow_quantum_absence) then
+        if (ieee_is_finite(q64) .and. ieee_is_finite(n64) .and. &
+            ieee_is_finite(dry_density) .and. ieee_is_finite(minimum_ratio) .and. &
+            ieee_is_finite(maximum_ratio)) then
+          if (q64>0.0_real64 .and. n64>0.0_real64 .and. dry_density>0.0_real32 .and. &
+              minimum_ratio>0.0_real64 .and. maximum_ratio>=minimum_ratio .and. &
+              q64<=inactive_mass_limit .and. &
+              q64<=real(huge(0.0_real32),real64) .and. &
+              n64<=real(huge(0.0_real32),real64)) then
+            if (.not.joint_moment_is_valid64(q64,n64,dry_density,minimum_ratio,maximum_ratio)) then
+              inactive_number_quantum_limit=nearest( &
+                  real(nearest(0.0_real32,1.0_real32),real64)/minimum_ratio,-1.0_real64)
+              if (n64<=inactive_number_quantum_limit) then
+                rounded_q=real(q64,real32)
+                if (rounded_q==0.0_real32) then
+                  stored_q=0.0_real32
+                  stored_n=0.0_real32
+                  adjustment=3
+                  valid=.true.
+                  return
+                end if
+              end if
+            end if
+          end if
+        end if
+      end if
+    end if
     if (require_strict_mass) then
       if (.not. strict_mass_ratio_valid64(q64,n64,minimum_ratio,maximum_ratio)) return
       if (.not.ieee_is_finite(dry_density)) return
       if (dry_density<=0.0_real32) return
     else
-      if (.not. joint_moment_is_valid64(q64, n64, dry_density, minimum_ratio, maximum_ratio)) return
+      stored_mass_valid = joint_moment_is_valid64(q64,n64,dry_density,minimum_ratio,maximum_ratio)
+      if (.not.stored_mass_valid) then
+        if (.not.use_inactive_mass_limit) return
+        if (inactive_mass_limit<=0.0_real64) return
+        if (.not.joint_moment_is_valid64(q64,n64,dry_density,minimum_ratio,maximum_ratio, &
+                                         inactive_mass_limit)) return
+        use_inactive_exact_store = .true.
+      end if
     end if
     if (use_volume_contract) then
       if (.not. volume_number_contract_valid(q64,n64,dry_density,volume_number_bounds)) return
@@ -68,6 +121,17 @@ contains
 
     rounded_q = real(q64,real32)
     rounded_n = real(n64,real32)
+    if (use_inactive_exact_store) then
+      if (rounded_q<=0.0_real32 .or. rounded_n<=0.0_real32) return
+      if (.not.joint_moment_is_valid(rounded_q,rounded_n,dry_density,minimum_ratio, &
+                                     maximum_ratio,inactive_mass_limit)) return
+      if (.not.stored_number_volume_is_representable(rounded_n,dry_density)) return
+      stored_q=rounded_q
+      stored_n=rounded_n
+      adjustment=0
+      valid=.true.
+      return
+    end if
     volume_valid = .true.
     if (use_volume_contract) then
       volume_valid = volume_number_stored_contract_valid(rounded_q,rounded_n, &
@@ -314,10 +378,30 @@ contains
                                         real(number_volume32,real64)<=maximum_number
   end function volume_number_stored_contract_valid
 
-  logical function joint_moment_is_valid64(q64, n64, dry_density, minimum_ratio, maximum_ratio)
+  logical function stored_number_volume_is_representable(n,dry_density)
+    real(real32), intent(in) :: n,dry_density
+    real(real64) :: number_volume64
+    real(real32) :: number_volume32
+
+    stored_number_volume_is_representable=.false.
+    if (.not.ieee_is_finite(n) .or. .not.ieee_is_finite(dry_density)) return
+    if (n<=0.0_real32 .or. dry_density<=0.0_real32) return
+    number_volume64=real(n,real64)*real(dry_density,real64)
+    if (.not.ieee_is_finite(number_volume64) .or. &
+        number_volume64<=0.5_real64*real(nearest(0.0_real32,1.0_real32),real64) .or. &
+        number_volume64>real(huge(0.0_real32),real64)) return
+    number_volume32=real(number_volume64,real32)
+    stored_number_volume_is_representable=ieee_is_finite(number_volume32) .and. &
+                                          number_volume32>0.0_real32
+  end function stored_number_volume_is_representable
+
+  logical function joint_moment_is_valid64(q64, n64, dry_density, minimum_ratio, maximum_ratio, &
+                                           inactive_mass_limit)
     real(real64), intent(in) :: q64, n64, minimum_ratio, maximum_ratio
     real(real32), intent(in) :: dry_density
+    real(real64), intent(in), optional :: inactive_mass_limit
     real(real64) :: pair_ratio, tolerance, moment_per_volume
+    logical :: inactive_mass
 
     joint_moment_is_valid64 = .false.
     if (.not. ieee_is_finite(q64) .or. .not. ieee_is_finite(n64) .or. &
@@ -325,6 +409,10 @@ contains
         .not. ieee_is_finite(minimum_ratio) .or. .not. ieee_is_finite(maximum_ratio)) return
     if (dry_density <= 0.0_real32 .or. minimum_ratio <= 0.0_real64 .or. &
         maximum_ratio < minimum_ratio) return
+    if (present(inactive_mass_limit)) then
+      if (.not.ieee_is_finite(inactive_mass_limit)) return
+      if (inactive_mass_limit<0.0_real64) return
+    end if
     if (q64 < 0.0_real64 .or. n64 < 0.0_real64 .or. &
         q64 > real(huge(0.0_real32),real64) .or. &
         n64 > real(huge(0.0_real32),real64)) return
@@ -338,6 +426,12 @@ contains
       if (n64 /= 0.0_real64) return
     else
       if (n64 == 0.0_real64) return
+      inactive_mass=.false.
+      if (present(inactive_mass_limit)) inactive_mass=q64<=inactive_mass_limit
+      if (inactive_mass) then
+        joint_moment_is_valid64=.true.
+        return
+      end if
       pair_ratio = q64/n64
       tolerance = 8.0_real64*abs(real(spacing(real(minimum_ratio,real32)),real64))
       if (pair_ratio < minimum_ratio-tolerance) return
@@ -355,7 +449,7 @@ contains
                               joint_constrained_storage, q_source_rate64, n_source_rate64, &
                               q_transport_rate64, n_transport_rate64, joint_quantum_absence, &
                               strict_number_pair, volume_number_bounds, number_pair_bounds, &
-                              strict_mass_pairs)
+                              strict_mass_pairs, inactive_mass_limits)
     ! Pair columns are QC/QNC, QI/QNI, QR/QNR, and QG/QIB. The first three
     ! ratios are mean particle masses; QG/QIB is graupel bulk density because
     ! QIB is rime-volume mixing ratio (m3 kg-dry-1), not a number moment.
@@ -381,14 +475,18 @@ contains
     ! opts that pair out of the strict volume-number contract.
     real(real64), intent(in), optional :: number_pair_bounds(:,:,:)
     logical, intent(in), optional :: strict_mass_pairs(:)
+    ! Opt-in q<=limit transient branch for ordinary number pairs only.
+    real(real64), intent(in), optional :: inactive_mass_limits(:)
 
     real(real32), allocatable :: q_candidate(:,:), n_candidate(:,:)
     real(real64), allocatable :: local_delta_q(:), local_delta_n(:)
     integer, allocatable :: local_adjustments(:)
+    real(real64), allocatable :: inactive_mass_limit_by_pair(:)
     real(real64) :: low, high, trial
     integer :: iteration, cell, pair, ncells, npairs, adjustment, use_strict_pair
     logical, allocatable :: pair_has_volume_bounds(:)
     logical, allocatable :: pair_has_strict_mass(:)
+    logical, allocatable :: pair_has_inactive_mass_limit(:)
     logical :: use_joint_storage, use_constrained_storage, use_quantum_absence, storage_valid
 
     feasible = .false.
@@ -439,8 +537,23 @@ contains
     npairs = size(q_base, 2)
     allocate(pair_has_volume_bounds(npairs))
     allocate(pair_has_strict_mass(npairs))
+    allocate(pair_has_inactive_mass_limit(npairs))
     pair_has_volume_bounds = .false.
     pair_has_strict_mass = .false.
+    pair_has_inactive_mass_limit = .false.
+    allocate(inactive_mass_limit_by_pair(npairs))
+    inactive_mass_limit_by_pair = 0.0_real64
+    if (present(inactive_mass_limits)) then
+      if (size(inactive_mass_limits)/=npairs) return
+      if (any(.not.ieee_is_finite(inactive_mass_limits))) return
+      if (any(inactive_mass_limits<0.0_real64)) return
+      inactive_mass_limit_by_pair=inactive_mass_limits
+      pair_has_inactive_mass_limit=inactive_mass_limits>0.0_real64
+      if (any(pair_has_inactive_mass_limit) .and. .not.use_constrained_storage) return
+      do pair=1,npairs
+        if (pair_has_inactive_mass_limit(pair) .and. pair/=2) return
+      end do
+    end if
     if (present(strict_mass_pairs)) then
       if (size(strict_mass_pairs) /= npairs) return
       pair_has_strict_mass = strict_mass_pairs
@@ -465,6 +578,8 @@ contains
         pair_has_volume_bounds(pair) = .true.
       end do
     end if
+    if (any(pair_has_inactive_mass_limit .and. &
+            (pair_has_volume_bounds .or. pair_has_strict_mass))) return
     if (npairs == 0 .or. ncells == 0) return
     if (size(n_base,1) /= ncells .or. size(q_stage,1) /= ncells .or. &
         size(n_stage,1) /= ncells .or. size(q_source,1) /= ncells .or. &
@@ -606,6 +721,14 @@ contains
                                       allow_joint_quantum_absence=use_quantum_absence, &
                                       volume_number_bounds=cell_volume_bounds, &
                                       strict_mass_ratio=pair_has_strict_mass(p))
+            else if (pair_has_inactive_mass_limit(p)) then
+              call joint_moment_store(q_value, n_value, dry_density(i), min_particle_mass(p), &
+                                      max_particle_mass(p), .true., q_candidate(i,p), &
+                                      n_candidate(i,p), adjustment, storage_valid, &
+                                      allow_normal_q_adjustment=use_constrained_storage, &
+                                      allow_joint_quantum_absence=use_quantum_absence, &
+                                      strict_mass_ratio=pair_has_strict_mass(p), &
+                                      inactive_mass_limit=inactive_mass_limit_by_pair(p))
             else
               call joint_moment_store(q_value, n_value, dry_density(i), min_particle_mass(p), &
                                       max_particle_mass(p), .true., q_candidate(i,p), &
@@ -645,8 +768,14 @@ contains
       candidate_is_feasible = .false.
       do p = 1, npairs
         do i = 1, ncells
-          pair_valid = joint_moment_is_valid(q_candidate(i,p),n_candidate(i,p),dry_density(i), &
-                                             min_particle_mass(p),max_particle_mass(p))
+          if (pair_has_inactive_mass_limit(p)) then
+            pair_valid = joint_moment_is_valid(q_candidate(i,p),n_candidate(i,p),dry_density(i), &
+                                               min_particle_mass(p),max_particle_mass(p), &
+                                               inactive_mass_limit_by_pair(p))
+          else
+            pair_valid = joint_moment_is_valid(q_candidate(i,p),n_candidate(i,p),dry_density(i), &
+                                               min_particle_mass(p),max_particle_mass(p))
+          end if
           if (pair_has_strict_mass(p)) pair_valid = strict_mass_ratio_valid64( &
               real(q_candidate(i,p),real64),real(n_candidate(i,p),real64), &
               min_particle_mass(p),max_particle_mass(p))

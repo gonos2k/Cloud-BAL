@@ -1,0 +1,182 @@
+{
+  "build": {
+    "candidate_executable_sha256": "5c7f6ff646d4867e4e21194d071a12db9bfad6ad4ef303d7d3bc75fd150268a4",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "full_clean_build": false,
+    "receipt": "/var/tmp/pr89_native_build_20261019_c4/pr87_native_overlay_build.json",
+    "receipt_sha256": "5bbad5e938f207d908852b9549be6b7faf08b9585e7bb265867ccfe7e62be843",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "c4_vs_c3_first80_prefix": {
+    "arms": {
+      "COUPLED": {
+        "arm": "COUPLED",
+        "c3_trace_sha256": "867cb1a64a250eadabec5ea1b822f3601bdab3a2d01d0a00b05ce05c802085c1",
+        "c4_trace_sha256": "867cb1a64a250eadabec5ea1b822f3601bdab3a2d01d0a00b05ce05c802085c1",
+        "compared_bytes": 3378551280,
+        "fields": 333,
+        "max_timestep_included": 4,
+        "mismatches": [],
+        "prefix_exact": true,
+        "records": 33,
+        "sequence_equal_through_t4": true
+      },
+      "OFF": {
+        "arm": "OFF",
+        "c3_trace_sha256": "513067757b00e8c2c0b1208cfe723093dd492afd154f30e1b2e9541986f50453",
+        "c4_trace_sha256": "513067757b00e8c2c0b1208cfe723093dd492afd154f30e1b2e9541986f50453",
+        "compared_bytes": 3378551280,
+        "fields": 333,
+        "max_timestep_included": 4,
+        "mismatches": [],
+        "prefix_exact": true,
+        "records": 33,
+        "sequence_equal_through_t4": true
+      }
+    },
+    "comparison_json": "/var/tmp/pr89_c4_vs_c3_first80_prefix_20261019.json",
+    "comparison_sha256": "6eab9f3521680d7bf16556cd6f526e57042fb3628f82e26cdc97eb28cd933fbb"
+  },
+  "completed_state_audits": {
+    "COUPLED": {
+      "audit_path": "/var/tmp/pr89_coupled_completed_state_audit_c4.json",
+      "audit_sha256": "f92fb671ebbecef4ef497cc25ebc9daa82a809953b459a42f292d6e797e737bf",
+      "audit_status": "FAIL",
+      "build_unchanged": true,
+      "completed_post_kdm6": 4,
+      "completed_steps": 4,
+      "executed_executable_sha256": "5c7f6ff646d4867e4e21194d071a12db9bfad6ad4ef303d7d3bc75fd150268a4",
+      "expected_executable_sha256": "5c7f6ff646d4867e4e21194d071a12db9bfad6ad4ef303d7d3bc75fd150268a4",
+      "final_completed_step": 4,
+      "input_hashes": {
+        "namelist": "dee430a6911f565f1f00f1d34fc41183d7f005f140375aca27cd5c0e2fd35bbd",
+        "wrfbdy_d01": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfinput_d01": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
+      },
+      "maximum_seen_step": 5,
+      "preflight_sha256": "7cc08d76ce361e28db486e4a0a7dd97d4f9eb4d89c45f3b330434462b6c9f4e6",
+      "receipt_sha256": "a24c4d30c2d2bcaf9b3df1c4375e2bce56027952425f9bb6b29808cbae289c0b",
+      "receipt_status": "INCOMPLETE",
+      "returncode": 1,
+      "stage_trace_sha256": "867cb1a64a250eadabec5ea1b822f3601bdab3a2d01d0a00b05ce05c802085c1",
+      "staged_or_original_inputs_changed": false,
+      "state_record_count": 25,
+      "step_statuses": {
+        "1": "PASS",
+        "2": "PASS",
+        "3": "PASS",
+        "4": "FAIL",
+        "5": "INCOMPLETE"
+      },
+      "t4_ice_beyond_8ulp": 2,
+      "t4_ice_exact_outside": 331,
+      "t4_strict_source_violations": {},
+      "trace_steps": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "OFF": {
+      "audit_path": "/var/tmp/pr89_off_completed_state_audit_c4.json",
+      "audit_sha256": "94640936d95f6f059bf78bbdf0233af4ff7bc69ad9e2c60fe4ec2a393f8e0df3",
+      "audit_status": "FAIL",
+      "build_unchanged": true,
+      "completed_post_kdm6": 4,
+      "completed_steps": 4,
+      "executed_executable_sha256": "5c7f6ff646d4867e4e21194d071a12db9bfad6ad4ef303d7d3bc75fd150268a4",
+      "expected_executable_sha256": "5c7f6ff646d4867e4e21194d071a12db9bfad6ad4ef303d7d3bc75fd150268a4",
+      "final_completed_step": 4,
+      "input_hashes": {
+        "namelist": "dee430a6911f565f1f00f1d34fc41183d7f005f140375aca27cd5c0e2fd35bbd",
+        "wrfbdy_d01": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfinput_d01": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200"
+      },
+      "maximum_seen_step": 5,
+      "preflight_sha256": "a8e661be98d695a10849679c255b499d40667a48f38ac9cb0a4bbeb58cd3f9e5",
+      "receipt_sha256": "fc91273589ef5181d85e6a9b4891a4b3b09b5853c34f02be82bee6b4c8e25e24",
+      "receipt_status": "INCOMPLETE",
+      "returncode": 1,
+      "stage_trace_sha256": "513067757b00e8c2c0b1208cfe723093dd492afd154f30e1b2e9541986f50453",
+      "staged_or_original_inputs_changed": false,
+      "state_record_count": 25,
+      "step_statuses": {
+        "1": "PASS",
+        "2": "PASS",
+        "3": "PASS",
+        "4": "FAIL",
+        "5": "INCOMPLETE"
+      },
+      "t4_ice_beyond_8ulp": 2,
+      "t4_ice_exact_outside": 325,
+      "t4_strict_source_violations": {},
+      "trace_steps": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  "failure": {
+    "decoded_operands": {
+      "candidate_n64": 1.1916375247192763e-44,
+      "candidate_q64": 1.5521916836884197e-60,
+      "candidate_r32_bits": "00000009",
+      "source_n64": 1.7025888806764468e-40,
+      "source_q64": 2.2177417599776646e-56,
+      "source_r32_bits": "0001DA9D",
+      "transport_n64": -0.0,
+      "transport_q64": -0.0
+    },
+    "interpretation": "The next storage candidate has Q64 that rounds to REAL32 zero and N64 that rounds to 9 positive REAL32 subnormals. The requested run remains incomplete. This is the observed storage contract failure after prior quantum-absence cases; no physical invalidity inference is made from the trace.",
+    "line": "PR87_GRAUPEL_TRIAL_REJECT 1 2 188 220 2 3383F446E813526C 36D101F352E66E25 346166B78DD72367 37ADA9CCD75CAC3F 8000000000000000 8000000000000000",
+    "operand_order": [
+      "candidate_q64",
+      "candidate_n64",
+      "source_q64",
+      "source_n64",
+      "transport_q64",
+      "transport_n64"
+    ]
+  },
+  "joint_rk": "For both arms, 12 completed RK rows through T4 have theta=1 and feasible=T. T5 RK1 has theta=0 and feasible=F.",
+  "request": {
+    "completed_calls": 4,
+    "completed_seconds": 80,
+    "dt_seconds": 20,
+    "expected_calls": 6,
+    "seconds": 120,
+    "status": "INCOMPLETE in both arms"
+  },
+  "schema": "pr89_c4_closed_prefix_independent_audit_v1",
+  "scope": "Read-only C4 build/input validation, completed-state audit and exact four-step C4/C3 stage-prefix comparison; no model/source edits or additional native runs",
+  "source_manifest": {
+    "embedded_joint_module_sha256": "7111caf1f940d1f27373836db488b6a336edccdac4c31bfcac4e7f8541561e1a",
+    "identity": "PR89-C4",
+    "initial_inputs_changed": false,
+    "module_em_sha256": "0bb7be7844100beb8562c8d3d1bf11b0278e92d4a24e5bfee5769fcb87a96483",
+    "module_kdm6_sha256": "14c6145df549541fae2aab84e98ee480ba6ac8a7c769dd926a6d44f22451c35d",
+    "parent_identity": "PR89-C1",
+    "path": "/var/tmp/pr89_sources_20261019_c4/sources.json",
+    "physics_changed": true,
+    "precision_prior_fp_changed": false,
+    "sha256": "0e6555606fa3303636dbdd92e0e0224637e2d3fc96064707860b2a715a14af91",
+    "supersedes_attempt": "PR89-C3 (80s prefix and T5 both-round-zero failure preserved)"
+  },
+  "t4_ice_policy": {
+    "both_arms": {
+      "active_pairs_beyond_8_ulp": 0,
+      "beyond_8_ulp_pairs_below_native_inactive_limit": 2,
+      "ice_pairs_beyond_8_ulp": 2,
+      "strict_cloud_rain_graupel_violations": {}
+    },
+    "generic_audit_note": "The generic cone audit examines all positive ice pairs and marks T4 FAIL on two tiny inactive ice pairs; the actual native inactive-mass contract places both below the active PSD gate.",
+    "native_inactive_limit": 9.999998977483753e-15
+  }
+}

@@ -1,0 +1,22 @@
+# PR89 C4 narrow ICE quantum-absence review — 2026-10-19
+
+## Reviewed identities
+
+- `src/common/cloud_bal_joint_transport.f90`: SHA-256 `7111caf1f940d1f27373836db488b6a336edccdac4c31bfcac4e7f8541561e1a`
+- `tests/test_joint_qnb_transport.f90`: SHA-256 `474a0860af6e3702f0a5fdb1134df934c2826e4c4ac65cdcb0f255e4dfd248cf`
+- `tools/pr89_ice_consumer_contract.py`: SHA-256 `8ea3c745769e45dc13a0a251c50937ac54d980ebce2a7f383b49228df2f52dab`
+- `tests/test_pr89_ice_consumer_contract.py`: SHA-256 `ebedd24a25a0c823ca0c3d0fa38ba965c68afdd1e4407717942f757e6b571dcc`
+
+Read-only source/test review only. I did not run tests, builds, or native cases.
+
+## C4 branch review
+
+The new path precedes continuous `N*rho` representability but is narrowly gated by a present, finite, positive inactive-mass limit; the existing joint-quantum-absence flag; finite Q/N, dry density and ratio bounds; positive Q/N and density; valid positive ordered bounds; `Q <= inactive_mass_limit`; R32 range checks; and both `REAL32(Q)` and `REAL32(N)` equal to zero. It stores exactly `(0,0)`, returns adjustment 3, and exits before the positive-pair validator. Thus it admits only the state the native inactive-ice consumer will receive; it does not claim the pre-storage positive N×density product is representable because the committed moments are both absent.
+
+The ordinary `joint_moment_is_valid64` predicate and the previous positive-storage path are unchanged. Without the declared quantum flag, or without the inactive cutoff, the T5 pair is rejected. One-sided zero rounding, above-limit, negative Q, strict/volume contracts, and invalid thresholds still reject. The common Q/N transaction accumulates the signed extensive losses as `carrier_new*(0-Qcandidate)` and `carrier_new*(0-Ncandidate)`; the new unit fixture checks both signs and values and counts one adjusted pair. `joint_qnb_update` continues to restrict positive inactive limits to the ICE/QI pair and rejects a limit combined with strict mass/volume contracts.
+
+The T5 test reconstructs the candidate from captured Q/N bit patterns `0x3313FC0F74539AB9` / `0x36610895A31A7272`, source-rate bits `0x33F16D2A0D5CBF25` / `0x373DB4CA633D4BA5`, and `dt=0x40D55555`; it asserts both computed REAL64 candidate bit patterns before checking that each casts to zero in R32. The new carrier `95244.79_real32` (95244.7890625) and density `1.198626_real32` are adapters from rounded retained state, not claims of exact RK1 operand captures. The fixture does not substitute the PRE_RK observer density. The ICE transformed-host regression remains bound to the positive T5 endpoint/certifier/actual full NG consumer; the new both-zero branch is directly exercised through `joint_moment_store` and the shared `joint_qnb_update` transaction. The host call-site flags and prepared-source/core hash binding remain covered by that connector test.
+
+## Review result and validation boundary
+
+No source-level blocker found in the narrow C4 change. The final integrated receipt `review/focused_validation.json` has SHA-256 `fcd3d92984e6cace9ae3b2d05c9c930edf0dc4246bbea48a085bde81296f2f5d`; it records 43 focused Python and pinned Intel source-form tests passing, and pins the current C4 core/test/connector identities above, including ICE connector SHA-256 `8ea3c745769e45dc13a0a251c50937ac54d980ebce2a7f383b49228df2f52dab`. The separate joint transport test passed Intel O0/O2; its checked-in log `review/joint_transport_tests_c4.log` has SHA-256 `ecd0f79c88fca16c0d799e258a95462d5bc8ec59c8f6df2d831c4ee50fd6bc62`. Focused test log/JUnit hashes are `440b81c71153f66d333deb220fc0ba4808cd83437baad709f03585f569499990` and `1d8a486b047dfd92d2fddfd10ff845ec6bce70f6b5e514abf068b6f0fffb0015`. The final whitespace-only cleanup also changed the process-consumer generator to SHA-256 `b3bd5b0e6f77a460d2bb440d631ed3b305849db7cb3a65fdb2e84f34960faa9f`; `review/c4_generation_equivalence.json` (SHA-256 `5be6cb650ac3f4869ead4934f50584f20f0588969f189512b037cbb435b7b137`) records that regenerated EM/KDM6 source hashes exactly equal the frozen C4 native sources. The earlier build manifest retains its preformat generator hash, while the native input bytes remain unchanged. This independent review did not rerun the batch. The C3 receipt and frozen source archive remain separate. These checks do not establish a whole canonical or clean WRF build, final native runtime, process closure, or physical approval.

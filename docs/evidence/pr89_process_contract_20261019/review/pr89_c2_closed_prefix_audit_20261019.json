@@ -1,0 +1,118 @@
+{
+  "arms": {
+    "COUPLED": {
+      "candidate_build_sha256": "9df16da3bf3221596a06d7fe26c494be002357d89ff8d0edc0be405335cd8f67",
+      "completed_calls": 1,
+      "executed_executable_sha256": "4cc58c7261b203bd2dad70a230536292278bc69ff4c18381923e159aaeab0ade",
+      "fatal_lines": [
+        "-------------- FATAL CALLED ---------------",
+        "-------------- FATAL CALLED ---------------"
+      ],
+      "input_hashes": {
+        "namelist": "dee430a6911f565f1f00f1d34fc41183d7f005f140375aca27cd5c0e2fd35bbd",
+        "wrfbdy_d01": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfinput_d01": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
+      },
+      "inputs_changed": false,
+      "last_completed_step": 1,
+      "maximum_seen_step": 2,
+      "preflight_sha256": "61a39b59daae587d9b654254aa5b031c6ddd23290c99152e6d648bc6a2afd525",
+      "receipt": "/var/tmp/pr89_COUPLED_120s_c2_20261019/receipt.json",
+      "receipt_sha256": "0b3d86565068d4afe9df3fb98dcb189ba059ee0b367d7f612c768d7b3ee3028a",
+      "returncode": 1,
+      "state_audit": {
+        "completed_calls": 1,
+        "path": "/var/tmp/pr89_coupled_completed_state_audit_c2.json",
+        "sha256": "2a58cac74e7f5f631242f6d3544a38598c69ff7457eed85dd411f997bba51e00",
+        "state_records": 7,
+        "status": "INCOMPLETE",
+        "timestep_statuses": {
+          "1": "PASS",
+          "2": "INCOMPLETE"
+        },
+        "trace_timesteps": [
+          1,
+          2
+        ]
+      },
+      "status": "INCOMPLETE"
+    },
+    "OFF": {
+      "candidate_build_sha256": "9df16da3bf3221596a06d7fe26c494be002357d89ff8d0edc0be405335cd8f67",
+      "completed_calls": 1,
+      "executed_executable_sha256": "4cc58c7261b203bd2dad70a230536292278bc69ff4c18381923e159aaeab0ade",
+      "fatal_lines": [
+        "-------------- FATAL CALLED ---------------",
+        "-------------- FATAL CALLED ---------------"
+      ],
+      "input_hashes": {
+        "namelist": "dee430a6911f565f1f00f1d34fc41183d7f005f140375aca27cd5c0e2fd35bbd",
+        "wrfbdy_d01": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfinput_d01": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200"
+      },
+      "inputs_changed": false,
+      "last_completed_step": 1,
+      "maximum_seen_step": 2,
+      "preflight_sha256": "a1e597e2f282e898dca8327641e88ef8a494c393a2d6c3947f827d70763697c3",
+      "receipt": "/var/tmp/pr89_OFF_120s_c2_20261019/receipt.json",
+      "receipt_sha256": "207bfe72c1832bf1880b3d4638777fbd331ab3b842531b4a04e99e4ea7b6a2e1",
+      "returncode": 1,
+      "state_audit": {
+        "completed_calls": 1,
+        "path": "/var/tmp/pr89_off_completed_state_audit_c2.json",
+        "sha256": "723bf7a73b780a3da2bad95bf382a7e90d86d120941af5896cea52a50ddf25a2",
+        "state_records": 7,
+        "status": "INCOMPLETE",
+        "timestep_statuses": {
+          "1": "PASS",
+          "2": "INCOMPLETE"
+        },
+        "trace_timesteps": [
+          1,
+          2
+        ]
+      },
+      "status": "INCOMPLETE"
+    }
+  },
+  "build": {
+    "compiler": "pinned Intel ifx 2026.0.0",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "executable_sha256": "4cc58c7261b203bd2dad70a230536292278bc69ff4c18381923e159aaeab0ade",
+    "full_clean_build": false,
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "receipt": "/var/tmp/pr89_native_build_20261019_c2/pr87_native_overlay_build.json",
+    "receipt_sha256": "9df16da3bf3221596a06d7fe26c494be002357d89ff8d0edc0be405335cd8f67",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "classification": "OWN_C2_REGRESSION, not an unexplained host-state/physics failure. C2 inactive-ice propagation intercepts a pair that legacy validation accepts under its PSD contract but whose tiny Q rounds to zero in the storage endpoint; C2 has no legacy fallback on that path. Root source replay maps the failed pair to species 2 at i=233,j=104,k=7, Q\u22484.6395e-47 and N\u22481.315477e-37. C3 should restore old flow for legacy-valid pairs and use the new exact-storage route only when legacy validation rejects and the native inactive condition applies.",
+  "fatal_marker": "PR87_GRAUPEL_TRIAL_REJECT 1 2 233 104 7 3650F39CB3992608 384661B65DB0026E 372D96A949BBE498 3923888501094DAB 8000000000000000 8000000000000000",
+  "preflight": {
+    "arms": [
+      "OFF",
+      "COUPLED"
+    ],
+    "disk_guard": "PASS",
+    "duration_seconds": 120,
+    "expected_steps": 6,
+    "input_file_count": 101,
+    "namelist_sha256": "dee430a6911f565f1f00f1d34fc41183d7f005f140375aca27cd5c0e2fd35bbd",
+    "same_inputs_except": [
+      "wrfinput_d01"
+    ],
+    "timestep_seconds": 20,
+    "wrfbdy_sha256": "885591e6008e219d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e"
+  },
+  "schema": "pr89_c2_closed_prefix_independent_audit_v1",
+  "scope": "Read-only C2 build/preflight and closed 120s run-prefix audit; no native reruns or model/source edits",
+  "source_manifest": {
+    "embedded_joint_module_sha256": "cdebf80f369ce9cf2bff894859233d1d4910abd02ded9d864816e53ed7d0066e",
+    "initial_inputs_changed": false,
+    "module_em_sha256": "04ffa9902ead74449ea0656cf6368dfb8b193af7a74687f49a25fa3c703754ea",
+    "module_kdm6_sha256": "14c6145df549541fae2aab84e98ee480ba6ac8a7c769dd926a6d44f22451c35d",
+    "path": "/var/tmp/pr89_sources_20261019_c2/sources.json",
+    "physics_changed": true,
+    "precision_prior_fp_changed": false,
+    "sha256": "79c16ef0a8d229a49ce9c4fe5cc867c0ad19e63ec078c166b76f20f9204573e6"
+  }
+}
