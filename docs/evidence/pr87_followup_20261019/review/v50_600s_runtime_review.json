@@ -1,0 +1,141 @@
+{
+  "T4_summary": {
+    "COUPLED": {
+      "cause": "same captured fatal class; no separate source replay or causal attribution claimed",
+      "fatal_class": "KDM6 invalid base before nongraupel admission",
+      "fatal_log_sha256": "663126dd873f1c9e944af0629ca1087ef2d8958b1fd7d95d9ee31fc57319e88f",
+      "observed_post_kdm6": false,
+      "stage_sequence": [
+        "PRE_RK",
+        "RK_STAGE_END",
+        "RK_STAGE_END",
+        "RK_STAGE_END",
+        "PRE_KDM6"
+      ],
+      "status": "INCOMPLETE"
+    },
+    "OFF": {
+      "captured_source_representation_records": [
+        "SOURCE_REPRESENTATION_META 4 3",
+        "SOURCE_TOTAL 4 3 1 2533440 739630",
+        "SOURCE_LATER_TOTAL 4 3 1 -7.57288456070751"
+      ],
+      "cause": "not assigned by this review",
+      "fatal_log_sha256": "3c53784ea0cd2071421f900f4594d82421f18d81d636cd41b09353e457b773b3",
+      "observed_post_kdm6": false,
+      "stage_sequence": [
+        "PRE_RK",
+        "RK_STAGE_END",
+        "RK_STAGE_END",
+        "RK_STAGE_END",
+        "PRE_KDM6"
+      ],
+      "status": "INCOMPLETE"
+    }
+  },
+  "arms": {
+    "COUPLED": {
+      "completed_post_kdm6_timesteps": [
+        1,
+        2,
+        3
+      ],
+      "fatal": "KDM6 invalid base before nongraupel admission",
+      "inputs_unchanged": true,
+      "processing_errors": [],
+      "receipt_sha256": "425d9f87ae31cb9175e6eb85064ec4d01f52d1594b9ba068bdfecbc1e8c6ad2b",
+      "returncode": 128,
+      "review_path": "/var/tmp/pr88_v50_600s_review_20261019/coupled_review.json",
+      "review_sha256": "fdd1ea3e623939410739e3993fd1fa709976ae1728ddb628100a814096cdb8ac",
+      "stage_audit_path": "/var/tmp/pr88_v50_600s_review_20261019/coupled_stage_audit.json",
+      "stage_audit_sha256": "7342323e5c4207ce37c20d08ed9735baaf18d101eb6a3de3b9f67fc0cc8ab9e1",
+      "status": "INCOMPLETE",
+      "strict_completed_timestep_statuses": [
+        [
+          1,
+          "PASS"
+        ],
+        [
+          2,
+          "PASS"
+        ],
+        [
+          3,
+          "PASS"
+        ]
+      ]
+    },
+    "OFF": {
+      "completed_post_kdm6_timesteps": [
+        1,
+        2,
+        3
+      ],
+      "fatal": "KDM6 invalid base before nongraupel admission",
+      "inputs_unchanged": true,
+      "processing_errors": [],
+      "receipt_sha256": "dfb88c2d54b5a19bd73c7b166daf4b2b6dcbc7bf4863ffb2d7d96434205fc734",
+      "returncode": 128,
+      "review_path": "/var/tmp/pr88_v50_600s_review_20261019/off_review.json",
+      "review_sha256": "30c00eb636cc21b2f896152ef10799ccd07c6dc2b2b6fafb0b9b53db7bfadc86",
+      "stage_audit_path": "/var/tmp/pr88_v50_600s_review_20261019/off_stage_audit.json",
+      "stage_audit_sha256": "abf4f829b7f7abb0f08648f87413c9f8b4e10f119eb152ec79bf0758321c7cd6",
+      "status": "INCOMPLETE",
+      "strict_completed_timestep_statuses": [
+        [
+          1,
+          "PASS"
+        ],
+        [
+          2,
+          "PASS"
+        ],
+        [
+          3,
+          "PASS"
+        ]
+      ]
+    }
+  },
+  "common_build": {
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+    "full_clean_build": false,
+    "receipt_path": "/var/tmp/pr87_followup_build_20261019_v50/pr87_native_overlay_build.json",
+    "receipt_sha256": "04b043f0da7678f49eb3991e3bd07db399fb17c4699da7c245a04fdab6040e8c",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "limitations": [
+    "Both 600s runs completed only POST_KDM6 timesteps 1\u20133 (20s/40s/60s); neither reached 80s.",
+    "Both stop in T4 KDM6 before POST_KDM6 with the same fatal class. This review does not establish the fatal predicate.",
+    "The 600s runs are not a PASS. The earlier completed 60s validation remains a separate COMPLETE result.",
+    "Build is a partial overlay, not a clean full-model build."
+  ],
+  "prefix_checks": {
+    "COUPLED": {
+      "all_nine_T1_T3_blocks_equal": true,
+      "compared_bytes": 2546783620,
+      "first_three_call_blocks_equal": true,
+      "records": 25,
+      "stage_metadata_equal": true,
+      "stage_record_hashes_equal": true
+    },
+    "OFF": {
+      "all_nine_T1_T3_blocks_equal": true,
+      "compared_bytes": 2546783620,
+      "first_three_call_blocks_equal": true,
+      "records": 25,
+      "stage_metadata_equal": true,
+      "stage_record_hashes_equal": true
+    },
+    "scope": "For each arm, compare 60s and 600s artifacts through completed T3: first three JOINT_RK blocks, all nine T1\u2013T3 blocks, and complete binary state/tendency records."
+  },
+  "schema": "pr88_v50_paired_600s_review_v1",
+  "scope": "Paired OFF/COUPLED 600-second V50 requested runs, both closed and incomplete at T4. Independent audits use captured artifacts only.",
+  "validated_60s_window": {
+    "relationship": "Separate successful three-step validation; retained unchanged.",
+    "review_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_followup_20261019/review/v50_runtime_review.json",
+    "review_sha256": "4ddfe7ea0b4582e71a96b4793d07ed6c643ae762a314f8e5d2746e0684e0b973",
+    "status": "COMPLETE"
+  }
+}

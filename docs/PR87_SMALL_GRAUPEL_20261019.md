@@ -7,13 +7,16 @@
 checks all completed states, all nine accepted RK calls at air fraction one,
 unchanged input hashes, and 17 bit-identical records through the preserved
 40-second prefix. Ice retains its separately declared 8-ULP policy;
-cloud/rain and graupel keep their strict bounds. The selected-object Intel
+cloud/rain and graupel pass strict checks at completed state boundaries.
+An internal rain-freezing packet has a separate existing 8-ULP allowance,
+as distinguished in the longer-window result below. The selected-object Intel
 build is a research partial host, not a clean whole-model build.
 
 The [manifest](evidence/pr87_followup_20261019/manifest.json) is the entry point
 for source/build identity, the 28 focused tests, matched closed receipts and
-scientific gates. The same binary is now attempting OFF600; COUPLED600 waits
-for its disk allocation. Neither window has a longer-duration PASS yet.
+scientific gates. Both fixed-binary 600-second attempts are now closed
+`INCOMPLETE`: three steps complete through 60 seconds, then timestep 4 fails
+before `POST_KDM6`. The successful 60-second window remains `PASS_SCOPED`.
 
 ## Preserved baseline and actual failure
 
@@ -212,6 +215,39 @@ also exposes pressure, Phi, potential-temperature and wind descriptors;
 force/continuity balance and independent observation agreement are not
 evaluated. First-call rain/cutoff/ice subsets remain byte-identical to V44,
 as bound by the V50 scoped comparison in the manifest.
+
+## Fixed-binary 600-second comparison
+
+Both arms preserve the V50 executable, original inputs and FP policy. Each
+reproduces the completed three-step 60-second window, then stops at
+`KDM6 invalid base before nongraupel admission` in timestep 4. Neither has
+an 80-second completed state or a 10-minute result. The
+[closed-run review](evidence/pr87_followup_20261019/review/v50_600s_runtime_review.json)
+keeps the 60-second prefix and the later failed step separate.
+
+The [source-pinned OFF diagnosis](evidence/pr87_followup_20261019/review/t4_ng_contract/README.md)
+links an accepted rain-freezing packet to the later strict rain-number failure
+(reason 6) at call latitude index 115, i26, k18. The packet moves the rain
+pair from just inside the strict bound to 1.0000006450932586 times its maximum.
+Its existing eight-REAL32-ULP mean-mass allowance accepts that endpoint; the
+next NG validator rejects it. A fresh pinned-Intel replay and independent
+review confirm the logged bits and predicate. This is a handoff between two
+different existing acceptance policies, not another ProgB transient or an FTZ
+failure. It is an OFF cell replay; the paired receipts independently establish
+the same fatal class in COUPLED.
+
+The receipt-bound T0/T60 history and first-call subsets match the completed
+60-second runs byte-for-byte in both arms. The current cold ledgers contain
+954 schema-comment lines and no data rows per arm: NG/AUT/G activity is
+`NOT_EVALUATED`, not zero. Historical v17 suppression rates are not used as
+V50 measurements. The [availability audit](evidence/pr87_followup_20261019/budget/review/v50_600s_history_prefix_and_cold_availability.json)
+records this limitation.
+
+Physics and tolerances were not changed during this comparison. The next
+focused task is to make the rain packet endpoint satisfy its next consumer's
+contract, retaining donor/receiver/heat coupling and transactional rollback.
+Clipping NR or broadening the NG tolerance is not justified by this diagnosis.
+The V50 60-second research baseline remains preserved.
 
 ## Scientific limits
 
