@@ -235,3 +235,7 @@ The [C3 integration review](evidence/pr89_process_contract_20261019/review/pr89_
 The final Python whitespace cleanup is bound in [generation equivalence](evidence/pr89_process_contract_20261019/review/c4_generation_equivalence.json): regenerating both native sources from the final tools reproduces the frozen C4 inputs byte-for-byte. Build-time generator hashes refer to the preserved preformat archive; the focused receipt binds the final formatted tools. The core, native source files and executable were not changed after build.
 
 The [C4 completed-prefix audit](evidence/pr89_process_contract_20261019/review/pr89_c4_completed_audit_20261019.md) binds both closed 120-second requests to four completed steps. Each corresponding C4/C3 stage trace has the same compressed SHA-256, and the decoded comparison found no field mismatch through 80 seconds. Strict cloud/rain/graupel checks pass in the completed states; both generic active-ice cone outliers at T4 lie below the native inactive limit. This does not establish an active PSD violation or a successful fifth call.
+
+The [Graphify/KG publication](PR89_KG_UPDATE_20261019.md) records the separately
+dated structural snapshots for frozen source commit `da48cca65c57aeaad9daf717abe0a0d6b6df9e25`.
+Later receipt/review publication metadata does not change that extraction identity.
