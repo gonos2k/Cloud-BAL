@@ -1,0 +1,102 @@
+{
+  "candidate": {
+    "build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v32diag/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "3d888e1537101768df6e8b7a06689f061b1e160c77ef3ea29ea6eb8b10f4ef37",
+    "build_status": "PASS_OVERLAY_BUILD",
+    "executable_sha256": "56beaa90e0c568ea7b0074c0deadc5976141da15afd8b44b9348e640bac5c681",
+    "module_mp_kdm6_sha256": "47a570ba5737d4260cec38727a2f01014d93a89d39cee96173cf9f0e53450575",
+    "parent_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+    "source_dir": "/var/tmp/pr87_joint_cycle_sources_20261016_v32diag",
+    "sources_json_sha256": "c714ac64fd4e10cb2eeb89b261d3d7d6874e7b9cb13314e17e6cd27f0d697d7e"
+  },
+  "first_timestep_observational_equivalence": {
+    "baseline_arm": "V31 OFF O0",
+    "baseline_trace_path": "/var/tmp/pr87_joint_OFF_40s_v31_20261016/run/pr85_joint_moment_stages.raw.gz",
+    "baseline_trace_sha256": "b0ce9cc5ea67a83cadf77120c94abbefd654c0e26ea6f7f02b0f5594f5860a59",
+    "diagnostic_trace_path": "/var/tmp/pr87_joint_OFF_40s_v32diag_20261016/run/pr85_joint_moment_stages.raw.gz",
+    "diagnostic_trace_sha256": "b0ce9cc5ea67a83cadf77120c94abbefd654c0e26ea6f7f02b0f5594f5860a59",
+    "fields_per_record": 12,
+    "headers_geometry_and_all_field_bits_identical": true,
+    "stage_sequence": [
+      "PRE_RK",
+      "RK_STAGE_END(1)",
+      "RK_STAGE_END(2)",
+      "RK_STAGE_END(3)",
+      "PRE_KDM6",
+      "POST_KDM6"
+    ],
+    "state_records_compared": 6
+  },
+  "progB_transient_stdout": {
+    "interpretation": "Diagnostic-only first transient record per ProgB call context. Context 6, latitude 62, i=189, k=17; QG/BG ratio about 891.1. Internal to KDM6/ProgB, not incoming PRE_KDM6 or a completed endpoint gate.",
+    "matching_row_count": 1,
+    "rows": [
+      "PR87_PROGB_TRANSIENT 6 62 189 17  8.0334534597464868E-013  9.0150277735602741E-016  8.9111799336962690E+002 2B621F22 2681EB95"
+    ],
+    "stdout_gzip_sha256": "96f8c551350ec86924908a3a42a773422fb896fca3506b6404d08df1921ddace"
+  },
+  "purpose": "Read-only diagnostic validation; no model physics or acceptance policy changed.",
+  "runtime": {
+    "arm": "OFF",
+    "candidate_executable_actual_sha256": "56beaa90e0c568ea7b0074c0deadc5976141da15afd8b44b9348e640bac5c681",
+    "candidate_executable_expected_sha256": "56beaa90e0c568ea7b0074c0deadc5976141da15afd8b44b9348e640bac5c681",
+    "candidate_namelist_actual_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+    "candidate_namelist_expected_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+    "duration_seconds": 40,
+    "exit": "INCOMPLETE",
+    "fatal": "ProgB transient PSD state rejected",
+    "frozen_input_count": 101,
+    "parent_executable_sha256_actual": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "parent_executable_sha256_expected": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "preflight_sha256": "2f4f4ce406da3be1d5530696b5ce112e9f959b233c72189e37e70327ed7e4d17",
+    "root": "/var/tmp/pr87_joint_OFF_40s_v32diag_20261016",
+    "unchanged_frozen_input_count_checked": 99,
+    "unchanged_frozen_input_mismatches": []
+  },
+  "schema": "pr87_v32diag_independent_review_v1",
+  "scope_limitations": [
+    "V32diag first-timestep exact equality establishes observational equivalence for that timestep only.",
+    "The captured transient row does not identify which internal preceding process created the state.",
+    "No COUPLED V32diag run was requested or reviewed."
+  ],
+  "strict_completed_state_audit": {
+    "completed_post_kdm6_timestep_count": 1,
+    "path": "/var/tmp/pr87_v32diag_OFF_strict_audit.json",
+    "sha256": "f669cc320347aba177e1f430cdc56cb9976ccded14506eb8436d45f104333404",
+    "stage_counts": {
+      "POST_KDM6": 1,
+      "PRE_KDM6": 2,
+      "PRE_RK": 2,
+      "RK_STAGE_END": 6
+    },
+    "state_record_count": 11,
+    "status": "INCOMPLETE",
+    "timesteps": [
+      {
+        "completed_post_kdm6": true,
+        "stages": [
+          "PRE_RK",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "PRE_KDM6",
+          "POST_KDM6"
+        ],
+        "status": "PASS",
+        "timestep": 1
+      },
+      {
+        "completed_post_kdm6": false,
+        "stages": [
+          "PRE_RK",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "PRE_KDM6"
+        ],
+        "status": "INCOMPLETE",
+        "timestep": 2
+      }
+    ]
+  }
+}

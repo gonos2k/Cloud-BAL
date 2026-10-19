@@ -1,0 +1,293 @@
+{
+  "schema": "pr87_v40diag_ice_causality_v1",
+  "conclusion": {
+    "target_count": 13,
+    "post_kdm6_values_match_v39_review": true,
+    "same_cell_ice_sedimentation_events": 2,
+    "targets_without_out_of_cone_post_ice_event": 11,
+    "interpretation": "The 11 event-free cells were already in-cone at every observed post-ICE-sedimentation endpoint, so their final lower-cone violations arose later in KDM6 or at a later consumer stage. The two event cells were nearly at the lower bound before sedimentation and crossed just below it after the ICE helper; their final POST_KDM6 ratio is about half the bound, so ICE sedimentation alone does not explain the final magnitude. This identifies a contributor for two cells, not the full downstream cause.",
+    "reporter_total_outlier_events_timestep2": 80498
+  },
+  "provenance": {
+    "V39_review_json": "/var/tmp/pr87_v39_review_20261016.json",
+    "V39_review_json_sha256": "c74a0b894763602896e401c27aa200466eace8808882bcd12bfab7c482637948",
+    "V39_receipt": "/var/tmp/pr87_joint_OFF_40s_v39_20261016/receipt.json",
+    "V39_receipt_sha256": "2bc1a0b58e7d54c930fb97fe2b0505780f03e0191efa645c960909d592a0376b",
+    "V40diag_receipt": "/var/tmp/pr87_joint_OFF_40s_v40diag_20261016/receipt.json",
+    "V40diag_receipt_sha256": "84dbe15ac8a06bbe31486f13c675373933b0743b4b029908fdc1e44d30bfc7fd",
+    "V40diag_build_receipt": "/var/tmp/pr87_joint_cycle_build_20261016_v40diag/pr87_native_overlay_build.json",
+    "V40diag_build_receipt_sha256": "381f41dca4ecf4f44e8b85e289f29bcd751d88350e762bc0aec70007774dcb19",
+    "V40diag_module_mp_kdm6": "/var/tmp/pr87_joint_cycle_sources_20261016_v40diag/module_mp_kdm6.F",
+    "V40diag_module_mp_kdm6_sha256": "89940fa05a1fa9d47fe79a5a95a01caacc037b4cf3719b3dca44ae51917d9e9b",
+    "V40diag_executable_sha256": "ddb64f82c8c796d0a64e75a5b8e46162399dcb2001b7ecfa9f790a71dd30079c",
+    "V39_executable_sha256": "2f58df49a4ee65ada9f4dcf574195a88b4f057c84fb26fbe3d2e29885a5a75a0",
+    "V40diag_stdout_raw": {
+      "path": "rsl.out.0000",
+      "sha256": "ca452a228692afa57ed11640f37833f58da609647e6eb6cfbc6f1dcf746a91ce",
+      "bytes": 239331338,
+      "compressed_path": "rsl.out.0000.gz",
+      "compressed_sha256": "ab7c08e038b3b1a26a4682c78d6bcc950c36aa6fe362d842f8f76254b3cfe673",
+      "compressed_bytes": 60754799
+    },
+    "same_hash_outputs_vs_v39": {
+      "kdm6_first_call_pre.raw": {
+        "sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+        "bytes": 195542592,
+        "identical": true
+      },
+      "kdm6_first_call_post.raw": {
+        "sha256": "d83cc5ff1eeb485c99f4ad0b6b8426fd9f4c43f2a8fda53529341ae359b2c802",
+        "bytes": 195542592,
+        "identical": true
+      },
+      "pr85_joint_moment_stages.raw": {
+        "sha256": "273509aaf449ee1d9f30adfd0b32f306f399ecc983b53cdfff33728ec3a4d55f",
+        "bytes": 1715012660,
+        "identical": true
+      },
+      "pr85_ice_sedimentation_budget.raw": {
+        "sha256": "7c9fe5db98293abeb1b3f2c57a229a725ad4135b24cbd1d94dc81c095e16b586",
+        "bytes": 21678440,
+        "identical": true
+      }
+    }
+  },
+  "scope_limits": [
+    "The reporter checks the actual stored QI/N volume pair immediately after each ice sedimentation substep, using the source ice coefficients and existing 8-float32-ULP boundary allowance.",
+    "No event means the immediate post-sedimentation state was within the reporter cone; it does not attribute later cold or warm process changes.",
+    "Event rows provide a pre/post sedimentation comparison but do not prove the final KDM6 endpoint producer."
+  ],
+  "cells": [
+    {
+      "DEN": 0.5355226397514343,
+      "NI": 16.477128982543945,
+      "QI": 2.1468274511891264e-15,
+      "QI_over_NI": 1.302913543654055e-16,
+      "below_inactive_threshold": true,
+      "i": 11,
+      "j": 87,
+      "k": 20,
+      "lower_bound_gap": 1.3026743616640075e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.44725045561790466,
+      "NI": 13.713768005371094,
+      "QI": 1.7908813368632936e-15,
+      "QI_over_NI": 1.3059002720199745e-16,
+      "below_inactive_threshold": true,
+      "i": 151,
+      "j": 125,
+      "k": 22,
+      "lower_bound_gap": 1.299687633298088e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.45887747406959534,
+      "NI": 15.37391471862793,
+      "QI": 2.012105802137146e-15,
+      "QI_over_NI": 1.3087790838979753e-16,
+      "below_inactive_threshold": true,
+      "i": 19,
+      "j": 152,
+      "k": 22,
+      "lower_bound_gap": 1.2968088214200872e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.5392977595329285,
+      "NI": 14.211668014526367,
+      "QI": 1.8596519418508702e-15,
+      "QI_over_NI": 1.3085388287638288e-16,
+      "below_inactive_threshold": true,
+      "i": 102,
+      "j": 169,
+      "k": 20,
+      "lower_bound_gap": 1.2970490765542337e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.6272002458572388,
+      "NI": 14.127241134643555,
+      "QI": 2.00549047481909e-15,
+      "QI_over_NI": 1.4195910268007827e-16,
+      "below_inactive_threshold": true,
+      "i": 135,
+      "j": 174,
+      "k": 18,
+      "lower_bound_gap": 1.1859968785172798e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.6170298457145691,
+      "NI": 13.409255027770996,
+      "QI": 1.794117214480042e-15,
+      "QI_over_NI": 1.3379693433858688e-16,
+      "below_inactive_threshold": true,
+      "i": 131,
+      "j": 196,
+      "k": 18,
+      "lower_bound_gap": 1.2676185619321937e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.49232080578804016,
+      "NI": 13.330801963806152,
+      "QI": 2.1305083026690883e-15,
+      "QI_over_NI": 1.5981846466953252e-16,
+      "below_inactive_threshold": true,
+      "i": 193,
+      "j": 203,
+      "k": 21,
+      "lower_bound_gap": 1.0074032586227373e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.45054060220718384,
+      "NI": 15.007044792175293,
+      "QI": 1.9557717583976305e-15,
+      "QI_over_NI": 1.3032357705878072e-16,
+      "below_inactive_threshold": true,
+      "i": 201,
+      "j": 206,
+      "k": 22,
+      "lower_bound_gap": 1.3023521347302553e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.5803255438804626,
+      "NI": 13.893040657043457,
+      "QI": 1.809668527633394e-15,
+      "QI_over_NI": 1.3025719655660354e-16,
+      "below_inactive_threshold": true,
+      "i": 110,
+      "j": 208,
+      "k": 19,
+      "lower_bound_gap": 1.303015939752027e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": [
+        {
+          "step": 2,
+          "lat_j": 208,
+          "i": 110,
+          "k": 19,
+          "substep": 1,
+          "nlevels": 1,
+          "mstep": 1,
+          "dt": 20.0,
+          "qmin": 1.0000000036274937e-15,
+          "reported_post_ratio": 2.605143842885822e-16,
+          "lower_bound": 2.6055879053180625e-16,
+          "upper_bound": 2.0982747187893314e-09,
+          "pre_QI_internal": 3.620159524258572e-15,
+          "pre_NI_volume": 8.062944412231445,
+          "post_QI_internal": 3.619337055266788e-15,
+          "post_NI_volume": 8.06248664855957,
+          "dry_density": 0.5803255438804626,
+          "delz": 777.91015625,
+          "pre_ratio_rhoQ_over_Nvol": 2.6055879061529707e-16,
+          "post_ratio_rhoQ_over_Nvol": 2.605143842885822e-16,
+          "pre_bits": [
+            "27826E14",
+            "410101D2"
+          ],
+          "post_bits": [
+            "2782667E",
+            "4100FFF2"
+          ]
+        }
+      ]
+    },
+    {
+      "DEN": 0.5768380761146545,
+      "NI": 13.913228034973145,
+      "QI": 1.813238771506071e-15,
+      "QI_over_NI": 1.3032480794163674e-16,
+      "below_inactive_threshold": true,
+      "i": 132,
+      "j": 223,
+      "k": 19,
+      "lower_bound_gap": 1.302339825901695e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.5785623788833618,
+      "NI": 14.177067756652832,
+      "QI": 1.84666438567062e-15,
+      "QI_over_NI": 1.302571460733861e-16,
+      "below_inactive_threshold": true,
+      "i": 126,
+      "j": 241,
+      "k": 19,
+      "lower_bound_gap": 1.3030164445842016e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": [
+        {
+          "step": 2,
+          "lat_j": 241,
+          "i": 126,
+          "k": 19,
+          "substep": 1,
+          "nlevels": 1,
+          "mstep": 1,
+          "dt": 20.0,
+          "qmin": 1.0000000036274937e-15,
+          "reported_post_ratio": 2.6051428755257816e-16,
+          "lower_bound": 2.6055879053180625e-16,
+          "upper_bound": 2.0982747187893314e-09,
+          "pre_QI_internal": 3.694170722090811e-15,
+          "pre_NI_volume": 8.20278549194336,
+          "post_QI_internal": 3.69332877134124e-15,
+          "post_NI_volume": 8.20231819152832,
+          "dry_density": 0.5785623788833618,
+          "delz": 776.68505859375,
+          "pre_ratio_rhoQ_over_Nvol": 2.6055883127424885e-16,
+          "post_ratio_rhoQ_over_Nvol": 2.6051428755257816e-16,
+          "pre_bits": [
+            "278518B6",
+            "41033E9C"
+          ],
+          "post_bits": [
+            "278510F2",
+            "41033CB2"
+          ]
+        }
+      ]
+    },
+    {
+      "DEN": 0.5865756869316101,
+      "NI": 14.431533813476562,
+      "QI": 2.051994701205719e-15,
+      "QI_over_NI": 1.421882613260075e-16,
+      "below_inactive_threshold": true,
+      "i": 91,
+      "j": 257,
+      "k": 19,
+      "lower_bound_gap": 1.1837052920579874e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    },
+    {
+      "DEN": 0.6347907781600952,
+      "NI": 13.78111743927002,
+      "QI": 1.8062613376030635e-15,
+      "QI_over_NI": 1.310678430513934e-16,
+      "below_inactive_threshold": true,
+      "i": 114,
+      "j": 264,
+      "k": 18,
+      "lower_bound_gap": 1.2949094748041284e-16,
+      "timestep": 2,
+      "same_cell_ice_sedimentation_outlier_events": []
+    }
+  ]
+}

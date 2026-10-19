@@ -1,0 +1,53 @@
+{
+  "fixture": {
+    "continuous_n": 4.691007751024326e-37,
+    "continuous_q": 7.352132008755282e-46,
+    "coordinate_i_j_k": [
+      183,
+      59,
+      2
+    ],
+    "dry_density": 1.192746,
+    "pair": "QI/QNI",
+    "rk": 3,
+    "source_ledger": "/var/tmp/pr87_joint_OFF_40s_v4_20261016/run/pr85_joint_source_failure.raw.gz",
+    "timestep": 2
+  },
+  "policy": "constrained-only; joint absence requires a continuously valid pair, 0 < Q < minsubnormal(REAL32), and failure of ordinary and one-adjacent-Q stores; signed extensive Q/N deltas are recorded",
+  "profiles": [
+    {
+      "command": "ifx <pinned profile flags> -module <fresh scratch> -I <fresh scratch> src/common/cloud_bal_joint_transport.f90 tests/test_joint_qnb_transport.f90 -o <scratch>/test_joint_qnb_transport && ./test_joint_qnb_transport",
+      "executable": "/var/tmp/pr87_joint_quantum_absence_ifx_receipt_20261016.CqDYor/O0/test_joint_qnb_transport",
+      "executable_sha256": "406a9393d2c50042ff82c740a66ac87ee5c768f6e1f65fe3197e5c5d406974c1",
+      "exit_code": 0,
+      "flags_profile": "CLOUD_BAL_FREE_FLAGS",
+      "optimization": "O0"
+    },
+    {
+      "command": "ifx <pinned profile flags> -module <fresh scratch> -I <fresh scratch> src/common/cloud_bal_joint_transport.f90 tests/test_joint_qnb_transport.f90 -o <scratch>/test_joint_qnb_transport && ./test_joint_qnb_transport",
+      "executable": "/var/tmp/pr87_joint_quantum_absence_ifx_receipt_20261016.CqDYor/O2/test_joint_qnb_transport",
+      "executable_sha256": "87726f34aeeaf3376f727d1a42296d7fb1e70efe9018bb2508af7533c524f34c",
+      "exit_code": 0,
+      "flags_profile": "CLOUD_BAL_REPRO_FLAGS",
+      "optimization": "O2"
+    }
+  ],
+  "schema": "pr87_joint_quantum_absence_ifx_test_v1",
+  "scratch_root": "/var/tmp/pr87_joint_quantum_absence_ifx_receipt_20261016.CqDYor",
+  "source": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+    "sha256": "d29654072eaafebd195e2d2d74bc54a0069fe032156ee425ea4f4c5536d36a78"
+  },
+  "status": "PASS_O0_O2",
+  "test": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/test_joint_qnb_transport.f90",
+    "sha256": "d4bfa1135ecd0646f8061a730e81096745c768e19974e072d3735be5e1b97c5e"
+  },
+  "toolchain": {
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  }
+}

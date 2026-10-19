@@ -1,0 +1,62 @@
+{
+  "schema": "pr87_g_boundary_diffusion_witness_v1",
+  "helper_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_horizontal_diffusion64.f90",
+  "helper_sha256": "0a8b2865fff3d7ad6592e0d1bc1d3f7b51970de13ac9ea128066b7cba655bfe3",
+  "driver_source": "/var/tmp/pr87_g_stencil_boundary/witness.f90",
+  "driver_sha256": "b740bc874fa2dd162335a322d0ca0949d1369aabfb4bddea3595309d9dc55ac0",
+  "geometry": "flat positive geometry: mut=1,c1=1,c2=0,xkmhd=1; all face metrics=1; rdx=rdy=1; target (i=2,k=0,j=2) QG=BG=0; only four horizontal neighbors populated",
+  "neighbor_order": [
+    "x-",
+    "x+",
+    "y-",
+    "y+"
+  ],
+  "bg_r32_bits": [
+    "31604C00",
+    "43AD7800",
+    "38354800",
+    "4430E000"
+  ],
+  "qg_r32_bits": [
+    "364522CC",
+    "48987678",
+    "3D1F5448",
+    "491B74E0"
+  ],
+  "exact_input_pair_validation": "each neighbor QG exact dyadic Fraction equals 900 * BG exact dyadic Fraction",
+  "exact_shared_stencil_reference": {
+    "QG_increment_fraction": "1043429705584593075/1099511627776",
+    "BG_increment_fraction": "4637465358153747/4398046511104",
+    "exact_ratio": "900",
+    "formula": "unit-coefficient empty-center stencil: sum of the four neighbors; exact linear operator gives QG_increment=900*BG_increment"
+  },
+  "intel_profile": {
+    "compiler": "pinned ifx 2026.0 from tests/intel_toolchain.sh",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "O0": "CLOUD_BAL_FREE_FLAGS",
+    "O2": "CLOUD_BAL_REPRO_FLAGS"
+  },
+  "outputs": {
+    "O0": {
+      "iteration": 577,
+      "increment_qg_r64": "9.48993788901673863E+005",
+      "increment_bg_r64": "1.05443754322408199E+003",
+      "q_increment_bits": "412CF60393EAEB92",
+      "bg_increment_bits": "409079C00B54B813",
+      "ratio": 900.0000000000001,
+      "excess_over_900": 1.1641532182693481e-10,
+      "stdout_sha256": "ae7fefb78885bc222575804f6f8cf7fb2c79f1550b0bae65aeb0bd29542d04cd"
+    },
+    "O2": {
+      "iteration": 577,
+      "increment_qg_r64": "9.48993788901673863E+005",
+      "increment_bg_r64": "1.05443754322408199E+003",
+      "q_increment_bits": "412CF60393EAEB92",
+      "bg_increment_bits": "409079C00B54B813",
+      "ratio": 900.0000000000001,
+      "excess_over_900": 1.1641532182693481e-10,
+      "stdout_sha256": "ae7fefb78885bc222575804f6f8cf7fb2c79f1550b0bae65aeb0bd29542d04cd"
+    }
+  },
+  "interpretation": "Both compiled profiles produce independently evaluated R64 increments with QG/BG=900.0000000000001; q increment is one binary64 ULP above 900*stored BG increment. The exact shared linear stencil ratio is 900. This is a manufactured possibility witness, not attribution to any model cell."
+}

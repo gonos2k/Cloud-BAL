@@ -1,0 +1,112 @@
+{
+  "schema": "pr87_physical_validation_integration_v1",
+  "base_commit": "c84cbd3a0bc366112afe9ebad1087a220eb23b46",
+  "physical_approval": "FAIL_OPEN",
+  "initialization": {
+    "status": "PRESERVED",
+    "policy": "original PR84 OFF/COUPLED Q/N/B inputs and boundaries; not regenerated or reclassified",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943"
+  },
+  "completed_air_updates": {
+    "status": "SECOND_RK3_SOURCE_STAGE_INCOMPLETE",
+    "candidate": "V28b",
+    "changes": [
+      "MP37 paired moisture preserved by host cleanup",
+      "atomic completed source/air pair storage with signed numerical representation ledger",
+      "source-first whole cloud/ice fallback on failed RK3 candidate only",
+      "REAL64 common-face air proposals retained directly for all pairs",
+      "strict selected-source rain sedimentation and public return domain",
+      "explicit REAL64 PBL source correction through actual driver and captured source carrier",
+      "shared all-pair REAL64 horizontal diffusion stencil",
+      "FogDES admission consumes corrected combined PBL/Fog source under exact selected cloud bounds",
+      "compact PBL diagnostics with separate unchanged-output evidence"
+    ],
+    "air_theta_required": 1,
+    "no_number_floor": true,
+    "scope": "Both arms complete20 and nextFog/RK1/RK2; source-first retry rejects atRK3; nosecondKDM6/40success."
+  },
+  "latest_actual_host": {
+    "candidate": "V28b",
+    "build_receipt": "pr87_two_step_v28b_20261016/build_receipt.json",
+    "runtime_manifest": "pr87_two_step_v28b_20261016/runtime/runtime_manifest.json",
+    "matched_arms": [
+      "OFF",
+      "COUPLED"
+    ],
+    "requested_seconds": 40,
+    "status": "INCOMPLETE",
+    "completed_seconds_per_arm": 20,
+    "completed_second_fogdes": true,
+    "completed_second_rk3": false,
+    "second_kdm6_completed": false,
+    "failure": "PR87 corrected source-stage pair fails strict storage validation",
+    "failure_cause": "Unassigned until diagnostic operands are evaluated; no storage tolerance widened.",
+    "executable_sha256": "91d9a9aebae4c002d13584a33a05ee95d3256954f05b504dbb4ff04ab53f2f03",
+    "scope": "selected-object pinnedIntel audit partialhost, not fullcleanWRF; same original/staged inputs"
+  },
+  "validation": {
+    "focused_tests": {
+      "status": "PASS",
+      "count": 115,
+      "log": "pr87_two_step_v18_20261016/pr87_focused_v18.log"
+    },
+    "intel_profile": "tests/intel_toolchain.sh",
+    "native_exact_fragment_o0_o2": {
+      "status": "PASS_O0_O2",
+      "receipt": "pr87_two_step_v18_20261016/pr87_source_first_fallback_ifx_o0_o2_v18_diffusion_r4.json",
+      "meaning": "diffusion precision RKcadence/signedQ,Nledgers;stale/partial/nonfinite andzero-delta mutant reject; previousairprecisioncasesmaintained"
+    },
+    "cold_suppression": "pr87_cold_reasons_20261016.json",
+    "source_failure_history": "pr87_two_step_v15_20261016/runtime/runtime_manifest.json",
+    "contained_component_evidence": "pr87_component_containment_20261016.json",
+    "rain_diffusion_producer": {
+      "status": "PASS_SCOPED",
+      "evidence": "pr87_two_step_v17diag_20261016/",
+      "meaning": "one actual source stencil, defaultREAL bitreplay, sameR64equationandpinnedIntelhelper"
+    },
+    "current_focused": {
+      "status": "PASS",
+      "test_count": 138,
+      "log": "pr87_two_step_v28b_20261016/pr87_v28b_focused_tests.log",
+      "scope": "focused actualtests before optionalO2buildfeature; not fullcanonical orfullWRF"
+    }
+  },
+  "candidate_scientific_gates": {
+    "host_hybrid_carrier_closure": "OPEN",
+    "total_energy": "OPEN",
+    "water_budget_for_new_candidate": "OPEN",
+    "cold_process_physical_fidelity": "OPEN",
+    "first_order_transport_signal_retention": "OPEN",
+    "observation_retention": "OPEN",
+    "mass_wind_force_continuity_balance": "OPEN",
+    "initial_shock_reduction": "OPEN",
+    "60_seconds": "NOT_RUN",
+    "600_seconds": "NOT_RUN"
+  },
+  "historical_host_summaries": {
+    "V23c": {
+      "candidate": "V23c",
+      "build_receipt": "pr87_two_step_v23c_20261016/build_receipt.json",
+      "runtime_manifest": "pr87_two_step_v23c_20261016/runtime/runtime_manifest.json",
+      "matched_arms": [
+        "OFF",
+        "COUPLED"
+      ],
+      "requested_seconds": 40,
+      "status": "INCOMPLETE",
+      "completed_seconds_per_arm": 20,
+      "completed_second_fogdes": true,
+      "completed_second_rk3": false,
+      "second_kdm6_completed": false,
+      "failure": "PR87 full joint moment candidate infeasible; 223 strict continuous cloud candidates in secondRK1",
+      "classification": "pr87_two_step_v23c_20261016/runtime/cloud_full_classification.json",
+      "scope": "selected partialhost overlay; not full clean build; physical approval OPEN"
+    }
+  },
+  "observer_compaction": {
+    "candidate": "V27bcompact",
+    "runtime": "pr87_two_step_v27bcompact_20261016/runtime/observer_comparison.json",
+    "status": "PASS_SCOPED",
+    "scope": "OFFfirst20; KDM6pre/post andPOST20record identicaltoV26c; noI/Otimeattribution"
+  }
+}

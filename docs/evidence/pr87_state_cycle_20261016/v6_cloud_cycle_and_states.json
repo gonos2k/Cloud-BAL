@@ -1,0 +1,1316 @@
+{
+  "build_binding": {
+    "candidate_executable_path": "/var/tmp/pr87_joint_cycle_build_20261016_v6/wrf_pr87_overlay.exe",
+    "candidate_executable_sha256": "718cf4b1042afd0f7ddd64639806e30075e9640e85df8b1d9c9bfab123267917",
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "full_clean_build": false,
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v6/pr87_native_overlay_build.json",
+    "receipt_sha256": "f0c9e7fb08358bbf4d523341d33edb620088d2137352a565dba19830d410c7a9"
+  },
+  "expected_model_timestamps": [
+    "2026-08-16_13:00:20",
+    "2026-08-16_13:00:40"
+  ],
+  "interpretation": "Both runs stop during the first KDM6 call before any completed POST_KDM6 state. Their public pre-call QG and BG arrays match the v17 baseline bit for bit; neither has a source-defined graupel transient at entry. All five completed Q/N/B states (PRE_RK, RK1, RK2, RK3, PRE_KDM6) pass strict field, paired-moment, PSD-cone, density-conversion, and entry-cap audit checks. ProgB later rejects an unsupported state without reporting its coordinate; no FogDES reject marker is present, and cloud probe values are unchanged between STEP_BEGIN and FOGDES_INPUT.",
+  "runs": {
+    "COUPLED": {
+      "cloud_cycle": {
+        "error_log_path": "/var/tmp/pr87_joint_COUPLED_40s_v6_20261016/run/rsl.error.0000.gz",
+        "error_log_sha256": "334b011c8a8e50b5deb73595243518c633928f42c84d084bcc2870925541b85a",
+        "fatal_marker": "ProgB unsupported PSD state rejected",
+        "fatal_marker_count": 1,
+        "fogdes_reject_marker_present": false,
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v6_20261016/run/pr87_cloud_cycle.log",
+        "records": [
+          "PR87_CLOUD STEP_BEGIN 1 1 234 1 282 1 39 0 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+          "PR87_FIRST STEP_BEGIN 1 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+          "PR87_PROBE STEP_BEGIN 1 230 70 3   1.2544152559712529E-04   1.1134470400000000E+08 390388F4 4CD45F88",
+          "PR87_CLOUD FOGDES_INPUT 1 1 234 1 282 1 39 0 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+          "PR87_FIRST FOGDES_INPUT 1 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+          "PR87_PROBE FOGDES_INPUT 1 230 70 3   1.2544152559712529E-04   1.1134470400000000E+08 390388F4 4CD45F88"
+        ],
+        "sha256": "0527c9c80d79fba438baffce881bf65bdb571b3de7eed979a1834f58bb31b30c"
+      },
+      "public_first_kdm6_pre": {
+        "baseline_path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/kdm6_first_call_pre.raw",
+        "baseline_sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+        "compressed_sha256": "96d357d76476b2bc8a3daaa9eaebc6cfcf0a8a8ade906d2a5efc2a556c4273b1",
+        "decoded_bytes": 195542592,
+        "decoded_sha256": "4c8c095aff80e6ee6b73e3dc1125577750615252b2d6c1ca469f7cd6a930e56e",
+        "first_transient": null,
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v6_20261016/run/kdm6_first_call_pre.raw.gz",
+        "qg_bg_comparison_to_v17": {
+          "BG": {
+            "bitwise_identical_to_v17_public_pre": true,
+            "changed_cells": 0,
+            "positive_cells_v17": 2537,
+            "positive_cells_v6": 2537
+          },
+          "QG": {
+            "bitwise_identical_to_v17_public_pre": true,
+            "changed_cells": 0,
+            "positive_cells_v17": 2537,
+            "positive_cells_v6": 2537
+          }
+        },
+        "source_transient_count_qg_gt0_bg_gt0_qg_le_1e9_bg_le_1e15": 0,
+        "stage": 1,
+        "timestep": 1
+      },
+      "receipt": {
+        "actual_model_timestamps": null,
+        "candidate_build_unchanged": true,
+        "candidate_executable_sha256": "718cf4b1042afd0f7ddd64639806e30075e9640e85df8b1d9c9bfab123267917",
+        "maximum_seen_timestep": 1,
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v6_20261016/receipt.json",
+        "returncode": 128,
+        "sha256": "36c0ad2a8db16829692301ad02f636cba5aa6058b6416e096f8be3a56cbcf0a3",
+        "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+        "status": "INCOMPLETE",
+        "timestep_count": 0,
+        "wall_seconds": 266.55258408375084
+      },
+      "state_audit": {
+        "completed_post_kdm6_timestep_count": 0,
+        "completed_post_timestep_ids": [],
+        "input": {
+          "bytes": 288989764,
+          "decoded_sha256": "e7f0ab225de3381988162fc98ae6f8561b692297d4f72f7e1c0186361841d62c",
+          "path": "/var/tmp/pr87_joint_COUPLED_40s_v6_20261016/run/pr85_joint_moment_stages.raw.gz",
+          "sha256": "394906c43f506c3619bf1914b8b42f37605ab00c130fd8ac4e8930be917a46a8"
+        },
+        "path": "docs/evidence/pr87_state_cycle_20261016/v6_COUPLED_completed_states.json",
+        "sha256": "9979b165560495c83112a59244bcc3e95fcc28e8c1ae34dd51f677581b680888",
+        "stages": [
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 960289
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1010
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 244498
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 205577
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 0,
+            "stage": "PRE_RK",
+            "timestep": 1
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1574440
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 2536
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 28,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 1.7204007402728749e-16,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 813792
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 275963
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 1,
+            "stage": "RK_STAGE_END",
+            "timestep": 1
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1574440
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 2536
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 26,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 1.4292969816384676e-16,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 813792
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 275959
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 2,
+            "stage": "RK_STAGE_END",
+            "timestep": 1
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1632919
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 2537
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 13,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 9.482597371982936e-17,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 901521
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 276035
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "timestep": 1
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1632919
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 2537
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 13,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 9.482597371982936e-17,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 901521
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 276035
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "timestep": 1
+          }
+        ],
+        "state_record_count": 5,
+        "status": "INCOMPLETE",
+        "timestep_ids_contiguous_from_one": true,
+        "trace_timestep_count": 1
+      }
+    },
+    "OFF": {
+      "cloud_cycle": {
+        "error_log_path": "/var/tmp/pr87_joint_OFF_40s_v6_20261016/run/rsl.error.0000.gz",
+        "error_log_sha256": "cb1805d05811b71cee2c0642a20275f5d0e3f2b92824e1af0719f20e430ece0a",
+        "fatal_marker": "ProgB unsupported PSD state rejected",
+        "fatal_marker_count": 1,
+        "fogdes_reject_marker_present": false,
+        "path": "/var/tmp/pr87_joint_OFF_40s_v6_20261016/run/pr87_cloud_cycle.log",
+        "records": [
+          "PR87_CLOUD STEP_BEGIN 1 1 234 1 282 1 39 0 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+          "PR87_FIRST STEP_BEGIN 1 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+          "PR87_PROBE STEP_BEGIN 1 230 70 3   1.2544152559712529E-04   1.1134470400000000E+08 390388F4 4CD45F88",
+          "PR87_CLOUD FOGDES_INPUT 1 1 234 1 282 1 39 0 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+          "PR87_FIRST FOGDES_INPUT 1 0 0 0   0.0000000000000000E+00   0.0000000000000000E+00",
+          "PR87_PROBE FOGDES_INPUT 1 230 70 3   1.2544152559712529E-04   1.1134470400000000E+08 390388F4 4CD45F88"
+        ],
+        "sha256": "0527c9c80d79fba438baffce881bf65bdb571b3de7eed979a1834f58bb31b30c"
+      },
+      "public_first_kdm6_pre": {
+        "baseline_path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/kdm6_first_call_pre.raw",
+        "baseline_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+        "compressed_sha256": "e3cefb28bb29b3ab7acf5932dc73ec5e65b5134eafc342f2b475e8e486de5e8c",
+        "decoded_bytes": 195542592,
+        "decoded_sha256": "3b8de467014e4974d511e196e09066602024bc7532984d7749f473e29374ba83",
+        "first_transient": null,
+        "path": "/var/tmp/pr87_joint_OFF_40s_v6_20261016/run/kdm6_first_call_pre.raw.gz",
+        "qg_bg_comparison_to_v17": {
+          "BG": {
+            "bitwise_identical_to_v17_public_pre": true,
+            "changed_cells": 0,
+            "positive_cells_v17": 2560,
+            "positive_cells_v6": 2560
+          },
+          "QG": {
+            "bitwise_identical_to_v17_public_pre": true,
+            "changed_cells": 0,
+            "positive_cells_v17": 2560,
+            "positive_cells_v6": 2560
+          }
+        },
+        "source_transient_count_qg_gt0_bg_gt0_qg_le_1e9_bg_le_1e15": 0,
+        "stage": 1,
+        "timestep": 1
+      },
+      "receipt": {
+        "actual_model_timestamps": null,
+        "candidate_build_unchanged": true,
+        "candidate_executable_sha256": "718cf4b1042afd0f7ddd64639806e30075e9640e85df8b1d9c9bfab123267917",
+        "maximum_seen_timestep": 1,
+        "path": "/var/tmp/pr87_joint_OFF_40s_v6_20261016/receipt.json",
+        "returncode": 128,
+        "sha256": "c658a7c7ece938ca11619aad05305c1e82c62378942ef4499b4b533b3a7e51c5",
+        "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+        "status": "INCOMPLETE",
+        "timestep_count": 0,
+        "wall_seconds": 267.01714790798724
+      },
+      "state_audit": {
+        "completed_post_kdm6_timestep_count": 0,
+        "completed_post_timestep_ids": [],
+        "input": {
+          "bytes": 288989506,
+          "decoded_sha256": "b7af11fd2ca061f1bbf3f53f460d4a44691435d2b61c9830d1db20c55c4c5da4",
+          "path": "/var/tmp/pr87_joint_OFF_40s_v6_20261016/run/pr85_joint_moment_stages.raw.gz",
+          "sha256": "9af3f7e233cdfeae194293f9426999666c2f99ea6897b8229793f842778816c7"
+        },
+        "path": "docs/evidence/pr87_state_cycle_20261016/v6_OFF_completed_states.json",
+        "sha256": "b7c4293f7f15760f06788dc8c0eb0788faf56d91f3b318d8f43900f9ec0e5947",
+        "stages": [
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 960289
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1022
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 244498
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 205577
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 0,
+            "stage": "PRE_RK",
+            "timestep": 1
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1574440
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 2560
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 28,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 1.7204007402728749e-16,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 813800
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 275970
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 1,
+            "stage": "RK_STAGE_END",
+            "timestep": 1
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1574440
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 2560
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 26,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 1.4292969816384676e-16,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 813800
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 275964
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 2,
+            "stage": "RK_STAGE_END",
+            "timestep": 1
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1632914
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 2560
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 13,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 9.482597371982936e-17,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 901534
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 276042
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "timestep": 1
+          },
+          {
+            "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+            "field_names": [
+              "BG",
+              "DEN",
+              "NC",
+              "NI",
+              "NN",
+              "NR",
+              "Q",
+              "QC",
+              "QG",
+              "QI",
+              "QR",
+              "QS"
+            ],
+            "field_negative_cells": 0,
+            "field_nonfinite_cells": 0,
+            "number_conversion_violation_channels": [],
+            "pair_counts": {
+              "cloud": {
+                "feasible_cone": {
+                  "bounds": [
+                    4.188790204786391e-15,
+                    3.0300855069345996e-10
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 3.3881317890172014e-21,
+                  "eight_ulp_tolerance_at_upper_bound": 2.220446049250313e-16,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 1632914
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "graupel": {
+                "feasible_cone": {
+                  "bounds": [
+                    100,
+                    900
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 6.103515625e-05,
+                  "eight_ulp_tolerance_at_upper_bound": 0.00048828125,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "QGRAUP/QIB bulk density kg m-3",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 2560
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "ice": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.6055879053180625e-16,
+                    2.0982747187893314e-09
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.117582368135751e-22,
+                  "eight_ulp_tolerance_at_upper_bound": 1.7763568394002505e-15,
+                  "exact_outside_bound_cells": 13,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 9.482597371982936e-17,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source REAL32 PIDNI and lambda interval, QI/NI kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 901534
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              },
+              "rain": {
+                "feasible_cone": {
+                  "bounds": [
+                    2.930931921716425e-10,
+                    1.4159232106169906e-05
+                  ],
+                  "eight_ulp_tolerance_at_lower_bound": 2.220446049250313e-16,
+                  "eight_ulp_tolerance_at_upper_bound": 7.275957614183426e-12,
+                  "exact_outside_bound_cells": 0,
+                  "maximum_exact_lower_residual": 0.0,
+                  "maximum_exact_upper_residual": 0.0,
+                  "outside_beyond_8_float32_ulp_cells": 0,
+                  "parameter_basis": "source policy particle mean-mass bounds kg per particle",
+                  "ratio_name": "mass/moment",
+                  "valid_positive_pair_cells": 276042
+                },
+                "negative_mass": 0,
+                "negative_moment": 0,
+                "nonfinite_mass_or_moment": 0,
+                "positive_mass_zero_moment": 0,
+                "positive_moment_zero_mass": 0
+              }
+            },
+            "paired_species_violation_channels": [],
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "timestep": 1
+          }
+        ],
+        "state_record_count": 5,
+        "status": "INCOMPLETE",
+        "timestep_ids_contiguous_from_one": true,
+        "trace_timestep_count": 1
+      }
+    }
+  },
+  "schema": "pr87_v6_cloud_cycle_and_state_audit_v1",
+  "scope": "Closed 40-second OFF/COUPLED run receipts, completed-state audit, public first KDM6 pre-state comparison, and Cloud cycle observer records."
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "pr87_unlaunched_build_failures_v1",
+  "builds": [
+    {
+      "candidate": "v11",
+      "status": "FAILED_BUILD_NOT_LAUNCHED",
+      "build_log": "/var/tmp/pr87_v11_build_20261016.log",
+      "build_log_sha256": "cd557b615d56be70450be426385c5a18b1adc6ca17f88a01169a9ccd008f5473",
+      "module_compile_log": "/var/tmp/pr87_joint_cycle_build_20261016_v11/logs/module_mp_kdm6.compile.log",
+      "module_compile_log_sha256": "a9e1beb788f5169bcf6f1c692602988c321bdca8fa3dd40a7c4e2c5f68a0c5ac",
+      "cause": "old inferred external signature"
+    },
+    {
+      "candidate": "v11a",
+      "status": "FAILED_BUILD_NOT_LAUNCHED",
+      "build_log": "/var/tmp/pr87_v11a_build_20261016.log",
+      "build_log_sha256": "dd1f999be15ded3868a2dd508b79c4fb604e21714c39a9122419a6f023cc4c76",
+      "module_compile_log": "/var/tmp/pr87_joint_cycle_build_20261016_v11a/logs/module_mp_kdm6.compile.log",
+      "module_compile_log_sha256": "efb0f3b671548cc46d7e8fb8e06fea034e1124b64e695796af82b4fa8e2fe075",
+      "cause": "stale copied parent compiler-generated external interface conflicts with current explicit interface"
+    }
+  ]
+}

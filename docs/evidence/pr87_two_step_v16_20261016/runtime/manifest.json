@@ -1,0 +1,126 @@
+{
+  "arms": {
+    "COUPLED": {
+      "launcher.stderr": {
+        "bytes": 0,
+        "path": "COUPLED/launcher.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "launcher.stdout": {
+        "bytes": 0,
+        "path": "COUPLED/launcher.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "preflight.json": {
+        "bytes": 12736,
+        "path": "COUPLED/preflight.json",
+        "sha256": "7c98f4e1c5f26a7cd4b7a76c7e1b5f8042f7c83679ab8830f8fb80f65a9fc2f9"
+      },
+      "receipt.json": {
+        "bytes": 48689,
+        "path": "COUPLED/receipt.json",
+        "sha256": "ab54a3e503ce69c93e98c386828025da999acd834cc199f7b2dce26f3995b667"
+      },
+      "runtime_reference_manifest.json": {
+        "bytes": 5847,
+        "path": "COUPLED/runtime_reference_manifest.json",
+        "sha256": "a0ef389fef3a6221c98862c7e05a498397b12cc38186613a811c5ff2b2b09b2f"
+      }
+    },
+    "OFF": {
+      "launcher.stderr": {
+        "bytes": 0,
+        "path": "OFF/launcher.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "launcher.stdout": {
+        "bytes": 0,
+        "path": "OFF/launcher.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "preflight.json": {
+        "bytes": 12720,
+        "path": "OFF/preflight.json",
+        "sha256": "42e7a2280e5ab2dd643e7b87db917bc4ea4ed3c73899be46c7a037cf78cf50a4"
+      },
+      "receipt.json": {
+        "bytes": 48684,
+        "path": "OFF/receipt.json",
+        "sha256": "c8707fe3c3b2b31ae22cdc2a53f37f3acc1b3f7505d546baffb01abd3e5413fe"
+      },
+      "runtime_reference_manifest.json": {
+        "bytes": 5847,
+        "path": "OFF/runtime_reference_manifest.json",
+        "sha256": "a0ef389fef3a6221c98862c7e05a498397b12cc38186613a811c5ff2b2b09b2f"
+      }
+    }
+  },
+  "audit": {
+    "bytes": 15248,
+    "path": "rain_source_failure_numeric_audit.json",
+    "sha256": "3e31a11cd709a625a9de9974215c9f9e7e0c644ca1f74fec51691063afcbd0ee"
+  },
+  "audit_parser": {
+    "bytes": 7132,
+    "path": "rain_source_failure_numeric_audit.py.gz",
+    "sha256": "1d33039640dc50813f076aa1dec9eb608aed9dbce55ced83584ad735bf573118"
+  },
+  "candidate_build_receipt": {
+    "path": "../build_receipt.json",
+    "sha256": "76683e7edd31a057503246fc0ed619fcfba3ce943d0251fc9c792df58dbbfe60"
+  },
+  "launch_bindings": {
+    "bytes": 3048,
+    "path": "launch_bindings.json",
+    "sha256": "9ac9eb317f2c5823c7a551cbfeec0bb884614a7ddca92790f73e0aa1fea38b65"
+  },
+  "omitted_large_artifacts": "Per-arm pr85_joint_moment_stages.raw.gz (about 397 MB each) is not duplicated; each run receipt binds its compressed hash and byte count.",
+  "quantizer_limiter": {
+    "O0": {
+      "compile.log": {
+        "bytes": 3207,
+        "path": "quantizer_limiter/O0/compile.log",
+        "sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126"
+      },
+      "run.txt": {
+        "bytes": 1480,
+        "path": "quantizer_limiter/O0/run.txt",
+        "sha256": "d481259bab55528b9acee73ecac2ea1f55cb1530dbd218b094e863cf42611508"
+      }
+    },
+    "O2": {
+      "compile.log": {
+        "bytes": 3207,
+        "path": "quantizer_limiter/O2/compile.log",
+        "sha256": "f35e25d14d2b69352c3f51f1e0a7613b959af7a9d99e8847fd59dd183dc06126"
+      },
+      "run.txt": {
+        "bytes": 1480,
+        "path": "quantizer_limiter/O2/run.txt",
+        "sha256": "d481259bab55528b9acee73ecac2ea1f55cb1530dbd218b094e863cf42611508"
+      }
+    },
+    "audit.json": {
+      "bytes": 25998,
+      "path": "quantizer_limiter/audit.json",
+      "sha256": "cab49120efd4976a7436c535e0aab39248be69660b9eeff1db52f87080858d59"
+    },
+    "quantizer_probe.f90": {
+      "bytes": 5139,
+      "path": "quantizer_limiter/quantizer_probe.f90",
+      "sha256": "3175817d8d3f4d7e39672165891868566d3d5329d8404b62f53d0a452aa2c6e8"
+    },
+    "receipt.json": {
+      "bytes": 3133,
+      "path": "quantizer_limiter/receipt.json",
+      "sha256": "66e11dde243252667324218066c1d9f7e637389f515c7b1a2db21409053f503b"
+    }
+  },
+  "schema": "pr87_v16_runtime_evidence_manifest_v1",
+  "scope": "compact run provenance and numeric failure audit; no source code, executable, or large stage ledger copied",
+  "shared_diagnostic_ledger": {
+    "bytes": 51988,
+    "path": "diagnostic/pr85_joint_source_failure.raw.gz",
+    "sha256": "42588e2eb65a9882efe801acc2a7dfb427f123f284b3797fbd9d22f8f9528b08"
+  }
+}

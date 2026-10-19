@@ -1,0 +1,38 @@
+{
+  "profiles": [
+    {
+      "command": "ifx <pinned profile flags> -module <fresh scratch> -I <fresh scratch> src/common/cloud_bal_joint_transport.f90 tests/test_joint_qnb_transport.f90 -o <scratch>/test_joint_qnb_transport && ./test_joint_qnb_transport",
+      "executable": "/var/tmp/pr87_joint_constrained_ifx_receipt_20261016.fzMEog/O0/test_joint_qnb_transport",
+      "executable_sha256": "9e89e545c03f71d3d6db76d1fe4a837546924857faf29c50fe5f9d4ead74bee8",
+      "exit_code": 0,
+      "flags_profile": "CLOUD_BAL_FREE_FLAGS",
+      "optimization": "O0"
+    },
+    {
+      "command": "ifx <pinned profile flags> -module <fresh scratch> -I <fresh scratch> src/common/cloud_bal_joint_transport.f90 tests/test_joint_qnb_transport.f90 -o <scratch>/test_joint_qnb_transport && ./test_joint_qnb_transport",
+      "executable": "/var/tmp/pr87_joint_constrained_ifx_receipt_20261016.fzMEog/O2/test_joint_qnb_transport",
+      "executable_sha256": "1abbf87e5f9cdb13b26dd9d00c90276e933e84369fb603d9d60868d8c8e9d214",
+      "exit_code": 0,
+      "flags_profile": "CLOUD_BAL_REPRO_FLAGS",
+      "optimization": "O2"
+    }
+  ],
+  "schema": "pr87_joint_storage_ifx_test_v1",
+  "scratch_root": "/var/tmp/pr87_joint_constrained_ifx_receipt_20261016.fzMEog",
+  "source": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+    "sha256": "dc6f682aa64c27651044a35ae31e07cf16ee5b1848daedd185db524218209b9e"
+  },
+  "status": "PASS_O0_O2",
+  "test": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/test_joint_qnb_transport.f90",
+    "sha256": "c1a8258b11fe19c8283a4c96727001f25e0207cb6d7427617ce6e20b36b93bb2"
+  },
+  "toolchain": {
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "identities": {
+    "COUPLED": {
+      "receipt_path": "/var/tmp/pr87_joint_COUPLED_40s_v22b_20261016/receipt.json",
+      "receipt_sha256": "7ce909e668430f4ef1c274e65b5c03e03319bfb8f0ef2c09ad8b4b183900a0a8",
+      "stage_raw_path": "/var/tmp/pr87_v22b_completed_audit_20261016/COUPLED/pr85_joint_moment_stages.raw",
+      "stage_raw_sha256": "335f606e26b1aefb2419d9a2631fa7c065c21e61062e5a1aa5aed2afb09c8dcc"
+    },
+    "OFF": {
+      "receipt_path": "/var/tmp/pr87_joint_OFF_40s_v22b_20261016/receipt.json",
+      "receipt_sha256": "5d9e5191248ece71df52a79adb80be2b4591dd14ca2c26966aa08f606ef705c7",
+      "stage_raw_path": "/var/tmp/pr87_v22b_completed_audit_20261016/OFF/pr85_joint_moment_stages.raw",
+      "stage_raw_sha256": "f03ff901d75707303658a75f37791a59052eed37cfe49374e97060ef596b3db6"
+    },
+    "analysis_script_path": "/var/tmp/pr87_v22b_completed_audit_20261016/ice_graupel_risk.py",
+    "analysis_script_sha256": "8ed3ef31dfbb666597b38622186cdaa597093747ac54285777e27144af0d0dff",
+    "build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v22b/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "14a48380d664730bca3f314765b5bb1961099801a92e20b7cb5ec5fddac5b5dc",
+    "kdm6_source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v22b/module_mp_kdm6.F",
+    "kdm6_source_sha256": "245e8a46bf11ba7e85137a81547f7e02b7f2bc429a293cbd3a34f61fc7b4a24d",
+    "overlay_executable_sha256": "70d13c645f76f9b5ed4e32a19f61d0672bd027fdc6fa566db41b9e2e08d0f2b4",
+    "source_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v22b/sources.json",
+    "source_manifest_sha256": "53140258768db6deb824d0a0f89f1bc3ab5d4bb6c8cc28bbc305c9bbbdf65675"
+  },
+  "interpretation": "Step1 POST_KDM6 ice has one continuously out-of-cone active pair, but its REAL32 internal number-volume product is inside; the many inactive paired ice rows are reported separately because the cold validator excludes them. Step2 RK3 graupel has 53 exact strict-density violations, all active under the stated QG/BG cutoffs and all above 900; the historical 8-ULP audit admits them because none exceeds its tolerance. This identifies a live strict-domain risk and does not endorse tolerance relaxation.",
+  "results": {
+    "bit_examples": {
+      "post_step1_ice_active_continuous_outside_first": [
+        {
+          "DEN": "3f229a62",
+          "NI": "46e0fa27",
+          "QI": "2d040000",
+          "i": 14,
+          "j": 96,
+          "k": 18
+        }
+      ],
+      "post_step1_ice_inactive_paired_continuous_outside_first5": [
+        {
+          "DEN": "3f138b7b",
+          "NI": "40da28e0",
+          "QI": "27000000",
+          "i": 163,
+          "j": 2,
+          "k": 19
+        },
+        {
+          "DEN": "3f138c82",
+          "NI": "40da28e0",
+          "QI": "27000000",
+          "i": 166,
+          "j": 2,
+          "k": 19
+        },
+        {
+          "DEN": "3f138e67",
+          "NI": "40da28e0",
+          "QI": "27000000",
+          "i": 170,
+          "j": 2,
+          "k": 19
+        },
+        {
+          "DEN": "3f1391cf",
+          "NI": "40da28e0",
+          "QI": "27000000",
+          "i": 171,
+          "j": 2,
+          "k": 19
+        },
+        {
+          "DEN": "3f139a03",
+          "NI": "415a28e0",
+          "QI": "27800000",
+          "i": 173,
+          "j": 2,
+          "k": 19
+        }
+      ],
+      "step2_rk3_graupel_active_outside_first5": [
+        {
+          "BG": "30617cf8",
+          "QG": "35462ed6",
+          "i": 32,
+          "j": 112,
+          "k": 17
+        },
+        {
+          "BG": "2e84e11e",
+          "QG": "336993b7",
+          "i": 27,
+          "j": 114,
+          "k": 17
+        },
+        {
+          "BG": "321aa8cf",
+          "QG": "3707ee5e",
+          "i": 33,
+          "j": 115,
+          "k": 23
+        },
+        {
+          "BG": "3204429a",
+          "QG": "36e87d13",
+          "i": 35,
+          "j": 116,
+          "k": 16
+        },
+        {
+          "BG": "2e5e1be9",
+          "QG": "33433688",
+          "i": 27,
+          "j": 116,
+          "k": 17
+        }
+      ]
+    },
+    "first_POST_KDM6_step1_ice": {
+      "COUPLED": {
+        "active_R32_volume_outside": 0,
+        "active_continuous_outside": 1,
+        "active_continuous_outside_below_above": [
+          0,
+          1
+        ],
+        "active_positive_pairs": 367102,
+        "active_unpaired_positive_QI_no_NI": 0,
+        "inactive_paired_R32_volume_outside": 153,
+        "inactive_paired_continuous_outside": 2060,
+        "inactive_paired_positive_QI_and_NI": 7875,
+        "negative_or_nonfinite": 0
+      },
+      "OFF": {
+        "active_R32_volume_outside": 0,
+        "active_continuous_outside": 1,
+        "active_continuous_outside_below_above": [
+          0,
+          1
+        ],
+        "active_positive_pairs": 367108,
+        "active_unpaired_positive_QI_no_NI": 0,
+        "inactive_paired_R32_volume_outside": 153,
+        "inactive_paired_continuous_outside": 2061,
+        "inactive_paired_positive_QI_and_NI": 7874,
+        "negative_or_nonfinite": 0
+      }
+    },
+    "step2_RK3_graupel": {
+      "COUPLED": {
+        "active_outside": 53,
+        "active_positive_pairs": 4085,
+        "active_unpaired": 0,
+        "exact_strict_outside": 53,
+        "historical_audit_beyond_8_float32_ulp": 0,
+        "historical_audit_max_upper_residual": 9.387983220676688e-05,
+        "historical_audit_upper_8ulp_tolerance": 0.00048828125,
+        "inactive_paired_outside": 0,
+        "inactive_paired_positive_QG_and_BG": 0,
+        "negative_or_nonfinite": 0,
+        "outside_below_above": [
+          0,
+          53
+        ]
+      },
+      "OFF": {
+        "active_outside": 53,
+        "active_positive_pairs": 4085,
+        "active_unpaired": 0,
+        "exact_strict_outside": 53,
+        "historical_audit_beyond_8_float32_ulp": 0,
+        "historical_audit_max_upper_residual": 9.387983220676688e-05,
+        "historical_audit_upper_8ulp_tolerance": 0.00048828125,
+        "inactive_paired_outside": 0,
+        "inactive_paired_positive_QG_and_BG": 0,
+        "negative_or_nonfinite": 0,
+        "outside_below_above": [
+          0,
+          53
+        ]
+      }
+    }
+  },
+  "schema": "pr87_v22b_ice_graupel_strict_risk_v1",
+  "scope": "Offline assessment of the actual cold-validator ice active set and strict graupel density domain. No model or source changes.",
+  "units_and_formulas": {
+    "DEN": "kg dry air per m3; authoritative REAL32 stage density",
+    "graupel_BG": "m3 graupel per kg dry air",
+    "graupel_QG": "kg graupel per kg dry air",
+    "graupel_active_cutoffs_real32": {
+      "bg": 1.0000000036274937e-15,
+      "qcrmin": 9.999999717180685e-10
+    },
+    "graupel_active_rule": "QG > REAL32(qcrmin=1e-9) OR BG > REAL32(1e-15)",
+    "graupel_strict_bounds": "100 <= QG/BG <= 900 kg/m3; QG and BG REAL32 values evaluated as REAL64 ratio",
+    "ice_NI": "ice number per kg dry air (specific number)",
+    "ice_QI": "kg ice per kg dry air (specific mass)",
+    "ice_active_rule": "QI > NEAREST(REAL32(1e-14), -1)",
+    "ice_exponent": 3.0,
+    "ice_lambda_max": 1820000.0,
+    "ice_lambda_min": 9080.0,
+    "ice_number_volume_R32": "REAL32(NI*DEN), #/m3",
+    "ice_number_volume_continuous": "REAL64(NI)*REAL64(DEN), #/m3",
+    "ice_source_PIDNI_REAL32": 1570.79638671875,
+    "ice_strict_bounds": "DEN * lambda_min**3 / PIDNI * QI <= NI_volume <= DEN * lambda_max**3 / PIDNI * QI, source REAL32 operands promoted for bound evaluation",
+    "ice_threshold_bits": "283424db",
+    "ice_threshold_real32": 9.999998977483753e-15
+  }
+}

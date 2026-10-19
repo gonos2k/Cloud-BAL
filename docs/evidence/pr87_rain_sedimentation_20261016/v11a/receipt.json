@@ -1,0 +1,52 @@
+{
+  "applied_source": {
+    "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v11a/module_mp_kdm6.F",
+    "sha256": "b14092c4664392804c99b6e068d04456f67c8205fefa1a0e8aaedb93825315e3"
+  },
+  "date_utc": "2026-10-16",
+  "helper": {
+    "path": "tools/pr85_kdm6_ice_sedimentation.F90",
+    "sha256": "9778dfbf4f9a67aa677ee9dbcf36ac3fda53c254405433c17974273e1d7c480d"
+  },
+  "logs": {
+    "graupel": {
+      "exit_status": 0,
+      "path": "docs/evidence/pr87_rain_sedimentation_20261016/v11a/graupel.log",
+      "sha256": "073da7ea07a02530be96a3aaf81389371fc0fb676e912d5459a6581dc1358228"
+    },
+    "ice": {
+      "exit_status": 0,
+      "path": "docs/evidence/pr87_rain_sedimentation_20261016/v11a/ice.log",
+      "sha256": "6a6f3815514ba2441c6c08fc9607b8d07a141c24ceb9485230b3b1e432d59967"
+    },
+    "rainkernel": {
+      "exit_status": 0,
+      "path": "docs/evidence/pr87_rain_sedimentation_20261016/v11a/rainkernel.log",
+      "sha256": "62bcc3bb76d55482d2bbbf49199a9525d005a472bd36a1a8ae62f192e2af6e1f"
+    }
+  },
+  "schema": "pr87-rain-sedimentation-v11a-focused-validation-v1",
+  "scope": "Pinned Intel O0/O2 helper fixtures against exact V11a embedded helper body and ICE/G call-site bounds; no native run claim.",
+  "source_extractor_tests": {
+    "graupel": {
+      "path": "tests/test_pr85_kdm6_graupel_sedimentation.py",
+      "sha256": "c7207f3bd2023ee4047edb70934d43b16cc36b26dfc9753003ba98bf4d99b7b6",
+      "status": "PASS exact helper body match outside INTERFACE blocks; final pair bounds asserted 0,0"
+    },
+    "ice": {
+      "path": "tests/test_pr85_kdm6_ice_sedimentation.py",
+      "sha256": "d98f784dbe7374bf375ed892fea91e095fc6cfaaf2f35d39bca0573d7bf19725",
+      "status": "PASS exact helper body match outside INTERFACE blocks; final pair bounds asserted 0,0"
+    }
+  },
+  "tests": {
+    "graupel": "PASS O0/O2",
+    "ice": "PASS O0/O2",
+    "rain_kernel": "PASS O0/O2"
+  },
+  "toolchain": {
+    "build_location": "fresh /var/tmp scratch directories",
+    "profile": "tests/intel_toolchain.sh",
+    "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  }
+}

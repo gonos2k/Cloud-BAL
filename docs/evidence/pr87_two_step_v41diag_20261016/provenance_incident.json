@@ -1,0 +1,38 @@
+{
+  "canonical_original_manifest_path_present": false,
+  "claims": {
+    "original_manifest_binding_claimed": false,
+    "original_manifest_hash_claimed": false,
+    "runtime_source_build_artifacts_modified_by_this_correction": false
+  },
+  "incident": "The preexisting untracked frozen archive_manifest.json was overwritten during an additive evidence audit.",
+  "original_manifest": {
+    "expected_path": "docs/evidence/pr87_two_step_v41diag_20261016/archive_manifest.json",
+    "note": "No backup or second exact copy was found in the scoped worktree evidence or /var/tmp V41 paths. No original schema or artifact records are reconstructed.",
+    "original_bytes_available": false,
+    "original_sha256_available": false,
+    "recovery_status": "NOT_RECOVERED",
+    "tracked_by_git": false
+  },
+  "replacement_audit": {
+    "bytes": 22610,
+    "path": "docs/evidence/pr87_two_step_v41diag_20261016/lineage_archive_manifest.json",
+    "preserved_byte_exact_from_overwritten_path": true,
+    "role": "134-file additive lineage inventory; not the frozen original manifest.",
+    "sha256": "54ef66e0461ba80350088ffe5989e631a3b5e5717fd6871e438b4c03f768d36a"
+  },
+  "runtime_source_build_artifact_checks": {
+    "build_executable": true,
+    "build_receipt": true,
+    "runtime_manifest_receipt": true,
+    "source_module_uncompressed": true,
+    "source_receipt": true
+  },
+  "schema": "pr87_v41diag_archive_provenance_incident_v1",
+  "verified_bindings": {
+    "build_receipt_sha256": "e74c1f02ca00deb6d1df665eafbf9f7b16547ca99a79100c1fc33dae0b42abf6",
+    "executed_executable_sha256": "4351ae924e963c80cf1245c1bb7756344ba4c6388ad566846e7f0829819e0657",
+    "module_mp_kdm6_sha256": "874d5f884c807911a40d219098e1432fdbfb5790971cb6f84a7904fdbc5e41fd",
+    "runtime_receipt_sha256": "f459c84231dff298e90859c9b8f186f54ad600c73b8c9febfb3b38e8f52e00a0"
+  }
+}

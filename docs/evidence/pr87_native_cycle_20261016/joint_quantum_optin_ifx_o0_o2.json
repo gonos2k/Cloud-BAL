@@ -1,0 +1,53 @@
+{
+  "fixture": {
+    "continuous_n": 4.691007751024326e-37,
+    "continuous_q": 7.352132008755282e-46,
+    "coordinate_i_j_k": [
+      183,
+      59,
+      2
+    ],
+    "dry_density": 1.192746,
+    "pair": "QI/QNI",
+    "rk": 3,
+    "source_ledger": "/var/tmp/pr87_joint_OFF_40s_v4_20261016/run/pr85_joint_source_failure.raw.gz",
+    "timestep": 1
+  },
+  "policy": "joint_quantum_absence is a separate opt-in requiring joint_constrained_storage and all three ledgers; default false; constrained storage alone preserves prior behavior",
+  "profiles": [
+    {
+      "command": "ifx <pinned profile flags> -module <fresh scratch> -I <fresh scratch> src/common/cloud_bal_joint_transport.f90 tests/test_joint_qnb_transport.f90 -o <scratch>/test_joint_qnb_transport && ./test_joint_qnb_transport",
+      "executable": "/var/tmp/pr87_joint_quantum_flag_ifx_20261016.Yi4exO/O0/test_joint_qnb_transport",
+      "executable_sha256": "8b14bd02ddbda60e3154959251e3a5c9d955c46fb2db19140631bd630d95a13e",
+      "exit_code": 0,
+      "flags_profile": "CLOUD_BAL_FREE_FLAGS",
+      "optimization": "O0"
+    },
+    {
+      "command": "ifx <pinned profile flags> -module <fresh scratch> -I <fresh scratch> src/common/cloud_bal_joint_transport.f90 tests/test_joint_qnb_transport.f90 -o <scratch>/test_joint_qnb_transport && ./test_joint_qnb_transport",
+      "executable": "/var/tmp/pr87_joint_quantum_flag_ifx_20261016.Yi4exO/O2/test_joint_qnb_transport",
+      "executable_sha256": "3b3d4dac908e12e42de858c080a7aec3ec7d160176e6a33645c4de90cc62952b",
+      "exit_code": 0,
+      "flags_profile": "CLOUD_BAL_REPRO_FLAGS",
+      "optimization": "O2"
+    }
+  ],
+  "schema": "pr87_joint_quantum_optin_ifx_test_v1",
+  "scratch_root": "/var/tmp/pr87_joint_quantum_flag_ifx_20261016.Yi4exO",
+  "source": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+    "sha256": "4149f75aa94d5ca917dc3acfb17db36342f454122459251aa007ea78d30cc9bb"
+  },
+  "status": "PASS_O0_O2",
+  "test": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/test_joint_qnb_transport.f90",
+    "sha256": "91b0f2c4ca3877fcc70bba74ffa0ecb1200eaec37fcc3ad58ea7316bb3e57693"
+  },
+  "toolchain": {
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  }
+}

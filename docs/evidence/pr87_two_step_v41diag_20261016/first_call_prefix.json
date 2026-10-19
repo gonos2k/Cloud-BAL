@@ -1,0 +1,71 @@
+{
+  "schema": "pr87_v41diag_first_call_prefix_v1",
+  "scope": "OFF arm first-call prefix only; V41diag ended INCOMPLETE and this is not a completed-runtime or full-state equivalence claim.",
+  "runs": {
+    "V39": {
+      "receipt_path": "/var/tmp/pr87_joint_OFF_40s_v39_20261016/receipt.json",
+      "receipt_sha256": "2bc1a0b58e7d54c930fb97fe2b0505780f03e0191efa645c960909d592a0376b",
+      "status": "COMPLETE",
+      "returncode": 0,
+      "final_completed_step": 2,
+      "executable_sha256": "2f58df49a4ee65ada9f4dcf574195a88b4f057c84fb26fbe3d2e29885a5a75a0"
+    },
+    "V40diag": {
+      "receipt_path": "/var/tmp/pr87_joint_OFF_40s_v40diag_20261016/receipt.json",
+      "receipt_sha256": "84dbe15ac8a06bbe31486f13c675373933b0743b4b029908fdc1e44d30bfc7fd",
+      "status": "COMPLETE",
+      "returncode": 0,
+      "final_completed_step": 2,
+      "executable_sha256": "ddb64f82c8c796d0a64e75a5b8e46162399dcb2001b7ecfa9f790a71dd30079c"
+    },
+    "V41diag": {
+      "receipt_path": "/var/tmp/pr87_joint_OFF_60s_v41diag_20261016/receipt.json",
+      "receipt_sha256": "f459c84231dff298e90859c9b8f186f54ad600c73b8c9febfb3b38e8f52e00a0",
+      "status": "INCOMPLETE",
+      "returncode": 1,
+      "final_completed_step": 2,
+      "executable_sha256": "4351ae924e963c80cf1245c1bb7756344ba4c6388ad566846e7f0829819e0657"
+    }
+  },
+  "V41diag_build": {
+    "path": "/var/tmp/pr87_joint_cycle_build_20261016_v41diag/pr87_native_overlay_build.json",
+    "sha256": "e74c1f02ca00deb6d1df665eafbf9f7b16547ca99a79100c1fc33dae0b42abf6",
+    "executable_sha256": "4351ae924e963c80cf1245c1bb7756344ba4c6388ad566846e7f0829819e0657",
+    "module_mp_kdm6_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v41diag/module_mp_kdm6.F",
+    "module_mp_kdm6_sha256": "874d5f884c807911a40d219098e1432fdbfb5790971cb6f84a7904fdbc5e41fd"
+  },
+  "V41diag_launch": {
+    "path": "/var/tmp/pr87_joint_OFF_60s_v41diag_launch_20261016.json",
+    "sha256": "b31d8a0487f372655c1305a183d9ad2759b6cca76ecc976b2cbdc17b3f0a48d6"
+  },
+  "bitwise_matches": {
+    "kdm6_first_call_pre.raw": {
+      "sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+      "bytes": 195542592,
+      "identical_across": [
+        "V39",
+        "V40diag",
+        "V41diag"
+      ]
+    },
+    "kdm6_first_call_post.raw": {
+      "sha256": "d83cc5ff1eeb485c99f4ad0b6b8426fd9f4c43f2a8fda53529341ae359b2c802",
+      "bytes": 195542592,
+      "identical_across": [
+        "V39",
+        "V40diag",
+        "V41diag"
+      ]
+    },
+    "pr85_ice_sedimentation_budget.raw": {
+      "sha256": "7c9fe5db98293abeb1b3f2c57a229a725ad4135b24cbd1d94dc81c095e16b586",
+      "bytes": 21678440,
+      "identical_across": [
+        "V39",
+        "V40diag",
+        "V41diag"
+      ]
+    }
+  },
+  "interpretation": "V41 diagnostic changes preserve the captured first-call pre/post arrays and the full ICE sedimentation budget byte-for-byte relative to V39/V40diag. Later KDM6 process behavior is outside this prefix comparison."
+}

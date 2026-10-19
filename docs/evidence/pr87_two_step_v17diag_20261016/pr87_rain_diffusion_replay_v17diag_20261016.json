@@ -1,0 +1,89 @@
+{
+  "build_identity": "PR87 source-mapped partial native overlay; not a clean build",
+  "cause_assessment": "At the selected timestep-2 RK1 rain pair, native R32 diffusion source reproduces the captured FULL rates bitwise after R32 cast. The full candidate mean mass is just below the strict rain lower bound; replacing only the diffusion producer delta by the same stencil evaluated from the captured R32 operands in R64 moves the candidate just above it. This supports source-precision causality at this cell; it does not establish whole-run validation.",
+  "full_continuous_candidate": [
+    4.085239622918289e-12,
+    0.01393836369224116
+  ],
+  "full_continuous_candidate_in_strict_cone": false,
+  "full_continuous_q_over_n": 2.9309320040144683e-10,
+  "full_failure_cell": [
+    110,
+    5,
+    18
+  ],
+  "full_failure_pair": "QR/QNR",
+  "full_failure_timestep": 2,
+  "full_qn_rates": [
+    5.799455138344456e-08,
+    197.870681762695
+  ],
+  "helper_source": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/dyn_em/module_big_step_utilities_em.F",
+    "routine_sha256": "cbcc347345a6449b9e5666407c5ef8c6a0db73a9a397d0e306ad14a085783ac3"
+  },
+  "helper_source_sha256": "cbcc347345a6449b9e5666407c5ef8c6a0db73a9a397d0e306ad14a085783ac3",
+  "probe_replays": [
+    {
+      "air_rate_r64": 0.0,
+      "delta64_over_delta32": 0.9999999724648685,
+      "dt_step": 6.666666507720947,
+      "full_qn_source_cast_r32": 5.799455138344456e-08,
+      "full_qn_source_over_native_delta_r32": 1.0,
+      "full_qn_source_r64": 5.799455138344456e-08,
+      "full_source_rate_bit_match": true,
+      "native_delta_r32": 5.799455138344456e-08,
+      "native_post_bit_match": true,
+      "post_r32": 5.799455138344456e-08,
+      "r64_delta": 5.799454978655696e-08,
+      "r64_minus_r32_fraction_of_larger_delta": -2.753513148570607e-08,
+      "registry_index": 4,
+      "species": "QR"
+    },
+    {
+      "air_rate_r64": 0.0,
+      "delta64_over_delta32": 0.9999999476414536,
+      "dt_step": 6.666666507720947,
+      "full_qn_source_cast_r32": 197.8706817626953,
+      "full_qn_source_over_native_delta_r32": 0.9999999999999984,
+      "full_qn_source_r64": 197.870681762695,
+      "full_source_rate_bit_match": true,
+      "native_delta_r32": 197.8706817626953,
+      "native_post_bit_match": true,
+      "post_r32": 197.8706817626953,
+      "r64_delta": 197.87067140247404,
+      "r64_minus_r32_fraction_of_larger_delta": -5.235854637612158e-08,
+      "registry_index": 6,
+      "species": "QNR"
+    }
+  ],
+  "r64_diffusion_corrected_candidate": [
+    4.0852393755377624e-12,
+    0.013938362502209709
+  ],
+  "r64_diffusion_corrected_candidate_in_strict_cone": true,
+  "r64_diffusion_corrected_q_over_n": 2.930932076770217e-10,
+  "rain_contract": {
+    "lambda_max": 35000.0,
+    "lambda_min": 961.0,
+    "pidn": 12566.37109375,
+    "power": 3.0,
+    "strict_q_over_n_bounds": [
+      2.9309320335276967e-10,
+      1.4159232646326343e-05
+    ]
+  },
+  "rain_pair_bounds": {
+    "maximum_q_over_n": 1.4159232646326343e-05,
+    "minimum_q_over_n": 2.9309320335276967e-10
+  },
+  "registry_indices": {
+    "QNR": 6,
+    "QR": 4
+  },
+  "run_identity": "V17 diagnostic OFF 40s; captured trace only, no production behavior changed by probe",
+  "source_base": [
+    0.0,
+    0.0
+  ]
+}

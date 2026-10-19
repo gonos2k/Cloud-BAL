@@ -1,0 +1,190 @@
+{
+  "conclusion": "At the first public return, source-strict cloud violations already exist elsewhere in the field (77 continuous; 20 after REAL32 NC-volume conversion). Thus source-strict invalidity is not introduced only by step 2 RK for the target cell. The target cell itself remains inactive at this first return and first becomes active at step 2 RK3.",
+  "identities": {
+    "COUPLED": {
+      "receipt_path": "/var/tmp/pr87_joint_COUPLED_40s_v22b_20261016/receipt.json",
+      "receipt_sha256": "7ce909e668430f4ef1c274e65b5c03e03319bfb8f0ef2c09ad8b4b183900a0a8",
+      "stage_raw_path": "/var/tmp/pr87_v22b_completed_audit_20261016/COUPLED/pr85_joint_moment_stages.raw",
+      "stage_raw_sha256": "335f606e26b1aefb2419d9a2631fa7c065c21e61062e5a1aa5aed2afb09c8dcc"
+    },
+    "OFF": {
+      "receipt_path": "/var/tmp/pr87_joint_OFF_40s_v22b_20261016/receipt.json",
+      "receipt_sha256": "5d9e5191248ece71df52a79adb80be2b4591dd14ca2c26966aa08f606ef705c7",
+      "stage_raw_path": "/var/tmp/pr87_v22b_completed_audit_20261016/OFF/pr85_joint_moment_stages.raw",
+      "stage_raw_sha256": "f03ff901d75707303658a75f37791a59052eed37cfe49374e97060ef596b3db6"
+    },
+    "analysis_script_path": "/var/tmp/pr87_v22b_completed_audit_20261016/first_post_cloud_check.py",
+    "analysis_script_sha256": "f08496142c665228269fe934cce038747e871eed88a706d1fa667e4b42d441b6",
+    "build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v22b/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "14a48380d664730bca3f314765b5bb1961099801a92e20b7cb5ec5fddac5b5dc",
+    "kdm6_source_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v22b/module_mp_kdm6.F",
+    "kdm6_source_sha256": "245e8a46bf11ba7e85137a81547f7e02b7f2bc429a293cbd3a34f61fc7b4a24d",
+    "overlay_executable_sha256": "70d13c645f76f9b5ed4e32a19f61d0672bd027fdc6fa566db41b9e2e08d0f2b4",
+    "source_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v22b/sources.json",
+    "source_manifest_sha256": "53140258768db6deb824d0a0f89f1bc3ab5d4bb6c8cc28bbc305c9bbbdf65675"
+  },
+  "results": {
+    "COUPLED": {
+      "R32_converted_outside_strict_cone": 20,
+      "R32_outside_above": 20,
+      "R32_outside_below": 0,
+      "continuous_outside_above": 77,
+      "continuous_outside_below": 0,
+      "continuous_outside_but_R32_inside": 62,
+      "continuous_outside_strict_cone": 77,
+      "negative_or_nonfinite_inputs": 0,
+      "newly_outside_after_R32": 5,
+      "positive_pairs": 230469,
+      "unpaired_positive_Q_or_N": 0
+    },
+    "OFF": {
+      "R32_converted_outside_strict_cone": 20,
+      "R32_outside_above": 20,
+      "R32_outside_below": 0,
+      "continuous_outside_above": 77,
+      "continuous_outside_below": 0,
+      "continuous_outside_but_R32_inside": 62,
+      "continuous_outside_strict_cone": 77,
+      "negative_or_nonfinite_inputs": 0,
+      "newly_outside_after_R32": 5,
+      "positive_pairs": 230465,
+      "unpaired_positive_Q_or_N": 0
+    },
+    "R32_converted_outside_first_five_examples_bits": [
+      {
+        "DEN": "3f88b429",
+        "NC_specific": "4c8c104c",
+        "NC_volume_R32": "4c959675",
+        "QC": "34a52400",
+        "i": 228,
+        "j": 9,
+        "k": 7
+      },
+      {
+        "DEN": "3f8ea934",
+        "NC_specific": "4d05e281",
+        "NC_volume_R32": "4d153843",
+        "QC": "351ddb00",
+        "i": 176,
+        "j": 44,
+        "k": 4
+      },
+      {
+        "DEN": "3ef8280b",
+        "NC_specific": "4d004f12",
+        "NC_volume_R32": "4c78c157",
+        "QC": "35174800",
+        "i": 215,
+        "j": 68,
+        "k": 21
+      },
+      {
+        "DEN": "3f8f93ff",
+        "NC_specific": "4e5022ed",
+        "NC_volume_R32": "4e6977ac",
+        "QC": "367566b0",
+        "i": 147,
+        "j": 70,
+        "k": 3
+      },
+      {
+        "DEN": "3f8e6320",
+        "NC_specific": "4f3736f9",
+        "NC_volume_R32": "4f4bcedf",
+        "QC": "37580478",
+        "i": 133,
+        "j": 72,
+        "k": 1
+      }
+    ],
+    "continuous_outside_first_five_examples_bits": [
+      {
+        "DEN": "3f7a2a32",
+        "NC_specific": "4d61b69e",
+        "NC_volume_R32": "4d5c918a",
+        "QC": "35851000",
+        "i": 51,
+        "j": 3,
+        "k": 10
+      },
+      {
+        "DEN": "3f453591",
+        "NC_specific": "4d544323",
+        "NC_volume_R32": "4d238414",
+        "QC": "357a4400",
+        "i": 90,
+        "j": 14,
+        "k": 15
+      },
+      {
+        "DEN": "3f88f91c",
+        "NC_specific": "4c364766",
+        "NC_volume_R32": "4c430e9b",
+        "QC": "3456ea00",
+        "i": 226,
+        "j": 24,
+        "k": 7
+      },
+      {
+        "DEN": "3f80e4bd",
+        "NC_specific": "4c0485ea",
+        "NC_volume_R32": "4c0572bc",
+        "QC": "341c4000",
+        "i": 88,
+        "j": 25,
+        "k": 9
+      },
+      {
+        "DEN": "3f697d13",
+        "NC_specific": "4cc49918",
+        "NC_volume_R32": "4cb34f64",
+        "QC": "34e7cc00",
+        "i": 178,
+        "j": 39,
+        "k": 12
+      }
+    ],
+    "target_second_step_candidate_at_first_return": {
+      "DEN": "3f20d7b3",
+      "NC_specific": "00000000",
+      "QC": "00000000",
+      "i": 89,
+      "j": 14,
+      "k": 18,
+      "state": "inactive zero/zero pair"
+    }
+  },
+  "schema": "pr87_v22b_first_post_cloud_strict_cone_provenance_v1",
+  "scope": "Offline source-strict cloud-cone audit of each arm first completed POST_KDM6 public state; no model run or source edits for this report.",
+  "stage": {
+    "cell_count": 2533440,
+    "coordinate_shape": "Fortran arrays (i,k,j), with i fastest",
+    "grid_active_shape": [
+      232,
+      39,
+      280
+    ],
+    "label": "POST_KDM6",
+    "rkstep": 0,
+    "timestep": 1
+  },
+  "units_and_formula": {
+    "DEN": "kg dry air per m3 (authoritative REAL32 dry density)",
+    "NC": "cloud number per kg dry air (specific number)",
+    "NC_volume_continuous": "REAL64(NC)*REAL64(DEN), particles/m3",
+    "NC_volume_stored": "REAL32(NC*DEN), particles/m3; matches the REAL32 specific_number_to_volume operation",
+    "QC": "kg liquid cloud water per kg dry air (specific mass)",
+    "consumer_coefficient_PIDNC_REAL32": 523.5988159179688,
+    "dmc": 3.0,
+    "equivalent_specific_pair_bounds": "PIDNC/lambda_c_max**dmc <= QC/NC <= PIDNC/lambda_c_min**dmc",
+    "lambda_c_max": 500000.0,
+    "lambda_c_min": 12000.0,
+    "source_locations": {
+      "PIDNC": "module_mp_kdm6.F line 6255",
+      "input_conversion": "module_mp_kdm6.F around line 1412",
+      "output_conversion": "module_mp_kdm6.F around line 1543",
+      "specific_number_to_volume": "module_mp_kdm6.F lines 450-464"
+    },
+    "strict_internal_volume_bounds": "DEN * lambda_c_min**dmc / PIDNC * QC <= NC_volume <= DEN * lambda_c_max**dmc / PIDNC * QC, computed in REAL64 with source REAL32 operands"
+  }
+}

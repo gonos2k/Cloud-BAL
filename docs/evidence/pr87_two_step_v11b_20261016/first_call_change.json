@@ -1,0 +1,260 @@
+{
+  "schema": "pr87_v11b_first_call_change_v1",
+  "scope": "New paired-rain numerical model minus preserved v17, same first-call incoming state and local dry-density DELZ area measure. Not improved conservation, observational skill, or host hybrid closure.",
+  "physical_approval": "FAIL_OPEN",
+  "arms": {
+    "OFF": {
+      "run_receipt_sha256": "4f7858e41a8a771c056855c07922686949ed2fdfa90d41f8a9665bd6e1fb7c2d",
+      "baseline_identity": {
+        "baseline": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr85_integration_20261015.json",
+          "sha256": "ae0d92ec38ac586dacd5f0d0d6627fdaf0696050a4c0bc719339fea087f0aac5"
+        },
+        "receipt": {
+          "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/pr83_same13_native_initialization.json",
+          "sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+          "bytes": 101091
+        },
+        "kdm6_first_call_pre.raw": {
+          "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/kdm6_first_call_pre.raw",
+          "sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+          "bytes": 195542592
+        },
+        "kdm6_first_call_post.raw": {
+          "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/kdm6_first_call_post.raw",
+          "sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+          "bytes": 195542592
+        },
+        "initial_wrfo": {
+          "path": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "ae7253d7261d8292c7de8a3b2a3f39b1798bf1a59599042901b892d2ebcb887c",
+          "bytes": 83147875
+        }
+      },
+      "candidate_dumps": {
+        "pre": {
+          "raw_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847",
+          "compressed_sha256": "df1ae7abf009b8eec6ea933328d902b7f106e14aedecbf26aa6d555c22f3d839"
+        },
+        "post": {
+          "raw_sha256": "669233de1e8fb38f9620a3e29cb7d2873c38891b1072b34e3defa60d683368bd",
+          "compressed_sha256": "f18bb7d74ff513737cd39ca25573e35cee58d239e66449a4775228c134240acf"
+        }
+      },
+      "pre_byte_identical_v17": true,
+      "post_byte_identical_v17": false,
+      "same_fixed_call_density_geometry": true,
+      "fields": {
+        "Q": {
+          "changed_cells": 36,
+          "max_abs_native_units": 1.7969869077205658e-05,
+          "rms_native_units": 1.4338500789229948e-08,
+          "signed_inventory_change": -460404.8941021721,
+          "l1_inventory_change": 631062.4760991355,
+          "inventory_unit": "kg"
+        },
+        "QC": {
+          "changed_cells": 589,
+          "max_abs_native_units": 0.0003068455262109637,
+          "rms_native_units": 2.1516663108214337e-07,
+          "signed_inventory_change": 5687062.536120261,
+          "l1_inventory_change": 7879908.251010215,
+          "inventory_unit": "kg"
+        },
+        "QI": {
+          "changed_cells": 19,
+          "max_abs_native_units": 3.7040983443148434e-05,
+          "rms_native_units": 4.741978341851524e-08,
+          "signed_inventory_change": 1239578.8845669208,
+          "l1_inventory_change": 2904468.3591983602,
+          "inventory_unit": "kg"
+        },
+        "QR": {
+          "changed_cells": 91100,
+          "max_abs_native_units": 3.896778798662126e-05,
+          "rms_native_units": 4.590360583914769e-08,
+          "signed_inventory_change": 1149412.3876905139,
+          "l1_inventory_change": 2424790.0271631703,
+          "inventory_unit": "kg"
+        },
+        "QS": {
+          "changed_cells": 34,
+          "max_abs_native_units": 0.00015958398580551147,
+          "rms_native_units": 1.3880900998381166e-07,
+          "signed_inventory_change": -3880566.227378331,
+          "l1_inventory_change": 7139416.315350102,
+          "inventory_unit": "kg"
+        },
+        "QG": {
+          "changed_cells": 40,
+          "max_abs_native_units": 0.000138493487611413,
+          "rms_native_units": 1.1405242103240385e-07,
+          "signed_inventory_change": -3734712.3056236506,
+          "l1_inventory_change": 4384936.423107122,
+          "inventory_unit": "kg"
+        },
+        "NC": {
+          "changed_cells": 553,
+          "max_abs_native_units": 81774784.0,
+          "rms_native_units": 65809.09452584457,
+          "signed_inventory_change": 1.9711202754529308e+18,
+          "l1_inventory_change": 2.8618621264265503e+18,
+          "inventory_unit": "number"
+        },
+        "NI": {
+          "changed_cells": 16,
+          "max_abs_native_units": 93028.6875,
+          "rms_native_units": 109.69046190007299,
+          "signed_inventory_change": 2146789410803854.0,
+          "l1_inventory_change": 6450548030319010.0,
+          "inventory_unit": "number"
+        },
+        "NR": {
+          "changed_cells": 62410,
+          "max_abs_native_units": 107209.8046875,
+          "rms_native_units": 69.59538200293132,
+          "signed_inventory_change": -1408521819259422.5,
+          "l1_inventory_change": 1987039755941301.0,
+          "inventory_unit": "number"
+        },
+        "BG": {
+          "changed_cells": 61,
+          "max_abs_native_units": 2.2304070057543868e-07,
+          "rms_native_units": 1.85007697920395e-10,
+          "signed_inventory_change": -5490.627157717765,
+          "l1_inventory_change": 7507.524275950906,
+          "inventory_unit": "m3"
+        }
+      }
+    },
+    "COUPLED": {
+      "run_receipt_sha256": "d69696dab06a93c20465e520d20a4ec8bfa2d3a4c2881b7bdc5465c176463c90",
+      "baseline_identity": {
+        "baseline": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr85_integration_20261015.json",
+          "sha256": "ae0d92ec38ac586dacd5f0d0d6627fdaf0696050a4c0bc719339fea087f0aac5"
+        },
+        "receipt": {
+          "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/pr83_same13_native_initialization.json",
+          "sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+          "bytes": 101424
+        },
+        "kdm6_first_call_pre.raw": {
+          "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/kdm6_first_call_pre.raw",
+          "sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+          "bytes": 195542592
+        },
+        "kdm6_first_call_post.raw": {
+          "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/kdm6_first_call_post.raw",
+          "sha256": "67c65cc6c36950b6b051791bd022d52021d2b2d785cbaeee12279ccad5b6cc6e",
+          "bytes": 195542592
+        },
+        "initial_wrfo": {
+          "path": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "4716ceda093b3b01ff4363be7c56dabedf2ed585b3a4d9bce4ea8012ced88663",
+          "bytes": 83150135
+        }
+      },
+      "candidate_dumps": {
+        "pre": {
+          "raw_sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd",
+          "compressed_sha256": "f89d2b950f8b5f9af2cc0ca56183388f11b55eb8ee785a93d0b429ab856a080c"
+        },
+        "post": {
+          "raw_sha256": "cf6ad2f59ec1aea5bdc47b4544ad7db9f6b8a1303e43ffcd3600422b4a115ac8",
+          "compressed_sha256": "a8000a6a850247be07181c0476e522a183bf6df278024d0cec6cf4cd00095ca3"
+        }
+      },
+      "pre_byte_identical_v17": true,
+      "post_byte_identical_v17": false,
+      "same_fixed_call_density_geometry": true,
+      "fields": {
+        "Q": {
+          "changed_cells": 37,
+          "max_abs_native_units": 1.7969869077205658e-05,
+          "rms_native_units": 1.4338500801168616e-08,
+          "signed_inventory_change": -460394.39015624096,
+          "l1_inventory_change": 631072.9800450667,
+          "inventory_unit": "kg"
+        },
+        "QC": {
+          "changed_cells": 600,
+          "max_abs_native_units": 0.0003068455262109637,
+          "rms_native_units": 2.1516663108233546e-07,
+          "signed_inventory_change": 5687061.178590108,
+          "l1_inventory_change": 7879919.192142287,
+          "inventory_unit": "kg"
+        },
+        "QI": {
+          "changed_cells": 19,
+          "max_abs_native_units": 3.7040983443148434e-05,
+          "rms_native_units": 4.741978341851524e-08,
+          "signed_inventory_change": 1239578.8845669208,
+          "l1_inventory_change": 2904468.3591983602,
+          "inventory_unit": "kg"
+        },
+        "QR": {
+          "changed_cells": 91084,
+          "max_abs_native_units": 3.896778798662126e-05,
+          "rms_native_units": 4.590360583999635e-08,
+          "signed_inventory_change": 1149423.3953363458,
+          "l1_inventory_change": 2424794.204718044,
+          "inventory_unit": "kg"
+        },
+        "QS": {
+          "changed_cells": 35,
+          "max_abs_native_units": 0.00015958398580551147,
+          "rms_native_units": 1.3880900998381285e-07,
+          "signed_inventory_change": -3880565.872972832,
+          "l1_inventory_change": 7139416.6697556,
+          "inventory_unit": "kg"
+        },
+        "QG": {
+          "changed_cells": 39,
+          "max_abs_native_units": 0.000138493487611413,
+          "rms_native_units": 1.1405242103240385e-07,
+          "signed_inventory_change": -3734712.3111995324,
+          "l1_inventory_change": 4384936.41753124,
+          "inventory_unit": "kg"
+        },
+        "NC": {
+          "changed_cells": 557,
+          "max_abs_native_units": 81774784.0,
+          "rms_native_units": 65809.09452593651,
+          "signed_inventory_change": 1.9711199399615442e+18,
+          "l1_inventory_change": 2.8618650986613033e+18,
+          "inventory_unit": "number"
+        },
+        "NI": {
+          "changed_cells": 16,
+          "max_abs_native_units": 93028.6875,
+          "rms_native_units": 109.69046190007299,
+          "signed_inventory_change": 2146789410803854.0,
+          "l1_inventory_change": 6450548030319010.0,
+          "inventory_unit": "number"
+        },
+        "NR": {
+          "changed_cells": 62433,
+          "max_abs_native_units": 107209.8046875,
+          "rms_native_units": 69.59538200293133,
+          "signed_inventory_change": -1408521695280853.5,
+          "l1_inventory_change": 1987039958207779.2,
+          "inventory_unit": "number"
+        },
+        "BG": {
+          "changed_cells": 60,
+          "max_abs_native_units": 2.2304070057543868e-07,
+          "rms_native_units": 1.85007697920395e-10,
+          "signed_inventory_change": -5490.6271631629625,
+          "l1_inventory_change": 7507.524270505708,
+          "inventory_unit": "m3"
+        }
+      }
+    }
+  },
+  "comparison_script": {
+    "path": "docs/evidence/pr87_two_step_v11b_20261016/first_call_compare.py.gz",
+    "compressed_sha256": "6f3a9750badba041fb5e8482d202b929edc5e643ad261548622e97a1715ae63b",
+    "decoded_sha256": "71d671cbc964ec90871d2aba962339c7651f4959050e1b83718f722f56e6ed4d"
+  }
+}

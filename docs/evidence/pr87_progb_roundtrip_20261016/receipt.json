@@ -1,0 +1,48 @@
+{
+  "archived_files": {
+    "o0_build_run.log": "8a65674bdb60349085ee654795054abe073a84ee8b788ce8e442d0cad7bff6f2",
+    "o2_build_run.log": "8a65674bdb60349085ee654795054abe073a84ee8b788ce8e442d0cad7bff6f2",
+    "progb_roundtrip_test.F90": "ca2830356a54af4b5f0449192e3ed00826daa99ee2fd87761bf97d5c55fa21c8"
+  },
+  "compiler_profile": "tests/intel_toolchain.sh pinned ifx 2026.0.0; O0 CLOUD_BAL_FREE_FLAGS and O2 CLOUD_BAL_REPRO_FLAGS; strict floating point, no FTZ.",
+  "input_pin": "9cb8d19bf676771e5bfd717d07cdaf43b4bc63912b0b7869b977fbd0f2ac1397",
+  "input_sha256": "9cb8d19bf676771e5bfd717d07cdaf43b4bc63912b0b7869b977fbd0f2ac1397",
+  "pinned_input": "docs/evidence/pr87_two_step_v31_20261016/module_mp_kdm6.F.gz",
+  "scope": "Source-extracted ProgB REAL32 BG rewrite regression; no model execution.",
+  "test_file": "tests/test_pr87_graupel_process_domain.py",
+  "test_result": "pytest tests/test_pr87_graupel_process_domain.py: 5 passed; extracted ProgB regression independently compiled and ran at O0/O2.",
+  "test_sha256": "077f498f92aa7a38aacd046cdda802ccba26f095d2f876f63008aaae6f65b0ec",
+  "transform_file": "tools/pr87_graupel_process_domain.py",
+  "transform_sha256": "db15ef8cc5cb79353e87d9761f4c3283a1908b6c44eecd07bef8498f0e04ab42",
+  "transformed_kdm6_sha256": "2a98262602d98b9288453ea0183e3ffe425c972779e012590317fc80ca11d73d",
+  "witness": {
+    "accepted_density_before": 899.9999695594491,
+    "baseline_bg_after_bits": "36E493B1",
+    "baseline_density_after": 900.0000296394858,
+    "bg_before_bits": "36E493B2",
+    "q_bits": "3BC8E5CF",
+    "rhox_bits": "44610000",
+    "transformed_bg_bits": "36E493B2",
+    "transformed_density": 899.9999695594491,
+    "unchanged_outputs": [
+      "rhox",
+      "cmg",
+      "pidn0g",
+      "avtg",
+      "pvtg",
+      "precg2",
+      "bvtg",
+      "bvtg1",
+      "bvtg2",
+      "bvtg3",
+      "bvtg4",
+      "rslopegbmax",
+      "g1pbg",
+      "g3pbg",
+      "g4pbg",
+      "g5pbgo2",
+      "g1pdgbgmg",
+      "dgbgmug1"
+    ]
+  }
+}

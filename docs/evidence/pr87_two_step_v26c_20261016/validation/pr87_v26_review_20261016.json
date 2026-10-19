@@ -1,0 +1,57 @@
+{
+  "schema": "pr87_independent_static_review_v1",
+  "reviewed_at_utc": "2026-10-16T09:35:36Z",
+  "scope": "V26c PBL shared-matrix source correction and all-pair horizontal diffusion precision integration; read-only source review. No model run performed by reviewer.",
+  "candidate": {
+    "sources_dir": "/var/tmp/pr87_joint_cycle_sources_20261016_v26c",
+    "build_receipt": "/var/tmp/pr87_joint_cycle_build_20261016_v26c/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "57e00ad6315167e03f7bcf4aee3474a3593b3688ac7f90d5e5f32f18b68e94ca",
+    "sources_manifest_sha256": "80368f11fadb31cd368f4576bae79fe2b5b003afcd2df55b983b9e836db19b11",
+    "build_status": "PASS_OVERLAY_BUILD",
+    "executable_sha256": "b4a1e6a13770462ad5ddca9bc64cbfe9387b959764d1728a2701677d2c7809d9",
+    "compiler": "pinned Intel ifx 2026.0.0; selected-object overlay build, not a clean build",
+    "model_run": false
+  },
+  "review_findings": [
+    {
+      "severity": "resolved-before-V26c",
+      "finding": "The PBL payload transformer originally appended positional actual arguments after keyword actuals in the solve-to-part1 call. That call already ended with f_flux=, aerocu=, restart_flag=, and feedback_is_ready=; Fortran requires subsequent actual arguments to also be keyworded. V26c now forwards the new array, step, and phase by keyword. V26b's unrelated later build failure was the missing P_QNI/P_QIB imports in the all-pair selector; V26c's ONLY list includes both names and the pinned overlay build passes.",
+      "resolution_evidence": {
+        "v26c_module_em_sha256": "8076b8a9c063911bcc4dcb8b3f74d8b8456aa805ad17f1d34bca1514dde66f25",
+        "v26c_solve_sha256": "e78f0a3981c399e5c4326bd550d55a6ca5522d297f8c44c0d60a18ac3768b2b3",
+        "v26c_part1_sha256": "3ed1a9d87146e91d19550f659a79bfedf61c18b218221e31d3a119862006c8df",
+        "v26c_part2_sha256": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+        "v26c_shinhong_sha256": "3bd3b9ee0f1aec25eb8a65c2ada0df748d03f785d1a0a28ad2f9b1fccb9afb50",
+        "v26c_pbl_driver_sha256": "106674d12edc3c66b42b1148db40949a1dbe43c2d1ccf98bb6876403c8fccc85",
+        "v26c_native_fragment_sha256": "e0648072b3fe02ffcc408947a2f031b622be94a4ec5b3f14eae2a60d30d5df27"
+      }
+    },
+    {
+      "severity": "scope-note",
+      "finding": "The Shinhong REAL64-vs-REAL32 source delta is computed for every cell/level where both paired channels are active, including nonzero pre-existing cloud/ice moments. This is an intentional full selected paired-operator precision correction, broader than only zero-base PR85 admissions. The original PR85 packet withholding still zeros both mapped deltas for rejected pairs. Treat this as an explicit candidate-wide numerical representation change; do not characterize it as a zero-base-only repair or as physical conservation."
+    },
+    {
+      "severity": "ledger-interpretation",
+      "finding": "The PBL ledger records the proposed rate correction amount dt * captured carrier * delta for each RK consumer. On the source-first path, an R32 virtual donor and bounded joint store can round or adjust the Q representation, so these sums are not an exact accounting of the final committed stored-field difference. They are useful signed operator-correction diagnostics, not a conservation proof or exact realized-storage delta."
+    },
+    {
+      "severity": "open-runtime-state",
+      "finding": "Negative QV at PRE_RK is the in-place moist array after rk_update_scalar's RK1 predictor update, not a detached advection or positive-definite scratch array. It remains an intermediate predictor, not the completed timestep state because later RK stages have not run. Completed-state validity remains open until full timestep/end-stage audit evidence is available."
+    }
+  ],
+  "validation": {
+    "focused_command": "pytest -q tests/test_pr87_all_pair_diffusion_precision.py tests/test_pr87_all_pair_diffusion_consumer_intel.py tests/test_pr87_pbl_source_payload.py tests/test_pr87_pbl_source_precision.py tests/test_pr87_pbl_source_precision_intel.py",
+    "result": "15 passed",
+    "test_hashes": {
+      "test_pr87_all_pair_diffusion_precision.py": "3d7a5757a6e168bf8522d0d10e3cbaf8f9022cf55b98ff25d8ce53f4fe1673f9",
+      "test_pr87_all_pair_diffusion_consumer_intel.py": "d683660b02a4e19612ff2211990d66ae52118a39a431a2149fa90fa6e49abc4e",
+      "test_pr87_pbl_source_payload.py": "b3124b784c13c440c979ca71bfd75f43f8540c3b75c634fe16ffe5954e9bd885",
+      "test_pr87_pbl_source_precision.py": "3458f29ba01cdcef9a7ab1adfcf97c9af074a680a3f18441e44ae69483bbf5e5",
+      "test_pr87_pbl_source_precision_intel.py": "a1085ec43f7505a014f53c5d0957eea777477a26547bb4fa84536d00976be263"
+    },
+    "limitations": [
+      "The pinned Intel PBL test extracts and exercises the original solver helpers plus delta arithmetic; consumer tests and source assertions cover routing and single application, but this does not establish full two-step model success.",
+      "The selected-object overlay build and these focused tests do not establish full clean-build equivalence or scientific approval."
+    ]
+  }
+}

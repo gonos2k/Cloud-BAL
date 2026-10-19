@@ -1,0 +1,55 @@
+{
+  "applied_source": {
+    "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v11/module_mp_kdm6.F",
+    "sha256": "392c53f97d37d467cd678f7c0b9323a12064c499c897827e4c1c1c0270241709"
+  },
+  "date_utc": "2026-10-16",
+  "helper": {
+    "api": "required REAL(real64) pair_min,pair_max trailing arguments; PR87_SED_RAIN=3",
+    "path": "tools/pr85_kdm6_ice_sedimentation.F90",
+    "sha256": "9778dfbf4f9a67aa677ee9dbcf36ac3fda53c254405433c17974273e1d7c480d"
+  },
+  "logs": {
+    "graupel": {
+      "exit_status": 0,
+      "path": "docs/evidence/pr87_rain_sedimentation_20261016/graupel.log",
+      "sha256": "17aee6fae2f0c1b09f826f3dfff31ff413dff0509f28e65599bb084b68e4e03f"
+    },
+    "ice": {
+      "exit_status": 0,
+      "path": "docs/evidence/pr87_rain_sedimentation_20261016/ice.log",
+      "sha256": "8636fce3b861c781511ceb25c19ecd1ec687557b732c341dd0ecba05d02f91c4"
+    },
+    "rainkernel": {
+      "exit_status": 0,
+      "path": "docs/evidence/pr87_rain_sedimentation_20261016/rainkernel.log",
+      "sha256": "4d0f28853d5fed380452ba769ac0b7f742c709fad4940c6b26b03446291f78f1"
+    },
+    "rainoverlay": {
+      "exit_status": 0,
+      "path": "docs/evidence/pr87_rain_sedimentation_20261016/rainoverlay.log",
+      "sha256": "2d1a3565bb8c33af8d012d256d0f813d218e8106d2b47ac0aaa8890206156bca"
+    }
+  },
+  "rain_fixture": {
+    "path": "tests/fixtures/pr87_kdm6_rain_sedimentation_source.F90",
+    "sha256": "d9bdde8a6f3851841c98290c0f062242dfc4aa9ea3893c8a72f986dc142f5675"
+  },
+  "schema": "pr87-rain-sedimentation-focused-validation-v1",
+  "scope": "Focused source/helper regression and V11 applied-source binding; no native model run claimed.",
+  "tests": {
+    "graupel_applied_source": "PASS; helper procedure byte-for-byte equals V11 extracted helper; final pair bounds asserted 0,0",
+    "ice_applied_source": "PASS; helper procedure byte-for-byte equals V11 extracted helper; final pair bounds asserted 0,0",
+    "rain_kernel": "PASS O0/O2: captured target, empty receiver with distinct rates, partial lower-bound factor, theta-zero subquantum, atomic invalid base",
+    "rain_overlay": "PASS (2 tests); generator/source-interface checks"
+  },
+  "toolchain": {
+    "build_location": "fresh /var/tmp scratch directories created by each test",
+    "build_modes": [
+      "O0",
+      "O2"
+    ],
+    "profile": "tests/intel_toolchain.sh",
+    "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  }
+}

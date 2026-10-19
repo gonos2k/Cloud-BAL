@@ -1,0 +1,189 @@
+{
+  "input_log": "/var/tmp/pr87_joint_OFF_40s_v35diag_20261016/run/rsl.out.0000.gz",
+  "input_log_sha256": "94fce40bd482647dd97b64559a8b0cf1f634dcf8ae4a7400579c8ddcaaa8f388",
+  "source": "/var/tmp/pr87_joint_cycle_sources_20261016_v34/module_mp_kdm6.F",
+  "source_sha256": "2b10d9f15caa6c91a541428b19a6187bab7d75080e1ab67ae94b2435f7d928ce",
+  "rows": [
+    {
+      "line": 554649,
+      "meta": [
+        2,
+        63,
+        204,
+        17,
+        1,
+        2,
+        2,
+        0,
+        0
+      ],
+      "state": [
+        0.002751304069533944,
+        0.00045600772136822343,
+        1.3263550499686971e-05,
+        0.0002693874412216246,
+        0.0,
+        -9.269749625673285e-07,
+        -1.7332468793540556e-10,
+        -4.061291463131056e-07,
+        8.077164466158138e-07,
+        5.255609494270175e-07,
+        558627648.0,
+        254149.421875,
+        30817.58203125,
+        -188002.5625,
+        -378.5792541503906,
+        -452.7471618652344,
+        0.0,
+        7.428652137875247e-10,
+        272.61529541015625,
+        0.00046010399819351733,
+        0.6809959411621094,
+        12566.37109375,
+        1.0000000036274937e-15,
+        10.0,
+        9.999999717180685e-10,
+        3.0
+      ],
+      "config": [
+        961.0,
+        35000.0,
+        100.0,
+        900.0,
+        523.5988159179688,
+        3.0,
+        12000.0,
+        500000.0,
+        1570.79638671875,
+        3.0,
+        9080.0,
+        1820000.0,
+        0.006936578080058098,
+        0.0,
+        9.999998977483753e-15,
+        0.0
+      ],
+      "results": {
+        "O0": {
+          "compile_command": [
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+            "-stand",
+            "f08",
+            "-warn",
+            "all",
+            "-check",
+            "all",
+            "-fpe0",
+            "-traceback",
+            "-O0",
+            "-fp-model",
+            "strict",
+            "-fimf-arch-consistency=true",
+            "-no-ftz",
+            "-free",
+            "/var/tmp/pr87_gsearch_replay_v35e/case1_O0.F90",
+            "-o",
+            "/var/tmp/pr87_gsearch_replay_v35e/case1_O0"
+          ],
+          "stdout": "GSEARCH_RAIN_ENVELOPE    1.34613922561935325E-06    1.51909224907131121E-06    1.34613935642846627E-06    1.51909216583590023E-06 6 6\nGSEARCH_RAIN_ENVELOPE_STATE    1.32635495901922695E-05    3.08175820312500000E+04    1.32635495901922695E-05    3.08175820312500000E+04    2.32347913009247208E+09    1.36749170269467868E-03    1.00000010950661213E-15\nGSEARCH_RAIN_ENVELOPE_BGHI    1.12848071392410458E-15\nCASE_META 2 63 204 17 1 2 2 0 6\nCASE_RESULT F    0.00000000000000000E+00 T F T T    0.00000000000000000E+00\n"
+        },
+        "O0_diagnostic": {
+          "compile_command": [
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+            "-stand",
+            "f08",
+            "-warn",
+            "all",
+            "-check",
+            "all",
+            "-fpe0",
+            "-traceback",
+            "-O0",
+            "-fp-model",
+            "strict",
+            "-fimf-arch-consistency=true",
+            "-no-ftz",
+            "-free",
+            "/var/tmp/pr87_gsearch_replay_v35e/case1_O0_diag.F90",
+            "-o",
+            "/var/tmp/pr87_gsearch_replay_v35e/case1_O0_diag"
+          ],
+          "stdout": "DIAG_PRECONDITIONS_PASSED\nDIAG_UPPER_WALK_EXHAUSTED    1.34613922561935325E-06    1.51909224907131121E-06    1.51908852785709314E-06    3.20000000000000000E+01\nDIAG_NO_BEST_SEARCH_FAILED    0.00000000000000000E+00\nGSEARCH_RAIN_ENVELOPE    1.34613922561935325E-06    1.51909224907131121E-06    1.34613935642846627E-06    1.51909216583590023E-06 6 6\nGSEARCH_RAIN_ENVELOPE_STATE    1.32635495901922695E-05    3.08175820312500000E+04    1.32635495901922695E-05    3.08175820312500000E+04    2.32347913009247208E+09    1.36749170269467868E-03    1.00000010950661213E-15\nGSEARCH_RAIN_ENVELOPE_BGHI    1.12848071392410458E-15\nCASE_META 2 63 204 17 1 2 2 0 6\nCASE_RESULT F    0.00000000000000000E+00 T F T T    0.00000000000000000E+00\n"
+        },
+        "O2": {
+          "compile_command": [
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+            "-stand",
+            "f08",
+            "-warn",
+            "all",
+            "-fpe0",
+            "-traceback",
+            "-O2",
+            "-fp-model",
+            "strict",
+            "-fimf-arch-consistency=true",
+            "-no-ftz",
+            "-free",
+            "/var/tmp/pr87_gsearch_replay_v35e/case1_O2.F90",
+            "-o",
+            "/var/tmp/pr87_gsearch_replay_v35e/case1_O2"
+          ],
+          "stdout": "GSEARCH_RAIN_ENVELOPE    1.34613922561935325E-06    1.51909224907131121E-06    1.34613935642846627E-06    1.51909216583590023E-06 6 6\nGSEARCH_RAIN_ENVELOPE_STATE    1.32635495901922695E-05    3.08175820312500000E+04    1.32635495901922695E-05    3.08175820312500000E+04    2.32347913009247208E+09    1.36749170269467868E-03    1.00000010950661213E-15\nGSEARCH_RAIN_ENVELOPE_BGHI    1.12848071392410458E-15\nCASE_META 2 63 204 17 1 2 2 0 6\nCASE_RESULT F    0.00000000000000000E+00 T F T T    0.00000000000000000E+00\n"
+        },
+        "O2_diagnostic": {
+          "compile_command": [
+            "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+            "-stand",
+            "f08",
+            "-warn",
+            "all",
+            "-fpe0",
+            "-traceback",
+            "-O2",
+            "-fp-model",
+            "strict",
+            "-fimf-arch-consistency=true",
+            "-no-ftz",
+            "-free",
+            "/var/tmp/pr87_gsearch_replay_v35e/case1_O2_diag.F90",
+            "-o",
+            "/var/tmp/pr87_gsearch_replay_v35e/case1_O2_diag"
+          ],
+          "stdout": "DIAG_PRECONDITIONS_PASSED\nDIAG_UPPER_WALK_EXHAUSTED    1.34613922561935325E-06    1.51909224907131121E-06    1.51908852785709314E-06    3.20000000000000000E+01\nDIAG_NO_BEST_SEARCH_FAILED    0.00000000000000000E+00\nGSEARCH_RAIN_ENVELOPE    1.34613922561935325E-06    1.51909224907131121E-06    1.34613935642846627E-06    1.51909216583590023E-06 6 6\nGSEARCH_RAIN_ENVELOPE_STATE    1.32635495901922695E-05    3.08175820312500000E+04    1.32635495901922695E-05    3.08175820312500000E+04    2.32347913009247208E+09    1.36749170269467868E-03    1.00000010950661213E-15\nGSEARCH_RAIN_ENVELOPE_BGHI    1.12848071392410458E-15\nCASE_META 2 63 204 17 1 2 2 0 6\nCASE_RESULT F    0.00000000000000000E+00 T F T T    0.00000000000000000E+00\n"
+        }
+      }
+    }
+  ],
+  "flags": {
+    "O0": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "O2": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ]
+  },
+  "ifx_version": "ifx (IFX) 2026.0.0 20260331"
+}

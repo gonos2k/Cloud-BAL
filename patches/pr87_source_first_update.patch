@@ -1,0 +1,437 @@
+--- a/native_update.f90
++++ b/native_update.f90
+@@ -1,15 +1,25 @@
+ ! Contained procedure inserted into the retained module_em research copy.
+ SUBROUTINE rk_update_joint_moments(q1,q2,n1,n2,qt,nt,nmoist,nscalar,qindex,nindex,qsindex,nnindex, &
+      ru,rv,ww,muold,munew,mub,c1,c2,msftx,msfty,rdx,rdy,rdnw,al,alb,dt,rk,itimestep,spec_zone, &
+-     ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte)
++     ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme,its,ite,jts,jte,kts,kte, &
++     pr87_raw_qsrc,pr87_raw_nsrc,pr87_coupled_qsrc,pr87_coupled_nsrc, &
++     pr87_source_carrier,pr87_source_step,pr87_later_qsrc,pr87_later_nsrc)
+   USE iso_fortran_env, ONLY: real32,real64
+-  USE cloud_bal_joint_transport, ONLY: joint_moment_is_valid, joint_moment_store, joint_qnb_update
++  USE cloud_bal_joint_transport, ONLY: joint_moment_is_valid, joint_moment_is_valid64, &
++       joint_moment_store, joint_qnb_update
+   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
+   IMPLICIT NONE
+   INTEGER,INTENT(IN) :: nmoist,nscalar,qindex(4),nindex(4),rk,itimestep,spec_zone
+   INTEGER,INTENT(IN) :: qsindex,nnindex
+   INTEGER,INTENT(IN) :: ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme
+-  INTEGER,INTENT(IN) :: its,ite,jts,jte,kts,kte
++  INTEGER,INTENT(IN) :: its,ite,jts,jte,kts,kte,pr87_source_step
++  REAL,INTENT(IN) :: pr87_raw_qsrc(ims:ime,kms:kme,jms:jme,2)
++  REAL,INTENT(IN) :: pr87_raw_nsrc(ims:ime,kms:kme,jms:jme,2)
++  REAL,INTENT(IN) :: pr87_coupled_qsrc(ims:ime,kms:kme,jms:jme,2)
++  REAL,INTENT(IN) :: pr87_coupled_nsrc(ims:ime,kms:kme,jms:jme,2)
++  REAL,INTENT(IN) :: pr87_source_carrier(ims:ime,kms:kme,jms:jme)
++  REAL(real64),INTENT(IN) :: pr87_later_qsrc(ims:ime,kms:kme,jms:jme,2)
++  REAL(real64),INTENT(IN) :: pr87_later_nsrc(ims:ime,kms:kme,jms:jme,2)
+   REAL,INTENT(INOUT) :: q1(ims:ime,kms:kme,jms:jme,nmoist),q2(ims:ime,kms:kme,jms:jme,nmoist)
+   REAL,INTENT(INOUT) :: n1(ims:ime,kms:kme,jms:jme,nscalar),n2(ims:ime,kms:kme,jms:jme,nscalar)
+   REAL,INTENT(IN) :: qt(ims:ime,kms:kme,jms:jme,nmoist),nt(ims:ime,kms:kme,jms:jme,nscalar)
+@@ -22,12 +32,15 @@
+   REAL(real32),ALLOCATABLE :: qb(:,:),nb(:,:),qc(:,:),nc(:,:),qs(:,:),ns(:,:),qa(:,:),na(:,:)
+   REAL(real32),ALLOCATABLE :: oldcarrier(:),newcarrier(:),drydensity(:)
+   REAL(real32),ALLOCATABLE :: snow_candidate(:),ccn_candidate(:)
++  REAL(real64),ALLOCATABLE :: donor_q(:,:,:,:),donor_n(:,:,:,:)
++  REAL(real64),ALLOCATABLE :: qs64(:,:),ns64(:,:),qa64(:,:),na64(:,:)
+   REAL(real64) :: theta,rejected_q(4),rejected_n(4),minmass(4),maxmass(4),rate(2)
+-  REAL(real64) :: outflow,cfl,maxcfl,weight,source_candidate(2)
++  REAL(real64) :: outflow,cfl,maxcfl,source_candidate(2),source_sum64(2)
+   REAL(real32) :: source_stored(2),full_stored(2)
++  REAL(real32) :: source_rate32(2),source_increment32(2),source_endpoint32(2)
+   REAL(real64) :: storage_delta_q(4),storage_delta_n(4)
+   INTEGER :: storage_adjustments(4),adjustment,full_failures
+-  LOGICAL :: full_valid
++  LOGICAL :: full_valid,baseline_feasible,source_first_pair(4),failed_pairs(4)
+   INTEGER :: il,ih,jl,jh,kl,kh,i,j,k,p,cell,cells,u,iq,in,source_failures
+   LOGICAL :: feasible,density_valid
+   EXTERNAL :: pr85_pbl_tendency_dump,pr85_dry_density_from_al_alb
+@@ -66,6 +79,8 @@
+   maxmass=[3.0300855069345996e-10_real64, &
+            1570.79638671875_real64/9080.0_real64**3, &
+            1.4159232106169906e-5_real64,900.0_real64]
++  ALLOCATE(qs64(cells,4),ns64(cells,4),qa64(cells,4),na64(cells,4))
++  source_first_pair=.FALSE.; failed_pairs=.FALSE.
+   cell=0; maxcfl=0.0_real64
+   DO j=jl,jh
+   DO k=kl,kh
+@@ -95,8 +110,10 @@
+       qc(cell,p)=q2(i,k,j,iq); nc(cell,p)=n2(i,k,j,in)
+       qs(cell,p)=qt(i,k,j,iq); ns(cell,p)=nt(i,k,j,in)
+       ! Use one old-time upwind donor map for both moments, not centered scalar fluxes.
+-      rate=air_tendency(q1(:,:,:,iq),n1(:,:,:,in),i,k,j)
++      rate=air_tendency(q1(:,:,:,iq),n1(:,:,:,in),i,k,j,p)
+       qa(cell,p)=REAL(rate(1),real32); na(cell,p)=REAL(rate(2),real32)
++      qs64(cell,p)=REAL(qs(cell,p),real64); ns64(cell,p)=REAL(ns(cell,p),real64)
++      qa64(cell,p)=REAL(qa(cell,p),real64); na64(cell,p)=REAL(na(cell,p),real64)
+     END DO
+     rate=air_tendency(q1(:,:,:,qsindex),q1(:,:,:,qsindex),i,k,j)
+     snow_candidate(cell)=singleton_candidate(q1(i,k,j,qsindex),qt(i,k,j,qsindex),rate(1), &
+@@ -109,11 +126,32 @@
+   END DO
+   IF (.NOT.ieee_is_finite(maxcfl).OR.maxcfl>1.0_real64) &
+     CALL wrf_error_fatal('PR85 common donor-cell carrier CFL exceeded')
+-  CALL joint_qnb_update(qb,nb,qc,nc,qs,ns,qa,na,oldcarrier,newcarrier,drydensity, &
+-                       dt,minmass,maxmass,theta,rejected_q,rejected_n,feasible, &
+-                       joint_subnormal_storage=.TRUE.,storage_delta_q=storage_delta_q, &
+-                       storage_delta_n=storage_delta_n,storage_adjustments=storage_adjustments)
++  IF (.NOT.ALL(ieee_is_finite(newcarrier))) &
++    CALL wrf_error_fatal('PR87 nonfinite new dry carrier')
++  IF (ANY(newcarrier<=0.0_real32)) CALL wrf_error_fatal('PR87 nonpositive new dry carrier')
++  IF (.NOT.ieee_is_finite(dt)) CALL wrf_error_fatal('PR87 nonfinite grouped timestep')
++  IF (dt<=0.0_real32) CALL wrf_error_fatal('PR87 nonpositive grouped timestep')
++  IF (ANY(.NOT.ieee_is_finite(qb)).OR.ANY(.NOT.ieee_is_finite(nb)).OR. &
++      ANY(.NOT.ieee_is_finite(qc)).OR.ANY(.NOT.ieee_is_finite(nc)).OR. &
++      ANY(.NOT.ieee_is_finite(qs64)).OR.ANY(.NOT.ieee_is_finite(ns64)).OR. &
++      ANY(.NOT.ieee_is_finite(qa64)).OR.ANY(.NOT.ieee_is_finite(na64))) &
++    CALL wrf_error_fatal('PR87 nonfinite grouped state/source/transport operand')
++  CALL evaluate_joint_candidate()
++  baseline_feasible=feasible
++  IF (.NOT.feasible.AND.rk==3) THEN
++    CALL find_failed_baseline_pairs()
++    ! One operator is chosen for the entire pair support, never for individual cells.
++    IF (.NOT.ANY(failed_pairs(3:4))) THEN
++      source_first_pair(1:2)=failed_pairs(1:2)
++      IF (ANY(source_first_pair)) THEN
++        CALL prepare_source_first_rates()
++        CALL evaluate_joint_candidate()
++      END IF
++    END IF
++  END IF
+   OPEN(NEWUNIT=u,FILE='pr85_joint_transport_budget.raw',STATUS='UNKNOWN',POSITION='APPEND')
++  WRITE(u,*) 'BASELINE_JOINT_FEASIBLE',itimestep,rk,baseline_feasible
++  WRITE(u,*) 'SOURCE_FIRST_PAIR_FALLBACK',itimestep,rk,source_first_pair
+   WRITE(u,*) 'JOINT_RK',rk,cells,maxcfl,theta,feasible
+   WRITE(u,*) 'REJECTED_PRESSURE_COORDINATE_Q',rejected_q
+   WRITE(u,*) 'REJECTED_PRESSURE_COORDINATE_MOMENT',rejected_n
+@@ -139,24 +177,24 @@
+         ! Inspect the full proposed update separately from the source-only diagnostic.
+         source_candidate=(REAL(oldcarrier(cell),real64)* &
+           [REAL(qb(cell,p),real64),REAL(nb(cell,p),real64)]+REAL(dt,real64)* &
+-          [REAL(qs(cell,p),real64)+REAL(qa(cell,p),real64), &
+-           REAL(ns(cell,p),real64)+REAL(na(cell,p),real64)])/REAL(newcarrier(cell),real64)
++          [qs64(cell,p)+qa64(cell,p),ns64(cell,p)+na64(cell,p)])/REAL(newcarrier(cell),real64)
+         CALL joint_moment_store(source_candidate(1),source_candidate(2),drydensity(cell), &
+-             minmass(p),maxmass(p),.TRUE.,full_stored(1),full_stored(2),adjustment,full_valid)
++             minmass(p),maxmass(p),.TRUE.,full_stored(1),full_stored(2),adjustment,full_valid, &
++             allow_normal_q_adjustment=.TRUE.,allow_joint_quantum_absence=.TRUE.)
+         IF (.NOT.full_valid) THEN
+           full_failures=full_failures+1
+           WRITE(u,*) 'FULL',itimestep,rk,p,i,j,k,oldcarrier(cell),newcarrier(cell), &
+-              qb(cell,p),nb(cell,p),qs(cell,p),ns(cell,p),qa(cell,p),na(cell,p), &
++              qb(cell,p),nb(cell,p),qs64(cell,p),ns64(cell,p),qa64(cell,p),na64(cell,p), &
+               source_candidate,full_stored,drydensity(cell),dt
+         END IF
+         source_candidate=(REAL(oldcarrier(cell),real64)* &
+           [REAL(qb(cell,p),real64),REAL(nb(cell,p),real64)]+REAL(dt,real64)* &
+-          [REAL(qs(cell,p),real64),REAL(ns(cell,p),real64)])/REAL(newcarrier(cell),real64)
++          [qs64(cell,p),ns64(cell,p)])/REAL(newcarrier(cell),real64)
+         IF (ANY(.NOT.ieee_is_finite(source_candidate)).OR. &
+             ANY(ABS(source_candidate)>REAL(HUGE(0.0_real32),real64))) THEN
+           source_failures=source_failures+1
+           WRITE(u,*) 'SOURCE_NOT_STORABLE_R32',rk,p,i,j,k,oldcarrier(cell),newcarrier(cell), &
+-              qb(cell,p),nb(cell,p),qs(cell,p),ns(cell,p),source_candidate,drydensity(cell)
++              qb(cell,p),nb(cell,p),qs64(cell,p),ns64(cell,p),source_candidate,drydensity(cell)
+           CYCLE
+         END IF
+         source_stored=REAL(source_candidate,real32)
+@@ -164,7 +202,7 @@
+                                        minmass(p),maxmass(p))) THEN
+           source_failures=source_failures+1
+           WRITE(u,*) 'SOURCE',rk,p,i,j,k,oldcarrier(cell),newcarrier(cell), &
+-              qb(cell,p),nb(cell,p),qs(cell,p),ns(cell,p),source_candidate,source_stored,drydensity(cell)
++              qb(cell,p),nb(cell,p),qs64(cell,p),ns64(cell,p),source_candidate,source_stored,drydensity(cell)
+         END IF
+       END DO
+     END DO
+@@ -178,6 +216,7 @@
+   IF (theta<=0.0_real64) CALL wrf_error_fatal('PR85 refusing zero common air transport')
+   IF (theta/=1.0_real64) &
+     CALL wrf_error_fatal('PR85 low-order donor map requires a conservative face limiter')
++  IF (ANY(source_first_pair)) CALL write_source_representation()
+   ! Additional joint storage rounding is a numerical term, not a physical source.
+   ! Signed aggregate deltas have pressure-coordinate units; no kg/energy closure is claimed.
+   OPEN(NEWUNIT=u,FILE='pr87_joint_storage.raw',STATUS='UNKNOWN',POSITION='APPEND')
+@@ -193,8 +232,7 @@
+       DO p=1,4
+         source_candidate=(REAL(oldcarrier(cell),real64)* &
+           [REAL(qb(cell,p),real64),REAL(nb(cell,p),real64)]+REAL(dt,real64)* &
+-          [REAL(qs(cell,p),real64)+theta*REAL(qa(cell,p),real64), &
+-           REAL(ns(cell,p),real64)+theta*REAL(na(cell,p),real64)])/REAL(newcarrier(cell),real64)
++          [qs64(cell,p)+theta*qa64(cell,p),ns64(cell,p)+theta*na64(cell,p)])/REAL(newcarrier(cell),real64)
+         source_stored=REAL(source_candidate,real32)
+         IF (qc(cell,p)/=source_stored(1).OR.nc(cell,p)/=source_stored(2)) &
+           WRITE(u,*) 'STORED_PAIR',itimestep,rk,p,i,j,k,oldcarrier(cell),newcarrier(cell), &
+@@ -222,6 +260,217 @@
+   END DO
+   END DO
+ CONTAINS
++  SUBROUTINE evaluate_joint_candidate()
++    CALL joint_qnb_update(qb,nb,qc,nc,qs,ns,qa,na,oldcarrier,newcarrier,drydensity, &
++                         dt,minmass,maxmass,theta,rejected_q,rejected_n,feasible, &
++                         joint_constrained_storage=.TRUE.,storage_delta_q=storage_delta_q, &
++                         storage_delta_n=storage_delta_n,storage_adjustments=storage_adjustments, &
++                         q_source_rate64=qs64,n_source_rate64=ns64, &
++                         q_transport_rate64=qa64,n_transport_rate64=na64,joint_quantum_absence=.TRUE.)
++  END SUBROUTINE evaluate_joint_candidate
++
++  SUBROUTINE find_failed_baseline_pairs()
++    INTEGER :: c,pair,local_adjustment
++    REAL(real64) :: value(2)
++    REAL(real32) :: stored(2)
++    LOGICAL :: local_valid
++    failed_pairs=.FALSE.
++    DO pair=1,4
++      DO c=1,cells
++        ! These are the exact operands of the initial theta=1 kernel candidate.
++        value=(REAL(oldcarrier(c),real64)*[REAL(qb(c,pair),real64),REAL(nb(c,pair),real64)]+ &
++               REAL(dt,real64)*[qs64(c,pair)+qa64(c,pair),ns64(c,pair)+na64(c,pair)])/ &
++               REAL(newcarrier(c),real64)
++        CALL joint_moment_store(value(1),value(2),drydensity(c),minmass(pair),maxmass(pair), &
++             .TRUE.,stored(1),stored(2),local_adjustment,local_valid, &
++             allow_normal_q_adjustment=.TRUE.,allow_joint_quantum_absence=.TRUE.)
++        IF (.NOT.local_valid) failed_pairs(pair)=.TRUE.
++      END DO
++    END DO
++  END SUBROUTINE find_failed_baseline_pairs
++
++  SUBROUTINE prepare_source_first_rates()
++    IF (pr87_source_step/=itimestep) &
++      CALL wrf_error_fatal('PR87 intensive source payload is not current or changed after capture')
++    ALLOCATE(donor_q(ims:ime,kms:kme,jms:jme,2),donor_n(ims:ime,kms:kme,jms:jme,2))
++    DO p=1,2
++      IF (.NOT.source_first_pair(p)) CYCLE
++      donor_q(:,:,:,p)=REAL(q1(:,:,:,qindex(p)),real64)
++      donor_n(:,:,:,p)=REAL(n1(:,:,:,nindex(p)),real64)
++    END DO
++    ! Capture comes before the host's R32 carrier coupling, with explicit step identity.
++    ! The source stage is virtual: only the complete source/air endpoint is committed.
++    cell=0
++    DO j=jl,jh
++    DO k=kl,kh
++    DO i=il,ih
++      cell=cell+1
++      IF (pr87_source_carrier(i,k,j)/=oldcarrier(cell)) THEN
++        WRITE(*,*) 'PR87_SOURCE_CARRIER_REJECT',itimestep,rk,i,j,k, &
++                    pr87_source_carrier(i,k,j),oldcarrier(cell)
++        CALL wrf_error_fatal('PR87 physical source and old state use different dry carriers')
++      ENDIF
++      DO p=1,2
++        IF (.NOT.source_first_pair(p)) CYCLE
++        IF (qs(cell,p)/=pr87_coupled_qsrc(i,k,j,p).OR. &
++            ns(cell,p)/=pr87_coupled_nsrc(i,k,j,p)) &
++          CALL wrf_error_fatal('PR87 coupled source changed since its intensive capture')
++        source_rate32=[pr87_raw_qsrc(i,k,j,p),pr87_raw_nsrc(i,k,j,p)]
++        IF (.NOT.ALL(ieee_is_finite(source_rate32))) &
++          CALL wrf_error_fatal('PR87 nonfinite intensive source payload')
++        source_candidate=[REAL(q1(i,k,j,qindex(p)),real64), &
++                          REAL(n1(i,k,j,nindex(p)),real64)]+REAL(dt,real64)*REAL(source_rate32,real64)
++        IF (.NOT.prepared_donor_is_safe(source_candidate(1),source_candidate(2),drydensity(cell))) &
++          CALL wrf_error_fatal('PR87 unsafe continuous intensive source donor')
++        ! Preserve the explicit intensive R32 integration order, not a division of a rounded W*S.
++        source_sum64=REAL(dt,real64)*REAL(source_rate32,real64)
++        IF (ANY(ABS(source_sum64)>REAL(HUGE(0.0_real32),real64))) &
++          CALL wrf_error_fatal('PR87 intensive source increment exceeds REAL32 range')
++        source_increment32=dt*source_rate32
++        source_sum64=[REAL(q1(i,k,j,qindex(p)),real64),REAL(n1(i,k,j,nindex(p)),real64)]+ &
++                      REAL(source_increment32,real64)
++        IF (ANY(source_sum64<0.0_real64).OR.ANY(source_sum64>REAL(HUGE(0.0_real32),real64))) &
++          CALL wrf_error_fatal('PR87 staged intensive source exceeds nonnegative REAL32 range')
++        source_endpoint32=[q1(i,k,j,qindex(p)),n1(i,k,j,nindex(p))]+source_increment32
++        IF (.NOT.prepared_donor_is_safe(REAL(source_endpoint32(1),real64), &
++                                       REAL(source_endpoint32(2),real64),drydensity(cell)).OR. &
++            (ALL(source_endpoint32==0.0_real32).AND.ANY(source_candidate>0.0_real64))) THEN
++          ! Existing bounded joint representation policy; continuously invalid pairs stay rejected.
++          CALL joint_moment_store(source_candidate(1),source_candidate(2),drydensity(cell), &
++               minmass(p),maxmass(p),.TRUE.,source_endpoint32(1),source_endpoint32(2),adjustment,full_valid, &
++               allow_normal_q_adjustment=.TRUE.,allow_joint_quantum_absence=.TRUE.)
++          IF (.NOT.full_valid) CALL wrf_error_fatal('PR87 intensive source pair is not jointly representable')
++        ENDIF
++        ! RK1 adds weighted diffusion/diabatic/boundary tendencies after physics coupling.
++        ! They remain explicit source amounts; PD advection is not part of this payload.
++        qs64(cell,p)=pr87_later_qsrc(i,k,j,p)
++        ns64(cell,p)=pr87_later_nsrc(i,k,j,p)
++        IF (.NOT.ALL(ieee_is_finite([qs64(cell,p),ns64(cell,p)]))) &
++          CALL wrf_error_fatal('PR87 nonfinite later non-air source payload')
++        ! Match the canonical no-air consumer arithmetic before using this virtual donor.
++        source_sum64=(REAL(oldcarrier(cell),real64)*REAL(source_endpoint32,real64)+ &
++                      REAL(dt,real64)*[qs64(cell,p),ns64(cell,p)])/REAL(oldcarrier(cell),real64)
++        IF (.NOT.prepared_donor_is_safe(source_sum64(1),source_sum64(2),drydensity(cell))) &
++          CALL wrf_error_fatal('PR87 unsafe complete source-prepared virtual donor')
++        donor_q(i,k,j,p)=source_sum64(1)
++        donor_n(i,k,j,p)=source_sum64(2)
++        ! Physics enters through the local stage once; later sources enter through qs64/ns64 once.
++        qb(cell,p)=source_endpoint32(1); nb(cell,p)=source_endpoint32(2)
++      END DO
++    END DO
++    END DO
++    END DO
++    ! The unchanged boundary donor ring remains a completed physical state.
++    DO j=jl-1,jh+1
++    DO k=kl,kh
++    DO i=il-1,ih+1
++      IF (i>=il.AND.i<=ih.AND.j>=jl.AND.j<=jh) CYCLE
++      CALL pr85_dry_density_from_al_alb(al(i,k,j),alb(i,k,j),source_stored(1),density_valid)
++      IF (.NOT.density_valid) CALL wrf_error_fatal('PR87 invalid donor-ring density')
++      DO p=1,2
++        IF (.NOT.source_first_pair(p)) CYCLE
++        IF (.NOT.joint_moment_is_valid64(donor_q(i,k,j,p),donor_n(i,k,j,p), &
++                                        source_stored(1),minmass(p),maxmass(p))) &
++          CALL wrf_error_fatal('PR87 unchanged boundary donor pair infeasible')
++      END DO
++    END DO
++    END DO
++    END DO
++    cell=0
++    DO j=jl,jh
++    DO k=kl,kh
++    DO i=il,ih
++      cell=cell+1
++      DO p=1,2
++        IF (.NOT.source_first_pair(p)) CYCLE
++        rate=air_tendency(q1(:,:,:,qindex(p)),n1(:,:,:,nindex(p)),i,k,j,p)
++        qa64(cell,p)=rate(1); na64(cell,p)=rate(2)
++      END DO
++    END DO
++    END DO
++    END DO
++  END SUBROUTINE prepare_source_first_rates
++
++  SUBROUTINE write_source_representation()
++    ! W has pressure-carrier units. These amounts are NOT kg, energy, or physical phase transfers.
++    REAL(real64) :: column(2,5),total(2,5),proposal(2),represented(2),delta(2)
++    REAL(real64) :: later_amount(2),later_total(2),identity_max(2),physical_delta(2)
++    INTEGER :: pair,x,y,z,c,unit,ios,changed,column_changed,maximum_k(2)
++    OPEN(NEWUNIT=unit,FILE='pr87_source_representation.raw',STATUS='UNKNOWN', &
++         POSITION='APPEND',ACTION='WRITE',IOSTAT=ios)
++    IF (ios/=0) CALL wrf_error_fatal('PR87 source representation ledger open failed')
++    WRITE(unit,*,IOSTAT=ios) 'SOURCE_REPRESENTATION_META',itimestep,rk, &
++       'pressure amounts: dt*total_source, W*(physics_stage-old)+dt*later_source, delta, L1, max; Q,N'
++    IF (ios/=0) CALL wrf_error_fatal('PR87 source representation metadata write failed')
++    DO pair=1,2
++      IF (.NOT.source_first_pair(pair)) CYCLE
++      total=0.0_real64; changed=0; later_total=0.0_real64; identity_max=0.0_real64
++      DO y=jl,jh
++      DO x=il,ih
++        column=0.0_real64; column_changed=0; maximum_k=0
++        DO z=kl,kh
++          c=((y-jl)*(kh-kl+1)+(z-kl))*(ih-il+1)+(x-il)+1
++          proposal=REAL(dt,real64)*[REAL(qs(c,pair),real64),REAL(ns(c,pair),real64)]
++          represented=REAL(oldcarrier(c),real64)* &
++             ([REAL(qb(c,pair),real64),REAL(nb(c,pair),real64)]- &
++              [REAL(q1(x,z,y,qindex(pair)),real64),REAL(n1(x,z,y,nindex(pair)),real64)])+ &
++             REAL(dt,real64)*[qs64(c,pair),ns64(c,pair)]
++          delta=represented-proposal
++          later_amount=REAL(dt,real64)*[qs64(c,pair),ns64(c,pair)]
++          later_total=later_total+later_amount
++          physical_delta=(represented-later_amount)-REAL(dt,real64)* &
++             ([REAL(qs(c,pair),real64),REAL(ns(c,pair),real64)]-[qs64(c,pair),ns64(c,pair)])
++          identity_max=MAX(identity_max,ABS(delta-physical_delta))
++          IF (.NOT.ALL(ieee_is_finite(delta))) &
++            CALL wrf_error_fatal('PR87 nonfinite source representation ledger')
++          IF (ANY(delta/=0.0_real64)) column_changed=column_changed+1
++          WHERE (ABS(delta)>column(:,5)) maximum_k=z
++          column(:,1)=column(:,1)+proposal; column(:,2)=column(:,2)+represented
++          column(:,3)=column(:,3)+delta; column(:,4)=column(:,4)+ABS(delta)
++          column(:,5)=MAX(column(:,5),ABS(delta))
++        END DO
++        IF (column_changed>0) THEN
++          WRITE(unit,*,IOSTAT=ios) 'SOURCE_COLUMN',itimestep,rk,pair,x,y,column_changed,maximum_k,column
++          IF (ios/=0) CALL wrf_error_fatal('PR87 source column ledger write failed')
++        ENDIF
++        changed=changed+column_changed
++        total(:,1:4)=total(:,1:4)+column(:,1:4)
++        total(:,5)=MAX(total(:,5),column(:,5))
++      END DO
++      END DO
++      IF (.NOT.ALL(ieee_is_finite(total))) &
++        CALL wrf_error_fatal('PR87 nonfinite source representation aggregate')
++      WRITE(unit,*,IOSTAT=ios) 'SOURCE_TOTAL',itimestep,rk,pair,cells,changed,total
++      IF (ios/=0) CALL wrf_error_fatal('PR87 source aggregate ledger write failed')
++      IF (.NOT.ALL(ieee_is_finite(later_total)).OR..NOT.ALL(ieee_is_finite(identity_max))) &
++        CALL wrf_error_fatal('PR87 nonfinite later source ledger')
++      WRITE(unit,*,IOSTAT=ios) 'SOURCE_LATER_TOTAL',itimestep,rk,pair,later_total,identity_max
++      IF (ios/=0) CALL wrf_error_fatal('PR87 later source ledger write failed')
++    END DO
++    CLOSE(unit,IOSTAT=ios)
++    IF (ios/=0) CALL wrf_error_fatal('PR87 source representation ledger close failed')
++  END SUBROUTINE write_source_representation
++
++  LOGICAL FUNCTION prepared_donor_is_safe(q,n,density) RESULT(valid)
++    REAL(real64),INTENT(IN) :: q,n
++    REAL(real32),INTENT(IN) :: density
++    REAL(real64) :: number_volume
++    valid=.FALSE.
++    IF (.NOT.ieee_is_finite(q).OR..NOT.ieee_is_finite(n)) RETURN
++    IF (.NOT.ieee_is_finite(density)) RETURN
++    IF (density<=0.0_real32) RETURN
++    IF (q<0.0_real64.OR.n<0.0_real64) RETURN
++    IF (q>REAL(HUGE(0.0_real32),real64).OR.n>REAL(HUGE(0.0_real32),real64)) RETURN
++    IF ((q==0.0_real64).NEQV.(n==0.0_real64)) RETURN
++    IF (n>0.0_real64) THEN
++      number_volume=n*REAL(density,real64)
++      IF (.NOT.ieee_is_finite(number_volume)) RETURN
++      IF (number_volume<=0.5_real64*REAL(NEAREST(0.0_real32,1.0_real32),real64).OR. &
++          number_volume>REAL(HUGE(0.0_real32),real64)) RETURN
++    ENDIF
++    valid=.TRUE.
++  END FUNCTION prepared_donor_is_safe
++
+   FUNCTION singleton_candidate(base,source,transport,oldmass,newmass,density,isnumber) RESULT(stored)
+     REAL,INTENT(IN) :: base,source,oldmass,newmass,density
+     REAL(real64),INTENT(IN) :: transport
+@@ -243,30 +492,46 @@
+         CALL wrf_error_fatal('PR85 ambient number density conversion infeasible')
+     END IF
+   END FUNCTION singleton_candidate
+-  FUNCTION air_tendency(mass,moment,i,k,j) RESULT(value)
++  FUNCTION air_tendency(mass,moment,i,k,j,pair) RESULT(value)
+     REAL,INTENT(IN) :: mass(ims:ime,kms:kme,jms:jme),moment(ims:ime,kms:kme,jms:jme)
+     INTEGER,INTENT(IN) :: i,k,j
++    INTEGER,INTENT(IN),OPTIONAL :: pair
+     REAL(real64) :: value(2),east(2),west(2),north(2),south(2),upper(2),lower(2)
+     INTEGER :: donor
+     donor=MERGE(i,i+1,ru(i+1,k,j)>=0.0)
+-    east=REAL(ru(i+1,k,j),real64)*[REAL(mass(donor,k,j),real64),REAL(moment(donor,k,j),real64)]
++    east=REAL(ru(i+1,k,j),real64)*donor_values(mass,moment,donor,k,j,pair)
+     donor=MERGE(i-1,i,ru(i,k,j)>=0.0)
+-    west=REAL(ru(i,k,j),real64)*[REAL(mass(donor,k,j),real64),REAL(moment(donor,k,j),real64)]
++    west=REAL(ru(i,k,j),real64)*donor_values(mass,moment,donor,k,j,pair)
+     donor=MERGE(j,j+1,rv(i,k,j+1)>=0.0)
+-    north=REAL(rv(i,k,j+1),real64)*[REAL(mass(i,k,donor),real64),REAL(moment(i,k,donor),real64)]
++    north=REAL(rv(i,k,j+1),real64)*donor_values(mass,moment,i,k,donor,pair)
+     donor=MERGE(j-1,j,rv(i,k,j)>=0.0)
+-    south=REAL(rv(i,k,j),real64)*[REAL(mass(i,k,donor),real64),REAL(moment(i,k,donor),real64)]
++    south=REAL(rv(i,k,j),real64)*donor_values(mass,moment,i,k,donor,pair)
+     upper=0.0_real64; lower=0.0_real64
+     IF (k<kh) THEN
+       donor=MERGE(k+1,k,ww(i,k+1,j)>=0.0)
+-      upper=REAL(ww(i,k+1,j),real64)*[REAL(mass(i,donor,j),real64),REAL(moment(i,donor,j),real64)]
++      upper=REAL(ww(i,k+1,j),real64)*donor_values(mass,moment,i,donor,j,pair)
+     END IF
+     IF (k>kl) THEN
+       donor=MERGE(k,k-1,ww(i,k,j)>=0.0)
+-      lower=REAL(ww(i,k,j),real64)*[REAL(mass(i,donor,j),real64),REAL(moment(i,donor,j),real64)]
++      lower=REAL(ww(i,k,j),real64)*donor_values(mass,moment,i,donor,j,pair)
+     END IF
+     value=-REAL(msfty(i,j),real64)*( &
+       REAL(msftx(i,j)*rdx,real64)*(east-west)+ &
+       REAL(msftx(i,j)*rdy,real64)*(north-south)+REAL(rdnw(k),real64)*(upper-lower))
+   END FUNCTION air_tendency
++
++  FUNCTION donor_values(mass,moment,i,k,j,pair) RESULT(value)
++    REAL,INTENT(IN) :: mass(ims:ime,kms:kme,jms:jme),moment(ims:ime,kms:kme,jms:jme)
++    INTEGER,INTENT(IN) :: i,k,j
++    INTEGER,INTENT(IN),OPTIONAL :: pair
++    REAL(real64) :: value(2)
++    value=[REAL(mass(i,k,j),real64),REAL(moment(i,k,j),real64)]
++    IF (rk/=3) RETURN
++    IF (.NOT.PRESENT(pair)) RETURN
++    IF (pair>2) RETURN
++    IF (.NOT.source_first_pair(pair)) RETURN
++    value=[donor_q(i,k,j,pair),donor_n(i,k,j,pair)]
++  END FUNCTION donor_values
++
++
+ END SUBROUTINE rk_update_joint_moments

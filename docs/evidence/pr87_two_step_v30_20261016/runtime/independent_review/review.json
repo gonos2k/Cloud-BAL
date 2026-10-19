@@ -1,0 +1,357 @@
+{
+  "candidate": {
+    "build_receipt": "/var/tmp/pr87_joint_cycle_build_20261016_v30/pr87_native_overlay_build.json",
+    "build_receipt_sha256": "0599bbaae71417906bc0b63043799ecdf93b5423990cfda365a89c2dc90ccc18",
+    "build_status": "PASS_OVERLAY_BUILD",
+    "executable_sha256": "ea356b65554bd2b4070f327fbb4d58985939896f4e9341b9b40c1b6acbdc73e8",
+    "generated_joint_kernel_sha256": "60917061915e0452251c27db7b5d4e97061729605c3218cd291c2cbc3e519e74",
+    "parent_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+    "source_dir": "/var/tmp/pr87_joint_cycle_sources_20261016_v30",
+    "source_hashes": {
+      "module_bl_fogdes.F": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+      "module_em_pr85.F": "6ea7f9f72a44981337f8341dc8a62a08eaac3a302b23fd79ffb2598248ac6287",
+      "native_update.f90": "bee2e9a61dafcf2ab81763c53385c22da26654d2b2661f1ac3bb185e379b49b5",
+      "solve_em.F": "e78f0a3981c399e5c4326bd550d55a6ca5522d297f8c44c0d60a18ac3768b2b3",
+      "sources.json": "56eec617d8c643463009ecb93887943a7e4be920431ae601aed5a5507fff2be6"
+    },
+    "source_manifest_sha256": "56eec617d8c643463009ecb93887943a7e4be920431ae601aed5a5507fff2be6",
+    "source_stage_failure_operands": true
+  },
+  "limitations": [
+    "PRE_RK and RK1/RK2 rows are intermediate states, not completed endpoint gates.",
+    "Timestep 2 retains negative-Q predictor observations in intermediate rows; they are reported, not treated as completed acceptance states."
+  ],
+  "overall_runtime_status": "INCOMPLETE in both arms: timestep 1 reaches POST_KDM6; timestep 2 stops at the RK3 source-stage strict storage fatal before RK3 completion or KDM6.",
+  "runs": {
+    "COUPLED": {
+      "audit_path": "docs/evidence/pr87_two_step_v30_20261016/runtime/independent_review/COUPLED_strict_completed_state_audit.json",
+      "audit_sha256": "c72ecfb8c916f8600d86c2cee31ce143499291090f188a65a4083813417eaebb",
+      "audit_status": "INCOMPLETE",
+      "candidate_executable_sha256_actual": "ea356b65554bd2b4070f327fbb4d58985939896f4e9341b9b40c1b6acbdc73e8",
+      "candidate_executable_sha256_expected": "ea356b65554bd2b4070f327fbb4d58985939896f4e9341b9b40c1b6acbdc73e8",
+      "candidate_namelist_sha256_actual": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_namelist_sha256_expected": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "completed_post_kdm6_timesteps": 1,
+      "duration_seconds": 40,
+      "expected_timesteps": 2,
+      "fatal_observed": true,
+      "frozen_input_file_count": 101,
+      "observed_stage_gate_summary": [
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "POST_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {
+            "cloud": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 54
+            },
+            "rain": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 101
+            }
+          },
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 5,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        }
+      ],
+      "observed_state_records": 9,
+      "parent_executable_sha256_actual": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "parent_executable_sha256_expected": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "preflight_sha256": "f13b535e12992725399e49086e7fd32008484b34be68af2bc0e275aa90c7c755",
+      "run_root": "/var/tmp/pr87_joint_COUPLED_40s_v30_20261016",
+      "runtime_receipt_sha256": null,
+      "source_failure_gzip_sha256": "cd68909cec9bbb4e36717cd97f9af8258fff7466e35cd28dc39103cac5c8c2d2",
+      "stage_counts": {
+        "POST_KDM6": 1,
+        "PRE_KDM6": 1,
+        "PRE_RK": 2,
+        "RK_STAGE_END": 5
+      },
+      "timesteps": [
+        {
+          "completed_post_kdm6": true,
+          "stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6",
+            "POST_KDM6"
+          ],
+          "status": "PASS",
+          "timestep": 1
+        },
+        {
+          "completed_post_kdm6": false,
+          "stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END"
+          ],
+          "status": "INCOMPLETE",
+          "timestep": 2
+        }
+      ],
+      "trace_decoded_sha256": "28f51483a9e7148a212adb768db4071a77f94e9b4a1953673c42191027993c55",
+      "trace_gzip_sha256": "37fc81a0f0708ec50a1a408ba183a120fed6faf94cb9e0f2f90fefdf0d66d4ed",
+      "unchanged_frozen_input_mismatches": [],
+      "unchanged_frozen_inputs_checked": 99
+    },
+    "OFF": {
+      "audit_path": "docs/evidence/pr87_two_step_v30_20261016/runtime/independent_review/OFF_strict_completed_state_audit.json",
+      "audit_sha256": "651517bb8c6dac06247e549ec53d2058fe975b76def8378b780bea967db0edff",
+      "audit_status": "INCOMPLETE",
+      "candidate_executable_sha256_actual": "ea356b65554bd2b4070f327fbb4d58985939896f4e9341b9b40c1b6acbdc73e8",
+      "candidate_executable_sha256_expected": "ea356b65554bd2b4070f327fbb4d58985939896f4e9341b9b40c1b6acbdc73e8",
+      "candidate_namelist_sha256_actual": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "candidate_namelist_sha256_expected": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+      "completed_post_kdm6_timesteps": 1,
+      "duration_seconds": 40,
+      "expected_timesteps": 2,
+      "fatal_observed": true,
+      "frozen_input_file_count": 101,
+      "observed_stage_gate_summary": [
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 3,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "PRE_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {},
+          "rkstep": 0,
+          "stage": "POST_KDM6",
+          "strict_endpoint_gate_applies": true,
+          "strict_source_coefficient_violations": {},
+          "timestep": 1,
+          "timestep_status": "PASS"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 0,
+          "stage": "PRE_RK",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {
+            "cloud": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 54
+            },
+            "rain": {
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 100
+            }
+          },
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 4,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 1,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        },
+        {
+          "field_violations": {
+            "Q": {
+              "negative": 5,
+              "nonfinite": 0
+            }
+          },
+          "rkstep": 2,
+          "stage": "RK_STAGE_END",
+          "strict_endpoint_gate_applies": false,
+          "strict_source_coefficient_violations": {},
+          "timestep": 2,
+          "timestep_status": "INCOMPLETE"
+        }
+      ],
+      "observed_state_records": 9,
+      "parent_executable_sha256_actual": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "parent_executable_sha256_expected": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "preflight_sha256": "af6e825aa3c31dd785ff684ac27a6bc2cc56771c090784bea345989c10a3cf99",
+      "run_root": "/var/tmp/pr87_joint_OFF_40s_v30_20261016",
+      "runtime_receipt_sha256": null,
+      "source_failure_gzip_sha256": "cd68909cec9bbb4e36717cd97f9af8258fff7466e35cd28dc39103cac5c8c2d2",
+      "stage_counts": {
+        "POST_KDM6": 1,
+        "PRE_KDM6": 1,
+        "PRE_RK": 2,
+        "RK_STAGE_END": 5
+      },
+      "timesteps": [
+        {
+          "completed_post_kdm6": true,
+          "stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "RK_STAGE_END",
+            "PRE_KDM6",
+            "POST_KDM6"
+          ],
+          "status": "PASS",
+          "timestep": 1
+        },
+        {
+          "completed_post_kdm6": false,
+          "stage_sequence": [
+            "PRE_RK",
+            "RK_STAGE_END",
+            "RK_STAGE_END"
+          ],
+          "status": "INCOMPLETE",
+          "timestep": 2
+        }
+      ],
+      "trace_decoded_sha256": "027b578f209a2a3de9e0e452c19f3e274ac0f10d4e3c95f283122adc687c3ca7",
+      "trace_gzip_sha256": "250beb201801480b29a7696b6075499ffe0cd89d37d0dd6bac10bb3b6eb7a87e",
+      "unchanged_frozen_input_mismatches": [],
+      "unchanged_frozen_inputs_checked": 99
+    }
+  },
+  "schema": "pr87_v30_independent_runtime_review_v1",
+  "scope": "Independent static/source binding and closed-run audit for matched OFF/COUPLED 40-second candidate runs; research validation only.",
+  "static_findings": [
+    "V30 diagnostic emits SOURCE_STAGE operands only after the existing source-stage joint storage failure, then preserves the fatal path.",
+    "Corrected FogDES path applies strict linear Q/N product bounds; the legacy no-sidecar path retains its prior 8-ULP check.",
+    "The earlier V29 exact witness is rejected by the V30 lower linear product. V30 does not thereby establish volume-product validity for every other candidate.",
+    "The source-first virtual donor is used only as specific paired Q/N input to common-air transport; the final grouped and public storage volume contracts remain separate."
+  ]
+}

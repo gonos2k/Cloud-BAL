@@ -1,0 +1,76 @@
+{
+  "fresh_scratch": "/var/tmp/pr87_horizontal_diffusion64_vz9u9_ue",
+  "helper": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tools/pr87_horizontal_diffusion64.f90",
+  "helper_sha256": "0a8b2865fff3d7ad6592e0d1bc1d3f7b51970de13ac9ea128066b7cba655bfe3",
+  "mapping": {
+    "upstream_file_sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c",
+    "upstream_procedure_sha256": "cbcc347345a6449b9e5666407c5ef8c6a0db73a9a397d0e306ad14a085783ac3"
+  },
+  "results": {
+    "O0": {
+      "compile_log": "/var/tmp/pr87_horizontal_diffusion64_vz9u9_ue/O0/compile.log",
+      "compile_log_sha256": "db128a03bea9c7a38330535400db86b222e660660a1fdd8336ba0868c6044f79",
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "executable": "/var/tmp/pr87_horizontal_diffusion64_vz9u9_ue/O0/test_pr87_horizontal_diffusion64.exe",
+      "executable_sha256": "ba20df732c5873d1c62ebb8b745d32c3b61b7add677904b86317a913a8ea9def",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "run_log": "/var/tmp/pr87_horizontal_diffusion64_vz9u9_ue/O0/run.log",
+      "run_log_sha256": "ba0ff2a3ad2157b80edaa6a1dbecddeeab4608661412c5dc69b971a89957faa9",
+      "status": "PASS",
+      "stdout": "PR87_DIFFUSION64_PASS -5.42101086242752217E-020  2.50985593593299220E-003  1.00000002127221662E-006  9.99999937500003804E-007"
+    },
+    "O2": {
+      "compile_log": "/var/tmp/pr87_horizontal_diffusion64_vz9u9_ue/O2/compile.log",
+      "compile_log_sha256": "db128a03bea9c7a38330535400db86b222e660660a1fdd8336ba0868c6044f79",
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "executable": "/var/tmp/pr87_horizontal_diffusion64_vz9u9_ue/O2/test_pr87_horizontal_diffusion64.exe",
+      "executable_sha256": "51a21858b27b5cdf2c165cb1fe356b5b7c8f1052373aed16652995840d67c289",
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "run_log": "/var/tmp/pr87_horizontal_diffusion64_vz9u9_ue/O2/run.log",
+      "run_log_sha256": "ba0ff2a3ad2157b80edaa6a1dbecddeeab4608661412c5dc69b971a89957faa9",
+      "status": "PASS",
+      "stdout": "PR87_DIFFUSION64_PASS -5.42101086242752217E-020  2.50985593593299220E-003  1.00000002127221662E-006  9.99999937500003804E-007"
+    }
+  },
+  "schema": "pr87_horizontal_diffusion64_ifx_o0_o2_v1",
+  "status": "PASS_O0_O2",
+  "test_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/test_pr87_horizontal_diffusion64.f90",
+  "test_source_sha256": "f33b4964924fe541fbd5473f9bbe11ab7a699a696bf9b95c8924ccce3e104e0f",
+  "tests": [
+    "zero_field",
+    "constant_field",
+    "nonuniform_face_coefficients",
+    "active_bounds_zeroed",
+    "closed_area_weighted_face_cancellation",
+    "exact_dyadic_shared_QN_mixing",
+    "R32_crosses_strict_lower_bound_R64_passes"
+  ]
+}

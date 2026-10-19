@@ -1,0 +1,515 @@
+{
+  "arms": {
+    "COUPLED": {
+      "binding": {
+        "candidate_build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v5b/pr87_native_overlay_build.json",
+        "candidate_build_receipt_sha256": "5a77e352c0015687bb92cd63238d069706c6a2c1f51c453b89f4087e04b5c45a",
+        "candidate_executable_sha256": "3631689bf1cddde4198d057489443d13a4d0bab94ee7aa53a4888e02fc6468ba",
+        "launch_provenance": {
+          "launch_provenance_file_present": false,
+          "launch_receipt_sha256": null,
+          "launch_time_runner_source_sha256_recorded": null,
+          "launcher_output_files": {
+            "launcher.stderr": {
+              "bytes": 0,
+              "path": "launcher.stderr",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "launcher.stdout": {
+              "bytes": 0,
+              "path": "launcher.stdout",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          },
+          "note": "No launch_provenance.json or launch-time runner source hash is present; launcher stdout/stderr are receipt-hashed."
+        },
+        "parent_build_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+        "preflight_path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/preflight.json",
+        "preflight_sha256": "1c7ced8819dd5cd86578db3f991ca7cae1e4ca5d0b0849fb3cc3d4442c84c409",
+        "run_receipt_path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/receipt.json",
+        "run_receipt_sha256": "f7942dda271f5a4c88279894e210d0e3d7a887ea08c3010a9edc60836ad7d6a0",
+        "source_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v5b/sources.json",
+        "source_manifest_sha256": "9fb39615841014a27c8f90ebae4810df1e19dc40193d7e0848ed2da019c16bb5",
+        "source_receipt_path": "/var/tmp/pr85_evidence_bundle_20261015/actual_v17_COUPLED_run_receipt.json",
+        "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675"
+      },
+      "first_call_state_hashes": {
+        "candidate_post_present": false,
+        "candidate_post_sha256": null,
+        "candidate_pre_matches_v17": false,
+        "candidate_pre_sha256": "95939a9885daf928d8ed8bc07d2c159e8000fa7e6b2e57d9dac26128e68a20cf",
+        "note": "Candidate pre/post is reported as observed; candidate pre differs from v17 and no candidate post snapshot was emitted before early failure.",
+        "v17_post_sha256": "67c65cc6c36950b6b051791bd022d52021d2b2d785cbaeee12279ccad5b6cc6e",
+        "v17_pre_sha256": "1517596e7f0c69de4b6212453c20911e3ec7c89ab0e0c5359ccd3801e9b6debd"
+      },
+      "joint_transport_diagnostic": {
+        "all_emitted_rk_have_theta_one_and_feasible": true,
+        "compressed_sha256": "3732a3ef926ca4dc7dcf53996893fe512eb482c1e1cbf96ab7ae66497387c57b",
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/run/pr85_joint_transport_budget.raw.gz",
+        "records": [
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "maximum_cfl": 0.08928265105439134,
+            "rk": 1,
+            "theta": 1.0
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "maximum_cfl": 0.135466488696665,
+            "rk": 2,
+            "theta": 1.0
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "maximum_cfl": 0.30500168382887,
+            "rk": 3,
+            "theta": 1.0
+          }
+        ],
+        "scope_note": "The native source writes RK but no timestep field in JOINT_RK; these records align by RK with the timestep-1 storage headers and the incomplete first-step execution.",
+        "uncompressed_bytes": 1044,
+        "uncompressed_sha256": "da32da54dc32d51e73ce09c100ad73ea7d4c6d8b7096c7e0bf9117ef090db130"
+      },
+      "scope": {
+        "completed_post_kdm6_timesteps": [],
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40"
+        ],
+        "failure_text_last_rsl_error_line": "ProgB transient PSD state rejected",
+        "final_completed_step": null,
+        "interpretation": "Incomplete first-step run; raw storage rows are from emitted RK calls, not a committed model timestep.",
+        "model_timestamps": [],
+        "returncode": 128,
+        "status": "INCOMPLETE",
+        "wall_seconds": 266.86982447467744
+      },
+      "storage_ledger": {
+        "compressed_bytes": 979675,
+        "compressed_sha256": "d041c459da5d3b2207889cb8a2549bb6dbbdeb2721662174dd01fce8418d9d50",
+        "header_rows": [
+          {
+            "cells": 2533440,
+            "counts_match": true,
+            "delta_pressure_moment_by_pair": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "delta_pressure_q_by_pair": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "header_adjustments_by_pair": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "rk": 1,
+            "step": 1,
+            "stored_pair_rows_by_pair": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "cells": 2533440,
+            "counts_match": true,
+            "delta_pressure_moment_by_pair": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "delta_pressure_q_by_pair": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "header_adjustments_by_pair": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "rk": 2,
+            "step": 1,
+            "stored_pair_rows_by_pair": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "cells": 2533440,
+            "counts_match": true,
+            "delta_pressure_moment_by_pair": [
+              -1.222965998583758e-25,
+              -1.490682227976975e-26,
+              0.0,
+              0.0
+            ],
+            "delta_pressure_q_by_pair": [
+              -1.479838555586677e-37,
+              -2.396314341700955e-37,
+              0.0,
+              0.0
+            ],
+            "header_adjustments_by_pair": [
+              6639,
+              10334,
+              0,
+              0
+            ],
+            "rk": 3,
+            "step": 1,
+            "stored_pair_rows_by_pair": [
+              6639,
+              10334,
+              0,
+              0
+            ]
+          }
+        ],
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v5b_20261016/run/pr87_joint_storage.raw.gz",
+        "proposal_moment_when_stored_zero_range": [
+          2.315878136736044e-40,
+          8.6231514904797e-34
+        ],
+        "proposal_q_below_one_real32_subnormal_quantum_count": 16973,
+        "proposal_q_when_stored_zero_range": [
+          1.328445757874428e-50,
+          1.044260095858385e-45
+        ],
+        "real32_smallest_subnormal": 1.401298464324817e-45,
+        "stored_pair_coordinate_summary": [
+          {
+            "duplicate_rows": 0,
+            "i_bounds": [
+              2,
+              233
+            ],
+            "j_bounds": [
+              2,
+              281
+            ],
+            "k_bounds": [
+              1,
+              33
+            ],
+            "pair": 1,
+            "rk": 3,
+            "row_count": 6639,
+            "step": 1,
+            "unique_coordinate_count": 6639
+          },
+          {
+            "duplicate_rows": 0,
+            "i_bounds": [
+              2,
+              233
+            ],
+            "j_bounds": [
+              2,
+              281
+            ],
+            "k_bounds": [
+              1,
+              39
+            ],
+            "pair": 2,
+            "rk": 3,
+            "row_count": 10334,
+            "step": 1,
+            "unique_coordinate_count": 10334
+          }
+        ],
+        "stored_pair_effect_counts": {
+          "both_positive_proposals_stored_zero": 16973,
+          "proposal_moment_positive_stored_zero": 16973,
+          "proposal_q_positive_stored_zero": 16973
+        },
+        "stored_pair_row_count": 16973,
+        "stored_pair_rows_by_step_rk_pair": {
+          "1:3:1": 6639,
+          "1:3:2": 10334
+        },
+        "stored_pair_rows_reconcile_header_adjustments": true,
+        "uncompressed_bytes": 4855331,
+        "uncompressed_sha256": "9b8a29f467476b66bc596ff5b84811fa46f0b1ef1ab7aaf8ef1a489c1b8a6b4d"
+      }
+    },
+    "OFF": {
+      "binding": {
+        "candidate_build_receipt_path": "/var/tmp/pr87_joint_cycle_build_20261016_v5b/pr87_native_overlay_build.json",
+        "candidate_build_receipt_sha256": "5a77e352c0015687bb92cd63238d069706c6a2c1f51c453b89f4087e04b5c45a",
+        "candidate_executable_sha256": "3631689bf1cddde4198d057489443d13a4d0bab94ee7aa53a4888e02fc6468ba",
+        "launch_provenance": {
+          "launch_provenance_file_present": false,
+          "launch_receipt_sha256": null,
+          "launch_time_runner_source_sha256_recorded": null,
+          "launcher_output_files": {
+            "launcher.stderr": {
+              "bytes": 0,
+              "path": "launcher.stderr",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "launcher.stdout": {
+              "bytes": 0,
+              "path": "launcher.stdout",
+              "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+          },
+          "note": "No launch_provenance.json or launch-time runner source hash is present; launcher stdout/stderr are receipt-hashed."
+        },
+        "parent_build_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+        "preflight_path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/preflight.json",
+        "preflight_sha256": "27878db6ce590f307650bbef55b92efe6ba978eecf537749d17a2457fb5e2e45",
+        "run_receipt_path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/receipt.json",
+        "run_receipt_sha256": "c8e80519a8c1fee344b45303c3f34d59a27b189edaac52e78a08c47080da078c",
+        "source_manifest_path": "/var/tmp/pr87_joint_cycle_sources_20261016_v5b/sources.json",
+        "source_manifest_sha256": "9fb39615841014a27c8f90ebae4810df1e19dc40193d7e0848ed2da019c16bb5",
+        "source_receipt_path": "/var/tmp/pr85_evidence_bundle_20261015/actual_v17_OFF_run_receipt.json",
+        "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e"
+      },
+      "first_call_state_hashes": {
+        "candidate_post_present": false,
+        "candidate_post_sha256": null,
+        "candidate_pre_matches_v17": false,
+        "candidate_pre_sha256": "02b021038370e1b952b3ed322860ce00b7c2447d7f1943a776f3e77fe80ecb3f",
+        "note": "Candidate pre/post is reported as observed; candidate pre differs from v17 and no candidate post snapshot was emitted before early failure.",
+        "v17_post_sha256": "198a4cc012b47b4ee0907c4db5c2e140789d4c951ee51098706e91bb9d1c9177",
+        "v17_pre_sha256": "93dff951d5d3a497b51a0b9281d2e1ebe9830fd4e8ed8c70318b25809a13b847"
+      },
+      "joint_transport_diagnostic": {
+        "all_emitted_rk_have_theta_one_and_feasible": true,
+        "compressed_sha256": "3732a3ef926ca4dc7dcf53996893fe512eb482c1e1cbf96ab7ae66497387c57b",
+        "path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/run/pr85_joint_transport_budget.raw.gz",
+        "records": [
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "maximum_cfl": 0.08928265105439134,
+            "rk": 1,
+            "theta": 1.0
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "maximum_cfl": 0.135466488696665,
+            "rk": 2,
+            "theta": 1.0
+          },
+          {
+            "cells": 2533440,
+            "feasible": true,
+            "maximum_cfl": 0.30500168382887,
+            "rk": 3,
+            "theta": 1.0
+          }
+        ],
+        "scope_note": "The native source writes RK but no timestep field in JOINT_RK; these records align by RK with the timestep-1 storage headers and the incomplete first-step execution.",
+        "uncompressed_bytes": 1044,
+        "uncompressed_sha256": "da32da54dc32d51e73ce09c100ad73ea7d4c6d8b7096c7e0bf9117ef090db130"
+      },
+      "scope": {
+        "completed_post_kdm6_timesteps": [],
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40"
+        ],
+        "failure_text_last_rsl_error_line": "ProgB transient PSD state rejected",
+        "final_completed_step": null,
+        "interpretation": "Incomplete first-step run; raw storage rows are from emitted RK calls, not a committed model timestep.",
+        "model_timestamps": [],
+        "returncode": 128,
+        "status": "INCOMPLETE",
+        "wall_seconds": 267.56827905774117
+      },
+      "storage_ledger": {
+        "compressed_bytes": 980167,
+        "compressed_sha256": "a233a05c75a12c20e1c15629c72aa19ae85f8418ae15e1c707046f7acf970511",
+        "header_rows": [
+          {
+            "cells": 2533440,
+            "counts_match": true,
+            "delta_pressure_moment_by_pair": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "delta_pressure_q_by_pair": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "header_adjustments_by_pair": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "rk": 1,
+            "step": 1,
+            "stored_pair_rows_by_pair": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "cells": 2533440,
+            "counts_match": true,
+            "delta_pressure_moment_by_pair": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "delta_pressure_q_by_pair": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "header_adjustments_by_pair": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "rk": 2,
+            "step": 1,
+            "stored_pair_rows_by_pair": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "cells": 2533440,
+            "counts_match": true,
+            "delta_pressure_moment_by_pair": [
+              -1.225710530698434e-25,
+              -1.490620865149486e-26,
+              0.0,
+              0.0
+            ],
+            "delta_pressure_q_by_pair": [
+              -1.482807799149765e-37,
+              -2.39534089637767e-37,
+              0.0,
+              0.0
+            ],
+            "header_adjustments_by_pair": [
+              6649,
+              10333,
+              0,
+              0
+            ],
+            "rk": 3,
+            "step": 1,
+            "stored_pair_rows_by_pair": [
+              6649,
+              10333,
+              0,
+              0
+            ]
+          }
+        ],
+        "path": "/var/tmp/pr87_joint_OFF_40s_v5b_20261016/run/pr87_joint_storage.raw.gz",
+        "proposal_moment_when_stored_zero_range": [
+          2.315878136736044e-40,
+          8.6231514904797e-34
+        ],
+        "proposal_q_below_one_real32_subnormal_quantum_count": 16982,
+        "proposal_q_when_stored_zero_range": [
+          1.32432518697061e-50,
+          1.044260095858385e-45
+        ],
+        "real32_smallest_subnormal": 1.401298464324817e-45,
+        "stored_pair_coordinate_summary": [
+          {
+            "duplicate_rows": 0,
+            "i_bounds": [
+              2,
+              233
+            ],
+            "j_bounds": [
+              2,
+              281
+            ],
+            "k_bounds": [
+              1,
+              33
+            ],
+            "pair": 1,
+            "rk": 3,
+            "row_count": 6649,
+            "step": 1,
+            "unique_coordinate_count": 6649
+          },
+          {
+            "duplicate_rows": 0,
+            "i_bounds": [
+              2,
+              233
+            ],
+            "j_bounds": [
+              2,
+              281
+            ],
+            "k_bounds": [
+              1,
+              39
+            ],
+            "pair": 2,
+            "rk": 3,
+            "row_count": 10333,
+            "step": 1,
+            "unique_coordinate_count": 10333
+          }
+        ],
+        "stored_pair_effect_counts": {
+          "both_positive_proposals_stored_zero": 16982,
+          "proposal_moment_positive_stored_zero": 16982,
+          "proposal_q_positive_stored_zero": 16982
+        },
+        "stored_pair_row_count": 16982,
+        "stored_pair_rows_by_step_rk_pair": {
+          "1:3:1": 6649,
+          "1:3:2": 10333
+        },
+        "stored_pair_rows_reconcile_header_adjustments": true,
+        "uncompressed_bytes": 4857905,
+        "uncompressed_sha256": "5a80ed00c831e0eed52aa70f69355c3e4f8d2f6d7444c1141b1e2924af28e83a"
+      }
+    }
+  },
+  "limitations": [
+    "Storage deltas are signed pressure-coordinate diagnostics from the native source; no kg or energy closure is inferred.",
+    "No full model timestep completed. The run receipts are INCOMPLETE; reported RK ledger records do not establish a committed timestep.",
+    "Both executions ended with return code 128 and logged \u201cProgB transient PSD state rejected\u201d.",
+    "Launcher stdout/stderr are hashed; no launch_provenance.json or launch-time runner-source hash was emitted, so no launch-code identity claim is made.",
+    "First-call pre hashes differ from paired v17 hashes; candidate post hashes are absent. No bit-identity claim is made.",
+    "The native storage rows have no alpha field; shared air-transport theta and feasibility are read from the paired existing pr85_joint_transport_budget ledger."
+  ],
+  "purpose": "Receipt-bound summary of existing source-first constrained-storage ledgers from the v5b OFF and COUPLED launches.",
+  "schema": "pr87_source_first_storage_v5b_actual_summary_v1",
+  "source_first_policy": "opt-in constrained REAL32 storage, explicit joint quantum absence, and REAL64 rates; signed numerical ledger; not conservation preserving"
+}

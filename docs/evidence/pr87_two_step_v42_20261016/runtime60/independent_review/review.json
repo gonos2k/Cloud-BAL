@@ -1,0 +1,406 @@
+{
+  "arms": {
+    "COUPLED": {
+      "audit_40": {
+        "audit_sha256": "631c7fdc22dd93f7e9272bcfb1aa46a2435c11205a16fe00abba91113ca0d7d9",
+        "completed_post_kdm6_timestep_count": 2,
+        "state_stage_counts": {
+          "POST_KDM6": 2,
+          "PRE_KDM6": 2,
+          "PRE_RK": 2,
+          "RK_STAGE_END": 6
+        },
+        "status": "PASS"
+      },
+      "audit_60": {
+        "audit_sha256": "5110e8c78f04baf98a61ff7f463ac64e5a1a362e12b55416216db5ef26b88da4",
+        "completed_post_kdm6_timestep_count": 2,
+        "state_record_count": 17,
+        "state_stage_counts": {
+          "POST_KDM6": 2,
+          "PRE_KDM6": 3,
+          "PRE_RK": 3,
+          "RK_STAGE_END": 9
+        },
+        "status": "INCOMPLETE",
+        "step_3_completed_post_kdm6": false,
+        "step_3_gate_snapshots": [
+          {
+            "cloud": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 828483,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 0,
+              "real64_volume_ratio_outside_exact_bounds": 0,
+              "specific_ratio_outside_exact_bounds": 0
+            },
+            "graupel": {
+              "negative_pair": 0,
+              "nonfinite_pair": 0,
+              "positive_pair_cells": 9420,
+              "ratio_outside_exact_bounds": 0
+            },
+            "ice_exact_coefficient_diagnostic_nongating": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 987790,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 183,
+              "real64_volume_ratio_outside_exact_bounds": 172,
+              "specific_ratio_outside_exact_bounds": 172
+            },
+            "native_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "rain": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 371459,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 0,
+              "real64_volume_ratio_outside_exact_bounds": 0,
+              "specific_ratio_outside_exact_bounds": 0
+            },
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "strict_endpoint_gate_applies": true,
+            "strict_source_coefficient_violations": {}
+          },
+          {
+            "cloud": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 828483,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 0,
+              "real64_volume_ratio_outside_exact_bounds": 0,
+              "specific_ratio_outside_exact_bounds": 0
+            },
+            "graupel": {
+              "negative_pair": 0,
+              "nonfinite_pair": 0,
+              "positive_pair_cells": 9420,
+              "ratio_outside_exact_bounds": 0
+            },
+            "ice_exact_coefficient_diagnostic_nongating": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 987790,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 183,
+              "real64_volume_ratio_outside_exact_bounds": 172,
+              "specific_ratio_outside_exact_bounds": 172
+            },
+            "native_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "rain": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 371459,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 0,
+              "real64_volume_ratio_outside_exact_bounds": 0,
+              "specific_ratio_outside_exact_bounds": 0
+            },
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "strict_endpoint_gate_applies": true,
+            "strict_source_coefficient_violations": {}
+          }
+        ],
+        "step_3_state_stage_sequence": [
+          "PRE_RK",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "PRE_KDM6"
+        ],
+        "step_3_status": "INCOMPLETE",
+        "steps_1_2": {
+          "1": {
+            "completed_post_kdm6": true,
+            "state_record_count": 6,
+            "status": "PASS"
+          },
+          "2": {
+            "completed_post_kdm6": true,
+            "state_record_count": 6,
+            "status": "PASS"
+          }
+        },
+        "trace_timesteps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "fatal_context": {
+        "PR77_counts_rows": 591,
+        "PR77_first_cell_rows": 0,
+        "captured_error_lines": [
+          "ProgB transient PSD state rejected"
+        ],
+        "cell_coordinates_and_QG_BG_at_fatal": "not captured in V42 artifacts"
+      },
+      "first_40s_trace_prefix": {
+        "bitwise_equal": true,
+        "compressed_trace_40_sha256": "5ac46842c7644ed5444ca10a01f49ea361fd9e2f4631a30c029f6f9ebf4e7e8c",
+        "compressed_trace_60_sha256": "2cb10b7d6013dba56c73cf114fb59a364c833bd93c9a78e0c72fb6345934ec79",
+        "records": 17,
+        "sha256_40": "338e7bd81874d3e17be17c90577236be2838e7953a828b29c13ce4000c406a4b",
+        "sha256_60_prefix": "338e7bd81874d3e17be17c90577236be2838e7953a828b29c13ce4000c406a4b",
+        "uncompressed_bytes": 1715012660
+      },
+      "inputs_and_executable": {
+        "executable_40_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+        "executable_60_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+        "namelist_40_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+        "namelist_60_sha256": "3700c1511a6a8ee7721c2dfb08e2dbed219de0a0afa38a6bb3a18d69bdd6906b",
+        "namelist_differs_due_requested_duration": true,
+        "wrfbdy_40_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfbdy_60_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfinput_40_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+        "wrfinput_60_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
+      },
+      "runtime_40s": {
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "receipt_sha256": "3511bf0d0ca4872e640e58077d31c9f0e33c40f45684d48e861756363aa4c60f",
+        "returncode": 0,
+        "status": "COMPLETE",
+        "wall_seconds": 353.7646448779851
+      },
+      "runtime_60s": {
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "earliest_fatal": "ProgB transient PSD state rejected",
+        "final_completed_step": 2,
+        "processing_errors": [],
+        "receipt_sha256": "52275cb5a14fe69019de4e3f9516a17ed80fb92bd8591a58dc9d478645d6a9d1",
+        "returncode": 128,
+        "status": "INCOMPLETE",
+        "wall_seconds": 440.4829588569701
+      }
+    },
+    "OFF": {
+      "audit_40": {
+        "audit_sha256": "ad4d1b3f007ea7ea345bb18c23c8c264f04842a663e80fbdb685f8b31c07a6ca",
+        "completed_post_kdm6_timestep_count": 2,
+        "state_stage_counts": {
+          "POST_KDM6": 2,
+          "PRE_KDM6": 2,
+          "PRE_RK": 2,
+          "RK_STAGE_END": 6
+        },
+        "status": "PASS"
+      },
+      "audit_60": {
+        "audit_sha256": "521e960a08fe8f6c8291abc0c28e02da73ea148d4f177521f663d985efecf430",
+        "completed_post_kdm6_timestep_count": 2,
+        "state_record_count": 17,
+        "state_stage_counts": {
+          "POST_KDM6": 2,
+          "PRE_KDM6": 3,
+          "PRE_RK": 3,
+          "RK_STAGE_END": 9
+        },
+        "status": "INCOMPLETE",
+        "step_3_completed_post_kdm6": false,
+        "step_3_gate_snapshots": [
+          {
+            "cloud": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 828458,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 0,
+              "real64_volume_ratio_outside_exact_bounds": 0,
+              "specific_ratio_outside_exact_bounds": 0
+            },
+            "graupel": {
+              "negative_pair": 0,
+              "nonfinite_pair": 0,
+              "positive_pair_cells": 9408,
+              "ratio_outside_exact_bounds": 0
+            },
+            "ice_exact_coefficient_diagnostic_nongating": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 987769,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 183,
+              "real64_volume_ratio_outside_exact_bounds": 172,
+              "specific_ratio_outside_exact_bounds": 172
+            },
+            "native_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "rain": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 371468,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 0,
+              "real64_volume_ratio_outside_exact_bounds": 0,
+              "specific_ratio_outside_exact_bounds": 0
+            },
+            "rkstep": 3,
+            "stage": "RK_STAGE_END",
+            "strict_endpoint_gate_applies": true,
+            "strict_source_coefficient_violations": {}
+          },
+          {
+            "cloud": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 828458,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 0,
+              "real64_volume_ratio_outside_exact_bounds": 0,
+              "specific_ratio_outside_exact_bounds": 0
+            },
+            "graupel": {
+              "negative_pair": 0,
+              "nonfinite_pair": 0,
+              "positive_pair_cells": 9408,
+              "ratio_outside_exact_bounds": 0
+            },
+            "ice_exact_coefficient_diagnostic_nongating": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 987769,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 183,
+              "real64_volume_ratio_outside_exact_bounds": 172,
+              "specific_ratio_outside_exact_bounds": 172
+            },
+            "native_violations": {
+              "fields": {},
+              "number_conversion": {},
+              "pairs": {}
+            },
+            "rain": {
+              "negative_pair": 0,
+              "positive_mass_zero_number_orphan": 0,
+              "positive_number_zero_mass_orphan": 0,
+              "positive_pair_cells": 371468,
+              "real32_density_times_number_volume_ratio_outside_exact_bounds": 0,
+              "real64_volume_ratio_outside_exact_bounds": 0,
+              "specific_ratio_outside_exact_bounds": 0
+            },
+            "rkstep": 0,
+            "stage": "PRE_KDM6",
+            "strict_endpoint_gate_applies": true,
+            "strict_source_coefficient_violations": {}
+          }
+        ],
+        "step_3_state_stage_sequence": [
+          "PRE_RK",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "PRE_KDM6"
+        ],
+        "step_3_status": "INCOMPLETE",
+        "steps_1_2": {
+          "1": {
+            "completed_post_kdm6": true,
+            "state_record_count": 6,
+            "status": "PASS"
+          },
+          "2": {
+            "completed_post_kdm6": true,
+            "state_record_count": 6,
+            "status": "PASS"
+          }
+        },
+        "trace_timesteps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "fatal_context": {
+        "PR77_counts_rows": 591,
+        "PR77_first_cell_rows": 0,
+        "captured_error_lines": [
+          "ProgB transient PSD state rejected"
+        ],
+        "cell_coordinates_and_QG_BG_at_fatal": "not captured in V42 artifacts"
+      },
+      "first_40s_trace_prefix": {
+        "bitwise_equal": true,
+        "compressed_trace_40_sha256": "9db10bd838fc3f387c63bf1e56cfdceda75d00bcdc27db17f21ef63d43746497",
+        "compressed_trace_60_sha256": "b36fb364ea80f329370a2fc85d5177db56b1485be018f23174f9365fd6c3d868",
+        "records": 17,
+        "sha256_40": "7375f93f84aa68f74641944a01886ef1f942a0044c4352ac4bfe9619be5aad4a",
+        "sha256_60_prefix": "7375f93f84aa68f74641944a01886ef1f942a0044c4352ac4bfe9619be5aad4a",
+        "uncompressed_bytes": 1715012660
+      },
+      "inputs_and_executable": {
+        "executable_40_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+        "executable_60_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+        "namelist_40_sha256": "61a847829bdb20fe2e81437ec66c7a7e7ef73cb85fc0ed4ca221b4a3be5d10e0",
+        "namelist_60_sha256": "3700c1511a6a8ee7721c2dfb08e2dbed219de0a0afa38a6bb3a18d69bdd6906b",
+        "namelist_differs_due_requested_duration": true,
+        "wrfbdy_40_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfbdy_60_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfinput_40_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+        "wrfinput_60_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200"
+      },
+      "runtime_40s": {
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "receipt_sha256": "ddb68d9c9fd020ccc403ca9ddc3d340bda85bd2ee8e1e9bcdbea59161539d85d",
+        "returncode": 0,
+        "status": "COMPLETE",
+        "wall_seconds": 353.24981405958533
+      },
+      "runtime_60s": {
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "earliest_fatal": "ProgB transient PSD state rejected",
+        "final_completed_step": 2,
+        "processing_errors": [],
+        "receipt_sha256": "4b8ee984002209218249c3c8808ee160014ce9c2986653c24fdd3de7b1fcabe2",
+        "returncode": 128,
+        "status": "INCOMPLETE",
+        "wall_seconds": 436.75056738965213
+      }
+    }
+  },
+  "audit_implementation": {
+    "path": "tools/pr87_completed_state_audit.py",
+    "sha256": "2daef11c005868abf58631d84df74b8535eccb217660fbd605bd8f03216ee70d",
+    "strict_source_coefficients": true,
+    "trace_parser_path": "tools/pr85_joint_stage_trace.py",
+    "trace_parser_sha256": "5c2e9ccb3537a6bc251845e2b87c3efb991002ebbc1db5232d475e29f6c31720"
+  },
+  "build": {
+    "build_receipt_sha256": "a28f9a99af74d080c38b986fdc12f941845b34a93a41515089632df5137dd680",
+    "executable_sha256": "04266c303b89a1c51775e735aa573ff52c2c1ec252d88ad7ccf6a2139dae8c2a",
+    "source_manifest_sha256": "422e1e3fefb51291e966c40c09755ae2d7e943b18dab870a1187cbf58253c88f"
+  },
+  "interpretation": [
+    "Both arms completed timesteps 1 and 2 with strict completed-state audits PASS.",
+    "At timestep 3, the recorded RK3 endpoint and PRE_KDM6 state pass the strict completed-state gates; no POST_KDM6 state was recorded.",
+    "The receipts report ProgB transient PSD state rejected. PR77 has aggregate counts but no PR77_FIRST cell/value row; fatal call coordinates and QG/BG operands are unavailable, so no exact producer or cell cause is asserted.",
+    "The first two timestep binary trace records match the corresponding complete 40-second trace byte-for-byte for each arm.",
+    "This is not a complete 60-second validation and does not establish the third timestep or broader scientific approval."
+  ],
+  "runtime_manifest": {
+    "path": "docs/evidence/pr87_two_step_v42_20261016/runtime60/runtime_manifest.json",
+    "sha256": "7e09039d13c07ed66b05768a13c314776262dd3fd9eb033b1aadcffb22655528"
+  },
+  "schema": "pr87_v42_matched60_independent_review_v1",
+  "scope": "Independent post-closure audit of matched V42 60-second OFF/COUPLED runs; no source or runtime mutation.",
+  "status": "INCOMPLETE_after_two_completed_timesteps"
+}
