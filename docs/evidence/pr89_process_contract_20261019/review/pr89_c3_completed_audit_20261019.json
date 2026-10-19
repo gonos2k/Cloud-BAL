@@ -1,0 +1,170 @@
+{
+  "arms": {
+    "COUPLED": {
+      "audit": {
+        "completed_calls": 4,
+        "path": "/var/tmp/pr89_coupled_completed_state_audit_c3.json",
+        "sha256": "195cf1ccefdbf27de63ff2b8175c07971d25fdc199505359e5f3afa0d1a50bf3",
+        "state_records": 25,
+        "status": "FAIL",
+        "statuses": {
+          "1": "PASS",
+          "2": "PASS",
+          "3": "PASS",
+          "4": "FAIL",
+          "5": "INCOMPLETE"
+        },
+        "trace_timesteps": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "candidate_build_unchanged": true,
+      "completed_calls": 4,
+      "executed_executable_sha256": "ab8ff2312b8cb8cd65a44b78801d2938367f6e8793148d2ed1211479fe04ff97",
+      "expected_executable_sha256": "ab8ff2312b8cb8cd65a44b78801d2938367f6e8793148d2ed1211479fe04ff97",
+      "input_hashes": {
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "namelist": "dee430a6911f565f1f00f1d34fc41183d7f005f140375aca27cd5c0e2fd35bbd",
+        "wrfbdy_d01": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfinput_d01": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
+      },
+      "last_completed_step": 4,
+      "maximum_seen_step": 5,
+      "preflight_sha256": "27d6a5d7d75d74b4c530f7319b223e6ce17c65cdb720c1900dbac38c11b57ddf",
+      "receipt": "/var/tmp/pr89_COUPLED_120s_c3_20261019/receipt.json",
+      "receipt_sha256": "39389d5f0fa0614a778c71918cdd59d0bd206929b7ed8b9d0079ff5b0b0f8df9",
+      "returncode": 1,
+      "status": "INCOMPLETE",
+      "trace": {
+        "path": "/var/tmp/pr89_COUPLED_120s_c3_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "sha256": "867cb1a64a250eadabec5ea1b822f3601bdab3a2d01d0a00b05ce05c802085c1"
+      }
+    },
+    "OFF": {
+      "audit": {
+        "completed_calls": 4,
+        "path": "/var/tmp/pr89_off_completed_state_audit_c3.json",
+        "sha256": "ed3576ce8d9d0f5aa9531b225d2d743e1c02a4a330300204054386b8c2838ad2",
+        "state_records": 25,
+        "status": "FAIL",
+        "statuses": {
+          "1": "PASS",
+          "2": "PASS",
+          "3": "PASS",
+          "4": "FAIL",
+          "5": "INCOMPLETE"
+        },
+        "trace_timesteps": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "candidate_build_unchanged": true,
+      "completed_calls": 4,
+      "executed_executable_sha256": "ab8ff2312b8cb8cd65a44b78801d2938367f6e8793148d2ed1211479fe04ff97",
+      "expected_executable_sha256": "ab8ff2312b8cb8cd65a44b78801d2938367f6e8793148d2ed1211479fe04ff97",
+      "input_hashes": {
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "namelist": "dee430a6911f565f1f00f1d34fc41183d7f005f140375aca27cd5c0e2fd35bbd",
+        "wrfbdy_d01": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "wrfinput_d01": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200"
+      },
+      "last_completed_step": 4,
+      "maximum_seen_step": 5,
+      "preflight_sha256": "20b1091c5ddc4781e8ed936be458a943cef8ac6608dc1dc9f0b037d222634f69",
+      "receipt": "/var/tmp/pr89_OFF_120s_c3_20261019/receipt.json",
+      "receipt_sha256": "280958438afefe1752ff2041b0a417873b4cabb96456980088d7aa7b920ea4f6",
+      "returncode": 1,
+      "status": "INCOMPLETE",
+      "trace": {
+        "path": "/var/tmp/pr89_OFF_120s_c3_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "sha256": "513067757b00e8c2c0b1208cfe723093dd492afd154f30e1b2e9541986f50453"
+      }
+    }
+  },
+  "build": {
+    "candidate_executable_sha256": "ab8ff2312b8cb8cd65a44b78801d2938367f6e8793148d2ed1211479fe04ff97",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "full_clean_build": false,
+    "receipt": "/var/tmp/pr89_native_build_20261019_c3/pr87_native_overlay_build.json",
+    "receipt_sha256": "36284d2856a834d6b6d3fc1c07cf1ad6abb00e0b27db54a2a8094650d9242760",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "failure": {
+    "classification": "Next exposed joint-storage contract boundary, not established as a C3-introduced regression: C1 would also reject this bad-PSD/unrepresentable pair if execution reached it, and no C1 source contrast shows this exact cell passed.",
+    "decoded_operands": {
+      "candidate_n32_bits": "00000000",
+      "candidate_n64": 9.323853136363463e-47,
+      "candidate_q32_bits": "00000000",
+      "candidate_q64": 1.2144974455722127e-62,
+      "source_n32_bits": "000003B7",
+      "source_n64": 1.332072669593088e-42,
+      "source_q32_bits": "00000000",
+      "source_q64": 1.735118336675502e-58,
+      "transport_n64": -0.0,
+      "transport_q64": -0.0
+    },
+    "line": "PR87_GRAUPEL_TRIAL_REJECT 1 2 188 220 1 3313FC0F74539AB9 36610895A31A7272 33F16D2A0D5CBF25 373DB4CA633D4BA5 8000000000000000 8000000000000000",
+    "operand_order": [
+      "value_q64",
+      "value_n64",
+      "source_q64",
+      "source_n64",
+      "transport_q64",
+      "transport_n64"
+    ]
+  },
+  "joint_rk": "All 12 rows for timesteps 1\u20134 (three RK stages each) record theta 1 and feasible T; T5 RK1 records theta 0 and feasible F.",
+  "request": {
+    "actual_completed_calls": 4,
+    "completed_seconds": 80,
+    "duration_seconds": 120,
+    "expected_calls": 6,
+    "status": "INCOMPLETE in both arms",
+    "timestep_seconds": 20
+  },
+  "schema": "pr89_c3_closed_prefix_independent_audit_v1",
+  "scope": "Read-only C3 build/input binding and closed native 120s prefix audit; no source/model changes or new native runs",
+  "source_manifest": {
+    "embedded_joint_module_sha256": "e8cb1f233e158334e4c15c2deec2983e67bb3ff0ff6d33d31e19a1d5ee940e17",
+    "identity": "PR89-C3",
+    "initial_inputs_changed": false,
+    "module_em_sha256": "99615b30d8acc50e7f8e6ba16132a85badfa1d046360d5cbd3353c23fce3dcfc",
+    "module_kdm6_sha256": "14c6145df549541fae2aab84e98ee480ba6ac8a7c769dd926a6d44f22451c35d",
+    "parent_identity": "PR89-C1",
+    "path": "/var/tmp/pr89_sources_20261019_c3/sources.json",
+    "physics_changed": true,
+    "precision_prior_fp_changed": false,
+    "sha256": "f95d66ca2399ccf547ee1da7c66f6156c688160f91e2752c877636e3545754b5",
+    "supersedes_attempt": "PR89-C2 (regression source and receipts preserved)"
+  },
+  "t4_ice_audit": {
+    "coupled_arm": {
+      "active_beyond_8_ulp": 0,
+      "beyond_8_ulp": 2,
+      "exact_outside_pairs": 331,
+      "inactive_beyond_8_ulp": 2,
+      "strict_source_violations": {}
+    },
+    "interpretation": "The generic audit marks the two tiny positive ice pairs outside 8 ULP, but both are below the existing native inactive cutoff; zero active ice pairs exceed 8 ULP.",
+    "native_inactive_cutoff_real32": 9.999998977483753e-15,
+    "off_arms": {
+      "active_beyond_8_ulp": 0,
+      "beyond_8_ulp": 2,
+      "exact_outside_pairs": 325,
+      "inactive_beyond_8_ulp": 2,
+      "strict_source_violations": {}
+    }
+  }
+}

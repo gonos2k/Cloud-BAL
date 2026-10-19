@@ -1,0 +1,43 @@
+{
+  "schema": "pr89_sources_v1",
+  "identity": "PR89-C4",
+  "review_base_commit": "f1809781e8be49e063de6728a85374a4ebcc334f",
+  "parent_manifest": "/var/tmp/pr89_sources_20261019_c1/sources.json",
+  "parent_manifest_sha256": "2151978ced1e97b29bb43e2129b3785e89d4abc07423066fd9b6cbbdf1d2e278",
+  "parent_identity": "PR89-C1",
+  "source_overrides": {
+    "module_microphysics_zero_out.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_microphysics_zero_out.F",
+    "module_em.o": "/var/tmp/pr89_sources_20261019_c4/module_em_pr89.F",
+    "module_bl_shinhong.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_shinhong.F",
+    "module_bl_fogdes.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_fogdes.F",
+    "module_pbl_driver.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_pbl_driver.F",
+    "module_mp_kdm6.o": "/var/tmp/pr89_sources_20261019_c1/module_mp_kdm6.F",
+    "module_first_rk_step_part1.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part1.F",
+    "module_first_rk_step_part2.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part2.F",
+    "solve_em.o": "/var/tmp/pr87_followup_sources_20261019_v50/solve_em.F"
+  },
+  "source_sha256": {
+    "module_microphysics_zero_out.o": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+    "module_em.o": "0bb7be7844100beb8562c8d3d1bf11b0278e92d4a24e5bfee5769fcb87a96483",
+    "module_bl_shinhong.o": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+    "module_bl_fogdes.o": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+    "module_pbl_driver.o": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+    "module_mp_kdm6.o": "14c6145df549541fae2aab84e98ee480ba6ac8a7c769dd926a6d44f22451c35d",
+    "module_first_rk_step_part1.o": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+    "module_first_rk_step_part2.o": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+    "solve_em.o": "412183300ea8dd6af028ac1a5254f937477b054630db4eb1f5910a6bf974c3c5"
+  },
+  "packet_only_source_sha256": "0ef2a8dd37db9b9d0293ffdc94fd6f04082a465237c8e4d2e6878f6bc6bfa14f",
+  "transforms": {
+    "pr89_process_consumer_contract.py": "be2c82f0d1cffd6966d1ac8f1d6cedde7f0873898643dee403df7b5ff8d986f7",
+    "pr89_cold_process_summary.py": "63467b4113efdbfb61aa5c9b83b52e0d714de3ff3c193fe47d1aa6691007b3d9",
+    "pr89_ice_consumer_contract.py": "7e575ad2ae4d560e6c5d83a28fc6522af8cc29884291222285681dd573327118"
+  },
+  "physics_changed": true,
+  "initial_inputs_changed": false,
+  "precision_prior_fp_changed": false,
+  "scope": "C1 shared strict rain admission; native inactive-ice storage with explicit joint both-round-zero representation and signed ledger; diagnostic-only cold summary; research partialhost",
+  "embedded_joint_module_sha256": "7111caf1f940d1f27373836db488b6a336edccdac4c31bfcac4e7f8541561e1a",
+  "embedded_joint_module_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr89_process_contract_20261019/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+  "supersedes_attempt": "PR89-C3 (80s prefix and T5 both-round-zero failure preserved)"
+}

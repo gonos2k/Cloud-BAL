@@ -1,0 +1,31 @@
+{
+  "schema": "pr89_focused_validation_v1",
+  "status": "PASS",
+  "test_count": 43,
+  "scope": "43 focused Python and pinned Intel O0/O2 source-form tests in fresh scratch; C4 storage and actual consumer forms, not whole canonical or clean WRF build",
+  "compiler_profile": "tests/intel_toolchain.sh",
+  "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "source_hashes": {
+    "tools/pr89_process_consumer_contract.py": "b3bd5b0e6f77a460d2bb440d631ed3b305849db7cb3a65fdb2e84f34960faa9f",
+    "tests/test_pr89_process_consumer_contract.py": "c3018d6c89ded65e14e912353a2885dcdf7cd7c62332ae6abbfb733f8b395e83",
+    "tools/pr89_cold_process_summary.py": "63467b4113efdbfb61aa5c9b83b52e0d714de3ff3c193fe47d1aa6691007b3d9",
+    "tests/test_pr89_cold_process_summary.py": "b16447cc75bbb3cc5d7a14e4106443a89e72a0dc7ea658763da71b7e7e39c83c",
+    "tools/pr89_paired_history.py": "7941d2d0f81fd4afc89c75bf35e5efe59c26e9fb4481ab7e7b30e57b996f0f75",
+    "tests/test_pr89_paired_history.py": "4c4f9a4e4d4440e9778a591ee2ddcba0c8658330b2bc8e04d82020a0479b9766",
+    "src/common/cloud_bal_joint_transport.f90": "7111caf1f940d1f27373836db488b6a336edccdac4c31bfcac4e7f8541561e1a",
+    "tests/test_joint_qnb_transport.f90": "474a0860af6e3702f0a5fdb1134df934c2826e4c4ac65cdcb0f255e4dfd248cf",
+    "tools/pr89_ice_consumer_contract.py": "8ea3c745769e45dc13a0a251c50937ac54d980ebce2a7f383b49228df2f52dab",
+    "tests/test_pr89_ice_consumer_contract.py": "ebedd24a25a0c823ca0c3d0fa38ba965c68afdd1e4407717942f757e6b571dcc"
+  },
+  "log_sha256": "440b81c71153f66d333deb220fc0ba4808cd83437baad709f03585f569499990",
+  "junit_sha256": "1d8a486b047dfd92d2fddfd10ff845ec6bce70f6b5e514abf068b6f0fffb0015",
+  "command": "python3 -m pytest -q tests/test_pr87_graupel_activity_audit.py tests/test_pr87_graupel_cone_mixture.py tests/test_pr87_graupel_failure_context.py tests/test_pr87_native_history.py tests/test_pr87_rain_flux_cache.py tests/test_pr87_small_graupel_domain.py tests/test_pr87_v42_budget.py tests/test_pr89_process_consumer_contract.py tests/test_pr89_cold_process_summary.py tests/test_pr89_paired_history.py tests/test_pr89_ice_consumer_contract.py",
+  "physical_approval": false,
+  "standalone_intel": {
+    "source": "tests/test_joint_qnb_transport.f90",
+    "O0": "PASS",
+    "O2": "PASS",
+    "log_path": "docs/evidence/pr89_process_contract_20261019/review/joint_transport_tests_c4.log",
+    "log_sha256": "ecd0f79c88fca16c0d799e258a95462d5bc8ec59c8f6df2d831c4ee50fd6bc62"
+  }
+}

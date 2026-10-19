@@ -1,5 +1,5 @@
 program test_joint_qnb_transport
-  use iso_fortran_env, only: int32, real32, real64
+  use iso_fortran_env, only: int32, int64, real32, real64
   use, intrinsic :: ieee_arithmetic, only: ieee_value, ieee_quiet_nan, ieee_positive_inf
   use cloud_bal_joint_transport, only: joint_moment_is_valid64, joint_moment_store, joint_qnb_update
   implicit none
@@ -42,6 +42,13 @@ program test_joint_qnb_transport
   real(real32) :: storedq, storedn, minsub
   real(real32) :: bulk_q_bad, bulk_n, bulk_q_stored
   real(real64) :: bulk_q_boundary
+  real(real64) :: ice_limit, ice_q64, ice_n64, quiet_nan64
+  real(real64) :: ice_legacy_q64, ice_legacy_n64, ice_bad_psd_n64
+  real(real64) :: ice_absent_q64, ice_absent_n64
+  real(real64) :: ice_c5_q64, ice_c5_n64
+  real(real64) :: ice_number_quantum_limit, ice_t5_full_q(11), ice_t5_full_n(11)
+  real(real64) :: ice_limits(4)
+  real(real32) :: ice_legacy_storedq, ice_legacy_storedn
   logical :: feasible
   logical :: strict_mass_flags(4)
   logical :: wrong_mass_flags(3)
@@ -1020,5 +1027,337 @@ program test_joint_qnb_transport
       n_transport_rate64=nt64,strict_mass_pairs=wrong_mass_flags)
   if (feasible .or. any(qs/=qb) .or. any(ns/=nb)) &
     error stop 'wrong-sized strict mass pair mask was accepted'
+
+  ! The opt-in ICE branch mirrors the actual KDM6 transient-mass rule. It
+  ! stores positive, representable Q/N unchanged, while omitted limits retain
+  ! the ordinary strict PSD gate.
+  ice_limit=real(nearest(1.0e-14_real32,-1.0_real32),real64)
+  ice_number_quantum_limit=nearest( &
+      real(nearest(0.0_real32,1.0_real32),real64)/2.6055879053180625e-16_real64, &
+      -1.0_real64)
+  ice_q64=transfer(int(z'3B800AB83227AC6B',int64),0.0_real64)
+  ice_n64=transfer(int(z'3EC0B22FF0418A72',int64),0.0_real64)
+  if (joint_moment_is_valid64(ice_q64,ice_n64,0.1140736_real32, &
+                              2.6055879053180625e-16_real64, &
+                              2.0982747187893314e-9_real64)) &
+    error stop 'default strict ICE validator accepted T5 transient candidate'
+  call joint_moment_store(ice_q64,ice_n64,0.1140736_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible)
+  if (feasible) error stop 'default strict ICE store accepted T5 transient candidate'
+  call joint_moment_store(ice_q64,ice_n64,0.1140736_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,inactive_mass_limit=ice_limit)
+  if (.not.feasible .or. adjustment/=0 .or. storedq/=real(ice_q64,real32) .or. &
+      storedn/=real(ice_n64,real32)) &
+    error stop 'opt-in ICE transient store did not preserve ordinary R32 values'
+
+  ! C2 T2 rejected reason 1/pair 2 at i=233,j=104,k=7 for an older,
+  ! legacy-valid underflow state. Its exact candidate bits are Q=3650F39CB3992608
+  ! and N=384661B65DB0026E; legacy storage performs the declared joint-absence
+  ! cleanup (adjustment 1). Opt-in must preserve it.
+  ice_legacy_q64=transfer(int(z'3650F39CB3992608',int64),0.0_real64)
+  ice_legacy_n64=transfer(int(z'384661B65DB0026E',int64),0.0_real64)
+  if (.not.joint_moment_is_valid64(ice_legacy_q64,ice_legacy_n64,0.1140736_real32, &
+                                   2.6055879053180625e-16_real64, &
+                                   2.0982747187893314e-9_real64)) &
+    error stop 'C2 T2 underflow fixture is not legacy PSD-valid'
+  call joint_moment_store(ice_legacy_q64,ice_legacy_n64,0.1140736_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true.)
+  if (.not.feasible .or. adjustment/=1 .or. storedq/=0.0_real32 .or. storedn/=0.0_real32) &
+    error stop 'legacy-valid T2 subnormal did not use declared joint-absence storage'
+  ice_legacy_storedq=storedq; ice_legacy_storedn=storedn
+  call joint_moment_store(ice_legacy_q64,ice_legacy_n64,0.1140736_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (.not.feasible .or. adjustment/=1 .or. storedq/=ice_legacy_storedq .or. &
+      storedn/=ice_legacy_storedn) &
+    error stop 'opt-in ICE changed legacy-valid T2 output or adjustment ledger'
+
+  ! A genuinely PSD-invalid subnormal is still rejected even though the native
+  ! inactive-mass consumer predicate permits this positive Q/N pair.
+  ice_bad_psd_n64=2.0_real64*ice_number_quantum_limit
+  call joint_moment_store(ice_legacy_q64,ice_bad_psd_n64,0.1140736_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_normal_q_adjustment=.true., &
+      allow_joint_quantum_absence=.true.,inactive_mass_limit=ice_limit)
+  if (feasible .or. adjustment/=0) &
+    error stop 'bad-PSD underflow ICE candidate used the transient fallback'
+
+  call joint_moment_store(ice_limit,1.0e15_real64,1.0_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,inactive_mass_limit=ice_limit)
+  if (.not.feasible .or. adjustment/=0 .or. &
+      storedq/=real(ice_limit,real32) .or. storedn/=1.0e15_real32) &
+    error stop 'exact-threshold transient ICE store did not preserve endpoint'
+  call joint_moment_store(nearest(ice_limit,1.0_real64),1.0e15_real64,1.0_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_normal_q_adjustment=.true., &
+      allow_joint_quantum_absence=.true.,inactive_mass_limit=ice_limit)
+  if (feasible .or. adjustment/=0) &
+    error stop 'active ICE store repaired a candidate above the transient limit'
+  call joint_moment_store(nearest(0.0_real64,1.0_real64),1.0e-20_real64,1.0_real32, &
+      1.0e-20_real64,1.0e-10_real64,.true.,storedq,storedn,adjustment,feasible, &
+      allow_normal_q_adjustment=.true.,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (feasible .or. adjustment/=0) &
+    error stop 'inactive ICE store repaired Q that rounded to zero'
+  call joint_moment_store(1.0e-20_real64,nearest(0.0_real64,1.0_real64),1.0_real32, &
+      1.0e-20_real64,1.0e-10_real64,.true.,storedq,storedn,adjustment,feasible, &
+      allow_normal_q_adjustment=.true.,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (feasible .or. adjustment/=0) &
+    error stop 'inactive ICE store repaired N that rounded to zero'
+
+  ! T5 pair-2 candidate: positive captured binary64 Q/N and source rates,
+  ! with dt and REAL32-rounded carrier adapter reproducing the payload. Exact
+  ! RK1 carrier and density bits were not retained in the full-state record.
+  ice_absent_q64=transfer(int(z'3313FC0F74539AB9',int64),0.0_real64)
+  ice_absent_n64=transfer(int(z'36610895A31A7272',int64),0.0_real64)
+  qsrc64(1,2)=transfer(int(z'33F16D2A0D5CBF25',int64),0.0_real64)
+  nsrc64(1,2)=transfer(int(z'373DB4CA633D4BA5',int64),0.0_real64)
+  dt=transfer(int(z'40D55555',int32),0.0_real32)
+  mnew(1)=95244.79_real32
+  qcontinuous=real(dt,real64)*qsrc64(1,2)/real(mnew(1),real64)
+  ncontinuous=real(dt,real64)*nsrc64(1,2)/real(mnew(1),real64)
+  if (transfer(qcontinuous,0_int64)/=int(z'3313FC0F74539AB9',int64) .or. &
+      transfer(ncontinuous,0_int64)/=int(z'36610895A31A7272',int64)) &
+    error stop 'T5 source-derived REAL64 candidate differs from captured payload'
+  if (real(ice_absent_q64,real32)/=0.0_real32 .or. real(ice_absent_n64,real32)/=0.0_real32) &
+    error stop 'T5 candidate is not a both-zero REAL32 rounding case'
+  call joint_moment_store(ice_absent_q64,ice_absent_n64,1.198626_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true.)
+  if (feasible) error stop 'T5 pair accepted without inactive consumer limit'
+  call joint_moment_store(ice_absent_q64,ice_absent_n64,1.198626_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,inactive_mass_limit=ice_limit)
+  if (feasible) error stop 'T5 pair accepted without declared joint absence'
+  call joint_moment_store(ice_absent_q64,ice_absent_n64,1.198626_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (.not.feasible .or. adjustment/=3 .or. storedq/=0.0_real32 .or. storedn/=0.0_real32) &
+    error stop 'T5 both-zero inactive pair did not use declared absence storage'
+  call joint_moment_store(ice_absent_q64,ice_number_quantum_limit,1.198626_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (.not.feasible .or. adjustment/=3 .or. storedq/=0.0_real32 .or. storedn/=0.0_real32) &
+    error stop 'one-minimum-mass number quantum was not admitted'
+  call joint_moment_store(ice_absent_q64,nearest(ice_number_quantum_limit,1.0_real64), &
+      1.198626_real32,2.6055879053180625e-16_real64,2.0982747187893314e-9_real64, &
+      .true.,storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (feasible) error stop 'number above one-minimum-mass quantum was erased'
+  ! Exact C5 fatal marker at i=188,j=220,k=2. The rounded source log does not
+  ! identify its REAL32 carrier uniquely, so bind this candidate directly.
+  ice_c5_q64=transfer(int(z'3383F446E813526C',int64),0.0_real64)
+  ice_c5_n64=transfer(int(z'36D101F352E66E25',int64),0.0_real64)
+  if (real(ice_c5_q64,real32)/=0.0_real32 .or. &
+      transfer(real(ice_c5_n64,real32),0_int32)/=int(z'00000009',int32)) &
+    error stop 'exact C5 candidate no longer rounds Q/N to captured endpoints'
+  call joint_moment_store(ice_c5_q64,ice_c5_n64,1.191947_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,inactive_mass_limit=ice_limit)
+  if (feasible) error stop 'exact C5 candidate accepted without explicit quantum permission'
+  call joint_moment_store(ice_c5_q64,ice_c5_n64,1.191947_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (.not.feasible .or. adjustment/=3 .or. storedq/=0.0_real32 .or. storedn/=0.0_real32) &
+    error stop 'exact C5 one-zero candidate did not use bounded joint absence'
+
+  ! Eleven pair-2 FULL T5 candidates from pr85_joint_source_failure.raw.gz
+  ! (SHA-256 3e7241c0508676e88cfe3e31a6807b08b608fed50991f762ab92aa6a94b006ef),
+  ! at i=188,j=220,k={2..9,23..25}. The source ledger is list-directed, so
+  ! these literals retain its printed precision; exact k=2 payload bits are
+  ! checked separately above.
+  ice_t5_full_q=[ &
+    1.552191683688420e-60_real64, 1.985016417439262e-56_real64, &
+    1.812463117428989e-53_real64, 2.748452452285081e-52_real64, &
+    5.364774446255385e-51_real64, 1.115558877351273e-49_real64, &
+    3.227710915803210e-48_real64, 1.926522433219146e-46_real64, &
+    2.156175073009364e-49_real64, 3.480842786055688e-54_real64, &
+    4.593613501196828e-60_real64]
+  ice_t5_full_n=[ &
+    1.191637524719276e-44_real64, 1.523922641167347e-40_real64, &
+    1.391451252828393e-37_real64, 2.110022306824227e-36_real64, &
+    4.118606360924345e-35_real64, 8.564289019553414e-34_real64, &
+    2.477955194990729e-32_real64, 1.479016056948707e-30_real64, &
+    1.655323343027298e-33_real64, 2.672287788358608e-38_real64, &
+    3.526576182315154e-44_real64]
+  do trial=1,size(ice_t5_full_q)
+    if (real(ice_t5_full_q(trial),real32)/=0.0_real32 .or. &
+        ice_t5_full_q(trial)>ice_limit .or. &
+        ice_t5_full_n(trial)>ice_number_quantum_limit) &
+      error stop 'captured C4 FULL ICE pair is outside the bounded quantum contract'
+    call joint_moment_store(ice_t5_full_q(trial),ice_t5_full_n(trial),1.198626_real32, &
+        2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+        storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+        inactive_mass_limit=ice_limit)
+    if (.not.feasible .or. adjustment/=3 .or. storedq/=0.0_real32 .or. storedn/=0.0_real32) &
+      error stop 'captured C4 FULL ICE pair did not use bounded joint absence'
+  end do
+  ice_limits=[0.0_real64,ice_limit,0.0_real64,0.0_real64]
+  qb=0.0_real32; nb=0.0_real32; qs=qb; ns=nb
+  qsrc=0.0_real32; nsrc=0.0_real32; qt=0.0_real32; nt=0.0_real32
+  qsrc64=0.0_real64; nsrc64=0.0_real64; qt64=0.0_real64; nt64=0.0_real64
+  qsrc64(1,2)=transfer(int(z'33F16D2A0D5CBF25',int64),0.0_real64)
+  nsrc64(1,2)=transfer(int(z'373DB4CA633D4BA5',int64),0.0_real64)
+  mold=95258.05_real32; mnew=95244.79_real32; rho=1.198626_real32
+  minmass=[1.0e-7_real64,2.6055879053180625e-16_real64,1.0e-7_real64,100.0_real64]
+  maxmass=[1.0e-5_real64,2.0982747187893314e-9_real64,1.0e-5_real64,900.0_real64]
+  call joint_qnb_update(qb,nb,qs,ns,qsrc,nsrc,qt,nt,mold,mnew,rho,dt, &
+      minmass,maxmass,theta,rq,rn,feasible,joint_constrained_storage=.true., &
+      storage_delta_q=deltaq,storage_delta_n=deltan,storage_adjustments=adjustments, &
+      q_source_rate64=qsrc64,n_source_rate64=nsrc64,q_transport_rate64=qt64, &
+      n_transport_rate64=nt64,inactive_mass_limits=ice_limits)
+  if (feasible .or. any(qs/=qb) .or. any(ns/=nb)) &
+    error stop 'T5 both-zero pair committed without declared quantum absence'
+  call joint_qnb_update(qb,nb,qs,ns,qsrc,nsrc,qt,nt,mold,mnew,rho,dt, &
+      minmass,maxmass,theta,rq,rn,feasible,joint_constrained_storage=.true., &
+      storage_delta_q=deltaq,storage_delta_n=deltan,storage_adjustments=adjustments, &
+      q_source_rate64=qsrc64,n_source_rate64=nsrc64,q_transport_rate64=qt64, &
+      n_transport_rate64=nt64,inactive_mass_limits=ice_limits,joint_quantum_absence=.true.)
+  if (.not.feasible .or. theta/=1.0_real64 .or. any(qs/=0.0_real32) .or. &
+      any(ns/=0.0_real32) .or. adjustments(2)/=1 .or. &
+      deltaq(2)/=-real(mnew(1),real64)*ice_absent_q64 .or. &
+      deltan(2)/=-real(mnew(1),real64)*ice_absent_n64) &
+    error stop 'T5 both-zero transaction missed signed Q/N loss ledger'
+
+  ! Exact C5 payload through the joint wrapper. Unit timestep and carriers
+  ! make this a candidate-level source transaction, not a native RHS replay.
+  qb=0.0_real32; nb=0.0_real32
+  qs=17.0_real32; ns=19.0_real32
+  qsrc=0.0_real32; nsrc=0.0_real32; qt=0.0_real32; nt=0.0_real32
+  qsrc64=0.0_real64; nsrc64=0.0_real64; qt64=0.0_real64; nt64=0.0_real64
+  qsrc64(1,2)=ice_c5_q64; nsrc64(1,2)=ice_c5_n64
+  mold=1.0_real32; mnew=1.0_real32; rho=1.191947_real32; dt=1.0_real32
+  call joint_qnb_update(qb,nb,qs,ns,qsrc,nsrc,qt,nt,mold,mnew,rho,dt, &
+      minmass,maxmass,theta,rq,rn,feasible,joint_constrained_storage=.true., &
+      storage_delta_q=deltaq,storage_delta_n=deltan,storage_adjustments=adjustments, &
+      q_source_rate64=qsrc64,n_source_rate64=nsrc64,q_transport_rate64=qt64, &
+      n_transport_rate64=nt64,inactive_mass_limits=ice_limits)
+  if (feasible .or. any(qs/=17.0_real32) .or. any(ns/=19.0_real32)) &
+    error stop 'C5 quantum flag-off failure changed the joint arrays'
+  qs=17.0_real32; ns=19.0_real32
+  call joint_qnb_update(qb,nb,qs,ns,qsrc,nsrc,qt,nt,mold,mnew,rho,dt, &
+      minmass,maxmass,theta,rq,rn,feasible,joint_constrained_storage=.true., &
+      storage_delta_q=deltaq,storage_delta_n=deltan,storage_adjustments=adjustments, &
+      q_source_rate64=qsrc64,n_source_rate64=nsrc64,q_transport_rate64=qt64, &
+      n_transport_rate64=nt64,inactive_mass_limits=ice_limits,joint_quantum_absence=.true.)
+  if (.not.feasible .or. theta/=1.0_real64 .or. any(qs/=0.0_real32) .or. &
+      any(ns/=0.0_real32) .or. adjustments(2)/=1 .or. &
+      deltaq(2)/=-ice_c5_q64 .or. deltan(2)/=-ice_c5_n64) &
+    error stop 'C5 quantum transaction did not commit paired zeros and signed loss ledger'
+  if (.not.joint_moment_is_valid64(real(qs(1,2),real64),real(ns(1,2),real64),rho(1), &
+      minmass(2),maxmass(2))) error stop 'C5 joint-absence endpoint failed continuous consumer'
+
+  call joint_moment_store(ice_absent_q64,1.0e-20_real64,1.198626_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (feasible) error stop 'single-zero inactive pair was erased'
+  call joint_moment_store(1.0e-20_real64,ice_absent_n64,1.198626_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (feasible) error stop 'single-zero inactive number was erased'
+  call joint_moment_store(nearest(ice_limit,1.0_real64),ice_absent_n64,1.198626_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (feasible) error stop 'above-limit both-zero inactive pair was erased'
+  call joint_moment_store(-ice_absent_q64,ice_absent_n64,1.198626_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,allow_joint_quantum_absence=.true., &
+      inactive_mass_limit=ice_limit)
+  if (feasible) error stop 'negative inactive pair used joint absence storage'
+  if (.not.joint_moment_is_valid64(ice_limit,1.0e15_real64,1.0_real32, &
+                                   2.6055879053180625e-16_real64, &
+                                   2.0982747187893314e-9_real64,ice_limit)) &
+    error stop 'inclusive ICE transient mass boundary rejected'
+  if (joint_moment_is_valid64(nearest(ice_limit,1.0_real64),1.0e15_real64,1.0_real32, &
+                              2.6055879053180625e-16_real64, &
+                              2.0982747187893314e-9_real64,ice_limit)) &
+    error stop 'ICE candidate above transient limit bypassed active PSD bound'
+  if (joint_moment_is_valid64(0.0_real64,1.0e-20_real64,1.0_real32, &
+                              1.0e-20_real64,1.0e-10_real64,ice_limit)) &
+    error stop 'transient ICE branch admitted orphan number'
+  if (joint_moment_is_valid64(1.0e-20_real64,0.0_real64,1.0_real32, &
+                              1.0e-20_real64,1.0e-10_real64,ice_limit)) &
+    error stop 'transient ICE branch admitted orphan mass'
+  if (joint_moment_is_valid64(1.0e-30_real64,1.0e-30_real64, &
+                              nearest(0.0_real32,1.0_real32),1.0e-20_real64, &
+                              1.0e-10_real64,ice_limit)) &
+    error stop 'transient ICE branch admitted unrepresentable N times density'
+  call joint_moment_store(real(bulk_q_bad,real64),real(bulk_n,real64),1.0_real32, &
+      100.0_real64,900.0_real64,.true.,storedq,storedn,adjustment,feasible, &
+      allow_normal_q_adjustment=.true.,strict_mass_ratio=.true.,inactive_mass_limit=0.0_real64)
+  if (feasible) error stop 'zero inactive-mass limit weakened strict graupel storage'
+  call joint_moment_store(1.0e-6_real64,1.0_real64,1.0e-4_real32, &
+      1.0e-7_real64,1.0e-5_real64,.true.,storedq,storedn,adjustment,feasible, &
+      allow_normal_q_adjustment=.true.,volume_number_bounds=[50.0_real64,200.0_real64], &
+      inactive_mass_limit=0.0_real64)
+  if (.not.feasible) error stop 'zero inactive-mass limit blocked valid volume-bounded storage'
+  call joint_moment_store(1.0e-6_real64,1.0_real64,1.0e-4_real32, &
+      1.0e-7_real64,1.0e-5_real64,.true.,storedq,storedn,adjustment,feasible, &
+      allow_normal_q_adjustment=.true.,volume_number_bounds=[200.0_real64,300.0_real64], &
+      inactive_mass_limit=0.0_real64)
+  if (feasible) error stop 'zero inactive-mass limit weakened volume bounds'
+
+  ! T5's recorded source-only candidate follows the same coupled limiter and
+  ! is then checked by the actual full NG consumer in the source-derived test.
+  qb=0.0_real32; nb=0.0_real32; qs=qb; ns=nb
+  qsrc=0.0_real32; nsrc=0.0_real32; qt=0.0_real32; nt=0.0_real32
+  qsrc64=0.0_real64; nsrc64=0.0_real64; qt64=0.0_real64; nt64=0.0_real64
+  ! The paired full-state record only retained rounded density 0.1140736;
+  ! use its REAL32 conversion as an adapter, not as captured RK1 rho bits.
+  mold=95000.0_real32; mnew=95000.0_real32; rho=0.1140736_real32
+  dt=transfer(int(z'40D55555',int32),0.0_real32)
+  minmass=[1.0e-7_real64,2.6055879053180625e-16_real64,1.0e-7_real64,100.0_real64]
+  maxmass=[1.0e-5_real64,2.0982747187893314e-9_real64,1.0e-5_real64,900.0_real64]
+  qsrc64(1,2)=transfer(int(z'3C5BE7A593E8188A',int64),0.0_real64)
+  nsrc64(1,2)=transfer(int(z'3F9D0AF50F3AFDC3',int64),0.0_real64)
+  ice_limits=[0.0_real64,ice_limit,0.0_real64,0.0_real64]
+  call joint_qnb_update(qb,nb,qs,ns,qsrc,nsrc,qt,nt,mold,mnew,rho,dt, &
+      minmass,maxmass,theta,rq,rn,feasible,joint_constrained_storage=.true., &
+      storage_delta_q=deltaq,storage_delta_n=deltan,storage_adjustments=adjustments, &
+      q_source_rate64=qsrc64,n_source_rate64=nsrc64,q_transport_rate64=qt64, &
+      n_transport_rate64=nt64)
+  qcontinuous=real(dt,real64)*qsrc64(1,2)/real(mnew(1),real64)
+  ncontinuous=real(dt,real64)*nsrc64(1,2)/real(mnew(1),real64)
+  if (transfer(qcontinuous,0_int64)/=int(z'3B800AB83227AC6B',int64) .or. &
+      transfer(ncontinuous,0_int64)/=int(z'3EC0B22FF0418A72',int64)) &
+    error stop 'T5 source-derived REAL64 candidate differs from captured payload'
+  if (feasible .or. any(qs/=qb) .or. any(ns/=nb)) &
+    error stop 'default joint ICE update accepted T5 strict PSD failure'
+  qs=qb; ns=nb
+  call joint_qnb_update(qb,nb,qs,ns,qsrc,nsrc,qt,nt,mold,mnew,rho,dt, &
+      minmass,maxmass,theta,rq,rn,feasible,joint_constrained_storage=.true., &
+      storage_delta_q=deltaq,storage_delta_n=deltan,storage_adjustments=adjustments, &
+      q_source_rate64=qsrc64,n_source_rate64=nsrc64,q_transport_rate64=qt64, &
+      n_transport_rate64=nt64,inactive_mass_limits=ice_limits)
+  if (.not.feasible .or. theta/=1.0_real64 .or. qs(1,2)/=real(ice_q64,real32) .or. &
+      ns(1,2)/=real(ice_n64,real32)) &
+    error stop 'opt-in joint ICE update did not commit exact T5 R32 endpoint'
+
+  quiet_nan64=ieee_value(0.0_real64,ieee_quiet_nan)
+  call joint_moment_store(ice_q64,ice_n64,0.1140736_real32, &
+      2.6055879053180625e-16_real64,2.0982747187893314e-9_real64,.true., &
+      storedq,storedn,adjustment,feasible,inactive_mass_limit=quiet_nan64)
+  if (feasible) error stop 'quiet NaN inactive-ice limit accepted'
+  ice_limits(2)=quiet_nan64
+  qs=qb; ns=nb
+  call joint_qnb_update(qb,nb,qs,ns,qsrc,nsrc,qt,nt,mold,mnew,rho,dt, &
+      minmass,maxmass,theta,rq,rn,feasible,joint_constrained_storage=.true., &
+      q_source_rate64=qsrc64,n_source_rate64=nsrc64,q_transport_rate64=qt64, &
+      n_transport_rate64=nt64,inactive_mass_limits=ice_limits)
+  if (feasible .or. any(qs/=qb) .or. any(ns/=nb)) &
+    error stop 'quiet NaN inactive-ice limit partially committed an update'
+
   write(*,'(a)') 'PASS test_joint_qnb_transport'
 end program test_joint_qnb_transport
