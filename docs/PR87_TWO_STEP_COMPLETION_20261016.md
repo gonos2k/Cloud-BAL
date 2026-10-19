@@ -1,5 +1,9 @@
 # PR87: joint moments through two model steps
 
+For the Oct19 follow-up and current candidate status, start with
+[small-graupel follow-up](PR87_SMALL_GRAUPEL_20261019.md).
+The V42 results below are preserved historical evidence.
+
 ## Status and scope
 
 Base: PR86 `c84cbd3a0bc366112afe9ebad1087a220eb23b46`.

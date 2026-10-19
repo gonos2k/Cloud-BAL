@@ -1,0 +1,854 @@
+{
+  "arms": {
+    "COUPLED": {
+      "run_receipt": {
+        "after_input_count": 101,
+        "build_receipt_sha256": "04b043f0da7678f49eb3991e3bd07db399fb17c4699da7c245a04fdab6040e8c",
+        "candidate_build_unchanged": true,
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "completed_post_kdm6_timesteps": [
+          1,
+          2,
+          3
+        ],
+        "duplicate_post_kdm6_timesteps": [],
+        "earliest_fatal": null,
+        "executed_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "expected_executed_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00"
+        ],
+        "fatal_line_count": 0,
+        "final_completed_step": 3,
+        "maximum_seen_timestep": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.29926,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 105.96474,
+            "timestamp": "2026-08-16_13:00:40"
+          },
+          {
+            "elapsed_seconds": 106.07988,
+            "timestamp": "2026-08-16_13:01:00"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v50_20261019/receipt.json",
+        "preflight_equals_after_inputs": true,
+        "preflight_input_count": 101,
+        "processing_errors": [],
+        "returncode": 0,
+        "sha256": "4b933ce7583568579b6a00b3c2f9dbdb248927ab23039a43bd0aa5867c82da42",
+        "status": "COMPLETE",
+        "timestep_count": 3,
+        "wall_seconds": 458.6846361402422
+      },
+      "scalar_log": {
+        "mixture_lines": [
+          "PR87_GRAUPEL_MIXTURE 2 2 1 146 216 21 3ECCFF6D711A33CB 3E307F1AFD36BA7A 3667FB6B 3183F8D8 F T",
+          "PR87_GRAUPEL_MIXTURE 3 1 1 160 235 20 3E2D3E3844E45B52 3D90A2D3C79E5AA2 3169F1C1 2C85169E F T",
+          "PR87_GRAUPEL_MIXTURE 3 3 1 160 235 20 3E42EC2ECF162049 3DA5879A8537E504 32176176 2D2C3CD4 F T"
+        ],
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v50_20261019/run/rsl.out.0000.gz",
+        "sha256": "8fd121284f35db76e369592e91a3501e3900cf230efe208b9809b0e6092b0a3b",
+        "trial_reject_lines": [
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 226 24 7 3E895C31A749DC0A 4185825721DD8314 BEF11B5AC385355E C1ED04A743E23381 BF035377F2606327 C200642F3E6F6BA1",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 208 21 4 3ED284C7C748A9AF 41CF69C3F227C019 BF4F535AF5D49615 C24A91974156B33A BF57B9BEE02B6C0B C2541F6F1B091EF0"
+        ]
+      },
+      "stage_audit": {
+        "completed_post_kdm6_timestep_count": 3,
+        "consumer_build_binding_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "density_contract": {
+          "formula_for_v2": "DEN is real32(1)/(AL+ALB), authoritative dry-air density; use DEN directly.",
+          "policy_sha256": "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92",
+          "source_helper": "pr85_joint_stage_trace._dry_density"
+        },
+        "path": "docs/evidence/pr87_followup_20261019/review/v50_coupled_stage_audit.json",
+        "sha256": "fab109d62d641d4359bc771058cac01c7adbbb45d8d5a66d4a8643891f9b7a61",
+        "state_record_count": 18,
+        "status": "PASS",
+        "strict_source_coefficient_contract": {
+          "cloud_rain_bounds": "source REAL32 coefficients, exact Q/N bounds and both REAL64 and REAL32 rho*N volume checks; no ULP tolerance",
+          "coefficients": {
+            "cloud": {
+              "lambda_max_r32": 500000.0,
+              "lambda_min_r32": 12000.0,
+              "mass": "QC",
+              "number": "NC",
+              "pidn_r32": 523.5988159179688,
+              "power_r32": 3.0
+            },
+            "ice_diagnostic": {
+              "lambda_max_r32": 1820000.0,
+              "lambda_min_r32": 9080.0,
+              "mass": "QI",
+              "number": "NI",
+              "pidn_r32": 1570.79638671875,
+              "power_r32": 3.0
+            },
+            "rain": {
+              "lambda_max_r32": 35000.0,
+              "lambda_min_r32": 961.0,
+              "mass": "QR",
+              "number": "NR",
+              "pidn_r32": 12566.37109375,
+              "power_r32": 3.0
+            }
+          },
+          "gate_stages": [
+            [
+              "POST_KDM6",
+              0
+            ],
+            [
+              "PRE_KDM6",
+              0
+            ],
+            [
+              "RK_STAGE_END",
+              3
+            ]
+          ],
+          "graupel_bounds": "exact QG/BG in [100,900]; no ULP tolerance",
+          "ice": "additional exact source-coefficient diagnostic only; existing native ice acceptance remains separately declared"
+        },
+        "timesteps": [
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 1
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 4,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 4,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 5,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 2
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 1,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 1,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 2,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 3
+          }
+        ],
+        "trace_path": "/var/tmp/pr87_followup_COUPLED_60s_v50_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "trace_sha256": "59bd399cfb9a5e6b1ef7a08a5035cc7c6b8d65522697421ada6b4060344ed31f",
+        "trace_timesteps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "transport_budget": {
+        "all_nine_calls_feasible_theta_one": true,
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v50_20261019/run/pr85_joint_transport_budget.raw.gz",
+        "rk_calls": [
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 3
+          }
+        ],
+        "sha256": "afa921c8eade5da008841cf8e34e36c1b5bda2d92752a2dd66fc2884516e71d5",
+        "source_first_pair_fallback": [
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 1
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 1
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 1
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 2
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 2
+          },
+          {
+            "pair_flags": [
+              "T",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 2
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 3
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 3
+          },
+          {
+            "pair_flags": [
+              "T",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 3
+          }
+        ]
+      }
+    },
+    "OFF": {
+      "run_receipt": {
+        "after_input_count": 101,
+        "build_receipt_sha256": "04b043f0da7678f49eb3991e3bd07db399fb17c4699da7c245a04fdab6040e8c",
+        "candidate_build_unchanged": true,
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "completed_post_kdm6_timesteps": [
+          1,
+          2,
+          3
+        ],
+        "duplicate_post_kdm6_timesteps": [],
+        "earliest_fatal": null,
+        "executed_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "expected_executed_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00"
+        ],
+        "fatal_line_count": 0,
+        "final_completed_step": 3,
+        "maximum_seen_timestep": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.58875,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 106.26762,
+            "timestamp": "2026-08-16_13:00:40"
+          },
+          {
+            "elapsed_seconds": 106.39223,
+            "timestamp": "2026-08-16_13:01:00"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_OFF_60s_v50_20261019/receipt.json",
+        "preflight_equals_after_inputs": true,
+        "preflight_input_count": 101,
+        "processing_errors": [],
+        "returncode": 0,
+        "sha256": "31a69eb3ae41bb25cc0270bccdfa38486b90e6fa3c1079c6fdb500ac65551d70",
+        "status": "COMPLETE",
+        "timestep_count": 3,
+        "wall_seconds": 459.6171822845936
+      },
+      "scalar_log": {
+        "mixture_lines": [
+          "PR87_GRAUPEL_MIXTURE 2 2 1 146 216 21 3ECCFF6D711A33CB 3E307F1AFD36BA7A 3667FB6B 3183F8D8 F T",
+          "PR87_GRAUPEL_MIXTURE 3 1 1 160 235 20 3E2D3E3844E45B52 3D90A2D3C79E5AA2 3169F1C1 2C85169E F T",
+          "PR87_GRAUPEL_MIXTURE 3 3 1 160 235 20 3E42EC2ECF162049 3DA5879A8537E504 32176176 2D2C3CD4 F T"
+        ],
+        "path": "/var/tmp/pr87_followup_OFF_60s_v50_20261019/run/rsl.out.0000.gz",
+        "sha256": "3901e9750eb1827315511f8ea0f221a2f65975ee2d1cb6b8311ad598fcbfa778",
+        "trial_reject_lines": [
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 226 24 7 3E895C31A749DC0A 4185825721DD8314 BEF11B5AC385355E C1ED04A743E23381 BF035377F2606327 C200642F3E6F6BA1",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 208 21 4 3ED284C7C748A9AF 41CF69C3F227C019 BF4F535AF5D49615 C24A91974156B33A BF57B9BEE02B6C0B C2541F6F1B091EF0"
+        ]
+      },
+      "stage_audit": {
+        "completed_post_kdm6_timestep_count": 3,
+        "consumer_build_binding_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "density_contract": {
+          "formula_for_v2": "DEN is real32(1)/(AL+ALB), authoritative dry-air density; use DEN directly.",
+          "policy_sha256": "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92",
+          "source_helper": "pr85_joint_stage_trace._dry_density"
+        },
+        "path": "docs/evidence/pr87_followup_20261019/review/v50_off_stage_audit.json",
+        "sha256": "589030ceae5e87707740067120747418309e8bbb2012249f73a193f389c996da",
+        "state_record_count": 18,
+        "status": "PASS",
+        "strict_source_coefficient_contract": {
+          "cloud_rain_bounds": "source REAL32 coefficients, exact Q/N bounds and both REAL64 and REAL32 rho*N volume checks; no ULP tolerance",
+          "coefficients": {
+            "cloud": {
+              "lambda_max_r32": 500000.0,
+              "lambda_min_r32": 12000.0,
+              "mass": "QC",
+              "number": "NC",
+              "pidn_r32": 523.5988159179688,
+              "power_r32": 3.0
+            },
+            "ice_diagnostic": {
+              "lambda_max_r32": 1820000.0,
+              "lambda_min_r32": 9080.0,
+              "mass": "QI",
+              "number": "NI",
+              "pidn_r32": 1570.79638671875,
+              "power_r32": 3.0
+            },
+            "rain": {
+              "lambda_max_r32": 35000.0,
+              "lambda_min_r32": 961.0,
+              "mass": "QR",
+              "number": "NR",
+              "pidn_r32": 12566.37109375,
+              "power_r32": 3.0
+            }
+          },
+          "gate_stages": [
+            [
+              "POST_KDM6",
+              0
+            ],
+            [
+              "PRE_KDM6",
+              0
+            ],
+            [
+              "RK_STAGE_END",
+              3
+            ]
+          ],
+          "graupel_bounds": "exact QG/BG in [100,900]; no ULP tolerance",
+          "ice": "additional exact source-coefficient diagnostic only; existing native ice acceptance remains separately declared"
+        },
+        "timesteps": [
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 1
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 4,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 4,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 5,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 2
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 1,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 1,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 2,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 3
+          }
+        ],
+        "trace_path": "/var/tmp/pr87_followup_OFF_60s_v50_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "trace_sha256": "d225736dd3ff05c79062d12ae035150ae6742fdf6d56a15f0f889c837bf0c93a",
+        "trace_timesteps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "transport_budget": {
+        "all_nine_calls_feasible_theta_one": true,
+        "path": "/var/tmp/pr87_followup_OFF_60s_v50_20261019/run/pr85_joint_transport_budget.raw.gz",
+        "rk_calls": [
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 3
+          }
+        ],
+        "sha256": "afa921c8eade5da008841cf8e34e36c1b5bda2d92752a2dd66fc2884516e71d5",
+        "source_first_pair_fallback": [
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 1
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 1
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 1
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 2
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 2
+          },
+          {
+            "pair_flags": [
+              "T",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 2
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 3
+          },
+          {
+            "pair_flags": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 3
+          },
+          {
+            "pair_flags": [
+              "T",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 3
+          }
+        ]
+      }
+    }
+  },
+  "build": {
+    "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "executable_hash_matches": true,
+    "executable_path": "/var/tmp/pr87_followup_build_20261019_v50/wrf_pr87_overlay.exe",
+    "executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+    "expected_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+    "expected_parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "full_clean_build": false,
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "parent_hash_matches": true,
+    "receipt_path": "/var/tmp/pr87_followup_build_20261019_v50/pr87_native_overlay_build.json",
+    "receipt_sha256": "04b043f0da7678f49eb3991e3bd07db399fb17c4699da7c245a04fdab6040e8c",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "limitations": [
+    "This is a three-step 60-second validation of the captured native overlay and these specific OFF/COUPLED inputs; it does not establish longer integration or general model correctness.",
+    "The native overlay is a partial overlay build, not a full clean model build."
+  ],
+  "schema": "pr87_v50_closed_runtime_review_v1",
+  "scope": "V50 OFF/COUPLED requested 60-second runs. Independent receipt, state, ledger, build, input, and trace-prefix checks.",
+  "source_identity": {
+    "graupel_mixture_transform_path": "tools/pr87_graupel_cone_mixture.py",
+    "graupel_mixture_transform_sha256": "76a8e25a641e57eeb5184eb21fb710cbf0fae64d5d1487442a3c052deb666710",
+    "module_em_override_sha256": "4d07170e68699e62276eb3ec800c123b6993e91cdaa9aae2411b4909c34a14c0",
+    "solve_em_override_path": "/var/tmp/pr87_followup_build_20261019_v50/source/overrides/solve_em.F",
+    "solve_em_override_sha256": "412183300ea8dd6af028ac1a5254f937477b054630db4eb1f5910a6bf974c3c5"
+  },
+  "t3_rk3_mixture_witness": {
+    "candidate_BG64_bits": "3DA5879A8537E504",
+    "candidate_Q64_bits": "3E42EC2ECF162049",
+    "candidate_Q_minus_900_BG_exact": "31/38685626227668133590597632",
+    "candidate_Q_over_BG_exact": "1363516254150740224/1515018060167489",
+    "candidate_Q_over_BG_minus_900_exact": "124/1515018060167489",
+    "coordinates": {
+      "i": 160,
+      "j": 235,
+      "k": 20,
+      "pair": 4,
+      "rk": 3,
+      "timestep": 3
+    },
+    "line": "PR87_GRAUPEL_MIXTURE 3 3 1 160 235 20 3E42EC2ECF162049 3DA5879A8537E504 32176176 2D2C3CD4 F T",
+    "stored_BG32_bits": "2D2C3CD4",
+    "stored_Q32_bits": "32176176",
+    "stored_Q_minus_900_BG_exact": "-21/72057594037927936",
+    "stored_Q_over_BG_exact": "846582272/940647",
+    "stored_Q_over_BG_minus_900_exact": "-28/940647"
+  },
+  "transport_semantics": {
+    "module_em_override_sha256": "4d07170e68699e62276eb3ec800c123b6993e91cdaa9aae2411b4909c34a14c0",
+    "source_first_pair_flag_note": "The report stores the four emitted flags verbatim. In the frozen module_em implementation, source_first_pair(1:2) is assigned from failed_pairs(1:2); pair 4 (graupel) is not admitted to this source-first fallback. Therefore T F F F at T3RK3 must not be read as a graupel source-first flag. The graupel retry is separately evidenced by the PR87_GRAUPEL_MIXTURE scalar line."
+  },
+  "v49_prefix_comparison": {
+    "arms": {
+      "COUPLED": {
+        "compared_complete_record_bytes": 1715012660,
+        "first_different_record": null,
+        "raw_record_hashes_equal": true,
+        "record_metadata_equal": true,
+        "through_timestep_2_record_count_v49": 17,
+        "through_timestep_2_record_count_v50": 17,
+        "v49_record_count": 22,
+        "v49_trace_sha256": "90b707a76ef937d37d61265ee3fc5e1412fcc1d49d06c5591756df4dfa42f639",
+        "v50_record_count": 25,
+        "v50_trace_sha256": "59bd399cfb9a5e6b1ef7a08a5035cc7c6b8d65522697421ada6b4060344ed31f"
+      },
+      "OFF": {
+        "compared_complete_record_bytes": 1715012660,
+        "first_different_record": null,
+        "raw_record_hashes_equal": true,
+        "record_metadata_equal": true,
+        "through_timestep_2_record_count_v49": 17,
+        "through_timestep_2_record_count_v50": 17,
+        "v49_record_count": 22,
+        "v49_trace_sha256": "f072f4e8b12e4234199895e1df38ef19ef141588df05543d257e1666a9ebe891",
+        "v50_record_count": 25,
+        "v50_trace_sha256": "d225736dd3ff05c79062d12ae035150ae6742fdf6d56a15f0f889c837bf0c93a"
+      }
+    },
+    "scope": "Complete binary state/tendency records through timestep 2 in pr85_joint_moment_stages.raw.gz."
+  }
+}

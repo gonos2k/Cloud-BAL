@@ -1,0 +1,819 @@
+{
+  "arms": {
+    "COUPLED": {
+      "first_call_budget": {
+        "BG_volume": {
+          "change": {
+            "l1": 9636047.9080553,
+            "max_abs_cell": 77304.346809583,
+            "max_abs_column": 354207.80948340794,
+            "signed": -13219.870694655123
+          },
+          "unit": "m3"
+        },
+        "active_shape_jki": [
+          280,
+          39,
+          232
+        ],
+        "bottom_outflow": {
+          "rainncv_accumulator_increment_kg": 689506724.2039762,
+          "records": 840,
+          "signed_l1_max_column": {
+            "l1": 689506723.7259775,
+            "max_abs_cell": 2372908.276721911,
+            "max_abs_column": 2372908.276721911,
+            "signed": 689506723.7259775
+          },
+          "species_outflow_kg": {
+            "graupel": 15376945.648036608,
+            "ice": 2.4011520084660107e-17,
+            "rain": 674129778.077941,
+            "snow": 0.0
+          },
+          "stage2_rows": 280,
+          "total_outflow_kg": 689506723.7259775,
+          "unit": "kg"
+        },
+        "call_seconds": 20.0,
+        "column_maps": {
+          "array_shapes": {
+            "BG_volume_delta_m3_per_column": [
+              280,
+              232
+            ],
+            "cell_area_m2": [
+              280,
+              232
+            ],
+            "helper_minus_public_rain_kg_per_column": [
+              280,
+              232
+            ],
+            "i_index": [
+              280,
+              232
+            ],
+            "j_index": [
+              280,
+              232
+            ],
+            "number_category_sum_delta_count_per_column_not_conserved": [
+              280,
+              232
+            ],
+            "public_bottom_outflow_kg_per_column": [
+              280,
+              232
+            ],
+            "total_water_delta_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_after_recorded_cleanup_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_before_cleanup_kg_per_column": [
+              280,
+              232
+            ]
+          },
+          "arrays": [
+            "total_water_delta_kg_per_column",
+            "public_bottom_outflow_kg_per_column",
+            "water_residual_before_cleanup_kg_per_column",
+            "water_residual_after_recorded_cleanup_kg_per_column",
+            "helper_minus_public_rain_kg_per_column",
+            "number_category_sum_delta_count_per_column_not_conserved",
+            "BG_volume_delta_m3_per_column",
+            "cell_area_m2",
+            "i_index",
+            "j_index"
+          ],
+          "bytes": 2439267,
+          "format": "compressed NumPy NPZ; 2D maps only; no interpolation",
+          "path": "/var/tmp/pr87_followup_budget_20261019_v44/COUPLED_firstcall_columns.npz",
+          "sha256": "d60ced8e872aa12766d8f60d1106c3337c0e983328b7dd7b9548092a90fb50be",
+          "shape_j_i": [
+            280,
+            232
+          ],
+          "units": {
+            "BG_volume_delta_m3_per_column": "m3",
+            "cell_area_m2": "m2",
+            "helper_minus_public_rain_kg_per_column": "kg",
+            "i_index": "1-based active-domain WRF i index",
+            "j_index": "1-based active-domain WRF j index",
+            "number_category_sum_delta_count_per_column_not_conserved": "count",
+            "public_bottom_outflow_kg_per_column": "kg",
+            "total_water_delta_kg_per_column": "kg",
+            "water_residual_after_recorded_cleanup_kg_per_column": "kg",
+            "water_residual_before_cleanup_kg_per_column": "kg"
+          }
+        },
+        "coverage_limits": [
+          "unadjusted residual precedes cutoff and ice/snow transition corrections; adjusted residual subtracts only those two recorded terms",
+          "both residuals omit stored-rounding and other numerical terms",
+          "same-call host hybrid dry-mass and boundary reconciliation are not captured",
+          "not a closed whole-model water or thermodynamic budget"
+        ],
+        "identities": {
+          "initial_history_sha256": "4716ceda093b3b01ff4363be7c56dabedf2ed585b3a4d9bce4ea8012ced88663",
+          "numerical_ledgers": {
+            "cutoff": {
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/pr85_kdm6_cutoff_budget.raw.gz",
+              "sha256": "d5a3baccccdc15c1544670a8dc076d0f247ec39937906c0c76cdf922d7ba69be"
+            },
+            "transition": {
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/pr85_ice_transition_branch.raw.gz",
+              "sha256": "f602fdd69fe9253a75de4d2336158ab032a433e6c46da47d36564d22a3ec841e"
+            }
+          },
+          "post": {
+            "compressed_path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/kdm6_first_call_post.raw.gz",
+            "compressed_sha256": "6e5876f724b5df4b22ac381d9ba1b3e02ebff2c82aedfad98b4db4b8de419b07",
+            "expanded_bytes": 195542592,
+            "expanded_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be"
+          },
+          "pre": {
+            "compressed_path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/kdm6_first_call_pre.raw.gz",
+            "compressed_sha256": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110",
+            "expanded_bytes": 195542592,
+            "expanded_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8"
+          },
+          "process": {
+            "compressed_path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/pr67_kdm6_process.raw.gz",
+            "compressed_sha256": "d8b45e323ca72ead866643f3a5d8591adbc6c9ba728cf4726274862dd431f918",
+            "expanded_bytes": 83442240,
+            "expanded_sha256": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976"
+          },
+          "rain_ground_ledger": {
+            "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/pr87_rain_sedimentation_budget.raw.gz",
+            "sha256": "c91b19bf87f8ac364a12246000056e7ad9a67991b583417b7af6e6242731ac24"
+          }
+        },
+        "inventory_by_field": {
+          "BG": {
+            "after": 19412281.498461194,
+            "before": 19425501.36915585,
+            "change": {
+              "l1": 9636047.9080553,
+              "max_abs_cell": 77304.346809583,
+              "max_abs_column": 354207.80948340794,
+              "signed": -13219.870694655123
+            }
+          },
+          "NC": {
+            "after": 8.349615310575926e+23,
+            "before": 9.994108852690669e+23,
+            "change": {
+              "l1": 3.269251170528696e+23,
+              "max_abs_cell": 1.3599795474413724e+19,
+              "max_abs_column": 1.0718930764258899e+20,
+              "signed": -1.644493542114752e+23
+            }
+          },
+          "NI": {
+            "after": 1.8604798673691117e+21,
+            "before": 9.30248092317456e+20,
+            "change": {
+              "l1": 1.4025415287638288e+21,
+              "max_abs_cell": 5.923214353300279e+18,
+              "max_abs_column": 9.017767149380839e+18,
+              "signed": 9.302317750516549e+20
+            }
+          },
+          "NN": {
+            "after": 6.120168139780819e+24,
+            "before": 2.5918660774524656e+24,
+            "change": {
+              "l1": 3.710335817990279e+24,
+              "max_abs_cell": 9.525995129960708e+18,
+              "max_abs_column": 9.448633180019968e+19,
+              "signed": 3.5283020623283506e+24
+            }
+          },
+          "NR": {
+            "after": 5.483811398347323e+18,
+            "before": 1.8604872518191242e+18,
+            "change": {
+              "l1": 3.715382557702826e+18,
+              "max_abs_cell": 5840346873729457.0,
+              "max_abs_column": 1.1521612690051796e+16,
+              "signed": 3.6233241465281966e+18
+            }
+          },
+          "Q": {
+            "after": 89519717989231.44,
+            "before": 88878263206481.73,
+            "change": {
+              "l1": 655976523631.6981,
+              "max_abs_cell": 16552659.092181526,
+              "max_abs_column": 103172640.75239845,
+              "signed": 641454782749.7275
+            }
+          },
+          "QC": {
+            "after": 1268731800791.7947,
+            "before": 1955039819301.7537,
+            "change": {
+              "l1": 715704440503.5323,
+              "max_abs_cell": 52647891.10748825,
+              "max_abs_column": 320181344.63719547,
+              "signed": -686308018509.9581
+            }
+          },
+          "QG": {
+            "after": 9652665579.883364,
+            "before": 7770200517.673036,
+            "change": {
+              "l1": 5724095890.128891,
+              "max_abs_cell": 24383037.306504928,
+              "max_abs_column": 115028189.68531097,
+              "signed": 1882465062.2103271
+            }
+          },
+          "QI": {
+            "after": 703445670378.8911,
+            "before": 994793062036.0454,
+            "change": {
+              "l1": 315935868417.01263,
+              "max_abs_cell": 65418874.804081306,
+              "max_abs_column": 371819953.19190687,
+              "signed": -291347391657.15454
+            }
+          },
+          "QR": {
+            "after": 162549417401.992,
+            "before": 119853139464.4475,
+            "change": {
+              "l1": 43672697100.679,
+              "max_abs_cell": 38094078.257387094,
+              "max_abs_column": 228564705.14243865,
+              "signed": 42696277937.54461
+            }
+          },
+          "QS": {
+            "after": 674080806758.9045,
+            "before": 383148512028.2993,
+            "change": {
+              "l1": 318933192659.8228,
+              "max_abs_cell": 64903778.490309216,
+              "max_abs_column": 358399628.40575814,
+              "signed": 290932294730.60504
+            }
+          }
+        },
+        "measure": "same-call DEN * DELZ * DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+        "number_category_sum_change_not_a_conservation_residual": {
+          "change": {
+            "l1": 3.4233860965876195e+24,
+            "max_abs_cell": 1.1466381090829023e+19,
+            "max_abs_column": 7.587682911367596e+19,
+            "signed": 3.3647865632160744e+24
+          },
+          "fields": [
+            "NN",
+            "NC",
+            "NI",
+            "NR"
+          ],
+          "sum_of_separate_field_l1": 4.03866719195447e+24
+        },
+        "rain_ground_comparison": {
+          "call_marker_rows": 280,
+          "captured_public_fall_phase1_rain_kg": 674129778.077941,
+          "captured_public_rain_map": {
+            "l1": 674129778.077941,
+            "max_abs_cell": 1984665.7318754608,
+            "max_abs_column": 1984665.7318754608,
+            "signed": 674129778.077941
+          },
+          "comparison": "helper ground-approved rain Q versus captured public fall phase 1 mapped through rainncv",
+          "helper_ground_approved_map": {
+            "l1": 674129778.4637431,
+            "max_abs_cell": 1984665.7600365304,
+            "max_abs_column": 1984665.7600365304,
+            "signed": 674129778.4637431
+          },
+          "helper_ground_approved_rain_Q_kg": 674129778.4637431,
+          "helper_internal_column_residual_mapped_kg": 12.55949349410649,
+          "helper_minus_public_rain_difference_kg": {
+            "l1": 18.838389102106838,
+            "max_abs_cell": 0.1416096012108028,
+            "max_abs_column": 0.1416096012108028,
+            "signed": 0.385802145901831
+          },
+          "interpretation": "The helper ledger and public output accumulator disagree; ground-approved process Q is not substituted for emitted precipitation.",
+          "selected_sedimentation_rows": 78926,
+          "timestep": 1,
+          "unit_basis": "ground_approved_q is kg m-2 per call times actual map area; public fall phase 1 uses source fall*DELZ/DENR*DTCLD*1000 mm times water density/1000 and map area"
+        },
+        "recorded_numerical_terms": {
+          "cutoff_rows_first_sweep": 212872,
+          "cutoff_rows_second_sweep_geometry_mismatches": 0,
+          "cutoff_sweep_assignment": "first full ordered j sweep; all rows rhoDry match first-call PRE; only one complete sweep is captured",
+          "cutoff_water_delta_kg": {
+            "l1": 43395.75513466774,
+            "max_abs_cell": 17.881881880561348,
+            "max_abs_column": 64.01544141157721,
+            "signed": -43395.75513466774
+          },
+          "ice_snow_transition_rows_step1": 7081,
+          "ice_snow_transition_water_delta_kg": {
+            "l1": 6243.856116641805,
+            "max_abs_cell": 5.127334448432817,
+            "max_abs_column": 10.688177925664862,
+            "signed": -77.56462413304718
+          },
+          "transition_step_assignment": "explicit PR85_ICE_TRANSITION_LOOP timestep marker equals 1"
+        },
+        "residual_after_recorded_numerical_terms": {
+          "interpretation": "water-state change + bottom outflow - recorded cutoff water delta - recorded ice/snow storage delta",
+          "l1": 464864.8188649245,
+          "max_abs_column": 60.10662685493472,
+          "not_closed": true,
+          "signed": -39489.9786945644,
+          "unit": "kg per column"
+        },
+        "status": "FIRST_KDM6_CALL_ACCOUNTED_PARTIAL_BUDGET_OPEN",
+        "timestep": 1,
+        "unadjusted_water_residual": {
+          "bottom_outflow_kg": 689506723.7259775,
+          "interpretation": "water-state change + bottom outflow before recorded cleanup/phase-storage corrections",
+          "l1": 486342.03537570254,
+          "max_abs_column": 70.73548819682134,
+          "signed": -82963.29845336518,
+          "unit": "kg per column",
+          "water_change_kg": -689589687.0244312
+        },
+        "water_total": {
+          "change": {
+            "l1": 31613467627.082592,
+            "max_abs_cell": 5094943.128871511,
+            "max_abs_column": 2372898.5163541497,
+            "signed": -689589687.0244312
+          },
+          "fields": [
+            "Q",
+            "QC",
+            "QI",
+            "QR",
+            "QS",
+            "QG"
+          ],
+          "sum_of_separate_field_l1": 2055946818202.8738
+        }
+      },
+      "preflight": {
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/preflight.json",
+        "sha256": "d2b73b371a0056fb03ef15c5088851a086e04c382dacf68ee34fd0ef792963a3"
+      },
+      "run_receipt": {
+        "candidate_build_unchanged": true,
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "executed_executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+        "final_completed_step": 1,
+        "frozen_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 244.39279,
+            "timestamp": "2026-08-16_13:00:20"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/receipt.json",
+        "returncode": 1,
+        "sha256": "dca269a63d5db125be0e911b95ca8b4783d6c9e3f0298202ef07c894ef4d1b55",
+        "status": "INCOMPLETE",
+        "timestep_count": 1
+      },
+      "run_root": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run"
+    },
+    "OFF": {
+      "first_call_budget": {
+        "BG_volume": {
+          "change": {
+            "l1": 9775178.498782987,
+            "max_abs_cell": 77304.346809583,
+            "max_abs_column": 354207.80948340794,
+            "signed": -152350.46150029876
+          },
+          "unit": "m3"
+        },
+        "active_shape_jki": [
+          280,
+          39,
+          232
+        ],
+        "bottom_outflow": {
+          "rainncv_accumulator_increment_kg": 689637512.5403583,
+          "records": 840,
+          "signed_l1_max_column": {
+            "l1": 689637512.5879184,
+            "max_abs_cell": 2409160.0234114337,
+            "max_abs_column": 2409160.0234114337,
+            "signed": 689637512.5879184
+          },
+          "species_outflow_kg": {
+            "graupel": 15518734.587922338,
+            "ice": 2.4011519857421796e-17,
+            "rain": 674118777.9999961,
+            "snow": 0.0
+          },
+          "stage2_rows": 280,
+          "total_outflow_kg": 689637512.5879184,
+          "unit": "kg"
+        },
+        "call_seconds": 20.0,
+        "column_maps": {
+          "array_shapes": {
+            "BG_volume_delta_m3_per_column": [
+              280,
+              232
+            ],
+            "cell_area_m2": [
+              280,
+              232
+            ],
+            "helper_minus_public_rain_kg_per_column": [
+              280,
+              232
+            ],
+            "i_index": [
+              280,
+              232
+            ],
+            "j_index": [
+              280,
+              232
+            ],
+            "number_category_sum_delta_count_per_column_not_conserved": [
+              280,
+              232
+            ],
+            "public_bottom_outflow_kg_per_column": [
+              280,
+              232
+            ],
+            "total_water_delta_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_after_recorded_cleanup_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_before_cleanup_kg_per_column": [
+              280,
+              232
+            ]
+          },
+          "arrays": [
+            "total_water_delta_kg_per_column",
+            "public_bottom_outflow_kg_per_column",
+            "water_residual_before_cleanup_kg_per_column",
+            "water_residual_after_recorded_cleanup_kg_per_column",
+            "helper_minus_public_rain_kg_per_column",
+            "number_category_sum_delta_count_per_column_not_conserved",
+            "BG_volume_delta_m3_per_column",
+            "cell_area_m2",
+            "i_index",
+            "j_index"
+          ],
+          "bytes": 2439293,
+          "format": "compressed NumPy NPZ; 2D maps only; no interpolation",
+          "path": "/var/tmp/pr87_followup_budget_20261019_v44/OFF_firstcall_columns.npz",
+          "sha256": "90ddc2cac26540ba3ef3223ed01b2c49ae3e3f9f7d5f9a0fc7d9b3d054e50c95",
+          "shape_j_i": [
+            280,
+            232
+          ],
+          "units": {
+            "BG_volume_delta_m3_per_column": "m3",
+            "cell_area_m2": "m2",
+            "helper_minus_public_rain_kg_per_column": "kg",
+            "i_index": "1-based active-domain WRF i index",
+            "j_index": "1-based active-domain WRF j index",
+            "number_category_sum_delta_count_per_column_not_conserved": "count",
+            "public_bottom_outflow_kg_per_column": "kg",
+            "total_water_delta_kg_per_column": "kg",
+            "water_residual_after_recorded_cleanup_kg_per_column": "kg",
+            "water_residual_before_cleanup_kg_per_column": "kg"
+          }
+        },
+        "coverage_limits": [
+          "unadjusted residual precedes cutoff and ice/snow transition corrections; adjusted residual subtracts only those two recorded terms",
+          "both residuals omit stored-rounding and other numerical terms",
+          "same-call host hybrid dry-mass and boundary reconciliation are not captured",
+          "not a closed whole-model water or thermodynamic budget"
+        ],
+        "identities": {
+          "initial_history_sha256": "ae7253d7261d8292c7de8a3b2a3f39b1798bf1a59599042901b892d2ebcb887c",
+          "numerical_ledgers": {
+            "cutoff": {
+              "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/pr85_kdm6_cutoff_budget.raw.gz",
+              "sha256": "cdf1eca982a415608236be14833cfbdeb283116fcfcc556e6b4e76fae424f739"
+            },
+            "transition": {
+              "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/pr85_ice_transition_branch.raw.gz",
+              "sha256": "9d9a9bf64f9b4a1d6c62fd31e18c4e248c072f1365a9147f24d51e809e12a5a5"
+            }
+          },
+          "post": {
+            "compressed_path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/kdm6_first_call_post.raw.gz",
+            "compressed_sha256": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f",
+            "expanded_bytes": 195542592,
+            "expanded_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529"
+          },
+          "pre": {
+            "compressed_path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/kdm6_first_call_pre.raw.gz",
+            "compressed_sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86",
+            "expanded_bytes": 195542592,
+            "expanded_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe"
+          },
+          "process": {
+            "compressed_path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/pr67_kdm6_process.raw.gz",
+            "compressed_sha256": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f",
+            "expanded_bytes": 83442240,
+            "expanded_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8"
+          },
+          "rain_ground_ledger": {
+            "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/pr87_rain_sedimentation_budget.raw.gz",
+            "sha256": "e4b7637ca2071d71f5ab14dea31349885617c228cd60245d70fbe39e22057ba5"
+          }
+        },
+        "inventory_by_field": {
+          "BG": {
+            "after": 19412281.498422213,
+            "before": 19564631.959922515,
+            "change": {
+              "l1": 9775178.498782987,
+              "max_abs_cell": 77304.346809583,
+              "max_abs_column": 354207.80948340794,
+              "signed": -152350.46150029876
+            }
+          },
+          "NC": {
+            "after": 8.349801481355059e+23,
+            "before": 9.995000838226918e+23,
+            "change": {
+              "l1": 3.2698589478686565e+23,
+              "max_abs_cell": 1.3599795474413724e+19,
+              "max_abs_column": 1.0718930764258899e+20,
+              "signed": -1.6451993568718686e+23
+            }
+          },
+          "NI": {
+            "after": 1.860414498393858e+21,
+            "before": 9.302480426768568e+20,
+            "change": {
+              "l1": 1.4025763876138826e+21,
+              "max_abs_cell": 5.923214353300279e+18,
+              "max_abs_column": 9.017767149380839e+18,
+              "signed": 9.301664557170004e+20
+            }
+          },
+          "NN": {
+            "after": 6.120223000406057e+24,
+            "before": 2.591866076991705e+24,
+            "change": {
+              "l1": 3.710390679076277e+24,
+              "max_abs_cell": 9.525995129960708e+18,
+              "max_abs_column": 9.448633180019968e+19,
+              "signed": 3.528356923414349e+24
+            }
+          },
+          "NR": {
+            "after": 5.48460397178589e+18,
+            "before": 1.8612563521840922e+18,
+            "change": {
+              "l1": 3.715501572075358e+18,
+              "max_abs_cell": 5840346873729457.0,
+              "max_abs_column": 1.1521612690051796e+16,
+              "signed": 3.6233476196017956e+18
+            }
+          },
+          "Q": {
+            "after": 89519534675962.9,
+            "before": 88877823659132.86,
+            "change": {
+              "l1": 656227958793.0492,
+              "max_abs_cell": 16552659.092181526,
+              "max_abs_column": 103172640.75239845,
+              "signed": 641711016830.0747
+            }
+          },
+          "QC": {
+            "after": 1268717262615.2034,
+            "before": 1955304534743.6138,
+            "change": {
+              "l1": 715980833357.3485,
+              "max_abs_cell": 52647891.10748825,
+              "max_abs_column": 320181344.63719547,
+              "signed": -686587272128.4094
+            }
+          },
+          "QG": {
+            "after": 9652665579.853834,
+            "before": 7825852752.171311,
+            "change": {
+              "l1": 5779748124.597639,
+              "max_abs_cell": 24383037.306504928,
+              "max_abs_column": 115028189.68531097,
+              "signed": 1826812827.6825225
+            }
+          },
+          "QI": {
+            "after": 703351854503.8694,
+            "before": 994793061309.0406,
+            "change": {
+              "l1": 316024015855.29944,
+              "max_abs_cell": 65418874.804081306,
+              "max_abs_column": 371819953.19190687,
+              "signed": -291441206805.17163
+            }
+          },
+          "QR": {
+            "after": 162682542789.27792,
+            "before": 119902685149.8512,
+            "change": {
+              "l1": 43754633617.77071,
+              "max_abs_cell": 38094078.257387094,
+              "max_abs_column": 228564705.14243865,
+              "signed": 42779857639.42683
+            }
+          },
+          "QS": {
+            "after": 674304708945.7914,
+            "before": 383283637971.92334,
+            "change": {
+              "l1": 319037132252.8653,
+              "max_abs_cell": 64903778.490309216,
+              "max_abs_column": 358399628.40575814,
+              "signed": 291021070973.8679
+            }
+          }
+        },
+        "measure": "same-call DEN * DELZ * DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+        "number_category_sum_change_not_a_conservation_residual": {
+          "change": {
+            "l1": 3.423370206771191e+24,
+            "max_abs_cell": 1.1466381090829023e+19,
+            "max_abs_column": 7.587682911367596e+19,
+            "signed": 3.364770777530499e+24
+          },
+          "fields": [
+            "NN",
+            "NC",
+            "NI",
+            "NR"
+          ],
+          "sum_of_separate_field_l1": 4.0387828657523284e+24
+        },
+        "rain_ground_comparison": {
+          "call_marker_rows": 280,
+          "captured_public_fall_phase1_rain_kg": 674118777.9999961,
+          "captured_public_rain_map": {
+            "l1": 674118777.9999961,
+            "max_abs_cell": 1984665.7318754608,
+            "max_abs_column": 1984665.7318754608,
+            "signed": 674118777.9999961
+          },
+          "comparison": "helper ground-approved rain Q versus captured public fall phase 1 mapped through rainncv",
+          "helper_ground_approved_map": {
+            "l1": 674118778.1787394,
+            "max_abs_cell": 1984665.7600365304,
+            "max_abs_column": 1984665.7600365304,
+            "signed": 674118778.1787394
+          },
+          "helper_ground_approved_rain_Q_kg": 674118778.1787394,
+          "helper_internal_column_residual_mapped_kg": 1.5894734665931711,
+          "helper_minus_public_rain_difference_kg": {
+            "l1": 18.728501976303363,
+            "max_abs_cell": 0.1416096012108028,
+            "max_abs_column": 0.1416096012108028,
+            "signed": 0.1787433023172811
+          },
+          "interpretation": "The helper ledger and public output accumulator disagree; ground-approved process Q is not substituted for emitted precipitation.",
+          "selected_sedimentation_rows": 78926,
+          "timestep": 1,
+          "unit_basis": "ground_approved_q is kg m-2 per call times actual map area; public fall phase 1 uses source fall*DELZ/DENR*DTCLD*1000 mm times water density/1000 and map area"
+        },
+        "recorded_numerical_terms": {
+          "cutoff_rows_first_sweep": 212866,
+          "cutoff_rows_second_sweep_geometry_mismatches": 0,
+          "cutoff_sweep_assignment": "first full ordered j sweep; all rows rhoDry match first-call PRE; only one complete sweep is captured",
+          "cutoff_water_delta_kg": {
+            "l1": 43406.91468048653,
+            "max_abs_cell": 17.881881880561348,
+            "max_abs_column": 64.01544141157721,
+            "signed": -43406.91468048653
+          },
+          "ice_snow_transition_rows_step1": 7084,
+          "ice_snow_transition_water_delta_kg": {
+            "l1": 6247.055220285157,
+            "max_abs_cell": 5.127334448432817,
+            "max_abs_column": 10.688177925664862,
+            "signed": -76.92520530537507
+          },
+          "transition_step_assignment": "explicit PR85_ICE_TRANSITION_LOOP timestep marker equals 1"
+        },
+        "residual_after_recorded_numerical_terms": {
+          "interpretation": "water-state change + bottom outflow - recorded cutoff water delta - recorded ice/snow storage delta",
+          "l1": 464811.78983738343,
+          "max_abs_column": 60.10662685493472,
+          "not_closed": true,
+          "signed": -39666.100610918744,
+          "unit": "kg per column"
+        },
+        "status": "FIRST_KDM6_CALL_ACCOUNTED_PARTIAL_BUDGET_OPEN",
+        "timestep": 1,
+        "unadjusted_water_residual": {
+          "bottom_outflow_kg": 689637512.5879184,
+          "interpretation": "water-state change + bottom outflow before recorded cleanup/phase-storage corrections",
+          "l1": 486309.6086139941,
+          "max_abs_column": 70.73548819682134,
+          "signed": -83149.94049671064,
+          "unit": "kg per column",
+          "water_change_kg": -689720662.5284154
+        },
+        "water_total": {
+          "change": {
+            "l1": 31616224570.38329,
+            "max_abs_cell": 5094943.128871511,
+            "max_abs_column": 2409185.949472369,
+            "signed": -689720662.5284154
+          },
+          "fields": [
+            "Q",
+            "QC",
+            "QI",
+            "QR",
+            "QS",
+            "QG"
+          ],
+          "sum_of_separate_field_l1": 2056804322000.931
+        }
+      },
+      "preflight": {
+        "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/preflight.json",
+        "sha256": "bd3666fce8ae8ed157b5c3d54adc13d3bd618bc713678f568dd3c3b7e9a41a7f"
+      },
+      "run_receipt": {
+        "candidate_build_unchanged": true,
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "executed_executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+        "final_completed_step": 1,
+        "frozen_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 242.81526,
+            "timestamp": "2026-08-16_13:00:20"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/receipt.json",
+        "returncode": 1,
+        "sha256": "658136176f33c25bb6a17b63675c1e6f2bce77e8f608714315e2c74795fd0f31",
+        "status": "INCOMPLETE",
+        "timestep_count": 1
+      },
+      "run_root": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run"
+    }
+  },
+  "build": {
+    "compiler_profile_path": null,
+    "compiler_profile_sha256": null,
+    "executable_path": "/var/tmp/pr87_followup_build_20261019_v44/wrf_pr87_overlay.exe",
+    "executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "path": "/var/tmp/pr87_followup_build_20261019_v44/pr87_native_overlay_build.json",
+    "sha256": "3fc3eb938e1c0ee687a0cf9badf6dd9bc6789948970c588e6d13007097f796af",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "complete_run_window": false,
+  "schema": "pr87_candidate_first_call_budget_v1",
+  "science_status": "OPEN; first-call partial budget only, not a closed whole-model budget",
+  "source_manifest": {
+    "candidate_source_sha256": "769cf33f7e6d59d46e2b31ec973a7d44cecce0b505fc18b0890b5b2a4ef2464f",
+    "identity": "V44: density-defined small graupel continuation and per-column paired rain flux consumption",
+    "path": "/var/tmp/pr87_followup_sources_20261019_v44/sources.json",
+    "rain_transform": {
+      "accepted_preimage": "V42 frozen KDM6 or V43 diagnostic plus small-positive graupel policy composition",
+      "changes": [
+        "copy each helper result immediately into existing per-column falk/falkn slots",
+        "remove later assignments that reused the final column's one-dimensional result",
+        "retain existing top and lower fall/falln accumulation statements"
+      ],
+      "input_sha256": "ed1f1ee12beb4395e08e7df831bd86163080e7d93fa60d6ac427a04c0862a148",
+      "output_sha256": "769cf33f7e6d59d46e2b31ec973a7d44cecce0b505fc18b0890b5b2a4ef2464f",
+      "preserved": [
+        "helper call order and substep gates",
+        "rate and packet formulas, theta selection, state mutations, and vertical sweep order"
+      ],
+      "schema": "pr87_rain_flux_cache_transform_v1"
+    },
+    "sha256": "9b5821098488203b3fa2d22545ea2e8188c1bd84a3ed0d85f4fb4c9e4f957618"
+  },
+  "status": "FIRST_KDM6_CALL_ACCOUNTED_FROM_INCOMPLETE_RUN_WINDOW"
+}

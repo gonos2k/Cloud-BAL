@@ -1,0 +1,251 @@
+{
+  "arms": {
+    "COUPLED": {
+      "archived_evidence": {
+        "pr85_joint_moment_stages.raw": {
+          "compressed_bytes": 441049351,
+          "compressed_sha256": "6e601eb3411197d8c00e0cc88fb8e2630947fbccdd6a19d7bf04c3f237f0462e",
+          "sha256": "f9c7b290df580efda91276277742fa5066542a42c1fd92340262ba0dea41b4fc"
+        },
+        "pr85_joint_source_failure.raw": {
+          "compressed_bytes": 52014,
+          "compressed_sha256": "b578e9fdad27415863cd05ebd808efb446be54fd3748c5581184300ddbd096fb",
+          "sha256": "a694d89f598ee84a1800230a2f4fcd046254f67e8923bbcd0d024615e5e0c0f1"
+        },
+        "rsl.error.0000": {
+          "compressed_bytes": 2413,
+          "compressed_sha256": "4369b2a6935fb6f34b67e335db00cec04a47f4f6e4f61934e7e781267467acae",
+          "sha256": "dc7718b3ba039eea394a8fbcc5309796e59612e08c5c9fa0df1fe52cc5fe1db4"
+        },
+        "rsl.out.0000": {
+          "compressed_bytes": 6530358,
+          "compressed_sha256": "c30ad64a7e7c3298202bf6d2117e3e84d274e3740c0dceb6d867b3e17be59a21",
+          "sha256": "465f737e0a474f1968c51d7a06ee60324b72bc1fb96fcd775054d0a2d95116e2"
+        }
+      },
+      "candidate_build_unchanged": true,
+      "candidate_namelist_sha256": "3700c1511a6a8ee7721c2dfb08e2dbed219de0a0afa38a6bb3a18d69bdd6906b",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "changed_original_inputs": [],
+      "changed_staged_inputs": [],
+      "completed_model_timestamps": [
+        {
+          "elapsed_seconds": 244.39279,
+          "timestamp": "2026-08-16_13:00:20"
+        }
+      ],
+      "completed_post_kdm6_timesteps": [
+        1
+      ],
+      "executed_executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+      "expected_executed_executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+      "expected_seconds": 60,
+      "fatal_lines": [
+        "-------------- FATAL CALLED ---------------",
+        "-------------- FATAL CALLED ---------------"
+      ],
+      "final_completed_step": 1,
+      "maximum_seen_timestep": 2,
+      "processing_errors": [],
+      "returncode": 1,
+      "status": "INCOMPLETE",
+      "strict_stage_audit": {
+        "audit_path": "docs/evidence/pr87_followup_20261019/review/v44_coupled_stage_audit.json",
+        "audit_sha256": "52d9bf127ca0445703559b504a5a0b255dfdf96d275e7c1994cb0df7b4d45fbb",
+        "completed_post_kdm6_timestep_count": 1,
+        "decoded_trace_sha256": "f9c7b290df580efda91276277742fa5066542a42c1fd92340262ba0dea41b4fc",
+        "stage_sequence_t1": [
+          "PRE_RK",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "PRE_KDM6",
+          "POST_KDM6"
+        ],
+        "status": "PASS",
+        "strict_endpoint_violations": {},
+        "timestep_ids": [
+          1,
+          2
+        ],
+        "trace_path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "trace_sha256": "6e601eb3411197d8c00e0cc88fb8e2630947fbccdd6a19d7bf04c3f237f0462e"
+      }
+    },
+    "OFF": {
+      "archived_evidence": {
+        "pr85_joint_moment_stages.raw": {
+          "compressed_bytes": 441044477,
+          "compressed_sha256": "e58d7186263f1d7e893350d45f5ff92d4a1faa8b9aa1a03ed3bc38f8af8caa31",
+          "sha256": "ffb00714a89bf5f02f1565251dedce082e47ec0a9c01a9600a0801f219428371"
+        },
+        "pr85_joint_source_failure.raw": {
+          "compressed_bytes": 52014,
+          "compressed_sha256": "b578e9fdad27415863cd05ebd808efb446be54fd3748c5581184300ddbd096fb",
+          "sha256": "a694d89f598ee84a1800230a2f4fcd046254f67e8923bbcd0d024615e5e0c0f1"
+        },
+        "rsl.error.0000": {
+          "compressed_bytes": 2413,
+          "compressed_sha256": "cfdfef39661d10adf16d2d4c3367a63ceda165e4a4c1dd75891d2dcf8c55d9d5",
+          "sha256": "8fa1e747397760329e8a157d2bb744e5081fc5296437611cac603ab07b1cf002"
+        },
+        "rsl.out.0000": {
+          "compressed_bytes": 6529997,
+          "compressed_sha256": "57c0304c5ab5eed960c0cf3f4e18d3f580c37558add7457856ebe977f19c317f",
+          "sha256": "af803edd7ddd3fca1aba4c3f2236a56fd21f45a5c698878492820f6a4d34e9e1"
+        }
+      },
+      "candidate_build_unchanged": true,
+      "candidate_namelist_sha256": "3700c1511a6a8ee7721c2dfb08e2dbed219de0a0afa38a6bb3a18d69bdd6906b",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "changed_original_inputs": [],
+      "changed_staged_inputs": [],
+      "completed_model_timestamps": [
+        {
+          "elapsed_seconds": 242.81526,
+          "timestamp": "2026-08-16_13:00:20"
+        }
+      ],
+      "completed_post_kdm6_timesteps": [
+        1
+      ],
+      "executed_executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+      "expected_executed_executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+      "expected_seconds": 60,
+      "fatal_lines": [
+        "-------------- FATAL CALLED ---------------",
+        "-------------- FATAL CALLED ---------------"
+      ],
+      "final_completed_step": 1,
+      "maximum_seen_timestep": 2,
+      "processing_errors": [],
+      "returncode": 1,
+      "status": "INCOMPLETE",
+      "strict_stage_audit": {
+        "audit_path": "docs/evidence/pr87_followup_20261019/review/v44_off_stage_audit.json",
+        "audit_sha256": "436076a58bd41ce3d9e1a19f679c2f7449fff828e878e7e744b3c0f6ba5514c3",
+        "completed_post_kdm6_timestep_count": 1,
+        "decoded_trace_sha256": "ffb00714a89bf5f02f1565251dedce082e47ec0a9c01a9600a0801f219428371",
+        "stage_sequence_t1": [
+          "PRE_RK",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "RK_STAGE_END",
+          "PRE_KDM6",
+          "POST_KDM6"
+        ],
+        "status": "PASS",
+        "strict_endpoint_violations": {},
+        "timestep_ids": [
+          1,
+          2
+        ],
+        "trace_path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "trace_sha256": "e58d7186263f1d7e893350d45f5ff92d4a1faa8b9aa1a03ed3bc38f8af8caa31"
+      }
+    }
+  },
+  "build_receipt_sha256": "3fc3eb938e1c0ee687a0cf9badf6dd9bc6789948970c588e6d13007097f796af",
+  "build_status": "PASS_OVERLAY_BUILD",
+  "executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+  "failure_cell_stage_history": {
+    "coordinate_basis": "native trace/log coordinates; target is within active trace bounds",
+    "coordinates_i_j_k": [
+      90,
+      14,
+      11
+    ],
+    "interpretation": "The paired T2 RK1 record is in the exact cloud source cone; trace ends before RK2/RK3/POST_KDM6. A later cloud-diffusion log row at this cell has tiny mass and zero number, but available evidence does not establish it as the cause of RK3 infeasibility. Cause remains open.",
+    "records": [
+      {
+        "NC": 0.0,
+        "QC": 0.0,
+        "arm": "OFF",
+        "stage": "POST_KDM6",
+        "timestep": 1
+      },
+      {
+        "NC": 0.0,
+        "QC": 0.0,
+        "arm": "OFF",
+        "stage": "PRE_RK",
+        "timestep": 2
+      },
+      {
+        "QNC_TEND": 1.640777791411807e-11,
+        "arm": "OFF",
+        "stage": "PRE_GROUPED_PHYSICS_TEND",
+        "timestep": 2
+      },
+      {
+        "NC": 1.1562830881100693e-15,
+        "QC": 4.843427929907778e-30,
+        "arm": "OFF",
+        "rkstep": 1,
+        "stage": "RK_STAGE_END",
+        "timestep": 2
+      },
+      {
+        "NC": 0.0,
+        "QC": 0.0,
+        "arm": "COUPLED",
+        "stage": "POST_KDM6",
+        "timestep": 1
+      },
+      {
+        "NC": 0.0,
+        "QC": 0.0,
+        "arm": "COUPLED",
+        "stage": "PRE_RK",
+        "timestep": 2
+      },
+      {
+        "QNC_TEND": 1.640777791411807e-11,
+        "arm": "COUPLED",
+        "stage": "PRE_GROUPED_PHYSICS_TEND",
+        "timestep": 2
+      },
+      {
+        "NC": 1.1562830881100693e-15,
+        "QC": 4.843427929907778e-30,
+        "arm": "COUPLED",
+        "rkstep": 1,
+        "stage": "RK_STAGE_END",
+        "timestep": 2
+      }
+    ]
+  },
+  "fatal_event": {
+    "cell_i_j_k": [
+      146,
+      216,
+      21
+    ],
+    "exact_full_record_count_per_arm": 1,
+    "exact_real_input_cone_certificate": "PRE_RK receiver/source are zero and the only nonzero six-face donor is an exact QG/BG=900 binary32 pair; the common linear air map therefore has exact-real endpoint ratio 900 independent of wind. Runtime REAL64 rounding sign remains unresolved.",
+    "message": "PR87 full joint moment candidate infeasible; see source/full diagnostics",
+    "pair_index": 4,
+    "record_kind": "FULL",
+    "rkstep": 2,
+    "source_failure_count_scope": "separate SOURCE-only diagnostic; it is not the FULL failure count",
+    "source_failure_record_count": 625,
+    "timestep": 2
+  },
+  "full_clean_build": false,
+  "full_failure_context_artifact": {
+    "path": "docs/evidence/pr87_followup_20261019/review/v44_full_failure_context.json",
+    "sha256": "ee3274fdd85820437c82f4a9ba5363d60ee6f856c619cd3bfe2d1e0ec7f41906"
+  },
+  "limitations": [
+    "Both runs ended at the second-step RK3 joint-moment feasibility failure; 60-second completion was not achieved.",
+    "T1 strict endpoint validation does not establish later-step or whole-window closure.",
+    "No full-air theta=1 claim is made from the incomplete run.",
+    "The PR87 rain-cache and graupel policy should not be assigned causal responsibility from these records alone.",
+    "The FULL candidate list-directed record does not preserve enough REAL64 digits to resolve whether the continuous ratio passed the strict 900 upper bound before REAL32 storage; the face donor snapshot contains only an exact-boundary QG/BG pair and no out-of-range pair."
+  ],
+  "schema": "pr87_v44_incomplete_runtime_review_v1",
+  "scope": "Matched OFF/COUPLED selected-object native overlay run audit; no full clean build or scientific closure claim.",
+  "source_sha256": "769cf33f7e6d59d46e2b31ec973a7d44cecce0b505fc18b0890b5b2a4ef2464f"
+}

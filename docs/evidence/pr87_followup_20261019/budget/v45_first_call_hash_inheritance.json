@@ -1,0 +1,536 @@
+{
+  "arms": {
+    "COUPLED": {
+      "payloads_byte_identical": {
+        "kdm6_first_call_post.raw.gz": true,
+        "kdm6_first_call_pre.raw.gz": true,
+        "pr67_kdm6_process.raw.gz": true,
+        "pr87_rain_sedimentation_budget.raw.gz": true
+      },
+      "v44_first_call_budget_reused": {
+        "bottom_outflow": {
+          "rainncv_accumulator_increment_kg": 689506724.2039762,
+          "records": 840,
+          "signed_l1_max_column": {
+            "l1": 689506723.7259775,
+            "max_abs_cell": 2372908.276721911,
+            "max_abs_column": 2372908.276721911,
+            "signed": 689506723.7259775
+          },
+          "species_outflow_kg": {
+            "graupel": 15376945.648036608,
+            "ice": 2.4011520084660107e-17,
+            "rain": 674129778.077941,
+            "snow": 0.0
+          },
+          "stage2_rows": 280,
+          "total_outflow_kg": 689506723.7259775,
+          "unit": "kg"
+        },
+        "column_maps": {
+          "array_shapes": {
+            "BG_volume_delta_m3_per_column": [
+              280,
+              232
+            ],
+            "cell_area_m2": [
+              280,
+              232
+            ],
+            "helper_minus_public_rain_kg_per_column": [
+              280,
+              232
+            ],
+            "i_index": [
+              280,
+              232
+            ],
+            "j_index": [
+              280,
+              232
+            ],
+            "number_category_sum_delta_count_per_column_not_conserved": [
+              280,
+              232
+            ],
+            "public_bottom_outflow_kg_per_column": [
+              280,
+              232
+            ],
+            "total_water_delta_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_after_recorded_cleanup_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_before_cleanup_kg_per_column": [
+              280,
+              232
+            ]
+          },
+          "arrays": [
+            "total_water_delta_kg_per_column",
+            "public_bottom_outflow_kg_per_column",
+            "water_residual_before_cleanup_kg_per_column",
+            "water_residual_after_recorded_cleanup_kg_per_column",
+            "helper_minus_public_rain_kg_per_column",
+            "number_category_sum_delta_count_per_column_not_conserved",
+            "BG_volume_delta_m3_per_column",
+            "cell_area_m2",
+            "i_index",
+            "j_index"
+          ],
+          "bytes": 2439267,
+          "format": "compressed NumPy NPZ; 2D maps only; no interpolation",
+          "path": "/var/tmp/pr87_followup_budget_20261019_v44/COUPLED_firstcall_columns.npz",
+          "sha256": "d60ced8e872aa12766d8f60d1106c3337c0e983328b7dd7b9548092a90fb50be",
+          "shape_j_i": [
+            280,
+            232
+          ],
+          "units": {
+            "BG_volume_delta_m3_per_column": "m3",
+            "cell_area_m2": "m2",
+            "helper_minus_public_rain_kg_per_column": "kg",
+            "i_index": "1-based active-domain WRF i index",
+            "j_index": "1-based active-domain WRF j index",
+            "number_category_sum_delta_count_per_column_not_conserved": "count",
+            "public_bottom_outflow_kg_per_column": "kg",
+            "total_water_delta_kg_per_column": "kg",
+            "water_residual_after_recorded_cleanup_kg_per_column": "kg",
+            "water_residual_before_cleanup_kg_per_column": "kg"
+          }
+        },
+        "rain_ground_comparison": {
+          "call_marker_rows": 280,
+          "captured_public_fall_phase1_rain_kg": 674129778.077941,
+          "captured_public_rain_map": {
+            "l1": 674129778.077941,
+            "max_abs_cell": 1984665.7318754608,
+            "max_abs_column": 1984665.7318754608,
+            "signed": 674129778.077941
+          },
+          "comparison": "helper ground-approved rain Q versus captured public fall phase 1 mapped through rainncv",
+          "helper_ground_approved_map": {
+            "l1": 674129778.4637431,
+            "max_abs_cell": 1984665.7600365304,
+            "max_abs_column": 1984665.7600365304,
+            "signed": 674129778.4637431
+          },
+          "helper_ground_approved_rain_Q_kg": 674129778.4637431,
+          "helper_internal_column_residual_mapped_kg": 12.55949349410649,
+          "helper_minus_public_rain_difference_kg": {
+            "l1": 18.838389102106838,
+            "max_abs_cell": 0.1416096012108028,
+            "max_abs_column": 0.1416096012108028,
+            "signed": 0.385802145901831
+          },
+          "interpretation": "The helper ledger and public output accumulator disagree; ground-approved process Q is not substituted for emitted precipitation.",
+          "selected_sedimentation_rows": 78926,
+          "timestep": 1,
+          "unit_basis": "ground_approved_q is kg m-2 per call times actual map area; public fall phase 1 uses source fall*DELZ/DENR*DTCLD*1000 mm times water density/1000 and map area"
+        },
+        "residual_after_recorded_numerical_terms": {
+          "interpretation": "water-state change + bottom outflow - recorded cutoff water delta - recorded ice/snow storage delta",
+          "l1": 464864.8188649245,
+          "max_abs_column": 60.10662685493472,
+          "not_closed": true,
+          "signed": -39489.9786945644,
+          "unit": "kg per column"
+        },
+        "status": "FIRST_KDM6_CALL_ACCOUNTED_PARTIAL_BUDGET_OPEN",
+        "unadjusted_water_residual": {
+          "bottom_outflow_kg": 689506723.7259775,
+          "interpretation": "water-state change + bottom outflow before recorded cleanup/phase-storage corrections",
+          "l1": 486342.03537570254,
+          "max_abs_column": 70.73548819682134,
+          "signed": -82963.29845336518,
+          "unit": "kg per column",
+          "water_change_kg": -689589687.0244312
+        },
+        "water_total_change": {
+          "l1": 31613467627.082592,
+          "max_abs_cell": 5094943.128871511,
+          "max_abs_column": 2372898.5163541497,
+          "signed": -689589687.0244312
+        }
+      },
+      "versions": {
+        "v44": {
+          "payloads": {
+            "kdm6_first_call_post.raw.gz": {
+              "compressed_bytes": 67316625,
+              "compressed_sha256": "6e5876f724b5df4b22ac381d9ba1b3e02ebff2c82aedfad98b4db4b8de419b07",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/kdm6_first_call_post.raw.gz"
+            },
+            "kdm6_first_call_pre.raw.gz": {
+              "compressed_bytes": 82031172,
+              "compressed_sha256": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/kdm6_first_call_pre.raw.gz"
+            },
+            "pr67_kdm6_process.raw.gz": {
+              "compressed_bytes": 34662665,
+              "compressed_sha256": "d8b45e323ca72ead866643f3a5d8591adbc6c9ba728cf4726274862dd431f918",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976",
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/pr67_kdm6_process.raw.gz"
+            },
+            "pr87_rain_sedimentation_budget.raw.gz": {
+              "compressed_bytes": 4567764,
+              "compressed_sha256": "c91b19bf87f8ac364a12246000056e7ad9a67991b583417b7af6e6242731ac24",
+              "expanded_bytes": 26399084,
+              "expanded_sha256": "cf221b5f53f4be6df39b6daef650857837f67c24cb3dd64d33d84aa806deaf77",
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/pr87_rain_sedimentation_budget.raw.gz"
+            }
+          },
+          "receipt": {
+            "candidate_build_unchanged": true,
+            "executed_executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+            "final_completed_step": 1,
+            "path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/receipt.json",
+            "returncode": 1,
+            "sha256": "dca269a63d5db125be0e911b95ca8b4783d6c9e3f0298202ef07c894ef4d1b55",
+            "status": "INCOMPLETE",
+            "timestep_count": 1
+          }
+        },
+        "v45": {
+          "payloads": {
+            "kdm6_first_call_post.raw.gz": {
+              "compressed_bytes": 67316625,
+              "compressed_sha256": "6e5876f724b5df4b22ac381d9ba1b3e02ebff2c82aedfad98b4db4b8de419b07",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v45_20261019/run/kdm6_first_call_post.raw.gz"
+            },
+            "kdm6_first_call_pre.raw.gz": {
+              "compressed_bytes": 82031172,
+              "compressed_sha256": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v45_20261019/run/kdm6_first_call_pre.raw.gz"
+            },
+            "pr67_kdm6_process.raw.gz": {
+              "compressed_bytes": 34662665,
+              "compressed_sha256": "d8b45e323ca72ead866643f3a5d8591adbc6c9ba728cf4726274862dd431f918",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976",
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v45_20261019/run/pr67_kdm6_process.raw.gz"
+            },
+            "pr87_rain_sedimentation_budget.raw.gz": {
+              "compressed_bytes": 4567764,
+              "compressed_sha256": "c91b19bf87f8ac364a12246000056e7ad9a67991b583417b7af6e6242731ac24",
+              "expanded_bytes": 26399084,
+              "expanded_sha256": "cf221b5f53f4be6df39b6daef650857837f67c24cb3dd64d33d84aa806deaf77",
+              "path": "/var/tmp/pr87_followup_COUPLED_60s_v45_20261019/run/pr87_rain_sedimentation_budget.raw.gz"
+            }
+          },
+          "receipt": {
+            "candidate_build_unchanged": true,
+            "executed_executable_sha256": "fd7b5fe3c59e1e66ce807b0d0c225d9ba6f59e53793f89a5179b5a4dd8c9a180",
+            "final_completed_step": 1,
+            "path": "/var/tmp/pr87_followup_COUPLED_60s_v45_20261019/receipt.json",
+            "returncode": 1,
+            "sha256": "618bbb9f01f8a5cf34d7244f44c602c15ab5993f7474bf75755e8ef8c73880de",
+            "status": "INCOMPLETE",
+            "timestep_count": 1
+          }
+        }
+      }
+    },
+    "OFF": {
+      "payloads_byte_identical": {
+        "kdm6_first_call_post.raw.gz": true,
+        "kdm6_first_call_pre.raw.gz": true,
+        "pr67_kdm6_process.raw.gz": true,
+        "pr87_rain_sedimentation_budget.raw.gz": true
+      },
+      "v44_first_call_budget_reused": {
+        "bottom_outflow": {
+          "rainncv_accumulator_increment_kg": 689637512.5403583,
+          "records": 840,
+          "signed_l1_max_column": {
+            "l1": 689637512.5879184,
+            "max_abs_cell": 2409160.0234114337,
+            "max_abs_column": 2409160.0234114337,
+            "signed": 689637512.5879184
+          },
+          "species_outflow_kg": {
+            "graupel": 15518734.587922338,
+            "ice": 2.4011519857421796e-17,
+            "rain": 674118777.9999961,
+            "snow": 0.0
+          },
+          "stage2_rows": 280,
+          "total_outflow_kg": 689637512.5879184,
+          "unit": "kg"
+        },
+        "column_maps": {
+          "array_shapes": {
+            "BG_volume_delta_m3_per_column": [
+              280,
+              232
+            ],
+            "cell_area_m2": [
+              280,
+              232
+            ],
+            "helper_minus_public_rain_kg_per_column": [
+              280,
+              232
+            ],
+            "i_index": [
+              280,
+              232
+            ],
+            "j_index": [
+              280,
+              232
+            ],
+            "number_category_sum_delta_count_per_column_not_conserved": [
+              280,
+              232
+            ],
+            "public_bottom_outflow_kg_per_column": [
+              280,
+              232
+            ],
+            "total_water_delta_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_after_recorded_cleanup_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_before_cleanup_kg_per_column": [
+              280,
+              232
+            ]
+          },
+          "arrays": [
+            "total_water_delta_kg_per_column",
+            "public_bottom_outflow_kg_per_column",
+            "water_residual_before_cleanup_kg_per_column",
+            "water_residual_after_recorded_cleanup_kg_per_column",
+            "helper_minus_public_rain_kg_per_column",
+            "number_category_sum_delta_count_per_column_not_conserved",
+            "BG_volume_delta_m3_per_column",
+            "cell_area_m2",
+            "i_index",
+            "j_index"
+          ],
+          "bytes": 2439293,
+          "format": "compressed NumPy NPZ; 2D maps only; no interpolation",
+          "path": "/var/tmp/pr87_followup_budget_20261019_v44/OFF_firstcall_columns.npz",
+          "sha256": "90ddc2cac26540ba3ef3223ed01b2c49ae3e3f9f7d5f9a0fc7d9b3d054e50c95",
+          "shape_j_i": [
+            280,
+            232
+          ],
+          "units": {
+            "BG_volume_delta_m3_per_column": "m3",
+            "cell_area_m2": "m2",
+            "helper_minus_public_rain_kg_per_column": "kg",
+            "i_index": "1-based active-domain WRF i index",
+            "j_index": "1-based active-domain WRF j index",
+            "number_category_sum_delta_count_per_column_not_conserved": "count",
+            "public_bottom_outflow_kg_per_column": "kg",
+            "total_water_delta_kg_per_column": "kg",
+            "water_residual_after_recorded_cleanup_kg_per_column": "kg",
+            "water_residual_before_cleanup_kg_per_column": "kg"
+          }
+        },
+        "rain_ground_comparison": {
+          "call_marker_rows": 280,
+          "captured_public_fall_phase1_rain_kg": 674118777.9999961,
+          "captured_public_rain_map": {
+            "l1": 674118777.9999961,
+            "max_abs_cell": 1984665.7318754608,
+            "max_abs_column": 1984665.7318754608,
+            "signed": 674118777.9999961
+          },
+          "comparison": "helper ground-approved rain Q versus captured public fall phase 1 mapped through rainncv",
+          "helper_ground_approved_map": {
+            "l1": 674118778.1787394,
+            "max_abs_cell": 1984665.7600365304,
+            "max_abs_column": 1984665.7600365304,
+            "signed": 674118778.1787394
+          },
+          "helper_ground_approved_rain_Q_kg": 674118778.1787394,
+          "helper_internal_column_residual_mapped_kg": 1.5894734665931711,
+          "helper_minus_public_rain_difference_kg": {
+            "l1": 18.728501976303363,
+            "max_abs_cell": 0.1416096012108028,
+            "max_abs_column": 0.1416096012108028,
+            "signed": 0.1787433023172811
+          },
+          "interpretation": "The helper ledger and public output accumulator disagree; ground-approved process Q is not substituted for emitted precipitation.",
+          "selected_sedimentation_rows": 78926,
+          "timestep": 1,
+          "unit_basis": "ground_approved_q is kg m-2 per call times actual map area; public fall phase 1 uses source fall*DELZ/DENR*DTCLD*1000 mm times water density/1000 and map area"
+        },
+        "residual_after_recorded_numerical_terms": {
+          "interpretation": "water-state change + bottom outflow - recorded cutoff water delta - recorded ice/snow storage delta",
+          "l1": 464811.78983738343,
+          "max_abs_column": 60.10662685493472,
+          "not_closed": true,
+          "signed": -39666.100610918744,
+          "unit": "kg per column"
+        },
+        "status": "FIRST_KDM6_CALL_ACCOUNTED_PARTIAL_BUDGET_OPEN",
+        "unadjusted_water_residual": {
+          "bottom_outflow_kg": 689637512.5879184,
+          "interpretation": "water-state change + bottom outflow before recorded cleanup/phase-storage corrections",
+          "l1": 486309.6086139941,
+          "max_abs_column": 70.73548819682134,
+          "signed": -83149.94049671064,
+          "unit": "kg per column",
+          "water_change_kg": -689720662.5284154
+        },
+        "water_total_change": {
+          "l1": 31616224570.38329,
+          "max_abs_cell": 5094943.128871511,
+          "max_abs_column": 2409185.949472369,
+          "signed": -689720662.5284154
+        }
+      },
+      "versions": {
+        "v44": {
+          "payloads": {
+            "kdm6_first_call_post.raw.gz": {
+              "compressed_bytes": 67311610,
+              "compressed_sha256": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+              "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/kdm6_first_call_post.raw.gz"
+            },
+            "kdm6_first_call_pre.raw.gz": {
+              "compressed_bytes": 82032193,
+              "compressed_sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+              "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/kdm6_first_call_pre.raw.gz"
+            },
+            "pr67_kdm6_process.raw.gz": {
+              "compressed_bytes": 34662190,
+              "compressed_sha256": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8",
+              "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/pr67_kdm6_process.raw.gz"
+            },
+            "pr87_rain_sedimentation_budget.raw.gz": {
+              "compressed_bytes": 4567792,
+              "compressed_sha256": "e4b7637ca2071d71f5ab14dea31349885617c228cd60245d70fbe39e22057ba5",
+              "expanded_bytes": 26399084,
+              "expanded_sha256": "5a4cb7363ec54b6e424b448892f82270f0b3e7644d9d91e6f7f750afe048420e",
+              "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/pr87_rain_sedimentation_budget.raw.gz"
+            }
+          },
+          "receipt": {
+            "candidate_build_unchanged": true,
+            "executed_executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+            "final_completed_step": 1,
+            "path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/receipt.json",
+            "returncode": 1,
+            "sha256": "658136176f33c25bb6a17b63675c1e6f2bce77e8f608714315e2c74795fd0f31",
+            "status": "INCOMPLETE",
+            "timestep_count": 1
+          }
+        },
+        "v45": {
+          "payloads": {
+            "kdm6_first_call_post.raw.gz": {
+              "compressed_bytes": 67311610,
+              "compressed_sha256": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+              "path": "/var/tmp/pr87_followup_OFF_60s_v45_20261019/run/kdm6_first_call_post.raw.gz"
+            },
+            "kdm6_first_call_pre.raw.gz": {
+              "compressed_bytes": 82032193,
+              "compressed_sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+              "path": "/var/tmp/pr87_followup_OFF_60s_v45_20261019/run/kdm6_first_call_pre.raw.gz"
+            },
+            "pr67_kdm6_process.raw.gz": {
+              "compressed_bytes": 34662190,
+              "compressed_sha256": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8",
+              "path": "/var/tmp/pr87_followup_OFF_60s_v45_20261019/run/pr67_kdm6_process.raw.gz"
+            },
+            "pr87_rain_sedimentation_budget.raw.gz": {
+              "compressed_bytes": 4567792,
+              "compressed_sha256": "e4b7637ca2071d71f5ab14dea31349885617c228cd60245d70fbe39e22057ba5",
+              "expanded_bytes": 26399084,
+              "expanded_sha256": "5a4cb7363ec54b6e424b448892f82270f0b3e7644d9d91e6f7f750afe048420e",
+              "path": "/var/tmp/pr87_followup_OFF_60s_v45_20261019/run/pr87_rain_sedimentation_budget.raw.gz"
+            }
+          },
+          "receipt": {
+            "candidate_build_unchanged": true,
+            "executed_executable_sha256": "fd7b5fe3c59e1e66ce807b0d0c225d9ba6f59e53793f89a5179b5a4dd8c9a180",
+            "final_completed_step": 1,
+            "path": "/var/tmp/pr87_followup_OFF_60s_v45_20261019/receipt.json",
+            "returncode": 1,
+            "sha256": "ca2e8c8de3727866ebf2a7874b4fd2d4bb0a97e3c1cba8f42e5431eb5b2b3a1a",
+            "status": "INCOMPLETE",
+            "timestep_count": 1
+          }
+        }
+      }
+    }
+  },
+  "complete_run_windows": false,
+  "inheritance_scope": "first-call PRE/POST state, PR67 process/public rain payload, and PR87 rain helper ledger only",
+  "interpretation": "V45 uses the V44 first-call budget because receipt-bound compressed and expanded payload hashes match byte-for-byte.",
+  "limitations": [
+    "Both V45 run windows are INCOMPLETE at timestep 1; this does not establish a completed 60-second run.",
+    "No cause is assigned to the later run failure.",
+    "Exact first-call payload identity does not imply later-stage identity or scientific acceptance."
+  ],
+  "schema": "pr87_v45_first_call_hash_inheritance_v1",
+  "source_build": {
+    "v44": {
+      "build": {
+        "executable_sha256": "cc5116844f01fac937baa9147f178e6079622c8b26cc94378df932473474dfe9",
+        "path": "/var/tmp/pr87_followup_build_20261019_v44/pr87_native_overlay_build.json",
+        "sha256": "3fc3eb938e1c0ee687a0cf9badf6dd9bc6789948970c588e6d13007097f796af",
+        "status": "PASS_OVERLAY_BUILD"
+      },
+      "manifest": {
+        "candidate_source_sha256": "769cf33f7e6d59d46e2b31ec973a7d44cecce0b505fc18b0890b5b2a4ef2464f",
+        "identity": "V44: density-defined small graupel continuation and per-column paired rain flux consumption",
+        "path": "/var/tmp/pr87_followup_sources_20261019_v44/sources.json",
+        "sha256": "9b5821098488203b3fa2d22545ea2e8188c1bd84a3ed0d85f4fb4c9e4f957618"
+      }
+    },
+    "v45": {
+      "build": {
+        "executable_sha256": "fd7b5fe3c59e1e66ce807b0d0c225d9ba6f59e53793f89a5179b5a4dd8c9a180",
+        "path": "/var/tmp/pr87_followup_build_20261019_v45/pr87_native_overlay_build.json",
+        "sha256": "ec39efe4c6274f96b56ea5c76c6a43ab1813619abd944bd7bbdb837f78c18155",
+        "status": "PASS_OVERLAY_BUILD"
+      },
+      "manifest": {
+        "candidate_source_sha256": "769cf33f7e6d59d46e2b31ec973a7d44cecce0b505fc18b0890b5b2a4ef2464f",
+        "identity": "V45: V44 plus source-certified common-air graupel mixture storage",
+        "path": "/var/tmp/pr87_followup_sources_20261019_v45/sources.json",
+        "sha256": "7d09d601f3a187f843a93980d6e4d989127f504a1e8379d76e6050cd8243857a"
+      }
+    }
+  },
+  "status": "V44_FIRST_CALL_BUDGET_INHERITED_BY_EXACT_CAPTURE_HASH",
+  "v44_budget_reference": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_followup_20261019/budget/v44_first_call_budget.json",
+    "sha256": "a6e0d038bbe5a549c6ce0e5290807b854e4d43233feb65f04ddf09574d6be17d"
+  }
+}

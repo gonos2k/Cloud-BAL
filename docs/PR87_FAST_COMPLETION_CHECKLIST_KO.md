@@ -1,3 +1,6 @@
+<!-- Latest follow-up preserves V42 evidence. -->
+최신 상태: [2026-10-19 후속 작업](PR87_SMALL_GRAUPEL_20261019.md). 아래 V42 기록은 보존합니다.
+
 # PR87 두 단계 공동 상태 점검
 
 현재 V42 OFF·COUPLED 40초와 완료 상태 감사가 통과했습니다. 동일 실행파일의 60초 대조는 세 번째 단계 ProgB transient 상태에서 중단됐습니다.

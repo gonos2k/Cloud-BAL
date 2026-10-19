@@ -1,0 +1,665 @@
+{
+  "event": {
+    "i": 146,
+    "interpretation": "Pair index 4 uses the strict graupel mass-ratio path in the frozen transport code.",
+    "j": 216,
+    "k": 21,
+    "kind": "FULL",
+    "pair_index": 4,
+    "rkstep": 2,
+    "timestep": 2
+  },
+  "full_failure_record": {
+    "COUPLED": {
+      "air_n": "3.368950206249689E-005",
+      "air_q": "3.032055185624720E-002",
+      "base_n": "0.0000000E+00",
+      "base_q": "0.0000000E+00",
+      "candidate_n_text": "3.840892010189874E-009",
+      "candidate_q_text": "3.456802809170887E-006",
+      "dry_density": "0.5157570",
+      "dt": "10.00000",
+      "i": "146",
+      "j": "216",
+      "k": "21",
+      "label": "FULL",
+      "newcarrier": "87712.70",
+      "oldcarrier": "87740.05",
+      "pair_index": "4",
+      "rkstep": "2",
+      "source_n": "0.000000000000000E+000",
+      "source_q": "0.000000000000000E+000",
+      "stored_n": "-1.000000",
+      "stored_q": "-1.000000",
+      "timestep": "2"
+    },
+    "OFF": {
+      "air_n": "3.368950206249689E-005",
+      "air_q": "3.032055185624720E-002",
+      "base_n": "0.0000000E+00",
+      "base_q": "0.0000000E+00",
+      "candidate_n_text": "3.840892010189874E-009",
+      "candidate_q_text": "3.456802809170887E-006",
+      "dry_density": "0.5157570",
+      "dt": "10.00000",
+      "i": "146",
+      "j": "216",
+      "k": "21",
+      "label": "FULL",
+      "newcarrier": "87712.70",
+      "oldcarrier": "87740.05",
+      "pair_index": "4",
+      "rkstep": "2",
+      "source_n": "0.000000000000000E+000",
+      "source_q": "0.000000000000000E+000",
+      "stored_n": "-1.000000",
+      "stored_q": "-1.000000",
+      "timestep": "2"
+    }
+  },
+  "input_files": {
+    "COUPLED": {
+      "source_failure_path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/pr85_joint_source_failure.raw.gz",
+      "source_failure_sha256": "b578e9fdad27415863cd05ebd808efb446be54fd3748c5581184300ddbd096fb",
+      "trace_path": "/var/tmp/pr87_followup_COUPLED_60s_v44_20261019/run/pr85_joint_moment_stages.raw.gz",
+      "trace_sha256": "6e601eb3411197d8c00e0cc88fb8e2630947fbccdd6a19d7bf04c3f237f0462e"
+    },
+    "OFF": {
+      "source_failure_path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/pr85_joint_source_failure.raw.gz",
+      "source_failure_sha256": "b578e9fdad27415863cd05ebd808efb446be54fd3748c5581184300ddbd096fb",
+      "trace_path": "/var/tmp/pr87_followup_OFF_60s_v44_20261019/run/pr85_joint_moment_stages.raw.gz",
+      "trace_sha256": "e58d7186263f1d7e893350d45f5ff92d4a1faa8b9aa1a03ed3bc38f8af8caa31"
+    }
+  },
+  "limits": [
+    "Stage snapshots contain only PRE_RK and RK_STAGE_END rkstep=1 for timestep 2; the failure occurs at RK2, so no RK2 state or later endpoint exists.",
+    "FULL record values use list-directed output and do not preserve full REAL64 bit patterns. Exact comparison of the continuous REAL64 candidate with 900 requires source-side bit-level capture or an exact replay from unrounded operands."
+  ],
+  "pre_rk_and_rk1_face_neighborhoods": {
+    "COUPLED": {
+      "PRE_RK": {
+        "BG": {
+          "145,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,215,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,20": {
+            "hex32": "0x34A16400",
+            "real32": 3.006134647876024e-07
+          },
+          "146,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,22": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,217,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "147,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          }
+        },
+        "DEN": {
+          "145,216,21": {
+            "hex32": "0x3F042569",
+            "real32": 0.5161958336830139
+          },
+          "146,215,21": {
+            "hex32": "0x3F04175B",
+            "real32": 0.5159813761711121
+          },
+          "146,216,20": {
+            "hex32": "0x3F0EACF1",
+            "real32": 0.5573263764381409
+          },
+          "146,216,21": {
+            "hex32": "0x3F041B71",
+            "real32": 0.5160437226295471
+          },
+          "146,216,22": {
+            "hex32": "0x3EF42D51",
+            "real32": 0.47690823674201965
+          },
+          "146,217,21": {
+            "hex32": "0x3F0453B0",
+            "real32": 0.516901969909668
+          },
+          "147,216,21": {
+            "hex32": "0x3F046E24",
+            "real32": 0.5173056125640869
+          }
+        },
+        "QG": {
+          "145,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,215,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,20": {
+            "hex32": "0x398DD8E4",
+            "real32": 0.0002705521183088422
+          },
+          "146,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,22": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,217,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "147,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          }
+        },
+        "exact_binary32_pair_ratio_checks": {
+          "145,216,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,215,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,216,20": {
+            "difference_from_900_exact_fraction": "0",
+            "qg_over_bg_exact_fraction": "900",
+            "qg_over_bg_float": 900.0,
+            "within_100_900": true
+          },
+          "146,216,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,216,22": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,217,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "147,216,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          }
+        },
+        "rkstep": 0,
+        "stage": "PRE_RK",
+        "timestep": 2
+      },
+      "RK_STAGE_END_RK1": {
+        "BG": {
+          "145,216,21": {
+            "hex32": "0x311591B6",
+            "real32": 2.1765180768795744e-09
+          },
+          "146,215,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,20": {
+            "hex32": "0x34AE5BC1",
+            "real32": 3.247678534989973e-07
+          },
+          "146,216,21": {
+            "hex32": "0x3133D3C4",
+            "real32": 2.6168303079998623e-09
+          },
+          "146,216,22": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,217,21": {
+            "hex32": "0x319BACEB",
+            "real32": 4.530752217846157e-09
+          },
+          "147,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          }
+        },
+        "DEN": {
+          "145,216,21": {
+            "hex32": "0x3EF9F3C6",
+            "real32": 0.4881879687309265
+          },
+          "146,215,21": {
+            "hex32": "0x3EF98411",
+            "real32": 0.4873357117176056
+          },
+          "146,216,20": {
+            "hex32": "0x3F071492",
+            "real32": 0.5276576280593872
+          },
+          "146,216,21": {
+            "hex32": "0x3EF99AB0",
+            "real32": 0.48750829696655273
+          },
+          "146,216,22": {
+            "hex32": "0x3EE7461A",
+            "real32": 0.4517067074775696
+          },
+          "146,217,21": {
+            "hex32": "0x3EFA16FF",
+            "real32": 0.48845669627189636
+          },
+          "147,216,21": {
+            "hex32": "0x3EFA4570",
+            "real32": 0.48881101608276367
+          }
+        },
+        "QG": {
+          "145,216,21": {
+            "hex32": "0x36037510",
+            "real32": 1.9588660506997257e-06
+          },
+          "146,215,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,20": {
+            "hex32": "0x399769C2",
+            "real32": 0.0002887976006604731
+          },
+          "146,216,21": {
+            "hex32": "0x361E0D1F",
+            "real32": 2.3551472168037435e-06
+          },
+          "146,216,22": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,217,21": {
+            "hex32": "0x3688D2FA",
+            "real32": 4.0776767491479404e-06
+          },
+          "147,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          }
+        },
+        "exact_binary32_pair_ratio_checks": {
+          "145,216,21": {
+            "difference_from_900_exact_fraction": "-492/4901083",
+            "qg_over_bg_exact_fraction": "4410974208/4901083",
+            "qg_over_bg_float": 899.9998996140241,
+            "within_100_900": true
+          },
+          "146,215,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,216,20": {
+            "difference_from_900_exact_fraction": "-122915460/11426753",
+            "qg_over_bg_exact_fraction": "10161162240/11426753",
+            "qg_over_bg_float": 889.2431857063857,
+            "within_100_900": true
+          },
+          "146,216,21": {
+            "difference_from_900_exact_fraction": "-68/2946289",
+            "qg_over_bg_exact_fraction": "2651660032/2946289",
+            "qg_over_bg_float": 899.9999769201188,
+            "within_100_900": true
+          },
+          "146,216,22": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,217,21": {
+            "difference_from_900_exact_fraction": "-556/10202347",
+            "qg_over_bg_exact_fraction": "9182111744/10202347",
+            "qg_over_bg_float": 899.9999455027358,
+            "within_100_900": true
+          },
+          "147,216,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          }
+        },
+        "rkstep": 1,
+        "stage": "RK_STAGE_END",
+        "timestep": 2
+      }
+    },
+    "OFF": {
+      "PRE_RK": {
+        "BG": {
+          "145,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,215,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,20": {
+            "hex32": "0x34A16400",
+            "real32": 3.006134647876024e-07
+          },
+          "146,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,22": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,217,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "147,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          }
+        },
+        "DEN": {
+          "145,216,21": {
+            "hex32": "0x3F042569",
+            "real32": 0.5161958336830139
+          },
+          "146,215,21": {
+            "hex32": "0x3F04175B",
+            "real32": 0.5159813761711121
+          },
+          "146,216,20": {
+            "hex32": "0x3F0EACF1",
+            "real32": 0.5573263764381409
+          },
+          "146,216,21": {
+            "hex32": "0x3F041B71",
+            "real32": 0.5160437226295471
+          },
+          "146,216,22": {
+            "hex32": "0x3EF42D51",
+            "real32": 0.47690823674201965
+          },
+          "146,217,21": {
+            "hex32": "0x3F0453B0",
+            "real32": 0.516901969909668
+          },
+          "147,216,21": {
+            "hex32": "0x3F046E24",
+            "real32": 0.5173056125640869
+          }
+        },
+        "QG": {
+          "145,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,215,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,20": {
+            "hex32": "0x398DD8E4",
+            "real32": 0.0002705521183088422
+          },
+          "146,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,22": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,217,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "147,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          }
+        },
+        "exact_binary32_pair_ratio_checks": {
+          "145,216,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,215,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,216,20": {
+            "difference_from_900_exact_fraction": "0",
+            "qg_over_bg_exact_fraction": "900",
+            "qg_over_bg_float": 900.0,
+            "within_100_900": true
+          },
+          "146,216,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,216,22": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,217,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "147,216,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          }
+        },
+        "rkstep": 0,
+        "stage": "PRE_RK",
+        "timestep": 2
+      },
+      "RK_STAGE_END_RK1": {
+        "BG": {
+          "145,216,21": {
+            "hex32": "0x311591B6",
+            "real32": 2.1765180768795744e-09
+          },
+          "146,215,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,20": {
+            "hex32": "0x34AE5BC1",
+            "real32": 3.247678534989973e-07
+          },
+          "146,216,21": {
+            "hex32": "0x3133D3C4",
+            "real32": 2.6168303079998623e-09
+          },
+          "146,216,22": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,217,21": {
+            "hex32": "0x319BACEB",
+            "real32": 4.530752217846157e-09
+          },
+          "147,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          }
+        },
+        "DEN": {
+          "145,216,21": {
+            "hex32": "0x3EF9F3C6",
+            "real32": 0.4881879687309265
+          },
+          "146,215,21": {
+            "hex32": "0x3EF98411",
+            "real32": 0.4873357117176056
+          },
+          "146,216,20": {
+            "hex32": "0x3F071492",
+            "real32": 0.5276576280593872
+          },
+          "146,216,21": {
+            "hex32": "0x3EF99AB0",
+            "real32": 0.48750829696655273
+          },
+          "146,216,22": {
+            "hex32": "0x3EE7461A",
+            "real32": 0.4517067074775696
+          },
+          "146,217,21": {
+            "hex32": "0x3EFA16FF",
+            "real32": 0.48845669627189636
+          },
+          "147,216,21": {
+            "hex32": "0x3EFA4570",
+            "real32": 0.48881101608276367
+          }
+        },
+        "QG": {
+          "145,216,21": {
+            "hex32": "0x36037510",
+            "real32": 1.9588660506997257e-06
+          },
+          "146,215,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,216,20": {
+            "hex32": "0x399769C2",
+            "real32": 0.0002887976006604731
+          },
+          "146,216,21": {
+            "hex32": "0x361E0D1F",
+            "real32": 2.3551472168037435e-06
+          },
+          "146,216,22": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          },
+          "146,217,21": {
+            "hex32": "0x3688D2FA",
+            "real32": 4.0776767491479404e-06
+          },
+          "147,216,21": {
+            "hex32": "0x00000000",
+            "real32": 0.0
+          }
+        },
+        "exact_binary32_pair_ratio_checks": {
+          "145,216,21": {
+            "difference_from_900_exact_fraction": "-492/4901083",
+            "qg_over_bg_exact_fraction": "4410974208/4901083",
+            "qg_over_bg_float": 899.9998996140241,
+            "within_100_900": true
+          },
+          "146,215,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,216,20": {
+            "difference_from_900_exact_fraction": "-122915460/11426753",
+            "qg_over_bg_exact_fraction": "10161162240/11426753",
+            "qg_over_bg_float": 889.2431857063857,
+            "within_100_900": true
+          },
+          "146,216,21": {
+            "difference_from_900_exact_fraction": "-68/2946289",
+            "qg_over_bg_exact_fraction": "2651660032/2946289",
+            "qg_over_bg_float": 899.9999769201188,
+            "within_100_900": true
+          },
+          "146,216,22": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          },
+          "146,217,21": {
+            "difference_from_900_exact_fraction": "-556/10202347",
+            "qg_over_bg_exact_fraction": "9182111744/10202347",
+            "qg_over_bg_float": 899.9999455027358,
+            "within_100_900": true
+          },
+          "147,216,21": {
+            "qg_over_bg": "absent_pair",
+            "within_100_900": true
+          }
+        },
+        "rkstep": 1,
+        "stage": "RK_STAGE_END",
+        "timestep": 2
+      }
+    }
+  },
+  "ratio_probe": {
+    "COUPLED": {
+      "from_list_directed_decimal_text": {
+        "candidate_q_div_n": "900.00000000000010414247496123330260181170464664628891555914443385955102907601706",
+        "difference_from_900": "1.0414247496123330260181170464664628891555914443385955102907601706E-13",
+        "note": "Exact arithmetic on logged decimal text only; not an exact reconstruction of the underlying binary64 REAL64 operands."
+      },
+      "rounded_real32_from_logged_decimal_text": {
+        "difference_from_900_exact_fraction": "4/216223",
+        "n_hex32": "0x3183F8D8",
+        "n_real32": 3.8408920488564036e-09,
+        "q_div_n_exact_fraction": "194600704/216223",
+        "q_hex32": "0x3667FB6C",
+        "q_real32": 3.4568029150250368e-06,
+        "strictly_above_900": true
+      }
+    },
+    "OFF": {
+      "from_list_directed_decimal_text": {
+        "candidate_q_div_n": "900.00000000000010414247496123330260181170464664628891555914443385955102907601706",
+        "difference_from_900": "1.0414247496123330260181170464664628891555914443385955102907601706E-13",
+        "note": "Exact arithmetic on logged decimal text only; not an exact reconstruction of the underlying binary64 REAL64 operands."
+      },
+      "rounded_real32_from_logged_decimal_text": {
+        "difference_from_900_exact_fraction": "4/216223",
+        "n_hex32": "0x3183F8D8",
+        "n_real32": 3.8408920488564036e-09,
+        "q_div_n_exact_fraction": "194600704/216223",
+        "q_hex32": "0x3667FB6C",
+        "q_real32": 3.4568029150250368e-06,
+        "strictly_above_900": true
+      }
+    }
+  },
+  "schema": "pr87_v44_full_failure_context_v1",
+  "source_algebraic_certificate": {
+    "basis": "Exact-real arithmetic applied to the frozen source operator; this is separate from the computed REAL64 bit pattern.",
+    "conclusion": "In exact real arithmetic, the shared linear donor map gives qa=900*na and the nonzero endpoint candidate ratio is exactly 900, independent of wind signs/magnitudes. This rules out a genuinely out-of-cone PRE_RK source donor for this event.",
+    "event_pair": "p4 is QG/BG and does not use the source-first substitution path.",
+    "machine_arithmetic_limit": "Separate REAL64 multiplications/accumulations can round components differently. The FULL record does not preserve the candidate operands bit-exactly, so this certificate does not prove the actual computed REAL64 ratio equals 900 or reveal which strict R64/R32 check rejected it.",
+    "nonzero_prestep_face_donors": [
+      {
+        "BG_hex32": "0x34A16400",
+        "DEN_hex32": "0x3F0EACF1",
+        "QG_div_BG_exact_fraction": "900/1",
+        "QG_equals_900_times_BG_exactly": true,
+        "QG_hex32": "0x398DD8E4",
+        "i": 146,
+        "j": 216,
+        "k": 20
+      }
+    ],
+    "operator": "air_tendency uses one six-face upwind donor map and identical REAL64 coefficients for both components; donor_values returns the QG/BG pair together from old-time q1 arrays.",
+    "other_five_face_donors": "exact +0/+0",
+    "receiver_base_and_physical_source": {
+      "nb": 0.0,
+      "ns64": 0.0,
+      "qb": 0.0,
+      "qs64": 0.0
+    }
+  }
+}

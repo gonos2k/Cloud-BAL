@@ -1,0 +1,76 @@
+{
+  "schema": "pr87_small_graupel_policy_review_v1",
+  "review_date": "2026-10-19",
+  "result": "PASS_SCOPED",
+  "scope": {
+    "transform": "tools/pr87_small_graupel_domain.py",
+    "test": "tests/test_pr87_small_graupel_domain.py",
+    "v42_kdm6_sha256": "bdb1882afed860068cecbb6c7b958eef0938cadbd4225222ba7522e28ecc071a",
+    "v43_diagnostic_kdm6_sha256": "9bbf8a8f74badc8d1f30fafa3f330494ebf34bc4c826b02d9935c2f6221341b6",
+    "compiled_v43_diagnostic_override_sha256": "9bbf8a8f74badc8d1f30fafa3f330494ebf34bc4c826b02d9935c2f6221341b6"
+  },
+  "source_review": {
+    "status": "PASS",
+    "changed_gates": [
+      "ProgB low-QG/BG transient state floor",
+      "pair-only and full-PSD process interval transient floor",
+      "pair-only and full-PSD stored-state transient floor",
+      "graupel sedimentation state predicate transient floor"
+    ],
+    "preserved": [
+      "finite QG/BG and density-bound checks",
+      "exact (QG,BG)=(0,0) absence",
+      "orphan, negative, nonfinite, and out-of-density rejection",
+      "ProgB slope/intercept/property formulas",
+      "process source and flux formulas",
+      "sedimentation inventory, endpoint, and rollback logic",
+      "q_active_min and second_active_min as search partition points",
+      "existing qcrmin terminal cleanup and zeroing of paired BG/properties"
+    ],
+    "notes": "Shared REAL64 density predicate retains inclusive [100,900] kg m-3 bounds. The V43 diagnostic source hash binds the whole V42 source plus the separately reviewed read-only diagnostic additions."
+  },
+  "validation": {
+    "focused_test": {
+      "command": "pytest -q tests/test_pr87_small_graupel_domain.py",
+      "result": "3 passed",
+      "compiler": "pinned Intel ifx from tests/intel_toolchain.sh",
+      "optimizations": ["O0", "O2"],
+      "scratch": "fresh /var/tmp directories"
+    },
+    "extra_rejection_probe": {
+      "result": "PASS",
+      "compiler": "pinned Intel ifx O0",
+      "scope": "temporary extracted-routine fixture; no repository file changes",
+      "cases": [
+        "zero/zero absence accepted",
+        "orphan QG or BG rejected",
+        "negative QG rejected",
+        "NaN QG rejected",
+        "density below and above bounds rejected",
+        "ProgB and process-state validator reject invalid examples"
+      ]
+    }
+  },
+  "diagnostic_replay": {
+    "run": "/var/tmp/pr87_followup_OFF_60s_v43diag_20261019",
+    "status": "INCOMPLETE",
+    "returncode": 128,
+    "completed_model_steps": 2,
+    "fatal": "ProgB transient PSD state rejected",
+    "actual_failure_rows": 1,
+    "actual_failure_row": "PR87_G_CONSUMER_FAILURE 3 1 32 117 17 1 8.08411172205369954E-13 9.12216261831136615E-16 2B638C2A 268376D7",
+    "rsl_out_0000_gz_sha256": "e5381b9e5f1290e09c022e4ae6e1a8da42c4f5572c6b048a39a8cb2cb6101625",
+    "third_call_pre_gz_sha256": "40231d2817e0eabe3ada2b7a46c7d9b11df60886afb47995a09f22df89cefdb6",
+    "old_v42_off40_vs_v43_diagnostic_off60_prefix": {
+      "stream_bytewise_equal": true,
+      "records": 17,
+      "uncompressed_bytes": 1715012660,
+      "sha256": "7375f93f84aa68f74641944a01886ef1f942a0044c4352ac4bfe9619be5aad4a"
+    },
+    "limitation": "The replay uses V43 diagnostic source, before the small-positive domain transform. It reproduces the original failure and confirms the first-40-second diagnostic trace prefix, but it does not validate a full-model run with the proposed small-positive policy."
+  },
+  "graphify": {
+    "status": "LIMITED",
+    "note": "The existing graph had no ProgB_param node; source inspection and the focused pinned-Intel fixture were used as authoritative review evidence."
+  }
+}

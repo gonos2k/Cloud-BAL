@@ -1,0 +1,1636 @@
+{
+  "schema": "pr87_graupel_activity_audit_v1",
+  "source": {
+    "binding": "exact frozen module_mp_kdm6.F SHA-256; source gates at ProgB_param",
+    "path": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_mp_kdm6.F",
+    "sha256": "bdb1882afed860068cecbb6c7b958eef0938cadbd4225222ba7522e28ecc071a"
+  },
+  "source_conditions": {
+    "absent": "finite QG=0 and BG=0",
+    "active_gates_pass": "positive pair, not transient, finite REAL64(QG)/REAL64(BG) in inclusive [100,900] kg m-3",
+    "limitation": "This is a saved-state source-gate classification; it does not read native progb_status or replay ProgB's downstream derived gamma/PSD finite checks, so it cannot prove the actual fatal cell or cause.",
+    "transient": "finite QG>0 and BG>0 and QG<=REAL32(1e-9) and BG<=REAL32(1e-15)"
+  },
+  "states": [
+    {
+      "counts": {
+        "ABSENT": 2532430,
+        "ACTIVE_GATES_PASS": 1010,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f99565b",
+            "value": 1.1979478597640991
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x34fc2940",
+            "value": 4.6968671085778624e-07
+          },
+          "DEN": {
+            "float32_bits": "0x3f9981c2",
+            "value": 1.1992723941802979
+          },
+          "QG": {
+            "float32_bits": "0x3945003a",
+            "value": 0.0001878746843431145
+          },
+          "array_indices_jki": [
+            15,
+            0,
+            134
+          ],
+          "indices_ijk": {
+            "i": 136,
+            "j": 17,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": 400.0
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 0,
+      "stage": "PRE_RK",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 1010,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 1010
+      },
+      "timestep": 1
+    },
+    {
+      "counts": {
+        "ABSENT": 2530904,
+        "ACTIVE_GATES_PASS": 2536,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90a826",
+            "value": 1.130131483078003
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x2e845a44",
+            "value": 6.018699427734475e-11
+          },
+          "DEN": {
+            "float32_bits": "0x3f903445",
+            "value": 1.126595139503479
+          },
+          "QG": {
+            "float32_bits": "0x32cecd0a",
+            "value": 2.407479726684869e-08
+          },
+          "array_indices_jki": [
+            14,
+            0,
+            134
+          ],
+          "indices_ijk": {
+            "i": 136,
+            "j": 16,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": 399.99999262150874
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 1,
+      "stage": "RK_STAGE_END",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 2536,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 2536
+      },
+      "timestep": 1
+    },
+    {
+      "counts": {
+        "ABSENT": 2530904,
+        "ACTIVE_GATES_PASS": 2536,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90a6bc",
+            "value": 1.1300883293151855
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x2ec68498",
+            "value": 9.027550929019412e-11
+          },
+          "DEN": {
+            "float32_bits": "0x3f902fef",
+            "value": 1.1264628171920776
+          },
+          "QG": {
+            "float32_bits": "0x331b1797",
+            "value": 3.611020460425607e-08
+          },
+          "array_indices_jki": [
+            14,
+            0,
+            134
+          ],
+          "indices_ijk": {
+            "i": 136,
+            "j": 16,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": 400.00000983853124
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 2,
+      "stage": "RK_STAGE_END",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 2536,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 2536
+      },
+      "timestep": 1
+    },
+    {
+      "counts": {
+        "ABSENT": 2530903,
+        "ACTIVE_GATES_PASS": 2537,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90ab5e",
+            "value": 1.1302297115325928
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x2f46d2b6",
+            "value": 1.8082854658096892e-10
+          },
+          "DEN": {
+            "float32_bits": "0x3f903a1f",
+            "value": 1.126773715019226
+          },
+          "QG": {
+            "float32_bits": "0x339b549e",
+            "value": 7.233141730011994e-08
+          },
+          "array_indices_jki": [
+            14,
+            0,
+            134
+          ],
+          "indices_ijk": {
+            "i": 136,
+            "j": 16,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": 399.99999263242637
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 3,
+      "stage": "RK_STAGE_END",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 2537,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 2537
+      },
+      "timestep": 1
+    },
+    {
+      "counts": {
+        "ABSENT": 2530903,
+        "ACTIVE_GATES_PASS": 2537,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90ab5e",
+            "value": 1.1302297115325928
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x2f46d2b6",
+            "value": 1.8082854658096892e-10
+          },
+          "DEN": {
+            "float32_bits": "0x3f903a1f",
+            "value": 1.126773715019226
+          },
+          "QG": {
+            "float32_bits": "0x339b549e",
+            "value": 7.233141730011994e-08
+          },
+          "array_indices_jki": [
+            14,
+            0,
+            134
+          ],
+          "indices_ijk": {
+            "i": 136,
+            "j": 16,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": 399.99999263242637
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 0,
+      "stage": "PRE_KDM6",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 2537,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 2537
+      },
+      "timestep": 1
+    },
+    {
+      "counts": {
+        "ABSENT": 2531728,
+        "ACTIVE_GATES_PASS": 1712,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90ab5e",
+            "value": 1.1302297115325928
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x3255aae0",
+            "value": 1.243708425135992e-08
+          },
+          "DEN": {
+            "float32_bits": "0x3f2d4b89",
+            "value": 0.6769338250160217
+          },
+          "QG": {
+            "float32_bits": "0x3734ed13",
+            "value": 1.0784034202515613e-05
+          },
+          "array_indices_jki": [
+            11,
+            16,
+            125
+          ],
+          "indices_ijk": {
+            "i": 127,
+            "j": 13,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 867.0870104732502
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 0,
+      "stage": "POST_KDM6",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 1712,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 1712
+      },
+      "timestep": 1
+    },
+    {
+      "counts": {
+        "ABSENT": 2531728,
+        "ACTIVE_GATES_PASS": 1712,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f99550e",
+            "value": 1.1979081630706787
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x3255aae0",
+            "value": 1.243708425135992e-08
+          },
+          "DEN": {
+            "float32_bits": "0x3f38a2c3",
+            "value": 0.7212335467338562
+          },
+          "QG": {
+            "float32_bits": "0x3734ed13",
+            "value": 1.0784034202515613e-05
+          },
+          "array_indices_jki": [
+            11,
+            16,
+            125
+          ],
+          "indices_ijk": {
+            "i": 127,
+            "j": 13,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 867.0870104732502
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 0,
+      "stage": "PRE_RK",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 1712,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 1712
+      },
+      "timestep": 2
+    },
+    {
+      "counts": {
+        "ABSENT": 2529356,
+        "ACTIVE_GATES_PASS": 4084,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90abcd",
+            "value": 1.130242943763733
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x2be21ea5",
+            "value": 1.6066771394221413e-12
+          },
+          "DEN": {
+            "float32_bits": "0x3f2d3efd",
+            "value": 0.6767423748970032
+          },
+          "QG": {
+            "float32_bits": "0x30bf785e",
+            "value": 1.3931289455371143e-09
+          },
+          "array_indices_jki": [
+            10,
+            16,
+            125
+          ],
+          "indices_ijk": {
+            "i": 127,
+            "j": 12,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 867.0870527467442
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 1,
+      "stage": "RK_STAGE_END",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 4084,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 4084
+      },
+      "timestep": 2
+    },
+    {
+      "counts": {
+        "ABSENT": 2529358,
+        "ACTIVE_GATES_PASS": 4082,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90adf8",
+            "value": 1.1303091049194336
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x2c299728",
+            "value": 2.4100253043224384e-12
+          },
+          "DEN": {
+            "float32_bits": "0x3f2d36bd",
+            "value": 0.6766164898872375
+          },
+          "QG": {
+            "float32_bits": "0x310f9a6c",
+            "value": 2.089701744978356e-09
+          },
+          "array_indices_jki": [
+            10,
+            16,
+            125
+          ],
+          "indices_ijk": {
+            "i": 127,
+            "j": 12,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 867.087055571751
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 2,
+      "stage": "RK_STAGE_END",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 4082,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 4082
+      },
+      "timestep": 2
+    },
+    {
+      "counts": {
+        "ABSENT": 2529355,
+        "ACTIVE_GATES_PASS": 4085,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90a79a",
+            "value": 1.1301147937774658
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x2ca99ca0",
+            "value": 4.820657761861469e-12
+          },
+          "DEN": {
+            "float32_bits": "0x3f2d5415",
+            "value": 0.6770642399787903
+          },
+          "QG": {
+            "float32_bits": "0x318f9f0d",
+            "value": 4.179929735670385e-09
+          },
+          "array_indices_jki": [
+            10,
+            16,
+            125
+          ],
+          "indices_ijk": {
+            "i": 127,
+            "j": 12,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 867.0870122205749
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 3,
+      "stage": "RK_STAGE_END",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 4085,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 4085
+      },
+      "timestep": 2
+    },
+    {
+      "counts": {
+        "ABSENT": 2529355,
+        "ACTIVE_GATES_PASS": 4085,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90a79a",
+            "value": 1.1301147937774658
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x2ca99ca0",
+            "value": 4.820657761861469e-12
+          },
+          "DEN": {
+            "float32_bits": "0x3f2d5415",
+            "value": 0.6770642399787903
+          },
+          "QG": {
+            "float32_bits": "0x318f9f0d",
+            "value": 4.179929735670385e-09
+          },
+          "array_indices_jki": [
+            10,
+            16,
+            125
+          ],
+          "indices_ijk": {
+            "i": 127,
+            "j": 12,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 867.0870122205749
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 0,
+      "stage": "PRE_KDM6",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 4085,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 4085
+      },
+      "timestep": 2
+    },
+    {
+      "counts": {
+        "ABSENT": 2529022,
+        "ACTIVE_GATES_PASS": 4418,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90a79a",
+            "value": 1.1301147937774658
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x3404268a",
+            "value": 1.2307478414186335e-07
+          },
+          "DEN": {
+            "float32_bits": "0x3f2dba8c",
+            "value": 0.6786277294158936
+          },
+          "QG": {
+            "float32_bits": "0x38dded48",
+            "value": 0.00010582298273220658
+          },
+          "array_indices_jki": [
+            0,
+            16,
+            101
+          ],
+          "indices_ijk": {
+            "i": 103,
+            "j": 2,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 859.826677495763
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 0,
+      "stage": "POST_KDM6",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 4418,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 4418
+      },
+      "timestep": 2
+    },
+    {
+      "counts": {
+        "ABSENT": 2529022,
+        "ACTIVE_GATES_PASS": 4418,
+        "TRANSIENT": 0,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f995781",
+            "value": 1.197982907295227
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x3404268a",
+            "value": 1.2307478414186335e-07
+          },
+          "DEN": {
+            "float32_bits": "0x3f38f1fe",
+            "value": 0.7224425077438354
+          },
+          "QG": {
+            "float32_bits": "0x38dded48",
+            "value": 0.00010582298273220658
+          },
+          "array_indices_jki": [
+            0,
+            16,
+            101
+          ],
+          "indices_ijk": {
+            "i": 103,
+            "j": 2,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 859.826677495763
+        },
+        "TRANSIENT": null,
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 0,
+      "stage": "PRE_RK",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 4418,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 4418
+      },
+      "timestep": 3
+    },
+    {
+      "counts": {
+        "ABSENT": 2524003,
+        "ACTIVE_GATES_PASS": 9372,
+        "TRANSIENT": 65,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90aa38",
+            "value": 1.1301946640014648
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x3049e58f",
+            "value": 7.344959640498416e-10
+          },
+          "DEN": {
+            "float32_bits": "0x3f3a4369",
+            "value": 0.7275910973548889
+          },
+          "QG": {
+            "float32_bits": "0x350f6377",
+            "value": 5.341639166545065e-07
+          },
+          "array_indices_jki": [
+            0,
+            15,
+            102
+          ],
+          "indices_ijk": {
+            "i": 104,
+            "j": 2,
+            "k": 16
+          },
+          "qg_bg_density_kg_m3": 727.2523509989757
+        },
+        "TRANSIENT": {
+          "BG": {
+            "float32_bits": "0x262ceff7",
+            "value": 5.999970057974453e-16
+          },
+          "DEN": {
+            "float32_bits": "0x3f2d5923",
+            "value": 0.6771413683891296
+          },
+          "QG": {
+            "float32_bits": "0x2b127036",
+            "value": 5.202534366852141e-13
+          },
+          "array_indices_jki": [
+            9,
+            16,
+            125
+          ],
+          "indices_ijk": {
+            "i": 127,
+            "j": 11,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 867.0933882307537
+        },
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 1,
+      "stage": "RK_STAGE_END",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 9437,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 9437
+      },
+      "timestep": 3
+    },
+    {
+      "counts": {
+        "ABSENT": 2524006,
+        "ACTIVE_GATES_PASS": 9386,
+        "TRANSIENT": 48,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90a6da",
+            "value": 1.130091905593872
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x2fb3784f",
+            "value": 3.2645394720809406e-10
+          },
+          "DEN": {
+            "float32_bits": "0x3f3a33d6",
+            "value": 0.7273534536361694
+          },
+          "QG": {
+            "float32_bits": "0x3496b244",
+            "value": 2.8069382551620947e-07
+          },
+          "array_indices_jki": [
+            0,
+            15,
+            101
+          ],
+          "indices_ijk": {
+            "i": 103,
+            "j": 2,
+            "k": 16
+          },
+          "qg_bg_density_kg_m3": 859.8267164994168
+        },
+        "TRANSIENT": {
+          "BG": {
+            "float32_bits": "0x2681b1c3",
+            "value": 8.999355546453701e-16
+          },
+          "DEN": {
+            "float32_bits": "0x3f2d526a",
+            "value": 0.6770387887954712
+          },
+          "QG": {
+            "float32_bits": "0x2b5ba490",
+            "value": 7.803280591134332e-13
+          },
+          "array_indices_jki": [
+            9,
+            16,
+            125
+          ],
+          "indices_ijk": {
+            "i": 127,
+            "j": 11,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 867.0932658293852
+        },
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 2,
+      "stage": "RK_STAGE_END",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 9434,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 9434
+      },
+      "timestep": 3
+    },
+    {
+      "counts": {
+        "ABSENT": 2524020,
+        "ACTIVE_GATES_PASS": 9402,
+        "TRANSIENT": 18,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90ad9d",
+            "value": 1.1302982568740845
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x30caa5cb",
+            "value": 1.4744555576484686e-09
+          },
+          "DEN": {
+            "float32_bits": "0x3f3a1110",
+            "value": 0.7268228530883789
+          },
+          "QG": {
+            "float32_bits": "0x35aa2876",
+            "value": 1.2677762697421713e-06
+          },
+          "array_indices_jki": [
+            0,
+            15,
+            101
+          ],
+          "indices_ijk": {
+            "i": 103,
+            "j": 2,
+            "k": 16
+          },
+          "qg_bg_density_kg_m3": 859.8267090288437
+        },
+        "TRANSIENT": {
+          "BG": {
+            "float32_bits": "0x268376d7",
+            "value": 9.122162618311366e-16
+          },
+          "DEN": {
+            "float32_bits": "0x3f2d69f6",
+            "value": 0.6773980855941772
+          },
+          "QG": {
+            "float32_bits": "0x2b638c2a",
+            "value": 8.0841117220537e-13
+          },
+          "array_indices_jki": [
+            30,
+            16,
+            115
+          ],
+          "indices_ijk": {
+            "i": 117,
+            "j": 32,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 886.205613768172
+        },
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 3,
+      "stage": "RK_STAGE_END",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 9420,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 9420
+      },
+      "timestep": 3
+    },
+    {
+      "counts": {
+        "ABSENT": 2524020,
+        "ACTIVE_GATES_PASS": 9402,
+        "TRANSIENT": 18,
+        "UNSUPPORTED_DENSITY": 0,
+        "UNSUPPORTED_PAIR": 0
+      },
+      "first_by_class": {
+        "ABSENT": {
+          "BG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "DEN": {
+            "float32_bits": "0x3f90ad9d",
+            "value": 1.1302982568740845
+          },
+          "QG": {
+            "float32_bits": "0x00000000",
+            "value": 0.0
+          },
+          "array_indices_jki": [
+            0,
+            0,
+            0
+          ],
+          "indices_ijk": {
+            "i": 2,
+            "j": 2,
+            "k": 1
+          },
+          "qg_bg_density_kg_m3": null
+        },
+        "ACTIVE_GATES_PASS": {
+          "BG": {
+            "float32_bits": "0x30caa5cb",
+            "value": 1.4744555576484686e-09
+          },
+          "DEN": {
+            "float32_bits": "0x3f3a1110",
+            "value": 0.7268228530883789
+          },
+          "QG": {
+            "float32_bits": "0x35aa2876",
+            "value": 1.2677762697421713e-06
+          },
+          "array_indices_jki": [
+            0,
+            15,
+            101
+          ],
+          "indices_ijk": {
+            "i": 103,
+            "j": 2,
+            "k": 16
+          },
+          "qg_bg_density_kg_m3": 859.8267090288437
+        },
+        "TRANSIENT": {
+          "BG": {
+            "float32_bits": "0x268376d7",
+            "value": 9.122162618311366e-16
+          },
+          "DEN": {
+            "float32_bits": "0x3f2d69f6",
+            "value": 0.6773980855941772
+          },
+          "QG": {
+            "float32_bits": "0x2b638c2a",
+            "value": 8.0841117220537e-13
+          },
+          "array_indices_jki": [
+            30,
+            16,
+            115
+          ],
+          "indices_ijk": {
+            "i": 117,
+            "j": 32,
+            "k": 17
+          },
+          "qg_bg_density_kg_m3": 886.205613768172
+        },
+        "UNSUPPORTED_DENSITY": null,
+        "UNSUPPORTED_PAIR": null
+      },
+      "host_dry_density": {
+        "finite_positive_cells": 2533440,
+        "nonfinite_or_nonpositive_cells": 0
+      },
+      "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+      "rkstep": 0,
+      "stage": "PRE_KDM6",
+      "stored_pair": {
+        "exact_qg_bg_density_cone": [
+          100.0,
+          900.0
+        ],
+        "exact_qg_bg_density_cone_cells": 9420,
+        "finite_qg_bg_cells": 2533440,
+        "nonfinite_qg_or_bg_cells": 0,
+        "orphan_or_negative_pair_cells": 0,
+        "positive_pair_cells": 9420
+      },
+      "timestep": 3
+    }
+  ],
+  "t3_pre_kdm6": {
+    "counts": {
+      "ABSENT": 2524020,
+      "ACTIVE_GATES_PASS": 9402,
+      "TRANSIENT": 18,
+      "UNSUPPORTED_DENSITY": 0,
+      "UNSUPPORTED_PAIR": 0
+    },
+    "first_by_class": {
+      "ABSENT": {
+        "BG": {
+          "float32_bits": "0x00000000",
+          "value": 0.0
+        },
+        "DEN": {
+          "float32_bits": "0x3f90ad9d",
+          "value": 1.1302982568740845
+        },
+        "QG": {
+          "float32_bits": "0x00000000",
+          "value": 0.0
+        },
+        "array_indices_jki": [
+          0,
+          0,
+          0
+        ],
+        "indices_ijk": {
+          "i": 2,
+          "j": 2,
+          "k": 1
+        },
+        "qg_bg_density_kg_m3": null
+      },
+      "ACTIVE_GATES_PASS": {
+        "BG": {
+          "float32_bits": "0x30caa5cb",
+          "value": 1.4744555576484686e-09
+        },
+        "DEN": {
+          "float32_bits": "0x3f3a1110",
+          "value": 0.7268228530883789
+        },
+        "QG": {
+          "float32_bits": "0x35aa2876",
+          "value": 1.2677762697421713e-06
+        },
+        "array_indices_jki": [
+          0,
+          15,
+          101
+        ],
+        "indices_ijk": {
+          "i": 103,
+          "j": 2,
+          "k": 16
+        },
+        "qg_bg_density_kg_m3": 859.8267090288437
+      },
+      "TRANSIENT": {
+        "BG": {
+          "float32_bits": "0x268376d7",
+          "value": 9.122162618311366e-16
+        },
+        "DEN": {
+          "float32_bits": "0x3f2d69f6",
+          "value": 0.6773980855941772
+        },
+        "QG": {
+          "float32_bits": "0x2b638c2a",
+          "value": 8.0841117220537e-13
+        },
+        "array_indices_jki": [
+          30,
+          16,
+          115
+        ],
+        "indices_ijk": {
+          "i": 117,
+          "j": 32,
+          "k": 17
+        },
+        "qg_bg_density_kg_m3": 886.205613768172
+      },
+      "UNSUPPORTED_DENSITY": null,
+      "UNSUPPORTED_PAIR": null
+    },
+    "host_dry_density": {
+      "finite_positive_cells": 2533440,
+      "nonfinite_or_nonpositive_cells": 0
+    },
+    "interpretation": "ACTIVE_GATES_PASS reproduces the source pair/transient/raw-density gates; ProgB's later derived-parameter finite checks are not recorded in this snapshot.",
+    "rkstep": 0,
+    "stage": "PRE_KDM6",
+    "stored_pair": {
+      "exact_qg_bg_density_cone": [
+        100.0,
+        900.0
+      ],
+      "exact_qg_bg_density_cone_cells": 9420,
+      "finite_qg_bg_cells": 2533440,
+      "nonfinite_qg_or_bg_cells": 0,
+      "orphan_or_negative_pair_cells": 0,
+      "positive_pair_cells": 9420
+    },
+    "timestep": 3
+  },
+  "trace": {
+    "bytes": 871745768,
+    "decoded_sha256": "5e276ed079847e2c8ff69e6732e4e2f11da00428aa4d382e1eaae3775eed96a6",
+    "path": "/var/tmp/pr87_joint_COUPLED_60s_v42_20261016/run/pr85_joint_moment_stages.raw.gz",
+    "sha256": "2cb10b7d6013dba56c73cf114fb59a364c833bd93c9a78e0c72fb6345934ec79"
+  }
+}

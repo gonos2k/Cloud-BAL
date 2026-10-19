@@ -1,0 +1,742 @@
+{
+  "arms": {
+    "COUPLED": {
+      "failure_evidence": {
+        "full_failure_count": 16,
+        "full_failures_by_pair": {
+          "1": 15,
+          "4": 1
+        },
+        "last_full_rows": [
+          "FULL 3 3 1 111 185 3",
+          "FULL 3 3 1 109 196 2",
+          "FULL 3 3 1 37 225 11",
+          "FULL 3 3 4 160 235 20"
+        ],
+        "scalar_log_path": "/var/tmp/pr87_followup_COUPLED_60s_v49_20261019/run/rsl.out.0000.gz",
+        "scalar_log_sha256": "f2d845949ee3aac556b5ce58c0f99da3209a420f73c1e3273c88810bb0acecd5",
+        "selected_scalar_lines": [
+          "PR87_GRAUPEL_MIXTURE 2 2 1 146 216 21 3ECCFF6D711A33CB 3E307F1AFD36BA7A 3667FB6B 3183F8D8 F T",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 226 24 7 3E895C31A749DC0A 4185825721DD8314 BEF11B5AC385355E C1ED04A743E23381 BF035377F2606327 C200642F3E6F6BA1",
+          "PR87_GRAUPEL_MIXTURE 3 1 1 160 235 20 3E2D3E3844E45B52 3D90A2D3C79E5AA2 3169F1C1 2C85169E F T",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 208 21 4 3ED284C7C748A9AF 41CF69C3F227C019 BF4F535AF5D49615 C24A91974156B33A BF57B9BEE02B6C0B C2541F6F1B091EF0",
+          "-------------- FATAL CALLED ---------------"
+        ],
+        "source_failure_count": 661,
+        "source_failure_path": "/var/tmp/pr87_followup_COUPLED_60s_v49_20261019/run/pr85_joint_source_failure.raw.gz",
+        "source_failure_sha256": "3dc917aed5aef52ff065f495fb5a41be4a40f60bc4e7a3fad07e8cf7776f6971"
+      },
+      "run_receipt": {
+        "after_input_count": 101,
+        "build_receipt_sha256": "1ac5e081148faa08f03964ef5a71b91bb70a93fc5674a48ab20758dc67391546",
+        "candidate_build_unchanged": true,
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "completed_post_kdm6_timesteps": [
+          1,
+          2
+        ],
+        "duplicate_post_kdm6_timesteps": [],
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "executed_executable_sha256": "91636c57dbf612f61fd6d4f3b6721b8fff5f6abd1e3dfe395253da6d02178a52",
+        "expected_executed_executable_sha256": "91636c57dbf612f61fd6d4f3b6721b8fff5f6abd1e3dfe395253da6d02178a52",
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00"
+        ],
+        "fatal_line_count": 2,
+        "final_completed_step": 2,
+        "maximum_seen_timestep": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 242.26807,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 105.84,
+            "timestamp": "2026-08-16_13:00:40"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v49_20261019/receipt.json",
+        "preflight_equals_after_inputs": true,
+        "preflight_input_count": 101,
+        "processing_errors": [],
+        "returncode": 1,
+        "sha256": "7b659fa82f99355945543e73eb65731ba397f17dedc629de8a1e28958d2c09f8",
+        "status": "INCOMPLETE",
+        "timestep_count": 2,
+        "wall_seconds": 428.57484984211624
+      },
+      "stage_audit": {
+        "completed_post_kdm6_timestep_count": 2,
+        "consumer_build_binding_executable_sha256": "91636c57dbf612f61fd6d4f3b6721b8fff5f6abd1e3dfe395253da6d02178a52",
+        "path": "docs/evidence/pr87_followup_20261019/review/v49_coupled_stage_audit.json",
+        "sha256": "127c6fc99dd5819f2f477eb96b59aaf07bb5e2a2204854f16fdfcc4c90c63c3f",
+        "state_record_count": 15,
+        "status": "INCOMPLETE",
+        "timesteps": [
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 1
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 4,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 4,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 5,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 2
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 1,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 1,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 2,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": false,
+            "required_rkstep_sequence_complete": false,
+            "required_state_sequence_complete": false,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END"
+            ],
+            "status": "INCOMPLETE",
+            "timestep": 3
+          }
+        ],
+        "trace_path": "/var/tmp/pr87_followup_COUPLED_60s_v49_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "trace_sha256": "90b707a76ef937d37d61265ee3fc5e1412fcc1d49d06c5591756df4dfa42f639",
+        "trace_timesteps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "transport_budget": {
+        "completed_calls_theta_one": true,
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v49_20261019/run/pr85_joint_transport_budget.raw.gz",
+        "rk_calls": [
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": false,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 0.0,
+            "timestep": 3
+          }
+        ],
+        "sha256": "6abc59a8fa9c8657d37f0f2bf14cfdd4379c142a22c67dbb47370256b85e9533",
+        "source_first_pair_fallback": [
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "T",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 3
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 3
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 3
+          }
+        ],
+        "t3_rk3_feasible": false
+      }
+    },
+    "OFF": {
+      "failure_evidence": {
+        "full_failure_count": 16,
+        "full_failures_by_pair": {
+          "1": 15,
+          "4": 1
+        },
+        "last_full_rows": [
+          "FULL 3 3 1 111 185 3",
+          "FULL 3 3 1 109 196 2",
+          "FULL 3 3 1 37 225 11",
+          "FULL 3 3 4 160 235 20"
+        ],
+        "scalar_log_path": "/var/tmp/pr87_followup_OFF_60s_v49_20261019/run/rsl.out.0000.gz",
+        "scalar_log_sha256": "b8469b10df194c677d6ef95bdd6ea8a14404593b239b825d9046246daef75e30",
+        "selected_scalar_lines": [
+          "PR87_GRAUPEL_MIXTURE 2 2 1 146 216 21 3ECCFF6D711A33CB 3E307F1AFD36BA7A 3667FB6B 3183F8D8 F T",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 226 24 7 3E895C31A749DC0A 4185825721DD8314 BEF11B5AC385355E C1ED04A743E23381 BF035377F2606327 C200642F3E6F6BA1",
+          "PR87_GRAUPEL_MIXTURE 3 1 1 160 235 20 3E2D3E3844E45B52 3D90A2D3C79E5AA2 3169F1C1 2C85169E F T",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 208 21 4 3ED284C7C748A9AF 41CF69C3F227C019 BF4F535AF5D49615 C24A91974156B33A BF57B9BEE02B6C0B C2541F6F1B091EF0",
+          "-------------- FATAL CALLED ---------------"
+        ],
+        "source_failure_count": 661,
+        "source_failure_path": "/var/tmp/pr87_followup_OFF_60s_v49_20261019/run/pr85_joint_source_failure.raw.gz",
+        "source_failure_sha256": "6f5ef6dc017508aace9b44729fe8ddf889fac5fc02aea58141f36726d576f3da"
+      },
+      "run_receipt": {
+        "after_input_count": 101,
+        "build_receipt_sha256": "1ac5e081148faa08f03964ef5a71b91bb70a93fc5674a48ab20758dc67391546",
+        "candidate_build_unchanged": true,
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "completed_post_kdm6_timesteps": [
+          1,
+          2
+        ],
+        "duplicate_post_kdm6_timesteps": [],
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "executed_executable_sha256": "91636c57dbf612f61fd6d4f3b6721b8fff5f6abd1e3dfe395253da6d02178a52",
+        "expected_executed_executable_sha256": "91636c57dbf612f61fd6d4f3b6721b8fff5f6abd1e3dfe395253da6d02178a52",
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00"
+        ],
+        "fatal_line_count": 2,
+        "final_completed_step": 2,
+        "maximum_seen_timestep": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.12117,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 105.36318,
+            "timestamp": "2026-08-16_13:00:40"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_OFF_60s_v49_20261019/receipt.json",
+        "preflight_equals_after_inputs": true,
+        "preflight_input_count": 101,
+        "processing_errors": [],
+        "returncode": 1,
+        "sha256": "821fb8727c72b6e690565badd5afeb016a8ffa83ab5b15c8a339f8a1bb8620c6",
+        "status": "INCOMPLETE",
+        "timestep_count": 2,
+        "wall_seconds": 426.8793890848756
+      },
+      "stage_audit": {
+        "completed_post_kdm6_timestep_count": 2,
+        "consumer_build_binding_executable_sha256": "91636c57dbf612f61fd6d4f3b6721b8fff5f6abd1e3dfe395253da6d02178a52",
+        "path": "docs/evidence/pr87_followup_20261019/review/v49_off_stage_audit.json",
+        "sha256": "e337c830c94b1abe4bea7263e198786128a7cd0cd2f089044e26726e07c7b742",
+        "state_record_count": 15,
+        "status": "INCOMPLETE",
+        "timesteps": [
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 1
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 4,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 4,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 5,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 2
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 1,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 1,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 2,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": false,
+            "required_rkstep_sequence_complete": false,
+            "required_state_sequence_complete": false,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END"
+            ],
+            "status": "INCOMPLETE",
+            "timestep": 3
+          }
+        ],
+        "trace_path": "/var/tmp/pr87_followup_OFF_60s_v49_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "trace_sha256": "f072f4e8b12e4234199895e1df38ef19ef141588df05543d257e1666a9ebe891",
+        "trace_timesteps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "transport_budget": {
+        "completed_calls_theta_one": true,
+        "path": "/var/tmp/pr87_followup_OFF_60s_v49_20261019/run/pr85_joint_transport_budget.raw.gz",
+        "rk_calls": [
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": false,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 0.0,
+            "timestep": 3
+          }
+        ],
+        "sha256": "6abc59a8fa9c8657d37f0f2bf14cfdd4379c142a22c67dbb47370256b85e9533",
+        "source_first_pair_fallback": [
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "T",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 3
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 3
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 3
+          }
+        ],
+        "t3_rk3_feasible": false
+      }
+    }
+  },
+  "build": {
+    "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "executable_hash_matches": true,
+    "executable_path": "/var/tmp/pr87_followup_build_20261019_v49/wrf_pr87_overlay.exe",
+    "executable_sha256": "91636c57dbf612f61fd6d4f3b6721b8fff5f6abd1e3dfe395253da6d02178a52",
+    "expected_executable_sha256": "91636c57dbf612f61fd6d4f3b6721b8fff5f6abd1e3dfe395253da6d02178a52",
+    "expected_parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "full_clean_build": false,
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "parent_hash_matches": true,
+    "receipt_path": "/var/tmp/pr87_followup_build_20261019_v49/pr87_native_overlay_build.json",
+    "receipt_sha256": "1ac5e081148faa08f03964ef5a71b91bb70a93fc5674a48ab20758dc67391546",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "graupel_source_identity_witness": {
+    "actual_q_over_bg_minus_900_exact": "60/769544770726417",
+    "actual_source_bg64_bits": "3E589B127047FA99",
+    "actual_source_q64_bits": "3EF5A04B34AF4341",
+    "replayed_q_over_bg_minus_900_exact": "620/6929229510098437",
+    "replayed_source_bg64_bits": "3E589E18F7843E05",
+    "replayed_source_q64_bits": "3EF5A2F3F18B3A83",
+    "scope": "T3 RK3 failure diagnostic at graupel (i,j,k)=(160,235,20); source values are the captured actual total and transformed replay values. This records an identity mismatch without assigning it as the failure cause."
+  },
+  "limitations": [
+    "Neither arm completed T3 POST_KDM6 or the requested 60-second run.",
+    "Both arms fail at T3 RK3; captured FULL_FAILURE_COUNT is 16 (15 cloud pair 1, one graupel pair 4). This audit does not establish the causal failure mechanism.",
+    "The V49 native overlay is a partial overlay, not a full clean model build."
+  ],
+  "schema": "pr87_v49_closed_runtime_review_v1",
+  "scope": "Closed V49 OFF/COUPLED requested 60-second runs; both are incomplete. Stage, ledger, receipt, and prefix comparisons are limited to captured artifacts.",
+  "v48_prefix_comparison": {
+    "arms": {
+      "COUPLED": {
+        "compared_complete_record_bytes": 1715012660,
+        "first_different_record": null,
+        "metadata_sequence_equal": true,
+        "per_record_bytes_equal": true,
+        "through_timestep_2_record_count_v48": 17,
+        "through_timestep_2_record_count_v49": 17,
+        "v48_record_count": 22,
+        "v48_trace_sha256": "90b707a76ef937d37d61265ee3fc5e1412fcc1d49d06c5591756df4dfa42f639",
+        "v49_record_count": 22,
+        "v49_trace_sha256": "90b707a76ef937d37d61265ee3fc5e1412fcc1d49d06c5591756df4dfa42f639"
+      },
+      "OFF": {
+        "compared_complete_record_bytes": 1715012660,
+        "first_different_record": null,
+        "metadata_sequence_equal": true,
+        "per_record_bytes_equal": true,
+        "through_timestep_2_record_count_v48": 17,
+        "through_timestep_2_record_count_v49": 17,
+        "v48_record_count": 22,
+        "v48_trace_sha256": "f072f4e8b12e4234199895e1df38ef19ef141588df05543d257e1666a9ebe891",
+        "v49_record_count": 22,
+        "v49_trace_sha256": "f072f4e8b12e4234199895e1df38ef19ef141588df05543d257e1666a9ebe891"
+      }
+    },
+    "scope": "Complete binary records through timestep 2 in pr85_joint_moment_stages.raw.gz, including all state and tendency records captured in that stream."
+  }
+}

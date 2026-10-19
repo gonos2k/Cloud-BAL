@@ -1,0 +1,704 @@
+{
+  "arms": {
+    "COUPLED": {
+      "failure_evidence": {
+        "full_failure_count": 16,
+        "full_failures_by_pair": {
+          "1": 15,
+          "4": 1
+        },
+        "scalar_log_path": "/var/tmp/pr87_followup_COUPLED_60s_v48_20261019/run/rsl.out.0000.gz",
+        "scalar_log_sha256": "7f490aaa7d7ed68b3a96e2ee7b57c912f60a86a7bab9a523902cd8d6d22f32d7",
+        "selected_scalar_lines": [
+          "PR87_GRAUPEL_MIXTURE 2 2 1 146 216 21 3ECCFF6D711A33CB 3E307F1AFD36BA7A 3667FB6B 3183F8D8 F T",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 226 24 7 3E895C31A749DC0A 4185825721DD8314 BEF11B5AC385355E C1ED04A743E23381 BF035377F2606327 C200642F3E6F6BA1",
+          "PR87_GRAUPEL_MIXTURE 3 1 1 160 235 20 3E2D3E3844E45B52 3D90A2D3C79E5AA2 3169F1C1 2C85169E F T",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 208 21 4 3ED284C7C748A9AF 41CF69C3F227C019 BF4F535AF5D49615 C24A91974156B33A BF57B9BEE02B6C0B C2541F6F1B091EF0",
+          "-------------- FATAL CALLED ---------------"
+        ],
+        "source_failure_path": "/var/tmp/pr87_followup_COUPLED_60s_v48_20261019/run/pr85_joint_source_failure.raw.gz",
+        "source_failure_sha256": "3dc917aed5aef52ff065f495fb5a41be4a40f60bc4e7a3fad07e8cf7776f6971"
+      },
+      "run_receipt": {
+        "after_input_count": 101,
+        "build_receipt_sha256": "d55f43af058bbc678a033248a060f9b672f10c21810ed4bb9fb7981903ccc23d",
+        "candidate_build_unchanged": true,
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "completed_post_kdm6_timesteps": [
+          1,
+          2
+        ],
+        "duplicate_post_kdm6_timesteps": [],
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "executed_executable_sha256": "712a4387b8400506873ef97a10e2463991b8b4324e5de03427b726652bf35376",
+        "expected_executed_executable_sha256": "712a4387b8400506873ef97a10e2463991b8b4324e5de03427b726652bf35376",
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00"
+        ],
+        "fatal_line_count": 2,
+        "final_completed_step": 2,
+        "maximum_seen_timestep": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.4465,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 105.63083,
+            "timestamp": "2026-08-16_13:00:40"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v48_20261019/receipt.json",
+        "preflight_equals_after_inputs": true,
+        "preflight_input_count": 101,
+        "processing_errors": [],
+        "returncode": 1,
+        "sha256": "cb55ce4fa0d3c422685fdbe4a55a6571badad760e5461b285f62273e212e0b0e",
+        "status": "INCOMPLETE",
+        "timestep_count": 2,
+        "wall_seconds": 427.2507593370974
+      },
+      "stage_audit": {
+        "completed_post_kdm6_timestep_count": 2,
+        "consumer_build_binding_executable_sha256": "712a4387b8400506873ef97a10e2463991b8b4324e5de03427b726652bf35376",
+        "path": "docs/evidence/pr87_followup_20261019/review/v48_coupled_stage_audit.json",
+        "sha256": "cd6c87120780715bd8c5806f5a592fe8d5b2d99557efe569ee1ebb61474795ef",
+        "state_record_count": 15,
+        "status": "INCOMPLETE",
+        "timesteps": [
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 1
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 4,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 4,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 5,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 2
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 1,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 1,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 2,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": false,
+            "required_rkstep_sequence_complete": false,
+            "required_state_sequence_complete": false,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END"
+            ],
+            "status": "INCOMPLETE",
+            "timestep": 3
+          }
+        ],
+        "trace_path": "/var/tmp/pr87_followup_COUPLED_60s_v48_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "trace_sha256": "90b707a76ef937d37d61265ee3fc5e1412fcc1d49d06c5591756df4dfa42f639",
+        "trace_timesteps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "transport_budget": {
+        "all_completed_calls_theta_one": true,
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v48_20261019/run/pr85_joint_transport_budget.raw.gz",
+        "rk_calls": [
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": false,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 0.0,
+            "timestep": 3
+          }
+        ],
+        "sha256": "6abc59a8fa9c8657d37f0f2bf14cfdd4379c142a22c67dbb47370256b85e9533",
+        "source_first_pair_fallback": [
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "T",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 3
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 3
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 3
+          }
+        ],
+        "t3_rk3_feasible": false
+      }
+    },
+    "OFF": {
+      "failure_evidence": {
+        "full_failure_count": 16,
+        "full_failures_by_pair": {
+          "1": 15,
+          "4": 1
+        },
+        "scalar_log_path": "/var/tmp/pr87_followup_OFF_60s_v48_20261019/run/rsl.out.0000.gz",
+        "scalar_log_sha256": "9c516ca846486991aef6c7a537291be3c6e83bf169c6f70f3d816399aea12473",
+        "selected_scalar_lines": [
+          "PR87_GRAUPEL_MIXTURE 2 2 1 146 216 21 3ECCFF6D711A33CB 3E307F1AFD36BA7A 3667FB6B 3183F8D8 F T",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 226 24 7 3E895C31A749DC0A 4185825721DD8314 BEF11B5AC385355E C1ED04A743E23381 BF035377F2606327 C200642F3E6F6BA1",
+          "PR87_GRAUPEL_MIXTURE 3 1 1 160 235 20 3E2D3E3844E45B52 3D90A2D3C79E5AA2 3169F1C1 2C85169E F T",
+          "PR87_GRAUPEL_TRIAL_REJECT 1 1 208 21 4 3ED284C7C748A9AF 41CF69C3F227C019 BF4F535AF5D49615 C24A91974156B33A BF57B9BEE02B6C0B C2541F6F1B091EF0",
+          "-------------- FATAL CALLED ---------------"
+        ],
+        "source_failure_path": "/var/tmp/pr87_followup_OFF_60s_v48_20261019/run/pr85_joint_source_failure.raw.gz",
+        "source_failure_sha256": "6f5ef6dc017508aace9b44729fe8ddf889fac5fc02aea58141f36726d576f3da"
+      },
+      "run_receipt": {
+        "after_input_count": 101,
+        "build_receipt_sha256": "d55f43af058bbc678a033248a060f9b672f10c21810ed4bb9fb7981903ccc23d",
+        "candidate_build_unchanged": true,
+        "changed_original_inputs": [],
+        "changed_staged_inputs": [],
+        "completed_post_kdm6_timesteps": [
+          1,
+          2
+        ],
+        "duplicate_post_kdm6_timesteps": [],
+        "earliest_fatal": "-------------- FATAL CALLED ---------------",
+        "executed_executable_sha256": "712a4387b8400506873ef97a10e2463991b8b4324e5de03427b726652bf35376",
+        "expected_executed_executable_sha256": "712a4387b8400506873ef97a10e2463991b8b4324e5de03427b726652bf35376",
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00"
+        ],
+        "fatal_line_count": 2,
+        "final_completed_step": 2,
+        "maximum_seen_timestep": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.05692,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 105.51064,
+            "timestamp": "2026-08-16_13:00:40"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_OFF_60s_v48_20261019/receipt.json",
+        "preflight_equals_after_inputs": true,
+        "preflight_input_count": 101,
+        "processing_errors": [],
+        "returncode": 1,
+        "sha256": "4ca520ddedd1fd94d25a4822e071b13105658a10f5e5a4e39953f0afbb9f9241",
+        "status": "INCOMPLETE",
+        "timestep_count": 2,
+        "wall_seconds": 426.6835524253547
+      },
+      "stage_audit": {
+        "completed_post_kdm6_timestep_count": 2,
+        "consumer_build_binding_executable_sha256": "712a4387b8400506873ef97a10e2463991b8b4324e5de03427b726652bf35376",
+        "path": "docs/evidence/pr87_followup_20261019/review/v48_off_stage_audit.json",
+        "sha256": "ca60b4fe494f138fc98d2f1331ef3876aba1a1c0416aec44e2adb4432d89760d",
+        "state_record_count": 15,
+        "status": "INCOMPLETE",
+        "timesteps": [
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 1
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 4,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 4,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 5,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": true,
+            "required_rkstep_sequence_complete": true,
+            "required_state_sequence_complete": true,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "RK_STAGE_END",
+              "PRE_KDM6",
+              "POST_KDM6"
+            ],
+            "status": "PASS",
+            "timestep": 2
+          },
+          {
+            "first_recorded_state_violation": null,
+            "intermediate_predictor_qv_negative_records": [
+              {
+                "negative_cells": 1,
+                "rkstep": 0,
+                "stage": "PRE_RK"
+              },
+              {
+                "negative_cells": 1,
+                "rkstep": 1,
+                "stage": "RK_STAGE_END"
+              },
+              {
+                "negative_cells": 2,
+                "rkstep": 2,
+                "stage": "RK_STAGE_END"
+              }
+            ],
+            "observed_post_kdm6": false,
+            "required_rkstep_sequence_complete": false,
+            "required_state_sequence_complete": false,
+            "state_stage_sequence": [
+              "PRE_RK",
+              "RK_STAGE_END",
+              "RK_STAGE_END"
+            ],
+            "status": "INCOMPLETE",
+            "timestep": 3
+          }
+        ],
+        "trace_path": "/var/tmp/pr87_followup_OFF_60s_v48_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "trace_sha256": "f072f4e8b12e4234199895e1df38ef19ef141588df05543d257e1666a9ebe891",
+        "trace_timesteps": [
+          1,
+          2,
+          3
+        ]
+      },
+      "transport_budget": {
+        "all_completed_calls_theta_one": true,
+        "path": "/var/tmp/pr87_followup_OFF_60s_v48_20261019/run/pr85_joint_transport_budget.raw.gz",
+        "rk_calls": [
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 1
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": true,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 1.0,
+            "timestep": 2
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 1,
+            "rk": 1,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": true,
+            "feasible": true,
+            "reported_rk": 2,
+            "rk": 2,
+            "theta": 1.0,
+            "timestep": 3
+          },
+          {
+            "baseline_feasible": false,
+            "feasible": false,
+            "reported_rk": 3,
+            "rk": 3,
+            "theta": 0.0,
+            "timestep": 3
+          }
+        ],
+        "sha256": "6abc59a8fa9c8657d37f0f2bf14cfdd4379c142a22c67dbb47370256b85e9533",
+        "source_first_pair_fallback": [
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 1
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "T",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 2
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 1,
+            "timestep": 3
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 2,
+            "timestep": 3
+          },
+          {
+            "pairs": [
+              "F",
+              "F",
+              "F",
+              "F"
+            ],
+            "rk": 3,
+            "timestep": 3
+          }
+        ],
+        "t3_rk3_feasible": false
+      }
+    }
+  },
+  "build": {
+    "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "executable_hash_matches": true,
+    "executable_path": "/var/tmp/pr87_followup_build_20261019_v48/wrf_pr87_overlay.exe",
+    "executable_sha256": "712a4387b8400506873ef97a10e2463991b8b4324e5de03427b726652bf35376",
+    "expected_executable_sha256": "712a4387b8400506873ef97a10e2463991b8b4324e5de03427b726652bf35376",
+    "expected_parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "full_clean_build": false,
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "parent_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+    "parent_hash_matches": true,
+    "receipt_path": "/var/tmp/pr87_followup_build_20261019_v48/pr87_native_overlay_build.json",
+    "receipt_sha256": "d55f43af058bbc678a033248a060f9b672f10c21810ed4bb9fb7981903ccc23d",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "limitations": [
+    "Neither arm completed timestep 3 POST_KDM6; do not claim 60-second completion or full T3 state validation.",
+    "Both arms fail at T3 RK3 with captured FULL_FAILURE_COUNT 16 (15 cloud pair 1, one graupel pair 4); this review records but does not infer root cause.",
+    "The native overlay build is partial, not a full clean model build."
+  ],
+  "mixture_witness": {
+    "candidate_BG64_bits": "3D90A2D3C79E5AA2",
+    "candidate_Q64_bits": "3E2D3E3844E45B52",
+    "candidate_Q_minus_900_BG_exact": "79/154742504910672534362390528",
+    "candidate_Q_over_BG_exact": "2107183544196092416/2341315049106769",
+    "candidate_Q_over_BG_minus_900_exact": "316/2341315049106769",
+    "line": "PR87_GRAUPEL_MIXTURE 3 1 1 160 235 20 3E2D3E3844E45B52 3D90A2D3C79E5AA2 3169F1C1 2C85169E F T",
+    "meaning": "T3 RK1, p4 graupel at i=160,j=235,k=20; scalar log reports source-certified mixture success.",
+    "stored_BG32_bits": "2C85169E",
+    "stored_Q32_bits": "3169F1C1",
+    "stored_Q_minus_900_BG_exact": "-47/288230376151711744",
+    "stored_Q_over_BG_exact": "3924934912/4361039",
+    "stored_Q_over_BG_minus_900_exact": "-188/4361039"
+  },
+  "schema": "pr87_v48_closed_runtime_review_v1",
+  "scope": "Closed V48 OFF/COUPLED 60-second requested runs; audited artifacts only. Both runs are incomplete and do not establish a completed 60-second result."
+}
