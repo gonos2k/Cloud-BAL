@@ -1,0 +1,185 @@
+{
+  "schema": "pr90_rain_failure_replay_v1",
+  "capture": {
+    "path": "/var/tmp/pr90_OFF_140s_diag_20261019/run/rsl.out.0000.gz",
+    "raw_sha256": "038c3e3cf2d010cb4b39bf7bb14c11c276a05dfffc5eed37c1c3438079bde530",
+    "decoded_sha256": "b19881c654903dbb344a346eb480d94e13c7caee1e8972725c659f9a4cf659f4"
+  },
+  "event": {
+    "helper_stage": 4,
+    "core_stage": -1,
+    "reason": "internal_volume_precheck",
+    "input_hex": {
+      "q_internal": "308D0490",
+      "nvol_internal": "38AB5008",
+      "dry_density": "3F904AFD",
+      "pidnr": "4644597C",
+      "power": "40400000",
+      "lambda_min": "44704000",
+      "lambda_max": "4708B800"
+    },
+    "derived_hex": [
+      "3E11A09200000000",
+      "3F12FF0007136D24",
+      "3F12FF0000000000",
+      "3FF2095FA0000000",
+      "3DF4242670FFE044",
+      "3EEDB1AE1DEBB1E9",
+      "40F36FF14DB69056",
+      "41ECA80051846F34",
+      "3F156A012D150021",
+      "400F9215D6CECA58",
+      "3F156A00F8060000",
+      "3F156A0100000000"
+    ],
+    "caller": {
+      "timestep": 7,
+      "j": 222,
+      "i": 193,
+      "k": 4,
+      "printed_values": [
+        "1.0260397E-09",
+        "8.1688224E-05",
+        "1.127288"
+      ]
+    }
+  },
+  "stage_trace": {
+    "initial_internal_volume_predicate": "failed",
+    "unit_quotient": "not_reached",
+    "public_store": "not_reached",
+    "restore": "not_executed_until_public_store_valid",
+    "consumer": "not_executed_until_restore_valid"
+  },
+  "provenance": {
+    "preflight": {
+      "path": "/var/tmp/pr90_OFF_140s_diag_20261019/preflight.json",
+      "sha256": "56edf8257f2b3d8cdd9686498a3594e5cda33a380ecd1146eb2add5d3beada3d"
+    },
+    "build_receipt": {
+      "path": "/var/tmp/pr90_native_build_diag_20261019/pr87_native_overlay_build.json",
+      "sha256": "4e2715cc272099491f69edb9153cb40389d1b1d8397acb5fb258d21475cf2f4e"
+    },
+    "closed_run_receipt": {
+      "path": "/var/tmp/pr90_OFF_140s_diag_20261019/receipt.json",
+      "sha256": "60a1e154ccaffad642bfa3869bdd372b7f9192df4d602b3dbf5bb007ea43b57a",
+      "status": "INCOMPLETE",
+      "returncode": 128,
+      "wall_seconds": 916.7670307941735,
+      "capture_artifact": {
+        "path": "rsl.out.0000.gz",
+        "bytes": 32424777,
+        "sha256": "038c3e3cf2d010cb4b39bf7bb14c11c276a05dfffc5eed37c1c3438079bde530"
+      }
+    },
+    "candidate_executable": {
+      "path": "/var/tmp/pr90_native_build_diag_20261019/wrf_pr87_overlay.exe",
+      "sha256": "f74f4c5f33add32770a3d0517bcf427dac96d575b299ac170663e571f5a77dca"
+    },
+    "compiler_profile": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    "compiled_sources": {
+      "module_em.o": {
+        "path": "/var/tmp/pr90_native_build_diag_20261019/source/overrides/module_em.F",
+        "sha256": "090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b"
+      },
+      "module_mp_kdm6.o": {
+        "path": "/var/tmp/pr90_native_build_diag_20261019/source/overrides/module_mp_kdm6.F",
+        "sha256": "14c6145df549541fae2aab84e98ee480ba6ac8a7c769dd926a6d44f22451c35d"
+      },
+      "support": {
+        "path": "/var/tmp/pr90_native_build_diag_20261019/source/pr90_cycle_support.f90",
+        "sha256": "3675000ae517282e1a8169666337e33f1f2cc9d568699dcb6feef3df00e715ca"
+      }
+    },
+    "diagnostic_count": 12
+  },
+  "replays": [
+    {
+      "helper_stage": 4,
+      "core_stage": -1,
+      "reason": "internal_volume_precheck",
+      "public_store_valid": false,
+      "result_hex": {
+        "q_public": "BF800000",
+        "n_specific": "BF800000",
+        "q_restored": "BF800000",
+        "nvol_restored": "BF800000"
+      },
+      "roundtrip_executed": false,
+      "consumer_executed": false,
+      "consumer_valid": false,
+      "consumer_reason": -1,
+      "diagnostic_hex": [
+        "3E11A09200000000",
+        "3F12FF0007136D24",
+        "3F12FF0000000000",
+        "3FF2095FA0000000",
+        "3DF4242670FFE044",
+        "3EEDB1AE1DEBB1E9",
+        "40F36FF14DB69056",
+        "41ECA80051846F34",
+        "3F156A012D150021",
+        "400F9215D6CECA58",
+        "3F156A00F8060000",
+        "3F156A0100000000"
+      ],
+      "profile": "O0",
+      "scratch": "/var/tmp/pr90_failure_replay_O0_i7wywf9c",
+      "stdout": "PR90_REPLAY 4 -1 internal_volume_precheck F BF800000 BF800000 BF800000 BF800000 F F -1\nPR90_REPLAY_DIAGNOSTIC_HEX 3E11A09200000000 3F12FF0007136D24 3F12FF0000000000 3FF2095FA0000000 3DF4242670FFE044 3EEDB1AE1DEBB1E9 40F36FF14DB69056 41ECA80051846F34 3F156A012D150021 400F9215D6CECA58 3F156A00F8060000 3F156A0100000000",
+      "stdout_sha256": "575bd736a742346bf2bfa2ea6434f8da1ed979a18df45f7c61546a4c28e73188",
+      "matches_native_failure": true,
+      "stage_trace": {
+        "initial_internal_volume_predicate": "failed",
+        "unit_quotient": "not_reached",
+        "public_store": "not_reached",
+        "restore": "not_executed",
+        "consumer": "not_executed"
+      }
+    },
+    {
+      "helper_stage": 4,
+      "core_stage": -1,
+      "reason": "internal_volume_precheck",
+      "public_store_valid": false,
+      "result_hex": {
+        "q_public": "BF800000",
+        "n_specific": "BF800000",
+        "q_restored": "BF800000",
+        "nvol_restored": "BF800000"
+      },
+      "roundtrip_executed": false,
+      "consumer_executed": false,
+      "consumer_valid": false,
+      "consumer_reason": -1,
+      "diagnostic_hex": [
+        "3E11A09200000000",
+        "3F12FF0007136D24",
+        "3F12FF0000000000",
+        "3FF2095FA0000000",
+        "3DF4242670FFE044",
+        "3EEDB1AE1DEBB1E9",
+        "40F36FF14DB69056",
+        "41ECA80051846F34",
+        "3F156A012D150021",
+        "400F9215D6CECA58",
+        "3F156A00F8060000",
+        "3F156A0100000000"
+      ],
+      "profile": "O2",
+      "scratch": "/var/tmp/pr90_failure_replay_O2_h4t6hqz9",
+      "stdout": "PR90_REPLAY 4 -1 internal_volume_precheck F BF800000 BF800000 BF800000 BF800000 F F -1\nPR90_REPLAY_DIAGNOSTIC_HEX 3E11A09200000000 3F12FF0007136D24 3F12FF0000000000 3FF2095FA0000000 3DF4242670FFE044 3EEDB1AE1DEBB1E9 40F36FF14DB69056 41ECA80051846F34 3F156A012D150021 400F9215D6CECA58 3F156A00F8060000 3F156A0100000000",
+      "stdout_sha256": "575bd736a742346bf2bfa2ea6434f8da1ed979a18df45f7c61546a4c28e73188",
+      "matches_native_failure": true,
+      "stage_trace": {
+        "initial_internal_volume_predicate": "failed",
+        "unit_quotient": "not_reached",
+        "public_store": "not_reached",
+        "restore": "not_executed",
+        "consumer": "not_executed"
+      }
+    }
+  ]
+}

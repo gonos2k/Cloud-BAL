@@ -1,0 +1,277 @@
+{
+  "arms": [
+    {
+      "arm": "OFF",
+      "candidate_build": {
+        "compiled_source_sha256": {
+          "module_em.o": {
+            "sha256": "090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b",
+            "staged_path": "/var/tmp/pr90_native_build_c7_20261019/source/overrides/module_em.F"
+          },
+          "module_mp_kdm6.o": {
+            "sha256": "983095a0aa0c76eab4efdda27f9435e61634e08e542ef9bd096aa4cf8004eca4",
+            "staged_path": "/var/tmp/pr90_native_build_c7_20261019/source/overrides/module_mp_kdm6.F"
+          },
+          "support": {
+            "sha256": "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6",
+            "staged_path": "/var/tmp/pr90_native_build_c7_20261019/source/pr90_cycle_support.f90"
+          }
+        },
+        "executable_sha256": "5f5599e38759a9e2be27a9e7e0977370592c92cab328062d07eb359bddd19572",
+        "identity": "PR87 source-mapped partial native overlay; not a clean build",
+        "path": "/var/tmp/pr90_native_build_c7_20261019/pr87_native_overlay_build.json",
+        "sha256": "7a58ac2ae90eca9ffe0500515282b537e11db25ab9de8175856609bf812bba31",
+        "status": "PASS_OVERLAY_BUILD"
+      },
+      "native_post_kdm6_trace": {
+        "artifact": {
+          "compressed_bytes": 2726170120,
+          "compressed_path": "pr85_joint_moment_stages.raw.gz",
+          "compressed_sha256": "976d7b11d65677f4257d37a5d1d686e41982024ffa2d60f803546197f877d56b",
+          "path": "pr85_joint_moment_stages.raw",
+          "raw_bytes": 7537409380,
+          "raw_sha256": "59ffbe79d42089f4d15589864977ad693f3f2544f4f6ccab431271cc16b8acb8",
+          "records_parsed": 73
+        },
+        "post_kdm6_public_state": {
+          "DEN_kg_per_m3": {
+            "decimal": 1.114193081855774,
+            "hex": "3F8E9DE1"
+          },
+          "NR_public_per_kgdry": {
+            "decimal": 0.01708397828042507,
+            "hex": "3C8BF3B3"
+          },
+          "QR_kg_per_kgdry": {
+            "decimal": 2.4189600367208186e-07,
+            "hex": "3481DDEF"
+          },
+          "global_i_j_k": [
+            188,
+            222,
+            5
+          ],
+          "record_bounds": {
+            "ite": 233,
+            "its": 2,
+            "jte": 281,
+            "jts": 2,
+            "kte": 39,
+            "kts": 1
+          },
+          "source_call_status": "POST_KDM6 after timestep 8 KDM6 returned normally"
+        },
+        "trace_schema": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/tools/pr85_joint_stage_trace.py",
+          "sha256": "5c2e9ccb3537a6bc251845e2b87c3efb991002ebbc1db5232d475e29f6c31720",
+          "state_fields": [
+            "DEN",
+            "Q",
+            "QC",
+            "QI",
+            "QR",
+            "QS",
+            "QG",
+            "NN",
+            "NC",
+            "NI",
+            "NR",
+            "BG"
+          ]
+        }
+      },
+      "psd_ledger": {
+        "compressed_bytes": 850386,
+        "compressed_path": "pr85_kdm6_psd_boundary.raw.gz",
+        "compressed_sha256": "e2d87e01cf3b50574486f971d71cfc307960d4caa3755dc7d9bd0cc7f1d05df0",
+        "raw_bytes": 4237750,
+        "raw_sha256": "b4105026fc1082a24d6b47de5e83f1644a61ea25026cb64ed34753a1203f1922"
+      },
+      "run_receipt": {
+        "path": "/var/tmp/pr90_OFF_180s_c7_20261019/receipt.json",
+        "returncode": 0,
+        "sha256": "3dc5773680fb0d92cbdf2aeb0a8ebaa1739e11c6366152add51e949c6f767ab1",
+        "status": "COMPLETE",
+        "timesteps": 9,
+        "wall_seconds": 1136.5474561993033
+      },
+      "target_bits": {
+        "nvol_before": "3C9BEEF8",
+        "nvol_directed": "3C9BEEF9",
+        "q_internal": "3481DDEF",
+        "rho_dry": "3F8E9DE1"
+      },
+      "target_row": {
+        "exact_number_max_r64": "9.1956705490572938E+002",
+        "exact_number_min_r64": "1.9034848889916363E-002",
+        "i": 188,
+        "k": 5,
+        "lambda_max_r32": "3.5000000000000000E+004",
+        "lambda_min_r32": "9.6100000000000000E+002",
+        "lat": 222,
+        "legacy_available": "T",
+        "native_delta_r64": "1.8626451492309570E-009",
+        "number_volume_before_r32": "1.9034847617149353E-002",
+        "number_volume_directed_r32": "1.9034849479794502E-002",
+        "number_volume_native_r32": "1.9034849479794502E-002",
+        "q_r32": "2.4189600367208186E-007",
+        "rho_dry_r32": "1.1141930818557739E+000",
+        "side": 1,
+        "species": "rain",
+        "stage": "stage3",
+        "storage_correction_r64": "0.0000000000000000E+000"
+      }
+    },
+    {
+      "arm": "COUPLED",
+      "candidate_build": {
+        "compiled_source_sha256": {
+          "module_em.o": {
+            "sha256": "090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b",
+            "staged_path": "/var/tmp/pr90_native_build_c7_20261019/source/overrides/module_em.F"
+          },
+          "module_mp_kdm6.o": {
+            "sha256": "983095a0aa0c76eab4efdda27f9435e61634e08e542ef9bd096aa4cf8004eca4",
+            "staged_path": "/var/tmp/pr90_native_build_c7_20261019/source/overrides/module_mp_kdm6.F"
+          },
+          "support": {
+            "sha256": "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6",
+            "staged_path": "/var/tmp/pr90_native_build_c7_20261019/source/pr90_cycle_support.f90"
+          }
+        },
+        "executable_sha256": "5f5599e38759a9e2be27a9e7e0977370592c92cab328062d07eb359bddd19572",
+        "identity": "PR87 source-mapped partial native overlay; not a clean build",
+        "path": "/var/tmp/pr90_native_build_c7_20261019/pr87_native_overlay_build.json",
+        "sha256": "7a58ac2ae90eca9ffe0500515282b537e11db25ab9de8175856609bf812bba31",
+        "status": "PASS_OVERLAY_BUILD"
+      },
+      "native_post_kdm6_trace": {
+        "artifact": {
+          "compressed_bytes": 2726249005,
+          "compressed_path": "pr85_joint_moment_stages.raw.gz",
+          "compressed_sha256": "ac1bf866d3c758c82808a6b5ba9ff9a04d0f915717add1c8b7a7ebdb61bf77cd",
+          "path": "pr85_joint_moment_stages.raw",
+          "raw_bytes": 7537409380,
+          "raw_sha256": "f2e12c5559aafc59c9604aa285aa7dfec6c8b803ac7b56f338b5cac7d653dbeb",
+          "records_parsed": 73
+        },
+        "post_kdm6_public_state": {
+          "DEN_kg_per_m3": {
+            "decimal": 1.114193081855774,
+            "hex": "3F8E9DE1"
+          },
+          "NR_public_per_kgdry": {
+            "decimal": 0.01708397828042507,
+            "hex": "3C8BF3B3"
+          },
+          "QR_kg_per_kgdry": {
+            "decimal": 2.4189600367208186e-07,
+            "hex": "3481DDEF"
+          },
+          "global_i_j_k": [
+            188,
+            222,
+            5
+          ],
+          "record_bounds": {
+            "ite": 233,
+            "its": 2,
+            "jte": 281,
+            "jts": 2,
+            "kte": 39,
+            "kts": 1
+          },
+          "source_call_status": "POST_KDM6 after timestep 8 KDM6 returned normally"
+        },
+        "trace_schema": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/tools/pr85_joint_stage_trace.py",
+          "sha256": "5c2e9ccb3537a6bc251845e2b87c3efb991002ebbc1db5232d475e29f6c31720",
+          "state_fields": [
+            "DEN",
+            "Q",
+            "QC",
+            "QI",
+            "QR",
+            "QS",
+            "QG",
+            "NN",
+            "NC",
+            "NI",
+            "NR",
+            "BG"
+          ]
+        }
+      },
+      "psd_ledger": {
+        "compressed_bytes": 849782,
+        "compressed_path": "pr85_kdm6_psd_boundary.raw.gz",
+        "compressed_sha256": "731ee3efed59a0938f6c417642c5708eb8067c9253421ebc2ca26f8078f5f622",
+        "raw_bytes": 4236775,
+        "raw_sha256": "0792e2bb8c37bf6ef219739b4ccb60d61b8ea08f7c32a349b1420ffbb06b24ea"
+      },
+      "run_receipt": {
+        "path": "/var/tmp/pr90_COUPLED_180s_c7_20261019/receipt.json",
+        "returncode": 0,
+        "sha256": "72fe00aebe9db05270c747b974218114d3f3f83d1d7c6a87d4032b6399c5a0e0",
+        "status": "COMPLETE",
+        "timesteps": 9,
+        "wall_seconds": 1130.7373465523124
+      },
+      "target_bits": {
+        "nvol_before": "3C9BEEF8",
+        "nvol_directed": "3C9BEEF9",
+        "q_internal": "3481DDEF",
+        "rho_dry": "3F8E9DE1"
+      },
+      "target_row": {
+        "exact_number_max_r64": "9.1956705490572938E+002",
+        "exact_number_min_r64": "1.9034848889916363E-002",
+        "i": 188,
+        "k": 5,
+        "lambda_max_r32": "3.5000000000000000E+004",
+        "lambda_min_r32": "9.6100000000000000E+002",
+        "lat": 222,
+        "legacy_available": "T",
+        "native_delta_r64": "1.8626451492309570E-009",
+        "number_volume_before_r32": "1.9034847617149353E-002",
+        "number_volume_directed_r32": "1.9034849479794502E-002",
+        "number_volume_native_r32": "1.9034849479794502E-002",
+        "q_r32": "2.4189600367208186E-007",
+        "rho_dry_r32": "1.1141930818557739E+000",
+        "side": 1,
+        "species": "rain",
+        "stage": "stage3",
+        "storage_correction_r64": "0.0000000000000000E+000"
+      }
+    }
+  ],
+  "extractor": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/docs/evidence/pr90_rain_roundtrip_20261019/c7/science/extract_psd_t8_event.py",
+    "sha256": "89df60870576788c4a5077e876b131a8d410bbab280ba4ed7b6de345f43fb702"
+  },
+  "schema": "pr90_c7_psd_t8_event_v1",
+  "scope": {
+    "internal_nvol_and_public_nr_are_distinct_fields": true,
+    "internal_volume_number_unit": "number per m3 dry air; PR85 PSD row N values",
+    "interpretation": "one final PSD boundary-reconstruction event in each arm",
+    "ledger_row_semantics": "events; repeated rows are not deduplicated unique cells",
+    "legacy_paths_may_also_be_logged": true,
+    "not_a_global_number_budget": true,
+    "not_a_physical_nucleation_claim": true,
+    "public_specific_number_unit": "number per kg dry air; actual POST_KDM6 NR state trace"
+  },
+  "source_failure_binding": {
+    "c6_failure_replay": "../c6/OFF_t8_failure_replay.json",
+    "c6_failure_replay_sha256": "e084d1738cc14a5efe1c581975502f967ecb7464602fa011295e5626c61196b4",
+    "input_hex": {
+      "dry_density": "3F8E9DE1",
+      "lambda_max": "4708B800",
+      "lambda_min": "44704000",
+      "nvol_internal": "3C9BEEF8",
+      "pidnr": "4644597C",
+      "power": "40400000",
+      "q_internal": "3481DDEF"
+    }
+  },
+  "status": "PASS_RECEIPT_BOUND_TARGET_EVENT"
+}

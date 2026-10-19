@@ -30,6 +30,9 @@ STATE_FIELDS = ("DEN", "Q", "QC", "QI", "QR", "QS", "QG", "NN", "NC", "NI", "NR"
 TENDENCY_FIELDS = ("QV_TEND", "QC_TEND", "QI_TEND", "QNC_TEND", "QNI_TEND")
 SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 30: "10min"}
 SNAPSHOT_SECONDS = tuple(timestep * 20 for timestep in SNAPSHOTS)
+LAUNCH_ENVIRONMENT = {"OMP_NUM_THREADS": "1", "OMP_DYNAMIC": "FALSE"}
+LAUNCH_ENVIRONMENT_SHA256 = hashlib.sha256(
+    b"export OMP_NUM_THREADS=1 OMP_DYNAMIC=FALSE").hexdigest()
 
 
 def snapshot_schedule(duration: int) -> dict[int, str]:
@@ -247,6 +250,9 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         "candidate_wrfbdy_sha256": receipt["candidate_wrfbdy_sha256"], "input_file_count": len(inputs),
         "input_hashes": inputs, "source_namelist_sha256": sha256(namelist),
         "candidate_namelist_sha256": hashlib.sha256(edited.encode()).hexdigest(),
+        "launch_environment": {**LAUNCH_ENVIRONMENT,
+                               "status": "CONFIGURED_BY_RUNNER",
+                               "launch_request_sha256": LAUNCH_ENVIRONMENT_SHA256},
         "namelist_changes": {"runtime_seconds": duration, "end_time": model_end_time(original_namelist, duration),
                              "history_interval_minutes": 1}, "namelist_diff": namelist_diff,
         "namelist_text": edited,
@@ -307,6 +313,106 @@ def _model_times(stage: Path) -> list[dict]:
         if [row["timestamp"] for row in rows] != primary_times:
             raise ValueError(f"model timestamp sequence differs between {primary_name} and {name}")
     return primary
+
+
+def _unknown_execution_layout(reason: str, preflight: dict | None = None) -> dict:
+    return {"status": "UNKNOWN", "single_execution_layout": None, "reason": reason,
+            "basis": "candidate namelist max_dom, same-run receipt-bound rsl.out.0000, and recorded launch request",
+            "source_sha256": {
+                "candidate_namelist": (preflight or {}).get("candidate_namelist_sha256"),
+                "launch_request": (preflight or {}).get("launch_environment", {}).get(
+                    "launch_request_sha256")}}
+
+
+def _namelist_max_dom(text: str) -> int:
+    uncommented = "\n".join(line.split("!", 1)[0] for line in text.splitlines())
+    values = re.findall(r"(?im)^\s*max_dom\s*=\s*(\d+)\s*,?\s*$", uncommented)
+    if len(values) != 1:
+        raise ValueError("staged namelist must contain exactly one integer max_dom")
+    return int(values[0])
+
+
+def _rsl_layout(path: Path) -> tuple[set[tuple[int, int]], set[int]]:
+    opener = gzip.open if path.suffix == ".gz" else open
+    tasks, tiles = set(), set()
+    task_pattern = re.compile(r"Ntasks\s+in\s+X\s+(\d+)\s*,\s*ntasks\s+in\s+Y\s+(\d+)", re.I)
+    tile_pattern = re.compile(r"WRF\s*NUMBER\s*OF\s*TILES\s*=\s*(\d+)", re.I)
+    with opener(path, "rt", errors="replace") as stream:
+        for line in stream:
+            if match := task_pattern.search(line):
+                tasks.add((int(match.group(1)), int(match.group(2))))
+            if match := tile_pattern.search(line):
+                tiles.add(int(match.group(1)))
+    return tasks, tiles
+
+
+def _payload_sha256(path: Path) -> str:
+    opener = gzip.open if path.suffix == ".gz" else open
+    digest = hashlib.sha256()
+    with opener(path, "rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _rsl_output_is_bound(path: Path, receipt: dict) -> bool:
+    payload_sha = _payload_sha256(path)
+    if path.suffix == ".gz":
+        if sha256(path) not in {row.get("compressed_sha256") for row in
+                                receipt.get("compressed_outputs", [])
+                                if row.get("compressed_path") == path.name}:
+            return False
+        return payload_sha in {row.get("sha256") for row in receipt.get("compressed_outputs", [])
+                               if row.get("compressed_path") == path.name}
+    return payload_sha in {row.get("sha256") for row in receipt.get("generated_files", [])
+                           if row.get("path") == path.name}
+
+
+def _execution_layout(preflight: dict, stage: Path, receipt: dict | None = None) -> dict:
+    launch = preflight.get("launch_environment")
+    if (not isinstance(launch, dict) or launch.get("status") != "CONFIGURED_BY_RUNNER"
+            or launch.get("OMP_NUM_THREADS") != "1" or launch.get("OMP_DYNAMIC") != "FALSE"
+            or launch.get("launch_request_sha256") != LAUNCH_ENVIRONMENT_SHA256):
+        return _unknown_execution_layout("preflight lacks a verified runner launch request", preflight)
+    namelist_path = stage / "namelist.input"
+    rsl_path = next((path for path in (stage / "rsl.out.0000", stage / "rsl.out.0000.gz")
+                     if path.is_file()), None)
+    try:
+        namelist_sha = sha256(namelist_path)
+        if namelist_sha != preflight.get("candidate_namelist_sha256"):
+            raise ValueError("staged namelist hash differs from preflight")
+        max_dom = _namelist_max_dom(namelist_path.read_text(encoding="utf-8"))
+        if rsl_path is None:
+            raise ValueError("same-run rsl.out.0000 is absent")
+        if receipt is not None and not _rsl_output_is_bound(rsl_path, receipt):
+            raise ValueError("same-run rsl.out.0000 is not receipt-bound")
+        tasks, tiles = _rsl_layout(rsl_path)
+        if len(tasks) != 1 or len(tiles) != 1:
+            raise ValueError("RSL rank or tile layout is absent or contradictory")
+        ntasks_x, ntasks_y = next(iter(tasks))
+        tile_count = next(iter(tiles))
+        if min(ntasks_x, ntasks_y, tile_count) < 1 or max_dom < 1:
+            raise ValueError("invalid execution-layout count")
+        if max_dom != 1:
+            raise ValueError(f"unsupported max_dom={max_dom}")
+        single = (ntasks_x == 1 and ntasks_y == 1 and tile_count == 1
+                  and launch["OMP_NUM_THREADS"] == "1")
+        return {"status": "VERIFIED_SINGLE" if single else "KNOWN_MULTIPLE",
+                "single_execution_layout": single, "domain_count": max_dom,
+                "mpi_tasks_x": ntasks_x, "mpi_tasks_y": ntasks_y,
+                "mpi_rank_count": ntasks_x * ntasks_y, "mpi_ranks": ntasks_x * ntasks_y,
+                "tiles_per_domain": tile_count,
+                "threads": int(launch["OMP_NUM_THREADS"]),
+                "configured_omp_threads": int(launch["OMP_NUM_THREADS"]),
+                "configured_omp_dynamic": launch["OMP_DYNAMIC"],
+                "thread_count_basis": "configured by this runner launch request; not runtime-observed",
+                "basis": "candidate namelist max_dom, same-run receipt-bound rsl.out.0000, and recorded launch request",
+                "source_sha256": {"candidate_namelist": namelist_sha,
+                                  "launch_request": launch["launch_request_sha256"],
+                                  "rsl_out_0000_payload": _payload_sha256(rsl_path),
+                                  "rsl_out_0000_artifact": sha256(rsl_path)}}
+    except (OSError, ValueError, EOFError) as exc:
+        return _unknown_execution_layout(str(exc), preflight)
 
 
 def _compress_closed(stage: Path) -> list[dict]:
@@ -482,7 +588,9 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
         "successor_collector_source_sha256": sha256(Path(__file__).resolve()),
         "successor_collector_source_path": str(Path(__file__).resolve()),
         "launch_receipt_sha256": sha256(launch_receipt_path) if launch_receipt_path.is_file() else None,
+        "launch_environment": preflight.get("launch_environment"),
     })
+    receipt["execution_layout"] = _execution_layout(preflight, stage, receipt)
     (out / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
     return receipt
 
@@ -508,7 +616,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     if candidate_build and _candidate_build_binding(Path(candidate_build["receipt_path"])) != candidate_build:
         raise RuntimeError("candidate build identity changed after preflight")
     pr87_probe = os.environ.get("PR87_PROBE")
-    command = ["/bin/bash", "-c", ". /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh --force >/dev/null 2>&1; . /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh >/dev/null 2>&1; export OMP_NUM_THREADS=1 OMP_DYNAMIC=FALSE; export LD_LIBRARY_PATH=/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:${LD_LIBRARY_PATH:-}; ulimit -s unlimited; ./wrf.exe > candidate_run.log 2>&1"]
+    command = ["/bin/bash", "-c", f". /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh --force >/dev/null 2>&1; . /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh >/dev/null 2>&1; export OMP_NUM_THREADS={LAUNCH_ENVIRONMENT['OMP_NUM_THREADS']} OMP_DYNAMIC={LAUNCH_ENVIRONMENT['OMP_DYNAMIC']}; export LD_LIBRARY_PATH=/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:${{LD_LIBRARY_PATH:-}}; ulimit -s unlimited; ./wrf.exe > candidate_run.log 2>&1"]
     start = time.monotonic()
     with (stage / "launcher.stdout").open("wb") as stdout, (stage / "launcher.stderr").open("wb") as stderr:
         process = subprocess.run(command, cwd=stage, stdout=stdout, stderr=stderr, check=False)
@@ -591,7 +699,9 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
                "candidate_wrfinput_sha256": prepared["candidate_wrfinput_sha256"],
                "candidate_wrfbdy_sha256": prepared["candidate_wrfbdy_sha256"],
                "candidate_namelist_sha256": prepared["candidate_namelist_sha256"],
+               "launch_environment": prepared["launch_environment"],
                "generated_files": generated_files, "compressed_outputs": compressed}
+    receipt["execution_layout"] = _execution_layout(prepared, stage, receipt)
     (out / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
     return receipt
 

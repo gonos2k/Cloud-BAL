@@ -1,0 +1,220 @@
+{
+  "failure": {
+    "caller": {
+      "i": 193,
+      "j": 222,
+      "k": 4,
+      "printed_values": [
+        "1.0260397E-09",
+        "8.1688224E-05",
+        "1.127288"
+      ],
+      "timestep": 7
+    },
+    "core_stage": -1,
+    "derived_hex": [
+      "3E11A09200000000",
+      "3F12FF0007136D24",
+      "3F12FF0000000000",
+      "3FF2095FA0000000",
+      "3DF4242670FFE044",
+      "3EEDB1AE1DEBB1E9",
+      "40F36FF14DB69056",
+      "41ECA80051846F34",
+      "3F156A012D150021",
+      "400F9215D6CECA58",
+      "3F156A00F8060000",
+      "3F156A0100000000"
+    ],
+    "finding": "At T7 the paired-store helper rejected at stage 4 on its internal volume precheck, before joint_moment_store (core stage -1). The KDM wrapper had already completed volume_number_to_specific scalar conversion successfully. The helper\u2019s subsequent internal Nspec64 division, public store, restore, and consumer were not reached. Replay in O0 and O2 reproduces this failure.",
+    "helper_stage": 4,
+    "input_hex": {
+      "dry_density": "3F904AFD",
+      "lambda_max": "4708B800",
+      "lambda_min": "44704000",
+      "nvol_internal": "38AB5008",
+      "pidnr": "4644597C",
+      "power": "40400000",
+      "q_internal": "308D0490"
+    },
+    "native_rsl_line": "PR90_RAIN_FAILURE stages=4 -1 internal_volume_precheck 308D0490 38AB5008 3F904AFD 4644597C 40400000 44704000 4708B800",
+    "reason": "internal_volume_precheck",
+    "replay_profiles": [
+      {
+        "consumer_executed": false,
+        "matches_native_failure": true,
+        "profile": "O0",
+        "public_store_valid": false,
+        "roundtrip_executed": false
+      },
+      {
+        "consumer_executed": false,
+        "matches_native_failure": true,
+        "profile": "O2",
+        "public_store_valid": false,
+        "roundtrip_executed": false
+      }
+    ],
+    "replay_provenance_receipt_sha256": "60a1e154ccaffad642bfa3869bdd372b7f9192df4d602b3dbf5bb007ea43b57a",
+    "stage_trace": {
+      "consumer": "not_executed_until_restore_valid",
+      "core_public_store": "not_reached",
+      "initial_internal_volume_predicate": "failed",
+      "paired_store_helper_unit_quotient": "not_reached",
+      "restore": "not_executed_until_paired_store_valid",
+      "wrapper_scalar_conversion": "completed successfully before paired-store helper entry"
+    },
+    "timestep": 7,
+    "wrapper_scalar_conversion": "completed successfully before pr87_number_public_store called the paired-store helper"
+  },
+  "interpretation": {
+    "d1_closure": "INCOMPLETE: expected 7 timesteps through 140 s, completed through step 6 (120 s); T7 rejected with return code 128.",
+    "limitations": [
+      "D1 diagnostic candidate runs additional probes on accepted paths; prefix identity is observed for captured fields and does not establish IEEE floating-point flag neutrality.",
+      "This verifies a 120 s physical-state/stage-trace prefix only; it is not a completed 140 s run or a scientific acceptance result."
+    ],
+    "prefix": "D1 and C5 OFF120 trace records through step 6 are bitwise identical despite the diagnostic candidate executable and duration difference."
+  },
+  "receipt_preservation": "all original receipts and run artifacts left unchanged",
+  "reproducibility": {
+    "command": "python3 docs/evidence/pr90_rain_roundtrip_20261019/d1/independent_review.py /var/tmp/pr90_OFF_140s_diag_20261019/run/pr85_joint_moment_stages.raw.gz /var/tmp/pr89_OFF_120s_c5_20261019/run/pr85_joint_moment_stages.raw.gz",
+    "script_path": "docs/evidence/pr90_rain_roundtrip_20261019/d1/independent_review.py",
+    "script_sha256": "263ad1c6aa2d4e63a5d1f8f24f30fa445ea4228b60623e42e34ba4e8a24c8579"
+  },
+  "review_mode": "read-only",
+  "runs": [
+    {
+      "arm": "OFF",
+      "build_receipt_path": "/var/tmp/pr90_native_build_diag_20261019/pr87_native_overlay_build.json",
+      "build_receipt_sha256": "4e2715cc272099491f69edb9153cb40389d1b1d8397acb5fb258d21475cf2f4e",
+      "candidate_namelist_sha256": "a8a7c741673c64c7618717f1876088f2299965e0df5539c63251e59c7e0d0ad5",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "changed_original_inputs": [],
+      "changed_staged_inputs": [],
+      "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/tests/intel_toolchain.sh",
+      "compiler_profile_sha256_actual": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "executable_path": "/var/tmp/pr90_native_build_diag_20261019/wrf_pr87_overlay.exe",
+      "executable_sha256_actual": "f74f4c5f33add32770a3d0517bcf427dac96d575b299ac170663e571f5a77dca",
+      "executed_executable_sha256": "f74f4c5f33add32770a3d0517bcf427dac96d575b299ac170663e571f5a77dca",
+      "expected_duration_seconds": 140,
+      "expected_executed_executable_sha256": "f74f4c5f33add32770a3d0517bcf427dac96d575b299ac170663e571f5a77dca",
+      "final_completed_step": 6,
+      "frozen_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "maximum_seen_timestep": 7,
+      "model_timestamps": [
+        "2026-08-16_13:00:20",
+        "2026-08-16_13:00:40",
+        "2026-08-16_13:01:00",
+        "2026-08-16_13:01:20",
+        "2026-08-16_13:01:40",
+        "2026-08-16_13:02:00"
+      ],
+      "preflight_sha256": "56edf8257f2b3d8cdd9686498a3594e5cda33a380ecd1146eb2add5d3beada3d",
+      "processing_errors": [],
+      "receipt_sha256": "60a1e154ccaffad642bfa3869bdd372b7f9192df4d602b3dbf5bb007ea43b57a",
+      "returncode": 128,
+      "root": "/var/tmp/pr90_OFF_140s_diag_20261019",
+      "source_input_count": 101,
+      "source_inputs_after_equal_preflight": true,
+      "source_override_hashes_match_staged": true,
+      "source_overrides": {
+        "module_bl_fogdes.o": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+        "module_bl_shinhong.o": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+        "module_em.o": "090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b",
+        "module_first_rk_step_part1.o": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+        "module_first_rk_step_part2.o": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+        "module_microphysics_zero_out.o": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+        "module_mp_kdm6.o": "14c6145df549541fae2aab84e98ee480ba6ac8a7c769dd926a6d44f22451c35d",
+        "module_pbl_driver.o": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+        "solve_em.o": "412183300ea8dd6af028ac1a5254f937477b054630db4eb1f5910a6bf974c3c5"
+      },
+      "source_receipt": "/var/tmp/pr85_evidence_bundle_20261015/actual_v17_OFF_run_receipt.json",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "stage_trace_compressed_path": "/var/tmp/pr90_OFF_140s_diag_20261019/run/pr85_joint_moment_stages.raw.gz",
+      "stage_trace_compressed_sha256_actual": "31f55bfba07560be06c171e8a31d567bbe9ce4a403972c32eaad610da8adc276",
+      "stage_trace_compressed_sha256_receipt": "31f55bfba07560be06c171e8a31d567bbe9ce4a403972c32eaad610da8adc276",
+      "stage_trace_uncompressed_bytes_receipt": 5752262240,
+      "stage_trace_uncompressed_sha256_receipt": "235f68cd5be1d86291d0bad95789bea0406147f7fad5e9fdb91f303af171d085",
+      "status": "INCOMPLETE",
+      "timestep_count": 6
+    },
+    {
+      "arm": "OFF",
+      "build_receipt_path": "/var/tmp/pr89_native_build_20261019_c5/pr87_native_overlay_build.json",
+      "build_receipt_sha256": "1079c73676532bb6ee21c37c9143dcc74a5f93001be01e18f3a283504070dfaf",
+      "candidate_namelist_sha256": "dee430a6911f565f1f00f1d34fc41183d7f005f140375aca27cd5c0e2fd35bbd",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "changed_original_inputs": [],
+      "changed_staged_inputs": [],
+      "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr89_process_contract_20261019/Cloud-BAL/tests/intel_toolchain.sh",
+      "compiler_profile_sha256_actual": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "executable_path": "/var/tmp/pr89_native_build_20261019_c5/wrf_pr87_overlay.exe",
+      "executable_sha256_actual": "beb2da6745606566074e15a043d173a8be01d277f00c4cc90ad3915f5de5a2d6",
+      "executed_executable_sha256": "beb2da6745606566074e15a043d173a8be01d277f00c4cc90ad3915f5de5a2d6",
+      "expected_duration_seconds": 120,
+      "expected_executed_executable_sha256": "beb2da6745606566074e15a043d173a8be01d277f00c4cc90ad3915f5de5a2d6",
+      "final_completed_step": 6,
+      "frozen_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "maximum_seen_timestep": 6,
+      "model_timestamps": [
+        "2026-08-16_13:00:20",
+        "2026-08-16_13:00:40",
+        "2026-08-16_13:01:00",
+        "2026-08-16_13:01:20",
+        "2026-08-16_13:01:40",
+        "2026-08-16_13:02:00"
+      ],
+      "preflight_sha256": "dee60a78cc5f00047cba34cf09ad350a68ec8a0a0fabb920e88b3fb4b546c31b",
+      "processing_errors": [],
+      "receipt_sha256": "199ae0f4eeed0ea0472150ae2d056351f8939c2835096b1e05bc1f9ec122ac33",
+      "returncode": 0,
+      "root": "/var/tmp/pr89_OFF_120s_c5_20261019",
+      "source_input_count": 101,
+      "source_inputs_after_equal_preflight": true,
+      "source_override_hashes_match_staged": true,
+      "source_overrides": {
+        "module_bl_fogdes.o": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+        "module_bl_shinhong.o": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+        "module_em.o": "0d3b1fe91a01c747a2339487695d82c7109ad4df3da5cbc561ca338c1fecf91d",
+        "module_first_rk_step_part1.o": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+        "module_first_rk_step_part2.o": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+        "module_microphysics_zero_out.o": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+        "module_mp_kdm6.o": "14c6145df549541fae2aab84e98ee480ba6ac8a7c769dd926a6d44f22451c35d",
+        "module_pbl_driver.o": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+        "solve_em.o": "412183300ea8dd6af028ac1a5254f937477b054630db4eb1f5910a6bf974c3c5"
+      },
+      "source_receipt": "/var/tmp/pr85_evidence_bundle_20261015/actual_v17_OFF_run_receipt.json",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "stage_trace_compressed_path": "/var/tmp/pr89_OFF_120s_c5_20261019/run/pr85_joint_moment_stages.raw.gz",
+      "stage_trace_compressed_sha256_actual": "215af430e15c617ec57f7ef86160e2af829ecf57cb2005eed9045074f3ad6ec8",
+      "stage_trace_compressed_sha256_receipt": "215af430e15c617ec57f7ef86160e2af829ecf57cb2005eed9045074f3ad6ec8",
+      "stage_trace_uncompressed_bytes_receipt": 5042096500,
+      "stage_trace_uncompressed_sha256_receipt": "75aa062fe3786dbf538be91e5fadb701825b0ecdf4f2cda8b2b5fe6dc9f6389c",
+      "status": "COMPLETE",
+      "timestep_count": 6
+    }
+  ],
+  "schema": "pr90_d1_independent_review_v1",
+  "trace_prefix_comparison": {
+    "bitwise_equal": true,
+    "compared_records": 49,
+    "decoded_trace_bytes_total": 10794358740,
+    "files": [
+      "/var/tmp/pr90_OFF_140s_diag_20261019/run/pr85_joint_moment_stages.raw.gz",
+      "/var/tmp/pr89_OFF_120s_c5_20261019/run/pr85_joint_moment_stages.raw.gz"
+    ],
+    "first_difference": null,
+    "record_counts_by_timestep": {
+      "1": 9,
+      "2": 8,
+      "3": 8,
+      "4": 8,
+      "5": 8,
+      "6": 8
+    },
+    "scope": "All stage records (state and PBL tendency) for completed timesteps 1 through 6. Exact record equality tests physical-state and recorded tendency equality for this prefix.",
+    "streaming_method": "Read gzip records and payloads in 1 MiB chunks; retained only records with timestep <= 6; compared record metadata and SHA-256 over exact encoded payload bytes."
+  }
+}

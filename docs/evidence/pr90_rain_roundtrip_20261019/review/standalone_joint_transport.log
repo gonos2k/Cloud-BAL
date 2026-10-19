@@ -1,0 +1,115 @@
+Pinned tests/intel_toolchain.sh; fresh scratch; source src/common/cloud_bal_joint_transport.f90 and tests/test_joint_qnb_transport.f90.
+
+[O0] scratch=/var/tmp/pr90_joint_original_O0_lmogi9h1 returncode=0
+PASS test_joint_qnb_transport
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/tests/test_joint_qnb_transport.f90(437): remark #7920: The value was too small when converting to REAL(KIND=4); the result is in the subnormal range.   [1.50E-39]
+  nb(1,1) = 1.50e-39_real32
+------------^
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/tests/test_joint_qnb_transport.f90(467): remark #7920: The value was too small when converting to REAL(KIND=4); the result is in the subnormal range.   [1.0E-40]
+  nb(1,1) = 1.0e-40_real32
+------------^
+forrtl: warning (406): fort: (1): In call to JOINT_MOMENT_STORE, an array temporary was created for argument #13
+
+Image              PC                Routine            Line        Source             
+test_joint         00000000004396E3  test_joint_qnb_tr         571  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to JOINT_MOMENT_STORE, an array temporary was created for argument #13
+
+Image              PC                Routine            Line        Source             
+test_joint         000000000043992A  test_joint_qnb_tr         578  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to JOINT_MOMENT_STORE, an array temporary was created for argument #13
+
+Image              PC                Routine            Line        Source             
+test_joint         0000000000439B70  test_joint_qnb_tr         588  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to STORE_DIRECTED_Q, an array temporary was created for argument #6
+
+Image              PC                Routine            Line        Source             
+test_joint         0000000000406FD2  joint_moment_stor         167  cloud_bal_joint_transport.f90
+test_joint         000000000043A171  test_joint_qnb_tr         621  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to JOINT_MOMENT_STORE, an array temporary was created for argument #13
+
+Image              PC                Routine            Line        Source             
+test_joint         000000000043CBC8  test_joint_qnb_tr         708  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to JOINT_MOMENT_STORE, an array temporary was created for argument #13
+
+Image              PC                Routine            Line        Source             
+test_joint         000000000043CCFD  test_joint_qnb_tr         716  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to STORE_DIRECTED_Q, an array temporary was created for argument #6
+
+Image              PC                Routine            Line        Source             
+test_joint         0000000000406FD2  joint_moment_stor         167  cloud_bal_joint_transport.f90
+test_joint         000000000044C987  test_joint_qnb_tr         964  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to STORE_DIRECTED_Q, an array temporary was created for argument #6
+
+Image              PC                Routine            Line        Source             
+test_joint         0000000000406FD2  joint_moment_stor         167  cloud_bal_joint_transport.f90
+test_joint         00000000004198CB  form_candidate            748  cloud_bal_joint_transport.f90
+test_joint         0000000000411C24  joint_qnb_update          641  cloud_bal_joint_transport.f90
+test_joint         000000000044E4C3  test_joint_qnb_tr         991  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to STORE_DIRECTED_Q, an array temporary was created for argument #6
+
+Image              PC                Routine            Line        Source             
+test_joint         0000000000406FD2  joint_moment_stor         167  cloud_bal_joint_transport.f90
+test_joint         00000000004198CB  form_candidate            748  cloud_bal_joint_transport.f90
+test_joint         0000000000411CA8  joint_qnb_update          666  cloud_bal_joint_transport.f90
+test_joint         000000000044E4C3  test_joint_qnb_tr         991  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to JOINT_MOMENT_STORE, an array temporary was created for argument #13
+
+Image              PC                Routine            Line        Source             
+test_joint         00000000004586A0  test_joint_qnb_tr        1301  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+forrtl: warning (406): fort: (1): In call to JOINT_MOMENT_STORE, an array temporary was created for argument #13
+
+Image              PC                Routine            Line        Source             
+test_joint         00000000004587DB  test_joint_qnb_tr        1306  test_joint_qnb_transport.f90
+test_joint         0000000000405D1D  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF65021CA  Unknown               Unknown  Unknown
+libc.so.6          00007B0AF650228B  __libc_start_main     Unknown  Unknown
+test_joint         0000000000405C05  Unknown               Unknown  Unknown
+
+[O2] scratch=/var/tmp/pr90_joint_original_O2_x89qdhif returncode=0
+PASS test_joint_qnb_transport
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/tests/test_joint_qnb_transport.f90(437): remark #7920: The value was too small when converting to REAL(KIND=4); the result is in the subnormal range.   [1.50E-39]
+  nb(1,1) = 1.50e-39_real32
+------------^
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr90_rain_roundtrip_20261019/Cloud-BAL/tests/test_joint_qnb_transport.f90(467): remark #7920: The value was too small when converting to REAL(KIND=4); the result is in the subnormal range.   [1.0E-40]
+  nb(1,1) = 1.0e-40_real32
+------------^

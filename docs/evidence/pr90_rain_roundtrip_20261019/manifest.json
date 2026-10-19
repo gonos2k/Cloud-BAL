@@ -1,0 +1,95 @@
+{
+  "schema": "pr90_rain_roundtrip_integration_v1",
+  "base_commit": "3bc7bb8df6a100b60c6f8908ad93a7c3d981f360",
+  "candidate_identity": "PR90-C7",
+  "physical_approval": "FAIL_OPEN",
+  "validation": {
+    "status": "PASS",
+    "path": "docs/evidence/pr90_rain_roundtrip_20261019/review/focused_validation.json",
+    "sha256": "44b67fec1c1570597582bf1d97fe301fcd901ae3ae0d6e20c3f61ab1157fa841",
+    "focused_test_count": 95,
+    "compiler_profile": "tests/intel_toolchain.sh"
+  },
+  "native_build": {
+    "path": "docs/evidence/pr90_rain_roundtrip_20261019/c7/build_receipt.json",
+    "sha256": "7a58ac2ae90eca9ffe0500515282b537e11db25ab9de8175856609bf812bba31"
+  },
+  "latest_actual_host": {
+    "status": "INCOMPLETE",
+    "windows": {
+      "180": {
+        "run_identity": "PR87 selected-object native candidate",
+        "requested_duration_seconds": 180,
+        "timestep_seconds": 20,
+        "status": "COMPLETE",
+        "executed_executable_sha256": "5f5599e38759a9e2be27a9e7e0977370592c92cab328062d07eb359bddd19572",
+        "arms": {
+          "OFF": {
+            "status": "COMPLETE",
+            "returncode": 0,
+            "final_completed_step": 9,
+            "timestep_count": 9,
+            "receipt": {
+              "path": "docs/evidence/pr90_rain_roundtrip_20261019/c7/180/OFF/run_receipt.json",
+              "sha256": "3dc5773680fb0d92cbdf2aeb0a8ebaa1739e11c6366152add51e949c6f767ab1"
+            }
+          },
+          "COUPLED": {
+            "status": "COMPLETE",
+            "returncode": 0,
+            "final_completed_step": 9,
+            "timestep_count": 9,
+            "receipt": {
+              "path": "docs/evidence/pr90_rain_roundtrip_20261019/c7/180/COUPLED/run_receipt.json",
+              "sha256": "72fe00aebe9db05270c747b974218114d3f3f83d1d7c6a87d4032b6399c5a0e0"
+            }
+          }
+        }
+      },
+      "600": {
+        "run_identity": "PR87 selected-object native candidate",
+        "requested_duration_seconds": 600,
+        "timestep_seconds": 20,
+        "status": "INCOMPLETE",
+        "executed_executable_sha256": "5f5599e38759a9e2be27a9e7e0977370592c92cab328062d07eb359bddd19572",
+        "arms": {
+          "OFF": {
+            "status": "INCOMPLETE",
+            "returncode": 1,
+            "final_completed_step": 9,
+            "timestep_count": 9,
+            "receipt": {
+              "path": "docs/evidence/pr90_rain_roundtrip_20261019/c7/600/OFF/run_receipt.json",
+              "sha256": "d1802d60e5263ff5f2c02aee7b38e35bce274eb93e48bf3e40da75d113dd951d"
+            }
+          },
+          "COUPLED": {
+            "status": "INCOMPLETE",
+            "returncode": 1,
+            "final_completed_step": 9,
+            "timestep_count": 9,
+            "receipt": {
+              "path": "docs/evidence/pr90_rain_roundtrip_20261019/c7/600/COUPLED/run_receipt.json",
+              "sha256": "4142a65a5a66e4b9b262c1a239218d60c21cb672a89b737d9f605fc597a66d53"
+            }
+          }
+        }
+      }
+    }
+  },
+  "runtime_state_scope": {
+    "completed_180_seconds": "STRICT_CLOUD_RAIN_GRAUPEL_AND_DENSITY_PASS; GENERIC_ICE_FAIL_PRESERVED; SOURCE_INACTIVE_SPLIT_HAS_ZERO_ACTIVE_OUTLIERS",
+    "unfinished_600_seconds": "NINE_COMPLETED_STEPS_THEN_TIMESTEP10_HOST_JOINT_CANDIDATE_FATAL; NOT_TENTH_KDM6_COMPLETION",
+    "full_clean_build": false
+  },
+  "candidate_scientific_gates": {
+    "local_cold_activity": "AREA_WEIGHTED_180S_ACCOUNTED; LARGE_AUT_G_DEFERRAL_JUSTIFICATION_OPEN",
+    "joint_absence": "C7_180S_SAME_EVENT_WEIGHTED_SIGNED_CHANGES_ACCOUNTED; FINAL_BUDGET_OPEN",
+    "matched_history": "C7_T0_T60_T120_T180_ACCOUNTED; DESCRIPTIVE_27_COLUMN_SUPPORT",
+    "observation_support": "OPEN_SOURCE_BOUND_162_PRESSURE_CELL_TO_NATIVE_OPERATOR_MISSING",
+    "number_budget": "OPEN_FINAL_RAW_NR_CAP_NOT_GENERALLY_LOGGED; LOCAL_BOUNDARY_EVENT_ONLY",
+    "water_and_energy": "OPEN_HOST_HYBRID_CARRIER_AND_BOUNDARY_PROCESS_CLOSURE",
+    "native_mass_wind": "OPEN_PHYSICAL_FACE_FLUX_CONTINUITY_AND_MOMENTUM",
+    "initial_shock_and_forecast": "OPEN_OBSERVATION_FIT_AND_MATCHED_LONGER_TIME_RESPONSE_NOT_APPROVED"
+  }
+}
