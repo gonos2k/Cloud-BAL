@@ -239,3 +239,13 @@ The [C4 completed-prefix audit](evidence/pr89_process_contract_20261019/review/p
 The [Graphify/KG publication](PR89_KG_UPDATE_20261019.md) records the separately
 dated structural snapshots for frozen source commit `da48cca65c57aeaad9daf717abe0a0d6b6df9e25`.
 Later receipt/review publication metadata does not change that extraction identity.
+
+
+The [final C5 runtime audit](evidence/pr89_process_contract_20261019/review/pr89_c5_independent_runtime_audit_20261019.md)
+checks both six-step windows independently. All 18 required source gates for
+cloud, rain and graupel pass per arm. The original generic auditor JSON retains
+its ice-cone FAIL: a separate source-cutoff split finds all flagged pairs
+inactive and zero active outliers. No diagnostic result is rewritten. Each
+600-second trace has its corresponding 5,042,096,500-byte 120-second stage trace
+as an exact decompressed prefix. These later review artifacts are publication
+metadata, outside the frozen Graphify extraction identity.
