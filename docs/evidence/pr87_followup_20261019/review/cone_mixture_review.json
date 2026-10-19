@@ -1,0 +1,41 @@
+{
+  "review": "PR87 source-certified graupel cone mixture transform and focused regressions",
+  "status": "PASS_WITHIN_REVIEW_SCOPE",
+  "source_binding": {
+    "pinned_module_em_sha256": "5eb415ca23119460ae3dd766d9acea0f4c99b96ad576100efb95c3bb4d402a6c",
+    "transform_sha256": "217e947d8a88a4f6fe7421915d0d807167a7ac7eb56ace8ad57967e3fdff2a74",
+    "assembled_source_sha256": "2af8e6323c7ed908660728f5c56faae9a4f9615902bd090acd28cdbb5e50b109",
+    "joint_transport_sha256": "60917061915e0452251c27db7b5d4e97061729605c3218cd291c2cbc3e519e74",
+    "maintained_test_sha256": "488926c00c65a88787fb04eaaccedbadca71e900e0b9253135d18bda63b31b5a",
+    "external_fixture_sha256": "e2369110c443cbcb49aad35ee0d88728265036cf503af5dde7067c6c50c9f6a8"
+  },
+  "maintained_validation": {
+    "command": "pytest -q tests/test_pr87_graupel_cone_mixture.py",
+    "result": "5 passed",
+    "compiler_profile": "pinned Intel via tests/intel_toolchain.sh; O0 and O2",
+    "coverage": [
+      "strict primary candidate retained",
+      "boundary mixture helper",
+      "two-cell successful transaction",
+      "nonzero-source later-cell rollback with candidate and ledger unchanged",
+      "infeasible/partial-theta rollback"
+    ]
+  },
+  "independent_external_validation": {
+    "receipt": "cone_mixture_external_receipt.json",
+    "fixture": "cone_mixture_external_fixture.F90.gz",
+    "cases": [
+      "invalid positive-Q/zero-N later donor rejects after an earlier local repair; candidate arrays and ledgers remain unchanged",
+      "quiet NaN mixture weight returns invalid under -fpe0"
+    ],
+    "O0_log": "cone_mixture_external_O0.log.gz",
+    "O2_log": "cone_mixture_external_O2.log.gz",
+    "both_optimizations": "PASS",
+    "compiler_profile": "pinned Intel via tests/intel_toolchain.sh; O0 and O2; -fpe0"
+  },
+  "review_finding_resolved": {
+    "finding": "Initial certifier reused helper output `valid`; a successful earlier cell could leave it true when a later nonzero-source cell returned early.",
+    "resolution": "Frozen transform resets per-cell validity and only reports success after the complete certification loop; maintained O0/O2 rollback test fails on prior behavior and now passes."
+  },
+  "scope_limit": "Source transform and extracted native transaction routines were reviewed and compiled in focused fixtures. No full model compile or runtime claim is made here; V45 runtime review is pending."
+}

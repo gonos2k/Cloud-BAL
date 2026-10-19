@@ -1,0 +1,877 @@
+{
+  "arms": {
+    "COUPLED": {
+      "full_failure_ledger": {
+        "compressed_sha256": "da2d5c0c098835e74244ca3aee0d1cc417795436fbb9cf5bb07203037bd9498b",
+        "expanded_sha256": "3232d683b7cf4311aec50d55e7fd81800e70550f2223ae6709cc3a586bee0492",
+        "full_failure_count": 1,
+        "full_record_fields": {
+          "candidate_n_real32_bits": "2c85169e",
+          "candidate_n_real64": 3.782598469726092e-12,
+          "candidate_n_real64_hex": "0x1.0a2d3c79e5aa2p-38",
+          "candidate_q_over_n_real32_rounded": 900.0000155926145,
+          "candidate_q_over_n_real64": 900.0000000000002,
+          "candidate_q_real32_bits": "3169f1c2",
+          "candidate_q_real64": 3.404338622753484e-09,
+          "candidate_q_real64_hex": "0x1.d3e3844e45b53p-29",
+          "carrier_new": 84130.31,
+          "carrier_old": 84064.46,
+          "coded_8ulp_check_result": "continuous_and_rounded_pair_pass",
+          "dry_density": 0.5545024,
+          "dt": 6.666667,
+          "i": 160,
+          "interpretation": "The strict graupel ratio bound is [100,900]. The FULL candidate ratio is slightly above 900 in REAL64 and its independent REAL32 rounding is also above 900. This matches the recorded invalid (-1,-1) store sentinel; no broader cause is inferred.",
+          "j": 235,
+          "k": 20,
+          "n_base": 0.0,
+          "n_source": 2.291589053411245e-08,
+          "n_transport": 2.48187893019827e-08,
+          "pair_index": 4,
+          "q_base": 0.0,
+          "q_source": 2.06243014807012e-05,
+          "q_transport": 2.233691037178443e-05,
+          "rk": 1,
+          "stored_n_sentinel": -1.0,
+          "stored_q_sentinel": -1.0,
+          "strict_G_bounds": [
+            100.0,
+            900.0
+          ],
+          "strict_G_real64_pass": false,
+          "strict_G_rounded_real32_pass": false,
+          "timestep": 3
+        },
+        "full_record_raw_text": " FULL           3           1           4         160         235          20\n   84064.46       84130.31      0.0000000E+00  0.0000000E+00\n  2.062430148070120E-005  2.291589053411245E-008  2.233691037178443E-005\n  2.481878930198270E-008  3.404338622753484E-009  3.782598469726092E-012\n  -1.000000      -1.000000      0.5545024       6.666667    ",
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v47_20261019/run/pr85_joint_source_failure.raw.gz",
+        "t3_rk1_rows": 1,
+        "target_cell_rows": 1,
+        "target_rows": [
+          {
+            "classification": {
+              "classification": "continuous_and_rounded_pair_pass",
+              "continuous_n": 3.782598469726092e-12,
+              "continuous_q": 3.404338622753484e-09,
+              "continuous_q_over_n": 900.0000000000002,
+              "continuous_ratio_margin_ulps_from_minimum": 104857600.00000003,
+              "continuous_valid_with_coded_8ulp_tolerance": true,
+              "continuous_validity_reason": "valid",
+              "i": 160,
+              "independently_rounded_n": 3.7825983664752094e-12,
+              "independently_rounded_q": 3.4043385888082867e-09,
+              "independently_rounded_q_over_n": 900.0000155926145,
+              "independently_rounded_valid_with_coded_8ulp_tolerance": true,
+              "independently_rounded_validity_reason": "valid",
+              "j": 235,
+              "k": 20,
+              "logged_full_stored_n": -1.0,
+              "logged_full_stored_q": -1.0,
+              "pair": "QG/QIB",
+              "pair_index": 4,
+              "rk": 1,
+              "timestep": 3
+            }
+          }
+        ]
+      },
+      "receipt": {
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00"
+        ],
+        "final_completed_step": 2,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.35562,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 106.67612,
+            "timestamp": "2026-08-16_13:00:40"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v47_20261019/receipt.json",
+        "returncode": 1,
+        "sha256": "7c0df171e6c875968e163156dbdd88388f1b69fabcb7123c3375871fbf76e801",
+        "status": "INCOMPLETE"
+      },
+      "stencil": [
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5545023679733276,
+          "DEN_r32_bits": "3f0df3de",
+          "NI": 348417.625,
+          "NI_r32_bits": "48aa2034",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 0.00015744278789497912,
+          "QI_r32_bits": "3925173a",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 160,
+          "j": 235,
+          "k": 20,
+          "position": "receiver"
+        },
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5563916563987732,
+          "DEN_r32_bits": "3f0e6faf",
+          "NI": 1439.746337890625,
+          "NI_r32_bits": "44b3f7e2",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 5.046105115980026e-07,
+          "QI_r32_bits": "35077492",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 159,
+          "j": 235,
+          "k": 20,
+          "position": "west"
+        },
+        {
+          "BG": 3.7349536796682514e-09,
+          "BG_r32_bits": "31805500",
+          "DEN": 0.5567609071731567,
+          "DEN_r32_bits": "3f0e87e2",
+          "NI": 540473.6875,
+          "NI_r32_bits": "4903f39b",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 3.3614583117014263e-06,
+          "QG_over_BG": 900.0,
+          "QG_r32_bits": "3661956a",
+          "QI": 0.0005692410632036626,
+          "QI_r32_bits": "3a15391f",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": true,
+          "i": 161,
+          "j": 235,
+          "k": 20,
+          "position": "east"
+        },
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5578413009643555,
+          "DEN_r32_bits": "3f0eceb0",
+          "NI": 15710.828125,
+          "NI_r32_bits": "46757b50",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 6.032711326042772e-07,
+          "QI_r32_bits": "3521f07a",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 160,
+          "j": 234,
+          "k": 20,
+          "position": "south"
+        },
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5549445748329163,
+          "DEN_r32_bits": "3f0e10d9",
+          "NI": 340727.84375,
+          "NI_r32_bits": "48a65efb",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 0.00015129645180422813,
+          "QI_r32_bits": "391ea555",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 160,
+          "j": 236,
+          "k": 20,
+          "position": "north"
+        },
+        {
+          "BG": 1.8532829437756249e-10,
+          "BG_r32_bits": "2f4bc547",
+          "DEN": 0.5989779233932495,
+          "DEN_r32_bits": "3f19569e",
+          "NI": 250609.234375,
+          "NI_r32_bits": "4874bc4f",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 1.6679545922215766e-07,
+          "QG_over_BG": 899.9999691485393,
+          "QG_r32_bits": "34331863",
+          "QI": 9.277685603592545e-05,
+          "QI_r32_bits": "38c29132",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": true,
+          "i": 160,
+          "j": 235,
+          "k": 19,
+          "position": "below"
+        },
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5153603553771973,
+          "DEN_r32_bits": "3f03eea8",
+          "NI": 109145.3359375,
+          "NI_r32_bits": "47d52cab",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 1.8587328668218106e-05,
+          "QI_r32_bits": "379bebfc",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 160,
+          "j": 235,
+          "k": 21,
+          "position": "above"
+        }
+      ],
+      "t3_pre_rk_trace": {
+        "bounds": {
+          "ime": 240,
+          "ims": -4,
+          "ite": 233,
+          "its": 2,
+          "jme": 288,
+          "jms": -4,
+          "jte": 281,
+          "jts": 2,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "compressed_sha256": "4cb0b5a5579fb4806f6726c19a77a55c0f6680eed9bfd09faa5c9991259fa36b",
+        "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+        "expanded_sha256": "cd2a471ee3941c4cba6fc988d15512dd20da79bf9a85b2cdea340f94ce27069a",
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v47_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "record_binding": "selected directly from saved PR85 whole-tile stage trace",
+        "shape_jki": [
+          280,
+          39,
+          232
+        ],
+        "stage": "PRE_RK",
+        "step": 3
+      }
+    },
+    "OFF": {
+      "full_failure_ledger": {
+        "compressed_sha256": "a9a4734e1c491d2d31bc5ba6ca4d204bed753da93e3301db933da52f76f73a1d",
+        "expanded_sha256": "4415e612f6363c1bb2d7a3f291c7ff513a073eea351d6c8bd1c482c364243123",
+        "full_failure_count": 1,
+        "full_record_fields": {
+          "candidate_n_real32_bits": "2c85169e",
+          "candidate_n_real64": 3.782598469726092e-12,
+          "candidate_n_real64_hex": "0x1.0a2d3c79e5aa2p-38",
+          "candidate_q_over_n_real32_rounded": 900.0000155926145,
+          "candidate_q_over_n_real64": 900.0000000000002,
+          "candidate_q_real32_bits": "3169f1c2",
+          "candidate_q_real64": 3.404338622753484e-09,
+          "candidate_q_real64_hex": "0x1.d3e3844e45b53p-29",
+          "carrier_new": 84130.31,
+          "carrier_old": 84064.46,
+          "coded_8ulp_check_result": "continuous_and_rounded_pair_pass",
+          "dry_density": 0.5545024,
+          "dt": 6.666667,
+          "i": 160,
+          "interpretation": "The strict graupel ratio bound is [100,900]. The FULL candidate ratio is slightly above 900 in REAL64 and its independent REAL32 rounding is also above 900. This matches the recorded invalid (-1,-1) store sentinel; no broader cause is inferred.",
+          "j": 235,
+          "k": 20,
+          "n_base": 0.0,
+          "n_source": 2.291589053411245e-08,
+          "n_transport": 2.48187893019827e-08,
+          "pair_index": 4,
+          "q_base": 0.0,
+          "q_source": 2.06243014807012e-05,
+          "q_transport": 2.233691037178443e-05,
+          "rk": 1,
+          "stored_n_sentinel": -1.0,
+          "stored_q_sentinel": -1.0,
+          "strict_G_bounds": [
+            100.0,
+            900.0
+          ],
+          "strict_G_real64_pass": false,
+          "strict_G_rounded_real32_pass": false,
+          "timestep": 3
+        },
+        "full_record_raw_text": " FULL           3           1           4         160         235          20\n   84064.46       84130.31      0.0000000E+00  0.0000000E+00\n  2.062430148070120E-005  2.291589053411245E-008  2.233691037178443E-005\n  2.481878930198270E-008  3.404338622753484E-009  3.782598469726092E-012\n  -1.000000      -1.000000      0.5545024       6.666667    ",
+        "path": "/var/tmp/pr87_followup_OFF_60s_v47_20261019/run/pr85_joint_source_failure.raw.gz",
+        "t3_rk1_rows": 1,
+        "target_cell_rows": 1,
+        "target_rows": [
+          {
+            "classification": {
+              "classification": "continuous_and_rounded_pair_pass",
+              "continuous_n": 3.782598469726092e-12,
+              "continuous_q": 3.404338622753484e-09,
+              "continuous_q_over_n": 900.0000000000002,
+              "continuous_ratio_margin_ulps_from_minimum": 104857600.00000003,
+              "continuous_valid_with_coded_8ulp_tolerance": true,
+              "continuous_validity_reason": "valid",
+              "i": 160,
+              "independently_rounded_n": 3.7825983664752094e-12,
+              "independently_rounded_q": 3.4043385888082867e-09,
+              "independently_rounded_q_over_n": 900.0000155926145,
+              "independently_rounded_valid_with_coded_8ulp_tolerance": true,
+              "independently_rounded_validity_reason": "valid",
+              "j": 235,
+              "k": 20,
+              "logged_full_stored_n": -1.0,
+              "logged_full_stored_q": -1.0,
+              "pair": "QG/QIB",
+              "pair_index": 4,
+              "rk": 1,
+              "timestep": 3
+            }
+          }
+        ]
+      },
+      "receipt": {
+        "expected_model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40",
+          "2026-08-16_13:01:00"
+        ],
+        "final_completed_step": 2,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.61476,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 106.44602,
+            "timestamp": "2026-08-16_13:00:40"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_OFF_60s_v47_20261019/receipt.json",
+        "returncode": 1,
+        "sha256": "c4910fadd29c458cfeeb3cf9897b241e0032008b55be69ccefba284bff9e0b5e",
+        "status": "INCOMPLETE"
+      },
+      "stencil": [
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5545023679733276,
+          "DEN_r32_bits": "3f0df3de",
+          "NI": 348417.625,
+          "NI_r32_bits": "48aa2034",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 0.00015744278789497912,
+          "QI_r32_bits": "3925173a",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 160,
+          "j": 235,
+          "k": 20,
+          "position": "receiver"
+        },
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5563916563987732,
+          "DEN_r32_bits": "3f0e6faf",
+          "NI": 1439.746337890625,
+          "NI_r32_bits": "44b3f7e2",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 5.046105115980026e-07,
+          "QI_r32_bits": "35077492",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 159,
+          "j": 235,
+          "k": 20,
+          "position": "west"
+        },
+        {
+          "BG": 3.7349536796682514e-09,
+          "BG_r32_bits": "31805500",
+          "DEN": 0.5567609071731567,
+          "DEN_r32_bits": "3f0e87e2",
+          "NI": 540473.6875,
+          "NI_r32_bits": "4903f39b",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 3.3614583117014263e-06,
+          "QG_over_BG": 900.0,
+          "QG_r32_bits": "3661956a",
+          "QI": 0.0005692410632036626,
+          "QI_r32_bits": "3a15391f",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": true,
+          "i": 161,
+          "j": 235,
+          "k": 20,
+          "position": "east"
+        },
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5578413009643555,
+          "DEN_r32_bits": "3f0eceb0",
+          "NI": 15710.828125,
+          "NI_r32_bits": "46757b50",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 6.032711326042772e-07,
+          "QI_r32_bits": "3521f07a",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 160,
+          "j": 234,
+          "k": 20,
+          "position": "south"
+        },
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5549445748329163,
+          "DEN_r32_bits": "3f0e10d9",
+          "NI": 340727.84375,
+          "NI_r32_bits": "48a65efb",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 0.00015129645180422813,
+          "QI_r32_bits": "391ea555",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 160,
+          "j": 236,
+          "k": 20,
+          "position": "north"
+        },
+        {
+          "BG": 1.8532829437756249e-10,
+          "BG_r32_bits": "2f4bc547",
+          "DEN": 0.5989779233932495,
+          "DEN_r32_bits": "3f19569e",
+          "NI": 250609.234375,
+          "NI_r32_bits": "4874bc4f",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 1.6679545922215766e-07,
+          "QG_over_BG": 899.9999691485393,
+          "QG_r32_bits": "34331863",
+          "QI": 9.277685603592545e-05,
+          "QI_r32_bits": "38c29132",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": true,
+          "i": 160,
+          "j": 235,
+          "k": 19,
+          "position": "below"
+        },
+        {
+          "BG": 0.0,
+          "BG_r32_bits": "00000000",
+          "DEN": 0.5153603553771973,
+          "DEN_r32_bits": "3f03eea8",
+          "NI": 109145.3359375,
+          "NI_r32_bits": "47d52cab",
+          "NR": 0.0,
+          "NR_r32_bits": "00000000",
+          "QG": 0.0,
+          "QG_over_BG": null,
+          "QG_r32_bits": "00000000",
+          "QI": 1.8587328668218106e-05,
+          "QI_r32_bits": "379bebfc",
+          "QR": 0.0,
+          "QR_r32_bits": "00000000",
+          "exact_G_density_bounds_pass": false,
+          "i": 160,
+          "j": 235,
+          "k": 21,
+          "position": "above"
+        }
+      ],
+      "t3_pre_rk_trace": {
+        "bounds": {
+          "ime": 240,
+          "ims": -4,
+          "ite": 233,
+          "its": 2,
+          "jme": 288,
+          "jms": -4,
+          "jte": 281,
+          "jts": 2,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "compressed_sha256": "7ce4f811d50a6cf129cdf0688ed5bdbd2c46062aa45d8ea1cf63554250852661",
+        "density_contract_status": "AUTHORITATIVE_DRY_FROM_AL_ALB",
+        "expanded_sha256": "2ad1bf2d95efb1adb2684a188f4b007371df0c488ebfa913cc370051035e3a80",
+        "path": "/var/tmp/pr87_followup_OFF_60s_v47_20261019/run/pr85_joint_moment_stages.raw.gz",
+        "record_binding": "selected directly from saved PR85 whole-tile stage trace",
+        "shape_jki": [
+          280,
+          39,
+          232
+        ],
+        "stage": "PRE_RK",
+        "step": 3
+      }
+    }
+  },
+  "firstcall_payloads_vs_v44": {
+    "COUPLED": {
+      "kdm6_first_call_post.raw.gz": {
+        "byte_identical_to_v44": true,
+        "bytes": 67316625,
+        "compressed_sha256": "6e5876f724b5df4b22ac381d9ba1b3e02ebff2c82aedfad98b4db4b8de419b07",
+        "expanded_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+        "present": true,
+        "v44_compressed_sha256": "6e5876f724b5df4b22ac381d9ba1b3e02ebff2c82aedfad98b4db4b8de419b07"
+      },
+      "kdm6_first_call_pre.raw.gz": {
+        "byte_identical_to_v44": true,
+        "bytes": 82031172,
+        "compressed_sha256": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110",
+        "expanded_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+        "present": true,
+        "v44_compressed_sha256": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110"
+      },
+      "pr67_kdm6_process.raw.gz": {
+        "byte_identical_to_v44": true,
+        "bytes": 34662665,
+        "compressed_sha256": "d8b45e323ca72ead866643f3a5d8591adbc6c9ba728cf4726274862dd431f918",
+        "expanded_sha256": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976",
+        "present": true,
+        "v44_compressed_sha256": "d8b45e323ca72ead866643f3a5d8591adbc6c9ba728cf4726274862dd431f918"
+      },
+      "pr87_rain_sedimentation_budget.raw.gz": {
+        "byte_identical_to_v44": false,
+        "bytes": 9955980,
+        "compressed_sha256": "e296cf7e27aa7671c4b7baf32604a4b7fa6be20219cef5fd7d76a8d99ce2e8d7",
+        "expanded_sha256": "affe3e511e9358b4ca943496646dda6cd42270363385a086013dd112b1a36d1c",
+        "present": true,
+        "v44_compressed_sha256": "c91b19bf87f8ac364a12246000056e7ad9a67991b583417b7af6e6242731ac24"
+      }
+    },
+    "OFF": {
+      "kdm6_first_call_post.raw.gz": {
+        "byte_identical_to_v44": true,
+        "bytes": 67311610,
+        "compressed_sha256": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f",
+        "expanded_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+        "present": true,
+        "v44_compressed_sha256": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f"
+      },
+      "kdm6_first_call_pre.raw.gz": {
+        "byte_identical_to_v44": true,
+        "bytes": 82032193,
+        "compressed_sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86",
+        "expanded_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+        "present": true,
+        "v44_compressed_sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86"
+      },
+      "pr67_kdm6_process.raw.gz": {
+        "byte_identical_to_v44": true,
+        "bytes": 34662190,
+        "compressed_sha256": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f",
+        "expanded_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8",
+        "present": true,
+        "v44_compressed_sha256": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f"
+      },
+      "pr87_rain_sedimentation_budget.raw.gz": {
+        "byte_identical_to_v44": false,
+        "bytes": 9956591,
+        "compressed_sha256": "d12feb0027389f22bdabd901f86b51a83fe59e0c2d7257f0b2a1557134ec4037",
+        "expanded_sha256": "a71a0242e08f23f2a46c771287e5abd752ca24032012f78e9da57ffd7f9af796",
+        "present": true,
+        "v44_compressed_sha256": "e4b7637ca2071d71f5ab14dea31349885617c228cd60245d70fbe39e22057ba5"
+      }
+    }
+  },
+  "firstcall_subset_comparison": {
+    "arms": {
+      "COUPLED": {
+        "selected_subset_matches_v44": {
+          "pr85_ice_transition_branch.raw.gz": true,
+          "pr85_kdm6_cutoff_budget.raw.gz": true,
+          "pr87_rain_sedimentation_budget.raw.gz": true
+        },
+        "v44": {
+          "firstcall_subsets": {
+            "pr85_ice_transition_branch.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": null,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 280,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 7081,
+              "selected_lines": 7361,
+              "selected_sha256": "102172449e39d70dc10aa7c132107070ea606158976c7266e6a5002509dd27ba",
+              "sweeps_present": 1,
+              "unique_cell_rows": null,
+              "whole_compressed_sha256": "f602fdd69fe9253a75de4d2336158ab032a433e6c46da47d36564d22a3ec841e"
+            },
+            "pr85_kdm6_cutoff_budget.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": 0,
+              "first_sweep_assignment": "only sweep in captured V44 cutoff ledger",
+              "first_sweep_density_mismatches": 0,
+              "first_sweep_rows": 212872,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 0,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 212872,
+              "selected_lines": 212872,
+              "selected_sha256": "477f31bd76024c24720bf9b90a4a819613e230d04c3d2604227c6124ffffd6b5",
+              "sweeps_present": 1,
+              "unique_cell_rows": 212872,
+              "whole_compressed_sha256": "d5a3baccccdc15c1544670a8dc076d0f247ec39937906c0c76cdf922d7ba69be"
+            },
+            "pr87_rain_sedimentation_budget.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": null,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 280,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 78926,
+              "selected_lines": 79206,
+              "selected_sha256": "94acd8e6018638ce27a6bff85f57d70ac917e5336325ba3daaf9f56629aab281",
+              "sweeps_present": 1,
+              "unique_cell_rows": null,
+              "whole_compressed_sha256": "c91b19bf87f8ac364a12246000056e7ad9a67991b583417b7af6e6242731ac24"
+            }
+          },
+          "receipt_sha256": "dca269a63d5db125be0e911b95ca8b4783d6c9e3f0298202ef07c894ef4d1b55",
+          "status": "INCOMPLETE"
+        },
+        "v47": {
+          "firstcall_subsets": {
+            "pr85_ice_transition_branch.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": null,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 280,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 7081,
+              "selected_lines": 7361,
+              "selected_sha256": "102172449e39d70dc10aa7c132107070ea606158976c7266e6a5002509dd27ba",
+              "sweeps_present": 1,
+              "unique_cell_rows": null,
+              "whole_compressed_sha256": "f602fdd69fe9253a75de4d2336158ab032a433e6c46da47d36564d22a3ec841e"
+            },
+            "pr85_kdm6_cutoff_budget.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": 0,
+              "first_sweep_assignment": "first complete j sweep; exact selected-line hash matches V44 first sweep and every first-sweep dry density matches PRE",
+              "first_sweep_density_mismatches": 0,
+              "first_sweep_rows": 212872,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 0,
+              "ordered_unique_j_sweep": true,
+              "second_sweep_density_mismatches_vs_first_PRE": 311574,
+              "second_sweep_j_count": 280,
+              "second_sweep_rows": 311851,
+              "selected_data_rows": 212872,
+              "selected_lines": 212872,
+              "selected_sha256": "477f31bd76024c24720bf9b90a4a819613e230d04c3d2604227c6124ffffd6b5",
+              "sweeps_present": 2,
+              "unique_cell_rows": 212872,
+              "whole_compressed_sha256": "e0da1408693c73933ce8e908ac55cf78e84fd61beac4e28ce27d4c733b9a93b1"
+            },
+            "pr87_rain_sedimentation_budget.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": null,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 280,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 78926,
+              "selected_lines": 79206,
+              "selected_sha256": "94acd8e6018638ce27a6bff85f57d70ac917e5336325ba3daaf9f56629aab281",
+              "sweeps_present": 1,
+              "unique_cell_rows": null,
+              "whole_compressed_sha256": "e296cf7e27aa7671c4b7baf32604a4b7fa6be20219cef5fd7d76a8d99ce2e8d7"
+            }
+          },
+          "receipt_sha256": "7c0df171e6c875968e163156dbdd88388f1b69fabcb7123c3375871fbf76e801",
+          "status": "INCOMPLETE"
+        }
+      },
+      "OFF": {
+        "selected_subset_matches_v44": {
+          "pr85_ice_transition_branch.raw.gz": true,
+          "pr85_kdm6_cutoff_budget.raw.gz": true,
+          "pr87_rain_sedimentation_budget.raw.gz": true
+        },
+        "v44": {
+          "firstcall_subsets": {
+            "pr85_ice_transition_branch.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": null,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 280,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 7084,
+              "selected_lines": 7364,
+              "selected_sha256": "0f40ad0dd2e621bbeef7ed3aa3596731aefcd5275c4ef2242b915f70aef7aa58",
+              "sweeps_present": 1,
+              "unique_cell_rows": null,
+              "whole_compressed_sha256": "9d9a9bf64f9b4a1d6c62fd31e18c4e248c072f1365a9147f24d51e809e12a5a5"
+            },
+            "pr85_kdm6_cutoff_budget.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": 0,
+              "first_sweep_assignment": "only sweep in captured V44 cutoff ledger",
+              "first_sweep_density_mismatches": 0,
+              "first_sweep_rows": 212866,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 0,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 212866,
+              "selected_lines": 212866,
+              "selected_sha256": "87a296a89c084363b6a2fc0b27ce0cd1d5cdd7a3cc9cc9fd4d955dc5b23db9b4",
+              "sweeps_present": 1,
+              "unique_cell_rows": 212866,
+              "whole_compressed_sha256": "cdf1eca982a415608236be14833cfbdeb283116fcfcc556e6b4e76fae424f739"
+            },
+            "pr87_rain_sedimentation_budget.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": null,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 280,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 78926,
+              "selected_lines": 79206,
+              "selected_sha256": "8f4f0778fd1b5f439f48a7b91bae7d3204df3109de9f7bd0d0368c3e5f3eee06",
+              "sweeps_present": 1,
+              "unique_cell_rows": null,
+              "whole_compressed_sha256": "e4b7637ca2071d71f5ab14dea31349885617c228cd60245d70fbe39e22057ba5"
+            }
+          },
+          "receipt_sha256": "658136176f33c25bb6a17b63675c1e6f2bce77e8f608714315e2c74795fd0f31",
+          "status": "INCOMPLETE"
+        },
+        "v47": {
+          "firstcall_subsets": {
+            "pr85_ice_transition_branch.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": null,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 280,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 7084,
+              "selected_lines": 7364,
+              "selected_sha256": "0f40ad0dd2e621bbeef7ed3aa3596731aefcd5275c4ef2242b915f70aef7aa58",
+              "sweeps_present": 1,
+              "unique_cell_rows": null,
+              "whole_compressed_sha256": "9d9a9bf64f9b4a1d6c62fd31e18c4e248c072f1365a9147f24d51e809e12a5a5"
+            },
+            "pr85_kdm6_cutoff_budget.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": 0,
+              "first_sweep_assignment": "first complete j sweep; exact selected-line hash matches V44 first sweep and every first-sweep dry density matches PRE",
+              "first_sweep_density_mismatches": 0,
+              "first_sweep_rows": 212866,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 0,
+              "ordered_unique_j_sweep": true,
+              "second_sweep_density_mismatches_vs_first_PRE": 311547,
+              "second_sweep_j_count": 280,
+              "second_sweep_rows": 311825,
+              "selected_data_rows": 212866,
+              "selected_lines": 212866,
+              "selected_sha256": "87a296a89c084363b6a2fc0b27ce0cd1d5cdd7a3cc9cc9fd4d955dc5b23db9b4",
+              "sweeps_present": 2,
+              "unique_cell_rows": 212866,
+              "whole_compressed_sha256": "a2f34ce468467895d8ab7021a2c1113bdf5ba7da5e6277b184c6c06567bd32dc"
+            },
+            "pr87_rain_sedimentation_budget.raw.gz": {
+              "dry_density_mismatches_vs_first_PRE": null,
+              "j_count": 280,
+              "j_first": 2,
+              "j_last": 281,
+              "markers": 280,
+              "ordered_unique_j_sweep": true,
+              "selected_data_rows": 78926,
+              "selected_lines": 79206,
+              "selected_sha256": "8f4f0778fd1b5f439f48a7b91bae7d3204df3109de9f7bd0d0368c3e5f3eee06",
+              "sweeps_present": 1,
+              "unique_cell_rows": null,
+              "whole_compressed_sha256": "d12feb0027389f22bdabd901f86b51a83fe59e0c2d7257f0b2a1557134ec4037"
+            }
+          },
+          "receipt_sha256": "c4910fadd29c458cfeeb3cf9897b241e0032008b55be69ccefba284bff9e0b5e",
+          "status": "INCOMPLETE"
+        }
+      }
+    },
+    "interpretation": "The V47 full PR87 rain-helper file differs from V44, but the selected timestep-1 ordered j sweep has matching selected-line SHA-256. The first ordered cutoff j sweep and timestep-1 ice-transition records also match; cutoff first-sweep density matches its first-call PRE capture. This permits scoped first-call subset inheritance only, not whole-ledger identity or a new independently recomputed budget.",
+    "schema": "firstcall-prefix-subset-hash-compare-v44-v47-v1",
+    "scope": "Inherit the V44 first-call budget only through exact first-call state/PR67 payload identity plus exact selected step-1 rain helper, first cutoff j sweep, and step-1 ice-transition subset identity. Whole V47 rain and cutoff ledgers differ, so identity is scoped to those first-call subsets. V47 receipts remain INCOMPLETE."
+  },
+  "limitations": [
+    "Both windows are INCOMPLETE at model timestamp 40 s (T3 RK1); no 60 s history.",
+    "Stencil values are saved native T3 PRE_RK stage state, not source attribution or a complete conservation budget.",
+    "No causal claim is made about the failed candidate.",
+    "The FULL row is the failed QG/QIB candidate at (160,235,20), with strict graupel [100,900] ratio failure; source and air-operator attribution are outside this extraction.",
+    "The PR87 rain helper and cutoff whole-file hashes differ from V44; only their selected timestep-1/first-j-sweep subsets match and are bound by the per-subset hashes in this artifact."
+  ],
+  "schema": "pr87_v47_closed_failure_stencil_and_firstcall_hash_v1",
+  "source_manifest": {
+    "path": "/var/tmp/pr87_followup_sources_20261019_v47/sources.json",
+    "sha256": "a9f4f18109be1bfe78145276555d37551c7810e3b14cd8c45696b94df3ddd010"
+  }
+}

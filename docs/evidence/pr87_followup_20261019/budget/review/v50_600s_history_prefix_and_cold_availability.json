@@ -1,0 +1,204 @@
+{
+  "arms": {
+    "COUPLED": {
+      "cold_activity_capture": {
+        "compressed_receipt_hash_match": true,
+        "compressed_sha256": "69f7f3a0c8283d809c759a3bc89d82593d0731bd8d6a40e4b34f8a70440202a1",
+        "evaluation_status": "NOT_EVALUATED_NO_COLD_DATA_ROWS",
+        "expanded_bytes": 678294,
+        "expanded_receipt_hash_match": true,
+        "expanded_sha256": "71d293bd343fc63bea1392c92502d45f2d73ea9f25fd0aa17565a68e85a1407f",
+        "header": "# PR85_KDM6_COLD fields: i,lat,k,loop,ngSearchStatus,autSearchStatus,gSearchStatus,compositeRetry,storedNoop; then dtcld,rhoDry,compositeGamma,scaledRates(41) REAL32,alphaNG,alphaAUT,alphaG; Qbefore(5),QafterNG_AUT(5),QGrequest(5),Qafter(5); Nbefore(3),NafterNG_AUT(3),NGrequest(3),Nafter(3); BGbefore,BGafterNG_AUT,BGrequest,BGafter; Tbefore,TafterNG_AUT,TGrequest,Tafter; QVbefore,QVafterNG_AUT,QVGrequest,QVafter; CCN3before,CCN3transfer,CCN3after; NG proposal/approved/withheld: Q(5),N(3),BG,T,QV; AUT proposal/approved/withheld: Q(5),N(3),BG,T,QV; G proposal/approved/withheld: Q(5),N(3),BG,T,QV; stored-minus-approved R32 residuals Q(5),N(3),CCN3,BG,T,QV; Q kg/kgdry, N #/m3, B m3/kgdry, QV kg/kgdry, T K",
+        "interpretation": "Existing PR86 cold aggregation requires PR85_KDM6_COLD rows and same-call DEN/DELZ/area weighting. This capture contains no process data rows, so absence is not interpreted as zero activity.",
+        "path": "/var/tmp/pr87_followup_COUPLED_600s_v50_20261019/run/pr85_kdm6_cold_budget.raw.gz",
+        "receipt_compressed_sha256": "69f7f3a0c8283d809c759a3bc89d82593d0731bd8d6a40e4b34f8a70440202a1",
+        "receipt_expanded_sha256": "71d293bd343fc63bea1392c92502d45f2d73ea9f25fd0aa17565a68e85a1407f",
+        "record_counts": {
+          "PR85_KDM6_COLD_data_rows": 0,
+          "other_noncomment_lines": 0,
+          "schema_comment_lines": 954
+        }
+      },
+      "first_call_capture_prefix": {
+        "kdm6_first_call_post.raw.gz": {
+          "byte_identical_600s_vs_60s": true,
+          "sha256_600s": "6e5876f724b5df4b22ac381d9ba1b3e02ebff2c82aedfad98b4db4b8de419b07",
+          "sha256_600s_receipt_match": true,
+          "sha256_60s": "6e5876f724b5df4b22ac381d9ba1b3e02ebff2c82aedfad98b4db4b8de419b07"
+        },
+        "kdm6_first_call_pre.raw.gz": {
+          "byte_identical_600s_vs_60s": true,
+          "sha256_600s": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110",
+          "sha256_600s_receipt_match": true,
+          "sha256_60s": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110"
+        },
+        "pr67_kdm6_process.raw.gz": {
+          "byte_identical_600s_vs_60s": true,
+          "sha256_600s": "d8b45e323ca72ead866643f3a5d8591adbc6c9ba728cf4726274862dd431f918",
+          "sha256_600s_receipt_match": true,
+          "sha256_60s": "d8b45e323ca72ead866643f3a5d8591adbc6c9ba728cf4726274862dd431f918"
+        }
+      },
+      "run_600s_receipt": {
+        "executed_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "final_completed_step": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.95279,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 106.43921,
+            "timestamp": "2026-08-16_13:00:40"
+          },
+          {
+            "elapsed_seconds": 106.50136,
+            "timestamp": "2026-08-16_13:01:00"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_COUPLED_600s_v50_20261019/receipt.json",
+        "returncode": 128,
+        "sha256": "425d9f87ae31cb9175e6eb85064ec4d01f52d1594b9ba068bdfecbc1e8c6ad2b",
+        "status": "INCOMPLETE"
+      },
+      "run_60s_receipt": {
+        "executed_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "final_completed_step": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.29926,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 105.96474,
+            "timestamp": "2026-08-16_13:00:40"
+          },
+          {
+            "elapsed_seconds": 106.07988,
+            "timestamp": "2026-08-16_13:01:00"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_COUPLED_60s_v50_20261019/receipt.json",
+        "returncode": 0,
+        "sha256": "4b933ce7583568579b6a00b3c2f9dbdb248927ab23039a43bd0aa5867c82da42",
+        "status": "COMPLETE"
+      },
+      "saved_history_prefix": {
+        "bytes_600s": 178977532,
+        "bytes_60s": 178977532,
+        "full_file_byte_identical_600s_vs_60s": true,
+        "history_times_bound_by_v50_60s_native_history_analysis": [
+          "2026-08-16_13:00:00",
+          "2026-08-16_13:01:00"
+        ],
+        "interpretation": "Exact full history file identity verifies the saved T0/T60 data prefix; no T80 endpoint is bound in the 600s receipt.",
+        "path_600s": "/var/tmp/pr87_followup_COUPLED_600s_v50_20261019/run/wrfout_d01_2026-08-16_13:00:00",
+        "path_60s": "/var/tmp/pr87_followup_COUPLED_60s_v50_20261019/run/wrfout_d01_2026-08-16_13:00:00",
+        "sha256_600s": "64e7ee9c67d826193caae46b1dddd1e7f8410690fea74deb15febefb9ec9eb67",
+        "sha256_600s_receipt_match": true,
+        "sha256_60s": "64e7ee9c67d826193caae46b1dddd1e7f8410690fea74deb15febefb9ec9eb67"
+      }
+    },
+    "OFF": {
+      "cold_activity_capture": {
+        "compressed_receipt_hash_match": true,
+        "compressed_sha256": "69f7f3a0c8283d809c759a3bc89d82593d0731bd8d6a40e4b34f8a70440202a1",
+        "evaluation_status": "NOT_EVALUATED_NO_COLD_DATA_ROWS",
+        "expanded_bytes": 678294,
+        "expanded_receipt_hash_match": true,
+        "expanded_sha256": "71d293bd343fc63bea1392c92502d45f2d73ea9f25fd0aa17565a68e85a1407f",
+        "header": "# PR85_KDM6_COLD fields: i,lat,k,loop,ngSearchStatus,autSearchStatus,gSearchStatus,compositeRetry,storedNoop; then dtcld,rhoDry,compositeGamma,scaledRates(41) REAL32,alphaNG,alphaAUT,alphaG; Qbefore(5),QafterNG_AUT(5),QGrequest(5),Qafter(5); Nbefore(3),NafterNG_AUT(3),NGrequest(3),Nafter(3); BGbefore,BGafterNG_AUT,BGrequest,BGafter; Tbefore,TafterNG_AUT,TGrequest,Tafter; QVbefore,QVafterNG_AUT,QVGrequest,QVafter; CCN3before,CCN3transfer,CCN3after; NG proposal/approved/withheld: Q(5),N(3),BG,T,QV; AUT proposal/approved/withheld: Q(5),N(3),BG,T,QV; G proposal/approved/withheld: Q(5),N(3),BG,T,QV; stored-minus-approved R32 residuals Q(5),N(3),CCN3,BG,T,QV; Q kg/kgdry, N #/m3, B m3/kgdry, QV kg/kgdry, T K",
+        "interpretation": "Existing PR86 cold aggregation requires PR85_KDM6_COLD rows and same-call DEN/DELZ/area weighting. This capture contains no process data rows, so absence is not interpreted as zero activity.",
+        "path": "/var/tmp/pr87_followup_OFF_600s_v50_20261019/run/pr85_kdm6_cold_budget.raw.gz",
+        "receipt_compressed_sha256": "69f7f3a0c8283d809c759a3bc89d82593d0731bd8d6a40e4b34f8a70440202a1",
+        "receipt_expanded_sha256": "71d293bd343fc63bea1392c92502d45f2d73ea9f25fd0aa17565a68e85a1407f",
+        "record_counts": {
+          "PR85_KDM6_COLD_data_rows": 0,
+          "other_noncomment_lines": 0,
+          "schema_comment_lines": 954
+        }
+      },
+      "first_call_capture_prefix": {
+        "kdm6_first_call_post.raw.gz": {
+          "byte_identical_600s_vs_60s": true,
+          "sha256_600s": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f",
+          "sha256_600s_receipt_match": true,
+          "sha256_60s": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f"
+        },
+        "kdm6_first_call_pre.raw.gz": {
+          "byte_identical_600s_vs_60s": true,
+          "sha256_600s": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86",
+          "sha256_600s_receipt_match": true,
+          "sha256_60s": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86"
+        },
+        "pr67_kdm6_process.raw.gz": {
+          "byte_identical_600s_vs_60s": true,
+          "sha256_600s": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f",
+          "sha256_600s_receipt_match": true,
+          "sha256_60s": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f"
+        }
+      },
+      "run_600s_receipt": {
+        "executed_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "final_completed_step": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.1776,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 105.94371,
+            "timestamp": "2026-08-16_13:00:40"
+          },
+          {
+            "elapsed_seconds": 105.73834,
+            "timestamp": "2026-08-16_13:01:00"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_OFF_600s_v50_20261019/receipt.json",
+        "returncode": 128,
+        "sha256": "dfb88c2d54b5a19bd73c7b166daf4b2b6dcbc7bf4863ffb2d7d96434205fc734",
+        "status": "INCOMPLETE"
+      },
+      "run_60s_receipt": {
+        "executed_executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+        "final_completed_step": 3,
+        "model_timestamps": [
+          {
+            "elapsed_seconds": 241.58875,
+            "timestamp": "2026-08-16_13:00:20"
+          },
+          {
+            "elapsed_seconds": 106.26762,
+            "timestamp": "2026-08-16_13:00:40"
+          },
+          {
+            "elapsed_seconds": 106.39223,
+            "timestamp": "2026-08-16_13:01:00"
+          }
+        ],
+        "path": "/var/tmp/pr87_followup_OFF_60s_v50_20261019/receipt.json",
+        "returncode": 0,
+        "sha256": "31a69eb3ae41bb25cc0270bccdfa38486b90e6fa3c1079c6fdb500ac65551d70",
+        "status": "COMPLETE"
+      },
+      "saved_history_prefix": {
+        "bytes_600s": 178971877,
+        "bytes_60s": 178971877,
+        "full_file_byte_identical_600s_vs_60s": true,
+        "history_times_bound_by_v50_60s_native_history_analysis": [
+          "2026-08-16_13:00:00",
+          "2026-08-16_13:01:00"
+        ],
+        "interpretation": "Exact full history file identity verifies the saved T0/T60 data prefix; no T80 endpoint is bound in the 600s receipt.",
+        "path_600s": "/var/tmp/pr87_followup_OFF_600s_v50_20261019/run/wrfout_d01_2026-08-16_13:00:00",
+        "path_60s": "/var/tmp/pr87_followup_OFF_60s_v50_20261019/run/wrfout_d01_2026-08-16_13:00:00",
+        "sha256_600s": "cebc524bc907d1c0e32c11dfa4b302893f25bf4e5574c412548c7eb4a03b6129",
+        "sha256_600s_receipt_match": true,
+        "sha256_60s": "cebc524bc907d1c0e32c11dfa4b302893f25bf4e5574c412548c7eb4a03b6129"
+      }
+    }
+  },
+  "schema": "pr87_v50_600s_receipt_history_prefix_and_cold_availability_v1",
+  "scope": "Receipt/hash binding of saved initial and 60 s history plus first-call cold-ledger availability; no 80 s history, no closure residuals, no activity inference from absent rows."
+}

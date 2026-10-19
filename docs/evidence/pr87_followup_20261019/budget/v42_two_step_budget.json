@@ -1,0 +1,1301 @@
+{
+  "arms": {
+    "COUPLED": {
+      "arm": "COUPLED",
+      "bound_inputs": {
+        "kdm6_first_call_post.raw.gz": {
+          "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/kdm6_first_call_post.raw.gz",
+          "sha256": "45520f31fe3e03eb82fd2898133bec6808e70f5acc04886770eab1f9007cfb84"
+        },
+        "kdm6_first_call_pre.raw.gz": {
+          "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/kdm6_first_call_pre.raw.gz",
+          "sha256": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110"
+        },
+        "pr85_joint_moment_stages.raw.gz": {
+          "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/pr85_joint_moment_stages.raw.gz",
+          "sha256": "5ac46842c7644ed5444ca10a01f49ea361fd9e2f4631a30c029f6f9ebf4e7e8c"
+        }
+      },
+      "first_kdm6_call_budget": {
+        "BG_volume": {
+          "change": {
+            "l1": 9636047.9080553,
+            "max_abs_cell": 77304.346809583,
+            "max_abs_column": 354207.80948340794,
+            "signed": -13219.870694655123
+          },
+          "unit": "m3"
+        },
+        "active_shape_jki": [
+          280,
+          39,
+          232
+        ],
+        "bottom_outflow": {
+          "rainncv_accumulator_increment_kg": 27654491.514651243,
+          "records": 840,
+          "signed_l1_max_column": {
+            "l1": 27654491.80497141,
+            "max_abs_cell": 1952153.7812059512,
+            "max_abs_column": 1952153.7812059512,
+            "signed": 27654491.80497141
+          },
+          "species_outflow_kg": {
+            "graupel": 15376945.648036608,
+            "ice": 2.4011520084660107e-17,
+            "rain": 12277546.156934805,
+            "snow": 0.0
+          },
+          "stage2_rows": 280,
+          "total_outflow_kg": 27654491.80497141,
+          "unit": "kg"
+        },
+        "call_seconds": 20.0,
+        "column_maps": {
+          "array_shapes": {
+            "BG_volume_delta_m3_per_column": [
+              280,
+              232
+            ],
+            "cell_area_m2": [
+              280,
+              232
+            ],
+            "helper_minus_public_rain_kg_per_column": [
+              280,
+              232
+            ],
+            "i_index": [
+              280,
+              232
+            ],
+            "j_index": [
+              280,
+              232
+            ],
+            "number_category_sum_delta_count_per_column_not_conserved": [
+              280,
+              232
+            ],
+            "public_bottom_outflow_kg_per_column": [
+              280,
+              232
+            ],
+            "total_water_delta_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_after_recorded_cleanup_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_before_cleanup_kg_per_column": [
+              280,
+              232
+            ]
+          },
+          "arrays": [
+            "total_water_delta_kg_per_column",
+            "public_bottom_outflow_kg_per_column",
+            "water_residual_before_cleanup_kg_per_column",
+            "water_residual_after_recorded_cleanup_kg_per_column",
+            "helper_minus_public_rain_kg_per_column",
+            "number_category_sum_delta_count_per_column_not_conserved",
+            "BG_volume_delta_m3_per_column",
+            "cell_area_m2",
+            "i_index",
+            "j_index"
+          ],
+          "bytes": 2438070,
+          "format": "compressed NumPy NPZ; 2D maps only; no interpolation",
+          "path": "/var/tmp/pr87_followup_budget_20261019/COUPLED_firstcall_columns.npz",
+          "sha256": "b0408b2ffc752c7522ab6b95cf6c623a762122cfebfbf24b6007950f58b9b1fe",
+          "shape_j_i": [
+            280,
+            232
+          ],
+          "units": {
+            "BG_volume_delta_m3_per_column": "m3",
+            "cell_area_m2": "m2",
+            "helper_minus_public_rain_kg_per_column": "kg",
+            "i_index": "1-based active-domain WRF i index",
+            "j_index": "1-based active-domain WRF j index",
+            "number_category_sum_delta_count_per_column_not_conserved": "count",
+            "public_bottom_outflow_kg_per_column": "kg",
+            "total_water_delta_kg_per_column": "kg",
+            "water_residual_after_recorded_cleanup_kg_per_column": "kg",
+            "water_residual_before_cleanup_kg_per_column": "kg"
+          }
+        },
+        "coverage_limits": [
+          "unadjusted residual precedes cutoff and ice/snow transition corrections; adjusted residual subtracts only those two recorded terms",
+          "both residuals omit stored-rounding and other numerical terms",
+          "same-call host hybrid dry-mass and boundary reconciliation are not captured",
+          "not a closed whole-model water or thermodynamic budget"
+        ],
+        "identities": {
+          "initial_history_sha256": "4716ceda093b3b01ff4363be7c56dabedf2ed585b3a4d9bce4ea8012ced88663",
+          "numerical_ledgers": {
+            "cutoff": {
+              "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/pr85_kdm6_cutoff_budget.raw.gz",
+              "sha256": "789957fd99de3cb01bbf67648df5e61d650c0793d999c19f8191559759600e66"
+            },
+            "transition": {
+              "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/pr85_ice_transition_branch.raw.gz",
+              "sha256": "f602fdd69fe9253a75de4d2336158ab032a433e6c46da47d36564d22a3ec841e"
+            }
+          },
+          "post": {
+            "compressed_path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/kdm6_first_call_post.raw.gz",
+            "compressed_sha256": "45520f31fe3e03eb82fd2898133bec6808e70f5acc04886770eab1f9007cfb84",
+            "expanded_bytes": 195542592,
+            "expanded_sha256": "5970a6bc79c01cd6f2550baf9842f445ad0c8eb7eb807e3eaa7889563bd607b1"
+          },
+          "pre": {
+            "compressed_path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/kdm6_first_call_pre.raw.gz",
+            "compressed_sha256": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110",
+            "expanded_bytes": 195542592,
+            "expanded_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8"
+          },
+          "process": {
+            "compressed_path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/pr67_kdm6_process.raw.gz",
+            "compressed_sha256": "b435dee012ca8fa4c9144eab800d6aba894ad586ae190e657d9338bb82a39e1e",
+            "expanded_bytes": 83442240,
+            "expanded_sha256": "50516cca55e7cc7f0ac48df9a8730b405f2ea406aa79282d2f444ca713366677"
+          },
+          "rain_ground_ledger": {
+            "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/pr87_rain_sedimentation_budget.raw.gz",
+            "sha256": "aac1b8f99d04e4404f5270e5619da623cae46f9ff6a198eaa0a24f366c08603f"
+          }
+        },
+        "inventory_by_field": {
+          "BG": {
+            "after": 19412281.498461194,
+            "before": 19425501.36915585,
+            "change": {
+              "l1": 9636047.9080553,
+              "max_abs_cell": 77304.346809583,
+              "max_abs_column": 354207.80948340794,
+              "signed": -13219.870694655123
+            }
+          },
+          "NC": {
+            "after": 8.349615310975427e+23,
+            "before": 9.994108852690669e+23,
+            "change": {
+              "l1": 3.269251170129197e+23,
+              "max_abs_cell": 1.3599795474413724e+19,
+              "max_abs_column": 1.0718930764258899e+20,
+              "signed": -1.6444935417152517e+23
+            }
+          },
+          "NI": {
+            "after": 1.8604798673691117e+21,
+            "before": 9.30248092317456e+20,
+            "change": {
+              "l1": 1.4025415287638288e+21,
+              "max_abs_cell": 5.923214353300279e+18,
+              "max_abs_column": 9.017767149380839e+18,
+              "signed": 9.302317750516549e+20
+            }
+          },
+          "NN": {
+            "after": 6.120168139787478e+24,
+            "before": 2.5918660774524656e+24,
+            "change": {
+              "l1": 3.7103358179969377e+24,
+              "max_abs_cell": 9.525995129960708e+18,
+              "max_abs_column": 9.448633180019968e+19,
+              "signed": 3.52830206233501e+24
+            }
+          },
+          "NR": {
+            "after": 5.483811398278255e+18,
+            "before": 1.8604872518191242e+18,
+            "change": {
+              "l1": 3.715382557633757e+18,
+              "max_abs_cell": 5840346873729457.0,
+              "max_abs_column": 1.1521612690051796e+16,
+              "signed": 3.6233241464591273e+18
+            }
+          },
+          "Q": {
+            "after": 89519717989252.39,
+            "before": 88878263206481.73,
+            "change": {
+              "l1": 655976523652.6497,
+              "max_abs_cell": 16552659.092181526,
+              "max_abs_column": 103172640.75239845,
+              "signed": 641454782770.679
+            }
+          },
+          "QC": {
+            "after": 1268731800912.5437,
+            "before": 1955039819301.7537,
+            "change": {
+              "l1": 715704440382.7836,
+              "max_abs_cell": 52647891.10748825,
+              "max_abs_column": 320181344.63719547,
+              "signed": -686308018389.2091
+            }
+          },
+          "QG": {
+            "after": 9652665579.883364,
+            "before": 7770200517.673036,
+            "change": {
+              "l1": 5724095890.128891,
+              "max_abs_cell": 24383037.306504928,
+              "max_abs_column": 115028189.68531097,
+              "signed": 1882465062.2103271
+            }
+          },
+          "QI": {
+            "after": 703445670378.8911,
+            "before": 994793062036.0454,
+            "change": {
+              "l1": 315935868417.01263,
+              "max_abs_cell": 65418874.804081306,
+              "max_abs_column": 371819953.19190687,
+              "signed": -291347391657.15454
+            }
+          },
+          "QR": {
+            "after": 162549417260.29526,
+            "before": 119853139464.4475,
+            "change": {
+              "l1": 43672696958.98222,
+              "max_abs_cell": 38094078.257387094,
+              "max_abs_column": 228564705.14243865,
+              "signed": 42696277795.84785
+            }
+          },
+          "QS": {
+            "after": 674080806763.9917,
+            "before": 383148512028.2993,
+            "change": {
+              "l1": 318933192654.73566,
+              "max_abs_cell": 64903778.490309216,
+              "max_abs_column": 358399628.40575814,
+              "signed": 290932294735.6922
+            }
+          }
+        },
+        "measure": "same-call DEN * DELZ * DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+        "number_category_sum_change_not_a_conservation_residual": {
+          "change": {
+            "l1": 3.4233860965410105e+24,
+            "max_abs_cell": 1.1466381090829023e+19,
+            "max_abs_column": 7.587682911367596e+19,
+            "signed": 3.3647865632626834e+24
+          },
+          "fields": [
+            "NN",
+            "NC",
+            "NI",
+            "NR"
+          ],
+          "sum_of_separate_field_l1": 4.0386671919211787e+24
+        },
+        "rain_ground_comparison": {
+          "call_marker_rows": 280,
+          "captured_public_fall_phase1_rain_kg": 12277546.156934805,
+          "captured_public_rain_map": {
+            "l1": 12277546.156934805,
+            "max_abs_cell": 29846.128672102423,
+            "max_abs_column": 29846.128672102423,
+            "signed": 12277546.156934805
+          },
+          "comparison": "helper ground-approved rain Q versus captured public fall phase 1 mapped through rainncv",
+          "helper_ground_approved_map": {
+            "l1": 674129778.4637431,
+            "max_abs_cell": 1984665.7600365304,
+            "max_abs_column": 1984665.7600365304,
+            "signed": 674129778.4637431
+          },
+          "helper_ground_approved_rain_Q_kg": 674129778.4637431,
+          "helper_internal_column_residual_mapped_kg": 12.55949349410649,
+          "helper_minus_public_rain_difference_kg": {
+            "l1": 683342003.3878344,
+            "max_abs_cell": 1984665.7600365304,
+            "max_abs_column": 1984665.7600365304,
+            "signed": 661852232.3068084
+          },
+          "interpretation": "The helper ledger and public output accumulator disagree; ground-approved process Q is not substituted for emitted precipitation.",
+          "selected_sedimentation_rows": 78926,
+          "timestep": 1,
+          "unit_basis": "ground_approved_q is kg m-2 per call times actual map area; public fall phase 1 uses source fall*DELZ/DENR*DTCLD*1000 mm times water density/1000 and map area"
+        },
+        "recorded_numerical_terms": {
+          "cutoff_rows_first_sweep": 212873,
+          "cutoff_rows_second_sweep_geometry_mismatches": 311497,
+          "cutoff_sweep_assignment": "first full ordered j sweep; every row rhoDry matches first-call PRE capture and second sweep has changed rhoDry rows",
+          "cutoff_water_delta_kg": {
+            "l1": 43395.8169016234,
+            "max_abs_cell": 17.881881880561348,
+            "max_abs_column": 64.01544141157721,
+            "signed": -43395.8169016234
+          },
+          "ice_snow_transition_rows_step1": 7081,
+          "ice_snow_transition_water_delta_kg": {
+            "l1": 6243.856116641805,
+            "max_abs_cell": 5.127334448432817,
+            "max_abs_column": 10.688177925664862,
+            "signed": -77.56462413304718
+          },
+          "transition_step_assignment": "explicit PR85_ICE_TRANSITION_LOOP timestep marker equals 1"
+        },
+        "residual_after_recorded_numerical_terms": {
+          "interpretation": "water-state change + bottom outflow - recorded cutoff water delta - recorded ice/snow storage delta",
+          "l1": 683658766.1611352,
+          "max_abs_column": 1984682.4251179101,
+          "not_closed": true,
+          "signed": -661891716.7471974,
+          "unit": "kg per column"
+        },
+        "status": "FIRST_KDM6_CALL_ACCOUNTED_PARTIAL_BUDGET_OPEN",
+        "timestep": 1,
+        "unadjusted_water_residual": {
+          "bottom_outflow_kg": 27654491.80497141,
+          "interpretation": "water-state change + bottom outflow before recorded cleanup/phase-storage corrections",
+          "l1": 683681936.3789109,
+          "max_abs_column": 1984682.4251179101,
+          "signed": -661935190.1287233,
+          "unit": "kg per column",
+          "water_change_kg": -689589681.9336947
+        },
+        "water_total": {
+          "change": {
+            "l1": 31613467633.553936,
+            "max_abs_cell": 5094943.128871511,
+            "max_abs_column": 2372898.5163541497,
+            "signed": -689589681.9336947
+          },
+          "fields": [
+            "Q",
+            "QC",
+            "QI",
+            "QR",
+            "QS",
+            "QG"
+          ],
+          "sum_of_separate_field_l1": 2055946817956.2927
+        }
+      },
+      "geometry_availability": {
+        "DELZ": "captured in first-call KDM6 PRE/POST files only; not alongside per-step PRE_RK/POST_KDM6 stage states",
+        "area": "static map area derivable from initial MAPFAC_MX/MAPFAC_MY and DX*DY",
+        "exact_two_step_inventory_changes": false,
+        "reason": "endpoint DELZ is absent from the full stage trace, so rhoDry*DELZ*area cannot be applied to both state endpoints without assuming fixed layer thickness",
+        "rhoDry": "captured at every PRE_RK/POST_KDM6 state as DEN",
+        "units_of_reported_changes": "native Q/B mixing or moment state units; not kg, particles, or column inventory"
+      },
+      "observation_signal": {
+        "available_initial_fields": [
+          "P",
+          "PB",
+          "PH",
+          "PHB",
+          "U",
+          "V",
+          "W",
+          "MAPFAC_MX",
+          "MAPFAC_MY",
+          "XLAT",
+          "XLONG"
+        ],
+        "dx_m": 5000.0,
+        "dy_m": 5000.0,
+        "map_area_m2_max": 26799275.69136113,
+        "map_area_m2_min": 25286466.67286178,
+        "model_times": [
+          "2026-08-16_13:00:00"
+        ],
+        "observation_or_echo_fields": [],
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/wrfout_d01_2026-08-16_13:00:00",
+        "post_step_pressure_phi_wind_or_observation_signal": false,
+        "records": 1,
+        "sha256": "4716ceda093b3b01ff4363be7c56dabedf2ed585b3a4d9bce4ea8012ced88663"
+      },
+      "receipt": {
+        "model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40"
+        ],
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/receipt.json",
+        "run_status": "COMPLETE",
+        "sha256": "3511bf0d0ca4872e640e58077d31c9f0e33c40f45684d48e861756363aa4c60f",
+        "timesteps": 2
+      },
+      "stage_trace": {
+        "active_bounds_ims_ime_jms_jme_kms_kme_its_ite_jts_jte_kts_kte": [
+          2,
+          233,
+          2,
+          281,
+          1,
+          39
+        ],
+        "path": "/var/tmp/pr87_joint_COUPLED_40s_v42_20261016/run/pr85_joint_moment_stages.raw.gz",
+        "records": 17,
+        "sha256": "5ac46842c7644ed5444ca10a01f49ea361fd9e2f4631a30c029f6f9ebf4e7e8c",
+        "step_changes": {
+          "1": {
+            "active_shape_jki": [
+              39,
+              280,
+              232
+            ],
+            "field_groups": {
+              "graupel_B_BG": {
+                "l1_field_sum": 0.0010225020805459313,
+                "max_abs_cell_delta": 6.221327566890977e-06,
+                "max_abs_column_sum": 0.00010291255769601104,
+                "signed_field_sum": -0.00017213799745129923
+              },
+              "number_NN_NC_NI_NR": {
+                "l1_field_sum": 925479849169792.9,
+                "max_abs_cell_delta": 4829917112.0,
+                "max_abs_column_sum": 173969767973.0,
+                "signed_field_sum": 806040538529026.8
+              },
+              "water_Q_QC_QI_QR_QS_QG": {
+                "l1_field_sum": 220.00862179870416,
+                "max_abs_cell_delta": 0.00993315503001213,
+                "max_abs_column_sum": 0.2203632111773448,
+                "signed_field_sum": 0.011724287481299056
+              }
+            },
+            "fields": {
+              "BG": {
+                "l1_field_sum": 0.0010225020805459313,
+                "max_abs_cell_delta": 6.221327566890977e-06,
+                "max_abs_column_sum": 0.00010291255769601104,
+                "signed_field_sum": -0.00017213799745129923
+              },
+              "NC": {
+                "l1_field_sum": 60355083624180.19,
+                "max_abs_cell_delta": 4680782590.0,
+                "max_abs_column_sum": 173969767973.0,
+                "signed_field_sum": 1703709248364.5564
+              },
+              "NI": {
+                "l1_field_sum": 203469546879.26495,
+                "max_abs_cell_delta": 902672715.0,
+                "max_abs_column_sum": 5502356414.094205,
+                "signed_field_sum": 158291509712.19067
+              },
+              "NN": {
+                "l1_field_sum": 864920981328640.1,
+                "max_abs_cell_delta": 4829917112.0,
+                "max_abs_column_sum": 109954337955.09389,
+                "signed_field_sum": 804178237871135.9
+              },
+              "NR": {
+                "l1_field_sum": 314670093.34485894,
+                "max_abs_cell_delta": 465546.48110961914,
+                "max_abs_column_sum": 4908560.070464373,
+                "signed_field_sum": 299899814.07085437
+              },
+              "Q": {
+                "l1_field_sum": 74.50791085342254,
+                "max_abs_cell_delta": 0.001280317548662424,
+                "max_abs_column_sum": 0.056856159851577104,
+                "signed_field_sum": 70.39478819357572
+              },
+              "QC": {
+                "l1_field_sum": 78.33512129400727,
+                "max_abs_cell_delta": 0.004270289558917284,
+                "max_abs_column_sum": 0.09474468768989652,
+                "signed_field_sum": -75.2370778947804
+              },
+              "QG": {
+                "l1_field_sum": 0.5700009104974881,
+                "max_abs_cell_delta": 0.0021080151200294495,
+                "max_abs_column_sum": 0.029496170972720392,
+                "signed_field_sum": 0.09494191839735033
+              },
+              "QI": {
+                "l1_field_sum": 31.12802417919326,
+                "max_abs_cell_delta": 0.00993315503001213,
+                "max_abs_column_sum": 0.21553724923023765,
+                "signed_field_sum": -27.980770228246342
+              },
+              "QR": {
+                "l1_field_sum": 4.468336498600415,
+                "max_abs_cell_delta": 0.00311871524900198,
+                "max_abs_column_sum": 0.07366788517424538,
+                "signed_field_sum": 4.335965326547621
+              },
+              "QS": {
+                "l1_field_sum": 30.999228062983185,
+                "max_abs_cell_delta": 0.009790592826902866,
+                "max_abs_column_sum": 0.2203632111773448,
+                "signed_field_sum": 28.403876971987348
+              }
+            },
+            "model_seconds": 20,
+            "rhoDry": {
+              "post_max": 1.163761854171753,
+              "post_min": 0.08372926712036133,
+              "pre_max": 1.2076181173324585,
+              "pre_min": 0.09184066206216812
+            }
+          },
+          "2": {
+            "active_shape_jki": [
+              39,
+              280,
+              232
+            ],
+            "field_groups": {
+              "graupel_B_BG": {
+                "l1_field_sum": 0.003505177502917932,
+                "max_abs_cell_delta": 8.604190225014463e-05,
+                "max_abs_column_sum": 0.0001597176292196245,
+                "signed_field_sum": 0.0032930413469397833
+              },
+              "number_NN_NC_NI_NR": {
+                "l1_field_sum": 96440548900508.48,
+                "max_abs_cell_delta": 4751979989.0,
+                "max_abs_column_sum": 176733345462.0,
+                "signed_field_sum": 3348025860443.816
+              },
+              "water_Q_QC_QI_QR_QS_QG": {
+                "l1_field_sum": 65.7031272640855,
+                "max_abs_cell_delta": 0.010189537890255451,
+                "max_abs_column_sum": 0.09781517353886571,
+                "signed_field_sum": -0.22047700897710176
+              }
+            },
+            "fields": {
+              "BG": {
+                "l1_field_sum": 0.003505177502917932,
+                "max_abs_cell_delta": 8.604190225014463e-05,
+                "max_abs_column_sum": 0.0001597176292196245,
+                "signed_field_sum": 0.0032930413469397833
+              },
+              "NC": {
+                "l1_field_sum": 50837459858797.72,
+                "max_abs_cell_delta": 4751979989.0,
+                "max_abs_column_sum": 176733345462.0,
+                "signed_field_sum": 39170370974572.03
+              },
+              "NI": {
+                "l1_field_sum": 106931340378.33797,
+                "max_abs_cell_delta": 905207616.0,
+                "max_abs_column_sum": 5547861690.4574795,
+                "signed_field_sum": -95888067917.40486
+              },
+              "NN": {
+                "l1_field_sum": 45495892092760.0,
+                "max_abs_cell_delta": 4660284680.0,
+                "max_abs_column_sum": 167847608232.0,
+                "signed_field_sum": -35726698945640.0
+              },
+              "NR": {
+                "l1_field_sum": 265608572.42128092,
+                "max_abs_cell_delta": 386103.9375,
+                "max_abs_column_sum": 3684315.474345684,
+                "signed_field_sum": 241899429.18939874
+              },
+              "Q": {
+                "l1_field_sum": 9.896957436036239,
+                "max_abs_cell_delta": 0.00027712713927030563,
+                "max_abs_column_sum": 0.013042409684203449,
+                "signed_field_sum": 1.0665888088613322
+              },
+              "QC": {
+                "l1_field_sum": 9.249674951470881,
+                "max_abs_cell_delta": 0.0026032908353954554,
+                "max_abs_column_sum": 0.0185893057314388,
+                "signed_field_sum": -5.431268256819775
+              },
+              "QG": {
+                "l1_field_sum": 0.7756469037876381,
+                "max_abs_cell_delta": 0.010189537890255451,
+                "max_abs_column_sum": 0.01969894191165622,
+                "signed_field_sum": 0.6753614325500261
+              },
+              "QI": {
+                "l1_field_sum": 20.696069369917844,
+                "max_abs_cell_delta": 0.008082772605121136,
+                "max_abs_column_sum": 0.09662400509431993,
+                "signed_field_sum": -18.418580839168182
+              },
+              "QR": {
+                "l1_field_sum": 3.1424951305521267,
+                "max_abs_cell_delta": 0.0027441554702818394,
+                "max_abs_column_sum": 0.019975063944855265,
+                "signed_field_sum": 2.547528699974084
+              },
+              "QS": {
+                "l1_field_sum": 21.94228347232077,
+                "max_abs_cell_delta": 0.00894166063517332,
+                "max_abs_column_sum": 0.09781517353886571,
+                "signed_field_sum": 19.339893145625414
+              }
+            },
+            "model_seconds": 40,
+            "rhoDry": {
+              "post_max": 1.16361665725708,
+              "post_min": 0.08374450355768204,
+              "pre_max": 1.200648307800293,
+              "pre_min": 0.08981930464506149
+            }
+          }
+        }
+      },
+      "status": "STATE_CHANGES_ONLY_PHYSICAL_INVENTORY_OPEN"
+    },
+    "OFF": {
+      "arm": "OFF",
+      "bound_inputs": {
+        "kdm6_first_call_post.raw.gz": {
+          "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/kdm6_first_call_post.raw.gz",
+          "sha256": "8962f7575e49e4b832482a126ce36ccab2302a59e4fb932439578fff4d49b973"
+        },
+        "kdm6_first_call_pre.raw.gz": {
+          "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/kdm6_first_call_pre.raw.gz",
+          "sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86"
+        },
+        "pr85_joint_moment_stages.raw.gz": {
+          "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/pr85_joint_moment_stages.raw.gz",
+          "sha256": "9db10bd838fc3f387c63bf1e56cfdceda75d00bcdc27db17f21ef63d43746497"
+        }
+      },
+      "first_kdm6_call_budget": {
+        "BG_volume": {
+          "change": {
+            "l1": 9775178.498782987,
+            "max_abs_cell": 77304.346809583,
+            "max_abs_column": 354207.80948340794,
+            "signed": -152350.46150029876
+          },
+          "unit": "m3"
+        },
+        "active_shape_jki": [
+          280,
+          39,
+          232
+        ],
+        "bottom_outflow": {
+          "rainncv_accumulator_increment_kg": 27796280.86516572,
+          "records": 840,
+          "signed_l1_max_column": {
+            "l1": 27796280.744857144,
+            "max_abs_cell": 1998370.270847491,
+            "max_abs_column": 1998370.270847491,
+            "signed": 27796280.744857144
+          },
+          "species_outflow_kg": {
+            "graupel": 15518734.587922338,
+            "ice": 2.4011519857421796e-17,
+            "rain": 12277546.156934805,
+            "snow": 0.0
+          },
+          "stage2_rows": 280,
+          "total_outflow_kg": 27796280.744857144,
+          "unit": "kg"
+        },
+        "call_seconds": 20.0,
+        "column_maps": {
+          "array_shapes": {
+            "BG_volume_delta_m3_per_column": [
+              280,
+              232
+            ],
+            "cell_area_m2": [
+              280,
+              232
+            ],
+            "helper_minus_public_rain_kg_per_column": [
+              280,
+              232
+            ],
+            "i_index": [
+              280,
+              232
+            ],
+            "j_index": [
+              280,
+              232
+            ],
+            "number_category_sum_delta_count_per_column_not_conserved": [
+              280,
+              232
+            ],
+            "public_bottom_outflow_kg_per_column": [
+              280,
+              232
+            ],
+            "total_water_delta_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_after_recorded_cleanup_kg_per_column": [
+              280,
+              232
+            ],
+            "water_residual_before_cleanup_kg_per_column": [
+              280,
+              232
+            ]
+          },
+          "arrays": [
+            "total_water_delta_kg_per_column",
+            "public_bottom_outflow_kg_per_column",
+            "water_residual_before_cleanup_kg_per_column",
+            "water_residual_after_recorded_cleanup_kg_per_column",
+            "helper_minus_public_rain_kg_per_column",
+            "number_category_sum_delta_count_per_column_not_conserved",
+            "BG_volume_delta_m3_per_column",
+            "cell_area_m2",
+            "i_index",
+            "j_index"
+          ],
+          "bytes": 2438060,
+          "format": "compressed NumPy NPZ; 2D maps only; no interpolation",
+          "path": "/var/tmp/pr87_followup_budget_20261019/OFF_firstcall_columns.npz",
+          "sha256": "14228310ed907340229791b0535bcf610613797ab9c2e187c6203e42704d55d0",
+          "shape_j_i": [
+            280,
+            232
+          ],
+          "units": {
+            "BG_volume_delta_m3_per_column": "m3",
+            "cell_area_m2": "m2",
+            "helper_minus_public_rain_kg_per_column": "kg",
+            "i_index": "1-based active-domain WRF i index",
+            "j_index": "1-based active-domain WRF j index",
+            "number_category_sum_delta_count_per_column_not_conserved": "count",
+            "public_bottom_outflow_kg_per_column": "kg",
+            "total_water_delta_kg_per_column": "kg",
+            "water_residual_after_recorded_cleanup_kg_per_column": "kg",
+            "water_residual_before_cleanup_kg_per_column": "kg"
+          }
+        },
+        "coverage_limits": [
+          "unadjusted residual precedes cutoff and ice/snow transition corrections; adjusted residual subtracts only those two recorded terms",
+          "both residuals omit stored-rounding and other numerical terms",
+          "same-call host hybrid dry-mass and boundary reconciliation are not captured",
+          "not a closed whole-model water or thermodynamic budget"
+        ],
+        "identities": {
+          "initial_history_sha256": "ae7253d7261d8292c7de8a3b2a3f39b1798bf1a59599042901b892d2ebcb887c",
+          "numerical_ledgers": {
+            "cutoff": {
+              "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/pr85_kdm6_cutoff_budget.raw.gz",
+              "sha256": "81e301063595e519dd5ca150dfff863a1d60513faf0e58e90609f480865bfe53"
+            },
+            "transition": {
+              "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/pr85_ice_transition_branch.raw.gz",
+              "sha256": "9d9a9bf64f9b4a1d6c62fd31e18c4e248c072f1365a9147f24d51e809e12a5a5"
+            }
+          },
+          "post": {
+            "compressed_path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/kdm6_first_call_post.raw.gz",
+            "compressed_sha256": "8962f7575e49e4b832482a126ce36ccab2302a59e4fb932439578fff4d49b973",
+            "expanded_bytes": 195542592,
+            "expanded_sha256": "0f2ebcef240423dc6fe37057540d9216835ef05884cf9bc2cf1a4c6a305328e3"
+          },
+          "pre": {
+            "compressed_path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/kdm6_first_call_pre.raw.gz",
+            "compressed_sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86",
+            "expanded_bytes": 195542592,
+            "expanded_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe"
+          },
+          "process": {
+            "compressed_path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/pr67_kdm6_process.raw.gz",
+            "compressed_sha256": "cf41960758833b8522612117f02c7d0bb297a3f179499ba643b6aa30b0c8cd63",
+            "expanded_bytes": 83442240,
+            "expanded_sha256": "d944a2b50e1950aa3228e7d9ad268e449bed97d1a797ef91d9439fef056898eb"
+          },
+          "rain_ground_ledger": {
+            "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/pr87_rain_sedimentation_budget.raw.gz",
+            "sha256": "2bb06099eef7113e0927e59067917ddb82083078cc1176b530ce7de343cea6d6"
+          }
+        },
+        "inventory_by_field": {
+          "BG": {
+            "after": 19412281.498422213,
+            "before": 19564631.959922515,
+            "change": {
+              "l1": 9775178.498782987,
+              "max_abs_cell": 77304.346809583,
+              "max_abs_column": 354207.80948340794,
+              "signed": -152350.46150029876
+            }
+          },
+          "NC": {
+            "after": 8.34980148175456e+23,
+            "before": 9.995000838226918e+23,
+            "change": {
+              "l1": 3.269858947469157e+23,
+              "max_abs_cell": 1.3599795474413724e+19,
+              "max_abs_column": 1.0718930764258899e+20,
+              "signed": -1.6451993564723682e+23
+            }
+          },
+          "NI": {
+            "after": 1.860414498393858e+21,
+            "before": 9.302480426768568e+20,
+            "change": {
+              "l1": 1.4025763876138826e+21,
+              "max_abs_cell": 5.923214353300279e+18,
+              "max_abs_column": 9.017767149380839e+18,
+              "signed": 9.301664557170004e+20
+            }
+          },
+          "NN": {
+            "after": 6.120223000412717e+24,
+            "before": 2.591866076991705e+24,
+            "change": {
+              "l1": 3.710390679082936e+24,
+              "max_abs_cell": 9.525995129960708e+18,
+              "max_abs_column": 9.448633180019968e+19,
+              "signed": 3.5283569234210086e+24
+            }
+          },
+          "NR": {
+            "after": 5.484603971716821e+18,
+            "before": 1.8612563521840922e+18,
+            "change": {
+              "l1": 3.7155015720062894e+18,
+              "max_abs_cell": 5840346873729457.0,
+              "max_abs_column": 1.1521612690051796e+16,
+              "signed": 3.6233476195327263e+18
+            }
+          },
+          "Q": {
+            "after": 89519534675983.86,
+            "before": 88877823659132.86,
+            "change": {
+              "l1": 656227958814.0007,
+              "max_abs_cell": 16552659.092181526,
+              "max_abs_column": 103172640.75239845,
+              "signed": 641711016851.0261
+            }
+          },
+          "QC": {
+            "after": 1268717262735.9524,
+            "before": 1955304534743.6138,
+            "change": {
+              "l1": 715980833236.5997,
+              "max_abs_cell": 52647891.10748825,
+              "max_abs_column": 320181344.63719547,
+              "signed": -686587272007.6605
+            }
+          },
+          "QG": {
+            "after": 9652665579.853834,
+            "before": 7825852752.171311,
+            "change": {
+              "l1": 5779748124.597639,
+              "max_abs_cell": 24383037.306504928,
+              "max_abs_column": 115028189.68531097,
+              "signed": 1826812827.6825225
+            }
+          },
+          "QI": {
+            "after": 703351854503.8694,
+            "before": 994793061309.0406,
+            "change": {
+              "l1": 316024015855.29944,
+              "max_abs_cell": 65418874.804081306,
+              "max_abs_column": 371819953.19190687,
+              "signed": -291441206805.17163
+            }
+          },
+          "QR": {
+            "after": 162682542647.58118,
+            "before": 119902685149.8512,
+            "change": {
+              "l1": 43754633476.07394,
+              "max_abs_cell": 38094078.257387094,
+              "max_abs_column": 228564705.14243865,
+              "signed": 42779857497.73006
+            }
+          },
+          "QS": {
+            "after": 674304708950.8787,
+            "before": 383283637971.92334,
+            "change": {
+              "l1": 319037132247.7781,
+              "max_abs_cell": 64903778.490309216,
+              "max_abs_column": 358399628.40575814,
+              "signed": 291021070978.95514
+            }
+          }
+        },
+        "measure": "same-call DEN * DELZ * DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+        "number_category_sum_change_not_a_conservation_residual": {
+          "change": {
+            "l1": 3.423370206724582e+24,
+            "max_abs_cell": 1.1466381090829023e+19,
+            "max_abs_column": 7.587682911367596e+19,
+            "signed": 3.364770777577108e+24
+          },
+          "fields": [
+            "NN",
+            "NC",
+            "NI",
+            "NR"
+          ],
+          "sum_of_separate_field_l1": 4.0387828657190376e+24
+        },
+        "rain_ground_comparison": {
+          "call_marker_rows": 280,
+          "captured_public_fall_phase1_rain_kg": 12277546.156934805,
+          "captured_public_rain_map": {
+            "l1": 12277546.156934805,
+            "max_abs_cell": 29846.128672102423,
+            "max_abs_column": 29846.128672102423,
+            "signed": 12277546.156934805
+          },
+          "comparison": "helper ground-approved rain Q versus captured public fall phase 1 mapped through rainncv",
+          "helper_ground_approved_map": {
+            "l1": 674118778.1787394,
+            "max_abs_cell": 1984665.7600365304,
+            "max_abs_column": 1984665.7600365304,
+            "signed": 674118778.1787394
+          },
+          "helper_ground_approved_rain_Q_kg": 674118778.1787394,
+          "helper_internal_column_residual_mapped_kg": 1.5894734665931711,
+          "helper_minus_public_rain_difference_kg": {
+            "l1": 683331003.1028308,
+            "max_abs_cell": 1984665.7600365304,
+            "max_abs_column": 1984665.7600365304,
+            "signed": 661841232.0218047
+          },
+          "interpretation": "The helper ledger and public output accumulator disagree; ground-approved process Q is not substituted for emitted precipitation.",
+          "selected_sedimentation_rows": 78926,
+          "timestep": 1,
+          "unit_basis": "ground_approved_q is kg m-2 per call times actual map area; public fall phase 1 uses source fall*DELZ/DENR*DTCLD*1000 mm times water density/1000 and map area"
+        },
+        "recorded_numerical_terms": {
+          "cutoff_rows_first_sweep": 212867,
+          "cutoff_rows_second_sweep_geometry_mismatches": 311471,
+          "cutoff_sweep_assignment": "first full ordered j sweep; every row rhoDry matches first-call PRE capture and second sweep has changed rhoDry rows",
+          "cutoff_water_delta_kg": {
+            "l1": 43406.97644744219,
+            "max_abs_cell": 17.881881880561348,
+            "max_abs_column": 64.01544141157721,
+            "signed": -43406.97644744219
+          },
+          "ice_snow_transition_rows_step1": 7084,
+          "ice_snow_transition_water_delta_kg": {
+            "l1": 6247.055220285157,
+            "max_abs_cell": 5.127334448432817,
+            "max_abs_column": 10.688177925664862,
+            "signed": -76.92520530537507
+          },
+          "transition_step_assignment": "explicit PR85_ICE_TRANSITION_LOOP timestep marker equals 1"
+        },
+        "residual_after_recorded_numerical_terms": {
+          "interpretation": "water-state change + bottom outflow - recorded cutoff water delta - recorded ice/snow storage delta",
+          "l1": 683647789.0957209,
+          "max_abs_column": 1984682.4251179101,
+          "not_closed": true,
+          "signed": -661880892.7911689,
+          "unit": "kg per column"
+        },
+        "status": "FIRST_KDM6_CALL_ACCOUNTED_PARTIAL_BUDGET_OPEN",
+        "timestep": 1,
+        "unadjusted_water_residual": {
+          "bottom_outflow_kg": 27796280.744857144,
+          "interpretation": "water-state change + bottom outflow before recorded cleanup/phase-storage corrections",
+          "l1": 683670990.686908,
+          "max_abs_column": 1984682.4251179101,
+          "signed": -661924376.6928217,
+          "unit": "kg per column",
+          "water_change_kg": -689720657.4376789
+        },
+        "water_total": {
+          "change": {
+            "l1": 31616224576.854633,
+            "max_abs_cell": 5094943.128871511,
+            "max_abs_column": 2409185.949472369,
+            "signed": -689720657.4376789
+          },
+          "fields": [
+            "Q",
+            "QC",
+            "QI",
+            "QR",
+            "QS",
+            "QG"
+          ],
+          "sum_of_separate_field_l1": 2056804321754.3496
+        }
+      },
+      "geometry_availability": {
+        "DELZ": "captured in first-call KDM6 PRE/POST files only; not alongside per-step PRE_RK/POST_KDM6 stage states",
+        "area": "static map area derivable from initial MAPFAC_MX/MAPFAC_MY and DX*DY",
+        "exact_two_step_inventory_changes": false,
+        "reason": "endpoint DELZ is absent from the full stage trace, so rhoDry*DELZ*area cannot be applied to both state endpoints without assuming fixed layer thickness",
+        "rhoDry": "captured at every PRE_RK/POST_KDM6 state as DEN",
+        "units_of_reported_changes": "native Q/B mixing or moment state units; not kg, particles, or column inventory"
+      },
+      "observation_signal": {
+        "available_initial_fields": [
+          "P",
+          "PB",
+          "PH",
+          "PHB",
+          "U",
+          "V",
+          "W",
+          "MAPFAC_MX",
+          "MAPFAC_MY",
+          "XLAT",
+          "XLONG"
+        ],
+        "dx_m": 5000.0,
+        "dy_m": 5000.0,
+        "map_area_m2_max": 26799275.69136113,
+        "map_area_m2_min": 25286466.67286178,
+        "model_times": [
+          "2026-08-16_13:00:00"
+        ],
+        "observation_or_echo_fields": [],
+        "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/wrfout_d01_2026-08-16_13:00:00",
+        "post_step_pressure_phi_wind_or_observation_signal": false,
+        "records": 1,
+        "sha256": "ae7253d7261d8292c7de8a3b2a3f39b1798bf1a59599042901b892d2ebcb887c"
+      },
+      "receipt": {
+        "model_timestamps": [
+          "2026-08-16_13:00:20",
+          "2026-08-16_13:00:40"
+        ],
+        "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/receipt.json",
+        "run_status": "COMPLETE",
+        "sha256": "ddb68d9c9fd020ccc403ca9ddc3d340bda85bd2ee8e1e9bcdbea59161539d85d",
+        "timesteps": 2
+      },
+      "stage_trace": {
+        "active_bounds_ims_ime_jms_jme_kms_kme_its_ite_jts_jte_kts_kte": [
+          2,
+          233,
+          2,
+          281,
+          1,
+          39
+        ],
+        "path": "/var/tmp/pr87_joint_OFF_40s_v42_20261016/run/pr85_joint_moment_stages.raw.gz",
+        "records": 17,
+        "sha256": "9db10bd838fc3f387c63bf1e56cfdceda75d00bcdc27db17f21ef63d43746497",
+        "step_changes": {
+          "1": {
+            "active_shape_jki": [
+              39,
+              280,
+              232
+            ],
+            "field_groups": {
+              "graupel_B_BG": {
+                "l1_field_sum": 0.001045958779955883,
+                "max_abs_cell_delta": 6.221327566890977e-06,
+                "max_abs_column_sum": 0.00010291255769601104,
+                "signed_field_sum": -0.0001955946968603627
+              },
+              "number_NN_NC_NI_NR": {
+                "l1_field_sum": 925494389245386.8,
+                "max_abs_cell_delta": 4829917112.0,
+                "max_abs_column_sum": 173969767973.0,
+                "signed_field_sum": 806038613134727.5
+              },
+              "water_Q_QC_QI_QR_QS_QG": {
+                "l1_field_sum": 220.10625053631793,
+                "max_abs_cell_delta": 0.00993315503001213,
+                "max_abs_column_sum": 0.2203632111773448,
+                "signed_field_sum": 0.012731503087876517
+              }
+            },
+            "fields": {
+              "BG": {
+                "l1_field_sum": 0.001045958779955883,
+                "max_abs_cell_delta": 6.221327566890977e-06,
+                "max_abs_column_sum": 0.00010291255769601104,
+                "signed_field_sum": -0.0001955946968603627
+              },
+              "NC": {
+                "l1_field_sum": 60362658887963.16,
+                "max_abs_cell_delta": 4680782590.0,
+                "max_abs_column_sum": 173969767973.0,
+                "signed_field_sum": 1694826694151.5876
+              },
+              "NI": {
+                "l1_field_sum": 203470161514.4978,
+                "max_abs_cell_delta": 902672715.0,
+                "max_abs_column_sum": 5502356414.094205,
+                "signed_field_sum": 158284476395.7843
+              },
+              "NN": {
+                "l1_field_sum": 864927945506834.9,
+                "max_abs_cell_delta": 4829917112.0,
+                "max_abs_column_sum": 109954337955.09389,
+                "signed_field_sum": 804185202049330.6
+              },
+              "NR": {
+                "l1_field_sum": 314689074.22115886,
+                "max_abs_cell_delta": 465546.48110961914,
+                "max_abs_column_sum": 4908560.070464373,
+                "signed_field_sum": 299914849.4978049
+              },
+              "Q": {
+                "l1_field_sum": 74.53677374039236,
+                "max_abs_cell_delta": 0.001280317548662424,
+                "max_abs_column_sum": 0.056856159851577104,
+                "signed_field_sum": 70.4246400430631
+              },
+              "QC": {
+                "l1_field_sum": 78.36683418141466,
+                "max_abs_cell_delta": 0.004270289558917284,
+                "max_abs_column_sum": 0.09474468768989652,
+                "signed_field_sum": -75.26930063525423
+              },
+              "QG": {
+                "l1_field_sum": 0.5793835901908053,
+                "max_abs_cell_delta": 0.0021080151200294495,
+                "max_abs_column_sum": 0.029496170972720392,
+                "signed_field_sum": 0.08555923870494264
+              },
+              "QI": {
+                "l1_field_sum": 31.134763500852223,
+                "max_abs_cell_delta": 0.00993315503001213,
+                "max_abs_column_sum": 0.21553724923023765,
+                "signed_field_sum": -27.988500478578352
+              },
+              "QR": {
+                "l1_field_sum": 4.480832980122708,
+                "max_abs_cell_delta": 0.00311871524900198,
+                "max_abs_column_sum": 0.07366788517424538,
+                "signed_field_sum": 4.349100127633291
+              },
+              "QS": {
+                "l1_field_sum": 31.007662543345162,
+                "max_abs_cell_delta": 0.009790592826902866,
+                "max_abs_column_sum": 0.2203632111773448,
+                "signed_field_sum": 28.411233207519114
+              }
+            },
+            "model_seconds": 20,
+            "rhoDry": {
+              "post_max": 1.163761854171753,
+              "post_min": 0.08372926712036133,
+              "pre_max": 1.2076181173324585,
+              "pre_min": 0.09184066206216812
+            }
+          },
+          "2": {
+            "active_shape_jki": [
+              39,
+              280,
+              232
+            ],
+            "field_groups": {
+              "graupel_B_BG": {
+                "l1_field_sum": 0.0035043673411989437,
+                "max_abs_cell_delta": 8.604190225014463e-05,
+                "max_abs_column_sum": 0.0001597176292196245,
+                "signed_field_sum": 0.0032922311851977023
+              },
+              "number_NN_NC_NI_NR": {
+                "l1_field_sum": 96438728639120.06,
+                "max_abs_cell_delta": 4751979989.0,
+                "max_abs_column_sum": 176733345462.0,
+                "signed_field_sum": 3346576886083.432
+              },
+              "water_Q_QC_QI_QR_QS_QG": {
+                "l1_field_sum": 65.67457236704335,
+                "max_abs_cell_delta": 0.010189537890255451,
+                "max_abs_column_sum": 0.09781517353886571,
+                "signed_field_sum": -0.21994886783540912
+              }
+            },
+            "fields": {
+              "BG": {
+                "l1_field_sum": 0.0035043673411989437,
+                "max_abs_cell_delta": 8.604190225014463e-05,
+                "max_abs_column_sum": 0.0001597176292196245,
+                "signed_field_sum": 0.0032922311851977023
+              },
+              "NC": {
+                "l1_field_sum": 50836140202541.97,
+                "max_abs_cell_delta": 4751979989.0,
+                "max_abs_column_sum": 176733345462.0,
+                "signed_field_sum": 39168041648511.28
+              },
+              "NI": {
+                "l1_field_sum": 106911876602.74487,
+                "max_abs_cell_delta": 905207616.0,
+                "max_abs_column_sum": 5547861690.4574795,
+                "signed_field_sum": -95894128785.68343
+              },
+              "NN": {
+                "l1_field_sum": 45495411740800.0,
+                "max_abs_cell_delta": 4660284680.0,
+                "max_abs_column_sum": 167847608232.0,
+                "signed_field_sum": -35725811717008.0
+              },
+              "NR": {
+                "l1_field_sum": 264819175.35311246,
+                "max_abs_cell_delta": 386103.9375,
+                "max_abs_column_sum": 3684315.474345684,
+                "signed_field_sum": 241083365.83417144
+              },
+              "Q": {
+                "l1_field_sum": 9.89410137619722,
+                "max_abs_cell_delta": 0.00027712713927030563,
+                "max_abs_column_sum": 0.013042409684203449,
+                "signed_field_sum": 1.0680184402078006
+              },
+              "QC": {
+                "l1_field_sum": 9.24703214449359,
+                "max_abs_cell_delta": 0.0026032908353954554,
+                "max_abs_column_sum": 0.0185893057314388,
+                "signed_field_sum": -5.431178544736694
+              },
+              "QG": {
+                "l1_field_sum": 0.7751084050919728,
+                "max_abs_cell_delta": 0.010189537890255451,
+                "max_abs_column_sum": 0.01969894191165622,
+                "signed_field_sum": 0.6748229338398088
+              },
+              "QI": {
+                "l1_field_sum": 20.685046611036295,
+                "max_abs_cell_delta": 0.008082772605121136,
+                "max_abs_column_sum": 0.09662400509431993,
+                "signed_field_sum": -18.40822699589985
+              },
+              "QR": {
+                "l1_field_sum": 3.1425656065216323,
+                "max_abs_cell_delta": 0.0027441554702818394,
+                "max_abs_column_sum": 0.019975063944855265,
+                "signed_field_sum": 2.548823488826862
+              },
+              "QS": {
+                "l1_field_sum": 21.930718223702645,
+                "max_abs_cell_delta": 0.00894166063517332,
+                "max_abs_column_sum": 0.09781517353886571,
+                "signed_field_sum": 19.327791809926662
+              }
+            },
+            "model_seconds": 40,
+            "rhoDry": {
+              "post_max": 1.16361665725708,
+              "post_min": 0.08374450355768204,
+              "pre_max": 1.2004106044769287,
+              "pre_min": 0.08981930464506149
+            }
+          }
+        }
+      },
+      "status": "STATE_CHANGES_ONLY_PHYSICAL_INVENTORY_OPEN"
+    }
+  },
+  "schema": "pr87_v42_state_budget_availability_v1",
+  "source_manifest": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/sources.json",
+  "source_manifest_sha256": "422e1e3fefb51291e966c40c09755ae2d7e943b18dab870a1187cbf58253c88f"
+}

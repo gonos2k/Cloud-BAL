@@ -1,0 +1,44 @@
+{
+  "schema": "pr87_small_graupel_sources_v1",
+  "identity": "V44: density-defined small graupel continuation and per-column paired rain flux consumption",
+  "parent_baseline": "V42",
+  "parent_manifest": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/sources.json",
+  "parent_manifest_sha256": "422e1e3fefb51291e966c40c09755ae2d7e943b18dab870a1187cbf58253c88f",
+  "diagnostic_source": "/var/tmp/pr87_followup_sources_20261019_v43diag/module_mp_kdm6.F",
+  "diagnostic_source_sha256": "9bbf8a8f74badc8d1f30fafa3f330494ebf34bc4c826b02d9935c2f6221341b6",
+  "source_overrides": {
+    "module_microphysics_zero_out.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_microphysics_zero_out.F",
+    "module_em.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_em_pr85.F",
+    "module_bl_shinhong.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_shinhong.F",
+    "module_bl_fogdes.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_fogdes.F",
+    "module_pbl_driver.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_pbl_driver.F",
+    "module_mp_kdm6.o": "/var/tmp/pr87_followup_sources_20261019_v44/module_mp_kdm6.F",
+    "module_first_rk_step_part1.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part1.F",
+    "module_first_rk_step_part2.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part2.F",
+    "solve_em.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/solve_em.F"
+  },
+  "transforms": {
+    "pr87_graupel_failure_context.py": "2623723583b6535a92cb83a14d8112ed5eb334bb2bc55fa51e3720eec5b0b84d",
+    "pr87_small_graupel_domain.py": "f502d180dd6052b111a283a3e4165d7db8d4e076fc33a9e13d2b54511d43f528",
+    "pr87_rain_flux_cache.py": "55879709e1797f80208838bed2b4c1e854ba189510ffbdc120a0159e2fdfd8dc"
+  },
+  "rain_transform": {
+    "schema": "pr87_rain_flux_cache_transform_v1",
+    "input_sha256": "ed1f1ee12beb4395e08e7df831bd86163080e7d93fa60d6ac427a04c0862a148",
+    "output_sha256": "769cf33f7e6d59d46e2b31ec973a7d44cecce0b505fc18b0890b5b2a4ef2464f",
+    "accepted_preimage": "V42 frozen KDM6 or V43 diagnostic plus small-positive graupel policy composition",
+    "changes": [
+      "copy each helper result immediately into existing per-column falk/falkn slots",
+      "remove later assignments that reused the final column's one-dimensional result",
+      "retain existing top and lower fall/falln accumulation statements"
+    ],
+    "preserved": [
+      "helper call order and substep gates",
+      "rate and packet formulas, theta selection, state mutations, and vertical sweep order"
+    ]
+  },
+  "candidate_source_sha256": "769cf33f7e6d59d46e2b31ec973a7d44cecce0b505fc18b0890b5b2a4ef2464f",
+  "physics_changed": true,
+  "public_input_policy_changed": false,
+  "scope": "1 domain,1 rank,1 thread,1 tile, same initial inputs and boundaries; scientific acceptance OPEN"
+}

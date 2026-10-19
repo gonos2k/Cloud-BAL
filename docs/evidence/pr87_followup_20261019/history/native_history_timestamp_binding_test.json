@@ -1,0 +1,52 @@
+{
+  "analyzer": {
+    "path": "tools/pr87_native_history.py",
+    "sha256": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71"
+  },
+  "command": "pytest -q tests/test_pr87_native_history.py",
+  "regression_shapes": [
+    {
+      "history_times": [
+        "2026-08-16_13:00:00",
+        "2026-08-16_13:01:00"
+      ],
+      "receipt_expected_model_timestamps": [
+        "2026-08-16_13:00:20",
+        "2026-08-16_13:00:40",
+        "2026-08-16_13:01:00"
+      ],
+      "requested_analysis_endpoint_seconds": 60,
+      "run_status": "COMPLETE"
+    },
+    {
+      "actual_completed_model_timestamp": "2026-08-16_13:01:20",
+      "history_times": [
+        "2026-08-16_13:00:00",
+        "2026-08-16_13:01:00"
+      ],
+      "receipt_expected_model_timestamps": [
+        "2026-08-16_13:00:20",
+        "2026-08-16_13:00:40",
+        "2026-08-16_13:01:00",
+        "2026-08-16_13:01:20"
+      ],
+      "requested_analysis_endpoint_seconds": 60,
+      "run_status": "INCOMPLETE"
+    }
+  ],
+  "schema": "pr87_native_history_timestamp_binding_test_v1",
+  "scope": "receipt/history timestamp binding only; no live V46 data read",
+  "status": "PASS",
+  "test_file": {
+    "path": "tests/test_pr87_native_history.py",
+    "sha256": "9a4688609c8406c11b72843f4fefaefd1886ceacdf32512e17ea30556e247b61"
+  },
+  "test_log": {
+    "output": "Running 3 items in this shard\n...                                                                      [100%]\n3 passed in 0.64s",
+    "path": "docs/evidence/pr87_followup_20261019/history/native_history_timestamp_binding_pytest.log",
+    "sha256": "77330c5e1354e44e2431a0bde05daf793ec5b66633b6896637482fabe70dc95a"
+  },
+  "tests_failed": 0,
+  "tests_passed": 3,
+  "timestamp_rule": "derive runner step from the uniform expected model timestamp cadence; run start is first expected model timestamp minus one step; history starts at run start and each available record aligns with the requested history interval; report actual completed model timestamp separately."
+}

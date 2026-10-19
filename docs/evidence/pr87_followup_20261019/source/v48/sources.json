@@ -1,0 +1,40 @@
+{
+  "schema": "pr87_small_graupel_sources_v2",
+  "identity": "V48: V44 plus species-aware storage and exact total-source common-diffusion certificate",
+  "parent_baseline": "V44",
+  "parent_manifest": "/var/tmp/pr87_followup_sources_20261019_v44/sources.json",
+  "parent_manifest_sha256": "9b5821098488203b3fa2d22545ea2e8188c1bd84a3ed0d85f4fb4c9e4f957618",
+  "source_overrides": {
+    "module_microphysics_zero_out.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_microphysics_zero_out.F",
+    "module_em.o": "/var/tmp/pr87_followup_sources_20261019_v48/module_em_pr85.F",
+    "module_bl_shinhong.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_shinhong.F",
+    "module_bl_fogdes.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_fogdes.F",
+    "module_pbl_driver.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_pbl_driver.F",
+    "module_mp_kdm6.o": "/var/tmp/pr87_followup_sources_20261019_v44/module_mp_kdm6.F",
+    "module_first_rk_step_part1.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part1.F",
+    "module_first_rk_step_part2.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part2.F",
+    "solve_em.o": "/var/tmp/pr87_followup_sources_20261019_v48/solve_em.F"
+  },
+  "source_sha256": {
+    "module_microphysics_zero_out.o": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+    "module_em.o": "45e74e6b4709b753dc501d965ac19cb4b9a021f4d8817cb195d4ced28640b8c5",
+    "module_bl_shinhong.o": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+    "module_bl_fogdes.o": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+    "module_pbl_driver.o": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+    "module_mp_kdm6.o": "769cf33f7e6d59d46e2b31ec973a7d44cecce0b505fc18b0890b5b2a4ef2464f",
+    "module_first_rk_step_part1.o": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+    "module_first_rk_step_part2.o": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+    "solve_em.o": "9819ecab5e329cde214995bd192b1d6fee847809d8629498a3e5fe1c5b1de76f"
+  },
+  "transforms": {
+    "pr87_graupel_failure_context.py": "2623723583b6535a92cb83a14d8112ed5eb334bb2bc55fa51e3720eec5b0b84d",
+    "pr87_small_graupel_domain.py": "f502d180dd6052b111a283a3e4165d7db8d4e076fc33a9e13d2b54511d43f528",
+    "pr87_rain_flux_cache.py": "55879709e1797f80208838bed2b4c1e854ba189510ffbdc120a0159e2fdfd8dc",
+    "pr87_graupel_cone_mixture.py": "66a8742c1f638fc3cea29fa73c7c8e3aeeeae2ce2a719a4ebd3ab0f022195b3d"
+  },
+  "candidate_source_sha256": "769cf33f7e6d59d46e2b31ec973a7d44cecce0b505fc18b0890b5b2a4ef2464f",
+  "candidate_module_em_sha256": "45e74e6b4709b753dc501d965ac19cb4b9a021f4d8817cb195d4ced28640b8c5",
+  "physics_changed": true,
+  "public_input_policy_changed": false,
+  "scope": "selected-object research partialhost, same initial inputs/FP; no scientific acceptance"
+}

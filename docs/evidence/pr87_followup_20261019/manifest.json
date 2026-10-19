@@ -1,0 +1,149 @@
+{
+  "schema": "pr87_physical_validation_integration_v1",
+  "base_commit": "d22a3887b168f3ba7c3f4f538b28dd27b583f6f5",
+  "date": "2026-10-19",
+  "initialization": {
+    "status": "PRESERVED",
+    "policy": "PR84 same-policy OFF/COUPLED Q/N/B; original operating inputs and baseline receipts unchanged"
+  },
+  "completed_air_updates": {
+    "status": "V50_NATIVE_60S_VERIFIED_V42_40S_PRESERVED",
+    "theta_policy": "one, common shared-face old-time donors",
+    "source_first_policy": "existing cloud/ice RK3 only"
+  },
+  "latest_actual_host": {
+    "identity": "V50",
+    "scope": "latest matched closed 600-second attempts; three steps complete through 60 seconds, T4 fails before POST_KDM6",
+    "status": "INCOMPLETE",
+    "duration_seconds": 600,
+    "arms": {
+      "OFF": {
+        "status": "INCOMPLETE",
+        "returncode": 128,
+        "final_completed_step": 3,
+        "receipt": "runtime/v50_off600/receipt.json",
+        "earliest_fatal": "KDM6 invalid base before nongraupel admission"
+      },
+      "COUPLED": {
+        "status": "INCOMPLETE",
+        "returncode": 128,
+        "final_completed_step": 3,
+        "receipt": "runtime/v50_coupled600/receipt.json",
+        "earliest_fatal": "KDM6 invalid base before nongraupel admission"
+      }
+    },
+    "independent_review": "review/v50_600s_runtime_review.json"
+  },
+  "validation": {
+    "status": "PASS_FOCUSED",
+    "compiler_profile": "tests/intel_toolchain.sh",
+    "focused_tests_passed": 28,
+    "scope": "Python and pinned Intel O0/O2 extracted/transaction tests; full-module saved T3 replay and actual native attempts bound separately",
+    "receipt": "review/v50_focused_tests.json"
+  },
+  "candidate_scientific_gates": {
+    "water_energy_closure": "OPEN",
+    "host_hybrid_carrier": "OPEN",
+    "native_mass_wind": "OPEN",
+    "observation_signal": "OPEN",
+    "initial_shock": "OPEN",
+    "ten_minute": "INCOMPLETE_BOTH_ARMS_T4_NG_BASE"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "historical_baseline": {
+    "identity": "V42",
+    "OFF40": "PASS_SCOPED",
+    "COUPLED40": "PASS_SCOPED",
+    "same60": "INCOMPLETE"
+  },
+  "diagnosis": {
+    "saved_t3_transient_pairs": {
+      "OFF": 18,
+      "COUPLED": 18
+    },
+    "actual_read_only_failure": "T3 first ProgB, call_lat32 i117 k17, QG2B638C2A BG268376D7",
+    "source_homogeneous_transport_failure": "V44 T2 RK2 G i146 j216 k21: absent receiver, only positive donor exact density900; machine candidate bit side unavailable",
+    "latest_completed_native_failure": "V50 T4 invalid base before nongraupel admission in both fixed-binary 600-second attempts; no POST_KDM6 T4",
+    "T4_OFF_source_replay": {
+      "scope": "source-pinned OFF transition and validator replay; not a separate COUPLED cell replay",
+      "reason": 6,
+      "cause": "rain-freezing packet accepts an 8-float32-ULP mean-mass allowance; subsequent NG base validator uses strict rain bounds",
+      "report": "review/t4_ng_contract/README.md",
+      "independent_review": "review/t4_ng_contract/independent_review.md",
+      "source_changed": false
+    }
+  },
+  "component_replay": {
+    "scope": "saved actual T3 row plus complete OFF T3 input; full selected KDM6 source with actual initialization/constants",
+    "V43": "rc128 same ProgB bits",
+    "V44": "row and full-input rc0; 2,533,440 active post cells pass cloud/rain/G strict and unchanged ice 8-ULP checks"
+  },
+  "budget": {
+    "V42": "budget/v42_two_step_budget.json",
+    "V44_first_call": "budget/v44_first_call_budget.json",
+    "full_two_step_geometry": "UNAVAILABLE",
+    "same_call_first_water_residual_after_included_cleanup_kg": {
+      "OFF": -39666.101,
+      "COUPLED": -39489.979
+    },
+    "scope": "local KDM6 first-call DEN*DELZ*area; V50 inherits exact first-call subsets only; no full 60s flux/energy closure",
+    "V47_first_call_scope_binding": "budget/review/v47_failure_stencil_and_firstcall_hash.json",
+    "V48_first_call_scope_binding": "budget/review/v48_receipt_firstcall_subset_identity.json",
+    "V49_first_call_scope_binding": "budget/review/v49_receipt_firstcall_subset_identity.json",
+    "V50_first_call_scope_binding": "budget/review/v50_receipt_firstcall_subset_identity.json",
+    "V50_600s_scope_binding": "budget/review/v50_600s_history_prefix_and_cold_availability.json",
+    "V50_cold_group_activity": "NOT_EVALUATED_NO_COLD_DATA_ROWS"
+  },
+  "limitations": [
+    "1 domain,rank,thread,tile; selected-object partialhost, not clean whole WRF build",
+    "Test Gamma/constants adapter is separate from full component replay",
+    "No copied historical budget is treated as current-candidate closure",
+    "Strict cloud/rain/G audit refers to completed state boundaries; the internal rain-freezing packet has a distinct existing 8-ULP mean-mass allowance"
+  ],
+  "integration_base_commit": "45c8800fcac1f8ea2a8964519550accaba01f20a",
+  "prior_pr": {
+    "number": 87,
+    "state": "MERGED",
+    "merged_at": "2026-10-19T01:47:58Z",
+    "merge_commit": "45c8800fcac1f8ea2a8964519550accaba01f20a"
+  },
+  "candidate_build": {
+    "identity": "V50",
+    "status": "PASS_OVERLAY_BUILD",
+    "executable_sha256": "a294d756f5ba595274b15bc75d67bcce1d39eda77d5884cf4bd3f93a9dda8e9a",
+    "receipt": "build/v50_build.json.gz",
+    "native_attempt": "COMPLETE_60S_SCOPED__INCOMPLETE_600S"
+  },
+  "native_history": {
+    "status": "PASS_SCOPED_DATA",
+    "receipt": "history/v50/native_history_summary.json",
+    "endpoints_seconds": [
+      0,
+      60
+    ],
+    "carrier": "per-endpoint native hybrid MU/MUB/DNW/area with pinned compiled gravity",
+    "physical_approval": false,
+    "scope": "Endpoint changes and descriptors; no flux, energy, observation, force or continuity closure"
+  },
+  "validated_window": {
+    "identity": "V50",
+    "scope": "matched completed 60-second window; separate from the later 600-second attempts",
+    "status": "COMPLETE",
+    "duration_seconds": 60,
+    "arms": {
+      "OFF": {
+        "status": "COMPLETE",
+        "returncode": 0,
+        "final_completed_step": 3,
+        "receipt": "runtime/v50_off60/receipt.json"
+      },
+      "COUPLED": {
+        "status": "COMPLETE",
+        "returncode": 0,
+        "final_completed_step": 3,
+        "receipt": "runtime/v50_coupled60/receipt.json"
+      }
+    },
+    "independent_review": "review/v50_runtime_review.json"
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "corpora": {
+    "Cloud-BAL": {
+      "communities": 1079,
+      "delta_edges": 545,
+      "delta_nodes": 379,
+      "edges": 21662,
+      "graph_sha256": "a684f6105f879dcf0229ccbb6891ab7f1b3d22df99bb21c919bf671dad81ca85",
+      "hash_matches": true,
+      "nodes": 12175,
+      "private_profile_incident_links": 133,
+      "private_profile_nodes": 134,
+      "receipt_counts_match": [
+        true,
+        true,
+        true
+      ],
+      "receipt_sha256": "a684f6105f879dcf0229ccbb6891ab7f1b3d22df99bb21c919bf671dad81ca85"
+    },
+    "KLAPS50": {
+      "communities": 3115,
+      "delta_edges": 546,
+      "delta_nodes": 379,
+      "edges": 80112,
+      "graph_sha256": "0830927fd4d096f260f007254b773cce8621c50f2e35120d9b411008bab89a3a",
+      "hash_matches": true,
+      "nodes": 38003,
+      "private_profile_incident_links": 0,
+      "private_profile_nodes": 0,
+      "receipt_counts_match": [
+        true,
+        true,
+        true
+      ],
+      "receipt_sha256": "0830927fd4d096f260f007254b773cce8621c50f2e35120d9b411008bab89a3a"
+    }
+  },
+  "dated_snapshots": {
+    "corpora": {
+      "Cloud-BAL": {
+        "GRAPH_REPORT.md": {
+          "created_new": true,
+          "exists": true,
+          "sha256_matches": true
+        },
+        "graph.json": {
+          "created_new": true,
+          "exists": true,
+          "sha256_matches": true
+        },
+        "manifest.json": {
+          "created_new": true,
+          "exists": true,
+          "sha256_matches": true
+        }
+      },
+      "KLAPS50": {
+        "GRAPH_REPORT.md": {
+          "created_new": true,
+          "exists": true,
+          "sha256_matches": true
+        },
+        "graph.json": {
+          "created_new": true,
+          "exists": true,
+          "sha256_matches": true
+        },
+        "manifest.json": {
+          "created_new": true,
+          "exists": true,
+          "sha256_matches": true
+        }
+      }
+    },
+    "day": "2026-10-19",
+    "directory": "2026-10-19-small-graupel"
+  },
+  "derived_wiki": {
+    "paths": [
+      "graph-report.md",
+      "graph-report-klaps50.md",
+      "graph-report-cloud-bal.md",
+      "index.md#Graph-snapshot",
+      "log.md (append-only)"
+    ],
+    "receipt_hashes_match": true,
+    "sha256": {
+      "wiki/graph-report-cloud-bal.md": "beb7d58be445383d5f34513137520eb62d58bc79b7c0dde60a9234fbd2939264",
+      "wiki/graph-report-klaps50.md": "91cb412b5923bd1a9da4d87e3ae8686c73d0376c634d3b35ca1c3565fd73bacd",
+      "wiki/graph-report.md": "7831785109e1bec647efc2243dd567619bd6023c8029de3c0205aa5a83fe2cad",
+      "wiki/index.md": "c7c799ed313afda916e8001a7e2c76203321ac17541a7a2dfa735f7a743251a0",
+      "wiki/log.md": "b9154d7bd8552c55845a33a35f8b456f6c855c9b96a6df9dc3d61854c3f2822d"
+    }
+  },
+  "extraction_limitations": [
+    "Graph counts are separate for overlapping KLAPS50 and Cloud-BAL corpora.",
+    "Markdown semantic extraction was not performed; Markdown contributes heading structure only.",
+    "Fortran cross-file CALL extraction is partial.",
+    "Generated Fortran inside Python strings and compressed source artifacts is hash-bound, not separately Fortran-AST extracted.",
+    "External source trees and runtime artifacts outside selected repository paths are not represented.",
+    "Candidate overlay graphs and freshness are structural navigation evidence, not runtime or scientific validation.",
+    "Non-extractable or binary selected paths are recorded by SHA-256 and passed to the pinned Graphify extractor, which returns no extractor for their suffix; their contents are not parsed.",
+    "The preceding PR87 receipt chain remains immutable; this structural update does not establish end-to-end runtime or scientific acceptance."
+  ],
+  "helper_preflight": {
+    "expected_helper_sha256": "01b264582ba1c0dd8a1215368649deddf1d5bf35645d1d1c56b0c9796ee3440b",
+    "expected_plan_sha256": "3ca76ad8bffe1e7d6dcfda197ccf0a52e86748fff7fcf768332d28d3574971ba",
+    "helper_path": "/var/tmp/pr87_refresh_kg_followup_20261019.py",
+    "helper_sha256": "01b264582ba1c0dd8a1215368649deddf1d5bf35645d1d1c56b0c9796ee3440b",
+    "plan_path": "/var/tmp/pr88_kg_final_checkonly_20261019.json",
+    "plan_sha256": "3ca76ad8bffe1e7d6dcfda197ccf0a52e86748fff7fcf768332d28d3574971ba",
+    "preflight_review_path": "/var/tmp/pr88_kg_final_preflight_review_20261019.md",
+    "preflight_review_sha256": "a8388278700b71f895c39b913cca71ca9bf0c968518fd3d5f8bbd962b2ac11be",
+    "reviewed_helper_hash_matches": true
+  },
+  "maintained_source_preservation": {
+    "current_digest": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f",
+    "current_matches_receipt_before": true,
+    "entry_count": 627,
+    "receipt_before_digest": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f",
+    "receipt_claims_pre_post_equal": true,
+    "receipt_entry_count": 627
+  },
+  "native_receipt_binding": {
+    "path": "docs/evidence/pr87_followup_20261019/manifest.json",
+    "physical_approval": "FAIL_OPEN",
+    "remaining_acceptance_gates": [
+      "Whole host/thread FP policy beyond the selected single-thread cold start",
+      "Joint Q/N/B validity during subsequent evolution beyond the declared latest validated window",
+      "PBL DEL versus native dry-carrier global budget connection",
+      "Physical justification and broader validation of conditional freezing and transient QG/BG admission",
+      "Water and energy closure"
+    ],
+    "remaining_scientific_gates": [
+      "incoming joint-moment admissibility",
+      "same-call mapped water/energy closure",
+      "feasible mass-wind joint search",
+      "fixed-setting native time-response and independent observation validation"
+    ],
+    "sha256": "93f42941c42a42a1afff37efaa62f71fdaad75951db53df8627ecf83772a6f48",
+    "source_commit": "f32a80acfa44a968cd2095c8ef80ee1fe671dae2"
+  },
+  "prior_pins": {
+    "additional_immutable_paths": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-16-two-step/GRAPH_REPORT.md",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-16-two-step/graph.json",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-16-two-step/manifest.json",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr87_two_step_20261016/kg_receipt.json",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-16-two-step/GRAPH_REPORT.md",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-16-two-step/graph.json",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-16-two-step/manifest.json",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_kg_20261016/kg_receipt.json",
+      "/var/tmp/pr87_refresh_kg_followup_20261019.py"
+    ],
+    "additional_immutable_paths_count": 9,
+    "current_immutable_failures": [],
+    "current_immutable_files_verified": 173,
+    "expected_previous_receipt_sha256": "b30f72e0f13132bb6d0e70c4a284a9452c0a16fda098e1c78b4eb2fdcccbaeb0",
+    "inherited_pin_count": 164,
+    "inherited_pin_failures": [],
+    "inherited_pin_files_verified": 164,
+    "previous_receipt_matches": true,
+    "previous_receipt_sha256": "b30f72e0f13132bb6d0e70c4a284a9452c0a16fda098e1c78b4eb2fdcccbaeb0",
+    "receipt_previous_prior_pins_count": 173
+  },
+  "private_profile": {
+    "Cloud-BAL": {
+      "incident_links": 133,
+      "nodes": 134,
+      "source_file": "config/cp01_private_host_profile.json",
+      "unchanged": true
+    },
+    "KLAPS50": {
+      "incident_links": 0,
+      "nodes": 0,
+      "source_file": "Cloud-BAL/config/cp01_private_host_profile.json",
+      "unchanged": true
+    }
+  },
+  "protected_wiki": {
+    "current_protected_hashes_match_pre_apply": true,
+    "listed_unchanged": [
+      "wiki/hot.md",
+      "wiki/overview.md",
+      "wiki/.schema",
+      "wiki/.schema-proposals",
+      "wiki/.research-queue",
+      "wiki/entities",
+      "wiki/concepts",
+      "wiki/sources",
+      "wiki/decisions",
+      "wiki/heuristics",
+      "wiki/experiences",
+      "wiki/procedures",
+      "wiki/queries"
+    ],
+    "protected_page_scopes": [
+      "wiki/.research-queue",
+      "wiki/.schema",
+      "wiki/.schema-proposals",
+      "wiki/concepts",
+      "wiki/decisions",
+      "wiki/entities",
+      "wiki/experiences",
+      "wiki/heuristics",
+      "wiki/hot.md",
+      "wiki/overview.md",
+      "wiki/procedures",
+      "wiki/queries",
+      "wiki/sources"
+    ],
+    "schema_and_content_pages_touched": false
+  },
+  "receipt": {
+    "actual_source_head": "f32a80acfa44a968cd2095c8ef80ee1fe671dae2",
+    "frozen_source_commit": "f32a80acfa44a968cd2095c8ef80ee1fe671dae2",
+    "graphify_extraction_counts": {
+      "AST_OR_MARKDOWN_HEADING": 139,
+      "NON_EXTRACTABLE_HASH_ONLY": 66
+    },
+    "head_matches": true,
+    "mode": "guarded selected-path overlay extraction/build_merge, cluster-only, derived wiki sync",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr87_small_graupel_20261019/kg_receipt.json",
+    "recorded_utc": "2026-10-19T03:38:35.682862+00:00",
+    "schema": "pr87_small_graupel_selected_path_graphify_kg_receipt_v1",
+    "selected_candidate_sha_mismatches": [],
+    "selected_diff_count": 205,
+    "selected_matches_frozen_diff": true,
+    "selected_path_count": 205,
+    "selected_status_counts": {
+      "A": 203,
+      "M": 2
+    },
+    "sha256": "1b1cc9031a6ca234df4be090e50b0475e99ee932a3f9e70d8958f9dc526314ce",
+    "source_sync_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr87_small_graupel_20261019/source_sync.json",
+    "source_sync_receipt_match": true,
+    "source_sync_sha256": "a23824ff8aa137fe3e591c022dd1a81a1249eae830004ec22f3dcbadab45ee24",
+    "source_worktree_clean": true
+  },
+  "schema": "pr88_kg_applied_integrity_review_v1",
+  "validation": {
+    "compiler_profile": "tests/intel_toolchain.sh",
+    "hash_match": true,
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr87_two_step_20261016/Cloud-BAL/docs/evidence/pr87_followup_20261019/review/v50_focused_tests.json",
+    "receipt_sha256": "14094aad083a6340388b4139dfee2dde899a4f8730a5a5f1b043b7830f1a7ff3",
+    "sha256": "14094aad083a6340388b4139dfee2dde899a4f8730a5a5f1b043b7830f1a7ff3",
+    "status": "PASS",
+    "test_count": 28
+  }
+}
