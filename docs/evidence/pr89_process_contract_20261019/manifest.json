@@ -12,40 +12,63 @@
     "sha256": "1079c73676532bb6ee21c37c9143dcc74a5f93001be01e18f3a283504070dfaf"
   },
   "latest_actual_host": {
-    "status": "COMPLETE",
-    "requested_duration_seconds": 120,
+    "status": "INCOMPLETE",
+    "requested_duration_seconds": 600,
     "timestep_seconds": 20,
     "arms": {
       "OFF": {
-        "status": "COMPLETE",
-        "returncode": 0,
+        "status": "INCOMPLETE",
+        "returncode": 128,
         "final_completed_step": 6,
         "receipt": {
-          "path": "docs/evidence/pr89_process_contract_20261019/native/c5_off_120s_receipt.json",
-          "sha256": "199ae0f4eeed0ea0472150ae2d056351f8939c2835096b1e05bc1f9ec122ac33"
-        }
+          "path": "docs/evidence/pr89_process_contract_20261019/native/c5_off_600s_receipt.json",
+          "sha256": "80b6fa75e515751cb83992301b8b32a0cb858d9c58dafb57faf682296ae90e34"
+        },
+        "timestep_count": 6,
+        "earliest_fatal": "PR87 invalid continuous or unrepresentable rain public pair",
+        "maximum_seen_timestep": 7
       },
       "COUPLED": {
-        "status": "COMPLETE",
-        "returncode": 0,
+        "status": "INCOMPLETE",
+        "returncode": 128,
         "final_completed_step": 6,
         "receipt": {
-          "path": "docs/evidence/pr89_process_contract_20261019/native/c5_coupled_120s_receipt.json",
-          "sha256": "5989d07a9c9a4999c2d44ccc11160f597abfa46d29c92e60630651249cdecab3"
-        }
+          "path": "docs/evidence/pr89_process_contract_20261019/native/c5_coupled_600s_receipt.json",
+          "sha256": "ff3b32962d4136b0938b2b35ec3bb18632b579065b70bd383a66945f64ba579d"
+        },
+        "timestep_count": 6,
+        "earliest_fatal": "PR87 invalid continuous or unrepresentable rain public pair",
+        "maximum_seen_timestep": 7
       }
-    }
+    },
+    "run_identity": "PR87 selected-object native candidate"
   },
   "preserved_baselines": {
     "V50": "OFF/COUPLED 60s PASS_SCOPED, 3 calls; prior 600s INCOMPLETE",
     "C1": "paired 120s INCOMPLETE, 4 calls/80s; former T4 rain handoff passed",
     "C2": "paired 120s INCOMPLETE after 20s; introduced storage-path regression preserved",
     "C3": "paired 120s INCOMPLETE, 4 calls/80s; next both-round-zero ice boundary",
-    "C4": "paired 120s INCOMPLETE, 4 calls/80s; next bounded orphan-number representation"
+    "C4": "paired 120s INCOMPLETE, 4 calls/80s; next bounded orphan-number representation",
+    "C5_120s": {
+      "status": "COMPLETE",
+      "requested_duration_seconds": 120,
+      "timestep_seconds": 20,
+      "completed_steps_per_arm": 6,
+      "receipts": {
+        "OFF": {
+          "path": "docs/evidence/pr89_process_contract_20261019/native/c5_off_120s_receipt.json",
+          "sha256": "199ae0f4eeed0ea0472150ae2d056351f8939c2835096b1e05bc1f9ec122ac33"
+        },
+        "COUPLED": {
+          "path": "docs/evidence/pr89_process_contract_20261019/native/c5_coupled_120s_receipt.json",
+          "sha256": "5989d07a9c9a4999c2d44ccc11160f597abfa46d29c92e60630651249cdecab3"
+        }
+      }
+    }
   },
   "candidate_scientific_gates": {
-    "micro_runtime": "COMPLETE: requested 120s; per-arm completed steps bound above; source-consumer policy retained",
-    "cold_activity": "C5 completed120s evaluated in column measure; prior C1/C3/C4 prefixes preserved separately; not global reaction kg",
+    "micro_runtime": "120s PASS_SCOPED in both arms; same-executable 600s INCOMPLETE at T7 rain public store, six completed calls; not T4 freezing-NG recurrence",
+    "cold_activity": "C5 completed120s and closed600s-attempt prefix evaluated in DEN*DELZ column measure; six complete steps plus partial T7 (221/280 columns); not global reaction kg; prior C1/C3/C4 separately bound",
     "water_energy": "OPEN: no full same-carrier boundary/process/energy closure",
     "mass_wind": "ENDPOINT_DIAGNOSTICS_ONLY: actual V50 pressure/Phi/staggered wind; no RK face-flux closure",
     "observation": "NOT_VERIFIED: source-bound native-to-observation operator and independent validation support missing",
@@ -73,6 +96,22 @@
     "c5_cold_summary_120s": {
       "path": "docs/evidence/pr89_process_contract_20261019/native/c5_cold_summary_120s.json",
       "sha256": "af5a57bfdf3538bd072d7a191a11483a06d9da5193e31ab5891133fb68969cfb"
+    },
+    "c1_cold_summary": {
+      "path": "docs/evidence/pr89_process_contract_20261019/native/c1_cold_summary.json",
+      "sha256": "347d5a7e63e1aa17f77e9050ba6a8500c39d601476081bf5dabd9e6f0a570fdb"
+    },
+    "c4_cold_summary": {
+      "path": "docs/evidence/pr89_process_contract_20261019/native/c4_cold_summary.json",
+      "sha256": "5bcbd6d1ac0cddcec549f302018ffb2050c799807b4e2c6ccb78a81830552546"
+    },
+    "c5_cold_summary_600s_attempt": {
+      "path": "docs/evidence/pr89_process_contract_20261019/native/c5_cold_summary_600s.json",
+      "sha256": "837f6997313110a2b86a7a38034654255631da2c6666ac7ab536f68ba9a559dc"
+    },
+    "c5_t7_rain_store_audit": {
+      "path": "docs/evidence/pr89_process_contract_20261019/review/pr89_c5_t7_rain_store_audit_20261019.md",
+      "sha256": "f97dcfc283c7e443656e95d1a29036b340876661d846c6a7ed5d68605c88654f"
     }
   }
 }

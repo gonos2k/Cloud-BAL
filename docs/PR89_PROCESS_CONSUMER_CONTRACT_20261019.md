@@ -106,7 +106,9 @@ growth, count reconstruction and conservation still require evaluation.
 
 ## Current process and existing-history diagnostics
 
-The [cold summary](PR89_COLD_SUMMARY_20261019.md) records current NG/AUT/G
+The [cold summary](PR89_COLD_SUMMARY_20261019.md) separates the completed
+120-second window from the partial seventh call of the 600-second attempt.
+It records current NG/AUT/G
 proposal/applied/deferred water-vector activity after the final composite
 factor. It does not enable the multi-GB primitive ledger. Actual DEN*DELZ
 weights give **kg m-2 SUM_COLUMNS**, not grid-area/global kg: KDM62D has no
@@ -131,7 +133,7 @@ Both closed receipts are `INCOMPLETE`, return code 1: the fifth timestep stops
 at the joint moment candidate validator before the next KDM6 call. The candidate
 build and staged/original inputs remain unchanged. This is an audited completed
 prefix, not a successful 120-second execution. The new failure is being
-localized from its stored operands. A 600-second attempt remains conditional
+localized from its stored operands. At that C1 stage, a 600-second attempt remained conditional
 on completing the repeated 120-second consumer test. C2's first implementation of the inactive branch caused a regression: it
 intercepted an already PSD-valid underflow pair before the existing joint
 quantum cleanup. Both attempts stopped after 20 seconds. Its source, tests,
@@ -183,10 +185,22 @@ The pinned Intel C5 partial-host build passes; executable SHA-256 is
 `beb2da6745606566074e15a043d173a8be01d277f00c4cc90ad3915f5de5a2d6`.
 Both matched 120-second attempts are **COMPLETE**, return code 0, with six
 completed KDM6 steps and unchanged staged/original inputs and executable.
-The same C5 executable and inputs are now running the matched 600-second
-requests. Those long-window outcomes are pending; no completed 600-second
-claim is made before CLOSED receipts. Current [120-second receipts](evidence/pr89_process_contract_20261019/manifest.json)
-bind the closed window separately from the ongoing 600-second attempts.
+The same C5 executable, initial-state and boundary inputs were then used
+for matched 600-second requests with duration-specific namelists (end time
+and output interval). Both closed as **INCOMPLETE**, return code 128, with six completed
+steps (120 seconds) and a seventh-call rejection:
+`PR87 invalid continuous or unrepresentable rain public pair`. The diagnostic
+label is `PR87_RAIN_PUBLIC_STORE_REJECT` at printed indices `(7,222,193,4)`.
+This is after the former T4 freezing-to-NG boundary and is not a completed
+600-second forecast. The [manifest](evidence/pr89_process_contract_20261019/manifest.json)
+binds the successful 120-second receipts separately from both closed
+600-second attempts. Inputs and the C5 build remained unchanged. Rounded fatal
+text is not promoted to exact operand bits or a confirmed PSD cause. The
+[source-bound T7 audit](evidence/pr89_process_contract_20261019/review/pr89_c5_t7_rain_store_audit_20261019.md)
+identifies public number conversion, strict volume bounds and REAL32 round-trip
+as the guarded path. The per-cell ledger is emitted only after successful storage,
+so the exact failing sub-predicate and operand bits are not available. No new
+clipping or acceptance-policy change is made from the rounded fatal text.
 
 The [paired output projection](evidence/pr89_process_contract_20261019/native/c5_600s_resource_plan.json)
 uses each completed 120-second run's measured raw and other output bytes,

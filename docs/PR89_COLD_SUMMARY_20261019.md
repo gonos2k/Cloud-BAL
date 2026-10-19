@@ -128,3 +128,29 @@ The table reports full-run half-L1 water activity by group, in `kg m-2 SUM_COLUM
 | COUPLED | G | 16,247.776355 | 1,994.900578 | 14,252.875777 | 0.122780 | 0.877220 |
 
 These are same-call request activity diagnostics, not reaction throughput or a closed conservation budget. KDM62D provides no horizontal area, so the column sums are not global kilograms. No historical V17 rates are included.
+
+## Current C5 600-second attempt
+
+Both requested 600-second attempts ended `INCOMPLETE` with return code 128. Each receipt reports six completed 20-second steps (120 seconds). The fully parsed cold summaries contain all 1,680 rows for steps 1–6 plus 221 of 280 call rows at step 7; 59 step-7 call rows are absent in each arm. The partial step is reported separately and is not counted as a completed step. The executable SHA-256 was `beb2da6745606566074e15a043d173a8be01d277f00c4cc90ad3915f5de5a2d6` for both runs.
+
+The first table sums only completed steps 1–6. The second table covers only the observed 221 rows at partial step 7. Both report half-L1 water activity by group, in `kg m-2 SUM_COLUMNS` after same-call `DEN*DELZ` weighting. Ratios use the same subset's applied/proposed values. The evidence JSON contains all signed and half-L1 metrics, per-step rows, exact partial-step counts, completed-prefix and all-recorded aggregates, transaction counts, process status, and receipt/compressed/uncompressed hashes: [`c5_cold_summary_600s.json`](evidence/pr89_process_contract_20261019/native/c5_cold_summary_600s.json).
+
+| Arm | Completed steps | Group | Proposed | Applied | Deferred | Applied / proposed | Deferred / proposed |
+|---|---:|---|---:|---:|---:|---:|---:|
+| OFF | 1–6 | NG | 10,644.980444 | 8,549.730006 | 2,095.250438 | 0.803170 | 0.196830 |
+| OFF | 1–6 | AUT | 2,113.424390 | 214.822974 | 1,898.601416 | 0.101647 | 0.898353 |
+| OFF | 1–6 | G | 16,251.692320 | 1,989.772783 | 14,261.919537 | 0.122435 | 0.877565 |
+| COUPLED | 1–6 | NG | 10,646.299152 | 8,550.089216 | 2,096.209937 | 0.803104 | 0.196896 |
+| COUPLED | 1–6 | AUT | 2,113.017420 | 214.899816 | 1,898.117604 | 0.101703 | 0.898297 |
+| COUPLED | 1–6 | G | 16,247.776355 | 1,994.900578 | 14,252.875777 | 0.122780 | 0.877220 |
+
+| Arm | Partial step | Rows | Group | Proposed | Applied | Deferred | Applied / proposed | Deferred / proposed |
+|---|---:|---:|---|---:|---:|---:|---:|---:|
+| OFF | 7 | 221 / 280 | NG | 593.198316 | 518.897484 | 74.300831 | 0.874745 | 0.125255 |
+| OFF | 7 | 221 / 280 | AUT | 238.877720 | 54.331677 | 184.546043 | 0.227446 | 0.772554 |
+| OFF | 7 | 221 / 280 | G | 2,032.740100 | 266.021116 | 1,766.718984 | 0.130868 | 0.869132 |
+| COUPLED | 7 | 221 / 280 | NG | 593.357573 | 518.896047 | 74.461526 | 0.874508 | 0.125492 |
+| COUPLED | 7 | 221 / 280 | AUT | 238.815881 | 54.241748 | 184.574134 | 0.227128 | 0.772872 |
+| COUPLED | 7 | 221 / 280 | G | 2,030.771896 | 265.069456 | 1,765.702441 | 0.130526 | 0.869474 |
+
+These are same-call request activity diagnostics, not reaction throughput or a closed conservation budget. KDM62D provides no horizontal area, so the column sums are not global kilograms. The 600-second attempts remain incomplete; no full-run rate or 600-second completion is claimed. No historical V17 rates are included.
