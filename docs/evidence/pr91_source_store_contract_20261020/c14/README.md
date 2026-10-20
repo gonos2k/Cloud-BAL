@@ -10,4 +10,4 @@ The generated host source embeds the instrumented C14 core. `dedup_byte_comparis
 
 The scoped FP expression probe is in `fp_probe.f90` and its O0/O2 outputs. It observed gradual underflow and matching conversion results for the tested minimum-subnormal expressions. This does not establish a general compiler/runtime property beyond the tested profile and expressions.
 
-The paired 240-second OFF and COUPLED native runs were running when this bundle was written. No native runtime success or final validation claim is made here.
+The paired OFF and COUPLED 240-second native runs completed and passed the bounded audit in `runtime/`. Separate 600-second paired runs are running under root orchestration; this bundle makes no claim about their outcome.

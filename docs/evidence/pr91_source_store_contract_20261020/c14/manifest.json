@@ -36,8 +36,8 @@
   "files": [
     {
       "path": "README.md",
-      "sha256": "102469b89784cd23d1fa338a2fef6d7d034ba2c61600f3d3d810f595319e809d",
-      "bytes": 1889
+      "sha256": "5574fdac836a7cd5a92debd738aec44c0ef40f0f43c54fe58700f76ad1564cc8",
+      "bytes": 1952
     },
     {
       "path": "build_binding.json",
@@ -120,6 +120,56 @@
       "bytes": 7119
     },
     {
+      "path": "runtime/README.md",
+      "sha256": "96fe900ad47a25e24285756333f897c7b8cac9edad3d999ca95d2dfeea165167",
+      "bytes": 2266
+    },
+    {
+      "path": "runtime/closed_audit.py",
+      "sha256": "6a31baf1cc3589a292e21b6cea5fc046ec18e6c6b435e98f5a2048f49923e3d5",
+      "bytes": 16623
+    },
+    {
+      "path": "runtime/closed_runtime_audit.json",
+      "sha256": "875be1a620472caf9e017ffc0ca8b1f50466ccf96ec81f9ccacb267e669c5601",
+      "bytes": 1034048
+    },
+    {
+      "path": "runtime/coupled_preflight.json",
+      "sha256": "0111e697ae681471819168425d3e90de9c7ee256ca8a2da47d49a03c23eaa9f7",
+      "bytes": 13099
+    },
+    {
+      "path": "runtime/coupled_receipt.json",
+      "sha256": "9bd0a867987896dc9c6551bbc964e8fd1d2d759cb865827af81346b782a40e48",
+      "bytes": 63260
+    },
+    {
+      "path": "runtime/coverage_selector_attempt.json",
+      "sha256": "a23f3022b9a15d8d4e32106b8c9128f0d1c29372c7f32189364baac9f558d141",
+      "bytes": 1708
+    },
+    {
+      "path": "runtime/off_preflight.json",
+      "sha256": "312c77cb3e4e7b4dae9973a5384e060097c08d40ee4f3a45ba1e7ea9b7434286",
+      "bytes": 13083
+    },
+    {
+      "path": "runtime/off_receipt.json",
+      "sha256": "f6a2e40d65c76e4e9abd0dfb1fc26f0c5da3abe4327a5d23829e4a66f34b540a",
+      "bytes": 63256
+    },
+    {
+      "path": "runtime/runtime_summary.json",
+      "sha256": "dd3ac15f0623e84d845769f377a41431db3f79c84ff06054d1ba4b803c3d306c",
+      "bytes": 5271
+    },
+    {
+      "path": "runtime600/closed_audit_600.py",
+      "sha256": "1ebec2c34b1acdedd64e20eb4b80a0e75e509c04b8577da408c9c64bb303f5f4",
+      "bytes": 6235
+    },
+    {
       "path": "solve_em.F",
       "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
       "bytes": 294818
@@ -141,5 +191,21 @@
     }
   ],
   "runtime_limit": "The build receipt has model_run=false. Paired native runs are being managed by root. This archive records no C14 runtime outcome.",
-  "core_consumer_symbols_sha256": "e593b23f874ca2f35b312a86f316d2d06d2afd7dae111c27ae8d82d63d1acba9"
+  "core_consumer_symbols_sha256": "e593b23f874ca2f35b312a86f316d2d06d2afd7dae111c27ae8d82d63d1acba9",
+  "runtime_240s": {
+    "status": "PASS_240_PREFIX",
+    "audit_sha256": "875be1a620472caf9e017ffc0ca8b1f50466ccf96ec81f9ccacb267e669c5601",
+    "summary_sha256": "dd3ac15f0623e84d845769f377a41431db3f79c84ff06054d1ba4b803c3d306c",
+    "auditor_sha256": "6a31baf1cc3589a292e21b6cea5fc046ec18e6c6b435e98f5a2048f49923e3d5",
+    "coverage_selector_attempt_sha256": "a23f3022b9a15d8d4e32106b8c9128f0d1c29372c7f32189364baac9f558d141",
+    "C13_parser_sha256": "6d52891ffcf6fcdd279bc81006db2aac5a96330c09730bf499d83715c1337fae",
+    "strict_source_checker_sha256": "2daef11c005868abf58631d84df74b8535eccb217660fbd605bd8f03216ee70d",
+    "stage_parser_sha256": "5c2e9ccb3537a6bc251845e2b87c3efb991002ebbc1db5232d475e29f6c31720",
+    "scope": "Paired 240-second run only; 600-second result not assessed."
+  },
+  "runtime_600s": {
+    "status_at_bundle_refresh": "RUNNING; no runtime traces inspected or result claimed",
+    "auditor_wrapper_sha256": "1ebec2c34b1acdedd64e20eb4b80a0e75e509c04b8577da408c9c64bb303f5f4",
+    "scope": "Reuses the reviewed C14 closed-prefix audit helpers; reads completed-step count from closure receipt and accepts only a fully audited completed prefix."
+  }
 }

@@ -1,0 +1,144 @@
+{
+  "arms": {
+    "COUPLED": {
+      "actual_store_capture_payload_sha256": "abe467e48968c95b7e37a6c96a4f7c7f79fd22846873461ea34712c50f5e4cda",
+      "c14_store": {
+        "inactive_q_quantum_adjustments_by_pair": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "ledger_rows": 36,
+        "source_representation_separate": true,
+        "storage_delta_scope": "per-pair Q/N, pressure-coordinate units; numerical storage representation only, not kg or energy closure"
+      },
+      "completed_step": 12,
+      "completed_steps_coverage": 12,
+      "exact_source_boundaries": {
+        "checker": "tools/pr87_completed_state_audit.py::_strict_source_checks/_strict_source_violations; exact source coefficients, cloud/rain dual volume and ratio, graupel stored ratio; no ULP allowance",
+        "count": 36,
+        "coverage_12steps_3stages": true,
+        "stages": [
+          "RK_STAGE_END rk=3",
+          "PRE_KDM6 rk=0",
+          "POST_KDM6 rk=0"
+        ],
+        "status": "PASS",
+        "violations": 0
+      },
+      "generic_state_policy_status": "PASS",
+      "ice_outside_8ulp": {
+        "active": 0,
+        "inactive": 379
+      },
+      "identity_checks_pass": true,
+      "joint_transport": {
+        "all_feasible": true,
+        "all_theta_one": true,
+        "rows": 36
+      },
+      "maximum_seen_timestep": 12,
+      "partial_failed_actual_store_calls": [
+        {
+          "adjustment_code": 0,
+          "attempt_id": 0,
+          "failure_stage": 3,
+          "form": "BASELINE",
+          "ijk": [
+            130,
+            182,
+            2
+          ],
+          "pair": 1,
+          "rk": 3,
+          "run_id": "PR91-C14-COUPLED-240s-20261020",
+          "timestep": 10
+        }
+      ],
+      "preflight_sha256": "0111e697ae681471819168425d3e90de9c7ee256ca8a2da47d49a03c23eaa9f7",
+      "receipt_sha256": "9bd0a867987896dc9c6551bbc964e8fd1d2d759cb865827af81346b782a40e48",
+      "returncode": 0,
+      "run_status": "COMPLETE",
+      "stage_trace_compressed_sha256": "ac97319132f618f011177f2e6405dcb7c0d306817b4000ebca9ec53160d221db",
+      "state_records": 72,
+      "storage_ledger_payload_sha256": "5a12de02255a9f8bcc315a6f91607ebd62eab6e1f5a679b5ec7c54fb9f06f796",
+      "trace_records": 97
+    },
+    "OFF": {
+      "actual_store_capture_payload_sha256": "328a5ca9f9fe5ddea9f8ef4a2123bff9f705e1960dffdb2a7eb6424b2e827ff6",
+      "c14_store": {
+        "inactive_q_quantum_adjustments_by_pair": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "ledger_rows": 36,
+        "source_representation_separate": true,
+        "storage_delta_scope": "per-pair Q/N, pressure-coordinate units; numerical storage representation only, not kg or energy closure"
+      },
+      "completed_step": 12,
+      "completed_steps_coverage": 12,
+      "exact_source_boundaries": {
+        "checker": "tools/pr87_completed_state_audit.py::_strict_source_checks/_strict_source_violations; exact source coefficients, cloud/rain dual volume and ratio, graupel stored ratio; no ULP allowance",
+        "count": 36,
+        "coverage_12steps_3stages": true,
+        "stages": [
+          "RK_STAGE_END rk=3",
+          "PRE_KDM6 rk=0",
+          "POST_KDM6 rk=0"
+        ],
+        "status": "PASS",
+        "violations": 0
+      },
+      "generic_state_policy_status": "PASS",
+      "ice_outside_8ulp": {
+        "active": 0,
+        "inactive": 378
+      },
+      "identity_checks_pass": true,
+      "joint_transport": {
+        "all_feasible": true,
+        "all_theta_one": true,
+        "rows": 36
+      },
+      "maximum_seen_timestep": 12,
+      "partial_failed_actual_store_calls": [
+        {
+          "adjustment_code": 0,
+          "attempt_id": 0,
+          "failure_stage": 3,
+          "form": "BASELINE",
+          "ijk": [
+            130,
+            182,
+            2
+          ],
+          "pair": 1,
+          "rk": 3,
+          "run_id": "PR91-C14-OFF-240s-20261020",
+          "timestep": 10
+        }
+      ],
+      "preflight_sha256": "312c77cb3e4e7b4dae9973a5384e060097c08d40ee4f3a45ba1e7ea9b7434286",
+      "receipt_sha256": "f6a2e40d65c76e4e9abd0dfb1fc26f0c5da3abe4327a5d23829e4a66f34b540a",
+      "returncode": 0,
+      "run_status": "COMPLETE",
+      "stage_trace_compressed_sha256": "3eb073a4fa6983f942df8598968aac94a648768c7072a734740d1796486c6f72",
+      "state_records": 72,
+      "storage_ledger_payload_sha256": "8da9e5806ca1e68bdd38b637cc4baa19eab3fb86694616abfef7500b37d5f221",
+      "trace_records": 97
+    }
+  },
+  "build_receipt_sha256": "273b08fa9bb31d4070f59c817b3d59f77154947366dbcf8edb53c546360e053f",
+  "executable_sha256": "5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be",
+  "limits": [
+    "PASS_240_PREFIX covers the 240-second paired runs only; it is not a 600-second result.",
+    "The inherited generic state status is reported separately from the additional exact-source coefficient checks.",
+    "Failed-attempt sparse rows are reported separately from committed storage ledgers and completed state records.",
+    "Signed storage deltas are pressure-coordinate numerical representation terms; no isolated kg or energy closure is claimed."
+  ],
+  "overall_status": "PASS_240_PREFIX",
+  "schema": "pr91_c14_240s_runtime_summary_v1"
+}

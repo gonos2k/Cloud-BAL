@@ -7,8 +7,8 @@
 | Preserved reference | PR90/C7, `3a896be3d381909f0cc61d1c0896b329b98d5aea`: OFF and COUPLED 180s / nine KDM6 calls |
 | Latest candidate | C14: source-prepared diffusion, FogDES contract, and explicit inactive-ice storage option |
 | Executable SHA-256 | `5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be` |
-| Paired 240s requests | C14 RUNNING; no completion claimed |
-| Same-candidate 600s | NOT_RUN_PENDING_240S |
+| Paired 240s requests | COMPLETE: 12 timesteps and 12 KDM6 calls per arm; independent completed-state audit PASS |
+| Same-candidate 600s | RUNNING with the same executable and corresponding frozen arm inputs; no completion claimed |
 | Configuration | Pinned Intel selected-object partial-host; one domain, rank, thread and tile |
 | Scientific approval | OPEN / FAIL_OPEN |
 
@@ -62,17 +62,27 @@ This is a numerical representation policy, not nucleation or phase change. Sourc
 
 An exact REAL64 binary32-quantum constant now makes the intended thresholds explicit. A controlled pinned Intel O0/O2 probe shows that the former `REAL(NEAREST(...),REAL64)` expression and the explicit constant agree. An earlier uncontrolled cast-to-zero observation was not reproduced; no compiler defect or threshold correction is claimed. The explicit inactive-Q option remains a deliberate representation-policy change.
 
+## Closed 240-second repeated consumption
+
+Both C14 receipts are COMPLETE with return code 0 through timestep 12. Per arm, the closed trace has 97 records: 72 state records and 25 non-state records. All 12 steps have the six expected state boundaries. The 36 completed endpoints (RK3, PRE_KDM6 and POST_KDM6) pass the existing exact source-coefficient cloud/rain mean-mass and dual-volume checks and strict graupel density checks. Active ice retains its separately declared 8-ULP criterion and source-inactive split. All 36 joint-air-transport rows are feasible with theta 1; executable and original/staged input checks pass.
+
+The sparse attempted-store trace still records a rejected baseline cloud trial at T10/RK3, `(130,182,2)`, stage 3. Completed transactions and subsequent endpoint checks pass; the failure-only trace does not contain a matching per-cell success row. An attempted-call rejection is not a committed invalid state. Each arm's final grouped storage ledger records one pair-2 inactive-Q quantum adjustment. Its signed Q/N storage residual remains in pressure-coordinate units and is separate from aggregate source representation and physical phase transfer.
+
+The inherited C13 `strict_state_status` label denotes the earlier pair/cone audit with 8-ULP diagnostics. The new C14 exact endpoint supplement is required for the strict cloud/rain/graupel statement above. Original C13 evidence is preserved. The 600-second extension is a separate, still-running gate.
+
 ## Validation and evidence
 
 - [Final Intel validation receipt](evidence/pr91_host_store_20261020/final_validation.json): 63 unique focused cases across 22 files, including the C14 inactive-ice storage fixture. Its full maintained-core O0/O2 executions are inside the C14 test and are not additional pytest cases. The earlier 57-case C13 receipt is preserved at [final_c13_validation/root_receipt.json](evidence/pr91_host_store_20261020/final_c13_validation/root_receipt.json); the complete C14 source, test, profile, build and log pins are in [final_c14/source_pins.json](evidence/pr91_host_store_20261020/final_c14/source_pins.json).
 - [C12 source/formula bundle](evidence/pr91_source_store_contract_20261020/c12/README.md): frozen host/solve, exact captured native REAL128 stencil, non-diffusion decomposition, writer and intermediate/final contract tests.
 - [C13 FogDES bundle](evidence/pr91_source_store_contract_20261020/c13/README.md): captured marginal-candidate rejection and a separate source-present positive-flux/common-theta/conservation/store regression.
 
-The captured-packet test does not establish positive theta for that exact native primitive proposal. C13 closed INCOMPLETE at T9/RK2; C14 runtime closure remains a separate gate. Builds replace selected objects in the preserved host; they are not a clean rebuild of all WRF and libraries. No whole canonical pipeline pass is claimed for these final files.
+The captured-packet test does not establish positive theta for that exact native primitive proposal. C13 closed INCOMPLETE at T9/RK2; C14's closed 240-second result is separate from the running 600-second extension. Builds replace selected objects in the preserved host; they are not a clean rebuild of all WRF and libraries. No whole canonical pipeline pass is claimed for these final files.
 
 The portable validation receipt maps five original scratch inputs to byte-identical committed archives and preserves their original paths as aliases. The pre-normalization receipt is retained. Raw test/build/probe logs omitted from the initial draft by Git ignore rules are included unchanged; [publication presence](evidence/pr91_host_store_20261020/raw_log_publication_presence.json) records their hashes. This corrects evidence publication and does not change test execution or results.
 
 ## Physical diagnostics remain separate
+
+[Current C14 response](evidence/pr91_science_sources_20261020/c14_current_response/current_candidate_note.md) uses its own closed 240-second receipts, same-call column geometry and time-varying native hybrid mass. Area-weighted deferred/proposed request activity is about 79% for AUT and 84% for G in both arms. These are acceptance-factor partitions of grouped half-L1 requests, not measured reaction throughput or precipitation suppression. Matched pressure/Phi/native-face-W snapshots and inventories at 0/60/120/180/240 seconds remain descriptive diagnostics.
 
 [Preserved C5/C7 history response](PR91_HISTORY_RESPONSE_20261020.md) provides same-location pressure, Phi and native-face W maps/trajectories through 180s. At common 0/60/120s the C5–C7 interaction of the COUPLED–OFF differences is zero at stored precision for those three fields. This is neither observation skill nor new-candidate history.
 
