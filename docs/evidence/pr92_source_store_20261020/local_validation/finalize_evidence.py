@@ -129,7 +129,7 @@ def main():
         state_audits.append({'arm': run['arm'], 'path': path.relative_to(ROOT).as_posix(),
                              'sha256': sha(path), 'generic_exact_source_status': audit['completed_state_audit']['status'],
                              'declared_policy': policy,
-                             'scope': 'Completed cloud/rain/graupel strict source contract; ice uses declared inactive cutoff and 8-ULP active gate. Generic audit is retained separately.'})
+                             'scope': 'Declared ice-only inactive cutoff and 8-ULP active policy over completed states. The independent generic exact-source audit, including rain, remains FAIL; no all-species exact PASS is claimed.'})
     paths = graph_paths() + ['tests/intel_toolchain.sh',
                             'docs/evidence/pr92_source_store_20261020/c18/module_em.F',
                             'docs/evidence/pr92_source_store_20261020/graupel_store/witness/module_em_c15.F']
@@ -158,7 +158,7 @@ def main():
                   'limits': 'Canonical snapshot excludes new PR92 Python tools, tested separately; no full clean WRF build or scientific approval.'}
     write_json(EVIDENCE / 'final_validation.json', validation)
     integration = {'schema': 'pr92_source_store_integration_v1',
-                   'base_commit': '71b8c1d5dae181c163d04eabac9cf8f80134f417',
+                   'base_commit': '71b8c1d5dae181c163d04eabac9cf8f80134f417', 'source_commit': None,
                    'candidate_identity': 'PR92-C18-bounded', 'candidate_executable_sha256': EXE_SHA,
                    'validation_sha256': sha(EVIDENCE / 'final_validation.json'),
                    'closed_runtime_receipts': runtime, 'completed_state_audits': state_audits, 'physical_approval': 'FAIL_OPEN',
@@ -167,7 +167,7 @@ def main():
                                                   'independent_observation_agreement': 'OPEN',
                                                   'reduced_initialization_shock': 'OPEN'},
                    'research_layout': 'selected-object pinned Intel partial-host; 1 domain/rank/thread/tile',
-                   'science_evidence_identity': 'C14 response maps; C16 history is byte-identical through T240 only; selected QC vertical source-form replay. C17 closed audit is separately bound; C18 audit is separately bound after closed receipt review.'}
+                   'science_evidence_identity': 'C14 response maps; selected PR83 QC vertical source-form replay. C18 own 23-step area activity and completed-state audit are receipt-bound. Same-arm C18/C17 histories are byte-identical through T420, and the first 14 stage-trace timesteps match; these do not establish 600-second completion.'}
     write_json(EVIDENCE / 'integration_manifest.json', integration)
     print(json.dumps({'runtime': runtime, 'validation_sha256': integration['validation_sha256']}, indent=2))
 
