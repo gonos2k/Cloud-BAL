@@ -1,0 +1,15 @@
+# C14 paired 600-second closure audit
+
+Both paired runs closed with `INCOMPLETE`, model return code 1, and 14 completed steps (maximum observed timestep 15). The 14-step prefix passes the inherited generic state checks and the exact cloud/rain/graupel source-boundary checks: 84 six-state records and 42 endpoint checks per arm. The 42 completed joint-transport rows per arm are feasible with theta=1. These completed-prefix results are separate from one partial T15/RK1 row per arm, which is infeasible with theta=0. The overall 600-second result is therefore incomplete, not a pass.
+
+The first fatal is the same in OFF and COUPLED: timestep 15, RK1, pair 4 (graupel), cell `(i,j,k)=(2,218,13)`. The full-candidate source diagnostic lists 7 failed pair-4 cells in OFF and 12 in COUPLED; both lists include this cell. At the graupel trial, reason code 6 is returned by `add_graupel_diffusion_mixture`. Its source-identity check sees source Q/N R64 words `37DF4A1044E19719` and `3741E86FF089F302`, while the diffusion recomputed from the current q1/n1 fields is zero for both moments. The trial reject words, in writer order (candidate Q, candidate N, source Q, source N, transport Q, transport N), are `370528AC448AD089`, `3668384CB70114F1`, `37DF4A1044E19719`, `3741E86FF089F302`, `8000000000000000`, `8000000000000000`. No cause beyond this observed source-identity mismatch is asserted.
+
+This is distinct from the earlier recoverable T10/RK3 pair-1 cloud store rejection at `(130,182,2)`. The sparse actual-store trace contains that T10 attempt only; it has no T15 pair-4 entry, so no T15 store stage or store-candidate bits are claimed. The T15 candidate bits above come from the separate graupel-trial diagnostic.
+
+Each 600-second run has 42 committed storage-ledger records and one pair-2 inactive-Q quantum adjustment. Per-pair signed storage deltas are pressure-coordinate representation terms; the source-representation ledger remains separate. They are not mass or energy closure totals. C14's paired 240-second PASS remains an independent completed validation result and is not changed by this later failure.
+
+## Artifacts and reproduction
+
+`closed_audit_600.py` reuses the reviewed C14/C13 parsers and strict boundary checker. Run it only after both receipts have closed. Its JSON retains all 43 joint rows per arm and reports `CLOSED_PREFIX_REVIEW_REQUIRED`, while `completion_partition_600.json` explicitly separates completed rows from the partial row. `failure_context_600.json` contains a compact extraction of closed full/source and RSL diagnostics. Receipts and preflight records bind each arm to the C14 build and executable. No full traces or executable copies are stored in this evidence directory.
+
+The inherited strict-source JSON contains a legacy `coverage_all_12_steps_x_3_boundaries` field name. For this 600-second audit the authoritative values in that object are `coverage_expected_steps: 14`, `coverage_selected_stage_records: 42`, and the explicit stage list for steps 1–14; the legacy key label is stale. The JSON is preserved byte-for-byte.

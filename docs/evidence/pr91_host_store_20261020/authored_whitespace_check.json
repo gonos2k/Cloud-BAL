@@ -1,27 +1,138 @@
 {
   "schema": "pr91_authored_whitespace_v1",
   "status": "PASS",
-  "scope": "Staged authored changes checked; only these exact frozen source/raw-output artifacts excluded to preserve byte/hash evidence. No extension-wide exclusion.",
+  "scope": "Base-to-current staged/worktree diff checked with git diff --check. Exact frozen source/raw-output artifacts below preserve source/evidence bytes; the untracked integration manifest was separately scanned and has no trailing whitespace. No extension-wide exclusion.",
+  "base_commit": "3a896be3d381909f0cc61d1c0896b329b98d5aea",
+  "candidate_head": "6a0d9e6da3869591bbe7de0485efcb926290812a",
+  "git_diff_check_log_path": "/var/tmp/pr91_final_diffcheck.log",
+  "git_diff_check_log_sha256": "b60c18526eaa1d19d87f432bfcb742200d4b63fe2822476cc702091dc4d44948",
+  "git_diff_check_trailing_lines": 2468,
   "excluded_artifacts": {
-    "docs/evidence/pr91_host_store_20261020/validation/final_i/module_em.F": "dc21f48b29784f7ab6bbb6975ef541d184b31effa796b0e5aab51b16e80d406d",
-    "docs/evidence/pr91_science_sources_20261020/c13_ice_underflow_review/c13_off_t9_rk2_pair2_full_row.txt": "615db5db168ea2dfd4f446685e941d297bca7d34b0e69c9898e89878b8de51e2",
-    "docs/evidence/pr91_source_store_contract_20261020/c10/module_em.F": "af54a8bd951e47407f6900dbfd4b16396cd6fc30753bb32437fd46c45b86be4c",
-    "docs/evidence/pr91_source_store_contract_20261020/c10/solve_em.F": "dd3d8436ec6e7712ea8b62a33502acf89832f2d8a9f45969f84968f06ff78ca6",
-    "docs/evidence/pr91_source_store_contract_20261020/c11d/module_em_c11d.F": "40bfbce9e266a11ca576aca7a78e256b410b07f79ae783132ae2c3d24b8d64b3",
-    "docs/evidence/pr91_source_store_contract_20261020/c11d/solve_em_c10.F": "dd3d8436ec6e7712ea8b62a33502acf89832f2d8a9f45969f84968f06ff78ca6",
-    "docs/evidence/pr91_source_store_contract_20261020/c12/generated/module_em.F": "fcdc8f34b523aa83adcf7f60a049e27aba5f1975c264bb7118bb7efe62120a5f",
-    "docs/evidence/pr91_source_store_contract_20261020/c12/generated/solve_em.F": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
-    "docs/evidence/pr91_source_store_contract_20261020/c12/inputs/solve_em_c7.F": "412183300ea8dd6af028ac1a5254f937477b054630db4eb1f5910a6bf974c3c5",
-    "docs/evidence/pr91_source_store_contract_20261020/c13/generated/module_bl_fogdes.F": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
-    "docs/evidence/pr91_source_store_contract_20261020/c13/inputs/module_bl_fogdes_c12.F": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
-    "docs/evidence/pr91_source_store_contract_20261020/c14/inputs/module_bl_fogdes_c12.F": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
-    "docs/evidence/pr91_source_store_contract_20261020/c14/inputs/module_em_c12.F": "fcdc8f34b523aa83adcf7f60a049e27aba5f1975c264bb7118bb7efe62120a5f",
-    "docs/evidence/pr91_source_store_contract_20261020/c14/module_bl_fogdes.F": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
-    "docs/evidence/pr91_source_store_contract_20261020/c14/module_em.F": "6a7a97c23c84f05837a3bb5e384ce944ecd2df220ea1889d990349cd509094b1",
-    "docs/evidence/pr91_source_store_contract_20261020/c14/solve_em.F": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
-    "docs/evidence/pr91_source_store_contract_20261020/c9/module_em_c9.F": "226e64ca5dc30cbaa801bb8d4e736755ec9b0ac0e1227b0992c96f4c61db0e7f",
-    "docs/evidence/pr91_source_store_contract_20261020/c9/solve_em_c9.F": "9f1c9f0c9993c1c623aed92988f4e8016c49c8ad14c11e38d41a62bec27b63cf"
+    "docs/evidence/pr91_host_store_20261020/validation/final_i/module_em.F": {
+      "sha256": "dc21f48b29784f7ab6bbb6975ef541d184b31effa796b0e5aab51b16e80d406d",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_science_sources_20261020/c13_ice_underflow_review/c13_off_t9_rk2_pair2_full_row.txt": {
+      "sha256": "615db5db168ea2dfd4f446685e941d297bca7d34b0e69c9898e89878b8de51e2",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_science_sources_20261020/final_c12_validation/joint_transport_o0_combined.log": {
+      "sha256": "3399a84354ef3bb986fcbb1e677a0359f3b5b3a43ecf1e2f0dd13b5d3e655613",
+      "reason": "Frozen compiler/test output; exact diagnostic bytes retained as evidence."
+    },
+    "docs/evidence/pr91_science_sources_20261020/final_c14_validation/attempt_01_pytest.log": {
+      "sha256": "2f5cfe6e610439f9a74bc71e21d59cf5856e4e6bbc3ce36843fb2e4be75fc183",
+      "reason": "Frozen compiler/test output; exact diagnostic bytes retained as evidence."
+    },
+    "docs/evidence/pr91_science_sources_20261020/horizontal_replay/replay_18level/METGRID.TBL": {
+      "sha256": "44f1a43af35441957d0bef3a6220831aad1cf56ebc765d64d08e20f439a63b44",
+      "reason": "WPS upstream configuration snapshot; exact source bytes retained, not authored for this PR."
+    },
+    "docs/evidence/pr91_science_sources_20261020/horizontal_replay/replay_18level/operator_source/interp_module.F": {
+      "sha256": "cd3bf205f4870fb1deceefefd511bbc950ae97f78b08e43f68b7221333f6f424",
+      "reason": "WPS upstream operator source snapshot; exact source bytes retained, not authored for this PR."
+    },
+    "docs/evidence/pr91_science_sources_20261020/horizontal_replay/replay_18level/operator_source/llxy_module.F": {
+      "sha256": "72d37a444728d13c36f5d1c233345b1ba15f5f133e4f5a8b24b41d26151e4ecc",
+      "reason": "WPS upstream operator source snapshot; exact source bytes retained, not authored for this PR."
+    },
+    "docs/evidence/pr91_science_sources_20261020/horizontal_replay/replay_18level/operator_source/module_map_utils.F": {
+      "sha256": "ac35b633c91534c48b128026ff445db62ebd4d0a9d6df9c36c5da1b9c5352865",
+      "reason": "WPS upstream operator source snapshot; exact source bytes retained, not authored for this PR."
+    },
+    "docs/evidence/pr91_science_sources_20261020/horizontal_replay/replay_18level/operator_source/process_domain_module.F": {
+      "sha256": "af0246e38ac765b608e9fe406f2dd0acf7e530abc46cd7676718cd8711526cc7",
+      "reason": "WPS upstream operator source snapshot; exact source bytes retained, not authored for this PR."
+    },
+    "docs/evidence/pr91_science_sources_20261020/horizontal_replay/replay_18level/operator_source/read_met_module.F": {
+      "sha256": "8b979b6a5d0f98c9812adbe704e021f385e8dc1cfdc2f0223883f47028e9dca7",
+      "reason": "WPS upstream operator source snapshot; exact source bytes retained, not authored for this PR."
+    },
+    "docs/evidence/pr91_science_sources_20261020/joint_qnb_transport.log": {
+      "sha256": "a56078e5ff91b7657886042ca70b45bb6b35752b60a6d021968eb5818a6283c5",
+      "reason": "Frozen compiler/test output; exact diagnostic bytes retained as evidence."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c10/module_em.F": {
+      "sha256": "af54a8bd951e47407f6900dbfd4b16396cd6fc30753bb32437fd46c45b86be4c",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c10/solve_em.F": {
+      "sha256": "dd3d8436ec6e7712ea8b62a33502acf89832f2d8a9f45969f84968f06ff78ca6",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c10/solve_em.compile.log": {
+      "sha256": "5f49699bf6ed3d0e716eb1c1af1a8da4aeb9875f1f5e8f3e15cc579cb30b6b6d",
+      "reason": "Frozen compiler/test output; exact diagnostic bytes retained as evidence."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c10/t2_fixture/o0.out": {
+      "sha256": "6fee56567936d752e7766e60496c542345b538cbb6310073d5c5415389acc902",
+      "reason": "Frozen compiler/test output; exact diagnostic bytes retained as evidence."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c11d/module_em_c11d.F": {
+      "sha256": "40bfbce9e266a11ca576aca7a78e256b410b07f79ae783132ae2c3d24b8d64b3",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c11d/solve_em_c10.F": {
+      "sha256": "dd3d8436ec6e7712ea8b62a33502acf89832f2d8a9f45969f84968f06ff78ca6",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c12/generated/module_em.F": {
+      "sha256": "fcdc8f34b523aa83adcf7f60a049e27aba5f1975c264bb7118bb7efe62120a5f",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c12/generated/solve_em.F": {
+      "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c12/inputs/solve_em_c7.F": {
+      "sha256": "412183300ea8dd6af028ac1a5254f937477b054630db4eb1f5910a6bf974c3c5",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c13/generated/module_bl_fogdes.F": {
+      "sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c13/inputs/module_bl_fogdes_c12.F": {
+      "sha256": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c14/inputs/module_bl_fogdes_c12.F": {
+      "sha256": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c14/inputs/module_em_c12.F": {
+      "sha256": "fcdc8f34b523aa83adcf7f60a049e27aba5f1975c264bb7118bb7efe62120a5f",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c14/module_bl_fogdes.F": {
+      "sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c14/module_em.F": {
+      "sha256": "6a7a97c23c84f05837a3bb5e384ce944ecd2df220ea1889d990349cd509094b1",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c14/solve_em.F": {
+      "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c9/module_em_c9.F": {
+      "sha256": "226e64ca5dc30cbaa801bb8d4e736755ec9b0ac0e1227b0992c96f4c61db0e7f",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c9/solve_em.compile.log": {
+      "sha256": "a5fe8c9d85185d67eb43c4ee44d54ad8cb8a534f8bc6c646a20cafdd3812d8d5",
+      "reason": "Frozen compiler/test output; exact diagnostic bytes retained as evidence."
+    },
+    "docs/evidence/pr91_source_store_contract_20261020/c9/solve_em_c9.F": {
+      "sha256": "9f1c9f0c9993c1c623aed92988f4e8016c49c8ad14c11e38d41a62bec27b63cf",
+      "reason": "Previously pinned frozen source/evidence artifact; bytes retained for provenance."
+    }
   },
-  "excluded_artifact_count": 18,
-  "all_diff_check_log_sha256": "a27312e2c88f7bed8fb0d57cc4807d92d82cbab5eb308e928b45f5ba09b3e10d"
+  "excluded_artifact_count": 30,
+  "untracked_integration_manifest": {
+    "path": "docs/evidence/pr91_host_store_20261020/pr91_integration_manifest.json",
+    "sha256": "647afbc1c1199149d4a07051d18e9fb315d6bd9583ad4febd1846e9a51a78ac8",
+    "trailing_whitespace_lines": 0
+  }
 }

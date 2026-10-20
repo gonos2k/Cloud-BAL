@@ -8,7 +8,7 @@
 | Latest candidate | C14: source-prepared diffusion, FogDES contract, and explicit inactive-ice storage option |
 | Executable SHA-256 | `5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be` |
 | Paired 240s requests | COMPLETE: 12 timesteps and 12 KDM6 calls per arm; independent completed-state audit PASS |
-| Same-candidate 600s | RUNNING with the same executable and corresponding frozen arm inputs; no completion claimed |
+| Same-candidate 600s | Both INCOMPLETE, model return code 1: 14/30 steps (280s), then T15/RK1 source-identity rejection; completed-prefix audit PASS |
 | Configuration | Pinned Intel selected-object partial-host; one domain, rank, thread and tile |
 | Scientific approval | OPEN / FAIL_OPEN |
 
@@ -68,7 +68,17 @@ Both C14 receipts are COMPLETE with return code 0 through timestep 12. Per arm, 
 
 The sparse attempted-store trace still records a rejected baseline cloud trial at T10/RK3, `(130,182,2)`, stage 3. Completed transactions and subsequent endpoint checks pass; the failure-only trace does not contain a matching per-cell success row. An attempted-call rejection is not a committed invalid state. Each arm's final grouped storage ledger records one pair-2 inactive-Q quantum adjustment. Its signed Q/N storage residual remains in pressure-coordinate units and is separate from aggregate source representation and physical phase transfer.
 
-The inherited C13 `strict_state_status` label denotes the earlier pair/cone audit with 8-ULP diagnostics. The new C14 exact endpoint supplement is required for the strict cloud/rain/graupel statement above. Original C13 evidence is preserved. The 600-second extension is a separate, still-running gate.
+The inherited C13 `strict_state_status` label denotes the earlier pair/cone audit with 8-ULP diagnostics. The new C14 exact endpoint supplement is required for the strict cloud/rain/graupel statement above. Original C13 evidence is preserved. The 600-second extension reached a new T15/RK1 source-identity rejection after 14 completed steps.
+
+## Separate failure in the 600-second extension
+
+Both closed 600-second receipts report INCOMPLETE, return code 1, 14 completed model timesteps and maximum seen timestep 15. Their candidate build and executable are unchanged; neither original nor staged input hashes changed, and collector processing errors are empty. The successful requested 240-second window remains the formal PASS_SCOPED result; the 280-second completed prefix does not make the requested 600-second window complete.
+
+The [600-second closure audit](evidence/pr91_source_store_contract_20261020/c14/runtime600/README.md) passes coverage and inherited pair/conversion gates for 84 state records, plus 42 exact completed endpoint checks per arm. The 42 completed joint rows are feasible with theta 1. One separate partial T15/RK1 row per arm is infeasible with theta 0; all 43 rows are retained. This is a passing completed prefix inside an INCOMPLETE request, not PASS_600.
+
+The new log path is T15/RK1 graupel source/diffusion identity certification, reason 6 at `(2,218,13)`. It is distinct from the original six T10 storage candidates. The [bounded source event](evidence/pr91_science_sources_20261020/c14_t15_source_identity/source_event.md) maps reason 6 to the certifier's own enum, not the common store's failure-stage enum. Both point calls return valid before the identity writer: recomputed increments are +0/+0, whereas the recorded source payloads are nonzero. The sparse actual-store trace has no T15 entry for this cell, so its initial store subpredicate is not claimed.
+
+The responsible producer-state/geometry relationship remains unresolved. The printed source operands must not be treated as QG/BG state values, assigned unverified physical units, or used to diagnose density/PSD, underflow, FP mode, or storage-quantum causes. A complete local replay still needs the actual producer/consumer stencils, metrics, carrier and construction components; no further physics change is made on this evidence alone.
 
 ## Validation and evidence
 
@@ -76,13 +86,25 @@ The inherited C13 `strict_state_status` label denotes the earlier pair/cone audi
 - [C12 source/formula bundle](evidence/pr91_source_store_contract_20261020/c12/README.md): frozen host/solve, exact captured native REAL128 stencil, non-diffusion decomposition, writer and intermediate/final contract tests.
 - [C13 FogDES bundle](evidence/pr91_source_store_contract_20261020/c13/README.md): captured marginal-candidate rejection and a separate source-present positive-flux/common-theta/conservation/store regression.
 
-The captured-packet test does not establish positive theta for that exact native primitive proposal. C13 closed INCOMPLETE at T9/RK2; C14's closed 240-second result is separate from the running 600-second extension. Builds replace selected objects in the preserved host; they are not a clean rebuild of all WRF and libraries. No whole canonical pipeline pass is claimed for these final files.
+The captured-packet test does not establish positive theta for that exact native primitive proposal. C13 closed INCOMPLETE at T9/RK2; C14's closed 240-second result is separate from the incomplete 600-second extension and its passing completed-prefix audit. Builds replace selected objects in the preserved host; they are not a clean rebuild of all WRF and libraries. No whole canonical pipeline pass is claimed for these final files.
 
 The portable validation receipt maps five original scratch inputs to byte-identical committed archives and preserves their original paths as aliases. The pre-normalization receipt is retained. Raw test/build/probe logs omitted from the initial draft by Git ignore rules are included unchanged; [publication presence](evidence/pr91_host_store_20261020/raw_log_publication_presence.json) records their hashes. This corrects evidence publication and does not change test execution or results.
 
 ## Physical diagnostics remain separate
 
 [Current C14 response](evidence/pr91_science_sources_20261020/c14_current_response/current_candidate_note.md) uses its own closed 240-second receipts, same-call column geometry and time-varying native hybrid mass. Area-weighted deferred/proposed request activity is about 79% for AUT and 84% for G in both arms. These are acceptance-factor partitions of grouped half-L1 requests, not measured reaction throughput or precipitation suppression. Matched pressure/Phi/native-face-W snapshots and inventories at 0/60/120/180/240 seconds remain descriptive diagnostics.
+
+Whole-native maximum absolute COUPLED-minus-OFF differences are:
+
+| Elapsed seconds | P+PB (Pa) | Interface Phi (m²/s²) | Native-face W (m/s) |
+|---:|---:|---:|---:|
+| 0 | 33.6094 | 116.0469 | 0 |
+| 60 | 360.6328 | 332.8838 | 1.72853 |
+| 120 | 157.0938 | 276.7012 | 2.21889 |
+| 180 | 77.1016 | 102.1426 | 1.40504 |
+| 240 | 74.9609 | 88.5732 | 1.46365 |
+
+These maxima need not occur at the same location. The transient pressure increase and later decline are not a force/continuity closure, an initialization-shock index, or evidence of improved observation fit.
 
 [Preserved C5/C7 history response](PR91_HISTORY_RESPONSE_20261020.md) provides same-location pressure, Phi and native-face W maps/trajectories through 180s. At common 0/60/120s the C5–C7 interaction of the COUPLED–OFF differences is zero at stored precision for those three fields. This is neither observation skill nor new-candidate history.
 

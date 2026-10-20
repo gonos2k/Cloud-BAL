@@ -1,0 +1,282 @@
+{
+  "schema": "pr91_host_store_integration_v1",
+  "prepublication_skeleton_only": false,
+  "final_freeze_ready": false,
+  "base_commit": "3a896be3d381909f0cc61d1c0896b329b98d5aea",
+  "source_commit": null,
+  "pull_request": "https://github.com/gonos2k/Cloud-BAL/pull/91",
+  "physical_approval": "FAIL_OPEN",
+  "validation": {
+    "status": "PASS",
+    "path": "docs/evidence/pr91_host_store_20261020/final_validation.json",
+    "sha256": "093e746ec981b9b3d51b1f49ea1e52d4d58d8512d21631f08fabcdb31e5a40c9",
+    "schema": "pr91_final_intel_validation_v1",
+    "test_count": 63,
+    "compiler_profile": "tests/intel_toolchain.sh",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "source_pins_path": "docs/evidence/pr91_host_store_20261020/final_c14/source_pins.json",
+    "source_pins_sha256": "bc8a3256e0fec329fbd115fd8e4501f383227541dc6f14088b1c0922fe4f7569",
+    "source_pin_count": 57,
+    "log_count": 6,
+    "source_pins": "Portable exact path/hash set and six bound logs are in the committed final validation and C14 source-pins receipts; final publication commit membership is still required.",
+    "source_path_aliases_count": 5,
+    "source_unchanged_dependency_count": 24,
+    "portable_source_hash_paths": true
+  },
+  "native_build": {
+    "path": "docs/evidence/pr91_source_store_contract_20261020/c14/build_receipt.json",
+    "sha256": "273b08fa9bb31d4070f59c817b3d59f77154947366dbcf8edb53c546360e053f",
+    "schema": "pr87_native_overlay_build_v1",
+    "status": "PASS_OVERLAY_BUILD",
+    "full_clean_build": false,
+    "executable_sha256": "5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be",
+    "source_binding_path": "docs/evidence/pr91_source_store_contract_20261020/c14/build_binding.json",
+    "source_binding_sha256": "6295797499611ccf97dbd3f63b3c6825f0c5d2a95b3688c5671bf4a24bc87d77",
+    "model_run": false,
+    "evidence_manifest": {
+      "path": "docs/evidence/pr91_source_store_contract_20261020/c14/manifest.json",
+      "sha256": "a0e742a9c8869e81ea0126f635cf733a8b701faeffef0d9d7eb81c9c465225b2"
+    }
+  },
+  "latest_actual_host": {
+    "status": "INCOMPLETE",
+    "overall_status": "INCOMPLETE_FINALIZATION_PENDING_600S",
+    "windows": {
+      "240": {
+        "run_identity": "PR87 selected-object native candidate",
+        "requested_duration_seconds": 240,
+        "timestep_seconds": 20,
+        "expected_timesteps": 12,
+        "status": "COMPLETE",
+        "executed_executable_sha256": "5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be",
+        "closed_audit": {
+          "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime/closed_runtime_audit.json",
+          "sha256": "875be1a620472caf9e017ffc0ca8b1f50466ccf96ec81f9ccacb267e669c5601",
+          "overall_status": "PASS_240_PREFIX"
+        },
+        "summary": {
+          "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime/runtime_summary.json",
+          "sha256": "dd3ac15f0623e84d845769f377a41431db3f79c84ff06054d1ba4b803c3d306c",
+          "overall_status": "PASS_240_PREFIX"
+        },
+        "arms": {
+          "OFF": {
+            "status": "COMPLETE",
+            "returncode": 0,
+            "final_completed_step": 12,
+            "timestep_count": 12,
+            "receipt": {
+              "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime/off_receipt.json",
+              "sha256": "f6a2e40d65c76e4e9abd0dfb1fc26f0c5da3abe4327a5d23829e4a66f34b540a"
+            }
+          },
+          "COUPLED": {
+            "status": "COMPLETE",
+            "returncode": 0,
+            "final_completed_step": 12,
+            "timestep_count": 12,
+            "receipt": {
+              "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime/coupled_receipt.json",
+              "sha256": "9bd0a867987896dc9c6551bbc964e8fd1d2d759cb865827af81346b782a40e48"
+            }
+          }
+        }
+      },
+      "600": {
+        "run_identity": "PR87 selected-object native candidate",
+        "requested_duration_seconds": 600,
+        "timestep_seconds": 20,
+        "expected_timesteps": 30,
+        "status": "INCOMPLETE",
+        "executed_executable_sha256": "5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be",
+        "arms": {
+          "OFF": {
+            "status": "INCOMPLETE",
+            "returncode": 1,
+            "final_completed_step": 14,
+            "maximum_seen_timestep": 15,
+            "timestep_count": 14,
+            "receipt": {
+              "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime600/off_receipt.json",
+              "sha256": "797be5e60fb0e5983f3d977413db958d6d2fc151b50b58a3627d82ecbe78607f"
+            },
+            "preflight": {
+              "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime600/off_preflight.json",
+              "sha256": "41dc478bfae9b26609f778342ad1c3b91c10e1d20ed9883e0e37debc80c894af"
+            },
+            "candidate_build_unchanged": true,
+            "unchanged_inputs": true,
+            "identity_checks_pass": true,
+            "completed_prefix": {
+              "state_records": 84,
+              "strict_source_endpoint_checks": 42,
+              "strict_source_status": "PASS",
+              "joint_transport_rows": 42,
+              "all_feasible": true,
+              "all_theta_one": true
+            },
+            "separate_partial_attempt": {
+              "timestep": 15,
+              "rk": 1,
+              "pair": 4,
+              "process": "graupel source/diffusion trial",
+              "cell_ijk_one_based": [
+                2,
+                218,
+                13
+              ],
+              "feasible": false,
+              "theta": 0.0
+            }
+          },
+          "COUPLED": {
+            "status": "INCOMPLETE",
+            "returncode": 1,
+            "final_completed_step": 14,
+            "maximum_seen_timestep": 15,
+            "timestep_count": 14,
+            "receipt": {
+              "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime600/coupled_receipt.json",
+              "sha256": "cae066b8f8c6c3ff9f5254c397cbe243f031ba3171d4eecb59fcf057f8c0468d"
+            },
+            "preflight": {
+              "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime600/coupled_preflight.json",
+              "sha256": "9fff76320760c8dcf5c02fe139464da68200507af58df723e2216f66c8f5cf75"
+            },
+            "candidate_build_unchanged": true,
+            "unchanged_inputs": true,
+            "identity_checks_pass": true,
+            "completed_prefix": {
+              "state_records": 84,
+              "strict_source_endpoint_checks": 42,
+              "strict_source_status": "PASS",
+              "joint_transport_rows": 42,
+              "all_feasible": true,
+              "all_theta_one": true
+            },
+            "separate_partial_attempt": {
+              "timestep": 15,
+              "rk": 1,
+              "pair": 4,
+              "process": "graupel source/diffusion trial",
+              "cell_ijk_one_based": [
+                2,
+                218,
+                13
+              ],
+              "feasible": false,
+              "theta": 0.0
+            }
+          }
+        },
+        "closed_audit": {
+          "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime600/closed_runtime_audit_600.json",
+          "sha256": "f0011302d7c5f501c9878653a7e9d8c2854af527644e8748d9c2dcd9d9a5bc32",
+          "schema": "pr91_c14_closed_600s_audit_v1",
+          "overall_status": "CLOSED_PREFIX_REVIEW_REQUIRED"
+        },
+        "completion_partition": {
+          "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime600/completion_partition_600.json",
+          "sha256": "f7e8f51a868dd21d923c34369d05a37a9882f57fc282b494b0e7d3afb7d28e37",
+          "schema": "pr91_c14_600_completion_partition_v1",
+          "overall_status": "CLOSED_PREFIX_REVIEW_REQUIRED"
+        },
+        "failure_context": {
+          "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime600/failure_context_600.json",
+          "sha256": "c85b0582606d7d663ec6d4802e9458a7a11c9d45c9d75fcdeefd0fec15f1ca66",
+          "schema": "pr91_c14_600_failure_context_v1"
+        },
+        "readme": {
+          "path": "docs/evidence/pr91_source_store_contract_20261020/c14/runtime600/README.md",
+          "sha256": "2013b8ad8512609e4e351fda100e8ece573be02a5bf4b5648ebb7fbb4f28cbdc"
+        },
+        "audit_review_status": "CLOSED_REVIEWED_NO_BLOCKERS",
+        "source_event": {
+          "path": "docs/evidence/pr91_science_sources_20261020/c14_t15_source_identity/source_event.json",
+          "sha256": "f63992e8ff48bea046a82c69762b55eb9c3284748a10c40755006c1c9c405d99",
+          "report": {
+            "path": "docs/evidence/pr91_science_sources_20261020/c14_t15_source_identity/source_event.md",
+            "sha256": "734e86d2795113bdfa28ff46a38c4639f61d73d260e256c6425923208a4306f2"
+          },
+          "schema": "pr91_c14_t15_source_identity_v1",
+          "classification": "Observed C14 trial rejection at the graupel source/diffusion identity guard; upstream cause unresolved.",
+          "physical_approval": false,
+          "event": {
+            "same_context_both_arms": true,
+            "step": 15,
+            "rk": 1,
+            "pair": 4,
+            "i": 2,
+            "j": 218,
+            "k": 13,
+            "source_identity_fail_line_sha256_with_lf": "990b514740dce87212e6aa88feeab95ca29f8ec5bd008d7d60620c1bd606c2be",
+            "trial_reject_context_line_sha256_with_lf": "acc673d72f04b8db8a0d8dd1dec525051c8e6be659afd1e012a970e8f18d4c52",
+            "trial_reject_line_sha256_with_lf": "08bef24cba5911252f6c996d8cd652c195f1fec37f49097863a4697ab3c73787"
+          },
+          "source_guard_mapping": {
+            "reject_reason_namespace": "certify_graupel_storage reject_reason",
+            "reject_reason_6_means": "add_graupel_diffusion_mixture returned invalid for the pair-4 fallback candidate; this is not joint_moment_store failure_stage 6.",
+            "call_sequence": "The normal pair-4 joint_moment_store candidate is invalid, so the graupel mixture fallback is attempted. Source-rate replay and transport mixture checks precede add_graupel_diffusion_mixture. That routine recomputes Q/N increments from q1/n1 and the diffusion geometry, then bit-compares them with qs64/ns64. The observed identity record is emitted on this comparison mismatch; reject_reason 6 follows. The subsequent mixture store, which would set reason 4, is not reached.",
+            "known_source_difference": "The recorded qs64/ns64 source payload bits are nonzero, while both valid recomputed Q/N diffusion increments are +0. qa64/na64 are captured as negative zero in the trial-reject row.",
+            "unresolved": "The captured identity/trial rows do not include the actual q1/n1 5-point stencils, diffusion coefficients/metrics, carriers, density, or the decomposition/provenance of qs64/ns64 at this cell. The initial joint_moment_store invalid subpredicate is also not logged. Therefore the record localizes the failing guard but does not identify why the payload and recomputed increments differ."
+          },
+          "cause_status": "UPSTREAM_CAUSE_OPEN; zero recomputed Q/N diffusion increments are reported as valid point results, but no causal explanation is established."
+        },
+        "failure_semantics": "The T15 reason-code-6 rejection is the graupel trial source/diffusion identity fallback guard. It is not joint_moment_store failure_stage 6; the subsequent store path was not reached. The sparse actual-store writer has no T15 row.",
+        "limits": [
+          "The 600-second run is INCOMPLETE, not a runtime pass.",
+          "Each arm has 42 completed strict endpoints and 42 feasible theta=1 completed joint rows; the separate single partial T15 RK1 graupel row is infeasible with theta=0.",
+          "The source/diffusion identity mismatch is localized, but its upstream cause remains open.",
+          "Storage deltas remain pressure-coordinate numerical representation terms, not standalone mass or energy closure."
+        ],
+        "independent_review": {
+          "path": "docs/evidence/pr91_science_sources_20261020/c14_t15_source_identity/independent_review.md",
+          "sha256": "32493553c6b31704e8530c431206cb3b7f48fd04b6d2efe889e4c8e30c2bf9f6",
+          "status": "PASS_NO_BLOCKERS",
+          "scope": "Independent source-identity evidence review; upstream cause remains open."
+        }
+      }
+    },
+    "candidate_identity": {
+      "candidate": "C14",
+      "source_code_commit": "eadc7ccf2d9fddddd6fcfac77174190363ac3f32",
+      "executable_sha256": "5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be",
+      "build_receipt_path": "docs/evidence/pr91_source_store_contract_20261020/c14/build_receipt.json",
+      "build_receipt_sha256": "273b08fa9bb31d4070f59c817b3d59f77154947366dbcf8edb53c546360e053f"
+    },
+    "limits": [
+      "C14 paired 240-second runs completed all 12 requested timesteps and passed the closed strict audit.",
+      "C14 paired 600-second arm receipts both report INCOMPLETE, return code 1, 14 completed timesteps, and maximum seen timestep 15. Their closed-prefix audit and independent review are packaged; do not claim PASS.",
+      "Storage deltas are pressure-coordinate numerical representation terms; they do not establish isolated kg or energy closure."
+    ],
+    "status_detail": "240-second pair COMPLETE with PASS_240_PREFIX. The paired 600-second runs are INCOMPLETE; the closed-prefix audit, failure partition, and independent review are packaged. Publication commit and final selected-path/hash freeze remain pending.",
+    "all_requested_windows_closed": true,
+    "runtime_readiness": false,
+    "runtime_completion_ready": false,
+    "closed_evidence_ready": true
+  },
+  "candidate_scientific_gates": {
+    "initial_shock_and_forecast": "OPEN: initial response characterization and matched longer-time response not scientifically approved.",
+    "joint_absence": "C7 T180 same-event weighted signed changes accounted descriptively; final budget remains OPEN.",
+    "local_cold_activity": "C14 area-weighted cold summary is descriptive; large AUT/G deferral justification remains OPEN.",
+    "matched_history": "C7 T0/T60/T120/T180 history remains descriptive 27-column support; not a general forecast conclusion.",
+    "native_mass_wind": "OPEN: physical face-flux continuity and momentum validation.",
+    "number_budget": "OPEN: final raw number cap is not generally logged; only local boundary event evidence is available.",
+    "observation_support": "QC horizontal source component COMPLETE for 16 target columns, 36 nonzero source links, and 288/288 matches over 18 pressure levels. Other field-specific horizontal transfer and real.exe pressure-to-native-eta influence remain OPEN.",
+    "water_and_energy": "OPEN: host/hybrid carrier and boundary-process closure; no water/energy budget approval.",
+    "source_event": "C14 T15 pair-4 source/diffusion identity event is localized by bounded evidence; upstream physical/numerical cause remains OPEN."
+  },
+  "source_code_commit": "eadc7ccf2d9fddddd6fcfac77174190363ac3f32",
+  "source_code_commit_role": "Pushed C14 source/code freeze ancestor; later publication commits contain C14 closure evidence and final documentation.",
+  "manifest_commit_binding": "source_commit remains null to avoid self-reference. Root must copy this file to expected_repo_path, then bind the containing publication commit and selected changed-path set in the external KG receipt. Readiness remains false until publication commit and selected-path/hash freeze.",
+  "kg_apply_ready": false,
+  "runtime_readiness_ready": false,
+  "manifest_status": "CLOSED_EVIDENCE_REVIEWED_PENDING_PUBLICATION_COMMIT",
+  "expected_repo_path": "docs/evidence/pr91_host_store_20261020/pr91_integration_manifest.json",
+  "closed_evidence_ready": true,
+  "allowlist_ready": false,
+  "freeze_blockers": [
+    "Publication commit and actual final selected-path/hash set are not frozen.",
+    "Physical/scientific gates remain FAIL_OPEN."
+  ]
+}

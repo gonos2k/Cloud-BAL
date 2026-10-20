@@ -1,0 +1,154 @@
+{
+  "arms": {
+    "COUPLED": {
+      "actual_store_failure_rows": [
+        {
+          "adjustment_code": 0,
+          "attempt_id": 0,
+          "failure_stage": 3,
+          "ijk": [
+            130,
+            182,
+            2
+          ],
+          "options_row": [
+            "PR91-C14-COUPLED-600s-20261020",
+            "BASELINE",
+            "10",
+            "3",
+            "1",
+            "130",
+            "182",
+            "2",
+            "T",
+            "T",
+            "T",
+            "F",
+            "F",
+            "T",
+            "T",
+            "F",
+            "0.00000000000000000E+00"
+          ],
+          "pair": 1,
+          "rk": 3,
+          "run_id": "PR91-C14-COUPLED-600s-20261020",
+          "timestep": 10
+        }
+      ],
+      "completed_prefix": {
+        "all_feasible": true,
+        "all_theta_one": true,
+        "exact_source_checks": "PASS",
+        "exact_source_endpoint_checks": 42,
+        "generic_state": "PASS",
+        "joint_transport_rows": 42,
+        "six_state_records": 84
+      },
+      "final_completed_step": 14,
+      "identity_checks_pass": true,
+      "maximum_seen_timestep": 15,
+      "partial_rows": [
+        {
+          "cells": 2533440,
+          "feasible": false,
+          "max_cfl": 0.09276495236020767,
+          "rk": 1,
+          "theta": 0.0,
+          "timestep": 15
+        }
+      ],
+      "returncode": 1,
+      "status": "INCOMPLETE",
+      "storage": {
+        "committed_records": 42,
+        "inactive_q_quantum_adjustment_count_by_pair": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "signed_storage_delta_scope": "per-pair Q/N, pressure-coordinate units; numerical storage representation only, not kg or energy closure",
+        "source_representation_is_separate": true
+      }
+    },
+    "OFF": {
+      "actual_store_failure_rows": [
+        {
+          "adjustment_code": 0,
+          "attempt_id": 0,
+          "failure_stage": 3,
+          "ijk": [
+            130,
+            182,
+            2
+          ],
+          "options_row": [
+            "PR91-C14-OFF-600s-20261020",
+            "BASELINE",
+            "10",
+            "3",
+            "1",
+            "130",
+            "182",
+            "2",
+            "T",
+            "T",
+            "T",
+            "F",
+            "F",
+            "T",
+            "T",
+            "F",
+            "0.00000000000000000E+00"
+          ],
+          "pair": 1,
+          "rk": 3,
+          "run_id": "PR91-C14-OFF-600s-20261020",
+          "timestep": 10
+        }
+      ],
+      "completed_prefix": {
+        "all_feasible": true,
+        "all_theta_one": true,
+        "exact_source_checks": "PASS",
+        "exact_source_endpoint_checks": 42,
+        "generic_state": "PASS",
+        "joint_transport_rows": 42,
+        "six_state_records": 84
+      },
+      "final_completed_step": 14,
+      "identity_checks_pass": true,
+      "maximum_seen_timestep": 15,
+      "partial_rows": [
+        {
+          "cells": 2533440,
+          "feasible": false,
+          "max_cfl": 0.09276495236020767,
+          "rk": 1,
+          "theta": 0.0,
+          "timestep": 15
+        }
+      ],
+      "returncode": 1,
+      "status": "INCOMPLETE",
+      "storage": {
+        "committed_records": 42,
+        "inactive_q_quantum_adjustment_count_by_pair": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "signed_storage_delta_scope": "per-pair Q/N, pressure-coordinate units; numerical storage representation only, not kg or energy closure",
+        "source_representation_is_separate": true
+      }
+    }
+  },
+  "overall_status": "CLOSED_PREFIX_REVIEW_REQUIRED",
+  "run_identity": {
+    "build_receipt_sha256": "273b08fa9bb31d4070f59c817b3d59f77154947366dbcf8edb53c546360e053f",
+    "executable_sha256": "5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be"
+  },
+  "schema": "pr91_c14_600_completion_partition_v1"
+}
