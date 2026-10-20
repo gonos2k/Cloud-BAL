@@ -1,0 +1,96 @@
+{
+  "schema": "pr91_c14_t15_source_identity_v1",
+  "physical_approval": false,
+  "classification": "Observed C14 trial rejection at the graupel source/diffusion identity guard; upstream cause unresolved.",
+  "scope": "Two 600-second C14 runs are INCOMPLETE after 14 completed steps. Both fail at T15 RK1, pair 4, cell (i=2,j=218,k=13). This is a bounded event classification, not a full native state audit or source replay.",
+  "source_identity": {
+    "compiled_module_path": "docs/evidence/pr91_source_store_contract_20261020/c14/module_em.F",
+    "compiled_module_sha256": "6a7a97c23c84f05837a3bb5e384ce944ecd2df220ea1889d990349cd509094b1",
+    "shared_core_path": "docs/evidence/pr91_source_store_contract_20261020/c14/cloud_bal_joint_transport.f90",
+    "shared_core_sha256": "cf1384a06a82e2f3d03b4ca61db8fbfb8ad2e61d889e4290d790d7aa4d3be466",
+    "build_receipt_sha256": "273b08fa9bb31d4070f59c817b3d59f77154947366dbcf8edb53c546360e053f",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "executed_executable_sha256": "5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be"
+  },
+  "runs": {
+    "OFF": {
+      "receipt": "/var/tmp/pr91_OFF_600s_c14_20261020/receipt.json",
+      "receipt_sha256": "797be5e60fb0e5983f3d977413db958d6d2fc151b50b58a3627d82ecbe78607f",
+      "status": "INCOMPLETE",
+      "returncode": 1,
+      "final_completed_step": 14,
+      "candidate_build_receipt_sha256": "273b08fa9bb31d4070f59c817b3d59f77154947366dbcf8edb53c546360e053f",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "rsl_gzip_path": "/var/tmp/pr91_OFF_600s_c14_20261020/run/rsl.out.0000.gz",
+      "rsl_gzip_sha256": "8f41b56eb219d4fcf5ea13f3ad652f8d391a9b21ea4e4c164faedf5850084a53",
+      "rsl_sha_matches_receipt_generated_file": true,
+      "source_failure_gzip_sha256": "275bbd9076345add07ead13752f055cc25ef77191a19f7911180a2c6ca32a6e4",
+      "source_diffusion_gzip_sha256": "38743c3e95ef1a05f386457b2552cad13aa8c04255f02a4caaa5dc3c0c8caaff"
+    },
+    "COUPLED": {
+      "receipt": "/var/tmp/pr91_COUPLED_600s_c14_20261020/receipt.json",
+      "receipt_sha256": "cae066b8f8c6c3ff9f5254c397cbe243f031ba3171d4eecb59fcf057f8c0468d",
+      "status": "INCOMPLETE",
+      "returncode": 1,
+      "final_completed_step": 14,
+      "candidate_build_receipt_sha256": "273b08fa9bb31d4070f59c817b3d59f77154947366dbcf8edb53c546360e053f",
+      "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "rsl_gzip_path": "/var/tmp/pr91_COUPLED_600s_c14_20261020/run/rsl.out.0000.gz",
+      "rsl_gzip_sha256": "046c8e82cd8029474e46295f19dabe8931a5dfd8569e1cadd7c3f842d1085f31",
+      "rsl_sha_matches_receipt_generated_file": true,
+      "source_failure_gzip_sha256": "337bd85cf9d124e81d75a1ee8e08c48cd096326c4113e2afb738950539486cda",
+      "source_diffusion_gzip_sha256": "fae4b93d73c6110bc267b6a5912a210c06e4e59cb0a3fd91d2ca8c4578877402"
+    }
+  },
+  "event": {
+    "same_context_both_arms": true,
+    "step": 15,
+    "rk": 1,
+    "pair": 4,
+    "i": 2,
+    "j": 218,
+    "k": 13,
+    "source_identity_fail_line": "PR87_GRAUPEL_SOURCE_IDENTITY_FAIL 15 1 2 218 13 37DF4A1044E19719 3741E86FF089F302 0000000000000000 0000000000000000",
+    "source_identity_fail_line_sha256_with_lf": "990b514740dce87212e6aa88feeab95ca29f8ec5bd008d7d60620c1bd606c2be",
+    "trial_reject_context_line": "PR91_GRAUPEL_TRIAL_REJECT_CONTEXT 15 1 6 4 2 218 13",
+    "trial_reject_context_line_sha256_with_lf": "acc673d72f04b8db8a0d8dd1dec525051c8e6be659afd1e012a970e8f18d4c52",
+    "trial_reject_line": "PR87_GRAUPEL_TRIAL_REJECT 6 4 2 218 13 370528AC448AD089 3668384CB70114F1 37DF4A1044E19719 3741E86FF089F302 8000000000000000 8000000000000000",
+    "trial_reject_line_sha256_with_lf": "08bef24cba5911252f6c996d8cd652c195f1fec37f49097863a4697ab3c73787",
+    "trial_reject_bits_order": ["candidate_value_q64", "candidate_value_n64", "qs64_source_payload", "ns64_source_payload", "qa64_rate", "na64_rate"],
+    "decoded_r64_values_for_reference_only": {
+      "candidate_value_q64": 1.1859961634011352e-43,
+      "candidate_value_n64": 1.3257553714467398e-46,
+      "qs64_source_payload": 1.4367346884124137e-39,
+      "ns64_source_payload": 1.60604122448782e-42,
+      "qa64_rate_negative_zero": true,
+      "na64_rate_negative_zero": true
+    },
+    "source_identity_operands": {
+      "qs64_source_payload_bits": "37DF4A1044E19719",
+      "ns64_source_payload_bits": "3741E86FF089F302",
+      "recomputed_q_diffusion_increment_bits": "0000000000000000",
+      "recomputed_n_diffusion_increment_bits": "0000000000000000",
+      "zero_increment_status": "Computed valid REAL64 point increments, not initialized defaults: the source-identity writer is reached only after both Q and N graupel_diffusion_point calls return valid; either invalid result returns before that comparison and writer."
+    }
+  },
+  "source_guard_mapping": {
+    "reject_reason_namespace": "certify_graupel_storage reject_reason",
+    "reject_reason_6_means": "add_graupel_diffusion_mixture returned invalid for the pair-4 fallback candidate; this is not joint_moment_store failure_stage 6.",
+    "call_sequence": "The normal pair-4 joint_moment_store candidate is invalid, so the graupel mixture fallback is attempted. Source-rate replay and transport mixture checks precede add_graupel_diffusion_mixture. That routine recomputes Q/N increments from q1/n1 and the diffusion geometry, then bit-compares them with qs64/ns64. The observed identity record is emitted on this comparison mismatch; reject_reason 6 follows. The subsequent mixture store, which would set reason 4, is not reached.",
+    "known_source_difference": "The recorded qs64/ns64 source payload bits are nonzero, while both valid recomputed Q/N diffusion increments are +0. qa64/na64 are captured as negative zero in the trial-reject row.",
+    "unresolved": "The captured identity/trial rows do not include the actual q1/n1 5-point stencils, diffusion coefficients/metrics, carriers, density, or the decomposition/provenance of qs64/ns64 at this cell. The initial joint_moment_store invalid subpredicate is also not logged. Therefore the record localizes the failing guard but does not identify why the payload and recomputed increments differ."
+  },
+  "interpretation_limits": [
+    "Do not assign PSD, storage quantum absence, FTZ, or source-preparation quantum rounding as the cause from these rows.",
+    "The routine uses generic Q/N names, but the caller maps pair 4 to QG mass and QIB bulk-volume channels; ns64 is not a particle-number concentration here. Do not compare these payloads with QG/QIB state values or infer a bulk-state ratio. Their physical units and full provenance remain unresolved.",
+    "No full state audit or mixture replay is represented here; the host agent owns those audits.",
+    "Both 600-second runs remain INCOMPLETE. The accepted C14 240-second evidence is unchanged and separate."
+  ],
+  "minimal_exact_replay_inputs": [
+    "At (i=2,j=218,k=13), preserve q1 and n1 center plus four horizontal neighbors at the same k, with raw REAL32 bits.",
+    "Preserve mut_diff, xkmhd_diff 5-point stencil, c1/c2 at k, msfux_diff, msfuy_diff, msfvx_inv_diff, msfvy_diff, msftx/msfty at required faces/cell, and rdx/rdy; retain exact subroutine operation order and REAL128 evaluation.",
+    "Preserve the exact qs64/ns64 source payload construction components and qa64/na64, plus the candidate store inputs/options needed to show the normal store invalid branch before fallback."
+  ]
+}

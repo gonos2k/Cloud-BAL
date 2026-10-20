@@ -1,0 +1,75 @@
+{
+  "schema": "pr91_c11_writer_fixture_v1",
+  "identity": "C11d extracted production guard and embedded C10 REAL128 diffusion kernel",
+  "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+  "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "compile_commands": {
+    "O0": "source tests/intel_toolchain.sh && \"$CLOUD_BAL_FC\" \"${CLOUD_BAL_FREE_FLAGS[@]}\" -free kernel.f90 driver.f90 -o capture_O0.exe",
+    "O2": "source tests/intel_toolchain.sh && \"$CLOUD_BAL_FC\" \"${CLOUD_BAL_REPRO_FLAGS[@]}\" -free kernel.f90 driver.f90 -o capture_O2.exe"
+  },
+  "run_command": "source tests/intel_toolchain.sh && exec ./capture_LEVEL.exe",
+  "captured_source_sha256": "40bfbce9e266a11ca576aca7a78e256b410b07f79ae783132ae2c3d24b8d64b3",
+  "kernel_source": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/docs/evidence/pr91_source_store_contract_20261020/c11d/writer_fixture/kernel.f90",
+    "size_bytes": 3553,
+    "sha256": "d7f555f6d2fe91cfb662fd19e346db391b5b672a9e289d0184e9b094a66692ca"
+  },
+  "driver_source": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/docs/evidence/pr91_source_store_contract_20261020/c11d/writer_fixture/driver.f90",
+    "size_bytes": 7147,
+    "sha256": "fa65bf949a62e09686ad9b74eb574a527b599abe30a23031dc7f616375f7bce0"
+  },
+  "outputs": {
+    "O0": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/docs/evidence/pr91_source_store_contract_20261020/c11d/writer_fixture/pr85_joint_source_failure_O0.raw",
+      "size_bytes": 1445,
+      "sha256": "3585c2f15a843aff3ccd813e643d3d199ea6063749b912c325f65ce95bd3a4ca"
+    },
+    "O2": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/docs/evidence/pr91_source_store_contract_20261020/c11d/writer_fixture/pr85_joint_source_failure_O2.raw",
+      "size_bytes": 1445,
+      "sha256": "3585c2f15a843aff3ccd813e643d3d199ea6063749b912c325f65ce95bd3a4ca"
+    }
+  },
+  "stdout": {
+    "O0": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/docs/evidence/pr91_source_store_contract_20261020/c11d/writer_fixture/stdout_O0.txt",
+      "size_bytes": 51,
+      "sha256": "6aa73d32bb88ba6eb5d277762ae85a0bb73be822f9521a0f77d0df7d2220148a"
+    },
+    "O2": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/docs/evidence/pr91_source_store_contract_20261020/c11d/writer_fixture/stdout_O2.txt",
+      "size_bytes": 51,
+      "sha256": "6aa73d32bb88ba6eb5d277762ae85a0bb73be822f9521a0f77d0df7d2220148a"
+    }
+  },
+  "outputs_identical": true,
+  "parsed_records": 17,
+  "record_schemas": [
+    "VIRTUAL_DONOR_STAGE",
+    "VDS_OPERANDS_R32",
+    "VDS_OPERANDS_R64",
+    "VDS_SOURCE_DIFFUSION",
+    "VDS_Q_STENCIL x3",
+    "VDS_N_STENCIL x3",
+    "VDS_DIFFUSIVITY",
+    "VDS_GEOMETRY_X x3",
+    "VDS_GEOMETRY_FACE",
+    "VDS_GEOMETRY_Y",
+    "VDS_RDY"
+  ],
+  "executables_external_not_archived": {
+    "O0": {
+      "path": "/var/tmp/pr91-c11-writer-preserved/capture_O0.exe",
+      "size_bytes": 672848,
+      "sha256": "20fa5426c5a2a0d48c682e6f0f25591132912d8d79429f4d45b2b6d5050a01f6"
+    },
+    "O2": {
+      "path": "/var/tmp/pr91-c11-writer-preserved/capture_O2.exe",
+      "size_bytes": 603760,
+      "sha256": "5e0e60e36ce9bbfb2fc908ee32299a8d47e34fcf433352d576950e681601a84e"
+    }
+  }
+}

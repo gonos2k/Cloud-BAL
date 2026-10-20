@@ -1,0 +1,224 @@
+{
+  "schema": "pr91_host_store_validation_artifacts_v1",
+  "maintained_physics_sources_changed": false,
+  "compiler": {
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331",
+    "audit_flags": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "repro_flags": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ]
+  },
+  "attempts": [
+    {
+      "id": "D1",
+      "status": "interrupted_before_host_compile",
+      "source": {
+        "label": "D1 generated host source",
+        "path": "/var/tmp/pr91_native_build_d1_20261020/source/overrides/module_em.F",
+        "size_bytes": 253632,
+        "sha256": "923d3a8c40bd35aa4bfa01100353ba7b0682d4213be8bdec57f984b0a98eff8a"
+      },
+      "outcome": "Build interrupted; no successful host compile claimed."
+    },
+    {
+      "id": "D2",
+      "status": "compile_failed",
+      "source": {
+        "label": "D2 generated host source",
+        "path": "/var/tmp/pr91_native_build_d2_20261020/source/overrides/module_em.F",
+        "size_bytes": 254421,
+        "sha256": "a73da57273ae5d0086edbd5a27ded3e6632a1ecd147af790f31aaec4ba4dfd07"
+      },
+      "preprocessed_source": {
+        "label": "D2 preprocessed host source",
+        "path": "/var/tmp/pr91_native_build_d2_20261020/preprocessed/module_em.f90",
+        "size_bytes": 253994,
+        "sha256": "6c85680dc9dfaefd0e6b3254f74bfc5095248259525b457e60682bb7c6dcf023"
+      },
+      "compiler_log": {
+        "label": "D2 compiler log",
+        "path": "/var/tmp/pr91_native_build_d2_20261020/logs/module_em.compile.log",
+        "size_bytes": 39421,
+        "sha256": "2d48557840e67933f205212b45e9c9df1498c3d27a74573840f1934a8e1571f4"
+      },
+      "diagnostic_excerpt": "preprocessed/module_em.f90(4592): error #6099: An ENDDO statement occurred without a corresponding DO or DO WHILE statement.",
+      "exit_status": 1
+    },
+    {
+      "id": "final_i_writer",
+      "status": "pass",
+      "executable": {
+        "label": "writer exercise executable",
+        "path": "/var/tmp/pr91_host_store_writer_exercise_20261020_c/writer.exe",
+        "size_bytes": 646104,
+        "sha256": "8cb33be7c0d44d6346774bc04b1cc0160a41b08a9319e635a3647cea39a0fe92"
+      },
+      "compile_command": "source tests/intel_toolchain.sh && \"$CLOUD_BAL_FC\" \"${CLOUD_BAL_FREE_FLAGS[@]}\" writer.f90 -o writer.exe",
+      "run_command": "source tests/intel_toolchain.sh && PR91_RUN_ID=stub_run_20261020 ./writer.exe",
+      "stdout": "PASS: writer raw record read back; 48 fields; attempted_scale=1, returned theta=0, failure_stage=6; exact hexadecimal fields parsed."
+    },
+    {
+      "id": "transport_O0",
+      "status": "pass",
+      "executable": {
+        "label": "transport O0 executable",
+        "path": "/var/tmp/pr91_core_forwardcompat_20261020/O0/test_joint_qnb_transport.exe",
+        "size_bytes": 1101056,
+        "sha256": "6d8fa369277094dbf5a13bda7860e5701ffdaae33cb5d79f7be790cce611ae9e"
+      },
+      "compile_command": "source tests/intel_toolchain.sh && \"$CLOUD_BAL_FC\" \"${CLOUD_BAL_FREE_FLAGS[@]}\" cloud_bal_joint_transport.f90 test_joint_qnb_transport.f90 -o test_joint_qnb_transport.exe",
+      "run_command": "./test_joint_qnb_transport.exe",
+      "stdout": "PASS test_joint_qnb_transport"
+    },
+    {
+      "id": "transport_O2",
+      "status": "pass",
+      "executable": {
+        "label": "transport O2 executable",
+        "path": "/var/tmp/pr91_core_forwardcompat_20261020/O2/test_joint_qnb_transport.exe",
+        "size_bytes": 910056,
+        "sha256": "69aedb4ca77167d7420fb48b216f220cac4fc1a54b4fcc9becf4121a68e6133c"
+      },
+      "compile_command": "source tests/intel_toolchain.sh && \"$CLOUD_BAL_FC\" \"${CLOUD_BAL_REPRO_FLAGS[@]}\" cloud_bal_joint_transport.f90 test_joint_qnb_transport.f90 -o test_joint_qnb_transport.exe",
+      "run_command": "./test_joint_qnb_transport.exe",
+      "stdout": "PASS test_joint_qnb_transport"
+    },
+    {
+      "id": "D3",
+      "status": "overlay_build_pass",
+      "source": {
+        "label": "D3 generated host source",
+        "path": "/var/tmp/pr91_native_build_d3_20261020/source/overrides/module_em.F",
+        "size_bytes": 254457,
+        "sha256": "dc21f48b29784f7ab6bbb6975ef541d184b31effa796b0e5aab51b16e80d406d"
+      },
+      "preprocessed_source": {
+        "label": "D3 preprocessed host source",
+        "path": "/var/tmp/pr91_native_build_d3_20261020/preprocessed/module_em.f90",
+        "size_bytes": 254030,
+        "sha256": "ba691bdc61716f5d5d93ab5fc61215121403322210407eafe8460d0d99571356"
+      },
+      "compiler_log": {
+        "label": "D3 compiler log",
+        "path": "/var/tmp/pr91_native_build_d3_20261020/logs/module_em.compile.log",
+        "size_bytes": 39141,
+        "sha256": "d2107fd0c8c91c319c317ec5eb3c0f69f3b4c51b38349ceae439822e3004b254"
+      },
+      "executable": {
+        "label": "D3 overlay executable",
+        "path": "/var/tmp/pr91_native_build_d3_20261020/wrf_pr87_overlay.exe",
+        "size_bytes": 81174464,
+        "sha256": "89812febe43ac6afb7388e5aed7395614527c46ffee8c9eb3dcbad1ba807f97a"
+      },
+      "receipt_path": "/var/tmp/pr91_native_build_d3_20261020/pr87_native_overlay_build.json",
+      "receipt_sha256": "e58f116cc4157623298cacae1744eecfa466ccb023f5519c139472f39f37450c",
+      "build_command": "See receipt compiled_overrides and link_argv; partial nine-object source-mapped native overlay, not a clean build.",
+      "model_run": "not part of this build receipt; OFF 200-second run outcome pending."
+    }
+  ],
+  "artifacts": [
+    {
+      "label": "D1 generated host source",
+      "path": "/var/tmp/pr91_native_build_d1_20261020/source/overrides/module_em.F",
+      "size_bytes": 253632,
+      "sha256": "923d3a8c40bd35aa4bfa01100353ba7b0682d4213be8bdec57f984b0a98eff8a"
+    },
+    {
+      "label": "D2 generated host source",
+      "path": "/var/tmp/pr91_native_build_d2_20261020/source/overrides/module_em.F",
+      "size_bytes": 254421,
+      "sha256": "a73da57273ae5d0086edbd5a27ded3e6632a1ecd147af790f31aaec4ba4dfd07"
+    },
+    {
+      "label": "D2 preprocessed host source",
+      "path": "/var/tmp/pr91_native_build_d2_20261020/preprocessed/module_em.f90",
+      "size_bytes": 253994,
+      "sha256": "6c85680dc9dfaefd0e6b3254f74bfc5095248259525b457e60682bb7c6dcf023"
+    },
+    {
+      "label": "D2 compiler log",
+      "path": "/var/tmp/pr91_native_build_d2_20261020/logs/module_em.compile.log",
+      "size_bytes": 39421,
+      "sha256": "2d48557840e67933f205212b45e9c9df1498c3d27a74573840f1934a8e1571f4"
+    },
+    {
+      "label": "D3 generated host source",
+      "path": "/var/tmp/pr91_native_build_d3_20261020/source/overrides/module_em.F",
+      "size_bytes": 254457,
+      "sha256": "dc21f48b29784f7ab6bbb6975ef541d184b31effa796b0e5aab51b16e80d406d"
+    },
+    {
+      "label": "D3 preprocessed host source",
+      "path": "/var/tmp/pr91_native_build_d3_20261020/preprocessed/module_em.f90",
+      "size_bytes": 254030,
+      "sha256": "ba691bdc61716f5d5d93ab5fc61215121403322210407eafe8460d0d99571356"
+    },
+    {
+      "label": "D3 compiler log",
+      "path": "/var/tmp/pr91_native_build_d3_20261020/logs/module_em.compile.log",
+      "size_bytes": 39141,
+      "sha256": "d2107fd0c8c91c319c317ec5eb3c0f69f3b4c51b38349ceae439822e3004b254"
+    },
+    {
+      "label": "D3 overlay executable",
+      "path": "/var/tmp/pr91_native_build_d3_20261020/wrf_pr87_overlay.exe",
+      "size_bytes": 81174464,
+      "sha256": "89812febe43ac6afb7388e5aed7395614527c46ffee8c9eb3dcbad1ba807f97a"
+    },
+    {
+      "label": "writer exercise executable",
+      "path": "/var/tmp/pr91_host_store_writer_exercise_20261020_c/writer.exe",
+      "size_bytes": 646104,
+      "sha256": "8cb33be7c0d44d6346774bc04b1cc0160a41b08a9319e635a3647cea39a0fe92"
+    },
+    {
+      "label": "transport O0 executable",
+      "path": "/var/tmp/pr91_core_forwardcompat_20261020/O0/test_joint_qnb_transport.exe",
+      "size_bytes": 1101056,
+      "sha256": "6d8fa369277094dbf5a13bda7860e5701ffdaae33cb5d79f7be790cce611ae9e"
+    },
+    {
+      "label": "transport O2 executable",
+      "path": "/var/tmp/pr91_core_forwardcompat_20261020/O2/test_joint_qnb_transport.exe",
+      "size_bytes": 910056,
+      "sha256": "69aedb4ca77167d7420fb48b216f220cac4fc1a54b4fcc9becf4121a68e6133c"
+    }
+  ],
+  "focused_python_tests": {
+    "command": "python -m unittest tests/test_pr91_host_store_trace.py",
+    "stdout": "Ran 3 tests; OK"
+  },
+  "notes": [
+    "External artifacts stay in /var/tmp and are not duplicated as binary/source snapshots in this evidence tree.",
+    "The generated _i host/core source remains in final_i for review and reproducibility.",
+    "D1/D2 source hashes identify the exact generated versions; D2 compiler log excerpt records the compile error."
+  ]
+}

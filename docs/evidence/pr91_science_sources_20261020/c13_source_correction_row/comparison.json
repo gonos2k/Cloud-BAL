@@ -1,0 +1,179 @@
+{
+  "schema": "pr91_c12_c13_fogdes_source_correction_row_compare_v1",
+  "scope": "One matched PR87_FOGDES_SOURCE_CORRECTION_RK row at source_step=3, i=162, j=132; COUPLED arms only.",
+  "c12_source": {
+    "run_id": "PR91-C12-COUPLED-240s-20261020",
+    "closed_archive_path": "/var/tmp/pr91_COUPLED_240s_c12_20261020/run/pr85_fogdes_budget.raw.gz",
+    "compressed_bytes": 32973447,
+    "compressed_sha256": "927506bdcd15fc8c662eb754e8dd7082cd18b8ad51c08abe1efe9d02fee24b81",
+    "runtime_status": "INCOMPLETE, returncode 1; compressed ledger is closed and receipt is preserved.",
+    "receipt": "../pr91_source_store_contract_20261020/c12/runtime/coupled_receipt.json",
+    "live_identity_copy": "c12_coupled_identity.json",
+    "live_identity_sha256": "c05cf2ab1232ae9eb59bff3c136d3b3f9c3b15a3b0fae54f7456f0d3704fa51e"
+  },
+  "c13_source": {
+    "run_id": "PR91-C13-COUPLED-240s-20261020",
+    "build_receipt_sha256": "dc4c6d1ad0cd0870ff26dd6b490ecf145733e552b575f3a8859a9ef75c9e5106",
+    "executable_sha256": "69c0f5fb394917aab999e073fc05671ba208502fc58c6bd17b2e860bf5cf0c87",
+    "identity_copy": "c13_coupled_live_identity.json",
+    "live_identity_sha256": "b024ce26fcead155e9b27ba864cc56e99ef80e8d00b9aeb6aa9817e28097d121",
+    "process_state_at_identity_capture": "R",
+    "live_ledger_path": "/var/tmp/pr91_COUPLED_240s_c13_20261020/run/pr85_fogdes_budget.raw",
+    "bounded_prefix_bytes": 170472964,
+    "bounded_prefix_sha256": "223b04dcf1ff88a2d0abd2d0ee0556580a70fcd51b9489d08fe27fdaa830f64e",
+    "source_stat_at_snapshot": {
+      "size": 170472964,
+      "mtime_ns": 1792461118809863076,
+      "ctime_ns": 1792461118809863076
+    },
+    "closure": "NOT CLOSED: this was one bounded prefix snapshot from the append-only live ledger; no final receipt/closure is claimed."
+  },
+  "matched_row": {
+    "key": {
+      "source_step": 3,
+      "i": 162,
+      "j": 132
+    },
+    "row_count_per_arm": 1,
+    "c12_row_sha256": "0f952a89fbc74d4b97b3d257dea35be2e4bb06b0c3e6cc1f6b248c50e8740f8d",
+    "c13_row_sha256": "e54a0a685ac8e0809c8fe3a608c46e5e37926c34066bc73a73f394fc4e791901",
+    "fields": {
+      "C12": {
+        "record": "PR87_FOGDES_SOURCE_CORRECTION_RK",
+        "source_step": "3",
+        "i": "162",
+        "j": "132",
+        "changed_count": "11",
+        "sample_k": "1",
+        "theta": "2.9400507919490337E-03",
+        "incoming_sum_q": "-3.4639534180670151E-15",
+        "incoming_sum_n": "-1.6314140968118529E+00",
+        "incoming_l1_q": "3.4639534180670151E-15",
+        "incoming_l1_n": "1.6314140968118529E+00",
+        "incoming_max_q": "3.4279640516496184E-15",
+        "incoming_max_n": "1.6190403344226070E+00",
+        "outgoing_sum_q": "-3.4679037443532728E-15",
+        "outgoing_sum_n": "-1.6298968920835371E+00",
+        "outgoing_l1_q": "3.4679037443532728E-15",
+        "outgoing_l1_n": "1.6298968920835371E+00",
+        "outgoing_max_q": "3.4235253080452254E-15",
+        "outgoing_max_n": "1.6252417140058242E+00",
+        "sample_in_q": "-2.0313035631771064E-17",
+        "sample_in_n": "-1.1805486661614850E-02",
+        "sample_out_q": "-2.9000628641694489E-17",
+        "sample_out_n": "-4.1302079625893384E-03"
+      },
+      "C13": {
+        "record": "PR87_FOGDES_SOURCE_CORRECTION_RK",
+        "source_step": "3",
+        "i": "162",
+        "j": "132",
+        "changed_count": "11",
+        "sample_k": "1",
+        "theta": "2.9400505591183901E-03",
+        "incoming_sum_q": "-3.4639534180670151E-15",
+        "incoming_sum_n": "-1.6314140968118529E+00",
+        "incoming_l1_q": "3.4639534180670151E-15",
+        "incoming_l1_n": "1.6314140968118529E+00",
+        "incoming_max_q": "3.4279640516496184E-15",
+        "incoming_max_n": "1.6190403344226070E+00",
+        "outgoing_sum_q": "-3.4679047952878567E-15",
+        "outgoing_sum_n": "-1.6298970426140051E+00",
+        "outgoing_l1_q": "3.4679047952878567E-15",
+        "outgoing_l1_n": "1.6298970426140051E+00",
+        "outgoing_max_q": "3.4235213826596286E-15",
+        "outgoing_max_n": "1.6252411517198198E+00",
+        "sample_in_q": "-2.0313035631771064E-17",
+        "sample_in_n": "-1.1805486661614850E-02",
+        "sample_out_q": "-2.9005608785969941E-17",
+        "sample_out_n": "-4.1309213265776634E-03"
+      }
+    },
+    "changed_fields": [
+      {
+        "field": "theta",
+        "c12": "0.0029400507919490337",
+        "c13": "0.0029400505591183901",
+        "delta_c13_minus_c12": "-2.328306436E-10"
+      },
+      {
+        "field": "outgoing_sum_q",
+        "c12": "-3.4679037443532728E-15",
+        "c13": "-3.4679047952878567E-15",
+        "delta_c13_minus_c12": "-1.0509345839E-21"
+      },
+      {
+        "field": "outgoing_sum_n",
+        "c12": "-1.6298968920835371",
+        "c13": "-1.6298970426140051",
+        "delta_c13_minus_c12": "-1.505304680E-7"
+      },
+      {
+        "field": "outgoing_l1_q",
+        "c12": "3.4679037443532728E-15",
+        "c13": "3.4679047952878567E-15",
+        "delta_c13_minus_c12": "1.0509345839E-21"
+      },
+      {
+        "field": "outgoing_l1_n",
+        "c12": "1.6298968920835371",
+        "c13": "1.6298970426140051",
+        "delta_c13_minus_c12": "1.505304680E-7"
+      },
+      {
+        "field": "outgoing_max_q",
+        "c12": "3.4235253080452254E-15",
+        "c13": "3.4235213826596286E-15",
+        "delta_c13_minus_c12": "-3.9253855968E-21"
+      },
+      {
+        "field": "outgoing_max_n",
+        "c12": "1.6252417140058242",
+        "c13": "1.6252411517198198",
+        "delta_c13_minus_c12": "-5.622860044E-7"
+      },
+      {
+        "field": "sample_out_q",
+        "c12": "-2.9000628641694489E-17",
+        "c13": "-2.9005608785969941E-17",
+        "delta_c13_minus_c12": "-4.980144275452E-21"
+      },
+      {
+        "field": "sample_out_n",
+        "c12": "-0.0041302079625893384",
+        "c13": "-0.0041309213265776634",
+        "delta_c13_minus_c12": "-7.133639883250E-7"
+      }
+    ],
+    "identical_text_fields": [
+      "record",
+      "source_step",
+      "i",
+      "j",
+      "changed_count",
+      "sample_k",
+      "incoming_sum_q",
+      "incoming_sum_n",
+      "incoming_l1_q",
+      "incoming_l1_n",
+      "incoming_max_q",
+      "incoming_max_n",
+      "sample_in_q",
+      "sample_in_n"
+    ],
+    "interpretation_limit": "Equal summary fields do not establish identical primitive producer states; the ledger contains aggregate/sample fields only."
+  },
+  "theta_comparison": {
+    "c12_decimal": "0.0029400507919490337",
+    "c13_decimal": "0.0029400505591183901",
+    "c13_is_positive": true,
+    "absolute_delta_c13_minus_c12": "-2.328306436E-10",
+    "relative_change_percent": "-0.000007919272831529917335834109367",
+    "source": "Printed ES24.16 ledger values; differences are evaluated from their serialized decimal representations."
+  },
+  "limitations": [
+    "This compares one FogDES source-correction ledger row; it does not establish identical primitive states or isolate which primitive changed.",
+    "C13 row is captured from an append-only live prefix while the native run was active; it does not establish run closure, full-runtime science outcome, area-weighted impact, or budget closure.",
+    "C12 run itself ended INCOMPLETE (returncode 1); the gzip is a closed artifact, not a successful simulation."
+  ]
+}

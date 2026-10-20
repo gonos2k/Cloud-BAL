@@ -1,0 +1,151 @@
+{
+  "captured_utc": "2026-10-20T00:37:33Z",
+  "status": "LIVE_PROCESS_IDENTITY_SNAPSHOT",
+  "warning": "Snapshot records process identity/config/input/executable bindings only; it is not a closed-run receipt and establishes no completed timestep count.",
+  "build_receipt_sha256": "e2d5e1b17459da1b4830c1af68fdc89cd65e04918aa80256d5f47448e27eaf85",
+  "build_executable_sha256": "f90ab0db440bab51822461a95b1e068a97efc1f18c9bbc13007f189a0efcfc32",
+  "arms": [
+    {
+      "arm": "OFF",
+      "run_id": "PR91-C9-OFF-240s-20261020",
+      "run_root": "/var/tmp/pr91_OFF_240s_c9_20261020",
+      "preflight_path": "/var/tmp/pr91_OFF_240s_c9_20261020/preflight.json",
+      "preflight_sha256": "cda8b03166688848f780a7b6a8b8e5bedb96785027293f9cb27d2a778840bc56",
+      "candidate_receipt_path": "/var/tmp/pr91_native_build_c9_20261020/pr87_native_overlay_build.json",
+      "candidate_receipt_sha256": "e2d5e1b17459da1b4830c1af68fdc89cd65e04918aa80256d5f47448e27eaf85",
+      "build_status": "PASS_OVERLAY_BUILD",
+      "executable_path": "/var/tmp/pr91_OFF_240s_c9_20261020/run/wrf.exe",
+      "executable_sha256": "f90ab0db440bab51822461a95b1e068a97efc1f18c9bbc13007f189a0efcfc32",
+      "expected_executable_sha256": "f90ab0db440bab51822461a95b1e068a97efc1f18c9bbc13007f189a0efcfc32",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "namelist_sha256": "160e3b83af7ba510fd4a8c59b487c1e8ea28738f09d07119f022d5be1702b0b5",
+      "namelist_input_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "namelist_bdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "input_file_count": 101,
+      "input_hashes_sha256": "a27c9edda114eca93e113d6c50459fa7fe4207518469afd7e98becc8bda1506b",
+      "physics_config": {
+        "mp_physics": 37,
+        "diff_opt": 1,
+        "scalar_mix2_off": false,
+        "scalar_mix2_off_basis": "not overridden in candidate namelist; WRF Registry.EM_COMMON default .false. (line 2958); README.namelist default .false. (line 1713)",
+        "mpi_tasks_x": 1,
+        "mpi_tasks_y": 1,
+        "tile_count": 1,
+        "tile_evidence": "rsl.error.0000 and rsl.out.0000 report Ntasks X=1/Y=1 and WRF NUMBER OF TILES=1"
+      },
+      "runner_env_receipt": {
+        "OMP_NUM_THREADS": "1",
+        "OMP_DYNAMIC": "FALSE",
+        "status": "CONFIGURED_BY_RUNNER",
+        "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89"
+      },
+      "processes": [
+        {
+          "pid": 414762,
+          "ppid": 414622,
+          "start_ticks": 1190955077,
+          "exe_link": "/usr/bin/python3.12",
+          "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL",
+          "selected_environment": {
+            "OMP_NUM_THREADS": "68",
+            "PR91_RUN_ID": "PR91-C9-OFF-240s-20261020"
+          }
+        },
+        {
+          "pid": 414847,
+          "ppid": 414762,
+          "start_ticks": 1190955179,
+          "exe_link": "/usr/bin/bash",
+          "cwd": "/var/tmp/pr91_OFF_240s_c9_20261020/run",
+          "selected_environment": {
+            "OMP_NUM_THREADS": "68",
+            "PR91_RUN_ID": "PR91-C9-OFF-240s-20261020"
+          }
+        },
+        {
+          "pid": 415394,
+          "ppid": 414847,
+          "start_ticks": 1190955223,
+          "exe_link": "/var/tmp/pr91_OFF_240s_c9_20261020/run/wrf.exe",
+          "cwd": "/var/tmp/pr91_OFF_240s_c9_20261020/run",
+          "selected_environment": {
+            "OMP_DYNAMIC": "FALSE",
+            "OMP_NUM_THREADS": "1",
+            "PR91_RUN_ID": "PR91-C9-OFF-240s-20261020"
+          }
+        }
+      ]
+    },
+    {
+      "arm": "COUPLED",
+      "run_id": "PR91-C9-COUPLED-240s-20261020",
+      "run_root": "/var/tmp/pr91_COUPLED_240s_c9_20261020",
+      "preflight_path": "/var/tmp/pr91_COUPLED_240s_c9_20261020/preflight.json",
+      "preflight_sha256": "6415969a8ca13bffa01346f65dab77bd1ebf1efc695bf7ce1f5d16b12bb7c021",
+      "candidate_receipt_path": "/var/tmp/pr91_native_build_c9_20261020/pr87_native_overlay_build.json",
+      "candidate_receipt_sha256": "e2d5e1b17459da1b4830c1af68fdc89cd65e04918aa80256d5f47448e27eaf85",
+      "build_status": "PASS_OVERLAY_BUILD",
+      "executable_path": "/var/tmp/pr91_COUPLED_240s_c9_20261020/run/wrf.exe",
+      "executable_sha256": "f90ab0db440bab51822461a95b1e068a97efc1f18c9bbc13007f189a0efcfc32",
+      "expected_executable_sha256": "f90ab0db440bab51822461a95b1e068a97efc1f18c9bbc13007f189a0efcfc32",
+      "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+      "namelist_sha256": "160e3b83af7ba510fd4a8c59b487c1e8ea28738f09d07119f022d5be1702b0b5",
+      "namelist_input_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "namelist_bdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "input_file_count": 101,
+      "input_hashes_sha256": "8b5c48ddf9896876d547174369874b280822c6361028fd391851e3935246a6dd",
+      "physics_config": {
+        "mp_physics": 37,
+        "diff_opt": 1,
+        "scalar_mix2_off": false,
+        "scalar_mix2_off_basis": "not overridden in candidate namelist; WRF Registry.EM_COMMON default .false. (line 2958); README.namelist default .false. (line 1713)",
+        "mpi_tasks_x": 1,
+        "mpi_tasks_y": 1,
+        "tile_count": 1,
+        "tile_evidence": "rsl.error.0000 and rsl.out.0000 report Ntasks X=1/Y=1 and WRF NUMBER OF TILES=1"
+      },
+      "runner_env_receipt": {
+        "OMP_NUM_THREADS": "1",
+        "OMP_DYNAMIC": "FALSE",
+        "status": "CONFIGURED_BY_RUNNER",
+        "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89"
+      },
+      "processes": [
+        {
+          "pid": 415146,
+          "ppid": 414894,
+          "start_ticks": 1190955198,
+          "exe_link": "/usr/bin/python3.12",
+          "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL",
+          "selected_environment": {
+            "OMP_NUM_THREADS": "68",
+            "PR91_RUN_ID": "PR91-C9-COUPLED-240s-20261020"
+          }
+        },
+        {
+          "pid": 415560,
+          "ppid": 415146,
+          "start_ticks": 1190955304,
+          "exe_link": "/usr/bin/bash",
+          "cwd": "/var/tmp/pr91_COUPLED_240s_c9_20261020/run",
+          "selected_environment": {
+            "OMP_NUM_THREADS": "68",
+            "PR91_RUN_ID": "PR91-C9-COUPLED-240s-20261020"
+          }
+        },
+        {
+          "pid": 415901,
+          "ppid": 415560,
+          "start_ticks": 1190955347,
+          "exe_link": "/var/tmp/pr91_COUPLED_240s_c9_20261020/run/wrf.exe",
+          "cwd": "/var/tmp/pr91_COUPLED_240s_c9_20261020/run",
+          "selected_environment": {
+            "OMP_DYNAMIC": "FALSE",
+            "OMP_NUM_THREADS": "1",
+            "PR91_RUN_ID": "PR91-C9-COUPLED-240s-20261020"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "pr91_c9_focused_validation_v1",
+  "status": "PASS_FOCUSED_TEST; NATIVE_240S_RUNNING_AS_REPORTED_BY_ROOT",
+  "command": "python -m unittest -v tests/test_pr91_source_first_diffusion.py",
+  "test_scope": "3 focused tests; the Intel standalone operator fixture compiles the separately maintained REAL64-internal tools/pr87_horizontal_diffusion64.f90 manufactured kernel at O0 and O2 through tests/intel_toolchain.sh, and checks prepared-state replacement, shared-face conservation, preserved halo values, copied donor formula, and optional cache-presence guard. It is not an exact replay of the native C9 module's embedded REAL128-internal pr87_horizontal_diffusion64 kernel.",
+  "pinned_toolchain_profile": "tests/intel_toolchain.sh",
+  "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "ifx_profile_version": "ifx (IFX) 2026.0.0 20260331",
+  "ifx_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "sources": {
+    "generated_module_em.F": "226e64ca5dc30cbaa801bb8d4e736755ec9b0ac0e1227b0992c96f4c61db0e7f",
+    "generated_solve_em.F": "9f1c9f0c9993c1c623aed92988f4e8016c49c8ad14c11e38d41a62bec27b63cf",
+    "transform": "610a23955d9f9e9dab5813a41d6cef1652d9b2574b058f4e9b878d89aa61ecc3",
+    "focused_test": "10e31f594703691c355b53e03c8ebf234cd24565b5e8488d4fdf45eb12fad6c8",
+    "fixture_driver": "d2ea9d82cbf3f84853bb33ef44cbfe3959f745072e719a2f92be5ef34b651b17",
+    "operator_kernel": "0a8b2865fff3d7ad6592e0d1bc1d3f7b51970de13ac9ea128066b7cba655bfe3"
+  },
+  "build_receipt_sha256": "e2d5e1b17459da1b4830c1af68fdc89cd65e04918aa80256d5f47448e27eaf85",
+  "build_status": "PASS_OVERLAY_BUILD; receipt reports partial selected-object build, not a full clean build.",
+  "native_run_status": "RUNNING per root update; no run outcome is claimed here.",
+  "binary_policy": "Executable, object, module, and archive files are not included in this evidence directory; build receipt retains external paths and hashes.",
+  "reviewed_pre_whitespace_test_sha256": "8ee2d677309f8abe7d10da91c5b5e669e1ed559d916e683bc529416368c0aa64",
+  "test_edit_note": "After review, removed trailing whitespace from one assertion line only; test logic, transform, generated Fortran source pair, and fixture are unchanged. Reran the focused suite; all 3 tests passed."
+}

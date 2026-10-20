@@ -1,0 +1,11 @@
+# C10 T20 completed-prefix audit
+
+Both paired 240-second C10 attempts closed `INCOMPLETE`, return code 1. OFF receipt SHA-256: `2b1595f59d4e1d8d4a3573b7022aba581da8800b6cd4e5b98f3d6626cd29e307`; COUPLED: `534881a4accebbfe09bedac389114b44a583207b8b4637e11aab39f904317a0c`. Both receipts bind the C10 overlay receipt SHA-256 `751283f094c12c6841933c0a9726a4ff4d9948609ab87ea1a15a6a9b5d65bc55` and executable SHA-256 `286b1c538deb8e83a7456134c301930620d2fc072ac4001e8a82df47dcd77b8d`.
+
+I streamed both receipt-bound stage traces and audited only timestep 1, the completed prefix. Each has six T1 state records (`PRE_RK`, three `RK_STAGE_END`, `PRE_KDM6`, `POST_KDM6`). Across cloud, ice, rain, and graupel, all six states in each arm have zero Q/N violations beyond the policy bounds by more than eight float32 ULP, zero negative or nonfinite pair values, and zero one-sided zero pairs. The native inactive-ice split finds no ice outliers, active or inactive. Only T1 has a completed `POST_KDM6` state (model T20); receipts report `final_completed_step=1`, `maximum_seen_timestep=2`, `timestep_count=1`.
+
+Both arms then fail in T2/RK3 with `PR87 unsafe complete source-prepared virtual donor`. No exact operands or predicate values are present in the closed artifacts; this audit does not classify the guard failure. The trace contains 14 total records spanning T1 and incomplete T2, but T2 is excluded from completed-state strict checks.
+
+The source diffusion ledger records one T2/RK3 pair-1 proposal over bounds `i=2..233, j=2..281, k=1..39`, 2,533,440 cells. The matching `pr85_joint_transport_budget.raw` has no `JOINT_RK 2 3` record in either arm. Therefore this delta is proposed pretransaction data and is **not applied**. The ledger does contain feasible `JOINT_RK` records for T1/RK1-3 and T2/RK1-2; those earlier records do not match the T2/RK3 proposal. No full timestep or C10 success claim follows from them.
+
+Per-state checks, record hashes, and ledger payload bindings are in [c10_t20_completed_prefix_audit.json](c10_t20_completed_prefix_audit.json). Copied receipts and selected compressed logs are under [c10/](c10/). The live identity snapshot is [c10_live_run_identity.json](c10_live_run_identity.json). Full stage traces remain in the external `/var/tmp/pr91_{OFF,COUPLED}_240s_c10_20261020/` roots and are pinned by their receipts.

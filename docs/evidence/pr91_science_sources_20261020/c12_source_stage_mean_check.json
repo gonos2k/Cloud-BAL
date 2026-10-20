@@ -1,0 +1,39 @@
+{
+  "formula": "candidate = base + dt * raw_rate; mean_mass = Q/N; lower-bound margin = Q - minimum_mean_mass*N.",
+  "inputs_printed_decimal_approximations": {
+    "dt_s": "20",
+    "minimum_mean_mass": "4.1887905273437498E-15",
+    "nbase": "1771801.125",
+    "qbase": "7.42170414014253765E-9",
+    "raw_n_rate": "1923.51439689265726",
+    "raw_q_rate": "8.05718031463633084E-12",
+    "reported_candidate_n": "1810271.41293785325",
+    "reported_candidate_q": "7.58284774643526457E-9"
+  },
+  "interpretation": "The printed decimal values place the candidate mean Q/N slightly below the supplied minimum mean mass before storage; the base mean is above the limit and the raw increment ratio is below it. This arithmetic is consistent with source-stage mean-bound failure. It does not identify the source producer/operator or establish that a common linear PBL raw-mean boundary generated these tokens.",
+  "limitations": [
+    "Inputs are printed decimal approximations, not exact captured binary64 operands.",
+    "No source operator mapping is inferred from dimensions or from the quotient.",
+    "No conclusion about storage, transport, pairwise exclusive cause, or final inventory loss.",
+    "No same-arm area-weighted history/activity summary: both native arms closed INCOMPLETE at the T3/RK3 source-stage pair gate, per parent-provided run status."
+  ],
+  "recomputed_from_printed_base_and_rate": {
+    "base_mean_mass": "4.1887907369640809151196356758154784442864601973881239069650099697278383881825337E-15",
+    "candidate_n": "1810271.41293785314520",
+    "candidate_q": "7.58284774643526426680E-9",
+    "lower_bound_q_margin": "-6.63674019951491870960E-25",
+    "mean_mass_q_over_n": "4.1887905273437494333842454737609630341466259344787420580341256796763546870746490E-15",
+    "n_difference_from_reported_candidate": "1.0480E-10",
+    "q_difference_from_reported_candidate": "3.0320E-25",
+    "raw_increment_mean_mass": "4.1887808729959644051299392630379764901380549014455865241915312882442622306381775E-15",
+    "relative_mean_bound_margin": "-8.752305758261972010672458288883508638598613578801148495173331465E-17"
+  },
+  "reported_candidate_tokens_check": {
+    "below_lower_mean_bound": true,
+    "lower_bound_q_margin": "-7.99459267217116850E-25",
+    "mean_mass_q_over_n": "4.1887905273437493583760194723008946328316214887512718916011811906292118568403510E-15",
+    "relative_mean_bound_margin": "-1.0542995111473082758847393647046326271007257898753261794003076179E-16"
+  },
+  "schema": "pr91_c12_source_stage_mean_check_v1",
+  "scope": "Independent decimal arithmetic check of parent-supplied printed source-stage tokens for a failed C12 candidate; not a native transaction replay."
+}

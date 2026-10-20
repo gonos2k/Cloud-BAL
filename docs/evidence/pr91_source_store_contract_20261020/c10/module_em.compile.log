@@ -1,0 +1,511 @@
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(959): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+  USE module_state_description, only: param_first_scalar, p_qr, p_qv, p_qc, p_qg, p_qi, p_qs, p_qnr, p_qnc, p_qni, p_qib, tiedtkescheme,ntiedtkescheme, heldsuarez, &
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4116): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+     pr87_all_pair_diffusion_delta,pr87_all_pair_diffusion_step,pr87_pbl_tendency_delta64,pr87_pbl_tendency_step,pr87_pbl_tendency_phase, &
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4175): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+  REAL(real64) :: outflow,cfl,maxcfl,source_candidate(2),source_sum64(2),source_rate64(2),pbl_source_correction_sum(4),pbl_source_correction_l1(4), &
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4234): warning #5151: Continuation character illegal as first non_blank in statement
+  pbl_source_correction_sum=0.0_real64; pbl_source_correction_l1=0.0_real64; &
+-----------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1369): warning #8889: Explicit interface or EXTERNAL declaration is required.   [NL_GET_TIME_STEP]
+   CALL nl_get_time_step ( 1, time_step )
+--------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2195): warning #8889: Explicit interface or EXTERNAL declaration is required.   [NL_GET_TIME_STEP]
+   CALL nl_get_time_step ( 1, time_step )
+--------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2214): warning #8889: Explicit interface or EXTERNAL declaration is required.   [NL_GET_TIME_STEP]
+     CALL nl_get_time_step ( 1, time_step )
+----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2445): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+             CALL wrf_error_fatal('PR91 incomplete source diffusion cache')
+------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2450): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+               CALL wrf_error_fatal('PR91 producer diffusion bounds changed within RK1')
+--------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3747): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+   call wrf_debug(200,trim(dbg_mes) )
+--------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3799): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ATOTIME]
+         call wrf_atotime( next_timestr, next_time )
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3806): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ATOTIME]
+         call wrf_atotime( wrk_timestr(1:19), start_time )
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3808): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ATOTIME]
+         call wrf_atotime( wrk_timestr(1:19), stop_time )
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4190): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR87 rain diffusion delta/step must be supplied together')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4193): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR87 rain diffusion timestep mismatch')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4199): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR91 incomplete source diffusion cache')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4209): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR91 source diffusion cache identity mismatch')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4220): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR85 invalid grouped scalar registry slots')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4222): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR85 invalid unpaired scalar registry slots')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4224): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR85 joint update unsupported domain footprint')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4229): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR91 diffusion bounds differ from prepared source footprint')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4233): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR87 PBL/source payload epoch mismatch')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4241): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR87 nonfinite PBL tendency correction')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4244): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR87 invalid captured PBL source carrier')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4249): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR87 PBL source reference mismatch')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4251): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [PR87_SOURCE_CARRIER]
+    pbl_carrier_min=MIN(pbl_carrier_min,pr87_source_carrier(i,k,j))
+----------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4252): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [PR87_SOURCE_CARRIER]
+    pbl_carrier_max=MAX(pbl_carrier_max,pr87_source_carrier(i,k,j))
+----------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4309): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    IF (.NOT.density_valid) CALL wrf_error_fatal('PR85 invalid AL+ALB dry density')
+---------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4319): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR85 nonpositive old dry carrier')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4341): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+        CALL wrf_error_fatal('PR87 nonfinite joint air rate')
+-------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4343): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+        CALL wrf_error_fatal('PR87 joint air diagnostic rate overflow')
+-------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4366): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 nonfinite paired diffusion correction')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4382): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR85 common donor-cell carrier CFL exceeded')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4384): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR87 nonfinite new dry carrier')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4385): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+  IF (ANY(newcarrier<=0.0_real32)) CALL wrf_error_fatal('PR87 nonpositive new dry carrier')
+----------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4386): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+  IF (.NOT.ieee_is_finite(dt)) CALL wrf_error_fatal('PR87 nonfinite grouped timestep')
+------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4387): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+  IF (dt<=0.0_real32) CALL wrf_error_fatal('PR87 nonpositive grouped timestep')
+---------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4392): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR87 nonfinite grouped state/source/transport operand')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4510): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR87 full joint moment candidate infeasible; see source/full diagnostics')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4512): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+  IF (theta<=0.0_real64) CALL wrf_error_fatal('PR85 refusing zero common air transport')
+------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4514): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    CALL wrf_error_fatal('PR85 low-order donor map requires a conservative face limiter')
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4609): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    IF (ios/=0) CALL wrf_error_fatal('PR91 trace open failed')
+---------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4611): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    IF (ios/=0.OR.LEN_TRIM(run_id)==0) CALL wrf_error_fatal('PR91_RUN_ID is required')
+--------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4716): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+        CALL wrf_error_fatal('PR91_RUN_ID is required for probe trace')
+-------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(4888): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR91_RUN_ID is required for mixture trace')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5180): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR87 intensive source payload is not current or changed after capture')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5203): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+        CALL wrf_error_fatal('PR87 physical source and old state use different dry carriers')
+-------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5209): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 coupled source changed since its intensive capture')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5217): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 nonfinite intensive source payload')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5221): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 unsafe continuous intensive source donor')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5225): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 intensive source increment exceeds REAL32 range')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5230): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 staged intensive source exceeds nonnegative REAL32 range')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5253): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 corrected source-stage pair fails strict storage validation')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5263): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          IF (.NOT.full_valid) CALL wrf_error_fatal('PR87 intensive source pair is not jointly representable')
+------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5273): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+            CALL wrf_error_fatal('PR87 nonfinite later paired diffusion correction')
+-----------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5278): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 nonfinite later non-air source payload')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5292): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      IF (.NOT.density_valid) CALL wrf_error_fatal('PR87 invalid donor-ring density')
+-----------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5297): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 unchanged boundary donor pair infeasible')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5309): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+        CALL wrf_error_fatal('PR91 source-first diffusion requires producer cache')
+-------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5311): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+        CALL wrf_error_fatal('PR91 missing paired old diffusion cache channel')
+-------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5335): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR91 nonfinite source-prepared diffusion delta')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5361): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal('PR87 unsafe complete source-prepared virtual donor')
+---------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5390): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    IF (ios/=0) CALL wrf_error_fatal('PR87 source representation ledger open failed')
+---------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5393): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    IF (ios/=0) CALL wrf_error_fatal('PR87 source representation metadata write failed')
+---------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5414): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+            CALL wrf_error_fatal('PR87 nonfinite source representation ledger')
+-----------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5423): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          IF (ios/=0) CALL wrf_error_fatal('PR87 source column ledger write failed')
+---------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5431): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+        CALL wrf_error_fatal('PR87 nonfinite source representation aggregate')
+-------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5433): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      IF (ios/=0) CALL wrf_error_fatal('PR87 source aggregate ledger write failed')
+-----------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5435): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+        CALL wrf_error_fatal('PR87 nonfinite later source ledger')
+-------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5437): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      IF (ios/=0) CALL wrf_error_fatal('PR87 later source ledger write failed')
+-----------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5440): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+    IF (ios/=0) CALL wrf_error_fatal('PR87 source representation ledger close failed')
+---------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5471): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR85 invalid unpaired source or dry carrier')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5475): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal('PR85 unpaired completed source/transport state infeasible')
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(5481): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+        CALL wrf_error_fatal('PR85 ambient number density conversion infeasible')
+-------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3999): remark #7712: This variable has not been used.   [MESSAGE]
+   CHARACTER (LEN=132) :: message
+--------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3051): remark #7712: This variable has not been used.   [IS]
+   INTEGER :: im, ic, is
+----------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3182): remark #7712: This variable has not been used.   [SCALAR]
+                     scalar, scalar_tend, num_scalar,                  &
+---------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90: remark #7712: This variable has not been used.   [MODEL_CONFIG_REC]
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3014): remark #7712: This variable has not been used.   [RK_STEP]
+                              n_moist,n_chem,n_scalar,rk_step,         &
+------------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2897): remark #7712: This variable has not been used.   [RK_STEP]
+                                rk_step, dt, spec_zone,        &
+--------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(976): remark #7712: This variable has not been used.   [RK_STEP]
+SUBROUTINE rk_step_prep  ( config_flags, rk_step,           &
+-----------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(977): remark #7712: This variable has not been used.   [T]
+                           u, v, w, t, ph, mu,              &
+------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(981): remark #7712: This variable has not been used.   [PB]
+                           mub, mut, phb, pb, p, al, alb,   &
+------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(981): remark #7712: This variable has not been used.   [P]
+                           mub, mut, phb, pb, p, al, alb,   &
+----------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1902): remark #7712: This variable has not been used.   [MSFUX]
+                            h_diabatic, mut, msftx, msfty, msfux, msfuy,     &
+-----------------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1903): remark #7712: This variable has not been used.   [MSFVY]
+                            msfvx, msfvx_inv, msfvy,                         &
+----------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2682): remark #7712: This variable has not been used.   [MSFTX]
+                             msftx, msfty, c1, c2,          &
+-----------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1902): remark #7712: This variable has not been used.   [MSFTX]
+                            h_diabatic, mut, msftx, msfty, msfux, msfuy,     &
+---------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(986): remark #7712: This variable has not been used.   [FNM]
+                           fnm, fnp, dnw, rdx, rdy,         &
+---------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(986): remark #7712: This variable has not been used.   [FNP]
+                           fnm, fnp, dnw, rdx, rdy,         &
+--------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1150): remark #7712: This variable has not been used.   [N_MOIST]
+                         cf1, cf2, cf3, cfn, cfn1, n_moist,               &
+---------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3657): remark #7712: This variable has not been used.   [IDS]
+                            ids, ide, jds, jde, kds, kde,    &
+----------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3615): remark #7712: This variable has not been used.   [IDS]
+                       ids,ide, jds,jde, kds,kde,  &
+-----------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3581): remark #7712: This variable has not been used.   [IDS]
+                       ids,ide, jds,jde, kds,kde,  &
+-----------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3547): remark #7712: This variable has not been used.   [IDS]
+                                      ids,ide, jds,jde, kds,kde,  &
+--------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2612): remark #7712: This variable has not been used.   [IDS]
+                            ids, ide, jds, jde, kds, kde,    &
+----------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2540): remark #7712: This variable has not been used.   [IDS]
+                            ids, ide, jds, jde, kds, kde,    &
+----------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1904): remark #7712: This variable has not been used.   [IDS]
+                            ids,ide, jds,jde, kds,kde,                       &
+----------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3657): remark #7712: This variable has not been used.   [JDS]
+                            ids, ide, jds, jde, kds, kde,    &
+--------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3615): remark #7712: This variable has not been used.   [JDS]
+                       ids,ide, jds,jde, kds,kde,  &
+--------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3581): remark #7712: This variable has not been used.   [JDS]
+                       ids,ide, jds,jde, kds,kde,  &
+--------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3547): remark #7712: This variable has not been used.   [JDS]
+                                      ids,ide, jds,jde, kds,kde,  &
+-----------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2612): remark #7712: This variable has not been used.   [JDS]
+                            ids, ide, jds, jde, kds, kde,    &
+--------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2540): remark #7712: This variable has not been used.   [JDS]
+                            ids, ide, jds, jde, kds, kde,    &
+--------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1904): remark #7712: This variable has not been used.   [JDS]
+                            ids,ide, jds,jde, kds,kde,                       &
+-------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3657): remark #7712: This variable has not been used.   [KDS]
+                            ids, ide, jds, jde, kds, kde,    &
+------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3615): remark #7712: This variable has not been used.   [KDS]
+                       ids,ide, jds,jde, kds,kde,  &
+-----------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3581): remark #7712: This variable has not been used.   [KDS]
+                       ids,ide, jds,jde, kds,kde,  &
+-----------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3547): remark #7712: This variable has not been used.   [KDS]
+                                      ids,ide, jds,jde, kds,kde,  &
+--------------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3184): remark #7712: This variable has not been used.   [KDS]
+                     ids,ide, jds,jde, kds,kde,                        &
+---------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2899): remark #7712: This variable has not been used.   [KDS]
+                                ids, ide, jds, jde, kds, kde,  &
+----------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2687): remark #7712: This variable has not been used.   [KDS]
+                             ids, ide, jds, jde, kds, kde,  &
+-------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2612): remark #7712: This variable has not been used.   [KDS]
+                            ids, ide, jds, jde, kds, kde,    &
+------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2540): remark #7712: This variable has not been used.   [KDS]
+                            ids, ide, jds, jde, kds, kde,    &
+------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1904): remark #7712: This variable has not been used.   [KDS]
+                            ids,ide, jds,jde, kds,kde,                       &
+----------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3615): remark #7712: This variable has not been used.   [KDE]
+                       ids,ide, jds,jde, kds,kde,  &
+---------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3581): remark #7712: This variable has not been used.   [KDE]
+                       ids,ide, jds,jde, kds,kde,  &
+---------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3547): remark #7712: This variable has not been used.   [KDE]
+                                      ids,ide, jds,jde, kds,kde,  &
+------------------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2612): remark #7712: This variable has not been used.   [KDE]
+                            ids, ide, jds, jde, kds, kde,    &
+-----------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2540): remark #7712: This variable has not been used.   [KDE]
+                            ids, ide, jds, jde, kds, kde,    &
+-----------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1904): remark #7712: This variable has not been used.   [KDE]
+                            ids,ide, jds,jde, kds,kde,                       &
+--------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3134): remark #7712: This variable has not been used.   [JMS]
+                      ims, ime, jms, jme, kms, kme, &
+--------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3134): remark #7712: This variable has not been used.   [JME]
+                      ims, ime, jms, jme, kms, kme, &
+-------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3659): remark #7712: This variable has not been used.   [KTS]
+                            its, ite, jts, jte, kts, kte    )
+------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3996): remark #7712: This variable has not been used.   [K]
+   INTEGER :: i, k, iunit
+-----------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2137): remark #7712: This variable has not been used.   [K]
+   INTEGER :: im, i,j,k
+----------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1277): remark #7712: This variable has not been used.   [K]
+   INTEGER :: i,j,k
+------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1055): remark #7712: This variable has not been used.   [K]
+   integer :: k
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1131): remark #7712: This variable has not been used.   [PH_TENDF]
+                         ru_tendf, rv_tendf, rw_tendf, ph_tendf, t_tendf, &
+-------------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1137): remark #7712: This variable has not been used.   [H_DIABATIC]
+                         h_diabatic, phb,t_init,                          &
+-------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1141): remark #7712: This variable has not been used.   [QV_BASE]
+                         u_base, v_base, t_base, qv_base, z_base,         &
+-------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3652): remark #7712: This variable has not been used.   [RDN]
+                            rdx, rdy, rdn, rdnw,rdzw,        &
+--------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2537): remark #7712: This variable has not been used.   [DT]
+                            dt, mut, c1, c2,                 &
+----------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1152): remark #7712: This variable has not been used.   [U_FRAME]
+                         u_frame, v_frame,                                &
+-------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1152): remark #7712: This variable has not been used.   [V_FRAME]
+                         u_frame, v_frame,                                &
+----------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1276): remark #7712: This variable has not been used.   [KDIFT]
+   REAL    :: kdift, khdq, kvdq, cfn, cfn1, cf1, cf2, cf3
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3996): remark #7712: This variable has not been used.   [I]
+   INTEGER :: i, k, iunit
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2137): remark #7712: This variable has not been used.   [I]
+   INTEGER :: im, i,j,k
+------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1277): remark #7712: This variable has not been used.   [I]
+   INTEGER :: i,j,k
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2137): remark #7712: This variable has not been used.   [J]
+   INTEGER :: im, i,j,k
+--------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1277): remark #7712: This variable has not been used.   [J]
+   INTEGER :: i,j,k
+----------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1906): remark #7712: This variable has not been used.   [IPS]
+                            ips,ipe, jps,jpe, kps,kpe,                       &
+----------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1906): remark #7712: This variable has not been used.   [IPE]
+                            ips,ipe, jps,jpe, kps,kpe,                       &
+--------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1906): remark #7712: This variable has not been used.   [JPS]
+                            ips,ipe, jps,jpe, kps,kpe,                       &
+-------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1906): remark #7712: This variable has not been used.   [JPE]
+                            ips,ipe, jps,jpe, kps,kpe,                       &
+-----------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1906): remark #7712: This variable has not been used.   [KPS]
+                            ips,ipe, jps,jpe, kps,kpe,                       &
+----------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(1906): remark #7712: This variable has not been used.   [KPE]
+                            ips,ipe, jps,jpe, kps,kpe,                       &
+--------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2147): remark #7712: This variable has not been used.   [TENDENCY]
+   REAL    :: khdq, kvdq, tendency
+--------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2927): remark #7712: This variable has not been used.   [SC_MIDDLE]
+   REAL    :: sc_middle, msfsq
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2728): remark #7712: This variable has not been used.   [SC_MIDDLE]
+   REAL    :: sc_middle, msfsq
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2927): remark #7712: This variable has not been used.   [MSFSQ]
+   REAL    :: sc_middle, msfsq
+-------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(2728): remark #7712: This variable has not been used.   [MSFSQ]
+   REAL    :: sc_middle, msfsq
+-------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3170): remark #7712: This variable has not been used.   [PI3D]
+                     mut,muu,muv,pi3d,                                 &
+---------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3181): remark #7712: This variable has not been used.   [RMUNDGDTEN]
+                     RMUNDGDTEN,                                       &
+---------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3183): remark #7712: This variable has not been used.   [TRACER]
+                     tracer, tracer_tend, num_tracer,                  &
+---------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3650): remark #7712: This variable has not been used.   [ITIMESTEP]
+                            dt,itimestep,ru_m, rv_m, ww_m,   &
+-------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3652): remark #7712: This variable has not been used.   [RDZW]
+                            rdx, rdy, rdn, rdnw,rdzw,        &
+------------------------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3655): remark #7712: This variable has not been used.   [XLONG]
+                            xlong,xlat,                      &
+----------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3655): remark #7712: This variable has not been used.   [XLAT]
+                            xlong,xlat,                      &
+----------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3717): remark #7712: This variable has not been used.   [AX]
+  real :: deltx, delty, deltz,ax
+------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3719): remark #7712: This variable has not been used.   [TEMP_I]
+  real :: temp_i,temp_j
+----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3719): remark #7712: This variable has not been used.   [TEMP_J]
+  real :: temp_i,temp_j
+-----------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3732): remark #7712: This variable has not been used.   [KNOWN_LAT]
+  real:: known_lat, known_lon
+---------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3732): remark #7712: This variable has not been used.   [KNOWN_LON]
+  real:: known_lat, known_lon
+--------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3995): remark #7712: This variable has not been used.   [NTSLOC_TEMP]
+   INTEGER :: ntsloc_temp
+--------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3996): remark #7712: This variable has not been used.   [IUNIT]
+   INTEGER :: i, k, iunit
+--------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3997): remark #7712: This variable has not been used.   [TS_RX]
+   REAL :: ts_rx, ts_ry, ts_xlat, ts_xlong, ts_hgt
+-----------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3997): remark #7712: This variable has not been used.   [TS_RY]
+   REAL :: ts_rx, ts_ry, ts_xlat, ts_xlong, ts_hgt
+------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3997): remark #7712: This variable has not been used.   [TS_XLAT]
+   REAL :: ts_rx, ts_ry, ts_xlat, ts_xlong, ts_hgt
+-------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3997): remark #7712: This variable has not been used.   [TS_XLONG]
+   REAL :: ts_rx, ts_ry, ts_xlat, ts_xlong, ts_hgt
+----------------------------------^
+/var/tmp/pr91_native_build_c10_20261020/preprocessed/module_em.f90(3997): remark #7712: This variable has not been used.   [TS_HGT]
+   REAL :: ts_rx, ts_ry, ts_xlat, ts_xlong, ts_hgt
+--------------------------------------------^

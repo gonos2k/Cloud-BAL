@@ -1,0 +1,55 @@
+{
+  "candidate": "PR91 C12 source-first paired diffusion decomposition",
+  "status": "SOURCE_FROZEN_NATIVE_BUILD_RUNNING",
+  "physics_change": true,
+  "physics_change_summary": "Source-first rates use the explicit REAL64 non-diffusion residual from producer REAL32 before/after diffusion fields, then add the full prepared-field diffusion tendency once. The old-diffusion difference remains only in the signed pressure-coordinate ledger. Baseline path and final strict store remain unchanged.",
+  "native_runtime_claim": false,
+  "inputs": {
+    "D3 module": {
+      "path": "docs/evidence/pr91_host_store_20261020/validation/final_i/module_em.F",
+      "sha256": "dc21f48b29784f7ab6bbb6975ef541d184b31effa796b0e5aab51b16e80d406d"
+    },
+    "C7 solve": {
+      "path": "inputs/solve_em_c7.F",
+      "sha256": "412183300ea8dd6af028ac1a5254f937477b054630db4eb1f5910a6bf974c3c5"
+    }
+  },
+  "outputs": {
+    "generated/module_em.F": {
+      "sha256": "fcdc8f34b523aa83adcf7f60a049e27aba5f1975c264bb7118bb7efe62120a5f"
+    },
+    "generated/solve_em.F": {
+      "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+    }
+  },
+  "transform_dependencies": {
+    "transform/pr91_source_first_diffusion.py": {
+      "sha256": "80b654e32bcda6207aa69825f1ff5bfad4410ad681bdcaa67e53b68e14322796"
+    },
+    "transform/pr91_source_first_diffusion_c11.py": {
+      "sha256": "9855bd25856c1a45c86192cd3d8c74253a9bfc27086776d2cb6c56176f8219e6"
+    },
+    "transform/pr91_virtual_donor_capture.py": {
+      "sha256": "c400f92525b7deb9e0fc839cc39932c7b9de261151335052933f53e0e381f77e"
+    }
+  },
+  "focused_validation": {
+    "command": "python3 -m unittest tests.test_pr91_source_first_diffusion tests.test_pr91_source_first_diffusion_c11 -v",
+    "exit_code": 0,
+    "result": "9 tests passed; pinned Intel O0/O2 cases passed",
+    "log_sha256": "b1adece14ed54efda93e262c958ee00f9a5adf56bec1affc0684039603f2fbe9",
+    "test_hashes": {
+      "validation/test_pr91_source_first_diffusion.py": "9e8756b2d48774d5eaf692d016be46a09fb0286bf924bb169901549793cb249b",
+      "validation/test_pr91_source_first_diffusion_c11.py": "ba6f2f2c1e83b42426370b37e4b0d41a5cce329865637f853db2f849848208b4"
+    },
+    "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "memory_accounting": "C12 adds eight REAL32 values per cell (4 channels before/after, 32 B) and four REAL64 nonD values per cell (32 B), total 64 B/cell. Existing 4-channel REAL64 Dold cache remains 32 B/cell. No new REAL128 arrays.",
+  "failure_capture": "Shared C11 writer template emits the C12 before/after R32 words, nonD/prepared-D/old-D R64 words, and existing raw/later/delta provenance only when the complete virtual donor guard fails.",
+  "boundary_scope": "Prepared fields replace active interior values; the inherited outer donor ring is retained as boundary data. Existing focused fixture checks the ring values remain unchanged. Boundary flux closure remains open.",
+  "limitations": [
+    "Embedded REAL128 helper replay uses the exact archived C11d failing stencil and C12 source ordering; this is not a C12 model failure capture.",
+    "Manufactured residual and orphan-source cases test the production expressions but are not meteorological source packets.",
+    "A C12 model run has not completed; the root native build/run owns runtime validation."
+  ]
+}

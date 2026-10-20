@@ -1,0 +1,52 @@
+{
+  "compiler_profile": "tests/intel_toolchain.sh",
+  "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "logs": [
+    {
+      "path": "docs/evidence/pr91_science_sources_20261020/final_c13_validation/pre_fix_baseline/pytest.log",
+      "sha256": "7fcc24942c137c10d088408ea673bd6d4ea1cc9d226f728ec2611d0f36d66fbb"
+    },
+    {
+      "path": "docs/evidence/pr91_science_sources_20261020/final_c13_validation/final_positive_flux_two_cases.log",
+      "sha256": "0ccf3e784d2ca0727fa95244126222039612b41918aa2de3c8b322b28abce79d"
+    },
+    {
+      "path": "docs/evidence/pr91_science_sources_20261020/final_c12_validation/joint_transport_o0_combined.log",
+      "sha256": "3399a84354ef3bb986fcbb1e677a0359f3b5b3a43ecf1e2f0dd13b5d3e655613"
+    },
+    {
+      "path": "docs/evidence/pr91_science_sources_20261020/final_c12_validation/joint_transport_o2_combined.log",
+      "sha256": "0d6a16ad0ff097d283ff828691636bd5722eff0774fc00e41cdfe91fc7b42611"
+    }
+  ],
+  "native_runtime": "BOUND_SEPARATELY_BY_CLOSED_RECEIPTS",
+  "physical_approval": false,
+  "schema": "pr91_final_intel_validation_v1",
+  "source_hashes": {
+    "docs/evidence/pr91_source_store_contract_20261020/c12/generated/module_em.F": "fcdc8f34b523aa83adcf7f60a049e27aba5f1975c264bb7118bb7efe62120a5f",
+    "docs/evidence/pr91_source_store_contract_20261020/c12/generated/solve_em.F": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
+    "docs/evidence/pr91_source_store_contract_20261020/c13/generated/module_bl_fogdes.F": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+    "tests/test_pr91_fogdes_store_contract.py": "c5a8f098abd5ac6c93f09caa9a4bd8587db272290945c67a8c92b56ad88b053a",
+    "tests/test_pr91_history_response.py": "2a297614084b133ca9b3dc3806278e8ceeb1d55ef117bcf589115bae4ac26ae4",
+    "tests/test_pr91_host_store_replay.py": "ac563764c6938a52fec61b148621f91bf0998dbebba33c7f30e9c67380aeded2",
+    "tests/test_pr91_host_store_trace.py": "79d92b5bfc612bc97112dd38669452ad443a923c7ecd1ea7c9fb2da130053e85",
+    "tests/test_pr91_source_first_diffusion.py": "9e8756b2d48774d5eaf692d016be46a09fb0286bf924bb169901549793cb249b",
+    "tests/test_pr91_source_first_diffusion_c11.py": "ba6f2f2c1e83b42426370b37e4b0d41a5cce329865637f853db2f849848208b4",
+    "tests/test_pr91_source_store_contract.py": "ab36b46c03e6b9d084e2189d16ad835adf831ddc71dd9c221392e4843bac6d8d",
+    "tools/pr91_fogdes_store_contract.py": "ddbc3828bcc4ac6b1bedf117edc2a215e324fca46726dbb17a9b437270f91aa6",
+    "tools/pr91_history_response.py": "dee21e7ad30765ad366c0d856ddd8ba2436b391e6caa54cfa50ab6c46580b528",
+    "tools/pr91_host_store_replay.py": "f8cce2f7d142c0bd321eaf9b2e9184ac250cbf4ba801c63e5ad2a219c5f1c0fc",
+    "tools/pr91_host_store_trace.py": "3f694f9ecfd19d8ce93c59feab64d12382ba789d80755851eb477735a26850e8",
+    "tools/pr91_source_first_diffusion.py": "80b654e32bcda6207aa69825f1ff5bfad4410ad681bdcaa67e53b68e14322796",
+    "tools/pr91_source_first_diffusion_c11.py": "9855bd25856c1a45c86192cd3d8c74253a9bfc27086776d2cb6c56176f8219e6",
+    "tools/pr91_source_store_contract.py": "9aeab4f6d64b71e5da46f1581c02e3605ab721fb0b4b06601b008d41626b8c07",
+    "tools/pr91_virtual_donor_capture.py": "c400f92525b7deb9e0fc839cc39932c7b9de261151335052933f53e0e381f77e"
+  },
+  "source_provenance": {
+    "path": "docs/evidence/pr91_science_sources_20261020/final_c13_validation/source_pins.json",
+    "sha256": "558a270b3b59123cd92f8db11555f3dcd08a4e8a15814b8fa00358cdff1852e0"
+  },
+  "status": "PASS",
+  "test_count": 57,
+  "validation_scope": "57 unique focused cases: the 55 unchanged cases in the full 57-case run, plus the two corrected source-present FogDES cases rerun with pinned Intel O0/O2. The two replace the earlier fixture versions; this is not 59 unique cases. Standalone unchanged common transport compiled and ran separately at Intel O0/O2. No full canonical or clean full-host build is claimed."
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "pr91_c10_evidence_v1",
+  "identity": "PR91-C10",
+  "generator": {
+    "path": "tools/pr91_source_first_diffusion.py",
+    "sha256": "6cd06d2d81bfb829ff1703abaefb86483de89dd536b4a18d374a90da101e697e"
+  },
+  "test": {
+    "path": "tests/test_pr91_source_first_diffusion.py",
+    "sha256": "3d07b17312c26514065d4587a7d6d57cc4f76bdbe74f87d47b7852506a7c292b",
+    "command": "python -m unittest -v tests/test_pr91_source_first_diffusion.py",
+    "status": "PASS; 4 tests, including pinned Intel O0/O2 source-diffusion fixture and exact T2 endpoint fixture",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "operator_kernel_sha256": "0a8b2865fff3d7ad6592e0d1bc1d3f7b51970de13ac9ea128066b7cba655bfe3"
+  },
+  "generated_sources": {
+    "module_em.F": "af54a8bd951e47407f6900dbfd4b16396cd6fc30753bb32437fd46c45b86be4c",
+    "solve_em.F": "dd3d8436ec6e7712ea8b62a33502acf89832f2d8a9f45969f84968f06ff78ca6",
+    "sources.json": "c3e9409ce9b460b180fa5be3346b5b76c81045f4becf94e1f941116d67587553",
+    "overrides.json": "f2b03f352c6d39344317b6da20e633d9945f6b1f271f29fc02499a65c232646b"
+  },
+  "C9_retained": true,
+  "C8_retained": true,
+  "native_build_status": "PASS_OVERLAY_BUILD; full_clean_build=false; model_run=false.",
+  "native_run_status": "OFF and COUPLED 240-second runs RUNNING per root update; no run outcome claimed.",
+  "binary_policy": "No executable, object, archive, or module binaries are included.",
+  "t2_fixture_core_sha256": "9cfc20a3724b9a71b0be912d7f6746cd3ae5f17128dd743539a34ddadfd862a6",
+  "native_build_receipt_sha256": "751283f094c12c6841933c0a9726a4ff4d9948609ab87ea1a15a6a9b5d65bc55",
+  "external_executable": {
+    "path": "/var/tmp/pr91_native_build_c10_20261020/wrf_pr87_overlay.exe",
+    "size_bytes": 81187032,
+    "sha256": "286b1c538deb8e83a7456134c301930620d2fc072ac4001e8a82df47dcd77b8d",
+    "copied": false
+  }
+}

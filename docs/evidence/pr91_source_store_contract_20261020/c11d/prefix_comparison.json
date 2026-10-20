@@ -1,0 +1,35 @@
+{
+  "schema": "pr91_c11d_c10_off_completed_prefix_comparison_v1",
+  "c11d_run": {
+    "receipt": "c11d_off_receipt.json",
+    "receipt_sha256": "2f35be1345d3beb685d54202a69a7035f38d0bd1125e60f7f36702a94f63b254",
+    "status": "INCOMPLETE",
+    "returncode": 1,
+    "final_completed_step": 1,
+    "record_count": 14,
+    "completed_post_kdm6_timesteps": [1]
+  },
+  "comparison_c10_off_run": {
+    "path": "/var/tmp/pr91_OFF_240s_c10_20261020/receipt.json",
+    "receipt_sha256": "2b1595f59d4e1d8d4a3573b7022aba581da8800b6cd4e5b98f3d6626cd29e307",
+    "status": "INCOMPLETE",
+    "returncode": 1,
+    "final_completed_step": 1,
+    "record_count": 14,
+    "completed_post_kdm6_timesteps": [1]
+  },
+  "joint_moment_stage_trace": {
+    "path_relative_to_each_run": "run/pr85_joint_moment_stages.raw.gz",
+    "c11d_compressed_sha256": "a54e4f4fa315dd2c25509f48d892af12389f20b05cec6df5dd01077348d8429c",
+    "c10_compressed_sha256": "a54e4f4fa315dd2c25509f48d892af12389f20b05cec6df5dd01077348d8429c",
+    "uncompressed_bytes": 1350197000,
+    "compressed_bytes": 485643877,
+    "byte_identical": true
+  },
+  "completed_t20_snapshot": {
+    "c11d_record_sha256": "4f9f75ed115c3734f272409eeb1bf0e6961c032d1bf7210eeccf994b7b60c1c9",
+    "c10_record_sha256": "4f9f75ed115c3734f272409eeb1bf0e6961c032d1bf7210eeccf994b7b60c1c9",
+    "byte_identical": true
+  },
+  "scope": "The comparison binds the identical native stage-trace artifact and completed T20 snapshot. Both runs then fail in T2/RK3. This is a source-diagnostic comparison only, not run success or paired-arm validation; C11d was OFF-only."
+}

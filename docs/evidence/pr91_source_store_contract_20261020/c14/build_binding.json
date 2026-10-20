@@ -1,0 +1,77 @@
+{
+  "status": "PASS_OVERLAY_BUILD",
+  "full_clean_build": false,
+  "model_run": false,
+  "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+  "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+  "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "compile_profile": {
+    "name": "CLOUD_BAL_REPRO_FLAGS",
+    "enabled": true,
+    "flags": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ]
+  },
+  "compiled_overrides": [
+    {
+      "object": "module_em.o",
+      "source_sha256": "6a7a97c23c84f05837a3bb5e384ce944ecd2df220ea1889d990349cd509094b1",
+      "staged_source_sha256": "6a7a97c23c84f05837a3bb5e384ce944ecd2df220ea1889d990349cd509094b1"
+    },
+    {
+      "object": "module_bl_fogdes.o",
+      "source_sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+      "staged_source_sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7"
+    },
+    {
+      "object": "solve_em.o",
+      "source_sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
+      "staged_source_sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+    }
+  ],
+  "common_module_regenerated": {
+    "path": "/var/tmp/pr91_native_build_c14_20261020/compile/cloud_bal_joint_transport.mod",
+    "sha256": "6de0cb961a1e7f128e2680d4b8d1d7df913aaf5e2443093dfbab9093cc3df255",
+    "parent_path": "/var/tmp/pr85_native_joint_candidate_20261015v17/compile/cloud_bal_joint_transport.mod",
+    "parent_sha256": "005ce953c3dc014934b747769daa75a1d2bfbff5e486511d7a0ce0daa01a2950",
+    "staged_sha256": "005ce953c3dc014934b747769daa75a1d2bfbff5e486511d7a0ce0daa01a2950",
+    "regenerated": true
+  },
+  "executable_sha256": "5581e1be3febd54409304ccf7cbe305830a75968858075bf0d95f68b48d812be",
+  "note": "The fresh overlay regenerated the common module interface and rebuilt all known callers in this build. This does not audit external consumers outside this overlay.",
+  "known_common_core_consumers": [
+    {
+      "object": "module_em.o",
+      "source_sha256": "6a7a97c23c84f05837a3bb5e384ce944ecd2df220ea1889d990349cd509094b1"
+    },
+    {
+      "object": "module_bl_fogdes.o",
+      "source_sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7"
+    },
+    {
+      "object": "pr90_cycle_support.o",
+      "source_sha256": "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6"
+    }
+  ],
+  "module_interface_compile_order": [
+    "cloud_bal_joint_transport.mod regenerated from C14 core",
+    "module_em.o",
+    "module_bl_fogdes.o",
+    "pr90_cycle_support.o"
+  ],
+  "additional_recompiled_override": {
+    "object": "solve_em.o",
+    "source_sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+  }
+}

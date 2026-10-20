@@ -1,0 +1,120 @@
+{
+  "c10_test": {
+    "collected_tests": 4,
+    "included_operator_fixture_optimizations": [
+      "O0",
+      "O2"
+    ],
+    "included_t2_fixture_optimizations": [
+      "O0",
+      "O2"
+    ],
+    "path": "tests/test_pr91_source_first_diffusion.py",
+    "sha256": "3d07b17312c26514065d4587a7d6d57cc4f76bdbe74f87d47b7852506a7c292b",
+    "test_scope": "D3-pinned transform and source-prepared diffusion fixture; exact T2 source-stage intermediate and existing final volume consumer fixture."
+  },
+  "date": "2026-10-20",
+  "exact_command": {
+    "path": "focused_regression_c10_command.txt",
+    "sha256": "07a496a2b978423c041b29faa4b0780f62ff8d0679a05d45da6640b92c938a06"
+  },
+  "previous_46_run": "Historical 46-test non-C9 run remains separately recorded; this rerun includes the maintained C10 test.",
+  "pytest_log": {
+    "path": "focused_regression_c10.log",
+    "sha256": "31cf27213f408bfff4ec0833a965d94b53ac74b4b5b6e8c9839d72c97b79df26"
+  },
+  "pytest_unique_case_count": 50,
+  "runtime_scope": "Focused tests only, no native model run. Test fixtures compile/run using pinned Intel in fresh /var/tmp directories. 50 is the unique pytest case count; O0/O2 fixture builds are separate subprocesses inside tests, not extra pytest tests.",
+  "runtime_seconds": 25.2,
+  "schema": "pr91_focused_regression_c10_v1",
+  "status": "PASS",
+  "test_files": [
+    {
+      "path": "tests/test_pr91_history_response.py",
+      "sha256": "2a297614084b133ca9b3dc3806278e8ceeb1d55ef117bcf589115bae4ac26ae4"
+    },
+    {
+      "path": "tests/test_pr91_host_store_replay.py",
+      "sha256": "ac563764c6938a52fec61b148621f91bf0998dbebba33c7f30e9c67380aeded2"
+    },
+    {
+      "path": "tests/test_pr91_host_store_trace.py",
+      "sha256": "79d92b5bfc612bc97112dd38669452ad443a923c7ecd1ea7c9fb2da130053e85"
+    },
+    {
+      "path": "tests/test_pr91_source_store_contract.py",
+      "sha256": "ab36b46c03e6b9d084e2189d16ad835adf831ddc71dd9c221392e4843bac6d8d"
+    },
+    {
+      "path": "tests/test_pr91_source_first_diffusion.py",
+      "sha256": "3d07b17312c26514065d4587a7d6d57cc4f76bdbe74f87d47b7852506a7c292b"
+    },
+    {
+      "path": "tests/test_pr90_joint_store_reason.py",
+      "sha256": "80d58532f350faf6c2d6eba1f95e8cbc956bfa714e69efe22d9eff19a5756f4d"
+    },
+    {
+      "path": "tests/test_pr90_rain_failure_replay.py",
+      "sha256": "303741fd41f38ce864f9222d7c7f251f1b4606cc11c061476b06a1e47988c25b"
+    },
+    {
+      "path": "tests/test_pr90_rain_final_psd.py",
+      "sha256": "aee6b84e2b86067693bb6c419ebf2473201dbdce886d76558804bee85832374a"
+    },
+    {
+      "path": "tests/test_pr90_rain_producer_trace.py",
+      "sha256": "37dc5283ecfbc2632cc918090600e44dfb0335af4de620ad478da7f8af9d1bc4"
+    },
+    {
+      "path": "tests/test_pr90_rain_public_roundtrip.py",
+      "sha256": "6bb0c3187541d2052a958235f711885db282d60591f57d607bb29246f7260dcb"
+    },
+    {
+      "path": "tests/test_pr90_warm_rain_output.py",
+      "sha256": "8defcee653a925c218f4daec3a1740ded4d84af4ef585785ae68b581dbf25119"
+    },
+    {
+      "path": "tests/test_pr85_kdm6_warm_process.py",
+      "sha256": "fee109ebc363e7ff4699a257954fe0a407873e962da012f457ba87891dbe38e6"
+    },
+    {
+      "path": "tests/test_pr87_cloud_public_store.py",
+      "sha256": "2f80cbc0c7f6351ad1a71237a602490e24c02427d0cc6b3b3d6328e9cd84cb1e"
+    },
+    {
+      "path": "tests/test_pr87_qn_density_storage.py",
+      "sha256": "c3dcabd8f68ff708b571dfe5e8e030925fc0d73c875c76418a1671f4b1237c11"
+    },
+    {
+      "path": "tests/test_pr87_rain_density_storage.py",
+      "sha256": "2fa3f8c19b5b742900794350d452ee936385f0ebf7f29f890e965cb2c7165771"
+    },
+    {
+      "path": "tests/test_pr87_rain_public_store.py",
+      "sha256": "d7f7c1b411d9dfa5d9e991fa7d81b8199d0dea642695ef4b14692fc630366afc"
+    },
+    {
+      "path": "tests/test_pr87_rain_storage_contract.py",
+      "sha256": "c6713e1b1ff97dc5b7461b9a6993a0be3d24f266fd81d58032452fd6f2168187"
+    },
+    {
+      "path": "tests/test_pr87_rain_volume_store.py",
+      "sha256": "583fbd35ffe448b2c860cb3cc768c7b8a3a9835c720dcb62bf6111c4c38c7c54"
+    },
+    {
+      "path": "tests/test_pr87_source_storage_failures.py",
+      "sha256": "32c74bcdf584272e16c189d5219c4b9c00347b0baef2f20089e9128b404f8e30"
+    },
+    {
+      "path": "tests/test_joint_qnb_transport.f90",
+      "sha256": "1a1368f6af6e287ad571f7b8c9f482653bcf4789adb04371345a861c189aead8"
+    }
+  ],
+  "toolchain": {
+    "ifx_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "ifx_version": "ifx (IFX) 2026.0.0 20260331",
+    "profile_path": "tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "validation_run_modified_worktree_sources": false
+}

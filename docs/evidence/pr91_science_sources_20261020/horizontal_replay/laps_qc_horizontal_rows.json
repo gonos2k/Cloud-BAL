@@ -1,0 +1,1172 @@
+{
+  "claim_scope": "For the preserved candidate LAPS QC field, the actual v5 source projection header and WPS interp_sequence have been replayed at all 16 candidate-supported target columns and all 18 original pressure levels (95,000–10,000 Pa). The 36 source-target REAL32 four_pt coefficient links use direct lltoxy coordinates at 6371229.00390625 m. All 288 source-only predictions match met_em QC bitwise at their exact pressure levels. Native eta composition and generalization to other fields remain open.",
+  "compiler": {
+    "args": "-stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -free -convert big_endian",
+    "compiler": "ifx 2026.0.0 20260331",
+    "driver_executable_sha256": "3755c33a2ea6a50df940bbe3d409a4fe8a0e5a4442acac0f3629bef2b919e916",
+    "driver_sha256": "ecd82d6b1db3d1da2e71927c2cfa4e738c8153e1a205c59e131a113ba391ba16",
+    "exact_compile_argv": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -free -convert big_endian -I /var/tmp/pr82_same13_metgrid_be.final20261012/build/O2/objects -module /var/tmp/pr91_wps_horizontal_replay_20261020/mod -c /var/tmp/pr82_same13_metgrid_be.final20261012/build/O2/objects/module_map_utils.f90 -o /var/tmp/pr91_wps_horizontal_replay_20261020/module_map_utils.o",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -free -convert big_endian -I /var/tmp/pr91_wps_horizontal_replay_20261020/mod -I /var/tmp/pr82_same13_metgrid_be.final20261012/build/O2/objects -module /var/tmp/pr91_wps_horizontal_replay_20261020/mod -c /var/tmp/pr82_same13_metgrid_be.final20261012/build/O2/objects/llxy_module.f90 -o /var/tmp/pr91_wps_horizontal_replay_20261020/llxy_module.o",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -free -convert big_endian -I /var/tmp/pr91_wps_horizontal_replay_20261020/mod -I /var/tmp/pr82_same13_metgrid_be.final20261012/build/O2/objects /var/tmp/pr91_wps_horizontal_replay_20261020/grid_probe.f90 /var/tmp/pr91_wps_horizontal_replay_20261020/llxy_module.o /var/tmp/pr91_wps_horizontal_replay_20261020/module_map_utils.o /var/tmp/pr82_same13_metgrid_be.final20261012/build/O2/objects/module_debug.o /var/tmp/pr82_same13_metgrid_be.final20261012/build/O2/objects/parallel_module.o /var/tmp/pr82_same13_metgrid_be.final20261012/build/O2/objects/cio.o -o /var/tmp/pr91_wps_horizontal_replay_20261020/grid_probe"
+    ],
+    "fresh_working_directory": "/var/tmp/pr91_wps_horizontal_replay_20261020",
+    "freshly_compiled_objects": {
+      "llxy_module.o": "ce3a975be130beb82c34315300fc6e2587bf859c780b900dab78d8c7bf4cea35",
+      "module_map_utils.o": "861672db7ed0b3baa32da7739a423d18fdc7d8aa73ecde5153ae73256eb415cf"
+    },
+    "lltoxy_xy_output_sha256": "2dab59526c01d994cc725a9f662173d1121909b34c1c9f2673b5df85a31f527c",
+    "objects_bit_identical_to_preserved_build": true,
+    "production_object_comparison": {
+      "llxy_module.o": "ce3a975be130beb82c34315300fc6e2587bf859c780b900dab78d8c7bf4cea35",
+      "module_map_utils.o": "861672db7ed0b3baa32da7739a423d18fdc7d8aa73ecde5153ae73256eb415cf"
+    },
+    "profile": "Cloud-BAL/tests/intel_toolchain.sh",
+    "target_coordinates_sha256": "b4923abaf064fc083530fe09a2934c8daaef63c2ed699c5afd2a327fae327a53",
+    "toolchain_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "index_convention": {
+    "WPS_source_indices": "one-based Fortran x,y; candidate i0,j0 maps to WPS i=i0+1,j=j0+1",
+    "candidate_indices": "zero-based NumPy [k,j,i]",
+    "four_pt_real32_formula": "With x/y=lltoxy outputs (single precision), min=floor, max=ceiling; direct REAL32 source-expression coefficients are REAL32((y-miny)*(maxx-x)), REAL32((y-miny)*(x-minx)), REAL32((maxy-y)*(maxx-x)), REAL32((maxy-y)*(x-minx)) at (minx,maxy),(maxx,maxy),(minx,miny),(maxx,miny), respectively.",
+    "target_indices": "zero-based geo_em/netCDF [j,i]",
+    "vertical_candidate_mask": "k0=3..20; horizontal coefficient rows repeat identically on each of these pressure planes before WPS vertical interpolation",
+    "source_pressure_mapping": "The preserved candidate mask uses source k0=3..20; the LAPS file stores QC records ascending at xlvl=5000..100000 plus 200100 Pa. These mask levels map to LAPS QC records with xlvl=95000,90000,...,10000 Pa. Met_em PRES has one exact pressure index for each of those 18 levels."
+  },
+  "links_by_source_cell": [
+    {
+      "source_i0": 134,
+      "source_i_wps": 135,
+      "source_j0": 16,
+      "source_j_wps": 17,
+      "source_pressure_k0": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "links": [
+        {
+          "target_i0": 133,
+          "target_j0": 15,
+          "target_lat_f32": 32.2467308,
+          "target_lon_f32": 126.885437,
+          "source_x_wps": 134.50389099121094,
+          "source_y_wps": 16.4769287109375,
+          "coefficient_f32": 0.240320086479187,
+          "coefficient_hex": "3E761678",
+          "fractional_x_wps": 0.5038909912109375,
+          "fractional_y_wps": 0.4769287109375,
+          "source_corner_i0": 134,
+          "source_corner_j0": 16
+        },
+        {
+          "target_i0": 134,
+          "target_j0": 15,
+          "target_lat_f32": 32.246212,
+          "target_lon_f32": 126.939087,
+          "source_x_wps": 135.50393676757812,
+          "source_y_wps": 16.4769287109375,
+          "coefficient_f32": 0.236586794257164,
+          "coefficient_hex": "3E7243CF",
+          "fractional_x_wps": 0.503936767578125,
+          "fractional_y_wps": 0.4769287109375,
+          "source_corner_i0": 134,
+          "source_corner_j0": 16
+        },
+        {
+          "target_i0": 133,
+          "target_j0": 16,
+          "target_lat_f32": 32.2921181,
+          "target_lon_f32": 126.886017,
+          "source_x_wps": 134.50363159179688,
+          "source_y_wps": 17.4771728515625,
+          "coefficient_f32": 0.26331228017807007,
+          "coefficient_hex": "3E86D0DE",
+          "fractional_x_wps": 0.503631591796875,
+          "fractional_y_wps": 0.4771728515625,
+          "source_corner_i0": 134,
+          "source_corner_j0": 16
+        },
+        {
+          "target_i0": 134,
+          "target_j0": 16,
+          "target_lat_f32": 32.2915993,
+          "target_lon_f32": 126.939697,
+          "source_x_wps": 135.50357055664062,
+          "source_y_wps": 17.47705078125,
+          "coefficient_f32": 0.25960737466812134,
+          "coefficient_hex": "3E84EB42",
+          "fractional_x_wps": 0.503570556640625,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 134,
+          "source_corner_j0": 16
+        }
+      ]
+    },
+    {
+      "source_i0": 135,
+      "source_i_wps": 136,
+      "source_j0": 16,
+      "source_j_wps": 17,
+      "source_pressure_k0": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "links": [
+        {
+          "target_i0": 134,
+          "target_j0": 15,
+          "target_lat_f32": 32.246212,
+          "target_lon_f32": 126.939087,
+          "source_x_wps": 135.50393676757812,
+          "source_y_wps": 16.4769287109375,
+          "coefficient_f32": 0.240341916680336,
+          "coefficient_hex": "3E761C31",
+          "fractional_x_wps": 0.503936767578125,
+          "fractional_y_wps": 0.4769287109375,
+          "source_corner_i0": 135,
+          "source_corner_j0": 16
+        },
+        {
+          "target_i0": 135,
+          "target_j0": 15,
+          "target_lat_f32": 32.2456703,
+          "target_lon_f32": 126.992737,
+          "source_x_wps": 136.50401306152344,
+          "source_y_wps": 16.4766845703125,
+          "coefficient_f32": 0.23642931878566742,
+          "coefficient_hex": "3E721A87",
+          "fractional_x_wps": 0.5040130615234375,
+          "fractional_y_wps": 0.4766845703125,
+          "source_corner_i0": 135,
+          "source_corner_j0": 16
+        },
+        {
+          "target_i0": 134,
+          "target_j0": 16,
+          "target_lat_f32": 32.2915993,
+          "target_lon_f32": 126.939697,
+          "source_x_wps": 135.50357055664062,
+          "source_y_wps": 17.47705078125,
+          "coefficient_f32": 0.26334184408187866,
+          "coefficient_hex": "3E86D4BE",
+          "fractional_x_wps": 0.503570556640625,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 135,
+          "source_corner_j0": 16
+        },
+        {
+          "target_i0": 135,
+          "target_j0": 16,
+          "target_lat_f32": 32.2910576,
+          "target_lon_f32": 126.993408,
+          "source_x_wps": 136.50411987304688,
+          "source_y_wps": 17.4769287109375,
+          "coefficient_f32": 0.25938066840171814,
+          "coefficient_hex": "3E84CD8B",
+          "fractional_x_wps": 0.504119873046875,
+          "fractional_y_wps": 0.4769287109375,
+          "source_corner_i0": 135,
+          "source_corner_j0": 16
+        }
+      ]
+    },
+    {
+      "source_i0": 136,
+      "source_i_wps": 137,
+      "source_j0": 16,
+      "source_j_wps": 17,
+      "source_pressure_k0": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "links": [
+        {
+          "target_i0": 135,
+          "target_j0": 15,
+          "target_lat_f32": 32.2456703,
+          "target_lon_f32": 126.992737,
+          "source_x_wps": 136.50401306152344,
+          "source_y_wps": 16.4766845703125,
+          "coefficient_f32": 0.24025525152683258,
+          "coefficient_hex": "3E760579",
+          "fractional_x_wps": 0.5040130615234375,
+          "fractional_y_wps": 0.4766845703125,
+          "source_corner_i0": 136,
+          "source_corner_j0": 16
+        },
+        {
+          "target_i0": 136,
+          "target_j0": 15,
+          "target_lat_f32": 32.2450829,
+          "target_lon_f32": 127.046387,
+          "source_x_wps": 137.5041046142578,
+          "source_y_wps": 16.4765625,
+          "coefficient_f32": 0.23632514476776123,
+          "coefficient_hex": "3E71FF38",
+          "fractional_x_wps": 0.5041046142578125,
+          "fractional_y_wps": 0.4765625,
+          "source_corner_i0": 136,
+          "source_corner_j0": 16
+        },
+        {
+          "target_i0": 135,
+          "target_j0": 16,
+          "target_lat_f32": 32.2910576,
+          "target_lon_f32": 126.993408,
+          "source_x_wps": 136.50411987304688,
+          "source_y_wps": 17.4769287109375,
+          "coefficient_f32": 0.26369062066078186,
+          "coefficient_hex": "3E870275",
+          "fractional_x_wps": 0.504119873046875,
+          "fractional_y_wps": 0.4769287109375,
+          "source_corner_i0": 136,
+          "source_corner_j0": 16
+        },
+        {
+          "target_i0": 136,
+          "target_j0": 16,
+          "target_lat_f32": 32.2904663,
+          "target_lon_f32": 127.047089,
+          "source_x_wps": 137.5041046142578,
+          "source_y_wps": 17.476806640625,
+          "coefficient_f32": 0.25944918394088745,
+          "coefficient_hex": "3E84D686",
+          "fractional_x_wps": 0.5041046142578125,
+          "fractional_y_wps": 0.476806640625,
+          "source_corner_i0": 136,
+          "source_corner_j0": 16
+        }
+      ]
+    },
+    {
+      "source_i0": 134,
+      "source_i_wps": 135,
+      "source_j0": 17,
+      "source_j_wps": 18,
+      "source_pressure_k0": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "links": [
+        {
+          "target_i0": 133,
+          "target_j0": 16,
+          "target_lat_f32": 32.2921181,
+          "target_lon_f32": 126.886017,
+          "source_x_wps": 134.50363159179688,
+          "source_y_wps": 17.4771728515625,
+          "coefficient_f32": 0.24031932651996613,
+          "coefficient_hex": "3E761645",
+          "fractional_x_wps": 0.503631591796875,
+          "fractional_y_wps": 0.4771728515625,
+          "source_corner_i0": 134,
+          "source_corner_j0": 17
+        },
+        {
+          "target_i0": 134,
+          "target_j0": 16,
+          "target_lat_f32": 32.2915993,
+          "target_lon_f32": 126.939697,
+          "source_x_wps": 135.50357055664062,
+          "source_y_wps": 17.47705078125,
+          "coefficient_f32": 0.23682205379009247,
+          "coefficient_hex": "3E72817B",
+          "fractional_x_wps": 0.503570556640625,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 134,
+          "source_corner_j0": 17
+        },
+        {
+          "target_i0": 133,
+          "target_j0": 17,
+          "target_lat_f32": 32.3375053,
+          "target_lon_f32": 126.886597,
+          "source_x_wps": 134.50335693359375,
+          "source_y_wps": 18.47705078125,
+          "coefficient_f32": 0.2632301151752472,
+          "coefficient_hex": "3E86C619",
+          "fractional_x_wps": 0.50335693359375,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 134,
+          "source_corner_j0": 17
+        },
+        {
+          "target_i0": 134,
+          "target_j0": 17,
+          "target_lat_f32": 32.3369904,
+          "target_lon_f32": 126.940338,
+          "source_x_wps": 135.50376892089844,
+          "source_y_wps": 18.4771728515625,
+          "coefficient_f32": 0.259443074464798,
+          "coefficient_hex": "3E84D5B9",
+          "fractional_x_wps": 0.5037689208984375,
+          "fractional_y_wps": 0.4771728515625,
+          "source_corner_i0": 134,
+          "source_corner_j0": 17
+        }
+      ]
+    },
+    {
+      "source_i0": 135,
+      "source_i_wps": 136,
+      "source_j0": 17,
+      "source_j_wps": 18,
+      "source_pressure_k0": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "links": [
+        {
+          "target_i0": 134,
+          "target_j0": 16,
+          "target_lat_f32": 32.2915993,
+          "target_lon_f32": 126.939697,
+          "source_x_wps": 135.50357055664062,
+          "source_y_wps": 17.47705078125,
+          "coefficient_f32": 0.24022872745990753,
+          "coefficient_hex": "3E75FE85",
+          "fractional_x_wps": 0.503570556640625,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 135,
+          "source_corner_j0": 17
+        },
+        {
+          "target_i0": 135,
+          "target_j0": 16,
+          "target_lat_f32": 32.2910576,
+          "target_lon_f32": 126.993408,
+          "source_x_wps": 136.50411987304688,
+          "source_y_wps": 17.4769287109375,
+          "coefficient_f32": 0.23649947345256805,
+          "coefficient_hex": "3E722CEB",
+          "fractional_x_wps": 0.504119873046875,
+          "fractional_y_wps": 0.4769287109375,
+          "source_corner_i0": 135,
+          "source_corner_j0": 17
+        },
+        {
+          "target_i0": 134,
+          "target_j0": 17,
+          "target_lat_f32": 32.3369904,
+          "target_lon_f32": 126.940338,
+          "source_x_wps": 135.50376892089844,
+          "source_y_wps": 18.4771728515625,
+          "coefficient_f32": 0.263384073972702,
+          "coefficient_hex": "3E86DA47",
+          "fractional_x_wps": 0.5037689208984375,
+          "fractional_y_wps": 0.4771728515625,
+          "source_corner_i0": 135,
+          "source_corner_j0": 17
+        },
+        {
+          "target_i0": 135,
+          "target_j0": 17,
+          "target_lat_f32": 32.3364372,
+          "target_lon_f32": 126.99408,
+          "source_x_wps": 136.50421142578125,
+          "source_y_wps": 18.47705078125,
+          "coefficient_f32": 0.2592722475528717,
+          "coefficient_hex": "3E84BF55",
+          "fractional_x_wps": 0.50421142578125,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 135,
+          "source_corner_j0": 17
+        }
+      ]
+    },
+    {
+      "source_i0": 136,
+      "source_i_wps": 137,
+      "source_j0": 17,
+      "source_j_wps": 18,
+      "source_pressure_k0": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "links": [
+        {
+          "target_i0": 135,
+          "target_j0": 16,
+          "target_lat_f32": 32.2910576,
+          "target_lon_f32": 126.993408,
+          "source_x_wps": 136.50411987304688,
+          "source_y_wps": 17.4769287109375,
+          "coefficient_f32": 0.24042923748493195,
+          "coefficient_hex": "3E763315",
+          "fractional_x_wps": 0.504119873046875,
+          "fractional_y_wps": 0.4769287109375,
+          "source_corner_i0": 136,
+          "source_corner_j0": 17
+        },
+        {
+          "target_i0": 136,
+          "target_j0": 16,
+          "target_lat_f32": 32.2904663,
+          "target_lon_f32": 127.047089,
+          "source_x_wps": 137.5041046142578,
+          "source_y_wps": 17.476806640625,
+          "coefficient_f32": 0.23644621670246124,
+          "coefficient_hex": "3E721EF5",
+          "fractional_x_wps": 0.5041046142578125,
+          "fractional_y_wps": 0.476806640625,
+          "source_corner_i0": 136,
+          "source_corner_j0": 17
+        },
+        {
+          "target_i0": 135,
+          "target_j0": 17,
+          "target_lat_f32": 32.3364372,
+          "target_lon_f32": 126.99408,
+          "source_x_wps": 136.50421142578125,
+          "source_y_wps": 18.47705078125,
+          "coefficient_f32": 0.2636769711971283,
+          "coefficient_hex": "3E8700AB",
+          "fractional_x_wps": 0.50421142578125,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 136,
+          "source_corner_j0": 17
+        },
+        {
+          "target_i0": 136,
+          "target_j0": 17,
+          "target_lat_f32": 32.335865,
+          "target_lon_f32": 127.047791,
+          "source_x_wps": 137.50408935546875,
+          "source_y_wps": 18.4771728515625,
+          "coefficient_f32": 0.25927555561065674,
+          "coefficient_hex": "3E84BFC4",
+          "fractional_x_wps": 0.50408935546875,
+          "fractional_y_wps": 0.4771728515625,
+          "source_corner_i0": 136,
+          "source_corner_j0": 17
+        }
+      ]
+    },
+    {
+      "source_i0": 134,
+      "source_i_wps": 135,
+      "source_j0": 18,
+      "source_j_wps": 19,
+      "source_pressure_k0": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "links": [
+        {
+          "target_i0": 133,
+          "target_j0": 17,
+          "target_lat_f32": 32.3375053,
+          "target_lon_f32": 126.886597,
+          "source_x_wps": 134.50335693359375,
+          "source_y_wps": 18.47705078125,
+          "coefficient_f32": 0.2401268184185028,
+          "coefficient_hex": "3E75E3CE",
+          "fractional_x_wps": 0.50335693359375,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 134,
+          "source_corner_j0": 18
+        },
+        {
+          "target_i0": 134,
+          "target_j0": 17,
+          "target_lat_f32": 32.3369904,
+          "target_lon_f32": 126.940338,
+          "source_x_wps": 135.50376892089844,
+          "source_y_wps": 18.4771728515625,
+          "coefficient_f32": 0.23678800463676453,
+          "coefficient_hex": "3E72788E",
+          "fractional_x_wps": 0.5037689208984375,
+          "fractional_y_wps": 0.4771728515625,
+          "source_corner_i0": 134,
+          "source_corner_j0": 18
+        },
+        {
+          "target_i0": 133,
+          "target_j0": 18,
+          "target_lat_f32": 32.3829041,
+          "target_lon_f32": 126.887207,
+          "source_x_wps": 134.50363159179688,
+          "source_y_wps": 19.477294921875,
+          "coefficient_f32": 0.26325079798698425,
+          "coefficient_hex": "3E86C8CF",
+          "fractional_x_wps": 0.503631591796875,
+          "fractional_y_wps": 0.477294921875,
+          "source_corner_i0": 134,
+          "source_corner_j0": 18
+        },
+        {
+          "target_i0": 134,
+          "target_j0": 18,
+          "target_lat_f32": 32.3823929,
+          "target_lon_f32": 126.940979,
+          "source_x_wps": 135.5039520263672,
+          "source_y_wps": 19.4775390625,
+          "coefficient_f32": 0.2591657042503357,
+          "coefficient_hex": "3E84B15E",
+          "fractional_x_wps": 0.5039520263671875,
+          "fractional_y_wps": 0.4775390625,
+          "source_corner_i0": 134,
+          "source_corner_j0": 18
+        }
+      ]
+    },
+    {
+      "source_i0": 135,
+      "source_i_wps": 136,
+      "source_j0": 18,
+      "source_j_wps": 19,
+      "source_pressure_k0": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "links": [
+        {
+          "target_i0": 134,
+          "target_j0": 17,
+          "target_lat_f32": 32.3369904,
+          "target_lon_f32": 126.940338,
+          "source_x_wps": 135.50376892089844,
+          "source_y_wps": 18.4771728515625,
+          "coefficient_f32": 0.24038484692573547,
+          "coefficient_hex": "3E762772",
+          "fractional_x_wps": 0.5037689208984375,
+          "fractional_y_wps": 0.4771728515625,
+          "source_corner_i0": 135,
+          "source_corner_j0": 18
+        },
+        {
+          "target_i0": 135,
+          "target_j0": 17,
+          "target_lat_f32": 32.3364372,
+          "target_lon_f32": 126.99408,
+          "source_x_wps": 136.50421142578125,
+          "source_y_wps": 18.47705078125,
+          "coefficient_f32": 0.2365163266658783,
+          "coefficient_hex": "3E723156",
+          "fractional_x_wps": 0.50421142578125,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 135,
+          "source_corner_j0": 18
+        },
+        {
+          "target_i0": 134,
+          "target_j0": 18,
+          "target_lat_f32": 32.3823929,
+          "target_lon_f32": 126.940979,
+          "source_x_wps": 135.5039520263672,
+          "source_y_wps": 19.4775390625,
+          "coefficient_f32": 0.2632952332496643,
+          "coefficient_hex": "3E86CEA2",
+          "fractional_x_wps": 0.5039520263671875,
+          "fractional_y_wps": 0.4775390625,
+          "source_corner_i0": 135,
+          "source_corner_j0": 18
+        },
+        {
+          "target_i0": 135,
+          "target_j0": 18,
+          "target_lat_f32": 32.3818474,
+          "target_lon_f32": 126.994751,
+          "source_x_wps": 136.5042724609375,
+          "source_y_wps": 19.4775390625,
+          "coefficient_f32": 0.2589982748031616,
+          "coefficient_hex": "3E849B6C",
+          "fractional_x_wps": 0.5042724609375,
+          "fractional_y_wps": 0.4775390625,
+          "source_corner_i0": 135,
+          "source_corner_j0": 18
+        }
+      ]
+    },
+    {
+      "source_i0": 136,
+      "source_i_wps": 137,
+      "source_j0": 18,
+      "source_j_wps": 19,
+      "source_pressure_k0": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "links": [
+        {
+          "target_i0": 135,
+          "target_j0": 17,
+          "target_lat_f32": 32.3364372,
+          "target_lon_f32": 126.99408,
+          "source_x_wps": 136.50421142578125,
+          "source_y_wps": 18.47705078125,
+          "coefficient_f32": 0.2405344545841217,
+          "coefficient_hex": "3E764EAA",
+          "fractional_x_wps": 0.50421142578125,
+          "fractional_y_wps": 0.47705078125,
+          "source_corner_i0": 136,
+          "source_corner_j0": 18
+        },
+        {
+          "target_i0": 136,
+          "target_j0": 17,
+          "target_lat_f32": 32.335865,
+          "target_lon_f32": 127.047791,
+          "source_x_wps": 137.50408935546875,
+          "source_y_wps": 18.4771728515625,
+          "coefficient_f32": 0.23663508892059326,
+          "coefficient_hex": "3E725078",
+          "fractional_x_wps": 0.50408935546875,
+          "fractional_y_wps": 0.4771728515625,
+          "source_corner_i0": 136,
+          "source_corner_j0": 18
+        },
+        {
+          "target_i0": 135,
+          "target_j0": 18,
+          "target_lat_f32": 32.3818474,
+          "target_lon_f32": 126.994751,
+          "source_x_wps": 136.5042724609375,
+          "source_y_wps": 19.4775390625,
+          "coefficient_f32": 0.2634626626968384,
+          "coefficient_hex": "3E86E494",
+          "fractional_x_wps": 0.5042724609375,
+          "fractional_y_wps": 0.4775390625,
+          "source_corner_i0": 136,
+          "source_corner_j0": 18
+        },
+        {
+          "target_i0": 136,
+          "target_j0": 18,
+          "target_lat_f32": 32.3812599,
+          "target_lon_f32": 127.048492,
+          "source_x_wps": 137.50405883789062,
+          "source_y_wps": 19.477294921875,
+          "coefficient_f32": 0.25923097133636475,
+          "coefficient_hex": "3E84B9EC",
+          "fractional_x_wps": 0.504058837890625,
+          "fractional_y_wps": 0.477294921875,
+          "source_corner_i0": 136,
+          "source_corner_j0": 18
+        }
+      ]
+    }
+  ],
+  "observed_final_qc_comparison": {
+    "accum_continuous_applicability": "Not selected for QC: do_gcell_interp is enabled only when interp_method contains average_gcell; active QC method is four_pt+average_4pt.",
+    "direct_fresh_ifx_interp_sequence_prediction_f32": 0.0003123792412225157,
+    "direct_fresh_ifx_interp_sequence_prediction_hex": "39A3C6D5",
+    "direct_interp_actual_radius_m": 6371229.00390625,
+    "direct_interp_all_16_affected_targets_bitwise_match": true,
+    "direct_interp_call_scope": "Direct WPS interp_sequence replay over all 16 candidate-supported mass-grid targets × 18 original candidate pressure levels, using the exact source QC slab at each level and actual met_em pressure-level values.",
+    "direct_interp_coordinate_xy_wps_1based_actual_radius": [
+      134.50389099121094,
+      16.4769287109375
+    ],
+    "direct_interp_method": "four_pt+average_4pt",
+    "direct_interp_prediction_matches_met_em_bitwise": true,
+    "direct_interp_sequence_coordinate_xy_wps_1based": [
+      134.50389099121094,
+      16.4769287109375
+    ],
+    "example_source_i0_j0": [
+      134,
+      16
+    ],
+    "finding": "Using the actual v5 source Earth radius, direct four_pt interpolation of the LAPS QC slab alone matches final met_em QC bitwise at all 16 candidate-supported target columns and all 18 original source pressure levels (288 comparisons). This is a field/time/pressure-level-specific horizontal component result; native eta influence remains open.",
+    "fresh_operator_replay": {
+      "actual_radius_driver": {
+        "driver_path": "/var/tmp/pr91_interp_sequence_actual_radius_20261020/grid_rows.f90",
+        "driver_sha256": "6ed3d10fcb08d06542cd5b39c6a2db20447af6957c24b237fe4c4d833b4c0bf8",
+        "output_sha256": "31bf7c5b23774e034afb4d80ccde9f13f6af8af9d25dc10d4fce266ebcc4b383",
+        "source_slab_sha256": "1f8ae32ae686e8e5284c3c3f0482e2c7435e1fde5bef892902abb43f6cc78efe",
+        "targets_sha256": "2be62e570b008614282c516e0b9fe18bf308223f8b9ed5316d1f9afc09e3d2da"
+      },
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx 2026.0.0 20260331",
+      "dependencies": "Existing O2 WPS dependency objects and module files were linked for support; interp_module, llxy_module and map_utils operator units were freshly compiled from the preserved source under the pinned profile.",
+      "fresh_object_hashes": {
+        "interp_module.o": "68f9ab37b527895de1909556f36ac05a8504eee98094849f71fd5ea012a74918",
+        "llxy_module.o": "395987fd0425e1deec3f08db89a31dae04915052fdac231668e7538f117b54c8",
+        "map_utils.o": "e957b14a2502ecb4508013886ad049d7095cd70ce054d656c07f24799aadcb59",
+        "row_driver": "d582f1f0db5725e2a527e410b3cd6eba80ff9084a49f94f167a215db6087b647"
+      },
+      "freshly_compiled_operator_source_hashes": {
+        "interp_module.F": "cd3bf205f4870fb1deceefefd511bbc950ae97f78b08e43f68b7221333f6f424",
+        "llxy_module.F": "72d37a444728d13c36f5d1c233345b1ba15f5f133e4f5a8b24b41d26151e4ecc",
+        "module_map_utils.F": "ac35b633c91534c48b128026ff445db62ebd4d0a9d6df9c36c5da1b9c5352865"
+      },
+      "output": "Using header radius 6371229.00390625 m, direct interp_sequence matches all 288 source-only QC values against met_em bitwise.",
+      "profile": "Cloud-BAL tests/intel_toolchain.sh CLOUD_BAL_REPRO_FLAGS, plus -free for preserved .F source compilation",
+      "scope": "Source-operator replay for 16 affected mass-grid targets × 18 source pressure levels; not full process_domain/metgrid execution or real.exe native eta composition.",
+      "negative_control_6370000m": {
+        "comparison_count": 288,
+        "bitwise_match_count": 65,
+        "mismatch_count": 223,
+        "example_95000_i133_j15_prediction_hex": "39A0D267",
+        "output": "At the intentionally incorrect 6370000 m radius, only 65/288 values match; the former example returns 39A0D267 instead of 39A3C6D5."
+      }
+    },
+    "klbg_qc_95000_corner_values_kg_kg": [
+      0.0,
+      0.0,
+      0.0,
+      9.999999974752427e-07
+    ],
+    "klbg_qc_corner_max_f32": 9.999999974752427e-07,
+    "klbg_source": "/var/tmp/pr82_same13_metgrid_candidate.final20261012/KLBG:2026-08-16_13",
+    "laps_95000_record_scan": {
+      "conclusion": "One unique QC@95000 source record exists; its v5 projection header radius has been used in the corrected direct replay.",
+      "projection_f32": [
+        31.344505310058594,
+        119.79931640625,
+        5.0,
+        5.0,
+        126.0,
+        30.0,
+        60.0,
+        6371.22900390625
+      ],
+      "qc_records_at_95000_count": 1,
+      "record_version": 5,
+      "slab_sha256": "e35c44ae300386563fe968c08a3d8f88f335b3e2f47a86bf8762e2c2295f6f77",
+      "source_file_sha256": "d73b3356430b64b98997b720e9e7549033ac9a5e4d35be798dff2d1dfdb0dbce",
+      "unique_date": "2026-08-16_13:00:00.0000",
+      "unique_dimensions": [
+        235,
+        283
+      ],
+      "unique_field": "QC",
+      "unique_level_pa": 95000.0,
+      "unique_projection_code": 3,
+      "unique_projection_header_hex": "5357434f524e455241fac18c42ef994040a0000040a0000042fc000041f000004270000045c719d5",
+      "unique_source": "LAPS ANALYSIS",
+      "unique_startloc": "SWCORNER",
+      "unique_units": "kg kg{-1}",
+      "wind_flag_i": -1
+    },
+    "laps_source": "/var/tmp/pr82_same13_metgrid_candidate.final20261012/LAPS:2026-08-16_13",
+    "met_em_pressure_pa_at_index": 95000.0,
+    "met_em_qc_description": "Cloud Water Mixing Ratio",
+    "met_em_qc_stagger": "M",
+    "met_em_qc_units": "kg kg-1",
+    "moisture_normalization_probe": {
+      "candidate_factors": {
+        "1_over_1_minus_qv": 1.020233952605378,
+        "1_over_1_minus_qv_over_0_622": 1.0329354619211177,
+        "1_plus_qv": 1.0198326595127583,
+        "1_plus_qv_over_0_622": 1.031885304682891
+      },
+      "conclusion": "The prior mismatch came from using an incorrect 6370000 m source radius; the actual v5 header radius reproduces all 288 tested met_em values bitwise.",
+      "finding": "The apparent 1.8% ratio is eliminated when lltoxy uses the source header radius 6371229.00390625 m. No moisture normalization or post-metgrid rewrite is needed to explain it.",
+      "laps_source_unit_path": "LAPSPREP source writes QC units kg kg{-1}; in its hot-start conversion path, hydrometeor concentration in kg m-3 is divided by computed dry-air density rho_d to form kg kg-1 dry-air mixing ratio. This is already converted at source and WPS has no evidence of another QC normalization.",
+      "met_em_provenance": "Global TITLE is OUTPUT FROM METGRID V4.6.0. The exact met_em SHA256 is identical in inputs.pre.sha256 and inputs.post.sha256 for the readback run; no post-metgrid rewrite is evidenced.",
+      "met_em_qv": {
+        "description": "Water vapor mixing ratio (kg/kg dry air)",
+        "field": "QV",
+        "units": "kg kg{-1}"
+      },
+      "met_em_qv_dry_air_mixing_ratio_at_same_cell_level": 0.019832659512758255,
+      "ratio_final_to_direct_laps_prediction": 1.0,
+      "source_code_sha256": {
+        "cloud_bal_wps_adapter.f90": "f063f9b3605fe2504b6d364f858cef82605105a0888825cd795ea03c7c65eacb",
+        "lapsprep.f90": "535208a6b754fc8a273d7f4074a52dd4c81fef3a8502c1abc850219ceba2a1f5",
+        "module_lapsprep_wps.f90": "d41849677d965d3b8ad1e5834cbd74f99f958f3e9894b7157049ec1dae077cce"
+      },
+      "spechumd_variable": "Absent from this met_em file; QV is the available humidity field."
+    },
+    "observed_met_em_qc_f32": 0.0003123792412225157,
+    "observed_met_em_qc_hex": "39A3C6D5",
+    "pressure_pa": 95000.0,
+    "priority_code_observation": "process_domain iterates fg_name in listed order; storage_put_field replaces an existing field/vertical-level node on equal secondary key. interp_met_field updates current source where its interpolation result is valid. The final output mismatch is unresolved, so source order alone does not certify which successful source/path supplied this cell.",
+    "result_limit": "Actual v5 source Earth radius resolves the previously observed one-row discrepancy. The 16 candidate-supported met_em QC targets at 95000 Pa all match the direct LAPS source replay bitwise. Native eta-level composition remains open.",
+    "source_laps_qc_four_pt_prediction_f32": 0.0003123792412225157,
+    "source_laps_qc_four_pt_prediction_hex": "39A3C6D5",
+    "source_qc_corners_f32": {
+      "maxx_maxy": 0.0003709899610839784,
+      "maxx_miny": 0.0004453748115338385,
+      "minx_maxy": 0.00044393775169737637,
+      "minx_miny": 3.0657356546726078e-06
+    },
+    "source_record_identity": {
+      "arm_identity": "PR82 single candidate preprocessing case, 2026-08-16 13 UTC; no OFF/COUPLED arm is represented by this source comparison.",
+      "klbg_date": "2026-08-16_13:00:00",
+      "klbg_field": "QC",
+      "klbg_file_sha256": "180e75c16ac2d299e4826324abd71aee530288d2c2c86079355ff1c4c9800e08",
+      "klbg_level_pa": 95000.0,
+      "klbg_source_description": "KMA KLAPS Model",
+      "klbg_units": "kg kg-1",
+      "laps_date": "2026-08-16_13:00:00.0000",
+      "laps_earth_radius_km_f32": 6371.22900390625,
+      "laps_earth_radius_map_m": 6371229.00390625,
+      "laps_field": "QC",
+      "laps_file_sha256": "d73b3356430b64b98997b720e9e7549033ac9a5e4d35be798dff2d1dfdb0dbce",
+      "laps_level_pa": 95000.0,
+      "laps_source_description": "LAPS ANALYSIS",
+      "laps_table_mask": "No QC interpolation mask is specified for this METGRID.TBL entry; all four source values are nonmissing. The intermediate file has no serialized valid-mask field.",
+      "laps_units": "kg kg{-1}",
+      "output_file_sha256": "e635b4083c22258907338c06104c4ba8ef02a819e6b76a5c4f6cc567b067cd60"
+    },
+    "target_i0_j0": [
+      133,
+      15
+    ],
+    "target_pressure_index": 2,
+    "vertical_path_observation": "Archived met_em QC/PRES are 21 pressure levels; target index 2 PRES is exactly 95000 Pa, matching source QC pressure record 95000 Pa. WPS processes QC records at each xlvl separately; this output is not real.exe hybrid-level interpolation.",
+    "wps_input_date": "2026-08-16_13:00:00",
+    "wps_source_order": [
+      "SOIT",
+      "SOIM",
+      "KLBG",
+      "LAPS",
+      "RCHA"
+    ],
+    "direct_interp_all_288_target_level_rows_bitwise_match": true,
+    "direct_interp_target_count": 16,
+    "direct_interp_level_count": 18,
+    "direct_interp_comparison_count": 288,
+    "all_level_replay_artifact": "direct_interp_288.json",
+    "all_level_replay_bitwise_match_count": 288,
+    "all_level_replay_mismatch_count": 0
+  },
+  "operator": {
+    "QC_method": "four_pt+average_4pt",
+    "active_table_sha256": "44f1a43af35441957d0bef3a6220831aad1cf56ebc765d64d08e20f439a63b44",
+    "all-four-corners-valid-on-5x5-source-candidate-cloudwater_block": true,
+    "classification": "The 36 source-to-target links are REAL32 WPS four_pt source-component rows derived from direct lltoxy with the actual v5 source header. Fresh pinned-ifx interp_sequence matches all 288 met_em QC values at exact pressure levels. This validates horizontal QC source-component influence for these targets and levels, not complete source selection elsewhere, other fields, or native eta influence.",
+    "direct_met_em_95000_validation": {
+      "exact_float32_matches": 16,
+      "mismatch_count": 0,
+      "target_count": 16,
+      "method": "Freshly compiled WPS interp_sequence with four_pt+average_4pt, actual source header radius, target XLAT_M/XLONG_M, actual QC source slabs; direct predictions compared with met_em QC at PRES=95000 Pa."
+    },
+    "interp_module_sha256": "cd3bf205f4870fb1deceefefd511bbc950ae97f78b08e43f68b7221333f6f424",
+    "llxy_module_sha256": "72d37a444728d13c36f5d1c233345b1ba15f5f133e4f5a8b24b1d26151e4ecc",
+    "map_utils_module_sha256": "ac35b633c91534c48b128026ff445db62ebd4d0a9d6df9c36c5da1b9c5352865",
+    "process_domain_module_sha256": "af0246e38ac765b608e9fe406f2dd0acf7e530abc46cd7676718cd8711526cc7",
+    "source": "/var/tmp/pr82_same13_metgrid_be.final20261012/source/WPS/metgrid/src/process_domain_module.F and interp_module.F",
+    "source_call_behavior": "interp_to_latlon uses lltoxy and interp_sequence; four_pt proceeds when its four slab corners are nonmissing; otherwise ordered fallback applies. LAPS-source rows here use four_pt because the candidate QC validity block surrounding the support is fully valid.",
+    "source_projection_binding": "The LAPS v5 projection record stores earth_radius=6371.22900390625 km. read_met_module.F retains km; process_domain_module.F passes earth_radius*1000 to push_source_projection, so the actual map radius is 6371229.00390625 m. The corrected 16-target replay uses this exact radius and 5000 m dx/dy.",
+    "direct_met_em_all_levels_validation": {
+      "exact_float32_matches": 288,
+      "mismatch_count": 0,
+      "target_count": 16,
+      "pressure_level_count": 18,
+      "pressure_levels_pa": [
+        95000.0,
+        90000.0,
+        85000.0,
+        80000.0,
+        75000.0,
+        70000.0,
+        65000.0,
+        60000.0,
+        55000.0,
+        50000.0,
+        45000.0,
+        40000.0,
+        35000.0,
+        30000.0,
+        25000.0,
+        20000.0,
+        15000.0,
+        10000.0
+      ],
+      "method": "Freshly compiled WPS interp_sequence with four_pt+average_4pt, actual source header radius, target XLAT_M/XLONG_M, source QC records matched by exact xlvl/PRES; compared with met_em QC at exact pressure levels."
+    }
+  },
+  "remaining_scope": [
+    "Compose hash-bound real.exe pressure-to-hybrid interpolation to map these pressure-level source rows into native eta support.",
+    "Do not generalize these QC rows to other fields or levels; their WPS methods, masks, and source priorities can differ.",
+    "No full WPS/real execution or WRF model forecast was performed."
+  ],
+  "schema": "pr91_wps_horizontal_laps_component_rows_v1",
+  "source_grid": {
+    "dimensions_xy": [
+      235,
+      283
+    ],
+    "dx_km_f32": 5.0,
+    "dy_km_f32": 5.0,
+    "earth_radius_km_f32": 6371.22900390625,
+    "input_sha256": "d73b3356430b64b98997b720e9e7549033ac9a5e4d35be798dff2d1dfdb0dbce",
+    "projection": "Lambert conformal",
+    "projection_call_units": {
+      "dx_m_to_map_set": 5000.0,
+      "dy_m_to_map_set": 5000.0,
+      "earth_radius_m_to_map_set": 6371229.00390625,
+      "origin_x_y": [
+        1.0,
+        1.0
+      ]
+    },
+    "projection_record_path": "/var/tmp/pr82_same13_metgrid_candidate.final20261012/LAPS:2026-08-16_13",
+    "startlat_f32": 31.344505310058594,
+    "startloc": "SWCORNER",
+    "startlon_f32": 119.79931640625,
+    "stdlon_f32": 126.0,
+    "truelat1_f32": 30.0,
+    "truelat2_f32": 60.0
+  },
+  "source_support": {
+    "candidate_file": "/var/tmp/pr81_joint_thermo.HbL5ry/O2/joint_candidate.nc",
+    "candidate_qc_valid_5x5x18": true,
+    "candidate_support_mask_sha256": "002a74a5834874dbb56dfc7dfa7b17d6f07655e8a6df0338a57847a278473139",
+    "sha256": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1",
+    "source_i0": [
+      134,
+      135,
+      136
+    ],
+    "source_j0": [
+      16,
+      17,
+      18
+    ],
+    "source_pressure_k0_inclusive": [
+      3,
+      20
+    ],
+    "source_pressure_levels_count": 18,
+    "laps_qc_record_count": 21,
+    "source_pressure_levels_present_pa": [
+      5000,
+      10000,
+      15000,
+      20000,
+      25000,
+      30000,
+      35000,
+      40000,
+      45000,
+      50000,
+      55000,
+      60000,
+      65000,
+      70000,
+      75000,
+      80000,
+      85000,
+      90000,
+      95000,
+      100000,
+      200100
+    ]
+  },
+  "status": "LAPS_QC_SOURCE_ROWS_DIRECTLY_REPLAYED_AT_16_MET_EM_TARGETS; NATIVE_VERTICAL_COMPOSITION_OPEN",
+  "target_grid": {
+    "dimensions_yx": [
+      282,
+      234
+    ],
+    "field": "XLAT_M/XLONG_M",
+    "file": "/var/tmp/pr82_same13_metgrid_candidate.final20261012/geo_em.d01.nc",
+    "output_file": "/var/tmp/pr82_same13_real_candidate.final20261012/met_em.d01.2026-08-16_13:00:00.nc",
+    "output_sha256": "e635b4083c22258907338c06104c4ba8ef02a819e6b76a5c4f6cc567b067cd60",
+    "sha256": "9791fdfab40fcc623f967cfeac72c43f0ac13a72ff453eea717a2f510901044b"
+  },
+  "union_target_cells": [
+    {
+      "target_i0": 133,
+      "target_j0": 15
+    },
+    {
+      "target_i0": 134,
+      "target_j0": 15
+    },
+    {
+      "target_i0": 135,
+      "target_j0": 15
+    },
+    {
+      "target_i0": 136,
+      "target_j0": 15
+    },
+    {
+      "target_i0": 133,
+      "target_j0": 16
+    },
+    {
+      "target_i0": 134,
+      "target_j0": 16
+    },
+    {
+      "target_i0": 135,
+      "target_j0": 16
+    },
+    {
+      "target_i0": 136,
+      "target_j0": 16
+    },
+    {
+      "target_i0": 133,
+      "target_j0": 17
+    },
+    {
+      "target_i0": 134,
+      "target_j0": 17
+    },
+    {
+      "target_i0": 135,
+      "target_j0": 17
+    },
+    {
+      "target_i0": 136,
+      "target_j0": 17
+    },
+    {
+      "target_i0": 133,
+      "target_j0": 18
+    },
+    {
+      "target_i0": 134,
+      "target_j0": 18
+    },
+    {
+      "target_i0": 135,
+      "target_j0": 18
+    },
+    {
+      "target_i0": 136,
+      "target_j0": 18
+    }
+  ]
+}
