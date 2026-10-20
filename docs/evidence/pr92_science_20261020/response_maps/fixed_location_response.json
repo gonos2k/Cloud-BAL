@@ -1,0 +1,613 @@
+{
+  "schema": "pr92_c14_fixed_location_response_v1",
+  "physical_approval": false,
+  "run_identity": {
+    "OFF": {
+      "arm": "OFF",
+      "receipt": "/var/tmp/pr91_OFF_240s_c14_20261020/receipt.json",
+      "receipt_sha256": "f6a2e40d65c76e4e9abd0dfb1fc26f0c5da3abe4327a5d23829e4a66f34b540a",
+      "history": "/var/tmp/pr91_OFF_240s_c14_20261020/run/wrfout_d01_2026-08-16_13:00:00",
+      "history_sha256": "024675f8288118a6e9f014cb3287f8c09b440c5091d6c4293d3511b6d239584a",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7"
+    },
+    "COUPLED": {
+      "arm": "COUPLED",
+      "receipt": "/var/tmp/pr91_COUPLED_240s_c14_20261020/receipt.json",
+      "receipt_sha256": "9bd0a867987896dc9c6551bbc964e8fd1d2d759cb865827af81346b782a40e48",
+      "history": "/var/tmp/pr91_COUPLED_240s_c14_20261020/run/wrfout_d01_2026-08-16_13:00:00",
+      "history_sha256": "b7a4bf00d908814579a6a286a92c03e05c9d923d0fd12f0ed304817c86d6ef4a",
+      "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7"
+    }
+  },
+  "static_geometry_check": {
+    "dx_m": 5000.0,
+    "dy_m": 5000.0,
+    "dimensions_exact_match": true,
+    "static_fields": {
+      "XLAT": {
+        "shape": [
+          5,
+          282,
+          234
+        ],
+        "exact_match": true
+      },
+      "XLONG": {
+        "shape": [
+          5,
+          282,
+          234
+        ],
+        "exact_match": true
+      },
+      "XLAT_U": {
+        "shape": [
+          5,
+          282,
+          235
+        ],
+        "exact_match": true
+      },
+      "XLONG_U": {
+        "shape": [
+          5,
+          282,
+          235
+        ],
+        "exact_match": true
+      },
+      "XLAT_V": {
+        "shape": [
+          5,
+          283,
+          234
+        ],
+        "exact_match": true
+      },
+      "XLONG_V": {
+        "shape": [
+          5,
+          283,
+          234
+        ],
+        "exact_match": true
+      },
+      "MAPFAC_M": {
+        "shape": [
+          5,
+          282,
+          234
+        ],
+        "exact_match": true
+      },
+      "MAPFAC_U": {
+        "shape": [
+          5,
+          282,
+          235
+        ],
+        "exact_match": true
+      },
+      "MAPFAC_V": {
+        "shape": [
+          5,
+          283,
+          234
+        ],
+        "exact_match": true
+      },
+      "MAPFAC_MX": {
+        "shape": [
+          5,
+          282,
+          234
+        ],
+        "exact_match": true
+      },
+      "MAPFAC_MY": {
+        "shape": [
+          5,
+          282,
+          234
+        ],
+        "exact_match": true
+      },
+      "MAPFAC_UX": {
+        "shape": [
+          5,
+          282,
+          235
+        ],
+        "exact_match": true
+      },
+      "MAPFAC_UY": {
+        "shape": [
+          5,
+          282,
+          235
+        ],
+        "exact_match": true
+      },
+      "MAPFAC_VX": {
+        "shape": [
+          5,
+          283,
+          234
+        ],
+        "exact_match": true
+      },
+      "MAPFAC_VY": {
+        "shape": [
+          5,
+          283,
+          234
+        ],
+        "exact_match": true
+      },
+      "SINALPHA": {
+        "shape": [
+          5,
+          282,
+          234
+        ],
+        "exact_match": true
+      },
+      "COSALPHA": {
+        "shape": [
+          5,
+          282,
+          234
+        ],
+        "exact_match": true
+      },
+      "ZNU": {
+        "shape": [
+          5,
+          39
+        ],
+        "exact_match": true
+      },
+      "ZNW": {
+        "shape": [
+          5,
+          40
+        ],
+        "exact_match": true
+      },
+      "C1H": {
+        "shape": [
+          5,
+          39
+        ],
+        "exact_match": true
+      },
+      "C2H": {
+        "shape": [
+          5,
+          39
+        ],
+        "exact_match": true
+      },
+      "DNW": {
+        "shape": [
+          5,
+          39
+        ],
+        "exact_match": true
+      }
+    }
+  },
+  "elapsed_seconds": [
+    0,
+    60,
+    120,
+    180,
+    240
+  ],
+  "fields": {
+    "pressure": {
+      "units": "Pa",
+      "fixed_native_location_tracks": [
+        {
+          "native_ijk_one_based": [
+            136,
+            17,
+            1
+          ],
+          "stored_level_location": "lowest",
+          "latitude": 32.29105758666992,
+          "longitude": 126.993408203125,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": -33.609375,
+            "60": 116.1875,
+            "120": -45.296875,
+            "180": -50.1640625,
+            "240": -45.5625
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            136,
+            18,
+            1
+          ],
+          "stored_level_location": "lowest",
+          "latitude": 32.3364372253418,
+          "longitude": 126.99407958984375,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": -32.3046875,
+            "60": 83.609375,
+            "120": -21.5859375,
+            "180": -25.25,
+            "240": -74.9609375
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            138,
+            20,
+            6
+          ],
+          "stored_level_location": "interior",
+          "latitude": 32.426063537597656,
+          "longitude": 127.10299682617188,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": -0.0078125,
+            "60": 48.078125,
+            "120": 27.828125,
+            "180": 77.1015625,
+            "240": -11.4921875
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            136,
+            17,
+            7
+          ],
+          "stored_level_location": "interior",
+          "latitude": 32.29105758666992,
+          "longitude": 126.993408203125,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": -31.3671875,
+            "60": -206.9375,
+            "120": -157.09375,
+            "180": -26.484375,
+            "240": 7.1171875
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            136,
+            17,
+            11
+          ],
+          "stored_level_location": "interior",
+          "latitude": 32.29105758666992,
+          "longitude": 126.993408203125,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": -28.1875,
+            "60": -360.6328125,
+            "120": -84.6171875,
+            "180": -14.0078125,
+            "240": -2.53125
+          }
+        }
+      ],
+      "max_abs_by_stored_level_scope": {
+        "0": {
+          "all_levels": 33.609375,
+          "lowest_and_highest_levels": 33.609375,
+          "interior_levels": 33.3359375
+        },
+        "60": {
+          "all_levels": 360.6328125,
+          "lowest_and_highest_levels": 186.5859375,
+          "interior_levels": 360.6328125
+        },
+        "120": {
+          "all_levels": 157.09375,
+          "lowest_and_highest_levels": 76.6328125,
+          "interior_levels": 157.09375
+        },
+        "180": {
+          "all_levels": 77.1015625,
+          "lowest_and_highest_levels": 71.0234375,
+          "interior_levels": 77.1015625
+        },
+        "240": {
+          "all_levels": 74.9609375,
+          "lowest_and_highest_levels": 74.9609375,
+          "interior_levels": 74.4921875
+        }
+      },
+      "maps": {
+        "path": "c14_pressure_maps.png",
+        "sha256": "3c2af2b94ad5e65ace39c972591a1657fc31438ac464a8bce206d55841662b9c"
+      },
+      "map_definition": "Signed delta at each column's largest absolute native-level delta; level may differ between columns and times."
+    },
+    "geopotential": {
+      "units": "m2 s-2",
+      "fixed_native_location_tracks": [
+        {
+          "native_ijk_one_based": [
+            140,
+            17,
+            23
+          ],
+          "stored_level_location": "interior",
+          "latitude": 32.288543701171875,
+          "longitude": 127.20816040039062,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": 0.0,
+            "60": -18.927734375,
+            "120": 47.87353515625,
+            "180": -102.142578125,
+            "240": 45.61572265625
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            136,
+            17,
+            26
+          ],
+          "stored_level_location": "interior",
+          "latitude": 32.29105758666992,
+          "longitude": 126.993408203125,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": -116.046875,
+            "60": 42.28125,
+            "120": -15.5634765625,
+            "180": -26.42236328125,
+            "240": -28.40673828125
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            133,
+            16,
+            40
+          ],
+          "stored_level_location": "highest",
+          "latitude": 32.247222900390625,
+          "longitude": 126.83175659179688,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "one_cell_neighbor_of_fixed_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": 0.109375,
+            "60": 21.45703125,
+            "120": 93.796875,
+            "180": -87.8291015625,
+            "240": 88.5732421875
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            135,
+            17,
+            40
+          ],
+          "stored_level_location": "highest",
+          "latitude": 32.29159927368164,
+          "longitude": 126.939697265625,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": -48.875,
+            "60": 174.1298828125,
+            "120": -276.701171875,
+            "180": 44.470703125,
+            "240": 37.5751953125
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            135,
+            18,
+            40
+          ],
+          "stored_level_location": "highest",
+          "latitude": 32.33699035644531,
+          "longitude": 126.94033813476562,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": -34.125,
+            "60": -332.8837890625,
+            "120": 78.5693359375,
+            "180": -52.9296875,
+            "240": 6.673828125
+          }
+        }
+      ],
+      "max_abs_by_stored_level_scope": {
+        "0": {
+          "all_levels": 116.046875,
+          "lowest_and_highest_levels": 116.046875,
+          "interior_levels": 116.046875
+        },
+        "60": {
+          "all_levels": 332.8837890625,
+          "lowest_and_highest_levels": 332.8837890625,
+          "interior_levels": 322.3173828125
+        },
+        "120": {
+          "all_levels": 276.701171875,
+          "lowest_and_highest_levels": 276.701171875,
+          "interior_levels": 269.8408203125
+        },
+        "180": {
+          "all_levels": 102.142578125,
+          "lowest_and_highest_levels": 92.2841796875,
+          "interior_levels": 102.142578125
+        },
+        "240": {
+          "all_levels": 88.5732421875,
+          "lowest_and_highest_levels": 88.5732421875,
+          "interior_levels": 87.734375
+        }
+      },
+      "maps": {
+        "path": "c14_geopotential_maps.png",
+        "sha256": "2d5c76a9742a4696f91d78833d3e550e1697343c8773b7ccc28bae70efc5bbde"
+      },
+      "map_definition": "Signed delta at each column's largest absolute native-level delta; level may differ between columns and times."
+    },
+    "vertical_velocity": {
+      "units": "m s-1",
+      "fixed_native_location_tracks": [
+        {
+          "native_ijk_one_based": [
+            136,
+            17,
+            14
+          ],
+          "stored_level_location": "interior",
+          "latitude": 32.29105758666992,
+          "longitude": 126.993408203125,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": 0.0,
+            "60": 0.27645232900977135,
+            "120": 1.0721224173903465,
+            "180": 1.4050446152687073,
+            "240": 1.463652841746807
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            133,
+            16,
+            40
+          ],
+          "stored_level_location": "highest",
+          "latitude": 32.247222900390625,
+          "longitude": 126.83175659179688,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "one_cell_neighbor_of_fixed_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": 0.0,
+            "60": -1.7285290956497192,
+            "120": 1.2155365943908691,
+            "180": -0.4933668114244938,
+            "240": 0.13340628147125244
+          }
+        },
+        {
+          "native_ijk_one_based": [
+            138,
+            16,
+            40
+          ],
+          "stored_level_location": "highest",
+          "latitude": 32.244483947753906,
+          "longitude": 127.10003662109375,
+          "descriptive_scopes": [
+            "whole_grid",
+            "interior_boundary_ring_excluded",
+            "fixed_C14_T0_water_support"
+          ],
+          "delta_at_elapsed_seconds": {
+            "0": 0.0,
+            "60": 1.6167352199554443,
+            "120": -2.2188902515918016,
+            "180": 0.0979210240766406,
+            "240": 0.5186511874198914
+          }
+        }
+      ],
+      "max_abs_by_stored_level_scope": {
+        "0": {
+          "all_levels": 0.0,
+          "lowest_and_highest_levels": 0.0,
+          "interior_levels": 0.0
+        },
+        "60": {
+          "all_levels": 1.7285290956497192,
+          "lowest_and_highest_levels": 1.7285290956497192,
+          "interior_levels": 1.557981550693512
+        },
+        "120": {
+          "all_levels": 2.2188902515918016,
+          "lowest_and_highest_levels": 2.2188902515918016,
+          "interior_levels": 2.0035477727651596
+        },
+        "180": {
+          "all_levels": 1.4050446152687073,
+          "lowest_and_highest_levels": 0.8732784986495972,
+          "interior_levels": 1.4050446152687073
+        },
+        "240": {
+          "all_levels": 1.463652841746807,
+          "lowest_and_highest_levels": 0.6096916198730469,
+          "interior_levels": 1.463652841746807
+        }
+      },
+      "maps": {
+        "path": "c14_vertical_velocity_maps.png",
+        "sha256": "e7267541900e0ee2fd92e24af8e4ab178eb81a6ebf4cdaea778202906a4b9b8b"
+      },
+      "map_definition": "Signed delta at each column's largest absolute native-level delta; level may differ between columns and times."
+    }
+  },
+  "limits": [
+    "Locations are outcome-selected descriptive peaks, not observation support.",
+    "A fixed native grid point and level is not a material parcel or fixed altitude.",
+    "Upper maps cover the domain; lower maps use the fixed T0 response-support box plus 0.75 degrees.",
+    "These are paired state differences, not force, continuity, water or energy closure."
+  ]
+}

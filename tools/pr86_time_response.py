@@ -28,7 +28,7 @@ INTEL_PROFILE = Path(__file__).resolve().parents[1] / "tests/intel_toolchain.sh"
 STATE_MAGIC, TENDENCY_MAGIC = b"PR85QND2", b"PR85PLB1"
 STATE_FIELDS = ("DEN", "Q", "QC", "QI", "QR", "QS", "QG", "NN", "NC", "NI", "NR", "BG")
 TENDENCY_FIELDS = ("QV_TEND", "QC_TEND", "QI_TEND", "QNC_TEND", "QNI_TEND")
-SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 30: "10min"}
+SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 16: "320s", 30: "10min"}
 SNAPSHOT_SECONDS = tuple(timestep * 20 for timestep in SNAPSHOTS)
 LAUNCH_ENVIRONMENT = {"OMP_NUM_THREADS": "1", "OMP_DYNAMIC": "FALSE"}
 LAUNCH_ENVIRONMENT_SHA256 = hashlib.sha256(
@@ -214,8 +214,137 @@ def _projected_step_bytes(receipt: dict, runtime: Path) -> int:
     return per_step + 64 * 1024 * 1024
 
 
+def _disk_reference_projection(reference_path: Path, arm: str, source_receipt_sha256: str,
+                               source_namelist_sha256: str, input_hashes: dict,
+                               executable_sha256: str, wrfinput_sha256: str,
+                               wrfbdy_sha256: str, pr87_probe: str | None) -> dict:
+    """Validate a successful same-input run and project disk use from its artifacts."""
+    reference_path = reference_path.resolve()
+    receipt = json.loads(reference_path.read_text())
+    preflight_path = reference_path.parent / "preflight.json"
+    preflight = json.loads(preflight_path.read_text())
+    steps = receipt.get("timestep_count")
+    if (receipt.get("status") != "COMPLETE" or receipt.get("returncode") != 0 or
+            not isinstance(steps, int) or steps <= 0 or
+            receipt.get("final_completed_step") != steps or
+            receipt.get("maximum_seen_timestep") != steps or
+            len(receipt.get("model_timestamps", [])) != steps or
+            receipt.get("duplicate_post_kdm6_timesteps") or receipt.get("earliest_fatal") or
+            receipt.get("fatal_lines") or receipt.get("processing_errors") or
+            receipt.get("changed_staged_inputs") or receipt.get("changed_original_inputs") or
+            receipt.get("candidate_build_unchanged") is not True):
+        raise ValueError("disk reference receipt is incomplete or contains run errors")
+    actual_timestamps = [row.get("timestamp") for row in receipt.get("model_timestamps", [])
+                         if isinstance(row, dict)]
+    if (actual_timestamps != receipt.get("expected_model_timestamps") or
+            receipt.get("final_completed_step") != len(receipt.get("expected_model_timestamps", []))):
+        raise ValueError("disk reference timestep sequence is not contiguous")
+    if (preflight.get("arm") != arm or receipt.get("arm") != arm or
+            preflight.get("source_receipt_sha256") != source_receipt_sha256 or
+            preflight.get("source_namelist_sha256") != source_namelist_sha256 or
+            preflight.get("input_hashes") != input_hashes or
+            preflight.get("baseline_frozen_executable_sha256") != executable_sha256 or
+            preflight.get("candidate_wrfinput_sha256") != wrfinput_sha256 or
+            preflight.get("candidate_wrfbdy_sha256") != wrfbdy_sha256 or
+            preflight.get("timestep_seconds") != 20 or
+            preflight.get("namelist_changes", {}).get("history_interval_minutes") != 1 or
+            receipt.get("pr87_probe") != pr87_probe or
+            preflight.get("launch_environment", {}).get("OMP_NUM_THREADS") != "1" or
+            preflight.get("launch_environment", {}).get("OMP_DYNAMIC") != "FALSE" or
+            preflight.get("launch_environment", {}).get("launch_request_sha256") !=
+            LAUNCH_ENVIRONMENT_SHA256):
+        raise ValueError("disk reference preflight does not match candidate source and controls")
+    candidate_build = preflight.get("candidate_build")
+    if receipt.get("candidate_build") != candidate_build:
+        raise ValueError("disk reference candidate build differs from preflight")
+    expected_executable_sha256 = (candidate_build.get("executable_sha256") if candidate_build
+                                  else preflight.get("executable_sha256"))
+    if (receipt.get("expected_executed_executable_sha256") != expected_executable_sha256 or
+            receipt.get("executed_executable_sha256") != expected_executable_sha256):
+        raise ValueError("disk reference executable differs from preflight candidate")
+    if candidate_build:
+        try:
+            if _candidate_build_binding(Path(candidate_build["receipt_path"])) != candidate_build:
+                raise ValueError("disk reference candidate build receipt changed")
+        except Exception as exc:
+            raise ValueError("disk reference candidate build is not unchanged") from exc
+    if (receipt.get("source_receipt_sha256") != source_receipt_sha256 or
+            receipt.get("candidate_wrfinput_sha256") != wrfinput_sha256 or
+            receipt.get("candidate_wrfbdy_sha256") != wrfbdy_sha256 or
+            receipt.get("baseline_frozen_executable_sha256") != executable_sha256):
+        raise ValueError("disk reference receipt input identity mismatch")
+
+    stage = reference_path.parent / "run"
+    generated = receipt.get("generated_files")
+    compressed = receipt.get("compressed_outputs")
+    if not isinstance(generated, list) or not isinstance(compressed, list):
+        raise ValueError("disk reference artifact inventory missing")
+    generated_by_name = {}
+    for row in generated:
+        name = row.get("path")
+        if not isinstance(name, str) or Path(name).name != name or name in generated_by_name:
+            raise ValueError("disk reference has duplicate or unsafe generated artifact paths")
+        path = stage / name
+        if (not path.is_file() or path.stat().st_size != row.get("bytes") or
+                sha256(path) != row.get("sha256")):
+            raise ValueError(f"disk reference artifact changed: {name}")
+        generated_by_name[name] = row
+    compressed_names, archive_names = set(), set()
+    trace_bytes = 0
+    for row in compressed:
+        raw_name, archive_name = row.get("path"), row.get("compressed_path")
+        if (not isinstance(raw_name, str) or Path(raw_name).name != raw_name or
+                not isinstance(archive_name, str) or Path(archive_name).name != archive_name or
+                raw_name == archive_name or raw_name in compressed_names or
+                raw_name in archive_names or archive_name in archive_names or
+                archive_name in compressed_names):
+            raise ValueError("disk reference has duplicate or unsafe compressed artifact paths")
+        compressed_names.add(raw_name)
+        archive_names.add(archive_name)
+        archive = stage / archive_name
+        if (not archive.is_file() or archive.stat().st_size != row.get("compressed_bytes") or
+                sha256(archive) != row.get("compressed_sha256")):
+            raise ValueError(f"disk reference compressed archive changed: {archive_name}")
+        digest, byte_count = hashlib.sha256(), 0
+        try:
+            with gzip.open(archive, "rb") as stream:
+                for block in iter(lambda: stream.read(1024 * 1024), b""):
+                    digest.update(block)
+                    byte_count += len(block)
+        except Exception as exc:
+            raise ValueError(f"disk reference compressed archive is unreadable: {archive_name}") from exc
+        if byte_count != row.get("bytes") or digest.hexdigest() != row.get("sha256"):
+            raise ValueError(f"disk reference uncompressed artifact changed: {raw_name}")
+        generated_row = generated_by_name.get(archive_name)
+        if (generated_row is None or generated_row.get("bytes") != row.get("compressed_bytes") or
+                generated_row.get("sha256") != row.get("compressed_sha256")):
+            raise ValueError(f"disk reference archive inventory mismatch: {archive_name}")
+        trace_bytes += row["bytes"]
+    histories = [row for row in generated if row["path"].startswith("wrfout")]
+    if not histories:
+        raise ValueError("disk reference history artifact missing")
+    history_bytes = sum(row["bytes"] for row in histories)
+    multiplier = 3
+    slack = 64 * 1024 * 1024
+    measured_bytes = trace_bytes + history_bytes
+    per_step = multiplier * math.ceil(measured_bytes / steps) + slack
+    return {"method": "successful_same_input_receipt", "reference_receipt": str(reference_path),
+            "reference_receipt_sha256": sha256(reference_path),
+            "reference_preflight": str(preflight_path),
+            "reference_preflight_sha256": sha256(preflight_path),
+            "reference_arm": arm, "reference_timestep_count": steps,
+            "source_trace_uncompressed_bytes": trace_bytes,
+            "history_artifact_bytes": history_bytes,
+            "measured_uncompressed_bytes": measured_bytes,
+            "artifact_multiplier": multiplier, "safety_slack_bytes_per_step": slack,
+            "cadence_seconds": 20, "per_step_projection_bytes": per_step,
+            "history_artifacts": histories,
+            "compressed_archive_count": len(compressed)}
+
+
 def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
-            candidate_build_path: Path | None = None) -> dict:
+            candidate_build_path: Path | None = None,
+            disk_reference_receipt_path: Path | None = None) -> dict:
     snapshot_schedule(duration)
     runtime, receipt_path = Path(str(RUNTIME).format(arm=arm)), Path(str(RUN_RECEIPT).format(arm=arm))
     receipt = json.loads(receipt_path.read_text())
@@ -239,8 +368,18 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         original_namelist.splitlines(keepends=True), edited.splitlines(keepends=True),
         fromfile="v17/namelist.input", tofile="pr86/namelist.input"))
     steps = math.ceil(duration / 20)
+    reference_projection = None
+    if disk_reference_receipt_path is None:
+        per_step_projection = _projected_step_bytes(receipt, runtime)
+    else:
+        reference_projection = _disk_reference_projection(
+            disk_reference_receipt_path, arm, sha256(receipt_path), sha256(namelist), inputs,
+            sha256(exe), receipt["candidate_wrfinput_sha256"], receipt["candidate_wrfbdy_sha256"],
+            os.environ.get("PR87_PROBE"))
+        per_step_projection = reference_projection["per_step_projection_bytes"]
+    projected = per_step_projection * steps
     disk = shutil.disk_usage(out.parent if out.parent.exists() else Path("/var/tmp"))
-    projected = _projected_step_bytes(receipt, runtime) * steps
+    required_free = math.ceil(projected / safety_fraction)
     return {
         "arm": arm, "duration_seconds": duration, "timestep_seconds": 20,
         "expected_timesteps": steps, "runtime_dir": str(runtime), "source_receipt": str(receipt_path),
@@ -257,11 +396,12 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
                              "history_interval_minutes": 1}, "namelist_diff": namelist_diff,
         "namelist_text": edited,
         "first_v17_step_seconds": 662.69806,
-        "disk_guard": {"free_bytes": disk.free, "per_step_projection_bytes": _projected_step_bytes(receipt, runtime),
+        "disk_guard": {"free_bytes": disk.free, "per_step_projection_bytes": per_step_projection,
                        "active_run_projection_bytes": projected,
-                       "required_free_bytes": int(projected / safety_fraction),
+                       "required_free_bytes": required_free,
                        "safety_fraction": safety_fraction,
-                       "status": "PASS" if disk.free >= int(projected / safety_fraction) else "FAIL"},
+                       "status": "PASS" if disk.free >= required_free else "FAIL",
+                       "reference": reference_projection},
         "output": str(out),
     }
 
@@ -596,10 +736,14 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
 
 
 def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: float,
-        candidate_build_path: Path | None = None) -> dict:
+        candidate_build_path: Path | None = None,
+        disk_reference_receipt_path: Path | None = None) -> dict:
+    runner_path = Path(__file__).resolve()
+    runner_sha256_at_entry = sha256(runner_path)
     schedule = snapshot_schedule(duration)
     out.mkdir(parents=True, exist_ok=False)
-    prepared = prepare(arm, duration, out, safety_fraction, candidate_build_path)
+    prepared = prepare(arm, duration, out, safety_fraction, candidate_build_path,
+                       disk_reference_receipt_path)
     (out / "preflight.json").write_text(json.dumps({k: v for k, v in prepared.items()
                                                      if k != "namelist_text"}, indent=2) + "\n")
     if prepared["disk_guard"]["status"] != "PASS":
@@ -615,6 +759,9 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
         raise RuntimeError("staged executable hash differs from preflight")
     if candidate_build and _candidate_build_binding(Path(candidate_build["receipt_path"])) != candidate_build:
         raise RuntimeError("candidate build identity changed after preflight")
+    launch_provenance = {"launch_runner_source_path": str(runner_path),
+                         "launch_runner_source_sha256": runner_sha256_at_entry}
+    (out / "launch_provenance.json").write_text(json.dumps(launch_provenance, indent=2) + "\n")
     pr87_probe = os.environ.get("PR87_PROBE")
     command = ["/bin/bash", "-c", f". /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh --force >/dev/null 2>&1; . /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh >/dev/null 2>&1; export OMP_NUM_THREADS={LAUNCH_ENVIRONMENT['OMP_NUM_THREADS']} OMP_DYNAMIC={LAUNCH_ENVIRONMENT['OMP_DYNAMIC']}; export LD_LIBRARY_PATH=/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:${{LD_LIBRARY_PATH:-}}; ulimit -s unlimited; ./wrf.exe > candidate_run.log 2>&1"]
     start = time.monotonic()
@@ -694,6 +841,9 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
                "executed_executable_sha256": executed_executable_sha256,
                "expected_executed_executable_sha256": expected_executable_sha256,
                "candidate_build": candidate_build, "candidate_build_unchanged": candidate_build_unchanged,
+               "launch_runner_source_path": str(runner_path),
+               "launch_runner_source_sha256": runner_sha256_at_entry,
+               "launch_runner_source_sha256_status": "captured at run entry before model execution",
                "pr87_probe": pr87_probe,
                "source_receipt_sha256": prepared["source_receipt_sha256"],
                "candidate_wrfinput_sha256": prepared["candidate_wrfinput_sha256"],
@@ -716,6 +866,8 @@ def main() -> int:
     parser.add_argument("--candidate-build", type=Path,
                         help="explicit PR87 overlay build receipt; default uses frozen PR86 executable")
     parser.add_argument("--safety-fraction", type=float, default=0.85)
+    parser.add_argument("--disk-reference-receipt", type=Path,
+                        help="calibrate the disk guard from a successful same-input run receipt")
     args = parser.parse_args()
     try:
         snapshot_schedule(args.duration_seconds)
@@ -724,7 +876,7 @@ def main() -> int:
     out = args.output or DEFAULT_OUT / args.arm
     result = (finalize_existing_run(args.arm, out, args.duration_seconds, args.candidate_build) if args.finalize else
               run(args.arm, out, args.duration_seconds, args.execute, args.safety_fraction,
-                  args.candidate_build))
+                  args.candidate_build, args.disk_reference_receipt))
     print(json.dumps({k: v for k, v in result.items() if k != "input_hashes"}, indent=2))
     return 0
 

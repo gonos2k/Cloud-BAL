@@ -1,0 +1,29 @@
+{
+  "graph_sha256": "d76f912d4801cd7b674d3305e709a434ea041f56687dcbdb021b4a9376b5b7cd",
+  "scope": "prior PR91 selected-overlay navigation snapshot; not a complete candidate extraction",
+  "command": [
+    "graphify",
+    "affected",
+    "src_common_cloud_bal_joint_transport_joint_moment_store",
+    "--graph",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json"
+  ],
+  "resolved_source_path": "src/common/cloud_bal_joint_transport.f90",
+  "observed_relation": "form_candidate() calls joint_moment_store()",
+  "source_authority": "current source plus pinned Intel current-core and original-store regressions determine actual impact; compiled-host opt-in/counter paths reviewed separately",
+  "limits": [
+    "Fortran cross-file calls are partial",
+    "Generated Fortran inside Python strings is not separately extracted",
+    "Unqualified name is ambiguous among preserved historical evidence"
+  ],
+  "c18_followup": {
+    "command": [
+      "graphify",
+      "affected",
+      "src_common_cloud_bal_joint_transport_store_directed_q",
+      "--graph",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json"
+    ],
+    "scope": "Existing same-module directed-Q call relationships guided the bounded subnormal reuse. Current source and exact Intel fixtures remain validation authority."
+  }
+}

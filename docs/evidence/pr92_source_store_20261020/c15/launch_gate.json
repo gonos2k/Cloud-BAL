@@ -1,0 +1,82 @@
+{
+  "identity": "PR92-C15-bounded",
+  "base": "71b8c1d5dae181c163d04eabac9cf8f80134f417",
+  "executable_sha256": "cb1d845e059ebbc50ef3fa7bc3d5ed51ad2f8cdf0344bdefd9efa11e8bc62870",
+  "module_sha256": "1ec3131abace4337314279ac833a6bcae32c0080261cccc912b45f0afba16399",
+  "core_sha256": "8ce23e675a23283fb047a88f6ca0d26444ed2f56a9e7dfdc872a1602a6f1d6bf",
+  "launch_runner_sha256": "298827e4219b7e2bc529e42c2d7aed8c1934b743888755efee242b13d1bc6d96",
+  "component_gates": "Pinned Intel O0/O2 current core suite, bulk representation/rollback fixture; captured source/stage6 replay scoped gates; default-off old store regressions",
+  "open_local_gate": "17 FULL stage2 existing fallback witnesses pending actual runtime; no new-policy acceptance of these records",
+  "run_scope": "one paired same-executable 600-second experiment, 1 domain/rank/thread/tile; selected object overlay, not clean WRF build",
+  "disk_guard": {
+    "combined_required_free_bytes": 338809646295,
+    "observed_free_bytes": 480045547520,
+    "status": "PASS",
+    "arms": {
+      "OFF": {
+        "free_bytes": 480045596672,
+        "per_step_projection_bytes": 4799808607,
+        "active_run_projection_bytes": 143994258210,
+        "required_free_bytes": 169405009659,
+        "safety_fraction": 0.85,
+        "status": "PASS",
+        "reference": {
+          "method": "successful_same_input_receipt",
+          "reference_receipt": "/var/tmp/pr91_OFF_240s_c14_20261020/receipt.json",
+          "reference_receipt_sha256": "f6a2e40d65c76e4e9abd0dfb1fc26f0c5da3abe4327a5d23829e4a66f34b540a",
+          "reference_preflight": "/var/tmp/pr91_OFF_240s_c14_20261020/preflight.json",
+          "reference_preflight_sha256": "312c77cb3e4e7b4dae9973a5384e060097c08d40ee4f3a45ba1e7ea9b7434286",
+          "reference_arm": "OFF",
+          "reference_timestep_count": 12,
+          "source_trace_uncompressed_bytes": 18460018354,
+          "history_artifact_bytes": 470780613,
+          "measured_uncompressed_bytes": 18930798967,
+          "artifact_multiplier": 3,
+          "safety_slack_bytes_per_step": 67108864,
+          "cadence_seconds": 20,
+          "per_step_projection_bytes": 4799808607,
+          "history_artifacts": [
+            {
+              "path": "wrfout_d01_2026-08-16_13:00:00",
+              "bytes": 470780613,
+              "sha256": "024675f8288118a6e9f014cb3287f8c09b440c5091d6c4293d3511b6d239584a"
+            }
+          ],
+          "compressed_archive_count": 44
+        }
+      },
+      "COUPLED": {
+        "free_bytes": 480045572096,
+        "per_step_projection_bytes": 4799798038,
+        "active_run_projection_bytes": 143993941140,
+        "required_free_bytes": 169404636636,
+        "safety_fraction": 0.85,
+        "status": "PASS",
+        "reference": {
+          "method": "successful_same_input_receipt",
+          "reference_receipt": "/var/tmp/pr91_COUPLED_240s_c14_20261020/receipt.json",
+          "reference_receipt_sha256": "9bd0a867987896dc9c6551bbc964e8fd1d2d759cb865827af81346b782a40e48",
+          "reference_preflight": "/var/tmp/pr91_COUPLED_240s_c14_20261020/preflight.json",
+          "reference_preflight_sha256": "0111e697ae681471819168425d3e90de9c7ee256ca8a2da47d49a03c23eaa9f7",
+          "reference_arm": "COUPLED",
+          "reference_timestep_count": 12,
+          "source_trace_uncompressed_bytes": 18459961420,
+          "history_artifact_bytes": 470795275,
+          "measured_uncompressed_bytes": 18930756695,
+          "artifact_multiplier": 3,
+          "safety_slack_bytes_per_step": 67108864,
+          "cadence_seconds": 20,
+          "per_step_projection_bytes": 4799798038,
+          "history_artifacts": [
+            {
+              "path": "wrfout_d01_2026-08-16_13:00:00",
+              "bytes": 470795275,
+              "sha256": "b7a4bf00d908814579a6a286a92c03e05c9d923d0fd12f0ed304817c86d6ef4a"
+            }
+          ],
+          "compressed_archive_count": 44
+        }
+      }
+    }
+  }
+}

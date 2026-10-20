@@ -1,0 +1,525 @@
+{
+  "schema": "pr92_c17_bulk_event_physical_weighting_v2",
+  "source_pins": {
+    "module_em_sha256": "99be82b97872bd5981facc1e75b167574e1fc10b7c5511130b494c8b989140fb",
+    "core_sha256": "aae36b8e259f7ef477429e8aa726c56668348ed2d3e8572b3eb71b3da723377e",
+    "gravity_constants_source_sha256": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+    "map_area_consumer_sha256": "61b964809856661c89e0d9e1b390469de730e256e653e7f18e0849ee88f9b819"
+  },
+  "geometry": {
+    "arms": {
+      "OFF": {
+        "history_sha256": "aa565c80cae3ca23bc29eb83aadbdb4389078437026439c61d7a9b684af3cbc8",
+        "dx_m": 5000.0,
+        "dy_m": 5000.0,
+        "field_shapes": {
+          "DNW": [
+            8,
+            39
+          ],
+          "C1H": [
+            8,
+            39
+          ],
+          "C2H": [
+            8,
+            39
+          ],
+          "MAPFAC_MX": [
+            8,
+            282,
+            234
+          ],
+          "MAPFAC_MY": [
+            8,
+            282,
+            234
+          ],
+          "MAPFAC_M": [
+            8,
+            282,
+            234
+          ]
+        },
+        "field_dtypes": {
+          "DNW": "float32",
+          "C1H": "float32",
+          "C2H": "float32",
+          "MAPFAC_MX": "float32",
+          "MAPFAC_MY": "float32",
+          "MAPFAC_M": "float32"
+        },
+        "field_units": {
+          "DNW": "",
+          "C1H": "Dimensionless",
+          "C2H": "Pa",
+          "MAPFAC_MX": "",
+          "MAPFAC_MY": "",
+          "MAPFAC_M": ""
+        },
+        "field_time_invariant": {
+          "DNW": true,
+          "C1H": true,
+          "C2H": true,
+          "MAPFAC_MX": true,
+          "MAPFAC_MY": true,
+          "MAPFAC_M": true
+        },
+        "field_sha256": {
+          "DNW": "a03f79467387b13380404571018b733753276e1eb5cab65a4d6c7ec36acf4cb4",
+          "C1H": "bbd3af751740a111eec12b095c78000d1f0943053d50736055f5367525538910",
+          "C2H": "aab6e169473bba66d34779b8f986fd83e3fd9c125869240b83df02d101af8f37",
+          "MAPFAC_MX": "b620910380033e295a2a54723635de39301b4d967a428fe5b40689424d98b340",
+          "MAPFAC_MY": "b620910380033e295a2a54723635de39301b4d967a428fe5b40689424d98b340",
+          "MAPFAC_M": "b620910380033e295a2a54723635de39301b4d967a428fe5b40689424d98b340"
+        }
+      },
+      "COUPLED": {
+        "history_sha256": "06b608f0017b0fc394063d68b0c188267016bfc0aae707fe4bd53aa0c0fac2cd",
+        "dx_m": 5000.0,
+        "dy_m": 5000.0,
+        "field_shapes": {
+          "DNW": [
+            8,
+            39
+          ],
+          "C1H": [
+            8,
+            39
+          ],
+          "C2H": [
+            8,
+            39
+          ],
+          "MAPFAC_MX": [
+            8,
+            282,
+            234
+          ],
+          "MAPFAC_MY": [
+            8,
+            282,
+            234
+          ],
+          "MAPFAC_M": [
+            8,
+            282,
+            234
+          ]
+        },
+        "field_dtypes": {
+          "DNW": "float32",
+          "C1H": "float32",
+          "C2H": "float32",
+          "MAPFAC_MX": "float32",
+          "MAPFAC_MY": "float32",
+          "MAPFAC_M": "float32"
+        },
+        "field_units": {
+          "DNW": "",
+          "C1H": "Dimensionless",
+          "C2H": "Pa",
+          "MAPFAC_MX": "",
+          "MAPFAC_MY": "",
+          "MAPFAC_M": ""
+        },
+        "field_time_invariant": {
+          "DNW": true,
+          "C1H": true,
+          "C2H": true,
+          "MAPFAC_MX": true,
+          "MAPFAC_MY": true,
+          "MAPFAC_M": true
+        },
+        "field_sha256": {
+          "DNW": "a03f79467387b13380404571018b733753276e1eb5cab65a4d6c7ec36acf4cb4",
+          "C1H": "bbd3af751740a111eec12b095c78000d1f0943053d50736055f5367525538910",
+          "C2H": "aab6e169473bba66d34779b8f986fd83e3fd9c125869240b83df02d101af8f37",
+          "MAPFAC_MX": "b620910380033e295a2a54723635de39301b4d967a428fe5b40689424d98b340",
+          "MAPFAC_MY": "b620910380033e295a2a54723635de39301b4d967a428fe5b40689424d98b340",
+          "MAPFAC_M": "b620910380033e295a2a54723635de39301b4d967a428fe5b40689424d98b340"
+        }
+      }
+    },
+    "same_static_fields_across_arms": true,
+    "map_area_formula": "DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+    "gravity_m_s2": 9.81,
+    "gravity_source": "WRF share/module_model_constants.F, g=9.81 m s-2",
+    "native_weight_formula": "(-DNW[k])*DX*DY/(MAPFAC_MX[j,i]*MAPFAC_MY[j,i]*g)",
+    "weight_extrema_kg_per_Pa_and_m3_per_Pa": [
+      15196.691672241805,
+      136705.8769620545
+    ],
+    "mapfactor_extrema": {
+      "MAPFAC_MX": [
+        0.9658473134040833,
+        0.9943194389343262
+      ],
+      "MAPFAC_MY": [
+        0.9658473134040833,
+        0.9943194389343262
+      ]
+    },
+    "map_area_m2_extrema": [
+      25286467.25244947,
+      26799275.769159824
+    ],
+    "all_map_factor_fields_equal_bitwise": {
+      "MAPFAC_MX_equals_MAPFAC_MY": true,
+      "MAPFAC_MX_equals_MAPFAC_M": true,
+      "OFF_equals_COUPLED": true,
+      "all_8_history_records_identical_within_each_arm": true
+    }
+  },
+  "carrier_units_binding": {
+    "compiled_operator": "newcarrier(k,i,j)=C1H[k]*(MU(i,j)+MUB(i,j))+C2H[k]",
+    "runtime_units": "C1H dimensionless; MU, MUB and C2H in Pa, so newcarrier is Pa",
+    "dnw_units": "dimensionless layer thickness; DNW values are negative",
+    "effect": "carrier-weighted Q changes convert to kg and carrier-weighted B changes convert to m3 after multiplying by -DNW*map_area/g"
+  },
+  "operator": {
+    "event_delta": "newcarrier*(stored-candidate)",
+    "code5_sign": "all code-5 per-event Q/B deltas are negative: candidate Q/B positive, both stored values zero",
+    "ledger_resolution": "committed signed deltas summed by timestep/RK; no event p/i/j/k coordinates retained"
+  },
+  "results": {
+    "OFF": {
+      "ledger_sha256": "0c48252509ffee5eee8aa93792293e3adf0b2dd842be57c9cd7be7e0d07e3efb",
+      "event_count": 11,
+      "nonzero_rows": [
+        {
+          "step": 15,
+          "rk": 1,
+          "event_count": 1,
+          "delta_Q_carrier": -9.57823102771993e-39,
+          "delta_B_carrier": -1.0706941241312088e-41,
+          "Q_kg_bound": [
+            -1.3094004723896134e-33,
+            -1.4555742369375952e-34
+          ],
+          "B_m3_bound": [
+            -1.4637017919747573e-36,
+            -1.6271008479702973e-37
+          ]
+        },
+        {
+          "step": 15,
+          "rk": 2,
+          "event_count": 1,
+          "delta_Q_carrier": -1.4367346884124138e-38,
+          "delta_B_carrier": -1.6060412244878198e-41,
+          "Q_kg_bound": [
+            -1.9641007554122314e-33,
+            -2.183361407461785e-34
+          ],
+          "B_m3_bound": [
+            -2.1955527403081924e-36,
+            -2.440651330145108e-37
+          ]
+        },
+        {
+          "step": 15,
+          "rk": 3,
+          "event_count": 1,
+          "delta_Q_carrier": -2.8734693768248276e-38,
+          "delta_B_carrier": -3.21208244897564e-41,
+          "Q_kg_bound": [
+            -3.928201510824463e-33,
+            -4.36672281492357e-34
+          ],
+          "B_m3_bound": [
+            -4.3911054806163855e-36,
+            -4.881302660290217e-37
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 1,
+          "event_count": 1,
+          "delta_Q_carrier": -1.325147204728762e-39,
+          "delta_B_carrier": -1.5222745040810478e-42,
+          "Q_kg_bound": [
+            -1.8115541072626057e-34,
+            -2.0137853490596082e-35
+          ],
+          "B_m3_bound": [
+            -2.0810387105737623e-37,
+            -2.3133536279034483e-38
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 2,
+          "event_count": 1,
+          "delta_Q_carrier": -1.987720854484101e-39,
+          "delta_B_carrier": -2.2834118105623516e-42,
+          "Q_kg_bound": [
+            -2.717331225680133e-34,
+            -3.02067809560799e-35
+          ],
+          "B_m3_bound": [
+            -3.121558140284389e-37,
+            -3.470030524587147e-38
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 3,
+          "event_count": 1,
+          "delta_Q_carrier": -3.975441708968203e-39,
+          "delta_B_carrier": -4.566823621124703e-42,
+          "Q_kg_bound": [
+            -5.434662451360268e-34,
+            -6.041356191215982e-35
+          ],
+          "B_m3_bound": [
+            -6.243116280568778e-37,
+            -6.940061049174294e-38
+          ]
+        },
+        {
+          "step": 21,
+          "rk": 1,
+          "event_count": 1,
+          "delta_Q_carrier": -1.8593786456403416e-38,
+          "delta_B_carrier": -2.2864336399457672e-41,
+          "Q_kg_bound": [
+            -2.5418798835678006e-33,
+            -2.8256403979746824e-34
+          ],
+          "B_m3_bound": [
+            -3.125689158643284e-36,
+            -3.4746227055297356e-37
+          ]
+        },
+        {
+          "step": 21,
+          "rk": 2,
+          "event_count": 1,
+          "delta_Q_carrier": -2.789068034957076e-38,
+          "delta_B_carrier": -3.4296505416878917e-41,
+          "Q_kg_bound": [
+            -3.812819916256411e-33,
+            -4.2384606980148004e-34
+          ],
+          "B_m3_bound": [
+            -4.6885338497482846e-36,
+            -5.211934182556798e-37
+          ]
+        },
+        {
+          "step": 22,
+          "rk": 1,
+          "event_count": 2,
+          "delta_Q_carrier": -4.345499291946229e-38,
+          "delta_B_carrier": -5.329724405203595e-41,
+          "Q_kg_bound": [
+            -5.9405529154349614e-33,
+            -6.603721290165192e-34
+          ],
+          "B_m3_bound": [
+            -7.286046487794217e-36,
+            -8.099417848390137e-37
+          ]
+        },
+        {
+          "step": 22,
+          "rk": 2,
+          "event_count": 1,
+          "delta_Q_carrier": -1.2769605420376513e-41,
+          "delta_B_carrier": -2.5539210840753027e-44,
+          "Q_kg_bound": [
+            -1.745680107451976e-36,
+            -1.9405575634964955e-37
+          ],
+          "B_m3_bound": [
+            -3.4913602149039514e-39,
+            -3.8811151269929915e-40
+          ]
+        }
+      ],
+      "summed_delta_Q_carrier": -1.4992081077913026e-37,
+      "summed_delta_B_carrier": -1.7774431299092808e-40,
+      "cumulative_Q_kg_bound": [
+        -2.0495055912423235e-32,
+        -2.278300336662948e-33
+      ],
+      "cumulative_B_m3_bound": [
+        -2.4298692182442716e-35,
+        -2.7011255210175774e-36
+      ]
+    },
+    "COUPLED": {
+      "ledger_sha256": "35a968150a78f10d419d21200100966cd85ada7c4b0a2b0669f93c622b7e65c8",
+      "event_count": 11,
+      "nonzero_rows": [
+        {
+          "step": 15,
+          "rk": 1,
+          "event_count": 1,
+          "delta_Q_carrier": -9.57823102771993e-39,
+          "delta_B_carrier": -1.0706941241312088e-41,
+          "Q_kg_bound": [
+            -1.3094004723896134e-33,
+            -1.4555742369375952e-34
+          ],
+          "B_m3_bound": [
+            -1.4637017919747573e-36,
+            -1.6271008479702973e-37
+          ]
+        },
+        {
+          "step": 15,
+          "rk": 2,
+          "event_count": 1,
+          "delta_Q_carrier": -1.4367346884124138e-38,
+          "delta_B_carrier": -1.6060412244878198e-41,
+          "Q_kg_bound": [
+            -1.9641007554122314e-33,
+            -2.183361407461785e-34
+          ],
+          "B_m3_bound": [
+            -2.1955527403081924e-36,
+            -2.440651330145108e-37
+          ]
+        },
+        {
+          "step": 15,
+          "rk": 3,
+          "event_count": 1,
+          "delta_Q_carrier": -2.8734693768248276e-38,
+          "delta_B_carrier": -3.21208244897564e-41,
+          "Q_kg_bound": [
+            -3.928201510824463e-33,
+            -4.36672281492357e-34
+          ],
+          "B_m3_bound": [
+            -4.3911054806163855e-36,
+            -4.881302660290217e-37
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 1,
+          "event_count": 1,
+          "delta_Q_carrier": -1.325147204728762e-39,
+          "delta_B_carrier": -1.5222745040810478e-42,
+          "Q_kg_bound": [
+            -1.8115541072626057e-34,
+            -2.0137853490596082e-35
+          ],
+          "B_m3_bound": [
+            -2.0810387105737623e-37,
+            -2.3133536279034483e-38
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 2,
+          "event_count": 1,
+          "delta_Q_carrier": -1.987720854484101e-39,
+          "delta_B_carrier": -2.2834118105623516e-42,
+          "Q_kg_bound": [
+            -2.717331225680133e-34,
+            -3.02067809560799e-35
+          ],
+          "B_m3_bound": [
+            -3.121558140284389e-37,
+            -3.470030524587147e-38
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 3,
+          "event_count": 1,
+          "delta_Q_carrier": -3.975441708968203e-39,
+          "delta_B_carrier": -4.566823621124703e-42,
+          "Q_kg_bound": [
+            -5.434662451360268e-34,
+            -6.041356191215982e-35
+          ],
+          "B_m3_bound": [
+            -6.243116280568778e-37,
+            -6.940061049174294e-38
+          ]
+        },
+        {
+          "step": 21,
+          "rk": 1,
+          "event_count": 1,
+          "delta_Q_carrier": -1.8593786456403416e-38,
+          "delta_B_carrier": -2.2864336399457672e-41,
+          "Q_kg_bound": [
+            -2.5418798835678006e-33,
+            -2.8256403979746824e-34
+          ],
+          "B_m3_bound": [
+            -3.125689158643284e-36,
+            -3.4746227055297356e-37
+          ]
+        },
+        {
+          "step": 21,
+          "rk": 2,
+          "event_count": 1,
+          "delta_Q_carrier": -2.789068034957076e-38,
+          "delta_B_carrier": -3.4296505416878917e-41,
+          "Q_kg_bound": [
+            -3.812819916256411e-33,
+            -4.2384606980148004e-34
+          ],
+          "B_m3_bound": [
+            -4.6885338497482846e-36,
+            -5.211934182556798e-37
+          ]
+        },
+        {
+          "step": 22,
+          "rk": 1,
+          "event_count": 2,
+          "delta_Q_carrier": -4.345499291946229e-38,
+          "delta_B_carrier": -5.329724405203595e-41,
+          "Q_kg_bound": [
+            -5.9405529154349614e-33,
+            -6.603721290165192e-34
+          ],
+          "B_m3_bound": [
+            -7.286046487794217e-36,
+            -8.099417848390137e-37
+          ]
+        },
+        {
+          "step": 22,
+          "rk": 2,
+          "event_count": 1,
+          "delta_Q_carrier": -1.2769605420376513e-41,
+          "delta_B_carrier": -2.5539210840753027e-44,
+          "Q_kg_bound": [
+            -1.745680107451976e-36,
+            -1.9405575634964955e-37
+          ],
+          "B_m3_bound": [
+            -3.4913602149039514e-39,
+            -3.8811151269929915e-40
+          ]
+        }
+      ],
+      "summed_delta_Q_carrier": -1.4992081077913026e-37,
+      "summed_delta_B_carrier": -1.7774431299092808e-40,
+      "cumulative_Q_kg_bound": [
+        -2.0495055912423235e-32,
+        -2.278300336662948e-33
+      ],
+      "cumulative_B_m3_bound": [
+        -2.4298692182442716e-35,
+        -2.7011255210175774e-36
+      ]
+    }
+  },
+  "limits": [
+    "Conservative interval uses extrema across all 39 mass layers and the whole native grid because individual event k,i,j coordinates are not retained. Every qualifying contribution is negative, making positive factor extrema valid bounds on the signed sum.",
+    "Q result is kg; B result is m3. These are distinct diagnostics.",
+    "Only committed code-5 storage adjustments are included; these are not total RK transport or endpoint inventory/conservation estimates.",
+    "The 11 events include committed RK1/RK2 rows from incomplete T22; this is not a completed-step-only aggregate."
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "scope": "direct bit comparison of recorded original producer and later consumer 3x3 state stencils; no new runtime or inferred producer values",
+  "arms": {
+    "off": {
+      "center_ijk": [
+        2,
+        218,
+        13
+      ],
+      "state_stencil_differences": [
+        {
+          "channel": 7,
+          "coordinate_ijk": [
+            1,
+            218,
+            13
+          ],
+          "producer_real32_hex": "000B7AD7",
+          "consumer_real32_hex": "00000000"
+        },
+        {
+          "channel": 7,
+          "coordinate_ijk": [
+            1,
+            219,
+            13
+          ],
+          "producer_real32_hex": "2E2F4D3C",
+          "consumer_real32_hex": "00000000"
+        },
+        {
+          "channel": 8,
+          "coordinate_ijk": [
+            1,
+            218,
+            13
+          ],
+          "producer_real32_hex": "00000349",
+          "consumer_real32_hex": "00000000"
+        },
+        {
+          "channel": 8,
+          "coordinate_ijk": [
+            1,
+            219,
+            13
+          ],
+          "producer_real32_hex": "29482272",
+          "consumer_real32_hex": "00000000"
+        }
+      ],
+      "all_differences_at_west_donor_i1": true
+    },
+    "cpl": {
+      "center_ijk": [
+        2,
+        218,
+        13
+      ],
+      "state_stencil_differences": [
+        {
+          "channel": 7,
+          "coordinate_ijk": [
+            1,
+            218,
+            13
+          ],
+          "producer_real32_hex": "000B7AD7",
+          "consumer_real32_hex": "00000000"
+        },
+        {
+          "channel": 7,
+          "coordinate_ijk": [
+            1,
+            219,
+            13
+          ],
+          "producer_real32_hex": "2E2F4D3C",
+          "consumer_real32_hex": "00000000"
+        },
+        {
+          "channel": 8,
+          "coordinate_ijk": [
+            1,
+            218,
+            13
+          ],
+          "producer_real32_hex": "00000349",
+          "consumer_real32_hex": "00000000"
+        },
+        {
+          "channel": 8,
+          "coordinate_ijk": [
+            1,
+            219,
+            13
+          ],
+          "producer_real32_hex": "29482272",
+          "consumer_real32_hex": "00000000"
+        }
+      ],
+      "all_differences_at_west_donor_i1": true
+    }
+  },
+  "selected_solve_source": {
+    "path": "/var/tmp/pr91_sources_c14_20261020/solve_em.F",
+    "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+  },
+  "call_order_observation": "The selected solve calls scalar boundary handling after rk_scalar_tend and before rk_update_joint_moments; the latter copies q2/n2 into q1/n1 at RK1. These static calls and the captured boundary differences do not alone identify the exact boundary write or establish a physical boundary error.",
+  "changes": "No boundary, tendency, source, stencil, or identity comparison is changed by PR92."
+}

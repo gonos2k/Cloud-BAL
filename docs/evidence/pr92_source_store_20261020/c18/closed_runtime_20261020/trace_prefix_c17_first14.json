@@ -1,0 +1,28 @@
+{
+  "schema": "pr92_c18_c17_first14_trace_prefix_v1",
+  "scope": "Complete stage trace records with timestep <=14; record bytes include headers and all stored field payloads.",
+  "arms": {
+    "off": {
+      "c17_trace": "/var/tmp/pr92_OFF_600s_c17_20261020/run/pr85_joint_moment_stages.raw.gz",
+      "c18_trace": "/var/tmp/pr92_OFF_600s_c18_20261020/run/pr85_joint_moment_stages.raw.gz",
+      "complete_records_compared": 113,
+      "records_identical": true,
+      "first_difference": null,
+      "steps_compared_through": 14,
+      "status": "PASS",
+      "c17_trace_sha256": "0b59ee10017044ec7d23dddb15cc08b683494eecb4e59ada24b2eeb9a7ad614a",
+      "c18_trace_sha256": "813bccf4c4f98fe7414e4941ce98ee69b81c88be0c20d309483ff129538742c6"
+    },
+    "coupled": {
+      "c17_trace": "/var/tmp/pr92_COUPLED_600s_c17_20261020/run/pr85_joint_moment_stages.raw.gz",
+      "c18_trace": "/var/tmp/pr92_COUPLED_600s_c18_20261020/run/pr85_joint_moment_stages.raw.gz",
+      "complete_records_compared": 113,
+      "records_identical": true,
+      "first_difference": null,
+      "steps_compared_through": 14,
+      "status": "PASS",
+      "c17_trace_sha256": "39add916712874b5d9afd99ba2853832c711732ccba2b26a3d59f20e5c7cbd52",
+      "c18_trace_sha256": "6574c76ad9f83fb22cfeb462475df0b5c3b36de7cab5ecc40e52038c1a600de9"
+    }
+  }
+}

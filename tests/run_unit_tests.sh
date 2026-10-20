@@ -47,6 +47,19 @@ pressure_transition_fixture="$test_tmp/pressure_transition_remap_fixture.txt"
 python3 "$repo_root/tests/test_pr85_native_air_operator.py"
 "$test_tmp/test_joint_qnb_transport"
 
+for bulk_profile in O0 O2; do
+  if [[ $bulk_profile == O0 ]]; then
+    bulk_flags=("${CLOUD_BAL_FREE_FLAGS[@]}")
+  else
+    bulk_flags=("${CLOUD_BAL_REPRO_FLAGS[@]}")
+  fi
+  "$CLOUD_BAL_FC" "${bulk_flags[@]}" -module "$test_tmp" -I "$test_tmp" \
+    "$repo_root/src/common/cloud_bal_joint_transport.f90" \
+    "$repo_root/tests/test_pr92_bulk_volume_policy.f90" \
+    -o "$test_tmp/test_pr92_bulk_volume_policy_$bulk_profile"
+  "$test_tmp/test_pr92_bulk_volume_policy_$bulk_profile"
+done
+
 "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
   -module "$test_tmp" -I "$test_tmp" \
   "$repo_root/src/common/cloud_bal_state.f90" \

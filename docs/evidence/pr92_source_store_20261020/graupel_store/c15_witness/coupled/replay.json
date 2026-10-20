@@ -1,0 +1,929 @@
+{
+  "schema": "pr92_c15_mixture_witness_replay_v1",
+  "status": "LOCAL_TRIAL_REPLAY_CLOSED_COMMIT_UNVERIFIED",
+  "arm": "CPL",
+  "local_trial_count": 11,
+  "d1_full_candidate_count": 12,
+  "global_target_coordinate_coverage": {
+    "covered": 11,
+    "expected_union": 12,
+    "coordinates": [
+      [
+        11,
+        216,
+        21
+      ],
+      [
+        22,
+        228,
+        21
+      ],
+      [
+        41,
+        229,
+        14
+      ],
+      [
+        43,
+        239,
+        19
+      ],
+      [
+        127,
+        5,
+        22
+      ],
+      [
+        158,
+        47,
+        20
+      ],
+      [
+        163,
+        44,
+        20
+      ],
+      [
+        170,
+        42,
+        23
+      ],
+      [
+        171,
+        43,
+        23
+      ],
+      [
+        203,
+        213,
+        21
+      ],
+      [
+        232,
+        203,
+        20
+      ]
+    ]
+  },
+  "d1_full_count": 12,
+  "d1_full_stage2_count": 11,
+  "d1_full_stage6_count": 1,
+  "stage2_witness_coordinate_count": 11,
+  "d1_full_stage2_coordinate_coverage_complete": true,
+  "all_local_trials_replay_exactly": true,
+  "all_overlapping_d1_full_candidates_match": true,
+  "transaction_commit_status": "NOT_CAPTURED",
+  "historical_excluded_store_counts": {
+    "step=2/rk=2/CERTIFIER": 1,
+    "step=3/rk=1/CERTIFIER": 1,
+    "step=3/rk=2/CERTIFIER": 2,
+    "step=4/rk=1/CERTIFIER": 2,
+    "step=4/rk=2/CERTIFIER": 2,
+    "step=4/rk=3/CERTIFIER": 6,
+    "step=5/rk=1/CERTIFIER": 2,
+    "step=5/rk=2/CERTIFIER": 2,
+    "step=5/rk=3/CERTIFIER": 8,
+    "step=6/rk=1/CERTIFIER": 2,
+    "step=6/rk=2/CERTIFIER": 3,
+    "step=6/rk=3/CERTIFIER": 4,
+    "step=7/rk=1/CERTIFIER": 11,
+    "step=7/rk=2/CERTIFIER": 13,
+    "step=7/rk=3/CERTIFIER": 24,
+    "step=8/rk=1/CERTIFIER": 4,
+    "step=8/rk=2/CERTIFIER": 3,
+    "step=8/rk=3/CERTIFIER": 4,
+    "step=9/rk=1/CERTIFIER": 5,
+    "step=9/rk=2/CERTIFIER": 4,
+    "step=9/rk=3/CERTIFIER": 14,
+    "step=10/rk=1/CERTIFIER": 8,
+    "step=10/rk=2/CERTIFIER": 8,
+    "step=10/rk=3/CERTIFIER": 14,
+    "step=11/rk=1/CERTIFIER": 7,
+    "step=11/rk=2/CERTIFIER": 11,
+    "step=11/rk=3/CERTIFIER": 18,
+    "step=12/rk=1/CERTIFIER": 8,
+    "step=12/rk=2/CERTIFIER": 11,
+    "step=12/rk=3/CERTIFIER": 26,
+    "step=13/rk=1/CERTIFIER": 6,
+    "step=13/rk=2/CERTIFIER": 7,
+    "step=13/rk=3/CERTIFIER": 6,
+    "step=14/rk=1/CERTIFIER": 6,
+    "step=14/rk=2/CERTIFIER": 11,
+    "step=14/rk=3/CERTIFIER": 20
+  },
+  "local_trials": [
+    {
+      "coordinate": [
+        15,
+        1,
+        127,
+        5,
+        22
+      ],
+      "cell": 32142,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3DEE73D075C0AE2F",
+      "candidate_b_bits64": "3D5152F3BF01865C",
+      "source_payload_bits64": {
+        "q_source": "0000000000000000",
+        "b_source": "0000000000000000",
+        "q_after": "3ECA77DA28F2BA9E",
+        "b_after": "3E2E1D69FECDA121",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F72D80A0000000"
+      },
+      "weights64_bits": [
+        "40F6D4E509527892",
+        "0000000000000000",
+        "4067DE1EECFBA6D4",
+        "0000000000000000",
+        "407DEF9361869C56",
+        "0000000000000000",
+        "40875E81782BF3A3"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "32F19FAA",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "2E097500"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47B96CFE",
+        "new_carrier": "47B96C05",
+        "dry_density": "3EF5894A",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "2F739E83",
+      "stored_b_bits32": "2A8A979E",
+      "delta_q_bits64": "BD6F82D72C6C75D6",
+      "delta_b_bits64": "3C970A28F9B20680",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3DEE73D075C0AE2F",
+        "3D5152F3BF01865C"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        170,
+        42,
+        23
+      ],
+      "cell": 367193,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3D5CE4B0D1CFF205",
+      "candidate_b_bits64": "3CC06FE528DA6C19",
+      "source_payload_bits64": {
+        "q_source": "3E3928B8C9920D44",
+        "b_source": "3D9CA01C33D95FE0",
+        "q_after": "8000000000000000",
+        "b_after": "8000000000000000",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F7385E80000000"
+      },
+      "weights64_bits": [
+        "40F6A55CA23B4122",
+        "402EFDF496F1A60C",
+        "408A41261F4C7312",
+        "402AB1F2AAE97BCF",
+        "409010DD92026321",
+        "407C6E95DE3C0470",
+        "0000000000000000"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "312D2EAB",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "2C450B00",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47B9C2AE",
+        "new_carrier": "47B9C2F4",
+        "dry_density": "3EE1DE1B",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "2AE72586",
+      "stored_b_bits32": "26037F29",
+      "delta_q_bits64": "BCD9D9ACEA6EED88",
+      "delta_b_bits64": "BC39B25850ABE750",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3D5CE4B0D1CFF205",
+        "3CC06FE528DA6C19"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        171,
+        43,
+        23
+      ],
+      "cell": 376242,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3DBF398411FF23DE",
+      "candidate_b_bits64": "3D21C36C20FE5F7F",
+      "source_payload_bits64": {
+        "q_source": "3E41B3032290D5F1",
+        "b_source": "3DA42348F8ADE4A1",
+        "q_after": "3E9AA39F14C10FB3",
+        "b_after": "3DFE4F36B4A07F17",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F7390E40000000"
+      },
+      "weights64_bits": [
+        "40F6BCD6A8F29E3C",
+        "4038550765F01668",
+        "4087BF606D17A0B4",
+        "4033638AF758C231",
+        "4090BF8F95AAA677",
+        "405BFBE7DF27E823",
+        "0000000000000000"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "312D2EAB",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "2C450B00",
+        "00000000",
+        "00000000"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47B9C738",
+        "new_carrier": "47B9C872",
+        "dry_density": "3EE1DF21",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "2DF9CC20",
+      "stored_b_bits32": "290E1B61",
+      "delta_q_bits64": "BD3A1EF08622D1B8",
+      "delta_b_bits64": "BC671345D517D1C0",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3DBF398411FF23DE",
+        "3D21C36C20FE5F7F"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        163,
+        44,
+        20
+      ],
+      "cell": 384586,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3D8291A3F18754C2",
+      "candidate_b_bits64": "3CE520961F524BF4",
+      "source_payload_bits64": {
+        "q_source": "3E602BC9E24F3F72",
+        "b_source": "3DC26628D3FA97D4",
+        "q_after": "8000000000000000",
+        "b_after": "8000000000000000",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F7391E60000000"
+      },
+      "weights64_bits": [
+        "40F6BD438E0915D0",
+        "402584889C87EA64",
+        "4086B13E69028C58",
+        "40145BCA25140736",
+        "408CF54BC89B1389",
+        "0000000000000000",
+        "407390139BD38A83"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "32A0532A",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "2DB66A00",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47B9C47A",
+        "new_carrier": "47B9C8F3",
+        "dry_density": "3F113345",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "2C148D1F",
+      "stored_b_bits32": "272904B1",
+      "delta_q_bits64": "BD09711D3BBE084C",
+      "delta_b_bits64": "3C1F83DD8DD1D900",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3D8291A3F18754C2",
+        "3CE520961F524BF4"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        158,
+        47,
+        20
+      ],
+      "cell": 411725,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3DD0744D566FAF23",
+      "candidate_b_bits64": "3D32B8A9E9BDA645",
+      "source_payload_bits64": {
+        "q_source": "0000000000000000",
+        "b_source": "0000000000000000",
+        "q_after": "3EAC97EAAE70F894",
+        "b_after": "3E1044382385AC22",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F72B82C0000000"
+      },
+      "weights64_bits": [
+        "40F6AE03AA5B5928",
+        "0000000000000000",
+        "4082932A1E0E77D6",
+        "0000000000000000",
+        "40910506D6BA7200",
+        "0000000000000000",
+        "4074449BBA385BC1"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "32967B57",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "2DAB3700"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47B955A8",
+        "new_carrier": "47B95C16",
+        "dry_density": "3F11422E",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "2E83A26A",
+      "stored_b_bits32": "2995C54F",
+      "delta_q_bits64": "BD603EC7A0D4A102",
+      "delta_b_bits64": "BCAC363897A857B8",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3DD0744D566FAF23",
+        "3D32B8A9E9BDA645"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        232,
+        203,
+        20
+      ],
+      "cell": 1823287,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3DEB23B589DE8155",
+      "candidate_b_bits64": "3D4EE0F2F59C7349",
+      "source_payload_bits64": {
+        "q_source": "3E887F516F9EB96B",
+        "b_source": "3DEBDF5DCB3AD9CA",
+        "q_after": "3EC62BB941C68A87",
+        "b_after": "3E2939B656373A9F",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F749F860000000"
+      },
+      "weights64_bits": [
+        "40F6E5508BC0388D",
+        "40746C490A034090",
+        "40418CE9BCE6331B",
+        "403B9A814E378232",
+        "4092AF04EBBEA8AC",
+        "403942DFDDAF5580",
+        "0000000000000000"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "33779572",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "2E8CD900",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47BA4F07",
+        "new_carrier": "47BA4FC3",
+        "dry_density": "3F1142DA",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "2F591DAC",
+      "stored_b_bits32": "2A770798",
+      "delta_q_bits64": "BD5CBAF4989EFAFC",
+      "delta_b_bits64": "3CBE3E437CDAA194",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3DEB23B589DE8155",
+        "3D4EE0F2F59C7349"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        203,
+        213,
+        21
+      ],
+      "cell": 1913970,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3E07D8A929D956A6",
+      "candidate_b_bits64": "3D6B21BF55295857",
+      "source_payload_bits64": {
+        "q_source": "0000000000000000",
+        "b_source": "0000000000000000",
+        "q_after": "3EE4CF1370067FC3",
+        "b_after": "3E47AD0753162F83",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F7451DA0000000"
+      },
+      "weights64_bits": [
+        "40F6A699EFAE57E9",
+        "0000000000000000",
+        "4087B603C2E32CD4",
+        "0000000000000000",
+        "409A6B87F9628E6A",
+        "0000000000000000",
+        "4055A660B36D013C"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "354D0BCC",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "30694C00"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47BA27B1",
+        "new_carrier": "47BA28ED",
+        "dry_density": "3F057C43",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "303EC549",
+      "stored_b_bits32": "2B590DFB",
+      "delta_q_bits64": "BD7CA5F0216C9EB8",
+      "delta_b_bits64": "3CDF86C58ED67DD4",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3E07D8A929D956A6",
+        "3D6B21BF55295857"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        11,
+        216,
+        21
+      ],
+      "cell": 1940922,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3DE0232D213236D7",
+      "candidate_b_bits64": "3D425C5C4EBAD6DB",
+      "source_payload_bits64": {
+        "q_source": "0000000000000000",
+        "b_source": "0000000000000000",
+        "q_after": "3EBAF71C13820F97",
+        "b_after": "3E1EAE346CAABC67",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F6479BE0000000"
+      },
+      "weights64_bits": [
+        "40F5F7179A57D2B4",
+        "0000000000000000",
+        "4064F07C36E9E42E",
+        "0000000000000000",
+        "408827F1F047455A",
+        "0000000000000000",
+        "4075BC0EA1423A04"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "33045652",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "2E169200"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47B23F06",
+        "new_carrier": "47B23CDF",
+        "dry_density": "3F04C2FC",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "2F011968",
+      "stored_b_bits32": "2A12E2E2",
+      "delta_q_bits64": "BD771CCED1162949",
+      "delta_b_bits64": "BCC482D406C4F98A",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3DE0232D213236D7",
+        "3D425C5C4EBAD6DB"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        22,
+        228,
+        21
+      ],
+      "cell": 2049509,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3DB147BD4792911D",
+      "candidate_b_bits64": "3D13A93B7B880A5E",
+      "source_payload_bits64": {
+        "q_source": "0000000000000000",
+        "b_source": "0000000000000000",
+        "q_after": "3E8C8D712CDAD50F",
+        "b_after": "3DF03E42A8E09D9D",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F607ED00000000"
+      },
+      "weights64_bits": [
+        "40F5E33624A1E741",
+        "40502C5CEFF34094",
+        "0000000000000000",
+        "0000000000000000",
+        "407343FE7875E1F7",
+        "0000000000000000",
+        "406ACF68894AF433"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "31E33280",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "2D014000"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47B03B03",
+        "new_carrier": "47B03F68",
+        "dry_density": "3F0482FE",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "2D8A3DEA",
+      "stored_b_bits32": "289D49DC",
+      "delta_q_bits64": "BD24DA8FA4C45B20",
+      "delta_b_bits64": "3C789CA1AC753E80",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3DB147BD4792911D",
+        "3D13A93B7B880A5E"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        41,
+        229,
+        14
+      ],
+      "cell": 2056952,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3E1F29F10BA27639",
+      "candidate_b_bits64": "3D81BA8FF46A1377",
+      "source_payload_bits64": {
+        "q_source": "0000000000000000",
+        "b_source": "0000000000000000",
+        "q_after": "3EF921DF665CF70D",
+        "b_after": "3E5C98513CB72477",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F5816B00000000"
+      },
+      "weights64_bits": [
+        "40F5275EE404CCE2",
+        "40826B82D7979764",
+        "0000000000000000",
+        "0000000000000000",
+        "408562FC8DDF4F89",
+        "4064DE759A93784F",
+        "0000000000000000"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "35807528",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "30922800",
+        "00000000"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47AC02AE",
+        "new_carrier": "47AC0B58",
+        "dry_density": "3F590894",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "30F94F88",
+      "stored_b_bits32": "2C0DD480",
+      "delta_q_bits64": "BD8F46ADA4E45A60",
+      "delta_b_bits64": "3CFF24F962FCC860",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3E1F29F10BA27639",
+        "3D81BA8FF46A1377"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    },
+    {
+      "coordinate": [
+        15,
+        1,
+        43,
+        239,
+        19
+      ],
+      "cell": 2148594,
+      "source_first_pair": false,
+      "candidate_q_bits64": "3DBC4FE104422F6B",
+      "candidate_b_bits64": "3D201B3CE16D5500",
+      "source_payload_bits64": {
+        "q_source": "3E51AB2BCB48AA84",
+        "b_source": "3DB41A5D10407930",
+        "q_after": "3E9649A8DDB8BA2C",
+        "b_after": "3DF95BC5D22C101F",
+        "minimum_ratio": "4059000000000000",
+        "maximum_ratio": "408C200000000000",
+        "new_carrier_r64": "40F60857C0000000"
+      },
+      "weights64_bits": [
+        "40F58FAD76C66DE9",
+        "4042C9AD015780B8",
+        "4081CEF972937E16",
+        "4040C08D3D581C4B",
+        "408BA349F54BB383",
+        "0000000000000000",
+        "4079547244D39204"
+      ],
+      "donor_q_and_b_terms32_bits": [
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "31348F70",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "00000000",
+        "2C4D7000",
+        "00000000",
+        "00000000"
+      ],
+      "store_inputs32_bits": {
+        "dt": "40D55555",
+        "old_carrier": "47B03EBF",
+        "new_carrier": "47B042BE",
+        "dry_density": "3F1C69F3",
+        "q_base": "00000000",
+        "b_base": "00000000"
+      },
+      "stored_q_bits32": "2DE27F08",
+      "stored_b_bits32": "2900D9E7",
+      "delta_q_bits64": "BD1774E697463B50",
+      "delta_b_bits64": "BC6F7135E1E2C000",
+      "candidate_strict": false,
+      "stored_strict": true,
+      "helper_replay_exact": true,
+      "candidate_bits_match_d1_full": true,
+      "cell_matches_d1_full": true,
+      "candidate_matches_d1_full": true,
+      "d1_failure_stage": 2,
+      "d1_candidate_bits64": [
+        "3DBC4FE104422F6B",
+        "3D201B3CE16D5500"
+      ],
+      "transaction_commit_status": "NOT_CAPTURED"
+    }
+  ],
+  "profiles": {
+    "O0": {
+      "profile": "O0",
+      "scratch": "/var/tmp/pr92_source_o0_pp51tqdi",
+      "stdout": "/var/tmp/pr92_source_o0_pp51tqdi/replay.f90(11): remark #7712: This variable has not been used.   [ADJUST]\n  integer :: row,j,adjust\n-------------------^\nMIXTURE_REPLAY 1 T F T 2F739E83 2A8A979E BD6F82D72C6C75D6 3C970A28F9B20680 3DEE73D075C0AE2F 3D5152F3BF01865C BD6F82D72C6C75D6 3C970A28F9B20680\nMIXTURE_REPLAY 2 T F T 2AE72586 26037F29 BCD9D9ACEA6EED88 BC39B25850ABE750 3D5CE4B0D1CFF205 3CC06FE528DA6C19 BCD9D9ACEA6EED88 BC39B25850ABE750\nMIXTURE_REPLAY 3 T F T 2DF9CC20 290E1B61 BD3A1EF08622D1B8 BC671345D517D1C0 3DBF398411FF23DE 3D21C36C20FE5F7F BD3A1EF08622D1B8 BC671345D517D1C0\nMIXTURE_REPLAY 4 T F T 2C148D1F 272904B1 BD09711D3BBE084C 3C1F83DD8DD1D900 3D8291A3F18754C2 3CE520961F524BF4 BD09711D3BBE084C 3C1F83DD8DD1D900\nMIXTURE_REPLAY 5 T F T 2E83A26A 2995C54F BD603EC7A0D4A102 BCAC363897A857B8 3DD0744D566FAF23 3D32B8A9E9BDA645 BD603EC7A0D4A102 BCAC363897A857B8\nMIXTURE_REPLAY 6 T F T 2F591DAC 2A770798 BD5CBAF4989EFAFC 3CBE3E437CDAA194 3DEB23B589DE8155 3D4EE0F2F59C7349 BD5CBAF4989EFAFC 3CBE3E437CDAA194\nMIXTURE_REPLAY 7 T F T 303EC549 2B590DFB BD7CA5F0216C9EB8 3CDF86C58ED67DD4 3E07D8A929D956A6 3D6B21BF55295857 BD7CA5F0216C9EB8 3CDF86C58ED67DD4\nMIXTURE_REPLAY 8 T F T 2F011968 2A12E2E2 BD771CCED1162949 BCC482D406C4F98A 3DE0232D213236D7 3D425C5C4EBAD6DB BD771CCED1162949 BCC482D406C4F98A\nMIXTURE_REPLAY 9 T F T 2D8A3DEA 289D49DC BD24DA8FA4C45B20 3C789CA1AC753E80 3DB147BD4792911D 3D13A93B7B880A5E BD24DA8FA4C45B20 3C789CA1AC753E80\nMIXTURE_REPLAY 10 T F T 30F94F88 2C0DD480 BD8F46ADA4E45A60 3CFF24F962FCC860 3E1F29F10BA27639 3D81BA8FF46A1377 BD8F46ADA4E45A60 3CFF24F962FCC860\nMIXTURE_REPLAY 11 T F T 2DE27F08 2900D9E7 BD1774E697463B50 BC6F7135E1E2C000 3DBC4FE104422F6B 3D201B3CE16D5500 BD1774E697463B50 BC6F7135E1E2C000",
+      "stdout_sha256": "e968a3cc74a2a0c6991cd256a7d5dd838ed37770f1ba33b812da415e85f1ead8"
+    },
+    "O2": {
+      "profile": "O2",
+      "scratch": "/var/tmp/pr92_source_o2_ahidipou",
+      "stdout": "/var/tmp/pr92_source_o2_ahidipou/replay.f90(11): remark #7712: This variable has not been used.   [ADJUST]\n  integer :: row,j,adjust\n-------------------^\nMIXTURE_REPLAY 1 T F T 2F739E83 2A8A979E BD6F82D72C6C75D6 3C970A28F9B20680 3DEE73D075C0AE2F 3D5152F3BF01865C BD6F82D72C6C75D6 3C970A28F9B20680\nMIXTURE_REPLAY 2 T F T 2AE72586 26037F29 BCD9D9ACEA6EED88 BC39B25850ABE750 3D5CE4B0D1CFF205 3CC06FE528DA6C19 BCD9D9ACEA6EED88 BC39B25850ABE750\nMIXTURE_REPLAY 3 T F T 2DF9CC20 290E1B61 BD3A1EF08622D1B8 BC671345D517D1C0 3DBF398411FF23DE 3D21C36C20FE5F7F BD3A1EF08622D1B8 BC671345D517D1C0\nMIXTURE_REPLAY 4 T F T 2C148D1F 272904B1 BD09711D3BBE084C 3C1F83DD8DD1D900 3D8291A3F18754C2 3CE520961F524BF4 BD09711D3BBE084C 3C1F83DD8DD1D900\nMIXTURE_REPLAY 5 T F T 2E83A26A 2995C54F BD603EC7A0D4A102 BCAC363897A857B8 3DD0744D566FAF23 3D32B8A9E9BDA645 BD603EC7A0D4A102 BCAC363897A857B8\nMIXTURE_REPLAY 6 T F T 2F591DAC 2A770798 BD5CBAF4989EFAFC 3CBE3E437CDAA194 3DEB23B589DE8155 3D4EE0F2F59C7349 BD5CBAF4989EFAFC 3CBE3E437CDAA194\nMIXTURE_REPLAY 7 T F T 303EC549 2B590DFB BD7CA5F0216C9EB8 3CDF86C58ED67DD4 3E07D8A929D956A6 3D6B21BF55295857 BD7CA5F0216C9EB8 3CDF86C58ED67DD4\nMIXTURE_REPLAY 8 T F T 2F011968 2A12E2E2 BD771CCED1162949 BCC482D406C4F98A 3DE0232D213236D7 3D425C5C4EBAD6DB BD771CCED1162949 BCC482D406C4F98A\nMIXTURE_REPLAY 9 T F T 2D8A3DEA 289D49DC BD24DA8FA4C45B20 3C789CA1AC753E80 3DB147BD4792911D 3D13A93B7B880A5E BD24DA8FA4C45B20 3C789CA1AC753E80\nMIXTURE_REPLAY 10 T F T 30F94F88 2C0DD480 BD8F46ADA4E45A60 3CFF24F962FCC860 3E1F29F10BA27639 3D81BA8FF46A1377 BD8F46ADA4E45A60 3CFF24F962FCC860\nMIXTURE_REPLAY 11 T F T 2DE27F08 2900D9E7 BD1774E697463B50 BC6F7135E1E2C000 3DBC4FE104422F6B 3D201B3CE16D5500 BD1774E697463B50 BC6F7135E1E2C000",
+      "stdout_sha256": "60f8a156980a1934073ac59c14a02b8c00758cd06f6acd871decb0510852c265"
+    }
+  },
+  "runtime_stdout_sha256": "cbeb507624cabf1416eb96728c9d812136fba03d27337391b687242580d2a11a",
+  "hashes": {
+    "c15_source_sha256": "1ec3131abace4337314279ac833a6bcae32c0080261cccc912b45f0afba16399",
+    "d1_consumer_capture_sha256": "6ce982d18e0bf44890414216c46a89bb01c6405625c972255420ceffd1e47a76",
+    "d1_combined_replay_sha256": "caecb9360f54c49c0c369aa825eb9e35c470228a50dd459af81e59032e8542e5",
+    "mixture_capture_sha256": "ff447cd18406ed03a926652dbc0e9c86f7bf9b5c5d69f8a5553a4055c4f0616e",
+    "mixture_helper_text_sha256": "4e969c8424320f720e90b3086ed795bcabc3cda7acfd4f7e1bfb6ef721ea60d0",
+    "tool_sha256": "76ab9666d423e2737940beeda6f1fcd522aedaf0e815155bf48ed83918ba5308",
+    "source_parser_sha256": "4c9dda239beaa12428a4be0fb047495f14d68e73a37a6bb1d8fdb4af144da401",
+    "producer_target_source_sha256": "307aa38ceb818d0d76e4131f9a2fd9b7733a4aaafeb55dab08c71aea65d14214",
+    "compiler_wrapper_sha256": "af140dc79a8c8bba66eaf781206976ebb7dc46f30d945551555b5b94d6356644",
+    "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "generated_source_files": {
+    "mixture_adapter.f90": "4e969c8424320f720e90b3086ed795bcabc3cda7acfd4f7e1bfb6ef721ea60d0",
+    "witness_data.f90": "0134ea42fcb1e6773cafeb5ee303fcb48ebbaca2123c61a2a681d4b2d98f7dd8",
+    "replay.f90": "0a9e1c6d85b0f06b2557b10ea9f047d1051b64340d2f9455ee9762c17bb081a2"
+  }
+}

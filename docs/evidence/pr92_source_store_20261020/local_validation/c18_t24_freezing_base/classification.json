@@ -1,0 +1,97 @@
+{
+  "status": "SCOPED_CLASSIFICATION",
+  "scope": "C18 paired native runs, T24 KDM6 PINU failure coordinate only; both runs incomplete at 23 timesteps / rc 128.",
+  "arms": {
+    "OFF": {
+      "receipt": "/var/tmp/pr92_OFF_600s_c18_20261020/receipt.json",
+      "freezing_ledger_sha256": "8d8778e6714f822c34d553774147aefda5559bb15511a86998e99a7fef772152",
+      "rsl_error_sha256": "87938290e9e889ba4a06ae01f165c36f58e80816f384a7989a5bfadb47864f2b",
+      "failure": "PR85 invalid cloud-ice freezing packet base"
+    },
+    "COUPLED": {
+      "receipt": "/var/tmp/pr92_COUPLED_600s_c18_20261020/receipt.json",
+      "freezing_ledger_sha256": "37fb48b0f7a7b98c1e328643d16d7b7aee228c411e3d2a55aa64b17961df127d",
+      "rsl_error_sha256": "483b6491ed19404ff4486df4240a392ca8366ffe165908af6796b951113bde5f",
+      "failure": "PR85 invalid cloud-ice freezing packet base"
+    }
+  },
+  "source": {
+    "module_path": "/var/tmp/pr90_sources_c7_20261019/module_mp_kdm6.F",
+    "module_sha256": "983095a0aa0c76eab4efdda27f9435e61634e08e542ef9bd096aa4cf8004eca4",
+    "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr92_source_store_20261020/Cloud-BAL/tools/pr85_kdm6_freezing_packet.F90",
+    "helper_sha256": "64daa2b447d39114affa944966b055d52c83fea8a4a208095c2fa9254f357a6a",
+    "source_helper_body_sha256": "64daa2b447d39114affa944966b055d52c83fea8a4a208095c2fa9254f357a6a"
+  },
+  "last_failure_record": "PINU 230 247 20 FFF 0.0000000000000000E+00 2.1296498102647661E-13 5.0349597749963093E-01 0.0000000000000000E+00 0.0000000000000000E+00 2.1296498102647661E-13 5.0349597749963093E-01 1.3505793504009489E-05 4.2574184000000000E+07 2.4385062715737149E-06 6.2293597412109375E+02 1.3505793504009489E-05 4.2574184000000000E+07 2.4385062715737149E-06 6.2293597412109375E+02 2.5718026733398438E+02 2.5718026733398438E+02 0 0 0 0 0 0 5.3602170944213867E-01 1.0000000036274937E-15",
+  "input_real32": {
+    "qc": {
+      "value": 1.3505793504009489e-05,
+      "bits": "376296F1"
+    },
+    "nc": {
+      "value": 42574184.0,
+      "bits": "4C22685A"
+    },
+    "qi": {
+      "value": 2.438506271573715e-06,
+      "bits": "3623A538"
+    },
+    "ni": {
+      "value": 622.9359741210938,
+      "bits": "441BBBE7"
+    },
+    "rho": {
+      "value": 0.5360217094421387,
+      "bits": "3F0938B8"
+    },
+    "inactive_ice_limit": {
+      "source_expression": "NEAREST(1.e-14,-1.0)",
+      "value": 9.999998977483753e-15,
+      "bits": "283424DB"
+    }
+  },
+  "bounds_recomputed_from_source_call": {
+    "pidnc_real32": 523.5988159179688,
+    "pidnc_bits": "4402EFA4",
+    "pidni_real32": 1570.79638671875,
+    "pidni_bits": "44C4597C",
+    "cloud_min": 4.18879052734375e-15,
+    "cloud_max": 3.0300857402660227e-10,
+    "ice_min": 2.6055879053180625e-16,
+    "ice_max": 2.0982747187893314e-09,
+    "ice_mean_particle_mass_real64": 2.0982771175135736e-09,
+    "ice_mean_promoted_real32": 2.098277107620561e-09,
+    "ice_mean_promoted_bits": "31103148",
+    "ice_max_promoted_real32": 2.0982746651299067e-09,
+    "ice_max_promoted_bits": "3110313D",
+    "ice_mean_minus_max_real64": 2.3987242422e-15,
+    "real32_spacing_at_max": 2.220446049250313e-16,
+    "ulp_distance": 11,
+    "allowed_high_tolerance_ulps": 8,
+    "outside_tolerance_ulps": 3,
+    "cloud_cone": "passes",
+    "ice_cone": "fails strict active-ice upper bound",
+    "ulp_distance_real": 10.802893603220582,
+    "outside_tolerance_ulps_real": 2.802893603220582
+  },
+  "replay": {
+    "harness_sha256": "1a5052ebdf8af1a4f15dbb9cf2190a981e5db3a1a154710dad53f4df48f9a70a",
+    "O0_log_sha256": "0661e6a57069c71c51954136cdd062844cbebfb34dc0ce721acbea11f5faf3fe",
+    "O2_log_sha256": "e91904dadac9a42606669f4d2f9cfdc1551d5596bb5edb4a6079add39977962e",
+    "O0_result": "base_valid=F accepted=F",
+    "O2_result": "base_valid=F accepted=F",
+    "profile": "tests/intel_toolchain.sh pinned Intel; O0 uses CLOUD_BAL_FREE_FLAGS, O2 uses CLOUD_BAL_REPRO_FLAGS",
+    "fresh_scratch": [
+      "/var/tmp/c18_freezing_final_O0_PBa8aa",
+      "/var/tmp/c18_freezing_final_O2_FS8PGO"
+    ],
+    "harness_path": "scratch/pr92_source_store_20261020/Cloud-BAL/docs/evidence/pr92_source_store_20261020/local_validation/c18_t24_freezing_base/replay.f90",
+    "source_cutoff_bits": "283424DB",
+    "proposal_R64": {
+      "mass_request": 2.129649810264766e-13,
+      "number_request": 0.5034959774996309
+    }
+  },
+  "interpretation": "The ice state is above the native inactive threshold, so the strict active-ice cone applies. Its promoted mean mass is 11 REAL32 ULP above the configured maximum; the helper allows 8 ULP, leaving a 3-ULP excess. This reproduces base_valid=F at O0 and O2. The captured state is formally outside the configured cone, although only narrowly in relative terms. This classification does not identify which upstream operation produced the state; prior-QB adjustment causality remains unresolved.",
+  "next_probe": "Capture the exact qice/nice/rho immediately before upstream updates and after each relevant ice mass/number update at this coordinate; compare each stage against the same strict cone before proposing a change."
+}

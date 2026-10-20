@@ -1,0 +1,275 @@
+{
+  "configured_log_pressure_source_formula_r32_replay": {
+    "compared_points": 624,
+    "compiler": "ifx (IFX) 2026.0.0 20260331",
+    "initialized_qcloud_bit_matches": 624,
+    "initialized_qcloud_bit_mismatches": 0,
+    "interpretation": "All 624 source-form log-pressure QC interpolation results match initialized PR83 QCLOUD bits at both O0 and O2. This validates selected-column vertical operator and pressure reconstruction within the archived input/output lineage. It does not validate horizontal source selection or a domain-wide native footprint.",
+    "manifest_path": "qc_r32_fortran_probe/manifest.json",
+    "max_abs_difference_kg_kg": 0.0,
+    "native_levels_per_column": 39,
+    "o0_o2_outputs_bitwise_identical": true,
+    "operator_inputs_reconstructed_in_real32": "sfcprs2 using direct QV and TAVGSFC; integ_moist source expression/order; p_dts mu0; p_dry half-level target pressure; 500-Pa close-level selection; interp_type=2 LOG pressure; source lagrange_interp routine.",
+    "optimization_levels": [
+      "O0",
+      "O2"
+    ],
+    "target_columns": 16
+  },
+  "fortran_r32_operator_probe": {
+    "compiler_profile": "Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "exact_fortran_output_qc_kg_kg": 0.00274666771,
+    "extracted_source_sha256": "0b68fad6c73649c8bfabe160d930c3901add010fd2c4eecff806e2b8c879df8c",
+    "fortran_minus_initialized_qcloud_kg_kg": -5.4549661597886e-05,
+    "initialized_wrfinput_qcloud_kg_kg": 0.002801217371597886,
+    "interpretation": "REAL32 source interpolation changes the Python reconstruction by approximately 1.3e-9 kg kg-1, far below the 5.45e-5 residual. The prescribed source branch arithmetic is consistent; the difference is already present in an upstream QC input/pressure state or another unrepresented runtime branch. The probe does not identify which. That focused probe used the wrong coordinate-mode assumption (linear pressure); it isolates the Lagrange arithmetic but is not the configured QC path. The configured log-pressure focused test at the former worst target matches native QCLOUD bit-for-bit at O0 and O2.",
+    "optimization_and_fp_flags": "-stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz",
+    "purpose": "Isolate the pressure-bracket interpolator at the largest residual, with the exact source lagrange_interp routine and actual REAL32 inputs.",
+    "scratch_directory": "/var/tmp/pr92_r32_vert_probe_20261020",
+    "source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_initialize_real.F lines 6653-6691",
+    "source_bracket_pressure_pa": [
+      29993.4794921875,
+      24997.9296875
+    ],
+    "source_bracket_qc_kg_kg": [
+      0.0035466021,
+      0.0
+    ],
+    "target_dry_pressure_pa": 28866.736328125
+  },
+  "horizontal_lineage_limit": {
+    "actual_pr83_met_em_sha256": "5c896259727e224658434b7896b1c04187cd903190d87b8fc790a75dda856e02",
+    "comparison_scope": "NOT_DIRECTLY_COMPARABLE: README defines the existing 288 rows as a WPS source-component replay, not the full QC field; it explicitly does not establish that QC alone selected each final met_em value.",
+    "direct_interp_embedded_source_sha256_conflict": "Embedded 135c2315... is the SHA of /var/tmp/pr81_joint_thermo.HbL5ry/O2/joint_candidate.nc per support_lookup.json, not the replay LAPS record. This is a derived-JSON metadata bug. Replay manifest and live LAPS path bind d73b335...; replay met_em binds e635b4... .",
+    "existing_bitwise_matches": 288,
+    "existing_replay_met_em_path": "/var/tmp/pr82_same13_real_candidate.final20261012/met_em.d01.2026-08-16_13:00:00.nc",
+    "existing_replay_met_em_sha256": "e635b4083c22258907338c06104c4ba8ef02a819e6b76a5c4f6cc567b067cd60",
+    "existing_replay_targets": 16,
+    "geometry_transfer": "SAME: both met_em products are 234x282x21 with identical XLAT_M/XLONG_M, PRES, RH, PSFC, TAVGSFC, HGT_M and projection/dx/dy/center/truelat attributes. WPS geometric stencil can be scoped to this identical grid, with source LAPS radius from the replay manifest.",
+    "links": 36,
+    "pressure_levels": 18,
+    "qc_selection_mask": "Replay bundle records all 1152 four-point source corners valid for its source QC and no fallback at those rows. The archived evidence does not retain per-source-selection masks/alternate-source contributions for the PR83 met_em product.",
+    "qc_value_transfer": "NOT_ESTABLISHED: at the 288 target/pressure rows, 157 final PR83 met_em QC values bit-match replay outputs and 131 differ; the full QC arrays differ at 131 grid/level locations. Replay source-only output cannot be attributed as the complete QC selected by the PR83 product.",
+    "replay_manifest_sha256": "73cbbd104bf19072a1c6ceb8940c8ec37da4ed9c837fffd00aa3f21babacbbc9",
+    "replay_source_record_path": "/var/tmp/pr82_same13_metgrid_candidate.final20261012/LAPS:2026-08-16_13",
+    "replay_source_record_sha256": "d73b3356430b64b98997b720e9e7549033ac9a5e4d35be798dff2d1dfdb0dbce",
+    "transfer_status": "UNRESOLVED: replay component source and PR83 initializer input are distinct archived met_em products; the evidence does not yet show whether this source-component operator/lineage applies to PR83."
+  },
+  "interpretation_limit": "The exact source-form REAL32 replay of surface pressure, direct-QV moisture integration, dry surface pressure, eta half-level target pressure, close-level selection, log-pressure interpolation and source lagrange_interp matches initialized QCLOUD at all 624 levels of 16 selected PR83 columns at both O0 and O2. This is a bounded vertical validation only. WPS geometric stencil transfers to the same grid, but 131/288 replay target-pressure QC values differ from PR83 final met_em QC and the replay is source-component-only; no actual horizontal QC attribution or domain-wide footprint is established.",
+  "post_interpolation_qc_review": {
+    "conclusion": "No active post-interpolation QC mass mutation explains the earlier linear-pressure residual. Using the configured log-pressure coordinate and source-form REAL32 pressure path reproduces all 624 selected initialized QCLOUD values bitwise at O0 and O2.",
+    "insert_init_cloud": "false by Registry default; absent from preserved PR83 namelist.input",
+    "moist_to_dry_conversion_for_qc": "No QC mass conversion found in the traced source path; Registry describes qc_gc as cloud-water mixing ratio kg kg-1.",
+    "source_assignments_after_vert_interp": "Only the optional insert_init_cloud block assigns moist(P_QC)=temp_Qc; it is conditional on config_flags%insert_init_cloud. The following Thompson number initialization reads QC mass but only assigns number scalars."
+  },
+  "preliminary_log_pressure_batch_with_python_pressure_rounding": {
+    "bit_mismatch_locations": [
+      {
+        "initialized_qcloud_bits": "3A963DFA",
+        "native_eta_level0": 10,
+        "reconstructed_qc_bits": "3A963DD0",
+        "target_i0": 135,
+        "target_j0": 16
+      },
+      {
+        "initialized_qcloud_bits": "39F1C02F",
+        "native_eta_level0": 5,
+        "reconstructed_qc_bits": "39F1BFBB",
+        "target_i0": 136,
+        "target_j0": 16
+      },
+      {
+        "initialized_qcloud_bits": "3AD190CE",
+        "native_eta_level0": 13,
+        "reconstructed_qc_bits": "3AD190AC",
+        "target_i0": 136,
+        "target_j0": 17
+      }
+    ],
+    "compiler_profile": "Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_version": "ifx 2026.0.0 20260331",
+    "exact_qcloud_bit_matches": 621,
+    "input_limit": "This batch passes REAL32-rounded source pressures and QC values from the source-form reconstruction into the exact source lagrange_interp routine. It does not independently reconstruct every p_dry input and source runtime selection branch in REAL32. At the largest former residual (i0=136,j0=16,k0=22), O0 and O2 each match initialized QCLOUD bit-for-bit (0.00280121737; bits 3B3794A1).",
+    "max_abs_difference_kg_kg": 4.889443516731262e-09,
+    "mean_abs_difference_kg_kg": 1.9589116650641026e-11,
+    "o0_o2_outputs_identical": true,
+    "optimization_and_fp_flags": "-stand f08 -warn all -check all -fpe0 -traceback -fp-model strict -fimf-arch-consistency=true -no-ftz",
+    "optimization_levels": [
+      "O0",
+      "O2"
+    ],
+    "scratch_directory": "/var/tmp/pr92_log_r32_probe_20261020",
+    "selected_native_target_rows": 624,
+    "source_routine": "lagrange_interp copied from module_initialize_real.F lines 6653-6691; REAL32 log(p) coordinate and source first-order polynomial",
+    "source_routine_sha256": "0b68fad6c73649c8bfabe160d930c3901add010fd2c4eecff806e2b8c879df8c"
+  },
+  "real_run_bindings": {
+    "c14_off_input_sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+    "c14_off_vs_original_pr83_arrays_bit_identical": [
+      "QCLOUD",
+      "PB",
+      "MU",
+      "MUB",
+      "P_TOP",
+      "C3H",
+      "C4H"
+    ],
+    "initializer_source_sha256": "a4bb2497d0c70588f45da06fe9754b56597245033fec7b4bb51beba05901ce2c",
+    "input_contract": {
+      "met_em_inputs": [
+        {
+          "Qv_units": "kg kg{-1}",
+          "direct_QV_present": true,
+          "grid": [
+            235,
+            283
+          ],
+          "metgrid_levels": 21,
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/met_em.d01.2026-08-16_13:00:00.nc",
+          "sha256": "5c896259727e224658434b7896b1c04187cd903190d87b8fc790a75dda856e02",
+          "spacing_m": [
+            5000.0,
+            5000.0
+          ],
+          "time": "2026-08-16_13:00:00"
+        },
+        {
+          "Qv_units": null,
+          "direct_QV_present": false,
+          "grid": [
+            235,
+            283
+          ],
+          "metgrid_levels": 21,
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/met_em.d01.2026-08-16_14:00:00.nc",
+          "sha256": "4015054ed0b059142873a6a0d7d153ff0297156166fb58e72774f0ac28a3938d",
+          "spacing_m": [
+            5000.0,
+            5000.0
+          ],
+          "time": "2026-08-16_14:00:00"
+        },
+        {
+          "Qv_units": "kg kg{-1}",
+          "direct_QV_present": true,
+          "grid": [
+            235,
+            283
+          ],
+          "metgrid_levels": 21,
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/met_em.d01.2026-08-16_15:00:00.nc",
+          "sha256": "fc61a3885e6cdbbdead9c63b8b67c84018167e253a951e3412d3f1e1bdd6f3ab",
+          "spacing_m": [
+            5000.0,
+            5000.0
+          ],
+          "time": "2026-08-16_15:00:00"
+        }
+      ],
+      "namelist_delta_from_single_time": {
+        "end_hour": [
+          13,
+          15
+        ],
+        "interval_seconds": [
+          10800,
+          3600
+        ],
+        "start_hour": [
+          13,
+          13
+        ]
+      },
+      "namelist_sha256": "59e949a1a9feffec06204f8abc9b090b3c294e1a501e9f9599cbfc10503646f6",
+      "physics_and_direct_qv_options_preserved": true,
+      "status": "PASS_SCOPED_SAME13_BOUNDARY_INPUT_CONTRACT",
+      "time_authority": "retained same-time source products at 14/15, not retimed 12 UTC data"
+    },
+    "met_em_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/met_em.d01.2026-08-16_13:00:00.nc",
+    "met_em_sha256": "5c896259727e224658434b7896b1c04187cd903190d87b8fc790a75dda856e02",
+    "namelist_sha256": "59e949a1a9feffec06204f8abc9b090b3c294e1a501e9f9599cbfc10503646f6",
+    "pr84_prior_transaction": {
+      "all_other_variables_unchanged": true,
+      "changed_nonmoment_variables": [],
+      "output_input_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "source_input_sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730",
+      "source_unchanged": true
+    },
+    "real_executable_sha256": "fa76d4bb17c0c63ecfed12a09ed912ba149248c1378f45b1938b16d2f729bdff",
+    "wrfinput_sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730"
+  },
+  "reconstructed_operator": {
+    "extrap_type": 1,
+    "force_sfc_in_vinterp": 0,
+    "humidity_branch": "direct QV when met_em contains QV; otherwise rh_to_mxrat1 liquid-water branch",
+    "interp_coordinate": "natural log of dry pressure in Pa",
+    "interp_type": 2,
+    "lagrange_order": 1,
+    "lagrange_order_note": "Preserved namelist sets lagrange_order=1, but the QC vert_interp call passes linear_interp instead.",
+    "linear_interp": 1,
+    "linear_interp_registry_default": "1=linear; this is the QC call order argument",
+    "pressure_target": "C3H*mu0 + C4H + P_TOP; mu0=PSFC-integrated_vapor-P_TOP",
+    "use_levels_below_ground": true,
+    "use_surface": true,
+    "var_type": "Q",
+    "zap_close_levels_pa": 500.0
+  },
+  "schema": "pr92_qc_vertical_reconstruction_pr83_lineage_v1",
+  "scope": "Source-form pressure-space QC vertical interpolation weights for 16 preserved candidate targets using the actual PR83 initialization input/output lineage inherited by C14 OFF.",
+  "source_pressure_reconstruction_diagnostics": {
+    "initial_qcloud_vs_reconstructed_vert_interp_max_abs": 1.1183149762131195e-08,
+    "initial_qcloud_vs_reconstructed_vert_interp_mean_abs": 6.398505376800519e-10,
+    "interpretation": "Registry.EM_COMMON default interp_type=2 (log pressure) applies because the preserved namelist does not override interp_type. Replaying the actual log-pressure branch reduces the QCLOUD residual to near REAL32 roundoff while preserving mu0 agreement.",
+    "mu0_vs_wrfinput_mu_plus_mub_max_abs_pa": 0.003756763180717826,
+    "previous_linear_pressure_trial_max_abs": 5.45483617227548e-05,
+    "qcloud_comparison_note": "Same met_em QC is vertically replayed at each selected target, then compared with initialized wrfinput QCLOUD; this readback check does not prove executable identity.",
+    "selected_target_count": 16,
+    "worst_qcloud_target_level": {
+      "difference": 1.1183149762131195e-08,
+      "initialized_qcloud": 0.002059831051155925,
+      "native_eta_level0": 18,
+      "reconstructed_qcloud": 0.002059842234305687,
+      "target_i0": 136,
+      "target_j0": 17,
+      "vertical_row": {
+        "mode": "linear_log_pressure_interpolation",
+        "target_pressure_pa": 44119.01637294959,
+        "vertical_coefficients": [
+          {
+            "input_pressure_pa": 44952.27526893818,
+            "met_em_pressure_index0": 12,
+            "pressure_pa": 44952.27526893818,
+            "weight": 0.8406634121394636
+          },
+          {
+            "input_pressure_pa": 39971.79178812245,
+            "met_em_pressure_index0": 13,
+            "pressure_pa": 39971.79178812245,
+            "weight": 0.1593365878605364
+          }
+        ]
+      }
+    }
+  },
+  "status": "SELECTED_PR83_VERTICAL_QC_REPLAY_BITWISE_VALIDATED; HORIZONTAL_SOURCE_ATTRIBUTION_OPEN",
+  "tentative_composition_counts": {
+    "composed_nonzero_links": 2348,
+    "levels_with_qc_support": 613,
+    "native_target_levels": 624,
+    "unique_horizontal_source_cells": 9
+  },
+  "upstream_branch_checks": {
+    "interp_type_resolution": "Registry/Registry.EM_COMMON default 2 (log pressure); interp_type is absent from the preserved PR83 namelist. The initializer resets interp_type to grid%interp_type before the QC call; Registry.CONVERT default 1 does not apply to this EM initializer.",
+    "pr83_met_em_cloud_fraction_inputs": "Neither CL nor SPECCLDL variable is present; the QC call therefore consumes QC rather than CL/(1-CL).",
+    "pr83_met_em_flag_qc": 1,
+    "pr83_met_em_flag_speccldl": "attribute absent; module_optional_input defaults flag_speccldl to 0",
+    "pressure_at_qc_call": "p_dry is called with full_levs=.FALSE.; source p_dry computes grid%pb(k)=c3h(k)*mu0+c4h(k)+p_top for half levels. Final wrfinput PB is later rebuilt as base pressure and is not the direct QC target-pressure array.",
+    "real32_direct_qv_probe_at_worst_qc_target": {
+      "difference_kg_kg": -1.16732e-05,
+      "initialized_qvapor_kg_kg": 0.0011095884,
+      "interpretation": "The direct-QV source-form trial also has a nontrivial residual at the same target; this points toward an upstream pressure/moisture intermediate or another runtime branch, not a QC-only adjustment. It does not identify the first runtime mismatch.",
+      "reconstructed_qv_kg_kg": 0.0010979152
+    }
+  }
+}

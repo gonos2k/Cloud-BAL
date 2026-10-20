@@ -1,0 +1,130 @@
+{
+  "donor_mixture": {
+    "manufactured_contract_cases_only": true,
+    "status": "unknown; native weights and terms not supplied"
+  },
+  "known_candidate": {
+    "candidate": {
+      "b": 1.3257553714467398e-46,
+      "density_label": "diagnostic rho=1.0; actual density pending",
+      "q": 1.1859961634011352e-43,
+      "ratio": 894.5814506539834
+    },
+    "candidate_hex": {
+      "b_real64": "3668384CB70114F1",
+      "q_real64": "370528AC448AD089"
+    },
+    "candidate_in_separate_real32_quantum_units": {
+      "b": 0.09460906474949461,
+      "q": 84.63551438861954
+    },
+    "fixed_q_positive_b_exists": false,
+    "nearest_pair": {
+      "b_bits": "00000000",
+      "q_bits": "00000055",
+      "strict_cone_valid": false
+    },
+    "nearest_real32_bits": {
+      "b": "00000000",
+      "q": "00000055"
+    },
+    "note": "Q and B use separate field values and signed deltas; no shared ice-moment quantum is reused.",
+    "real32_quantum_each_field": 1.401298464324817e-45,
+    "smallest_positive_joint_cone_pair": {
+      "b": 1.401298464324817e-45,
+      "b_bits": "00000001",
+      "delta_b": 1.2687229271801431e-45,
+      "delta_q": 2.1530230092368186e-44,
+      "q": 1.401298464324817e-43,
+      "q_bits": "00000064",
+      "ratio": 100.0,
+      "relative_delta_b": 9.56981170512355,
+      "relative_delta_q": 0.18153709730919335
+    },
+    "zero_pair": {
+      "b_bits": "00000000",
+      "q_bits": "00000000",
+      "signed_delta_b": -1.3257553714467398e-46,
+      "signed_delta_q": -1.1859961634011352e-43
+    }
+  },
+  "replays": [
+    {
+      "profile": "O0",
+      "rows": {
+        "CORE_CANDIDATE": [
+          "F",
+          "6",
+          "0",
+          "BF800000",
+          "BF800000"
+        ],
+        "MIXTURE_ABSENT": [
+          "T",
+          "00000000",
+          "00000000",
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "MIXTURE_MIN_POSITIVE": [
+          "T",
+          "00000064",
+          "00000001",
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "MIXTURE_NORMAL": [
+          "T",
+          "398DD8E4",
+          "34A16400"
+        ]
+      },
+      "scratch": "/var/tmp/pr92_graupel_o0_hqwhwhto",
+      "stdout": "CORE_CANDIDATE F 6 0 BF800000 BF800000\nMIXTURE_ABSENT T 00000000 00000000 0000000000000000 0000000000000000\nMIXTURE_MIN_POSITIVE T 00000064 00000001 0000000000000000 0000000000000000\nMIXTURE_NORMAL T 398DD8E4 34A16400",
+      "stdout_sha256": "d7f41188290a8506e4a9d6806140d1c2b9cf8ccd2eb313b4e10e4a604d626da5"
+    },
+    {
+      "profile": "O2",
+      "rows": {
+        "CORE_CANDIDATE": [
+          "F",
+          "6",
+          "0",
+          "BF800000",
+          "BF800000"
+        ],
+        "MIXTURE_ABSENT": [
+          "T",
+          "00000000",
+          "00000000",
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "MIXTURE_MIN_POSITIVE": [
+          "T",
+          "00000064",
+          "00000001",
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "MIXTURE_NORMAL": [
+          "T",
+          "398DD8E4",
+          "34A16400"
+        ]
+      },
+      "scratch": "/var/tmp/pr92_graupel_o2_wr0kpynz",
+      "stdout": "CORE_CANDIDATE F 6 0 BF800000 BF800000\nMIXTURE_ABSENT T 00000000 00000000 0000000000000000 0000000000000000\nMIXTURE_MIN_POSITIVE T 00000064 00000001 0000000000000000 0000000000000000\nMIXTURE_NORMAL T 398DD8E4 34A16400",
+      "stdout_sha256": "d7f41188290a8506e4a9d6806140d1c2b9cf8ccd2eb313b4e10e4a604d626da5"
+    }
+  ],
+  "schema": "pr92_graupel_store_replay_v1",
+  "source": {
+    "core": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr92_source_store_20261020/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+    "core_sha256": "cf1384a06a82e2f3d03b4ca61db8fbfb8ad2e61d889e4290d790d7aa4d3be466",
+    "helper_sha256": "754db2471da211b11d4ed0d3f4fd5fe244ac12f49bc77b24a6baac9cce549d10",
+    "mixture_generator": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr92_source_store_20261020/Cloud-BAL/tools/pr87_graupel_cone_mixture.py",
+    "toolchain_profile": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr92_source_store_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+    "toolchain_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  }
+}

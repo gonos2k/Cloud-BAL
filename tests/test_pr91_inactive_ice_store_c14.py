@@ -18,7 +18,7 @@ CORE_TEST = ROOT / "tests/test_joint_qnb_transport.f90"
 class InactiveIceStoreC14Tests(unittest.TestCase):
     def test_pinned_c12_host_receives_bounded_ice_optin_and_ledger(self) -> None:
         c12 = (ROOT / "docs/evidence/pr91_source_store_contract_20261020/c12/generated/module_em.F").read_text()
-        core = (ROOT / "src/common/cloud_bal_joint_transport.f90").read_text()
+        core = (ROOT / "docs/evidence/pr92_source_store_20261020/historical_c14/cloud_bal_joint_transport.f90").read_text()
 
         generated = transform_module(c12, core)
 
@@ -36,7 +36,7 @@ class InactiveIceStoreC14Tests(unittest.TestCase):
 
     def test_instrumented_core_compiles_and_runs_joint_transport_suite(self) -> None:
         c12 = (ROOT / "docs/evidence/pr91_source_store_contract_20261020/c12/generated/module_em.F").read_text()
-        core = (ROOT / "src/common/cloud_bal_joint_transport.f90").read_text()
+        core = (ROOT / "docs/evidence/pr92_source_store_20261020/historical_c14/cloud_bal_joint_transport.f90").read_text()
         generated = transform_module(c12, core)
         end_marker = "end module cloud_bal_joint_transport"
         end = generated.index(end_marker) + len(end_marker)
