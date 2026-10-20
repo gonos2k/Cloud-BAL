@@ -1,0 +1,41 @@
+Running 63 items in this shard
+.......................................F.......................          [100%]
+=================================== FAILURES ===================================
+___________________________ test_pr90_rain_final_psd ___________________________
+
+    def test_pr90_rain_final_psd() -> None:
+        assert C5_MANIFEST.is_file() and C5_SUPPORT.is_file() and C6_BUILD.is_dir()
+        assert hashlib.sha256(T8_REPLAY.read_bytes()).hexdigest() == T8_REPLAY_SHA256
+        replay = json.loads(T8_REPLAY.read_text())
+        assert replay["capture"]["raw_sha256"] == (
+            "aac2f11ae44d506cdcb35238e86479a26a080980cccf8f5bc91c80c6be48fe2c"
+        )
+        assert replay["provenance"]["closed_run_receipt"]["status"] == "INCOMPLETE"
+        assert replay["event"]["reason"] == "internal_volume_precheck"
+        event_hex = replay["event"]["input_hex"]
+        assert [event_hex[name] for name in (
+            "q_internal", "nvol_internal", "dry_density", "pidnr", "power", "lambda_min", "lambda_max"
+        )] == [T8_INPUT[name] for name in (
+            "q", "n", "rho", "pid", "power", "lambda_min", "lambda_max"
+        )]
+        scratch_parent = Path(tempfile.mkdtemp(prefix="pr90_c7_sources_", dir="/var/tmp"))
+        scratch_source = scratch_parent / "source"
+        generated = prepare(C5_MANIFEST, C5_SUPPORT, scratch_source, columns=True,
+                            final_rain_bounds=True)
+        assert generated["identity"] == "PR90-C7"
+        assert generated["final_rain_bounds_enabled"] is True
+        kdm_path = Path(generated["source_overrides"]["module_mp_kdm6.o"])
+        support_path = Path(generated["extra_support_source"])
+        em_path = Path(generated["source_overrides"]["module_em.o"])
+        assert hashlib.sha256(kdm_path.read_bytes()).hexdigest() != C6_KDM_SHA256
+        assert hashlib.sha256(support_path.read_bytes()).hexdigest() == C6_SUPPORT_SHA256
+>       assert hashlib.sha256(em_path.read_bytes()).hexdigest() == C6_EM_SHA256
+E       AssertionError: assert '6bb2f0ec1917...34ee37b0192ad' == '090b9329c817...198b15401819b'
+E         
+E         - 090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b
+E         + 6bb2f0ec191706c5f145e5978d37a8a310856c8901c4f5ca68734ee37b0192ad
+
+tests/test_pr90_rain_final_psd.py:210: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_pr90_rain_final_psd.py::test_pr90_rain_final_psd - Assertio...
+1 failed, 62 passed in 36.23s

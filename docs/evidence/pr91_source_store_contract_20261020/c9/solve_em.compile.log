@@ -1,0 +1,507 @@
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(1122): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+                             , pr87_source_carrier, pr87_source_step, pr87_pbl_tendency_delta64, pr87_pbl_tendency_step, pr87_pbl_tendency_phase)
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(1269): warning #5112: Extension to FORTRAN-90: tab formatting
+                             grid%msfux, grid%msfvx, grid%msft,	                   &
+--------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2503): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+       IF ((config_flags%tracer_adv_opt /= ORIGINAL .and. config_flags%tracer_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order)) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3468): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+              pr87_all_pair_diffusion_delta, pr87_all_pair_diffusion_step, pr87_pbl_tendency_delta64, pr87_pbl_tendency_step, pr87_pbl_tendency_phase, &
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4056): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+         IF ( (config_flags%tke_adv_opt /= ORIGINAL .and. config_flags%tke_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4086): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+         IF ( (config_flags%tke_adv_opt /= ORIGINAL .and. config_flags%tke_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4122): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+           IF ( (config_flags%moist_adv_opt /= ORIGINAL .and. config_flags%moist_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4156): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+           IF ( (config_flags%moist_adv_opt /= ORIGINAL .and. config_flags%moist_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4196): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+           IF ( (config_flags%chem_adv_opt /= ORIGINAL .and. config_flags%chem_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4230): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+           IF ( (config_flags%chem_adv_opt /= ORIGINAL .and. config_flags%chem_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4270): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+           IF ( (config_flags%tracer_adv_opt /= ORIGINAL .and. config_flags%tracer_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4304): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+           IF ( (config_flags%tracer_adv_opt /= ORIGINAL .and. config_flags%tracer_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4344): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+           IF ( (config_flags%scalar_adv_opt /= ORIGINAL .and. config_flags%scalar_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4378): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+           IF ( (config_flags%scalar_adv_opt /= ORIGINAL .and. config_flags%scalar_adv_opt /= WENO_SCALAR) .and. (rk_step == rk_order-1) ) THEN
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(365): warning #7346: The CHARACTER* form of a CHARACTER declaration is an obsolescent feature in Fortran 2008.
+   CHARACTER*256                              :: message, message2, message3
+-------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(532): warning #8889: Explicit interface or EXTERNAL declaration is required.   [REAL_TIME]
+   curr_secs  = real_time(tmpTimeInterval)
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(545): warning #8889: Explicit interface or EXTERNAL declaration is required.   [ADAPT_TIMESTEP]
+      CALL adapt_timestep(grid, config_flags)
+-----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(596): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 50 , wrf_err_message )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(605): warning #8889: Explicit interface or EXTERNAL declaration is required.   [GET_WRF_DEBUG_LEVEL]
+     CALL get_wrf_debug_level( debug_level )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(612): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+       CALL wrf_debug ( 0 , wrf_err_message )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(745): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR87_CLOUD_CYCLE]
+       CALL pr87_cloud_cycle('STEP_BEGIN',grid%itimestep, &
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(766): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+       CALL wrf_error_fatal( wrf_err_message )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(799): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+       CALL wrf_error_fatal( wrf_err_message )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(828): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call rk_step_prep ' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(928): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+       CALL wrf_debug ( 200 , ' call rk_phys_bc_dry_1' )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(1131): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+       CALL wrf_debug ( 200 , ' call rk_tendency' )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(1338): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+       CALL wrf_debug ( 200 , ' call small_step_prep ' )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2051): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+       CALL wrf_debug ( 200 , ' call rk_small_finish' )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2182): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+         CALL wrf_debug ( 200 , ' call rk_update_scalar_pd' )
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2241): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+           CALL wrf_error_fatal(TRIM(wrf_err_message))
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2292): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+         CALL wrf_debug ( 200 , ' call rk_update_scalar_pd' )
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2352): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+           CALL wrf_error_fatal(TRIM(wrf_err_message))
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2403): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call rk_update_scalar_pd' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2458): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+             CALL wrf_error_fatal(TRIM(wrf_err_message))
+------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2508): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call rk_update_scalar_pd' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2563): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+             CALL wrf_error_fatal(TRIM(wrf_err_message))
+------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2614): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call rk_update_scalar_pd' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2663): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+             CALL wrf_error_fatal(TRIM(wrf_err_message))
+------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2785): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+               CALL wrf_debug ( 200 , ' call rk_scalar_tend' )
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2883): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+               CALL wrf_debug ( 200 , ' call rk_update_scalar' )
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2981): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+          CALL wrf_error_fatal(TRIM(wrf_err_message))
+---------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(2988): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call rk_scalar_tend for tke' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3024): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call rk_update_scalar' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3080): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+             CALL wrf_debug ( 15 , ' call rk_scalar_tend in tracer_tile_loop_1' )
+------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3115): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+             IF(ic.eq.1)CALL wrf_debug ( 10 , ' have_bcs_tracer' )
+-----------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3155): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call rk_update_scalar' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3204): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call rk_scalar_tend' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3283): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call rk_update_scalar' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3396): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+         CALL wrf_error_fatal('PR85 grouped Q/N/B update requires RK order 3')
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3399): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+         CALL wrf_error_fatal('PR85 grouped Q/N/B update requires one tile')
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3402): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+         CALL wrf_error_fatal('PR85 grouped Q/N/B update requires explicit vertical advection')
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3420): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+             CALL wrf_error_fatal('PR87 source capture timestep mismatch')
+------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3449): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+           CALL wrf_error_fatal('PR87 missing RK1 diffusion geometry for joint update')
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3564): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call filter moist ' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3610): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call filter chem ' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3655): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call filter tracer ' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3701): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+           CALL wrf_debug ( 200 , ' call filter scalar ' )
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3839): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+         CALL wrf_error_fatal(TRIM(wrf_err_message))
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(3939): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+         CALL wrf_debug ( 200 , ' call rk_phys_bc_dry_2' )
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4117): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+         CALL wrf_error_fatal(TRIM(wrf_err_message))
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4191): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+           CALL wrf_error_fatal(TRIM(wrf_err_message))
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4265): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+           CALL wrf_error_fatal(TRIM(wrf_err_message))
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4339): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+           CALL wrf_error_fatal(TRIM(wrf_err_message))
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4413): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+           CALL wrf_error_fatal(TRIM(wrf_err_message))
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4440): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+           CALL wrf_error_fatal('PR87 cloud/rain density storage transaction rejected')
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4578): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+      CALL wrf_debug(200,message)
+-----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4586): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_MESSAGE]
+         CALL wrf_message(trim(message)) 
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4593): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+            CALL wrf_debug(200,'In solve_em, before zero_avgflx call')
+-----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4601): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+            CALL wrf_debug(200,'In solve_em, after zero_avgflx call')
+-----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4612): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+         CALL wrf_debug(200,'In solve_em, before upd_avgflx call')
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4622): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+         CALL wrf_debug(200,'In solve_em, after upd_avgflx call')
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4634): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call advance_ppt' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4654): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+        CALL wrf_debug ( 200 , ' call phy_prep_part2' )
+-------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4717): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+         CALL wrf_debug ( 200 , ' call cloud_tracer_nudge' )
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4734): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+       CALL wrf_debug ( 200 , ' call moist_physics_prep' )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4750): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+         CALL wrf_debug ( 200 , ' call bulk_dust_emis' )
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(4764): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call microphysics_driver' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(5078): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR87_CLOUD_CYCLE]
+       CALL pr87_cloud_cycle('POST_KDM6_FULL_TILE',grid%itimestep, &
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(5105): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call moist_physics_finish' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(5192): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR87_CLOUD_CYCLE]
+       CALL pr87_cloud_cycle('POST_HOST_CLEANUP',grid%itimestep, &
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(5259): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+       CALL wrf_debug ( 200 , ' call filter moist' )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(5389): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+   CALL wrf_debug ( 200 , ' call chem polar filter ' )
+--------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(5639): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+      CALL wrf_error_fatal(TRIM(wrf_err_message))
+-----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(5728): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call set_phys_bc_dry_2' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(5816): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call spec_bdy_final' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6004): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+   CALL wrf_debug ( 10 , ' call set_w_surface' )
+--------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6049): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+   CALL wrf_debug ( 200 , ' call HALO_RK_E' )
+--------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6081): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+     CALL wrf_error_fatal(TRIM(wrf_err_message))
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6090): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call HALO_RK_MOIST' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6125): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+       CALL wrf_error_fatal(TRIM(wrf_err_message))
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6132): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call HALO_RK_CHEM' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6167): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+       CALL wrf_error_fatal(TRIM(wrf_err_message))
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6174): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call HALO_RK_TRACER' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6209): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+       CALL wrf_error_fatal(TRIM(wrf_err_message))
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6216): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+     CALL wrf_debug ( 200 , ' call HALO_RK_SCALAR' )
+----------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6251): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_ERROR_FATAL]
+       CALL wrf_error_fatal(TRIM(wrf_err_message))
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6269): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+       CALL wrf_debug ( 200 , ' call HALO_FIREBRAND_SPOTTING' )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6285): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+       CALL wrf_debug ( 3 , 'solve: calling firebrand_spotting_em_driver...' )
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6322): warning #8889: Explicit interface or EXTERNAL declaration is required.   [WRF_DEBUG]
+   CALL wrf_debug ( 200 , ' call end of solve_em' )
+--------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(6393): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR87_CLOUD_CYCLE]
+       CALL pr87_cloud_cycle('STEP_END',grid%itimestep, &
+------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(205): remark #7712: This variable has not been used.   [LOOP]
+   INTEGER                         :: loop
+--------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(11): remark #7712: This variable has not been used.   [DFI_MOIST]
+,moist,moist_bxs,moist_bxe,moist_bys,moist_bye,moist_btxs,moist_btxe,moist_btys,moist_btye,dfi_moist,dfi_moist_bxs,dfi_moist_bxe, &
+-------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(11): remark #7712: This variable has not been used.   [DFI_MOIST_BXS]
+,moist,moist_bxs,moist_bxe,moist_bys,moist_bye,moist_btxs,moist_btxe,moist_btys,moist_btye,dfi_moist,dfi_moist_bxs,dfi_moist_bxe, &
+-----------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(11): remark #7712: This variable has not been used.   [DFI_MOIST_BXE]
+,moist,moist_bxs,moist_bxe,moist_bys,moist_bye,moist_btxs,moist_btxe,moist_btys,moist_btye,dfi_moist,dfi_moist_bxs,dfi_moist_bxe, &
+-------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(12): remark #7712: This variable has not been used.   [DFI_MOIST_BYS]
+dfi_moist_bys,dfi_moist_bye,dfi_moist_btxs,dfi_moist_btxe,dfi_moist_btys,dfi_moist_btye,scalar,scalar_bxs,scalar_bxe,scalar_bys, &
+^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(12): remark #7712: This variable has not been used.   [DFI_MOIST_BYE]
+dfi_moist_bys,dfi_moist_bye,dfi_moist_btxs,dfi_moist_btxe,dfi_moist_btys,dfi_moist_btye,scalar,scalar_bxs,scalar_bxe,scalar_bys, &
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(12): remark #7712: This variable has not been used.   [DFI_MOIST_BTXS]
+dfi_moist_bys,dfi_moist_bye,dfi_moist_btxs,dfi_moist_btxe,dfi_moist_btys,dfi_moist_btye,scalar,scalar_bxs,scalar_bxe,scalar_bys, &
+----------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(12): remark #7712: This variable has not been used.   [DFI_MOIST_BTXE]
+dfi_moist_bys,dfi_moist_bye,dfi_moist_btxs,dfi_moist_btxe,dfi_moist_btys,dfi_moist_btye,scalar,scalar_bxs,scalar_bxe,scalar_bys, &
+-------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(12): remark #7712: This variable has not been used.   [DFI_MOIST_BTYS]
+dfi_moist_bys,dfi_moist_bye,dfi_moist_btxs,dfi_moist_btxe,dfi_moist_btys,dfi_moist_btye,scalar,scalar_bxs,scalar_bxe,scalar_bys, &
+----------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(12): remark #7712: This variable has not been used.   [DFI_MOIST_BTYE]
+dfi_moist_bys,dfi_moist_bye,dfi_moist_btxs,dfi_moist_btxe,dfi_moist_btys,dfi_moist_btye,scalar,scalar_bxs,scalar_bxe,scalar_bys, &
+-------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(13): remark #7712: This variable has not been used.   [DFI_SCALAR]
+scalar_bye,scalar_btxs,scalar_btxe,scalar_btys,scalar_btye,dfi_scalar,dfi_scalar_bxs,dfi_scalar_bxe,dfi_scalar_bys, &
+-----------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(13): remark #7712: This variable has not been used.   [DFI_SCALAR_BXS]
+scalar_bye,scalar_btxs,scalar_btxe,scalar_btys,scalar_btye,dfi_scalar,dfi_scalar_bxs,dfi_scalar_bxe,dfi_scalar_bys, &
+----------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(13): remark #7712: This variable has not been used.   [DFI_SCALAR_BXE]
+scalar_bye,scalar_btxs,scalar_btxe,scalar_btys,scalar_btye,dfi_scalar,dfi_scalar_bxs,dfi_scalar_bxe,dfi_scalar_bys, &
+-------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(13): remark #7712: This variable has not been used.   [DFI_SCALAR_BYS]
+scalar_bye,scalar_btxs,scalar_btxe,scalar_btys,scalar_btye,dfi_scalar,dfi_scalar_bxs,dfi_scalar_bxe,dfi_scalar_bys, &
+----------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(14): remark #7712: This variable has not been used.   [DFI_SCALAR_BYE]
+dfi_scalar_bye,dfi_scalar_btxs,dfi_scalar_btxe,dfi_scalar_btys,dfi_scalar_btye,aerod,aerocu,ozmixm,aerosolc_1,aerosolc_2,fdda3d, &
+^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(14): remark #7712: This variable has not been used.   [DFI_SCALAR_BTXS]
+dfi_scalar_bye,dfi_scalar_btxs,dfi_scalar_btxe,dfi_scalar_btys,dfi_scalar_btye,aerod,aerocu,ozmixm,aerosolc_1,aerosolc_2,fdda3d, &
+---------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(14): remark #7712: This variable has not been used.   [DFI_SCALAR_BTXE]
+dfi_scalar_bye,dfi_scalar_btxs,dfi_scalar_btxe,dfi_scalar_btys,dfi_scalar_btye,aerod,aerocu,ozmixm,aerosolc_1,aerosolc_2,fdda3d, &
+-------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(14): remark #7712: This variable has not been used.   [DFI_SCALAR_BTYS]
+dfi_scalar_bye,dfi_scalar_btxs,dfi_scalar_btxe,dfi_scalar_btys,dfi_scalar_btye,aerod,aerocu,ozmixm,aerosolc_1,aerosolc_2,fdda3d, &
+-----------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(14): remark #7712: This variable has not been used.   [DFI_SCALAR_BTYE]
+dfi_scalar_bye,dfi_scalar_btxs,dfi_scalar_btxe,dfi_scalar_btys,dfi_scalar_btye,aerod,aerocu,ozmixm,aerosolc_1,aerosolc_2,fdda3d, &
+---------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(14): remark #7712: This variable has not been used.   [OZMIXM]
+dfi_scalar_bye,dfi_scalar_btxs,dfi_scalar_btxe,dfi_scalar_btys,dfi_scalar_btye,aerod,aerocu,ozmixm,aerosolc_1,aerosolc_2,fdda3d, &
+--------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(14): remark #7712: This variable has not been used.   [AEROSOLC_1]
+dfi_scalar_bye,dfi_scalar_btxs,dfi_scalar_btxe,dfi_scalar_btys,dfi_scalar_btye,aerod,aerocu,ozmixm,aerosolc_1,aerosolc_2,fdda3d, &
+---------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(14): remark #7712: This variable has not been used.   [AEROSOLC_2]
+dfi_scalar_bye,dfi_scalar_btxs,dfi_scalar_btxe,dfi_scalar_btys,dfi_scalar_btye,aerod,aerocu,ozmixm,aerosolc_1,aerosolc_2,fdda3d, &
+--------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(15): remark #7712: This variable has not been used.   [ADVH_T]
+fdda2d,advh_t,advz_t,tracer,tracer_bxs,tracer_bxe,tracer_bys,tracer_bye,tracer_btxs,tracer_btxe,tracer_btys,tracer_btye,pert3d, &
+-------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(15): remark #7712: This variable has not been used.   [ADVZ_T]
+fdda2d,advh_t,advz_t,tracer,tracer_bxs,tracer_bxe,tracer_bys,tracer_bye,tracer_btxs,tracer_btxe,tracer_btys,tracer_btye,pert3d, &
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(15): remark #7712: This variable has not been used.   [PERT3D]
+fdda2d,advh_t,advz_t,tracer,tracer_bxs,tracer_bxe,tracer_bys,tracer_bye,tracer_btxs,tracer_btxe,tracer_btys,tracer_btye,pert3d, &
+------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(207): remark #7712: This variable has not been used.   [ISWATER]
+   INTEGER                         :: iswater
+--------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(211): remark #7712: This variable has not been used.   [T_NEW]
+   REAL                            :: t_new, time_duration_of_lbcs
+--------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(211): remark #7712: This variable has not been used.   [TIME_DURATION_OF_LBCS]
+   REAL                            :: t_new, time_duration_of_lbcs
+---------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(214): remark #7712: This variable has not been used.   [TWOWAY_JDATE]
+   integer       :: twoway_jdate,    &  ! CMAQ current job date
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(215): remark #7712: This variable has not been used.   [TWOWAY_JTIME]
+                    twoway_jtime,    &  ! CMAQ current job time
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(216): remark #7712: This variable has not been used.   [MET_FILE_TSTEP]
+                    met_file_tstep      ! MCIP like MET file time step
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(218): remark #7712: This variable has not been used.   [CMAQ_NSTEP]
+   integer, save :: cmaq_nstep,      &  ! total number of CMAQ steps
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(219): remark #7712: This variable has not been used.   [WRF_END_STEP]
+                    wrf_end_step,    &  ! WRF ending step #
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(220): remark #7712: This variable has not been used.   [COUNTER]
+                    counter = -1,    &  ! step counter
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(221): remark #7712: This variable has not been used.   [WRF_CMAQ_FREQ]
+                    wrf_cmaq_freq,   &  ! call frequency between WRF and CMAQ
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(222): remark #7712: This variable has not been used.   [WRF_CMAQ_OPTION]
+                    wrf_cmaq_option     ! WRF-CMAQ coupled model option
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(228): remark #7712: This variable has not been used.   [CMAQ_STEP]
+   logical       :: cmaq_step           ! CMAQ step number
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(230): remark #7712: This variable has not been used.   [FIRSTIME]
+   logical, save :: firstime = .true.,   &  ! logical variable indicating first time
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(232): remark #7712: This variable has not been used.   [FEEDBACK_RESTART]
+                    feedback_restart,    &  ! logical variable indicating feedback information is available
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(233): remark #7712: This variable has not been used.   [DIRECT_SW_FEEDBACK]
+                    direct_sw_feedback      ! logical variable indicating direct aerosol sw feedback is on or not
+--------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(263): remark #7712: This variable has not been used.   [WWP]
+real      ,DIMENSION(grid%sm31:grid%em31,grid%sm32:grid%em32,grid%sm33:grid%em33)           :: wwp
+-----------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(283): remark #7712: This variable has not been used.   [PHM]
+real      ,DIMENSION(grid%sm31:grid%em31,grid%sm32:grid%em32,grid%sm33:grid%em33)           :: phm
+-----------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(292): remark #7712: This variable has not been used.   [HT_LOC]
+real      ,DIMENSION(grid%sm31:grid%em31,grid%sm33:grid%em33)           :: ht_loc
+---------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(305): remark #7712: This variable has not been used.   [DFI_MOIST_TEND]
+real      ,DIMENSION(grid%sm31:grid%em31,grid%sm32:grid%em32,grid%sm33:grid%em33,num_dfi_moist)           :: dfi_moist_tend
+-------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(307): remark #7712: This variable has not been used.   [DFI_MOIST_OLD]
+real      ,DIMENSION(grid%sm31:grid%em31,grid%sm32:grid%em32,grid%sm33:grid%em33,num_dfi_moist)           :: dfi_moist_old
+-------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(313): remark #7712: This variable has not been used.   [DFI_SCALAR_TEND]
+real      ,DIMENSION(grid%sm31:grid%em31,grid%sm32:grid%em32,grid%sm33:grid%em33,num_dfi_scalar)           :: dfi_scalar_tend
+--------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(315): remark #7712: This variable has not been used.   [DFI_SCALAR_OLD]
+real      ,DIMENSION(grid%sm31:grid%em31,grid%sm32:grid%em32,grid%sm33:grid%em33,num_dfi_scalar)           :: dfi_scalar_old
+--------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(332): remark #7712: This variable has not been used.   [RC]
+   INTEGER :: rc 
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(337): remark #7712: This variable has not been used.   [KLEVEL]
+   INTEGER :: klevel,ijm,ijp,i,j,k,size1,size2    ! for prints/plots only
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(337): remark #7712: This variable has not been used.   [IJM]
+   INTEGER :: klevel,ijm,ijp,i,j,k,size1,size2    ! for prints/plots only
+---------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(337): remark #7712: This variable has not been used.   [IJP]
+   INTEGER :: klevel,ijm,ijp,i,j,k,size1,size2    ! for prints/plots only
+-------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(337): remark #7712: This variable has not been used.   [SIZE1]
+   INTEGER :: klevel,ijm,ijp,i,j,k,size1,size2    ! for prints/plots only
+-----------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(337): remark #7712: This variable has not been used.   [SIZE2]
+   INTEGER :: klevel,ijm,ijp,i,j,k,size1,size2    ! for prints/plots only
+-----------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(338): remark #7712: This variable has not been used.   [IDUM1]
+   INTEGER :: idum1, idum2, dynamics_option
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(338): remark #7712: This variable has not been used.   [IDUM2]
+   INTEGER :: idum1, idum2, dynamics_option
+---------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(340): remark #7712: This variable has not been used.   [IWMAX]
+   INTEGER :: rk_order, iwmax, jwmax, kwmax
+------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(340): remark #7712: This variable has not been used.   [JWMAX]
+   INTEGER :: rk_order, iwmax, jwmax, kwmax
+-------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(340): remark #7712: This variable has not been used.   [KWMAX]
+   INTEGER :: rk_order, iwmax, jwmax, kwmax
+--------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(341): remark #7712: This variable has not been used.   [WMAX]
+   REAL :: dt_rk, dts_rk, dts, dtm, wmax
+------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(343): remark #7712: This variable has not been used.   [LEAPFROG]
+   LOGICAL :: leapfrog
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(344): remark #7712: This variable has not been used.   [L]
+   INTEGER :: l,kte,kk
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(344): remark #7712: This variable has not been used.   [KTE]
+   INTEGER :: l,kte,kk
+----------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(357): remark #7712: This variable has not been used.   [NUM_ROOF_LAYERS]
+   INTEGER :: NUM_ROOF_LAYERS, NUM_WALL_LAYERS, NUM_ROAD_LAYERS   ! urban
+--------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(357): remark #7712: This variable has not been used.   [NUM_WALL_LAYERS]
+   INTEGER :: NUM_ROOF_LAYERS, NUM_WALL_LAYERS, NUM_ROAD_LAYERS   ! urban
+-------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(357): remark #7712: This variable has not been used.   [NUM_ROAD_LAYERS]
+   INTEGER :: NUM_ROOF_LAYERS, NUM_WALL_LAYERS, NUM_ROAD_LAYERS   ! urban
+------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(365): remark #7712: This variable has not been used.   [MESSAGE3]
+   CHARACTER*256                              :: message, message2, message3
+--------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(367): remark #7712: This variable has not been used.   [RESTART_TIME]
+   TYPE(WRFU_Time)                            :: temp_time, CurrTime, restart_time
+----------------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(370): remark #7712: This variable has not been used.   [INTERVALTIME]
+   TYPE(WRFU_TimeInterval)                    :: dtInterval, intervaltime,restartinterval
+-------------------------------------------------------------^
+/var/tmp/pr91_native_build_c9_20261020/preprocessed/solve_em.f90(370): remark #7712: This variable has not been used.   [RESTARTINTERVAL]
+   TYPE(WRFU_TimeInterval)                    :: dtInterval, intervaltime,restartinterval
+--------------------------------------------------------------------------^

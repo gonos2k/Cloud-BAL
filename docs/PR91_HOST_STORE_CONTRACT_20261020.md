@@ -12,7 +12,7 @@
 | Configuration | Pinned Intel selected-object partial-host; one domain, rank, thread and tile |
 | Scientific approval | OPEN / FAIL_OPEN |
 
-C13 is not an accepted replacement for C7. Its T9/RK2 full candidate fails for an inactive ice storage case and five near-boundary graupel cases in OFF (four graupel cases in COUPLED); the existing graupel fallback first rejects the ice pair. Exact source/store replay is in progress. No density or storage tolerance is widened.
+C13 is not an accepted replacement for C7. Its T9/RK2 full candidate fails for an inactive ice storage case and five near-boundary graupel cases in OFF (four graupel cases in COUPLED); exact replay confirms that the existing graupel fallback first rejects the ice pair. C14 addresses that representation case with the explicit option described below. No density or storage tolerance is widened.
 
 The successful C7 reference is preserved. Failed C9/C10/C12 repairs and the OFF-only C11d diagnostic are separate identities; none replaces C7. C12 completed two steps (40s) but failed at T3/RK3. Its known failure was not sent through another 600s request. See the [closed C12 audit](evidence/pr91_source_store_contract_20261020/c12/runtime/closed_runtime_audit.json) and [investigation history](evidence/pr91_host_store_20261020/investigation_history.md).
 
@@ -69,6 +69,8 @@ An exact REAL64 binary32-quantum constant now makes the intended thresholds expl
 - [C13 FogDES bundle](evidence/pr91_source_store_contract_20261020/c13/README.md): captured marginal-candidate rejection and a separate source-present positive-flux/common-theta/conservation/store regression.
 
 The captured-packet test does not establish positive theta for that exact native primitive proposal. C13 closed INCOMPLETE at T9/RK2; C14 runtime closure remains a separate gate. Builds replace selected objects in the preserved host; they are not a clean rebuild of all WRF and libraries. No whole canonical pipeline pass is claimed for these final files.
+
+The portable validation receipt maps five original scratch inputs to byte-identical committed archives and preserves their original paths as aliases. The pre-normalization receipt is retained. Raw test/build/probe logs omitted from the initial draft by Git ignore rules are included unchanged; [publication presence](evidence/pr91_host_store_20261020/raw_log_publication_presence.json) records their hashes. This corrects evidence publication and does not change test execution or results.
 
 ## Physical diagnostics remain separate
 
