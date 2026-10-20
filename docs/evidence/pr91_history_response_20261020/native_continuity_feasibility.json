@@ -1,0 +1,56 @@
+{
+  "schema": "pr91_native_continuity_feasibility_v1",
+  "scope": "Read-only feasibility check using preserved C7 OFF/COUPLED history through T180; no model run, proxy flux calculation, or continuity closure claim.",
+  "history_identity": {
+    "history_analysis": "docs/evidence/pr90_rain_roundtrip_20261019/c7/science/history_180s.json",
+    "OFF": {
+      "path": "/var/tmp/pr90_OFF_180s_c7_20261019/run/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "46724cb66a4eaaaa9b543d6feb0c2e6035d6d779493858a684066d1a259522ba"
+    },
+    "COUPLED": {
+      "path": "/var/tmp/pr90_COUPLED_180s_c7_20261019/run/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "8077b533c67c1c3202706a3aa572737db53d7af58a68ea3f2ef9866d4e77a261"
+    },
+    "time_records": [0, 60, 120, 180],
+    "model_timestep_seconds": 20,
+    "history_output_interval_seconds": 60
+  },
+  "available_history_fields": {
+    "OFF": {
+      "U": {"shape": [4, 39, 282, 235], "dimensions": ["Time", "bottom_top", "south_north", "west_east_stag"]},
+      "V": {"shape": [4, 39, 283, 234], "dimensions": ["Time", "bottom_top", "south_north_stag", "west_east"]},
+      "MAPFAC_U": {"shape": [4, 282, 235]},
+      "MAPFAC_V": {"shape": [4, 283, 234]},
+      "MAPFAC_MX": {"shape": [4, 282, 234]},
+      "MAPFAC_MY": {"shape": [4, 282, 234]},
+      "C1H": {"shape": [4, 39]},
+      "C2H": {"shape": [4, 39]},
+      "MU": {"shape": [4, 282, 234]},
+      "MUB": {"shape": [4, 282, 234]},
+      "DNW": {"shape": [4, 39]}
+    },
+    "COUPLED": "Same names and shapes as OFF. Exact cross-arm geometry matches are recorded in history_180s.json."
+  },
+  "native_equation_reference": {
+    "source_path_checked": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/KIM_RDPS_MODL_V2026.2/dyn_em/module_small_step_em.F",
+    "source_sha256_checked": "cabf1a177d50fb0096db79644af20cfe6d75217dbe63ab406a7e29bb54c17634",
+    "routine": "advance_mu_t",
+    "relevant_source_lines": "1094-1104",
+    "equation_as_expressed_in_source": "dvdxi = MAPFAC_MX*MAPFAC_MY * [rdy*Delta_y(V + (C1H*MUV+C2H)*V_1*MF_VX_INV) + rdx*Delta_x(U + (C1H*MUU+C2H)*U_1/MAPFAC_UY)]; DMDT = sum_k DNW(k)*dvdxi; MU update = MU + dts*(DMDT+MU_TEND).",
+    "identity_to_frozen_C7_compiled_source": "NOT ESTABLISHED. The C7 native build receipt binds parent archive libwrflib_pr85.a SHA-256 102faf532e0d0cb361e8cf0ce2098224c0b7ef09aaa008cf4a421e1584059911 and links module_small_step_em.o from that archive. Its receipt does not bind that object's source file hash to the currently checked-out module_small_step_em.F above. The checked-out file is used only as an equation reference; source equivalence to the frozen compiled object is not claimed."
+  },
+  "missing_history_fields_for_exact_native_reconstruction": [
+    {"field": "U_1", "role": "Previous RK/fast-step U state in native mass tendency"},
+    {"field": "V_1", "role": "Previous RK/fast-step V state in native mass tendency"},
+    {"field": "MUU", "role": "Native U-face perturbation mass field"},
+    {"field": "MUV", "role": "Native V-face perturbation mass field"},
+    {"field": "MU_TEND", "role": "Additional mass tendency combined with horizontal divergence"},
+    {"field": "Per-step RK/fast-time states", "role": "History is sampled every 60 seconds while the model step is 20 seconds; intermediate stage values and time-level context are not retained."}
+  ],
+  "decision": {
+    "endpoint_native_flux_reconstruction": "NOT FEASIBLE from retained history alone",
+    "full_continuity_closure": "NOT ESTABLISHED; two endpoints are insufficient, and current history has only four 60-second states without native stage tendencies",
+    "cloudbal_tool_reuse": "tools/cp06a_state_force_flux.py implements a pressure-coordinate state-flux diagnostic with different interpolation/geometry. It is not the native eta-coordinate advance_mu_t operator and is not used to report native continuity here.",
+    "computed_proxy_values": false
+  }
+}

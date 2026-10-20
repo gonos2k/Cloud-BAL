@@ -1,0 +1,64 @@
+{
+  "schema": "pr91_source_bound_transfer_operator_lookup_v1",
+  "status": "FORWARD_OPERATOR_SOURCE_AND_SETTINGS_RECOVERED; TARGET_SPECIFIC_WEIGHTS_NOT_PERSISTED",
+  "scope": "Read-only inventory of existing PR81 candidate -> LAPSPREP/WPS -> metgrid -> real chain. No mapping or model run performed.",
+  "candidate_to_lapsprep": {
+    "source": "src/common/cloud_bal_wps_adapter.f90",
+    "lines": "756-852",
+    "finding": "The mapper validates exact pressure-coordinate matches and reverses level order when needed, then loops over identical i,j indices and copies candidate fields into the captured background arrays. It has no horizontal interpolation, coordinate lookup, or remapping weights. Geopotential is converted to height by division by gravity.",
+    "geometry_binding": "Candidate and background must have matching shapes/metadata; this checks compatibility, not that either grid is native WRF mass/U/V geometry."
+  },
+  "candidate_to_intermediate_writer": {
+    "source": "src/lapsprep/module_lapsprep_wps.f90",
+    "lines": "82-119; PR82 caller documented at docs/PR82_SAME13_HANDOFF_20261012.md:11",
+    "finding": "Existing LAPSPREP writes WPS intermediate records from arrays as supplied. PR82 exact float32 readback establishes writer fidelity on 235x283 source-grid points, not a native-grid transfer operator."
+  },
+  "metgrid": {
+    "settings_file": "/var/tmp/pr82_same13_metgrid_candidate.final20261012/namelist.wps",
+    "settings_sha256": "15e3789b944e1820b504db299ada5c90117b4478d4d5d0127736f528dc2eec29",
+    "settings_finding": "Same-time metgrid uses fg_name SOIT, SOIM, KLBG, LAPS, RCHA and operational table path; namelist does not specify explicit interp_option/weights.",
+    "pinned_artifact": "PR82 handoff docs/PR82_SAME13_HANDOFF_20261012.md:15-19; executable SHA256 f96632837016bda00946e0a5cfeaaac3372eba972e4e9451e0e4e88ee8399c37.",
+    "finding": "The forward metgrid run yields a 234x282 mass grid and reports four offset comparisons only as exploratory; no source offset or exact cell mapping was selected. The retained run/settings prove the forward consumer path but do not provide a saved cell-weight table or verified inverse support map.",
+    "source_tree": "/var/tmp/pr82_same13_metgrid_be.final20261012/source/WPS/metgrid/src (32-source restored build, per PR82 receipt)",
+    "algorithm_sources": [
+      {
+        "file": "process_domain_module.F",
+        "lines": "2324-2325, 2402-2409",
+        "finding": "Selects field interpolation methods from the operational METGRID.TBL and calls interp_to_latlon at target coordinates."
+      },
+      {
+        "file": "interp_option_module.F",
+        "lines": "112-123, 282-305",
+        "finding": "Default vertical_interp_option is linear_log_p; table parser stores per-field horizontal interpolation choices."
+      },
+      {
+        "file": "interp_module.F",
+        "lines": "137-220",
+        "finding": "Parses ordered fallback/option strings such as nearest_neighbor, four_pt, sixteen_pt, average_4pt, weighted variants and search."
+      }
+    ],
+    "table_sha256": "44f1a43af35441957d0bef3a6220831aad1cf56ebc765d64d08e20f439a63b44",
+    "active_field_options": {
+      "TT": "sixteen_pt+four_pt+average_4pt",
+      "UU": "sixteen_pt+four_pt+average_4pt (output_stagger=U)",
+      "VV": "sixteen_pt+four_pt+average_4pt (output_stagger=V)",
+      "QV_QC_QI_QR_QS_QG": "four_pt+average_4pt"
+    },
+    "horizontal_weights": "Not written as a target/source coefficient table in the retained receipt. Their exact nonzero support depends on the restored WPS code, source/target coordinate arrays, source coverage, field masks/missing values, and ordered fallback selection. These inputs are source-bound and suggest weights can be recovered by tracing/replaying the existing WPS code; do not replace that method with guessed offsets or nearest-cell mapping.",
+    "vertical_note": "WPS input carries pressure-level fields and metgrid output has pressure levels; the remaining pressure-to-native eta-level transformation occurs in real.exe. The retained real namelist/executable receipt does not contain per-native-level vertical coefficients or source influence membership."
+  },
+  "real_vertical_transfer": {
+    "settings": "/var/tmp/pr82_same13_real_boundary_candidate.final2_20261012/namelist.input (p_top_requested=5000); handoff docs lines 21-22",
+    "finding": "The retained real.exe consumes 21 metgrid pressure levels and produces 39 mass levels plus 40 staggered levels. The namelist and output identify the vertical transformation but no source-derived pressure-to-eta interpolation coefficients or source-cell influence weights were retained in the inspected evidence."
+  },
+  "native_support_union_proposal": {
+    "method": "For a future source-bound derivation, compose the exact active horizontal coefficient rows from the retained WPS code for each relevant field/stagger and the exact real pressure-to-eta vertical coefficient rows; take the union of original pressure-grid support indices with nonzero composed coefficients for each native target. Honor missing/fill/terrain branches and preserve the original 162-cell mask.",
+    "current_status": "OPEN: exact target-specific horizontal coefficient rows were not serialized, and real vertical influence rows were not recovered. Existing code/settings make the forward path reproducible in principle, but no source-to-native influence union is currently certified. Do not infer nearest cells or same indices."
+  },
+  "evidence_limitations": [
+    "The actual forward metgrid source, active table, same-time namelist and output geometry are retained; this is stronger than having only executable settings.",
+    "The PR82 forward run readback preserves exploratory offset comparisons only; it selected no source offset and serialized no transfer-weight rows.",
+    "The candidate WPS exact readback is writer fidelity on the pressure grid, not a target-native influence map.",
+    "No new interpolation, nearest-neighbor mapping, or weight reconstruction was attempted."
+  ]
+}

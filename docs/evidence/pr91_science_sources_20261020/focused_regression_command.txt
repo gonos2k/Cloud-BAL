@@ -1,0 +1,35 @@
+cd /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL
+source tests/intel_toolchain.sh
+export TMPDIR=/var/tmp/pr91_focused_regression_20261020
+mkdir -p "$TMPDIR"
+pytest -q \
+  tests/test_pr91_history_response.py \
+  tests/test_pr91_host_store_replay.py \
+  tests/test_pr91_host_store_trace.py \
+  tests/test_pr91_source_store_contract.py \
+  tests/test_pr90_joint_store_reason.py \
+  tests/test_pr90_rain_failure_replay.py \
+  tests/test_pr90_rain_final_psd.py \
+  tests/test_pr90_rain_producer_trace.py \
+  tests/test_pr90_rain_public_roundtrip.py \
+  tests/test_pr90_warm_rain_output.py \
+  tests/test_pr85_kdm6_warm_process.py \
+  tests/test_pr87_cloud_public_store.py \
+  tests/test_pr87_qn_density_storage.py \
+  tests/test_pr87_rain_density_storage.py \
+  tests/test_pr87_rain_public_store.py \
+  tests/test_pr87_rain_storage_contract.py \
+  tests/test_pr87_rain_volume_store.py \
+  tests/test_pr87_source_storage_failures.py
+
+# Standalone existing joint Q/N transport regression, pinned Intel O0:
+source tests/intel_toolchain.sh
+joint_scratch=/var/tmp/pr91_joint_qnb_transport_20261020
+mkdir -p "$joint_scratch"
+cd "$joint_scratch"
+"$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
+  -module "$joint_scratch" -I "$joint_scratch" \
+  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/src/common/cloud_bal_joint_transport.f90 \
+  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/tests/test_joint_qnb_transport.f90 \
+  -o "$joint_scratch/test_joint_qnb_transport"
+"$joint_scratch/test_joint_qnb_transport"

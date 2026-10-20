@@ -1,0 +1,2 @@
+source tests/intel_toolchain.sh && "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" -free kernel.f90 cloud_bal_joint_transport.f90 driver.f90 -o c12_O0.exe && ./c12_O0.exe
+source tests/intel_toolchain.sh && "$CLOUD_BAL_FC" "${CLOUD_BAL_REPRO_FLAGS[@]}" -free kernel.f90 cloud_bal_joint_transport.f90 driver.f90 -o c12_O2.exe && ./c12_O2.exe

@@ -1,0 +1,61 @@
+{
+  "binary64_rounding": {
+    "delta_precision_binary64_result": "0x1.0000000000000p+0",
+    "delta_precision_exact_value": "0x1.0000000000000p+0",
+    "donor64_from_zero_prepared_endpoint": "-0x1.0000000000000p-54",
+    "explanation": "At 1.0, the upward binary64 spacing is 2^-52 and half that spacing is 2^-53. The added 2^-54 is below half an ulp, so 1 + 2^-54 rounds to 1.0; subtracting the lost Dold after cancellation leaves -2^-54.",
+    "later_residual_binary64": "-0x1.0000000000000p+0",
+    "prepared_minus_old_binary64": "-0x1.0000000000000p-54",
+    "qs64_result": "-0x1.0000000000000p-54",
+    "rounding": "IEEE binary64 round-to-nearest, ties-to-even under pinned Intel strict FP profile"
+  },
+  "classification": "MANUFACTURED_BINARY64_CANCELLATION_COUNTEREXAMPLE",
+  "ideal_exact_rational_steps": {
+    "delta_precision_unrounded": "18014398509481985/18014398509481984",
+    "later_residual": "-1",
+    "prepared_minus_old_diffusion": "-1/18014398509481984",
+    "total": "0"
+  },
+  "ifx_results": {
+    "O0_O2_log": "ifx_o0_o2.log",
+    "O0_and_O2_byte_identical": true,
+    "log_sha256": "127d5bbc4dcab1c7c2a6319982dea29c01a9e34e984e07c1138f85db75cef4d0",
+    "pass_marker_count": 2
+  },
+  "inputs_exact_rational": {
+    "Dold64": "1/18014398509481984",
+    "Dprepared64": "0",
+    "coupled_before32": "1",
+    "dt64": "1",
+    "non_diffusion_remainder": "0",
+    "old_carrier64": "1",
+    "t_after32": "0",
+    "t_before32": "1"
+  },
+  "not_native_failure_evidence": true,
+  "pins": {
+    "C10_generated_module_sha256": "af54a8bd951e47407f6900dbfd4b16396cd6fc30753bb32437fd46c45b86be4c",
+    "C10_generator_sha256": "6cd06d2d81bfb829ff1703abaefb86483de89dd536b4a18d374a90da101e697e",
+    "command": {
+      "path": "run_command.txt",
+      "sha256": "b35f404cb10fea1f07c40fce3613e7f3665ad4dce431f3657c1f8cdee321b78c"
+    },
+    "driver": {
+      "path": "roundoff_probe.f90",
+      "sha256": "b99506322f1d60ac40d5068795890b096687722befbdcbf93a01e6ecd946f95d"
+    },
+    "ifx_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "ifx_version": "ifx (IFX) 2026.0.0 20260331",
+    "profile": {
+      "path": "tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    }
+  },
+  "question_tested": "Can (laterResidual64 + deltaPrecision64) + (Dprepared64 - Dold64) leave a signed residual when coupled_before32 equals t_before32, non-diffusion remainder is zero, Dprepared is zero, and the stored prepared endpoint is zero?",
+  "schema": "pr91_c10_manufactured_roundoff_probe_v1",
+  "scope_limits": [
+    "The values are manufactured and are not from D3/C9/C10/C11 model runtime.",
+    "This demonstrates a possible signed roundoff residue under the stated equality/zero conditions; it does not show that C11 reaches this state or that the C10 native failure has this cause.",
+    "No physics source, model code, or native instrumentation was changed."
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "artifacts": {
+    "README.md": "b42c3a1ce1092b6cc16f3b65683dde0937083df8db7bf4d58c789ba003f83b81",
+    "driver.f90": "6db624e7b6cc7a4a142cba6afd90b48a9faa6c2834ae05545ad2111d7e518d6a",
+    "kernel_c10_embedded.f90": "af9a54b9f3e51d085ef3a11b2dd52c6b5a9a6f755a8720866e34c740415f79de",
+    "replay_output.txt": "3533f0426d422d3be6bf33c62a86aaf18264935c6484038fec69eda3a0463a58",
+    "replay_output_O0.txt": "3533f0426d422d3be6bf33c62a86aaf18264935c6484038fec69eda3a0463a58"
+  },
+  "builds": [
+    "CLOUD_BAL_FREE_FLAGS (-free; O0)",
+    "CLOUD_BAL_REPRO_FLAGS (-free; O2)"
+  ],
+  "c10_module_sha256": "af54a8bd951e47407f6900dbfd4b16396cd6fc30753bb32437fd46c45b86be4c",
+  "c11d_module_sha256": "40bfbce9e266a11ca576aca7a78e256b410b07f79ae783132ae2c3d24b8d64b3",
+  "c11d_run_receipt_sha256": "2f35be1345d3beb685d54202a69a7035f38d0bd1125e60f7f36702a94f63b254",
+  "capture_gzip_sha256": "fc30643d1df2ce0768b7e1fd3c478a6ad637007bab2bd51aee22158131803e7d",
+  "comparison": {
+    "c10_off_joint_moment_stages_sha256": "a54e4f4fa315dd2c25509f48d892af12389f20b05cec6df5dd01077348d8429c",
+    "c11d_off_joint_moment_stages_sha256": "a54e4f4fa315dd2c25509f48d892af12389f20b05cec6df5dd01077348d8429c",
+    "completed_post_kdm6_timestep_each": 20,
+    "compressed_bytes": 485643877,
+    "receipt_snapshot_record_count_each": 14,
+    "result": "full compressed joint-moment stage trace byte-identical; T20 snapshot hash also identical",
+    "t20_snapshot_record_sha256_each": "4f9f75ed115c3734f272409eeb1bf0e6961c032d1bf7210eeccf994b7b60c1c9",
+    "uncompressed_bytes": 1350197000
+  },
+  "failure": {
+    "i": 233,
+    "j": 62,
+    "k": 1,
+    "pair": 1,
+    "rk": 3,
+    "timestep": 2
+  },
+  "native_helper_replay": {
+    "ns_after_prepared_minus_old_hex": "3DF0000000000000",
+    "prepared_diffusion_n_hex": "3DEEDC08DA77C3AC",
+    "prepared_diffusion_q_hex": "3B39C82BC6F72E40",
+    "qs_after_prepared_minus_old_hex": "0000000000000000",
+    "source_plus_later_delta_n_hex": "41255E05FAD1937D",
+    "source_plus_later_delta_q_hex": "3EAA8DB6FDF0014D",
+    "virtual_donor_n_hex": "3D2B7A7AA1B95EA2",
+    "virtual_donor_q_hex": "0000000000000000"
+  },
+  "outputs_identical_o0_o2": true,
+  "profile_path": "tests/intel_toolchain.sh",
+  "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "schema": "pr91_c11d_native_failure_replay_v1"
+}

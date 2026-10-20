@@ -1,8 +1,14 @@
 module cloud_bal_joint_transport
-  use iso_fortran_env, only: real32, real64
+  use iso_fortran_env, only: int32, real32, real64
   use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
   implicit none
   private
+
+  ! Exact binary32 minimum subnormal. Keep the REAL64 quantum normal and
+  ! construct the REAL32 value by bits; converting a NEAREST result is not
+  ! reliable with every pinned Intel code path.
+  real(real64), parameter :: real32_quantum64 = scale(1.0_real64, -149)
+  real(real32), parameter :: real32_quantum = transfer(1_int32, 0.0_real32)
 
   public :: joint_moment_is_valid, joint_moment_is_valid64, joint_moment_store, joint_qnb_update
 
@@ -23,7 +29,7 @@ contains
                                 allow_subnormal, stored_q, stored_n, adjustment, valid, &
                                 allow_normal_q_adjustment, allow_joint_quantum_absence, &
                                 volume_number_bounds, strict_mass_ratio, inactive_mass_limit, &
-                                failure_stage)
+                                failure_stage, allow_inactive_q_quantum_adjustment)
     ! Store an already valid continuous pair. Opt-in repairs preserve the
     ! continuous gate: subnormal Q underflow can store joint absence; legacy
     ! one-neighbor Q repair handles PSD rounding; strict-volume normal-Q repair
@@ -40,12 +46,14 @@ contains
     logical, intent(in), optional :: strict_mass_ratio
     real(real64), intent(in), optional :: inactive_mass_limit
     integer, intent(out), optional :: failure_stage
+    logical, intent(in), optional :: allow_inactive_q_quantum_adjustment
     real(real32) :: rounded_q, rounded_n, adjusted_q, directed_q
     real(real64) :: ratio, minimum_number, maximum_number, inactive_number_quantum_limit
     real(real32) :: number_volume32
     logical :: allow_normal, allow_quantum_absence, use_volume_contract, volume_valid
     logical :: require_strict_mass, stored_mass_valid, use_inactive_mass_limit
     logical :: use_inactive_exact_store
+    logical :: allow_inactive_q_quantum
     logical :: need_q_up, need_q_down, directed_valid
 
     stored_q = -1.0_real32
@@ -57,11 +65,17 @@ contains
     allow_quantum_absence = .false.
     require_strict_mass = .false.
     use_inactive_exact_store = .false.
+    allow_inactive_q_quantum = .false.
     use_inactive_mass_limit = present(inactive_mass_limit)
     use_volume_contract = present(volume_number_bounds)
     if (present(allow_normal_q_adjustment)) allow_normal = allow_normal_q_adjustment
     if (present(allow_joint_quantum_absence)) allow_quantum_absence = allow_joint_quantum_absence
     if (present(strict_mass_ratio)) require_strict_mass = strict_mass_ratio
+    if (present(allow_inactive_q_quantum_adjustment)) &
+      allow_inactive_q_quantum = allow_inactive_q_quantum_adjustment
+    if (allow_inactive_q_quantum .and. &
+        (.not.allow_subnormal .or. .not.use_inactive_mass_limit .or. &
+         .not.allow_quantum_absence)) return
     if (use_inactive_mass_limit) then
       if (.not.ieee_is_finite(inactive_mass_limit)) return
       if (inactive_mass_limit<0.0_real64) return
@@ -86,7 +100,7 @@ contains
               n64<=real(huge(0.0_real32),real64)) then
             if (.not.joint_moment_is_valid64(q64,n64,dry_density,minimum_ratio,maximum_ratio)) then
               inactive_number_quantum_limit=nearest( &
-                  real(nearest(0.0_real32,1.0_real32),real64)/minimum_ratio,-1.0_real64)
+                  real32_quantum64/minimum_ratio,-1.0_real64)
               if (n64<=inactive_number_quantum_limit) then
                 rounded_q=real(q64,real32)
                 if (rounded_q==0.0_real32) then
@@ -129,7 +143,21 @@ contains
     rounded_q = real(q64,real32)
     rounded_n = real(n64,real32)
     if (use_inactive_exact_store) then
-      if (rounded_q<=0.0_real32 .or. rounded_n<=0.0_real32) return
+      if (rounded_n<=0.0_real32) return
+      if (rounded_q<=0.0_real32) then
+        if (.not.allow_inactive_q_quantum) return
+        if (q64<=0.0_real64 .or. q64>=real32_quantum64 .or. &
+            q64>inactive_mass_limit .or. real32_quantum>inactive_mass_limit) return
+        if (.not.joint_moment_is_valid(real32_quantum,rounded_n,dry_density, &
+                                       minimum_ratio,maximum_ratio,inactive_mass_limit)) return
+        if (.not.stored_number_volume_is_representable(rounded_n,dry_density)) return
+        stored_q=real32_quantum
+        stored_n=rounded_n
+        adjustment=4
+        valid=.true.
+        if (present(failure_stage)) failure_stage=0
+        return
+      end if
       if (.not.joint_moment_is_valid(rounded_q,rounded_n,dry_density,minimum_ratio, &
                                      maximum_ratio,inactive_mass_limit)) return
       if (.not.stored_number_volume_is_representable(rounded_n,dry_density)) return
@@ -238,7 +266,7 @@ contains
                                   minimum_ratio,maximum_ratio)
     if (.not.stored_mass_valid .or. .not.volume_valid) then
       if (allow_quantum_absence .and. q64 > 0.0_real64 .and. &
-          q64 < real(nearest(0.0_real32,1.0_real32),real64)) then
+          q64 < real32_quantum64) then
         if (joint_moment_is_valid(0.0_real32,0.0_real32,dry_density, &
                                   minimum_ratio,maximum_ratio)) then
           if (use_volume_contract) then
@@ -403,7 +431,7 @@ contains
     if (n<=0.0_real32 .or. dry_density<=0.0_real32) return
     number_volume64=real(n,real64)*real(dry_density,real64)
     if (.not.ieee_is_finite(number_volume64) .or. &
-        number_volume64<=0.5_real64*real(nearest(0.0_real32,1.0_real32),real64) .or. &
+        number_volume64<=0.5_real64*real32_quantum64 .or. &
         number_volume64>real(huge(0.0_real32),real64)) return
     number_volume32=real(number_volume64,real32)
     stored_number_volume_is_representable=ieee_is_finite(number_volume32) .and. &
@@ -434,7 +462,7 @@ contains
     if (n64 > 0.0_real64) then
       moment_per_volume = n64*real(dry_density,real64)
       if (.not. ieee_is_finite(moment_per_volume) .or. &
-          moment_per_volume <= 0.5_real64*real(nearest(0.0_real32,1.0_real32),real64) .or. &
+          moment_per_volume <= 0.5_real64*real32_quantum64 .or. &
           moment_per_volume > real(huge(0.0_real32),real64)) return
     end if
     if (q64 == 0.0_real64) then
@@ -464,7 +492,8 @@ contains
                               joint_constrained_storage, q_source_rate64, n_source_rate64, &
                               q_transport_rate64, n_transport_rate64, joint_quantum_absence, &
                               strict_number_pair, volume_number_bounds, number_pair_bounds, &
-                              strict_mass_pairs, inactive_mass_limits)
+                              strict_mass_pairs, inactive_mass_limits, &
+                              inactive_q_quantum_adjustment_pairs, inactive_q_quantum_adjustments)
     ! Pair columns are QC/QNC, QI/QNI, QR/QNR, and QG/QIB. The first three
     ! ratios are mean particle masses; QG/QIB is graupel bulk density because
     ! QIB is rime-volume mixing ratio (m3 kg-dry-1), not a number moment.
@@ -492,16 +521,21 @@ contains
     logical, intent(in), optional :: strict_mass_pairs(:)
     ! Opt-in q<=limit transient branch for ordinary number pairs only.
     real(real64), intent(in), optional :: inactive_mass_limits(:)
+    ! Opt-in bounded positive-Q representation for inactive underflow cells.
+    logical, intent(in), optional :: inactive_q_quantum_adjustment_pairs(:)
+    integer, intent(out), optional :: inactive_q_quantum_adjustments(:)
 
     real(real32), allocatable :: q_candidate(:,:), n_candidate(:,:)
     real(real64), allocatable :: local_delta_q(:), local_delta_n(:)
     integer, allocatable :: local_adjustments(:)
+    integer, allocatable :: local_inactive_q_quantum_adjustments(:)
     real(real64), allocatable :: inactive_mass_limit_by_pair(:)
     real(real64) :: low, high, trial
     integer :: iteration, cell, pair, ncells, npairs, adjustment, use_strict_pair
     logical, allocatable :: pair_has_volume_bounds(:)
     logical, allocatable :: pair_has_strict_mass(:)
     logical, allocatable :: pair_has_inactive_mass_limit(:)
+    logical, allocatable :: pair_allows_inactive_q_quantum(:)
     logical :: use_joint_storage, use_constrained_storage, use_quantum_absence, storage_valid
 
     feasible = .false.
@@ -511,6 +545,7 @@ contains
     if (present(storage_delta_q)) storage_delta_q = 0.0_real64
     if (present(storage_delta_n)) storage_delta_n = 0.0_real64
     if (present(storage_adjustments)) storage_adjustments = 0
+    if (present(inactive_q_quantum_adjustments)) inactive_q_quantum_adjustments = 0
     use_joint_storage = .false.
     use_constrained_storage = .false.
     use_quantum_absence = .false.
@@ -553,9 +588,11 @@ contains
     allocate(pair_has_volume_bounds(npairs))
     allocate(pair_has_strict_mass(npairs))
     allocate(pair_has_inactive_mass_limit(npairs))
+    allocate(pair_allows_inactive_q_quantum(npairs))
     pair_has_volume_bounds = .false.
     pair_has_strict_mass = .false.
     pair_has_inactive_mass_limit = .false.
+    pair_allows_inactive_q_quantum = .false.
     allocate(inactive_mass_limit_by_pair(npairs))
     inactive_mass_limit_by_pair = 0.0_real64
     if (present(inactive_mass_limits)) then
@@ -568,6 +605,21 @@ contains
       do pair=1,npairs
         if (pair_has_inactive_mass_limit(pair) .and. pair/=2) return
       end do
+    end if
+    if (present(inactive_q_quantum_adjustment_pairs)) then
+      if (size(inactive_q_quantum_adjustment_pairs)/=npairs) return
+      pair_allows_inactive_q_quantum=inactive_q_quantum_adjustment_pairs
+      if (any(pair_allows_inactive_q_quantum)) then
+        if (.not.present(inactive_mass_limits) .or. .not.use_quantum_absence .or. &
+            .not.present(inactive_q_quantum_adjustments)) return
+        if (any(pair_allows_inactive_q_quantum .and. .not.pair_has_inactive_mass_limit)) return
+      end if
+    else if (present(inactive_q_quantum_adjustments)) then
+      return
+    end if
+    if (present(inactive_q_quantum_adjustments)) then
+      if (size(inactive_q_quantum_adjustments)/=npairs) return
+      inactive_q_quantum_adjustments=0
     end if
     if (present(strict_mass_pairs)) then
       if (size(strict_mass_pairs) /= npairs) return
@@ -638,6 +690,7 @@ contains
     allocate(q_candidate(ncells,npairs), n_candidate(ncells,npairs))
     if (use_joint_storage) then
       allocate(local_delta_q(npairs), local_delta_n(npairs), local_adjustments(npairs))
+      allocate(local_inactive_q_quantum_adjustments(npairs))
       call form_candidate(1.0_real64)
       if (.not. candidate_is_feasible()) return
       theta = 1.0_real64
@@ -686,6 +739,8 @@ contains
       storage_delta_q = local_delta_q
       storage_delta_n = local_delta_n
       storage_adjustments = local_adjustments
+      if (present(inactive_q_quantum_adjustments)) &
+        inactive_q_quantum_adjustments = local_inactive_q_quantum_adjustments
     end if
     feasible = .true.
 
@@ -702,6 +757,7 @@ contains
         local_delta_q = 0.0_real64
         local_delta_n = 0.0_real64
         local_adjustments = 0
+        local_inactive_q_quantum_adjustments = 0
       end if
       do p = 1, npairs
         do i = 1, ncells
@@ -743,7 +799,9 @@ contains
                                       allow_normal_q_adjustment=use_constrained_storage, &
                                       allow_joint_quantum_absence=use_quantum_absence, &
                                       strict_mass_ratio=pair_has_strict_mass(p), &
-                                      inactive_mass_limit=inactive_mass_limit_by_pair(p))
+                                      inactive_mass_limit=inactive_mass_limit_by_pair(p), &
+                                      allow_inactive_q_quantum_adjustment= &
+                                          pair_allows_inactive_q_quantum(p))
             else
               call joint_moment_store(q_value, n_value, dry_density(i), min_particle_mass(p), &
                                       max_particle_mass(p), .true., q_candidate(i,p), &
@@ -761,6 +819,9 @@ contains
               local_delta_n(p) = local_delta_n(p) + real(carrier_new(i),real64)* &
                   (real(n_candidate(i,p),real64)-n_value)
               local_adjustments(p) = local_adjustments(p) + 1
+              if (adjustment == 4) &
+                local_inactive_q_quantum_adjustments(p) = &
+                    local_inactive_q_quantum_adjustments(p) + 1
             end if
           else if (.not. ieee_is_finite(q_value) .or. .not. ieee_is_finite(n_value) .or. &
               abs(q_value) > real(huge(0.0_real32),real64) .or. &

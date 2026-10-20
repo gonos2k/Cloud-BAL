@@ -1,0 +1,103 @@
+{
+  "schema": "pr91_readonly_graph_guidance_v1",
+  "graph_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json",
+  "graph_sha256": "c159357009f0529d7940c7ff788ea0c59f04b9b1869abda908c2e2cde160ffa2",
+  "snapshot": "2026-10-19-rain-roundtrip (before PR91)",
+  "query": "rk_update_joint_moments horizontal_diffusion64 pr87_later_qsrc",
+  "query_log_external": "/var/tmp/pr91_producer_graph_query.txt",
+  "query_budget": 500,
+  "query_result_nodes": 243,
+  "query_truncated": true,
+  "selected_exact_label_nodes": [
+    {
+      "id": "tools_pr85_native_joint_update_rk_update_joint_moments",
+      "label": "rk_update_joint_moments()",
+      "_origin": "ast",
+      "community": 10200,
+      "community_name": "rk_update_joint_moments",
+      "file_type": "code",
+      "norm_label": "rk_update_joint_moments()",
+      "source_file": "tools/pr85_native_joint_update.f90",
+      "source_location": "L2"
+    },
+    {
+      "id": "docs_evidence_pr87_final_static_review_20261016_benchmark_real128_horizontal_diffusion64",
+      "label": "horizontal_diffusion64()",
+      "_origin": "ast",
+      "community": 10414,
+      "community_name": "pr87_horizontal_diffusion64",
+      "file_type": "code",
+      "norm_label": "horizontal_diffusion64()",
+      "source_file": "docs/evidence/pr87_final_static_review_20261016/benchmark_real128.f90",
+      "source_location": "L9"
+    },
+    {
+      "id": "docs_evidence_pr87_g_stencil_boundary_diffusion_20261016_pr87_horizontal_diffusion64_horizontal_diffusion64",
+      "label": "horizontal_diffusion64()",
+      "_origin": "ast",
+      "community": 10443,
+      "community_name": "pr87_horizontal_diffusion64",
+      "file_type": "code",
+      "norm_label": "horizontal_diffusion64()",
+      "source_file": "docs/evidence/pr87_g_stencil_boundary_diffusion_20261016/pr87_horizontal_diffusion64.f90",
+      "source_location": "L9"
+    },
+    {
+      "id": "tools_pr87_horizontal_diffusion64_horizontal_diffusion64",
+      "label": "horizontal_diffusion64()",
+      "_origin": "ast",
+      "community": 11256,
+      "community_name": "pr87_horizontal_diffusion64",
+      "file_type": "code",
+      "norm_label": "horizontal_diffusion64()",
+      "source_file": "tools/pr87_horizontal_diffusion64.f90",
+      "source_location": "L9"
+    },
+    {
+      "id": "docs_evidence_pr90_rain_roundtrip_20261019_d1_compiled_joint_transport_joint_moment_store",
+      "label": "joint_moment_store()",
+      "_origin": "ast",
+      "community": 12297,
+      "community_name": "cloud_bal_joint_transport",
+      "file_type": "code",
+      "norm_label": "joint_moment_store()",
+      "source_file": "docs/evidence/pr90_rain_roundtrip_20261019/d1/compiled_joint_transport.f90",
+      "source_location": "L22"
+    },
+    {
+      "id": "docs_evidence_pr90_rain_roundtrip_20261019_d1_compiled_joint_transport_joint_qnb_update",
+      "label": "joint_qnb_update()",
+      "_origin": "ast",
+      "community": 12297,
+      "community_name": "cloud_bal_joint_transport",
+      "file_type": "code",
+      "norm_label": "joint_qnb_update()",
+      "source_file": "docs/evidence/pr90_rain_roundtrip_20261019/d1/compiled_joint_transport.f90",
+      "source_location": "L459"
+    },
+    {
+      "id": "src_common_cloud_bal_joint_transport_joint_moment_store",
+      "label": "joint_moment_store()",
+      "_origin": "ast",
+      "community": 12458,
+      "community_name": "cloud_bal_joint_transport",
+      "file_type": "code",
+      "norm_label": "joint_moment_store()",
+      "source_file": "src/common/cloud_bal_joint_transport.f90",
+      "source_location": "L22"
+    },
+    {
+      "id": "src_common_cloud_bal_joint_transport_joint_qnb_update",
+      "label": "joint_qnb_update()",
+      "_origin": "ast",
+      "community": 12458,
+      "community_name": "cloud_bal_joint_transport",
+      "file_type": "code",
+      "norm_label": "joint_qnb_update()",
+      "source_file": "src/common/cloud_bal_joint_transport.f90",
+      "source_location": "L459"
+    }
+  ],
+  "edges_within_selection": [],
+  "limitation": "Historical helper/benchmark/generated-source symbols coexist; graph does not bind the currently compiled embedded host kernel or injected Fortran strings. Frozen host/source/preprocessor/object manifests and actual runtime replay establish the implementation. No graph/wiki mutation was performed."
+}

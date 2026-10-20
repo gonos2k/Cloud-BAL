@@ -1,0 +1,23 @@
+{
+  "schema": "pr91_c9_source_endpoint_failure_summary_v1",
+  "status": "INCOMPLETE",
+  "duration_seconds": 240,
+  "returncode": 1,
+  "completed_post_kdm6_steps": 1,
+  "maximum_seen_timestep": 2,
+  "same_source_failure_record_both_arms": true,
+  "OFF_receipt_sha256": "2a8300e4cca5d836a5d975d4090deead9e759014610103b15ded0a65032ecb99",
+  "COUPLED_receipt_sha256": "23d5c3c4bf8881e95e2089734dec6e0c529b2385db5d47faa304ba3480e47485",
+  "OFF_source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+  "COUPLED_source_failure_raw_sha256": "39a161e01efe12609684f534f32a20899961c16811696657f9bde16980fc0a22",
+  "source_stage_record": "SOURCE_STAGE         2         3         1       106        55         6   2.31259036809206009E-07   5.52090240000000000E+07  -5.73329534876483977E-13  -1.36871687786769883E+02   2.31247570218508490E-07   5.52062865662442669E+07   1.14675259590148926E+00   4.18879052734374980E-15   3.03008574026602271E-10   3.78455494068234348E+09   2.73766995130377844E+14   2.00000000000000000E+01  -5.73414796548044059E-13  -1.36900970458984375E+02   8.52616715600819183E-17   2.92826722144923224E-02   0.00000000000000000E+00   0.00000000000000000E+00   9.47135078125000000E+04   9.48846406250000000E+04",
+  "target": {
+    "timestep": 2,
+    "rk": 3,
+    "pair": 1,
+    "i": 106,
+    "j": 55,
+    "k": 6
+  },
+  "interpretation": "C9 applies the C8 strict continuous volume precheck at the physical source endpoint and fails before the C9 prepared-state diffusion replacement runs. C10 starts from D3 source, restoring original source-stage strict-mass-only semantics while leaving final complete-candidate volume validation intact."
+}

@@ -1,0 +1,7 @@
+# C11d failed virtual-donor diagnostic evidence
+
+C11d is diagnostic-only relative to C10: it records operands at the unsafe complete virtual-donor guard and recomputes the existing embedded REAL128 `horizontal_diffusion64` helper for that pair and cell. It makes no source, tolerance, storage-policy, or transport changes. Source pins and build provenance are in `sources_c11d.json` and `native_overlay_build_c11d.json`.
+
+The writer fixture uses the exact helper module extracted from immutable C10 `module_em.F` and the exact C11d capture block extracted from generated C11d `module_em.F`. Pinned Intel ifx O0 and O2 runs each produce 17 records; the focused test checks labels, fields, and Z8/Z16 widths. Raw outputs are under `writer_fixture/`. No executable is stored here.
+
+`attempts.json` retains the cancelled C11b build and C11c writer-format failure as provenance, and records external executable paths, sizes, and hashes. The C11d overlay build passed. The OFF-only 40-second diagnostic run closed INCOMPLETE (rc=1) after one completed T20 state and the T2/RK3 virtual-donor failure. Its live binding is recorded in `c11d_off_live_identity.json`; the closed receipt and exact failure payload are retained here. The independently compiled native REAL128 replay and bit-identical completed-prefix comparison are documented in `native_replay/README.md` and `prefix_comparison.json`. This diagnostic identifies the captured arithmetic failure at one cell; it does not establish a repair or scientific validation. No COUPLED C11d diagnostic run was performed.

@@ -1,0 +1,128 @@
+{
+  "arms": {
+    "COUPLED": {
+      "candidate_namelist_sha256": "160e3b83af7ba510fd4a8c59b487c1e8ea28738f09d07119f022d5be1702b0b5",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "input_file_count": 101,
+      "input_hash_mapping_sha256": "8b5c48ddf9896876d547174369874b280822c6361028fd391851e3935246a6dd",
+      "namelist_diff": "--- v17/namelist.input\n+++ pr86/namelist.input\n@@ -1,8 +1,8 @@\n  &time_control\n  run_days                            = 0,\n  run_hours                           = 0,\n- run_minutes                         = 0,\n- run_seconds = 20,\n+ run_minutes                         = 4,\n+ run_seconds = 0,\n  start_year                          = 2026,\n  start_month                         = 08,\n  start_day                           = 16,\n@@ -13,13 +13,13 @@\n  end_month                           = 08,\n  end_day                             = 16,\n  end_hour = 13,\n- end_minute                          = 00,\n- end_second = 20,\n+ end_minute                          = 04,\n+ end_second = 00,\n  interval_seconds                    = 3600, \n  input_from_file                     = .true.,\n  fine_input_stream                   = 0,\n  auxinput1_inname                    = \"met_em.d<domain>.<date>\",\n- history_interval                    = 60,\n+ history_interval                    = 1,\n  frames_per_outfile                  = 1000,\n  io_form_history                     = 2\n  io_form_restart                     = 2\n",
+      "namelist_selected_settings": {
+        "diff_opt": [
+          "diff_opt                            = 1,"
+        ],
+        "mp_physics": [
+          "mp_physics                          = 37,"
+        ]
+      },
+      "namelist_sha256": "160e3b83af7ba510fd4a8c59b487c1e8ea28738f09d07119f022d5be1702b0b5",
+      "preflight_candidate_build_receipt_sha256": "751283f094c12c6841933c0a9726a4ff4d9948609ab87ea1a15a6a9b5d65bc55",
+      "preflight_sha256": "980b4abaef92317abefd63355c4faa1da37917d8529e38552bee856381772513",
+      "run_dir": "/var/tmp/pr91_COUPLED_240s_c10_20261020/run",
+      "run_id": "PR91-C10-COUPLED-240s-20261020",
+      "runner_pid": 561448,
+      "runtime_layout_log_lines": [
+        "Ntasks in X            1 , ntasks in Y            1",
+        "WRF TILE   1 IS      1 IE    235 JS      1 JE    283",
+        "WRF NUMBER OF TILES =   1"
+      ],
+      "runtime_namelist_output_settings": {
+        "DIFF_OPT": [
+          "DIFF_OPT        =           1, 10*-1,"
+        ],
+        "MOIST_MIX2_OFF": [
+          "MOIST_MIX2_OFF  = 11*F,"
+        ],
+        "MP_PHYSICS": [
+          "MP_PHYSICS      =          37, 10*-1,"
+        ],
+        "NPROC_X": [
+          "NPROC_X =          -1,"
+        ],
+        "NPROC_Y": [
+          "NPROC_Y =          -1,"
+        ],
+        "SCALAR_MIX2_OFF": [
+          "SCALAR_MIX2_OFF = 11*F,"
+        ]
+      },
+      "runtime_namelist_output_sha256": "3fb3f9415ec568195a71e60a8ef1c8bd56dabe96737543e9d287555371ea8ed6",
+      "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+      "wrf_cmdline": "./wrf.exe",
+      "wrf_environment": {
+        "LD_LIBRARY_PATH": "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/opt/mpi/libfabric/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/umf/1.1/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/env/../lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tbb/2023.0/env/../lib/intel64/gcc4.8:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/opt/mpi/libfabric/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/debugger/2026.0/opt/debugger/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/opt/compiler/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+        "OMP_DYNAMIC": "FALSE",
+        "OMP_NUM_THREADS": "1",
+        "PR91_RUN_ID": "PR91-C10-COUPLED-240s-20261020"
+      },
+      "wrf_pid": 562329
+    },
+    "OFF": {
+      "candidate_namelist_sha256": "160e3b83af7ba510fd4a8c59b487c1e8ea28738f09d07119f022d5be1702b0b5",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "input_file_count": 101,
+      "input_hash_mapping_sha256": "a27c9edda114eca93e113d6c50459fa7fe4207518469afd7e98becc8bda1506b",
+      "namelist_diff": "--- v17/namelist.input\n+++ pr86/namelist.input\n@@ -1,8 +1,8 @@\n  &time_control\n  run_days                            = 0,\n  run_hours                           = 0,\n- run_minutes                         = 0,\n- run_seconds = 20,\n+ run_minutes                         = 4,\n+ run_seconds = 0,\n  start_year                          = 2026,\n  start_month                         = 08,\n  start_day                           = 16,\n@@ -13,13 +13,13 @@\n  end_month                           = 08,\n  end_day                             = 16,\n  end_hour = 13,\n- end_minute                          = 00,\n- end_second = 20,\n+ end_minute                          = 04,\n+ end_second = 00,\n  interval_seconds                    = 3600, \n  input_from_file                     = .true.,\n  fine_input_stream                   = 0,\n  auxinput1_inname                    = \"met_em.d<domain>.<date>\",\n- history_interval                    = 60,\n+ history_interval                    = 1,\n  frames_per_outfile                  = 1000,\n  io_form_history                     = 2\n  io_form_restart                     = 2\n",
+      "namelist_selected_settings": {
+        "diff_opt": [
+          "diff_opt                            = 1,"
+        ],
+        "mp_physics": [
+          "mp_physics                          = 37,"
+        ]
+      },
+      "namelist_sha256": "160e3b83af7ba510fd4a8c59b487c1e8ea28738f09d07119f022d5be1702b0b5",
+      "preflight_candidate_build_receipt_sha256": "751283f094c12c6841933c0a9726a4ff4d9948609ab87ea1a15a6a9b5d65bc55",
+      "preflight_sha256": "53e8ce412cd85bafc40677aad03281213d82af110886dcbc9176cb821e0637aa",
+      "run_dir": "/var/tmp/pr91_OFF_240s_c10_20261020/run",
+      "run_id": "PR91-C10-OFF-240s-20261020",
+      "runner_pid": 560939,
+      "runtime_layout_log_lines": [
+        "Ntasks in X            1 , ntasks in Y            1",
+        "WRF TILE   1 IS      1 IE    235 JS      1 JE    283",
+        "WRF NUMBER OF TILES =   1"
+      ],
+      "runtime_namelist_output_settings": {
+        "DIFF_OPT": [
+          "DIFF_OPT        =           1, 10*-1,"
+        ],
+        "MOIST_MIX2_OFF": [
+          "MOIST_MIX2_OFF  = 11*F,"
+        ],
+        "MP_PHYSICS": [
+          "MP_PHYSICS      =          37, 10*-1,"
+        ],
+        "NPROC_X": [
+          "NPROC_X =          -1,"
+        ],
+        "NPROC_Y": [
+          "NPROC_Y =          -1,"
+        ],
+        "SCALAR_MIX2_OFF": [
+          "SCALAR_MIX2_OFF = 11*F,"
+        ]
+      },
+      "runtime_namelist_output_sha256": "3fb3f9415ec568195a71e60a8ef1c8bd56dabe96737543e9d287555371ea8ed6",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "wrf_cmdline": "./wrf.exe",
+      "wrf_environment": {
+        "LD_LIBRARY_PATH": "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/opt/mpi/libfabric/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/umf/1.1/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/env/../lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tbb/2023.0/env/../lib/intel64/gcc4.8:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/opt/mpi/libfabric/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/debugger/2026.0/opt/debugger/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/opt/compiler/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+        "OMP_DYNAMIC": "FALSE",
+        "OMP_NUM_THREADS": "1",
+        "PR91_RUN_ID": "PR91-C10-OFF-240s-20261020"
+      },
+      "wrf_pid": 561675
+    }
+  },
+  "build_status": "PASS_OVERLAY_BUILD",
+  "candidate_build_receipt": "/var/tmp/pr91_native_build_c10_20261020/pr87_native_overlay_build.json",
+  "candidate_build_receipt_sha256": "751283f094c12c6841933c0a9726a4ff4d9948609ab87ea1a15a6a9b5d65bc55",
+  "captured_unix_time": 1792457528.3451407,
+  "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+  "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "executable_path": "/var/tmp/pr91_native_build_c10_20261020/wrf_pr87_overlay.exe",
+  "executable_sha256": "286b1c538deb8e83a7456134c301930620d2fc072ac4001e8a82df47dcd77b8d",
+  "schema": "pr91_c10_live_run_identity_v1",
+  "scope": "Live process snapshot only; does not establish completion, strict-state outcome, or scientific approval."
+}

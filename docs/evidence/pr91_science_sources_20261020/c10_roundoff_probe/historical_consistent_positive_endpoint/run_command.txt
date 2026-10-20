@@ -1,0 +1,10 @@
+cd /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL
+source tests/intel_toolchain.sh
+scratch=/var/tmp/pr91_c10_roundoff_probe_20261020
+mkdir -p "$scratch/o0" "$scratch/o2"
+cd "$scratch/o0"
+"$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/docs/evidence/pr91_science_sources_20261020/c10_roundoff_probe/roundoff_probe.f90 -o probe_o0
+./probe_o0
+cd "$scratch/o2"
+"$CLOUD_BAL_FC" "${CLOUD_BAL_REPRO_FLAGS[@]}" /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr91_host_store_20261020/Cloud-BAL/docs/evidence/pr91_science_sources_20261020/c10_roundoff_probe/roundoff_probe.f90 -o probe_o2
+./probe_o2

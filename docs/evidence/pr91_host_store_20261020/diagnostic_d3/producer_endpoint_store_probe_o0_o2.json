@@ -1,0 +1,69 @@
+{
+  "schema": "pr91_existing_source_endpoint_store_probe_v1",
+  "scope": "Re-consume an already stored REAL32 source endpoint through the maintained store primitive. This does not reproduce the primitive source-candidate producer and is not an airflow/model-chain replay.",
+  "source_endpoint_hex32": {
+    "q": "36F6D87B",
+    "n": "4ED15C91",
+    "dry_density": "3F8BA750"
+  },
+  "mass_bounds_hex64": {
+    "minimum": "3CF2DD58BFD7689A",
+    "maximum": "3DF4D2954D1355A3"
+  },
+  "volume_bounds_hex64": {
+    "minimum": "41EAD3CB1A2DDE23",
+    "maximum": "42ED9C99864E99CF"
+  },
+  "arguments": {
+    "allow_subnormal": true,
+    "allow_normal_q_adjustment": true,
+    "strict_mass_ratio": true,
+    "volume_contract_case": "volume_number_bounds passed",
+    "no_volume_case": "volume_number_bounds omitted"
+  },
+  "core_sha256": "c8ecedde5cc8f9adedf6cf082054596ca1c0d6a3565d152c73d730c00cd678f3",
+  "compiler_profile": "Pinned Intel ifx from tests/intel_toolchain.sh; O0 audit flags and O2 reproduce flags; strict FP, no FTZ.",
+  "results": {
+    "O0": {
+      "no_volume": {
+        "valid": true,
+        "stage": 0,
+        "adjustment": 0,
+        "stored_q_hex32": "36F6D87B",
+        "stored_n_hex32": "4ED15C91"
+      },
+      "with_volume_bounds": {
+        "valid": true,
+        "stage": 0,
+        "adjustment": 0,
+        "stored_q_hex32": "36F6D87B",
+        "stored_n_hex32": "4ED15C91"
+      }
+    },
+    "O2": {
+      "no_volume": {
+        "valid": true,
+        "stage": 0,
+        "adjustment": 0,
+        "stored_q_hex32": "36F6D87B",
+        "stored_n_hex32": "4ED15C91"
+      },
+      "with_volume_bounds": {
+        "valid": true,
+        "stage": 0,
+        "adjustment": 0,
+        "stored_q_hex32": "36F6D87B",
+        "stored_n_hex32": "4ED15C91"
+      }
+    }
+  },
+  "exact_rational_margins": {
+    "definition": "M = N*rho; lower = volume_min*Q; upper = volume_max*Q. Stored-consumer check requires both REAL64 M and REAL32-rounded M to lie in [lower, upper]. Fractions are exact rationals of the represented IEEE input bits.",
+    "lower_margin_real64": "8836548912735671970286714159/4611686018427387904",
+    "lower_margin_real32": "8836548864235281683227000111/4611686018427387904",
+    "upper_margin_real64": "58865319448181/70368744177664",
+    "upper_margin_real32": "798922544287349/70368744177664",
+    "all_four_margins_positive": true
+  },
+  "conclusion": "With these supplied source-endpoint bits and bounds, the volume-enabled call passes without changing Q. This endpoint probe does not establish what happened at the primitive producer; the separate captured candidate replay is the source-bound evidence."
+}

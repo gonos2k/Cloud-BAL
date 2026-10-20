@@ -1,0 +1,38 @@
+{
+  "schema": "pr91_c11_writer_attempts_v1",
+  "cancelled_b": {
+    "status": "CANCELLED_BEFORE_MODEL_RUN",
+    "receipt_external_path": "/var/tmp/pr91_native_build_c11_20261020/cancelled.json",
+    "receipt_sha256": "a18ce48efec09e456d2fe5307c41033da4cd573c7212a7fcbac835a2497dcd6b",
+    "source_module_sha256": "1ba690453a6fe8adfd9986a069f33323abcdeeede5d706b92fb270624f2ee04f",
+    "scope": "Build cancelled before model execution; retained as provenance only."
+  },
+  "format_failed_c": {
+    "status": "WRITER_FIXTURE_FORMAT_FAILED",
+    "source_module_external_path": "/var/tmp/pr91_sources_c11_20261020c/module_em.F",
+    "source_module_sha256": "6fed1f590713ceca2748cf3bb4520e2d6a08c0ed88959ac37e780bf532f2d0c4",
+    "observed_issue": "C11c writer output concatenated adjacent Z fields. The Intel fixture exposed field-token count mismatch. Superseded by explicit 1x separators in C11d."
+  },
+  "validated_d": {
+    "status": "WRITER_FIXTURE_PASS_O0_O2",
+    "generated_module_sha256": "40bfbce9e266a11ca576aca7a78e256b410b07f79ae783132ae2c3d24b8d64b3",
+    "test_source_sha256": "ba6f2f2c1e83b42426370b37e4b0d41a5cce329865637f853db2f849848208b4",
+    "output_O0_sha256": "3585c2f15a843aff3ccd813e643d3d199ea6063749b912c325f65ce95bd3a4ca",
+    "output_O2_sha256": "3585c2f15a843aff3ccd813e643d3d199ea6063749b912c325f65ce95bd3a4ca",
+    "outputs_identical": true,
+    "records": 17,
+    "compile_profile": "tests/intel_toolchain.sh; pinned ifx 2026.0; O0 strict audit and O2 strict reproduction flags",
+    "kernel_origin": "Exact embedded pr87_horizontal_diffusion64 module from immutable C10 module_em.F",
+    "kernel_embedded_c10_sha256": "d7f555f6d2fe91cfb662fd19e346db391b5b672a9e289d0184e9b094a66692ca",
+    "no_executable_copied": true
+  },
+  "c11d_native_build": {
+    "status": "PASS_OVERLAY_BUILD",
+    "receipt_external_path": "/var/tmp/pr91_native_build_c11d_20261020/pr87_native_overlay_build.json",
+    "receipt_sha256": "47d6fdae967c4187abdee7775f9287e9bbe1e19e9498b8743353c1c56f57122f",
+    "executable_external_path": "/var/tmp/pr91_native_build_c11d_20261020/wrf_pr87_overlay.exe",
+    "executable_size_bytes": 81192160,
+    "executable_sha256": "29e46c408478fc7912962d06d7d8b30bc2a18dd8bcb528047c1ebb8612b6d634",
+    "model_run_status": "RUNNING at archive time; no outcome inferred"
+  }
+}

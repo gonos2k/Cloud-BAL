@@ -1,0 +1,41 @@
+{
+  "schema": "pr91_native_sources_v1",
+  "identity": "PR91-C10",
+  "base_commit": "3a896be3d381909f0cc61d1c0896b329b98d5aea",
+  "parent_manifest": "/var/tmp/pr91_sources_d3_20261020/sources.json",
+  "parent_manifest_sha256": "538ab7a8284b28ba4e91a3b55b115ef098999fb32198a452f929454bb5b94bb8",
+  "source_overrides": {
+    "module_microphysics_zero_out.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_microphysics_zero_out.F",
+    "module_em.o": "/var/tmp/pr91_sources_c10_20261020/module_em.F",
+    "module_bl_shinhong.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_shinhong.F",
+    "module_bl_fogdes.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_bl_fogdes.F",
+    "module_pbl_driver.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_pbl_driver.F",
+    "module_mp_kdm6.o": "/var/tmp/pr90_sources_c7_20261019/module_mp_kdm6.F",
+    "module_first_rk_step_part1.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part1.F",
+    "module_first_rk_step_part2.o": "/var/tmp/pr87_joint_cycle_sources_20261016_v42/module_first_rk_step_part2.F",
+    "solve_em.o": "/var/tmp/pr91_sources_c10_20261020/solve_em.F"
+  },
+  "source_sha256": {
+    "module_microphysics_zero_out.o": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+    "module_em.o": "af54a8bd951e47407f6900dbfd4b16396cd6fc30753bb32437fd46c45b86be4c",
+    "module_bl_shinhong.o": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+    "module_bl_fogdes.o": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+    "module_pbl_driver.o": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+    "module_mp_kdm6.o": "983095a0aa0c76eab4efdda27f9435e61634e08e542ef9bd096aa4cf8004eca4",
+    "module_first_rk_step_part1.o": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+    "module_first_rk_step_part2.o": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+    "solve_em.o": "dd3d8436ec6e7712ea8b62a33502acf89832f2d8a9f45969f84968f06ff78ca6"
+  },
+  "extra_support_source": "/var/tmp/pr90_sources_c7_20261019/pr90_cycle_support.f90",
+  "extra_support_sha256": "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6",
+  "diagnostic_transform": "tools/pr91_host_store_trace.py",
+  "diagnostic_transform_sha256": "3f694f9ecfd19d8ce93c59feab64d12382ba789d80755851eb477735a26850e8",
+  "physics_changed_from_C7": true,
+  "scope": "Selected-object pinned Intel partial host, one domain/rank/thread/tile; original D3 temporary source mean-mass store retained; complete host commit strict volume unchanged. Initial inputs/FP unchanged.",
+  "supersedes_unbuilt_manifest": "/var/tmp/pr91_sources_d2_20261020/sources.json",
+  "created_at_utc": "2026-10-20T00:49:32.096723+00:00",
+  "change": "Prepared physical source public Q/N field uses existing horizontal diffusion operator under original RK1 geometry; replaces actual captured old contribution once. No C8 premature source volume gate, no core/tolerance/prior/precision/G change. Signed pressure-coordinate dt delta per pair.",
+  "diffusion_transform": "tools/pr91_source_first_diffusion.py",
+  "diffusion_transform_sha256": "6cd06d2d81bfb829ff1703abaefb86483de89dd536b4a18d374a90da101e697e",
+  "preserved_failed_candidate": "PR91-C9: paired240 incomplete afterone completedstep, newprematureC8sourcevolume gate failedT2RK3; noC9Dreplacement reached"
+}

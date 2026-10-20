@@ -1,0 +1,124 @@
+{
+  "scope": "Independent exact-bit arithmetic reconstruction of one captured C11d virtual-donor failure; not a full native transaction replay.",
+  "capture": {
+    "path": "/var/tmp/pr91_OFF_40s_c11d_20261020/run/pr85_joint_source_failure.raw.gz",
+    "sha256": "fc30643d1df2ce0768b7e1fd3c478a6ad637007bab2bd51aee22158131803e7d",
+    "bytes": 539,
+    "record_count": 17,
+    "context_tokens": [
+      "2",
+      "3",
+      "1",
+      "233",
+      "62",
+      "1"
+    ],
+    "source_path": "/var/tmp/pr91_native_build_c11d_20261020/source/overrides/module_em.F",
+    "source_sha256": "40bfbce9e266a11ca576aca7a78e256b410b07f79ae783132ae2c3d24b8d64b3",
+    "build_receipt_sha256": "47d6fdae967c4187abdee7775f9287e9bbe1e19e9498b8743353c1c56f57122f"
+  },
+  "input_hex": {
+    "R32": [
+      "00000000",
+      "00000000",
+      "47BA53F4",
+      "47BA40B0",
+      "3F9945D4",
+      "41A00000"
+    ],
+    "R64_source_pair": [
+      "0000000000000000",
+      "3DF0000000000000"
+    ],
+    "VDS_SOURCE_DIFFUSION": [
+      "3EAA8DB720000000",
+      "41255E0620000000",
+      "BD3107FF59800000",
+      "BFB2973641800000",
+      "3EAA8DB6FDF0014D",
+      "41255E05FAD1937D",
+      "3B39C82BC6F72E40",
+      "3DEEDC08DA77C3AC",
+      "3CF2DD58BFD7689A",
+      "3DF4D2954D1355A3",
+      "41ED718CBAEB47A8",
+      "42F03FEF587F51E0"
+    ]
+  },
+  "inputs_decoded": {
+    "base_q": 0.0,
+    "base_n": 0.0,
+    "old_carrier": 95399.90625,
+    "new_carrier": 95361.375,
+    "dry_density": 1.1974434852600098,
+    "dt": 20.0,
+    "later_q": 7.91358218066307e-07,
+    "later_n": 700163.0625,
+    "diffusion_pair_delta_q": -6.05071195843246e-14,
+    "diffusion_pair_delta_n": -0.07261981104966253,
+    "old_D_q": 7.913581575591874e-07,
+    "old_D_n": 700162.989880189,
+    "prepared_D_q": 2.1326302713444503e-23,
+    "prepared_D_n": 2.245324874239295e-10,
+    "mass_ratio_lower": 4.18879052734375e-15,
+    "mass_ratio_upper": 3.0300857402660227e-10,
+    "logged_number_bound_lower": 3951846871.352497,
+    "logged_number_bound_upper": 285868552615198.0
+  },
+  "binary64_reconstruction": {
+    "later_plus_pair_delta_q_hex": "0x1.a8db6fdf0014dp-21",
+    "equals_old_D_q_bitwise": true,
+    "later_plus_pair_delta_n_hex": "0x1.55e05fad1937dp+19",
+    "equals_old_D_n_bitwise": true,
+    "prepared_minus_old_q_hex": "-0x1.a8db6fdf0014dp-21",
+    "prepared_minus_old_n_hex": "-0x1.55e05fad1937bp+19",
+    "legacy_order_q_hex": "0x0.0p+0",
+    "legacy_order_q": 0.0,
+    "legacy_order_n_hex": "0x1.0000000000000p-32",
+    "legacy_order_n": 2.3283064365386963e-10,
+    "captured_candidate_q_hex": "0x0.0p+0",
+    "captured_candidate_n_hex": "0x1.0000000000000p-32",
+    "explicit_nonD_q_hex": "0x0.0p+0",
+    "explicit_nonD_n_hex": "0x0.0p+0",
+    "direct_prepared_rate_q_hex": "0x1.9c82bc6f72e40p-76",
+    "direct_prepared_rate_n_hex": "0x1.edc08da77c3acp-33",
+    "direct_donor_formula": "(REAL(old_carrier,real64)*base + REAL(dt,real64)*rate)/REAL(old_carrier,real64)",
+    "direct_donor_q_hex": "0x1.62392e43a79b1p-88",
+    "direct_donor_q": 4.4709273943221516e-27,
+    "direct_donor_q_exact_fraction": "6231563288869297/1393796574908163946345982392040522594123776",
+    "direct_donor_n_hex": "0x1.a7fc49ced867dp-45",
+    "direct_donor_n": 4.707184655622856e-14,
+    "direct_donor_n_exact_fraction": "7458831817606781/158456325028528675187087900672",
+    "direct_q_over_n": 9.498092217354404e-14,
+    "direct_q_over_n_exact_fraction": "6231563288869297/65608578504674020112044392448"
+  },
+  "source_bound_check": {
+    "pair": "p=1 cloud liquid Q/QNC; maintained source maps pairs to QC/QNC, QI/QNI, QR/QNR, QG/QIB.",
+    "mean_mass_bounds": [
+      4.18879052734375e-15,
+      3.0300857402660227e-10
+    ],
+    "R32_direct_q": 4.470927343424405e-27,
+    "R32_direct_q_hex": "13b11c97",
+    "R32_direct_n": 4.7071846881506854e-14,
+    "R32_direct_n_hex": "2953fe25",
+    "both_R32_components_normal": true,
+    "rho_times_N_direct": 5.6365875997914714e-14,
+    "logged_number_bounds_applied_to_donor": false,
+    "why_number_bounds_not_applied": "This donor path calls prepared_donor_is_safe and joint_moment_is_valid64 with strict mean-mass bounds; neither call passes volume_number_bounds. The logged lambda-derived number bounds are captured context, not donor validator limits.",
+    "ratio_minus_lower": 9.079213164620028e-14,
+    "upper_minus_ratio": 3.0291359310442875e-10,
+    "half_smallest_R32_subnormal": 7.006492321624085e-46,
+    "rho_times_N_direct_above_half_smallest_subnormal": true,
+    "independent_ratio_comparison_with_configured_mean_mass_endpoints": true,
+    "configured_mean_mass_bounds_comparison_is_not_the_failed_interior_guard": true,
+    "failed_interior_call_guard": "prepared_donor_is_safe(source_sum64(1),source_sum64(2),drydensity(cell)); no joint_moment_is_valid64 call at this failed interior call.",
+    "strict_joint_mean_validator_scope": "joint_moment_is_valid64 is called earlier for unchanged boundary donor ring; this interior failure record is emitted by the prepared_donor_is_safe gate.",
+    "why_number_bounds_not_applicable": "At the failed interior call, prepared_donor_is_safe checks finite/nonnegative pair, paired-zero agreement, REAL32 range, and n*rho storage representability. It does not call joint_moment_is_valid64 or pass volume_number_bounds. The independent Q/N comparison against configured cloud mean-mass endpoints is informative only; it is not the guard that rejected this call."
+  },
+  "limitations": [
+    "The trace captures the virtual donor stage and exact stencil operands; this reconstruction is not a full source/air/stage/host transaction replay.",
+    "No native post-fix run is represented.",
+    "No general causal claim beyond this captured pair and cell."
+  ]
+}

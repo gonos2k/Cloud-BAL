@@ -1,0 +1,54 @@
+{
+  "schema": "pr91_c10_t2_intermediate_store_classification_v1",
+  "test_profile": "tests/intel_toolchain.sh pinned ifx 2026.0.0; executed at O0 and O2; both stdout files have identical successful records.",
+  "source_stage_input_hex": {
+    "q64": "3E8F099B2388800A",
+    "n64": "418A530C7487AB13",
+    "dry_density32": "3F92C8CA",
+    "minimum_mass_ratio64": "3CF2DD58BFD7689A",
+    "maximum_mass_ratio64": "3DF4D2954D1355A3",
+    "volume_number_bounds64": [
+      "41EC32773795D5C2",
+      "42EF1FAB0FDF013B"
+    ]
+  },
+  "r32_source_endpoint_arithmetic": {
+    "q1_plus_rounded_increment": "34784CD9",
+    "n1_plus_rounded_increment": "4C529864"
+  },
+  "d3_original_source_store": {
+    "options": "strict_mass_ratio=.TRUE.; normal-Q adjustment and quantum absence enabled; no volume_number_bounds",
+    "valid": true,
+    "failure_stage": 0,
+    "adjustment": 2,
+    "returned_r32": [
+      "34784CDA",
+      "4C529864"
+    ]
+  },
+  "c8_added_source_volume_gate": {
+    "same_continuous_q64_n64_and_bounds": true,
+    "valid": false,
+    "failure_stage": 3,
+    "effect": "rejects before source endpoint can seed prepared diffusion"
+  },
+  "old_policy_returned_r32_volume_predicate": {
+    "continuous_upper_margin_U_minus_Nrho": 1.816743679344654,
+    "stored_r32_product_upper_margin_U_minus_r32(Nrho)": -0.10917108505964279,
+    "interpretation": "returned R32 intermediate is not itself a strict dual-product final representation"
+  },
+  "existing_final_store_on_same_r32_intermediate": {
+    "same_bounds_density_and_options": true,
+    "volume_number_bounds": true,
+    "valid": true,
+    "failure_stage": 0,
+    "adjustment": 2,
+    "returned_r32": [
+      "34784CDB",
+      "4C529864"
+    ],
+    "interpretation": "existing final store applies its existing directed Q adjustment; no new tolerance or pending-state storage policy was introduced"
+  },
+  "scope_limit": "This proves the source-stage intermediate/store contract and final joint_moment_store behavior. It is not a complete native source + prepared diffusion + air transport model-chain pass; C10 native run is still in progress.",
+  "corrected_scratch_note": "An earlier scratch calculation mistakenly used the continuous Q64 candidate to compute the returned-R32 product margin. It is superseded. The values above use the exact returned Q32=34784CDA and N32=4C529864; the archived O0/O2 driver is authoritative."
+}

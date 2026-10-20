@@ -1,0 +1,135 @@
+{
+  "schema": "pr91_final_c14_focused_validation_attempt_v1",
+  "status": "SUPERSEDED_FAILED_ATTEMPT",
+  "date": "2026-10-20",
+  "command": "focused_command.sh",
+  "pytest_log": "pytest.log",
+  "pytest_log_sha256": "2f5cfe6e610439f9a74bc71e21d59cf5856e4e6bbc3ce36843fb2e4be75fc183",
+  "result": {
+    "collected": 63,
+    "passed": 62,
+    "failed": 1,
+    "duration_seconds": 36.23
+  },
+  "failure": {
+    "test": "tests/test_pr90_rain_final_psd.py::test_pr90_rain_final_psd",
+    "expected_generated_em_sha256": "090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b",
+    "actual_generated_em_path": "/var/tmp/pr90_c7_sources_ruz29p3c/source/module_em.F",
+    "actual_generated_em_sha256": "6bb2f0ec191706c5f145e5978d37a8a310856c8901c4f5ca68734ee37b0192ad"
+  },
+  "source_bindings": {
+    "core": {
+      "path": "src/common/cloud_bal_joint_transport.f90",
+      "sha256": "cf1384a06a82e2f3d03b4ca61db8fbfb8ad2e61d889e4290d790d7aa4d3be466"
+    },
+    "generated_module_em": {
+      "path": "/var/tmp/pr91_sources_c14_20261020/module_em.F",
+      "sha256": "6a7a97c23c84f05837a3bb5e384ce944ecd2df220ea1889d990349cd509094b1"
+    },
+    "generated_module_em_identity": "6a7a97c23c84f05837a3bb5e384ce944ecd2df220ea1889d990349cd509094b1",
+    "solve_c12": {
+      "path": "/var/tmp/pr91_sources_c12c_20261020/solve_em.F",
+      "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+    },
+    "fogdes_c13": {
+      "path": "docs/evidence/pr91_source_store_contract_20261020/c13/generated/module_bl_fogdes.F",
+      "sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7"
+    }
+  },
+  "test_files": [
+    {
+      "path": "tests/test_pr91_history_response.py",
+      "sha256": "2a297614084b133ca9b3dc3806278e8ceeb1d55ef117bcf589115bae4ac26ae4"
+    },
+    {
+      "path": "tests/test_pr91_host_store_replay.py",
+      "sha256": "58f1fbbc11c207885226b8937789a42239adad8bafd79aaffa2ed88636d61e45"
+    },
+    {
+      "path": "tests/test_pr91_host_store_trace.py",
+      "sha256": "20a18f9597921469090311a3f7bb204d7cc41a3659b7b1a21544e4e49dd6ebb7"
+    },
+    {
+      "path": "tests/test_pr91_source_store_contract.py",
+      "sha256": "ab36b46c03e6b9d084e2189d16ad835adf831ddc71dd9c221392e4843bac6d8d"
+    },
+    {
+      "path": "tests/test_pr91_source_first_diffusion.py",
+      "sha256": "9e8756b2d48774d5eaf692d016be46a09fb0286bf924bb169901549793cb249b"
+    },
+    {
+      "path": "tests/test_pr91_source_first_diffusion_c11.py",
+      "sha256": "ba6f2f2c1e83b42426370b37e4b0d41a5cce329865637f853db2f849848208b4"
+    },
+    {
+      "path": "tests/test_pr90_joint_store_reason.py",
+      "sha256": "80d58532f350faf6c2d6eba1f95e8cbc956bfa714e69efe22d9eff19a5756f4d"
+    },
+    {
+      "path": "tests/test_pr90_rain_failure_replay.py",
+      "sha256": "303741fd41f38ce864f9222d7c7f251f1b4606cc11c061476b06a1e47988c25b"
+    },
+    {
+      "path": "tests/test_pr90_rain_final_psd.py",
+      "sha256": "aee6b84e2b86067693bb6c419ebf2473201dbdce886d76558804bee85832374a"
+    },
+    {
+      "path": "tests/test_pr90_rain_producer_trace.py",
+      "sha256": "37dc5283ecfbc2632cc918090600e44dfb0335af4de620ad478da7f8af9d1bc4"
+    },
+    {
+      "path": "tests/test_pr90_rain_public_roundtrip.py",
+      "sha256": "6bb0c3187541d2052a958235f711885db282d60591f57d607bb29246f7260dcb"
+    },
+    {
+      "path": "tests/test_pr90_warm_rain_output.py",
+      "sha256": "8defcee653a925c218f4daec3a1740ded4d84af4ef585785ae68b581dbf25119"
+    },
+    {
+      "path": "tests/test_pr85_kdm6_warm_process.py",
+      "sha256": "fee109ebc363e7ff4699a257954fe0a407873e962da012f457ba87891dbe38e6"
+    },
+    {
+      "path": "tests/test_pr87_cloud_public_store.py",
+      "sha256": "2f80cbc0c7f6351ad1a71237a602490e24c02427d0cc6b3b3d6328e9cd84cb1e"
+    },
+    {
+      "path": "tests/test_pr87_qn_density_storage.py",
+      "sha256": "c3dcabd8f68ff708b571dfe5e8e030925fc0d73c875c76418a1671f4b1237c11"
+    },
+    {
+      "path": "tests/test_pr87_rain_density_storage.py",
+      "sha256": "2fa3f8c19b5b742900794350d452ee936385f0ebf7f29f890e965cb2c7165771"
+    },
+    {
+      "path": "tests/test_pr87_rain_public_store.py",
+      "sha256": "d7f7c1b411d9dfa5d9e991fa7d81b8199d0dea642695ef4b14692fc630366afc"
+    },
+    {
+      "path": "tests/test_pr87_rain_storage_contract.py",
+      "sha256": "c6713e1b1ff97dc5b7461b9a6993a0be3d24f266fd81d58032452fd6f2168187"
+    },
+    {
+      "path": "tests/test_pr87_rain_volume_store.py",
+      "sha256": "583fbd35ffe448b2c860cb3cc768c7b8a3a9835c720dcb62bf6111c4c38c7c54"
+    },
+    {
+      "path": "tests/test_pr87_source_storage_failures.py",
+      "sha256": "32c74bcdf584272e16c189d5219c4b9c00347b0baef2f20089e9128b404f8e30"
+    },
+    {
+      "path": "tests/test_pr91_fogdes_store_contract.py",
+      "sha256": "c5a8f098abd5ac6c93f09caa9a4bd8587db272290945c67a8c92b56ad88b053a"
+    },
+    {
+      "path": "tests/test_pr91_inactive_ice_store_c14.py",
+      "sha256": "1bed3043396637d0d10e5442df80543a0bd46603989efc6e158423206d8f22f2"
+    }
+  ],
+  "toolchain": [
+    "ifx_version=ifx (IFX) 2026.0.0 20260331",
+    "ifx_sha256=909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "profile_sha256=5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  ],
+  "scope_note": "This run is not a passing final receipt. It ran in fresh TMPDIR with tests/intel_toolchain.sh. All C14 cases and the other 61 cases passed; one pre-existing exact generated-C6-EM hash assertion failed because the regenerated module included the current shared core. Preserve as failed attempt pending owner decision/test pin update."
+}

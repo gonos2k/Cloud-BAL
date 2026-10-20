@@ -47,12 +47,15 @@ program test_joint_qnb_transport
   real(real64) :: ice_absent_q64, ice_absent_n64
   real(real64) :: ice_c5_q64, ice_c5_n64
   real(real64) :: ice_number_quantum_limit, ice_t5_full_q(11), ice_t5_full_n(11)
+  real(real64) :: inactive_quantum_q, inactive_quantum_n, inactive_quantum_limit
   real(real64) :: ice_limits(4)
   real(real32) :: ice_legacy_storedq, ice_legacy_storedn
   logical :: feasible
   logical :: strict_mass_flags(4)
+  logical :: inactive_quantum_pairs(4)
   logical :: wrong_mass_flags(3)
-  integer :: p, adjustment, adjustments(4), short_adjustments(3), trial, case_index
+  integer :: p, adjustment, adjustments(4), inactive_quantum_adjustments(4)
+  integer :: short_adjustments(3), trial, case_index
 
   ! Invalid density must reject before any ordered NaN comparison under traps.
   call joint_moment_store(400.0_real64,1.0_real64, &
@@ -300,6 +303,101 @@ program test_joint_qnb_transport
                           .true.,storedq,storedn,adjustment,feasible, &
                           allow_normal_q_adjustment=.true.)
   if (feasible) error stop 'subnormal-only store accepted quantum absence'
+
+  ! Captured C13 T9/RK2 ice candidate. The continuous pair is valid only as
+  ! inactive ice; binary32 Q rounds to zero while N and N*rho remain stored.
+  inactive_quantum_q = 5.4266349637423089e-46_real64
+  inactive_quantum_n = 6.8387101931419546e-30_real64
+  inactive_quantum_limit = scale(1.0_real64,-149)
+  minbound = 1570.79638671875_real64/(1820000.0_real64**3)
+  maxbound = 1570.79638671875_real64/(9080.0_real64**3)
+  if (.not.joint_moment_is_valid64(inactive_quantum_q,inactive_quantum_n, &
+                                  0.479358_real32,minbound,maxbound,inactive_quantum_limit)) &
+    error stop 'captured inactive ice pair is not continuously valid'
+  call joint_moment_store(inactive_quantum_q,inactive_quantum_n,0.479358_real32, &
+       minbound,maxbound,.true.,storedq,storedn,adjustment,feasible, &
+       allow_normal_q_adjustment=.true.,allow_joint_quantum_absence=.true., &
+       inactive_mass_limit=inactive_quantum_limit)
+  if (feasible) error stop 'default inactive Q-quantum repair was enabled'
+  call joint_moment_store(inactive_quantum_q,inactive_quantum_n,0.479358_real32, &
+       minbound,maxbound,.true.,storedq,storedn,adjustment,feasible, &
+       allow_normal_q_adjustment=.true.,allow_joint_quantum_absence=.true., &
+       inactive_mass_limit=inactive_quantum_limit, &
+       allow_inactive_q_quantum_adjustment=.true.)
+  if (.not.feasible .or. adjustment/=4 .or. &
+      transfer(storedq,0_int32)/=1_int32 .or. &
+      storedn/=real(inactive_quantum_n,real32)) &
+    error stop 'bounded inactive Q-quantum store failed'
+  if (real(storedq,real64)-inactive_quantum_q<=0.0_real64 .or. &
+      real(storedq,real64)-inactive_quantum_q>=inactive_quantum_limit) &
+    error stop 'inactive Q-quantum signed adjustment is outside one quantum'
+  call joint_moment_store(inactive_quantum_q,inactive_quantum_n,0.479358_real32, &
+       minbound,maxbound,.false.,storedq,storedn,adjustment,feasible, &
+       allow_normal_q_adjustment=.true.,allow_joint_quantum_absence=.true., &
+       inactive_mass_limit=inactive_quantum_limit, &
+       allow_inactive_q_quantum_adjustment=.true.)
+  if (feasible) error stop 'inactive Q-quantum repair overrode subnormal denial'
+  call joint_moment_store(inactive_quantum_q,inactive_quantum_n,0.479358_real32, &
+       minbound,maxbound,.true.,storedq,storedn,adjustment,feasible, &
+       allow_normal_q_adjustment=.true.,inactive_mass_limit=inactive_quantum_limit, &
+       allow_inactive_q_quantum_adjustment=.true.)
+  if (feasible) error stop 'inactive Q-quantum repair bypassed quantum-absence opt-in'
+  call joint_moment_store(inactive_quantum_q,inactive_quantum_n,0.479358_real32, &
+       minbound,maxbound,.true.,storedq,storedn,adjustment,feasible, &
+       allow_normal_q_adjustment=.true.,allow_joint_quantum_absence=.true., &
+       inactive_mass_limit=0.5_real64*inactive_quantum_limit, &
+       allow_inactive_q_quantum_adjustment=.true.)
+  if (feasible) error stop 'inactive Q-quantum repair exceeded the inactive mass limit'
+
+  qb=0.0_real32; nb=0.0_real32; qs=qb; ns=nb
+  qsrc=0.0_real32; nsrc=0.0_real32; qt=0.0_real32; nt=0.0_real32
+  qsrc64=0.0_real64; nsrc64=0.0_real64
+  qt64=0.0_real64; nt64=0.0_real64
+  qsrc64(1,2)=inactive_quantum_q
+  nsrc64(1,2)=inactive_quantum_n
+  mold=1.0_real32; mnew=1.0_real32; rho=0.479358_real32; dt=1.0_real32
+  minmass=1.0e-6_real64; maxmass=1.0e-5_real64
+  minmass(2)=minbound; maxmass(2)=maxbound
+  ice_limits=0.0_real64; ice_limits(2)=inactive_quantum_limit
+  inactive_quantum_pairs=.false.; inactive_quantum_pairs(2)=.true.
+  inactive_quantum_adjustments=-1
+  call joint_qnb_update(qb,nb,qs,ns,qsrc,nsrc,qt,nt,mold,mnew,rho,dt, &
+       minmass,maxmass,theta,rq,rn,feasible,storage_delta_q=deltaq, &
+       storage_delta_n=deltan,storage_adjustments=adjustments, &
+       joint_constrained_storage=.true.,q_source_rate64=qsrc64, &
+       n_source_rate64=nsrc64,q_transport_rate64=qt64,n_transport_rate64=nt64, &
+       joint_quantum_absence=.true.,inactive_mass_limits=ice_limits, &
+       inactive_q_quantum_adjustment_pairs=inactive_quantum_pairs, &
+       inactive_q_quantum_adjustments=inactive_quantum_adjustments)
+  if (.not.feasible .or. theta/=1.0_real64 .or. &
+      transfer(qs(1,2),0_int32)/=1_int32 .or. &
+      ns(1,2)/=real(inactive_quantum_n,real32) .or. &
+      inactive_quantum_adjustments(2)/=1) &
+    error stop 'grouped inactive Q-quantum opt-in failed'
+  if (deltaq(2)/=real(qs(1,2),real64)-inactive_quantum_q .or. &
+      deltan(2)/=real(ns(1,2),real64)-inactive_quantum_n) &
+    error stop 'grouped inactive Q-quantum signed ledger is incorrect'
+  if (any(inactive_quantum_adjustments([1,3,4])/=0) .or. &
+      any(adjustments([1,3,4])/=0)) &
+    error stop 'inactive Q-quantum adjustment leaked to another pair'
+
+  ! A failed pair rolls back the Q-quantum state and every signed ledger.
+  qs=qb; ns=nb
+  nsrc64(1,1)=1.0e-20_real64
+  deltaq=-1.0_real64; deltan=-1.0_real64; adjustments=-1
+  inactive_quantum_adjustments=-1
+  call joint_qnb_update(qb,nb,qs,ns,qsrc,nsrc,qt,nt,mold,mnew,rho,dt, &
+       minmass,maxmass,theta,rq,rn,feasible,storage_delta_q=deltaq, &
+       storage_delta_n=deltan,storage_adjustments=adjustments, &
+       joint_constrained_storage=.true.,q_source_rate64=qsrc64, &
+       n_source_rate64=nsrc64,q_transport_rate64=qt64,n_transport_rate64=nt64, &
+       joint_quantum_absence=.true.,inactive_mass_limits=ice_limits, &
+       inactive_q_quantum_adjustment_pairs=inactive_quantum_pairs, &
+       inactive_q_quantum_adjustments=inactive_quantum_adjustments)
+  if (feasible .or. any(qs/=qb) .or. any(ns/=nb) .or. &
+      any(deltaq/=0.0_real64) .or. any(deltan/=0.0_real64) .or. &
+      any(adjustments/=0) .or. any(inactive_quantum_adjustments/=0)) &
+    error stop 'failed grouped candidate did not roll back Q-quantum repair state'
 
   ! Quantum absence must not clear Q at or above one REAL32 quantum. Here the
   ! nearest Q and adjacent Q values both fail; rounded N density also underflows.

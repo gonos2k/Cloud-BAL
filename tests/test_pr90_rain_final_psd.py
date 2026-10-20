@@ -24,6 +24,8 @@ C6_BUILD = Path("/var/tmp/pr90_native_build_c6_20261019")
 C6_KDM_SHA256 = C6_KDM6_SOURCE_SHA256
 C6_SUPPORT_SHA256 = "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6"
 C6_EM_SHA256 = "090b9329c817f52f0fba45d6d97f93a6bdb35adc5f46cfed0ae198b15401819b"
+ORIGINAL_C7_CORE = ROOT / "docs/evidence/pr91_host_store_20261020/validation/final_i/original_c7_core.f90"
+ORIGINAL_C7_CORE_SHA256 = "c8ecedde5cc8f9adedf6cf082054596ca1c0d6a3565d152c73d730c00cd678f3"
 T8_REPLAY = ROOT / "docs/evidence/pr90_rain_roundtrip_20261019/c6/OFF_t8_failure_replay.json"
 T8_REPLAY_SHA256 = "e084d1738cc14a5efe1c581975502f967ecb7464602fa011295e5626c61196b4"
 T8_INPUT = {
@@ -207,7 +209,16 @@ def test_pr90_rain_final_psd() -> None:
     em_path = Path(generated["source_overrides"]["module_em.o"])
     assert hashlib.sha256(kdm_path.read_bytes()).hexdigest() != C6_KDM_SHA256
     assert hashlib.sha256(support_path.read_bytes()).hexdigest() == C6_SUPPORT_SHA256
-    assert hashlib.sha256(em_path.read_bytes()).hexdigest() == C6_EM_SHA256
+    em_bytes = em_path.read_bytes()
+    current_core = (ROOT / "src/common/cloud_bal_joint_transport.f90").read_bytes()
+    original_core = ORIGINAL_C7_CORE.read_bytes()
+    assert hashlib.sha256(original_core).hexdigest() == ORIGINAL_C7_CORE_SHA256
+    # The C6 T8 fixture is historical rain behavior with today's maintained
+    # common store. Replacing only that module prefix with the frozen C7 core
+    # must reconstruct the exact C6 source, preserving the expected rain bits.
+    assert em_bytes.startswith(current_core)
+    reconstructed_c6_em = original_core + em_bytes[len(current_core):]
+    assert hashlib.sha256(reconstructed_c6_em).hexdigest() == C6_EM_SHA256
     kdm = kdm_path.read_text()
     transformed = kdm
     assert transformed.count("PR90_KDM6_PSD_BOUNDARY_CONTEXT") == 1

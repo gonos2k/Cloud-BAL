@@ -1,0 +1,68 @@
+{
+  "command": "bash /var/tmp/pr91_c13_strict_mean_hex_20261020/run.sh",
+  "exact_binary64_analysis": {
+    "binary64_ratio_hex": "0x1.2dd58bfd76899p-48",
+    "binary64_ratio_one_ulp_below_minimum": true,
+    "exact_rational_q_minus_minimum_times_n": "-2230343872169475/2722258935367507707706996859454145691648",
+    "exact_rational_q_minus_minimum_times_n_decimal": "-8.19298944414476253E-25",
+    "minimum_mean_mass_hex": "0x1.2dd58bfd7689ap-48",
+    "n_hex": "0x1.b9f5f69b64b8fp+20",
+    "q_hex": "0x1.048b6f24832c2p-27",
+    "rounded_binary64_product_hex": "0x1.048b6f24832c2p-27",
+    "rounded_q_minus_product_hex": "0x0.0p+0"
+  },
+  "files": [
+    {
+      "bytes": 2189,
+      "path": "README.md",
+      "sha256": "8aa7e09b5ee8353d6cff61bda9fb2c528d7fd0153ee5850bbea5fb624a217ee1"
+    },
+    {
+      "bytes": 1741,
+      "path": "strict_mean_hex.f90",
+      "sha256": "85371fd3ada065653c919d4e61ce57f6f0c7cbca55abdbfbc40072616a5bcb71"
+    },
+    {
+      "bytes": 236,
+      "path": "ifx_o0.log",
+      "sha256": "fd5a8c8a911a0a56e37dbaee9701f62d5960ec624bb62d3659d54d9424300612"
+    },
+    {
+      "bytes": 236,
+      "path": "ifx_o2.log",
+      "sha256": "fd5a8c8a911a0a56e37dbaee9701f62d5960ec624bb62d3659d54d9424300612"
+    }
+  ],
+  "input_capture": {
+    "COUPLED": "/var/tmp/pr91_COUPLED_240s_c12_20261020/run/pr85_joint_source_failure.raw.gz",
+    "OFF": "/var/tmp/pr91_OFF_240s_c12_20261020/run/pr85_joint_source_failure.raw.gz",
+    "arms": {
+      "COUPLED": {
+        "compressed_bytes": 330,
+        "compressed_path": "/var/tmp/pr91_COUPLED_240s_c12_20261020/run/pr85_joint_source_failure.raw.gz",
+        "compressed_sha256": "bb3d88f74b6542e0f80800915c1e23b8ca6919e7f03c54cf78364afed613f363",
+        "raw_row_bytes": 593,
+        "raw_row_sha256": "c2df23b424c06b368e76fa6abe7ec1e37c8e3e141e414d236137ca98026a3a13"
+      },
+      "OFF": {
+        "compressed_bytes": 330,
+        "compressed_path": "/var/tmp/pr91_OFF_240s_c12_20261020/run/pr85_joint_source_failure.raw.gz",
+        "compressed_sha256": "bb3d88f74b6542e0f80800915c1e23b8ca6919e7f03c54cf78364afed613f363",
+        "raw_row_bytes": 593,
+        "raw_row_sha256": "c2df23b424c06b368e76fa6abe7ec1e37c8e3e141e414d236137ca98026a3a13"
+      }
+    },
+    "record": "SOURCE_STAGE timestep=3 rk=3 pair=1 i=162 j=132 k=3",
+    "writer_format": "(a,6i10,1p,20es26.17), 18 significant decimal digits for REAL64 fields"
+  },
+  "result": "O0/O2 identical. Product comparator q < mmin*n sees equality and passes; strict q/n comparator sees ratio one binary64 ULP below minimum. Existing store with strict_mass_ratio true and no volume bounds returns invalid, failure_stage=2, adjustment=0.",
+  "schema": "pr91_c13_strict_mean_trial_evidence_v1",
+  "scratch": "/var/tmp/pr91_c13_strict_mean_hex_20261020",
+  "source_pins": {
+    "C12_module_em_F_sha256": "fcdc8f34b523aa83adcf7f60a049e27aba5f1975c264bb7118bb7efe62120a5f",
+    "FogDES_source_sha256": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be",
+    "extracted_joint_store_module_sha256": "9cfc20a3724b9a71b0be912d7f6746cd3ae5f17128dd743539a34ddadfd862a6",
+    "ifx_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "ifx_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef"
+  }
+}

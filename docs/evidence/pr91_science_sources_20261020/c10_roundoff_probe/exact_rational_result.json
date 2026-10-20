@@ -1,0 +1,47 @@
+{
+  "scope": "Manufactured coherent source-extinction packet; not a native failure replay or cause attribution.",
+  "binary64_exact": {
+    "Dold_Q": "1/36028797018963968",
+    "Dold_N": "1/4503599627370496",
+    "Dprepared_Q": "0",
+    "Dprepared_N": "0",
+    "before32": "-1",
+    "after32": "-1",
+    "coupled_before32": "-1",
+    "ulp_binary64_upward_at_minus_one": "1/9007199254740992",
+    "half_ulp": "1/18014398509481984",
+    "Dold_Q_below_half_ulp": true,
+    "later_residual_Q": "0",
+    "precision_correction_Q": "0",
+    "source_diff_Q": "-1/36028797018963968",
+    "source_diff_N": "-1/4503599627370496",
+    "qs": "-1/36028797018963968",
+    "ns": "-1/4503599627370496",
+    "prepared_endpoint_Q": "0",
+    "prepared_endpoint_N": "0",
+    "unit_carrier_unit_dt_donor_Q": "-1/36028797018963968",
+    "unit_carrier_unit_dt_donor_N": "-1/4503599627370496",
+    "old_Q_to_N_ratio": "1/8",
+    "raw_source_Q_to_N_ratio": "1/8",
+    "Dold_Q_to_N_ratio": "1/8",
+    "donor_Q_to_N_ratio": "1/8"
+  },
+  "construction": {
+    "kernel": "Extracted verbatim from C10 module_em.F pr87_horizontal_diffusion64 embedded module; R128 face arithmetic and R64 increment output.",
+    "grid": "3x1x3; all eight q neighbors=2, center=1; all eight n neighbors=16, center=8.",
+    "geometry": "mut=1,c1=1,c2=0, all map factors=1, rdx=rdy=1, xkmhd=2^-57.",
+    "source_endpoint": "old center (Q,N)=(1,8), raw source rate=(-1,-8), source dt=1, prepared center endpoint=(0,0).",
+    "Dold": "Four incoming faces each contribute 2^-57 for Q; linear N profile gives eight times the Q increment.",
+    "Dprepared": "Prepared fields are zero throughout 3x3 stencil, so both increments are exactly zero."
+  },
+  "compiler_runs": {
+    "O0": "PASS",
+    "O2": "PASS",
+    "profile": "tests/intel_toolchain.sh pinned Intel ifx; strict FP; scratch /var/tmp/pr91_c10_zero_endpoint_20261020"
+  },
+  "limitations": [
+    "Generic manufactured packet; no claim this is an actual PBL or T10 operand set.",
+    "Does not establish C11/native failure cause.",
+    "No alpha/storage/composite state tested."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "pr91_c12_t3_source_stage_replay_v2",
+  "runtime_failure": {
+    "run_id": "PR91-OFF-240s-C12-20261020",
+    "external_record": "/var/tmp/pr91_OFF_240s_c12_20261020/run/pr85_joint_source_failure.raw.gz",
+    "record_path_in_bundle": "captured_failure.raw",
+    "record": "SOURCE_STAGE timestep=3 rk=3 pair=1 i=162 j=132 k=3",
+    "record_bytes": 593,
+    "scope": "one captured failed source-stage cell; not a host/model rerun"
+  },
+  "store_module_sha256": "9cfc20a3724b9a71b0be912d7f6746cd3ae5f17128dd743539a34ddadfd862a6",
+  "intel_profile": "tests/intel_toolchain.sh; O0 CLOUD_BAL_FREE_FLAGS and O2 CLOUD_BAL_REPRO_FLAGS",
+  "actual_host_call_options": {
+    "strict_mass_ratio": true,
+    "allow_normal_q_adjustment": true,
+    "allow_joint_quantum_absence": true,
+    "volume_number_bounds": false
+  },
+  "results": {
+    "O0": [
+      "ADJUSTED_SOURCE F stage=2 adjustment=0",
+      "RAW_SOURCE T stage=0",
+      "R32_AS_R64 T stage=0"
+    ],
+    "O2": "byte-identical to O0 output",
+    "adjusted_candidate_q_over_n_minus_minimum": -7.888609052210118e-31,
+    "adjusted_candidate_q_minus_rounded_min_times_n": 0.0,
+    "raw_physical_rate_q_over_n_minus_minimum": 1.452246431050129e-22,
+    "r32_endpoint_words": [
+      "320245B8",
+      "49DCFAFB"
+    ],
+    "classification": "FogDES product predicate accepted the corrected R64 source candidate at the boundary; host strict division predicate rejects it"
+  },
+  "caution": "No mean-mass tolerance or rate clipping is authorized by this replay. C13 aligns the producer trial with the existing host store predicate.",
+  "sidecar_provenance": "PBL-origin source-correction sidecar, updated by FogDES during the callback; captured values do not isolate or diagnose the PBL operator."
+}

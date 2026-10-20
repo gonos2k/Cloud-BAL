@@ -1,0 +1,156 @@
+{
+  "schema": "pr91_source_endpoint_virtual_donor_candidate_chain_v1",
+  "capture": {
+    "identity": "PR91-D3-OFF-200s-20261020",
+    "raw_sha256": "3231d1a51f6f701b9d5db5a87a18e9edaee7c263eff7401cf46dfa81e4352d5a",
+    "gzip_sha256": "06836135ffc87528595d29f51286b34edb33aa391098c0a999521b926601ba48",
+    "collected_at_utc": "2026-10-20T00:21:09.667662+00:00",
+    "record_count": 17
+  },
+  "target": {
+    "attempt": 1,
+    "timestep": 10,
+    "rk": 3,
+    "pair": 1,
+    "i": 130,
+    "j": 182,
+    "k": 2
+  },
+  "source_core_sha256": "c8ecedde5cc8f9adedf6cf082054596ca1c0d6a3565d152c73d730c00cd678f3",
+  "fixture_source": "source_chain_probe.f90",
+  "fixture_source_sha256": "3f595447c92b0f9bd2cc51afbae0361a1e41240eb4fc4bfd842107ddf68b614b",
+  "profile": "Pinned Intel tests/intel_toolchain.sh: CLOUD_BAL_FREE_FLAGS O0 and CLOUD_BAL_REPRO_FLAGS O2; outputs byte-identical.",
+  "inputs_hex": {
+    "stored_source_endpoint": {
+      "q32": "36F6D87B",
+      "n32": "4ED15C91"
+    },
+    "dry_density32": "3F8BA750",
+    "old_carrier32": "47A5D67A",
+    "new_carrier32": "47A5D3D6",
+    "base_q32": "36F6D87B",
+    "base_n32": "4ED15C91",
+    "dt32": "41A00000",
+    "later_source_rate64": {
+      "q": "BF380B7C26C0B810",
+      "n": "C23464C2D285C708"
+    },
+    "transport_rate64": {
+      "q": "BF57EC72025010F6",
+      "n": "C2544A6F664C4821"
+    },
+    "scale_printed_r64": "1.00000000000000000E+00",
+    "mass_bounds64": {
+      "minimum": "3CF2DD58BFD7689A",
+      "maximum": "3DF4D2954D1355A3"
+    },
+    "volume_bounds64": {
+      "minimum": "41EAD3CB1A2DDE23",
+      "maximum": "42ED9C99864E99CF"
+    },
+    "carrier_old_hex": "47A5D67A",
+    "carrier_new_hex": "47A5D3D6",
+    "base_q_hex": "36F6D87B",
+    "base_n_hex": "4ED15C91",
+    "dt_hex": "41A00000"
+  },
+  "sequence": {
+    "stored_endpoint": {
+      "formula": "input REAL32 endpoint converted to REAL64, then joint_moment_store with strict_mass_ratio=.true.; policy A omits volume bounds, policy B includes the captured volume bounds.",
+      "O0": [
+        "SOURCE_ENDPOINT_NO_VOLUME T 0 0 36F6D87B 4ED15C91",
+        "SOURCE_ENDPOINT_WITH_VOLUME T 0 0 36F6D87B 4ED15C91"
+      ],
+      "O2": [
+        "SOURCE_ENDPOINT_NO_VOLUME T 0 0 36F6D87B 4ED15C91",
+        "SOURCE_ENDPOINT_WITH_VOLUME T 0 0 36F6D87B 4ED15C91"
+      ],
+      "result": "Both policies pass at stage 0 and preserve exact source endpoint Q/N bits."
+    },
+    "later_source_virtual_donor": {
+      "formula": "(REAL64(oldcarrier32)*REAL64(base32)+REAL64(dt32)*later_source_rate64)/REAL64(oldcarrier32), evaluated in the captured source expression order; transport is excluded from this donor state.",
+      "q64_hex": "3EDE7E442C58A592",
+      "n64_hex": "41D9DCDE33F1AC42",
+      "q_over_n_printed": "4.18879052620414399E-15",
+      "strict_mass_ratio": {
+        "ratio64": 4.188790526204144e-15,
+        "lower_margin_ratio_minus_minimum": {
+          "decimal": -1.1396058186221885e-24,
+          "exact_fraction": "-722311/633825300114114700748351602688"
+        }
+      },
+      "volume": {
+        "M64": 1893637761.4232686,
+        "L64": 26177.648406793356,
+        "U64": 1893637760.908084,
+        "continuous_upper_margin_U64_minus_M64": {
+          "decimal": -0.5151846408843994,
+          "exact_fraction": "-2160841/4194304"
+        },
+        "M32": 1893637760.0,
+        "stored_upper_margin_U64_minus_M32": {
+          "decimal": 0.9080839157104492,
+          "exact_fraction": "952195/1048576"
+        }
+      },
+      "O0": [
+        "VIRTUAL_DONOR 3EDE7E442C58A592 41D9DCDE33F1AC42    4.18879052620414399E-15    1.89363776142326856E+09   -5.15184640884399414E-01",
+        "VIRTUAL_VOLUME_MARGINS    1.89361158377486181E+09   -5.15184640884399414E-01",
+        "VIRTUAL_STORED_PRODUCT    1.89363776000000000E+09",
+        "VIRTUAL_STORE_NO_VOLUME F 2 0 BF800000 BF800000",
+        "VIRTUAL_STORE_WITH_VOLUME F 2 0 BF800000 BF800000"
+      ],
+      "O2": [
+        "VIRTUAL_DONOR 3EDE7E442C58A592 41D9DCDE33F1AC42    4.18879052620414399E-15    1.89363776142326856E+09   -5.15184640884399414E-01",
+        "VIRTUAL_VOLUME_MARGINS    1.89361158377486181E+09   -5.15184640884399414E-01",
+        "VIRTUAL_STORED_PRODUCT    1.89363776000000000E+09",
+        "VIRTUAL_STORE_NO_VOLUME F 2 0 BF800000 BF800000",
+        "VIRTUAL_STORE_WITH_VOLUME F 2 0 BF800000 BF800000"
+      ],
+      "result": "Both store calls fail at stage 2 because strict mass ratio is already below the minimum; the volume upper excess is independently present in the continuous virtual donor. R32 product rounds inside the upper bound, but the continuous R64 gate runs first."
+    },
+    "full_candidate": {
+      "formula": "(oldcarrier*base+dt*(later_source+scale*transport))/newcarrier, in the same REAL64 expression order as joint_qnb_update.",
+      "candidate_q64_hex": "3EDD0D6CF179BEF8",
+      "candidate_n64_hex": "41D8A40957EA0410",
+      "matches_capture_bits": true,
+      "trace_stage": 3,
+      "trace_valid": false,
+      "trace_adjustment": 0,
+      "trace_stored_q32_hex": "BF800000",
+      "trace_stored_n32_hex": "BF800000",
+      "volume_margins": {
+        "definition": "M64=N64*rho32, L64=volume_min*Q64, U64=volume_max*Q64 with REAL64 rounding as in the core; stored check compares REAL32-rounded M32 to the same L64/U64.",
+        "M64": 1804164672.7291672,
+        "M32": 1804164736.0,
+        "L64": 24940.77242918206,
+        "U64": 1804164672.2498596,
+        "continuous_lower_margin_M64_minus_L64": {
+          "decimal": 1804139731.956738,
+          "exact_fraction": "495918153354777342245/274877906944"
+        },
+        "continuous_upper_margin_U64_minus_M64": {
+          "decimal": -0.4793076515197754,
+          "exact_fraction": "-1005181/2097152"
+        },
+        "stored_lower_margin_M32_minus_L64": {
+          "decimal": 1804139795.2275708,
+          "exact_fraction": "495918170746531426597/274877906944"
+        },
+        "stored_upper_margin_U64_minus_M32": {
+          "decimal": -63.75014042854309,
+          "exact_fraction": "-267387469/4194304"
+        }
+      },
+      "O0": "FULL_CANDIDATE 3EDD0D6CF179BEF8 41D8A40957EA0410 F 3 0 BF800000 BF800000",
+      "O2": "FULL_CANDIDATE 3EDD0D6CF179BEF8 41D8A40957EA0410 F 3 0 BF800000 BF800000",
+      "result": "The reconstructed full candidate matches captured HEX64 exactly and is rejected at stage 3 by the continuous volume upper bound.",
+      "store_trace_match": true
+    }
+  },
+  "interpretation": "The already stored source endpoint passes both storage policies unchanged. Applying the later source rates creates a virtual donor below the strict mass minimum and above the continuous volume upper bound. This separates the source-stage arithmetic/state change from endpoint storage; endpoint validity alone does not close the later local failure. No producer input or physical source was invented and no fix is claimed.",
+  "raw_outputs": {
+    "o0_sha256": "3f9597e9ddade05e6a7b12039adca3b0fbb0ed201a453354d4450fed8cb50f4e",
+    "o2_sha256": "3f9597e9ddade05e6a7b12039adca3b0fbb0ed201a453354d4450fed8cb50f4e"
+  }
+}

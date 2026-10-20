@@ -1,0 +1,52 @@
+{
+  "schema": "pr91_c13_fogdes_store_contract_v1",
+  "candidate": "C13 source-present FogDES candidate uses the host strict joint store",
+  "native_runtime_status": "C13_PAIRED_240S_INCOMPLETE_T9_RK2_JOINT_CANDIDATE_INFEASIBLE_600S_NOT_RUN",
+  "physics_change": true,
+  "physics_change_summary": "FogDES source-present trial validation now calls the existing joint_moment_store with strict_mass_ratio, normal-Q adjustment, and joint-quantum absence options. No-volume temporary source contract; no tolerance or clipping.",
+  "unchanged_host_inputs": {
+    "C12 module_em.F": "fcdc8f34b523aa83adcf7f60a049e27aba5f1975c264bb7118bb7efe62120a5f",
+    "C12 solve_em.F": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+  },
+  "fogdes_input": {
+    "path": "inputs/module_bl_fogdes_c12.F",
+    "sha256": "56cf7041973def041db00a27d97085503f587cc6d29834cc74e8d4f40a7803be"
+  },
+  "generated": {
+    "path": "generated/module_bl_fogdes.F",
+    "sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+    "external_output": "/var/tmp/pr91_sources_c13_20261020/module_bl_fogdes.F"
+  },
+  "transform": {
+    "path": "transform/pr91_fogdes_store_contract.py",
+    "sha256": "ddbc3828bcc4ac6b1bedf117edc2a215e324fca46726dbb17a9b437270f91aa6"
+  },
+  "focused_validation": {
+    "command": "python3 -m unittest tests.test_pr91_fogdes_store_contract -v",
+    "result": "2 passed; pinned Intel O0/O2 executes transformed full FogDES with positive paired ground flux through the source-present callback, common theta, source-inclusive conservation, ratio preservation, strict-store acceptance, and captured source predicate cases",
+    "test_path": "validation/test_pr91_fogdes_store_contract.py",
+    "test_sha256": "c5a8f098abd5ac6c93f09caa9a4bd8587db272290945c67a8c92b56ad88b053a",
+    "log_path": "validation/focused_test.log",
+    "log_sha256": "0ccf3e784d2ca0727fa95244126222039612b41918aa2de3c8b322b28abce79d"
+  },
+  "failure_fixture": "../c12/t3_source_replay/captured_failure.raw",
+  "limitations": [
+    "The positive-flux callback case is a normal one-layer regression; it does not establish a positive revised theta for the captured marginal source packet.",
+    "C13 generated host source is not an independent scientific approval or native completion result."
+  ],
+  "native_runtime": {
+    "status": "INCOMPLETE",
+    "returncode": 1,
+    "final_completed_step": 8,
+    "maximum_seen_timestep": 9,
+    "build_receipt_sha256": "dc4c6d1ad0cd0870ff26dd6b490ecf145733e552b575f3a8859a9ef75c9e5106",
+    "executable_sha256": "69c0f5fb394917aab999e073fc05671ba208502fc58c6bd17b2e860bf5cf0c87",
+    "failure": "T9 RK2 full joint moment candidate infeasible in both OFF and COUPLED arms",
+    "closed_audit": "runtime/closed_runtime_audit.json",
+    "model_600s_attempted": false,
+    "runtime_receipts": [
+      "runtime/off_receipt.json",
+      "runtime/coupled_receipt.json"
+    ]
+  }
+}

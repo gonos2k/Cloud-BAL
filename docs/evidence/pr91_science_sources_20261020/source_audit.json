@@ -1,0 +1,64 @@
+{
+  "schema": "pr91_science_source_audit_v1",
+  "date": "2026-10-20",
+  "mode": "read_only_source_and_evidence_audit",
+  "pressure_support": {
+    "source_receipt": "Cloud-BAL/docs/evidence/pr82_observation_signal_readback_strict3_compact_20261012.json",
+    "mask_cells": 162,
+    "mask_sha256": "002a74a5834874dbb56dfc7dfa7b17d6f07655e8a6df0338a57847a278473139",
+    "candidate_grid_kji": [22, 283, 235],
+    "source_operator": "qc=LWC/rho_d; rho_d=p/[287.05*T*(1+qv/0.622)]",
+    "evidence": [
+      {"path": "/var/tmp/pr82_same13_real_candidate.final20261012/met_em.d01.2026-08-16_13:00:00.nc", "sha256": "e635b4083c22258907338c06104c4ba8ef02a819e6b76a5c4f6cc567b067cd60", "size_bytes": 146800640},
+      {"path": "/var/tmp/pr82_same13_real_candidate.final20261012/wrfinput_d01", "sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb", "size_bytes": 376438784},
+      {"path": "Cloud-BAL/docs/PR82_SAME13_HANDOFF_20261012.md", "claim": "pinned WPS/metgrid/real path and candidate readback; candidate-value verification is not an influence-stencil calculation"}
+    ],
+    "original_support_lookup": "support_lookup.json",
+    "original_support_status": "RECOVERED_FROM_HASH_BOUND_PR78_AND_PR81_CANDIDATES",
+    "original_horizontal_points": 9,
+    "original_pressure_levels": 18,
+    "transfer_operator_lookup": "support_operator_lookup.json",
+    "located_operator_sources": [
+      "candidate-to-LAPSPREP direct same-horizontal-index copy and pressure-order reversal",
+      "restored WPS interp_to_latlon source and receipt-bound active interpolation table"
+    ],
+    "missing_for_native_influence_stencil": [
+      "target-specific source-bound horizontal interpolation influence rows",
+      "pressure-to-hybrid vertical interpolation influence rows through real.exe"
+    ],
+    "conclusion": "The original mask, coordinates, and pressure levels are recovered. Native influence weights remain uncomputed; candidate-grid dimensions, native coordinate proximity, and the outcome-selected 27-column support do not establish that stencil."
+  },
+  "c7_deferral": {
+    "source_manifest": "Cloud-BAL/docs/evidence/pr90_rain_roundtrip_20261019/c7/sources.json",
+    "compiled_kdm6_source": "/var/tmp/pr90_sources_c7_20261019/module_mp_kdm6.F",
+    "compiled_kdm6_sha256": "983095a0aa0c76eab4efdda27f9435e61634e08e542ef9bd096aa4cf8004eca4",
+    "area_weighted_summary": "Cloud-BAL/docs/evidence/pr90_rain_roundtrip_20261019/c7/science/area_weighted_180s.json",
+    "admission_reason_records": {
+      "file_pattern": "/var/tmp/pr90_{OFF,COUPLED}_180s_c7_20261019/run/pr87_admission_reason.raw.gz",
+      "reason_semantics": "first failed full-proposal endpoint validation; not a unique final active-bound certificate",
+      "OFF": {
+        "AUT": {"rows": 46831, "endpoint_reason_counts": {"RAIN": 46831}},
+        "G": {"rows": 122846, "endpoint_reason_counts": {"BULKDENSITY": 119963, "RAIN": 1358, "DONORNEGATIVE": 523, "ORPHAN": 759, "ICE": 242, "PSDCLOUD": 1}}
+      },
+      "COUPLED": {
+        "AUT": {"rows": 46838, "endpoint_reason_counts": {"RAIN": 46838}},
+        "G": {"rows": 122852, "endpoint_reason_counts": {"BULKDENSITY": 119971, "RAIN": 1355, "DONORNEGATIVE": 523, "ORPHAN": 760, "ICE": 242, "PSDCLOUD": 1}}
+      },
+      "vapor_reason": "0 for every recorded AUT/G row",
+      "tally_scope": "event counts only; not area weighted and not an exclusive partition of published deferred half-L1"
+    },
+    "existing_record_roles": {
+      "pr85_kdm6_cold_budget": "group alpha, retry/status, before/request/after states and withheld vectors; no unique cause mask",
+      "pr85_kdm6_psd_boundary": "PSD/native/direct/storage boundary values where instrumented; not all admission checks",
+      "pr90_kdm6_cold_column": "area-weighted group-stage proposed/applied/deferred summaries; no reason join",
+      "pr87_admission_reason": "first failed endpoint check for partial AUT/G admissions; not active-bound proof"
+    },
+    "minimum_new_diagnostic": "At the existing AUT/G admission site, emit validator limiting-reason bit mask for donor/orphan, PSD, density, storage representability, and composite/temperature; aggregate counts and proposed/deferred DEN*DELZ*cell_area half-L1 by cause while retaining first-failure code. Preserve overlap or document precedence."
+  },
+  "scope_limits": [
+    "No model run",
+    "No Fortran source changes",
+    "No graph update",
+    "Historical receipts were read in place and not rewritten"
+  ]
+}

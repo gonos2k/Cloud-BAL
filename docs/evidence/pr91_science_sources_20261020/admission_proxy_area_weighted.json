@@ -1,0 +1,201 @@
+{
+  "schema": "pr91_admission_first_trace_area_proxy_v1",
+  "scope": "trace-gated admission records; the admission schema has no model timestep or trace-context identifier, so temporal coverage cannot be joined to the nine-step collector.",
+  "source": {
+    "path": "/var/tmp/pr90_sources_c7_20261019/module_mp_kdm6.F",
+    "sha256": "983095a0aa0c76eab4efdda27f9435e61634e08e542ef9bd096aa4cf8004eca4",
+    "mass_activity_field_definition": {
+      "AUT": "0.5*sum(abs(rain_aut_q_process(1:5))); AUT QV process is zero",
+      "G": "0.5*(sum(abs(rain_g_q_process(1:5)))+abs(rain_g_qv_process))",
+      "units": "kg/kg dry air mixing-ratio half-L1 proxy",
+      "excludes": [
+        "DEN*DELZ",
+        "horizontal area",
+        "number moments",
+        "rime-volume",
+        "temperature"
+      ],
+      "printed_format": "ES24.16 from REAL32 values; decimal readback is rounded"
+    },
+    "record_fields": [
+      "group",
+      "i",
+      "lat/j",
+      "k",
+      "loop",
+      "search_status",
+      "endpoint_reason",
+      "vapor_reason",
+      "full_evap_pending",
+      "alpha",
+      "mass_activity_kg_per_kgdry",
+      "rhoDry_kg_m3",
+      "DELZ_m"
+    ],
+    "record_lacks": [
+      "model_timestep",
+      "horizontal_area",
+      "active-bound certificate",
+      "storage residual",
+      "composite reduction"
+    ],
+    "trace_gate": "pr67_trace_this_call=.not.pr67_trace_complete; source sets the saved completion flag at KDM6 exit. The records contain coordinates and call loop but do not identify model timestep or trace context."
+  },
+  "area_join": {
+    "formula": "DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+    "DX_m": 5000.0,
+    "DY_m": 5000.0,
+    "grid_ny_nx": [
+      282,
+      234
+    ],
+    "map_factors": "same-run history fields; exact equality confirmed across all nine history records in each arm",
+    "row_contributions": {
+      "full_request_proxy_kg": "mass_activity_kg_per_kgdry*rhoDry_kg_m3*DELZ_m*cell_area_m2",
+      "alpha_scaled_proxy_kg": "full_request_proxy_kg*alpha",
+      "withheld_proxy_kg": "full_request_proxy_kg*(1-alpha)"
+    }
+  },
+  "input_hashes": {
+    "OFF_reason_gzip": "4a251ce2ef8d44813564ca4f19e0585b49b47a038aebcda95fdc5bcbc7f14bd4",
+    "COUPLED_reason_gzip": "3bf177ed9e1b17cf57a582dd32a3816de8bf16783196a430ba18aeaefbf854fb",
+    "OFF_history": "46724cb66a4eaaaa9b543d6feb0c2e6035d6d779493858a684066d1a259522ba",
+    "COUPLED_history": "8077b533c67c1c3202706a3aa572737db53d7af58a68ea3f2ef9866d4e77a261"
+  },
+  "results_kg": {
+    "OFF": {
+      "AUT": {
+        "rows": 46831,
+        "by_reason": {
+          "RAIN": {
+            "full_request": 12607316448.883429,
+            "alpha_scaled": 101393302.52021421,
+            "withheld": 12505923146.363216
+          }
+        }
+      },
+      "G": {
+        "rows": 122846,
+        "by_reason": {
+          "BULKDENSITY": {
+            "rows": 119963,
+            "full_request": 38523505228.91628,
+            "alpha_scaled": 933614973.3002106,
+            "withheld": 37589890255.61625
+          },
+          "RAIN": {
+            "rows": 1358,
+            "full_request": 4606444407.77363,
+            "alpha_scaled": 358403432.00836515,
+            "withheld": 4248040975.7652674
+          },
+          "DONORNEGATIVE": {
+            "rows": 523,
+            "full_request": 1028750162.2972449,
+            "alpha_scaled": 362053665.54260385,
+            "withheld": 666696496.7546407
+          },
+          "ORPHAN": {
+            "rows": 759,
+            "full_request": 958669389.7095935,
+            "alpha_scaled": 263362237.0606496,
+            "withheld": 695307152.6489434
+          },
+          "ICE": {
+            "rows": 242,
+            "full_request": 578886994.4214674,
+            "alpha_scaled": 43.458970871858206,
+            "withheld": 578886950.9624965
+          },
+          "PSDCLOUD": {
+            "rows": 1,
+            "full_request": 24538835.22497621,
+            "alpha_scaled": 2397350.954229269,
+            "withheld": 22141484.270746943
+          }
+        },
+        "total": {
+          "full_request": 45720795018.34319,
+          "alpha_scaled": 1919831702.3250294,
+          "withheld": 43800963316.01833
+        }
+      }
+    },
+    "COUPLED": {
+      "AUT": {
+        "rows": 46838,
+        "by_reason": {
+          "RAIN": {
+            "full_request": 12607552197.803078,
+            "alpha_scaled": 102129537.63690399,
+            "withheld": 12505422660.166176
+          }
+        }
+      },
+      "G": {
+        "rows": 122852,
+        "by_reason": {
+          "BULKDENSITY": {
+            "rows": 119971,
+            "full_request": 38511213676.61741,
+            "alpha_scaled": 933614973.3002106,
+            "withheld": 37577598703.317375
+          },
+          "RAIN": {
+            "rows": 1355,
+            "full_request": 4605178070.398947,
+            "alpha_scaled": 358403432.00836515,
+            "withheld": 4246774638.390583
+          },
+          "DONORNEGATIVE": {
+            "rows": 523,
+            "full_request": 1028737177.2233362,
+            "alpha_scaled": 362053665.54260385,
+            "withheld": 666683511.680732
+          },
+          "ORPHAN": {
+            "rows": 760,
+            "full_request": 958664905.8536574,
+            "alpha_scaled": 263362237.0606496,
+            "withheld": 695302668.7930071
+          },
+          "ICE": {
+            "rows": 242,
+            "full_request": 578886989.6571523,
+            "alpha_scaled": 43.458970871858206,
+            "withheld": 578886946.1981814
+          },
+          "PSDCLOUD": {
+            "rows": 1,
+            "full_request": 24538835.22497621,
+            "alpha_scaled": 2397350.954229269,
+            "withheld": 22141484.270746943
+          }
+        },
+        "total": {
+          "full_request": 45707219654.97548,
+          "alpha_scaled": 1919831702.3250294,
+          "withheld": 43787387952.65063
+        }
+      }
+    }
+  },
+  "comparison_limit": {
+    "published_area_weighted_collector_scope": "all calls over completed steps 1-9",
+    "AUT_deferred_kg": {
+      "OFF": 63072749277.36431,
+      "COUPLED": 63060019309.63429
+    },
+    "G_deferred_kg": {
+      "OFF": 549174938973.2006,
+      "COUPLED": 548824685755.41833
+    },
+    "not_reconciled_because": [
+      "admission schema has no model timestep or trace-context identifier",
+      "G admission uses rain_g_alpha while column collector uses rain_process_alpha",
+      "printed fields are REAL32 values formatted as ES24.16"
+    ],
+    "interpretation": "first-failure-associated area-weighted activity proxy only; alpha-scaled and withheld proxies omit storage rounding residual and composite reduction; not a unique causal allocation of full-window deferral"
+  },
+  "pressure_support_lookup_scope_note": "PR82 compact/full receipts, handoff, and named WPS/real artifacts inspected; not an exhaustive search of every original PR78 artifact and does not establish that a separate original support artifact is absent elsewhere."
+}
