@@ -1,0 +1,416 @@
+{
+  "schema": "pr93_c18_target_trace_provenance_v1",
+  "source_path": "/var/tmp/pr90_sources_c7_20261019/module_mp_kdm6.F",
+  "source_sha256": "983095a0aa0c76eab4efdda27f9435e61634e08e542ef9bd096aa4cf8004eca4",
+  "coordinate_convention": "i,j,k; public NI is # kg-1 dry air; KDM6 internal NI is # m-3",
+  "number_conversion_source": "specific_number_to_volume(public_NI,DEN,number_value) in selected module_mp_kdm6.F",
+  "conversion_precision": "REAL32 product, then exact REAL64 helper mean DEN*QI/NI_volume",
+  "arms": {
+    "OFF": {
+      "receipt_path": "/var/tmp/pr92_OFF_600s_c18_20261020/receipt.json",
+      "receipt_sha256": "22888b80b072cac26f91366ab087ecd169ae073f2556ea672b706564fee5bc75",
+      "receipt_status": "INCOMPLETE",
+      "trace_path": "/var/tmp/pr92_OFF_600s_c18_20261020/run/pr85_joint_moment_stages.raw.gz",
+      "trace_compressed_sha256": "813bccf4c4f98fe7414e4941ce98ee69b81c88be0c20d309483ff129538742c6",
+      "trace_compressed_bytes": 7304525044,
+      "receipt_bound_compressed_sha256": "813bccf4c4f98fe7414e4941ce98ee69b81c88be0c20d309483ff129538742c6",
+      "receipt_bound_compressed_bytes": 7304525044,
+      "trace_payload_sha256": "3c5b2c4d3f855e5a6793c696efe608c1e2b70955499299f7260b1d7422ec79c7",
+      "receipt_bound_payload_sha256": "3c5b2c4d3f855e5a6793c696efe608c1e2b70955499299f7260b1d7422ec79c7",
+      "receipt_bound_payload_bytes": 19892368560,
+      "selected_target_states": {
+        "T23_POST_KDM6_RK0": {
+          "timestep": 23,
+          "stage": "POST_KDM6",
+          "rkstep": 0,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5362854599952698,
+              "bits": "3F094A01"
+            },
+            "QI": {
+              "value": 2.290274323968333e-06,
+              "bits": "3619B29D"
+            },
+            "NI": {
+              "value": 1123.8333740234375,
+              "bits": "448C7AAB"
+            },
+            "NI_volume": {
+              "value": 602.6954956054688,
+              "bits": "4416AC83",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.037912724253598e-09
+          }
+        },
+        "T24_PRE_RK_RK0": {
+          "timestep": 24,
+          "stage": "PRE_RK",
+          "rkstep": 0,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5669577121734619,
+              "bits": "3F112424"
+            },
+            "QI": {
+              "value": 2.290274323968333e-06,
+              "bits": "3619B29D"
+            },
+            "NI": {
+              "value": 1123.8333740234375,
+              "bits": "448C7AAB"
+            },
+            "NI_volume": {
+              "value": 637.166015625,
+              "bits": "441F4AA0",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.037912661887676e-09
+          }
+        },
+        "T24_RK_STAGE_END_RK1": {
+          "timestep": 24,
+          "stage": "RK_STAGE_END",
+          "rkstep": 1,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.536177396774292,
+              "bits": "3F0942EC"
+            },
+            "QI": {
+              "value": 2.275329279655125e-06,
+              "bits": "3618B1DC"
+            },
+            "NI": {
+              "value": 1123.453369140625,
+              "bits": "448C6E82"
+            },
+            "NI_volume": {
+              "value": 602.3703002929688,
+              "bits": "441697B3",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.0252992708579102e-09
+          }
+        },
+        "T24_RK_STAGE_END_RK2": {
+          "timestep": 24,
+          "stage": "RK_STAGE_END",
+          "rkstep": 2,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5361045002937317,
+              "bits": "3F093E25"
+            },
+            "QI": {
+              "value": 2.267936679345439e-06,
+              "bits": "361832DB"
+            },
+            "NI": {
+              "value": 1123.2811279296875,
+              "bits": "448C68FF"
+            },
+            "NI_volume": {
+              "value": 602.196044921875,
+              "bits": "44168C8C",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.0190286376524585e-09
+          }
+        },
+        "T24_RK_STAGE_END_RK3": {
+          "timestep": 24,
+          "stage": "RK_STAGE_END",
+          "rkstep": 3,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5360217094421387,
+              "bits": "3F0938B8"
+            },
+            "QI": {
+              "value": 2.2463866571342805e-06,
+              "bits": "3616C0A1"
+            },
+            "NI": {
+              "value": 1122.9310302734375,
+              "bits": "448C5DCB"
+            },
+            "NI_volume": {
+              "value": 601.9154052734375,
+              "bits": "44167A96",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.000467184384699e-09
+          }
+        },
+        "T24_PRE_KDM6_RK0": {
+          "timestep": 24,
+          "stage": "PRE_KDM6",
+          "rkstep": 0,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5360217094421387,
+              "bits": "3F0938B8"
+            },
+            "QI": {
+              "value": 2.2463866571342805e-06,
+              "bits": "3616C0A1"
+            },
+            "NI": {
+              "value": 1122.9310302734375,
+              "bits": "448C5DCB"
+            },
+            "NI_volume": {
+              "value": 601.9154052734375,
+              "bits": "44167A96",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.000467184384699e-09
+          }
+        }
+      }
+    },
+    "COUPLED": {
+      "receipt_path": "/var/tmp/pr92_COUPLED_600s_c18_20261020/receipt.json",
+      "receipt_sha256": "cda8f4fedad8e5ba2eb06d9f180f089879f8caa2ef4bca93af677f0fb16ed091",
+      "receipt_status": "INCOMPLETE",
+      "trace_path": "/var/tmp/pr92_COUPLED_600s_c18_20261020/run/pr85_joint_moment_stages.raw.gz",
+      "trace_compressed_sha256": "6574c76ad9f83fb22cfeb462475df0b5c3b36de7cab5ecc40e52038c1a600de9",
+      "trace_compressed_bytes": 7304605801,
+      "receipt_bound_compressed_sha256": "6574c76ad9f83fb22cfeb462475df0b5c3b36de7cab5ecc40e52038c1a600de9",
+      "receipt_bound_compressed_bytes": 7304605801,
+      "trace_payload_sha256": "b030d58d4c43f3da023b967d2e6bafffa4e627ab70b8bfaa5705099fc5fc6539",
+      "receipt_bound_payload_sha256": "b030d58d4c43f3da023b967d2e6bafffa4e627ab70b8bfaa5705099fc5fc6539",
+      "receipt_bound_payload_bytes": 19892368560,
+      "selected_target_states": {
+        "T23_POST_KDM6_RK0": {
+          "timestep": 23,
+          "stage": "POST_KDM6",
+          "rkstep": 0,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5362854599952698,
+              "bits": "3F094A01"
+            },
+            "QI": {
+              "value": 2.290274323968333e-06,
+              "bits": "3619B29D"
+            },
+            "NI": {
+              "value": 1123.8333740234375,
+              "bits": "448C7AAB"
+            },
+            "NI_volume": {
+              "value": 602.6954956054688,
+              "bits": "4416AC83",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.037912724253598e-09
+          }
+        },
+        "T24_PRE_RK_RK0": {
+          "timestep": 24,
+          "stage": "PRE_RK",
+          "rkstep": 0,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5669577121734619,
+              "bits": "3F112424"
+            },
+            "QI": {
+              "value": 2.290274323968333e-06,
+              "bits": "3619B29D"
+            },
+            "NI": {
+              "value": 1123.8333740234375,
+              "bits": "448C7AAB"
+            },
+            "NI_volume": {
+              "value": 637.166015625,
+              "bits": "441F4AA0",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.037912661887676e-09
+          }
+        },
+        "T24_RK_STAGE_END_RK1": {
+          "timestep": 24,
+          "stage": "RK_STAGE_END",
+          "rkstep": 1,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.536177396774292,
+              "bits": "3F0942EC"
+            },
+            "QI": {
+              "value": 2.275329279655125e-06,
+              "bits": "3618B1DC"
+            },
+            "NI": {
+              "value": 1123.453369140625,
+              "bits": "448C6E82"
+            },
+            "NI_volume": {
+              "value": 602.3703002929688,
+              "bits": "441697B3",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.0252992708579102e-09
+          }
+        },
+        "T24_RK_STAGE_END_RK2": {
+          "timestep": 24,
+          "stage": "RK_STAGE_END",
+          "rkstep": 2,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5361045002937317,
+              "bits": "3F093E25"
+            },
+            "QI": {
+              "value": 2.267936679345439e-06,
+              "bits": "361832DB"
+            },
+            "NI": {
+              "value": 1123.2811279296875,
+              "bits": "448C68FF"
+            },
+            "NI_volume": {
+              "value": 602.196044921875,
+              "bits": "44168C8C",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.0190286376524585e-09
+          }
+        },
+        "T24_RK_STAGE_END_RK3": {
+          "timestep": 24,
+          "stage": "RK_STAGE_END",
+          "rkstep": 3,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5360217094421387,
+              "bits": "3F0938B8"
+            },
+            "QI": {
+              "value": 2.2463866571342805e-06,
+              "bits": "3616C0A1"
+            },
+            "NI": {
+              "value": 1122.9310302734375,
+              "bits": "448C5DCB"
+            },
+            "NI_volume": {
+              "value": 601.9154052734375,
+              "bits": "44167A96",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.000467184384699e-09
+          }
+        },
+        "T24_PRE_KDM6_RK0": {
+          "timestep": 24,
+          "stage": "PRE_KDM6",
+          "rkstep": 0,
+          "point_ijk": [
+            230,
+            247,
+            20
+          ],
+          "fields": {
+            "DEN": {
+              "value": 0.5360217094421387,
+              "bits": "3F0938B8"
+            },
+            "QI": {
+              "value": 2.2463866571342805e-06,
+              "bits": "3616C0A1"
+            },
+            "NI": {
+              "value": 1122.9310302734375,
+              "bits": "448C5DCB"
+            },
+            "NI_volume": {
+              "value": 601.9154052734375,
+              "bits": "44167A96",
+              "conversion": "REAL32(public_NI * REAL32(DEN))"
+            },
+            "ice_mean_mass_kg": 2.000467184384699e-09
+          }
+        }
+      }
+    }
+  },
+  "retained_scope": "only T23 POST_KDM6 and T24 PRE_RK, RK1, RK2, RK3, PRE_KDM6 at (230,247,20)",
+  "owned_decompression_copies_disposed": [
+    {
+      "path": "/var/tmp/pr93_OFF_joint.raw",
+      "sha256": "3c5b2c4d3f855e5a6793c696efe608c1e2b70955499299f7260b1d7422ec79c7",
+      "bytes": 19892368560,
+      "disposed_after_hash_verification": true
+    },
+    {
+      "path": "/var/tmp/pr93_COUPLED_joint.raw",
+      "sha256": "b030d58d4c43f3da023b967d2e6bafffa4e627ab70b8bfaa5705099fc5fc6539",
+      "bytes": 19892368560,
+      "disposed_after_hash_verification": true
+    }
+  ],
+  "disposal_note": "Only the two PR93-created raw decompressions were removed after hashes matched the gzip-decoded payload digests; original C18 gzip traces and receipts were retained and rechecked."
+}

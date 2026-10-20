@@ -1,0 +1,324 @@
+--- C18/module_mp_kdm6.F
++++ PR93-C4/module_mp_kdm6.F
+@@ -2320,6 +2320,10 @@
+    real                               :: pr85_psd_legacy,pr85_psd_directed,pr85_psd_before
+    real(8)                            :: pr85_psd_exact_min,pr85_psd_exact_max
+    logical                            :: pr85_psd_valid,pr85_psd_native_available
++   logical :: pr93_ice_pair_valid,pr93_ice_direct_repair
++   integer :: pr93_ice_k,pr93_ice_ios
++   logical, external :: pr93_kdm6_pair_in_cone
++   real(8) :: pr93_ice_mean,pr93_ice_min,pr93_ice_max
+ 
+    real                               :: cpmcal, xlcal, lamdac, diffus, &
+                                          viscos, xka, venfac, conden, diffac,  &
+@@ -3003,12 +3007,33 @@
+       do n = 1, mstepmax_i
+         do i = its, ite
+           if (n.le.mstep_i(i)) then
++            if (pr87_model_timestep.eq.24 .and. lat.eq.247 .and. i.eq.230) then
++              do pr93_ice_k=kts,kte
++                write(pr85_psd_unit,'(a,7i8,3(1x,z8.8),1p,4e25.16e3)',iostat=pr93_ice_ios) &
++                     'PR93_ICE_SED_BEFORE',pr87_model_timestep,i,lat,loop,n,mstep_i(i),pr93_ice_k, &
++                     transfer(qci(i,pr93_ice_k,2),0),transfer(nci(i,pr93_ice_k,2),0), &
++                     transfer(dend(i,pr93_ice_k),0),DBLE(delz(i,pr93_ice_k)), &
++                     mass_velocity_rate(i,pr93_ice_k,4),number_velocity_rate(i,pr93_ice_k,2),DBLE(dtcld)
++                if (pr93_ice_ios.ne.0) error stop 'PR93 ice column capture failed'
++              enddo
++            endif
+             call pr85_kdm6_paired_sediment_column(kts,kte,i,lat,n,dtcld,mstep_i(i), &
+                  dend(i,kts:kte),delz(i,kts:kte),mass_velocity_rate(i,kts:kte,4), &
+                  number_velocity_rate(i,kts:kte,2),qci(i,kts:kte,2),nci(i,kts:kte,2), &
+                  PR85_SED_ICE,0.0,0.0,0.0,0.0,pr85_ice_qrate,pr85_ice_nrate, &
+                  pr85_ice_unit,pr67_trace_this_call,pr85_ice_valid,0.0,0.0,0.0,0.0)
+             if (.not.pr85_ice_valid) error stop 'PR85 ice sedimentation packet rejected'
++            if (pr87_model_timestep.eq.24 .and. lat.eq.247 .and. i.eq.230) then
++              do pr93_ice_k=kts,kte
++                write(pr85_psd_unit,'(a,7i8,3(1x,z8.8),1p,4e25.16e3)',iostat=pr93_ice_ios) &
++                     'PR93_ICE_SED_AFTER',pr87_model_timestep,i,lat,loop,n,mstep_i(i),pr93_ice_k, &
++                     transfer(qci(i,pr93_ice_k,2),0),transfer(nci(i,pr93_ice_k,2),0), &
++                     transfer(dend(i,pr93_ice_k),0),DBLE(delz(i,pr93_ice_k)), &
++                     mass_velocity_rate(i,pr93_ice_k,4),number_velocity_rate(i,pr93_ice_k,2),DBLE(dtcld)
++                if (pr93_ice_ios.ne.0) error stop 'PR93 ice column capture failed'
++              enddo
++            endif
++
+             do k = kts, kte
+               falk(i,k,4) = REAL(pr85_ice_qrate(k))
+               falkn(i,k,2) = REAL(pr85_ice_nrate(k))
+@@ -3591,32 +3616,60 @@
+             endif
+           endif
+           if(qci(i,k,2) .ge. 1.e-14 ) then
++            if (.not.all(ieee_is_finite([qci(i,k,2),nci(i,k,2), &
++                 dry_carrier_density(i,k)])) .or. nci(i,k,2).le.0.0 .or. &
++                 dry_carrier_density(i,k).le.0.0) &
++              error stop 'PR93 invalid active ice PSD input'
+             lamdi_tmp(i,k) = exp(log((((pidni)*nci(i,k,2))                       &
+                          /(dry_carrier_density(i,k)*qci(i,k,2))))*(1./dmi))
+             n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+-            if(lamdi_tmp(i,k) .le. lamdaimin) then
++            pr93_ice_min=DBLE(pidni)/(DBLE(lamdaimax)**DBLE(dmi))
++            pr93_ice_max=DBLE(pidni)/(DBLE(lamdaimin)**DBLE(dmi))
++            pr93_ice_pair_valid=pr93_kdm6_pair_in_cone(qci(i,k,2),nci(i,k,2), &
++                 dry_carrier_density(i,k),pr93_ice_min,pr93_ice_max)
++            if (qci(i,k,2).gt.0.0 .and. qci(i,k,2).le.PR85_ICE_NATIVE_INACTIVE_MAX &
++                 .and. nci(i,k,2).gt.0.0) pr93_ice_pair_valid=.true.
++            pr93_ice_mean=0.0d0
++            if (.not.pr93_ice_pair_valid) then
++              pr93_ice_mean=DBLE(dry_carrier_density(i,k))* &
++                   DBLE(qci(i,k,2))/DBLE(nci(i,k,2))
++            endif
++            pr93_ice_direct_repair=lamdi_tmp(i,k).gt.lamdaimin .and. &
++                 lamdi_tmp(i,k).lt.lamdaimax .and. .not.pr93_ice_pair_valid
++            if(lamdi_tmp(i,k) .le. lamdaimin .or. &
++                 (.not.pr93_ice_pair_valid .and. pr93_ice_mean.gt.pr93_ice_max)) then
+               lamdi_tmp(i,k) = lamdaimin
+               pr85_psd_before = nci(i,k,2)
+               call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
+                    lamdaimin,lamdaimax,pidni,dmi,1, &
+-                   'ice','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   'ice','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available, &
++                   (pr67_trace_this_call.or.pr93_ice_direct_repair), &
+                    pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
+                    pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
+               if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
+               nci(i,k,2) = pr85_psd_directed
+               n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+-            elseif(lamdi_tmp(i,k) .ge. lamdaimax) then
++            elseif(lamdi_tmp(i,k) .ge. lamdaimax .or. &
++                 (.not.pr93_ice_pair_valid .and. &
++                  pr93_ice_mean.lt.pr93_ice_min)) then
+               lamdi_tmp(i,k) = lamdaimax
+               pr85_psd_before = nci(i,k,2)
+               call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
+                    lamdaimin,lamdaimax,pidni,dmi,2, &
+-                   'ice','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   'ice','stage1',i,lat,k,pr85_psd_before,pr85_psd_native_available, &
++                   (pr67_trace_this_call.or.pr93_ice_direct_repair), &
+                    pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
+                    pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
+               if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
+               nci(i,k,2) = pr85_psd_directed
+               n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             endif
++            pr93_ice_pair_valid=pr93_kdm6_pair_in_cone(qci(i,k,2),nci(i,k,2), &
++                 dry_carrier_density(i,k),pr93_ice_min,pr93_ice_max)
++            if (qci(i,k,2).gt.0.0 .and. qci(i,k,2).le.PR85_ICE_NATIVE_INACTIVE_MAX &
++                 .and. nci(i,k,2).gt.0.0) pr93_ice_pair_valid=.true.
++            if (.not.pr93_ice_pair_valid) &
++              error stop 'PR93 ice PSD output failed consumer contract'
+           endif
+ 
+ 
+@@ -4169,32 +4222,60 @@
+             endif
+           endif
+           if(qci(i,k,2).ge. 1.e-14 ) then
++            if (.not.all(ieee_is_finite([qci(i,k,2),nci(i,k,2), &
++                 dry_carrier_density(i,k)])) .or. nci(i,k,2).le.0.0 .or. &
++                 dry_carrier_density(i,k).le.0.0) &
++              error stop 'PR93 invalid active ice PSD input'
+             lamdi_tmp(i,k) = exp(log((((pidni)*nci(i,k,2))                       &
+                          /(dry_carrier_density(i,k)*qci(i,k,2))))*(1./dmi))
+             n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+-            if(lamdi_tmp(i,k) .le. lamdaimin) then
++            pr93_ice_min=DBLE(pidni)/(DBLE(lamdaimax)**DBLE(dmi))
++            pr93_ice_max=DBLE(pidni)/(DBLE(lamdaimin)**DBLE(dmi))
++            pr93_ice_pair_valid=pr93_kdm6_pair_in_cone(qci(i,k,2),nci(i,k,2), &
++                 dry_carrier_density(i,k),pr93_ice_min,pr93_ice_max)
++            if (qci(i,k,2).gt.0.0 .and. qci(i,k,2).le.PR85_ICE_NATIVE_INACTIVE_MAX &
++                 .and. nci(i,k,2).gt.0.0) pr93_ice_pair_valid=.true.
++            pr93_ice_mean=0.0d0
++            if (.not.pr93_ice_pair_valid) then
++              pr93_ice_mean=DBLE(dry_carrier_density(i,k))* &
++                   DBLE(qci(i,k,2))/DBLE(nci(i,k,2))
++            endif
++            pr93_ice_direct_repair=lamdi_tmp(i,k).gt.lamdaimin .and. &
++                 lamdi_tmp(i,k).lt.lamdaimax .and. .not.pr93_ice_pair_valid
++            if(lamdi_tmp(i,k) .le. lamdaimin .or. &
++                 (.not.pr93_ice_pair_valid .and. pr93_ice_mean.gt.pr93_ice_max)) then
+               lamdi_tmp(i,k) = lamdaimin
+               pr85_psd_before = nci(i,k,2)
+               call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
+                    lamdaimin,lamdaimax,pidni,dmi,1, &
+-                   'ice','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   'ice','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available, &
++                   (pr67_trace_this_call.or.pr93_ice_direct_repair), &
+                    pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
+                    pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
+               if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
+               nci(i,k,2) = pr85_psd_directed
+               n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+-            elseif(lamdi_tmp(i,k) .ge. lamdaimax) then
++            elseif(lamdi_tmp(i,k) .ge. lamdaimax .or. &
++                 (.not.pr93_ice_pair_valid .and. &
++                  pr93_ice_mean.lt.pr93_ice_min)) then
+               lamdi_tmp(i,k) = lamdaimax
+               pr85_psd_before = nci(i,k,2)
+               call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
+                    lamdaimin,lamdaimax,pidni,dmi,2, &
+-                   'ice','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   'ice','stage2',i,lat,k,pr85_psd_before,pr85_psd_native_available, &
++                   (pr67_trace_this_call.or.pr93_ice_direct_repair), &
+                    pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
+                    pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
+               if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
+               nci(i,k,2) = pr85_psd_directed
+               n0i(i,k) = (1./g1pmi)*DBLE(nci(i,k,2))*lamdi_tmp(i,k)**(mui+1)
+             endif
++            pr93_ice_pair_valid=pr93_kdm6_pair_in_cone(qci(i,k,2),nci(i,k,2), &
++                 dry_carrier_density(i,k),pr93_ice_min,pr93_ice_max)
++            if (qci(i,k,2).gt.0.0 .and. qci(i,k,2).le.PR85_ICE_NATIVE_INACTIVE_MAX &
++                 .and. nci(i,k,2).gt.0.0) pr93_ice_pair_valid=.true.
++            if (.not.pr93_ice_pair_valid) &
++              error stop 'PR93 ice PSD output failed consumer contract'
+           endif
+ 
+ 
+@@ -6672,29 +6753,57 @@
+                qci(i,k,1),nci(i,k,1),qci(i,k,2),nci(i,k,2), &
+                qrs(i,k,3),brs(i,k))
+           if(qci(i,k,2).ge. qmin .and. nci(i,k,2) .ge. ncmin ) then
++            if (.not.all(ieee_is_finite([qci(i,k,2),nci(i,k,2), &
++                 dry_carrier_density(i,k)])) .or. nci(i,k,2).le.0.0 .or. &
++                 dry_carrier_density(i,k).le.0.0) &
++              error stop 'PR93 invalid active ice PSD input'
+             lamdi_tmp(i,k) = exp(log((((pidni)*nci(i,k,2))                       &
+                          /(dry_carrier_density(i,k)*qci(i,k,2))))*(1./dmi))
+-            if(lamdi_tmp(i,k) .le. lamdaimin) then
++            pr93_ice_min=DBLE(pidni)/(DBLE(lamdaimax)**DBLE(dmi))
++            pr93_ice_max=DBLE(pidni)/(DBLE(lamdaimin)**DBLE(dmi))
++            pr93_ice_pair_valid=pr93_kdm6_pair_in_cone(qci(i,k,2),nci(i,k,2), &
++                 dry_carrier_density(i,k),pr93_ice_min,pr93_ice_max)
++            if (qci(i,k,2).gt.0.0 .and. qci(i,k,2).le.PR85_ICE_NATIVE_INACTIVE_MAX &
++                 .and. nci(i,k,2).gt.0.0) pr93_ice_pair_valid=.true.
++            pr93_ice_mean=0.0d0
++            if (.not.pr93_ice_pair_valid) then
++              pr93_ice_mean=DBLE(dry_carrier_density(i,k))* &
++                   DBLE(qci(i,k,2))/DBLE(nci(i,k,2))
++            endif
++            pr93_ice_direct_repair=lamdi_tmp(i,k).gt.lamdaimin .and. &
++                 lamdi_tmp(i,k).lt.lamdaimax .and. .not.pr93_ice_pair_valid
++            if(lamdi_tmp(i,k) .le. lamdaimin .or. &
++                 (.not.pr93_ice_pair_valid .and. pr93_ice_mean.gt.pr93_ice_max)) then
+               lamdi_tmp(i,k) = lamdaimin
+               pr85_psd_before = nci(i,k,2)
+               call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
+                    lamdaimin,lamdaimax,pidni,dmi,1, &
+-                   'ice','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   'ice','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available, &
++                   (pr67_trace_this_call.or.pr93_ice_direct_repair), &
+                    pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
+                    pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
+               if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
+               nci(i,k,2) = pr85_psd_directed
+-            elseif(lamdi_tmp(i,k) .ge. lamdaimax) then
++            elseif(lamdi_tmp(i,k) .ge. lamdaimax .or. &
++                 (.not.pr93_ice_pair_valid .and. &
++                  pr93_ice_mean.lt.pr93_ice_min)) then
+               lamdi_tmp(i,k) = lamdaimax
+               pr85_psd_before = nci(i,k,2)
+               call pr85_kdm6_psd_bound_number(qci(i,k,2),dry_carrier_density(i,k),lamdi_tmp(i,k), &
+                    lamdaimin,lamdaimax,pidni,dmi,2, &
+-                   'ice','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available,pr67_trace_this_call, &
++                   'ice','stage3',i,lat,k,pr85_psd_before,pr85_psd_native_available, &
++                   (pr67_trace_this_call.or.pr93_ice_direct_repair), &
+                    pr85_psd_unit,pr85_psd_legacy,pr85_psd_directed, &
+                    pr85_psd_exact_min,pr85_psd_exact_max,pr85_psd_valid)
+               if (.not.pr85_psd_valid) error stop 'KDM6 PSD boundary number invalid'
+               nci(i,k,2) = pr85_psd_directed
+             endif
++            pr93_ice_pair_valid=pr93_kdm6_pair_in_cone(qci(i,k,2),nci(i,k,2), &
++                 dry_carrier_density(i,k),pr93_ice_min,pr93_ice_max)
++            if (qci(i,k,2).gt.0.0 .and. qci(i,k,2).le.PR85_ICE_NATIVE_INACTIVE_MAX &
++                 .and. nci(i,k,2).gt.0.0) pr93_ice_pair_valid=.true.
++            if (.not.pr93_ice_pair_valid) &
++              error stop 'PR93 ice PSD output failed consumer contract'
+           endif
+             nci(i,k,3) = min(max(nci(i,k,3),1.e8),2.e10)
+             if( nrs(i,k,1).gt.nrmax ) then
+@@ -8748,6 +8857,25 @@
+ 
+ END SUBROUTINE pr85_kdm6_subthreshold_melt
+ 
++PURE LOGICAL FUNCTION pr93_kdm6_pair_in_cone(q,n,rho,mmin,mmax)
++USE, INTRINSIC :: iso_fortran_env, ONLY: real32,real64
++USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
++REAL(real32), INTENT(IN) :: q,n,rho
++REAL(real64), INTENT(IN) :: mmin,mmax
++REAL(real64) :: mean_mass,lo_tol,hi_tol
++pr93_kdm6_pair_in_cone=.FALSE.
++IF (q==0.0_real32 .AND. n==0.0_real32) THEN
++  pr93_kdm6_pair_in_cone=.TRUE.
++  RETURN
++ENDIF
++IF (q<=0.0_real32 .OR. n<=0.0_real32) RETURN
++mean_mass=REAL(rho,real64)*REAL(q,real64)/REAL(n,real64)
++lo_tol=8.0_real64*REAL(SPACING(REAL(mmin,real32)),real64)
++hi_tol=8.0_real64*REAL(SPACING(REAL(mmax,real32)),real64)
++pr93_kdm6_pair_in_cone=ieee_is_finite(mean_mass) .AND. &
++        mean_mass>=mmin-lo_tol .AND. mean_mass<=mmax+hi_tol
++END FUNCTION pr93_kdm6_pair_in_cone
++
+ SUBROUTINE pr85_kdm6_freezing_packet(qcloud,ncloud,qice,nice,dry_density,ice_transient_mass_limit, &
+ mass_requested,number_requested,cloud_min,cloud_max,ice_min,ice_max, &
+ qcloud_after,ncloud_after,qice_after,nice_after,mass_approved, &
+@@ -8762,6 +8890,7 @@
+ REAL(real32), INTENT(OUT) :: qcloud_after,ncloud_after,qice_after,nice_after
+ REAL(real64), INTENT(OUT) :: mass_approved,number_approved,fraction
+ LOGICAL, INTENT(OUT) :: base_valid,accepted
++LOGICAL, EXTERNAL :: pr93_kdm6_pair_in_cone
+ 
+ REAL(real64) :: theta
+ REAL(real32) :: qct,nct,qit,nit
+@@ -8789,13 +8918,13 @@
+ IF (MIN(cloud_min,ice_min)<REAL(TINY(0.0_real32),real64) .OR. &
+     MAX(cloud_max,ice_max)>REAL(HUGE(0.0_real32),real64)) RETURN
+ IF (.NOT.paired(qcloud,ncloud) .OR. .NOT.paired(qice,nice)) RETURN
+-IF (.NOT.in_cone(qcloud,ncloud,dry_density,cloud_min,cloud_max)) RETURN
++IF (.NOT.pr93_kdm6_pair_in_cone(qcloud,ncloud,dry_density,cloud_min,cloud_max)) RETURN
+ IF (qice>0.0_real32 .AND. REAL(qice,real64)<=ice_transient_mass_limit) THEN
+   ! Native KDM6 skips ice PSD reconstruction below the 1.e-14 mass gate.
+   ! Admit only that source-bounded base category;
+   ! candidate endpoints still pass the strict ice cone below.
+ ELSE
+-  IF (.NOT.in_cone(qice,nice,dry_density,ice_min,ice_max)) RETURN
++  IF (.NOT.pr93_kdm6_pair_in_cone(qice,nice,dry_density,ice_min,ice_max)) RETURN
+ ENDIF
+ base_valid=.TRUE.
+ IF (mass_requested==0.0_real64 .AND. number_requested==0.0_real64) THEN
+@@ -8858,8 +8987,8 @@
+     number_amount,nco)) RETURN
+ IF (.NOT.change_matches_packet(REAL(nio,real64)-REAL(nice,real64), &
+     number_amount,nio)) RETURN
+-IF (.NOT.in_cone(qco,nco,dry_density,cloud_min,cloud_max) .OR. &
+-    .NOT.in_cone(qio,nio,dry_density,ice_min,ice_max)) RETURN
++IF (.NOT.pr93_kdm6_pair_in_cone(qco,nco,dry_density,cloud_min,cloud_max) .OR. &
++    .NOT.pr93_kdm6_pair_in_cone(qio,nio,dry_density,ice_min,ice_max)) RETURN
+ ok=.TRUE.
+ END SUBROUTINE candidate
+ 
+@@ -8892,22 +9021,7 @@
+        (q>0.0_real32 .AND. n>0.0_real32)
+ END FUNCTION paired
+ 
+-PURE LOGICAL FUNCTION in_cone(q,n,rho,mmin,mmax)
+-REAL(real32), INTENT(IN) :: q,n,rho
+-REAL(real64), INTENT(IN) :: mmin,mmax
+-REAL(real64) :: mean_mass,lo_tol,hi_tol
+-in_cone=.FALSE.
+-IF (q==0.0_real32 .AND. n==0.0_real32) THEN
+-  in_cone=.TRUE.
+-  RETURN
+-ENDIF
+-IF (q<=0.0_real32 .OR. n<=0.0_real32) RETURN
+-mean_mass=REAL(rho,real64)*REAL(q,real64)/REAL(n,real64)
+-lo_tol=8.0_real64*REAL(SPACING(REAL(mmin,real32)),real64)
+-hi_tol=8.0_real64*REAL(SPACING(REAL(mmax,real32)),real64)
+-in_cone=ieee_is_finite(mean_mass) .AND. &
+-        mean_mass>=mmin-lo_tol .AND. mean_mass<=mmax+hi_tol
+-END FUNCTION in_cone
++
+ 
+ END SUBROUTINE pr85_kdm6_freezing_packet
+ 

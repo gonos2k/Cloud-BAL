@@ -1,0 +1,23 @@
+{
+  "compiler": "ifx (IFX) 2026.0.0 20260331",
+  "input_bindings": {
+    "met_em_sha256": "5c896259727e224658434b7896b1c04187cd903190d87b8fc790a75dda856e02",
+    "wrfinput_sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730"
+  },
+  "operator_inputs": "sfcprs2 using direct QV and TAVGSFC; integ_moist source expression/order; p_dts mu0; p_dry half-level target pressure; 500-Pa close-level selection; interp_type=2 LOG pressure; source lagrange_interp routine.",
+  "optimization_levels": [
+    "O0",
+    "O2"
+  ],
+  "result": {
+    "compared_points": 624,
+    "max_abs_difference_kg_kg": 0.0,
+    "mismatches": 0,
+    "native_levels_per_column": 39,
+    "o0_o2_bitwise_identical": true,
+    "qcloud_exact_bit_matches": 624,
+    "target_columns": 16
+  },
+  "schema": "pr93_pr83_real32_vertical_probe_binding_v1",
+  "source_report": "docs/evidence/pr92_science_20261020/qc_vertical_support_pr83_trial.json"
+}

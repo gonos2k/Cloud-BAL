@@ -1,0 +1,317 @@
+{
+  "schema": "pr93_c4_selected_ice_call_origin_v1",
+  "status": "PASS_CALL_LEVEL",
+  "source": {
+    "path": "/var/tmp/pr93_sources_c4_20261020/module_mp_kdm6.F",
+    "sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+    "expected_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+    "sedimentation_call_lines": [
+      3020,
+      3023
+    ],
+    "before_after_capture_lines": [
+      3014,
+      3029
+    ],
+    "stage1_ice_psd_consumer_lines": [
+      3597,
+      3620
+    ],
+    "helper_body_sha256": "26b6c268ca1bc243438c06c1be209dcc33b0b31612e48aaca16476cdda35505a",
+    "helper_source_lines": [
+      8222,
+      8754
+    ]
+  },
+  "scope": "C4 selected-call origin only. No historical C18 source-prefix attribution is established.",
+  "arms": {
+    "OFF": {
+      "audit_path": "/var/tmp/pr93_closed_runtime_audit_20261020/off_closed_audit.json",
+      "audit_sha256": "7179ef5bf441504afd77f4a814309b709c2a1b0e5697014b4143443dd4101814",
+      "receipt": {
+        "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/receipt.json",
+        "sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a",
+        "status": "COMPLETE",
+        "returncode": 0,
+        "completed_steps": 30,
+        "final_completed_step": 30,
+        "executed_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be"
+      },
+      "ledger_identity": {
+        "compressed_sha256": "a0672146b28cb2cbd4e1ba2725f003f90c2fd16366de8810dd05bce6d5576fc5",
+        "compressed_bytes": 878322,
+        "expanded_sha256": "e8b21684f4224c2be85449541119f188b6b3c58176e918be121d51ea5eedf142",
+        "expanded_bytes": 6179868
+      },
+      "capture_status": "FIRST_VALID_TO_INVALID_CAPTURED",
+      "first_valid_to_invalid_call": [
+        1,
+        1,
+        1
+      ],
+      "first_transition_level_count": 1,
+      "replay": {
+        "schema": "pr93_c4_ice_sedimentation_replay_v1",
+        "status": "PASS_CALL_LEVEL",
+        "arm": "OFF",
+        "receipt_path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/receipt.json",
+        "receipt_sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a",
+        "ledger_path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/run/pr85_kdm6_psd_boundary.raw.gz",
+        "ledger_identity": {
+          "compressed_sha256": "a0672146b28cb2cbd4e1ba2725f003f90c2fd16366de8810dd05bce6d5576fc5",
+          "compressed_bytes": 878322,
+          "expanded_sha256": "e8b21684f4224c2be85449541119f188b6b3c58176e918be121d51ea5eedf142",
+          "expanded_bytes": 6179868
+        },
+        "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/docs/evidence/pr93_active_ice_20261020/runtime/c4_pr85_kdm6_paired_sediment_column.F90",
+        "helper_sha256": "26b6c268ca1bc243438c06c1be209dcc33b0b31612e48aaca16476cdda35505a",
+        "source_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+        "calls": [
+          {
+            "key": [
+              1,
+              1,
+              1
+            ],
+            "levels": 39
+          }
+        ],
+        "driver_sha256": "490555efed52cbdce836b89528d164d441bcaa5109c95ff84670f77c7c08a025",
+        "profile_results": {
+          "O0": {
+            "returncode": 0,
+            "call_count": 1,
+            "expected_state_count": 39,
+            "actual_state_count": 39,
+            "mismatch_count": 0,
+            "mismatches": [],
+            "status": "PASS"
+          },
+          "O2": {
+            "returncode": 0,
+            "call_count": 1,
+            "expected_state_count": 39,
+            "actual_state_count": 39,
+            "mismatch_count": 0,
+            "mismatches": [],
+            "status": "PASS"
+          }
+        },
+        "replay": "Pinned Intel O0/O2; each helper output QI/NI REAL32 bit pair compared to captured AFTER for every level.",
+        "completion_claim": "Call-level evidence only; whole-step completion through T24 is not required or claimed.",
+        "attribution": "C4 selected-call replay only; this does not by itself prove C18 historical causality.",
+        "audit_path": "/var/tmp/pr93_closed_runtime_audit_20261020/off_closed_audit.json",
+        "audit_sha256": "7179ef5bf441504afd77f4a814309b709c2a1b0e5697014b4143443dd4101814",
+        "audit_capture_status": "FIRST_VALID_TO_INVALID_CAPTURED",
+        "receipt_status": "COMPLETE",
+        "maximum_seen_timestep": 30,
+        "completed_prefix_final_step": 30,
+        "executed_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+        "output_log_sha256": {
+          "O0": "e01f133a9c8e9361738620b9ab107035c6fc1d87669f06dc186b06f9562d795a",
+          "O2": "b764fee6a62debd924f9d85af35702e3ff05958b5a83acf1d435b95381759128"
+        },
+        "fixture_sha256": "490555efed52cbdce836b89528d164d441bcaa5109c95ff84670f77c7c08a025"
+      },
+      "k20": {
+        "before": {
+          "QI_bits32": "3616C0A1",
+          "NI_volume_bits32": "44167A96",
+          "dry_density_bits32": "3F0938B8",
+          "QI": 2.2463866571342805e-06,
+          "NI_volume": 601.9154052734375,
+          "dry_density": 0.5360217094421387
+        },
+        "before_mean_kg": 2.000467184384699e-09,
+        "before_cone_status": "active_cone",
+        "after_sedimentation": {
+          "QI_bits32": "3623A538",
+          "NI_volume_bits32": "441BBBE7",
+          "dry_density_bits32": "3F0938B8",
+          "QI": 2.438506271573715e-06,
+          "NI_volume": 622.9359741210938,
+          "dry_density": 0.5360217094421387
+        },
+        "after_sedimentation_mean_kg": 2.0982771175135736e-09,
+        "after_sedimentation_cone_status": "outside_active_cone",
+        "configured_mean_bounds_kg": [
+          2.6055879053180625e-16,
+          2.0982747187893314e-09
+        ],
+        "eight_ulp_tolerances_kg": [
+          2.117582368135751e-22,
+          1.7763568394002505e-15
+        ],
+        "upper_eight_ulp_limit_kg": 2.0982764951461708e-09,
+        "raw_upper_bound_excess_float32_ulps": 10.802893603220582,
+        "excess_beyond_eight_ulp_float32_ulps": 2.802893603220582
+      },
+      "subsequent_stage1_psd_completion": {
+        "call_index": 6685,
+        "stage": "stage1",
+        "side": 1,
+        "Nbefore": 622.9359741210938,
+        "Nnative": 622.9367065429688,
+        "Ndirected": 622.9367065429688,
+        "exactNmin": 622.9366862545476,
+        "nativeDelta": 0.000732421875,
+        "storageCorrection": 0.0,
+        "mean_after_directed_kg": 2.0982746504506367e-09,
+        "inside_configured_upper_bound": true,
+        "boundary_rows_after_first_call": 0,
+        "scope": "Selected ice PSD boundary reconstruction diagnostics only. N changes are unweighted event-row sums, not a carrier-integrated or global N budget and not evidence of nucleation. Rows after the first selected call are counted separately as possible direct-miss catches when the source trace flag was false; this is a scope label, not a causal attribution."
+      },
+      "interpretation": "The selected helper produces a temporary out-of-cone pair; the following stage1 PSD boundary completion repairs it. This does not support changing sedimentation settling velocities or treating the pending pair as a completed-state violation.",
+      "completed_state_audit_gates": {
+        "exact_source_endpoint": "PASS",
+        "active_ice_policy": "PASS",
+        "generic_qnb_pair_conversion": "FAIL",
+        "generic_qnb_failure_count": 161
+      }
+    },
+    "COUPLED": {
+      "audit_path": "/var/tmp/pr93_closed_runtime_audit_20261020/coupled_closed_audit.json",
+      "audit_sha256": "36ce0a27884ab495c3cd644c093e54e3232fedb90965ec74baac0c9d376b52ac",
+      "receipt": {
+        "path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/receipt.json",
+        "sha256": "03ff4396ff4d6eed3978a8481dd11120aad30d3b59bc6af89bb20ebcf3d9e418",
+        "status": "COMPLETE",
+        "returncode": 0,
+        "completed_steps": 30,
+        "final_completed_step": 30,
+        "executed_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be"
+      },
+      "ledger_identity": {
+        "compressed_sha256": "fefd9047b447d6c13c1778798d0713de362de03cf45fca284959fc2ec4a7ac58",
+        "compressed_bytes": 877171,
+        "expanded_sha256": "0cef8c9b171f0f45c1be3ad504c41a34ea5c154e0ef20be87cc23adb98ccd71e",
+        "expanded_bytes": 6178246
+      },
+      "capture_status": "FIRST_VALID_TO_INVALID_CAPTURED",
+      "first_valid_to_invalid_call": [
+        1,
+        1,
+        1
+      ],
+      "first_transition_level_count": 1,
+      "replay": {
+        "schema": "pr93_c4_ice_sedimentation_replay_v1",
+        "status": "PASS_CALL_LEVEL",
+        "arm": "COUPLED",
+        "receipt_path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/receipt.json",
+        "receipt_sha256": "03ff4396ff4d6eed3978a8481dd11120aad30d3b59bc6af89bb20ebcf3d9e418",
+        "ledger_path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/run/pr85_kdm6_psd_boundary.raw.gz",
+        "ledger_identity": {
+          "compressed_sha256": "fefd9047b447d6c13c1778798d0713de362de03cf45fca284959fc2ec4a7ac58",
+          "compressed_bytes": 877171,
+          "expanded_sha256": "0cef8c9b171f0f45c1be3ad504c41a34ea5c154e0ef20be87cc23adb98ccd71e",
+          "expanded_bytes": 6178246
+        },
+        "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/docs/evidence/pr93_active_ice_20261020/runtime/c4_pr85_kdm6_paired_sediment_column.F90",
+        "helper_sha256": "26b6c268ca1bc243438c06c1be209dcc33b0b31612e48aaca16476cdda35505a",
+        "source_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+        "calls": [
+          {
+            "key": [
+              1,
+              1,
+              1
+            ],
+            "levels": 39
+          }
+        ],
+        "driver_sha256": "490555efed52cbdce836b89528d164d441bcaa5109c95ff84670f77c7c08a025",
+        "profile_results": {
+          "O0": {
+            "returncode": 0,
+            "call_count": 1,
+            "expected_state_count": 39,
+            "actual_state_count": 39,
+            "mismatch_count": 0,
+            "mismatches": [],
+            "status": "PASS"
+          },
+          "O2": {
+            "returncode": 0,
+            "call_count": 1,
+            "expected_state_count": 39,
+            "actual_state_count": 39,
+            "mismatch_count": 0,
+            "mismatches": [],
+            "status": "PASS"
+          }
+        },
+        "replay": "Pinned Intel O0/O2; each helper output QI/NI REAL32 bit pair compared to captured AFTER for every level.",
+        "completion_claim": "Call-level evidence only; whole-step completion through T24 is not required or claimed.",
+        "attribution": "C4 selected-call replay only; this does not by itself prove C18 historical causality.",
+        "audit_path": "/var/tmp/pr93_closed_runtime_audit_20261020/coupled_closed_audit.json",
+        "audit_sha256": "36ce0a27884ab495c3cd644c093e54e3232fedb90965ec74baac0c9d376b52ac",
+        "audit_capture_status": "FIRST_VALID_TO_INVALID_CAPTURED",
+        "receipt_status": "COMPLETE",
+        "maximum_seen_timestep": 30,
+        "completed_prefix_final_step": 30,
+        "executed_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+        "output_log_sha256": {
+          "O0": "f37a57a23b97f9bc61f5798e98ec4c02e6cb0d5859404f4d17ed195869200b04",
+          "O2": "148c277693f80b6553fd8ab78e42fbf397f62f64b0fb34fa1ac1d5c572bae8df"
+        },
+        "fixture_sha256": "490555efed52cbdce836b89528d164d441bcaa5109c95ff84670f77c7c08a025"
+      },
+      "k20": {
+        "before": {
+          "QI_bits32": "3616C0A1",
+          "NI_volume_bits32": "44167A96",
+          "dry_density_bits32": "3F0938B8",
+          "QI": 2.2463866571342805e-06,
+          "NI_volume": 601.9154052734375,
+          "dry_density": 0.5360217094421387
+        },
+        "before_mean_kg": 2.000467184384699e-09,
+        "before_cone_status": "active_cone",
+        "after_sedimentation": {
+          "QI_bits32": "3623A538",
+          "NI_volume_bits32": "441BBBE7",
+          "dry_density_bits32": "3F0938B8",
+          "QI": 2.438506271573715e-06,
+          "NI_volume": 622.9359741210938,
+          "dry_density": 0.5360217094421387
+        },
+        "after_sedimentation_mean_kg": 2.0982771175135736e-09,
+        "after_sedimentation_cone_status": "outside_active_cone",
+        "configured_mean_bounds_kg": [
+          2.6055879053180625e-16,
+          2.0982747187893314e-09
+        ],
+        "eight_ulp_tolerances_kg": [
+          2.117582368135751e-22,
+          1.7763568394002505e-15
+        ],
+        "upper_eight_ulp_limit_kg": 2.0982764951461708e-09,
+        "raw_upper_bound_excess_float32_ulps": 10.802893603220582,
+        "excess_beyond_eight_ulp_float32_ulps": 2.802893603220582
+      },
+      "subsequent_stage1_psd_completion": {
+        "call_index": 6685,
+        "stage": "stage1",
+        "side": 1,
+        "Nbefore": 622.9359741210938,
+        "Nnative": 622.9367065429688,
+        "Ndirected": 622.9367065429688,
+        "exactNmin": 622.9366862545476,
+        "nativeDelta": 0.000732421875,
+        "storageCorrection": 0.0,
+        "mean_after_directed_kg": 2.0982746504506367e-09,
+        "inside_configured_upper_bound": true,
+        "boundary_rows_after_first_call": 0,
+        "scope": "Selected ice PSD boundary reconstruction diagnostics only. N changes are unweighted event-row sums, not a carrier-integrated or global N budget and not evidence of nucleation. Rows after the first selected call are counted separately as possible direct-miss catches when the source trace flag was false; this is a scope label, not a causal attribution."
+      },
+      "interpretation": "The selected helper produces a temporary out-of-cone pair; the following stage1 PSD boundary completion repairs it. This does not support changing sedimentation settling velocities or treating the pending pair as a completed-state violation.",
+      "completed_state_audit_gates": {
+        "exact_source_endpoint": "PASS",
+        "active_ice_policy": "PASS",
+        "generic_qnb_pair_conversion": "FAIL",
+        "generic_qnb_failure_count": 159
+      }
+    }
+  }
+}

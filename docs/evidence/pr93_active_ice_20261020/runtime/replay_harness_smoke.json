@@ -1,0 +1,38 @@
+{
+  "schema": "pr93_c4_ice_replay_harness_smoke_v1",
+  "status": "PASS_HARNESS_ONLY",
+  "source_unit_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+  "helper_body_sha256": "26b6c268ca1bc243438c06c1be209dcc33b0b31612e48aaca16476cdda35505a",
+  "helper_extraction_metadata_sha256": "d99db31906e9c790f8525e8a1011fdf78d402ff6b7291d207b20364f67ea0274",
+  "replay_script_sha256": "366b728d74d1669f5c91a4b4abcb3e5b8d8a1a1d88f93dff930d9b1639c374ce",
+  "helper_compile_profiles": {
+    "O0": "PASS",
+    "O2": "PASS"
+  },
+  "fixture_smoke_profiles": {
+    "O0": {
+      "status": "PASS",
+      "calls": 1,
+      "levels": 39,
+      "actual_state_count": 39,
+      "qi_ni_bit_mismatches": 0
+    },
+    "O2": {
+      "status": "PASS",
+      "calls": 1,
+      "levels": 39,
+      "actual_state_count": 39,
+      "qi_ni_bit_mismatches": 0
+    }
+  },
+  "synthetic_fixture": "39-level joint-absence ice state, zero rates, rho=1, DELZ=1, dt=1, mstep=1",
+  "compiler": "ifx (IFX) 2026.0.0 20260331",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "scope": "Harness plumbing only. No bound receipt or active payload was read; no C4 selected call was replayed.",
+  "capture_parser_smoke": {
+    "status": "PASS",
+    "synthetic_calls": 1,
+    "levels": 39,
+    "before_after_pairs": 39
+  }
+}

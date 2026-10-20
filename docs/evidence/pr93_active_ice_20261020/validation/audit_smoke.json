@@ -1,0 +1,35 @@
+{
+  "schema": "pr93_closed_auditor_smoke_v1",
+  "script_path": "/var/tmp/pr93_closed_audit_20261020.py",
+  "script_sha256": "286039941198bd36fa3c8cc1908b955829c15633c8a42a2552b8d2da85059789",
+  "status": "PASS",
+  "receipt": {
+    "candidate_build": {
+      "executable_path": "/var/tmp/pr93_native_build_c4_20261020/wrf_pr87_overlay.exe",
+      "executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+      "identity": "PR87 source-mapped partial native overlay; not a clean build",
+      "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+      "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "receipt_path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+      "receipt_sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669",
+      "schema": "pr87_native_overlay_build_v1",
+      "status": "PASS_OVERLAY_BUILD"
+    },
+    "candidate_namelist_sha256": "afc366ae884021ae5eb91510f61a137cab30880ba9a81702094e763e5fb52f35",
+    "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+    "completed_prefix": [
+      1
+    ],
+    "executed_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+    "final_completed_step": 1,
+    "path": "/var/tmp/pr93_OFF_600s_c4_execution_20261020/receipt.json",
+    "returncode": 1,
+    "sha256": "de62cb50ce4d63393c81b58a42ee40dbca641ba522906e763588b8e9d59d3734",
+    "status": "INCOMPLETE"
+  },
+  "exact_source_status": "PASS",
+  "active_ice_status": "PASS",
+  "qnb_status": "PASS",
+  "scope": "Read-only audit integration on closed initial OFF one-step launch failure. It is not a final bound-run audit or scientific validation."
+}

@@ -1,0 +1,93 @@
+{
+  "kg_receipt_binding": {
+    "contents_published": false,
+    "path": "Cloud-BAL/scratch/pr93_active_ice_20261020/kg/kg_receipt.json",
+    "sha256": "a7f1d3f658b08aa29b9cce5261005fa78396e9fca30e41f627494645c6859a5d"
+  },
+  "limitations": [
+    "This is a structural navigation snapshot from selected PR93 source and documentation inputs.",
+    "Evidence payloads were hash-bound but not ingested as graph nodes.",
+    "Cross-file Fortran CALL extraction is partial.",
+    "Snapshot freshness does not establish runtime correctness, physical validity, observational skill, or scientific approval."
+  ],
+  "publication": {
+    "date": "2026-10-20",
+    "publication_commit": "Separate derived documentation-only publication commit; identify from PR head/history. Frozen extraction source remains 475062cc04deb42af8f008aa2901e69383d23d08.",
+    "pull_request": "https://github.com/gonos2k/Cloud-BAL/pull/93",
+    "source_commit": "475062cc04deb42af8f008aa2901e69383d23d08"
+  },
+  "runtime_science_evidence_pointers": {
+    "active_ice_contract": "../../../PR93_ACTIVE_ICE_CONTRACT_20261020.md",
+    "execution_summary": "../runtime/execution_summary.json",
+    "fixed_support_response": "../runtime/c4_fixed_support_response_20261020.json",
+    "generic_policy_scope": "../runtime/qnb_scope_split.json",
+    "paired_run": "../runtime/c4_runtime_summary_20261020.md",
+    "paired_run_json": "../runtime/c4_runtime_summary_20261020.json"
+  },
+  "schema": "pr93_public_kg_snapshot_summary_v1",
+  "snapshot": {
+    "corpora": {
+      "Cloud-BAL": {
+        "added_ids": 90,
+        "communities": 1210,
+        "delta_edges": 126,
+        "delta_nodes": 88,
+        "edges": 23483,
+        "extracted_edges": 365,
+        "extracted_nodes": 144,
+        "graph_sha256": "d173f3de7d98b74e3c5ae3fac3f8e4abfda68617de6421c9fd9c7e551b93b2fb",
+        "integrity": {
+          "dangling_endpoint_edges": 0,
+          "exact_duplicate_edges": 0,
+          "missing_endpoint_edges": 0,
+          "self_loop_edges": 0,
+          "unverified_node_count": 0
+        },
+        "nodes": 13392,
+        "previous_graph_sha256": "600bb37f161ac4ac31be1d31b75978659ce6c4885141a9d1c74a9df6b76c34c8",
+        "removed_ids": 2,
+        "snapshot": "2026-10-20-active-ice"
+      },
+      "KLAPS50": {
+        "added_ids": 90,
+        "communities": 3207,
+        "delta_edges": 127,
+        "delta_nodes": 88,
+        "edges": 81934,
+        "extracted_edges": 365,
+        "extracted_nodes": 144,
+        "graph_sha256": "7f8cd28bdefaeef9d386fb2240cfaddee7e2f329a6246b2159a608464fb3490f",
+        "integrity": {
+          "dangling_endpoint_edges": 0,
+          "exact_duplicate_edges": 0,
+          "missing_endpoint_edges": 0,
+          "self_loop_edges": 0,
+          "unverified_node_count": 0
+        },
+        "nodes": 39220,
+        "previous_graph_sha256": "654d92d785b8867d5c117ab5a1d8fa8d964626bf120cb413e96da3f5451faf4a",
+        "removed_ids": 2,
+        "snapshot": "2026-10-20-active-ice"
+      }
+    },
+    "graphify_version": "graphify 0.9.53",
+    "immutable_pin_count_verified": 197,
+    "maintained_source_entry_count": 627,
+    "maintained_source_manifest_sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f",
+    "new_snapshot": "2026-10-20-active-ice",
+    "prior_snapshot": "2026-10-20-source-store"
+  },
+  "validation_status_pointers": {
+    "canonical_suite": "../validation/canonical.json",
+    "focused_tests": "../validation/focused.json",
+    "generic_policy": "../runtime/qnb_scope_split.json"
+  },
+  "validation_summary": {
+    "completed_timesteps_per_arm": 30,
+    "focused_tests_passed": 23,
+    "generic_policy": "FAIL",
+    "physical_approval": "FAIL_OPEN",
+    "pinned_intel_canonical_suite_exit": 0,
+    "requested_and_completed_seconds_per_arm": 600
+  }
+}

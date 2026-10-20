@@ -74,6 +74,14 @@ def make_finalizer_fixture(root: Path, duration: int, steps: tuple[int, ...] | N
 
 
 class TimeResponseTests(unittest.TestCase):
+    def test_diagnostic_identity_is_stable_and_distinguishes_runs(self) -> None:
+        output = Path("/var/tmp/diagnostic run with spaces")
+        identity = response.diagnostic_run_id("OFF", output)
+        self.assertEqual(identity, response.diagnostic_run_id("OFF", output))
+        self.assertRegex(identity, r"^OFF_[0-9a-f]{16}$")
+        self.assertNotEqual(identity, response.diagnostic_run_id("COUPLED", output))
+        self.assertNotEqual(identity, response.diagnostic_run_id("OFF", output / "other"))
+
     def _make_disk_reference(self, root: Path) -> tuple[Path, dict]:
         bundle, stage = root / "reference", root / "reference" / "run"
         stage.mkdir(parents=True)
@@ -252,11 +260,11 @@ class TimeResponseTests(unittest.TestCase):
     def test_streaming_snapshot_reader_selects_true_model_timesteps(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "stages.raw"
-            path.write_bytes(b"".join(record(step, float(step)) for step in (1, 2, 3, 15, 16, 30)))
+            path.write_bytes(b"".join(record(step, float(step)) for step in (1, 2, 3, 15, 16, 24, 25, 30)))
             result = response.read_time_snapshots(path)
-        self.assertEqual(result["timesteps"], [1, 2, 3, 15, 16, 30])
-        self.assertEqual(result["completed_post_kdm6_timesteps"], [1, 2, 3, 15, 16, 30])
-        self.assertEqual(set(result["snapshots"]), {"20s", "1min", "5min", "320s", "10min"})
+        self.assertEqual(result["timesteps"], [1, 2, 3, 15, 16, 24, 25, 30])
+        self.assertEqual(result["completed_post_kdm6_timesteps"], [1, 2, 3, 15, 16, 24, 25, 30])
+        self.assertEqual(set(result["snapshots"]), {"20s", "1min", "5min", "320s", "480s", "500s", "10min"})
         self.assertEqual(result["snapshots"]["5min"]["model_seconds"], 300)
         self.assertEqual(result["snapshots"]["320s"]["fields"]["QC"]["max"], 16.0)
         self.assertEqual(result["snapshots"]["10min"]["fields"]["QC"]["max"], 30.0)
@@ -288,7 +296,9 @@ class TimeResponseTests(unittest.TestCase):
             60: {1: "20s", 3: "1min"},
             300: {1: "20s", 3: "1min", 15: "5min"},
             320: {1: "20s", 3: "1min", 15: "5min", 16: "320s"},
-            600: {1: "20s", 3: "1min", 15: "5min", 16: "320s", 30: "10min"},
+            480: {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s"},
+            500: {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s", 25: "500s"},
+            600: {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s", 25: "500s", 30: "10min"},
         }
         for duration, schedule in expected.items():
             with self.subTest(duration=duration):
@@ -297,7 +307,7 @@ class TimeResponseTests(unittest.TestCase):
             response.snapshot_schedule(30)
 
     def test_finalizer_completes_each_supported_duration_schedule(self) -> None:
-        for duration in (20, 40, 60, 300, 320, 600):
+        for duration in (20, 40, 60, 300, 320, 480, 500, 600):
             with self.subTest(duration=duration), tempfile.TemporaryDirectory() as directory:
                 out = make_finalizer_fixture(Path(directory), duration)
                 receipt = response.finalize_existing_run("OFF", out, duration)
@@ -356,13 +366,15 @@ class TimeResponseTests(unittest.TestCase):
             self.assertEqual(receipt["status"], "INCOMPLETE")
             self.assertEqual(receipt["earliest_fatal"], message)
 
-    def test_bare_rain_packet_rejection_is_fatal(self) -> None:
-        message = "PR87 rain sedimentation packet rejected"
-        with tempfile.TemporaryDirectory() as directory:
-            out = make_finalizer_fixture(Path(directory), 20, rsl_error=message + "\n")
-            receipt = response.finalize_existing_run("OFF", out, 20)
-            self.assertEqual(receipt["status"], "INCOMPLETE")
-            self.assertEqual(receipt["earliest_fatal"], message)
+    def test_bare_research_packet_rejections_are_fatal(self) -> None:
+        for message in ("PR87 rain sedimentation packet rejected",
+                        "PR85 invalid cloud-ice freezing packet base",
+                        "PR93 invalid active ice PSD input"):
+            with self.subTest(message=message), tempfile.TemporaryDirectory() as directory:
+                out = make_finalizer_fixture(Path(directory), 20, rsl_error=message + "\n")
+                receipt = response.finalize_existing_run("OFF", out, 20)
+                self.assertEqual(receipt["status"], "INCOMPLETE")
+                self.assertEqual(receipt["earliest_fatal"], message)
 
     def test_bare_progb_rejection_is_fatal(self) -> None:
         message = "ProgB unsupported PSD state rejected"

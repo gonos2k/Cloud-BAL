@@ -1,0 +1,12 @@
+$ python -m unittest discover -s tests -p 'test_pr93_qc_chain.py'
+Ran 3 tests in 0.000s
+OK
+
+$ python tools/pr93_qc_chain.py ...
+PASS: PR83 met_em, LAPS, KLBG, and wrfinput hashes match the archived identities.
+PASS: 288/288 LAPS source-to-met_em QC rows are bitwise equal.
+PASS: source-form vertical probe binds the same met_em/wrfinput and matches 624/624 QCLOUD points at O0/O2.
+KLBG source-only comparison: 22/288 rows equal final met_em QC.
+
+$ git diff --check
+PASS
