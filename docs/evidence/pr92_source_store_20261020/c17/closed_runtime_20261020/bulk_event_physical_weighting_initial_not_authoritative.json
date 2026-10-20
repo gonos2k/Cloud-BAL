@@ -1,0 +1,383 @@
+{
+  "schema": "pr92_c17_bulk_event_physical_weighting_v1",
+  "source_pins": {
+    "module_em_sha256": "99be82b97872bd5981facc1e75b167574e1fc10b7c5511130b494c8b989140fb",
+    "core_sha256": "aae36b8e259f7ef477429e8aa726c56668348ed2d3e8572b3eb71b3da723377e",
+    "gravity_constants_source_sha256": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062"
+  },
+  "geometry": {
+    "arms": {
+      "OFF": {
+        "history_sha256": "aa565c80cae3ca23bc29eb83aadbdb4389078437026439c61d7a9b684af3cbc8",
+        "dnw_sha256": "a03f79467387b13380404571018b733753276e1eb5cab65a4d6c7ec36acf4cb4",
+        "dnw_time_invariant": true,
+        "dnw_levels": 39,
+        "dx_m": 5000.0,
+        "dy_m": 5000.0
+      },
+      "COUPLED": {
+        "history_sha256": "06b608f0017b0fc394063d68b0c188267016bfc0aae707fe4bd53aa0c0fac2cd",
+        "dnw_sha256": "a03f79467387b13380404571018b733753276e1eb5cab65a4d6c7ec36acf4cb4",
+        "dnw_time_invariant": true,
+        "dnw_levels": 39,
+        "dx_m": 5000.0,
+        "dy_m": 5000.0
+      }
+    },
+    "same_dnw_across_arms": true,
+    "map_area_m2": 25000000.0,
+    "gravity_m_s2": 9.81,
+    "gravity_source": "WRF share/module_model_constants.F: REAL, PARAMETER :: g=9.81 m s-2; source SHA-256 5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+    "weighting_factor_min_max_kg_per_pa_or_m2_per_pa": [
+      15024.530580770472,
+      127527.58557400329
+    ],
+    "factor_definition": "(-DNW[k]) * DX * DY / g; applied to the already carrier-weighted row delta"
+  },
+  "operator": {
+    "committed_adjustment": 5,
+    "delta_per_event": "newcarrier * (stored - candidate)",
+    "code5_sign": "negative for Q and B: code path requires positive candidate Q/B and stores both as zero",
+    "bulk_ledger": "sum of per-event carrier-weighted deltas by timestep and RK; has no per-event i/j/k",
+    "weighting_derivation": "For each event, ledger delta = newcarrier*(stored-candidate); multiplying by -DNW[k]*DX*DY/g converts the pressure-carrier specific Q change to kg and B change to m3. The event layer k is not recorded, so global DNW extrema bound the signed aggregate."
+  },
+  "results": {
+    "OFF": {
+      "ledger_sha256": "0c48252509ffee5eee8aa93792293e3adf0b2dd842be57c9cd7be7e0d07e3efb",
+      "event_count": 11,
+      "nonzero_rows": [
+        {
+          "step": 15,
+          "rk": 1,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -9.57823102771993e-39,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -1.0706941241312088e-41,
+          "bounded_delta_Q_kg": [
+            -1.2214886770351268e-33,
+            -1.4390842498566267e-34
+          ],
+          "bounded_delta_B_m3": [
+            -1.3654303653872523e-36,
+            -1.6086676610660602e-37
+          ]
+        },
+        {
+          "step": 15,
+          "rk": 2,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.4367346884124138e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -1.6060412244878198e-41,
+          "bounded_delta_Q_kg": [
+            -1.8322330592365305e-33,
+            -2.1586264262506047e-34
+          ],
+          "bounded_delta_B_m3": [
+            -2.0481455969124746e-36,
+            -2.4130015491295304e-37
+          ]
+        },
+        {
+          "step": 15,
+          "rk": 3,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -2.8734693768248276e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -3.21208244897564e-41,
+          "bounded_delta_Q_kg": [
+            -3.664466118473061e-33,
+            -4.3172528525012095e-34
+          ],
+          "bounded_delta_B_m3": [
+            -4.09629119382495e-36,
+            -4.826003098259062e-37
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 1,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.325147204728762e-39,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -1.5222745040810478e-42,
+          "bounded_delta_Q_kg": [
+            -1.6899282354919843e-34,
+            -1.9909714701469792e-35
+          ],
+          "bounded_delta_B_m3": [
+            -1.9413199208631924e-37,
+            -2.2871459838892907e-38
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 2,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.987720854484101e-39,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -2.2834118105623516e-42,
+          "bounded_delta_Q_kg": [
+            -2.534892413674521e-34,
+            -2.9864572764231586e-35
+          ],
+          "bounded_delta_B_m3": [
+            -2.911979950721801e-37,
+            -3.4307190576286525e-38
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 3,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -3.975441708968203e-39,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -4.566823621124703e-42,
+          "bounded_delta_Q_kg": [
+            -5.069784827349044e-34,
+            -5.972914552846319e-35
+          ],
+          "bounded_delta_B_m3": [
+            -5.823959901443602e-37,
+            -6.861438115257305e-38
+          ]
+        },
+        {
+          "step": 21,
+          "rk": 1,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.8593786456403416e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -2.2864336399457672e-41,
+          "bounded_delta_Q_kg": [
+            -2.37122069346373e-33,
+            -2.7936291322654895e-34
+          ],
+          "bounded_delta_B_m3": [
+            -2.9158336167746364e-36,
+            -3.435259214426752e-37
+          ]
+        },
+        {
+          "step": 21,
+          "rk": 2,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -2.789068034957076e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -3.4296505416878917e-41,
+          "bounded_delta_Q_kg": [
+            -3.556831124997057e-33,
+            -4.190443798306199e-34
+          ],
+          "bounded_delta_B_m3": [
+            -4.3737505294402936e-36,
+            -5.1528889444945744e-37
+          ]
+        },
+        {
+          "step": 22,
+          "rk": 1,
+          "event_count": 2,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -4.345499291946229e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -5.329724405203595e-41,
+          "bounded_delta_Q_kg": [
+            -5.541710328154434e-33,
+            -6.528908700056255e-34
+          ],
+          "bounded_delta_B_m3": [
+            -6.796868851704552e-36,
+            -8.007660731306013e-37
+          ]
+        },
+        {
+          "step": 22,
+          "rk": 2,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.2769605420376513e-41,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -2.5539210840753027e-44,
+          "bounded_delta_Q_kg": [
+            -1.628476947993322e-36,
+            -1.918573271428193e-37
+          ],
+          "bounded_delta_B_m3": [
+            -3.256953895986644e-39,
+            -3.837146542856386e-40
+          ]
+        }
+      ],
+      "summed_signed_delta_Q_carrier": -1.4992081077913026e-37,
+      "summed_signed_delta_B_carrier": -1.7774431299092808e-40,
+      "bounded_sum_delta_Q_kg": [
+        -1.911903902595949e-32,
+        -2.252489806244946e-33
+      ],
+      "bounded_sum_delta_B_m3": [
+        -2.2667303085243003e-35,
+        -2.6705248660902372e-36
+      ]
+    },
+    "COUPLED": {
+      "ledger_sha256": "35a968150a78f10d419d21200100966cd85ada7c4b0a2b0669f93c622b7e65c8",
+      "event_count": 11,
+      "nonzero_rows": [
+        {
+          "step": 15,
+          "rk": 1,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -9.57823102771993e-39,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -1.0706941241312088e-41,
+          "bounded_delta_Q_kg": [
+            -1.2214886770351268e-33,
+            -1.4390842498566267e-34
+          ],
+          "bounded_delta_B_m3": [
+            -1.3654303653872523e-36,
+            -1.6086676610660602e-37
+          ]
+        },
+        {
+          "step": 15,
+          "rk": 2,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.4367346884124138e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -1.6060412244878198e-41,
+          "bounded_delta_Q_kg": [
+            -1.8322330592365305e-33,
+            -2.1586264262506047e-34
+          ],
+          "bounded_delta_B_m3": [
+            -2.0481455969124746e-36,
+            -2.4130015491295304e-37
+          ]
+        },
+        {
+          "step": 15,
+          "rk": 3,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -2.8734693768248276e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -3.21208244897564e-41,
+          "bounded_delta_Q_kg": [
+            -3.664466118473061e-33,
+            -4.3172528525012095e-34
+          ],
+          "bounded_delta_B_m3": [
+            -4.09629119382495e-36,
+            -4.826003098259062e-37
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 1,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.325147204728762e-39,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -1.5222745040810478e-42,
+          "bounded_delta_Q_kg": [
+            -1.6899282354919843e-34,
+            -1.9909714701469792e-35
+          ],
+          "bounded_delta_B_m3": [
+            -1.9413199208631924e-37,
+            -2.2871459838892907e-38
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 2,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.987720854484101e-39,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -2.2834118105623516e-42,
+          "bounded_delta_Q_kg": [
+            -2.534892413674521e-34,
+            -2.9864572764231586e-35
+          ],
+          "bounded_delta_B_m3": [
+            -2.911979950721801e-37,
+            -3.4307190576286525e-38
+          ]
+        },
+        {
+          "step": 16,
+          "rk": 3,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -3.975441708968203e-39,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -4.566823621124703e-42,
+          "bounded_delta_Q_kg": [
+            -5.069784827349044e-34,
+            -5.972914552846319e-35
+          ],
+          "bounded_delta_B_m3": [
+            -5.823959901443602e-37,
+            -6.861438115257305e-38
+          ]
+        },
+        {
+          "step": 21,
+          "rk": 1,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.8593786456403416e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -2.2864336399457672e-41,
+          "bounded_delta_Q_kg": [
+            -2.37122069346373e-33,
+            -2.7936291322654895e-34
+          ],
+          "bounded_delta_B_m3": [
+            -2.9158336167746364e-36,
+            -3.435259214426752e-37
+          ]
+        },
+        {
+          "step": 21,
+          "rk": 2,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -2.789068034957076e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -3.4296505416878917e-41,
+          "bounded_delta_Q_kg": [
+            -3.556831124997057e-33,
+            -4.190443798306199e-34
+          ],
+          "bounded_delta_B_m3": [
+            -4.3737505294402936e-36,
+            -5.1528889444945744e-37
+          ]
+        },
+        {
+          "step": 22,
+          "rk": 1,
+          "event_count": 2,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -4.345499291946229e-38,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -5.329724405203595e-41,
+          "bounded_delta_Q_kg": [
+            -5.541710328154434e-33,
+            -6.528908700056255e-34
+          ],
+          "bounded_delta_B_m3": [
+            -6.796868851704552e-36,
+            -8.007660731306013e-37
+          ]
+        },
+        {
+          "step": 22,
+          "rk": 2,
+          "event_count": 1,
+          "ledger_delta_Q_carrier_kg_per_kg_dry": -1.2769605420376513e-41,
+          "ledger_delta_B_carrier_m3_per_kg_dry": -2.5539210840753027e-44,
+          "bounded_delta_Q_kg": [
+            -1.628476947993322e-36,
+            -1.918573271428193e-37
+          ],
+          "bounded_delta_B_m3": [
+            -3.256953895986644e-39,
+            -3.837146542856386e-40
+          ]
+        }
+      ],
+      "summed_signed_delta_Q_carrier": -1.4992081077913026e-37,
+      "summed_signed_delta_B_carrier": -1.7774431299092808e-40,
+      "bounded_sum_delta_Q_kg": [
+        -1.911903902595949e-32,
+        -2.252489806244946e-33
+      ],
+      "bounded_sum_delta_B_m3": [
+        -2.2667303085243003e-35,
+        -2.6705248660902372e-36
+      ]
+    }
+  },
+  "limits": [
+    "Bounds use min/max layer factor because individual event levels are not retained. Since all code-5 Q/B contributions are negative, applying these positive factor extrema bounds the weighted sum.",
+    "Q bounds are kg; B bounds are m3. They are separate quantities.",
+    "These are committed code-5 storage-adjustment bounds only, not total RK transport or endpoint water loss/conservation closure."
+  ]
+}

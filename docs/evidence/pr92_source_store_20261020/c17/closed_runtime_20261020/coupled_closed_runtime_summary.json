@@ -1,0 +1,250 @@
+{
+  "area_weighted_activity": {
+    "complete_full_coverage_all_steps": true,
+    "covered_timesteps": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    ],
+    "final_completed_step": 21,
+    "half_l1_kg_by_group_through_step21": {
+      "AUT": {
+        "applied": 32408527570.537766,
+        "deferred": 73775124396.91078,
+        "deferred_over_proposed": 0.6947879737600954,
+        "proposed": 106183651967.44861
+      },
+      "G": {
+        "applied": 297399654683.0893,
+        "deferred": 792443284292.3606,
+        "deferred_over_proposed": 0.7271169596578096,
+        "proposed": 1089842938975.4495
+      },
+      "NG": {
+        "applied": 431819330931.78467,
+        "deferred": 88766013133.06734,
+        "deferred_over_proposed": 0.1705119326640341,
+        "proposed": 520585344064.8418
+      }
+    },
+    "history_sha256": "06b608f0017b0fc394063d68b0c188267016bfc0aae707fe4bd53aa0c0fac2cd",
+    "history_times": [
+      "2026-08-16_13:00:00",
+      "2026-08-16_13:01:00",
+      "2026-08-16_13:02:00",
+      "2026-08-16_13:03:00",
+      "2026-08-16_13:04:00",
+      "2026-08-16_13:05:00",
+      "2026-08-16_13:06:00",
+      "2026-08-16_13:07:00"
+    ],
+    "native_grid": {
+      "dx_m": 5000.0,
+      "dy_m": 5000.0,
+      "nx": 234,
+      "ny": 282
+    },
+    "run_status": "INCOMPLETE",
+    "stage_record_sha256": "39add916712874b5d9afd99ba2853832c711732ccba2b26a3d59f20e5c7cbd52"
+  },
+  "arm": "COUPLED",
+  "c17_vs_c16_completed_prefix": {
+    "exact": true,
+    "fields": 1153,
+    "matched_fields": 1153,
+    "matched_records": 113,
+    "mismatches": [],
+    "records": 113,
+    "steps": 14
+  },
+  "committed_bulk_event_counts": {
+    "bulk_summary_sha256": "e57d7fb8ed0c6fd830ab93f7108f87b938ac9d81fa48ff68253023a459e39028",
+    "event_count_full_closed_trace": 11,
+    "ledger_sha256": "35a968150a78f10d419d21200100966cd85ada7c4b0a2b0669f93c622b7e65c8",
+    "t15_rk_committed_events": {
+      "1": 1,
+      "2": 1,
+      "3": 1
+    },
+    "t15_total_committed_events": 3,
+    "t21_rk_committed_events": {
+      "1": 1,
+      "2": 1,
+      "3": 0
+    },
+    "t22_partial_rk_committed_events": {
+      "1": 2,
+      "2": 1
+    },
+    "t22_partial_total_committed_events": 3
+  },
+  "completed_state_audit": {
+    "completed_post_kdm6_count": 21,
+    "decoded_payload_sha256": "ee7c431e22ac0aa9255a9a5f50788d57a7cbd7f2dd007edbdc48279e6d5bd4f0",
+    "state_record_count": 129,
+    "state_stage_counts": {
+      "POST_KDM6": 21,
+      "PRE_KDM6": 21,
+      "PRE_RK": 22,
+      "RK_STAGE_END": 65
+    },
+    "status": "FAIL",
+    "strict_source_coefficient_contract": {
+      "cloud_rain_bounds": "source REAL32 coefficients, exact Q/N bounds and both REAL64 and REAL32 rho*N volume checks; no ULP tolerance",
+      "coefficients": {
+        "cloud": {
+          "lambda_max_r32": 500000.0,
+          "lambda_min_r32": 12000.0,
+          "mass": "QC",
+          "number": "NC",
+          "pidn_r32": 523.5988159179688,
+          "power_r32": 3.0
+        },
+        "ice_diagnostic": {
+          "lambda_max_r32": 1820000.0,
+          "lambda_min_r32": 9080.0,
+          "mass": "QI",
+          "number": "NI",
+          "pidn_r32": 1570.79638671875,
+          "power_r32": 3.0
+        },
+        "rain": {
+          "lambda_max_r32": 35000.0,
+          "lambda_min_r32": 961.0,
+          "mass": "QR",
+          "number": "NR",
+          "pidn_r32": 12566.37109375,
+          "power_r32": 3.0
+        }
+      },
+      "gate_stages": [
+        [
+          "POST_KDM6",
+          0
+        ],
+        [
+          "PRE_KDM6",
+          0
+        ],
+        [
+          "RK_STAGE_END",
+          3
+        ]
+      ],
+      "graupel_bounds": "exact QG/BG in [100,900]; no ULP tolerance",
+      "ice": "additional exact source-coefficient diagnostic only; existing native ice acceptance remains separately declared"
+    },
+    "strict_source_coefficient_status_counts": {
+      "FAIL": 18,
+      "PASS": 3
+    },
+    "t22_stage_sequence": [
+      "PRE_RK",
+      "RK_STAGE_END",
+      "RK_STAGE_END"
+    ],
+    "t22_status": "INCOMPLETE",
+    "trace_sha256": "39add916712874b5d9afd99ba2853832c711732ccba2b26a3d59f20e5c7cbd52",
+    "trace_timestep_count": 22
+  },
+  "declared_native_ice_policy_split": {
+    "active_outlier_count": 0,
+    "completed_states": 126,
+    "cutoff": 9.999998977483753e-15,
+    "inactive_outlier_count": 1061,
+    "raw_outlier_count": 1061,
+    "scope": "Declared inactive-ice policy split; zero active outliers. Exact source-coefficient audit remains separately FAIL.",
+    "status": "PASS",
+    "strict_state_failure_count": 0
+  },
+  "diagnostic_producer_records": {
+    "scope": "Receipt-bound local diagnostic rows only; not counted as additional physical stages.",
+    "step15_rk1_channel7_records": 12,
+    "step15_rk1_channel8_records": 12,
+    "total": 24
+  },
+  "endpoints": {
+    "t15_post_kdm6_present": true,
+    "t15_rk1_compared_to_c16": 24,
+    "t15_rk1_matches_c16_values": 24,
+    "t15_rk3_to_post_exact": false,
+    "t15_rk3_to_post_qg_bg_bit_matches": 2,
+    "t15_rk3_to_post_qg_bg_comparisons": 24,
+    "t15_rk_stage_record_target_counts": {
+      "1": 12,
+      "2": 12,
+      "3": 12
+    },
+    "t22_partial_rk_records": [
+      "1",
+      "2"
+    ],
+    "t22_post_kdm6_present": false
+  },
+  "final_completed_step": 21,
+  "first_fatal": "-------------- FATAL CALLED ---------------",
+  "joint_transport": {
+    "all_feasible_through_step21": true,
+    "completed_prefix_rows": 63,
+    "expected_for_30_steps": 90,
+    "missing_due_incomplete_run": 27,
+    "scope": "Only 21 completed steps \u00d7 3 RK rows; T22 ledger entries, if any, are not counted as completed.",
+    "theta_all_one_through_step21": true
+  },
+  "local_witness": {
+    "bit_matches": 22,
+    "compared_values": 22,
+    "exact_match": true,
+    "scope": "Only emitted valid local T15/RK1 trials; diagnostic trials do not add committed endpoint records.",
+    "trial_blocks": 11
+  },
+  "milestones": {
+    "20s": "POST_KDM6 complete",
+    "300s": "POST_KDM6 complete at step15",
+    "320s": "POST_KDM6 complete at step16",
+    "420s": "POST_KDM6 complete at step21",
+    "600s": "not reached; step30 absent",
+    "60s": "POST_KDM6 complete"
+  },
+  "processing_errors": [],
+  "provenance": {
+    "candidate_build_receipt_sha256": "1fb250191357e8b22af0303861f5d16415f7bb91a6283ceaf223deb165d3445d",
+    "candidate_executable_sha256": "1bdec2d56ad55f7e26c5d482eca7b4dae2aead629bb99279eeb8691858bdf645",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "input_hash_count": 101,
+    "launch_provenance_sha256": "d4b4934459af2ec9c7409ccf730b947cb20d143707c1c132849f9457315eba7e",
+    "launch_runner_source_sha256": "298827e4219b7e2bc529e42c2d7aed8c1934b743888755efee242b13d1bc6d96",
+    "module_em_sha256": "99be82b97872bd5981facc1e75b167574e1fc10b7c5511130b494c8b989140fb",
+    "preflight_sha256": "b6e5bee18d7a5c1c3eceec929542ab079d24bb475a45036bad7e2ce34144d286",
+    "receipt_sha256": "bbd45eeae819d7975410add8c73b3c74639d57006e7f9e1d7db2e96677574226",
+    "same_101_input_hashes_as_c16": true,
+    "same_candidate_wrfinput_wrfbdy_namelist_and_source_receipt_as_c16": true,
+    "same_runner_as_c16": true,
+    "stage_trace_compressed_bytes": 6593970857,
+    "stage_trace_compressed_sha256": "39add916712874b5d9afd99ba2853832c711732ccba2b26a3d59f20e5c7cbd52",
+    "stage_trace_payload_sha256": "ee7c431e22ac0aa9255a9a5f50788d57a7cbd7f2dd007edbdc48279e6d5bd4f0",
+    "witness_compressed_sha256": "2301497323f165b6cca3dca3a5826a9b8840938c0462fcd7f9dec16020a5f3b8"
+  },
+  "returncode": 1,
+  "runtime_status": "INCOMPLETE",
+  "schema": "pr92_c17_closed_runtime_arm_summary_v1",
+  "timestep_count": 21
+}

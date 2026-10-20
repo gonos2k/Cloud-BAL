@@ -1,0 +1,33 @@
+{
+  "compiler": "Pinned Intel ifx selected and verified by tests/intel_toolchain.sh",
+  "note": "Both builds used fresh scratch working directories. Earlier initial validation logs under local_validation/c18_policy were retained unchanged and are not current-source evidence.",
+  "runs": [
+    {
+      "compile_command": "$CLOUD_BAL_FC ${CLOUD_BAL_FREE_FLAGS[@]} src/common/cloud_bal_joint_transport.f90 tests/test_pr92_bulk_volume_policy.f90 -o test_pr92_bulk_volume_policy",
+      "log_path": "docs/evidence/pr92_source_store_20261020/local_validation/c18_policy_final/O0.log",
+      "log_sha256": "4e045624382fbdb4a8708a3b5566c61e929d350babcc5a5e4f87f6b7416583b7",
+      "profile": "O0",
+      "profile_array": "CLOUD_BAL_FREE_FLAGS",
+      "result": "PR92 bulk-volume quantum policy PASS",
+      "run_command": "./test_pr92_bulk_volume_policy",
+      "scratch": "/var/tmp/pr92_c18_policy_current_free_lUlwAD"
+    },
+    {
+      "compile_command": "$CLOUD_BAL_FC ${CLOUD_BAL_REPRO_FLAGS[@]} src/common/cloud_bal_joint_transport.f90 tests/test_pr92_bulk_volume_policy.f90 -o test_pr92_bulk_volume_policy",
+      "log_path": "docs/evidence/pr92_source_store_20261020/local_validation/c18_policy_final/O2.log",
+      "log_sha256": "eecfe98dc7e9512128e7393f45a52c800b5ec928add7026726ce0d8d6547f673",
+      "profile": "O2",
+      "profile_array": "CLOUD_BAL_REPRO_FLAGS",
+      "result": "PR92 bulk-volume quantum policy PASS",
+      "run_command": "./test_pr92_bulk_volume_policy",
+      "scratch": "/var/tmp/pr92_c18_policy_current_repro_NK3NJ8"
+    }
+  ],
+  "schema": "pr92_c18_policy_final_validation_v1",
+  "source_hashes": {
+    "core_sha256": "faa4ce0e31bf5b394c9a5ec2045a917464dca7cd4d902b6aa62be80a19aa5ac0",
+    "fixture_sha256": "4cc7f5242dc16363ea4867c02b14980f02dcbbde4b75941ebe1d4594053ce659",
+    "intel_toolchain_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,49 @@
+{
+  "c14": {
+    "coupled_receipt": {
+      "path": "/var/tmp/pr91_COUPLED_240s_c14_20261020/receipt.json",
+      "sha256": "9bd0a867987896dc9c6551bbc964e8fd1d2d759cb865827af81346b782a40e48"
+    },
+    "coupled_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+    "off_receipt": {
+      "path": "/var/tmp/pr91_OFF_240s_c14_20261020/receipt.json",
+      "sha256": "f6a2e40d65c76e4e9abd0dfb1fc26f0c5da3abe4327a5d23829e4a66f34b540a"
+    },
+    "off_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+    "runtime": "C14 histories end at 240 seconds; no 600-second run is used"
+  },
+  "qc_vertical_operator": {
+    "horizontal_lineage_limit": "The replay geometric stencil transfers to the PR83 met_em grid because dimensions, projection attributes, XLAT_M/XLONG_M, pressure, RH, PSFC, TAVGSFC, and HGT_M are bit-identical. QC value transfer does not: 131 of the 288 target/pressure QC rows differ, so actual source selection/composition remains open.",
+    "horizontal_qc_replay": {
+      "direct_interp_embedded_source_sha256_conflict": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1",
+      "direct_interp_sha256": "06cfdb8ed68c24934bf2f2282dc06d37f5c85095be520c3d7a73d6c4b1b4db0f",
+      "manifest_path": "../docs/evidence/pr91_science_sources_20261020/horizontal_replay/replay_18level/manifest.json",
+      "manifest_sha256": "73cbbd104bf19072a1c6ceb8940c8ec37da4ed9c837fffd00aa3f21babacbbc9",
+      "met_em_path": "/var/tmp/pr82_same13_real_candidate.final20261012/met_em.d01.2026-08-16_13:00:00.nc",
+      "met_em_sha256": "e635b4083c22258907338c06104c4ba8ef02a819e6b76a5c4f6cc567b067cd60",
+      "nonzero_links": 36,
+      "pressure_levels": 18,
+      "source_only_bitwise_matches": 288,
+      "source_record_path": "/var/tmp/pr82_same13_metgrid_candidate.final20261012/LAPS:2026-08-16_13",
+      "source_record_sha256": "d73b3356430b64b98997b720e9e7549033ac9a5e4d35be798dff2d1dfdb0dbce",
+      "targets": 16
+    },
+    "host_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_initialize_real.F",
+    "host_source_sha256": "a4bb2497d0c70588f45da06fe9754b56597245033fec7b4bb51beba05901ce2c",
+    "met_em_input": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/met_em.d01.2026-08-16_13:00:00.nc",
+    "met_em_qc_and_pressure_levels": 21,
+    "met_em_sha256": "5c896259727e224658434b7896b1c04187cd903190d87b8fc790a75dda856e02",
+    "operational_modl_met_em_role": "Separate current MODL product; not the PR83 initializer input or the PR91 horizontal replay met_em product.",
+    "operational_modl_met_em_sha256": "b9dff28aab489f932a5e2a4f2a44b340beef605a4305bff010773f9e01322c33",
+    "qc_call_lines": "1884-1905",
+    "vert_interp_definition_lines": "5576-6327",
+    "vertical_inputs_requiring_source reconstruction": [
+      "real.exe pressure-level humidity branch and vapor mixing ratio",
+      "integ_moist result pd_gc on QC pressure levels",
+      "eta target dry-pressure levels after the configured p_dry branch",
+      "pressure-level below-ground and close-level mask for each selected target"
+    ],
+    "vertical_replay_status": "Source-form REAL32 replay of all 16 selected columns x 39 eta levels matches initialized QCLOUD bits 624/624 at pinned Intel O0/O2; see qc_r32_fortran_probe/manifest.json. Bounded vertical validation only; horizontal QC attribution remains open."
+  },
+  "schema": "pr92_science_source_bindings_v1"
+}

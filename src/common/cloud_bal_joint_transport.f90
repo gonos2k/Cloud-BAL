@@ -29,7 +29,8 @@ contains
                                 allow_subnormal, stored_q, stored_n, adjustment, valid, &
                                 allow_normal_q_adjustment, allow_joint_quantum_absence, &
                                 volume_number_bounds, strict_mass_ratio, inactive_mass_limit, &
-                                failure_stage, allow_inactive_q_quantum_adjustment)
+                                failure_stage, allow_inactive_q_quantum_adjustment, &
+                                allow_bulk_volume_quantum_storage)
     ! Store an already valid continuous pair. Opt-in repairs preserve the
     ! continuous gate: subnormal Q underflow can store joint absence; legacy
     ! one-neighbor Q repair handles PSD rounding; strict-volume normal-Q repair
@@ -47,6 +48,7 @@ contains
     real(real64), intent(in), optional :: inactive_mass_limit
     integer, intent(out), optional :: failure_stage
     logical, intent(in), optional :: allow_inactive_q_quantum_adjustment
+    logical, intent(in), optional :: allow_bulk_volume_quantum_storage
     real(real32) :: rounded_q, rounded_n, adjusted_q, directed_q
     real(real64) :: ratio, minimum_number, maximum_number, inactive_number_quantum_limit
     real(real32) :: number_volume32
@@ -54,6 +56,7 @@ contains
     logical :: require_strict_mass, stored_mass_valid, use_inactive_mass_limit
     logical :: use_inactive_exact_store
     logical :: allow_inactive_q_quantum
+    logical :: allow_bulk_absence
     logical :: need_q_up, need_q_down, directed_valid
 
     stored_q = -1.0_real32
@@ -66,6 +69,7 @@ contains
     require_strict_mass = .false.
     use_inactive_exact_store = .false.
     allow_inactive_q_quantum = .false.
+    allow_bulk_absence = .false.
     use_inactive_mass_limit = present(inactive_mass_limit)
     use_volume_contract = present(volume_number_bounds)
     if (present(allow_normal_q_adjustment)) allow_normal = allow_normal_q_adjustment
@@ -73,6 +77,11 @@ contains
     if (present(strict_mass_ratio)) require_strict_mass = strict_mass_ratio
     if (present(allow_inactive_q_quantum_adjustment)) &
       allow_inactive_q_quantum = allow_inactive_q_quantum_adjustment
+    if (present(allow_bulk_volume_quantum_storage)) &
+      allow_bulk_absence = allow_bulk_volume_quantum_storage
+    if (allow_bulk_absence .and. &
+        (.not.allow_subnormal .or. .not.allow_quantum_absence .or. &
+         .not.require_strict_mass .or. use_volume_contract)) return
     if (allow_inactive_q_quantum .and. &
         (.not.allow_subnormal .or. .not.use_inactive_mass_limit .or. &
          .not.allow_quantum_absence)) return
@@ -80,7 +89,7 @@ contains
       if (.not.ieee_is_finite(inactive_mass_limit)) return
       if (inactive_mass_limit<0.0_real64) return
       if (inactive_mass_limit>0.0_real64) then
-        if (require_strict_mass .or. use_volume_contract) return
+        if (require_strict_mass .or. use_volume_contract .or. allow_bulk_absence) return
       end if
     end if
     ! A declared joint-absence store may represent a positive inactive pair
@@ -142,6 +151,18 @@ contains
 
     rounded_q = real(q64,real32)
     rounded_n = real(n64,real32)
+    if (allow_bulk_absence) then
+      if (q64>0.0_real64 .and. n64>0.0_real64 .and. rounded_n==0.0_real32) then
+        if (bulk_volume_absence_is_valid(q64,n64,rounded_q,minimum_ratio,maximum_ratio)) then
+          stored_q=0.0_real32
+          stored_n=0.0_real32
+          adjustment=5
+          valid=.true.
+          if (present(failure_stage)) failure_stage=0
+          return
+        end if
+      end if
+    end if
     if (use_inactive_exact_store) then
       if (rounded_n<=0.0_real32) return
       if (rounded_q<=0.0_real32) then
@@ -200,6 +221,26 @@ contains
         stored_n = rounded_n
         adjustment = 2
         valid = .true.
+        if (present(failure_stage)) failure_stage=0
+        return
+      end if
+    end if
+    ! Under the explicit bulk policy, a subnormal Q with positive rounded B
+    ! may use the same directed projection as normal Q. Bound both signed
+    ! event losses before accepting it; this is adjustment 2, not absence.
+    if (allow_bulk_absence .and. require_strict_mass .and. .not.use_volume_contract .and. &
+        q64 > 0.0_real64 .and. q64 < real(tiny(0.0_real32),real64) .and. &
+        rounded_n > 0.0_real32) then
+      if (present(failure_stage)) failure_stage=5
+      call store_directed_q(q64,rounded_n,dry_density,minimum_ratio,maximum_ratio, &
+          [0.0_real64,0.0_real64],.false.,.true.,directed_q,directed_valid, &
+          allow_subnormal_q=.true.)
+      if (directed_valid .and. &
+          bulk_volume_loss_is_bounded(q64,n64,directed_q,rounded_n,maximum_ratio)) then
+        stored_q=directed_q
+        stored_n=rounded_n
+        adjustment=2
+        valid=.true.
         if (present(failure_stage)) failure_stage=0
         return
       end if
@@ -294,21 +335,67 @@ contains
     if (present(failure_stage)) failure_stage=0
   end subroutine joint_moment_store
 
+  logical function bulk_volume_absence_is_valid(q64,b64,q32,minimum_ratio,maximum_ratio)
+    integer, parameter :: real128 = selected_real_kind(33,4931)
+    real(real64), intent(in) :: q64,b64,minimum_ratio,maximum_ratio
+    real(real32), intent(in) :: q32
+    real(real128) :: q128,b128,min128,max128,eta128
+
+    bulk_volume_absence_is_valid=.false.
+    if (.not.all(ieee_is_finite([q64,b64,minimum_ratio,maximum_ratio])) .or. &
+        .not.ieee_is_finite(q32)) return
+    if (q64<=0.0_real64 .or. b64<=0.0_real64) return
+    if (minimum_ratio<=0.0_real64 .or. maximum_ratio<minimum_ratio) return
+    q128=real(q64,real128); b128=real(b64,real128)
+    min128=real(minimum_ratio,real128); max128=real(maximum_ratio,real128)
+    eta128=real(real32_quantum64,real128)
+    ! Joint absence spends at most half a B quantum and the corresponding
+    ! maximum-density Q packet. The caller accumulates these signed losses.
+    if (b128>=0.5_real128*eta128) return
+    if (q128<min128*b128 .or. q128>max128*b128) return
+    if (.not.bulk_volume_loss_is_bounded(q64,b64,0.0_real32,0.0_real32,maximum_ratio)) return
+    bulk_volume_absence_is_valid=.true.
+  end function bulk_volume_absence_is_valid
+
+  logical function bulk_volume_loss_is_bounded(q64,b64,q32,b32,maximum_ratio)
+    integer, parameter :: real128 = selected_real_kind(33,4931)
+    real(real64), intent(in) :: q64,b64,maximum_ratio
+    real(real32), intent(in) :: q32,b32
+    real(real128) :: eta128,q_loss_budget,q_error,b_error
+
+    bulk_volume_loss_is_bounded=.false.
+    if (.not.all(ieee_is_finite([q64,b64,maximum_ratio])) .or. &
+        .not.all(ieee_is_finite([q32,b32]))) return
+    if (maximum_ratio<=0.0_real64) return
+    eta128=real(real32_quantum64,real128)
+    q_loss_budget=0.5_real128*real(maximum_ratio,real128)*eta128
+    q_error=abs(real(q32,real128)-real(q64,real128))
+    b_error=abs(real(b32,real128)-real(b64,real128))
+    if (q_error>=q_loss_budget .or. b_error>=0.5_real128*eta128) return
+    bulk_volume_loss_is_bounded=.true.
+  end function bulk_volume_loss_is_bounded
+
   subroutine store_directed_q(q64,rounded_n,dry_density,minimum_ratio,maximum_ratio, &
-                              bounds,has_volume_contract,strict_mass_ratio,stored_q,valid)
+                              bounds,has_volume_contract,strict_mass_ratio,stored_q,valid, &
+                              allow_subnormal_q)
     real(real64), intent(in) :: q64,minimum_ratio,maximum_ratio,bounds(2)
     real(real32), intent(in) :: rounded_n,dry_density
     logical, intent(in) :: has_volume_contract,strict_mass_ratio
     real(real32), intent(out) :: stored_q
     logical, intent(out) :: valid
+    logical, intent(in), optional :: allow_subnormal_q
     real(real64) :: number_volume64,number_volume32,lower_q,upper_q,target,midpoint
     real(real32) :: candidate_q
     logical :: pair_valid,volume_valid
     integer :: attempt,direction
+    logical :: permit_subnormal_q
 
     stored_q = -1.0_real32
     valid = .false.
-    if (.not.ieee_is_finite(q64) .or. q64 < real(tiny(0.0_real32),real64) .or. &
+    permit_subnormal_q=.false.
+    if (present(allow_subnormal_q)) permit_subnormal_q=allow_subnormal_q
+    if (.not.ieee_is_finite(q64) .or. q64<=0.0_real64 .or. &
+        (q64 < real(tiny(0.0_real32),real64) .and. .not.permit_subnormal_q) .or. &
         .not.ieee_is_finite(rounded_n) .or. rounded_n <= 0.0_real32) return
     lower_q = real(rounded_n,real64)*minimum_ratio
     upper_q = real(rounded_n,real64)*maximum_ratio
@@ -493,7 +580,8 @@ contains
                               q_transport_rate64, n_transport_rate64, joint_quantum_absence, &
                               strict_number_pair, volume_number_bounds, number_pair_bounds, &
                               strict_mass_pairs, inactive_mass_limits, &
-                              inactive_q_quantum_adjustment_pairs, inactive_q_quantum_adjustments)
+                              inactive_q_quantum_adjustment_pairs, inactive_q_quantum_adjustments, &
+                              bulk_volume_quantum_storage, bulk_volume_absences, bulk_volume_delta)
     ! Pair columns are QC/QNC, QI/QNI, QR/QNR, and QG/QIB. The first three
     ! ratios are mean particle masses; QG/QIB is graupel bulk density because
     ! QIB is rime-volume mixing ratio (m3 kg-dry-1), not a number moment.
@@ -524,6 +612,9 @@ contains
     ! Opt-in bounded positive-Q representation for inactive underflow cells.
     logical, intent(in), optional :: inactive_q_quantum_adjustment_pairs(:)
     integer, intent(out), optional :: inactive_q_quantum_adjustments(:)
+    logical, intent(in), optional :: bulk_volume_quantum_storage
+    integer, intent(out), optional :: bulk_volume_absences
+    real(real64), intent(out), optional :: bulk_volume_delta(2)
 
     real(real32), allocatable :: q_candidate(:,:), n_candidate(:,:)
     real(real64), allocatable :: local_delta_q(:), local_delta_n(:)
@@ -532,11 +623,14 @@ contains
     real(real64), allocatable :: inactive_mass_limit_by_pair(:)
     real(real64) :: low, high, trial
     integer :: iteration, cell, pair, ncells, npairs, adjustment, use_strict_pair
+    integer :: local_bulk_volume_absences
+    real(real64) :: local_bulk_volume_delta(2)
     logical, allocatable :: pair_has_volume_bounds(:)
     logical, allocatable :: pair_has_strict_mass(:)
     logical, allocatable :: pair_has_inactive_mass_limit(:)
     logical, allocatable :: pair_allows_inactive_q_quantum(:)
     logical :: use_joint_storage, use_constrained_storage, use_quantum_absence, storage_valid
+    logical :: use_bulk_volume_absence
 
     feasible = .false.
     theta = 0.0_real64
@@ -546,9 +640,16 @@ contains
     if (present(storage_delta_n)) storage_delta_n = 0.0_real64
     if (present(storage_adjustments)) storage_adjustments = 0
     if (present(inactive_q_quantum_adjustments)) inactive_q_quantum_adjustments = 0
+    if (present(bulk_volume_absences)) bulk_volume_absences = 0
+    if (present(bulk_volume_delta)) bulk_volume_delta = 0.0_real64
     use_joint_storage = .false.
     use_constrained_storage = .false.
     use_quantum_absence = .false.
+    use_bulk_volume_absence = .false.
+    if (present(bulk_volume_quantum_storage)) &
+      use_bulk_volume_absence = bulk_volume_quantum_storage
+    if (use_bulk_volume_absence .and. &
+        (.not.present(bulk_volume_absences) .or. .not.present(bulk_volume_delta))) return
     use_strict_pair = 0
     if (present(joint_subnormal_storage)) use_joint_storage = joint_subnormal_storage
     if (present(joint_constrained_storage)) use_constrained_storage = joint_constrained_storage
@@ -647,6 +748,13 @@ contains
     end if
     if (any(pair_has_inactive_mass_limit .and. &
             (pair_has_volume_bounds .or. pair_has_strict_mass))) return
+    if (use_bulk_volume_absence) then
+      if (.not.use_constrained_storage .or. .not.use_quantum_absence .or. npairs<4) return
+      if (.not.present(strict_mass_pairs)) return
+      if (.not.pair_has_strict_mass(4)) return
+      if (pair_has_volume_bounds(4) .or. pair_has_inactive_mass_limit(4)) return
+      if (pair_allows_inactive_q_quantum(4)) return
+    end if
     if (npairs == 0 .or. ncells == 0) return
     if (size(n_base,1) /= ncells .or. size(q_stage,1) /= ncells .or. &
         size(n_stage,1) /= ncells .or. size(q_source,1) /= ncells .or. &
@@ -691,6 +799,7 @@ contains
     if (use_joint_storage) then
       allocate(local_delta_q(npairs), local_delta_n(npairs), local_adjustments(npairs))
       allocate(local_inactive_q_quantum_adjustments(npairs))
+      local_bulk_volume_absences = 0
       call form_candidate(1.0_real64)
       if (.not. candidate_is_feasible()) return
       theta = 1.0_real64
@@ -739,6 +848,8 @@ contains
       storage_delta_q = local_delta_q
       storage_delta_n = local_delta_n
       storage_adjustments = local_adjustments
+      if (present(bulk_volume_absences)) bulk_volume_absences = local_bulk_volume_absences
+      if (present(bulk_volume_delta)) bulk_volume_delta = local_bulk_volume_delta
       if (present(inactive_q_quantum_adjustments)) &
         inactive_q_quantum_adjustments = local_inactive_q_quantum_adjustments
     end if
@@ -758,6 +869,8 @@ contains
         local_delta_n = 0.0_real64
         local_adjustments = 0
         local_inactive_q_quantum_adjustments = 0
+        local_bulk_volume_absences = 0
+        local_bulk_volume_delta = 0.0_real64
       end if
       do p = 1, npairs
         do i = 1, ncells
@@ -808,7 +921,9 @@ contains
                                       n_candidate(i,p), adjustment, storage_valid, &
                                       allow_normal_q_adjustment=use_constrained_storage, &
                                       allow_joint_quantum_absence=use_quantum_absence, &
-                                      strict_mass_ratio=pair_has_strict_mass(p))
+                                      strict_mass_ratio=pair_has_strict_mass(p), &
+                                      allow_bulk_volume_quantum_storage= &
+                                          use_bulk_volume_absence .and. p==4)
             end if
             if (.not. storage_valid) then
               q_candidate(i,p) = -1.0_real32
@@ -822,6 +937,13 @@ contains
               if (adjustment == 4) &
                 local_inactive_q_quantum_adjustments(p) = &
                     local_inactive_q_quantum_adjustments(p) + 1
+              if (adjustment == 5) then
+                local_bulk_volume_absences=local_bulk_volume_absences+1
+                local_bulk_volume_delta(1)=local_bulk_volume_delta(1)+real(carrier_new(i),real64)* &
+                    (real(q_candidate(i,p),real64)-q_value)
+                local_bulk_volume_delta(2)=local_bulk_volume_delta(2)+real(carrier_new(i),real64)* &
+                    (real(n_candidate(i,p),real64)-n_value)
+              end if
             end if
           else if (.not. ieee_is_finite(q_value) .or. .not. ieee_is_finite(n_value) .or. &
               abs(q_value) > real(huge(0.0_real32),real64) .or. &

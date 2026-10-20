@@ -1,0 +1,29 @@
+{
+  "changes": "Renamed opt-in to allow_bulk_volume_quantum_storage / bulk_volume_quantum_storage; added default-off bounded subnormal directed-Q path using adjustment 2, with same strict per-event Q/B budgets as adjustment 5. Adjustment-5 counters/delta remain exclusive to 0/0 absence.",
+  "compiler_profile": "pinned Intel ifx via tests/intel_toolchain.sh; fresh scratch per profile",
+  "hashes": {
+    "archived_c17_core_sha256": "aae36b8e259f7ef477429e8aa726c56668348ed2d3e8572b3eb71b3da723377e",
+    "archived_c17_test_sha256": "508097d27d617173ff65c74b1b87012f411e348c79cb56d1ef3b0bbf97a5621d",
+    "core_sha256": "ee032363de52632d7ea17335ea6c73a8be0d5e694c4aa759d836282607d522d4",
+    "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "test_sha256": "4cc7f5242dc16363ea4867c02b14980f02dcbbde4b75941ebe1d4594053ce659"
+  },
+  "runs": [
+    {
+      "log": "docs/evidence/pr92_source_store_20261020/local_validation/c18_policy/o0.log",
+      "log_sha256": "dcc6dcdfe9f9d6ee9d45a7816c57b9f54941b4cb49c722b283a72a20bd6d8a25",
+      "profile": "FREE/O0",
+      "result": "PR92 bulk-volume quantum policy PASS",
+      "scratch": "/var/tmp/pr92_c18_policy_v2_free_wx0QRf"
+    },
+    {
+      "log": "docs/evidence/pr92_source_store_20261020/local_validation/c18_policy/o2.log",
+      "log_sha256": "eecfe98dc7e9512128e7393f45a52c800b5ec928add7026726ce0d8d6547f673",
+      "profile": "REPRO/O2",
+      "result": "PR92 bulk-volume quantum policy PASS",
+      "scratch": "/var/tmp/pr92_c18_policy_v2_repro_PeuhHW"
+    }
+  ],
+  "schema": "pr92_c18_policy_validation_v1",
+  "status": "PASS"
+}

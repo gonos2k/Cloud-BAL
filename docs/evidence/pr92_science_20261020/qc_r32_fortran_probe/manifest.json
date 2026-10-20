@@ -1,0 +1,50 @@
+{
+  "artifacts_sha256": {
+    "lagrange_interp.F90": "0b68fad6c73649c8bfabe160d930c3901add010fd2c4eecff806e2b8c879df8c",
+    "r32_source_formula_probe.F90": "3fd442afd52e4f74b9d21082bff6b9d92ea8ff302a1c01f5ef8c28121d94f52b",
+    "results_o0_bits.txt": "4aa4d94bc20fed076b2c621cc6f067807ad3e74ac77072ac205e7c5087085079",
+    "results_o2_bits.txt": "4aa4d94bc20fed076b2c621cc6f067807ad3e74ac77072ac205e7c5087085079",
+    "selected_columns_input.txt": "462e6c4dc45b2149af1fe80d2c61c33973320a55eb4a602bd16e0eeb442dc41f"
+  },
+  "compiler": "ifx (IFX) 2026.0.0 20260331",
+  "compiler_profile": "Cloud-BAL/tests/intel_toolchain.sh",
+  "configuration": {
+    "coordinate": "natural log of dry pressure",
+    "extrap_type": 1,
+    "flag_qc": 1,
+    "flag_speccldl": 0,
+    "humidity": "direct QV",
+    "interp_type": 2,
+    "linear_interp": 1,
+    "sfcp_to_sfcp": true,
+    "use_levels_below_ground": true,
+    "use_surface": true,
+    "use_tavgsfc": true,
+    "zap_close_levels_pa": 500.0
+  },
+  "flags": "-stand f08 -warn all -check all -fpe0 -traceback -fp-model strict -fimf-arch-consistency=true -no-ftz; both -O0 and -O2",
+  "input_bindings": {
+    "met_em_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/met_em.d01.2026-08-16_13:00:00.nc",
+    "met_em_sha256": "5c896259727e224658434b7896b1c04187cd903190d87b8fc790a75dda856e02",
+    "wrfinput_path": "/var/tmp/pr84_same13_OFF_input_4yhaky_4/wrfinput_d01",
+    "wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200"
+  },
+  "limitations": "This is a standalone source-form reconstruction of the traced source expressions/level selection, not a real.exe execution. It is bound to exact archived met_em and initialized wrfinput inputs; exact QCLOUD bit agreement across all selected points validates the bounded selected-target vertical operator replay, not horizontal source-component attribution or domain-wide footprint.",
+  "result": {
+    "compared_points": 624,
+    "max_abs_difference_kg_kg": 0.0,
+    "mean_abs_difference_kg_kg": 0.0,
+    "mismatches": 0,
+    "native_levels_per_column": 39,
+    "o0_o2_bitwise_identical": true,
+    "qcloud_exact_bit_matches": 624,
+    "target_columns": 16
+  },
+  "schema": "pr92_selected_target_qc_r32_source_formula_probe_v1",
+  "scope": "REAL32 source-form replay for all 16 selected PR83 met_em target columns and all 39 native levels (624 points); no full model run.",
+  "source_authority": {
+    "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_initialize_real.F",
+    "sha256": "a4bb2497d0c70588f45da06fe9754b56597245033fec7b4bb51beba05901ce2c",
+    "used_operators": "sfcprs2 surface pressure, integ_moist direct-QV integration, p_dts dry mu, p_dry half-level eta pressure, vert_interp close-level selection/log pressure coordinate, and exact lagrange_interp routine copied to lagrange_interp.F90"
+  }
+}

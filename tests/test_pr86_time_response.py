@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import hashlib
+import gzip
 import json
 import re
 import struct
@@ -73,6 +74,139 @@ def make_finalizer_fixture(root: Path, duration: int, steps: tuple[int, ...] | N
 
 
 class TimeResponseTests(unittest.TestCase):
+    def _make_disk_reference(self, root: Path) -> tuple[Path, dict]:
+        bundle, stage = root / "reference", root / "reference" / "run"
+        stage.mkdir(parents=True)
+        source_sha, namelist_sha = "a" * 64, "b" * 64
+        input_hashes = {"input.dat": "c" * 64}
+        executable_sha, input_sha, boundary_sha = "d" * 64, "e" * 64, "f" * 64
+        raw = b"step trace payload"
+        archive_name = "trace.raw.gz"
+        archive = gzip.compress(raw, mtime=0)
+        (stage / archive_name).write_bytes(archive)
+        once_raw = b"first-call raw trace"
+        once_archive_name = "kdm6_first_call_pre.raw.gz"
+        once_archive = gzip.compress(once_raw, mtime=0)
+        (stage / once_archive_name).write_bytes(once_archive)
+        history = b"history bytes"
+        (stage / "wrfout_d01_2026-08-16_13:00:00").write_bytes(history)
+        rows = [
+            {"path": archive_name, "bytes": len(archive),
+             "sha256": hashlib.sha256(archive).hexdigest()},
+            {"path": once_archive_name, "bytes": len(once_archive),
+             "sha256": hashlib.sha256(once_archive).hexdigest()},
+            {"path": "wrfout_d01_2026-08-16_13:00:00", "bytes": len(history),
+             "sha256": hashlib.sha256(history).hexdigest()},
+        ]
+        expected_timestamps = ["step-1", "step-2"]
+        timestamps = [{"timestamp": value} for value in expected_timestamps]
+        preflight = {"arm": "COUPLED", "source_receipt_sha256": source_sha,
+                     "source_namelist_sha256": namelist_sha, "input_hashes": input_hashes,
+                     "baseline_frozen_executable_sha256": executable_sha,
+                     "candidate_wrfinput_sha256": input_sha,
+                     "candidate_wrfbdy_sha256": boundary_sha, "timestep_seconds": 20,
+                     "executable_sha256": executable_sha, "candidate_build": None,
+                     "namelist_changes": {"history_interval_minutes": 1},
+                     "launch_environment": {"OMP_NUM_THREADS": "1", "OMP_DYNAMIC": "FALSE",
+                         "launch_request_sha256": response.LAUNCH_ENVIRONMENT_SHA256}}
+        (bundle / "preflight.json").write_text(json.dumps(preflight))
+        receipt = {"status": "COMPLETE", "returncode": 0, "arm": "COUPLED",
+                   "timestep_count": 2, "final_completed_step": 2, "maximum_seen_timestep": 2,
+                   "model_timestamps": timestamps, "expected_model_timestamps": expected_timestamps,
+                   "duplicate_post_kdm6_timesteps": [], "earliest_fatal": None,
+                   "fatal_lines": [], "processing_errors": [], "changed_staged_inputs": [],
+                   "changed_original_inputs": [], "source_receipt_sha256": source_sha,
+                   "candidate_wrfinput_sha256": input_sha,
+                   "candidate_wrfbdy_sha256": boundary_sha,
+                   "baseline_frozen_executable_sha256": executable_sha, "pr87_probe": None,
+                   "candidate_build": None, "candidate_build_unchanged": True,
+                   "expected_executed_executable_sha256": executable_sha,
+                   "executed_executable_sha256": executable_sha,
+                   "generated_files": rows,
+                   "compressed_outputs": [{"path": "trace.raw", "bytes": len(raw),
+                       "sha256": hashlib.sha256(raw).hexdigest(), "compressed_path": archive_name,
+                       "compressed_bytes": len(archive),
+                       "compressed_sha256": hashlib.sha256(archive).hexdigest()},
+                      {"path": "kdm6_first_call_pre.raw", "bytes": len(once_raw),
+                       "sha256": hashlib.sha256(once_raw).hexdigest(),
+                       "compressed_path": once_archive_name,
+                       "compressed_bytes": len(once_archive),
+                       "compressed_sha256": hashlib.sha256(once_archive).hexdigest()}]}
+        receipt_path = bundle / "receipt.json"
+        receipt_path.write_text(json.dumps(receipt))
+        context = {"source_sha": source_sha, "namelist_sha": namelist_sha,
+                   "input_hashes": input_hashes, "executable_sha": executable_sha,
+                   "input_sha": input_sha, "boundary_sha": boundary_sha,
+                   "reference": receipt_path}
+        return receipt_path, context
+
+    def test_disk_reference_projection_verifies_inventory_and_calibrates(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            reference, ctx = self._make_disk_reference(root)
+            result = response._disk_reference_projection(
+                reference, "COUPLED", ctx["source_sha"], ctx["namelist_sha"],
+                ctx["input_hashes"], ctx["executable_sha"], ctx["input_sha"],
+                ctx["boundary_sha"], None)
+            expected = 3 * ((len(b"step trace payload") + len(b"first-call raw trace") +
+                             len(b"history bytes") + 1) // 2) + 64 * 1024 * 1024
+            self.assertEqual(result["per_step_projection_bytes"], expected)
+            self.assertEqual(result["source_trace_uncompressed_bytes"],
+                             len(b"step trace payload") + len(b"first-call raw trace"))
+            self.assertEqual(result["compressed_archive_count"], 2)
+            self.assertEqual(result["reference_preflight_sha256"],
+                             response.sha256(reference.parent / "preflight.json"))
+
+    def test_disk_reference_rejects_incomplete_or_changed_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            reference, ctx = self._make_disk_reference(root)
+            receipt = json.loads(reference.read_text())
+            receipt["returncode"] = 1
+            reference.write_text(json.dumps(receipt))
+            with self.assertRaisesRegex(ValueError, "incomplete"):
+                response._disk_reference_projection(
+                    reference, "COUPLED", ctx["source_sha"], ctx["namelist_sha"],
+                    ctx["input_hashes"], ctx["executable_sha"], ctx["input_sha"],
+                    ctx["boundary_sha"], None)
+            receipt["returncode"] = 0
+            reference.write_text(json.dumps(receipt))
+            (reference.parent / "run" / "trace.raw.gz").write_bytes(b"changed")
+            with self.assertRaisesRegex(ValueError, "artifact changed"):
+                response._disk_reference_projection(
+                    reference, "COUPLED", ctx["source_sha"], ctx["namelist_sha"],
+                    ctx["input_hashes"], ctx["executable_sha"], ctx["input_sha"],
+                    ctx["boundary_sha"], None)
+
+    def test_disk_reference_rejects_candidate_build_metadata_mismatch(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            reference, ctx = self._make_disk_reference(root)
+            preflight_path = reference.parent / "preflight.json"
+            preflight = json.loads(preflight_path.read_text())
+            receipt = json.loads(reference.read_text())
+            build = {"receipt_path": str(root / "build_receipt.json"),
+                     "executable_sha256": "7" * 64}
+            preflight["candidate_build"] = build
+            receipt["candidate_build"] = build
+            receipt["expected_executed_executable_sha256"] = build["executable_sha256"]
+            receipt["executed_executable_sha256"] = build["executable_sha256"]
+            preflight_path.write_text(json.dumps(preflight))
+            reference.write_text(json.dumps(receipt))
+            with patch.object(response, "_candidate_build_binding", return_value=build):
+                result = response._disk_reference_projection(
+                    reference, "COUPLED", ctx["source_sha"], ctx["namelist_sha"],
+                    ctx["input_hashes"], ctx["executable_sha"], ctx["input_sha"],
+                    ctx["boundary_sha"], None)
+                self.assertEqual(result["compressed_archive_count"], 2)
+                receipt["candidate_build"] = {**build, "executable_sha256": "8" * 64}
+                reference.write_text(json.dumps(receipt))
+                with self.assertRaisesRegex(ValueError, "candidate build differs"):
+                    response._disk_reference_projection(
+                        reference, "COUPLED", ctx["source_sha"], ctx["namelist_sha"],
+                        ctx["input_hashes"], ctx["executable_sha"], ctx["input_sha"],
+                        ctx["boundary_sha"], None)
+
     def test_runtime_and_history_edits_preserve_physics_namelist(self) -> None:
         source = """&time_control
  run_days = 0,
@@ -118,12 +252,13 @@ class TimeResponseTests(unittest.TestCase):
     def test_streaming_snapshot_reader_selects_true_model_timesteps(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "stages.raw"
-            path.write_bytes(b"".join(record(step, float(step)) for step in (1, 2, 3, 15, 30)))
+            path.write_bytes(b"".join(record(step, float(step)) for step in (1, 2, 3, 15, 16, 30)))
             result = response.read_time_snapshots(path)
-        self.assertEqual(result["timesteps"], [1, 2, 3, 15, 30])
-        self.assertEqual(result["completed_post_kdm6_timesteps"], [1, 2, 3, 15, 30])
-        self.assertEqual(set(result["snapshots"]), {"20s", "1min", "5min", "10min"})
+        self.assertEqual(result["timesteps"], [1, 2, 3, 15, 16, 30])
+        self.assertEqual(result["completed_post_kdm6_timesteps"], [1, 2, 3, 15, 16, 30])
+        self.assertEqual(set(result["snapshots"]), {"20s", "1min", "5min", "320s", "10min"})
         self.assertEqual(result["snapshots"]["5min"]["model_seconds"], 300)
+        self.assertEqual(result["snapshots"]["320s"]["fields"]["QC"]["max"], 16.0)
         self.assertEqual(result["snapshots"]["10min"]["fields"]["QC"]["max"], 30.0)
 
     def test_duplicate_post_kdm6_timestep_is_reported(self) -> None:
@@ -152,7 +287,8 @@ class TimeResponseTests(unittest.TestCase):
             40: {1: "20s", 2: "40s"},
             60: {1: "20s", 3: "1min"},
             300: {1: "20s", 3: "1min", 15: "5min"},
-            600: {1: "20s", 3: "1min", 15: "5min", 30: "10min"},
+            320: {1: "20s", 3: "1min", 15: "5min", 16: "320s"},
+            600: {1: "20s", 3: "1min", 15: "5min", 16: "320s", 30: "10min"},
         }
         for duration, schedule in expected.items():
             with self.subTest(duration=duration):
@@ -161,7 +297,7 @@ class TimeResponseTests(unittest.TestCase):
             response.snapshot_schedule(30)
 
     def test_finalizer_completes_each_supported_duration_schedule(self) -> None:
-        for duration in (20, 40, 60, 300, 600):
+        for duration in (20, 40, 60, 300, 320, 600):
             with self.subTest(duration=duration), tempfile.TemporaryDirectory() as directory:
                 out = make_finalizer_fixture(Path(directory), duration)
                 receipt = response.finalize_existing_run("OFF", out, duration)

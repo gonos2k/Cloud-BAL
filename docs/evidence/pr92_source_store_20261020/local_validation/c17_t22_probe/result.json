@@ -1,0 +1,101 @@
+{
+  "candidate": {
+    "b": 2.003716070677646e-45,
+    "b_bits64": "36A6E0DE5EEF31AA",
+    "b_eta32_units": 1.429899569356261,
+    "continuous_cone_bounds": [
+      100.0,
+      900.0
+    ],
+    "continuous_cone_valid": true,
+    "continuous_density": 815.4335990374493,
+    "q": 1.633897406961849e-42,
+    "q_bits64": "374237F3DE250AFA",
+    "q_eta32_units": 1165.9881521022749,
+    "source_b_bits64": "3766474E24589AC8",
+    "source_q_bits64": "3801BDAAAE1408F6",
+    "transport_b_bits64": "8000000000000000",
+    "transport_q_bits64": "8000000000000000"
+  },
+  "current_core_replay": {
+    "bulk_absence_policy_enabled": {
+      "adjustment": 0,
+      "failure_stage": 6,
+      "stored_b_bits32": "BF800000",
+      "stored_q_bits32": "BF800000",
+      "valid": false
+    },
+    "default_off": {
+      "adjustment": 0,
+      "failure_stage": 6,
+      "stored_b_bits32": "BF800000",
+      "stored_q_bits32": "BF800000",
+      "valid": false
+    },
+    "interpretation": "The opt-in bulk-absence branch requires rounded B==0; this candidate rounds B to the positive minimum subnormal, so that branch does not apply. Strict rounded pair fails the max-density bound; existing directed-Q repair is skipped for q64 below the REAL32 normal threshold.",
+    "same_result_in": [
+      "pinned Intel O0",
+      "pinned Intel O2"
+    ]
+  },
+  "nearest_real32": {
+    "b_bits32": "00000001",
+    "b_eta_units": 1,
+    "q_bits32": "0000048E",
+    "q_eta_units": 1166,
+    "stored_density": 1166,
+    "strict_cone_valid": false
+  },
+  "positive_pair_witness": {
+    "b_bits32": "00000001",
+    "b_eta_units": 1,
+    "density": 900,
+    "joint_moment_store": {
+      "adjustment": 0,
+      "failure_stage": 0,
+      "valid": true
+    },
+    "q_bits32": "00000384",
+    "q_eta_units": 900,
+    "relative_to_candidate": {
+      "b_budget_eta_units": 0.5,
+      "both_strictly_inside_budgets": true,
+      "delta_b_eta_units": -0.42989956935626106,
+      "delta_q_eta_units": -265.98815210227485,
+      "q_budget_eta_units": 450
+    },
+    "strict_cone_valid": true
+  },
+  "provenance": {
+    "core_path": "src/common/cloud_bal_joint_transport.f90",
+    "core_sha256": "aae36b8e259f7ef477429e8aa726c56668348ed2d3e8572b3eb71b3da723377e",
+    "harness_path": "local_validation/c17_t22_probe/probe.f90",
+    "harness_sha256": "87a1f71df5914bbb8b8129544cbabe36ab13b01c27d6e205f1dd2fafd0760bfa",
+    "intel_profile_path": "tests/intel_toolchain.sh",
+    "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "runs": [
+    {
+      "output": [
+        "DEFAULT F 6 0 BF800000 BF800000",
+        "POLICY F 6 0 BF800000 BF800000",
+        "POSITIVE_BOUNDARY_PAIR T 0 0 00000384 00000001"
+      ],
+      "profile": "FREE/O0",
+      "scratch": "/var/tmp/pr92_c17_t22_probe_final_free_X6Ge7H"
+    },
+    {
+      "output": [
+        "DEFAULT F 6 0 BF800000 BF800000",
+        "POLICY F 6 0 BF800000 BF800000",
+        "POSITIVE_BOUNDARY_PAIR T 0 0 00000384 00000001"
+      ],
+      "profile": "REPRO/O2",
+      "scratch": "/var/tmp/pr92_c17_t22_probe_final_repro_8TbVTx"
+    }
+  ],
+  "schema": "pr92_c17_t22_probe_v1",
+  "scope": "Read-only replay of parent-provided T22/RK3 candidate through current common store. Does not inspect C17 stage payloads or change core/policy.",
+  "smallest_policy_gap_assessment": "This is not a joint-absence case and not a positive-volume representability impossibility. The nearest independent pair is invalid (density 1166), but a nearby positive pair exists at Q=900 eta, B=1 eta. A narrow opt-in extension could let the existing store_directed_q clamp a subnormal-Q candidate against the already-rounded positive B and strict bounds, then accept only if stored-Q loss < max_ratio*eta/2 and B rounding loss < eta/2. For this input target=min(max(Q,100 eta),900 eta)=900 eta. Report this as a bounded directed-Q repair with ordinary adjustment code 2/total signed ledger, not bulk absence code 5 or its counter. Keep default-off and strict continuous gate; do not claim this proposal has been implemented or validated.",
+  "status": "CURRENT_POLICY_REJECTS; POSITIVE_DIRECTED_PAIR_EXISTS"
+}

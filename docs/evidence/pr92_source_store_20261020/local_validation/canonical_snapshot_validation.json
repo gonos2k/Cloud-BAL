@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "returncode": 0,
+  "snapshot_path": "/var/tmp/pr92_canonical_core_snapshot_20261020",
+  "snapshot_base_commit": "71b8c1d5dae181c163d04eabac9cf8f80134f417",
+  "snapshot_file_count": 6372,
+  "source_overlay": [
+    "src/common/cloud_bal_joint_transport.f90",
+    "tests/run_unit_tests.sh",
+    "tests/test_pr86_time_response.py",
+    "tests/test_pr91_inactive_ice_store_c14.py",
+    "tools/pr86_time_response.py",
+    "tools/pr91_host_store_trace.py",
+    "tests/test_pr92_bulk_volume_policy.f90",
+    "docs/evidence/pr92_source_store_20261020/historical_c14/cloud_bal_joint_transport.f90"
+  ],
+  "source_manifest_sha256": "b45e1733f9859590cc7204c2e65fdc1e969b2824be587b98ab8a6c4404663299",
+  "all_snapshot_file_hashes_unchanged_after_run": true,
+  "combined_raw_log_sha256": "ecfac5c73045bce894eb1768b90c7d1bb8dc036a391238bf29a9c014f3323f94",
+  "combined_raw_log_bytes": 803931,
+  "completion_marker": "qbalpe fixed-form 72-column compile check passed",
+  "scope": "Canonical run_unit_tests.sh against this exact frozen source snapshot and pinned Intel profile, including PR92 bulk policy O0/O2. New PR92 Python tools tested separately. This is not a clean-build WRF forecast or scientific approval."
+}

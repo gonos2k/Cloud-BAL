@@ -1,0 +1,137 @@
+{
+  "arm": "COUPLED",
+  "c16_vs_c15_completed_prefix": {
+    "exact": true,
+    "fields": 1153,
+    "matched_fields": 1153,
+    "matched_records": 113,
+    "mismatches": [],
+    "records": 113,
+    "steps": 14
+  },
+  "completed_state_audit": {
+    "completed_post_kdm6_status_counts": {
+      "FAIL": 11,
+      "PASS": 3
+    },
+    "completed_post_kdm6_steps": 14,
+    "state_record_count": 87,
+    "state_stage_counts": {
+      "POST_KDM6": 14,
+      "PRE_KDM6": 14,
+      "PRE_RK": 15,
+      "RK_STAGE_END": 44
+    },
+    "status": "FAIL",
+    "strict_source_coefficients": {
+      "cloud_rain_bounds": "source REAL32 coefficients, exact Q/N bounds and both REAL64 and REAL32 rho*N volume checks; no ULP tolerance",
+      "coefficients": {
+        "cloud": {
+          "lambda_max_r32": 500000.0,
+          "lambda_min_r32": 12000.0,
+          "mass": "QC",
+          "number": "NC",
+          "pidn_r32": 523.5988159179688,
+          "power_r32": 3.0
+        },
+        "ice_diagnostic": {
+          "lambda_max_r32": 1820000.0,
+          "lambda_min_r32": 9080.0,
+          "mass": "QI",
+          "number": "NI",
+          "pidn_r32": 1570.79638671875,
+          "power_r32": 3.0
+        },
+        "rain": {
+          "lambda_max_r32": 35000.0,
+          "lambda_min_r32": 961.0,
+          "mass": "QR",
+          "number": "NR",
+          "pidn_r32": 12566.37109375,
+          "power_r32": 3.0
+        }
+      },
+      "gate_stages": [
+        [
+          "POST_KDM6",
+          0
+        ],
+        [
+          "PRE_KDM6",
+          0
+        ],
+        [
+          "RK_STAGE_END",
+          3
+        ]
+      ],
+      "graupel_bounds": "exact QG/BG in [100,900]; no ULP tolerance",
+      "ice": "additional exact source-coefficient diagnostic only; existing native ice acceptance remains separately declared"
+    },
+    "t15_stage_sequence": [
+      "PRE_RK",
+      "RK_STAGE_END",
+      "RK_STAGE_END"
+    ],
+    "trace_payload_sha256": "0f38ba6e6f0f9f085da95ed9cb65a76467731238c4402d923d42a16754be5632",
+    "trace_sha256": "227c6abaa888381faa91affda81a5240d043b8017ba8fbab0819f1725fa96065",
+    "trace_timestep_count": 15
+  },
+  "declared_native_ice_policy_split": {
+    "active_outlier_count": 0,
+    "completed_states": 84,
+    "cutoff": 9.999998977483753e-15,
+    "inactive_outlier_count": 532,
+    "raw_outlier_count": 532,
+    "scope": "Declared inactive ice QI cutoff split; zero active policy violations. This does not change the separate exact source-coefficient audit FAIL.",
+    "status": "PASS",
+    "strict_state_failure_count": 0
+  },
+  "final_completed_step": 14,
+  "first_fatal": "-------------- FATAL CALLED ---------------",
+  "joint_transport": {
+    "all_feasible_through_step14": true,
+    "committed_completed_prefix_rows": 42,
+    "scope": "14 completed steps x 3 RK stages; no T15 completion claimed.",
+    "theta_all_one_through_step14": true
+  },
+  "milestones": {
+    "20s": "present",
+    "300s": "not completed; T15 did not reach POST_KDM6",
+    "320s": "not present; timestep 16 absent",
+    "600s": "not present; timestep 30 absent",
+    "60s": "present"
+  },
+  "processing_errors": [],
+  "provenance": {
+    "candidate_build_receipt_sha256": "45b317d5ed39cfce3cddc745af8fb195ebf9f0cef7d5da2d9535fcb963004193",
+    "candidate_executable_sha256": "73b9805493e4db5350e7382fec3ef403c7ffa61b3fcb79348ef85d19f47f88bf",
+    "candidate_namelist_sha256": "afc366ae884021ae5eb91510f61a137cab30880ba9a81702094e763e5fb52f35",
+    "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+    "input_hash_count": 101,
+    "launch_provenance_sha256": "d4b4934459af2ec9c7409ccf730b947cb20d143707c1c132849f9457315eba7e",
+    "preflight_sha256": "19390d92b739312d82ee40fabe570ab5beb63fdb9adf09b7889acb506097a374",
+    "receipt_sha256": "5506d58dda63ec7ceab5af194d479513e12f76c64c1709a309778991f7da5821",
+    "runner_source_sha256": "298827e4219b7e2bc529e42c2d7aed8c1934b743888755efee242b13d1bc6d96",
+    "same_101_input_hashes_as_c15": true,
+    "same_candidate_wrfinput_wrfbdy_namelist_and_source_receipt_as_c15": true,
+    "same_runner_as_c15": true,
+    "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+    "stage_trace_compressed_bytes": 4441894730,
+    "stage_trace_compressed_sha256": "227c6abaa888381faa91affda81a5240d043b8017ba8fbab0819f1725fa96065",
+    "stage_trace_payload_sha256": "0f38ba6e6f0f9f085da95ed9cb65a76467731238c4402d923d42a16754be5632"
+  },
+  "returncode": 1,
+  "runtime_status": "INCOMPLETE",
+  "schema": "pr92_c16_closed_runtime_arm_summary_v1",
+  "t15_endpoint_scope": {
+    "endpoint_artifact_sha256": "0dbebd206a218a254b46b51ab622fd5f8b65ea2711ed9bbe9084b1afe6eddfde",
+    "post15_present": false,
+    "rk1_target_count": 12,
+    "rk2_target_count": 12,
+    "rk3_present": false,
+    "stage_trace_sha256": "227c6abaa888381faa91affda81a5240d043b8017ba8fbab0819f1725fa96065"
+  },
+  "timestep_count": 14
+}

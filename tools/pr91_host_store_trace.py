@@ -24,7 +24,19 @@ def replace_once(source: str, before: str, after: str, label: str) -> str:
 def instrument_core(source: str, expected_sha256: str = CORE_SHA256) -> str:
     if sha256(source) != expected_sha256:
         raise ValueError("shared core source hash mismatch")
-    if "inactive_q_quantum_adjustment_pairs, inactive_q_quantum_adjustments)" in source:
+    has_bulk_volume_policy = "bulk_volume_absences, bulk_volume_delta)" in source
+    bulk_option = ("bulk_volume_quantum_storage" if "bulk_volume_quantum_storage" in source
+                   else "bulk_volume_quantum_absence")
+    if has_bulk_volume_policy:
+        source = replace_once(
+            source,
+            f"                              {bulk_option}, bulk_volume_absences, bulk_volume_delta)\n",
+            f"                              {bulk_option}, bulk_volume_absences, bulk_volume_delta, &\n"
+            "                              diagnostic_stage, diagnostic_candidate, diagnostic_stored, &\n"
+            "                              diagnostic_adjustment, diagnostic_scale, diagnostic_cells)\n",
+            "bulk-volume joint update optional outputs",
+        )
+    elif "inactive_q_quantum_adjustment_pairs, inactive_q_quantum_adjustments)" in source:
         source = replace_once(
             source,
             "                              inactive_q_quantum_adjustment_pairs, inactive_q_quantum_adjustments)\n",
@@ -52,7 +64,18 @@ def instrument_core(source: str, expected_sha256: str = CORE_SHA256) -> str:
         "    real(real64), intent(out), optional :: diagnostic_scale(:,:)\n"
         "    integer, intent(in), optional :: diagnostic_cells(:)\n\n"
     )
-    if expected_sha256 == CORE_SHA256:
+    if has_bulk_volume_policy:
+        old_declaration = "    real(real64), intent(out), optional :: bulk_volume_delta(2)\n\n"
+        new_declaration = (
+            "    real(real64), intent(out), optional :: bulk_volume_delta(2)\n"
+            "    integer, intent(out), optional :: diagnostic_stage(:,:)\n"
+            "    real(real64), intent(out), optional :: diagnostic_candidate(:,:,:)\n"
+            "    real(real32), intent(out), optional :: diagnostic_stored(:,:,:)\n"
+            "    integer, intent(out), optional :: diagnostic_adjustment(:,:)\n"
+            "    real(real64), intent(out), optional :: diagnostic_scale(:,:)\n"
+            "    integer, intent(in), optional :: diagnostic_cells(:)\n\n"
+        )
+    elif expected_sha256 == CORE_SHA256:
         old_declaration += "\n"
     else:
         old_declaration = (
@@ -73,13 +96,11 @@ def instrument_core(source: str, expected_sha256: str = CORE_SHA256) -> str:
         new_declaration,
         "joint update diagnostic declarations",
     )
-    source = replace_once(
-        source,
-        "    logical :: use_joint_storage, use_constrained_storage, use_quantum_absence, storage_valid\n\n",
-        "    logical :: use_joint_storage, use_constrained_storage, use_quantum_absence, storage_valid\n"
-        "    integer :: local_store_stage\n\n",
-        "joint update diagnostic local",
-    )
+    local_anchor = ("    logical :: use_bulk_volume_absence\n" if has_bulk_volume_policy else
+                    "    logical :: use_joint_storage, use_constrained_storage, use_quantum_absence, storage_valid\n")
+    source = replace_once(source, local_anchor + "\n",
+                          local_anchor + "    integer :: local_store_stage\n\n",
+                          "joint update diagnostic local")
     source = replace_once(source,
         "      real(real64) :: cell_volume_bounds(2)\n      integer :: i, p\n",
         "      real(real64) :: cell_volume_bounds(2)\n      integer :: i, p, trace_cell\n",
@@ -150,13 +171,24 @@ def instrument_core(source: str, expected_sha256: str = CORE_SHA256) -> str:
     end if
 """,
         "sparse trace array validation")
-    source = replace_once(
-        source,
-        "strict_mass_ratio=pair_has_strict_mass(p))",
-        "strict_mass_ratio=pair_has_strict_mass(p), &\n"
-        "                                      failure_stage=local_store_stage)",
-        "strict-mass store call",
-    )
+    if has_bulk_volume_policy:
+        source = replace_once(
+            source,
+            f"allow_{bulk_option}= &\n"
+            "                                          use_bulk_volume_absence .and. p==4)",
+            f"allow_{bulk_option}= &\n"
+            "                                          use_bulk_volume_absence .and. p==4, &\n"
+            "                                      failure_stage=local_store_stage)",
+            "bulk-volume strict-mass store call",
+        )
+    else:
+        source = replace_once(
+            source,
+            "strict_mass_ratio=pair_has_strict_mass(p))",
+            "strict_mass_ratio=pair_has_strict_mass(p), &\n"
+            "                                      failure_stage=local_store_stage)",
+            "strict-mass store call",
+        )
     anchor = """            if (.not. storage_valid) then
               q_candidate(i,p) = -1.0_real32
               n_candidate(i,p) = -1.0_real32

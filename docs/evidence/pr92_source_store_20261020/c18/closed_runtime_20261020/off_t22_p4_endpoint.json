@@ -1,0 +1,103 @@
+{
+  "schema": "pr92_c18_t22_p4_fixed_endpoint_v1",
+  "arm": "OFF",
+  "trace_sha256": "813bccf4c4f98fe7414e4941ce98ee69b81c88be0c20d309483ff129538742c6",
+  "point_i_j_k": [
+    2,
+    252,
+    14
+  ],
+  "stages": {
+    "RK1": {
+      "step": 22,
+      "stage": "RK_STAGE_END",
+      "rkstep": 1,
+      "i_j_k": [
+        2,
+        252,
+        14
+      ],
+      "QG": {
+        "bits32": "00000000",
+        "value": 0.0
+      },
+      "BG": {
+        "bits32": "00000000",
+        "value": 0.0
+      }
+    },
+    "RK2": {
+      "step": 22,
+      "stage": "RK_STAGE_END",
+      "rkstep": 2,
+      "i_j_k": [
+        2,
+        252,
+        14
+      ],
+      "QG": {
+        "bits32": "00000247",
+        "value": 8.169570047013684e-43
+      },
+      "BG": {
+        "bits32": "00000001",
+        "value": 1.401298464324817e-45
+      }
+    },
+    "RK3": {
+      "step": 22,
+      "stage": "RK_STAGE_END",
+      "rkstep": 3,
+      "i_j_k": [
+        2,
+        252,
+        14
+      ],
+      "QG": {
+        "bits32": "00000384",
+        "value": 1.2611686178923354e-42
+      },
+      "BG": {
+        "bits32": "00000001",
+        "value": 1.401298464324817e-45
+      }
+    },
+    "PRE_KDM6": {
+      "step": 22,
+      "stage": "PRE_KDM6",
+      "rkstep": 0,
+      "i_j_k": [
+        2,
+        252,
+        14
+      ],
+      "QG": {
+        "bits32": "00000384",
+        "value": 1.2611686178923354e-42
+      },
+      "BG": {
+        "bits32": "00000001",
+        "value": 1.401298464324817e-45
+      }
+    },
+    "POST_KDM6": {
+      "step": 22,
+      "stage": "POST_KDM6",
+      "rkstep": 0,
+      "i_j_k": [
+        2,
+        252,
+        14
+      ],
+      "QG": {
+        "bits32": "00000000",
+        "value": 0.0
+      },
+      "BG": {
+        "bits32": "00000000",
+        "value": 0.0
+      }
+    }
+  },
+  "scope": "Actual trace QG/BG at the requested point. T22 is complete; these are actual state values, with RK3, PRE_KDM6, and POST_KDM6 retained separately."
+}

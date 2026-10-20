@@ -1,0 +1,57 @@
+{
+  "common_prefix": {
+    "c15_vs_c14": "Previously receipt-bound exact for T1\u2013T14 in both arms: 113 records/1,153 fields.",
+    "c16_vs_c15": "Exact for T1\u2013T14 in both arms: 113 records/1,153 fields, no byte mismatches.",
+    "transitive_conclusion": "C16 T1\u2013T14 is byte-identical to C14 in both arms; C16 adds only the partial T15 prefix."
+  },
+  "evidence_directory": "docs/evidence/pr92_source_store_20261020/c16/closed_runtime_20261020",
+  "ice_scopes": {
+    "declared_native_ice_cutoff": "PASS in both arms: 84 completed states each, 0 active outliers beyond 8 REAL32 ulps; OFF 530 and COUPLED 532 raw ice outliers are all below/equal declared inactive cutoff. The declared-policy result does not erase the generic exact-coefficient FAIL.",
+    "exact_source_coefficient_audit": "Generic FAIL retained in both arms: 3 of 14 completed POST_KDM6 steps pass and 11 fail the stricter exact-source coefficient audit."
+  },
+  "identified_stop_cause": "Root investigation attributed the RK3 stop to the retry-selection probe omitting bulk opt-in/outs, leaving failed_pairs4 true and blocking cloud source-first retry. C17 is the planned probe-only correction.",
+  "milestones": {
+    "300_seconds": "Not completed: no T15 POST_KDM6 state.",
+    "320_seconds": "Not reached: step 16 absent.",
+    "600_seconds": "Not reached: step 30 absent.",
+    "theta1_joint_rows": {
+      "all_observed_rows_feasible": true,
+      "all_observed_theta_equal_one": true,
+      "expected_for_30_completed_steps": 90,
+      "missing_rows_due_incomplete_run": 48,
+      "observed_committed_rows_through_step14": 42
+    }
+  },
+  "partial_activity": {
+    "artifact": "area_activity_through_step14.json",
+    "coupled_over_off_ratios": {
+      "AUT": {
+        "applied": 0.9997917313916453,
+        "deferred": 0.99992649531991,
+        "proposed": 0.9998935137718725
+      },
+      "G": {
+        "applied": 1.000046370781048,
+        "deferred": 0.9997044263365709,
+        "proposed": 0.9997688414221905
+      },
+      "NG": {
+        "applied": 0.9999244207401602,
+        "deferred": 1.000631147545964,
+        "proposed": 1.0000457035220338
+      }
+    },
+    "history_coverage": "C16 histories contain T0\u2013T240 and are byte-identical to same-arm C14 histories; T260/T280 activity is joined to same-run C16 stages/summary but has no new history record beyond T240.",
+    "scope": "Actual C16 area-weighted half-L1 request activity over completed steps 1\u201314 (20\u2013280 s); not a 600s endpoint budget."
+  },
+  "schema": "pr92_c16_closed_runtime_summary_v1",
+  "scope": "Paired C16 OFF/COUPLED same-600s-request runs closed INCOMPLETE after 14 POST_KDM6 timesteps, with T15 RK1 and RK2 committed. No T15 RK3 or POST15 state. No native reruns were performed for this audit.",
+  "t15_endpoints": {
+    "both_arms": {
+      "post15": "Absent.",
+      "rk1": "12 target QG/BG values extracted; all 24 values per arm match C15 committed RK1 bits exactly.",
+      "rk2": "12 target QG/BG values extracted from C16 committed RK2; no C15 committed RK2 comparison available.",
+      "rk3": "Absent."
+    }
+  }
+}

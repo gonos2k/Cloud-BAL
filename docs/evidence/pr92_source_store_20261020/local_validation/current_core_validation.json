@@ -1,0 +1,35 @@
+{
+  "profiles": [
+    {
+      "profile": "O0",
+      "scratch": "/var/tmp/pr92_current_core_validation.3iCM1j/O0",
+      "tests": [
+        "test_joint_qnb_transport",
+        "test_pr92_bulk_volume_policy"
+      ],
+      "status": "PASS",
+      "combined_log": "current_core_O0.log"
+    },
+    {
+      "profile": "O2",
+      "scratch": "/var/tmp/pr92_current_core_validation.3iCM1j/O2",
+      "tests": [
+        "test_joint_qnb_transport",
+        "test_pr92_bulk_volume_policy"
+      ],
+      "status": "PASS",
+      "combined_log": "current_core_O2.log"
+    }
+  ],
+  "source_sha256": {
+    "src/common/cloud_bal_joint_transport.f90": "8ce23e675a23283fb047a88f6ca0d26444ed2f56a9e7dfdc872a1602a6f1d6bf",
+    "tests/test_joint_qnb_transport.f90": "cd77f51722a5e2612aad674056ad5cf3643339b9c3b3b3cf5b31c34ba33148bc",
+    "tests/test_pr92_bulk_volume_policy.f90": "69f11fb1fca0ae6a1d6cfefa368fb6f85fd1c890d02f4d8cbc893d5158b02b64",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "compiler": "pinned ifx 2026.0 strict profiles; fresh scratch working directories",
+  "notes": [
+    "O0 array-temporary warnings in existing store interfaces retained in complete logs",
+    "No GNU or ifort substitution; component validation, not whole WRF clean build"
+  ]
+}

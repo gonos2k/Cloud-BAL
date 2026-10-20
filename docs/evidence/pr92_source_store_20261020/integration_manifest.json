@@ -1,0 +1,77 @@
+{
+  "base_commit": "71b8c1d5dae181c163d04eabac9cf8f80134f417",
+  "candidate_executable_sha256": "32a324d49366487f68ec1e6e687a465ef2533bd9163e2fe09733e83cc2272c16",
+  "candidate_identity": "PR92-C18-bounded",
+  "candidate_scientific_gates": {
+    "independent_observation_agreement": "OPEN",
+    "native_mass_wind_balance": "OPEN",
+    "reduced_initialization_shock": "OPEN",
+    "water_energy_closure": "OPEN"
+  },
+  "closed_runtime_receipts": [
+    {
+      "arm": "OFF",
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "final_completed_step": 23,
+      "input_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "launch_provenance_sha256": "d4b4934459af2ec9c7409ccf730b947cb20d143707c1c132849f9457315eba7e",
+      "path": "docs/evidence/pr92_source_store_20261020/c18/off/receipt.json",
+      "preflight_sha256": "a492e4ba7148662dd0b32ff6a07459fc46f4e6012961e1492bb30e47c1671590",
+      "returncode": 128,
+      "sha256": "22888b80b072cac26f91366ab087ecd169ae073f2556ea672b706564fee5bc75",
+      "status": "INCOMPLETE"
+    },
+    {
+      "arm": "COUPLED",
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "final_completed_step": 23,
+      "input_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "launch_provenance_sha256": "d4b4934459af2ec9c7409ccf730b947cb20d143707c1c132849f9457315eba7e",
+      "path": "docs/evidence/pr92_source_store_20261020/c18/coupled/receipt.json",
+      "preflight_sha256": "064b886103d5857d20a3da6c946ed723594d307bd5c271dafb2c9bd8e128442e",
+      "returncode": 128,
+      "sha256": "cda8f4fedad8e5ba2eb06d9f180f089879f8caa2ef4bca93af677f0fb16ed091",
+      "status": "INCOMPLETE"
+    }
+  ],
+  "completed_state_audits": [
+    {
+      "arm": "OFF",
+      "declared_policy": {
+        "active_outlier_count": 0,
+        "completed_states": 138,
+        "cutoff_real32": 9.999998977483753e-15,
+        "inactive_outlier_count": 1450,
+        "scope": "Completed PRE_RK, RK1/2/3, PRE_KDM6, POST_KDM6 states for T1-T23 only; T24 partial states excluded. Active policy tests only QI/NI source-bound outliers beyond 8 REAL32 ULPs; generic exact source audit remains independent.",
+        "status": "PASS",
+        "strict_state_failure_count": 0
+      },
+      "generic_exact_source_status": "FAIL",
+      "path": "docs/evidence/pr92_source_store_20261020/c18/closed_runtime_20261020/off_closed_runtime_summary.json",
+      "scope": "Declared ice-only inactive cutoff and 8-ULP active policy over completed states. The independent generic exact-source audit, including rain, remains FAIL; no all-species exact PASS is claimed.",
+      "sha256": "dc05e7c14238befee1f8eb84c0805019d571ee62992f28fc8bf4e517f66a090d"
+    },
+    {
+      "arm": "COUPLED",
+      "declared_policy": {
+        "active_outlier_count": 0,
+        "completed_states": 138,
+        "cutoff_real32": 9.999998977483753e-15,
+        "inactive_outlier_count": 1280,
+        "scope": "Completed PRE_RK, RK1/2/3, PRE_KDM6, POST_KDM6 states for T1-T23 only; T24 partial states excluded. Active policy tests only QI/NI source-bound outliers beyond 8 REAL32 ULPs; generic exact source audit remains independent.",
+        "status": "PASS",
+        "strict_state_failure_count": 0
+      },
+      "generic_exact_source_status": "FAIL",
+      "path": "docs/evidence/pr92_source_store_20261020/c18/closed_runtime_20261020/coupled_closed_runtime_summary.json",
+      "scope": "Declared ice-only inactive cutoff and 8-ULP active policy over completed states. The independent generic exact-source audit, including rain, remains FAIL; no all-species exact PASS is claimed.",
+      "sha256": "8a0ea2e6b3a912d5a7de1f770917f066904feb7b25d1185fde17feddc379d973"
+    }
+  ],
+  "physical_approval": "FAIL_OPEN",
+  "research_layout": "selected-object pinned Intel partial-host; 1 domain/rank/thread/tile",
+  "schema": "pr92_source_store_integration_v1",
+  "science_evidence_identity": "C14 response maps; selected PR83 QC vertical source-form replay. C18 own 23-step area activity and completed-state audit are receipt-bound. Same-arm C18/C17 histories are byte-identical through T420, and the first 14 stage-trace timesteps match; these do not establish 600-second completion.",
+  "source_commit": null,
+  "validation_sha256": "d864c751ff82b3eb148c1f566ff958d51daca8f43e848740cf4ab6fad90bf891"
+}
