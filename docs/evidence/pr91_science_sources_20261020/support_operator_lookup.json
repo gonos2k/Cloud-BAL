@@ -1,7 +1,7 @@
 {
   "schema": "pr91_source_bound_transfer_operator_lookup_v1",
-  "status": "FORWARD_OPERATOR_SOURCE_AND_SETTINGS_RECOVERED; TARGET_SPECIFIC_WEIGHTS_NOT_PERSISTED",
-  "scope": "Read-only inventory of existing PR81 candidate -> LAPSPREP/WPS -> metgrid -> real chain. No mapping or model run performed.",
+  "status": "QC_HORIZONTAL_COMPONENT_REPLAYED_AT_16_TARGETS_X_18_PRESSURE_LEVELS; OTHER_FIELDS_AND_REAL_ETA_OPEN",
+  "scope": "Read-only inventory of existing PR81 candidate -> LAPSPREP/WPS -> metgrid -> real chain, extended with isolated direct WPS source-operator replay for the preserved LAPS QC field. No full WPS, real.exe, or model run performed.",
   "candidate_to_lapsprep": {
     "source": "src/common/cloud_bal_wps_adapter.f90",
     "lines": "756-852",
@@ -44,8 +44,40 @@
       "VV": "sixteen_pt+four_pt+average_4pt (output_stagger=V)",
       "QV_QC_QI_QR_QS_QG": "four_pt+average_4pt"
     },
-    "horizontal_weights": "Not written as a target/source coefficient table in the retained receipt. Their exact nonzero support depends on the restored WPS code, source/target coordinate arrays, source coverage, field masks/missing values, and ordered fallback selection. These inputs are source-bound and suggest weights can be recovered by tracing/replaying the existing WPS code; do not replace that method with guessed offsets or nearest-cell mapping.",
-    "vertical_note": "WPS input carries pressure-level fields and metgrid output has pressure levels; the remaining pressure-to-native eta-level transformation occurs in real.exe. The retained real namelist/executable receipt does not contain per-native-level vertical coefficients or source influence membership."
+    "horizontal_weights": "For LAPS QC, actual v5 source header geometry and fresh direct interp_sequence replay now produce 36 nonzero REAL32 four_pt source-to-target links from the original 3x3 support, at 16 affected mass-grid targets and 18 exact pressure levels; all 288 direct source-only values match met_em QC bitwise. Links, coordinates, corner weights and inverse support are persisted in docs/evidence/pr91_science_sources_20261020/horizontal_replay/. Other fields retain separate active interpolation options, masks, priorities and staggering; their target-specific links remain uncomputed.",
+    "vertical_note": "WPS input carries pressure-level fields and metgrid output has pressure levels; the remaining pressure-to-native eta-level transformation occurs in real.exe. The retained real namelist/executable receipt does not contain per-native-level vertical coefficients or source influence membership.",
+    "qc_horizontal_replay": {
+      "artifact": "docs/evidence/pr91_science_sources_20261020/horizontal_replay/direct_interp_288.json",
+      "archive": "docs/evidence/pr91_science_sources_20261020/horizontal_replay/replay_18level/",
+      "source_record_sha256": "d73b3356430b64b98997b720e9e7549033ac9a5e4d35be798dff2d1dfdb0dbce",
+      "source_header_earth_radius_m": 6371229.00390625,
+      "source_pressure_support_pa": [
+        95000,
+        90000,
+        85000,
+        80000,
+        75000,
+        70000,
+        65000,
+        60000,
+        55000,
+        50000,
+        45000,
+        40000,
+        35000,
+        30000,
+        25000,
+        20000,
+        15000,
+        10000
+      ],
+      "target_cell_count": 16,
+      "direct_interpolation_count": 288,
+      "bitwise_matches": 288,
+      "wrong_radius_negative_control_matches": 65,
+      "wrong_radius_negative_control_mismatches": 223,
+      "scope": "QC horizontal component only; not proof that QC alone supplies final met_em or a native eta influence stencil."
+    }
   },
   "real_vertical_transfer": {
     "settings": "/var/tmp/pr82_same13_real_boundary_candidate.final2_20261012/namelist.input (p_top_requested=5000); handoff docs lines 21-22",
@@ -53,12 +85,12 @@
   },
   "native_support_union_proposal": {
     "method": "For a future source-bound derivation, compose the exact active horizontal coefficient rows from the retained WPS code for each relevant field/stagger and the exact real pressure-to-eta vertical coefficient rows; take the union of original pressure-grid support indices with nonzero composed coefficients for each native target. Honor missing/fill/terrain branches and preserve the original 162-cell mask.",
-    "current_status": "OPEN: exact target-specific horizontal coefficient rows were not serialized, and real vertical influence rows were not recovered. Existing code/settings make the forward path reproducible in principle, but no source-to-native influence union is currently certified. Do not infer nearest cells or same indices."
+    "current_status": "QC source horizontal component is now bounded for 16 target columns \u00d7 18 pressure levels. Source-to-native union remains OPEN because real.exe pressure-to-hybrid influence is unreconstructed and other field-specific horizontal rows (TT/QV/U/V/geopotential, as applicable) are not mapped. Do not infer nearest cells, same-index native correspondence, or a full native footprint."
   },
   "evidence_limitations": [
     "The actual forward metgrid source, active table, same-time namelist and output geometry are retained; this is stronger than having only executable settings.",
     "The PR82 forward run readback preserves exploratory offset comparisons only; it selected no source offset and serialized no transfer-weight rows.",
     "The candidate WPS exact readback is writer fidelity on the pressure grid, not a target-native influence map.",
-    "No new interpolation, nearest-neighbor mapping, or weight reconstruction was attempted."
+    "A fresh pinned-ifx isolated direct WPS interp_sequence replay was performed for QC; this is not a full process_domain/metgrid execution. The extracted 21 QC records, 288 target observations, replay programs, outputs, compiler profile, and source modules are archived. Other fields and native vertical composition remain open."
   ]
 }
