@@ -1,0 +1,203 @@
+{
+  "comparisons": {
+    "coupled": {
+      "arm": "COUPLED",
+      "bound_step1_prefix": {
+        "bytes": 883241700,
+        "first_timestep2_seen": true,
+        "record_count": 9,
+        "scope": "Exact serialized state and PBL trace records with timestep <=1, stopping at the first timestep-2 record or at EOF if this one-step attempt has no timestep-2 record.",
+        "sha256": "d4877b247c3aca320fd86b1f2d7fbce9a7d622bb477b841525908d6b16ca3c2b"
+      },
+      "initial_step1_prefix": {
+        "bytes": 883241700,
+        "first_timestep2_seen": true,
+        "record_count": 9,
+        "scope": "Exact serialized state and PBL trace records with timestep <=1, stopping at the first timestep-2 record or at EOF if this one-step attempt has no timestep-2 record.",
+        "sha256": "d4877b247c3aca320fd86b1f2d7fbce9a7d622bb477b841525908d6b16ca3c2b"
+      },
+      "note": "Equal step-1 trace prefixes support only this run-pair comparison. They do not establish C18 source-prefix identity or historical causality.",
+      "receipts": {
+        "bound": {
+          "path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/receipt.json",
+          "sha256": "03ff4396ff4d6eed3978a8481dd11120aad30d3b59bc6af89bb20ebcf3d9e418",
+          "status": "COMPLETE"
+        },
+        "initial": {
+          "path": "/var/tmp/pr93_COUPLED_600s_c4_execution_20261020/receipt.json",
+          "sha256": "f1f13fad86d8dd90d4eb2fde1dc997a3b68e88b12729c87f0c6c50a37fff9c74",
+          "status": "INCOMPLETE"
+        }
+      },
+      "same_source_and_input_pins": false,
+      "source_and_input_pins": {
+        "candidate_build": {
+          "bound": {
+            "executable_path": "/var/tmp/pr93_native_build_c4_20261020/wrf_pr87_overlay.exe",
+            "executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+            "identity": "PR87 source-mapped partial native overlay; not a clean build",
+            "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+            "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+            "receipt_path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+            "receipt_sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669",
+            "schema": "pr87_native_overlay_build_v1",
+            "status": "PASS_OVERLAY_BUILD"
+          },
+          "equal": true,
+          "initial": {
+            "executable_path": "/var/tmp/pr93_native_build_c4_20261020/wrf_pr87_overlay.exe",
+            "executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+            "identity": "PR87 source-mapped partial native overlay; not a clean build",
+            "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+            "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+            "receipt_path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+            "receipt_sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669",
+            "schema": "pr87_native_overlay_build_v1",
+            "status": "PASS_OVERLAY_BUILD"
+          }
+        },
+        "candidate_namelist_sha256": {
+          "bound": "afc366ae884021ae5eb91510f61a137cab30880ba9a81702094e763e5fb52f35",
+          "equal": true,
+          "initial": "afc366ae884021ae5eb91510f61a137cab30880ba9a81702094e763e5fb52f35"
+        },
+        "candidate_wrfbdy_sha256": {
+          "bound": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+          "equal": true,
+          "initial": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7"
+        },
+        "candidate_wrfinput_sha256": {
+          "bound": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+          "equal": true,
+          "initial": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
+        },
+        "executed_executable_sha256": {
+          "bound": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+          "equal": true,
+          "initial": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be"
+        },
+        "expected_executed_executable_sha256": {
+          "bound": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+          "equal": true,
+          "initial": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be"
+        },
+        "launch_runner_source_sha256": {
+          "bound": "c0eb435d65f29774385ea2bc0aa032a0d03dc497d592f771ef9d19247eeb6b22",
+          "equal": false,
+          "initial": "ddaf686f7efe14c7b66686bb1416c3ac3d6cf26d5a8999f94f7dc4311a1ff68c"
+        },
+        "source_receipt_sha256": {
+          "bound": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+          "equal": true,
+          "initial": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675"
+        },
+        "source_receipt_unchanged": {
+          "bound": null,
+          "equal": true,
+          "initial": null
+        }
+      },
+      "status": "MATCH"
+    },
+    "off": {
+      "arm": "OFF",
+      "bound_step1_prefix": {
+        "bytes": 883241700,
+        "first_timestep2_seen": true,
+        "record_count": 9,
+        "scope": "Exact serialized state and PBL trace records with timestep <=1, stopping at the first timestep-2 record or at EOF if this one-step attempt has no timestep-2 record.",
+        "sha256": "34aba43561bdcfcd2c1da2c43c2a7644b188f220895b54aab4f3dfa6a1baaafa"
+      },
+      "initial_step1_prefix": {
+        "bytes": 883241700,
+        "first_timestep2_seen": true,
+        "record_count": 9,
+        "scope": "Exact serialized state and PBL trace records with timestep <=1, stopping at the first timestep-2 record or at EOF if this one-step attempt has no timestep-2 record.",
+        "sha256": "34aba43561bdcfcd2c1da2c43c2a7644b188f220895b54aab4f3dfa6a1baaafa"
+      },
+      "note": "Equal step-1 trace prefixes support only this run-pair comparison. They do not establish C18 source-prefix identity or historical causality.",
+      "receipts": {
+        "bound": {
+          "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/receipt.json",
+          "sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a",
+          "status": "COMPLETE"
+        },
+        "initial": {
+          "path": "/var/tmp/pr93_OFF_600s_c4_execution_20261020/receipt.json",
+          "sha256": "de62cb50ce4d63393c81b58a42ee40dbca641ba522906e763588b8e9d59d3734",
+          "status": "INCOMPLETE"
+        }
+      },
+      "same_source_and_input_pins": false,
+      "source_and_input_pins": {
+        "candidate_build": {
+          "bound": {
+            "executable_path": "/var/tmp/pr93_native_build_c4_20261020/wrf_pr87_overlay.exe",
+            "executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+            "identity": "PR87 source-mapped partial native overlay; not a clean build",
+            "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+            "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+            "receipt_path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+            "receipt_sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669",
+            "schema": "pr87_native_overlay_build_v1",
+            "status": "PASS_OVERLAY_BUILD"
+          },
+          "equal": true,
+          "initial": {
+            "executable_path": "/var/tmp/pr93_native_build_c4_20261020/wrf_pr87_overlay.exe",
+            "executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+            "identity": "PR87 source-mapped partial native overlay; not a clean build",
+            "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+            "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+            "receipt_path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+            "receipt_sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669",
+            "schema": "pr87_native_overlay_build_v1",
+            "status": "PASS_OVERLAY_BUILD"
+          }
+        },
+        "candidate_namelist_sha256": {
+          "bound": "afc366ae884021ae5eb91510f61a137cab30880ba9a81702094e763e5fb52f35",
+          "equal": true,
+          "initial": "afc366ae884021ae5eb91510f61a137cab30880ba9a81702094e763e5fb52f35"
+        },
+        "candidate_wrfbdy_sha256": {
+          "bound": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+          "equal": true,
+          "initial": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7"
+        },
+        "candidate_wrfinput_sha256": {
+          "bound": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+          "equal": true,
+          "initial": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200"
+        },
+        "executed_executable_sha256": {
+          "bound": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+          "equal": true,
+          "initial": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be"
+        },
+        "expected_executed_executable_sha256": {
+          "bound": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+          "equal": true,
+          "initial": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be"
+        },
+        "launch_runner_source_sha256": {
+          "bound": "c0eb435d65f29774385ea2bc0aa032a0d03dc497d592f771ef9d19247eeb6b22",
+          "equal": false,
+          "initial": "ddaf686f7efe14c7b66686bb1416c3ac3d6cf26d5a8999f94f7dc4311a1ff68c"
+        },
+        "source_receipt_sha256": {
+          "bound": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+          "equal": true,
+          "initial": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e"
+        },
+        "source_receipt_unchanged": {
+          "bound": null,
+          "equal": true,
+          "initial": null
+        }
+      },
+      "status": "MATCH"
+    }
+  },
+  "schema": "pr93_initial_step1_prefix_comparison_v1"
+}

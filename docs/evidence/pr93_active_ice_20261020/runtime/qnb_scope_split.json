@@ -1,0 +1,385 @@
+{
+  "arms": {
+    "coupled": {
+      "active_ice_policy_status": "PASS",
+      "generic_qnb_status": "FAIL",
+      "stage_class_split": {
+        "endpoints": {
+          "active_ice_policy_split": {
+            "active_beyond_8ulp": 0,
+            "active_exact_outliers": 83,
+            "inactive_beyond_8ulp": 861,
+            "inactive_exact_outliers": 18434
+          },
+          "actual_field_negative_nonfinite_cells": {},
+          "actual_pair_negative_orphan_nonfinite_cells": {
+            "cloud_negative_mass": 0,
+            "cloud_negative_moment": 0,
+            "cloud_nonfinite_mass_or_moment": 0,
+            "cloud_positive_mass_zero_moment": 0,
+            "cloud_positive_moment_zero_mass": 0,
+            "graupel_negative_mass": 0,
+            "graupel_negative_moment": 0,
+            "graupel_nonfinite_mass_or_moment": 0,
+            "graupel_positive_mass_zero_moment": 0,
+            "graupel_positive_moment_zero_mass": 0,
+            "ice_negative_mass": 0,
+            "ice_negative_moment": 0,
+            "ice_nonfinite_mass_or_moment": 0,
+            "ice_positive_mass_zero_moment": 0,
+            "ice_positive_moment_zero_mass": 0,
+            "rain_negative_mass": 0,
+            "rain_negative_moment": 0,
+            "rain_nonfinite_mass_or_moment": 0,
+            "rain_positive_mass_zero_moment": 0,
+            "rain_positive_moment_zero_mass": 0
+          },
+          "beyond8_under_generic_policy_bounds": {
+            "cloud_beyond8_generic_policy_cells": 0,
+            "graupel_beyond8_generic_policy_cells": 0,
+            "ice_beyond8_generic_policy_cells": 861,
+            "rain_beyond8_generic_policy_cells": 0
+          },
+          "exact_outside_under_generic_policy_bounds": {
+            "cloud_exact_outside_generic_policy_cells": 0,
+            "graupel_exact_outside_generic_policy_cells": 0,
+            "ice_exact_outside_generic_policy_cells": 18517,
+            "rain_exact_outside_generic_policy_cells": 351
+          },
+          "generic_qnb_failed_states": 72,
+          "generic_qnb_failed_states_by_category": {
+            "pairs_failed_states": 72
+          },
+          "number_conversion_failure_counts": {
+            "BG_negative_input": 0,
+            "BG_nonfinite_input": 0,
+            "BG_nonfinite_or_nonpositive_dry_density": 0,
+            "BG_nonfinite_result": 0,
+            "BG_overflow_guard": 0,
+            "BG_positive_to_zero": 0,
+            "BG_product_at_or_below_half_minimum_subnormal": 0,
+            "NC_negative_input": 0,
+            "NC_nonfinite_input": 0,
+            "NC_nonfinite_or_nonpositive_dry_density": 0,
+            "NC_nonfinite_result": 0,
+            "NC_overflow_guard": 0,
+            "NC_positive_to_zero": 0,
+            "NC_product_at_or_below_half_minimum_subnormal": 0,
+            "NI_negative_input": 0,
+            "NI_nonfinite_input": 0,
+            "NI_nonfinite_or_nonpositive_dry_density": 0,
+            "NI_nonfinite_result": 0,
+            "NI_overflow_guard": 0,
+            "NI_positive_to_zero": 0,
+            "NI_product_at_or_below_half_minimum_subnormal": 0,
+            "NN_negative_input": 0,
+            "NN_nonfinite_input": 0,
+            "NN_nonfinite_or_nonpositive_dry_density": 0,
+            "NN_nonfinite_result": 0,
+            "NN_overflow_guard": 0,
+            "NN_positive_to_zero": 0,
+            "NN_product_at_or_below_half_minimum_subnormal": 0,
+            "NR_negative_input": 0,
+            "NR_nonfinite_input": 0,
+            "NR_nonfinite_or_nonpositive_dry_density": 0,
+            "NR_nonfinite_result": 0,
+            "NR_overflow_guard": 0,
+            "NR_positive_to_zero": 0,
+            "NR_product_at_or_below_half_minimum_subnormal": 0
+          },
+          "state_count": 90
+        },
+        "predictors": {
+          "active_ice_policy_split": {
+            "active_beyond_8ulp": 0,
+            "active_exact_outliers": 82,
+            "inactive_beyond_8ulp": 846,
+            "inactive_exact_outliers": 18088
+          },
+          "actual_field_negative_nonfinite_cells": {
+            "Q_negative_cells": 1528,
+            "Q_nonfinite_cells": 0
+          },
+          "actual_pair_negative_orphan_nonfinite_cells": {
+            "cloud_negative_mass": 0,
+            "cloud_negative_moment": 0,
+            "cloud_nonfinite_mass_or_moment": 0,
+            "cloud_positive_mass_zero_moment": 0,
+            "cloud_positive_moment_zero_mass": 0,
+            "graupel_negative_mass": 0,
+            "graupel_negative_moment": 0,
+            "graupel_nonfinite_mass_or_moment": 0,
+            "graupel_positive_mass_zero_moment": 0,
+            "graupel_positive_moment_zero_mass": 0,
+            "ice_negative_mass": 0,
+            "ice_negative_moment": 0,
+            "ice_nonfinite_mass_or_moment": 0,
+            "ice_positive_mass_zero_moment": 0,
+            "ice_positive_moment_zero_mass": 0,
+            "rain_negative_mass": 0,
+            "rain_negative_moment": 0,
+            "rain_nonfinite_mass_or_moment": 0,
+            "rain_positive_mass_zero_moment": 0,
+            "rain_positive_moment_zero_mass": 0
+          },
+          "beyond8_under_generic_policy_bounds": {
+            "cloud_beyond8_generic_policy_cells": 0,
+            "graupel_beyond8_generic_policy_cells": 0,
+            "ice_beyond8_generic_policy_cells": 846,
+            "rain_beyond8_generic_policy_cells": 0
+          },
+          "exact_outside_under_generic_policy_bounds": {
+            "cloud_exact_outside_generic_policy_cells": 0,
+            "graupel_exact_outside_generic_policy_cells": 0,
+            "ice_exact_outside_generic_policy_cells": 18170,
+            "rain_exact_outside_generic_policy_cells": 324
+          },
+          "generic_qnb_failed_states": 87,
+          "generic_qnb_failed_states_by_category": {
+            "fields_failed_states": 87,
+            "pairs_failed_states": 73
+          },
+          "number_conversion_failure_counts": {
+            "BG_negative_input": 0,
+            "BG_nonfinite_input": 0,
+            "BG_nonfinite_or_nonpositive_dry_density": 0,
+            "BG_nonfinite_result": 0,
+            "BG_overflow_guard": 0,
+            "BG_positive_to_zero": 0,
+            "BG_product_at_or_below_half_minimum_subnormal": 0,
+            "NC_negative_input": 0,
+            "NC_nonfinite_input": 0,
+            "NC_nonfinite_or_nonpositive_dry_density": 0,
+            "NC_nonfinite_result": 0,
+            "NC_overflow_guard": 0,
+            "NC_positive_to_zero": 0,
+            "NC_product_at_or_below_half_minimum_subnormal": 0,
+            "NI_negative_input": 0,
+            "NI_nonfinite_input": 0,
+            "NI_nonfinite_or_nonpositive_dry_density": 0,
+            "NI_nonfinite_result": 0,
+            "NI_overflow_guard": 0,
+            "NI_positive_to_zero": 0,
+            "NI_product_at_or_below_half_minimum_subnormal": 0,
+            "NN_negative_input": 0,
+            "NN_nonfinite_input": 0,
+            "NN_nonfinite_or_nonpositive_dry_density": 0,
+            "NN_nonfinite_result": 0,
+            "NN_overflow_guard": 0,
+            "NN_positive_to_zero": 0,
+            "NN_product_at_or_below_half_minimum_subnormal": 0,
+            "NR_negative_input": 0,
+            "NR_nonfinite_input": 0,
+            "NR_nonfinite_or_nonpositive_dry_density": 0,
+            "NR_nonfinite_result": 0,
+            "NR_overflow_guard": 0,
+            "NR_positive_to_zero": 0,
+            "NR_product_at_or_below_half_minimum_subnormal": 0
+          },
+          "state_count": 90
+        }
+      },
+      "strict_source_endpoint_gate": {
+        "failure_count": 0,
+        "scope": "Existing PR87 exact source coefficient violations at RK3, PRE_KDM6, POST_KDM6 only; no ULP slack. Exact ice counts are diagnostic, not this generic gate.",
+        "status": "PASS"
+      }
+    },
+    "off": {
+      "active_ice_policy_status": "PASS",
+      "generic_qnb_status": "FAIL",
+      "stage_class_split": {
+        "endpoints": {
+          "active_ice_policy_split": {
+            "active_beyond_8ulp": 0,
+            "active_exact_outliers": 78,
+            "inactive_beyond_8ulp": 921,
+            "inactive_exact_outliers": 18229
+          },
+          "actual_field_negative_nonfinite_cells": {},
+          "actual_pair_negative_orphan_nonfinite_cells": {
+            "cloud_negative_mass": 0,
+            "cloud_negative_moment": 0,
+            "cloud_nonfinite_mass_or_moment": 0,
+            "cloud_positive_mass_zero_moment": 0,
+            "cloud_positive_moment_zero_mass": 0,
+            "graupel_negative_mass": 0,
+            "graupel_negative_moment": 0,
+            "graupel_nonfinite_mass_or_moment": 0,
+            "graupel_positive_mass_zero_moment": 0,
+            "graupel_positive_moment_zero_mass": 0,
+            "ice_negative_mass": 0,
+            "ice_negative_moment": 0,
+            "ice_nonfinite_mass_or_moment": 0,
+            "ice_positive_mass_zero_moment": 0,
+            "ice_positive_moment_zero_mass": 0,
+            "rain_negative_mass": 0,
+            "rain_negative_moment": 0,
+            "rain_nonfinite_mass_or_moment": 0,
+            "rain_positive_mass_zero_moment": 0,
+            "rain_positive_moment_zero_mass": 0
+          },
+          "beyond8_under_generic_policy_bounds": {
+            "cloud_beyond8_generic_policy_cells": 0,
+            "graupel_beyond8_generic_policy_cells": 0,
+            "ice_beyond8_generic_policy_cells": 921,
+            "rain_beyond8_generic_policy_cells": 0
+          },
+          "exact_outside_under_generic_policy_bounds": {
+            "cloud_exact_outside_generic_policy_cells": 0,
+            "graupel_exact_outside_generic_policy_cells": 0,
+            "ice_exact_outside_generic_policy_cells": 18307,
+            "rain_exact_outside_generic_policy_cells": 351
+          },
+          "generic_qnb_failed_states": 74,
+          "generic_qnb_failed_states_by_category": {
+            "pairs_failed_states": 74
+          },
+          "number_conversion_failure_counts": {
+            "BG_negative_input": 0,
+            "BG_nonfinite_input": 0,
+            "BG_nonfinite_or_nonpositive_dry_density": 0,
+            "BG_nonfinite_result": 0,
+            "BG_overflow_guard": 0,
+            "BG_positive_to_zero": 0,
+            "BG_product_at_or_below_half_minimum_subnormal": 0,
+            "NC_negative_input": 0,
+            "NC_nonfinite_input": 0,
+            "NC_nonfinite_or_nonpositive_dry_density": 0,
+            "NC_nonfinite_result": 0,
+            "NC_overflow_guard": 0,
+            "NC_positive_to_zero": 0,
+            "NC_product_at_or_below_half_minimum_subnormal": 0,
+            "NI_negative_input": 0,
+            "NI_nonfinite_input": 0,
+            "NI_nonfinite_or_nonpositive_dry_density": 0,
+            "NI_nonfinite_result": 0,
+            "NI_overflow_guard": 0,
+            "NI_positive_to_zero": 0,
+            "NI_product_at_or_below_half_minimum_subnormal": 0,
+            "NN_negative_input": 0,
+            "NN_nonfinite_input": 0,
+            "NN_nonfinite_or_nonpositive_dry_density": 0,
+            "NN_nonfinite_result": 0,
+            "NN_overflow_guard": 0,
+            "NN_positive_to_zero": 0,
+            "NN_product_at_or_below_half_minimum_subnormal": 0,
+            "NR_negative_input": 0,
+            "NR_nonfinite_input": 0,
+            "NR_nonfinite_or_nonpositive_dry_density": 0,
+            "NR_nonfinite_result": 0,
+            "NR_overflow_guard": 0,
+            "NR_positive_to_zero": 0,
+            "NR_product_at_or_below_half_minimum_subnormal": 0
+          },
+          "state_count": 90
+        },
+        "predictors": {
+          "active_ice_policy_split": {
+            "active_beyond_8ulp": 0,
+            "active_exact_outliers": 78,
+            "inactive_beyond_8ulp": 907,
+            "inactive_exact_outliers": 17971
+          },
+          "actual_field_negative_nonfinite_cells": {
+            "Q_negative_cells": 1527,
+            "Q_nonfinite_cells": 0
+          },
+          "actual_pair_negative_orphan_nonfinite_cells": {
+            "cloud_negative_mass": 0,
+            "cloud_negative_moment": 0,
+            "cloud_nonfinite_mass_or_moment": 0,
+            "cloud_positive_mass_zero_moment": 0,
+            "cloud_positive_moment_zero_mass": 0,
+            "graupel_negative_mass": 0,
+            "graupel_negative_moment": 0,
+            "graupel_nonfinite_mass_or_moment": 0,
+            "graupel_positive_mass_zero_moment": 0,
+            "graupel_positive_moment_zero_mass": 0,
+            "ice_negative_mass": 0,
+            "ice_negative_moment": 0,
+            "ice_nonfinite_mass_or_moment": 0,
+            "ice_positive_mass_zero_moment": 0,
+            "ice_positive_moment_zero_mass": 0,
+            "rain_negative_mass": 0,
+            "rain_negative_moment": 0,
+            "rain_nonfinite_mass_or_moment": 0,
+            "rain_positive_mass_zero_moment": 0,
+            "rain_positive_moment_zero_mass": 0
+          },
+          "beyond8_under_generic_policy_bounds": {
+            "cloud_beyond8_generic_policy_cells": 0,
+            "graupel_beyond8_generic_policy_cells": 0,
+            "ice_beyond8_generic_policy_cells": 907,
+            "rain_beyond8_generic_policy_cells": 0
+          },
+          "exact_outside_under_generic_policy_bounds": {
+            "cloud_exact_outside_generic_policy_cells": 0,
+            "graupel_exact_outside_generic_policy_cells": 0,
+            "ice_exact_outside_generic_policy_cells": 18049,
+            "rain_exact_outside_generic_policy_cells": 324
+          },
+          "generic_qnb_failed_states": 87,
+          "generic_qnb_failed_states_by_category": {
+            "fields_failed_states": 87,
+            "pairs_failed_states": 75
+          },
+          "number_conversion_failure_counts": {
+            "BG_negative_input": 0,
+            "BG_nonfinite_input": 0,
+            "BG_nonfinite_or_nonpositive_dry_density": 0,
+            "BG_nonfinite_result": 0,
+            "BG_overflow_guard": 0,
+            "BG_positive_to_zero": 0,
+            "BG_product_at_or_below_half_minimum_subnormal": 0,
+            "NC_negative_input": 0,
+            "NC_nonfinite_input": 0,
+            "NC_nonfinite_or_nonpositive_dry_density": 0,
+            "NC_nonfinite_result": 0,
+            "NC_overflow_guard": 0,
+            "NC_positive_to_zero": 0,
+            "NC_product_at_or_below_half_minimum_subnormal": 0,
+            "NI_negative_input": 0,
+            "NI_nonfinite_input": 0,
+            "NI_nonfinite_or_nonpositive_dry_density": 0,
+            "NI_nonfinite_result": 0,
+            "NI_overflow_guard": 0,
+            "NI_positive_to_zero": 0,
+            "NI_product_at_or_below_half_minimum_subnormal": 0,
+            "NN_negative_input": 0,
+            "NN_nonfinite_input": 0,
+            "NN_nonfinite_or_nonpositive_dry_density": 0,
+            "NN_nonfinite_result": 0,
+            "NN_overflow_guard": 0,
+            "NN_positive_to_zero": 0,
+            "NN_product_at_or_below_half_minimum_subnormal": 0,
+            "NR_negative_input": 0,
+            "NR_nonfinite_input": 0,
+            "NR_nonfinite_or_nonpositive_dry_density": 0,
+            "NR_nonfinite_result": 0,
+            "NR_overflow_guard": 0,
+            "NR_positive_to_zero": 0,
+            "NR_product_at_or_below_half_minimum_subnormal": 0
+          },
+          "state_count": 90
+        }
+      },
+      "strict_source_endpoint_gate": {
+        "failure_count": 0,
+        "scope": "Existing PR87 exact source coefficient violations at RK3, PRE_KDM6, POST_KDM6 only; no ULP slack. Exact ice counts are diagnostic, not this generic gate.",
+        "status": "PASS"
+      }
+    }
+  },
+  "schema": "pr93_qnb_scope_split_v1",
+  "scope_notes": [
+    "PR87 exact source endpoint gate checks cloud/rain/graupel source coefficients with no ULP allowance at RK3, PRE_KDM6, and POST_KDM6; it does not gate ice. Current run PASS is scoped and does not overwrite historical C18 FAIL.",
+    "Generic PR87 pair-conversion audit keeps its unchanged policy bounds and eight-ULP criteria across all six stage states. Its FAIL is preserved separately from the active-ice split.",
+    "Exact-outside counts in this summary use generic policy JSON bounds, not the strict source coefficient basis. The bases differ slightly for rain, so exact-outside-within-eight-ULP can coexist with strict source endpoint PASS.",
+    "Predictor class is PRE_RK and RK1/RK2; endpoint class is RK3, PRE_KDM6, POST_KDM6. Negative mass/moment, orphan pairs, nonfinite pairs, and number-conversion failures are counted separately from ice cone outliers."
+  ],
+  "source_report_hashes": {
+    "coupled": "36ce0a27884ab495c3cd644c093e54e3232fedb90965ec74baac0c9d376b52ac",
+    "off": "7179ef5bf441504afd77f4a814309b709c2a1b0e5697014b4143443dd4101814"
+  }
+}

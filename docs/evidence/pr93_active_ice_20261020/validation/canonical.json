@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "run": {
+    "command": "bash tests/run_unit_tests.sh",
+    "working_directory": "/var/tmp/pr93_canonical_20261020",
+    "environment": {
+      "CLOUD_BAL_WORKSPACE_ROOT": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50",
+      "CLOUD_BAL_TEST_SCRATCH_ROOT": "/var/tmp",
+      "GIT_DIR": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/.git/worktrees/Cloud-BAL86",
+      "GIT_WORK_TREE": "/var/tmp/pr93_canonical_20261020",
+      "GIT_OPTIONAL_LOCKS": "0"
+    },
+    "exit_code": 0,
+    "finished_utc": "2026-10-20T11:14:43Z",
+    "full_log": "/var/tmp/pr93_canonical_20261020/canonical_exact_worktree.log",
+    "full_log_sha256": "8565b9deff0e91004dbf83b06cbebeaa0f7415559fe77412f06d4620816bff31",
+    "compact_log": "docs/evidence/pr93_active_ice_20261020/validation/canonical.log",
+    "compact_log_sha256": "15ab9bcda11be7ea6c658c22b550119b85c51d1a2e3b6141daf5ed0d3a5f4628",
+    "initial_no_git_attempt": {
+      "exit_code": 1,
+      "reason": "unmodified snapshot has no .git; test_output_transaction.py requires git rev-parse HEAD",
+      "log": "/var/tmp/pr93_canonical_20261020/canonical.log"
+    },
+    "interrupted_wrong_gitdir_attempt": {
+      "status": "stopped before git-dependent test; common repo gitdir did not match isolated worktree HEAD"
+    }
+  },
+  "source": {
+    "base_commit": "984cbf9a3b658c218448912d6b3e25100d72e1f3",
+    "isolated_git_dir": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/.git/worktrees/Cloud-BAL86",
+    "snapshot_root": "/var/tmp/pr93_canonical_20261020",
+    "manifest": "snapshot_manifest.json",
+    "manifest_sha256": "3b57f22bcee94d5f3a8d5c3929536faa3813d514418ef19000a9ae4612c7d8c4",
+    "manifest_file_count": 6526,
+    "manifest_total_bytes": 1575480335,
+    "changed_manifest_files_after_run": [],
+    "missing_manifest_files_after_run": [],
+    "excluded": [
+      ".git",
+      "graphify-out/",
+      "untracked docs/evidence and prose outside the canonical suite"
+    ]
+  },
+  "compiler": {
+    "profile_script": "tests/intel_toolchain.sh",
+    "profile_script_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "setvars_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh",
+    "setvars_sha256": "26084d08db985eadb61adc43c7f18821be9e75156b60f920de363ea51c70887e",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "version": "ifx (IFX) 2026.0.0 20260331",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "runtime_imf_sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8",
+    "runtime_intlc_sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120",
+    "build_scratch": "fresh /var/tmp/unit_tests.* created by canonical runner and removed by its exit trap"
+  },
+  "scope_note": "This canonical suite did not invoke PR93 focused Python/source-form tests unless they are part of the existing runner. PR93 focused checks remain separately recorded."
+}

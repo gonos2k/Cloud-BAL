@@ -1,0 +1,38 @@
+{
+  "schema": "pr93_paired_prelaunch_v1",
+  "required_free_bytes_combined": 338809646295,
+  "free_bytes": 402332622848,
+  "status": "PASS",
+  "preflights": [
+    {
+      "path": "/var/tmp/pr93_OFF_600s_c4_20261020/preflight.json",
+      "sha256": "49a669e118e7f605ed698ff06aab4a62461211fb762e58c527196ff461a7aa96"
+    },
+    {
+      "path": "/var/tmp/pr93_COUPLED_preflight_c4_20261020_b/preflight.json",
+      "sha256": "3e00f39c2db9b09f2a7dfdec9bc6d51836fb666c55c9f5ea7be8afc1aa3b2cae"
+    }
+  ],
+  "build": {
+    "receipt_path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+    "receipt_sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669",
+    "schema": "pr87_native_overlay_build_v1",
+    "status": "PASS_OVERLAY_BUILD",
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "executable_path": "/var/tmp/pr93_native_build_c4_20261020/wrf_pr87_overlay.exe",
+    "executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be"
+  },
+  "checkpoint_seconds": [
+    480,
+    500,
+    600
+  ],
+  "relaunch_disk_check": {
+    "free_bytes": 400341626880,
+    "status": "PASS",
+    "same_executable": true,
+    "reason": "supply native diagnostic run identity; no physical source changes"
+  }
+}

@@ -28,7 +28,7 @@ INTEL_PROFILE = Path(__file__).resolve().parents[1] / "tests/intel_toolchain.sh"
 STATE_MAGIC, TENDENCY_MAGIC = b"PR85QND2", b"PR85PLB1"
 STATE_FIELDS = ("DEN", "Q", "QC", "QI", "QR", "QS", "QG", "NN", "NC", "NI", "NR", "BG")
 TENDENCY_FIELDS = ("QV_TEND", "QC_TEND", "QI_TEND", "QNC_TEND", "QNI_TEND")
-SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 16: "320s", 30: "10min"}
+SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s", 25: "500s", 30: "10min"}
 SNAPSHOT_SECONDS = tuple(timestep * 20 for timestep in SNAPSHOTS)
 LAUNCH_ENVIRONMENT = {"OMP_NUM_THREADS": "1", "OMP_DYNAMIC": "FALSE"}
 LAUNCH_ENVIRONMENT_SHA256 = hashlib.sha256(
@@ -62,7 +62,7 @@ def _fatal_lines(stage: Path) -> tuple[list[str], list[str]]:
                 for line in stream:
                     generic_fatal = re.search(r"fatal|error stop|segmentation|signal", line, re.I)
                     kdm6_rejection = (name == "rsl.error.0000" and re.match(
-                        r"^\s*(?:KDM6|PR87|ProgB)\b.*\b(?:invalid|unsupported|failed|requires|no valid|rejected)\b",
+                        r"^\s*(?:KDM6|PR85|PR87|PR93|ProgB)\b.*\b(?:invalid|unsupported|failed|requires|no valid|rejected)\b",
                         line, re.I))
                     if generic_fatal or kdm6_rejection:
                         fatal.append(line.rstrip())
@@ -342,6 +342,11 @@ def _disk_reference_projection(reference_path: Path, arm: str, source_receipt_sh
             "compressed_archive_count": len(compressed)}
 
 
+def diagnostic_run_id(arm: str, out: Path) -> str:
+    """Give the native trace writer a stable, whitespace-free run identity."""
+    return arm + "_" + hashlib.sha256(str(out.resolve()).encode()).hexdigest()[:16]
+
+
 def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
             candidate_build_path: Path | None = None,
             disk_reference_receipt_path: Path | None = None) -> dict:
@@ -392,6 +397,7 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         "launch_environment": {**LAUNCH_ENVIRONMENT,
                                "status": "CONFIGURED_BY_RUNNER",
                                "launch_request_sha256": LAUNCH_ENVIRONMENT_SHA256},
+        "diagnostic_environment": {"PR91_RUN_ID": diagnostic_run_id(arm, out)},
         "namelist_changes": {"runtime_seconds": duration, "end_time": model_end_time(original_namelist, duration),
                              "history_interval_minutes": 1}, "namelist_diff": namelist_diff,
         "namelist_text": edited,
@@ -760,13 +766,15 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     if candidate_build and _candidate_build_binding(Path(candidate_build["receipt_path"])) != candidate_build:
         raise RuntimeError("candidate build identity changed after preflight")
     launch_provenance = {"launch_runner_source_path": str(runner_path),
-                         "launch_runner_source_sha256": runner_sha256_at_entry}
+                         "launch_runner_source_sha256": runner_sha256_at_entry,
+                         "diagnostic_environment": prepared["diagnostic_environment"]}
     (out / "launch_provenance.json").write_text(json.dumps(launch_provenance, indent=2) + "\n")
     pr87_probe = os.environ.get("PR87_PROBE")
     command = ["/bin/bash", "-c", f". /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh --force >/dev/null 2>&1; . /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh >/dev/null 2>&1; export OMP_NUM_THREADS={LAUNCH_ENVIRONMENT['OMP_NUM_THREADS']} OMP_DYNAMIC={LAUNCH_ENVIRONMENT['OMP_DYNAMIC']}; export LD_LIBRARY_PATH=/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:${{LD_LIBRARY_PATH:-}}; ulimit -s unlimited; ./wrf.exe > candidate_run.log 2>&1"]
     start = time.monotonic()
     with (stage / "launcher.stdout").open("wb") as stdout, (stage / "launcher.stderr").open("wb") as stderr:
-        process = subprocess.run(command, cwd=stage, stdout=stdout, stderr=stderr, check=False)
+        process = subprocess.run(command, cwd=stage, stdout=stdout, stderr=stderr, check=False,
+                                 env={**os.environ, **prepared["diagnostic_environment"]})
     elapsed = time.monotonic() - start
     processing_errors = []
     try:
@@ -845,6 +853,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
                "launch_runner_source_sha256": runner_sha256_at_entry,
                "launch_runner_source_sha256_status": "captured at run entry before model execution",
                "pr87_probe": pr87_probe,
+               "diagnostic_environment": prepared["diagnostic_environment"],
                "source_receipt_sha256": prepared["source_receipt_sha256"],
                "candidate_wrfinput_sha256": prepared["candidate_wrfinput_sha256"],
                "candidate_wrfbdy_sha256": prepared["candidate_wrfbdy_sha256"],

@@ -1,0 +1,24 @@
+{
+  "schema": "pr93_canonical_vs_final_source_v1",
+  "canonical_manifest_sha256": "3b57f22bcee94d5f3a8d5c3929536faa3813d514418ef19000a9ae4612c7d8c4",
+  "changed_code_files_after_freeze": [
+    {
+      "path": "tests/test_pr86_time_response.py",
+      "snapshot_sha256": "437aac2debe2e00df59b96727f34bd81069de6daa32b9c4c8dac0fb1c24666bf",
+      "current_sha256": "83e10a823447cd837f90f3a17cace551e562f14654cb56715d145490b22a31d9"
+    },
+    {
+      "path": "tests/test_pr93_active_ice_contract.py",
+      "snapshot_sha256": "a5995fddb8bed29fd1999fa02ff80b7268e21b0a6c3e4b1ebd030ecaa40175fc",
+      "current_sha256": "b107a9a39b47ba73134b51e41ce11f23c83e0fc24473079eccc46bcd1c194d84"
+    },
+    {
+      "path": "tools/pr86_time_response.py",
+      "snapshot_sha256": "ddaf686f7efe14c7b66686bb1416c3ac3d6cf26d5a8999f94f7dc4311a1ff68c",
+      "current_sha256": "c0eb435d65f29774385ea2bc0aa032a0d03dc497d592f771ef9d19247eeb6b22"
+    }
+  ],
+  "fortran_changes_after_freeze": [],
+  "new_response_tool_outside_snapshot": "tools/pr93_qc_fixed_support_response.py",
+  "scope": "Final runner/contract fixture changes have separate focused validation; canonical result describes its frozen snapshot, not every final file. Offline audit/replay evidence scripts and the exact copied sedimentation helper are published after the snapshot and have separately recorded smoke/call-level execution; they are not additional production Fortran changes."
+}

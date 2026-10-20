@@ -1,0 +1,71 @@
+{
+  "horizontal_qc_replay": {
+    "bitwise_matches": 288,
+    "comparisons": 288,
+    "pressure_levels": 18,
+    "source_support_pressure_cells": 162,
+    "target_metgrid_columns": 16,
+    "unique_horizontal_source_cells": 9
+  },
+  "input_bindings": {
+    "klbg": {
+      "path": "/var/tmp/pr83_same13_off_metgrid_20261013b/KLBG:2026-08-16_13",
+      "sha256": "180e75c16ac2d299e4826324abd71aee530288d2c2c86079355ff1c4c9800e08"
+    },
+    "laps": {
+      "path": "/var/tmp/pr83_same13_off_metgrid_20261013b/LAPS:2026-08-16_13",
+      "sha256": "f6e54602dea6fa6c867cbf226efd969d70f1f18526962f4b3dcb13a3189f9da1"
+    },
+    "met_em": {
+      "path": "/var/tmp/pr93_metgrid_same13_replay_20261020/met_em.d01.2026-08-16_13:00:00.nc",
+      "sha256": "5c896259727e224658434b7896b1c04187cd903190d87b8fc790a75dda856e02"
+    },
+    "wrfinput": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr83_same13_off_real_boundary_20261013a/wrfinput_d01",
+      "sha256": "6ed69cbd2bdb8d128dbd7273ac8de216fe4537748a0e4ca474213ac408060730"
+    }
+  },
+  "interpretation_limit": "The preserved source-form real.exe QC vertical expressions match the initialized QCLOUD at the 16 WPS-touched columns and 39 eta levels. This is a bounded source-form replay, not a full real.exe execution. Other WPS variables and their masks/fallback behavior are outside scope.",
+  "metgrid_reproduction": {
+    "forecast_source_order": [
+      "SOIT",
+      "SOIM",
+      "KLBG",
+      "LAPS",
+      "RCHA"
+    ],
+    "metgrid_executable_sha256": "f96632837016bda00946e0a5cfeaaac3372eba972e4e9451e0e4e88ee8399c37",
+    "metgrid_table_sha256": "44f1a43af35441957d0bef3a6220831aad1cf56ebc765d64d08e20f439a63b44",
+    "qc_table": {
+      "fill_lev": "200100:const(0.)",
+      "fill_missing": "0.",
+      "flag_in_output": "FLAG_QC",
+      "interp_option": "four_pt+average_4pt",
+      "qc_specific_interpolation_mask": false
+    },
+    "reproduced_met_em_sha256_matches_pr83": true
+  },
+  "native_qc_influence": {
+    "composed_source_links": 2348,
+    "levels_with_nonzero_qc_support": 613,
+    "native_target_levels": 624,
+    "optimization_results_bitwise_identical": true,
+    "source_form_mismatches": 0,
+    "source_form_qcloud_bitwise_matches": 624,
+    "unique_horizontal_source_cells": 9
+  },
+  "schema": "pr93_pr83_same_met_em_qc_chain_v1",
+  "source_priority_control": {
+    "interpretation": "KLBG is listed before LAPS in fg_name and contains QC. Its standalone WPS replay matches final QC at only the counted rows; the exact LAPS replay matches all 288 rows. This is evidence for the retained support rows and this product, not a general priority rule.",
+    "klbg_only_matches_final_met_em_rows": 22,
+    "klbg_only_matches_laps_replay_rows": 22,
+    "klbg_qc_input_present": true,
+    "source_order": [
+      "SOIT",
+      "SOIM",
+      "KLBG",
+      "LAPS",
+      "RCHA"
+    ]
+  }
+}

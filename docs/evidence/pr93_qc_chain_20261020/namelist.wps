@@ -1,0 +1,17 @@
+! Isolated 13 UTC metgrid preparation using the original KLFS OML table.
+! All input records in this directory are read-only symlinks.
+&share
+ wrf_core = 'ARW',
+ max_dom = 1,
+ start_date = '2026-08-16_13:00:00',
+ end_date = '2026-08-16_13:00:00',
+ interval_seconds = 10800,
+ io_form_geogrid = 2,
+/
+&metgrid
+ fg_name = 'SOIT', 'SOIM', 'KLBG', 'LAPS', 'RCHA',
+ constants_name = 'TAVGSFC', 'OML', 'SST',
+ io_form_metgrid = 2,
+ opt_output_from_metgrid_path = './',
+ opt_metgrid_tbl_path = "./",
+/

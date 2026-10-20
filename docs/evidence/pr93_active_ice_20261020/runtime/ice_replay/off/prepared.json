@@ -1,0 +1,63 @@
+{
+  "schema": "pr93_c4_ice_sedimentation_replay_v1",
+  "status": "PASS_CALL_LEVEL",
+  "arm": "OFF",
+  "receipt_path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/receipt.json",
+  "receipt_sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a",
+  "ledger_path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/run/pr85_kdm6_psd_boundary.raw.gz",
+  "ledger_identity": {
+    "compressed_sha256": "a0672146b28cb2cbd4e1ba2725f003f90c2fd16366de8810dd05bce6d5576fc5",
+    "compressed_bytes": 878322,
+    "expanded_sha256": "e8b21684f4224c2be85449541119f188b6b3c58176e918be121d51ea5eedf142",
+    "expanded_bytes": 6179868
+  },
+  "helper_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/docs/evidence/pr93_active_ice_20261020/runtime/c4_pr85_kdm6_paired_sediment_column.F90",
+  "helper_sha256": "26b6c268ca1bc243438c06c1be209dcc33b0b31612e48aaca16476cdda35505a",
+  "source_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+  "calls": [
+    {
+      "key": [
+        1,
+        1,
+        1
+      ],
+      "levels": 39
+    }
+  ],
+  "driver_sha256": "490555efed52cbdce836b89528d164d441bcaa5109c95ff84670f77c7c08a025",
+  "profile_results": {
+    "O0": {
+      "returncode": 0,
+      "call_count": 1,
+      "expected_state_count": 39,
+      "actual_state_count": 39,
+      "mismatch_count": 0,
+      "mismatches": [],
+      "status": "PASS"
+    },
+    "O2": {
+      "returncode": 0,
+      "call_count": 1,
+      "expected_state_count": 39,
+      "actual_state_count": 39,
+      "mismatch_count": 0,
+      "mismatches": [],
+      "status": "PASS"
+    }
+  },
+  "replay": "Pinned Intel O0/O2; each helper output QI/NI REAL32 bit pair compared to captured AFTER for every level.",
+  "completion_claim": "Call-level evidence only; whole-step completion through T24 is not required or claimed.",
+  "attribution": "C4 selected-call replay only; this does not by itself prove C18 historical causality.",
+  "audit_path": "/var/tmp/pr93_closed_runtime_audit_20261020/off_closed_audit.json",
+  "audit_sha256": "7179ef5bf441504afd77f4a814309b709c2a1b0e5697014b4143443dd4101814",
+  "audit_capture_status": "FIRST_VALID_TO_INVALID_CAPTURED",
+  "receipt_status": "COMPLETE",
+  "maximum_seen_timestep": 30,
+  "completed_prefix_final_step": 30,
+  "executed_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+  "output_log_sha256": {
+    "O0": "e01f133a9c8e9361738620b9ab107035c6fc1d87669f06dc186b06f9562d795a",
+    "O2": "b764fee6a62debd924f9d85af35702e3ff05958b5a83acf1d435b95381759128"
+  },
+  "fixture_sha256": "490555efed52cbdce836b89528d164d441bcaa5109c95ff84670f77c7c08a025"
+}
