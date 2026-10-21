@@ -1,6 +1,6 @@
 {
   "schema": "pr98_integrated_validation_v1",
-  "time_utc": "2026-10-21T23:39:00.685141+00:00",
+  "time_utc": "2026-10-21T23:43:12.913284+00:00",
   "pytest_argv": [
     "python3",
     "-m",
@@ -10,14 +10,15 @@
     "tests/test_pr98_boundary_audit.py",
     "tests/test_pr98_budget.py",
     "tests/test_pr98_budget_faces.py",
+    "tests/test_pr98_kg_restore.py",
     "tests/test_pr98_native_capture.py",
     "tests/test_pr98_native_effect.py"
   ],
   "pytest_returncode": 0,
-  "pytest_output": "Running 38 items in this shard\n......................................                                   [100%]\n38 passed in 0.94s",
+  "pytest_output": "Running 46 items in this shard\n..............................................                           [100%]\n46 passed in 1.01s",
   "external_log_path": "/var/tmp/pr98_final_python_validation_20261022.txt",
-  "external_log_sha256": "078f377d6304f349209fdca0deedb9ace26791e896be6d62a58cdea163e0807a",
-  "python_syntax_files": 18,
+  "external_log_sha256": "e96b208c60079f69ebcd1642de64444bd305ca4e8620228990db968efc75f6a1",
+  "python_syntax_files": 19,
   "bash_syntax_files": 3,
   "source_sha256": {
     "tools/pr98_boundary640.py": "eb6053c66ad1b7503975aa703133a38cbe542a8cd4b2bf174595e13550e27e69",
@@ -35,9 +36,10 @@
     "tests/test_pr98_boundary_audit.py": "3170584b406f44d257b394b9b45016454033ff84f67beca9f5c63e32c35b29c7",
     "tests/test_pr98_budget.py": "bc34ae30ff14269471fad08c19e6809788956ee3a2ef46ee1aa379284a76c6a2",
     "tests/test_pr98_budget_faces.py": "4fab944a1c49f401d24439b0e4f0964e6c12db2b888890a015d2aea284912c1a",
+    "tests/test_pr98_kg_restore.py": "9246d8d83e3e45480f5f0a429e771473bcd00c6411daa9a36d270804cbd1d1b1",
     "tests/test_pr98_native_capture.py": "e882e8f6565db6f7c744ad50d3be2f6d67a4df23aba8763c6fde1c2c109c54e9",
     "tests/test_pr98_native_effect.py": "5ce7247a3a378b5ede1c24ecca8c184b66df7e11009acc57a1ef3ae3803c421d",
-    "docs/evidence/pr98_native_effect_20261022/kg/update_kg.py": "dff0da3c84d8277bb16f731a69d3fc4300497d343df1ea2eb81f59197036df01",
+    "docs/evidence/pr98_native_effect_20261022/kg/update_kg.py": "d3e54ce6929b9e8fa0857e2a63a2cf4c595b642f5c09173d6956e1925b9733d2",
     "tools/pr98_build_face_observer.sh": "ff24b6c976b84348ec2e362dcd9ff0aa245e08bf7e8352944dfd9579d61a8778",
     "tools/pr98_replay.sh": "79526d33b9c099810d49472c82deae297b29a69fef6cacf20d284dace6c042d4",
     "tests/run_pr98_face_accumulate.sh": "f0570edb1abfb4e8090046ed2af441b12923b09923be3638d553bf7b941cf44d",

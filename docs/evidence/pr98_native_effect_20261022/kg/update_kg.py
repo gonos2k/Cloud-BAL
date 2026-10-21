@@ -70,6 +70,53 @@ def require(ok: bool, message: str) -> None:
         raise RuntimeError(message)
 
 
+def restore_backup_if_changed(guard, source: Path, destination: Path, expected_sha256: str) -> None:
+    """Restore a hash-bound backup only when the destination differs."""
+    guard.guard_destination(source)
+    guard.guard_destination(destination)
+    require(sha(source) == expected_sha256, f'backup hash mismatch: {source}')
+    if destination.is_file() and sha(destination) == expected_sha256:
+        return
+    guard.copy_checked(source, destination)
+    require(sha(destination) == expected_sha256, f'backup restore verification failed: {destination}')
+
+
+def restore_changed_snapshots(guard, snapshots: dict) -> None:
+    """Restore only changed prior snapshot members, preserving strict membership checks."""
+    errors = []
+    for directory, members in snapshots.items():
+        previous = Path(directory)
+        try:
+            guard.guard_directory(previous)
+            expected_names = set(members)
+            actual_names = {path.name for path in previous.iterdir()}
+            require(actual_names <= expected_names,
+                    f'prior snapshot membership changed; unknown files preserved: {previous}')
+        except BaseException as error:
+            errors.append(f'{previous}: {error}')
+            continue
+        for name, record in members.items():
+            destination = previous / name
+            try:
+                backup = Path(record['backup'])
+                guard.guard_destination(backup)
+                guard.guard_destination(destination)
+                require(sha(backup) == record['sha256'], 'prior automatic snapshot backup drift')
+                if destination.is_file() and sha(destination) == record['sha256']:
+                    continue
+                guard.copy_checked(backup, destination)
+                require(sha(destination) == record['sha256'], 'prior snapshot content changed')
+            except BaseException as error:
+                errors.append(f'{destination}: {error}')
+        try:
+            require({path.name for path in previous.iterdir()} == expected_names,
+                    f'prior snapshot membership changed; unknown files preserved: {previous}')
+        except BaseException as error:
+            errors.append(f'{previous}: {error}')
+    if errors:
+        raise RuntimeError('automatic snapshot restore errors: ' + '; '.join(errors))
+
+
 def load(name: str, path: Path, expected: str):
     require(sha(path) == expected, f'helper pin changed: {path}')
     spec = importlib.util.spec_from_file_location(name, path)
@@ -252,19 +299,20 @@ def apply(plan: dict) -> None:
     original_graphs = {label: json.loads((directory / 'graphify-out/graph.json').read_text())
                        for label,directory in (('KLAPS50',ROOT),('Cloud-BAL',MAINT))}
     backups = {}
+    backup_hashes = {}
     for label,directory in (('KLAPS50',ROOT),('Cloud-BAL',MAINT)):
         for name in updater.GRAPH_FILES:
             path = directory / 'graphify-out' / name
             if path.exists():
-                dst=OUT/'backups'/label/name; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(path,dst); backups[path]=dst
+                dst=OUT/'backups'/label/name; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(path,dst); backups[path]=dst; backup_hashes[path]=sha(path)
         for folder_name in plan['dated_snapshot_baseline']:
             folder=Path(folder_name)
             if folder.parent == directory/'graphify-out':
                 for path in folder.iterdir():
                     if path.is_file():
-                        dst=OUT/'backups'/label/folder.name/path.name; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(path,dst); backups[path]=dst
+                        dst=OUT/'backups'/label/folder.name/path.name; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(path,dst); backups[path]=dst; backup_hashes[path]=sha(path)
     for name in updater.WIKI_FILES:
-        path=ROOT/'wiki'/name; dst=OUT/'backups/wiki'/name; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(path,dst); backups[path]=dst
+        path=ROOT/'wiki'/name; dst=OUT/'backups/wiki'/name; dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(path,dst); backups[path]=dst; backup_hashes[path]=sha(path)
     automatic={}
     for folder_name in plan['dated_snapshot_baseline']:
         folder=Path(folder_name)
@@ -280,7 +328,7 @@ def apply(plan: dict) -> None:
             extraction=json.loads((OUT/f'{label.lower().replace("-","_")}_extraction.json').read_text())
             auditor.record_snapshot(label,directory,original_graphs[label],extraction)
         private=auditor.verify_private_profile(original_graphs)
-        guard.restore_automatic_snapshots(automatic)
+        restore_changed_snapshots(guard, automatic)
         limits=('Separate KLAPS50 and Cloud-BAL snapshots extract allowlisted PR98 docs, tools, and tests; evidence payloads are hash-bound only. '
                 'Cross-file Fortran CALL extraction is partial; Fortran embedded in Python generator strings is not extracted as standalone Fortran procedures. '
                 'Graph freshness is navigation evidence, not runtime/scientific approval.')
@@ -315,7 +363,7 @@ def apply(plan: dict) -> None:
             for label,r in records.items(): log.write(f'- {label}: {SNAPSHOT}; {r["nodes"]} nodes / {r["edges"]} edges / {r["communities"]} communities; delta nodes={r["delta_nodes"]}, edges={r["delta_edges"]}.\n')
             log.write(f'- Three C1 600-second runs (30 calls each) are COMPLETE/CLOSED; independent results audit is {RESULTS_AUDIT_STATE}; physical approval remains FAIL_OPEN. PR98 changes are source-commit-bound; evidence payloads are hash-only.\n')
             log.write(f'- {limits} Physical approval remains FAIL_OPEN. Prior PR97 KG receipt SHA-256 `{PRIOR_SHA}`.\n')
-        guard.restore_automatic_snapshots(automatic)
+        restore_changed_snapshots(guard, automatic)
         require(protected_helper.protected_content(guard)==protected,'protected wiki content changed')
         maintained_after = snapshot_identity(guard.maintained_source_snapshot())
         require(maintained_after == plan['maintained_source_snapshot_before'],
@@ -334,9 +382,15 @@ def apply(plan: dict) -> None:
         (OUT/'kg_receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
     except BaseException:
         for path,dst in backups.items():
-            if dst.exists(): shutil.copy2(dst,path)
+            if dst.exists():
+                try:
+                    guard.guard_destination(dst)
+                    guard.guard_destination(path)
+                    restore_backup_if_changed(guard, dst, path, backup_hashes[path])
+                except BaseException:
+                    pass
         try:
-            guard.restore_automatic_snapshots(automatic)
+            restore_changed_snapshots(guard, automatic)
         except BaseException:
             pass
         for directory in (ROOT,MAINT):
