@@ -1,0 +1,35 @@
+{
+  "schema": "pr98_c1_640_progress_status_v1",
+  "observed_at_utc": "2026-10-21T23:11:25Z",
+  "scope": "Read-only process status for the three authorized frozen-runner 640-second requests",
+  "source": "ps process table; no live binary or history contents read",
+  "supervisor_pid": 212575,
+  "runs": {
+    "OFF": {
+      "runner_pid": 212628,
+      "model_shell_pid": 213159,
+      "wrf_pid": 213910,
+      "elapsed": "25:52",
+      "runner_state": "Sl",
+      "wrf_state": "I"
+    },
+    "HYDRO": {
+      "runner_pid": 212630,
+      "model_shell_pid": 213922,
+      "wrf_pid": 214264,
+      "elapsed": "25:52",
+      "runner_state": "Sl",
+      "wrf_state": "R"
+    },
+    "COUPLED": {
+      "runner_pid": 212632,
+      "model_shell_pid": 213120,
+      "wrf_pid": 213917,
+      "elapsed": "25:52",
+      "runner_state": "Sl",
+      "wrf_state": "I"
+    }
+  },
+  "receipt_status": "PENDING_NOT_READ",
+  "interpretation": "Progress snapshot only; process presence is not completion or a closed result."
+}

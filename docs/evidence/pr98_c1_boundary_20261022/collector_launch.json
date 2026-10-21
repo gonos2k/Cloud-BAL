@@ -1,0 +1,25 @@
+{
+  "schema": "pr98_c1_640_collector_launch_v1",
+  "launched_at_utc": "2026-10-21T23:39:27Z",
+  "collector_script": "/var/tmp/pr98_c1_640_collect_20261022.py",
+  "collector_script_sha256": "f1129283b5e36c7b8d6dd1a56e34fcf9605fcc52681d42f898002fb421a64ba5",
+  "collector_pid": 440722,
+  "collector_session_id": 23729,
+  "collector_stdout_log": "/var/tmp/pr98_c1_640_collect_20261022.log",
+  "collector_stdout_log_sha256_at_launch": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "frozen_c1_auditor": "tools/pr98_boundary_audit.py",
+  "frozen_c1_auditor_sha256": "97430ea1c83414d09dcc22a9023dcc0f5248d32c59f3682113efa39f32601323",
+  "run_roots": {
+    "OFF": "evidence/pr98_c1_boundary_20261022/runs_640s/OFF_640s_c1",
+    "HYDRO": "evidence/pr98_c1_boundary_20261022/runs_640s/HYDRO_640s_c1",
+    "COUPLED": "evidence/pr98_c1_boundary_20261022/runs_640s/COUPLED_640s_c1"
+  },
+  "private_output_root": "evidence/pr98_c1_boundary_20261022/closed_audits",
+  "wait_conditions": [
+    "Supervisor PID 212575 exits",
+    "All three receipt.json files have finalized COMPLETE or INCOMPLETE status and collector-closed fields"
+  ],
+  "collection_mode": "Sequential per-arm reviewed audit; preserve each stdout log, return code, receipt hash, audit hash, and final manifest.",
+  "status": "WAITING_FOR_SUPERVISOR_AND_FINALIZED_RECEIPTS",
+  "closed_result_claim": false
+}

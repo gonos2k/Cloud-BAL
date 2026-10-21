@@ -1,0 +1,53 @@
+{
+  "schema": "pr98_c1_640_progress_status_v1",
+  "observed_at_utc": "2026-10-21T23:12:38Z",
+  "scope": "Read-only progress snapshot for the three authorized frozen-runner 640-second requests",
+  "process_source": "ps process table",
+  "model_timing_source": "explicit 'Timing for main: time ...' lines in each live rsl.error.0000",
+  "runner_stdout": {
+    "path": "evidence/pr98_c1_boundary_20261022/runs_640s_supervisor.log",
+    "size_bytes_at_observation": 0,
+    "interpretation": "Buffered/empty supervisor output is not used as a model-progress signal."
+  },
+  "supervisor_pid": 212575,
+  "runs": {
+    "OFF": {
+      "runner_pid": 212628,
+      "model_shell_pid": 213159,
+      "wrf_pid": 213910,
+      "elapsed_runner": "27:08",
+      "runner_state": "Sl",
+      "wrf_state": "R",
+      "latest_explicit_completed_model_time": "2026-08-16T13:01:40",
+      "timing_record_elapsed_seconds": 277.46115,
+      "completed_model_elapsed_seconds_from_13_00_00": 100,
+      "completed_20_second_steps": 5
+    },
+    "HYDRO": {
+      "runner_pid": 212630,
+      "model_shell_pid": 213922,
+      "wrf_pid": 214264,
+      "elapsed_runner": "27:08",
+      "runner_state": "Sl",
+      "wrf_state": "R",
+      "latest_explicit_completed_model_time": "2026-08-16T13:01:20",
+      "timing_record_elapsed_seconds": 269.55228,
+      "completed_model_elapsed_seconds_from_13_00_00": 80,
+      "completed_20_second_steps": 4
+    },
+    "COUPLED": {
+      "runner_pid": 212632,
+      "model_shell_pid": 213120,
+      "wrf_pid": 213917,
+      "elapsed_runner": "27:08",
+      "runner_state": "Sl",
+      "wrf_state": "R",
+      "latest_explicit_completed_model_time": "2026-08-16T13:01:40",
+      "timing_record_elapsed_seconds": 277.53192,
+      "completed_model_elapsed_seconds_from_13_00_00": 100,
+      "completed_20_second_steps": 5
+    }
+  },
+  "receipt_status": "PENDING_NOT_READ",
+  "interpretation": "Model elapsed time is derived from the explicit model timestamp relative to the run initial model time 2026-08-16T13:00:00. The separate elapsed-seconds value in each Timing for main line is wall time for that timestep. Progress only; no binary or history contents were read and receipt status remains pending."
+}
