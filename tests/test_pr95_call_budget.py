@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 
 import numpy as np
+import netCDF4
 import pytest
 
 MODULE = Path(__file__).resolve().parents[1] / "tools/pr95_call_budget.py"
@@ -89,3 +90,99 @@ def test_statistics_label_2d_inputs_as_columns_only():
     result = budget._stats(np.array([[1.0, -2.0]]))
     assert result == {"signed_kg": -1.0, "L1_column_kg": 3.0,
                       "max_abs_column_kg": 2.0}
+
+
+GEOMETRY_VARS = ("MAPFAC_MX", "MAPFAC_MY", "XLAT", "XLONG")
+
+
+def _geometry_file(path: Path, *, invalid: tuple[str, str, float] | None = None,
+                   dx: float = 1000.0, dy: float = 2000.0) -> None:
+    with netCDF4.Dataset(path, "w") as dataset:
+        dataset.createDimension("Time", 1)
+        dataset.createDimension("south_north", 2)
+        dataset.createDimension("west_east", 2)
+        dataset.DX = dx
+        dataset.DY = dy
+        for name in GEOMETRY_VARS:
+            kwargs = {"fill_value": 9.969209968e36} if invalid and invalid[:2] == (name, "_FillValue") else {}
+            variable = dataset.createVariable(name, "f8", ("Time", "south_north", "west_east"), **kwargs)
+            if invalid and invalid[:2] == (name, "missing_value"):
+                variable.missing_value = 1.0e30
+            values = np.full((1, 2, 2), 2.0 if name.startswith("MAPFAC") else 42.0)
+            if invalid and invalid[0] == name:
+                values[0, 0, 0] = invalid[2]
+            variable[:] = values
+
+
+@pytest.mark.parametrize("name", GEOMETRY_VARS)
+@pytest.mark.parametrize("attribute,sentinel", [
+    ("_FillValue", 9.969209968e36), ("missing_value", 1.0e30)])
+def test_geometry_rejects_declared_sentinels_from_netcdf(tmp_path, name, attribute, sentinel):
+    path = tmp_path / "geometry.nc"
+    _geometry_file(path, invalid=(name, attribute, sentinel))
+
+    with netCDF4.Dataset(path) as dataset:
+        dataset.set_auto_mask(False)
+        with pytest.raises(ValueError, match=f"{name} contains declared {attribute} sentinel"):
+            budget._read_map_geometry(dataset, slice(0, 1), slice(0, 1))
+
+
+@pytest.mark.parametrize("name", GEOMETRY_VARS)
+@pytest.mark.parametrize("value", [np.nan, np.inf])
+def test_geometry_rejects_nonfinite_values_from_netcdf(tmp_path, name, value):
+    path = tmp_path / "geometry.nc"
+    _geometry_file(path, invalid=(name, "nonfinite", value))
+
+    with netCDF4.Dataset(path) as dataset:
+        dataset.set_auto_mask(False)
+        with pytest.raises(ValueError, match=f"{name} contains nonfinite history values"):
+            budget._read_map_geometry(dataset, slice(0, 1), slice(0, 1))
+
+
+def test_geometry_checks_invalid_values_outside_selected_tile(tmp_path):
+    path = tmp_path / "geometry.nc"
+    _geometry_file(path)
+    with netCDF4.Dataset(path, "r+") as dataset:
+        dataset["XLONG"][0, 1, 1] = np.nan
+
+    with netCDF4.Dataset(path) as dataset:
+        dataset.set_auto_mask(False)
+        with pytest.raises(ValueError, match="XLONG contains nonfinite history values"):
+            budget._read_map_geometry(dataset, slice(0, 1), slice(0, 1))
+
+
+def test_geometry_valid_result_preserves_area_and_coordinates(tmp_path):
+    path = tmp_path / "geometry.nc"
+    _geometry_file(path)
+
+    with netCDF4.Dataset(path) as dataset:
+        dataset.set_auto_mask(False)
+        area, latitude, longitude = budget._read_map_geometry(
+            dataset, slice(1, 2), slice(0, 2))
+
+    np.testing.assert_array_equal(area, [[500000.0, 500000.0]])
+    np.testing.assert_array_equal(latitude, [[42.0, 42.0]])
+    np.testing.assert_array_equal(longitude, [[42.0, 42.0]])
+
+
+@pytest.mark.parametrize("kwargs,message", [
+    ({"dx": 0.0}, "DX and DY must be finite and positive"),
+    ({"dy": -1.0}, "DX and DY must be finite and positive"),
+])
+def test_geometry_rejects_nonpositive_grid_spacing(tmp_path, kwargs, message):
+    path = tmp_path / "geometry.nc"
+    _geometry_file(path, **kwargs)
+
+    with netCDF4.Dataset(path) as dataset:
+        with pytest.raises(ValueError, match=message):
+            budget._read_map_geometry(dataset, slice(0, 1), slice(0, 1))
+
+
+@pytest.mark.parametrize("name", ["MAPFAC_MX", "MAPFAC_MY"])
+def test_geometry_rejects_nonpositive_map_factors(tmp_path, name):
+    path = tmp_path / "geometry.nc"
+    _geometry_file(path, invalid=(name, "nonpositive", 0.0))
+
+    with netCDF4.Dataset(path) as dataset:
+        with pytest.raises(ValueError, match="MAPFAC_MX and MAPFAC_MY must be positive"):
+            budget._read_map_geometry(dataset, slice(0, 1), slice(0, 1))

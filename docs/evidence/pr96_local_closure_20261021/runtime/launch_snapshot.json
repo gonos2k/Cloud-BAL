@@ -1,0 +1,112 @@
+{
+  "schema": "pr96_c1_launch_snapshot_v1",
+  "observed_utc": "2026-10-21T07:19:57.978994+00:00",
+  "status": "NATIVE_LAUNCHED_CLOSED_RECEIPTS_PENDING",
+  "physical_approval": "FAIL_OPEN",
+  "arms": {
+    "OFF": {
+      "run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/OFF_600s_c1",
+      "requested_seconds": 600,
+      "expected_steps": 30,
+      "preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/OFF_600s_c1/preflight.json",
+        "sha256": "1748a87872b029bafaf3b77ce94e20726aed8618575ee714b0c7ef330db88d49"
+      },
+      "launch_provenance": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/OFF_600s_c1/launch_provenance.json",
+        "sha256": "a7f8a905e7da4855636b85d692522c2b8c7eef1ed1b0ce011113809ea8065a57"
+      },
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_namelist_sha256": "afc366ae884021ae5eb91510f61a137cab30880ba9a81702094e763e5fb52f35",
+      "candidate_build": {
+        "receipt_path": "/var/tmp/pr96_native_build_c1_20261021/pr87_native_overlay_build.json",
+        "receipt_sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+        "schema": "pr87_native_overlay_build_v1",
+        "status": "PASS_OVERLAY_BUILD",
+        "identity": "PR87 source-mapped partial native overlay; not a clean build",
+        "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/Cloud-BAL/tests/intel_toolchain.sh",
+        "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+        "executable_path": "/var/tmp/pr96_native_build_c1_20261021/wrf_pr87_overlay.exe",
+        "executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d"
+      },
+      "closed_receipt_observed": false,
+      "status": "NATIVE_LAUNCHED_CLOSED_RECEIPT_PENDING"
+    },
+    "HYDRO": {
+      "run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1",
+      "requested_seconds": 600,
+      "expected_steps": 30,
+      "preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/preflight.json",
+        "sha256": "857c313e057008437da76e24111301de27a52d827bf76abe999b66734e96f9c5"
+      },
+      "launch_provenance": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/launch_provenance.json",
+        "sha256": "2873f532de7ec74229059f116c52d49ec7d9ffc4ecf405dec6e8bf1a7b85a4fb"
+      },
+      "candidate_wrfinput_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_namelist_sha256": "afc366ae884021ae5eb91510f61a137cab30880ba9a81702094e763e5fb52f35",
+      "candidate_build": {
+        "receipt_path": "/var/tmp/pr96_native_build_c1_20261021/pr87_native_overlay_build.json",
+        "receipt_sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+        "schema": "pr87_native_overlay_build_v1",
+        "status": "PASS_OVERLAY_BUILD",
+        "identity": "PR87 source-mapped partial native overlay; not a clean build",
+        "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/Cloud-BAL/tests/intel_toolchain.sh",
+        "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+        "executable_path": "/var/tmp/pr96_native_build_c1_20261021/wrf_pr87_overlay.exe",
+        "executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d"
+      },
+      "closed_receipt_observed": false,
+      "status": "NATIVE_LAUNCHED_CLOSED_RECEIPT_PENDING"
+    },
+    "COUPLED": {
+      "run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1",
+      "requested_seconds": 600,
+      "expected_steps": 30,
+      "preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/preflight.json",
+        "sha256": "77b784f79bdde59c9b50bcfcffb6a5aaeb058601006873d1ad35b606171dafd8"
+      },
+      "launch_provenance": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/launch_provenance.json",
+        "sha256": "d48806f6cd23e7710fedbda087a67fd35333c814ba95cb8aa5791c6409cc9651"
+      },
+      "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_namelist_sha256": "afc366ae884021ae5eb91510f61a137cab30880ba9a81702094e763e5fb52f35",
+      "candidate_build": {
+        "receipt_path": "/var/tmp/pr96_native_build_c1_20261021/pr87_native_overlay_build.json",
+        "receipt_sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+        "schema": "pr87_native_overlay_build_v1",
+        "status": "PASS_OVERLAY_BUILD",
+        "identity": "PR87 source-mapped partial native overlay; not a clean build",
+        "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/Cloud-BAL/tests/intel_toolchain.sh",
+        "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+        "executable_path": "/var/tmp/pr96_native_build_c1_20261021/wrf_pr87_overlay.exe",
+        "executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d"
+      },
+      "closed_receipt_observed": false,
+      "status": "NATIVE_LAUNCHED_CLOSED_RECEIPT_PENDING"
+    }
+  },
+  "closed_audit_waiter": {
+    "path": "/var/tmp/pr96_closed_audit_queue_20261021.py",
+    "sha256": "317ff289a22acce9ddbfb27dce432e507de2bf91c04357c4c033ef2aada1bbaf",
+    "published_source": "closed_audit_queue.py",
+    "output_dir": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/closed_audits/pr96_c1_20261021",
+    "scope": "Polls finalized receipts only, then verifies build/input identities and invokes the existing frozen per-arm audit. No runtime completion is inferred from process presence."
+  },
+  "dry_preflight_note": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/preflights/staging_note.json",
+    "sha256": "e0c9b4958bc223b001ff49735587bc52ab510304dbf11791cd698e24ad033bdf",
+    "scope": "The dry CLI reserved three output paths; the first execute wrapper refused them before launching WRF. Dry directories and errors were preserved separately, then each real forecast launched once into a fresh directory."
+  },
+  "limits": [
+    "This is a timestamped launch snapshot, not evidence of later process state or completion.",
+    "The runtime image and requests are frozen independently of later source publication commits.",
+    "Generic, source endpoint, active-ice and procedural results are reported separately when closed receipts become available."
+  ]
+}
