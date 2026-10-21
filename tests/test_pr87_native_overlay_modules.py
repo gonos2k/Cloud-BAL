@@ -97,3 +97,113 @@ def test_reproduction_flags_are_read_from_sourced_profile(tmp_path: Path) -> Non
     profile.write_text("CLOUD_BAL_REPRO_FLAGS=(-stand f08 -O2 -fp-model strict)\n")
 
     assert overlay.load_reproduction_flags(profile) == ["-stand", "f08", "-O2", "-fp-model", "strict"]
+
+
+def _link_receipt(tmp_path: Path) -> dict:
+    return {
+        "candidate_executable_path": "/parent/wrf.exe",
+        "candidate_archive_path": "/parent/libwrf.a",
+        "observer_object_path": "/parent/pr85_joint_stage_observer.o",
+        "link_argv": ["ifx", "-o", "/parent/wrf.exe", "/parent/wrf.o",
+                      "/parent/libwrf.a", "/parent/pr85_joint_stage_observer.o",
+                      "/parent/solve_em.o"],
+    }
+
+
+def test_link_replaces_exact_parent_observer_and_keeps_extra_adjacent(tmp_path: Path) -> None:
+    receipt = _link_receipt(tmp_path)
+    executable = tmp_path / "overlay.exe"
+    archive = tmp_path / "overlay.a"
+    staged_wrf = tmp_path / "wrf.o"
+    observer_object = tmp_path / "observer_override.o"
+    extra_object = tmp_path / "extra.o"
+    observer_object.write_bytes(b"replacement observer")
+    staged_link_inputs = {"/parent/wrf.o": {"path": str(staged_wrf)}}
+
+    argv = overlay.build_link_argv(
+        receipt, executable, archive, staged_link_inputs,
+        {"object_path": str(extra_object)},
+        {"object_path": str(observer_object), "object_sha256": overlay.sha256(observer_object)},
+    )
+
+    assert argv == ["ifx", "-o", str(executable), str(staged_wrf), str(archive),
+                    str(observer_object), str(extra_object), "/parent/solve_em.o"]
+    assert receipt["link_argv"][5] == receipt["observer_object_path"]
+
+
+def test_link_without_override_keeps_parent_observer_and_existing_extra_order(tmp_path: Path) -> None:
+    receipt = _link_receipt(tmp_path)
+
+    argv = overlay.build_link_argv(
+        receipt, tmp_path / "overlay.exe", tmp_path / "overlay.a", {},
+        {"object_path": "/extra/pr90_cycle_support.o"},
+    )
+
+    observer_index = argv.index(receipt["observer_object_path"])
+    assert argv[observer_index + 1] == "/extra/pr90_cycle_support.o"
+    assert receipt["observer_object_path"] in argv
+
+
+def test_link_rejects_missing_parent_observer_link_input(tmp_path: Path) -> None:
+    receipt = _link_receipt(tmp_path)
+    receipt["link_argv"].remove(receipt["observer_object_path"])
+    observer_object = tmp_path / "observer_override.o"
+    observer_object.write_bytes(b"replacement observer")
+
+    with pytest.raises(ValueError, match="parent observer object exactly once"):
+        overlay.build_link_argv(
+            receipt, tmp_path / "overlay.exe", tmp_path / "overlay.a", {}, None,
+            {"object_path": str(observer_object), "object_sha256": overlay.sha256(observer_object)},
+        )
+
+
+def test_link_rejects_missing_or_mismatched_observer_override_object(tmp_path: Path) -> None:
+    receipt = _link_receipt(tmp_path)
+    missing = tmp_path / "missing_observer.o"
+    with pytest.raises(ValueError, match="observer override object is missing"):
+        overlay.build_link_argv(
+            receipt, tmp_path / "overlay.exe", tmp_path / "overlay.a", {}, None,
+            {"object_path": str(missing), "object_sha256": "0" * 64},
+        )
+
+    observer_object = tmp_path / "observer_override.o"
+    observer_object.write_bytes(b"actual object")
+    with pytest.raises(ValueError, match="observer override object hash mismatch"):
+        overlay.build_link_argv(
+            receipt, tmp_path / "overlay.exe", tmp_path / "overlay.a", {}, None,
+            {"object_path": str(observer_object), "object_sha256": "0" * 64},
+        )
+
+
+def test_extra_source_object_and_log_defaults_remain_stable(tmp_path: Path, monkeypatch) -> None:
+    source = tmp_path / "observer.f90"
+    source.write_text("subroutine observer()\nend\n")
+    scratch = tmp_path / "scratch"
+    compile_dir = scratch / "compile"
+    (scratch / "logs").mkdir(parents=True)
+    compile_dir.mkdir()
+
+    def fake_run_pinned(argv, cwd, log, profile=overlay.PROFILE):
+        output = Path(argv[argv.index("-o") + 1])
+        output.write_bytes(b"compiled")
+        log.write_text("compiled\n")
+
+    monkeypatch.setattr(overlay, "run_pinned", fake_run_pinned)
+    parent = {"observer_source_path": "/parent/observer.f90",
+              "observer_compile_argv": ["ifx", "-O0", "-c", "-free",
+                                        "/parent/observer.f90", "-o", "/parent/observer.o"]}
+
+    result = overlay.compile_extra_source(source, parent, scratch, compile_dir, False)
+    override = overlay.compile_extra_source(
+        source, parent, scratch, compile_dir, False,
+        object_name="pr87_stage_observer_override.o",
+        log_name="stage_observer_override.compile.log",
+        source_subdir="stage_observer_override",
+    )
+
+    assert Path(result["source_path"]) == scratch / "source" / "observer.f90"
+    assert Path(result["object_path"]).name == "pr87_extra_observer.o"
+    assert Path(result["compile_log"]).name == "extra_observer.compile.log"
+    assert Path(override["source_path"]) == scratch / "source/stage_observer_override/observer.f90"
+    assert Path(override["object_path"]).name == "pr87_stage_observer_override.o"
+    assert Path(override["compile_log"]).name == "stage_observer_override.compile.log"

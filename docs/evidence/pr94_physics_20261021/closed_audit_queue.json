@@ -1,0 +1,22 @@
+{
+  "schema": "pr94_closed_artifact_queue_provenance_v1",
+  "recorded_utc": "2026-10-21T00:51:18.652555+00:00",
+  "status": "WAITING_FOR_CLOSED_RECEIPTS",
+  "queue_script": {
+    "path": "/var/tmp/pr94_postrun_queue_20261021.py",
+    "sha256": "8cf745e91955a7066f41c3f01b997d60e7837d02baca67b420ab98d116e8109c"
+  },
+  "startup_tool_pins": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/closed_audits/source_pins.json",
+    "sha256": "a800423b12a31c755c161fe6a5d80023bb6649fc6a6b0e08a60bc3faaf62b6a0",
+    "scope": "startup identities checked for changes; not an external expected-hash manifest"
+  },
+  "outputs": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/closed_audits",
+  "semantics": [
+    "Only finalized COMPLETE/INCOMPLETE receipt triggers artifact reads",
+    "HYDRO INCOMPLETE skips normal response comparison",
+    "Audit return codes and incomplete prefix stay explicit",
+    "Queue never commits, pushes, publishes, or awards physical PASS"
+  ],
+  "independent_review": "operational GO; no models or live binary/history inspected"
+}

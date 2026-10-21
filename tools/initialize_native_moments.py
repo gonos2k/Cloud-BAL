@@ -36,6 +36,8 @@ PR84_EXPECTED_SOURCE_INPUTS = {
     "COUPLED": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
 }
 PR84_POLICY_SCHEMA = "pr84_same13_native_moment_policy_v2"
+PR94_HYDRO_POLICY_SCHEMA = "pr94_same13_hydro_moment_policy_v1"
+PR94_HYDRO_POLICY_ID = "SAME13_KDM6_NATIVE_MOMENT_PRIOR_20261013_V2_HYDRO"
 PR83_BOUND_SOURCE = (
     "Selected KDM6 source PSD parameterization and source-exact same-time WRF AL+ALB density; "
     "see docs/PR83_NATIVE_MOMENT_POLICY_20261013.json"
@@ -199,6 +201,9 @@ def _validate_same13_policy_file(path: Path) -> dict[str, Any]:
         raise InitializationError(f"INVALID_POLICY_FILE:{error}") from error
     if not isinstance(policy, dict):
         raise InitializationError("POLICY_ROOT_MUST_BE_OBJECT")
+    if policy.get("schema") == PR94_HYDRO_POLICY_SCHEMA:
+        _validate_pr94_hydro_policy(path, policy)
+        return policy
     if policy.get("schema") == PR84_POLICY_SCHEMA:
         if file_sha256(path) != PR84_EXPECTED_POLICY_SHA256:
             raise InitializationError("PR84_POLICY_HASH_MISMATCH")
@@ -247,6 +252,49 @@ def _validate_same13_policy_file(path: Path) -> dict[str, Any]:
             raise InitializationError(f"WRF_SOURCE_HASH_MISMATCH:{path_key}")
     _check_same13_policy_implementation(policy)
     return policy
+
+
+def _validate_pr94_hydro_policy(path: Path, policy: dict[str, Any]) -> None:
+    """Allow one separately bound HYDRO input under the unchanged PR84 v2 prior."""
+    base_path = Path(__file__).resolve().parents[1] / "docs/PR84_NATIVE_MOMENT_POLICY_20261013.json"
+    try:
+        base = json.loads(base_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise InitializationError(f"PR94_BASE_POLICY_UNAVAILABLE:{error}") from error
+    if file_sha256(base_path) != PR84_EXPECTED_POLICY_SHA256:
+        raise InitializationError("PR94_BASE_POLICY_HASH_MISMATCH")
+    if policy.get("policy_id") != PR94_HYDRO_POLICY_ID:
+        raise InitializationError("PR94_POLICY_ID_MISMATCH")
+    binding = policy.get("hydro_input_binding")
+    if (not isinstance(binding, dict)
+            or set(binding) != {"source_receipt_path", "source_receipt_sha256",
+                                "wrfinput_path", "wrfinput_sha256"}):
+        raise InitializationError("PR94_HYDRO_INPUT_BINDING_MISSING")
+    receipt_path = Path(binding["source_receipt_path"])
+    wrfinput_path = Path(binding["wrfinput_path"])
+    if (file_sha256(receipt_path) != binding["source_receipt_sha256"]
+            or file_sha256(wrfinput_path) != binding["wrfinput_sha256"]):
+        raise InitializationError("PR94_HYDRO_INPUT_BINDING_HASH_MISMATCH")
+    try:
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise InitializationError(f"PR94_SOURCE_RECEIPT_INVALID:{error}") from error
+    wrfinput_binding = receipt.get("wrfinput", {})
+    if (receipt.get("schema") != "pr94_hydro_real_input_receipt_v1"
+            or receipt.get("status") != "PASS_HYDRO_REAL_INPUT"
+            or receipt.get("role") != "HYDRO"
+            or wrfinput_binding.get("path") != str(wrfinput_path)
+            or wrfinput_binding.get("sha256") != binding["wrfinput_sha256"]):
+        raise InitializationError("PR94_SOURCE_RECEIPT_IDENTITY_MISMATCH")
+    restored = json.loads(json.dumps(policy))
+    restored.pop("hydro_input_binding", None)
+    restored["schema"] = base["schema"]
+    restored["policy_id"] = base["policy_id"]
+    restored["preflight"]["authorized_source_inputs"] = base["preflight"]["authorized_source_inputs"]
+    if restored != base:
+        raise InitializationError("PR94_POLICY_DIFFERS_FROM_PR84_V2")
+    _validate_pr84_policy_contract(base)
+    _validate_pr84_evidence_bindings(base)
 
 
 def _validate_pr84_policy_contract(policy: dict[str, Any]) -> None:
@@ -546,7 +594,7 @@ def _same13_dry_density(dataset: Dataset) -> np.ndarray:
 
 
 def _same13_active_slice(policy: dict[str, Any]) -> tuple[slice, slice, slice]:
-    if (policy.get("schema") == PR84_POLICY_SCHEMA
+    if (policy.get("schema") in (PR84_POLICY_SCHEMA, PR94_HYDRO_POLICY_SCHEMA)
             and policy["prior"].get("active_domain_mode") == "FULL_NATIVE_HORIZONTAL"):
         return (slice(None), slice(None), slice(None))
     return (slice(None), slice(1, -1), slice(1, -1))
@@ -582,7 +630,9 @@ def _same13_preflight(
     arrays: dict[str, np.ndarray], density: np.ndarray,
     policy: dict[str, Any] | None = None,
 ) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], dict[str, Any]]:
-    is_pr84 = policy is not None and policy.get("schema") == PR84_POLICY_SCHEMA
+    is_pr84 = policy is not None and policy.get("schema") in (
+        PR84_POLICY_SCHEMA, PR94_HYDRO_POLICY_SCHEMA
+    )
     active_slice = _same13_active_slice(policy or {})
     active_density = density[active_slice]
     updated: dict[str, np.ndarray] = {}
@@ -768,7 +818,7 @@ def _same13_evidence_hashes(
         "driver_path", "runtime_consumer_source_path", "runtime_consumer_executable_path",
         "runtime_consumer_archive_path", "runtime_consumer_build_receipt_path",
     ]
-    if policy.get("schema") != PR84_POLICY_SCHEMA:
+    if policy.get("schema") not in (PR84_POLICY_SCHEMA, PR94_HYDRO_POLICY_SCHEMA):
         source_keys.append("runtime_consumer_readback_receipt_path")
     for key in source_keys:
         hashes[key] = file_sha256(Path(source_metadata[key]))
@@ -800,14 +850,21 @@ def initialize_same13_copy(
             or receipt_file.exists()):
         raise InitializationError("OUTPUT_AND_RECEIPT_MUST_BE_NEW_PATHS")
     policy = _validate_same13_policy_file(policy_file)
-    is_pr84 = policy.get("schema") == PR84_POLICY_SCHEMA
+    is_pr84 = policy.get("schema") in (PR84_POLICY_SCHEMA, PR94_HYDRO_POLICY_SCHEMA)
+    is_pr94_hydro = policy.get("schema") == PR94_HYDRO_POLICY_SCHEMA
     policy_hash = file_sha256(policy_file)
     initializer_path = Path(__file__).resolve()
     initializer_hash = file_sha256(initializer_path)
     source_hash = file_sha256(source)
-    if is_pr84:
-        if source_hash not in PR84_EXPECTED_SOURCE_INPUTS.values():
-            raise InitializationError("PR84_SOURCE_INPUT_HASH_MISMATCH")
+    if is_pr94_hydro:
+        binding = policy["hydro_input_binding"]
+        if (source_hash != binding["wrfinput_sha256"]
+                or str(source) != binding["wrfinput_path"]):
+            raise InitializationError("PR94_HYDRO_SOURCE_INPUT_MISMATCH")
+        source_role = "HYDRO"
+    elif is_pr84 and source_hash not in PR84_EXPECTED_SOURCE_INPUTS.values():
+        raise InitializationError("PR84_SOURCE_INPUT_HASH_MISMATCH")
+    elif is_pr84:
         source_role = next(
             role for role, digest in PR84_EXPECTED_SOURCE_INPUTS.items()
             if digest == source_hash
@@ -908,6 +965,9 @@ def initialize_same13_copy(
         if is_pr84:
             receipt["policy_schema"] = PR84_POLICY_SCHEMA
             receipt["source_input_role"] = source_role
+            if is_pr94_hydro:
+                receipt["policy_schema"] = PR94_HYDRO_POLICY_SCHEMA
+                receipt["hydro_input_binding"] = policy["hydro_input_binding"]
         _write_receipt(receipt_file, receipt)
         return receipt
 
@@ -1026,6 +1086,9 @@ def initialize_same13_copy(
     if is_pr84:
         receipt["policy_schema"] = PR84_POLICY_SCHEMA
         receipt["source_input_role"] = source_role
+        if is_pr94_hydro:
+            receipt["policy_schema"] = PR94_HYDRO_POLICY_SCHEMA
+            receipt["hydro_input_binding"] = policy["hydro_input_binding"]
     try:
         _write_receipt(receipt_file, receipt)
     except BaseException:

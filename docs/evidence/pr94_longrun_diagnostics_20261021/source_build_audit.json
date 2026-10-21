@@ -1,0 +1,82 @@
+{
+  "schema": "pr94_diagnostic_overlay_source_audit_v1",
+  "status": "PASS_SOURCE_BUILD_NOT_RUNTIME",
+  "baseline_build": {
+    "path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+    "sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669",
+    "executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be"
+  },
+  "diagnostic_build": {
+    "path": "/var/tmp/pr94_native_compact3600_20261021/pr87_native_overlay_build.json",
+    "sha256": "9ba94b0b0d4737641bd87d6237ff65e8b207bf8ae52c815521510d7d022f073d",
+    "executable_sha256": "3eea34b73a1ac3a7c0dfb121968e82fa764e65eeeee0df75c79e8bba27641bac"
+  },
+  "physical_sources": [
+    {
+      "member": "module_microphysics_zero_out.o",
+      "source_sha256": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+      "preprocessed_body_sha256_excluding_cpp_line_markers": "65c682b2cf7c85de04e44ae0ca751ff1d873f97096450fc6db062c57d638f872",
+      "same_as_frozen_C4": true
+    },
+    {
+      "member": "module_em.o",
+      "source_sha256": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+      "preprocessed_body_sha256_excluding_cpp_line_markers": "0758047c709271092466c904b0aa8fe93949265b1b2a339282ea8520254686a4",
+      "same_as_frozen_C4": true
+    },
+    {
+      "member": "module_bl_shinhong.o",
+      "source_sha256": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+      "preprocessed_body_sha256_excluding_cpp_line_markers": "e49b056054854857c277af42516e0b61cde42672a595418f26cfdc298a618f61",
+      "same_as_frozen_C4": true
+    },
+    {
+      "member": "module_bl_fogdes.o",
+      "source_sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+      "preprocessed_body_sha256_excluding_cpp_line_markers": "4b718efa72ae4d5785b04e076ef42017ecd6bbf1219db59f43fdbcfbd55809c0",
+      "same_as_frozen_C4": true
+    },
+    {
+      "member": "module_pbl_driver.o",
+      "source_sha256": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+      "preprocessed_body_sha256_excluding_cpp_line_markers": "a0420c0e589b49c33fbfea0f5cbe89531c26b03a844cbad5e1a3bc53099e12a2",
+      "same_as_frozen_C4": true
+    },
+    {
+      "member": "module_mp_kdm6.o",
+      "source_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+      "preprocessed_body_sha256_excluding_cpp_line_markers": "c736daf44cbf569d040a0b34ade8013b9066ebc24e38e083fd531046d7e01172",
+      "same_as_frozen_C4": true
+    },
+    {
+      "member": "module_first_rk_step_part1.o",
+      "source_sha256": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+      "preprocessed_body_sha256_excluding_cpp_line_markers": "b9ba01c674fa4fddde46c7f1fed3d5cd4a8b078e11ffda907d1997a56b8dbaac",
+      "same_as_frozen_C4": true
+    },
+    {
+      "member": "module_first_rk_step_part2.o",
+      "source_sha256": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+      "preprocessed_body_sha256_excluding_cpp_line_markers": "480de58a87254ebb6ed293f8f35d8b013edc027aeef2ecbc013fbecd670f5f59",
+      "same_as_frozen_C4": true
+    },
+    {
+      "member": "solve_em.o",
+      "source_sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
+      "preprocessed_body_sha256_excluding_cpp_line_markers": "ad975ef557e73849b382c92aa382d1e7829bd38f0801d9af8b02b8d37fd97dc6",
+      "same_as_frozen_C4": true
+    }
+  ],
+  "parent_archive_sha256_unchanged": true,
+  "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "compile_profile_unchanged": true,
+  "cycle_support_sha256": "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6",
+  "cycle_support_unchanged": true,
+  "observer_source_sha256": "d04edb3747df3057762be1fe013ce9bdcf09e14e6a974e4e8bc2daa3e2dea1b3",
+  "full_clean_build": false,
+  "limits": [
+    "Selected-object partial-host; executable hash differs because observer object changes.",
+    "Manufactured observer prefix comparison is separate from native full-model prefix/history comparison.",
+    "Source/hash identity does not establish runtime conservation, observation skill or scientific acceptance."
+  ]
+}

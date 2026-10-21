@@ -1,0 +1,131 @@
+{
+  "schema": "pr94_physical_validation_work_v1",
+  "base_commit": "3d055bf24e92bfd6bba5d558cb8b77a32f8fa668",
+  "recorded_utc": "2026-10-21T00:47:45.923533+00:00",
+  "frozen_physics": "PR93-C4",
+  "original_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+  "scope": {
+    "existing_OFF_COUPLED_600s": "PASS_SCOPED",
+    "absolute_water_closure": "OPEN_MISSING_TERMS",
+    "QC_pattern": "ACTUAL_ARRAY_NEGATIVE_ALIGNMENT_DESCRIPTIVE",
+    "observation_skill": "NOT_EVALUATED_NO_MATCHED_Y",
+    "HYDRO_600s": "RUNNING",
+    "OFF_COUPLED_3600s": "RUNNING",
+    "native_prefix_equivalence": "PENDING_CLOSED_RUNS",
+    "full_clean_host_rebuild": "NOT_RUN",
+    "current_full_canonical": "NOT_RUN",
+    "physical_approval": "OPEN"
+  },
+  "validation": {
+    "focused_python_tests": 104,
+    "focused_log": "validation/focused_tests.txt",
+    "pinned_ifx_observer": "six O0/O2 manufactured builds; retained bytes/fatal behavior unchanged",
+    "HYDRO_producer": "fresh scratch-CWD O0/O2; candidate bytes identical; actual pinned WPS/metgrid/real and PR84v2 initialization receipts",
+    "GNU_used": false
+  },
+  "resolved_review_findings": [
+    "cross-filesystem staged-copy byte verification before native consumption",
+    "HYDRO arm/template/launch-preflight/source-chain checks",
+    "stage raw-input and initializer/policy/output crosslinks",
+    "explicit final2 evidence selection; historical and superseded attempts retained",
+    "exclude initial non-scratch-CWD builds from validation; compliant reruns used",
+    "stream compact state audit with bounded memory and EOF hash checks",
+    "map color clipping declared and saturation counts recorded",
+    "paired actual Times/map geometry and support index validation"
+  ],
+  "remaining": [
+    "actual HYDRO closed response",
+    "30/60min closed native audit and original first600 prefix comparison",
+    "actual boundary/relaxation/surface/integrated numerical budget terms",
+    "physical versus PSD/representation number changes",
+    "authoritative matched observations/operator",
+    "absolute energy and C-grid mass-wind closure"
+  ],
+  "bounded_artifacts": [
+    {
+      "path": "docs/evidence/pr94_cloud_response_20261021/cloud_response.json",
+      "bytes": 430650,
+      "sha256": "d950cd8d31df69506ffbebcc689bf37541682799e7ec1cfc00f6a08db0b164ef"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/README.md",
+      "bytes": 1368,
+      "sha256": "3fa1cb46b0dd1185e7febf57f374d272e9aec47377728c882811b3d13a895e3d"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/current_hydro_producer_receipt.json",
+      "bytes": 1113,
+      "sha256": "9ce8364031437ea74e93e9226ebca233e9820f6f7f11455c1554656dd0ed7988"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/current_profile_comparison.json",
+      "bytes": 1012,
+      "sha256": "1b740beafb1ef9d398152dc7f25878f48c9482d3bc975e14bb371630ad18a351"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/hydro_initialization_receipt.json",
+      "bytes": 8450,
+      "sha256": "4be879874a18a778a1dfa8324e4eeaf5dd835fa4ed04759d1010d6bd697c547d"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/hydro_moment_policy.json",
+      "bytes": 14168,
+      "sha256": "d997de683a0a06d13789edd3b59805f835ae2a0816dda202df3e06d795bff1e5"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/hydro_native_input_receipt.json",
+      "bytes": 3383,
+      "sha256": "7852af11055e02b92cd5fb90d0229842ae991431261366681fd7c22915a699d5"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/hydro_real_input_stage.json",
+      "bytes": 2884,
+      "sha256": "288edb99937d81f8b57c0d328e168905f8ad266d80414753deb1780019f69aaa"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/manifest.json",
+      "bytes": 4406,
+      "sha256": "4dcdf3bf06196dc2de96f403f6f21e5cb283aef178e20b160c2a90816df171d6"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/metgrid_readback.json",
+      "bytes": 2967,
+      "sha256": "97667d0e9681e3dd2728e5f2d398f3d1ac0388e804bd0fd1bab3b9df09c97489"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/real_readback.json",
+      "bytes": 9437,
+      "sha256": "b321a35800b253d72404a74e4140297281618377261b6d3f3c8a5224f9543f74"
+    },
+    {
+      "path": "docs/evidence/pr94_hydro_control_20261021/wps_readback.json",
+      "bytes": 987,
+      "sha256": "52b1244a58cb74d4e1ef0e9d08796d62a82e4fcbdff78d22b0c4987ee831b892"
+    },
+    {
+      "path": "docs/evidence/pr94_longrun_diagnostics_20261021/longrun_launch_plan.json",
+      "bytes": 11895,
+      "sha256": "ad29459154237389b49301251cff9399c4c94d42124c73ac2b7c9f555415b0a8"
+    },
+    {
+      "path": "docs/evidence/pr94_longrun_diagnostics_20261021/observer_validation.json",
+      "bytes": 20151,
+      "sha256": "7899f5a0b64e0ecb0c55758f9f645966d38d53e3be5c50b1a58a9006e4b43127"
+    },
+    {
+      "path": "docs/evidence/pr94_longrun_diagnostics_20261021/source_build_audit.json",
+      "bytes": 4218,
+      "sha256": "a41aa4b1ed703803272649198483b7787aae5b1962d759c68f5644e3f54adf06"
+    },
+    {
+      "path": "docs/evidence/pr94_water_budget_20261021/c4_absolute_water_budget.json",
+      "bytes": 43705,
+      "sha256": "72e532e362c4b3e2d8bca087449d74e5f660fdce5df0587142a047e8c836e2ce"
+    },
+    {
+      "path": "docs/evidence/pr94_water_budget_20261021/c4_water_columns_v2.png",
+      "bytes": 1011301,
+      "sha256": "f933205bb35e944537996f1f0c1566ef7f736a432a9ec77b04fe0fe920496051"
+    }
+  ]
+}

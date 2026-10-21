@@ -250,17 +250,21 @@ def preprocess_and_compile(row: dict, source: Path, scratch: Path, compile_dir: 
 
 def compile_extra_source(source: Path, receipt: dict, scratch: Path, compile_dir: Path,
                          quiet_arg_temporaries: bool,
-                         reproduction_flags: list[str] | None = None) -> dict:
-    source_dir = scratch / "source"
+                         reproduction_flags: list[str] | None = None,
+                         object_name: str = "pr87_extra_observer.o",
+                         log_name: str = "extra_observer.compile.log",
+                         source_subdir: str = "") -> dict:
+    source_dir = scratch / "source" / source_subdir
+    source_dir.mkdir(parents=True, exist_ok=True)
     staged_source = source_dir / source.name
     shutil.copy2(source, staged_source)
-    obj = compile_dir / "pr87_extra_observer.o"
+    obj = compile_dir / object_name
     argv = with_overlay_paths(receipt["observer_compile_argv"],
                               {Path(receipt["observer_source_path"])}, None, None, obj,
                               compile_dir, quiet_arg_temporaries, staged_source)
     if reproduction_flags is not None:
         argv = reproduction_compile_argv(argv, reproduction_flags)
-    log = scratch / "logs/extra_observer.compile.log"
+    log = scratch / "logs" / log_name
     run_pinned(argv, scratch, log)
     if not obj.is_file():
         raise RuntimeError(f"compiler did not create {obj}")
@@ -273,7 +277,8 @@ def compile_extra_source(source: Path, receipt: dict, scratch: Path, compile_dir
 
 
 def build_link_argv(receipt: dict, executable: Path, archive: Path,
-                    staged_link_inputs: dict[str, dict], extra: dict | None) -> list[str]:
+                    staged_link_inputs: dict[str, dict], extra: dict | None,
+                    observer_override: dict | None = None) -> list[str]:
     argv = list(receipt["link_argv"])
     for index, arg in enumerate(argv):
         if arg == receipt["candidate_executable_path"]:
@@ -282,8 +287,23 @@ def build_link_argv(receipt: dict, executable: Path, archive: Path,
             argv[index] = str(archive)
         elif arg in staged_link_inputs:
             argv[index] = staged_link_inputs[arg]["path"]
+    parent_observer_path = receipt["observer_object_path"]
+    observer_count = argv.count(parent_observer_path)
+    if observer_override:
+        if observer_count != 1:
+            raise ValueError("link argv must contain the parent observer object exactly once")
+        observer_object = Path(observer_override["object_path"])
+        if not observer_object.is_file():
+            raise ValueError(f"observer override object is missing: {observer_object}")
+        if sha256(observer_object) != observer_override.get("object_sha256"):
+            raise ValueError(f"observer override object hash mismatch: {observer_object}")
+        observer_index = argv.index(parent_observer_path)
+        argv[observer_index] = str(observer_object)
+    elif extra:
+        if observer_count != 1:
+            raise ValueError("link argv must contain the parent observer object exactly once")
+        observer_index = argv.index(parent_observer_path)
     if extra:
-        observer_index = argv.index(receipt["observer_object_path"])
         argv.insert(observer_index + 1, extra["object_path"])
     return argv
 
@@ -294,9 +314,13 @@ def build_overlay(args: argparse.Namespace) -> dict:
         raise ValueError(f"scratch already exists: {scratch}")
     overrides = load_overrides(args.source_overrides)
     extra_source = args.extra_source.resolve() if args.extra_source else None
-    if not overrides and extra_source is None:
-        raise ValueError("provide --source-overrides or --extra-source")
-    for source in [*overrides.values(), *([extra_source] if extra_source else [])]:
+    observer_source = (Path(args.observer_source).resolve()
+                       if getattr(args, "observer_source", None) else None)
+    if not overrides and extra_source is None and observer_source is None:
+        raise ValueError("provide --source-overrides, --extra-source, or --observer-source")
+    sources = [*overrides.values(), *([extra_source] if extra_source else []),
+               *([observer_source] if observer_source else [])]
+    for source in sources:
         if not source.is_file():
             raise ValueError(f"source file is missing: {source}")
 
@@ -347,6 +371,11 @@ def build_overlay(args: argparse.Namespace) -> dict:
 
     extra = compile_extra_source(extra_source, parent_receipt, scratch, compile_dir,
                                  args.quiet_arg_temporaries, repro_flags) if extra_source else None
+    observer_override = (compile_extra_source(
+        observer_source, parent_receipt, scratch, compile_dir, args.quiet_arg_temporaries,
+        repro_flags, object_name="pr87_stage_observer_override.o",
+        log_name="stage_observer_override.compile.log", source_subdir="stage_observer_override")
+        if observer_source else None)
     parent_link_dir = Path(parent_receipt["link_cwd"])
     staged_link_inputs = {}
     for name in ("wrf.o", "module_wrf_top.o"):
@@ -369,7 +398,7 @@ def build_overlay(args: argparse.Namespace) -> dict:
 
     executable = scratch / "wrf_pr87_overlay.exe"
     overlay_link_argv = build_link_argv(parent_receipt, executable, overlay_archive,
-                                        staged_link_inputs, extra)
+                                        staged_link_inputs, extra, observer_override)
     link_log = scratch / "logs/link.log"
     run_pinned(overlay_link_argv, link_dir, link_log)
     if not executable.is_file() or executable.open("rb").read(4) != b"\x7fELF":
@@ -392,6 +421,7 @@ def build_overlay(args: argparse.Namespace) -> dict:
         "modules": final_modules(compile_dir, modules),
         "excluded_parent_generated_interface": REPLACED_EXTERNAL_INTERFACE,
         "compiled_overrides": compiled, "extra_observer": extra,
+        "stage_observer_override": observer_override,
         "source_overrides": {member: {
             "requested_path": str(overrides[member]), "requested_sha256": sha256(overrides[member]),
             "staged_path": str(path), "staged_sha256": sha256(path),
@@ -422,6 +452,8 @@ def main() -> int:
                         help="JSON object or JSON file mapping archive .o members to source paths")
     parser.add_argument("--extra-source", type=Path,
                         help="optional additional observer source compiled with its recorded ifx recipe")
+    parser.add_argument("--observer-source", type=Path,
+                        help="optional replacement PR85 stage observer source compiled with its recorded ifx recipe")
     parser.add_argument("--quiet-arg-temporaries", action="store_true",
                         help="add -check noarg_temp_created to check-all ifx compiles")
     parser.add_argument("--reproduction-profile", action="store_true",

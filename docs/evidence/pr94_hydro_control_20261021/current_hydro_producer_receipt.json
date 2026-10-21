@@ -1,0 +1,29 @@
+{
+  "candidate": {
+    "path": "/var/tmp/pr94_hydro_current_O2_20261021/build/hydro_candidate.nc",
+    "sha256": "97a98c5bb05a8dc70528c2b6c025ae8cb359ed46f23b7d3c28941535f71ae9d6"
+  },
+  "configuration": {
+    "background_continuity_prior": false,
+    "column_transport_precipitation": false,
+    "force_prior_enabled": false,
+    "maximum_outer_iterations": 8,
+    "requested_mode": "MODE_SHADOW",
+    "thermo_density_prior_background_weight": 0.5,
+    "thermo_density_prior_enabled": true,
+    "thermo_density_prior_max_temperature_increment_K": 5.0,
+    "thermo_density_prior_max_vapor_increment_kg_kg-1": 0.005
+  },
+  "input_pre_post_hashes_equal": true,
+  "o0_candidate": {
+    "path": "/var/tmp/pr94_hydro_current_O0_20261021/build/hydro_candidate.nc",
+    "sha256": "97a98c5bb05a8dc70528c2b6c025ae8cb359ed46f23b7d3c28941535f71ae9d6"
+  },
+  "o0_o2_candidate_arrays_bitwise_equal": true,
+  "profile": "pinned Intel O2",
+  "role": "HYDRO",
+  "schema": "pr94_hydro_current_producer_v1",
+  "source_pre_post_hashes_equal": true,
+  "status": "PASS_PR94_CURRENT_GENERATION_HYDRO",
+  "wind_state_unchanged": true
+}

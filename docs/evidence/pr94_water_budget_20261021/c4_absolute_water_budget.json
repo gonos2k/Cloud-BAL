@@ -1,0 +1,1194 @@
+{
+  "arms": {
+    "COUPLED": {
+      "arm": "COUPLED",
+      "elapsed_600s": {
+        "available_residual_column_change_plus_precipitation": {
+          "L1_kg": 1613346729766.016,
+          "max_abs_column_kg": 711239142.0924809,
+          "signed_total_kg": 146286769809.65323
+        },
+        "closure_status": "OPEN_MISSING_TERMS",
+        "inventory_change_cell_diagnostics": {
+          "L1_kg": 2700071289001.1567,
+          "column_L1_kg": 1680607593440.7422,
+          "max_abs_cell_kg": 179996637.75995287,
+          "max_abs_column_kg": 875452387.4985762,
+          "signed_total_kg": -13352195793.062193
+        },
+        "inventory_change_diagnostic_only": true,
+        "precipitation_outflow_kg": 159638965602.71555,
+        "species_inventory_change_kg": {
+          "QCLOUD": -1566068454233.2703,
+          "QGRAUP": 166802142887.6522,
+          "QICE": -970340399331.3301,
+          "QRAIN": 646682942155.393,
+          "QSNOW": 863918885816.8496,
+          "QVAPOR": 845652686911.6406
+        },
+        "total_water_inventory_change_kg": -13352195793.0625
+      },
+      "history_timestamps": [
+        "2026-08-16_13:00:00",
+        "2026-08-16_13:01:00",
+        "2026-08-16_13:02:00",
+        "2026-08-16_13:03:00",
+        "2026-08-16_13:04:00",
+        "2026-08-16_13:05:00",
+        "2026-08-16_13:06:00",
+        "2026-08-16_13:07:00",
+        "2026-08-16_13:08:00",
+        "2026-08-16_13:09:00",
+        "2026-08-16_13:10:00"
+      ],
+      "identities": {
+        "grid": {
+          "dx": 5000.0,
+          "dy": 5000.0,
+          "shape": [
+            282,
+            234
+          ]
+        },
+        "history": {
+          "path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/run/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba"
+        },
+        "receipt": {
+          "path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/receipt.json",
+          "sha256": "03ff4396ff4d6eed3978a8481dd11120aad30d3b59bc6af89bb20ebcf3d9e418"
+        },
+        "window": {
+          "complete_run_window": true,
+          "history_outputs": [
+            {
+              "path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/run/wrfout_d01_2026-08-16_13:00:00",
+              "sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba"
+            }
+          ],
+          "observed_endpoint_seconds": 600,
+          "path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/receipt.json",
+          "requested_endpoint_seconds": 600,
+          "run_completed_timestamp": "2026-08-16_13:10:00",
+          "run_start_derivation": "first expected model timestamp minus uniform expected model-step interval",
+          "run_start_timestamp": "2026-08-16_13:00:00",
+          "runner_timestep_seconds": 20,
+          "sha256": "03ff4396ff4d6eed3978a8481dd11120aad30d3b59bc6af89bb20ebcf3d9e418",
+          "status": "COMPLETE"
+        }
+      },
+      "missing_terms": [
+        "lateral and top boundary water fluxes",
+        "surface exchange and precipitation interception/evaporation",
+        "non-microphysics water sources and sinks",
+        "relaxation/nudging and other model adjustments",
+        "numerical transport, diffusion, and roundoff residuals",
+        "precipitation phase-specific boundary attribution"
+      ],
+      "native_dry_mass_measure": "DX*DY/(MAPFAC_MX*MAPFAC_MY) * -(C1H*(MU+MUB)+C2H)*DNW/g",
+      "precipitation_accumulator_increment_kg_by_elapsed_minute": [
+        0.0,
+        3160489741.600537,
+        7900140491.2434,
+        13731669140.217852,
+        20923779851.778427,
+        30336711542.95257,
+        43875486290.89086,
+        63175044739.58985,
+        89068012439.8097,
+        121688638063.8907,
+        159638965602.71555
+      ],
+      "receipt_status": "COMPLETE",
+      "water_species_inventory_kg_by_elapsed_minute": [
+        {
+          "QCLOUD": 1969101617608.863,
+          "QGRAUP": 7766548010.919036,
+          "QICE": 1012793312606.0804,
+          "QRAIN": 120750026864.29715,
+          "QSNOW": 395569010169.1025,
+          "QVAPOR": 90191762508329.89
+        },
+        {
+          "QCLOUD": 1159213554518.3772,
+          "QGRAUP": 22104887351.472466,
+          "QICE": 401566161420.0248,
+          "QRAIN": 216795933284.55905,
+          "QSNOW": 1014369367943.6188,
+          "QVAPOR": 90877472521190.08
+        },
+        {
+          "QCLOUD": 1065095019143.743,
+          "QGRAUP": 37281706234.82618,
+          "QICE": 213419661923.42343,
+          "QRAIN": 301108112868.8056,
+          "QSNOW": 1203009962657.5361,
+          "QVAPOR": 90881194050891.84
+        },
+        {
+          "QCLOUD": 993558414987.482,
+          "QGRAUP": 54040910639.81522,
+          "QICE": 149443348234.91858,
+          "QRAIN": 392950783697.36127,
+          "QSNOW": 1266238189686.858,
+          "QVAPOR": 90854511252232.83
+        },
+        {
+          "QCLOUD": 802038316777.8962,
+          "QGRAUP": 77704962236.63606,
+          "QICE": 112994827424.99327,
+          "QRAIN": 487153498712.3584,
+          "QSNOW": 1293731788703.2632,
+          "QVAPOR": 90946667583602.03
+        },
+        {
+          "QCLOUD": 692363640852.7223,
+          "QGRAUP": 110668300904.51552,
+          "QICE": 88210146310.35515,
+          "QRAIN": 569850758088.8837,
+          "QSNOW": 1304875229929.951,
+          "QVAPOR": 90962167779151.47
+        },
+        {
+          "QCLOUD": 624325499948.2007,
+          "QGRAUP": 149824636334.09512,
+          "QICE": 72849456137.00644,
+          "QRAIN": 635193092713.3235,
+          "QSNOW": 1304366650592.4773,
+          "QVAPOR": 90945870568766.56
+        },
+        {
+          "QCLOUD": 513579960916.2282,
+          "QGRAUP": 177986601307.60245,
+          "QICE": 61965607363.149185,
+          "QRAIN": 681111867438.3932,
+          "QSNOW": 1295587750639.1792,
+          "QVAPOR": 91000814271684.89
+        },
+        {
+          "QCLOUD": 474833959397.19196,
+          "QGRAUP": 190171253592.62637,
+          "QICE": 53841015956.23876,
+          "QRAIN": 713774952677.4386,
+          "QSNOW": 1284060380083.3389,
+          "QVAPOR": 91005671971010.02
+        },
+        {
+          "QCLOUD": 450557820799.64307,
+          "QGRAUP": 187970785342.60086,
+          "QICE": 47636350495.692314,
+          "QRAIN": 742885083528.0089,
+          "QSNOW": 1273059308612.159,
+          "QVAPOR": 91004369086345.81
+        },
+        {
+          "QCLOUD": 403033163375.59283,
+          "QGRAUP": 174568690898.57123,
+          "QICE": 42452913274.75034,
+          "QRAIN": 767432969019.6901,
+          "QSNOW": 1259487895985.9521,
+          "QVAPOR": 91037415195241.53
+        }
+      ],
+      "water_total_inventory_kg_by_elapsed_minute": [
+        93697743023589.16,
+        93691522425708.12,
+        93701108513720.17,
+        93710742899479.27,
+        93720290977457.17,
+        93728135855237.89,
+        93732429904491.67,
+        93731046059349.44,
+        93722353532716.84,
+        93706478435123.92,
+        93684390827796.1
+      ]
+    },
+    "OFF": {
+      "arm": "OFF",
+      "elapsed_600s": {
+        "available_residual_column_change_plus_precipitation": {
+          "L1_kg": 1613462180779.6553,
+          "max_abs_column_kg": 711520897.8356755,
+          "signed_total_kg": 146287561139.63934
+        },
+        "closure_status": "OPEN_MISSING_TERMS",
+        "inventory_change_cell_diagnostics": {
+          "L1_kg": 2700532948754.6733,
+          "column_L1_kg": 1680944033157.2893,
+          "max_abs_cell_kg": 179996637.75995287,
+          "max_abs_column_kg": 875452387.4985762,
+          "signed_total_kg": -13448713801.30904
+        },
+        "inventory_change_diagnostic_only": true,
+        "precipitation_outflow_kg": 159736274940.94824,
+        "species_inventory_change_kg": {
+          "QCLOUD": -1566294621022.5894,
+          "QGRAUP": 166847993451.29407,
+          "QICE": -970353525411.6788,
+          "QRAIN": 646738477843.7986,
+          "QSNOW": 863685918102.4447,
+          "QVAPOR": 845927043235.4062
+        },
+        "total_water_inventory_change_kg": -13448713801.328125
+      },
+      "history_timestamps": [
+        "2026-08-16_13:00:00",
+        "2026-08-16_13:01:00",
+        "2026-08-16_13:02:00",
+        "2026-08-16_13:03:00",
+        "2026-08-16_13:04:00",
+        "2026-08-16_13:05:00",
+        "2026-08-16_13:06:00",
+        "2026-08-16_13:07:00",
+        "2026-08-16_13:08:00",
+        "2026-08-16_13:09:00",
+        "2026-08-16_13:10:00"
+      ],
+      "identities": {
+        "grid": {
+          "dx": 5000.0,
+          "dy": 5000.0,
+          "shape": [
+            282,
+            234
+          ]
+        },
+        "history": {
+          "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/run/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f"
+        },
+        "receipt": {
+          "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/receipt.json",
+          "sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a"
+        },
+        "window": {
+          "complete_run_window": true,
+          "history_outputs": [
+            {
+              "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/run/wrfout_d01_2026-08-16_13:00:00",
+              "sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f"
+            }
+          ],
+          "observed_endpoint_seconds": 600,
+          "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/receipt.json",
+          "requested_endpoint_seconds": 600,
+          "run_completed_timestamp": "2026-08-16_13:10:00",
+          "run_start_derivation": "first expected model timestamp minus uniform expected model-step interval",
+          "run_start_timestamp": "2026-08-16_13:00:00",
+          "runner_timestep_seconds": 20,
+          "sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a",
+          "status": "COMPLETE"
+        }
+      },
+      "missing_terms": [
+        "lateral and top boundary water fluxes",
+        "surface exchange and precipitation interception/evaporation",
+        "non-microphysics water sources and sinks",
+        "relaxation/nudging and other model adjustments",
+        "numerical transport, diffusion, and roundoff residuals",
+        "precipitation phase-specific boundary attribution"
+      ],
+      "native_dry_mass_measure": "DX*DY/(MAPFAC_MX*MAPFAC_MY) * -(C1H*(MU+MUB)+C2H)*DNW/g",
+      "precipitation_accumulator_increment_kg_by_elapsed_minute": [
+        0.0,
+        3162988187.3061433,
+        7911284652.882731,
+        13754523725.54587,
+        20959124229.166374,
+        30383887259.01324,
+        43933516786.21702,
+        63243972505.70454,
+        89148008499.82393,
+        121778552313.24684,
+        159736274940.94824
+      ],
+      "receipt_status": "COMPLETE",
+      "water_species_inventory_kg_by_elapsed_minute": [
+        {
+          "QCLOUD": 1969366274387.8333,
+          "QGRAUP": 7822195908.90886,
+          "QICE": 1012793311784.6293,
+          "QRAIN": 120799554733.00075,
+          "QSNOW": 395704037824.7372,
+          "QVAPOR": 90191323022593.5
+        },
+        {
+          "QCLOUD": 1159223282939.0012,
+          "QGRAUP": 22070436779.826187,
+          "QICE": 401565690113.7301,
+          "QRAIN": 216937977340.1968,
+          "QSNOW": 1014478137041.865,
+          "QVAPOR": 90877309801460.92
+        },
+        {
+          "QCLOUD": 1065131945032.5674,
+          "QGRAUP": 37170695868.09058,
+          "QICE": 213350470289.71744,
+          "QRAIN": 301250021823.7043,
+          "QSNOW": 1203241846740.681,
+          "QVAPOR": 90881017819587.19
+        },
+        {
+          "QCLOUD": 993523385660.2904,
+          "QGRAUP": 54043338255.030685,
+          "QICE": 149395748641.61905,
+          "QRAIN": 393088172532.2335,
+          "QSNOW": 1266410355989.2717,
+          "QVAPOR": 90854324527526.11
+        },
+        {
+          "QCLOUD": 801952388769.1881,
+          "QGRAUP": 77726588875.33838,
+          "QICE": 112997516581.03104,
+          "QRAIN": 487291766850.901,
+          "QSNOW": 1293828632353.3186,
+          "QVAPOR": 90946524437323.66
+        },
+        {
+          "QCLOUD": 692260739922.6979,
+          "QGRAUP": 110727877278.0149,
+          "QICE": 88202865879.67357,
+          "QRAIN": 570021563344.2556,
+          "QSNOW": 1304918943900.6545,
+          "QVAPOR": 90962024398741.0
+        },
+        {
+          "QCLOUD": 624310274936.0339,
+          "QGRAUP": 149899747557.3337,
+          "QICE": 72823926446.71735,
+          "QRAIN": 635337870339.319,
+          "QSNOW": 1304373673361.6597,
+          "QVAPOR": 90945694201292.33
+        },
+        {
+          "QCLOUD": 513563825038.2282,
+          "QGRAUP": 178109981249.16507,
+          "QICE": 61940222490.96559,
+          "QRAIN": 681247860923.5447,
+          "QSNOW": 1295516484500.1658,
+          "QVAPOR": 91000667218724.55
+        },
+        {
+          "QCLOUD": 474834648564.49634,
+          "QGRAUP": 190300525184.5281,
+          "QICE": 53811662013.982796,
+          "QRAIN": 713886309634.5128,
+          "QSNOW": 1283990927717.1228,
+          "QVAPOR": 91005516529906.67
+        },
+        {
+          "QCLOUD": 450614332911.948,
+          "QGRAUP": 188090825128.81766,
+          "QICE": 47618633021.680725,
+          "QRAIN": 742981118292.5792,
+          "QSNOW": 1272970683907.1587,
+          "QVAPOR": 91004180809917.45
+        },
+        {
+          "QCLOUD": 403071653365.24396,
+          "QGRAUP": 174670189360.20294,
+          "QICE": 42439786372.95047,
+          "QRAIN": 767538032576.7993,
+          "QSNOW": 1259389955927.182,
+          "QVAPOR": 91037250065828.9
+        }
+      ],
+      "water_total_inventory_kg_by_elapsed_minute": [
+        93697808397232.61,
+        93691585325675.55,
+        93701162799341.95,
+        93710785528604.56,
+        93720321330753.44,
+        93728156389066.3,
+        93732439693933.39,
+        93731045592926.61,
+        93722340603021.31,
+        93706456403179.64,
+        93684359683431.28
+      ]
+    }
+  },
+  "boundary_and_source_ledger_audit": {
+    "arms": {
+      "COUPLED": {
+        "fdda_configured": false,
+        "fdda_namelist_block": "EMPTY",
+        "kdm6_detailed_process_capture": {
+          "captured_process_file": "pr67_kdm6_process.raw.gz",
+          "source_gating_verifies_first_call_only": true,
+          "whole_window_call_coverage": false
+        },
+        "receipt_bound_source_ledgers": {
+          "pr85_cumulus_source.raw.gz": {
+            "receipt_sha256": "056d2541c7c0ba03441bf710c972057dde43fa8217c17295610181d0f60b3f74",
+            "records_with_marker": 30
+          },
+          "pr85_joint_source_diffusion.raw.gz": {
+            "receipt_sha256": "e1855a4356be9348cf07194df0a7ab31a988196174a36eb6b5bdd0ece9e35920",
+            "records_with_marker": 29
+          },
+          "pr85_joint_transport_budget.raw.gz": {
+            "receipt_sha256": "4e74bd1edadd847d79913f887a8b56f8e334fabee380244bc1f49f8b4701bb2d",
+            "records_with_marker": 90
+          },
+          "pr87_pbl_source_correction.raw.gz": {
+            "receipt_sha256": "e583888f9fbc49c7f60d8e990f2d7b774e51a85ab4da84b7be6c6e23c197f1fc",
+            "records_with_marker": 90
+          }
+        },
+        "specified_boundary_width_and_relax_zone": {
+          "relax_zone": 4,
+          "spec_bdy_width": 5
+        },
+        "specified_lateral_boundary_enabled": true,
+        "term_interpretation": {
+          "cumulus_source": "KSAS QC/QI and paired number source packets; not all QV/hydrometeor source terms",
+          "joint_source_diffusion": "selected paired scalar diffusion correction; not full moisture transport",
+          "joint_transport": "RK grouped Q/N candidate/fallback diagnostics; not face water flux",
+          "lateral_boundary": "specified lateral boundary active; no water-species boundary flux ledger",
+          "pbl_source_correction": "logged PBL tendency correction channels, not the complete PBL moisture source",
+          "relaxation": "FDDA namelist block is empty; analysis nudging is not configured in this run",
+          "surface": "QFX snapshots exist but no time-integrated surface exchange ledger"
+        },
+        "water_species_face_flux_fields": []
+      },
+      "OFF": {
+        "fdda_configured": false,
+        "fdda_namelist_block": "EMPTY",
+        "kdm6_detailed_process_capture": {
+          "captured_process_file": "pr67_kdm6_process.raw.gz",
+          "source_gating_verifies_first_call_only": true,
+          "whole_window_call_coverage": false
+        },
+        "receipt_bound_source_ledgers": {
+          "pr85_cumulus_source.raw.gz": {
+            "receipt_sha256": "33d668497a3498cc2a621041b5eca94e6e6f7decacc9e88e91016c9d6c81ae8d",
+            "records_with_marker": 30
+          },
+          "pr85_joint_source_diffusion.raw.gz": {
+            "receipt_sha256": "b5c7b1ac83f759f50bc1a81dd1d1cfadf99bb33176362140775aad1c4f12ff44",
+            "records_with_marker": 29
+          },
+          "pr85_joint_transport_budget.raw.gz": {
+            "receipt_sha256": "34574066b85f522d58f3219e64dcbee75ece4cd48d6d1ad26a2ec797ca238150",
+            "records_with_marker": 90
+          },
+          "pr87_pbl_source_correction.raw.gz": {
+            "receipt_sha256": "cdf621c93163936f622d31de2ca29d2c9ee02669c8092c99b47b438d285278b1",
+            "records_with_marker": 90
+          }
+        },
+        "specified_boundary_width_and_relax_zone": {
+          "relax_zone": 4,
+          "spec_bdy_width": 5
+        },
+        "specified_lateral_boundary_enabled": true,
+        "term_interpretation": {
+          "cumulus_source": "KSAS QC/QI and paired number source packets; not all QV/hydrometeor source terms",
+          "joint_source_diffusion": "selected paired scalar diffusion correction; not full moisture transport",
+          "joint_transport": "RK grouped Q/N candidate/fallback diagnostics; not face water flux",
+          "lateral_boundary": "specified lateral boundary active; no water-species boundary flux ledger",
+          "pbl_source_correction": "logged PBL tendency correction channels, not the complete PBL moisture source",
+          "relaxation": "FDDA namelist block is empty; analysis nudging is not configured in this run",
+          "surface": "QFX snapshots exist but no time-integrated surface exchange ledger"
+        },
+        "water_species_face_flux_fields": []
+      }
+    }
+  },
+  "column_diagnostics": {
+    "color_limits_by_field": {
+      "available_inventory_change_plus_precipitation_kg": {
+        "rule": "pooled OFF/COUPLED absolute-value 99.5th percentile; tails saturated",
+        "saturated_columns_by_arm": {
+          "COUPLED": 329,
+          "OFF": 330
+        },
+        "vmax_kg": 215812692.33022448,
+        "vmin_kg": -215812692.33022448
+      },
+      "inventory_change_kg": {
+        "rule": "pooled OFF/COUPLED absolute-value 99.5th percentile; tails saturated",
+        "saturated_columns_by_arm": {
+          "COUPLED": 330,
+          "OFF": 330
+        },
+        "vmax_kg": 249771048.48515457,
+        "vmin_kg": -249771048.48515457
+      },
+      "precipitation_outflow_kg": {
+        "rule": "pooled OFF/COUPLED absolute-value 99.5th percentile; tails saturated",
+        "saturated_columns_by_arm": {
+          "COUPLED": 329,
+          "OFF": 331
+        },
+        "vmax_kg": 90071853.00928427,
+        "vmin_kg": 0.0
+      }
+    },
+    "paired_map_png": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/Cloud-BAL/docs/evidence/pr94_water_budget_20261021/c4_water_columns_v2.png",
+      "sha256": "f933205bb35e944537996f1f0c1566ef7f736a432a9ec77b04fe0fe920496051"
+    },
+    "predecessor_private_npz": {
+      "arrays": [
+        "COUPLED_available_inventory_change_plus_precipitation_kg",
+        "COUPLED_cell_area_m2",
+        "COUPLED_inventory_change_kg",
+        "COUPLED_latitude_deg",
+        "COUPLED_longitude_deg",
+        "COUPLED_precipitation_outflow_kg",
+        "OFF_available_inventory_change_plus_precipitation_kg",
+        "OFF_cell_area_m2",
+        "OFF_inventory_change_kg",
+        "OFF_latitude_deg",
+        "OFF_longitude_deg",
+        "OFF_precipitation_outflow_kg"
+      ],
+      "path": "/var/tmp/pr94_water_columns_20261021/water_columns.npz",
+      "privacy": "Private numeric per-column arrays; do not publish.",
+      "sha256": "d9255dd22f4ef5147ec63c347330148ca19e0ccf8dd844aca217840599e88211"
+    },
+    "private_npz": {
+      "arrays": [
+        "COUPLED_available_inventory_change_plus_precipitation_kg",
+        "COUPLED_cell_area_m2",
+        "COUPLED_inventory_change_kg",
+        "COUPLED_latitude_deg",
+        "COUPLED_longitude_deg",
+        "COUPLED_precipitation_outflow_kg",
+        "OFF_available_inventory_change_plus_precipitation_kg",
+        "OFF_cell_area_m2",
+        "OFF_inventory_change_kg",
+        "OFF_latitude_deg",
+        "OFF_longitude_deg",
+        "OFF_precipitation_outflow_kg"
+      ],
+      "path": "/var/tmp/pr94_water_columns_20261021_v2/water_columns.npz",
+      "privacy": "Private numeric per-column arrays; do not publish.",
+      "sha256": "d9255dd22f4ef5147ec63c347330148ca19e0ccf8dd844aca217840599e88211"
+    },
+    "stats_by_arm": {
+      "COUPLED": {
+        "available_inventory_change_plus_precipitation_kg": {
+          "L1_kg": 1613346729766.016,
+          "abs_quantiles_kg": {
+            "p50": 12959335.439071164,
+            "p90": 57239275.35228804,
+            "p95": 86929262.26507404,
+            "p99": 172902431.09491208
+          },
+          "max_abs_kg": 711239142.0924809,
+          "max_location": {
+            "i_zero_based": 161,
+            "j_zero_based": 71,
+            "latitude_deg": 34.77234649658203,
+            "longitude_deg": 128.48040771484375
+          },
+          "signed_at_max_abs_kg": 711239142.0924809,
+          "signed_total_kg": 146286769809.65323
+        },
+        "inventory_change_kg": {
+          "L1_kg": 1680607593440.7422,
+          "abs_quantiles_kg": {
+            "p50": 12978818.479968552,
+            "p90": 58796677.04893569,
+            "p95": 91452754.3038977,
+            "p99": 191784426.57051948
+          },
+          "max_abs_kg": 875452387.4985762,
+          "max_location": {
+            "i_zero_based": 69,
+            "j_zero_based": 264,
+            "latitude_deg": 43.68748474121094,
+            "longitude_deg": 122.94183349609375
+          },
+          "signed_at_max_abs_kg": -875452387.4985762,
+          "signed_total_kg": -13352195793.062328
+        },
+        "precipitation_outflow_kg": {
+          "L1_kg": 159638965602.71555,
+          "abs_quantiles_kg": {
+            "p50": 0.0,
+            "p90": 1634176.2697177436,
+            "p95": 8425337.008173192,
+            "p99": 62972506.01445749
+          },
+          "max_abs_kg": 300257953.8186583,
+          "max_location": {
+            "i_zero_based": 30,
+            "j_zero_based": 113,
+            "latitude_deg": 36.6087646484375,
+            "longitude_deg": 121.0380859375
+          },
+          "signed_at_max_abs_kg": 300257953.8186583,
+          "signed_total_kg": 159638965602.71555
+        }
+      },
+      "OFF": {
+        "available_inventory_change_plus_precipitation_kg": {
+          "L1_kg": 1613462180779.6553,
+          "abs_quantiles_kg": {
+            "p50": 12958491.516103335,
+            "p90": 57225510.50524745,
+            "p95": 86929326.03469585,
+            "p99": 172902431.09491208
+          },
+          "max_abs_kg": 711520897.8356755,
+          "max_location": {
+            "i_zero_based": 161,
+            "j_zero_based": 71,
+            "latitude_deg": 34.77234649658203,
+            "longitude_deg": 128.48040771484375
+          },
+          "signed_at_max_abs_kg": 711520897.8356755,
+          "signed_total_kg": 146287561139.63934
+        },
+        "inventory_change_kg": {
+          "L1_kg": 1680944033157.2893,
+          "abs_quantiles_kg": {
+            "p50": 12984232.339085795,
+            "p90": 58833955.8296598,
+            "p95": 91476220.66911133,
+            "p99": 191812857.7471179
+          },
+          "max_abs_kg": 875452387.4985762,
+          "max_location": {
+            "i_zero_based": 69,
+            "j_zero_based": 264,
+            "latitude_deg": 43.68748474121094,
+            "longitude_deg": 122.94183349609375
+          },
+          "signed_at_max_abs_kg": -875452387.4985762,
+          "signed_total_kg": -13448713801.308933
+        },
+        "precipitation_outflow_kg": {
+          "L1_kg": 159736274940.94824,
+          "abs_quantiles_kg": {
+            "p50": 0.0,
+            "p90": 1634659.166470472,
+            "p95": 8441883.636680614,
+            "p99": 62983462.255820096
+          },
+          "max_abs_kg": 300257953.8186583,
+          "max_location": {
+            "i_zero_based": 30,
+            "j_zero_based": 113,
+            "latitude_deg": 36.6087646484375,
+            "longitude_deg": 121.0380859375
+          },
+          "signed_at_max_abs_kg": 300257953.8186583,
+          "signed_total_kg": 159736274940.94824
+        }
+      }
+    },
+    "units": "kg per native column"
+  },
+  "gravity_source": {
+    "g_m_s2": 9.8100004196167,
+    "module_interface_sha256": "262c94bfd198c60701a4fdceb8e85f30ae40c4a167fc5918cc7e73530d8bbe65",
+    "path": "/var/tmp/pr87_history_constants_20261019/receipt.json",
+    "probe_executable_sha256": "5176f808614e724d1b616a91d8a16f704a6d6151e35e577639360605473f03ca",
+    "probe_source_sha256": "63c29bff575caac55053236162e30d88395d9ffeb4bebf91b2f53d0ee2d6b34d",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "sha256": "7b6cc54597b1d67c35ec112decab192cae3d1d5035ec03f5fb418a081df38670"
+  },
+  "history_interval_seconds": 60,
+  "interpretation": "Absolute per-arm water inventories and accumulated precipitation are reported with their available residual. Inventory change alone is not a conservation residual; no whole-model closure claim is made.",
+  "kdm6_geometry_source_audit": {
+    "arms": {
+      "COUPLED": {
+        "call": {
+          "call_seconds": 60,
+          "captured_pre_fields": [
+            "DEN",
+            "DELZ",
+            "QVAPOR",
+            "QCLOUD",
+            "QICE",
+            "QRAIN",
+            "QSNOW",
+            "QGRAUP"
+          ],
+          "timestep": 3
+        },
+        "call_budget_gap": "Only timestep 3 has a receipt-bound KDM6 DELZ dump; its call-specific RAINNC increment and call-specific numerical residual are not captured. Remaining KDM6 calls have no DELZ capture. The minute RAINNC history increment spans three calls and is not assigned to one call.",
+        "call_budget_status": "NOT_COMPUTED",
+        "same_minute_history_layer_thickness_comparison": {
+          "exact_match_fraction": 0.0,
+          "history_record_timestamp": "2026-08-16_13:01:00",
+          "max_abs_difference_m": 0.0034259182666573906,
+          "max_relative_abs_difference": 5.348210603264312e-06,
+          "mean_abs_difference_m": 0.00035792408223771737,
+          "mean_relative_abs_difference": 5.678266973663343e-07,
+          "source_order_note": "History geometry is emitted after microphysics and after_all_rk_steps; it is not the KDM6 PRE input geometry.",
+          "support_jki": [
+            280,
+            39,
+            232
+          ]
+        },
+        "source_binding": {
+          "module_mp_kdm6_source": {
+            "DEN_and_DELZ_intent": "IN",
+            "path": "/var/tmp/pr93_sources_c4_20261020/module_mp_kdm6.F",
+            "sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa"
+          },
+          "overlay_build_receipt": {
+            "path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+            "sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669"
+          },
+          "solve_em_source": {
+            "path": "/var/tmp/pr91_sources_c14_20261020/solve_em.F",
+            "producer_order": [
+              "PRE_KDM6",
+              "microphysics_driver",
+              "POST_KDM6",
+              "after_all_rk_steps"
+            ],
+            "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+          }
+        },
+        "third_call_pre_identity": {
+          "compressed_sha256": "c008e7d932d02f01c42f360453ca401bbedc6d8642dccac63bb4811066ccd626",
+          "expanded_sha256": "3524c23199dea20765e0dffde6ec3d7e29b01f221c52375e443214d08f608441",
+          "path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/run/kdm6_third_call_pre.raw.gz"
+        }
+      },
+      "OFF": {
+        "call": {
+          "call_seconds": 60,
+          "captured_pre_fields": [
+            "DEN",
+            "DELZ",
+            "QVAPOR",
+            "QCLOUD",
+            "QICE",
+            "QRAIN",
+            "QSNOW",
+            "QGRAUP"
+          ],
+          "timestep": 3
+        },
+        "call_budget_gap": "Only timestep 3 has a receipt-bound KDM6 DELZ dump; its call-specific RAINNC increment and call-specific numerical residual are not captured. Remaining KDM6 calls have no DELZ capture. The minute RAINNC history increment spans three calls and is not assigned to one call.",
+        "call_budget_status": "NOT_COMPUTED",
+        "same_minute_history_layer_thickness_comparison": {
+          "exact_match_fraction": 0.0,
+          "history_record_timestamp": "2026-08-16_13:01:00",
+          "max_abs_difference_m": 0.0034259182666573906,
+          "max_relative_abs_difference": 5.348210603264312e-06,
+          "mean_abs_difference_m": 0.0003578377175394126,
+          "mean_relative_abs_difference": 5.676975331685112e-07,
+          "source_order_note": "History geometry is emitted after microphysics and after_all_rk_steps; it is not the KDM6 PRE input geometry.",
+          "support_jki": [
+            280,
+            39,
+            232
+          ]
+        },
+        "source_binding": {
+          "module_mp_kdm6_source": {
+            "DEN_and_DELZ_intent": "IN",
+            "path": "/var/tmp/pr93_sources_c4_20261020/module_mp_kdm6.F",
+            "sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa"
+          },
+          "overlay_build_receipt": {
+            "path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+            "sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669"
+          },
+          "solve_em_source": {
+            "path": "/var/tmp/pr91_sources_c14_20261020/solve_em.F",
+            "producer_order": [
+              "PRE_KDM6",
+              "microphysics_driver",
+              "POST_KDM6",
+              "after_all_rk_steps"
+            ],
+            "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+          }
+        },
+        "third_call_pre_identity": {
+          "compressed_sha256": "52639f2665fcdc0d0969befbbb1dac835b3110a0033ff83a330b8ef21a584eda",
+          "expanded_sha256": "cfbce74d8b3fdf528b42846bdc1ed4b887763ced6381f3639ef535e5d6f5b114",
+          "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/run/kdm6_third_call_pre.raw.gz"
+        }
+      }
+    },
+    "conclusion": "The KDM6 input geometry and density are directly captured only for timestep 3, but same-minute history PH+PHB is a post-microphysics/post-finalization product and does not exactly reproduce that DELZ. The current receipts do not support a complete per-call water-plus-precipitation residual; no PH-derived or initial geometry is substituted."
+  },
+  "paired_grid": {
+    "coordinates_and_hybrid_coefficients_exact_match": true,
+    "dx_m": 5000.0,
+    "dy_m": 5000.0,
+    "mass_grid_shape": [
+      282,
+      234
+    ],
+    "mass_map_factors_exact_match": true,
+    "timestamps_exact_match": true
+  },
+  "physical_approval": false,
+  "psd_reconstruction": {
+    "arms": {
+      "COUPLED": {
+        "capture_status": "FIRST_VALID_TO_INVALID_CAPTURED",
+        "first_subsequent_stage1_reconstruction": {
+          "Nbefore": 622.9359741210938,
+          "Ndirected": 622.9367065429688,
+          "Nnative": 622.9367065429688,
+          "boundary_rows_after_first_call": 0,
+          "call_index": 6685,
+          "exactNmin": 622.9366862545476,
+          "nativeDelta": 0.000732421875,
+          "side": 1,
+          "stage": "stage1",
+          "storageCorrection": 0.0
+        },
+        "first_transition_level_count": 1,
+        "first_valid_to_invalid_call": [
+          1,
+          1,
+          1
+        ],
+        "interpretation": "Selected ice PSD representation reconstruction only; number change is not nucleation.",
+        "ledger_identity": {
+          "compressed_sha256": "fefd9047b447d6c13c1778798d0713de362de03cf45fca284959fc2ec4a7ac58",
+          "expanded_sha256": "0cef8c9b171f0f45c1be3ad504c41a34ea5c154e0ef20be87cc23adb98ccd71e",
+          "path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/run/pr85_kdm6_psd_boundary.raw.gz"
+        },
+        "ledger_representation_coverage": {
+          "boundary_row_count_by_species_stage_side": {
+            "cloud/stage1/side1": 8,
+            "cloud/stage3/side2": 647,
+            "ice/stage1/side1": 1585,
+            "ice/stage3/side2": 1340,
+            "rain/stage1/side2": 2958,
+            "rain/stage2/side2": 2958,
+            "rain/stage3/side1": 25,
+            "rain/stage3/side2": 1022
+          },
+          "context_count_timestep_lat_pairs": 8400,
+          "native_reconstruction_available_rows": 10543,
+          "native_reconstruction_unavailable_rows": 0
+        },
+        "nativeDelta_units": "# m-3",
+        "volume_weighted_number_change": "UNAVAILABLE: boundary ledger does not include DELZ or cell volume"
+      },
+      "OFF": {
+        "capture_status": "FIRST_VALID_TO_INVALID_CAPTURED",
+        "first_subsequent_stage1_reconstruction": {
+          "Nbefore": 622.9359741210938,
+          "Ndirected": 622.9367065429688,
+          "Nnative": 622.9367065429688,
+          "boundary_rows_after_first_call": 0,
+          "call_index": 6685,
+          "exactNmin": 622.9366862545476,
+          "nativeDelta": 0.000732421875,
+          "side": 1,
+          "stage": "stage1",
+          "storageCorrection": 0.0
+        },
+        "first_transition_level_count": 1,
+        "first_valid_to_invalid_call": [
+          1,
+          1,
+          1
+        ],
+        "interpretation": "Selected ice PSD representation reconstruction only; number change is not nucleation.",
+        "ledger_identity": {
+          "compressed_sha256": "a0672146b28cb2cbd4e1ba2725f003f90c2fd16366de8810dd05bce6d5576fc5",
+          "expanded_sha256": "e8b21684f4224c2be85449541119f188b6b3c58176e918be121d51ea5eedf142",
+          "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/run/pr85_kdm6_psd_boundary.raw.gz"
+        },
+        "ledger_representation_coverage": {
+          "boundary_row_count_by_species_stage_side": {
+            "cloud/stage1/side1": 8,
+            "cloud/stage3/side2": 647,
+            "ice/stage1/side1": 1587,
+            "ice/stage3/side2": 1338,
+            "rain/stage1/side2": 2960,
+            "rain/stage2/side2": 2960,
+            "rain/stage3/side1": 25,
+            "rain/stage3/side2": 1023
+          },
+          "context_count_timestep_lat_pairs": 8400,
+          "native_reconstruction_available_rows": 10548,
+          "native_reconstruction_unavailable_rows": 0
+        },
+        "nativeDelta_units": "# m-3",
+        "volume_weighted_number_change": "UNAVAILABLE: boundary ledger does not include DELZ or cell volume"
+      }
+    },
+    "source_summary": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/Cloud-BAL/docs/evidence/pr93_active_ice_20261020/runtime/ice_replay/call_origin_summary.json",
+      "sha256": "f6890e189a318f5a7ea82add08d56e7f5e1f0158c35faa7ff494ad392747137f"
+    }
+  },
+  "schema": "pr94_frozen_c4_absolute_water_budget_v1",
+  "source_scope_audit": {
+    "COUPLED": {
+      "history_public_fields": {
+        "GRAUPELNC": {
+          "description": "ACCUMULATED TOTAL GRID SCALE GRAUPEL",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "HAILNC": {
+          "description": "ACCUMULATED TOTAL GRID SCALE HAIL",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "QFX": {
+          "description": "UPWARD MOISTURE FLUX AT THE SURFACE",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "kg m-2 s-1"
+        },
+        "QVAPOR": {
+          "description": "Water vapor mixing ratio",
+          "dimensions": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "units": "kg kg-1"
+        },
+        "RAINC": {
+          "description": "ACCUMULATED TOTAL CUMULUS PRECIPITATION",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "RAINNC": {
+          "description": "ACCUMULATED TOTAL GRID SCALE PRECIPITATION",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "RAINSH": {
+          "description": "ACCUMULATED SHALLOW CUMULUS PRECIPITATION",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "SNOWNC": {
+          "description": "ACCUMULATED TOTAL GRID SCALE SNOW AND ICE",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "U": {
+          "description": "x-wind component",
+          "dimensions": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east_stag"
+          ],
+          "units": "m s-1"
+        },
+        "V": {
+          "description": "y-wind component",
+          "dimensions": [
+            "Time",
+            "bottom_top",
+            "south_north_stag",
+            "west_east"
+          ],
+          "units": "m s-1"
+        },
+        "W": {
+          "description": "z-wind component",
+          "dimensions": [
+            "Time",
+            "bottom_top_stag",
+            "south_north",
+            "west_east"
+          ],
+          "units": "m s-1"
+        }
+      },
+      "receipt_bound_diagnostic_ledgers": [
+        "namelist.input.source",
+        "pr67_kdm6_process.raw.gz",
+        "pr85_cumulus_source.raw.gz",
+        "pr85_fogdes_budget.raw.gz",
+        "pr85_graupel_sedimentation_budget.raw.gz",
+        "pr85_ice_sedimentation_budget.raw.gz",
+        "pr85_joint_source_diffusion.raw.gz",
+        "pr85_joint_transport_budget.raw.gz",
+        "pr85_kdm6_cold_budget.raw.gz",
+        "pr85_kdm6_cutoff_budget.raw.gz",
+        "pr85_kdm6_freezing_budget.raw.gz",
+        "pr85_kdm6_melt_budget.raw.gz",
+        "pr85_kdm6_warm_budget.raw.gz",
+        "pr85_rain_freezing_budget.raw.gz",
+        "pr87_pbl_source_correction.raw.gz",
+        "pr87_rain_sedimentation_budget.raw.gz",
+        "pr87_source_representation.raw.gz",
+        "pr92_graupel_source_capture.raw.gz"
+      ],
+      "scope": "RAINC and RAINNC are accumulated public precipitation depths. QFX is an instantaneous surface moisture flux; sparse history snapshots are not a time-integrated exchange ledger. U/V/W do not provide water-species face fluxes. Selected process ledgers do not constitute a whole-model transport/nudging/surface budget.",
+      "water_species_face_flux_fields_present": []
+    },
+    "OFF": {
+      "history_public_fields": {
+        "GRAUPELNC": {
+          "description": "ACCUMULATED TOTAL GRID SCALE GRAUPEL",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "HAILNC": {
+          "description": "ACCUMULATED TOTAL GRID SCALE HAIL",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "QFX": {
+          "description": "UPWARD MOISTURE FLUX AT THE SURFACE",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "kg m-2 s-1"
+        },
+        "QVAPOR": {
+          "description": "Water vapor mixing ratio",
+          "dimensions": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "units": "kg kg-1"
+        },
+        "RAINC": {
+          "description": "ACCUMULATED TOTAL CUMULUS PRECIPITATION",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "RAINNC": {
+          "description": "ACCUMULATED TOTAL GRID SCALE PRECIPITATION",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "RAINSH": {
+          "description": "ACCUMULATED SHALLOW CUMULUS PRECIPITATION",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "SNOWNC": {
+          "description": "ACCUMULATED TOTAL GRID SCALE SNOW AND ICE",
+          "dimensions": [
+            "Time",
+            "south_north",
+            "west_east"
+          ],
+          "units": "mm"
+        },
+        "U": {
+          "description": "x-wind component",
+          "dimensions": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east_stag"
+          ],
+          "units": "m s-1"
+        },
+        "V": {
+          "description": "y-wind component",
+          "dimensions": [
+            "Time",
+            "bottom_top",
+            "south_north_stag",
+            "west_east"
+          ],
+          "units": "m s-1"
+        },
+        "W": {
+          "description": "z-wind component",
+          "dimensions": [
+            "Time",
+            "bottom_top_stag",
+            "south_north",
+            "west_east"
+          ],
+          "units": "m s-1"
+        }
+      },
+      "receipt_bound_diagnostic_ledgers": [
+        "namelist.input.source",
+        "pr67_kdm6_process.raw.gz",
+        "pr85_cumulus_source.raw.gz",
+        "pr85_fogdes_budget.raw.gz",
+        "pr85_graupel_sedimentation_budget.raw.gz",
+        "pr85_ice_sedimentation_budget.raw.gz",
+        "pr85_joint_source_diffusion.raw.gz",
+        "pr85_joint_transport_budget.raw.gz",
+        "pr85_kdm6_cold_budget.raw.gz",
+        "pr85_kdm6_cutoff_budget.raw.gz",
+        "pr85_kdm6_freezing_budget.raw.gz",
+        "pr85_kdm6_melt_budget.raw.gz",
+        "pr85_kdm6_warm_budget.raw.gz",
+        "pr85_rain_freezing_budget.raw.gz",
+        "pr87_pbl_source_correction.raw.gz",
+        "pr87_rain_sedimentation_budget.raw.gz",
+        "pr87_source_representation.raw.gz",
+        "pr92_graupel_source_capture.raw.gz"
+      ],
+      "scope": "RAINC and RAINNC are accumulated public precipitation depths. QFX is an instantaneous surface moisture flux; sparse history snapshots are not a time-integrated exchange ledger. U/V/W do not provide water-species face fluxes. Selected process ledgers do not constitute a whole-model transport/nudging/surface budget.",
+      "water_species_face_flux_fields_present": []
+    }
+  },
+  "status": "ACCOUNTED_DIAGNOSTIC_OPEN",
+  "window_seconds": [
+    0,
+    600
+  ]
+}

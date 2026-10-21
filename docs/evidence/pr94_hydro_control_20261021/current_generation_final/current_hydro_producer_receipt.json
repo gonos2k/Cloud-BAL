@@ -1,0 +1,50 @@
+{
+  "O0_O2_candidate_files_bitwise_equal": true,
+  "O0_candidate": {
+    "path": "/var/tmp/pr94_hydro_current_O0_buildcwd_20261021/build/hydro_candidate.nc",
+    "sha256": "97a98c5bb05a8dc70528c2b6c025ae8cb359ed46f23b7d3c28941535f71ae9d6"
+  },
+  "build_artifact_receipts": [
+    {
+      "path": "/var/tmp/pr94_hydro_current_O0_buildcwd_20261021/artifacts.sha256",
+      "sha256": "69fab5a43d6fc5abc90cd0841774f8875b22d421c5e4e94792396b1cf41c7361"
+    },
+    {
+      "path": "/var/tmp/pr94_hydro_current_O2_buildcwd_20261021/artifacts.sha256",
+      "sha256": "513b0ec0ecfb271eeb228842ab17b6481977e704b1f85e1ad5a1e84dd4d36606"
+    }
+  ],
+  "candidate": {
+    "path": "/var/tmp/pr94_hydro_current_O2_buildcwd_20261021/build/hydro_candidate.nc",
+    "sha256": "97a98c5bb05a8dc70528c2b6c025ae8cb359ed46f23b7d3c28941535f71ae9d6"
+  },
+  "configuration": {
+    "background_continuity_prior": false,
+    "column_transport_precipitation": false,
+    "force_prior_enabled": false,
+    "maximum_outer_iterations": 8,
+    "requested_mode": "MODE_SHADOW",
+    "thermo_density_prior_background_weight": 0.5,
+    "thermo_density_prior_enabled": true,
+    "thermo_density_prior_max_temperature_increment_K": 5.0,
+    "thermo_density_prior_max_vapor_increment_kg_kg-1": 0.005
+  },
+  "profiles": [
+    {
+      "build_working_directory": "/var/tmp/pr94_hydro_current_O0_buildcwd_20261021/build",
+      "path": "/var/tmp/pr94_hydro_current_O0_buildcwd_20261021/build/profile.txt",
+      "sha256": "cd3316850bfa8ec78c188691cf828e714e10549181405f85a261d11b71d5b81f"
+    },
+    {
+      "build_working_directory": "/var/tmp/pr94_hydro_current_O2_buildcwd_20261021/build",
+      "path": "/var/tmp/pr94_hydro_current_O2_buildcwd_20261021/build/profile.txt",
+      "sha256": "570f2c620110c297a8a307cae1454feae51600574d33f7f085a5bb73079b7f82"
+    }
+  ],
+  "role": "HYDRO",
+  "schema": "pr94_hydro_current_producer_v1",
+  "selected_profile": "pinned Intel O2; fresh scratch build cwd",
+  "source_and_input_pre_post_hashes_equal": true,
+  "status": "PASS_PR94_CURRENT_GENERATION_HYDRO",
+  "wind_state_unchanged": true
+}
