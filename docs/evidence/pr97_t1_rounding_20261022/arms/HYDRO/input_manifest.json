@@ -1,0 +1,69 @@
+{
+  "schema": "pr97_c1_t1_replay_input_v1",
+  "arm": "HYDRO",
+  "capture_scope": "Receipt-bound native PR96-C1 first-call full-memory T1 pre/post; 17 fields plus XLAND.",
+  "run_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/receipt.json",
+  "run_receipt_sha256": "342119a6c39c673fbd0f2e9cc16a9690387f5fa0e07b35efadaaf2bf85e093c1",
+  "build_receipt_path": "/var/tmp/pr96_native_build_c1_20261021/pr87_native_overlay_build.json",
+  "build_receipt_sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+  "candidate_executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d",
+  "staged_c1_kdm6_source_path": "/var/tmp/pr96_sources_c1_20261021/module_mp_kdm6.F",
+  "staged_c1_kdm6_source_sha256": "f09a413c36b7bda9fb7376f0276e00329179c68bdbef1e4766bae2811152f58b",
+  "timestep": 1,
+  "bounds": {
+    "ids": 1,
+    "ide": 235,
+    "jds": 1,
+    "jde": 283,
+    "kds": 1,
+    "kde": 40,
+    "ims": -4,
+    "ime": 240,
+    "jms": -4,
+    "jme": 288,
+    "kms": 1,
+    "kme": 40,
+    "its": 2,
+    "ite": 233,
+    "jts": 2,
+    "jte": 281,
+    "kts": 1,
+    "kte": 39
+  },
+  "active_shape_xyz": [
+    232,
+    280,
+    39
+  ],
+  "params": {
+    "dt_s": 20.0,
+    "ccn_number_m3": 100000000.0,
+    "scale_h_m": 750.0,
+    "qnccn_land_mult": 50.0,
+    "qnccn_sea_mult": 0.5
+  },
+  "capture_hashes": {
+    "kdm6_first_call_pre.raw": {
+      "expanded_sha256": "72ad647a5df1cd39e7eb3db8f8757e63a9aa4dbde5ce03fcbb08630ca1664f54",
+      "compressed_sha256": "78d0378e0b158c3560bdc4777500feb600f7fa1932e50c2d5df5f9584ab635f5",
+      "bytes": 195542592
+    },
+    "kdm6_first_call_post.raw": {
+      "expanded_sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf",
+      "compressed_sha256": "965735811109a21564ec23f95229e6ab2a9b37b6f0c1b889b286d2c9bdb556bd",
+      "bytes": 195542592
+    },
+    "pr67_kdm6_process.raw": {
+      "expanded_sha256": "9bcef6cd06ca3dc9f6a532b2c715d7f25a9b222fcb292fa328f5e38cf431661b",
+      "compressed_sha256": "82143f4e6a90fe7fbbdbfafcdecc95abb2fb79a451dd9bc3b7baf209fec874c2",
+      "bytes": 83442240
+    }
+  },
+  "history_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/run/wrfout_d01_2026-08-16_13:00:00",
+  "history_sha256": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84",
+  "area_map_rule": "DX*DY/(MAPFAC_MX*MAPFAC_MY), one per active tile cell; Fortran (i,j) big-endian float64 with off-tile zeros.",
+  "area_path": "/var/tmp/pr97_t1_20261022/HYDRO/input/cell_area.raw",
+  "area_sha256": "ccaa4d5d53477a0b0ef2bea8b77cfe6b37609e29ffe99937468a1a667ddbfe28",
+  "area_bytes": 574280,
+  "area_manifest_sha256": "3cf614a6f4f3d36279fc8a64bfacf12301c58f23314f95026ee064b17b389d15"
+}

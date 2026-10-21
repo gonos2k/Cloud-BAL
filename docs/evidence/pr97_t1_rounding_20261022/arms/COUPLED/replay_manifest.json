@@ -1,0 +1,270 @@
+{
+  "schema": "pr97_c1_t1_fulltile_diagnostic_replay_v1",
+  "arm": "COUPLED",
+  "run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1",
+  "native_run_receipt_sha256": "a6b5f550a3ddfc36b0a1a2eee2e7af4a14b582344c4f8b683b0d1e32a586c598",
+  "capture_hashes": {
+    "kdm6_first_call_pre.raw": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+    "kdm6_first_call_post.raw": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+    "pr67_kdm6_process.raw": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976"
+  },
+  "area_sha256": "ccaa4d5d53477a0b0ef2bea8b77cfe6b37609e29ffe99937468a1a667ddbfe28",
+  "input_manifest_sha256": "4f71f464590168c47980458a5bf19653fe16c8acb9570b46648be97518040bd2",
+  "area_manifest_sha256": "02661bfc1acf6e7c6f8e3fc456a3d1ea332446a9dd22558b847b185c68253b52",
+  "fulltile_active_shape_xyz": [
+    232,
+    280,
+    39
+  ],
+  "call_bounds": {
+    "i": [
+      2,
+      233
+    ],
+    "j": [
+      2,
+      281
+    ],
+    "k": [
+      1,
+      39
+    ]
+  },
+  "diagnostic_executable_sha256": "94d3d35b1c204d00cc4df548521dc6ad4088b76e7d37db1a9a5d86da975bebd5",
+  "diagnostic_executable_sha256_before_run": "94d3d35b1c204d00cc4df548521dc6ad4088b76e7d37db1a9a5d86da975bebd5",
+  "diagnostic_executable_sha256_after_run": "94d3d35b1c204d00cc4df548521dc6ad4088b76e7d37db1a9a5d86da975bebd5",
+  "pinned_compiler_profile": "tests/intel_toolchain.sh; Intel ifx 2026.0; existing linked standalone executable; no compiler invocation in this arm replay",
+  "run_settings": {
+    "OMP_NUM_THREADS": 1,
+    "stack": "unlimited",
+    "LD_LIBRARY_PATH_prefix": [
+      "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+      "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64"
+    ]
+  },
+  "replay_post_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+  "native_post_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+  "full_post_byte_match": true,
+  "compact_column_sha256": "dce2c81fcae327bf57aa994e680c6ae21be167fa5dbf2d6a92e2ae21c4a449cc",
+  "compact_column_records": 64960,
+  "reducer_report_sha256": "a7950d6e9dd6d93c8575f2eb6c660b3b038f3c26f4a1683ad354a77eed639c25",
+  "reducer_report": {
+    "schema": "pr97_samecall_compact_liquid_account_v1",
+    "arm": "COUPLED",
+    "timestep": 1,
+    "call_seconds": 20.0,
+    "columns": 64960,
+    "measure": "input DEN*DELZ*map area, fixed during this KDM6 call",
+    "R_raw": {
+      "signed_kg": -82963.29845336518,
+      "L1_column_kg": 486342.03537570254,
+      "max_abs_column_kg": 70.73548819682134
+    },
+    "C_liquid_store": {
+      "signed_kg": -16900.617606777017,
+      "L1_column_kg": 403910.07024607976,
+      "max_abs_column_kg": 39.469307196540136
+    },
+    "R_unexplained_after_liquid_only": {
+      "signed_kg": -66062.68084658816,
+      "L1_column_kg": 200421.32944736507,
+      "max_abs_column_kg": 61.12367393642078
+    },
+    "liquid_account": {
+      "event_counts": {
+        "activation": 15001,
+        "full_evaporation": 1192911,
+        "general_negative_extent": 220991,
+        "general_positive_extent": 9478,
+        "clipped_exact_target": 0,
+        "all_events": 1438381
+      },
+      "columns_with_events": 64628,
+      "Q_store_error_kg": -16934.80459446139,
+      "QC_store_error_kg": 34.18698768437288,
+      "L1_event_error_kg": 1637822.4745657083,
+      "max_abs_event_error_kg": 8.426314420232153,
+      "signed_approved_extent_kg": -643847208743.3982
+    },
+    "largest_unexplained_columns": [
+      {
+        "i": 184,
+        "j": 147,
+        "R_raw_kg": -70.73548819682134,
+        "C_liquid_store_kg": -9.611814260400555,
+        "R_unexplained_kg": -61.12367393642078
+      },
+      {
+        "i": 167,
+        "j": 29,
+        "R_raw_kg": -59.729496031879215,
+        "C_liquid_store_kg": -2.288879946755497,
+        "R_unexplained_kg": -57.440616085123715
+      },
+      {
+        "i": 48,
+        "j": 145,
+        "R_raw_kg": -49.335966977968084,
+        "C_liquid_store_kg": 7.845081567498538,
+        "R_unexplained_kg": -57.18104854546662
+      },
+      {
+        "i": 185,
+        "j": 147,
+        "R_raw_kg": -61.556435002897814,
+        "C_liquid_store_kg": -7.218702886419758,
+        "R_unexplained_kg": -54.33773211647806
+      },
+      {
+        "i": 213,
+        "j": 66,
+        "R_raw_kg": -48.060929977081116,
+        "C_liquid_store_kg": 6.1368574059901375,
+        "R_unexplained_kg": -54.19778738307125
+      },
+      {
+        "i": 103,
+        "j": 47,
+        "R_raw_kg": -58.44292173132287,
+        "C_liquid_store_kg": -4.970137752342498,
+        "R_unexplained_kg": -53.472783978980374
+      },
+      {
+        "i": 141,
+        "j": 50,
+        "R_raw_kg": -52.53731231427558,
+        "C_liquid_store_kg": 0.3881864900133293,
+        "R_unexplained_kg": -52.925498804288914
+      },
+      {
+        "i": 166,
+        "j": 29,
+        "R_raw_kg": -43.3405305501094,
+        "C_liquid_store_kg": 8.802816173670909,
+        "R_unexplained_kg": -52.14334672378031
+      },
+      {
+        "i": 165,
+        "j": 30,
+        "R_raw_kg": -61.200797556633994,
+        "C_liquid_store_kg": -10.452074192745446,
+        "R_unexplained_kg": -50.748723363888544
+      },
+      {
+        "i": 156,
+        "j": 112,
+        "R_raw_kg": -58.83082115346042,
+        "C_liquid_store_kg": -8.50194815578081,
+        "R_unexplained_kg": -50.32887299767961
+      },
+      {
+        "i": 143,
+        "j": 10,
+        "R_raw_kg": -66.72108904597845,
+        "C_liquid_store_kg": -16.711772714895986,
+        "R_unexplained_kg": -50.00931633108246
+      },
+      {
+        "i": 105,
+        "j": 109,
+        "R_raw_kg": -34.189287111163495,
+        "C_liquid_store_kg": 14.286291338618657,
+        "R_unexplained_kg": -48.47557844978215
+      },
+      {
+        "i": 54,
+        "j": 139,
+        "R_raw_kg": -42.40513938796504,
+        "C_liquid_store_kg": 5.68163954796782,
+        "R_unexplained_kg": -48.08677893593286
+      },
+      {
+        "i": 105,
+        "j": 108,
+        "R_raw_kg": -49.52930628412697,
+        "C_liquid_store_kg": -2.4472642922507655,
+        "R_unexplained_kg": -47.0820419918762
+      },
+      {
+        "i": 119,
+        "j": 60,
+        "R_raw_kg": -44.6847374260247,
+        "C_liquid_store_kg": 2.0617090505687106,
+        "R_unexplained_kg": -46.746446476593405
+      },
+      {
+        "i": 207,
+        "j": 55,
+        "R_raw_kg": -46.59110506419044,
+        "C_liquid_store_kg": -0.03296029855830086,
+        "R_unexplained_kg": -46.558144765632136
+      },
+      {
+        "i": 130,
+        "j": 4,
+        "R_raw_kg": -57.43531695879019,
+        "C_liquid_store_kg": -10.94883922287047,
+        "R_unexplained_kg": -46.48647773591972
+      },
+      {
+        "i": 104,
+        "j": 46,
+        "R_raw_kg": -42.561747888456054,
+        "C_liquid_store_kg": 2.906272998138747,
+        "R_unexplained_kg": -45.4680208865948
+      },
+      {
+        "i": 206,
+        "j": 55,
+        "R_raw_kg": -41.9496099498689,
+        "C_liquid_store_kg": 3.4266809078585627,
+        "R_unexplained_kg": -45.37629085772746
+      },
+      {
+        "i": 137,
+        "j": 117,
+        "R_raw_kg": -36.653772626595305,
+        "C_liquid_store_kg": 8.64136855156882,
+        "R_unexplained_kg": -45.29514117816413
+      }
+    ],
+    "identity": {
+      "receipt_sha256": "a6b5f550a3ddfc36b0a1a2eee2e7af4a14b582344c4f8b683b0d1e32a586c598",
+      "build_receipt_sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+      "executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d",
+      "KDM6_source_sha256": "f09a413c36b7bda9fb7376f0276e00329179c68bdbef1e4766bae2811152f58b",
+      "captures": {
+        "kdm6_first_call_pre.raw": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+        "kdm6_first_call_post.raw": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+        "pr67_kdm6_process.raw": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976"
+      },
+      "history_sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba",
+      "compact_columns_sha256": "dce2c81fcae327bf57aa994e680c6ae21be167fa5dbf2d6a92e2ae21c4a449cc",
+      "replay_post_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+      "all_17_fields_and_XLAND_byte_equal": true
+    },
+    "limits": [
+      "Only liquid activation and general/full evaporation stores are reduced.",
+      "Other phase, sedimentation, cutoff and representation terms remain unreduced.",
+      "REAL64 compensated compact sums are numerical accounts, not exact rational tile closure.",
+      "No water correction; local exact reference tests remain separate from tile aggregation.",
+      "Not native hybrid host water, energy, mass-wind or observation closure."
+    ],
+    "physical_approval": "FAIL_OPEN"
+  },
+  "recipe_path": "/var/tmp/pr97_t1_20261022/replay_recipe.txt",
+  "diagnostic_KDM6_source_sha256": "4872609b7a0b28f4214269dbf9298583a427ac19503c960412404959311b7a13",
+  "liquid_observer_source_sha256": "41ca80593218e704e193927f18ea188cc1a3c85221e8522c7fd62bcb45a79a55",
+  "diagnostic_KDM6_original_object_sha256": "9f8b0e49252f5b4a0ed357ce77f7eafaa9365e171bbc94e2bbda92b164ac8ca9",
+  "diagnostic_KDM6_link_object_sha256": "96caae6062c1f201140ba1412ae1f500c5f8eadbd991b2976b3fddb49981f160",
+  "liquid_observer_object_sha256": "66eafbe04ecb29214e20a624daa58603df5e2563ecb7c83f27bf73e84dc26212",
+  "native_C1_archive_sha256": "abb5df4371caf97a44e73b4aa24958a6285d6c3705597ccb5b35fdceda1218d6",
+  "pinned_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "reducer_source_sha256": "8e0be2c4168d4db601808cb172fa7ae5f1a7b848c152a79101bbdfff01ac6176",
+  "link_recipe_sha256": "ec147ad9376cfc14cb76d7b415ee4be7c9521968fcdd8ecbca1dbe5ea8c3d27c",
+  "recipe_sha256": "ae9254090bef9ae34c76661227aa21a3ea85d68db1078509a816f7a5940550d4",
+  "shared_active_area_sha256": "b51311bb70446c4d37fd16cb0c45b998a400ee3d882e567f32781e399b1b9031",
+  "shared_full_memory_area_sha256": "ccaa4d5d53477a0b0ef2bea8b77cfe6b37609e29ffe99937468a1a667ddbfe28",
+  "rounding_report_sha256": "a7950d6e9dd6d93c8575f2eb6c660b3b038f3c26f4a1683ad354a77eed639c25",
+  "area_mapping_note": "Active area embedded at memory offsets its-ims,jts-jms and derived with float64 products from receipt-bound history. Earlier private scratch staging used global i-1,j-1 offsets, was invalid and not consumed by the reducer; corrected array is shared across all arms."
+}

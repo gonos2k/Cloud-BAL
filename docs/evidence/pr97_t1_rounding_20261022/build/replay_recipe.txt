@@ -1,0 +1,8 @@
+C1 OFF T1 full-tile diagnostic replay recipe
+
+1. Source pinned tests/intel_toolchain.sh from scratch/pr96_local_closure_20261021/Cloud-BAL.
+2. Compile pr97_liquid_observer.f90 then module_mp_kdm6_diagnostic.f90 with CLOUD_BAL_REPRO_FLAGS, -convert big_endian, and module search order: fresh diag_compile, C1 compile, WRF frame, WRF phys. Compile in /var/tmp/pr97_t1_20261022/diag_compile after copying C1 compile/*.mod there.
+3. Link with diag_link_argv.json from /var/tmp/pr96_native_build_c1_20261021/link/main; diagnostic KDM6 object replaces C1 module_mp_kdm6.o and observer object is included. The diagnostic object is objcopy-renamed for radar_init_variable_graupel_ to module_mp_radar_mp_radar_init_variable_graupel_ to resolve the C1 native module procedure symbol.
+4. Run from OFF/replay with pinned Intel profile sourced, LD_LIBRARY_PATH prefixed by WRF_LIBS/lib and lib64, OMP_NUM_THREADS=1, and `ulimit -s unlimited`; execute ../../replay.exe ../input/kdm6_first_call_pre.raw.
+
+Expected full active bounds: i=2:233, j=2:281, k=1:39. Replay post KDM6TRC1 SHA must equal receipt-bound C1 OFF T1 post SHA. Observer writes pr97_liquid_columns.raw in current run directory. Receipt-bound pr67_kdm6_process.raw.gz was expanded into OFF/input and verified against receipt compressed and expanded hashes.

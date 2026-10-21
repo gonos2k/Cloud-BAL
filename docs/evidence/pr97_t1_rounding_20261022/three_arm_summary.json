@@ -1,0 +1,549 @@
+{
+  "schema": "pr97_c1_t1_three_arm_rounding_summary_v1",
+  "basis": "Standalone replay of each arm\u2019s own receipt-bound T1 pre-state; no correction; per-arm replay post bit-identical to native captured T1 post.",
+  "measure": "Input DEN*DELZ*map area carrier, fixed during each KDM6 call. All three receipt-bound histories produce the same active map-area SHA-256 b51311bb70446c4d37fd16cb0c45b998a400ee3d882e567f32781e399b1b9031.",
+  "source_label_classification": "Preserve raw COND label. Actual 2COND/column records have negative extent and are partial evaporation; 22 full-evaporation records are the separate full_cloud_evap branch.",
+  "arms": {
+    "OFF": {
+      "R_raw": {
+        "signed_kg": -83149.94049671064,
+        "L1_column_kg": 486309.6086139941,
+        "max_abs_column_kg": 70.73548819682134
+      },
+      "C_liquid_store": {
+        "signed_kg": -17093.392430247965,
+        "L1_column_kg": 403899.48219294305,
+        "max_abs_column_kg": 39.469307196540136
+      },
+      "R_unexplained_after_liquid_only": {
+        "signed_kg": -66056.54806646268,
+        "L1_column_kg": 200484.6186202582,
+        "max_abs_column_kg": 61.12367393642078
+      },
+      "liquid_account": {
+        "event_counts": {
+          "activation": 14994,
+          "full_evaporation": 1192915,
+          "general_negative_extent": 220997,
+          "general_positive_extent": 9468,
+          "clipped_exact_target": 0,
+          "all_events": 1438374
+        },
+        "columns_with_events": 64628,
+        "Q_store_error_kg": -17141.6201651478,
+        "QC_store_error_kg": 48.227734899834175,
+        "L1_event_error_kg": 1637724.3377854768,
+        "max_abs_event_error_kg": 8.426314420232153,
+        "signed_approved_extent_kg": -644095062019.7605
+      },
+      "largest_unexplained_columns": [
+        {
+          "i": 184,
+          "j": 147,
+          "R_raw_kg": -70.73548819682134,
+          "C_liquid_store_kg": -9.611814260400555,
+          "R_unexplained_kg": -61.12367393642078
+        },
+        {
+          "i": 167,
+          "j": 29,
+          "R_raw_kg": -59.729496031879215,
+          "C_liquid_store_kg": -2.288879946755497,
+          "R_unexplained_kg": -57.440616085123715
+        },
+        {
+          "i": 48,
+          "j": 145,
+          "R_raw_kg": -49.335966977968084,
+          "C_liquid_store_kg": 7.845081567498538,
+          "R_unexplained_kg": -57.18104854546662
+        },
+        {
+          "i": 185,
+          "j": 147,
+          "R_raw_kg": -61.556435002897814,
+          "C_liquid_store_kg": -7.218702886419758,
+          "R_unexplained_kg": -54.33773211647806
+        },
+        {
+          "i": 213,
+          "j": 66,
+          "R_raw_kg": -48.060929977081116,
+          "C_liquid_store_kg": 6.1368574059901375,
+          "R_unexplained_kg": -54.19778738307125
+        },
+        {
+          "i": 103,
+          "j": 47,
+          "R_raw_kg": -58.44292173132287,
+          "C_liquid_store_kg": -4.970137752342498,
+          "R_unexplained_kg": -53.472783978980374
+        },
+        {
+          "i": 141,
+          "j": 50,
+          "R_raw_kg": -52.53731231427558,
+          "C_liquid_store_kg": 0.3881864900133293,
+          "R_unexplained_kg": -52.925498804288914
+        },
+        {
+          "i": 166,
+          "j": 29,
+          "R_raw_kg": -43.3405305501094,
+          "C_liquid_store_kg": 8.802816173670909,
+          "R_unexplained_kg": -52.14334672378031
+        },
+        {
+          "i": 165,
+          "j": 30,
+          "R_raw_kg": -61.200797556633994,
+          "C_liquid_store_kg": -10.452074192745446,
+          "R_unexplained_kg": -50.748723363888544
+        },
+        {
+          "i": 156,
+          "j": 112,
+          "R_raw_kg": -58.83082115346042,
+          "C_liquid_store_kg": -8.50194815578081,
+          "R_unexplained_kg": -50.32887299767961
+        },
+        {
+          "i": 143,
+          "j": 10,
+          "R_raw_kg": -66.7207291416444,
+          "C_liquid_store_kg": -16.71177235855506,
+          "R_unexplained_kg": -50.00895678308934
+        },
+        {
+          "i": 105,
+          "j": 109,
+          "R_raw_kg": -34.189287111163495,
+          "C_liquid_store_kg": 14.286291338618657,
+          "R_unexplained_kg": -48.47557844978215
+        },
+        {
+          "i": 54,
+          "j": 139,
+          "R_raw_kg": -42.40513938796504,
+          "C_liquid_store_kg": 5.68163954796782,
+          "R_unexplained_kg": -48.08677893593286
+        },
+        {
+          "i": 105,
+          "j": 108,
+          "R_raw_kg": -49.52930628412697,
+          "C_liquid_store_kg": -2.4472642922507655,
+          "R_unexplained_kg": -47.0820419918762
+        },
+        {
+          "i": 119,
+          "j": 60,
+          "R_raw_kg": -44.6847374260247,
+          "C_liquid_store_kg": 2.0617090505687106,
+          "R_unexplained_kg": -46.746446476593405
+        },
+        {
+          "i": 207,
+          "j": 55,
+          "R_raw_kg": -46.59110506419044,
+          "C_liquid_store_kg": -0.03296029855830086,
+          "R_unexplained_kg": -46.558144765632136
+        },
+        {
+          "i": 130,
+          "j": 4,
+          "R_raw_kg": -57.43531695879019,
+          "C_liquid_store_kg": -10.94883922287047,
+          "R_unexplained_kg": -46.48647773591972
+        },
+        {
+          "i": 104,
+          "j": 46,
+          "R_raw_kg": -42.561747888456054,
+          "C_liquid_store_kg": 2.906272998138747,
+          "R_unexplained_kg": -45.4680208865948
+        },
+        {
+          "i": 206,
+          "j": 55,
+          "R_raw_kg": -41.9496099498689,
+          "C_liquid_store_kg": 3.4266809078585627,
+          "R_unexplained_kg": -45.37629085772746
+        },
+        {
+          "i": 137,
+          "j": 117,
+          "R_raw_kg": -36.653772626595305,
+          "C_liquid_store_kg": 8.64136855156882,
+          "R_unexplained_kg": -45.29514117816413
+        }
+      ],
+      "physical_approval": "FAIL_OPEN",
+      "report_sha256": "cd244295fe4e2576482767fa890140b2e9361b4315b600a43897d347fc88ef8a"
+    },
+    "HYDRO": {
+      "R_raw": {
+        "signed_kg": -83334.35488560433,
+        "L1_column_kg": 486480.55416573584,
+        "max_abs_column_kg": 70.73548819682134
+      },
+      "C_liquid_store": {
+        "signed_kg": -17270.67849177621,
+        "L1_column_kg": 403756.4173134494,
+        "max_abs_column_kg": 39.469307196540136
+      },
+      "R_unexplained_after_liquid_only": {
+        "signed_kg": -66063.67639382812,
+        "L1_column_kg": 200452.07686083822,
+        "max_abs_column_kg": 61.12367393642078
+      },
+      "liquid_account": {
+        "event_counts": {
+          "activation": 15001,
+          "full_evaporation": 1192915,
+          "general_negative_extent": 220988,
+          "general_positive_extent": 9477,
+          "clipped_exact_target": 0,
+          "all_events": 1438381
+        },
+        "columns_with_events": 64628,
+        "Q_store_error_kg": -17307.97168214825,
+        "QC_store_error_kg": 37.2931903720406,
+        "L1_event_error_kg": 1637677.698134044,
+        "max_abs_event_error_kg": 8.426314420232153,
+        "signed_approved_extent_kg": -643845134801.608
+      },
+      "largest_unexplained_columns": [
+        {
+          "i": 184,
+          "j": 147,
+          "R_raw_kg": -70.73548819682134,
+          "C_liquid_store_kg": -9.611814260400555,
+          "R_unexplained_kg": -61.12367393642078
+        },
+        {
+          "i": 167,
+          "j": 29,
+          "R_raw_kg": -59.729496031879215,
+          "C_liquid_store_kg": -2.288879946755497,
+          "R_unexplained_kg": -57.440616085123715
+        },
+        {
+          "i": 48,
+          "j": 145,
+          "R_raw_kg": -49.335966977968084,
+          "C_liquid_store_kg": 7.845081567498538,
+          "R_unexplained_kg": -57.18104854546662
+        },
+        {
+          "i": 185,
+          "j": 147,
+          "R_raw_kg": -61.556435002897814,
+          "C_liquid_store_kg": -7.218702886419758,
+          "R_unexplained_kg": -54.33773211647806
+        },
+        {
+          "i": 213,
+          "j": 66,
+          "R_raw_kg": -48.060929977081116,
+          "C_liquid_store_kg": 6.1368574059901375,
+          "R_unexplained_kg": -54.19778738307125
+        },
+        {
+          "i": 103,
+          "j": 47,
+          "R_raw_kg": -58.44292173132287,
+          "C_liquid_store_kg": -4.970137752342498,
+          "R_unexplained_kg": -53.472783978980374
+        },
+        {
+          "i": 141,
+          "j": 50,
+          "R_raw_kg": -52.53731231427558,
+          "C_liquid_store_kg": 0.3881864900133293,
+          "R_unexplained_kg": -52.925498804288914
+        },
+        {
+          "i": 166,
+          "j": 29,
+          "R_raw_kg": -43.3405305501094,
+          "C_liquid_store_kg": 8.802816173670909,
+          "R_unexplained_kg": -52.14334672378031
+        },
+        {
+          "i": 165,
+          "j": 30,
+          "R_raw_kg": -61.200797556633994,
+          "C_liquid_store_kg": -10.452074192745446,
+          "R_unexplained_kg": -50.748723363888544
+        },
+        {
+          "i": 156,
+          "j": 112,
+          "R_raw_kg": -58.83082115346042,
+          "C_liquid_store_kg": -8.50194815578081,
+          "R_unexplained_kg": -50.32887299767961
+        },
+        {
+          "i": 143,
+          "j": 10,
+          "R_raw_kg": -66.7207291416444,
+          "C_liquid_store_kg": -16.71177235855506,
+          "R_unexplained_kg": -50.00895678308934
+        },
+        {
+          "i": 105,
+          "j": 109,
+          "R_raw_kg": -34.189287111163495,
+          "C_liquid_store_kg": 14.286291338618657,
+          "R_unexplained_kg": -48.47557844978215
+        },
+        {
+          "i": 54,
+          "j": 139,
+          "R_raw_kg": -42.40513938796504,
+          "C_liquid_store_kg": 5.68163954796782,
+          "R_unexplained_kg": -48.08677893593286
+        },
+        {
+          "i": 105,
+          "j": 108,
+          "R_raw_kg": -49.52930628412697,
+          "C_liquid_store_kg": -2.4472642922507655,
+          "R_unexplained_kg": -47.0820419918762
+        },
+        {
+          "i": 119,
+          "j": 60,
+          "R_raw_kg": -44.6847374260247,
+          "C_liquid_store_kg": 2.0617090505687106,
+          "R_unexplained_kg": -46.746446476593405
+        },
+        {
+          "i": 207,
+          "j": 55,
+          "R_raw_kg": -46.59110506419044,
+          "C_liquid_store_kg": -0.03296029855830086,
+          "R_unexplained_kg": -46.558144765632136
+        },
+        {
+          "i": 130,
+          "j": 4,
+          "R_raw_kg": -57.43531695879019,
+          "C_liquid_store_kg": -10.94883922287047,
+          "R_unexplained_kg": -46.48647773591972
+        },
+        {
+          "i": 104,
+          "j": 46,
+          "R_raw_kg": -42.561747888456054,
+          "C_liquid_store_kg": 2.906272998138747,
+          "R_unexplained_kg": -45.4680208865948
+        },
+        {
+          "i": 206,
+          "j": 55,
+          "R_raw_kg": -41.9496099498689,
+          "C_liquid_store_kg": 3.4266809078585627,
+          "R_unexplained_kg": -45.37629085772746
+        },
+        {
+          "i": 137,
+          "j": 117,
+          "R_raw_kg": -36.653772626595305,
+          "C_liquid_store_kg": 8.64136855156882,
+          "R_unexplained_kg": -45.29514117816413
+        }
+      ],
+      "physical_approval": "FAIL_OPEN",
+      "report_sha256": "22f3ad5155417410c306438fd53e5bc420d234ee397646c6e0493435b8c3d109"
+    },
+    "COUPLED": {
+      "R_raw": {
+        "signed_kg": -82963.29845336518,
+        "L1_column_kg": 486342.03537570254,
+        "max_abs_column_kg": 70.73548819682134
+      },
+      "C_liquid_store": {
+        "signed_kg": -16900.617606777017,
+        "L1_column_kg": 403910.07024607976,
+        "max_abs_column_kg": 39.469307196540136
+      },
+      "R_unexplained_after_liquid_only": {
+        "signed_kg": -66062.68084658816,
+        "L1_column_kg": 200421.32944736507,
+        "max_abs_column_kg": 61.12367393642078
+      },
+      "liquid_account": {
+        "event_counts": {
+          "activation": 15001,
+          "full_evaporation": 1192911,
+          "general_negative_extent": 220991,
+          "general_positive_extent": 9478,
+          "clipped_exact_target": 0,
+          "all_events": 1438381
+        },
+        "columns_with_events": 64628,
+        "Q_store_error_kg": -16934.80459446139,
+        "QC_store_error_kg": 34.18698768437288,
+        "L1_event_error_kg": 1637822.4745657083,
+        "max_abs_event_error_kg": 8.426314420232153,
+        "signed_approved_extent_kg": -643847208743.3982
+      },
+      "largest_unexplained_columns": [
+        {
+          "i": 184,
+          "j": 147,
+          "R_raw_kg": -70.73548819682134,
+          "C_liquid_store_kg": -9.611814260400555,
+          "R_unexplained_kg": -61.12367393642078
+        },
+        {
+          "i": 167,
+          "j": 29,
+          "R_raw_kg": -59.729496031879215,
+          "C_liquid_store_kg": -2.288879946755497,
+          "R_unexplained_kg": -57.440616085123715
+        },
+        {
+          "i": 48,
+          "j": 145,
+          "R_raw_kg": -49.335966977968084,
+          "C_liquid_store_kg": 7.845081567498538,
+          "R_unexplained_kg": -57.18104854546662
+        },
+        {
+          "i": 185,
+          "j": 147,
+          "R_raw_kg": -61.556435002897814,
+          "C_liquid_store_kg": -7.218702886419758,
+          "R_unexplained_kg": -54.33773211647806
+        },
+        {
+          "i": 213,
+          "j": 66,
+          "R_raw_kg": -48.060929977081116,
+          "C_liquid_store_kg": 6.1368574059901375,
+          "R_unexplained_kg": -54.19778738307125
+        },
+        {
+          "i": 103,
+          "j": 47,
+          "R_raw_kg": -58.44292173132287,
+          "C_liquid_store_kg": -4.970137752342498,
+          "R_unexplained_kg": -53.472783978980374
+        },
+        {
+          "i": 141,
+          "j": 50,
+          "R_raw_kg": -52.53731231427558,
+          "C_liquid_store_kg": 0.3881864900133293,
+          "R_unexplained_kg": -52.925498804288914
+        },
+        {
+          "i": 166,
+          "j": 29,
+          "R_raw_kg": -43.3405305501094,
+          "C_liquid_store_kg": 8.802816173670909,
+          "R_unexplained_kg": -52.14334672378031
+        },
+        {
+          "i": 165,
+          "j": 30,
+          "R_raw_kg": -61.200797556633994,
+          "C_liquid_store_kg": -10.452074192745446,
+          "R_unexplained_kg": -50.748723363888544
+        },
+        {
+          "i": 156,
+          "j": 112,
+          "R_raw_kg": -58.83082115346042,
+          "C_liquid_store_kg": -8.50194815578081,
+          "R_unexplained_kg": -50.32887299767961
+        },
+        {
+          "i": 143,
+          "j": 10,
+          "R_raw_kg": -66.72108904597845,
+          "C_liquid_store_kg": -16.711772714895986,
+          "R_unexplained_kg": -50.00931633108246
+        },
+        {
+          "i": 105,
+          "j": 109,
+          "R_raw_kg": -34.189287111163495,
+          "C_liquid_store_kg": 14.286291338618657,
+          "R_unexplained_kg": -48.47557844978215
+        },
+        {
+          "i": 54,
+          "j": 139,
+          "R_raw_kg": -42.40513938796504,
+          "C_liquid_store_kg": 5.68163954796782,
+          "R_unexplained_kg": -48.08677893593286
+        },
+        {
+          "i": 105,
+          "j": 108,
+          "R_raw_kg": -49.52930628412697,
+          "C_liquid_store_kg": -2.4472642922507655,
+          "R_unexplained_kg": -47.0820419918762
+        },
+        {
+          "i": 119,
+          "j": 60,
+          "R_raw_kg": -44.6847374260247,
+          "C_liquid_store_kg": 2.0617090505687106,
+          "R_unexplained_kg": -46.746446476593405
+        },
+        {
+          "i": 207,
+          "j": 55,
+          "R_raw_kg": -46.59110506419044,
+          "C_liquid_store_kg": -0.03296029855830086,
+          "R_unexplained_kg": -46.558144765632136
+        },
+        {
+          "i": 130,
+          "j": 4,
+          "R_raw_kg": -57.43531695879019,
+          "C_liquid_store_kg": -10.94883922287047,
+          "R_unexplained_kg": -46.48647773591972
+        },
+        {
+          "i": 104,
+          "j": 46,
+          "R_raw_kg": -42.561747888456054,
+          "C_liquid_store_kg": 2.906272998138747,
+          "R_unexplained_kg": -45.4680208865948
+        },
+        {
+          "i": 206,
+          "j": 55,
+          "R_raw_kg": -41.9496099498689,
+          "C_liquid_store_kg": 3.4266809078585627,
+          "R_unexplained_kg": -45.37629085772746
+        },
+        {
+          "i": 137,
+          "j": 117,
+          "R_raw_kg": -36.653772626595305,
+          "C_liquid_store_kg": 8.64136855156882,
+          "R_unexplained_kg": -45.29514117816413
+        }
+      ],
+      "physical_approval": "FAIL_OPEN",
+      "report_sha256": "a7950d6e9dd6d93c8575f2eb6c660b3b038f3c26f4a1683ad354a77eed639c25"
+    }
+  },
+  "status": "REVIEW_REQUIRED",
+  "physical_approval": "FAIL_OPEN",
+  "scope_limits": [
+    "One public KDM6 T1 call per arm from completed 600-second receipt runs.",
+    "Liquid activation, partial evaporation and full evaporation only; other phases/processes remain outside this account.",
+    "C_liquid_store is Q+QC endpoint rounding contribution; R_unexplained_after_liquid_only remains nonzero and must not be assigned to rounding.",
+    "Clipped exact-target event count is zero in OFF, HYDRO, and COUPLED; no water correction was applied.",
+    "REAL64 compensated compact sums are accounting estimates; they are not exact rational whole-tile closure.",
+    "Input per-column rows and full captures remain at receipt-bound /var/tmp paths and are hash-bound by arm manifests."
+  ]
+}
