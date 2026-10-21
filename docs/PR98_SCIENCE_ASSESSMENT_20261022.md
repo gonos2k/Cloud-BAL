@@ -105,3 +105,9 @@ per-cell callbacks do not establish what will happen in C1.
 Graph freshness and diagnostic test counts do not establish runtime or
 scientific approval. The new captures are partial-host research overlays,
 not a clean rebuild of the full WRF model and its dependencies.
+
+The [KG maintenance record](evidence/pr98_native_effect_20261022/kg/README.md)
+binds the separate KLAPS50 and Cloud-BAL snapshots to reviewed source commit
+`4d0baf151cd2669437f0341307c095fa95fb92e5`. It records extraction limits,
+derived wiki synchronization and preservation checks separately from the
+runtime and scientific findings above.
