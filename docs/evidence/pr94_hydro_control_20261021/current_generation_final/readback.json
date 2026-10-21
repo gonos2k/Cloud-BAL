@@ -1,0 +1,446 @@
+{
+  "T_semantics": "perturbation potential temperature theta minus base theta; stored units K do not make T an absolute temperature",
+  "available_number_moment_fields": [
+    "QNCCN",
+    "QNCLOUD",
+    "QNICE",
+    "QNRAIN"
+  ],
+  "candidate_met_em_sha256": "00e0241501c9ecddbee53be25da3d5e84bc97fbd03ef686ae1bc330a44f17393",
+  "dims": {
+    "Time": 1,
+    "bottom_top": 39,
+    "bottom_top_stag": 40,
+    "south_north": 282,
+    "west_east": 234
+  },
+  "native_component_version_note": "real.exe output is WRF V4.6.0; retained native diagnostic consumer is a distinct WRF v4.8 component",
+  "physical_pressure_p_plus_pb_pa": {
+    "max": 102869.453125,
+    "min": 5280.03173828125,
+    "shape": [
+      1,
+      39,
+      282,
+      234
+    ]
+  },
+  "required_mass_and_staggered_fields": [
+    "QVAPOR",
+    "QCLOUD",
+    "QICE",
+    "QRAIN",
+    "QSNOW",
+    "QGRAUP",
+    "PSFC",
+    "P",
+    "PB",
+    "T",
+    "PH",
+    "PHB",
+    "U",
+    "V",
+    "W",
+    "MU",
+    "MUB"
+  ],
+  "science_authority": "NONE",
+  "status": "PASS_SCOPED_SAME13_REAL_READBACK",
+  "time": "2026-08-16_13:00:00",
+  "variables": {
+    "MU": {
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 2497.78125,
+      "min": -623.65625,
+      "sha256_f32": "5addfe1aae18c0a57dff74b6b4c2ca62e800772311f4707fe818bacc5c151069",
+      "shape": [
+        1,
+        282,
+        234
+      ],
+      "units": "Pa"
+    },
+    "MUB": {
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 95172.421875,
+      "min": 71243.7734375,
+      "sha256_f32": "3a9155755ff5717d709d5d295149f0bd55f0d30143e2f48411379b0dc5b93cc7",
+      "shape": [
+        1,
+        282,
+        234
+      ],
+      "units": "Pa"
+    },
+    "P": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 3163.25,
+      "min": -279.1953125,
+      "sha256_f32": "d773f73386962665554ff6d3cf5e6589aa9ad73851e30c3a5bf42e8578ef65c8",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "Pa"
+    },
+    "PB": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 99878.0859375,
+      "min": 5280.0419921875,
+      "sha256_f32": "4686702558f4fe0cb895cf77945f27edff267b228dff45e1df8efc94c40138f3",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "Pa"
+    },
+    "PH": {
+      "dimensions": [
+        "Time",
+        "bottom_top_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 13363.53125,
+      "min": 0.0,
+      "sha256_f32": "424c176994684b8ce9ca3fc6b6354822eba67978da4093507eaa109f432f6a12",
+      "shape": [
+        1,
+        40,
+        282,
+        234
+      ],
+      "units": "m2 s-2"
+    },
+    "PHB": {
+      "dimensions": [
+        "Time",
+        "bottom_top_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 195224.296875,
+      "min": -143.42970275878906,
+      "sha256_f32": "33068967466f0f92a0c3a24825ebf58bf1adff9210a7ea7e49fa56741e1628d6",
+      "shape": [
+        1,
+        40,
+        282,
+        234
+      ],
+      "units": "m2 s-2"
+    },
+    "PSFC": {
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 103089.4375,
+      "min": 77645.78125,
+      "sha256_f32": "d4ee75decde8d7a8e51d69d9324f23fa726eb46996fe2a0e4d9e346d3268731c",
+      "shape": [
+        1,
+        282,
+        234
+      ],
+      "units": "Pa"
+    },
+    "QCLOUD": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.00640183687210083,
+      "min": 0.0,
+      "sha256_f32": "9f0c5deb731d24ffe4713d19c4216cc9ed414bf388143e1ae3a342931c1786a7",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "kg kg-1"
+    },
+    "QGRAUP": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.005818620324134827,
+      "min": 0.0,
+      "sha256_f32": "3bec2407c29865310fdf641ab30ae563da507a819c715e2575a0b3e7aeb59b7e",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "kg kg-1"
+    },
+    "QICE": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.00993315503001213,
+      "min": 0.0,
+      "sha256_f32": "2ff06c20e8a9c10d23d3a80f8c69a0bd2f3b72f206cb28c1e5642ed91eb5b932",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "kg kg-1"
+    },
+    "QNCCN": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.0,
+      "min": 0.0,
+      "sha256_f32": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "  kg(-1)"
+    },
+    "QNCLOUD": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.0,
+      "min": 0.0,
+      "sha256_f32": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "  kg(-1)"
+    },
+    "QNICE": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.0,
+      "min": 0.0,
+      "sha256_f32": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "  kg-1"
+    },
+    "QNRAIN": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.0,
+      "min": 0.0,
+      "sha256_f32": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "  kg(-1)"
+    },
+    "QRAIN": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.0022620633244514465,
+      "min": 0.0,
+      "sha256_f32": "157e7edb46bb902d390b3c87b8ddf36f4ed4bbdf633bac394caed2801569768e",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "kg kg-1"
+    },
+    "QSNOW": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.015988271683454514,
+      "min": 0.0,
+      "sha256_f32": "0ee28dccc8fe7964996cefbff3b5ccc7215e1ad33f35f0aea46a7e9a1a5444f4",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "kg kg-1"
+    },
+    "QVAPOR": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.022663475945591927,
+      "min": 1.2136382565586246e-07,
+      "sha256_f32": "235d6b7ee2ce736684534a128c1493db27c32d3a6c7a535f0dd549d42b697b42",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "kg kg-1"
+    },
+    "T": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 209.31790161132812,
+      "min": -6.636932373046875,
+      "sha256_f32": "39e59de40330fcc807c5d981e22ec7365066a348ea8c026ebe3b608005368122",
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "units": "K"
+    },
+    "U": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east_stag"
+      ],
+      "dtype": "float32",
+      "max": 33.67778015136719,
+      "min": -18.779943466186523,
+      "sha256_f32": "943023b493adab526fb055b02575bf1154085c6bc66a09ffd655aa80064b3d60",
+      "shape": [
+        1,
+        39,
+        282,
+        235
+      ],
+      "units": "m s-1"
+    },
+    "V": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north_stag",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 30.37018585205078,
+      "min": -17.752614974975586,
+      "sha256_f32": "15ebe7d7dd3c1d0267f5bdbf377cc36680676b24157130cf57fe4b2d55a6a1c4",
+      "shape": [
+        1,
+        39,
+        283,
+        234
+      ],
+      "units": "m s-1"
+    },
+    "W": {
+      "dimensions": [
+        "Time",
+        "bottom_top_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "max": 0.0,
+      "min": 0.0,
+      "sha256_f32": "2a82733b5fc973eb267174f599b70434d99c1c9a27e8cc1ebf475bda9c11719b",
+      "shape": [
+        1,
+        40,
+        282,
+        234
+      ],
+      "units": "m s-1"
+    }
+  },
+  "wrfinput_sha256": "967bd4464011a84b396ce283e34a761386a66a3e67809183d9fcbfc599143c61"
+}

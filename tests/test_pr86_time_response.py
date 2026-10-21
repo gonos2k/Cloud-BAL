@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import errno
 import hashlib
 import gzip
 import json
@@ -73,7 +74,142 @@ def make_finalizer_fixture(root: Path, duration: int, steps: tuple[int, ...] | N
     return out
 
 
+def make_hydro_binding(root: Path) -> dict:
+    artifacts = {}
+    for name in ("wrfinput", "wrfbdy", "source_candidate", "moment_policy", "initialization_receipt", "source_chain"):
+        path = root / name
+        path.write_bytes(("HYDRO " + name).encode())
+        artifacts[name] = {"path": str(path), "sha256": response.sha256(path)}
+    receipt = {"schema": "pr94_hydro_native_input_v1", "role": "HYDRO",
+               "status": "PASS_HYDRO_NATIVE_INPUT",
+               **{key: value for key, value in artifacts.items() if key != "source_chain"},
+               "source_chain_receipts": [artifacts["source_chain"]],
+               "comparison_contract": {"physics": "frozen C4"}}
+    path = root / "hydro_input.json"
+    path.write_text(json.dumps(receipt))
+    return response._hydro_input_binding(path)
+
+
 class TimeResponseTests(unittest.TestCase):
+    def test_hydro_binding_rejects_changed_artifact_and_failed_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = make_hydro_binding(root)
+            self.assertTrue(response._input_binding_unchanged(binding))
+            (root / "source_chain").write_text("changed source provenance")
+            with self.assertRaisesRegex(ValueError, "artifact changed"):
+                response._input_binding_unchanged(binding)
+            path = Path(binding["receipt_path"])
+            receipt = json.loads(path.read_text())
+            receipt["status"] = "FAILED"
+            path.write_text(json.dumps(receipt))
+            with self.assertRaisesRegex(ValueError, "source-bound"):
+                response._hydro_input_binding(path)
+
+    def test_hydro_stage_preserves_off_template_and_checks_injected_hash(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = make_hydro_binding(root)
+            runtime = root / "runtime"
+            runtime.mkdir()
+            (runtime / "wrfinput_d01").write_bytes(b"original OFF input")
+            (runtime / "namelist.input.source").write_text("source namelist")
+            original_hash = response.sha256(runtime / "wrfinput_d01")
+            input_hash = binding["artifacts"]["wrfinput"]["sha256"]
+            prepared = {"runtime_dir": str(runtime), "input_hashes": {"wrfinput_d01": original_hash},
+                        "candidate_input_binding": binding, "candidate_wrfinput_sha256": input_hash,
+                        "namelist_text": "HYDRO namelist", "namelist_diff": ""}
+            stage = response._stage(prepared, root / "output")
+            self.assertEqual(response.sha256(runtime / "wrfinput_d01"), original_hash)
+            self.assertEqual(response.sha256(stage / "wrfinput_d01"), input_hash)
+            self.assertEqual(response._staged_expected_hash("wrfinput_d01", prepared["input_hashes"],
+                                                           None, None, input_hash), input_hash)
+            (root / "source_candidate").write_text("changed upstream candidate")
+            with self.assertRaisesRegex(ValueError, "artifact changed"):
+                response._stage(prepared, root / "rejected_output")
+
+    def test_cross_filesystem_stage_copies_only_for_exdev(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runtime = root / "runtime"
+            runtime.mkdir()
+            (runtime / "input.dat").write_bytes(b"frozen input")
+            (runtime / "namelist.input.source").write_text("source namelist")
+            prepared = {"runtime_dir": str(runtime), "input_hashes": {"input.dat": "unused"},
+                        "namelist_text": "candidate namelist", "namelist_diff": ""}
+            with patch.object(response.os, "link", side_effect=OSError(errno.EXDEV, "cross-device")):
+                stage = response._stage(prepared, root / "copied")
+            self.assertEqual((stage / "input.dat").read_bytes(), b"frozen input")
+            with patch.object(response.os, "link", side_effect=PermissionError(errno.EACCES, "denied")):
+                with self.assertRaises(PermissionError):
+                    response._stage(prepared, root / "denied")
+
+    def test_corrupt_cross_device_copy_is_rejected_before_consumption(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runtime = root / "runtime"
+            runtime.mkdir()
+            original = runtime / "input.dat"
+            original.write_bytes(b"frozen input")
+            (runtime / "namelist.input.source").write_text("source namelist")
+            prepared = {"runtime_dir": str(runtime), "input_hashes": {"input.dat": response.sha256(original)},
+                        "namelist_text": "candidate namelist", "namelist_diff": ""}
+            copy = response.shutil.copy2
+            def corrupt_input(source, destination):
+                if Path(source).name == "input.dat":
+                    Path(destination).write_bytes(b"corrupt copy")
+                else:
+                    copy(source, destination)
+            with patch.object(response.os, "link", side_effect=OSError(errno.EXDEV, "cross-device")), \
+                 patch.object(response.shutil, "copy2", side_effect=corrupt_input):
+                stage = response._stage(prepared, root / "output")
+            with self.assertRaisesRegex(ValueError, "input.dat"):
+                response.verify_staged_inputs(prepared, stage)
+            self.assertEqual(original.read_bytes(), b"frozen input")
+
+    def test_hydro_finalizer_rejects_changed_source_provenance(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = make_hydro_binding(root)
+            out = make_finalizer_fixture(root, 40)
+            preflight_path = out / "preflight.json"
+            preflight = json.loads(preflight_path.read_text())
+            input_sha = binding["artifacts"]["wrfinput"]["sha256"]
+            preflight.update(arm="HYDRO", template_arm="OFF", candidate_input_binding=binding,
+                             candidate_wrfinput_sha256=input_sha)
+            preflight_path.write_text(json.dumps(preflight))
+            launch = {"returncode": 0, "arm": "HYDRO", "compressed_outputs": [],
+                      "candidate_input_binding": binding, "candidate_wrfinput_sha256": input_sha}
+            (out / "receipt.json").write_text(json.dumps(launch))
+            self.assertEqual(response.finalize_existing_run("HYDRO", out, 40)["status"], "COMPLETE")
+            with self.subTest(missing_launch_binding=True):
+                (out / "receipt.json").write_text(json.dumps({**launch, "candidate_input_binding": None}))
+                self.assertEqual(response.finalize_existing_run("HYDRO", out, 40)["status"], "INCOMPLETE")
+            (out / "receipt.json").write_text(json.dumps(launch))
+            with self.subTest(wrong_arm=True):
+                self.assertEqual(response.finalize_existing_run("OFF", out, 40)["status"], "INCOMPLETE")
+            (out / "receipt.json").write_text(json.dumps(launch))
+            (root / "source_chain").write_text("changed source provenance")
+            result = response.finalize_existing_run("HYDRO", out, 40)
+            self.assertEqual(result["status"], "INCOMPLETE")
+            self.assertFalse(result["candidate_input_unchanged"])
+            self.assertIn("HYDRO input binding changed after preflight", result["processing_errors"])
+
+    def test_longrun_finalizer_requires_every_step_and_final_snapshot(self) -> None:
+        for duration in (1800, 3600):
+            with self.subTest(duration=duration), tempfile.TemporaryDirectory() as directory:
+                out = make_finalizer_fixture(Path(directory), duration)
+                result = response.finalize_existing_run("OFF", out, duration)
+                self.assertEqual(result["status"], "COMPLETE")
+                self.assertEqual(result["final_completed_step"], duration // 20)
+                schedule = response.snapshot_schedule(duration)
+                self.assertIn(90, schedule)
+                self.assertIn(duration // 20, schedule)
+            with self.subTest(duration=duration, missing=True), tempfile.TemporaryDirectory() as directory:
+                steps = tuple(range(1, duration // 20))
+                out = make_finalizer_fixture(Path(directory), duration, steps=steps)
+                self.assertEqual(response.finalize_existing_run("OFF", out, duration)["status"], "INCOMPLETE")
+
     def test_diagnostic_identity_is_stable_and_distinguishes_runs(self) -> None:
         output = Path("/var/tmp/diagnostic run with spaces")
         identity = response.diagnostic_run_id("OFF", output)

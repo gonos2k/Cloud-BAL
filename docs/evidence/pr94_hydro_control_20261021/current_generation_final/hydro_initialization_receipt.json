@@ -1,0 +1,159 @@
+{
+  "all_other_variables_unchanged": true,
+  "changed_nonmoment_variables": [],
+  "committed_initialized_cells": {
+    "QIB": 1010,
+    "QNCLOUD": 973831,
+    "QNICE": 249167,
+    "QNRAIN": 207316
+  },
+  "consumed_variable_sha256": {
+    "AL": "59c5bcbb818ccd0ed0d0d5ffb4857e1e43959f8a73f7d7e61986cb4822a552f1",
+    "ALB": "f820e5ddc4b579ff50826cbd016a9a26a1e69e48790a6d93ebbb5bd2c7cdfdca",
+    "QCLOUD": "9f0c5deb731d24ffe4713d19c4216cc9ed414bf388143e1ae3a342931c1786a7",
+    "QGRAUP": "3bec2407c29865310fdf641ab30ae563da507a819c715e2575a0b3e7aeb59b7e",
+    "QIB": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+    "QICE": "2ff06c20e8a9c10d23d3a80f8c69a0bd2f3b72f206cb28c1e5642ed91eb5b932",
+    "QNCCN": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+    "QNCLOUD": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+    "QNICE": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+    "QNRAIN": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+    "QRAIN": "157e7edb46bb902d390b3c87b8ddf36f4ed4bbdf633bac394caed2801569768e"
+  },
+  "field_prior_receipts": {
+    "QIB": {
+      "density_center_kg_m-3": 400.0,
+      "density_support_kg_m-3": [
+        100.0,
+        900.0
+      ],
+      "eligible_missing_cells": 1010,
+      "initialized_cells": 1010,
+      "positive_mass_without_representable_moment": 0,
+      "preflight": {
+        "bound_source": "Selected KDM6 source PSD parameterization and source-exact same-time WRF AL+ALB density; see docs/PR83_NATIVE_MOMENT_POLICY_20261013.json",
+        "checked_count": 2573532,
+        "mutated_input": false,
+        "reason": "WITHIN_DECLARED_DENSITY_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "PASS_SCOPED",
+        "uncertainty_description": "Source rho_min..rho_max is an admissibility envelope, not a statistical sigma; rho_mid is the declared research center.",
+        "valid": true,
+        "violation_count": 0
+      },
+      "preserved_existing_nonzero_cells": 0,
+      "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion"
+    },
+    "QNCLOUD": {
+      "cap_rounding_policy": "Stored number is checked with stored DEN and exact source cap; an over-cap stored value is stepped toward zero by one representable native dtype value until admissible.",
+      "eligible_missing_cells": 973831,
+      "initialized_cells": 973831,
+      "left_unchanged_infeasible_cells": 0,
+      "positive_mass_without_representable_moment": 0,
+      "preflight": {
+        "bound_source": "Selected KDM6 source PSD parameterization and source-exact same-time WRF AL+ALB density; see docs/PR83_NATIVE_MOMENT_POLICY_20261013.json",
+        "checked_count": 973831,
+        "mutated_input": false,
+        "reason": "WITHIN_DECLARED_PARTICLE_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "PASS_SCOPED",
+        "uncertainty_description": "Source-parameter admissibility envelope, not statistical sigma. Gamma PSD individual diameter support is unbounded; derived particle-mass limits describe the mean particle mass implied by lambda, not every particle.",
+        "valid": true,
+        "violation_count": 0
+      },
+      "preserved_existing_nonzero_cells": 0,
+      "prior_center_lambda_m-1_range": [
+        49412.11900079232,
+        77459.66692414833
+      ],
+      "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion",
+      "source_lambda_max_m-1": 500000.0,
+      "source_lambda_min_m-1": 12000.0
+    },
+    "QNICE": {
+      "cap_rounding_policy": "Stored number is checked with stored DEN and exact source cap; an over-cap stored value is stepped toward zero by one representable native dtype value until admissible.",
+      "eligible_missing_cells": 249167,
+      "entry_cap_formula": "max(1e6, REAL32(QNICE_minimum_REAL32 * dry_density_REAL32)); QNICE satisfies public and REAL32 internal PSD floors",
+      "high_mass_minimum_qnice_cells": 2326,
+      "high_mass_qnice_policy": "least REAL32 public number at or above the exact REAL64 source lambda_min PSD bound",
+      "initialized_cells": 249167,
+      "internal_number_cap_mode": "SOURCE_PSD_COMPATIBLE_ENTRY_GUARD",
+      "left_unchanged_infeasible_cells": 0,
+      "low_ice_internal_number_cap_m-3": 1000000.0,
+      "positive_mass_without_representable_moment": 0,
+      "preflight": {
+        "bound_source": "PR84 exact retained KDM6 REAL32 PIDNI and lambda bounds",
+        "checked_count": 249167,
+        "mutated_input": false,
+        "reason": "WITHIN_DECLARED_PARTICLE_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "PASS_SCOPED",
+        "uncertainty_description": "Source-parameter admissibility envelope, not statistical sigma. Gamma PSD individual diameter support is unbounded; derived particle-mass limits describe the mean particle mass implied by lambda, not every particle.",
+        "valid": true,
+        "violation_count": 0
+      },
+      "preserved_existing_nonzero_cells": 0,
+      "prior_center_lambda_m-1_range": [
+        9080.02955389015,
+        128551.93503016591
+      ],
+      "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion",
+      "source_lambda_max_m-1": 1820000.0,
+      "source_lambda_min_m-1": 9080.0,
+      "source_pidni_binary32": 1570.79638671875,
+      "source_pidni_binary32_hex": "0x44c4597c"
+    },
+    "QNRAIN": {
+      "cap_rounding_policy": "Stored number is checked with stored DEN and exact source cap; an over-cap stored value is stepped toward zero by one representable native dtype value until admissible.",
+      "eligible_missing_cells": 207316,
+      "initialized_cells": 207316,
+      "left_unchanged_infeasible_cells": 0,
+      "positive_mass_without_representable_moment": 0,
+      "preflight": {
+        "bound_source": "Selected KDM6 source PSD parameterization and source-exact same-time WRF AL+ALB density; see docs/PR83_NATIVE_MOMENT_POLICY_20261013.json",
+        "checked_count": 207316,
+        "mutated_input": false,
+        "reason": "WITHIN_DECLARED_PARTICLE_BOUNDS",
+        "source_authentication": "NOT_ASSESSED",
+        "status": "PASS_SCOPED",
+        "uncertainty_description": "Source-parameter admissibility envelope, not statistical sigma. Gamma PSD individual diameter support is unbounded; derived particle-mass limits describe the mean particle mass implied by lambda, not every particle.",
+        "valid": true,
+        "violation_count": 0
+      },
+      "preserved_existing_nonzero_cells": 0,
+      "prior_center_lambda_m-1_range": [
+        5799.5689494996095,
+        5799.5689494996095
+      ],
+      "research_fill_cutoff": "exact positive mass; no positive-mass floor or deletion",
+      "source_lambda_max_m-1": 35000.0,
+      "source_lambda_min_m-1": 961.0
+    }
+  },
+  "hydro_input_binding": {
+    "source_receipt_path": "/var/tmp/pr94_hydro_current_inputs_20261021b/hydro_real_input_stage.json",
+    "source_receipt_sha256": "a33eb9aac376eec4fb71c05fa5ba157d3ea426ad9e1313dd916ee2456592c865",
+    "wrfinput_path": "/var/tmp/pr94_hydro_current_real_buildcwd_20261021/wrfinput_d01",
+    "wrfinput_sha256": "967bd4464011a84b396ce283e34a761386a66a3e67809183d9fcbfc599143c61"
+  },
+  "initializer_sha256": "58b38289e8176e2fd65e31000830227b7644303b215376667729daba5603407c",
+  "limited_scope": "Explicit same-13UTC research PSD/density prior only; no observation recovery, forecast acceptance, or operational authority is implied.",
+  "native_launch_authority": "NONE",
+  "output_input": "/var/tmp/pr94_hydro_current_real_buildcwd_20261021/wrfinput_d01.moment",
+  "output_input_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+  "policy_id": "SAME13_KDM6_NATIVE_MOMENT_PRIOR_20261013_V2_HYDRO",
+  "policy_schema": "pr94_same13_hydro_moment_policy_v1",
+  "policy_sha256": "a26929405b1583eb26dc5621ca801317bcf70724061b8a55b61ca987add928a1",
+  "schema": "pr83_same13_native_moment_prior_receipt_v1",
+  "source_density": {
+    "active_max_kg_m-3": 1.1726703643798828,
+    "active_min_kg_m-3": 0.08369996398687363,
+    "basis": "dry_air",
+    "formula": "real32 reciprocal of real32 AL + ALB"
+  },
+  "source_input": "/var/tmp/pr94_hydro_current_real_buildcwd_20261021/wrfinput_d01",
+  "source_input_role": "HYDRO",
+  "source_input_sha256": "967bd4464011a84b396ce283e34a761386a66a3e67809183d9fcbfc599143c61",
+  "source_input_unchanged": true,
+  "status": "RESEARCH_PRIOR_CREATED"
+}

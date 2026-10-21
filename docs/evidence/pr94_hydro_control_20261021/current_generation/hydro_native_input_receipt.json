@@ -1,0 +1,75 @@
+{
+  "comparison_contract": {
+    "attribution_scope": "matched current-generation HYDRO input control for PR81 current joint producer; no claim of scientific validation",
+    "baseline_generation": "PR81 joint thermo/density/Phi/force producer",
+    "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "configuration_delta": [
+      "background_continuity_prior=true -> false",
+      "force_prior_enabled=true -> false"
+    ],
+    "current_generation": true,
+    "unchanged_contract": [
+      "same PR81 13Z real-reader input hashes",
+      "same PR81 source support and liquid thermo/Phi reference masks",
+      "same pipeline/column/density/hydrostatic equations",
+      "same 8 outer iterations",
+      "same thermo density weight 0.5 and increment caps 5 K / 0.005 kg kg-1",
+      "same balance numerical limits (stage is bypassed in HYDRO branch)",
+      "candidate U/V/omega bitwise equal to background",
+      "pinned O0 and O2 candidate arrays bitwise equal"
+    ],
+    "valid_time_epoch": 1786885200
+  },
+  "initialization_receipt": {
+    "path": "/var/tmp/pr94_hydro_current_inputs_20261021/hydro_initialization_receipt.json",
+    "sha256": "4be879874a18a778a1dfa8324e4eeaf5dd835fa4ed04759d1010d6bd697c547d"
+  },
+  "moment_policy": {
+    "parent_policy_sha256": "7f0176742d736c9dbe2be127f43eb00ed35ebda89f0b792a51220efb7d4d7e92",
+    "path": "/var/tmp/pr94_hydro_current_inputs_20261021/hydro_moment_policy.json",
+    "sha256": "d997de683a0a06d13789edd3b59805f835ae2a0816dda202df3e06d795bff1e5"
+  },
+  "role": "HYDRO",
+  "schema": "pr94_hydro_native_input_v1",
+  "source_candidate": {
+    "generation": "PR81 same13 current-generation thermo/density/Phi producer, pinned O2",
+    "mode": "HYDRO",
+    "path": "/var/tmp/pr94_hydro_current_O2_20261021/build/hydro_candidate.nc",
+    "sha256": "97a98c5bb05a8dc70528c2b6c025ae8cb359ed46f23b7d3c28941535f71ae9d6"
+  },
+  "source_chain_receipts": [
+    {
+      "path": "/var/tmp/pr94_hydro_current_O2_20261021/artifacts.sha256",
+      "sha256": "2303a44686f36a13a83fd68d98e5c9c65a068b0e47308f7748b2a377c361a689"
+    },
+    {
+      "path": "/var/tmp/pr94_hydro_current_O0_20261021/artifacts.sha256",
+      "sha256": "385fc4f2860b797c87a992174c75874cf845057e9e5f1c48d5dac9febf030adb"
+    },
+    {
+      "path": "/var/tmp/pr94_hydro_current_wps_O2_20261021/build/readback.json",
+      "sha256": "52b1244a58cb74d4e1ef0e9d08796d62a82e4fcbdff78d22b0c4987ee831b892"
+    },
+    {
+      "path": "/var/tmp/pr94_hydro_current_metgrid_20261021/readback.json",
+      "sha256": "97667d0e9681e3dd2728e5f2d398f3d1ac0388e804bd0fd1bab3b9df09c97489"
+    },
+    {
+      "path": "/var/tmp/pr94_hydro_current_real_20261021/readback.json",
+      "sha256": "b321a35800b253d72404a74e4140297281618377261b6d3f3c8a5224f9543f74"
+    },
+    {
+      "path": "/var/tmp/pr94_hydro_current_inputs_20261021/current_hydro_producer_receipt.json",
+      "sha256": "9ce8364031437ea74e93e9226ebca233e9820f6f7f11455c1554656dd0ed7988"
+    }
+  ],
+  "status": "PASS_HYDRO_NATIVE_INPUT",
+  "wrfbdy": {
+    "path": "/var/tmp/pr94_hydro_current_real_20261021/wrfbdy_d01",
+    "sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7"
+  },
+  "wrfinput": {
+    "path": "/var/tmp/pr94_hydro_current_real_20261021/wrfinput_d01.moment",
+    "sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c"
+  }
+}

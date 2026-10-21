@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Safely stage and receipt PR85v17 multistep OFF/COUPLED runs."""
+"""Safely stage and receipt source-bound multistep OFF/HYDRO/COUPLED runs."""
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import difflib
+import errno
 import gzip
 import hashlib
 import json
@@ -28,7 +29,8 @@ INTEL_PROFILE = Path(__file__).resolve().parents[1] / "tests/intel_toolchain.sh"
 STATE_MAGIC, TENDENCY_MAGIC = b"PR85QND2", b"PR85PLB1"
 STATE_FIELDS = ("DEN", "Q", "QC", "QI", "QR", "QS", "QG", "NN", "NC", "NI", "NR", "BG")
 TENDENCY_FIELDS = ("QV_TEND", "QC_TEND", "QI_TEND", "QNC_TEND", "QNI_TEND")
-SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s", 25: "500s", 30: "10min"}
+SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s", 25: "500s",
+             30: "10min", 60: "20min", 90: "30min", 180: "60min"}
 SNAPSHOT_SECONDS = tuple(timestep * 20 for timestep in SNAPSHOTS)
 LAUNCH_ENVIRONMENT = {"OMP_NUM_THREADS": "1", "OMP_DYNAMIC": "FALSE"}
 LAUNCH_ENVIRONMENT_SHA256 = hashlib.sha256(
@@ -114,12 +116,39 @@ def _candidate_build_binding(path: Path) -> dict:
 
 
 def _staged_expected_hash(name: str, input_hashes: dict, candidate_build: dict | None,
-                          candidate_namelist_sha256: str | None = None) -> str:
+                          candidate_namelist_sha256: str | None = None,
+                          candidate_wrfinput_sha256: str | None = None) -> str:
     if name == "wrf.exe" and candidate_build:
         return candidate_build["executable_sha256"]
     if name == "namelist.input" and candidate_namelist_sha256:
         return candidate_namelist_sha256
+    if name == "wrfinput_d01" and candidate_wrfinput_sha256:
+        return candidate_wrfinput_sha256
     return input_hashes[name]
+
+
+def _hydro_input_binding(path: Path) -> dict:
+    """Bind a separately produced HYDRO input without changing its OFF template."""
+    path = path.resolve()
+    receipt = json.loads(path.read_text())
+    if (receipt.get("schema") != "pr94_hydro_native_input_v1" or receipt.get("role") != "HYDRO" or
+            receipt.get("status") != "PASS_HYDRO_NATIVE_INPUT"):
+        raise ValueError("expected a source-bound PR94 HYDRO native input receipt")
+    artifacts = {name: receipt[name] for name in (
+        "wrfinput", "wrfbdy", "source_candidate", "moment_policy", "initialization_receipt")}
+    chain = receipt.get("source_chain_receipts")
+    if not isinstance(chain, list) or not chain:
+        raise ValueError("HYDRO source-chain receipts are missing")
+    for row in [*artifacts.values(), *chain]:
+        if sha256(Path(row["path"])) != row["sha256"]:
+            raise ValueError(f"HYDRO artifact changed: {row['path']}")
+    return {"receipt_path": str(path), "receipt_sha256": sha256(path),
+            "artifacts": artifacts, "source_chain_receipts": chain,
+            "comparison_contract": receipt.get("comparison_contract")}
+
+
+def _input_binding_unchanged(binding: dict | None) -> bool:
+    return binding is None or _hydro_input_binding(Path(binding["receipt_path"])) == binding
 
 
 def edit_namelist(text: str, seconds: int) -> str:
@@ -349,9 +378,14 @@ def diagnostic_run_id(arm: str, out: Path) -> str:
 
 def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
             candidate_build_path: Path | None = None,
-            disk_reference_receipt_path: Path | None = None) -> dict:
+            disk_reference_receipt_path: Path | None = None,
+            hydro_input_receipt_path: Path | None = None) -> dict:
     snapshot_schedule(duration)
-    runtime, receipt_path = Path(str(RUNTIME).format(arm=arm)), Path(str(RUN_RECEIPT).format(arm=arm))
+    if (arm == "HYDRO") != (hydro_input_receipt_path is not None):
+        raise ValueError("HYDRO requires its own input receipt; OFF/COUPLED do not accept one")
+    template_arm = "OFF" if arm == "HYDRO" else arm
+    runtime = Path(str(RUNTIME).format(arm=template_arm))
+    receipt_path = Path(str(RUN_RECEIPT).format(arm=template_arm))
     receipt = json.loads(receipt_path.read_text())
     inputs = {Path(row["path"]).name: row["sha256_after"] for row in receipt["run_isolation"]["inputs"]}
     exe = runtime / "wrf.exe"
@@ -366,6 +400,12 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         raise ValueError(f"{arm}: frozen inputs changed: {bad}")
     candidate_build = (_candidate_build_binding(candidate_build_path)
                        if candidate_build_path is not None else None)
+    candidate_input = (_hydro_input_binding(hydro_input_receipt_path)
+                       if hydro_input_receipt_path is not None else None)
+    if candidate_input and candidate_input["artifacts"]["wrfbdy"]["sha256"] != receipt["candidate_wrfbdy_sha256"]:
+        raise ValueError("HYDRO boundary differs from the frozen matched boundary")
+    wrfinput_sha256 = (candidate_input["artifacts"]["wrfinput"]["sha256"] if candidate_input
+                      else receipt["candidate_wrfinput_sha256"])
     namelist = runtime / "namelist.input"
     original_namelist = namelist.read_text()
     edited = edit_namelist(original_namelist, duration)
@@ -379,7 +419,7 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
     else:
         reference_projection = _disk_reference_projection(
             disk_reference_receipt_path, arm, sha256(receipt_path), sha256(namelist), inputs,
-            sha256(exe), receipt["candidate_wrfinput_sha256"], receipt["candidate_wrfbdy_sha256"],
+            sha256(exe), wrfinput_sha256, receipt["candidate_wrfbdy_sha256"],
             os.environ.get("PR87_PROBE"))
         per_step_projection = reference_projection["per_step_projection_bytes"]
     projected = per_step_projection * steps
@@ -389,7 +429,8 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         "arm": arm, "duration_seconds": duration, "timestep_seconds": 20,
         "expected_timesteps": steps, "runtime_dir": str(runtime), "source_receipt": str(receipt_path),
         "source_receipt_sha256": sha256(receipt_path),
-        "executable_sha256": sha256(exe), "candidate_wrfinput_sha256": receipt["candidate_wrfinput_sha256"],
+        "executable_sha256": sha256(exe), "candidate_wrfinput_sha256": wrfinput_sha256,
+        "template_arm": template_arm, "candidate_input_binding": candidate_input,
         "baseline_frozen_executable_sha256": sha256(exe), "candidate_build": candidate_build,
         "candidate_wrfbdy_sha256": receipt["candidate_wrfbdy_sha256"], "input_file_count": len(inputs),
         "input_hashes": inputs, "source_namelist_sha256": sha256(namelist),
@@ -417,7 +458,21 @@ def _stage(prepared: dict, out: Path) -> Path:
     stage.mkdir(parents=True)
     for name in prepared["input_hashes"]:
         if name not in {"namelist.input", "namelist.input.source"}:
-            os.link(runtime / name, stage / name)
+            try:
+                os.link(runtime / name, stage / name)
+            except OSError as exc:
+                if exc.errno != errno.EXDEV:
+                    raise
+                shutil.copy2(runtime / name, stage / name)
+    candidate_input = prepared.get("candidate_input_binding")
+    if candidate_input:
+        if not _input_binding_unchanged(candidate_input):
+            raise ValueError("HYDRO source input binding changed after preflight")
+        staged_input = stage / "wrfinput_d01"
+        staged_input.unlink()
+        shutil.copy2(candidate_input["artifacts"]["wrfinput"]["path"], staged_input)
+        if sha256(staged_input) != prepared["candidate_wrfinput_sha256"]:
+            raise ValueError("staged HYDRO input hash mismatch")
     candidate_build = prepared.get("candidate_build")
     if candidate_build:
         staged_executable = stage / "wrf.exe"
@@ -429,6 +484,17 @@ def _stage(prepared: dict, out: Path) -> Path:
     (stage / "namelist.input").write_text(prepared["namelist_text"])
     (stage / "namelist.input.diff").write_text(prepared["namelist_diff"])
     return stage
+
+
+
+def verify_staged_inputs(prepared: dict, stage: Path) -> None:
+    """Reject changed staging bytes before WRF can consume them."""
+    for name in prepared["input_hashes"]:
+        expected = _staged_expected_hash(
+            name, prepared["input_hashes"], prepared.get("candidate_build"),
+            prepared.get("candidate_namelist_sha256"), prepared.get("candidate_wrfinput_sha256"))
+        if sha256(stage / name) != expected:
+            raise ValueError(f"staged input hash differs from preflight: {name}")
 
 
 def _model_times(stage: Path) -> list[dict]:
@@ -595,6 +661,18 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
     original = json.loads((out / "receipt.json").read_text()) if (out / "receipt.json").exists() else {}
     stage = out / "run"
     issues = []
+    if preflight.get("arm", arm) != arm or original.get("arm", arm) != arm:
+        issues.append("requested arm differs from run provenance")
+    hydro_binding = preflight.get("candidate_input_binding")
+    if (arm == "HYDRO") != bool(hydro_binding):
+        issues.append("HYDRO arm requires its own source-bound input")
+    if hydro_binding:
+        if (preflight.get("template_arm") != "OFF" or original.get("arm") != "HYDRO" or
+                original.get("candidate_input_binding") != hydro_binding or
+                original.get("candidate_wrfinput_sha256") != preflight.get("candidate_wrfinput_sha256") or
+                preflight.get("candidate_wrfinput_sha256") !=
+                hydro_binding.get("artifacts", {}).get("wrfinput", {}).get("sha256")):
+            issues.append("HYDRO launch input provenance differs from preflight")
     candidate_build = preflight.get("candidate_build")
     candidate_build_unchanged = True
     if candidate_build_path is not None and (not candidate_build or
@@ -652,8 +730,17 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
         if name == "namelist.input":
             expected = preflight["candidate_namelist_sha256"]
         if sha256(staged) != _staged_expected_hash(
-                name, input_hashes, candidate_build, preflight.get("candidate_namelist_sha256")):
+                name, input_hashes, candidate_build, preflight.get("candidate_namelist_sha256"),
+                preflight.get("candidate_wrfinput_sha256")):
             changed_stage.append(name)
+    candidate_input = preflight.get("candidate_input_binding")
+    try:
+        candidate_input_unchanged = _input_binding_unchanged(candidate_input)
+    except (OSError, ValueError, KeyError) as exc:
+        candidate_input_unchanged = False
+        issues.append(f"HYDRO input binding validation: {exc}")
+    if not candidate_input_unchanged:
+        issues.append("HYDRO input binding changed after preflight")
     source = Path(preflight["runtime_dir"])
     source_after = {}
     changed_original = []
@@ -677,7 +764,7 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
                 completed == list(range(1, duration // 20 + 1)) and not duplicate_post and
                 not fatal and not issues and
                 not changed_stage and not changed_original and source_receipt_unchanged and
-                candidate_build_unchanged and
+                candidate_build_unchanged and candidate_input_unchanged and
                 set(schedule.values()).issubset(snapshots["snapshots"]))
     compressed = original.get("compressed_outputs", [])
     for row in compressed:
@@ -715,6 +802,8 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
         "expected_executed_executable_sha256": expected_executable_sha256,
         "candidate_build": candidate_build,
         "candidate_build_unchanged": candidate_build_unchanged,
+        "candidate_input_binding": candidate_input,
+        "candidate_input_unchanged": candidate_input_unchanged,
         "pr87_probe": original.get("pr87_probe"),
         "source_inputs_after_sha256": source_after, "processing_errors": issues,
         "source_receipt_sha256": source_receipt_sha,
@@ -743,13 +832,14 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
 
 def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: float,
         candidate_build_path: Path | None = None,
-        disk_reference_receipt_path: Path | None = None) -> dict:
+        disk_reference_receipt_path: Path | None = None,
+        hydro_input_receipt_path: Path | None = None) -> dict:
     runner_path = Path(__file__).resolve()
     runner_sha256_at_entry = sha256(runner_path)
     schedule = snapshot_schedule(duration)
     out.mkdir(parents=True, exist_ok=False)
     prepared = prepare(arm, duration, out, safety_fraction, candidate_build_path,
-                       disk_reference_receipt_path)
+                       disk_reference_receipt_path, hydro_input_receipt_path)
     (out / "preflight.json").write_text(json.dumps({k: v for k, v in prepared.items()
                                                      if k != "namelist_text"}, indent=2) + "\n")
     if prepared["disk_guard"]["status"] != "PASS":
@@ -757,6 +847,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     if not execute:
         return {k: v for k, v in prepared.items() if k not in {"namelist_text", "input_hashes"}}
     stage = _stage(prepared, out)
+    verify_staged_inputs(prepared, stage)
     candidate_build = prepared.get("candidate_build")
     expected_executable_sha256 = (candidate_build["executable_sha256"] if candidate_build
                                   else prepared["executable_sha256"])
@@ -765,6 +856,9 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
         raise RuntimeError("staged executable hash differs from preflight")
     if candidate_build and _candidate_build_binding(Path(candidate_build["receipt_path"])) != candidate_build:
         raise RuntimeError("candidate build identity changed after preflight")
+    candidate_input = prepared.get("candidate_input_binding")
+    if not _input_binding_unchanged(candidate_input):
+        raise RuntimeError("HYDRO input identity changed after preflight")
     launch_provenance = {"launch_runner_source_path": str(runner_path),
                          "launch_runner_source_sha256": runner_sha256_at_entry,
                          "diagnostic_environment": prepared["diagnostic_environment"]}
@@ -808,7 +902,8 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     stage_hashes["namelist.input.source"] = sha256(stage / "namelist.input.source")
     changed_stage = [name for name, digest in stage_hashes.items()
                      if digest != _staged_expected_hash(
-                         name, inputs, candidate_build, prepared["candidate_namelist_sha256"])]
+                         name, inputs, candidate_build, prepared["candidate_namelist_sha256"],
+                         prepared["candidate_wrfinput_sha256"])]
     original_after = {name: sha256(Path(prepared["runtime_dir"]) / name) for name in inputs}
     changed_original = [name for name, digest in original_after.items() if digest != inputs[name]]
     start_time = dt.datetime(2026, 8, 16, 13)
@@ -825,12 +920,17 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
         except Exception as exc:
             candidate_build_unchanged = False
             processing_errors.append(f"candidate build validation: {exc}")
+    try:
+        candidate_input_unchanged = _input_binding_unchanged(candidate_input)
+    except (OSError, ValueError, KeyError) as exc:
+        candidate_input_unchanged = False
+        processing_errors.append(f"HYDRO input binding validation: {exc}")
     complete = (process.returncode == 0 and actual_times == expected_times and
                 completed_steps == list(range(1, duration // 20 + 1)) and not duplicate_post and not fatal and
                 not processing_errors and not changed_stage and not changed_original and
                 sha256(Path(prepared["source_receipt"])) == prepared["source_receipt_sha256"] and
                 executed_executable_sha256 == expected_executable_sha256 and
-                candidate_build_unchanged and
+                candidate_build_unchanged and candidate_input_unchanged and
                 set(schedule.values()).issubset(snapshots.get("snapshots", {})))
     receipt = {"arm": arm, "status": "COMPLETE" if complete else "INCOMPLETE",
                "run_identity": ("PR87 selected-object native candidate" if candidate_build
@@ -849,6 +949,8 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
                "executed_executable_sha256": executed_executable_sha256,
                "expected_executed_executable_sha256": expected_executable_sha256,
                "candidate_build": candidate_build, "candidate_build_unchanged": candidate_build_unchanged,
+               "candidate_input_binding": candidate_input,
+               "candidate_input_unchanged": candidate_input_unchanged,
                "launch_runner_source_path": str(runner_path),
                "launch_runner_source_sha256": runner_sha256_at_entry,
                "launch_runner_source_sha256_status": "captured at run entry before model execution",
@@ -867,13 +969,15 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--arm", choices=("OFF", "COUPLED"), required=True)
+    parser.add_argument("--arm", choices=("OFF", "HYDRO", "COUPLED"), required=True)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--duration-seconds", type=int, default=600)
     parser.add_argument("--execute", action="store_true", help="launch after hash and disk checks")
     parser.add_argument("--finalize", action="store_true", help="receipt a completed run directory without relaunch")
     parser.add_argument("--candidate-build", type=Path,
                         help="explicit PR87 overlay build receipt; default uses frozen PR86 executable")
+    parser.add_argument("--hydro-input-receipt", type=Path,
+                        help="source-bound HYDRO native input; OFF ancillary template remains immutable")
     parser.add_argument("--safety-fraction", type=float, default=0.85)
     parser.add_argument("--disk-reference-receipt", type=Path,
                         help="calibrate the disk guard from a successful same-input run receipt")
@@ -882,10 +986,12 @@ def main() -> int:
         snapshot_schedule(args.duration_seconds)
     except ValueError as exc:
         parser.error(f"--duration-seconds {exc}")
+    if args.finalize and args.hydro_input_receipt is not None:
+        parser.error("--finalize uses the launch-bound HYDRO receipt in preflight.json")
     out = args.output or DEFAULT_OUT / args.arm
     result = (finalize_existing_run(args.arm, out, args.duration_seconds, args.candidate_build) if args.finalize else
               run(args.arm, out, args.duration_seconds, args.execute, args.safety_fraction,
-                  args.candidate_build, args.disk_reference_receipt))
+                  args.candidate_build, args.disk_reference_receipt, args.hydro_input_receipt))
     print(json.dumps({k: v for k, v in result.items() if k != "input_hashes"}, indent=2))
     return 0
 

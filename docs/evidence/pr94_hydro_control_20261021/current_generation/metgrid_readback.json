@@ -1,0 +1,118 @@
+{
+  "candidate_metgrid_flags": {
+    "FLAG_PSFC": 1,
+    "FLAG_QC": 1,
+    "FLAG_QG": 1,
+    "FLAG_QI": 1,
+    "FLAG_QR": 1,
+    "FLAG_QS": 1,
+    "FLAG_QV": 1,
+    "FLAG_SOILHGT": 1
+  },
+  "candidate_wps_sha256": "24d9a4fe07d97fbaeef2beb6235e8408bd67e955725f52cb9364a4a26d710c43",
+  "direct_candidate_qv_pressure_comparison_all_offsets": [
+    {
+      "cell_count": 1319760,
+      "exact_cell_count": 66,
+      "max_abs_error": 0.005458008497953415,
+      "mean_abs_error": 5.404193947420248e-05,
+      "shift_x": 0,
+      "shift_y": 0
+    },
+    {
+      "cell_count": 1319760,
+      "exact_cell_count": 61,
+      "max_abs_error": 0.0056121814996004105,
+      "mean_abs_error": 6.513877318794963e-05,
+      "shift_x": 1,
+      "shift_y": 0
+    },
+    {
+      "cell_count": 1319760,
+      "exact_cell_count": 62,
+      "max_abs_error": 0.005572354421019554,
+      "mean_abs_error": 6.481233621359783e-05,
+      "shift_x": 0,
+      "shift_y": 1
+    },
+    {
+      "cell_count": 1319760,
+      "exact_cell_count": 65,
+      "max_abs_error": 0.005596570670604706,
+      "mean_abs_error": 5.35041389170803e-05,
+      "shift_x": 1,
+      "shift_y": 1
+    }
+  ],
+  "direct_candidate_qv_surface_comparison_all_offsets": [
+    {
+      "cell_count": 65988,
+      "exact_cell_count": 1,
+      "max_abs_error": 0.0012358836829662323,
+      "mean_abs_error": 0.00011227050431288592,
+      "shift_x": 0,
+      "shift_y": 0
+    },
+    {
+      "cell_count": 65988,
+      "exact_cell_count": 0,
+      "max_abs_error": 0.001586897298693657,
+      "mean_abs_error": 0.00012146422058915653,
+      "shift_x": 1,
+      "shift_y": 0
+    },
+    {
+      "cell_count": 65988,
+      "exact_cell_count": 1,
+      "max_abs_error": 0.0015999265015125275,
+      "mean_abs_error": 0.00012072486986524194,
+      "shift_x": 0,
+      "shift_y": 1
+    },
+    {
+      "cell_count": 65988,
+      "exact_cell_count": 1,
+      "max_abs_error": 0.0012522414326667786,
+      "mean_abs_error": 0.00011096200848721664,
+      "shift_x": 1,
+      "shift_y": 1
+    }
+  ],
+  "direct_qv_field_present": true,
+  "geo_em_sha256": "9791fdfab40fcc623f967cfeac72c43f0ac13a72ff453eea717a2f510901044b",
+  "grid_dimensions_mass": [
+    234,
+    282
+  ],
+  "met_em_bytes": 146582708,
+  "met_em_sha256": "00e0241501c9ecddbee53be25da3d5e84bc97fbd03ef686ae1bc330a44f17393",
+  "metgrid_levels": 21,
+  "real_exe_executed": false,
+  "real_qv_selection": {
+    "metgrid_FLAG_QV": 1,
+    "metgrid_QV_source": "same-time PR81 candidate WPS QV profile and surface",
+    "real_namelist_use_sh_qv": true,
+    "selection_scope": "input/configuration provenance only; not a physics validation"
+  },
+  "required_fields": [
+    "PRES",
+    "TT",
+    "GHT",
+    "UU",
+    "VV",
+    "QV",
+    "QC",
+    "QI",
+    "QR",
+    "QS",
+    "QG",
+    "RH",
+    "PMSL",
+    "PSFC",
+    "SKINTEMP",
+    "SOILHGT"
+  ],
+  "science_authority": "NONE",
+  "status": "PASS_SCOPED_SAME13_PINNED_INTEL_METGRID_READBACK",
+  "valid_time": "2026-08-16_13:00:00"
+}

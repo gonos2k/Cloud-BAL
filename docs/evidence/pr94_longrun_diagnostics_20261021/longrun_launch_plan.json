@@ -1,0 +1,193 @@
+{
+  "schema": "pr94_longrun_launch_plan_v1",
+  "status": "RUNNING_NATIVE_RECEIPTS_PENDING",
+  "baseline_build": {
+    "path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+    "sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669"
+  },
+  "compact_build": {
+    "path": "/var/tmp/pr94_native_compact3600_20261021/pr87_native_overlay_build.json",
+    "sha256": "9ba94b0b0d4737641bd87d6237ff65e8b207bf8ae52c815521510d7d022f073d",
+    "executable_sha256": "3eea34b73a1ac3a7c0dfb121968e82fa764e65eeeee0df75c79e8bba27641bac"
+  },
+  "physical_override_sources_unchanged": true,
+  "cycle_source_unchanged": true,
+  "compile_profile_unchanged": true,
+  "observer_change_only": "IO gates; manufactured prefix equality is not yet full native prefix validation",
+  "duration_seconds": 3600,
+  "checkpoints_seconds": [
+    600,
+    1200,
+    1800,
+    3600
+  ],
+  "combined_required_free_bytes": 2012969757812,
+  "free_bytes": 5359723384832,
+  "arms": {
+    "OFF": {
+      "arm": "OFF",
+      "duration_seconds": 3600,
+      "timestep_seconds": 20,
+      "expected_timesteps": 180,
+      "runtime_dir": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a",
+      "source_receipt": "/var/tmp/pr85_evidence_bundle_20261015/actual_v17_OFF_run_receipt.json",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "template_arm": "OFF",
+      "candidate_input_binding": null,
+      "baseline_frozen_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "candidate_build": {
+        "receipt_path": "/var/tmp/pr94_native_compact3600_20261021/pr87_native_overlay_build.json",
+        "receipt_sha256": "9ba94b0b0d4737641bd87d6237ff65e8b207bf8ae52c815521510d7d022f073d",
+        "schema": "pr87_native_overlay_build_v1",
+        "status": "PASS_OVERLAY_BUILD",
+        "identity": "PR87 source-mapped partial native overlay; not a clean build",
+        "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/Cloud-BAL/tests/intel_toolchain.sh",
+        "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+        "executable_path": "/var/tmp/pr94_native_compact3600_20261021/wrf_pr87_overlay.exe",
+        "executable_sha256": "3eea34b73a1ac3a7c0dfb121968e82fa764e65eeeee0df75c79e8bba27641bac"
+      },
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "input_file_count": 101,
+      "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+      "candidate_namelist_sha256": "36941d6ce0ded8e1ca0e1912574b0aa3a839f3a6caea0a30c1987d5b34dcd21b",
+      "launch_environment": {
+        "OMP_NUM_THREADS": "1",
+        "OMP_DYNAMIC": "FALSE",
+        "status": "CONFIGURED_BY_RUNNER",
+        "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89"
+      },
+      "diagnostic_environment": {
+        "PR91_RUN_ID": "OFF_4190d43147c3b073"
+      },
+      "namelist_changes": {
+        "runtime_seconds": 3600,
+        "end_time": "2026-08-16_14:00:00",
+        "history_interval_minutes": 1
+      },
+      "namelist_diff": "--- v17/namelist.input\n+++ pr86/namelist.input\n@@ -1,8 +1,8 @@\n  &time_control\n  run_days                            = 0,\n  run_hours                           = 0,\n- run_minutes                         = 0,\n- run_seconds = 20,\n+ run_minutes                         = 60,\n+ run_seconds = 0,\n  start_year                          = 2026,\n  start_month                         = 08,\n  start_day                           = 16,\n@@ -12,14 +12,14 @@\n  end_year                            = 2026,\n  end_month                           = 08,\n  end_day                             = 16,\n- end_hour = 13,\n+ end_hour = 14,\n  end_minute                          = 00,\n- end_second = 20,\n+ end_second = 00,\n  interval_seconds                    = 3600, \n  input_from_file                     = .true.,\n  fine_input_stream                   = 0,\n  auxinput1_inname                    = \"met_em.d<domain>.<date>\",\n- history_interval                    = 60,\n+ history_interval                    = 1,\n  frames_per_outfile                  = 1000,\n  io_form_history                     = 2\n  io_form_restart                     = 2\n",
+      "first_v17_step_seconds": 662.69806,
+      "disk_guard": {
+        "free_bytes": 5359824130048,
+        "per_step_projection_bytes": 4752803803,
+        "active_run_projection_bytes": 855504684540,
+        "required_free_bytes": 1006476099459,
+        "safety_fraction": 0.85,
+        "status": "PASS",
+        "reference": {
+          "method": "successful_same_input_receipt",
+          "reference_receipt": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/receipt.json",
+          "reference_receipt_sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a",
+          "reference_preflight": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/preflight.json",
+          "reference_preflight_sha256": "fcf47b1c1daab9093981af5384995ac632ffd1ef6abe9f4a3a288e9c34162e0f",
+          "reference_arm": "OFF",
+          "reference_timestep_count": 30,
+          "source_trace_uncompressed_bytes": 45798020012,
+          "history_artifact_bytes": 1058929368,
+          "measured_uncompressed_bytes": 46856949380,
+          "artifact_multiplier": 3,
+          "safety_slack_bytes_per_step": 67108864,
+          "cadence_seconds": 20,
+          "per_step_projection_bytes": 4752803803,
+          "history_artifacts": [
+            {
+              "path": "wrfout_d01_2026-08-16_13:00:00",
+              "bytes": 1058929368,
+              "sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f"
+            }
+          ],
+          "compressed_archive_count": 47
+        }
+      },
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/OFF_3600s_c4_compact"
+    },
+    "COUPLED": {
+      "arm": "COUPLED",
+      "duration_seconds": 3600,
+      "timestep_seconds": 20,
+      "expected_timesteps": 180,
+      "runtime_dir": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a",
+      "source_receipt": "/var/tmp/pr85_evidence_bundle_20261015/actual_v17_COUPLED_run_receipt.json",
+      "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+      "executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "template_arm": "COUPLED",
+      "candidate_input_binding": null,
+      "baseline_frozen_executable_sha256": "9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943",
+      "candidate_build": {
+        "receipt_path": "/var/tmp/pr94_native_compact3600_20261021/pr87_native_overlay_build.json",
+        "receipt_sha256": "9ba94b0b0d4737641bd87d6237ff65e8b207bf8ae52c815521510d7d022f073d",
+        "schema": "pr87_native_overlay_build_v1",
+        "status": "PASS_OVERLAY_BUILD",
+        "identity": "PR87 source-mapped partial native overlay; not a clean build",
+        "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/Cloud-BAL/tests/intel_toolchain.sh",
+        "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+        "executable_path": "/var/tmp/pr94_native_compact3600_20261021/wrf_pr87_overlay.exe",
+        "executable_sha256": "3eea34b73a1ac3a7c0dfb121968e82fa764e65eeeee0df75c79e8bba27641bac"
+      },
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "input_file_count": 101,
+      "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+      "candidate_namelist_sha256": "36941d6ce0ded8e1ca0e1912574b0aa3a839f3a6caea0a30c1987d5b34dcd21b",
+      "launch_environment": {
+        "OMP_NUM_THREADS": "1",
+        "OMP_DYNAMIC": "FALSE",
+        "status": "CONFIGURED_BY_RUNNER",
+        "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89"
+      },
+      "diagnostic_environment": {
+        "PR91_RUN_ID": "COUPLED_f131182dc7766474"
+      },
+      "namelist_changes": {
+        "runtime_seconds": 3600,
+        "end_time": "2026-08-16_14:00:00",
+        "history_interval_minutes": 1
+      },
+      "namelist_diff": "--- v17/namelist.input\n+++ pr86/namelist.input\n@@ -1,8 +1,8 @@\n  &time_control\n  run_days                            = 0,\n  run_hours                           = 0,\n- run_minutes                         = 0,\n- run_seconds = 20,\n+ run_minutes                         = 60,\n+ run_seconds = 0,\n  start_year                          = 2026,\n  start_month                         = 08,\n  start_day                           = 16,\n@@ -12,14 +12,14 @@\n  end_year                            = 2026,\n  end_month                           = 08,\n  end_day                             = 16,\n- end_hour = 13,\n+ end_hour = 14,\n  end_minute                          = 00,\n- end_second = 20,\n+ end_second = 00,\n  interval_seconds                    = 3600, \n  input_from_file                     = .true.,\n  fine_input_stream                   = 0,\n  auxinput1_inname                    = \"met_em.d<domain>.<date>\",\n- history_interval                    = 60,\n+ history_interval                    = 1,\n  frames_per_outfile                  = 1000,\n  io_form_history                     = 2\n  io_form_restart                     = 2\n",
+      "first_v17_step_seconds": 662.69806,
+      "disk_guard": {
+        "free_bytes": 5359723384832,
+        "per_step_projection_bytes": 4752886720,
+        "active_run_projection_bytes": 855519609600,
+        "required_free_bytes": 1006493658353,
+        "safety_fraction": 0.85,
+        "status": "PASS",
+        "reference": {
+          "method": "successful_same_input_receipt",
+          "reference_receipt": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/receipt.json",
+          "reference_receipt_sha256": "03ff4396ff4d6eed3978a8481dd11120aad30d3b59bc6af89bb20ebcf3d9e418",
+          "reference_preflight": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/preflight.json",
+          "reference_preflight_sha256": "c54471d36238a676b8fb7051547f8f6dba7a56d83a12075cd40f1a0b2eb6d49a",
+          "reference_arm": "COUPLED",
+          "reference_timestep_count": 30,
+          "source_trace_uncompressed_bytes": 45798822934,
+          "history_artifact_bytes": 1058955623,
+          "measured_uncompressed_bytes": 46857778557,
+          "artifact_multiplier": 3,
+          "safety_slack_bytes_per_step": 67108864,
+          "cadence_seconds": 20,
+          "per_step_projection_bytes": 4752886720,
+          "history_artifacts": [
+            {
+              "path": "wrfout_d01_2026-08-16_13:00:00",
+              "bytes": 1058955623,
+              "sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba"
+            }
+          ],
+          "compressed_archive_count": 47
+        }
+      },
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/COUPLED_3600s_c4_compact"
+    }
+  },
+  "launch_runner": {
+    "path": "/var/tmp/pr94_runner_frozen_20261021/tools/pr86_time_response.py",
+    "sha256": "80803b6b3e8591053d0524ed9e5b0110dfd7cbf1d105d2e40029addb5f5a55c4"
+  },
+  "launch_logs": {
+    "OFF": "/var/tmp/pr94_OFF_3600s_launch_20261021.log",
+    "COUPLED": "/var/tmp/pr94_COUPLED_3600s_launch_20261021.log"
+  },
+  "recorded_utc": "2026-10-21T00:47:45.920888+00:00"
+}
