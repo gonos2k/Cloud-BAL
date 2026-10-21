@@ -1,0 +1,55 @@
+--- module_mp_kdm6_pr95_diagnostic.f90
++++ module_mp_kdm6_pr95_diagnostic.f90
+@@ -1916,0 +1917,2 @@
++   real :: pr96_q_before, pr96_qc_before, pr96_transfer
++   integer :: pr96_unit, pr96_ios
+@@ -6557,0 +6560,3 @@
++            pr96_q_before=q(i,k)
++            pr96_qc_before=qci(i,k,1)
++            pr96_transfer=pcact(i,k)*dtcld
+@@ -6559,0 +6565,19 @@
++            if (pr67_trace_this_call .and. pr96_transfer.ne.0.0) then
++              open(newunit=pr96_unit,file='pr96_liquid_transfer.raw',form='formatted', &
++                   status='unknown',position='append',action='write',iostat=pr96_ios)
++              if (pr96_ios.ne.0) error stop 'PR96 activation trace open failed'
++              write(pr96_unit,'(a,4i8,7(1x,z8.8),1p,11e24.16)',iostat=pr96_ios) &
++                   'ACT',i,lat,k,loop,transfer(pcact(i,k),0),transfer(dtcld,0), &
++                   transfer(pr96_transfer,0),transfer(pr96_q_before,0), &
++                   transfer(pr96_qc_before,0),transfer(q(i,k),0),transfer(qci(i,k,1),0), &
++                   DBLE(pcact(i,k)),DBLE(dtcld),DBLE(pr96_transfer), &
++                   DBLE(pcact(i,k))*DBLE(dtcld),DBLE(pr96_q_before),DBLE(pr96_qc_before), &
++                   DBLE(q(i,k)),DBLE(qci(i,k,1)), &
++                   DBLE(q(i,k))-DBLE(pr96_q_before)+DBLE(pr96_transfer), &
++                   DBLE(qci(i,k,1))-DBLE(pr96_qc_before)-DBLE(pr96_transfer), &
++                   (DBLE(q(i,k))-DBLE(pr96_q_before)+DBLE(pr96_transfer))+ &
++                   (DBLE(qci(i,k,1))-DBLE(pr96_qc_before)-DBLE(pr96_transfer))
++              if (pr96_ios.ne.0) error stop 'PR96 activation trace write failed'
++              close(pr96_unit,iostat=pr96_ios)
++              if (pr96_ios.ne.0) error stop 'PR96 activation trace close failed'
++            endif
+@@ -6583,0 +6608,3 @@
++          pr96_q_before=q(i,k)
++          pr96_qc_before=qci(i,k,1)
++          pr96_transfer=pcond(i,k)*dtcld
+@@ -6598,0 +6626,21 @@
++          endif
++          if (full_cloud_evap) pr96_transfer=-cloud_evap_extent
++          if (pr67_trace_this_call .and. pr96_transfer.ne.0.0) then
++            open(newunit=pr96_unit,file='pr96_liquid_transfer.raw',form='formatted', &
++                 status='unknown',position='append',action='write',iostat=pr96_ios)
++            if (pr96_ios.ne.0) error stop 'PR96 condensation trace open failed'
++            write(pr96_unit,'(a,4i8,7(1x,z8.8),1p,11e24.16)',iostat=pr96_ios) &
++                 merge('CONDFULL','COND    ',full_cloud_evap),i,lat,k,loop, &
++                 transfer(pcond(i,k),0),transfer(dtcld,0),transfer(pr96_transfer,0), &
++                 transfer(pr96_q_before,0),transfer(pr96_qc_before,0), &
++                 transfer(q(i,k),0),transfer(qci(i,k,1),0), &
++                 DBLE(pcond(i,k)),DBLE(dtcld),DBLE(pr96_transfer), &
++                 DBLE(pcond(i,k))*DBLE(dtcld),DBLE(pr96_q_before),DBLE(pr96_qc_before), &
++                 DBLE(q(i,k)),DBLE(qci(i,k,1)), &
++                 DBLE(q(i,k))-DBLE(pr96_q_before)+DBLE(pr96_transfer), &
++                 DBLE(qci(i,k,1))-DBLE(pr96_qc_before)-DBLE(pr96_transfer), &
++                 (DBLE(q(i,k))-DBLE(pr96_q_before)+DBLE(pr96_transfer))+ &
++                 (DBLE(qci(i,k,1))-DBLE(pr96_qc_before)-DBLE(pr96_transfer))
++            if (pr96_ios.ne.0) error stop 'PR96 condensation trace write failed'
++            close(pr96_unit,iostat=pr96_ios)
++            if (pr96_ios.ne.0) error stop 'PR96 condensation trace close failed'

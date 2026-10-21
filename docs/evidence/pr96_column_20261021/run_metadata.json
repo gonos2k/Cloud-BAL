@@ -1,0 +1,101 @@
+{
+  "artifacts": {
+    "nearby_116_141_actual_post.bin": "9a91ec452c2b551b06a52f2ba6ed4c6a21d6f628ffe4240cfec97bea8b2a4c85",
+    "nearby_116_141_layer_weights.json": "231b937c2487b4f3b0701414cd81582b7dbaa244507f2af2242abd292e5d5106",
+    "nearby_116_141_liquid_closure_reduced.json": "7a97bd9e45613726b13b4eacfde969fa2e29549c23915cc9d3be348b739de18c",
+    "nearby_116_141_liquid_transfer.raw": "e4cad9796817f94eba52f340434c234c8869d18cf74140e6a24042e82cbccc18",
+    "nearby_116_141_pre.bin": "07f8b030ba9d1329cb7827ce3dc7837ec87d4f3c39c0fe5f99b69945cc343c45",
+    "nearby_116_141_replay_post.bin": "9a91ec452c2b551b06a52f2ba6ed4c6a21d6f628ffe4240cfec97bea8b2a4c85",
+    "nearby_link_argv.json": "f4443c667f13d44324f55af22702f7a486c789ad7909d9743387f675a1cdd65a",
+    "nearby_run.log": "ee9deeda128e3d4678a9b4d3e6b3ed49e4644e8ab76473fe6c785406696ef507",
+    "off_117_141_actual_post.bin": "9b041cc948255d6982e1d670a311e57feaa8733f0e3c0a65c8c88d6d0d33a8f5",
+    "off_117_141_pre.bin": "c3ab1432ec37f3afc1f755d6c52339b852e5a04560e47b2b6646154f61161417",
+    "off_117_141_replay_post.bin": "9b041cc948255d6982e1d670a311e57feaa8733f0e3c0a65c8c88d6d0d33a8f5",
+    "off_layer_weights.json": "a217d1dd344c1b5d084c73433f6231f900b75d54b80e194a848aa7396ef8511e",
+    "off_link_argv.json": "cc73ba2d9a8e903a68298b39bcdd52f441b3eb7d57f29ea8599a369902a7e45c",
+    "off_liquid_closure.json": "cfdd4b3ef334a8117a78c3d68d29619fe7f4a62b64cc4c1a56fc2d46e72f6240",
+    "off_liquid_transfer.raw": "67940d38b83944843c8151e6ae47d032b81e9a183e2a2cb64e33ca853dc9ec02",
+    "off_run.log": "d89cf6b8ad7c671b43db893b9df08dc86d4d854d0e535bf178936427976b154c"
+  },
+  "compiler": {
+    "flags": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz",
+      "-qopenmp",
+      "-convert",
+      "big_endian",
+      "-real-size",
+      "32",
+      "-i4"
+    ],
+    "ifx_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "ifx_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "profile": "tests/intel_toolchain.sh"
+  },
+  "date_utc": "2026-10-21",
+  "diagnostic_source": {
+    "base_source_sha256": "31d030184f16523fbc963a4aabe6070e0ce00f828fb42a9b4dee17ed87d4c55b",
+    "original_c4_module_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+    "patch_path": "tools/pr96_column_liquid_trace.patch",
+    "patch_sha256": "4d27d115fcee43cd9139dfb312becf38638de1ca6fd6a82231a03bb9cbb572b4",
+    "path": "/var/tmp/pr95_kdm6_column_off_20261021/module_mp_kdm6_pr95_diagnostic.f90",
+    "scope": "trace-only writes around unchanged pcact and pcond/full_cloud_evap arithmetic; no physics expressions or gates changed beyond two existing PR95 cold/warm ledger gates",
+    "sha256": "24e3466d9d2a5dd12485540422b6976490152094e5e947cd0f85ab7508d1f2a7"
+  },
+  "input": {
+    "actual_post_path": "/var/tmp/pr95_kdm6_column_off_20261021/actual_post.raw",
+    "actual_post_receipt_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+    "area_source": "receipt-bound OFF WRF history dx*dy/(MAPFAC_MX*MAPFAC_MY)",
+    "overlay_archive_path": "/var/tmp/pr93_native_build_c4_20261020/link/main/libwrflib_pr87_overlay.a",
+    "overlay_archive_sha256": "0ca4e37935749a871096ac4334a190df782828196632165d3e1e05fd82cb0f11",
+    "pre_trace_path": "/var/tmp/pr95_kdm6_column_off_20261021/input_pretrace.raw",
+    "pre_trace_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+    "receipt_path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/receipt.json",
+    "receipt_sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a"
+  },
+  "limitations": [
+    "Standalone KDM6 component replay, not a full WRF run.",
+    "Evidence covers two actual OFF columns only; no full-tile or global closure claim.",
+    "Graph extraction is structural and is not runtime or scientific validation."
+  ],
+  "runs": {
+    "nearby_116_141": {
+      "compile_cwd": "/var/tmp/pr96_liquid_trace_20261021/second_compile",
+      "completion": "REPLAY COMPLETED ONE COLUMN 116 116 141 141",
+      "cwd": "/var/tmp/pr96_liquid_trace_20261021/second_run",
+      "driver_object_sha256": "efc5108cba5010ccec3d4b0fe44fea9ee4f03fde19a48d820a6f4b2905fe6e51",
+      "driver_source_sha256": "7ae5d84759df1058d59df0b0a5dbb2151006fc71599fae0a17a9b375ddf8b2cf",
+      "executable_sha256": "b2e025667a9bd8c32ec426b5de60176ce69dc372fdc797f36e74648a36e5dc48",
+      "link_argv_artifact": "nearby_link_argv.json",
+      "omp_num_threads": "1",
+      "post_bytewise_equal": true,
+      "post_fields_bytes": 2652,
+      "post_sha256": "9a91ec452c2b551b06a52f2ba6ed4c6a21d6f628ffe4240cfec97bea8b2a4c85",
+      "stack": "unlimited"
+    },
+    "off_117_141": {
+      "compile_cwd": "/var/tmp/pr96_liquid_trace_20261021/compile4",
+      "completion": "REPLAY COMPLETED ONE COLUMN 117 117 141 141",
+      "cwd": "/var/tmp/pr96_liquid_trace_20261021/run2",
+      "driver_object_sha256": "98265b86efbe30eaead83b2d2bb6f103700e89062ea804fb932d79090aee334d",
+      "driver_source_sha256": "ff0a59eb663d6ce68bdc05ca223f7dab44ed1b813f43dd20781b7aa9772dfc02",
+      "executable_sha256": "df5cf6d4782b9f371f1804986295034ebeec6fd642243111257066a1e7d7e7bd",
+      "link_argv_artifact": "off_link_argv.json",
+      "omp_num_threads": "1",
+      "post_bytewise_equal": true,
+      "post_fields_bytes": 2652,
+      "post_sha256": "9b041cc948255d6982e1d670a311e57feaa8733f0e3c0a65c8c88d6d0d33a8f5",
+      "stack": "unlimited"
+    }
+  },
+  "schema": "pr96_actual_column_liquid_store_closure_v1"
+}

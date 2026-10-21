@@ -1,0 +1,142 @@
+{
+  "schema": "pr96_c1_source_build_summary_v1",
+  "status": "PASS_SCOPED_BUILD_NOT_RUNTIME",
+  "identity": "PR96-C1",
+  "full_clean_build": false,
+  "physical_approval": "FAIL_OPEN",
+  "build_receipt": {
+    "path": "/var/tmp/pr96_native_build_c1_20261021/pr87_native_overlay_build.json",
+    "sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56"
+  },
+  "source_manifest": {
+    "path": "/var/tmp/pr96_sources_c1_20261021/manifest.json",
+    "sha256": "1d1e2d28b0bfbf531ecfd66c2193936836ce2df62625a3354e40b15f02178f22"
+  },
+  "executable": {
+    "path": "/var/tmp/pr96_native_build_c1_20261021/wrf_pr87_overlay.exe",
+    "sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d"
+  },
+  "compiler": {
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compile_profile": {
+      "name": "CLOUD_BAL_REPRO_FLAGS",
+      "enabled": true,
+      "flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ]
+    }
+  },
+  "objects": [
+    {
+      "member": "module_microphysics_zero_out.o",
+      "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_microphysics_zero_out.F",
+      "source_sha256": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+      "generated_source_path": "/var/tmp/pr96_native_build_c1_20261021/preprocessed/module_microphysics_zero_out.f90",
+      "generated_source_sha256": "478b7534a18823e9ca5273e68689becbb25591b3a0f95acb1d90be33ac1d0261",
+      "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/module_microphysics_zero_out.o",
+      "object_sha256": "a836d436b8b8d3a02c6c0a78ef4437c761e2f20fd0debc6e70d449e8e2c2a8be"
+    },
+    {
+      "member": "module_em.o",
+      "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_em.F",
+      "source_sha256": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+      "generated_source_path": "/var/tmp/pr96_native_build_c1_20261021/preprocessed/module_em.f90",
+      "generated_source_sha256": "84bc8179ff033a54b2ba05d006c783330d159109d875aa4916a66e4cc7fef710",
+      "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/module_em.o",
+      "object_sha256": "7df673395d6bf9a4644b1b3aa8ad7c1a0133a191e6c5ea15de6a59e254c673f3"
+    },
+    {
+      "member": "module_bl_shinhong.o",
+      "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_bl_shinhong.F",
+      "source_sha256": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+      "generated_source_path": "/var/tmp/pr96_native_build_c1_20261021/preprocessed/module_bl_shinhong.f90",
+      "generated_source_sha256": "96f62607458fec806089428f44299d98d8083ab8d2bcbc204c46b05cf13850d4",
+      "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/module_bl_shinhong.o",
+      "object_sha256": "5d2b43318fd69453b580a9879498ecaa9ca216d0e5580dffb2f3032ba4df6993"
+    },
+    {
+      "member": "module_bl_fogdes.o",
+      "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_bl_fogdes.F",
+      "source_sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+      "generated_source_path": "/var/tmp/pr96_native_build_c1_20261021/preprocessed/module_bl_fogdes.f90",
+      "generated_source_sha256": "7cfcaabea501cde4d19240f1b2d794862f5b4a186d783b7627c243cbf1877a7b",
+      "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/module_bl_fogdes.o",
+      "object_sha256": "223e718526a9e0bbd450f09bf748ab50fbe1630c82b500d0b3f9c0a1644b2ace"
+    },
+    {
+      "member": "module_pbl_driver.o",
+      "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_pbl_driver.F",
+      "source_sha256": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+      "generated_source_path": "/var/tmp/pr96_native_build_c1_20261021/preprocessed/module_pbl_driver.f90",
+      "generated_source_sha256": "231aaa0aa2020794bcc568ba4d5a2a1dabd1356dcb49540d335b0d53491b8c81",
+      "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/module_pbl_driver.o",
+      "object_sha256": "a64cb0d6e32b40ce1c4f16fd353679f01543d36806410e2aa5196f29c363f7cb"
+    },
+    {
+      "member": "module_mp_kdm6.o",
+      "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_mp_kdm6.F",
+      "source_sha256": "f09a413c36b7bda9fb7376f0276e00329179c68bdbef1e4766bae2811152f58b",
+      "generated_source_path": "/var/tmp/pr96_native_build_c1_20261021/preprocessed/module_mp_kdm6.f90",
+      "generated_source_sha256": "7329d618f87a2924f167bd36fab43a9bd107e2697fbb6ac72ef3cee195953a67",
+      "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/module_mp_kdm6.o",
+      "object_sha256": "0370d0fbf2ed66af2cc1a41e4f3fe1268cc15e2b22e719d61fc218db5338bf28"
+    },
+    {
+      "member": "module_first_rk_step_part1.o",
+      "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_first_rk_step_part1.F",
+      "source_sha256": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+      "generated_source_path": "/var/tmp/pr96_native_build_c1_20261021/preprocessed/module_first_rk_step_part1.f90",
+      "generated_source_sha256": "20428ef7a99bf4dee73d3bec8f745b7a1f7cb83330e8c2080326739f205f20f7",
+      "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/module_first_rk_step_part1.o",
+      "object_sha256": "e1c6b6b912a8246179fff562c77824ead6242669020be7e45e21fd2dab9302b9"
+    },
+    {
+      "member": "module_first_rk_step_part2.o",
+      "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_first_rk_step_part2.F",
+      "source_sha256": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+      "generated_source_path": "/var/tmp/pr96_native_build_c1_20261021/preprocessed/module_first_rk_step_part2.f90",
+      "generated_source_sha256": "d5b3eca8b6aeecd2d13c03407c16361743aa1f0f264ad154f1dd77c1c35a0fbd",
+      "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/module_first_rk_step_part2.o",
+      "object_sha256": "8b98e64e6607f3563e5bcd4da9a202915c2a8dcc0f8f7bd0e544881334a39b64"
+    },
+    {
+      "member": "solve_em.o",
+      "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/solve_em.F",
+      "source_sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
+      "generated_source_path": "/var/tmp/pr96_native_build_c1_20261021/preprocessed/solve_em.f90",
+      "generated_source_sha256": "30d847001a8a0608c9fbac2d3d425f96455c63506680ffd05d2db20484d167ee",
+      "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/solve_em.o",
+      "object_sha256": "c7d791d9c94878348e1d435d084c22bddf9cf6656553c68c9abd18d1a0ff9f65"
+    }
+  ],
+  "cycle_support": {
+    "source_path": "/var/tmp/pr96_native_build_c1_20261021/source/pr90_cycle_support.f90",
+    "source_sha256": "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6",
+    "object_path": "/var/tmp/pr96_native_build_c1_20261021/compile/pr87_extra_observer.o",
+    "object_sha256": "c9ad581a9752a425264b635c687d96743cb3900e26e91bc99cacd2a9aad39b51"
+  },
+  "runner_manifest": {
+    "tools/pr86_time_response.py": "80803b6b3e8591053d0524ed9e5b0110dfd7cbf1d105d2e40029addb5f5a55c4",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "runtime_status": "NATIVE_LAUNCHED_CLOSED_RECEIPTS_PENDING",
+  "limits": [
+    "All nine C4 overrides retained, eight unchanged. Only KDM6 active-ice completion contract changes.",
+    "Fresh pinned Intel O2 strict overlay compilation, not a clean WRF build.",
+    "Same-executable OFF/HYDRO/COUPLED 600-second results require closed receipts and separate endpoint audits."
+  ]
+}

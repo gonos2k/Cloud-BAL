@@ -1,0 +1,27 @@
+{
+  "schema": "pr96_validation_source_snapshot_v1",
+  "status": "PASS_SCOPED",
+  "tests": 93,
+  "log_sha256": "2ef48f1fafca1e39bf73fde77d837a81ec38abf1c09f031c665fb6843b2d6d91",
+  "source_hashes": {
+    "tools/pr95_call_budget.py": "b7ca2a0d4c5f56ecd9c2628c1d8f47b8131d8a0bbb4e12ce047281673159961f",
+    "tests/test_pr95_call_budget.py": "4c0f5d2fd7ed3ed754bd819c250171eab92fced8c3f021de48e61a5eb8772f7b",
+    "tools/pr94_hydro_response.py": "9546e1f72834da4c14c0da2b66e2e4aaaed62a83238da63c05b66c2a0c30ee78",
+    "tests/test_pr94_hydro_response.py": "02116e122e78e702879fd71391bc88de3f3ed46a9a7a655fbae16d6fd9de998a",
+    "tools/pr96_column_closure.py": "8d4c519a301743174006afd0714f913d54d754b5a8f503d698b227414e495ef9",
+    "tools/pr96_column_liquid_trace.patch": "4d27d115fcee43cd9139dfb312becf38638de1ca6fd6a82231a03bb9cbb572b4",
+    "tests/test_pr96_column_closure.py": "cb2b161cc8b7700c498c333fdd9c7d485dfbc1571c1f58be29c5b95d263ed0c7",
+    "tools/pr96_ice_ng_contract.py": "5e153b7581ca48c83752b1d552aa20de635478fce2877f7fe483018ee542e1d8",
+    "tests/test_pr96_ice_ng_contract.py": "f8e7afc7eb19fc5e2253a5359cfd75deab5cef65a482543e371aecb7bf47a74a"
+  },
+  "limits": [
+    "Focused Python/NetCDF tests and source-derived pinned Intel O0/O2 tests. Not the canonical full pipeline.",
+    "Native C1 overlay compiled separately; three-arm closed runtime audit pending."
+  ],
+  "artifact_format_note": {
+    "path": "tools/pr96_column_liquid_trace.patch",
+    "previous_sha256": "5919e5d4932370d76f560cfee1de5ac3f1993eaa8e6a3ba30e6862fbcfbdb1aa",
+    "sha256": "4d27d115fcee43cd9139dfb312becf38638de1ca6fd6a82231a03bb9cbb572b4",
+    "change": "Zero-context unified patch only; fresh patch application reproduces identical diagnostic source 24e3466d9d2a5dd12485540422b6976490152094e5e947cd0f85ab7508d1f2a7. No compiled source or output changes."
+  }
+}

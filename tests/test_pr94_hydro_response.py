@@ -67,8 +67,35 @@ def test_receipt_triplet_rejects_diagnostic_or_other_executable() -> None:
     receipts = valid_triplet()
     receipts["HYDRO"] = receipt("HYDRO", executable="compact-overlay-sha")
 
-    with np.testing.assert_raises_regex(ValueError, "frozen C4 executable"):
+    with np.testing.assert_raises_regex(ValueError, "expected executable SHA-256"):
         hydro.validate_receipt_triplet(receipts)
+
+
+def test_receipt_triplet_accepts_explicit_c1_executable() -> None:
+    c1_sha = "a" * 64
+    receipts = {arm: receipt(arm, executable=c1_sha)
+                for arm in ("OFF", "COUPLED", "HYDRO")}
+
+    with patch.object(hydro, "_input_binding_unchanged", return_value=True):
+        hydro.validate_receipt_triplet(
+            receipts, expected_executable_sha256=c1_sha)
+
+
+def test_receipt_triplet_rejects_one_arm_executable_mismatch() -> None:
+    c1_sha = "a" * 64
+    receipts = {arm: receipt(arm, executable=c1_sha)
+                for arm in ("OFF", "COUPLED", "HYDRO")}
+    receipts["COUPLED"]["executed_executable_sha256"] = "b" * 64
+
+    with np.testing.assert_raises_regex(ValueError, "expected executable SHA-256"):
+        hydro.validate_receipt_triplet(
+            receipts, expected_executable_sha256=c1_sha)
+
+
+def test_receipt_triplet_rejects_invalid_expected_executable_sha256() -> None:
+    with np.testing.assert_raises_regex(ValueError, "64 hexadecimal"):
+        hydro.validate_receipt_triplet(
+            valid_triplet(), expected_executable_sha256="not-a-sha")
 
 
 def test_pointwise_three_arm_identity_is_checked_on_arrays() -> None:

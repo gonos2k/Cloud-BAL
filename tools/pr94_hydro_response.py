@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Receipt-bound three-arm HYDRO response comparison for closed PR94 C4 runs."""
+"""Receipt-bound three-arm HYDRO response comparison for closed runs."""
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -35,8 +36,17 @@ from pr86_time_response import _input_binding_unchanged  # noqa: E402
 from pr94_water_budget import verify_paired_grid  # noqa: E402
 
 
-def validate_receipt_triplet(receipts: dict[str, dict[str, Any]]) -> None:
-    """Require closed 600 s runs with the same C4 executable and matched boundary."""
+def _validated_executable_sha256(value: str) -> str:
+    if not isinstance(value, str) or re.fullmatch(r"[0-9a-fA-F]{64}", value) is None:
+        raise ValueError("expected executable SHA-256 must be 64 hexadecimal characters")
+    return value.lower()
+
+
+def validate_receipt_triplet(
+        receipts: dict[str, dict[str, Any]], *,
+        expected_executable_sha256: str = FROZEN_C4_EXECUTABLE) -> None:
+    """Require closed 600 s runs with the expected executable and matched boundary."""
+    expected_executable_sha256 = _validated_executable_sha256(expected_executable_sha256)
     if set(receipts) != {"OFF", "COUPLED", "HYDRO"}:
         raise ValueError("expected OFF, COUPLED, and HYDRO receipts")
     common_boundary = None
@@ -46,9 +56,9 @@ def validate_receipt_triplet(receipts: dict[str, dict[str, Any]]) -> None:
         if (receipt.get("arm") != arm or receipt.get("status") != "COMPLETE" or
                 receipt.get("returncode") != 0 or receipt.get("final_completed_step") != 30):
             raise ValueError(f"{arm} receipt is not a complete 600-second run")
-        if (receipt.get("executed_executable_sha256") != FROZEN_C4_EXECUTABLE or
-                receipt.get("expected_executed_executable_sha256") != FROZEN_C4_EXECUTABLE):
-            raise ValueError(f"{arm} did not execute the frozen C4 executable")
+        if (receipt.get("executed_executable_sha256") != expected_executable_sha256 or
+                receipt.get("expected_executed_executable_sha256") != expected_executable_sha256):
+            raise ValueError(f"{arm} did not execute the expected executable SHA-256")
         namelist = receipt.get("candidate_namelist_sha256")
         if not namelist:
             raise ValueError(f"{arm} lacks its physics namelist identity")
@@ -120,14 +130,17 @@ def pointwise_decomposition(off: np.ndarray, coupled: np.ndarray,
 
 
 def analyze(hydro_root: Path, composition_path: Path = COMPOSITION,
-            output: Path = EVIDENCE) -> dict[str, Any]:
-    roots = {**RUNS, "HYDRO": hydro_root}
+            output: Path = EVIDENCE, *, off_root: Path = RUNS["OFF"],
+            coupled_root: Path = RUNS["COUPLED"],
+            expected_executable_sha256: str = FROZEN_C4_EXECUTABLE) -> dict[str, Any]:
+    expected_executable_sha256 = _validated_executable_sha256(expected_executable_sha256)
+    roots = {"OFF": off_root, "COUPLED": coupled_root, "HYDRO": hydro_root}
     histories, receipts, identities = {}, {}, {}
     for arm, root in roots.items():
         receipt_path = root / "receipt.json"
         receipts[arm] = json.loads(receipt_path.read_text())
         histories[arm], identities[arm] = verify_history(arm, root, receipts[arm])
-    validate_receipt_triplet(receipts)
+    validate_receipt_triplet(receipts, expected_executable_sha256=expected_executable_sha256)
     grid_audit = verify_triplet_grid(roots)
     composition = json.loads(composition_path.read_text())["composed_qc_vertical_influence"]
     record: dict[str, Any] = {}
@@ -167,7 +180,8 @@ def analyze(hydro_root: Path, composition_path: Path = COMPOSITION,
     output.mkdir(parents=True, exist_ok=True)
     return {
         "schema": "pr94_hydro_response_v1", "physical_approval": "FAIL_OPEN",
-        "run_scope": "Receipt-bound frozen-C4 OFF, COUPLED, and current-generation HYDRO 600-second histories at 60-second intervals.",
+        "run_scope": (f"Receipt-bound executable SHA-256 {expected_executable_sha256} OFF, COUPLED, "
+                      "and current-generation HYDRO 600-second histories at 60-second intervals."),
         "identities": identities, "paired_grid": grid_audit,
         "input_identity": {"candidate_wrfinput_sha256": {
             arm: receipts[arm].get("candidate_wrfinput_sha256") for arm in roots},
@@ -189,9 +203,14 @@ def analyze(hydro_root: Path, composition_path: Path = COMPOSITION,
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--hydro-run", type=Path, required=True)
+    parser.add_argument("--off-run", type=Path, default=RUNS["OFF"])
+    parser.add_argument("--coupled-run", type=Path, default=RUNS["COUPLED"])
+    parser.add_argument("--expected-executable-sha256", default=FROZEN_C4_EXECUTABLE)
     parser.add_argument("--output", type=Path, default=EVIDENCE)
     args = parser.parse_args()
-    result = analyze(args.hydro_run, output=args.output)
+    result = analyze(args.hydro_run, output=args.output, off_root=args.off_run,
+                     coupled_root=args.coupled_run,
+                     expected_executable_sha256=args.expected_executable_sha256)
     path = args.output / "hydro_response.json"
     path.write_text(json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n")
     print(f"wrote {path}")

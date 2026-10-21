@@ -17,6 +17,7 @@ import numpy as np
 
 from native_kdm6_trace import read_dump
 from pr67_kdm6_process_budget import parse_process_capture
+from pr87_native_history import _finite
 
 WATER = ("Q", "QC", "QI", "QR", "QS", "QG")
 HISTORY = "wrfout_d01_2026-08-16_13:00:00"
@@ -55,6 +56,26 @@ def _same_float32_bytes(left: np.ndarray, right: np.ndarray) -> bool:
             np.isfinite(right).all() and
             left.astype(">f4", copy=False).tobytes() ==
             right.astype(">f4", copy=False).tobytes())
+
+
+def _read_map_geometry(dataset: netCDF4.Dataset, ys: slice, xs: slice
+                       ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Read validated history geometry, then select the captured KDM6 tile."""
+    mx = _finite(dataset, "MAPFAC_MX", 0)
+    my = _finite(dataset, "MAPFAC_MY", 0)
+    latitude = _finite(dataset, "XLAT", 0)
+    longitude = _finite(dataset, "XLONG", 0)
+    dx, dy = float(dataset.DX), float(dataset.DY)
+    if not np.isfinite(dx) or not np.isfinite(dy) or dx <= 0 or dy <= 0:
+        raise ValueError("DX and DY must be finite and positive")
+    if np.any(mx <= 0) or np.any(my <= 0):
+        raise ValueError("MAPFAC_MX and MAPFAC_MY must be positive")
+    area = dx * dy / (mx[ys, xs] * my[ys, xs])
+    if (not np.isfinite(area).all() or np.any(area <= 0) or
+            not np.isfinite(latitude[ys, xs]).all() or
+            not np.isfinite(longitude[ys, xs]).all()):
+        raise ValueError("invalid receipt-bound map area or coordinates")
+    return area, latitude[ys, xs], longitude[ys, xs]
 
 
 def _stats(cell: np.ndarray) -> dict[str, float]:
@@ -349,14 +370,7 @@ def analyze(root: Path) -> dict[str, Any]:
         xs = slice(bounds["its"] - 1, bounds["ite"])
         with netCDF4.Dataset(history) as dataset:
             dataset.set_auto_mask(False)
-            mx = np.asarray(dataset["MAPFAC_MX"][0, ys, xs], dtype=np.float64)
-            my = np.asarray(dataset["MAPFAC_MY"][0, ys, xs], dtype=np.float64)
-            area = float(dataset.DX) * float(dataset.DY) / (mx * my)
-            latitude = np.asarray(dataset["XLAT"][0, ys, xs], dtype=np.float64)
-            longitude = np.asarray(dataset["XLONG"][0, ys, xs], dtype=np.float64)
-        if (not np.isfinite(area).all() or np.any(area <= 0) or
-                not np.isfinite(latitude).all() or not np.isfinite(longitude).all()):
-            raise ValueError("invalid receipt-bound map area or coordinates")
+            area, latitude, longitude = _read_map_geometry(dataset, ys, xs)
         identities["initial_history_sha256"] = generated[HISTORY]
 
         density = pre["fields"]["DEN"].astype(np.float64)

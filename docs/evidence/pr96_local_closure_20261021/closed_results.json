@@ -1,0 +1,259 @@
+{
+  "schema": "pr96_closed_run_results_bounded_v1",
+  "status": "REVIEW_REQUIRED",
+  "physical_approval": "FAIL_OPEN",
+  "startup_source_commit": "9191cd4a3cef3eaa897d2b0a7a2693f0ddd88b84",
+  "closed_queue_status": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/closed_audits/queue_status.json",
+    "sha256": "df83c569d98bbc6d99609869ed87b0ce2066d84ca1895b362d226fac8ef19931"
+  },
+  "arms": {
+    "off": {
+      "requested_seconds": 3600,
+      "runtime_status": "INCOMPLETE",
+      "returncode": 1,
+      "completed_steps": 31,
+      "completed_seconds": 620,
+      "receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/OFF_3600s_c4_compact/receipt.json",
+        "sha256": "773a9eb7ddf62abaa065dd03bd08e0b1983c895df8b252878507461d51cc0f33"
+      },
+      "archived_fatal_log": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/OFF_3600s_c4_compact/run/rsl.error.0000.gz",
+        "sha256": "f2bbecbc58c5451a98a2ed2d3faf97e98466b8c07b394403fe13f45bfe7ce970",
+        "fatal_text": "PR87 full joint moment candidate infeasible; see source/full diagnostics"
+      },
+      "audit": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/closed_audits/OFF_3600_audit.json",
+        "sha256": "2160338bc010479fdd7cf1ae09ba4e2659205903c329277f86d9b0cd61b48135"
+      },
+      "runtime_binding": {
+        "status": "PASS",
+        "baseline_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+        "compact_executable_sha256": "3eea34b73a1ac3a7c0dfb121968e82fa764e65eeeee0df75c79e8bba27641bac",
+        "input_hashes_equal": true,
+        "wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+        "wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+        "namelist_scope": "Both staged namelists reproduce the existing runner's duration/end-time/history edits from the same receipt-bound source namelist.",
+        "source_build_audit_sha256": "a41aa4b1ed703803272649198483b7787aae5b1962d759c68f5644e3f54adf06"
+      },
+      "trace_comparison": {
+        "status": "PASS",
+        "compared_state_records": 180,
+        "common_prefix_steps": 30,
+        "differences": [],
+        "scope": "Exact state metadata and big-endian serialized field bytes for six common completed states per step through min(step 30, compact completed prefix). Both whole traces were streamed to EOF and checked against their receipt-bound compressed and expanded hashes.",
+        "baseline": {
+          "compressed_sha256": "5bea514433500eff5475b011429051be16560cbe13b16429c43a63affabbd427",
+          "expanded_sha256": "dddb843b67043886c537df151978b8b1cf0beaa17763c8b3cdd4404faf43afbe"
+        },
+        "compact": {
+          "compressed_sha256": "8bf208f85acf23ddf46c133695bca66be73536f6b2eb24de7d5027509c1e86a9",
+          "expanded_sha256": "9b89d3d66df10bbb4539f0bb4356545f4a148087240618e03bc846a968388131"
+        }
+      },
+      "generic_audit": {
+        "status": "FAIL",
+        "checked_retained_states": 181,
+        "first_failure": {
+          "timestep": 2,
+          "stage": "PRE_RK",
+          "rkstep": 0,
+          "negative_fields": {
+            "Q": 4
+          },
+          "pair_violation_counts": {}
+        }
+      },
+      "exact_source_endpoint_audit": "PASS",
+      "active_ice_policy_audit": "PASS",
+      "history_comparison": {
+        "status": "PASS",
+        "fields": [
+          "T",
+          "P",
+          "PB",
+          "PH",
+          "PHB",
+          "U",
+          "V",
+          "W",
+          "MU",
+          "MUB"
+        ],
+        "timestamps": [
+          "2026-08-16_13:00:00",
+          "2026-08-16_13:01:00",
+          "2026-08-16_13:02:00",
+          "2026-08-16_13:03:00",
+          "2026-08-16_13:04:00",
+          "2026-08-16_13:05:00",
+          "2026-08-16_13:06:00",
+          "2026-08-16_13:07:00",
+          "2026-08-16_13:08:00",
+          "2026-08-16_13:09:00",
+          "2026-08-16_13:10:00"
+        ],
+        "compared_frames": 11,
+        "scope": "Exact numeric equality per frame for T, P, PB, PH, PHB, U, V, W, MU, and MUB at common 0..600 second history timestamps. Original dtype, dimension names and non-Time extents, units, and stagger are validated; no derived fields or destaggering are included."
+      }
+    },
+    "coupled": {
+      "requested_seconds": 3600,
+      "runtime_status": "INCOMPLETE",
+      "returncode": 1,
+      "completed_steps": 31,
+      "completed_seconds": 620,
+      "receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/COUPLED_3600s_c4_compact/receipt.json",
+        "sha256": "6fc1d73c185f7f9a6afade20ac47af5140510df981b68e085fdb3a325cd16405"
+      },
+      "archived_fatal_log": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/COUPLED_3600s_c4_compact/run/rsl.error.0000.gz",
+        "sha256": "3fb26872af1b0c28e5012fb79f53aea62cac6a0aa1715e004b64e90c73cb86de",
+        "fatal_text": "PR87 full joint moment candidate infeasible; see source/full diagnostics"
+      },
+      "audit": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/closed_audits/COUPLED_3600_audit.json",
+        "sha256": "5d3c496e91211b69a36809b551c2995125d1436f35bf54e7f02e3dff85af258d"
+      },
+      "runtime_binding": {
+        "status": "PASS",
+        "baseline_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+        "compact_executable_sha256": "3eea34b73a1ac3a7c0dfb121968e82fa764e65eeeee0df75c79e8bba27641bac",
+        "input_hashes_equal": true,
+        "wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+        "wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+        "namelist_scope": "Both staged namelists reproduce the existing runner's duration/end-time/history edits from the same receipt-bound source namelist.",
+        "source_build_audit_sha256": "a41aa4b1ed703803272649198483b7787aae5b1962d759c68f5644e3f54adf06"
+      },
+      "trace_comparison": {
+        "status": "PASS",
+        "compared_state_records": 180,
+        "common_prefix_steps": 30,
+        "differences": [],
+        "scope": "Exact state metadata and big-endian serialized field bytes for six common completed states per step through min(step 30, compact completed prefix). Both whole traces were streamed to EOF and checked against their receipt-bound compressed and expanded hashes.",
+        "baseline": {
+          "compressed_sha256": "901175f6fe7aa309822dc0b0584970953f15c014b64ac1cf3ac85d9e39ebec22",
+          "expanded_sha256": "be22fc2dc889e6eef82a32766e983595bb9a4f5a221e039a71e76710965d211b"
+        },
+        "compact": {
+          "compressed_sha256": "aca4aa56b7b7ed1b75ad5dd88642fbc740e319db4d9f87c7e09cbb2829e5ae3c",
+          "expanded_sha256": "49df7dbab05d5146ff9d103f4fb84edbcf9b6b4941fb98d0abd529a850f336fd"
+        }
+      },
+      "generic_audit": {
+        "status": "FAIL",
+        "checked_retained_states": 181,
+        "first_failure": {
+          "timestep": 2,
+          "stage": "PRE_RK",
+          "rkstep": 0,
+          "negative_fields": {
+            "Q": 4
+          },
+          "pair_violation_counts": {}
+        }
+      },
+      "exact_source_endpoint_audit": "PASS",
+      "active_ice_policy_audit": "PASS",
+      "history_comparison": {
+        "status": "PASS",
+        "fields": [
+          "T",
+          "P",
+          "PB",
+          "PH",
+          "PHB",
+          "U",
+          "V",
+          "W",
+          "MU",
+          "MUB"
+        ],
+        "timestamps": [
+          "2026-08-16_13:00:00",
+          "2026-08-16_13:01:00",
+          "2026-08-16_13:02:00",
+          "2026-08-16_13:03:00",
+          "2026-08-16_13:04:00",
+          "2026-08-16_13:05:00",
+          "2026-08-16_13:06:00",
+          "2026-08-16_13:07:00",
+          "2026-08-16_13:08:00",
+          "2026-08-16_13:09:00",
+          "2026-08-16_13:10:00"
+        ],
+        "compared_frames": 11,
+        "scope": "Exact numeric equality per frame for T, P, PB, PH, PHB, U, V, W, MU, and MUB at common 0..600 second history timestamps. Original dtype, dimension names and non-Time extents, units, and stagger are validated; no derived fields or destaggering are included."
+      }
+    },
+    "hydro_control": {
+      "requested_seconds": 600,
+      "runtime_status": "INCOMPLETE",
+      "returncode": 128,
+      "completed_steps": 25,
+      "completed_seconds": 500,
+      "fatal_text": "KDM6 invalid base before nongraupel admission",
+      "receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/HYDRO_600s_c4_current/receipt.json",
+        "sha256": "785205ab3fdfd8c070d01376939a8ed120f9f5f5bb2535e0c8fee31f9400ccb2"
+      },
+      "audit_status": "CONTROL_INCOMPLETE_RESPONSE_NOT_EVALUATED"
+    }
+  },
+  "baseline_context": "C4 OFF/COUPLED 600-second baseline success remains; HYDRO control incomplete at 500 seconds.",
+  "original_full_results": {
+    "path": "/var/tmp/pr95_closed_results_20261021.json",
+    "sha256": "1a240a79069f1b58e2f380d8965d2464df64174dafd52bf5839cc78eeaf51650"
+  },
+  "limitations": [
+    "Both 3600-second compact runs are incomplete at 620 seconds.",
+    "The passing prefix comparisons cover only 0\u2013600 seconds and ten named raw history fields.",
+    "The generic completed-state audit fails on negative Q and ice-cone predicates; this is reported separately from the runtime fatal.",
+    "Graph freshness/provenance is not runtime or scientific validation."
+  ],
+  "startup_reader_dependency_pins": {
+    "verified_against_commit": "9191cd4a3cef3eaa897d2b0a7a2693f0ddd88b84",
+    "count": 7,
+    "items": {
+      "tools/pr94_longrun_audit.py": {
+        "expected_sha256": "0ce4eb5a00fa5065aef71be5436b1894813e6d3bdca9d5904283ef72dca326d1",
+        "actual_sha256": "0ce4eb5a00fa5065aef71be5436b1894813e6d3bdca9d5904283ef72dca326d1",
+        "match": true
+      },
+      "tools/pr86_compare_response.py": {
+        "expected_sha256": "64b2f97f452035cae328576d26216c54877fa778b3eeabe17cdb9980103aaa5c",
+        "actual_sha256": "64b2f97f452035cae328576d26216c54877fa778b3eeabe17cdb9980103aaa5c",
+        "match": true
+      },
+      "tools/pr87_native_history.py": {
+        "expected_sha256": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+        "actual_sha256": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+        "match": true
+      },
+      "tools/pr86_water_budget.py": {
+        "expected_sha256": "e6c00374e9730278b3c1545630af9aa3a6af4c68544c7f39dbda61f909337dc2",
+        "actual_sha256": "e6c00374e9730278b3c1545630af9aa3a6af4c68544c7f39dbda61f909337dc2",
+        "match": true
+      },
+      "tools/pr87_completed_state_audit.py": {
+        "expected_sha256": "2daef11c005868abf58631d84df74b8535eccb217660fbd605bd8f03216ee70d",
+        "actual_sha256": "2daef11c005868abf58631d84df74b8535eccb217660fbd605bd8f03216ee70d",
+        "match": true
+      },
+      "tools/pr85_joint_stage_trace.py": {
+        "expected_sha256": "5c2e9ccb3537a6bc251845e2b87c3efb991002ebbc1db5232d475e29f6c31720",
+        "actual_sha256": "5c2e9ccb3537a6bc251845e2b87c3efb991002ebbc1db5232d475e29f6c31720",
+        "match": true
+      },
+      "docs/evidence/pr93_active_ice_20261020/runtime/closed_run_audit.py": {
+        "expected_sha256": "8f9affa02e6d843d623911cfd6a9447a9ddb4ba0713cf927e2d5de2bcfb2e126",
+        "actual_sha256": "8f9affa02e6d843d623911cfd6a9447a9ddb4ba0713cf927e2d5de2bcfb2e126",
+        "match": true
+      }
+    }
+  }
+}
