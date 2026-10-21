@@ -109,6 +109,21 @@ def test_pointwise_three_arm_identity_is_checked_on_arrays() -> None:
     assert result["max_abs_identity_residual"] < 1e-14
 
 
+def test_coupled_minus_off_metrics_use_direct_paired_arrays() -> None:
+    arrays = {"OFF": np.array([1.0, 2.0]),
+              "HYDRO": np.array([2.0, 6.0]),
+              "COUPLED": np.array([4.0, 7.0])}
+    masks = {"support": np.array([True, True])}
+
+    result = hydro.paired_field_metrics(arrays, masks, "unit")
+
+    direct = result["COUPLED_minus_OFF"]["support"]
+    assert direct["delta_rms"] == np.sqrt((3.0**2 + 5.0**2) / 2.0)
+    assert direct["delta_rms"] != (
+        result["HYDRO_minus_OFF"]["support"]["delta_rms"] +
+        result["COUPLED_minus_HYDRO"]["support"]["delta_rms"])
+
+
 def test_pointwise_decomposition_rejects_shape_mismatch() -> None:
     with np.testing.assert_raises_regex(ValueError, "identical shape"):
         hydro.pointwise_decomposition(np.zeros((2,)), np.zeros((2,)), np.zeros((3,)))

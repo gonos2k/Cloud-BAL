@@ -129,6 +129,20 @@ def pointwise_decomposition(off: np.ndarray, coupled: np.ndarray,
             "identity_holds_within_roundoff": bool(np.allclose(left, right, rtol=1e-12, atol=1e-14))}
 
 
+def paired_field_metrics(arrays: dict[str, np.ndarray],
+                         masks: dict[str, np.ndarray], unit: str) -> dict[str, Any]:
+    """Measure each arm difference directly on the supplied arrays and masks."""
+    result = {}
+    for pair, first, second in (("HYDRO_minus_OFF", "OFF", "HYDRO"),
+                                ("COUPLED_minus_HYDRO", "HYDRO", "COUPLED"),
+                                ("COUPLED_minus_OFF", "OFF", "COUPLED")):
+        result[pair] = {
+            mask_name: {"selected_native_values": int(mask.sum()), "unit": unit,
+                        **cloud.vector_metrics(arrays[first][mask], arrays[second][mask])}
+            for mask_name, mask in masks.items()}
+    return result
+
+
 def analyze(hydro_root: Path, composition_path: Path = COMPOSITION,
             output: Path = EVIDENCE, *, off_root: Path = RUNS["OFF"],
             coupled_root: Path = RUNS["COUPLED"],
@@ -144,6 +158,7 @@ def analyze(hydro_root: Path, composition_path: Path = COMPOSITION,
     grid_audit = verify_triplet_grid(roots)
     composition = json.loads(composition_path.read_text())["composed_qc_vertical_influence"]
     record: dict[str, Any] = {}
+    face_records: dict[str, Any] = {}
     mask_doc = None
     decomposition: dict[str, Any] = {}
     for second in SECONDS:
@@ -167,15 +182,28 @@ def analyze(hydro_root: Path, composition_path: Path = COMPOSITION,
             arrays = {arm: loaded[arm][name] for arm in roots}
             if len({values.shape for values in arrays.values()}) != 1:
                 raise ValueError(f"{name} shape differs across arms")
-            for pair, first, second_arm in (("HYDRO_minus_OFF", "OFF", "HYDRO"),
-                                            ("COUPLED_minus_HYDRO", "HYDRO", "COUPLED")):
-                record[str(second)]["fields"].setdefault(name, {})[pair] = {
-                    mask_name: {"selected_native_values": int(mask.sum()), "unit": unit,
-                                **cloud.vector_metrics(arrays[first][mask], arrays[second_arm][mask])}
-                    for mask_name, mask in masks.items()}
+            record[str(second)]["fields"][name] = paired_field_metrics(arrays, masks, unit)
             check = pointwise_decomposition(arrays["OFF"], arrays["COUPLED"], arrays["HYDRO"])
             record[str(second)]["pointwise_decomposition"][name] = check
             decomposition.setdefault(name, []).append(check["max_abs_identity_residual"])
+        if second in (0, 60, 120, 600):
+            face_fields = {arm: cloud.read_face_winds(history, frame)
+                           for arm, history in histories.items()}
+            face_records[str(second)] = {"fields": {}}
+            for field in ("U_face", "V_face", "W_face"):
+                arrays = {arm: face_fields[arm][field] for arm in roots}
+                if len({values.shape for values in arrays.values()}) != 1:
+                    raise ValueError(f"{field} shape differs across arms")
+                face_records[str(second)]["fields"][field] = {
+                    "shape_kji": list(arrays["OFF"].shape),
+                    "unit": "m s-1",
+                    "direct_pair_differences": {
+                        pair: {"selected_native_values": int(arrays[first].size),
+                               **cloud.vector_metrics(arrays[first], arrays[second_arm])}
+                        for pair, first, second_arm in (
+                            ("HYDRO_minus_OFF", "OFF", "HYDRO"),
+                            ("COUPLED_minus_HYDRO", "HYDRO", "COUPLED"),
+                            ("COUPLED_minus_OFF", "OFF", "COUPLED"))}}
     hydro_binding = receipts["HYDRO"]["candidate_input_binding"]
     output.mkdir(parents=True, exist_ok=True)
     return {
@@ -189,6 +217,11 @@ def analyze(hydro_root: Path, composition_path: Path = COMPOSITION,
             "hydro_source_binding": hydro_binding,
             "interpretation": "HYDRO is a separately source-bound current-generation initial state; the paired differences describe run outcomes and do not isolate causal mechanisms."},
         "fixed_masks": mask_doc,
+        "actual_staggered_face_winds": {
+            "scope": "Actual U, V, and W C-grid face arrays read from the saved histories using pr94_cloud_response.read_face_winds; outer mass-grid ring cropped as in PR94. Full declared active face crop; separate from the 613-cell mass-point mask and mass-point U/V/W statistics.",
+            "times_seconds": [0, 60, 120, 600],
+            "fields": face_records,
+            "limits": ["No face flux, continuity, or mass-wind closure is inferred."]},
         "mask_definition": "Reused source-composed 613 native QC support, fixed clipped 2/5-cell Chebyshev buffers, and full active history domain; all masks are unchanged at every time.",
         "records": record,
         "pointwise_identity": {name: {"max_abs_residual_over_times": max(values),

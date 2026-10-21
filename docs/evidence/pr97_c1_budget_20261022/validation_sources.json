@@ -1,0 +1,34 @@
+{
+  "schema": "pr97_focused_validation_sources_v1",
+  "base": "72bab3a89ec3b74b552646cf44386cb7a3950672",
+  "test_command": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_pr97_t1_rounding.py",
+    "tests/test_pr97_liquid_observer.py",
+    "tests/test_pr94_hydro_response.py",
+    "tests/test_pr97_620_c4_failure_classify.py"
+  ],
+  "result": "24 passed",
+  "source_sha256": {
+    "docs/PR96_COLUMN_LIQUID_ROUNDING_20261021.md": "9b9fb5ee6c29a07645a57165dee5803c0ce4a444f9de55ac78c2f7c56372b9ec",
+    "docs/PR96_LOCAL_CLOSURE_20261021.md": "aefd033350eb7422b86d1e51d7dc6d0948dcf0d8bf8290c690b896424306d6bf",
+    "docs/PR97_620_C4_FAILURE_CLASSIFICATION_20261022.md": "04e8f76ea6b4a903e6f102d045d60decca2690c53c42b534bf3180ec37bf6f8c",
+    "docs/PR97_C1_BUDGET_20261022.md": "46cd6d4aa3010c2238728f1a441e01abc36156fa34ffdc245fb6936531232849",
+    "docs/PR97_T1_ROUNDING_20261022.md": "71064f7e57d92e300516d023111f3419935a3dea4dc9a69d020e413753235206",
+    "tests/test_pr94_hydro_response.py": "25d53ab6bafe8f0a98c5b25727fc8adc2dc0d811409d686043648d3468317800",
+    "tests/test_pr97_620_c4_failure_classify.py": "4d0500e1dd87a2c6ebaaad9975415a23c0694a7a932df32dcc54fe8633c3852f",
+    "tests/test_pr97_liquid_observer.py": "49abe056425dfe275f00e7857a34216e93410dba6a3a0d0f27d065177369d602",
+    "tests/test_pr97_t1_rounding.py": "ad8439f7fe8bd0a88b7fa8b69edbcd7f3b3f6fc5f42f13b228cd03d4620991d5",
+    "tools/pr94_hydro_response.py": "41cfd37b94ca3f0652aa66afba3d56fca23b88de6e06e0a727def219a2b1e46a",
+    "tools/pr97_620_c4_failure_classify.py": "9813612425f66985718b8b9b7d40f433708d2425e3fcf7f0647a320ad8b07507",
+    "tools/pr97_c1_t1_fulltile_driver.f90": "54e6d4b6b3845c0a75595dccc2537d0c8e0adafde0b14c97b202aa97e8cf51ef",
+    "tools/pr97_liquid_observer.f90": "41ca80593218e704e193927f18ea188cc1a3c85221e8522c7fd62bcb45a79a55",
+    "tools/pr97_prepare_liquid_observer.py": "2555645243d464637e3068b62946f1262af3190fc04f022edc79547c40e1d114",
+    "tools/pr97_t1_rounding.py": "8e0be2c4168d4db601808cb172fa7ae5f1a7b848c152a79101bbdfff01ac6176"
+  },
+  "Intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "scope": "Focused diagnostic/source-form tests plus separately bound closed native C1 runs and component replays; not a canonical full-pipeline or clean full-WRF rebuild."
+}

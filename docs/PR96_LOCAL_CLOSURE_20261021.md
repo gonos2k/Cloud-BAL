@@ -3,9 +3,11 @@
 Base: main `50d11d631a59d461c37da2e8bc9666c6bcc9c380` (PR95).
 The original PR93-C4 executable and inputs remain preserved.
 
-Publication is a **draft** while the three C1 600-second receipts and
-endpoint audits remain pending. Local source/build results do not meet
-that native runtime gate.
+PR #96 was merged on 2026-10-21 at 11:48:38 UTC as
+`72bab3a89ec3b74b552646cf44386cb7a3950672`. The draft/pending descriptions
+in the retained launch artifacts are historical snapshots. Merge status
+does not establish runtime completion or scientific approval. The later
+C1 closed results are reported separately in [the PR97 result entry](PR97_C1_BUDGET_20261022.md).
 
 ## Results available before the new native comparison
 
@@ -52,9 +54,11 @@ cycle support; only KDM6's active-ice completion contract changes.
 - Pinned Intel 2026 `CLOUD_BAL_REPRO_FLAGS`: O2, strict FP, no FTZ.
 - Full overlay compiled in fresh scratch; this is not a clean full-WRF build.
 - The same executable is required for OFF, HYDRO, and COUPLED at 600 seconds.
-- The three native runs started after source review and preflight. Their
-  closed receipts and completed endpoint audits remain pending; neither the
-  successful build nor the local regression establishes runtime completion.
+- The three native runs started after source review and preflight. At PR96
+  publication their closed receipts and endpoint audits were pending. Those
+  launch records are retained; the PR97 result entry records the subsequent
+  closed results. The successful build and local regression alone do not
+  establish native runtime completion.
 
 The [timestamped launch snapshot and closed-audit handoff](evidence/pr96_local_closure_20261021/runtime/README.md)
 record those requests and the existing-auditor queue. The final focused
