@@ -1,0 +1,67 @@
+{
+  "schema": "pr94_public_kg_summary_v1",
+  "status": "PASS",
+  "source_commit": "9b6d10ba468ad1942528e67543c024d806b1c0b1",
+  "base": "3d055bf24e92bfd6bba5d558cb8b77a32f8fa668",
+  "pr": "https://github.com/gonos2k/Cloud-BAL/pull/94",
+  "snapshot": "2026-10-21-pr94-physics",
+  "graphify_version": "graphify 0.9.53",
+  "selected_extraction_files": 31,
+  "receipt": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr94_physics_20261021/kg/kg_receipt.json",
+    "sha256": "7c6b48b7a4841f0eaf9bfb168b46ea22d3082b935b6c4a3f3d34e7734bd70f3c"
+  },
+  "corpora": {
+    "KLAPS50": {
+      "snapshot": "2026-10-21-pr94-physics",
+      "nodes": 39472,
+      "edges": 82459,
+      "communities": 3220,
+      "delta_nodes": 252,
+      "delta_edges": 525,
+      "added_ids": 268,
+      "removed_ids": 16,
+      "sha256": "5ce523177982640dd3f5428e51af942c2129e503620d33e07d19cdf94ee91b0a",
+      "previous_graph_sha256": "7f8cd28bdefaeef9d386fb2240cfaddee7e2f329a6246b2159a608464fb3490f",
+      "extracted_nodes": 395,
+      "extracted_edges": 1211
+    },
+    "Cloud-BAL": {
+      "snapshot": "2026-10-21-pr94-physics",
+      "nodes": 13644,
+      "edges": 24008,
+      "communities": 1224,
+      "delta_nodes": 252,
+      "delta_edges": 525,
+      "added_ids": 268,
+      "removed_ids": 16,
+      "sha256": "188873c7826d1b106f9b23e0ba820f9043fc1f15263537a538bb3c54ba7e8f38",
+      "previous_graph_sha256": "d173f3de7d98b74e3c5ae3fac3f8e4abfda68617de6421c9fd9c7e551b93b2fb",
+      "extracted_nodes": 395,
+      "extracted_edges": 1211
+    }
+  },
+  "preservation": {
+    "immutable_receipt_pins_verified": 197,
+    "maintained_source_inventory": {
+      "entry_count": 627,
+      "sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f"
+    },
+    "maintained_source_pre_post_equal": true,
+    "private_profile_unchanged": true,
+    "protected_wiki_content_unchanged": true,
+    "old_dated_snapshot_directories_verified": 94,
+    "index_scope": "Graph snapshot and date_modified only",
+    "log_scope": "append-only"
+  },
+  "derived_wiki_sha256": {
+    "wiki/graph-report.md": "faf6fd445a2aee676484e01b4a6c387ba03d87c06c47cd9f8334a3911bf3ef49",
+    "wiki/graph-report-klaps50.md": "dece9ee45510c61114c5916001596de2c32fec85b1340a29b1e983152d569c25",
+    "wiki/graph-report-cloud-bal.md": "2f954d02532dc8a7cda3432dbc97525f5342b18f99805076fedb9f5d357a3ee5",
+    "wiki/index.md": "75a204f7cd2d7f4545feaf163edbd7f76468ddaa2723780029cd835a27724cb3",
+    "wiki/log.md": "72af32c98f1b96f36c93bf505439514a2e5207ca7936ef92e6ade33c8971a1c1"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "limitations": "Selected PR94 source/docs AST or Markdown headings; evidence payloads hash-bound only. Cross-file Fortran CALL extraction is partial. Graph freshness is navigation evidence, not runtime/scientific approval.",
+  "independent_post_apply_review": "GO; live/snapshot hashes, counts, guards, old snapshots, normalized index and append-only log checked"
+}
