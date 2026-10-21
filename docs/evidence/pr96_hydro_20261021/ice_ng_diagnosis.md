@@ -13,8 +13,8 @@ does not infer a substep meaning for that field.
 
 The same record reports search status 1, `rain_full_evap_pending=F`, and
 `rain_ng_base_valid=F`. The twelve exact float32 words are the source-ordered
-`rain_q_fixed(5)`, `rain_n_fixed(3)`, background, temperature, vapor, and dry
-carrier density:
+`rain_q_fixed(5)`, `rain_n_fixed(3)`, graupel specific bulk volume BG,
+temperature, vapor, and dry carrier density:
 
 ```text
 2481A27B 3588833E 369D5018 3B761470 39F6208F 393A9AD4
@@ -28,7 +28,7 @@ same operation order as the consumer's strict predicate, the lower ice
 number bound is `279.5983589944634`; the captured number is lower by
 `9.239290091045405e-5` (`3.30449e-7` relative). That is state validity
 failure reason 7, the active ice PSD pair bound. The vapor and temperature
-are positive; the printed rain, cloud, and background/graupel pairs do not
+are positive; the printed rain and cloud pairs and the graupel mass–volume pair do not
 explain this failure.
 
 The host T26 PRE_KDM6 trace records ice `q=9.49175159803417e-7` (REAL32

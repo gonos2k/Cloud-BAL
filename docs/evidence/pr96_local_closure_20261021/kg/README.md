@@ -1,7 +1,21 @@
-# PR96 guarded Graphify/KG helper
+# PR96 guarded Graphify/KG publication record
 
-`update_kg.py` is adapted from the PR95 guarded updater. It pins the clean source base `50d11d631a59d461c37da2e8bc9666c6bcc9c380`, the PR95 KG receipt and recursively resolved PR95 → PR94 → PR92 protected-content helper chain, the current graph hashes, and the 197 inherited immutable pins. It creates separately dated KLAPS50 and Cloud-BAL snapshots and preserves existing dated snapshot directories through the inherited rollback guard.
+The guarded selected-source update was applied and passed on source commit
+`d94a7f0f263135b7353b5af360591c38e4a27faa` for Draft PR #96. The bounded
+[`summary.json`](summary.json) records separate KLAPS50 and Cloud-BAL dated
+snapshots, their file hashes and graph deltas, the selected source hashes,
+and the apply receipt identity. `SHA256SUMS` covers this summary, this README,
+the static helper, and the independent review note.
 
-The extraction allowlist currently covers `docs/PR96_*`, `tools/pr96_*`, `tests/*pr96*`, and the inherited exact PR95 call-budget source/test paths. `docs/evidence/**` is hash-bound only. Add any final PR96 source paths to the allowlist only after the root agent freezes the final changed-path list.
+The update preserved the maintained-source inventory (627 entries), all 197
+inherited immutable pins, and 100 pre-existing dated snapshots. It created
+separate `2026-10-21-pr96-local-closure` snapshots. Evidence payloads were
+hash-bound only; no graph JSON, private profile, or backup contents are
+published in this bundle. Extraction of the legacy KDM6 Fortran module and
+cross-file CALL relationships is incomplete. Graph freshness records source
+navigation only; it does not establish runtime or scientific validation.
 
-The helper requires a clean final commit and an actual open GitHub PR #96 matching that commit before either `--check-only` or `--apply` can proceed. No check or apply has been run in this local copy. The result publication records incomplete 3600-second runs; graph freshness is provenance only and does not change physical approval (`FAIL_OPEN`).
+PR96 remains DRAFT. The new C1 OFF, HYDRO, and COUPLED 600-second closed
+receipts and endpoint audits are pending; no C1 600-second PASS is claimed.
+The separately closed C4 evidence and its limits are summarized in
+`summary.json`. Physical approval remains `FAIL_OPEN`.
