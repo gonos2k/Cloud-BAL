@@ -447,9 +447,9 @@ def kdm6_geometry_source_audit(roots: dict[str, Path], gravity: float) -> dict[s
                          "exact_match_fraction": float(np.mean(history_dz == call_dz)),
                          "source_order_note": "History geometry is emitted after microphysics and after_all_rk_steps; it is not the KDM6 PRE input geometry."},
                      "call_budget_status": "NOT_COMPUTED",
-                     "call_budget_gap": "Only timestep 3 has a receipt-bound KDM6 DELZ dump; its call-specific RAINNC increment and call-specific numerical residual are not captured. Remaining KDM6 calls have no DELZ capture. The minute RAINNC history increment spans three calls and is not assigned to one call."}
+                     "call_budget_gap": "This probe examines the timestep-3 PRE dump only. Its same-call precipitation increment and complete numerical terms are not captured here. Separate receipt-bound timestep-1 pre/post and process captures are assessed in PR95; the minute RAINNC history increment is not assigned to one call."}
     return {"arms": arms,
-            "conclusion": "The KDM6 input geometry and density are directly captured only for timestep 3, but same-minute history PH+PHB is a post-microphysics/post-finalization product and does not exactly reproduce that DELZ. The current receipts do not support a complete per-call water-plus-precipitation residual; no PH-derived or initial geometry is substituted."}
+            "conclusion": "The timestep-3 probe demonstrates that same-minute history PH+PHB is a post-microphysics/post-finalization product and does not exactly reproduce its DELZ. This probe does not inventory all archived call captures or compute a complete call budget; no PH-derived or initial geometry is substituted."}
 
 
 def boundary_and_source_ledger_audit(roots: dict[str, Path]) -> dict[str, Any]:

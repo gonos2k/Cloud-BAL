@@ -1,0 +1,68 @@
+{
+  "schema": "pr95_public_kg_summary_v1",
+  "status": "PASS",
+  "source_commit": "f640e3f40c90d795a9444f0bbb51f8d5b18c6240",
+  "base": "7c2d1e295c1930d64a98e9602c36289aabb1d440",
+  "pr": "https://github.com/gonos2k/Cloud-BAL/pull/95",
+  "snapshot": "2026-10-21-pr95-reader-closure",
+  "graphify_version": "graphify 0.9.53",
+  "selected_extraction_files": 15,
+  "hash_only_evidence_files": 11,
+  "receipt": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr95_reader_closure_20261021/kg/kg_receipt.json",
+    "sha256": "e111852490726b1cbcdc1555cd09d11ea8300a75735db750f2dd9d00e0b3a5fa"
+  },
+  "corpora": {
+    "KLAPS50": {
+      "snapshot": "2026-10-21-pr95-reader-closure",
+      "nodes": 39564,
+      "edges": 82620,
+      "communities": 3248,
+      "delta_nodes": 92,
+      "delta_edges": 161,
+      "added_ids": 101,
+      "removed_ids": 9,
+      "sha256": "abdcbf114a225e4228d578bb59b47392c975d7c93475ce4e237d8a6ccd29d037",
+      "previous_graph_sha256": "5ce523177982640dd3f5428e51af942c2129e503620d33e07d19cdf94ee91b0a",
+      "extracted_nodes": 202,
+      "extracted_edges": 568
+    },
+    "Cloud-BAL": {
+      "snapshot": "2026-10-21-pr95-reader-closure",
+      "nodes": 13736,
+      "edges": 24169,
+      "communities": 1247,
+      "delta_nodes": 92,
+      "delta_edges": 161,
+      "added_ids": 101,
+      "removed_ids": 9,
+      "sha256": "6bbe4adce03298040142a14af544775e4e1cb6bb33798a7024c8d205922fb8f5",
+      "previous_graph_sha256": "188873c7826d1b106f9b23e0ba820f9043fc1f15263537a538bb3c54ba7e8f38",
+      "extracted_nodes": 202,
+      "extracted_edges": 568
+    }
+  },
+  "preservation": {
+    "immutable_receipt_pins_verified": 197,
+    "maintained_source_inventory": {
+      "entry_count": 627,
+      "sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f"
+    },
+    "maintained_source_pre_post_equal": true,
+    "private_profile_unchanged": true,
+    "protected_wiki_content_unchanged": true,
+    "old_dated_snapshot_directories_verified": 98,
+    "index_scope": "Graph snapshot and date_modified only",
+    "log_scope": "append-only"
+  },
+  "derived_wiki_sha256": {
+    "wiki/graph-report.md": "daeeceb93e7438154fd63f98043d0785040085a36aece43eb63f2f7babbbc02c",
+    "wiki/graph-report-klaps50.md": "7cc6478d701eb61fe1d7f3760fa6416f10dd13bcec62e6c99ea45ecbbfc5ee85",
+    "wiki/graph-report-cloud-bal.md": "b1c82a1a65b65a98e15e21356a332cef763e3d33a959512a14c4ebb5d8155cf2",
+    "wiki/index.md": "874740611b5b201fca8c8874f464db093b2172e7570ab0ac440f9871070b5523",
+    "wiki/log.md": "d1b7df139a2af58a1ceab841e226a18ff97dfa45ce243e63635b354163bf9ee2"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "limitations": "Separate KLAPS50 and Cloud-BAL snapshots extract allowlisted PR95 docs, tools, and tests; evidence payloads are hash-bound only. Cross-file Fortran CALL extraction is partial. Graph freshness is navigation evidence, not runtime/scientific approval.",
+  "independent_post_apply_review": "GO; graph/snapshot/report hashes, maintained source, protected content/profile, inherited pins, old snapshots, bounded index and append-only log checked"
+}

@@ -1,0 +1,639 @@
+{
+  "schema": "pr95_staged_initial_input_comparison_v1",
+  "identities": {
+    "OFF": {
+      "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/run/wrfinput_d01",
+      "sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200"
+    },
+    "COUPLED": {
+      "path": "/var/tmp/pr93_COUPLED_600s_c4_bound_20261020/run/wrfinput_d01",
+      "sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
+    },
+    "HYDRO": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/HYDRO_600s_c4_current/run/wrfinput_d01",
+      "sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c"
+    }
+  },
+  "scope": "Full raw staged wrfinput arrays before WRF initialization, not runtime history or observed skill.",
+  "valid_time": "2026-08-16_13:00:00",
+  "treatment": "Continuity and force priors disabled together in HYDRO; no separate causal attribution.",
+  "records": {
+    "T": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "K",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 717,
+          "rms": 0.0037919183057095332,
+          "max_abs": 1.84881591796875
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QVAPOR": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 434,
+          "rms": 3.3309959470914675e-06,
+          "max_abs": 0.0015739016234874725
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QCLOUD": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 430,
+          "rms": 1.930641884538966e-06,
+          "max_abs": 0.0008931820630095899
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QICE": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 104,
+          "rms": 4.606987198294193e-09,
+          "max_abs": 5.441717803478241e-06
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QRAIN": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 312,
+          "rms": 8.929619797543346e-07,
+          "max_abs": 0.0002649522211868316
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QSNOW": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 79,
+          "rms": 1.1714583589393312e-06,
+          "max_abs": 0.0006475672562373802
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QGRAUP": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 73,
+          "rms": 1.0678668272750196e-06,
+          "max_abs": 0.00039675587322562933
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QNCLOUD": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "  kg(-1)",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 564,
+          "rms": 675880.6133387539,
+          "max_abs": 237914896.0
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QNICE": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "  kg-1",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 159,
+          "rms": 2.2782952174420594,
+          "max_abs": 2421.3125
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QNRAIN": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "  kg(-1)",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 311,
+          "rms": 13.861500347171864,
+          "max_abs": 4112.86865234375
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "QIB": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "m(3) kg(-1)",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 73,
+          "rms": 2.6696671125795202e-09,
+          "max_abs": 9.918896921590203e-07
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "P": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "Pa",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 723,
+          "rms": 0.13729006870710894,
+          "max_abs": 33.609375
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "PB": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "Pa",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "PH": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top_stag",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          40,
+          282,
+          234
+        ],
+        "units": "m2 s-2",
+        "stagger": "Z"
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 1378,
+          "rms": 0.5920912320924604,
+          "max_abs": 116.046875
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "PHB": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top_stag",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          40,
+          282,
+          234
+        ],
+        "units": "m2 s-2",
+        "stagger": "Z"
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "U": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east_stag"
+        ],
+        "shape": [
+          1,
+          39,
+          282,
+          235
+        ],
+        "units": "m s-1",
+        "stagger": "X"
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 504,
+          "rms": 1.9700514087880333e-05,
+          "max_abs": 0.009824752807617188
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 2314,
+          "rms": 0.04380565892202454,
+          "max_abs": 9.048566818237305
+        }
+      }
+    },
+    "V": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north_stag",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          39,
+          283,
+          234
+        ],
+        "units": "m s-1",
+        "stagger": "Y"
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 480,
+          "rms": 9.34719294450215e-06,
+          "max_abs": 0.0057125091552734375
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 2402,
+          "rms": 0.048970222014166155,
+          "max_abs": 7.995775878429413
+        }
+      }
+    },
+    "W": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "bottom_top_stag",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          40,
+          282,
+          234
+        ],
+        "units": "m s-1",
+        "stagger": "Z"
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "MU": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          282,
+          234
+        ],
+        "units": "Pa",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 27,
+          "rms": 0.22395290234478843,
+          "max_abs": 33.125
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    },
+    "MUB": {
+      "raw_variable": {
+        "dtype": "float32",
+        "dimensions": [
+          "Time",
+          "south_north",
+          "west_east"
+        ],
+        "shape": [
+          1,
+          282,
+          234
+        ],
+        "units": "Pa",
+        "stagger": ""
+      },
+      "comparison": {
+        "HYDRO_minus_OFF": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        },
+        "COUPLED_minus_HYDRO": {
+          "changed_values": 0,
+          "rms": 0.0,
+          "max_abs": 0.0
+        }
+      }
+    }
+  },
+  "physical_approval": "OPEN"
+}

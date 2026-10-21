@@ -1,0 +1,13 @@
+# PR95 runtime results
+
+This table records captured evidence only. HYDRO has a closed but incomplete run receipt. OFF and COUPLED have no closed receipt; their newer captures are plaintext timing logs and `/proc` process/cwd snapshots. Process presence does not establish forward progress or completion. No live model binary or history data were read for this update.
+
+| Arm | Requested | Evidence capture (UTC) | Last captured model time | Result |
+| --- | ---: | --- | --- | --- |
+| HYDRO | 600 s | 2026-10-21 04:17:29 | 13:08:20 (25 completed calls, 500 s; maximum observed trace timestep 26) | `INCOMPLETE`, return code 128. Fatal text: `KDM6 invalid base before nongraupel admission`. No 600-second completion. |
+| OFF | 3600 s | 2026-10-21 04:19:14.068970 | 13:09:40 (29 timing rows; last reported elapsed 621.06232 s) | No closed receipt. `wrf.exe` PID 2968052 and launcher PID 2967681 were present in `/proc` (state `I` and `S`) with cwd under the OFF run root. Plain `rsl.error.0000` SHA-256 `1891934a…223f4`. |
+| COUPLED | 3600 s | 2026-10-21 04:19:14.068970 | 13:09:40 (29 timing rows; last reported elapsed 613.49622 s) | No closed receipt. `wrf.exe` PID 2968354 and launcher PID 2967997 were present in `/proc` (state `I` and `S`) with cwd under the COUPLED run root. Plain `rsl.error.0000` SHA-256 `011423c0…4c8dd`. |
+
+The HYDRO receipt is private `runs_on_lustre/HYDRO_600s_c4_current/receipt.json` (full local path in the evidence JSON), SHA-256 `785205ab3fdfd8c070d01376939a8ed120f9f5f5bb2535e0c8fee31f9400ccb2`. Its archived `rsl.error.0000.gz` fatal text is receipt-bound (compressed SHA-256 `ee44b37196e872c2f4b66b155f108b5863dafec82cb72209e01451d11f9fa0ad`; expanded SHA-256 `2b82cab5a108aa37255668c0ff886f062a00580e38b03dd8d47db2305cf0514c`). The receipt binds the executed executable to the candidate build and expected executable at SHA-256 `20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be`; its current-input receipt SHA-256 is `967a481070c37286f6aef8d616679583f1c86afb7dd60ac64f1d411977eba39b`, with `candidate_input_unchanged: true` and no changed staged or original inputs.
+
+The archived fatal record supplies the exact failure string, but no exact failure-bit diagnosis is available here. OFF/COUPLED logs were stable while read and present as plaintext in this snapshot; if logs later disappear during compression, that yields no receipt and no assumed running state. No source-level failure attribution, normal-600-second HYDRO comparison, physical approval, or current remote-state claim is made. Log hashes and `/proc` cwd hashes are recorded in [`runtime_status.json`](evidence/pr95_reader_closure_20261021/runtime_status.json).

@@ -11,6 +11,7 @@ import netCDF4
 import numpy as np
 
 from pr86_water_budget import load_call_measure, sha256
+from pr87_native_history import _finite
 
 START = dt.datetime(2026, 8, 16, 13)
 SCALARS = ("QVAPOR", "QCLOUD", "QICE", "QRAIN", "QSNOW", "QGRAUP",
@@ -92,22 +93,23 @@ def load_history(path: Path, frame: int = 0) -> tuple[str, dict, dict]:
         shape = ds["QVAPOR"].shape
         if shape != (len(times), 39, 282, 234):
             raise ValueError(f"unexpected frozen-domain history shape {shape}")
-        fields = {n: np.asarray(ds[n][frame, :, 1:-1, 1:-1], dtype=np.float64) for n in SCALARS}
-        fields["pressure"] = (ds["P"][frame, :, 1:-1, 1:-1].astype(np.float64) +
-                              ds["PB"][frame, :, 1:-1, 1:-1].astype(np.float64))
-        phi = (ds["PH"][frame, :, 1:-1, 1:-1].astype(np.float64) +
-               ds["PHB"][frame, :, 1:-1, 1:-1].astype(np.float64))
+        fields = {n: _finite(ds, n, frame)[:, 1:-1, 1:-1] for n in SCALARS}
+        pressure = (_finite(ds, "P", frame)[:, 1:-1, 1:-1] +
+                    _finite(ds, "PB", frame)[:, 1:-1, 1:-1])
+        fields["pressure"] = pressure
+        phi = (_finite(ds, "PH", frame)[:, 1:-1, 1:-1] +
+               _finite(ds, "PHB", frame)[:, 1:-1, 1:-1])
         fields["geopotential"] = 0.5 * (phi[:-1] + phi[1:])
-        u = np.asarray(ds["U"][frame, :, 1:-1, 1:-1], dtype=np.float64)
-        v = np.asarray(ds["V"][frame, :, 1:-1, 1:-1], dtype=np.float64)
-        w = np.asarray(ds["W"][frame, :, 1:-1, 1:-1], dtype=np.float64)
+        u = _finite(ds, "U", frame)[:, 1:-1, 1:-1]
+        v = _finite(ds, "V", frame)[:, 1:-1, 1:-1]
+        w = _finite(ds, "W", frame)[:, 1:-1, 1:-1]
         fields["U"], fields["V"], fields["W"] = (0.5 * (u[..., :-1] + u[..., 1:]),
                                                    0.5 * (v[:, :-1] + v[:, 1:]),
                                                    0.5 * (w[:-1] + w[1:]))
         extras = {}
         for name in ("RAINNC", "RAINC", "REFL_10CM"):
             if name in ds.variables:
-                values = np.asarray(ds[name][frame], dtype=np.float64)
+                values = _finite(ds, name, frame)
                 extras[name] = {"finite": int(np.isfinite(values).sum()),
                                 "nonfinite": int((~np.isfinite(values)).sum()),
                                 "min": float(np.nanmin(values)), "max": float(np.nanmax(values))}

@@ -1,0 +1,24 @@
+# PR95 same-call KDM6 water account
+
+This account uses the archived, receipt-bound PR93-C4 OFF and COUPLED captures. The reader checks pre/post headers and canonical float32 bytes for all 12 fields against `PRE_KDM6(1)` and `POST_KDM6(1)` in the independent joint-stage stream. It validates all three process-record stages and rows, compares stage-0 DEN/DELZ with the captured KDM6 input, and confirms stage-2 bottom DELZ against stage-0 bottom DELZ. It also binds the candidate build and executed executable hashes to the run receipt.
+
+The measure is `DEN * DELZ * DX*DY/(MAPFAC_MX*MAPFAC_MY)`. Bottom outflow uses the actual four-phase stage-2 fall arrays with the source accumulator conversion `fall * DELZ / DENR * DTCLD * 1000` mm, then maps mm to kg m-2 and multiplies by receipt-bound cell area. Neither RAINC nor minute history is substituted. Surface precipitation is a same-call term.
+
+## Full captured tile
+
+| Arm | Δ six-water (kg) | Actual bottom fall (kg) | Raw ΔW + bottom (kg) | Raw L1 columns (kg) | Max absolute column (kg) | T1 ice-to-snow storage Δ (kg) | Residual after this term (kg) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| OFF | -689,720,662.528 | 689,637,512.588 | -83,149.940 | 486,309.609 | 70.7355 | -76.925 | -83,073.015 |
+| COUPLED | -689,589,687.024 | 689,506,723.726 | -82,963.298 | 486,342.035 | 70.7355 | -77.565 | -82,885.734 |
+
+The signed, L1, and maximum column statistics are in the arm JSON files. The ice-to-snow storage change includes every internal loop owned by the source-bound first public KDM6 call; the ledger marker contains a loop index, not a model timestep. The source proves ownership through the first-call trace gate, with the call-complete flag set at the end of that call. Rain helper ground approval is compared independently with the actual public rain increment; the difference is not substituted into the account. Both arm reports include source-pinned proofs for the selected KDM6 implementation: the paired sedimentation helper has only internal `kts..kte` and ground-at-`kts` faces for rain, ice, and graupel; the snow top-level block removes only its own top outflow and the next internal-transfer sweep starts at `kte-1`. Thus these four precipitation phases have no upper-boundary inflow in the selected implementation. This is a source proof, not an independently captured runtime top-face flux.
+
+The full-tile account remains open. The cutoff cleanup ledger has no model-timestep marker, and other stored process-rounding/numerical terms are not completely reduced. Therefore the partial corrected residual is not a conservation pass or physical approval.
+
+## Isolated actual-column replay
+
+To test whether retained component replay could recover missing same-call terms without a whole-model run, one captured OFF column (`i=117, j=141`) was replayed with the receipt-bound C4 pre-call fields and XLAND, the pinned Intel profile, the C4 overlay archive, and original full array geometry with only active horizontal bounds narrowed to that cell. A diagnostic-only copy of the C4 preprocessed KDM6 source enabled two existing cold/warm ledger writes; no physical arithmetic, guards, or process branches were changed. The replay post-state for all 17 serialized fields was compared as raw canonical float32 bytes against the selected column of actual C4 `POST_KDM6(1)` and matched exactly (2,652 bytes).
+
+For this column, six-water storage changed by -10.784439 kg and actual bottom fall was 0 kg. The enabled cold/warm stored-minus-approved terms summed to 0 kg; cutoff, ice-to-snow transition, and ice/graupel sedimentation residual records contributed 0 kg. The remaining -10.784439 kg is still open: the separate `pr85_rain_freezing_budget.raw` ledger was not emitted. A sparse five-row PINU/PFRZ cloud-ice audit exists for levels 17–19 (integrated field-19 change 0 kg), but it is not declared in the replay receipt and does not cover the call. The available PR67 process stages also show QI and ice fall as zero, so they do not assign the opposing Q/QC storage changes; liquid-cloud phase rounding and the other process/phase numerical terms remain uncovered; no zero is inferred for them. This test demonstrates same-state replay and a partial numerical account for one column; it does not close the full tile.
+
+The per-arm capture hashes and reductions are in [OFF evidence](evidence/pr95_call_water_budget_20261021/off_samecall.json) and [COUPLED evidence](evidence/pr95_call_water_budget_20261021/coupled_samecall.json). The isolated-column replay receipt is [here](evidence/pr95_call_water_budget_20261021/off_column_replay.json); its exact two-line diagnostic gate change is preserved in [this patch](evidence/pr95_call_water_budget_20261021/off_column_diagnostic_gates.patch). The reducer is [tools/pr95_call_budget.py](../tools/pr95_call_budget.py).
