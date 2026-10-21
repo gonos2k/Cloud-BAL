@@ -29,6 +29,7 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, str(ROOT / "tools"))
 from pr86_compare_response import load_history  # noqa: E402
 from pr94_water_budget import verify_paired_grid  # noqa: E402
+from pr87_native_history import _finite  # noqa: E402
 
 
 def sha256(path: Path) -> str:
@@ -185,9 +186,8 @@ def read_face_winds(path: Path, frame: int) -> dict[str, np.ndarray]:
     with netCDF4.Dataset(path) as ds:
         ds.set_auto_mask(False)
         # Exclude WRF's raw outer mass-grid ring; retain actual staggered faces.
-        return {"U_face": np.asarray(ds["U"][frame, :, 1:-1, 1:-1], dtype=np.float64),
-                "V_face": np.asarray(ds["V"][frame, :, 1:-1, 1:-1], dtype=np.float64),
-                "W_face": np.asarray(ds["W"][frame, :, 1:-1, 1:-1], dtype=np.float64)}
+        return {f"{name}_face": _finite(ds, name, frame)[:, 1:-1, 1:-1]
+                for name in ("U", "V", "W")}
 
 
 def first_max(delta: np.ndarray, mask: np.ndarray | None = None) -> dict[str, Any]:

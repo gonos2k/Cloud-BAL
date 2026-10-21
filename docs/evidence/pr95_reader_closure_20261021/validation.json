@@ -1,0 +1,103 @@
+{
+  "schema": "pr95_reader_closure_validation_v1",
+  "recorded_utc": "2026-10-21T04:22:13.719749+00:00",
+  "base_commit": "7c2d1e295c1930d64a98e9602c36289aabb1d440",
+  "python_focused": {
+    "argv": [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_pr86_compare_response.py",
+      "tests/test_pr87_native_history.py",
+      "tests/test_pr89_paired_history.py",
+      "tests/test_pr94_cloud_response.py",
+      "tests/test_pr94_longrun_audit.py",
+      "tests/test_pr94_water_budget.py",
+      "tests/test_pr86_water_budget.py",
+      "tests/test_pr94_hydro_response.py",
+      "tests/test_pr94_hydro_control.py",
+      "tests/test_pr94_compact_diagnostics.py",
+      "tests/test_pr86_time_response.py",
+      "tests/test_pr95_call_budget.py",
+      "tests/test_pr95_closed_results.py"
+    ],
+    "returncode": 0,
+    "result": "103 passed in 3.76s",
+    "log_sha256": "ac7b8157a6123d8196a5db0ae2f4507825d011a9d3bb42b4eae1f0ce78a1603e",
+    "tests_sha256": {
+      "tests/test_pr86_compare_response.py": "5f136a2665786e2ee82fa5a079faf0387c63d2a3c96e2ce18304c48a9726a596",
+      "tests/test_pr87_native_history.py": "9a4688609c8406c11b72843f4fefaefd1886ceacdf32512e17ea30556e247b61",
+      "tests/test_pr89_paired_history.py": "0524faf67e895bdc2cc7d695555fcf4c60ce0155c554ad8e38e0e406863418aa",
+      "tests/test_pr94_cloud_response.py": "dbd0585061211c6ae09ce59fd0c83b7da752f390aeb959833a889fea4e42ed98",
+      "tests/test_pr94_longrun_audit.py": "38ad16f2e749472eb313333672c961ffb5bae5c3addfb8f892da7fccc708816b",
+      "tests/test_pr94_water_budget.py": "122fb001fce0ad3802fc0cd3be1cb83a4ab85d6c4e37bdec9486a1cd62542211",
+      "tests/test_pr86_water_budget.py": "d769471997781abadbf457e65609e7aba133524ac199c5426f2ad656221fcbda",
+      "tests/test_pr94_hydro_response.py": "eb874314c5154ceb13d817ba98891a9acc624af76e591e6e74f1e355df49e0a4",
+      "tests/test_pr94_hydro_control.py": "735bd374ad0a371367f9a50cc7fbab14c1ac92656eb8d8e4fc601bb8d69fc304",
+      "tests/test_pr94_compact_diagnostics.py": "520f6de091538d555257ab36661abb3f8a7992d0db1b70be90f4dc57a176b6a7",
+      "tests/test_pr86_time_response.py": "5b7eb55b37639bfbd2eef00ca64d9bf37251598d6cd42f7ff3397c18313b0740",
+      "tests/test_pr95_call_budget.py": "8fb38ca4094a666277d15a191c051b584ae97df88dd554c1fa7c16d64d11e7b7",
+      "tests/test_pr95_closed_results.py": "b08bb06a33020a592de7a172748e675019d09cd996fe61b23192db60247ea0c6"
+    }
+  },
+  "changed_tool_sha256": {
+    "tools/pr86_compare_response.py": "64b2f97f452035cae328576d26216c54877fa778b3eeabe17cdb9980103aaa5c",
+    "tools/pr94_cloud_response.py": "a626b22f234b3095202982a4fe32d89d9ab6c200e4a9547f6a06a8b109536537",
+    "tools/pr94_longrun_audit.py": "0ce4eb5a00fa5065aef71be5436b1894813e6d3bdca9d5904283ef72dca326d1",
+    "tools/pr94_water_budget.py": "22e8055c19508c27136c7ea1722af644ac5e62202b267bad064d655f50c6ae91",
+    "tools/pr95_call_budget.py": "9c0a0f9d9798f74f6e09bab21e05fd53101a2df8d7885cd8cade94cf8bb6a6db",
+    "tools/pr95_closed_results.py": "61ceca777362929e6b39b86c31a41c98c17148a6d22e439e11b7d947ccfb5195"
+  },
+  "intel_component_replay": {
+    "receipt": "../pr95_call_water_budget_20261021/off_column_replay.json",
+    "receipt_sha256": "e1183b1cc401301f03f16a94b71de12f8284f3e2dfdd35621faaa84c1caeb623",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "fresh_scratch_cwd": "/var/tmp/pr95_kdm6_column_off_20261021",
+    "full_clean_wrf_rebuild": false,
+    "GNU_or_ifort_used": false
+  },
+  "existing_trace_audit_reuse": {
+    "old_source_sha256": "dce5a6cc2fbfa9042b8b8dad71d8aeb744d531cd42340d1e706e9d724460a77d",
+    "new_source_sha256": "0ce4eb5a00fa5065aef71be5436b1894813e6d3bdca9d5904283ef72dca326d1",
+    "unchanged_function_AST": {
+      "compare_first_600_seconds": true,
+      "validate_compact_state_profile": true,
+      "_assert_state_record_equal": true,
+      "_verify_runtime_bindings": true
+    }
+  },
+  "scope": [
+    "103 selected Python tests; not a complete canonical run.",
+    "Strengthened actual C4 reader scan covers eleven frames per arm.",
+    "One-column Intel component replay matches 17 post-state fields; water closure remains OPEN.",
+    "HYDRO 600s is INCOMPLETE; compact longrun history comparison awaits closed receipts."
+  ],
+  "physical_approval": "OPEN",
+  "team_review": {
+    "status": "GO",
+    "reviewed": [
+      "reader fill-value checks",
+      "history metadata and raw-field scope",
+      "transition first-public-call ownership including all internal loops",
+      "same-call executable and top-boundary source binding",
+      "diagnostic two-write-gate patch and 17-field post-state equality",
+      "closed-results queue receipt/reuse/source gates",
+      "guarded Graphify/KG helper"
+    ],
+    "resolved_findings": [
+      "test winds independently",
+      "compare non-Time dimension extents",
+      "separate raw and corrected water residuals",
+      "treat transition marker as internal loop, not model timestep",
+      "retain exact diagnostic-only source patch",
+      "distinguish rain-freezing file from sparse cloud-ice freezing audit"
+    ],
+    "open_scientific_items": [
+      "same-call/full-host water closure",
+      "HYDRO 600s incomplete",
+      "longrun histories await closed receipts",
+      "observed skill and native mass-wind/energy closure"
+    ]
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "schema": "pr95_samecall_water_account_v1",
+  "arm": "OFF",
+  "timestep": 1,
+  "call_seconds": 20.0,
+  "active_shape_jki": [
+    280,
+    39,
+    232
+  ],
+  "measure": "captured KDM6 DEN * DELZ * DX*DY/(MAPFAC_MX*MAPFAC_MY)",
+  "units": {
+    "water_inventory_and_bottom_fall": "kg",
+    "bottom_fall_map": "kg per native column",
+    "bottom_fall_source_increment": "mm per KDM6 call; 1 mm = 1 kg m-2"
+  },
+  "species_water_delta": {
+    "Q": {
+      "signed_kg": 641711016830.0747,
+      "L1_cell_kg": 656227958793.0492,
+      "max_abs_cell_kg": 16552659.092181526,
+      "L1_column_kg": 642837771595.7795,
+      "max_abs_column_kg": 103172640.75239845
+    },
+    "QC": {
+      "signed_kg": -686587272128.4094,
+      "L1_cell_kg": 715980833357.3485,
+      "max_abs_cell_kg": 52647891.10748825,
+      "L1_column_kg": 687394434271.6987,
+      "max_abs_column_kg": 320181344.63719547
+    },
+    "QI": {
+      "signed_kg": -291441206805.17163,
+      "L1_cell_kg": 316024015855.29944,
+      "max_abs_cell_kg": 65418874.804081306,
+      "L1_column_kg": 294617535626.72546,
+      "max_abs_column_kg": 371819953.19190687
+    },
+    "QR": {
+      "signed_kg": 42779857639.42683,
+      "L1_cell_kg": 43754633617.77071,
+      "max_abs_cell_kg": 38094078.257387094,
+      "L1_column_kg": 42876780260.86534,
+      "max_abs_column_kg": 228564705.14243865
+    },
+    "QS": {
+      "signed_kg": 291021070973.8679,
+      "L1_cell_kg": 319037132252.8653,
+      "max_abs_cell_kg": 64903778.490309216,
+      "L1_column_kg": 302037043492.73627,
+      "max_abs_column_kg": 358399628.40575814
+    },
+    "QG": {
+      "signed_kg": 1826812827.6825225,
+      "L1_cell_kg": 5779748124.597639,
+      "max_abs_cell_kg": 24383037.306504928,
+      "L1_column_kg": 3861328392.4765725,
+      "max_abs_column_kg": 115028189.68531097
+    }
+  },
+  "six_water_delta": {
+    "signed_kg": -689720662.5284154,
+    "L1_cell_kg": 31616224570.38329,
+    "max_abs_cell_kg": 5094943.128871511,
+    "L1_column_kg": 690002924.3016094,
+    "max_abs_column_kg": 2409185.949472369
+  },
+  "actual_bottom_fall_by_species_kg": {
+    "phase_1": 674118777.9999961,
+    "phase_2": 0.0,
+    "phase_3": 15518734.587922338,
+    "phase_4": 2.4011519857421796e-17
+  },
+  "actual_bottom_fall": {
+    "signed_kg": 689637512.5879184,
+    "L1_column_kg": 689637512.5879184,
+    "max_abs_column_kg": 2409160.0234114337
+  },
+  "focused_delta_plus_bottom_column": {
+    "signed_kg": -83149.94049671064,
+    "L1_column_kg": 486309.6086139941,
+    "max_abs_column_kg": 70.73548819682134
+  },
+  "recorded_ice_to_snow_water_delta": {
+    "signed_kg": -76.92520530537507,
+    "L1_cell_kg": 6247.055220285157,
+    "max_abs_cell_kg": 5.127334448432817,
+    "L1_column_kg": 3331.231444910166,
+    "max_abs_column_kg": 10.688177925664862
+  },
+  "recorded_ice_to_snow_event_rows_first_public_call": 7084,
+  "transition_source_call_identity": {
+    "status": "SOURCE_BOUND_FIRST_PUBLIC_CALL",
+    "source_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+    "gate_assignment_line": "1525",
+    "kdm62d_call_line": "1649",
+    "writer_guard_line": "2512",
+    "call_complete_line": "1832",
+    "reason": "KDM6 sets the first-public-call flag, passes it to kdm62D, whose transition writer is guarded by it; KDM6 sets the completion flag before returning. All loop markers in this one-time ledger belong to that public call."
+  },
+  "residual_after_reduced_numerical_terms": {
+    "signed_kg": -83073.01529140527,
+    "L1_column_kg": 485908.16480922134,
+    "max_abs_column_kg": 70.73548819682134
+  },
+  "rain_helper_vs_actual_bottom": {
+    "ground_approved_minus_public_rain_kg": {
+      "signed_kg": 0.1787433023172811,
+      "L1_column_kg": 18.728501976303363,
+      "max_abs_column_kg": 0.1416096012108028
+    },
+    "ground_approved_rain_kg": {
+      "signed_kg": 674118778.1787394,
+      "L1_column_kg": 674118778.1787394,
+      "max_abs_column_kg": 1984665.7600365304
+    },
+    "captured_public_rain_kg": {
+      "signed_kg": 674118777.9999961,
+      "L1_column_kg": 674118777.9999961,
+      "max_abs_column_kg": 1984665.7318754608
+    },
+    "internal_residual_by_column_kg": 1.5894734665931738,
+    "timestep_1_call_markers": 280,
+    "timestep_1_rows": 78926
+  },
+  "numerical_terms": {
+    "status": "PARTIALLY_REDUCED",
+    "reduced": [
+      "all ice-to-snow stored water deltas in the source-bound first public call"
+    ],
+    "unreduced_or_unjoinable": [
+      "cutoff cleanup ledger has no model-timestep marker",
+      "other stored process-rounding residuals and numerical water adjustments"
+    ],
+    "ledger_names": [
+      "pr85_fogdes_budget.raw",
+      "pr85_graupel_sedimentation_budget.raw",
+      "pr85_ice_sedimentation_budget.raw",
+      "pr85_ice_transition_branch.raw",
+      "pr85_joint_transport_budget.raw",
+      "pr85_kdm6_cold_budget.raw",
+      "pr85_kdm6_cutoff_budget.raw",
+      "pr85_kdm6_freezing_budget.raw",
+      "pr85_kdm6_melt_budget.raw",
+      "pr85_kdm6_warm_budget.raw",
+      "pr85_rain_freezing_budget.raw",
+      "pr87_rain_sedimentation_budget.raw"
+    ]
+  },
+  "top_boundary_water_flux": {
+    "status": "SOURCE_STENCIL_ZERO_FOR_SELECTED_SEDIMENTATION_TOP_FLUX",
+    "source_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+    "paired_sedimentation": {
+      "routine": "pr85_kdm6_paired_sediment_column",
+      "body_sha256": "26b6c268ca1bc243438c06c1be209dcc33b0b31612e48aaca16476cdda35505a",
+      "source_lines": "8222-8754",
+      "phases": [
+        "rain",
+        "ice",
+        "graupel"
+      ],
+      "reason": "The bound helper commits only internal kts..kte faces and a ground face at kts; no upper face is in its interface or stencil."
+    },
+    "snow": {
+      "source_path": "/var/tmp/pr93_sources_c4_20261020/module_mp_kdm6.F",
+      "top_block_sha256": "0bd4d20825171af73374108440c3676772aaf6944c2c484d8b90be287bba5f42",
+      "line_range": "2914-2926",
+      "reason": "kte_in equals kte; at k=kte snow fall is computed from its own top-level state and subtracts only that own outflow. The following internal-transfer loop begins at kte_in-1, so no above-top snow inflow is added."
+    },
+    "scope": "Source proves no top precipitation inflow for rain, ice, graupel, and snow in the selected captured KDM6 implementation; no independent runtime top-face flux was captured."
+  },
+  "closure_status": "OPEN_MISSING_EXACT_CUTOFF_AND_OTHER_NUMERICAL_TERM_REDUCTION",
+  "column_residual_shape_ji": [
+    280,
+    232
+  ],
+  "identities": {
+    "receipt_sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a",
+    "captures": {
+      "kdm6_first_call_pre.raw.gz": {
+        "compressed_sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86",
+        "expanded_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe"
+      },
+      "kdm6_first_call_post.raw.gz": {
+        "compressed_sha256": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f",
+        "expanded_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529"
+      },
+      "pr67_kdm6_process.raw.gz": {
+        "compressed_sha256": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f",
+        "expanded_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8"
+      }
+    },
+    "candidate_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+    "candidate_build_receipt_sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669",
+    "candidate_module_mp_kdm6_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+    "stage_pair": {
+      "path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/run/pr85_joint_moment_stages.raw.gz",
+      "compressed_sha256": "5bea514433500eff5475b011429051be16560cbe13b16429c43a63affabbd427",
+      "matched_fields": [
+        "DEN",
+        "Q",
+        "QC",
+        "QI",
+        "QR",
+        "QS",
+        "QG",
+        "NN",
+        "NC",
+        "NI",
+        "NR",
+        "BG"
+      ],
+      "timestep": 1
+    },
+    "initial_history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+    "pr87_rain_sedimentation_budget.raw.gz": {
+      "compressed_sha256": "89951b7e1b4b265566a9808386ce9fb47f8b2b7aa1aaf9c501dc8fec568ae092"
+    },
+    "pr85_ice_transition_branch.raw.gz": {
+      "compressed_sha256": "9d9a9bf64f9b4a1d6c62fd31e18c4e248c072f1365a9147f24d51e809e12a5a5",
+      "expanded_sha256": "ceb177ebe461e18b82312e039325ce1352bc333d884868c8b5bdc8a664308b95"
+    }
+  }
+}

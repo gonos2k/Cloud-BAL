@@ -1,0 +1,20 @@
+--- C4_preprocessed_module_mp_kdm6.f90
++++ PR95_diagnostic_only_module_mp_kdm6.f90
+@@ -5974,7 +5974,7 @@
+                      pr89_cold_half_l1*pr89_cold_weight
+               enddo
+             enddo
+-            if (.false.) then
++            if (.true.) then
+             write(pr85_cold_unit,'(a,8i8,1x,l1,1p,*(1x,e24.16))',iostat=pr85_cold_ios) &
+                  'PR85_KDM6_COLD',i,lat,k,loop,rain_ng_search_status, &
+                  rain_aut_search_status,rain_process_search_status,rain_composite_retry, &
+@@ -6300,7 +6300,7 @@
+                  rain_ccn3_after.eq.rain_ccn3_before
+ ! Existing full v17 ledgers remain the reference.
+ ! Sparse PR87 NO_POSITIVE_WARM_STEP trace: status 1 only.
+-            if (rain_warm_search_status.eq.1 .or. rain_warm_retry.gt.0) then
++            if (.true.) then
+             write(pr85_warm_unit,'(a,7i8,1x,2l1,1p,*(1x,e24.16))',iostat=pr85_warm_ios) &
+                  'WARM',i,lat,k,loop,rain_warm_search_status,rain_warm_retry, &
+                  progb_status(i,k),rain_warm_rate_noop,rain_warm_state_noop, &

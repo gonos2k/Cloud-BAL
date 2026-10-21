@@ -1,0 +1,146 @@
+{
+  "schema": "pr95_one_column_c4_diagnostic_replay_v1",
+  "arm": "OFF",
+  "model_timestep": 1,
+  "call_seconds": 20.0,
+  "scope": "standalone C4 KDM6 replay for one captured active column; not a whole-model run",
+  "selected_ij": [
+    117,
+    141
+  ],
+  "active_bounds": [
+    117,
+    117,
+    141,
+    141,
+    1,
+    39
+  ],
+  "input": {
+    "receipt_path": "/var/tmp/pr93_OFF_600s_c4_bound_20261020/receipt.json",
+    "receipt_sha256": "4569bfc353628a2512701428822916fbfdbe2c47954ce0c4050dfbd7d938398a",
+    "captured_pre_expanded_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+    "captured_pre_receipt_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+    "xl_and_state": "driver reads all 17 3D fields and XLAND from the hash-bound KDM6 pretrace; full array bounds/constants preserved"
+  },
+  "build": {
+    "candidate_build_receipt_path": "/var/tmp/pr93_native_build_c4_20261020/pr87_native_overlay_build.json",
+    "candidate_build_receipt_sha256": "3c4687e71dffea99000e7aa2835074f55a4ccf1782b31940bfdb4e234a19f669",
+    "candidate_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+    "c4_module_source_sha256": "b358064642d81c86ee1f914c52620ade2c7589ccf302dcffd26d25809fd5adaa",
+    "c4_module_object_sha256": "3d253aa8c1a6106d295c0cc42698359d7933f4af56820a5d8c9db1fb1be492d2",
+    "c4_overlay_archive_sha256": "0ca4e37935749a871096ac4334a190df782828196632165d3e1e05fd82cb0f11",
+    "diagnostic_source_sha256": "31d030184f16523fbc963a4aabe6070e0ce00f828fb42a9b4dee17ed87d4c55b",
+    "diagnostic_object_sha256": "8da20b6b0d7f2ff283100040924d2c1bb5609eeddc28a506c68cb5c95703a3ac",
+    "diagnostic_source_changes": [
+      "existing cold ledger write gate changed from .false. to .true.",
+      "existing sparse warm ledger write gate changed to .true."
+    ],
+    "diagnostic_source_scope": "preprocessed source copy; no process arithmetic/guard/physics edits",
+    "compiler_profile": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr93_active_ice_20261020/Cloud-BAL/tests/intel_toolchain.sh",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compile_flags": [
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz",
+      "-qopenmp",
+      "-convert",
+      "big_endian",
+      "-real-size",
+      "32",
+      "-i4"
+    ],
+    "preprocessed_c4_source_sha256": "3a4e2fe7ae6042a3d0d6df928176e8f23a582f74c718b9e4a58e38bfb82b5d2f",
+    "diagnostic_source_path": "/var/tmp/pr95_diagnostic_source_20261021/module_mp_kdm6_pr95_diagnostic.f90",
+    "diagnostic_gate_patch_path": "docs/evidence/pr95_call_water_budget_20261021/off_column_diagnostic_gates.patch",
+    "diagnostic_gate_patch_sha256": "3c7f41ccb1176b588391e2c05fb66d40ad20b106e16a7a07a632a56b3484ec3c",
+    "diagnostic_source_compressed_path": "/var/tmp/pr95_diagnostic_source_20261021/module_mp_kdm6_pr95_diagnostic.f90.gz",
+    "diagnostic_source_compressed_sha256": "8972b7f699b41cf496f18b014ba0ba41014914a2551f67e4a4cf5a0ccc16233e",
+    "diagnostic_source_compressed_bytes": 66943,
+    "diagnostic_source_retention": "External scratch gzip copy, regenerated from hash-bound C4 preprocessed source plus exactly the two-gate patch"
+  },
+  "execution": {
+    "cwd": "/var/tmp/pr95_kdm6_column_off_20261021/diagrun_enabled",
+    "driver_source_sha256": "ff0a59eb663d6ce68bdc05ca223f7dab44ed1b813f43dd20781b7aa9772dfc02",
+    "executable_sha256": "21d0271d2b501ed1dd869ef675bf43fa481e1e26781deda5f367071c91322642",
+    "run_log_sha256": "d89cf6b8ad7c671b43db893b9df08dc86d4d854d0e535bf178936427976b154c",
+    "returncode": 0,
+    "marker": "REPLAY COMPLETED ONE COLUMN 117 117 141 141",
+    "OMP_NUM_THREADS": "1",
+    "stack_limit": "unlimited"
+  },
+  "post_state_check": {
+    "actual_c4_post_receipt_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+    "field_order": [
+      "TH",
+      "PII",
+      "DEN",
+      "P",
+      "DELZ",
+      "Q",
+      "QC",
+      "QR",
+      "QI",
+      "QS",
+      "QG",
+      "NN",
+      "NC",
+      "NI",
+      "NR",
+      "BG",
+      "DIAGRHOG"
+    ],
+    "comparison": "canonical >f4 raw bytes",
+    "bytes": 2652,
+    "bitwise_equal": true,
+    "actual_column_bytes_sha256": "9b041cc948255d6982e1d670a311e57feaa8733f0e3c0a65c8c88d6d0d33a8f5",
+    "replay_column_bytes_sha256": "9b041cc948255d6982e1d670a311e57feaa8733f0e3c0a65c8c88d6d0d33a8f5"
+  },
+  "water_account": {
+    "measure": "captured DEN * DELZ * receipt-bound map area",
+    "area_m2": 26347542.365178235,
+    "six_water_delta_by_species_kg": {
+      "Q": 6449976.874377267,
+      "QC": -6449987.658816373,
+      "QI": 0.0,
+      "QR": 0.0,
+      "QS": 0.0,
+      "QG": 0.0
+    },
+    "six_water_delta_kg": -10.784439105540514,
+    "actual_bottom_fall_kg": 0.0,
+    "process_stage_subtotals": {"PR67_stage0_to_stage1_QI_storage_delta_kg": 0.0, "PR67_stage1_ice_fall_kg": 0.0, "PR67_stage2_four_phase_bottom_fall_kg": 0.0, "source": "hash-bound one-column diagnostic replay process capture; QI and fall arrays are zero at all 39 levels"},
+    "raw_delta_plus_bottom_kg": -10.784439105540514,
+    "numerical_terms": {
+      "cutoff_cleanup_kg": 0.0,
+      "ice_to_snow_storage_delta_kg": 0.0,
+      "cold_stored_minus_approved_kg": 0.0,
+      "cold_rows": 23,
+      "warm_stored_minus_approved_kg": 0.0,
+      "warm_rows": 16,
+      "ice_sedimentation_R32_kg": 0.0,
+      "graupel_sedimentation_R32_kg": 0.0,
+      "rain_freezing_storage_delta_kg": null,
+      "rain_freezing_ledger": {"expected_path": "pr85_rain_freezing_budget.raw", "status": "NOT_EMITTED"},
+      "cloud_ice_freezing_audit": {"path": "diagrun_enabled/pr85_kdm6_freezing_budget.raw", "sha256_unbound": "505b13370afb9b52f1715c29a2e6d069c461d2885f4c5ce885a604c4d003b8bf", "rows": 5, "row_coverage": "sparse levels 17-19; not declared in replay receipt", "field_19_integrated_column_change_kg": 0.0}
+    },
+    "residual_after_available_terms_kg": -10.784439105540514,
+    "closure_status": "OPEN_UNCOVERED_RAIN_FREEZING_AND_OTHER_PHASE_NUMERICAL_TERMS",
+    "output_ledger_sha256": {
+      "pr85_kdm6_cold_budget.raw": "e1eca1d4a195734314eafcb22f8dfc8d47fe0d35f94d843e75e26f56f6083cfc",
+      "pr85_kdm6_warm_budget.raw": "3ad22c3df93828d3a8369365218a9fcaa5252f7a68d42e29a6b56762092c6f2d",
+      "pr85_kdm6_cutoff_budget.raw": "720e00265bdb9aac44baea2e29fa6714dcd0eaaa94b96a02d2d503cdf96e5924",
+      "pr85_ice_transition_branch.raw": "b6f3cb460c550f3bd0ef9ea9530e60ea3e217833d36521b13a7bae5df27b2960",
+      "pr85_ice_sedimentation_budget.raw": "546c169d7ae1cb3475c6d056cdc7d7a36885652cf08926a6ea63803e1650eaac",
+      "pr85_graupel_sedimentation_budget.raw": "7e0ee09b4d97889691ab3e3a460e84d7645ffbac1e1bb00a6c47e4a78baf06d9"
+    }
+  },
+  "limits": [
+    "Selected one-column state replay passed exact post-state comparison.",
+    "The separate pr85_rain_freezing_budget.raw ledger was not emitted. A sparse five-row PINU/PFRZ cloud-ice audit exists for levels 17–19 (field-19 integrated column change 0 kg), but it is not declared in the replay receipt and does not cover the call. No rain-freezing or liquid-cloud subtotal is assigned.",
+    "Other process/phase numerical residual terms remain uncovered.",
+    "No full-tile or global closure is claimed."
+  ]
+}

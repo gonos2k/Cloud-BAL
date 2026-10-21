@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import hashlib
 import importlib.util
 import json
@@ -10,10 +11,14 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+import netCDF4
+import numpy as np
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import pr87_completed_state_audit as completed_audit  # noqa: E402
 import pr85_joint_stage_trace as stage_trace  # noqa: E402
+from pr87_native_history import _finite  # noqa: E402
 
 FROZEN_AUDITOR_PATH = (
     ROOT / "docs/evidence/pr93_active_ice_20261020/runtime/closed_run_audit.py"
@@ -35,6 +40,12 @@ FULL_STEPS = 30
 DETAIL_STEPS = (60, 90, 180)
 FIELDS = stage_trace.STATE_FIELDS
 EXPECTED_SEQUENCE = tuple(zip(completed_audit.STATE_SEQUENCE, (0, 1, 2, 3, 0, 0), strict=True))
+HISTORY_FIELDS = ("T", "P", "PB", "PH", "PHB", "U", "V", "W", "MU", "MUB")
+HISTORY_START = dt.datetime(2026, 8, 16, 13, 0, 0)
+HISTORY_TIMES = tuple(
+    (HISTORY_START + dt.timedelta(seconds=seconds)).strftime("%Y-%m-%d_%H:%M:%S")
+    for seconds in range(0, 601, 60)
+)
 
 
 class LongrunAuditError(RuntimeError):
@@ -304,6 +315,154 @@ def compare_first_600_seconds(baseline_root: Path, baseline_receipt: dict,
     }
 
 
+def _closed_history_files(root: Path, receipt: dict, label: str) -> list[tuple[Path, str]]:
+    """Resolve only history files named and hashed in the closed receipt."""
+    rows = []
+    for key in ("generated_files", "compressed_outputs", "history_files", "history_outputs"):
+        for row in receipt.get(key, []):
+            if not isinstance(row, dict):
+                continue
+            name = row.get("path", row.get("compressed_path", ""))
+            if Path(name).name.startswith("wrfout_d01_"):
+                rows.append((name, row))
+    unique: dict[str, str] = {}
+    for name, row in rows:
+        digest = row.get("sha256", row.get("compressed_sha256"))
+        if not isinstance(digest, str):
+            raise LongrunAuditError(f"{label}: closed history receipt lacks a hash: {name}")
+        if name in unique and unique[name] != digest:
+            raise LongrunAuditError(f"{label}: conflicting receipt hashes for history: {name}")
+        unique[name] = digest
+    if not unique:
+        raise LongrunAuditError(f"{label}: closed receipt has no WRF history files")
+    files = []
+    for name, expected_hash in sorted(unique.items()):
+        path = root / "run" / name
+        if not path.is_file():
+            raise LongrunAuditError(f"{label}: receipt-bound history file is unavailable: {name}")
+        if frozen.sha256(path) != expected_hash:
+            raise LongrunAuditError(f"{label}: history file differs from closed receipt: {name}")
+        files.append((path, expected_hash))
+    return files
+
+
+def _history_index(paths: list[Path], label: str) -> tuple[dict[str, tuple[Path, int]], dict]:
+    index: dict[str, tuple[Path, int]] = {}
+    metadata = {}
+    for path in paths:
+        try:
+            with netCDF4.Dataset(path) as dataset:
+                if "Times" not in dataset.variables:
+                    raise LongrunAuditError(f"{label}: history is missing Times: {path.name}")
+                times = [value.rstrip("\x00 ") for value in
+                         netCDF4.chartostring(dataset.variables["Times"][:]).tolist()]
+                if not times or not path.name.endswith(times[0]):
+                    raise LongrunAuditError(f"{label}: history filename/time mismatch: {path.name}")
+                for frame, timestamp in enumerate(times):
+                    if timestamp in index:
+                        raise LongrunAuditError(f"{label}: duplicate history timestamp {timestamp}")
+                    index[timestamp] = (path, frame)
+                metadata[path.name] = {
+                    name: (str(dataset.variables[name].dtype),
+                           tuple(dataset.variables[name].dimensions),
+                           tuple(len(dataset.dimensions[dimension])
+                                 for dimension in dataset.variables[name].dimensions
+                                 if dimension != "Time"),
+                           str(getattr(dataset.variables[name], "units", "")),
+                           str(getattr(dataset.variables[name], "stagger", "")))
+                    for name in HISTORY_FIELDS if name in dataset.variables
+                }
+        except OSError as error:
+            raise LongrunAuditError(f"{label}: cannot read history {path.name}: {error}") from error
+    return index, metadata
+
+
+def _history_metadata_signature(index: dict, metadata: dict, label: str) -> dict:
+    if not index:
+        raise LongrunAuditError(f"{label}: no history frames found")
+    signature = None
+    for path, _frame in index.values():
+        current = metadata[path.name]
+        missing = sorted(set(HISTORY_FIELDS) - set(current))
+        if missing:
+            raise LongrunAuditError(f"{label}: history is missing declared fields: {missing}")
+        if signature is None:
+            signature = current
+        elif current != signature:
+            raise LongrunAuditError(f"{label}: history metadata changes between files")
+    return signature or {}
+
+
+def _read_history_values(path: Path, frame: int, label: str) -> tuple[dict, dict]:
+    values, dtypes = {}, {}
+    try:
+        with netCDF4.Dataset(path) as dataset:
+            dataset.set_auto_mask(False)
+            for name in HISTORY_FIELDS:
+                variable = dataset.variables[name]
+                dtypes[name] = str(variable.dtype)
+                # _finite rejects nonfinite values and declared fill/missing sentinels
+                # before any cross-run arithmetic or field transformation.
+                values[name] = _finite(dataset, name, frame)
+    except (OSError, ValueError) as error:
+        raise LongrunAuditError(f"{label}: invalid history frame {path.name}[{frame}]: {error}") from error
+    return values, dtypes
+
+
+def compare_closed_histories(baseline_root: Path, baseline_receipt: dict,
+                             compact_root: Path, compact_receipt: dict,
+                             arm: str) -> dict:
+    """Compare receipt-bound native fields at every common minute through 600 s."""
+    base_files = _closed_history_files(baseline_root, baseline_receipt, f"baseline {arm}")
+    compact_files = _closed_history_files(compact_root, compact_receipt, f"compact {arm}")
+    base_index, base_meta = _history_index([path for path, _ in base_files], f"baseline {arm}")
+    compact_index, compact_meta = _history_index([path for path, _ in compact_files], f"compact {arm}")
+    try:
+        base_signature = _history_metadata_signature(base_index, base_meta, f"baseline {arm}")
+        compact_signature = _history_metadata_signature(compact_index, compact_meta, f"compact {arm}")
+    except LongrunAuditError as error:
+        return {"status": "FAIL", "differences": [str(error)], "compared_timestamps": [],
+                "scope": "Declared native history fields only; metadata validation failed."}
+    if base_signature != compact_signature:
+        return {"status": "FAIL", "differences": ["history dtype, dimensions, units, or stagger metadata differ"],
+                "compared_timestamps": [], "metadata": {"baseline": base_signature,
+                "compact": compact_signature},
+                "scope": "Declared native history fields only; dtype, dimensions, units, and stagger must match exactly."}
+    missing = {"baseline": sorted(set(HISTORY_TIMES) - set(base_index)),
+               "compact": sorted(set(HISTORY_TIMES) - set(compact_index))}
+    timestamps = [time for time in HISTORY_TIMES if time in base_index and time in compact_index]
+    differences = []
+    compared = 0
+    for timestamp in timestamps:
+        base_path, base_frame = base_index[timestamp]
+        compact_path, compact_frame = compact_index[timestamp]
+        try:
+            base_values, base_dtypes = _read_history_values(base_path, base_frame, f"baseline {arm}")
+            compact_values, compact_dtypes = _read_history_values(compact_path, compact_frame, f"compact {arm}")
+        except LongrunAuditError as error:
+            differences.append(str(error))
+            continue
+        for name in HISTORY_FIELDS:
+            if base_dtypes[name] != compact_dtypes[name]:
+                differences.append(f"{timestamp} {name}: original dtype differs")
+            elif base_values[name].shape != compact_values[name].shape:
+                differences.append(f"{timestamp} {name}: dimensions differ")
+            elif not np.array_equal(base_values[name], compact_values[name]):
+                differences.append(f"{timestamp} {name}: values differ")
+        compared += 1
+    for path, expected_hash in base_files:
+        if frozen.sha256(path) != expected_hash:
+            differences.append(f"baseline {arm}: history changed while reading: {path.name}")
+    for path, expected_hash in compact_files:
+        if frozen.sha256(path) != expected_hash:
+            differences.append(f"compact {arm}: history changed while reading: {path.name}")
+    return {"status": "FAIL" if differences else "PASS" if not any(missing.values()) else "INCOMPLETE",
+            "compared_timestamps": timestamps, "compared_frames": compared,
+            "missing_expected_timestamps": missing, "differences": differences,
+            "metadata": base_signature,
+            "scope": "Exact numeric equality per frame for T, P, PB, PH, PHB, U, V, W, MU, and MUB at common 0..600 second history timestamps. Original dtype, dimension names and non-Time extents, units, and stagger are validated; no derived fields or destaggering are included."}
+
+
 def audit_compact_run(root: Path, baseline_root: Path, arm: str, duration_seconds: int) -> dict:
     if arm not in ("OFF", "COUPLED"):
         raise LongrunAuditError("compact longrun audit supports OFF and COUPLED; HYDRO remains a 600-second C4 control")
@@ -371,6 +530,7 @@ def audit_compact_run(root: Path, baseline_root: Path, arm: str, duration_second
                    "completed_steps": len(completed),
                    "retained_state_records": len(profile_rows)}
     prefix = compare_first_600_seconds(baseline_root, baseline_receipt, root, receipt, arm)
+    history = compare_closed_histories(baseline_root, baseline_receipt, root, receipt, arm)
     expected_steps = duration_seconds // 20
     return {
         "schema": "pr94_compact_longrun_audit_v1",
@@ -391,6 +551,7 @@ def audit_compact_run(root: Path, baseline_root: Path, arm: str, duration_second
                                            "counted": False}},
         "compact_profile": profile,
         "first_600_seconds_baseline_comparison": prefix,
+        "closed_history_baseline_comparison": history,
         "generic_completed_state_audit": {"status": "FAIL" if generic_failures else "PASS",
                                            "checked_retained_states": generic_checked,
                                            "failures": generic_failures,
@@ -405,6 +566,7 @@ def audit_compact_run(root: Path, baseline_root: Path, arm: str, duration_second
                                      "scope": "Existing 8-ULP active ice policy on every retained state, reported separately from generic and exact endpoint gates."},
         "scope_limits": [
             "The first 600 seconds compare six state records per step byte-for-byte; later full PRE_RK/RK1/RK2/RK3/PRE_KDM6 records are absent except at detailed snapshots.",
+            "The closed-history comparison covers only T, P, PB, PH, PHB, U, V, W, MU, and MUB at shared minute timestamps through 600 seconds; it does not establish full-state equivalence.",
             "Generic, exact, and active ice checks apply only to retained completed state records; they do not validate omitted later predictors or endpoints.",
             "This offline audit does not read a live binary trace or establish physical neutrality, mass closure, or scientific validity.",
         ],
@@ -430,17 +592,20 @@ def main() -> int:
         parser.error(str(error))
     procedural_complete = (result["compact_profile"]["status"] == "PASS"
                            and result["first_600_seconds_baseline_comparison"]["status"] == "PASS"
+                           and result["closed_history_baseline_comparison"]["status"] == "PASS"
                            and result["runtime_binding"]["status"] == "PASS"
                            and result["runtime"]["duration_complete"])
     print(json.dumps({"procedural_audit_complete": procedural_complete,
                       "compact_profile": result["compact_profile"]["status"],
                       "prefix": result["first_600_seconds_baseline_comparison"]["status"],
+                      "closed_history": result["closed_history_baseline_comparison"]["status"],
                       "generic": result["generic_completed_state_audit"]["status"],
                       "exact": result["exact_source_endpoint_audit"]["status"],
                       "active_ice": result["active_ice_policy_split"]["status"],
                       "duration_complete": result["runtime"]["duration_complete"]}))
     checks = (result["compact_profile"]["status"],
               result["first_600_seconds_baseline_comparison"]["status"],
+              result["closed_history_baseline_comparison"]["status"],
               result["runtime_binding"]["status"])
     return 0 if all(status == "PASS" for status in checks) and result["runtime"]["duration_complete"] else 1
 

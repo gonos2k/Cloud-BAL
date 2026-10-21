@@ -8,6 +8,7 @@ import unittest
 from pathlib import Path
 
 import numpy as np
+import netCDF4
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
@@ -132,6 +133,136 @@ class PrefixComparisonTests(unittest.TestCase):
             self.assertEqual(result["status"], "INCOMPLETE")
             self.assertEqual(result["common_prefix_steps"], 3)
             self.assertEqual(result["compared_state_records"], 18)
+
+
+class ClosedHistoryComparisonTests(unittest.TestCase):
+    timestamps = audit.HISTORY_TIMES[:2]
+    layouts = {
+        "T": ("bottom_top", "south_north", "west_east"),
+        "P": ("bottom_top", "south_north", "west_east"),
+        "PB": ("bottom_top", "south_north", "west_east"),
+        "PH": ("bottom_top_stag", "south_north", "west_east"),
+        "PHB": ("bottom_top_stag", "south_north", "west_east"),
+        "U": ("bottom_top", "south_north", "west_east_stag"),
+        "V": ("bottom_top", "south_north_stag", "west_east"),
+        "W": ("bottom_top_stag", "south_north", "west_east"),
+        "MU": ("south_north", "west_east"),
+        "MUB": ("south_north", "west_east"),
+    }
+
+    def _history(self, path: Path, *, mutate: str | None = None,
+                 dtype_change: str | None = None, units_change: str | None = None,
+                 include_second: bool = True, fill: str | None = None,
+                 stagger_change: str | None = None,
+                 dimension_change: str | None = None,
+                 spatial_extent: int = 2,
+                 time_indices: tuple[int, ...] | None = None) -> dict:
+        times = (tuple(audit.HISTORY_TIMES[index] for index in time_indices)
+                 if time_indices is not None else
+                 self.timestamps if include_second else self.timestamps[:1])
+        with netCDF4.Dataset(path, "w") as ds:
+            ds.createDimension("Time", None)
+            ds.createDimension("DateStrLen", 19)
+            for dimension in {name for dims in self.layouts.values() for name in dims}:
+                ds.createDimension(dimension, spatial_extent)
+            time_var = ds.createVariable("Times", "S1", ("Time", "DateStrLen"))
+            time_var[:] = np.asarray([[value.encode("ascii")[i:i + 1] for i in range(19)]
+                                      for value in times], dtype="S1")
+            for index, (name, dims) in enumerate(self.layouts.items()):
+                dtype = "f8" if name == dtype_change else "f4"
+                variable_dims = tuple(
+                    "west_east" if name == dimension_change and axis == dims[-1] else axis
+                    for axis in dims
+                )
+                var = ds.createVariable(name, dtype, ("Time", *variable_dims), fill_value=-9999.0)
+                var.units = "changed" if name == units_change else ("K" if name == "T" else "Pa")
+                var.stagger = "Y" if name == stagger_change else ("X" if name in ("U", "V", "W") else "")
+                values = np.full((len(times), *(len(ds.dimensions[dim]) for dim in variable_dims)),
+                                 index + 1, dtype=dtype)
+                if name == mutate:
+                    values[1, ...] += 1
+                if name == fill:
+                    values[0, ...] = -9999.0
+                var[:] = values
+        return {"path": path.name, "sha256": audit.frozen.sha256(path)}
+
+    def _compare(self, temp: Path, **compact_options) -> dict:
+        baseline = temp / "baseline"
+        compact = temp / "compact"
+        (baseline / "run").mkdir(parents=True, exist_ok=True)
+        (compact / "run").mkdir(parents=True, exist_ok=True)
+        base_row = self._history(baseline / "run" / ("wrfout_d01_" + self.timestamps[0]), include_second=True)
+        compact_path = compact / "run" / ("wrfout_d01_" + self.timestamps[0])
+        compact_row = self._history(compact_path, **compact_options)
+        base_receipt = {"generated_files": [base_row]}
+        compact_receipt = {"generated_files": [compact_row]}
+        return audit.compare_closed_histories(baseline, base_receipt, compact,
+                                              compact_receipt, "OFF")
+
+    def test_compares_real_netcdf_fields_and_reports_missing_timestamps(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._compare(Path(directory), include_second=False)
+        self.assertEqual(result["status"], "INCOMPLETE")
+        self.assertEqual(result["compared_frames"], 1)
+        self.assertEqual(result["missing_expected_timestamps"]["baseline"],
+                         list(audit.HISTORY_TIMES[2:]))
+        self.assertEqual(result["missing_expected_timestamps"]["compact"],
+                         list(audit.HISTORY_TIMES[1:]))
+        self.assertEqual(result["differences"], [])
+
+    def test_rejects_changed_spatial_extent_but_allows_different_time_lengths(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._compare(Path(directory), spatial_extent=3)
+        self.assertEqual(result["status"], "FAIL")
+        self.assertIn("metadata", result["differences"][0])
+
+    def test_rejects_changed_spatial_extent_between_files_in_one_arm(self):
+        with tempfile.TemporaryDirectory() as directory:
+            temp = Path(directory)
+            baseline, compact = temp / "baseline", temp / "compact"
+            (baseline / "run").mkdir(parents=True)
+            (compact / "run").mkdir(parents=True)
+            base_rows = [
+                self._history(baseline / "run" / ("wrfout_d01_" + audit.HISTORY_TIMES[index]),
+                              spatial_extent=extent, time_indices=(index,))
+                for index, extent in ((0, 2), (1, 3))
+            ]
+            compact_row = self._history(
+                compact / "run" / ("wrfout_d01_" + audit.HISTORY_TIMES[0]),
+                time_indices=(0, 1))
+            result = audit.compare_closed_histories(
+                baseline, {"generated_files": base_rows}, compact,
+                {"generated_files": [compact_row]}, "OFF")
+        self.assertEqual(result["status"], "FAIL")
+        self.assertIn("metadata changes between files", result["differences"][0])
+
+    def test_detects_field_value_change_at_shared_frame(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._compare(Path(directory), mutate="U")
+        self.assertEqual(result["status"], "FAIL")
+        self.assertTrue(any(audit.HISTORY_TIMES[1] in item and "U" in item
+                            for item in result["differences"]))
+
+    def test_rejects_dtype_or_attribute_changes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._compare(Path(directory), dtype_change="T")
+        self.assertEqual(result["status"], "FAIL")
+        self.assertIn("metadata", result["differences"][0])
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._compare(Path(directory), units_change="P")
+        self.assertEqual(result["status"], "FAIL")
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._compare(Path(directory), stagger_change="U")
+        self.assertEqual(result["status"], "FAIL")
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._compare(Path(directory), dimension_change="U")
+        self.assertEqual(result["status"], "FAIL")
+
+    def test_finite_reader_rejects_declared_fill_before_compare(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = self._compare(Path(directory), fill="MU")
+        self.assertEqual(result["status"], "FAIL")
+        self.assertIn("sentinel", result["differences"][0])
 
 
 if __name__ == "__main__":

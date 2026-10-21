@@ -4,6 +4,7 @@ import importlib.util
 from pathlib import Path
 
 import numpy as np
+import netCDF4
 
 MODULE = Path(__file__).resolve().parents[1] / "tools/pr94_cloud_response.py"
 spec = importlib.util.spec_from_file_location("pr94_cloud_response", MODULE)
@@ -112,3 +113,49 @@ def test_support_refuses_outer_ring_negative_index_wrapping() -> None:
     composition = {"targets": [{"target_i0": 0, "target_j0": 2, "native_levels": []}]}
     with np.testing.assert_raises_regex(ValueError, "cropped active grid"):
         cloud.make_masks(composition, (39, 10, 10))
+
+
+def _wind_history(path: Path, field: str, attribute: str, value: float) -> None:
+    with netCDF4.Dataset(path, "w") as ds:
+        for name, size in (("Time", 1), ("k", 2), ("j", 4), ("i", 4)):
+            ds.createDimension(name, size)
+        for name in ("U", "V", "W"):
+            kwargs = {"fill_value": value} if attribute == "_FillValue" else {}
+            var = ds.createVariable(name, "f8", ("Time", "k", "j", "i"), **kwargs)
+            var[:] = 2.0
+            if attribute == "missing_value":
+                var.missing_value = value
+            if name == field:
+                var[0, 0, 1, 1] = value
+
+
+def test_face_winds_validate_each_field_and_sentinel_attribute(tmp_path: Path) -> None:
+    for field in ("U", "V", "W"):
+        for attribute, value in (("_FillValue", -8888.0), ("missing_value", -9999.0)):
+            path = tmp_path / f"{field}_{attribute}.nc"
+            _wind_history(path, field, attribute, value)
+            with np.testing.assert_raises_regex(ValueError, f"{field} contains declared {attribute} sentinel"):
+                cloud.read_face_winds(path, 0)
+
+    valid_path = tmp_path / "valid.nc"
+    _wind_history(valid_path, "U", "missing_value", -9999.0)
+    with netCDF4.Dataset(valid_path, "a") as ds:
+        ds["U"][0, 0, 1, 1] = 2.0
+    valid = cloud.read_face_winds(valid_path, 0)
+    assert all(np.all(values == 2.0) for values in valid.values())
+
+    for field in ("U", "V", "W"):
+        for bad in (np.nan, np.inf):
+            path = tmp_path / f"{field}_{'nan' if np.isnan(bad) else 'inf'}.nc"
+            _wind_history(path, field, "missing_value", -9999.0)
+            with netCDF4.Dataset(path, "a") as ds:
+                ds[field][0, 0, 1, 1] = bad
+            with np.testing.assert_raises_regex(ValueError, f"{field} contains nonfinite"):
+                cloud.read_face_winds(path, 0)
+
+    # Identical sentinels in both arms must fail at the reader before subtraction.
+    for arm in ("OFF", "COUPLED"):
+        path = tmp_path / f"{arm}_sentinel.nc"
+        _wind_history(path, "U", "missing_value", -9999.0)
+        with np.testing.assert_raises_regex(ValueError, "U contains declared missing_value sentinel"):
+            cloud.read_face_winds(path, 0)

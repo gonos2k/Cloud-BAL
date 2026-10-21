@@ -1,0 +1,102 @@
+{
+  "schema": "pr95_runtime_text_observation_v1",
+  "recorded_utc": "2026-10-21T04:19:14.068970+00:00",
+  "base_commit": "7c2d1e295c1930d64a98e9602c36289aabb1d440",
+  "arms": {
+    "OFF": {
+      "requested_seconds": 3600,
+      "run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/OFF_3600s_c4_compact",
+      "status": "NO_CLOSED_RECEIPT_PROCESS_PRESENT",
+      "final_receipt": null,
+      "observed_last_model_timestamp": "2026-08-16_13:09:40",
+      "observed_timing_rows": 29,
+      "observed_text_log_sha256": "1891934a06dc0566d4c63b3a8c14b0790fe153f444ae86865f3add1de2f223f4",
+      "text_observation_scope": "Snapshot of text log only; not a completed-state or full requested-duration audit.",
+      "preflight_sha256": "8a327fcb04e0635979d37b2c5c87b6019c4a92eb55a971b6e7c28edc798c06c4",
+      "candidate_executable_sha256": "3eea34b73a1ac3a7c0dfb121968e82fa764e65eeeee0df75c79e8bba27641bac",
+      "observed_last_timing_line": "Timing for main: time 2026-08-16_13:09:40 on domain 1: 621.06232 elapsed seconds",
+      "observed_text_log_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/OFF_3600s_c4_compact/run/rsl.error.0000",
+      "observed_text_log_bytes": 48126,
+      "observed_text_log_stable_during_read": true,
+      "process_snapshot": [
+        {
+          "pid": 2967681,
+          "state": "S",
+          "comm": "bash",
+          "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/OFF_3600s_c4_compact/run",
+          "cwd_sha256": "861e66cf42e0e2986683fec867a0d9789d039fab03e6c501aa55186a2f4bfac8"
+        },
+        {
+          "pid": 2968052,
+          "state": "I",
+          "comm": "wrf.exe",
+          "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/OFF_3600s_c4_compact/run",
+          "cwd_sha256": "861e66cf42e0e2986683fec867a0d9789d039fab03e6c501aa55186a2f4bfac8"
+        }
+      ],
+      "snapshot_scope": "Plaintext timing and /proc process/cwd snapshot only; no closed run receipt, no completed-state or requested-duration audit. Process presence/state does not establish forward progress."
+    },
+    "COUPLED": {
+      "requested_seconds": 3600,
+      "run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/COUPLED_3600s_c4_compact",
+      "status": "NO_CLOSED_RECEIPT_PROCESS_PRESENT",
+      "final_receipt": null,
+      "observed_last_model_timestamp": "2026-08-16_13:09:40",
+      "observed_timing_rows": 29,
+      "observed_text_log_sha256": "011423c0a7e96bac5060c3a79bf6fd1510331049874a54c2f7b8e9a89bb4c8dd",
+      "text_observation_scope": "Snapshot of text log only; not a completed-state or full requested-duration audit.",
+      "preflight_sha256": "6b7ef2238e9a220fd06c9821b98eaf2c23b8e36797018b9b3f9634670c713524",
+      "candidate_executable_sha256": "3eea34b73a1ac3a7c0dfb121968e82fa764e65eeeee0df75c79e8bba27641bac",
+      "observed_last_timing_line": "Timing for main: time 2026-08-16_13:09:40 on domain 1: 613.49622 elapsed seconds",
+      "observed_text_log_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/COUPLED_3600s_c4_compact/run/rsl.error.0000",
+      "observed_text_log_bytes": 48126,
+      "observed_text_log_stable_during_read": true,
+      "process_snapshot": [
+        {
+          "pid": 2967997,
+          "state": "S",
+          "comm": "bash",
+          "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/COUPLED_3600s_c4_compact/run",
+          "cwd_sha256": "6c51f0e2ca72eae5e7442aa03e24c94b20e3f21073596f706e6a93f1d16a6f87"
+        },
+        {
+          "pid": 2968354,
+          "state": "I",
+          "comm": "wrf.exe",
+          "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/COUPLED_3600s_c4_compact/run",
+          "cwd_sha256": "6c51f0e2ca72eae5e7442aa03e24c94b20e3f21073596f706e6a93f1d16a6f87"
+        }
+      ],
+      "snapshot_scope": "Plaintext timing and /proc process/cwd snapshot only; no closed run receipt, no completed-state or requested-duration audit. Process presence/state does not establish forward progress."
+    },
+    "HYDRO": {
+      "requested_seconds": 600,
+      "run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/HYDRO_600s_c4_current",
+      "status": "INCOMPLETE_RECEIPT_CLOSED",
+      "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr94_physics_20261021/runs_on_lustre/HYDRO_600s_c4_current/receipt.json",
+      "receipt_sha256": "785205ab3fdfd8c070d01376939a8ed120f9f5f5bb2535e0c8fee31f9400ccb2",
+      "receipt_capture_utc": "2026-10-21T04:17:29+00:00",
+      "returncode": 128,
+      "completed_model_seconds": 500,
+      "completed_calls": 25,
+      "last_completed_model_timestamp": "2026-08-16_13:08:20",
+      "maximum_seen_timestep": 26,
+      "fatal": "KDM6 invalid base before nongraupel admission",
+      "fatal_text_artifact": {
+        "path": "run/rsl.error.0000.gz",
+        "compressed_sha256": "ee44b37196e872c2f4b66b155f108b5863dafec82cb72209e01451d11f9fa0ad",
+        "expanded_sha256": "2b82cab5a108aa37255668c0ff886f062a00580e38b03dd8d47db2305cf0514c"
+      },
+      "candidate_executable_sha256": "20aaa6058797e7d1ec7a874ae92ed44f9ac19876ef2f14477b5eedb6a1ae44be",
+      "executable_receipt_binding": "candidate build, expected executed executable, and executed executable hashes agree",
+      "candidate_input_receipt_sha256": "967a481070c37286f6aef8d616679583f1c86afb7dd60ac64f1d411977eba39b",
+      "candidate_input_unchanged": true,
+      "changed_staged_inputs": [],
+      "changed_original_inputs": [],
+      "closed_receipt_scope": "No 600-second completion; fatal text is hash-bound. No live binary or history data were read."
+    }
+  },
+  "new_model_requests": 0,
+  "live_binary_or_history_read": false,
+  "physical_approval": "OPEN"
+}
