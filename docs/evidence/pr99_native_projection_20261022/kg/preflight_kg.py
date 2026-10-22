@@ -11,6 +11,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True
+
 SOURCE = Path(__file__).resolve().parents[4]
 ROOT = SOURCE.parents[2]
 MAINT = ROOT / "Cloud-BAL"

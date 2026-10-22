@@ -2,6 +2,8 @@
 
 `preflight_kg.py` validates PR99 source and runtime evidence without writes. `apply_kg.py` converts that verified snapshot into the pinned PR98 engine plan. The command requires an explicit mode; applying requires the exact plan hash from a root-reviewed check-only result. Graph updates use the immutable PR98 engine, followed by guarded PR99 report and receipt corrections.
 
+Both entry points disable bytecode-cache writes before loading the pinned helpers. Runtime gate states are evidence labels; an `OPEN` or `INCOMPLETE` label does not authorize application. Root approves a fresh plan only after the diagnostic process has closed and its final integration manifest is reviewed.
+
 Run after the PR99 source work is committed and reviewed, the checkout is clean, and the root-owned integration manifest is finalized:
 
 ```sh

@@ -13,6 +13,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True
+
 HERE = Path(__file__).resolve().parent
 PREFLIGHT = HERE / "preflight_kg.py"
 
