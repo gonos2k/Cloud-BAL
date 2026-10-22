@@ -1,0 +1,24 @@
+PR100 full-tile snow / graupel-melt independent review
+Date: 2026-10-22
+Scope: read-only review of the frozen private C1 first-call package. No build, replay, forecast, checkout edit, or KG action.
+
+Reviewed inputs and pins
+- README: /var/tmp/pr100_snow_replay_20261022/README.txt SHA256 0b07d448dd9a0b4a8672c314443658c3c34655761491dbdf06dfceeaebeeb92a
+- Account: fulltile_snow_graupel_account.json SHA256 0715342c13166296bc16b4a10fdec4328f7bade8b0d84fed44da43e6e8651f1a
+- Provenance: fulltile_snow_graupel_provenance.json SHA256 072bcadba671b046379db19e716c4a11e83f6389b3bda58a12e5a4c8ba05a02e
+- Reducer: reduce_fulltile_snow_graupel.py SHA256 62e15fdcdc1bdbd66597c7fa20c18134fc49e5518d26f04f44e7c7321be640e5
+- Bundle SHA256SUMS SHA 2a4c9e6246633c9e22c1bb29e3229edd8e2deb897031eb9b1a300347dd56db99; all listed entries verified with sha256sum -c.
+- Instrumented two-column source SHA 4c99b0a9408cd55f86f275e25fd18c70ca6a59e91674d5e89c1ada355b06cf1b; full-tile source and generation are pinned in provenance. Final executable SHA fffa3eb851612e3b6689dc7d29d698072c1d7111d4752731a6ea2c5317f51d55; link map SHA 9372e253dec40415e7e4d7c80f1521f5d89aaf469114784a66d5ae93e0aa78c7.
+
+Findings
+1. The final full-tile binary is consistently bound to OFF/HYDRO/COUPLED: all three run receipts and account identities show the same executable SHA; each run returned 0, emitted 64,960 unique compact columns and 156 selected-cell QS events, and the replay post dump matches the native post dump for the stated 17 fields plus XLAND. The link-map excerpt attributes KDM6/KDM62D and PR100 observer symbols to the generated full-tile object. The earlier OFF no-map run is explicitly classified invalid due to missing observer rows and is excluded.
+2. The three input states and histories are separately hashed. Reduction reuses each arm's v5 compact stage capture only after checking its listed input inventory, and reconstitutes the prior v5 remainder before applying the new QS and graupel-melt terms. I checked the reported selected-column equations: at (169,227), 22.5885860012 - 22.2288861867 - 0.3609073024 = -0.0012074879 kg; at (146,215), -20.1782844996 - (-17.3484246378) - (-1.4497822018) = -1.3800776601 kg. These agree with the report.
+3. The accounting keeps actual stored QS endpoint deltas separate from approved source packets and their difference. The source hooks use pre/post state operands and the R64 promoted source terms; map area is applied once in the reducer with the fixed DEN*DELZ weights. The source places the separate QS bottom flux at the outer-loop ground block; reported bottom arrays are zero for all three arms, and loop count is one per column. The report does not fold bottom fall into the sedimentation packet.
+4. Graupel melt is correctly separated from the earlier QC/QR/QS melt stage. Source inspection confirms the candidate QG and QR packet components are equal and opposite, alpha is applied to each, and source commits the resulting species endpoints only when alpha is positive. The reducer checks represented R32 proposed/approved pair arithmetic, actual QG/QR endpoint deltas, and the source-order residual independently. All logged approved pair sums are zero in R32, while stored endpoint reductions are nonzero; the report appropriately calls the latter actual stored change and does not label it pure cast loss.
+5. The reported all-domain signed remainder worsens after these terms are added, while column L1 and max absolute residual improve. The package explicitly leaves closure OPEN and does not assign the remaining residual. Scope remains a private T1 C1 first-call replay over the full active tile; it is not C2 evidence, a complete history, or full closure.
+
+Limits / caveat
+- Final compile and link return codes were not separately persisted. The package correctly does not assert those return codes. The object/executable hashes, map ownership, and successful three-arm invocations support the artifacts' use, but explicit final compile/link RC evidence is absent.
+- The full tile is not the exact 613-cell vertical support used by the focused comparison; the README states that limitation. No whole-domain process attribution should be inferred from these reductions.
+
+Disposition: no blocking arithmetic, role, arm-binding, or interpretation issue found in the reviewed package. Preserve the explicit compile/link-RC caveat and OPEN residual status.

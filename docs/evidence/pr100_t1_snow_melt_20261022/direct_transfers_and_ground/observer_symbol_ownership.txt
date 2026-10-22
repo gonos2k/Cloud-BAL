@@ -1,0 +1,96 @@
+PR100 diagnostic executable map symbol-ownership excerpt
+
+Full private map: /var/tmp/pr100_unowned_diag_build2_20261022/link/pr100_unowned_replay.map
+Full private map SHA256: c98fb4ca6a58e3ad0d0c3fedf7f67fa293155604f26d79d6b901961d898ea869
+Diagnostic object SHA256 (private): a043fcb3dc06825bb3841b429df37e288ac0583320a06ec309397e449d867a30
+Diagnostic executable SHA256 (private): 34a97616c17839148f035e40130ded6b19f97bd32dcd5fa7471970225e572647
+
+The following GNU ld map excerpt associates the actual KDM6 and KDM62D entry points and observer entry points with that generated object:
+                0x000000000041b4e0                module_mp_kdm6_mp_kdm6_progb_density_pair_valid_
+                0x000000000041b650                module_mp_kdm6_mp_kdm6_refresh_graupel_intercept_
+                0x000000000041b840                module_mp_kdm6_mp_pr84_ice_entry_ceiling_
+                0x000000000041bd10                module_mp_kdm6_mp_classify_species_state_
+                0x000000000041bdc0                module_mp_kdm6_mp_validate_kdm6_species_states_
+                0x000000000041c260                module_mp_kdm6_mp_validate_kdm6_slope_states_
+                0x000000000041ca40                module_mp_kdm6_mp_validate_local_species_states_
+                0x000000000041cd00                module_mp_kdm6_mp_require_paired_state_
+                0x000000000041cd70                module_mp_kdm6_mp_checked_substep_count_
+                0x000000000041cea0                module_mp_kdm6_mp_moist_to_dry_density_
+                0x000000000041cf40                module_mp_kdm6_mp_dry_to_gas_density_
+                0x000000000041d030                module_mp_kdm6_mp_specific_number_to_volume_
+                0x000000000041d100                module_mp_kdm6_mp_volume_number_to_specific_
+                0x000000000041d1d0                module_mp_kdm6_mp_kdm6_mass_volume_rate_
+                0x000000000041d290                module_mp_kdm6_mp_kdm6_rain_process_fraction_
+                0x000000000041eb50                module_mp_kdm6kdm6_rain_process_fraction_mp_refine_valid_interval_
+                0x000000000041ec60                module_mp_kdm6kdm6_rain_process_fraction_mp_add_breakpoint_
+                0x000000000041ed00                module_mp_kdm6kdm6_rain_process_fraction_mp_sort_breakpoints_
+                0x000000000041ee00                module_mp_kdm6kdm6_rain_process_fraction_mp_no_storable_rain_interval_
+                0x000000000041f200                module_mp_kdm6kdm6_rain_process_fraction_mp_interval_constraints_
+                0x00000000004201e0                module_mp_kdm6kdm6_rain_process_fraction_mp_clip_
+                0x00000000004202e0                module_mp_kdm6kdm6_rain_process_fraction_mp_validate_trial_
+                0x00000000004207d0                module_mp_kdm6_mp_kdm6_rain_ng_pair_valid_
+                0x0000000000420910                module_mp_kdm6_mp_kdm6_unreconstructed_rain_output_valid_
+                0x0000000000420de0                module_mp_kdm6_mp_kdm6_rain_process_state_valid_
+                0x0000000000421cc0                module_mp_kdm6_mp_kdm6_ice_ng_pair_contract_
+                0x0000000000421fb0                module_mp_kdm6_mp_constrain_process_margin_
+                0x0000000000422010                module_mp_kdm6_mp_kdm6_shared_pair_fraction_
+                0x0000000000422180                module_mp_kdm6_mp_kdm6_
+                0x0000000000426b90                module_mp_kdm6_mp_pr87_report_graupel_consumer_
+                0x0000000000426f00                module_mp_kdm6_mp_kdm6_trace_dump_
+                0x0000000000428010                module_mp_kdm6_mp_kdm62d_
+                0x0000000000467930                module_mp_kdm6_mp_gammln_
+                0x0000000000467a20                module_mp_kdm6_mp_rgmma_
+                0x0000000000467b20                module_mp_kdm6_mp_fpvs_
+                0x0000000000467c00                module_mp_kdm6_mp_kdm6init_
+                0x000000000046bdd0                module_mp_kdm6_mp_progb_param_
+                0x000000000046ce10                module_mp_kdm6_mp_slope_kdm6_
+                0x000000000046db60                module_mp_kdm6_mp_kdm6_velocity_rates_
+                0x000000000046dfb0                module_mp_kdm6_mp_slope_rain_
+                0x000000000046e380                module_mp_kdm6_mp_nislfv_rain_plmr_
+                0x0000000000470ab0                module_mp_kdm6_mp_refl10cm_kdm6_
+                0x00000000004727a0                module_mp_kdm6_mp_effectrad_kdm6_
+                0x0000000000473bc0                module_mp_kdm6_mp_pr77_scan_entry_state_
+                0x0000000000474630                module_mp_kdm6_mp_pr77_scan_slope_state_
+                0x0000000000474bc0                module_mp_kdm6_mp_pr77_scan_local_state_
+                0x0000000000474c90                module_mp_kdm6_mp_pr77_count_state_
+                0x0000000000474d80                module_mp_kdm6_mp_pr77_record_first_
+                0x0000000000475200                module_mp_kdm6_mp_pr99_total_checkpoint_
+                0x00000000004756a0                module_mp_kdm6_mp_pr100_snow_record_
+                0x0000000000475e10                pr85_kdm6_paired_sediment_column_
+                0x00000000004781e0                pr100_norm_write_columns_
+                0x0000000000478500                pr100_unowned_write_columns_
+                0x00000000004788b0                pr100_unowned_event_
+                0x0000000000479060                pr100_norm_observe_
+                0x0000000000479160                pr93_kdm6_pair_in_cone_
+                0x0000000000479260                pr85_kdm6_psd_bound_number_
+                0x0000000000479e30                pr85_kdm6_rain_freezing_packet_
+                0x000000000047a4a0                pr85_kdm6_freezing_packet_
+                0x000000000047ab10                pr85_kdm6_subthreshold_melt_
+                0x000000000047b050                pr85_kdm6_paired_sediment_column_IP_paired_
+                0x000000000047b0e0                pr85_kdm6_paired_sediment_column_IP_graupel_state_valid_
+                0x000000000047b1e0                pr85_kdm6_paired_sediment_column_IP_rain_state_valid32_
+                0x000000000047b3b0                pr85_kdm6_paired_sediment_column_IP_rain_state_valid64_
+                0x000000000047b510                pr85_kdm6_paired_sediment_column_IP_add_partition_point_
+                0x000000000047b5f0                pr85_kdm6_paired_sediment_column_IP_search_graupel_partitions_
+                0x000000000047c2a0                pr85_kdm6_paired_sediment_column_IP_commit_face_
+                0x000000000047c9c0                pr85_kdm6_paired_sediment_column_IP_candidate_
+                0x000000000047d640                pr85_kdm6_paired_sediment_column_IP_ulp32_
+                0x000000000047d6e0                pr85_kdm6_paired_sediment_column_IP_safe_ratio_
+                0x000000000047d790                pr85_kdm6_paired_sediment_column_IP_approve_packet_
+                0x000000000047d7e0                pr85_kdm6_paired_sediment_column_IP_backtrack_packet_
+                0x000000000047db00                pr85_kdm6_subthreshold_melt_IP_try_category_
+                0x000000000047dd40                pr85_kdm6_subthreshold_melt_IP_paired_
+                0x000000000047dd80                pr85_kdm6_rain_freezing_packet_IP_candidate_
+                0x000000000047e3f0                pr85_kdm6_rain_freezing_packet_IP_change_matches_
+                0x000000000047e4e0                pr85_kdm6_rain_freezing_packet_IP_endpoint_ulp_
+                0x000000000047e540                pr85_kdm6_rain_freezing_packet_IP_paired_
+                0x000000000047e580                pr85_kdm6_rain_freezing_packet_IP_rain_cone_
+                0x000000000047e680                pr85_kdm6_rain_freezing_packet_IP_graupel_cone_
+                0x000000000047e730                pr100_snow_kahan_
+                0x000000000047e760                pr100_snow_write_columns_
+                0x000000000047ed20                pr100_unowned_kahan_
+                0x000000000047ed50                pr85_kdm6_freezing_packet_IP_candidate_
+                0x000000000047f380                pr85_kdm6_freezing_packet_IP_change_matches_packet_
+                0x000000000047f470                pr85_kdm6_freezing_packet_IP_endpoint_ulp_
+                0x000000000047f4c0                pr85_kdm6_freezing_packet_IP_paired_
+                0x000000000047f500                pr100_snow_compact_event_

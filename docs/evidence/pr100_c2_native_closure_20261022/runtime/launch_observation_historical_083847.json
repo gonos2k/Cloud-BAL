@@ -1,0 +1,140 @@
+{
+  "schema": "pr99_c2_matched640_launch_observation_v1",
+  "observed_utc": "2026-10-22T08:38:47.238289+00:00",
+  "launch_record_path": "/var/tmp/pr99_c2_matched640_launches_20261022.json",
+  "launch_record_sha256": "7b0be338ce1d25919c2377372bbb2c0539928a1b901f2e043b1b5afd2929a775",
+  "failed_setup_attempt_path": "/var/tmp/pr99_c2_launch_shell_setup_attempt_20261022.json",
+  "failed_setup_attempt_sha256": "6fc1ccb095b61de84dcf72986a3fd0e44a3c1a804a0914d216fb947ca3065216",
+  "status": "ALL_THREE_RUNNERS_ACTIVE_PREFLIGHTS_AND_STAGE_HASHES_MATCH",
+  "arms": [
+    {
+      "arm": "OFF",
+      "runner_pid": 1311834,
+      "runner_process": "1311834       1 Ssl        00:30",
+      "utc_before_launch": "2026-10-22T08:38:16.387070+00:00",
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF",
+      "preflight_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF/preflight.json",
+      "preflight_sha256": "3d64c75c70f568fe59f8e42c620811c235b274f29f1ade123537e0fc2392ee2c",
+      "launch_provenance_sha256": "1ada6ed300899eaed893da821d3d7d6547f59acb3dbeb1d7a3ac3ac6bdd25a2f",
+      "runner_source_sha256": "80803b6b3e8591053d0524ed9e5b0110dfd7cbf1d105d2e40029addb5f5a55c4",
+      "preflight_duration_seconds": 640,
+      "preflight_expected_timesteps": 32,
+      "candidate_build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+      "candidate_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+      "candidate_namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+      "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "hydro_input_receipt_sha256": null,
+      "staged_hashes": {
+        "wrf.exe": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+        "wrfinput_d01": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+        "wrfbdy_d01": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "namelist.input": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8"
+      },
+      "launcher_stderr_bytes": 0,
+      "append_file_metadata_only": {
+        "rsl.out.0000": {
+          "bytes": 44633,
+          "mtime_ns": 1792658305000000000
+        },
+        "rsl.error.0000": {
+          "bytes": 44599,
+          "mtime_ns": 1792658305000000000
+        },
+        "candidate_run.log": {
+          "bytes": 49,
+          "mtime_ns": 1792658299000000000
+        }
+      }
+    },
+    {
+      "arm": "HYDRO",
+      "runner_pid": 1311835,
+      "runner_process": "1311835       1 Ssl        00:31",
+      "utc_before_launch": "2026-10-22T08:38:16.388704+00:00",
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO",
+      "preflight_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO/preflight.json",
+      "preflight_sha256": "875de6cf8765339c02b5f625151411465e0b199813aa8e6e5386e30beefad7b0",
+      "launch_provenance_sha256": "7980dfc6c34b2c56effb64124baeb87dabd251615a6b80cd1c414a737c609065",
+      "runner_source_sha256": "80803b6b3e8591053d0524ed9e5b0110dfd7cbf1d105d2e40029addb5f5a55c4",
+      "preflight_duration_seconds": 640,
+      "preflight_expected_timesteps": 32,
+      "candidate_build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+      "candidate_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+      "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+      "candidate_namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+      "candidate_wrfinput_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "hydro_input_receipt_sha256": "967a481070c37286f6aef8d616679583f1c86afb7dd60ac64f1d411977eba39b",
+      "staged_hashes": {
+        "wrf.exe": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+        "wrfinput_d01": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+        "wrfbdy_d01": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "namelist.input": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8"
+      },
+      "launcher_stderr_bytes": 0,
+      "append_file_metadata_only": {
+        "rsl.out.0000": {
+          "bytes": 44633,
+          "mtime_ns": 1792658306000000000
+        },
+        "rsl.error.0000": {
+          "bytes": 44599,
+          "mtime_ns": 1792658306000000000
+        },
+        "candidate_run.log": {
+          "bytes": 49,
+          "mtime_ns": 1792658301000000000
+        }
+      }
+    },
+    {
+      "arm": "COUPLED",
+      "runner_pid": 1311836,
+      "runner_process": "1311836       1 Ssl        00:31",
+      "utc_before_launch": "2026-10-22T08:38:16.390186+00:00",
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED",
+      "preflight_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED/preflight.json",
+      "preflight_sha256": "19941e93fa9dc7d7f7e840ae80021bd2017ed034072d71871a7cc904a2e0edb3",
+      "launch_provenance_sha256": "f53bea2d14623c7f3ce53f85553714359ed13afd12ed3a31b7874d4df57e3aa6",
+      "runner_source_sha256": "80803b6b3e8591053d0524ed9e5b0110dfd7cbf1d105d2e40029addb5f5a55c4",
+      "preflight_duration_seconds": 640,
+      "preflight_expected_timesteps": 32,
+      "candidate_build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+      "candidate_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+      "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+      "candidate_namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+      "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "hydro_input_receipt_sha256": null,
+      "staged_hashes": {
+        "wrf.exe": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+        "wrfinput_d01": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+        "wrfbdy_d01": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "namelist.input": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8"
+      },
+      "launcher_stderr_bytes": 0,
+      "append_file_metadata_only": {
+        "rsl.out.0000": {
+          "bytes": 44633,
+          "mtime_ns": 1792658305000000000
+        },
+        "rsl.error.0000": {
+          "bytes": 44599,
+          "mtime_ns": 1792658305000000000
+        },
+        "candidate_run.log": {
+          "bytes": 49,
+          "mtime_ns": 1792658299000000000
+        }
+      }
+    }
+  ]
+}

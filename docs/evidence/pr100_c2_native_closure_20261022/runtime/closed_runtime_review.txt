@@ -1,0 +1,54 @@
+PR100 C2 closed runtime audit and bounded reducer source review
+Date: 2026-10-22
+Review type: read-only; no model, build, trace replay, or reducer execution.
+
+Closed audit identity
+- Result: /var/tmp/pr100_c2_closed_results_20261022.json
+- SHA256: 7db371d79162c795a4be66ae92bbef2b4652fac97da11db423328ae007903fc9
+- Schema/candidate: pr99_c2_closed_audit_v1 / PR99-C2
+- Driver path/hash: /var/tmp/pr99_c2_closed_audit_20261022.py / 6c85d05da948c2911a4d4c30c35f0c64eca0676401006650e4b375593eea6ccf
+- Build receipt: 9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb
+- Executable: 387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a
+- Reviewed preflight / root launch GO: e5ebd3fe173ec8deee525d2553a347f88ff86a68041f6fc2fac8fbd7df4554a1 / 5420c264a6dabf1361e6ff4b0e448efdeee9b0f51811fcef79cb894005760363.
+
+Findings
+- All three arm identities are PASS and bind the same executable/build, arm-specific receipt and input, and matching C1 inputs. HYDRO's separately receipt-bound native input is independently reported PASS.
+- OFF, HYDRO, and COUPLED each report COMPLETE, return code 0, all 32 steps, final step 32, and the 620-second POST_KDM6 state. All three have 180 matched first-600 trace state records over 30 steps, 11 matched history frames through 600 seconds, and exact identity for the first-call pre, post, and PR67 payloads.
+- The existing generic Q/N/B audit remains FAIL with 173 OFF, 171 HYDRO, and 171 COUPLED violations across 192 inspected states per arm. The source endpoint audit and active-ice policy audit are PASS for all three arms. These results support procedural completion and C1 regression comparison, not physical acceptance: top-level disposition remains FAIL_OPEN and each arm's regression approval is READY_FOR_REVIEW.
+- The audit's classifications remain separated: first-600 equivalence, history equivalence, first-call identity, source endpoint checks, active-ice policy, and generic Q/N/B checks are separate outputs. The generic failure must remain visible in any summary; do not phrase procedural PASS or regression READY_FOR_REVIEW as overall success.
+
+Bounded runtime bundle cross-check
+- Runtime inventory SHA256SUMS passed for all listed files at review time.
+- Copied receipts: OFF c4174b0363dc3b6eb5117ae1e011e9bee0f4f70d090036c607331fac7b0d1f8d; HYDRO 1440db5a0178af11ac4d92854b3284cc35cb5a74e5e6f6a14cc59dcac3a00a64; COUPLED 0a7e1c3bcce58dea8433e9bffa615395d923cd05377c5068469af5dba29759cb. These match the audit result's receipt pins.
+- The runtime bundle's build_summary.json is a historical 08:38 launch-time snapshot. Its reviewed_inputs auditor SHA 6b1d78db... names the then-current driver, while the final published closed_audit_driver.py SHA is 6c85d05d.... Preserve the historical summary and explain the final driver separately; the old RUNNING/pending text in the bundle README needs replacement/clarification in the final disposition.
+- The copied README's prior claim that the audit had not run and bulk reducer was not run was accurate when prepared, but is now stale. The reducer v3 was subsequently attempted and failed safely at receipt-schema binding before ledger reads; preserve that failure as historical, not as a C2 data finding.
+
+Portable QC source fixture
+- `tests/fixtures/pr100_qc_source_anchors.txt` is explicitly a noncompilable excerpt pinned to source SHA 7aa8f40732065d55eee8b23f70a02ad4e8379bc91714d8077aea5e849e6d6de6. The tests patch `compact.prepare` to identity and test insertion/anchor behavior, not full Fortran source equivalence.
+- Recorded focused validation is rc 0, 7 passed; the retained log records one NumPy ABI RuntimeWarning. It is appropriately limited and does not replace the pinned full-source build or C2 runtime evidence.
+
+Bulk reducer v4 source review (not executed)
+- `/var/tmp/pr100_bulk_storage_reducer_v4_20261022.py`, SHA256 `087b61e2f8b222ed8444a449398b9d8f980afa018dcfd71f6180e17262119f8d`.
+- Diff from frozen v3 SHA `63b4ee606a21a31e44aa18e807ef4482493fd5a6e00a0164a6e7964b8d05a132` is limited to `_artifact_receipt_binding`: it expects the generated file to be the `.gz` path, checks that generated-file hash/bytes equal compressed-output hash/bytes, and separately uses the compressed-output row's expanded hash/bytes. The streaming scan then checks the encoded artifact before/after, reaches gzip EOF/CRC, and verifies expanded hash and byte count.
+- This matches the observed receipt schema (`generated_files` compressed path versus `compressed_outputs` raw and compressed metadata). The rest of the frozen v3 reduction gates remain: all three arms must be closed COMPLETE/0 and closed-audit procedural PASS for 32 steps; exact 96 RK step/call keys are required; duplicate/missing/extra rows reject; conditional tiny-B witness rows are retained and only joined at call level; no certificate-only attribution or pressure-to-kg/physical-zero-loss claim is made. GO for the root to run v4 against the closed data. This review does not validate its output.
+
+Limitations
+- I inspected the bounded audit JSON and copied receipt metadata only; I did not read/decompress native trace arrays or rerun the audit. No water, physical-closure, or model-quality conclusion follows from this procedural/equivalence review.
+- Bulk reducer v4 has only been source-reviewed. Any aggregate finding requires a separate review of its output, receipt hashes, row coverage, and printed-decimal reduction scope.
+
+Bounded public closed-result summary comparison
+- Public projection: `docs/evidence/pr100_c2_native_closure_20261022/runtime/closed_result_summary.json`, SHA256 `9c414447d0d85c0d392bb9f2ca19457144765381f57574e656b34c08317c6b7c`; it binds the full private audit path, schema, byte size 5,262,183, and SHA256 `7db371d79162c795a4be66ae92bbef2b4652fac97da11db423328ae007903fc9`.
+- Direct comparison with the full audit found the retained identity and procedural objects, 600-second trace and history statuses/counts, all three T1 payload identity statuses, QNB status/failure count/evaluated-state count, source endpoint failures/status, active-ice status/count/max, regression label, and FAIL_OPEN disposition agree for all arms. The summary's source endpoint `predictor_diagnostic_records_not_gated=96` is a count projection of the full 96 diagnostic records per arm; those predictors are explicitly outside the exact endpoint gate. The full per-state tables remain private and are not reproduced in the bounded summary.
+- No mismatch found in the summary's represented fields. It is a lossy projection by design and must not be treated as a replacement for the bound full audit.
+
+Final v4 reducer source-review disposition
+- GO was sent to root to execute v4 against the closed ledger payloads. This review does not validate its output.
+
+Bulk reducer v4 closed-result review
+- Result: `/var/tmp/pr100_bulk_storage_results_v4_20261022.json`, SHA256 `887f9b87b6faa2fa1a84228c954ac139134d618f9cdbecf22428ee61bd4c1e7f` (144,897 bytes), schema `pr100_closed_bulk_storage_reduction_v2`.
+- It binds the full closed audit SHA `7db371d79162c795a4be66ae92bbef2b4652fac97da11db423328ae007903fc9`, build receipt `9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb`, executable `387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a`, and compiled source `d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296`.
+- For each arm, result receipt SHA matches the bounded published receipt copy; status COMPLETE, rc 0, final step 32. Compressed/expanded storage and stdout metadata in the result match both receipt tables (`generated_files` compressed row and `compressed_outputs` compressed plus expanded fields). Both artifacts report read through gzip EOF; this review checked the metadata but did not independently reread the large compressed streams.
+- Each arm has the exact 96 expected `(step,RK)` call keys, no missing/extra/duplicate keys, and `rk_coverage=PASS`. It reports 39 total adjustment-5 events in each arm. The identical printed-decimal reductions across arms are Q `-4.244686619826197207893E-37` and B `-5.128644088209860690023E-40`; I recomputed these sums from the 96 serialized row strings using the recorded Decimal precision 28. They are separate carrier-weighted mixing-ratio amounts in pressure coordinates, not kg, not exact underlying binary sums, and not a water-loss proof.
+- Each arm preserves 27 conditional successful-mixture witness rows (event count sum 41). They all join to a same-call storage ledger commit row at call granularity. This does not identify certificate-only cell locations/counts. At step 32, RK1 the ledger adjustment count is 4 and the first witness coordinate is `(2,236,14)`; that is an all-policy-path call count/witness, not a certificate-only count.
+- GO on the v4 reduction's bounded ledger-accounting output and stated limits. It is not physical closure or overall candidate acceptance; the C2 generic Q/N/B audit remains FAIL and physical disposition remains FAIL_OPEN. The result did not claim certificate-only attribution, physical kg conversion, or zero loss from aggregate totals. No blocker found in the output bindings or reducer semantics reviewed here.
+- Review limitation: I checked row structure, coverage, printed-string sums, result bindings, and matching receipt metadata; I relied on the v4 reducer's `read_to_gzip_eof` plus expanded SHA/byte receipt checks for the large streams rather than decompressing them independently.

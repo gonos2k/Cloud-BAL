@@ -1,0 +1,18 @@
+Read-only review: PR99-C2 closed-auditor T1 payload supplement
+Date: 2026-10-22
+
+Reviewed source identity
+- Current driver: `/var/tmp/pr99_c2_closed_audit_20261022.py`, SHA256 `6c85d05da948c2911a4d4c30c35f0c64eca0676401006650e4b375593eea6ccf`.
+- Preserved pre-T1 driver: `/var/tmp/pr99_c2_closed_audit_20261022.pre_t1_payload.py`, SHA256 `6b1d78dbb4056089fc2798d8e9eb8e2f962dc9b44cf5e73821adbe6ee3e45a3b`.
+
+Review findings
+- The delta adds only gzip import, three payload names (`kdm6_first_call_pre.raw`, `kdm6_first_call_post.raw`, `pr67_kdm6_process.raw`), receipt-row payload identity helpers, one call from `audit_arm`, and a separate `t1_payload_identity` result field.
+- `expanded_payload_identity` requires a unique compressed-output row through the existing reader, checks the raw path matches the expected name, verifies compressed size/SHA via `verify_compressed_output`, then drains gzip to EOF and checks expanded byte count/SHA against the receipt row. Missing row/file is reported `MISSING`; corrupt/inconsistent receipt or bytes raises and leaves the arm `FAIL`/`FAIL_OPEN`.
+- Comparison uses `c1_baseline_identity(arm)`, so the reference is the matching frozen C1 arm. It reports per-payload `PASS_IDENTICAL`, `FAIL_DIFFERENT`, or `MISSING` based on expanded byte count and SHA. It does not normalize values or infer physics.
+- The T1 identity result is emitted separately. It is not included in `procedural_status`, `regression_ready`, or water-closure status, so a difference cannot relabel procedural completion or promote closure.
+- Existing C1 receipt JSONs (read only; no native arrays) contain exactly one compressed-output row per requested payload in all three arms, with raw/compressed path, byte count, and SHA fields required by the existing output-row verifier. Pre/post expanded payloads are 195,542,592 bytes; PR67 payloads are 83,442,240 bytes in these receipts.
+
+Limit
+- No C2 receipts/output files were read; neither auditor version was executed. No model, build, or KG action was performed.
+
+Conclusion: the narrow T1 supplement is consistent with the existing receipt API and keeps identity comparison separate from 640-second procedural completion and physical closure.

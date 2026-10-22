@@ -1,0 +1,15 @@
+Addendum: status='replace' inode behavior
+Date: 2026-10-22. This supplements, and does not overwrite, `/var/tmp/pr100_replay_cwd_incident_review_20261022.txt`.
+
+Evidence
+- Root's exact OpenMP/big-endian probe is `/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr100_replay_cwd_incident_20261022/replace_probe_mt/result.json`, SHA256 `cda6118aa84ec05fb3d6d11d22bcb602629c814ef1e9bda24b4ef91b786c4a26`. It reports compile/run rc 0. Both test files retained inode and birth time after replacement, while contents/size changed to `NEW`/3 bytes.
+- Probe source SHA256 `51e0360e72ee83d3256154dd572bcfe694bbc804ac46a0d126cdd235a00b953b`. It exercises both stage-style OPEN (`access='stream', form='unformatted', status='replace', action='write'`) and driver-style OPEN with `convert='big_endian'`. Root reports compilation with pinned REPRO flags plus `-convert big_endian -qopenmp`.
+- Probe executable SHA256 `5e62b4ae6744aba49b3542cb0cb856ce2ffa69ab128b0c15ca3460f140eb0d4e`; diagnostic executable SHA256 `34a97616c17839148f035e40130ded6b19f97bd32dcd5fa7471970225e572647`; diagnostic link argv SHA256 `aa367474aae64bbdc2ea6b4e69687f1898af98c23719a1c6f2f6c3acfa529125`.
+- The actual executable and exact-profile probe both define `for__open_args`, `for__open_default`, and `for__open_proc`. Their symbol sizes match (0x4ac, 0x2f8, 0x27ed); each function has the same instruction count (260, 169, 2111) and instruction/opcode stream after normalizing address-dependent target labels. The actual executable's `-qopenmp` link includes an MPI-origin `libifcoremt` dynamic dependency, but its OPEN entry points are defined in the executable; I therefore compared those definitions directly rather than inferring equivalence from `ldd` alone.
+- Diagnostic writer source SHA256 `be7a4e735f80ec81c1b4ce51c392556482bcfe997cf65095885ce2f685487f26`; driver source SHA256 `54e6d4b6b3845c0a75595dccc2537d0c8e0adafde0b14c97b202aa97e8cf51ef`. These source statements use the two OPEN modes covered by the probe. Root's birthtime inventory SHA256 remains `3a31ff6832e9d3dc7fef9354e64728bce54b4e7aa5371a1c48df03ed46700aa3`.
+
+Finding and limit
+The probe reproduces the relevant Intel runtime/OpenMP/big-endian OPEN conditions; same OPEN entry-point code and observed inode-retention behavior support the conclusion that `status='replace'` retained an already-existing inode on this Lustre filesystem. Since each of the three current replacement-output inodes was born during the incident, the evidence supports that no pre-existing inode at those paths was truncated by this run. This does not establish whether an earlier same-name file had already been removed before the incident, and it does not make the bad working-directory launch compliant. No files were restored or changed.
+
+Disposition note
+For scientific/diagnostic outputs, recovery can use the matching isolated HYDRO artifacts and the new compact output only if the separate source/input/executable/coverage audit binds them; label them as recovered outputs from the cwd-incident run, not as a clean isolated launch. The incident execution history must remain explicit.

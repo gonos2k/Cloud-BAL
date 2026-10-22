@@ -1,0 +1,295 @@
+{
+  "schema": "pr100_t1_snow_melt_bounded_evidence_v1",
+  "date": "2026-10-22",
+  "source_revision": "private diagnostic overlay only; no maintained source change",
+  "scope": "Existing C1 T1 first-call states only; no forecast, no C2 outputs read, no KG/Graphify, no native source equation changes.",
+  "report": "docs/PR100_T1_SNOW_MELT_20261022.md",
+  "measurement": "R64 reductions of actual source operands and R32 endpoints with actual per-level pre-call DEN*DELZ and same-call map area once; all 39 levels in each of 64,960 active columns.",
+  "three_arm_receipts": [
+    {
+      "arm": "OFF",
+      "run_dir_private": "/var/tmp/pr100_snow_fulltile_replay_20261022/OFF_valid",
+      "returncode": 0,
+      "completion_marker_observed": true,
+      "pre_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+      "native_post_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+      "replay_post_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+      "all_17_fields_plus_XLAND_identical": true,
+      "compact_column_rows": 64960,
+      "compact_sha256": "88cd10e4251d573d84a0171a69f14e25edc884a96e3a9b37d8df6cf70806eb78",
+      "selected_raw_rows": 156,
+      "selected_raw_sha256": "689c51b8d9c3f85ec924b85c49aa83723fa54dc75f7c41bfa7897b9076a16c12",
+      "graupel_melt_raw_sha256": "1d17f11159471f48a2d0be8bda2c7efa9e1e6b4d2871ea91ce76ff8f14fbdcca",
+      "process_stream_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8",
+      "v5_compact_stage_reused_sha256": "9916d45f690e5be39784cf6efa51e402faaa6baf37a0278274fb5ae66cf83e71",
+      "executable_sha256": "fffa3eb851612e3b6689dc7d29d698072c1d7111d4752731a6ea2c5317f51d55",
+      "run_log_sha256": "aba8dd6c01f4079cc744ac932a379f44f648aa7ecae8974ddd6c548febfeeeae",
+      "run_argv_sha256": "0608c6a97bb0c280f23dacc0beacd27d96dc3c997fa391bbcf503c7ba6f97b96"
+    },
+    {
+      "arm": "HYDRO",
+      "run_dir_private": "/var/tmp/pr100_snow_fulltile_replay_20261022/HYDRO",
+      "returncode": 0,
+      "completion_marker_observed": true,
+      "pre_sha256": "72ad647a5df1cd39e7eb3db8f8757e63a9aa4dbde5ce03fcbb08630ca1664f54",
+      "native_post_sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf",
+      "replay_post_sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf",
+      "all_17_fields_plus_XLAND_identical": true,
+      "compact_column_rows": 64960,
+      "compact_sha256": "636507fa692a731bf7ed73ed24be9c0469d1c1aedabe9ffeb8d7eeee4daf724f",
+      "selected_raw_rows": 156,
+      "selected_raw_sha256": "689c51b8d9c3f85ec924b85c49aa83723fa54dc75f7c41bfa7897b9076a16c12",
+      "graupel_melt_raw_sha256": "848ac876fb04540d727f4aa7a2b780fa8cee535f7afeacf2012e60bfbd5d684f",
+      "process_stream_sha256": "9bcef6cd06ca3dc9f6a532b2c715d7f25a9b222fcb292fa328f5e38cf431661b",
+      "v5_compact_stage_reused_sha256": "820205aa121ffa6a99267daebf6b1d318b574f6d93d1d135e00e57d94c628a24",
+      "executable_sha256": "fffa3eb851612e3b6689dc7d29d698072c1d7111d4752731a6ea2c5317f51d55",
+      "run_log_sha256": "5cb2dd5c20e2ae3664fefd1bb88b3ac295baf84626346ed1986b66344f184b26",
+      "run_argv_sha256": "b8b341559324514525bfc6605ad5ec6f1c7ab05fca58666914ab1cf72ea63b2a"
+    },
+    {
+      "arm": "COUPLED",
+      "run_dir_private": "/var/tmp/pr100_snow_fulltile_replay_20261022/COUPLED",
+      "returncode": 0,
+      "completion_marker_observed": true,
+      "pre_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+      "native_post_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+      "replay_post_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+      "all_17_fields_plus_XLAND_identical": true,
+      "compact_column_rows": 64960,
+      "compact_sha256": "09062e09699e9ca304d7d104f33a8e0e1337187029957dec1888515b6153f934",
+      "selected_raw_rows": 156,
+      "selected_raw_sha256": "689c51b8d9c3f85ec924b85c49aa83723fa54dc75f7c41bfa7897b9076a16c12",
+      "graupel_melt_raw_sha256": "798a24a779e85f2ac1d190472c4155a6310d591e7ed0974d46039aa59b0bc26c",
+      "process_stream_sha256": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976",
+      "v5_compact_stage_reused_sha256": "fb0c7b52b42c720c8c9a93f6f6b2ce8bcc6e2d6480629489c523dd7ecfdebf50",
+      "executable_sha256": "fffa3eb851612e3b6689dc7d29d698072c1d7111d4752731a6ea2c5317f51d55",
+      "run_log_sha256": "0d70e7e1af4a6c94ec2d3f37f25690e2d2c5c34b17749153daba83720031e4fa",
+      "run_argv_sha256": "f03b4bae2fc63f3db9f5a3baadfef6bdf5363862ecf2ade6759f61b0607f96f4"
+    }
+  ],
+  "account_artifact": {
+    "private_path": "/var/tmp/pr100_snow_replay_20261022/fulltile_snow_graupel_account.json",
+    "sha256": "0715342c13166296bc16b4a10fdec4328f7bade8b0d84fed44da43e6e8651f1a",
+    "provenance_private_path": "/var/tmp/pr100_snow_replay_20261022/fulltile_snow_graupel_provenance.json",
+    "provenance_sha256": "072bcadba671b046379db19e716c4a11e83f6389b3bda58a12e5a4c8ba05a02e"
+  },
+  "source_ownership": {
+    "qs_top_and_internal_source_lines": "Generated source lines 2978 and 3009 call the compact observer immediately after the actual source update. Approved top is -min(QS_before,decrement); approved internal is DBLE(dqs_next)-DBLE(dqs_self).",
+    "qs_bottom_source_line": "Generated source line 3528 accumulates the actual bottom-fall block once per outer loop; reducer verifies captured bottom sum and applies map area once.",
+    "graupel_melt_source_lines": "Generated source lines 3342-3350 form equal/opposite QR/QG proposal; lines 3434-3497 apply alpha, log actual endpoints and commit QG/QR. The existing v4 compact melt owner reads only pr85_kdm6_melt_budget.raw, so this is independently accounted.",
+    "graupel_melt_checks": "For every emitted feasible row, R32 proposal components are equal/opposite, alpha-approved components match R32 multiplication and sum to zero, and source printed mass residual equals its left-associative endpoint expression. R64 column account separately sums actual represented endpoint changes."
+  },
+  "historical_invalid_binding_attempt": {
+    "private_run_dir": "/var/tmp/pr100_snow_fulltile_replay_20261022/OFF",
+    "classification": "INVALID_INSTRUMENTATION: native post identity matched but PR100 observer emitted no rows; first link raced ahead of completion of candidate fulltile compile. Preserved and excluded.",
+    "private_executable_sha256": "fbb58447e07ebadac1cb96dc85575b629943ac28916d02370bb8511b140e50c5",
+    "no_map_binary_sha256": "fbb58447e07ebadac1cb96dc85575b629943ac28916d02370bb8511b140e50c5",
+    "superseded_by_final_map_link_object_sha256": "632db9af4eb88e4bd4920c6924062eae0993be6e6cb9d4b552483e1d95d6b770"
+  },
+  "build": {
+    "fresh_scratch_cwd": "/var/tmp/pr100_snow_fulltile_build_20261022",
+    "compile_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compile_argv_private": "/var/tmp/pr100_snow_fulltile_build_20261022/compile.argv",
+    "compile_argv_sha256": "0331a9c88c2b041c8f34fbce20a8e4fc5aa6f7c46ba98b939f90f219937ddb30",
+    "compile_log_sha256": "349eec28be93478d6f3c75ce8567caddd64017ef6e74952c1dbb131ee8df620e",
+    "compile_rc": "not separately persisted; object timestamp precedes final map link; no compile rc claim",
+    "object_sha256": "632db9af4eb88e4bd4920c6924062eae0993be6e6cb9d4b552483e1d95d6b770",
+    "link_argv_sha256": "965f1b4917b515cd905ae051b62000be99f99485c005ebbfb3dab2386986f32e",
+    "link_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "link_map_sha256": "9372e253dec40415e7e4d7c80f1521f5d89aaf469114784a66d5ae93e0aa78c7",
+    "final_executable_sha256": "fffa3eb851612e3b6689dc7d29d698072c1d7111d4752731a6ea2c5317f51d55",
+    "link_rc": "not separately persisted; map-linked executable completed the three successful replays"
+  },
+  "prior_v5_immutability": {
+    "directory": "docs/evidence/pr99_t1_remaining_20261022/compact_v5/",
+    "sha256sums_verified": true,
+    "prior_account_files_unchanged": true
+  },
+  "review_inputs": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_t1_snow_melt_20261022/two_column_provenance.txt",
+      "sha256": "684c409ff46e0741e7485345cc5eaf43d68f0512d01e84438f39a9f6d11f681d"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_t1_snow_melt_20261022/two_column_fraction_oracle.json",
+      "sha256": "b1c3f64b65b5490431cbaa69fbafdbcbae9f960e6ad305e84599b469e613d314"
+    }
+  ],
+  "private_hash_inventory": [
+    {
+      "label": "reduce_fulltile_snow_graupel.py",
+      "path_in_evidence": "reduce_fulltile_snow_graupel.py",
+      "path_private": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_t1_snow_melt_20261022/reduce_fulltile_snow_graupel.py",
+      "sha256": "62e15fdcdc1bdbd66597c7fa20c18134fc49e5518d26f04f44e7c7321be640e5",
+      "bytes": 11815
+    },
+    {
+      "label": "make_fulltile_source.py",
+      "path_in_evidence": "make_fulltile_source.py",
+      "path_private": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_t1_snow_melt_20261022/make_fulltile_source.py",
+      "sha256": "9aac9517f35c08eefcab63c70b81519a152a7156ca09f20aee7012b99a3dd309",
+      "bytes": 9561
+    },
+    {
+      "label": "fulltile_observer.patch",
+      "path_in_evidence": "fulltile_observer.patch",
+      "path_private": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_t1_snow_melt_20261022/fulltile_observer.patch",
+      "sha256": "88a1ff22efc72fa9d5b3d17b60627d5d38164ac234c5ef2e1f62593c7e69709e",
+      "bytes": 9420,
+      "format_note": "Regenerated as a zero-context unified diff from the pinned baseline to the pinned generated source; verified by fresh-scratch application."
+    },
+    {
+      "label": "two_column_provenance.txt",
+      "path_in_evidence": "two_column_provenance.txt",
+      "path_private": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_t1_snow_melt_20261022/two_column_provenance.txt",
+      "sha256": "684c409ff46e0741e7485345cc5eaf43d68f0512d01e84438f39a9f6d11f681d",
+      "bytes": 5099
+    },
+    {
+      "label": "two_column_fraction_oracle.json",
+      "path_in_evidence": "two_column_fraction_oracle.json",
+      "path_private": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_t1_snow_melt_20261022/two_column_fraction_oracle.json",
+      "sha256": "b1c3f64b65b5490431cbaa69fbafdbcbae9f960e6ad305e84599b469e613d314",
+      "bytes": 1351
+    },
+    {
+      "label": "fulltile account",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_replay_20261022/fulltile_snow_graupel_account.json",
+      "sha256": "0715342c13166296bc16b4a10fdec4328f7bade8b0d84fed44da43e6e8651f1a",
+      "bytes": 28658
+    },
+    {
+      "label": "fulltile provenance",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_replay_20261022/fulltile_snow_graupel_provenance.json",
+      "sha256": "072bcadba671b046379db19e716c4a11e83f6389b3bda58a12e5a4c8ba05a02e",
+      "bytes": 10872
+    },
+    {
+      "label": "generated fulltile source",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_build_20261022/source/module_mp_kdm6_snow_fulltile.f90",
+      "sha256": "eb98a36c2cfb0bd52713a858694bcec5ba55263aa2e798a2759bcd215b23adc4",
+      "bytes": 436956
+    },
+    {
+      "label": "transform generator",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_build_20261022/make_fulltile_source.py",
+      "sha256": "9aac9517f35c08eefcab63c70b81519a152a7156ca09f20aee7012b99a3dd309",
+      "bytes": 9561
+    },
+    {
+      "label": "baseline selected source",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr99_extrema_checkpoint_source_20261022.f90",
+      "sha256": "d66029c311004b4483681227a3d9a7e94698991e504d74fab93a26b1adbe4433",
+      "bytes": 428011
+    },
+    {
+      "label": "pinned Intel profile",
+      "path_in_evidence": null,
+      "path_private": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "bytes": 3470
+    },
+    {
+      "label": "fulltile compile argv",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fulltile_build_20261022/compile.argv",
+      "sha256": "0331a9c88c2b041c8f34fbce20a8e4fc5aa6f7c46ba98b939f90f219937ddb30",
+      "bytes": 677
+    },
+    {
+      "label": "fulltile compile log",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fulltile_build_20261022/compile.log",
+      "sha256": "349eec28be93478d6f3c75ce8567caddd64017ef6e74952c1dbb131ee8df620e",
+      "bytes": 37683
+    },
+    {
+      "label": "fulltile object",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fulltile_build_20261022/obj/module_mp_kdm6_diagnostic.link.o",
+      "sha256": "632db9af4eb88e4bd4920c6924062eae0993be6e6cb9d4b552483e1d95d6b770",
+      "bytes": 712800
+    },
+    {
+      "label": "fulltile link argv",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fulltile_build_20261022/link/link_argv.json",
+      "sha256": "965f1b4917b515cd905ae051b62000be99f99485c005ebbfb3dab2386986f32e",
+      "bytes": 2639
+    },
+    {
+      "label": "fulltile link map",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fulltile_build_20261022/link/pr100_snow.map",
+      "sha256": "9372e253dec40415e7e4d7c80f1521f5d89aaf469114784a66d5ae93e0aa78c7",
+      "bytes": 3040110
+    },
+    {
+      "label": "binding map excerpt",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fulltile_build_20261022/link/binding_map_excerpt.txt",
+      "sha256": "6dac38bea97f8f6297efe8da2a2bfc62df9f1f7f619d1372137cd081486de1fe",
+      "bytes": 694
+    },
+    {
+      "label": "binding symbols",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fulltile_build_20261022/link/binding_symbols.txt",
+      "sha256": "8efe5851fdc2d8ae934844a1e3ba0bf6d857055bfeae4a35f5116d1503d10646",
+      "bytes": 590
+    },
+    {
+      "label": "final executable",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fulltile_build_20261022/link/pr100_snow_replay.exe",
+      "sha256": "fffa3eb851612e3b6689dc7d29d698072c1d7111d4752731a6ea2c5317f51d55",
+      "bytes": 71546680
+    },
+    {
+      "label": "no-map invalid executable",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fulltile_build_20261022/link/pr100_snow_replay_no_map_invalid_instr.exe",
+      "sha256": "fbb58447e07ebadac1cb96dc85575b629943ac28916d02370bb8511b140e50c5",
+      "bytes": 71512408
+    },
+    {
+      "label": "helper fixture source",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_helper_test_20261022/src/test.f90",
+      "sha256": "bd141db76527dd247124ff9b4b93ed8cf2022b23d6f729639f56972c174fc79b",
+      "bytes": 2397
+    },
+    {
+      "label": "helper test log",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_helper_test_20261022/run.log",
+      "sha256": "499ff97133995c44d5099388009704c106caffa8c0004513bd850f3d7806c55f",
+      "bytes": 34
+    },
+    {
+      "label": "root independent Fraction oracle",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_fraction_oracle_20261022.json",
+      "sha256": "b1c3f64b65b5490431cbaa69fbafdbcbae9f960e6ad305e84599b469e613d314",
+      "bytes": 1351
+    },
+    {
+      "label": "two-column provenance",
+      "path_in_evidence": null,
+      "path_private": "/var/tmp/pr100_snow_replay_20261022/two_column_provenance_report.txt",
+      "sha256": "684c409ff46e0741e7485345cc5eaf43d68f0512d01e84438f39a9f6d11f681d",
+      "bytes": 5099
+    }
+  ],
+  "limits": [
+    "Signed global residual worsens while column L1 and maximum absolute residual improve; closure remains OPEN.",
+    "No exact 613-cell vertical subset is reconstructed.",
+    "QS stored-minus-approved and graupel melt stored endpoint change are not described as pure cast loss.",
+    "No fitted correction, rounding bucket, phase/vapor reinterpretation, or physics change."
+  ]
+}

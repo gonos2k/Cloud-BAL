@@ -1,0 +1,1181 @@
+{
+  "arms": {
+    "COUPLED": {
+      "active_ice_policy": {
+        "evaluated_state_records": 192,
+        "max_active_beyond_8ulp": 0,
+        "scope": "Existing 8-ULP active ice policy, with source-inactive positive pairs separately counted, on all six states per completed timestep.",
+        "status": "PASS"
+      },
+      "arm": "COUPLED",
+      "exact_source_endpoint": {
+        "failures": [],
+        "predictor_diagnostic_records_not_gated": 96,
+        "scope": "Existing PR87 exact source coefficient violations at RK3, PRE_KDM6, POST_KDM6 only; no ULP slack. Exact ice counts are diagnostic, not this generic gate.",
+        "status": "PASS"
+      },
+      "first_600_history_equivalence": {
+        "comparator_status": "PASS",
+        "compared_frames": 11,
+        "compared_timestamps": [
+          "2026-08-16_13:00:00",
+          "2026-08-16_13:01:00",
+          "2026-08-16_13:02:00",
+          "2026-08-16_13:03:00",
+          "2026-08-16_13:04:00",
+          "2026-08-16_13:05:00",
+          "2026-08-16_13:06:00",
+          "2026-08-16_13:07:00",
+          "2026-08-16_13:08:00",
+          "2026-08-16_13:09:00",
+          "2026-08-16_13:10:00"
+        ],
+        "differences": [],
+        "first_difference": null,
+        "metadata": {
+          "MU": [
+            "float32",
+            [
+              "Time",
+              "south_north",
+              "west_east"
+            ],
+            [
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "MUB": [
+            "float32",
+            [
+              "Time",
+              "south_north",
+              "west_east"
+            ],
+            [
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "P": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east"
+            ],
+            [
+              39,
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "PB": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east"
+            ],
+            [
+              39,
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "PH": [
+            "float32",
+            [
+              "Time",
+              "bottom_top_stag",
+              "south_north",
+              "west_east"
+            ],
+            [
+              40,
+              282,
+              234
+            ],
+            "m2 s-2",
+            "Z"
+          ],
+          "PHB": [
+            "float32",
+            [
+              "Time",
+              "bottom_top_stag",
+              "south_north",
+              "west_east"
+            ],
+            [
+              40,
+              282,
+              234
+            ],
+            "m2 s-2",
+            "Z"
+          ],
+          "T": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east"
+            ],
+            [
+              39,
+              282,
+              234
+            ],
+            "K",
+            ""
+          ],
+          "U": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east_stag"
+            ],
+            [
+              39,
+              282,
+              235
+            ],
+            "m s-1",
+            "X"
+          ],
+          "V": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north_stag",
+              "west_east"
+            ],
+            [
+              39,
+              283,
+              234
+            ],
+            "m s-1",
+            "Y"
+          ],
+          "W": [
+            "float32",
+            [
+              "Time",
+              "bottom_top_stag",
+              "south_north",
+              "west_east"
+            ],
+            [
+              40,
+              282,
+              234
+            ],
+            "m s-1",
+            "Z"
+          ]
+        },
+        "missing_expected_timestamps": {
+          "baseline": [],
+          "compact": []
+        },
+        "scope": "Exact numeric equality per frame for T, P, PB, PH, PHB, U, V, W, MU, and MUB at common 0..600 second history timestamps. Original dtype, dimension names and non-Time extents, units, and stagger are validated; no derived fields or destaggering are included.",
+        "status": "PASS"
+      },
+      "first_600_trace_equivalence": {
+        "baseline": {
+          "compressed_sha256": "1dc558f20d3e2e6b76bd890ca241e123ef48e11e37211e90010edf6f0732576c",
+          "expanded_sha256": "718d953cd9d32c3fb14fd5ec0f3497de1efcdf182cc083046ad99c489d7f9865"
+        },
+        "common_prefix_steps": 30,
+        "compact": {
+          "compressed_sha256": "898333c56ec4752b5e2d71e13f541b30fe1a9ffeb4556a0e31b02a44eca6f0f8",
+          "expanded_sha256": "934ba4048a43365df6abdd4297826544a43a79857b904ab38d42555d8d62eafd"
+        },
+        "comparator_status": "PASS",
+        "compared_state_records": 180,
+        "differences": [],
+        "first_difference": null,
+        "scope": "Exact state metadata and big-endian serialized field bytes for six common completed states per step through min(step 30, compact completed prefix). Both whole traces were streamed to EOF and checked against their receipt-bound compressed and expanded hashes.",
+        "status": "PASS"
+      },
+      "generic_qnb": {
+        "evaluated_state_records": 192,
+        "failure_count": 171,
+        "scope": "Existing PR87 generic Q/N/B pair, PSD cone with 8-ULP slack, and dry-density number conversion checks per completed state.",
+        "status": "FAIL"
+      },
+      "identity": {
+        "build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+        "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "candidate_wrfinput_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+        "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+        "hydro_input_binding": null,
+        "inputs_match_c1": true,
+        "run_preflight_sha256": "19941e93fa9dc7d7f7e840ae80021bd2017ed034072d71871a7cc904a2e0edb3",
+        "run_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED/receipt.json",
+        "run_receipt_sha256": "0a7e1c3bcce58dea8433e9bffa615395d923cd05377c5068469af5dba29759cb",
+        "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+        "status": "PASS"
+      },
+      "physical_disposition": "FAIL_OPEN",
+      "procedural": {
+        "620_second_post_kdm6_present": true,
+        "completed_steps": 32,
+        "final_completed_step": 32,
+        "missing_runner_snapshots": [],
+        "receipt_status": "COMPLETE",
+        "required_review_seconds": [
+          20,
+          60,
+          300,
+          600,
+          640
+        ],
+        "returncode": 0,
+        "status": "PASS"
+      },
+      "receipt_history_files": {
+        "wrfout_d01_2026-08-16_13:00:00": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba"
+      },
+      "regression_approval": "READY_FOR_REVIEW",
+      "t1_payload_identity": {
+        "candidate_identities": {
+          "c2": {
+            "arm": "COUPLED",
+            "candidate": "PR99-C2",
+            "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED/receipt.json",
+            "receipt_sha256": "0a7e1c3bcce58dea8433e9bffa615395d923cd05377c5068469af5dba29759cb"
+          },
+          "matching_c1": {
+            "arm": "COUPLED",
+            "candidate": "frozen C1 baseline",
+            "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/receipt.json",
+            "receipt_sha256": "a6b5f550a3ddfc36b0a1a2eee2e7af4a14b582344c4f8b683b0d1e32a586c598"
+          }
+        },
+        "does_not_gate_procedural_completion": true,
+        "does_not_promote_water_closure": true,
+        "payloads": {
+          "kdm6_first_call_post.raw": {
+            "c2": {
+              "compressed_bytes": 67316625,
+              "compressed_sha256": "6e5876f724b5df4b22ac381d9ba1b3e02ebff2c82aedfad98b4db4b8de419b07",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+              "raw_name": "kdm6_first_call_post.raw",
+              "status": "VERIFIED"
+            },
+            "matching_c1": {
+              "compressed_bytes": 67316625,
+              "compressed_sha256": "6e5876f724b5df4b22ac381d9ba1b3e02ebff2c82aedfad98b4db4b8de419b07",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+              "raw_name": "kdm6_first_call_post.raw",
+              "status": "VERIFIED"
+            },
+            "status": "PASS_IDENTICAL"
+          },
+          "kdm6_first_call_pre.raw": {
+            "c2": {
+              "compressed_bytes": 82031172,
+              "compressed_sha256": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+              "raw_name": "kdm6_first_call_pre.raw",
+              "status": "VERIFIED"
+            },
+            "matching_c1": {
+              "compressed_bytes": 82031172,
+              "compressed_sha256": "ad19b5b018879fe72ec87197db5a4d0ca38c5067530b03025362151eedf48110",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+              "raw_name": "kdm6_first_call_pre.raw",
+              "status": "VERIFIED"
+            },
+            "status": "PASS_IDENTICAL"
+          },
+          "pr67_kdm6_process.raw": {
+            "c2": {
+              "compressed_bytes": 34662665,
+              "compressed_sha256": "d8b45e323ca72ead866643f3a5d8591adbc6c9ba728cf4726274862dd431f918",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976",
+              "raw_name": "pr67_kdm6_process.raw",
+              "status": "VERIFIED"
+            },
+            "matching_c1": {
+              "compressed_bytes": 34662665,
+              "compressed_sha256": "d8b45e323ca72ead866643f3a5d8591adbc6c9ba728cf4726274862dd431f918",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976",
+              "raw_name": "pr67_kdm6_process.raw",
+              "status": "VERIFIED"
+            },
+            "status": "PASS_IDENTICAL"
+          }
+        },
+        "scope": "C2 versus matching frozen C1 first-call T1 payload identity"
+      },
+      "trace": {
+        "completed_post_kdm6_timesteps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "duplicate_post_kdm6_timesteps": [],
+        "record_count": 257,
+        "row": {
+          "bytes": 26668141460,
+          "compressed_bytes": 9789154058,
+          "compressed_path": "pr85_joint_moment_stages.raw.gz",
+          "compressed_sha256": "898333c56ec4752b5e2d71e13f541b30fe1a9ffeb4556a0e31b02a44eca6f0f8",
+          "path": "pr85_joint_moment_stages.raw",
+          "sha256": "934ba4048a43365df6abdd4297826544a43a79857b904ab38d42555d8d62eafd"
+        },
+        "sha256_after_audit": "898333c56ec4752b5e2d71e13f541b30fe1a9ffeb4556a0e31b02a44eca6f0f8"
+      }
+    },
+    "HYDRO": {
+      "active_ice_policy": {
+        "evaluated_state_records": 192,
+        "max_active_beyond_8ulp": 0,
+        "scope": "Existing 8-ULP active ice policy, with source-inactive positive pairs separately counted, on all six states per completed timestep.",
+        "status": "PASS"
+      },
+      "arm": "HYDRO",
+      "exact_source_endpoint": {
+        "failures": [],
+        "predictor_diagnostic_records_not_gated": 96,
+        "scope": "Existing PR87 exact source coefficient violations at RK3, PRE_KDM6, POST_KDM6 only; no ULP slack. Exact ice counts are diagnostic, not this generic gate.",
+        "status": "PASS"
+      },
+      "first_600_history_equivalence": {
+        "comparator_status": "PASS",
+        "compared_frames": 11,
+        "compared_timestamps": [
+          "2026-08-16_13:00:00",
+          "2026-08-16_13:01:00",
+          "2026-08-16_13:02:00",
+          "2026-08-16_13:03:00",
+          "2026-08-16_13:04:00",
+          "2026-08-16_13:05:00",
+          "2026-08-16_13:06:00",
+          "2026-08-16_13:07:00",
+          "2026-08-16_13:08:00",
+          "2026-08-16_13:09:00",
+          "2026-08-16_13:10:00"
+        ],
+        "differences": [],
+        "first_difference": null,
+        "metadata": {
+          "MU": [
+            "float32",
+            [
+              "Time",
+              "south_north",
+              "west_east"
+            ],
+            [
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "MUB": [
+            "float32",
+            [
+              "Time",
+              "south_north",
+              "west_east"
+            ],
+            [
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "P": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east"
+            ],
+            [
+              39,
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "PB": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east"
+            ],
+            [
+              39,
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "PH": [
+            "float32",
+            [
+              "Time",
+              "bottom_top_stag",
+              "south_north",
+              "west_east"
+            ],
+            [
+              40,
+              282,
+              234
+            ],
+            "m2 s-2",
+            "Z"
+          ],
+          "PHB": [
+            "float32",
+            [
+              "Time",
+              "bottom_top_stag",
+              "south_north",
+              "west_east"
+            ],
+            [
+              40,
+              282,
+              234
+            ],
+            "m2 s-2",
+            "Z"
+          ],
+          "T": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east"
+            ],
+            [
+              39,
+              282,
+              234
+            ],
+            "K",
+            ""
+          ],
+          "U": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east_stag"
+            ],
+            [
+              39,
+              282,
+              235
+            ],
+            "m s-1",
+            "X"
+          ],
+          "V": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north_stag",
+              "west_east"
+            ],
+            [
+              39,
+              283,
+              234
+            ],
+            "m s-1",
+            "Y"
+          ],
+          "W": [
+            "float32",
+            [
+              "Time",
+              "bottom_top_stag",
+              "south_north",
+              "west_east"
+            ],
+            [
+              40,
+              282,
+              234
+            ],
+            "m s-1",
+            "Z"
+          ]
+        },
+        "missing_expected_timestamps": {
+          "baseline": [],
+          "compact": []
+        },
+        "scope": "Exact numeric equality per frame for T, P, PB, PH, PHB, U, V, W, MU, and MUB at common 0..600 second history timestamps. Original dtype, dimension names and non-Time extents, units, and stagger are validated; no derived fields or destaggering are included.",
+        "status": "PASS"
+      },
+      "first_600_trace_equivalence": {
+        "baseline": {
+          "compressed_sha256": "9470e0dd23dabb5a69253ea242def6195ea6f0b3f7bb72da0877402a524e1bfc",
+          "expanded_sha256": "bbba2d8006825dc91b877d03fd491569bd76240c62dc7f56e826f9d2dff246f7"
+        },
+        "common_prefix_steps": 30,
+        "compact": {
+          "compressed_sha256": "3f5c88192a402205d280f5792dc6cfde93abf4d07bf065a362a436ae6f0eba65",
+          "expanded_sha256": "f9c217358164e1a91f1c2f0a50858deadef9809d863a3942c6ddb10023b2236a"
+        },
+        "comparator_status": "PASS",
+        "compared_state_records": 180,
+        "differences": [],
+        "first_difference": null,
+        "scope": "Exact state metadata and big-endian serialized field bytes for six common completed states per step through min(step 30, compact completed prefix). Both whole traces were streamed to EOF and checked against their receipt-bound compressed and expanded hashes.",
+        "status": "PASS"
+      },
+      "generic_qnb": {
+        "evaluated_state_records": 192,
+        "failure_count": 171,
+        "scope": "Existing PR87 generic Q/N/B pair, PSD cone with 8-ULP slack, and dry-density number conversion checks per completed state.",
+        "status": "FAIL"
+      },
+      "identity": {
+        "build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+        "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "candidate_wrfinput_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+        "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+        "hydro_input_binding": {
+          "all_metadata_equal_except_top_level_receipt_path": true,
+          "baseline_receipt_path": "/var/tmp/pr94_hydro_current_inputs_20261021d/hydro_native_input_receipt.json",
+          "receipt_sha256": "967a481070c37286f6aef8d616679583f1c86afb7dd60ac64f1d411977eba39b",
+          "run_receipt_path": "/var/tmp/pr94_hydro_current_inputs_20261021d/hydro_native_input_receipt.json",
+          "status": "PASS"
+        },
+        "inputs_match_c1": true,
+        "run_preflight_sha256": "875de6cf8765339c02b5f625151411465e0b199813aa8e6e5386e30beefad7b0",
+        "run_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO/receipt.json",
+        "run_receipt_sha256": "1440db5a0178af11ac4d92854b3284cc35cb5a74e5e6f6a14cc59dcac3a00a64",
+        "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+        "status": "PASS"
+      },
+      "physical_disposition": "FAIL_OPEN",
+      "procedural": {
+        "620_second_post_kdm6_present": true,
+        "completed_steps": 32,
+        "final_completed_step": 32,
+        "missing_runner_snapshots": [],
+        "receipt_status": "COMPLETE",
+        "required_review_seconds": [
+          20,
+          60,
+          300,
+          600,
+          640
+        ],
+        "returncode": 0,
+        "status": "PASS"
+      },
+      "receipt_history_files": {
+        "wrfout_d01_2026-08-16_13:00:00": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84"
+      },
+      "regression_approval": "READY_FOR_REVIEW",
+      "t1_payload_identity": {
+        "candidate_identities": {
+          "c2": {
+            "arm": "HYDRO",
+            "candidate": "PR99-C2",
+            "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO/receipt.json",
+            "receipt_sha256": "1440db5a0178af11ac4d92854b3284cc35cb5a74e5e6f6a14cc59dcac3a00a64"
+          },
+          "matching_c1": {
+            "arm": "HYDRO",
+            "candidate": "frozen C1 baseline",
+            "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/receipt.json",
+            "receipt_sha256": "342119a6c39c673fbd0f2e9cc16a9690387f5fa0e07b35efadaaf2bf85e093c1"
+          }
+        },
+        "does_not_gate_procedural_completion": true,
+        "does_not_promote_water_closure": true,
+        "payloads": {
+          "kdm6_first_call_post.raw": {
+            "c2": {
+              "compressed_bytes": 67313266,
+              "compressed_sha256": "965735811109a21564ec23f95229e6ab2a9b37b6f0c1b889b286d2c9bdb556bd",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf",
+              "raw_name": "kdm6_first_call_post.raw",
+              "status": "VERIFIED"
+            },
+            "matching_c1": {
+              "compressed_bytes": 67313266,
+              "compressed_sha256": "965735811109a21564ec23f95229e6ab2a9b37b6f0c1b889b286d2c9bdb556bd",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf",
+              "raw_name": "kdm6_first_call_post.raw",
+              "status": "VERIFIED"
+            },
+            "status": "PASS_IDENTICAL"
+          },
+          "kdm6_first_call_pre.raw": {
+            "c2": {
+              "compressed_bytes": 82032040,
+              "compressed_sha256": "78d0378e0b158c3560bdc4777500feb600f7fa1932e50c2d5df5f9584ab635f5",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "72ad647a5df1cd39e7eb3db8f8757e63a9aa4dbde5ce03fcbb08630ca1664f54",
+              "raw_name": "kdm6_first_call_pre.raw",
+              "status": "VERIFIED"
+            },
+            "matching_c1": {
+              "compressed_bytes": 82032040,
+              "compressed_sha256": "78d0378e0b158c3560bdc4777500feb600f7fa1932e50c2d5df5f9584ab635f5",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "72ad647a5df1cd39e7eb3db8f8757e63a9aa4dbde5ce03fcbb08630ca1664f54",
+              "raw_name": "kdm6_first_call_pre.raw",
+              "status": "VERIFIED"
+            },
+            "status": "PASS_IDENTICAL"
+          },
+          "pr67_kdm6_process.raw": {
+            "c2": {
+              "compressed_bytes": 34662269,
+              "compressed_sha256": "82143f4e6a90fe7fbbdbfafcdecc95abb2fb79a451dd9bc3b7baf209fec874c2",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "9bcef6cd06ca3dc9f6a532b2c715d7f25a9b222fcb292fa328f5e38cf431661b",
+              "raw_name": "pr67_kdm6_process.raw",
+              "status": "VERIFIED"
+            },
+            "matching_c1": {
+              "compressed_bytes": 34662269,
+              "compressed_sha256": "82143f4e6a90fe7fbbdbfafcdecc95abb2fb79a451dd9bc3b7baf209fec874c2",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "9bcef6cd06ca3dc9f6a532b2c715d7f25a9b222fcb292fa328f5e38cf431661b",
+              "raw_name": "pr67_kdm6_process.raw",
+              "status": "VERIFIED"
+            },
+            "status": "PASS_IDENTICAL"
+          }
+        },
+        "scope": "C2 versus matching frozen C1 first-call T1 payload identity"
+      },
+      "trace": {
+        "completed_post_kdm6_timesteps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "duplicate_post_kdm6_timesteps": [],
+        "record_count": 257,
+        "row": {
+          "bytes": 26668141460,
+          "compressed_bytes": 9789167122,
+          "compressed_path": "pr85_joint_moment_stages.raw.gz",
+          "compressed_sha256": "3f5c88192a402205d280f5792dc6cfde93abf4d07bf065a362a436ae6f0eba65",
+          "path": "pr85_joint_moment_stages.raw",
+          "sha256": "f9c217358164e1a91f1c2f0a50858deadef9809d863a3942c6ddb10023b2236a"
+        },
+        "sha256_after_audit": "3f5c88192a402205d280f5792dc6cfde93abf4d07bf065a362a436ae6f0eba65"
+      }
+    },
+    "OFF": {
+      "active_ice_policy": {
+        "evaluated_state_records": 192,
+        "max_active_beyond_8ulp": 0,
+        "scope": "Existing 8-ULP active ice policy, with source-inactive positive pairs separately counted, on all six states per completed timestep.",
+        "status": "PASS"
+      },
+      "arm": "OFF",
+      "exact_source_endpoint": {
+        "failures": [],
+        "predictor_diagnostic_records_not_gated": 96,
+        "scope": "Existing PR87 exact source coefficient violations at RK3, PRE_KDM6, POST_KDM6 only; no ULP slack. Exact ice counts are diagnostic, not this generic gate.",
+        "status": "PASS"
+      },
+      "first_600_history_equivalence": {
+        "comparator_status": "PASS",
+        "compared_frames": 11,
+        "compared_timestamps": [
+          "2026-08-16_13:00:00",
+          "2026-08-16_13:01:00",
+          "2026-08-16_13:02:00",
+          "2026-08-16_13:03:00",
+          "2026-08-16_13:04:00",
+          "2026-08-16_13:05:00",
+          "2026-08-16_13:06:00",
+          "2026-08-16_13:07:00",
+          "2026-08-16_13:08:00",
+          "2026-08-16_13:09:00",
+          "2026-08-16_13:10:00"
+        ],
+        "differences": [],
+        "first_difference": null,
+        "metadata": {
+          "MU": [
+            "float32",
+            [
+              "Time",
+              "south_north",
+              "west_east"
+            ],
+            [
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "MUB": [
+            "float32",
+            [
+              "Time",
+              "south_north",
+              "west_east"
+            ],
+            [
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "P": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east"
+            ],
+            [
+              39,
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "PB": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east"
+            ],
+            [
+              39,
+              282,
+              234
+            ],
+            "Pa",
+            ""
+          ],
+          "PH": [
+            "float32",
+            [
+              "Time",
+              "bottom_top_stag",
+              "south_north",
+              "west_east"
+            ],
+            [
+              40,
+              282,
+              234
+            ],
+            "m2 s-2",
+            "Z"
+          ],
+          "PHB": [
+            "float32",
+            [
+              "Time",
+              "bottom_top_stag",
+              "south_north",
+              "west_east"
+            ],
+            [
+              40,
+              282,
+              234
+            ],
+            "m2 s-2",
+            "Z"
+          ],
+          "T": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east"
+            ],
+            [
+              39,
+              282,
+              234
+            ],
+            "K",
+            ""
+          ],
+          "U": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north",
+              "west_east_stag"
+            ],
+            [
+              39,
+              282,
+              235
+            ],
+            "m s-1",
+            "X"
+          ],
+          "V": [
+            "float32",
+            [
+              "Time",
+              "bottom_top",
+              "south_north_stag",
+              "west_east"
+            ],
+            [
+              39,
+              283,
+              234
+            ],
+            "m s-1",
+            "Y"
+          ],
+          "W": [
+            "float32",
+            [
+              "Time",
+              "bottom_top_stag",
+              "south_north",
+              "west_east"
+            ],
+            [
+              40,
+              282,
+              234
+            ],
+            "m s-1",
+            "Z"
+          ]
+        },
+        "missing_expected_timestamps": {
+          "baseline": [],
+          "compact": []
+        },
+        "scope": "Exact numeric equality per frame for T, P, PB, PH, PHB, U, V, W, MU, and MUB at common 0..600 second history timestamps. Original dtype, dimension names and non-Time extents, units, and stagger are validated; no derived fields or destaggering are included.",
+        "status": "PASS"
+      },
+      "first_600_trace_equivalence": {
+        "baseline": {
+          "compressed_sha256": "5bea514433500eff5475b011429051be16560cbe13b16429c43a63affabbd427",
+          "expanded_sha256": "dddb843b67043886c537df151978b8b1cf0beaa17763c8b3cdd4404faf43afbe"
+        },
+        "common_prefix_steps": 30,
+        "compact": {
+          "compressed_sha256": "17d42fbdf054b159fe939385be8ecc9a6c2b7804f80ff24c6a6e55351befdf7a",
+          "expanded_sha256": "4907ca9c1ef59ebcfa83003baafddd981d93f9dc9bf0f63bd277363b227f8d84"
+        },
+        "comparator_status": "PASS",
+        "compared_state_records": 180,
+        "differences": [],
+        "first_difference": null,
+        "scope": "Exact state metadata and big-endian serialized field bytes for six common completed states per step through min(step 30, compact completed prefix). Both whole traces were streamed to EOF and checked against their receipt-bound compressed and expanded hashes.",
+        "status": "PASS"
+      },
+      "generic_qnb": {
+        "evaluated_state_records": 192,
+        "failure_count": 173,
+        "scope": "Existing PR87 generic Q/N/B pair, PSD cone with 8-ULP slack, and dry-density number conversion checks per completed state.",
+        "status": "FAIL"
+      },
+      "identity": {
+        "build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+        "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+        "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+        "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+        "hydro_input_binding": null,
+        "inputs_match_c1": true,
+        "run_preflight_sha256": "3d64c75c70f568fe59f8e42c620811c235b274f29f1ade123537e0fc2392ee2c",
+        "run_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF/receipt.json",
+        "run_receipt_sha256": "c4174b0363dc3b6eb5117ae1e011e9bee0f4f70d090036c607331fac7b0d1f8d",
+        "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+        "status": "PASS"
+      },
+      "physical_disposition": "FAIL_OPEN",
+      "procedural": {
+        "620_second_post_kdm6_present": true,
+        "completed_steps": 32,
+        "final_completed_step": 32,
+        "missing_runner_snapshots": [],
+        "receipt_status": "COMPLETE",
+        "required_review_seconds": [
+          20,
+          60,
+          300,
+          600,
+          640
+        ],
+        "returncode": 0,
+        "status": "PASS"
+      },
+      "receipt_history_files": {
+        "wrfout_d01_2026-08-16_13:00:00": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f"
+      },
+      "regression_approval": "READY_FOR_REVIEW",
+      "t1_payload_identity": {
+        "candidate_identities": {
+          "c2": {
+            "arm": "OFF",
+            "candidate": "PR99-C2",
+            "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF/receipt.json",
+            "receipt_sha256": "c4174b0363dc3b6eb5117ae1e011e9bee0f4f70d090036c607331fac7b0d1f8d"
+          },
+          "matching_c1": {
+            "arm": "OFF",
+            "candidate": "frozen C1 baseline",
+            "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/OFF_600s_c1/receipt.json",
+            "receipt_sha256": "e44d75017995a981fc51be618e8f94755c911bec47af9bc8bd809ec0b30d958f"
+          }
+        },
+        "does_not_gate_procedural_completion": true,
+        "does_not_promote_water_closure": true,
+        "payloads": {
+          "kdm6_first_call_post.raw": {
+            "c2": {
+              "compressed_bytes": 67311610,
+              "compressed_sha256": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+              "raw_name": "kdm6_first_call_post.raw",
+              "status": "VERIFIED"
+            },
+            "matching_c1": {
+              "compressed_bytes": 67311610,
+              "compressed_sha256": "1383153273e6aa9faed9ac85e0f693b123575f70ac6922f45b4ca444341a504f",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+              "raw_name": "kdm6_first_call_post.raw",
+              "status": "VERIFIED"
+            },
+            "status": "PASS_IDENTICAL"
+          },
+          "kdm6_first_call_pre.raw": {
+            "c2": {
+              "compressed_bytes": 82032193,
+              "compressed_sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+              "raw_name": "kdm6_first_call_pre.raw",
+              "status": "VERIFIED"
+            },
+            "matching_c1": {
+              "compressed_bytes": 82032193,
+              "compressed_sha256": "43db35d367b7b173fdab6f990869040b03bbaf2989dce4a241db03fd0e97ea86",
+              "expanded_bytes": 195542592,
+              "expanded_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+              "raw_name": "kdm6_first_call_pre.raw",
+              "status": "VERIFIED"
+            },
+            "status": "PASS_IDENTICAL"
+          },
+          "pr67_kdm6_process.raw": {
+            "c2": {
+              "compressed_bytes": 34662190,
+              "compressed_sha256": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8",
+              "raw_name": "pr67_kdm6_process.raw",
+              "status": "VERIFIED"
+            },
+            "matching_c1": {
+              "compressed_bytes": 34662190,
+              "compressed_sha256": "8adf24f5b12a658b561b46df374a5d951561838200c1ab15a4a3470ca436fe3f",
+              "expanded_bytes": 83442240,
+              "expanded_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8",
+              "raw_name": "pr67_kdm6_process.raw",
+              "status": "VERIFIED"
+            },
+            "status": "PASS_IDENTICAL"
+          }
+        },
+        "scope": "C2 versus matching frozen C1 first-call T1 payload identity"
+      },
+      "trace": {
+        "completed_post_kdm6_timesteps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "duplicate_post_kdm6_timesteps": [],
+        "record_count": 257,
+        "row": {
+          "bytes": 26668141460,
+          "compressed_bytes": 9789035397,
+          "compressed_path": "pr85_joint_moment_stages.raw.gz",
+          "compressed_sha256": "17d42fbdf054b159fe939385be8ecc9a6c2b7804f80ff24c6a6e55351befdf7a",
+          "path": "pr85_joint_moment_stages.raw",
+          "sha256": "4907ca9c1ef59ebcfa83003baafddd981d93f9dc9bf0f63bd277363b227f8d84"
+        },
+        "sha256_after_audit": "17d42fbdf054b159fe939385be8ecc9a6c2b7804f80ff24c6a6e55351befdf7a"
+      }
+    }
+  },
+  "build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+  "candidate": "PR99-C2",
+  "driver_path": "/var/tmp/pr99_c2_closed_audit_20261022.py",
+  "driver_sha256": "6c85d05da948c2911a4d4c30c35f0c64eca0676401006650e4b375593eea6ccf",
+  "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+  "full_audit": {
+    "bytes": 5262183,
+    "path": "/var/tmp/pr100_c2_closed_results_20261022.json",
+    "publication": "retained private; per-state diagnostic tables omitted from this bounded summary",
+    "schema": "pr99_c2_closed_audit_v1",
+    "sha256": "7db371d79162c795a4be66ae92bbef2b4652fac97da11db423328ae007903fc9"
+  },
+  "note": "Procedural completion and C1 equivalence are separate; every C2 difference requires source-backed explanation before regression approval.",
+  "overall_disposition": "FAIL_OPEN",
+  "reader_pins": {
+    "docs/evidence/pr93_active_ice_20261020/runtime/closed_run_audit.py": "8f9affa02e6d843d623911cfd6a9447a9ddb4ba0713cf927e2d5de2bcfb2e126",
+    "tools/pr85_joint_stage_trace.py": "5c2e9ccb3537a6bc251845e2b87c3efb991002ebbc1db5232d475e29f6c31720",
+    "tools/pr86_compare_response.py": "64b2f97f452035cae328576d26216c54877fa778b3eeabe17cdb9980103aaa5c",
+    "tools/pr86_water_budget.py": "e6c00374e9730278b3c1545630af9aa3a6af4c68544c7f39dbda61f909337dc2",
+    "tools/pr87_completed_state_audit.py": "2daef11c005868abf58631d84df74b8535eccb217660fbd605bd8f03216ee70d",
+    "tools/pr87_native_history.py": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+    "tools/pr94_longrun_audit.py": "0ce4eb5a00fa5065aef71be5436b1894813e6d3bdca9d5904283ef72dca326d1"
+  },
+  "reviewed_c2_preflight_sha256": "e5ebd3fe173ec8deee525d2553a347f88ff86a68041f6fc2fac8fbd7df4554a1",
+  "root_launch_go_sha256": "5420c264a6dabf1361e6ff4b0e448efdeee9b0f51811fcef79cb894005760363",
+  "run_roots": {
+    "COUPLED": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED",
+    "HYDRO": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO",
+    "OFF": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF"
+  },
+  "schema": "pr100_c2_closed_summary_v1"
+}

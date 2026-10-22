@@ -1,0 +1,26 @@
+PR100 replay cwd incident: read-only forensic review
+Date: 2026-10-22
+
+Scope and preservation
+- Reviewed current root `.raw` inventory only after root archived the current inodes as hardlinks. No file was moved, restored, deleted, or rewritten by this review.
+- Current inventory: `/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr100_replay_cwd_incident_20261022/current_root_raw_inventory.json`, SHA256 `f4299b1d2fefd65cb0447c4824ee437923bedff834f0088ae44df89cb0c0d4ab`; 33 paths, 1,487,106,395 bytes.
+- Birth inventory: `/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr100_replay_cwd_incident_20261022/birthtime_inventory.json`, SHA256 `3a31ff6832e9d3dc7fef9354e64728bce54b4e7aa5371a1c48df03ed46700aa3`. Current inodes were born 2026-10-22 21:12:07–21:18:45 +0900.
+
+Writer semantics
+- In `/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90:1884-1890`, KDM6 writes `kdm6_first_call_pre.raw` at stage 1 and `kdm6_first_call_post.raw` on the post stage, both with `status='replace'`.
+- In `/var/tmp/pr97_t1_20261022/source/pr97_c1_t1_fulltile_driver.f90:19-20`, driver reads argv[1] as the input pre file; at line 63 it writes `replay_post.raw` with `status='replace'`. Thus root `kdm6_first_call_pre.raw` is an instrumented stage-1 output copy, not the argv input. The driver does not ignore its input argument.
+- The other 30 raw paths are append-mode writers (`status='unknown', position='append'`). Their current inodes were born during the incident, proving those inodes do not preserve an earlier inode's bytes. This does not establish whether a same-name path existed before the run and was removed/replaced beforehand.
+
+Content identity against known isolated runs
+- Hashed each current raw against same-named files in four prior isolated candidate directories: fresh QC HYDRO, fulltile snow HYDRO, clean unowned OFF, and unowned HYDRO OFF. 30/33 current files exactly match a candidate file; this establishes byte identity with those isolated outputs, not that those bytes were the former contents at root.
+- The three with no match in those candidate directories are `pr100_unowned_columns.raw`, `pr76_target_call.raw`, and `pr76_thread_entry.raw`. The last two are process/thread observer records and may vary with runtime IDs. `pr100_unowned_columns.raw` is a current diagnostic output for which no matching prior candidate was found.
+- The three `status='replace'` paths have uncertain pre-incident root state: their current birth times do not prove prior absence because replacement can truncate or replace a pre-existing file. No prior root-specific digest or backup was found in the searched maintained root.
+
+Recovery disposition
+- Do not restore based solely on a matching isolated-run hash. Restore a replace-path only from a pre-incident root-specific backup/digest-authorized source; otherwise retain the hardlinked current bytes as incident evidence and mark the root path's prior state unresolved.
+- Append-only current inodes are incident-created. Keep the archived inode evidence; if cleanup is later approved, preserve it outside the maintained project and do not treat it as pre-incident model evidence. This review did not remove or rename any path.
+
+Protected state spot-checks
+- `Cloud-BAL/tests/intel_toolchain.sh` SHA256 remains `5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4`.
+- KLAPS50 maintained graph SHA256 `983942df987a14cfbe4b78a7b51f73f092d58fb208e0b4c92278a7f73ddec2bc`; Cloud-BAL graph SHA256 `be2ccfd8d33823dc984bcc4621e55da45c304ae6387febce745e4c7c37be57a6`.
+- Maintained-source inventory remains 627 entries, SHA256 `0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f`; the five PR98 wiki markdown receipt hashes also matched. C2 isolated run roots were outside the affected working directory; root reports them untouched.

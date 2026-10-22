@@ -1,0 +1,72 @@
+{
+  "schema": "pr99_c2_root_launch_go_v1",
+  "utc": "2026-10-22T08:36:11.199084+00:00",
+  "status": "GO_MATCHED_THREE_ARM_640_ONLY",
+  "source_commit": "63c0e12",
+  "current_head": "ba8cdf14a80c418af05a75e4fb8f4b8ba1af961c",
+  "head_difference": "test assertion label only; runtime source unchanged",
+  "candidate": "PR99-C2",
+  "build_receipt": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json",
+  "build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+  "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+  "archive_sha256": "c9294166dc38c9ce9640a9615aed0651dddc15f975334638341ce457a9ad03da",
+  "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "overrides": [
+    {
+      "member": "module_microphysics_zero_out.o",
+      "source_sha256": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+      "object_sha256": "a836d436b8b8d3a02c6c0a78ef4437c761e2f20fd0debc6e70d449e8e2c2a8be"
+    },
+    {
+      "member": "module_em.o",
+      "source_sha256": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296",
+      "object_sha256": "94d6b6c9c1af95935a5e4908a396d0439fbb76e326a015a24f9b86bff325c954"
+    },
+    {
+      "member": "module_bl_shinhong.o",
+      "source_sha256": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+      "object_sha256": "5d2b43318fd69453b580a9879498ecaa9ca216d0e5580dffb2f3032ba4df6993"
+    },
+    {
+      "member": "module_bl_fogdes.o",
+      "source_sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+      "object_sha256": "223e718526a9e0bbd450f09bf748ab50fbe1630c82b500d0b3f9c0a1644b2ace"
+    },
+    {
+      "member": "module_pbl_driver.o",
+      "source_sha256": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+      "object_sha256": "a64cb0d6e32b40ce1c4f16fd353679f01543d36806410e2aa5196f29c363f7cb"
+    },
+    {
+      "member": "module_mp_kdm6.o",
+      "source_sha256": "f09a413c36b7bda9fb7376f0276e00329179c68bdbef1e4766bae2811152f58b",
+      "object_sha256": "0b6b42ecb0269561d2071f9c253757ef36a1b2a35820cbb4e2844fe1a013ae10"
+    },
+    {
+      "member": "module_first_rk_step_part1.o",
+      "source_sha256": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+      "object_sha256": "5ed8f52732857424085c4d2984f7627b057d209a963f13ba27d75e9e6ea8f311"
+    },
+    {
+      "member": "module_first_rk_step_part2.o",
+      "source_sha256": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+      "object_sha256": "da29c7c6731330f0f7649135cd387feee7062ee794c8d857b8b2561de9359b18"
+    },
+    {
+      "member": "solve_em.o",
+      "source_sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
+      "object_sha256": "a1274155d9fa1b30f6d1cd2d424ee90977e1e2bc5c48cb2e063212207d79ba33"
+    }
+  ],
+  "unchanged_object_review": "010d4e9918061851cccb8567989ee9e97e1c741e59bf273686dc6eef4bcc3d30",
+  "object_scope": "four unchanged overrides byte identical; four differ in traceback path metadata/padding and relocation targets only; PR90 temp basename only; not whole-object identity",
+  "preflight_sha256": "e5ebd3fe173ec8deee525d2553a347f88ff86a68041f6fc2fac8fbd7df4554a1",
+  "run_roots": {
+    "OFF": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF",
+    "HYDRO": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO",
+    "COUPLED": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED"
+  },
+  "guard": "same executable and original C1 arm-specific inputs/boundary/profile; no duplicate requests; closed-only audit; no automatic longer forecast",
+  "physical_approval": "FAIL_OPEN",
+  "observations": "NOT_EVALUATED"
+}

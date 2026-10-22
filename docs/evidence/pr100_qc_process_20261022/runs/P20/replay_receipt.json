@@ -1,0 +1,59 @@
+{
+  "schema": "pr100_qc_p20_replay_v1",
+  "arm": "P20_COUPLED_SEPARATE_RECEIPT",
+  "returncode": 0,
+  "completion_marker": true,
+  "all_17_fields_and_XLAND_byte_equal": true,
+  "build_manifest_sha256": "0e78d27efc8eb34ba206e728cb6fd27482f6e24af810eb0bde58a05f93896bb9",
+  "executable_sha256": "f984494e1c04ae54590df2b17903d52950aeab1d9f1354b2cda296e9b948002b",
+  "pre_sha256": "867b86bbacdb4067387be2ab4f67c45afbfe950caca47c260c7853c27b778de3",
+  "native_post_sha256": "18f93f5494ce7a4787df7df1a1b57be7c2bb52b5bc358b497d34dceee60975e4",
+  "replay_post_sha256": "18f93f5494ce7a4787df7df1a1b57be7c2bb52b5bc358b497d34dceee60975e4",
+  "available_existing_streams_byte_equal": {
+    "pr67_kdm6_process.raw": {
+      "expanded_source_sha256": "0147d30cfdbe33a4a351d9070107ba4cf7798333c2020d9658e3a3ab127df142",
+      "replay_sha256": "0147d30cfdbe33a4a351d9070107ba4cf7798333c2020d9658e3a3ab127df142",
+      "byte_equal": true
+    },
+    "pr85_kdm6_cold_budget.raw": {
+      "expanded_source_sha256": "f3af9e2e2674208fa8f4ff2571ca8cc48cff58e553020ab215bbc1783af4390d",
+      "replay_sha256": "f3af9e2e2674208fa8f4ff2571ca8cc48cff58e553020ab215bbc1783af4390d",
+      "byte_equal": true
+    },
+    "pr85_kdm6_cutoff_budget.raw": {
+      "expanded_source_sha256": "2fe11735fe547ea1d35cc2c8db73729b2ce9dd72325dacca8cc633ed5e727212",
+      "replay_sha256": "2fe11735fe547ea1d35cc2c8db73729b2ce9dd72325dacca8cc633ed5e727212",
+      "byte_equal": true
+    },
+    "pr85_kdm6_freezing_budget.raw": {
+      "expanded_source_sha256": "8147542db7a894773a51fa36d07f61a09441298f3630234ec00088a099eb310c",
+      "replay_sha256": "8147542db7a894773a51fa36d07f61a09441298f3630234ec00088a099eb310c",
+      "byte_equal": true
+    },
+    "pr85_kdm6_melt_budget.raw": {
+      "expanded_source_sha256": "bf0c20859d529414b579cbab64b071564cc331950497953ba1f1a93cb372d13d",
+      "replay_sha256": "bf0c20859d529414b579cbab64b071564cc331950497953ba1f1a93cb372d13d",
+      "byte_equal": true
+    },
+    "pr85_kdm6_psd_boundary.raw": {
+      "expanded_source_sha256": "7e4bd01030e45d44db32fbb675d59404e4a2e2572e16d1a556e5138f6d13bf38",
+      "replay_sha256": "7e4bd01030e45d44db32fbb675d59404e4a2e2572e16d1a556e5138f6d13bf38",
+      "byte_equal": true
+    },
+    "pr85_kdm6_warm_budget.raw": {
+      "expanded_source_sha256": "bb3a9951ec6d9d80edf4e00a0798546212b1c9821d2fd682648d3fa30fef6e1e",
+      "replay_sha256": "bb3a9951ec6d9d80edf4e00a0798546212b1c9821d2fd682648d3fa30fef6e1e",
+      "byte_equal": true
+    }
+  },
+  "missing_reused_streams": [
+    "pr97_liquid_columns.raw",
+    "pr98_sed_face.raw",
+    "pr87_rain_sedimentation_budget.raw",
+    "pr85_ice_sedimentation_budget.raw"
+  ],
+  "profile": "tests/intel_toolchain.sh pinned Intel 2026.0; OMP_NUM_THREADS=1; unlimited stack",
+  "scratch": "/var/tmp/pr100_qc_observer_runs_fresh_20261022/P20",
+  "native_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_native_uv20_capture_20261022/run/receipt.json",
+  "native_receipt_sha256": "f734125bb30555c30cf6815ab8b61a58d5cb173605c13f4f6ff7ce9d326a90a1"
+}

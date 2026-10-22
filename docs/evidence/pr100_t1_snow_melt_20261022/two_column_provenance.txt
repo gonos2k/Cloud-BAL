@@ -1,0 +1,76 @@
+PR100 two-column QS sedimentation replay: provenance and findings
+Date: 2026-10-22
+Scope: selected columns (169,227) and (146,215), original preserved C1 first-call prestate.
+This is a diagnostic replay, not a forecast and not a complete water closure.
+
+Inputs and source
+- Pinned C1 source copy: /var/tmp/pr99_extrema_checkpoint_source_20261022.f90
+  SHA256 d66029c311004b4483681227a3d9a7e94698991e504d74fab93a26b1adbe4433
+- Instrumented source: /var/tmp/pr100_snow_build_20261022/source/module_mp_kdm6_snow.f90
+  SHA256 4c99b0a9408cd55f86f275e25fd18c70ca6a59e91674d5e89c1ada355b06cf1b
+  The observer records only the two selected horizontal cells at each QS top/internal
+  update. Existing physical assignments were retained; the source copy is outside
+  the checkout.
+- Original C1 prestate: /var/tmp/pr99_extrema_checkpoint_replay4_20261022/OFF/kdm6_first_call_pre.raw
+  SHA256 757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe
+  The replay copy has the same hash.
+- Tool profile: Cloud-BAL/tests/intel_toolchain.sh, SHA256
+  5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4.
+  Compiler is pinned Intel ifx 2026.0.0 20260331 (profile checks compiler and runtime hashes).
+- Fresh build cwd: /var/tmp/pr100_snow_build_20261022. Compile command and log:
+  compile.sh SHA256 ee178feee7e26d4d143b14fa06e817ba59e3deb0726c12947f99cc6bfcffccfb
+  compile.argv SHA256 fd64c2fbc0094c56957c3fc31f3a76577bfddad16b44b134eaa8ebb461dd2776
+  compile.log SHA256 6f2ea41998e60ebb09dad80c59358c0f9476e6a01eb4256f816840807f591982
+  Flags include profile REPRO (-O2, strict FP, no FTZ) and -convert big_endian.
+- Link command record: link_argv.json SHA256
+  efe7b40a3dbe0561e2eb562df1f6573ad661bcae5c114519084bac44f226df22
+  link.log is empty (SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855);
+  the resulting executable is runnable and its SHA256 is
+  25d7c3a0454b02bc0e3e01048ad4d9d037b3248405a48244ad522b9063b8555f.
+- Replay cwd: /var/tmp/pr100_snow_replay_20261022/OFF_be. run.sh SHA256
+  a8cdfca780118868cc8449f5f774c736d19ec036467c6648e9bf105cf7f095c4;
+  run.argv SHA256 0dfba6058630ff9bafaaa0566e34fb80afd014992f959894cb2700ddba26f376;
+  run.log SHA256 aba8dd6c01f4079cc744ac932a379f44f648aa7ecae8974ddd6c548febfeeeae;
+  returncode.txt SHA256 9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa (content 0).
+  OMP_NUM_THREADS=1; pinned Intel runtime path; source argument is the preserved C1 prestate.
+
+Replay integrity
+- Native poststate SHA256 84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529.
+- Replay poststate has the same SHA256. The native capture asserts all 17 returned fields
+  and XLAND byte-identical; existing process stream also matches bytewise.
+- Completion marker in run.log: REPLAY COMPLETED FULL ACTIVE TILE (2:233, 2:281, 1:39).
+  The full driver replayed the preserved call; the added observer emitted only two columns.
+- QS observer raw SHA256 689c51b8d9c3f85ec924b85c49aa83723fa54dc75f7c41bfa7897b9076a16c12.
+  Reducer SHA256 d9b43ad500c9bf2837c57ef5e0d20a1dd1b59bfe0ff64ba98b90b0d208b3401e.
+  Account JSON SHA256 294f81c5c9e5954b14b8ffa1b4578598a9bfe4779221d178335e3e41f7da409a.
+
+Measurement
+For each column, 78 source-ordered updates were recorded (two top updates and 76 internal
+transfers, two substeps). Actual R32 QS pre/post states and falk/dqs operands were retained.
+DEN, dry_carrier_density, and dend matched at donor and receiver levels. Geometry used
+actual DEN*DELZ at each level and receipt-bound map area once. The approved source term is
+computed independently from the represented R32 source operands; storage change remains the
+actual R32 before/after delta. The captured QS bottom sink was zero in both columns.
+
+  Column      stored QS delta      approved QS term     stored - approved
+  (169,227)   +22.2288861870 kg    +0.5014266077 kg    +21.7274595794 kg
+  (146,215)   -17.3484246377 kg    -0.0014128398 kg    -17.3470117982 kg
+
+The source packet term plus captured bottom sink is the packet column imbalance; it is not
+reclassified as storage rounding. Compared with the prior v5 residuals (+22.5885860012 kg
+and -20.1782844996 kg), subtracting QS storage change leaves +0.3596998142 kg and
+-2.8298598619 kg open, respectively. Thus QS storage explains most but not all of the two
+selected residuals. No cause is assigned to the remainder; no tolerance, fitted correction,
+or change to physical state was used.
+
+Recommended next step
+Have root review this two-column source/operand account first. If accepted, add the same
+bounded observer as a compact per-column accumulator over the existing full-tile C1 replay,
+with separate packet imbalance and stored-minus-approved sums, and preserve byte identity.
+Do not treat the two-column outcome as a closed account or generalize to C2 until that
+separate validation is reviewed.
+
+Superseded attempts
+Earlier diagnostics under /var/tmp/pr100_snow_replay_20261022/OFF were superseded due to
+missing endian conversion or incompatible module dependencies. They are not evidence and
+are not used above. The valid replay is OFF_be only.

@@ -1,0 +1,128 @@
+{
+  "schema": "pr100_qc_process_account_v1",
+  "event_sha256": "5719f234a98e27595941ccf6d29d3ddf90c28d0c955b499e8611ddaeb9eac130",
+  "mask_sha256": "c1baa8dd711ec2ed7dc93cf5308bbfd955a295e70c054f5447750da3a21b7089",
+  "pre_sha256": "867b86bbacdb4067387be2ab4f67c45afbfe950caca47c260c7853c27b778de3",
+  "post_sha256": "18f93f5494ce7a4787df7df1a1b57be7c2bb52b5bc358b497d34dceee60975e4",
+  "mask_cells": 613,
+  "event_rows": 3981,
+  "event_labels": {
+    "ACTIVATION": 9,
+    "COLD_COMMIT": 368,
+    "CONDENSATION": 383,
+    "CUTOFF": 454,
+    "ENTRY": 613,
+    "EXIT": 613,
+    "FULL_EVAPORATION": 230,
+    "ICE_EXTINCTION": 96,
+    "ICE_TO_CLOUD": 218,
+    "MELT": 5,
+    "NORMALIZE": 613,
+    "PFRZ": 77,
+    "PINU": 57,
+    "WARM_COMMIT": 245
+  },
+  "packet_accounting": {
+    "cold": {
+      "commit_events": 368,
+      "actual_single_stored_delta_sum": -0.006569643803749692,
+      "component_columns": {
+        "NG": {
+          "proposal_signed_sum": -0.008471828456806777,
+          "alpha_observed_min": 1.3137172595953657e-27,
+          "alpha_observed_max": 1.0,
+          "approved_signed_sum": -0.0065320292622188005,
+          "binary64_product_of_observed_real32_alpha_and_proposal_signed_sum": -0.006532029259957979,
+          "binary64_product_minus_recorded_real32_approved_sum": 2.2608217381536733e-12,
+          "deferred_signed_sum": -0.0019397991927689873
+        },
+        "AUT": {
+          "proposal_signed_sum": -0.001181979653296139,
+          "alpha_observed_min": 0.0,
+          "alpha_observed_max": 1.0,
+          "approved_signed_sum": -3.761436136073826e-05,
+          "binary64_product_of_observed_real32_alpha_and_proposal_signed_sum": -3.761436136073826e-05,
+          "binary64_product_minus_recorded_real32_approved_sum": 0.0,
+          "deferred_signed_sum": -0.0011443652919354008
+        },
+        "G": {
+          "proposal_signed_sum": -0.00187130792260376,
+          "alpha_observed_min": 0.0,
+          "alpha_observed_max": 1.0,
+          "approved_signed_sum": 0.0,
+          "binary64_product_of_observed_real32_alpha_and_proposal_signed_sum": 0.0,
+          "binary64_product_minus_recorded_real32_approved_sum": 0.0,
+          "deferred_signed_sum": -0.00187130792260376
+        },
+        "WARM": {
+          "proposal_signed_sum": 0.0,
+          "alpha_observed_min": 0.0,
+          "alpha_observed_max": 0.0,
+          "approved_signed_sum": 0.0,
+          "binary64_product_of_observed_real32_alpha_and_proposal_signed_sum": 0.0,
+          "binary64_product_minus_recorded_real32_approved_sum": 0.0,
+          "deferred_signed_sum": 0.0
+        }
+      },
+      "REAL32_product_and_remainder_checks": "PASS",
+      "interpretation": "packet columns are REAL32 source diagnostics; recorded approved is rounded REAL32 multiplication, not exact mathematical approval; actual QCI commit is counted once in stored delta"
+    },
+    "warm": {
+      "commit_events": 245,
+      "actual_single_stored_delta_sum": -0.004490636079481192,
+      "component_columns": {
+        "NG": {
+          "proposal_signed_sum": 0.0,
+          "alpha_observed_min": 0.0,
+          "alpha_observed_max": 0.0,
+          "approved_signed_sum": 0.0,
+          "binary64_product_of_observed_real32_alpha_and_proposal_signed_sum": 0.0,
+          "binary64_product_minus_recorded_real32_approved_sum": 0.0,
+          "deferred_signed_sum": 0.0
+        },
+        "AUT": {
+          "proposal_signed_sum": 0.0,
+          "alpha_observed_min": 0.0,
+          "alpha_observed_max": 0.0,
+          "approved_signed_sum": 0.0,
+          "binary64_product_of_observed_real32_alpha_and_proposal_signed_sum": 0.0,
+          "binary64_product_minus_recorded_real32_approved_sum": 0.0,
+          "deferred_signed_sum": 0.0
+        },
+        "G": {
+          "proposal_signed_sum": 0.0,
+          "alpha_observed_min": 0.0,
+          "alpha_observed_max": 0.0,
+          "approved_signed_sum": 0.0,
+          "binary64_product_of_observed_real32_alpha_and_proposal_signed_sum": 0.0,
+          "binary64_product_minus_recorded_real32_approved_sum": 0.0,
+          "deferred_signed_sum": 0.0
+        },
+        "WARM": {
+          "proposal_signed_sum": -0.00449063572902908,
+          "alpha_observed_min": 1.0,
+          "alpha_observed_max": 1.0,
+          "approved_signed_sum": -0.00449063572902908,
+          "binary64_product_of_observed_real32_alpha_and_proposal_signed_sum": -0.00449063572902908,
+          "binary64_product_minus_recorded_real32_approved_sum": 0.0,
+          "deferred_signed_sum": 0.0
+        }
+      },
+      "REAL32_product_and_remainder_checks": "PASS",
+      "interpretation": "packet columns are REAL32 source diagnostics; recorded approved is rounded REAL32 multiplication, not exact mathematical approval; actual QCI commit is counted once in stored delta"
+    }
+  },
+  "event_column_coverage": {
+    "COLD_COMMIT": "NG/AUT/G proposal, alpha, approved and deferred values captured; one actual stored QCI delta",
+    "WARM_COMMIT": "warm proposal, alpha, approved and deferred values captured; one actual stored QCI delta",
+    "other_direct_write_labels": "proposal/alpha/approved/deferred arrays are zero-filled N/A sentinels, not captured zero physical process rates; before/after/delta remain observed",
+    "CONDENSATION": "source tag retained; sign classification uses actual stored QCI delta; requested E/pcond is not captured"
+  },
+  "per_cell_chain_and_telescope": "PASS",
+  "entry_exit_raw_qc_identity": "PASS",
+  "total_stored_qc_change_fsum": -0.06690917659371877,
+  "sum_source_write_deltas_fsum": -0.06690917659371877,
+  "support_qc_pre_rms": 0.0005543275886664575,
+  "support_qc_post_rms": 0.00043148727190008186,
+  "scope": "613 fixed source-composed QC support cells; T1 only; observer replay, not process causality"
+}

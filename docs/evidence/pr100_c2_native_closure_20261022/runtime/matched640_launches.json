@@ -1,0 +1,81 @@
+{
+  "schema": "pr99_c2_matched640_launch_record_v1",
+  "go_path": "/var/tmp/pr99_c2_root_launch_go_20261022.json",
+  "go_sha256": "5420c264a6dabf1361e6ff4b0e448efdeee9b0f51811fcef79cb894005760363",
+  "runner_path": "/var/tmp/pr96_runner_frozen_20261021/tools/pr86_time_response.py",
+  "runner_sha256": "80803b6b3e8591053d0524ed9e5b0110dfd7cbf1d105d2e40029addb5f5a55c4",
+  "build_receipt": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json",
+  "build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+  "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+  "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "hydro_input_receipt": "/var/tmp/pr94_hydro_current_inputs_20261021d/hydro_native_input_receipt.json",
+  "hydro_input_receipt_sha256": "967a481070c37286f6aef8d616679583f1c86afb7dd60ac64f1d411977eba39b",
+  "duration_seconds": 640,
+  "launches": [
+    {
+      "arm": "OFF",
+      "utc_before_launch": "2026-10-22T08:38:16.387070+00:00",
+      "pid": 1311834,
+      "argv": [
+        "python",
+        "/var/tmp/pr96_runner_frozen_20261021/tools/pr86_time_response.py",
+        "--arm",
+        "OFF",
+        "--output",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF",
+        "--duration-seconds",
+        "640",
+        "--execute",
+        "--candidate-build",
+        "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json"
+      ],
+      "stdout": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF.launcher.stdout.log",
+      "stderr": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF.launcher.stderr.log",
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF"
+    },
+    {
+      "arm": "HYDRO",
+      "utc_before_launch": "2026-10-22T08:38:16.388704+00:00",
+      "pid": 1311835,
+      "argv": [
+        "python",
+        "/var/tmp/pr96_runner_frozen_20261021/tools/pr86_time_response.py",
+        "--arm",
+        "HYDRO",
+        "--output",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO",
+        "--duration-seconds",
+        "640",
+        "--execute",
+        "--candidate-build",
+        "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json",
+        "--hydro-input-receipt",
+        "/var/tmp/pr94_hydro_current_inputs_20261021d/hydro_native_input_receipt.json"
+      ],
+      "stdout": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO.launcher.stdout.log",
+      "stderr": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO.launcher.stderr.log",
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO"
+    },
+    {
+      "arm": "COUPLED",
+      "utc_before_launch": "2026-10-22T08:38:16.390186+00:00",
+      "pid": 1311836,
+      "argv": [
+        "python",
+        "/var/tmp/pr96_runner_frozen_20261021/tools/pr86_time_response.py",
+        "--arm",
+        "COUPLED",
+        "--output",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED",
+        "--duration-seconds",
+        "640",
+        "--execute",
+        "--candidate-build",
+        "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json"
+      ],
+      "stdout": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED.launcher.stdout.log",
+      "stderr": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED.launcher.stderr.log",
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED"
+    }
+  ]
+}

@@ -1,0 +1,630 @@
+{
+  "schema": "pr100_qc_contrast_v1",
+  "mask_sha256": "c1baa8dd711ec2ed7dc93cf5308bbfd955a295e70c054f5447750da3a21b7089",
+  "T0_C1_COUPLED_input": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/run/wrfinput_d01",
+    "sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+    "QCLOUD_identity": {
+      "variable": "QCLOUD",
+      "shape": [
+        39,
+        282,
+        234
+      ],
+      "dtype": "<f4",
+      "full_array_sha256": "9f0c5deb731d24ffe4713d19c4216cc9ed414bf388143e1ae3a342931c1786a7"
+    }
+  },
+  "T0_OFF_input": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/OFF_600s_c1/run/wrfinput_d01",
+    "sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+    "QCLOUD_identity": {
+      "variable": "QCLOUD",
+      "shape": [
+        39,
+        282,
+        234
+      ],
+      "dtype": "<f4",
+      "full_array_sha256": "8f458f042d36afcc2ba2febb84980502b4806f2448ffc37ae196021ca7153480"
+    }
+  },
+  "T0_reader_source_sha256": "59d3e3f300e2e8a2bdf071cd7bff22521618db542e58e89254a03e1ea27c1509",
+  "T0_pattern_metric_note": "primary projections use fixed source-composed support T0 C1_COUPLED\u2212OFF; call PRE projection is reported separately because arms already differ at entry",
+  "ordinary_write_packet_columns": "proposal/alpha/approved/deferred are zero-filled N/A sentinels for ordinary direct writes, not measured zero rates; only cold/warm commit blocks capture those packet terms",
+  "arm_input_sha256": {
+    "OFF": {
+      "events": "d4f84ebb5c2e5b1133284f4fc8e3598798d755e24e361731b2ae8e1871d82d0b",
+      "pre": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+      "post": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529"
+    },
+    "HYDRO": {
+      "events": "1fa6e0b2dfea7171ac19cf1fb9c22f2f9c7fd472974a5253cf39738cb48097d1",
+      "pre": "72ad647a5df1cd39e7eb3db8f8757e63a9aa4dbde5ce03fcbb08630ca1664f54",
+      "post": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf"
+    },
+    "COUPLED": {
+      "events": "a6bb99eb3465faaf484235238386b246f334c065920899171ad8e6a6c07d1b61",
+      "pre": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+      "post": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be"
+    },
+    "P20": {
+      "events": "5719f234a98e27595941ccf6d29d3ddf90c28d0c955b499e8611ddaeb9eac130",
+      "pre": "867b86bbacdb4067387be2ab4f67c45afbfe950caca47c260c7853c27b778de3",
+      "post": "18f93f5494ce7a4787df7df1a1b57be7c2bb52b5bc358b497d34dceee60975e4"
+    }
+  },
+  "contrasts": {
+    "HYDRO-OFF": {
+      "T0_C1_COUPLED_minus_OFF_l2": 0.0030971804564550653,
+      "call_PRE_arm_minus_OFF_l2": 0.003053639043631496,
+      "post_contrast_l2": 0.00036536345240709264,
+      "contrast_change_l2": 0.003246992087595566,
+      "contrast_change_projection_on_T0_C1_COUPLED_minus_OFF": -1.043147113399123,
+      "contrast_change_projection_on_call_PRE_arm_minus_OFF": -1.0581656476113606,
+      "event_reconstruction_max_abs_error": 0.0,
+      "label_contributions": {
+        "ACTIVATION": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.0004255743420108287,
+          "projection_on_call_PRE_arm_minus_OFF": -0.00042571412277212065,
+          "delta_vector_l2": 2.805290380462544e-06,
+          "delta_vector_signed_sum": 6.214628228917718e-06,
+          "max_abs_cell_delta": 1.5628756955265999e-06,
+          "arm_stored_increment_sum": 6.214628228917718e-06,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "ACTIVATION",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "COLD_COMMIT": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -2.333725994165751e-05,
+          "projection_on_call_PRE_arm_minus_OFF": -4.792478545815885e-05,
+          "delta_vector_l2": 0.00024846384884380507,
+          "delta_vector_signed_sum": 0.000286442067704229,
+          "max_abs_cell_delta": 0.0002471043262630701,
+          "arm_stored_increment_sum": -0.006307317126072579,
+          "OFF_stored_increment_sum": -0.006593759193776808,
+          "source_record_label": "COLD_COMMIT",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "CONDENSATION_QC_NEGATIVE": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.6493422490382793,
+          "projection_on_call_PRE_arm_minus_OFF": -0.6576096349259336,
+          "delta_vector_l2": 0.0024718656602062783,
+          "delta_vector_signed_sum": 0.01717131643817993,
+          "max_abs_cell_delta": 0.0008474350906908512,
+          "arm_stored_increment_sum": -0.029027708442299627,
+          "OFF_stored_increment_sum": -0.046199024880479556,
+          "source_record_label": "CONDENSATION",
+          "stored_qc_delta_interpretation": "negative QC store delta in the condensation source branch (partial evaporation)"
+        },
+        "CONDENSATION_QC_POSITIVE": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.011522544289804976,
+          "projection_on_call_PRE_arm_minus_OFF": -0.011514658835439257,
+          "delta_vector_l2": 7.528517081135434e-05,
+          "delta_vector_signed_sum": 0.00017216362903127447,
+          "max_abs_cell_delta": 5.744019290432334e-05,
+          "arm_stored_increment_sum": 0.00017216362903127447,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "CONDENSATION",
+          "stored_qc_delta_interpretation": "positive QC store delta in the condensation source branch"
+        },
+        "CONDENSATION_QC_ZERO": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": 0.0,
+          "delta_vector_l2": 0.0,
+          "delta_vector_signed_sum": 0.0,
+          "max_abs_cell_delta": 0.0,
+          "arm_stored_increment_sum": 0.0,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "CONDENSATION",
+          "stored_qc_delta_interpretation": "zero QC store delta in the condensation source branch; E/request is not captured"
+        },
+        "CUTOFF": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": 0.0,
+          "delta_vector_l2": 0.0,
+          "delta_vector_signed_sum": 0.0,
+          "max_abs_cell_delta": 0.0,
+          "arm_stored_increment_sum": 0.0,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "CUTOFF",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "FULL_EVAPORATION": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.28748167348466397,
+          "projection_on_call_PRE_arm_minus_OFF": -0.29221844023127774,
+          "delta_vector_l2": 0.0016781728768484332,
+          "delta_vector_signed_sum": 0.011401639505710137,
+          "max_abs_cell_delta": 0.000807048927526921,
+          "arm_stored_increment_sum": -0.026963715621817843,
+          "OFF_stored_increment_sum": -0.03836535512752798,
+          "source_record_label": "FULL_EVAPORATION",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "ICE_EXTINCTION": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": -8.445795243085315e-30,
+          "delta_vector_l2": 8.874379035149878e-18,
+          "delta_vector_signed_sum": 1.0130736245526699e-17,
+          "max_abs_cell_delta": 5.014435047745458e-18,
+          "arm_stored_increment_sum": -5.745394179104826e-13,
+          "OFF_stored_increment_sum": -5.74549548646728e-13,
+          "source_record_label": "ICE_EXTINCTION",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "ICE_TO_CLOUD": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -6.174330657381474e-05,
+          "projection_on_call_PRE_arm_minus_OFF": -6.521794927330342e-05,
+          "delta_vector_l2": 7.910982932061049e-06,
+          "delta_vector_signed_sum": 1.2068526757502696e-05,
+          "max_abs_cell_delta": 7.466180250048637e-06,
+          "arm_stored_increment_sum": 0.0001439599368495692,
+          "OFF_stored_increment_sum": 0.0001318914100920665,
+          "source_record_label": "ICE_TO_CLOUD",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "MELT": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -7.1369520932003505e-09,
+          "projection_on_call_PRE_arm_minus_OFF": -7.220516153084534e-09,
+          "delta_vector_l2": 1.3015628661377063e-10,
+          "delta_vector_signed_sum": 1.7462298274040222e-10,
+          "max_abs_cell_delta": 1.1641532182693481e-10,
+          "arm_stored_increment_sum": 6.402842700481415e-10,
+          "OFF_stored_increment_sum": 4.656612873077393e-10,
+          "source_record_label": "MELT",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "NORMALIZE": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": 0.0,
+          "delta_vector_l2": 0.0,
+          "delta_vector_signed_sum": 0.0,
+          "max_abs_cell_delta": 0.0,
+          "arm_stored_increment_sum": 0.0,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "NORMALIZE",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "PFRZ": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -2.0693901372847307e-09,
+          "projection_on_call_PRE_arm_minus_OFF": -2.0597635466734963e-07,
+          "delta_vector_l2": 4.049676333895815e-07,
+          "delta_vector_signed_sum": 7.889787459417624e-07,
+          "max_abs_cell_delta": 2.7852365747094154e-07,
+          "arm_stored_increment_sum": -5.031808863565149e-05,
+          "OFF_stored_increment_sum": -5.110706738159325e-05,
+          "source_record_label": "PFRZ",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "PINU": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -9.788509414597577e-14,
+          "projection_on_call_PRE_arm_minus_OFF": -1.1172408686700394e-11,
+          "delta_vector_l2": 4.118347773591372e-11,
+          "delta_vector_signed_sum": 5.908687775169064e-11,
+          "max_abs_cell_delta": 2.9103830456733704e-11,
+          "arm_stored_increment_sum": -1.7760447272585633e-08,
+          "OFF_stored_increment_sum": -1.7819534150337324e-08,
+          "source_record_label": "PINU",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "WARM_COMMIT": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.09428998247140824,
+          "projection_on_call_PRE_arm_minus_OFF": -0.09628384355316319,
+          "delta_vector_l2": 0.0003460816786135052,
+          "delta_vector_signed_sum": 0.0029677851446194836,
+          "max_abs_cell_delta": 9.962692274712026e-05,
+          "arm_stored_increment_sum": -0.004504285468783564,
+          "OFF_stored_increment_sum": -0.007472070613403048,
+          "source_record_label": "WARM_COMMIT",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        }
+      },
+      "cold_commit_signed_proposed_approved_deferred": {
+        "NG": [
+          -0.00855907996735315,
+          -0.00626991723508528,
+          -0.0022891627304488793
+        ],
+        "AUT": [
+          -0.0012011408900605147,
+          -3.739985629636067e-05,
+          -0.001163741033764154
+        ],
+        "G": [
+          -0.0018793190006924623,
+          0.0,
+          -0.0018793190006924623
+        ]
+      },
+      "warm_commit_signed_proposed_approved_deferred": {
+        "WARM": [
+          -0.004504285343384318,
+          -0.004504285343384318,
+          0.0
+        ]
+      },
+      "interpretation": "source-record attribution on fixed support; not causal, not a total-water account"
+    },
+    "COUPLED-OFF": {
+      "T0_C1_COUPLED_minus_OFF_l2": 0.0030971804564550653,
+      "call_PRE_arm_minus_OFF_l2": 0.003067766564493301,
+      "post_contrast_l2": 0.0004570574506287984,
+      "contrast_change_l2": 0.0032857458183227477,
+      "contrast_change_projection_on_T0_C1_COUPLED_minus_OFF": -1.0533433559869179,
+      "contrast_change_projection_on_call_PRE_arm_minus_OFF": -1.0624805239037365,
+      "event_reconstruction_max_abs_error": 0.0,
+      "label_contributions": {
+        "ACTIVATION": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.0005604464046482758,
+          "projection_on_call_PRE_arm_minus_OFF": -0.0005563560526082938,
+          "delta_vector_l2": 3.7522706691078894e-06,
+          "delta_vector_signed_sum": 9.910065273288637e-06,
+          "max_abs_cell_delta": 1.5632831491529942e-06,
+          "arm_stored_increment_sum": 9.910065273288637e-06,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "ACTIVATION",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "COLD_COMMIT": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -6.53185448919195e-05,
+          "projection_on_call_PRE_arm_minus_OFF": -0.0002512298581304547,
+          "delta_vector_l2": 0.00023421410542385072,
+          "delta_vector_signed_sum": 0.0004418953753742051,
+          "max_abs_cell_delta": 0.0001471705036237836,
+          "arm_stored_increment_sum": -0.006151863818402603,
+          "OFF_stored_increment_sum": -0.006593759193776808,
+          "source_record_label": "COLD_COMMIT",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "CONDENSATION_QC_NEGATIVE": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.635301057811211,
+          "projection_on_call_PRE_arm_minus_OFF": -0.6421643528086731,
+          "delta_vector_l2": 0.0026161233830752344,
+          "delta_vector_signed_sum": 0.017381471203407273,
+          "max_abs_cell_delta": 0.0008474350906908512,
+          "arm_stored_increment_sum": -0.028817553677072283,
+          "OFF_stored_increment_sum": -0.046199024880479556,
+          "source_record_label": "CONDENSATION",
+          "stored_qc_delta_interpretation": "negative QC store delta in the condensation source branch (partial evaporation)"
+        },
+        "CONDENSATION_QC_POSITIVE": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.015855564055712177,
+          "projection_on_call_PRE_arm_minus_OFF": -0.015707562052212652,
+          "delta_vector_l2": 0.00010295724862560834,
+          "delta_vector_signed_sum": 0.00027568005316425115,
+          "max_abs_cell_delta": 6.689515430480242e-05,
+          "arm_stored_increment_sum": 0.00027568005316425115,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "CONDENSATION",
+          "stored_qc_delta_interpretation": "positive QC store delta in the condensation source branch"
+        },
+        "CONDENSATION_QC_ZERO": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": 0.0,
+          "delta_vector_l2": 0.0,
+          "delta_vector_signed_sum": 0.0,
+          "max_abs_cell_delta": 0.0,
+          "arm_stored_increment_sum": 0.0,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "CONDENSATION",
+          "stored_qc_delta_interpretation": "zero QC store delta in the condensation source branch; E/request is not captured"
+        },
+        "CUTOFF": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": 0.0,
+          "delta_vector_l2": 0.0,
+          "delta_vector_signed_sum": 0.0,
+          "max_abs_cell_delta": 0.0,
+          "arm_stored_increment_sum": 0.0,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "CUTOFF",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "FULL_EVAPORATION": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.30688402959758965,
+          "projection_on_call_PRE_arm_minus_OFF": -0.30761842573787657,
+          "delta_vector_l2": 0.0019669549955495125,
+          "delta_vector_signed_sum": 0.011210572552143062,
+          "max_abs_cell_delta": 0.000807048927526921,
+          "arm_stored_increment_sum": -0.02715478257538491,
+          "OFF_stored_increment_sum": -0.03836535512752798,
+          "source_record_label": "FULL_EVAPORATION",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "ICE_EXTINCTION": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": -2.6971808193251323e-26,
+          "delta_vector_l2": 5.0382224766925845e-16,
+          "delta_vector_signed_sum": 1.0831012812942616e-15,
+          "max_abs_cell_delta": 3.247592082408768e-16,
+          "arm_stored_increment_sum": -5.734664473654339e-13,
+          "OFF_stored_increment_sum": -5.74549548646728e-13,
+          "source_record_label": "ICE_EXTINCTION",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "ICE_TO_CLOUD": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -6.470598704732911e-05,
+          "projection_on_call_PRE_arm_minus_OFF": -9.925877373142011e-05,
+          "delta_vector_l2": 1.207819221674621e-05,
+          "delta_vector_signed_sum": 2.234936437162105e-05,
+          "max_abs_cell_delta": 9.271316230297089e-06,
+          "arm_stored_increment_sum": 0.00015424077446368756,
+          "OFF_stored_increment_sum": 0.0001318914100920665,
+          "source_record_label": "ICE_TO_CLOUD",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "MELT": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 1.4571520291225373e-08,
+          "projection_on_call_PRE_arm_minus_OFF": 1.49847550155701e-08,
+          "delta_vector_l2": 4.757830967507272e-10,
+          "delta_vector_signed_sum": -2.764863893389702e-10,
+          "max_abs_cell_delta": 4.656612873077393e-10,
+          "arm_stored_increment_sum": 1.8917489796876907e-10,
+          "OFF_stored_increment_sum": 4.656612873077393e-10,
+          "source_record_label": "MELT",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "NORMALIZE": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": 0.0,
+          "delta_vector_l2": 0.0,
+          "delta_vector_signed_sum": 0.0,
+          "max_abs_cell_delta": 0.0,
+          "arm_stored_increment_sum": 0.0,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "NORMALIZE",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "PFRZ": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -2.365220352546366e-09,
+          "projection_on_call_PRE_arm_minus_OFF": -4.487096349658578e-06,
+          "delta_vector_l2": 3.0848433819393056e-06,
+          "delta_vector_signed_sum": -2.663487494242861e-06,
+          "max_abs_cell_delta": 3.024551221142424e-06,
+          "arm_stored_increment_sum": -5.377055487583611e-05,
+          "OFF_stored_increment_sum": -5.110706738159325e-05,
+          "source_record_label": "PFRZ",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "PINU": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -1.304006820713465e-12,
+          "projection_on_call_PRE_arm_minus_OFF": -2.6473761940934213e-09,
+          "delta_vector_l2": 3.0713025788468315e-10,
+          "delta_vector_signed_sum": 2.6184511156546186e-10,
+          "max_abs_cell_delta": 2.3283064365386963e-10,
+          "arm_stored_increment_sum": -1.7557689038771862e-08,
+          "OFF_stored_increment_sum": -1.7819534150337324e-08,
+          "source_record_label": "PINU",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "WARM_COMMIT": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.09461224579081344,
+          "projection_on_call_PRE_arm_minus_OFF": -0.09607886386153304,
+          "delta_vector_l2": 0.00034804789444305937,
+          "delta_vector_signed_sum": 0.002979034417649018,
+          "max_abs_cell_delta": 9.92225541267544e-05,
+          "arm_stored_increment_sum": -0.00449303619575403,
+          "OFF_stored_increment_sum": -0.007472070613403048,
+          "source_record_label": "WARM_COMMIT",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        }
+      },
+      "cold_commit_signed_proposed_approved_deferred": {
+        "NG": [
+          -0.008465257796496567,
+          -0.006083481533432328,
+          -0.002381776272159186
+        ],
+        "AUT": [
+          -0.0011777391953415872,
+          -6.838206292059112e-05,
+          -0.0011093571340126118
+        ],
+        "G": [
+          -0.0018635528530820888,
+          0.0,
+          -0.0018635528530820888
+        ]
+      },
+      "warm_commit_signed_proposed_approved_deferred": {
+        "WARM": [
+          -0.004493036209207268,
+          -0.004493036209207268,
+          0.0
+        ]
+      },
+      "interpretation": "source-record attribution on fixed support; not causal, not a total-water account"
+    },
+    "P20-OFF": {
+      "T0_C1_COUPLED_minus_OFF_l2": 0.0030971804564550653,
+      "call_PRE_arm_minus_OFF_l2": 0.0030667857883451906,
+      "post_contrast_l2": 0.0003055371187688061,
+      "contrast_change_l2": 0.0032470219640621063,
+      "contrast_change_projection_on_T0_C1_COUPLED_minus_OFF": -1.0459717459127342,
+      "contrast_change_projection_on_call_PRE_arm_minus_OFF": -1.0555345128935965,
+      "event_reconstruction_max_abs_error": 0.0,
+      "label_contributions": {
+        "ACTIVATION": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.0005197252999630442,
+          "projection_on_call_PRE_arm_minus_OFF": -0.0005162078769442984,
+          "delta_vector_l2": 3.3962635936532644e-06,
+          "delta_vector_signed_sum": 8.768154657445848e-06,
+          "max_abs_cell_delta": 1.5631667338311672e-06,
+          "arm_stored_increment_sum": 8.768154657445848e-06,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "ACTIVATION",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "COLD_COMMIT": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -2.8971531340493526e-05,
+          "projection_on_call_PRE_arm_minus_OFF": -0.00024581550141089705,
+          "delta_vector_l2": 4.1436070518277064e-05,
+          "delta_vector_signed_sum": 2.4115390027116407e-05,
+          "max_abs_cell_delta": 2.056988887488842e-05,
+          "arm_stored_increment_sum": -0.006569643803749692,
+          "OFF_stored_increment_sum": -0.006593759193776808,
+          "source_record_label": "COLD_COMMIT",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "CONDENSATION_QC_NEGATIVE": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.6409253730184046,
+          "projection_on_call_PRE_arm_minus_OFF": -0.6471306807993701,
+          "delta_vector_l2": 0.002508298105412399,
+          "delta_vector_signed_sum": 0.016839891877680202,
+          "max_abs_cell_delta": 0.0008474350906908512,
+          "arm_stored_increment_sum": -0.029359133002799354,
+          "OFF_stored_increment_sum": -0.046199024880479556,
+          "source_record_label": "CONDENSATION",
+          "stored_qc_delta_interpretation": "negative QC store delta in the condensation source branch (partial evaporation)"
+        },
+        "CONDENSATION_QC_POSITIVE": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.013249152151555746,
+          "projection_on_call_PRE_arm_minus_OFF": -0.013147506991522345,
+          "delta_vector_l2": 8.596044506877597e-05,
+          "delta_vector_signed_sum": 0.00020763608335983008,
+          "max_abs_cell_delta": 6.1033773818053305e-05,
+          "arm_stored_increment_sum": 0.00020763608335983008,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "CONDENSATION",
+          "stored_qc_delta_interpretation": "positive QC store delta in the condensation source branch"
+        },
+        "CONDENSATION_QC_ZERO": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": 0.0,
+          "delta_vector_l2": 0.0,
+          "delta_vector_signed_sum": 0.0,
+          "max_abs_cell_delta": 0.0,
+          "arm_stored_increment_sum": 0.0,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "CONDENSATION",
+          "stored_qc_delta_interpretation": "zero QC store delta in the condensation source branch; E/request is not captured"
+        },
+        "CUTOFF": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": 0.0,
+          "delta_vector_l2": 0.0,
+          "delta_vector_signed_sum": 0.0,
+          "max_abs_cell_delta": 0.0,
+          "arm_stored_increment_sum": 0.0,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "CUTOFF",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "FULL_EVAPORATION": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.2965362307611123,
+          "projection_on_call_PRE_arm_minus_OFF": -0.298171859328749,
+          "delta_vector_l2": 0.0017756895779523084,
+          "delta_vector_signed_sum": 0.011569209495319274,
+          "max_abs_cell_delta": 0.000807048927526921,
+          "arm_stored_increment_sum": -0.026796145632208702,
+          "OFF_stored_increment_sum": -0.03836535512752798,
+          "source_record_label": "FULL_EVAPORATION",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "ICE_EXTINCTION": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": -2.7647157541134165e-27,
+          "delta_vector_l2": 1.6125332768856687e-16,
+          "delta_vector_signed_sum": 1.1184461759965504e-16,
+          "max_abs_cell_delta": 1.1927579150056156e-16,
+          "arm_stored_increment_sum": -5.744377040291285e-13,
+          "OFF_stored_increment_sum": -5.74549548646728e-13,
+          "source_record_label": "ICE_EXTINCTION",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "ICE_TO_CLOUD": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -3.970817634919335e-05,
+          "projection_on_call_PRE_arm_minus_OFF": -4.722891653056662e-05,
+          "delta_vector_l2": 4.529855832675137e-06,
+          "delta_vector_signed_sum": 8.395696568186395e-06,
+          "max_abs_cell_delta": 3.8014259189367294e-06,
+          "arm_stored_increment_sum": 0.0001402871066602529,
+          "OFF_stored_increment_sum": 0.0001318914100920665,
+          "source_record_label": "ICE_TO_CLOUD",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "MELT": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -7.1369520932003505e-09,
+          "projection_on_call_PRE_arm_minus_OFF": -7.319988215767796e-09,
+          "delta_vector_l2": 1.3015628661377063e-10,
+          "delta_vector_signed_sum": 1.7462298274040222e-10,
+          "max_abs_cell_delta": 1.1641532182693481e-10,
+          "arm_stored_increment_sum": 6.402842700481415e-10,
+          "OFF_stored_increment_sum": 4.656612873077393e-10,
+          "source_record_label": "MELT",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "NORMALIZE": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": 0.0,
+          "projection_on_call_PRE_arm_minus_OFF": 0.0,
+          "delta_vector_l2": 0.0,
+          "delta_vector_signed_sum": 0.0,
+          "max_abs_cell_delta": 0.0,
+          "arm_stored_increment_sum": 0.0,
+          "OFF_stored_increment_sum": 0.0,
+          "source_record_label": "NORMALIZE",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "PFRZ": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -2.5446647198543117e-09,
+          "projection_on_call_PRE_arm_minus_OFF": -1.8417773857403349e-06,
+          "delta_vector_l2": 6.189456764706713e-07,
+          "delta_vector_signed_sum": 8.146540160375304e-07,
+          "max_abs_cell_delta": 4.584435373544693e-07,
+          "arm_stored_increment_sum": -5.029241336555572e-05,
+          "OFF_stored_increment_sum": -5.110706738159325e-05,
+          "source_record_label": "PFRZ",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "PINU": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -2.8919929857211503e-13,
+          "projection_on_call_PRE_arm_minus_OFF": -2.1897859383483977e-09,
+          "delta_vector_l2": 2.767401219717765e-10,
+          "delta_vector_signed_sum": 1.7303251192979374e-10,
+          "max_abs_cell_delta": 2.3283064365386963e-10,
+          "arm_stored_increment_sum": -1.764650163840753e-08,
+          "OFF_stored_increment_sum": -1.7819534150337324e-08,
+          "source_record_label": "PINU",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        },
+        "WARM_COMMIT": {
+          "projection_on_T0_C1_COUPLED_minus_OFF": -0.09467257529210281,
+          "projection_on_call_PRE_arm_minus_OFF": -0.09627336219190939,
+          "delta_vector_l2": 0.00034836891632421724,
+          "delta_vector_signed_sum": 0.002981434533921856,
+          "max_abs_cell_delta": 9.920544107444584e-05,
+          "arm_stored_increment_sum": -0.004490636079481192,
+          "OFF_stored_increment_sum": -0.007472070613403048,
+          "source_record_label": "WARM_COMMIT",
+          "stored_qc_delta_interpretation": "source label identifies the write site; packet fields are N/A unless a commit block captures them"
+        }
+      },
+      "cold_commit_signed_proposed_approved_deferred": {
+        "NG": [
+          -0.008471828456806777,
+          -0.0065320292622188005,
+          -0.0019397991927689873
+        ],
+        "AUT": [
+          -0.001181979653296139,
+          -3.761436136073826e-05,
+          -0.0011443652919354008
+        ],
+        "G": [
+          -0.00187130792260376,
+          0.0,
+          -0.00187130792260376
+        ]
+      },
+      "warm_commit_signed_proposed_approved_deferred": {
+        "WARM": [
+          -0.00449063572902908,
+          -0.00449063572902908,
+          0.0
+        ]
+      },
+      "interpretation": "source-record attribution on fixed support; not causal, not a total-water account"
+    }
+  },
+  "fixed_support_cells": 613
+}

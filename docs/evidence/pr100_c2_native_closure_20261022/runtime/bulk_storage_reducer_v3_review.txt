@@ -1,0 +1,10 @@
+Independent metadata-only review: bulk storage reducer v3
+Date: 2026-10-22
+
+Reviewed frozen files:
+- v2/previous: `/var/tmp/pr100_bulk_storage_reducer_20261022.py`, SHA256 `013ea219a1f1ba9fdbc14e3c8e1c6859f8fb87baecd7855da1ef99ce6a7b2d5f`.
+- v3: `/var/tmp/pr100_bulk_storage_reducer_v3_20261022.py`, SHA256 `63b4ee606a21a31e44aa18e807ef4482493fd5a6e00a0164a6e7964b8d05a132`.
+
+The unified diff is limited to importing `decimal.getcontext`, recording `getcontext().prec`, and correcting the precision note. The note now accurately says sums are rounded Decimal reductions of printed ES26.17 strings at the recorded context precision; they are neither exact sums of underlying binary values nor physical kg. Units remain separate carrier-weighted pressure-coordinate amounts. Count scope still combines ordinary bulk storage with certificate acceptance; certificate-only count is explicitly unobserved. The per-event predicate remains the loss-budget authority.
+
+No arithmetic expression, parsing, source binding, count/coverage gate, acceptance gate, or output control changed. Review is GO for the metadata-only correction. I did not execute the script or inspect any live C2 outputs; collection remains pending root closure.

@@ -1,0 +1,9 @@
+Patch format-only update, 2026-10-22
+Baseline source: /var/tmp/pr99_extrema_checkpoint_source_20261022.f90
+Baseline SHA-256: d66029c311004b4483681227a3d9a7e94698991e504d74fab93a26b1adbe4433
+Target generated source: /var/tmp/pr100_snow_build_20261022/source/module_mp_kdm6_snow_fulltile.f90
+Target SHA-256: eb98a36c2cfb0bd52713a858694bcec5ba55263aa2e798a2759bcd215b23adc4
+Zero-context patch SHA-256: 88a1ff22efc72fa9d5b3d17b60627d5d38164ac234c5ef2e1f62593c7e69709e
+Verification: copied the pinned baseline to a fresh temporary directory, applied the patch with patch -p0, and hashed the result.
+Applied result SHA-256: eb98a36c2cfb0bd52713a858694bcec5ba55263aa2e798a2759bcd215b23adc4 (matches target).
+No source logic, build, or model-run changes were made.

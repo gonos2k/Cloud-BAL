@@ -1,0 +1,22 @@
+PR100 precommit integration review
+Date: 2026-10-22
+Review type: bounded read-only inspection; no live cohort reads, model/build runs, reducer execution, or repository edits.
+
+Reviewed artifact pins
+- Top document `docs/PR100_C2_NATIVE_CLOSURE_20261022.md`: SHA256 0de65046e327cc19f3db50f3109764d4761c1918275769e0d004d9aa614e7dab.
+- Runtime README `docs/evidence/pr100_c2_native_closure_20261022/runtime/README.md`: SHA256 2502a87fd758011d055c9f09be6cae745ea2055a7d9cc65616254c293b7530c3.
+- Closed summary: SHA256 9c414447d0d85c0d392bb9f2ca19457144765381f57574e656b34c08317c6b7c.
+- Bulk result: SHA256 887f9b87b6faa2fa1a84228c954ac139134d618f9cdbecf22428ee61bd4c1e7f.
+- Existing bounded runtime source/result review: `/var/tmp/pr100_runtime_final_review_20261022.txt`, SHA256 2e61b4c9f94d6ead94af117cd82c7980f046693a85431261b45a5cf9ec3d5338.
+- Runtime bundle SHA256SUMS passed all 25 entries at review time.
+- Portable QC source fixture/test evidence: provenance records focused command exit 0, 7 passed, one NumPy ABI warning; fixture is scoped to observer insertion with `compact.prepare` patched to identity.
+
+Findings
+- Cohorts are explicitly distinct: original C1 OFF/HYDRO/COUPLED, projected-input P20, and PR99-C2 OFF/HYDRO/COUPLED. The text does not merge P20 into C2 or infer projected-input repetition from C1 results.
+- C2 closure language matches the bounded summary: each arm is COMPLETE/rc 0, 32 calls, source endpoint and active/inactive ice checks PASS, 180 common first-600 trace states and 11 history frames PASS, and T1 payloads match their arm's C1 capture. Generic Q/N/B remains FAIL with 173/171/171 records; physical approval remains FAIL_OPEN. `READY_FOR_REVIEW` is not presented as overall success.
+- The C2 bulk result is described in pressure-carrier-weighted units, not kg. Decimal reductions are explicitly rounded sums of printed values, not exact underlying binary totals. The aggregate adjustment-5 count combines ordinary and certificate paths; witness rows are call-associated, not certificate-only. No zero-loss, physical water/energy closure, or universal per-trial rollback claim is made.
+- The full-tile first-call water account is identified as C1 selected arithmetic. Its source-owned transfers and actual R32 fall versus approved R64 ground comparison remain separated from C2 closure. Signed remainders and open full-native hybrid/energy/cutoff limits remain visible.
+- The runtime README no longer carries the stale launch-time RUNNING/pending prose; it distinguishes the historical launch snapshot and build summary from closed receipts and the final auditor. The older 6b... driver pin is described as historical, with the final 6c85... driver separately bound.
+
+Disposition
+GO for the reviewed top-level scope and wording, with no blocker found in these documents/results. Physical approval remains FAIL_OPEN and observation skill NOT_EVALUATED. This review does not independently reopen or rerun the full audit; it cross-checks the published summaries against the bounded runtime review and the named artifact identities. It is not a Graphify/KG freshness claim.
