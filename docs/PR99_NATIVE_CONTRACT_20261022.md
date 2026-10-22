@@ -60,6 +60,18 @@ the model to force closure. Cutoff remains a measured numerical removal,
 not evaporation or sublimation. This is the fixed input `DEN × DELZ × area`
 measure of one KDM6 call, separate from the host's hybrid water/energy budget.
 
+The cutoff supplement keeps the source-composed QC support and the fixed
+buffer. No QC mass is removed by the recorded T1 threshold assignments;
+most removal is rain and snow. Ratios to pre-call condensate inventory are
+context only, since species can form and replenish during the call.
+
+The closed first-call captures also localize a QC pattern change. In the
+613-cell support, HYDRO, original COUPLED, and the U/V proposal retain strong
+alignment with the initial C1−OFF QC contrast at KDM6 entry (cosines
+0.997–1.000), but their POST contrasts have negative cosines. The change
+develops across that measured call; no individual process or observation
+skill is inferred from this Eulerian diagnostic.
+
 ## Evidence map
 
 - [Pressure candidate, omega authority, and feasibility](PR99_PRESSURE_TRANSFER_20261022.md)
@@ -68,6 +80,8 @@ measure of one KDM6 call, separate from the host's hybrid water/energy budget.
 - [Physical dry-column mass-rate measure](PR99_NATIVE_DRY_MASS_RATE_20261022.md)
 - [First grouped rejection capture and scalar replay](PR99_GROUPED_FAILURE_DIAGNOSTIC_20261022.md)
 - [Same-call T1 remaining water accounting](PR99_T1_REMAINING_20261022.md)
+- [Cutoff removal and same-region condensate context](PR99_CUTOFF_INVENTORY_20261022.md)
+- [First-call hydrometeor entry and response](evidence/pr99_hydrometeor_response_20261022/README.md)
 
 The linked receipts bind the source, compiler/profile, generated driver,
 candidate, boundary, and output artifacts. Native work uses pinned Intel

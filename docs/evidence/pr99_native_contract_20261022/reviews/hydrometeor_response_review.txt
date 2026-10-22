@@ -1,0 +1,10 @@
+Independent read-only review: PR99 first-call hydrometeor response
+Date: 2026-10-22
+
+I reran the complete reducer to a new temporary output using the receipt-bound PRE/POST traces and initial wrfinput arrays. Its parsed JSON is structurally identical to the frozen response.json. The reducer, README, response and the three pinned reader/mask source hashes match provenance.json. The composition hash and all four run receipts also match the recorded bindings; each run is at 2026-08-16_13:00:20 with the same executable and boundary hash.
+
+The reducer keeps each arm's POST−PRE KDM6 increment distinct from cross-arm POST state contrasts and from the proposal−OFF increment contrast. It evaluates the initial C1_COUPLED−OFF moisture pattern against proposal−OFF, HYDRO−OFF and original C1_COUPLED−OFF POST states, plus proposal−HYDRO. All 39 levels are finite-checked before aggregation. The six hundred thirteen-cell support, fixed buffers and full active domain are independently reproduced by the rerun. Proposal and original C1_COUPLED initial full-array bytes match for QCLOUD, QICE, QRAIN, QSNOW and QGRAUP.
+
+Selected 613-cell metrics also reproduce: QC T0 RMS 1.2509394e−4 kg/kg, proposal−OFF POST RMS 1.2340528e−5 and cosine −0.5898568; QI proposal−OFF POST RMS 6.1187098e−6 and cosine 0.2002139; QR proposal−OFF POST RMS 6.3925729e−5 and cosine 0.2228393; QS proposal−OFF POST RMS 7.3978310e−5 and cosine 0.9933115. QG proposal−OFF POST is exactly zero (initial QG bytes match C1, and both POST arrays match), while its proposal−OFF microincrement is nonzero. Negative cosine values are reported as alignment descriptors only. README explicitly disclaims causal attribution, full host history, total-water mass and observation skill; neither README nor reducer treats negative alignment as skill or proof of a mechanism.
+
+Limit: this review verifies trace/input binding, reducer arithmetic and interpretation language; the single 20-second T1 call does not establish later-time behavior or physical approval.
