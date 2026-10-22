@@ -46,6 +46,12 @@ therefore remains **non-default; physical approval `FAIL_OPEN` and observation
 skill `NOT_EVALUATED`**. Raw RU/RV are not acceleration or energy norms. A
 nonzero column mass tendency is not itself a continuity-conservation error.
 
+The RU/RV capture is after `rk_addtend_dry`, before conditional boundary
+updates and the acoustic coupled-wind integration. Physical wind
+restoration also uses hybrid coefficients and updated face carriers not
+captured at that later boundary. The raw RHS norms are retained; initial
+column-mass division is not treated as actual wind acceleration.
+
 ## Grouped rejection and revised storage
 
 The first T32/RK1 grouped rejection is a normal-size transport candidate at

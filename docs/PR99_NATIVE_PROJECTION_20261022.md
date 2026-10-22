@@ -59,6 +59,15 @@ hybrid sensitivity and pinned gravity
 kept in their own source-coordinate units; they are not combined into an
 acceleration or energy norm.
 
+The pinned capture hook follows `rk_addtend_dry`. Conditional boundary
+updates and small-step preparation follow it before `advance_uv`; that
+routine updates coupled perturbation winds. The later
+`small_step_finish` call receives separate updated face carriers
+`MUUS/MUVS` and hybrid coefficients. The capture does not retain all of
+those quantities at the restoration boundary. Dividing the captured RU/RV
+by the initial column mass therefore does not establish the actual
+physical wind acceleration. No such conversion is used in this report.
+
 Relative to original COUPLED, mass-rate L2 decreases about 96.0%, RU 7.8% and
 RV 2.5%. RU/RV remain **1.56/1.39 times HYDRO**. Thus, matching the native
 mass-flux degrees of freedom materially improves this mass response but
