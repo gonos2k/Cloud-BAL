@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shlex
 import struct
 from pathlib import Path
@@ -33,6 +34,76 @@ TEXT_ROWS = {
     "R64_INACTIVE_MASS_LIMIT": 1,
 }
 BOOLEAN_VALUES = {"T": True, ".TRUE.": True, "F": False, ".FALSE.": False}
+FAILURE_MARKER = "PR99_GROUP_FAILURE_V1"
+POST_RETRY_MARKER = "PR99_GROUP_POST_RETRY_V1"
+
+
+def _expand_wire_marker(fields: list[str], line_number: int) -> tuple[list[str], int] | None:
+    """Split Intel list-directed marker concatenation and return expected row width."""
+    token = fields[0]
+    if token.startswith(FAILURE_MARKER):
+        suffix = token[len(FAILURE_MARKER):]
+        if suffix:
+            match = re.fullmatch(r"(.+)(SOURCE_FIRST|BASELINE)", suffix)
+            if match is None:
+                raise ValueError(f"malformed concatenated PR99 failure marker at line {line_number}")
+            fields = [FAILURE_MARKER, match.group(1), match.group(2), *fields[1:]]
+        return fields, 13
+    if token.startswith(POST_RETRY_MARKER):
+        suffix = token[len(POST_RETRY_MARKER):]
+        if suffix:
+            fields = [POST_RETRY_MARKER, suffix, *fields[1:]]
+        return fields, 8
+    return None
+
+
+def _read_records(path: Path) -> list[tuple[int, list[str]]]:
+    """Normalize wrapped list-directed PR99 headers into logical rows."""
+    physical = path.read_text().splitlines()
+    records: list[tuple[int, list[str]]] = []
+    line_index = 0
+    while line_index < len(physical):
+        line_number = line_index + 1
+        fields = shlex.split(physical[line_index])
+        line_index += 1
+        if not fields:
+            continue
+        expanded = _expand_wire_marker(fields, line_number)
+        if expanded is None:
+            records.append((line_number, fields))
+            continue
+        fields, expected_count = expanded
+        marker = fields[0]
+        while len(fields) < expected_count:
+            if line_index >= len(physical):
+                raise ValueError(f"truncated PR99 header continuation at line {line_number}")
+            continuation_number = line_index + 1
+            continuation = shlex.split(physical[line_index])
+            line_index += 1
+            if not continuation:
+                continue
+            # Only integer columns followed by one boolean can continue these
+            # numeric list-directed headers. A marker or data row here is an
+            # interleaved/truncated header, not another record to consume.
+            bool_index = 12 if marker == FAILURE_MARKER else 7
+            for token in continuation:
+                next_index = len(fields)
+                if next_index > bool_index:
+                    raise ValueError(f"overlong PR99 header continuation at line {continuation_number}")
+                if next_index == bool_index:
+                    if token.upper() not in BOOLEAN_VALUES:
+                        raise ValueError(f"malformed PR99 header continuation at line {continuation_number}")
+                else:
+                    try:
+                        int(token)
+                    except ValueError as error:
+                        raise ValueError(
+                            f"malformed PR99 header continuation at line {continuation_number}") from error
+                fields.append(token)
+                if len(fields) > expected_count:
+                    raise ValueError(f"overlong PR99 header continuation at line {continuation_number}")
+        records.append((line_number, fields))
+    return records
 
 
 def parse_bool(token: str, line_number: int) -> bool:
@@ -66,19 +137,14 @@ def parse_capture(path: Path) -> dict[str, Any]:
     """Parse a complete PR99 event sequence and bind each post-retry status."""
     events: list[dict[str, Any]] = []
     current: dict[str, Any] | None = None
-    for line_number, line in enumerate(path.read_text().splitlines(), 1):
-        if not line.strip():
-            continue
-        fields = shlex.split(line)
-        if not fields:
-            continue
+    for line_number, fields in _read_records(path):
         marker = fields[0]
-        if marker == "PR99_GROUP_FAILURE_V1":
+        if marker == FAILURE_MARKER:
             if current is not None:
                 events.append(current)
             current = _parse_failure(fields, line_number)
             continue
-        if marker == "PR99_GROUP_POST_RETRY_V1":
+        if marker == POST_RETRY_MARKER:
             if len(fields) != 8:
                 raise ValueError(f"malformed PR99 post-retry row at line {line_number}")
             _, run_id, timestep, rk, cell, pair, predicate, feasible = fields

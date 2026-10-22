@@ -1,4 +1,6 @@
 from pathlib import Path
+import hashlib
+import json
 import subprocess
 import sys
 import tempfile
@@ -61,6 +63,59 @@ class GroupFailureTraceTest(unittest.TestCase):
             source_first = capture.parse_capture(path)["events"][0]
         self.assertEqual(source_first["attempt"], "SOURCE_FIRST")
         self.assertTrue(source_first["post_graupel_mixture_feasible"])
+
+    def test_capture_parser_reads_source_bound_intel_list_directed_headers(self):
+        fixture = ROOT / "tests/fixtures/pr99_group_failure_intel_header.raw"
+        provenance = json.loads((fixture.parent / "pr99_group_failure_intel_header.provenance.json")
+                                .read_text())
+        expected_sha256 = "5e38458df2d680c3fb83936823e0f7f147e99d7c2d9303d05e23aad1be9529ae"
+        self.assertEqual(provenance["source_path"],
+                         "/var/tmp/pr99_group_failure_first_event_20261022.raw")
+        self.assertEqual(provenance["sha256"], expected_sha256)
+        self.assertEqual(hashlib.sha256(fixture.read_bytes()).hexdigest(), expected_sha256)
+        result = capture.parse_capture(fixture)
+        self.assertEqual(result["event_count"], 1)
+        event = result["events"][0]
+        self.assertEqual((event["run_id"], event["attempt"], event["timestep"], event["rk"]),
+                         ("OFF_9510f27a00cb8426", "BASELINE", 32, 1))
+        self.assertEqual((event["cell"], event["pair"], event["i"], event["j"], event["k"]),
+                         (556962, 4, 163, 63, 22))
+        self.assertEqual(event["hex"]["HEX64_CANDIDATE"],
+                         ["3DAAA0E68E084B52", "3D0E4C1E36A67346"])
+        self.assertEqual(event["hex"]["HEX32_STORED"], ["BF800000", "BF800000"])
+        self.assertFalse(event["store_succeeded"])
+        self.assertFalse(event["post_graupel_mixture_feasible"])
+
+    def test_capture_parser_rejects_malformed_intel_header_continuation(self):
+        fixture = ROOT / "tests/fixtures/pr99_group_failure_intel_header.raw"
+        contents = fixture.read_text()
+        malformed = contents.replace("      556962           4         163          63          22           1",
+                                    "      invalid           4         163          63          22           1", 1)
+        with tempfile.TemporaryDirectory(prefix="pr99-intel-header-continuation-") as tmp:
+            path = Path(tmp) / "malformed.raw"
+            path.write_text(malformed)
+            with self.assertRaisesRegex(ValueError, "malformed PR99 header continuation"):
+                capture.parse_capture(path)
+
+    def test_capture_parser_rejects_malformed_intel_post_retry_continuation(self):
+        fixture = ROOT / "tests/fixtures/pr99_group_failure_intel_header.raw"
+        contents = fixture.read_text().replace(
+            "      556962           4           1 F",
+            "      556962           4           1 maybe", 1)
+        with tempfile.TemporaryDirectory(prefix="pr99-intel-post-continuation-") as tmp:
+            path = Path(tmp) / "malformed-post.raw"
+            path.write_text(contents)
+            with self.assertRaisesRegex(ValueError, "malformed PR99 header continuation"):
+                capture.parse_capture(path)
+
+    def test_capture_parser_rejects_truncated_intel_header_continuation(self):
+        fixture = ROOT / "tests/fixtures/pr99_group_failure_intel_header.raw"
+        contents = fixture.read_text().splitlines()
+        with tempfile.TemporaryDirectory(prefix="pr99-intel-header-truncated-") as tmp:
+            path = Path(tmp) / "truncated.raw"
+            path.write_text(contents[0] + "\n")
+            with self.assertRaisesRegex(ValueError, "truncated PR99 header continuation"):
+                capture.parse_capture(path)
 
     @unittest.skipUnless(Path("/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_em.F").is_file(),
                          "receipt-pinned C1 source is unavailable")
