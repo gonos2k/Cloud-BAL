@@ -25,6 +25,10 @@ After the PR100 source commit and open PR URL exist and the root-owned final man
   --check-only
 ```
 
-Review the exact printed `plan_sha256` before any later `--apply --reviewed-plan-sha256 <plan_sha256>` invocation. The wrapper is being prepared while C2 runs; do not run check-only or apply against incomplete runtime evidence. The source-generation state and these documents provide no runtime or scientific validation.
+Review the exact printed `plan_sha256` before any later `--apply --reviewed-plan-sha256 <plan_sha256>` invocation. This describes the guarded preparation workflow; closed C2 results and the completed apply are recorded in `publication.md`. Do not run check-only or apply against incomplete runtime evidence. The source-generation state and these documents provide no runtime or scientific validation.
 
 The dated PR100 snapshots will remain separate in the KLAPS50 and Cloud-BAL corpora. Extraction limits, runtime gate states, open items, and graph deltas will be recorded in both reports and the final receipt. Graph freshness is navigation evidence only.
+
+## Applied result
+
+See [publication.md](publication.md) and [applied_summary.json](applied_summary.json) for the completed, independently reviewed application at source freeze `870dd5c9dac9aa1fae9f836c051cffd5699c6f85`. Runtime/diagnostic scopes remain separate; physical approval is FAIL_OPEN and observation skill is NOT_EVALUATED. `SHA256SUMS` binds this bounded publication; no full graph, profile, or backup is included.

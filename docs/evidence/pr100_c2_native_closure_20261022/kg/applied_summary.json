@@ -1,0 +1,118 @@
+{
+  "apply_receipt": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr100_c2_native_closure_20261022/kg/kg_receipt.json",
+    "sha256": "9958027ddc1306bbe8b130a19c2c2530c07ea01bdd858e8d9664b31a9667c015"
+  },
+  "apply_return_code": 0,
+  "check_only_plan": {
+    "plan_file_sha256": "26831d9947f568ac9a7b1f77f437e180e3aee4b56e278c113e1516b303944804",
+    "plan_sha256": "fd7ce8f6dcf84e9b3366364a87ea743d0ae5c6369322dd84e54e23528909dde0",
+    "review_path": "check_only_v2_review.txt",
+    "review_sha256": "c1c222177074e8c4aa0eb01bc1181c40a54072df0d30146616856aeb1c781991",
+    "status": "CHECK_ONLY_NO_WRITES",
+    "writes_performed": false
+  },
+  "corpus_snapshots": {
+    "Cloud-BAL": {
+      "communities": 1289,
+      "delta": {
+        "communities": 20,
+        "edges": 558,
+        "nodes": 338
+      },
+      "edges": 25431,
+      "graph_sha256": "ac91e8bdfab43634e01bb1b215f3b0515bd66ec72ea9c3fe9d6b6f76b059d0f9",
+      "integrity": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "self_loop_edges": 0
+      },
+      "nodes": 14448,
+      "report_sha256": "2dbb5b54db881850110d3066ed12576d42e9ccc41cd09a6ed9734dbadbc315aa",
+      "snapshot_files_sha256": {
+        "GRAPH_REPORT.md": "2dbb5b54db881850110d3066ed12576d42e9ccc41cd09a6ed9734dbadbc315aa",
+        "graph.json": "ac91e8bdfab43634e01bb1b215f3b0515bd66ec72ea9c3fe9d6b6f76b059d0f9",
+        "manifest.json": "f92e7ccea89d7c6ce2ca5668bd26086b0a356e92e90390cee9fad87e516bb6c7"
+      }
+    },
+    "KLAPS50": {
+      "communities": 3283,
+      "delta": {
+        "communities": 24,
+        "edges": 559,
+        "nodes": 338
+      },
+      "edges": 83885,
+      "graph_sha256": "4765b0f1b8b5f680d541f2c106b35bf29ada8e634bc1170f293e808b60faef0f",
+      "integrity": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "self_loop_edges": 0
+      },
+      "nodes": 40276,
+      "report_sha256": "720839ee17238ca4d8118775c1b7389ecefc3014152efa7c6969aa26f5b7ab4f",
+      "snapshot_files_sha256": {
+        "GRAPH_REPORT.md": "720839ee17238ca4d8118775c1b7389ecefc3014152efa7c6969aa26f5b7ab4f",
+        "graph.json": "4765b0f1b8b5f680d541f2c106b35bf29ada8e634bc1170f293e808b60faef0f",
+        "manifest.json": "aefb3d2722a37aec6cf37c19fa3b7e44c8abce775c884c46a2bf730cc106c3ee"
+      }
+    },
+    "snapshot_id": "2026-10-22-pr100-c2-native-closure"
+  },
+  "extraction_limits": [
+    "Separate KLAPS50 and Cloud-BAL snapshots extract allowlisted PR99 lineage and PR100 source/docs; evidence payloads are hash-bound only. Cross-file Fortran CALL extraction is partial; Fortran embedded in Python generator strings is not extracted as standalone procedures. Graph freshness is navigation evidence, not runtime/scientific approval.",
+    "The noncompilable PR99 transform-anchor fixture and archived C1 core fixture are hash-only; source bytes retained."
+  ],
+  "extraction_scope": {
+    "hash_only_paths": 306,
+    "lineage_paths": 366,
+    "selected_sources": 60
+  },
+  "post_review": {
+    "path": "postapply_review.txt",
+    "sha256": "98f58f269193c7327a109893c1b7ee95af18cbdc46d7265d3fa948e1975a00bb"
+  },
+  "post_review_status": "GO",
+  "preservation": {
+    "authorized_derived_wiki_files": 5,
+    "inherited_immutable_pins": 197,
+    "maintained_source_entries": 627,
+    "prior_dated_snapshot_directories": 110,
+    "protected_wiki_content_fingerprints": 13,
+    "status": "independent post-apply review GO"
+  },
+  "publication_draft_review": {
+    "path": "publication_draft_review.txt",
+    "scope": "Reviewed draft with post-review pending; final metadata replaces pending status using the separately hash-bound completed post-apply review.",
+    "sha256": "e62fcf5679d69b6c6c965ea1d86eacf02ad457f91bba6fd67047f05eb8a04764"
+  },
+  "publication_limits": [
+    "No full receipt, graph, profile, rollback archive, or private plan is included.",
+    "Graph snapshot freshness is navigation evidence and does not establish runtime or scientific validation."
+  ],
+  "root_manifest": {
+    "path": "root_integration_manifest_v2.json",
+    "sha256": "73cea19646cc1a6970f2c75ce6257922c6a3358e034935b1f3d48c14c534a271"
+  },
+  "runtime_gate_states": {
+    "bulk_candidate_640_three_arm": "COMPLETE",
+    "native_20s": "COMPLETE",
+    "off640": "COMPLETE",
+    "water_compact_fulltile": "COMPLETE"
+  },
+  "schema": "pr100_c2_kg_applied_summary_v1",
+  "scientific_disposition": {
+    "observation_skill": "NOT_EVALUATED",
+    "physical_approval": "FAIL_OPEN"
+  },
+  "source_lineage": {
+    "approval_base": "950fd7b41af5a10ab6dd36a17098e86dd8306197",
+    "first_runtime_diagnostics_commit": "fa7f163add7c017398d118c54d541101096de6da",
+    "graph_selection_base": "6ac1ddb6a50c9e4f909e47243bbd656e09fc85a3",
+    "graph_source_freeze": "870dd5c9dac9aa1fae9f836c051cffd5699c6f85",
+    "pull_request": "https://github.com/gonos2k/Cloud-BAL/pull/100"
+  },
+  "status": "APPLIED_PASS"
+}

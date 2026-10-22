@@ -1,0 +1,26 @@
+PR100 KG exact v2 plan independent review
+Date: 2026-10-22
+Scope: read-only comparison of the fresh check-only plan against the previously reviewed plan, root integration manifest, source delta and protected-state pins. No KG apply or graph/wiki write performed.
+
+Review pins
+- Fresh check-only result: `/var/tmp/pr100_kg_check_only_v2_20261022.json`, SHA256 `26831d9947f568ac9a7b1f77f437e180e3aee4b56e278c113e1516b303944804`.
+- Check-only status `CHECK_ONLY_NO_WRITES`; `writes_performed=false`. Canonical plan hash recomputed from its JSON as `fd7ce8f6dcf84e9b3366364a87ea743d0ae5c6369322dd84e54e23528909dde0`, matching its `plan_sha256`.
+- Root integration manifest v2: `/var/tmp/pr100_root_integration_final_v2_20261022.json`, SHA256 `73cea19646cc1a6970f2c75ce6257922c6a3358e034935b1f3d48c14c534a271`.
+- Source commit `870dd5c9dac9aa1fae9f836c051cffd5699c6f85`; actual open PR URL remains `https://github.com/gonos2k/Cloud-BAL/pull/100`.
+- Failed-attempt preservation record: `/var/tmp/pr100_kg_failed_attempt_preservation_20261022.json`, SHA256 `7051a512a4e2df48dd94df65efd2e1dafcfe929443dadd31ce73aad0b74caa5f`; it binds the prior rollback review and failed plan and records 577 preserved files.
+
+Exact delta from the prior reviewed plan
+- Approval base remains `950fd7b41af5a10ab6dd36a17098e86dd8306197`; graph-selection base remains `6ac1ddb6a50c9e4f909e47243bbd656e09fc85a3`. PR99 remains recorded as merged without a KG apply.
+- Diff from prior PR100 source commit `fa7f163add7c017398d118c54d541101096de6da` to v2 commit contains exactly six paths: README and preflight modified; four bounded failed-attempt provenance files added. No model/source physics file changed.
+- The one extraction-policy change is the exact-path exclusion of `tests/fixtures/pr99_group_failure_source.f90`. Its source hash remains `eb5011cd0d2052d3aaa782be47283fd38a09005e1d3a44b3be3b8465445a0780`; it is now hash-only alongside the existing archived C1 fixture. The selected production implementation and other selected source/docs paths remain selected. No broad fixture exclusion, self-loop-edge filtering, or integrity tolerance was added.
+- Compared with the old plan, graph extraction drops only that fixture; it does not add or drop any other graph source path. The current plan has 366 changed lineage rows, 60 selected graph source paths, and 306 hash-only rows. No evidence path is selected; 299 evidence paths are hash-only. Both PR99 Fortran fixtures are hash-only.
+- The README and diagnosis describe the source-anchor fixture as noncompilable transform-test data and the extracted self-loop as a parser association at the post-procedure anchor. The reason for the narrow exclusion is explicit and bounded to the old extraction's observed self-loop. No claim is made that runtime Fortran is recursive.
+
+Root manifest and retained baseline
+- The v2 root manifest changes the PR source commit and adds superseded-manifest/revision metadata. Its four runtime gate records and scopes are unchanged from v1; it still has `physical_approval=FAIL_OPEN` and `observation_skill=NOT_EVALUATED`.
+- New plan's root-manifest path/hash match the v2 manifest. It binds the same four gates: native_20s, off640, water_compact_fulltile, and bulk_candidate_640_three_arm.
+- Maintained-source baseline remains 627 entries, SHA256 `0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f`; all 197 inherited immutable pins match current bytes; 13 protected-content hashes match through the pinned PR98 helper chain; all five wiki hashes match.
+- Prior dated-snapshot inventory is unchanged at 110 directories. The 451-file rollback baseline is byte-for-byte identical to v1. I rechecked all 451 current targets against v2, all 110 directory memberships and 434 snapshot files, and found zero mismatches or additions. All 366 current source-plan path hashes match the committed source bytes.
+
+Disposition
+GO on this exact v2 check-only plan for root's separate review. It cleanly narrows Graphify extraction by hash-pinning the identified parser-only fixture, preserves the inherited PR99 lineage and protected state, and leaves the scientific/open statuses intact. This is not authorization to apply; no apply was performed. A future rerun or changed plan requires review of its new exact plan SHA.

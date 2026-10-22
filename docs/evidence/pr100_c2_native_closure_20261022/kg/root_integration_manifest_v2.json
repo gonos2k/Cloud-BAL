@@ -1,0 +1,41 @@
+{
+  "schema": "pr100_root_integration_final_v1",
+  "source_commit": "870dd5c9dac9aa1fae9f836c051cffd5699c6f85",
+  "approval_base_commit": "950fd7b41af5a10ab6dd36a17098e86dd8306197",
+  "graph_selection_base_commit": "6ac1ddb6a50c9e4f909e47243bbd656e09fc85a3",
+  "pr_url": "https://github.com/gonos2k/Cloud-BAL/pull/100",
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED",
+  "runtime_gates": {
+    "native_20s": {
+      "state": "COMPLETE",
+      "candidate": "PR99 projected U/V P20 on C1 diagnostic model",
+      "scope": "Separate original projected-input 20s capture only; no C2 projected-input repetition or physical approval",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_qc_process_20261022/runs/P20/native_receipt.json",
+      "evidence_sha256": "f734125bb30555c30cf6815ab8b61a58d5cb173605c13f4f6ff7ce9d326a90a1"
+    },
+    "off640": {
+      "state": "COMPLETE",
+      "candidate": "PR99-C2 original matched OFF input",
+      "scope": "Closed OFF 640s/32 calls; first600 trace180record byte comparison and11time history numeric comparison PASS; genericFAIL retained",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_c2_native_closure_20261022/runtime/closed_result_summary.json",
+      "evidence_sha256": "9c414447d0d85c0d392bb9f2ca19457144765381f57574e656b34c08317c6b7c"
+    },
+    "water_compact_fulltile": {
+      "state": "COMPLETE",
+      "candidate": "Original C1 OFF/HYDRO/COUPLED T1 diagnostic replays",
+      "scope": "64960columns per arm; independent source-owned first-call account; actual nonzero R64 remainder retained; cutoff actual removal, native hybrid/energy/full640budget remainOPEN; separate C2 T1payloadidentity only",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_t1_snow_melt_20261022/direct_transfers_and_ground/final_three_arm_account.json",
+      "evidence_sha256": "de02ca7cb7a91ba957f23d932b0f9a0d3a75d691397b2f2c7bd8b458343d0bf1"
+    },
+    "bulk_candidate_640_three_arm": {
+      "state": "COMPLETE",
+      "candidate": "PR99-C2 original OFF/HYDRO/COUPLED inputs",
+      "scope": "All3 closed640s/32calls and96RKrows each;39all-policy adjustment5events and27conditionalwitnessrowseach; separate pressure-carrier Q/B units, no certificate-only count orphysicalkgclaim",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr100_c2_native_closure_20261022/runtime/bulk_storage_results.json",
+      "evidence_sha256": "887f9b87b6faa2fa1a84228c954ac139134d618f9cdbecf22428ee61bd4c1e7f"
+    }
+  },
+  "superseded_manifest_sha256": "12ce5f1d1c63d8304e24bccf12dc51eb917d5ab79d0c74d315325fa5c624cb7d",
+  "metadata_only_source_revision": "Exclude the noncompilable PR99 transform-anchor fixture from AST extraction, preserve its hash; no runtime/model/policy change"
+}
