@@ -1,0 +1,282 @@
+{
+  "schema": "pr98_c1_640_closed_results_v1",
+  "publication_status": "FINAL_CLOSED_AUDITS_ALL_ARMS",
+  "generated_at_utc": "2026-10-22T02:30:05.551081+00:00",
+  "scope": "Three frozen PR96-C1 runs at 640-second requested duration. No model-source or executable changes. Per-arm statuses are procedural and are not scientific approval.",
+  "shared_executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d",
+  "expected_completed_steps": 32,
+  "seconds_per_timestep": 20,
+  "arms": {
+    "OFF": {
+      "run_root_private": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr98_native_effect_20261022/Cloud-BAL/evidence/pr98_c1_boundary_20261022/runs_640s/OFF_640s_c1",
+      "receipt_sha256": "bc7561456802326a766420e1d0668613734cc32008deb7dd24dee5e697459aeb",
+      "preflight_sha256_observed": "a4b33e7a3ba243140013ce529f621bd2d186ff4725ae6aba4ec032e641d6128c",
+      "preflight_duration_seconds": 640,
+      "planned_timestamps_count": 32,
+      "planned_final_timestamp": "2026-08-16_13:10:40",
+      "actual_final_timestamp": "2026-08-16_13:10:20",
+      "actual_elapsed_model_seconds_from_pinned_start": 620,
+      "final_completed_step": 31,
+      "final_timestep_count": 31,
+      "returncode": 1,
+      "receipt_status": "INCOMPLETE",
+      "wall_seconds": 11489.686707887799,
+      "executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d",
+      "candidate_build_receipt_sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+      "fatal_lines_generic_receipt": [
+        "-------------- FATAL CALLED ---------------",
+        "-------------- FATAL CALLED ---------------"
+      ],
+      "processing_errors": [],
+      "rsl_error_0000": {
+        "compressed_sha256": "4d25015fe12939ac10cf432863696af139edf859a6e31cd739cba78a57ceba9d",
+        "expanded_sha256": "e273773517f42da09c03e841ba123747638cee12b5b876514754aaf0cfa5445c",
+        "receipt_hashes_verified": true
+      },
+      "rsl_out_0000": {
+        "compressed_sha256": "18deb7fcabdcdb8df5ff9c8aeeee7ae35b1a46834d94bc42b58fe326780f4406",
+        "expanded_sha256": "4727cf640957c7953c3e4c5244b3682d6cc6e830fee5f891283edaa22eb7c7b9",
+        "receipt_hashes_verified": true
+      },
+      "audit_status": "INCOMPLETE_OR_FAIL",
+      "audit_sha256": "4784a5f608344b54efefc48cb31273b81b89558800171f570264e14fbeb88e92",
+      "audit_tool_sha256": "55c11ec55ba727121e256e50fdb1c64feb1fa0d074ede4e82505cc0ddd10d4c4",
+      "audit_exit_status": 1,
+      "duration_complete": false,
+      "trace_prefix_status": "PASS",
+      "trace_prefix_compared_state_records": 180,
+      "trace_prefix_common_steps": 30,
+      "history_status": "PASS",
+      "history_compared_frames": 11,
+      "history_compared_timestamps": [
+        "2026-08-16_13:00:00",
+        "2026-08-16_13:01:00",
+        "2026-08-16_13:02:00",
+        "2026-08-16_13:03:00",
+        "2026-08-16_13:04:00",
+        "2026-08-16_13:05:00",
+        "2026-08-16_13:06:00",
+        "2026-08-16_13:07:00",
+        "2026-08-16_13:08:00",
+        "2026-08-16_13:09:00",
+        "2026-08-16_13:10:00"
+      ],
+      "trace_620_present": true,
+      "present_snapshot_labels": [
+        "10min",
+        "1min",
+        "20s",
+        "320s",
+        "480s",
+        "500s",
+        "5min"
+      ],
+      "missing_runner_snapshot_labels": [
+        "640s"
+      ],
+      "policy_statuses": {
+        "generic_qnb": "FAIL",
+        "exact_source_endpoint": "PASS",
+        "active_ice_policy": "PASS"
+      }
+    },
+    "HYDRO": {
+      "run_root_private": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr98_native_effect_20261022/Cloud-BAL/evidence/pr98_c1_boundary_20261022/runs_640s/HYDRO_640s_c1",
+      "receipt_sha256": "9e43e1742083a0ace9cc85d8aa5715bdcda782c199135e1c6698262f89c46832",
+      "preflight_sha256_observed": "b6686e95efae24c95688833aec88ce02ea1222277d5b7ae64259c11f62959b1c",
+      "preflight_duration_seconds": 640,
+      "planned_timestamps_count": 32,
+      "planned_final_timestamp": "2026-08-16_13:10:40",
+      "actual_final_timestamp": "2026-08-16_13:10:20",
+      "actual_elapsed_model_seconds_from_pinned_start": 620,
+      "final_completed_step": 31,
+      "final_timestep_count": 31,
+      "returncode": 1,
+      "receipt_status": "INCOMPLETE",
+      "wall_seconds": 11470.41510547325,
+      "executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d",
+      "candidate_build_receipt_sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+      "fatal_lines_generic_receipt": [
+        "-------------- FATAL CALLED ---------------",
+        "-------------- FATAL CALLED ---------------"
+      ],
+      "processing_errors": [],
+      "rsl_error_0000": {
+        "compressed_sha256": "41ab75878d82122ee05fb1f9d0b0edd9016a50bab38a84b71513bd39f009a746",
+        "expanded_sha256": "9cdafb224b830340b90d7f9185898d367e248928927d282b39663745ed4b6e4c",
+        "receipt_hashes_verified": true
+      },
+      "rsl_out_0000": {
+        "compressed_sha256": "cd4e0d1248659dd02e37ca61876ac0388fb53b90429e24aac8cc6b87bbd8f7bc",
+        "expanded_sha256": "415d2437bcb5e09b2c9254f4027fa732269188b2390d1654f32747dbc380df86",
+        "receipt_hashes_verified": true
+      },
+      "retry_status": "FINALIZED",
+      "audit_attempt_history": [
+        {
+          "attempt": "initial_duration_gate",
+          "auditor_sha256": "97430ea1c83414d09dcc22a9023dcc0f5248d32c59f3682113efa39f32601323",
+          "returncode": 1,
+          "exception": "ValueError: closed receipt does not bind the requested 640-second duration",
+          "stdout_sha256": "3b2618aaad8e2c9380446ed465322dc2972accb100c89e94d022cd6db2711908",
+          "collection_manifest_sha256": "7dd6b5dc17fe338f3e527c654a29133a28dea090cf8e1d0c3ca85268eb93bdde"
+        },
+        {
+          "attempt": "hydro_path_binding_gate",
+          "auditor_sha256": "55c11ec55ba727121e256e50fdb1c64feb1fa0d074ede4e82505cc0ddd10d4c4",
+          "returncode": 1,
+          "exception": "ValueError: HYDRO source input chain differs from frozen C1",
+          "stdout_sha256": "dd38a7a36f9905f6863816a204f6df90d23a58c9a8f731e6e38f32b3d6629ce5",
+          "collection_manifest_sha256": "f4e4c7564c32ba34b31fd1b999e254ecc6e06852bc1156ab8c4364b3d1161571",
+          "diagnosis": "Only top-level receipt_path differed; both named files and nested SHA matched."
+        }
+      ],
+      "audit_status": "INCOMPLETE_OR_FAIL",
+      "audit_sha256": "98101ac5b3bd11e6b8a461d931ecf4348a1bd99d570d331011bf25babafd897f",
+      "audit_tool_sha256": "77f911b4e4b552cc92c47885c3f7c875cad7028636fb06d9b8ec463e79282932",
+      "audit_exit_status": 1,
+      "duration_complete": false,
+      "trace_prefix_status": "PASS",
+      "trace_prefix_compared_state_records": 180,
+      "trace_prefix_common_steps": 30,
+      "history_status": "PASS",
+      "history_compared_frames": 11,
+      "history_compared_timestamps": [
+        "2026-08-16_13:00:00",
+        "2026-08-16_13:01:00",
+        "2026-08-16_13:02:00",
+        "2026-08-16_13:03:00",
+        "2026-08-16_13:04:00",
+        "2026-08-16_13:05:00",
+        "2026-08-16_13:06:00",
+        "2026-08-16_13:07:00",
+        "2026-08-16_13:08:00",
+        "2026-08-16_13:09:00",
+        "2026-08-16_13:10:00"
+      ],
+      "trace_620_present": true,
+      "present_snapshot_labels": [
+        "10min",
+        "1min",
+        "20s",
+        "320s",
+        "480s",
+        "500s",
+        "5min"
+      ],
+      "missing_runner_snapshot_labels": [
+        "640s"
+      ],
+      "policy_statuses": {
+        "generic_qnb": "FAIL",
+        "exact_source_endpoint": "PASS",
+        "active_ice_policy": "PASS"
+      },
+      "hydro_input_binding_path_relocation": {
+        "status": "PASS",
+        "baseline_receipt_path": "/var/tmp/pr94_hydro_current_inputs_20261021d/hydro_native_input_receipt.json",
+        "run_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr98_native_effect_20261022/Cloud-BAL/docs/evidence/pr94_hydro_control_20261021/current_generation_final2/hydro_native_input_receipt.json",
+        "receipt_sha256": "967a481070c37286f6aef8d616679583f1c86afb7dd60ac64f1d411977eba39b",
+        "all_metadata_equal_except_top_level_receipt_path": true
+      },
+      "retry_output_path_private": "evidence/pr98_c1_boundary_20261022/hydro_audit_retry1/HYDRO_audit.json",
+      "retry_stdout_sha256": "cf76bcbb991850d2c1e4a143314d75b37ca0f3d6a87109bba3bbd0b6f127ab0e",
+      "retry_peer_review_sha256": "19583d7ad6fa3b1095efb42038566c75eb18d6be58bda570e4163816f5a9dacf"
+    },
+    "COUPLED": {
+      "run_root_private": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr98_native_effect_20261022/Cloud-BAL/evidence/pr98_c1_boundary_20261022/runs_640s/COUPLED_640s_c1",
+      "receipt_sha256": "95079d21b1b08cdaa74d63bf52c73c561f1cf0f16153f3919d31a9f1f64fb87e",
+      "preflight_sha256_observed": "15c29b06962cff80b4218403d7b0a1586b172574f3df87da8503aaa383e13552",
+      "preflight_duration_seconds": 640,
+      "planned_timestamps_count": 32,
+      "planned_final_timestamp": "2026-08-16_13:10:40",
+      "actual_final_timestamp": "2026-08-16_13:10:20",
+      "actual_elapsed_model_seconds_from_pinned_start": 620,
+      "final_completed_step": 31,
+      "final_timestep_count": 31,
+      "returncode": 1,
+      "receipt_status": "INCOMPLETE",
+      "wall_seconds": 11547.802459955215,
+      "executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d",
+      "candidate_build_receipt_sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+      "fatal_lines_generic_receipt": [
+        "-------------- FATAL CALLED ---------------",
+        "-------------- FATAL CALLED ---------------"
+      ],
+      "processing_errors": [],
+      "rsl_error_0000": {
+        "compressed_sha256": "dd9dda32ae7f0b1ff8c0e352ef7177f9333ee2ec7cce1a0ae0cc91a7d4535213",
+        "expanded_sha256": "94ae090ba9d68f6fac9545141ce10a9eec961e9508731d7fcc48105733b1b254",
+        "receipt_hashes_verified": true
+      },
+      "rsl_out_0000": {
+        "compressed_sha256": "6386c2314f462e8e0d9f6d8913d3eb0e8f0f8e4ae4be86834db545076db7c24d",
+        "expanded_sha256": "a3b8707b5795e9f8e0df773d4e19838bf938e2d90f67078ea4f808569b52b379",
+        "receipt_hashes_verified": true
+      },
+      "audit_status": "INCOMPLETE_OR_FAIL",
+      "audit_sha256": "737dec46528fe4dbdf343b288d6e8b231e7507cb81d0f208e643570d0601d836",
+      "audit_tool_sha256": "55c11ec55ba727121e256e50fdb1c64feb1fa0d074ede4e82505cc0ddd10d4c4",
+      "audit_exit_status": 1,
+      "duration_complete": false,
+      "trace_prefix_status": "PASS",
+      "trace_prefix_compared_state_records": 180,
+      "trace_prefix_common_steps": 30,
+      "history_status": "PASS",
+      "history_compared_frames": 11,
+      "history_compared_timestamps": [
+        "2026-08-16_13:00:00",
+        "2026-08-16_13:01:00",
+        "2026-08-16_13:02:00",
+        "2026-08-16_13:03:00",
+        "2026-08-16_13:04:00",
+        "2026-08-16_13:05:00",
+        "2026-08-16_13:06:00",
+        "2026-08-16_13:07:00",
+        "2026-08-16_13:08:00",
+        "2026-08-16_13:09:00",
+        "2026-08-16_13:10:00"
+      ],
+      "trace_620_present": true,
+      "present_snapshot_labels": [
+        "10min",
+        "1min",
+        "20s",
+        "320s",
+        "480s",
+        "500s",
+        "5min"
+      ],
+      "missing_runner_snapshot_labels": [
+        "640s"
+      ],
+      "policy_statuses": {
+        "generic_qnb": "FAIL",
+        "exact_source_endpoint": "PASS",
+        "active_ice_policy": "PASS"
+      }
+    }
+  },
+  "trace_comparison_scope": "First 600 seconds: exact numeric equality (numpy.array_equal; signed zero not distinguished) for the 12 prescribed trace fields across 180 state records / 30 steps. Comparison is not whole-NetCDF or record-byte identity. The full stage trace includes completed step 31 at 620 seconds; the mandatory 640-second snapshot is absent in the closed O/C outputs.",
+  "history_comparison_scope": "Exact numeric equality (numpy.array_equal; signed zero not distinguished) for T,P,PB,PH,PHB,U,V,W,MU,MUB at the 11 shared history timestamps from 13:00:00 through 13:10:00. This verifies only the shared history fields/timestamps, which end at 600 seconds.",
+  "failure_diagnostics": {
+    "hash_verified_host_message": "PR87 full joint moment candidate infeasible; see source/full diagnostics",
+    "first_grouped_subpredicate": "OPEN",
+    "per_cell_callback_records": "PR91_GRAUPEL_TRIAL_REJECT_CONTEXT / PR87_GRAUPEL_TRIAL_REJECT records are retained separately; their local reason=6 must not be conflated with common-store failure_stage=6.",
+    "source_failure_counts": "Counts only; not unique physical errors or a causal certificate.",
+    "scientific_approval": "FAIL_OPEN",
+    "640_second_mandatory_snapshot_absent_all_arms": true,
+    "all_arms_same_receipt_closed_host_message": true
+  },
+  "auditor_provenance": {
+    "first_attempt_tool_sha256": "97430ea1c83414d09dcc22a9023dcc0f5248d32c59f3682113efa39f32601323",
+    "first_attempt_exception": "unsupported expectation of run_receipt.duration_seconds; frozen receipt has no such field",
+    "O_and_C_audit_tool_sha256": "55c11ec55ba727121e256e50fdb1c64feb1fa0d074ede4e82505cc0ddd10d4c4",
+    "HYDRO_retry_tool_sha256": "77f911b4e4b552cc92c47885c3f7c875cad7028636fb06d9b8ec463e79282932",
+    "HYDRO_retry_peer_review_sha256": "19583d7ad6fa3b1095efb42038566c75eb18d6be58bda570e4163816f5a9dacf",
+    "first_attempt_collection_manifest_sha256": "7dd6b5dc17fe338f3e527c654a29133a28dea090cf8e1d0c3ca85268eb93bdde",
+    "second_attempt_collection_manifest_sha256": "f4e4c7564c32ba34b31fd1b999e254ecc6e06852bc1156ab8c4364b3d1161571",
+    "HYDRO_final_audit_tool_sha256": "77f911b4e4b552cc92c47885c3f7c875cad7028636fb06d9b8ec463e79282932",
+    "HYDRO_final_audit_peer_review_sha256": "19583d7ad6fa3b1095efb42038566c75eb18d6be58bda570e4163816f5a9dacf"
+  }
+}

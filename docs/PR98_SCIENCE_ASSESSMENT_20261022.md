@@ -84,11 +84,23 @@ energy and mass–wind closure remain open.
 
 ## Repeated consumption beyond 600 seconds
 
-The frozen C1 executable is used for three 640-second requests. Their final
-result is tracked separately in the
-[boundary report](PR98_C1_BOUNDARY_20261022.md). A running request is not a
-completed regression. The earlier C4 grouped failure and its subsequent
-per-cell callbacks do not establish what will happen in C1.
+All three frozen C1 640-second requests ended with return code 1 after
+31 completed steps, at 620 seconds. Each request remains `INCOMPLETE`.
+The closed logs identify host joint-moment candidate rejection; the exact
+first grouped rejection subcondition is not recorded. Subsequent trial and
+per-cell callbacks do not establish that missing cause.
+
+The [boundary report](PR98_C1_BOUNDARY_20261022.md) keeps the closed results,
+prefix comparisons and source-policy audits separate. The initial audit
+attempt stopped before decoding artifacts because it required a duration
+field absent from the frozen receipt schema. The corrected adapter uses the
+actual preflight, planned timestamps and staged namelist bindings. Original
+receipts and the failed audit attempt are preserved; the forecast executable
+and outputs are unchanged. All three first-600-second comparisons pass for
+12 trace fields across 180 state records and ten raw history fields at
+11 common timestamps. These are exact numerical comparisons, not whole-file
+byte comparisons. Source endpoint and active-ice policy checks pass over
+the completed interval; the separate generic checks retain FAIL.
 
 ## Approval boundaries
 

@@ -19,6 +19,7 @@ GUARD_SHA = 'a2b4de3e7941e3d0cf2cf8d60ee3956338fe2471df960c1f93c04bcf554ea9cf'
 PINNED_PYTHON = Path('/home/korea_keun/.local/share/uv/tools/graphifyy/bin/python3')
 PINNED_BIN = PINNED_PYTHON.parent
 SNAPSHOT = '2026-10-22-pr98-native-effect'
+EXPECTED_DATED_SNAPSHOTS = 106
 RESULTS_AUDIT_STATE = 'C1 three-arm 600-second baseline closed; PR98 first-call native response and T1 independent accounting reviewed; three frozen C1 640-second requests await closed receipts; generic FAIL retained, full water/energy/mass-wind approval OPEN and observation skill NOT_EVALUATED'
 GRAPH_SUFFIXES = {'.md', '.py', '.f', '.for', '.f90', '.f95', '.f03', '.f08', '.sh'}
 WIKI_FILES = ('graph-report.md', 'graph-report-klaps50.md', 'graph-report-cloud-bal.md', 'index.md', 'log.md')
@@ -207,7 +208,8 @@ def preflight(commit: str, pr_url: str) -> dict:
             if folder.is_dir() and re.match(r'^2026-\d\d-\d\d', folder.name):
                 snapshot_baseline[str(folder)] = {
                     path.name: {'sha256': sha(path)} for path in sorted(folder.iterdir()) if path.is_file()}
-    require(len(snapshot_baseline) == 106, 'expected 106 existing dated graph snapshots')
+    require(len(snapshot_baseline) == EXPECTED_DATED_SNAPSHOTS,
+            f'expected {EXPECTED_DATED_SNAPSHOTS} existing dated graph snapshots')
     names = git('diff', '--name-only', '--diff-filter=ACMRT', BASE, commit).splitlines()
     require(names, 'no PR98 commit delta from base')
     items = []

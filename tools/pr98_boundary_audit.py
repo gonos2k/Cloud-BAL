@@ -7,6 +7,7 @@ import hashlib
 import importlib.util
 import json
 import sys
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import netCDF4  # noqa: F401 - required by the frozen C1 comparison reader
@@ -77,6 +78,43 @@ def verify_source_receipt_binding(run_root: Path, run_receipt: dict, baseline_re
         source_path = run_root / source_path
     require(source_path.is_file(), "source receipt file named by preflight is missing")
     require(sha256(source_path) == expected, "source receipt file changed after C1 preflight")
+
+
+def verify_hydro_input_binding(run_root: Path, run_receipt: dict, baseline_receipt: dict,
+                               run_preflight: dict, baseline_preflight: dict) -> dict:
+    """Allow only a path relocation for an otherwise byte-identical HYDRO input receipt."""
+    run_binding = run_preflight.get("candidate_input_binding")
+    run_receipt_binding = run_receipt.get("candidate_input_binding")
+    baseline_binding = baseline_preflight.get("candidate_input_binding")
+    baseline_receipt_binding = baseline_receipt.get("candidate_input_binding")
+    require(run_binding == run_receipt_binding,
+            "HYDRO closed receipt input binding differs from its preflight")
+    require(baseline_binding == baseline_receipt_binding,
+            "HYDRO baseline receipt input binding differs from its preflight")
+    require(isinstance(run_binding, dict) and isinstance(baseline_binding, dict),
+            "HYDRO input binding is missing")
+    require(run_binding.get("receipt_sha256") == baseline_binding.get("receipt_sha256"),
+            "HYDRO input receipt hash differs from frozen C1")
+    run_path = Path(run_binding.get("receipt_path", ""))
+    baseline_path = Path(baseline_binding.get("receipt_path", ""))
+    if not run_path.is_absolute():
+        run_path = run_root / run_path
+    require(run_path.is_file() and baseline_path.is_file(),
+            "HYDRO input receipt named by preflight is missing")
+    expected_hash = run_binding["receipt_sha256"]
+    require(sha256(run_path) == expected_hash and sha256(baseline_path) == expected_hash,
+            "HYDRO input receipt file does not match the pinned receipt hash")
+    run_metadata = {key: value for key, value in run_binding.items() if key != "receipt_path"}
+    baseline_metadata = {key: value for key, value in baseline_binding.items() if key != "receipt_path"}
+    require(run_metadata == baseline_metadata,
+            "HYDRO input receipt metadata differs from frozen C1 beyond receipt path")
+    return {
+        "status": "PASS",
+        "baseline_receipt_path": str(baseline_path),
+        "run_receipt_path": str(run_path),
+        "receipt_sha256": expected_hash,
+        "all_metadata_equal_except_top_level_receipt_path": True,
+    }
 
 
 def sha256(path: Path) -> str:
@@ -162,8 +200,23 @@ def validate_c1_runtime_binding(run_root: Path, arm: str,
                                 run_preflight: dict, baseline_preflight: dict) -> dict:
     """Reject a different executable, build, arm input, or C1 source recipe."""
     require(run_receipt.get("arm", "").upper() == arm, "closed receipt arm mismatch")
-    require(run_receipt.get("duration_seconds") == DURATION_SECONDS,
-            "closed receipt does not bind the requested 640-second duration")
+    require(run_preflight.get("arm") == arm and
+            run_preflight.get("duration_seconds") == DURATION_SECONDS and
+            run_preflight.get("timestep_seconds") == 20 and
+            run_preflight.get("expected_timesteps") == DURATION_SECONDS // 20,
+            "640-second preflight arm, duration, or timestep schedule mismatch")
+    baseline_times = baseline_receipt.get("expected_model_timestamps", [])
+    require(bool(baseline_times), "matching C1 receipt has no planned model timestamps")
+    start = datetime.strptime(baseline_times[0], "%Y-%m-%d_%H:%M:%S") - timedelta(seconds=20)
+    expected_times = [(start + timedelta(seconds=20 * step)).strftime("%Y-%m-%d_%H:%M:%S")
+                      for step in range(1, DURATION_SECONDS // 20 + 1)]
+    require(run_receipt.get("expected_model_timestamps") == expected_times,
+            "closed receipt planned model timestamps do not bind 640 seconds from C1 start")
+    namelist = run_root / "run" / "namelist.input"
+    require(namelist.is_file() and
+            run_preflight.get("candidate_namelist_sha256") ==
+            run_receipt.get("candidate_namelist_sha256") == sha256(namelist),
+            "candidate namelist hash differs between preflight, closed receipt, and staged run file")
     require(run_receipt.get("executed_executable_sha256") == EXPECTED_EXE and
             run_receipt.get("expected_executed_executable_sha256") == EXPECTED_EXE,
             "640-second run executable differs from the frozen C1 executable")
@@ -172,8 +225,6 @@ def validate_c1_runtime_binding(run_root: Path, arm: str,
     for name in ("candidate_wrfinput_sha256", "candidate_wrfbdy_sha256"):
         require(run_receipt.get(name) == baseline_receipt.get(name),
                 f"640-second run {name} differs from matching C1 arm")
-    require(run_preflight.get("arm") == arm and run_preflight.get("duration_seconds") == DURATION_SECONDS,
-            "640-second preflight arm or duration mismatch")
     require(run_preflight.get("candidate_build") == baseline_preflight.get("candidate_build"),
             "640-second preflight candidate build differs from C1")
     require(run_preflight.get("input_hashes") == baseline_preflight.get("input_hashes"),
@@ -191,13 +242,14 @@ def validate_c1_runtime_binding(run_root: Path, arm: str,
             run_receipt.get("candidate_build_unchanged") is True and
             run_receipt.get("candidate_input_unchanged") is True,
             "closed runner receipt reports changed C1 inputs or build")
-    if arm == "HYDRO":
-        require(run_preflight.get("candidate_input_binding") == baseline_preflight.get("candidate_input_binding"),
-                "HYDRO source input chain differs from frozen C1")
+    hydro_input_binding = (verify_hydro_input_binding(run_root, run_receipt, baseline_receipt,
+                                                       run_preflight, baseline_preflight)
+                           if arm == "HYDRO" else None)
     return {
         "status": "PASS",
         "arm": arm,
-        "duration_seconds": DURATION_SECONDS,
+        "duration_seconds": run_preflight["duration_seconds"],
+        "duration_source": "run preflight; the frozen closed receipt has no duration_seconds field",
         "executable_sha256": EXPECTED_EXE,
         "candidate_build_receipt": run_receipt["candidate_build"],
         "candidate_wrfinput_sha256": run_receipt["candidate_wrfinput_sha256"],
@@ -205,6 +257,7 @@ def validate_c1_runtime_binding(run_root: Path, arm: str,
         "source_input_hashes_equal_to_c1": True,
         "source_namelist_sha256": run_preflight["source_namelist_sha256"],
         "hydro_source_receipt_sha256": run_preflight.get("source_receipt_sha256") if arm == "HYDRO" else None,
+        "hydro_input_binding_path_relocation": hydro_input_binding,
         "run_root": str(run_root),
     }
 
@@ -239,6 +292,13 @@ def audit_run(run_root: Path, arm: str) -> dict:
     preflight = json.loads((run_root / "preflight.json").read_text(encoding="utf-8"))
     c1_preflight = json.loads((c1_root / "preflight.json").read_text(encoding="utf-8"))
     runtime = validate_c1_runtime_binding(run_root, arm, receipt, c1_receipt, preflight, c1_preflight)
+    preflight_path = run_root / "preflight.json"
+    runtime["preflight_path"] = str(preflight_path)
+    runtime["preflight_sha256"] = sha256(preflight_path)
+    runtime["preflight_binding_scope"] = (
+        "Observed file hash; the frozen receipt has no preflight digest. Preflight identity fields are cross-checked "
+        "against the closed receipt and matching PR96-C1 baseline."
+    )
     completed = auditor.derive_prefix(receipt, arm)
     duration_complete = closed_run_complete(receipt, completed)
 
