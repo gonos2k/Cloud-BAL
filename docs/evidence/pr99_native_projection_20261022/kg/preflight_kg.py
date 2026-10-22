@@ -36,15 +36,18 @@ GRAPH_PINS = {
 GRAPH_SUFFIXES = {".md", ".py", ".f", ".for", ".f90", ".f95", ".f03", ".f08", ".sh"}
 EXACT_SELECTED = {
     "src/common/cloud_bal_balance_operator.f90",
+    "src/common/cloud_bal_joint_transport.f90",
     "tests/test_background_continuity_balance.f90",
     "tests/test_balance_omega_authority.f90",
     "tests/pr81_joint_thermo_retained.f90",
     "tests/test_pr86_time_response.py",
+    "tests/test_pr92_source_store_fixture.py",
+    "tests/run_unit_tests.sh",
     "tools/cp06a_state_force_flux.py",
     "tools/pr86_time_response.py",
     "tools/pr98_budget_faces.py",
 }
-REQUIRED_GATES = ("native_20s", "off640", "water_compact_fulltile")
+REQUIRED_GATES = ("native_20s", "off640", "water_compact_fulltile", "bulk_candidate_640_three_arm")
 WIKI_FILES = ("graph-report.md", "graph-report-klaps50.md", "graph-report-cloud-bal.md", "index.md", "log.md")
 
 
@@ -59,6 +62,8 @@ def require(ok: bool, message: str) -> None:
 
 def selected_path(relative: str) -> bool:
     if relative.startswith("docs/evidence/"):
+        return False
+    if relative == "tests/fixtures/pr99_c1_core_pre_certificate.f90":
         return False
     prefixes = (
         "docs/PR99_", "tools/pr99_", "tests/pr99_", "tests/test_pr99_",
@@ -183,14 +188,10 @@ def preflight(commit: str, pr_url: str, results_manifest: Path,
 
     names = git("diff", "--name-only", "--diff-filter=ACMRT", BASE, commit).splitlines()
     require(names, "no PR99 source delta from pinned main base")
-    allowed = ("src/common/cloud_bal_balance_operator.f90", "tests/test_background_continuity_balance.f90",
-               "tests/test_balance_omega_authority.f90", "tests/pr81_joint_thermo_retained.f90",
-               "tests/test_pr86_time_response.py", "tools/cp06a_state_force_flux.py",
-               "tools/pr86_time_response.py", "tools/pr98_budget_faces.py")
     for relative in names:
         require(relative.startswith(("docs/PR99_", "docs/evidence/pr99_", "tools/pr99_",
                                      "tests/pr99_", "tests/test_pr99_", "tests/fixtures/pr99_",
-                                     "tests/run_pr99_")) or relative in allowed,
+                                     "tests/run_pr99_")) or relative in EXACT_SELECTED,
                 f"source diff is outside the PR99 allowlist: {relative}")
     selected = [name for name in names if selected_path(name) and Path(name).suffix.lower() in GRAPH_SUFFIXES]
     require(selected, "no PR99 source/docs paths selected for incremental graph update")
@@ -206,6 +207,7 @@ def preflight(commit: str, pr_url: str, results_manifest: Path,
         "source": str(SOURCE), "source_commit": commit, "base": BASE, "pr_url": pr_url,
         "graphify_version": version, "selected_graph_paths": selected,
         "hash_only_paths": [name for name in names if name not in selected],
+        "hash_only_sha256": {name: sha(SOURCE / name) for name in names if name not in selected},
         "prior_receipt_sha256": PRIOR_SHA, "prior_receipt": str(PRIOR),
         "prior_graphs": GRAPH_PINS, "dated_snapshot_count": EXPECTED_DATED_SNAPSHOTS,
         "prior_dated_snapshot_files_verified": sum(len(rows) for rows in prior_snapshots.values()),

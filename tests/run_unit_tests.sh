@@ -58,7 +58,13 @@ for bulk_profile in O0 O2; do
     "$repo_root/tests/test_pr92_bulk_volume_policy.f90" \
     -o "$test_tmp/test_pr92_bulk_volume_policy_$bulk_profile"
   "$test_tmp/test_pr92_bulk_volume_policy_$bulk_profile"
+  "$CLOUD_BAL_FC" "${bulk_flags[@]}" -module "$test_tmp" -I "$test_tmp" \
+    "$repo_root/src/common/cloud_bal_joint_transport.f90" \
+    "$repo_root/tests/test_pr99_bulk_candidate_contract.f90" \
+    -o "$test_tmp/test_pr99_bulk_candidate_contract_$bulk_profile"
+  "$test_tmp/test_pr99_bulk_candidate_contract_$bulk_profile"
 done
+python3 "$repo_root/tests/test_pr99_bulk_candidate_contract.py"
 
 "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
   -module "$test_tmp" -I "$test_tmp" \

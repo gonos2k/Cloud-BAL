@@ -1,0 +1,127 @@
+{
+  "schema": "pr99_bulk_candidate_fraction_oracle_final_v2",
+  "core_sha256": "6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53",
+  "generator_sha256": "64f9b4fea53ae44ba15d0a4b331520c4b5931436e001ea4b8124fc8b348bfaf0",
+  "transformed_host_sha256": "98a44389d693ec28533d492c129204fc0bdba22e6ed3ae71acc9e65df7b9cb1a",
+  "author_validation_json_sha256": "4abb18635ae5f19b04ac87f31b3b6100e9d4df850a43bd556a156b8b72eafeb1",
+  "pinned_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "source_before_and_after_sha256": "6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53",
+  "oracle_method": "Python Fraction exact arithmetic on represented binary32/binary64 inputs; accepted result must imply exact positivity, strict ratio cone, half-quantum budgets, R32 endpoint range, and bit-identical operational R64 references.",
+  "case_count": 40,
+  "profiles": {
+    "free": {
+      "cases": 40,
+      "accepted": 17,
+      "rejected": 23,
+      "false_accepts": [],
+      "actual_fatal_accepted": true,
+      "conservative_valid_rejections": [
+        "interior_ratio_100",
+        "interior_ratio_900",
+        "min_edge_equal",
+        "max_edge_equal"
+      ],
+      "conservative_valid_rejection_count": 4
+    },
+    "repro": {
+      "cases": 40,
+      "accepted": 17,
+      "rejected": 23,
+      "false_accepts": [],
+      "actual_fatal_accepted": true,
+      "conservative_valid_rejections": [
+        "interior_ratio_100",
+        "interior_ratio_900",
+        "min_edge_equal",
+        "max_edge_equal"
+      ],
+      "conservative_valid_rejection_count": 4
+    }
+  },
+  "files": {
+    "prepare_v2.py": {
+      "sha256": "63ebd847bc09422d1da5419f030db352c41beb8f6a0f74a346c7fdc7a78f16f9",
+      "bytes": 9022
+    },
+    "cases.json": {
+      "sha256": "660ede3cf4b3e4e1f2fdbc57a6a5be51b7f1461ce5c33bf7e4bc63ef1d6d8940",
+      "bytes": 29909
+    },
+    "bulk_absence_harness.f90": {
+      "sha256": "b4af82a5a1ec5223dfa7d9d028e5234fde7682ccf6707388f139201f03e22fee",
+      "bytes": 38198
+    },
+    "check_results_v2.py": {
+      "sha256": "938b0856afded990353010db02d382b9ecdba28d273c789e32c4b01978f9b9b0",
+      "bytes": 1155
+    },
+    "build_finalv2.sh": {
+      "sha256": "9a56680f9bd4cb917dcdf8979b7773957a2eea45038e2b50fbd9c97e4896e2a9",
+      "bytes": 1546
+    },
+    "free/build_inputs.txt": {
+      "sha256": "551b7d8f4b678a013cfaba3e6e64e791f3e1399aeed6da36e8b871b7681d027e",
+      "bytes": 443
+    },
+    "free/compile_core.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "free/compile_harness.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "free/harness_output.txt": {
+      "sha256": "0ed0eb9729c2dcdce1cd639230f3457ffa7c914276df105cc36951e40bcab3c1",
+      "bytes": 191
+    },
+    "free/harness_stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "free/oracle_check.json": {
+      "sha256": "30c906bc258742297b9265762ede57fb7b58a635bc26a51053e62dd0b668d07e",
+      "bytes": 290
+    },
+    "free/hashes.txt": {
+      "sha256": "68496a1281bf477107d309003d905c33fbb4ca96a539c596a59a9aee023215de",
+      "bytes": 342
+    },
+    "free/bin/bulk_absence_harness": {
+      "sha256": "cda9b1b758c1c43eb3f9b1f4ed51600403cc14cb9dcc7067090ef3de5facbd6b",
+      "bytes": 823344
+    },
+    "repro/build_inputs.txt": {
+      "sha256": "b866487b1791de08c1f3ab610b6a6ce360590381f44e049e15a925ddea377876",
+      "bytes": 433
+    },
+    "repro/compile_core.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "repro/compile_harness.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "repro/harness_output.txt": {
+      "sha256": "0ed0eb9729c2dcdce1cd639230f3457ffa7c914276df105cc36951e40bcab3c1",
+      "bytes": 191
+    },
+    "repro/harness_stderr.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "repro/oracle_check.json": {
+      "sha256": "30c906bc258742297b9265762ede57fb7b58a635bc26a51053e62dd0b668d07e",
+      "bytes": 290
+    },
+    "repro/hashes.txt": {
+      "sha256": "1fb1b6b46a7387c598e0c5fe7b3d3adc795920901941dc5baafe1046cedbb25a",
+      "bytes": 343
+    },
+    "repro/bin/bulk_absence_harness": {
+      "sha256": "9556356f567354f672db515a23d05c2666548d808680378ef1684ba843d96efd",
+      "bytes": 700040
+    }
+  }
+}

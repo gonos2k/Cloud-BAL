@@ -1,0 +1,51 @@
+{
+  "schema": "pr99_bulk_candidate_fatal_fixture_v1",
+  "provenance": {
+    "run_receipt_sha256": "e654668d5a62774b8d83b26b3d0fa3d7870aeeb29897500f6399b6d259dfc658",
+    "capture_gzip_sha256": "aa4c284a0cd98c05705b73606c852b96555181da0cf5594a7fbd971816cce80b",
+    "capture_uncompressed_sha256": "4454d1763a29002164349a2a9119e39296de7880890d88ab2957ecaeedc383d5",
+    "source_module_em_sha256": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+    "scope": "Captured rounded operands for one OFF fatal fallback event; not an upstream source-precision proof.",
+    "historical_three_arm_comparison": {
+      "summary_path": "/var/tmp/pr99_c1_three_arm_fallback_20261022/summary.json",
+      "summary_sha256": "451c161986f3fc3502641cee87f6717fdfa4c5042854d875ae72d6c58e26ae89",
+      "all_arms_share_event_bits": true,
+      "arms": {
+        "OFF": {"receipt_sha256": "bc7561456802326a766420e1d0668613734cc32008deb7dd24dee5e697459aeb", "status": "INCOMPLETE"},
+        "HYDRO": {"receipt_sha256": "9e43e1742083a0ace9cc85d8aa5715bdcda782c199135e1c6698262f89c46832", "status": "INCOMPLETE"},
+        "COUPLED": {"receipt_sha256": "95079d21b1b08cdaa74d63bf52c73c561f1cf0f16153f3919d31a9f1f64fb87e", "status": "INCOMPLETE"}
+      },
+      "matching_t32_rk1": {
+        "coordinate_ijk_one_based": [2, 241, 14],
+        "reason_code": 6,
+        "store_failure_stage": 2,
+        "candidate_qn_hex64": ["36796B3BA65C1BE8", "35DCEBC8FCFEFC7A"],
+        "source_qn_hex64": ["3753214B46A3BC21", "36B5C40847451A51"]
+      },
+      "scope_note": "Historical frozen-C1 matching only; no claim that a future modified run repeats these captures."
+    }
+  },
+  "event": {
+    "timestep": 32,
+    "rk": 1,
+    "ijk_one_based": [2, 241, 14],
+    "pair": "QG/QIB",
+    "base_q_hex32": "00000000",
+    "base_b_hex32": "00000000",
+    "old_carrier_hex32": "47A09016",
+    "new_carrier_hex32": "47A08D94",
+    "dt_hex32": "40D55555",
+    "density_hex32": "3F53B32D",
+    "source_q_hex64": "3753214B46A3BC21",
+    "source_b_hex64": "36B5C40847451A51",
+    "transport_q_hex64": "8000000000000000",
+    "transport_b_hex64": "8000000000000000",
+    "scale_hex64": "3FF0000000000000",
+    "minimum_ratio": 100.0,
+    "maximum_ratio": 900.0,
+    "reference_candidate_q_hex64": "36796B3BA65C1BE8",
+    "reference_candidate_b_hex64": "35DCEBC8FCFEFC7A",
+    "expected_reference_r32_hex32": ["00000000", "00000000"],
+    "expected_certificate": true
+  }
+}

@@ -13,7 +13,8 @@ for those three completed runs.
 | Native dry-flux proposal | Project only the additional C−H U/V increment inside the fixed QC buffer, retaining HYDRO's nonzero reference motion. | A local, frozen-carrier mass constraint, with no omega-to-W substitution. |
 | Archived native consumer | The actual C1 `calc_ww_cp` object consumes the proposed stored REAL32 winds. | Initial mass-coordinate `ww` is checked in Pa/s, not physical W or pressure-level omega. |
 | Native integration | One closed 20-second proposal run, using the same capture model and boundary as the original three diagnostic arms. All 208 input variables are audited; only U/V differ from the original C1 COUPLED input. | This verifies one subsequent native consumption, not 600-second stability or observation benefit. |
-| First grouped rejection | One OFF 640-second diagnostic request is being captured at the original T32 boundary. | Its closed receipt and exact first event are required before assigning a cause. |
+| First grouped rejection | The OFF diagnostic closed after 620 seconds; its first 600 seconds match the original C1 trace and history. The first store rejection and separate fatal fallback are replayed. | An ordinary transport boundary rejection precedes a different tiny source candidate whose fallback assumes pure diffusion. |
+| Revised storage contract | The actual full candidate equation has a conservative, shared quantum-absence certificate. Intel O0/O2 and the independent exact-input oracle pass locally. | The distinct PR99-C2 model still requires a matched three-arm native test. |
 | Same-call water budget | Independent process/store terms are reduced from full-tile replays with unchanged post-state fields. | Explained numerical removal or storage change is accounting evidence, not restored physical conservation. |
 
 ## Native proposal outcome
@@ -30,7 +31,7 @@ During the first captured 20-second step, at each measure's own source boundary:
 
 | Measure | HYDRO | Original C1 COUPLED | U/V proposal |
 |---|---:|---:|---:|
-| Observed dry-column mass-rate L2, kg/s | 17,899,337 | 383,305,796 | 15,276,841 |
+| Captured dry-column mass-rate L2, kg/s | 17,899,337 | 383,305,796 | 15,276,841 |
 | Assembled RU L2, source-array units | 24,361.97 | 41,212.46 | 37,999.03 |
 | Assembled RV L2, source-array units | 23,908.72 | 34,050.81 | 33,199.72 |
 
@@ -44,6 +45,24 @@ COUPLED treatment, but remain about 1.56 and 1.39 times HYDRO. The proposal
 therefore remains **non-default; physical approval `FAIL_OPEN` and observation
 skill `NOT_EVALUATED`**. Raw RU/RV are not acceleration or energy norms. A
 nonzero column mass tendency is not itself a continuity-conservation error.
+
+## Grouped rejection and revised storage
+
+The first T32/RK1 grouped rejection is a normal-size transport candidate at
+`(163,63,22)`, rejected at strict store stage 2. The later decisive fallback
+is at `(2,241,14)`: its composed source is nonzero while diffusion replay of
+the captured old field is zero. All three historical C1 arms have the same
+compared fatal operands. Local reason 6 is not common-store stage 6.
+
+The revised common predicate certifies the existing complete source-plus-air
+equation using outward numerator bounds. It requires the whole bound to lie
+inside the strict density cone and the existing quantum-loss budget, and
+bit-binds the original REAL64 candidate. It authorizes only paired-zero
+representation with adjustment 5 and the existing signed ledger. Uncertain
+bounds are rejected; no density tolerance, physical source, or candidate
+arithmetic is changed. This remains a storage-policy revision, so the matched
+OFF/HYDRO/COUPLED test must use the same distinct PR99-C2 executable. The old
+C1 diagnostic failure remains preserved.
 
 ## T1 accounting outcome
 
@@ -84,6 +103,7 @@ skill is inferred from this Eulerian diagnostic.
 - [Actual archived native consumer replay](PR99_NATIVE_WW_CONSUMER_REPLAY_20261022.md)
 - [Physical dry-column mass-rate measure](PR99_NATIVE_DRY_MASS_RATE_20261022.md)
 - [First grouped rejection capture and scalar replay](PR99_GROUPED_FAILURE_DIAGNOSTIC_20261022.md)
+- [Shared full-candidate storage certificate](PR99_BULK_CANDIDATE_CONTRACT_20261022.md)
 - [Same-call T1 remaining water accounting](PR99_T1_REMAINING_20261022.md)
 - [Cutoff removal and same-region condensate context](PR99_CUTOFF_INVENTORY_20261022.md)
 - [First-call hydrometeor entry and response](evidence/pr99_hydrometeor_response_20261022/README.md)
@@ -97,9 +117,9 @@ research runs; they are not clean full-WRF/library rebuilds.
 
 Full momentum balance, whole-host hybrid water/energy closure, retained cloud
 and precipitation signals, and independent observation skill remain open.
-The frozen C1 three-arm comparison must stay separate from this one-step
-research proposal. A future change to model physics or storage policy requires
-the comparison arms to use the same new executable.
+The frozen C1 three-arm comparison and one-step wind proposal must stay
+separate from the revised storage candidate. Its three comparison arms must
+use the same new executable; local certification is not native completion.
 
 Graphify/KG updates describe source relationships and extraction limits only.
 They cannot promote any runtime or scientific status.
