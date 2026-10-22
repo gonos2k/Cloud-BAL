@@ -52,7 +52,7 @@ program test_pr99_bulk_candidate_contract
 
   valid=joint_bulk_candidate_absence_is_valid(qb,bb,oldc,newc,dt,rho,sq,sb,aq,ab,theta, &
       100.0_real64,900.0_real64,qref,nearest(bref,1.0_real64))
-  call check(.not.valid,'stored-volume budget rejects the next B candidate bit')
+  call check(.not.valid,'volume reference bits must match ordered R64 recomputation')
 
   valid=joint_bulk_candidate_absence_is_valid(qb,bb,oldc,newc,dt,rho,sq,sb,aq,ab,theta, &
       100.0_real64,899.0_real64,qref,bref)
