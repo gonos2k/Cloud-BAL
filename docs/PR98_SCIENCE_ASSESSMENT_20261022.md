@@ -123,3 +123,10 @@ binds the separate KLAPS50 and Cloud-BAL snapshots to reviewed source commit
 `4d0baf151cd2669437f0341307c095fa95fb92e5`. It records extraction limits,
 derived wiki synchronization and preservation checks separately from the
 runtime and scientific findings above.
+
+The [closed-result KG follow-up](evidence/pr98_native_effect_20261022/kg/closed640/README.md)
+records source `aea142c3df602e3ac339953507dc7f691743ddb8` and separate
+`2026-10-22-pr98-closed640` snapshots. Re-extraction adds 12 node IDs and
+removes six in each corpus (net +6 nodes and +16 edges). This is graph
+maintenance for the reviewed receipt-adapter changes and closed results;
+it does not change any scientific approval.

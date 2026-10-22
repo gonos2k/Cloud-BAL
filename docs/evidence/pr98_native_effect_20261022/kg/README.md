@@ -25,9 +25,11 @@ Cross-file Fortran `CALL` extraction is partial. Fortran embedded in Python gene
 
 At first-phase receipt time the three C1 600-second baseline runs were closed, while the three C1 640-second requests were still pending. Since then, all three 640-second runs closed incomplete at 620 seconds (31 steps), return code 1; generic validation remains `FAIL`, full physical approval remains `FAIL_OPEN`, and observation skill status remains `NOT_EVALUATED`. See the [C1 boundary report](../../../PR98_C1_BOUNDARY_20261022.md) for the updated closed-run audit record. The first KG update does not change these states.
 
-## Closed-640 follow-up driver (not applied)
+## Closed-640 follow-up KG update
 
-The bounded follow-up driver is [update_closed_kg.py](update_closed_kg.py), SHA-256 `651c5fede18a8bf565c59b8788c6755e7491db7374eb80fbf5a04b77f822e626`. It binds the first receipt and frozen first-phase helper above, plans the separate `2026-10-22-pr98-closed640` snapshot against the current first-phase graph hashes, and expects 108 pre-existing dated snapshots. Its output remains unapplied: no closed-640 graph snapshot or second receipt has been created. The driver preserves `FAIL`, `FAIL_OPEN`, and `NOT_EVALUATED`.
+The second guarded update completed for source commit [`aea142c3df602e3ac339953507dc7f691743ddb8`](https://github.com/gonos2k/Cloud-BAL/commit/aea142c3df602e3ac339953507dc7f691743ddb8), based on first-phase commit `4d0baf151cd2669437f0341307c095fa95fb92e5`. It created the separate `2026-10-22-pr98-closed640` snapshots. The private receipt has status `PASS`, SHA-256 `6483bca8400f8ced959f23cde9a71208e8a525284fecfae843eb7e46730f2c06`, and binds the first-phase receipt by its unchanged hash above.
+
+Each corpus changed by +6 net nodes and +16 edges, with 12 node IDs added and 6 removed during re-extraction. The bounded [closed-640 summary](closed640/README.md) gives separate corpus totals, snapshot hashes, preservation checks, and review links. It preserves the independent runtime state: all three 640-second runs ended INCOMPLETE at 620 seconds / step 31 with rc=1; generic validation is `FAIL`, physical approval is `FAIL_OPEN`, and observation skill status is `NOT_EVALUATED`.
 
 ## Review and helper
 
