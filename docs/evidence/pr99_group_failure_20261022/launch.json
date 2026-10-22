@@ -1,0 +1,187 @@
+{
+  "schema": "pr99_group_failure_diagnostic_launch_v1",
+  "status": "RUNNING_NOT_CLOSED",
+  "scope": "one OFF diagnostic capture, 640 model seconds",
+  "launched_utc_date": "2026-10-22",
+  "run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_group_failure_off640_20261022/run",
+  "actual_model_stage_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_group_failure_off640_20261022/run/run",
+  "runner": {
+    "path": "/var/tmp/pr96_runner_frozen_20261021/tools/pr86_time_response.py",
+    "sha256": "80803b6b3e8591053d0524ed9e5b0110dfd7cbf1d105d2e40029addb5f5a55c4",
+    "invocation": [
+      "python3",
+      "/var/tmp/pr96_runner_frozen_20261021/tools/pr86_time_response.py",
+      "--arm",
+      "OFF",
+      "--output",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_group_failure_off640_20261022/run",
+      "--duration-seconds",
+      "640",
+      "--candidate-build",
+      "/var/tmp/pr99_group_failure_build_v7_20261022/pr87_native_overlay_build.json",
+      "--execute"
+    ],
+    "process_id": 737245,
+    "wrapper_process_id": 737597,
+    "model_process_id": 737921
+  },
+  "build": {
+    "receipt_path": "/var/tmp/pr99_group_failure_build_v7_20261022/pr87_native_overlay_build.json",
+    "receipt_sha256": "b61680253381802a5f8ee135897d2c136a7448269b5f7899ab06d7686aa2d338",
+    "status": "PASS_OVERLAY_BUILD",
+    "executable_path": "/var/tmp/pr99_group_failure_build_v7_20261022/wrf_pr87_overlay.exe",
+    "executable_sha256": "d8293e1ee9973adec0c62964cefcefeffb8ea6727d6f1ca47ec04815b65030f1",
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "source_overrides": {
+      "module_microphysics_zero_out.o": {
+        "path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/overrides/module_microphysics_zero_out.F",
+        "sha256": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0"
+      },
+      "module_em.o": {
+        "path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/overrides/module_em.F",
+        "sha256": "b6b9ae8366a290ba4a7060140a3e46e3bb7d8f6d94b5327a71c2da84d6e7c139"
+      },
+      "module_bl_shinhong.o": {
+        "path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/overrides/module_bl_shinhong.F",
+        "sha256": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3"
+      },
+      "module_bl_fogdes.o": {
+        "path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/overrides/module_bl_fogdes.F",
+        "sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7"
+      },
+      "module_pbl_driver.o": {
+        "path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/overrides/module_pbl_driver.F",
+        "sha256": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676"
+      },
+      "module_mp_kdm6.o": {
+        "path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/overrides/module_mp_kdm6.F",
+        "sha256": "f09a413c36b7bda9fb7376f0276e00329179c68bdbef1e4766bae2811152f58b"
+      },
+      "module_first_rk_step_part1.o": {
+        "path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/overrides/module_first_rk_step_part1.F",
+        "sha256": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef"
+      },
+      "module_first_rk_step_part2.o": {
+        "path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/overrides/module_first_rk_step_part2.F",
+        "sha256": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082"
+      },
+      "solve_em.o": {
+        "path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/overrides/solve_em.F",
+        "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+      }
+    },
+    "extra_observer": {
+      "immutable_build_receipt_path": "/var/tmp/pr99_group_failure_build_v7_20261022/pr87_native_overlay_build.json",
+      "source_path": "/var/tmp/pr99_group_failure_build_v7_20261022/source/pr90_cycle_support.f90",
+      "source_sha256": "d8ade43c7fe053e49a415b3de50680074bd56593ce9b5c9f31fdffb8036e91f6",
+      "object_path": "/var/tmp/pr99_group_failure_build_v7_20261022/compile/pr87_extra_observer.o",
+      "object_sha256": "8d0dcf43818cc6679967fcc51afee2d930db9a82c8e06ed5c282eca0ef9cc139",
+      "compile_profile": {
+        "name": "CLOUD_BAL_REPRO_FLAGS",
+        "enabled": true,
+        "flags": [
+          "-stand",
+          "f08",
+          "-warn",
+          "all",
+          "-fpe0",
+          "-traceback",
+          "-O2",
+          "-fp-model",
+          "strict",
+          "-fimf-arch-consistency=true",
+          "-no-ftz"
+        ]
+      },
+      "compile_argv_sha256": "2f616e38e757b9f74a65267d6f8c892dc246f43257e577c9b1e92ec0172ae130"
+    },
+    "original_parent_archive_build_receipt": {
+      "path": "/var/tmp/pr85_native_joint_candidate_20261015v17/pr85_native_transport_build.json",
+      "sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+      "role": "PR85 base receipt used to reconstruct the overlay archive"
+    },
+    "frozen_c1_build_receipt": {
+      "path": "/var/tmp/pr96_native_build_c1_20261021/pr87_native_overlay_build.json",
+      "sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+      "executable_sha256": "a714f00d3f81c0b47d94aef815f1f765ae48842e9de629cb869323ccfc22a96d"
+    },
+    "frozen_c1_module_em_source_sha256": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+    "c1_override_comparison": {
+      "module_em.o": "intentionally differs for v7 failure-only instrumentation",
+      "other_overrides_byte_identical": true,
+      "override_count": 9,
+      "overrides": {
+        "module_microphysics_zero_out.o": {
+          "sha256": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+          "matches_frozen_c1": true
+        },
+        "module_em.o": {
+          "sha256": "b6b9ae8366a290ba4a7060140a3e46e3bb7d8f6d94b5327a71c2da84d6e7c139",
+          "matches_frozen_c1": false
+        },
+        "module_bl_shinhong.o": {
+          "sha256": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+          "matches_frozen_c1": true
+        },
+        "module_bl_fogdes.o": {
+          "sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+          "matches_frozen_c1": true
+        },
+        "module_pbl_driver.o": {
+          "sha256": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+          "matches_frozen_c1": true
+        },
+        "module_mp_kdm6.o": {
+          "sha256": "f09a413c36b7bda9fb7376f0276e00329179c68bdbef1e4766bae2811152f58b",
+          "matches_frozen_c1": true
+        },
+        "module_first_rk_step_part1.o": {
+          "sha256": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+          "matches_frozen_c1": true
+        },
+        "module_first_rk_step_part2.o": {
+          "sha256": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+          "matches_frozen_c1": true
+        },
+        "solve_em.o": {
+          "sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
+          "matches_frozen_c1": true
+        }
+      }
+    }
+  },
+  "run_inputs": {
+    "duration_seconds": 640,
+    "expected_timesteps": 32,
+    "timestep_seconds": 20,
+    "candidate_wrfinput_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+    "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "candidate_namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+    "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+    "input_file_count": 101,
+    "omp_num_threads": "1",
+    "omp_dynamic": "FALSE",
+    "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89"
+  },
+  "receipts": {
+    "preflight_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_group_failure_off640_20261022/run/preflight.json",
+    "preflight_sha256": "572b67d723d7f8f240f1c76ae242771530b2ed8f6f7e5c3a26fc9bb216370a8f",
+    "launch_provenance_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_group_failure_off640_20261022/run/launch_provenance.json",
+    "launch_provenance_sha256": "5264594edac6ae8de57fbb876fd505b685154d481420c8bde1b0c5b8c5336144",
+    "closed_run_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_group_failure_off640_20261022/run/receipt.json",
+    "closed_run_receipt_sha256": null
+  },
+  "latest_observed_progress": {
+    "source": "run/rsl.out.0000 plaintext Timing for main records",
+    "completed_step_count": 11,
+    "last_completed_model_timestamp": "2026-08-16_13:03:40",
+    "timing_line": "Timing for main: time 2026-08-16_13:03:40 on domain 1: 342.24802 elapsed seconds",
+    "observed_utc": "2026-10-22T04:54:08Z"
+  },
+  "closure_note": "The model and frozen runner were active at the last status check. No closed-run receipt or failure artifact is claimed."
+}

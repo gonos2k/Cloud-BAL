@@ -1,0 +1,110 @@
+PR99 grouped-candidate diagnostic review
+Date: 2026-10-22
+Scope: read-only review of capture transform, parser, scalar replay, fixtures, and tests.
+
+Reviewed inputs
+- tools/pr99_group_failure_trace.py, pinned input SHA-256 f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af
+- tools/pr99_group_failure_capture.py
+- tools/pr99_group_failure_scalar_replay.py
+- tests/test_pr99_group_failure_trace.py
+- tests/test_pr99_group_failure_core.f90
+- tests/fixtures/pr99_group_failure_capture.raw and pr99_group_failure_source.f90
+- Original receipt-pinned module_em.F with the same source hash above
+
+Tests
+- `pytest -q tests/test_pr99_group_failure_trace.py`: 8 passed.
+- The tests include pinned IFX scalar/core runs at FREE and REPRO settings.
+- These are fixture/core tests. No actual native OFF timestep-32 event was available for this review; the running OFF 640-second case is not treated as a result.
+
+Findings
+1. The trace captures the exact REAL64 candidate expression for the selected
+   constrained-store call: old carrier times base plus `dt*(source+transport)`,
+   divided by new carrier. The call uses constrained storage with theta fixed
+   to one. It captures direct operands as R32/R64 bit patterns, bounds, store
+   options, cell mapping, store stage, and stored R32 sentinels/values. The
+   injected capture is after the failed candidate predicate and before the
+   PR91 callback and graupel-mixture fallback. Transform anchors are exact-count
+   checked against the frozen source hash.
+
+2. Attempt labeling is global, while source-first selection is per pair. The
+   capture writes `ANY(source_first_pair)` and the replay checks this global
+   value against BASELINE/SOURCE_FIRST. `prepare_source_first_rates` modifies
+   only selected pairs among 1 and 2. If a failure event belongs to an
+   unselected pair (including pairs 3 or 4), the event can still be labeled
+   SOURCE_FIRST because another pair is selected. Candidate operands remain
+   captured exactly, but the label alone cannot establish which formulation
+   produced this pair's candidate. Capture the selected pair mask or label
+   from `source_first_pair(pair)` before using attempt mode as causal context.
+
+3. `PR99_GROUP_POST_RETRY_V1` reports the feasibility left by
+   `try_graupel_mixture_trial()` inside the current `evaluate_joint_candidate`
+   call. It does not report whether the later outer RK3 source-first
+   reevaluation was attempted or its result. The parser correctly binds this
+   row to the immediately pending failure key, but the name/comment can be read
+   as the outer source-first retry. Treat the current boolean as
+   `post_graupel_mixture_feasible`; preserve a separate status for the later
+   baseline-to-source-first transition if that distinction is needed.
+
+4. The scalar replay recomputes candidate bits and replays `joint_moment_store`
+   at FREE and REPRO, comparing store stage, stored bits, and store validity.
+   It does not evaluate the following `joint_moment_is_valid`/strict grouped
+   predicate or the volume-number predicate. The checked capture fixture has
+   store stage 2 and is therefore classified as `store_rejection`; it does not
+   demonstrate a successful store followed by grouped predicate 1 or 2. The
+   core harness also exercises a store failure, rollback, and a success path,
+   but does not exercise either post-store grouped predicate. Do not claim the
+   current scalar fixture classifies post-store group failures; add paired
+   fixtures and exact predicate replay if needed.
+
+5. Parser checks exact row sets, bit-token syntax, option presence, and the
+   post-retry key, but does not itself require `store_succeeded ==
+   (store_failure_stage == 0)` or validate pair-specific option consistency.
+   The scalar replay checks the important option relationships before running,
+   so malformed captures are rejected there; adding those invariants to the
+   parser would make parsed classifications independently trustworthy.
+
+Conclusion
+The instrumentation is bounded and diagnostic-only; the captured candidate
+and initial store outcome can be replayed exactly for the fixture in two pinned
+compiler modes. The current fixture supports a store-rejection classification,
+not a post-store grouped-predicate classification. Global source-first labeling
+and the meaning of the post-retry boolean need to be kept explicit. No
+actual-model failure classification is available until the authorized native
+OFF capture produces a timestep-32 event and its receipt is reviewed.
+
+Resolution addendum (2026-10-22)
+---------------------------------
+Read-only closeout review of the follow-up fixes:
+
+- Scalar replay now applies the same `(-1,-1)` REAL32 sentinel after a failed
+  store as `form_candidate`, then calls the frozen grouped-predicate routines.
+  It compares the replayed predicate with the captured first predicate for
+  both store-failure and successful-store cases. This resolves finding 4's
+  missing post-store predicate replay and removes the earlier mistaken
+  implication that a failed store's sentinel bypasses group validation.
+- The parser now rejects a mismatch between the store-success flag and zero
+  failure stage, checks pair-specific options, requires the complete HEX and
+  text payload (including exact bound operands), and raises `ValueError` for
+  a missing post-graupel-mixture row. These resolve finding 5's parser
+  invariants and close the missing-row error path.
+- Findings 2 and 3 remain scope constraints rather than code defects: the
+  attempt flag is host-wide `ANY(source_first_pair)`, so it cannot identify
+  whether this particular pair was selected; the post-mixture boolean refers
+  to the inner graupel-mixture fallback, not the later outer RK3 reevaluation.
+  The parser's scope descriptions make both limits explicit.
+- The bounded capture still has no actual native OFF timestep-32 failure row.
+  The fixture/core coverage supports local scalar classification only and
+  cannot be represented as an actual-model event.
+
+Validation: `pytest -q tests/test_pr99_group_failure_trace.py` — 12 passed
+(including pinned FREE and REPRO scalar replays where the C1 source is
+available).
+
+Reviewed-file SHA-256 at closeout:
+- `tools/pr99_group_failure_trace.py`: `fa9411b591c2ca6a0711ffbee91d0fee2d34a3890a83af2b1f5ad70f574c8044`
+- `tools/pr99_group_failure_capture.py`: `0fc50691797fa8b9c241846b093d09398b4d494fc1f0d100e4c3eabb80fb58a0`
+- `tools/pr99_group_failure_scalar_replay.py`: `b7efb752ca36ef62daaa31fd33bea44948e569bd42100e136e761daab1708a55`
+- `tests/test_pr99_group_failure_trace.py`: `58f312fb43e8a6a88604e7ba16e95bc7d10d07dda56e3d66e8dd45a927f3a667`
+- `tests/test_pr99_group_failure_core.f90`: `7c5723a895b3ef5c6e65ac26a0988675906b0a737f4feddc5edbe2246229086c`
+- `tests/fixtures/pr99_group_failure_capture.raw`: `530a6bbd90f1b1b384758673621e6a2fd63d44585ef90b81b284b47e6ca47e67`
+- `tests/fixtures/pr99_group_failure_source.f90`: `eb5011cd0d2052d3aaa782be47283fd38a09005e1d3a44b3be3b8465445a0780`

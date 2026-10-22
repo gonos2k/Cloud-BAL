@@ -76,6 +76,26 @@ PROGRAM test_background_continuity_balance
       result%numerical%max_omega_increment<=5.0_real64,'increment caps are honored')
   END IF
 
+  config%fixed_omega_for_export=.TRUE.
+  input=background
+  input%u%value(4,4,2)=input%u%value(4,4,2)+0.1_real32
+  CALL apply_background_continuity_balance(background,input,output,result,config,support,shell)
+  CALL check(result%status==STATUS_OK .AND. &
+    (ANY(output%u%value/=input%u%value) .OR. ANY(output%v%value/=input%v%value)) .AND. &
+    ALL(output%omega%value==input%omega%value), &
+    'compatible continuity mismatch projects on exported U/V while omega stays fixed')
+
+  input=background
+  input%omega%value(4,4,2)=0.1_real32
+  before=input
+  CALL apply_background_continuity_balance(background,input,output,result,config,support,shell)
+  CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_SOLVER .AND. &
+    result%numerical%solver_reason==SOLVER_INCOMPATIBLE_RHS .AND. &
+    canonical_states_equal(output,before), &
+    'omega-only continuity mismatch is rejected when exported horizontal DOFs cannot close it')
+  config%fixed_omega_for_export=.FALSE.
+  input=background
+
   invalid_background=background
   invalid_background%u%valid(4,4,2)=.FALSE.
   before=input

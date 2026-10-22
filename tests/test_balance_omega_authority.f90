@@ -8,6 +8,7 @@ PROGRAM test_balance_omega_authority
 
   failures=0
   CALL test_middle_target_keeps_other_omega(failures)
+  CALL test_fixed_omega_export_policy(failures)
   CALL test_partial_authority_operator_identity(failures)
   CALL test_alternating_target_rejects(failures)
   CALL test_near_alternating_target_rejects(failures)
@@ -151,6 +152,35 @@ CONTAINS
     CALL check(other_cells_unchanged, &
       'omega field must be unchanged without explicit target authority',failures)
   END SUBROUTINE test_middle_target_keeps_other_omega
+
+  SUBROUTINE test_fixed_omega_export_policy(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: input
+    TYPE(balance_operator_type) :: op
+    TYPE(balance_operator_snapshot) :: view
+    TYPE(balance_operator_config) :: cfg
+    REAL(real64), ALLOCATABLE :: lambda(:,:,:),du(:,:,:),dv(:,:,:),domega(:,:,:)
+    INTEGER :: status,reason,i,j,k
+
+    CALL make_state(input)
+    CALL authorize_target(input,3,3,3,0.08_real32)
+    CALL permissive_config(cfg)
+    cfg%fixed_omega_for_export=.TRUE.
+    CALL build_balance_operator(input,cfg,op,status,reason)
+    CALL check(status==STATUS_OK,'fixed-omega export operator builds',failures)
+    IF (status/=STATUS_OK) RETURN
+    CALL snapshot_balance_operator(op,view,status)
+    ALLOCATE(lambda(6,5,4),du(6,5,4),dv(6,5,4),domega(6,5,4))
+    DO k=1,4; DO j=1,5; DO i=1,6
+      lambda(i,j,k)=SIN(0.17_real64*i+0.23_real64*j-0.31_real64*k)
+    END DO; END DO; END DO
+    CALL apply_balance_correction(op,lambda,du,dv,domega,status)
+    CALL check(status==STATUS_OK .AND. .NOT.ANY(view%omega_authorized) .AND. &
+               ALL(domega==0.0_real64), &
+      'fixed-omega export policy removes omega from authorized correction DOFs',failures)
+    CALL check(ANY(du/=0.0_real64) .OR. ANY(dv/=0.0_real64), &
+      'fixed-omega export policy retains horizontal correction DOFs',failures)
+  END SUBROUTINE test_fixed_omega_export_policy
 
   SUBROUTINE test_partial_authority_operator_identity(failures)
     INTEGER, INTENT(INOUT) :: failures

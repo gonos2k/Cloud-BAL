@@ -90,6 +90,21 @@ def make_hydro_binding(root: Path) -> dict:
     return response._hydro_input_binding(path)
 
 
+def make_native_input_binding(root: Path) -> dict:
+    artifacts = {}
+    for name in ("candidate", "parent", "reference", "boundary", "generator", "composition"):
+        path = root / f"native_{name}"
+        path.write_bytes(("native " + name).encode())
+        artifacts[name] = {"path": str(path), "sha256": response.sha256(path)}
+    receipt = {"schema": "pr99_native_uv_projection_proposal_v1",
+               "status": "PROPOSAL_REQUIRES_NATIVE_CONSUMER_AND_TENDENCY_VALIDATION",
+               "role": "COUPLED", **artifacts,
+               "composition_sha256": artifacts["composition"]["sha256"]}
+    path = root / "native_input.json"
+    path.write_text(json.dumps(receipt))
+    return response._native_input_binding(path)
+
+
 class TimeResponseTests(unittest.TestCase):
     def test_hydro_binding_rejects_changed_artifact_and_failed_receipt(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -105,6 +120,101 @@ class TimeResponseTests(unittest.TestCase):
             path.write_text(json.dumps(receipt))
             with self.assertRaisesRegex(ValueError, "source-bound"):
                 response._hydro_input_binding(path)
+
+    def test_native_binding_checks_every_declared_artifact_and_proposal_identity(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = make_native_input_binding(root)
+            self.assertTrue(response._input_binding_unchanged(binding))
+            for name in ("candidate", "parent", "reference", "boundary", "generator", "composition"):
+                with self.subTest(artifact=name):
+                    path = Path(binding["artifacts"][name]["path"])
+                    original = path.read_bytes()
+                    path.write_bytes(original + b" changed")
+                    with self.assertRaisesRegex(ValueError, "native proposal artifact changed"):
+                        response._input_binding_unchanged(binding)
+                    path.write_bytes(original)
+            path = Path(binding["receipt_path"])
+            receipt = json.loads(path.read_text())
+            receipt["role"] = "HYDRO"
+            path.write_text(json.dumps(receipt))
+            with self.assertRaisesRegex(ValueError, "COUPLED native input proposal"):
+                response._native_input_binding(path)
+
+    def test_native_binding_requires_frozen_coupled_parent_and_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = make_native_input_binding(root)
+            parent = binding["artifacts"]["parent"]["sha256"]
+            boundary = binding["artifacts"]["boundary"]["sha256"]
+            response._validate_native_template(
+                binding, {"candidate_wrfinput_sha256": parent, "candidate_wrfbdy_sha256": boundary})
+            with self.assertRaisesRegex(ValueError, "parent differs"):
+                response._validate_native_template(
+                    binding, {"candidate_wrfinput_sha256": "wrong", "candidate_wrfbdy_sha256": boundary})
+            with self.assertRaisesRegex(ValueError, "boundary differs"):
+                response._validate_native_template(
+                    binding, {"candidate_wrfinput_sha256": parent, "candidate_wrfbdy_sha256": "wrong"})
+
+    def test_native_candidate_is_staged_and_hydro_arm_rejects_native_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = make_native_input_binding(root)
+            runtime = root / "runtime"
+            runtime.mkdir()
+            (runtime / "wrfinput_d01").write_bytes(b"frozen parent")
+            (runtime / "namelist.input.source").write_text("source namelist")
+            prepared = {"runtime_dir": str(runtime),
+                        "input_hashes": {"wrfinput_d01": response.sha256(runtime / "wrfinput_d01")},
+                        "candidate_input_binding": binding,
+                        "candidate_wrfinput_sha256": binding["artifacts"]["candidate"]["sha256"],
+                        "namelist_text": "candidate namelist", "namelist_diff": ""}
+            stage = response._stage(prepared, root / "output")
+            self.assertEqual(response.sha256(stage / "wrfinput_d01"), prepared["candidate_wrfinput_sha256"])
+            with self.assertRaisesRegex(ValueError, "only valid for the COUPLED arm"):
+                response.prepare("OFF", 20, root / "rejected", native_input_receipt_path=Path(binding["receipt_path"]))
+            with self.assertRaisesRegex(ValueError, "HYDRO requires its own input receipt"):
+                response.prepare("HYDRO", 20, root / "rejected_hydro",
+                                 native_input_receipt_path=Path(binding["receipt_path"]))
+            with self.assertRaisesRegex(ValueError, "limited to one 20-second step"):
+                response.prepare("COUPLED", 40, root / "rejected_longrun",
+                                 native_input_receipt_path=Path(binding["receipt_path"]))
+
+    def test_native_finalizer_requires_coupled_role_template_and_launch_binding(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = make_native_input_binding(root)
+            out = make_finalizer_fixture(root, 20)
+            preflight_path = out / "preflight.json"
+            preflight = json.loads(preflight_path.read_text())
+            template_path = Path(preflight["source_receipt"])
+            template = json.loads(template_path.read_text())
+            template.update(candidate_wrfinput_sha256=binding["artifacts"]["parent"]["sha256"],
+                            candidate_wrfbdy_sha256=binding["artifacts"]["boundary"]["sha256"])
+            template_path.write_text(json.dumps(template))
+            preflight.update(arm="COUPLED", template_arm="COUPLED", duration_seconds=20,
+                            candidate_input_binding=binding,
+                            candidate_wrfinput_sha256=binding["artifacts"]["candidate"]["sha256"],
+                            candidate_wrfbdy_sha256=binding["artifacts"]["boundary"]["sha256"],
+                            source_receipt_sha256=response.sha256(template_path))
+            preflight_path.write_text(json.dumps(preflight))
+            launch = {"returncode": 0, "arm": "COUPLED", "compressed_outputs": [],
+                      "candidate_input_binding": binding,
+                      "candidate_wrfinput_sha256": preflight["candidate_wrfinput_sha256"]}
+            (out / "receipt.json").write_text(json.dumps(launch))
+            self.assertEqual(response.finalize_existing_run("COUPLED", out, 20)["status"], "COMPLETE")
+            launch["arm"] = "HYDRO"
+            (out / "receipt.json").write_text(json.dumps(launch))
+            result = response.finalize_existing_run("COUPLED", out, 20)
+            self.assertEqual(result["status"], "INCOMPLETE")
+            self.assertIn("COUPLED native proposal provenance differs from preflight",
+                          result["processing_errors"])
+            launch["arm"] = "COUPLED"
+            (out / "receipt.json").write_text(json.dumps(launch))
+            result = response.finalize_existing_run("COUPLED", out, 40)
+            self.assertEqual(result["status"], "INCOMPLETE")
+            self.assertIn("COUPLED native proposal provenance differs from preflight",
+                          result["processing_errors"])
 
     def test_hydro_stage_preserves_off_template_and_checks_injected_hash(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -1,0 +1,56 @@
+{
+  "schema": "pr99_native_projection_publication_v1",
+  "artifacts": [
+    {
+      "path": "docs/evidence/pr99_native_projection_20261022/response.json",
+      "sha256": "62fde5687c176b0ae1af2c2debbc6003c6a8f778786ae6b640e40d32fbd94a4d"
+    },
+    {
+      "path": "docs/evidence/pr99_native_projection_20261022/proposal.json",
+      "sha256": "a6fdd4907228b6bcd95d2eba3e61539adcedf69c0154c23a9e1a2edeb6c6b5d0"
+    },
+    {
+      "path": "docs/evidence/pr99_native_projection_20261022/closed_receipt.json",
+      "sha256": "f734125bb30555c30cf6815ab8b61a58d5cb173605c13f4f6ff7ce9d326a90a1"
+    },
+    {
+      "path": "docs/evidence/pr99_native_projection_20261022/launch_preflight.json",
+      "sha256": "fb5ae032186bea24a5c8dffe852650fe6573ade2b6784a09f9b0858add1254f9"
+    },
+    {
+      "path": "tools/pr99_native_projection.py",
+      "sha256": "c14bdcf018c4e246472a2989867efa582aaede090cdb8583afafb289f40e0cbf"
+    },
+    {
+      "path": "tools/pr99_projection_response.py",
+      "sha256": "6c2f7bcdfea5e221a9dd3ee24e90336429ef171433b42a19eab92b528c146f60"
+    },
+    {
+      "path": "tools/pr86_time_response.py",
+      "sha256": "6267101c3bab90a9b73124a46cee48b0fbced04b3910657240e444789f732788"
+    },
+    {
+      "path": "tests/test_pr99_native_projection.py",
+      "sha256": "ce5b4dde1cc022464c876ea008ae73f30b175192a9301fa33185b5f6901f922b"
+    },
+    {
+      "path": "tests/test_pr99_projection_response.py",
+      "sha256": "8c9e0870ee821c36a104d348e68083cdc813910bd6cb7e543ff639f0e990eac4"
+    }
+  ],
+  "python": "3.12.3 (main, Nov  6 2025, 13:44:16) [GCC 13.3.0]",
+  "libraries": {
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "netCDF4": "1.7.4"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED",
+  "additional_native_wind_norm": {
+    "method": "sqrt(sum((U-H.U)^2)+sum((V-H.V)^2)) on original native faces, operands promoted before subtraction",
+    "units": "m/s; equal-face norm, not energy",
+    "original_C1": 105.60764341998298,
+    "proposal": 101.14320948003385,
+    "retained_fraction": 0.9577262232602345
+  }
+}

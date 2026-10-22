@@ -50,6 +50,9 @@ MODULE cloud_bal_balance_operator
     REAL(real64) :: geostrophic_absolute_tolerance = 1.0e-3_real64
     INTEGER :: minimum_held_out_samples = 20
     INTEGER :: minimum_held_out_radars = 2
+    ! WPS exports U/V but has no pressure-level omega field.  This opt-in
+    ! policy keeps omega fixed when a correction must cross that boundary.
+    LOGICAL :: fixed_omega_for_export = .FALSE.
   END TYPE balance_operator_config
 
   TYPE, PUBLIC :: balance_operator_type
@@ -404,7 +407,7 @@ CONTAINS
       op%ku=config%kappa_u
       op%kv=config%kappa_v
     END WHERE
-    IF (op%nz>2) THEN
+    IF (op%nz>2 .AND. .NOT.config%fixed_omega_for_export) THEN
       WHERE(control_support(:,:,2:op%nz-1))
         op%ko(:,:,2:op%nz-1)=config%kappa_omega
         op%omega_authorized(:,:,2:op%nz-1)=.TRUE.
@@ -1346,6 +1349,7 @@ CONTAINS
       op%cell_active=op%cell_active .AND. state%model_target_coverage
     END IF
     op%omega_authorized=op%cell_active .AND. target_is_resolved(state,config%target_authority)
+    IF (config%fixed_omega_for_export) op%omega_authorized=.FALSE.
     IF (config%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS) THEN
       DO k=1,nz; DO j=1,ny; DO i=1,nx
         IF (.NOT.model_target_level_is_interior(state,i,j,k)) &
@@ -3898,10 +3902,18 @@ CONTAINS
     TYPE(balance_operator_config), INTENT(IN) :: cfg
     INTEGER :: component,i,j,k
     REAL(real64), ALLOCATABLE :: total(:),scale(:)
+    REAL(real64), ALLOCATABLE :: layer_total(:),layer_scale(:)
+    CHARACTER(LEN=8) :: trace_setting
+    INTEGER :: environment_status
+    LOGICAL :: trace_compatibility
     compatibility_ok=.FALSE.
     ALLOCATE(total(op%ncomponent),scale(op%ncomponent))
     total=0.0_real64
     scale=0.0_real64
+    trace_setting=''
+    CALL GET_ENVIRONMENT_VARIABLE('CLOUD_BAL_COMPATIBILITY_TRACE',trace_setting, &
+      STATUS=environment_status)
+    trace_compatibility=environment_status==0 .AND. TRIM(trace_setting)=='1'
     DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
       component=op%component(i,j,k)
       IF (component<=0) CYCLE
@@ -3910,7 +3922,28 @@ CONTAINS
     END DO; END DO; END DO
     DO component=1,op%ncomponent
       IF (ABS(total(component))>cfg%compatibility_absolute_tolerance+ &
-          cfg%compatibility_relative_tolerance*scale(component)) RETURN
+          cfg%compatibility_relative_tolerance*scale(component)) THEN
+        IF (trace_compatibility) THEN
+          ALLOCATE(layer_total(op%nz),layer_scale(op%nz))
+          layer_total=0.0_real64
+          layer_scale=0.0_real64
+          DO k=1,op%nz; DO j=1,op%ny; DO i=1,op%nx
+            IF (op%component(i,j,k)/=component) CYCLE
+            layer_total(k)=layer_total(k)+op%volume(i,j,k)*b(i,j,k)
+            layer_scale(k)=layer_scale(k)+op%volume(i,j,k)*ABS(b(i,j,k))
+          END DO; END DO; END DO
+          WRITE(*,'(A,I0,A,ES24.16,A,ES24.16)') 'compatibility_component=',component, &
+            ',weighted_residual=',total(component),',weighted_abs_scale=',scale(component)
+          DO k=1,op%nz
+            IF (layer_scale(k)<=0.0_real64) CYCLE
+            WRITE(*,'(A,I0,A,I0,A,ES24.16,A,ES24.16)') 'compatibility_layer_component=', &
+              component,',k=',k,',weighted_residual=',layer_total(k), &
+              ',weighted_abs_scale=',layer_scale(k)
+          END DO
+          DEALLOCATE(layer_total,layer_scale)
+        END IF
+        RETURN
+      END IF
     END DO
     compatibility_ok=.TRUE.
   END FUNCTION compatibility_ok
