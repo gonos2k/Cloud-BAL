@@ -1,0 +1,131 @@
+{
+  "cause_scope": "first grouped predicate and bounded direct-input record; no aggregate physical conclusion",
+  "event_count": 1,
+  "events": [
+    {
+      "attempt": "BASELINE",
+      "attempt_scope": "BASELINE means the host-wide ANY(source_first_pair) flag was false at this attempt",
+      "cell": 556962,
+      "classification": "store_rejection",
+      "group_predicate": 1,
+      "group_shape": [
+        2533440,
+        4
+      ],
+      "grouped_predicate_input": "(-1,-1) REAL32 sentinel installed by form_candidate after store failure",
+      "hex": {
+        "HEX32_BASE": [
+          "00000000",
+          "00000000"
+        ],
+        "HEX32_CARRIERS_DT": [
+          "47B9E408",
+          "47B9E7D9",
+          "3EF58B3C",
+          "40D55555"
+        ],
+        "HEX32_STORED": [
+          "BF800000",
+          "BF800000"
+        ],
+        "HEX64_CANDIDATE": [
+          "3DAAA0E68E084B52",
+          "3D0E4C1E36A67346"
+        ],
+        "HEX64_INACTIVE_MASS_LIMIT": [
+          "0000000000000000"
+        ],
+        "HEX64_MASS_BOUNDS": [
+          "4059000000000000",
+          "408C200000000000"
+        ],
+        "HEX64_NUMBER_BOUNDS": [
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "HEX64_SOURCE_RATE": [
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "HEX64_TRANSPORT_RATE": [
+          "3E8734787B5D4AF7",
+          "3DEA66EF7B4B6D2F"
+        ]
+      },
+      "i": 163,
+      "j": 63,
+      "k": 22,
+      "key": [
+        "OFF_9510f27a00cb8426",
+        32,
+        1,
+        556962,
+        4,
+        1
+      ],
+      "number_bounds_r64": [
+        0.0,
+        0.0
+      ],
+      "options": {
+        "OPT_bulk_volume_quantum_storage": true,
+        "OPT_inactive_mass_pair": false,
+        "OPT_inactive_q_quantum_pair": false,
+        "OPT_joint_constrained_storage": true,
+        "OPT_joint_quantum_absence": true,
+        "OPT_normal_q_adjustment": true,
+        "OPT_number_pair_bounds": true,
+        "OPT_source_first_fallback": false,
+        "OPT_strict_mass_pair": true
+      },
+      "pair": 4,
+      "post_graupel_mixture_feasible": false,
+      "post_graupel_mixture_scope": "feasibility after the inner try_graupel_mixture_trial fallback in the same evaluate_joint_candidate call; not the later outer RK3 source-first reevaluation",
+      "rk": 1,
+      "run_id": "OFF_9510f27a00cb8426",
+      "store_failure_stage": 2,
+      "store_succeeded": false,
+      "text": {
+        "R32_BASE": [
+          "0.0000000E+00",
+          "0.0000000E+00"
+        ],
+        "R32_CARRIERS": [
+          "95176.06",
+          "95183.70",
+          "0.4795779",
+          "6.666667"
+        ],
+        "R32_STORED": [
+          "-1.000000",
+          "-1.000000"
+        ],
+        "R64_CANDIDATE": [
+          "1.210924801274590E-011",
+          "1.345472001416211E-014"
+        ],
+        "R64_INACTIVE_MASS_LIMIT": [
+          "0.000000000000000E+000"
+        ],
+        "R64_MASS_BOUNDS": [
+          "100.000000000000",
+          "900.000000000000"
+        ],
+        "R64_NUMBER_BOUNDS": [
+          "0.000000000000000E+000",
+          "0.000000000000000E+000"
+        ],
+        "R64_SOURCE_RATE": [
+          "0.000000000000000E+000",
+          "0.000000000000000E+000"
+        ],
+        "R64_TRANSPORT_RATE": [
+          "1.728904501183349E-007",
+          "1.921005001314832E-010"
+        ]
+      },
+      "timestep": 32
+    }
+  ],
+  "schema": "pr99_group_failure_capture_v1"
+}

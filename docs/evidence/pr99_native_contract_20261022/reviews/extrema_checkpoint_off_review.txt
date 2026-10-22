@@ -1,0 +1,58 @@
+Independent bounded review: OFF extrema checkpoint follow-up
+Date: 2026-10-22
+
+Reviewed `docs/evidence/pr99_t1_remaining_20261022/extrema_checkpoint_off/`.
+
+Integrity and provenance
+------------------------
+`sha256sum -c SHA256SUMS` passes for all eight bundle files. I independently
+checked the externally retained prepared-source, reducer, raw checkpoint,
+executable, link-argv, and link-log hashes against the manifest. The prepared
+Fortran source differs from its retained base only at the checkpoint observer
+coordinate predicate: `(192,71)/(161,57)` -> `(169,227)/(146,215)`. The
+reducer likewise differs from the pinned repository reducer only in its
+coordinate tuple. The build manifest identifies the pinned Intel 2026.0
+`ifx`/`mpiifx` hashes and fresh build directory; the retained `link_argv.json`
+is hash-bound and contains actual link flags and object/library paths. The
+bundle states that no standalone compile argv/log was retained; `mpiifx_show`
+is only a `-c` display command, and `link.log` is empty. This limitation is
+reported accurately rather than filled by reconstruction.
+
+Replay and reduction
+--------------------
+The replay manifest binds the prepared source and executable hashes, the
+first-call pre/native-post hashes, raw checkpoint hash, and reused stage
+streams. It reports successful completion, the full active-tile marker, and
+byte equality of 17 returned fields plus XLAND. The replay post hash equals
+the native post hash. The coordinate patch selects the two v5 extrema, and
+the reducer uses the captured REAL32 Q+QC+QI+QR+QS+QG totals with pre-state
+DEN*DELZ and history map-area weights. Both per-level telescopes match the
+native pre/post column totals within 1.60e-7 kg and 1.58e-9 kg. The final
+selected-level-to-endpoint discrepancies are negligible in the column sums.
+
+Interpretation and limit
+------------------------
+The endpoint telescope establishes that selected assignment-site changes
+account for the endpoint total-water change. It does not map the intervening
+large compensating changes to the aggregated v4/v5 ownership terms or identify
+the first interval that creates the remainders. The README correctly leaves
+cause open. Its signed v5 arithmetic is consistent with the account
+convention: the signed process change is subtracted from the v4 open amount
+(e.g. `22.5686566492 - (-0.0199293520) = 22.5885860012 kg`; similarly for
+`-20.2828640512 - (-0.1045795516) = -20.1782844996 kg`). No causal or
+endpoint-telescope claim is inferred from this arithmetic.
+
+No blocking issue found within this bounded scope. This is an OFF-only
+selected-coordinate replay; it does not close the remaining water account or
+establish a process cause.
+
+Reducer patch-format follow-up
+-----------------------------
+After the zero-context reducer patch refresh, `sha256sum -c SHA256SUMS` still
+passes all eight files. The patch hash is
+`4be69f1ed43898487820eec0cad5050a38f74102c9a051084fcb9a1e1eecd6d2`, matching
+`provenance.json`; the provenance hash and bundle checksum were refreshed and
+verify. Applying the patch to a fresh copy of the pinned repository reducer
+produces byte-identical output to the retained external reducer
+(`c1c31f012a9a82c7894f2eba67aaa95f5ece0944521881d0cab50081e510ad85`). The
+format-only change does not alter the review findings above.

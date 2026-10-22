@@ -1,0 +1,8 @@
+Bounded addendum: PRE-KDM6 hydrometeor alignment
+Date: 2026-10-22
+
+This review covers only the PRE-alignment addition to the previously reviewed first-call hydrometeor package. The frozen artifact hashes match the author-supplied pins: README `6a7e03128fa971c55ca45879b457316cc10d2367baff4e453b0c33bf145f6325`, reducer `59d3e3f300e2e8a2bdf071cd7bff22521618db542e58e89254a03e1ea27c1509`, response `3c2419d22e9eb96a9b069f6bc285a8cc0b8e0ce666922bfcb5cb67a2be7b063f`. The provenance artifact byte counts and hashes match these files.
+
+The added reducer terms use the already validated full-grid initial T0 C1−OFF baseline and each arm's receipt-bound first-call PRE trace contrast against OFF, on the same 613-cell support. The QC values match the README table: proposal PRE cosine 0.997572, HYDRO PRE 0.999659, original C1 COUPLED PRE 0.996963; corresponding T0 RMS is 1.250939e−4 kg/kg. The already reviewed POST cosines are respectively −0.589857, −0.487781 and −0.446216. The README correctly states that the QC contrast is strongly aligned at KDM6 entry and that the alignment changes sign across the measured PRE-to-POST interval.
+
+PRE is after host operations preceding the KDM6 call. The corrected text explicitly says these values do not identify which earlier operation produced the entry state, and it does not assign the within-interval change to any individual process. These are geometric alignment diagnostics, not causal attribution, cloud-signal validation, observation skill or physical approval. No full reducer rerun was needed for this narrow addition; the arithmetic reuses the already audited `pattern_metrics` implementation and the frozen PRE, POST and T0 bindings.

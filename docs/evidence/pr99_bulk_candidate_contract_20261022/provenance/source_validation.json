@@ -1,0 +1,194 @@
+{
+  "schema": "pr99_bulk_candidate_validation_v2",
+  "artifact_directory": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022",
+  "core_sha256": "6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53",
+  "generator_sha256": "64f9b4fea53ae44ba15d0a4b331520c4b5931436e001ea4b8124fc8b348bfaf0",
+  "transformed_host_path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/module_em_certified_v2.F",
+  "transformed_host_sha256": "98a44389d693ec28533d492c129204fc0bdba22e6ed3ae71acc9e65df7b9cb1a",
+  "pinned_sources": {
+    "c1_module_em": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+    "archival_core": "faa4ce0e31bf5b394c9a5ec2045a917464dca7cd4d902b6aa62be80a19aa5ac0",
+    "embedded_baseline_module": "da7cc5729ae0299919e113484af3d788f97366dfbcf14f5d0e1a75d70c1af9b8"
+  },
+  "source_files": {
+    "src/common/cloud_bal_joint_transport.f90": "6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53",
+    "tools/pr99_bulk_candidate_contract.py": "64f9b4fea53ae44ba15d0a4b331520c4b5931436e001ea4b8124fc8b348bfaf0",
+    "tests/test_pr99_bulk_candidate_contract.f90": "e778506835467a9a7b707050427f515e770e98d2372a7245137273bda130c273",
+    "tests/test_pr99_bulk_candidate_contract.py": "b19b7c1dcc0fbcd2be9533e21f757129a2a74a7fd3e7bc8cd978579b1a05e4be",
+    "tests/fixtures/pr99_bulk_candidate_fatal.json": "a7a38debb976c884aabd1d50a89abe2443ac8737440f67dc17cc8a5d0dc59df6",
+    "tests/fixtures/pr99_c1_core_pre_certificate.f90": "faa4ce0e31bf5b394c9a5ec2045a917464dca7cd4d902b6aa62be80a19aa5ac0",
+    "tests/run_unit_tests.sh": "d361173a4355dbe2b963c7d55f756dc87acbc263343b155b34691ab2acfad0ce",
+    "tests/test_pr92_source_store_fixture.py": "f2df84b58a4a7d6459a6466f29eed3d089ea3737265881e49c02cb517ee4f46a"
+  },
+  "compiler": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "fresh_scratch": "/var/tmp/pr99_bulk_candidate_v2.EWfTha",
+  "commands": {
+    "new_O0": "cd /var/tmp/pr99_bulk_candidate_v2.EWfTha; /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/pr99_bulk_candidate_v2.EWfTha -I /var/tmp/pr99_bulk_candidate_v2.EWfTha /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/src/common/cloud_bal_joint_transport.f90 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/test_pr99_bulk_candidate_contract.f90 -o test_O0; ./test_O0",
+    "new_O2": "cd /var/tmp/pr99_bulk_candidate_v2.EWfTha; /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/pr99_bulk_candidate_v2.EWfTha -I /var/tmp/pr99_bulk_candidate_v2.EWfTha /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/src/common/cloud_bal_joint_transport.f90 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/test_pr99_bulk_candidate_contract.f90 -o test_O2; ./test_O2",
+    "PR92_O0": "cd /var/tmp/pr99_bulk_candidate_v2.EWfTha; /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/pr99_bulk_candidate_v2.EWfTha -I /var/tmp/pr99_bulk_candidate_v2.EWfTha /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/src/common/cloud_bal_joint_transport.f90 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/test_pr92_bulk_volume_policy.f90 -o pr92_O0; ./pr92_O0",
+    "PR92_O2": "cd /var/tmp/pr99_bulk_candidate_v2.EWfTha; /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -module /var/tmp/pr99_bulk_candidate_v2.EWfTha -I /var/tmp/pr99_bulk_candidate_v2.EWfTha /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/src/common/cloud_bal_joint_transport.f90 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/test_pr92_bulk_volume_policy.f90 -o pr92_O2; ./pr92_O2",
+    "python_fixture": "cd /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL; python3 tests/test_pr99_bulk_candidate_contract.py",
+    "historical_source_fixture": "cd /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL; python3 tests/test_pr92_source_store_fixture.py",
+    "source_transform": "cd /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL; PYTHONPATH=tools python3 tools/pr99_bulk_candidate_contract.py --host /var/tmp/pr96_native_build_c1_20261021/source/overrides/module_em.F --core src/common/cloud_bal_joint_transport.f90 --baseline-core tests/fixtures/pr99_c1_core_pre_certificate.f90 --output /var/tmp/pr99_bulk_candidate_validation_v2_20261022/module_em_certified_v2.F",
+    "source_wiring_test": "cd /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL; python3 tests/test_pr99_bulk_candidate_contract.py"
+  },
+  "logs": {
+    "o0_compile": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/o0_compile.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/o0_compile.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "o0": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/o0.stdout",
+        "sha256": "75a2684a7646b3a66f0f060886b8b48cdeba91f453d7c47674fb06130e9dc9ec"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/o0.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "o2_compile": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/o2_compile.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/o2_compile.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "o2": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/o2.stdout",
+        "sha256": "75a2684a7646b3a66f0f060886b8b48cdeba91f453d7c47674fb06130e9dc9ec"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/o2.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pr92_o0_compile": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_o0_compile.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_o0_compile.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pr92_o0": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_o0.stdout",
+        "sha256": "eecfe98dc7e9512128e7393f45a52c800b5ec928add7026726ce0d8d6547f673"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_o0.stderr",
+        "sha256": "86ba82ede6dee8e393c5a14ced94752bdd9e4305db366c42df4cb6a4564fcceb"
+      }
+    },
+    "pr92_o2_compile": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_o2_compile.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_o2_compile.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pr92_o2": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_o2.stdout",
+        "sha256": "eecfe98dc7e9512128e7393f45a52c800b5ec928add7026726ce0d8d6547f673"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_o2.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "python": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/python.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/python.stderr",
+        "sha256": "fe008aab760eb03ccac7578e2b84665b1b50b0d7f855b17a0c7a8d039435b658"
+      }
+    },
+    "pr92_source_fixture": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_source_fixture.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/pr92_source_fixture.stderr",
+        "sha256": "4c5cf8135e190b89673d1b72c03957837c411dfb090d3b4b2ed9dcd8e62a968a"
+      }
+    },
+    "transform_v2": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/transform_v2.stdout",
+        "sha256": "8b0417a1e0406686abc300c633ab87f7bde6c2c181cd91ca5413716b630cf626"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/transform_v2.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "source_wiring": {
+      "stdout": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/source_wiring.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "/var/tmp/pr99_bulk_candidate_validation_v2_20261022/source_wiring.stderr",
+        "sha256": "edb4e2159c923ea45a32656078835cdf531c3d7b414c670dd786978875cb0678"
+      }
+    }
+  },
+  "executables": {
+    "o0": "2aa57ef1e7ee98a12ddbe259125bca9ecfc36c0dfde3dcc9d12e450fa74d586c",
+    "o2": "f67e41a07fe796735d9eac5f636741fe1ec945af8d80457dc4126dc460afad14",
+    "pr92_o0": "82ef15b7a0884eb9a84f33463928427c9e7860b9f298e62b4b04637222e76752",
+    "pr92_o2": "e099af48d93ff4fda90c7f9dac1bcae3a86da15bd9fe47c558028880fb833b78"
+  },
+  "results": {
+    "new_certificate_FREE_O0": "PASS",
+    "new_certificate_REPRO_O2": "PASS",
+    "existing_bulk_policy_FREE_O0": "PASS",
+    "existing_bulk_policy_REPRO_O2": "PASS",
+    "python_fixture": "PASS",
+    "historical_source_fixture": "PASS",
+    "host_transform": "PASS",
+    "py_compile": "PASS",
+    "git_diff_check": "PASS",
+    "source_wiring_test": "PASS (3 tests; pinned source available; embedded core exactly equals instrument_core output; host certifier call is full source+air, theta 1; both call sites share certifier; core and baseline drift rejected)"
+  },
+  "three_arm_actual_fixture": {
+    "summary_path": "/var/tmp/pr99_c1_three_arm_fallback_20261022/summary.json",
+    "summary_sha256": "451c161986f3fc3502641cee87f6717fdfa4c5042854d875ae72d6c58e26ae89",
+    "scope": "Historical closed C1 OFF/HYDRO/COUPLED T32/RK1 fatal operands match diagnostic OFF; no claim for future modified run."
+  },
+  "limitations": [
+    "No full WRF build or forecast was run.",
+    "Original C1 runs were incomplete at step 31/32; this is local predicate/source validation only.",
+    "Captured rounded operands do not prove upstream source precision."
+  ],
+  "source_wiring_binding": {
+    "c1_host_sha256": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+    "transformed_host_sha256": "98a44389d693ec28533d492c129204fc0bdba22e6ed3ae71acc9e65df7b9cb1a",
+    "expected_transform_sha256": "98a44389d693ec28533d492c129204fc0bdba22e6ed3ae71acc9e65df7b9cb1a"
+  }
+}

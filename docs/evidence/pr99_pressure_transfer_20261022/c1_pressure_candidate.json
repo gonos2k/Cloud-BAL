@@ -1,0 +1,57 @@
+{
+  "changed_values": {
+    "omega": 475,
+    "u": 300,
+    "v": 300
+  },
+  "combined": {
+    "cells": 1294696,
+    "l1_kg_s": 448333.4753917636,
+    "max_abs_kg_s": 9983.076414708059,
+    "rms_kg_s": 41.01896152413919,
+    "signed_sum_kg_s": -8.416943586553316e-09
+  },
+  "component_cancellation": {
+    "fraction_of_component_l1": 0.06191474889833504,
+    "l1_removed_by_opposing_terms_kg_s": 29590.545762232214
+  },
+  "export_contract": "WPS UU/VV carry horizontal correction; pressure omega has no WPS field",
+  "fixed_omega_wps_projection": {
+    "closed_mass_wind_balance_assessed": false,
+    "exported_correction": {
+      "cells": 1294696,
+      "l1_kg_s": 449132.6057861357,
+      "max_abs_kg_s": 9937.734064400895,
+      "rms_kg_s": 40.654256801546204,
+      "signed_sum_kg_s": -8.421920938417315e-09
+    },
+    "max_split_reconstruction_error_kg_s": 1.8189894035458565e-12,
+    "omitted_omega_correction": {
+      "cells": 1294696,
+      "l1_kg_s": 28791.415367860132,
+      "max_abs_kg_s": 594.9383137287818,
+      "rms_kg_s": 2.0560249931538466,
+      "signed_sum_kg_s": 6.572520305780927e-13
+    }
+  },
+  "horizontal_uv": {
+    "cells": 1294696,
+    "l1_kg_s": 449132.6057861357,
+    "max_abs_kg_s": 9937.734064400895,
+    "rms_kg_s": 40.654256801546204,
+    "signed_sum_kg_s": -8.421920938417315e-09
+  },
+  "input": {
+    "path": "/var/tmp/pr81_joint_thermo.HbL5ry/O2/joint_candidate.nc",
+    "sha256": "135c2315d0953182d248ff650ad50fcab7c0b21075b208e693a04fd7f8487ef1"
+  },
+  "omega": {
+    "cells": 1294696,
+    "l1_kg_s": 28791.415367860132,
+    "max_abs_kg_s": 594.9383137287818,
+    "rms_kg_s": 2.0560249931538466,
+    "signed_sum_kg_s": 6.572520305780927e-13
+  },
+  "schema": "pr99_pressure_transfer_diagnostic_v1",
+  "scope": "candidate-minus-background wind correction at fixed candidate dry carrier and pressure geometry"
+}

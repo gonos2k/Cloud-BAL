@@ -1,0 +1,192 @@
+{
+  "schema": "pr99_t1_candidate_store_supplement_v5",
+  "arm": "COUPLED",
+  "source_sha256": "2ded707269f411a9ef5d3af9afb963de7a7ae1bd435406793292211ed5ea61f8",
+  "executable_sha256": "9b417dbeddfe595d6d658770b9f07de05b82a2e313f92e26989385104c7586a9",
+  "manifest_sha256": "ab40b2024c3498d2de5c1eb760a02270342df79492e72be5597325c03390af41",
+  "replay_post_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+  "replay_executable_sha256": "9b417dbeddfe595d6d658770b9f07de05b82a2e313f92e26989385104c7586a9",
+  "input_inventory_sha256": {
+    "pr67_kdm6_process.raw": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976",
+    "pr85_kdm6_cutoff_budget.raw": "7952f2914fa10e358478c07f56847ae61ce4b33c042f06daedee5f9acfa3cb23",
+    "pr87_rain_sedimentation_budget.raw": "eeac7dfc8429f9386811d64f25cbaf80e03e43bc5175d985873f20887d3e3579",
+    "pr85_ice_sedimentation_budget.raw": "325b43cc773a9931c6cc39b507080cb05d20a2502f6358b596e4a5bdf54a0d1e",
+    "pr87_qn_public_store.raw": "5354a8144eea9f00a3b5ed9dcaa8aa045f1d8b3c87642d90c956219fa34d3f42",
+    "pr85_graupel_sedimentation_budget.raw": "1135f89af17c2f69ef757fa6ffb78af2e5063347971d812a9cb933fc7cc7a786",
+    "pr99_process_stage_compact.raw": "fb0c7b52b42c720c8c9a93f6f6b2ce8bcc6e2d6480629489c523dd7ecfdebf50"
+  },
+  "liquid_columns_sha256": "dce2c81fcae327bf57aa994e680c6ae21be167fa5dbf2d6a92e2ae21c4a449cc",
+  "baseline_face_report_sha256": "e6a2739400f0b595897d327d3fb69ef9276e64598d563ed6cfa5d86beda63421",
+  "history_sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba",
+  "public_store_sha256": "5354a8144eea9f00a3b5ed9dcaa8aa045f1d8b3c87642d90c956219fa34d3f42",
+  "graupel_ledger_sha256": "1135f89af17c2f69ef757fa6ffb78af2e5063347971d812a9cb933fc7cc7a786",
+  "all_17_fields_and_XLAND_byte_equal": true,
+  "fixed_active_tile_columns": 64960,
+  "v4_open_after_six_stages_and_separate_approved_packet": {
+    "signed_kg": -163.74445399118846,
+    "L1_column_kg": 12022.335114943857,
+    "max_abs_column_kg": 23.830359253000413,
+    "largest_positive": {
+      "i": 169,
+      "j": 227,
+      "kg": 22.56865664924805
+    },
+    "most_negative": {
+      "i": 32,
+      "j": 116,
+      "kg": -23.830359253000413
+    }
+  },
+  "public_store_Q_change": {
+    "source_formula": "(Q_public_R32 - Q_internal_R32) * emitted DEN * DELZ * same-call map area",
+    "writer_coverage_proof": "source calls the public store for every active rain/cloud level; it writes when adjustment!=0 or public N differs from ordinary N conversion. In the store routine, adjustment=0 keeps rounded input Q, so its Q delta is exactly zero. Thus every nonzero public Q delta is logged. Logged values are reduced as emitted.",
+    "rows_by_kind": {
+      "PR87_CLOUD_PUBLIC_STORE": 77,
+      "PR87_RAIN_PUBLIC_STORE": 169
+    },
+    "cloud": {
+      "signed_kg": 0.05586824773509869,
+      "L1_column_kg": 0.05586824773509869,
+      "max_abs_column_kg": 0.0028563437455570097,
+      "largest_positive": {
+        "i": 139,
+        "j": 170,
+        "kg": 0.0028563437455570097
+      },
+      "most_negative": {
+        "i": 2,
+        "j": 2,
+        "kg": 0.0
+      }
+    },
+    "rain": {
+      "signed_kg": -2.3249066139467094,
+      "L1_column_kg": 6.501329175043416,
+      "max_abs_column_kg": 2.235868443559698,
+      "largest_positive": {
+        "i": 30,
+        "j": 114,
+        "kg": 0.09188247443660043
+      },
+      "most_negative": {
+        "i": 132,
+        "j": 205,
+        "kg": -2.235868443559698
+      }
+    },
+    "combined": {
+      "signed_kg": -2.2690383662116105,
+      "L1_column_kg": 6.557197422778515,
+      "max_abs_column_kg": 2.235868443559698,
+      "largest_positive": {
+        "i": 30,
+        "j": 114,
+        "kg": 0.09188247443660043
+      },
+      "most_negative": {
+        "i": 132,
+        "j": 205,
+        "kg": -2.235868443559698
+      }
+    },
+    "rows": 246
+  },
+  "graupel_sedimentation_Q_change": {
+    "source_formula": "(stored_delta_q + ground_approved_q) * same-call map area; source residual is kg m-2 and stored_delta_q uses actual DEN*DELZ over kts:kte",
+    "ownership_proof": "the source column operator freezes G packets, sweeps all kts:kte faces, updates only QG/BG for this species, sums stored QG delta with each level's actual DEN*DELZ, adds approved ground Q, writes residual_q=stored_delta_q+ground_approved_q, then commits qwork to QG. This G-only source term is separate from rain/ice face terms and the six compact process stages.",
+    "rows": 78926,
+    "columns": 64960,
+    "min_substeps_per_column": 1,
+    "max_substeps_per_column": 2,
+    "vertical_levels_per_row": 39,
+    "event_L1_kg": 193.63830385298456,
+    "max_abs_event_kg": 16.613392614911792,
+    "column_account": {
+      "signed_kg": 12.099223575580103,
+      "L1_column_kg": 122.27405831712622,
+      "max_abs_column_kg": 12.046210624675435,
+      "largest_positive": {
+        "i": 30,
+        "j": 114,
+        "kg": 6.27028762078357
+      },
+      "most_negative": {
+        "i": 31,
+        "j": 115,
+        "kg": -12.046210624675435
+      }
+    },
+    "event_rows_cover_all_active_columns_and_contiguous_substeps": true
+  },
+  "open_after_two_additional_source_terms": {
+    "signed_kg": -173.57463920055696,
+    "L1_column_kg": 11970.601398006107,
+    "max_abs_column_kg": 22.588586001237736,
+    "largest_positive": {
+      "i": 169,
+      "j": 227,
+      "kg": 22.588586001237736
+    },
+    "most_negative": {
+      "i": 146,
+      "j": 215,
+      "kg": -20.178284499625637
+    }
+  },
+  "selected_column_checks": {
+    "169,227": {
+      "v4_open_kg": 22.56865664924805,
+      "public_store_Q_change_kg": 0.0,
+      "graupel_sedimentation_Q_change_kg": -0.019929351989685692,
+      "open_after_two_additional_terms_kg": 22.588586001237736,
+      "public_store_rows": 0,
+      "graupel_substeps": 2
+    },
+    "32,116": {
+      "v4_open_kg": -23.830359253000413,
+      "public_store_Q_change_kg": 0.0,
+      "graupel_sedimentation_Q_change_kg": -7.493479634779548,
+      "open_after_two_additional_terms_kg": -16.336879618220866,
+      "public_store_rows": 0,
+      "graupel_substeps": 2
+    },
+    "146,215": {
+      "v4_open_kg": -20.282864051237226,
+      "public_store_Q_change_kg": 0.0,
+      "graupel_sedimentation_Q_change_kg": -0.10457955161158944,
+      "open_after_two_additional_terms_kg": -20.178284499625637,
+      "public_store_rows": 0,
+      "graupel_substeps": 2
+    },
+    "30,114": {
+      "v4_open_kg": 5.968328207176,
+      "public_store_Q_change_kg": 0.09188247443660043,
+      "graupel_sedimentation_Q_change_kg": 6.27028762078357,
+      "open_after_two_additional_terms_kg": -0.39384188804416986,
+      "public_store_rows": 1,
+      "graupel_substeps": 2
+    },
+    "132,205": {
+      "v4_open_kg": -4.6182980932684625,
+      "public_store_Q_change_kg": -2.235868443559698,
+      "graupel_sedimentation_Q_change_kg": 0.0,
+      "open_after_two_additional_terms_kg": -2.3824296497087647,
+      "public_store_rows": 1,
+      "graupel_substeps": 2
+    },
+    "31,115": {
+      "v4_open_kg": -9.071848861355994,
+      "public_store_Q_change_kg": 0.0,
+      "graupel_sedimentation_Q_change_kg": -12.046210624675435,
+      "open_after_two_additional_terms_kg": 2.9743617633194415,
+      "public_store_rows": 0,
+      "graupel_substeps": 2
+    }
+  },
+  "balance_convention": "R_final = R_v4 - public_Q_store_change - graupel_source_residual; positive C is positive Q storage change",
+  "limits": [
+    "Supplemental terms use existing successful C1 first-call T1 replay artifacts; no forecast was run.",
+    "Only the full active-tile measure is reported; no exact 613-cell vertical mask is reconstructed here.",
+    "The resulting remainder is still open and is not attributed to rounding or a physical loss."
+  ]
+}

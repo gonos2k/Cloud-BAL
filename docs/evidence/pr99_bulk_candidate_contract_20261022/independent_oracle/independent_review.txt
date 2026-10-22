@@ -1,0 +1,27 @@
+PR99 bulk candidate certificate: independent review
+Date: 2026-10-22
+Scope: read-only source review and independent typed-input oracle; no source edits, model run, or forecast.
+
+Pinned source identity
+- Core `cloud_bal_joint_transport.f90`: SHA256 `6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53` before and after the oracle runs.
+- Contract generator: SHA256 `64f9b4fea53ae44ba15d0a4b331520c4b5931436e001ea4b8124fc8b348bfaf0`.
+- Transformed host source: SHA256 `98a44389d693ec28533d492c129204fc0bdba22e6ed3ae71acc9e65df7b9cb1a`.
+- Pinned Intel profile `tests/intel_toolchain.sh`: SHA256 `5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4`.
+- Author validation JSON currently SHA256 `4abb18635ae5f19b04ac87f31b3b6100e9d4df850a43bd556a156b8b72eafeb1`. Its earlier hash `a97d0d9c…` was refreshed as expected after the requested host source-wiring test/provenance update; the mathematical core, generator, and transformed host hashes remained unchanged.
+
+Static review
+- The shared predicate validates finite typed operands, positive carriers/density/timestep, trial scale in [0,1], nonnegative base moments, and positive reference moments. It recomputes the operational REAL64 expression and bit-binds both supplied reference values.
+- The certificate bounds magnitudes before REAL64 recomputation with factor-four HUGE headroom, then encloses the extensive numerator using outward REAL128 intervals. It requires a positive numerator, strict minimum/maximum ratio cone, half-quantum B and maximum-density Q budgets, and endpoint values within HUGE(REAL32) after division by the new carrier. These gates narrow eligibility; they do not alter candidate values or add a tolerance.
+- In `joint_qnb_update`, the helper is called only for pair 4 after normal storage fails, under the existing bulk-absence option and strict mass-ratio/no-volume-bound/no-inactive-limit conditions. The host probe/commit certificate invokes the same helper for pair 4 at trial scale 1.0 after strict storage failure. The authorized outcome is paired zero storage with adjustment 5.
+
+Independent exact oracle
+- Oracle evaluates represented binary32/binary64 input values with Python `Fraction`; it independently checks positivity, strict ratio cone, quantum budgets, REAL32 endpoint range, and operational REAL64 reference bit identity.
+- Pinned Intel FREE/O0 and REPRO/O2 runs each covered 40 cases: 17 accepted, 23 rejected, zero false accepts, actual fatal typed input accepted, and four exact-valid conservative rejections. The four rejected valid cases were two interior values near ratio endpoints and the exact min/max boundary values.
+- Added cases cover large maximum-ratio inputs, a maximum-ratio candidate outside REAL32 endpoint range, tiny positive carrier, near-overflow same-sign and cancellation operands, and negative transport. Both profiles produced identical case outputs.
+
+Evidence bundle
+- `/var/tmp/pr99_bulk_oracle_finalv2_20261022/pinned_inputs.json` SHA256 `53b8e584c840989dcc8cac77e0bec7078e13d30af173e22c92a204b9601fa515`.
+- `/var/tmp/pr99_bulk_oracle_finalv2_20261022/SHA256SUMS` SHA256 `71a9818bb95a2c18fd91c494a9e06151d19a00717568864cc44008f5ab087d56`.
+
+Limitations
+- This is a bounded predicate and source-wiring review plus manufactured exact-input checks. It does not establish upstream source precision or validate a modified full forecast.

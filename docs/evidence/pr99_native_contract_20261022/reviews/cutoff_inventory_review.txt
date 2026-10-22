@@ -1,0 +1,12 @@
+Independent read-only review: PR99 cutoff inventory context
+Date: 2026-10-22
+
+I checked SHA256SUMS and reran `tools/pr99_cutoff_inventory.py` to a new temporary output. The regenerated cutoff_inventory.json is structurally identical to the frozen evidence. The tool, test, report and JSON hashes match the evidence SHA256SUMS. The four focused tests pass.
+
+Source and weight bindings: each arm binds the replay manifest, same-call PRE state, native/replay POST state, cutoff ledger and frozen replay executable by hash. The full-tile face receipt independently binds the same PRE/POST/cutoff files, records the full-tile completion marker and reports all 17 returned fields plus XLAND byte-equal. The reducer checks cutoff row counts, unique (I,J,K,loop) assignment keys, row thresholds, same-call DEN, and whether below-threshold Q assignments zero the store while above-threshold stores remain unchanged. It weights each event at its own K/J/I with the matching PRE `DEN*DELZ` and receipt-bound history map area. The map reader validates finite positive map factors and area. The source-composed mask hash and expected 613 cells/16 columns/196-column all-level buffer are checked.
+
+The four-region outputs are reproducible for all arms. Full-tile totals are OFF 43,406.91468048652 kg, HYDRO 43,418.202834446674 kg and COUPLED 43,395.755134667736 kg; inventory denominators are about 3.4611e12 kg. Five-cell-buffer removals are 302.211, 313.499 and 291.053 kg; exact-support removals are 17.919, 26.232 and 10.374 kg. The event-footprint ratios use each species' pre-call same-species inventory over cells with recorded removal. Documentation correctly identifies these as contextual ratios, not fractions physically lost; species may form, convert, replenish or be removed repeatedly. QV is excluded and signed Q sums are not called extensive water mass.
+
+The PR98 cross-check reports zero difference at the resulting float64 totals in each arm. This is a computed R64 agreement between reducers with different accumulation paths; it is not an exact-real-arithmetic or general conservation claim. The report scopes “matches exactly” to the reported R64 totals and says this accounting does not explain the remaining residual or establish physical conservation.
+
+No blocker found in the stated source, weight, mask or interpretation contract. This is a cutoff-ledger/inventory check for one first KDM6 call, not phase-change attribution or complete water budget evidence.

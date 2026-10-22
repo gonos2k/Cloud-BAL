@@ -1,0 +1,32 @@
+{
+  "original_extra_wind_L2": 105.607643419983,
+  "proposal_extra_wind_L2": 101.14320948003383,
+  "applied_projection_change_L2": 30.38133625180067,
+  "applied_change_over_original_norm": 0.28768122522135486,
+  "retained_norm_ratio": 0.957726223260234,
+  "projection_change_max_abs_by_component": {
+    "U": 1.7442002296447754,
+    "V": 1.872469425201416
+  },
+  "limits": "Equal-face unweighted velocity norms, not energy or observation error; component maxima need not co-locate.",
+  "schema": "pr99_projection_stored_wind_displacement_v1",
+  "units": "m/s for individual components and equal-face aggregate velocity norms",
+  "formula": "d=C-H; p=proposal-H; applied change=p-d; all stored REAL32 values promoted before subtraction",
+  "input_binding": {
+    "candidate": {
+      "path": "/var/tmp/pr99_native_projection_v4_20261022/wrfinput_d01",
+      "sha256": "10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3"
+    },
+    "parent": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/run/wrfinput_d01",
+      "sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
+    },
+    "reference": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/run/wrfinput_d01",
+      "sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c"
+    }
+  },
+  "proposal_receipt_sha256": "a6fdd4907228b6bcd95d2eba3e61539adcedf69c0154c23a9e1a2edeb6c6b5d0",
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED"
+}

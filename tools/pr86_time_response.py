@@ -147,8 +147,44 @@ def _hydro_input_binding(path: Path) -> dict:
             "comparison_contract": receipt.get("comparison_contract")}
 
 
+def _native_input_binding(path: Path) -> dict:
+    """Bind a COUPLED U/V projection proposal and every declared source artifact."""
+    path = path.resolve()
+    receipt = json.loads(path.read_text())
+    if (receipt.get("schema") != "pr99_native_uv_projection_proposal_v1" or
+            receipt.get("status") != "PROPOSAL_REQUIRES_NATIVE_CONSUMER_AND_TENDENCY_VALIDATION" or
+            receipt.get("role") != "COUPLED"):
+        raise ValueError("expected a source-bound PR99 COUPLED native input proposal")
+    artifacts = {name: receipt[name] for name in (
+        "candidate", "parent", "reference", "boundary", "generator", "composition")}
+    for row in artifacts.values():
+        if sha256(Path(row["path"])) != row["sha256"]:
+            raise ValueError(f"native proposal artifact changed: {row['path']}")
+    if receipt.get("composition_sha256") != artifacts["composition"]["sha256"]:
+        raise ValueError("native proposal composition hash is inconsistent")
+    return {"binding_kind": "native_uv_projection", "role": "COUPLED",
+            "receipt_path": str(path), "receipt_sha256": sha256(path),
+            "schema": receipt["schema"], "status": receipt["status"],
+            "artifacts": artifacts, "composition_sha256": receipt["composition_sha256"]}
+
+
 def _input_binding_unchanged(binding: dict | None) -> bool:
-    return binding is None or _hydro_input_binding(Path(binding["receipt_path"])) == binding
+    if binding is None:
+        return True
+    kind = binding.get("binding_kind", "hydro")
+    if kind == "hydro":
+        return _hydro_input_binding(Path(binding["receipt_path"])) == binding
+    if kind == "native_uv_projection":
+        return _native_input_binding(Path(binding["receipt_path"])) == binding
+    return False
+
+
+def _validate_native_template(binding: dict, template_receipt: dict) -> None:
+    artifacts = binding["artifacts"]
+    if artifacts["parent"]["sha256"] != template_receipt["candidate_wrfinput_sha256"]:
+        raise ValueError("native proposal parent differs from the frozen COUPLED input")
+    if artifacts["boundary"]["sha256"] != template_receipt["candidate_wrfbdy_sha256"]:
+        raise ValueError("native proposal boundary differs from the frozen COUPLED boundary")
 
 
 def edit_namelist(text: str, seconds: int) -> str:
@@ -379,10 +415,20 @@ def diagnostic_run_id(arm: str, out: Path) -> str:
 def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
             candidate_build_path: Path | None = None,
             disk_reference_receipt_path: Path | None = None,
-            hydro_input_receipt_path: Path | None = None) -> dict:
+            hydro_input_receipt_path: Path | None = None,
+            native_input_receipt_path: Path | None = None) -> dict:
     snapshot_schedule(duration)
-    if (arm == "HYDRO") != (hydro_input_receipt_path is not None):
-        raise ValueError("HYDRO requires its own input receipt; OFF/COUPLED do not accept one")
+    if hydro_input_receipt_path is not None and native_input_receipt_path is not None:
+        raise ValueError("HYDRO and native projection input receipts are mutually exclusive")
+    if arm == "HYDRO":
+        if hydro_input_receipt_path is None or native_input_receipt_path is not None:
+            raise ValueError("HYDRO requires its own input receipt")
+    elif hydro_input_receipt_path is not None:
+        raise ValueError("HYDRO input receipt is only valid for the HYDRO arm")
+    if native_input_receipt_path is not None and arm != "COUPLED":
+        raise ValueError("native projection input receipt is only valid for the COUPLED arm")
+    if native_input_receipt_path is not None and duration != 20:
+        raise ValueError("native projection input receipt is limited to one 20-second step")
     template_arm = "OFF" if arm == "HYDRO" else arm
     runtime = Path(str(RUNTIME).format(arm=template_arm))
     receipt_path = Path(str(RUN_RECEIPT).format(arm=template_arm))
@@ -401,11 +447,18 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
     candidate_build = (_candidate_build_binding(candidate_build_path)
                        if candidate_build_path is not None else None)
     candidate_input = (_hydro_input_binding(hydro_input_receipt_path)
-                       if hydro_input_receipt_path is not None else None)
-    if candidate_input and candidate_input["artifacts"]["wrfbdy"]["sha256"] != receipt["candidate_wrfbdy_sha256"]:
+                       if hydro_input_receipt_path is not None else
+                       _native_input_binding(native_input_receipt_path)
+                       if native_input_receipt_path is not None else None)
+    if (candidate_input and candidate_input.get("binding_kind", "hydro") == "hydro" and
+            candidate_input["artifacts"]["wrfbdy"]["sha256"] != receipt["candidate_wrfbdy_sha256"]):
         raise ValueError("HYDRO boundary differs from the frozen matched boundary")
-    wrfinput_sha256 = (candidate_input["artifacts"]["wrfinput"]["sha256"] if candidate_input
-                      else receipt["candidate_wrfinput_sha256"])
+    if candidate_input and candidate_input.get("binding_kind") == "native_uv_projection":
+        _validate_native_template(candidate_input, receipt)
+        wrfinput_sha256 = candidate_input["artifacts"]["candidate"]["sha256"]
+    else:
+        wrfinput_sha256 = (candidate_input["artifacts"]["wrfinput"]["sha256"] if candidate_input
+                          else receipt["candidate_wrfinput_sha256"])
     namelist = runtime / "namelist.input"
     original_namelist = namelist.read_text()
     edited = edit_namelist(original_namelist, duration)
@@ -467,12 +520,15 @@ def _stage(prepared: dict, out: Path) -> Path:
     candidate_input = prepared.get("candidate_input_binding")
     if candidate_input:
         if not _input_binding_unchanged(candidate_input):
-            raise ValueError("HYDRO source input binding changed after preflight")
+            raise ValueError("source-bound native input changed after preflight")
         staged_input = stage / "wrfinput_d01"
         staged_input.unlink()
-        shutil.copy2(candidate_input["artifacts"]["wrfinput"]["path"], staged_input)
+        input_artifact = (candidate_input["artifacts"]["candidate"]
+                          if candidate_input.get("binding_kind") == "native_uv_projection"
+                          else candidate_input["artifacts"]["wrfinput"])
+        shutil.copy2(input_artifact["path"], staged_input)
         if sha256(staged_input) != prepared["candidate_wrfinput_sha256"]:
-            raise ValueError("staged HYDRO input hash mismatch")
+            raise ValueError("staged candidate input hash mismatch")
     candidate_build = prepared.get("candidate_build")
     if candidate_build:
         staged_executable = stage / "wrf.exe"
@@ -663,16 +719,35 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
     issues = []
     if preflight.get("arm", arm) != arm or original.get("arm", arm) != arm:
         issues.append("requested arm differs from run provenance")
-    hydro_binding = preflight.get("candidate_input_binding")
-    if (arm == "HYDRO") != bool(hydro_binding):
-        issues.append("HYDRO arm requires its own source-bound input")
-    if hydro_binding:
-        if (preflight.get("template_arm") != "OFF" or original.get("arm") != "HYDRO" or
-                original.get("candidate_input_binding") != hydro_binding or
+    candidate_input = preflight.get("candidate_input_binding")
+    binding_kind = candidate_input.get("binding_kind", "hydro") if candidate_input else None
+    if arm == "HYDRO":
+        if binding_kind != "hydro":
+            issues.append("HYDRO arm requires its own source-bound input")
+        elif (preflight.get("template_arm") != "OFF" or original.get("arm") != "HYDRO" or
+              original.get("candidate_input_binding") != candidate_input or
+              original.get("candidate_wrfinput_sha256") != preflight.get("candidate_wrfinput_sha256") or
+              preflight.get("candidate_wrfinput_sha256") !=
+              candidate_input.get("artifacts", {}).get("wrfinput", {}).get("sha256")):
+            issues.append("HYDRO launch input provenance differs from preflight")
+    elif binding_kind == "hydro":
+        issues.append("HYDRO source-bound input is only valid for the HYDRO arm")
+    elif binding_kind == "native_uv_projection":
+        template_receipt = json.loads(Path(preflight["source_receipt"]).read_text())
+        try:
+            _validate_native_template(candidate_input, template_receipt)
+        except (KeyError, ValueError) as exc:
+            issues.append(str(exc))
+        if (duration != 20 or preflight.get("duration_seconds") != 20 or
+                arm != "COUPLED" or candidate_input.get("role") != "COUPLED" or
+                preflight.get("template_arm") != "COUPLED" or original.get("arm") != "COUPLED" or
+                original.get("candidate_input_binding") != candidate_input or
                 original.get("candidate_wrfinput_sha256") != preflight.get("candidate_wrfinput_sha256") or
                 preflight.get("candidate_wrfinput_sha256") !=
-                hydro_binding.get("artifacts", {}).get("wrfinput", {}).get("sha256")):
-            issues.append("HYDRO launch input provenance differs from preflight")
+                candidate_input.get("artifacts", {}).get("candidate", {}).get("sha256")):
+            issues.append("COUPLED native proposal provenance differs from preflight")
+    elif candidate_input is not None:
+        issues.append("unknown source-bound input kind")
     candidate_build = preflight.get("candidate_build")
     candidate_build_unchanged = True
     if candidate_build_path is not None and (not candidate_build or
@@ -738,9 +813,12 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
         candidate_input_unchanged = _input_binding_unchanged(candidate_input)
     except (OSError, ValueError, KeyError) as exc:
         candidate_input_unchanged = False
-        issues.append(f"HYDRO input binding validation: {exc}")
+        label = "HYDRO" if binding_kind == "hydro" else "source-bound native"
+        issues.append(f"{label} input binding validation: {exc}")
     if not candidate_input_unchanged:
-        issues.append("HYDRO input binding changed after preflight")
+        message = ("HYDRO input binding changed after preflight" if binding_kind == "hydro"
+                   else "source-bound input changed after preflight")
+        issues.append(message)
     source = Path(preflight["runtime_dir"])
     source_after = {}
     changed_original = []
@@ -833,13 +911,15 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
 def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: float,
         candidate_build_path: Path | None = None,
         disk_reference_receipt_path: Path | None = None,
-        hydro_input_receipt_path: Path | None = None) -> dict:
+        hydro_input_receipt_path: Path | None = None,
+        native_input_receipt_path: Path | None = None) -> dict:
     runner_path = Path(__file__).resolve()
     runner_sha256_at_entry = sha256(runner_path)
     schedule = snapshot_schedule(duration)
     out.mkdir(parents=True, exist_ok=False)
     prepared = prepare(arm, duration, out, safety_fraction, candidate_build_path,
-                       disk_reference_receipt_path, hydro_input_receipt_path)
+                       disk_reference_receipt_path, hydro_input_receipt_path,
+                       native_input_receipt_path)
     (out / "preflight.json").write_text(json.dumps({k: v for k, v in prepared.items()
                                                      if k != "namelist_text"}, indent=2) + "\n")
     if prepared["disk_guard"]["status"] != "PASS":
@@ -858,7 +938,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
         raise RuntimeError("candidate build identity changed after preflight")
     candidate_input = prepared.get("candidate_input_binding")
     if not _input_binding_unchanged(candidate_input):
-        raise RuntimeError("HYDRO input identity changed after preflight")
+        raise RuntimeError("source-bound input identity changed after preflight")
     launch_provenance = {"launch_runner_source_path": str(runner_path),
                          "launch_runner_source_sha256": runner_sha256_at_entry,
                          "diagnostic_environment": prepared["diagnostic_environment"]}
@@ -924,7 +1004,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
         candidate_input_unchanged = _input_binding_unchanged(candidate_input)
     except (OSError, ValueError, KeyError) as exc:
         candidate_input_unchanged = False
-        processing_errors.append(f"HYDRO input binding validation: {exc}")
+        processing_errors.append(f"source-bound input binding validation: {exc}")
     complete = (process.returncode == 0 and actual_times == expected_times and
                 completed_steps == list(range(1, duration // 20 + 1)) and not duplicate_post and not fatal and
                 not processing_errors and not changed_stage and not changed_original and
@@ -978,6 +1058,8 @@ def main() -> int:
                         help="explicit PR87 overlay build receipt; default uses frozen PR86 executable")
     parser.add_argument("--hydro-input-receipt", type=Path,
                         help="source-bound HYDRO native input; OFF ancillary template remains immutable")
+    parser.add_argument("--native-input-receipt", type=Path,
+                        help="source-bound PR99 COUPLED native input proposal")
     parser.add_argument("--safety-fraction", type=float, default=0.85)
     parser.add_argument("--disk-reference-receipt", type=Path,
                         help="calibrate the disk guard from a successful same-input run receipt")
@@ -988,10 +1070,13 @@ def main() -> int:
         parser.error(f"--duration-seconds {exc}")
     if args.finalize and args.hydro_input_receipt is not None:
         parser.error("--finalize uses the launch-bound HYDRO receipt in preflight.json")
+    if args.finalize and args.native_input_receipt is not None:
+        parser.error("--finalize uses the launch-bound native input receipt in preflight.json")
     out = args.output or DEFAULT_OUT / args.arm
     result = (finalize_existing_run(args.arm, out, args.duration_seconds, args.candidate_build) if args.finalize else
               run(args.arm, out, args.duration_seconds, args.execute, args.safety_fraction,
-                  args.candidate_build, args.disk_reference_receipt, args.hydro_input_receipt))
+                  args.candidate_build, args.disk_reference_receipt, args.hydro_input_receipt,
+                  args.native_input_receipt))
     print(json.dumps({k: v for k, v in result.items() if k != "input_hashes"}, indent=2))
     return 0
 

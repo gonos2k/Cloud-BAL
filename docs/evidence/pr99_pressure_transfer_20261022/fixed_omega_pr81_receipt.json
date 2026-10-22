@@ -1,0 +1,43 @@
+{
+  "compatibility_failure": {
+    "check": "component volume-weighted residual mean exceeds absolute plus relative compatibility tolerance",
+    "operator_component": 9,
+    "pressure_level_k": 3,
+    "residual_to_scale": 0.3834476012758921,
+    "support_on_other_levels": false,
+    "volume_weighted_residual": -401.59429500702026,
+    "weighted_absolute_scale": 1047.3250938870042
+  },
+  "input": {
+    "path": "/var/tmp/pr78_cp06a_spatial.V9LYrN/O2/coupled.nc",
+    "role": "PR81 producer input; upstream support artifact, not the final C1 candidate",
+    "sha256": "2fba48293d11c33d93b63b60d874ffbd3431e4397c92806996732e5d11def260"
+  },
+  "outcome": {
+    "balance_reason": 6,
+    "balance_status": -10,
+    "candidate_written": false,
+    "native_validation": "NOT_RUN",
+    "pipeline_reason": 6,
+    "pipeline_status": -10,
+    "science_authority": "NONE",
+    "solver_iterations": 0,
+    "solver_reason": 2
+  },
+  "policy": {
+    "CLOUD_BAL_COMPATIBILITY_TRACE": "1",
+    "CLOUD_BAL_FIXED_OMEGA_FOR_EXPORT": "1"
+  },
+  "producer": "tests/run_pr81_joint_thermo_retained.sh",
+  "profile": "Intel O2 pinned",
+  "receipt": {
+    "executable_sha256": "914a14b7ca092117d610fa9925f532d96ad2e1cde92d27787a61c573c5148",
+    "path": "/var/tmp/pr81_joint_thermo.ls9m9N/receipt.txt",
+    "run_log_sha256": "bfb5869dc8294e2f8e8ba297e4765aafd7f65872859d2c19b0e997da0c46493c",
+    "source_manifest": "source_pre.sha256 (matches source_post.sha256 byte-for-byte) in referenced run directory",
+    "source_manifest_sha256": "e19110160d50272107e6f02ffb892d23bf358dea504515a65667d97b762bf441"
+  },
+  "run_directory": "/var/tmp/pr81_joint_thermo.ls9m9N",
+  "schema": "pr99_fixed_omega_pr81_receipt_v1",
+  "source_head": "6ac1ddb6a50c9e4f909e47243bbd656e09fc85a3"
+}

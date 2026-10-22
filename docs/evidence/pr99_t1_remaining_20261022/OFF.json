@@ -1,0 +1,223 @@
+{
+  "schema": "pr98_selected_sedimentation_face_account_v1",
+  "arm": "OFF",
+  "source_terms_are_independent": true,
+  "definition": "per accepted face, (stored donor Q change * DEN * DELZ + theta*pq) + (stored receiver Q change * DEN * DELZ - theta*pq); ground face has no receiver",
+  "interpretation": "source-stage accepted-packet/store discrepancy, with local source-ledger agreement; includes REAL32 representation and REAL64 accumulation effects and is not labelled pure R32 rounding",
+  "selected_face_capture": {
+    "accepted_face_capture_counts_by_mode": {
+      "ice": {
+        "captured_accepted_face_records": 78,
+        "nonzero_approved_packets": 34,
+        "positive_approved_packets": 34,
+        "negative_approved_packets": 0,
+        "zero_approved_packets": 44
+      },
+      "graupel": {
+        "captured_accepted_face_records": 117,
+        "nonzero_approved_packets": 0,
+        "positive_approved_packets": 0,
+        "negative_approved_packets": 0,
+        "zero_approved_packets": 117
+      },
+      "rain": {
+        "captured_accepted_face_records": 117,
+        "nonzero_approved_packets": 47,
+        "positive_approved_packets": 47,
+        "negative_approved_packets": 0,
+        "zero_approved_packets": 70
+      }
+    },
+    "matched_substeps": 5,
+    "selected_columns": {
+      "184,147": {
+        "ice": {
+          "accepted_face_records": 39,
+          "approved_packet_kg": 48109.91305221934,
+          "donor_store_packet_discrepancy_kg": 0.02722103992003827,
+          "receiver_store_packet_discrepancy_kg": -0.014568401334145024,
+          "net_source_face_discrepancy_kg": 0.012652638585893244,
+          "source_stage_rows_independently_match": true
+        },
+        "rain": {
+          "accepted_face_records": 39,
+          "approved_packet_kg": 8.830871012439962,
+          "donor_store_packet_discrepancy_kg": 5.53359624340129e-07,
+          "receiver_store_packet_discrepancy_kg": 3.1398411204717984e-07,
+          "net_source_face_discrepancy_kg": 8.673437363873089e-07,
+          "source_stage_rows_independently_match": true
+        }
+      },
+      "208,79": {
+        "ice": {
+          "accepted_face_records": 39,
+          "approved_packet_kg": 16108497.936156258,
+          "donor_store_packet_discrepancy_kg": 3.611268585120108,
+          "receiver_store_packet_discrepancy_kg": 3.761214608868908,
+          "net_source_face_discrepancy_kg": 7.372483193989016,
+          "source_stage_rows_independently_match": true
+        },
+        "rain": {
+          "accepted_face_records": 78,
+          "approved_packet_kg": 2610568.6445019795,
+          "donor_store_packet_discrepancy_kg": -0.0898047122645412,
+          "receiver_store_packet_discrepancy_kg": 0.07204885054852012,
+          "net_source_face_discrepancy_kg": -0.017755861716021084,
+          "source_stage_rows_independently_match": true
+        }
+      }
+    }
+  },
+  "compact_full_tile_face_capture": {
+    "rain": {
+      "substeps": 78926,
+      "stage_rows": 78926,
+      "columns_with_events": 64960,
+      "accepted_face_records": 3078114,
+      "nonzero_approved_packet_records": 490829,
+      "L1_face_event_kg": 10263.830845585953,
+      "max_abs_face_event_kg": 1.0159524612552238,
+      "approved_packet_kg": 25604256059.27342,
+      "packet_sum_kg": 25604256059.27342,
+      "donor_discrepancy_kg": -8.886166115431111,
+      "receiver_discrepancy_kg": 10.47563957544742,
+      "net_discrepancy": {
+        "signed_kg": 1.5894734600163059,
+        "L1_column_kg": 1548.8810211795455,
+        "max_abs_column_kg": 5.39699177178522,
+        "columns_with_events": 64960
+      }
+    },
+    "ice": {
+      "substeps": 64960,
+      "stage_rows": 64960,
+      "columns_with_events": 64960,
+      "accepted_face_records": 2533440,
+      "nonzero_approved_packet_records": 599318,
+      "L1_face_event_kg": 41449.469477438666,
+      "max_abs_face_event_kg": 3.297696459472899,
+      "approved_packet_kg": 43263837306.126,
+      "packet_sum_kg": 43263837306.126,
+      "donor_discrepancy_kg": 6.007172551878428,
+      "receiver_discrepancy_kg": 1.0234669366521507,
+      "net_discrepancy": {
+        "signed_kg": 7.0306394885305705,
+        "L1_column_kg": 11209.69727455013,
+        "max_abs_column_kg": 13.434102409346675,
+        "columns_with_events": 64960
+      }
+    },
+    "combined_net_discrepancy": {
+      "signed_kg": 8.620112948546884,
+      "L1_column_kg": 12046.60643409483,
+      "max_abs_column_kg": 13.21277343147912,
+      "columns_with_events": 64960
+    },
+    "open_residual_after_independent_face_term": {
+      "signed_kg": -22658.253498380956,
+      "L1_column_kg": 169744.74909334895,
+      "max_abs_column_kg": 40.300883862718166,
+      "columns_with_events": 64652
+    },
+    "extreme_remaining_columns_by_sign": {
+      "largest_positive": {
+        "i": 192,
+        "j": 71,
+        "R_raw_kg": 23.6560731465579,
+        "C_liquid_store_kg": -13.328006463126835,
+        "C_cutoff_actual_store_change_kg": -2.827253236350908e-07,
+        "C_accepted_rain_ice_face_store_discrepancy_kg": -1.305231574636057,
+        "remaining_after_cutoff_and_face_terms_kg": 38.28931146704612
+      },
+      "most_negative": {
+        "i": 161,
+        "j": 57,
+        "R_raw_kg": -50.66065864945995,
+        "C_liquid_store_kg": -10.945631590553491,
+        "C_cutoff_actual_store_change_kg": -2.156036074650947e-17,
+        "C_accepted_rain_ice_face_store_discrepancy_kg": 0.5858568038117051,
+        "remaining_after_cutoff_and_face_terms_kg": -40.300883862718166
+      }
+    },
+    "selected_columns_after_independent_face_term": {
+      "184,147": {
+        "R_raw_kg": -70.7354881968086,
+        "C_liquid_store_kg": -9.611814260400555,
+        "C_cutoff_actual_store_change_kg": -60.567291093204986,
+        "C_accepted_rain_ice_face_store_discrepancy_kg": 0.012653505929629633,
+        "remaining_after_cutoff_kg": -0.5563828432030604,
+        "remaining_after_cutoff_and_face_terms_kg": -0.5690363491326901
+      },
+      "208,79": {
+        "R_raw_kg": 40.241824630022165,
+        "C_liquid_store_kg": 2.613444738384729,
+        "C_cutoff_actual_store_change_kg": -7.280252627332967e-18,
+        "C_accepted_rain_ice_face_store_discrepancy_kg": 7.354727332272995,
+        "remaining_after_cutoff_kg": 37.62837989163744,
+        "remaining_after_cutoff_and_face_terms_kg": 30.273652559364443
+      }
+    }
+  },
+  "same_call_budget_identity": {
+    "receipt_sha256": "e44d75017995a981fc51be618e8f94755c911bec47af9bc8bd809ec0b30d958f",
+    "pre_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+    "post_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+    "process_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8",
+    "replay_post_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+    "all_17_fields_and_XLAND_byte_equal": true
+  },
+  "pr99_reducer_source_sha256": "1d22a0fdf154468cc7ae326529d799e9406e5c46a2bf3e1d1fb8f923a530f857",
+  "baseline_budget_report_sha256": "48bb801566d5dae7c02ffcb7e90b954cf395377f27437abfc3df72fad619939d",
+  "identity": {
+    "schema": "pr98_face_replay_v1",
+    "completion_marker": "REPLAY COMPLETED FULL ACTIVE TILE",
+    "completion_marker_observed": true,
+    "arm": "OFF",
+    "executable_path": "/var/tmp/pr98_face_v8_OFF_20261022/replay.exe",
+    "executable_sha256": "d612dcc308c8ee7ce8f141d4f10c64f4c87b4adb364a2172cc2fa2a7fc144898",
+    "original_pr97_diagnostic_source_sha256": "4872609b7a0b28f4214269dbf9298583a427ac19503c960412404959311b7a13",
+    "build_manifest_sha256": "aa9865ff771711aa71ef528974f2905a7016f947b97c054b6bf16f0a0a685176",
+    "build_manifest": {
+      "schema": "pr98_face_observer_build_v1",
+      "compile_profile": "repro",
+      "pinned_ifx_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "pinned_ifx_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "pinned_mpiifx_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+      "pinned_mpiifx_sha256": "9d8235d45ca2b09b5c6ffd1ba0b12cb728252aa1577ea80a240c6a2f5b69b0fb",
+      "mpiifx_show": "ifx -c '/var/tmp/pr98_sed_source_v5.f90' -I\"/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/include/mpi\" -I\"/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/include\" -I\"/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/include/mpi\"",
+      "prepared_source_path": "/var/tmp/pr98_sed_source_v5.f90",
+      "prepared_source_sha256": "1995eb8eda794e737243885d10bd4d53e3f39f7c7fe4e51ff5e9fa89d65afdf5",
+      "observer_source_sha256": "3f9115383ed26687ae1b453c1431d8375d776a8b3b6f3c325667f7c52133ab11",
+      "link_argv_json_sha256": "ec147ad9376cfc14cb76d7b415ee4be7c9521968fcdd8ecbca1dbe5ea8c3d27c",
+      "linked_executable_path": "/var/tmp/pr98_face_observer_build12_20261022/link/pr98_face_replay.exe",
+      "linked_executable_sha256": "d612dcc308c8ee7ce8f141d4f10c64f4c87b4adb364a2172cc2fa2a7fc144898"
+    },
+    "prepared_source_path": "/var/tmp/pr98_sed_source_v5.f90",
+    "prepared_source_sha256": "1995eb8eda794e737243885d10bd4d53e3f39f7c7fe4e51ff5e9fa89d65afdf5",
+    "observer_source_sha256": "3f9115383ed26687ae1b453c1431d8375d776a8b3b6f3c325667f7c52133ab11",
+    "build_link_argv_sha256": "ec147ad9376cfc14cb76d7b415ee4be7c9521968fcdd8ecbca1dbe5ea8c3d27c",
+    "compiler_profile": "tests/intel_toolchain.sh (pinned Intel 2026.0 ifx)",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "omp_threads": 1,
+    "unlimited_stack": true,
+    "pre_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+    "native_post_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+    "replay_post_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+    "all_17_fields_and_XLAND_byte_equal": true,
+    "face_rows_sha256": "17a49e9099ed7ded05c117fa9250cfd46ad0516802a305f80428210061f05221",
+    "accepted_face_records": 312,
+    "rain_rows_sha256": "ddbcf73e13b8daae86ea4f439de9267ea75e3819fb60e60f34f2446f5c15fe43",
+    "rain_stage_rows": 78926,
+    "rain_face_summary_rows": 78926,
+    "ice_rows_sha256": "bdab19cab8b0ff893c5fca68a828cab05407ff24a92164ce80f1f6ee3b952bc0",
+    "ice_stage_rows": 64960,
+    "ice_face_summary_rows": 64960,
+    "cutoff_rows_sha256": "fa8bc6700466e00145b4289e8d98023742d5e6680871f56aca471e3bcc8536c4",
+    "liquid_columns_sha256": "b463701c7f000fe9c0741c830817d855328526a75947f14328dca0f6e72f622c",
+    "history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+    "history_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/OFF_600s_c1/run/wrfout_d01_2026-08-16_13:00:00",
+    "log_sha256": "aba8dd6c01f4079cc744ac932a379f44f648aa7ecae8974ddd6c548febfeeeae",
+    "scratch_directory": "/var/tmp/pr98_face_v8_OFF_20261022"
+  },
+  "physical_approval": "FAIL_OPEN"
+}

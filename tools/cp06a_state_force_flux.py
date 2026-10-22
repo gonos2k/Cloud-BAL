@@ -76,7 +76,9 @@ def dry_fraction(dataset: Dataset, prefix: str, above: np.ndarray) -> np.ndarray
 
 def independent_flux(dataset: Dataset, prefix: str,
                      dry_override: np.ndarray | None = None,
-                     wind_override: tuple[np.ndarray, np.ndarray] | None = None
+                     wind_override: tuple[np.ndarray, np.ndarray] | None = None,
+                     omega_override: np.ndarray | None = None,
+                     zero_omega_boundaries: bool = False
                      ) -> dict[str, np.ndarray | float]:
     """Build dry-air face flux divergence without operator/divergence readbacks."""
     above = get(dataset, "above_ground") != 0
@@ -84,6 +86,8 @@ def independent_flux(dataset: Dataset, prefix: str,
                    for field in ("u", "v", "omega"))
     if wind_override is not None:
         u, v = (np.asarray(value, dtype=np.float64) for value in wind_override)
+    if omega_override is not None:
+        omega = np.asarray(omega_override, dtype=np.float64)
     # NetCDF stores (z,y,x); the Fortran operator is indexed (x,y,z).
     dz, ny, nx = u.shape
     pressure_i = get(dataset, "pressure_interface").astype(np.float64)
@@ -167,6 +171,9 @@ def independent_flux(dataset: Dataset, prefix: str,
 
     top = get(dataset, "omega_top_boundary").astype(np.float64)
     bottom = get(dataset, "omega_bottom_boundary").astype(np.float64)
+    if zero_omega_boundaries:
+        top = np.zeros_like(top)
+        bottom = np.zeros_like(bottom)
     top_valid = get(dataset, "omega_top_boundary_valid") != 0
     bottom_valid = get(dataset, "omega_bottom_boundary_valid") != 0
     vertical_boundary = np.zeros(2, dtype=np.float64)

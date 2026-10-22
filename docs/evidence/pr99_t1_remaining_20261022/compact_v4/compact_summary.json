@@ -1,0 +1,788 @@
+{
+  "schema": "pr99_compact_t1_stage_evidence_v1",
+  "source_generator_sha256": "cefec27b987a263435e67a4e213a95f9c89faf8fbf7e853741a163692996f7f0",
+  "reducer_sha256": "c2ddd14c12f87c6fd9640b940a8c5ba9081deedc33418e6596b9b0e5af30002f",
+  "off_raw_crosscheck_tool_sha256": "6520678ae618cf1aba05de0b334e562fbbd108475fee729a750f051940b887d8",
+  "arms": {
+    "OFF": {
+      "returncode_observed": 0,
+      "completion_marker_observed": true,
+      "all_17_fields_and_XLAND_byte_equal": true,
+      "pre_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+      "native_post_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+      "replay_post_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+      "compact_output_sha256": "9916d45f690e5be39784cf6efa51e402faaa6baf37a0278274fb5ae66cf83e71",
+      "compact_output_bytes": 81849600,
+      "stage_rows": 389760,
+      "expected_stage_rows": 389760,
+      "baseline_signed_kg": -22658.253498380956,
+      "stored_minus_approved_signed_kg": -22474.130855310872,
+      "remaining_after_store": {
+        "signed_kg": -184.12264307008581,
+        "L1_column_kg": 12201.602011254936,
+        "max_abs_column_kg": 23.87863302842428,
+        "largest_positive": {
+          "i": 169,
+          "j": 227,
+          "kg": 21.999347350674924,
+          "baseline_after_liquid_cutoff_face_kg": 32.5128903666046,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": 3.49211351126265,
+              "event_count": 6
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -1.2987932776699391,
+              "event_count": 18
+            },
+            "cold": {
+              "stored_minus_approved_kg": 5.182334102854676,
+              "event_count": 24
+            },
+            "warm": {
+              "stored_minus_approved_kg": -0.7345820129186261,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 3.8768122752318868,
+              "event_count": 3
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": -0.004341582830970815,
+              "event_count": 1
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 0.0768602543722681,
+              "event_count": 24
+            },
+            "warm": {
+              "approved_sum_kg": -0.6461695529453952,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        },
+        "most_negative": {
+          "i": 32,
+          "j": 116,
+          "kg": -23.87863302842428,
+          "baseline_after_liquid_cutoff_face_kg": -2.9540018181093983,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": -1.452831425216389,
+              "event_count": 4
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -0.7429474569671072,
+              "event_count": 16
+            },
+            "cold": {
+              "stored_minus_approved_kg": -1.8663501752900067,
+              "event_count": 23
+            },
+            "warm": {
+              "stored_minus_approved_kg": 23.107720326249016,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 1.8790399415393686,
+              "event_count": 2
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": 0.0,
+              "event_count": 0
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 3.2706545688825805,
+              "event_count": 23
+            },
+            "warm": {
+              "approved_sum_kg": -3.3189283443064475,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        }
+      },
+      "approved_packet_signed_kg": -24.28549511226553,
+      "remaining_after_store_and_packet": {
+        "signed_kg": -159.83714795782026,
+        "L1_column_kg": 12023.263033784395,
+        "max_abs_column_kg": 23.830359253000413,
+        "largest_positive": {
+          "i": 169,
+          "j": 227,
+          "kg": 22.56865664924805,
+          "baseline_after_liquid_cutoff_face_kg": 32.5128903666046,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": 3.49211351126265,
+              "event_count": 6
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -1.2987932776699391,
+              "event_count": 18
+            },
+            "cold": {
+              "stored_minus_approved_kg": 5.182334102854676,
+              "event_count": 24
+            },
+            "warm": {
+              "stored_minus_approved_kg": -0.7345820129186261,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 3.8768122752318868,
+              "event_count": 3
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": -0.004341582830970815,
+              "event_count": 1
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 0.0768602543722681,
+              "event_count": 24
+            },
+            "warm": {
+              "approved_sum_kg": -0.6461695529453952,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        },
+        "most_negative": {
+          "i": 32,
+          "j": 116,
+          "kg": -23.830359253000413,
+          "baseline_after_liquid_cutoff_face_kg": -2.9540018181093983,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": -1.452831425216389,
+              "event_count": 4
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -0.7429474569671072,
+              "event_count": 16
+            },
+            "cold": {
+              "stored_minus_approved_kg": -1.8663501752900067,
+              "event_count": 23
+            },
+            "warm": {
+              "stored_minus_approved_kg": 23.107720326249016,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 1.8790399415393686,
+              "event_count": 2
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": 0.0,
+              "event_count": 0
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 3.2706545688825805,
+              "event_count": 23
+            },
+            "warm": {
+              "approved_sum_kg": -3.3189283443064475,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        }
+      },
+      "face_report_sha256": "7c2d485d6dc318d8003fbc426e864a4c9acf8ec25f19eea50c106fb6439a0b24",
+      "history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f"
+    },
+    "HYDRO": {
+      "returncode_observed": 0,
+      "completion_marker_observed": true,
+      "all_17_fields_and_XLAND_byte_equal": true,
+      "pre_sha256": "72ad647a5df1cd39e7eb3db8f8757e63a9aa4dbde5ce03fcbb08630ca1664f54",
+      "native_post_sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf",
+      "replay_post_sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf",
+      "compact_output_sha256": "820205aa121ffa6a99267daebf6b1d318b574f6d93d1d135e00e57d94c628a24",
+      "compact_output_bytes": 81849600,
+      "stage_rows": 389760,
+      "expected_stage_rows": 389760,
+      "baseline_signed_kg": -22655.157443130058,
+      "stored_minus_approved_signed_kg": -22469.867576968198,
+      "remaining_after_store": {
+        "signed_kg": -185.2898661618605,
+        "L1_column_kg": 12191.576997837888,
+        "max_abs_column_kg": 23.87863302842428,
+        "largest_positive": {
+          "i": 169,
+          "j": 227,
+          "kg": 21.999347350674924,
+          "baseline_after_liquid_cutoff_face_kg": 32.5128903666046,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": 3.49211351126265,
+              "event_count": 6
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -1.2987932776699391,
+              "event_count": 18
+            },
+            "cold": {
+              "stored_minus_approved_kg": 5.182334102854676,
+              "event_count": 24
+            },
+            "warm": {
+              "stored_minus_approved_kg": -0.7345820129186261,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 3.8768122752318868,
+              "event_count": 3
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": -0.004341582830970815,
+              "event_count": 1
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 0.0768602543722681,
+              "event_count": 24
+            },
+            "warm": {
+              "approved_sum_kg": -0.6461695529453952,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        },
+        "most_negative": {
+          "i": 32,
+          "j": 116,
+          "kg": -23.87863302842428,
+          "baseline_after_liquid_cutoff_face_kg": -2.9540018181093983,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": -1.452831425216389,
+              "event_count": 4
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -0.7429474569671072,
+              "event_count": 16
+            },
+            "cold": {
+              "stored_minus_approved_kg": -1.8663501752900067,
+              "event_count": 23
+            },
+            "warm": {
+              "stored_minus_approved_kg": 23.107720326249016,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 1.8790399415393686,
+              "event_count": 2
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": 0.0,
+              "event_count": 0
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 3.2706545688825805,
+              "event_count": 23
+            },
+            "warm": {
+              "approved_sum_kg": -3.3189283443064475,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        }
+      },
+      "approved_packet_signed_kg": -23.66745418252831,
+      "remaining_after_store_and_packet": {
+        "signed_kg": -161.62241197933218,
+        "L1_column_kg": 12012.034991302386,
+        "max_abs_column_kg": 23.830359253000413,
+        "largest_positive": {
+          "i": 169,
+          "j": 227,
+          "kg": 22.56865664924805,
+          "baseline_after_liquid_cutoff_face_kg": 32.5128903666046,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": 3.49211351126265,
+              "event_count": 6
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -1.2987932776699391,
+              "event_count": 18
+            },
+            "cold": {
+              "stored_minus_approved_kg": 5.182334102854676,
+              "event_count": 24
+            },
+            "warm": {
+              "stored_minus_approved_kg": -0.7345820129186261,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 3.8768122752318868,
+              "event_count": 3
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": -0.004341582830970815,
+              "event_count": 1
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 0.0768602543722681,
+              "event_count": 24
+            },
+            "warm": {
+              "approved_sum_kg": -0.6461695529453952,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        },
+        "most_negative": {
+          "i": 32,
+          "j": 116,
+          "kg": -23.830359253000413,
+          "baseline_after_liquid_cutoff_face_kg": -2.9540018181093983,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": -1.452831425216389,
+              "event_count": 4
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -0.7429474569671072,
+              "event_count": 16
+            },
+            "cold": {
+              "stored_minus_approved_kg": -1.8663501752900067,
+              "event_count": 23
+            },
+            "warm": {
+              "stored_minus_approved_kg": 23.107720326249016,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 1.8790399415393686,
+              "event_count": 2
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": 0.0,
+              "event_count": 0
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 3.2706545688825805,
+              "event_count": 23
+            },
+            "warm": {
+              "approved_sum_kg": -3.3189283443064475,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        }
+      },
+      "face_report_sha256": "dafb1c94764ce80ce8fe8b6e299d07e1445715d3f67b412507cdf73514f7943e",
+      "history_sha256": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84"
+    },
+    "COUPLED": {
+      "returncode_observed": 0,
+      "completion_marker_observed": true,
+      "all_17_fields_and_XLAND_byte_equal": true,
+      "pre_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+      "native_post_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+      "replay_post_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+      "compact_output_sha256": "fb0c7b52b42c720c8c9a93f6f6b2ce8bcc6e2d6480629489c523dd7ecfdebf50",
+      "compact_output_bytes": 81849600,
+      "stage_rows": 389760,
+      "expected_stage_rows": 389760,
+      "baseline_signed_kg": -22683.38767426891,
+      "stored_minus_approved_signed_kg": -22495.769548656353,
+      "remaining_after_store": {
+        "signed_kg": -187.61812561255613,
+        "L1_column_kg": 12202.606570032556,
+        "max_abs_column_kg": 23.87863302842428,
+        "largest_positive": {
+          "i": 169,
+          "j": 227,
+          "kg": 21.999347350674924,
+          "baseline_after_liquid_cutoff_face_kg": 32.5128903666046,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": 3.49211351126265,
+              "event_count": 6
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -1.2987932776699391,
+              "event_count": 18
+            },
+            "cold": {
+              "stored_minus_approved_kg": 5.182334102854676,
+              "event_count": 24
+            },
+            "warm": {
+              "stored_minus_approved_kg": -0.7345820129186261,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 3.8768122752318868,
+              "event_count": 3
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": -0.004341582830970815,
+              "event_count": 1
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 0.0768602543722681,
+              "event_count": 24
+            },
+            "warm": {
+              "approved_sum_kg": -0.6461695529453952,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        },
+        "most_negative": {
+          "i": 32,
+          "j": 116,
+          "kg": -23.87863302842428,
+          "baseline_after_liquid_cutoff_face_kg": -2.9540018181093983,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": -1.452831425216389,
+              "event_count": 4
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -0.7429474569671072,
+              "event_count": 16
+            },
+            "cold": {
+              "stored_minus_approved_kg": -1.8663501752900067,
+              "event_count": 23
+            },
+            "warm": {
+              "stored_minus_approved_kg": 23.107720326249016,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 1.8790399415393686,
+              "event_count": 2
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": 0.0,
+              "event_count": 0
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 3.2706545688825805,
+              "event_count": 23
+            },
+            "warm": {
+              "approved_sum_kg": -3.3189283443064475,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        }
+      },
+      "approved_packet_signed_kg": -23.873671621367656,
+      "remaining_after_store_and_packet": {
+        "signed_kg": -163.74445399118846,
+        "L1_column_kg": 12022.335114943857,
+        "max_abs_column_kg": 23.830359253000413,
+        "largest_positive": {
+          "i": 169,
+          "j": 227,
+          "kg": 22.56865664924805,
+          "baseline_after_liquid_cutoff_face_kg": 32.5128903666046,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": 3.49211351126265,
+              "event_count": 6
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -1.2987932776699391,
+              "event_count": 18
+            },
+            "cold": {
+              "stored_minus_approved_kg": 5.182334102854676,
+              "event_count": 24
+            },
+            "warm": {
+              "stored_minus_approved_kg": -0.7345820129186261,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 3.8768122752318868,
+              "event_count": 3
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": -0.004341582830970815,
+              "event_count": 1
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 0.0768602543722681,
+              "event_count": 24
+            },
+            "warm": {
+              "approved_sum_kg": -0.6461695529453952,
+              "event_count": 15
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        },
+        "most_negative": {
+          "i": 32,
+          "j": 116,
+          "kg": -23.830359253000413,
+          "baseline_after_liquid_cutoff_face_kg": -2.9540018181093983,
+          "process_stages": {
+            "melt": {
+              "stored_minus_approved_kg": -1.452831425216389,
+              "event_count": 4
+            },
+            "freezing": {
+              "stored_minus_approved_kg": -0.7429474569671072,
+              "event_count": 16
+            },
+            "cold": {
+              "stored_minus_approved_kg": -1.8663501752900067,
+              "event_count": 23
+            },
+            "warm": {
+              "stored_minus_approved_kg": 23.107720326249016,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "stored_minus_approved_kg": 1.8790399415393686,
+              "event_count": 2
+            },
+            "rain_freezing": {
+              "stored_minus_approved_kg": 0.0,
+              "event_count": 0
+            }
+          },
+          "approved_packet_water": {
+            "melt": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "cold": {
+              "approved_sum_kg": 3.2706545688825805,
+              "event_count": 23
+            },
+            "warm": {
+              "approved_sum_kg": -3.3189283443064475,
+              "event_count": 16
+            },
+            "ice_transition": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            },
+            "rain_freezing": {
+              "approved_sum_kg": 0.0,
+              "event_count": 0
+            }
+          }
+        }
+      },
+      "face_report_sha256": "e6a2739400f0b595897d327d3fb69ef9276e64598d563ed6cfa5d86beda63421",
+      "history_sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba"
+    }
+  },
+  "source_sha256": "2ded707269f411a9ef5d3af9afb963de7a7ae1bd435406793292211ed5ea61f8",
+  "build_manifest_sha256": "9a7e02f2c5e43c57561401c8512d7e58005ec04ac05d0b662cc6f575e2bc1dfb",
+  "off_full_raw_selected_crosscheck_sha256": "948fcb7d9aacc5dde551242c03a01edf1614b42cf1091a86fed26ef87740abab"
+}

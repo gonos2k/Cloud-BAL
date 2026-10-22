@@ -1,0 +1,187 @@
+{
+  "c1_source_sha256": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+  "capture_event_count": 1,
+  "captured_group_predicate": 1,
+  "captured_group_predicate_input_hex": [
+    "BF800000",
+    "BF800000"
+  ],
+  "captured_post_graupel_mixture_feasible": false,
+  "captured_store_failure_stage": 2,
+  "event_key": [
+    "OFF_9510f27a00cb8426",
+    32,
+    1,
+    556962,
+    4,
+    1
+  ],
+  "interpretation": "scalar local replay only; no forecast causality claim",
+  "normalized_parser_input_sha256": "08387554be36ef0b21d8fca2c065bc24c7d3e51872bc1709b2464005e887b9fb",
+  "raw_capture_sha256": "5e38458df2d680c3fb83936823e0f7f147e99d7c2d9303d05e23aad1be9529ae",
+  "replay_adapter_sha256": "bb543eb70611ce879f45e265ae609353920fa4016b66c96d3ce6262f59ee9383",
+  "runs": [
+    {
+      "adjustment": 0,
+      "build_stdout": "driver.f90(41): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.\n      [transfer(int(z'0000000000000000',int64),0.0_real64),transfer(int(z'0000000000000000',int64),0.0_real64)],pair==1 .or. pair==3, &\n-------------------------------------------------------------------------------------------------------------------------------------^\nld: warning: libintlc.so.5, needed by /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so, not found (try using -rpath or -rpath-link)\n",
+      "candidate_hex": [
+        "3DAAA0E68E084B52",
+        "3D0E4C1E36A67346"
+      ],
+      "captured_store_succeeded": false,
+      "compile_argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "-free",
+        "core.f90",
+        "driver.f90",
+        "-module",
+        "/var/tmp/pr99-scalar-free-ni3o5ady",
+        "-o",
+        "/var/tmp/pr99-scalar-free-ni3o5ady/scalar_replay.exe"
+      ],
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+      "driver_sha256": "1319009bdeec83aeb769c7f400775d144509fa65c951bbd858f3028768561f11",
+      "executable_sha256": "6353b6f65644252bd739cee6235b36776e9d783cf1f3b515467c93ce0bd89fa2",
+      "group_predicate_input": "(-1,-1) REAL32 sentinel installed by form_candidate after store failure",
+      "group_predicate_input_hex": [
+        "BF800000",
+        "BF800000"
+      ],
+      "group_predicate_reached": true,
+      "instrumented_core_sha256": "c581d00b017c341ddd03a30437f244a0dbb50a7ced911c6fa23c1423554f0a77",
+      "normalized_parser_input_sha256": "08387554be36ef0b21d8fca2c065bc24c7d3e51872bc1709b2464005e887b9fb",
+      "optimization": "FREE",
+      "profile_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "raw_capture_sha256": "5e38458df2d680c3fb83936823e0f7f147e99d7c2d9303d05e23aad1be9529ae",
+      "replay_adapter": "visibility-only wrapper calls frozen private grouped predicates",
+      "replayed_group_predicate": 1,
+      "replayed_pair_valid": false,
+      "replayed_volume_valid": true,
+      "run_argv": [
+        "bash",
+        "-c",
+        "source \"$1\" && exec \"$2\"",
+        "pr99-scalar-runtime",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/intel_toolchain.sh",
+        "/var/tmp/pr99-scalar-free-ni3o5ady/scalar_replay.exe"
+      ],
+      "run_stdout": "RECOMPUTED_CANDIDATE 3DAAA0E68E084B52 3D0E4C1E36A67346\nSTORE_RESULT 2 BF800000 BF800000 0 F\nGROUP_INPUT BF800000 BF800000\nforrtl: warning (406): fort: (1): In call to PR99_REPLAY_GROUP_PREDICATES, an array temporary was created for argument #9\n\nImage              PC                Routine            Line        Source             \nscalar_replay.exe  0000000000425B41  scalar_replay              39  driver.f90\nscalar_replay.exe  0000000000405D1D  Unknown               Unknown  Unknown\nlibc.so.6          0000712ABDBE21CA  Unknown               Unknown  Unknown\nlibc.so.6          0000712ABDBE228B  __libc_start_main     Unknown  Unknown\nscalar_replay.exe  0000000000405C05  Unknown               Unknown  Unknown\nGROUP_RESULT 1 F T\n",
+      "store_failure_stage": 2,
+      "store_output_hex": [
+        "BF800000",
+        "BF800000"
+      ],
+      "valid": false
+    },
+    {
+      "adjustment": 0,
+      "build_stdout": "driver.f90(41): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.\n      [transfer(int(z'0000000000000000',int64),0.0_real64),transfer(int(z'0000000000000000',int64),0.0_real64)],pair==1 .or. pair==3, &\n-------------------------------------------------------------------------------------------------------------------------------------^\nld: warning: libintlc.so.5, needed by /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so, not found (try using -rpath or -rpath-link)\n",
+      "candidate_hex": [
+        "3DAAA0E68E084B52",
+        "3D0E4C1E36A67346"
+      ],
+      "captured_store_succeeded": false,
+      "compile_argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "-free",
+        "core.f90",
+        "driver.f90",
+        "-module",
+        "/var/tmp/pr99-scalar-repro-svdwbbgk",
+        "-o",
+        "/var/tmp/pr99-scalar-repro-svdwbbgk/scalar_replay.exe"
+      ],
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+      "driver_sha256": "1319009bdeec83aeb769c7f400775d144509fa65c951bbd858f3028768561f11",
+      "executable_sha256": "42bac5b00c8cccc5e8b2b0fce51b261fafacaef3dc110055312273fe029f60b6",
+      "group_predicate_input": "(-1,-1) REAL32 sentinel installed by form_candidate after store failure",
+      "group_predicate_input_hex": [
+        "BF800000",
+        "BF800000"
+      ],
+      "group_predicate_reached": true,
+      "instrumented_core_sha256": "c581d00b017c341ddd03a30437f244a0dbb50a7ced911c6fa23c1423554f0a77",
+      "normalized_parser_input_sha256": "08387554be36ef0b21d8fca2c065bc24c7d3e51872bc1709b2464005e887b9fb",
+      "optimization": "REPRO",
+      "profile_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "raw_capture_sha256": "5e38458df2d680c3fb83936823e0f7f147e99d7c2d9303d05e23aad1be9529ae",
+      "replay_adapter": "visibility-only wrapper calls frozen private grouped predicates",
+      "replayed_group_predicate": 1,
+      "replayed_pair_valid": false,
+      "replayed_volume_valid": true,
+      "run_argv": [
+        "bash",
+        "-c",
+        "source \"$1\" && exec \"$2\"",
+        "pr99-scalar-runtime",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/intel_toolchain.sh",
+        "/var/tmp/pr99-scalar-repro-svdwbbgk/scalar_replay.exe"
+      ],
+      "run_stdout": "RECOMPUTED_CANDIDATE 3DAAA0E68E084B52 3D0E4C1E36A67346\nSTORE_RESULT 2 BF800000 BF800000 0 F\nGROUP_INPUT BF800000 BF800000\nGROUP_RESULT 1 F T\n",
+      "store_failure_stage": 2,
+      "store_output_hex": [
+        "BF800000",
+        "BF800000"
+      ],
+      "valid": false
+    }
+  ],
+  "schema": "pr99_group_failure_scalar_replay_v2",
+  "selected_event_index": 0
+}

@@ -1,5 +1,5 @@
 module cloud_bal_joint_transport
-  use iso_fortran_env, only: int32, real32, real64
+  use iso_fortran_env, only: int32, int64, real32, real64
   use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
   implicit none
   private
@@ -11,6 +11,7 @@ module cloud_bal_joint_transport
   real(real32), parameter :: real32_quantum = transfer(1_int32, 0.0_real32)
 
   public :: joint_moment_is_valid, joint_moment_is_valid64, joint_moment_store, joint_qnb_update
+  public :: joint_bulk_candidate_absence_is_valid
 
 contains
 
@@ -374,6 +375,143 @@ contains
     if (q_error>=q_loss_budget .or. b_error>=0.5_real128*eta128) return
     bulk_volume_loss_is_bounded=.true.
   end function bulk_volume_loss_is_bounded
+
+  logical function joint_bulk_candidate_absence_is_valid(base_q,base_b,old_carrier,new_carrier,dt, &
+      dry_density,source_q,source_b,transport_q,transport_b,trial_scale,minimum_ratio,maximum_ratio, &
+      reference_q,reference_b)
+    integer, parameter :: real128=selected_real_kind(33,4931)
+    real(real32), intent(in) :: base_q,base_b,old_carrier,new_carrier,dt,dry_density
+    real(real64), intent(in) :: source_q,source_b,transport_q,transport_b,trial_scale
+    real(real64), intent(in) :: minimum_ratio,maximum_ratio,reference_q,reference_b
+    real(real64) :: regenerated_q,regenerated_b
+    real(real128) :: theta,dt128,old128,new128,min128,max128,eta128
+    real(real128) :: source_q_lo,source_q_hi,source_b_lo,source_b_hi
+    real(real128) :: transport_q_lo,transport_q_hi,transport_b_lo,transport_b_hi
+    real(real128) :: amount_q_lo,amount_q_hi,amount_b_lo,amount_b_hi
+    real(real128) :: base_q128,base_b128,numer_q_lo,numer_q_hi,numer_b_lo,numer_b_hi
+    real(real128) :: lower_cone,upper_cone,b_budget,q_budget,source_abs,amount_abs
+    real(real128) :: scaled_q_lo,scaled_q_hi,scaled_b_lo,scaled_b_hi
+    real(real128) :: safe_r64_limit, safe_candidate_limit, safe_r32_limit
+
+    joint_bulk_candidate_absence_is_valid=.false.
+    if (.not.all(ieee_is_finite([source_q,source_b,transport_q,transport_b,trial_scale, &
+        minimum_ratio,maximum_ratio,reference_q,reference_b]))) return
+    if (.not.all(ieee_is_finite([base_q,base_b,old_carrier,new_carrier,dt,dry_density]))) return
+    if (trial_scale<0.0_real64 .or. trial_scale>1.0_real64 .or. dt<=0.0_real32) return
+    if (old_carrier<=0.0_real32 .or. new_carrier<=0.0_real32 .or. dry_density<=0.0_real32) return
+    if (minimum_ratio<=0.0_real64 .or. maximum_ratio<minimum_ratio) return
+    if (base_q<0.0_real32 .or. base_b<0.0_real32) return
+    if (reference_q<=0.0_real64 .or. reference_b<=0.0_real64) return
+    safe_r32_limit=real(huge(0.0_real32),real128)
+    if (reference_q>real(huge(0.0_real32),real64) .or. &
+        reference_b>real(huge(0.0_real32),real64)) return
+    if (.not.bulk_volume_loss_is_bounded(reference_q,reference_b,0.0_real32,0.0_real32,maximum_ratio)) return
+
+    theta=real(trial_scale,real128); dt128=real(dt,real128)
+    old128=real(old_carrier,real128); new128=real(new_carrier,real128)
+    min128=real(minimum_ratio,real128); max128=real(maximum_ratio,real128)
+    eta128=real(real32_quantum64,real128)
+
+    ! Prove the ordered R64 reference expression cannot overflow before
+    ! recomputing it. The bounds are widened outward and are deliberately
+    ! conservative in cancellation cases.
+    ! Factor-four headroom keeps a few R64 roundings below overflow even
+    ! when the exact magnitudes approach HUGE; it only narrows this fallback.
+    safe_r64_limit=0.25_real128*real(huge(0.0_real64),real128)
+    source_abs=interval_abs_sum(real(source_q,real128),theta,real(transport_q,real128))
+    if (.not.ieee_is_finite(source_abs) .or. source_abs>=safe_r64_limit) return
+    amount_abs=interval_abs_sum(real(base_q,real128)*old128,dt128,source_abs)
+    if (.not.ieee_is_finite(amount_abs)) return
+    safe_candidate_limit=safe_r64_limit*min(1.0_real128,new128)
+    if (amount_abs>=safe_candidate_limit) return
+    source_abs=interval_abs_sum(real(source_b,real128),theta,real(transport_b,real128))
+    if (.not.ieee_is_finite(source_abs) .or. source_abs>=safe_r64_limit) return
+    amount_abs=interval_abs_sum(real(base_b,real128)*old128,dt128,source_abs)
+    if (.not.ieee_is_finite(amount_abs)) return
+    if (amount_abs>=safe_candidate_limit) return
+
+    regenerated_q=(real(old_carrier,real64)*real(base_q,real64)+ &
+        real(dt,real64)*(source_q+trial_scale*transport_q))/real(new_carrier,real64)
+    regenerated_b=(real(old_carrier,real64)*real(base_b,real64)+ &
+        real(dt,real64)*(source_b+trial_scale*transport_b))/real(new_carrier,real64)
+    if (.not.all(ieee_is_finite([regenerated_q,regenerated_b]))) return
+    if (transfer(regenerated_q,0_int64)/=transfer(reference_q,0_int64) .or. &
+        transfer(regenerated_b,0_int64)/=transfer(reference_b,0_int64)) return
+    ! Enclose the complete extensive endpoint before division by the carrier.
+    ! Two binary32 significands multiply exactly in binary128 (at most 48 bits).
+    call interval_point(real(source_q,real128),source_q_lo,source_q_hi)
+    call interval_product_nonnegative(real(trial_scale,real128), &
+        real(transport_q,real128),transport_q_lo,transport_q_hi)
+    call interval_add(source_q_lo,source_q_hi,transport_q_lo,transport_q_hi,amount_q_lo,amount_q_hi)
+    call interval_scale_nonnegative(amount_q_lo,amount_q_hi,dt128,scaled_q_lo,scaled_q_hi)
+    base_q128=old128*real(base_q,real128)
+    call interval_add(base_q128,base_q128,scaled_q_lo,scaled_q_hi,numer_q_lo,numer_q_hi)
+
+    call interval_point(real(source_b,real128),source_b_lo,source_b_hi)
+    call interval_product_nonnegative(real(trial_scale,real128), &
+        real(transport_b,real128),transport_b_lo,transport_b_hi)
+    call interval_add(source_b_lo,source_b_hi,transport_b_lo,transport_b_hi,amount_b_lo,amount_b_hi)
+    call interval_scale_nonnegative(amount_b_lo,amount_b_hi,dt128,scaled_b_lo,scaled_b_hi)
+    base_b128=old128*real(base_b,real128)
+    call interval_add(base_b128,base_b128,scaled_b_lo,scaled_b_hi,numer_b_lo,numer_b_hi)
+
+    if (numer_q_lo<=0.0_real128 .or. numer_b_lo<=0.0_real128) return
+    ! The pre-existing storage path rejects REAL64 references above REAL32
+    ! range. Preserve that gate for the entire certified endpoint interval.
+    safe_candidate_limit=nearest(safe_r32_limit*new128,-1.0_real128)
+    if (numer_q_hi>safe_candidate_limit .or. numer_b_hi>safe_candidate_limit) return
+    call interval_scale_nonnegative(numer_b_lo,numer_b_hi,min128,lower_cone,upper_cone)
+    if (numer_q_lo<upper_cone) return
+    call interval_scale_nonnegative(numer_b_lo,numer_b_hi,max128,lower_cone,upper_cone)
+    if (numer_q_hi>lower_cone) return
+
+    ! The budget products have at most 77 significand bits; one outward step
+    ! makes each stored-endpoint ceiling conservative.
+    b_budget=nearest(0.5_real128*eta128*new128,-1.0_real128)
+    q_budget=nearest(0.5_real128*max128*eta128*new128,-1.0_real128)
+    if (numer_b_hi>=b_budget .or. numer_q_hi>=q_budget) return
+    joint_bulk_candidate_absence_is_valid=.true.
+  end function joint_bulk_candidate_absence_is_valid
+
+  subroutine interval_point(value,lower,upper)
+    integer, parameter :: real128=selected_real_kind(33,4931)
+    real(real128), intent(in) :: value
+    real(real128), intent(out) :: lower,upper
+    lower=nearest(value,-1.0_real128)
+    upper=nearest(value,1.0_real128)
+  end subroutine interval_point
+
+  subroutine interval_product_nonnegative(factor,value,lower,upper)
+    integer, parameter :: real128=selected_real_kind(33,4931)
+    real(real128), intent(in) :: factor,value
+    real(real128), intent(out) :: lower,upper
+    real(real128) :: lo,hi
+    call interval_point(value,lo,hi)
+    lower=nearest(factor*lo,-1.0_real128)
+    upper=nearest(factor*hi,1.0_real128)
+  end subroutine interval_product_nonnegative
+
+  subroutine interval_scale_nonnegative(lower_in,upper_in,factor,lower,upper)
+    integer, parameter :: real128=selected_real_kind(33,4931)
+    real(real128), intent(in) :: lower_in,upper_in,factor
+    real(real128), intent(out) :: lower,upper
+    lower=nearest(factor*lower_in,-1.0_real128)
+    upper=nearest(factor*upper_in,1.0_real128)
+  end subroutine interval_scale_nonnegative
+
+  subroutine interval_add(a_lo,a_hi,b_lo,b_hi,lower,upper)
+    integer, parameter :: real128=selected_real_kind(33,4931)
+    real(real128), intent(in) :: a_lo,a_hi,b_lo,b_hi
+    real(real128), intent(out) :: lower,upper
+    lower=nearest(a_lo+b_lo,-1.0_real128)
+    upper=nearest(a_hi+b_hi,1.0_real128)
+  end subroutine interval_add
+
+  real(selected_real_kind(33,4931)) function interval_abs_sum(a,factor,b)
+    integer, parameter :: real128=selected_real_kind(33,4931)
+    real(real128), intent(in) :: a,factor,b
+    interval_abs_sum=nearest(abs(a)+nearest(factor*abs(b),1.0_real128),1.0_real128)
+  end function interval_abs_sum
 
   subroutine store_directed_q(q64,rounded_n,dry_density,minimum_ratio,maximum_ratio, &
                               bounds,has_volume_contract,strict_mass_ratio,stored_q,valid, &
@@ -924,6 +1062,19 @@ contains
                                       strict_mass_ratio=pair_has_strict_mass(p), &
                                       allow_bulk_volume_quantum_storage= &
                                           use_bulk_volume_absence .and. p==4)
+              if (.not.storage_valid .and. use_bulk_volume_absence .and. p==4 .and. &
+                  pair_has_strict_mass(p) .and. .not.pair_has_volume_bounds(p) .and. &
+                  .not.pair_has_inactive_mass_limit(p)) then
+                if (joint_bulk_candidate_absence_is_valid(q_base(i,p),n_base(i,p), &
+                    carrier_old(i),carrier_new(i),dt,dry_density(i),source_rate_q,source_rate_n, &
+                    transport_rate_q,transport_rate_n,scale,min_particle_mass(p),max_particle_mass(p), &
+                    q_value,n_value)) then
+                  q_candidate(i,p)=0.0_real32
+                  n_candidate(i,p)=0.0_real32
+                  adjustment=5
+                  storage_valid=.true.
+                end if
+              end if
             end if
             if (.not. storage_valid) then
               q_candidate(i,p) = -1.0_real32

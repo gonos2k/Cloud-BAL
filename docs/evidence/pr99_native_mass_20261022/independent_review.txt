@@ -1,0 +1,24 @@
+PR99 native MU-to-dry-column-rate review (read-only)
+Date: 2026-10-22
+Files reviewed: tools/pr99_native_mass_effect.py, tests/test_pr99_native_mass_effect.py, tools/pr98_native_effect.py, tools/pr94_cloud_response.py, tools/pr95_call_budget.py, tools/pr87_native_history.py.
+Validation: pytest -q tests/test_pr99_native_mass_effect.py -> 6 passed; py_compile of the reviewed/new Python tools passed.
+
+Findings
+- No concrete source or test blocker found in the MU-to-kg/s conversion.
+- At fixed C1H, C2H, DNW, map area, and g, the hybrid column dry mass is A/g * sum_k[-(C1H_k * MU_total + C2H_k) * DNW_k]. Its exact endpoint difference is A/g * sum_k(-C1H_k*DNW_k) * (MU_after-MU_before); C2H and MUB cancel. The code applies the captured MU delta over captured RK seconds and multiplies by native map area and this column sensitivity. Units are kg/s.
+- Capture fields are promoted to float64 before subtracting MU endpoints. Captured C1H is checked against the corresponding initial wrfinput profile; pre/post allocated bounds are checked; RK dt must be common, finite, and positive; DNW must be negative and all geometry/operands finite and positive where required.
+- Coordinate mapping follows the repository's existing source support contract: composition masks are KJI on active history interior, `SUPPORT_ORIGIN_IJK=(2,1,2)` maps cropped support columns into native Fortran I/J, and captured MU uses its recorded allocated/active bounds. Conversion back to zero-based wrfinput array addressing uses `[j-1, i-1]`, matching one-based native coordinates. Each arm must resolve to the same captured native support.
+- Map area uses `_read_map_geometry`: DX*DY/(MAPFAC_MX*MAPFAC_MY). It is bound to each arm's receipt-verified wrfinput. Gravity is read from the pinned constants receipt.
+- Tests provide meaningful algebraic checks: endpoint finite-difference equality with nonzero C2H, promotion-before-subtraction at the REAL32 precision boundary, and rejection of invalid dt, zero sensitivity, nonnegative DNW, and nonfinite area.
+
+Scope limitation
+- The six tests exercise the pure conversion/validation helper, not the complete receipt-bound `analyze()` path or all source coordinate/file joins. Those paths do explicit hash, bounds, C1H, support, and shared-dt checks, but no runtime result artifact was present in this worktree at review time. This is a coverage limitation, not a demonstrated defect. The result's own labels correctly limit the claim to the first captured acoustic MU update on the fixed support and do not call it a closed face-flux budget or global dry-mass loss.
+
+Actual receipt-bound result review (2026-10-22)
+Artifact: /var/tmp/pr99_native_mass_effect_v2_20261022.json
+Artifact SHA-256: 478309562e2a0684f477b65d95762d4307d48484f6f8ddaab0a507b7df409ff7
+
+- The result binds each arm's `wrfinput_d01` hash to the capture receipts and reports 57/57 snapshots (429,851,256 bytes) per arm, COMPLETE status, successful one-step 20-second capture, same executed executable SHA-256 e919518165d52e26004858fa40293b7df806a9ba2a17af6ab320858f713768f1, unchanged candidate build/input, no staged/original input changes, and matching source-run receipt preflight hashes. Each arm's capture builder receipt is the same v4 build SHA; the three baseline C1 receipts differ by arm. Static map/hybrid geometry hashes agree across arms while dynamic MU/MUT/MUU/MUV geometry correctly differs where native state differs.
+- All arms use the same captured 6.666666507720947-second call, same C1H/DNW profile (`hybrid_beta=0.9999999997256122`), gravity 9.8100004196167 m/s2, and same 16 native support columns `(i=134..137,j=16..19)`.
+- Reported per-column signed rates are OFF 20.818 million kg/s, HYDRO 39.812 million kg/s, COUPLED 40.099 million kg/s. COUPLED absolute L1/L2 are 1.1817e9 / 3.8331e8 kg/s over 16 columns, with max absolute column rate 2.0992e8 kg/s at native `(i=135,j=18)`. COUPLED−HYDRO difference has L2 3.8642e8 kg/s, RMS 9.6606e7 kg/s per column, max absolute 2.0880e8 kg/s, while signed support increment is 2.8668e5 kg/s. Large local signed redistribution dominates this observed local rate difference; the signed sum is not interpreted as global dry-mass loss.
+- No binding or arithmetic defect found in the result. Its explicit limits are appropriate: first captured acoustic call and fixed footprint only; fixed geometry in the transform; not a separately closed face-flux budget, global budget, momentum/energy claim, or observation-skill result.

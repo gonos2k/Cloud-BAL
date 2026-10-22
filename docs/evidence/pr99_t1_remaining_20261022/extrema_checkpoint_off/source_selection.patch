@@ -1,0 +1,11 @@
+--- pr99_total_checkpoint_source_20261022.f90
++++ pr99_extrema_checkpoint_source_20261022.f90
+@@ -8327,7 +8327,7 @@
+   integer,intent(in)::i,k,lat,loop,site
+   real,intent(in)::qv,qc,qi,qr,qs,qg
+   integer::u,ios
+-  if ((i/=192.or.lat/=71).and.(i/=161.or.lat/=57)) return
++  if ((i/=169.or.lat/=227).and.(i/=146.or.lat/=215)) return
+   open(newunit=u,file='pr99_total_water_checkpoints.raw',form='formatted',status='unknown',position='append',action='write',iostat=ios)
+   if (ios/=0) error stop 'PR99 total checkpoint open failed'
+   write(u,*) i,lat,k,loop,site, dble(qv)+dble(qc)+dble(qi)+dble(qr)+dble(qs)+dble(qg), &

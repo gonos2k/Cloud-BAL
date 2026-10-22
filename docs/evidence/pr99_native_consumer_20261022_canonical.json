@@ -1,0 +1,384 @@
+{
+  "consumer": "archived C1 calc_ww_cp -> mass-coordinate ww (Pa/s), not physical W",
+  "date": "2026-10-22",
+  "fixed_support_metrics": {
+    "metrics": {
+      "fixed_5_cell_chebyshev_buffer_vertical_faces": {
+        "absolute_by_arm": {
+          "COUPLED": {
+            "max_abs_pa_s": 34.64906692504883,
+            "mean_pa_s": -0.23990407540237282,
+            "n": 7840,
+            "rms_pa_s": 3.0971167964510093,
+            "signed_sum_pa_s": -1880.847951154603
+          },
+          "HYDRO": {
+            "max_abs_pa_s": 1.6778966188430786,
+            "mean_pa_s": -0.2399039504892021,
+            "n": 7840,
+            "rms_pa_s": 0.48721949097071626,
+            "signed_sum_pa_s": -1880.8469718353444
+          },
+          "OFF": {
+            "max_abs_pa_s": 1.6778966188430786,
+            "mean_pa_s": -0.2399039447960177,
+            "n": 7840,
+            "rms_pa_s": 0.4872227959882101,
+            "signed_sum_pa_s": -1880.8469272007787
+          }
+        },
+        "face_values": 7840,
+        "paired_increments": {
+          "COUPLED_minus_HYDRO": {
+            "max_abs_pa_s": 35.34603959321976,
+            "mean_pa_s": -1.249131707240571e-07,
+            "n": 7840,
+            "rms_pa_s": 3.0590900573631457,
+            "signed_sum_pa_s": -0.0009793192584766075
+          },
+          "COUPLED_minus_OFF": {
+            "max_abs_pa_s": 35.345802426338196,
+            "mean_pa_s": -1.3060635512597308e-07,
+            "n": 7840,
+            "rms_pa_s": 3.0590844653328166,
+            "signed_sum_pa_s": -0.001023953824187629
+          },
+          "HYDRO_minus_OFF": {
+            "max_abs_pa_s": 0.00559234619140625,
+            "mean_pa_s": -5.693184401915998e-09,
+            "n": 7840,
+            "rms_pa_s": 0.00023864047100184544,
+            "signed_sum_pa_s": -4.463456571102142e-05
+          }
+        }
+      },
+      "original_613_native_vertical_faces": {
+        "absolute_by_arm": {
+          "COUPLED": {
+            "max_abs_pa_s": 34.64906692504883,
+            "mean_pa_s": -0.3007401641456792,
+            "n": 629,
+            "rms_pa_s": 8.975873653687174,
+            "signed_sum_pa_s": -189.16556324763224
+          },
+          "HYDRO": {
+            "max_abs_pa_s": 1.560551643371582,
+            "mean_pa_s": -0.30832934955953784,
+            "n": 629,
+            "rms_pa_s": 0.5509263092404958,
+            "signed_sum_pa_s": -193.9391608729493
+          },
+          "OFF": {
+            "max_abs_pa_s": 1.5604629516601562,
+            "mean_pa_s": -0.3083431287627928,
+            "n": 629,
+            "rms_pa_s": 0.5509765657760959,
+            "signed_sum_pa_s": -193.94782799179666
+          }
+        },
+        "face_values": 629,
+        "paired_increments": {
+          "COUPLED_minus_HYDRO": {
+            "max_abs_pa_s": 35.34603959321976,
+            "mean_pa_s": 0.007589185413858588,
+            "n": 629,
+            "rms_pa_s": 8.95715847886737,
+            "signed_sum_pa_s": 4.773597625317052
+          },
+          "COUPLED_minus_OFF": {
+            "max_abs_pa_s": 35.345802426338196,
+            "mean_pa_s": 0.007602964617113549,
+            "n": 629,
+            "rms_pa_s": 8.957150825744872,
+            "signed_sum_pa_s": 4.782264744164422
+          },
+          "HYDRO_minus_OFF": {
+            "max_abs_pa_s": 0.00559234619140625,
+            "mean_pa_s": 1.377920325496049e-05,
+            "n": 629,
+            "rms_pa_s": 0.0007807191357672406,
+            "signed_sum_pa_s": 0.008667118847370148
+          }
+        }
+      }
+    },
+    "schema": "pr99_native_ww_fixed_support_metrics_v1",
+    "support_identity": {
+      "composition_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr93_qc_chain_20261020/qc_vertical_composition.json",
+      "composition_sha256": "331eb9837c41a7aa663864c348f8fe18c44f8e55feed736900f5029685b1aa64",
+      "fixed5_mass_column_cells": 196,
+      "mass_support_cells": 613,
+      "mass_support_columns": 16,
+      "vertical_face_mapping": "union of the two adjacent native ww faces for each supported mass level; the top face is included where adjacent"
+    },
+    "units": "mass-coordinate ww in Pa/s"
+  },
+  "projection_candidate": {
+    "actual_c1_consumer_delta": {
+      "top_face_40": {
+        "max_abs_pa_s": 0.0,
+        "mean_pa_s": 0.0,
+        "n": 64960,
+        "rms_pa_s": 0.0,
+        "signed_sum_pa_s": 0.0
+      },
+      "top_face_exact_zero": true,
+      "whole_safe_interior_all_40_faces": {
+        "max_abs_pa_s": 4.112720489501953e-06,
+        "mean_pa_s": 9.644338941035833e-11,
+        "n": 2598400,
+        "rms_pa_s": 4.7056735100198e-08,
+        "signed_sum_pa_s": 0.0002505985030438751
+      },
+      "whole_safe_interior_mass_faces_1_to_39": {
+        "max_abs_pa_s": 4.112720489501953e-06,
+        "mean_pa_s": 9.891629683113676e-11,
+        "n": 2533440,
+        "rms_pa_s": 4.7656208122398286e-08,
+        "signed_sum_pa_s": 0.0002505985030438751
+      }
+    },
+    "candidate_input_sha256": "10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3",
+    "output_matches_previous_o2_strict_bitwise": true,
+    "proposal_receipt_sha256": "a6fdd4907228b6bcd95d2eba3e61539adcedf69c0154c23a9e1a2edeb6c6b5d0",
+    "status": "research proposal; FAIL_OPEN",
+    "support": {
+      "613_native_vertical_faces": {
+        "max_abs_pa_s": 4.112720489501953e-06,
+        "mean_pa_s": 9.111932734995843e-08,
+        "n": 629,
+        "rms_pa_s": 1.0483308798590637e-06,
+        "signed_sum_pa_s": 5.7314056903123856e-05
+      },
+      "fixed5_mass_faces_1_to_39": {
+        "max_abs_pa_s": 4.112720489501953e-06,
+        "mean_pa_s": 3.278368694974818e-08,
+        "n": 7644,
+        "rms_pa_s": 8.675898372951184e-07,
+        "signed_sum_pa_s": 0.0002505985030438751
+      },
+      "fixed5_vertical_faces": {
+        "max_abs_pa_s": 4.112720489501953e-06,
+        "mean_pa_s": 3.1964094776004474e-08,
+        "n": 7840,
+        "rms_pa_s": 8.566763231427175e-07,
+        "signed_sum_pa_s": 0.0002505985030438751
+      }
+    }
+  },
+  "provenance": {
+    "archived_calc_ww_cp_object_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+    "c1_archive_sha256": "abb5df4371caf97a44e73b4aa24958a6285d6c3705597ccb5b35fdceda1218d6",
+    "c1_receipt_sha256": "ac7b1cbefc2cbbf128b7bbe08573d79b575b3b50d51db3a955f1bb0d6d02ae56",
+    "compiler": "pinned IFX 2026.0 via CLOUD_BAL_REPRO_FLAGS",
+    "driver_sha256": "9ca9f3846313180ae8913258ed54e740f375b6a3bc1fd2d93a404996c141604f",
+    "fresh_scratch": "/var/tmp for each compile/link/run",
+    "intel_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/Cloud-BAL/tests/intel_toolchain.sh",
+    "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "interface_module_sha256": "647618325beb8e681db484b0bc2a023b9b0945e5e2a2fd28ef1f134c122e1794",
+    "profile_repro_flags": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "raw_native_ww_fields": "kept privately under /var/tmp; omitted from this bounded report",
+    "reader_source_sha256": "8dd4643cad57a139a0ba116dd1f2cead931072462b81d5b5827509b649edd622",
+    "reader_validation": "C1 grid 234x282x39, sentinel-aware fields, positive map factors and RDX/RDY; serialized OFF native input was byte-identical to retained strict-profile run",
+    "reader_validation_native_input_sha256": "28230558724425b4c323598768f7fc5cfdeffe628f6906c8e024a3ae7896498b",
+    "standalone_executable_sha256": "ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61"
+  },
+  "runs": {
+    "COUPLED": {
+      "active_tile_one_based": {
+        "i": [
+          2,
+          233
+        ],
+        "j": [
+          2,
+          281
+        ],
+        "k": [
+          1,
+          40
+        ]
+      },
+      "archive_member_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+      "driver_sha256": "9ca9f3846313180ae8913258ed54e740f375b6a3bc1fd2d93a404996c141604f",
+      "executable_sha256": "ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61",
+      "finite_value_count": 2598400,
+      "input_sha256": "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d",
+      "native_ww_lower_top_face_max_abs_pa_s": 0.0,
+      "native_ww_max_abs_pa_s": 35.69504928588867,
+      "native_ww_rms_pa_s": 0.832384624960588,
+      "native_ww_sha256": "a87651a2d33a3b5c7362fba3dbbe4d35dd37a21f69e3bb475475c9396ccac626",
+      "output_matches_previous_o2_strict_bitwise": true,
+      "previous_o2_strict_output_sha256": "a87651a2d33a3b5c7362fba3dbbe4d35dd37a21f69e3bb475475c9396ccac626",
+      "profile_repro_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ]
+    },
+    "HYDRO": {
+      "active_tile_one_based": {
+        "i": [
+          2,
+          233
+        ],
+        "j": [
+          2,
+          281
+        ],
+        "k": [
+          1,
+          40
+        ]
+      },
+      "archive_member_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+      "driver_sha256": "9ca9f3846313180ae8913258ed54e740f375b6a3bc1fd2d93a404996c141604f",
+      "executable_sha256": "ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61",
+      "finite_value_count": 2598400,
+      "input_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+      "native_ww_lower_top_face_max_abs_pa_s": 0.0,
+      "native_ww_max_abs_pa_s": 35.69504928588867,
+      "native_ww_rms_pa_s": 0.8152537189297707,
+      "native_ww_sha256": "71ea495f0897a07c84be63bcf2ae7a168f59d32fa6546fd7e42a118d8b0f1707",
+      "output_matches_previous_o2_strict_bitwise": true,
+      "previous_o2_strict_output_sha256": "71ea495f0897a07c84be63bcf2ae7a168f59d32fa6546fd7e42a118d8b0f1707",
+      "profile_repro_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ]
+    },
+    "OFF": {
+      "active_tile_one_based": {
+        "i": [
+          2,
+          233
+        ],
+        "j": [
+          2,
+          281
+        ],
+        "k": [
+          1,
+          40
+        ]
+      },
+      "archive_member_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+      "driver_sha256": "9ca9f3846313180ae8913258ed54e740f375b6a3bc1fd2d93a404996c141604f",
+      "executable_sha256": "ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61",
+      "finite_value_count": 2598400,
+      "input_sha256": "23a948dfbea1cd9f1d69d9aad30531218a4c93ac6a82159e73e5505e39440200",
+      "native_ww_lower_top_face_max_abs_pa_s": 0.0,
+      "native_ww_max_abs_pa_s": 35.69504928588867,
+      "native_ww_rms_pa_s": 0.8152537248893714,
+      "native_ww_sha256": "0152a54053bdcca837711298d62af5d50d73009a8d25ac14f5f0b72e5e105feb",
+      "output_matches_previous_o2_strict_bitwise": true,
+      "previous_o2_strict_output_sha256": "0152a54053bdcca837711298d62af5d50d73009a8d25ac14f5f0b72e5e105feb",
+      "profile_repro_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ]
+    },
+    "PROJECTION_V4": {
+      "active_tile_one_based": {
+        "i": [
+          2,
+          233
+        ],
+        "j": [
+          2,
+          281
+        ],
+        "k": [
+          1,
+          40
+        ]
+      },
+      "archive_member_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+      "driver_sha256": "9ca9f3846313180ae8913258ed54e740f375b6a3bc1fd2d93a404996c141604f",
+      "executable_sha256": "ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61",
+      "finite_value_count": 2598400,
+      "input_sha256": "10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3",
+      "native_ww_lower_top_face_max_abs_pa_s": 0.0,
+      "native_ww_max_abs_pa_s": 35.69504928588867,
+      "native_ww_rms_pa_s": 0.8152537189129411,
+      "native_ww_sha256": "c9c94d658b4a22d3dc684fcfbf6f7c526468803c498f28183970d474807f9519",
+      "output_matches_previous_o2_strict_bitwise": true,
+      "previous_o2_strict_output_sha256": "c9c94d658b4a22d3dc684fcfbf6f7c526468803c498f28183970d474807f9519",
+      "profile_repro_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ]
+    }
+  },
+  "schema": "pr99_native_consumer_canonical_evidence_v2",
+  "scope": {
+    "active_bounds_1based": {
+      "i": [
+        2,
+        233
+      ],
+      "j": [
+        2,
+        281
+      ],
+      "vertical_faces": [
+        1,
+        40
+      ]
+    },
+    "capture_limit": "Initial-condition replay only; frozen C1 evidence has no exact T32 U/V/MU/C geometry or stored ww; no forecast/T32 causality, complete physical balance, or observation skill is established.",
+    "finite_interior_values_per_arm": 2598400,
+    "fixed5_buffer_mass_cells": 196,
+    "fixed5_native_ww_faces": 7840,
+    "original_support_mass_cells": 613,
+    "top_face_40_is_emitted_and_zero": true,
+    "unique_native_ww_faces_after_adjacent_level_union": 629
+  }
+}

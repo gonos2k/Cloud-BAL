@@ -1,0 +1,61 @@
+PR99 native U/V projection, runner binding, and response review (read-only)
+Date: 2026-10-22
+Scope: tools/pr99_native_projection.py, tools/pr99_projection_response.py,
+       tools/pr99_native_mass_effect.py, tools/pr86_time_response.py,
+       associated tests and PR99 public reports/evidence.
+Validation: pytest -q tests/test_pr99_native_projection.py
+            tests/test_pr99_projection_response.py
+            tests/test_pr99_native_mass_effect.py
+            tests/test_pr86_time_response.py -> 53 passed.
+Graphify: existing Cloud-BAL graph queried for affected component relationships;
+source and focused tests were treated as authoritative.
+
+Review findings
+- No concrete blocker found in the proposed U/V projection, receipt/runner
+  binding, native response calculation, or reported units.
+- The control mask has 196 fixed QC-buffer mass columns. A U or V face is free
+  only when both adjacent columns are in that mask. The incidence matrix gives
+  each free face equal and opposite contributions to its two cells, so each
+  column sums to zero. Exterior and buffer-boundary increments remain fixed.
+- Per-level coefficients use the frozen REAL32 carrier construction and
+  calc_ww_cp geometry ordering, then promote to REAL64 for the linear solve.
+  The candidate is formed by projecting only COUPLED minus HYDRO U/V and adding
+  the projected increment back to HYDRO; therefore the constraint preserves
+  the HYDRO reference divergence rather than imposing zero total flux. The
+  generator checks that non-U/V variables and metadata match the COUPLED
+  parent, writes only U/V, and binds candidate, parent, HYDRO reference,
+  boundary, generator, and QC composition hashes in its proposal receipt.
+- The runner treats this as a COUPLED-only proposal with a 20-second limit.
+  It verifies every receipt artifact, matches parent and boundary to the
+  frozen COUPLED template, stages the bound candidate, and checks the same
+  launch binding at finalization. The response analyzer requires a clean
+  complete one-step receipt and verifies its source/build/input/boundary,
+  all 57 snapshots, and the exact staged state comparison before analysis.
+- The mass-rate conversion is dimensionally kg/s: fixed-geometry hybrid
+  inventory difference is area/g times sum(-C1H*DNW) times the observed MU
+  endpoint difference per captured RK second. It promotes REAL32 endpoints
+  before subtraction, checks the captured hybrid profile and bounds, and uses
+  native map area plus receipt-pinned gravity. It is labeled as a local
+  footprint response, not a closed face-flux or global mass budget.
+- The response report keeps RU/RV in distinct native source-coordinate units;
+  it does not combine them as acceleration or energy. The public docs state
+  the one-step scope, lack of observation-skill validation, and FAIL_OPEN
+  decision. The candidate result is not presented as closing the long-run
+  grouped failure.
+
+Evidence bindings inspected
+- Projection publication manifest binds response, proposal, closed receipt,
+  launch preflight, generator, response analyzer, runner, and focused tests by
+  SHA-256. Proposal receipt binds the candidate U/V file and all declared
+  upstream artifacts. The observed response data comprise 57 receipt-bound
+  snapshots from the closed 20-second diagnostic.
+- Mass-effect publication manifest binds the observed result, conversion
+  source and tests. Its capture binding records all three original arm
+  receipts, inputs, executable, and 57-file inventories. The independent review
+  cross-checks physical units and source-coordinate joins.
+
+Scope limit
+- This review did not launch a model or repeat native consumer compilation.
+  The captured 20-second response is not evidence for 600-second stability,
+  complete momentum balance, global dry-mass closure, or observation skill.
+  Scientific approval remains FAIL_OPEN.

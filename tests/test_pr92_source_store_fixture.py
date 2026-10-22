@@ -13,8 +13,8 @@ import pr92_bulk_volume_store as bulk_store
 
 class SourceStoreFixtureTests(unittest.TestCase):
     def test_retry_probe_uses_the_committed_storage_policy_with_local_outputs(self) -> None:
-        source = bulk_store.transform_module(fixture.D1_SOURCE.read_text(),
-                                             (ROOT / "src/common/cloud_bal_joint_transport.f90").read_text())
+        historical_core = ROOT / "tests/fixtures/pr99_c1_core_pre_certificate.f90"
+        source = bulk_store.transform_module(fixture.D1_SOURCE.read_text(), historical_core.read_text())
         trial = fixture._extract(source, "try_graupel_mixture_trial")
         probe = fixture._extract(source, "probe_failed_graupel_pair")
         for body in (trial, probe):
@@ -28,6 +28,8 @@ class SourceStoreFixtureTests(unittest.TestCase):
     def test_extracts_helpers_from_pinned_d1_module(self) -> None:
         source = fixture.D1_SOURCE.read_text()
         self.assertEqual(fixture.sha256(source.encode()), fixture.D1_SHA256)
+        historical_core = ROOT / "tests/fixtures/pr99_c1_core_pre_certificate.f90"
+        self.assertEqual(fixture.sha256(historical_core.read_bytes()), bulk_store.CORE_SHA256)
         self.assertIn("SUBROUTINE graupel_diffusion_point", fixture._extract(source, "graupel_diffusion_point"))
         self.assertIn("PURE LOGICAL FUNCTION strict_graupel_pair", fixture._extract(source, "strict_graupel_pair"))
 

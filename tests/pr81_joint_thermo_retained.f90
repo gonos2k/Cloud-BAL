@@ -81,6 +81,10 @@ PROGRAM pr81_joint_thermo_retained
     WRITE(*,'(A,I0,A,I0,A,I0,A,I0)') 'pipeline_status=',result%status, &
       ',reason=',result%reason_code,',column_status=',result%column%status, &
       ',column_reason=',result%column%reason_code
+    WRITE(*,'(A,I0,A,I0,A,I0,A,I0)') 'balance_status=',result%balance%status, &
+      ',balance_reason=',result%balance%reason_code,',solver_reason=', &
+      result%balance%numerical%solver_reason,',solver_iterations=', &
+      result%balance%numerical%solver_iterations
     IF (result%status==STATUS_DEGRADED .AND. result%reason_code==REASON_GATE .AND. &
         result%column%status==STATUS_OK .AND. result%force_prior%status==STATUS_DEGRADED .AND. &
         result%force_prior%reason==REASON_GATE .AND. .NOT.result%thermo_density_prior_applied) THEN
@@ -312,12 +316,18 @@ CONTAINS
 
   SUBROUTINE configure_trial(pipeline_config)
     TYPE(cloud_bal_pipeline_config), INTENT(OUT) :: pipeline_config
+    CHARACTER(LEN=8) :: fixed_omega_policy
+    INTEGER :: environment_status
     pipeline_config%requested_mode=MODE_SHADOW
     pipeline_config%maximum_outer_iterations=8
     pipeline_config%column%transport_precipitation=.FALSE.
     pipeline_config%background_continuity_prior=.TRUE.
     pipeline_config%balance%maximum_wind_increment=10.0_real64
     pipeline_config%balance%maximum_omega_increment=5.0_real64
+    CALL GET_ENVIRONMENT_VARIABLE('CLOUD_BAL_FIXED_OMEGA_FOR_EXPORT', &
+      fixed_omega_policy,STATUS=environment_status)
+    pipeline_config%balance%fixed_omega_for_export= &
+      environment_status==0 .AND. TRIM(fixed_omega_policy)=='1'
     pipeline_config%balance%increment_headroom=0.95_real64
     pipeline_config%balance%solver_residual_fraction=1.0e-3_real64
     pipeline_config%force_prior_enabled=.TRUE.

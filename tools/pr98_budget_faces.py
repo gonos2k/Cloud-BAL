@@ -305,6 +305,23 @@ def analyze(run_root: Path, pre_path: Path, post_path: Path, replay_post: Path,
     liquid_term = (liquid_values[:, :, 0] + liquid_values[:, :, 1]) * area
     remaining = raw - liquid_term - cutoff
     remaining_after_face = remaining - combined
+
+    def column_record(row: int, col: int) -> dict:
+        return {
+            "i": int(col + b["its"]), "j": int(row + b["jts"]),
+            "R_raw_kg": float(raw[row, col]),
+            "C_liquid_store_kg": float(liquid_term[row, col]),
+            "C_cutoff_actual_store_change_kg": float(cutoff[row, col]),
+            "C_accepted_rain_ice_face_store_discrepancy_kg": float(combined[row, col]),
+            "remaining_after_cutoff_and_face_terms_kg": float(remaining_after_face[row, col]),
+        }
+
+    positive_index = int(np.argmax(remaining_after_face))
+    negative_index = int(np.argmin(remaining_after_face))
+    extreme_remaining_columns = {
+        "largest_positive": column_record(*np.unravel_index(positive_index, remaining_after_face.shape)),
+        "most_negative": column_record(*np.unravel_index(negative_index, remaining_after_face.shape)),
+    }
     selected = {}
     for i, j in ((184, 147), (208, 79)):
         row, col = j - b["jts"], i - b["its"]
@@ -322,12 +339,18 @@ def analyze(run_root: Path, pre_path: Path, post_path: Path, replay_post: Path,
             "max_abs_column_kg": float(np.max(np.abs(combined))),
             "columns_with_events": int(np.count_nonzero(combined_counts))},
         "open_residual_after_independent_face_term": stats(remaining_after_face),
+        "extreme_remaining_columns_by_sign": extreme_remaining_columns,
         "selected_columns_after_independent_face_term": selected}
     return {"schema": "pr98_selected_sedimentation_face_account_v1", "arm": manifest["arm"],
             "source_terms_are_independent": True,
             "definition": "per accepted face, (stored donor Q change * DEN * DELZ + theta*pq) + (stored receiver Q change * DEN * DELZ - theta*pq); ground face has no receiver",
             "interpretation": "source-stage accepted-packet/store discrepancy, with local source-ledger agreement; includes REAL32 representation and REAL64 accumulation effects and is not labelled pure R32 rounding",
             "selected_face_capture": terms, "compact_full_tile_face_capture": compact,
+        "same_call_budget_identity": {
+            key: baseline_report["identity"][key]
+            for key in ("receipt_sha256", "pre_sha256", "post_sha256", "process_sha256",
+                        "replay_post_sha256", "all_17_fields_and_XLAND_byte_equal")},
+        "pr99_reducer_source_sha256": sha256(Path(__file__).resolve()),
         "baseline_budget_report_sha256": sha256(Path(__file__).resolve().parents[1] /
             "docs" / "evidence" / "pr98_t1_residual_20261022" / f"{manifest['arm']}.json"),
             "identity": manifest,
