@@ -5,7 +5,7 @@ This isolated wrapper preserves the closed PR98 KG engine and PR98 maintained st
 There are two source bases with different jobs:
 
 - The PR100 approval base is `950fd7b41af5a10ab6dd36a17098e86dd8306197`. The preflight requires the reviewed PR100 commit to descend from it and limits that PR's own diff to PR100 paths.
-- Graph extraction compares the final PR100 commit with `6ac1ddb6a50c9e4f909e47243bbd656e09fc85a3`, the PR98 lineage base. This includes inherited PR99 source and documentation changes plus PR100 paths. Unknown changed paths fail closed. PR99's archived C1 core fixture stays hash-only; evidence payloads under `docs/evidence/` are also hash-only.
+- Graph extraction compares the final PR100 commit with `6ac1ddb6a50c9e4f909e47243bbd656e09fc85a3`, the PR98 lineage base. This includes inherited PR99 source and documentation changes plus PR100 paths. Unknown changed paths fail closed. PR99's archived C1 core fixture and its noncompilable `pr99_group_failure_source.f90` transform-anchor fixture stay hash-only; evidence payloads under `docs/evidence/` are also hash-only. The anchor fixture is data for source-transform tests, not a runtime Fortran module; best-effort parsing falsely associated a later call with an `END SUBROUTINE` node and created a self-loop. The initial guarded attempt rolled back; no generic edge filter or integrity tolerance is added.
 
 The existing PR98 receipt, graph pins, 627-file maintained-source inventory, 197 inherited immutable pins, 110 dated snapshots, protected wiki/profile hashes, and rollback inventory remain pinned. New snapshots and receipts use the PR100 C2 identity. The old PR99 wrapper and receipt artifacts are left alone.
 

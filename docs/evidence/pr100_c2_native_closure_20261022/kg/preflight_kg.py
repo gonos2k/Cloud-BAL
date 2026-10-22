@@ -64,7 +64,8 @@ def require(ok: bool, message: str) -> None:
 def selected_path(relative: str) -> bool:
     if relative.startswith("docs/evidence/"):
         return False
-    if relative == "tests/fixtures/pr99_c1_core_pre_certificate.f90":
+    if relative in {"tests/fixtures/pr99_c1_core_pre_certificate.f90",
+                    "tests/fixtures/pr99_group_failure_source.f90"}:
         return False
     prefixes = (
         "docs/PR99_", "tools/pr99_", "tests/pr99_", "tests/test_pr99_",

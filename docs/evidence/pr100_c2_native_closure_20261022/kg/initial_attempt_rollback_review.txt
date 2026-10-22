@@ -1,0 +1,18 @@
+PR100 KG failed-apply rollback review
+Date: 2026-10-22
+Scope: read-only verification after guarded apply failure. No restore, deletion, move, retry, apply, or graph operation performed.
+
+Failure record
+- `/var/tmp/pr100_kg_apply_20261022.log` reports `APPLY_FAILED_ROLLED_BACK`, reason `guard failed: KLAPS50 graph integrity self_loop_edges=1`, and `rollback_attempted=true`.
+- Reviewed check-only plan: `/var/tmp/pr100_kg_check_only_20261022.json`, SHA256 `d1948035090ef89e07d99e1b03de252a5c0c88d9fb59516b33fa80257a11ae77`; exact plan SHA `ed2a5c1d271a265895262f8658cf866067b52c1f2334eee2a6668c18c0136749`.
+
+Rollback verification against exact plan
+- All 451 plan-bound rollback targets currently exist and match their recorded SHA256 values: both corpora's live graph/report/manifest/profile files, all dated snapshot members, and five wiki files. No missing or mismatched target.
+- All 451 files retained under `Cloud-BAL/scratch/pr100_c2_native_closure_20261022/kg/backups/` match the same plan keys and hashes exactly.
+- All 110 plan-bound dated snapshot directories remain present with exact file membership and hashes (434 snapshot files checked); no additional dated snapshot directory exists in either corpus. The planned new PR100 snapshot is absent after rollback.
+- Recomputed maintained-source snapshot using the pinned guard API is 627 entries, SHA256 `0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f`, matching plan. All 197 inherited immutable pins match. The exact PR98 protected-content helper reports all 13 protected wiki/profile content hashes matching; five wiki outputs also match individually.
+- No new automatic dated/intermediate snapshot directory was found. Existing non-dated cache directories remain; their `last_query_stamp` files have birth/mtime 2026-10-22 20:04/20:05 +0900, earlier than the failed apply log's 22:12:42 +0900 birth, so they are not new outputs of this failed apply. Their earlier origin is not inferred here.
+
+Disposition and limit
+- GO on the observed rollback integrity for the 451-file plan baseline, protected content, 627 source inventory, 197 pins, and 110 prior snapshots. This says the guarded restoration succeeded for its recorded baseline; it does not validate the graph extraction that failed.
+- The failed attempt's output directory remains at `/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr100_c2_native_closure_20261022/kg`, including the full backup set and `klaps50_extraction.json`. Preserve it intact as root requested. The existing wrapper refuses to proceed while this output directory exists, so any later attempt needs a separately reviewed disposition/versioned output path; this review authorizes no cleanup or retry.
