@@ -26,13 +26,18 @@ extra-wind norm; its component maxima are 1.744 m/s in U and 1.872 m/s in V.
 These maxima need not occur together. Retaining a norm does not establish
 observation-signal preservation.
 
-At the first captured acoustic update in the fixed 16 QC columns:
+During the first captured 20-second step, at each measure's own source boundary:
 
 | Measure | HYDRO | Original C1 COUPLED | U/V proposal |
 |---|---:|---:|---:|
 | Observed dry-column mass-rate L2, kg/s | 17,899,337 | 383,305,796 | 15,276,841 |
 | Assembled RU L2, source-array units | 24,361.97 | 41,212.46 | 37,999.03 |
 | Assembled RV L2, source-array units | 23,908.72 | 34,050.81 | 33,199.72 |
+
+The dry-column rate uses the first acoustic MU update in 16 QC columns.
+RU/RV use the first assembled tendency capture on the 769/767 faces linked
+to the fixed QC support. They are not a simultaneous vector or energy norm;
+the completed-step timestamp does not identify each tendency's instant.
 
 The mass response decreases strongly. RU and RV decrease relative to the old
 COUPLED treatment, but remain about 1.56 and 1.39 times HYDRO. The proposal
