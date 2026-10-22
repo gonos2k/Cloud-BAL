@@ -1,0 +1,28 @@
+{
+  "schema": "pr99_actual_failure_package_independent_review_v1",
+  "status": "PASS_WITH_NONBLOCKING_WORDING_NOTE",
+  "reviewed_at_utc": "2026-10-22T07:56:11.278461+00:00",
+  "package": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/docs/evidence/pr99_group_failure_20261022/actual_failure",
+  "hashes": {
+    "checksum_manifest_sha256": "311f203e9988e337c82c722bfbb39756a4c18d33c2658ea74087adce6ed599a4",
+    "package_readme_sha256": "a3139e193ef6eee89f3f107981e9c8b95defdea3cb0723259d04948941cdf947",
+    "summary_sha256": "295a60e90a02d0acc6f5c701727018dde5310b9ed7c2a28f616d8ce1761c0822",
+    "event_sha256": "5e38458df2d680c3fb83936823e0f7f147e99d7c2d9303d05e23aad1be9529ae",
+    "launch_snapshot_sha256": "4686df91030b37e375605049a6d205bedf6ee8ca804d4d9bbec17f96fe6b0a57",
+    "diagnostic_doc_sha256": "f535c482d77844ced5ea9f625cbb52b8b33655f483f33e313776a1ae43e63c87",
+    "closed_receipt_sha256": "e654668d5a62774b8d83b26b3d0fa3d7870aeeb29897500f6399b6d259dfc658",
+    "first600_report_sha256": "5c4cd307a6793f2b1a0deb953c1207bb96728feedd788fb7d862b3851eb1bafb"
+  },
+  "checks": {
+    "package_sha256sums": "PASS (README.md: OK; actual_failure_summary.json: OK; first_group_event.raw: OK; parsed_event.json: OK; scalar_replay.json: OK; fatal_event_analysis.json: OK; fatal_event_excerpt.txt: OK)",
+    "closed_run": "INCOMPLETE, returncode 1, 31/32 steps (620/640 s), max timestep 32",
+    "first_group_event": "one event, T32/RK1, (163,63,22), store failure stage 2, predicate 1; candidate and stored sentinel replay bits agree at FREE/O0 and REPRO/O2",
+    "fatal_fallback": "separate source-capture/closed-stdout event, reason code 6 at T32/RK1 (2,241,14); not the first grouped event",
+    "first600_trace": "PASS: 30 steps, 180 state records across declared 12 trace fields",
+    "first600_history": "PASS: 11 timestamps through 600 seconds, 10 fields",
+    "no_640_success_or_fix_claim": "PASS",
+    "launch_snapshot": "PASS: unchanged hash bound in summary"
+  },
+  "nonblocking_wording_note": "README says private PR92 capture and full stdout are bound by their hashes and paths \u201cin the summary\u201d; the summary directly carries capture hashes and a fatal-analysis path/hash, while the bundled fatal_event_analysis.json carries the capture/stdout paths and the run receipt binds compressed outputs. The overall binding is present in the package, but this sentence could say \u201csummary and bundled fatal analysis/closed receipt\u201d for precise location.",
+  "mutations_performed": []
+}

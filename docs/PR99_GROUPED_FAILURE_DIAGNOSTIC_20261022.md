@@ -12,4 +12,46 @@ The scalar replay checks the exact REAL64 candidate and store outcome against th
 
 This is a diagnostic-only source overlay. It does not change candidate arithmetic, acceptance predicates, thresholds, fallback behavior, rollback, or commit ordering. It does not re-run a stateful store routine. A single integer failure-stage grid is allocated only when the timestep-32 capture is enabled. No type or stencil histogram is recorded; existing runtime callbacks remain the source for their noncausal counts, while this compact event identifies only the first failing candidate.
 
-The existing closed receipts and frozen captures do not contain enough information to reconstruct this first-group event exactly. The instrumented executable was rebuilt against the pinned C1 receipt with all nine original overrides retained, then launched for one OFF 640-second diagnostic capture. The launch and build are bound in [launch.json](evidence/pr99_group_failure_20261022/launch.json). At the latest recorded check, the run had completed through model time `2026-08-16_13:03:20` and remained active; the receipt is not closed. Any resulting failure record supports a local source-bound replay; it does not close the other two arms or establish runtime/scientific validation.
+## Actual OFF event and run status
+
+The actual first captured grouped event is now preserved in the bounded
+[evidence package](evidence/pr99_group_failure_20261022/actual_failure/README.md).
+The original raw record is 1,530 bytes and is bound by SHA-256 in the package.
+It records T32/RK1, flattened cell 556962 at one-based `(i,j,k)=(163,63,22)`,
+pair 4, grouped predicate 1, and an ordinary `joint_moment_store` failure at
+stage 2. The immediate inner mixture-fallback status is false. The raw event
+is now parsed directly from the original Intel list-directed bytes; its
+concatenated marker/run-id/attempt fields and wrapped integer header are not
+rewritten in the preserved record.
+
+The pinned-C1 scalar replay at FREE/O0 and REPRO/O2 reproduces this event's
+REAL64 candidate bits, store failure, installed REAL32 `(-1,-1)` group
+sentinel, and grouped predicate 1. This is a local replay of the captured
+event, not the cause of the run's later fatal exit.
+
+The full OFF receipt is closed and reports **INCOMPLETE**, return code 1,
+after 31 completed 20-second steps (620 of the requested 640 seconds); wall
+time was 13,198.311 seconds. The candidate inputs were unchanged. The run
+used a PR87 partial native overlay with nine source overrides; only
+`module_em` differs from frozen C1 for this failure-only instrumentation.
+The original launch-time [launch.json](evidence/pr99_group_failure_20261022/launch.json)
+is retained unchanged; the package binds the later closed receipt separately.
+
+The run's separate fatal inner fallback is captured at T32/RK1,
+`(i,j,k)=(2,241,14)`, pair QG/QIB. The stdout callback reports local reason
+code 6, which the pinned source maps to a bit mismatch between the captured
+`qs64/ns64` source and the pointwise `qdiff/ndiff` recomputation in
+`add_graupel_diffusion_mixture`. At this sampled cell the logged local
+stencil and transport-donor terms are zero while the source values are
+nonzero; the captured source-plus-cache bits match `qs64/ns64`. That is a
+local source-contract observation. Nonzero source totals alongside a zero
+local diffusion stencil do **not** by themselves imply an invalid physical
+state or a producer-wide cause. The common-certificate design review remains
+pending; no fix is claimed.
+
+The receipt-bound first-600-second comparison passes for the common prefix:
+30 completed steps and 180 state records across 12 fields, plus 11 history
+timestamps across 10 fields. This comparison does not make the diagnostic
+executable identical to C1, establish 640-second completion, or identify a
+physical cause. The run is not a 640-second success, and the grouped-failure
+cause remains open.

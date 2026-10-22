@@ -1,0 +1,110 @@
+{
+  "schema": "pr99_actual_group_failure_bounded_evidence_v1",
+  "scope": "One OFF run's first captured grouped store event, a local scalar replay, and a separately identified fatal fallback event.",
+  "run": {
+    "arm": "OFF",
+    "status": "INCOMPLETE",
+    "requested_seconds": 640,
+    "completed_steps": 31,
+    "timestep_seconds": 20,
+    "completed_seconds": 620,
+    "returncode": 1,
+    "wall_seconds": 13198.311023978516,
+    "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_group_failure_off640_20261022/run/receipt.json",
+    "receipt_sha256": "e654668d5a62774b8d83b26b3d0fa3d7870aeeb29897500f6399b6d259dfc658",
+    "candidate_inputs_unchanged": true,
+    "changed_staged_inputs": [],
+    "changed_original_inputs": [],
+    "build_status": "PASS_OVERLAY_BUILD",
+    "diagnostic_executable_sha256": "d8293e1ee9973adec0c62964cefcefeffb8ea6727d6f1ca47ec04815b65030f1",
+    "diagnostic_build_receipt_sha256": "b61680253381802a5f8ee135897d2c136a7448269b5f7899ab06d7686aa2d338",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "source_override_scope": "Nine source overrides were used; only module_em differs from frozen C1 for the failure-only instrumentation. This is a partial overlay, not a clean build."
+  },
+  "first_group_event": {
+    "artifact": "first_group_event.raw",
+    "bytes": 1530,
+    "sha256": "5e38458df2d680c3fb83936823e0f7f147e99d7c2d9303d05e23aad1be9529ae",
+    "original_private_path": "/var/tmp/pr99_group_failure_first_event_20261022.raw",
+    "writer_close_observation_path": "/var/tmp/pr99_group_failure_first_event_closed_observation_20261022.json",
+    "writer_close_observation_sha256": "daf3232f4047f49eef028a3f8ab20d83d07f2d99a5b58627fc7c275c15a1c255",
+    "parsed_output_path": "/var/tmp/pr99_actual_group_replay_20261022/parsed_from_original_raw.json",
+    "parsed_output_sha256": "dc9c7bc4b741ff3b00513b072514dcacbd3844826c57b12ab445fe89fe357091",
+    "parser_sha256": "48a91be6b90c92df92e40443585d13e0eb3d4f03573c71549be903a9b08e1b25",
+    "event_key": ["OFF_9510f27a00cb8426", 32, 1, 556962, 4, 1],
+    "coordinate_ijk_one_based": [163, 63, 22],
+    "classification": "store_rejection",
+    "store_failure_stage": 2,
+    "group_predicate": 1,
+    "candidate_hex64_qn": ["3DAAA0E68E084B52", "3D0E4C1E36A67346"],
+    "stored_and_group_predicate_input_hex32_qn": ["BF800000", "BF800000"],
+    "post_inner_mixture_fallback_feasible": false,
+    "distinction": "This first normal store failure is not the separate fatal reason-6 event below."
+  },
+  "local_scalar_replay": {
+    "replay_manifest_path": "/var/tmp/pr99_actual_group_replay_20261022/manifest.json",
+    "replay_manifest_sha256": "257ebcb9291feff6cedcb1daa773602af1c83dadab10b91a2eb4a35a8d2ee9d1",
+    "artifact_path": "/var/tmp/pr99_actual_group_replay_20261022/scalar_replay.json",
+    "artifact_sha256": "f6411df8b2505bd2f6c5b2dcb197f051a1d399456c937e7dec5c4b2f55ecfe3d",
+    "replay_source_sha256": "b7efb752ca36ef62daaa31fd33bea44948e569bd42100e136e761daab1708a55",
+    "pinned_c1_module_em_sha256": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "runs": [
+      {
+        "setting": "FREE/O0",
+        "executable_sha256": "6353b6f65644252bd739cee6235b36776e9d783cf1f3b515467c93ce0bd89fa2",
+        "candidate_hex64_qn": ["3DAAA0E68E084B52", "3D0E4C1E36A67346"],
+        "store_failure_stage": 2,
+        "store_output_hex32_qn": ["BF800000", "BF800000"],
+        "group_predicate": 1,
+        "valid": false
+      },
+      {
+        "setting": "REPRO/O2",
+        "executable_sha256": "42bac5b00c8cccc5e8b2b0fce51b261fafacaef3dc110055312273fe029f60b6",
+        "candidate_hex64_qn": ["3DAAA0E68E084B52", "3D0E4C1E36A67346"],
+        "store_failure_stage": 2,
+        "store_output_hex32_qn": ["BF800000", "BF800000"],
+        "group_predicate": 1,
+        "valid": false
+      }
+    ],
+    "interpretation": "Local replay of the captured candidate and pinned store/predicates; not a forecast or cause proof."
+  },
+  "separate_fatal_inner_fallback": {
+    "stdout_fallback_context": "PR91_GRAUPEL_TRIAL_REJECT_CONTEXT 32 1 6 4 2 241 14",
+    "stdout_fallback_bits": "PR87_GRAUPEL_TRIAL_REJECT 6 4 2 241 14 36796B3BA65C1BE8 35DCEBC8FCFEFC7A 3753214B46A3BC21 36B5C40847451A51 8000000000000000 8000000000000000",
+    "reason_code": 6,
+    "source_code_mapping": "add_graupel_diffusion_mixture rejects when captured qs64/ns64 source bits differ from its qdiff/ndiff recomputation; this reason code is distinct from joint_moment_store failure_stage.",
+    "coordinate_ijk_one_based": [2, 241, 14],
+    "pair": "QG/QIB",
+    "capture_gzip_sha256": "aa4c284a0cd98c05705b73606c852b96555181da0cf5594a7fbd971816cce80b",
+    "capture_uncompressed_sha256": "4454d1763a29002164349a2a9119e39296de7880890d88ab2957ecaeedc383d5",
+    "capture_excerpt_sha256": "655e6e200fb3eea3a93715bb7e7b58b910892d3586aab69b9cd1ed5b0b5347ff",
+    "analysis_path": "/var/tmp/pr99_actual_group_replay_20261022/fatal_source_bind/fatal_event_analysis.json",
+    "analysis_sha256": "c3883ac4b6230290770d08010f5fe1a027cdf80b527ea13add50cbbd1e974261",
+    "pinned_c1_module_em_sha256": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+    "diagnostic_module_em_sha256": "b6b9ae8366a290ba4a7060140a3e46e3bb7d8f6d94b5327a71c2da84d6e7c139",
+    "bounded_observation": "At this captured cell, local stencil and transport-donor terms are zero while source values are nonzero and source-plus-cache bits match qs64/ns64; the recomputed pointwise diffusion values do not bit-match the captured source. This is a local source-contract observation only and does not imply an invalid physical state or producer-wide cause.",
+    "common_certificate_review": "PENDING"
+  },
+  "first_600s_prefix_comparison": {
+    "artifact_path": "/var/tmp/pr99_off640_first600_compare_20261022.json",
+    "artifact_sha256": "5c4cd307a6793f2b1a0deb953c1207bb96728feedd788fb7d862b3851eb1bafb",
+    "history": "PASS: 11 timestamps, 10 fields, 0..600 seconds",
+    "stage_trace": "PASS: 30 completed steps, 180 state records, 12 fields",
+    "scope": "Receipt-bound first-600s prefix comparison; does not imply diagnostic executable identity, 640s completion, or cause."
+  },
+  "limitations": [
+    "The OFF run did not complete the requested 640 seconds; no 640-second success is claimed.",
+    "The event and replay are local evidence; no producer-wide or physical cause is established.",
+    "Source totals being nonzero where the captured local diffusion stencil is zero is not evidence by itself that the physical state is invalid.",
+    "A common admissibility-certificate design review is pending; no fix or 640-second validation is claimed."
+  ],
+  "preserved_launch_snapshot": {
+    "path": "../launch.json",
+    "sha256": "4686df91030b37e375605049a6d205bedf6ee8ca804d4d9bbec17f96fe6b0a57",
+    "note": "Original launch-time snapshot retained unchanged; this summary binds the later closed run receipt."
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "bulk_absence_budget": {
+    "candidate_below_half_eta": true,
+    "candidate_q_loss_below_half_maxratio_eta": true,
+    "candidate_r32_b": 0.0,
+    "candidate_r32_q": 0.0,
+    "eta_R32_min_subnormal": 1.401298464324817e-45,
+    "half_eta_B_budget": 7.006492321624085e-46,
+    "half_maxratio_eta_Q_budget": 6.305843089461677e-43,
+    "note": "The half-quantum loss budget is amply met, but the current candidate is just above Q=900*B and the common strict-mass check fails before the bulk-absence store branch.",
+    "strict_exact_density_pair_valid": false,
+    "strict_pair_check_precedes_bulk_absence_storage": true
+  },
+  "cache_source_assembly": {
+    "n_cache_delta_hex64": "B681DFBDC5D72D78",
+    "n_term_plus_cache_delta_equals_ns64": true,
+    "nt_promoted_hex64": "36B8000000000000",
+    "q_cache_delta_hex64": "B686972B887BE000",
+    "q_term_plus_cache_delta_equals_qs64": true,
+    "qt_promoted_hex64": "3753220000000000"
+  },
+  "event": {
+    "candidate_b_hex64": "35DCEBC8FCFEFC7A",
+    "candidate_q_hex64": "36796B3BA65C1BE8",
+    "cell": 2165489,
+    "failure_stage_certifier": 2,
+    "failure_stage_full": 2,
+    "i": 2,
+    "j": 241,
+    "k": 14,
+    "pair": "QG/QIB",
+    "rk": 1,
+    "step": 32
+  },
+  "limitations": [
+    "Bound operands are from this closed OFF trace; no forecast rerun.",
+    "C1 source is pinned by hash; diagnostic transformed source hash is recorded separately.",
+    "Exact rational calculations use captured rounded binary operands and do not establish upstream producer precision or source-wide correctness."
+  ],
+  "operational_candidate": {
+    "matches_captured_n": true,
+    "matches_captured_q": true,
+    "n_hex64": "35DCEBC8FCFEFC7A",
+    "q_hex64": "36796B3BA65C1BE8"
+  },
+  "producer_mismatch": {
+    "all_3x3_q1_n1_stencil_zero": true,
+    "all_7_transport_donor_terms_zero": true,
+    "n1_state_hex32": "00000000",
+    "n_diffusion_recomputed_hex64": "0000000000000000",
+    "n_source_equals_recomputed": false,
+    "n_source_hex64": "36B5C40847451A51",
+    "nt_state_hex32": "00000003",
+    "q1_state_hex32": "00000000",
+    "q_diffusion_recomputed_hex64": "0000000000000000",
+    "q_source_equals_recomputed": false,
+    "q_source_hex64": "3753214B46A3BC21",
+    "qt_state_hex32": "00000991"
+  },
+  "schema": "pr99_fatal_graupel_event_binding_v1",
+  "source_binding": {
+    "capture_gzip_sha256": "aa4c284a0cd98c05705b73606c852b96555181da0cf5594a7fbd971816cce80b",
+    "capture_path": "/var/tmp/pr99_actual_group_replay_20261022/fatal_source_bind/pr92_graupel_source_capture.raw.gz",
+    "capture_uncompressed_sha256": "4454d1763a29002164349a2a9119e39296de7880890d88ab2957ecaeedc383d5",
+    "diagnostic_transformed_source": "/var/tmp/pr99_group_failure_module_em_v7.F",
+    "diagnostic_transformed_source_sha256": "b6b9ae8366a290ba4a7060140a3e46e3bb7d8f6d94b5327a71c2da84d6e7c139",
+    "pinned_c1_source": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_em.F",
+    "pinned_c1_source_sha256": "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af",
+    "receipt_runner_closed": true,
+    "receipt_sha256": "e654668d5a62774b8d83b26b3d0fa3d7870aeeb29897500f6399b6d259dfc658",
+    "stdout_gzip_sha256": "a9a2477fd47a6e58c570947e2916886d0b977623601441c8f398ed9771b34021",
+    "stdout_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_group_failure_off640_20261022/run/run/rsl.out.0000.gz"
+  },
+  "source_capture_identity": [
+    32,
+    1,
+    2,
+    233,
+    2,
+    281,
+    1,
+    39
+  ],
+  "source_label": "PR92 R64 fields: qs/ns are paired non-air source rates (for pair4, input qt/nt promoted to R64 plus pr87_all_pair_diffusion_delta channels 7/8 in frozen C1 form_candidate); qdiff/ndiff are fresh local horizontal diffusion recomputations from q1/n1.",
+  "source_only_exact_assembly": {
+    "candidate_strict_max_valid": false,
+    "formula": "dt * (qsource, nsource) / newcarrier; base and air transport terms are zero at this cell",
+    "n_exact_correctly_rounded_hex64": "35DCEBC8FCFEFC7B",
+    "n_exact_rational_num_den": [
+      "85654876707965719781861",
+      "277024088546431348166060069739922755885285867346239837703576280719425536"
+    ],
+    "n_matches_captured_operational_candidate": false,
+    "q_exact_correctly_rounded_hex64": "36796B3BA65C1BE7",
+    "q_exact_rational_num_den": [
+      "75282606481610493225973",
+      "270531336471124363443418036855393316294224479830312341507398711640064"
+    ],
+    "q_matches_captured_operational_candidate": false,
+    "q_over_900n_candidate_exact": "99/3291009114642412084309938365114701009965471731267159726697218048",
+    "q_over_900n_candidate_float": 3.0081958618567042e-62,
+    "q_over_900n_source_rate_exact": "-49/401734511064747568885490523085290650630550748445698208825344",
+    "q_over_900n_source_rate_float": -1.2197109944607838e-58,
+    "source_candidate_equals_full_candidate": false,
+    "source_rate_strict_max_valid": true
+  },
+  "stdout_fallback": {
+    "bits_row": "PR87_GRAUPEL_TRIAL_REJECT 6 4 2 241 14 36796B3BA65C1BE8 35DCEBC8FCFEFC7A 3753214B46A3BC21 36B5C40847451A51 8000000000000000 8000000000000000",
+    "context_row": "PR91_GRAUPEL_TRIAL_REJECT_CONTEXT 32 1 6 4 2 241 14",
+    "reason_code": 6,
+    "source_code_mapping": "add_graupel_diffusion_mixture sets local reject_reason=6 and returns when PR92 qs64/ns64 source bits differ from qdiff/ndiff recomputation; this is distinct from joint_moment_store failure_stage=6."
+  }
+}
