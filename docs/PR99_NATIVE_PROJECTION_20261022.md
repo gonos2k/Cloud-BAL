@@ -22,6 +22,12 @@ belong to the buffer; its boundary increments are fixed at zero. The nearest
 additional wind is found with a small sparse linear least-squares projection.
 This uses an equal-face velocity norm, not an energy or complete momentum
 objective. It preserves about 95.8% of the original additional-wind L2 norm.
+The applied stored-wind displacement has norm 30.381 m/s, or 28.77% of the
+original additional-wind norm. Its maximum absolute changes are 1.744 m/s
+for U and 1.872 m/s for V, with no assumption of co-location. The
+[stored-array calculation](evidence/pr99_native_projection_20261022/wind_displacement.json)
+records the three input hashes and formula. Observation preservation remains
+unverified.
 
 Face dry mass, hybrid coefficients and map factors follow `calc_ww_cp`'s
 source order. A solver residual gate precedes REAL32 storage. Storage error

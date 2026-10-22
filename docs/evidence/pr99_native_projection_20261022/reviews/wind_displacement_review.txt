@@ -1,0 +1,14 @@
+Independent stored-wind displacement review
+Date: 2026-10-22
+Scope: Recompute the reported equal-face U/V norms from the three closed wrfinput_d01 arrays. This is a numerical/source-binding check, not physical approval.
+
+Bindings verified:
+- Parent/original C1 COUPLED input: d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d
+- Reference/HYDRO input: 46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c
+- Proposal input: 10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3
+- Proposal receipt: a6fdd4907228b6bcd95d2eba3e61539adcedf69c0154c23a9e1a2edeb6c6b5d0
+- Generator source named by proposal receipt: tools/pr99_native_projection.py, c14bdcf018c4e246472a2989867efa582aaede090cdb8583afafb289f40e0cbf
+
+Method: Read finite stored REAL32 U and V values from each input with the repository's _finite reader, promote to float64, and reduce every stored face with equal weight. Let C be the parent, H the HYDRO reference, and P the proposal. Recomputed ||C-H||2 = 105.607643419983 m/s; ||P-H||2 = 101.14320948003383 m/s; ||P-C||2 = 30.38133625180067 m/s. Thus ||P-C||2/||C-H||2 = 0.28768122522135486 and ||P-H||2/||C-H||2 = 0.957726223260234. Componentwise max |P-C| is 1.7442002296447754 m/s for U and 1.872469425201416 m/s for V. Each value matches wind_displacement.json at stated precision.
+
+Interpretation: 95.77% is the retained norm of the proposal's additional wind P-H relative to the original additional wind C-H. The 28.77% is the norm of the applied stored-array displacement P-C relative to ||C-H||. These ratios do not imply that only 4.23% of the wind was edited. Component maxima need not occur at the same face. The equal-face velocity norms are not energy or observation-error measures. Physical approval remains FAIL_OPEN; observation skill remains NOT_EVALUATED.

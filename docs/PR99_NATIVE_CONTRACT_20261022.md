@@ -21,6 +21,10 @@ for those three completed runs.
 The proposal retains 95.77% of the equal-face L2 norm of the additional C−H
 wind increment. Every other stored input field, including W, mass, pressure,
 Phi, temperature, and hydrometeor moments, remains unchanged.
+The applied U/V change has L2 norm 30.381 m/s, or 28.77% of the original
+extra-wind norm; its component maxima are 1.744 m/s in U and 1.872 m/s in V.
+These maxima need not occur together. Retaining a norm does not establish
+observation-signal preservation.
 
 At the first captured acoustic update in the fixed 16 QC columns:
 
