@@ -1,0 +1,108 @@
+{
+  "schema": "pr98_same_level_native_maps_v1",
+  "native_level_1based": 16,
+  "mass_grid_1based": {
+    "i": [
+      2,
+      233
+    ],
+    "j": [
+      2,
+      281
+    ]
+  },
+  "original_qc_points": 613,
+  "projected_qc_columns": 16,
+  "zoom_native_bounds": [
+    128.5,
+    142.5,
+    10.5,
+    24.5
+  ],
+  "zoom_selection": "Original fixed five-cell QC buffer, independent of response values",
+  "initial_mass_point_wind_increment_peak": {
+    "i": 136,
+    "j": 16,
+    "magnitude_m_s": 6.552539704153072
+  },
+  "histories": {
+    "OFF": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/OFF_600s_c1/run/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/OFF_600s_c1/receipt.json",
+      "receipt_sha256": "e44d75017995a981fc51be618e8f94755c911bec47af9bc8bd809ec0b30d958f",
+      "arm": "OFF",
+      "status": "COMPLETE",
+      "final_completed_step": 30
+    },
+    "HYDRO": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/run/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84",
+      "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/receipt.json",
+      "receipt_sha256": "342119a6c39c673fbd0f2e9cc16a9690387f5fa0e07b35efadaaf2bf85e093c1",
+      "arm": "HYDRO",
+      "status": "COMPLETE",
+      "final_completed_step": 30
+    },
+    "COUPLED": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/run/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba",
+      "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/receipt.json",
+      "receipt_sha256": "a6b5f550a3ddfc36b0a1a2eee2e7af4a14b582344c4f8b683b0d1e32a586c598",
+      "arm": "COUPLED",
+      "status": "COMPLETE",
+      "final_completed_step": 30
+    }
+  },
+  "composition": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr98_native_effect_20261022/Cloud-BAL/docs/evidence/pr93_qc_chain_20261020/qc_vertical_composition.json",
+    "sha256": "331eb9837c41a7aa663864c348f8fe18c44f8e55feed736900f5029685b1aa64"
+  },
+  "panels": [
+    {
+      "title": "Initial U increment",
+      "minimum": -4.719145655632019,
+      "maximum": 6.357889890670776,
+      "units": "m s-1"
+    },
+    {
+      "title": "Initial V increment",
+      "minimum": -6.08309805393219,
+      "maximum": 6.180092811584473,
+      "units": "m s-1"
+    },
+    {
+      "title": "Initial wind-increment magnitude",
+      "minimum": 0.0,
+      "maximum": 6.552539704153072,
+      "units": "m s-1"
+    },
+    {
+      "title": "60 s pressure difference",
+      "minimum": -30.90234375,
+      "maximum": 25.42578125,
+      "units": "Pa"
+    },
+    {
+      "title": "60 s geopotential difference",
+      "minimum": -85.6435546875,
+      "maximum": 90.4573974609375,
+      "units": "m2 s-2"
+    },
+    {
+      "title": "60 s W difference",
+      "minimum": -0.48127007856965065,
+      "maximum": 0.36330114863812923,
+      "units": "m s-1"
+    }
+  ],
+  "artifacts": {
+    "same_level_response.png": "35a707ef0517ea1412a421b0d762162db0b6783954776b26d9511a6fecb6eb24",
+    "same_level_response.svg": "b42bf410b7e8d61bf215a7d89c8d2e08ce2ea98ba27f508087036c144b316593",
+    "full_domain_response.png": "e6dba5a8a5475cbb3038b4de7828ec6b725b69a318292bcfafacc4e64f1d56d5",
+    "full_domain_response.svg": "d50927c9ba39f509d4c90eb2e96e7df717cc3691baf8f94f528aeef0ae8397af"
+  },
+  "script_sha256": "10dab1d0bd2075726546172a1496180a6c2d3075557537d68e466d36e4e44dc6",
+  "physical_approval": "FAIL_OPEN",
+  "skill": "NOT_EVALUATED"
+}

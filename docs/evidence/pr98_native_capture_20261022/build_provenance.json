@@ -1,0 +1,135 @@
+{
+  "archive_sha256": "e68c1a644b8c794704fe88a03ebbdf40ef424f9d7e26ff382c72734568283179",
+  "build_identity": "PR87 source-mapped partial native overlay; not a clean build",
+  "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "compiler_profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr98_native_effect_20261022/Cloud-BAL/tests/intel_toolchain.sh",
+  "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+  "executable_path": "/var/tmp/pr98_native_capture_build_v4_20261022/wrf_pr87_overlay.exe",
+  "executable_sha256": "e919518165d52e26004858fa40293b7df806a9ba2a17af6ab320858f713768f1",
+  "failed_or_superseded_attempts": [
+    {
+      "build": "v1",
+      "reason": "only module_em/solve_em were replaced; C1-bound first-RK helper and microphysics signatures mismatched",
+      "status": "FAILED_COMPILE"
+    },
+    {
+      "build": "v2",
+      "reason": "complete C1 overrides compiled but the receipt-bound pr90_cycle_support extra observer was omitted",
+      "status": "FAILED_LINK"
+    },
+    {
+      "build": "v3",
+      "executable_sha256": "eb9f1196fe54b4b196cf6c06152a30505f712d2a3645a8e05ae12be065d5c1f4",
+      "reason": "predated final review hooks for regular U geometry and assembled RU/RV/RW endpoints; not run",
+      "status": "PASS_OVERLAY_BUILD_SUPERSEDED"
+    }
+  ],
+  "interpretation_limit": "Partial source-mapped native overlay; overlay build success is not clean full-build or runtime/scientific validation.",
+  "model_run_during_build": false,
+  "observer": {
+    "compile_log": "/var/tmp/pr98_native_capture_build_v4_20261022/logs/extra_observer.compile.log",
+    "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/pr87_extra_observer.o",
+    "object_sha256": "b0a2a765bb6ce8d9e219b7cf4dafa71884174ff77fb642931c825595c2acca06",
+    "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/pr98_combined_observer.f90",
+    "source_sha256": "1b66e2801c06487342365e698a6784251c28d29d6df2f4299b51f211aa0956dd"
+  },
+  "overrides": [
+    {
+      "generated_source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/preprocessed/module_microphysics_zero_out.f90",
+      "generated_source_sha256": "478b7534a18823e9ca5273e68689becbb25591b3a0f95acb1d90be33ac1d0261",
+      "member": "module_microphysics_zero_out.o",
+      "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/module_microphysics_zero_out.o",
+      "object_sha256": "a836d436b8b8d3a02c6c0a78ef4437c761e2f20fd0debc6e70d449e8e2c2a8be",
+      "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_microphysics_zero_out.F",
+      "source_sha256": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0"
+    },
+    {
+      "generated_source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/preprocessed/module_em.f90",
+      "generated_source_sha256": "b97b42e8a29b2f6c2fc6b32c2a84f1eee2699d27df599108edb3802aa3c6dd94",
+      "member": "module_em.o",
+      "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/module_em.o",
+      "object_sha256": "6dc4310104875e164dc225c0d0b1009c4903f249151a12d3e23f90223366a74a",
+      "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_em.F",
+      "source_sha256": "a3764fde23dab460561e350577a208800002312dd4839293f5a17f76faa1f04c"
+    },
+    {
+      "generated_source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/preprocessed/module_bl_shinhong.f90",
+      "generated_source_sha256": "96f62607458fec806089428f44299d98d8083ab8d2bcbc204c46b05cf13850d4",
+      "member": "module_bl_shinhong.o",
+      "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/module_bl_shinhong.o",
+      "object_sha256": "5d2b43318fd69453b580a9879498ecaa9ca216d0e5580dffb2f3032ba4df6993",
+      "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_bl_shinhong.F",
+      "source_sha256": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3"
+    },
+    {
+      "generated_source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/preprocessed/module_bl_fogdes.f90",
+      "generated_source_sha256": "7cfcaabea501cde4d19240f1b2d794862f5b4a186d783b7627c243cbf1877a7b",
+      "member": "module_bl_fogdes.o",
+      "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/module_bl_fogdes.o",
+      "object_sha256": "223e718526a9e0bbd450f09bf748ab50fbe1630c82b500d0b3f9c0a1644b2ace",
+      "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_bl_fogdes.F",
+      "source_sha256": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7"
+    },
+    {
+      "generated_source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/preprocessed/module_pbl_driver.f90",
+      "generated_source_sha256": "231aaa0aa2020794bcc568ba4d5a2a1dabd1356dcb49540d335b0d53491b8c81",
+      "member": "module_pbl_driver.o",
+      "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/module_pbl_driver.o",
+      "object_sha256": "a64cb0d6e32b40ce1c4f16fd353679f01543d36806410e2aa5196f29c363f7cb",
+      "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_pbl_driver.F",
+      "source_sha256": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676"
+    },
+    {
+      "generated_source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/preprocessed/module_mp_kdm6.f90",
+      "generated_source_sha256": "7329d618f87a2924f167bd36fab43a9bd107e2697fbb6ac72ef3cee195953a67",
+      "member": "module_mp_kdm6.o",
+      "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/module_mp_kdm6.o",
+      "object_sha256": "a2ce939d92c09327fc169b55c7873fd72d6840da05fd24417e45e639ae4be738",
+      "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_mp_kdm6.F",
+      "source_sha256": "f09a413c36b7bda9fb7376f0276e00329179c68bdbef1e4766bae2811152f58b"
+    },
+    {
+      "generated_source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/preprocessed/module_first_rk_step_part1.f90",
+      "generated_source_sha256": "20428ef7a99bf4dee73d3bec8f745b7a1f7cb83330e8c2080326739f205f20f7",
+      "member": "module_first_rk_step_part1.o",
+      "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/module_first_rk_step_part1.o",
+      "object_sha256": "905af1ef89463219b4a3fe19cfe577b76f11d413c76871c22eabb154be696e58",
+      "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_first_rk_step_part1.F",
+      "source_sha256": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef"
+    },
+    {
+      "generated_source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/preprocessed/module_first_rk_step_part2.f90",
+      "generated_source_sha256": "d5b3eca8b6aeecd2d13c03407c16361743aa1f0f264ad154f1dd77c1c35a0fbd",
+      "member": "module_first_rk_step_part2.o",
+      "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/module_first_rk_step_part2.o",
+      "object_sha256": "42a01754ce768977b1d9df55f4632ace2f382471b04ecd4fc8abe6a1cb52456f",
+      "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_first_rk_step_part2.F",
+      "source_sha256": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082"
+    },
+    {
+      "generated_source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/preprocessed/solve_em.f90",
+      "generated_source_sha256": "f60d24235d4046f8c1a0038efcd40b4ac402bc3305309549a69046a7b3bca065",
+      "member": "solve_em.o",
+      "object_path": "/var/tmp/pr98_native_capture_build_v4_20261022/compile/solve_em.o",
+      "object_sha256": "bbe0c2028654527f69839f5e6d9e4cdce09406ee09e5b1a84d57cc0ce28d16fc",
+      "source_path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/solve_em.F",
+      "source_sha256": "39281d586c26302cf2224858c3d9171a5d3e029696cb86e85e3d5fc24d8e47ba"
+    }
+  ],
+  "parent_c1_receipt_path": "/var/tmp/pr85_native_joint_candidate_20261015v17/pr85_native_transport_build.json",
+  "parent_c1_receipt_sha256": "a2c09db99d3b934a6de677c30901434ce75012fb2fd9020f19c800ee19954353",
+  "raw_native_snapshots_expected_under": "scratch/pr98_native_effect_20261022/native_capture_runs/{OFF,HYDRO,COUPLED}_20s/run/pr98_*.bin",
+  "receipt_path": "/var/tmp/pr98_native_capture_build_v4_20261022/pr87_native_overlay_build.json",
+  "receipt_sha256": "34a3b92a1d0288e172d34423a1f254ce371213b757f254c13c1c4f6727b7beb7",
+  "reproduction_profile": true,
+  "schema": "pr98_native_capture_build_provenance_v1",
+  "source_artifacts_retained_outside_checkout": [
+    "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_em.F",
+    "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/solve_em.F",
+    "/var/tmp/pr98_native_capture_build_v4_20261022/source/pr98_combined_observer.f90"
+  ],
+  "status": "PASS_OVERLAY_BUILD"
+}
