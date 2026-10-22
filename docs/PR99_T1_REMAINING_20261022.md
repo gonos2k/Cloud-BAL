@@ -162,3 +162,18 @@ directories. The graph query helped locate the relevant reducer, but its broad
 traversal returned many unrelated Cloud-BAL nodes; source code and captured
 artifacts are the evidence for these numerical results. No graph snapshot was
 updated in this task.
+
+## Current extrema: checkpoint coverage limit
+
+A further OFF local replay selects the current v5 extrema `(169,227)` and
+`(146,215)` using only coordinate changes to the retained checkpoint source
+and reducer. All 17 returned fields and XLAND remain byte-identical. The
+checkpoint changes telescope to each endpoint, and each level's last captured
+site leaves a negligible column-sum tail. This does not identify the first
+interval contributing to the remaining `+22.588586` and `−20.178284 kg`:
+selected assignment samples do not independently partition whole-call
+process/store totals into complete source-ordered transactions.
+
+The [bounded evidence and provenance](evidence/pr99_t1_remaining_20261022/extrema_checkpoint_off/README.md)
+retain that limitation. No new cause, correction, or water-closure claim is
+assigned from this replay.
