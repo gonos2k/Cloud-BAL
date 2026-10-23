@@ -1,0 +1,24 @@
+PR100 QC process evidence: fresh-v2 build/runtime addendum
+Date: 2026-10-22
+Scope: read-only verification of the fresh-v2 toolchain/runtime bundle and corrected module metadata. The existing source/math review is separate and not repeated here. No build, replay, checkout edit, forecast, or KG action was performed.
+
+Bundle and checksums
+- Bundle: /var/tmp/pr100_qc_process_evidence_fresh_20261022
+- SHA256SUMS SHA256 cfbf389c2633f0f0567768e8c51872f41cb6561d9eb061f08a33eeed8e596398. All listed bundle entries pass `sha256sum -c` from the bundle directory.
+- Fresh build cwd recorded as /var/tmp/pr100_qc_observer_build_fresh_20261022, outside the source checkout. The pinned Intel profile and compiler records match the profile review: `tests/intel_toolchain.sh` SHA256 5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4; ifx SHA256 909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef; mpiifx SHA256 9d8235d45ca2b09b5c6ffd1ba0b12cb728252aa1577ea80a240c6a2f5b69b0fb.
+- Fresh observer source SHA256 0c76fdae6e58e336dfafd581779a0979415e7b0fa64c30f701d1e22594d3e2a1; final object SHA256 b5da739a360c90374d32007906ee92e78f109fe108fdbe72ad7c5f9f0a22e56a; final executable SHA256 f984494e1c04ae54590df2b17903d52950aeab1d9f1354b2cda296e9b948002b.
+
+Build and runtime binding
+- Compile and link command records show the pinned Intel REPRO strict profile (`-O2`, strict floating-point, `-fpe0`, `-no-ftz`) in the fresh scratch cwd. The earlier missing-module compile and dependent link failure are retained and precede the final compile/link. The final object/executable artifacts exist and hash correctly; all four replay receipts identify the same final executable SHA and report return code 0. Final executable invocations therefore demonstrate the linked program was runnable for each arm.
+- OFF, HYDRO, COUPLED, and P20 v2 event/pre/post raw identities match their v1 counterparts byte-for-byte. Each of the four run summaries uses the same v2 executable hash. The full source/math report remains the controlling source-equation review; this addendum verifies only new build/runtime bindings.
+- Final compiler/linker return-code fields are not explicitly serialized. Artifact hashes plus successful invocations establish use of the final object/executable, but do not substitute for separately recorded compiler/linker RC values. V1 remains superseded because its build cwd was the tracked source checkout.
+
+Corrected module metadata
+- `build/module_seed_copy_record.json` SHA256 d9bc3ee32a546efe65d0186a20ab7382da87a0ecacf16cfa2d6bcdf623e08649 records exactly 27 candidate module-interface names/hashes. All 27 archived module copies match the recorded hashes and the 27 rows in `module_input_hashes.txt`.
+- The record explicitly states that the copy command and a separate precompile fresh-module-directory inventory were not retained. Therefore these are retained candidate interface inputs/evidence copies, not independently proven compiler-consumed bytes.
+- `build/postcompile_module_outputs.json` SHA256 1c9be5a10953e710e8447a8f6a6935ed1b59b5b8188320e8885e8af92d4041b0 separately records 28 postcompile module outputs; each listed output path currently matches its recorded hash. This output inventory is not conflated with the 27 candidate input list. The older inconsistent 28-row `module_input_bindings_postcompile_superseded.json` is retained as superseded and must not be used as the input binding.
+
+Disposition and limits
+- Fresh-v2 build/run provenance is acceptable for the bounded four-arm diagnostic, with the explicit seed-copy and compiler/linker-RC limits above. Do not claim the archived 27 modules are verified compiler-consumed bytes.
+- The offline label metadata is consistent with the pinned source interpretation: raw `GRAUPEL_TO_CLOUD` is the rain-to-cloud source writer; raw `ICE_EXTINCTION` is complete-cloud freezing/QC clear; CUTOFF event counts include zero-QC-change writes. These are diagnostic aliases, not claims of physical graupel-to-cloud or ice loss. Labels do not alter the frozen raw event data.
+- This is a bounded T1 C1 process replay, not an end-to-end forecast or physical process validation.

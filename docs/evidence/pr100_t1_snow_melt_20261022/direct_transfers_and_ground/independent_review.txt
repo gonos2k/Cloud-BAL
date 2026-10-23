@@ -1,0 +1,31 @@
+Independent review: PR100 three-arm ground-boundary account
+Date: 2026-10-22
+
+Reviewed artifacts
+- Analyzer `/var/tmp/pr100_ground_boundary_final_account_20261022.py`, SHA256 `2df5f1e2729395d137cde03e908459d35d87f48245a110b9ae675fa3b368c728`.
+- Result `/var/tmp/pr100_ground_boundary_final_account_20261022.json`, SHA256 `de02ca7cb7a91ba957f23d932b0f9a0d3a75d691397b2f2c7bd8b458343d0bf1`.
+- Ground audit `/var/tmp/pr100_ground_boundary_analysis_20261022.json`, SHA256 `6ff0521f54adeb7135f7660a2b9830c0d06fbd5be98d1760694bac97946b1c38`.
+- Guarded HYDRO receipt SHA256 `f4d829fe8d939529c16aea360a3edaa4d6dbdaf09f49f139d4c836c0ca65a4b6`; COUPLED receipt SHA256 `9fa2b5c89ac20f80fb28d88bcceabf778c0a5975adf9c016459ea2ea27628fcc`; OFF is bound to `/var/tmp/pr100_snow_fulltile_replay_20261022/OFF_valid/snow_account.json` SHA256 `0e1ad5292a77cbdadb4bce32f4f8d80fe426fb0b93ed2dc601b50a7a07c616f1`.
+
+Finding: GO on the current account, diagnostic scope only
+The source mapping and signs are internally consistent. PR67's actual R32 bottom fall is a positive outflow reconstructed from stage-2 fall arrays. The paired helper rows encode accepted R64 ground Q in values[6]; the instrumented source writes `residual_q = stored_delta_q + ground_approved_q`. The account takes the difference `actual_R32_phasefall - helper_approved_ground`, applies the same-call map area once, and subtracts that identified mismatch from the residual. The helper residual and ground mismatch have separate roles: the former is the source store-plus-approved-boundary residual; the latter is the cast/accumulation difference between observed R32 fall and the approved R64 boundary value. PR98 face reductions cross-check rain/ice source residuals and accepted face records; the G reducer checks the R32 source residual against stored delta plus approved ground and requires all active columns/contiguous substeps. This supports the account's decomposition without counting the accepted packet twice.
+
+I independently scanned the three arms' row headers and summary coverage:
+- Each unowned summary has exactly 194,880 unique keys: 64,960 active columns × 3 site rows. Values are finite; counts, L1, and maxima are nonnegative. Normalization ledgers have 64,960 rows/arm, zero invalid pre-clamp channels, zero changed channels, and zero maximum change.
+- Rain and graupel ground ledgers each have 78,926 unique `(i,j,substep)` rows/arm, all 64,960 columns present, 39 levels per row, and contiguous substeps. Ice has 64,960 unique rows/arm, all 64,960 columns, 39 levels/row, contiguous substeps. No malformed rows or duplicate keys were found.
+- `PR67` process stream parsing through the existing `same_call_bottom` reducer checks its exact 3×ny stage sequence, j ordering, timestep, and same-call density/thickness carriers. The run identity binds the first call's pre/post and 17 returned fields plus XLAND. HYDRO and COUPLED receipts' launch-manifest SHA fields match their actual manifest bytes; all artifact files are receipt-hash checked by the analyzer.
+- Water equation uses R64 field differences weighted by same-call DEN×DELZ and the active map area. Ground rows are source mass-per-area and area is applied once. Public RAINNCV reconstruction is explicitly kept outside the Q-water residual and states that it is reconstructed from the source formula because no pre-call accumulator was recorded.
+
+Numerical decomposition reported by the result
+| Arm | After v5 + QS + Gmelt signed/L1/max (kg) | After three direct transfers signed/L1/max (kg) | Actual R32 fall minus helper approved ground signed/L1/max (kg) | Remaining signed/L1/max (kg) |
+|---|---|---|---|---|
+| OFF | -322.278642 / 7722.963658 / 4.472506 | -0.0135133 / 18.835162 / 0.141610 | -0.0135017 / 18.835100 / 0.141610 | -1.16083e-5 / 0.000110796 / 5.33986e-8 |
+| HYDRO | -313.639247 / 7720.229852 / 4.472506 | -0.00557369 / 18.732547 / 0.141610 | -0.00556206 / 18.732484 / 0.141610 | -1.16277e-5 / 0.000110784 / 5.33986e-8 |
+| COUPLED | -318.137431 / 7725.354812 / 4.472506 | -0.2214408 / 18.967978 / 0.141610 | -0.2214292 / 18.967915 / 0.141610 | -1.15547e-5 / 0.000110650 / 5.33986e-8 |
+
+The starting residual is the existing v5 remainder after QS and graupel-melt terms; it is not the original v5-only residual. The three direct transfer owners are QI→QC, QC→QI complete-freeze, and QR→QC. Their observed stored-water changes are distinct from PR67 phasefall outputs. Remaining values are a source-accounting remainder, not evidence of physical water conservation or a tolerance pass; no correction or fitted term is introduced.
+
+Reproducibility note
+The analyzer explicitly verifies all guarded output artifacts except it skips the `launch_manifest.json` row inside the receipt artifact loop. I separately hashed the actual HYDRO and COUPLED manifests and confirmed both match the receipt's `launch_manifest_sha256`; this does not undermine this frozen result. A follow-up analyzer version should check that file directly so a later rerun also fails closed on manifest drift.
+
+No builds, model runs, KG operations, or file edits were performed for this review.

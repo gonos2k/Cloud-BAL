@@ -1,0 +1,19 @@
+PR100 KG wrapper read-only review
+Date: 2026-10-22
+Scope: source-only review of PR100 `preflight_kg.py`, `apply_kg.py`, and README. Did not run check-only, apply, Graphify, or alter files/KG.
+
+Reviewed files
+- `docs/evidence/pr100_c2_native_closure_20261022/kg/preflight_kg.py` SHA256 1d10401736c8e9705798c04d8423b9ede722b99147422dce6d7a44bda0961cd2
+- `docs/evidence/pr100_c2_native_closure_20261022/kg/apply_kg.py` SHA256 27aafb1257e88341d5a524e44fbfe8fb8bf80d4c8df3539b73f2f115e033b290
+- `docs/evidence/pr100_c2_native_closure_20261022/kg/README.md` SHA256 5a563ab4d867e85ad7732033b5bb3449a33c928e2ce8d67196712297abacef08
+
+Review findings
+- The two lineage bases are distinct and correctly applied: exact PR100 approval ancestry/diff is checked against `950fd7b...`; graph selection ancestry/diff is checked against `6ac1ddb...`. PR99 inherited paths are permitted for graph selection while PR100 approval diff is restricted to PR100 paths. The preflight enforces the source HEAD and clean-tree commit match, open PR URL/head/base, and the integration manifest's both base commits and URL.
+- `selected_path()` excludes all `docs/evidence/` content and specifically excludes `tests/fixtures/pr99_c1_core_pre_certificate.f90`, while still SHA-binding hash-only paths in the plan. PR99/PR100 source and docs lineage paths are selected only through the declared allowlist/exact list; unknown changed paths fail closed.
+- Prior maintained state is pinned to the PR98 receipt and its 627-file inventory, 197 immutable pins, protected-content hash, graph pins, wiki files, and 110 dated snapshots. Apply rechecks them before writes. New output/snapshot paths are PR100-specific and refuse pre-existing outputs. The README correctly says PR99 merged without KG apply and does not invent a PR99 snapshot/receipt.
+- Root integration manifest binding requires source commit, PR URL, both bases, all four named gates with explicit state/hash/candidate/scope, and preserves `physical_approval=FAIL_OPEN` and `observation_skill=NOT_EVALUATED`. The manifest hash is included in the check-only plan and revalidated for apply.
+- Check-only returns a deterministic plan hash without writes. Apply requires exact reviewed plan hash and re-runs preflight; both entry points set `sys.dont_write_bytecode` before dynamic loads. The pinned PR98 engine is hash-checked. Rollback plan binds graph/wiki/snapshot backups to exact hashes and removes only the newly named PR100 snapshots. README keeps runtime closure and root manifest as preconditions and says the wrapper itself is not scientific approval.
+- README's two-base explanation, hash-only treatment, separated KLAPS50/Cloud-BAL snapshots, and extraction limitations match the code.
+
+Disposition
+GO for the bounded source review. I found no blocker in the lineage selection, preserved-state pins, manifest gates, check-only/apply gate, or rollback design. This is not execution validation: no preflight/check-only result or apply was run. The wrapper's preflight validates gate fields and bindings but deliberately does not itself infer scientific acceptance from gate labels/states; root remains responsible for final runtime-manifest review.

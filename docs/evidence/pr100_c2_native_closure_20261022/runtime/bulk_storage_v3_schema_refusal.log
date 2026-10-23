@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/var/tmp/pr100_bulk_storage_reducer_v3_20261022.py", line 329, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/var/tmp/pr100_bulk_storage_reducer_v3_20261022.py", line 320, in main
+    result = run(args.manifest, args.expected_audit_sha256)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/pr100_bulk_storage_reducer_v3_20261022.py", line 302, in run
+    outputs = [reduce_arm(name, manifest["arms"][name], audit, audit_sha, build_sha)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/pr100_bulk_storage_reducer_v3_20261022.py", line 217, in reduce_arm
+    ledger_spec = _artifact_receipt_binding(receipt, run_root, "pr87_joint_storage.raw")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/pr100_bulk_storage_reducer_v3_20261022.py", line 147, in _artifact_receipt_binding
+    raise EvidenceError(f"receipt must contain exactly one raw and compressed row for {raw_name}")
+EvidenceError: receipt must contain exactly one raw and compressed row for pr87_joint_storage.raw

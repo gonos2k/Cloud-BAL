@@ -1,0 +1,28 @@
+PR100 momentum-locality private review
+Date: 2026-10-22
+
+Artifacts reviewed
+- Script: `/var/tmp/pr100_momentum_locality_20261022.py`, SHA256 `a492d4bd65b4f33f92ffb681cacc34e53a1c174775b39e7bd0a13db9103336a8`.
+- Result: `/var/tmp/pr100_momentum_locality_20261022.json`, SHA256 `ce17c1b6799147fb2df343d077fe38a0068a235594764c9a5d6b7d87a07f5a90`.
+- Source response: `docs/evidence/pr99_native_projection_20261022/response.json`, SHA256 `62fde5687c176b0ae1af2c2debbc6003c6a8f778786ae6b640e40d32fbd94a4d`.
+- Receipt pins are result-bound: P `f734125bb30555c30cf6815ab8b61a58d5cb173605c13f4f6ff7ce9d326a90a1`; H `3d4a4174e17c25e7570db5342fcc7f0358b09cec286dedfc1bbb72d18adef1b4`; C `443dd36ef7102e1c94d2930ad460d85c8d3dac94e4d9db2eb88fb67858703f5e`.
+
+Binding checks
+- The source response hash and locality script hash match the hashes recorded in the result. All three closed receipts rehash to the result pins and report `COMPLETE`, return code 0.
+- Independently rehashed each receipt-bound candidate `wrfinput_d01` and each of the 30 captured files consumed by the script: 10 relevant `advu`, `advv`, `hdifu`, `hdifv`, and assembled RU/RV captures per arm across P/H/C. Each file matches its receipt `generated_files` hash. No live C2 run data was inspected.
+- The script uses P for the PR99 projected proposal, H for the original C1 HYDRO capture, and C for the original C1 COUPLED capture. It computes P−H, C−H, and P−C separately. The result's terse labels should be expanded this way in any user-facing summary.
+
+Coordinate and metric review
+- The native reader declares capture axes `I,K,J` and reshapes Fortran stream data in that order. `support_native_mask` consumes the cropped source support in `K,J,I`, maps it from mass origin `(i=2,k=1,j=2)`, and creates an `I,K,J` face mask. The locality script retains that `I,K,J` array order for both mask and captured fields.
+- Initial NetCDF U/V arrays are read in `K,J,I` order. Converting native `(i,k,j)` to `[k-1,j-1,i-1]` is consistent with one-based native Fortran indices and the NetCDF array layout. The report records the same cropped-support origin mapping. No orientation/index blocker found; a manufactured test was unnecessary.
+- The locality `P−H` L2 metrics reproduce the PR99 response report's proposal `b_C_minus_H` metrics on the shared fixed support: `advu_ru_tend` 13149.316930119357 vs 13149.316930119357; `advv_rv_tend` 16727.817316708086 vs 16727.817316708082; `hdifu_ru_tendf` 26474.72001147808 vs 26474.72001147808; `hdifv_rv_tendf` 19938.26674434289 vs 19938.26674434289.
+- Aggregate algebra checks on the reported arrays passed: level-L2 quadrature reconstructs the full-field L2 for P−H, C−H, and P−C; reported top-eight values satisfy P−C = (P−H)−(C−H).
+- Squared P−H norm fractions on native levels 37–39 are 81.8819% for HDIFU, 81.9753% for HDIFV, 67.1175% for assembled RU, and 55.4870% for assembled RV. The top-eight fractions are separately 63.0350%, 53.2613%, 50.6102%, and 40.0231%, respectively. Advection-difference peaks are concentrated around native k 26–30, so these are distinct vertical-locality patterns.
+
+Scope and limits
+- This is only the previously closed PR99 proposal 20-second capture compared with original C1 HYDRO/COUPLED captures. It does not describe the current C2 640-second cohort.
+- The source reports and script keep the four fields separate. Raw RU/RV and HDIF tendency snapshots are source-coordinate values with differing source units/roles; they are not physical accelerations or a complete momentum budget and should not be summed as a homogeneous closure.
+- The U/V initial-wind curvature is an unweighted computational-grid diagnostic, not the native metric-weighted diffusion operator or a physical Laplacian. Spatial colocation of initial wind increment/curvature and response maxima does not establish causality or identify an individual process as the cause.
+- Physical approval remains `FAIL_OPEN`; observation skill remains `NOT_EVALUATED`. Review outcome: no provenance, orientation, or stated aggregate-arithmetic blocker found within this bounded scope.
+
+Review actions were read-only: hash verification of closed receipts/selected captures, source inspection, and JSON/report comparisons. No Fortran replay, forecast, model build, Graphify/KG action, or checkout edit was performed.

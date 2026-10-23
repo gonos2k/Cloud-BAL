@@ -1,0 +1,87 @@
+{
+  "compile_cwd": "/var/tmp/pr100_qc_observer_build_fresh_20261022",
+  "link_cwd": "/var/tmp/pr100_qc_observer_build_fresh_20261022",
+  "fresh_scratch_cwd": true,
+  "compile_argv": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -module /var/tmp/pr100_qc_observer_build_fresh_20261022/mod -I/var/tmp/pr100_qc_observer_build_fresh_20261022/mod -stand f08 -warn all -fpe0 -traceback -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -qopenmp -convert big_endian -I/var/tmp/pr84_ice_entry_guard_final_1efgtcsn/compile -I/var/tmp/pr61_ccn_origin_20261006/hostcopy/phys -I/var/tmp/pr61_ccn_origin_20261006/hostcopy/frame -free -c /var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90 -o /var/tmp/pr100_qc_observer_build_fresh_20261022/obj/module_mp_kdm6_pr100.o",
+  "link_argv": [
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpiifx",
+    "-o",
+    "/var/tmp/pr100_qc_observer_build_fresh_20261022/link/pr100_qc_replay.exe",
+    "-stand",
+    "f08",
+    "-warn",
+    "all",
+    "-fpe0",
+    "-traceback",
+    "-O2",
+    "-fp-model",
+    "strict",
+    "-fimf-arch-consistency=true",
+    "-no-ftz",
+    "-convert",
+    "big_endian",
+    "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+    "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+    "-Wl,-rpath,/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+    "/var/tmp/pr97_t1_20261022/compile/driver.o",
+    "/var/tmp/pr100_qc_observer_build_fresh_20261022/obj/module_mp_kdm6_pr100.o",
+    "/var/tmp/pr99_compact_stage_build6_20261022/obj/pr98_budget_face_observer.o",
+    "/var/tmp/pr97_t1_20261022/diag_compile/liquid_observer.o",
+    "/var/tmp/pr95_kdm6_column_off_20261021/pr90_cycle_support.o",
+    "/var/tmp/pr85_native_joint_candidate_20261015v17/compile/pr85_joint_stage_observer.o",
+    "/var/tmp/pr96_native_build_c1_20261021/link/main/libwrflib_pr87_overlay.a",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/fftpack/fftpack5/libfftpack.a",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib1/libio_grib1.a",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_grib_share/libio_grib_share.a",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_int/libwrfio_int.a",
+    "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/esmf_time_f90",
+    "-lesmf_time",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/RSL_LITE/librsl_lite.a",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/module_internal_header_util.o",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/frame/pack_utils.o",
+    "-L/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/external/io_netcdf",
+    "-lwrfio_nf",
+    "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+    "-lnetcdff",
+    "-lnetcdf",
+    "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+    "-lnetcdf",
+    "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+    "-lnetcdff",
+    "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib",
+    "-L/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64",
+    "-lnetcdf",
+    "-lnetcdf",
+    "-lm",
+    "-qopenmp"
+  ],
+  "profile": "absolute tests/intel_toolchain.sh sourced before ifx/mpiifx",
+  "c1_replay_runner": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tools/pr99_selected_process_replay.py",
+    "sha256": "7fa53dca97591d26c6ea612aa16dda6b74975217e5cb57c41f341ed9f2f53aed",
+    "subprocess_argv": [
+      "<run_dir>/replay.exe",
+      "<native_pre.resolve()>"
+    ],
+    "subprocess_cwd": "<run_dir>",
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "stack": "unlimited",
+      "LD_LIBRARY_PATH_prefix": "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib"
+    }
+  },
+  "p20_replay": {
+    "script_path": "/var/tmp/pr100_qc_p20_replay_fresh_20261022.py",
+    "script_sha256": "fd8c181e9bca5be1e5e3027d1a23f2973ccf0bb0e4c513d2224955e3c6593db7",
+    "argv": [
+      "<run_dir>/replay.exe",
+      "<expanded P20 pre raw>"
+    ],
+    "cwd": "/var/tmp/pr100_qc_observer_runs_fresh_20261022/P20",
+    "environment": {
+      "OMP_NUM_THREADS": "1",
+      "stack": "unlimited",
+      "LD_LIBRARY_PATH_prefix": "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib"
+    }
+  }
+}

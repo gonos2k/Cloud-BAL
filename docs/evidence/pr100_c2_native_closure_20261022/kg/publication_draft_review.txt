@@ -1,0 +1,27 @@
+PR100 KG publication review — GO
+Date: 2026-10-22
+Scope: read-only bounded review of the five publication files and receipt/snapshot binding. No repository edits or KG apply.
+
+Reviewed publication inputs and SHA-256:
+- docs/evidence/pr100_c2_native_closure_20261022/kg/applied_summary.json: 644f416e76e66b0568e27f8cc9b0c78ef54b116a6553e5f5c23121271b1e1118
+- docs/evidence/pr100_c2_native_closure_20261022/kg/publication.md: f99d59b28f89c1948a494bed32612d6daceb7428b3f003d3705a450dda32b501
+- docs/evidence/pr100_c2_native_closure_20261022/kg/root_integration_manifest_v2.json: 73cea19646cc1a6970f2c75ce6257922c6a3358e034935b1f3d48c14c534a271
+- docs/evidence/pr100_c2_native_closure_20261022/kg/kg_receipt_reference.json: f35132c06b03742aba6796da3eae37311e0810c06fe63933509aaf40974dc5df
+- docs/evidence/pr100_c2_native_closure_20261022/kg/check_only_v2_review.txt: c1c222177074e8c4aa0eb01bc1181c40a54072df0d30146616856aeb1c781991
+
+Receipt verification:
+- Actual receipt path: /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr100_c2_native_closure_20261022/kg/kg_receipt.json
+- Actual receipt SHA-256: 9958027ddc1306bbe8b130a19c2c2530c07ea01bdd858e8d9664b31a9667c015; status PASS.
+- Receipt lineage matches publication: approval base 950fd7b41af5a10ab6dd36a17098e86dd8306197; graph-selection base 6ac1ddb6a50c9e4f909e47243bbd656e09fc85a3; graph source freeze 870dd5c9dac9aa1fae9f836c051cffd5699c6f85; PR100. Receipt records PR99 merged without KG apply.
+- 60 graph source paths are selected. The 366 lineage rows comprise 60 SELECTED and 306 HASH_ONLY, consistent with summary and publication.
+
+Snapshot verification:
+- Both dated snapshot directories exist. Recomputed SHA-256 values for graph.json, GRAPH_REPORT.md, and manifest.json match the applied summary.
+- KLAPS50: 40,276 nodes, 83,885 edges, 3,283 communities; delta +338 nodes, +559 edges, +24 communities.
+- Cloud-BAL: 14,448 nodes, 25,431 edges, 1,289 communities; delta +338 nodes, +558 edges, +20 communities.
+
+Scope and interpretation:
+- Four runtime/diagnostic gates and their evidence hashes/scopes agree with root manifest v2. Gate completion is not presented as physical/scientific approval.
+- Physical approval remains FAIL_OPEN; observation skill remains NOT_EVALUATED; post_review_status is PENDING as expected before this review is incorporated.
+- Publication retains the hash-only fixture/evidence policy, cross-file Fortran extraction limits, and statement that graph freshness is navigation evidence only.
+- No blockers found. GO for root to record this bounded publication review. This review does not approve physical conclusions or expand the runtime scopes.

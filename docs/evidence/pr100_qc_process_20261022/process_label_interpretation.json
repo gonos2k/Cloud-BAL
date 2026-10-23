@@ -1,0 +1,29 @@
+{
+  "schema": "pr100_qc_process_label_interpretation_v1",
+  "retained_source_sha256": "0c76fdae6e58e336dfafd581779a0979415e7b0fa64c30f701d1e22594d3e2a1",
+  "scope": "Offline semantic interpretation only; no source, executable, replay, or numeric summaries changed.",
+  "interpretations": {
+    "GRAUPEL_TO_CLOUD": {
+      "raw_label_preserved": true,
+      "semantic_alias": "TINY_RAIN_TO_CLOUD",
+      "source_evidence": "At generated-source lines 7507-7518, qci is incremented by qrs(i,k,1), then qrs(i,k,1) is set to zero. The transferred species is the source array qrs index 1 (rain), not graupel.",
+      "coverage": "This raw event label is absent from the four 613-cell event-count summaries. This means no such event row was captured on the validated fixed support in these replays; it does not establish absence outside support."
+    },
+    "ICE_EXTINCTION": {
+      "raw_label_preserved": true,
+      "semantic_alias": "COMPLETE_CLOUD_FREEZING_QC_CLEAR",
+      "source_evidence": "Source lines 3546-3555 transfer QC to QI (QI incremented by QC; QC cleared), with number and latent-heat updates. This is a complete-freezing/QC-clearing branch, not physical ice loss.",
+      "interpretation_limit": "The observer records the QC write delta only. Do not interpret the near-zero QC increment as a standalone ice-loss or total freezing amount."
+    },
+    "CUTOFF": {
+      "raw_label_preserved": true,
+      "semantic_alias": "QC_CUTOFF_WRITE_SITE",
+      "interpretation_limit": "In these captured rows QC before/after is equal; event count alone does not indicate QC mass removal."
+    },
+    "ICE_TO_CLOUD": {
+      "raw_label_preserved": true,
+      "semantic_alias": "ICE_TO_CLOUD_QC_TRANSFER_WRITE_SITE",
+      "interpretation_limit": "Retained as a generic QC transfer site; no broader process-rate claim is made."
+    }
+  }
+}

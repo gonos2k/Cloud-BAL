@@ -1,0 +1,25 @@
+# Noncompilable anchor excerpts for the PR100 observer-transform unit test.
+# Extracted from prepared source SHA-256 7aa8f40732065d55eee8b23f70a02ad4e8379bc91714d8077aea5e849e6d6de6.
+# This fixture exercises only tools/pr100_qc_source.py; compact.prepare is patched to identity.
+# It is not a replacement for the separate full-source build and runtime evidence.
+   real :: cloud_evap_extent
+   idim = ite-its+1
+   call validate_kdm6_species_states(qci,qrs,nrs,nci,brs)
+   do k = kts, kte
+   do loop = 1,loops
+       qci(i,k,1) = max(qci(i,k,1),0.0)
+                      qci(i,k,1) = pr85_melt_qc_after
+                  qci(i,k,1) = qci(i,k,1) + qci(i,k,2)
+            qci(i,k,1) = 0.
+                      qci(i,k,1)=pr85_freeze_qc_after
+                      qci(i,k,1)=pr85_freeze_qc_after
+            qci(i,k,1) = qci(i,k,1)+qrs(i,k,1)
+            qci(i,k,1) = max(qci(i,k,1)+pcact(i,k)*dtcld,0.)
+            qci(i,k,1) = 0.
+            qci(i,k,1) = max(qci(i,k,1)+pcond(i,k)*dtcld,0.)
+            qci(i,k,1) = 0.
+              qci(i,k,1) = 0.0
+            qci(i,k,1)=rain_q_after(1)
+            qci(i,k,1)=rain_warm_q_after(1)
+   call liquid_end(lat,its,ite)
+        REAL FUNCTION GAMMLN(x)

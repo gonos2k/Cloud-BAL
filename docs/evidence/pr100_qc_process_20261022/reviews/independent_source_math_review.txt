@@ -1,0 +1,38 @@
+PR100 QC process evidence: independent read-only review
+Date: 2026-10-22
+Review scope: /var/tmp/pr100_qc_process_evidence_20261022; no checkout edits, builds, forecasts, C2 reads, or KG writes.
+
+Bundle identity and scope
+- Bundle `evidence.json` SHA256: c6b2922df5b001fd66ff437741a3bf2ee5d60f70eb1a5a4be3825744e6415bbd.
+- Bundle `SHA256SUMS` was checked against all 31 listed files; all passed. The checksum file itself is not a member of its inventory.
+- Build manifest SHA256: 15e54f45ca20877424d60948cb0a6e8222d851bd5d06c20d3c403366728b73f1.
+- Event-source transformer SHA256: 4ca204279c0c0cdcf57e5ef306d69ff8bfe881cb3ded98db9dc87ad205ec4dc8.
+- Process reducer SHA256: f83b9ad953abca83c543bde742878a4ef6213742f846de3e61d5b8f67ca04c90.
+- Contrast reducer SHA256: 81e8c2ffe13f695361fa523b7cb38a31ba9d04d6d9dca384e69a49788900bcca.
+- Generated observer source SHA256: 0c76fdae6e58e336dfafd581779a0979415e7b0fa64c30f701d1e22594d3e2a1; observer object: 6dcb4bbf16287eae7af95419a82d0d8ee15c4e01339d8142214a51980417748e; replay executable: 251c656da6cfbbd78bd09d915efd0bcbde046da6a6f7222ed1d2d2f9903e6f09.
+- Pin/profile metadata is coherent: pinned ifx SHA 909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef, mpiifx SHA 9d8235d45ca2b09b5c6ffd1ba0b12cb728252aa1577ea80a240c6a2f5b69b0fb, profile flags include -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz and OMP_NUM_THREADS=1. The recorded source/profile/executable identity is consistent across the four replay summaries.
+
+Toolchain working-directory gate
+- The manifest and `commands.json` both record the generation/compile working directory as the tracked Cloud-BAL checkout (`.../scratch/pr99_native_contract_20261022/Cloud-BAL`). Compile outputs were placed under /var/tmp, but the agent instruction requires compilation from a fresh scratch working directory outside the source tree. Therefore the v1 package does not establish compliance with that gate. Treat v1 build/replay validation as provisional until the planned fresh-scratch v2 rerun is bound. This does not invalidate the read-only arithmetic/source review below.
+- The build summary declares a strict Intel profile and pins compiler binaries, but the final link log is empty; link argv and executable hash are present. The clean-scratch rerun should retain complete command output and actual cwd evidence.
+
+Source hooks and ownership
+- The generated source records the fixed 613-cell support and source-order QCI assignments. I enumerated the generated `qci(i,k,1)` writes: one host-to-local initialization, then NORMALIZE, MELT, ICE_TO_CLOUD, ICE_EXTINCTION, PINU, PFRZ, COLD_COMMIT, WARM_COMMIT, GRAUPEL_TO_CLOUD, ACTIVATION, FULL_EVAPORATION, CONDENSATION, and CUTOFF. Each internal assignment after ENTRY has a post-assignment event hook; the host initialization is represented by ENTRY and the final copy-out is not a QCI write process. The generator test compares all original QCI assignment lines before/after instrumentation and requires equality. The cold/warm packet hooks are adjacent to their existing QCI commit assignments.
+- `TRANSFER` words bind REAL32 before/after states. The event records also contain readable decimal values, source label, timestep, j/loop/i/k, and monotonically increasing ordinal. Per-cell ENTRY/EXIT checks, bit-chain checks, and endpoint capture checks reject broken/missing records.
+- Four observer replay summaries report exact 17-field-plus-XLAND native/replay POST identity. OFF, HYDRO, and COUPLED are the original C1 capture lineage; P20 has a separate PR87 native receipt and is identified separately. Every replay is a one-call T1 observer replay, not a multi-step history or C2 result. P20 explicitly lists unavailable reused streams instead of treating them as zero.
+- Source injection preserves the original QCI assignments, and the replay equality evidence is a strong noninterference check for these bound cases. It does not prove general compiler/runtime noninterference outside the recorded executable and inputs.
+
+Coordinates, initial state, and contrast reconstruction
+- The support list is 613 unique `i j k` rows over 16 columns and levels 1..39. Full WRF QCLOUD arrays are shaped `[k,j,i] = [39,282,234]`; the 2-cell halo crop yields `[39,280,232]`. On the cropped array, source `i,j,k` maps to `[k-1,j-2,i-2]`. On the uncropped NetCDF array, it maps to `[k-1,j-1,i-1]`. I independently computed T0 vectors with the crop followed by the reported index map; the resulting C1_COUPLED−OFF support L2 is 0.003097180456455065, matching the contrast JSON. Directly applying cropped indices to the uncropped full array is an off-by-one error; the artifact's documented crop-first path is correct.
+- Read-only full QCLOUD comparisons show initial HYDRO, original COUPLED, and PR99 proposal/P20 candidate arrays have the same byte identity (SHA256 9f0c5deb731d24ffe4713d19c4216cc9ed414bf388143e1ae3a342931c1786a7); OFF differs (8f458f042d36afcc2ba2febb84980502b4806f2448ffc37ae196021ca7153480). The proposal input whole-file SHA matches its separate native receipt's candidate input pin. The T0 C1−OFF pattern is therefore nonzero and is the stated projection reference.
+- I independently parsed the pinned OFF/HYDRO/COUPLED/P20 event raws, verified their SHA pins, and summed source deltas per support cell. For all four, event deltas telescope exactly to the captured PRE→POST QC changes (max error 0 in this recomputation). For HYDRO−OFF, COUPLED−OFF, and P20−OFF, cross-arm source-label vectors reconstruct the observed contrast-change vector exactly (max error 0). Independent T0 projection values match the report: HYDRO−OFF −1.043147113399123; COUPLED−OFF −1.053343355986918; P20−OFF −1.045971745912734. This is source-record decomposition, not a causal allocation.
+
+Sign and precision interpretation
+- The CONDENSATION source assignment uses `pcond*dtcld` in `max(QC+pcond*dtcld,0)`. Positive stored QC delta is condensation; negative stored QC delta is partial cloud evaporation (pcond<0). Full cloud evaporation is a distinct zero-store branch/event that transfers the remaining cloud amount to vapor. The captured row is the actual QCI store delta; requested E/pcond is not captured, so no claim is made about a requested process rate.
+- Proposal/alpha/approved/deferred packet fields are populated only at COLD_COMMIT and WARM_COMMIT. Ordinary write labels carry initialized zero-filled N/A packet values; they are not observations of zero process rates. Each commit's actual QCI delta is counted once.
+- Source `real` declarations make those packet operands REAL32 under the pinned build. The observer's `alpha*proposal` and `proposal-approved` diagnostics are REAL32-rounded source quantities. Reducer checks reconstruct those REAL32 products/remainders; binary64 sums/products of their decoded values are comparison diagnostics, not an independently evaluated unrounded R64 target. The result labels preserve this distinction and do not call packet sums the actual committed QCI amount.
+
+Review disposition
+- No source-equation, coordinate, sign, N/A-field, or vector-attribution blocker found in the private bundle. The independently reconstructed numerical identities agree with the reported results.
+- Validation endorsement remains conditional on the v2 fresh-scratch build/replay prompted by the recorded checkout cwd. Do not claim the omitted full-tile QS attempt is verified from this fixed 613-cell support package.
+- Publication packaging should exclude the generated full KDM6 module and superseded full source; keep the source transformer, hash pins, bounded summaries, and explicit scope/limitation statements. The current bundle is private review material, not a recommendation to publish raw replay artifacts.

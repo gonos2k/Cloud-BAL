@@ -1,0 +1,24 @@
+PR99-C2 closed-only auditor review
+Date: 2026-10-22
+Auditor reviewed: `/var/tmp/pr99_c2_closed_audit_20261022.py`
+Auditor SHA256: `e7295edccd3eed463e40af88662f921229f2c51122a62a2a03101ab5d703fa7c`
+Review scope: read-only source/API/schema review. Did not execute the auditor, inspect C2 run directories, read native arrays, or run a model/build/KG action.
+
+Checks that align
+- Global pins bind the reviewed C2 build receipt, executable hash, read-only preflight, root GO artifact, all three exact run roots, 640-second duration, FAIL_OPEN physical disposition, and NOT_EVALUATED observations. The current files match the script pins: build receipt `9c4802e1…`, preflight `e5ebd3fe…`, root GO `5420c264…`, executable `387f46df…`.
+- Frozen runner CLI supports `--arm OFF|HYDRO|COUPLED`, `--duration-seconds`, `--candidate-build`, and requires `--hydro-input-receipt` only for HYDRO. Its pure schedule selects timestep 32 at 640 seconds, with earlier step-30/600-second milestone retained.
+- Existing C1 receipt JSONs are finalized `COMPLETE`, return code 0, 30 timesteps/final step 30, and have the nested/top-level duplicate-post-KDM6 fields the auditor reads. They carry receipt-listed compressed outputs with the exact `path`, `sha256`, `bytes`, `compressed_path`, `compressed_sha256`, and `compressed_bytes` schema expected by the frozen reader. Their `expected_model_timestamps` are string lists. The C1 preflight fields consumed by the auditor are present.
+- C2 expected run receipt fields (`candidate_build`, executed executable hashes, C1 input/boundary hashes, source receipt identity, namelist hashes, changed-input lists, snapshots, completed prefix, output rows) are emitted by the pinned runner. HYDRO binding helper compares receipt metadata while allowing only receipt-path relocation.
+- Prefix and equivalence outcomes remain separate: procedural completion requires steps 1–32, final step 32, unique post-KDM6 records and a 620-second state; first-600 trace comparison is scoped to at most steps 1–30 and can return `INCOMPLETE`; history comparison is scoped through 600 seconds. Per-arm errors become FAIL/FAIL_OPEN, while output creation uses exclusive `open("x")`; global pin/receipt changes abort.
+
+Finding for author
+- The auditor verifies the frozen runner SHA in its reviewed input preflight and loads that frozen runner for reading, but it does not compare each C2 closed receipt's `launch_runner_source_sha256` to `RUNNER_SHA` (or require its `launch_runner_source_sha256_status` to be the runner's captured-at-entry value). The pinned runner emits those fields in the receipt. Add this receipt-level equality check so the actual run provenance is bound to the frozen runner, rather than only binding the preflight and audit reader. This is a provenance gap; the other reviewed build/input bindings are cross-checked.
+
+Limit
+- The current check is against source and existing C1 JSON schemas only. C2 closed receipt contents and runtime outputs were intentionally not opened or evaluated.
+
+Follow-up on final GO driver
+- Final driver `/var/tmp/pr99_c2_closed_audit_20261022.py` has SHA256 `6b1d78dbb4056089fc2798d8e9eb8e2f962dc9b44cf5e73821adbe6ee3e45a3b`.
+- The previously noted receipt provenance gap is fixed at `validate_arm_identity`: it now requires `receipt.launch_runner_source_sha256 == RUNNER_SHA` and exact status `captured at run entry before model execution`.
+- Frozen runner code emits both values on completed runs. All three existing C1 closed receipts have the expected runner SHA `80803b6b3e8591053d0524ed9e5b0110dfd7cbf1d105d2e40029addb5f5a55c4` and exact status string. This validates schema/value compatibility for the guard; no C2 receipts were opened.
+- Resolution: prior provenance finding addressed. Review remains source/schema-only and no auditor execution or native-array reads were performed.

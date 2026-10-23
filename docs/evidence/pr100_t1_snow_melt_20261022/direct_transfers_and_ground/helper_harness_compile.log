@@ -1,0 +1,24 @@
+harness/pr100_unowned_harness.f90(51): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_KAHAN]
+  call pr100_unowned_kahan(weight*delta,signed(ix,site),signed_c(ix,site))
+-------^
+harness/pr100_unowned_harness.f90(52): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_KAHAN]
+  call pr100_unowned_kahan(abs(weight*delta),l1(ix,site),l1_c(ix,site))
+-------^
+harness/pr100_unowned_harness.f90(36): remark #7712: This variable has not been used.   [RECEIVER]
+subroutine pr100_unowned_event(site,i,j,k,loop,before,after,den,dz,ncol,ix,donor,receiver, &
+---------------------------------------------------------------------------------^
+harness/pr100_unowned_harness.f90(114): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_EVENT]
+      call pr100_unowned_event(site,10,15,7,1,before,after,den,dz,4,2,2,3, &
+-----------^
+harness/pr100_unowned_harness.f90(119): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_EVENT]
+      call pr100_unowned_event(site,10,15,7,1,before,after,den,dz,4,2,3,2, &
+-----------^
+harness/pr100_unowned_harness.f90(124): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_EVENT]
+      call pr100_unowned_event(site,10,15,7,1,before,after,den,dz,4,2,2,4, &
+-----------^
+harness/pr100_unowned_harness.f90(131): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_NORM_OBSERVE]
+  call pr100_norm_observe(before,after,4,2,invalid,changed,maxchange)
+-------^
+harness/pr100_unowned_harness.f90(134): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_NORM_OBSERVE]
+  call pr100_norm_observe(before,after,4,2,invalid,changed,maxchange)
+-------^

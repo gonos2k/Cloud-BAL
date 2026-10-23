@@ -1,0 +1,106 @@
+{
+  "schema": "pr100_root_replay_cwd_incident_appendix_v1",
+  "status": "CLOSED_FOR_PRESERVATION; SCIENTIFICALLY_EXCLUDED",
+  "incident": {
+    "description": "A bad-H new-three-transfer diagnostic replay ran from the KLAPS50 root instead of its isolated run cwd.",
+    "observed_window_utc": "2026-10-22 12:12\u201312:18 UTC (as reported by root; inventory recorded at 12:20:06Z).",
+    "root_raw_files_created": 33,
+    "raw_bytes_total": 1487106395,
+    "inventory_sha256": "f4299b1d2fefd65cb0447c4824ee437923bedff834f0088ae44df89cb0c0d4ab",
+    "birth_inventory_sha256": "3a31ff6832e9d3dc7fef9354e64728bce54b4e7aa5371a1c48df03ed46700aa3",
+    "quarantine_receipt_sha256": "a8f152a18136ec1531d588f6e3585c241b30e47a71b92748a86b381d455df3d3",
+    "preservation": "All 33 current raw files were archived as hardlinks and then atomically moved to quarantined_names; post-quarantine review verified hashes/inodes and found no root-level raw names.",
+    "scientific_disposition": "Exclude the bad-cwd diagnostic and all its outputs from scientific interpretation. This is a working-directory incident, not evidence of a source or physics failure."
+  },
+  "replace_semantics_correction": {
+    "supersedes": "The initial review treated prior same-name state for three status=replace files as unresolved and warned a prior inode might have been truncated.",
+    "result": "The pinned Intel/OpenMP/big-endian probe reproduced the relevant OPEN modes and retained the inode on replacement. The three current status=replace output inodes were born during the incident window, so the run did not overwrite or truncate a pre-existing inode at those paths.",
+    "recorded_launch_history": "The recorded bad-launch sequence contains no rm/unlink. With the exact-profile probe showing status=replace retains an existing inode, the three incident-born output inodes establish that this launch created those files without truncating a prior inode."
+  },
+  "protected_state": {
+    "maintained_source_inventory_count": 627,
+    "maintained_source_inventory_sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f",
+    "klaps50_graph_sha256": "983942df987a14cfbe4b78a7b51f73f092d58fb208e0b4c92278a7f73ddec2bc",
+    "cloud_bal_graph_sha256": "be2ccfd8d33823dc984bcc4621e55da45c304ae6387febce745e4c7c37be57a6",
+    "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "wiki_hashes": {
+      "graph-report.md": "cff0be52a7f6d11f94c2ac61bb15dfc93b22810f92964d63f63071f68c265325",
+      "graph-report-klaps50.md": "1190ac98a592c9cbb097eb731533938a845bcd8e34ee3b7adb9516267246bbdf",
+      "graph-report-cloud-bal.md": "3b54b9049a0fb77a43c75ffaac180b1b631e4173f9c3f5b35663db6339aa28f3",
+      "index.md": "1701f2905aaabd76226236ceb97b282e2ba855c333a4a077446377dca90db8d1",
+      "log.md": "11065ac8c077dbbb60f1661324e8b67f045a5da0d817fee26efbb2c1ce2ea9a3"
+    },
+    "c2_isolated_working_directories": "Root verified the isolated C2 run working directories were unchanged.",
+    "separate_clean_guarded_receipts": {
+      "HYDRO": {
+        "path": "guarded_replays/HYDRO/receipt.json",
+        "sha256": "f4d829fe8d939529c16aea360a3edaa4d6dbdaf09f49f139d4c836c0ca65a4b6",
+        "launch_manifest_sha256": "a567ae8d42fc2745fbc48d45ecee25cb81f1ff87de970ecea0d089d42d0ba1f4",
+        "returncode": 0,
+        "post_matches_native": true,
+        "native_dump_matches": true,
+        "completion_marker": true
+      },
+      "COUPLED": {
+        "path": "guarded_replays/COUPLED/receipt.json",
+        "sha256": "9fa2b5c89ac20f80fb28d88bcceabf778c0a5975adf9c016459ea2ea27628fcc",
+        "launch_manifest_sha256": "2ecb47ae623ac365b4061f7fc48be11df968888393e31aaaa3c57225f475cc64",
+        "returncode": 0,
+        "post_matches_native": true,
+        "native_dump_matches": true,
+        "completion_marker": true
+      },
+      "scope": "Separate guarded C1 T1 diagnostic replays, not results from the bad-cwd incident and not C2 model reads/forecasts."
+    }
+  },
+  "evidence_inventory": {
+    "current_root_raw_inventory": "inventory/current_root_raw_inventory.json",
+    "birthtime_inventory": "inventory/birthtime_inventory.json",
+    "quarantine_receipt": "inventory/quarantine_receipt.json",
+    "reviews": {
+      "initial_forensic_review.txt": {
+        "path": "reviews/initial_forensic_review.txt",
+        "sha256": "6a75b3108d1e309f71a12faf556c090315b1341d193d16722584d57d89e43f64"
+      },
+      "replace_probe_addendum.txt": {
+        "path": "reviews/replace_probe_addendum.txt",
+        "sha256": "77eade256d36a46397a020273691e2140a926dcfb80061d5e10cf047f3f4bdd5"
+      },
+      "postquarantine_review.txt": {
+        "path": "reviews/postquarantine_review.txt",
+        "sha256": "6477a7e303cd7031fbcb903fe8dbf7d3b1143b65623f60e7ef74000450c5d771"
+      }
+    },
+    "replace_probe": "Pinned source and result metadata only; probe executables and raw files are excluded.",
+    "probe_artifacts": {
+      "openmp_big_endian_probe": {
+        "source": "probe/replace_probe_mt_probe.f90",
+        "source_sha256": "51e0360e72ee83d3256154dd572bcfe694bbc804ac46a0d126cdd235a00b953b",
+        "result": "probe/replace_probe_mt_result.json",
+        "result_sha256": "cda6118aa84ec05fb3d6d11d22bcb602629c814ef1e9bda24b4ef91b786c4a26",
+        "compile_and_run_rc": "0",
+        "probe_executable_sha256": "5e62b4ae6744aba49b3542cb0cb856ce2ffa69ab128b0c15ca3460f140eb0d4e",
+        "scope": "Same replacement OPEN modes under pinned Intel runtime, OpenMP, and big-endian conversion; test artifacts only.",
+        "compiler_profile": {
+          "path": "Cloud-BAL/tests/intel_toolchain.sh",
+          "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+          "reported_flags": "pinned REPRO flags including -O2 -fp-model strict -fimf-arch-consistency=true -no-ftz -fpe0, plus -convert big_endian -qopenmp"
+        }
+      },
+      "stage_replace_probe": {
+        "source": "probe/replace_probe_probe.f90",
+        "source_sha256": "d87385c077a8b74e942aa90652c3cff96f37b379607f4cab3c19bd32539bb934",
+        "result": "probe/replace_probe_result.json",
+        "result_sha256": "f4971e65e71f392e2c39a87ab626e7e98f6753be692fb89e980662c9ef911c86",
+        "compile_and_run_rc": "0",
+        "probe_executable_sha256": "1281bd698c947d9ea6ac3328f3c2418756a006cf238ce7c3c743bfc920757b50"
+      }
+    }
+  },
+  "excluded_from_public_appendix": [
+    "1.487 GB raw files and hardlink copies",
+    "large diagnostic executables and full module objects",
+    "full private model output arrays"
+  ],
+  "original_incident_archive_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr100_replay_cwd_incident_20261022"
+}

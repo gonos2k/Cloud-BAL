@@ -1,0 +1,32 @@
+PR100 KG post-apply review (read-only)
+Date: 2026-10-22
+Disposition: GO; no post-apply integrity or preservation blocker found.
+
+Bindings
+- Apply receipt: /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr100_c2_native_closure_20261022/kg/kg_receipt.json
+  SHA256 9958027ddc1306bbe8b130a19c2c2530c07ea01bdd858e8d9664b31a9667c015; status PASS.
+- Source commit: 870dd5c9dac9aa1fae9f836c051cffd5699c6f85; live PR100 checkout HEAD matched.
+- Root integration manifest SHA256 73cea19646cc1a6970f2c75ce6257922c6a3358e034935b1f3d48c14c534a271.
+- Check-only plan SHA256 fd7ce8f6dcf84e9b3366364a87ea743d0ae5c6369322dd84e54e23528909dde0.
+- Result manifest declares native20s, OFF640, full-tile water compact, and three-arm bulk candidate gates COMPLETE. It still declares physical approval FAIL_OPEN and observation skill NOT_EVALUATED.
+- PR100 was applied after PR99 merge without a PR99 KG apply; the graph-selection base is 6ac1ddb6a50c9e4f909e47243bbd656e09fc85a3.
+
+Live graph and dated snapshot checks
+- KLAPS50 live graph SHA256 4765b0f1b8b5f680d541f2c106b35bf29ada8e634bc1170f293e808b60faef0f: 40,276 nodes, 83,885 edges, 3,283 labels/communities; receipt deltas +338 nodes, +559 edges, +24 communities.
+- Cloud-BAL live graph SHA256 ac91e8bdfab43634e01bb1b215f3b0515bd66ec72ea9c3fe9d6b6f76b059d0f9: 14,448 nodes, 25,431 edges, 1,289 labels/communities; receipt deltas +338 nodes, +558 edges, +20 communities.
+- Each live graph byte-hash matches its new dated snapshot graph. Snapshot report and manifest hashes match the receipt for both corpora.
+- I independently parsed each live graph: zero self-loops, dangling endpoints, and duplicate endpoint/relation tuples. Receipt diagnostics likewise show zero unverified nodes, non-object edges, missing/dangling endpoints, self-loops, exact duplicate edges, or collapsed endpoint pairs.
+- All 110 pre-existing dated snapshot entries and their inventoried files were present and hash-identical. Two PR100 snapshots were added, one per corpus (112 date-like snapshot directories after apply).
+- 197 inherited immutable pins were individually hash-verified with no failures.
+
+Protected state and allowed wiki updates
+- Using the preflight's hash-pinned helper, the maintained source snapshot recomputes to 627 entries / SHA256 0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f, matching the receipt's pre- and post-apply snapshots.
+- All 366 selected PR100 paths in the reviewed source checkout match their receipt SHA256 values.
+- Protected wiki content (13 protected files/directories) matches its receipt fingerprints. The private host profile remains marked unchanged in both corpora; the shared profile file hash is 196fa15e32364ab9355a7cf4dd141189fcb452c76499c6d251af6084a5d5231d. Reported profile graph counts are unchanged (KLAPS50 0 nodes/0 links; Cloud-BAL 134 nodes/133 links).
+- The five managed wiki files all match their post-apply receipt hashes. Exactly the three derived graph reports plus wiki/index.md and wiki/log.md differ from their pre-apply hashes; these are the authorized sync/bookkeeping files.
+
+Scope and limitations
+- Separate dated snapshots were retained for KLAPS50 and Cloud-BAL. The receipt records Graphify 0.9.53 and extraction limits: cross-file Fortran CALL extraction is partial, and Fortran embedded in Python generator strings is not extracted as standalone procedures.
+- This review covers KG application integrity and preservation. Graph freshness is navigation evidence; it does not change the scientific disposition. Physical approval remains FAIL_OPEN and observation skill remains NOT_EVALUATED.
+
+Checks run: receipt/hash inspection; direct graph JSON counts and endpoint-integrity checks; hash verification of the 110 prior dated-snapshot inventory, 197 inherited pins, 366 selected paths, five managed wiki files, and protected wiki content; recomputation of the maintained source snapshot through the pinned preflight helper. No KG apply, Graphify run, model run, or repository edit was performed.

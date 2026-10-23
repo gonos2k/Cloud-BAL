@@ -1,0 +1,1405 @@
+{
+  "arms": {
+    "COUPLED": {
+      "equation_note": "PR67 bottom phasefall is reconstructed from actual R32 fall arrays (source casts and accumulates approved rates in R32); source helper ground is sum of its accepted R64 packet field. Both are weighted by the same-call map area once. The residual is stepped by subtracting this identified owner; that arithmetic account is not proof of physical closure.",
+      "history_sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba",
+      "identity": {
+        "all17_XLAND_equal": true,
+        "completion_marker": true,
+        "executable_sha256": "34a97616c17839148f035e40130ded6b19f97bd32dcd5fa7471970225e572647",
+        "launch_manifest_sha256": "2ecb47ae623ac365b4061f7fc48be11df968888393e31aaaa3c57225f475cc64",
+        "native_dump_matches": true,
+        "native_post_sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+        "pr67_sha256": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976",
+        "pre_sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+        "receipt_path": "/var/tmp/pr100_unowned_root_guarded_20261022/COUPLED/receipt.json",
+        "receipt_sha256": "9fa2b5c89ac20f80fb28d88bcceabf778c0a5975adf9c016459ea2ea27628fcc",
+        "returncode": 0
+      },
+      "input_normalization": {
+        "changed_channel_count": 0,
+        "full_columns": 64960,
+        "invalid_preclamp_channel_count": 0,
+        "max_abs_change": 0.0
+      },
+      "owned_process_terms": {
+        "QS_actual_bottom_sink": {
+          "L1_column_kg": 0.0,
+          "largest_positive": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "max_abs_column_kg": 0.0,
+          "most_negative": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "signed_kg": 0.0
+        },
+        "QS_approved_source_packet": {
+          "L1_column_kg": 299.6583667613023,
+          "largest_positive": {
+            "i": 32,
+            "j": 117,
+            "kg": 1.126173251551895
+          },
+          "max_abs_column_kg": 1.3047445457598668,
+          "most_negative": {
+            "i": 37,
+            "j": 234,
+            "kg": -1.3047445457598668
+          },
+          "signed_kg": 3.255938021390788
+        },
+        "QS_storage_arithmetic": {
+          "L1_column_kg": 5748.203346082917,
+          "largest_positive": {
+            "i": 169,
+            "j": 227,
+            "kg": 21.727459579264753
+          },
+          "max_abs_column_kg": 21.727459579264753,
+          "most_negative": {
+            "i": 56,
+            "j": 253,
+            "kg": -19.41481953673188
+          },
+          "signed_kg": 140.87267087960703
+        },
+        "QS_stored": {
+          "L1_column_kg": 5748.3434744752985,
+          "largest_positive": {
+            "i": 169,
+            "j": 227,
+            "kg": 22.228886186735078
+          },
+          "max_abs_column_kg": 22.228886186735078,
+          "most_negative": {
+            "i": 56,
+            "j": 253,
+            "kg": -19.003484481195056
+          },
+          "signed_kg": 144.12860889726392
+        },
+        "direct_transfers": {
+          "1": {
+            "L1_column_kg": 4230.328405999661,
+            "columns_with_taken_branches": 35767,
+            "max_abs_column_kg": 3.4359946606961174,
+            "signed_kg": -230.05112505019972,
+            "source": "QI -> QC",
+            "taken_branch_count": 260812
+          },
+          "2": {
+            "L1_column_kg": 433.6599023781541,
+            "columns_with_taken_branches": 34055,
+            "max_abs_column_kg": 2.694408096511869,
+            "signed_kg": -45.23531846180379,
+            "source": "QC -> QI complete-freeze shortcut",
+            "taken_branch_count": 151761
+          },
+          "3": {
+            "L1_column_kg": 3552.594409407017,
+            "columns_with_taken_branches": 18629,
+            "max_abs_column_kg": 3.246175560914914,
+            "signed_kg": -42.62954712856623,
+            "source": "QR -> QC small-drop conversion",
+            "taken_branch_count": 85848
+          }
+        },
+        "graupel_melt_approved_source_packet": {
+          "L1_column_kg": 0.0,
+          "largest_positive": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "max_abs_column_kg": 0.0,
+          "most_negative": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "signed_kg": 0.0
+        },
+        "graupel_melt_storage_arithmetic": {
+          "L1_column_kg": 133.628873054873,
+          "largest_positive": {
+            "i": 146,
+            "j": 217,
+            "kg": 2.5030485858022176
+          },
+          "max_abs_column_kg": 3.372599683498351,
+          "most_negative": {
+            "i": 31,
+            "j": 115,
+            "kg": -3.372599683498351
+          },
+          "signed_kg": 0.43418333198110715
+        },
+        "graupel_melt_stored": {
+          "L1_column_kg": 133.628873054873,
+          "largest_positive": {
+            "i": 146,
+            "j": 217,
+            "kg": 2.5030485858022176
+          },
+          "max_abs_column_kg": 3.372599683498351,
+          "most_negative": {
+            "i": 31,
+            "j": 115,
+            "kg": -3.372599683498351
+          },
+          "signed_kg": 0.43418333198110715
+        },
+        "ground_conversion_components": {
+          "graupel": {
+            "actual_PR67_phasefall": {
+              "L1_column_kg": 15376945.648036608,
+              "largest_positive": {
+                "i": 137,
+                "j": 18,
+                "kg": 1952153.7812059512
+              },
+              "max_abs_column_kg": 1952153.7812059512,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 15376945.648036608
+            },
+            "approved_helper_ground": {
+              "L1_column_kg": 15376945.483663697,
+              "largest_positive": {
+                "i": 137,
+                "j": 18,
+                "kg": 1952153.725719475
+              },
+              "max_abs_column_kg": 1952153.725719475,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 15376945.483663697
+            },
+            "difference_actual_minus_approved": {
+              "L1_column_kg": 0.42899033229260297,
+              "largest_positive": {
+                "i": 137,
+                "j": 18,
+                "kg": 0.055486476281657815
+              },
+              "max_abs_column_kg": 0.055486476281657815,
+              "most_negative": {
+                "i": 153,
+                "j": 56,
+                "kg": -0.029174287570640445
+              },
+              "signed_kg": 0.16437291140625732
+            }
+          },
+          "ice": {
+            "actual_PR67_phasefall": {
+              "L1_column_kg": 2.4011520084660107e-17,
+              "largest_positive": {
+                "i": 12,
+                "j": 220,
+                "kg": 1.3377571975541411e-17
+              },
+              "max_abs_column_kg": 1.3377571975541411e-17,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 2.4011520084660107e-17
+            },
+            "approved_helper_ground": {
+              "L1_column_kg": 2.4011519857759598e-17,
+              "largest_positive": {
+                "i": 12,
+                "j": 220,
+                "kg": 1.3377571662226732e-17
+              },
+              "max_abs_column_kg": 1.3377571662226732e-17,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 2.4011519857759598e-17
+            },
+            "difference_actual_minus_approved": {
+              "L1_column_kg": 4.890626521407751e-25,
+              "largest_positive": {
+                "i": 12,
+                "j": 220,
+                "kg": 3.133146790954206e-25
+              },
+              "max_abs_column_kg": 3.133146790954206e-25,
+              "most_negative": {
+                "i": 12,
+                "j": 219,
+                "kg": -7.802894538551593e-26
+              },
+              "signed_kg": 2.269005099021441e-25
+            }
+          },
+          "rain": {
+            "actual_PR67_phasefall": {
+              "L1_column_kg": 674129778.0779411,
+              "largest_positive": {
+                "i": 166,
+                "j": 65,
+                "kg": 1984665.7318754608
+              },
+              "max_abs_column_kg": 1984665.7318754608,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 674129778.0779411
+            },
+            "approved_helper_ground": {
+              "L1_column_kg": 674129778.4637432,
+              "largest_positive": {
+                "i": 166,
+                "j": 65,
+                "kg": 1984665.7600365304
+              },
+              "max_abs_column_kg": 1984665.7600365304,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 674129778.4637432
+            },
+            "difference_actual_minus_approved": {
+              "L1_column_kg": 18.83838910210684,
+              "largest_positive": {
+                "i": 168,
+                "j": 70,
+                "kg": 0.10546587104909122
+              },
+              "max_abs_column_kg": 0.1416096012108028,
+              "most_negative": {
+                "i": 166,
+                "j": 68,
+                "kg": -0.1416096012108028
+              },
+              "signed_kg": -0.38580214590183104
+            }
+          }
+        },
+        "ground_source_rows": {
+          "graupel": 78926,
+          "ice": 64960,
+          "rain": 78926
+        }
+      },
+      "public_RAINNCV_increment_formula_reconstruction_not_in_water_closure": {
+        "difference_vs_same_call_PR67_phasefall_mass_kg": {
+          "L1_column_kg": 29.42127532191138,
+          "largest_positive": {
+            "i": 138,
+            "j": 19,
+            "kg": 0.2643011149484664
+          },
+          "max_abs_column_kg": 0.2643011149484664,
+          "most_negative": {
+            "i": 167,
+            "j": 66,
+            "kg": -0.2610688495915383
+          },
+          "signed_kg": 0.4779986372689403
+        },
+        "limitation": "PR67 records the post-call RAINNCV state but not its pre-call accumulator; this is the source-formula increment reconstruction, not a directly observed RAINNCV before/after delta. Public accumulation is separate from the Q water inventory sink.",
+        "method": "R32 fallSum=fall1+fall2+fall3+fall4, then source-order R32 multiply/divide by DELZ/DENR*dtcld*1000; map area applied once",
+        "signed_L1_max_for_reconstructed_increment_kg": {
+          "L1_column_kg": 689506724.2039763,
+          "largest_positive": {
+            "i": 137,
+            "j": 18,
+            "kg": 2372908.424861048
+          },
+          "max_abs_column_kg": 2372908.424861048,
+          "most_negative": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "signed_kg": 689506724.2039763
+        }
+      },
+      "raw_process_sha256": "741e14e8f0925332fb6b9c27190f19719a0190f3894ce921dc3997b22f3ce976",
+      "reducer_inputs": {
+        "graupel_ground_rows_sha256": "1135f89af17c2f69ef757fa6ffb78af2e5063347971d812a9cb933fc7cc7a786",
+        "graupel_melt_sha256": "798a24a779e85f2ac1d190472c4155a6310d591e7ed0974d46039aa59b0bc26c",
+        "ice_ground_rows_sha256": "325b43cc773a9931c6cc39b507080cb05d20a2502f6358b596e4a5bdf54a0d1e",
+        "rain_ground_rows_sha256": "eeac7dfc8429f9386811d64f25cbaf80e03e43bc5175d985873f20887d3e3579",
+        "snow_columns_sha256": "09062e09699e9ca304d7d104f33a8e0e1337187029957dec1888515b6153f934",
+        "unowned_summary_sha256": "6467c498e671911eb0e08efc47ab996f77fdd24acd08a4ee3cba6fd136302b0c",
+        "v5_account_sha256": "1ae2df8e21418cecce6a20ed90713db2b022b2b420d183bfb4d7f2157d9e6098",
+        "v5_compact_stage_sha256": "fb0c7b52b42c720c8c9a93f6f6b2ce8bcc6e2d6480629489c523dd7ecfdebf50"
+      },
+      "source_post_hash": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be",
+      "source_pre_hash": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8",
+      "stages": {
+        "after_three_direct_transfers": {
+          "L1_column_kg": 18.967978048532615,
+          "largest_positive": {
+            "i": 168,
+            "j": 70,
+            "kg": 0.10546586651083234
+          },
+          "max_abs_column_kg": 0.14160960745470597,
+          "most_negative": {
+            "i": 166,
+            "j": 68,
+            "kg": -0.14160960745470597
+          },
+          "signed_kg": -0.22144078923225655
+        },
+        "after_v5_terms_QS_and_Gmelt": {
+          "L1_column_kg": 7725.354811598486,
+          "largest_positive": {
+            "i": 203,
+            "j": 81,
+            "kg": 3.7744713144755524
+          },
+          "max_abs_column_kg": 4.472506455649408,
+          "most_negative": {
+            "i": 205,
+            "j": 230,
+            "kg": -4.472506455649408
+          },
+          "signed_kg": -318.137431429802
+        },
+        "identified_ground_boundary_term_actual_R32_phasefall_minus_approved_helper": {
+          "combined": {
+            "L1_column_kg": 18.967915391998467,
+            "largest_positive": {
+              "i": 168,
+              "j": 70,
+              "kg": 0.10546587104909122
+            },
+            "max_abs_column_kg": 0.1416096012108028,
+            "most_negative": {
+              "i": 166,
+              "j": 68,
+              "kg": -0.1416096012108028
+            },
+            "signed_kg": -0.2214292344955737
+          },
+          "graupel": {
+            "L1_column_kg": 0.42899033229260297,
+            "largest_positive": {
+              "i": 137,
+              "j": 18,
+              "kg": 0.055486476281657815
+            },
+            "max_abs_column_kg": 0.055486476281657815,
+            "most_negative": {
+              "i": 153,
+              "j": 56,
+              "kg": -0.029174287570640445
+            },
+            "signed_kg": 0.16437291140625732
+          },
+          "ice": {
+            "L1_column_kg": 4.890626521407751e-25,
+            "largest_positive": {
+              "i": 12,
+              "j": 220,
+              "kg": 3.133146790954206e-25
+            },
+            "max_abs_column_kg": 3.133146790954206e-25,
+            "most_negative": {
+              "i": 12,
+              "j": 219,
+              "kg": -7.802894538551593e-26
+            },
+            "signed_kg": 2.269005099021441e-25
+          },
+          "rain": {
+            "L1_column_kg": 18.83838910210684,
+            "largest_positive": {
+              "i": 168,
+              "j": 70,
+              "kg": 0.10546587104909122
+            },
+            "max_abs_column_kg": 0.1416096012108028,
+            "most_negative": {
+              "i": 166,
+              "j": 68,
+              "kg": -0.1416096012108028
+            },
+            "signed_kg": -0.38580214590183104
+          }
+        },
+        "remaining_after_ground_boundary_term": {
+          "L1_column_kg": 0.00011065018397448766,
+          "largest_positive": {
+            "i": 233,
+            "j": 248,
+            "kg": 3.752360955289191e-08
+          },
+          "max_abs_column_kg": 5.3398584443087316e-08,
+          "most_negative": {
+            "i": 198,
+            "j": 67,
+            "kg": -5.3398584443087316e-08
+          },
+          "signed_kg": -1.1554736682851616e-05
+        }
+      }
+    },
+    "HYDRO": {
+      "equation_note": "PR67 bottom phasefall is reconstructed from actual R32 fall arrays (source casts and accumulates approved rates in R32); source helper ground is sum of its accepted R64 packet field. Both are weighted by the same-call map area once. The residual is stepped by subtracting this identified owner; that arithmetic account is not proof of physical closure.",
+      "history_sha256": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84",
+      "identity": {
+        "all17_XLAND_equal": true,
+        "completion_marker": true,
+        "executable_sha256": "34a97616c17839148f035e40130ded6b19f97bd32dcd5fa7471970225e572647",
+        "launch_manifest_sha256": "a567ae8d42fc2745fbc48d45ecee25cb81f1ff87de970ecea0d089d42d0ba1f4",
+        "native_dump_matches": true,
+        "native_post_sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf",
+        "pr67_sha256": "9bcef6cd06ca3dc9f6a532b2c715d7f25a9b222fcb292fa328f5e38cf431661b",
+        "pre_sha256": "72ad647a5df1cd39e7eb3db8f8757e63a9aa4dbde5ce03fcbb08630ca1664f54",
+        "receipt_path": "/var/tmp/pr100_unowned_root_guarded_20261022/HYDRO/receipt.json",
+        "receipt_sha256": "f4d829fe8d939529c16aea360a3edaa4d6dbdaf09f49f139d4c836c0ca65a4b6",
+        "returncode": 0
+      },
+      "input_normalization": {
+        "changed_channel_count": 0,
+        "full_columns": 64960,
+        "invalid_preclamp_channel_count": 0,
+        "max_abs_change": 0.0
+      },
+      "owned_process_terms": {
+        "QS_actual_bottom_sink": {
+          "L1_column_kg": 0.0,
+          "largest_positive": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "max_abs_column_kg": 0.0,
+          "most_negative": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "signed_kg": 0.0
+        },
+        "QS_approved_source_packet": {
+          "L1_column_kg": 299.88060494127114,
+          "largest_positive": {
+            "i": 32,
+            "j": 117,
+            "kg": 1.126173251551895
+          },
+          "max_abs_column_kg": 1.3047445457598668,
+          "most_negative": {
+            "i": 37,
+            "j": 234,
+            "kg": -1.3047445457598668
+          },
+          "signed_kg": 2.6551594868678206
+        },
+        "QS_storage_arithmetic": {
+          "L1_column_kg": 5743.729378505547,
+          "largest_positive": {
+            "i": 169,
+            "j": 227,
+            "kg": 21.727459579264753
+          },
+          "max_abs_column_kg": 21.727459579264753,
+          "most_negative": {
+            "i": 56,
+            "j": 253,
+            "kg": -19.41481953673188
+          },
+          "signed_kg": 140.9622715539083
+        },
+        "QS_stored": {
+          "L1_column_kg": 5743.1240094516725,
+          "largest_positive": {
+            "i": 169,
+            "j": 227,
+            "kg": 22.228886186735078
+          },
+          "max_abs_column_kg": 22.228886186735078,
+          "most_negative": {
+            "i": 56,
+            "j": 253,
+            "kg": -19.003484481195056
+          },
+          "signed_kg": 143.61743103684435
+        },
+        "direct_transfers": {
+          "1": {
+            "L1_column_kg": 4225.743959258415,
+            "columns_with_taken_branches": 35767,
+            "max_abs_column_kg": 3.4359946606961174,
+            "signed_kg": -226.7390355688498,
+            "source": "QI -> QC",
+            "taken_branch_count": 260812
+          },
+          "2": {
+            "L1_column_kg": 433.6599021041347,
+            "columns_with_taken_branches": 34055,
+            "max_abs_column_kg": 2.694408096511869,
+            "signed_kg": -45.23531866100862,
+            "source": "QC -> QI complete-freeze shortcut",
+            "taken_branch_count": 151761
+          },
+          "3": {
+            "L1_column_kg": 3552.03258616226,
+            "columns_with_taken_branches": 18630,
+            "max_abs_column_kg": 3.246175560914914,
+            "signed_kg": -41.65931897385985,
+            "source": "QR -> QC small-drop conversion",
+            "taken_branch_count": 85849
+          }
+        },
+        "graupel_melt_approved_source_packet": {
+          "L1_column_kg": 0.0,
+          "largest_positive": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "max_abs_column_kg": 0.0,
+          "most_negative": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "signed_kg": 0.0
+        },
+        "graupel_melt_storage_arithmetic": {
+          "L1_column_kg": 131.38318293166287,
+          "largest_positive": {
+            "i": 146,
+            "j": 217,
+            "kg": 2.5030485858022176
+          },
+          "max_abs_column_kg": 3.372599683498351,
+          "most_negative": {
+            "i": 31,
+            "j": 115,
+            "kg": -3.372599683498351
+          },
+          "signed_kg": -2.0316679363186987
+        },
+        "graupel_melt_stored": {
+          "L1_column_kg": 131.38318293166287,
+          "largest_positive": {
+            "i": 146,
+            "j": 217,
+            "kg": 2.5030485858022176
+          },
+          "max_abs_column_kg": 3.372599683498351,
+          "most_negative": {
+            "i": 31,
+            "j": 115,
+            "kg": -3.372599683498351
+          },
+          "signed_kg": -2.0316679363186987
+        },
+        "ground_conversion_components": {
+          "graupel": {
+            "actual_PR67_phasefall": {
+              "L1_column_kg": 15372683.519743726,
+              "largest_positive": {
+                "i": 137,
+                "j": 18,
+                "kg": 1952791.8060372937
+              },
+              "max_abs_column_kg": 1952791.8060372937,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 15372683.519743726
+            },
+            "approved_helper_ground": {
+              "L1_column_kg": 15372683.506680056,
+              "largest_positive": {
+                "i": 137,
+                "j": 18,
+                "kg": 1952791.8418257954
+              },
+              "max_abs_column_kg": 1952791.8418257954,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 15372683.506680056
+            },
+            "difference_actual_minus_approved": {
+              "L1_column_kg": 0.4236842706246371,
+              "largest_positive": {
+                "i": 138,
+                "j": 18,
+                "kg": 0.035765140783041716
+              },
+              "max_abs_column_kg": 0.03701885521877557,
+              "most_negative": {
+                "i": 136,
+                "j": 18,
+                "kg": -0.03701885521877557
+              },
+              "signed_kg": 0.013063668504440074
+            }
+          },
+          "ice": {
+            "actual_PR67_phasefall": {
+              "L1_column_kg": 2.4011520109883478e-17,
+              "largest_positive": {
+                "i": 12,
+                "j": 220,
+                "kg": 1.3377571975541411e-17
+              },
+              "max_abs_column_kg": 1.3377571975541411e-17,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 2.4011520109883478e-17
+            },
+            "approved_helper_ground": {
+              "L1_column_kg": 2.4011519882982985e-17,
+              "largest_positive": {
+                "i": 12,
+                "j": 220,
+                "kg": 1.3377571662226732e-17
+              },
+              "max_abs_column_kg": 1.3377571662226732e-17,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 2.4011519882982985e-17
+            },
+            "difference_actual_minus_approved": {
+              "L1_column_kg": 4.890626423686683e-25,
+              "largest_positive": {
+                "i": 12,
+                "j": 220,
+                "kg": 3.133146790954206e-25
+              },
+              "max_abs_column_kg": 3.133146790954206e-25,
+              "most_negative": {
+                "i": 12,
+                "j": 219,
+                "kg": -7.802894538551593e-26
+              },
+              "signed_kg": 2.2690049163030066e-25
+            }
+          },
+          "rain": {
+            "actual_PR67_phasefall": {
+              "L1_column_kg": 674130470.5470477,
+              "largest_positive": {
+                "i": 166,
+                "j": 65,
+                "kg": 1984665.7318754608
+              },
+              "max_abs_column_kg": 1984665.7318754608,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 674130470.5470477
+            },
+            "approved_helper_ground": {
+              "L1_column_kg": 674130470.5656735,
+              "largest_positive": {
+                "i": 166,
+                "j": 65,
+                "kg": 1984665.7600365304
+              },
+              "max_abs_column_kg": 1984665.7600365304,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 674130470.5656735
+            },
+            "difference_actual_minus_approved": {
+              "L1_column_kg": 18.568592744382357,
+              "largest_positive": {
+                "i": 168,
+                "j": 70,
+                "kg": 0.10546587104909122
+              },
+              "max_abs_column_kg": 0.1416096012108028,
+              "most_negative": {
+                "i": 166,
+                "j": 68,
+                "kg": -0.1416096012108028
+              },
+              "signed_kg": -0.01862572808533005
+            }
+          }
+        },
+        "ground_source_rows": {
+          "graupel": 78926,
+          "ice": 64960,
+          "rain": 78926
+        }
+      },
+      "public_RAINNCV_increment_formula_reconstruction_not_in_water_closure": {
+        "difference_vs_same_call_PR67_phasefall_mass_kg": {
+          "L1_column_kg": 29.489364984604663,
+          "largest_positive": {
+            "i": 30,
+            "j": 113,
+            "kg": 0.25478432583622634
+          },
+          "max_abs_column_kg": 0.2610688495915383,
+          "most_negative": {
+            "i": 167,
+            "j": 66,
+            "kg": -0.2610688495915383
+          },
+          "signed_kg": 0.19980182445931843
+        },
+        "limitation": "PR67 records the post-call RAINNCV state but not its pre-call accumulator; this is the source-formula increment reconstruction, not a directly observed RAINNCV before/after delta. Public accumulation is separate from the Q water inventory sink.",
+        "method": "R32 fallSum=fall1+fall2+fall3+fall4, then source-order R32 multiply/divide by DELZ/DENR*dtcld*1000; map area applied once",
+        "signed_L1_max_for_reconstructed_increment_kg": {
+          "L1_column_kg": 689503154.2665933,
+          "largest_positive": {
+            "i": 137,
+            "j": 18,
+            "kg": 2373630.281368204
+          },
+          "max_abs_column_kg": 2373630.281368204,
+          "most_negative": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "signed_kg": 689503154.2665933
+        }
+      },
+      "raw_process_sha256": "9bcef6cd06ca3dc9f6a532b2c715d7f25a9b222fcb292fa328f5e38cf431661b",
+      "reducer_inputs": {
+        "graupel_ground_rows_sha256": "54a5cbe03be3c223d2036f43ea52008d09aad194c48999a69b771f086f67aeee",
+        "graupel_melt_sha256": "848ac876fb04540d727f4aa7a2b780fa8cee535f7afeacf2012e60bfbd5d684f",
+        "ice_ground_rows_sha256": "d158667f4b7835dbbf0e0e6e27ca355c3e89bbc0af33e2e74c5273b1d4e6fad4",
+        "rain_ground_rows_sha256": "96cb78ecaef34d5380f3ccfb91c2a1a7328fdf7e827e76859d83cee84b5f328f",
+        "snow_columns_sha256": "636507fa692a731bf7ed73ed24be9c0469d1c1aedabe9ffeb8d7eeee4daf724f",
+        "unowned_summary_sha256": "f7deef7fd5d0e9c42496dc497f8676fd94419fc2992ef44a091bb92af62fb238",
+        "v5_account_sha256": "ee966a4d0e7a7f098084119077a4735206f038f296c1c551f735114a5233409f",
+        "v5_compact_stage_sha256": "820205aa121ffa6a99267daebf6b1d318b574f6d93d1d135e00e57d94c628a24"
+      },
+      "source_post_hash": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf",
+      "source_pre_hash": "72ad647a5df1cd39e7eb3db8f8757e63a9aa4dbde5ce03fcbb08630ca1664f54",
+      "stages": {
+        "after_three_direct_transfers": {
+          "L1_column_kg": 18.732546733876845,
+          "largest_positive": {
+            "i": 168,
+            "j": 70,
+            "kg": 0.10546586651083234
+          },
+          "max_abs_column_kg": 0.14160960745470597,
+          "most_negative": {
+            "i": 166,
+            "j": 68,
+            "kg": -0.14160960745470597
+          },
+          "signed_kg": -0.005573687300456605
+        },
+        "after_v5_terms_QS_and_Gmelt": {
+          "L1_column_kg": 7720.229852221957,
+          "largest_positive": {
+            "i": 203,
+            "j": 81,
+            "kg": 3.7744713144755524
+          },
+          "max_abs_column_kg": 4.472506455649408,
+          "most_negative": {
+            "i": 205,
+            "j": 230,
+            "kg": -4.472506455649408
+          },
+          "signed_kg": -313.63924689101873
+        },
+        "identified_ground_boundary_term_actual_R32_phasefall_minus_approved_helper": {
+          "combined": {
+            "L1_column_kg": 18.732484082772242,
+            "largest_positive": {
+              "i": 168,
+              "j": 70,
+              "kg": 0.10546587104909122
+            },
+            "max_abs_column_kg": 0.1416096012108028,
+            "most_negative": {
+              "i": 166,
+              "j": 68,
+              "kg": -0.1416096012108028
+            },
+            "signed_kg": -0.005562059580889977
+          },
+          "graupel": {
+            "L1_column_kg": 0.4236842706246371,
+            "largest_positive": {
+              "i": 138,
+              "j": 18,
+              "kg": 0.035765140783041716
+            },
+            "max_abs_column_kg": 0.03701885521877557,
+            "most_negative": {
+              "i": 136,
+              "j": 18,
+              "kg": -0.03701885521877557
+            },
+            "signed_kg": 0.013063668504440074
+          },
+          "ice": {
+            "L1_column_kg": 4.890626423686683e-25,
+            "largest_positive": {
+              "i": 12,
+              "j": 220,
+              "kg": 3.133146790954206e-25
+            },
+            "max_abs_column_kg": 3.133146790954206e-25,
+            "most_negative": {
+              "i": 12,
+              "j": 219,
+              "kg": -7.802894538551593e-26
+            },
+            "signed_kg": 2.2690049163030066e-25
+          },
+          "rain": {
+            "L1_column_kg": 18.568592744382357,
+            "largest_positive": {
+              "i": 168,
+              "j": 70,
+              "kg": 0.10546587104909122
+            },
+            "max_abs_column_kg": 0.1416096012108028,
+            "most_negative": {
+              "i": 166,
+              "j": 68,
+              "kg": -0.1416096012108028
+            },
+            "signed_kg": -0.01862572808533005
+          }
+        },
+        "remaining_after_ground_boundary_term": {
+          "L1_column_kg": 0.00011078381097412382,
+          "largest_positive": {
+            "i": 233,
+            "j": 248,
+            "kg": 3.752360955289191e-08
+          },
+          "max_abs_column_kg": 5.3398584443087316e-08,
+          "most_negative": {
+            "i": 198,
+            "j": 67,
+            "kg": -5.3398584443087316e-08
+          },
+          "signed_kg": -1.1627719566627865e-05
+        }
+      }
+    },
+    "OFF": {
+      "equation_note": "PR67 bottom phasefall is reconstructed from actual R32 fall arrays (source casts and accumulates approved rates in R32); source helper ground is sum of its accepted R64 packet field. Both are weighted by the same-call map area once. The residual is stepped by subtracting this identified owner; that arithmetic account is not proof of physical closure.",
+      "history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "identity": {
+        "all17_XLAND_equal": true,
+        "native_post_sha256": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+        "pr67_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8",
+        "pre_sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+        "receipt_or_account": "/var/tmp/pr100_snow_fulltile_replay_20261022/OFF_valid/snow_account.json",
+        "returncode": 0,
+        "sha256": "0e1ad5292a77cbdadb4bce32f4f8d80fe426fb0b93ed2dc601b50a7a07c616f1"
+      },
+      "input_normalization": {
+        "changed_channel_count": 0,
+        "full_columns": 64960,
+        "invalid_preclamp_channel_count": 0,
+        "max_abs_change": 0.0
+      },
+      "owned_process_terms": {
+        "QS_actual_bottom_sink": {
+          "L1_column_kg": 0.0,
+          "largest_positive": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "max_abs_column_kg": 0.0,
+          "most_negative": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "signed_kg": 0.0
+        },
+        "QS_approved_source_packet": {
+          "L1_column_kg": 299.54607727832285,
+          "largest_positive": {
+            "i": 32,
+            "j": 117,
+            "kg": 1.126173251551895
+          },
+          "max_abs_column_kg": 1.3047445457598668,
+          "most_negative": {
+            "i": 37,
+            "j": 234,
+            "kg": -1.3047445457598668
+          },
+          "signed_kg": 3.141868572731503
+        },
+        "QS_storage_arithmetic": {
+          "L1_column_kg": 5751.819992963985,
+          "largest_positive": {
+            "i": 169,
+            "j": 227,
+            "kg": 21.727459579264753
+          },
+          "max_abs_column_kg": 21.727459579264753,
+          "most_negative": {
+            "i": 56,
+            "j": 253,
+            "kg": -19.41481953673188
+          },
+          "signed_kg": 146.82743520631553
+        },
+        "QS_stored": {
+          "L1_column_kg": 5751.51002130963,
+          "largest_positive": {
+            "i": 169,
+            "j": 227,
+            "kg": 22.228886186735078
+          },
+          "max_abs_column_kg": 22.228886186735078,
+          "most_negative": {
+            "i": 56,
+            "j": 253,
+            "kg": -19.003484481195056
+          },
+          "signed_kg": 149.96930377541437
+        },
+        "direct_transfers": {
+          "1": {
+            "L1_column_kg": 4228.63247262666,
+            "columns_with_taken_branches": 35767,
+            "max_abs_column_kg": 3.4359946606961174,
+            "signed_kg": -233.62290602187457,
+            "source": "QI -> QC",
+            "taken_branch_count": 260820
+          },
+          "2": {
+            "L1_column_kg": 433.65990207454547,
+            "columns_with_taken_branches": 34055,
+            "max_abs_column_kg": 2.694408096511869,
+            "signed_kg": -45.235318695156806,
+            "source": "QC -> QI complete-freeze shortcut",
+            "taken_branch_count": 151761
+          },
+          "3": {
+            "L1_column_kg": 3551.8045425320943,
+            "columns_with_taken_branches": 18630,
+            "max_abs_column_kg": 3.246175560914914,
+            "signed_kg": -43.40690374991657,
+            "source": "QR -> QC small-drop conversion",
+            "taken_branch_count": 85849
+          }
+        },
+        "graupel_melt_approved_source_packet": {
+          "L1_column_kg": 0.0,
+          "largest_positive": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "max_abs_column_kg": 0.0,
+          "most_negative": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "signed_kg": 0.0
+        },
+        "graupel_melt_storage_arithmetic": {
+          "L1_column_kg": 132.64091251249087,
+          "largest_positive": {
+            "i": 146,
+            "j": 217,
+            "kg": 2.5030485858022176
+          },
+          "max_abs_column_kg": 3.372599683498351,
+          "most_negative": {
+            "i": 31,
+            "j": 115,
+            "kg": -3.372599683498351
+          },
+          "signed_kg": -1.788287231992809
+        },
+        "graupel_melt_stored": {
+          "L1_column_kg": 132.64091251249087,
+          "largest_positive": {
+            "i": 146,
+            "j": 217,
+            "kg": 2.5030485858022176
+          },
+          "max_abs_column_kg": 3.372599683498351,
+          "most_negative": {
+            "i": 31,
+            "j": 115,
+            "kg": -3.372599683498351
+          },
+          "signed_kg": -1.788287231992809
+        },
+        "ground_conversion_components": {
+          "graupel": {
+            "actual_PR67_phasefall": {
+              "L1_column_kg": 15518734.587922338,
+              "largest_positive": {
+                "i": 137,
+                "j": 18,
+                "kg": 1998370.270847491
+              },
+              "max_abs_column_kg": 1998370.270847491,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 15518734.587922338
+            },
+            "approved_helper_ground": {
+              "L1_column_kg": 15518734.422680704,
+              "largest_positive": {
+                "i": 137,
+                "j": 18,
+                "kg": 1998370.2716469103
+              },
+              "max_abs_column_kg": 1998370.2716469103,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 15518734.422680704
+            },
+            "difference_actual_minus_approved": {
+              "L1_column_kg": 0.3372572882418403,
+              "largest_positive": {
+                "i": 138,
+                "j": 18,
+                "kg": 0.045161141315475106
+              },
+              "max_abs_column_kg": 0.045161141315475106,
+              "most_negative": {
+                "i": 153,
+                "j": 56,
+                "kg": -0.029174287570640445
+              },
+              "signed_kg": 0.16524163500605837
+            }
+          },
+          "ice": {
+            "actual_PR67_phasefall": {
+              "L1_column_kg": 2.40115198574218e-17,
+              "largest_positive": {
+                "i": 12,
+                "j": 220,
+                "kg": 1.3377571975541411e-17
+              },
+              "max_abs_column_kg": 1.3377571975541411e-17,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 2.40115198574218e-17
+            },
+            "approved_helper_ground": {
+              "L1_column_kg": 2.4011519630521293e-17,
+              "largest_positive": {
+                "i": 12,
+                "j": 220,
+                "kg": 1.3377571662226732e-17
+              },
+              "max_abs_column_kg": 1.3377571662226732e-17,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 2.4011519630521293e-17
+            },
+            "difference_actual_minus_approved": {
+              "L1_column_kg": 4.890626511250796e-25,
+              "largest_positive": {
+                "i": 12,
+                "j": 220,
+                "kg": 3.133146790954206e-25
+              },
+              "max_abs_column_kg": 3.133146790954206e-25,
+              "most_negative": {
+                "i": 12,
+                "j": 219,
+                "kg": -7.802894538551593e-26
+              },
+              "signed_kg": 2.269005035812792e-25
+            }
+          },
+          "rain": {
+            "actual_PR67_phasefall": {
+              "L1_column_kg": 674118777.9999962,
+              "largest_positive": {
+                "i": 166,
+                "j": 65,
+                "kg": 1984665.7318754608
+              },
+              "max_abs_column_kg": 1984665.7318754608,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 674118777.9999962
+            },
+            "approved_helper_ground": {
+              "L1_column_kg": 674118778.1787394,
+              "largest_positive": {
+                "i": 166,
+                "j": 65,
+                "kg": 1984665.7600365304
+              },
+              "max_abs_column_kg": 1984665.7600365304,
+              "most_negative": {
+                "i": 2,
+                "j": 2,
+                "kg": 0.0
+              },
+              "signed_kg": 674118778.1787394
+            },
+            "difference_actual_minus_approved": {
+              "L1_column_kg": 18.728501976303363,
+              "largest_positive": {
+                "i": 168,
+                "j": 70,
+                "kg": 0.10546587104909122
+              },
+              "max_abs_column_kg": 0.1416096012108028,
+              "most_negative": {
+                "i": 166,
+                "j": 68,
+                "kg": -0.1416096012108028
+              },
+              "signed_kg": -0.17874330231728114
+            }
+          }
+        },
+        "ground_source_rows": {
+          "graupel": 78926,
+          "ice": 64960,
+          "rain": 78926
+        }
+      },
+      "public_RAINNCV_increment_formula_reconstruction_not_in_water_closure": {
+        "difference_vs_same_call_PR67_phasefall_mass_kg": {
+          "L1_column_kg": 29.23210475134622,
+          "largest_positive": {
+            "i": 30,
+            "j": 113,
+            "kg": 0.25478432583622634
+          },
+          "max_abs_column_kg": 0.2610688495915383,
+          "most_negative": {
+            "i": 167,
+            "j": 66,
+            "kg": -0.2610688495915383
+          },
+          "signed_kg": -0.047560245086521076
+        },
+        "limitation": "PR67 records the post-call RAINNCV state but not its pre-call accumulator; this is the source-formula increment reconstruction, not a directly observed RAINNCV before/after delta. Public accumulation is separate from the Q water inventory sink.",
+        "method": "R32 fallSum=fall1+fall2+fall3+fall4, then source-order R32 multiply/divide by DELZ/DENR*dtcld*1000; map area applied once",
+        "signed_L1_max_for_reconstructed_increment_kg": {
+          "L1_column_kg": 689637512.5403583,
+          "largest_positive": {
+            "i": 137,
+            "j": 18,
+            "kg": 2409160.1231866456
+          },
+          "max_abs_column_kg": 2409160.1231866456,
+          "most_negative": {
+            "i": 2,
+            "j": 2,
+            "kg": 0.0
+          },
+          "signed_kg": 689637512.5403583
+        }
+      },
+      "raw_process_sha256": "ec404af81f23be47425edef9f30b1cb9ba2fa548753c1a835e386e21177768c8",
+      "reducer_inputs": {
+        "graupel_ground_rows_sha256": "5eaa4dbb3c1aaef13094ebfe08b5006bc478afe06b8c4823d1a946446f7097d6",
+        "graupel_melt_sha256": "1d17f11159471f48a2d0be8bda2c7efa9e1e6b4d2871ea91ce76ff8f14fbdcca",
+        "ice_ground_rows_sha256": "bdab19cab8b0ff893c5fca68a828cab05407ff24a92164ce80f1f6ee3b952bc0",
+        "rain_ground_rows_sha256": "ddbcf73e13b8daae86ea4f439de9267ea75e3819fb60e60f34f2446f5c15fe43",
+        "snow_columns_sha256": "88cd10e4251d573d84a0171a69f14e25edc884a96e3a9b37d8df6cf70806eb78",
+        "unowned_summary_sha256": "a54cbe8a3f42a47dd28f2e6ec00d00660ab05c717ff0f58dc33bc7c057f98ea7",
+        "v5_account_sha256": "29ac88f6de42bdf8b0a6416915434b8ce54b9aee52583d0fd3957fb684f9f5f9",
+        "v5_compact_stage_sha256": "9916d45f690e5be39784cf6efa51e402faaa6baf37a0278274fb5ae66cf83e71"
+      },
+      "source_post_hash": "84025cea58bb646b0ea0d289ee1bdbe212673c6eb7d5ed2d892c8b69cd2b0529",
+      "source_pre_hash": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe",
+      "stages": {
+        "after_three_direct_transfers": {
+          "L1_column_kg": 18.83516224934147,
+          "largest_positive": {
+            "i": 168,
+            "j": 70,
+            "kg": 0.10546586651083234
+          },
+          "max_abs_column_kg": 0.14160960745470597,
+          "most_negative": {
+            "i": 166,
+            "j": 68,
+            "kg": -0.14160960745470597
+          },
+          "signed_kg": -0.013513275650836347
+        },
+        "after_v5_terms_QS_and_Gmelt": {
+          "L1_column_kg": 7722.963657642494,
+          "largest_positive": {
+            "i": 203,
+            "j": 81,
+            "kg": 3.7744713144755524
+          },
+          "max_abs_column_kg": 4.472506455649408,
+          "most_negative": {
+            "i": 205,
+            "j": 230,
+            "kg": -4.472506455649408
+          },
+          "signed_kg": -322.2786417425988
+        },
+        "identified_ground_boundary_term_actual_R32_phasefall_minus_approved_helper": {
+          "combined": {
+            "L1_column_kg": 18.835099621790352,
+            "largest_positive": {
+              "i": 168,
+              "j": 70,
+              "kg": 0.10546587104909122
+            },
+            "max_abs_column_kg": 0.1416096012108028,
+            "most_negative": {
+              "i": 166,
+              "j": 68,
+              "kg": -0.1416096012108028
+            },
+            "signed_kg": -0.013501667311222773
+          },
+          "graupel": {
+            "L1_column_kg": 0.3372572882418403,
+            "largest_positive": {
+              "i": 138,
+              "j": 18,
+              "kg": 0.045161141315475106
+            },
+            "max_abs_column_kg": 0.045161141315475106,
+            "most_negative": {
+              "i": 153,
+              "j": 56,
+              "kg": -0.029174287570640445
+            },
+            "signed_kg": 0.16524163500605837
+          },
+          "ice": {
+            "L1_column_kg": 4.890626511250796e-25,
+            "largest_positive": {
+              "i": 12,
+              "j": 220,
+              "kg": 3.133146790954206e-25
+            },
+            "max_abs_column_kg": 3.133146790954206e-25,
+            "most_negative": {
+              "i": 12,
+              "j": 219,
+              "kg": -7.802894538551593e-26
+            },
+            "signed_kg": 2.269005035812792e-25
+          },
+          "rain": {
+            "L1_column_kg": 18.728501976303363,
+            "largest_positive": {
+              "i": 168,
+              "j": 70,
+              "kg": 0.10546587104909122
+            },
+            "max_abs_column_kg": 0.1416096012108028,
+            "most_negative": {
+              "i": 166,
+              "j": 68,
+              "kg": -0.1416096012108028
+            },
+            "signed_kg": -0.17874330231728114
+          }
+        },
+        "remaining_after_ground_boundary_term": {
+          "L1_column_kg": 0.00011079626978729929,
+          "largest_positive": {
+            "i": 233,
+            "j": 248,
+            "kg": 3.752360955289191e-08
+          },
+          "max_abs_column_kg": 5.3398584443087316e-08,
+          "most_negative": {
+            "i": 198,
+            "j": 67,
+            "kg": -5.3398584443087316e-08
+          },
+          "signed_kg": -1.1608339613572493e-05
+        }
+      }
+    }
+  },
+  "schema": "pr100_t1_ground_boundary_three_arm_account_v1",
+  "scope": "same-call C1 T1, source-owned 3-arm R64 residual decomposition; diagnostic only, no closure or physics claim",
+  "source_pins": {
+    "analysis_reducer": {
+      "path": "/var/tmp/pr100_ground_boundary_final_account_20261022.py",
+      "sha256": "2df5f1e2729395d137cde03e908459d35d87f48245a110b9ae675fa3b368c728"
+    },
+    "executable": {
+      "path": "/var/tmp/pr100_unowned_diag_build2_20261022/link/pr100_unowned_replay.exe",
+      "sha256": "34a97616c17839148f035e40130ded6b19f97bd32dcd5fa7471970225e572647"
+    },
+    "ground_boundary_audit": {
+      "path": "/var/tmp/pr100_ground_boundary_analysis_20261022.json",
+      "sha256": "6ff0521f54adeb7135f7660a2b9830c0d06fbd5be98d1760694bac97946b1c38"
+    },
+    "instrumented_source": {
+      "path": "/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90",
+      "sha256": "be7a4e735f80ec81c1b4ce51c392556482bcfe997cf65095885ce2f685487f26"
+    },
+    "production_module_source": {
+      "path": "/var/tmp/pr98_native_capture_build_v4_20261022/source/overrides/module_mp_kdm6.F",
+      "sha256": "f09a413c36b7bda9fb7376f0276e00329179c68bdbef1e4766bae2811152f58b"
+    },
+    "subtraction_source": "helper-approved source ground is subtracted from actual phasefall remainder; no residual fitted term"
+  }
+}

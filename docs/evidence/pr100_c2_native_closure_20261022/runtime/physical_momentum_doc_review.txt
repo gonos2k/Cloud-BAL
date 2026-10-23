@@ -1,0 +1,24 @@
+Read-only review: PR99 momentum wording
+Date: 2026-10-22
+
+Reviewed documents
+- `docs/PR99_NATIVE_CONTRACT_20261022.md`, SHA256 `359b489ca5e86c8017698644706d627b30b0fa33479a0ace2c3d4f5c449efa26`.
+- `docs/PR99_NATIVE_PROJECTION_20261022.md`, SHA256 `7bddbc8e1919bfc088b7107f16f16550fa0cd37f2ede3794d903c1cba3c1d7f0`.
+
+Capture/source pins
+- PR98 capture overlay build receipt: `/var/tmp/pr98_native_capture_build_v4_20261022/pr87_native_overlay_build.json`, SHA256 `34a3b92a1d0288e172d34423a1f254ce371213b757f254c13c1c4f6727b7beb7`.
+- Pinned capture `solve_em.F`: SHA256 `39281d586c26302cf2224858c3d9171a5d3e029696cb86e85e3d5fc24d8e47ba`.
+- Pinned capture `module_em.F`: SHA256 `a3764fde23dab460561e350577a208800002312dd4839293f5a17f76faa1f04c`.
+- The build receipt binds both staged source files to those same hashes as compiled overrides.
+
+Findings
+- The assembled RU/RV dump is source-ordered after `rk_addtend_dry` at `solve_em.F:1037,1051-1052`, then before conditional `spec_bdy_dry` at about line 1058, `small_step_prep` at 1163, and `advance_uv` at 1353. The documents correctly describe the captured RHS boundary and do not call it a completed-step force or acceleration.
+- The later `small_step_finish` call at about line 1821 receives `MUU/MUV`, updated `MUUS/MUVS`, and `C1H/C2H`. In the current KIM `module_small_step_em.F`, the finish formulas use the updated face carriers in their denominators. This supports the documents' statement that the assembled-RHS capture is not a complete restoration-boundary state and that dividing captured RU/RV by initial column mass does not establish physical wind acceleration.
+- `module_em.F` separately captures geometry `C1H/C2H` (`geom_c1h/c2h` rows around 1627-28 and 1655-56). The wording that the capture does not retain *all* restoration quantities at the restoration boundary is accurate; it should not be generalized to say hybrid coefficients never appear in any capture. The current text makes the boundary-specific distinction and is not materially overstated.
+- Reported RU/RV figures remain identified as source-array units; no old normalization/acceleration values from the superseded private note appear in either public document. The private superseded note is `/var/tmp/pr99_physical_momentum_callchain_correction_20261022.md`, SHA256 `b8da6a9224348b6944669c4184661bccbe79f987f7f3211653aa96f180e39d04`.
+
+Limitations
+- `module_small_step_em.F` was inspected as current source only, SHA256 `cabf1a177d50fb0096db79644af20cfe6d75217dbe63ab406a7e29bb54c17634`; it is not bound to the capture override build/object. This review does not claim exact KIM source/object identity or a full callchain replay.
+- No source changes, compilation, model run, audit, or native-array read was performed.
+
+Conclusion: no material overstatement found in the added momentum wording, subject to the explicit current-source limitation above.

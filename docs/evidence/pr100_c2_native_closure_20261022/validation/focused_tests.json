@@ -1,0 +1,34 @@
+{
+  "schema": "pr100_focused_portable_validation_v2",
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL",
+  "argv": [
+    "python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_pr100_qc_source.py",
+    "tests/test_pr100_qc_process_reducer.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "returncode": 0,
+  "tests_passed": 7,
+  "warnings": [
+    "NumPy ABI RuntimeWarning retained in log"
+  ],
+  "source_and_test_sha256": {
+    "tools/pr100_qc_source.py": "4ca204279c0c0cdcf57e5ef306d69ff8bfe881cb3ded98db9dc87ad205ec4dc8",
+    "tools/pr100_qc_process_reducer.py": "f83b9ad953abca83c543bde742878a4ef6213742f846de3e61d5b8f67ca04c90",
+    "tools/pr100_qc_contrast.py": "81e8c2ffe13f695361fa523b7cb38a31ba9d04d6d9dca384e69a49788900bcca",
+    "tests/test_pr100_qc_source.py": "66be630e161b1f3fc00f63780335f5809245a51c68d5bbe99146f5d06b7c3762",
+    "tests/test_pr100_qc_process_reducer.py": "8dd2ddebfe9034157ff1e8355f12ac94c0e98cdfcb700b3af895a7e9bd139aae",
+    "tests/fixtures/pr100_qc_source_anchors.txt": "13f9e3d65dc89fe1c3d250b07ee37981f61efd4182aed4ea93cc8d7b58aebd35",
+    "docs/evidence/pr93_qc_chain_20261020/qc_vertical_composition.json": "331eb9837c41a7aa663864c348f8fe18c44f8e55feed736900f5029685b1aa64"
+  },
+  "log_sha256": "fda6e47dcc4ec53930a8aaa7c45b30e5ca4db33d0a9c85b0b48fd11cf37615ed",
+  "scope": "Python unit tests only; tracked noncompilable source excerpts test PR100 insertion with compact.prepare identity; no Fortran build or forecast",
+  "resolved_review_finding": "removed private /var/tmp dependency; missing-anchor rejection covered"
+}

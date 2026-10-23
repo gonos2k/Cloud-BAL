@@ -1,0 +1,17 @@
+PR100 cwd incident post-quarantine check
+Date: 2026-10-22
+
+Quarantine receipt
+- Receipt `/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr100_replay_cwd_incident_20261022/quarantine_receipt.json` SHA256 `a8f152a18136ec1531d588f6e3585c241b30e47a71b92748a86b381d455df3d3`.
+- It records 33 files tied to inventory SHA256 `f4299b1d2fefd65cb0447c4824ee437923bedff834f0088ae44df89cb0c0d4ab`; `remaining_root_raw_names` is empty. A fresh check found no top-level `KLAPS50/*.raw` names.
+- For every receipt row, I verified the quarantined file and `preserved_current` link exist, both have the receipt SHA and original inode, and the original root path is absent. No mismatch found. I made no changes.
+
+Protected state post-check
+- Maintained source inventory: 627 entries, SHA256 `0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f`.
+- KLAPS50 graph: SHA256 `983942df987a14cfbe4b78a7b51f73f092d58fb208e0b4c92278a7f73ddec2bc`.
+- Cloud-BAL graph: SHA256 `be2ccfd8d33823dc984bcc4621e55da45c304ae6387febce745e4c7c37be57a6`.
+- Intel profile `Cloud-BAL/tests/intel_toolchain.sh`: SHA256 `5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4`.
+- Wiki files: `graph-report.md` `cff0be52a7f6d11f94c2ac61bb15dfc93b22810f92964d63f63071f68c265325`; `graph-report-klaps50.md` `1190ac98a592c9cbb097eb731533938a845bcd8e34ee3b7adb9516267246bbdf`; `graph-report-cloud-bal.md` `3b54b9049a0fb77a43c75ffaac180b1b631e4173f9c3f5b35663db6339aa28f3`; `index.md` `1701f2905aaabd76226236ceb97b282e2ba855c333a4a077446377dca90db8d1`; `log.md` `11065ac8c077dbbb60f1661324e8b67f045a5da0d817fee26efbb2c1ce2ea9a3`.
+
+Run classification
+- The bad-cwd H run remains excluded. Root reports a separate guarded H run with current-directory assertions and its own receipt; it is outside this post-quarantine check. No attempt was made to promote the bad-cwd H artifacts or to rerun them.

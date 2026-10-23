@@ -1,0 +1,167 @@
+{
+  "build_receipt": {
+    "full_clean_build": false,
+    "identity": "PR87 source-mapped partial native overlay; not a clean build",
+    "model_run_at_build": false,
+    "path": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json",
+    "sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+    "status": "PASS_OVERLAY_BUILD"
+  },
+  "executable": {
+    "sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a"
+  },
+  "launch": {
+    "arms": [
+      "OFF",
+      "HYDRO",
+      "COUPLED"
+    ],
+    "duration_seconds": 640,
+    "expected_timesteps": 32,
+    "launch_observation_is_historical": true,
+    "launch_observation_sha256": "2d8efdd44ccaf9522b039b25126632414604486e2f012c66eeff929a7e120b12",
+    "launch_records_sha256": "7b0be338ce1d25919c2377372bbb2c0539928a1b901f2e043b1b5afd2929a775",
+    "no_640_second_success_claim": true,
+    "observation_status": "ALL_THREE_RUNNERS_ACTIVE_PREFLIGHTS_AND_STAGE_HASHES_MATCH",
+    "root_go_sha256": "5420c264a6dabf1361e6ff4b0e448efdeee9b0f51811fcef79cb894005760363"
+  },
+  "not_a_success_claim": true,
+  "object_scope": {
+    "C1_to_C2_reviewed_objects": 9,
+    "byte_identical_objects": 4,
+    "byte_review_sha256": "010d4e9918061851cccb8567989ee9e97e1c741e59bf273686dc6eef4bcc3d30",
+    "elf_review_sha256": "30d9122fb7f68c13b00bccaa73510cd29a887aa4d613bbfa8583628bc604297a",
+    "objects": [
+      {
+        "different_sections": [],
+        "member": "module_microphysics_zero_out.o",
+        "object_sha256_c1": "a836d436b8b8d3a02c6c0a78ef4437c761e2f20fd0debc6e70d449e8e2c2a8be",
+        "object_sha256_c2": "a836d436b8b8d3a02c6c0a78ef4437c761e2f20fd0debc6e70d449e8e2c2a8be",
+        "text_byte_identical": true
+      },
+      {
+        "different_sections": [],
+        "member": "module_bl_shinhong.o",
+        "object_sha256_c1": "5d2b43318fd69453b580a9879498ecaa9ca216d0e5580dffb2f3032ba4df6993",
+        "object_sha256_c2": "5d2b43318fd69453b580a9879498ecaa9ca216d0e5580dffb2f3032ba4df6993",
+        "text_byte_identical": true
+      },
+      {
+        "different_sections": [],
+        "member": "module_bl_fogdes.o",
+        "object_sha256_c1": "223e718526a9e0bbd450f09bf748ab50fbe1630c82b500d0b3f9c0a1644b2ace",
+        "object_sha256_c2": "223e718526a9e0bbd450f09bf748ab50fbe1630c82b500d0b3f9c0a1644b2ace",
+        "text_byte_identical": true
+      },
+      {
+        "different_sections": [],
+        "member": "module_pbl_driver.o",
+        "object_sha256_c1": "a64cb0d6e32b40ce1c4f16fd353679f01543d36806410e2aa5196f29c363f7cb",
+        "object_sha256_c2": "a64cb0d6e32b40ce1c4f16fd353679f01543d36806410e2aa5196f29c363f7cb",
+        "text_byte_identical": true
+      },
+      {
+        "different_sections": [
+          ".rela.data",
+          ".rodata"
+        ],
+        "member": "module_mp_kdm6.o",
+        "object_sha256_c1": "0370d0fbf2ed66af2cc1a41e4f3fe1268cc15e2b22e719d61fc218db5338bf28",
+        "object_sha256_c2": "0b6b42ecb0269561d2071f9c253757ef36a1b2a35820cbb4e2844fe1a013ae10",
+        "text_byte_identical": true
+      },
+      {
+        "different_sections": [
+          ".rela.data",
+          ".rodata"
+        ],
+        "member": "module_first_rk_step_part1.o",
+        "object_sha256_c1": "e1c6b6b912a8246179fff562c77824ead6242669020be7e45e21fd2dab9302b9",
+        "object_sha256_c2": "5ed8f52732857424085c4d2984f7627b057d209a963f13ba27d75e9e6ea8f311",
+        "text_byte_identical": true
+      },
+      {
+        "different_sections": [
+          ".rela.data",
+          ".rodata"
+        ],
+        "member": "module_first_rk_step_part2.o",
+        "object_sha256_c1": "8b98e64e6607f3563e5bcd4da9a202915c2a8dcc0f8f7bd0e544881334a39b64",
+        "object_sha256_c2": "da29c7c6731330f0f7649135cd387feee7062ee794c8d857b8b2561de9359b18",
+        "text_byte_identical": true
+      },
+      {
+        "different_sections": [
+          ".rela.data",
+          ".rodata"
+        ],
+        "member": "solve_em.o",
+        "object_sha256_c1": "c7d791d9c94878348e1d435d084c22bddf9cf6656553c68c9abd18d1a0ff9f65",
+        "object_sha256_c2": "a1274155d9fa1b30f6d1cd2d424ee90977e1e2bc5c48cb2e063212207d79ba33",
+        "text_byte_identical": true
+      },
+      {
+        "different_sections": [
+          ".strtab"
+        ],
+        "member": "pr90_extra_observer.o",
+        "object_sha256_c1": "c9ad581a9752a425264b635c687d96743cb3900e26e91bc99cacd2a9aad39b51",
+        "object_sha256_c2": "e304f0ab130b350bd753ddca9073f5a2f2b65783c3e68fc2d1f5ac66ce3cf040",
+        "text_byte_identical": true
+      }
+    ],
+    "observer_object": {
+      "difference": [
+        ".strtab"
+      ],
+      "member": "pr90_extra_observer.o",
+      "note": "Observer provenance metadata; excluded from the 8 source-identical runtime overrides.",
+      "source_same": true,
+      "text_byte_identical": true
+    },
+    "runtime_code_equivalence_finding": "All reviewed C2 objects have byte-identical text bytes; ELF review also reports byte-identical disassembly and equivalent allocated sections after exact scratch-root traceback metadata normalization. Four unchanged override objects are fully byte-identical; four other unchanged-source override objects differ only in reviewed .rodata/.rela.data metadata while code bytes/disassembly match. Observer object has a .strtab-only difference. This is object-level code equivalence, not whole-model runtime equivalence.",
+    "same_source_overrides_except_module_em": 8,
+    "text_byte_identical_objects": 9,
+    "unchanged_source_override_code_equivalent": 8
+  },
+  "profile": {
+    "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "flags": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "reviewed_inputs": {
+    "closed_audit_driver_sha256": "6b1d78dbb4056089fc2798d8e9eb8e2f962dc9b44cf5e73821adbe6ee3e45a3b",
+    "closed_audit_review_sha256": "76ff32f516cbb59b1330e5ac8b8b974cc21fb38ed78b0e8e415de7d4f887058f",
+    "failed_shell_setup_attempt_sha256": "6fc1ccb095b61de84dcf72986a3fd0e44a3c1a804a0914d216fb947ca3065216",
+    "input_preflight_sha256": "e5ebd3fe173ec8deee525d2553a347f88ff86a68041f6fc2fac8fbd7df4554a1",
+    "launch_observation_sha256": "2d8efdd44ccaf9522b039b25126632414604486e2f012c66eeff929a7e120b12",
+    "launch_records_sha256": "7b0be338ce1d25919c2377372bbb2c0539928a1b901f2e043b1b5afd2929a775",
+    "root_go_sha256": "5420c264a6dabf1361e6ff4b0e448efdeee9b0f51811fcef79cb894005760363"
+  },
+  "schema": "pr99_c2_private_build_summary_v1",
+  "source_identity": {
+    "joint_transport_core_source_sha256": "6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53",
+    "module_em_source_sha256": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296",
+    "note": "Core and generator pins identify the reviewed C2 source contract; the native build receipt binds the compiled overlay and module_em override.",
+    "source_commit": "63c0e12",
+    "source_generator_sha256": "64f9b4fea53ae44ba15d0a4b331520c4b5931436e001ea4b8124fc8b348bfaf0"
+  },
+  "state": "RUNNING_NATIVE_RESULTS_PENDING",
+  "state_as_of_utc": "2026-10-22T08:38:47.238289+00:00"
+}

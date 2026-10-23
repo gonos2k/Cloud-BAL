@@ -1,0 +1,474 @@
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8412): warning #5183: Missing ampersand in continued character constant
+               3(",",Z8.8))') 'PR77_FIRST',trim(stage),trim(species), &
+---------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2396): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [CPMCAL]
+   cpmcal(x) = cpd*(1.-max(x,qmin))+max(x,qmin)*cpv
+---^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2397): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [XLCAL]
+   xlcal(x) = xlv0-xlv1*(x-t0c)
+---^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2406): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAC]
+   lamdac(x,y,z)= exp(log(((pidnc*z)/(x*y)))*(1./dmc))
+---^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2411): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [DIFFUS]
+   diffus(x,y) = 8.794e-5 * exp(log(x)*(1.81)) / y   
+---^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2412): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [VISCOS]
+   viscos(x,y) = 1.496e-6 * (x*sqrt(x)) /(x+120.)/y  
+---^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2413): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [XKA]
+   xka(x,y)    = 1.414e3*viscos(x,y)*y
+---^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2414): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [DIFFAC]
+   diffac(a,b,c,d,e) = d*a*a/(xka(c,d)*rv*c*c)+1./(e*diffus(c,b))
+---^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2415): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [VENFAC]
+   venfac(a,b,c) = exp(log((viscos(b,c)/diffus(b,a)))*((.3333333)))            &
+---^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2417): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [CONDEN]
+   conden(a,b,c,d,e) = (max(b,qmin)-c)/(1.+d*d/(rv*e)*c/(a*a))
+---^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7600): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAR]
+      lamdar(x,y,z)= exp(log(((pidnr*z)/(x*y)))*(1./dmr)) 
+------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7602): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAS]
+      lamdas(x,y,z)= exp(log(((pidn0s*z)/(x*y)))*(1./(dms+1)))
+------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7604): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAG]
+      lamdag(x,y)= exp(log(((pidn0g(i,k))/(x*y)))*(1./(dmg+1)))
+------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7606): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAI]
+      lamdai(x,y,z)= exp(log(((pidni*z)/(x*y)))*(1./dmi))
+------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7756): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAR]
+      lamdar(xd,yd,zd)= exp(log(((pidnr*zd)/(xd*yd)))*(1./dmr))
+------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8037): warning #8586: Implicit type is given to allow out-of-order declaration. Non-standard extension.   [KTS]
+      REAL, DIMENSION(kts:kte), INTENT(IN):: xam_g
+----------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8037): warning #8586: Implicit type is given to allow out-of-order declaration. Non-standard extension.   [KTE]
+      REAL, DIMENSION(kts:kte), INTENT(IN):: xam_g
+--------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2453): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_NORM_OBSERVE]
+       call pr100_norm_observe(pr100_norm_before, &
+------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2656): warning #8889: Explicit interface or EXTERNAL declaration is required.   [VSREC]
+       call vsrec( tvec1(its), gas_density(its,k), ite-its+1)
+------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2660): warning #8889: Explicit interface or EXTERNAL declaration is required.   [VSSQRT]
+       call vssqrt( denfac(its,k), tvec1(its), ite-its+1)
+------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2994): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_COMPACT_EVENT]
+           call pr100_snow_compact_event(i-its+1,pr100_qs_before,qrs(i,k,2), &
+----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(3025): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_COMPACT_EVENT]
+             call pr100_snow_compact_event(i-its+1,pr100_qs_before,qrs(i,k,2), &
+------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(3533): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_EVENT]
+            call pr100_unowned_event(1,i,lat,k,loop,pr100_unowned_before, &
+-----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(3550): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_KAHAN]
+        call pr100_snow_kahan(dble(fall(i,kts,2))*dble(delz(i,kts))/dble(denr)*dble(dtcld)*1000.d0, &
+-------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(3552): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_KAHAN]
+        call pr100_snow_kahan(dble(pr100_qs_bottom_r32_value),pr100_qs_bottom_r32(i-its+1), &
+-------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(3646): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_EVENT]
+            call pr100_unowned_event(2,i,lat,k,loop,pr100_unowned_before, &
+-----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(3814): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [QCI]
+                *g4pmc*rslopecmu(i,k)*rslopec3(i,k)*rslopec2(i,k)*dtcld,qci(i,k,1))
+------------------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(3822): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [NCI]
+                      *g1pmc*rslopecmu(i,k)*rslopec2(i,k)*dtcld,nci(i,k,1))
+----------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(3931): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [QCI]
+                     ,qci(i,k,1))
+----------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(3940): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [NCI]
+                       *rslopec(i,k)*rslopecd(i,k)*dtcld,nci(i,k,1))
+---------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(4046): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [QRS]
+                  *rslopemu(i,k,1)*rslope(i,k,1)*g1p2drmr*dtcld,qrs(i,k,1))        
+----------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(4055): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [NRS]
+                       *dtcld, nrs(i,k,1))
+-------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(4715): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                        *qci(i,k,1)*denfac(i,k),qci(i,k,1)/dtcld)
+----------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(4728): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                       *denfac(i,k),nci(i,k,1)/dtcld)
+----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(4740): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                        *denfac(i,k),qci(i,k,1)/dtcld)
+-----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(4752): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                        *denfac(i,k),nci(i,k,1)/dtcld)
+-----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(4777): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                        *qci(i,k,1)*denfac(i,k),qci(i,k,1)/dtcld)
+----------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(4789): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                       *denfac(i,k),nci(i,k,1)/dtcld)
+----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(6714): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_EVENT]
+            call pr100_unowned_event(3,i,lat,k,loop,pr100_unowned_before, &
+-----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(6763): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [0.]
+          pcond(i,k) = min(max(work1(i,k,1)/dtcld,0.),max(q(i,k),0.)/dtcld)
+--------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(6763): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+          pcond(i,k) = min(max(work1(i,k,1)/dtcld,0.),max(q(i,k),0.)/dtcld)
+--------------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(6765): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+            pcond(i,k) = max(work1(i,k,1),-qci(i,k,1))/dtcld
+------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7087): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_WRITE_COLUMNS]
+   call pr100_unowned_write_columns(lat,its,ite,pr100_unowned_count,pr100_unowned_signed, &
+--------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7089): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_NORM_WRITE_COLUMNS]
+   call pr100_norm_write_columns(lat,its,ite,pr100_norm_invalid,pr100_norm_changed,pr100_norm_maxchange)
+--------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7090): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_WRITE_COLUMNS]
+   call pr100_snow_write_columns(lat,its,ite,pr100_qs_count,pr100_qs_top_clamps, &
+--------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7410): remark #7712: This variable has not been used.   [QCRMIN]
+   SUBROUTINE ProgB_param(brs,qrs,rhox,its,ite,jts,jte,kts,kte,qcrmin             &
+---------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8243): remark #7712: This variable has not been used.   [I]
+      integer:: i,k
+----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8058): remark #7712: This variable has not been used.   [I]
+      INTEGER:: i, k, k_0, kbot, n
+----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8214): remark #7712: This variable has not been used.   [QMIN]
+     subroutine effectRad_kdm6 (t, qc, nc, qi, ni, qs, rho, qmin, t0c,    &
+------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2089): remark #7712: This variable has not been used.   [DBG]
+   real, dimension(its:ite,kts:kte)   :: dbs,dbg
+---------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7751): remark #7712: This variable has not been used.   [J]
+  integer :: i, j, k
+----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7588): remark #7712: This variable has not been used.   [J]
+  integer :: i, j, k
+----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2376): remark #7712: This variable has not been used.   [J]
+   integer                            :: i, j, k, mstepmax,mstepmax_i,         &
+--------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1921): remark #7712: This variable has not been used.   [G]
+                   ,delt,g, cpd, cpv, ccn0, rd, rv, t0c           &
+-------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7156): remark #7712: This variable has not been used.   [CCN0]
+  SUBROUTINE kdm6init(den0,denr,dens,cl,cpv, ccn0, hail_opt, allowed_to_read) 
+---------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1921): remark #7712: This variable has not been used.   [CCN0]
+                   ,delt,g, cpd, cpv, ccn0, rd, rv, t0c           &
+--------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7132): remark #7712: This variable has not been used.   [RD]
+   real function fpvs(t,ice,rd,rv,cvap,cliq,cice,hvap,hsub,psat,t0c)
+----------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1921): remark #7712: This variable has not been used.   [RD]
+                   ,delt,g, cpd, cpv, ccn0, rd, rv, t0c           &
+--------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1922): remark #7712: This variable has not been used.   [EP1]
+                   ,ep1, ep2, qmin                                &
+--------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1931): remark #7712: This variable has not been used.   [IDS]
+                   ,ids,ide, jds,jde, kds,kde                     &
+--------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1931): remark #7712: This variable has not been used.   [IDE]
+                   ,ids,ide, jds,jde, kds,kde                     &
+------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1931): remark #7712: This variable has not been used.   [JDS]
+                   ,ids,ide, jds,jde, kds,kde                     &
+-----------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1931): remark #7712: This variable has not been used.   [JDE]
+                   ,ids,ide, jds,jde, kds,kde                     &
+---------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1931): remark #7712: This variable has not been used.   [KDS]
+                   ,ids,ide, jds,jde, kds,kde                     &
+--------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1931): remark #7712: This variable has not been used.   [KDE]
+                   ,ids,ide, jds,jde, kds,kde                     &
+------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1932): remark #7712: This variable has not been used.   [JMS]
+                   ,ims,ime, jms,jme, kms,kme                     &
+-----------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(1932): remark #7712: This variable has not been used.   [JME]
+                   ,ims,ime, jms,jme, kms,kme                     &
+---------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8349): remark #7712: This variable has not been used.   [ITE]
+        brs,qrs,nrs,qci,nci,its,ite,kts,kte,lat,stage)
+--------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7734): remark #7712: This variable has not been used.   [JTS]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7563): remark #7712: This variable has not been used.   [JTS]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7410): remark #7712: This variable has not been used.   [JTS]
+   SUBROUTINE ProgB_param(brs,qrs,rhox,its,ite,jts,jte,kts,kte,qcrmin             &
+-----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7734): remark #7712: This variable has not been used.   [JTE]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7563): remark #7712: This variable has not been used.   [JTE]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7410): remark #7712: This variable has not been used.   [JTE]
+   SUBROUTINE ProgB_param(brs,qrs,rhox,its,ite,jts,jte,kts,kte,qcrmin             &
+---------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8349): remark #7712: This variable has not been used.   [KTE]
+        brs,qrs,nrs,qci,nci,its,ite,kts,kte,lat,stage)
+----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7731): remark #7712: This variable has not been used.   [T]
+      subroutine slope_rain(qrs,nrs,den,denfac,t,rslope,rslopeb,rslope2,rslope3,   &
+-----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2089): remark #7712: This variable has not been used.   [DBS]
+   real, dimension(its:ite,kts:kte)   :: dbs,dbg
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2102): remark #7712: This variable has not been used.   [WORKN]
+   double precision, dimension(its:ite,kts:kte,2)   :: workn
+-------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2106): remark #7712: This variable has not been used.   [WORKA]
+   real, dimension(its:ite,kts:kte)   :: worka, workr
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2106): remark #7712: This variable has not been used.   [WORKR]
+   real, dimension(its:ite,kts:kte)   :: worka, workr
+------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2117): remark #7712: This variable has not been used.   [WORK1C]
+   real, dimension(its:ite,kts:kte)   :: falkc, work1c, work2c
+------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2117): remark #7712: This variable has not been used.   [WORK2C]
+   real, dimension(its:ite,kts:kte)   :: falkc, work1c, work2c
+--------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2118): remark #7712: This variable has not been used.   [DQR]
+   real, dimension(its:ite,kts:kte)   :: dqr,dnr
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2118): remark #7712: This variable has not been used.   [DNR]
+   real, dimension(its:ite,kts:kte)   :: dqr,dnr
+---------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2119): remark #7712: This variable has not been used.   [DQI]
+   real, dimension(its:ite,kts:kte)   :: dqi,dni
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2119): remark #7712: This variable has not been used.   [DNI]
+   real, dimension(its:ite,kts:kte)   :: dqi,dni
+---------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2120): remark #7712: This variable has not been used.   [DQG]
+   real, dimension(its:ite,kts:kte)   :: dqs,dqg
+---------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2136): remark #7712: This variable has not been used.   [BSACW]
+                                        bgacr,baacw,bsacw,bgacw,bgacs,bgaci,&
+----------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2136): remark #7712: This variable has not been used.   [BGACW]
+                                        bgacr,baacw,bsacw,bgacw,bgacs,bgaci,&
+----------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7748): remark #7712: This variable has not been used.   [N0SFAC]
+                                                                       n0sfac
+-----------------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2143): remark #7712: This variable has not been used.   [DENQRS1]
+   real, dimension(its:ite,kts:kte)   :: denqrs1, denqrs2, denqrs3
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2143): remark #7712: This variable has not been used.   [DENQRS2]
+   real, dimension(its:ite,kts:kte)   :: denqrs1, denqrs2, denqrs3
+--------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2143): remark #7712: This variable has not been used.   [DENQRS3]
+   real, dimension(its:ite,kts:kte)   :: denqrs1, denqrs2, denqrs3
+-----------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2144): remark #7712: This variable has not been used.   [DENQR1]
+   real, dimension(its:ite,kts:kte)   :: denqr1, denncr3, denqci
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2144): remark #7712: This variable has not been used.   [DENNCR3]
+   real, dimension(its:ite,kts:kte)   :: denqr1, denncr3, denqci
+-------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2144): remark #7712: This variable has not been used.   [DENQCI]
+   real, dimension(its:ite,kts:kte)   :: denqr1, denncr3, denqci
+----------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2145): remark #7712: This variable has not been used.   [DELQRS1]
+   real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2145): remark #7712: This variable has not been used.   [DELQRS2]
+   real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+--------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2145): remark #7712: This variable has not been used.   [DELQRS3]
+   real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+-----------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2145): remark #7712: This variable has not been used.   [DELNCR3]
+   real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+--------------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2146): remark #7712: This variable has not been used.   [DELQI]
+   real, dimension(its:ite)           :: delqi
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2226): remark #7712: This variable has not been used.   [NUMNDT]
+   integer, dimension(its:ite)        :: mnstep, numndt
+-------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8251): remark #7712: This variable has not been used.   [TEMP]
+      real :: temp
+--------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2238): remark #7712: This variable has not been used.   [TEMP]
+   real                               :: temp
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2239): remark #7712: This variable has not been used.   [HOLDC]
+   real                               :: holdc, holdci
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2239): remark #7712: This variable has not been used.   [HOLDCI]
+   real                               :: holdc, holdci
+------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7749): remark #7712: This variable has not been used.   [X]
+  REAL       ::  x, y, z, supcol
+-----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7749): remark #7712: This variable has not been used.   [Y]
+  REAL       ::  x, y, z, supcol
+--------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7749): remark #7712: This variable has not been used.   [Z]
+  REAL       ::  x, y, z, supcol
+-----------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2366): remark #7712: This variable has not been used.   [NDT]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2366): remark #7712: This variable has not been used.   [QDT]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2366): remark #7712: This variable has not been used.   [HOLDRR]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+---------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2366): remark #7712: This variable has not been used.   [HOLDRS]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+-----------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2366): remark #7712: This variable has not been used.   [HOLDRG]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+-------------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7749): remark #7712: This variable has not been used.   [SUPCOL]
+  REAL       ::  x, y, z, supcol
+--------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2367): remark #7712: This variable has not been used.   [PVT]
+                                         supcol, supcolt, pvt, supsat,         &
+----------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2368): remark #7712: This variable has not been used.   [XMI]
+                                         dtcld, xmi, eacsi, satdt, qimax,      &
+------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2368): remark #7712: This variable has not been used.   [QIMAX]
+                                         dtcld, xmi, eacsi, satdt, qimax,      &
+-------------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2369): remark #7712: This variable has not been used.   [DIAMETER]
+                                         diameter, xni0, roqi0,                &
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2369): remark #7712: This variable has not been used.   [XNI0]
+                                         diameter, xni0, roqi0,                &
+---------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2369): remark #7712: This variable has not been used.   [ROQI0]
+                                         diameter, xni0, roqi0,                &
+---------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2371): remark #7712: This variable has not been used.   [EGS]
+                                         egs, eacgi, coecol,                   &
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2372): remark #7712: This variable has not been used.   [TAUCON]
+                                         taucon, lencon, lenconcr,             &
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2374): remark #7712: This variable has not been used.   [ALPHA2]
+                                         alpha1,alpha2, delta2, delta3
+------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2377): remark #7712: This variable has not been used.   [IPRT]
+                                         iprt, latd, lond, loop, loops, ifsat, &
+-----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2377): remark #7712: This variable has not been used.   [LATD]
+                                         iprt, latd, lond, loop, loops, ifsat, &
+-----------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(2377): remark #7712: This variable has not been used.   [LOND]
+                                         iprt, latd, lond, loop, loops, ifsat, &
+-----------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7156): remark #7712: This variable has not been used.   [ALLOWED_TO_READ]
+  SUBROUTINE kdm6init(den0,denr,dens,cl,cpv, ccn0, hail_opt, allowed_to_read) 
+-------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7428): remark #7712: This variable has not been used.   [TMP1]
+  REAL ::tmp1,tmp2
+---------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7782): remark #7712: This variable has not been used.   [ID]
+      SUBROUTINE nislfv_rain_plmr(im,km,denl,denfacl,tkl,dzl,wwl,rql,rnl,precip,dt,id,iter,rid)
+-----------------------------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7814): remark #7712: This variable has not been used.   [C1]
+      real  zsum,qsum,dim,dip,c1,con1,fa1,fa2
+------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7815): remark #7712: This variable has not been used.   [ALLNEW]
+      real  allold, allnew, zz, dzamin, cflmax, decfl
+--------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7815): remark #7712: This variable has not been used.   [ZZ]
+      real  allold, allnew, zz, dzamin, cflmax, decfl
+----------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7815): remark #7712: This variable has not been used.   [DZAMIN]
+      real  allold, allnew, zz, dzamin, cflmax, decfl
+--------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7815): remark #7712: This variable has not been used.   [CFLMAX]
+      real  allold, allnew, zz, dzamin, cflmax, decfl
+----------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(7819): remark #7712: This variable has not been used.   [QR2]
+      real  qn(km), qr(km), qr2(km)
+----------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8215): remark #7712: This variable has not been used.   [II]
+                                re_qc, re_qi, re_qs, kts, kte, ii, jj)
+---------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8035): remark #7712: This variable has not been used.   [II]
+                       n0go1d, t1d, p1d, dBZ, kts, kte, ii, jj,xam_g)
+--------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8215): remark #7712: This variable has not been used.   [JJ]
+                                re_qc, re_qi, re_qs, kts, kte, ii, jj)
+-------------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8035): remark #7712: This variable has not been used.   [JJ]
+                       n0go1d, t1d, p1d, dBZ, kts, kte, ii, jj,xam_g)
+------------------------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8058): remark #7712: This variable has not been used.   [KBOT]
+      INTEGER:: i, k, k_0, kbot, n
+---------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8244): remark #7712: This variable has not been used.   [INU_C]
+      integer :: inu_c
+-----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8253): remark #7712: This variable has not been used.   [DIAI]
+      real :: diai      
+--------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8478): remark #7712: This variable has not been used.   [QD_STORE]
+REAL(real32) :: qd_store,nd_store,qr_store,nr_store
+----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8478): remark #7712: This variable has not been used.   [ND_STORE]
+REAL(real32) :: qd_store,nd_store,qr_store,nr_store
+-------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8478): remark #7712: This variable has not been used.   [QR_STORE]
+REAL(real32) :: qd_store,nd_store,qr_store,nr_store
+----------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8478): remark #7712: This variable has not been used.   [NR_STORE]
+REAL(real32) :: qd_store,nd_store,qr_store,nr_store
+-------------------------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8481): remark #7712: This variable has not been used.   [THETA]
+REAL(real64) :: theta,dt64
+----------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(8487): remark #7712: This variable has not been used.   [FULL_EMPTY_UNPAIRED]
+LOGICAL :: candidate_valid,full_empty_unpaired
+---------------------------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(9577): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_KAHAN]
+  call pr100_snow_kahan(s,stored(ix),stored_c(ix))
+-------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(9578): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_KAHAN]
+  call pr100_snow_kahan(p,packet(ix),packet_c(ix))
+-------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(9579): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_KAHAN]
+  call pr100_snow_kahan(d,diff(ix),diff_c(ix))
+-------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(9580): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_KAHAN]
+  call pr100_snow_kahan(abs(s),stored_l1(ix),stored_l1_c(ix))
+-------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(9581): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_KAHAN]
+  call pr100_snow_kahan(abs(p),packet_l1(ix),packet_l1_c(ix))
+-------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(9582): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_SNOW_KAHAN]
+  call pr100_snow_kahan(abs(d),diff_l1(ix),diff_l1_c(ix))
+-------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(9681): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_KAHAN]
+  call pr100_unowned_kahan(weight*delta,signed(ix,site),signed_c(ix,site))
+-------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(9682): warning #8889: Explicit interface or EXTERNAL declaration is required.   [PR100_UNOWNED_KAHAN]
+  call pr100_unowned_kahan(abs(weight*delta),l1(ix,site),l1_c(ix,site))
+-------^
+/var/tmp/pr100_unowned_diag_build2_20261022/source/module_mp_kdm6_snow_unowned.f90(9666): remark #7712: This variable has not been used.   [RECEIVER]
+subroutine pr100_unowned_event(site,i,j,k,loop,before,after,den,dz,ncol,ix,donor,receiver, &
+---------------------------------------------------------------------------------^

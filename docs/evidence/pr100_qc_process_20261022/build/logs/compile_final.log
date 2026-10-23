@@ -1,0 +1,417 @@
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9284): warning #5183: Missing ampersand in continued character constant
+               3(",",Z8.8))') 'PR77_FIRST',trim(stage),trim(species), &
+---------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9301): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+  open(newunit=u,file='pr99_total_water_checkpoints.raw',form='formatted',status='unknown',position='append',action='write',iostat=ios)
+-------------------------------------------------------------------------------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2387): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [CPMCAL]
+   cpmcal(x) = cpd*(1.-max(x,qmin))+max(x,qmin)*cpv
+---^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2388): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [XLCAL]
+   xlcal(x) = xlv0-xlv1*(x-t0c)
+---^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2397): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAC]
+   lamdac(x,y,z)= exp(log(((pidnc*z)/(x*y)))*(1./dmc))
+---^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2402): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [DIFFUS]
+   diffus(x,y) = 8.794e-5 * exp(log(x)*(1.81)) / y   
+---^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2403): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [VISCOS]
+   viscos(x,y) = 1.496e-6 * (x*sqrt(x)) /(x+120.)/y  
+---^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2404): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [XKA]
+   xka(x,y)    = 1.414e3*viscos(x,y)*y
+---^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2405): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [DIFFAC]
+   diffac(a,b,c,d,e) = d*a*a/(xka(c,d)*rv*c*c)+1./(e*diffus(c,b))
+---^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2406): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [VENFAC]
+   venfac(a,b,c) = exp(log((viscos(b,c)/diffus(b,a)))*((.3333333)))            &
+---^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2408): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [CONDEN]
+   conden(a,b,c,d,e) = (max(b,qmin)-c)/(1.+d*d/(rv*e)*c/(a*a))
+---^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8472): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAR]
+      lamdar(x,y,z)= exp(log(((pidnr*z)/(x*y)))*(1./dmr)) 
+------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8474): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAS]
+      lamdas(x,y,z)= exp(log(((pidn0s*z)/(x*y)))*(1./(dms+1)))
+------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8476): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAG]
+      lamdag(x,y)= exp(log(((pidn0g(i,k))/(x*y)))*(1./(dmg+1)))
+------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8478): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAI]
+      lamdai(x,y,z)= exp(log(((pidni*z)/(x*y)))*(1./dmi))
+------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8628): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAR]
+      lamdar(xd,yd,zd)= exp(log(((pidnr*zd)/(xd*yd)))*(1./dmr))
+------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8909): warning #8586: Implicit type is given to allow out-of-order declaration. Non-standard extension.   [KTS]
+      REAL, DIMENSION(kts:kte), INTENT(IN):: xam_g
+----------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8909): warning #8586: Implicit type is given to allow out-of-order declaration. Non-standard extension.   [KTE]
+      REAL, DIMENSION(kts:kte), INTENT(IN):: xam_g
+--------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(3292): warning #8889: Explicit interface or EXTERNAL declaration is required.   [VSREC]
+       call vsrec( tvec1(its), gas_density(its,k), ite-its+1)
+------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(3296): warning #8889: Explicit interface or EXTERNAL declaration is required.   [VSSQRT]
+       call vssqrt( denfac(its,k), tvec1(its), ite-its+1)
+------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(4443): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [QCI]
+                *g4pmc*rslopecmu(i,k)*rslopec3(i,k)*rslopec2(i,k)*dtcld,qci(i,k,1))
+------------------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(4451): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [NCI]
+                      *g1pmc*rslopecmu(i,k)*rslopec2(i,k)*dtcld,nci(i,k,1))
+----------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(4580): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [QCI]
+                     ,qci(i,k,1))
+----------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(4589): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [NCI]
+                       *rslopec(i,k)*rslopecd(i,k)*dtcld,nci(i,k,1))
+---------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(4715): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [QRS]
+                  *rslopemu(i,k,1)*rslope(i,k,1)*g1p2drmr*dtcld,qrs(i,k,1))        
+----------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(4724): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [NRS]
+                       *dtcld, nrs(i,k,1))
+-------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(5396): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                        *qci(i,k,1)*denfac(i,k),qci(i,k,1)/dtcld)
+----------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(5409): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                       *denfac(i,k),nci(i,k,1)/dtcld)
+----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(5421): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                        *denfac(i,k),qci(i,k,1)/dtcld)
+-----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(5433): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                        *denfac(i,k),nci(i,k,1)/dtcld)
+-----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(5458): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                        *qci(i,k,1)*denfac(i,k),qci(i,k,1)/dtcld)
+----------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(5470): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+                       *denfac(i,k),nci(i,k,1)/dtcld)
+----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(7568): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.   [0.]
+          pcond(i,k) = min(max(work1(i,k,1)/dtcld,0.),max(q(i,k),0.)/dtcld)
+--------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(7568): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+          pcond(i,k) = min(max(work1(i,k,1)/dtcld,0.),max(q(i,k),0.)/dtcld)
+--------------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(7570): warning #7374: F2008 standard requires all arguments be of the same type and same kind type parameter.
+            pcond(i,k) = max(work1(i,k,1),-qci(i,k,1))/dtcld
+------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8282): remark #7712: This variable has not been used.   [QCRMIN]
+   SUBROUTINE ProgB_param(brs,qrs,rhox,its,ite,jts,jte,kts,kte,qcrmin             &
+---------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9115): remark #7712: This variable has not been used.   [I]
+      integer:: i,k
+----------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8930): remark #7712: This variable has not been used.   [I]
+      INTEGER:: i, k, k_0, kbot, n
+----------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9086): remark #7712: This variable has not been used.   [QMIN]
+     subroutine effectRad_kdm6 (t, qc, nc, qi, ni, qs, rho, qmin, t0c,    &
+------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2094): remark #7712: This variable has not been used.   [DBG]
+   real, dimension(its:ite,kts:kte)   :: dbs,dbg
+---------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8623): remark #7712: This variable has not been used.   [J]
+  integer :: i, j, k
+----------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8460): remark #7712: This variable has not been used.   [J]
+  integer :: i, j, k
+----------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2367): remark #7712: This variable has not been used.   [J]
+   integer                            :: i, j, k, mstepmax,mstepmax_i,         &
+--------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1921): remark #7712: This variable has not been used.   [G]
+                   ,delt,g, cpd, cpv, ccn0, rd, rv, t0c           &
+-------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8028): remark #7712: This variable has not been used.   [CCN0]
+  SUBROUTINE kdm6init(den0,denr,dens,cl,cpv, ccn0, hail_opt, allowed_to_read) 
+---------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1921): remark #7712: This variable has not been used.   [CCN0]
+                   ,delt,g, cpd, cpv, ccn0, rd, rv, t0c           &
+--------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8004): remark #7712: This variable has not been used.   [RD]
+   real function fpvs(t,ice,rd,rv,cvap,cliq,cice,hvap,hsub,psat,t0c)
+----------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1921): remark #7712: This variable has not been used.   [RD]
+                   ,delt,g, cpd, cpv, ccn0, rd, rv, t0c           &
+--------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1922): remark #7712: This variable has not been used.   [EP1]
+                   ,ep1, ep2, qmin                                &
+--------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1931): remark #7712: This variable has not been used.   [IDS]
+                   ,ids,ide, jds,jde, kds,kde                     &
+--------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1931): remark #7712: This variable has not been used.   [IDE]
+                   ,ids,ide, jds,jde, kds,kde                     &
+------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1931): remark #7712: This variable has not been used.   [JDS]
+                   ,ids,ide, jds,jde, kds,kde                     &
+-----------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1931): remark #7712: This variable has not been used.   [JDE]
+                   ,ids,ide, jds,jde, kds,kde                     &
+---------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1931): remark #7712: This variable has not been used.   [KDS]
+                   ,ids,ide, jds,jde, kds,kde                     &
+--------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1931): remark #7712: This variable has not been used.   [KDE]
+                   ,ids,ide, jds,jde, kds,kde                     &
+------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1932): remark #7712: This variable has not been used.   [JMS]
+                   ,ims,ime, jms,jme, kms,kme                     &
+-----------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(1932): remark #7712: This variable has not been used.   [JME]
+                   ,ims,ime, jms,jme, kms,kme                     &
+---------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9221): remark #7712: This variable has not been used.   [ITE]
+        brs,qrs,nrs,qci,nci,its,ite,kts,kte,lat,stage)
+--------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8606): remark #7712: This variable has not been used.   [JTS]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8435): remark #7712: This variable has not been used.   [JTS]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8282): remark #7712: This variable has not been used.   [JTS]
+   SUBROUTINE ProgB_param(brs,qrs,rhox,its,ite,jts,jte,kts,kte,qcrmin             &
+-----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8606): remark #7712: This variable has not been used.   [JTE]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8435): remark #7712: This variable has not been used.   [JTE]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8282): remark #7712: This variable has not been used.   [JTE]
+   SUBROUTINE ProgB_param(brs,qrs,rhox,its,ite,jts,jte,kts,kte,qcrmin             &
+---------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9221): remark #7712: This variable has not been used.   [KTE]
+        brs,qrs,nrs,qci,nci,its,ite,kts,kte,lat,stage)
+----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8603): remark #7712: This variable has not been used.   [T]
+      subroutine slope_rain(qrs,nrs,den,denfac,t,rslope,rslopeb,rslope2,rslope3,   &
+-----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2094): remark #7712: This variable has not been used.   [DBS]
+   real, dimension(its:ite,kts:kte)   :: dbs,dbg
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2107): remark #7712: This variable has not been used.   [WORKN]
+   double precision, dimension(its:ite,kts:kte,2)   :: workn
+-------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2111): remark #7712: This variable has not been used.   [WORKA]
+   real, dimension(its:ite,kts:kte)   :: worka, workr
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2111): remark #7712: This variable has not been used.   [WORKR]
+   real, dimension(its:ite,kts:kte)   :: worka, workr
+------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2122): remark #7712: This variable has not been used.   [WORK1C]
+   real, dimension(its:ite,kts:kte)   :: falkc, work1c, work2c
+------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2122): remark #7712: This variable has not been used.   [WORK2C]
+   real, dimension(its:ite,kts:kte)   :: falkc, work1c, work2c
+--------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2123): remark #7712: This variable has not been used.   [DQR]
+   real, dimension(its:ite,kts:kte)   :: dqr,dnr
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2123): remark #7712: This variable has not been used.   [DNR]
+   real, dimension(its:ite,kts:kte)   :: dqr,dnr
+---------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2124): remark #7712: This variable has not been used.   [DQI]
+   real, dimension(its:ite,kts:kte)   :: dqi,dni
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2124): remark #7712: This variable has not been used.   [DNI]
+   real, dimension(its:ite,kts:kte)   :: dqi,dni
+---------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2125): remark #7712: This variable has not been used.   [DQG]
+   real, dimension(its:ite,kts:kte)   :: dqs,dqg
+---------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2141): remark #7712: This variable has not been used.   [BSACW]
+                                        bgacr,baacw,bsacw,bgacw,bgacs,bgaci,&
+----------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2141): remark #7712: This variable has not been used.   [BGACW]
+                                        bgacr,baacw,bsacw,bgacw,bgacs,bgaci,&
+----------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8620): remark #7712: This variable has not been used.   [N0SFAC]
+                                                                       n0sfac
+-----------------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2148): remark #7712: This variable has not been used.   [DENQRS1]
+   real, dimension(its:ite,kts:kte)   :: denqrs1, denqrs2, denqrs3
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2148): remark #7712: This variable has not been used.   [DENQRS2]
+   real, dimension(its:ite,kts:kte)   :: denqrs1, denqrs2, denqrs3
+--------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2148): remark #7712: This variable has not been used.   [DENQRS3]
+   real, dimension(its:ite,kts:kte)   :: denqrs1, denqrs2, denqrs3
+-----------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2149): remark #7712: This variable has not been used.   [DENQR1]
+   real, dimension(its:ite,kts:kte)   :: denqr1, denncr3, denqci
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2149): remark #7712: This variable has not been used.   [DENNCR3]
+   real, dimension(its:ite,kts:kte)   :: denqr1, denncr3, denqci
+-------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2149): remark #7712: This variable has not been used.   [DENQCI]
+   real, dimension(its:ite,kts:kte)   :: denqr1, denncr3, denqci
+----------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2150): remark #7712: This variable has not been used.   [DELQRS1]
+   real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2150): remark #7712: This variable has not been used.   [DELQRS2]
+   real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+--------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2150): remark #7712: This variable has not been used.   [DELQRS3]
+   real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+-----------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2150): remark #7712: This variable has not been used.   [DELNCR3]
+   real, dimension(its:ite)           :: delqrs1, delqrs2, delqrs3, delncr3
+--------------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2151): remark #7712: This variable has not been used.   [DELQI]
+   real, dimension(its:ite)           :: delqi
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2239): remark #7712: This variable has not been used.   [NUMNDT]
+   integer, dimension(its:ite)        :: mnstep, numndt
+-------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9123): remark #7712: This variable has not been used.   [TEMP]
+      real :: temp
+--------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2251): remark #7712: This variable has not been used.   [TEMP]
+   real                               :: temp
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2252): remark #7712: This variable has not been used.   [HOLDC]
+   real                               :: holdc, holdci
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2252): remark #7712: This variable has not been used.   [HOLDCI]
+   real                               :: holdc, holdci
+------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8621): remark #7712: This variable has not been used.   [X]
+  REAL       ::  x, y, z, supcol
+-----------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8621): remark #7712: This variable has not been used.   [Y]
+  REAL       ::  x, y, z, supcol
+--------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8621): remark #7712: This variable has not been used.   [Z]
+  REAL       ::  x, y, z, supcol
+-----------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2357): remark #7712: This variable has not been used.   [NDT]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2357): remark #7712: This variable has not been used.   [QDT]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2357): remark #7712: This variable has not been used.   [HOLDRR]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+---------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2357): remark #7712: This variable has not been used.   [HOLDRS]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+-----------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2357): remark #7712: This variable has not been used.   [HOLDRG]
+                                         ndt, qdt, holdrr, holdrs, holdrg,     &
+-------------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8621): remark #7712: This variable has not been used.   [SUPCOL]
+  REAL       ::  x, y, z, supcol
+--------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2358): remark #7712: This variable has not been used.   [PVT]
+                                         supcol, supcolt, pvt, supsat,         &
+----------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2359): remark #7712: This variable has not been used.   [XMI]
+                                         dtcld, xmi, eacsi, satdt, qimax,      &
+------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2359): remark #7712: This variable has not been used.   [QIMAX]
+                                         dtcld, xmi, eacsi, satdt, qimax,      &
+-------------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2360): remark #7712: This variable has not been used.   [DIAMETER]
+                                         diameter, xni0, roqi0,                &
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2360): remark #7712: This variable has not been used.   [XNI0]
+                                         diameter, xni0, roqi0,                &
+---------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2360): remark #7712: This variable has not been used.   [ROQI0]
+                                         diameter, xni0, roqi0,                &
+---------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2362): remark #7712: This variable has not been used.   [EGS]
+                                         egs, eacgi, coecol,                   &
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2363): remark #7712: This variable has not been used.   [TAUCON]
+                                         taucon, lencon, lenconcr,             &
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2365): remark #7712: This variable has not been used.   [ALPHA2]
+                                         alpha1,alpha2, delta2, delta3
+------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2368): remark #7712: This variable has not been used.   [IPRT]
+                                         iprt, latd, lond, loop, loops, ifsat, &
+-----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2368): remark #7712: This variable has not been used.   [LATD]
+                                         iprt, latd, lond, loop, loops, ifsat, &
+-----------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(2368): remark #7712: This variable has not been used.   [LOND]
+                                         iprt, latd, lond, loop, loops, ifsat, &
+-----------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8028): remark #7712: This variable has not been used.   [ALLOWED_TO_READ]
+  SUBROUTINE kdm6init(den0,denr,dens,cl,cpv, ccn0, hail_opt, allowed_to_read) 
+-------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8300): remark #7712: This variable has not been used.   [TMP1]
+  REAL ::tmp1,tmp2
+---------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8654): remark #7712: This variable has not been used.   [ID]
+      SUBROUTINE nislfv_rain_plmr(im,km,denl,denfacl,tkl,dzl,wwl,rql,rnl,precip,dt,id,iter,rid)
+-----------------------------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8686): remark #7712: This variable has not been used.   [C1]
+      real  zsum,qsum,dim,dip,c1,con1,fa1,fa2
+------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8687): remark #7712: This variable has not been used.   [ALLNEW]
+      real  allold, allnew, zz, dzamin, cflmax, decfl
+--------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8687): remark #7712: This variable has not been used.   [ZZ]
+      real  allold, allnew, zz, dzamin, cflmax, decfl
+----------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8687): remark #7712: This variable has not been used.   [DZAMIN]
+      real  allold, allnew, zz, dzamin, cflmax, decfl
+--------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8687): remark #7712: This variable has not been used.   [CFLMAX]
+      real  allold, allnew, zz, dzamin, cflmax, decfl
+----------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8691): remark #7712: This variable has not been used.   [QR2]
+      real  qn(km), qr(km), qr2(km)
+----------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9087): remark #7712: This variable has not been used.   [II]
+                                re_qc, re_qi, re_qs, kts, kte, ii, jj)
+---------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8907): remark #7712: This variable has not been used.   [II]
+                       n0go1d, t1d, p1d, dBZ, kts, kte, ii, jj,xam_g)
+--------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9087): remark #7712: This variable has not been used.   [JJ]
+                                re_qc, re_qi, re_qs, kts, kte, ii, jj)
+-------------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8907): remark #7712: This variable has not been used.   [JJ]
+                       n0go1d, t1d, p1d, dBZ, kts, kte, ii, jj,xam_g)
+------------------------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(8930): remark #7712: This variable has not been used.   [KBOT]
+      INTEGER:: i, k, k_0, kbot, n
+---------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9116): remark #7712: This variable has not been used.   [INU_C]
+      integer :: inu_c
+-----------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9125): remark #7712: This variable has not been used.   [DIAI]
+      real :: diai      
+--------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9330): remark #7712: This variable has not been used.   [QD_STORE]
+REAL(real32) :: qd_store,nd_store,qr_store,nr_store
+----------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9330): remark #7712: This variable has not been used.   [ND_STORE]
+REAL(real32) :: qd_store,nd_store,qr_store,nr_store
+-------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9330): remark #7712: This variable has not been used.   [QR_STORE]
+REAL(real32) :: qd_store,nd_store,qr_store,nr_store
+----------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9330): remark #7712: This variable has not been used.   [NR_STORE]
+REAL(real32) :: qd_store,nd_store,qr_store,nr_store
+-------------------------------------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9333): remark #7712: This variable has not been used.   [THETA]
+REAL(real64) :: theta,dt64
+----------------^
+/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90(9339): remark #7712: This variable has not been used.   [FULL_EMPTY_UNPAIRED]
+LOGICAL :: candidate_valid,full_empty_unpaired
+---------------------------^

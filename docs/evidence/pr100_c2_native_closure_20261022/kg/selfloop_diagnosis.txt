@@ -1,0 +1,22 @@
+PR100 KG self-loop diagnosis
+Date: 2026-10-22
+Scope: read-only review of the rolled-back extraction/diagnostics, fixture source, PR100 selected-path wrapper change, and inherited PR98 engine wiring. No graph/wiki mutation, model/build run, or repo edit.
+
+Observed artifacts
+- Raw KLAPS50 extraction: `/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr100_c2_native_closure_20261022/kg/klaps50_extraction.json`, SHA256 `f330834cc2317e21a098472bfaa9afce33265c1a0d857d952824be96c1f4725d`.
+- Diagnostic: `.../kg/klaps50_diagnose.json`, SHA256 `5393def13f5bbd9c7f94f86a7af1994575b251ed288530d372d6b28e92d2e394`; it reports 40,281 nodes, 83,890 edges, one self-loop, and no example rows. Producer source-name suppression evidence is heuristic and does not itself explain the loop.
+- Cluster log: `.../kg/klaps50_cluster.log`, SHA256 `5490c123a7c9f06067b812565ac16ba2d8a01d5dabbba13b181e698c9700fbc3`; it reports ordinary reclustering to 3,288 communities and 250 community renames after labels changed. It has no self-loop or recursive-call diagnosis.
+- The unique self-loop in the extraction JSON is `cloud_bal_tests_fixtures_pr99_group_failure_source_joint_qnb_update` --calls--> itself, source file `Cloud-BAL/tests/fixtures/pr99_group_failure_source.f90`, edge location L30. The node is `joint_qnb_update()` at L27.
+- Fixture SHA256 in the source checkout and extracted overlay: `eb5011cd0d2052d3aaa782be47283fd38a09005e1d3a44b3be3b8465445a0780`.
+
+Classification
+This is a Graphify parser artifact from a deliberately noncompilable Fortran-like anchor fixture, not an actual recursive call or an ID collision. The fixture ends the pseudo `joint_qnb_update` procedure at line 27, then contains a later `evaluate_joint_candidate` call at line 30. The extractor emits the node at the end-subroutine anchor and associates that later sibling call with the same node, yielding the loop. The fixture has incomplete pseudo declarations/statements and is expressly a transform/source anchor; it is not a compiled runtime module. The production implementation in `src/common/cloud_bal_joint_transport.f90` declares `joint_qnb_update` and ends it without a self-call. The valid callsites are external callers (for example `tools/pr85_native_joint_update.f90` and tests), not recursive calls inside the implementation.
+
+Review of the proposed narrow fix
+- Current preflight change is limited to adding exactly `tests/fixtures/pr99_group_failure_source.f90` to the existing exact-path hash-only set alongside the older archived C1 core fixture. The existing PR99 fixture prefix remains selected; no broader tests/fixtures exclusion was introduced.
+- Preflight still hashes every graph-base diff path and reports nonselected paths as hash-only. `apply_kg.py` uses the same `selected_path()` predicate to produce `graph_rows`; the inherited pinned PR98 engine receives only those selected rows for Graphify extraction. Thus the exact fixture remains identity/provenance-bound but is not parsed. No self-loop edge is filtered after extraction, and no integrity tolerance/baseline is changed.
+- The PR100 wrapper README now says why this particular fixture is hash-only and calls out its non-runtime status. Inherited engine pin remains PR98 helper SHA `92ca3f6aa630807dfde2e7fbb1559b87a1ba0d3f746e211a993be963be01d685`.
+- Reviewed preflight SHA `a40696d4fb8415f0c5d43bb123dea5bb35b056e5cb8b2b13b23ace309e8896c2`; README SHA `78b23f8fa8d6978bf51f173c15cced4ceb404d1992045d6b1ba814a17f1ecf89`. Root reports five focused selector cases pass; I did not rerun them.
+
+Disposition
+GO on the exact-path hash-only fix. It removes the parser-only fixture from extraction while preserving the file hash and all other selected source paths. Keep the failed preflight/rollback record immutable; a fresh future plan should confirm the fixture is hash-only, selected production implementation remains selected, and extraction self-loops are zero before any apply. No graph state was changed by this review.
