@@ -1,0 +1,41 @@
+{
+  "schema": "pr101_root_closed_results_manifest_v1",
+  "source_commit": "2345bc1d83eae9094225a2ddfe8879740c4d8273",
+  "approval_base_commit": "d531fdd02bb4d83c5f01e08fb780211d899e854e",
+  "graph_selection_base_commit": "870dd5c9dac9aa1fae9f836c051cffd5699c6f85",
+  "pr_url": "https://github.com/gonos2k/Cloud-BAL/pull/101",
+  "runtime_gates": {
+    "P_C2_640": {
+      "state": "COMPLETE",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_projected_c2_20261023/closed_response.json",
+      "evidence_sha256": "a4f6c93cbba6035ea948e2f290cff9765decc206a2b090e2142c23f1a372a5d0",
+      "candidate": "Unchanged PR99 input P; C2 executable 387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "scope": "Closed 640 seconds/32 calls/rc0; matched existing three C2 controls; 0\u2013600 actual history, trace milestones to640; endpoint/active PASS, generic FAIL preserved."
+    },
+    "cloudthermo": {
+      "state": "COMPLETE",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_cloud_thermo_20261023/four_arm_summary.json",
+      "evidence_sha256": "87ec029801aef9165dcc760cdae7d6c9d4206cbbe208a6661f0bb79f102f5042",
+      "candidate": "Retained first-call C1 kernel with additive observer; OFF/HYDRO/COUPLED/P20 receipt-bound inputs",
+      "scope": "Four source-form pinned Intel replays return 17 fields and XLAND byte-identical; 613 support keys each; selected absolute saturation/transfer evidence, not full thermodynamic approval."
+    },
+    "upperwind": {
+      "state": "COMPLETE",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_upper_wind_20261023/final_validation.json",
+      "evidence_sha256": "174359fcae8084e63082e8208dd9792350fad796de09ce1a3bec45713b16d4a6",
+      "candidate": "C2-derived additive native capture overlay; HYDRO/P20 source-bound inputs",
+      "scope": "Paired closed20s captures and original Fortran source routine replays, six post-call bits per arm exact; selected k37\u201339 field/coefficient source attribution only, not full operator or wind-interpolation proof."
+    },
+    "T1sum": {
+      "state": "COMPLETE",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_t1_sum_20261023/independent_sum_check.json",
+      "evidence_sha256": "e7145ce3578a13393adca75261b2a3a0856a13ee257a7235da70df022ba35100",
+      "candidate": "Frozen PR100 original C2 OFF/HYDRO/COUPLED final T1 residual arrays",
+      "scope": "Independent exact sum of64960 REAL64 column operands per arm reproduces signed/L1/max; no model correction and no full host water/energy closure."
+    }
+  },
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED",
+  "scientific_disposition": "Mixed response: some early Phi/W metrics improve relative COUPLED; 600-second pressure/Phi/W/QC RMS remains above HYDRO. No physical change or new input selected.",
+  "review_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_cloud_thermo_native_20261023/reviews/closed_team_review.json"
+}

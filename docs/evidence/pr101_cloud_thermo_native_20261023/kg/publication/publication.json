@@ -1,0 +1,95 @@
+{
+  "schema": "pr101_kg_publication_v1",
+  "status": "PASS_REVIEWED_DERIVED_PUBLICATION",
+  "source_commit": "2345bc1d83eae9094225a2ddfe8879740c4d8273",
+  "pr_url": "https://github.com/gonos2k/Cloud-BAL/pull/101",
+  "publication_scope": "Evidence-only descendant of the frozen source commit; source, runtime evidence and graph extraction selection stay bound to2345bc1. Do not rerun source-freeze preflight against this publication-only descendant.",
+  "artifacts": {
+    "apply.log": {
+      "path": "docs/evidence/pr101_cloud_thermo_native_20261023/kg/publication/apply.log",
+      "sha256": "303b3cffea0a23dcc9c2b0ea7cb402061e0b884bf2b14dab3cd55cee805f60eb",
+      "bytes": 130
+    },
+    "check_only.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_native_20261023/kg/publication/check_only.json",
+      "sha256": "88d693a884d40467844aef3fea9d52c9adad55d11e1013bc43912fa5788ad33b",
+      "bytes": 239218
+    },
+    "check_only_review.txt": {
+      "path": "docs/evidence/pr101_cloud_thermo_native_20261023/kg/publication/check_only_review.txt",
+      "sha256": "f526776e63cf91ddcf6277973472a2df04ae13df353f276a8ce988254cf3b2e3",
+      "bytes": 3005
+    },
+    "execution.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_native_20261023/kg/publication/execution.json",
+      "sha256": "dfa921626c68cca7d64fefc6958367593f575f3a94d71bef9075b92c0c5a42ea",
+      "bytes": 954
+    },
+    "kg_receipt.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_native_20261023/kg/publication/kg_receipt.json",
+      "sha256": "78dbd7ed923c888954f2a23f863948ce63a7034230a99d045c13c513e7a64565",
+      "bytes": 296854
+    },
+    "post_apply_review.txt": {
+      "path": "docs/evidence/pr101_cloud_thermo_native_20261023/kg/publication/post_apply_review.txt",
+      "sha256": "b85ee0b5736b5cd95571664b4d9d47f01d2153026a775bbf36f71aef4c92c193",
+      "bytes": 4147
+    },
+    "root_go.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_native_20261023/kg/publication/root_go.json",
+      "sha256": "07db63465f9f3d0c068c3ace07c8d627dc66311ce87a5742c4d79ab8585ddeaa",
+      "bytes": 589
+    },
+    "root_post_apply_readback.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_native_20261023/kg/publication/root_post_apply_readback.json",
+      "sha256": "d88f4fc6c255c8f3fea33b14a3c0e290147871d578646fa8aa9a838c74fe4018",
+      "bytes": 6878
+    },
+    "root_results_manifest.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_native_20261023/kg/publication/root_results_manifest.json",
+      "sha256": "a43fa857e8054df5e909aac7195e1b9c51a7498aa07dec4561c8663f35dd86cb",
+      "bytes": 3341
+    }
+  },
+  "authoritative_snapshot": "2026-10-23-pr101-cloud-thermo-native",
+  "dated_snapshot_inventory": "112 retained historical folders plus2automatic intermediate date folders plus2final named PR101 folders =116; roles/member hashes in root_post_apply_readback.json. Plain-date intermediate exports are not the authoritative PR101 graphs.",
+  "corpus_deltas": {
+    "KLAPS50": {
+      "nodes": 40517,
+      "edges": 84398,
+      "communities": 3292,
+      "delta_nodes": 241,
+      "delta_edges": 513,
+      "sha256": "0659dfb07ddb202a823f7aa43d9a7e97bb2a7895491fbcf602367eb990af493e",
+      "report_sha256": "2ada3c5df74a5e99651e77f5837fec7353d5b4e098ab75450bc114569ad9a6e4"
+    },
+    "Cloud-BAL": {
+      "nodes": 14689,
+      "edges": 25942,
+      "communities": 1317,
+      "delta_nodes": 241,
+      "delta_edges": 511,
+      "sha256": "3dc5e37767dd1bc579f40cbfee19f2edb3ea688f362f53e9b3ee661ca1f52760",
+      "report_sha256": "52a15a51886d91de34af438c3a19b6e581e5739b0d84b9a84a9381589b4b8730"
+    }
+  },
+  "runtime_gates": {
+    "P_C2_640": "COMPLETE",
+    "cloudthermo": "COMPLETE",
+    "upperwind": "COMPLETE",
+    "T1sum": "COMPLETE"
+  },
+  "maintained_source_snapshot": {
+    "entry_count": 627,
+    "sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f"
+  },
+  "inherited_immutable_pin_count": 197,
+  "extraction_limits": "Separate KLAPS50 and Cloud-BAL snapshots extract allowlisted PR100 lineage, PR101 source/docs, and the approved changed PR86 runner/test; evidence payloads are hash-bound only. Cross-file Fortran CALL extraction is partial; Fortran embedded in Python generator strings is not extracted as standalone procedures. Graph freshness is navigation evidence, not runtime/scientific approval.",
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED",
+  "remaining_open": [
+    "Model-native physical/energy/host-water acceptance",
+    "Observation skill and validity of incoming cloud thermodynamics",
+    "Constraint-preserving upper-wind candidate design; no new input selected"
+  ]
+}
