@@ -1,0 +1,143 @@
+{
+  "schema": "pr101_cloud_thermo_source_revision_r64_v1",
+  "private_generated_source": {
+    "path": "/var/tmp/pr101_cloud_thermo_private_20261023/module_mp_kdm6_pr101_r64.f90",
+    "sha256": "f7ef82b945c409ea2c54ce88139f544250c9360af611fdd8515cbae8e23c3dca"
+  },
+  "source_transform": {
+    "path": "tools/pr101_cloud_thermo_source.py",
+    "sha256": "76cd5a39705dd01d2f90753d87c48f131c57a91102cfdb737ea76a155b0cba25"
+  },
+  "reducer": {
+    "path": "tools/pr101_cloud_thermo_reducer.py",
+    "sha256": "83194a6757d36354d5980b595e5d6b9713e50cb0d8d86ecf50ec405f56701ccc"
+  },
+  "source_patch": {
+    "path": "docs/evidence/pr101_cloud_thermo_20261023/source_r64.patch",
+    "sha256": "6f78bc02056817158414c1dda37a628fa8a44bf317ffa5815739a4c990635dbd"
+  },
+  "tests": {
+    "source": "tests/test_pr101_cloud_thermo_source.py",
+    "source_sha256": "2d42cad0cff4c7fef3f0ae232383a86998dcfb9baba6dfb4168e2fd9300bd0a2",
+    "reducer": "tests/test_pr101_cloud_thermo_reducer.py",
+    "reducer_sha256": "ee7dbfeff1d288d70f4aaf4898d841422d279cab75dbe3d1653981806b3695f8",
+    "log": "docs/evidence/pr101_cloud_thermo_20261023/validation/focused_python_tests_r64.log",
+    "log_sha256": "a95e4ef993f20ebc51468b833996442361543095528987e11bc3ef69ac5c16c8",
+    "result": "15 passed"
+  },
+  "build": {
+    "scratch": "/var/tmp/pr101_cloud_thermo_build_20261023_r64",
+    "plan": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/build_r64/build_plan.json",
+      "sha256": "65478f6d00648fc62cd36734a49e4445571d92920f7bf561aa8f5aa510210a69"
+    },
+    "module_count": 30,
+    "compile": "RETURN_CODE_0",
+    "link": "RETURN_CODE_0",
+    "replay": "COMPLETE_GUARDED_OFF_HYDRO_COUPLED_P20",
+    "post_link_input_inventory": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/build_r64/link_inputs_post_link.json",
+      "sha256": "4bb406baebeab0a25537ca91c8f0e3af787579479f3b9a63916fb3ea9af9281e",
+      "timing": "post-link readback; not a build-time input pin"
+    },
+    "module_inventory": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/build_r64/precompile_seed_inventory.json",
+      "sha256": "658a31c3359f1b091c9fe99f4d700b60fb40deb54b847187d3555aac83c0da5a"
+    },
+    "executable": {
+      "path": "/var/tmp/pr101_cloud_thermo_build_20261023_r64/link/pr101_cloud_thermo_replay.exe",
+      "sha256": "0fa1b8d44dc2a1fe9f438351c10f0e07e707e8c22c7850f32d54b484a12a3622"
+    }
+  },
+  "state": "r64 source built and four guarded T1 standalone replays completed; no forecast-control reruns",
+  "guarded_replays": {
+    "OFF": {
+      "receipt": "docs/evidence/pr101_cloud_thermo_20261023/replay_off_receipt.json",
+      "receipt_sha256": "9bf23cf7f902361df3253d85e6e30cc4e36dceb0761d3b2a98e99e7a552957c2"
+    },
+    "HYDRO": {
+      "receipt": "docs/evidence/pr101_cloud_thermo_20261023/replay_hydro_receipt.json",
+      "receipt_sha256": "7f0f7eec48f0dff14f52d048175cded4199a194bf0347a6b7d4c4534cf7e416d"
+    },
+    "COUPLED": {
+      "receipt": "docs/evidence/pr101_cloud_thermo_20261023/replay_coupled_receipt.json",
+      "receipt_sha256": "33b555378f8567f4f776edccead04623ab7110cbd14646d8906a3010259d705d"
+    },
+    "P20": {
+      "receipt": "docs/evidence/pr101_cloud_thermo_20261023/replay_p20_receipt.json",
+      "receipt_sha256": "c8a154605f42d4acb80849bd48d27b2246ac9618e3e3f2e0b6c901e8a06d841d"
+    }
+  },
+  "outputs": {
+    "four_arm_summary.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/four_arm_summary.json",
+      "sha256": "87ec029801aef9165dcc760cdae7d6c9d4206cbbe208a6661f0bb79f102f5042"
+    },
+    "report": {
+      "path": "docs/PR101_CLOUD_THERMO_20261023.md",
+      "sha256": "6c27129f075360bf326052b32f9bbabd0b2c7c053613300308b90985e1b72671"
+    },
+    "link_inputs_post_link.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/build_r64/link_inputs_post_link.json",
+      "sha256": "4bb406baebeab0a25537ca91c8f0e3af787579479f3b9a63916fb3ea9af9281e"
+    },
+    "stager_recheck.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/build_r64/stager_recheck.json",
+      "sha256": "df7a9d9cc5927260c76480e04b0493e6143b06c19eccf22b79abb87ed5c051fe"
+    },
+    "reproducibility_readback.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/build_r64/reproducibility_readback.json",
+      "sha256": "f8a6cb13746fd1361aaea3c374de92075c876bd9094bb82a1aeb3cae10d1527b"
+    },
+    "aggregate_tool.py": {
+      "path": "tools/pr101_cloud_thermo_aggregate.py",
+      "sha256": "df836a45d2017e99716d0666efcc43a35c6690efa6328e82ae26b369460464e9"
+    },
+    "aggregate_test.py": {
+      "path": "tests/test_pr101_cloud_thermo_aggregate.py",
+      "sha256": "bbad8e89eac8b1a23a88969bce2b7567c817280a5b9b433894047a5d2dd3be79"
+    },
+    "manifest_refresh_tool.py": {
+      "path": "tools/pr101_cloud_thermo_refresh_manifest.py",
+      "sha256": "e42ad695ff9a23f862db4096ec795439c5a005bddb84821b75c6d45957f3b583"
+    },
+    "off_summary.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/off_summary.json",
+      "sha256": "e70b5dbbda9ecd05b2447327ff8f3806501d9368642715dbd267c1039cc44087"
+    },
+    "replay_off_guarded_manifest.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/replay_off_guarded_manifest.json",
+      "sha256": "07751ea9d5dbb1bbc6ec3f27f6b973ae52b23b9a4351b61d475eee4af1912ed2"
+    },
+    "replay_hydro_guarded_manifest.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/replay_hydro_guarded_manifest.json",
+      "sha256": "28e0dbb345a2bfa24961c1ea245294ac68bc8ed1b8a5aa550b17fdf696a0eee0"
+    },
+    "replay_coupled_guarded_manifest.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/replay_coupled_guarded_manifest.json",
+      "sha256": "381fc6debe2f9b16e723adc32427cccf84aef26e971001998fe2290d4a4cb1c0"
+    },
+    "replay_p20_guarded_manifest.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/replay_p20_guarded_manifest.json",
+      "sha256": "c0f83761864c766a9fbf535eca18915f4d0d835b7f374e9ad6ec3f84cc218898"
+    },
+    "off_runtime_retry_note.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/off_runtime_retry_note.json",
+      "sha256": "d7759b99a93506bb9552d9a853845bda259d34b3f8c3a16ac7a84b0e25c40b98"
+    },
+    "replay_off_loader_failure_receipt.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/replay_off_loader_failure_receipt.json",
+      "sha256": "ba941f6bf82040a0df69d0fb6723a197c453258d882302b89e9da40afd169e11"
+    },
+    "aggregation_inputs.json": {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/aggregation_inputs.json",
+      "sha256": "c1c653275e62de49cc1699bfa7916c4d0715d1ccdb8a7a92f48d880180a14b1a"
+    }
+  },
+  "source_review_status": "root approved source and build; replay GO separately issued for OFF then HYDRO/COUPLED/P20",
+  "base_prepared_source": {
+    "path": "/var/tmp/pr100_qc_observer_build_fresh_20261022/src/module_mp_kdm6_pr100.f90",
+    "sha256": "0c76fdae6e58e336dfafd581779a0979415e7b0fa64c30f701d1e22594d3e2a1",
+    "role": "prepared PR100 observer source used as additive-transform input"
+  }
+}

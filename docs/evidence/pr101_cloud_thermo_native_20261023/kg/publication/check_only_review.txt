@@ -1,0 +1,21 @@
+PR101 KG CHECK_ONLY plan review — 2026-10-23
+
+Decision: GO for CHECK_ONLY as a read-only preflight; do not treat this as authorization to apply the KG update.
+
+Reviewed plan: /var/tmp/pr101_kg_check_only_20261023.json
+Plan file SHA256: 88d693a884d40467844aef3fea9d52c9adad55d11e1013bc43912fa5788ad33b
+Canonical inner plan SHA256: d8b7071e3d6254326075cb4a73b2d80ef193d7aca32a73138455e95f848c8060 (matches declared pin)
+External closed-results manifest SHA256: a43fa857e8054df5e909aac7195e1b9c51a7498aa07dec4561c8663f35dd86cb (matches requested pin)
+
+Source checkout explicitly reviewed: /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL. It is at source commit 2345bc1d83eae9094225a2ddfe8879740c4d8273 with a clean worktree. The separately maintained checkout /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL is not the PR source checkout and was not used for the source cleanliness decision.
+
+Scope and evidence checks:
+- Plan pins approval/base d531fdd02bb4d83c5f01e08fb780211d899e854e, graph selection base 870dd5c9dac9aa1fae9f836c051cffd5699c6f85, and open PR 101.
+- Independently checked all 156 selected-path current hashes and graph-selection-base hashes: 156/156 match. The 28 graph extraction paths are all non-evidence paths; selected path distribution is 28 SELECTED and 128 HASH_ONLY.
+- Maintained source inventory records 627 entries with pinned digest 0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f. The plan reports 197 verified immutable pins, 112 dated snapshot entries, and 457 rollback entries. Root independently verified these protected inventory/pin counts. I relied on the preflight's hash checks for the large immutable dated-snapshot payload rather than rehashing several GB in this bounded review.
+- Protected wiki baseline and helper pins are bound in the plan. Planned PR101 snapshot directory is absent; planned scratch KG output directory is absent.
+- Prior PR100 KG receipt at the maintained checkout matches pinned SHA256 9958027ddc1306bbe8b130a19c2c2530c07ea01bdd858e8d9664b31a9667c015.
+- All four runtime evidence gates are COMPLETE and their evidence paths/hashes match the external manifest: P_C2_640, cloudthermo, upperwind, and T1sum. These gate states indicate evidence completeness only. Physical approval remains FAIL_OPEN and observation skill remains NOT_EVALUATED. The P_C2 evidence explicitly preserves generic-QNB FAIL and FIRST_VALID_TO_INVALID_CAPTURED; the plan does not convert these into closure/approval claims.
+- The preflight/apply wrapper's CHECK_ONLY path serializes the bound plan and exits before engine.apply. No apply was performed in this review. Declared future mutations are limited to the derived graph/wiki report/index/log outputs and receipt/rollback bookkeeping; no wiki content pages, model files, or source inputs are in scope.
+
+No material blocker found for the requested CHECK_ONLY preflight. No KG apply, source edit, model run, or graph update was performed.

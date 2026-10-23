@@ -1,0 +1,215 @@
+{
+  "schema": "pr101_upper_wind_replay_v1",
+  "capture": "/var/tmp/pr101_upper_wind_projected20s_run2.raw",
+  "records": 4,
+  "capture_coverage": {
+    "expected_faces": [
+      [
+        "U",
+        136,
+        16
+      ],
+      [
+        "V",
+        135,
+        17
+      ]
+    ],
+    "observed_faces": [
+      [
+        "U",
+        136,
+        16
+      ],
+      [
+        "V",
+        135,
+        17
+      ]
+    ],
+    "complete_for_both_target_faces": true
+  },
+  "faces": [
+    {
+      "component": "U",
+      "face_ij": [
+        136,
+        16
+      ],
+      "native_time_step_seconds": 20,
+      "rk_step": 1,
+      "levels": [
+        {
+          "k": 37,
+          "before": 0.0067949299700558186,
+          "after": -8658.3193359375,
+          "predicted_after": -8658.3193359375,
+          "residual": 0.0,
+          "observed_increment": -8658.326171875
+        },
+        {
+          "k": 38,
+          "before": 0.00622868537902832,
+          "after": -10314.32421875,
+          "predicted_after": -10314.32421875,
+          "residual": 0.0,
+          "observed_increment": -10314.330078125
+        },
+        {
+          "k": 39,
+          "before": 0.05492568016052246,
+          "after": -11227.625,
+          "predicted_after": -11227.625,
+          "residual": 0.0,
+          "observed_increment": -11227.6796875
+        }
+      ]
+    },
+    {
+      "component": "V",
+      "face_ij": [
+        135,
+        17
+      ],
+      "native_time_step_seconds": 20,
+      "rk_step": 1,
+      "levels": [
+        {
+          "k": 37,
+          "before": -0.0028312206268310547,
+          "after": 5413.56591796875,
+          "predicted_after": 5413.56591796875,
+          "residual": 0.0,
+          "observed_increment": 5413.56884765625
+        },
+        {
+          "k": 38,
+          "before": -0.0025480985641479492,
+          "after": 6445.7001953125,
+          "predicted_after": 6445.7001953125,
+          "residual": 0.0,
+          "observed_increment": 6445.70263671875
+        },
+        {
+          "k": 39,
+          "before": -0.02689659781754017,
+          "after": 7012.74365234375,
+          "predicted_after": 7012.74365234375,
+          "residual": 0.0,
+          "observed_increment": 7012.7705078125
+        }
+      ]
+    }
+  ],
+  "factor_separation": {
+    "schema": "pr101_upper_wind_factor_separation_v1",
+    "projected_capture": "/var/tmp/pr101_upper_wind_projected20s_run2.raw",
+    "hydro_capture": "/var/tmp/pr101_upper_wind_hydro20s_run2.raw",
+    "capture_coverage": {
+      "projected_complete_for_both_target_faces": true,
+      "hydro_complete_for_both_target_faces": true
+    },
+    "faces": [
+      {
+        "component": "U",
+        "face_ij": [
+          136,
+          16
+        ],
+        "native_time_step_seconds": 20,
+        "rk_step": 1,
+        "levels": [
+          {
+            "k": 37,
+            "P_field_P_coeff": -8658.326171875,
+            "P_field_H_coeff": -8658.326171875,
+            "H_field_P_coeff": 7.793572902679443,
+            "H_field_H_coeff": 7.793572902679443,
+            "field_effect_at_H_coeff": -8666.11974477768,
+            "coefficient_effect_at_H_field": 0.0,
+            "field_coefficient_interaction": 0.0,
+            "total_P_minus_H": -8666.11974477768
+          },
+          {
+            "k": 38,
+            "P_field_P_coeff": -10314.330078125,
+            "P_field_H_coeff": -10314.330078125,
+            "H_field_P_coeff": 5.519319534301758,
+            "H_field_H_coeff": 5.519319534301758,
+            "field_effect_at_H_coeff": -10319.849397659302,
+            "coefficient_effect_at_H_field": 0.0,
+            "field_coefficient_interaction": 0.0,
+            "total_P_minus_H": -10319.849397659302
+          },
+          {
+            "k": 39,
+            "P_field_P_coeff": -11227.6796875,
+            "P_field_H_coeff": -11227.6796875,
+            "H_field_P_coeff": 1.915189266204834,
+            "H_field_H_coeff": 1.915189266204834,
+            "field_effect_at_H_coeff": -11229.594876766205,
+            "coefficient_effect_at_H_field": 0.0,
+            "field_coefficient_interaction": 0.0,
+            "total_P_minus_H": -11229.594876766205
+          }
+        ]
+      },
+      {
+        "component": "V",
+        "face_ij": [
+          135,
+          17
+        ],
+        "native_time_step_seconds": 20,
+        "rk_step": 1,
+        "levels": [
+          {
+            "k": 37,
+            "P_field_P_coeff": 5413.56884765625,
+            "P_field_H_coeff": 5413.56884765625,
+            "H_field_P_coeff": 1.744731068611145,
+            "H_field_H_coeff": 1.744731068611145,
+            "field_effect_at_H_coeff": 5411.824116587639,
+            "coefficient_effect_at_H_field": 0.0,
+            "field_coefficient_interaction": 0.0,
+            "total_P_minus_H": 5411.824116587639
+          },
+          {
+            "k": 38,
+            "P_field_P_coeff": 6445.70263671875,
+            "P_field_H_coeff": 6445.70263671875,
+            "H_field_P_coeff": 0.8754696249961853,
+            "H_field_H_coeff": 0.8754696249961853,
+            "field_effect_at_H_coeff": 6444.827167093754,
+            "coefficient_effect_at_H_field": 0.0,
+            "field_coefficient_interaction": 0.0,
+            "total_P_minus_H": 6444.827167093754
+          },
+          {
+            "k": 39,
+            "P_field_P_coeff": 7012.7705078125,
+            "P_field_H_coeff": 7012.7705078125,
+            "H_field_P_coeff": -0.3556479215621948,
+            "H_field_H_coeff": -0.3556479215621948,
+            "field_effect_at_H_coeff": 7013.126155734062,
+            "coefficient_effect_at_H_field": 0.0,
+            "field_coefficient_interaction": 0.0,
+            "total_P_minus_H": 7013.126155734062
+          }
+        ]
+      }
+    ],
+    "coefficient_fields": [
+      "MUT",
+      "xkmhd",
+      "c1",
+      "c2",
+      "map_metrics",
+      "rdx",
+      "rdy"
+    ],
+    "captured_but_not_read_by_horizontal_diffusion": [
+      "khdif"
+    ]
+  }
+}

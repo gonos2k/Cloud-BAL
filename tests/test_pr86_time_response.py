@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import errno
 import hashlib
 import gzip
 import json
@@ -171,7 +170,7 @@ class TimeResponseTests(unittest.TestCase):
                         "namelist_text": "candidate namelist", "namelist_diff": ""}
             stage = response._stage(prepared, root / "output")
             self.assertEqual(response.sha256(stage / "wrfinput_d01"), prepared["candidate_wrfinput_sha256"])
-            with self.assertRaisesRegex(ValueError, "only valid for the COUPLED arm"):
+            with self.assertRaisesRegex(ValueError, "only valid for COUPLED or PROJECTED"):
                 response.prepare("OFF", 20, root / "rejected", native_input_receipt_path=Path(binding["receipt_path"]))
             with self.assertRaisesRegex(ValueError, "HYDRO requires its own input receipt"):
                 response.prepare("HYDRO", 20, root / "rejected_hydro",
@@ -179,6 +178,52 @@ class TimeResponseTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "limited to one 20-second step"):
                 response.prepare("COUPLED", 40, root / "rejected_longrun",
                                  native_input_receipt_path=Path(binding["receipt_path"]))
+
+    def test_projected_arm_requires_receipt_candidate_build_and_matched_duration(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = make_native_input_binding(root)
+            receipt_path = Path(binding["receipt_path"])
+            with self.assertRaisesRegex(ValueError, "requires a source-bound"):
+                response.prepare("PROJECTED", 640, root / "missing_receipt")
+            with self.assertRaisesRegex(ValueError, "explicit C2 candidate build"):
+                response.prepare("PROJECTED", 640, root / "missing_build",
+                                 native_input_receipt_path=receipt_path)
+            with self.assertRaisesRegex(ValueError, "matched 640-second run"):
+                response.prepare("PROJECTED", 20, root / "wrong_duration",
+                                 candidate_build_path=root / "unused_build.json",
+                                 native_input_receipt_path=receipt_path)
+
+    def test_projected_native_binding_rejects_wrong_parent_or_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            binding = make_native_input_binding(root)
+            template = {"candidate_wrfinput_sha256": "wrong-parent",
+                        "candidate_wrfbdy_sha256": binding["artifacts"]["boundary"]["sha256"]}
+            with self.assertRaisesRegex(ValueError, "parent differs"):
+                response._validate_native_template(binding, template)
+            template["candidate_wrfinput_sha256"] = binding["artifacts"]["parent"]["sha256"]
+            template["candidate_wrfbdy_sha256"] = "wrong-boundary"
+            with self.assertRaisesRegex(ValueError, "boundary differs"):
+                response._validate_native_template(binding, template)
+
+    def test_projected_finalizer_rejects_missing_input_binding(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            out = make_finalizer_fixture(root, 640)
+            preflight_path = out / "preflight.json"
+            preflight = json.loads(preflight_path.read_text())
+            preflight.update(arm="PROJECTED", template_arm="COUPLED", duration_seconds=640,
+                             candidate_input_binding=None, candidate_build=None)
+            preflight_path.write_text(json.dumps(preflight))
+            launch_path = out / "receipt.json"
+            launch = json.loads(launch_path.read_text())
+            launch.update(arm="PROJECTED", candidate_input_binding=None)
+            launch_path.write_text(json.dumps(launch))
+            result = response.finalize_existing_run("PROJECTED", out, 640)
+            self.assertEqual(result["status"], "INCOMPLETE")
+            self.assertIn("PROJECTED arm requires its source-bound native projection input",
+                          result["processing_errors"])
 
     def test_native_finalizer_requires_coupled_role_template_and_launch_binding(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -238,7 +283,7 @@ class TimeResponseTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "artifact changed"):
                 response._stage(prepared, root / "rejected_output")
 
-    def test_cross_filesystem_stage_copies_only_for_exdev(self) -> None:
+    def test_stage_copies_template_inputs_and_isolates_staged_writes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             runtime = root / "runtime"
@@ -247,12 +292,12 @@ class TimeResponseTests(unittest.TestCase):
             (runtime / "namelist.input.source").write_text("source namelist")
             prepared = {"runtime_dir": str(runtime), "input_hashes": {"input.dat": "unused"},
                         "namelist_text": "candidate namelist", "namelist_diff": ""}
-            with patch.object(response.os, "link", side_effect=OSError(errno.EXDEV, "cross-device")):
-                stage = response._stage(prepared, root / "copied")
-            self.assertEqual((stage / "input.dat").read_bytes(), b"frozen input")
-            with patch.object(response.os, "link", side_effect=PermissionError(errno.EACCES, "denied")):
-                with self.assertRaises(PermissionError):
-                    response._stage(prepared, root / "denied")
+            stage = response._stage(prepared, root / "copied")
+            staged_input = stage / "input.dat"
+            self.assertEqual(staged_input.read_bytes(), b"frozen input")
+            self.assertNotEqual(staged_input.stat().st_ino, (runtime / "input.dat").stat().st_ino)
+            staged_input.write_bytes(b"model changed staged auxiliary input")
+            self.assertEqual((runtime / "input.dat").read_bytes(), b"frozen input")
 
     def test_corrupt_cross_device_copy_is_rejected_before_consumption(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -270,8 +315,7 @@ class TimeResponseTests(unittest.TestCase):
                     Path(destination).write_bytes(b"corrupt copy")
                 else:
                     copy(source, destination)
-            with patch.object(response.os, "link", side_effect=OSError(errno.EXDEV, "cross-device")), \
-                 patch.object(response.shutil, "copy2", side_effect=corrupt_input):
+            with patch.object(response.shutil, "copy2", side_effect=corrupt_input):
                 stage = response._stage(prepared, root / "output")
             with self.assertRaisesRegex(ValueError, "input.dat"):
                 response.verify_staged_inputs(prepared, stage)

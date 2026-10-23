@@ -1,0 +1,19 @@
+PR101 cloud thermo final post-fix review
+Date: 2026-10-23
+Scope: read-only verification of final manifest metadata simplification, frozen R64 build-plan binding, current summary pins and four guarded replay input/output bindings. No tests, build, replay or model run was performed by this reviewer.
+
+Decision: GO for evidence consistency and reproducibility metadata review.
+
+Verified final hashes
+- Main manifest: `f38a6566d480bbc7d6dd45dddf76b9805c4bc71d41c5229caf36df4d060b55ab`.
+- Source revision manifest: `f9f7a1d114f34c89a85d9fd8229d5095379c6c1817c14f00e8c8692d480b5c87`.
+- Four-arm summary: `87ec029801aef9165dcc760cdae7d6c9d4206cbbe208a6661f0bb79f102f5042`.
+- Frozen guarded build plan: `65478f6d00648fc62cd36734a49e4445571d92920f7bf561aa8f5aa510210a69`.
+
+Checks
+- Each manifest now contains structured `{path, sha256}` records for every output and no duplicate scalar aliases for report, summary, or source revision manifest hashes. I verified every structured output pin against current file bytes and cross-checked the main manifest’s source-revision and summary pins.
+- The four-arm OFF/HYDRO/COUPLED/P20 guarded manifests each contain exactly one binding to the frozen build plan SHA. I rechecked their manifest/receipt pins, executable and capture hashes, all manifest input/binding path hashes, expected output hashes, COMPLETE/rc0 state, receipt-to-manifest binding, successful markers and empty preservation issues.
+- The separate reproducibility readback retains the post-link inventory timing limitation instead of treating post-link bytes as link-time pins. The module staging recheck records 30 modules, isolated module search path and `compile_not_run=true`; this is not a fresh rebuild or runtime result.
+- The owner reports the canonical refresher is idempotent across two consecutive calls and 20 tests/36 checksums pass; I did not rerun them.
+
+This review addresses the former stale `report_sha256` alias and finds no remaining metadata inconsistency in the checked artifacts. Existing scientific/runtime limits and the explicit post-link inventory limitation remain applicable.

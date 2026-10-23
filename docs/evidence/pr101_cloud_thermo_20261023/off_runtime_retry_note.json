@@ -1,0 +1,15 @@
+{
+  "schema": "pr101_replay_runtime_retry_note_v1",
+  "failed_attempt": {
+    "receipt": "docs/evidence/pr101_cloud_thermo_20261023/replay_off_loader_failure_receipt.json",
+    "sha256": "ba941f6bf82040a0df69d0fb6723a197c453258d882302b89e9da40afd169e11",
+    "returncode": 127,
+    "failure": "dynamic loader could not find libhdf5_hl.so.310 before model entry"
+  },
+  "successful_retry": {
+    "directory": "/var/tmp/pr101_thermo_replay_off_20261023_retry1",
+    "runtime_change": "after sourcing pinned tests/intel_toolchain.sh, prefixed /NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib and lib64 to LD_LIBRARY_PATH",
+    "receipt": "docs/evidence/pr101_cloud_thermo_20261023/replay_off_receipt.json"
+  },
+  "replay_was_guarded": "both attempts used tools/pr101_guarded_replay.py; failed and successful attempts used different fresh directories"
+}

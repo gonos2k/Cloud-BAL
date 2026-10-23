@@ -1,0 +1,13 @@
+PR101 upper-wind post-fix independent review
+Date: 2026-10-23
+Scope: read-only verification of the corrected prebuild source pin, archive-member identity evidence, and refreshed final-validation references. No build, test, decompression, replay, or model run was performed.
+
+Decision: GO; prior evidence-pin blocker is resolved.
+
+Verified
+- `prebuild_validation.json` now pins source SHA256 `27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c`, matching the bytes at its pinned source path and the final compile/replay records. The old erroneous SHA no longer appears in the upper-wind evidence, tools, or tests.
+- `horizontal_diffusion_object_compare.json` (SHA256 `7c5e1d264d39d2f2875d540f8bed7e9e4f66a72e6ab5106c14414b218853b6a8`) pins the receipt-bound base C2 and instrumented C2 archives. It records identical `module_big_step_utilities_em.o` member SHA256 values `8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343`, with `byte_equal=true`.
+- Refreshed `final_validation.json` SHA256 `174359fcae8084e63082e8208dd9792350fad796de09ce1a3bec45713b16d4a6` correctly pins the archive-member comparison and the unchanged source hash.
+- The previous final review file remains unchanged at SHA256 `dfe05b1fc461651555de826cba9a39fd08c3cc09c2088e4c3683e13613623b7c`.
+
+This clears the recorded evidence consistency blocker. Prior scope limits still apply: the archive identity proves the native horizontal-diffusion object was not changed between those two archives; it does not establish physical validation. The guarded source replay and paired capture remain limited to the sampled faces/levels and the stated short-run/noninterference scope.

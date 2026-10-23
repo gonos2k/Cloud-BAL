@@ -1,0 +1,63 @@
+{
+  "schema": "pr101_projected_c2_response_execution_v1",
+  "attempt": 2,
+  "argv": [
+    "python",
+    "tools/pr101_projected_c2_response.py",
+    "--run-root",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr101_projected_c2_640_20261023",
+    "--output",
+    "docs/evidence/pr101_projected_c2_20261023/closed_response.json"
+  ],
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL",
+  "returncode": 0,
+  "returncode_basis": "Analyzer command completed without stderr and wrote its complete JSON output; output writing is the final operation in the CLI.",
+  "stdout_log": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_projected_c2_20261023/closed_response_attempt02.log",
+  "stdout_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_log": null,
+  "response_source_path": "tools/pr101_projected_c2_response.py",
+  "response_source_sha256": "1bc24af37f04427d10be6ca3620ec0df8c0cb190a9983f3c7ef5caa70612c8ba",
+  "run_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr101_projected_c2_640_20261023/receipt.json",
+  "run_receipt_sha256": "d0a7920687aecbef15b91f2641638918f00beea67de5fb2af6e5597175bc5da2",
+  "run_preflight_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr101_projected_c2_640_20261023/preflight.json",
+  "run_preflight_sha256": "db19a14accab9958d75a9c83107f317cab4b0b64788789fde60168391418bdaa",
+  "output_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_projected_c2_20261023/closed_response.json",
+  "output_sha256": "a4f6c93cbba6035ea948e2f290cff9765decc206a2b090e2142c23f1a372a5d0",
+  "output_bytes": 2287531,
+  "status": "RECEIPT_CLOSED_FIXED_SUPPORT_RESPONSE",
+  "history_records": 11,
+  "history_scopes": [
+    "PROJECTED_minus_OFF",
+    "PROJECTED_minus_HYDRO",
+    "PROJECTED_minus_COUPLED"
+  ],
+  "milestones_seconds": [
+    20,
+    60,
+    300,
+    320,
+    480,
+    500,
+    600,
+    640
+  ],
+  "first_call_status": "EXACT_STATE_MATCH_DIFFERENT_EXECUTABLE",
+  "source_audit_statuses": {
+    "reader_pins": null,
+    "exact_source_endpoint": "PASS",
+    "active_ice_policy_split": "PASS",
+    "generic_qnb_pair_conversion": "FAIL",
+    "ice_sedimentation_ledger": "FIRST_VALID_TO_INVALID_CAPTURED",
+    "trace_identity": null
+  },
+  "source_reader_pins": {
+    "tools/pr94_longrun_audit.py": "0ce4eb5a00fa5065aef71be5436b1894813e6d3bdca9d5904283ef72dca326d1",
+    "tools/pr86_compare_response.py": "64b2f97f452035cae328576d26216c54877fa778b3eeabe17cdb9980103aaa5c",
+    "tools/pr87_native_history.py": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+    "tools/pr86_water_budget.py": "e6c00374e9730278b3c1545630af9aa3a6af4c68544c7f39dbda61f909337dc2",
+    "tools/pr87_completed_state_audit.py": "2daef11c005868abf58631d84df74b8535eccb217660fbd605bd8f03216ee70d",
+    "tools/pr85_joint_stage_trace.py": "5c2e9ccb3537a6bc251845e2b87c3efb991002ebbc1db5232d475e29f6c31720",
+    "docs/evidence/pr93_active_ice_20261020/runtime/closed_run_audit.py": "8f9affa02e6d843d623911cfd6a9447a9ddb4ba0713cf927e2d5de2bcfb2e126"
+  },
+  "attempt01_record": "closed_response_attempt01.json"
+}

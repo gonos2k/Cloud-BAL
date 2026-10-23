@@ -1,0 +1,83 @@
+{
+  "schema": "pr101_upper_wind_fortran_compile_v1",
+  "status": "COMPILE_RC0_NOT_EXECUTED",
+  "scratch": "/var/tmp/pr101_upper_wind_source_replay_build_final_20261023",
+  "compiler": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "profile": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/tests/intel_toolchain.sh",
+    "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "flags": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz",
+      "-real-size",
+      "32",
+      "-i4",
+      "-convert",
+      "big_endian"
+    ]
+  },
+  "source_routine": {
+    "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_big_step_utilities_em.F",
+    "sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c",
+    "expected_sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c"
+  },
+  "capture_raw": {
+    "path": "/var/tmp/pr101_upper_wind_projected20s_run2.raw",
+    "sha256": "e961c89d3e2b5841c8ed49c0e754b1a289a8abb5047c0862fcdcb4419669da9d"
+  },
+  "generated_driver": {
+    "path": "/var/tmp/pr101_upper_wind_fortran_replay_final_20261023.F90",
+    "sha256": "72a7a0a3ba8ab156d184e5f4d09c6150adcdb7978c1d6fe47d0f1053b073c672"
+  },
+  "compiled_driver_copy": {
+    "path": "/var/tmp/pr101_upper_wind_source_replay_build_final_20261023/pr101_upper_wind_replay.F90",
+    "sha256": "72a7a0a3ba8ab156d184e5f4d09c6150adcdb7978c1d6fe47d0f1053b073c672"
+  },
+  "executable": {
+    "path": "/var/tmp/pr101_upper_wind_source_replay_build_final_20261023/replay.exe",
+    "sha256": "8f12b1496b07a679d0a9e9bc5e48d599a82fefa2755a4667a4e556463ef38bfe"
+  },
+  "compile_log": {
+    "path": "/var/tmp/pr101_upper_wind_source_replay_build_final_20261023/compile.log",
+    "sha256": "dc0a3e1ff175b4082fb9c38d77f95d7ab63904561c82106389f3dd6b7ac65ca5"
+  },
+  "compile_returncode": 0,
+  "model_run": false,
+  "executable_run": false,
+  "compile_cwd": "/var/tmp/pr101_upper_wind_source_replay_build_final_20261023",
+  "compile_argv": [
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "-stand",
+    "f08",
+    "-warn",
+    "all",
+    "-fpe0",
+    "-traceback",
+    "-O2",
+    "-fp-model",
+    "strict",
+    "-fimf-arch-consistency=true",
+    "-no-ftz",
+    "-real-size",
+    "32",
+    "-i4",
+    "-convert",
+    "big_endian",
+    "-o",
+    "replay.exe",
+    "pr101_upper_wind_replay.F90"
+  ]
+}

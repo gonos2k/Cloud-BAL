@@ -1,0 +1,63 @@
+{
+  "schema": "pr101_upper_wind_final_validation_v1",
+  "status": "PASS_SOURCE_CAPTURE_AND_GUARDED_REPLAY",
+  "evidence": {
+    "focused_tests": {
+      "command": "python3 -m unittest tests.test_pr101_upper_wind_capture tests.test_pr101_upper_wind_replay",
+      "result": "PASS",
+      "count": 12
+    },
+    "paired_model_capture": {
+      "hydro_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_upper_wind_20261023/hydro20s_receipt.json",
+      "hydro_receipt_sha256": "c0557e8053144b57fdacc43d9b20973b11651d05060ca38a9b60ff6fca89213d",
+      "p20_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_upper_wind_20261023/projected20s_receipt.json",
+      "p20_receipt_sha256": "fc56bce9217c390deceb0a8ec005659bcefde7eda8efc0bd5a3ac3cc129146f8",
+      "both_complete_one_timestep": true,
+      "common_boundary": true,
+      "same_instrumented_executable": true
+    },
+    "source_stencil": {
+      "raw_hydro_sha256": "812a1871ae3ea4154cfa37b5369102fb4b7f5818a71bea2a5088e5d33bede431",
+      "raw_p20_sha256": "e961c89d3e2b5841c8ed49c0e754b1a289a8abb5047c0862fcdcb4419669da9d",
+      "python_real32_replay": "PASS_ZERO_RESIDUAL_ALL_6_POST_VALUES",
+      "complete_face_event_coverage": true,
+      "paired_operator_fields_equal": [
+        "options",
+        "bounds",
+        "flags",
+        "c1",
+        "c2",
+        "XKMHD",
+        "MUT",
+        "map_metrics",
+        "khdif",
+        "rdx",
+        "rdy"
+      ],
+      "P_minus_H_increment_difference_attributed_to_field_stencil": true
+    },
+    "noninterference": {
+      "path": "noninterference_comparison.json",
+      "sha256": "794e7ac93032ef9156f7c00aa7a4c5c591902fdceefe44863d898aa6bb6edfac",
+      "checks": "full first-call pre/post KDM6 and PR67 payload SHA, XLAND input, ten raw T0 fields with metadata, and 16 derived T0 fields"
+    },
+    "fortran_source_replay": {
+      "p20_receipt_sha256": "fb46da412193530e2d489598b8624ed6c54b9ce45e75a0f6985b51c635a1d783",
+      "hydro_receipt_sha256": "44897f8d9bf46d05ccffab30fce19022a3d9cc2d353e0e352419b7bbd1ad0cc4",
+      "p20_guard_status": "COMPLETE",
+      "hydro_guard_status": "COMPLETE",
+      "source_sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c",
+      "routine_source_unchanged": true
+    },
+    "remaining_limits": [
+      "Exact real.exe vertical/horizontal wind interpolation is not replayed; pressure levels bracket the target.",
+      "C1 archived P20 state comparison is cross-executable.",
+      "No longer forecast or physical tuning was performed."
+    ],
+    "source_object_identity": {
+      "path": "horizontal_diffusion_object_compare.json",
+      "sha256": "7c5e1d264d39d2f2875d540f8bed7e9e4f66a72e6ab5106c14414b218853b6a8",
+      "result": "module_big_step_utilities_em.o byte-identical between base C2 and instrumented C2 archives"
+    }
+  }
+}

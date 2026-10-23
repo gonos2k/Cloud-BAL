@@ -1,0 +1,48 @@
+{
+  "schema": "pr101_guarded_replay_v1",
+  "case": "PR101 source-form horizontal diffusion HYDRO upper U/V faces",
+  "scope": "Exact source routine replay for captured HYDRO call; standalone Fortran program bitwise-checks all six post-call values against captured POST REAL32 bits; no model, wind tuning, or operator changes.",
+  "directory": "/var/tmp/pr101_upper_wind_fortran_replay_guarded_hydro_20261023",
+  "executable": {
+    "path": "/var/tmp/pr101_upper_wind_source_replay_hydro_build_20261023/replay.exe",
+    "sha256": "ebe599b5c78ac4956464bef7076bfee2bcc3d706de238fdd6d3bc15023a1aa69"
+  },
+  "arguments": [],
+  "inputs": {},
+  "bindings": [
+    {
+      "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_big_step_utilities_em.F",
+      "sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c"
+    },
+    {
+      "path": "/var/tmp/pr101_upper_wind_fortran_replay_hydro_20261023.F90",
+      "sha256": "a1c160398f3e1280cf45bd245e5f7f7d8c50449ad09ad3d9488f7b6059f90d9e"
+    },
+    {
+      "path": "/var/tmp/pr101_upper_wind_hydro20s_run2.raw",
+      "sha256": "812a1871ae3ea4154cfa37b5369102fb4b7f5818a71bea2a5088e5d33bede431"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_upper_wind_20261023/fortran_compile_receipt_hydro.json",
+      "sha256": "fabddcfa680c58e12906522e2ae194667b15bda44ad698b7a1738da3da2ea1d9"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_upper_wind_20261023/fortran_replay_expected_hydro.txt",
+      "sha256": "022e5ad4e23116d929fb248d2d9767ff10786db515c9137412bf18c1a9ad7d91"
+    }
+  ],
+  "expected_outputs": {
+    "pr101_upper_wind_fortran_replay.txt": "022e5ad4e23116d929fb248d2d9767ff10786db515c9137412bf18c1a9ad7d91"
+  },
+  "completion_markers": [
+    "PR101_UPPER_WIND_FORTRAN_REPLAY_PASS v1"
+  ]
+}

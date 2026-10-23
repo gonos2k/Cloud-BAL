@@ -1,0 +1,17 @@
+PR101 guarded replay runner independent review
+Date: 2026-10-23
+Scope: tools/pr101_guarded_replay.py and tests/test_pr101_guarded_replay.py in the PR101 Cloud-BAL checkout. Static review only; no compiler, model, replay, or test execution by reviewer. The root reports 7 passing Python semantic tests.
+
+Decision: GO for the stated guarded diagnostic replay use, with a non-blocking test coverage note below.
+
+Review findings
+- The runner hashes the manifest bytes before decoding and pins those same bytes; it rechecks executable, inputs, bindings, and manifest before and after child execution.
+- It refuses a pre-existing scratch directory, requires a canonical absolute path outside any ancestor containing .git, stages the pinned executable and named inputs into that new directory, checks staged hashes before and after, and launches with cwd set to the scratch directory.
+- It fixes OMP_NUM_THREADS=1 and OMP_DYNAMIC=FALSE while preserving the caller environment. LD_LIBRARY_PATH is inherited and recorded; the caller must provide the pinned Intel runtime profile as the root task specifies.
+- Completion requires return code zero, all exact expected output hashes, all required markers in run.log, and no staged-input/pin preservation issues. It writes a receipt for both complete and incomplete executions. Expected outputs are tested without following symlinks; top-level symlink artifacts are also marked as preservation issues.
+- The original pinned input files are only read by the runner and copied into scratch. The process itself is not OS-sandboxed; this review relies on the specified hash-pinned diagnostic executable and its cwd-relative output contract.
+
+Non-blocking coverage note
+The checked-in test file covers fresh cwd/staging/receipt, preflight hash and path rejection, staged-input mutation, and missing-marker failure. I did not find an explicit symlink-artifact test or a bindings/manifest mutation-during-child test, although the implementation contains checks for these cases. The root-reported seven passing cases therefore do not directly exercise those branches.
+
+No edits were made. This GO is limited to the common guard mechanics; it does not review the instrumented Fortran source, scientific interpretation, or runtime output.
