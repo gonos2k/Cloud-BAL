@@ -1,0 +1,32 @@
+{
+  "schema": "pr101_graphify_preview_reference_v1",
+  "status": "STRUCTURAL_FRAGMENT_PREVIEW_ONLY",
+  "preview_directory": "/var/tmp/pr101_graphify_preview_20261023",
+  "artifacts": {
+    "input_inventory.json": {
+      "path": "/var/tmp/pr101_graphify_preview_20261023/input_inventory.json",
+      "sha256": "51896bcccb102dc3dc41cf499a7de9772c7f57f9111ef004b0d5698d4d594ff4"
+    },
+    "preview_summary.json": {
+      "path": "/var/tmp/pr101_graphify_preview_20261023/preview_summary.json",
+      "sha256": "34624d6ed2be8730bb9bdcafa2640c82ff33459e55cfb4a7d8295f21455de863"
+    },
+    "raw_extraction.json": {
+      "path": "/var/tmp/pr101_graphify_preview_20261023/raw_extraction.json",
+      "sha256": "d424c33cd8f2ea341602bc83421ec93d089fec5d5ad66f7c29d964d14df61bdc"
+    }
+  },
+  "counts": {
+    "selected_file_count": 23,
+    "node_count": 292,
+    "edge_count": 868,
+    "self_loop_count": 0,
+    "missing_source_endpoint_count": 0
+  },
+  "limits": "Raw fragment import targets include out-of-scope modules and unresolved selected-module aliases; final merged graph integrity is checked separately by the guarded updater. This preview did not alter maintained graphs/wiki/source and does not validate runtime or science.",
+  "later_delta_after_preview": {
+    "path": "tests/test_pr101_upper_wind_replay.py",
+    "sha256": "73438b78cde96f9f94d31bbecf83c7505fb39354c01c5bd1c9508727e7f06139",
+    "scope": "test-only portability decorators and use of the existing pair validator; final maintained graph extraction will use current file bytes"
+  }
+}

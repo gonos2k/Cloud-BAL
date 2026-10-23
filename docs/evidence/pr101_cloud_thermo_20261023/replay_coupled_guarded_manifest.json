@@ -1,0 +1,47 @@
+{
+  "schema": "pr101_guarded_replay_v1",
+  "case": "PR101 cloud thermo COUPLED first-call T1",
+  "scope": "Full active tile standalone replay with additive thermodynamic capture; identity check against receipt-bound native 17-field + XLAND post trace",
+  "directory": "/var/tmp/pr101_thermo_replay_coupled_20261023",
+  "executable": {
+    "path": "/var/tmp/pr101_cloud_thermo_build_20261023_r64/link/pr101_cloud_thermo_replay.exe",
+    "sha256": "0fa1b8d44dc2a1fe9f438351c10f0e07e707e8c22c7850f32d54b484a12a3622"
+  },
+  "inputs": {
+    "kdm6_first_call_pre.raw": {
+      "path": "/var/tmp/pr97_t1_20261022/COUPLED/input/kdm6_first_call_pre.raw",
+      "sha256": "e4efd6811065ae6196eac8b123eabda68c441f34af8ed4b7db6c92683fca04e8"
+    }
+  },
+  "arguments": [
+    "kdm6_first_call_pre.raw"
+  ],
+  "expected_outputs": {
+    "replay_post.raw": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be"
+  },
+  "completion_markers": [
+    "REPLAY COMPLETED FULL ACTIVE TILE"
+  ],
+  "bindings": [
+    {
+      "path": "/var/tmp/pr97_t1_20261022/COUPLED/input/kdm6_first_call_post.raw",
+      "sha256": "12d758c33e745adbaa5ccd5a0ef96728543b99e80e6587ea36adb78a894cc8be"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr101_cloud_thermo_20261023/build_r64/build_plan.json",
+      "sha256": "65478f6d00648fc62cd36734a49e4445571d92920f7bf561aa8f5aa510210a69"
+    },
+    {
+      "path": "/var/tmp/pr101_cloud_thermo_build_20261023_r64/src/module_mp_kdm6_pr101.f90",
+      "sha256": "f7ef82b945c409ea2c54ce88139f544250c9360af611fdd8515cbae8e23c3dca"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/docs/evidence/pr97_t1_rounding_20261022/arms/COUPLED/input_manifest.json",
+      "sha256": "4f71f464590168c47980458a5bf19653fe16c8acb9570b46648be97518040bd2"
+    }
+  ]
+}

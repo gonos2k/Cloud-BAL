@@ -1,0 +1,24 @@
+{
+  "schema": "pr101_horizontal_diffusion_archive_member_compare_v1",
+  "member": "module_big_step_utilities_em.o",
+  "base_c2_archive": {
+    "path": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/link/main/libwrflib_pr87_overlay.a",
+    "sha256": "c9294166dc38c9ce9640a9615aed0651dddc15f975334638341ce457a9ad03da"
+  },
+  "instrumented_c2_archive": {
+    "path": "/var/tmp/pr101_upper_wind_freshbuild_after_root_review_20261023/link/main/libwrflib_pr87_overlay.a",
+    "sha256": "81d25a9685c2a85a5a2b28a7de80838089580142a92e7ff059345ea666488894"
+  },
+  "extracted_member": {
+    "base_path": "/var/tmp/pr101_base_c2_module_big_step_utilities_em.o",
+    "instrumented_path": "/var/tmp/pr101_overlay_module_big_step_utilities_em.o",
+    "base_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+    "instrumented_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+    "byte_equal": true
+  },
+  "routine_source": {
+    "path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_big_step_utilities_em.F",
+    "sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c"
+  },
+  "scope": "The instrumented rebuild changed module_em.o and did not replace module_big_step_utilities_em.o; this establishes the native HD object was byte-identical between the receipt-bound base C2 archive and instrumented C2 archive."
+}

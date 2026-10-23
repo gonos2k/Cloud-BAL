@@ -1,0 +1,817 @@
+{
+  "schema": "pr101_cloud_thermo_four_arm_summary_v1",
+  "source_sha256": "f7ef82b945c409ea2c54ce88139f544250c9360af611fdd8515cbae8e23c3dca",
+  "executable_sha256": "0fa1b8d44dc2a1fe9f438351c10f0e07e707e8c22c7850f32d54b484a12a3622",
+  "lineage": {
+    "OFF": "C1 retained kernel, first-call T1 input",
+    "HYDRO": "C1 retained kernel, first-call T1 input",
+    "COUPLED": "C1 retained kernel, first-call T1 input",
+    "P20": "separate closed P20 receipt; not live C2 P640"
+  },
+  "support": {
+    "all_arms_same_613_event_keys": true,
+    "events": 613
+  },
+  "arm_absolutes": {
+    "OFF": {
+      "rows": 613,
+      "full_rows": 231,
+      "general_rows": 382,
+      "sum": {
+        "unbounded_evaporation": 0.15281837727434322,
+        "bounded_evaporation": 0.08456438005183364,
+        "source_extent": 0.08456438022173879,
+        "stored_dqv": 0.08456437962013297,
+        "stored_dqc": -0.08456438000800753,
+        "stored_dt": -205.85765075683594
+      },
+      "python_saturation_oracle": {
+        "disposition": "advisory only",
+        "max_ulp_difference": 1,
+        "over_one_ulp": 0
+      }
+    },
+    "HYDRO": {
+      "rows": 613,
+      "full_rows": 231,
+      "general_rows": 382,
+      "sum": {
+        "unbounded_evaporation": 0.12500754105030865,
+        "bounded_evaporation": 0.05599142416956217,
+        "source_extent": 0.05581926048942849,
+        "stored_dqv": 0.055819267756305635,
+        "stored_dqc": -0.055819260435086185,
+        "stored_dt": -136.37208557128906
+      },
+      "python_saturation_oracle": {
+        "disposition": "advisory only",
+        "max_ulp_difference": 2,
+        "over_one_ulp": 1
+      }
+    },
+    "COUPLED": {
+      "rows": 613,
+      "full_rows": 231,
+      "general_rows": 382,
+      "sum": {
+        "unbounded_evaporation": 0.1249294135694754,
+        "bounded_evaporation": 0.05597233614212056,
+        "source_extent": 0.05569665613824311,
+        "stored_dqv": 0.05569665931398049,
+        "stored_dqc": -0.05569665619929294,
+        "stored_dt": -136.10704040527344
+      },
+      "python_saturation_oracle": {
+        "disposition": "advisory only",
+        "max_ulp_difference": 1,
+        "over_one_ulp": 0
+      }
+    },
+    "P20": {
+      "rows": 613,
+      "full_rows": 230,
+      "general_rows": 383,
+      "sum": {
+        "unbounded_evaporation": 0.12488141168296352,
+        "bounded_evaporation": 0.05615527877109131,
+        "source_extent": 0.05594764274998912,
+        "stored_dqv": 0.05594765968271531,
+        "stored_dqc": -0.05594764255164822,
+        "stored_dt": -136.6995391845703
+      },
+      "python_saturation_oracle": {
+        "disposition": "advisory only",
+        "max_ulp_difference": 1,
+        "over_one_ulp": 0
+      }
+    }
+  },
+  "signed_contrasts": {
+    "HYDRO_minus_OFF": {
+      "t_before": -44.183258056640625,
+      "pressure": 865.2822265625,
+      "qv_before": 0.05070133452090886,
+      "qc_before": -0.02735139609307089,
+      "es_liquid": -6077.542286872864,
+      "qs_liquid": -0.048070232949612546,
+      "work1": 0.027982999766436478,
+      "pcond": 0.001437255982335203,
+      "unbounded_evaporation": -0.027810836224034574,
+      "bounded_evaporation": -0.028572955882271468,
+      "source_extent": -0.02874511973231029,
+      "cpm": 43.4718017578125,
+      "xl": 117364.75,
+      "cpm_basis_q": 0.05163649620976685,
+      "xl_basis_t": -50.07826232910156,
+      "es_initial": -6993.291020452976,
+      "qs_initial": -0.054892609228772926,
+      "es_after": 2967.668496131897,
+      "qs_after": 0.022933180634936434,
+      "rh_initial": 6.214284379966557,
+      "rh_branch": 5.8468066919595,
+      "rh_after": -0.09751052968204021,
+      "qv_after": 0.021956222657081526,
+      "qc_after": 0.0013937234798504505,
+      "t_after": 25.30230712890625,
+      "stored_dqv": -0.028745111863827333,
+      "stored_dqc": 0.028745119572921342,
+      "stored_dt": 69.48556518554688,
+      "full_flag_mismatches": 4
+    },
+    "COUPLED_minus_OFF": {
+      "t_before": -45.43952941894531,
+      "pressure": 210.41650390625,
+      "qv_before": 0.05068465522435872,
+      "qc_before": -0.02729698546964552,
+      "es_liquid": -6136.210988104343,
+      "qs_liquid": -0.04848133402992971,
+      "work1": 0.02816464373574945,
+      "pcond": 0.0014433862020982397,
+      "unbounded_evaporation": -0.02788896370486782,
+      "bounded_evaporation": -0.028592043909713073,
+      "source_extent": -0.028867724083495673,
+      "cpm": 43.48358154296875,
+      "xl": 120330.25,
+      "cpm_basis_q": 0.05165045368198662,
+      "xl_basis_t": -51.3441162109375,
+      "es_initial": -7054.875274538994,
+      "qs_initial": -0.055318350707239006,
+      "es_after": 3037.540282189846,
+      "qs_after": 0.023367078829323873,
+      "rh_initial": 6.317977646365762,
+      "rh_branch": 5.9311325727030635,
+      "rh_after": 0.05909277778118849,
+      "qv_after": 0.021816934918206243,
+      "qc_after": 0.0015707383390690666,
+      "t_after": 24.311080932617188,
+      "stored_dqv": -0.028867720306152478,
+      "stored_dqc": 0.028867723808714586,
+      "stored_dt": 69.7506103515625,
+      "full_flag_mismatches": 12
+    },
+    "P20_minus_COUPLED": {
+      "t_before": 0.0128631591796875,
+      "pressure": 35.34033203125,
+      "qv_before": 3.779203098019934e-05,
+      "qc_before": -0.00041584678290044856,
+      "es_liquid": -6.6528588235378265,
+      "qs_liquid": -3.477365680737421e-05,
+      "work1": -2.0042060626224156e-05,
+      "pcond": -1.2549331343354817e-05,
+      "unbounded_evaporation": -4.800188651188364e-05,
+      "bounded_evaporation": 0.00018294262897074545,
+      "source_extent": 0.0002509866117460114,
+      "cpm": 0.01153564453125,
+      "xl": 176.25,
+      "cpm_basis_q": 1.3317993534656125e-05,
+      "xl_basis_t": -0.0760650634765625,
+      "es_initial": -6.104942262172699,
+      "qs_initial": -5.088956095278263e-05,
+      "es_after": -129.6532288491726,
+      "qs_after": -0.0009027400446939282,
+      "rh_initial": -0.019716985523700714,
+      "rh_branch": -0.011828197166323662,
+      "rh_after": 0.0015387404710054398,
+      "qv_after": 0.000288792399715021,
+      "qc_after": -0.0006668331352557288,
+      "t_after": -0.5796356201171875,
+      "stored_dqv": 0.0002510003687348217,
+      "stored_dqc": -0.0002509863523552803,
+      "stored_dt": -0.592498779296875,
+      "full_flag_mismatches": 9
+    }
+  },
+  "ranked_cells": {
+    "COUPLED_minus_OFF_general": {
+      "rank_rule": "largest absolute COUPLED\u2212OFF stored_dqc difference among rows full_evaporation=false in both arms",
+      "identity": {
+        "timestep": 1,
+        "loop": 1,
+        "i": 136,
+        "j": 17,
+        "k": 11
+      },
+      "signed_delta_C_minus_OFF": {
+        "unbounded_evaporation": -0.0008474350906908512,
+        "bounded_evaporation": -0.0008474350906908512,
+        "source_extent": -0.0009143302304437384,
+        "stored_dqv": -0.0009143305942416191,
+        "stored_dqc": 0.0009143302449956536,
+        "stored_dt": 2.211517333984375,
+        "rh_initial": 0.20004945993423462,
+        "rh_branch": 0.19445645809173584,
+        "rh_after": 0.004456281661987305
+      },
+      "arms": {
+        "OFF": {
+          "full_evaporation": false,
+          "t_before": 291.3748474121094,
+          "pressure": 80474.875,
+          "qv_before": 0.013584007509052753,
+          "qc_before": 0.0010394464479759336,
+          "es_liquid": 2087.7373046875,
+          "qs_liquid": 0.016559496521949768,
+          "work1": -0.0008474350906908512,
+          "pcond": -4.23717538069468e-05,
+          "dtcld": 20.0,
+          "xl": 2457131.5,
+          "cpm": 1015.9159545898438,
+          "cpm_basis_q": 0.013559714891016483,
+          "xl_basis_t": 291.4417724609375,
+          "es_initial": 2096.51513671875,
+          "qs_initial": 0.016630982980132103,
+          "es_after": 1834.044677734375,
+          "qs_after": 0.014500330202281475,
+          "rh_initial": 0.8153285384178162,
+          "rh_branch": 0.8203152418136597,
+          "rh_after": 0.9952492713928223,
+          "unbounded_evaporation": 0.0008474350906908512,
+          "bounded_evaporation": 0.0008474350906908512,
+          "source_extent": 0.0008474350906908512,
+          "qv_after": 0.014431443065404892,
+          "qc_after": 0.00019201135728508234,
+          "t_after": 289.3251953125,
+          "stored_dqv": 0.0008474355563521385,
+          "stored_dqc": -0.0008474350906908512,
+          "stored_dt": -2.049652099609375
+        },
+        "COUPLED": {
+          "full_evaporation": false,
+          "t_before": 289.7353820800781,
+          "pressure": 80478.65625,
+          "qv_before": 0.015112143009901047,
+          "qc_before": 0.00024027860490605235,
+          "es_liquid": 1882.53369140625,
+          "qs_liquid": 0.014892159961163998,
+          "work1": 6.689513975288719e-05,
+          "pcond": 3.3447570331190946e-06,
+          "dtcld": 20.0,
+          "xl": 2461145.75,
+          "cpm": 1017.2252197265625,
+          "cpm_basis_q": 0.015114814043045044,
+          "xl_basis_t": 289.7289123535156,
+          "es_initial": 1881.7606201171875,
+          "qs_initial": 0.014885898679494858,
+          "es_after": 1901.9752197265625,
+          "qs_after": 0.015049679204821587,
+          "rh_initial": 1.0153779983520508,
+          "rh_branch": 1.0147716999053955,
+          "rh_after": 0.9997055530548096,
+          "unbounded_evaporation": 0.0,
+          "bounded_evaporation": 0.0,
+          "source_extent": -6.689513975288719e-05,
+          "qv_after": 0.015045247972011566,
+          "qc_after": 0.00030717375921085477,
+          "t_after": 289.8972473144531,
+          "stored_dqv": -6.689503788948059e-05,
+          "stored_dqc": 6.689515430480242e-05,
+          "stored_dt": 0.161865234375
+        },
+        "P20": {
+          "full_evaporation": false,
+          "t_before": 289.7558288574219,
+          "pressure": 80493.609375,
+          "qv_before": 0.015109994448721409,
+          "qc_before": 0.00024041048891376704,
+          "es_liquid": 1884.9813232421875,
+          "qs_liquid": 0.014909151941537857,
+          "work1": 6.103377745603211e-05,
+          "pcond": 3.051688963751076e-06,
+          "dtcld": 20.0,
+          "xl": 2461097.25,
+          "cpm": 1017.2232055664062,
+          "cpm_basis_q": 0.015112562105059624,
+          "xl_basis_t": 289.7496032714844,
+          "es_initial": 1884.236083984375,
+          "qs_initial": 0.0149031151086092,
+          "es_after": 1902.7298583984375,
+          "qs_after": 0.01505293045192957,
+          "rh_initial": 1.0140539407730103,
+          "rh_branch": 1.0134711265563965,
+          "rh_after": 0.9997362494468689,
+          "unbounded_evaporation": 0.0,
+          "bounded_evaporation": 0.0,
+          "source_extent": -6.103378109401092e-05,
+          "qv_after": 0.015048960223793983,
+          "qc_after": 0.00030144426273182034,
+          "t_after": 289.90350341796875,
+          "stored_dqv": -6.1034224927425385e-05,
+          "stored_dqc": 6.1033773818053305e-05,
+          "stored_dt": 0.147674560546875
+        }
+      }
+    },
+    "COUPLED_minus_OFF_full": {
+      "rank_rule": "largest absolute COUPLED\u2212OFF stored_dqc difference among rows full_evaporation=true in both arms",
+      "identity": {
+        "timestep": 1,
+        "loop": 1,
+        "i": 135,
+        "j": 17,
+        "k": 11
+      },
+      "signed_delta_C_minus_OFF": {
+        "unbounded_evaporation": -0.0004776859423145652,
+        "bounded_evaporation": -0.0004263308655936271,
+        "source_extent": -0.0004263308655936271,
+        "stored_dqv": -0.000426330603659153,
+        "stored_dqc": 0.0004263308655936271,
+        "stored_dt": 1.03125,
+        "rh_initial": 0.09968221187591553,
+        "rh_branch": 0.09913462400436401,
+        "rh_after": 0.016519486904144287
+      },
+      "arms": {
+        "OFF": {
+          "full_evaporation": true,
+          "t_before": 291.43408203125,
+          "pressure": 80462.40625,
+          "qv_before": 0.01338774710893631,
+          "qc_before": 0.0005538598052226007,
+          "es_liquid": 2095.504638671875,
+          "qs_liquid": 0.01662539690732956,
+          "work1": -0.0009196587488986552,
+          "pcond": -2.7692989533534274e-05,
+          "dtcld": 20.0,
+          "xl": 2457122.75,
+          "cpm": 1015.7672119140625,
+          "cpm_basis_q": 0.013383048586547375,
+          "xl_basis_t": 291.4454345703125,
+          "es_initial": 2096.9970703125,
+          "qs_initial": 0.01663755625486374,
+          "es_after": 1925.8792724609375,
+          "qs_after": 0.015246616676449776,
+          "rh_initial": 0.8043878674507141,
+          "rh_branch": 0.8052588105201721,
+          "rh_after": 0.9144065976142883,
+          "unbounded_evaporation": 0.0009196587488986552,
+          "bounded_evaporation": 0.0005538598052226007,
+          "source_extent": 0.0005538598052226007,
+          "qv_after": 0.013941606506705284,
+          "qc_after": 0.0,
+          "t_after": 290.09429931640625,
+          "stored_dqv": 0.0005538593977689743,
+          "stored_dqc": -0.0005538598052226007,
+          "stored_dt": -1.33978271484375
+        },
+        "COUPLED": {
+          "full_evaporation": true,
+          "t_before": 290.5497131347656,
+          "pressure": 80403.9140625,
+          "qv_before": 0.014212491922080517,
+          "qc_before": 0.0001275289396289736,
+          "es_liquid": 1982.1361083984375,
+          "qs_liquid": 0.015714943408966064,
+          "work1": -0.00044197280658409,
+          "pcond": -6.37644689049921e-06,
+          "dtcld": 20.0,
+          "xl": 2459213.0,
+          "cpm": 1016.464111328125,
+          "cpm_basis_q": 0.014210919849574566,
+          "xl_basis_t": 290.55352783203125,
+          "es_initial": 1982.61328125,
+          "qs_initial": 0.015718825161457062,
+          "es_after": 1943.869384765625,
+          "qs_after": 0.01540403813123703,
+          "rh_initial": 0.9040700793266296,
+          "rh_branch": 0.9043934345245361,
+          "rh_after": 0.9309260845184326,
+          "unbounded_evaporation": 0.00044197280658409,
+          "bounded_evaporation": 0.0001275289396289736,
+          "source_extent": 0.0001275289396289736,
+          "qv_after": 0.014340020716190338,
+          "qc_after": 0.0,
+          "t_after": 290.2411804199219,
+          "stored_dqv": 0.00012752879410982132,
+          "stored_dqc": -0.0001275289396289736,
+          "stored_dt": -0.30853271484375
+        },
+        "P20": {
+          "full_evaporation": true,
+          "t_before": 290.6475830078125,
+          "pressure": 80456.3203125,
+          "qv_before": 0.014181125909090042,
+          "qc_before": 0.00012659670028369874,
+          "es_liquid": 1994.413818359375,
+          "qs_liquid": 0.015804199501872063,
+          "work1": -0.00047583022387698293,
+          "pcond": -6.3298348322859965e-06,
+          "dtcld": 20.0,
+          "xl": 2458983.0,
+          "cpm": 1016.4376831054688,
+          "cpm_basis_q": 0.01417943648993969,
+          "xl_basis_t": 290.65167236328125,
+          "es_initial": 1994.92626953125,
+          "qs_initial": 0.015808364376425743,
+          "es_after": 1956.215576171875,
+          "qs_after": 0.015493964776396751,
+          "rh_initial": 0.8969578742980957,
+          "rh_branch": 0.8973011374473572,
+          "rh_after": 0.9234384298324585,
+          "unbounded_evaporation": 0.00047583022387698293,
+          "bounded_evaporation": 0.00012659670028369874,
+          "source_extent": 0.00012659670028369874,
+          "qv_after": 0.014307722449302673,
+          "qc_after": 0.0,
+          "t_after": 290.34130859375,
+          "stored_dqv": 0.00012659654021263123,
+          "stored_dqc": -0.00012659670028369874,
+          "stored_dt": -0.3062744140625
+        }
+      }
+    },
+    "COUPLED_minus_OFF_substantial_process_control": {
+      "rank_rule": "smallest absolute COUPLED\u2212OFF stored_dqc contrast with qc_before and unbounded request >=1e-4 in both arms",
+      "identity": {
+        "timestep": 1,
+        "loop": 1,
+        "i": 137,
+        "j": 16,
+        "k": 23
+      },
+      "signed_delta_C_minus_OFF": {
+        "unbounded_evaporation": -1.9397702999413013e-08,
+        "bounded_evaporation": -1.9397702999413013e-08,
+        "source_extent": -1.9397702999413013e-08,
+        "stored_dqv": -1.932494342327118e-08,
+        "stored_dqc": 1.9441358745098114e-08,
+        "stored_dt": 9.1552734375e-05,
+        "rh_initial": 0.0008807182312011719,
+        "rh_branch": 0.0009850859642028809,
+        "rh_after": 3.814697265625e-06
+      },
+      "arms": {
+        "OFF": {
+          "full_evaporation": false,
+          "t_before": 245.5769805908203,
+          "pressure": 28867.23046875,
+          "qv_before": 0.0010895946761593223,
+          "qc_before": 0.001283982302993536,
+          "es_liquid": 63.941612243652344,
+          "qs_liquid": 0.0013802493922412395,
+          "work1": -0.0002194514381699264,
+          "pcond": -1.097257154469844e-05,
+          "dtcld": 20.0,
+          "xl": 2565077.5,
+          "cpm": 1005.439453125,
+          "cpm_basis_q": 0.0011158493580296636,
+          "xl_basis_t": 245.38180541992188,
+          "es_initial": 62.801109313964844,
+          "qs_initial": 0.0013555767945945263,
+          "es_after": 60.71922302246094,
+          "qs_after": 0.001310543972067535,
+          "rh_initial": 0.8231546878814697,
+          "rh_branch": 0.7894186973571777,
+          "rh_after": 0.9988570213317871,
+          "unbounded_evaporation": 0.0002194514381699264,
+          "bounded_evaporation": 0.0002194514381699264,
+          "source_extent": 0.0002194514381699264,
+          "qv_after": 0.0013090460561215878,
+          "qc_after": 0.0010645308066159487,
+          "t_after": 245.01712036132812,
+          "stored_dqv": 0.0002194513799622655,
+          "stored_dqc": -0.00021945149637758732,
+          "stored_dt": -0.5598602294921875
+        },
+        "COUPLED": {
+          "full_evaporation": false,
+          "t_before": 245.65679931640625,
+          "pressure": 28911.39453125,
+          "qv_before": 0.0010973390890285373,
+          "qc_before": 0.001266679260879755,
+          "es_liquid": 64.41338348388672,
+          "qs_liquid": 0.001388327218592167,
+          "work1": -0.000219432040466927,
+          "pcond": -1.097160202334635e-05,
+          "dtcld": 20.0,
+          "xl": 2564888.25,
+          "cpm": 1005.446044921875,
+          "cpm_basis_q": 0.0011236886493861675,
+          "xl_basis_t": 245.4625244140625,
+          "es_initial": 63.270545959472656,
+          "qs_initial": 0.0013636412331834435,
+          "es_after": 61.16999816894531,
+          "qs_after": 0.001318272901698947,
+          "rh_initial": 0.8240354061126709,
+          "rh_branch": 0.7904037833213806,
+          "rh_after": 0.9988608360290527,
+          "unbounded_evaporation": 0.000219432040466927,
+          "bounded_evaporation": 0.000219432040466927,
+          "source_extent": 0.000219432040466927,
+          "qv_after": 0.0013167711440473795,
+          "qc_after": 0.0010472472058609128,
+          "t_after": 245.09703063964844,
+          "stored_dqv": 0.00021943205501884222,
+          "stored_dqc": -0.00021943205501884222,
+          "stored_dt": -0.5597686767578125
+        },
+        "P20": {
+          "full_evaporation": false,
+          "t_before": 245.58766174316406,
+          "pressure": 28873.24609375,
+          "qv_before": 0.00109018140938133,
+          "qc_before": 0.001261108205653727,
+          "es_liquid": 64.00457763671875,
+          "qs_liquid": 0.0013813230907544494,
+          "work1": -0.00021978336735628545,
+          "pcond": -1.0989168004016392e-05,
+          "dtcld": 20.0,
+          "xl": 2565043.25,
+          "cpm": 1005.4395751953125,
+          "cpm_basis_q": 0.0011159763671457767,
+          "xl_basis_t": 245.39646911621094,
+          "es_initial": 62.886138916015625,
+          "qs_initial": 0.001357132801786065,
+          "es_after": 60.77463150024414,
+          "qs_after": 0.0013114686589688063,
+          "rh_initial": 0.8223044872283936,
+          "rh_branch": 0.7892298698425293,
+          "rh_after": 0.998853325843811,
+          "unbounded_evaporation": 0.00021978336735628545,
+          "bounded_evaporation": 0.00021978336735628545,
+          "source_extent": 0.00021978336735628545,
+          "qv_after": 0.001309964805841446,
+          "qc_after": 0.0010413248091936111,
+          "t_after": 245.02696228027344,
+          "stored_dqv": 0.0002197833964601159,
+          "stored_dqc": -0.0002197833964601159,
+          "stored_dt": -0.560699462890625
+        }
+      }
+    },
+    "COUPLED_minus_OFF_branch_mismatch": {
+      "rank_rule": "largest absolute stored_dqc difference among full_evaporation-flag mismatches in the aligned 613 keys",
+      "identity": {
+        "timestep": 1,
+        "loop": 1,
+        "i": 136,
+        "j": 18,
+        "k": 11
+      },
+      "signed_delta_C_minus_OFF": {
+        "unbounded_evaporation": -0.0007040878554107621,
+        "bounded_evaporation": -0.000643802122795023,
+        "source_extent": -0.000643802122795023,
+        "stored_dqv": -0.0006438018754124641,
+        "stored_dqc": 0.000643802122795023,
+        "stored_dt": 1.557220458984375,
+        "rh_initial": 0.15405982732772827,
+        "rh_branch": 0.14837366342544556,
+        "rh_after": 0.01898115873336792
+      },
+      "arms": {
+        "OFF": {
+          "full_evaporation": true,
+          "t_before": 291.33099365234375,
+          "pressure": 80488.640625,
+          "qv_before": 0.013470111414790154,
+          "qc_before": 0.000807048927526921,
+          "es_liquid": 2082.005126953125,
+          "qs_liquid": 0.016509924083948135,
+          "work1": -0.0008673346601426601,
+          "unbounded_evaporation": 0.0008673346601426601,
+          "pcond": -4.035244637634605e-05,
+          "bounded_evaporation": 0.000807048927526921,
+          "source_extent": 0.000807048927526921,
+          "stored_dqv": 0.0008070487529039383,
+          "stored_dqc": -0.000807048927526921,
+          "stored_dt": -1.95220947265625,
+          "rh_initial": 0.8094154000282288,
+          "rh_branch": 0.8158796429634094,
+          "rh_after": 0.9813463091850281,
+          "xl": 2457188.0,
+          "cpm": 1015.8135375976562
+        },
+        "COUPLED": {
+          "full_evaporation": false,
+          "t_before": 290.0727844238281,
+          "pressure": 80495.2890625,
+          "qv_before": 0.014674958772957325,
+          "qc_before": 0.00018940183508675545,
+          "es_liquid": 1923.2584228515625,
+          "qs_liquid": 0.015218987129628658,
+          "work1": -0.000163246804731898,
+          "unbounded_evaporation": 0.000163246804731898,
+          "pcond": -8.1623402365949e-06,
+          "bounded_evaporation": 0.000163246804731898,
+          "source_extent": 0.000163246804731898,
+          "stored_dqv": 0.00016324687749147415,
+          "stored_dqc": -0.000163246804731898,
+          "stored_dt": -0.394989013671875,
+          "rh_initial": 0.963475227355957,
+          "rh_branch": 0.964253306388855,
+          "rh_after": 1.000327467918396,
+          "xl": 2460319.25,
+          "cpm": 1016.851806640625
+        }
+      },
+      "mismatch_count": 12
+    }
+  },
+  "diagnostics": {
+    "liquid_saturation": "actual source phase is liquid formula even for cold temperatures",
+    "unbounded_evaporation": "max(-work1,0), source condenser REAL result promoted into DOUBLE work1; this is a request only",
+    "bounded_evaporation": "max(-pcond*dtcld,0), source-derived bounded comparison",
+    "source_extent": "signed actual source branch extent; full branch takes available qc, ordinary branch is -pcond*dtcld",
+    "stored_qv_qc_T": "separately checked from source assignments; stored deltas are not relabeled as exact approved transfer",
+    "latent_and_heat_capacity": "per-event xl/cpm plus producer-basis cpm q and xl T retained in absolute arm rows",
+    "cross_language_math": "Python saturation log/exp ULP comparisons advisory, never hardgate; source Fortran computed values are retained"
+  },
+  "private_raws": {
+    "OFF": {
+      "directory": "/var/tmp/pr101_thermo_replay_off_20261023_retry1",
+      "capture_sha256": "43d40ea74542539299b49481400b186a149678e7f3fb90e414965705dfeef1ad",
+      "receipt_sha256": "9bf23cf7f902361df3253d85e6e30cc4e36dceb0761d3b2a98e99e7a552957c2"
+    },
+    "HYDRO": {
+      "directory": "/var/tmp/pr101_thermo_replay_hydro_20261023",
+      "capture_sha256": "da06b04534aa037047a1a66297cd40da05a5ec853971d2085b387907184a023b",
+      "receipt_sha256": "7f0f7eec48f0dff14f52d048175cded4199a194bf0347a6b7d4c4534cf7e416d"
+    },
+    "COUPLED": {
+      "directory": "/var/tmp/pr101_thermo_replay_coupled_20261023",
+      "capture_sha256": "6dfcf8f4712eef3879a8cb5cdb500f19c970e90ed0ba1aa82449173b4753bcc2",
+      "receipt_sha256": "33b555378f8567f4f776edccead04623ab7110cbd14646d8906a3010259d705d"
+    },
+    "P20": {
+      "directory": "/var/tmp/pr101_thermo_replay_p20_20261023",
+      "capture_sha256": "be9ba06bd1330e13d5bd62a1b6ae476f26d210f57e738b4055306677f815c126",
+      "receipt_sha256": "c8a154605f42d4acb80849bd48d27b2246ac9618e3e3f2e0b6c901e8a06d841d"
+    }
+  },
+  "arm_branch_counts": {
+    "OFF": {
+      "rows": 613,
+      "full_evaporation_rows": 231,
+      "general_branch_rows": 382,
+      "qc_before_positive": 389,
+      "qc_before_zero": 224,
+      "qc_before_negative": 0,
+      "qc_positive_liquid_RH_counts": {
+        "rh_branch_lt_1": {
+          "count": 389,
+          "full_evaporation": 231,
+          "general_branch": 158,
+          "extent_sign": {
+            "evaporation_positive_extent": 389,
+            "condensation_negative_extent": 0,
+            "zero_extent": 0
+          }
+        },
+        "rh_branch_ge_1": {
+          "count": 0,
+          "full_evaporation": 0,
+          "general_branch": 0,
+          "extent_sign": {
+            "evaporation_positive_extent": 0,
+            "condensation_negative_extent": 0,
+            "zero_extent": 0
+          }
+        }
+      },
+      "extent_sign_by_branch": {
+        "full_evaporation": {
+          "evaporation_positive_extent": 231,
+          "condensation_negative_extent": 0,
+          "zero_extent": 0
+        },
+        "general_branch": {
+          "evaporation_positive_extent": 158,
+          "condensation_negative_extent": 0,
+          "zero_extent": 224
+        }
+      }
+    },
+    "HYDRO": {
+      "rows": 613,
+      "full_evaporation_rows": 231,
+      "general_branch_rows": 382,
+      "qc_before_positive": 389,
+      "qc_before_zero": 224,
+      "qc_before_negative": 0,
+      "qc_positive_liquid_RH_counts": {
+        "rh_branch_lt_1": {
+          "count": 380,
+          "full_evaporation": 231,
+          "general_branch": 149,
+          "extent_sign": {
+            "evaporation_positive_extent": 380,
+            "condensation_negative_extent": 0,
+            "zero_extent": 0
+          }
+        },
+        "rh_branch_ge_1": {
+          "count": 9,
+          "full_evaporation": 0,
+          "general_branch": 9,
+          "extent_sign": {
+            "evaporation_positive_extent": 0,
+            "condensation_negative_extent": 9,
+            "zero_extent": 0
+          }
+        }
+      },
+      "extent_sign_by_branch": {
+        "full_evaporation": {
+          "evaporation_positive_extent": 231,
+          "condensation_negative_extent": 0,
+          "zero_extent": 0
+        },
+        "general_branch": {
+          "evaporation_positive_extent": 149,
+          "condensation_negative_extent": 9,
+          "zero_extent": 224
+        }
+      }
+    },
+    "COUPLED": {
+      "rows": 613,
+      "full_evaporation_rows": 231,
+      "general_branch_rows": 382,
+      "qc_before_positive": 389,
+      "qc_before_zero": 224,
+      "qc_before_negative": 0,
+      "qc_positive_liquid_RH_counts": {
+        "rh_branch_lt_1": {
+          "count": 379,
+          "full_evaporation": 231,
+          "general_branch": 148,
+          "extent_sign": {
+            "evaporation_positive_extent": 379,
+            "condensation_negative_extent": 0,
+            "zero_extent": 0
+          }
+        },
+        "rh_branch_ge_1": {
+          "count": 10,
+          "full_evaporation": 0,
+          "general_branch": 10,
+          "extent_sign": {
+            "evaporation_positive_extent": 0,
+            "condensation_negative_extent": 10,
+            "zero_extent": 0
+          }
+        }
+      },
+      "extent_sign_by_branch": {
+        "full_evaporation": {
+          "evaporation_positive_extent": 231,
+          "condensation_negative_extent": 0,
+          "zero_extent": 0
+        },
+        "general_branch": {
+          "evaporation_positive_extent": 148,
+          "condensation_negative_extent": 10,
+          "zero_extent": 224
+        }
+      }
+    },
+    "P20": {
+      "rows": 613,
+      "full_evaporation_rows": 230,
+      "general_branch_rows": 383,
+      "qc_before_positive": 389,
+      "qc_before_zero": 224,
+      "qc_before_negative": 0,
+      "qc_positive_liquid_RH_counts": {
+        "rh_branch_lt_1": {
+          "count": 380,
+          "full_evaporation": 230,
+          "general_branch": 150,
+          "extent_sign": {
+            "evaporation_positive_extent": 380,
+            "condensation_negative_extent": 0,
+            "zero_extent": 0
+          }
+        },
+        "rh_branch_ge_1": {
+          "count": 9,
+          "full_evaporation": 0,
+          "general_branch": 9,
+          "extent_sign": {
+            "evaporation_positive_extent": 0,
+            "condensation_negative_extent": 9,
+            "zero_extent": 0
+          }
+        }
+      },
+      "extent_sign_by_branch": {
+        "full_evaporation": {
+          "evaporation_positive_extent": 230,
+          "condensation_negative_extent": 0,
+          "zero_extent": 0
+        },
+        "general_branch": {
+          "evaporation_positive_extent": 150,
+          "condensation_negative_extent": 9,
+          "zero_extent": 224
+        }
+      }
+    }
+  },
+  "branch_count_semantics": {
+    "liquid_RH": "source branch qv_before / source qs_liquid; counted only where qc_before > 0",
+    "transfer_sign": "positive source_extent means vapor transfer from cloud to vapor; negative means vapor-to-cloud condensation; zero is no signed source extent; full-evaporation source extent separately reported"
+  },
+  "rh_scope_note": "The former all-613 mean RH was removed: that population includes clear/dry cells. RH counts now use only qc_before > 0 and branch RH category."
+}

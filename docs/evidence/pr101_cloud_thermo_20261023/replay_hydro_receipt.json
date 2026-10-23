@@ -1,0 +1,167 @@
+{
+  "schema": "pr101_guarded_replay_receipt_v1",
+  "case": "PR101 cloud thermo HYDRO first-call T1",
+  "scope": "Full active tile standalone replay with additive thermodynamic capture; identity check against receipt-bound native 17-field + XLAND post trace",
+  "directory": "/var/tmp/pr101_thermo_replay_hydro_20261023",
+  "argv": [
+    "/var/tmp/pr101_thermo_replay_hydro_20261023/replay.exe",
+    "kdm6_first_call_pre.raw"
+  ],
+  "start_utc": "2026-10-23T08:23:17.718949+00:00",
+  "end_utc": "2026-10-23T08:23:49.371475+00:00",
+  "returncode": 0,
+  "execution_error": null,
+  "manifest_sha256": "28e0dbb345a2bfa24961c1ea245294ac68bc8ed1b8a5aa550b17fdf696a0eee0",
+  "guard_sha256": "f9854bd5c7d920786b0ee47d1ab1f694d3a4b9d33b060ff1e8e1a61fa58a76d3",
+  "expected_outputs": {
+    "replay_post.raw": true
+  },
+  "completion_markers": {
+    "REPLAY COMPLETED FULL ACTIVE TILE": true
+  },
+  "preservation_issues": [],
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OMP_DYNAMIC": "FALSE",
+    "LD_LIBRARY_PATH": "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib64:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/umf/1.1/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/env/../lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tbb/2023.0/env/../lib/intel64/gcc4.8:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/opt/mpi/libfabric/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/debugger/2026.0/opt/debugger/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/opt/compiler/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib"
+  },
+  "artifacts": {
+    "kdm6_first_call_post.raw": {
+      "bytes": 195542592,
+      "sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf"
+    },
+    "kdm6_first_call_pre.raw": {
+      "bytes": 195542592,
+      "sha256": "72ad647a5df1cd39e7eb3db8f8757e63a9aa4dbde5ce03fcbb08630ca1664f54"
+    },
+    "launch_manifest.json": {
+      "bytes": 2147,
+      "sha256": "28e0dbb345a2bfa24961c1ea245294ac68bc8ed1b8a5aa550b17fdf696a0eee0"
+    },
+    "pr100_qc_process.raw": {
+      "bytes": 2086920,
+      "sha256": "1fa6e0b2dfea7171ac19cf1fb9c22f2f9c7fd472974a5253cf39738cb48097d1"
+    },
+    "pr101_cloud_thermo.raw": {
+      "bytes": 564462,
+      "sha256": "da06b04534aa037047a1a66297cd40da05a5ec853971d2085b387907184a023b"
+    },
+    "pr67_kdm6_process.raw": {
+      "bytes": 83442240,
+      "sha256": "9bcef6cd06ca3dc9f6a532b2c715d7f25a9b222fcb292fa328f5e38cf431661b"
+    },
+    "pr76_target_call.raw": {
+      "bytes": 194,
+      "sha256": "7d583abf97d60148cc55280581612d29982a9f6472572663dbb46a5ad52a8130"
+    },
+    "pr76_thread_entry.raw": {
+      "bytes": 37,
+      "sha256": "db12de3ed8f7b49bc3f2e7922017b9c20e7e955c12d55de55ab9f40b87d236c9"
+    },
+    "pr77_native_species.raw": {
+      "bytes": 24430,
+      "sha256": "81c2cde6e27739c2dd983357758e84f811f28129682314b4009a529eabf08227"
+    },
+    "pr85_graupel_sedimentation_budget.raw": {
+      "bytes": 26169586,
+      "sha256": "54a5cbe03be3c223d2036f43ea52008d09aad194c48999a69b771f086f67aeee"
+    },
+    "pr85_ice_sedimentation_budget.raw": {
+      "bytes": 42855400,
+      "sha256": "d158667f4b7835dbbf0e0e6e27ca355c3e89bbc0af33e2e74c5273b1d4e6fad4"
+    },
+    "pr85_ice_transition_branch.raw": {
+      "bytes": 2659216,
+      "sha256": "fd74f96af9df4250971616290af8a30e3f007928e81ce1d7364e6c5d8cce69e8"
+    },
+    "pr85_kdm6_cold_budget.raw": {
+      "bytes": 199080,
+      "sha256": "f3af9e2e2674208fa8f4ff2571ca8cc48cff58e553020ab215bbc1783af4390d"
+    },
+    "pr85_kdm6_cutoff_budget.raw": {
+      "bytes": 143367458,
+      "sha256": "74501b6998d91e0f60b5d12d07e8453da8885e100a00d0c09f9e7bda34f14463"
+    },
+    "pr85_kdm6_freezing_budget.raw": {
+      "bytes": 329055555,
+      "sha256": "23eb5f14fc6d23385a9ed67097c66054fadb0b8220a4bf7dad296a0ea02d121f"
+    },
+    "pr85_kdm6_melt_budget.raw": {
+      "bytes": 35413854,
+      "sha256": "5e581a05a125fb0c8c8855d7e6eba344f385276ec296ab1b1467357cb37f2d23"
+    },
+    "pr85_kdm6_psd_boundary.raw": {
+      "bytes": 3503324,
+      "sha256": "10b30cea15e76aca0d955bcf99af237f1943c1756daea844dee17adabfcfc515"
+    },
+    "pr85_kdm6_warm_budget.raw": {
+      "bytes": 203826,
+      "sha256": "bb3a9951ec6d9d80edf4e00a0798546212b1c9821d2fd682648d3fa30fef6e1e"
+    },
+    "pr85_rain_freezing_budget.raw": {
+      "bytes": 7710798,
+      "sha256": "355d1bed7ccd57434f1635c4bc4a762dcbbbe3ba33ab3640055045c2c81701c4"
+    },
+    "pr87_admission_reason.raw": {
+      "bytes": 23514774,
+      "sha256": "8d1a8b503c91f47f26139d1dbf4cc2c10249bf611c5ecc43416bb24085e34770"
+    },
+    "pr87_graupel_melt.raw": {
+      "bytes": 2206368,
+      "sha256": "848ac876fb04540d727f4aa7a2b780fa8cee535f7afeacf2012e60bfbd5d684f"
+    },
+    "pr87_ice_extinction.raw": {
+      "bytes": 29950209,
+      "sha256": "e4d1f7d7db01a8b49b28d4354eeb5fb55fc346d964e4920ed6d8da0873431294"
+    },
+    "pr87_ice_sublimation_pending.raw": {
+      "bytes": 3506560,
+      "sha256": "2011cff14b72df3cf39d512ec7f8f1198ca9bc5b518b3d95adc00e1e767c0c0e"
+    },
+    "pr87_qn_public_store.raw": {
+      "bytes": 78890,
+      "sha256": "12c6ad4d0a75cf2cabc3bbf435eaf106ad4440d324d69e948715577c9278296b"
+    },
+    "pr87_rain_sedimentation_budget.raw": {
+      "bytes": 52128960,
+      "sha256": "96cb78ecaef34d5380f3ccfb91c2a1a7328fdf7e827e76859d83cee84b5f328f"
+    },
+    "pr89_kdm6_cold_summary.raw": {
+      "bytes": 248080,
+      "sha256": "90f602c2fccf99635d91899c6647bf1fd812ddb41a9b6e3371012c3e37e11c99"
+    },
+    "pr90_kdm6_cold_column.raw": {
+      "bytes": 33999280,
+      "sha256": "f41e9548ab8b07bb161b3d09992b1378edad5220fe9184caa30fb1ebdcf6464f"
+    },
+    "pr97_liquid_columns.raw": {
+      "bytes": 25854080,
+      "sha256": "98ddf8cd9ed1df7e51d8e480313ab330baba04e5c4d06f5694d9aa906e4f82d5"
+    },
+    "pr98_sed_face.raw": {
+      "bytes": 102960,
+      "sha256": "17a49e9099ed7ded05c117fa9250cfd46ad0516802a305f80428210061f05221"
+    },
+    "pr99_process_stage_compact.raw": {
+      "bytes": 81849600,
+      "sha256": "820205aa121ffa6a99267daebf6b1d318b574f6d93d1d135e00e57d94c628a24"
+    },
+    "pr99_total_water_checkpoints.raw": {
+      "bytes": 376064,
+      "sha256": "09170b1f3404eb1e7438b6e65f5a99fc82916c5eb6e6feb9fedc060e52cf03aa"
+    },
+    "replay.exe": {
+      "bytes": 71556248,
+      "sha256": "0fa1b8d44dc2a1fe9f438351c10f0e07e707e8c22c7850f32d54b484a12a3622"
+    },
+    "replay_post.raw": {
+      "bytes": 195542592,
+      "sha256": "4bbedf79f39e0018ad1c72ad223391693e82dde458b63dd1c5d01e6440512daf"
+    },
+    "run.log": {
+      "bytes": 33596282,
+      "sha256": "5cb2dd5c20e2ae3664fefd1bb88b3ac295baf84626346ed1986b66344f184b26"
+    }
+  },
+  "status": "COMPLETE"
+}

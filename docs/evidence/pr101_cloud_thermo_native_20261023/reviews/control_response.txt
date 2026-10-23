@@ -1,0 +1,27 @@
+PR101 control-response RMS reducer: read-only peer review
+Date: 2026-10-23
+Reviewer: /root/pr101_upper_wind
+Scope: reviewed the reducer source, its JSON result and four small closed receipts; did not reread history binaries, rerun models, or execute the reducer.
+Disposition: no material arithmetic, provenance, unit, mask, or interpretation blocker found.
+
+Current reviewed hashes (SHA-256):
+fcc7c059dd957a7287acc18cfdbbef6314a9230f235edc2fba64ff777b6b073c  docs/evidence/pr101_cloud_thermo_native_20261023/control_response_rms.py
+a300a0969bc28295d340287b7119907428b964fbc244575e6124aab01288bb2f  docs/evidence/pr101_cloud_thermo_native_20261023/control_response_rms.json
+331eb9837c41a7aa663864c348f8fe18c44f8e55feed736900f5029685b1aa64  docs/evidence/pr93_qc_chain_20261020/qc_vertical_composition.json
+c4174b0363dc3b6eb5117ae1e011e9bee0f4f70d090036c607331fac7b0d1f8d  OFF receipt.json
+1440db5a0178af11ac4d92854b3284cc35cb5a74e5e6f6a14cc59dcac3a00a64  HYDRO receipt.json
+0a7e1c3bcce58dea8433e9bffa615395d923cd05377c5068469af5dba29759cb  COUPLED receipt.json
+d0a7920687aecbef15b91f2641638918f00beea67de5fb2af6e5597175bc5da2  PROJECTED P640 receipt.json
+
+Method and bounds:
+- The reducer pins each of the four receipts and confirms COMPLETE, return code 0, final step 32. It verifies the receipt-listed history hash and checks the loaded stamps at actual common saved times 0, 60, 120, and 600 seconds; it rehashes histories after reading.
+- The fixed support-composition input is hash-pinned. Active mass-grid crop is KJI=(39,280,232); masks contain 613 original native support values and 7,644 cells in the fixed five-cell Chebyshev buffer. The buffer includes the support columns. RMS is unweighted Eulerian RMS of each arm minus OFF, evaluated in float64.
+- `load_history` provides P+PB pressure (Pa), PH+PHB mass-level geopotential (m2/s2), perturbation potential temperature T (K), dry-mass mixing ratios (kg/kg), and U/V/W destaggered to mass points (m/s). The reducer output scope now labels U/V/W as mass-point destaggered.
+- OFF is explicitly a reference rather than truth. The output retains `physical_approval=FAIL_OPEN` and `observation_skill=NOT_EVALUATED`; these statistics are not energy closure, direct P-minus-C distance, or observation skill.
+
+Mixed RMS comparison on the 613-value support (each item is arm-minus-OFF RMS):
+- 60 s: projected is below coupled for 11/12 reported physical fields, but V is slightly higher (2.592 vs 2.578 m/s). Projected U/V are 2.110/2.592 m/s versus Hydro 0.110/0.098 m/s. QCLOUD is 4.870e-5 kg/kg for projected, 5.054e-5 for coupled, and 4.245e-5 for Hydro.
+- 120 s: projected is below coupled for 9/12 fields and above for QRAIN, U, and V. Projected/coupled U/V are nearly equal (2.037/2.460 vs 2.032/2.457 m/s); Hydro is 0.098/0.093 m/s. QCLOUD is 4.369e-5, 4.584e-5, and 2.912e-5 kg/kg for projected, coupled, and Hydro.
+- 600 s: projected is below coupled for 8/12 fields and above for geopotential, T, QICE, and QSNOW. Projected/coupled U/V are 1.605/1.906 vs 1.606/1.907 m/s, while Hydro is 0.214/0.163 m/s. QCLOUD is 3.271e-5, 3.295e-5, and 2.286e-5 kg/kg for projected, coupled, and Hydro. Geopotential and T projected RMS are slightly above coupled (11.106 vs 11.059 m2/s2; 0.2168 vs 0.2153 K).
+
+Interpretation limit: these are separate magnitudes relative to OFF at four saved times. A smaller projected-minus-OFF RMS than coupled-minus-OFF does not establish a smaller direct projected-minus-coupled difference, causal attribution, or improved forecast skill. Across 60/120/600 s, projected norms are mixed relative to coupled rather than uniformly reduced; winds remain close to coupled and much larger than Hydro relative to OFF.

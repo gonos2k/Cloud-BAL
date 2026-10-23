@@ -1,0 +1,16 @@
+PR101 common guarded replay / frozen runner final review
+Date: 2026-10-23 UTC
+Scope: read-only review of tools/pr101_guarded_replay.py, tests/test_pr101_guarded_replay.py, tools/pr86_time_response.py, tests/test_pr86_time_response.py. No edits made to these files.
+
+Reviewed source pins:
+- tools/pr101_guarded_replay.py SHA256 f9854bd5c7d920786b0ee47d1ab1f694d3a4b9d33b060ff1e8e1a61fa58a76d3
+- tests/test_pr101_guarded_replay.py SHA256 ad016ff972029368caab608df6e599fa1b8f59ee9d88a0ed7d620b7ab4fbaf17
+- tools/pr86_time_response.py SHA256 087f9f3a9f80f5679db7c228d99dde269200028d823553e0a2045a855cbba439
+- tests/test_pr86_time_response.py SHA256 4dcfab3ce31c5e94c849496ce15e9c03734bd04130103aa6e5370e97af7e2854
+- frozen v2 PR101 runner has matching SHA256 087f9f3a9f80f5679db7c228d99dde269200028d823553e0a2045a855cbba439
+
+Review outcome: no material blockers found. Guarded replay validates pins before and after execution, copies its executable and inputs into an exclusive fresh directory, validates staged preservation, expected output hashes, completion markers and return code, and writes a closed receipt on executed failures. It records effective OMP and LD_LIBRARY_PATH values. It is a provenance/preservation guard, not an OS sandbox. It inherits caller environment apart from forcing OMP_NUM_THREADS=1 and OMP_DYNAMIC=FALSE; review consumers should inspect the recorded environment (the PR101 manifests pin the Intel profile as a binding).
+
+P640 runner review: `_input_binding_unchanged` branches on explicit `binding_kind`, retaining legacy HYDRO default/behavior. PROJECTED is an explicit arm requiring the source-bound native projection receipt, COUPLED template, C2 candidate build and duration 640; original COUPLED native proposal duration remains 20. `finalize_existing_run` independently rejects a missing/wrong PROJECTED input binding or missing build. The frozen runner hash equals the reviewed current source hash.
+
+Validation evidence at review time: `python tests/test_pr86_time_response.py` passed 31/31; PR101 PROJECTED response tests after axis/crop correction passed 18/18; `py_compile` and `git diff --check` passed for the response changes.

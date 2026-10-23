@@ -1,0 +1,22 @@
+PR101 upper-wind final independent review
+Date: 2026-10-23
+Scope: read-only review of parser finite-value/flag/event closure, paired capture summary and factor split, noninterference evidence, exact-source standalone replay and final validation. No tests, build, decompression, model run, or replay was performed by this reviewer.
+
+Decision: CONDITIONAL GO; one evidence-pin blocker remains before PR.
+
+Reviewed pins
+- `final_validation.json`: SHA256 `1a1dd504145786c75e5a0cfab4a9ab732e9a6ffd1f7b54ae42d60bbbf9fc8039`.
+- `paired_capture_summary.json`: SHA256 `f285c85b378b65019f91474942fa03b77f3cdf04521728f828c4e4fcecdc5c20`.
+- `paired_replay_results.json`: SHA256 `3431a5ebe8f904713154b816d94e2b7677804c1cfc2f4bdda07dfd6094840d57`.
+- Source routine: `/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_big_step_utilities_em.F`, SHA256 `27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c`.
+- P20 guarded replay receipt: SHA256 `fb46da412193530e2d489598b8624ed6c54b9ce45e75a0f6985b51c635a1d783`; manifest `761e43da500ea2352b22c3d1a3a20362af59d4838f573beaec7043861bbd463b`; expected output `c75db53fc57b2a98a1009f32851c792b883dca991a08dc65caff9762097d7d43`.
+- HYDRO guarded replay receipt: SHA256 `44897f8d9bf46d05ccffab30fce19022a3d9cc2d353e0e352419b7bbd1ad0cc4`; manifest `5761c93503a3a32016198f6f3e0406ee621cac8ba20419c349913b1693dfb3be`; expected output `022e5ad4e23116d929fb248d2d9767ff10786db515c9137412bf18c1a9ad7d91`.
+
+Findings
+1. Decoder now rejects invalid Boolean flag encodings and any non-finite numeric operand. It pairs PRE/POST records by `(component, i, j, time_step, rk_step)`, rejects duplicate/missing phases and changed bounds/flags/operands/options, and explicitly checks coverage against exactly U `(136,16)` and V `(135,17)`. Summary confirms both target faces, matching bounds/flags/options/coefficients/XKMHD/MUT/map metrics/khdif/rdx/rdy across H/P; all six Python REAL32 replay residuals are zero.
+2. The generated standalone Fortran driver's 236-line `horizontal_diffusion` routine is line-for-line identical to the pinned source routine. The P20 and HYDRO compilations use the pinned IFX profile with REAL32, i4, big_endian and strict FP options; compile receipts record RC=0, fresh scratch cwd, exact argv, and no model/executable run at compile time. Guard manifests pin their respective compile receipt, executable, source, driver, raw capture, profile/compiler, expected bytes and PASS marker. Both guarded receipts are COMPLETE, return code 0, output hash and completion marker match, and `preservation_issues` is empty. Six result bits per run match their respective expected files.
+3. Paired capture/factor split covers only the two target face points and levels k=37..39 for a single timestep/RK1 event. At these sampled locations H/P use equal operator coefficients and metrics; the factor split reports zero coefficient effect and interaction, and the P-H increment difference is assigned to the differing captured field stencil. This is limited to the sampled tendencies and does not establish a broader domain or physical effect.
+4. Noninterference evidence is explicitly limited to matched H vs C2 HYDRO and projected P20 vs separate archived C1 P20, at T0/first-call scope; final validation reports hashes for KDM6/PR67 pre/post payloads and selected raw/derived T0 fields. P20 remains cross-executable. Final validation limits include no exact real.exe vertical/horizontal wind interpolation replay, no long forecast and no physical tuning. Build receipt describes a partial source-mapped overlay, not a clean build. No all-clean or scientific-approval claim is supported.
+
+Blocker
+`prebuild_validation.json` contains `fortran_source_driver.diffusion_source_sha256 = 27ce690b27b24c80247a8ef40b8a8aef436661f2093b6f66bef7e666584aa296`, which does not match the actual routine source SHA `27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c`. The final compile/replay manifests use the correct hash, so the source replay receipts are internally consistent; however the contradictory stale pin in retained prebuild evidence should be corrected or explicitly superseded before PR. No other blocker found in this review.

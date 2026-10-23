@@ -1,0 +1,399 @@
+{
+  "schema": "pr101_upper_wind_pair_capture_summary_v1",
+  "runs": {
+    "hydro20s": {
+      "receipt_sha256": "c0557e8053144b57fdacc43d9b20973b11651d05060ca38a9b60ff6fca89213d",
+      "status": "COMPLETE",
+      "returncode": 0,
+      "timestep_count": 1,
+      "model_timestamps": [
+        {
+          "timestamp": "2026-08-16_13:00:20",
+          "elapsed_seconds": 241.57637
+        }
+      ],
+      "candidate_input_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+      "candidate_boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_exe_sha256": "4100279548fa19c5edd591f0738d3555aa8655b886bc2c9b9da7c88cd202615d",
+      "capture_raw_sha256": "812a1871ae3ea4154cfa37b5369102fb4b7f5818a71bea2a5088e5d33bede431",
+      "capture_raw_gzip_sha256": "ed0d0da60f1bf5e4f07a98a988c7af4ceb201dcff5173d237a83f6ba81c4d699"
+    },
+    "projected20s": {
+      "receipt_sha256": "fc56bce9217c390deceb0a8ec005659bcefde7eda8efc0bd5a3ac3cc129146f8",
+      "status": "COMPLETE",
+      "returncode": 0,
+      "timestep_count": 1,
+      "model_timestamps": [
+        {
+          "timestamp": "2026-08-16_13:00:20",
+          "elapsed_seconds": 242.32916
+        }
+      ],
+      "candidate_input_sha256": "10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3",
+      "candidate_boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_exe_sha256": "4100279548fa19c5edd591f0738d3555aa8655b886bc2c9b9da7c88cd202615d",
+      "capture_raw_sha256": "e961c89d3e2b5841c8ed49c0e754b1a289a8abb5047c0862fcdcb4419669da9d",
+      "capture_raw_gzip_sha256": "8dc81730d196f5f495ba3d96dbac63f381a9f3373d29cdcf1d9e0441ec555c86"
+    }
+  },
+  "paired_operator": {
+    "same_bounds": true,
+    "same_flags": true,
+    "same_options": true,
+    "same_coefficients": true,
+    "same_xkmhd": true,
+    "same_metrics": true,
+    "same_khdif_rdx_rdy": true
+  },
+  "source_replay": {
+    "source_routine_path": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_big_step_utilities_em.F",
+    "source_routine_sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c",
+    "P20": {
+      "compile_receipt": "fortran_compile_receipt.json",
+      "compile_receipt_sha256": "de2f6f66b08f4481cc2999e4f8007a952ed3b5a670ae80107fb6db7943e103ee",
+      "guard_manifest": "fortran_replay_guard_manifest.json",
+      "guard_manifest_sha256": "761e43da500ea2352b22c3d1a3a20362af59d4838f573beaec7043861bbd463b",
+      "guard_receipt": "fortran_replay_receipt.json",
+      "guard_receipt_sha256": "fb46da412193530e2d489598b8624ed6c54b9ce45e75a0f6985b51c635a1d783",
+      "result": "fortran_replay_result.txt",
+      "result_sha256": "c75db53fc57b2a98a1009f32851c792b883dca991a08dc65caff9762097d7d43",
+      "status": "COMPLETE"
+    },
+    "HYDRO": {
+      "compile_receipt": "fortran_compile_receipt_hydro.json",
+      "compile_receipt_sha256": "fabddcfa680c58e12906522e2ae194667b15bda44ad698b7a1738da3da2ea1d9",
+      "guard_manifest": "fortran_replay_guard_manifest_hydro.json",
+      "guard_manifest_sha256": "5761c93503a3a32016198f6f3e0406ee621cac8ba20419c349913b1693dfb3be",
+      "guard_receipt": "fortran_replay_receipt_hydro.json",
+      "guard_receipt_sha256": "44897f8d9bf46d05ccffab30fce19022a3d9cc2d353e0e352419b7bbd1ad0cc4",
+      "result": "fortran_replay_result_hydro.txt",
+      "result_sha256": "022e5ad4e23116d929fb248d2d9767ff10786db515c9137412bf18c1a9ad7d91",
+      "status": "COMPLETE"
+    }
+  },
+  "faces": [
+    {
+      "component": "U",
+      "face_ij": [
+        136,
+        16
+      ],
+      "rk_step": 1,
+      "diff_options": [
+        1,
+        4,
+        0
+      ],
+      "flags": {
+        "open_xs": false,
+        "open_xe": false,
+        "open_ys": false,
+        "open_ye": false,
+        "specified": true,
+        "nested": false,
+        "periodic_x": false,
+        "polar": false
+      },
+      "bounds": {
+        "ids": 1,
+        "ide": 235,
+        "jds": 1,
+        "jde": 283,
+        "kds": 1,
+        "kde": 40,
+        "ims": -4,
+        "ime": 240,
+        "jms": -4,
+        "jme": 288,
+        "kms": 1,
+        "kme": 40,
+        "its": 1,
+        "ite": 235,
+        "jts": 1,
+        "jte": 283,
+        "kts": 1,
+        "kte": 40
+      },
+      "P_minus_H_field_k37_39": {
+        "37": 7.845882415771484,
+        "38": 7.845882415771484,
+        "39": 7.845882415771484
+      },
+      "P_minus_H_xkmhd_k37_39": {
+        "37": 0.0,
+        "38": 0.0,
+        "39": 0.0
+      },
+      "native_time_step_seconds": 20
+    },
+    {
+      "component": "V",
+      "face_ij": [
+        135,
+        17
+      ],
+      "rk_step": 1,
+      "diff_options": [
+        1,
+        4,
+        0
+      ],
+      "flags": {
+        "open_xs": false,
+        "open_xe": false,
+        "open_ys": false,
+        "open_ye": false,
+        "specified": true,
+        "nested": false,
+        "periodic_x": false,
+        "polar": false
+      },
+      "bounds": {
+        "ids": 1,
+        "ide": 235,
+        "jds": 1,
+        "jde": 283,
+        "kds": 1,
+        "kde": 40,
+        "ims": -4,
+        "ime": 240,
+        "jms": -4,
+        "jme": 288,
+        "kms": 1,
+        "kme": 40,
+        "its": 1,
+        "ite": 235,
+        "jts": 1,
+        "jte": 283,
+        "kts": 1,
+        "kte": 40
+      },
+      "P_minus_H_field_k37_39": {
+        "37": -7.223984718322754,
+        "38": -7.2239837646484375,
+        "39": -7.2239837646484375
+      },
+      "P_minus_H_xkmhd_k37_39": {
+        "37": 0.0,
+        "38": 0.0,
+        "39": 0.0
+      },
+      "native_time_step_seconds": 20
+    }
+  ],
+  "replay": {
+    "schema": "pr101_upper_wind_replay_v1",
+    "capture": "/var/tmp/pr101_upper_wind_projected20s_run2.raw",
+    "records": 4,
+    "capture_coverage": {
+      "expected_faces": [
+        [
+          "U",
+          136,
+          16
+        ],
+        [
+          "V",
+          135,
+          17
+        ]
+      ],
+      "observed_faces": [
+        [
+          "U",
+          136,
+          16
+        ],
+        [
+          "V",
+          135,
+          17
+        ]
+      ],
+      "complete_for_both_target_faces": true
+    },
+    "faces": [
+      {
+        "component": "U",
+        "face_ij": [
+          136,
+          16
+        ],
+        "native_time_step_seconds": 20,
+        "rk_step": 1,
+        "levels": [
+          {
+            "k": 37,
+            "before": 0.0067949299700558186,
+            "after": -8658.3193359375,
+            "predicted_after": -8658.3193359375,
+            "residual": 0.0,
+            "observed_increment": -8658.326171875
+          },
+          {
+            "k": 38,
+            "before": 0.00622868537902832,
+            "after": -10314.32421875,
+            "predicted_after": -10314.32421875,
+            "residual": 0.0,
+            "observed_increment": -10314.330078125
+          },
+          {
+            "k": 39,
+            "before": 0.05492568016052246,
+            "after": -11227.625,
+            "predicted_after": -11227.625,
+            "residual": 0.0,
+            "observed_increment": -11227.6796875
+          }
+        ]
+      },
+      {
+        "component": "V",
+        "face_ij": [
+          135,
+          17
+        ],
+        "native_time_step_seconds": 20,
+        "rk_step": 1,
+        "levels": [
+          {
+            "k": 37,
+            "before": -0.0028312206268310547,
+            "after": 5413.56591796875,
+            "predicted_after": 5413.56591796875,
+            "residual": 0.0,
+            "observed_increment": 5413.56884765625
+          },
+          {
+            "k": 38,
+            "before": -0.0025480985641479492,
+            "after": 6445.7001953125,
+            "predicted_after": 6445.7001953125,
+            "residual": 0.0,
+            "observed_increment": 6445.70263671875
+          },
+          {
+            "k": 39,
+            "before": -0.02689659781754017,
+            "after": 7012.74365234375,
+            "predicted_after": 7012.74365234375,
+            "residual": 0.0,
+            "observed_increment": 7012.7705078125
+          }
+        ]
+      }
+    ],
+    "factor_separation": {
+      "schema": "pr101_upper_wind_factor_separation_v1",
+      "projected_capture": "/var/tmp/pr101_upper_wind_projected20s_run2.raw",
+      "hydro_capture": "/var/tmp/pr101_upper_wind_hydro20s_run2.raw",
+      "capture_coverage": {
+        "projected_complete_for_both_target_faces": true,
+        "hydro_complete_for_both_target_faces": true
+      },
+      "faces": [
+        {
+          "component": "U",
+          "face_ij": [
+            136,
+            16
+          ],
+          "native_time_step_seconds": 20,
+          "rk_step": 1,
+          "levels": [
+            {
+              "k": 37,
+              "P_field_P_coeff": -8658.326171875,
+              "P_field_H_coeff": -8658.326171875,
+              "H_field_P_coeff": 7.793572902679443,
+              "H_field_H_coeff": 7.793572902679443,
+              "field_effect_at_H_coeff": -8666.11974477768,
+              "coefficient_effect_at_H_field": 0.0,
+              "field_coefficient_interaction": 0.0,
+              "total_P_minus_H": -8666.11974477768
+            },
+            {
+              "k": 38,
+              "P_field_P_coeff": -10314.330078125,
+              "P_field_H_coeff": -10314.330078125,
+              "H_field_P_coeff": 5.519319534301758,
+              "H_field_H_coeff": 5.519319534301758,
+              "field_effect_at_H_coeff": -10319.849397659302,
+              "coefficient_effect_at_H_field": 0.0,
+              "field_coefficient_interaction": 0.0,
+              "total_P_minus_H": -10319.849397659302
+            },
+            {
+              "k": 39,
+              "P_field_P_coeff": -11227.6796875,
+              "P_field_H_coeff": -11227.6796875,
+              "H_field_P_coeff": 1.915189266204834,
+              "H_field_H_coeff": 1.915189266204834,
+              "field_effect_at_H_coeff": -11229.594876766205,
+              "coefficient_effect_at_H_field": 0.0,
+              "field_coefficient_interaction": 0.0,
+              "total_P_minus_H": -11229.594876766205
+            }
+          ]
+        },
+        {
+          "component": "V",
+          "face_ij": [
+            135,
+            17
+          ],
+          "native_time_step_seconds": 20,
+          "rk_step": 1,
+          "levels": [
+            {
+              "k": 37,
+              "P_field_P_coeff": 5413.56884765625,
+              "P_field_H_coeff": 5413.56884765625,
+              "H_field_P_coeff": 1.744731068611145,
+              "H_field_H_coeff": 1.744731068611145,
+              "field_effect_at_H_coeff": 5411.824116587639,
+              "coefficient_effect_at_H_field": 0.0,
+              "field_coefficient_interaction": 0.0,
+              "total_P_minus_H": 5411.824116587639
+            },
+            {
+              "k": 38,
+              "P_field_P_coeff": 6445.70263671875,
+              "P_field_H_coeff": 6445.70263671875,
+              "H_field_P_coeff": 0.8754696249961853,
+              "H_field_H_coeff": 0.8754696249961853,
+              "field_effect_at_H_coeff": 6444.827167093754,
+              "coefficient_effect_at_H_field": 0.0,
+              "field_coefficient_interaction": 0.0,
+              "total_P_minus_H": 6444.827167093754
+            },
+            {
+              "k": 39,
+              "P_field_P_coeff": 7012.7705078125,
+              "P_field_H_coeff": 7012.7705078125,
+              "H_field_P_coeff": -0.3556479215621948,
+              "H_field_H_coeff": -0.3556479215621948,
+              "field_effect_at_H_coeff": 7013.126155734062,
+              "coefficient_effect_at_H_field": 0.0,
+              "field_coefficient_interaction": 0.0,
+              "total_P_minus_H": 7013.126155734062
+            }
+          ]
+        }
+      ],
+      "coefficient_fields": [
+        "MUT",
+        "xkmhd",
+        "c1",
+        "c2",
+        "map_metrics",
+        "rdx",
+        "rdy"
+      ],
+      "captured_but_not_read_by_horizontal_diffusion": [
+        "khdif"
+      ]
+    }
+  }
+}

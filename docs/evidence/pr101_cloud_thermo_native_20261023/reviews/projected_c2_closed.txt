@@ -1,0 +1,30 @@
+PR101 projected C2 640-second closed-run independent review
+Date: 2026-10-23
+Scope: read-only review of receipt/launch identity, closed response and source-audit outcomes, first-call comparison, and fixed-region history RMS interpretation. No model, binary trace re-read, or analyzer rerun was performed by this reviewer.
+
+Decision: GO for the receipt-closed runtime and evidence record; NOT a scientific-approval GO.
+
+Pinned evidence
+- P640 receipt: SHA256 `d0a7920687aecbef15b91f2641638918f00beea67de5fb2af6e5597175bc5da2`.
+- Closed response: SHA256 `a4f6c93cbba6035ea948e2f290cff9765decc206a2b090e2142c23f1a372a5d0`.
+- Response execution receipt: SHA256 `465aac883add027bee603d09e4a33a2e955213b24c462e81c566f1c8ad16c9c2`; analyzer source SHA256 `1bc24af37f04427d10be6ca3620ec0df8c0cb190a9983f3c7ef5caa70612c8ba`.
+- Receipt/preflight/launch/root-GO files match the hashes in `closed_run_pins.json`; the seven frozen source-reader pins in the closed response match current bytes.
+
+Runtime and lineage
+- Receipt is COMPLETE, returncode 0, 32 steps through 640 seconds, no fatal lines, processing errors, duplicate captures, or changed original/staged inputs. Candidate build and input stayed unchanged.
+- Executed C2 partial-overlay executable SHA is `387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a`; projected wrfinput is `10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3`; boundary `885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7`; namelist `58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8`. The projection receipt remains explicitly `PROPOSAL_REQUIRES_NATIVE_CONSUMER_AND_TENDENCY_VALIDATION`.
+- Launch is recorded as one MPI rank, one tile and one configured OpenMP thread. The runner PID is gone. This is a 640-second C2 run using the projected input, compared to the pre-existing C2 OFF/HYDRO/COUPLED controls.
+
+Source audit outcomes (reported separately)
+- Frozen strict source endpoint predicates: PASS, zero failures. The 96 predictor diagnostics remain diagnostic and are not endpoint failures.
+- Frozen active ice policy: PASS for all 192 state records; no active beyond-eight-ULP violations. Exact-bound ice outliers are separately reported, including inactive positive pairs.
+- Generic Q/N/B pair conversion: FAIL in 171/192 state records. The recorded causes include negative Q in 93 states (1,652 cells total) and 1,806 ice feasible-cone cells beyond the eight-FLOAT32-ULP allowance among 126,010,251 valid positive pairs. This FAIL is not masked by endpoint/active-ice PASS.
+- Ice sedimentation ledger: `FIRST_VALID_TO_INVALID_CAPTURED` at timestep 24, target `(i=230, call_j=247)`, level 20. Under the recorded `REAL64(dry_density)*REAL64(QI)/REAL64(NI_volume)` predicate, the captured ratio changes from in-cone to just above the upper bound. The ledger says the column routine records a post-call state; it does not infer ordering among levels within that call. The generic C4 reader annotation is not evidence that this run is historical C18.
+- Physical approval remains `FAIL_OPEN`; observation skill is `NOT_EVALUATED`.
+
+Response and first-call interpretation
+- History response compares PROJECTED-minus-OFF/HYDRO/COUPLED on the fixed 613-cell QC-composed support and 7,644-cell five-cell buffer. The closed-response history contains 11 actual saved records from 0 through 600 seconds; the selected POST_KDM6 trace milestones extend through 640 seconds. No 640-second history frame is inferred.
+- The separate control RMS reducer uses unweighted Eulerian spatial RMS on receipt-pinned histories, OFF as a reference rather than truth, and destaggers U/V/W to mass points. Its own JSON reports 0/60/120/600-second records. The integration table’s 60-second comparison shows lower PROJECTED than COUPLED geopotential and W RMS; at 600 seconds PROJECTED remains above HYDRO for the reported fields and its geopotential is slightly above COUPLED. This is mixed response evidence, not general reduction or skill evidence.
+- P20 and P640 first-call KDM6 pre/post arrays match exactly by recorded uncompressed SHA, header and array comparisons; optional PR67 raw hashes also match. The P20 executable (`e919518165d52e26004858fa40293b7df806a9ba2a17af6ab320858f713768f1`) differs from C2 (`387f46df...`), so this is cross-executable state identity only, not same-executable behavior or a combined C1/P20 × C2/640 validation.
+
+No material receipt or scope blocker found. The response is limited to fixed-region state differences and captured source predicates; it does not establish physical causality, energy closure, observation skill, or forecast approval. The integration document’s mixed verdict and `FAIL_OPEN` / `NOT_EVALUATED` disposition agree with the underlying evidence.

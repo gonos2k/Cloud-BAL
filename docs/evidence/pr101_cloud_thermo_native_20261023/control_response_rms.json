@@ -1,0 +1,873 @@
+{
+  "schema": "pr101_c2_control_response_rms_v1",
+  "history_artifacts": {
+    "OFF": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF/run/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "receipt_sha256": "c4174b0363dc3b6eb5117ae1e011e9bee0f4f70d090036c607331fac7b0d1f8d"
+    },
+    "HYDRO": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO/run/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84",
+      "receipt_sha256": "1440db5a0178af11ac4d92854b3284cc35cb5a74e5e6f6a14cc59dcac3a00a64"
+    },
+    "COUPLED": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/COUPLED/run/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba",
+      "receipt_sha256": "0a7e1c3bcce58dea8433e9bffa615395d923cd05377c5068469af5dba29759cb"
+    },
+    "PROJECTED": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr101_projected_c2_640_20261023/run/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "0a19bcc0ff51f8f4287a4fb2d4e6ee02de6c49a93d429a7f9f4bf26abdd8e96a",
+      "receipt_sha256": "d0a7920687aecbef15b91f2641638918f00beea67de5fb2af6e5597175bc5da2"
+    }
+  },
+  "regions": {
+    "original_613_native_support": 613,
+    "fixed_5_cell_chebyshev_buffer": 7644
+  },
+  "units": {
+    "pressure": "Pa",
+    "geopotential": "m2/s2",
+    "W": "m/s",
+    "QCLOUD": "kg/kg dry",
+    "T": "K perturbation potential temperature",
+    "QVAPOR": "kg/kg dry",
+    "QICE": "kg/kg dry",
+    "QRAIN": "kg/kg dry",
+    "QSNOW": "kg/kg dry",
+    "QGRAUP": "kg/kg dry",
+    "U": "m/s",
+    "V": "m/s"
+  },
+  "records": {
+    "0": {
+      "HYDRO_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 8.52707851565805,
+          "fixed_5_cell_chebyshev_buffer": 2.519265251587844
+        },
+        "geopotential": {
+          "original_613_native_support": 38.276210009571635,
+          "fixed_5_cell_chebyshev_buffer": 10.88673706159504
+        },
+        "W": {
+          "original_613_native_support": 0.0,
+          "fixed_5_cell_chebyshev_buffer": 0.0
+        },
+        "QCLOUD": {
+          "original_613_native_support": 0.00012509394042572663,
+          "fixed_5_cell_chebyshev_buffer": 3.542469918075085e-05
+        },
+        "T": {
+          "original_613_native_support": 0.245052609747972,
+          "fixed_5_cell_chebyshev_buffer": 0.06957663478321348
+        },
+        "QVAPOR": {
+          "original_613_native_support": 0.00021582843069563144,
+          "fixed_5_cell_chebyshev_buffer": 6.11193253098793e-05
+        },
+        "QICE": {
+          "original_613_native_support": 2.9850451418248313e-07,
+          "fixed_5_cell_chebyshev_buffer": 8.453206000351229e-08
+        },
+        "QRAIN": {
+          "original_613_native_support": 5.7858545814764744e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.638465930215687e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 7.590343050986583e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.149469577995385e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 6.919132324934967e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.9593929575579398e-05
+        },
+        "U": {
+          "original_613_native_support": 0.0011839588985088922,
+          "fixed_5_cell_chebyshev_buffer": 0.00033859923530538214
+        },
+        "V": {
+          "original_613_native_support": 0.0005737032806890927,
+          "fixed_5_cell_chebyshev_buffer": 0.0001636211182452556
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": 1.0,
+            "projection_delta_t_onto_delta0": 1.0,
+            "orthogonal_residual_rms": 0.0,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 0.00012509394042572663,
+            "delta_t_minus_delta0_rms": 0.0
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": 1.0,
+            "projection_delta_t_onto_delta0": 1.0,
+            "orthogonal_residual_rms": 0.0,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 3.542469918075085e-05,
+            "delta_t_minus_delta0_rms": 0.0
+          }
+        }
+      },
+      "COUPLED_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 8.52707851565805,
+          "fixed_5_cell_chebyshev_buffer": 2.519265251587844
+        },
+        "geopotential": {
+          "original_613_native_support": 38.276210009571635,
+          "fixed_5_cell_chebyshev_buffer": 10.88673706159504
+        },
+        "W": {
+          "original_613_native_support": 0.0,
+          "fixed_5_cell_chebyshev_buffer": 0.0
+        },
+        "QCLOUD": {
+          "original_613_native_support": 0.00012509394042572663,
+          "fixed_5_cell_chebyshev_buffer": 3.542469918075085e-05
+        },
+        "T": {
+          "original_613_native_support": 0.245052609747972,
+          "fixed_5_cell_chebyshev_buffer": 0.06957663478321348
+        },
+        "QVAPOR": {
+          "original_613_native_support": 0.00021582843069563144,
+          "fixed_5_cell_chebyshev_buffer": 6.11193253098793e-05
+        },
+        "QICE": {
+          "original_613_native_support": 2.9850451418248313e-07,
+          "fixed_5_cell_chebyshev_buffer": 8.453206000351229e-08
+        },
+        "QRAIN": {
+          "original_613_native_support": 5.7858545814764744e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.638465930215687e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 7.590343050986583e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.149469577995385e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 6.919132324934967e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.9593929575579398e-05
+        },
+        "U": {
+          "original_613_native_support": 2.18407423494333,
+          "fixed_5_cell_chebyshev_buffer": 0.6674152348564156
+        },
+        "V": {
+          "original_613_native_support": 2.7115289091141133,
+          "fixed_5_cell_chebyshev_buffer": 0.7764855879003429
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": 1.0,
+            "projection_delta_t_onto_delta0": 1.0,
+            "orthogonal_residual_rms": 0.0,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 0.00012509394042572663,
+            "delta_t_minus_delta0_rms": 0.0
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": 1.0,
+            "projection_delta_t_onto_delta0": 1.0,
+            "orthogonal_residual_rms": 0.0,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 3.542469918075085e-05,
+            "delta_t_minus_delta0_rms": 0.0
+          }
+        }
+      },
+      "PROJECTED_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 8.52707851565805,
+          "fixed_5_cell_chebyshev_buffer": 2.519265251587844
+        },
+        "geopotential": {
+          "original_613_native_support": 38.276210009571635,
+          "fixed_5_cell_chebyshev_buffer": 10.88673706159504
+        },
+        "W": {
+          "original_613_native_support": 0.0,
+          "fixed_5_cell_chebyshev_buffer": 0.0
+        },
+        "QCLOUD": {
+          "original_613_native_support": 0.00012509394042572663,
+          "fixed_5_cell_chebyshev_buffer": 3.542469918075085e-05
+        },
+        "T": {
+          "original_613_native_support": 0.245052609747972,
+          "fixed_5_cell_chebyshev_buffer": 0.06957663478321348
+        },
+        "QVAPOR": {
+          "original_613_native_support": 0.00021582843069563144,
+          "fixed_5_cell_chebyshev_buffer": 6.11193253098793e-05
+        },
+        "QICE": {
+          "original_613_native_support": 2.9850451418248313e-07,
+          "fixed_5_cell_chebyshev_buffer": 8.453206000351229e-08
+        },
+        "QRAIN": {
+          "original_613_native_support": 5.7858545814764744e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.638465930215687e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 7.590343050986583e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.149469577995385e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 6.919132324934967e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.9593929575579398e-05
+        },
+        "U": {
+          "original_613_native_support": 2.2407867028015374,
+          "fixed_5_cell_chebyshev_buffer": 0.6697301373273562
+        },
+        "V": {
+          "original_613_native_support": 2.791710791656547,
+          "fixed_5_cell_chebyshev_buffer": 0.7998775769850717
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": 1.0,
+            "projection_delta_t_onto_delta0": 1.0,
+            "orthogonal_residual_rms": 0.0,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 0.00012509394042572663,
+            "delta_t_minus_delta0_rms": 0.0
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": 1.0,
+            "projection_delta_t_onto_delta0": 1.0,
+            "orthogonal_residual_rms": 0.0,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 3.542469918075085e-05,
+            "delta_t_minus_delta0_rms": 0.0
+          }
+        }
+      }
+    },
+    "60": {
+      "HYDRO_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 68.25953456919152,
+          "fixed_5_cell_chebyshev_buffer": 21.23994529582112
+        },
+        "geopotential": {
+          "original_613_native_support": 42.787577679513774,
+          "fixed_5_cell_chebyshev_buffer": 13.484102775476392
+        },
+        "W": {
+          "original_613_native_support": 0.24497434525160547,
+          "fixed_5_cell_chebyshev_buffer": 0.0755555511076235
+        },
+        "QCLOUD": {
+          "original_613_native_support": 4.2452896020206524e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.468740396809204e-05
+        },
+        "T": {
+          "original_613_native_support": 0.12398981297311557,
+          "fixed_5_cell_chebyshev_buffer": 0.03592561845704633
+        },
+        "QVAPOR": {
+          "original_613_native_support": 8.327379723340219e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.364404692507147e-05
+        },
+        "QICE": {
+          "original_613_native_support": 1.7880792612336474e-05,
+          "fixed_5_cell_chebyshev_buffer": 5.248431638430993e-05
+        },
+        "QRAIN": {
+          "original_613_native_support": 6.75278359383841e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.966943112396823e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 7.215417328658316e-05,
+          "fixed_5_cell_chebyshev_buffer": 5.6985929639678704e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 1.4228130731856928e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.301145429284182e-05
+        },
+        "U": {
+          "original_613_native_support": 0.11027184668421072,
+          "fixed_5_cell_chebyshev_buffer": 0.04145742053288914
+        },
+        "V": {
+          "original_613_native_support": 0.09813797635608543,
+          "fixed_5_cell_chebyshev_buffer": 0.03708283957701502
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": -0.3880720496716185,
+            "projection_delta_t_onto_delta0": -0.13169928389008892,
+            "orthogonal_residual_rms": 3.912582173274903e-05,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 4.2452896020206524e-05,
+            "delta_t_minus_delta0_rms": 0.00014687591089467968
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": -0.188979308369572,
+            "projection_delta_t_onto_delta0": -0.1316993124917024,
+            "orthogonal_residual_rms": 2.4242563353673646e-05,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 2.468740396809204e-05,
+            "delta_t_minus_delta0_rms": 4.6849958527222037e-05
+          }
+        }
+      },
+      "COUPLED_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 78.19373829909237,
+          "fixed_5_cell_chebyshev_buffer": 27.880271232296774
+        },
+        "geopotential": {
+          "original_613_native_support": 72.73376565833036,
+          "fixed_5_cell_chebyshev_buffer": 27.545034550744088
+        },
+        "W": {
+          "original_613_native_support": 0.3470957046230688,
+          "fixed_5_cell_chebyshev_buffer": 0.14042765269941432
+        },
+        "QCLOUD": {
+          "original_613_native_support": 5.054349008236808e-05,
+          "fixed_5_cell_chebyshev_buffer": 3.7182921869621625e-05
+        },
+        "T": {
+          "original_613_native_support": 0.16007676286187483,
+          "fixed_5_cell_chebyshev_buffer": 0.05067807305381457
+        },
+        "QVAPOR": {
+          "original_613_native_support": 8.698419040934516e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.5269111530763864e-05
+        },
+        "QICE": {
+          "original_613_native_support": 0.00011612166797161795,
+          "fixed_5_cell_chebyshev_buffer": 6.626051912505245e-05
+        },
+        "QRAIN": {
+          "original_613_native_support": 6.862571170606177e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.0226477956849245e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 0.00014083854608673007,
+          "fixed_5_cell_chebyshev_buffer": 7.199082499998798e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 1.491846701770058e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.3219732784585116e-05
+        },
+        "U": {
+          "original_613_native_support": 2.1487001217174897,
+          "fixed_5_cell_chebyshev_buffer": 0.6422026683172709
+        },
+        "V": {
+          "original_613_native_support": 2.5781855338389654,
+          "fixed_5_cell_chebyshev_buffer": 0.746577555378857
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": -0.3426326867683645,
+            "projection_delta_t_onto_delta0": -0.1384387744652929,
+            "orthogonal_residual_rms": 4.748406468012915e-05,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 5.054349008236808e-05,
+            "delta_t_minus_delta0_rms": 0.00015011946897413821
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": -0.13189267782649924,
+            "projection_delta_t_onto_delta0": -0.13843886464003421,
+            "orthogonal_residual_rms": 3.68580919361844e-05,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 3.7182921869621625e-05,
+            "delta_t_minus_delta0_rms": 5.463456260995394e-05
+          }
+        }
+      },
+      "PROJECTED_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 72.63745083112458,
+          "fixed_5_cell_chebyshev_buffer": 22.48739781095079
+        },
+        "geopotential": {
+          "original_613_native_support": 33.57218391153852,
+          "fixed_5_cell_chebyshev_buffer": 10.93584759441204
+        },
+        "W": {
+          "original_613_native_support": 0.23908977947965707,
+          "fixed_5_cell_chebyshev_buffer": 0.07392197868641917
+        },
+        "QCLOUD": {
+          "original_613_native_support": 4.870020216568632e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.4046489325972846e-05
+        },
+        "T": {
+          "original_613_native_support": 0.1329365852168547,
+          "fixed_5_cell_chebyshev_buffer": 0.038457625193943676
+        },
+        "QVAPOR": {
+          "original_613_native_support": 8.36485421384357e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.3730124029786765e-05
+        },
+        "QICE": {
+          "original_613_native_support": 5.629156831248632e-05,
+          "fixed_5_cell_chebyshev_buffer": 5.029021788337205e-05
+        },
+        "QRAIN": {
+          "original_613_native_support": 6.848665232600736e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.9778768994024585e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 9.026247412286132e-05,
+          "fixed_5_cell_chebyshev_buffer": 5.504718320144013e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 1.4247122910846087e-05,
+          "fixed_5_cell_chebyshev_buffer": 4.04405430418719e-06
+        },
+        "U": {
+          "original_613_native_support": 2.1096142130690434,
+          "fixed_5_cell_chebyshev_buffer": 0.6312846380731834
+        },
+        "V": {
+          "original_613_native_support": 2.5924003642363527,
+          "fixed_5_cell_chebyshev_buffer": 0.7485877876245045
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": -0.34094175001188665,
+            "projection_delta_t_onto_delta0": -0.1327317062344854,
+            "orthogonal_residual_rms": 4.578230147186223e-05,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 4.870020216568632e-05,
+            "delta_t_minus_delta0_rms": 0.00014891039661890518
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": -0.33474427062438944,
+            "projection_delta_t_onto_delta0": -0.1327317361331617,
+            "orthogonal_residual_rms": 1.3236133472771979e-05,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 1.4046489325972846e-05,
+            "delta_t_minus_delta0_rms": 4.225335203018355e-05
+          }
+        }
+      }
+    },
+    "120": {
+      "HYDRO_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 21.43891381289352,
+          "fixed_5_cell_chebyshev_buffer": 8.688595992383506
+        },
+        "geopotential": {
+          "original_613_native_support": 35.74591777238191,
+          "fixed_5_cell_chebyshev_buffer": 14.836060223907465
+        },
+        "W": {
+          "original_613_native_support": 0.25395012949685447,
+          "fixed_5_cell_chebyshev_buffer": 0.11852733114481537
+        },
+        "QCLOUD": {
+          "original_613_native_support": 2.9124602370794898e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.3581030191513992e-05
+        },
+        "T": {
+          "original_613_native_support": 0.10596377555983968,
+          "fixed_5_cell_chebyshev_buffer": 0.030974289720129566
+        },
+        "QVAPOR": {
+          "original_613_native_support": 8.878945610172798e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.5275404558600837e-05
+        },
+        "QICE": {
+          "original_613_native_support": 5.1318877686578525e-05,
+          "fixed_5_cell_chebyshev_buffer": 3.871988026729913e-05
+        },
+        "QRAIN": {
+          "original_613_native_support": 6.952133971885748e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.18395908582851e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 9.201761884196144e-05,
+          "fixed_5_cell_chebyshev_buffer": 5.140594526211922e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 1.4561894572893118e-05,
+          "fixed_5_cell_chebyshev_buffer": 3.697347006834686e-05
+        },
+        "U": {
+          "original_613_native_support": 0.09834552662306222,
+          "fixed_5_cell_chebyshev_buffer": 0.04418104776573094
+        },
+        "V": {
+          "original_613_native_support": 0.09303088804168073,
+          "fixed_5_cell_chebyshev_buffer": 0.04063402513379658
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": -0.4921466785802263,
+            "projection_delta_t_onto_delta0": -0.11458249914404864,
+            "orthogonal_residual_rms": 2.5353324300479675e-05,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 2.9124602370794898e-05,
+            "delta_t_minus_delta0_rms": 0.00014171387892318444
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": -0.17213191500313313,
+            "projection_delta_t_onto_delta0": -0.11458242352041247,
+            "orthogonal_residual_rms": 2.3229057560812095e-05,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 2.3581030191513992e-05,
+            "delta_t_minus_delta0_rms": 4.580999233229657e-05
+          }
+        }
+      },
+      "COUPLED_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 31.35007457704558,
+          "fixed_5_cell_chebyshev_buffer": 15.024891400081481
+        },
+        "geopotential": {
+          "original_613_native_support": 59.35822787715455,
+          "fixed_5_cell_chebyshev_buffer": 28.107776451733002
+        },
+        "W": {
+          "original_613_native_support": 0.34018518304894413,
+          "fixed_5_cell_chebyshev_buffer": 0.1663759030023328
+        },
+        "QCLOUD": {
+          "original_613_native_support": 4.584424686516448e-05,
+          "fixed_5_cell_chebyshev_buffer": 3.0418525813775275e-05
+        },
+        "T": {
+          "original_613_native_support": 0.147698092686638,
+          "fixed_5_cell_chebyshev_buffer": 0.047345551275328336
+        },
+        "QVAPOR": {
+          "original_613_native_support": 9.679277083006992e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.8725417760658942e-05
+        },
+        "QICE": {
+          "original_613_native_support": 5.9675579884789994e-05,
+          "fixed_5_cell_chebyshev_buffer": 5.39171838249703e-05
+        },
+        "QRAIN": {
+          "original_613_native_support": 7.25971735440858e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.3548376151312693e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 0.00010857548110723892,
+          "fixed_5_cell_chebyshev_buffer": 6.979025675236463e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 2.2952917341691263e-05,
+          "fixed_5_cell_chebyshev_buffer": 4.713381624916106e-05
+        },
+        "U": {
+          "original_613_native_support": 2.0323921110239405,
+          "fixed_5_cell_chebyshev_buffer": 0.611613623587333
+        },
+        "V": {
+          "original_613_native_support": 2.456530393392773,
+          "fixed_5_cell_chebyshev_buffer": 0.7182565716149087
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": -0.3847199366577578,
+            "projection_delta_t_onto_delta0": -0.14099160750764425,
+            "orthogonal_residual_rms": 4.2315768889471885e-05,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 4.584424686516448e-05,
+            "delta_t_minus_delta0_rms": 0.00014887176203278558
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": -0.16419550876625005,
+            "projection_delta_t_onto_delta0": -0.14099160860697188,
+            "orthogonal_residual_rms": 3.0005679964724217e-05,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 3.0418525813775275e-05,
+            "delta_t_minus_delta0_rms": 5.033944169190462e-05
+          }
+        }
+      },
+      "PROJECTED_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 23.917680927947384,
+          "fixed_5_cell_chebyshev_buffer": 9.385637996372624
+        },
+        "geopotential": {
+          "original_613_native_support": 38.72159965961512,
+          "fixed_5_cell_chebyshev_buffer": 15.153371254838012
+        },
+        "W": {
+          "original_613_native_support": 0.27789494202830084,
+          "fixed_5_cell_chebyshev_buffer": 0.12305858395618079
+        },
+        "QCLOUD": {
+          "original_613_native_support": 4.368574566339979e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.465307059195455e-05
+        },
+        "T": {
+          "original_613_native_support": 0.1261145335497099,
+          "fixed_5_cell_chebyshev_buffer": 0.03749539363677146
+        },
+        "QVAPOR": {
+          "original_613_native_support": 9.094400921939072e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.5909431477210456e-05
+        },
+        "QICE": {
+          "original_613_native_support": 4.5268718176858906e-05,
+          "fixed_5_cell_chebyshev_buffer": 3.5610049253185114e-05
+        },
+        "QRAIN": {
+          "original_613_native_support": 7.288940073326458e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.204894589344223e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 9.049252320846856e-05,
+          "fixed_5_cell_chebyshev_buffer": 4.8827496503209516e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 1.4582613407341116e-05,
+          "fixed_5_cell_chebyshev_buffer": 3.584674980933802e-05
+        },
+        "U": {
+          "original_613_native_support": 2.03651829667091,
+          "fixed_5_cell_chebyshev_buffer": 0.6099771539198959
+        },
+        "V": {
+          "original_613_native_support": 2.4599382820197033,
+          "fixed_5_cell_chebyshev_buffer": 0.7182883673858218
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": -0.35712573073920933,
+            "projection_delta_t_onto_delta0": -0.12471670322186408,
+            "orthogonal_residual_rms": 4.080494691294017e-05,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 4.368574566339979e-05,
+            "delta_t_minus_delta0_rms": 0.00014649298772427476
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": -0.1792089523920942,
+            "projection_delta_t_onto_delta0": -0.12471668232071287,
+            "orthogonal_residual_rms": 2.4253962879897932e-05,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 2.465307059195455e-05,
+            "delta_t_minus_delta0_rms": 4.6644393593252414e-05
+          }
+        }
+      }
+    },
+    "600": {
+      "HYDRO_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 4.241214325101716,
+          "fixed_5_cell_chebyshev_buffer": 2.6082204733537053
+        },
+        "geopotential": {
+          "original_613_native_support": 4.439463487026425,
+          "fixed_5_cell_chebyshev_buffer": 4.757668829930216
+        },
+        "W": {
+          "original_613_native_support": 0.11201784487227408,
+          "fixed_5_cell_chebyshev_buffer": 0.04225678315099403
+        },
+        "QCLOUD": {
+          "original_613_native_support": 2.2860584017249513e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.115690151702727e-05
+        },
+        "T": {
+          "original_613_native_support": 0.10809867561179301,
+          "fixed_5_cell_chebyshev_buffer": 0.04266471031338363
+        },
+        "QVAPOR": {
+          "original_613_native_support": 0.00018879017251268893,
+          "fixed_5_cell_chebyshev_buffer": 5.694910389926371e-05
+        },
+        "QICE": {
+          "original_613_native_support": 2.286050257685803e-06,
+          "fixed_5_cell_chebyshev_buffer": 2.4564179295946676e-06
+        },
+        "QRAIN": {
+          "original_613_native_support": 2.8644839687657153e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.0254512948528898e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 2.2767463230739636e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.7025927318712775e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 1.2074579771441928e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.586509909096875e-05
+        },
+        "U": {
+          "original_613_native_support": 0.21398990536818596,
+          "fixed_5_cell_chebyshev_buffer": 0.08694432054380113
+        },
+        "V": {
+          "original_613_native_support": 0.1630912657730328,
+          "fixed_5_cell_chebyshev_buffer": 0.07708275062888299
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": -0.09224586665532292,
+            "projection_delta_t_onto_delta0": -0.016857686133646754,
+            "orthogonal_residual_rms": 2.276311243771076e-05,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 2.2860584017249513e-05,
+            "delta_t_minus_delta0_rms": 0.00012922343065852667
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": -0.05352566703743235,
+            "projection_delta_t_onto_delta0": -0.016857746419320984,
+            "orthogonal_residual_rms": 1.114090780846343e-05,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 1.115690151702727e-05,
+            "delta_t_minus_delta0_rms": 3.7705379582107254e-05
+          }
+        }
+      },
+      "COUPLED_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 5.902299104212611,
+          "fixed_5_cell_chebyshev_buffer": 3.0914652031980467
+        },
+        "geopotential": {
+          "original_613_native_support": 11.058657170099105,
+          "fixed_5_cell_chebyshev_buffer": 5.869802627160998
+        },
+        "W": {
+          "original_613_native_support": 0.22598835851642332,
+          "fixed_5_cell_chebyshev_buffer": 0.07512204754587296
+        },
+        "QCLOUD": {
+          "original_613_native_support": 3.2945244577282327e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.378575499179711e-05
+        },
+        "T": {
+          "original_613_native_support": 0.21531583484624955,
+          "fixed_5_cell_chebyshev_buffer": 0.0763163413687372
+        },
+        "QVAPOR": {
+          "original_613_native_support": 0.00024852128138910784,
+          "fixed_5_cell_chebyshev_buffer": 7.361955309154826e-05
+        },
+        "QICE": {
+          "original_613_native_support": 5.3712753331064415e-06,
+          "fixed_5_cell_chebyshev_buffer": 3.1702129875149053e-06
+        },
+        "QRAIN": {
+          "original_613_native_support": 5.0720818155062324e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.733089530008083e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 5.633183903057891e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.156920722987899e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 5.775612683524618e-06,
+          "fixed_5_cell_chebyshev_buffer": 9.494312567084299e-06
+        },
+        "U": {
+          "original_613_native_support": 1.606046910020653,
+          "fixed_5_cell_chebyshev_buffer": 0.5461626753157177
+        },
+        "V": {
+          "original_613_native_support": 1.9074451457394441,
+          "fixed_5_cell_chebyshev_buffer": 0.6329095446442594
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": -0.3679945352643743,
+            "projection_delta_t_onto_delta0": -0.09691652470238135,
+            "orthogonal_residual_rms": 3.063340932346253e-05,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 3.2945244577282327e-05,
+            "delta_t_minus_delta0_rms": 0.00014059544220484336
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": -0.2490428467005841,
+            "projection_delta_t_onto_delta0": -0.09691666397945034,
+            "orthogonal_residual_rms": 1.3351399874783007e-05,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 1.378575499179711e-05,
+            "delta_t_minus_delta0_rms": 4.10877062024783e-05
+          }
+        }
+      },
+      "PROJECTED_minus_OFF": {
+        "pressure": {
+          "original_613_native_support": 5.70182197332521,
+          "fixed_5_cell_chebyshev_buffer": 2.9778914653151296
+        },
+        "geopotential": {
+          "original_613_native_support": 11.10613784334414,
+          "fixed_5_cell_chebyshev_buffer": 5.56591593281421
+        },
+        "W": {
+          "original_613_native_support": 0.21939412598740152,
+          "fixed_5_cell_chebyshev_buffer": 0.07234294321594546
+        },
+        "QCLOUD": {
+          "original_613_native_support": 3.2712826840539465e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.1968483926778029e-05
+        },
+        "T": {
+          "original_613_native_support": 0.21682598502531356,
+          "fixed_5_cell_chebyshev_buffer": 0.07509520123050915
+        },
+        "QVAPOR": {
+          "original_613_native_support": 0.00024816387550513153,
+          "fixed_5_cell_chebyshev_buffer": 7.302944002702542e-05
+        },
+        "QICE": {
+          "original_613_native_support": 5.674751261153503e-06,
+          "fixed_5_cell_chebyshev_buffer": 2.6646012046350206e-06
+        },
+        "QRAIN": {
+          "original_613_native_support": 4.843620653089718e-05,
+          "fixed_5_cell_chebyshev_buffer": 1.638154235611606e-05
+        },
+        "QSNOW": {
+          "original_613_native_support": 5.6622890902868453e-05,
+          "fixed_5_cell_chebyshev_buffer": 2.132125665101017e-05
+        },
+        "QGRAUP": {
+          "original_613_native_support": 5.681058469331468e-06,
+          "fixed_5_cell_chebyshev_buffer": 7.579447205330761e-06
+        },
+        "U": {
+          "original_613_native_support": 1.6053711004532079,
+          "fixed_5_cell_chebyshev_buffer": 0.5456922489906214
+        },
+        "V": {
+          "original_613_native_support": 1.905553668521452,
+          "fixed_5_cell_chebyshev_buffer": 0.6318487525227248
+        },
+        "QC_pattern": {
+          "original_613_native_support": {
+            "cosine_delta_t_vs_delta0": -0.3831907576167769,
+            "projection_delta_t_onto_delta0": -0.1002067155143733,
+            "orthogonal_residual_rms": 3.0215831522759473e-05,
+            "delta0_rms": 0.00012509394042572663,
+            "delta_t_rms": 3.2712826840539465e-05,
+            "delta_t_minus_delta0_rms": 0.00014090703080515797
+          },
+          "fixed_5_cell_chebyshev_buffer": {
+            "cosine_delta_t_vs_delta0": -0.29659533696453494,
+            "projection_delta_t_onto_delta0": -0.10020682194377661,
+            "orthogonal_residual_rms": 1.1429941038749852e-05,
+            "delta0_rms": 3.542469918075085e-05,
+            "delta_t_rms": 1.1968483926778029e-05,
+            "delta_t_minus_delta0_rms": 4.061594351394455e-05
+          }
+        }
+      }
+    }
+  },
+  "scope": "Unweighted Eulerian RMS on fixed support and buffer at actual common saved times; U/V/W are mass-point destaggered. OFF is a reference, not truth. No energy or observation skill claim.",
+  "script_sha256": "fcc7c059dd957a7287acc18cfdbbef6314a9230f235edc2fba64ff777b6b073c",
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED"
+}

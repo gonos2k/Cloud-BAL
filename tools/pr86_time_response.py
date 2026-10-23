@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Safely stage and receipt source-bound multistep OFF/HYDRO/COUPLED runs."""
+"""Safely stage and receipt source-bound multistep WRF input-response runs."""
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import difflib
-import errno
 import gzip
 import hashlib
 import json
@@ -425,11 +424,17 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
             raise ValueError("HYDRO requires its own input receipt")
     elif hydro_input_receipt_path is not None:
         raise ValueError("HYDRO input receipt is only valid for the HYDRO arm")
-    if native_input_receipt_path is not None and arm != "COUPLED":
-        raise ValueError("native projection input receipt is only valid for the COUPLED arm")
-    if native_input_receipt_path is not None and duration != 20:
-        raise ValueError("native projection input receipt is limited to one 20-second step")
-    template_arm = "OFF" if arm == "HYDRO" else arm
+    if native_input_receipt_path is not None and arm not in {"COUPLED", "PROJECTED"}:
+        raise ValueError("native projection input receipt is only valid for COUPLED or PROJECTED")
+    if arm == "PROJECTED" and native_input_receipt_path is None:
+        raise ValueError("PROJECTED requires a source-bound native projection input receipt")
+    if arm == "PROJECTED" and candidate_build_path is None:
+        raise ValueError("PROJECTED requires the explicit C2 candidate build receipt")
+    if arm == "PROJECTED" and duration != 640:
+        raise ValueError("PROJECTED is limited to the matched 640-second run")
+    if native_input_receipt_path is not None and arm == "COUPLED" and duration != 20:
+        raise ValueError("COUPLED native projection input is limited to one 20-second step")
+    template_arm = "OFF" if arm == "HYDRO" else "COUPLED" if arm == "PROJECTED" else arm
     runtime = Path(str(RUNTIME).format(arm=template_arm))
     receipt_path = Path(str(RUN_RECEIPT).format(arm=template_arm))
     receipt = json.loads(receipt_path.read_text())
@@ -511,12 +516,7 @@ def _stage(prepared: dict, out: Path) -> Path:
     stage.mkdir(parents=True)
     for name in prepared["input_hashes"]:
         if name not in {"namelist.input", "namelist.input.source"}:
-            try:
-                os.link(runtime / name, stage / name)
-            except OSError as exc:
-                if exc.errno != errno.EXDEV:
-                    raise
-                shutil.copy2(runtime / name, stage / name)
+            shutil.copy2(runtime / name, stage / name)
     candidate_input = prepared.get("candidate_input_binding")
     if candidate_input:
         if not _input_binding_unchanged(candidate_input):
@@ -738,17 +738,23 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
             _validate_native_template(candidate_input, template_receipt)
         except (KeyError, ValueError) as exc:
             issues.append(str(exc))
-        if (duration != 20 or preflight.get("duration_seconds") != 20 or
-                arm != "COUPLED" or candidate_input.get("role") != "COUPLED" or
-                preflight.get("template_arm") != "COUPLED" or original.get("arm") != "COUPLED" or
+        projected_arm = arm == "PROJECTED"
+        expected_duration = 640 if projected_arm else 20
+        if (duration != expected_duration or preflight.get("duration_seconds") != expected_duration or
+                arm not in {"COUPLED", "PROJECTED"} or candidate_input.get("role") != "COUPLED" or
+                preflight.get("template_arm") != "COUPLED" or original.get("arm") != arm or
                 original.get("candidate_input_binding") != candidate_input or
                 original.get("candidate_wrfinput_sha256") != preflight.get("candidate_wrfinput_sha256") or
                 preflight.get("candidate_wrfinput_sha256") !=
                 candidate_input.get("artifacts", {}).get("candidate", {}).get("sha256")):
-            issues.append("COUPLED native proposal provenance differs from preflight")
+            issues.append(f"{arm} native proposal provenance differs from preflight")
     elif candidate_input is not None:
         issues.append("unknown source-bound input kind")
+    if arm == "PROJECTED" and binding_kind != "native_uv_projection":
+        issues.append("PROJECTED arm requires its source-bound native projection input")
     candidate_build = preflight.get("candidate_build")
+    if arm == "PROJECTED" and (not candidate_build or preflight.get("template_arm") != "COUPLED"):
+        issues.append("PROJECTED requires the explicit C2 candidate build and COUPLED template")
     candidate_build_unchanged = True
     if candidate_build_path is not None and (not candidate_build or
                                               Path(candidate_build["receipt_path"]) != candidate_build_path.resolve()):
@@ -1049,7 +1055,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--arm", choices=("OFF", "HYDRO", "COUPLED"), required=True)
+    parser.add_argument("--arm", choices=("OFF", "HYDRO", "COUPLED", "PROJECTED"), required=True)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--duration-seconds", type=int, default=600)
     parser.add_argument("--execute", action="store_true", help="launch after hash and disk checks")

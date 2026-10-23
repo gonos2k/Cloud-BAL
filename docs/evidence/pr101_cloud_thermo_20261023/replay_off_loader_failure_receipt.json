@@ -1,0 +1,47 @@
+{
+  "schema": "pr101_guarded_replay_receipt_v1",
+  "case": "PR101 cloud thermo OFF C1 first-call T1",
+  "scope": "Full active tile OFF standalone replay with additive thermodynamic capture; identity check against receipt-bound C1 native post trace",
+  "directory": "/var/tmp/pr101_thermo_replay_off_20261023",
+  "argv": [
+    "/var/tmp/pr101_thermo_replay_off_20261023/replay.exe",
+    "kdm6_first_call_pre.raw"
+  ],
+  "start_utc": "2026-10-23T08:21:26.334196+00:00",
+  "end_utc": "2026-10-23T08:21:26.722793+00:00",
+  "returncode": 127,
+  "execution_error": null,
+  "manifest_sha256": "423cef5391df59c4778423d979dc0e4d96d7b5905376f84665eb3ff125888af4",
+  "guard_sha256": "f9854bd5c7d920786b0ee47d1ab1f694d3a4b9d33b060ff1e8e1a61fa58a76d3",
+  "expected_outputs": {
+    "replay_post.raw": false
+  },
+  "completion_markers": {
+    "REPLAY COMPLETED FULL ACTIVE TILE": false
+  },
+  "preservation_issues": [],
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OMP_DYNAMIC": "FALSE",
+    "LD_LIBRARY_PATH": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/umf/1.1/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/env/../lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tbb/2023.0/env/../lib/intel64/gcc4.8:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/opt/mpi/libfabric/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/debugger/2026.0/opt/debugger/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/opt/compiler/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib"
+  },
+  "artifacts": {
+    "kdm6_first_call_pre.raw": {
+      "bytes": 195542592,
+      "sha256": "757666f55ff1626c98ede21eda348eb6798b2ba2f1e9dc7c426619e62cadbefe"
+    },
+    "launch_manifest.json": {
+      "bytes": 1854,
+      "sha256": "423cef5391df59c4778423d979dc0e4d96d7b5905376f84665eb3ff125888af4"
+    },
+    "replay.exe": {
+      "bytes": 71556248,
+      "sha256": "0fa1b8d44dc2a1fe9f438351c10f0e07e707e8c22c7850f32d54b484a12a3622"
+    },
+    "run.log": {
+      "bytes": 169,
+      "sha256": "342703dbccba71a1a2209a71ea1e62af8ff4dee18a4dc5bad7780cf007d1c1e9"
+    }
+  },
+  "status": "INCOMPLETE"
+}

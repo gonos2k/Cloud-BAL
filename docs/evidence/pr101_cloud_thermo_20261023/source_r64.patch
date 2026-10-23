@@ -1,0 +1,164 @@
+--- a/module_mp_kdm6_pr100.f90
++++ b/module_mp_kdm6_pr101.f90
+@@ -1939,6 +1939,14 @@
+ 
+     implicit none
+    real :: cloud_evap_extent
++   real :: pr101_t_before,pr101_qv_before,pr101_qc_before
++   real :: pr101_es,pr101_bounded_e,pr101_source_extent
++   double precision :: pr101_work1,pr101_e_request
++   real :: pr101_es_initial,pr101_qs_initial,pr101_es_after,pr101_qs_after
++   real :: pr101_rh_initial,pr101_rh_branch,pr101_rh_after
++   real :: pr101_qv_after,pr101_qc_after,pr101_t_after
++   real, allocatable :: pr101_cpm_basis_q(:,:),pr101_xl_basis_t(:,:)
++   integer, save :: pr101_unit
+    real :: pr100_qc_before,pr100_qc_proposal(4),pr100_qc_approved(4)
+    real :: pr100_qc_alpha(4),pr100_qc_deferred(4)
+    logical, allocatable :: pr100_qc_support(:,:)
+@@ -3036,6 +3044,9 @@
+      write(pr100_qc_unit,'(a)') 'PR100_QC_V1 613 fixed_source_support'
+      pr100_qc_ordinal=0
+      pr100_qc_open=.true.
++     open(newunit=pr101_unit,file='pr101_cloud_thermo.raw', &
++          form='formatted',status='replace',action='write')
++     write(pr101_unit,'(a)') 'PR101_CLOUD_THERMO_V1'
+    endif
+    pr100_loop_tag=-1
+    pr100_qc_proposal=0.0; pr100_qc_alpha=0.0
+@@ -3044,6 +3055,14 @@
+ 
+    kte_in = kte
+    call liquid_begin(its,ite)
++   allocate(pr101_cpm_basis_q(its:ite,kts:kte), &
++            pr101_xl_basis_t(its:ite,kts:kte))
++   do k=kts,kte
++     do i=its,ite
++       pr101_cpm_basis_q(i,k)=q(i,k)
++       pr101_xl_basis_t(i,k)=t(i,k)
++     enddo
++   enddo
+    call pr77_scan_entry_state(qci,qrs,nrs,nci,brs,its,ite,kts,kte,lat)
+    call validate_kdm6_species_states(qci,qrs,nrs,nci,brs)
+    if (pr87_model_timestep.eq.1) then
+@@ -3125,6 +3144,8 @@
+ 
+    do k = kts,kte_in
+      do i = its,ite
++       pr101_cpm_basis_q(i,k)=q(i,k)
++       pr101_xl_basis_t(i,k)=t(i,k)
+        cpm(i,k) = cpmcal(q(i,k))
+        xl(i,k) = xlcal(t(i,k))
+      enddo
+@@ -7560,6 +7581,7 @@
+ 
+           tr=ttp/t(i,k)
+           qs(i,k,1)=psat*exp(log(tr)*(xa))*exp(xb*(1.-tr))
++          pr101_es=qs(i,k,1)
+           qs(i,k,1) = min(qs(i,k,1),0.99*p(i,k))
+           qs(i,k,1) = ep2 * qs(i,k,1) / (p(i,k) - qs(i,k,1))
+           qs(i,k,1) = max(qs(i,k,1),qmin)
+@@ -7582,6 +7604,14 @@
+             nci(i,k,1) = 0.
+             if(cloud_evap_extent.gt.0.) full_cloud_evap = .true.
+           endif
++          pr101_t_before=t(i,k)
++          pr101_qv_before=q(i,k)
++          pr101_qc_before=qci(i,k,1)
++          if(full_cloud_evap) then
++            pr101_source_extent=cloud_evap_extent
++          else
++            pr101_source_extent=-pcond(i,k)*dtcld
++          endif
+           if(full_cloud_evap) then
+             q(i,k) = q(i,k)+cloud_evap_extent
+           call pr99_total_checkpoint(i,k,lat,loop,6644,q(i,k),qci(i,k,1),qci(i,k,2),qrs(i,k,1),qrs(i,k,2),qrs(i,k,3))
+@@ -7611,6 +7641,30 @@
+           call pr99_total_checkpoint(i,k,lat,loop,6649,q(i,k),qci(i,k,1),qci(i,k,2),qrs(i,k,1),qrs(i,k,2),qrs(i,k,3))
+             t(i,k) = t(i,k)+pcond(i,k)*xl(i,k)/cpm(i,k)*dtcld
+           endif
++          if (pr87_model_timestep.eq.1 .and. pr100_qc_support(i,k)) then
++            pr101_qv_after=q(i,k)
++            pr101_qc_after=qci(i,k,1)
++            pr101_t_after=t(i,k)
++            pr101_work1=work1(i,k,1)
++            pr101_e_request=max(-pr101_work1,0.d0)
++            pr101_bounded_e=max(-pcond(i,k)*dtcld,0.)
++            call pr101_liquid_qs(pr101_xl_basis_t(i,k),p(i,k),psat,ttp, &
++              xa,xb,ep2,qmin,pr101_es_initial,pr101_qs_initial)
++            call pr101_liquid_qs(pr101_t_after,p(i,k),psat,ttp,xa,xb, &
++              ep2,qmin,pr101_es_after,pr101_qs_after)
++            pr101_rh_initial=max(pr101_cpm_basis_q(i,k)/pr101_qs_initial,qmin)
++            pr101_rh_branch=max(pr101_qv_before/qs(i,k,1),qmin)
++            pr101_rh_after=max(pr101_qv_after/pr101_qs_after,qmin)
++            call pr101_write_thermo(pr101_unit,pr87_model_timestep,lat,loop,i,k, &
++              full_cloud_evap,pr101_t_before,p(i,k),pr101_qv_before, &
++              pr101_qc_before,pr101_es,qs(i,k,1),pr101_work1,pcond(i,k), &
++              dtcld,xl(i,k),cpm(i,k),pr101_cpm_basis_q(i,k), &
++              pr101_xl_basis_t(i,k),psat,ttp,xa,xb,ep2,qmin, &
++              pr101_es_initial,pr101_qs_initial,pr101_es_after, &
++              pr101_qs_after,pr101_rh_initial,pr101_rh_branch, &
++              pr101_rh_after,pr101_e_request,pr101_bounded_e,pr101_source_extent, &
++              pr101_qv_after,pr101_qc_after,pr101_t_after)
++          endif
+           if(full_cloud_evap) pr97_extent=-cloud_evap_extent
+           call liquid_record(i,merge(2,3,full_cloud_evap), &
+             pr97_q_before,pr97_c_before,pr97_extent, &
+@@ -7944,9 +7998,11 @@
+    endif
+    deallocate(pr100_qc_support)
+    if (pr87_model_timestep.eq.1 .and. lat.eq.jte .and. pr100_qc_open) then
++     close(pr101_unit)
+      close(pr100_qc_unit)
+      pr100_qc_open=.false.
+    endif
++   deallocate(pr101_cpm_basis_q,pr101_xl_basis_t)
+    call liquid_end(lat,its,ite)
+    end subroutine kdm62d
+ 
+@@ -7967,6 +8023,46 @@
+        dble(proposal),dble(alpha),dble(approved),dble(deferred)
+ end subroutine pr100_write_qc_event
+ 
++subroutine pr101_liquid_qs(temp,p,psat,ttp,xa,xb,ep2,qmin,es,qs)
++  implicit none
++  real, intent(in) :: temp,p,psat,ttp,xa,xb,ep2,qmin
++  real, intent(out) :: es,qs
++  real :: tr
++  tr=ttp/temp
++  es=psat*exp(log(tr)*(xa))*exp(xb*(1.-tr))
++  qs=min(es,0.99*p)
++  qs=ep2*qs/(p-qs)
++  qs=max(qs,qmin)
++end subroutine pr101_liquid_qs
++
++subroutine pr101_write_thermo(unit,timestep,j,loop,i,k,full_evap, &
++    t_before,p,qv_before,qc_before,es,qs,work,pcond,dt,xl,cpm,cpm_basis_q, &
++    xl_basis_t,psat,ttp,xa,xb,ep2,qmin,es_initial,qs_initial,es_after, &
++    qs_after,rh_initial,rh_branch,rh_after,e_request,bounded_e, &
++    source_extent,qv_after,qc_after,t_after)
++  implicit none
++  integer, intent(in) :: unit,timestep,j,loop,i,k
++  logical, intent(in) :: full_evap
++  real, intent(in) :: t_before,p,qv_before,qc_before,es,qs,pcond,dt,xl,cpm
++  double precision, intent(in) :: work
++  real, intent(in) :: cpm_basis_q,xl_basis_t
++  real, intent(in) :: psat,ttp,xa,xb,ep2,qmin,es_initial,qs_initial,es_after,qs_after
++  real, intent(in) :: rh_initial,rh_branch,rh_after,bounded_e
++  double precision, intent(in) :: e_request
++  real, intent(in) :: source_extent,qv_after,qc_after,t_after
++  write(unit,'(a,7(",",i0),*(1x,es24.16e3))') 'PR101THERMO_LIQUID', &
++       timestep,j,loop,i,k,merge(1,0,full_evap),transfer(t_before,0), &
++       dble(t_before),dble(p),dble(qv_before),dble(qc_before),dble(es), &
++       dble(qs),dble(work),dble(pcond),dble(dt),dble(xl),dble(cpm), &
++       dble(cpm_basis_q),dble(xl_basis_t),dble(psat),dble(ttp),dble(xa), &
++       dble(xb),dble(ep2),dble(qmin),dble(es_initial),dble(qs_initial), &
++       dble(es_after),dble(qs_after),dble(rh_initial),dble(rh_branch), &
++       dble(rh_after),dble(e_request),dble(bounded_e), &
++       dble(source_extent),dble(qv_after),dble(qc_after), &
++       dble(t_after),dble(qv_after)-dble(qv_before), &
++       dble(qc_after)-dble(qc_before),dble(t_after)-dble(t_before)
++end subroutine pr101_write_thermo
++
+         REAL FUNCTION GAMMLN(x)
+ 
+ 

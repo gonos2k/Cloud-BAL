@@ -1,0 +1,44 @@
+{
+  "schema": "pr101_upper_wind_build_execution_v1",
+  "status": "PASS_OVERLAY_BUILD",
+  "returncode": 0,
+  "command": [
+    "python3",
+    "tools/pr87_build_native_overlay.py",
+    "--scratch",
+    "/var/tmp/pr101_upper_wind_freshbuild_after_root_review_20261023",
+    "--source-overrides",
+    "/var/tmp/pr101_upper_wind_sourceprep_20261023/source_overrides.json",
+    "--extra-source",
+    "/var/tmp/pr96_native_build_c1_20261021/source/pr90_cycle_support.f90",
+    "--reproduction-profile"
+  ],
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL",
+  "scratch": "/var/tmp/pr101_upper_wind_freshbuild_after_root_review_20261023",
+  "model_run": false,
+  "plan_sha256": "c3187addfa1be0f43ccf182cf06f330ec5fa0253401ab929b6b4187384740cc2",
+  "independent_build_review_sha256": "0a4c5cea736c1ec8324bb4748b4e400dc56f59a9dc0ffe533f509da958f46f11",
+  "base_c2_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+  "transformed_module_em_sha256": "1ff7b4c31f83944be07382ef61660269ecddcf5fe3cf66920f35fa341a8c988b",
+  "compiler_profile": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/tests/intel_toolchain.sh",
+    "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "executable": {
+    "path": "/var/tmp/pr101_upper_wind_freshbuild_after_root_review_20261023/wrf_pr87_overlay.exe",
+    "sha256": "4100279548fa19c5edd591f0738d3555aa8655b886bc2c9b9da7c88cd202615d"
+  },
+  "archive": {
+    "path": "/var/tmp/pr101_upper_wind_freshbuild_after_root_review_20261023/link/main/libwrflib_pr87_overlay.a",
+    "sha256": "81d25a9685c2a85a5a2b28a7de80838089580142a92e7ff059345ea666488894"
+  },
+  "receipt_path": "/var/tmp/pr101_upper_wind_freshbuild_after_root_review_20261023/pr87_native_overlay_build.json",
+  "operations_not_run": [
+    "model forecast",
+    "paired H/P20 capture",
+    "source replay"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "pr101_upper_wind_prebuild_validation_v1",
+  "validation": "PASS",
+  "focused_unittest_command": "python3 -m unittest discover -s tests -p 'test_pr101_upper_wind_*.py' -v",
+  "focused_unittest_count": 12,
+  "focused_unittest_result": "PASS (12 tests; event pairing, format pin, finite operand checks, bounds contract, and replay mismatch guards)",
+  "py_compile": {
+    "command": "python3 -m py_compile tools/pr101_upper_wind_capture.py tools/pr101_upper_wind_replay.py tools/pr101_upper_wind_fortran_replay.py tools/pr101_upper_wind_build_plan.py",
+    "result": "PASS"
+  },
+  "operations_not_run": [
+    "compiler",
+    "overlay builder",
+    "forecast",
+    "capture replay"
+  ],
+  "prepared_transformed_source": "/var/tmp/pr101_upper_wind_sourceprep_20261023/module_em.F",
+  "prepared_transformed_source_sha256": "1ff7b4c31f83944be07382ef61660269ecddcf5fe3cf66920f35fa341a8c988b",
+  "byte_order_evidence": {
+    "c2_receipt": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json",
+    "compile_options": [
+      "-convert",
+      "big_endian",
+      "-real-size",
+      "32",
+      "-i4"
+    ],
+    "capture_open_convert": "BIG_ENDIAN",
+    "reader_struct_byte_order": "big-endian"
+  },
+  "fortran_source_driver": {
+    "diffusion_source": "/var/tmp/pr61_ccn_origin_20261006/hostcopy/dyn_em/module_big_step_utilities_em.F",
+    "diffusion_source_sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c",
+    "mismatch_behavior": "ERROR STOP 1 on captured-vs-replayed REAL32 bit mismatch",
+    "result_file": "pr101_upper_wind_fortran_replay.txt",
+    "required_final_marker": "PR101_UPPER_WIND_FORTRAN_REPLAY_PASS v1",
+    "diffusion_source_sha256_verification": "re-read from pinned source path before standalone compilation; compile receipts bind this value"
+  },
+  "caller_stage": {
+    "solve_em_actual_arguments": [
+      "grid%u_2",
+      "grid%v_2"
+    ],
+    "solve_em_source_sha256": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6",
+    "rk_tendency_arguments_intent": "INTENT(IN)",
+    "horizontal_diffusion_gate": "forward_step when rk_step==1"
+  },
+  "upstream_lineage_limit": "No WPS/met_em and real.exe receipt presently links a pressure-level wind source to the actual C1 wrfinput; PR81 pressure-level candidate is a separate artifact."
+}

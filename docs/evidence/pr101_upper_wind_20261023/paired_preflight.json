@@ -1,0 +1,47 @@
+{
+  "schema": "pr101_upper_wind_paired_preflight_v1",
+  "status": "READY_FOR_ROOT_REVIEW_NO_MODEL_LAUNCH",
+  "model_launch_performed": false,
+  "run_stage_created": false,
+  "preflights": {
+    "HYDRO": {
+      "path": "/var/tmp/pr101_upper_wind_capture_hydro_20s_20261023/preflight.json",
+      "sha256": "1b90faa3a164cdd9576bdf69edd9fe482850eda6a503acab482625653ed61b55",
+      "input_receipt": "/var/tmp/pr94_hydro_current_inputs_20261021d/hydro_native_input_receipt.json",
+      "input_receipt_sha256": "967a481070c37286f6aef8d616679583f1c86afb7dd60ac64f1d411977eba39b",
+      "wrfinput_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+      "runtime_template": "/var/tmp/pr85_same13_OFF_joint_v17_20261015a",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e"
+    },
+    "PROJECTED_P20": {
+      "path": "/var/tmp/pr101_upper_wind_capture_projected_20s_20261023/preflight.json",
+      "sha256": "fb72ca3416b08ba576b663728d695adab59a4e5d2c8692af393a66cd9afccb7c",
+      "input_receipt": "/var/tmp/pr99_native_projection_v4_20261022/wrfinput_d01.proposal.json",
+      "input_receipt_sha256": "a6fdd4907228b6bcd95d2eba3e61539adcedf69c0154c23a9e1a2edeb6c6b5d0",
+      "wrfinput_sha256": "10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3",
+      "runtime_template": "/var/tmp/pr85_same13_COUPLED_joint_v17_20261015a",
+      "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675"
+    }
+  },
+  "candidate_build_receipt": {
+    "path": "/var/tmp/pr101_upper_wind_freshbuild_after_root_review_20261023/pr87_native_overlay_build.json",
+    "sha256": "3d61cbfddb7b5701ede57b73e5f532981b43708679d24d00da229b78ef692ec0",
+    "executable_sha256": "4100279548fa19c5edd591f0738d3555aa8655b886bc2c9b9da7c88cd202615d",
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "frozen_runner": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/tools/pr86_time_response.py",
+    "sha256": "087f9f3a9f80f5679db7c228d99dde269200028d823553e0a2045a855cbba439"
+  },
+  "paired_checks": {
+    "duration_seconds_equal": true,
+    "expected_one_step": true,
+    "candidate_namelist_sha256_equal": true,
+    "candidate_boundary_sha256_equal": true,
+    "candidate_build_equal": true,
+    "all_101_template_input_hashes_equal_except_wrfinput": true,
+    "wrfinput_is_only_template_input_difference": true,
+    "disk_guards_pass": true
+  },
+  "next_gate": "Root review of paired preflight hashes before either 20-second run."
+}

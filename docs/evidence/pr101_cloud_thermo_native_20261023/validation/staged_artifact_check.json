@@ -1,0 +1,33 @@
+{
+  "schema": "pr101_staged_artifact_check_v1",
+  "command": [
+    "git",
+    "diff",
+    "--cached",
+    "--check",
+    "--",
+    ".",
+    ":(exclude)docs/evidence/pr101_cloud_thermo_20261023/source.patch",
+    ":(exclude)docs/evidence/pr101_cloud_thermo_20261023/source_r64.patch"
+  ],
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL",
+  "returncode": 0,
+  "output": "",
+  "immutable_patch_exceptions": [
+    {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/source.patch",
+      "sha256": "25b678cfccb34448c0dc4e639bcc93265509754c7d21c2c07373a99ce575fccc",
+      "reason": "Retained generated unified diff contains whitespace-only context lines; preserving receipt-bound patch bytes. Full staged whitespace check reports these context lines only."
+    },
+    {
+      "path": "docs/evidence/pr101_cloud_thermo_20261023/source_r64.patch",
+      "sha256": "6f78bc02056817158414c1dda37a628fa8a44bf317ffa5815739a4c990635dbd",
+      "reason": "Retained generated unified diff contains whitespace-only context lines; preserving receipt-bound patch bytes. Full staged whitespace check reports these context lines only."
+    }
+  ],
+  "checksum_readback": {
+    "cloudthermo": "36/36 SHA256SUMS entries match from evidence directory",
+    "T1sum": "3/3 SHA256SUMS entries match from repository root; initial wrong-directory invocation reported missing files, corrected cwd passed; no bytes changed"
+  },
+  "scientific_disposition": "FAIL_OPEN"
+}
