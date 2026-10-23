@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "tools/pr101_projected_c2_response.py", line 586, in <module>
+    report = analyze(args.run_root)
+  File "tools/pr101_projected_c2_response.py", line 531, in analyze
+    projected_trace, source_policy = _read_projected_trace_and_policy(
+  File "tools/pr101_projected_c2_response.py", line 216, in _read_projected_trace_and_policy
+    sys.path.insert(0, str(PR99_C2_AUDIT_ROOT / "tools"))
+NameError: name 'sys' is not defined
