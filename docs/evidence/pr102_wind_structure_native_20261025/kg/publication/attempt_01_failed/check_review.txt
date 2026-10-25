@@ -1,0 +1,19 @@
+PR102 exact guarded KG CHECK_ONLY plan peer review
+Date: 2026-10-26
+Scope: read-only review of recorded CHECK_ONLY output/plan and current source/maintained path identities. No Graphify/`kg-update`/check-only/apply was invoked by reviewer; no maintained writes or model output reads.
+
+Reviewed artifact hashes:
+- CHECK_ONLY stdout `/var/tmp/pr102_kg_check_only_20261026/stdout.json`: a0a7a0a746eb833b9def9310ca7930d97642875293762950d1b0b5e637c71249
+- canonical plan SHA256: a5e343769c3df798282495bcfa6d637324c8c1832aa1ad2adc79f41104fef1e9 (independently recomputed; matches stdout)
+- results manifest `/var/tmp/pr102_kg_results_manifest_20261026.json`: 94218915f196c21424f7f68e0f4570f2e0f08ef28f21205596c7d8512f0fa3d5
+
+Verdict: GO for ROOT consideration to apply this exact reviewed plan, after its separate GO record is written. This review does not apply KG and is not physical/observation approval.
+
+Checks:
+- stdout status is CHECK_ONLY_NO_WRITES and `writes_performed=false`; recorded plan is canonical-hash-bound. Current source checkout is clean at exact `ada6f7e6f318b82f60a7b448c64860dc05b2323d`. Read-only GitHub API confirms PR102 is open, exact head SHA, and base `main`.
+- Manifest current SHA matches plan. Its source commit, approval base `1e2c45eb30135582f925bc8c833d96b131af1df9`, graph-selection base `2345bc1d83eae9094225a2ddfe8879740c4d8273`, and PR URL match. All four runtime gate states are COMPLETE; evidence path/hash pairs for candidate, consumer, nativecapture and C2_640 currently match. C2 scope explicitly retains generic QNB FAIL (173 findings), with exact endpoint and active-ice statuses distinct. Manifest remains physical_approval FAIL_OPEN and observation_skill NOT_EVALUATED.
+- Selected graph extraction is exactly 25 paths: 4 PR102 docs, 8 PR102 tests, 11 PR102 tools, changed PR86 test and changed PR86 runner. The other 129 diff paths are all docs/evidence and hash-only. No source path outside the stated PR101/PR102/changed-PR86 allowlists is selected. Graph selection is incremental from the PR101 graph base; PR101 evidence remains hash-only.
+- Current maintained source inventory was recomputed read-only through the pinned helper and matches 627 entries / SHA `0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f`. All 197 inherited pins were recomputed and match the plan. Protected-content hash map (13 protected entries) and helper chain match. Five wiki rollback baseline files match. Both current maintained graph hashes independently match their pins.
+- Existing dated folder count is currently 116 (56 KLAPS50, 60 Cloud-BAL). Plan provenance preserves the 112 prior receipt folders plus four distinct PR101 publication additions (two raw-date and two final named). Plan date is 2026-10-26 while named work-start snapshot remains 2026-10-25-pr102-wind-structure; the reviewed source wrapper uses the plan automatic date for wiki/log publication metadata. Both corpora's two reserved snapshot paths (raw 2026-10-26 and named PR102 path) are absent. Maintained Cloud-BAL PR102 KG output directory is absent. The plan captures full rollback and 116-folder inventories; reviewer did not reread every older snapshot file.
+
+Apply remains gated by ROOT JSON with decision GO, this plan SHA, exact source commit, automatic_snapshot_date `2026-10-26`, and nonempty reviewed_by, followed by the wrapper's date/plan/pin rechecks. After apply, verify the receipt and exact four additions / 120 total folders, report/wiki hashes, 627/197/protected-content preservation.
