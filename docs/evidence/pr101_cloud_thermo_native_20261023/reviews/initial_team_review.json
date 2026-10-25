@@ -1,0 +1,117 @@
+{
+  "schema": "pr101_initial_team_review_v1",
+  "status": "CODE_AND_LOCAL_EVIDENCE_REVIEWED_P640_PENDING",
+  "reviews": [
+    {
+      "component": "guard_mechanics",
+      "status": "GO",
+      "scope": "standalone launcher mechanics",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/guard_mechanics.txt",
+        "sha256": "f4f6329d36b000d20cef2329e75ac2e5412f38b0cb8e2480e82a9db14f1c34c2"
+      }
+    },
+    {
+      "component": "guard_and_runner",
+      "status": "GO",
+      "scope": "standalone launcher and frozen PROJECTED runner bindings",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/guard_and_runner.txt",
+        "sha256": "a151373a901c44f5634791c38163a84be2d4b3eeab8bc4fa6c81d2a6ffb267a4"
+      }
+    },
+    {
+      "component": "upper_build",
+      "status": "GO",
+      "scope": "fresh diagnostic C2 overlay source and build plan",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/upper_build.txt",
+        "sha256": "0a4c5cea736c1ec8324bb4748b4e400dc56f59a9dc0ffe533f509da958f46f11"
+      }
+    },
+    {
+      "component": "upper_initial_final",
+      "status": "CONDITIONAL_GO_RESOLVED_BY_POSTFIX",
+      "scope": "historical review; wrong prebuild source hash fixed",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/upper_initial_final.txt",
+        "sha256": "dfe05b1fc461651555de826cba9a39fd08c3cc09c2088e4c3683e13613623b7c"
+      }
+    },
+    {
+      "component": "upper_postfix",
+      "status": "GO",
+      "scope": "exact source replays, captured scope and corrected source pin",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/upper_postfix.txt",
+        "sha256": "1417736a88b874a8d3bbab32450340058581bc94fc0b97b926d170fd5442eb99"
+      }
+    },
+    {
+      "component": "thermo_initial",
+      "status": "INITIAL_FINDINGS_RESOLVED_BY_POSTFIX",
+      "scope": "historical review of retained observer evidence and reproducibility gaps",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/thermo_initial.txt",
+        "sha256": "1f1d802304f9bde57e27aff687b662a130072757bbc653e003b1e429e5c2b896"
+      }
+    },
+    {
+      "component": "thermo_postfix",
+      "status": "GO",
+      "scope": "four replays, fixed bindings, summary and reproducibility metadata",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/thermo_postfix.txt",
+        "sha256": "3db6bfbb4da717a57bcf36ce7b87ac19e8860b58fe23ddc5cb2f130b3de62ad4"
+      }
+    },
+    {
+      "component": "kg_wrapper",
+      "status": "GO",
+      "scope": "read-only guarded publication code; no apply performed",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/kg_wrapper.txt",
+        "sha256": "57bcdf6416b0bf164c00d681995f94a9babb4b8b42b45c51779445914796b338"
+      }
+    }
+  ],
+  "review_findings_resolved": [
+    "Match diagnostic work1 type to source DOUBLE PRECISION storage with REAL32 statement-function provenance",
+    "Reject malformed/nonfinite upper capture records and label native time_step as seconds",
+    "Decode Fortran JKI storage to KJI masks and crop the active halo consistently; real closed-control canonical-reader regression passes",
+    "Restore exact guarded build-plan bytes; keep later readback metadata separate; remove duplicate derived hash aliases",
+    "Bind actual closed control receipt/preflight/input identities and preserve native/cross-executable cohort limits",
+    "Correct pinned-engine KG table/log/date output while preserving original protected baseline bytes"
+  ],
+  "source_code_sha256": {
+    "docs/evidence/pr101_cloud_thermo_native_20261023/kg/apply_kg.py": "b7afdaacfeb1cf51f23844fa327d9602caa3f1247eb990fde1b3849309879d1b",
+    "docs/evidence/pr101_cloud_thermo_native_20261023/kg/preflight_kg.py": "fb1892cdb0b7b9d07c8a57ba5ca789fa5d818b800f338e499f5c5fd131b8d872",
+    "docs/evidence/pr101_cloud_thermo_native_20261023/kg/test_wrapper_publication.py": "0b933f4ec028eb3e71dc9fa6722e64361ad913e8dc6101653391c2fb2cd44a3e",
+    "tests/test_pr101_cloud_thermo_aggregate.py": "bbad8e89eac8b1a23a88969bce2b7567c817280a5b9b433894047a5d2dd3be79",
+    "tests/test_pr101_cloud_thermo_reducer.py": "ee7dbfeff1d288d70f4aaf4898d841422d279cab75dbe3d1653981806b3695f8",
+    "tests/test_pr101_cloud_thermo_source.py": "2d42cad0cff4c7fef3f0ae232383a86998dcfb9baba6dfb4168e2fd9300bd0a2",
+    "tests/test_pr101_guarded_replay.py": "ad016ff972029368caab608df6e599fa1b8f59ee9d88a0ed7d620b7ab4fbaf17",
+    "tests/test_pr101_projected_c2_response.py": "d6c0135453800e4cb8180ce08dd5dba9b84eaed9235c7842c0843c3f47099c72",
+    "tests/test_pr101_upper_wind_capture.py": "af14810dd263ed2b50a37b20a5eeada1ba0a3d1ecd1983744491e3141e278b0f",
+    "tests/test_pr101_upper_wind_replay.py": "843609f56bc8559f8d21f108262b881faca8118382e7215cb7fedb11c1a7e6b6",
+    "tests/test_pr86_time_response.py": "4dcfab3ce31c5e94c849496ce15e9c03734bd04130103aa6e5370e97af7e2854",
+    "tools/pr101_cloud_thermo_aggregate.py": "df836a45d2017e99716d0666efcc43a35c6690efa6328e82ae26b369460464e9",
+    "tools/pr101_cloud_thermo_reducer.py": "83194a6757d36354d5980b595e5d6b9713e50cb0d8d86ecf50ec405f56701ccc",
+    "tools/pr101_cloud_thermo_refresh_manifest.py": "e42ad695ff9a23f862db4096ec795439c5a005bddb84821b75c6d45957f3b583",
+    "tools/pr101_cloud_thermo_source.py": "76cd5a39705dd01d2f90753d87c48f131c57a91102cfdb737ea76a155b0cba25",
+    "tools/pr101_guarded_replay.py": "f9854bd5c7d920786b0ee47d1ab1f694d3a4b9d33b060ff1e8e1a61fa58a76d3",
+    "tools/pr101_prepare_cloud_thermo_build.py": "9ca6ab058dcfe9ff87696c9dcc5a407d5f5271875b44fdebd9d1926897c54208",
+    "tools/pr101_projected_c2_preflight.py": "8bc63053536bfd1fc02ec73fb83e4beb95329894c9593f5f1e641c4060c354ad",
+    "tools/pr101_projected_c2_response.py": "2a64588ddc0d88c55c4f885d6a6f71e59fcb24f7d0c6e8ba2593e3ae986953bd",
+    "tools/pr101_t1_sum_check.py": "30c23ae34783cd8ff2c5dc7e5d714566b727f9ad77c688853b700386bdd68cbb",
+    "tools/pr101_upper_wind_build_plan.py": "f297a93f8f5b3d986a0671be3bdd4d5479f72d21be5e07df2a9a618805945663",
+    "tools/pr101_upper_wind_capture.F90": "80ddcc6ae2221dfffaa1fb4ce6b9aadb6a145480d8da3c38272e3d8309460b3c",
+    "tools/pr101_upper_wind_capture.py": "b6a6a71fb4ff9821c4ca35c931f3176a13ce762303b8f6ee4e51e3a9df0a9499",
+    "tools/pr101_upper_wind_fortran_replay.py": "47de62f37b1afd06578b318427fffb443c38a83800a42bb0baeb02895dcb5ca4",
+    "tools/pr101_upper_wind_replay.py": "5489d29b1c25b782ea85d9463dd87af85ddef2597b1c7fd53d2059bc354ccd57",
+    "tools/pr86_time_response.py": "087f9f3a9f80f5679db7c228d99dde269200028d823553e0a2045a855cbba439"
+  },
+  "pending": "Unchanged C2 projected input 640-second forecast closure and matched response review; no live forecast binary/history was read",
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED"
+}

@@ -1,0 +1,19 @@
+PR101 thermodynamic observer independent review
+Date: 2026-10-23
+Scope: static review of source transform/patch, reducer, final build/replay receipts, four-arm summary, report. No compiler, build, model replay, or source edits.
+
+Decision: no source-operator or summary-interpretation blocker found in the reviewed evidence. This is an implementation/evidence review, not scientific approval.
+
+Checks and findings
+- The corrected `source_r64.patch` is additive: it does not delete or replace original source lines. The existing saturation, pcond, QV, QC, and T statements remain intact. New reads/writes are diagnostic capture, property-state snapshots, and output only.
+- Source `work1` is a DOUBLE PRECISION array assigned from the default-REAL `conden` statement function. The corrected observer copies it into DOUBLE PRECISION `pr101_work1`; `max(-work1,0.d0)` and the writer preserve the promoted value. The failed initial REAL capture is retained as a separate failed attempt; it is not the built candidate.
+- Sign semantics are consistent with the source: negative `work1` produces negative pcond (evaporation); ordinary-branch source extent is `-pcond*dtcld`, positive for evaporation and negative for condensation; full evaporation uses available QC. Stored QV/QC/T endpoints are separately checked using the source branch arithmetic.
+- The four-arm summary reports unweighted sums over the 613-cell fixed support, not an area/mass-integrated water budget. RH branch counts are scoped to QC-positive cells; zero-QC count is separate. The report distinguishes full evaporation, general branch, branch-RH category, and signed extent.
+- I parsed each private thermodynamic capture offline with the reducer: all four capture hashes match the summary pins, each parses to 613 unique events, and all four exact `(timestep,loop,i,j,k)` key sets are identical. I also verified each complete `replay_post.raw` hash equals both its guarded manifest's expected output and the bound native post-trace hash for OFF, HYDRO, COUPLED, and P20.
+- The earlier nested four-arm hash mismatch in `source_r64_manifest.json` was fixed by the owner. Current source revision manifest SHA is `a18257626e13d4f4baf5ece45fd2c90bdcf801fa81fe5335839b84996ad3ebc7`; current four-arm SHA is `ce68e111a99181c1d9ab40955d13501785513de23b1e9678bf4848fe2358f219`; all 32 `SHA256SUMS` entries verify.
+
+Reproducibility gaps to keep visible
+- The final `build_r64/precompile_seed_inventory.json` contains 30 modules: 27 retained PR100 pins plus 3 explicit dependencies. `tools/pr101_prepare_cloud_thermo_build.py` only accepts/stages 27 pinned modules; the three additional module staging steps are represented by source/hash rows in the final inventory but not reproduced by that builder. The compiler-consumed module trace is explicitly `NOT_AVAILABLE`.
+- The final link argv lists inherited C1/PR85/PR96 objects and archives, but the PR101 build plan does not hash every external link input. The executable/link-map hashes bind the produced artifact, not a complete independent reconstruction of all link inputs.
+- The transformed source and raw captures are retained under `/var/tmp`; the report records their hashes. The base prepared-source hash is pinned, and a matching PR100 staged source exists locally, but the manifest does not name that input path. Raw capture paths are private and the checked-in reducer does not regenerate the full four-arm ranked/conditional summary; the compact summary is hash-bound but not fully derivable from tracked source alone after private raw removal.
+- The review checked the first-call standalone replay identity and its captured source arithmetic. It does not establish forecast evolution, C2/P640 behavior, or a physical/area-integrated closure result; the report already states these limits.

@@ -1,0 +1,11 @@
+PR101 ignored-log publication review
+Date: 2026-10-23
+Scope: read-only audit of `.log` files under the five PR101 evidence directories before publication. No files modified, tests rerun, or model actions performed.
+
+Decision: GO for publishing the 14 files currently inventoried; reconcile one count discrepancy before calling the requested 15-file set complete.
+
+I enumerated all regular `.log` files under `docs/evidence/pr101_cloud_thermo_20261023`, `pr101_cloud_thermo_native_20261023`, `pr101_projected_c2_20261023`, `pr101_t1_sum_20261023`, and `pr101_upper_wind_20261023`. There are 14, all listed in `validation/ignored_log_publication.json`; each byte count and SHA256 matches its file. The staged set I observed also contains these same 14 files. No additional PR101 `.log` exists under those five directories.
+
+The selected logs are compiler/linker output, validation stdout/stderr, and the two closed-response analyzer attempt logs. The 34,982-byte compiler log contains compiler diagnostics only; the other logs are small validation summaries, empty successful diff/link/py_compile logs, or recorded failed attempts. The analyzer attempt 1 traceback (missing `sys`) and failed test selection (`file or directory not found`, zero tests run) are preserved visibly. The second analyzer stdout log is empty and its execution receipt records the return code and output hash. I found no credentials/secrets or unbound model-state payloads in these logs.
+
+Count discrepancy: the request/message says 15 `.log` files, but the publication inventory and on-disk enumeration both contain 14. I found no unlisted fifteenth log in the five evidence directories; root should confirm whether 14 is the intended set or identify the missing path. No hash/content blocker was found for the 14 inventoried files.

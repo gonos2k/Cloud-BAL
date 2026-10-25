@@ -1,0 +1,58 @@
+{
+  "schema": "pr101_upper_wind_build_plan_v1",
+  "execution": "NOT_RUN_REQUIRES_ROOT_REVIEW_AND_COMMON_GUARD_GO",
+  "builder": "tools/pr87_build_native_overlay.py",
+  "base_receipt": {
+    "path": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json",
+    "sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb"
+  },
+  "base_overlay_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+  "base_archive_sha256": "c9294166dc38c9ce9640a9615aed0651dddc15f975334638341ce457a9ad03da",
+  "transformed_module_em": {
+    "path": "/var/tmp/pr101_upper_wind_sourceprep_20261023/module_em.F",
+    "sha256": "1ff7b4c31f83944be07382ef61660269ecddcf5fe3cf66920f35fa341a8c988b"
+  },
+  "baseline_override_hashes": {
+    "module_microphysics_zero_out.o": "b70e521c589f8858e4551d10619b3282a4fb3261732b3b8770f369b62792a1a0",
+    "module_em.o": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296",
+    "module_bl_shinhong.o": "92843e196b0e1fcae0af134b8f5a6e4d534dd9b47e76abc09de25531418b7ea3",
+    "module_bl_fogdes.o": "bd983a8c1d65b007e6e9d0b07b4ec63efadd33a606a9692d3dd52ba990ee88f7",
+    "module_pbl_driver.o": "19585dd32f72e1172e15b072ecab5857c8f50092b4bc2114ba281e07282ba676",
+    "module_mp_kdm6.o": "f09a413c36b7bda9fb7376f0276e00329179c68bdbef1e4766bae2811152f58b",
+    "module_first_rk_step_part1.o": "b902d535a0f6ca2eeb538192c623db53c3e172aebd55ee41b3911b28f81246ef",
+    "module_first_rk_step_part2.o": "6712dae70238e7d1c21786784698847dcee367f5a69c4f99fb7bd5c541ee9082",
+    "solve_em.o": "d0ff9110811811c01ad13709bf5b538f7b92a49739211b0519aac55a81bc04a6"
+  },
+  "source_overrides": {
+    "module_microphysics_zero_out.o": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_microphysics_zero_out.F",
+    "module_em.o": "/var/tmp/pr101_upper_wind_sourceprep_20261023/module_em.F",
+    "module_bl_shinhong.o": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_bl_shinhong.F",
+    "module_bl_fogdes.o": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_bl_fogdes.F",
+    "module_pbl_driver.o": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_pbl_driver.F",
+    "module_mp_kdm6.o": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_mp_kdm6.F",
+    "module_first_rk_step_part1.o": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_first_rk_step_part1.F",
+    "module_first_rk_step_part2.o": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_first_rk_step_part2.F",
+    "solve_em.o": "/var/tmp/pr96_native_build_c1_20261021/source/overrides/solve_em.F"
+  },
+  "extra_source": "/var/tmp/pr96_native_build_c1_20261021/source/pr90_cycle_support.f90",
+  "scratch": "/var/tmp/pr101_upper_wind_freshbuild_after_root_review_20261023",
+  "builder_argv": [
+    "python3",
+    "tools/pr87_build_native_overlay.py",
+    "--scratch",
+    "/var/tmp/pr101_upper_wind_freshbuild_after_root_review_20261023",
+    "--source-overrides",
+    "{\"module_microphysics_zero_out.o\":\"/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_microphysics_zero_out.F\",\"module_em.o\":\"/var/tmp/pr101_upper_wind_sourceprep_20261023/module_em.F\",\"module_bl_shinhong.o\":\"/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_bl_shinhong.F\",\"module_bl_fogdes.o\":\"/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_bl_fogdes.F\",\"module_pbl_driver.o\":\"/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_pbl_driver.F\",\"module_mp_kdm6.o\":\"/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_mp_kdm6.F\",\"module_first_rk_step_part1.o\":\"/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_first_rk_step_part1.F\",\"module_first_rk_step_part2.o\":\"/var/tmp/pr96_native_build_c1_20261021/source/overrides/module_first_rk_step_part2.F\",\"solve_em.o\":\"/var/tmp/pr96_native_build_c1_20261021/source/overrides/solve_em.F\"}",
+    "--extra-source",
+    "/var/tmp/pr96_native_build_c1_20261021/source/pr90_cycle_support.f90",
+    "--reproduction-profile"
+  ],
+  "compiler_profile": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr99_native_contract_20261022/Cloud-BAL/tests/intel_toolchain.sh",
+    "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "version": "ifx (IFX) 2026.0.0 20260331"
+  },
+  "base_C2_inputs_and_namelist": "root common guard binds these; do not reuse C1 P20 inputs"
+}

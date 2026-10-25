@@ -1,0 +1,40 @@
+{
+  "schema": "pr101_upper_wind_source_transform_v1",
+  "source": {
+    "path": "/var/tmp/pr99-c2-source.2n00oy19/module_em.F",
+    "sha256": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296"
+  },
+  "helper": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr101_cloud_thermo_20261023/Cloud-BAL/tools/pr101_upper_wind_capture.F90",
+    "sha256": "80ddcc6ae2221dfffaa1fb4ce6b9aadb6a145480d8da3c38272e3d8309460b3c"
+  },
+  "transformed": {
+    "path": "/var/tmp/pr101_upper_wind_sourceprep_20261023/module_em.F",
+    "sha256": "1ff7b4c31f83944be07382ef61660269ecddcf5fe3cf66920f35fa341a8c988b"
+  },
+  "capture": {
+    "faces_ijk": {
+      "U": [
+        136,
+        39,
+        16
+      ],
+      "V": [
+        135,
+        39,
+        17
+      ]
+    },
+    "levels": [
+      37,
+      38,
+      39
+    ],
+    "phases": {
+      "before": 1,
+      "after": 2
+    },
+    "raw_file": "pr101_upper_wind.raw",
+    "operator_mutated": false
+  }
+}

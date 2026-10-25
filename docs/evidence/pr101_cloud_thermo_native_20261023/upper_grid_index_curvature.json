@@ -1,0 +1,109 @@
+{
+  "schema": "pr101_upper_wind_grid_index_curvature_v1",
+  "scope": "five-point field increment curvature in grid indices, not physical acceleration/energy; captured native RK1 at dt=20s; two target faces only",
+  "capture_sha256": {
+    "hydro": "812a1871ae3ea4154cfa37b5369102fb4b7f5818a71bea2a5088e5d33bede431",
+    "projected": "e961c89d3e2b5841c8ed49c0e754b1a289a8abb5047c0862fcdcb4419669da9d"
+  },
+  "rows": [
+    {
+      "component": "u",
+      "i": 136,
+      "j": 16,
+      "k": 37,
+      "delta_P_minus_H_center_west_east_south_north_m_s": [
+        7.8458825051784515,
+        1.5170135498046875,
+        4.302736759185791,
+        2.672208786010742,
+        -0.9997553825378418
+      ],
+      "delta_x2_grid_index_m_s": -9.872014701366425,
+      "delta_y2_grid_index_m_s": -14.019311606884003
+    },
+    {
+      "component": "u",
+      "i": 136,
+      "j": 16,
+      "k": 38,
+      "delta_P_minus_H_center_west_east_south_north_m_s": [
+        7.8458826541900635,
+        1.517014503479004,
+        4.302736759185791,
+        2.672208786010742,
+        -0.9997568130493164
+      ],
+      "delta_x2_grid_index_m_s": -9.872014045715332,
+      "delta_y2_grid_index_m_s": -14.019313335418701
+    },
+    {
+      "component": "u",
+      "i": 136,
+      "j": 16,
+      "k": 39,
+      "delta_P_minus_H_center_west_east_south_north_m_s": [
+        7.845882415771484,
+        1.5170135498046875,
+        4.302736282348633,
+        2.672208786010742,
+        -0.999755859375
+      ],
+      "delta_x2_grid_index_m_s": -9.872014999389648,
+      "delta_y2_grid_index_m_s": -14.019311904907227
+    },
+    {
+      "component": "v",
+      "i": 135,
+      "j": 17,
+      "k": 37,
+      "delta_P_minus_H_center_west_east_south_north_m_s": [
+        -7.223984599113464,
+        -3.2383254766464233,
+        3.7113802433013916,
+        -0.8958172798156738,
+        -5.381421446800232
+      ],
+      "delta_x2_grid_index_m_s": 14.921023964881897,
+      "delta_y2_grid_index_m_s": 8.170730471611023
+    },
+    {
+      "component": "v",
+      "i": 135,
+      "j": 17,
+      "k": 38,
+      "delta_P_minus_H_center_west_east_south_north_m_s": [
+        -7.2239837646484375,
+        -3.2383254766464233,
+        3.7113802433013916,
+        -0.8958171606063843,
+        -5.381420612335205
+      ],
+      "delta_x2_grid_index_m_s": 14.921022295951843,
+      "delta_y2_grid_index_m_s": 8.170729756355286
+    },
+    {
+      "component": "v",
+      "i": 135,
+      "j": 17,
+      "k": 39,
+      "delta_P_minus_H_center_west_east_south_north_m_s": [
+        -7.223984003067017,
+        -3.2383254766464233,
+        3.71138072013855,
+        -0.8958171606063843,
+        -5.381420135498047
+      ],
+      "delta_x2_grid_index_m_s": 14.92102324962616,
+      "delta_y2_grid_index_m_s": 8.170730710029602
+    }
+  ],
+  "formulas": {
+    "x": "b_east - 2*b_center + b_west",
+    "y": "b_north - 2*b_center + b_south",
+    "b": "captured PRE field_PROJECTED - captured PRE field_HYDRO; arithmetic in binary64 on exact REAL32 operands"
+  },
+  "reader": {
+    "path": "tools/pr101_upper_wind_replay.py",
+    "sha256": "5489d29b1c25b782ea85d9463dd87af85ddef2597b1c7fd53d2059bc354ccd57"
+  }
+}

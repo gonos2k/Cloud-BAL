@@ -1,0 +1,53 @@
+{
+  "schema": "pr101_closed_team_review_v1",
+  "status": "GO_FOR_SOURCE_FREEZE_AND_PR",
+  "initial_reviews": {
+    "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/initial_team_review.json",
+    "sha256": "6dab747afb91a6c42ddf044ec6d29c1a5a0289fcc5181df41226fe83b7524490"
+  },
+  "final_reviews": [
+    {
+      "component": "projected_c2_closed",
+      "status": "GO",
+      "scope": "actual receipt, source audit, first-call identity and response interpretation",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/projected_c2_closed.txt",
+        "sha256": "958d68ca3b35b217ffb87dfbf3856e340ec7e377a2e12d5340b0220c5decae08"
+      }
+    },
+    {
+      "component": "control_response",
+      "status": "GO",
+      "scope": "independent four-arm fixed-support RMS reducer, provenance and mixed verdict",
+      "review": {
+        "path": "docs/evidence/pr101_cloud_thermo_native_20261023/reviews/control_response.txt",
+        "sha256": "64babb643d81c755c4944367477d32a0902b57ea4da3568a308af9709966c3e8"
+      }
+    }
+  ],
+  "review_findings_resolved": [
+    "Match diagnostic work1 type to source DOUBLE PRECISION storage with REAL32 statement-function provenance",
+    "Reject malformed/nonfinite upper capture records and label native time_step as seconds",
+    "Decode Fortran JKI storage to KJI masks and crop the active halo consistently; real closed-control canonical-reader regression passes",
+    "Restore exact guarded build-plan bytes; keep later readback metadata separate; remove duplicate derived hash aliases",
+    "Bind actual closed control receipt/preflight/input identities and preserve native/cross-executable cohort limits",
+    "Correct pinned-engine KG table/log/date output while preserving original protected baseline bytes",
+    "Add sys import required by actual closed trace reader dispatch; preserve failed first attempt and successful second command",
+    "Report actual generic FAIL and selected intermediate sedimentation transition separately from strict-source and active endpoint passes",
+    "Limit matched response conclusion to mixed unweighted fixed-region state differences; no physical or observational approval"
+  ],
+  "unresolved_material_implementation_blockers": [],
+  "source_validation": {
+    "path": "docs/evidence/pr101_cloud_thermo_native_20261023/validation/closed_focused_validation.json",
+    "sha256": "4bd73ce7e2494301b4599ec4be7aba047507361d33cf36fd295d146fb756e6f8"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED",
+  "open_scientific_items": [
+    "Projected 600-second pressure/Phi/W/QC response remains above HYDRO on fixed support",
+    "Exact wind interpolation lineage not replayed; selected source diffusion cause is field stencil under common coefficients",
+    "Source liquid saturation adjustment explains selected transfers; incoming cloud analysis quality and observations remain unapproved",
+    "Local first-call accounting does not close host water or energy budgets"
+  ],
+  "graph_publication": "PENDING_REVIEWED_SOURCE_COMMIT_AND_OPEN_PR"
+}

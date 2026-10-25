@@ -1,0 +1,46 @@
+{
+  "schema": "pr101_guarded_replay_receipt_v1",
+  "case": "PR101 source-form horizontal diffusion HYDRO upper U/V faces",
+  "scope": "Exact source routine replay for captured HYDRO call; standalone Fortran program bitwise-checks all six post-call values against captured POST REAL32 bits; no model, wind tuning, or operator changes.",
+  "directory": "/var/tmp/pr101_upper_wind_fortran_replay_guarded_hydro_20261023",
+  "argv": [
+    "/var/tmp/pr101_upper_wind_fortran_replay_guarded_hydro_20261023/replay.exe"
+  ],
+  "start_utc": "2026-10-23T08:42:43.990593+00:00",
+  "end_utc": "2026-10-23T08:42:44.032191+00:00",
+  "returncode": 0,
+  "execution_error": null,
+  "manifest_sha256": "5761c93503a3a32016198f6f3e0406ee621cac8ba20419c349913b1693dfb3be",
+  "guard_sha256": "f9854bd5c7d920786b0ee47d1ab1f694d3a4b9d33b060ff1e8e1a61fa58a76d3",
+  "expected_outputs": {
+    "pr101_upper_wind_fortran_replay.txt": true
+  },
+  "completion_markers": {
+    "PR101_UPPER_WIND_FORTRAN_REPLAY_PASS v1": true
+  },
+  "preservation_issues": [],
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OMP_DYNAMIC": "FALSE",
+    "LD_LIBRARY_PATH": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/umf/1.1/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/env/../lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tbb/2023.0/env/../lib/intel64/gcc4.8:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/opt/mpi/libfabric/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/debugger/2026.0/opt/debugger/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/opt/compiler/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/umf/1.1/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/env/../lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tbb/2023.0/env/../lib/intel64/gcc4.8:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/opt/mpi/libfabric/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/debugger/2026.0/opt/debugger/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/opt/compiler/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib"
+  },
+  "artifacts": {
+    "launch_manifest.json": {
+      "bytes": 2375,
+      "sha256": "5761c93503a3a32016198f6f3e0406ee621cac8ba20419c349913b1693dfb3be"
+    },
+    "pr101_upper_wind_fortran_replay.txt": {
+      "bytes": 256,
+      "sha256": "022e5ad4e23116d929fb248d2d9767ff10786db515c9137412bf18c1a9ad7d91"
+    },
+    "replay.exe": {
+      "bytes": 620256,
+      "sha256": "ebe599b5c78ac4956464bef7076bfee2bcc3d706de238fdd6d3bc15023a1aa69"
+    },
+    "run.log": {
+      "bytes": 40,
+      "sha256": "2126d5cc9424d50fc7f5de5f8083ee8d9d32525e5ccddf642151a40b7bea1c3c"
+    }
+  },
+  "status": "COMPLETE"
+}

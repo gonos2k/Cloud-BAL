@@ -1,0 +1,22 @@
+PR101 KG wrapper read-only peer review
+Date: 2026-10-23
+Reviewer: /root/pr101_upper_wind
+Review scope: source review only of the PR101 KG publication wrappers, their adjacent unit-test file, and README. No preflight, Graphify, apply, or tests were executed.
+
+Reviewed file hashes (SHA-256):
+fb1892cdb0b7b9d07c8a57ba5ca789fa5d818b800f338e499f5c5fd131b8d872  docs/evidence/pr101_cloud_thermo_native_20261023/kg/preflight_kg.py
+b7afdaacfeb1cf51f23844fa327d9602caa3f1247eb990fde1b3849309879d1b  docs/evidence/pr101_cloud_thermo_native_20261023/kg/apply_kg.py
+0b933f4ec028eb3e71dc9fa6722e64361ad913e8dc6101653391c2fb2cd44a3e  docs/evidence/pr101_cloud_thermo_native_20261023/kg/test_wrapper_publication.py
+788c88b453a2ad4c518de12682a7f6cda2be226fb2f51e799b71587bf3f0b9f7  docs/evidence/pr101_cloud_thermo_native_20261023/kg/README.md
+
+Disposition: GO; no material blockers identified.
+
+Checks from source review:
+- Preflight is read-only and distinguishes approval base d531fdd from graph-selection base 870dd5c. It checks ancestry/diffs, a clean source checkout and actual open PR, pins the two current graph snapshots and closed PR100 receipt, and validates maintained-source inventory, inherited pins, dated snapshots, protected wiki/profile state, and wiki baseline.
+- Root results-manifest binding checks its supplied SHA-256, source commit, PR URL, and both base commits. It requires P_C2_640, cloudthermo, upperwind, and T1sum rows with COMPLETE/INCOMPLETE/OPEN state, evidence SHA-256, candidate, and scope; it preserves physical_approval=FAIL_OPEN and observation_skill=NOT_EVALUATED.
+- PR100 evidence paths are allowed in the graph-selection lineage but remain excluded from extraction; evidence payloads are hash-bound only.
+- Apply recomputes the plan and requires the exact root-reviewed --reviewed-plan-sha256 before starting writes. The pinned engine checks protected content and maintained-source state before and after graph/wiki updates. Wrapper edits are limited to Graphify outputs and the listed wiki files; source paths are read for selection, not written.
+- Generated pinned-engine table/index/log content is checked against expected legacy output before bounded label/date/log corrections. Rollback verifies backup hashes/inventory and restores the bound baseline, removing the new snapshot.
+- The eight test methods cover graph-path allowlisting and correction/validation of generated table, index, and log content.
+
+Non-blocking limitation: if apply fails before the complete backup inventory exists, rollback reports ROLLBACK_FAILED rather than claiming a successful restore. This is explicit in the wrapper's failure status.
