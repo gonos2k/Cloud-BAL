@@ -1,0 +1,16 @@
+PR102 revised post-close source-policy audit plan/executor review
+Date: 2026-10-25
+Scope: read-only review only; no script executed and no run outputs opened.
+
+Reviewed SHA256:
+- Plan /var/tmp/pr102_structured640_postclose_source_audit_plan_v3.json: 3eb740ae618e7d8ecc2945c9aee89ef7e9eac91f15ca19fae60643c7f0567b66
+- Executor /var/tmp/pr102_structured640_closed_source_audit.py: d6d7612411051942031d5d6c9f9f6841ae61c7691828e6312457161358cb85fe
+
+Verdict: GO for this post-close Python source-policy audit only after the STRUCTURED run receipt is COMPLETE and independent root post-closure authorization is given. This does not authorize a new run or confer physical acceptance.
+
+Findings:
+- Revised executor now imports pinned `pr102_response`, validates the exact PR102 execution preflight using `_verify_execution_preflight`, and validates the run using `_closed_structured_run` before calling frozen PR93 `closed.audit_arm`. It then verifies the run preflight binds the exact full preflight path and SHA. This closes the earlier timestep-count/timestamp/change-flag gap; response closure validator binds 640 seconds, 32 expected timesteps, all 32 exact timestamps, no fatal/processing errors, no input changes, final/max completed steps, candidate executable/boundary/namelist and candidate preflight hash/input.
+- It retains exact base C2 executable, candidate input, boundary, namelist, build receipt and executable pins. It binds current response source and full execution preflight SHA. The frozen wrapper verifies reader recipe pins; plan reader-chain is verified before and after; executor/wrapper/runner/response/preflight source pins are compared before and after. No compiler or model-launch code is present.
+- Existing PR93 source-policy audit remains separate and reports Q/N/B conversion, exact source endpoint, and active-ice policy gates independently. Output does not synthesize an overall PASS or physical approval.
+
+Operational caveat: executor does not embed/check the whole plan file SHA itself. The reviewed plan SHA must be rechecked externally immediately before the post-close invocation, as the plan's `execution_authorized_by_this_plan` is false and it awaits receipt closure/root GO. No output or run receipt state was inspected.

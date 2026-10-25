@@ -1,0 +1,21 @@
+PR102 response analyzer bounded peer review
+Date: 2026-10-25
+Scope: read-only review of tools/pr102_response.py, tests/test_pr102_response.py, docs/PR102_RESPONSE_ANALYSIS_20261025.md. No actual H/P/N source payload values or live N20/640 output inspected; no tests executed by reviewer.
+
+Reviewed SHA256:
+- tools/pr102_response.py: c24a265d89fb63377952aabbc03c623d73899382ca4be4b3c7caa967eb17494e
+- tests/test_pr102_response.py: ff59ff6613f5c079ed62d3f30f1ec8ab6b1c160717c5de29fe991057269cba51
+- docs/PR102_RESPONSE_ANALYSIS_20261025.md: 65ab95314a373ae57dbd8177a9a6027e645a013d3a818d8fa11fa5ba39cb21dc
+
+Verdict: GO for descriptive response analysis when the closed inputs exist. This is not science approval and does not authorize/establish a 640-second run.
+
+Evidence/scope findings:
+- Four controls remain OFF/HYDRO/COUPLED/P (existing projected P). pr102_execution_preflight._controls pins receipt/preflight SHA256, completed 32 steps, matched executable, boundary, namelist, duration and runner source; response checks each closed receipt against those input hashes and common launch controls. STRUCTURED candidate is bound to the execution preflight; candidate-vs-P input is independently checked to permit only U/V differences.
+- Execution preflight evidence artifacts are hash-checked before analysis. Candidate receipt and candidate input SHA are explicitly required. Source capture cohort requires exact HYDRO/ORIGINAL_P/CANDIDATE keys; those map explicitly to H/P/N, each capture receipt and all 57 PR98 binary artifacts are checked, each is one-step/noninterference PASS and captures exactly RU/RV/MUDF; all three share the pinned diagnostic executable and match the expected H/P/N input SHA values.
+- Composition is rehashed and frozen masks require 613 cells, 16 native support columns, and 196 buffer columns across 39 levels. History reader requires all common timestamps 0..600 seconds in 60-second intervals. POST_KDM6 trace independently reads selected 20/60/300/320/480/500/600/640-second steps and is labeled as a separate source-stage measurement.
+- Native response roles are H=HYDRO, P=original projected P, N=candidate; label recursion maps OFF/HYDRO/COUPLED source-reader labels to H/P/N and pair directions H→P→N correctly. This is kept distinct from four forecast control labels.
+- Physical dry-column calculation directly calls pr99_native_mass_effect.column_mass_rate. Per H/P/N, it binds wrfinput hash, reads MAPFAC_MX/MY and DX/DY area, C1H and DNW, checks cross-arm equality, validates fixed 16 mapped native support coordinates, checks captured C1H against input C1H, and uses captured MU before/after and captured timestep with pinned gravity. The reused conversion calculates A/g * sum(-C1H*DNW) * dMU/dt, consistent with fixed-geometry dry-column mass-rate units. Same captured timestep is required across arms. RU/RV remain separate diagnostics; MUDF comparison is descriptive and has no invented closure tolerance. MUDF is not presented as closure.
+- Output status is DESCRIPTIVE_ONLY, physical_approval FAIL_OPEN and observation_skill NOT_EVALUATED; documentation states there is no authorized matched Y/H/error authority, does not claim forecast approval, and at authoring time no PR102 candidate outputs had been analyzed.
+- Focused manufactured tests cover finite paired metrics, role/pair remapping, closed 32-step schedule rejection, expected kg/s column conversion/support mapping, and shifted H/P/N support coordinate rejection. Five focused tests were reported PASS by the owner; reviewer did not execute tests.
+
+Limitation: as with any descriptive report, it depends on the preflight and run receipts supplied to analyze; this review does not validate live scientific outputs or replace the separate actual-run authorization gates. No material blocker found in the scoped analyzer revision.

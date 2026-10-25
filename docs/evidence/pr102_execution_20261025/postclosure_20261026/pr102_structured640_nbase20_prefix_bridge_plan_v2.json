@@ -1,0 +1,90 @@
+{
+  "artifacts": {
+    "both_t1_post_raw_gz_sha256": "81806b4575ff10a17359e4bdcd2a16932a2b9dfca1b16da5ff3239894ea7892d",
+    "n640_t0_history": {
+      "name": "wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "fd18da17a47abeb862ac088f4ea185d34583de65d88245737b124065aa52165a"
+    },
+    "n640_trace_compressed_sha256": "e62081b1332fa4eb0b85e535597258164c0eea7296eee919190676ed5aecabc9",
+    "nbase_t0_history": {
+      "name": "wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "bea67aa92f8a3d71dfc37fb2b45eebccc253bb453d678641fba5c29f2498f54"
+    },
+    "nbase_trace_compressed_sha256": "57692fc73d164f843f02aa017cb924787fd86fd50d424d9d60a95e40f17199fa"
+  },
+  "closed_arms": {
+    "structured640": {
+      "arm": "STRUCTURED",
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed1ed731234108706b25d7",
+      "build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+      "candidate_namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+      "executed_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "final_completed_step": 32,
+      "input_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+      "namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+      "preflight": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN/preflight.json",
+      "preflight_sha256": "11b3614e6aceceac3e40e5d4481f6954948210e79d3c6aea799512fa22afad4c",
+      "receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN/receipt.json",
+      "receipt_sha256": "313295e9cbf9e30a12a437c501bf3db2cf25c0e6762ec5d51c31d54ba311d4d6",
+      "returncode": 0,
+      "root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN",
+      "status": "COMPLETE"
+    },
+    "structured_baseline20": {
+      "arm": "STRUCTURED_BASELINE20",
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed1ed234108706b25d7",
+      "candidate_namelist_sha256": "bd668a0f54fdc05996782adf472c78834cfc4829a05645fad8c68531a0be52d3",
+      "candidate_wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_wrfinput_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+      "executed_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "final_completed_step": 1,
+      "input_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+      "namelist_sha256": "bd668a0f54fdc05996782adf472c78834cfc4829a05645fad8c68531a0be52d3",
+      "preflight": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/BASELINE20_RUN/preflight.json",
+      "preflight_sha256": "5b71d122531aaf11b7bf099f0195c33071249927ba9790f573eb3f363841c422",
+      "receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/BASELINE20_RUN/receipt.json",
+      "receipt_sha256": "4de36fbe52ef45d4703c306ca83c0521acb05489fdad8de8df63f3e59d239036",
+      "returncode": 0,
+      "root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/BASELINE20_RUN",
+      "status": "COMPLETE"
+    }
+  },
+  "comparison": [
+    {
+      "function": "compare_t0",
+      "name": "T0 history fields",
+      "purpose": "Compare exact bytes/dtypes/shapes of declared T0 history arrays; both histories are 13:00:00. Whole-file hashes are informative only, not equality criterion."
+    },
+    {
+      "function": "compare_first20",
+      "name": "first completed timestep",
+      "purpose": "Compare receipt-bound POST_KDM6 timestep-1 digest at 20 seconds."
+    },
+    {
+      "function": "compare_t1_post",
+      "name": "first-call post state",
+      "purpose": "Compare compressed kdm6_first_call_post.raw via existing native_kdm6_trace reader; 17 3D fields plus XLAND."
+    }
+  ],
+  "implementation": {
+    "api": "Import pr102_capture_noninterference and call compare_t0(n640_root,n640_receipt,nbase_root,nbase_receipt), compare_first20(n640_receipt,nbase_receipt), compare_t1_post(n640_root,n640_receipt,nbase_root,nbase_receipt). Preserve three component statuses; no synthetic combined scientific PASS.",
+    "comparator_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_capture_noninterference.py",
+    "comparator_sha256": "35ce2b7100f49cad04a71f57862b412555246a94d43ea29e4d5f76848c46a996"
+  },
+  "limitations": [
+    "Not executed.",
+    "This checks diagnostic noninterference/prefix agreement only; it does not assess the wind-input scientific objective.",
+    "N640 and N_BASELINE20 run lengths and namelist duration differ intentionally; same relevant input/executable/boundary/source and launch environment are pinned separately."
+  ],
+  "output_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/nbase20_prefix_bridge.json",
+  "purpose": "Bounded same-input/base-C2 prefix bridge after STRUCTURED640 closure; reuses existing capture_noninterference comparison functions.",
+  "schema": "pr102_structured640_nbase20_prefix_bridge_plan_v2",
+  "status": "PREPARED_NO_ANALYZER_RUN_WAITING_FOR_ROOT_GO",
+  "supersedes": {
+    "path": "/var/tmp/pr102_structured640_nbase20_prefix_bridge_plan_v1.json",
+    "reason": "Corrected boundary SHA typo in preparatory metadata plan and made receipt field bindings explicit before executing authorized bridge.",
+    "sha256": "071c293eed3d4e1a4617c137828ef87dae202950788afdd5e53bccefe6b76f26"
+  }
+}

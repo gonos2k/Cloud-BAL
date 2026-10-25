@@ -1,0 +1,31 @@
+{
+  "schema": "pr102_candidate_generation_execution_v1",
+  "argv": [
+    "/usr/bin/python",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_native_wind_candidate.py",
+    "--hydro",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/run/wrfinput_d01",
+    "--coupled",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/run/wrfinput_d01",
+    "--original-p",
+    "/var/tmp/pr99_native_projection_v4_20261022/wrfinput_d01",
+    "--pr99-receipt",
+    "/var/tmp/pr99_native_projection_v4_20261022/wrfinput_d01.proposal.json",
+    "--boundary",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/run/wrfbdy_d01",
+    "--constants-receipt",
+    "/var/tmp/pr87_history_constants_20261019/receipt.json",
+    "--output",
+    "/var/tmp/pr102_candidate_generation_20261025/candidate/wrfinput_d01"
+  ],
+  "cwd": "/var/tmp/pr102_candidate_generation_20261025",
+  "returncode": 1,
+  "start_utc": "2026-10-25T09:18:39.674027+00:00",
+  "elapsed_seconds": 1.9366385769098997,
+  "changed_inputs_or_sources": [],
+  "log_sha256": "9011914916d322f0cae927acaf991f25801c9293efa1c9657495904caeab4b54",
+  "root_go_sha256": "12df4f498f8e196e6e38a621c446c0e9fe201f46476edb2e9e09f89d7fa87534",
+  "output": "/var/tmp/pr102_candidate_generation_20261025/candidate/wrfinput_d01",
+  "output_sha256": null,
+  "proposal_sha256": null
+}

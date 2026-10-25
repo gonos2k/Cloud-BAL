@@ -1,0 +1,590 @@
+{
+  "arms": {
+    "structured640": {
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "completed_steps": 32,
+      "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "input_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+      "namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+      "preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN/preflight.json",
+        "sha256": "11b3614e6aceceac3e40e5d4481f6954948210e79d3c6aea799512fa22afad4c"
+      },
+      "receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN/receipt.json",
+        "sha256": "313295e9cbf9e30a12a437c501bf3db2cf25c0e6762ec5d51c31d54ba311d4d6"
+      },
+      "root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN"
+    },
+    "structured_baseline20": {
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "completed_steps": 1,
+      "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "input_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+      "namelist_sha256": "bd668a0f54fdc05996782adf472c78834cfc4829a05645fad8c68531a0be52d3",
+      "preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/BASELINE20_RUN/preflight.json",
+        "sha256": "5b71d122531aaf11b7bf099f0195c33071249927ba9790f573eb3f363841c422"
+      },
+      "receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/BASELINE20_RUN/receipt.json",
+        "sha256": "4de36fbe52ef45d4703c306ca83c0521acb05489fdad8de8df63f3e59d239036"
+      },
+      "root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/BASELINE20_RUN"
+    }
+  },
+  "checks": {
+    "n640_closed": true,
+    "nbase20_closed": true,
+    "same_boundary": true
+  },
+  "comparison_code": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_capture_noninterference.py",
+    "sha256": "35ce2b7100f49cad04a71f57862b412555246a94d43ea29e4d5f76848c46a996"
+  },
+  "component_results": {
+    "first20_post_kdm6": {
+      "active_cells": 2533440,
+      "method": "Existing pr86_time_response.read_time_snapshots record digest in receipt",
+      "record": "20s POST_KDM6 timestep 1",
+      "record_sha256": "33efc25b1852549f5493e750608892f22d1a9f12eef3edc1cccf69919791eb5c",
+      "status": "PASS"
+    },
+    "t0_history_fields": {
+      "control_file": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/BASELINE20_RUN/run/wrfout_d01_2026-08-16_13:00:00",
+        "sha256": "bea67aa92f8a3d71dfc37fb2bb45eebccc253bb453d678641fba5c29f2498f54",
+        "whole_file_hash_comparison_used": false
+      },
+      "diagnostic_file": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN/run/wrfout_d01_2026-08-16_13:00:00",
+        "sha256": "fd18da17a47abeb862ac088f4ea185d34583de65d88245737b124065aa52165a"
+      },
+      "field_count": 30,
+      "fields": {
+        "C1H": {
+          "control_array_sha256": "dd0a16da9f0a428b47c970af3b2225457864668e2512d283ba8fec4db1486e6d",
+          "diagnostic_array_sha256": "dd0a16da9f0a428b47c970af3b2225457864668e2512d283ba8fec4db1486e6d",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39
+          ]
+        },
+        "C2H": {
+          "control_array_sha256": "53f65f20c0cdced9c320369eda6dd46c575f0570924d36aec45aafb9e69c64cc",
+          "diagnostic_array_sha256": "53f65f20c0cdced9c320369eda6dd46c575f0570924d36aec45aafb9e69c64cc",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39
+          ]
+        },
+        "DNW": {
+          "control_array_sha256": "e61f94e8d663a4701244a71fde7225a3fc42ce4fa83ad4ca585f9c9bd82fe4d8",
+          "diagnostic_array_sha256": "e61f94e8d663a4701244a71fde7225a3fc42ce4fa83ad4ca585f9c9bd82fe4d8",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39
+          ]
+        },
+        "MAPFAC_MX": {
+          "control_array_sha256": "e535f9b97eb209c187121e8e7d5d717641aae33b9ec7f0f0723311ea08c6794c",
+          "diagnostic_array_sha256": "e535f9b97eb209c187121e8e7d5d717641aae33b9ec7f0f0723311ea08c6794c",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            282,
+            234
+          ]
+        },
+        "MAPFAC_MY": {
+          "control_array_sha256": "e535f9b97eb209c187121e8e7d5d717641aae33b9ec7f0f0723311ea08c6794c",
+          "diagnostic_array_sha256": "e535f9b97eb209c187121e8e7d5d717641aae33b9ec7f0f0723311ea08c6794c",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            282,
+            234
+          ]
+        },
+        "MAPFAC_UX": {
+          "control_array_sha256": "dd2d231a0fffbc94c1ea310fbacece979efbdfb14349cca485cd5b4f96ca9e25",
+          "diagnostic_array_sha256": "dd2d231a0fffbc94c1ea310fbacece979efbdfb14349cca485cd5b4f96ca9e25",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            282,
+            235
+          ]
+        },
+        "MAPFAC_UY": {
+          "control_array_sha256": "dd2d231a0fffbc94c1ea310fbacece979efbdfb14349cca485cd5b4f96ca9e25",
+          "diagnostic_array_sha256": "dd2d231a0fffbc94c1ea310fbacece979efbdfb14349cca485cd5b4f96ca9e25",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            282,
+            235
+          ]
+        },
+        "MAPFAC_VX": {
+          "control_array_sha256": "7a103cfc189e0020feae7d1759b66cc0cb29a86b385cd3e028ee2882cf8a7247",
+          "diagnostic_array_sha256": "7a103cfc189e0020feae7d1759b66cc0cb29a86b385cd3e028ee2882cf8a7247",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            283,
+            234
+          ]
+        },
+        "MAPFAC_VY": {
+          "control_array_sha256": "7a103cfc189e0020feae7d1759b66cc0cb29a86b385cd3e028ee2882cf8a7247",
+          "diagnostic_array_sha256": "7a103cfc189e0020feae7d1759b66cc0cb29a86b385cd3e028ee2882cf8a7247",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            283,
+            234
+          ]
+        },
+        "MU": {
+          "control_array_sha256": "5addfe1aae18c0a57dff74b6b4c2ca62e800772311f4707fe818bacc5c151069",
+          "diagnostic_array_sha256": "5addfe1aae18c0a57dff74b6b4c2ca62e800772311f4707fe818bacc5c151069",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            282,
+            234
+          ]
+        },
+        "MUB": {
+          "control_array_sha256": "430c48a8bea96978e7e1a67addc4d4cf5d5cc830c51dae7ea6fb9bca2e3f1da2",
+          "diagnostic_array_sha256": "430c48a8bea96978e7e1a67addc4d4cf5d5cc830c51dae7ea6fb9bca2e3f1da2",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            282,
+            234
+          ]
+        },
+        "P": {
+          "control_array_sha256": "e552639e49dc6b812cd82de5fadbfed91be9e38fa0e8cc2fb48159df370199e7",
+          "diagnostic_array_sha256": "e552639e49dc6b812cd82de5fadbfed91be9e38fa0e8cc2fb48159df370199e7",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "PB": {
+          "control_array_sha256": "2cd151cdf23cfd39955ec9e0aa4b440466b00482d7818d2e81e7e968cd50e21c",
+          "diagnostic_array_sha256": "2cd151cdf23cfd39955ec9e0aa4b440466b00482d7818d2e81e7e968cd50e21c",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "PH": {
+          "control_array_sha256": "424c176994684b8ce9ca3fc6b6354822eba67978da4093507eaa109f432f6a12",
+          "diagnostic_array_sha256": "424c176994684b8ce9ca3fc6b6354822eba67978da4093507eaa109f432f6a12",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            40,
+            282,
+            234
+          ]
+        },
+        "PHB": {
+          "control_array_sha256": "45087a38d07020dbbf966d39334818fe1962621141fa7061994407e38453dcfd",
+          "diagnostic_array_sha256": "45087a38d07020dbbf966d39334818fe1962621141fa7061994407e38453dcfd",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            40,
+            282,
+            234
+          ]
+        },
+        "QCLOUD": {
+          "control_array_sha256": "9f0c5deb731d24ffe4713d19c4216cc9ed414bf388143e1ae3a342931c1786a7",
+          "diagnostic_array_sha256": "9f0c5deb731d24ffe4713d19c4216cc9ed414bf388143e1ae3a342931c1786a7",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "QGRAUP": {
+          "control_array_sha256": "3bec2407c29865310fdf641ab30ae563da507a819c715e2575a0b3e7aeb59b7e",
+          "diagnostic_array_sha256": "3bec2407c29865310fdf641ab30ae563da507a819c715e2575a0b3e7aeb59b7e",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "QICE": {
+          "control_array_sha256": "2ff06c20e8a9c10d23d3a80f8c69a0bd2f3b72f206cb28c1e5642ed91eb5b932",
+          "diagnostic_array_sha256": "2ff06c20e8a9c10d23d3a80f8c69a0bd2f3b72f206cb28c1e5642ed91eb5b932",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "QNCCN": {
+          "control_array_sha256": "3d8f13a2d3f75c9df03f0b3885f5bfba3547faec6fa41d9277c095ac684186dc",
+          "diagnostic_array_sha256": "3d8f13a2d3f75c9df03f0b3885f5bfba3547faec6fa41d9277c095ac684186dc",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "QNCLOUD": {
+          "control_array_sha256": "c3a687c75e736e1e277b146ad9106726668398023c9f101f0f5173ce29059a03",
+          "diagnostic_array_sha256": "c3a687c75e736e1e277b146ad9106726668398023c9f101f0f5173ce29059a03",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "QNICE": {
+          "control_array_sha256": "edd9c18546df0003564860ba94ced7062d106096486e1fc3340e7c5ef2033407",
+          "diagnostic_array_sha256": "edd9c18546df0003564860ba94ced7062d106096486e1fc3340e7c5ef2033407",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "QNRAIN": {
+          "control_array_sha256": "a29c060b72d2ed7871522e96cb79848109d5a2a1ddb6a762d3d41600ca16f5e4",
+          "diagnostic_array_sha256": "a29c060b72d2ed7871522e96cb79848109d5a2a1ddb6a762d3d41600ca16f5e4",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "QRAIN": {
+          "control_array_sha256": "157e7edb46bb902d390b3c87b8ddf36f4ed4bbdf633bac394caed2801569768e",
+          "diagnostic_array_sha256": "157e7edb46bb902d390b3c87b8ddf36f4ed4bbdf633bac394caed2801569768e",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "QSNOW": {
+          "control_array_sha256": "0ee28dccc8fe7964996cefbff3b5ccc7215e1ad33f35f0aea46a7e9a1a5444f4",
+          "diagnostic_array_sha256": "0ee28dccc8fe7964996cefbff3b5ccc7215e1ad33f35f0aea46a7e9a1a5444f4",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "QVAPOR": {
+          "control_array_sha256": "235d6b7ee2ce736684534a128c1493db27c32d3a6c7a535f0dd549d42b697b42",
+          "diagnostic_array_sha256": "235d6b7ee2ce736684534a128c1493db27c32d3a6c7a535f0dd549d42b697b42",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "T": {
+          "control_array_sha256": "39e59de40330fcc807c5d981e22ec7365066a348ea8c026ebe3b608005368122",
+          "diagnostic_array_sha256": "39e59de40330fcc807c5d981e22ec7365066a348ea8c026ebe3b608005368122",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            234
+          ]
+        },
+        "U": {
+          "control_array_sha256": "72fcf52aff68fcf68ee459a5c3c2ad0f5d6522667505305ec0a7afbf4f6420b1",
+          "diagnostic_array_sha256": "72fcf52aff68fcf68ee459a5c3c2ad0f5d6522667505305ec0a7afbf4f6420b1",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            282,
+            235
+          ]
+        },
+        "V": {
+          "control_array_sha256": "a5d23aa3038973b11fe0f2366df4bd70e89bcb2fa2df7d0d2c75b625cfe5538e",
+          "diagnostic_array_sha256": "a5d23aa3038973b11fe0f2366df4bd70e89bcb2fa2df7d0d2c75b625cfe5538e",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            39,
+            283,
+            234
+          ]
+        },
+        "W": {
+          "control_array_sha256": "5328cc9dd49445553dccd470753686aa7a1bbfc1d626df30853cb8ab3d6f9eb9",
+          "diagnostic_array_sha256": "5328cc9dd49445553dccd470753686aa7a1bbfc1d626df30853cb8ab3d6f9eb9",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            40,
+            282,
+            234
+          ]
+        },
+        "XLAND": {
+          "control_array_sha256": "3b8ccc3bd236319dea5f79c9dcc1fffaeeab5448b1e3ddcfb89778530387b870",
+          "diagnostic_array_sha256": "3b8ccc3bd236319dea5f79c9dcc1fffaeeab5448b1e3ddcfb89778530387b870",
+          "dtype": "float32",
+          "equal": true,
+          "shape": [
+            282,
+            234
+          ]
+        }
+      },
+      "record": "2026-08-16_13:00:00",
+      "status": "PASS"
+    },
+    "t1_first_call_post": {
+      "control_compressed": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/BASELINE20_RUN/run/kdm6_first_call_post.raw.gz",
+        "sha256": "81806b4575ff10a17359e4bdcd2a16932a2b9dfca1b16da5ff3239894ea7892d"
+      },
+      "diagnostic_compressed": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN/run/kdm6_first_call_post.raw.gz",
+        "sha256": "81806b4575ff10a17359e4bdcd2a16932a2b9dfca1b16da5ff3239894ea7892d"
+      },
+      "field_count": 18,
+      "fields": {
+        "BG": {
+          "array_sha256": "fab4e82bda563ada58f0a53b46215f44b6ff61ff16990bba1f0a3077d897e386",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "DELZ": {
+          "array_sha256": "59f9e0dd50e99144da53a0df34d69639fdcfb544b3884e3ad51fd9d91c66fac9",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "DEN": {
+          "array_sha256": "2d810e8fd8949eff7dddcd24503a3b507267f797d971f41b00a16e9e2e781902",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "DIAGRHOG": {
+          "array_sha256": "828ea4cc8ab66beea4fb61e8bf7af807c55ade9bdad02383e7d590ea1353d1cc",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "NC": {
+          "array_sha256": "1d8bb21c3e636af506f6476f72c48ed3aeaa4c3ee8700e9bfa1ca031bdefba38",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "NI": {
+          "array_sha256": "450ea17f6ddd14c57824562f39aa9720236084b516b6ac046a014278bb57eb8f",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "NN": {
+          "array_sha256": "dfb9990b95e78461216b78069ae3b6cda4ccfeae972f0f2663b7f7234ecff077",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "NR": {
+          "array_sha256": "ceb12917f377c688c64bdf9e84054715390d69e18aa121dc74c3e71c14d121c6",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "P": {
+          "array_sha256": "ba5f778d380efc39976b1d7c69fe0225d72856848441e11fa5a56febe3e5343b",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "PII": {
+          "array_sha256": "2a3d317f6cb256d28951f05a4d51b6cf998a453735f89131c05d4b392f662fc9",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "Q": {
+          "array_sha256": "9e546a28be114e5eeefe23d100d366ff440803e6bcfb15610b9b7f6c75a510b4",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "QC": {
+          "array_sha256": "072c13b91d87fa44f591172d2bbbc3f58f17acaac9d0e3955ba0b163b5970dfe",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "QG": {
+          "array_sha256": "4bbbf8b3a3590de71b08a62c8cc370011f73f8dc684036c5366497bbdacd031d",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "QI": {
+          "array_sha256": "b876361e10106a3778cd29dba12af9bc34c13d712c2e05008295c68ae39e038a",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "QR": {
+          "array_sha256": "8248b4a150a418b17dcf2b7fc3a853aad7df8112665bf564fa256b75ab640e9a",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "QS": {
+          "array_sha256": "954471e2156918c17e2033464e3ab5e2a22fbeb9f5bad596c3f91a62b3a943cf",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "TH": {
+          "array_sha256": "3304af17626dea52947983c41af365ce1ac356fd57215f097320fcdfea2b1ac4",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            39,
+            232
+          ]
+        },
+        "XLAND": {
+          "array_sha256": "8fa602ad9dbbd2644ca2830fb5fb98dea21ec4de8824920d6ecceaac4c22c769",
+          "dtype": ">f4",
+          "equal": true,
+          "shape": [
+            280,
+            232
+          ]
+        }
+      },
+      "method": "Existing native_kdm6_trace.read_dump; field-by-field 17 3D fields plus XLAND",
+      "status": "PASS"
+    }
+  },
+  "component_statuses": {
+    "first20_post_kdm6": "PASS",
+    "t0_history_fields": "PASS",
+    "t1_first_call_post": "PASS"
+  },
+  "limitations": [
+    "Diagnostic prefix/noninterference comparison only; no wind-response objective or physical approval is inferred.",
+    "N640 and N_BASELINE20 run lengths/namelist duration differ intentionally."
+  ],
+  "schema": "pr102_structured640_nbase20_prefix_bridge_v1",
+  "status": "PASS"
+}

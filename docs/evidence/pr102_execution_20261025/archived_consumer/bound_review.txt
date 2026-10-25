@@ -1,0 +1,27 @@
+PR102 calc_ww_cp bounded-reference helper independent review
+Date: 2026-10-25
+
+Decision: GO for using this helper as a source-order arithmetic and fixed-buffer comparison gate, subject to the limitations below. No WW output values were read, no tests were run, and this review does not establish candidate acceptance or physics skill.
+
+Reviewed source identities:
+  tools/pr102_native_ww_bound.py SHA256 60e0c2fb95f693c0a3b735a149dcd178822c3f6b2dd2469eb049a1e044563407
+  tests/test_pr102_native_ww_bound.py SHA256 b317eb2ce6345190ee6704fd1fb4828528b614525c6829cb8c3bc5d7412cc21b
+  KIM-meso/KIM_RDPS_MODL_V2026.2/dyn_em/module_big_step_utilities_em.F SHA256 27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c
+  C2 libwrflib_pr87_overlay.a member module_big_step_utilities_em.o SHA256 8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343 (matches helper pin)
+  Intel profile SHA256 pinned by helper: 5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4
+
+Review findings:
+- Source-order operations match calc_ww_cp: four-term MU/MUB face average then 0.5; each `(c1h*muu/muv+c2h)` coefficient; U multiply then divide and V left-associated multiply chain; east-west/north-south differences, RDX/RDY scaling, horizontal sum, MSFTX*DNW scaling; sequential 39-level DMDT accumulation; and bottom-up WW updates `WW - (DNW*C1H*DMDT) - DIVV` through the interior faces. Active array mapping is transposed to vertical-face, active-j, active-i layout and matches the selected 39-level, 280x232 tile.
+- Forward bounds propagate reference binary64 roundoff and REAL32 unit roundoff, including half a REAL32 least-subnormal quantum per operation under the declared gradual-underflow profile. Positive upper helpers round each addition/multiplication/division direction outward; denominator bounds round downward and reject zero-crossing/underflow. The source-order sum/gamma envelopes and 39-term DMDT accumulation are conservative.
+- Carrier contract requires the exact finite REAL32 input set and byte-identical non-U/V fields between candidate and HYDRO. Fixed support is derived from the pinned composed QC masks, checked as 613 support cells / 16 columns / 196 buffer columns, and expanded to adjacent vertical faces.
+- The comparison keeps two checks separate: the input-only reference constraint requires predicted candidate-minus-HYDRO response to fit both reference arithmetic envelopes; source arithmetic then compares actual archived WW difference against that prediction. The divergent-wind test confirms a numerically matching actual response cannot pass when the reference constraint fails, and a deliberately perturbed actual response fails the source gate.
+- Minor metadata caveat: returned `operation_counts.divv` is 9, while the expression after the four flux values consists of 7 arithmetic operations (two differences, two RDX/RDY multiplies, horizontal sum, MSFTX*DNW, and final product). This does not feed the bound or gate; clarify the count convention before relying on that field as an exact arithmetic-operation count.
+
+Limitations:
+- The helper pins the archived consumer object hash but does not itself prove the compiler flags used for that preserved parent archive member. A standalone strict-profile reference/test driver cannot retroactively establish the archived callee's compile flags. Bind its actual C2 receipt/object identity and runtime invocation separately.
+- No WW output values were inspected; no candidate result is accepted by this review. Physical approval and observation skill remain separate gates.
+
+Addendum — metadata correction and pre-assessment scope (2026-10-25)
+- Final helper SHA256: 97fc385f47ae8d6c02d1cc43e6d2a02c9974effcf2d26f78f759bfc111ac825c. The reviewed metadata now reports `operation_counts.divv: 7`, matching the seven post-flux arithmetic operations identified above; no arithmetic helper or gate changes were reported. Current test file SHA256 remains b317eb2ce6345190ee6704fd1fb4828528b614525c6829cb8c3bc5d7412cc21b (five focused tests reported passing by owner, not rerun here).
+- Binding/scope decision remains GO for the source-bound arithmetic helper before actual WW assessment only. The unchanged archived callee remains identified by its C2 archive member SHA256 8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343 and Fortran source SHA256 27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c. Actual run receipt/invocation binding and compiler provenance must be reviewed with the assessment; this helper review does not confer that evidence or candidate/physics approval.
+- No actual WW outputs or Graphify/KG data were inspected or updated.

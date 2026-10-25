@@ -1,0 +1,24 @@
+{
+  "schema": "pr102_unscoped_scratch_graphify_disposition_v1",
+  "command_reported_by_agent": "graphify update .; graphify diagnose multigraph --json",
+  "scope": "PR102 scratch checkout only; maintained KLAPS50/Cloud-BAL graphs/wiki untouched",
+  "preserved_artifact_directory": "/var/tmp/pr102_unscoped_scratch_graphify_20261025",
+  "preserved_graph_sha256": "964aa770d842b75109b9223785fefb518ccafac3a439c47eb1fef09dc728635a",
+  "reported_nodes": 23619,
+  "reported_edges": 37655,
+  "reported_self_loops": 2,
+  "reported_missing_or_dangling_endpoints": 0,
+  "changed_tracked_paths_before_disposition": [
+    "graphify-out/.graphify_labels.json",
+    "graphify-out/.graphify_labels.json.sig",
+    "graphify-out/GRAPH_REPORT.md",
+    "graphify-out/cache/stat-index.json",
+    "graphify-out/graph.html",
+    "graphify-out/graph.json",
+    "graphify-out/manifest.json"
+  ],
+  "disposition": "Preserved entire unscoped derived scratch output externally and restored only graphify-out tracked artifacts from checkout HEAD. Broad refresh is not the selected maintained incremental graph update and not a clean integrity result. Root coordinates final guarded maintained update.",
+  "restored_source_commit": "1e2c45eb30135582f925bc8c833d96b131af1df9",
+  "restored_graph_sha256": "d830da780a5034f09d38f5de919da698b4ad995040c8ae14bd9c28293b81f2f6",
+  "runtime_or_scientific_approval": false
+}

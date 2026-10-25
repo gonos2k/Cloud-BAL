@@ -1,0 +1,106 @@
+{
+  "c2_runtime_authority": {
+    "candidate_build": {
+      "path": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json",
+      "sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb"
+    },
+    "candidate_executable": {
+      "path": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/wrf_pr87_overlay.exe",
+      "sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a"
+    },
+    "identity_fields": {
+      "candidate_build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+      "executed_executable_sha256": "receipt executed field must equal expected_base_c2_executable_sha256",
+      "expected_base_c2_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "template_executable_sha256": "baseline_frozen_executable_sha256 (receipt template identity; expected 9642a471acd39320efca247a55104da9369ef93d8735e60a0d266bf20332b943 for BASELINE20)"
+    },
+    "runner": {
+      "path": "/var/tmp/pr102_capture20_runner_bundle_v2_20261025/tools/pr86_time_response.py",
+      "sha256": "35adaa773773c046311d731ea1426821befb225a444092405098b4ee4e8baa43"
+    }
+  },
+  "command": [
+    "python3",
+    "/var/tmp/pr102_structured640_closed_source_audit_v4.py"
+  ],
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL",
+  "execution_authorized_by_this_plan": false,
+  "executor": {
+    "path": "/var/tmp/pr102_structured640_closed_source_audit_v4.py",
+    "sha256": "38908e7218526d31fdf4eefc537ae0c4c630e11954533abf042907eb7315c415"
+  },
+  "full_pr102_execution_preflight": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr102_execution_20261025/preflight.json",
+    "sha256": "c58feba119b7c774dc2b37e416bb6a46d49cdadfba104c7ef5c469faf5592dea"
+  },
+  "limitations": [
+    "No source audit has been run yet.",
+    "The executor checks full C2 run identity and reader/script pins before auditing and checks the code pins again after auditing.",
+    "Audit only after COMPLETE/32 run receipt closure; status fields remain independent, with no synthesized overall PASS.",
+    "Physical approval remains FAIL_OPEN.",
+    "Before the existing PR93 source audit, the executor reuses PR102 response closure validators and verifies the run preflight points to the pinned full PR102 preflight.",
+    "Output labels distinguish the historical baseline/template executable from the C2 executable actually used by the STRUCTURED640 run; no baseline-frozen field is presented as executed C2 identity."
+  ],
+  "output_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/source_policy_audit_v4.json",
+  "required_closed_receipt_contract": {
+    "arm": "STRUCTURED",
+    "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+    "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+    "final_completed_step": 32,
+    "full_pr102_preflight_sha256": "c58feba119b7c774dc2b37e416bb6a46d49cdadfba104c7ef5c469faf5592dea",
+    "input_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+    "namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+    "no_fatal_or_processing_errors": true,
+    "response_module_sha256": "9e30de564c85b5cfdbb8c9141d3f86f68d2958582892c62ad7578c77affe866e",
+    "returncode": 0,
+    "status": "COMPLETE",
+    "validate_with": "pr102_response._verify_execution_preflight and _closed_structured_run"
+  },
+  "schema": "pr102_structured640_postclose_source_audit_plan_v3",
+  "scope": [
+    "generic Q/N/B conversion and PSD-cone audit",
+    "exact source-endpoint audit",
+    "active-ice policy audit"
+  ],
+  "source_reader_chain": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr94_longrun_audit.py",
+      "sha256": "0ce4eb5a00fa5065aef71be5436b1894813e6d3bdca9d5904283ef72dca326d1"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr86_compare_response.py",
+      "sha256": "64b2f97f452035cae328576d26216c54877fa778b3eeabe17cdb9980103aaa5c"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr87_native_history.py",
+      "sha256": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr86_water_budget.py",
+      "sha256": "e6c00374e9730278b3c1545630af9aa3a6af4c68544c7f39dbda61f909337dc2"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr87_completed_state_audit.py",
+      "sha256": "2daef11c005868abf58631d84df74b8535eccb217660fbd605bd8f03216ee70d"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr85_joint_stage_trace.py",
+      "sha256": "5c2e9ccb3537a6bc251845e2b87c3efb991002ebbc1db5232d475e29f6c31720"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr98_boundary_audit.py",
+      "sha256": "77f911b4e4b552cc92c47885c3f7c875cad7028636fb06d9b8ec463e79282932"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr93_active_ice_20261020/runtime/closed_run_audit.py",
+      "sha256": "8f9affa02e6d843d623911cfd6a9447a9ddb4ba0713cf927e2d5de2bcfb2e126"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_response.py",
+      "sha256": "9e30de564c85b5cfdbb8c9141d3f86f68d2958582892c62ad7578c77affe866e"
+    }
+  ],
+  "status": "PREPARED_NO_RUN_WAITING_FOR_RECEIPT_CLOSURE",
+  "target_run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN"
+}

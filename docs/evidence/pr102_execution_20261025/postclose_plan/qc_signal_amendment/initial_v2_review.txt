@@ -1,0 +1,18 @@
+PR102 five-arm history readback v2 bounded review
+Date: 2026-10-25
+Scope: source-only review of prepared v2 against unchanged v1 and frozen `pr94_cloud_response.pattern_metrics`; no execution and no 640 output access.
+
+Reviewed SHA256:
+- /var/tmp/pr102_fivearm_history_readback_v2_20261025.py: 813886002c8c63abb739262036dfb93de06afb10a6af317788c4b8c941b7831b
+- preserved v1 /var/tmp/pr102_fivearm_history_readback_20261025.py: e92e7838721a22e75e8714020cb7e22768e9dcf2fc26623881396c13db28c7bd
+- tools/pr94_cloud_response.py: a626b22f234b3095202982a4fe32d89d9ab6c200e4a9547f6a06a8b109536537
+
+Verdict: GO for a later post-closure readback, subject to clarifying per-metric units in the new QCLOUD signal section before publishing/executing. No run approval implied.
+
+Findings:
+- Diff from v1 leaves the four fixed history fields, arm differences, per-mask RMS accumulation, plot values, panels, axes, labels and save calls unchanged. V2 adds a separate QCLOUD signal structure and increments the schema.
+- At t=0 it computes each arm's QCLOUD-minus-actual-OFF contrast, checks those initial contrasts with exact `np.array_equal` separately on both frozen support and buffer masks for every plotted arm, and raises before using them if any contrast differs. At each of all 11 fixed 0..600 s/60 s timestamps it calculates current QCLOUD-minus-OFF on each arm and calls the frozen `cloud.pattern_metrics` using that arm's own initial contrast and same region mask. No masks/times are selected from response.
+- The helper checks finite identical-shape vectors. If either baseline/current squared norm is zero, existing helper behavior returns `None` for cosine/projection; other residual/RMS diagnostics remain defined. V2 preserves those values and writes JSON with `allow_nan=False`, so it does not replace N/A with a fabricated score.
+- Pattern results are limited to fixed-support descriptive metrics; output retains NOT_EVALUATED observation skill and FAIL_OPEN physical approval, and explicitly rejects Pearson/skill/forecast-improvement claims. Readback remains independently pinned and only runs after the closed candidate/control cohort passes the frozen guards.
+
+Unit-label concern: each per-arm QCLOUD metric object carries a single `unit: kg/kg dry`, while `pattern_metrics` returns both dimensionless cosine/projection and QCLOUD-unit residual/RMS metrics. This is not numerically wrong, but the container-level unit may be read as applying to every metric. Add explicit per-metric units or a short metric-unit map (cosine/projection dimensionless; RMS/residual values kg/kg dry) before publishing the new section. The four unchanged RMS plots are not affected.

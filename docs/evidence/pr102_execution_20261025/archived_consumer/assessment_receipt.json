@@ -1,0 +1,167 @@
+{
+  "schema": "pr102_native_consumer_check_v1",
+  "status": "COMPLETE",
+  "candidate_wrfinput_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+  "native_consumer": "module_big_step_utilities_em_mp_calc_ww_cp_",
+  "archive_member_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+  "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "archived_consumer_executable": {
+    "path": "/var/tmp/pr99-native-consumer-q7y9dgzx/native_consumer.exe",
+    "sha256": "ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61"
+  },
+  "base_c2_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+  "dry_mass_check": {
+    "schema": "pr102_native_drymass_constraint_v1",
+    "status": "PASS",
+    "consumer": "module_big_step_utilities_em_mp_calc_ww_cp_",
+    "archive_member_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+    "required_compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "comparison": "candidate_minus_HYDRO",
+    "units": "Pa/s",
+    "composition_sha256": "331eb9837c41a7aa663864c348f8fe18c44f8e55feed736900f5029685b1aa64",
+    "support_contract": {
+      "mass_support_cells": 613,
+      "mass_support_columns": 16,
+      "fixed_buffer_mass_columns": 196,
+      "vertical_faces": "union of two faces adjacent to each fixed-buffer mass level"
+    },
+    "finite": true,
+    "support_count": 7840,
+    "observed_l2_pa_s": 6.807614748853095e-05,
+    "allowed_l2_pa_s": 0.06554152740935151,
+    "observed_max_abs_pa_s": 3.818129046373464e-06,
+    "allowed_max_abs_pa_s": 0.0012051699282045478,
+    "pointwise_exceedances": 0,
+    "source_arithmetic": {
+      "observed_l2_pa_s": 6.807614748853095e-05,
+      "allowed_l2_pa_s": 0.06554152740935151,
+      "observed_max_abs_pa_s": 3.818129046373464e-06,
+      "allowed_max_abs_pa_s": 0.0012051699282045478,
+      "pointwise_exceedances": 0,
+      "status": "PASS"
+    },
+    "reference_constraint": {
+      "observed_l2_pa_s": 3.325242890842602e-05,
+      "allowed_l2_pa_s": 0.06554152740934745,
+      "observed_max_abs_pa_s": 2.033850012017613e-06,
+      "allowed_max_abs_pa_s": 0.0012051699282045472,
+      "pointwise_exceedances": 0,
+      "status": "PASS"
+    },
+    "reference_delta_l2_pa_s": 3.325242890842602e-05,
+    "arithmetic_bound_l2_pa_s": 0.06554152740934743,
+    "bound_method": "source-order binary64 reference; REAL32 gamma_n errors plus half-subnormal quantum per operation",
+    "unit_roundoff": 5.960464477539063e-08,
+    "gamma_39": 2.3245865499303018e-06,
+    "gamma_39_binary64": 4.32986979603813e-15,
+    "operation_counts": {
+      "face_average": 4,
+      "coefficient": 2,
+      "u_flux": 2,
+      "v_flux": 2,
+      "divv": 7,
+      "dmdt_additions": 39,
+      "ww_update": 4
+    },
+    "input_semantics": "Final stored REAL32 winds and shared REAL32 carriers are exact reference inputs; their storage effects remain in the reference response",
+    "arithmetic_profile": "Strict round-to-nearest; gradual underflow (-no-ftz); no fast-math reassociation"
+  },
+  "artifacts": [
+    {
+      "path": "/var/tmp/pr102_assess_archived_consumer_20261025.py",
+      "sha256": "62444ebc1c4434060164dc5403f0dd12c6ee321265e75ff31e4251dce4c1d453"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_native_ww_bound.py",
+      "sha256": "97fc385f47ae8d6c02d1cc43e6d2a02c9974effcf2d26f78f759bfc111ac825c"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr99_native_consumer_replay.py",
+      "sha256": "8dd4643cad57a139a0ba116dd1f2cead931072462b81d5b5827509b649edd622"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr87_native_history.py",
+      "sha256": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr94_cloud_response.py",
+      "sha256": "a626b22f234b3095202982a4fe32d89d9ab6c200e4a9547f6a06a8b109536537"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr99_native_consumer_metrics.py",
+      "sha256": "2677415972c452ade52ae71f2d3b89fdaad1890f6a29613c131a80ca4f5ba359"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr93_qc_chain_20261020/qc_vertical_composition.json",
+      "sha256": "331eb9837c41a7aa663864c348f8fe18c44f8e55feed736900f5029685b1aa64"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/runs.json",
+      "sha256": "5e2ba06db20a5f44ee08e6f49e1fc1d707b4f0d21578bae739826caf4e259bd4"
+    },
+    {
+      "path": "/var/tmp/pr102_candidate_generation_v3_20261025/candidate/wrfinput_d01.proposal.json",
+      "sha256": "451e4e9110d3b921507e311be56328ad05e13ee20e1fedd2d9c60ce8ef94eeb8"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/reference_hydro/launch.json",
+      "sha256": "c0bd1250893ac3ce0e70f6408db6a0947374ecafe8ae80ce1019f74a12d3d548"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/reference_hydro/run.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/run/wrfinput_d01",
+      "sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/reference_hydro/native_consumer_ww.bin",
+      "sha256": "71ea495f0897a07c84be63bcf2ae7a168f59d32fa6546fd7e42a118d8b0f1707"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/reference_hydro/receipt.json",
+      "sha256": "1333f63c1416da52b98e2f0a5d4dbd54a477ac3ae7398176fc7e5a74e70a2e21"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/reference_hydro/native_consumer_input.bin",
+      "sha256": "9247b72eec008c17570942e9111ee6a79e0c4116219c49eefd980d849540cd10"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/candidate/launch.json",
+      "sha256": "8ef02b9ab7a29bab2309230ace0c28ab399a08da9de9a71862749ffc5cff460d"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/candidate/run.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/var/tmp/pr102_candidate_generation_v3_20261025/candidate/wrfinput_d01",
+      "sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/candidate/native_consumer_ww.bin",
+      "sha256": "aa5744a35674efd8f5365c083237d5fa65dce65ddcd95949724715003eb142e2"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/candidate/receipt.json",
+      "sha256": "b3e4e052144b980147368502452ce1fc963f280ec0a0d183064268493db5493d"
+    },
+    {
+      "path": "/var/tmp/pr102_archived_consumer_20261025/candidate/native_consumer_input.bin",
+      "sha256": "a294a49b98fcd306f8a14ff23d93bb5e9b1eb88b880028e5fbc347163e255e8a"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr99_native_consumer_20261022_canonical.json",
+      "sha256": "6d826e46510d08d6dd6c9e572f116090ce5ef1a5530c37454b6623d58e6ce91f"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr102_execution_20261025/calc_ww_archive_member_identity.json",
+      "sha256": "6d7455927c79b7e15ea46ae22173a150c00a676b444513e2bb765d442c2d039c"
+    }
+  ],
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED",
+  "scope": "Selected stored-input calc_ww_cp comparison only. The retained callee object is byte-identical in C1/C2; strict standalone driver flags do not establish all parent callee compilation flags. This is not an acoustic dry-mass update or full WRF integration.",
+  "end_utc": "2026-10-25T10:02:05.171315+00:00"
+}

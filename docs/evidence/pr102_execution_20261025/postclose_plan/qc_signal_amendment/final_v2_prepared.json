@@ -1,0 +1,59 @@
+{
+  "final_peer_review": {
+    "decision": "GO",
+    "path": "/var/tmp/pr102_fivearm_history_readback_v2_final_review_20261025.txt",
+    "payloads_read": false,
+    "reviewed_v2_sha256": "b7ea35ac1ddd6bdc9d1b87ce6cb7ff39e1bac22c8f91f4de6bec32717685a3b1",
+    "script_invoked": false,
+    "sha256": "397ff71863cb1408dab44c57940f30c8a087b5d418c4c6f2f3a3d9980d09403d"
+  },
+  "final_v2": {
+    "path": "/var/tmp/pr102_fivearm_history_readback_v2_final_20261025.py",
+    "sha256": "b7ea35ac1ddd6bdc9d1b87ce6cb7ff39e1bac22c8f91f4de6bec32717685a3b1"
+  },
+  "first_peer_review": {
+    "finding": "Added explicit per-key units before final review.",
+    "path": "/var/tmp/pr102_fivearm_history_readback_v2_review_20261025.txt",
+    "sha256": "c640c79d80021986e91128bd51e21b9b87cdb6d0826b882a6dd0cf23793d6893"
+  },
+  "frozen_pr102_response_reader": {
+    "expected_sha256": "9e30de564c85b5cfdbb8c9141d3f86f68d2958582892c62ad7578c77affe866e",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_response.py",
+    "sha256": "9e30de564c85b5cfdbb8c9141d3f86f68d2958582892c62ad7578c77affe866e"
+  },
+  "initial_v2_no_run_snapshot": {
+    "path": "/var/tmp/pr102_fivearm_history_readback_v2_initial_813886002c8c.py",
+    "prepared_record_path": "/var/tmp/pr102_fivearm_history_readback_v2_initial_prepared_813886002c8c.json",
+    "prepared_record_sha256": "a6f03e38c5ebdba7b071e2420de7d367840cfaa1dfa99f0be9cc0ebe8713430c",
+    "sha256": "813886002c8c63abb739262036dfb93de06afb10a6af317788c4b8c941b7831b"
+  },
+  "pattern_metrics_source": {
+    "expected_sha256": "a626b22f234b3095202982a4fe32d89d9ab6c200e4a9547f6a06a8b109536537",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr94_cloud_response.py",
+    "sha256": "a626b22f234b3095202982a4fe32d89d9ab6c200e4a9547f6a06a8b109536537"
+  },
+  "preserved_v1_plotter": {
+    "expected_sha256": "e92e7838721a22e75e8714020cb7e22768e9dcf2fc26623881396c13db28c7bd",
+    "path": "/var/tmp/pr102_fivearm_history_readback_20261025.py",
+    "sha256": "e92e7838721a22e75e8714020cb7e22768e9dcf2fc26623881396c13db28c7bd"
+  },
+  "reason": "Add predeclared QCLOUD initial-contrast pattern metrics because lower RMS alone does not establish preservation of the original QC signal.",
+  "run_state": {
+    "640_payload_read": false,
+    "model_launched": false,
+    "root_execution_go_required_before_run": true,
+    "script_invoked": false
+  },
+  "schema": "pr102_fivearm_history_readback_v2_prepared_v1",
+  "status": "PREPARED_NO_RUN_PEER_REVIEW_GO",
+  "unit_mapping": {
+    "cosine_delta_t_vs_delta0": "dimensionless",
+    "delta0_rms": "kg/kg dry",
+    "delta_t_minus_delta0_rms": "kg/kg dry",
+    "delta_t_rms": "kg/kg dry",
+    "inner_product_keys_returned": [],
+    "inner_product_unit_if_reported": "(kg/kg dry)^2",
+    "orthogonal_residual_rms": "kg/kg dry",
+    "projection_delta_t_onto_delta0": "dimensionless"
+  }
+}

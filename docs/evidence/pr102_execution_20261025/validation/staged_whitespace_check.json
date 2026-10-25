@@ -1,0 +1,63 @@
+{
+  "scope": "Authored source/tests/docs plus bounded evidence; immutable hash-pinned Fortran source/patch snapshots retain original whitespace. No evidence bytes rewritten to satisfy formatting.",
+  "full_staged_check_returncode": 2,
+  "full_warning_count": 804,
+  "immutable_snapshot_exceptions": [
+    {
+      "path": "docs/evidence/pr102_execution_20261025/c2_capture_source_plan/module_em.F",
+      "sha256": "3260e48e89e7fb914c38981a04e062d9b85ed98112a13c8511a4f13741b7be6b"
+    },
+    {
+      "path": "docs/evidence/pr102_execution_20261025/c2_capture_source_plan/solve_em.F",
+      "sha256": "39281d586c26302cf2224858c3d9171a5d3e029696cb86e85e3d5fc24d8e47ba"
+    },
+    {
+      "path": "docs/evidence/pr102_execution_20261025/c2_capture_source_plan/source_only_insertions.patch",
+      "sha256": "039eefe91c365b4198068bfd0b41c093671f638320445c679ae1bb37a85a4f42"
+    },
+    {
+      "path": "docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v2/module_em.F",
+      "sha256": "3260e48e89e7fb914c38981a04e062d9b85ed98112a13c8511a4f13741b7be6b"
+    },
+    {
+      "path": "docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v2/solve_em.F",
+      "sha256": "39281d586c26302cf2224858c3d9171a5d3e029696cb86e85e3d5fc24d8e47ba"
+    },
+    {
+      "path": "docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v2/source_only_insertions.patch",
+      "sha256": "039eefe91c365b4198068bfd0b41c093671f638320445c679ae1bb37a85a4f42"
+    },
+    {
+      "path": "docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v3/module_em.F",
+      "sha256": "8a8183acf715828adacfc72bcb5575c59fc0a65ef5a204cf48d0c8d72615a8e8"
+    },
+    {
+      "path": "docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v3/solve_em.F",
+      "sha256": "39281d586c26302cf2224858c3d9171a5d3e029696cb86e85e3d5fc24d8e47ba"
+    },
+    {
+      "path": "docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v3/source_only_insertions.patch",
+      "sha256": "6dab4cd85e5605611eb295006017aeab876bc82040fb3f46cad9ed7885fd02c8"
+    }
+  ],
+  "authored_check_command": [
+    "git",
+    "diff",
+    "--cached",
+    "--check",
+    "--",
+    ".",
+    ":(exclude)docs/evidence/pr102_execution_20261025/c2_capture_source_plan/module_em.F",
+    ":(exclude)docs/evidence/pr102_execution_20261025/c2_capture_source_plan/solve_em.F",
+    ":(exclude)docs/evidence/pr102_execution_20261025/c2_capture_source_plan/source_only_insertions.patch",
+    ":(exclude)docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v2/module_em.F",
+    ":(exclude)docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v2/solve_em.F",
+    ":(exclude)docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v2/source_only_insertions.patch",
+    ":(exclude)docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v3/module_em.F",
+    ":(exclude)docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v3/solve_em.F",
+    ":(exclude)docs/evidence/pr102_execution_20261025/c2_capture_source_plan_v3/source_only_insertions.patch"
+  ],
+  "authored_check_returncode": 0,
+  "note": "This check follows staging; earlier working-tree diff checks did not include newly added evidence snapshots.",
+  "created_at": "2026-10-26T00:29:23.536022+09:00"
+}

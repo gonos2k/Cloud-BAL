@@ -1,0 +1,403 @@
+--- /var/tmp/pr99-c2-source.2n00oy19/module_em.F
++++ PR102/module_em.F
+@@ -1813,6 +1813,21 @@
+ 
+    IF( (rk_step == rk_order) .and. ( adv_opt == WENO_MOM ) ) THEN
+ 
++      CALL pr98_dump2('geom_msfuy',msfuy,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvx_inv',msfvx_inv,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfty',msfty,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfux',msfux,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvx',msfvx,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvy',msfvy,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msftx',msftx,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_mut',mut,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_mu',mu,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_muu',muu,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_muv',muv,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump1('geom_c1h',c1h,kms,kme,kts,kte)
++      CALL pr98_dump1('geom_c2h',c2h,kms,kme,kts,kte)
++      CALL pr98_dump3('advu_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+      CALL advect_weno_u ( u, u , ru_tend, ru, rv, wwE,  &
+                           c1h, c2h,                     &
+                           mut, time_step, config_flags, &
+@@ -1822,9 +1837,25 @@
+                           ids, ide, jds, jde, kds, kde, &
+                           ims, ime, jms, jme, kms, kme, &
+                           its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advu_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+    ELSE
+ 
++      CALL pr98_dump2('geom_msfuy',msfuy,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvx_inv',msfvx_inv,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfty',msfty,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfux',msfux,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvx',msfvx,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvy',msfvy,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msftx',msftx,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_mut',mut,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_mu',mu,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_muu',muu,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_muv',muv,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump1('geom_c1h',c1h,kms,kme,kts,kte)
++      CALL pr98_dump1('geom_c2h',c2h,kms,kme,kts,kte)
++      CALL pr98_dump3('advu_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+      CALL advect_u ( u, u , ru_tend, ru, rv, wwE,  &
+                      c1h, c2h,                     &
+                      mut, time_step, config_flags, &
+@@ -1834,6 +1865,7 @@
+                      ids, ide, jds, jde, kds, kde, &
+                      ims, ime, jms, jme, kms, kme, &
+                      its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advu_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+    ENDIF
+ 
+    IF( ieva ) THEN
+@@ -1854,6 +1886,8 @@
+ 
+    IF( (rk_step == rk_order) .and. ( adv_opt == WENO_MOM ) ) THEN
+ 
++      CALL pr98_dump3('advv_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+       CALL advect_weno_v ( v, v , rv_tend, ru, rv, wwE,  &
+                            c1h, c2h,                     &
+                            mut, time_step, config_flags, &
+@@ -1863,9 +1897,12 @@
+                            ids, ide, jds, jde, kds, kde, &
+                            ims, ime, jms, jme, kms, kme, &
+                            its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advv_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+    ELSE
+ 
++      CALL pr98_dump3('advv_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+      CALL advect_v ( v, v , rv_tend, ru, rv, wwE,  &
+                      c1h, c2h,                     &
+                      mut, time_step, config_flags, &
+@@ -1875,6 +1912,7 @@
+                      ids, ide, jds, jde, kds, kde, &
+                      ims, ime, jms, jme, kms, kme, &
+                      its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advv_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+    ENDIF
+ 
+    IF( ieva ) THEN
+@@ -1897,6 +1935,8 @@
+ 
+      IF( (rk_step == rk_order) .and. ( adv_opt == WENO_MOM ) ) THEN
+ 
++      CALL pr98_dump3('advw_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+        CALL advect_weno_w ( w, w, rw_tend, ru, rv, wwE,   &
+                             c1h, c2h,                     &
+                             mut, time_step, config_flags, &
+@@ -1906,9 +1946,12 @@
+                             ids, ide, jds, jde, kds, kde, &
+                             ims, ime, jms, jme, kms, kme, &
+                             its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advw_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+      ELSE
+-     
++
++      CALL pr98_dump3('advw_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++           
+        CALL advect_w ( w, w, rw_tend, ru, rv, wwE,   &
+                        c1h, c2h,                     &
+                        mut, time_step, config_flags, &
+@@ -1918,6 +1961,7 @@
+                        ids, ide, jds, jde, kds, kde, &
+                        ims, ime, jms, jme, kms, kme, &
+                        its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advw_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+      ENDIF
+ 
+    ENDIF  ! non-hydrostatic
+@@ -2037,6 +2081,9 @@
+      
+    ENDIF  ! IEVA
+ 
++      CALL pr98_dump3('pgrad_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('pgrad_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+    CALL horizontal_pressure_gradient( ru_tend,rv_tend,                 &
+                                        ph,alt,p,pb,al,php,cqu,cqv,     &
+                                        muu,muv,mu,c1h,c2h,fnm,fnp,rdnw,&
+@@ -2048,6 +2095,8 @@
+                                        ids, ide, jds, jde, kds, kde,   &
+                                        ims, ime, jms, jme, kms, kme,   &
+                                        its, ite, jts, jte, kts, kte   )
++      CALL pr98_dump3('pgrad_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('pgrad_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+    IF (non_hydrostatic) THEN
+         CALL pg_buoy_w( rw_tend, p, cqw, mu, mub,       &
+@@ -2069,6 +2118,10 @@
+ 
+    IF(config_flags%pert_coriolis) THEN
+ 
++      CALL pr98_dump3('coriolis_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+         CALL perturbation_coriolis ( ru, rv, rw,                   &
+                                      ru_tend,  rv_tend,  rw_tend,  &
+                                      config_flags,                 &
+@@ -2080,8 +2133,15 @@
+                                      ids, ide, jds, jde, kds, kde, &
+                                      ims, ime, jms, jme, kms, kme, &
+                                      its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('coriolis_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+    ELSE
+-        CALL coriolis ( ru, rv, rw,                   &
++
++      CALL pr98_dump3('coriolis_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++              CALL coriolis ( ru, rv, rw,                   &
+                         ru_tend,  rv_tend,  rw_tend,  &
+                         config_flags,                 &
+                         msftx, msfty, msfux, msfuy,   &
+@@ -2090,9 +2150,16 @@
+                         ids, ide, jds, jde, kds, kde, &
+                         ims, ime, jms, jme, kms, kme, &
+                         its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('coriolis_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+    END IF
+ 
++      CALL pr98_dump3('curvature_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('curvature_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('curvature_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+    CALL curvature ( ru, rv, rw, u, v, w,            &
+                      ru_tend,  rv_tend,  rw_tend,    &
+                      config_flags,                   &
+@@ -2102,6 +2169,9 @@
+                      ids, ide, jds, jde, kds, kde,   &
+                      ims, ime, jms, jme, kms, kme,   &
+                      its, ite, jts, jte, kts, kte   )
++      CALL pr98_dump3('curvature_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('curvature_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('curvature_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+ ! Damping option added for Held-Suarez test (also uses lw option HELDSUAREZ)
+ 
+@@ -2123,7 +2193,9 @@
+   forward_step: IF( rk_step == 1 ) THEN
+ 
+     diff_opt1 : IF (config_flags%diff_opt .eq. 1) THEN
+-   
++
++      CALL pr98_dump3('hdifu_ru_tendf_in',ru_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++         
+         CALL horizontal_diffusion ('u', u, ru_tendf, mut,               &
+                                         c1h, c2h, config_flags,         &
+                                         msfux, msfuy, msfvx, msfvx_inv, &
+@@ -2132,7 +2204,10 @@
+                                         ids, ide, jds, jde, kds, kde,   &
+                                         ims, ime, jms, jme, kms, kme,   &
+                                         its, ite, jts, jte, kts, kte   )
+-
++      CALL pr98_dump3('hdifu_ru_tendf_out',ru_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++
++      CALL pr98_dump3('hdifv_rv_tendf_in',rv_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+         CALL horizontal_diffusion ('v', v, rv_tendf, mut,               &
+                                         c1h, c2h, config_flags,         &
+                                         msfux, msfuy, msfvx, msfvx_inv, &
+@@ -2141,7 +2216,10 @@
+                                         ids, ide, jds, jde, kds, kde,   &
+                                         ims, ime, jms, jme, kms, kme,   &
+                                         its, ite, jts, jte, kts, kte   )
+-
++      CALL pr98_dump3('hdifv_rv_tendf_out',rv_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++
++      CALL pr98_dump3('hdifw_rw_tendf_in',rw_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+         CALL horizontal_diffusion ('w', w, rw_tendf, mut,               &
+                                         c1f, c2f, config_flags,         &
+                                         msfux, msfuy, msfvx, msfvx_inv, &
+@@ -2150,6 +2228,7 @@
+                                         ids, ide, jds, jde, kds, kde,   &
+                                         ims, ime, jms, jme, kms, kme,   &
+                                         its, ite, jts, jte, kts, kte   )
++      CALL pr98_dump3('hdifw_rw_tendf_out',rw_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+         khdq = 3.*khdif
+         CALL horizontal_diffusion_3dmp ( 'm', t, t_tendf, mut,            &
+@@ -2164,19 +2243,25 @@
+ 
+         pbl_test : IF (config_flags%bl_pbl_physics .eq. 0) THEN
+ 
++      CALL pr98_dump3('vdifu_ru_tendf_in',ru_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+           CALL vertical_diffusion_u ( u, ru_tendf, config_flags,      &
+                                       u_base, c1h, c2h,               &
+                                       alt, muu, rdn, rdnw, kvdif,     &
+                                       ids, ide, jds, jde, kds, kde,   &
+                                       ims, ime, jms, jme, kms, kme,   &
+                                       its, ite, jts, jte, kts, kte   )
+-
++      CALL pr98_dump3('vdifu_ru_tendf_out',ru_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++
++      CALL pr98_dump3('vdifv_rv_tendf_in',rv_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+           CALL vertical_diffusion_v ( v, rv_tendf, config_flags,      &
+                                       v_base, c1h, c2h,               &
+                                       alt, muv, rdn, rdnw, kvdif,     &
+                                       ids, ide, jds, jde, kds, kde,   &
+                                       ims, ime, jms, jme, kms, kme,   &
+                                       its, ite, jts, jte, kts, kte   )
++      CALL pr98_dump3('vdifv_rv_tendf_out',rv_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+           IF (non_hydrostatic)                                           &
+           CALL vertical_diffusion ( 'w', w, rw_tendf, config_flags,      &
+@@ -2275,6 +2360,10 @@
+ 
+   END IF forward_step
+ 
++
++   CALL pr98_dump3('dyn_ru_final',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++   CALL pr98_dump3('dyn_rv_final',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++   CALL pr98_dump3('dyn_rw_final',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ END SUBROUTINE rk_tendency
+ 
+ !-------------------------------------------------------------------------------
+@@ -6365,3 +6454,81 @@
+ 
+ END SUBROUTINE rk_update_joint_moments
+ END MODULE module_em
++
++SUBROUTINE pr98_dump3(tag,a,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++  IMPLICIT NONE
++  CHARACTER(*), INTENT(IN) :: tag
++  INTEGER, INTENT(IN) :: ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte
++  REAL, INTENT(IN) :: a(ims:ime,kms:kme,jms:jme)
++  CHARACTER(160), SAVE :: seen(512)
++  INTEGER, SAVE :: nseen=0
++  CHARACTER(160) :: key
++  CHARACTER(32) :: tile
++  INTEGER :: unit, q
++  WRITE(tile,'(6(I0,"_"))') its,ite,jts,jte,kts,kte
++  key=TRIM(tag)//'_'//TRIM(tile)
++  DO q=1,nseen
++    IF (TRIM(seen(q)) == TRIM(key)) RETURN
++  END DO
++  IF (nseen >= SIZE(seen)) RETURN
++  nseen=nseen+1
++  seen(nseen)=key
++  OPEN(NEWUNIT=unit,FILE='pr98_'//TRIM(key)//'.bin',STATUS='replace', &
++       ACCESS='stream',FORM='unformatted',ACTION='write')
++  WRITE(unit) ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte
++  WRITE(unit) a
++  CLOSE(unit)
++END SUBROUTINE pr98_dump3
++
++SUBROUTINE pr98_dump2(tag,a,ims,ime,jms,jme,its,ite,jts,jte)
++  IMPLICIT NONE
++  CHARACTER(*), INTENT(IN) :: tag
++  INTEGER, INTENT(IN) :: ims,ime,jms,jme,its,ite,jts,jte
++  REAL, INTENT(IN) :: a(ims:ime,jms:jme)
++  CHARACTER(160), SAVE :: seen(512)
++  INTEGER, SAVE :: nseen=0
++  CHARACTER(160) :: key
++  CHARACTER(32) :: tile
++  INTEGER :: unit, q
++  WRITE(tile,'(4(I0,"_"))') its,ite,jts,jte
++  key=TRIM(tag)//'_'//TRIM(tile)
++  DO q=1,nseen
++    IF (TRIM(seen(q)) == TRIM(key)) RETURN
++  END DO
++  IF (nseen >= SIZE(seen)) RETURN
++  nseen=nseen+1
++  seen(nseen)=key
++  OPEN(NEWUNIT=unit,FILE='pr98_'//TRIM(key)//'.bin',STATUS='replace', &
++       ACCESS='stream',FORM='unformatted',ACTION='write')
++  WRITE(unit) ims,ime,jms,jme,its,ite,jts,jte
++  WRITE(unit) a
++  CLOSE(unit)
++END SUBROUTINE pr98_dump2
++
++SUBROUTINE pr98_dump1(tag,a,kms,kme,kts,kte)
++  IMPLICIT NONE
++  CHARACTER(*), INTENT(IN) :: tag
++  INTEGER, INTENT(IN) :: kms,kme,kts,kte
++  REAL, INTENT(IN) :: a(kms:kme)
++  INTEGER :: unit
++  OPEN(NEWUNIT=unit,FILE='pr98_'//TRIM(tag)//'.bin',STATUS='replace', &
++       ACCESS='stream',FORM='unformatted',ACTION='write')
++  WRITE(unit) kms,kme,kts,kte
++  WRITE(unit) a
++  CLOSE(unit)
++END SUBROUTINE pr98_dump1
++
++SUBROUTINE pr98_dump0(tag,value)
++  IMPLICIT NONE
++  CHARACTER(*), INTENT(IN) :: tag
++  REAL, INTENT(IN) :: value
++  LOGICAL, SAVE :: done=.FALSE.
++  INTEGER :: unit
++  IF (done) RETURN
++  done=.TRUE.
++  OPEN(NEWUNIT=unit,FILE='pr98_'//TRIM(tag)//'.bin',STATUS='replace', &
++       ACCESS='stream',FORM='unformatted',ACTION='write')
++  WRITE(unit) value
++  CLOSE(unit)
++END SUBROUTINE pr98_dump0
++
+--- /var/tmp/pr96_native_build_c1_20261021/source/overrides/solve_em.F
++++ PR102/solve_em.F
+@@ -1029,6 +1029,11 @@
+ 
+        ENDIF
+ 
++       CALL pr98_dump3('assembled_ru_tend_in',grid%ru_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump3('assembled_rv_tend_in',grid%rv_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump3('assembled_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump2('mu_large_in',mu_tend,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
++       
+        CALL rk_addtend_dry( grid%ru_tend,  grid%rv_tend,  rw_tend,  ph_tend,  t_tend,  &
+                             ru_tendf, rv_tendf, rw_tendf, ph_tendf, t_tendf, &
+                             grid%u_save, grid%v_save, w_save, ph_save, grid%t_save, &
+@@ -1043,6 +1048,10 @@
+                             grid%i_start(ij), grid%i_end(ij),                &
+                             grid%j_start(ij), grid%j_end(ij),                &
+                             k_start, k_end                                  )
++       CALL pr98_dump3('assembled_ru_tend_out',grid%ru_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump3('assembled_rv_tend_out',grid%rv_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump3('assembled_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump2('mu_large_out',mu_tend,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
+ 
+        IF( config_flags%specified .or. config_flags%nested ) THEN 
+          CALL spec_bdy_dry ( config_flags,                                    &
+@@ -1454,7 +1463,10 @@
+         !  advance the mass in the column, theta, and calculate ww
+ 
+ BENCH_START(advance_mu_t_tim)
+-         CALL advance_mu_t( grid%ww, ww1, grid%u_2, grid%u_save, grid%v_2, grid%v_save, &
++
++         CALL pr98_dump2('mu_small_in',grid%mu_2,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
++         CALL pr98_dump0('dts_small',dts_rk)
++                  CALL advance_mu_t( grid%ww, ww1, grid%u_2, grid%u_save, grid%v_2, grid%v_save, &
+                           grid%mu_2, grid%mut, muave, grid%muts, grid%muu, grid%muv,    &
+                           grid%mudf,                                                    &
+                           grid%c1h, grid%c2h, grid%c1f, grid%c2f,                       &
+@@ -1472,6 +1484,9 @@
+                           grid%i_start(ij), grid%i_end(ij),  &
+                           grid%j_start(ij), grid%j_end(ij),  &
+                           k_start    , k_end                )
++         CALL pr98_dump2('mu_small_out',grid%mu_2,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
++         CALL pr98_dump2('mu_tend_small',mu_tend,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
++         CALL pr98_dump2('mudf_small_out',grid%mudf,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
+ BENCH_END(advance_mu_t_tim)
+        ENDDO
+        !$OMP END PARALLEL DO

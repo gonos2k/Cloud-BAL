@@ -1,0 +1,142 @@
+{
+  "20s_namelist_change_scope": "Both H/P change history_interval only from the shared source template; H/P use byte-identical generated 20s namelist.",
+  "640s_namelist_change_scope": "Both closed C2 controls share byte-identical generated 640s namelist; preflight diff changes are limited to duration/end-time fields and history_interval.",
+  "arms": {
+    "H20": {
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_namelist_sha256": "bd668a0f54fdc05996782adf472c78834cfc4829a05645fad8c68531a0be52d3",
+      "executable_sha256": "aca04cd72a886d41fedcae51e2bbb9cc0b03688e4b9db96ddd12ebc62981b6e0",
+      "input_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+      "launch_environment": {
+        "OMP_DYNAMIC": "FALSE",
+        "OMP_NUM_THREADS": "1",
+        "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89",
+        "status": "CONFIGURED_BY_RUNNER"
+      },
+      "namelist_changed_options": [
+        "history_interval"
+      ],
+      "preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/HYDRO_RUN/preflight.json",
+        "sha256": "3a248d43dced6745dd50f270651a6d4ae793dfdc33a84dc9e69b1a926858237f"
+      },
+      "receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/HYDRO_RUN/receipt.json",
+        "sha256": "32e54869b875413cf7746f55c0259041cdcce8612bb9761f2b671893545fb412"
+      },
+      "returncode": 0,
+      "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+      "status": "COMPLETE",
+      "timestep_count": 1
+    },
+    "H640": {
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+      "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "input_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+      "launch_environment": {
+        "OMP_DYNAMIC": "FALSE",
+        "OMP_NUM_THREADS": "1",
+        "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89",
+        "status": "CONFIGURED_BY_RUNNER"
+      },
+      "namelist_changed_options": [
+        "end_minute",
+        "end_second",
+        "history_interval",
+        "run_minutes",
+        "run_seconds"
+      ],
+      "preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO/preflight.json",
+        "sha256": "875de6cf8765339c02b5f625151411465e0b199813aa8e6e5386e30beefad7b0"
+      },
+      "receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO/receipt.json",
+        "sha256": "1440db5a0178af11ac4d92854b3284cc35cb5a74e5e6f6a14cc59dcac3a00a64"
+      },
+      "returncode": 0,
+      "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+      "status": "COMPLETE",
+      "timestep_count": 32
+    },
+    "P20": {
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_namelist_sha256": "bd668a0f54fdc05996782adf472c78834cfc4829a05645fad8c68531a0be52d3",
+      "executable_sha256": "aca04cd72a886d41fedcae51e2bbb9cc0b03688e4b9db96ddd12ebc62981b6e0",
+      "input_sha256": "10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3",
+      "launch_environment": {
+        "OMP_DYNAMIC": "FALSE",
+        "OMP_NUM_THREADS": "1",
+        "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89",
+        "status": "CONFIGURED_BY_RUNNER"
+      },
+      "namelist_changed_options": [
+        "history_interval"
+      ],
+      "preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/PROJECTED_RUN/preflight.json",
+        "sha256": "8844610084bd0dffb505368782d607a5ac6fc14de924f5cf4c8203cd752f0667"
+      },
+      "receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure20_capture_20261025/PROJECTED_RUN/receipt.json",
+        "sha256": "46008ff3d03b9f1985f356e25cb9b06fc567b7a8682e1bdcd2da4fd8704c4534"
+      },
+      "returncode": 0,
+      "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+      "status": "COMPLETE",
+      "timestep_count": 1
+    },
+    "P640": {
+      "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+      "candidate_namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+      "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "input_sha256": "10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3",
+      "launch_environment": {
+        "OMP_DYNAMIC": "FALSE",
+        "OMP_NUM_THREADS": "1",
+        "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89",
+        "status": "CONFIGURED_BY_RUNNER"
+      },
+      "namelist_changed_options": [
+        "end_minute",
+        "end_second",
+        "history_interval",
+        "run_minutes",
+        "run_seconds"
+      ],
+      "preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr101_projected_c2_640_20261023/preflight.json",
+        "sha256": "db19a14accab9958d75a9c83107f317cab4b0b64788789fde60168391418bdaa"
+      },
+      "receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr101_projected_c2_640_20261023/receipt.json",
+        "sha256": "d0a7920687aecbef15b91f2641638918f00beea67de5fb2af6e5597175bc5da2"
+      },
+      "returncode": 0,
+      "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+      "status": "COMPLETE",
+      "timestep_count": 32
+    }
+  },
+  "capture_analysis_tool": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_capture_noninterference.py",
+    "sha256": "35ce2b7100f49cad04a71f57862b412555246a94d43ea29e4d5f76848c46a996"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "runtime_noninterference_evidence": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr102_execution_20261025/hp20_capture_noninterference.json",
+    "sha256": "b41ad79bebfcaffea6ae86a89ca557c2ebcb08a52f6576e1db3d6f62aae85d44"
+  },
+  "schema": "pr102_hp20_control_template_identity_v1",
+  "scope": "Template/configuration identity and bounded namelist changes only. Does not establish physical acceptance, full-run equivalence, or observation skill.",
+  "shared_boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+  "shared_launch_environment": {
+    "OMP_DYNAMIC": "FALSE",
+    "OMP_NUM_THREADS": "1",
+    "launch_request_sha256": "6a64ae6f037396da0900a25b9012257045b017051cfb659321b1bfdc8d629a89",
+    "status": "CONFIGURED_BY_RUNNER"
+  },
+  "source_namelist_sha256": "d1148cbc5c3e4d5fdfe0991bc2609a372c97c1142f540d222d0aeb45909d8fe4",
+  "status": "PASS_PARTIAL_CONTROL_IDENTITY"
+}

@@ -1,0 +1,13 @@
+PR102 KG publication-date fix
+Date: 2026-10-25
+Scope: wrapper and focused wrapper-publication test only. No KG check-only/apply/maintenance invoked; no live model/source-policy artifacts changed.
+
+Changed files and SHA256:
+- docs/evidence/pr102_wind_structure_native_20261025/kg/apply_kg.py: 9c0cbfdd9e0fe1ead03e31021f21028a3c15654f98224e2a8e0bd8c9640c00a5
+- docs/evidence/pr102_wind_structure_native_20261025/kg/test_wrapper_publication.py: 1c4ebcacd6090371ff3266df4b4e251b36bf1e07f697532343f70e25ad38b817
+
+Change: `wiki/index.md` date_modified and PR102 wiki-log publication entry now use the check-only-plan-bound `automatic_snapshot_date`. Named project snapshots remain `2026-10-25-pr102-wind-structure`. Historical pinned Graphify engine-output expectations stay fixed at their PR101 engine date (`2026-10-22`) and are still verified before correction. Added a focused 2026-10-26 rollover test for the wiki date and log date, alongside existing 2026-10-25 coverage.
+
+Validation: `python -m pytest -q docs/evidence/pr102_wind_structure_native_20261025/kg/test_wrapper_publication.py` -> 13 passed. First run found one pre-existing test fixture without `automatic_snapshot_date`; fixture was updated, then the full file passed. The previously reported 100-test receipt predates this narrow KG wrapper/test maintenance change and does not validate it.
+
+No manifest schema abstraction added. No maintained graph/wiki changes made. KG check-only/apply remain blocked until later explicit review and root GO.
