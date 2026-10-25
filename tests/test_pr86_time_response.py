@@ -105,6 +105,85 @@ def make_native_input_binding(root: Path) -> dict:
 
 
 class TimeResponseTests(unittest.TestCase):
+    def test_structured_capture_requires_matching_archived_consumer_pass(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            artifacts = {}
+            for name in ("candidate", "original_p", "reference_hydro", "reference_coupled",
+                         "boundary", "generator", "policy", "composition"):
+                path = root / f"wind_{name}"
+                path.write_bytes(name.encode())
+                artifacts[name] = {"path": str(path), "sha256": response.sha256(path)}
+            proposal = {"schema": "pr102_wind_structure_proposal_v1",
+                        "status": "PROPOSAL_REQUIRES_NATIVE_CONSUMER_AND_SOURCE_CAPTURE",
+                        "role": "COUPLED", **artifacts,
+                        "composition_sha256": artifacts["composition"]["sha256"],
+                        "parent_sha256": artifacts["original_p"]["sha256"],
+                        "change_contract": {"changed_variables": ["U", "V"],
+                                             "non_target_variables_identical": True}}
+            proposal_path = root / "proposal.json"
+            proposal_path.write_text(json.dumps(proposal))
+            binding = response._wind_structure_input_binding(proposal_path)
+            evidence = root / "consumer_evidence.txt"
+            evidence.write_text("archived consumer output")
+            consumer = {"schema": "pr102_native_consumer_check_v1", "status": "COMPLETE",
+                        "native_consumer": "module_big_step_utilities_em_mp_calc_ww_cp_",
+                        "candidate_wrfinput_sha256": artifacts["candidate"]["sha256"],
+                        "archive_member_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+                        "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+                        "dry_mass_check": {"schema": "pr102_native_drymass_constraint_v1", "status": "PASS",
+                                           "finite": True,
+                                           "composition_sha256": binding["composition_sha256"],
+                                           "consumer": "module_big_step_utilities_em_mp_calc_ww_cp_",
+                                           "comparison": "candidate_minus_HYDRO", "units": "Pa/s",
+                                           "support_count": 10,
+                                           "reference_constraint": {"status": "PASS",
+                                               "observed_l2_pa_s": 1e-9, "allowed_l2_pa_s": 1e-8,
+                                               "observed_max_abs_pa_s": 1e-10, "allowed_max_abs_pa_s": 1e-9},
+                                           "source_arithmetic": {"status": "PASS",
+                                               "observed_l2_pa_s": 1e-9, "allowed_l2_pa_s": 1e-8,
+                                               "observed_max_abs_pa_s": 1e-10, "allowed_max_abs_pa_s": 1e-9}},
+                        "artifacts": [{"path": str(evidence), "sha256": response.sha256(evidence)}]}
+            consumer_path = root / "consumer.json"
+            consumer_path.write_text(json.dumps(consumer))
+            pin = response._validate_pr102_consumer_capture(consumer_path, binding)
+            self.assertEqual(pin["status"], "COMPLETE")
+            self.assertEqual(pin["sha256"], response.sha256(consumer_path))
+            consumer["candidate_wrfinput_sha256"] = "wrong candidate"
+            consumer_path.write_text(json.dumps(consumer))
+            with self.assertRaisesRegex(ValueError, "does not bind this candidate"):
+                response._validate_pr102_consumer_capture(consumer_path, binding)
+            consumer["candidate_wrfinput_sha256"] = artifacts["candidate"]["sha256"]
+            consumer["dry_mass_check"]["reference_constraint"]["status"] = "FAIL"
+            consumer_path.write_text(json.dumps(consumer))
+            with self.assertRaisesRegex(ValueError, "reference_constraint gate"):
+                response._validate_pr102_consumer_capture(consumer_path, binding)
+
+    def test_structured_capture_is_one_step_and_requires_consumer_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with self.assertRaisesRegex(ValueError, "one 20-second step"):
+                response.prepare("STRUCTURED_CAPTURE", 640, root / "wrong_duration",
+                                 wind_structure_input_receipt_path=root / "proposal.json")
+            with self.assertRaisesRegex(ValueError, "explicit C2 build and passing archived consumer"):
+                response.prepare("STRUCTURED_CAPTURE", 20, root / "missing_consumer",
+                                 candidate_build_path=root / "build.json",
+                                 wind_structure_input_receipt_path=root / "proposal.json")
+
+    def test_structured_baseline20_requires_exact_c2_executable(self) -> None:
+        response._require_pr102_base_c2({
+            "executable_sha256": response.PR102_BASE_C2_EXECUTABLE_SHA256})
+        with self.assertRaisesRegex(ValueError, "exact matched base C2 executable"):
+            response._require_pr102_base_c2({"executable_sha256": "wrong"})
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with self.assertRaisesRegex(ValueError, "one 20-second step"):
+                response.prepare("STRUCTURED_BASELINE20", 640, root / "wrong_duration",
+                                 wind_structure_input_receipt_path=root / "proposal.json")
+            with self.assertRaisesRegex(ValueError, "explicit base C2 build receipt"):
+                response.prepare("STRUCTURED_BASELINE20", 20, root / "missing_build",
+                                 wind_structure_input_receipt_path=root / "proposal.json")
+
     def test_hydro_binding_rejects_changed_artifact_and_failed_receipt(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -1,0 +1,38 @@
+{
+  "schema": "pr102_candidate_generation_execution_v1",
+  "argv": [
+    "/usr/bin/python",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_native_wind_candidate.py",
+    "--hydro",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/run/wrfinput_d01",
+    "--coupled",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/run/wrfinput_d01",
+    "--original-p",
+    "/var/tmp/pr99_native_projection_v4_20261022/wrfinput_d01",
+    "--pr99-receipt",
+    "/var/tmp/pr99_native_projection_v4_20261022/wrfinput_d01.proposal.json",
+    "--boundary",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/COUPLED_600s_c1/run/wrfbdy_d01",
+    "--constants-receipt",
+    "/var/tmp/pr87_history_constants_20261019/receipt.json",
+    "--output",
+    "/var/tmp/pr102_candidate_generation_v3_20261025/candidate/wrfinput_d01"
+  ],
+  "cwd": "/var/tmp/pr102_candidate_generation_v3_20261025",
+  "returncode": 0,
+  "start_utc": "2026-10-25T09:33:28.617400+00:00",
+  "elapsed_seconds": 13.526771998032928,
+  "changed_inputs_or_sources": [],
+  "log_sha256": "129ba8ac313583f312b5d33c232805c6a876567ca9c41420e1e47774d8a0eaba",
+  "root_go_sha256": "4636c0ed9d94cb61f45467219c577369756cce421f7abd6a21e7b9bfd21d6457",
+  "output": "/var/tmp/pr102_candidate_generation_v3_20261025/candidate/wrfinput_d01",
+  "output_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+  "proposal_sha256": "451e4e9110d3b921507e311be56328ad05e13ee20e1fedd2d9c60ce8ef94eeb8",
+  "source_snapshots": {
+    "pr102_native_uv_smoother.py": "0ad9b38485b5d25f6fd70b3150688449e994665ffc6e16c5feb371c4ff3a35f5",
+    "pr102_native_wind_candidate.py": "f044c57605942504a0c8ece22b915e8bd64bc2ddacb46a9cecd6920081f15b85",
+    "pr87_native_history.py": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+    "pr94_cloud_response.py": "a626b22f234b3095202982a4fe32d89d9ab6c200e4a9547f6a06a8b109536537",
+    "pr99_native_projection.py": "c14bdcf018c4e246472a2989867efa582aaede090cdb8583afafb289f40e0cbf"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "pr102_execution_capture_plan_v1",
+  "status": "SOURCE_PLAN_READY_WAITING_FOR_ROOT_REVIEW_CANDIDATE_AND_BUILD_GO",
+  "launch_authorized": false,
+  "candidate": null,
+  "arm": "STRUCTURED",
+  "duration_seconds": 640,
+  "expected_timesteps": 32,
+  "matched_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+  "required_proposal_artifacts": [
+    "candidate", "original_p", "reference_hydro", "reference_coupled",
+    "boundary", "generator", "policy", "composition"
+  ],
+  "required_pre_640_evidence": {
+    "native_consumer": {
+      "schema": "pr102_native_consumer_check_v1",
+      "status": "COMPLETE",
+      "consumer": "archived calc_ww_cp",
+      "archive_member_sha256": "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343",
+      "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "must_bind": ["candidate_wrfinput_sha256", "archive_member_sha256", "compiler_profile_sha256"],
+      "dry_mass_check_status": "PASS"
+    },
+    "native_source_capture_cohort": {
+      "schema": "pr102_native_source_capture_v1",
+      "status": "COMPLETE",
+      "captures": ["HYDRO", "ORIGINAL_P", "CANDIDATE"],
+      "duration_seconds": 20,
+      "expected_steps": 1,
+      "capture": "one-step C2 additive PR98 full-array overlay; same diagnostic executable for all three inputs",
+      "must_bind": ["candidate_wrfinput_sha256", "diagnostic_executable_sha256", "diagnostic_build_receipt_sha256", "baseline_c2_executable_sha256"],
+      "captured_sources": ["RU", "RV", "MUDF"],
+      "noninterference_status": "PASS"
+    }
+  },
+  "reused_closed_controls": ["OFF", "HYDRO", "COUPLED", "PROJECTED"],
+  "control_requirements": {
+    "executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+    "boundary_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "namelist_sha256": "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8",
+    "closed_steps": 32,
+    "changed_staged_inputs": [],
+    "changed_original_inputs": []
+  },
+  "capture_limits": [
+    "Historical pr98_prepare_native_capture.py is C1-source-pinned and is not evidence for a C2 capture.",
+    "PR101 selected two-face diffusion capture does not substitute for full-array RU/RV and MUDF source capture.",
+    "MUDF is combined DMDT plus MU_TEND; its capture does not prove complete dry-mass flux closure.",
+    "One-step source capture does not establish a 640-second forecast or physical approval."
+  ],
+  "source_only_build_plan": {
+    "path": "c2_capture_source_plan_v3/build_plan.json",
+    "sha256": "d366ec0ddf19544c8515124987cba2a31b3b980563ba27b476e7b7724ef5aad2",
+    "diff_path": "c2_capture_source_plan_v3/source_only_insertions.patch",
+    "diff_sha256": "6dab4cd85e5605611eb295006017aeab876bc82040fb3f46cad9ed7885fd02c8",
+    "superseded_plans": [
+      {"path": "c2_capture_source_plan_v2/build_plan.json",
+       "sha256": "5965c50b0809bf60c0b6f8b161f5fb44f090dd88a1820c0cebd2096af2c7c2a2",
+       "reason": "appended complete PR98 combined observer and duplicated existing C2 PR87/PR90 observer symbols"},
+      {"path": "c2_capture_source_plan/build_plan.json",
+       "sha256": "4d71f49524d8907c2f8fbea4655380f3815fe000ab3f87d2e9bd209a7ed3647d",
+       "reason": "module/interface loop reused module_path and corrupted module_em source path in the receipt"}
+    ],
+    "writer_tail": {"anchor": "SUBROUTINE pr98_dump3(", "line": 737,
+                    "tail_sha256": "666f3715f022711e0b0ea30d029d092b9b476bc26809c9f98a9081c790628f34",
+                    "procedures": ["pr98_dump3", "pr98_dump2", "pr98_dump1", "pr98_dump0"]},
+    "changed_model_objects": ["module_em.o", "solve_em.o"],
+    "status": "WAITING_FOR_INDEPENDENT_REVIEW",
+    "build_or_launch_performed": true,
+    "successful_diagnostic_build": false,
+    "model_launch_performed": false
+  },
+  "failed_build_attempts": [{
+    "scratch": "/var/tmp/pr102_c2_native_capture_build_v2_20261025",
+    "execution_record_sha256": "5995cba39dc92e67b317f5a5c6836bb61a0e8d538f827bbffbc54161d7023b26",
+    "status": "BUILD_FAILED",
+    "link_returncode": 1,
+    "link_log_sha256": "1dcd9c5883146b4686969edb14c6dbf673486af2d3545042e00c998be9712039",
+    "failure": "module_em observer definitions collide with reused pr87_extra_observer.o",
+    "launch_authorized": false
+  }]
+}

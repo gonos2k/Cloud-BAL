@@ -1,0 +1,29 @@
+PR102 archived calc_ww_cp assessment provenance review
+Date: 2026-10-25
+
+Decision: PASS for the scoped invocation and two-gate assessment provenance. This does not confer scientific approval or a later WRF run authorization.
+
+Reviewed closed assessment receipt:
+  /var/tmp/pr102_archived_consumer_assessment_20261025/receipt.json
+  SHA256: e91be241a9782a0b0be388437af24f2cc40ec56a2db3a342f5362cc9149faf59
+Assessment script SHA256: 62444ebc1c4434060164dc5403f0dd12c6ee321265e75ff31e4251dce4c1d453
+Root scope GO SHA256: e027c1c9287eb8eae87e53c0e67b73bdd9ade930d218a49865c24af158fdb247
+Bound helper SHA256: 97fc385f47ae8d6c02d1cc43e6d2a02c9974effcf2d26f78f759bfc111ac825c
+
+Provenance checks:
+- All 23 paths and hashes in the closed assessment receipt match current bytes.
+- Candidate input hash in the receipt and proposal both bind to b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f. The reference HYDRO input is bound to 46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c.
+- Independently reconstructed each Fortran input binary from the corresponding netCDF input via native_arrays/ARRAY_ORDER, little-endian REAL32, Fortran-order array bytes, and trailing RDX/RDY. Both repacked hashes exactly match the hashes in the closed launch records. The driver READ list matches the packed array order and calls the pinned calc_ww_cp entry point.
+- Both closed launch records bind the same consumer executable hash ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61, Intel profile hash 5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4, MPI env, driver, replay source, proposal validators, canonical provenance, and archive-identity proof. Staged consumer executable copies match the bound executable.
+- The C1/C2 identity proof states that module_big_step_utilities_em.o is byte-identical in both archives at SHA256 8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343; the independent archive extraction check in the prior helper review matched that digest. The standalone executable is pinned to its C1 archive/driver provenance.
+- Each historical launch has one present-day binding mismatch: tools/pr86_time_response.py is now 35adaa773773c046311d731ea1426821befb225a444092405098b4ee4e8baa43, while the closed launch binds b0c168e564adb40a588f88a71f09ea4612bf6601cb7ad03926b443000f0df884. The frozen runs record `binding_validator_changed=false`; this is the intentional later runner edit. The closed receipt/launch bundle remains intact and was not rewritten.
+
+Two-gate result recorded in the closed receipt:
+- `reference_constraint`: PASS, with zero pointwise exceedances. This checks the input-only source-derived candidate-minus-HYDRO reference response against the two reference arithmetic envelopes.
+- `source_arithmetic`: PASS, with zero pointwise exceedances. This checks archived actual candidate-minus-HYDRO WW difference against that predicted response with source/contrast arithmetic allowances.
+- Both gates use the frozen helper; no post-outcome bound adjustment is made. The receipt records physical_approval=FAIL_OPEN and observation_skill=NOT_EVALUATED.
+
+Callee and scope limitation:
+- The assessment calls a standalone driver linked against the retained archive consumer. The C1/C2 callee object is byte-identical, but this does not establish all compile flags used for the preserved parent object. The strict standalone driver flags do not retroactively prove the archived callee's compile flags.
+- This is a selected stored-input calc_ww_cp comparison only, not a WRF integration, candidate physics approval, observation-skill assessment, or permission for the 640-second run.
+- I did not inspect raw WW field values or modify any closed receipts.

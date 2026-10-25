@@ -1,0 +1,90 @@
+{
+  "schema": "pr102_archived_consumer_runs_v1",
+  "status": "COMPLETE",
+  "proposal": {
+    "path": "/var/tmp/pr102_candidate_generation_v3_20261025/candidate/wrfinput_d01.proposal.json",
+    "sha256": "451e4e9110d3b921507e311be56328ad05e13ee20e1fedd2d9c60ce8ef94eeb8"
+  },
+  "proposal_changed": false,
+  "binding_validator": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr86_time_response.py",
+    "sha256": "b0c168e564adb40a588f88a71f09ea4612bf6601cb7ad03926b443000f0df884"
+  },
+  "binding_validator_changed": false,
+  "executable": {
+    "path": "/var/tmp/pr99-native-consumer-q7y9dgzx/native_consumer.exe",
+    "sha256": "ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61"
+  },
+  "canonical_provenance": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr99_native_consumer_20261022_canonical.json",
+    "sha256": "6d826e46510d08d6dd6c9e572f116090ce5ef1a5530c37454b6623d58e6ce91f"
+  },
+  "archive_identity": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr102_execution_20261025/calc_ww_archive_member_identity.json",
+    "sha256": "6d7455927c79b7e15ea46ae22173a150c00a676b444513e2bb765d442c2d039c"
+  },
+  "cohorts": {
+    "reference_hydro": {
+      "schema": "pr102_archived_consumer_run_v1",
+      "status": "COMPLETE",
+      "returncode": 0,
+      "issues": [],
+      "launch": {
+        "path": "/var/tmp/pr102_archived_consumer_20261025/reference_hydro/launch.json",
+        "sha256": "c0bd1250893ac3ce0e70f6408db6a0947374ecafe8ae80ce1019f74a12d3d548"
+      },
+      "log": {
+        "path": "/var/tmp/pr102_archived_consumer_20261025/reference_hydro/run.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr96_local_closure_20261021/runs_on_lustre/HYDRO_600s_c1/run/wrfinput_d01",
+        "sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c"
+      },
+      "output": {
+        "path": "/var/tmp/pr102_archived_consumer_20261025/reference_hydro/native_consumer_ww.bin",
+        "sha256": "71ea495f0897a07c84be63bcf2ae7a168f59d32fa6546fd7e42a118d8b0f1707"
+      },
+      "active_shape": [
+        40,
+        280,
+        232
+      ],
+      "finite_value_count": 2598400,
+      "expected_ww_sha256": "71ea495f0897a07c84be63bcf2ae7a168f59d32fa6546fd7e42a118d8b0f1707",
+      "end_utc": "2026-10-25T09:49:22.670320+00:00"
+    },
+    "candidate": {
+      "schema": "pr102_archived_consumer_run_v1",
+      "status": "COMPLETE",
+      "returncode": 0,
+      "issues": [],
+      "launch": {
+        "path": "/var/tmp/pr102_archived_consumer_20261025/candidate/launch.json",
+        "sha256": "8ef02b9ab7a29bab2309230ace0c28ab399a08da9de9a71862749ffc5cff460d"
+      },
+      "log": {
+        "path": "/var/tmp/pr102_archived_consumer_20261025/candidate/run.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "input": {
+        "path": "/var/tmp/pr102_candidate_generation_v3_20261025/candidate/wrfinput_d01",
+        "sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f"
+      },
+      "output": {
+        "path": "/var/tmp/pr102_archived_consumer_20261025/candidate/native_consumer_ww.bin",
+        "sha256": "aa5744a35674efd8f5365c083237d5fa65dce65ddcd95949724715003eb142e2"
+      },
+      "active_shape": [
+        40,
+        280,
+        232
+      ],
+      "finite_value_count": 2598400,
+      "expected_ww_sha256": null,
+      "end_utc": "2026-10-25T09:49:29.675313+00:00"
+    }
+  },
+  "physical_approval": "FAIL_OPEN",
+  "scope": "Closed native calls and HYDRO bit identity only; arithmetic/constraint assessment is a separate gate."
+}

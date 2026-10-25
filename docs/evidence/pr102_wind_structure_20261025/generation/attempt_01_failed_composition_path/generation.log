@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_native_wind_candidate.py", line 522, in <module>
+    main()
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_native_wind_candidate.py", line 508, in main
+    report = propose(args.hydro, args.coupled, args.original_p, args.pr99_receipt,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_native_wind_candidate.py", line 291, in propose
+    pr99 = _verify_pr99_receipt(pr99_receipt, hydro, coupled, original_p, boundary)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_native_wind_candidate.py", line 269, in _verify_pr99_receipt
+    raise ValueError(f"PR99 {name} artifact does not bind the declared input")
+ValueError: PR99 composition artifact does not bind the declared input

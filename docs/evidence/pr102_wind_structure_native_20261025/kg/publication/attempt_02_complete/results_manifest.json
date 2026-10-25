@@ -1,0 +1,40 @@
+{
+  "schema": "pr102_integration_results_v1",
+  "source_commit": "394b2fb02726978ab8e12080afd80c9171f50762",
+  "approval_base_commit": "1e2c45eb30135582f925bc8c833d96b131af1df9",
+  "graph_selection_base_commit": "2345bc1d83eae9094225a2ddfe8879740c4d8273",
+  "pr_url": "https://github.com/gonos2k/Cloud-BAL/pull/102",
+  "runtime_gates": {
+    "candidate": {
+      "state": "COMPLETE",
+      "candidate": "PR102 STRUCTURED b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f / unchanged C2 executable387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr102_wind_structure_20261025/generation/attempt_03_success/wrfinput_d01.proposal.json",
+      "evidence_sha256": "451e4e9110d3b921507e311be56328ad05e13ee20e1fedd2d9c60ce8ef94eeb8",
+      "scope": "One stored U/V-only candidate: continuous fixed-carrier feasibility, predeclared trust budget with storage reserve, unchanged non-U/V and metadata; engineering policy, not physical approval."
+    },
+    "consumer": {
+      "state": "COMPLETE",
+      "candidate": "PR102 STRUCTURED b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f / unchanged C2 executable387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr102_execution_20261025/archived_consumer/assessment_receipt.json",
+      "evidence_sha256": "e91be241a9782a0b0be388437af24f2cc40ec56a2db3a342f5362cc9149faf59",
+      "scope": "Actual archived calc_ww_cp C2-identical member: separate fixed reference-constraint and source-arithmetic gates PASS on final stored input; not whole-model continuity closure."
+    },
+    "nativecapture": {
+      "state": "COMPLETE",
+      "candidate": "PR102 STRUCTURED b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f / unchanged C2 executable387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr102_execution_20261025/nbase20_prefix_bridge.json",
+      "evidence_sha256": "e3ef62b6f9a2792434d3471005ec59b5f6a7441f377946500fd91cb64c598194",
+      "scope": "Same-executable H/P/N additive IFX2026 capture cohort and noninterference are preflight-bound; N640-to-Nbase20 T0/first POST/T1post bridge PASS. Raw RU/RV and physical 16-column mass-rate remain separate stages/units."
+    },
+    "C2_640": {
+      "state": "COMPLETE",
+      "candidate": "PR102 STRUCTURED b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f / unchanged C2 executable387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+      "evidence_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr102_execution_20261025/postclosure_20261026/struct_640_receipt.json",
+      "evidence_sha256": "313295e9cbf9e30a12a437c501bf3db2cf25c0e6762ec5d51c31d54ba311d4d6",
+      "scope": "Single new unchanged C2 run COMPLETE32/640 rc0 with no input mutation/fatal; four closed controls reused. Saved history0..600/11times versus selected POST trace through640; genericQNB FAIL173 preserved, exactsourceendpointPASS, activeicepolicyPASS separately."
+    }
+  },
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED",
+  "maintenance_fix_scope": "Guarded KG post-apply inventory uses existing engine directly; physical inputs/code/results unchanged. Failed apply independently rolled back and preserved."
+}

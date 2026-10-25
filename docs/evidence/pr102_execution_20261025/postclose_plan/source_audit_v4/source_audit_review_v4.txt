@@ -1,0 +1,18 @@
+PR102 private post-close source audit v4 metadata review
+Date: 2026-10-25
+Scope: metadata-only read-only comparison of v4 executor and plan to reviewed v3; no run receipt/output opened, no script invoked.
+
+Reviewed SHA256:
+- /var/tmp/pr102_structured640_closed_source_audit_v4.py: 38908e7218526d31fdf4eefc537ae0c4c630e11954533abf042907eb7315c415
+- /var/tmp/pr102_structured640_postclose_source_audit_plan_v4.json: 227a03365ef9981644b08c7543a56418c9d4902e8b4ff61f6a325e0348969301
+- prior executor v3 remains d6d7612411051942031d5d6c9f9f6841ae61c7691828e6312457161358cb85fe; prior plan v3 remains 3eb740ae618e7d8ecc2945c9aee89ef7e9eac91f15ca19fae60643c7f0567b66.
+
+Verdict: GO for post-close audit only, after receipt closure, external v4 plan hash check, and separate ROOT authorization. No model run or physical approval is authorized.
+
+Diff findings:
+- Executor retains the previously reviewed strict PR102 response `_verify_execution_preflight` and `_closed_structured_run` calls, exact execution-preflight pointer/hash validation, fixed C2/input/boundary/namelist/build checks, and pre/post reader/source pins. The three separate source policy gate outputs remain independent.
+- V4 writes to `source_policy_audit_v4.json`; it does not overwrite v3's output. Plan command/output path and schema are correspondingly v3-plan-specific and `execution_authorized_by_this_plan` remains false.
+- Provenance JSON no longer labels `receipt.baseline_frozen_executable_sha256` as the base C2 executable. It calls it `template_executable_sha256`, separately records expected base C2 executable SHA256 387f46df...cc9a, actual executed executable from receipt, candidate build, and expected build receipt SHA256 9c4802e1...dafb. This correctly distinguishes historical template identity from C2 runtime identity/build.
+- No numerical/model/source policy logic changed in the v4 delta; only output/plan filenames and provenance field labels were altered.
+
+Metadata follow-up: the v4 plan documents the expected historical template executable SHA256 9642a471...b943, while executor reports (but does not independently assert) the receipt's template SHA. The C2 executed executable/build are asserted. If the template field is used as a gate rather than descriptive provenance, externally compare it to the planned 9642 hash before relying on the report.

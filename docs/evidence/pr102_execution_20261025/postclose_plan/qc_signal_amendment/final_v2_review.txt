@@ -1,0 +1,17 @@
+PR102 final v2 history reader bounded review
+Date: 2026-10-25
+Scope: read-only review of exact prepared final v2 against initial v2, preserved v1, and frozen pattern helper. No invocation or actual 640-second payload access.
+
+Hashes:
+- final v2 /var/tmp/pr102_fivearm_history_readback_v2_final_20261025.py: b7ea35ac1ddd6bdc9d1b87ce6cb7ff39e1bac22c8f91f4de6bec32717685a3b1
+- initial v2 /var/tmp/pr102_fivearm_history_readback_v2_20261025.py: 813886002c8c63abb739262036dfb93de06afb10a6af317788c4b8c941b7831b
+- preserved v1 /var/tmp/pr102_fivearm_history_readback_20261025.py: e92e7838721a22e75e8714020cb7e22768e9dcf2fc26623881396c13db28c7bd
+- frozen helper tools/pr94_cloud_response.py: a626b22f234b3095202982a4fe32d89d9ab6c200e4a9547f6a06a8b109536537
+- prepared record /var/tmp/pr102_fivearm_history_readback_v2_final_prepared_20261025.json: bd7c226fb3cea94a724065d8fa39937bfb160817f80bbdc2972ffddb92b12087
+
+Verdict: GO for later post-closure invocation after separate ROOT authorization. No actual C2 run status or results are approved here.
+
+Findings:
+- Final delta from initial v2 adds only unit metadata: initial-contrast summary records `kg/kg dry`; output metric map labels cosine and projection dimensionless and orthogonal residual/delta RMS values `kg/kg dry`; it explicitly records no inner-product keys returned (if exposed, inner product would have squared field units). These match the frozen `pattern_metrics` calculations: cosine and dot(base,current)/dot(base,base) dimensionless; returned residual and RMS values remain in the input field unit; helper does not return dot products.
+- Prior v2 checks remain: v1 four-field RMS values/plots are unchanged; QCLOUD baseline is each arm's own t=0 contrast to actual OFF; all arms' initial contrasts are bitwise equal on both frozen masks before pattern metrics run; all 11 fixed history timestamps feed helper on both masks; zero baseline keeps helper None for cosine/projection. No post-response selection or claim expansion.
+- Output/unit metadata and prepared record pin exact v2. Script remains uninvoked and no model payload was opened.

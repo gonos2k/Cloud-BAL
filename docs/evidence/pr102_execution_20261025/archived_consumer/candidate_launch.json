@@ -1,0 +1,35 @@
+{
+  "schema": "pr102_archived_consumer_launch_v1",
+  "argv": [
+    "bash",
+    "-c",
+    "set -e; source \"$1\"; source \"$2\"; export LD_LIBRARY_PATH=\"$3:${LD_LIBRARY_PATH:-}\"; exec \"$4\"",
+    "pr102-archived-consumer",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tests/intel_toolchain.sh",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh",
+    "/NHNHOME/WORKSPACE/26weather002_A/Library/WRF_LIBS/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib",
+    "/var/tmp/pr102_archived_consumer_20261025/candidate/consumer.exe"
+  ],
+  "cwd": "/var/tmp/pr102_archived_consumer_20261025/candidate",
+  "bindings": {
+    "/var/tmp/pr102_candidate_generation_v3_20261025/candidate/wrfinput_d01": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+    "/var/tmp/pr99-native-consumer-q7y9dgzx/native_consumer.exe": "ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh": "1f807842591f742c0e285df3769b4a07e8944536cbd0b0905e88520ae07dbcf8",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr99_native_consumer_driver.f90": "9ca9f3846313180ae8913258ed54e740f375b6a3bc1fd2d93a404996c141604f",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr99_native_consumer_replay.py": "8dd4643cad57a139a0ba116dd1f2cead931072462b81d5b5827509b649edd622",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_archived_consumer.py": "441491dce00ca6584ba9f1a08224b154cb28fb38b3e3c8b67522f12ecd69070a",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr99_native_consumer_20261022_canonical.json": "6d826e46510d08d6dd6c9e572f116090ce5ef1a5530c37454b6623d58e6ce91f",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/docs/evidence/pr102_execution_20261025/calc_ww_archive_member_identity.json": "6d7455927c79b7e15ea46ae22173a150c00a676b444513e2bb765d442c2d039c",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr86_time_response.py": "b0c168e564adb40a588f88a71f09ea4612bf6601cb7ad03926b443000f0df884",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr87_native_history.py": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr99_native_consumer_metrics.py": "2677415972c452ade52ae71f2d3b89fdaad1890f6a29613c131a80ca4f5ba359",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr101_guarded_replay.py": "f9854bd5c7d920786b0ee47d1ab1f694d3a4b9d33b060ff1e8e1a61fa58a76d3"
+  },
+  "input_binary": {
+    "path": "/var/tmp/pr102_archived_consumer_20261025/candidate/native_consumer_input.bin",
+    "sha256": "a294a49b98fcd306f8a14ff23d93bb5e9b1eb88b880028e5fbc347163e255e8a"
+  },
+  "start_utc": "2026-10-25T09:49:23.808651+00:00",
+  "scope": "Retained archived calc_ww_cp call only; not a WRF time integration."
+}

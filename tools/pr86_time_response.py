@@ -34,6 +34,11 @@ SNAPSHOT_SECONDS = tuple(timestep * 20 for timestep in SNAPSHOTS)
 LAUNCH_ENVIRONMENT = {"OMP_NUM_THREADS": "1", "OMP_DYNAMIC": "FALSE"}
 LAUNCH_ENVIRONMENT_SHA256 = hashlib.sha256(
     b"export OMP_NUM_THREADS=1 OMP_DYNAMIC=FALSE").hexdigest()
+PR102_BASE_C2_EXECUTABLE_SHA256 = "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a"
+PR102_ORIGINAL_P_C2_SHA256 = "10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3"
+PR102_REFERENCE_HYDRO_SHA256 = "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c"
+PR102_REFERENCE_COUPLED_SHA256 = "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
+PR102_BOUNDARY_C2_SHA256 = "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7"
 
 
 def snapshot_schedule(duration: int) -> dict[int, str]:
@@ -114,6 +119,11 @@ def _candidate_build_binding(path: Path) -> dict:
             "executable_sha256": executable_sha}
 
 
+def _require_pr102_base_c2(candidate_build: dict) -> None:
+    if candidate_build["executable_sha256"] != PR102_BASE_C2_EXECUTABLE_SHA256:
+        raise ValueError("STRUCTURED_BASELINE20 requires the exact matched base C2 executable")
+
+
 def _staged_expected_hash(name: str, input_hashes: dict, candidate_build: dict | None,
                           candidate_namelist_sha256: str | None = None,
                           candidate_wrfinput_sha256: str | None = None) -> str:
@@ -167,6 +177,36 @@ def _native_input_binding(path: Path) -> dict:
             "artifacts": artifacts, "composition_sha256": receipt["composition_sha256"]}
 
 
+def _wind_structure_input_binding(path: Path) -> dict:
+    """Bind a PR102 wind proposal and its immutable source and policy artifacts."""
+    path = path.resolve()
+    receipt = json.loads(path.read_text())
+    if (receipt.get("schema") != "pr102_wind_structure_proposal_v1" or
+            receipt.get("status") != "PROPOSAL_REQUIRES_NATIVE_CONSUMER_AND_SOURCE_CAPTURE" or
+            receipt.get("role") != "COUPLED"):
+        raise ValueError("expected a source-bound PR102 COUPLED wind-structure proposal")
+    names = ("candidate", "original_p", "reference_hydro", "reference_coupled",
+             "boundary", "generator", "policy", "composition")
+    artifacts = {name: receipt[name] for name in names}
+    for name, row in artifacts.items():
+        if sha256(Path(row["path"])) != row["sha256"]:
+            raise ValueError(f"wind-structure proposal {name} artifact changed: {row['path']}")
+    if receipt.get("composition_sha256") != artifacts["composition"]["sha256"]:
+        raise ValueError("wind-structure composition hash is inconsistent")
+    contract = receipt.get("change_contract", {})
+    if (contract.get("changed_variables") != ["U", "V"] or
+            contract.get("non_target_variables_identical") is not True):
+        raise ValueError("wind-structure proposal lacks the U/V-only noninterference contract")
+    if artifacts["original_p"]["sha256"] != receipt.get("parent_sha256",
+                                                              artifacts["original_p"]["sha256"]):
+        raise ValueError("wind-structure parent alias differs from original_p")
+    return {"binding_kind": "wind_structure", "role": "COUPLED",
+            "receipt_path": str(path), "receipt_sha256": sha256(path),
+            "schema": receipt["schema"], "status": receipt["status"],
+            "artifacts": artifacts, "composition_sha256": receipt["composition_sha256"],
+            "change_contract": contract}
+
+
 def _input_binding_unchanged(binding: dict | None) -> bool:
     if binding is None:
         return True
@@ -175,6 +215,8 @@ def _input_binding_unchanged(binding: dict | None) -> bool:
         return _hydro_input_binding(Path(binding["receipt_path"])) == binding
     if kind == "native_uv_projection":
         return _native_input_binding(Path(binding["receipt_path"])) == binding
+    if kind == "wind_structure":
+        return _wind_structure_input_binding(Path(binding["receipt_path"])) == binding
     return False
 
 
@@ -184,6 +226,83 @@ def _validate_native_template(binding: dict, template_receipt: dict) -> None:
         raise ValueError("native proposal parent differs from the frozen COUPLED input")
     if artifacts["boundary"]["sha256"] != template_receipt["candidate_wrfbdy_sha256"]:
         raise ValueError("native proposal boundary differs from the frozen COUPLED boundary")
+
+
+def _validate_wind_structure_template(binding: dict, template_receipt: dict) -> None:
+    artifacts = binding["artifacts"]
+    if artifacts["reference_hydro"]["sha256"] != PR102_REFERENCE_HYDRO_SHA256:
+        raise ValueError("wind-structure reference_hydro differs from the matched HYDRO input")
+    if (artifacts["reference_coupled"]["sha256"] != PR102_REFERENCE_COUPLED_SHA256 or
+            artifacts["reference_coupled"]["sha256"] != template_receipt["candidate_wrfinput_sha256"]):
+        raise ValueError("wind-structure reference_coupled differs from the frozen COUPLED template input")
+    if artifacts["original_p"]["sha256"] != PR102_ORIGINAL_P_C2_SHA256:
+        raise ValueError("wind-structure original_p differs from the closed C2 PROJECTED input")
+    if (artifacts["boundary"]["sha256"] != PR102_BOUNDARY_C2_SHA256 or
+            artifacts["boundary"]["sha256"] != template_receipt["candidate_wrfbdy_sha256"]):
+        raise ValueError("wind-structure boundary differs from the closed C2 matched boundary")
+
+
+def _validate_pr102_preflight(path: Path, input_binding: dict, candidate_build: dict) -> dict:
+    path = path.resolve()
+    record = json.loads(path.read_text())
+    if (record.get("schema") != "pr102_execution_preflight_v1" or
+            record.get("status") != "READY_FOR_ROOT_REVIEW_NO_LAUNCH" or
+            record.get("candidate_input_receipt_sha256") != input_binding["receipt_sha256"] or
+            record.get("candidate_wrfinput_sha256") != input_binding["artifacts"]["candidate"]["sha256"] or
+            record.get("candidate_build_receipt_sha256") != candidate_build["receipt_sha256"] or
+            record.get("candidate_executable_sha256") != candidate_build["executable_sha256"]):
+        raise ValueError("PR102 prerequisite preflight does not bind this proposal and C2 executable")
+    dependencies = record.get("evidence_artifacts")
+    if not isinstance(dependencies, list) or not dependencies:
+        raise ValueError("PR102 prerequisite preflight has no candidate-bound evidence artifacts")
+    for row in dependencies:
+        artifact = Path(row["path"])
+        if sha256(artifact) != row["sha256"]:
+            raise ValueError(f"PR102 prerequisite evidence changed: {artifact}")
+    return {"path": str(path), "sha256": sha256(path),
+            "schema": record["schema"], "status": record["status"],
+            "evidence_artifacts": dependencies}
+
+
+def _validate_pr102_consumer_capture(path: Path, input_binding: dict) -> dict:
+    """Require the archived calc_ww consumer pass before a one-step candidate capture."""
+    path = path.resolve()
+    record = json.loads(path.read_text())
+    if (record.get("schema") != "pr102_native_consumer_check_v1" or
+            record.get("status") != "COMPLETE" or
+            record.get("native_consumer") != "module_big_step_utilities_em_mp_calc_ww_cp_" or
+            record.get("candidate_wrfinput_sha256") != input_binding["artifacts"]["candidate"]["sha256"] or
+            record.get("archive_member_sha256") !=
+            "8f7a0666664bdccb45c414cb9e6ec481f7daaad3fa6170f0d51f524515572343" or
+            record.get("compiler_profile_sha256") !=
+            "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"):
+        raise ValueError("PR102 archived native consumer receipt does not bind this candidate")
+    check = record.get("dry_mass_check", {})
+    if (check.get("schema") != "pr102_native_drymass_constraint_v1" or
+            check.get("status") != "PASS" or check.get("finite") is not True or
+            check.get("consumer") != "module_big_step_utilities_em_mp_calc_ww_cp_" or
+            check.get("comparison") != "candidate_minus_HYDRO" or check.get("units") != "Pa/s" or
+            check.get("composition_sha256") != input_binding["composition_sha256"] or
+            check.get("support_count", 0) <= 0):
+        raise ValueError("PR102 archived native consumer dry-mass check did not pass")
+    for gate_name in ("reference_constraint", "source_arithmetic"):
+        gate = check.get(gate_name, {})
+        values = tuple(gate.get(name) for name in (
+            "observed_l2_pa_s", "allowed_l2_pa_s", "observed_max_abs_pa_s", "allowed_max_abs_pa_s"))
+        if (gate.get("status") != "PASS" or
+                any(not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0
+                    for value in values) or
+                values[0] > values[1] or values[2] > values[3]):
+            raise ValueError(f"PR102 archived consumer {gate_name} gate did not pass")
+    dependencies = record.get("artifacts")
+    if not isinstance(dependencies, list) or not dependencies:
+        raise ValueError("PR102 archived native consumer receipt has no bound artifacts")
+    for row in dependencies:
+        artifact = Path(row["path"])
+        if sha256(artifact) != row.get("sha256"):
+            raise ValueError(f"PR102 archived consumer evidence changed: {artifact}")
+    return {"path": str(path), "sha256": sha256(path), "schema": record["schema"],
+            "status": record["status"], "artifacts": dependencies}
 
 
 def edit_namelist(text: str, seconds: int) -> str:
@@ -415,10 +534,15 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
             candidate_build_path: Path | None = None,
             disk_reference_receipt_path: Path | None = None,
             hydro_input_receipt_path: Path | None = None,
-            native_input_receipt_path: Path | None = None) -> dict:
+            native_input_receipt_path: Path | None = None,
+            wind_structure_input_receipt_path: Path | None = None,
+            pr102_preflight_path: Path | None = None,
+            pr102_consumer_receipt_path: Path | None = None) -> dict:
     snapshot_schedule(duration)
-    if hydro_input_receipt_path is not None and native_input_receipt_path is not None:
-        raise ValueError("HYDRO and native projection input receipts are mutually exclusive")
+    supplied_inputs = [path for path in (hydro_input_receipt_path, native_input_receipt_path,
+                                         wind_structure_input_receipt_path) if path is not None]
+    if len(supplied_inputs) > 1:
+        raise ValueError("source-bound input receipts are mutually exclusive")
     if arm == "HYDRO":
         if hydro_input_receipt_path is None or native_input_receipt_path is not None:
             raise ValueError("HYDRO requires its own input receipt")
@@ -426,6 +550,23 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         raise ValueError("HYDRO input receipt is only valid for the HYDRO arm")
     if native_input_receipt_path is not None and arm not in {"COUPLED", "PROJECTED"}:
         raise ValueError("native projection input receipt is only valid for COUPLED or PROJECTED")
+    structured_arms = {"STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"}
+    if wind_structure_input_receipt_path is not None and arm not in structured_arms:
+        raise ValueError("wind-structure input receipt is only valid for STRUCTURED arms")
+    if arm == "STRUCTURED" and (duration != 640 or wind_structure_input_receipt_path is None):
+        raise ValueError("STRUCTURED requires a source-bound wind proposal for the matched 640-second run")
+    if arm == "STRUCTURED" and (candidate_build_path is None or pr102_preflight_path is None):
+        raise ValueError("STRUCTURED requires the explicit C2 build and PR102 prerequisite preflight")
+    if arm == "STRUCTURED_CAPTURE" and (duration != 20 or wind_structure_input_receipt_path is None):
+        raise ValueError("STRUCTURED_CAPTURE requires a source-bound PR102 proposal for one 20-second step")
+    if arm == "STRUCTURED_CAPTURE" and (candidate_build_path is None or pr102_consumer_receipt_path is None):
+        raise ValueError("STRUCTURED_CAPTURE requires the explicit C2 build and passing archived consumer receipt")
+    if arm == "STRUCTURED_BASELINE20" and (duration != 20 or wind_structure_input_receipt_path is None):
+        raise ValueError("STRUCTURED_BASELINE20 requires a source-bound PR102 proposal for one 20-second step")
+    if arm == "STRUCTURED_BASELINE20" and candidate_build_path is None:
+        raise ValueError("STRUCTURED_BASELINE20 requires the explicit base C2 build receipt")
+    if arm != "STRUCTURED_CAPTURE" and pr102_consumer_receipt_path is not None:
+        raise ValueError("PR102 archived consumer receipt is only valid for STRUCTURED_CAPTURE")
     if arm == "PROJECTED" and native_input_receipt_path is None:
         raise ValueError("PROJECTED requires a source-bound native projection input receipt")
     if arm == "PROJECTED" and candidate_build_path is None:
@@ -434,7 +575,8 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         raise ValueError("PROJECTED is limited to the matched 640-second run")
     if native_input_receipt_path is not None and arm == "COUPLED" and duration != 20:
         raise ValueError("COUPLED native projection input is limited to one 20-second step")
-    template_arm = "OFF" if arm == "HYDRO" else "COUPLED" if arm == "PROJECTED" else arm
+    template_arm = "OFF" if arm == "HYDRO" else "COUPLED" if arm in {
+        "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"} else arm
     runtime = Path(str(RUNTIME).format(arm=template_arm))
     receipt_path = Path(str(RUN_RECEIPT).format(arm=template_arm))
     receipt = json.loads(receipt_path.read_text())
@@ -451,19 +593,34 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         raise ValueError(f"{arm}: frozen inputs changed: {bad}")
     candidate_build = (_candidate_build_binding(candidate_build_path)
                        if candidate_build_path is not None else None)
+    if arm == "STRUCTURED_BASELINE20":
+        _require_pr102_base_c2(candidate_build)
     candidate_input = (_hydro_input_binding(hydro_input_receipt_path)
                        if hydro_input_receipt_path is not None else
                        _native_input_binding(native_input_receipt_path)
-                       if native_input_receipt_path is not None else None)
+                       if native_input_receipt_path is not None else
+                       _wind_structure_input_binding(wind_structure_input_receipt_path)
+                       if wind_structure_input_receipt_path is not None else None)
     if (candidate_input and candidate_input.get("binding_kind", "hydro") == "hydro" and
             candidate_input["artifacts"]["wrfbdy"]["sha256"] != receipt["candidate_wrfbdy_sha256"]):
         raise ValueError("HYDRO boundary differs from the frozen matched boundary")
     if candidate_input and candidate_input.get("binding_kind") == "native_uv_projection":
         _validate_native_template(candidate_input, receipt)
         wrfinput_sha256 = candidate_input["artifacts"]["candidate"]["sha256"]
+    elif candidate_input and candidate_input.get("binding_kind") == "wind_structure":
+        _validate_wind_structure_template(candidate_input, receipt)
+        wrfinput_sha256 = candidate_input["artifacts"]["candidate"]["sha256"]
     else:
         wrfinput_sha256 = (candidate_input["artifacts"]["wrfinput"]["sha256"] if candidate_input
                           else receipt["candidate_wrfinput_sha256"])
+    pr102_preflight = None
+    if arm == "STRUCTURED":
+        pr102_preflight = _validate_pr102_preflight(
+            pr102_preflight_path, candidate_input, candidate_build)
+    pr102_consumer = None
+    if arm == "STRUCTURED_CAPTURE":
+        pr102_consumer = _validate_pr102_consumer_capture(
+            pr102_consumer_receipt_path, candidate_input)
     namelist = runtime / "namelist.input"
     original_namelist = namelist.read_text()
     edited = edit_namelist(original_namelist, duration)
@@ -489,6 +646,8 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         "source_receipt_sha256": sha256(receipt_path),
         "executable_sha256": sha256(exe), "candidate_wrfinput_sha256": wrfinput_sha256,
         "template_arm": template_arm, "candidate_input_binding": candidate_input,
+        "pr102_execution_preflight": pr102_preflight,
+        "pr102_native_consumer": pr102_consumer,
         "baseline_frozen_executable_sha256": sha256(exe), "candidate_build": candidate_build,
         "candidate_wrfbdy_sha256": receipt["candidate_wrfbdy_sha256"], "input_file_count": len(inputs),
         "input_hashes": inputs, "source_namelist_sha256": sha256(namelist),
@@ -524,7 +683,7 @@ def _stage(prepared: dict, out: Path) -> Path:
         staged_input = stage / "wrfinput_d01"
         staged_input.unlink()
         input_artifact = (candidate_input["artifacts"]["candidate"]
-                          if candidate_input.get("binding_kind") == "native_uv_projection"
+                          if candidate_input.get("binding_kind") in {"native_uv_projection", "wind_structure"}
                           else candidate_input["artifacts"]["wrfinput"])
         shutil.copy2(input_artifact["path"], staged_input)
         if sha256(staged_input) != prepared["candidate_wrfinput_sha256"]:
@@ -732,16 +891,19 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
             issues.append("HYDRO launch input provenance differs from preflight")
     elif binding_kind == "hydro":
         issues.append("HYDRO source-bound input is only valid for the HYDRO arm")
-    elif binding_kind == "native_uv_projection":
+    elif binding_kind in {"native_uv_projection", "wind_structure"}:
         template_receipt = json.loads(Path(preflight["source_receipt"]).read_text())
         try:
-            _validate_native_template(candidate_input, template_receipt)
+            if binding_kind == "wind_structure":
+                _validate_wind_structure_template(candidate_input, template_receipt)
+            else:
+                _validate_native_template(candidate_input, template_receipt)
         except (KeyError, ValueError) as exc:
             issues.append(str(exc))
-        projected_arm = arm == "PROJECTED"
-        expected_duration = 640 if projected_arm else 20
+        long_arm = arm in {"PROJECTED", "STRUCTURED"}
+        expected_duration = 640 if long_arm else 20
         if (duration != expected_duration or preflight.get("duration_seconds") != expected_duration or
-                arm not in {"COUPLED", "PROJECTED"} or candidate_input.get("role") != "COUPLED" or
+                arm not in {"COUPLED", "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"} or candidate_input.get("role") != "COUPLED" or
                 preflight.get("template_arm") != "COUPLED" or original.get("arm") != arm or
                 original.get("candidate_input_binding") != candidate_input or
                 original.get("candidate_wrfinput_sha256") != preflight.get("candidate_wrfinput_sha256") or
@@ -752,9 +914,34 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
         issues.append("unknown source-bound input kind")
     if arm == "PROJECTED" and binding_kind != "native_uv_projection":
         issues.append("PROJECTED arm requires its source-bound native projection input")
+    if arm in {"STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"} and binding_kind != "wind_structure":
+        issues.append(f"{arm} arm requires its source-bound PR102 wind proposal")
     candidate_build = preflight.get("candidate_build")
-    if arm == "PROJECTED" and (not candidate_build or preflight.get("template_arm") != "COUPLED"):
-        issues.append("PROJECTED requires the explicit C2 candidate build and COUPLED template")
+    if arm in {"PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"} and (not candidate_build or preflight.get("template_arm") != "COUPLED"):
+        issues.append(f"{arm} requires the explicit C2 candidate build and COUPLED template")
+    if arm == "STRUCTURED_BASELINE20":
+        if duration != 20:
+            issues.append("STRUCTURED_BASELINE20 is limited to one 20-second step")
+        try:
+            _require_pr102_base_c2(candidate_build)
+        except (KeyError, TypeError, ValueError) as exc:
+            issues.append(str(exc))
+    if arm == "STRUCTURED":
+        pin = preflight.get("pr102_execution_preflight") or {}
+        try:
+            gate = _validate_pr102_preflight(Path(pin["path"]), candidate_input, candidate_build)
+            if gate != pin:
+                issues.append("PR102 prerequisite preflight changed or mismatches the STRUCTURED run")
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+            issues.append("PR102 prerequisite preflight is missing or invalid")
+    if arm == "STRUCTURED_CAPTURE":
+        pin = preflight.get("pr102_native_consumer") or {}
+        try:
+            gate = _validate_pr102_consumer_capture(Path(pin["path"]), candidate_input)
+            if gate != pin:
+                issues.append("PR102 archived consumer receipt changed or mismatches STRUCTURED_CAPTURE")
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+            issues.append("PR102 archived consumer receipt is missing or invalid")
     candidate_build_unchanged = True
     if candidate_build_path is not None and (not candidate_build or
                                               Path(candidate_build["receipt_path"]) != candidate_build_path.resolve()):
@@ -918,14 +1105,18 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
         candidate_build_path: Path | None = None,
         disk_reference_receipt_path: Path | None = None,
         hydro_input_receipt_path: Path | None = None,
-        native_input_receipt_path: Path | None = None) -> dict:
+        native_input_receipt_path: Path | None = None,
+        wind_structure_input_receipt_path: Path | None = None,
+        pr102_preflight_path: Path | None = None,
+        pr102_consumer_receipt_path: Path | None = None) -> dict:
     runner_path = Path(__file__).resolve()
     runner_sha256_at_entry = sha256(runner_path)
     schedule = snapshot_schedule(duration)
     out.mkdir(parents=True, exist_ok=False)
     prepared = prepare(arm, duration, out, safety_fraction, candidate_build_path,
                        disk_reference_receipt_path, hydro_input_receipt_path,
-                       native_input_receipt_path)
+                       native_input_receipt_path, wind_structure_input_receipt_path,
+                       pr102_preflight_path, pr102_consumer_receipt_path)
     (out / "preflight.json").write_text(json.dumps({k: v for k, v in prepared.items()
                                                      if k != "namelist_text"}, indent=2) + "\n")
     if prepared["disk_guard"]["status"] != "PASS":
@@ -945,6 +1136,17 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     candidate_input = prepared.get("candidate_input_binding")
     if not _input_binding_unchanged(candidate_input):
         raise RuntimeError("source-bound input identity changed after preflight")
+    if arm == "STRUCTURED":
+        gate = prepared["pr102_execution_preflight"]
+        current_gate = _validate_pr102_preflight(
+            Path(gate["path"]), candidate_input, candidate_build)
+        if current_gate != gate:
+            raise RuntimeError("PR102 prerequisite preflight changed after preparation")
+    if arm == "STRUCTURED_CAPTURE":
+        gate = prepared["pr102_native_consumer"]
+        current_gate = _validate_pr102_consumer_capture(Path(gate["path"]), candidate_input)
+        if current_gate != gate:
+            raise RuntimeError("PR102 archived consumer receipt changed after preparation")
     launch_provenance = {"launch_runner_source_path": str(runner_path),
                          "launch_runner_source_sha256": runner_sha256_at_entry,
                          "diagnostic_environment": prepared["diagnostic_environment"]}
@@ -1018,9 +1220,15 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
                 executed_executable_sha256 == expected_executable_sha256 and
                 candidate_build_unchanged and candidate_input_unchanged and
                 set(schedule.values()).issubset(snapshots.get("snapshots", {})))
+    identity = (candidate_build or {}).get("identity", "")
+    run_identity = ("PR102 same-input C2 baseline executable, 20-second comparator"
+                    if arm == "STRUCTURED_BASELINE20" else
+                    "PR102 C2 source-capture diagnostic overlay"
+                    if "source-capture diagnostic overlay" in identity else
+                    "PR87 selected-object native candidate" if candidate_build else
+                    "PR86 frozen executable run")
     receipt = {"arm": arm, "status": "COMPLETE" if complete else "INCOMPLETE",
-               "run_identity": ("PR87 selected-object native candidate" if candidate_build
-                                else "PR86 frozen executable run"),
+               "run_identity": run_identity,
                "returncode": process.returncode, "wall_seconds": elapsed, "model_timestamps": times,
                "timestep_count": len(times), "earliest_fatal": fatal[0] if fatal else None,
                "fatal_lines": fatal[:100], "snapshots": snapshots,
@@ -1055,7 +1263,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--arm", choices=("OFF", "HYDRO", "COUPLED", "PROJECTED"), required=True)
+    parser.add_argument("--arm", choices=("OFF", "HYDRO", "COUPLED", "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"), required=True)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--duration-seconds", type=int, default=600)
     parser.add_argument("--execute", action="store_true", help="launch after hash and disk checks")
@@ -1066,6 +1274,12 @@ def main() -> int:
                         help="source-bound HYDRO native input; OFF ancillary template remains immutable")
     parser.add_argument("--native-input-receipt", type=Path,
                         help="source-bound PR99 COUPLED native input proposal")
+    parser.add_argument("--wind-structure-input-receipt", type=Path,
+                        help="source-bound PR102 COUPLED wind-structure proposal")
+    parser.add_argument("--pr102-preflight", type=Path,
+                        help="closed candidate-bound PR102 consumer/source-capture prerequisite preflight")
+    parser.add_argument("--pr102-consumer-receipt", type=Path,
+                        help="passing archived PR102 calc_ww consumer receipt for STRUCTURED_CAPTURE")
     parser.add_argument("--safety-fraction", type=float, default=0.85)
     parser.add_argument("--disk-reference-receipt", type=Path,
                         help="calibrate the disk guard from a successful same-input run receipt")
@@ -1078,11 +1292,14 @@ def main() -> int:
         parser.error("--finalize uses the launch-bound HYDRO receipt in preflight.json")
     if args.finalize and args.native_input_receipt is not None:
         parser.error("--finalize uses the launch-bound native input receipt in preflight.json")
+    if args.finalize and args.wind_structure_input_receipt is not None:
+        parser.error("--finalize uses the launch-bound wind-structure input receipt in preflight.json")
     out = args.output or DEFAULT_OUT / args.arm
     result = (finalize_existing_run(args.arm, out, args.duration_seconds, args.candidate_build) if args.finalize else
               run(args.arm, out, args.duration_seconds, args.execute, args.safety_fraction,
                   args.candidate_build, args.disk_reference_receipt, args.hydro_input_receipt,
-                  args.native_input_receipt))
+                  args.native_input_receipt, args.wind_structure_input_receipt,
+                  args.pr102_preflight, args.pr102_consumer_receipt))
     print(json.dumps({k: v for k, v in result.items() if k != "input_hashes"}, indent=2))
     return 0
 

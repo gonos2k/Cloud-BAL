@@ -1,0 +1,29 @@
+{
+  "schema": "pr102_native_wind_structure_policy_v1",
+  "classification": "ONE_RESEARCH_INPUT_CANDIDATE_NO_STATISTICAL_OR_PHYSICAL_APPROVAL",
+  "reference": "HYDRO",
+  "raw_increment": "d = original COUPLED U/V minus HYDRO U/V on the existing free faces",
+  "center": "bP = independently verified continuous nearest equal-face Euclidean projection of d using original PR99 frozen-carrier per-layer A; its stored wind must reproduce archived PROJECTED byte-for-byte",
+  "control_support": "Existing receipt-bound fixed five-cell QC buffer; a free U/V face has both adjacent mass columns inside; every exterior horizontal increment remains zero at all levels",
+  "equality": "A_k b_k = 0 at all native levels; preserve the nonzero HYDRO reference divergence",
+  "distance_norm": "Global equal-free-face Euclidean velocity norm over both components and all native levels; squared units m2 s-2, inherited from PR99 projection; not a kinetic-energy or covariance norm",
+  "additional_change_budget": "Delta = norm(d - bP); require 0 < Delta < norm(bP); norm(b - bP) <= Delta; total source distance <= sqrt(2)*Delta by projection orthogonality",
+  "storage_reserve": "Before solve, bound REAL32 round-to-nearest wind error on the allowed componentwise box HYDRO + bP +/- Delta; subtract its global L2 upper bound from Delta; require positive continuous radius. Check actual stored wind readback strictly against the original Delta",
+  "objective": "Minimize integral of squared geometric finite differences of the additional grid-component wind, not the total HYDRO wind",
+  "horizontal_edges": "Each same-component neighboring face pair uses physical distance DX/mean(MAPFAC_*X) or DY/mean(MAPFAC_*Y); edge weight is mean geometric face dual volume divided by distance squared; include free-to-fixed-zero boundary links",
+  "vertical_edges": "Same native face between adjacent mass levels; center heights from PH and PHB read separately and pinned source gravity; edge weight is mean geometric face dual volume divided by center-height separation squared; natural end levels, no invented vertical ghosts",
+  "dual_geometry": "Face area DX*DY/(MAPFAC_*X*MAPFAC_*Y), face depth from adjacent-column average of native interface heights; finite, positive metrics/depths and monotone heights required",
+  "objective_units": "Unnormalized squared-gradient functional m3 s-2; horizontal and vertical terms have the same units. Optional one positive global trace normalization changes only objective scale, not the constrained minimizer",
+  "operator_limit": "A geometric roughness proxy for native grid components; not the complete WRF diffusion, covariant strain, momentum or energy operator",
+  "weight_selection": "No forecast-dependent parameter search or response-fit weights. A bracketed trust-region multiplier is determined solely by the fixed distance constraint; it is not an experimental candidate sweep",
+  "background_error_authority": "No case-bound authorized wind covariance or spatial correlation scale identified; the inherited projection-displacement envelope is an engineering research bound, not a statistical prior or observation-error acceptance threshold",
+  "candidate_admission": [
+    "All variables, dimension definitions, global attributes and variable metadata outside U/V values unchanged from original PROJECTED",
+    "Verify full A feasibility, nearest-projection normal-space condition, trust region, storage bounds and nonzero increment",
+    "Verify archived native calc_ww_cp on exact candidate and inspect actual C2 first mass/momentum source response before640 launch",
+    "Reuse existing closed C2 OFF/HYDRO/COUPLED/PROJECTED 640 controls with identical exe/boundary/namelist; no model-physics or input-thermodynamic change"
+  ],
+  "assessment": "Report predeclared fixed613support and five-cell buffer, native first-step source metrics and common history times, without redefining favorable regions or using OFF as truth",
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED"
+}

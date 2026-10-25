@@ -1,0 +1,1139 @@
+--- /var/tmp/pr99-c2-source.2n00oy19/module_em.F
++++ PR102/module_em.F
+@@ -1813,6 +1813,21 @@
+ 
+    IF( (rk_step == rk_order) .and. ( adv_opt == WENO_MOM ) ) THEN
+ 
++      CALL pr98_dump2('geom_msfuy',msfuy,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvx_inv',msfvx_inv,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfty',msfty,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfux',msfux,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvx',msfvx,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvy',msfvy,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msftx',msftx,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_mut',mut,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_mu',mu,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_muu',muu,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_muv',muv,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump1('geom_c1h',c1h,kms,kme,kts,kte)
++      CALL pr98_dump1('geom_c2h',c2h,kms,kme,kts,kte)
++      CALL pr98_dump3('advu_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+      CALL advect_weno_u ( u, u , ru_tend, ru, rv, wwE,  &
+                           c1h, c2h,                     &
+                           mut, time_step, config_flags, &
+@@ -1822,9 +1837,25 @@
+                           ids, ide, jds, jde, kds, kde, &
+                           ims, ime, jms, jme, kms, kme, &
+                           its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advu_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+    ELSE
+ 
++      CALL pr98_dump2('geom_msfuy',msfuy,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvx_inv',msfvx_inv,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfty',msfty,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfux',msfux,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvx',msfvx,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msfvy',msfvy,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_msftx',msftx,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_mut',mut,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_mu',mu,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_muu',muu,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump2('geom_muv',muv,ims,ime,jms,jme,its,ite,jts,jte)
++      CALL pr98_dump1('geom_c1h',c1h,kms,kme,kts,kte)
++      CALL pr98_dump1('geom_c2h',c2h,kms,kme,kts,kte)
++      CALL pr98_dump3('advu_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+      CALL advect_u ( u, u , ru_tend, ru, rv, wwE,  &
+                      c1h, c2h,                     &
+                      mut, time_step, config_flags, &
+@@ -1834,6 +1865,7 @@
+                      ids, ide, jds, jde, kds, kde, &
+                      ims, ime, jms, jme, kms, kme, &
+                      its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advu_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+    ENDIF
+ 
+    IF( ieva ) THEN
+@@ -1854,6 +1886,8 @@
+ 
+    IF( (rk_step == rk_order) .and. ( adv_opt == WENO_MOM ) ) THEN
+ 
++      CALL pr98_dump3('advv_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+       CALL advect_weno_v ( v, v , rv_tend, ru, rv, wwE,  &
+                            c1h, c2h,                     &
+                            mut, time_step, config_flags, &
+@@ -1863,9 +1897,12 @@
+                            ids, ide, jds, jde, kds, kde, &
+                            ims, ime, jms, jme, kms, kme, &
+                            its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advv_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+    ELSE
+ 
++      CALL pr98_dump3('advv_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+      CALL advect_v ( v, v , rv_tend, ru, rv, wwE,  &
+                      c1h, c2h,                     &
+                      mut, time_step, config_flags, &
+@@ -1875,6 +1912,7 @@
+                      ids, ide, jds, jde, kds, kde, &
+                      ims, ime, jms, jme, kms, kme, &
+                      its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advv_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+    ENDIF
+ 
+    IF( ieva ) THEN
+@@ -1897,6 +1935,8 @@
+ 
+      IF( (rk_step == rk_order) .and. ( adv_opt == WENO_MOM ) ) THEN
+ 
++      CALL pr98_dump3('advw_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+        CALL advect_weno_w ( w, w, rw_tend, ru, rv, wwE,   &
+                             c1h, c2h,                     &
+                             mut, time_step, config_flags, &
+@@ -1906,9 +1946,12 @@
+                             ids, ide, jds, jde, kds, kde, &
+                             ims, ime, jms, jme, kms, kme, &
+                             its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advw_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+      ELSE
+-     
++
++      CALL pr98_dump3('advw_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++           
+        CALL advect_w ( w, w, rw_tend, ru, rv, wwE,   &
+                        c1h, c2h,                     &
+                        mut, time_step, config_flags, &
+@@ -1918,6 +1961,7 @@
+                        ids, ide, jds, jde, kds, kde, &
+                        ims, ime, jms, jme, kms, kme, &
+                        its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('advw_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+      ENDIF
+ 
+    ENDIF  ! non-hydrostatic
+@@ -2037,6 +2081,9 @@
+      
+    ENDIF  ! IEVA
+ 
++      CALL pr98_dump3('pgrad_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('pgrad_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+    CALL horizontal_pressure_gradient( ru_tend,rv_tend,                 &
+                                        ph,alt,p,pb,al,php,cqu,cqv,     &
+                                        muu,muv,mu,c1h,c2h,fnm,fnp,rdnw,&
+@@ -2048,6 +2095,8 @@
+                                        ids, ide, jds, jde, kds, kde,   &
+                                        ims, ime, jms, jme, kms, kme,   &
+                                        its, ite, jts, jte, kts, kte   )
++      CALL pr98_dump3('pgrad_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('pgrad_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+    IF (non_hydrostatic) THEN
+         CALL pg_buoy_w( rw_tend, p, cqw, mu, mub,       &
+@@ -2069,6 +2118,10 @@
+ 
+    IF(config_flags%pert_coriolis) THEN
+ 
++      CALL pr98_dump3('coriolis_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+         CALL perturbation_coriolis ( ru, rv, rw,                   &
+                                      ru_tend,  rv_tend,  rw_tend,  &
+                                      config_flags,                 &
+@@ -2080,8 +2133,15 @@
+                                      ids, ide, jds, jde, kds, kde, &
+                                      ims, ime, jms, jme, kms, kme, &
+                                      its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('coriolis_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+    ELSE
+-        CALL coriolis ( ru, rv, rw,                   &
++
++      CALL pr98_dump3('coriolis_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++              CALL coriolis ( ru, rv, rw,                   &
+                         ru_tend,  rv_tend,  rw_tend,  &
+                         config_flags,                 &
+                         msftx, msfty, msfux, msfuy,   &
+@@ -2090,9 +2150,16 @@
+                         ids, ide, jds, jde, kds, kde, &
+                         ims, ime, jms, jme, kms, kme, &
+                         its, ite, jts, jte, kts, kte )
++      CALL pr98_dump3('coriolis_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('coriolis_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+    END IF
+ 
++      CALL pr98_dump3('curvature_ru_tend_in',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('curvature_rv_tend_in',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('curvature_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+    CALL curvature ( ru, rv, rw, u, v, w,            &
+                      ru_tend,  rv_tend,  rw_tend,    &
+                      config_flags,                   &
+@@ -2102,6 +2169,9 @@
+                      ids, ide, jds, jde, kds, kde,   &
+                      ims, ime, jms, jme, kms, kme,   &
+                      its, ite, jts, jte, kts, kte   )
++      CALL pr98_dump3('curvature_ru_tend_out',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('curvature_rv_tend_out',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      CALL pr98_dump3('curvature_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+ ! Damping option added for Held-Suarez test (also uses lw option HELDSUAREZ)
+ 
+@@ -2123,7 +2193,9 @@
+   forward_step: IF( rk_step == 1 ) THEN
+ 
+     diff_opt1 : IF (config_flags%diff_opt .eq. 1) THEN
+-   
++
++      CALL pr98_dump3('hdifu_ru_tendf_in',ru_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++         
+         CALL horizontal_diffusion ('u', u, ru_tendf, mut,               &
+                                         c1h, c2h, config_flags,         &
+                                         msfux, msfuy, msfvx, msfvx_inv, &
+@@ -2132,7 +2204,10 @@
+                                         ids, ide, jds, jde, kds, kde,   &
+                                         ims, ime, jms, jme, kms, kme,   &
+                                         its, ite, jts, jte, kts, kte   )
+-
++      CALL pr98_dump3('hdifu_ru_tendf_out',ru_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++
++      CALL pr98_dump3('hdifv_rv_tendf_in',rv_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+         CALL horizontal_diffusion ('v', v, rv_tendf, mut,               &
+                                         c1h, c2h, config_flags,         &
+                                         msfux, msfuy, msfvx, msfvx_inv, &
+@@ -2141,7 +2216,10 @@
+                                         ids, ide, jds, jde, kds, kde,   &
+                                         ims, ime, jms, jme, kms, kme,   &
+                                         its, ite, jts, jte, kts, kte   )
+-
++      CALL pr98_dump3('hdifv_rv_tendf_out',rv_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++
++      CALL pr98_dump3('hdifw_rw_tendf_in',rw_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+         CALL horizontal_diffusion ('w', w, rw_tendf, mut,               &
+                                         c1f, c2f, config_flags,         &
+                                         msfux, msfuy, msfvx, msfvx_inv, &
+@@ -2150,6 +2228,7 @@
+                                         ids, ide, jds, jde, kds, kde,   &
+                                         ims, ime, jms, jme, kms, kme,   &
+                                         its, ite, jts, jte, kts, kte   )
++      CALL pr98_dump3('hdifw_rw_tendf_out',rw_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+         khdq = 3.*khdif
+         CALL horizontal_diffusion_3dmp ( 'm', t, t_tendf, mut,            &
+@@ -2164,19 +2243,25 @@
+ 
+         pbl_test : IF (config_flags%bl_pbl_physics .eq. 0) THEN
+ 
++      CALL pr98_dump3('vdifu_ru_tendf_in',ru_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+           CALL vertical_diffusion_u ( u, ru_tendf, config_flags,      &
+                                       u_base, c1h, c2h,               &
+                                       alt, muu, rdn, rdnw, kvdif,     &
+                                       ids, ide, jds, jde, kds, kde,   &
+                                       ims, ime, jms, jme, kms, kme,   &
+                                       its, ite, jts, jte, kts, kte   )
+-
++      CALL pr98_dump3('vdifu_ru_tendf_out',ru_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++
++      CALL pr98_dump3('vdifv_rv_tendf_in',rv_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++      
+           CALL vertical_diffusion_v ( v, rv_tendf, config_flags,      &
+                                       v_base, c1h, c2h,               &
+                                       alt, muv, rdn, rdnw, kvdif,     &
+                                       ids, ide, jds, jde, kds, kde,   &
+                                       ims, ime, jms, jme, kms, kme,   &
+                                       its, ite, jts, jte, kts, kte   )
++      CALL pr98_dump3('vdifv_rv_tendf_out',rv_tendf,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ 
+           IF (non_hydrostatic)                                           &
+           CALL vertical_diffusion ( 'w', w, rw_tendf, config_flags,      &
+@@ -2275,6 +2360,10 @@
+ 
+   END IF forward_step
+ 
++
++   CALL pr98_dump3('dyn_ru_final',ru_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++   CALL pr98_dump3('dyn_rv_final',rv_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++   CALL pr98_dump3('dyn_rw_final',rw_tend,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
+ END SUBROUTINE rk_tendency
+ 
+ !-------------------------------------------------------------------------------
+@@ -6365,3 +6454,817 @@
+ 
+ END SUBROUTINE rk_update_joint_moments
+ END MODULE module_em
++
++! Read-only cloud-pair summaries at completed state boundaries.
++subroutine pr87_cloud_cycle(label, step, ims, ime, jms, jme, kms, kme, &
++                           its, ite, jts, jte, kts, kte, qc, nc)
++  use, intrinsic :: iso_fortran_env, only: real64, int32
++  use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
++  implicit none
++  character(*), intent(in) :: label
++  integer, intent(in) :: step, ims, ime, jms, jme, kms, kme
++  integer, intent(in) :: its, ite, jts, jte, kts, kte
++  real, intent(in) :: qc(ims:ime,kms:kme,jms:jme), nc(ims:ime,kms:kme,jms:jme)
++  integer :: i, j, k, unit, status, nonfinite, negative, mass_only, number_only
++  integer :: first(3), probe(3)
++  character(80) :: text
++  real(real64) :: first_q, first_n
++
++  nonfinite=0; negative=0; mass_only=0; number_only=0
++  first=0; first_q=0; first_n=0
++  do j=jts,jte
++    do i=its,ite
++      do k=kts,kte
++        if (.not.ieee_is_finite(qc(i,k,j)) .or. .not.ieee_is_finite(nc(i,k,j))) then
++          nonfinite=nonfinite+1
++          cycle
++        endif
++        if (qc(i,k,j)<0 .or. nc(i,k,j)<0) negative=negative+1
++        if (qc(i,k,j)>0 .and. nc(i,k,j)==0) mass_only=mass_only+1
++        if (qc(i,k,j)==0 .and. nc(i,k,j)>0) number_only=number_only+1
++        if (all(first==0)) then
++          if ((qc(i,k,j)>0 .and. nc(i,k,j)==0) .or. &
++              (qc(i,k,j)==0 .and. nc(i,k,j)>0)) then
++            first=(/i,j,k/)
++            first_q=real(qc(i,k,j),real64); first_n=real(nc(i,k,j),real64)
++          endif
++        endif
++      enddo
++    enddo
++  enddo
++  open(newunit=unit,file='pr87_cloud_cycle.log',status='unknown',position='append',iostat=status)
++  if (status/=0) error stop 'PR87 cycle log open failed'
++  write(unit,'(a,1x,a,11(1x,i0),2(1x,es24.16))') 'PR87_CLOUD',trim(label), &
++       step,its,ite,jts,jte,kts,kte,nonfinite,negative,mass_only,number_only,first_q,first_n
++  write(unit,'(a,1x,a,4(1x,i0),2(1x,es24.16))') 'PR87_FIRST',trim(label), &
++       step,first,first_q,first_n
++  call get_environment_variable('PR87_PROBE',text,status=status)
++  if (status==0) then
++    read(text,*,iostat=status) probe
++    if (status/=0) error stop 'PR87 invalid probe coordinates'
++    i=probe(1); j=probe(2); k=probe(3)
++    if (i>=its .and. i<=ite .and. j>=jts .and. j<=jte .and. k>=kts .and. k<=kte) then
++      write(unit,'(a,1x,a,4(1x,i0),2(1x,es24.16),2(1x,z8.8))') &
++           'PR87_PROBE',trim(label),step,probe,real(qc(i,k,j),real64),real(nc(i,k,j),real64), &
++           transfer(qc(i,k,j),0_int32),transfer(nc(i,k,j),0_int32)
++    endif
++  endif
++  close(unit,iostat=status)
++  if (status/=0) error stop 'PR87 cycle log close failed'
++end subroutine pr87_cloud_cycle
++
++subroutine pr90_rain_public_store_diagnostic(q_internal, nvol_internal, dry_density, pidnr, power, &
++                                  lambda_min, lambda_max, q_public, n_specific, valid, &
++                                  delta_q, delta_n, adjustment, failure_reason, diagnostic, stage, core_stage)
++  use iso_fortran_env, only: real32, real64, int32, int64
++  use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
++  use cloud_bal_joint_transport, only: joint_moment_store
++  implicit none
++    ! Convert the internal KDM6 volume number to public specific number, then store
++    ! both moments under the exact source-derived R32 volume-number contract.
++    real(real32), intent(in) :: q_internal, nvol_internal, dry_density
++    real(real32), intent(in) :: pidnr, power, lambda_min, lambda_max
++    real(real32), intent(out) :: q_public, n_specific
++    logical, intent(out) :: valid
++    real(real64), intent(out) :: delta_q, delta_n
++    integer, intent(out) :: adjustment
++    character(len=*), intent(out) :: failure_reason
++    real(real64), intent(out) :: diagnostic(12)
++    integer, intent(out) :: stage
++    integer, intent(out) :: core_stage
++
++    real(real64) :: q64, n64, rho64, pid64, power64, lambda_min64, lambda_max64
++    real(real64) :: minimum_ratio, maximum_ratio, volume_bounds(2)
++    real(real64) :: qstored, nstored
++    real(real32) :: stored_q, stored_n
++    integer :: jointstore_stage
++
++    q_public = -1.0_real32
++    n_specific = -1.0_real32
++    valid = .false.
++    delta_q = 0.0_real64
++    delta_n = 0.0_real64
++    adjustment = 0
++    failure_reason = 'none'
++    diagnostic = 0.0_real64
++    diagnostic(3) = -huge(0.0_real64) ! Sentinel: no safe REAL32 Nspec conversion available.
++    diagnostic(12) = -huge(0.0_real64) ! Sentinel: reconverted N-volume is unavailable.
++    stage = 0
++    core_stage = -1
++
++    if (.not.all(ieee_is_finite([q_internal,nvol_internal,dry_density,pidnr,power, &
++                                 lambda_min,lambda_max]))) then
++      failure_reason = 'input_nonfinite'
++      return
++    end if
++    stage = 1
++    if (q_internal < 0.0_real32 .or. nvol_internal < 0.0_real32 .or. &
++        dry_density <= 0.0_real32 .or. pidnr <= 0.0_real32 .or. &
++        power <= 0.0_real32 .or. power > 8.0_real32 .or. &
++        lambda_min <= 0.0_real32 .or. lambda_max < lambda_min) then
++      failure_reason = 'input_range'
++      return
++    end if
++    stage = 2
++
++    rho64 = real(dry_density,real64)
++    pid64 = real(pidnr,real64)
++    power64 = real(power,real64)
++    lambda_min64 = real(lambda_min,real64)
++    lambda_max64 = real(lambda_max,real64)
++    if (power64*log(lambda_min64) < log(real(tiny(0.0_real32),real64)) .or. &
++        power64*log(lambda_max64) > log(real(huge(0.0_real32),real64))) then
++      failure_reason = 'lambda_power_range'
++      return
++    end if
++
++    volume_bounds(1) = (rho64*lambda_min64**power64)/pid64
++    volume_bounds(2) = (rho64*lambda_max64**power64)/pid64
++    minimum_ratio = pid64/(lambda_max64**power64)
++    maximum_ratio = pid64/(lambda_min64**power64)
++    if (.not.all(ieee_is_finite([volume_bounds,minimum_ratio,maximum_ratio])) .or. &
++        volume_bounds(1) <= 0.0_real64 .or. volume_bounds(2) < volume_bounds(1) .or. &
++        volume_bounds(2) > real(huge(0.0_real32),real64) .or. &
++        maximum_ratio < minimum_ratio) then
++      failure_reason = 'volume_bound_invalid'
++      return
++    end if
++    stage = 3
++    diagnostic(4:8) = [rho64,minimum_ratio,maximum_ratio,volume_bounds(1),volume_bounds(2)]
++
++    q64 = real(q_internal,real64)
++    diagnostic(1) = q64
++    diagnostic(9:10) = [volume_bounds(1)*q64,volume_bounds(2)*q64]
++    stage = 4
++    if (real(nvol_internal,real64) < volume_bounds(1)*q64 .or. &
++        real(nvol_internal,real64) > volume_bounds(2)*q64) then
++      failure_reason = 'internal_volume_precheck'
++      diagnostic(2) = real(nvol_internal,real64)/rho64
++      if (ieee_is_finite(diagnostic(2))) then
++        if (diagnostic(2) >= 0.0_real64 .and. &
++            diagnostic(2) <= real(huge(0.0_real32),real64)) then
++          diagnostic(3) = real(real(diagnostic(2),real32),real64)
++          diagnostic(11) = diagnostic(3)*rho64
++          if (ieee_is_finite(diagnostic(11))) then
++            if (diagnostic(11) >= 0.0_real64 .and. &
++                diagnostic(11) <= real(huge(0.0_real32),real64)) &
++              diagnostic(12) = real(real(diagnostic(11),real32),real64)
++          end if
++        end if
++      end if
++      return
++    end if
++    n64 = real(nvol_internal,real64)/rho64
++    diagnostic(2) = n64
++    stage = 5
++    if (.not.ieee_is_finite(n64)) then
++      failure_reason = 'unit_division'
++      return
++    end if
++    failure_reason = 'jointstore_failed'
++    stage = 6
++    jointstore_stage = -1
++    call joint_moment_store(q64,n64,dry_density,minimum_ratio,maximum_ratio,.true., &
++                            stored_q,stored_n,adjustment,valid, &
++                            allow_normal_q_adjustment=.true., &
++                            allow_joint_quantum_absence=.true., &
++                            volume_number_bounds=volume_bounds, &
++                            failure_stage=jointstore_stage)
++    core_stage = jointstore_stage
++    if (.not.valid) then
++      adjustment = 0
++      if (ieee_is_finite(n64)) then
++        if (n64 >= 0.0_real64 .and. n64 <= real(huge(0.0_real32),real64)) then
++          diagnostic(3) = real(real(n64,real32),real64)
++          diagnostic(11) = diagnostic(3)*rho64
++          if (ieee_is_finite(diagnostic(11))) then
++            if (diagnostic(11) >= 0.0_real64 .and. &
++                diagnostic(11) <= real(huge(0.0_real32),real64)) &
++              diagnostic(12) = real(real(diagnostic(11),real32),real64)
++          end if
++        end if
++      end if
++      return
++    end if
++
++    q_public = stored_q
++    n_specific = stored_n
++    qstored = real(stored_q,real64)
++    nstored = real(stored_n,real64)
++    delta_q = qstored-q64
++    delta_n = nstored-n64
++    failure_reason = 'none'
++    stage = 7
++end subroutine pr90_rain_public_store_diagnostic
++
++subroutine pr87_number_public_store(q_internal, nvol_internal, dry_density, pidnr, power, &
++                                  lambda_min, lambda_max, q_public, n_specific, valid, &
++                                  delta_q, delta_n, adjustment)
++  use iso_fortran_env, only: real32, real64, int32, int64
++  implicit none
++  real(real32), intent(in) :: q_internal, nvol_internal, dry_density
++  real(real32), intent(in) :: pidnr, power, lambda_min, lambda_max
++  real(real32), intent(out) :: q_public, n_specific
++  logical, intent(out) :: valid
++  real(real64), intent(out) :: delta_q, delta_n
++  integer, intent(out) :: adjustment
++  character(len=32) :: ignored_reason
++  real(real64) :: diagnostic(12)
++  integer :: diagnostic_stage
++  integer :: diagnostic_core_stage
++  logical, save :: failure_reported = .false.
++  external :: pr90_rain_public_store_diagnostic
++
++  call pr90_rain_public_store_diagnostic(q_internal,nvol_internal,dry_density,pidnr, &
++      power,lambda_min,lambda_max,q_public,n_specific,valid,delta_q,delta_n, &
++      adjustment,ignored_reason,diagnostic,diagnostic_stage,diagnostic_core_stage)
++  if (.not.valid .and. .not.failure_reported) then
++    write(*,'(A,I0,1X,I0,1X,A,1X,7(Z8.8,1X))') 'PR90_RAIN_FAILURE stages=', &
++        diagnostic_stage,diagnostic_core_stage, &
++        trim(ignored_reason),transfer(q_internal,0_int32),transfer(nvol_internal,0_int32), &
++        transfer(dry_density,0_int32),transfer(pidnr,0_int32),transfer(power,0_int32), &
++        transfer(lambda_min,0_int32),transfer(lambda_max,0_int32)
++    write(*,'(A,12(Z16.16,1X))') 'PR90_RAIN_FAILURE_DERIVED_HEX ', &
++        transfer(diagnostic(1),0_int64),transfer(diagnostic(2),0_int64), &
++        transfer(diagnostic(3),0_int64),transfer(diagnostic(4),0_int64), &
++        transfer(diagnostic(5),0_int64),transfer(diagnostic(6),0_int64), &
++        transfer(diagnostic(7),0_int64),transfer(diagnostic(8),0_int64), &
++        transfer(diagnostic(9),0_int64),transfer(diagnostic(10),0_int64), &
++        transfer(diagnostic(11),0_int64),transfer(diagnostic(12),0_int64)
++    failure_reported = .true.
++  end if
++end subroutine pr87_number_public_store
++
++subroutine pr87_number_volume_store(q_specific, n_specific, dry_density, pidnr, power, &
++                                   lambda_min, lambda_max, q_stored, n_volume, valid, &
++                                   delta_q, delta_nvolume, adjustment)
++  use iso_fortran_env, only: real32, real64
++  use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
++  use cloud_bal_joint_transport, only: joint_moment_store
++  implicit none
++    ! Keep the public specific-number input fixed. Round its volume product
++    ! normally, and use the shared joint store only to choose a representable Q if
++    ! that representation alone breaks the selected rain cone.
++    real(real32), intent(in) :: q_specific, n_specific, dry_density
++    real(real32), intent(in) :: pidnr, power, lambda_min, lambda_max
++    real(real32), intent(out) :: q_stored, n_volume
++    logical, intent(out) :: valid
++    real(real64), intent(out) :: delta_q, delta_nvolume
++    integer, intent(out) :: adjustment
++
++    real(real64) :: q64, n64, rho64, pid64, power64, lambda_min64, lambda_max64
++    real(real64) :: minimum_ratio, maximum_ratio, volume_bounds(2), nvolume64
++    real(real64) :: stored_q64, stored_n64
++    real(real32) :: stored_q, stored_n_specific
++
++    q_stored = -1.0_real32
++    n_volume = -1.0_real32
++    valid = .false.
++    delta_q = 0.0_real64
++    delta_nvolume = 0.0_real64
++    adjustment = 0
++
++    if (.not.all(ieee_is_finite([q_specific,n_specific,dry_density,pidnr,power, &
++                                 lambda_min,lambda_max]))) return
++    if (q_specific < 0.0_real32 .or. n_specific < 0.0_real32 .or. &
++        dry_density <= 0.0_real32 .or. pidnr <= 0.0_real32 .or. &
++        power <= 0.0_real32 .or. power > 8.0_real32 .or. &
++        lambda_min <= 0.0_real32 .or. lambda_max < lambda_min) return
++
++    rho64 = real(dry_density,real64)
++    pid64 = real(pidnr,real64)
++    power64 = real(power,real64)
++    lambda_min64 = real(lambda_min,real64)
++    lambda_max64 = real(lambda_max,real64)
++    if (power64*log(lambda_min64) < log(real(tiny(0.0_real32),real64)) .or. &
++        power64*log(lambda_max64) > log(real(huge(0.0_real32),real64))) return
++
++    volume_bounds(1) = (rho64*lambda_min64**power64)/pid64
++    volume_bounds(2) = (rho64*lambda_max64**power64)/pid64
++    minimum_ratio = pid64/(lambda_max64**power64)
++    maximum_ratio = pid64/(lambda_min64**power64)
++    if (.not.all(ieee_is_finite([volume_bounds,minimum_ratio,maximum_ratio])) .or. &
++        volume_bounds(1) <= 0.0_real64 .or. volume_bounds(2) < volume_bounds(1) .or. &
++        volume_bounds(2) > real(huge(0.0_real32),real64) .or. &
++        maximum_ratio < minimum_ratio) return
++
++    q64 = real(q_specific,real64)
++    n64 = real(n_specific,real64)
++    nvolume64 = n64*rho64
++    if (.not.ieee_is_finite(nvolume64) .or. &
++        nvolume64 > real(huge(0.0_real32),real64)) return
++
++    call joint_moment_store(q64,n64,dry_density,minimum_ratio,maximum_ratio,.true., &
++                            stored_q,stored_n_specific,adjustment,valid, &
++                            allow_normal_q_adjustment=.true., &
++                            volume_number_bounds=volume_bounds)
++    if (.not.valid) then
++      adjustment = 0
++      return
++    end if
++    ! Npub is already REAL32, so the kernel's ordinary N store must preserve
++    ! it exactly. The adapter emits only the ordinary REAL32 volume product.
++    if (stored_n_specific /= n_specific) then
++      valid = .false.
++      adjustment = 0
++      return
++    end if
++
++    n_volume = real(nvolume64,real32)
++    q_stored = stored_q
++    stored_q64 = real(stored_q,real64)
++    stored_n64 = real(n_volume,real64)
++    delta_q = stored_q64-q64
++    delta_nvolume = stored_n64-nvolume64
++end subroutine pr87_number_volume_store
++
++subroutine pr87_rain_density_store(itimestep,rk_step,ims,ime,kms,kme,jms,jme, &
++     its,ite,jts,jte,kts,kte,al,alb,qrain,nrain,pidnr,power,lambda_min,lambda_max,valid)
++  use iso_fortran_env, only: real32, real64
++  use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
++  implicit none
++  integer, intent(in) :: itimestep,rk_step,ims,ime,kms,kme,jms,jme
++  integer, intent(in) :: its,ite,jts,jte,kts,kte
++  real(real32), intent(in) :: al(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(in) :: alb(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(inout) :: qrain(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(in) :: nrain(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(in) :: pidnr,power,lambda_min,lambda_max
++  logical, intent(out) :: valid
++  interface
++    subroutine pr85_dry_density_from_al_alb(al,alb,dry_density,valid)
++      use iso_fortran_env, only: real32
++      real, intent(in) :: al,alb
++      real(real32), intent(out) :: dry_density
++      logical, intent(out) :: valid
++    end subroutine pr85_dry_density_from_al_alb
++    subroutine pr87_number_volume_store(q_specific,n_specific,dry_density,pidnr,power, &
++         lambda_min,lambda_max,q_stored,n_volume,valid,delta_q,delta_nvolume,adjustment)
++      use iso_fortran_env, only: real32,real64
++      real(real32), intent(in) :: q_specific,n_specific,dry_density,pidnr,power
++      real(real32), intent(in) :: lambda_min,lambda_max
++      real(real32), intent(out) :: q_stored,n_volume
++      logical, intent(out) :: valid
++      real(real64), intent(out) :: delta_q,delta_nvolume
++      integer, intent(out) :: adjustment
++    end subroutine pr87_number_volume_store
++  end interface
++
++  character(len=*), parameter :: ledger_name='pr87_rain_density_storage.raw'
++  real(real32), allocatable :: q_candidate(:,:,:),rho_values(:,:,:),n_volume(:,:,:)
++  real(real64), allocatable :: delta_q(:,:,:),delta_nvolume(:,:,:)
++  real(real32) :: rho,q_stored,n_volume_stored
++  real(real64) :: sum_delta_q,l1_delta_q,max_delta_q
++  real(real64) :: sum_delta_nvolume,l1_delta_nvolume,max_delta_nvolume
++  integer :: i,j,k,io_status,ledger_unit,processed,q_changed,nvolume_rounded
++  integer :: failure_stage
++  integer :: adjustment
++  integer(kind=8) :: ledger_size
++  logical :: density_valid,cell_valid,ledger_exists
++
++  valid=.false.
++  if (itimestep<1 .or. rk_step<1 .or. rk_step>3) return
++  if (ims>ime .or. kms>kme .or. jms>jme .or. its<ims .or. ite>ime .or. &
++      kts<kms .or. kte>kme .or. jts<jms .or. jte>jme .or. &
++      its>ite .or. kts>kte .or. jts>jte) return
++  if (.not.all(ieee_is_finite([pidnr,power,lambda_min,lambda_max]))) return
++  if (pidnr<=0.0_real32 .or. power<=0.0_real32 .or. power>8.0_real32 .or. &
++      lambda_min<=0.0_real32 .or. lambda_max<lambda_min) return
++
++  allocate(q_candidate(its:ite,kts:kte,jts:jte), &
++           rho_values(its:ite,kts:kte,jts:jte), &
++           n_volume(its:ite,kts:kte,jts:jte), &
++           delta_q(its:ite,kts:kte,jts:jte), &
++           delta_nvolume(its:ite,kts:kte,jts:jte))
++  sum_delta_q=0.0_real64; l1_delta_q=0.0_real64; max_delta_q=0.0_real64
++  sum_delta_nvolume=0.0_real64; l1_delta_nvolume=0.0_real64; max_delta_nvolume=0.0_real64
++  processed=0; q_changed=0; nvolume_rounded=0
++
++  ! Validate every cell and stage all Q changes before touching model state.
++  do j=jts,jte
++    do k=kts,kte
++      do i=its,ite
++        rho=0.0_real32
++        call pr85_dry_density_from_al_alb(al(i,k,j),alb(i,k,j),rho,density_valid)
++        if (.not.density_valid) then
++          failure_stage=1
++          write(*,*) 'PR87_RAIN_DENSITY_REJECT',itimestep,rk_step,i,j,k, &
++               failure_stage,qrain(i,k,j),nrain(i,k,j),rho
++          goto 900
++        end if
++        call pr87_number_volume_store(qrain(i,k,j),nrain(i,k,j),rho,pidnr,power, &
++             lambda_min,lambda_max,q_stored,n_volume_stored,cell_valid, &
++             delta_q(i,k,j),delta_nvolume(i,k,j),adjustment)
++        if (.not.cell_valid) then
++          failure_stage=2
++          write(*,*) 'PR87_RAIN_DENSITY_REJECT',itimestep,rk_step,i,j,k, &
++               failure_stage,qrain(i,k,j),nrain(i,k,j),rho
++          goto 900
++        end if
++        if (.not.ieee_is_finite(delta_q(i,k,j)) .or. &
++            .not.ieee_is_finite(delta_nvolume(i,k,j)) .or. &
++            .not.ieee_is_finite(q_stored) .or. .not.ieee_is_finite(n_volume_stored)) then
++          failure_stage=3
++          write(*,*) 'PR87_RAIN_DENSITY_REJECT',itimestep,rk_step,i,j,k, &
++               failure_stage,qrain(i,k,j),nrain(i,k,j),rho
++          goto 900
++        end if
++        q_candidate(i,k,j)=q_stored
++        rho_values(i,k,j)=rho
++        n_volume(i,k,j)=n_volume_stored
++        processed=processed+1
++        sum_delta_q=sum_delta_q+delta_q(i,k,j)
++        l1_delta_q=l1_delta_q+abs(delta_q(i,k,j))
++        max_delta_q=max(max_delta_q,abs(delta_q(i,k,j)))
++        sum_delta_nvolume=sum_delta_nvolume+delta_nvolume(i,k,j)
++        l1_delta_nvolume=l1_delta_nvolume+abs(delta_nvolume(i,k,j))
++        max_delta_nvolume=max(max_delta_nvolume,abs(delta_nvolume(i,k,j)))
++        if (delta_q(i,k,j)/=0.0_real64) q_changed=q_changed+1
++        if (delta_nvolume(i,k,j)/=0.0_real64) nvolume_rounded=nvolume_rounded+1
++      end do
++    end do
++  end do
++
++  inquire(file=ledger_name,exist=ledger_exists,size=ledger_size,iostat=io_status)
++  if (io_status/=0) goto 900
++  open(newunit=ledger_unit,file=ledger_name,status='unknown',position='append', &
++       action='write',iostat=io_status)
++  if (io_status/=0) goto 900
++  if (.not.ledger_exists .or. ledger_size==0_8) then
++    write(ledger_unit,'(a)',iostat=io_status) &
++      '# PR87_RAIN_DENSITY_SUM time,rk,i0,i1,j0,j1,k0,k1,cells,Q_changed,prospective_Nvol_rounding_nonzero,'// &
++      'sum_delta_Q_specific,L1_delta_Q_specific,max_abs_delta_Q_specific,'// &
++      'sum_prospective_delta_Nvolume,L1_prospective_delta_Nvolume,max_abs_prospective_delta_Nvolume; '// &
++      'N_specific and AL/ALB are unchanged; Nvolume deltas are predicted ordinary REAL32 conversion rounding, '// &
++      'not committed N or spatially/area/time weighted totals. Sparse CELL rows report actual Q changes only.'
++    if (io_status/=0) then
++      close(ledger_unit)
++      goto 900
++    end if
++  end if
++  do j=jts,jte
++    do k=kts,kte
++      do i=its,ite
++        if (delta_q(i,k,j)/=0.0_real64) then
++          write(ledger_unit,'(a,5i10,1p,7e24.16)',iostat=io_status) &
++            'PR87_RAIN_DENSITY_CELL',itimestep,rk_step,i,j,k, &
++            real(rho_values(i,k,j),real64),real(qrain(i,k,j),real64), &
++            real(q_candidate(i,k,j),real64),real(nrain(i,k,j),real64), &
++            real(n_volume(i,k,j),real64),delta_q(i,k,j),delta_nvolume(i,k,j)
++          if (io_status/=0) then
++            close(ledger_unit)
++            goto 900
++          end if
++        end if
++      end do
++    end do
++  end do
++  write(ledger_unit,'(a,11i10,1p,6e24.16)',iostat=io_status) &
++    'PR87_RAIN_DENSITY_SUM',itimestep,rk_step,its,ite,jts,jte,kts,kte, &
++    processed,q_changed,nvolume_rounded,sum_delta_q,l1_delta_q,max_delta_q, &
++    sum_delta_nvolume,l1_delta_nvolume,max_delta_nvolume
++  if (io_status/=0) then
++    close(ledger_unit)
++    goto 900
++  end if
++  close(ledger_unit,iostat=io_status)
++  if (io_status/=0) goto 900
++
++  do j=jts,jte
++    do k=kts,kte
++      do i=its,ite
++        qrain(i,k,j)=q_candidate(i,k,j)
++      end do
++    end do
++  end do
++  valid=.true.
++900 continue
++  deallocate(q_candidate,rho_values,n_volume,delta_q,delta_nvolume)
++end subroutine pr87_rain_density_store
++
++subroutine pr87_qn_density_store(itimestep,rk_step,ims,ime,kms,kme,jms,jme, &
++     its,ite,jts,jte,kts,kte,al,alb,qcloud,ncloud,qrain,nrain, &
++     cloud_pidn,cloud_power,cloud_lambda_min,cloud_lambda_max, &
++     rain_pidn,rain_power,rain_lambda_min,rain_lambda_max,valid)
++  use iso_fortran_env, only: real32,real64
++  use, intrinsic :: ieee_arithmetic, only: ieee_is_finite
++  implicit none
++  integer, intent(in) :: itimestep,rk_step,ims,ime,kms,kme,jms,jme
++  integer, intent(in) :: its,ite,jts,jte,kts,kte
++  real(real32), intent(in) :: al(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(in) :: alb(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(inout) :: qcloud(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(in) :: ncloud(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(inout) :: qrain(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(in) :: nrain(ims:ime,kms:kme,jms:jme)
++  real(real32), intent(in) :: cloud_pidn,cloud_power,cloud_lambda_min,cloud_lambda_max
++  real(real32), intent(in) :: rain_pidn,rain_power,rain_lambda_min,rain_lambda_max
++  logical, intent(out) :: valid
++
++  interface
++    subroutine pr85_dry_density_from_al_alb(al,alb,dry_density,valid)
++      use iso_fortran_env, only: real32
++      real, intent(in) :: al,alb
++      real(real32), intent(out) :: dry_density
++      logical, intent(out) :: valid
++    end subroutine pr85_dry_density_from_al_alb
++    subroutine pr87_number_volume_store(q_specific,n_specific,dry_density,pidnr,power, &
++         lambda_min,lambda_max,q_stored,n_volume,valid,delta_q,delta_nvolume,adjustment)
++      use iso_fortran_env, only: real32,real64
++      real(real32), intent(in) :: q_specific,n_specific,dry_density,pidnr,power
++      real(real32), intent(in) :: lambda_min,lambda_max
++      real(real32), intent(out) :: q_stored,n_volume
++      logical, intent(out) :: valid
++      real(real64), intent(out) :: delta_q,delta_nvolume
++      integer, intent(out) :: adjustment
++    end subroutine pr87_number_volume_store
++  end interface
++
++  character(len=*), parameter :: ledger_name='pr87_qn_density_storage.raw'
++  real(real32), allocatable :: qcloud_candidate(:,:,:),qrain_candidate(:,:,:)
++  real(real32), allocatable :: rho_values(:,:,:),ncloud_volume(:,:,:),nrain_volume(:,:,:)
++  real(real64), allocatable :: dqcloud(:,:,:),dqrain(:,:,:)
++  real(real64), allocatable :: dncloud_volume(:,:,:),dnrain_volume(:,:,:)
++  real(real32) :: rho,q_stored,n_volume_stored
++  real(real64) :: sum_dqc,l1_dqc,max_dqc,sum_dqr,l1_dqr,max_dqr
++  real(real64) :: sum_dncvol,l1_dncvol,max_dncvol,sum_dnrvol,l1_dnrvol,max_dnrvol
++  integer :: i,j,k,io_status,ledger_unit,processed,alloc_status,failure_stage
++  integer :: qcloud_changed,qrain_changed,ncloud_rounding,nrain_rounding
++  integer :: cloud_adjustment,rain_adjustment
++  integer(kind=8) :: ledger_size
++  logical :: density_valid,cell_valid,ledger_exists
++
++  valid=.false.
++  if (itimestep<1 .or. rk_step<1 .or. rk_step>3) return
++  if (ims>ime .or. kms>kme .or. jms>jme .or. its<ims .or. ite>ime .or. &
++      kts<kms .or. kte>kme .or. jts<jms .or. jte>jme .or. &
++      its>ite .or. kts>kte .or. jts>jte) return
++  if (.not.all(ieee_is_finite([cloud_pidn,cloud_power,cloud_lambda_min, &
++      cloud_lambda_max,rain_pidn,rain_power,rain_lambda_min,rain_lambda_max]))) return
++
++  allocate(qcloud_candidate(its:ite,kts:kte,jts:jte), &
++           qrain_candidate(its:ite,kts:kte,jts:jte), &
++           rho_values(its:ite,kts:kte,jts:jte), &
++           ncloud_volume(its:ite,kts:kte,jts:jte), &
++           nrain_volume(its:ite,kts:kte,jts:jte), &
++           dqcloud(its:ite,kts:kte,jts:jte),dqrain(its:ite,kts:kte,jts:jte), &
++           dncloud_volume(its:ite,kts:kte,jts:jte), &
++           dnrain_volume(its:ite,kts:kte,jts:jte),stat=alloc_status)
++  if (alloc_status/=0) then
++    if (allocated(qcloud_candidate)) deallocate(qcloud_candidate)
++    if (allocated(qrain_candidate)) deallocate(qrain_candidate)
++    if (allocated(rho_values)) deallocate(rho_values)
++    if (allocated(ncloud_volume)) deallocate(ncloud_volume)
++    if (allocated(nrain_volume)) deallocate(nrain_volume)
++    if (allocated(dqcloud)) deallocate(dqcloud)
++    if (allocated(dqrain)) deallocate(dqrain)
++    if (allocated(dncloud_volume)) deallocate(dncloud_volume)
++    if (allocated(dnrain_volume)) deallocate(dnrain_volume)
++    return
++  end if
++
++  sum_dqc=0.0_real64; l1_dqc=0.0_real64; max_dqc=0.0_real64
++  sum_dqr=0.0_real64; l1_dqr=0.0_real64; max_dqr=0.0_real64
++  sum_dncvol=0.0_real64; l1_dncvol=0.0_real64; max_dncvol=0.0_real64
++  sum_dnrvol=0.0_real64; l1_dnrvol=0.0_real64; max_dnrvol=0.0_real64
++  processed=0; qcloud_changed=0; qrain_changed=0
++  ncloud_rounding=0; nrain_rounding=0
++
++  ! Stage and validate both species for every tile cell before writing or commit.
++  do j=jts,jte
++    do k=kts,kte
++      do i=its,ite
++        rho=0.0_real32
++        call pr85_dry_density_from_al_alb(al(i,k,j),alb(i,k,j),rho,density_valid)
++        if (.not.density_valid) then
++          failure_stage=1
++          write(*,*) 'PR87_QN_DENSITY_REJECT',itimestep,rk_step,1,i,j,k, &
++               failure_stage,qcloud(i,k,j),ncloud(i,k,j),qrain(i,k,j),nrain(i,k,j),rho
++          goto 900
++        end if
++
++        call pr87_number_volume_store(qcloud(i,k,j),ncloud(i,k,j),rho, &
++             cloud_pidn,cloud_power,cloud_lambda_min,cloud_lambda_max, &
++             q_stored,n_volume_stored,cell_valid,dqcloud(i,k,j), &
++             dncloud_volume(i,k,j),cloud_adjustment)
++        if (.not.cell_valid .or. .not.ieee_is_finite(q_stored) .or. &
++            .not.ieee_is_finite(n_volume_stored) .or. &
++            .not.ieee_is_finite(dqcloud(i,k,j)) .or. &
++            .not.ieee_is_finite(dncloud_volume(i,k,j))) then
++          failure_stage=2
++          write(*,*) 'PR87_QN_DENSITY_REJECT',itimestep,rk_step,1,i,j,k, &
++               failure_stage,qcloud(i,k,j),ncloud(i,k,j),qrain(i,k,j),nrain(i,k,j),rho
++          goto 900
++        end if
++        qcloud_candidate(i,k,j)=q_stored
++        ncloud_volume(i,k,j)=n_volume_stored
++
++        call pr87_number_volume_store(qrain(i,k,j),nrain(i,k,j),rho, &
++             rain_pidn,rain_power,rain_lambda_min,rain_lambda_max, &
++             q_stored,n_volume_stored,cell_valid,dqrain(i,k,j), &
++             dnrain_volume(i,k,j),rain_adjustment)
++        if (.not.cell_valid .or. .not.ieee_is_finite(q_stored) .or. &
++            .not.ieee_is_finite(n_volume_stored) .or. &
++            .not.ieee_is_finite(dqrain(i,k,j)) .or. &
++            .not.ieee_is_finite(dnrain_volume(i,k,j))) then
++          failure_stage=3
++          write(*,*) 'PR87_QN_DENSITY_REJECT',itimestep,rk_step,2,i,j,k, &
++               failure_stage,qcloud(i,k,j),ncloud(i,k,j),qrain(i,k,j),nrain(i,k,j),rho
++          goto 900
++        end if
++        qrain_candidate(i,k,j)=q_stored
++        nrain_volume(i,k,j)=n_volume_stored
++        rho_values(i,k,j)=rho
++
++        processed=processed+1
++        sum_dqc=sum_dqc+dqcloud(i,k,j); l1_dqc=l1_dqc+abs(dqcloud(i,k,j))
++        max_dqc=max(max_dqc,abs(dqcloud(i,k,j)))
++        sum_dqr=sum_dqr+dqrain(i,k,j); l1_dqr=l1_dqr+abs(dqrain(i,k,j))
++        max_dqr=max(max_dqr,abs(dqrain(i,k,j)))
++        sum_dncvol=sum_dncvol+dncloud_volume(i,k,j)
++        l1_dncvol=l1_dncvol+abs(dncloud_volume(i,k,j))
++        max_dncvol=max(max_dncvol,abs(dncloud_volume(i,k,j)))
++        sum_dnrvol=sum_dnrvol+dnrain_volume(i,k,j)
++        l1_dnrvol=l1_dnrvol+abs(dnrain_volume(i,k,j))
++        max_dnrvol=max(max_dnrvol,abs(dnrain_volume(i,k,j)))
++        if (dqcloud(i,k,j)/=0.0_real64) qcloud_changed=qcloud_changed+1
++        if (dqrain(i,k,j)/=0.0_real64) qrain_changed=qrain_changed+1
++        if (dncloud_volume(i,k,j)/=0.0_real64) ncloud_rounding=ncloud_rounding+1
++        if (dnrain_volume(i,k,j)/=0.0_real64) nrain_rounding=nrain_rounding+1
++      end do
++    end do
++  end do
++
++  inquire(file=ledger_name,exist=ledger_exists,size=ledger_size,iostat=io_status)
++  if (io_status/=0) then
++    write(*,*) 'PR87_QN_DENSITY_IO_REJECT',itimestep,rk_step,1,io_status
++    goto 900
++  end if
++  open(newunit=ledger_unit,file=ledger_name,status='unknown',position='append', &
++       action='write',iostat=io_status)
++  if (io_status/=0) then
++    write(*,*) 'PR87_QN_DENSITY_IO_REJECT',itimestep,rk_step,2,io_status
++    goto 900
++  end if
++  if (.not.ledger_exists .or. ledger_size==0_8) then
++    write(ledger_unit,'(a)',iostat=io_status) &
++      '# PR87_QN_DENSITY_CELL time,rk,species_id,i,j,k,rho[kg/m3],Qbefore[kg/kg],Qafter[kg/kg],'// &
++      'Nspecific[number/kg],Nvolume_predicted[number/m3],dQ_specific[kg/kg],dNvolume_predicted[number/m3]; '// &
++      'prospective Nvolume is ordinary R32 conversion, not committed N.'
++    if (io_status/=0) then
++      close(ledger_unit)
++      write(*,*) 'PR87_QN_DENSITY_IO_REJECT',itimestep,rk_step,3,io_status
++      goto 900
++    end if
++    write(ledger_unit,'(a)',iostat=io_status) &
++      '# PR87_QN_DENSITY_SUM time,rk,i0,i1,j0,j1,k0,k1,cells,Qcloud_changed,Qrain_changed,'// &
++      'Ncloud_volume_rounding_nonzero,Nrain_volume_rounding_nonzero,'// &
++      'sum_dQcloud,L1_dQcloud,max_abs_dQcloud,sum_dQrain,L1_dQrain,max_abs_dQrain,'// &
++      'sum_prospective_dNcloudvol,L1_prospective_dNcloudvol,max_abs_prospective_dNcloudvol,'// &
++      'sum_prospective_dNrainvol,L1_prospective_dNrainvol,max_abs_prospective_dNrainvol; '// &
++      'unweighted diagnostics; prospective Nvolume deltas are not committed or conserved totals.'
++    if (io_status/=0) then
++      close(ledger_unit)
++      write(*,*) 'PR87_QN_DENSITY_IO_REJECT',itimestep,rk_step,4,io_status
++      goto 900
++    end if
++  end if
++
++  do j=jts,jte
++    do k=kts,kte
++      do i=its,ite
++        if (dqcloud(i,k,j)/=0.0_real64) then
++          write(ledger_unit,'(a,6i10,1p,7e24.16)',iostat=io_status) &
++            'PR87_QN_DENSITY_CELL',itimestep,rk_step,1,i,j,k, &
++            real(rho_values(i,k,j),real64),real(qcloud(i,k,j),real64), &
++            real(qcloud_candidate(i,k,j),real64),real(ncloud(i,k,j),real64), &
++            real(ncloud_volume(i,k,j),real64),dqcloud(i,k,j),dncloud_volume(i,k,j)
++          if (io_status/=0) then
++            close(ledger_unit)
++            write(*,*) 'PR87_QN_DENSITY_IO_REJECT',itimestep,rk_step,5,io_status
++            goto 900
++          end if
++        end if
++        if (dqrain(i,k,j)/=0.0_real64) then
++          write(ledger_unit,'(a,6i10,1p,7e24.16)',iostat=io_status) &
++            'PR87_QN_DENSITY_CELL',itimestep,rk_step,2,i,j,k, &
++            real(rho_values(i,k,j),real64),real(qrain(i,k,j),real64), &
++            real(qrain_candidate(i,k,j),real64),real(nrain(i,k,j),real64), &
++            real(nrain_volume(i,k,j),real64),dqrain(i,k,j),dnrain_volume(i,k,j)
++          if (io_status/=0) then
++            close(ledger_unit)
++            write(*,*) 'PR87_QN_DENSITY_IO_REJECT',itimestep,rk_step,6,io_status
++            goto 900
++          end if
++        end if
++      end do
++    end do
++  end do
++  write(ledger_unit,'(a,13i10,1p,12e24.16)',iostat=io_status) &
++    'PR87_QN_DENSITY_SUM',itimestep,rk_step,its,ite,jts,jte,kts,kte,processed, &
++    qcloud_changed,qrain_changed,ncloud_rounding,nrain_rounding, &
++    sum_dqc,l1_dqc,max_dqc,sum_dqr,l1_dqr,max_dqr, &
++    sum_dncvol,l1_dncvol,max_dncvol,sum_dnrvol,l1_dnrvol,max_dnrvol
++  if (io_status/=0) then
++    close(ledger_unit)
++    write(*,*) 'PR87_QN_DENSITY_IO_REJECT',itimestep,rk_step,7,io_status
++    goto 900
++  end if
++  close(ledger_unit,iostat=io_status)
++  if (io_status/=0) then
++    write(*,*) 'PR87_QN_DENSITY_IO_REJECT',itimestep,rk_step,8,io_status
++    goto 900
++  end if
++
++  ! The tile commit is the only mutation point; both Q species move together.
++  do j=jts,jte
++    do k=kts,kte
++      do i=its,ite
++        qcloud(i,k,j)=qcloud_candidate(i,k,j)
++        qrain(i,k,j)=qrain_candidate(i,k,j)
++      end do
++    end do
++  end do
++  valid=.true.
++900 continue
++  deallocate(qcloud_candidate,qrain_candidate,rho_values,ncloud_volume,nrain_volume, &
++             dqcloud,dqrain,dncloud_volume,dnrain_volume)
++end subroutine pr87_qn_density_store
++
++SUBROUTINE pr98_dump3(tag,a,ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte)
++  IMPLICIT NONE
++  CHARACTER(*), INTENT(IN) :: tag
++  INTEGER, INTENT(IN) :: ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte
++  REAL, INTENT(IN) :: a(ims:ime,kms:kme,jms:jme)
++  CHARACTER(160), SAVE :: seen(512)
++  INTEGER, SAVE :: nseen=0
++  CHARACTER(160) :: key
++  CHARACTER(32) :: tile
++  INTEGER :: unit, q
++  WRITE(tile,'(6(I0,"_"))') its,ite,jts,jte,kts,kte
++  key=TRIM(tag)//'_'//TRIM(tile)
++  DO q=1,nseen
++    IF (TRIM(seen(q)) == TRIM(key)) RETURN
++  END DO
++  IF (nseen >= SIZE(seen)) RETURN
++  nseen=nseen+1
++  seen(nseen)=key
++  OPEN(NEWUNIT=unit,FILE='pr98_'//TRIM(key)//'.bin',STATUS='replace', &
++       ACCESS='stream',FORM='unformatted',ACTION='write')
++  WRITE(unit) ims,ime,kms,kme,jms,jme,its,ite,kts,kte,jts,jte
++  WRITE(unit) a
++  CLOSE(unit)
++END SUBROUTINE pr98_dump3
++
++SUBROUTINE pr98_dump2(tag,a,ims,ime,jms,jme,its,ite,jts,jte)
++  IMPLICIT NONE
++  CHARACTER(*), INTENT(IN) :: tag
++  INTEGER, INTENT(IN) :: ims,ime,jms,jme,its,ite,jts,jte
++  REAL, INTENT(IN) :: a(ims:ime,jms:jme)
++  CHARACTER(160), SAVE :: seen(512)
++  INTEGER, SAVE :: nseen=0
++  CHARACTER(160) :: key
++  CHARACTER(32) :: tile
++  INTEGER :: unit, q
++  WRITE(tile,'(4(I0,"_"))') its,ite,jts,jte
++  key=TRIM(tag)//'_'//TRIM(tile)
++  DO q=1,nseen
++    IF (TRIM(seen(q)) == TRIM(key)) RETURN
++  END DO
++  IF (nseen >= SIZE(seen)) RETURN
++  nseen=nseen+1
++  seen(nseen)=key
++  OPEN(NEWUNIT=unit,FILE='pr98_'//TRIM(key)//'.bin',STATUS='replace', &
++       ACCESS='stream',FORM='unformatted',ACTION='write')
++  WRITE(unit) ims,ime,jms,jme,its,ite,jts,jte
++  WRITE(unit) a
++  CLOSE(unit)
++END SUBROUTINE pr98_dump2
++
++SUBROUTINE pr98_dump1(tag,a,kms,kme,kts,kte)
++  IMPLICIT NONE
++  CHARACTER(*), INTENT(IN) :: tag
++  INTEGER, INTENT(IN) :: kms,kme,kts,kte
++  REAL, INTENT(IN) :: a(kms:kme)
++  INTEGER :: unit
++  OPEN(NEWUNIT=unit,FILE='pr98_'//TRIM(tag)//'.bin',STATUS='replace', &
++       ACCESS='stream',FORM='unformatted',ACTION='write')
++  WRITE(unit) kms,kme,kts,kte
++  WRITE(unit) a
++  CLOSE(unit)
++END SUBROUTINE pr98_dump1
++
++SUBROUTINE pr98_dump0(tag,value)
++  IMPLICIT NONE
++  CHARACTER(*), INTENT(IN) :: tag
++  REAL, INTENT(IN) :: value
++  LOGICAL, SAVE :: done=.FALSE.
++  INTEGER :: unit
++  IF (done) RETURN
++  done=.TRUE.
++  OPEN(NEWUNIT=unit,FILE='pr98_'//TRIM(tag)//'.bin',STATUS='replace', &
++       ACCESS='stream',FORM='unformatted',ACTION='write')
++  WRITE(unit) value
++  CLOSE(unit)
++END SUBROUTINE pr98_dump0
++
+--- /var/tmp/pr96_native_build_c1_20261021/source/overrides/solve_em.F
++++ PR102/solve_em.F
+@@ -1029,6 +1029,11 @@
+ 
+        ENDIF
+ 
++       CALL pr98_dump3('assembled_ru_tend_in',grid%ru_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump3('assembled_rv_tend_in',grid%rv_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump3('assembled_rw_tend_in',rw_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump2('mu_large_in',mu_tend,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
++       
+        CALL rk_addtend_dry( grid%ru_tend,  grid%rv_tend,  rw_tend,  ph_tend,  t_tend,  &
+                             ru_tendf, rv_tendf, rw_tendf, ph_tendf, t_tendf, &
+                             grid%u_save, grid%v_save, w_save, ph_save, grid%t_save, &
+@@ -1043,6 +1048,10 @@
+                             grid%i_start(ij), grid%i_end(ij),                &
+                             grid%j_start(ij), grid%j_end(ij),                &
+                             k_start, k_end                                  )
++       CALL pr98_dump3('assembled_ru_tend_out',grid%ru_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump3('assembled_rv_tend_out',grid%rv_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump3('assembled_rw_tend_out',rw_tend,ims,ime,kms,kme,jms,jme,grid%i_start(ij),grid%i_end(ij),k_start,k_end,grid%j_start(ij),grid%j_end(ij))
++       CALL pr98_dump2('mu_large_out',mu_tend,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
+ 
+        IF( config_flags%specified .or. config_flags%nested ) THEN 
+          CALL spec_bdy_dry ( config_flags,                                    &
+@@ -1454,7 +1463,10 @@
+         !  advance the mass in the column, theta, and calculate ww
+ 
+ BENCH_START(advance_mu_t_tim)
+-         CALL advance_mu_t( grid%ww, ww1, grid%u_2, grid%u_save, grid%v_2, grid%v_save, &
++
++         CALL pr98_dump2('mu_small_in',grid%mu_2,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
++         CALL pr98_dump0('dts_small',dts_rk)
++                  CALL advance_mu_t( grid%ww, ww1, grid%u_2, grid%u_save, grid%v_2, grid%v_save, &
+                           grid%mu_2, grid%mut, muave, grid%muts, grid%muu, grid%muv,    &
+                           grid%mudf,                                                    &
+                           grid%c1h, grid%c2h, grid%c1f, grid%c2f,                       &
+@@ -1472,6 +1484,9 @@
+                           grid%i_start(ij), grid%i_end(ij),  &
+                           grid%j_start(ij), grid%j_end(ij),  &
+                           k_start    , k_end                )
++         CALL pr98_dump2('mu_small_out',grid%mu_2,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
++         CALL pr98_dump2('mu_tend_small',mu_tend,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
++         CALL pr98_dump2('mudf_small_out',grid%mudf,ims,ime,jms,jme,grid%i_start(ij),grid%i_end(ij),grid%j_start(ij),grid%j_end(ij))
+ BENCH_END(advance_mu_t_tim)
+        ENDDO
+        !$OMP END PARALLEL DO

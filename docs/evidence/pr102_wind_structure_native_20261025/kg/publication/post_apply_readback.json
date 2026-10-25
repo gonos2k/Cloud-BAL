@@ -1,0 +1,72 @@
+{
+  "decision": "GO_WITH_SCOPE",
+  "graphs": {
+    "Cloud-BAL": {
+      "edges": 26495,
+      "nodes": 14929,
+      "report_sha256": "1096864584c52a74050e24eeff5750ca5d4927dd91e053273a35f2c0e5964f6c",
+      "sha256": "f17b778c628e67c63cfe5d72f1f6263c4457b520289ee074c5df37df89044be6",
+      "snapshot": "2026-10-25-pr102-wind-structure"
+    },
+    "KLAPS50": {
+      "edges": 84953,
+      "nodes": 40757,
+      "report_sha256": "985b0ae4afa7ee245284ebd849116aa5162c69d59cddc31f3847c1829e3ae405",
+      "sha256": "09e24f672bd51561168e46850a3250f0df4706abb8caa63f049c5374be39d7d8",
+      "snapshot": "2026-10-25-pr102-wind-structure"
+    }
+  },
+  "limitations": "Graph/source inventory and maintained snapshots are verified for publication integrity. Graph extraction has partial Fortran call coverage; evidence payloads are hash-bound only. Graph freshness does not establish runtime or scientific approval. This readback is not a scientific approval.",
+  "plan": {
+    "check_only_returncode": 0,
+    "check_only_status": "CHECK_ONLY_NO_WRITES",
+    "sha256": "ff196345acf1b386c7f409c18101ea6163feff8c7c85d01432a71f56993f8884",
+    "writes_performed": false
+  },
+  "protected_content": {
+    "entry_count": 13,
+    "hashes_verified": true,
+    "immutable_pins_verified": 197,
+    "private_profile_preservation_reported_unchanged": true
+  },
+  "receipt": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/pr102_wind_structure_20261025/kg/kg_receipt.json",
+    "sha256": "a68ff8a938fe055bb9a82465b243f806f0575eb5bc850f73d4627d74e834dba1",
+    "status": "PASS"
+  },
+  "root_go": {
+    "decision": "GO",
+    "path": "/var/tmp/pr102_kg_root_go_v2_20261026.json",
+    "plan_sha256": "ff196345acf1b386c7f409c18101ea6163feff8c7c85d01432a71f56993f8884",
+    "sha256": "e855bf652dd4a72809d00475bd2559c671d390c0d735cfbf20eb8dea1d2e8507"
+  },
+  "runtime_scope": {
+    "C2_640": "COMPLETE",
+    "candidate": "COMPLETE",
+    "consumer": "COMPLETE",
+    "nativecapture": "COMPLETE",
+    "observation_skill": "NOT_EVALUATED",
+    "physical_approval": "FAIL_OPEN"
+  },
+  "schema": "pr102_kg_independent_postapply_readback_v1",
+  "snapshot_inventory": {
+    "all_directory_members_and_hashes_verified": true,
+    "automatic_raw_date_snapshots_2026_10_26": 2,
+    "named_pr102_snapshots": 2,
+    "new_snapshots": 4,
+    "post_apply_total": 120,
+    "prior_snapshots_retained": 116,
+    "receipt_inventory_sha256": "3547f64fb69acb01717fec8fd6ca6f31524176690608b355b740746b27d95e98"
+  },
+  "source_checkout": {
+    "clean": true,
+    "commit": "394b2fb02726978ab8e12080afd80c9171f50762",
+    "maintained_source_inventory_count": 627,
+    "maintained_source_inventory_sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL",
+    "receipt_before_after_inventory_equal": true,
+    "selected_graph_source_paths_verified": 25
+  },
+  "status": "PASS",
+  "wiki_files_verified": 5
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "pr102_kg_date_fix_test_validation_v1",
+  "status": "PASS",
+  "command": [
+    "python",
+    "-m",
+    "pytest",
+    "-q",
+    "docs/evidence/pr102_wind_structure_native_20261025/kg/test_wrapper_publication.py"
+  ],
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL",
+  "returncode": 0,
+  "result_summary": "13 passed in 0.78s",
+  "full_pytest_log_retained": false,
+  "validation_recording_note": "This bounded record preserves the final pytest tool result; no full stdout/stderr receipt was retained. An earlier attempt failed because the existing wiki date fixture lacked automatic_snapshot_date; the fixture was updated before the final passing run.",
+  "validated_code": {
+    "path": "docs/evidence/pr102_wind_structure_native_20261025/kg/apply_kg.py",
+    "sha256": "9c0cbfdd9e0fe1ead03e31021f21028a3c15654f98224e2a8e0bd8c9640c00a5"
+  },
+  "validated_test": {
+    "path": "docs/evidence/pr102_wind_structure_native_20261025/kg/test_wrapper_publication.py",
+    "sha256": "1c4ebcacd6090371ff3266df4b4e251b36bf1e07f697532343f70e25ad38b817"
+  },
+  "scope": "KG publication date helper and wrapper guard tests only; no KG check-only/apply and no maintained graph/wiki writes."
+}

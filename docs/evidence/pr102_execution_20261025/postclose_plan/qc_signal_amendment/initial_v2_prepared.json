@@ -1,0 +1,36 @@
+{
+  "change_scope": [
+    "reuses pr94_cloud_response.pattern_metrics for QCLOUD arm-minus-actual-OFF at all 11 fixed timestamps on fixed support and buffer",
+    "validates all four non-OFF arm initial QC contrasts against OFF match bitwise before evaluating temporal pattern metrics",
+    "keeps v1 pressure/Phi/W/QC RMS data and plotting statements unchanged",
+    "zero initial contrast preserves helper behavior: cosine/projection are null (N/A)"
+  ],
+  "frozen_pr102_response_reader": {
+    "expected_sha256": "9e30de564c85b5cfdbb8c9141d3f86f68d2958582892c62ad7578c77affe866e",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr102_response.py",
+    "sha256": "9e30de564c85b5cfdbb8c9141d3f86f68d2958582892c62ad7578c77affe866e"
+  },
+  "pattern_metrics_source": {
+    "expected_sha256": "a626b22f234b3095202982a4fe32d89d9ab6c200e4a9547f6a06a8b109536537",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr102_wind_structure_20261025/Cloud-BAL/tools/pr94_cloud_response.py",
+    "sha256": "a626b22f234b3095202982a4fe32d89d9ab6c200e4a9547f6a06a8b109536537"
+  },
+  "reason": "Add predeclared QCLOUD initial-contrast pattern metrics because lower RMS alone does not establish preservation of the original QC signal.",
+  "run_state": {
+    "640_payload_read": false,
+    "model_launched": false,
+    "root_execution_go_required_before_run": true,
+    "script_invoked": false
+  },
+  "schema": "pr102_fivearm_history_readback_v2_prepared_v1",
+  "status": "PREPARED_NO_RUN",
+  "v1_plotter": {
+    "path": "/var/tmp/pr102_fivearm_history_readback_20261025.py",
+    "preserved_unchanged": true,
+    "sha256": "e92e7838721a22e75e8714020cb7e22768e9dcf2fc26623881396c13db28c7bd"
+  },
+  "v2_plotter": {
+    "path": "/var/tmp/pr102_fivearm_history_readback_v2_20261025.py",
+    "sha256": "813886002c8c63abb739262036dfb93de06afb10a6af317788c4b8c941b7831b"
+  }
+}
