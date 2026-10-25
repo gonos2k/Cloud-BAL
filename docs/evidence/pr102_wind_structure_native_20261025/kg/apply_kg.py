@@ -365,9 +365,7 @@ def correct_outputs(engine, plan: dict, reviewed_plan_sha256: str, root_go_recor
                                             for name in ("graph.json", "GRAPH_REPORT.md", "manifest.json")}
     receipt["wiki_sha256"] = {f"wiki/{name}": digest(engine.ROOT / "wiki" / name)
                               for name in engine.WIKI_FILES}
-    after = current_snapshot_pins(SimpleNamespace(
-        ROOT=engine.ROOT, MAINT=engine.MAINT, EXPECTED_DATED_SNAPSHOTS=engine.EXPECTED_DATED_SNAPSHOTS),
-        expected_count=engine.EXPECTED_DATED_SNAPSHOTS + 4)
+    after = current_snapshot_pins(engine, expected_count=engine.EXPECTED_DATED_SNAPSHOTS + 4)
     additions = {key: value for key, value in after.items() if key not in plan["dated_snapshot_baseline"]}
     expected_additions = expected_post_apply_snapshot_paths(
         (engine.ROOT, engine.MAINT), plan["automatic_snapshot_date"], snapshot_name)

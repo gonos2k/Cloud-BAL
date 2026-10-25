@@ -1,0 +1,52 @@
+{
+  "schema": "pr102-kg-apply-rollback-review-v1",
+  "date": "2026-10-26",
+  "review_scope": "single guarded KG wrapper bug fix and independent rollback/output-preservation verification",
+  "source_commit_at_failed_apply": "ada6f7e6f318b82f60a7b448c64860dc05b2323d",
+  "pull_request": "https://github.com/gonos2k/Cloud-BAL/pull/102",
+  "reviewed_plan_sha256": "a5e343769c3df798282495bcfa6d637324c8c1832aa1ad2adc79f41104fef1e9",
+  "check_only_stdout_sha256": "a0a7a0a746eb833b9def9310ca7930d97642875293762950d1b0b5e637c71249",
+  "results_manifest_sha256": "94218915f196c21424f7f68e0f4570f2e0f08ef28f21205596c7d8512f0fa3d5",
+  "root_go_path": "/var/tmp/pr102_kg_root_go_20261026.json",
+  "root_go_sha256": "26dc3c4df3f4f7aa5730b350309fc244fcefe7192b538745872ef339ebdda90f",
+  "failed_apply": {
+    "status": "FAILED",
+    "returncode": 2,
+    "execution_record": "/var/tmp/pr102_kg_apply_20261026/execution.json",
+    "execution_record_sha256": "e58aa9b24e73966a384a5a827674ad679973995b4cb98331cadc6877834357f1",
+    "log_sha256": "df8eea2b16c246ed30e6360c9e424b045bd407fca4d90bb23460c68b9d679f52",
+    "failure": "NameError: SimpleNamespace is not defined in post-write snapshot-count verification",
+    "wrapper_reported_rollback": true
+  },
+  "fix": {
+    "file": "docs/evidence/pr102_wind_structure_native_20261025/kg/apply_kg.py",
+    "change": "Pass the existing engine directly to current_snapshot_pins; remove unnecessary SimpleNamespace construction.",
+    "sha256": "253f708c91f554693921bdb602c6e53cf86a6f2168c0ab21cd8f634d5f5ba370",
+    "test_command": "python -m pytest -q docs/evidence/pr102_wind_structure_native_20261025/kg/test_wrapper_publication.py",
+    "test_result": "13 passed in 0.69s",
+    "test_source_sha256": "1c4ebcacd6090371ff3266df4b4e251b36bf1e07f697532343f70e25ad38b817"
+  },
+  "rollback_readback": {
+    "result": "PASS",
+    "dated_snapshot_directories": 116,
+    "baseline_files_hash_checked": 473,
+    "maintained_source_count": 627,
+    "maintained_source_inventory_sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f",
+    "inherited_pins_matched": 197,
+    "protected_content_records_matched": 13,
+    "both_graph_roots_matched": true,
+    "five_wiki_files_matched": true,
+    "pr102_raw_and_named_snapshot_paths_absent": true
+  },
+  "preserved_failed_engine_output": {
+    "path": "/var/tmp/pr102_kg_failed_engine_out_20261026",
+    "copied_after_rollback_readback": true,
+    "source_and_copy_tree_match": true,
+    "files": 580,
+    "entries": 718,
+    "bytes": 3929394194,
+    "sorted_inventory_sha256": "b134a2856899794758cc0a5785b0262ebff7f7a5d06b562624fc758a4b1f9477"
+  },
+  "no_check_only_or_apply_rerun": true,
+  "no_physical_or_source_model_changes": true
+}
