@@ -1,0 +1,110 @@
+{
+  "base_commit": "4c290f1fff9c78cbe9967ce312114f0f53a27a43",
+  "limitations": [
+    "No full native/Linux/realdata tier pass claimed.",
+    "Pre-existing test_pr89_ice_consumer_contract.py transport source pin differs from unchanged base source; historical pin preserved.",
+    "No C2 physics, tolerance, wind input, or source-cache changes.",
+    "H/A/N one-hour forecasts remain INCOMPLETE at 760 seconds; 14 UTC skill NOT_EVALUATED.",
+    "Projection policy envelope is not a rigorous error bound or observation uncertainty."
+  ],
+  "logs": {
+    "/var/tmp/pr108_fresh_portable.log": "9bbaf8a2503178d17f8182259e9c12918596c82d8c98d418d237e43d656e50ee",
+    "/var/tmp/pr108_native_w_validation.log": "52e2392e4810e86a025349b6c607e3ef218f8e1dcafd0bb1754ba806f3b7afc0",
+    "/var/tmp/pr108_shell_recovery_final.log": "227135d4d1014e34e1cf82f3fb41f57a751d9f8f663b1bccc8cfa52efcca7e44",
+    "/var/tmp/pr108_shell_validation.log": "e6c288a1977b01eebea51d69832277476d4b1b28d16b363f0a073aa3a9844437"
+  },
+  "native": {
+    "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "lapsprep": {
+      "command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 CLOUD_BAL_TEST_SCRATCH_ROOT=/var/tmp CLOUD_BAL_KEEP_TEST_OUTPUT=1 bash tests/run_lapsprep_vapor.sh",
+      "o2_extra_negative_cases": 12,
+      "o2_extra_negative_evidence": "lapsprep_o2_negatives.json",
+      "optimizations": [
+        "O0",
+        "O2"
+      ],
+      "scratch": "/var/tmp/lapsprep_vapor_tests.HKEqkX",
+      "status": "PASS_SCOPED"
+    },
+    "native_w": {
+      "command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 CLOUD_BAL_TEST_SCRATCH_ROOT=/var/tmp bash tests/run_native_w_consumer.sh",
+      "optimizations": [
+        "O0",
+        "O2"
+      ],
+      "status": "PASS_SCOPED"
+    }
+  },
+  "portable": {
+    "all_skipped_files": 0,
+    "checkout": "/var/tmp/pr108_portable_checkout_20261026",
+    "command": "PYTHON_BIN=/var/tmp/pr108_portable_env_20261026/bin/python bash tests/run_python_contract_tests.sh",
+    "environment": [
+      "certifi==2026.10.23",
+      "cftime==1.6.5",
+      "contourpy==1.3.3",
+      "cycler==0.12.1",
+      "fonttools==4.67.0",
+      "iniconfig==2.3.1",
+      "kiwisolver==1.5.1",
+      "matplotlib==3.10.1",
+      "netCDF4==1.7.4",
+      "numpy==1.26.4",
+      "packaging==26.3",
+      "pillow==13.0.0",
+      "pluggy==1.7.0",
+      "pyparsing==3.3.3",
+      "pytest==8.1.1",
+      "python-dateutil==3.0.0",
+      "scipy==1.15.3",
+      "six==1.17.0",
+      "tzdata==2026.5"
+    ],
+    "legacy_script_files_passed": 7,
+    "optional_skip": "test_verify_shadow_wps_pair_lambert.py::test_optional_pyproj_reference (pyproj/PROJ unavailable)",
+    "pytest_cases_passed": 1390,
+    "pytest_cases_skipped": 1,
+    "pytest_modules": 208,
+    "python_environment": "/var/tmp/pr108_portable_env_20261026",
+    "python_files_passed": 215,
+    "registry_files": 293,
+    "returncode": 0,
+    "shell_files_passed": 2,
+    "status": "PASS",
+    "tiers": {
+      "linux": 4,
+      "native": 63,
+      "portable": 215,
+      "realdata": 11
+    }
+  },
+  "source_sha256": {
+    "src/common/cloud_bal_native_w_consumer.f90": "1a36fb8dd5d47fbcd90398c74a438e58ca429b243d96323383f409a9a6980210",
+    "src/lapsprep/lapsprep.f90": "66a754ee0e384610769c78c468bb7656b6078b0a8ce217d3432452efa1382035",
+    "src/lapsprep/module_setup.f90": "14586ff3db4cfa69d1dad959d449f80d211a1dabacd2aec78fd6a7a65e46b799",
+    "tests/check_test_tiers.py": "a268db59daa94afad74d426f380420f1d9617d01ddfc118a3f7bf08f3e1434d2",
+    "tests/fixtures/pr83_policy_contract.json": "cb6d112e4b28848d588447d1df7277f65ad4a267760b2a4191da279d66ffa529",
+    "tests/lapsprep_vapor_fixture.py": "f9ed7e3bf871dd52eb998c38532a97ef60535b26013bff98020689125d30fbd2",
+    "tests/output_safety.sh": "29425d705117d9e534539129d0a7fa594a97eb6fdc12e933443b2c13f5893917",
+    "tests/python_script_test_allowlist.json": "f4359244c81935be92fb52226b396c7dbfdc006fe43f46802d357a72740c2e7c",
+    "tests/run_lapsprep_vapor.sh": "6d50659badce36a3f8c2cef263b25c2a1791250ab5b67745fb9da462be801834",
+    "tests/run_native_w_consumer.sh": "03d05ae104a367427481664f59b27fcf44271a1489a0da456cf05fa86124c35f",
+    "tests/run_python_contract_tests.sh": "be904108468c760120327e06201b2a0dba25333a4f234d4ee3bed80c87f41001",
+    "tests/run_python_test.py": "b40d055e6ae43450f249596e5b78aff5a83e49666f19d5a7b788862c9e0abe7e",
+    "tests/run_real_manufactured_balance_cases.sh": "59097733819051204af455396a934437626d7fcded7d842150879a5481fc7d04",
+    "tests/run_real_shadow_cases.sh": "5a57800fd67b6bec3c1e857f886d5916b68bb5290c10e132ab130501c0868f47",
+    "tests/run_shell_transaction_recovery.sh": "42f264aa5247a2178c9aaa59448d8e3714960cf6edd3924314443feab9bf0166",
+    "tests/test_initialize_native_moments.py": "24dffc26a1b488757c0b9388b3fd6a9240424f327a7fd07ef73a3528c0652e87",
+    "tests/test_kg_external_helper_integration.py": "15c9db769077c2561fd4f05de216ea6dcb5ce7d60be6b1da75e38c6dea26480a",
+    "tests/test_native_w_consumer.f90": "62eaf93ef1d04505ee0722d8f8b39b4e00d9b97003965c531a21e447e7632788",
+    "tests/test_pr103_kg_guard.py": "948b5d0b9794abb19d581808f7324b7c736f1e42a3e9f2c8964771ae14136ee6",
+    "tests/test_pr103_surface_temperature_observation.py": "0153908a6e5ef6a93669caac6d5b9a9354e65321157c58cce41644b03203e92f",
+    "tests/test_pr104_kg_guard.py": "5be14c7bc593eeea876c55fe91d09a4f344ef0ef89ff9b95b9cadf51e90f175d",
+    "tests/test_pr104_validtime_observation.py": "c3b72c0a57d7cf91f26910bbb046fcff2e83d4456cefa639e8aaab8ac2a0ceea",
+    "tests/test_pr105_kg_guard.py": "5431df4d5daddb68fb0fcc53c8d9fb5b05a00eefad811ae5b7f2f211f7c0f4a4",
+    "tests/test_pr83_policy_source_integration.py": "df8abfa260dacdcc6450502c5640da307b4218cdfc18de2fe405319e4d93caaf",
+    "tests/test_python_test_runner.py": "687ba32929c630955afef6d5f2c34adc14197aa63080b529bf6c74541bd00a76",
+    "tests/test_tier_exceptions.json": "da9d2639d85400bdbcda832e9d6034e4d61e593599f358817822dff8f5daa4b5",
+    "tools/pr103_surface_temperature_observation.py": "0f7c1086053efd0f35d2bc4e5eec7b6e65e9811ca44918b2357c0f43407f5641"
+  }
+}

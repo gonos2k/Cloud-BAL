@@ -43,11 +43,14 @@ negative pressure vertical velocity: `omega = -(w * pressure) / 8000`.
 
 ## Deliberate exclusions
 
-No observations, model data, operational output, executables, object/module
-files, logs, benchmark products, wiki content, or wind Barnes/OpenMP release
-files are included. `graphify-out` contains the persistent source-and-document
-structural graph of this focused snapshot. Raw radar ingest/remap and the complete KLAPS
-build system are also outside this repository.
+The repository includes selected research evidence under `docs/evidence`,
+including compressed logs, diagnostic records, fixtures, manifests, and hashes.
+It does not bundle the complete operational observation/model trees, native
+executables, object/module files, wiki content, or wind Barnes/OpenMP releases.
+`graphify-out` contains the source-and-document structural graph. Raw radar
+ingest/remap and the complete KLAPS build system remain external. Historical
+evidence and its identities are preserved; this change does not migrate or
+remove large artifacts.
 
 The selected files preserve their upstream FSL public-domain notices. This is
 a focused source snapshot, not yet a standalone KLAPS build. External KLAPS and

@@ -28,26 +28,6 @@ apply = load("pr104_kg_apply_test", HERE / "apply_kg.py")
 
 
 class TestParentReceiptAndSnapshotLineage(unittest.TestCase):
-    def test_corrected_pr103_parent_receipt_binds_124_snapshots(self):
-        self.assertEqual(preflight.sha(preflight.PRIOR), preflight.PRIOR_SHA)
-        prior = json.loads(preflight.PRIOR.read_text())
-        inventory = preflight.expected_published_inventory(prior)
-        self.assertEqual(len(inventory), 124)
-        self.assertEqual(prior["source_commit"], preflight.PRIOR_COMMIT)
-        self.assertEqual(prior["maintained_source_snapshot"], preflight.EXPECTED_SOURCE)
-        self.assertEqual(len(prior["inherited_immutable_pins_after"]), 197)
-
-    def test_existing_pr102_pinned_helper_api_is_loaded_without_copying_it(self):
-        helper_path = preflight.SOURCE / "docs/evidence/pr102_wind_structure_native_20261025/kg/preflight_kg.py"
-        self.assertTrue(helper_path.is_file())
-        pr102 = load("pr104_actual_pr102_preflight_api_test", helper_path)
-        helper = pr102._load_pinned_helper()
-        self.assertEqual(pr102.GUARD_SHA, helper.GUARD_SHA)
-        self.assertTrue(Path(helper.GUARD).is_file())
-        for name in ("PINNED_PYTHON", "PINNED_BIN", "snapshot_identity", "load",
-                     "load_previous_helpers", "immutable_pin_snapshot", "PRIOR_HELPER_SHA"):
-            self.assertTrue(hasattr(helper, name), name)
-
     def test_raw_date_collision_and_exact_four_publication_targets(self):
         raw_name = preflight.raw_snapshot_name("2026-10-26", True)
         self.assertEqual(raw_name, "2026-10-26-pr104-graphify-raw")

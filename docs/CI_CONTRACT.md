@@ -1,16 +1,39 @@
 # Portable Python contract CI
 
-The maintained entry point is `tests/run_python_contract_tests.sh`. The
-current checkout has no tracked `.github/workflows` file, so this document
-does not establish an active hosted CI check or a hosted-runner result.
-`PYTHON_BIN` selects the local interpreter; the script's test list is the
-authoritative registration. It also runs the shell failure-injection test for
-the preflight log capture.
+The maintained entry point is `tests/run_python_contract_tests.sh`. It discovers
+every `tests/test_*.py` file and checks tier registration with
+`tests/check_test_tiers.py`; newly added tests join the portable tier by
+default and must collect under pytest. The small
+`tests/python_script_test_allowlist.json` lists the legacy self-running checks
+that use script entry points instead of pytest collection. A newly discovered
+module with no collected test cases fails visibly until it uses pytest or is
+explicitly added to that small script allowlist. The
+`tests/test_tier_exceptions.json` file assigns tests that
+need Linux facilities, native toolchain/evidence, or real operational data to
+their own tiers. The checker prints every selected test and every skipped test
+with the tier and a short reason. `PYTHON_BIN` selects the interpreter and
+`TEST_TIER` selects `portable`, `linux`, `native`, or `realdata` (default:
+`portable`). The portable run also executes the shell preflight failure and
+transaction-recovery tests.
+Some native checks also need command arguments or environment paths; those
+requirements are recorded with their tier assignment. The generic tier runner
+does not invent missing evidence paths.
 
-The registered tests use fixtures and temporary directories. Examples include
-transaction rollback, native geometry algebra, trace parsing, and PR65
-numerical replay. The native geometry tests are synthetic algebra and parser
-checks, not native model executions.
+The current checkout has no tracked `.github/workflows` file, so this document
+does not establish an active hosted CI check or a hosted-runner result.
+
+The portable tests use checked-in fixtures and temporary directories. Examples
+include transaction rollback, geometry algebra, trace parsing, and numerical
+replay. Geometry and parser contracts are not native model executions.
+
+PR83 has two separate checks. The portable policy-contract fixture checks the
+declared policy identity, valid time, density equation, evidence inventory, and
+the frozen policy-file digest without opening external source artifacts. The
+`realdata` source integration test invokes the production validator, which
+continues to require exact hashes for the external source, executable,
+archive, and receipts. Portable tests that mock these source bindings do not
+replace that integration check. Missing fixture or evidence files fail the
+selected integration test rather than counting as a pass.
 
 The local setup example below installs selected NumPy/netCDF4 binary wheels.
 The tests create their
@@ -21,23 +44,25 @@ The setup example pins dependency versions, but not wheel hashes. It is a
 portable regression check, not a release receipt, reproducibility
 attestation, or supply-chain verification.
 
-This is a bounded contract test runner, not a full scientific or operational
-validation. It does not test:
+The portable tier is a bounded contract check, not full scientific or
+operational validation. It does not test:
 
 - Fortran compilation, linking, runtime behavior, or any `tests/*.f90`/`tests/*.f`
   test invoked by `tests/run_unit_tests.sh`.
-- Intel `ifx` toolchain integration or native build provenance. The integration
-  audit test above is fixture-only logic; it does not execute `ifx`.
-- The optional native C/`nm`/`objdump` branch in
-  `tests/test_legacy_deriv_safety.py`.
+- Intel `ifx` toolchain integration or native build provenance; these are
+  classified under `native`.
 - The host-sandbox and `/usr/bin/bwrap` assumptions in
   `tests/test_original_upstream_replay.py`.
 - Real operational inputs, production deployment, credentials, or scientific
   correctness claims beyond the checked Python contracts.
 
-Run the registered tests locally from the repository root with an executable scratch
-filesystem. This workspace mounts `/tmp` with `noexec`, so do not install binary
-extension wheels there:
+The optional C/`nm`/`objdump` branch in `test_legacy_deriv_safety.py` runs
+when those tools exist and reports a skip otherwise; its availability is not
+guaranteed by the Python environment.
+
+Run the portable tier locally from the repository root with an executable
+scratch filesystem. This workspace mounts `/tmp` with `noexec`, so do not
+install binary extension wheels there:
 
 ```bash
 mkdir -p scratch
@@ -45,7 +70,8 @@ venv_dir=$(mktemp -d "$PWD/scratch/python-contract.XXXXXX")
 trap 'rm -rf "$venv_dir"' EXIT
 python3 -m venv "$venv_dir"
 "$venv_dir/bin/python" -m pip install --only-binary=:all: \
-  'numpy==1.26.4' 'netCDF4==1.7.4' 'cftime==1.6.5'
+  'numpy==1.26.4' 'netCDF4==1.7.4' 'cftime==1.6.5' \
+  'pytest==8.1.1' 'scipy==1.15.3' 'matplotlib==3.10.1'
 PYTHON_BIN="$venv_dir/bin/python" tests/run_python_contract_tests.sh
 ```
 

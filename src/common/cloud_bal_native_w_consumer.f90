@@ -535,8 +535,85 @@ CONTAINS
     IF (.NOT.has_units(ncid,'W','m s-1')) RETURN
     IF (nf90_inq_varid(ncid,'W',varid)/=NF90_NOERR) RETURN
     rc=nf90_get_var(ncid,varid,values)
-    read_w=rc==NF90_NOERR
+    IF (rc/=NF90_NOERR) RETURN
+    read_w=valid_w_values(ncid,varid,values)
   END FUNCTION read_w
+
+  LOGICAL FUNCTION valid_w_values(ncid,varid,values)
+    INTEGER, INTENT(IN) :: ncid,varid
+    REAL(real32), INTENT(IN) :: values(:,:,:,:)
+    REAL(real32) :: missing_value,valid_min,valid_max,valid_range(2)
+    LOGICAL :: present
+
+    valid_w_values=.FALSE.
+    IF (ANY(.NOT.ieee_is_finite(values))) RETURN
+    IF (ANY(values==NF90_FILL_FLOAT)) RETURN
+    IF (.NOT.read_w_scalar_attribute(ncid,varid,'_FillValue',present,missing_value)) RETURN
+    IF (present) THEN
+      IF (ANY(values==missing_value)) RETURN
+    END IF
+    IF (.NOT.read_w_scalar_attribute(ncid,varid,'missing_value',present,missing_value)) RETURN
+    IF (present) THEN
+      IF (ANY(values==missing_value)) RETURN
+    END IF
+
+    IF (.NOT.read_w_range_attribute(ncid,varid,'valid_range',present,valid_range)) RETURN
+    IF (present) THEN
+      IF (valid_range(1)>valid_range(2)) RETURN
+      IF (ANY(values<valid_range(1)) .OR. ANY(values>valid_range(2))) RETURN
+    END IF
+    IF (.NOT.read_w_scalar_attribute(ncid,varid,'valid_min',present,valid_min)) RETURN
+    IF (present) THEN
+      IF (ANY(values<valid_min)) RETURN
+    END IF
+    IF (.NOT.read_w_scalar_attribute(ncid,varid,'valid_max',present,valid_max)) RETURN
+    IF (present) THEN
+      IF (ANY(values>valid_max)) RETURN
+    END IF
+    valid_w_values=.TRUE.
+  END FUNCTION valid_w_values
+
+  LOGICAL FUNCTION read_w_scalar_attribute(ncid,varid,name,present,value)
+    INTEGER, INTENT(IN) :: ncid,varid
+    CHARACTER(LEN=*), INTENT(IN) :: name
+    LOGICAL, INTENT(OUT) :: present
+    REAL(real32), INTENT(OUT) :: value
+    INTEGER :: rc,xtype,att_length
+
+    present=.FALSE.; value=0.0_real32
+    rc=nf90_inquire_attribute(ncid,varid,TRIM(name),xtype=xtype,len=att_length)
+    IF (rc==NF90_ENOTATT) THEN
+      read_w_scalar_attribute=.TRUE.
+      RETURN
+    END IF
+    read_w_scalar_attribute=.FALSE.
+    IF (rc/=NF90_NOERR .OR. xtype/=NF90_FLOAT .OR. att_length/=1) RETURN
+    IF (nf90_get_att(ncid,varid,TRIM(name),value)/=NF90_NOERR) RETURN
+    IF (.NOT.ieee_is_finite(value)) RETURN
+    present=.TRUE.
+    read_w_scalar_attribute=.TRUE.
+  END FUNCTION read_w_scalar_attribute
+
+  LOGICAL FUNCTION read_w_range_attribute(ncid,varid,name,present,values)
+    INTEGER, INTENT(IN) :: ncid,varid
+    CHARACTER(LEN=*), INTENT(IN) :: name
+    LOGICAL, INTENT(OUT) :: present
+    REAL(real32), INTENT(OUT) :: values(2)
+    INTEGER :: rc,xtype,att_length
+
+    present=.FALSE.; values=0.0_real32
+    rc=nf90_inquire_attribute(ncid,varid,TRIM(name),xtype=xtype,len=att_length)
+    IF (rc==NF90_ENOTATT) THEN
+      read_w_range_attribute=.TRUE.
+      RETURN
+    END IF
+    read_w_range_attribute=.FALSE.
+    IF (rc/=NF90_NOERR .OR. xtype/=NF90_FLOAT .OR. att_length/=2) RETURN
+    IF (nf90_get_att(ncid,varid,TRIM(name),values)/=NF90_NOERR) RETURN
+    IF (ANY(.NOT.ieee_is_finite(values))) RETURN
+    present=.TRUE.
+    read_w_range_attribute=.TRUE.
+  END FUNCTION read_w_range_attribute
 
   LOGICAL FUNCTION read_real4(ncid,name,dimension_names,values,units)
     INTEGER, INTENT(IN) :: ncid

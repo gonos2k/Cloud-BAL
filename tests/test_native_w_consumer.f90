@@ -63,6 +63,15 @@ PROGRAM test_native_w_consumer
     ALL(updated_lon==baseline_lon),'only W changed in staged wrfinput',failures)
   CALL check(updated_start_date==VALID_TIME,'global attributes remain intact',failures)
 
+  CALL rejected_w_case(TRIM(root)//'/wrfinput_fill_updated','_FillValue',1,failures)
+  CALL rejected_w_case(TRIM(root)//'/wrfinput_fill_untouched','_FillValue',2,failures)
+  CALL rejected_w_case(TRIM(root)//'/wrfinput_missing_updated','missing_value',1,failures)
+  CALL rejected_w_case(TRIM(root)//'/wrfinput_missing_untouched','missing_value',2,failures)
+  CALL rejected_w_case(TRIM(root)//'/wrfinput_default_fill','default_fill',2,failures)
+  CALL rejected_w_case(TRIM(root)//'/wrfinput_range_updated','valid_range',1,failures)
+  CALL rejected_w_case(TRIM(root)//'/wrfinput_bad_range_shape','bad_range_shape',1,failures)
+  CALL rejected_w_case(TRIM(root)//'/wrfinput_bad_range_type','bad_range_type',1,failures)
+
   CALL create_wrfinput(TRIM(bad_wrfin))
   CALL create_candidate(TRIM(bad_candidate),WRONG_TIME)
   CALL read_wrf_snapshot(TRIM(bad_wrfin),baseline_w,baseline_extra,baseline_lat, &
@@ -141,8 +150,32 @@ CONTAINS
     END IF
   END SUBROUTINE check
 
-  SUBROUTINE create_wrfinput(path)
+  SUBROUTINE rejected_w_case(path,mode,sentinel_i,failures)
+    CHARACTER(LEN=*), INTENT(IN) :: path,mode
+    INTEGER, INTENT(IN) :: sentinel_i
+    INTEGER, INTENT(INOUT) :: failures
+    REAL(real32) :: before_w(NX,NY,NZ,1),after_w(NX,NY,NZ,1)
+    REAL(real32) :: before_extra(NX,NY,NZ,1),after_extra(NX,NY,NZ,1)
+    REAL(real64) :: before_lat(NX,NY,1),before_lon(NX,NY,1)
+    REAL(real64) :: after_lat(NX,NY,1),after_lon(NX,NY,1)
+    CHARACTER(LEN=DATE_LENGTH) :: before_time,after_time
+    INTEGER :: local_status
+
+    CALL create_wrfinput(path,mode,sentinel_i)
+    CALL read_wrf_snapshot(path,before_w,before_extra,before_lat,before_lon,before_time)
+    CALL apply_native_w_increment(path,TRIM(candidate),VALID_TIME,.TRUE.,local_status)
+    CALL check(local_status/=NATIVE_W_CONSUMER_OK,TRIM(mode)//' rejected before update',failures)
+    CALL read_wrf_snapshot(path,after_w,after_extra,after_lat,after_lon,after_time)
+    CALL check(ALL(after_w==before_w),TRIM(mode)//' preserves updated and untouched W',failures)
+    CALL check(ALL(after_extra==before_extra) .AND. ALL(after_lat==before_lat) .AND. &
+      ALL(after_lon==before_lon) .AND. after_time==before_time, &
+      TRIM(mode)//' rejection leaves all other data unchanged',failures)
+  END SUBROUTINE rejected_w_case
+
+  SUBROUTINE create_wrfinput(path,w_mode,sentinel_i)
     CHARACTER(LEN=*), INTENT(IN) :: path
+    CHARACTER(LEN=*), INTENT(IN), OPTIONAL :: w_mode
+    INTEGER, INTENT(IN), OPTIONAL :: sentinel_i
     INTEGER :: ncid,tdim,ddim,xdim,ydim,zdim,ustagdim,vstagdim
     INTEGER :: wvar,times_var,lat_var,lon_var,extra_var,hgt_var,mapx_var,mapy_var
     REAL(real32) :: w(NX,NY,NZ,1),extra(NX,NY,NZ,1)
@@ -179,12 +212,43 @@ CONTAINS
     CALL nc_assert(nf90_put_att(ncid,NF90_GLOBAL,'GRID_ID',1_int32),'grid id')
     CALL nc_assert(nf90_put_att(ncid,NF90_GLOBAL,'DX',10.0_real64),'DX')
     CALL nc_assert(nf90_put_att(ncid,NF90_GLOBAL,'DY',20.0_real64),'DY')
+    IF (PRESENT(w_mode)) THEN
+      SELECT CASE (TRIM(w_mode))
+      CASE ('_FillValue')
+        CALL nc_assert(nf90_put_att(ncid,wvar,'_FillValue',-999.0_real32),'W fill value')
+      CASE ('missing_value')
+        CALL nc_assert(nf90_put_att(ncid,wvar,'missing_value',-999.0_real32),'W missing value')
+      CASE ('valid_range')
+        CALL nc_assert(nf90_put_att(ncid,wvar,'valid_range',[0.0_real32,30.0_real32]), &
+          'W valid range')
+      CASE ('bad_range_shape')
+        CALL nc_assert(nf90_put_att(ncid,wvar,'valid_range',30.0_real32), &
+          'malformed W valid range')
+      CASE ('bad_range_type')
+        CALL nc_assert(nf90_put_att(ncid,wvar,'valid_min',[-10_int32,0_int32]), &
+          'malformed W valid minimum')
+      CASE ('default_fill')
+        CONTINUE
+      CASE DEFAULT
+        ERROR STOP 'unknown W metadata test mode'
+      END SELECT
+    END IF
     CALL nc_assert(nf90_enddef(ncid),'end wrf definition')
 
     DO k=1,NZ; DO j=1,NY; DO i=1,NX
       w(i,j,k,1)=10.0_real32+REAL(i+2*j+3*k,real32)
       extra(i,j,k,1)=70.0_real32+REAL(2*i+j+k,real32)
     END DO; END DO; END DO
+    IF (PRESENT(sentinel_i) .AND. PRESENT(w_mode)) THEN
+      SELECT CASE (TRIM(w_mode))
+      CASE ('_FillValue','missing_value')
+        w(sentinel_i,1,1,1)=-999.0_real32
+      CASE ('valid_range')
+        w(sentinel_i,1,1,1)=999.0_real32
+      CASE ('default_fill')
+        w(sentinel_i,1,1,1)=NF90_FILL_FLOAT
+      END SELECT
+    END IF
     DO j=1,NY; DO i=1,NX
       lat(i,j,1)=35.0_real32+0.25_real32*REAL(i,real32)+0.5_real32*REAL(j,real32)
       lon(i,j,1)=-120.0_real32+0.75_real32*REAL(i,real32)-0.25_real32*REAL(j,real32)

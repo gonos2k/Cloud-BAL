@@ -137,7 +137,8 @@ staging=$(python3 "$repo_root/tools/cloud_bal_transaction.py" begin \
   --configuration "radar-only-shadow-ifx-2026-v3" \
   --valid-time "$last_epoch" \
   --require-validation)
-trap 'if [[ -d $staging ]]; then mv "$staging" "$staging.failed.$$"; fi' EXIT
+trap 'cloud_bal_quarantine_staging_on_exit "$?" "$staging" \
+  "$publication_root" "$transaction_id"' EXIT
 
 case_count=0
 hydrometeor_valid_count=0

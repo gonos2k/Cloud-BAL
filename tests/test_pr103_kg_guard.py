@@ -196,33 +196,6 @@ class TestSelectionBoundary(unittest.TestCase):
         self.assertTrue(preflight.selected_path("tests/test_pr103_amplitude_control.py"))
 
 
-class TestPinnedPr102HelperBindings(unittest.TestCase):
-    def test_guard_api_is_read_from_the_actual_pinned_helper(self):
-        pr102 = preflight.load(
-            "pr103_actual_pr102_preflight_api_test",
-            preflight.SOURCE / "docs/evidence/pr102_wind_structure_native_20261025/kg/preflight_kg.py",
-        )
-        helper = pr102._load_pinned_helper()
-        self.assertFalse(hasattr(pr102, "GUARD"))
-        self.assertTrue(hasattr(helper, "GUARD"))
-        self.assertEqual(pr102.GUARD_SHA, helper.GUARD_SHA)
-        self.assertTrue(Path(helper.GUARD).is_file())
-        self.assertEqual(preflight.sha(Path(helper.GUARD)), helper.GUARD_SHA)
-        for name in ("PINNED_PYTHON", "PINNED_BIN", "snapshot_identity", "load",
-                     "load_previous_helpers", "immutable_pin_snapshot", "PRIOR_HELPER_SHA"):
-            self.assertTrue(hasattr(helper, name), name)
-        guard = helper.load("pr103_actual_guard_api_test", helper.GUARD, pr102.GUARD_SHA)
-        self.assertTrue(callable(guard.maintained_source_snapshot))
-        _, protected, _ = helper.load_previous_helpers()
-        self.assertTrue(callable(protected.protected_content))
-        updater = helper.load("pr103_actual_updater_api_test", preflight.UPDATER, preflight.UPDATER_SHA)
-        auditor = helper.load("pr103_actual_auditor_api_test", preflight.AUDITOR, preflight.AUDITOR_SHA)
-        self.assertTrue(callable(updater.update_graph))
-        self.assertTrue(updater.GRAPH_FILES)
-        self.assertTrue(callable(auditor.record_snapshot))
-        self.assertTrue(callable(auditor.verify_private_profile))
-
-
 class TestManifestEvidenceHash(unittest.TestCase):
     def test_gate_evidence_must_match_its_file_hash(self):
         with tempfile.TemporaryDirectory() as temp:

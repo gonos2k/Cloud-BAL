@@ -16,6 +16,25 @@ MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 
 
+def inverse_lambert_grid(ny, nx):
+    """Independent spherical LCC inverse for valid binary32 history fixtures."""
+    radius, spacing, lon0 = MODULE.PR103.RE, 5000.0, 126.0
+    phi1, phi2 = np.radians([30.0, 60.0])
+    cone = np.log(np.cos(phi1) / np.cos(phi2)) / np.log(
+        np.tan(np.pi / 4 + phi2 / 2) / np.tan(np.pi / 4 + phi1 / 2))
+    factor = np.cos(phi1) * np.tan(np.pi / 4 + phi1 / 2) ** cone / cone
+    anchor_phi = np.radians(35.0)
+    rho0 = radius * factor / np.tan(np.pi / 4 + anchor_phi / 2) ** cone
+    lat, lon = np.empty((ny, nx)), np.empty((ny, nx))
+    for j in range(ny):
+        for i in range(nx):
+            x, y = i * spacing, -rho0 + j * spacing
+            rho = np.hypot(x, y)
+            lat[j, i] = np.degrees(2 * np.arctan((radius * factor / rho) ** (1 / cone)) - np.pi / 2)
+            lon[j, i] = lon0 + np.degrees(np.arctan2(x, -y) / cone)
+    return lat.astype(np.float32), lon.astype(np.float32)
+
+
 class ExplicitValidTimeObservationTests(unittest.TestCase):
     def write_model(self, path, times):
         with Dataset(path, "w", format="NETCDF4") as nc:
@@ -26,13 +45,16 @@ class ExplicitValidTimeObservationTests(unittest.TestCase):
             times_var = nc.createVariable("Times", "S1", ("Time", "DateStrLen"))
             for index, value in enumerate(times):
                 times_var[index, :] = np.frombuffer(value.encode("ascii"), dtype="S1")
+            nc.MAP_PROJ = 1
             for name, value in (("TRUELAT1", 30.0), ("TRUELAT2", 60.0),
                                 ("STAND_LON", 126.0), ("DX", 5000.0), ("DY", 5000.0)):
                 setattr(nc, name, value)
-            for name, value in (("XLAT", 35.0), ("XLONG", 126.0), ("T2", 280.0)):
+            lat_grid, lon_grid = inverse_lambert_grid(5, 5)
+            for name, value in (("XLAT", lat_grid), ("XLONG", lon_grid), ("T2", 280.0)):
                 var = nc.createVariable(name, "f4", ("Time", "south_north", "west_east"), fill_value=-9999.0)
                 var.units = "K" if name == "T2" else "degrees_north"
-                var[:] = np.full((len(times), 5, 5), value, dtype=np.float32)
+                data = np.full((len(times), 5, 5), value, dtype=np.float32) if np.isscalar(value) else np.broadcast_to(value, (len(times), 5, 5))
+                var[:] = data
             nc.variables["T2"][1:, :, :] = 281.0
 
     @staticmethod
@@ -73,6 +95,26 @@ class ExplicitValidTimeObservationTests(unittest.TestCase):
                 nc.variables["T2"][1, 2, 2] = -9999.0
             with self.assertRaisesRegex(ValueError, "T2 contains declared _FillValue"):
                 MODULE.PR103.model_metadata(path, "2026-08-16T14:00:00Z")
+
+    def test_identical_malformed_arm_grids_fail_before_any_station_scores(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            root = Path(tempdir)
+            histories = {}
+            for arm in ("H", "A", "N"):
+                path = root / f"{arm}.nc"
+                self.write_model(path, ["2026-08-16_14:00:00"])
+                with Dataset(path, "a") as nc:
+                    nc.variables["XLAT"][:] = 35.0
+                    nc.variables["XLONG"][:] = 126.0
+                histories[arm] = path
+            observation_path = root / "obs.lso"
+            self.write_lso(observation_path)
+            with patch.object(MODULE.PR103, "compare") as score:
+                with self.assertRaisesRegex(ValueError, "fails Lambert mapping prerequisite"):
+                    MODULE.load_histories(histories,
+                                          MODULE.parse_valid_time("2026-08-16T14:00:00Z"),
+                                          [], observation_path)
+            score.assert_not_called()
 
     def test_lso_header_date_must_match_valid_date(self):
         with tempfile.TemporaryDirectory() as tempdir:

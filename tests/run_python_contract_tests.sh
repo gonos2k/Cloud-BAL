@@ -3,85 +3,58 @@ set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 python_bin=${PYTHON_BIN:-python3}
+python_bin=$(command -v "$python_bin")
+PATH="$(dirname "$python_bin"):$PATH"
+export PATH
+test_tier=${TEST_TIER:-portable}
 
 cd "$repo_root"
+mkdir -p scratch
+"$python_bin" tests/check_test_tiers.py --tier "$test_tier"
 
-tests=(
-  tests/test_cp02_metadata_staging.py
-  tests/test_compare_baseline.py
-  tests/test_intel_integration_audit.py
-  tests/test_native_hybrid_geometry.py
-  tests/test_native_mass_metric.py
-  tests/test_native_host_pressure.py
-  tests/test_mp37_aux_contract.py
-  tests/test_hydrometeor_moments.py
-  tests/test_initialize_native_moments.py
-  tests/test_native_ccn_stage_trace.py
-  tests/test_native_mp37_aux.py
-  tests/test_native_kdm6_trace.py
-  tests/test_native_kdm6_call_geometry.py
-  tests/test_pr63_transition_replay.py
-  tests/test_pr64_qc_channel_replay.py
-  tests/test_pr65_nc_donor_replay.py
-  tests/test_pr65_pbl_operator_replay.py
-  tests/test_pr65_pbl_domain_metrics.py
-  tests/test_pr65_samecall_budget_audit.py
-  tests/test_pr67_pbl_carrier_audit.py
-  tests/test_pr67_kdm6_process_budget.py
-  tests/test_pr67_output_safety_crosscheck.py
-  tests/test_pr67_negative_qc_replay.py
-  tests/test_pr68_carrier_budget_replay.py
-  tests/test_pr68_completed_qc_audit.py
-  tests/test_pr68_rain_process_trace.py
-  tests/test_pr69_water_budget.py
-  tests/test_pr69_water_observer_runner.py
-  tests/test_prepare_pr67_model_target.py
-  tests/test_pr63_paired_bg_volume.py
-  tests/test_operational_comparison_prep.py
-  tests/test_operational_shadow_compare.py
-  tests/test_output_transaction.py
-  tests/test_transaction_recovery.py
-  tests/test_publication_filesystem.py
-  tests/test_bound_executable.py
-  tests/test_bound_runtime.py
-  tests/test_pin_link_inputs.py
-  tests/test_pin_compiler_inputs.py
-  tests/test_e01_completion_gate.py
-  tests/test_landlock_policy.py
-  tests/test_detached_runtime.py
-  tests/test_cloud_bal_stage_coordinator.py
-  tests/test_qbal_real_input_manifest.py
-  tests/test_lco_evidence.py
-  tests/test_real_manufactured_balance_generation.py
-  tests/test_shadow_validator.py
-  tests/test_cloud_provenance_receipt.py
-  tests/test_candidate_endpoint_roundoff.py
-  tests/test_run_isolated_native.py
-  tests/test_pressure_transition_payload.py
-  tests/test_pressure_transition_reference.py
-  tests/test_thermo_output_certificate.py
-  tests/test_pressure_cell_geometry.py
-  tests/test_pressure_continuity_oracle.py
-  tests/test_verify_shadow_wps_pair_lambert.py
-  tests/test_pressure_geometry_budget.py
-  tests/test_pressure_state_replay.py
-  tests/test_transition_geopotential_reference.py
-  tests/test_transition_geostrophic_scope.py
-  tests/test_transition_radar_reader.py
-  tests/test_transition_state_validator.py
-  tests/test_transition_geometry_ledger.py
-  tests/test_thermo_stage_budget.py
-  tests/test_transition_geometry_reference.py
-  tests/test_radar_proposal_replay.py
-  tests/test_surface_boundary_validator.py
-)
+test_list=$(mktemp)
+trap 'rm -f "$test_list"' EXIT
+"$python_bin" tests/check_test_tiers.py --tier "$test_tier" --list > "$test_list"
+mapfile -t tests < "$test_list"
+if ((${#tests[@]} == 0)); then
+  echo "No tests registered for tier '$test_tier'" >&2
+  exit 2
+fi
 
+passed_tests=0
+skipped_tests=0
+run_output=$(mktemp)
+trap 'rm -f "$test_list" "$run_output"' EXIT
 for test_path in "${tests[@]}"; do
   echo "Running $test_path"
-  "$python_bin" "$repo_root/$test_path"
+  if "$python_bin" "$repo_root/tests/run_python_test.py" "$repo_root/$test_path" > "$run_output" 2>&1; then
+    cat "$run_output"
+    if grep -q '^TIER_RESULT: SKIP ' "$run_output"; then
+      ((skipped_tests += 1))
+    else
+      ((passed_tests += 1))
+    fi
+  else
+    test_status=$?
+    cat "$run_output" >&2
+    exit "$test_status"
+  fi
 done
 
-echo "Running tests/test_pr65_observation_preflight_runner.sh"
-bash "$repo_root/tests/test_pr65_observation_preflight_runner.sh"
+if ((passed_tests == 0)); then
+  echo "Tier '$test_tier' has no passing Python tests: 0 passed, $skipped_tests skipped" >&2
+  exit 1
+fi
 
-echo "Portable Python contract tests passed"
+if [[ "$test_tier" == portable ]]; then
+  echo "Running tests/test_pr65_observation_preflight_runner.sh"
+  bash "$repo_root/tests/test_pr65_observation_preflight_runner.sh"
+  echo "PASS tests/test_pr65_observation_preflight_runner.sh"
+  ((passed_tests += 1))
+  echo "Running tests/run_shell_transaction_recovery.sh"
+  bash "$repo_root/tests/run_shell_transaction_recovery.sh"
+  echo "PASS tests/run_shell_transaction_recovery.sh"
+  ((passed_tests += 1))
+fi
+
+echo "Tier '$test_tier' passed: $passed_tests tests passed, $skipped_tests skipped"

@@ -14,6 +14,32 @@ MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 
 
+def inverse_lambert_grid(ny, nx, *, lat1=35.0, lon1=126.0):
+    """Independent spherical LCC inverse used to make nondegenerate fixtures."""
+    radius, dx, dy, lon0 = MODULE.RE, 5000.0, 5000.0, 126.0
+    phi1, phi2 = np.radians([30.0, 60.0])
+    cone = np.log(np.cos(phi1) / np.cos(phi2)) / np.log(
+        np.tan(np.pi / 4 + phi2 / 2) / np.tan(np.pi / 4 + phi1 / 2))
+    factor = np.cos(phi1) * np.tan(np.pi / 4 + phi1 / 2) ** cone / cone
+
+    def projected(lat, lon):
+        phi = np.radians(lat)
+        rho = radius * factor / np.tan(np.pi / 4 + phi / 2) ** cone
+        theta = cone * np.radians(lon - lon0)
+        return rho * np.sin(theta), -rho * np.cos(theta)
+
+    x0, y0 = projected(lat1, lon1)
+    lat_grid = np.empty((ny, nx), dtype=np.float64)
+    lon_grid = np.empty((ny, nx), dtype=np.float64)
+    for j in range(ny):
+        for i in range(nx):
+            x, y = x0 + i * dx, y0 + j * dy
+            rho = np.hypot(x, y)
+            lat_grid[j, i] = np.degrees(2 * np.arctan((radius * factor / rho) ** (1 / cone)) - np.pi / 2)
+            lon_grid[j, i] = lon0 + np.degrees(np.arctan2(x, -y) / cone)
+    return lat_grid.astype(np.float32), lon_grid.astype(np.float32)
+
+
 class SurfaceTemperatureObservationTests(unittest.TestCase):
     def write_model_file(self, path, missing_variable=None):
         with Dataset(path, "w", format="NETCDF4") as nc:
@@ -23,13 +49,15 @@ class SurfaceTemperatureObservationTests(unittest.TestCase):
             nc.createDimension("west_east", 4)
             times = nc.createVariable("Times", "S1", ("Time", "DateStrLen"))
             times[0, :] = np.frombuffer(b"2026-08-16_13:00:00", dtype="S1")
+            nc.MAP_PROJ = 1
             for name, value in (("TRUELAT1", 30.0), ("TRUELAT2", 60.0),
                                 ("STAND_LON", 126.0), ("DX", 5000.0), ("DY", 5000.0)):
                 setattr(nc, name, value)
-            for name, value in (("XLAT", 35.0), ("XLONG", 126.0), ("T2", 280.0)):
+            lat_grid, lon_grid = inverse_lambert_grid(4, 4)
+            for name, value in (("XLAT", lat_grid), ("XLONG", lon_grid), ("T2", 280.0)):
                 var = nc.createVariable(name, "f4", ("Time", "south_north", "west_east"), fill_value=-9999.0)
                 var.units = "K" if name == "T2" else "degrees_north"
-                data = np.full((1, 4, 4), value, dtype=np.float32)
+                data = np.full((1, 4, 4), value, dtype=np.float32) if np.isscalar(value) else value[np.newaxis, :, :]
                 if name == missing_variable:
                     data[0, 1, 1] = -9999.0
                 var[:] = data
@@ -41,6 +69,53 @@ class SurfaceTemperatureObservationTests(unittest.TestCase):
                 self.write_model_file(path, missing_variable=name)
                 with self.assertRaisesRegex(ValueError, f"{name} contains declared _FillValue"):
                     MODULE.model_metadata(path)
+
+    def test_model_reader_requires_lambert_map_projection_and_valid_parameters(self):
+        for attrs, message in (({"MAP_PROJ": 0}, "unsupported MAP_PROJ"),
+                               ({"DX": 0.0}, "must be positive"),
+                               ({"TRUELAT1": 90.0}, "strictly between"),
+                               ({"TRUELAT2": float("nan")}, "invalid or missing Lambert parameter")):
+            with self.subTest(attrs=attrs), tempfile.TemporaryDirectory() as tempdir:
+                path = Path(tempdir) / "history.nc"
+                self.write_model_file(path)
+                with Dataset(path, "a") as nc:
+                    for name, value in attrs.items():
+                        setattr(nc, name, value)
+                with self.assertRaisesRegex(ValueError, message):
+                    MODULE.model_metadata(path)
+
+        with tempfile.TemporaryDirectory() as tempdir:
+            path = Path(tempdir) / "history.nc"
+            self.write_model_file(path)
+            with Dataset(path, "a") as nc:
+                del nc.MAP_PROJ
+            with self.assertRaisesRegex(ValueError, "missing MAP_PROJ"):
+                MODULE.model_metadata(path)
+
+    def test_lambert_mapping_gate_rejects_identical_malformed_grids(self):
+        bad_lat = np.full((4, 4), 35.0, dtype=np.float32)
+        bad_lon = np.full((4, 4), 126.0, dtype=np.float32)
+        projection = dict(lat1=35.0, lon1=126.0, stdlon=126.0,
+                          truelat1=30.0, truelat2=60.0, dx=5000.0, dy=5000.0)
+        for arm in ("H", "A", "N"):
+            with self.subTest(arm=arm), self.assertRaisesRegex(ValueError, "fails Lambert mapping prerequisite"):
+                MODULE.grid_mapping_residuals(bad_lat.copy(), bad_lon.copy(), projection)
+
+    def test_lambert_mapping_gate_accepts_real32_coordinates_from_independent_inverse(self):
+        lat, lon = inverse_lambert_grid(18, 20)
+        projection = dict(lat1=float(lat[0, 0]), lon1=float(lon[0, 0]), stdlon=126.0,
+                          truelat1=30.0, truelat2=60.0, dx=5000.0, dy=5000.0)
+        audit = MODULE.grid_mapping_residuals(lat, lon, projection)
+        self.assertLessEqual(audit["i_delta_grid_units"]["max_abs"], audit["acceptance_tolerance_grid_units"])
+        self.assertLessEqual(audit["j_delta_grid_units"]["max_abs"], audit["acceptance_tolerance_grid_units"])
+
+    def test_lambert_mapping_gate_rejects_nonfinite_inverse_output(self):
+        lat, lon = inverse_lambert_grid(4, 4)
+        projection = dict(lat1=float(lat[0, 0]), lon1=float(lon[0, 0]), stdlon=126.0,
+                          truelat1=30.0, truelat2=60.0, dx=5000.0, dy=5000.0)
+        with patch.object(MODULE, "lc_grid_ij", return_value=(float("nan"), 1.0)):
+            with self.assertRaisesRegex(ValueError, "nonfinite grid coordinates"):
+                MODULE.grid_mapping_residuals(lat, lon, projection)
 
     def test_model_reader_all_zero_guard_is_diagnostic_only(self):
         with tempfile.TemporaryDirectory() as tempdir:
