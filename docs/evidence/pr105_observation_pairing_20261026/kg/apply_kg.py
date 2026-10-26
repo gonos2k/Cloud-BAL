@@ -196,8 +196,9 @@ def finalize_stage(plan: dict, stage_root: Path, stage_maint: Path,
     for label, directory in (("KLAPS50", stage_root), ("Cloud-BAL", stage_maint)):
         report = directory / "graphify-out/GRAPH_REPORT.md"
         content = report.read_text()
-        section = (f"## Graph Freshness\n\n- PR105 source `{plan['source_commit']}`; approval and graph-selection "
-                   f"base `{plan['approval_base']}`; {len(plan['selected_graph_paths'])} selected paths.\n- {limits}\n")
+        section = (f"## Graph Freshness\n\n- PR105 source `{plan['source_commit']}`; approval base "
+                   f"`{plan['approval_base']}`; graph-selection base `{plan['graph_selection_base']}`; "
+                   f"{len(plan['selected_graph_paths'])} selected paths.\n- {limits}\n")
         report.write_text(update_graph_freshness(content, section, report))
         mirror = "graph-report-klaps50.md" if label == "KLAPS50" else "graph-report-cloud-bal.md"
         shutil.copy2(report, stage_root / "wiki" / mirror)
@@ -249,7 +250,8 @@ def finalize_stage(plan: dict, stage_root: Path, stage_maint: Path,
     code = plan["code_validation"]["state"]
     observation = plan["runtime_observation"]["state"]
     entry = (f"\n## [{plan['automatic_snapshot_date']}] kg-update | PR105 observation pairing\n"
-             f"- Source `{plan['source_commit']}`; approval and graph-selection base `{plan['approval_base']}`; PR {plan['pr_url']}.\n")
+             f"- Source `{plan['source_commit']}`; approval base `{plan['approval_base']}`; "
+             f"graph-selection base `{plan['graph_selection_base']}`; PR {plan['pr_url']}.\n")
     for label in ("KLAPS50", "Cloud-BAL"):
         row = records[label]
         entry += (f"- {label}: {preflight.PR105_SNAPSHOT}; {row['nodes']} nodes / {row['edges']} edges / "
@@ -259,7 +261,7 @@ def finalize_stage(plan: dict, stage_root: Path, stage_maint: Path,
               f"{plan['inherited_immutable_pin_count']} inherited immutable pins verified.\n"
               f"- Code validation: {code}; runtime observation: {observation} (open); "
               f"3600-second forecast verdict: {plan['forecast_verdict']}.\n"
-              "physical approval FAIL_OPEN; observation skill NOT_EVALUATED.\n"
+              "- Physical approval FAIL_OPEN; observation skill NOT_EVALUATED.\n"
               f"- Extraction limits: {limits}\n")
     with log.open("a") as stream:
         stream.write(entry)

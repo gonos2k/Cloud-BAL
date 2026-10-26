@@ -76,8 +76,9 @@ The final focused Python batch passed 43 checks with identical source hashes
 before and after execution. It covers the existing PR103 reader regression,
 explicit-time reader, output preservation, paired score arithmetic, closed
 result bindings, and scoped KG guards. The receipt and log are under
-`docs/evidence/pr105_observation_pairing_20261026/validation/final_v2/`.
-The earlier 42-check receipt is retained for its earlier source hashes; it is
-superseded by the final batch including the stage-receipt GO binding check.
+`docs/evidence/pr105_observation_pairing_20261026/validation/final_v3/`.
+Earlier validation receipts are retained for their source hashes. The final
+batch includes the stage-receipt GO binding check and corrected, distinct
+approval/graph-selection labels in the derived KG reports.
 Manufactured fixtures are not actual 14Z predictions. No Fortran compiler or
 new model integration was invoked for this batch.
