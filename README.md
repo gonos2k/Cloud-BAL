@@ -129,10 +129,13 @@ boundary are explicitly test-only, and every artifact states science authority
 
 ## Multi-radar balanced initialization planning
 
-The [current execution checklist](docs/FAST_COMPLETION_CHECKLIST_20261012.md)
-puts the CP06-A spatial producer and the controlled native baseline in parallel,
-then tracks joint-state updates, delivery, and the same candidate's time response.
-It preserves the existing physical and promotion gates.
+The [current research status](docs/CURRENT_RESEARCH_STATUS.md) records the
+PR106 baseline: six C2 experiments completed 640 seconds, while the H/A/N
+one-hour requests stopped after 760 seconds at T39/RK2. The immediate task is
+to connect the first grouped rejection to its RK1 source producer; actual 14 UTC
+observation scores remain unavailable. Wind candidates and physical/promotion
+gates are unchanged. The [PR84 execution checklist](docs/FAST_COMPLETION_CHECKLIST_20261012.md)
+is retained as a historical record.
 
 The added CP02 work diagnoses localized vertical motion before time integration,
 using the existing radar-informed horizontal analysis and hydrometeors.
