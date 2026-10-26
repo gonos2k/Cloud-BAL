@@ -274,7 +274,7 @@ def verify_source_guards(plan: dict) -> dict:
     pr102 = preflight.load("pr103_post_guard_preflight",
                            preflight.SOURCE / "docs/evidence/pr102_wind_structure_native_20261025/kg/preflight_kg.py")
     helper = pr102._load_pinned_helper()
-    guard = helper.load("pr103_post_source_guard", pr102.GUARD, pr102.GUARD_SHA)
+    guard = helper.load("pr103_post_source_guard", helper.GUARD, pr102.GUARD_SHA)
     actual_source = helper.snapshot_identity(guard.maintained_source_snapshot())
     preflight.require(actual_source == plan["maintained_source_snapshot"],
                       "maintained source inventory changed during KG publication")

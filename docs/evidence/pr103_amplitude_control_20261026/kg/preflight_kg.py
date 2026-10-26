@@ -223,9 +223,9 @@ def preflight(commit: str, pr_url: str, manifest_path: Path,
     require(version_match and tuple(map(int, version_match.groups())) >= (0, 8, 24),
             "pinned Graphify >= 0.8.24 is required for Fortran extraction")
     require(helper.snapshot_identity(helper.load(
-        "pr103_source_guard", pr102.GUARD, pr102.GUARD_SHA).maintained_source_snapshot()) == EXPECTED_SOURCE,
+        "pr103_source_guard", helper.GUARD, pr102.GUARD_SHA).maintained_source_snapshot()) == EXPECTED_SOURCE,
         "maintained-source inventory differs from PR102's 627-entry pin")
-    guard = helper.load("pr103_protected_guard", pr102.GUARD, pr102.GUARD_SHA)
+    guard = helper.load("pr103_protected_guard", helper.GUARD, pr102.GUARD_SHA)
     _, protected_helper, protected_chain = helper.load_previous_helpers()
     protected = protected_helper.protected_content(guard)
     require(protected == prior.get("protected_content_sha256"),
