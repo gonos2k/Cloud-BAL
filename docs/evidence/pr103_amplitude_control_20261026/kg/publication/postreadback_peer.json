@@ -1,0 +1,168 @@
+{
+  "admin_only_receipt_fix_review": {
+    "commit": "abbe8b847711c94623c7e0bf47756ee0aa0b8435",
+    "review": "GO; explicit receipt phase fields now follow plan unpack and AST regression checks the real receipt literal order without publication.",
+    "worktree_status": [
+      "?? docs/evidence/pr103_amplitude_control_20261026/kg/publication/"
+    ]
+  },
+  "bindings": {
+    "apply_stdout_path": "/var/tmp/pr103_kg_apply_execution_v2_20261026/stdout.json",
+    "apply_stdout_sha256": "4cd31715b10418f7a15749cda59d4af8151e406925dad52eec97645bcf528d46",
+    "plan_sha256": "c19f490c2b1f29bba49367da42ea7a639ec3581d07e4d79f40a3271c398bf43e",
+    "receipt_path": "/var/tmp/pr103_kg_apply_v2_20261026/kg_receipt.json",
+    "receipt_sha256": "2187059339edc437d835badcef60e9bf232839dbaed6a19f861ca32658f92d97"
+  },
+  "checks": {
+    "actual_snapshot_count": 124,
+    "actual_snapshot_inventory_sha256": "7237f4d4cdd04adb53404638dd5bb44e8d7916b4059f314b66169349181ff5d3",
+    "all_immutable_pins_current_equals_expected": true,
+    "all_old_snapshot_dirs_and_hashes_preserved": true,
+    "apply_stdout_sha256": "4cd31715b10418f7a15749cda59d4af8151e406925dad52eec97645bcf528d46",
+    "apply_stdout_status": "APPLY_COMPLETE",
+    "corpora": {
+      "Cloud-BAL": {
+        "added_ids": 236,
+        "communities": 1344,
+        "delta_edges": 416,
+        "delta_nodes": 226,
+        "edges": 26911,
+        "extracted_edges": 904,
+        "extracted_nodes": 317,
+        "graph_matches": true,
+        "graph_sha256": "f5b976c96939c99457f5e3f403b41ecadfa6bf381ff2076edf88999a0db51abc",
+        "integrity": {
+          "context_variant_groups": 0,
+          "dangling_endpoint_edges": 0,
+          "directed_same_endpoint_collapsed_edges": 0,
+          "directed_unique_endpoint_pairs": 26911,
+          "effective_directed": false,
+          "exact_duplicate_edges": 0,
+          "input_path": "/var/tmp/pr103_kg_apply_v2_20261026/staging/Cloud-BAL/graphify-out/graph.json",
+          "missing_endpoint_edges": 0,
+          "node_count": 15155,
+          "non_object_edges": 0,
+          "post_build_edge_count": 26911,
+          "post_build_error": "",
+          "post_build_graph_type": "Graph",
+          "post_build_node_count": 15155,
+          "raw_edge_count": 26911,
+          "relation_variant_groups": 0,
+          "same_endpoint_group_count": 0,
+          "self_loop_edges": 0,
+          "source_file_variant_groups": 0,
+          "source_location_variant_groups": 0,
+          "undirected_same_endpoint_collapsed_edges": 0,
+          "undirected_unique_endpoint_pairs": 26911,
+          "unverified_node_count": 0,
+          "valid_candidate_edges": 26911
+        },
+        "named_snapshot_matches": true,
+        "nodes": 15155,
+        "removed_ids": 10,
+        "report_matches": true,
+        "wiki_report_matches": true
+      },
+      "KLAPS50": {
+        "added_ids": 236,
+        "communities": 3315,
+        "delta_edges": 416,
+        "delta_nodes": 226,
+        "edges": 85369,
+        "extracted_edges": 904,
+        "extracted_nodes": 317,
+        "graph_matches": true,
+        "graph_sha256": "e6cc085065e1adfb966a213621d8b63a6326359f62b2c1a70d5e136b54aa8a04",
+        "integrity": {
+          "context_variant_groups": 0,
+          "dangling_endpoint_edges": 0,
+          "directed_same_endpoint_collapsed_edges": 0,
+          "directed_unique_endpoint_pairs": 85369,
+          "effective_directed": false,
+          "exact_duplicate_edges": 0,
+          "input_path": "/var/tmp/pr103_kg_apply_v2_20261026/staging/KLAPS50/graphify-out/graph.json",
+          "missing_endpoint_edges": 0,
+          "node_count": 40983,
+          "non_object_edges": 0,
+          "post_build_edge_count": 85369,
+          "post_build_error": "",
+          "post_build_graph_type": "Graph",
+          "post_build_node_count": 40983,
+          "raw_edge_count": 85369,
+          "relation_variant_groups": 0,
+          "same_endpoint_group_count": 0,
+          "self_loop_edges": 0,
+          "source_file_variant_groups": 0,
+          "source_location_variant_groups": 0,
+          "undirected_same_endpoint_collapsed_edges": 0,
+          "undirected_unique_endpoint_pairs": 85369,
+          "unverified_node_count": 0,
+          "valid_candidate_edges": 85369
+        },
+        "named_snapshot_matches": true,
+        "nodes": 40983,
+        "removed_ids": 10,
+        "report_matches": true,
+        "wiki_report_matches": true
+      }
+    },
+    "current_source_head": "e73203b9c2f070a58aeb8488bf1e5e67a66d5f2e",
+    "current_source_head_after_admin_fix_commit": "abbe8b847711c94623c7e0bf47756ee0aa0b8435",
+    "immutable_pin_count": 197,
+    "immutable_pins_match_receipt": true,
+    "inventory_sha_matches_receipt": true,
+    "limitations": "Separate KLAPS50 and Cloud-BAL graphs use the allowlisted PR103 source/docs/tests and reviewed shared PR86 response files; evidence payloads are hash-bound only. Fortran cross-file CALL extraction is partial. Graph freshness is navigation evidence, not runtime or scientific approval.",
+    "maintained_source_inventory": {
+      "entry_count": 627,
+      "sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f"
+    },
+    "maintained_source_inventory_matches": true,
+    "metadata_baseline_matches": {
+      "Cloud-BAL": true,
+      "KLAPS50": true
+    },
+    "new_snapshot_count": 4,
+    "new_snapshot_paths": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-26-pr103-amplitude-control",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-26-pr103-graphify-raw",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-26-pr103-amplitude-control",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-26-pr103-graphify-raw"
+    ],
+    "new_snapshot_paths_and_hashes_match_receipt": true,
+    "observation_skill": "NOT_EVALUATED",
+    "old_snapshot_count": 120,
+    "old_snapshot_member_count": 472,
+    "physical_approval": "FAIL_OPEN",
+    "plan_sha256": "c19f490c2b1f29bba49367da42ea7a639ec3581d07e4d79f40a3271c398bf43e",
+    "plan_stdout_sha256": "ded98da9b85be5cf901be6de350f397724fff675277de83eca2b1e779d18d2ed",
+    "protected_content_matches": true,
+    "protected_helper_chain_matches": true,
+    "receipt_sha256": "2187059339edc437d835badcef60e9bf232839dbaed6a19f861ca32658f92d97",
+    "receipt_source_commit": "e73203b9c2f070a58aeb8488bf1e5e67a66d5f2e",
+    "receipt_status": "PREFLIGHT_PASS_NO_WRITES",
+    "receipt_status_consistent": false,
+    "source_head_matches": true,
+    "source_head_matches_reviewed_graph_source_commit": true,
+    "source_worktree_status": [
+      " M docs/evidence/pr103_amplitude_control_20261026/kg/apply_kg.py",
+      " M tests/test_pr103_kg_guard.py",
+      "?? docs/evidence/pr103_amplitude_control_20261026/kg/publication/"
+    ],
+    "source_worktree_status_after_admin_fix_commit": [
+      "?? docs/evidence/pr103_amplitude_control_20261026/kg/publication/"
+    ],
+    "wiki_sha256_checks": {
+      "wiki/graph-report-cloud-bal.md": true,
+      "wiki/graph-report-klaps50.md": true,
+      "wiki/graph-report.md": true,
+      "wiki/index.md": true,
+      "wiki/log.md": true
+    }
+  },
+  "limitations": "Graphify extraction is selected-source and evidence payloads are hash-only; Fortran cross-file CALL extraction is partial. Graph freshness is navigation evidence, not runtime or scientific validation. Physical gate remains FAIL_OPEN and observation skill remains NOT_EVALUATED.",
+  "material_finding": "Original APPLY stdout says APPLY_COMPLETE while the original immutable kg_receipt.json status is PREFLIGHT_PASS_NO_WRITES due to plan status shadowing. The source fix was reviewed and committed as an admin-only receipt-phase correction after APPLY; graph extraction remains pinned to source commit e73203b9c2f070a58aeb8488bf1e5e67a66d5f2e. A superseding administrative receipt envelope should bind original receipt/stdout/plan/postreadback and preserve the original receipt without republishing graph roots.",
+  "result": "PRESERVATION_AND_ARTIFACTS_PASS_WITH_RECEIPT_STATUS_BLOCKER",
+  "reviewed_utc": "2026-10-26T05:23:02.886029+00:00",
+  "schema": "pr103_kg_postreadback_peer_v1",
+  "scope": "Independent read-only post-APPLY review; no Graphify, APPLY, staging, or maintained-root writes performed."
+}

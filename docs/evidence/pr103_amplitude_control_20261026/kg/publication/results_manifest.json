@@ -1,0 +1,89 @@
+{
+  "approval_base_commit": "eff97afe9d562d5a2fb39d4b362a7cbf1b96252c",
+  "graph_selection_base_commit": "eff97afe9d562d5a2fb39d4b362a7cbf1b96252c",
+  "limits": [
+    "Partial-host1domain/rank/thread/tile; no clean fullWRF/library rebuild",
+    "Fullhost water/energy and physicalbalance remain OPEN",
+    "No exact13:10LSO source, independent forecast skill NOT_EVALUATED",
+    "KG freshness is structural metadata, not runtime or scientific validation"
+  ],
+  "observation_skill": "NOT_EVALUATED",
+  "physical_approval": "FAIL_OPEN",
+  "pr_url": "https://github.com/gonos2k/Cloud-BAL/pull/103",
+  "previous_manifest": {
+    "path": "/var/tmp/pr103_integration_results_20261026_v2.json",
+    "sha256": "a4cf807f18de955d36a359b0bddbd6c1a795cdce43fa8118c77e560db09351a9"
+  },
+  "recorded_at_utc": "2026-10-26T04:58:17.873694+00:00",
+  "runtime_gates": {
+    "C2_640": {
+      "evidence_path": "docs/evidence/pr103_execution_20261026/postclosure/amplitude640_receipt.json",
+      "evidence_sha256": "76792551d703e5e05af778b39482269dcb09ed16b83a5780514e920fcd1e5296",
+      "scope": "One unchanged-C2 AMPLITUDE640 forecast COMPLETE32steps rc0; all1349launchpinsunchanged; no full physical approval",
+      "state": "COMPLETE"
+    },
+    "candidate": {
+      "evidence_path": "docs/evidence/pr103_amplitude_control_20261026/generation/wrfinput_d01.proposal.json",
+      "evidence_sha256": "93821aa86b188a91a7f43de9e6c5d49815bde71fe92faa7a59cc3a340c78057f",
+      "scope": "One frozen REAL32 uniformly scaled PROJECTED input, same aggregate equal-face increment norm as STRUCTURED within pre-write storage budget; non-U/V and exterior values preserved; no forecast-quality claim",
+      "state": "COMPLETE"
+    },
+    "consumer": {
+      "evidence_path": "docs/evidence/pr103_execution_20261026/artifacts/archived_consumer_assessment_v2.json",
+      "evidence_sha256": "2aa73b2cc965a9b2e7e6e84bde3c69ca8f19e11bd63c6c8b3ce1a36716124ecf",
+      "scope": "Pinned archived calc_ww_cp consumer reference/source arithmetic gates PASS for exact A; stored admission only",
+      "state": "COMPLETE"
+    },
+    "kg_freshness_review": {
+      "evidence_path": "docs/evidence/pr103_amplitude_control_20261026/kg/freshness_fix_review.md",
+      "evidence_sha256": "c2952fc2968ae271a5e37513eaac1a7848358b576605c571d00325950d4595fc",
+      "scope": "Independent staging freshness compatibility and freshOUT reviewGO; 142livehashes120dated472members unchanged after preserved failed private stage; newCHECK_ONLYplanreview required",
+      "state": "COMPLETE"
+    },
+    "kg_interface_review": {
+      "evidence_path": "docs/evidence/pr103_amplitude_control_20261026/kg/interface_fix_review.md",
+      "evidence_sha256": "a55b07a1e26ea580aa9633510f8f77b9f639f8a8a5d0fb393e0255eedf9726e3",
+      "scope": "Independent KG helper API fix source/test reviewGO; correctedCHECK_ONLYplan still requires review beforeAPPLY",
+      "state": "COMPLETE"
+    },
+    "nativecapture": {
+      "evidence_path": "docs/evidence/pr103_execution_20261026/artifacts/a20_amplitude_source_capture.json",
+      "evidence_sha256": "efdfcaabf05c968a2bcc8a7ef4930282405578112b4482eee45d128cc02005f3",
+      "scope": "Same-input base/diagnostic A20 noninterference PASS30T0/firstPOST/18T1;57native source snapshots; fixed-support RU/RV and dry-column contrasts descriptive",
+      "state": "COMPLETE"
+    },
+    "observation_input_consistency": {
+      "evidence_path": "docs/evidence/pr103_observation_20261026/amplitude640_t0/amplitude640_t0_input_consistency.json",
+      "evidence_sha256": "0edcfd203bf2674a3775c3e308f655fe074b7883b11c54236e03a65c6bae1bca",
+      "scope": "Actual13ZLSO/T2 raw same-cycle T0 consistency only,765matches; all6T0T2arrayssame; NOTindependent skill",
+      "state": "COMPLETE"
+    },
+    "saved_history_response": {
+      "evidence_path": "docs/evidence/pr103_time_response_20261026/postclosure_A640_20261026/allsavedtime_response.json",
+      "evidence_sha256": "ab81f6866b3b5166e8f841bded1dc330f686dcf4c8c13fe38749157aaa4018ea",
+      "scope": "All11savedtimes0..600; twofrozenmasks; existing5metrics preserved; actualpairedA-P/N/H; mixedN/Aintegralordering no skill/energyclaim",
+      "state": "COMPLETE"
+    },
+    "source_policy_audit": {
+      "evidence_path": "docs/evidence/pr103_execution_20261026/postclosure/source_policy_v4_audit.json",
+      "evidence_sha256": "e129f9e6e39896b4b9ce5b62112b6a922765c5a55f3df4eaf93f6e0798ca8fa3",
+      "scope": "192retainedstates; genericFAIL173state-recordfindings preserved; strictendpointPASS0fail andactiveicePASS0fail separately",
+      "state": "COMPLETE"
+    },
+    "source_validation": {
+      "evidence_path": "docs/evidence/pr103_execution_20261026/validation_postfreshnessfix_20261026/receipt.json",
+      "evidence_sha256": "21152502fdb5fd6c8a2a2531a581fd0153c255d0451b78d0e21079869ebf03f2",
+      "scope": "150 current focused Python checks,30sourcepinsunchanged, includes real pinned KG APIs and generated CLI freshness0/1/duplicate cases; no model/compiler rerun",
+      "state": "COMPLETE"
+    },
+    "team_review": {
+      "evidence_path": "docs/evidence/pr103_execution_20261026/final_team_review.md",
+      "evidence_sha256": "50f496ec1ace60768eadf066b991cbf26931385855c421cd30f93a0bb81223e1",
+      "scope": "Agent-teamreviewGO; code/provenancefindings fixed; physicalapprovalFAIL_OPENandindependentskillNOT_EVALUATED",
+      "state": "COMPLETE"
+    }
+  },
+  "schema": "pr103_integration_results_v1",
+  "source_commit": "e73203b9c2f070a58aeb8488bf1e5e67a66d5f2e",
+  "updated_at_utc": "2026-10-26T05:16:33.427372+00:00"
+}
