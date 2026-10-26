@@ -1,0 +1,442 @@
+{
+  "schema": "pr106_t39_graupel_callback_replay_v1",
+  "method": "Python-only IEEE bit decoding and source-predicate inspection; no model run or compiler invocation.",
+  "compiler_invoked": false,
+  "source_pointers": {
+    "store_ratio_predicate": {
+      "path": "Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+      "lines": "592-609"
+    },
+    "c2_interval_helper": {
+      "path": "Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+      "lines": "379-474"
+    },
+    "graupel_reason6": {
+      "path": "Cloud-BAL/tools/pr87_graupel_cone_mixture.py",
+      "lines": "217-224"
+    },
+    "source_mismatch_capture_guard": {
+      "path": "Cloud-BAL/tools/pr92_source_replay.py",
+      "lines": "21-26"
+    },
+    "hashes": {
+      "C2_core_source": "6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53",
+      "graupel_cone_source": "76a8e25a641e57eeb5184eb21fb710cbf0fae64d5d1487442a3c052deb666710",
+      "PR92_capture_source": "4c9dda239beaa12428a4be0fb047495f14d68e73a37a6bb1d8fdb4af144da401",
+      "C2_candidate_build_receipt": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+      "C2_candidate_module_em": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296",
+      "executed_candidate_executable": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a"
+    }
+  },
+  "source_predicate": {
+    "source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/src/common/cloud_bal_joint_transport.f90",
+    "sha256": "6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53",
+    "predicate": "strict_mass_ratio_valid64 requires q64/n64 <= maximum_ratio; joint_moment_store sets failure_stage=2 before this check and returns invalid if it fails.",
+    "independent_check": "The exact captured REAL64 quotient is greater than the captured upper bound 900.0; dry density is positive. Both candidate moments round to REAL32 zero."
+  },
+  "arms": [
+    {
+      "arm": "HYDRO",
+      "timestep_rk_cell": [
+        39,
+        2,
+        2,
+        219,
+        13
+      ],
+      "callback_candidate_bits64": [
+        "3676D01F0BF49AE5",
+        "35D9F4C29CF672CB"
+      ],
+      "candidate_q_real64": 2.497483207939608e-46,
+      "candidate_n_real64": 2.77498134215512e-49,
+      "candidate_q_over_n_real64": 900.0000000000001,
+      "strict_mass_bounds_real64": [
+        100.0,
+        900.0
+      ],
+      "upper_bound_excess": 1.1368683772161603e-13,
+      "dry_density_real32": 0.8667871952056885,
+      "dry_density_bits32": "3F5DE5C4",
+      "candidate_real32_bits_after_rounding": [
+        "00000000",
+        "00000000"
+      ],
+      "store_failure_stage": 2,
+      "full_candidate_record_matches_callback_bits": true,
+      "formula_inputs": {
+        "dt_bits32": "41200000",
+        "old_carrier_bits32": "47A0243C",
+        "new_carrier_bits32": "47A0273E",
+        "dry_density_bits32": "3F5DE5C4",
+        "base_q_bits32": "00000000",
+        "base_n_bits32": "00000000",
+        "source_q_bits64": "3746D5B76A91F326",
+        "source_n_bits64": "36A9FB2054D81EE3",
+        "transport_q_bits64": "8000000000000000",
+        "transport_n_bits64": "8000000000000000"
+      },
+      "ordered_r64_formula_replay_bits64": [
+        "3676D01F0BF49AE5",
+        "35D9F4C29CF672CB"
+      ],
+      "ordered_r64_formula_matches_runtime_bits": true,
+      "exact_rational_endpoint": {
+        "Q_star": "16068583078289375/64339103571173765899562755510585512125122655164197539281895424",
+        "N_star": "36564953493707375/131766484113763872562304523285679128832251197776276560449321828352",
+        "Q_star_decimal": 2.497483207939608e-46,
+        "N_star_decimal": 2.77498134215512e-49,
+        "Q_minus_900N": "625/32941621028440968140576130821419782208062799444069140112330457088",
+        "Q_over_N_minus_900": "20/292519627949659",
+        "outside_strict_100_900_cone": true
+      },
+      "exact_source_rate": {
+        "Q_s_over_N_s_minus_900": "20/292519627949659",
+        "Q_s_minus_900N_s": "125/803469022129495137770981046170581301261101496891396417650688",
+        "outside_strict_100_900_cone": true
+      },
+      "graupel_diffusion_source_identity": {
+        "source_bits64": [
+          "3746D5B76A91F326",
+          "36A9FB2054D81EE3"
+        ],
+        "recomputed_diffusion_bits64": [
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "bits_match": false,
+        "source_capture_hook": "The existing pr92_source_replay.py capture hook is inserted at the q/n source identity guard and emits PR92_FAIL only when source and recomputed diffusion bits differ."
+      },
+      "c2_interval_certificate_expected": false,
+      "c2_classification": "source-logic exact classification: rejected by the maximum-ratio interval check; not run through a compiler. Since exact Q*>900*N* and the C2 outward interval encloses Q* and 900*N*, its Q upper bound exceeds the cone upper bound.",
+      "c2_rejection_reason": "The exact typed-input endpoint is outside maximum ratio 900, so the C2 cone interval check correctly rejects it; this is not a conservative rejection of an exact-valid endpoint.",
+      "producer_source_bits64": [
+        "3746D5B76A91F326",
+        "36A9FB2054D81EE3"
+      ],
+      "recomputed_diffusion_bits64": [
+        "0000000000000000",
+        "0000000000000000"
+      ],
+      "source_q_minus_recomputed_q": 2.0478983780306083e-42,
+      "source_n_minus_recomputed_n": 2.2754426422562312e-45,
+      "producer_capture_record_count": 12,
+      "producer_identity_record": "PR92_PRODUCER_IDENTITY 39 1 2 233 2 281 1 39",
+      "geometry_and_faces_captured": true,
+      "full_candidate_store_failure_records_t39_rk2": 7,
+      "first_full_candidate_store_failure_records_t39_rk2": [
+        {
+          "i": 199,
+          "j": 52,
+          "k": 21,
+          "stage": 2,
+          "q_bits": "3DC0321C9E375C92",
+          "n_bits": "3D226D5A966EC69E"
+        },
+        {
+          "i": 218,
+          "j": 192,
+          "k": 16,
+          "stage": 2,
+          "q_bits": "3D70C004C4E22106",
+          "n_bits": "3CD30ECFF35A07FD"
+        },
+        {
+          "i": 104,
+          "j": 193,
+          "k": 17,
+          "stage": 2,
+          "q_bits": "3D823E080C5392BB",
+          "n_bits": "3CE4C1753EF2FFB1"
+        },
+        {
+          "i": 2,
+          "j": 219,
+          "k": 13,
+          "stage": 2,
+          "q_bits": "3676D01F0BF49AE5",
+          "n_bits": "35D9F4C29CF672CB"
+        }
+      ],
+      "matching_pr99_group_diagnostic_timesteps": [
+        32
+      ]
+    },
+    {
+      "arm": "AMPLITUDE",
+      "timestep_rk_cell": [
+        39,
+        2,
+        2,
+        219,
+        13
+      ],
+      "callback_candidate_bits64": [
+        "3676D01F0BF49AE5",
+        "35D9F4C29CF672CB"
+      ],
+      "candidate_q_real64": 2.497483207939608e-46,
+      "candidate_n_real64": 2.77498134215512e-49,
+      "candidate_q_over_n_real64": 900.0000000000001,
+      "strict_mass_bounds_real64": [
+        100.0,
+        900.0
+      ],
+      "upper_bound_excess": 1.1368683772161603e-13,
+      "dry_density_real32": 0.8667871952056885,
+      "dry_density_bits32": "3F5DE5C4",
+      "candidate_real32_bits_after_rounding": [
+        "00000000",
+        "00000000"
+      ],
+      "store_failure_stage": 2,
+      "full_candidate_record_matches_callback_bits": true,
+      "formula_inputs": {
+        "dt_bits32": "41200000",
+        "old_carrier_bits32": "47A0243C",
+        "new_carrier_bits32": "47A0273E",
+        "dry_density_bits32": "3F5DE5C4",
+        "base_q_bits32": "00000000",
+        "base_n_bits32": "00000000",
+        "source_q_bits64": "3746D5B76A91F326",
+        "source_n_bits64": "36A9FB2054D81EE3",
+        "transport_q_bits64": "8000000000000000",
+        "transport_n_bits64": "8000000000000000"
+      },
+      "ordered_r64_formula_replay_bits64": [
+        "3676D01F0BF49AE5",
+        "35D9F4C29CF672CB"
+      ],
+      "ordered_r64_formula_matches_runtime_bits": true,
+      "exact_rational_endpoint": {
+        "Q_star": "16068583078289375/64339103571173765899562755510585512125122655164197539281895424",
+        "N_star": "36564953493707375/131766484113763872562304523285679128832251197776276560449321828352",
+        "Q_star_decimal": 2.497483207939608e-46,
+        "N_star_decimal": 2.77498134215512e-49,
+        "Q_minus_900N": "625/32941621028440968140576130821419782208062799444069140112330457088",
+        "Q_over_N_minus_900": "20/292519627949659",
+        "outside_strict_100_900_cone": true
+      },
+      "exact_source_rate": {
+        "Q_s_over_N_s_minus_900": "20/292519627949659",
+        "Q_s_minus_900N_s": "125/803469022129495137770981046170581301261101496891396417650688",
+        "outside_strict_100_900_cone": true
+      },
+      "graupel_diffusion_source_identity": {
+        "source_bits64": [
+          "3746D5B76A91F326",
+          "36A9FB2054D81EE3"
+        ],
+        "recomputed_diffusion_bits64": [
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "bits_match": false,
+        "source_capture_hook": "The existing pr92_source_replay.py capture hook is inserted at the q/n source identity guard and emits PR92_FAIL only when source and recomputed diffusion bits differ."
+      },
+      "c2_interval_certificate_expected": false,
+      "c2_classification": "source-logic exact classification: rejected by the maximum-ratio interval check; not run through a compiler. Since exact Q*>900*N* and the C2 outward interval encloses Q* and 900*N*, its Q upper bound exceeds the cone upper bound.",
+      "c2_rejection_reason": "The exact typed-input endpoint is outside maximum ratio 900, so the C2 cone interval check correctly rejects it; this is not a conservative rejection of an exact-valid endpoint.",
+      "producer_source_bits64": [
+        "3746D5B76A91F326",
+        "36A9FB2054D81EE3"
+      ],
+      "recomputed_diffusion_bits64": [
+        "0000000000000000",
+        "0000000000000000"
+      ],
+      "source_q_minus_recomputed_q": 2.0478983780306083e-42,
+      "source_n_minus_recomputed_n": 2.2754426422562312e-45,
+      "producer_capture_record_count": 12,
+      "producer_identity_record": "PR92_PRODUCER_IDENTITY 39 1 2 233 2 281 1 39",
+      "geometry_and_faces_captured": true,
+      "full_candidate_store_failure_records_t39_rk2": 8,
+      "first_full_candidate_store_failure_records_t39_rk2": [
+        {
+          "i": 164,
+          "j": 27,
+          "k": 21,
+          "stage": 2,
+          "q_bits": "3DD6A5A90E0D69C8",
+          "n_bits": "3D39C472FA5EE7DB"
+        },
+        {
+          "i": 157,
+          "j": 43,
+          "k": 19,
+          "stage": 2,
+          "q_bits": "3D63FC8218BC6473",
+          "n_bits": "3CC6BD730686B447"
+        },
+        {
+          "i": 228,
+          "j": 91,
+          "k": 20,
+          "stage": 2,
+          "q_bits": "3DF990C96AC1BCA0",
+          "n_bits": "3D5D168351A4ADA6"
+        },
+        {
+          "i": 222,
+          "j": 202,
+          "k": 16,
+          "stage": 2,
+          "q_bits": "3DA794208B4285F4",
+          "n_bits": "3D0AD3C57459578C"
+        }
+      ],
+      "matching_pr99_group_diagnostic_timesteps": [
+        32
+      ]
+    },
+    {
+      "arm": "STRUCTURED",
+      "timestep_rk_cell": [
+        39,
+        2,
+        2,
+        219,
+        13
+      ],
+      "callback_candidate_bits64": [
+        "3676D01F0BF49AE5",
+        "35D9F4C29CF672CB"
+      ],
+      "candidate_q_real64": 2.497483207939608e-46,
+      "candidate_n_real64": 2.77498134215512e-49,
+      "candidate_q_over_n_real64": 900.0000000000001,
+      "strict_mass_bounds_real64": [
+        100.0,
+        900.0
+      ],
+      "upper_bound_excess": 1.1368683772161603e-13,
+      "dry_density_real32": 0.8667871952056885,
+      "dry_density_bits32": "3F5DE5C4",
+      "candidate_real32_bits_after_rounding": [
+        "00000000",
+        "00000000"
+      ],
+      "store_failure_stage": 2,
+      "full_candidate_record_matches_callback_bits": true,
+      "formula_inputs": {
+        "dt_bits32": "41200000",
+        "old_carrier_bits32": "47A0243C",
+        "new_carrier_bits32": "47A0273E",
+        "dry_density_bits32": "3F5DE5C4",
+        "base_q_bits32": "00000000",
+        "base_n_bits32": "00000000",
+        "source_q_bits64": "3746D5B76A91F326",
+        "source_n_bits64": "36A9FB2054D81EE3",
+        "transport_q_bits64": "8000000000000000",
+        "transport_n_bits64": "8000000000000000"
+      },
+      "ordered_r64_formula_replay_bits64": [
+        "3676D01F0BF49AE5",
+        "35D9F4C29CF672CB"
+      ],
+      "ordered_r64_formula_matches_runtime_bits": true,
+      "exact_rational_endpoint": {
+        "Q_star": "16068583078289375/64339103571173765899562755510585512125122655164197539281895424",
+        "N_star": "36564953493707375/131766484113763872562304523285679128832251197776276560449321828352",
+        "Q_star_decimal": 2.497483207939608e-46,
+        "N_star_decimal": 2.77498134215512e-49,
+        "Q_minus_900N": "625/32941621028440968140576130821419782208062799444069140112330457088",
+        "Q_over_N_minus_900": "20/292519627949659",
+        "outside_strict_100_900_cone": true
+      },
+      "exact_source_rate": {
+        "Q_s_over_N_s_minus_900": "20/292519627949659",
+        "Q_s_minus_900N_s": "125/803469022129495137770981046170581301261101496891396417650688",
+        "outside_strict_100_900_cone": true
+      },
+      "graupel_diffusion_source_identity": {
+        "source_bits64": [
+          "3746D5B76A91F326",
+          "36A9FB2054D81EE3"
+        ],
+        "recomputed_diffusion_bits64": [
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "bits_match": false,
+        "source_capture_hook": "The existing pr92_source_replay.py capture hook is inserted at the q/n source identity guard and emits PR92_FAIL only when source and recomputed diffusion bits differ."
+      },
+      "c2_interval_certificate_expected": false,
+      "c2_classification": "source-logic exact classification: rejected by the maximum-ratio interval check; not run through a compiler. Since exact Q*>900*N* and the C2 outward interval encloses Q* and 900*N*, its Q upper bound exceeds the cone upper bound.",
+      "c2_rejection_reason": "The exact typed-input endpoint is outside maximum ratio 900, so the C2 cone interval check correctly rejects it; this is not a conservative rejection of an exact-valid endpoint.",
+      "producer_source_bits64": [
+        "3746D5B76A91F326",
+        "36A9FB2054D81EE3"
+      ],
+      "recomputed_diffusion_bits64": [
+        "0000000000000000",
+        "0000000000000000"
+      ],
+      "source_q_minus_recomputed_q": 2.0478983780306083e-42,
+      "source_n_minus_recomputed_n": 2.2754426422562312e-45,
+      "producer_capture_record_count": 12,
+      "producer_identity_record": "PR92_PRODUCER_IDENTITY 39 1 2 233 2 281 1 39",
+      "geometry_and_faces_captured": true,
+      "full_candidate_store_failure_records_t39_rk2": 6,
+      "first_full_candidate_store_failure_records_t39_rk2": [
+        {
+          "i": 168,
+          "j": 28,
+          "k": 18,
+          "stage": 2,
+          "q_bits": "3DEB5C234FCA92B7",
+          "n_bits": "3D4F21270A00A6ED"
+        },
+        {
+          "i": 179,
+          "j": 68,
+          "k": 25,
+          "stage": 2,
+          "q_bits": "3DF1360ED844455C",
+          "n_bits": "3D53951D67D75927"
+        },
+        {
+          "i": 2,
+          "j": 219,
+          "k": 13,
+          "stage": 2,
+          "q_bits": "3676D01F0BF49AE5",
+          "n_bits": "35D9F4C29CF672CB"
+        },
+        {
+          "i": 2,
+          "j": 222,
+          "k": 14,
+          "stage": 6,
+          "q_bits": "3740D149FF087E60",
+          "n_bits": "36A3B64758FFA6AC"
+        }
+      ],
+      "matching_pr99_group_diagnostic_timesteps": [
+        32
+      ]
+    }
+  ],
+  "group_cause_assessment": {
+    "callback_scope": "Exact per-cell store rejection and PR92 producer/geometry capture are available for the returned T39/RK2 cell. They establish that cell-level rejection predicate.",
+    "full_group_scope": "Not established. PR92_STORE_FAIL_FULL records enumerate several failing cells, and the PR99_GROUP_FAILURE fixture is only at timestep 32, not the T39 fatal. The callback is not a grouped-transaction causal certificate.",
+    "available_replay_assets": "The T39/RK2 PR92_FAIL block captures producer identity, source and recomputed diffusion bits, state stencil, grid metrics, weights, donor terms, face coefficients, and cache delta at the callback cell. This supports per-cell producer/source predicate replay. Full-domain candidate arrays / complete group trial state for every pair are not present in this bounded capture."
+  },
+  "source_hashes_pre": {
+    "C2_core_source": "6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53",
+    "graupel_cone_source": "76a8e25a641e57eeb5184eb21fb710cbf0fae64d5d1487442a3c052deb666710",
+    "PR92_capture_source": "4c9dda239beaa12428a4be0fb047495f14d68e73a37a6bb1d8fdb4af144da401",
+    "C2_candidate_build_receipt": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+    "C2_candidate_module_em": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296",
+    "executed_candidate_executable": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a"
+  },
+  "source_hashes_post": {
+    "C2_core_source": "6c844fe8a68ded3c653d800065d428c390b08845a584dc65ab070995adc7dd53",
+    "graupel_cone_source": "76a8e25a641e57eeb5184eb21fb710cbf0fae64d5d1487442a3c052deb666710",
+    "PR92_capture_source": "4c9dda239beaa12428a4be0fb047495f14d68e73a37a6bb1d8fdb4af144da401",
+    "C2_candidate_build_receipt": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+    "C2_candidate_module_em": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296",
+    "executed_candidate_executable": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a"
+  },
+  "source_artifacts_unchanged_during_analysis": true
+}

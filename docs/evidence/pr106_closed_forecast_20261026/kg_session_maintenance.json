@@ -1,0 +1,19 @@
+{
+  "status": "APPEND_ONLY_SESSION_MAINTENANCE",
+  "source_commit": "851353d94df3c23492d11e6306b22cad3125980d",
+  "log_sha256_before": "69cc2f8f46025b132dad774a5bee2c87627a9571a4fed7a31145f6ab1fffff93",
+  "log_sha256_after": "0680df49f2f6a71400c48cf15f1680d092ebd04d87fd72c289438b94b92a0a26",
+  "existing_log_prefix_preserved": true,
+  "protected_graph_report_index_hashes": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/graph.json": "cfa847b2e33f9970197bbb58b1228c81a844ec8c05523a0152969d2575ebb06b",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json": "fd0e2ead8f71b48f737ec7b3e83f9c9f267b021c372278feead5eddb93de78c7",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/wiki/index.md": "a4846722c9acbd6152dbd5e087865718eddd59d7963aa47eacfcc40eec5fb50e",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/wiki/graph-report.md": "29739858e6b5ad4603ba0754505692a4a9a06347fd8bad015c4ab35367b6bf0d",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/wiki/graph-report-klaps50.md": "a367fc7ff19af46aa19d6b56d60a9441a69e3143a6491d7d38df1540cba1b1cf",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/wiki/graph-report-cloud-bal.md": "123c31a981339a0b242813f5a58df95f228cd0cfd0e88494cda73d671fa5facf"
+  },
+  "graph_update_run": false,
+  "graph_freshness": "PARTIAL_NOT_UPDATED",
+  "extraction_delta": null,
+  "entry": "\n## [2026-10-26] PR106 session maintenance | closed forecasts and IR source-data comparison\n- Evidence checkout: `scratch/pr106_closed_forecast_20261026/Cloud-BAL`, commit `851353d94df3c23492d11e6306b22cad3125980d`; PR https://github.com/gonos2k/Cloud-BAL/pull/106.\n- H/A/N requests are closed INCOMPLETE, model rc=1, 38 completed steps / 760 seconds through 13:12:40; requested 14:00 / 180 steps remains unfulfilled. Closed receipt/history hashes and Times were independently checked; histories end at 13:12. Observation and paired dispatches skipped. No 14Z scores or candidate rank.\n- Exact typed-input local callback replay reproduces Q/B binary64 bits and is strictly outside ratio900. Recorded source differs from recomputed diffusion +0. This is a source-logic/per-cell diagnosis; no compiled C2 helper or full grouped transaction replay. Group cause remains open.\n- Original nine LAPS support cells reproduce S8A as filtered maxima and S8W as arithmetic means, contrary to labels, using pinned IR112 counts, calibration/nav LUT and saved configuration. Root and agent replay outputs match byte-for-byte. This is Python source-data replay, not historical deployment proof or a model BT operator. Missing 14Z model endpoint and sensor-matched RTM remain separate blockers.\n- No production code, physical policy, model input or executable changed; no model restarted. Full host budgets/physical approval remain OPEN; independent skill NOT_EVALUATED.\n- Audit-only maintenance, not kg-update: no graph extraction/re-extraction or derived report/index synchronization. PR105 separately dated snapshots remain unchanged: KLAPS50 41093 nodes / 85532 edges / 3329 communities; Cloud-BAL 15265 / 27074 / 1340, both 2026-10-26-pr105-observation-pairing. PR106 docs are not indexed; freshness PARTIAL / NOT UPDATED, extraction delta N/A. Graph freshness is not runtime/scientific validation.\n"
+}
