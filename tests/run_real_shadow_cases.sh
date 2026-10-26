@@ -278,7 +278,7 @@ PY
 bash "$repo_root/tests/run_real_input_inventory.sh"
 verify_build_files
 if [[ $(git -C "$repo_root" rev-parse HEAD) != "$source_commit" ]] || \
-   [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=all) ]]; then
+   ! cloud_bal_require_clean_source; then
   printf 'source tree changed during the real-data run\n' >&2
   exit 2
 fi

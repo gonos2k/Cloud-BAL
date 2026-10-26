@@ -47,6 +47,8 @@ def make_file(
     bad_level_fill: bool = False,
     bad_units: bool = False,
     bad_var_type: bool = False,
+    double_variable: str | None = None,
+    double_level: bool = False,
 ) -> None:
     path = root / "lapsprd" / extension / f"{STAMP}.{extension}"
     depth = 1 if extension == "lsx" else (file_depth or NZ)
@@ -58,7 +60,7 @@ def make_file(
         dataset.createDimension("x", NX)
         dataset.createDimension("y", NY)
         levels = dataset.createVariable(
-            "level", "f4", ("zlevel" if bad_level_dim else "z",),
+            "level", "f8" if double_level else "f4", ("zlevel" if bad_level_dim else "z",),
             fill_value=1.0e37 if bad_level_fill else None,
         )
         levels.units = "hectopascals"
@@ -76,7 +78,10 @@ def make_file(
 
         for name in names:
             dims = ("record", "z", "x", "y") if swapped_xy else ("record", "z", "y", "x")
-            variable = dataset.createVariable(name, "i4" if bad_var_type and name == "t3" else "f4", dims)
+            variable_type = "i4" if bad_var_type and name == "t3" else (
+                "f8" if double_variable == name else "f4"
+            )
+            variable = dataset.createVariable(name, variable_type, dims)
             variable.units = {
                 "ht": "meters", "t3": "degrees Kelvin",
                 "u3": "meters / second", "v3": "meters / second",
@@ -258,7 +263,9 @@ def build_fixture(root: Path, case: str) -> None:
               bad_level_dim=case == "level-wrong-dim",
               bad_level_fill=case == "level-fill",
               bad_units=case == "bad-units",
-              bad_var_type=case == "bad-var-type")
+              bad_var_type=case == "bad-var-type",
+              double_variable="t3" if case == "f8t3" else None,
+              double_level=case == "f8level")
     make_file(root, "lw3", lw3_names, sh_bad=sh_bad, bad_temperature=bad_temperature,
               bad_surface_mr=bad_surface_mr, surface_pressure=surface_pressure,
               hotstart=hotstart, levels_hpa=levels_hpa,
@@ -266,7 +273,8 @@ def build_fixture(root: Path, case: str) -> None:
               make_sfc_uv=make_sfc_uv,
               file_depth=NZ + 1 if case == "increased-nz" else NZ - 1 if case == "decreased-nz" else None,
               swapped_xy=case == "swapped-xy",
-              time_offset=60.0 if case == "wrong-time" else 0.0)
+              time_offset=60.0 if case == "wrong-time" else 0.0,
+              double_variable="u3" if case == "f8u3" else None)
     make_file(root, "lh3", lh3_names, sh_bad=sh_bad, bad_temperature=bad_temperature,
               bad_surface_mr=bad_surface_mr, surface_pressure=surface_pressure,
               hotstart=hotstart, levels_hpa=levels_hpa,
@@ -319,7 +327,7 @@ def main() -> int:
         "bad-hydrometeor-mode",
         "increased-nz", "decreased-nz", "reverse-levels", "swapped-xy", "wrong-time",
         "level-wrong-dim", "level-fill", "bad-units",
-        "bad-var-type",
+        "bad-var-type", "f8t3", "f8u3", "f8level",
     ))
     args = parser.parse_args()
     build_fixture(args.root, args.case)

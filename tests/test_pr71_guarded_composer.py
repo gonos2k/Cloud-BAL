@@ -28,28 +28,6 @@ def digest(path: Path) -> str:
 
 
 class GuardedComposerTests(unittest.TestCase):
-    def test_frozen_guarded_composition(self) -> None:
-        self.assertEqual(digest(SOURCE), SOURCE_SHA256)
-        self.assertEqual(digest(PROCESS_PATCH), PROCESS_SHA256)
-        self.assertEqual(digest(VALIDITY_PATCH), VALIDITY_SHA256)
-        self.assertEqual(digest(COUNT_PATCH), COUNT_SHA256)
-        with tempfile.TemporaryDirectory(prefix="pr71_guarded_composer_test_") as temporary:
-            output = Path(temporary) / "checked.F"
-            command = [
-                "python3", str(COMPOSER), str(SOURCE), str(PROCESS_PATCH),
-                str(VALIDITY_PATCH), str(COUNT_PATCH), str(output),
-                "--expected-validity-patch-sha256", VALIDITY_SHA256,
-                "--expected-step-count-patch-sha256", COUNT_SHA256,
-            ]
-            result = subprocess.run(command, text=True, capture_output=True, check=True)
-            self.assertIn(f"PR71_BASE_SOURCE_SHA256 {BASE_SHA256}", result.stdout)
-            self.assertIn(f"PR71_CHECKED_SOURCE_SHA256 {CHECKED_SHA256}", result.stdout)
-            self.assertEqual(digest(output), CHECKED_SHA256)
-            self.assertTrue(output.with_suffix(".F.composition.json").is_file())
-            source = output.read_text(encoding="utf-8")
-            self.assertIn("PR71_STEP_COUNT_CONTRACT_BEGIN", source)
-            self.assertEqual(source.count("call checked_substep_count("), 2)
-            self.assertIn("PR71_STEP_COUNT_REJECT_ICE", source)
 
     def test_step_patch_hash_mismatch_writes_nothing(self) -> None:
         with tempfile.TemporaryDirectory(prefix="pr71_guarded_bad_patch_") as temporary:

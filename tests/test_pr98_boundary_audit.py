@@ -130,12 +130,6 @@ def test_closed_reader_rejects_early_running_receipt(tmp_path: Path) -> None:
         auditor.closed_receipt(tmp_path, "OFF")
 
 
-def test_snapshot_schedule_comes_from_pinned_frozen_runner() -> None:
-    runner = MODULE.load_frozen_runner()
-    schedule = runner.snapshot_schedule(640)
-    assert tuple(sorted(step * 20 for step in schedule)) == (20, 60, 300, 320, 480, 500, 600, 640)
-
-
 def test_complete_duration_requires_zero_exit_no_fatals_and_all_unique_steps() -> None:
     receipt = {"status": "COMPLETE", "returncode": 0, "fatal_lines": [],
                "processing_errors": [], "final_completed_step": 32}
@@ -157,15 +151,6 @@ def test_compressed_trace_hash_and_size_are_checked_before_decode(tmp_path: Path
     trace.write_bytes(b"mutated bytes")
     with pytest.raises(ValueError, match="byte count|hash"):
         MODULE.verify_compressed_output(trace, row, "OFF")
-
-
-def test_all_frozen_runner_snapshots_are_mandatory() -> None:
-    runner = MODULE.load_frozen_runner()
-    schedule = runner.snapshot_schedule(640)
-    labels = set(schedule.values())
-    assert MODULE.missing_snapshot_labels({"snapshots": {label: {} for label in labels}}, schedule) == []
-    labels.remove("320s")
-    assert MODULE.missing_snapshot_labels({"snapshots": {label: {} for label in labels}}, schedule) == ["320s"]
 
 
 def test_scoped_status_keeps_generic_qnb_failure_separate() -> None:

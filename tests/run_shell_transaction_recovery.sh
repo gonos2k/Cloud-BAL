@@ -7,6 +7,38 @@ trap 'rm -rf -- "$test_root"' EXIT
 publication_root=$test_root/publication
 transaction_id=shell-recovery-fixture
 
+damaged_repo=$test_root/damaged-index-repo
+mkdir -p "$damaged_repo"
+git -C "$damaged_repo" init -q
+git -C "$damaged_repo" -c user.name=fixture -c user.email=fixture@example.invalid \
+  commit --allow-empty -qm fixture
+printf 'damaged index\n' > "$damaged_repo/.git/index"
+git -C "$damaged_repo" rev-parse HEAD >/dev/null
+for call_mode in direct command_substitution; do
+  if bash -c '
+    set -euo pipefail
+    repo_root=$1
+    . "$repo_root/tests/output_safety.sh"
+    repo_root=$2
+    if [[ $3 == direct ]]; then
+      cloud_bal_require_clean_source
+    else
+      status=$(cloud_bal_require_clean_source)
+    fi
+    exit 91
+  ' _ "$repo_root" "$damaged_repo" "$call_mode" >/dev/null 2>&1; then
+    printf 'damaged Git index was accepted: %s\n' "$call_mode" >&2
+    exit 1
+  else
+    status=$?
+    [[ $status -ne 0 && $status -ne 91 ]] || {
+      printf 'damaged Git index failure was not propagated: %s (%d)\n' \
+        "$call_mode" "$status" >&2
+      exit 1
+    }
+  fi
+done
+
 python3 - "$test_root" <<'PY'
 import json
 import sys

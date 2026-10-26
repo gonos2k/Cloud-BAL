@@ -87,11 +87,6 @@ def test_tags_pair_qr_and_qnr_by_moist_flag_and_registry_index() -> None:
     assert all(_bits32(pair["r64_delta"]) == _bits32(1.0) for pair in pairs)
 
 
-def test_helper_source_procedure_is_hash_pinned() -> None:
-    receipt = require_helper_source()
-    assert receipt["routine_sha256"] == "cbcc347345a6449b9e5666407c5ef8c6a0db73a9a397d0e306ad14a085783ac3"
-
-
 def test_bounds_match_native_rain_lambda_contract() -> None:
     assert RAIN_BOUNDS == (
         12566.37109375 / 35000.0**3,

@@ -1,0 +1,263 @@
+{
+  "base_commit": "cb60815357d83fafe43dcdbb6afa6eb88192c04a",
+  "integration_eof_cleanup": {
+    "tests/test_pr101_upper_wind_capture_native.py": {
+      "after": "5cfc26503e0f1c1ea66846cef5524fd6f0f0f32fda1dd979f5e95460bab2d78d",
+      "ast_identical": true,
+      "before": "ea4d7afa3b8d70c9e9103cb5c2194f0ec65ba3ba0cc54f99a8d2581a3dc043e4"
+    },
+    "tests/test_pr101_upper_wind_replay_native.py": {
+      "after": "45cd679d983176679a56b364f00f7180fe248a50176ea75ea57a5a7be2a46a5f",
+      "ast_identical": true,
+      "before": "7196121d08bfda1f96425f21708fa81b42cae8ae0c930366dd8450e7ee88822f"
+    },
+    "tests/test_pr71_guarded_composer_native.py": {
+      "after": "0d37b105084808f79f469b82175e907617149bbeeeed9efc6efe0739459b291b",
+      "ast_identical": true,
+      "before": "3746fb92f8bf110d96eb8cd85eaf485724891c2dd180be28bf0dbb5b7f458881"
+    },
+    "tests/test_pr83_rk_operands_patch_native.py": {
+      "after": "3aa28e50f19cce083232be43cc5d960b1b3de899a7b45a6f5b6f711577709ca1",
+      "ast_identical": true,
+      "before": "28303ef1b1e6044b4e11c5cffd7abfa2e8ca3fc0dfb218f4420d9ef76b86f4b8"
+    },
+    "tests/test_pr84_native_moment_policy_native.py": {
+      "after": "01d1599e6f636813a3c4dd38d57e95503c37c170c49ba059846809c14c5e593f",
+      "ast_identical": true,
+      "before": "9d06d9881c0e6b126c0e24840717dd776fa1a6045171c708be3baf00bcf4d743"
+    },
+    "tests/test_pr87_rain_diffusion_replay_native.py": {
+      "after": "4f2f5577b3f02395b6590289009f0689f77d17f225d7252f331bc94045945711",
+      "ast_identical": true,
+      "before": "8a4296f9cb453a9bbcb899d0dd69577619c6b45bd82983272903b2df8db897e4"
+    },
+    "tests/test_pr94_hydro_control_realdata.py": {
+      "after": "fd0febd05aaa7266bb2b64f4a2b6d2f9486c8c1429586f96b62584831ff3a439",
+      "ast_identical": true,
+      "before": "a769724038ec3550e5bb9b66c436cfd84c1fc7ae69c89b225fcd551125d12e08"
+    },
+    "tests/test_pr98_boundary_audit_native.py": {
+      "after": "22fc1c977d6c82c8b8299706ceedbfb6350a0fd11064af552bbd8cdedfce49f8",
+      "ast_identical": true,
+      "before": "511fd9f6d479689efa3261252a86118e72e6dc2092f2c7ad5e29879bbe461eac"
+    }
+  },
+  "limits": [
+    "No whole native/Linux/realdata tier pass asserted.",
+    "Static LAPSPREP NCVGT input precision is outside this dynamic-input change.",
+    "Landlock limits read/execute access; it does not hide metadata or provide network isolation.",
+    "H/A/N one-hour results remain INCOMPLETE at 760s, 14 UTC observation skill NOT_EVALUATED."
+  ],
+  "logs": {
+    "/var/tmp/pr109_native_w.log": "52e2392e4810e86a025349b6c607e3ef218f8e1dcafd0bb1754ba806f3b7afc0",
+    "/var/tmp/pr109_portable_confined_final.log": "0b7675bb03f6ce554b03744799b507a76118771e5fbf88998aa96d18205753a3",
+    "/var/tmp/pr109_shell.log": "227135d4d1014e34e1cf82f3fb41f57a751d9f8f663b1bccc8cfa52efcca7e44",
+    "/var/tmp/pr109_split_collection.log": "37f14bd593b49e541b205cefb2b05a397c34c54e24aef1e67b229272dda24d9f",
+    "/var/tmp/pr109_split_collection_final.log": "5f6e0edf737c3ef0a5ded1192e542c0f7a4775305edd6efbc99935cbe7cc17be"
+  },
+  "native": {
+    "lapsprep": {
+      "command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 CLOUD_BAL_TEST_SCRATCH_ROOT=/var/tmp CLOUD_BAL_KEEP_TEST_OUTPUT=1 bash tests/run_lapsprep_vapor.sh",
+      "executables": {
+        "/var/tmp/lapsprep_vapor_tests.4Q2m2q/build-o2/lapsprep.exe": "bfb8184c164cb246ace781ff6f867fcd0cb83a0c940d0aa2defa607f56e5c62e",
+        "/var/tmp/lapsprep_vapor_tests.4Q2m2q/build/lapsprep.exe": "d81805dfe4fa720ccd3451c08e4d2808fd42a7ac02f48ded9d46f7551a779996"
+      },
+      "optimizations": [
+        "O0",
+        "O2"
+      ],
+      "rejection_cases_per_optimization": 33,
+      "rejection_log_sha256": {
+        "bad-hydrometeor-mode.log.O0": "c258be384822796f01fbb6f73eaf822ae4a204cb624e0fb4df3c4623dff98b49",
+        "bad-hydrometeor-mode.log.O2": "c258be384822796f01fbb6f73eaf822ae4a204cb624e0fb4df3c4623dff98b49",
+        "bad-namelist.log.O0": "a9e3e3f1e16b05b5fc32184927c2cb45acfe9463f479c3d1d5a56902937b7cd2",
+        "bad-namelist.log.O2": "d156513bc73fc685e9f130dae5a55e89c7430ef00a0abe7a107729709a5e4ef1",
+        "bad-units.log.O0": "10b16b18d13a0509f463874ee9ece58741d92123ee160eda7dee2ca7acbd81a7",
+        "bad-units.log.O2": "10b16b18d13a0509f463874ee9ece58741d92123ee160eda7dee2ca7acbd81a7",
+        "bad-var-type.log.O0": "ae9bf490e4bafcac6e125c22bdd19d8d162d3d081ccb786daf70ac03cac3de87",
+        "bad-var-type.log.O2": "ae9bf490e4bafcac6e125c22bdd19d8d162d3d081ccb786daf70ac03cac3de87",
+        "decreased-nz.log.O0": "fec79f419cdb2d3d91edb6406b161eaa9291eb2f06703d98c0efc9b6fe73167c",
+        "decreased-nz.log.O2": "fec79f419cdb2d3d91edb6406b161eaa9291eb2f06703d98c0efc9b6fe73167c",
+        "duplicate-pressure.log.O0": "258f520aace80989dc4e123d744aa4e20e7c76c1beee0abcb48f4f52c31bffbf",
+        "duplicate-pressure.log.O2": "258f520aace80989dc4e123d744aa4e20e7c76c1beee0abcb48f4f52c31bffbf",
+        "f8level.log.O0": "e0845f305f47bf6c7176fec89eaafb358c2bd7de8fee6c41d8fc02753ea20be4",
+        "f8level.log.O2": "e0845f305f47bf6c7176fec89eaafb358c2bd7de8fee6c41d8fc02753ea20be4",
+        "f8t3.log.O0": "f3141639cdfbac4c71db95c91b8867c433678385859940ea746b764b47c435cb",
+        "f8t3.log.O2": "f3141639cdfbac4c71db95c91b8867c433678385859940ea746b764b47c435cb",
+        "f8u3.log.O0": "5600e1f18b95b6a75c7753ac5ae2ec3ac62f15337de7d2f41b56d66e565f4113",
+        "f8u3.log.O2": "5600e1f18b95b6a75c7753ac5ae2ec3ac62f15337de7d2f41b56d66e565f4113",
+        "increased-nz.log.O0": "b0bcfc5f0c3313149b194ed0ed8e20db324dfecd267b7b69277aa9cbdd920280",
+        "increased-nz.log.O2": "b0bcfc5f0c3313149b194ed0ed8e20db324dfecd267b7b69277aa9cbdd920280",
+        "invalid-u3.log.O0": "52d05d9801e346bef0b43723a3f87a17aef55973df8e5bc7daabafcf12e90e6a",
+        "invalid-u3.log.O2": "52d05d9801e346bef0b43723a3f87a17aef55973df8e5bc7daabafcf12e90e6a",
+        "invalid-v3.log.O0": "e6dd2b740b8994efdb4d9d616e375a3592127b73483345bcf319547d8956f8ee",
+        "invalid-v3.log.O2": "e6dd2b740b8994efdb4d9d616e375a3592127b73483345bcf319547d8956f8ee",
+        "level-fill.log.O0": "fc60ddf6c1dcac89bc4028c8e55a810278f63a84a4b9b1fde148cd9f951362e3",
+        "level-fill.log.O2": "fc60ddf6c1dcac89bc4028c8e55a810278f63a84a4b9b1fde148cd9f951362e3",
+        "level-wrong-dim.log.O0": "825d160abdbd6c08336c309b7cd58a90a47b8e005b817d41df08f604e1c3f117",
+        "level-wrong-dim.log.O2": "825d160abdbd6c08336c309b7cd58a90a47b8e005b817d41df08f604e1c3f117",
+        "missing-lt1.log.O0": "b6b4e72d5389a4f38ecd3e55be5fd2cb363f114858b396fe98803205e9d22dc2",
+        "missing-lt1.log.O2": "b6b4e72d5389a4f38ecd3e55be5fd2cb363f114858b396fe98803205e9d22dc2",
+        "missing-namelist.log.O0": "94ae1ec578be435355bd23262f17c194b1a2a09554a2376df5bf2e33036cd1bc",
+        "missing-namelist.log.O2": "94ae1ec578be435355bd23262f17c194b1a2a09554a2376df5bf2e33036cd1bc",
+        "missing-u3.log.O0": "02692146694f201336c62434f5d2380173d34b2217fc670a55c45067596eb349",
+        "missing-u3.log.O2": "02692146694f201336c62434f5d2380173d34b2217fc670a55c45067596eb349",
+        "missing-v3.log.O0": "9ed619423c94d7f96b3f5b09190cab0702de24cd952f2329117553db341efbb3",
+        "missing-v3.log.O2": "9ed619423c94d7f96b3f5b09190cab0702de24cd952f2329117553db341efbb3",
+        "mixed-invalid-om.log.O0": "643eeb9bb9bfb73c5fd6200fb482e1a97349a45353e23e7bd6df1c743a8fee06",
+        "mixed-invalid-om.log.O2": "643eeb9bb9bfb73c5fd6200fb482e1a97349a45353e23e7bd6df1c743a8fee06",
+        "mixed-invalid-vv.log.O0": "dea3beb11c9532748cf1576c02c6efb1447b174bbd0d31ad5bb060acaa8fca3a",
+        "mixed-invalid-vv.log.O2": "dea3beb11c9532748cf1576c02c6efb1447b174bbd0d31ad5bb060acaa8fca3a",
+        "mixed-missing-om.log.O0": "f39aa9866122ccb3a1917cb226b3fb320bce8151605fc364fff816f8c7f72d02",
+        "mixed-missing-om.log.O2": "f39aa9866122ccb3a1917cb226b3fb320bce8151605fc364fff816f8c7f72d02",
+        "mixed-missing-vv.log.O0": "64a6e9c646c0150143f997087ebc89c324f395183ff8e7e55e0c0d89f963af21",
+        "mixed-missing-vv.log.O2": "64a6e9c646c0150143f997087ebc89c324f395183ff8e7e55e0c0d89f963af21",
+        "nonmonotonic-pressure.log.O0": "ffae5c5e5ec296d3d4817572d46e235f64be58648e81df3552eab9f9a01146bb",
+        "nonmonotonic-pressure.log.O2": "ffae5c5e5ec296d3d4817572d46e235f64be58648e81df3552eab9f9a01146bb",
+        "reject-subterrain-aboveground.log.O0": "a715ee5d18160354a79593ff11865a19f32e898bc6bfeaf4c27418819c3bf23b",
+        "reject-subterrain-aboveground.log.O2": "a715ee5d18160354a79593ff11865a19f32e898bc6bfeaf4c27418819c3bf23b",
+        "reject-subterrain-bad-psfc.log.O0": "1e0ef0fb59785df0da6b1df24bca7bea780ab73dc3806f42f794fb051c3aa8d7",
+        "reject-subterrain-bad-psfc.log.O2": "1e0ef0fb59785df0da6b1df24bca7bea780ab73dc3806f42f794fb051c3aa8d7",
+        "reject-subterrain-equality.log.O0": "b9e164608565dc99f57f6a6e2797d23c8db7d55a7db1ec85a752b010284a5535",
+        "reject-subterrain-equality.log.O2": "b9e164608565dc99f57f6a6e2797d23c8db7d55a7db1ec85a752b010284a5535",
+        "reject-subterrain-high.log.O0": "1da2cb16ebea21d6c5abb17650e4d634aec9cb9ea20eb1e1854d20dc1d618eb5",
+        "reject-subterrain-high.log.O2": "1da2cb16ebea21d6c5abb17650e4d634aec9cb9ea20eb1e1854d20dc1d618eb5",
+        "reject-subterrain-inf.log.O0": "6d6d909e500f8a6d2cf3dc7b704996c53a1aa43912ea71d54adc8091644fb06d",
+        "reject-subterrain-inf.log.O2": "6d6d909e500f8a6d2cf3dc7b704996c53a1aa43912ea71d54adc8091644fb06d",
+        "reject-subterrain-missing-sh.log.O0": "53d7f8c285355c92a29a5caff8a5acab4c18258b8ba2d3fd66d16bdb3c91b5e0",
+        "reject-subterrain-missing-sh.log.O2": "53d7f8c285355c92a29a5caff8a5acab4c18258b8ba2d3fd66d16bdb3c91b5e0",
+        "reject-subterrain-nan.log.O0": "9a6f30b8c6f8e5784d7dd3040c0fe7e7fa0bc0650f2e3853a20118495fc43ee0",
+        "reject-subterrain-nan.log.O2": "9a6f30b8c6f8e5784d7dd3040c0fe7e7fa0bc0650f2e3853a20118495fc43ee0",
+        "reverse-levels.log.O0": "479d4f06df6601ae42d12f9ef7e8180bfe732d26762512a571846eeea4f66e97",
+        "reverse-levels.log.O2": "479d4f06df6601ae42d12f9ef7e8180bfe732d26762512a571846eeea4f66e97",
+        "swapped-xy.log.O0": "7e2943b54551a4d83359fb7f190f37b292bb3467ca91ffe1d2e5f11d976e1a8c",
+        "swapped-xy.log.O2": "7e2943b54551a4d83359fb7f190f37b292bb3467ca91ffe1d2e5f11d976e1a8c",
+        "wrong-time.log.O0": "53747794d025294a1b9ecbc9a7da4e1056cf327f519c0cce6d64465d14a3bd94",
+        "wrong-time.log.O2": "53747794d025294a1b9ecbc9a7da4e1056cf327f519c0cce6d64465d14a3bd94"
+      },
+      "scratch": "/var/tmp/lapsprep_vapor_tests.4Q2m2q",
+      "status": "PASS_SCOPED"
+    },
+    "native_w": {
+      "command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 CLOUD_BAL_TEST_SCRATCH_ROOT=/var/tmp bash tests/run_native_w_consumer.sh",
+      "optimizations": [
+        "O0",
+        "O2"
+      ],
+      "output_negative_cases": [
+        "valid_range",
+        "_FillValue",
+        "missing_value"
+      ],
+      "status": "PASS_SCOPED"
+    },
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "portable": {
+    "all_skipped_files": 0,
+    "command": "python3 /var/tmp/pr109_isolated/run_confined.py tests/run_python_contract_tests.sh",
+    "confinement": {
+      "allowed": "private scratch and system libraries/tools; directory metadata visible",
+      "denied_probes": {
+        "external_research_read": "EACCES",
+        "ifx_execute": "EACCES",
+        "ifx_read": "EACCES",
+        "old_external_venv_read": "EACCES"
+      },
+      "landlock_abi": 4,
+      "network_isolation": false
+    },
+    "dependencies": [
+      "certifi==2026.10.23",
+      "cftime==1.6.5",
+      "contourpy==1.3.3",
+      "cycler==0.12.1",
+      "fonttools==4.67.0",
+      "iniconfig==2.3.1",
+      "kiwisolver==1.5.1",
+      "matplotlib==3.10.1",
+      "netCDF4==1.7.4",
+      "numpy==1.26.4",
+      "packaging==26.3",
+      "pillow==13.0.0",
+      "pluggy==1.7.0",
+      "pyparsing==3.3.3",
+      "pytest==8.1.1",
+      "python-dateutil==3.0.0",
+      "scipy==1.15.3",
+      "six==1.17.0",
+      "tzdata==2026.5"
+    ],
+    "environment": "/var/tmp/pr109_isolated/environment",
+    "legacy_scripts_passed": 7,
+    "pytest_cases_passed": 1340,
+    "pytest_cases_skipped": 1,
+    "pytest_modules": 201,
+    "python_files_passed": 208,
+    "registered_modules": 309,
+    "returncode": 0,
+    "shell_files_passed": 2,
+    "source_copy": "/var/tmp/pr109_isolated/Cloud-BAL",
+    "status": "PASS",
+    "tiers": {
+      "linux": 4,
+      "native": 83,
+      "portable": 208,
+      "realdata": 14
+    }
+  },
+  "source_sha256": {
+    "src/common/cloud_bal_native_w_consumer.f90": "4bc9c03c33d9880009015c2745a27f800139be98e1e30334d2c12cd3f59f1638",
+    "src/lapsprep/lapsprep.f90": "2c1a7c81042ab40928650d9286fb186e8725e52dc7d29e60bb71ac2cce00dfea",
+    "tests/lapsprep_vapor_fixture.py": "9275ce0a1ffb064157e97e03fca9ee7626c47a1cf13d608ea0fca5e9f4d4a8b8",
+    "tests/output_safety.sh": "8cbd02edcea05c1135cdf2f6276c530c5da1e16c357663ce08401ecb456469d6",
+    "tests/run_lapsprep_vapor.sh": "f25bba5edaba307ec2be71658490356210f4b18975061334df9131d359f93cc9",
+    "tests/run_real_manufactured_balance_cases.sh": "a9625f12a59699694128454b559439a43f49fdeb79f67f730353a65dba9572b9",
+    "tests/run_real_shadow_cases.sh": "edfa505a112f1808d0c0f149620593347e1736e7b10b5c631c7c253b97ef2e43",
+    "tests/run_shell_transaction_recovery.sh": "a0735696c37a6fc67aec441b141857f52277152231565c04a88ab0647ff1cb24",
+    "tests/test_native_w_consumer.f90": "d89453446fab1c6ebdf8849fb9262c6c205a3e63260083b0613d65c7f9561cec",
+    "tests/test_pr101_guarded_replay.py": "8868eff619e683942c220cfcca071001ada6984c775c64cc95ca68a099d1bac4",
+    "tests/test_pr101_projected_c2_response.py": "f5d07c788e6782b4bf5dbc0d9eb352b7553fc202c7558bb24dca5cb2fcc3e5bd",
+    "tests/test_pr101_projected_c2_response_native.py": "8cf7b2b593af2bf932b6c1ad7ac4013ee9fbff4c214798bacfe828b256453094",
+    "tests/test_pr101_upper_wind_capture.py": "566adf89d1b852707be1c0812fe82908d7e392f8fbccd7f0ccb5847ae2371576",
+    "tests/test_pr101_upper_wind_capture_native.py": "5cfc26503e0f1c1ea66846cef5524fd6f0f0f32fda1dd979f5e95460bab2d78d",
+    "tests/test_pr101_upper_wind_replay.py": "76268cb0c5241404ee5b73071949d913bd38b4c8bf97045275e3537830cff15a",
+    "tests/test_pr101_upper_wind_replay_native.py": "45cd679d983176679a56b364f00f7180fe248a50176ea75ea57a5a7be2a46a5f",
+    "tests/test_pr103_archived_consumer.py": "35e279b895b681a63c01c45d123ada8c1fce49c847b5a18fe3a4bf573caed384",
+    "tests/test_pr103_archived_consumer_native.py": "73d4bed5e1108ffa50f4a1f00cedc93e5dfe8d15438ba8f10e4a2ddb28535461",
+    "tests/test_pr71_guarded_composer.py": "b6d6c14b736d711dddc5ba8443affadc3c576a4c9f2d830dd0e6018afd85921f",
+    "tests/test_pr71_guarded_composer_native.py": "0d37b105084808f79f469b82175e907617149bbeeeed9efc6efe0739459b291b",
+    "tests/test_pr83_rk_operands_patch.py": "0fd952ac7c84b6223857328da90cfb9ab49acbceae00600c147aab7735460c48",
+    "tests/test_pr83_rk_operands_patch_native.py": "3aa28e50f19cce083232be43cc5d960b1b3de899a7b45a6f5b6f711577709ca1",
+    "tests/test_pr84_native_moment_policy.py": "30a4293a2ea971cff3b666960e7b53b9d14d0edef4d65fa772afcf521caed237",
+    "tests/test_pr84_native_moment_policy_native.py": "01d1599e6f636813a3c4dd38d57e95503c37c170c49ba059846809c14c5e593f",
+    "tests/test_pr84_shared_runner_contract.py": "bf398821de3cba55ac5233fb225d7940e31805d303712297c1b1546262d1e200",
+    "tests/test_pr84_shared_runner_contract_native.py": "3744245655e1f56e849a6c5e109eb0042d7675df902df4eb691af49660b65801",
+    "tests/test_pr87_progb_failure_context.py": "c56875f9b089831938dc9313790b72c3cad469bb7b2d25211beacef92f15eecc",
+    "tests/test_pr87_progb_failure_context_portable.py": "3739e97981a8c7ab0479186b9e5406744927e7c282c198e58b32a649d49d668d",
+    "tests/test_pr87_rain_diffusion_replay.py": "f406258ccc5a2decb8a88c7273cd80caf423647186bc6f6b2eb6147db9500d06",
+    "tests/test_pr87_rain_diffusion_replay_native.py": "4f2f5577b3f02395b6590289009f0689f77d17f225d7252f331bc94045945711",
+    "tests/test_pr91_host_store_trace.py": "5fa16e4080a71bc5335f52bc8b79dd150d8b5df66dabaaba8fefed47c26d0927",
+    "tests/test_pr91_host_store_trace_native.py": "564d3a58b4c08eac2e853c56c0298a6321d387c0a24f707d1045f50d68ad5a50",
+    "tests/test_pr92_graupel_store_replay.py": "da14be972b19d3015c3cc903b59f0a0ec20e739cb065043bef49c10309b24411",
+    "tests/test_pr92_graupel_store_replay_native.py": "1a45f69f97bc572dbcbb1b2631776efde37a01b99ae1a1070e01948f12b88880",
+    "tests/test_pr92_source_store_fixture.py": "97fbf0cd0a5a2dff20c123bf969e031020dc390fdba147276b94b3156129d461",
+    "tests/test_pr92_source_store_fixture_native.py": "df159c988b3b7cea3d0f0f3eaf44f62cbebbd82304999eefc24adde619e8f4db",
+    "tests/test_pr94_hydro_control.py": "f18b35c41fcdf8740baf50353d4caaeaf9459eca828eab1e371267623a028762",
+    "tests/test_pr94_hydro_control_realdata.py": "fd0febd05aaa7266bb2b64f4a2b6d2f9486c8c1429586f96b62584831ff3a439",
+    "tests/test_pr98_boundary_audit.py": "6c9c8552332435a562a92fa982596cfad6d4e1c36cf693c1238d2f3dabec3b6f",
+    "tests/test_pr98_boundary_audit_native.py": "22fc1c977d6c82c8b8299706ceedbfb6350a0fd11064af552bbd8cdedfce49f8",
+    "tests/test_pr99_bulk_candidate_contract.py": "88460d4815806a61b6a43c7e5b749a48371650e8ef0ce5962f99f7454ba02b94",
+    "tests/test_pr99_bulk_candidate_contract_native.py": "531d03971b25f69b204f4c5937a6d2b89758cd10cdcd3f8ef346b03b60a2d9f6",
+    "tests/test_tier_exceptions.json": "87d1b80171574acd79d9a51b17806ac67c02050d5a0f4fb2ca4d4198225d950b"
+  },
+  "test_split_review": {
+    "added": [],
+    "changed_and_new_test_declarations_after": 86,
+    "changed_test_declarations_before": 86,
+    "integration_collection_only": 28,
+    "new_sibling_cases_collected": 29,
+    "new_sibling_portable_cases": 1,
+    "removed": []
+  }
+}
