@@ -1,0 +1,42 @@
+{
+  "schema": "pr105_focused_validation_v1",
+  "recorded_utc": "2026-10-26T11:03:44.055532+00:00",
+  "command": [
+    "/usr/bin/python",
+    "-m",
+    "unittest",
+    "tests.test_pr104_validtime_observation",
+    "tests.test_pr105_paired_scores",
+    "tests.test_pr103_surface_temperature_observation",
+    "tests.test_pr105_kg_guard"
+  ],
+  "returncode": 0,
+  "source_pins_before": {
+    "tools/pr104_validtime_observation.py": "039cfd94014cadb0d10badb5a918726aca249e1f7ce02d5d91a7de9d1ef34811",
+    "tools/pr105_paired_scores.py": "8f2352bcb0e501f962c25a9367e88f45a67762ef3ec0d78a8bb97f971557f632",
+    "tools/pr103_surface_temperature_observation.py": "736ae3b5ec8f7e41dfd5543f00eb5b81c163a53e447e4c8de6dfcf5f182b62da",
+    "tools/pr87_native_history.py": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+    "tests/test_pr104_validtime_observation.py": "4dd01e86e991222ed42dd1b4dbc66571519b594d8a5c1bbff9fcc6ff0a1389e9",
+    "tests/test_pr105_paired_scores.py": "a0b7464d565eb65fb56f2d6acd9c5a1b0827d2e15f503fcdd99993739990b5b5",
+    "tests/test_pr103_surface_temperature_observation.py": "a09b115b667944f2cbfb462943b6ebbc46895fe8296a597ad6fd665e9db6e270",
+    "tests/test_pr105_kg_guard.py": "0c26d4fc269edea7117a80cd77bda53135b82cc67ec46dbcae0a778c4d7dbcea",
+    "docs/evidence/pr105_observation_pairing_20261026/kg/preflight_kg.py": "8c6f1171132c7e8108b9e1945c9ba4f9004cbd7e684ea5186ad8054c10035548",
+    "docs/evidence/pr105_observation_pairing_20261026/kg/apply_kg.py": "e3a30ce51c69e66ded2cee3f660ef9e36d3ed1acf2a08019b940e43e8e3b8269"
+  },
+  "source_pins_after": {
+    "tools/pr104_validtime_observation.py": "039cfd94014cadb0d10badb5a918726aca249e1f7ce02d5d91a7de9d1ef34811",
+    "tools/pr105_paired_scores.py": "8f2352bcb0e501f962c25a9367e88f45a67762ef3ec0d78a8bb97f971557f632",
+    "tools/pr103_surface_temperature_observation.py": "736ae3b5ec8f7e41dfd5543f00eb5b81c163a53e447e4c8de6dfcf5f182b62da",
+    "tools/pr87_native_history.py": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+    "tests/test_pr104_validtime_observation.py": "4dd01e86e991222ed42dd1b4dbc66571519b594d8a5c1bbff9fcc6ff0a1389e9",
+    "tests/test_pr105_paired_scores.py": "a0b7464d565eb65fb56f2d6acd9c5a1b0827d2e15f503fcdd99993739990b5b5",
+    "tests/test_pr103_surface_temperature_observation.py": "a09b115b667944f2cbfb462943b6ebbc46895fe8296a597ad6fd665e9db6e270",
+    "tests/test_pr105_kg_guard.py": "0c26d4fc269edea7117a80cd77bda53135b82cc67ec46dbcae0a778c4d7dbcea",
+    "docs/evidence/pr105_observation_pairing_20261026/kg/preflight_kg.py": "8c6f1171132c7e8108b9e1945c9ba4f9004cbd7e684ea5186ad8054c10035548",
+    "docs/evidence/pr105_observation_pairing_20261026/kg/apply_kg.py": "e3a30ce51c69e66ded2cee3f660ef9e36d3ed1acf2a08019b940e43e8e3b8269"
+  },
+  "source_unchanged": true,
+  "status": "PASS",
+  "log_sha256": "495d4695b642f3b33c12b911badad2551c0384497dd9bff5e554a6a849056244",
+  "scope": "42 Python checks: observation and closure pairing, existing PR103 reader regression, bounded KG guards. No forecast integration or Fortran compiler invocation. Runtime request completion and physical approval remain OPEN."
+}

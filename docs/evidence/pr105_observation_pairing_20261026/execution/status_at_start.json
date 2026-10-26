@@ -1,0 +1,67 @@
+{
+  "observed_utc": "2026-10-26T10:54:49.477482+00:00",
+  "scope": "process/supervisor/log timing metadata only; no live forecast arrays read",
+  "progress": {
+    "observed_utc": "2026-10-26T10:54:42.411281+00:00",
+    "scope": "log timing/process metadata only",
+    "arms": {
+      "HYDRO": {
+        "latest_timing": {
+          "timestamp": "2026-08-16_13:10:20",
+          "elapsed_seconds": 539.71759
+        },
+        "supervision": "RUNNING",
+        "closed_steps": null
+      },
+      "AMPLITUDE": {
+        "latest_timing": {
+          "timestamp": "2026-08-16_13:10:40",
+          "elapsed_seconds": 325.72034
+        },
+        "supervision": "RUNNING",
+        "closed_steps": null
+      },
+      "STRUCTURED": {
+        "latest_timing": {
+          "timestamp": "2026-08-16_13:10:20",
+          "elapsed_seconds": 537.79822
+        },
+        "supervision": "RUNNING",
+        "closed_steps": null
+      }
+    }
+  },
+  "supervision": {
+    "HYDRO": {
+      "path": "/var/tmp/pr104_execution_supervisor_20261026/hydro_supervision.json",
+      "sha256_at_observation": "db9585731c392135b971c16f37a9f847b1a921a0efcee571c54e235ab9b1dd48",
+      "status": "RUNNING",
+      "requested_seconds": 3600,
+      "expected_steps": 180,
+      "started_utc": "2026-10-26T06:36:43.119982+00:00",
+      "closed_result": null
+    },
+    "AMPLITUDE": {
+      "path": "/var/tmp/pr104_execution_supervisor_20261026/amplitude_supervision.json",
+      "sha256_at_observation": "68cb1405b74277e645470f25685183278d8abf85cd0a37cfd031ebe72b9f2f8a",
+      "status": "RUNNING",
+      "requested_seconds": 3600,
+      "expected_steps": 180,
+      "started_utc": "2026-10-26T06:36:43.120417+00:00",
+      "closed_result": null
+    },
+    "STRUCTURED": {
+      "path": "/var/tmp/pr104_execution_supervisor_20261026/structured_supervision.json",
+      "sha256_at_observation": "c8bbd736102ddf33aa818cec8d1a13b24311dc6fe56b8554fe70b613c6d8614d",
+      "status": "RUNNING",
+      "requested_seconds": 3600,
+      "expected_steps": 180,
+      "started_utc": "2026-10-26T06:36:43.120753+00:00",
+      "closed_result": null
+    }
+  },
+  "cohort_closed_exists": false,
+  "forecast_3600_verdict": "PENDING",
+  "scientific_approval": "OPEN",
+  "observation_skill": "NOT_EVALUATED"
+}

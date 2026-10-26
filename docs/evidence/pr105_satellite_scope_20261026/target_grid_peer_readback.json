@@ -1,0 +1,38 @@
+{
+  "scope": "Closed historical geometry only; target source indices use full WRF grid before any active-domain crop. No live fields or observation scores.",
+  "source_pins_before": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr93_qc_chain_20261020/laps_qc_horizontal_rows.json": "699b503c84cdeccd6020263a0a54ae3193eb2a0d29664f3c4a68ce142d68d8b8",
+    "/var/tmp/pr82_same13_metgrid_candidate.final20261012/geo_em.d01.nc": "9791fdfab40fcc623f967cfeac72c43f0ac13a72ff453eea717a2f510901044b",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/run/wrfout_d01_2026-08-16_13:00:00": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4"
+  },
+  "source_pins_after": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr93_qc_chain_20261020/laps_qc_horizontal_rows.json": "699b503c84cdeccd6020263a0a54ae3193eb2a0d29664f3c4a68ce142d68d8b8",
+    "/var/tmp/pr82_same13_metgrid_candidate.final20261012/geo_em.d01.nc": "9791fdfab40fcc623f967cfeac72c43f0ac13a72ff453eea717a2f510901044b",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/run/wrfout_d01_2026-08-16_13:00:00": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4"
+  },
+  "source_unchanged": true,
+  "comparison_method": "numpy.array_equal on all Time=0 coordinates, with shape and finiteness checked",
+  "comparisons": {
+    "XLAT_M=XLAT": {
+      "shape_yx": [
+        282,
+        234
+      ],
+      "exact_numeric_equal": true,
+      "maximum_abs_difference": 0.0,
+      "dtype_geo": "float32",
+      "dtype_wrf": "float32"
+    },
+    "XLONG_M=XLONG": {
+      "shape_yx": [
+        282,
+        234
+      ],
+      "exact_numeric_equal": true,
+      "maximum_abs_difference": 0.0,
+      "dtype_geo": "float32",
+      "dtype_wrf": "float32"
+    }
+  },
+  "status": "PASS_SCOPED"
+}

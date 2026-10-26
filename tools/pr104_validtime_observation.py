@@ -119,30 +119,104 @@ def load_histories(history_paths: dict[str, Path], valid_time: datetime,
 
 
 def paired_operator_difference(x_rows: list[dict], y_rows: list[dict], definition: str) -> dict:
-    def index(rows: list[dict]) -> dict[tuple[str, str, str, int], float]:
+    key_fields = ("station_id", "wmo_id", "provider", "time_hhmm")
+    shared_fields = ("observation_c", "lat", "lon", "elev_m", "time_hhmm",
+                     "temperature_expected_accuracy_f")
+
+    def index(rows: list[dict]) -> dict[tuple[str, str, str, int], dict]:
         result = {}
         for row in rows:
-            key = (row["station_id"], row["wmo_id"], row["provider"], row["time_hhmm"])
+            key = tuple(row[field] for field in key_fields)
             if key in result:
                 raise ValueError(f"duplicate matched station key: {key}")
-            result[key] = row["model_t2_c"]
+            result[key] = row
         return result
 
-    x_values, y_values = index(x_rows), index(y_rows)
-    if x_values.keys() != y_values.keys():
-        missing_from_x = len(y_values.keys() - x_values.keys())
-        missing_from_y = len(x_values.keys() - y_values.keys())
+    x_by_key, y_by_key = index(x_rows), index(y_rows)
+    if x_by_key.keys() != y_by_key.keys():
+        missing_from_x = len(y_by_key.keys() - x_by_key.keys())
+        missing_from_y = len(x_by_key.keys() - y_by_key.keys())
         raise ValueError(f"operator pair has different station coverage: missing_from_x={missing_from_x}, missing_from_y={missing_from_y}")
-    keys = sorted(x_values)
+    keys = sorted(x_by_key)
     if not keys:
         raise ValueError("operator pair has no matched station coverage")
-    delta = np.asarray([x_values[key] - y_values[key] for key in keys], dtype=float)
+    paired_rows = []
+    for key in keys:
+        x_row, y_row = x_by_key[key], y_by_key[key]
+        if any(x_row[field] != y_row[field] for field in shared_fields):
+            raise ValueError(f"operator pair has different shared station observation metadata: {key}")
+        for field in ("lat", "lon", "elev_m", "observation_c", "model_t2_c",
+                      "temperature_expected_accuracy_f",
+                      "signed_model_minus_observation_c"):
+            for row in (x_row, y_row):
+                try:
+                    value = float(row[field])
+                except (KeyError, TypeError, ValueError) as exc:
+                    raise ValueError(f"operator pair has invalid {field}: {key}") from exc
+                if not math.isfinite(value):
+                    raise ValueError(f"operator pair has nonfinite {field}: {key}")
+        observation = float(y_row["observation_c"])
+        f_x, f_y = float(x_row["model_t2_c"]), float(y_row["model_t2_c"])
+        e_x = f_x - observation
+        e_y = f_y - observation
+        if (float(x_row["signed_model_minus_observation_c"]) != e_x or
+                float(y_row["signed_model_minus_observation_c"]) != e_y):
+            raise ValueError(f"operator pair residual does not match model minus observation: {key}")
+        delta = f_x - f_y
+        cross = 2.0 * e_y * delta
+        delta_squared = delta * delta
+        direct_squared_error_delta = e_x * e_x - e_y * e_y
+        decomposed_squared_error_delta = cross + delta_squared
+        paired_rows.append({
+            "station_key": list(key), "observation_c": observation,
+            "f_x_c": f_x, "f_y_c": f_y, "prediction_delta_c": delta,
+            "e_x_c": e_x, "e_y_c": e_y, "cross_term_c2": cross,
+            "delta_squared_c2": delta_squared,
+            "squared_error_delta_c2": decomposed_squared_error_delta,
+            "direct_squared_error_delta_c2": direct_squared_error_delta,
+            "identity_roundoff_difference_c2": direct_squared_error_delta - decomposed_squared_error_delta,
+            "absolute_error_delta_c": abs(e_x) - abs(e_y),
+        })
+
+    delta = np.asarray([row["prediction_delta_c"] for row in paired_rows], dtype=float)
+    squared_error_delta = np.asarray(
+        [row["squared_error_delta_c2"] for row in paired_rows], dtype=float)
+    absolute_error_delta = np.asarray([row["absolute_error_delta_c"] for row in paired_rows])
+
+    def contribution_summary(values: np.ndarray) -> dict:
+        largest_index = int(np.argmax(np.abs(values)))
+        order = np.argsort(-np.abs(values), kind="stable")
+        top_count = min(5, int(values.size))
+        return {
+            "signed_total": float(values.sum()),
+            "absolute_total": float(np.abs(values).sum()),
+            "mean_signed_delta": float(values.mean()),
+            "mean_absolute_delta": float(np.abs(values).mean()),
+            "largest_abs_contribution": {
+                "station_key": list(keys[largest_index]), "value": float(values[largest_index]),
+            },
+            "top_5_cumulative_signed_contribution": float(values[order[:top_count]].sum()),
+            "top_5_cumulative_absolute_contribution": float(np.abs(values[order[:top_count]]).sum()),
+        }
+
     return {
         "definition": f"{definition}, station-interpolated T2 in degC",
         "paired_station_count": int(delta.size),
         "nonzero_signal": bool(np.any(delta != 0.0)),
         "rms_delta_c": float(np.sqrt(np.square(delta).mean())) if delta.size else None,
         "max_abs_delta_c": float(np.abs(delta).max()) if delta.size else None,
+        "paired_station_score_rows": paired_rows,
+        "paired_station_score_differences": {
+            "prediction_delta_c": contribution_summary(delta),
+            "squared_error_delta_c2": contribution_summary(squared_error_delta),
+            "absolute_error_delta_c": contribution_summary(absolute_error_delta),
+            "mean_mse_delta_c2": float(squared_error_delta.mean()),
+            "mean_mae_delta_c": float(absolute_error_delta.mean()),
+            "max_abs_identity_roundoff_difference_c2": max(
+                abs(row["identity_roundoff_difference_c2"]) for row in paired_rows),
+            "squared_error_decomposition": "e_x^2 - e_y^2 = 2 * e_y * delta + delta^2; e_y is y model minus observation",
+            "contribution_scope": "all paired matched station records; no additional exclusions",
+        },
     }
 
 
@@ -193,7 +267,9 @@ def main() -> None:
                    "No nearest-time selection or zero filling is performed.",
                    "Residuals do not establish independent forecast skill; observation QC and uncertainty are not modeled."],
     }
-    args.output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    encoded = json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n"
+    with args.output.open("x", encoding="utf-8") as stream:
+        stream.write(encoded)
 
 
 if __name__ == "__main__":

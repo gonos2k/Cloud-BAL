@@ -1,0 +1,511 @@
+{
+  "source_pins": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/lvd/kogk2a/262281400.lvd": "e7d2e745782dcfec29f0097183c510b759cefceab6617b2398d8a2b68cecb841",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/static.nest7grid": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr93_qc_chain_20261020/qc_vertical_composition.json": "331eb9837c41a7aa663864c348f8fe18c44f8e55feed736900f5029685b1aa64",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr93_qc_chain_20261020/laps_qc_horizontal_rows.json": "699b503c84cdeccd6020263a0a54ae3193eb2a0d29664f3c4a68ce142d68d8b8",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/run/wrfout_d01_2026-08-16_13:00:00": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr104_validtime_observation_20261026/Cloud-BAL/docs/evidence/pr104_observation_audit_20261026/station_mask_coverage_14z.json": "701a167a22da42552faa6beabc88a93e9843db2ae25b009841aae502f8d786ed",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr104_validtime_observation_20261026/Cloud-BAL/tests/original_upstream_replay_20260816.json": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5"
+  },
+  "static_grid_receipt": {
+    "path": "ANAL/NE57/DABA/static.nest7grid",
+    "absolute_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/static.nest7grid",
+    "sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b",
+    "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr104_validtime_observation_20261026/Cloud-BAL/tests/original_upstream_replay_20260816.json",
+    "receipt_sha256": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5"
+  },
+  "pr104_station_mask_evidence": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr104_validtime_observation_20261026/Cloud-BAL/docs/evidence/pr104_observation_audit_20261026/station_mask_coverage_14z.json",
+    "sha256": "701a167a22da42552faa6beabc88a93e9843db2ae25b009841aae502f8d786ed",
+    "all_803": {
+      "buffer_contained": 0,
+      "buffer_intersects": 0,
+      "full_4x4_inside_grid": 803,
+      "support_contained": 0,
+      "support_intersects": 0
+    },
+    "valid_765": {
+      "buffer_contained": 0,
+      "buffer_intersects": 0,
+      "full_4x4_inside_grid": 765,
+      "support_contained": 0,
+      "support_intersects": 0
+    }
+  },
+  "horizontal_rows_binding": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr93_qc_chain_20261020/laps_qc_horizontal_rows.json",
+    "sha256": "699b503c84cdeccd6020263a0a54ae3193eb2a0d29664f3c4a68ce142d68d8b8",
+    "composition_input_binding_path": "/var/tmp/pr93_horizontal_qc_replay_20261020/replay/laps_qc_horizontal_rows.json",
+    "composition_input_binding_sha256": "699b503c84cdeccd6020263a0a54ae3193eb2a0d29664f3c4a68ce142d68d8b8",
+    "source_horizontal_cells": 9,
+    "source_pressure_cells": 162,
+    "same_source_cells_as_composition": true,
+    "source_grid_registration": {
+      "projection": "Lambert conformal",
+      "startloc": "SWCORNER",
+      "earth_radius_km_f32": 6371.22900390625,
+      "source_grid_input_sha256": "d73b3356430b64b98997b720e9e7549033ac9a5e4d35be798dff2d1dfdb0dbce",
+      "lvd_static_parameter_differences": {
+        "nx_points": 0,
+        "ny_points": 0,
+        "dx_km": 0.0,
+        "dy_km": 0.0,
+        "sw_lat_deg": 0.0,
+        "sw_lon_deg": 0.0,
+        "stdlon_deg": 0.0,
+        "truelat1_deg": 0.0,
+        "truelat2_deg": 0.0
+      },
+      "difference_units": "native units; exact zero required; no fit",
+      "earth_radius_comparison": "LAPS static/LVD files do not expose a numeric counterpart; recorded as source-row metadata only"
+    }
+  },
+  "source_code_refs": [
+    {
+      "root": "KLAPS50",
+      "path": "klaps-v5.0_/src/ingest/satellite/lvd_gk2a/lvd_driver_sub.f",
+      "lines": "21-34,843-868,1011-1034",
+      "sha256": "f36784c270ab90a52d5768f50ffb8b79dc0c3c8ba2125853d5a64a6d17ff1545",
+      "claim": "source-declared legacy channel numbers, wavelengths, product names and units",
+      "absolute_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/src/ingest/satellite/lvd_gk2a/lvd_driver_sub.f"
+    },
+    {
+      "root": "KLAPS50",
+      "path": "klaps-v5.0_/src/cloud_20200204/get_sat_data.f",
+      "lines": "68-135",
+      "sha256": "ec9a3a407231a4e2a0c9b267d774bcdf736fa283951320bd05b74461a6aced90",
+      "claim": "legacy cloud reader loads S8A and optional S3A; range-checks S8A",
+      "absolute_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/src/cloud_20200204/get_sat_data.f"
+    },
+    {
+      "root": "KLAPS50",
+      "path": "klaps-v5.0_/src/cloud_20200204/getvis.f",
+      "lines": "108-122",
+      "sha256": "e28d1302081b5f82c4be0558fac86225f766571b4a954e3ac8f680799144a66b",
+      "claim": "legacy visible-cloud reader loads ALB",
+      "absolute_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/src/cloud_20200204/getvis.f"
+    },
+    {
+      "root": "KLAPS50",
+      "path": "klaps-v5.0_/src/cloud_20200204/insertsat.f",
+      "lines": "1302-1322,1360-1450",
+      "sha256": "0b22d2d45d77001821111cb8ebd080928d89632df1fba241fbe76c5070cf9341",
+      "claim": "empirical radiation/BT comparison adjusts cloud fractions with a 4-degree threshold and 0.05 cover step; not a general atmospheric forward RTM",
+      "absolute_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/src/cloud_20200204/insertsat.f"
+    },
+    {
+      "root": "KLAPS50",
+      "path": "klaps-v5.0_/src/lib/opt90/rtm_test_FWD.f90",
+      "lines": "3-34",
+      "sha256": "d793f05c894d94949ebbe23036bcbb510fc4d514ae8080555168ce5aa07e0075",
+      "claim": "separate NCEP RTM forward test utility; not evidence of GK2A channel binding or C2 runtime use",
+      "absolute_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/src/lib/opt90/rtm_test_FWD.f90"
+    },
+    {
+      "root": "Cloud-BAL",
+      "path": "src/common/cloud_bal_state.f90",
+      "lines": "188-209",
+      "sha256": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61",
+      "claim": "Cloud-BAL state declares cloud fraction and radar reflectivity, not satellite BT",
+      "absolute_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr105_observation_pairing_20261026/Cloud-BAL/src/common/cloud_bal_state.f90"
+    }
+  ],
+  "grid_registration": {
+    "laps_static_and_lvd_shape_yx": [
+      283,
+      235
+    ],
+    "static_file_declared_role": "static_grid in tests/original_upstream_replay_20260816.json",
+    "laps_lvd_projection_metadata": {
+      "Nx": [
+        235
+      ],
+      "Ny": [
+        283
+      ],
+      "La1": [
+        31.344505310058594
+      ],
+      "Lo1": [
+        119.79931640625
+      ],
+      "LoV": [
+        126.0
+      ],
+      "Latin1": [
+        30.0
+      ],
+      "Latin2": [
+        60.0
+      ],
+      "Dx": [
+        5000.0
+      ],
+      "Dy": [
+        5000.0
+      ]
+    },
+    "projection_parameter_differences_lvd_minus_static": {
+      "Nx": [
+        0.0
+      ],
+      "Ny": [
+        0.0
+      ],
+      "La1": [
+        0.0
+      ],
+      "Lo1": [
+        0.0
+      ],
+      "LoV": [
+        0.0
+      ],
+      "Latin1": [
+        0.0
+      ],
+      "Latin2": [
+        0.0
+      ],
+      "Dx": [
+        0.0
+      ],
+      "Dy": [
+        0.0
+      ]
+    },
+    "sw_corner_differences_static_latlon_minus_lvd_metadata": {
+      "La1_deg": 0.0,
+      "Lo1_deg": 0.0
+    },
+    "comparison_tolerance": "1e-6 in native parameter units; no fit or adjustment",
+    "static_to_lvd_registration": "receipt-bound static.nest7grid has same 235x283 lat/lon dimensions, Lambert projection parameters, and SW corner as LVD; its 2-D lat/lon arrays directly register the LVD raster",
+    "closed_wrf_grid": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/run/wrfout_d01_2026-08-16_13:00:00",
+    "wrf_grid_shape_yx": [
+      282,
+      234
+    ],
+    "mask_to_lvd_mapping": "nearest LAPS static lat/lon cell center for each frozen WRF support/buffer column, spherical unit-vector distance",
+    "buffer_nearest_laps_cells_unique": 196,
+    "nearest_cell_distance_km": {
+      "max": 3.4869568127101584,
+      "p95": 3.4844323643781854,
+      "median": 3.4746325784695986
+    },
+    "support_nearest_cell_distance_km": {
+      "max": 3.4773311893211,
+      "min": 3.4725168224417104
+    },
+    "support_nearest_laps_cells_unique": 16,
+    "support_level_cells": 613,
+    "support_wrf_columns": 16,
+    "buffer_wrf_columns": 196
+  },
+  "channel_coverage_on_mapped_cells": {
+    "s3a": {
+      "buffer_nearest_cell_count": 196,
+      "buffer_finite_nonfill_nearest_cells": 196,
+      "support_nearest_cell_count": 16,
+      "support_finite_nonfill_nearest_cells": 16,
+      "mapped_unique_source_cells_from_162_cell_qc_support": 9,
+      "source_support_finite_nonfill": 9
+    },
+    "s3c": {
+      "buffer_nearest_cell_count": 196,
+      "buffer_finite_nonfill_nearest_cells": 196,
+      "support_nearest_cell_count": 16,
+      "support_finite_nonfill_nearest_cells": 16,
+      "mapped_unique_source_cells_from_162_cell_qc_support": 9,
+      "source_support_finite_nonfill": 9
+    },
+    "s4a": {
+      "buffer_nearest_cell_count": 196,
+      "buffer_finite_nonfill_nearest_cells": 196,
+      "support_nearest_cell_count": 16,
+      "support_finite_nonfill_nearest_cells": 16,
+      "mapped_unique_source_cells_from_162_cell_qc_support": 9,
+      "source_support_finite_nonfill": 9
+    },
+    "s4c": {
+      "buffer_nearest_cell_count": 196,
+      "buffer_finite_nonfill_nearest_cells": 196,
+      "support_nearest_cell_count": 16,
+      "support_finite_nonfill_nearest_cells": 16,
+      "mapped_unique_source_cells_from_162_cell_qc_support": 9,
+      "source_support_finite_nonfill": 9
+    },
+    "s8a": {
+      "buffer_nearest_cell_count": 196,
+      "buffer_finite_nonfill_nearest_cells": 196,
+      "support_nearest_cell_count": 16,
+      "support_finite_nonfill_nearest_cells": 16,
+      "mapped_unique_source_cells_from_162_cell_qc_support": 9,
+      "source_support_finite_nonfill": 9
+    },
+    "s8w": {
+      "buffer_nearest_cell_count": 196,
+      "buffer_finite_nonfill_nearest_cells": 196,
+      "support_nearest_cell_count": 16,
+      "support_finite_nonfill_nearest_cells": 16,
+      "mapped_unique_source_cells_from_162_cell_qc_support": 9,
+      "source_support_finite_nonfill": 9
+    },
+    "s8c": {
+      "buffer_nearest_cell_count": 196,
+      "buffer_finite_nonfill_nearest_cells": 196,
+      "support_nearest_cell_count": 16,
+      "support_finite_nonfill_nearest_cells": 16,
+      "mapped_unique_source_cells_from_162_cell_qc_support": 9,
+      "source_support_finite_nonfill": 9
+    },
+    "sca": {
+      "buffer_nearest_cell_count": 196,
+      "buffer_finite_nonfill_nearest_cells": 196,
+      "support_nearest_cell_count": 16,
+      "support_finite_nonfill_nearest_cells": 16,
+      "mapped_unique_source_cells_from_162_cell_qc_support": 9,
+      "source_support_finite_nonfill": 9
+    },
+    "scc": {
+      "buffer_nearest_cell_count": 196,
+      "buffer_finite_nonfill_nearest_cells": 196,
+      "support_nearest_cell_count": 16,
+      "support_finite_nonfill_nearest_cells": 16,
+      "mapped_unique_source_cells_from_162_cell_qc_support": 9,
+      "source_support_finite_nonfill": 9
+    }
+  },
+  "source_declared_channel_products": {
+    "channel_1": {
+      "slot": "visible",
+      "LVD_products": [
+        "SVS",
+        "SVN",
+        "ALB"
+      ]
+    },
+    "channel_2": {
+      "slot": "3.9 um",
+      "LVD_products": [
+        "S3A",
+        "S3C"
+      ]
+    },
+    "channel_3": {
+      "slot": "6.7 um",
+      "LVD_products": [
+        "S4A",
+        "S4C"
+      ]
+    },
+    "channel_4": {
+      "slot": "11.2 um",
+      "LVD_products": [
+        "S8A",
+        "S8W",
+        "S8C"
+      ]
+    },
+    "channel_5": {
+      "slot": "12.0 um",
+      "LVD_products": [
+        "SCA",
+        "SCC"
+      ]
+    },
+    "calibration_limit": "legacy source labels only; channel response and independent calibration not established"
+  },
+  "source_composed_support": {
+    "composed_qc_pressure_cells": 162,
+    "unique_laps_source_grid_cells": 9,
+    "source_laps_grid_indices_zero_based_j_i": [
+      [
+        16,
+        134
+      ],
+      [
+        16,
+        135
+      ],
+      [
+        16,
+        136
+      ],
+      [
+        17,
+        134
+      ],
+      [
+        17,
+        135
+      ],
+      [
+        17,
+        136
+      ],
+      [
+        18,
+        134
+      ],
+      [
+        18,
+        135
+      ],
+      [
+        18,
+        136
+      ]
+    ],
+    "source_mask_direct_lvd_raster_indexing": "same 235x283 LAPS source grid"
+  },
+  "operator_inventory": {
+    "legacy_cloud_bt_operator": "insertsat.f compare_radiation empirically compares analyzed cloud to 11.2um BT and changes cloud fractions (4 K threshold; 0.05 cover step; up to 10 iterations)",
+    "general_column_to_gk2a_channel_forward_radiative_transfer": "not found in the inspected C2 runtime path",
+    "Cloud_BAL_satellite_bt_input": false,
+    "Cloud_BAL_radar_reflectivity_input": true,
+    "channel_labels": "legacy source-declared wavelength/channel labels, not independent sensor calibration or channel-response-function verification"
+  },
+  "closed_c2_host_diagnostics": {
+    "evidence_scope": "PR103 closed historical C2 output at 13Z; this is not a new 14Z forecast evaluation",
+    "diagnostics": {
+      "CLDFRA": {
+        "record_time": "2026-08-16_13:10:00",
+        "units": "",
+        "description": "CLOUD FRACTION",
+        "finite_count": 2573532,
+        "cell_count": 2573532,
+        "minimum": 0.0,
+        "maximum": 1.0,
+        "positive_cell_count": 449558
+      },
+      "REFL_10CM": {
+        "record_time": "2026-08-16_13:10:00",
+        "units": "dBZ",
+        "description": "Radar reflectivity (lamda = 10 cm)",
+        "finite_count": 2573532,
+        "cell_count": 2573532,
+        "minimum": -35.0,
+        "maximum": 63.08234405517578,
+        "positive_cell_count": 451878
+      }
+    },
+    "source_computation_binding": "The closed C2 output contains available finite nonzero diagnostics; actual selected-physics computation provenance remains unresolved because the selected C2 evidence does not bind the WRF source routine/formula. These outputs do not validate a satellite observation operator."
+  },
+  "arrays": {
+    "s8w": {
+      "units": "degrees Kelvin",
+      "long_name": "IR channel 4 (11.2u) b-temp: warmest pixel",
+      "finite_nonfill": 66505,
+      "raster_cells": 66505,
+      "valid_min": 209.2314453125,
+      "valid_max": 294.7746887207031
+    },
+    "s8c": {
+      "units": "degrees Kelvin",
+      "long_name": "IR channel 4 (11.2u) b-temp: coldest pixel",
+      "finite_nonfill": 66505,
+      "raster_cells": 66505,
+      "valid_min": 207.41725158691406,
+      "valid_max": 294.7812805175781
+    },
+    "svs": {
+      "units": "counts",
+      "long_name": "visible satellite counts - raw",
+      "finite_nonfill": 0,
+      "raster_cells": 66505,
+      "valid_min": null,
+      "valid_max": null
+    },
+    "svn": {
+      "units": "counts",
+      "long_name": "visible satellite counts - normalized",
+      "finite_nonfill": 0,
+      "raster_cells": 66505,
+      "valid_min": null,
+      "valid_max": null
+    },
+    "alb": {
+      "units": "none",
+      "long_name": "laps derived albedo",
+      "finite_nonfill": 0,
+      "raster_cells": 66505,
+      "valid_min": null,
+      "valid_max": null
+    },
+    "s3a": {
+      "units": "degrees Kelvin",
+      "long_name": "IR channel 2 (3.9u) b-temp: averaged",
+      "finite_nonfill": 66505,
+      "raster_cells": 66505,
+      "valid_min": 214.6895294189453,
+      "valid_max": 298.5283508300781
+    },
+    "s3c": {
+      "units": "degrees Kelvin",
+      "long_name": "IR channel 2 (3.9u) b-temp: filtered",
+      "finite_nonfill": 66505,
+      "raster_cells": 66505,
+      "valid_min": 211.9810028076172,
+      "valid_max": 298.209228515625
+    },
+    "s4a": {
+      "units": "degrees Kelvin",
+      "long_name": "IR channel 3 (6.7u) b-temp: averaged",
+      "finite_nonfill": 66505,
+      "raster_cells": 66505,
+      "valid_min": 209.97337341308594,
+      "valid_max": 257.9967041015625
+    },
+    "s4c": {
+      "units": "degrees Kelvin",
+      "long_name": "IR channel 3 (6.7u) b-temp: filtered",
+      "finite_nonfill": 66505,
+      "raster_cells": 66505,
+      "valid_min": 208.11178588867188,
+      "valid_max": 257.9967041015625
+    },
+    "s5a": {
+      "units": "degrees Kelvin",
+      "long_name": "unused",
+      "finite_nonfill": 0,
+      "raster_cells": 66505,
+      "valid_min": null,
+      "valid_max": null
+    },
+    "s5c": {
+      "units": "degrees Kelvin",
+      "long_name": "unused",
+      "finite_nonfill": 0,
+      "raster_cells": 66505,
+      "valid_min": null,
+      "valid_max": null
+    },
+    "s8a": {
+      "units": "degrees Kelvin",
+      "long_name": "IR channel 4 (11.2u) b-temp: averaged",
+      "finite_nonfill": 66505,
+      "raster_cells": 66505,
+      "valid_min": 210.39056396484375,
+      "valid_max": 294.8537902832031
+    },
+    "sca": {
+      "units": "degrees Kelvin",
+      "long_name": "IR channel 5 (12.0u) b-temp: averaged",
+      "finite_nonfill": 66505,
+      "raster_cells": 66505,
+      "valid_min": 209.5303955078125,
+      "valid_max": 290.94549560546875
+    },
+    "scc": {
+      "units": "degrees Kelvin",
+      "long_name": "IR channel 5 (12.0u) b-temp: filtered",
+      "finite_nonfill": 66505,
+      "raster_cells": 66505,
+      "valid_min": 207.0282440185547,
+      "valid_max": 290.94549560546875
+    }
+  },
+  "valid_time_utc": "2026-08-16T14:00:00+00:00",
+  "reference_time_utc": "2026-08-16T14:00:00+00:00"
+}
