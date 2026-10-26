@@ -19,6 +19,26 @@ Some native checks also need command arguments or environment paths; those
 requirements are recorded with their tier assignment. The generic tier runner
 does not invent missing evidence paths.
 
+The registry assigns each Python test module to its strongest required
+inputs. Local PR83 RK builder checks, PR87 ProgB v36 fixture checks, PR91
+source-store trace parsing, PR92 source parsing/report joins and
+representability/shell-input checks, PR94 synthetic policy identity, PR98
+boundary contracts, PR99 fixture validation, PR101 synthetic replay and
+source-rejection checks, and PR103 plan/GO checks remain portable. Their
+companion tests that read external source trees, frozen runners, compiler
+profiles, native receipts, archived executables, or operational run receipts
+are registered as `native` or `realdata` with the dependency recorded per
+module. The PR87 cloud/PBL consumer builds and PR92 generated Fortran replays
+use the pinned Intel profile in `native`. The PR94 HYDRO candidate, PR97 C4
+capture set, and PR101 closed C2 controls are `realdata`. A same-host pass
+cannot establish availability of those external dependencies.
+
+PR109 qualification additionally runs the complete portable entry point under
+Linux Landlock with external research-file reads and Intel compiler execution
+denied. A new checkout on a host with those resources is not, by itself, a
+portability proof. See `PR109_MEMORY_AND_PORTABILITY_20261027.md` for the
+qualification scope and exact evidence.
+
 The current checkout has no tracked `.github/workflows` file, so this document
 does not establish an active hosted CI check or a hosted-runner result.
 
@@ -72,7 +92,8 @@ python3 -m venv "$venv_dir"
 "$venv_dir/bin/python" -m pip install --only-binary=:all: \
   'numpy==1.26.4' 'netCDF4==1.7.4' 'cftime==1.6.5' \
   'pytest==8.1.1' 'scipy==1.15.3' 'matplotlib==3.10.1'
-PYTHON_BIN="$venv_dir/bin/python" tests/run_python_contract_tests.sh
+mkdir -p "$venv_dir/tmp"
+TMPDIR="$venv_dir/tmp" PYTHON_BIN="$venv_dir/bin/python" tests/run_python_contract_tests.sh
 ```
 
 ## Staged required-check plan

@@ -16,8 +16,7 @@ spec.loader.exec_module(guard)
 
 @pytest.fixture
 def tmp_path():
-    # /tmp is noexec on the research host; diagnostic scratch is /var/tmp.
-    with tempfile.TemporaryDirectory(prefix="pr101_guard_test_", dir="/var/tmp") as directory:
+    with tempfile.TemporaryDirectory(prefix="pr101_guard_test_") as directory:
         yield Path(directory)
 
 

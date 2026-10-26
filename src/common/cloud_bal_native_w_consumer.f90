@@ -400,6 +400,10 @@ CONTAINS
       status=NATIVE_W_CONSUMER_ROLLBACK
       RETURN
     END IF
+    IF (.NOT.valid_w_values(ncid,varid,new_w)) THEN
+      CALL close_dataset(ncid)
+      RETURN
+    END IF
     rc=nf90_put_var(ncid,varid,new_w)
     IF (rc/=NF90_NOERR) THEN
       rc=nf90_put_var(ncid,varid,seed_w)

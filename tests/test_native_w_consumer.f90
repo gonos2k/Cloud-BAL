@@ -71,6 +71,9 @@ PROGRAM test_native_w_consumer
   CALL rejected_w_case(TRIM(root)//'/wrfinput_range_updated','valid_range',1,failures)
   CALL rejected_w_case(TRIM(root)//'/wrfinput_bad_range_shape','bad_range_shape',1,failures)
   CALL rejected_w_case(TRIM(root)//'/wrfinput_bad_range_type','bad_range_type',1,failures)
+  CALL rejected_output_w_case(TRIM(root)//'/wrfinput_output_range','output_range',failures)
+  CALL rejected_output_w_case(TRIM(root)//'/wrfinput_output_fill','output_fill',failures)
+  CALL rejected_output_w_case(TRIM(root)//'/wrfinput_output_missing','output_missing',failures)
 
   CALL create_wrfinput(TRIM(bad_wrfin))
   CALL create_candidate(TRIM(bad_candidate),WRONG_TIME)
@@ -172,6 +175,27 @@ CONTAINS
       TRIM(mode)//' rejection leaves all other data unchanged',failures)
   END SUBROUTINE rejected_w_case
 
+  SUBROUTINE rejected_output_w_case(path,mode,failures)
+    CHARACTER(LEN=*), INTENT(IN) :: path,mode
+    INTEGER, INTENT(INOUT) :: failures
+    REAL(real32) :: before_w(NX,NY,NZ,1),after_w(NX,NY,NZ,1)
+    REAL(real32) :: before_extra(NX,NY,NZ,1),after_extra(NX,NY,NZ,1)
+    REAL(real64) :: before_lat(NX,NY,1),before_lon(NX,NY,1)
+    REAL(real64) :: after_lat(NX,NY,1),after_lon(NX,NY,1)
+    CHARACTER(LEN=DATE_LENGTH) :: before_time,after_time
+    INTEGER :: local_status
+
+    CALL create_wrfinput(path,mode)
+    CALL read_wrf_snapshot(path,before_w,before_extra,before_lat,before_lon,before_time)
+    CALL apply_native_w_increment(path,TRIM(candidate),VALID_TIME,.TRUE.,local_status)
+    CALL check(local_status/=NATIVE_W_CONSUMER_OK,TRIM(mode)//' output rejected',failures)
+    CALL read_wrf_snapshot(path,after_w,after_extra,after_lat,after_lon,after_time)
+    CALL check(ALL(after_w==before_w),TRIM(mode)//' rejection preserves all W',failures)
+    CALL check(ALL(after_extra==before_extra) .AND. ALL(after_lat==before_lat) .AND. &
+      ALL(after_lon==before_lon) .AND. after_time==before_time, &
+      TRIM(mode)//' rejection leaves other data unchanged',failures)
+  END SUBROUTINE rejected_output_w_case
+
   SUBROUTINE create_wrfinput(path,w_mode,sentinel_i)
     CHARACTER(LEN=*), INTENT(IN) :: path
     CHARACTER(LEN=*), INTENT(IN), OPTIONAL :: w_mode
@@ -221,6 +245,15 @@ CONTAINS
       CASE ('valid_range')
         CALL nc_assert(nf90_put_att(ncid,wvar,'valid_range',[0.0_real32,30.0_real32]), &
           'W valid range')
+      CASE ('output_range')
+        CALL nc_assert(nf90_put_att(ncid,wvar,'valid_range',[15.0_real32,30.0_real32]), &
+          'W output valid range')
+      CASE ('output_fill')
+        CALL nc_assert(nf90_put_att(ncid,wvar,'_FillValue',9.39_real32), &
+          'W output fill value')
+      CASE ('output_missing')
+        CALL nc_assert(nf90_put_att(ncid,wvar,'missing_value',9.39_real32), &
+          'W output missing value')
       CASE ('bad_range_shape')
         CALL nc_assert(nf90_put_att(ncid,wvar,'valid_range',30.0_real32), &
           'malformed W valid range')

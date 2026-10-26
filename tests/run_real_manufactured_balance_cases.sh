@@ -290,7 +290,7 @@ for pair in $(tail -n +2 "$manifest" | cut -f3-16 | tr '\t' '\n' | paste - - -d:
   verify_input "${pair%%:*}" "${pair##*:}"
 done
 if [[ $(git -C "$repo_root" rev-parse HEAD) != "$source_commit" ]] || \
-   [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=all) ]]; then
+   ! cloud_bal_require_clean_source; then
   printf 'source tree changed during the real-data numerical run\n' >&2
   exit 2
 fi

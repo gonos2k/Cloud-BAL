@@ -78,40 +78,7 @@ class UpperWindReplayTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "outside the native diffusion loop"):
             replay_face(x, 1)
 
-    @unittest.skipUnless(DIFFUSION_SOURCE.is_file(),
-                         "requires retained horizontal_diffusion source asset")
-    def test_big_endian_call_records_replay_to_captured_output(self):
-        x = record("u")
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "pr101_upper_wind.raw"
-            with path.open("wb") as stream:
-                write_record(stream, x, 1, 1)
-                write_record(stream, x, 2, 7)
-            result = compare(path)
-            generated = generate(path)
-        self.assertEqual(result["records"], 2)
-        self.assertEqual(result["faces"][0]["levels"][2]["residual"], 0.0)
-        routine = extract_routine(DIFFUSION_SOURCE.read_text())
-        self.assertIn(routine, generated)
-        self.assertIn("TYPE :: grid_config_rec_type", generated)
-        self.assertIn("CALL horizontal_diffusion('u'", generated)
-        self.assertIn("TRANSFER(tendency(136,39,16),0_int32) /= expected_bits", generated)
-        self.assertIn("PR101_UPPER_WIND_FORTRAN_REPLAY_PASS v1", generated)
-        self.assertIn("ERROR STOP 1", generated)
 
-    @unittest.skipUnless(DIFFUSION_SOURCE.is_file(),
-                         "requires retained horizontal_diffusion source asset")
-    def test_multiple_timestep_events_pair_independently(self):
-        x = record("u")
-        with tempfile.TemporaryDirectory() as directory:
-            path = Path(directory) / "pr101_upper_wind.raw"
-            with path.open("wb") as stream:
-                for timestep in (20, 21):
-                    x.time_step = timestep
-                    write_record(stream, x, 1, 1)
-                    write_record(stream, x, 2, 7)
-            self.assertEqual(len(compare(path)["faces"]), 2)
-            self.assertEqual(len(generate(path).split("Capture pair ")) - 1, 2)
 
     def test_source_driver_rejects_changed_pre_post_operands(self):
         x, after = record("u"), record("u")

@@ -1135,7 +1135,7 @@
         IF (code/=NF_NOERR) CALL input_error('missing variable '//TRIM(var_name))
         code=nf_inq_var(ncid,variable_id,var_name,variable_type,rank,dimids,attribute_count)
         IF (code/=NF_NOERR .OR. rank/=4) CALL input_error('invalid rank for '//TRIM(var_name))
-        IF (variable_type/=NF_FLOAT .AND. variable_type/=NF_DOUBLE) &
+        IF (variable_type/=NF_FLOAT) &
           CALL input_error('invalid type for '//TRIM(var_name))
         DO axis=1,4
           IF (dimids(axis)/=expected_dims(axis)) CALL input_error('dimension order mismatch for '//TRIM(var_name))
@@ -1157,7 +1157,7 @@
         IF (code/=NF_NOERR) CALL input_error('missing level coordinate')
         code=nf_inq_var(ncid,variable_id,var_name,level_type,level_rank,level_dims,level_attributes)
         IF (code/=NF_NOERR .OR. level_rank/=1) CALL input_error('invalid level coordinate rank')
-        IF (level_type/=NF_FLOAT .AND. level_type/=NF_DOUBLE) &
+        IF (level_type/=NF_FLOAT) &
           CALL input_error('invalid level coordinate type')
         IF (level_dims(1)/=zid) CALL input_error('level coordinate dimension mismatch')
         code=nf_inq_dimlen(ncid,level_dims(1),dim_length)

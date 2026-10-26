@@ -38,35 +38,6 @@ class RKOperandsPatchTest(unittest.TestCase):
         self.assertIn("base_target_slots != [337]", builder)
         self.assertIn("candidate_target_slots != base_target_slots", builder)
 
-    def test_patch_applies_to_pinned_source_copy(self) -> None:
-        self.assertEqual(sha256(SOURCE), SOURCE_SHA256)
-        with tempfile.TemporaryDirectory(prefix="pr83_rk_patch_check_") as tmp:
-            root = Path(tmp)
-            target = root / "dyn_em/module_em.F"
-            target.parent.mkdir()
-            shutil.copyfile(SOURCE, target)
-            subprocess.run(
-                ["patch", "--fuzz=0", "-p1", "-i", str(PATCH)],
-                cwd=root,
-                check=True,
-                capture_output=True,
-                text=True,
-            )
-            patched = target.read_text()
-            self.assertIn("p_qnc", patched.split("CONTAINS", 1)[0].lower())
-            for marker in (
-                "PR83_RK_PRODUCT",
-                "PR83_RK_TENDENCY",
-                "PR83_RK_INPUT",
-                "PR83_RK_OUTPUT",
-            ):
-                self.assertEqual(patched.count(marker), 2, marker)
-            self.assertEqual(
-                patched.count("IF (im==p_qnc .AND. i==4 .AND. j==2 .AND. k==22)"),
-                8,
-            )
-        self.assertEqual(sha256(SOURCE), SOURCE_SHA256)
-
 
 if __name__ == "__main__":
     unittest.main()

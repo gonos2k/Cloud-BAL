@@ -39,7 +39,9 @@ cloud_bal_output_under() {
 }
 
 cloud_bal_require_clean_source() {
-  if [[ -n $(git -C "$repo_root" status --porcelain --untracked-files=all) ]]; then
+  local status
+  status=$(git -C "$repo_root" status --porcelain --untracked-files=all) || return $?
+  if [[ -n $status ]]; then
     printf 'evidence tooling requires a clean exact-head source tree\n' >&2
     return 2
   fi

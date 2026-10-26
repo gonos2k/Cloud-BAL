@@ -141,23 +141,27 @@ run_success() {
 }
 
 run_rejected() {
-  local root=$1 output=$2 log=$3 pattern=$4
-  set +e
-  env -u CLOUD_BAL_SHADOW_EXPERIMENT \
-    LAPS_DATA_ROOT="$root" CLOUD_BAL_WPS_OUTPUT="$output" \
-    "$build/lapsprep.exe" 260010300 >"$log" 2>&1
-  local status=$?
-  set -e
-  if (( status == 0 )) || [[ -e "$output" ]]; then
-    cat "$log" >&2
-    printf 'invalid fixture unexpectedly succeeded or wrote output: %s\n' "$root" >&2
-    exit 1
-  fi
-  if [[ -n "$pattern" ]] && ! grep -Eq "$pattern" "$log"; then
-    cat "$log" >&2
-    printf 'invalid fixture failed for an unexpected reason: %s\n' "$root" >&2
-    exit 1
-  fi
+  local root=$1 output=$2 log=$3 pattern=$4 executable profile status
+  for profile in O0 O2; do
+    executable=$build/lapsprep.exe
+    [[ $profile == O2 ]] && executable=$build_o2/lapsprep.exe
+    set +e
+    env -u CLOUD_BAL_SHADOW_EXPERIMENT \
+      LAPS_DATA_ROOT="$root" CLOUD_BAL_WPS_OUTPUT="$output" \
+      "$executable" 260010300 >"$log.$profile" 2>&1
+    status=$?
+    set -e
+    if (( status == 0 )) || [[ -e "$output" ]]; then
+      cat "$log.$profile" >&2
+      printf 'invalid fixture unexpectedly succeeded or wrote output (%s): %s\n' "$profile" "$root" >&2
+      exit 1
+    fi
+    if [[ -n "$pattern" ]] && ! grep -Eq "$pattern" "$log.$profile"; then
+      cat "$log.$profile" >&2
+      printf 'invalid fixture failed for an unexpected reason (%s): %s\n' "$profile" "$root" >&2
+      exit 1
+    fi
+  done
 }
 
 run_shadow_rejected() {
@@ -328,11 +332,11 @@ for case_name in duplicate-pressure nonmonotonic-pressure; do
 done
 
 for case_name in increased-nz decreased-nz reverse-levels swapped-xy wrong-time \
-  level-wrong-dim level-fill bad-units bad-var-type; do
+  level-wrong-dim level-fill bad-units bad-var-type f8t3 f8u3 f8level; do
   root="$test_tmp/$case_name"
   make_fixture "$root" "$case_name"
   run_rejected "$root" "$root/rejected-output.wps" "$test_tmp/$case_name.log" \
-    'inconsistent z dimension|inconsistent level|dimension order mismatch|filename minute mismatch|level coordinate dimension mismatch|missing level coordinate|unexpected units|invalid type'
+    'inconsistent z dimension|inconsistent level|dimension order mismatch|filename minute mismatch|level coordinate dimension mismatch|missing level coordinate|unexpected units|invalid type|invalid level coordinate type'
   printf 'lapsprep input boundary rejection passed: %s\n' "$case_name"
 done
 
