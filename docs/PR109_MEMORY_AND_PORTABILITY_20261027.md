@@ -51,8 +51,9 @@ are recorded in the validation evidence.
   `_FillValue`/`missing_value`; original W and sampled other fields remain unchanged.
 - Actual corrupt-index shell checks propagate failure for direct and command
   substitution calls. Existing publication recovery regressions still pass.
-- Changed/split Python files preserve all 86 test declarations. Twenty-nine new
-  integration cases collected without executing their native/evidence paths;
+- Changed/split Python files preserve all 86 test declarations. The new sibling
+  files collected 29 cases: 28 integration cases and one portable fixture case.
+  Collection did not execute their native/evidence paths;
   focused pure tests and the complete confined run validate the portable side.
 - Independent team reviews covered LAPSPREP, W, shell gates and test separation.
 
