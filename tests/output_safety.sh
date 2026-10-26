@@ -45,13 +45,29 @@ cloud_bal_require_clean_source() {
   fi
 }
 
+cloud_bal_quarantine_staging_on_exit() {
+  local exit_status=$1 staging=$2 publication_root=$3 transaction_id=$4
+  local generation=$publication_root/generations/$transaction_id
+  if [[ ! -d $staging ]]; then
+    return 0
+  fi
+  if [[ $exit_status -eq 3 || -e $generation || -L $generation ]]; then
+    printf 'transaction state retained for recovery: %s\n' "$transaction_id" >&2
+    return 0
+  fi
+  mv -- "$staging" "$staging.failed.$$" || {
+    printf 'could not quarantine failed transaction staging: %s\n' "$staging" >&2
+    return 1
+  }
+}
+
 cloud_bal_current_evidence() {
   local publication_root=$1 manifest=$2 generation head
   cloud_bal_require_clean_source || return
   generation=$(python3 "$repo_root/tools/cloud_bal_transaction.py" current \
-    "$publication_root")
-  head=$(git -C "$repo_root" rev-parse HEAD)
-  python3 - "$generation" "$head" "$manifest" "$repo_root" <<'PY'
+    "$publication_root") || return $?
+  head=$(git -C "$repo_root" rev-parse HEAD) || return $?
+  if python3 - "$generation" "$head" "$manifest" "$repo_root" <<'PY'
 import csv
 import hashlib
 import json
@@ -187,6 +203,11 @@ if valid_reports != summary.get("hydrometeor_valid_count") or \
         rejected_reports != summary.get("rejected_count"):
     raise SystemExit("generation per-case decision summary mismatch")
 PY
+  then
+    :
+  else
+    return $?
+  fi
   printf '%s\n' "$generation"
 }
 

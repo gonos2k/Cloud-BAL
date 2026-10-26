@@ -289,7 +289,7 @@ for case_name in mixed-missing-om mixed-missing-vv mixed-invalid-om mixed-invali
   root="$test_tmp/$case_name"
   make_fixture "$root" "$case_name"
   if [[ $case_name == *-missing-* ]]; then
-    omega_pattern='ncvarid|invalid_(lw3_field: om|surface_field: vv)'
+    omega_pattern='missing variable (om|vv)|invalid_(lw3_field: om|surface_field: vv)'
   else
     omega_pattern='invalid_(lw3_field: om|surface_field: vv)'
   fi
@@ -303,7 +303,7 @@ for case_name in missing-u3 missing-v3 invalid-u3 invalid-v3; do
   make_fixture "$root" "$case_name"
   field=${case_name##*-}
   if [[ $case_name == missing-* ]]; then
-    wind_pattern="ncvarid|invalid_lw3_field: $field"
+    wind_pattern="missing variable $field|invalid_lw3_field: $field"
   else
     wind_pattern="invalid_lw3_field: $field"
   fi
@@ -323,9 +323,31 @@ for case_name in duplicate-pressure nonmonotonic-pressure; do
   root="$test_tmp/$case_name"
   make_fixture "$root" "$case_name"
   run_rejected "$root" "$root/rejected-output.wps" "$test_tmp/$case_name.log" \
-    'nonmonotonic_pressure_levels'
+    'invalid level coordinate order|nonmonotonic_pressure_levels'
   printf 'lapsprep pressure-order rejection passed: %s\n' "$case_name"
 done
+
+for case_name in increased-nz decreased-nz reverse-levels swapped-xy wrong-time \
+  level-wrong-dim level-fill bad-units bad-var-type; do
+  root="$test_tmp/$case_name"
+  make_fixture "$root" "$case_name"
+  run_rejected "$root" "$root/rejected-output.wps" "$test_tmp/$case_name.log" \
+    'inconsistent z dimension|inconsistent level|dimension order mismatch|filename minute mismatch|level coordinate dimension mismatch|missing level coordinate|unexpected units|invalid type'
+  printf 'lapsprep input boundary rejection passed: %s\n' "$case_name"
+done
+
+for case_name in missing-namelist bad-namelist missing-lt1; do
+  root="$test_tmp/$case_name"
+  make_fixture "$root" "$case_name"
+  run_rejected "$root" "$root/rejected-output.wps" "$test_tmp/$case_name.log" ''
+  printf 'lapsprep required-input failure passed: %s\n' "$case_name"
+done
+
+root="$test_tmp/bad-hydrometeor-mode"
+make_fixture "$root" bad-hydrometeor-mode
+run_rejected "$root" "$root/rejected-output.wps" "$test_tmp/bad-hydrometeor-mode.log" \
+  'Unsupported HYDRO_MODE'
+printf '%s\n' 'lapsprep hydrometeor failure passed: unsupported mode'
 
 for case_name in make-sfc-uv ascending-make-sfc-uv; do
   root="$test_tmp/$case_name"

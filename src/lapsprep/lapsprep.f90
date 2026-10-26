@@ -102,6 +102,8 @@
     CHARACTER(19) :: lookup_date,year_start_date
     INTEGER :: cdfid , rcode
     INTEGER :: zid
+    INTEGER :: xid,yid,dimension_length
+    CHARACTER(NF_MAX_NAME) :: dimension_name
     INTEGER :: z 
     INTEGER , DIMENSION(4) :: start , count
     INTEGER , DIMENSION(2) :: startc, countc
@@ -114,12 +116,13 @@
                                              rho,lcp
     REAL , ALLOCATABLE , DIMENSION (:,:)   :: slp , psfc, snocov, d2d,tskin
     REAL , ALLOCATABLE , DIMENSION (:)     :: p
+    REAL(real64), ALLOCATABLE, DIMENSION(:) :: input_levels,reference_levels
     REAL , PARAMETER                       :: tiny = 1.0e-30
     REAL , PARAMETER                       :: dry_vapor_gas_ratio = 0.622
     
     ! Miscellaneous local variables
                                         
-    INTEGER :: out_loop, loop , var_loop , i, j, k, kbot,istatus
+    INTEGER :: out_loop, loop , var_loop , i, j, k, kbot,istatus,input_pass
     CHARACTER(LEN=256) :: cloud_bal_wps_output
     CHARACTER(LEN=64) :: shadow_experiment
     INTEGER :: environment_status,environment_length
@@ -254,14 +257,15 @@
         hydrometeor_scale = 2./dx  ! dx is in km
       CASE DEFAULT
         PRINT *, 'Unsupported GRID_SCALE: ',TRIM(grid_scale)
-        STOP 'invalid_grid_scale'
+        PRINT *, 'invalid_grid_scale'
+        ERROR STOP 1
     END SELECT
 
     !  Loop through each of the requested extensions for this date.  Each of the
     !  extensions has a couple of the variables that we want.
 
     ! A9 locates the minute; original NetCDF metadata supplies exact seconds.
-    check_analysis_time=.NOT.hotstart .AND. ANY(output_format(:num_output)=='wps ')
+    check_analysis_time=.TRUE.
     IF (check_analysis_time) THEN
       CALL wrf_date_to_ymd(valid_yyyy*1000+valid_jjj,valid_yyyy,time_month,time_day)
       WRITE(lookup_date,'(I4.4,"-",I2.2,"-",I2.2,"_",I2.2,":",I2.2,":00")') &
@@ -275,6 +279,8 @@
     END IF
 
     PRINT '(A)', 'Starting Loop for each LAPS file'
+    z3=0
+    DO input_pass=1,2
     file_loop : DO loop = 1 , num_ext
       
       PRINT *, 'Looking for ',ext(loop)
@@ -317,7 +323,7 @@
             (ext(loop).EQ.'lh3').OR. &
             (ext(loop).EQ.'lsx') ) THEN 
           PRINT '(A)', 'Mandatory file not available:' ,input_laps_file
-          STOP 'not_enough_data'
+          ERROR STOP 1
         ELSE IF ( (ext(loop).EQ.'lq3') .OR. &
                (ext(loop).EQ.'lwc') ) THEN
           PRINT '(A)', 'File not available, cannot do hotstart.'
@@ -337,21 +343,38 @@
       cdfid = NCOPN ( TRIM(input_laps_file) , NCNOWRIT , rcode )
       IF (rcode .NE. 0) THEN
         PRINT *, 'NetCDF open failed/status: ',TRIM(input_laps_file),rcode
-        STOP 'input_open_failed'
+        ERROR STOP 1
       ENDIF
 
       IF (check_analysis_time) CALL check_input_time(cdfid)
 
       zid = NCDID ( cdfid , 'z' , rcode )
-      IF (rcode .NE. 0) STOP 'missing_z_dimension'
+      IF (rcode .NE. 0) CALL input_error('missing z dimension')
       CALL NCDINQ ( cdfid , zid , dum , z , rcode )
-      IF (rcode .NE. 0 .OR. z .LE. 0) STOP 'invalid_z_dimension'
+      IF (rcode .NE. 0 .OR. z .LE. 0) CALL input_error('invalid z dimension')
+
+      xid=NCDID(cdfid,'x',rcode)
+      IF (rcode/=0) CALL input_error('missing x dimension')
+      CALL NCDINQ(cdfid,xid,dimension_name,dimension_length,rcode)
+      IF (rcode/=0 .OR. dimension_length/=x) CALL input_error('x dimension mismatch')
+      yid=NCDID(cdfid,'y',rcode)
+      IF (rcode/=0) CALL input_error('missing y dimension')
+      CALL NCDINQ(cdfid,yid,dimension_name,dimension_length,rcode)
+      IF (rcode/=0 .OR. dimension_length/=y) CALL input_error('y dimension mismatch')
 
       IF ( ( ext(loop) .EQ. 'lsx' ) .OR. &
            ( ext(loop) .EQ. 'lm2') ) THEN
          z2 = z
       ELSE
-         z3 = z
+         IF (z3==0) z3=z
+         IF (z/=z3) CALL input_error('inconsistent z dimension')
+      END IF
+
+      CALL validate_input_layout(cdfid,loop,z)
+      IF (input_pass==1) THEN
+        rcode=nf_close(cdfid)
+        IF (rcode/=0) CALL input_error('NetCDF close failed during input preflight')
+        CYCLE file_loop
       END IF
       
       IF ( loop .EQ. 1 ) THEN
@@ -752,6 +775,7 @@
       END IF
 
     END DO file_loop
+    END DO
 
     DO loop=1,num_ext
       DO var_loop=1,num_cdf_var(loop)
@@ -882,16 +906,23 @@
             DO i=1,x
               CALL transfer_excess(lwc(i,j,k),rai(i,j,k), &
                                    autoconv_lwc2rai,transfer_status)
-              IF (transfer_status .NE. 1) STOP 'liquid_transfer_failed'
+              IF (transfer_status .NE. 1) THEN
+                PRINT *, 'liquid_transfer_failed'
+                ERROR STOP 1
+              END IF
               CALL transfer_excess(ice(i,j,k),sno(i,j,k), &
                                    autoconv_ice2sno,transfer_status)
-              IF (transfer_status .NE. 1) STOP 'ice_transfer_failed'
+              IF (transfer_status .NE. 1) THEN
+                PRINT *, 'ice_transfer_failed'
+                ERROR STOP 1
+              END IF
             ENDDO
           ENDDO
         ENDDO
       ELSE IF (TRIM(cap_policy) .NE. 'KEEP') THEN
         PRINT *, 'Unsupported CAP_POLICY: ',TRIM(cap_policy)
-        STOP 'invalid_cap_policy'
+        PRINT *, 'invalid_cap_policy'
+        ERROR STOP 1
       ENDIF
 
       ! Concentration (kg m-3) to dry-air mixing ratio (kg kg-1).
@@ -917,11 +948,13 @@
 
       IF (TRIM(hydro_mode) .NE. 'CONSERVATIVE') THEN
         PRINT *, 'Unsupported HYDRO_MODE: ',TRIM(hydro_mode)
-        STOP 'invalid_hydro_mode'
+        PRINT *, 'invalid_hydro_mode'
+        ERROR STOP 1
       ENDIF
       IF (lwc2vapor_thresh .GT. 0.) THEN
         PRINT *, 'Legacy water-only saturation adjustment is disabled.'
-        STOP 'canonical_water_enthalpy_adjustment_not_linked'
+        PRINT *, 'canonical_water_enthalpy_adjustment_not_linked'
+        ERROR STOP 1
       ENDIF
 
       DO species=1,5
@@ -935,7 +968,8 @@
           ANY(.NOT. ieee_is_finite(rai)) .OR. MINVAL(rai) .LT. 0.0 .OR. &
           ANY(.NOT. ieee_is_finite(sno)) .OR. MINVAL(sno) .LT. 0.0 .OR. &
           ANY(.NOT. ieee_is_finite(pic)) .OR. MINVAL(pic) .LT. 0.0) THEN
-        STOP 'invalid_hydrometeor_output'
+        PRINT *, 'invalid_hydrometeor_output'
+        ERROR STOP 1
       ENDIF
 
       ! Recompute MOIST-GAS density after transfers for the existing hydrostatic
@@ -946,7 +980,8 @@
           (rdry*t(:,:,k)*(1.0+mr(:,:,k)/dry_vapor_gas_ratio))
       ENDDO
       IF (ANY(.NOT. ieee_is_finite(rho)) .OR. MINVAL(rho) .LE. 0.0) THEN
-        STOP 'invalid_post_transfer_density'
+        PRINT *, 'invalid_post_transfer_density'
+        ERROR STOP 1
       ENDIF
 
       ! Convert 3d omega from Pa/s to m/s, or fill with sfc value if missing.
@@ -989,7 +1024,8 @@
             v(i,j,z3+1) = v(i,j,kbot)
           ELSE
             print *, 'Problem finding kbot.'
-            STOP
+            PRINT *, 'unable_to_find_lowest_valid_model_level'
+            ERROR STOP 1
           ENDIF
         ENDDO
       ENDDO
@@ -1070,6 +1106,137 @@
       PRINT '(A)', 'LAPSPREP input time: '//message
       STOP 1
     END SUBROUTINE time_error
+
+    SUBROUTINE input_error(message)
+      CHARACTER(*), INTENT(IN) :: message
+      PRINT '(A)', 'LAPSPREP input: '//message
+      ERROR STOP 1
+    END SUBROUTINE input_error
+
+    SUBROUTINE validate_input_layout(ncid,extension_index,file_z)
+      INTEGER, INTENT(IN) :: ncid,extension_index,file_z
+      INTEGER :: variable_id,code,rank,dimids(NF_MAX_VAR_DIMS),dim_length,unit_type,unit_length
+      INTEGER :: variable_type,attribute_count,level_rank,level_dims(NF_MAX_VAR_DIMS)
+      INTEGER :: level_type,level_attributes,attribute_type,attribute_length
+      REAL(real64) :: level_missing
+      INTEGER :: expected_dims(4),expected_lengths(4),index
+      INTEGER :: axis
+      CHARACTER(NF_MAX_NAME) :: dim_name,var_name
+      CHARACTER(80) :: units_text
+      expected_dims=[xid,yid,zid,0]
+      expected_dims(4)=NCDID(ncid,'record',code)
+      IF (code/=0) CALL input_error('missing record dimension')
+      expected_lengths=[x,y,file_z,1]
+      DO index=1,num_cdf_var(extension_index)
+        var_name=TRIM(cdf_var_name(index,extension_index))
+        IF (wps_only .AND. extension_index==2 .AND. var_name=='om') CYCLE
+        IF (wps_only .AND. (extension_index==4 .OR. extension_index==5) .AND. var_name=='vv') CYCLE
+        code=nf_inq_varid(ncid,TRIM(var_name),variable_id)
+        IF (code/=NF_NOERR) CALL input_error('missing variable '//TRIM(var_name))
+        code=nf_inq_var(ncid,variable_id,var_name,variable_type,rank,dimids,attribute_count)
+        IF (code/=NF_NOERR .OR. rank/=4) CALL input_error('invalid rank for '//TRIM(var_name))
+        IF (variable_type/=NF_FLOAT .AND. variable_type/=NF_DOUBLE) &
+          CALL input_error('invalid type for '//TRIM(var_name))
+        DO axis=1,4
+          IF (dimids(axis)/=expected_dims(axis)) CALL input_error('dimension order mismatch for '//TRIM(var_name))
+          code=nf_inq_dim(ncid,dimids(axis),dim_name,dim_length)
+          IF (code/=NF_NOERR .OR. dim_length/=expected_lengths(axis)) &
+            CALL input_error('dimension length mismatch for '//TRIM(var_name))
+        END DO
+        code=nf_inq_att(ncid,variable_id,'units',unit_type,unit_length)
+        IF (code/=NF_NOERR .OR. unit_type/=NF_CHAR .OR. unit_length>LEN(units_text)) &
+          CALL input_error('missing or invalid units for '//TRIM(var_name))
+        units_text=''
+        code=nf_get_att_text(ncid,variable_id,'units',units_text)
+        IF (code/=NF_NOERR .OR. .NOT.valid_input_units(TRIM(var_name),TRIM(units_text))) &
+          CALL input_error('unexpected units for '//TRIM(var_name)//': '//TRIM(units_text))
+      END DO
+      IF (TRIM(ext(extension_index))/='lsx' .AND. TRIM(ext(extension_index))/='lm2') THEN
+        ALLOCATE(input_levels(file_z))
+        code=nf_inq_varid(ncid,'level',variable_id)
+        IF (code/=NF_NOERR) CALL input_error('missing level coordinate')
+        code=nf_inq_var(ncid,variable_id,var_name,level_type,level_rank,level_dims,level_attributes)
+        IF (code/=NF_NOERR .OR. level_rank/=1) CALL input_error('invalid level coordinate rank')
+        IF (level_type/=NF_FLOAT .AND. level_type/=NF_DOUBLE) &
+          CALL input_error('invalid level coordinate type')
+        IF (level_dims(1)/=zid) CALL input_error('level coordinate dimension mismatch')
+        code=nf_inq_dimlen(ncid,level_dims(1),dim_length)
+        IF (code/=NF_NOERR .OR. dim_length/=file_z) CALL input_error('level coordinate length mismatch')
+        code=nf_get_var_double(ncid,variable_id,input_levels)
+        IF (code/=NF_NOERR) CALL input_error('level coordinate read failed')
+        code=nf_inq_att(ncid,variable_id,'units',attribute_type,attribute_length)
+        IF (code/=NF_NOERR .OR. attribute_type/=NF_CHAR) CALL input_error('missing level units')
+        units_text=''
+        IF (attribute_length>LEN(units_text)) CALL input_error('invalid level units')
+        code=nf_get_att_text(ncid,variable_id,'units',units_text)
+        IF (code/=NF_NOERR .OR. TRIM(units_text)/='hectopascals') CALL input_error('invalid level units')
+        code=nf_inq_att(ncid,variable_id,'_FillValue',attribute_type,attribute_length)
+        IF (code==NF_NOERR) THEN
+          IF ((attribute_type/=NF_FLOAT .AND. attribute_type/=NF_DOUBLE) .OR. attribute_length/=1) &
+            CALL input_error('invalid level fill value')
+          code=nf_get_att_double(ncid,variable_id,'_FillValue',level_missing)
+          IF (code/=NF_NOERR .OR. .NOT.ieee_is_finite(level_missing)) &
+            CALL input_error('level fill value read failed')
+          IF (ANY(input_levels==level_missing)) CALL input_error('missing level coordinate')
+        ELSE IF (code/=NF_ENOTATT) THEN
+          CALL input_error('level fill value inquiry failed')
+        END IF
+        code=nf_inq_att(ncid,variable_id,'missing_value',attribute_type,attribute_length)
+        IF (code==NF_NOERR) THEN
+          IF ((attribute_type/=NF_FLOAT .AND. attribute_type/=NF_DOUBLE) .OR. attribute_length/=1) &
+            CALL input_error('invalid level missing value')
+          code=nf_get_att_double(ncid,variable_id,'missing_value',level_missing)
+          IF (code/=NF_NOERR .OR. .NOT.ieee_is_finite(level_missing)) &
+            CALL input_error('level missing value read failed')
+          IF (ANY(input_levels==level_missing)) CALL input_error('missing level coordinate')
+        ELSE IF (code/=NF_ENOTATT) THEN
+          CALL input_error('level missing value inquiry failed')
+        END IF
+        IF (ANY(.NOT.ieee_is_finite(input_levels)) .OR. ANY(input_levels<1.0_real64) .OR. &
+            ANY(input_levels>1100.0_real64)) &
+          CALL input_error('invalid level coordinate values')
+        IF (file_z>1 .AND. .NOT.(ALL(input_levels(2:)>input_levels(:file_z-1)) .OR. &
+                                  ALL(input_levels(2:)<input_levels(:file_z-1)))) &
+          CALL input_error('invalid level coordinate order')
+        IF (.NOT.ALLOCATED(reference_levels)) THEN
+          ALLOCATE(reference_levels(file_z))
+          reference_levels=input_levels
+        ELSE IF (file_z/=SIZE(reference_levels)) THEN
+          CALL input_error('inconsistent level count')
+        ELSE IF (ANY(input_levels/=reference_levels)) THEN
+          CALL input_error('inconsistent level values or order')
+        END IF
+        DEALLOCATE(input_levels)
+      END IF
+    END SUBROUTINE validate_input_layout
+
+    LOGICAL FUNCTION valid_input_units(name,units)
+      CHARACTER(*), INTENT(IN) :: name,units
+      ! These are producer metadata strings observed in the retained source
+      ! inputs; notably rh='meters' and mr='grams/kikogram' are legacy labels,
+      ! while the field contracts below still define RH percent and MR g/kg.
+      SELECT CASE (TRIM(name))
+        CASE ('ht'); valid_input_units=units=='meters'
+        CASE ('t3'); valid_input_units=units=='degrees Kelvin'
+        CASE ('u3'); valid_input_units=units=='meters / second'
+        CASE ('v3'); valid_input_units=units=='meters / second'
+        CASE ('om'); valid_input_units=units=='pascals / second'
+        CASE ('rhl'); valid_input_units=units=='percent'
+        CASE ('u'); valid_input_units=units=='meters / second'
+        CASE ('v'); valid_input_units=units=='meters/second'
+        CASE ('t'); valid_input_units=units=='degrees kelvin'
+        CASE ('rh'); valid_input_units=units=='meters'
+        CASE ('tgd'); valid_input_units=units=='K'
+        CASE ('ps','msl'); valid_input_units=units=='pascals'
+        CASE ('mr'); valid_input_units=units=='grams/kikogram'
+        CASE ('vv'); valid_input_units=units=='meters/second'
+        CASE ('sh'); valid_input_units=units=='kg/kg'
+        CASE ('sc'); valid_input_units=units=='1'
+        CASE ('lwc','rai','sno','pic','ice'); valid_input_units=units=='kg/meter**3'
+        CASE ('lcp'); valid_input_units=units=='1'
+        CASE DEFAULT; valid_input_units=.FALSE.
+      END SELECT
+    END FUNCTION valid_input_units
 
     SUBROUTINE check_input_time(ncid)
       INTEGER, INTENT(IN) :: ncid

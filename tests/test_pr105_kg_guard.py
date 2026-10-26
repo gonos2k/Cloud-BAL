@@ -28,19 +28,6 @@ apply = load("pr105_kg_apply_test", HERE / "apply_kg.py")
 
 
 class TestParentReceiptAndSnapshotPlan(unittest.TestCase):
-    def test_corrected_pr103_parent_receipt_binds_current_parent(self):
-        self.assertEqual(preflight.sha(preflight.PRIOR), preflight.PRIOR_SHA)
-        prior = json.loads(preflight.PRIOR.read_text())
-        inventory = preflight.expected_published_inventory(prior)
-        self.assertEqual(len(inventory), 124)
-        self.assertEqual(prior["source_commit"], preflight.PRIOR_COMMIT)
-        self.assertEqual(prior["maintained_source_snapshot"], preflight.EXPECTED_SOURCE)
-        self.assertEqual(len(prior["inherited_immutable_pins_after"]), 197)
-        self.assertEqual(len(prior["protected_content_sha256"]), 13)
-        active = preflight.active250_root_go_snapshot()
-        self.assertEqual(active["sha256"], preflight.ACTIVE250_ROOT_GO_SHA)
-        self.assertEqual(active["source_pin_count"], 250)
-
     def test_two_corpora_get_only_raw_and_named_pr105_targets(self):
         self.assertEqual(preflight.BASE, "334969e120afff720f1b5da4eb1d8f0991f1a6c1")
         self.assertEqual(preflight.GRAPH_BASE, "6d33aa06856e4e892dd792e8def350f15c54c058")

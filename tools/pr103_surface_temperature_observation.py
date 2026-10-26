@@ -50,6 +50,12 @@ ARMS = {
 }
 # Pinned WRF-v4.8.0 share/module_llxy.F defines EARTH_RADIUS_M=6370000.
 RE = 6_370_000.0
+# Geometry acceptance is a supported numerical safety envelope, not a formal
+# worst-case proof: propagate half-ULP binary32 coordinate uncertainty through
+# the inverse, then budget 32 float32 rounding units over projection and grid
+# scales. The 0.01-cell cap rejects ill-conditioned or unsupported domains.
+PROJECTION_OPERATION_FACTOR = 32.0
+GRID_MAPPING_TOLERANCE_CAP = 1.0e-2
 
 
 def sha256(path: Path) -> str:
@@ -199,13 +205,24 @@ def model_metadata(path: Path, valid_time_utc: str = "2026-08-16T13:00:00Z", *,
         record = matching_records[0]
         if record_metadata is not None:
             record_metadata.update(index=record, stored_time=model_times[record])
-        attrs = {name: float(getattr(nc, name)) for name in ("TRUELAT1", "TRUELAT2", "STAND_LON", "DX", "DY")}
+        if not hasattr(nc, "MAP_PROJ"):
+            raise ValueError(f"missing MAP_PROJ in {path}; Lambert projection requires MAP_PROJ=1")
+        map_proj = float(nc.MAP_PROJ)
+        if not math.isfinite(map_proj) or map_proj != 1.0:
+            raise ValueError(f"unsupported MAP_PROJ in {path}: expected Lambert MAP_PROJ=1, got {map_proj}")
+        try:
+            attrs = {name: float(getattr(nc, name)) for name in ("TRUELAT1", "TRUELAT2", "STAND_LON", "DX", "DY")}
+        except (AttributeError, TypeError, ValueError) as exc:
+            raise ValueError(f"missing or invalid WRF Lambert metadata in {path}") from exc
+        attrs["MAP_PROJ"] = int(map_proj)
+        validate_lambert_parameters(attrs)
         # Archived history exposes WRF's mass-grid XLAT/XLONG; LAT_LL_T and
         # LON_LL_T expected by the current LAPS reader are absent here.
         lat_grid = _FINITE_MODULE._finite(nc, "XLAT", record)
         lon_grid = _FINITE_MODULE._finite(nc, "XLONG", record)
         attrs["lat1"] = float(lat_grid[0, 0])
         attrs["lon1"] = float(lon_grid[0, 0])
+        validate_lambert_anchor(attrs)
         t2var = nc.variables["T2"]
         if getattr(t2var, "units", "") not in ("K", "kelvin", "Kelvin"):
             raise ValueError(f"unexpected T2 units in {path}: {getattr(t2var, 'units', None)}")
@@ -217,24 +234,118 @@ def model_metadata(path: Path, valid_time_utc: str = "2026-08-16T13:00:00Z", *,
     return attrs, t2, lat_grid, lon_grid
 
 
+def validate_lambert_parameters(projection: dict) -> None:
+    """Reject malformed WRF Lambert metadata before using it for station scores."""
+    names = {"TRUELAT1": "truelat1", "TRUELAT2": "truelat2",
+             "STAND_LON": "stdlon", "DX": "dx", "DY": "dy"}
+    def parameter(name):
+        return projection.get(name, projection.get(names[name]))
+
+    for name in names:
+        value = parameter(name)
+        if value is None or not math.isfinite(float(value)):
+            raise ValueError(f"invalid or missing Lambert parameter {name}")
+    lat1, lat2 = float(parameter("TRUELAT1")), float(parameter("TRUELAT2"))
+    if not (-90.0 < lat1 < 90.0 and -90.0 < lat2 < 90.0):
+        raise ValueError("Lambert true latitudes must be finite and strictly between -90 and 90 degrees")
+    if lat1 * lat2 <= 0.0:
+        raise ValueError("Lambert true latitudes must be in the same hemisphere and nonzero")
+    if min(abs(lat1), abs(lat2)) < 0.1:
+        raise ValueError("Lambert true latitudes within 0.1 degrees of the equator are unsupported")
+    if not -180.0 <= float(parameter("STAND_LON")) <= 180.0:
+        raise ValueError("Lambert STAND_LON must be within -180 to 180 degrees")
+    dx, dy = float(parameter("DX")), float(parameter("DY"))
+    if dx <= 0.0 or dy <= 0.0:
+        raise ValueError("Lambert DX and DY must be positive")
+    if dx != dy:
+        raise ValueError("source WRF/LAPS mapping requires square grid spacing")
+
+
+def validate_lambert_anchor(projection: dict) -> None:
+    for name, lower, upper, strict in (("lat1", -90.0, 90.0, True),
+                                       ("lon1", -180.0, 360.0, False)):
+        value = projection.get(name)
+        if value is None or not math.isfinite(float(value)):
+            raise ValueError(f"invalid or missing Lambert anchor {name}")
+        value = float(value)
+        if (strict and not lower < value < upper) or (not strict and not lower <= value <= upper):
+            raise ValueError(f"Lambert anchor {name} is outside its valid domain")
+
+
 def grid_mapping_residuals(lat_grid: np.ndarray, lon_grid: np.ndarray,
                            projection: dict) -> dict:
-    """Report every archived mass-grid point's LC inverse-mapping residual."""
+    """Validate and report the archived mass-grid LC inverse-mapping residual."""
+    validate_lambert_parameters(projection)
+    validate_lambert_anchor(projection)
     if lat_grid.shape != lon_grid.shape:
         raise ValueError("XLAT/XLONG shape mismatch")
+    if lat_grid.ndim != 2 or not lat_grid.size:
+        raise ValueError("XLAT/XLONG must be nonempty two-dimensional grids")
+    if (not np.all(np.isfinite(lat_grid)) or not np.all(np.isfinite(lon_grid))
+            or np.any((lat_grid <= -90.0) | (lat_grid >= 90.0))
+            or np.any((lon_grid < -180.0) | (lon_grid > 360.0))):
+        raise ValueError("XLAT/XLONG contains nonfinite or out-of-domain coordinates")
     ny, nx = lat_grid.shape
     di = np.empty((ny, nx), dtype=np.float64)
     dj = np.empty((ny, nx), dtype=np.float64)
+    coordinate_budget = 0.0
     for y in range(ny):
         for x in range(nx):
-            i, j = lc_grid_ij(float(lat_grid[y, x]), float(lon_grid[y, x]), **projection)
+            lat, lon = float(lat_grid[y, x]), float(lon_grid[y, x])
+            i, j = lc_grid_ij(lat, lon, **projection)
+            if not math.isfinite(i) or not math.isfinite(j):
+                raise ValueError("Lambert inverse produced nonfinite grid coordinates")
             di[y, x], dj[y, x] = i - (x + 1), j - (y + 1)
-    return {
+            # Each stored float32 coordinate may differ from the source value
+            # by half a neighboring ULP. Propagate that perturbation in both
+            # directions, and sum latitude and longitude contributions.
+            point_coordinate_budget = 0.0
+            for coordinate, is_lat in ((lat, True), (lon, False)):
+                stored = np.float32(coordinate)
+                up = float(np.nextafter(stored, np.float32(np.inf))) - coordinate
+                down = coordinate - float(np.nextafter(stored, np.float32(-np.inf)))
+                half_ulp = 0.5 * max(up, down)
+                shift = 0.0
+                for sign in (-1.0, 1.0):
+                    perturbed_lat = lat + sign * half_ulp if is_lat else lat
+                    perturbed_lon = lon if is_lat else lon + sign * half_ulp
+                    if not -90.0 < perturbed_lat < 90.0:
+                        raise ValueError("XLAT is too close to a pole for its binary32 precision envelope")
+                    pi, pj = lc_grid_ij(perturbed_lat, perturbed_lon, **projection)
+                    if not math.isfinite(pi) or not math.isfinite(pj):
+                        raise ValueError("Lambert coordinate precision propagation produced nonfinite grid coordinates")
+                    shift = max(shift, math.hypot(pi - i, pj - j))
+                point_coordinate_budget += shift
+            coordinate_budget = max(coordinate_budget, point_coordinate_budget)
+    if not np.all(np.isfinite(di)) or not np.all(np.isfinite(dj)):
+        raise ValueError("Lambert grid mapping produced nonfinite residuals")
+    arithmetic_budget = (PROJECTION_OPERATION_FACTOR * np.finfo(np.float32).eps
+                         * (RE / float(projection.get("DX", projection.get("dx"))) + max(nx, ny)))
+    tolerance = coordinate_budget + arithmetic_budget
+    if not math.isfinite(tolerance) or tolerance > GRID_MAPPING_TOLERANCE_CAP:
+        raise ValueError(
+            "unsupported or ill-conditioned Lambert grid: numerical acceptance "
+            f"envelope {tolerance:.7g} exceeds {GRID_MAPPING_TOLERANCE_CAP:g} grid units"
+        )
+    result = {
         "grid_points": int(nx * ny),
         "i_delta_grid_units": {"rms": float(np.sqrt(np.mean(di * di))), "max_abs": float(np.max(np.abs(di)))},
         "j_delta_grid_units": {"rms": float(np.sqrt(np.mean(dj * dj))), "max_abs": float(np.max(np.abs(dj)))},
-        "meaning": "raw map output minus 1-based XLAT/XLONG indices; descriptive only, no fitted tolerance",
+        "acceptance_tolerance_grid_units": tolerance,
+        "coordinate_precision_budget_grid_units": coordinate_budget,
+        "source_arithmetic_budget_grid_units": arithmetic_budget,
+        "acceptance_tolerance_cap_grid_units": GRID_MAPPING_TOLERANCE_CAP,
+        "meaning": "raw map output minus 1-based XLAT/XLONG indices; supported envelope propagates binary32 coordinate half-ULPs and budgets 32 float32 rounding units over RE/DX and grid dimensions; not a formal error bound",
     }
+    if max(result["i_delta_grid_units"]["max_abs"],
+           result["j_delta_grid_units"]["max_abs"]) > tolerance:
+        raise ValueError(
+            "XLAT/XLONG fails Lambert mapping prerequisite: maximum residual "
+            f"exceeds supported envelope {tolerance:.7g} grid units "
+            f"(i={result['i_delta_grid_units']['max_abs']:.7g}, "
+            f"j={result['j_delta_grid_units']['max_abs']:.7g})"
+        )
+    return result
 
 
 def compare(observations: list[dict], model: np.ndarray, projection: dict,

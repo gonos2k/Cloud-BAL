@@ -267,12 +267,18 @@ class NativeMomentInitializationTests(unittest.TestCase):
             self.assertEqual(saved_receipt["output_input_sha256"], receipt["output_input_sha256"])
 
     def test_same13_policy_is_separate_from_frozen_pr61_policy(self):
-        policy = initializer._validate_same13_policy_file(initializer.DEFAULT_PR83_POLICY)
-        self.assertEqual(policy["policy_id"], "SAME13_KDM6_NATIVE_MOMENT_PRIOR_20261013")
-        self.assertEqual(policy["preflight"]["expected_source_valid_time"], "2026-08-16_13:00:00")
+        fixture_path = ROOT / "tests/fixtures/pr83_policy_contract.json"
+        fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+        policy = json.loads(initializer.DEFAULT_PR83_POLICY.read_text(encoding="utf-8"))
+        self.assertEqual(policy["schema"], fixture["schema"])
+        self.assertEqual(policy["policy_id"], fixture["policy_id"])
+        self.assertEqual(policy["preflight"]["expected_source_valid_time"],
+                         fixture["expected_source_valid_time"])
+        self.assertEqual(policy["density_source"]["formula"], fixture["density_formula"])
+        self.assertTrue(set(fixture["source_evidence_keys"]).issubset(policy["source"]))
         self.assertEqual(
-            policy["density_source"]["formula"],
-            "alt = real32(AL + ALB) in source operation order; rho_dry = real32(1.0) / alt",
+            initializer.file_sha256(initializer.DEFAULT_PR83_POLICY),
+            initializer.PR83_EXPECTED_POLICY_SHA256,
         )
 
     def test_empty_validation_mask_is_not_reported_as_pass(self):

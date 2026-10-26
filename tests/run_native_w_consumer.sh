@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-workspace_root=$(cd "$repo_root/.." && pwd)
+workspace_root=$(realpath -e "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
 . "$repo_root/tests/intel_toolchain.sh"
 
 nf_config="$workspace_root/klaps-v5.0_/baseline/20260818_rdr_input/deps/netcdf-fortran-ifx/install/bin/nf-config"
@@ -26,7 +26,9 @@ verify_hash "$netcdf_archive" f603197dafe9397e682cd84dd699ca22ac24188053f8b9b1af
 read -r -a nf_fflags <<<"$($nf_config --fflags)"
 read -r -a nf_flibs <<<"$($nf_config --flibs)"
 
-test_tmp=$(mktemp -d "$repo_root/scratch/native_w_consumer.XXXXXX")
+scratch_root=${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}
+mkdir -p "$scratch_root"
+test_tmp=$(mktemp -d "$scratch_root/native_w_consumer.XXXXXX")
 trap 'rm -rf -- "$test_tmp"' EXIT
 
 run_case() {

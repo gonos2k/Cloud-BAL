@@ -40,27 +40,58 @@ def make_file(
     reverse_levels: bool,
     invalid_fields: set[str],
     make_sfc_uv: bool,
+    file_depth: int | None = None,
+    swapped_xy: bool = False,
+    time_offset: float = 0.0,
+    bad_level_dim: bool = False,
+    bad_level_fill: bool = False,
+    bad_units: bool = False,
+    bad_var_type: bool = False,
 ) -> None:
     path = root / "lapsprd" / extension / f"{STAMP}.{extension}"
-    depth = 1 if extension == "lsx" else NZ
+    depth = 1 if extension == "lsx" else (file_depth or NZ)
     with netCDF4.Dataset(path, "w", format="NETCDF3_64BIT_OFFSET") as dataset:
         dataset.createDimension("record", 1)
         dataset.createDimension("z", depth)
+        if bad_level_dim:
+            dataset.createDimension("zlevel", depth)
         dataset.createDimension("x", NX)
         dataset.createDimension("y", NY)
-        levels = dataset.createVariable("level", "f4", ("z",))
-        levels[:] = levels_hpa[:depth]
+        levels = dataset.createVariable(
+            "level", "f4", ("zlevel" if bad_level_dim else "z",),
+            fill_value=1.0e37 if bad_level_fill else None,
+        )
+        levels.units = "hectopascals"
+        levels[:] = np.resize(levels_hpa, depth)
+        if bad_level_fill:
+            levels[0] = 1.0e37
         for name in ("reftime", "valtime"):
             variable = dataset.createVariable(name, "f8", ("record",))
             variable.units = TIME_UNITS
-            variable[:] = ANALYSIS_TIME_SECONDS
+            variable[:] = ANALYSIS_TIME_SECONDS + time_offset
 
         def level_index(level_hpa: float) -> int:
             index = int(np.flatnonzero(levels_hpa[:depth] == level_hpa)[0])
             return depth - 1 - index if reverse_levels else index
 
         for name in names:
-            variable = dataset.createVariable(name, "f4", ("record", "z", "y", "x"))
+            dims = ("record", "z", "x", "y") if swapped_xy else ("record", "z", "y", "x")
+            variable = dataset.createVariable(name, "i4" if bad_var_type and name == "t3" else "f4", dims)
+            variable.units = {
+                "ht": "meters", "t3": "degrees Kelvin",
+                "u3": "meters / second", "v3": "meters / second",
+                "om": "pascals / second", "rhl": "percent",
+                "u": "meters / second", "v": "meters/second",
+                "t": "degrees kelvin", "rh": "meters", "tgd": "K",
+                "ps": "pascals", "msl": "pascals",
+                "mr": "grams/kikogram", "vv": "meters/second",
+                "sh": "kg/kg", "lwc": "kg/meter**3",
+                "rai": "kg/meter**3", "sno": "kg/meter**3",
+                "pic": "kg/meter**3", "ice": "kg/meter**3",
+                "lcp": "1", "sc": "1",
+            }[name]
+            if bad_units and name == "t3":
+                variable.units = "meters"
             values = np.zeros((1, depth, NY, NX), dtype=np.float32)
             if name in {"ht"}:
                 if make_sfc_uv and depth > 1:
@@ -134,7 +165,7 @@ def build_fixture(root: Path, case: str) -> None:
     (root / "lapsprd" / "lapsprep" / "wps").mkdir(parents=True)
     (root / "static").mkdir()
 
-    hotstart = case == "hotstart-vapor"
+    hotstart = case in {"hotstart-vapor", "bad-hydrometeor-mode"}
     mixed_output = case.startswith("mixed-")
     make_sfc_uv = case in {"make-sfc-uv", "ascending-make-sfc-uv"}
     reverse_levels = case.startswith("ascending-")
@@ -185,7 +216,7 @@ def build_fixture(root: Path, case: str) -> None:
         "&lapsprep_nl",
         f" HOTSTART={'.true.' if hotstart else '.false.'}, BALANCE=.false., "
         f"OUTPUT_FORMAT={output_formats},",
-        f" GRID_SCALE='NONE', HYDRO_MODE='CONSERVATIVE', CAP_POLICY='{cap_policy}',",
+        f" GRID_SCALE='NONE', HYDRO_MODE='{'INVALID' if case == 'bad-hydrometeor-mode' else 'CONSERVATIVE'}', CAP_POLICY='{cap_policy}',",
         f" WIND_COORDINATE='GRID_RELATIVE', "
         f"MAKE_SFC_UV={'.true.' if make_sfc_uv else '.false.'}, "
         f"ENFORCE_FIELD_CONTRACTS={'.true.' if strict_contracts else '.false.'},",
@@ -220,14 +251,22 @@ def build_fixture(root: Path, case: str) -> None:
     )
     make_file(root, "lt1", lt1_names, sh_bad=sh_bad, bad_temperature=bad_temperature,
               bad_surface_mr=bad_surface_mr, surface_pressure=surface_pressure,
-              hotstart=hotstart, levels_hpa=levels_hpa,
+              hotstart=hotstart,
+              levels_hpa=levels_hpa[::-1].copy() if case == "reverse-levels" else levels_hpa,
               reverse_levels=reverse_levels, invalid_fields=invalid_fields,
-              make_sfc_uv=make_sfc_uv)
+              make_sfc_uv=make_sfc_uv,
+              bad_level_dim=case == "level-wrong-dim",
+              bad_level_fill=case == "level-fill",
+              bad_units=case == "bad-units",
+              bad_var_type=case == "bad-var-type")
     make_file(root, "lw3", lw3_names, sh_bad=sh_bad, bad_temperature=bad_temperature,
               bad_surface_mr=bad_surface_mr, surface_pressure=surface_pressure,
               hotstart=hotstart, levels_hpa=levels_hpa,
               reverse_levels=reverse_levels, invalid_fields=invalid_fields,
-              make_sfc_uv=make_sfc_uv)
+              make_sfc_uv=make_sfc_uv,
+              file_depth=NZ + 1 if case == "increased-nz" else NZ - 1 if case == "decreased-nz" else None,
+              swapped_xy=case == "swapped-xy",
+              time_offset=60.0 if case == "wrong-time" else 0.0)
     make_file(root, "lh3", lh3_names, sh_bad=sh_bad, bad_temperature=bad_temperature,
               bad_surface_mr=bad_surface_mr, surface_pressure=surface_pressure,
               hotstart=hotstart, levels_hpa=levels_hpa,
@@ -255,6 +294,12 @@ def build_fixture(root: Path, case: str) -> None:
                   surface_pressure=surface_pressure, hotstart=True, levels_hpa=levels_hpa,
                   reverse_levels=reverse_levels,
                   invalid_fields=invalid_fields, make_sfc_uv=make_sfc_uv)
+    if case == "missing-namelist":
+        (root / "static" / "lapsprep.nl").unlink()
+    elif case == "bad-namelist":
+        (root / "static" / "lapsprep.nl").write_text("&lapsprep_nl\n BROKEN=\n/\n")
+    elif case == "missing-lt1":
+        (root / "lapsprd" / "lt1" / f"{STAMP}.lt1").unlink()
 
 
 def main() -> int:
@@ -270,6 +315,11 @@ def main() -> int:
         "mixed-invalid-om", "mixed-invalid-vv", "missing-u3", "missing-v3", "invalid-u3",
         "invalid-v3", "ascending-vapor", "duplicate-pressure", "nonmonotonic-pressure",
         "make-sfc-uv", "ascending-make-sfc-uv",
+        "missing-namelist", "bad-namelist", "missing-lt1",
+        "bad-hydrometeor-mode",
+        "increased-nz", "decreased-nz", "reverse-levels", "swapped-xy", "wrong-time",
+        "level-wrong-dim", "level-fill", "bad-units",
+        "bad-var-type",
     ))
     args = parser.parse_args()
     build_fixture(args.root, args.case)

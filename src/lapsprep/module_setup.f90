@@ -143,7 +143,7 @@ CONTAINS
 
       IF ( ioerror .NE. 0 ) THEN
          PRINT '(3A,I4)','Error opening ', TRIM(input_laps_file), ' Code #',ioerror
-         STOP 'error_opening_namelist'
+         ERROR STOP 1
       END IF 
 
       ! Read and print the namelist
@@ -166,7 +166,7 @@ CONTAINS
       ENDDO find_outputs
       IF (num_output .LE. 0) THEN
         PRINT '(A)','Must specify at least one output format!'
-        STOP 'READ_NAMELIST'
+        ERROR STOP 1
       ENDIF
 
    END SUBROUTINE read_namelist

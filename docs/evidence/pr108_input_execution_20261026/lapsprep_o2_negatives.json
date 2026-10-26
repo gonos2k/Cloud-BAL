@@ -1,0 +1,77 @@
+{
+  "cases": [
+    {
+      "case": "increased-nz",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "mp/lapsprep_vapor_tests.HKEqkX/increased-nz/lapsprd/lw3/260010300.lw3    \n                                                                                \n                                                                                \n                    \nLAPSPREP input: inconsistent z dimension\n1\n"
+    },
+    {
+      "case": "decreased-nz",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "mp/lapsprep_vapor_tests.HKEqkX/decreased-nz/lapsprd/lw3/260010300.lw3    \n                                                                                \n                                                                                \n                    \nLAPSPREP input: inconsistent z dimension\n1\n"
+    },
+    {
+      "case": "reverse-levels",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "p_vapor_tests.HKEqkX/reverse-levels/lapsprd/lw3/260010300.lw3  \n                                                                                \n                                                                                \n                    \nLAPSPREP input: inconsistent level values or order\n1\n"
+    },
+    {
+      "case": "swapped-xy",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "prep_vapor_tests.HKEqkX/swapped-xy/lapsprd/lw3/260010300.lw3      \n                                                                                \n                                                                                \n                    \nLAPSPREP input: dimension order mismatch for u3\n1\n"
+    },
+    {
+      "case": "wrong-time",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "psprep_vapor_tests.HKEqkX/wrong-time/lapsprd/lw3/260010300.lw3      \n                                                                                \n                                                                                \n                    \nLAPSPREP input time: filename minute mismatch\n1\n"
+    },
+    {
+      "case": "level-wrong-dim",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "_vapor_tests.HKEqkX/level-wrong-dim/lapsprd/lt1/260010300.lt1 \n                                                                                \n                                                                                \n                    \nLAPSPREP input: level coordinate dimension mismatch\n1\n"
+    },
+    {
+      "case": "level-fill",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "mp/lapsprep_vapor_tests.HKEqkX/level-fill/lapsprd/lt1/260010300.lt1      \n                                                                                \n                                                                                \n                    \nLAPSPREP input: missing level coordinate\n1\n"
+    },
+    {
+      "case": "bad-units",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "prep_vapor_tests.HKEqkX/bad-units/lapsprd/lt1/260010300.lt1       \n                                                                                \n                                                                                \n                    \nLAPSPREP input: unexpected units for t3: meters\n1\n"
+    },
+    {
+      "case": "bad-var-type",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "var/tmp/lapsprep_vapor_tests.HKEqkX/bad-var-type/lapsprd/lt1/260010300.lt1    \n                                                                                \n                                                                                \n                    \nLAPSPREP input: invalid type for t3\n1\n"
+    },
+    {
+      "case": "missing-namelist",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "                                                                                                                                                                                                       \nError opening /var/tmp/lapsprep_vapor_tests.HKEqkX/missing-namelist/static/lapsprep.nl Code #  29\n1\n"
+    },
+    {
+      "case": "bad-namelist",
+      "returncode": 19,
+      "output_created": false,
+      "diagnostic_tail": "prep.exe       000000000040B9BD  Unknown               Unknown  Unknown\nlibc.so.6          000070E3C34B01CA  Unknown               Unknown  Unknown\nlibc.so.6          000070E3C34B028B  __libc_start_main     Unknown  Unknown\nlapsprep.exe       000000000040B8A5  Unknown               Unknown  Unknown\n"
+    },
+    {
+      "case": "missing-lt1",
+      "returncode": 1,
+      "output_created": false,
+      "diagnostic_tail": "          \nMandatory file not available:\n/var/tmp/lapsprep_vapor_tests.HKEqkX/missing-lt1/lapsprd/lt1/260010300.lt1                                                                                                                                                                                      \n1\n"
+    }
+  ],
+  "executable_sha256": "2a8542f9fc6a47631657a59eeabba51da869c1f98bb91ae0a45b91fc85013119"
+}
