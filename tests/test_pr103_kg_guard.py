@@ -116,6 +116,34 @@ class TestStageGraphInventory(unittest.TestCase):
             self.assertEqual(inventory, expected)
 
 
+class TestGraphFreshnessReportSection(unittest.TestCase):
+    def setUp(self):
+        self.section = "## Graph Freshness\n\n- Reviewed PR103 source.\n"
+        self.report = Path("GRAPH_REPORT.md")
+
+    def test_graphify_cli_report_without_custom_section_appends_one(self):
+        content = ("# Graph Report - Cloud-BAL  (2026-10-26)\n\n"
+                   "## Corpus Check\n- cluster-only mode — file stats not available\n\n"
+                   "## Summary\n- 15150 nodes · 26906 edges\n")
+        updated = apply.update_graph_freshness(content, self.section, self.report)
+        self.assertTrue(updated.startswith(content))
+        self.assertEqual(updated.count("## Graph Freshness"), 1)
+        self.assertTrue(updated.endswith(self.section))
+
+    def test_existing_section_is_replaced_without_changing_other_sections(self):
+        before = "# Graph Report\n\n## Summary\n- summary\n\n## Graph Freshness\n\n- old\n\n## Next Steps\n- keep\n"
+        updated = apply.update_graph_freshness(before, self.section, self.report)
+        self.assertTrue(updated.startswith("# Graph Report\n\n## Summary\n- summary\n\n"))
+        self.assertIn(self.section, updated)
+        self.assertTrue(updated.endswith("\n## Next Steps\n- keep\n"))
+        self.assertEqual(updated.count("## Graph Freshness"), 1)
+
+    def test_duplicate_sections_are_rejected(self):
+        duplicate = "## Summary\n- summary\n\n## Graph Freshness\n- one\n\n## Graph Freshness\n- two\n"
+        with self.assertRaises(RuntimeError):
+            apply.update_graph_freshness(duplicate, self.section, self.report)
+
+
 class TestSelectionBoundary(unittest.TestCase):
     def test_source_root_is_the_pr103_cloud_bal_checkout(self):
         self.assertEqual(preflight.SOURCE, Path(__file__).resolve().parents[1])

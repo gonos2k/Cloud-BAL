@@ -11,3 +11,25 @@ Addressed four bounded findings in the pre-runtime PR103 KG guard:
 Focused validation command: `python -m pytest -q tests/test_pr103_kg_guard.py` — **15 passed in 0.38s**. This covers source-root resolution, exact oracle allowlisting, rejection of unrelated test programs, full staged file inventory hashing, actual pinned PR102/PR98/guard/updater/auditor API attributes, 120-folder lineage reconstruction, raw-date collision mapping, root-GO date binding, and hash-bound manifest evidence.
 
 No check-only retry, Graphify query/update, or apply was run after the focused fix. The one prior check-only attempt was blocked without a plan or writes. No maintained KG or physical source was changed. The staging publisher remains unexecuted until the corrected committed PR103 source and actual runtime/evidence manifest are independently reviewed.
+
+
+## Subsequent authorized execution
+
+The earlier no-execution statements describe their review checkpoint. After the
+API fix was committed as `75052374bae2dcf9b5137e8f0fc840878d865e8e`, the corrected
+CHECK_ONLY plan `8c64dffd…295c` passed. A mistyped manifest digest was rejected
+before staging ([attempt record](apply_manifest_typo_failed.json)). Root then
+constructed the authorized argv directly from the reviewed plan. Both private
+corpus updates ran, but final staging validation rejected the CLI reports' absent
+custom Graph Freshness section ([invocation](apply_staging_freshness_failed.json)).
+No maintained publication occurred. Root and independent review confirmed all
+142 live graph/metadata/wiki hashes and all 120 dated folders/472 members
+unchanged; the four publication targets remain absent. The failed private output
+is preserved.
+
+The staging-only normalizer now appends a missing freshness section, replaces
+one, and rejects duplicates. The fresh private output is
+`/var/tmp/pr103_kg_apply_v2_20261026`. The focused guard suite passes 18 cases;
+the broader current Python suite passes 150 cases. The
+[freshness review](freshness_fix_review.md) approves source/tests only; a new
+commit-bound CHECK_ONLY plan and review are required before another APPLY.

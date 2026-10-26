@@ -1,0 +1,31 @@
+{
+  "attempt": "PR103 guarded KG apply invocation blocked before writes",
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL",
+  "argv": [
+    "/home/korea_keun/.local/share/uv/tools/graphifyy/bin/python3",
+    "docs/evidence/pr103_amplitude_control_20261026/kg/apply_kg.py",
+    "--commit",
+    "75052374bae2dcf9b5137e8f0fc840878d865e8e",
+    "--pr-url",
+    "https://github.com/gonos2k/Cloud-BAL/pull/103",
+    "--results-manifest",
+    "/var/tmp/pr103_integration_results_20261026_v2.json",
+    "--results-sha256",
+    "a4cf807f18de955d36a359f7f821daf295c6",
+    "--apply",
+    "--reviewed-plan-sha256",
+    "8c64dffd8c16c43dda7a11551001cd49febd40c134787b0235b79f821daf295c",
+    "--root-go",
+    "/var/tmp/pr103_kg_root_go_20261026.json",
+    "--out-dir",
+    "/var/tmp/pr103_kg_apply_20261026"
+  ],
+  "rc": 2,
+  "stdout": "{\n  \"status\": \"BLOCKED_OR_STAGING_FAILED_NO_WRITES\",\n  \"reason\": \"PR103 result manifest SHA-256 mismatch\"\n}\n",
+  "stderr": "",
+  "expected_manifest_sha256": "a4cf807f18de955d36a359b0bddbd6c1a795cdce43fa8118c77e560db09351a9",
+  "actual_manifest_sha256": "a4cf807f18de955d36a359f7f821daf295c6",
+  "maintained_writes": false,
+  "private_out_created": false,
+  "source_checkout_clean": true
+}

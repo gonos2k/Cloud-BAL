@@ -176,6 +176,16 @@ def freshness_limits() -> str:
             "extraction is partial. Graph freshness is navigation evidence, not runtime or scientific approval.")
 
 
+def update_graph_freshness(content: str, section: str, report: Path) -> str:
+    pattern = r"(?m)^## Graph Freshness[ \t]*\r?\n.*?(?=^## |\Z)"
+    updated, count = re.subn(pattern, lambda _: section, content, flags=re.S)
+    preflight.require(count <= 1, f"expected at most one Graph Freshness section in {report}")
+    if count == 1:
+        return updated
+    separator = "" if content.endswith("\n\n") else "\n" if content.endswith("\n") else "\n\n"
+    return content + separator + section.rstrip() + "\n"
+
+
 def finalize_stage(plan: dict, stage_root: Path, stage_maint: Path,
                    build: dict) -> dict:
     records = build["corpora"]
@@ -185,9 +195,7 @@ def finalize_stage(plan: dict, stage_root: Path, stage_maint: Path,
         content = report.read_text()
         section = (f"## Graph Freshness\n\n- PR103 source `{plan['source_commit']}`; approval and graph-selection "
                    f"base `{plan['approval_base']}`; {len(plan['selected_graph_paths'])} selected paths.\n- {limits}\n")
-        updated, count = re.subn(r"## Graph Freshness\n.*?(?=\n## |\Z)", section, content, flags=re.S)
-        preflight.require(count == 1, f"expected one Graph Freshness section in {report}")
-        report.write_text(updated)
+        report.write_text(update_graph_freshness(content, section, report))
         mirror = "graph-report-klaps50.md" if label == "KLAPS50" else "graph-report-cloud-bal.md"
         shutil.copy2(report, stage_root / "wiki" / mirror)
         snapshot = directory / "graphify-out" / preflight.PR103_SNAPSHOT
