@@ -1,0 +1,62 @@
+{
+  "schema": "pr105_independent_kg_readback_v1",
+  "disposition": "PASS",
+  "read_only": true,
+  "receipt_path": "/var/tmp/pr105_kg_apply_v1_20261026/kg_receipt.json",
+  "receipt_sha256": "34e96032623e8a58d3717941d910efbc50eedd712851f894e9775f69537187fc",
+  "receipt_status": "PASS",
+  "source_commit": "7317dff60942cd27fff4e3a4ba8345f2ccc509fd",
+  "reviewed_plan_sha256": "e7738ba8764abf10a7284ebc732edcfb66465286c81ba01f3c415c8da9b41433",
+  "maintained_snapshot_count": 128,
+  "receipt_snapshot_count": 128,
+  "snapshot_inventory_sha256": "c984ed192e19968b132a41bdddd509a235842f37be5707e1f4f93b246e0ff23e",
+  "receipt_inventory_sha256": "c984ed192e19968b132a41bdddd509a235842f37be5707e1f4f93b246e0ff23e",
+  "all_124_old_snapshot_hash_inventories_preserved": true,
+  "old_snapshot_count": 124,
+  "exact_four_new_snapshot_paths": true,
+  "new_snapshot_paths": [
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-26-pr105-graphify-raw",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-26-pr105-observation-pairing",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-26-pr105-graphify-raw",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-26-pr105-observation-pairing"
+  ],
+  "new_snapshot_member_hashes_match_receipt": true,
+  "corpora": {
+    "KLAPS50": {
+      "snapshot": "2026-10-26-pr105-observation-pairing",
+      "nodes": 41093,
+      "edges": 85532,
+      "current_graph_sha256_matches": true,
+      "named_members_sha256_match": true
+    },
+    "Cloud-BAL": {
+      "snapshot": "2026-10-26-pr105-observation-pairing",
+      "nodes": 15265,
+      "edges": 27074,
+      "current_graph_sha256_matches": true,
+      "named_members_sha256_match": true
+    }
+  },
+  "maintained_source_snapshot_after": {
+    "entry_count": 627,
+    "sha256": "0d11babbb4095a849093a512e499648d5dc51717e83710e1edf206041bb4346f"
+  },
+  "inherited_pin_count": 197,
+  "inherited_pins_match_receipt": true,
+  "protected_group_count": 13,
+  "protected_groups_match_receipt": true,
+  "active_root_go_pin_count": 250,
+  "active_root_go_matches_receipt": true,
+  "derived_wiki_sha256_match_receipt": {
+    "wiki/graph-report.md": true,
+    "wiki/graph-report-klaps50.md": true,
+    "wiki/graph-report-cloud-bal.md": true,
+    "wiki/index.md": true,
+    "wiki/log.md": true
+  },
+  "runtime_state": "RUNNING",
+  "runtime_closed": false,
+  "forecast_verdict": "PENDING",
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED"
+}
