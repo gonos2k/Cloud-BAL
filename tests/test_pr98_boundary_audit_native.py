@@ -24,6 +24,3 @@ def test_all_frozen_runner_snapshots_are_mandatory() -> None:
     assert MODULE.missing_snapshot_labels({"snapshots": {label: {} for label in labels}}, schedule) == []
     labels.remove("320s")
     assert MODULE.missing_snapshot_labels({"snapshots": {label: {} for label in labels}}, schedule) == ["320s"]
-
-
-

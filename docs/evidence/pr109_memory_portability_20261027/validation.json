@@ -1,5 +1,47 @@
 {
   "base_commit": "cb60815357d83fafe43dcdbb6afa6eb88192c04a",
+  "integration_eof_cleanup": {
+    "tests/test_pr101_upper_wind_capture_native.py": {
+      "after": "5cfc26503e0f1c1ea66846cef5524fd6f0f0f32fda1dd979f5e95460bab2d78d",
+      "ast_identical": true,
+      "before": "ea4d7afa3b8d70c9e9103cb5c2194f0ec65ba3ba0cc54f99a8d2581a3dc043e4"
+    },
+    "tests/test_pr101_upper_wind_replay_native.py": {
+      "after": "45cd679d983176679a56b364f00f7180fe248a50176ea75ea57a5a7be2a46a5f",
+      "ast_identical": true,
+      "before": "7196121d08bfda1f96425f21708fa81b42cae8ae0c930366dd8450e7ee88822f"
+    },
+    "tests/test_pr71_guarded_composer_native.py": {
+      "after": "0d37b105084808f79f469b82175e907617149bbeeeed9efc6efe0739459b291b",
+      "ast_identical": true,
+      "before": "3746fb92f8bf110d96eb8cd85eaf485724891c2dd180be28bf0dbb5b7f458881"
+    },
+    "tests/test_pr83_rk_operands_patch_native.py": {
+      "after": "3aa28e50f19cce083232be43cc5d960b1b3de899a7b45a6f5b6f711577709ca1",
+      "ast_identical": true,
+      "before": "28303ef1b1e6044b4e11c5cffd7abfa2e8ca3fc0dfb218f4420d9ef76b86f4b8"
+    },
+    "tests/test_pr84_native_moment_policy_native.py": {
+      "after": "01d1599e6f636813a3c4dd38d57e95503c37c170c49ba059846809c14c5e593f",
+      "ast_identical": true,
+      "before": "9d06d9881c0e6b126c0e24840717dd776fa1a6045171c708be3baf00bcf4d743"
+    },
+    "tests/test_pr87_rain_diffusion_replay_native.py": {
+      "after": "4f2f5577b3f02395b6590289009f0689f77d17f225d7252f331bc94045945711",
+      "ast_identical": true,
+      "before": "8a4296f9cb453a9bbcb899d0dd69577619c6b45bd82983272903b2df8db897e4"
+    },
+    "tests/test_pr94_hydro_control_realdata.py": {
+      "after": "fd0febd05aaa7266bb2b64f4a2b6d2f9486c8c1429586f96b62584831ff3a439",
+      "ast_identical": true,
+      "before": "a769724038ec3550e5bb9b66c436cfd84c1fc7ae69c89b225fcd551125d12e08"
+    },
+    "tests/test_pr98_boundary_audit_native.py": {
+      "after": "22fc1c977d6c82c8b8299706ceedbfb6350a0fd11064af552bbd8cdedfce49f8",
+      "ast_identical": true,
+      "before": "511fd9f6d479689efa3261252a86118e72e6dc2092f2c7ad5e29879bbe461eac"
+    }
+  },
   "limits": [
     "No whole native/Linux/realdata tier pass asserted.",
     "Static LAPSPREP NCVGT input precision is outside this dynamic-input change.",
@@ -10,7 +52,8 @@
     "/var/tmp/pr109_native_w.log": "52e2392e4810e86a025349b6c607e3ef218f8e1dcafd0bb1754ba806f3b7afc0",
     "/var/tmp/pr109_portable_confined_final.log": "0b7675bb03f6ce554b03744799b507a76118771e5fbf88998aa96d18205753a3",
     "/var/tmp/pr109_shell.log": "227135d4d1014e34e1cf82f3fb41f57a751d9f8f663b1bccc8cfa52efcca7e44",
-    "/var/tmp/pr109_split_collection.log": "37f14bd593b49e541b205cefb2b05a397c34c54e24aef1e67b229272dda24d9f"
+    "/var/tmp/pr109_split_collection.log": "37f14bd593b49e541b205cefb2b05a397c34c54e24aef1e67b229272dda24d9f",
+    "/var/tmp/pr109_split_collection_final.log": "5f6e0edf737c3ef0a5ded1192e542c0f7a4775305edd6efbc99935cbe7cc17be"
   },
   "native": {
     "lapsprep": {
@@ -177,23 +220,23 @@
     "tests/test_pr101_projected_c2_response.py": "f5d07c788e6782b4bf5dbc0d9eb352b7553fc202c7558bb24dca5cb2fcc3e5bd",
     "tests/test_pr101_projected_c2_response_native.py": "8cf7b2b593af2bf932b6c1ad7ac4013ee9fbff4c214798bacfe828b256453094",
     "tests/test_pr101_upper_wind_capture.py": "566adf89d1b852707be1c0812fe82908d7e392f8fbccd7f0ccb5847ae2371576",
-    "tests/test_pr101_upper_wind_capture_native.py": "ea4d7afa3b8d70c9e9103cb5c2194f0ec65ba3ba0cc54f99a8d2581a3dc043e4",
+    "tests/test_pr101_upper_wind_capture_native.py": "5cfc26503e0f1c1ea66846cef5524fd6f0f0f32fda1dd979f5e95460bab2d78d",
     "tests/test_pr101_upper_wind_replay.py": "76268cb0c5241404ee5b73071949d913bd38b4c8bf97045275e3537830cff15a",
-    "tests/test_pr101_upper_wind_replay_native.py": "7196121d08bfda1f96425f21708fa81b42cae8ae0c930366dd8450e7ee88822f",
+    "tests/test_pr101_upper_wind_replay_native.py": "45cd679d983176679a56b364f00f7180fe248a50176ea75ea57a5a7be2a46a5f",
     "tests/test_pr103_archived_consumer.py": "35e279b895b681a63c01c45d123ada8c1fce49c847b5a18fe3a4bf573caed384",
     "tests/test_pr103_archived_consumer_native.py": "73d4bed5e1108ffa50f4a1f00cedc93e5dfe8d15438ba8f10e4a2ddb28535461",
     "tests/test_pr71_guarded_composer.py": "b6d6c14b736d711dddc5ba8443affadc3c576a4c9f2d830dd0e6018afd85921f",
-    "tests/test_pr71_guarded_composer_native.py": "3746fb92f8bf110d96eb8cd85eaf485724891c2dd180be28bf0dbb5b7f458881",
+    "tests/test_pr71_guarded_composer_native.py": "0d37b105084808f79f469b82175e907617149bbeeeed9efc6efe0739459b291b",
     "tests/test_pr83_rk_operands_patch.py": "0fd952ac7c84b6223857328da90cfb9ab49acbceae00600c147aab7735460c48",
-    "tests/test_pr83_rk_operands_patch_native.py": "28303ef1b1e6044b4e11c5cffd7abfa2e8ca3fc0dfb218f4420d9ef76b86f4b8",
+    "tests/test_pr83_rk_operands_patch_native.py": "3aa28e50f19cce083232be43cc5d960b1b3de899a7b45a6f5b6f711577709ca1",
     "tests/test_pr84_native_moment_policy.py": "30a4293a2ea971cff3b666960e7b53b9d14d0edef4d65fa772afcf521caed237",
-    "tests/test_pr84_native_moment_policy_native.py": "9d06d9881c0e6b126c0e24840717dd776fa1a6045171c708be3baf00bcf4d743",
+    "tests/test_pr84_native_moment_policy_native.py": "01d1599e6f636813a3c4dd38d57e95503c37c170c49ba059846809c14c5e593f",
     "tests/test_pr84_shared_runner_contract.py": "bf398821de3cba55ac5233fb225d7940e31805d303712297c1b1546262d1e200",
     "tests/test_pr84_shared_runner_contract_native.py": "3744245655e1f56e849a6c5e109eb0042d7675df902df4eb691af49660b65801",
     "tests/test_pr87_progb_failure_context.py": "c56875f9b089831938dc9313790b72c3cad469bb7b2d25211beacef92f15eecc",
     "tests/test_pr87_progb_failure_context_portable.py": "3739e97981a8c7ab0479186b9e5406744927e7c282c198e58b32a649d49d668d",
     "tests/test_pr87_rain_diffusion_replay.py": "f406258ccc5a2decb8a88c7273cd80caf423647186bc6f6b2eb6147db9500d06",
-    "tests/test_pr87_rain_diffusion_replay_native.py": "8a4296f9cb453a9bbcb899d0dd69577619c6b45bd82983272903b2df8db897e4",
+    "tests/test_pr87_rain_diffusion_replay_native.py": "4f2f5577b3f02395b6590289009f0689f77d17f225d7252f331bc94045945711",
     "tests/test_pr91_host_store_trace.py": "5fa16e4080a71bc5335f52bc8b79dd150d8b5df66dabaaba8fefed47c26d0927",
     "tests/test_pr91_host_store_trace_native.py": "564d3a58b4c08eac2e853c56c0298a6321d387c0a24f707d1045f50d68ad5a50",
     "tests/test_pr92_graupel_store_replay.py": "da14be972b19d3015c3cc903b59f0a0ec20e739cb065043bef49c10309b24411",
@@ -201,9 +244,9 @@
     "tests/test_pr92_source_store_fixture.py": "97fbf0cd0a5a2dff20c123bf969e031020dc390fdba147276b94b3156129d461",
     "tests/test_pr92_source_store_fixture_native.py": "df159c988b3b7cea3d0f0f3eaf44f62cbebbd82304999eefc24adde619e8f4db",
     "tests/test_pr94_hydro_control.py": "f18b35c41fcdf8740baf50353d4caaeaf9459eca828eab1e371267623a028762",
-    "tests/test_pr94_hydro_control_realdata.py": "a769724038ec3550e5bb9b66c436cfd84c1fc7ae69c89b225fcd551125d12e08",
+    "tests/test_pr94_hydro_control_realdata.py": "fd0febd05aaa7266bb2b64f4a2b6d2f9486c8c1429586f96b62584831ff3a439",
     "tests/test_pr98_boundary_audit.py": "6c9c8552332435a562a92fa982596cfad6d4e1c36cf693c1238d2f3dabec3b6f",
-    "tests/test_pr98_boundary_audit_native.py": "511fd9f6d479689efa3261252a86118e72e6dc2092f2c7ad5e29879bbe461eac",
+    "tests/test_pr98_boundary_audit_native.py": "22fc1c977d6c82c8b8299706ceedbfb6350a0fd11064af552bbd8cdedfce49f8",
     "tests/test_pr99_bulk_candidate_contract.py": "88460d4815806a61b6a43c7e5b749a48371650e8ef0ce5962f99f7454ba02b94",
     "tests/test_pr99_bulk_candidate_contract_native.py": "531d03971b25f69b204f4c5937a6d2b89758cd10cdcd3f8ef346b03b60a2d9f6",
     "tests/test_tier_exceptions.json": "87d1b80171574acd79d9a51b17806ac67c02050d5a0f4fb2ca4d4198225d950b"

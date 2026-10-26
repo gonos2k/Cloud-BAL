@@ -43,5 +43,3 @@ class TestPR101UpperWindCaptureNative(unittest.TestCase):
         self.assertEqual(len(plan["source_overrides"]), 9)
         self.assertEqual(plan["source_overrides"]["module_em.o"], str(transformed.resolve()))
         self.assertIn("--reproduction-profile", plan["builder_argv"])
-
-

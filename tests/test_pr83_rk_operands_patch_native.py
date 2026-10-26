@@ -46,4 +46,3 @@ class TestRKOperandsPatchNative(unittest.TestCase):
                 8,
             )
         self.assertEqual(sha256(SOURCE), SOURCE_SHA256)
-

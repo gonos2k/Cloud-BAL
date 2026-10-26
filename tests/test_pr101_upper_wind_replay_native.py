@@ -49,5 +49,3 @@ class TestPR101UpperWindReplayNative(unittest.TestCase):
                     write_record(stream, x, 2, 7)
             self.assertEqual(len(compare(path)["faces"]), 2)
             self.assertEqual(len(generate(path).split("Capture pair ")) - 1, 2)
-
-

@@ -10,5 +10,3 @@ from pr87_rain_diffusion_replay import require_helper_source
 def test_helper_source_procedure_is_hash_pinned() -> None:
     receipt = require_helper_source()
     assert receipt["routine_sha256"] == "cbcc347345a6449b9e5666407c5ef8c6a0db73a9a397d0e306ad14a085783ac3"
-
-

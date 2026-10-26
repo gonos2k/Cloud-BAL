@@ -47,4 +47,3 @@ class TestGuardedComposerNative(unittest.TestCase):
             self.assertIn("PR71_STEP_COUNT_CONTRACT_BEGIN", source)
             self.assertEqual(source.count("call checked_substep_count("), 2)
             self.assertIn("PR71_STEP_COUNT_REJECT_ICE", source)
-

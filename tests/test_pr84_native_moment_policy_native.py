@@ -27,4 +27,3 @@ class TestPR84NativeMomentPolicyEvidence(unittest.TestCase):
         with self.assertRaisesRegex(initializer.InitializationError,
                                     "PR84_QICE_POLICY_PARAMETER_BINDING_MISMATCH"):
             initializer._validate_pr84_evidence_bindings(tampered)
-

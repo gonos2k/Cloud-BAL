@@ -126,5 +126,3 @@ class TestPR94HydroExternalInput(unittest.TestCase):
                 base.hydro.write_final_receipt(
                     stage_path, policy_path, initializer_receipt, root / "final.json"
                 )
-
-
