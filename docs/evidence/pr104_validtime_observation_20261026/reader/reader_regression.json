@@ -1,0 +1,38 @@
+{
+  "schema": "pr104_reader_regression_v1",
+  "scope": "PR103 13Z output preservation check; no forecasts run",
+  "command": "python tools/pr103_surface_temperature_observation.py --output /tmp/pr103_regression_pr104.json",
+  "baseline": {
+    "path": "docs/evidence/pr103_observation_20261026/surface_temperature_input_consistency_v2.json",
+    "sha256": "1813cf577e1030ac8c20b1651c1a857c6dd938092bb662d41278d94ddda7bf8c",
+    "reader_source_sha256_before": "fa7b890909368f5218c3b91a7aa31d95754703860f2151016f19912ab99a3144"
+  },
+  "after": {
+    "command_output_path": "/tmp/pr103_regression_pr104.json",
+    "command_output_sha256": "98ec778fc9ff6caeb926317dafcd67605b529e78c8e8da7d5cd986974db2afd6",
+    "reader_source_sha256": "736ae3b5ec8f7e41dfd5543f00eb5b81c163a53e447e4c8de6dfcf5f182b62da"
+  },
+  "inputs": {
+    "observation_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/lso/262281300.lso",
+    "observation_sha256": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+    "valid_time_utc": "2026-08-16T13:00:00Z"
+  },
+  "comparison": {
+    "arms": ["C", "H", "N", "O", "P"],
+    "matched_station_rows": 765,
+    "all_arm_metrics_equal": true,
+    "matched_station_rows_equal": true,
+    "canonical_arm_metrics_sha256_before": "7f3fc7ec6f8ad4be0beb8f3fd8283a04dadec5574feb7a9052661ee92fa8dc11",
+    "canonical_arm_metrics_sha256_after": "7f3fc7ec6f8ad4be0beb8f3fd8283a04dadec5574feb7a9052661ee92fa8dc11",
+    "canonical_matched_rows_sha256_before": "f4e275b9f6293ff0d36cb5c96a381aeafba34c0cdc22196d171201d8d6035a9b",
+    "canonical_matched_rows_sha256_after": "f4e275b9f6293ff0d36cb5c96a381aeafba34c0cdc22196d171201d8d6035a9b"
+  },
+  "validation": {
+    "test_command": "python -m unittest tests/test_pr103_surface_temperature_observation.py tests/test_pr104_validtime_observation.py",
+    "tests_passed": 24,
+    "observation_numeric_validation": "all five numeric fields reject NaN and +/-Inf; the finite -99.9 temperature sentinel remains allowed",
+    "py_compile": "passed",
+    "git_diff_check": "passed"
+  },
+  "limit": "The exact 14Z observation comparison awaits closed H/A/N 14Z history records."
+}

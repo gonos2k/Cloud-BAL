@@ -187,23 +187,29 @@ def gdtost(field: np.ndarray, i: float, j: float) -> tuple[float | None, str | N
     return value, None
 
 
-def model_metadata(path: Path) -> tuple[dict, np.ndarray, np.ndarray, np.ndarray]:
+def model_metadata(path: Path, valid_time_utc: str = "2026-08-16T13:00:00Z", *,
+                   record_metadata: dict | None = None) -> tuple[dict, np.ndarray, np.ndarray, np.ndarray]:
     with Dataset(path) as nc:
         nc.set_auto_mask(False)
-        model_time = b"".join(nc.variables["Times"][0]).decode("ascii")
-        if model_time != "2026-08-16_13:00:00":
-            raise ValueError(f"unexpected model time in {path}")
+        requested_time = valid_time_utc.removesuffix("Z").replace("T", "_")
+        model_times = [b"".join(row).decode("ascii").strip() for row in nc.variables["Times"][:]]
+        matching_records = [index for index, model_time in enumerate(model_times) if model_time == requested_time]
+        if len(matching_records) != 1:
+            raise ValueError(f"expected exactly one history record at {valid_time_utc} in {path}; found {len(matching_records)}")
+        record = matching_records[0]
+        if record_metadata is not None:
+            record_metadata.update(index=record, stored_time=model_times[record])
         attrs = {name: float(getattr(nc, name)) for name in ("TRUELAT1", "TRUELAT2", "STAND_LON", "DX", "DY")}
         # Archived history exposes WRF's mass-grid XLAT/XLONG; LAT_LL_T and
         # LON_LL_T expected by the current LAPS reader are absent here.
-        lat_grid = _FINITE_MODULE._finite(nc, "XLAT", 0)
-        lon_grid = _FINITE_MODULE._finite(nc, "XLONG", 0)
+        lat_grid = _FINITE_MODULE._finite(nc, "XLAT", record)
+        lon_grid = _FINITE_MODULE._finite(nc, "XLONG", record)
         attrs["lat1"] = float(lat_grid[0, 0])
         attrs["lon1"] = float(lon_grid[0, 0])
         t2var = nc.variables["T2"]
         if getattr(t2var, "units", "") not in ("K", "kelvin", "Kelvin"):
             raise ValueError(f"unexpected T2 units in {path}: {getattr(t2var, 'units', None)}")
-        t2 = _FINITE_MODULE._finite(nc, "T2", 0)
+        t2 = _FINITE_MODULE._finite(nc, "T2", record)
     if t2.ndim != 2 or lat_grid.shape != t2.shape or lon_grid.shape != t2.shape:
         raise ValueError(f"T2/XLAT/XLONG shape mismatch in {path}")
     if np.all(t2 == 0.0):
@@ -231,11 +237,12 @@ def grid_mapping_residuals(lat_grid: np.ndarray, lon_grid: np.ndarray,
     }
 
 
-def compare(observations: list[dict], model: np.ndarray, projection: dict) -> tuple[list[dict], dict]:
+def compare(observations: list[dict], model: np.ndarray, projection: dict,
+            report_time_hhmm: int = 1300) -> tuple[list[dict], dict]:
     rows, exclusions = [], {}
     for obs in observations:
-        if obs["time_hhmm"] != 1300:
-            reason = "non_1300_report_time"
+        if obs["time_hhmm"] != report_time_hhmm:
+            reason = f"non_{report_time_hhmm:04d}_report_time"
         elif obs["temperature_f"] == LSO_BADFLAG_F:
             reason = "missing_lso_temperature_sentinel"
         else:

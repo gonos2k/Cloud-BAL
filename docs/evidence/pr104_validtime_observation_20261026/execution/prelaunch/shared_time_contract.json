@@ -1,0 +1,66 @@
+{
+  "schema": "pr104_shared_time_contract_v1",
+  "status": "READY_FOR_ROOT_REVIEW_NO_LAUNCH",
+  "launch_authorized": false,
+  "valid_start": "2026-08-16_13:00:00",
+  "valid_end": "2026-08-16_14:00:00",
+  "duration_seconds": 3600,
+  "timestep_seconds": 20,
+  "expected_timesteps": 180,
+  "checkpoint_seconds": [
+    640,
+    1800,
+    3600
+  ],
+  "arms": {
+    "HYDRO": {
+      "reference_receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO/receipt.json",
+        "sha256": "1440db5a0178af11ac4d92854b3284cc35cb5a74e5e6f6a14cc59dcac3a00a64"
+      },
+      "reference_preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO/preflight.json",
+        "sha256": "875de6cf8765339c02b5f625151411465e0b199813aa8e6e5386e30beefad7b0"
+      },
+      "candidate_wrfinput_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+      "candidate_input_receipt_sha256": "967a481070c37286f6aef8d616679583f1c86afb7dd60ac64f1d411977eba39b",
+      "source_receipt_sha256": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e"
+    },
+    "AMPLITUDE": {
+      "reference_receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/receipt.json",
+        "sha256": "76792551d703e5e05af778b39482269dcb09ed16b83a5780514e920fcd1e5296"
+      },
+      "reference_preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/preflight.json",
+        "sha256": "b3d137c91ab90ee89cc25b3b8bf709d622f7b819f71a048f51f1527f06005b0b"
+      },
+      "candidate_wrfinput_sha256": "9038d0a26896a630b7048091a97a2c0055b26934513392195eb8e609626e74e2",
+      "candidate_input_receipt_sha256": "93821aa86b188a91a7f43de9e6c5d49815bde71fe92faa7a59cc3a340c78057f",
+      "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675"
+    },
+    "STRUCTURED": {
+      "reference_receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN/receipt.json",
+        "sha256": "313295e9cbf9e30a12a437c501bf3db2cf25c0e6762ec5d51c31d54ba311d4d6"
+      },
+      "reference_preflight": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN/preflight.json",
+        "sha256": "11b3614e6aceceac3e40e5d4481f6954948210e79d3c6aea799512fa22afad4c"
+      },
+      "candidate_wrfinput_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+      "candidate_input_receipt_sha256": "451e4e9110d3b921507e311be56328ad05e13ee20e1fedd2d9c60ce8ef94eeb8",
+      "source_receipt_sha256": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675"
+    }
+  },
+  "observation": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/lso/262281400.lso",
+    "sha256": "5897d4ec8d4979a71369f68de95c68f7229ae76fa6104619d893b204b9ad6ec9",
+    "valid_time": "2026-08-16T14:00:00Z",
+    "expected_header_records": 803,
+    "expected_temperature_matches_before_domain_filter": 765
+  },
+  "frozen_treatment": "HYDRO / AMPLITUDE / STRUCTURED inputs from closed same-C2 640s runs; no rebuild, candidate generation, tuning, physics, precision, or tolerance changes",
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED"
+}

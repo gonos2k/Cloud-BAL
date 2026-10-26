@@ -29,7 +29,7 @@ STATE_MAGIC, TENDENCY_MAGIC = b"PR85QND2", b"PR85PLB1"
 STATE_FIELDS = ("DEN", "Q", "QC", "QI", "QR", "QS", "QG", "NN", "NC", "NI", "NR", "BG")
 TENDENCY_FIELDS = ("QV_TEND", "QC_TEND", "QI_TEND", "QNC_TEND", "QNI_TEND")
 SNAPSHOTS = {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s", 25: "500s",
-             30: "10min", 60: "20min", 90: "30min", 180: "60min"}
+             30: "10min", 32: "640s", 60: "20min", 90: "30min", 180: "60min"}
 SNAPSHOT_SECONDS = tuple(timestep * 20 for timestep in SNAPSHOTS)
 LAUNCH_ENVIRONMENT = {"OMP_NUM_THREADS": "1", "OMP_DYNAMIC": "FALSE"}
 LAUNCH_ENVIRONMENT_SHA256 = hashlib.sha256(
@@ -43,6 +43,22 @@ PR102_BOUNDARY_C2_SHA256 = "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed73123
 PR102_STRUCTURED_INPUT_SHA256 = "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f"
 PR102_STRUCTURED_RUN_RECEIPT_SHA256 = "313295e9cbf9e30a12a437c501bf3db2cf25c0e6762ec5d51c31d54ba311d4d6"
 PR103_AMPLITUDE_POLICY_SHA256 = "32b916bb6789eeb83ba83798e639f48da73c6001444660d8113ed3c09d947696"
+PR104_SHARED_ARMS = {"HYDRO": PR102_REFERENCE_HYDRO_SHA256,
+                     "AMPLITUDE": "9038d0a26896a630b7048091a97a2c0055b26934513392195eb8e609626e74e2",
+                     "STRUCTURED": PR102_STRUCTURED_INPUT_SHA256}
+PR104_SHARED_INPUT_RECEIPTS = {
+    "HYDRO": "967a481070c37286f6aef8d616679583f1c86afb7dd60ac64f1d411977eba39b",
+    "AMPLITUDE": "93821aa86b188a91a7f43de9e6c5d49815bde71fe92faa7a59cc3a340c78057f",
+    "STRUCTURED": "451e4e9110d3b921507e311be56328ad05e13ee20e1fedd2d9c60ce8ef94eeb8",
+}
+PR104_SHARED_SOURCE_RECEIPTS = {
+    "HYDRO": "65fe21132d20292d9a6e20209e42fa63d96e7680b9ed1e29d0b1b6ee1a187a3e",
+    "AMPLITUDE": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+    "STRUCTURED": "8dc7aa4c8b1cdffc72ab29da5a8db255ee96a271bb452fb5bd73a1e62f32d675",
+}
+PR104_SHARED_BOUNDARY_SHA256 = PR102_BOUNDARY_C2_SHA256
+PR104_SHARED_EXECUTABLE_SHA256 = PR102_BASE_C2_EXECUTABLE_SHA256
+PR104_SHARED_NAMELIST_SHA256 = "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8"
 
 
 def snapshot_schedule(duration: int) -> dict[int, str]:
@@ -54,6 +70,87 @@ def snapshot_schedule(duration: int) -> dict[int, str]:
     seconds.add(duration)
     return {value // 20: seconds_to_label.get(value, f"{value}s")
             for value in sorted(seconds)}
+
+
+def _shared_time_contract(path: Path, arm: str, duration: int, input_sha256: str,
+                          boundary_sha256: str, executable_sha256: str,
+                          source_receipt_sha256: str,
+                          candidate_input: dict | None) -> dict:
+    """Bind a one-hour H/A/N run to its closed 640-second source control."""
+    if arm not in PR104_SHARED_ARMS or duration != 3600:
+        raise ValueError("shared-time contract is limited to one-hour HYDRO, AMPLITUDE, and STRUCTURED runs")
+    path = path.resolve()
+    record = json.loads(path.read_text())
+    if (record.get("schema") != "pr104_shared_time_contract_v1" or
+            record.get("status") != "READY_FOR_ROOT_REVIEW_NO_LAUNCH" or
+            record.get("valid_start") != "2026-08-16_13:00:00" or
+            record.get("valid_end") != "2026-08-16_14:00:00" or
+            record.get("duration_seconds") != 3600 or
+            record.get("timestep_seconds") != 20 or
+            record.get("expected_timesteps") != 180 or
+            record.get("checkpoint_seconds") != [640, 1800, 3600] or
+            record.get("launch_authorized") is not False):
+        raise ValueError("PR104 shared-time contract is not the frozen 13Z-to-14Z one-hour plan")
+    arms = record.get("arms")
+    if not isinstance(arms, dict) or set(arms) != set(PR104_SHARED_ARMS):
+        raise ValueError("PR104 contract must bind the frozen HYDRO, AMPLITUDE, and STRUCTURED arms")
+    boundary = PR104_SHARED_BOUNDARY_SHA256
+    executable = PR104_SHARED_EXECUTABLE_SHA256
+    namelist = PR104_SHARED_NAMELIST_SHA256
+    checked_arms = {}
+    for name, expected_input in PR104_SHARED_ARMS.items():
+        row = arms[name]
+        receipt_pin, preflight_pin = row.get("reference_receipt", {}), row.get("reference_preflight", {})
+        receipt_path, preflight_path = Path(receipt_pin.get("path", "")), Path(preflight_pin.get("path", ""))
+        if (not receipt_path.is_file() or sha256(receipt_path) != receipt_pin.get("sha256") or
+                not preflight_path.is_file() or sha256(preflight_path) != preflight_pin.get("sha256")):
+            raise ValueError(f"PR104 {name} closed 640-second receipt/preflight pin changed")
+        closed = json.loads(receipt_path.read_text())
+        preflight = json.loads(preflight_path.read_text())
+        if (closed.get("arm") != name or closed.get("status") != "COMPLETE" or
+                closed.get("returncode") != 0 or closed.get("timestep_count") != 32 or
+                closed.get("final_completed_step") != 32 or closed.get("maximum_seen_timestep") != 32 or
+                closed.get("earliest_fatal") is not None or closed.get("fatal_lines") or
+                closed.get("processing_errors") or closed.get("duplicate_post_kdm6_timesteps") or
+                closed.get("changed_staged_inputs") or closed.get("changed_original_inputs") or
+                closed.get("executed_executable_sha256") != executable or
+                closed.get("candidate_wrfinput_sha256") != expected_input or
+                closed.get("candidate_wrfbdy_sha256") != boundary or
+                closed.get("candidate_namelist_sha256") != namelist or
+                closed.get("source_receipt_sha256") != PR104_SHARED_SOURCE_RECEIPTS[name] or
+                (closed.get("candidate_input_binding") or {}).get("receipt_sha256") !=
+                PR104_SHARED_INPUT_RECEIPTS[name] or
+                preflight.get("arm") != name or preflight.get("duration_seconds") != 640 or
+                preflight.get("expected_timesteps") != 32 or
+                preflight.get("candidate_wrfinput_sha256") != expected_input or
+                preflight.get("candidate_wrfbdy_sha256") != boundary or
+                preflight.get("candidate_namelist_sha256") != namelist or
+                preflight.get("source_receipt_sha256") != PR104_SHARED_SOURCE_RECEIPTS[name]):
+            raise ValueError(f"PR104 {name} reference is not the frozen closed 640-second C2 control")
+        if row.get("candidate_wrfinput_sha256") != expected_input:
+            raise ValueError(f"PR104 {name} contract input identity differs from the frozen proposal")
+        if (row.get("candidate_input_receipt_sha256") != PR104_SHARED_INPUT_RECEIPTS[name] or
+                row.get("source_receipt_sha256") != PR104_SHARED_SOURCE_RECEIPTS[name]):
+            raise ValueError(f"PR104 {name} contract receipt pins differ from the frozen proposal")
+        checked_arms[name] = {"reference_receipt": receipt_pin, "reference_preflight": preflight_pin,
+                              "candidate_wrfinput_sha256": expected_input,
+                              "candidate_wrfbdy_sha256": boundary,
+                              "candidate_executable_sha256": executable,
+                              "candidate_namelist_sha256": namelist}
+    current = checked_arms[arm]
+    active_row = arms[arm]
+    expected_proposal_sha = (candidate_input or {}).get("receipt_sha256")
+    if (input_sha256 != current["candidate_wrfinput_sha256"] or
+            boundary_sha256 != current["candidate_wrfbdy_sha256"] or
+            executable_sha256 != current["candidate_executable_sha256"] or
+            active_row.get("source_receipt_sha256") != source_receipt_sha256 or
+            (candidate_input is not None and
+             active_row.get("candidate_input_receipt_sha256") != expected_proposal_sha)):
+        raise ValueError(f"PR104 {arm} shared-time contract does not bind this prepared run")
+    return {"path": str(path), "sha256": sha256(path), "schema": record["schema"],
+            "arm": arm, "duration_seconds": 3600, "valid_start": record["valid_start"],
+            "valid_end": record["valid_end"], "checkpoint_seconds": record["checkpoint_seconds"],
+            "arm_bindings": checked_arms}
 
 
 def _fatal_lines(stage: Path) -> tuple[list[str], list[str]]:
@@ -952,7 +1049,8 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
             pr102_consumer_receipt_path: Path | None = None,
             amplitude_control_input_receipt_path: Path | None = None,
             pr103_preflight_path: Path | None = None,
-            pr103_consumer_assessment_path: Path | None = None) -> dict:
+            pr103_consumer_assessment_path: Path | None = None,
+            shared_time_contract_path: Path | None = None) -> dict:
     snapshot_schedule(duration)
     supplied_inputs = [path for path in (hydro_input_receipt_path, native_input_receipt_path,
                                          wind_structure_input_receipt_path,
@@ -969,8 +1067,9 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
     structured_arms = {"STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"}
     if wind_structure_input_receipt_path is not None and arm not in structured_arms:
         raise ValueError("wind-structure input receipt is only valid for STRUCTURED arms")
-    if arm == "STRUCTURED" and (duration != 640 or wind_structure_input_receipt_path is None):
-        raise ValueError("STRUCTURED requires a source-bound wind proposal for the matched 640-second run")
+    if arm == "STRUCTURED" and (duration not in ((640, 3600) if shared_time_contract_path else (640,)) or
+                                  wind_structure_input_receipt_path is None):
+        raise ValueError("STRUCTURED requires a source-bound wind proposal for the matched 640-second run or contracted one-hour run")
     if arm == "STRUCTURED" and (candidate_build_path is None or pr102_preflight_path is None):
         raise ValueError("STRUCTURED requires the explicit C2 build and PR102 prerequisite preflight")
     if arm == "STRUCTURED_CAPTURE" and (duration != 20 or wind_structure_input_receipt_path is None):
@@ -986,10 +1085,15 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
     amplitude_arms = {"AMPLITUDE", "AMPLITUDE_CAPTURE", "AMPLITUDE_BASELINE20"}
     if amplitude_control_input_receipt_path is not None and arm not in amplitude_arms:
         raise ValueError("amplitude-control input receipt is only valid for AMPLITUDE arms")
-    if arm == "AMPLITUDE" and (duration != 640 or amplitude_control_input_receipt_path is None):
-        raise ValueError("AMPLITUDE requires a source-bound PR103 proposal for the matched 640-second run")
+    if arm == "AMPLITUDE" and (duration not in ((640, 3600) if shared_time_contract_path else (640,)) or
+                                 amplitude_control_input_receipt_path is None):
+        raise ValueError("AMPLITUDE requires a source-bound PR103 proposal for the matched 640-second run or contracted one-hour run")
     if arm == "AMPLITUDE" and (candidate_build_path is None or pr103_preflight_path is None):
         raise ValueError("AMPLITUDE requires the explicit base C2 build and PR103 prerequisite preflight")
+    if shared_time_contract_path is not None and arm not in {"HYDRO", "AMPLITUDE", "STRUCTURED"}:
+        raise ValueError("shared-time contract is only valid for HYDRO, AMPLITUDE, and STRUCTURED")
+    if duration == 3600 and arm in PR104_SHARED_ARMS and shared_time_contract_path is None:
+        raise ValueError(f"{arm} 3600-second run requires the PR104 shared-time contract")
     if arm == "AMPLITUDE_CAPTURE" and (duration != 20 or amplitude_control_input_receipt_path is None):
         raise ValueError("AMPLITUDE_CAPTURE requires a source-bound PR103 proposal for one 20-second step")
     if arm == "AMPLITUDE_CAPTURE" and (candidate_build_path is None or pr102_consumer_receipt_path is None):
@@ -1078,6 +1182,15 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
     if arm == "AMPLITUDE_CAPTURE":
         pr103_consumer = _validate_pr103_consumer_assessment(
             pr103_consumer_assessment_path, candidate_input)
+    shared_time_contract = None
+    if shared_time_contract_path is not None:
+        expected_executable_sha256 = (candidate_build["executable_sha256"] if candidate_build
+                                      else sha256(exe))
+        shared_time_contract = _shared_time_contract(
+            shared_time_contract_path, arm, duration, wrfinput_sha256,
+            receipt["candidate_wrfbdy_sha256"], expected_executable_sha256,
+            sha256(receipt_path), candidate_input)
+        shared_time_contract["path"] = str(Path(shared_time_contract_path).resolve())
     namelist = runtime / "namelist.input"
     original_namelist = namelist.read_text()
     edited = edit_namelist(original_namelist, duration)
@@ -1107,6 +1220,7 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         "pr102_native_consumer": pr102_consumer,
         "pr103_execution_preflight": pr103_preflight,
         "pr103_archived_consumer_assessment": pr103_consumer,
+        "shared_time_contract": shared_time_contract,
         "baseline_frozen_executable_sha256": sha256(exe), "candidate_build": candidate_build,
         "candidate_wrfbdy_sha256": receipt["candidate_wrfbdy_sha256"], "input_file_count": len(inputs),
         "input_hashes": inputs, "source_namelist_sha256": sha256(namelist),
@@ -1337,6 +1451,8 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
     issues = []
     if preflight.get("arm", arm) != arm or original.get("arm", arm) != arm:
         issues.append("requested arm differs from run provenance")
+    if duration == 3600 and arm in PR104_SHARED_ARMS and not preflight.get("shared_time_contract"):
+        issues.append(f"{arm} 3600-second run is missing the PR104 shared-time contract")
     candidate_input = preflight.get("candidate_input_binding")
     binding_kind = candidate_input.get("binding_kind", "hydro") if candidate_input else None
     if arm == "HYDRO":
@@ -1362,7 +1478,7 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
         except (KeyError, ValueError) as exc:
             issues.append(str(exc))
         long_arm = arm in {"PROJECTED", "STRUCTURED", "AMPLITUDE"}
-        expected_duration = 640 if long_arm else 20
+        expected_duration = (3600 if preflight.get("shared_time_contract") else 640) if long_arm else 20
         if (duration != expected_duration or preflight.get("duration_seconds") != expected_duration or
                 arm not in {"COUPLED", "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20",
                             "AMPLITUDE", "AMPLITUDE_CAPTURE", "AMPLITUDE_BASELINE20"} or candidate_input.get("role") != "COUPLED" or
@@ -1451,6 +1567,22 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
         issues.append("staged executable is missing")
     expected_executable_sha256 = (candidate_build["executable_sha256"] if candidate_build
                                   else preflight.get("executable_sha256"))
+    shared_time_contract = preflight.get("shared_time_contract")
+    if shared_time_contract:
+        try:
+            current_contract = _shared_time_contract(
+                Path(shared_time_contract["path"]), arm, duration,
+                preflight.get("candidate_wrfinput_sha256"), preflight.get("candidate_wrfbdy_sha256"),
+                expected_executable_sha256, preflight.get("source_receipt_sha256"), candidate_input)
+            current_contract["path"] = shared_time_contract["path"]
+            if current_contract != shared_time_contract:
+                issues.append("PR104 shared-time contract changed or mismatches preflight")
+            if original.get("shared_time_contract") != shared_time_contract:
+                issues.append("launch shared-time contract identity differs from preflight")
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+            issues.append(f"PR104 shared-time contract is missing or invalid: {exc}")
+    elif duration == 3600 and arm in PR104_SHARED_ARMS:
+        issues.append(f"{arm} 3600-second run is missing the PR104 shared-time contract")
     if executed_executable_sha256 != expected_executable_sha256:
         issues.append("staged executable hash differs from preflight")
     try:
@@ -1597,7 +1729,8 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
         pr102_consumer_receipt_path: Path | None = None,
         amplitude_control_input_receipt_path: Path | None = None,
         pr103_preflight_path: Path | None = None,
-        pr103_consumer_assessment_path: Path | None = None) -> dict:
+        pr103_consumer_assessment_path: Path | None = None,
+        shared_time_contract_path: Path | None = None) -> dict:
     runner_path = Path(__file__).resolve()
     runner_sha256_at_entry = sha256(runner_path)
     schedule = snapshot_schedule(duration)
@@ -1607,7 +1740,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
                        native_input_receipt_path, wind_structure_input_receipt_path,
                        pr102_preflight_path, pr102_consumer_receipt_path,
                        amplitude_control_input_receipt_path, pr103_preflight_path,
-                       pr103_consumer_assessment_path)
+                       pr103_consumer_assessment_path, shared_time_contract_path)
     (out / "preflight.json").write_text(json.dumps({k: v for k, v in prepared.items()
                                                      if k != "namelist_text"}, indent=2) + "\n")
     if prepared["disk_guard"]["status"] != "PASS":
@@ -1619,6 +1752,16 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     candidate_build = prepared.get("candidate_build")
     expected_executable_sha256 = (candidate_build["executable_sha256"] if candidate_build
                                   else prepared["executable_sha256"])
+    shared_time_contract = prepared.get("shared_time_contract")
+    if shared_time_contract:
+        current_contract = _shared_time_contract(
+            Path(shared_time_contract["path"]), arm, duration,
+            prepared["candidate_wrfinput_sha256"], prepared["candidate_wrfbdy_sha256"],
+            expected_executable_sha256, prepared["source_receipt_sha256"],
+            prepared.get("candidate_input_binding"))
+        current_contract["path"] = shared_time_contract["path"]
+        if current_contract != shared_time_contract:
+            raise RuntimeError("PR104 shared-time contract changed after preparation")
     executed_executable_sha256 = sha256(stage / "wrf.exe")
     if executed_executable_sha256 != expected_executable_sha256:
         raise RuntimeError("staged executable hash differs from preflight")
@@ -1682,6 +1825,19 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     except Exception as exc:
         compressed = []
         processing_errors.append(f"post-run compression: {exc}")
+    shared_time_contract = prepared.get("shared_time_contract")
+    if shared_time_contract:
+        try:
+            current_contract = _shared_time_contract(
+                Path(shared_time_contract["path"]), arm, duration,
+                prepared["candidate_wrfinput_sha256"], prepared["candidate_wrfbdy_sha256"],
+                expected_executable_sha256, prepared["source_receipt_sha256"],
+                prepared.get("candidate_input_binding"))
+            current_contract["path"] = shared_time_contract["path"]
+            if current_contract != shared_time_contract:
+                processing_errors.append("PR104 shared-time contract changed during model execution")
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+            processing_errors.append(f"PR104 shared-time contract validation after execution: {exc}")
     generated_files = [{"path": path.name, "bytes": path.stat().st_size, "sha256": sha256(path)}
                        for path in sorted(stage.iterdir()) if path.is_file()]
     inputs = prepared["input_hashes"]
@@ -1753,6 +1909,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
                "candidate_input_binding": candidate_input,
                "candidate_input_unchanged": candidate_input_unchanged,
                "pr103_execution_preflight": prepared.get("pr103_execution_preflight"),
+               "shared_time_contract": shared_time_contract,
                "launch_runner_source_path": str(runner_path),
                "launch_runner_source_sha256": runner_sha256_at_entry,
                "launch_runner_source_sha256_status": "captured at run entry before model execution",
@@ -1794,6 +1951,8 @@ def main() -> int:
                         help="closed PR103 consumer/source-capture prerequisite preflight")
     parser.add_argument("--pr103-consumer-assessment", type=Path,
                         help="passing candidate-bound PR103 archived-consumer assessment for AMPLITUDE_CAPTURE")
+    parser.add_argument("--shared-time-contract", type=Path,
+                        help="PR104 source-bound HYDRO/AMPLITUDE/STRUCTURED 13Z-to-14Z contract")
     parser.add_argument("--safety-fraction", type=float, default=0.85)
     parser.add_argument("--disk-reference-receipt", type=Path,
                         help="calibrate the disk guard from a successful same-input run receipt")
@@ -1812,6 +1971,8 @@ def main() -> int:
         parser.error("--finalize uses the launch-bound amplitude-control input receipt in preflight.json")
     if args.finalize and args.pr103_consumer_assessment is not None:
         parser.error("--finalize uses the launch-bound PR103 consumer assessment in preflight.json")
+    if args.finalize and args.shared_time_contract is not None:
+        parser.error("--finalize uses the launch-bound PR104 shared-time contract in preflight.json")
     out = args.output or DEFAULT_OUT / args.arm
     result = (finalize_existing_run(args.arm, out, args.duration_seconds, args.candidate_build) if args.finalize else
               run(args.arm, out, args.duration_seconds, args.execute, args.safety_fraction,
@@ -1819,7 +1980,7 @@ def main() -> int:
                   args.native_input_receipt, args.wind_structure_input_receipt,
                   args.pr102_preflight, args.pr102_consumer_receipt,
                   args.amplitude_control_input_receipt, args.pr103_preflight,
-                  args.pr103_consumer_assessment))
+                  args.pr103_consumer_assessment, args.shared_time_contract))
     print(json.dumps({k: v for k, v in result.items() if k != "input_hashes"}, indent=2))
     return 0
 
