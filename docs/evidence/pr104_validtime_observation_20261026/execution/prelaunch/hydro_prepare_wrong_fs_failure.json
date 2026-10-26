@@ -1,0 +1,17 @@
+{
+  "schema": "pr104_no_launch_prepare_failure_v1",
+  "status": "DISK_GUARD_FAILED_WRONG_TARGET_FILESYSTEM",
+  "arm": "HYDRO",
+  "planned_output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr104_validtime_forecast_20261026/HYDRO",
+  "disk_reference_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/HYDRO/receipt.json",
+  "reference_per_step_projection_bytes": 4744021903,
+  "projected_180_step_bytes": 853923942540,
+  "required_free_bytes_at_safety_fraction_0_85": 1004616402989,
+  "measured_filesystem_for_nonexistent_parent": "/var/tmp",
+  "measured_free_bytes": 199263432704,
+  "target_filesystem": "/NHNHOME/WORKSPACE/26weather002_A",
+  "target_free_bytes": 61970194219008,
+  "launch_attempted": false,
+  "final_arm_directory_created": false,
+  "reason": "The first no-launch prepare measured /var/tmp because the planned parent did not exist. Its 3600-second active-run projection is the same as the successful rerun on Lustre; /var/tmp free space was below the required amount."
+}

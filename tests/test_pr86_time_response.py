@@ -105,6 +105,89 @@ def make_native_input_binding(root: Path) -> dict:
 
 
 class TimeResponseTests(unittest.TestCase):
+    def test_pr104_shared_time_contract_binds_the_three_closed_c2_controls(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            arms = {}
+            for arm, input_sha in response.PR104_SHARED_ARMS.items():
+                source_receipt_sha = response.PR104_SHARED_SOURCE_RECEIPTS[arm]
+                receipt = root / f"{arm}.receipt.json"
+                receipt.write_text(json.dumps({
+                    "arm": arm, "status": "COMPLETE", "returncode": 0,
+                    "timestep_count": 32, "final_completed_step": 32,
+                    "maximum_seen_timestep": 32,
+                    "executed_executable_sha256": response.PR104_SHARED_EXECUTABLE_SHA256,
+                    "candidate_wrfinput_sha256": input_sha,
+                    "candidate_wrfbdy_sha256": response.PR104_SHARED_BOUNDARY_SHA256,
+                    "candidate_namelist_sha256": response.PR104_SHARED_NAMELIST_SHA256,
+                    "source_receipt_sha256": source_receipt_sha,
+                    "candidate_input_binding": {"receipt_sha256": response.PR104_SHARED_INPUT_RECEIPTS[arm]},
+                }))
+                preflight = root / f"{arm}.preflight.json"
+                preflight.write_text(json.dumps({
+                    "arm": arm, "duration_seconds": 640, "expected_timesteps": 32,
+                    "candidate_wrfinput_sha256": input_sha,
+                    "candidate_wrfbdy_sha256": response.PR104_SHARED_BOUNDARY_SHA256,
+                    "candidate_namelist_sha256": response.PR104_SHARED_NAMELIST_SHA256,
+                    "source_receipt_sha256": source_receipt_sha,
+                }))
+                arms[arm] = {
+                    "reference_receipt": {"path": str(receipt), "sha256": response.sha256(receipt)},
+                    "reference_preflight": {"path": str(preflight), "sha256": response.sha256(preflight)},
+                    "candidate_wrfinput_sha256": input_sha,
+                    "candidate_input_receipt_sha256": response.PR104_SHARED_INPUT_RECEIPTS[arm],
+                    "source_receipt_sha256": source_receipt_sha,
+                }
+            contract_path = root / "contract.json"
+            contract_path.write_text(json.dumps({
+                "schema": "pr104_shared_time_contract_v1",
+                "status": "READY_FOR_ROOT_REVIEW_NO_LAUNCH", "launch_authorized": False,
+                "valid_start": "2026-08-16_13:00:00", "valid_end": "2026-08-16_14:00:00",
+                "duration_seconds": 3600, "timestep_seconds": 20, "expected_timesteps": 180,
+                "checkpoint_seconds": [640, 1800, 3600], "arms": arms,
+            }))
+            input_binding = {"receipt_sha256": response.PR104_SHARED_INPUT_RECEIPTS["AMPLITUDE"]}
+            result = response._shared_time_contract(
+                contract_path, "AMPLITUDE", 3600,
+                response.PR104_SHARED_ARMS["AMPLITUDE"],
+                response.PR104_SHARED_BOUNDARY_SHA256,
+                response.PR104_SHARED_EXECUTABLE_SHA256,
+                response.PR104_SHARED_SOURCE_RECEIPTS["AMPLITUDE"], input_binding)
+            self.assertEqual(result["duration_seconds"], 3600)
+            self.assertEqual(result["checkpoint_seconds"], [640, 1800, 3600])
+            with self.assertRaisesRegex(ValueError, "does not bind this prepared run"):
+                response._shared_time_contract(
+                    contract_path, "AMPLITUDE", 3600, "wrong-input",
+                    response.PR104_SHARED_BOUNDARY_SHA256,
+                    response.PR104_SHARED_EXECUTABLE_SHA256,
+                    response.PR104_SHARED_SOURCE_RECEIPTS["AMPLITUDE"], input_binding)
+            with self.assertRaisesRegex(ValueError, "one-hour HYDRO"):
+                response._shared_time_contract(
+                    contract_path, "OFF", 3600, "unused", "unused", "unused", "unused", None)
+            tampered = json.loads(contract_path.read_text())
+            tampered["review_note"] = "changed after preflight"
+            contract_path.write_text(json.dumps(tampered))
+            updated = response._shared_time_contract(
+                contract_path, "AMPLITUDE", 3600,
+                response.PR104_SHARED_ARMS["AMPLITUDE"],
+                response.PR104_SHARED_BOUNDARY_SHA256,
+                response.PR104_SHARED_EXECUTABLE_SHA256,
+                response.PR104_SHARED_SOURCE_RECEIPTS["AMPLITUDE"], input_binding)
+            self.assertNotEqual(updated["sha256"], result["sha256"])
+
+    def test_pr104_one_hour_hydro_finalize_rejects_missing_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            out = make_finalizer_fixture(root, 3600)
+            preflight_path = out / "preflight.json"
+            preflight = json.loads(preflight_path.read_text())
+            preflight.update(arm="HYDRO", duration_seconds=3600, expected_timesteps=180)
+            preflight_path.write_text(json.dumps(preflight))
+            result = response.finalize_existing_run("HYDRO", out, 3600)
+            self.assertEqual(result["status"], "INCOMPLETE")
+            self.assertIn("HYDRO 3600-second run is missing the PR104 shared-time contract",
+                          result["processing_errors"])
+
     def test_amplitude_binding_checks_frozen_references_and_storage_bound(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -768,12 +851,17 @@ class TimeResponseTests(unittest.TestCase):
             480: {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s"},
             500: {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s", 25: "500s"},
             600: {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s", 25: "500s", 30: "10min"},
+            640: {1: "20s", 3: "1min", 15: "5min", 16: "320s", 24: "480s", 25: "500s", 30: "10min", 32: "640s"},
         }
         for duration, schedule in expected.items():
             with self.subTest(duration=duration):
                 self.assertEqual(response.snapshot_schedule(duration), schedule)
         with self.assertRaisesRegex(ValueError, "positive multiple"):
             response.snapshot_schedule(30)
+        one_hour = response.snapshot_schedule(3600)
+        self.assertEqual(one_hour[32], "640s")
+        self.assertEqual(one_hour[90], "30min")
+        self.assertEqual(one_hour[180], "60min")
 
     def test_finalizer_completes_each_supported_duration_schedule(self) -> None:
         for duration in (20, 40, 60, 300, 320, 480, 500, 600):

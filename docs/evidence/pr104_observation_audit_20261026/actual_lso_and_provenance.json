@@ -1,0 +1,256 @@
+{
+  "schema": "pr104_actual_surface_observation_audit_v1",
+  "audit_date_utc": "2026-10-26",
+  "cloud_bal_base_commit": "6d33aa06856e4e892dd792e8def350f15c54c058",
+  "actual_observation": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/lso/262281400.lso",
+    "sha256": "5897d4ec8d4979a71369f68de95c68f7229ae76fa6104619d893b204b9ad6ec9",
+    "bytes": 370433,
+    "header_valid_time": "2026-08-16 14:00:00.00",
+    "declared_records": 803,
+    "declared_records_in_header_tail": 803,
+    "parsed_records": 803,
+    "record_time_hhmm_counts": {
+      "1400": 803
+    },
+    "temperature_units": "degF",
+    "temperature_sentinel_degF": -99.9,
+    "valid_temperature_records_without_additional_qc": 765,
+    "sentinel_temperature_records": 38,
+    "non_sentinel_temperature_range_degF": [
+      62.96,
+      116.06
+    ],
+    "non_sentinel_temperature_range_degC": [
+      17.2,
+      46.7
+    ],
+    "inventory_binding": {
+      "path": "tests/original_upstream_replay_20260816.json#surface_observations.20260816T140000Z",
+      "inventory_sha256": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5",
+      "inventory_lso_sha256_matches_actual_file": true
+    }
+  },
+  "format_and_reader_evidence": {
+    "legacy_reader": "src/upstream/read_surface_obs.f:read_surface_data reads the report HHMM field and temperature into the surface-observation arrays; the declared formats are in lso_formats.inc.",
+    "surface_stage": "src/sfc/laps_sfc.f defaults to regular LSO and calls read_surface_data(i4time,...); it then calls qcdata unless skip_internal_qc is set.",
+    "source_badflag": "-99.9 degF, identified in the published PR103 source pin as surface_obs.inc:badflag.",
+    "published_source_hashes": {
+      "read_surface_obs.f": "ba6ae0ed4547ed90a2f7200bcfb36c1cd4f295cc70539bb03740fe89c80629ad",
+      "lso_formats.inc": "956becb489dcb7aee43857aef788c15e0fc0eec0303a179d801051ed71e3f96a",
+      "surface_obs.inc": "3edca9ceb40699ae14c71bce836232747ef141290e44decd025dead160028ebe"
+    },
+    "source_pin_receipt": "docs/evidence/pr103_observation_20261026/comparison_run_receipt_v2.json"
+  },
+  "published_pr103_comparison_scope": {
+    "comparison_run_receipt_sha256": "4cdac99b83fb78649872d6362b89697b3ad31aaa7a3256d0010c32e9195771c8",
+    "comparison_output_sha256": "1813cf577e1030ac8c20b1651c1a857c6dd938092bb662d41278d94ddda7bf8c",
+    "comparison_valid_time": "2026-08-16T13:00:00Z",
+    "comparison_observation_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/lso/262281300.lso",
+    "comparison_observation_sha256": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+    "matched_count": 765,
+    "max_abs_residual_degC": 21.78634572051771,
+    "h_n_o_p_fivearm_t2_bitwise_equal_at_13z": true,
+    "comparison_is_timestamp_matched_to_14z_lso": false,
+    "comparison_operator_status": "source-faithful diagnostic adapter; not a registered assimilation H"
+  },
+  "discriminating_run_timing_and_inputs": {
+    "H_arm": {
+      "label": "HYDRO",
+      "input_wrfinput_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c",
+      "13z_history_sha256": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84",
+      "13z_t2_equal_to_O_bitwise": true
+    },
+    "N_arm": {
+      "label": "STRUCTURED",
+      "input_wrfinput_sha256": "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f",
+      "13z_history_sha256": "fd18da17a47abeb862ac088f4ea185d34583de65d88245737b124065aa52165a",
+      "13z_t2_equal_to_O_bitwise": true
+    },
+    "A640_control": {
+      "candidate_wrfinput_sha256": "9038d0a26896a630b7048091a97a2c0055b26934513392195eb8e609626e74e2",
+      "13z_t0_history_sha256": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4",
+      "t0_t2_equal_to_O_bitwise": true,
+      "run_time_range": [
+        "2026-08-16_13:00:00",
+        "2026-08-16_13:10:40"
+      ],
+      "completed_steps": 32,
+      "observed_comparison_source": "13Z LSO only; the retained A640 T0 sidecar names 262281300.lso"
+    },
+    "fivearm_readback_sha256": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2",
+    "wrfbdy_sha256_common_to_H_O_N": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "wrf_fdda_namelist": "The inspected H, N, O, and A640 run namelists have an empty &fdda group.",
+    "published_A640_sidecar_sha256": "0edcfd203bf2674a3775c3e308f655fe074b7883b11c54236e03a65c6bae1bca"
+  },
+  "fourteen_z_observation_use_assessment": {
+    "initial_state": {
+      "finding": "Direct use of this 14Z LSO in the stored H/N/A640 initial states is not recorded. The H/N input receipts bind wrfinput hashes but do not bind the LSO file or the full upstream analysis derivation.",
+      "status": "indirect upstream use unresolved",
+      "basis": "tests/original_upstream_replay_20260816.json declares SURFACE_OBSERVATION_CLOSURE_UNDECLARED for the upstream surface-analysis stage."
+    },
+    "lateral_boundary": {
+      "finding": "The WRF runs consume a shared wrfbdy_d01 hash; no retained receipt traces that boundary file to this LSO. Indirect contribution through upstream analyzed/metgridded boundary inputs cannot be excluded while surface-observation closure is undeclared.",
+      "status": "NOT_EVALUATED; unresolved upstream provenance",
+      "interpretation": "The shared boundary hash establishes common file identity across these arms, not independence from 14Z analyses."
+    },
+    "observation_nudging": {
+      "finding": "No WRF observation nudging is configured in the inspected run namelists: &fdda is empty.",
+      "status": "no configured WRF FDDA in these runs"
+    },
+    "candidate_selection": {
+      "finding": "The retained H/N/A640 controls and selection receipts do not use a 14Z station residual. The PR103 observation skill field remains NOT_EVALUATED; A640 is selected from a constrained input/amplitude construction and its 13Z T0 readback is descriptive.",
+      "status": "14Z observation not used as a documented selection score"
+    },
+    "direct_model_time_match": {
+      "finding": "The historical H/N/A640 products inspected here are at 13Z, with A640 ending at 13:10:40. No 14Z T2 sample is retained in these comparison artifacts, so the 14Z LSO cannot be valid-time scored against those artifacts.",
+      "status": "no timestamp-matched 14Z model sample in this historical, pre-launch audit scope",
+      "scope_note": "This does not assess any later root-authorized H/A/N 3600-second runs."
+    }
+  },
+  "13z_max_residual_record": {
+    "station_id": "22485",
+    "wmo_id": "22485",
+    "provider": "KMA",
+    "report_time_hhmm": 1300,
+    "latitude_deg": 34.62,
+    "longitude_deg": 128.54,
+    "station_elevation_m": 0.0,
+    "source_observation_temperature_degF": 114.44,
+    "source_expected_accuracy_degF": 1.08,
+    "observation_temperature_degC": 45.800000000000004,
+    "model_history": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF/run/wrfout_d01_2026-08-16_13:00:00",
+    "model_history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+    "model_t2_units": "K",
+    "model_t2_sample_k": 297.1636542794823,
+    "model_t2_sample_degC": 24.013654279482296,
+    "signed_model_minus_observation_residual_degC": -21.78634572051771,
+    "projected_mass_grid_ij_1_based": [
+      163.17430900465885,
+      68.7067234116098
+    ],
+    "four_by_four_neighbor_t2_range_k": [
+      296.73699951171875,
+      297.61492919921875
+    ],
+    "four_by_four_neighbor_hgt_range_m": [
+      0.0,
+      48.577980041503906
+    ],
+    "source_interpolated_hgt_m": 0.6017028544031033,
+    "station_minus_interpolated_model_terrain_m": -0.6017028544031033,
+    "same_station_14z_observation_degF": 116.06,
+    "same_station_14z_observation_degC": 46.7,
+    "same_station_14z_record": {
+      "report_time_hhmm": 1400,
+      "provider": "KMA",
+      "latitude_deg": 34.62,
+      "longitude_deg": 128.54,
+      "station_elevation_m": 0.0,
+      "temperature_degF": 116.06,
+      "temperature_expected_accuracy_degF": 1.08
+    },
+    "qc_treatment": "No observation was dropped or reclassified for this audit. The PR103 residual is raw; expected accuracy is reported as supplied, and the source does not establish a station QC authority."
+  },
+  "missing_and_qc_definitions": {
+    "lso_temperature_badflag_degF": -99.9,
+    "model_history_readback": "PR103 reads T2/XLAT/XLONG with set_auto_mask(False) and rejects NaN or declared fill values using the pinned pr87_native_history._finite helper.",
+    "interpolation_missing_flag": 1e+37,
+    "interpolation_missing_flag_source": "bgdata.inc, pinned by the PR103 source-kernel oracle",
+    "station_qc": "No additional station-quality cutoff was applied in the PR103 raw comparison; this audit also applies none."
+  },
+  "graphify_review": {
+    "graph_snapshot": "existing Cloud-BAL graphify-out/graph.json at base commit 6d33aa06856e4e892dd792e8def350f15c54c058",
+    "query_terms_from_graph_vocabulary": [
+      "surface",
+      "observation",
+      "initial",
+      "boundary",
+      "selection",
+      "temperature",
+      "residual"
+    ],
+    "result": "The graph traversal surfaced generic Cloud-BAL state/boundary nodes but no extracted edge establishing the external KLAPS LSO-to-WRF input lineage. Source code and file/receipt hashes were used for conclusions. No source code changed; no graph refresh was run."
+  },
+  "limitations": [
+    "No 14Z WRF history was present in the audited H/N/A640 receipts; no 14Z residual is reported.",
+    "The upstream surface-analysis input closure is explicitly undeclared, so indirect LSO influence on stored initial or boundary products cannot be ruled out.",
+    "The 13Z maximum residual and 14Z station value are raw observations; no sample was removed and no plausibility threshold or QC verdict was invented.",
+    "This historical audit predates the separate root-authorized H/A/N 3600-second runs and makes no claim about their products.",
+    "Graph freshness or graph traversal does not establish runtime, scientific, or observation-lineage validation."
+  ],
+  "station22485_14z_source_followup": {
+    "observation_file": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/lso/262281400.lso",
+      "sha256": "5897d4ec8d4979a71369f68de95c68f7229ae76fa6104619d893b204b9ad6ec9",
+      "record_line_numbers_1based": [
+        6416,
+        6417,
+        6418
+      ],
+      "raw_record_excerpt": [
+        "22485                    22485  KMA             34.62    128.54       0.0      1400",
+        "           BUOY",
+        "        116.06   1.08    -99.90   1.98    -99.90   8.00"
+      ],
+      "observed_fields": {
+        "station_id": "22485",
+        "provider": "KMA",
+        "literal_report_or_station_type_line": "BUOY",
+        "latitude_deg": 34.62,
+        "longitude_deg": 128.54,
+        "station_elevation_m": 0.0,
+        "report_time_hhmm": 1400,
+        "temperature_degF": 116.06,
+        "temperature_expected_accuracy_degF": 1.08
+      }
+    },
+    "reader_source": {
+      "path": "src/upstream/read_surface_obs.f",
+      "sha256": "f9053d3ee62d7b917119528cd133fe3ad1d073c15dd747c30afc940ae816eab3",
+      "line_references_1based": {
+        "read_surface_data_report_time_and_metadata": [
+          110,
+          119
+        ],
+        "temperature_and_accuracy_degF": [
+          123,
+          125
+        ],
+        "separate_lso_qc_filename": [
+          876,
+          882
+        ],
+        "separate_lso_qc_reader_fields": [
+          894,
+          905
+        ]
+      },
+      "finding": "The regular LSO reader reads report time and temperature/expected accuracy in degrees F and has no station-QC field in this record interface. A separate routine reads a distinct .lso_qc file."
+    },
+    "retained_replay_configuration_evidence": {
+      "surface_configuration_inventory_path": "ANAL/NE57/DABA/namelist/surface_analysis.nl",
+      "surface_configuration_sha256": "725b1c8f6464a9a1e5a2e044ea81c44b5a196f4c576038af2707bb09a80cb107",
+      "inventory_path": "tests/original_upstream_replay_20260816.json#assets[role=surface_configuration]",
+      "inventory_sha256": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5",
+      "published_execution_record": "docs/CP01_EXECUTION_RECORD_20260907.md",
+      "published_execution_record_sha256": "52994f8ab4a810e31138ccd22405682f2483595faac1af4e7af73c4e25d88f4e",
+      "published_execution_record_lines_1based": [
+        1349,
+        1353
+      ],
+      "documented_replay_settings": {
+        "USE_LSO_QC": 0,
+        "L_REQUIRE_LSO": false
+      },
+      "interpretation": "These are retained replay configuration facts. USE_LSO_QC=0 does not establish whether an upstream producer applied QC to the raw LSO before it was written."
+    },
+    "bounded_conclusion": {
+      "temperature_unit_conversion": "The raw LSO field is in degrees F and the reported 45.8 C (13Z) and 46.7 C (14Z) conversions are correct; no source-unit mismatch explains the values.",
+      "measurement_kind": "NOT_ESTABLISHED; the literal BUOY line alone does not establish whether the temperature represents air, water, or another measurement.",
+      "producer_chain": "NOT_TRACED; the retained inventory binds the LSO file bytes but supplies no station-level raw producer report or processing lineage.",
+      "station_qc_verdict": "NOT_ESTABLISHED; no authoritative station QC flag/verdict is present in the inspected raw record or reader interface.",
+      "treatment": "Retain all station rows and raw temperatures in the full valid-time comparison; do not add a plausibility cutoff or exclusion."
+    }
+  }
+}

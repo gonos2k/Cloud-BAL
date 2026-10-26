@@ -1,0 +1,122 @@
+Running 142 items in this shard
+........................................................................ [ 50%]
+.........F............................................................   [100%]
+=================================== FAILURES ===================================
+_ TimeResponseTests.test_pr104_shared_time_contract_binds_the_three_closed_c2_controls _
+
+self = <test_pr86_time_response.TimeResponseTests testMethod=test_pr104_shared_time_contract_binds_the_three_closed_c2_controls>
+
+    def test_pr104_shared_time_contract_binds_the_three_closed_c2_controls(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            arms = {}
+            for arm, input_sha in response.PR104_SHARED_ARMS.items():
+                source_receipt_sha = response.PR104_SHARED_SOURCE_RECEIPTS[arm]
+                receipt = root / f"{arm}.receipt.json"
+                receipt.write_text(json.dumps({
+                    "arm": arm, "status": "COMPLETE", "returncode": 0,
+                    "timestep_count": 32, "final_completed_step": 32,
+                    "maximum_seen_timestep": 32,
+                    "executed_executable_sha256": response.PR104_SHARED_EXECUTABLE_SHA256,
+                    "candidate_wrfinput_sha256": input_sha,
+                    "candidate_wrfbdy_sha256": response.PR104_SHARED_BOUNDARY_SHA256,
+                    "candidate_namelist_sha256": response.PR104_SHARED_NAMELIST_SHA256,
+                    "source_receipt_sha256": source_receipt_sha,
+                    "candidate_input_binding": {"receipt_sha256": response.PR104_SHARED_INPUT_RECEIPTS[arm]},
+                }))
+                preflight = root / f"{arm}.preflight.json"
+                preflight.write_text(json.dumps({
+                    "arm": arm, "duration_seconds": 640, "expected_timesteps": 32,
+                    "candidate_wrfinput_sha256": input_sha,
+                    "candidate_wrfbdy_sha256": response.PR104_SHARED_BOUNDARY_SHA256,
+                    "candidate_namelist_sha256": response.PR104_SHARED_NAMELIST_SHA256,
+                    "source_receipt_sha256": source_receipt_sha,
+                }))
+                arms[arm] = {
+                    "reference_receipt": {"path": str(receipt), "sha256": response.sha256(receipt)},
+                    "reference_preflight": {"path": str(preflight), "sha256": response.sha256(preflight)},
+                    "candidate_wrfinput_sha256": input_sha,
+                    "candidate_input_receipt_sha256": response.PR104_SHARED_INPUT_RECEIPTS[arm],
+                    "source_receipt_sha256": source_receipt_sha,
+                }
+            contract_path = root / "contract.json"
+            contract_path.write_text(json.dumps({
+                "schema": "pr104_shared_time_contract_v1",
+                "status": "READY_FOR_ROOT_REVIEW_NO_LAUNCH", "launch_authorized": False,
+                "valid_start": "2026-08-16_13:00:00", "valid_end": "2026-08-16_14:00:00",
+                "duration_seconds": 3600, "timestep_seconds": 20, "expected_timesteps": 180,
+                "checkpoint_seconds": [640, 1800, 3600], "arms": arms,
+>           }))
+
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr104_validtime_observation_20261026/Cloud-BAL/tests/test_pr86_time_response.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/tmpkpm2zjx3/contract.json'), arm = 'AMPLITUDE'
+duration = 3600
+input_sha256 = '9038d0a26896a630b7048091a97a2c0055b26934513392195eb8e609626e74e2'
+boundary_sha256 = '885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7'
+executable_sha256 = '387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a'
+source_receipt_sha256 = 'source-receipt-sha'
+candidate_input = {'receipt_sha256': 'AMPLITUDE-proposal-sha'}
+
+    def _shared_time_contract(path: Path, arm: str, duration: int, input_sha256: str,
+                              boundary_sha256: str, executable_sha256: str,
+                              source_receipt_sha256: str,
+                              candidate_input: dict | None) -> dict:
+        """Bind a one-hour H/A/N run to its closed 640-second source control."""
+        if arm not in PR104_SHARED_ARMS or duration != 3600:
+            raise ValueError("shared-time contract is limited to one-hour HYDRO, AMPLITUDE, and STRUCTURED runs")
+        path = path.resolve()
+        record = json.loads(path.read_text())
+        if (record.get("schema") != "pr104_shared_time_contract_v1" or
+                record.get("status") != "READY_FOR_ROOT_REVIEW_NO_LAUNCH" or
+                record.get("valid_start") != "2026-08-16_13:00:00" or
+                record.get("valid_end") != "2026-08-16_14:00:00" or
+                record.get("duration_seconds") != 3600 or
+                record.get("timestep_seconds") != 20 or
+                record.get("expected_timesteps") != 180 or
+                record.get("checkpoint_seconds") != [640, 1800, 3600] or
+                record.get("launch_authorized") is not False):
+            raise ValueError("PR104 shared-time contract is not the frozen 13Z-to-14Z one-hour plan")
+        arms = record.get("arms")
+        if not isinstance(arms, dict) or set(arms) != set(PR104_SHARED_ARMS):
+            raise ValueError("PR104 contract must bind the frozen HYDRO, AMPLITUDE, and STRUCTURED arms")
+        boundary = PR104_SHARED_BOUNDARY_SHA256
+        executable = PR104_SHARED_EXECUTABLE_SHA256
+        namelist = PR104_SHARED_NAMELIST_SHA256
+        checked_arms = {}
+        for name, expected_input in PR104_SHARED_ARMS.items():
+            row = arms[name]
+            receipt_pin, preflight_pin = row.get("reference_receipt", {}), row.get("reference_preflight", {})
+            receipt_path, preflight_path = Path(receipt_pin.get("path", "")), Path(preflight_pin.get("path", ""))
+            if (not receipt_path.is_file() or sha256(receipt_path) != receipt_pin.get("sha256") or
+                    not preflight_path.is_file() or sha256(preflight_path) != preflight_pin.get("sha256")):
+                raise ValueError(f"PR104 {name} closed 640-second receipt/preflight pin changed")
+            closed = json.loads(receipt_path.read_text())
+            preflight = json.loads(preflight_path.read_text())
+            if (closed.get("arm") != name or closed.get("status") != "COMPLETE" or
+                    closed.get("returncode") != 0 or closed.get("timestep_count") != 32 or
+                    closed.get("final_completed_step") != 32 or closed.get("maximum_seen_timestep") != 32 or
+                    closed.get("earliest_fatal") is not None or closed.get("fatal_lines") or
+                    closed.get("processing_errors") or closed.get("duplicate_post_kdm6_timesteps") or
+                    closed.get("changed_staged_inputs") or closed.get("changed_original_inputs") or
+                    closed.get("executed_executable_sha256") != executable or
+                    closed.get("candidate_wrfinput_sha256") != expected_input or
+                    closed.get("candidate_wrfbdy_sha256") != boundary or
+                    closed.get("candidate_namelist_sha256") != namelist or
+                    closed.get("source_receipt_sha256") != PR104_SHARED_SOURCE_RECEIPTS[name] or
+                    (closed.get("candidate_input_binding") or {}).get("receipt_sha256") !=
+                    PR104_SHARED_INPUT_RECEIPTS[name] or
+                    preflight.get("arm") != name or preflight.get("duration_seconds") != 640 or
+                    preflight.get("expected_timesteps") != 32 or
+                    preflight.get("candidate_wrfinput_sha256") != expected_input or
+                    preflight.get("candidate_wrfbdy_sha256") != boundary or
+                    preflight.get("candidate_namelist_sha256") != namelist or
+                    preflight.get("source_receipt_sha256") != PR104_SHARED_SOURCE_RECEIPTS[name]):
+>               raise ValueError(f"PR104 {name} reference is not the frozen closed 640-second C2 control")
+E               ValueError: PR104 HYDRO reference is not the frozen closed 640-second C2 control
+
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr104_validtime_observation_20261026/Cloud-BAL/tools/pr86_time_response.py:129: ValueError
+=========================== short test summary info ============================
+FAILED ../../../NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr104_validtime_observation_20261026/Cloud-BAL/tests/test_pr86_time_response.py::TimeResponseTests::test_pr104_shared_time_contract_binds_the_three_closed_c2_controls
+1 failed, 141 passed in 105.24s (0:01:45)
