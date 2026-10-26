@@ -1,0 +1,28 @@
+{
+  "schema": "pr103_kg_freshness_staging_failure_review_v1",
+  "failed_apply_execution": "/var/tmp/pr103_kg_apply_execution_20261026/execution.json",
+  "failed_apply_execution_sha256": "eb66a61d6499e372d9472805122134eeaafde7c6b125128dd38a8d4c6496b18e",
+  "returncode": 2,
+  "status": "BLOCKED_OR_STAGING_FAILED_NO_WRITES",
+  "reason": "The guard expected exactly one Graph Freshness section, but pinned Graphify 0.9.53 cluster-only reports had none.",
+  "source_unchanged": true,
+  "maintained_writes": false,
+  "staged_report_freshness_section_counts": {
+    "KLAPS50": 0,
+    "Cloud-BAL": 0
+  },
+  "staged_report_sha256": {
+    "KLAPS50": "f786e1d71f64164425eafae41734af05fde6353969897dc83bb3e9d317fbef42",
+    "Cloud-BAL": "7c9d88c5d5d2a55a5d95634d91575fe8ea96fa3fde3c34576652ec2e3cccaedc"
+  },
+  "reviewed_transform_scope": {
+    "graph_report": "Copy the normalized report verbatim into the corpus mirror and named snapshot; only freshness section normalization assumes a section.",
+    "wiki_graph_report_index": "Replace exactly two existing corpus rows after requiring PR102 lineage.",
+    "wiki_index": "Replace Graph snapshot section and date_modified front-matter field.",
+    "wiki_log": "Append a dated PR103 entry; no existing report-header assumptions."
+  },
+  "source_fix": "Allow zero sections by appending one; replace one section; reject duplicate sections. Tests cover actual Graphify CLI-style report, replacement preserving surrounding sections, and duplicate rejection.",
+  "focused_tests": "python3 -m pytest -q tests/test_pr103_kg_guard.py: 18 passed in 0.38s; py_compile and git diff --check passed.",
+  "code_sha256": "02e5df2d95e49512f606cb0634db50b2d07952480fab9fa5b9e29dab058c415d",
+  "test_sha256": "06d1f92dcb36d24e9145548244c74f6c7985939208d89b6b556700b5c523f400"
+}

@@ -1,0 +1,67 @@
+{
+  "approved_at_utc": "2026-10-26T01:07:23.337997+00:00",
+  "argv": [
+    "python3",
+    "/var/tmp/pr103_capture_runner_bundle_20261026/tools/pr86_time_response.py",
+    "--arm",
+    "AMPLITUDE",
+    "--duration-seconds",
+    "640",
+    "--output",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN",
+    "--candidate-build",
+    "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json",
+    "--amplitude-control-input-receipt",
+    "/var/tmp/pr103_amplitude_generation_20261026/candidate/wrfinput_d01.proposal.json",
+    "--pr103-preflight",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/execution_preflight_640_v2.json",
+    "--execute"
+  ],
+  "cli_working_directory": "/var/tmp/pr103_capture_runner_bundle_20261026",
+  "model_working_directory": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/run",
+  "observation_skill": "NOT_EVALUATED",
+  "peer_review": {
+    "agent": "/root/pr103_amplitude_builder",
+    "scope": "Exact v2 preflight, all1342 evidence hashes and all7 planpins, closed5 controls and commonACA H/P/N/A captures, outputabsence/diskguard; final agent message2026-10-26",
+    "status": "GO"
+  },
+  "physical_approval": "FAIL_OPEN",
+  "plan": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/execution_plan_640.json",
+    "sha256": "af213c7683087f5d309f0b362e1c4947b3f4e2b78149ec10356fb3e827b91485"
+  },
+  "root_strong_preflight_validation": "PASS_1342_EVIDENCE_PINS",
+  "schema": "pr103_amplitude640_root_go_v1",
+  "scope": "Exactly one new AMPLITUDE 640-second/32-step forecast on unchanged C2; frozen9038 input, same five existing controls; final source/endpoint/history audit only after closed receipt",
+  "source_pins": [
+    {
+      "path": "/var/tmp/pr103_capture_runner_bundle_20261026/tools/pr86_time_response.py",
+      "sha256": "1ea789cc1e7e54417d8be01088b9bed140368bf6ebea740aaf942527373398bf"
+    },
+    {
+      "path": "/var/tmp/pr103_capture_runner_bundle_20261026/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    {
+      "path": "/var/tmp/pr103_amplitude_generation_20261026/candidate/wrfinput_d01.proposal.json",
+      "sha256": "93821aa86b188a91a7f43de9e6c5d49815bde71fe92faa7a59cc3a340c78057f"
+    },
+    {
+      "path": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/pr87_native_overlay_build.json",
+      "sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/execution_preflight_640_v2.json",
+      "sha256": "8e1bcbdacdc763d49d9e7451edf3c67c310736094f258a464bd0ce93624cede1"
+    },
+    {
+      "path": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/wrf_pr87_overlay.exe",
+      "sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/tools/pr103_execution_preflight.py",
+      "sha256": "bc80f723f49a35fe5c368b9882a753a1be2a0cb45403d38cb0ecb68c3a95bd6c"
+    }
+  ],
+  "status": "GO_ONE_MATCHED_C2_AMPLITUDE640"
+}

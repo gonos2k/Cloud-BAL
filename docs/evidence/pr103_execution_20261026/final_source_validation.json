@@ -1,0 +1,28 @@
+{
+  "binary_publication": "No ELF, NetCDF, or HDF files in the new evidence; PNG/PDF views and bounded textual receipts only",
+  "cached_whitespace_check": {
+    "argv": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      ".",
+      ":(exclude)docs/evidence/pr103_observation_20261026/intel_oracle/**",
+      ":(exclude)docs/evidence/pr103_observation_20261026/intel_oracle_v2/**"
+    ],
+    "excluded_raw_evidence": [
+      "docs/evidence/pr103_observation_20261026/intel_oracle/**",
+      "docs/evidence/pr103_observation_20261026/intel_oracle_v2/**"
+    ],
+    "reason": "Exact hash-bound original fixed-form kernel, IFX commands and receipts retain inherited trailing spaces; these immutable evidence bytes are not reformatted. All maintained code and prose are included in the scoped check.",
+    "returncode": 0
+  },
+  "focused_python_items": 146,
+  "focused_validation_receipt_sha256": "b11a72d77561aac584fb35051843629e8682d5372aa6a8200fd8f4049fac445d",
+  "observation_skill": "NOT_EVALUATED",
+  "physical_approval": "FAIL_OPEN",
+  "schema": "pr103_final_source_validation_v1",
+  "status": "PASS_SCOPED",
+  "validated_source_pins_still_unchanged": 25
+}

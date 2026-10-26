@@ -1,0 +1,42 @@
+{
+  "anchor": "XLAT[0,0,0]/XLONG[0,0,0], corresponding to WRF mass-grid knowni=knownj=1",
+  "grid_mapping_residuals": {
+    "grid_points": 65988,
+    "i_delta_grid_units": {
+      "max_abs": 0.000749294758634278,
+      "rms": 0.0003452889383044356
+    },
+    "j_delta_grid_units": {
+      "max_abs": 0.0004816868297439214,
+      "rms": 0.00015239134530388177
+    },
+    "meaning": "raw map output minus 1-based XLAT/XLONG indices; descriptive only, no fitted tolerance"
+  },
+  "limitations": [
+    "History archive lacks LAT_LL_T/LON_LL_T expected by KLAPS get_wrf2_map; WRF XLAT/XLONG anchor used explicitly.",
+    "Python mapping uses REAL64 arithmetic over REAL32 source attributes and coordinates; residuals report the resulting differences without a tolerance."
+  ],
+  "map_attributes": {
+    "DX": 5000.0,
+    "DY": 5000.0,
+    "STAND_LON": 126.0,
+    "TRUELAT1": 30.0,
+    "TRUELAT2": 60.0,
+    "lat1": 31.36752700805664,
+    "lon1": 119.8226318359375
+  },
+  "projection_source": {
+    "earth_radius_m": 6370000.0,
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/share/module_llxy.F",
+    "sha256": "0c777e66ffbb0602479cadcc0ab484769a140c4cb2b3e9a8f757597086f0c76b",
+    "source_constant": "EARTH_RADIUS_M=6370000."
+  },
+  "scope": "geometry audit only; no station residuals or skill claim",
+  "shape_yx": [
+    282,
+    234
+  ],
+  "time_utc": "2026-08-16T13:00:00Z",
+  "wrf_history_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF/run/wrfout_d01_2026-08-16_13:00:00",
+  "wrf_history_sha256_from_pr102_fivearm_pin": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f"
+}
