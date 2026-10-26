@@ -1,0 +1,40 @@
+{
+  "schema": "pr106_satellite_sourceorder_review_v1",
+  "review_date": "2026-10-26",
+  "review_type": "Narrow, read-only source-order and replay review",
+  "status": "PASS_SCOPED_WITH_LIMITS",
+  "graphify": {
+    "queried_first": true,
+    "snapshot": "graphify-out/graph.json",
+    "limitations": "Discovery only; source code and preserved replay evidence were authoritative. No graph update was performed."
+  },
+  "source_order": {
+    "result": "CONFIRMED",
+    "evidence": [
+      "process_ir_satellite calls satdat2laps_ir with actual arguments tb8, tc8, ta8.",
+      "satdat2laps_ir formal outputs are sa, sc, st; in the r_grid_ratio < 0.5 branch sa receives arithmetic mean, sc receives extremum, and st receives wm (warmest/max).",
+      "Therefore tb8=mean, tc8=extremum, ta8=warmest/max.",
+      "lvd_driver_sub applies filter_2dx(ta8,+0.5), then filter_2dx(ta8,-0.5), then writes ta8 to S8A and tb8 to S8W."
+    ],
+    "source_paths": [
+      "klaps-v5.0_/src/ingest/satellite/lvd_gk2a/satir_process.f",
+      "klaps-v5.0_/src/ingest/satellite/lvd_gk2a/satir2laps.f",
+      "klaps-v5.0_/src/ingest/satellite/lvd_gk2a/lvd_driver_sub.f",
+      "klaps-v5.0_/src/lib/util/filter_2dx.f"
+    ]
+  },
+  "replay_review": {
+    "evidence": "scratch/pr106_closed_forecast_20261026/Cloud-BAL/docs/evidence/pr106_closed_forecast_20261026/replay_satellite_support.py and satellite_support_replay.json",
+    "source_mapping": "Python preserves the 1-based source pixel-window bounds, Fortran-order mean accumulation, max statistic, array orientation, and two filter passes with the corresponding float32 calculations.",
+    "nine_cell_result": "All 9 fixed support cells have exact float32-bit equality: observed S8A equals twice-filtered source window maxima; observed S8W equals unfiltered window means. The report's source-order permutation conclusion is consistent with code and replay evidence.",
+    "source_input_integrity": "Replay JSON records equal before/after hashes for its 15 data/source inputs. Root reports rerunning the replay and byte-for-byte agreement with this JSON; this reviewer did not rerun the replay or compile Fortran.",
+    "range_filter": "Fortran process_ir_satellite screens ta8/tb8/tc8 before returning, then the driver filters ta8. The replay does not explicitly code this range-screen step. A targeted read-only check of the raw IR112 count LUT showed all raw QC-valid count-converted BT values finite and within the source bounds (205.72–295.48 K vs 81.85–330.05 K), so this omission is a no-op for this raw granule; fill values are retained as fill by source screening."
+  },
+  "findings": [],
+  "scope_limits": [
+    "Python source replay only; no Fortran compile or runtime replay was performed.",
+    "Exact comparison covers the 9 designated support cells, not full-grid product identity.",
+    "The 0.4 grid ratio is inferred from the saved 2 km/5 km configuration, not a historical runtime receipt.",
+    "Navigation-LUT deployment and calibration identity for the archived LVD remain unbound; results establish a scoped source-consistent replay, not historical runtime provenance or independent forecast skill."
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "pr106_closed_forecast_external_review_v1",
+  "reviewed_at_utc_date": "2026-10-26",
+  "scope": "Read-only independent review of closed cohort status, receipt/history identity, Times-only readback, and bounded RTM claims.",
+  "status": "PASS_WITH_NONBLOCKING_VERIFIER_COVERAGE_NOTE",
+  "reviewed_worktree": "scratch/pr106_closed_forecast_20261026/Cloud-BAL",
+  "graphify": {
+    "queried_first": true,
+    "snapshot": "graphify-out/graph.json",
+    "limitations": "Graph findings are discovery aids only; source/evidence receipts were checked directly. Snapshot not updated."
+  },
+  "checks": {
+    "verifier_rerun": {
+      "command": "python docs/evidence/pr106_closed_forecast_20261026/verify_closed.py /var/tmp/pr106_externalreview_actualclosed_verified.json",
+      "result": "PASS",
+      "saved_output_matches": "The generated JSON is byte-for-byte equal to docs/evidence/pr106_closed_forecast_20261026/closed_verified.json."
+    },
+    "cohort": {
+      "all_requested_forecasts_complete": false,
+      "arms": ["HYDRO", "AMPLITUDE", "STRUCTURED"],
+      "each_arm_status": "CLOSED",
+      "each_model_status": "INCOMPLETE",
+      "each_model_returncode": 1,
+      "each_completed_steps": 38,
+      "each_last_completed_model_time": "2026-08-16_13:12:40",
+      "each_requested_duration_seconds": 3600,
+      "each_requested_time_end": "2026-08-16_14:00:00",
+      "request_binding": "All three receipt shared_time_contract references hash to the same extant contract; each expected_model_timestamps list has 180 entries and ends at 14:00:00."
+    },
+    "receipt_binding": {
+      "result": "PASS",
+      "basis": "For each arm, copied receipt SHA-256 equals the original receipt SHA-256 and cohort-closed expected SHA-256. Each receipt has unchanged candidate build/input flags, empty changed staged/original inputs, and equal expected/executed executable SHA-256. The same executable digest is present across arms.",
+      "practical_identity_assessment": "Receipt identity is bound by the copied/original/cohort hashes at read time. The verifier does not claim a post-read receipt hash check; no such check is needed for its stated claim."
+    },
+    "history_readback": {
+      "result": "PASS",
+      "basis": "For each receipt, the generated WRF history hash matches the receipt hash before and after opening the file and reading only Times. Each history has 13 records from 13:00 through 13:12; there is no 14:00 record. The verifier does not access forecast field arrays."
+    },
+    "observation_gating": {
+      "result": "PASS",
+      "observation_dispatch": "SKIPPED_NONCOMPLETE_COHORT",
+      "paired_dispatch": "SKIPPED_NO_COMPLETE_OBSERVATION_RESULT",
+      "score_or_rank_computed": false
+    },
+    "rtm_scope": {
+      "result": "BOUNDED",
+      "basis": "The bundled report accurately says the legacy NCEP test coefficient/profile files are absent and the present CRTM 2.3.0 source tree has no local coefficient/build artifacts or validated GK2A mapping. The external source release notes mention ABI/AHI support but do not establish GK2A. No executable forward comparison or synthetic BT is claimed.",
+      "srf_reference": "The linked NWP SAF AMI SRF metadata page lists IR112 as AMI channel 14 at 891.713 cm-1 / 11.214 microns. That supports instrument-response identification only; it does not establish local CRTM/NCEP coefficient binding or historical LVD calibration identity."
+    }
+  },
+  "findings": [],
+  "nonblocking_verifier_coverage_note": "Current receipt artifacts support the report, but verify_closed.py does not assert candidate_build_unchanged/candidate_input_unchanged, verify shared_time_contract hash/duration, or assert expected_model_timestamps length/end. The checked-in receipts and shared contract do carry these values and the external review verified them directly. Adding those assertions would make the reproducer enforce more of the report, but no current claim was contradicted.",
+  "limitations": [
+    "No full source-endpoint, Q/N/B, or physical approval audit was performed; report correctly labels it outside scope.",
+    "No model field arrays or observation scores were read or computed.",
+    "The existence of generic AMI SRF metadata does not resolve deployment, calibration, coefficient, or profile/geometry binding."
+  ]
+}

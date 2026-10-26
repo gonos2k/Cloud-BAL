@@ -1,0 +1,20 @@
+{
+  "schema": "pr106_final_peer_review_v1",
+  "reviewed_document": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr106_closed_forecast_20261026/Cloud-BAL/docs/PR106_CLOSED_FORECAST_AND_IR_SCOPE_20261026.md",
+  "reviewed_evidence_dir": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr106_closed_forecast_20261026/Cloud-BAL/docs/evidence/pr106_closed_forecast_20261026",
+  "disposition": "PASS_WITH_ONE_CLARIFICATION",
+  "checks": {
+    "exact_formula": "PASS: all three captured typed inputs reproduce the runtime Q/N binary64 bit patterns under the ordered source formula.",
+    "exact_cone_predicate": "PASS: exact rational Q*/N* exceeds 900 by 20/292519627949659; the exact source component also exceeds 900; transport components are signed zero.",
+    "C2_helper_execution": "NOT_EXECUTED: callback_root_validation.json records compiler_run=false. The source-logic conclusion is justified because an outward interval containing an exact endpoint with Q*>900*N* must violate the maximum-cone check; it is not a reproduced helper execution.",
+    "grouped_failure": "PASS: document says group cause remains unresolved and does not elevate callback to grouped cause.",
+    "copied_callback_artifacts": "PASS: actual_callback_replay.json, actual_callback_excerpts.txt, and source_integrity.json have matching SHA256 across agent replay_final_v2, root replay, and evidence copy.",
+    "output_safety": "PASS: replay_callback.py requires a new --output-dir, mkdir uses exist_ok=False, outputs use exclusive mode x, and it does not invoke a compiler/model or delete/overwrite evidence."
+  },
+  "clarification_for_document": "The exact-formula paragraph should explicitly say the C2 interval outcome is source-logic classification only and the helper itself was not executed; the attached callback_root_validation.json confirms no compiler run. Current wording does not falsely claim execution, but this would remove ambiguity.",
+  "evidence_hashes": {
+    "actual_callback_replay.json": "72875e12e188381227b2280f309ec57520009f41dcf7cc66e7b46c43401168a4",
+    "actual_callback_excerpts.txt": "e3960d8042c06c618ed55ff80baa945043351555343e732f82a13129f87f4d53",
+    "source_integrity.json": "a071222e3234175b29ef4b1a7ee7df868fbb4a04eaa8b35dd9b89ab8f7e4d0ac"
+  }
+}
