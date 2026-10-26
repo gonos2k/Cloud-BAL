@@ -1,0 +1,58 @@
+{
+  "schema": "pr107_t39_source_transform_proof_v1",
+  "base_source_path": "/var/tmp/pr99_bulk_candidate_native_c2_20261022/source/overrides/module_em.F",
+  "base_source_sha256": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296",
+  "edited_source_sha256": "c978b37a5f290770f899336a52195dbbc78ead87482e40d89f14f90db86263f6",
+  "math_source_unchanged": true,
+  "changed_compiled_members": [
+    "module_em.o"
+  ],
+  "allowed_replacements": [
+    {
+      "before": "group_failure_enabled=itimestep==32",
+      "after": "group_failure_enabled=itimestep==39 .AND. rk==2"
+    },
+    {
+      "before": "IF (.NOT.feasible .AND. itimestep==32 .AND. pr99_cell>0)",
+      "after": "IF (.NOT.feasible .AND. itimestep==39 .AND. rk==2 .AND. pr99_cell>0)"
+    },
+    {
+      "before": "IF (itimestep==32 .AND. pr99_cell>0)",
+      "after": "IF (itimestep==39 .AND. rk==2 .AND. pr99_cell>0)"
+    },
+    {
+      "before": "   INTEGER,PARAMETER :: pr92_targets(3,12)=RESHAPE([ &\n       127,5,22, &\n       170,42,23, &\n       171,43,23, &\n       163,44,20, &\n       158,47,20, &\n       232,203,20, &\n       203,213,21, &\n       11,216,21, &\n       2,218,13, &\n       22,228,21, &\n       41,229,14, &\n       43,239,19], [3,12])\n",
+      "after": "   INTEGER,PARAMETER :: pr92_targets(3,1)=RESHAPE([ &\n       2,219,13], [3,1])\n"
+    },
+    {
+      "before": "IF (all_pair_diffusion_identity(1)==15) THEN",
+      "after": "IF (all_pair_diffusion_identity(1)==39.AND.rk_step==1) THEN"
+    }
+  ],
+  "producer_target": {
+    "timestep": 39,
+    "rkstep": 1,
+    "cell_ijk": [
+      2,
+      219,
+      13
+    ]
+  },
+  "group_target": {
+    "timestep": 39,
+    "rkstep": 2
+  },
+  "diff_path": "/var/tmp/pr107_t39_source_20261026_v2/module_em.diff",
+  "diff_sha256": "f5d08eede1fad6e1a213c479babcbcc117303a95fc6d6891ad3a79a792ab5a6d",
+  "helpers": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr107_t39_capture_20261026/Cloud-BAL/tools/pr92_diffusion_producer_capture.py",
+      "sha256": "35f895043056cac3203749d271e9d795e4348a6c74ebbf170a98689b8690ca17"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr107_t39_capture_20261026/Cloud-BAL/tools/pr99_group_failure_trace.py",
+      "sha256": "cadfb2f12c1b5ea303d642a87d118e9a43c102abf2af399e0b522e766938d82c"
+    }
+  ],
+  "generator_sha256": "b7ba4aea1b7ac8c2907404a9d879f7b12b174c5899788a8602fd1198290c48bf"
+}

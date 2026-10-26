@@ -1,0 +1,40 @@
+{
+  "status": "PASS_TEAM_REVIEW_AND_BUILD",
+  "tests": {
+    "command": "python -m pytest -q tests/test_pr92_diffusion_producer_capture.py tests/test_pr99_group_failure_trace.py tests/test_pr107_t39_postprocess.py",
+    "passed": 29
+  },
+  "reviewers": [
+    "pr107_kg_review",
+    "pr107_producer_capture",
+    "pr107_execution_path",
+    "pr107_group_capture"
+  ],
+  "resolved_findings": [
+    "Reject non-integer and boolean selection values",
+    "Compare ordered archive occurrences including duplicate track_driver.o",
+    "Create preprocessed scratch before compile",
+    "Validate five allowed source substitutions and generator/helper identities",
+    "Exclusive build receipt creation"
+  ],
+  "native_build": {
+    "compiler": "ifx (IFX) 2026.0.0 20260331",
+    "archive_entries": 373,
+    "changed_indices": [
+      337
+    ],
+    "changed_members": [
+      "module_em.o"
+    ],
+    "executable_sha256": "7af1f907eb70e8f4ea234cbf18cfad0f408e8b374a0aecc9e695100bc485918c"
+  },
+  "limits": [
+    "Diagnostic-only partial C2 host overlay, not a clean WRF rebuild",
+    "No T39 capture or physical correction established by build success"
+  ],
+  "postclose_review": {
+    "postprocess_t39": "No blockers: cross-stage identity/bounds, distinct firstgroup and fatalpair, receipt/artifacthashes",
+    "compare_prefix": "No blockers: existing APIs/keys verified, receipt-bound 600-second trace/history andT1fields",
+    "actual_postclosure_execution": "NOT_RUN"
+  }
+}

@@ -8,6 +8,7 @@ from pathlib import Path
 
 
 SOURCE_SHA256 = "f88708844994a30540fc458aeede7e0eda4503a04a341caf714050e52f8c18af"
+C2_SOURCE_SHA256 = "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296"
 
 
 def sha256(text: str) -> str:
@@ -20,9 +21,17 @@ def replace_once(source: str, before: str, after: str, label: str) -> str:
     return source.replace(before, after, 1)
 
 
-def transform(source: str, expected_sha256: str = SOURCE_SHA256) -> str:
+def transform(source: str, expected_sha256: str = SOURCE_SHA256, *,
+              timestep: int = 32, rk: int | None = None) -> str:
     if sha256(source) != expected_sha256:
         raise ValueError("C1 staged module_em source hash mismatch")
+    if not isinstance(timestep, int) or isinstance(timestep, bool) or timestep < 1:
+        raise ValueError("capture timestep must be a positive integer")
+    if rk is not None and (not isinstance(rk, int) or isinstance(rk, bool) or rk not in (1, 2, 3)):
+        raise ValueError("capture RK stage must be an integer from 1 through 3")
+    timestep_guard = f"itimestep=={timestep}"
+    if rk is not None:
+        timestep_guard += f" .AND. rk=={rk}"
     # The core returns the first failing cell/pair and the exact predicate.  The
     # optional arrays are allocated only by the one timestep-gated host call.
     source = replace_once(
@@ -154,8 +163,8 @@ def transform(source: str, expected_sha256: str = SOURCE_SHA256) -> str:
         "                         group_failure_store_stage=pr99_stage, &\n"
         "                         group_failure_candidate64=pr99_candidate64, &\n"
         "                         group_failure_stored32=pr99_stored32, &\n"
-        "                         group_failure_enabled=itimestep==32)\n"
-        "    IF (.NOT.feasible .AND. itimestep==32 .AND. pr99_cell>0) &\n"
+        f"                         group_failure_enabled={timestep_guard})\n"
+        f"    IF (.NOT.feasible .AND. {timestep_guard} .AND. pr99_cell>0) &\n"
         "      CALL write_pr99_group_failure(pr99_cell,pr99_pair,pr99_predicate,pr99_stage, &\n"
         "        pr99_candidate64,pr99_stored32,ANY(source_first_pair))\n"
         "    IF (.NOT.feasible) CALL write_pr91_actual_store_failures( &\n",
@@ -175,7 +184,7 @@ def transform(source: str, expected_sha256: str = SOURCE_SHA256) -> str:
         "    IF (.NOT.feasible) CALL try_graupel_mixture_trial()\n"
         "  END SUBROUTINE evaluate_joint_candidate\n",
         "    IF (.NOT.feasible) CALL try_graupel_mixture_trial()\n"
-        "    IF (itimestep==32 .AND. pr99_cell>0) &\n"
+        f"    IF ({timestep_guard} .AND. pr99_cell>0) &\n"
         "      CALL write_pr99_group_retry_result(pr99_cell,pr99_pair,pr99_predicate,feasible)\n"
         "  END SUBROUTINE evaluate_joint_candidate\n",
         "post-retry grouped status",
@@ -256,12 +265,35 @@ def transform(source: str, expected_sha256: str = SOURCE_SHA256) -> str:
     return source
 
 
+def retarget_generated_source(source: str, expected_sha256: str = C2_SOURCE_SHA256, *,
+                              timestep: int = 32, rk: int | None = None) -> str:
+    """Retarget the three capture guards in the staged C2 module_em source."""
+    if sha256(source) != expected_sha256:
+        raise ValueError("C2 staged module_em source hash mismatch")
+    if not isinstance(timestep, int) or isinstance(timestep, bool) or timestep < 1:
+        raise ValueError("capture timestep must be a positive integer")
+    if rk is not None and (not isinstance(rk, int) or isinstance(rk, bool) or rk not in (1, 2, 3)):
+        raise ValueError("capture RK stage must be an integer from 1 through 3")
+    guard = f"itimestep=={timestep}"
+    if rk is not None:
+        guard += f" .AND. rk=={rk}"
+    source = replace_once(source, "group_failure_enabled=itimestep==32",
+                          f"group_failure_enabled={guard}", "C2 group failure enable guard")
+    source = replace_once(source, "IF (.NOT.feasible .AND. itimestep==32 .AND. pr99_cell>0)",
+                          f"IF (.NOT.feasible .AND. {guard} .AND. pr99_cell>0)",
+                          "C2 initial group failure guard")
+    return replace_once(source, "IF (itimestep==32 .AND. pr99_cell>0)",
+                        f"IF ({guard} .AND. pr99_cell>0)", "C2 group retry guard")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--timestep", type=int, default=32)
+    parser.add_argument("--rk", type=int, choices=(1, 2, 3))
     args = parser.parse_args()
-    result = transform(args.source.read_text())
+    result = transform(args.source.read_text(), timestep=args.timestep, rk=args.rk)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("x") as stream:
         stream.write(result)

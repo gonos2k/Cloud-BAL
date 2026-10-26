@@ -1,0 +1,46 @@
+{
+  "schema": "pr107_kg_maintenance_v1",
+  "status": "PASS",
+  "source_commit": "dc1d2d2c22bdfa44290b800c9e050299bc0b8dee",
+  "publication_receipt_sha256": "35603e219745640dc2c520198db9cb3e8446e26d48ac3ca4de18b9977f943c3e",
+  "stage_sha256": "2b28ee23e0d1d190b6b940dd0e0d69d395d443c5ee55fa49280d749851cb639d",
+  "plan_sha256": "8c974da7bfbd5efa5652f33beaa8a4f669f5fbe4e963e9703d89790e7e23bf4f",
+  "corpora": {
+    "Cloud-BAL": {
+      "nodes": 15303,
+      "edges": 27116,
+      "communities": 1337,
+      "delta_nodes": 38,
+      "delta_edges": 42,
+      "snapshot": "2026-10-26-pr107-t39-capture",
+      "sha256": "fccc1a0019b0099e6ec9ebc3bc739be6535f62676852935ae4cbab6005cebbe3"
+    },
+    "KLAPS50": {
+      "nodes": 41131,
+      "edges": 85574,
+      "communities": 3332,
+      "delta_nodes": 38,
+      "delta_edges": 42,
+      "snapshot": "2026-10-26-pr107-t39-capture",
+      "sha256": "620e7b22689c419e5b5e84ac0cceeb4e09c6f8df33769b12128f250b0334a6c6"
+    }
+  },
+  "preserved": {
+    "maintained_source_entries": 627,
+    "immutable_pins": 197,
+    "pr104_source_pins": 250,
+    "historical_snapshot_folders": 128
+  },
+  "snapshot_folders_after": 132,
+  "scripts": {
+    "/tmp/pr107_kg_stage.py": "3d1cf519223beb5e94a5b8ad4b703362006f8e2b6ed0c46927d6256402c69bf7",
+    "/tmp/pr107_kg_publish.py": "f82c1068f82882e1a3d4b0900c6188254f5dc765dc29cc783ab5bb3a0d8de1d8",
+    "/tmp/pr107_kg_root_go.json": "19682b08a06572df028999b829fa97f23eae7dea887db7685358eb1dc1bc7d24"
+  },
+  "limits": [
+    "Only reviewed 11 paths extracted; evidence payloads hash-bound only",
+    "Cross-file Fortran CALL extraction remains partial",
+    "Graph freshness is not runtime or scientific approval",
+    "PR106 H/A/N3600 remains incomplete; PR107 single HYDRO diagnostic has no closed result in launch evidence"
+  ]
+}

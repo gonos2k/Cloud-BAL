@@ -133,8 +133,12 @@ def _parse_failure(fields: list[str], line_number: int) -> dict[str, Any]:
     return row
 
 
-def parse_capture(path: Path) -> dict[str, Any]:
+def parse_capture(path: Path, *, timestep: int = 32, rk: int | None = None) -> dict[str, Any]:
     """Parse a complete PR99 event sequence and bind each post-retry status."""
+    if not isinstance(timestep, int) or isinstance(timestep, bool) or timestep < 1:
+        raise ValueError("requested PR99 timestep must be a positive integer")
+    if rk is not None and (not isinstance(rk, int) or isinstance(rk, bool) or rk not in (1, 2, 3)):
+        raise ValueError("requested PR99 RK stage must be an integer from 1 through 3")
     events: list[dict[str, Any]] = []
     current: dict[str, Any] | None = None
     for line_number, fields in _read_records(path):
@@ -147,8 +151,8 @@ def parse_capture(path: Path) -> dict[str, Any]:
         if marker == POST_RETRY_MARKER:
             if len(fields) != 8:
                 raise ValueError(f"malformed PR99 post-retry row at line {line_number}")
-            _, run_id, timestep, rk, cell, pair, predicate, feasible = fields
-            key = (run_id, int(timestep), int(rk), int(cell), int(pair), int(predicate))
+            _, run_id, event_timestep, event_rk, cell, pair, predicate, feasible = fields
+            key = (run_id, int(event_timestep), int(event_rk), int(cell), int(pair), int(predicate))
             # The host emits this directly after fallback in the same
             # evaluate_joint_candidate call. Bind it to the one pending event;
             # the attempt label is carried by that event's pre-retry row.
@@ -207,9 +211,13 @@ def parse_capture(path: Path) -> dict[str, Any]:
             raise ValueError(f"unknown PR99 attempt label {event['attempt']!r}")
         if event["group_predicate"] not in {1, 2}:
             raise ValueError(f"unknown PR99 grouped predicate {event['group_predicate']}")
-        if (event["timestep"] != 32 or event["rk"] not in {1, 2, 3}
+        if (event["timestep"] != timestep or event["rk"] not in {1, 2, 3}
+                or (rk is not None and event["rk"] != rk)
                 or event["store_failure_stage"] < 0):
-            raise ValueError(f"invalid PR99 timestep, RK stage, or store stage for {event['key']}")
+            requested_rk = f", RK{rk}" if rk is not None else ""
+            raise ValueError(
+                f"PR99 event does not match requested T{timestep}{requested_rk} selection "
+                f"or has an invalid RK/store stage: {event['key']}")
         if (event["pair"] not in {1, 2, 3, 4} or event["cell"] < 1
                 or event["cell"] > event["group_shape"][0]
                 or event["pair"] > event["group_shape"][1]):
@@ -267,8 +275,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("capture", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--timestep", type=int, default=32)
+    parser.add_argument("--rk", type=int, choices=(1, 2, 3))
     args = parser.parse_args()
-    result = parse_capture(args.capture)
+    result = parse_capture(args.capture, timestep=args.timestep, rk=args.rk)
     rendered = json.dumps(result, indent=2, sort_keys=True, allow_nan=False) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

@@ -11,21 +11,44 @@ TARGETS = ((127, 5, 22), (170, 42, 23), (171, 43, 23), (163, 44, 20),
            (2, 218, 13), (22, 228, 21), (41, 229, 14), (43, 239, 19))
 
 
-def transform_producer(source: str) -> str:
+def _validate_selection(timestep: int, rk: int,
+                       cells: tuple[tuple[int, int, int], ...] | None
+                       ) -> tuple[tuple[int, int, int], ...]:
+    if not isinstance(timestep, int) or isinstance(timestep, bool) or timestep < 1:
+        raise ValueError("timestep must be a positive integer")
+    if not isinstance(rk, int) or isinstance(rk, bool) or rk not in (1, 2, 3):
+        raise ValueError("RK stage must be 1, 2, or 3")
+    selected = TARGETS if cells is None else cells
+    if not selected:
+        raise ValueError("at least one producer cell is required")
+    normalized = []
+    for cell in selected:
+        if (not isinstance(cell, (tuple, list)) or len(cell) != 3 or
+                any(not isinstance(value, int) or
+                    isinstance(value, bool) or value < 1 for value in cell)):
+            raise ValueError("producer cells must be positive (i, j, k) triples")
+        normalized.append(tuple(cell))
+    if len(set(normalized)) != len(normalized):
+        raise ValueError("producer cells must be unique")
+    return tuple(normalized)
+
+
+def transform_producer(source: str, *, timestep: int = 15, rk: int | None = None,
+                       cells: tuple[tuple[int, int, int], ...] | None = None) -> str:
     """Keep physics unchanged; record the original diffusion inputs and outputs."""
+    selected_cells = _validate_selection(timestep, 1 if rk is None else rk, cells)
     declarations = "   LOGICAL :: pr87_diff_specified, pr87_capture_rain_diffusion\n"
     anchor = "           IF (PRESENT(all_pair_diffusion_tendency32).AND.pr87_diff_channel<=4) THEN\n"
     if source.count(declarations) != 1 or source.count(anchor) != 1:
         raise ValueError("ambiguous retained diffusion producer")
     # RESHAPE uses column order: each coordinate is one complete (i,j,k) column.
-    coords = ", &\n       ".join(",".join(map(str, t)) for t in TARGETS)
-    source = source.replace(declarations, declarations + f"""   INTEGER :: pr92_u,pr92_target,pr92_i,pr92_j,pr92_k,pr92_dx,pr92_dy
-   INTEGER,PARAMETER :: pr92_targets(3,12)=RESHAPE([ &
-       {coords}], [3,12])
-""", 1)
-    record = """           ! Coordinate selection controls diagnostic I/O only, never a physical update.
+    source = source.replace(declarations, declarations +
+                            "   INTEGER :: pr92_u,pr92_target,pr92_i,pr92_j,pr92_k,pr92_dx,pr92_dy\n" +
+                            _target_declaration(selected_cells), 1)
+    rk_guard = "" if rk is None else f".AND.rk_step=={rk}"
+    record = f"""           ! Coordinate selection controls diagnostic I/O only, never a physical update.
            IF (pr87_diff_channel>=7.AND.PRESENT(all_pair_diffusion_identity)) THEN
-             IF (all_pair_diffusion_identity(1)==15) THEN
+             IF (all_pair_diffusion_identity(1)=={timestep}{rk_guard}) THEN
                OPEN(NEWUNIT=pr92_u,FILE='pr92_diffusion_producer.raw', &
                     STATUS='UNKNOWN',POSITION='APPEND')
                DO pr92_target=1,SIZE(pr92_targets,2)
@@ -64,6 +87,28 @@ def transform_producer(source: str) -> str:
            END IF
 """
     return source.replace(anchor, record + anchor, 1)
+
+
+def retarget_producer(source: str, *, timestep: int, rk: int,
+                      cells: tuple[tuple[int, int, int], ...]) -> str:
+    """Retarget one generated legacy capture block without changing physics."""
+    selected_cells = _validate_selection(timestep, rk, cells)
+    old_declaration = _target_declaration(TARGETS)
+    new_declaration = _target_declaration(selected_cells)
+    old_guard = "             IF (all_pair_diffusion_identity(1)==15) THEN\n"
+    new_guard = (f"             IF (all_pair_diffusion_identity(1)=={timestep}.AND."
+                 f"rk_step=={rk}) THEN\n")
+    if source.count(old_declaration) != 1 or source.count(old_guard) != 1:
+        raise ValueError("expected one complete legacy producer capture block")
+    if source.count("PR92_PRODUCER_END") != 1:
+        raise ValueError("expected one producer capture routine")
+    return source.replace(old_declaration, new_declaration, 1).replace(old_guard, new_guard, 1)
+
+
+def _target_declaration(cells: tuple[tuple[int, int, int], ...]) -> str:
+    coords = ", &\n       ".join(",".join(map(str, cell)) for cell in cells)
+    return (f"   INTEGER,PARAMETER :: pr92_targets(3,{len(cells)})=RESHAPE([ &\n"
+            f"       {coords}], [3,{len(cells)}])\n")
 
 
 def require_c14(path: Path) -> str:

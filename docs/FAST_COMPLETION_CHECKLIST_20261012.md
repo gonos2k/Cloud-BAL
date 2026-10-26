@@ -1,6 +1,9 @@
-# Cloud-BAL 우선 실행 체크리스트
+# Cloud-BAL 우선 실행 체크리스트 — PR84 역사 기록
 
-최신 checkpoint: PR83 main `4975df9e69f34a5f0a54df5c0e83b48ba4f98510` 이후 PR84 연구 작업.
+> 이 문서는 PR84 당시 상태를 보존한 역사 기록입니다. 현재 실행 상태와 다음 작업은
+> [현재 연구 상태](CURRENT_RESEARCH_STATUS.md)를 참조하십시오. 아래 OPEN/NOT_RUN은 당시 판정입니다.
+
+당시 checkpoint: PR83 main `4975df9e69f34a5f0a54df5c0e83b48ba4f98510` 이후 PR84 연구 작업.
 
 - 실제 13 UTC 비영 공간 producer와 T/q–Phi/continuity 구성은 PR79–81에서 실행됐다. 관측·과학 수용은 OPEN이다.
 - 동일 WPS–real–WRF 전달과 OFF 대조는 PR82–83 범위에서 확보됐다.

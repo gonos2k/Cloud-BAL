@@ -37,6 +37,47 @@ class GroupFailureTraceTest(unittest.TestCase):
         self.assertIn("write_pr99_group_retry_result(pr99_cell,pr99_pair,pr99_predicate,feasible)",
                       transformed)
 
+    def test_transform_selects_requested_timestep_and_rk(self):
+        source = (ROOT / "tests/fixtures/pr99_group_failure_source.f90").read_text()
+        transformed = trace.transform(source, expected_sha256=trace.sha256(source),
+                                      timestep=39, rk=2)
+        self.assertIn("group_failure_enabled=itimestep==39 .AND. rk==2", transformed)
+        self.assertIn("IF (.NOT.feasible .AND. itimestep==39 .AND. rk==2 .AND. pr99_cell>0)",
+                      transformed)
+        self.assertIn("IF (itimestep==39 .AND. rk==2 .AND. pr99_cell>0)", transformed)
+        rk1 = trace.transform(source, expected_sha256=trace.sha256(source), timestep=39, rk=1)
+        self.assertIn("group_failure_enabled=itimestep==39 .AND. rk==1", rk1)
+        with self.assertRaisesRegex(ValueError, "positive integer"):
+            trace.transform(source, expected_sha256=trace.sha256(source), timestep=0)
+        with self.assertRaisesRegex(ValueError, "integer from 1 through 3"):
+            trace.transform(source, expected_sha256=trace.sha256(source), timestep=39, rk=4)
+        for bad_timestep, bad_rk in ((True, None), (39.0, None), (39, True), (39, 2.0)):
+            with self.subTest(timestep=bad_timestep, rk=bad_rk):
+                with self.assertRaises(ValueError):
+                    trace.transform(source, expected_sha256=trace.sha256(source),
+                                    timestep=bad_timestep, rk=bad_rk)
+
+    def test_retarget_generated_source_preserves_default_and_selects_t39_rk2(self):
+        source = "\n".join((
+            "group_failure_enabled=itimestep==32",
+            "IF (.NOT.feasible .AND. itimestep==32 .AND. pr99_cell>0)",
+            "IF (itimestep==32 .AND. pr99_cell>0)",
+        ))
+        source_hash = trace.sha256(source)
+        self.assertEqual(trace.retarget_generated_source(source, source_hash), source)
+        transformed = trace.retarget_generated_source(source, source_hash, timestep=39, rk=2)
+        self.assertIn("group_failure_enabled=itimestep==39 .AND. rk==2", transformed)
+        self.assertIn("IF (.NOT.feasible .AND. itimestep==39 .AND. rk==2 .AND. pr99_cell>0)",
+                      transformed)
+        self.assertIn("IF (itimestep==39 .AND. rk==2 .AND. pr99_cell>0)", transformed)
+        with self.assertRaisesRegex(ValueError, "C2 staged module_em source hash mismatch"):
+            trace.retarget_generated_source(source)
+        for timestep, rk in ((True, None), (39.0, None), (39, True), (39, 2.0)):
+            with self.subTest(timestep=timestep, rk=rk):
+                with self.assertRaises(ValueError):
+                    trace.retarget_generated_source(source, source_hash,
+                                                    timestep=timestep, rk=rk)
+
     def test_transform_rejects_unpinned_source(self):
         source = (ROOT / "tests/fixtures/pr99_group_failure_source.f90").read_text()
         with self.assertRaisesRegex(ValueError, "source hash mismatch"):
@@ -63,6 +104,26 @@ class GroupFailureTraceTest(unittest.TestCase):
             source_first = capture.parse_capture(path)["events"][0]
         self.assertEqual(source_first["attempt"], "SOURCE_FIRST")
         self.assertTrue(source_first["post_graupel_mixture_feasible"])
+
+    def test_capture_parser_accepts_requested_t39_rk2_and_rejects_other_selection(self):
+        fixture = ROOT / "tests/fixtures/pr99_group_failure_capture.raw"
+        contents = fixture.read_text().replace("BASELINE 32 2", "BASELINE 39 2", 1)
+        contents = contents.replace("POST_RETRY_V1 test-run 32 2", "POST_RETRY_V1 test-run 39 2", 1)
+        with tempfile.TemporaryDirectory(prefix="pr99-t39-rk2-capture-") as tmp:
+            path = Path(tmp) / "t39-rk2.raw"
+            path.write_text(contents)
+            event = capture.parse_capture(path, timestep=39, rk=2)["events"][0]
+            self.assertEqual((event["timestep"], event["rk"]), (39, 2))
+            with self.assertRaisesRegex(ValueError, "requested T32 selection"):
+                capture.parse_capture(path)
+            with self.assertRaisesRegex(ValueError, "requested T39, RK1 selection"):
+                capture.parse_capture(path, timestep=39, rk=1)
+            with self.assertRaisesRegex(ValueError, "requested T38, RK2 selection"):
+                capture.parse_capture(path, timestep=38, rk=2)
+            for timestep, rk in ((True, 2), (39.0, 2), (39, True), (39, 2.0)):
+                with self.subTest(timestep=timestep, rk=rk):
+                    with self.assertRaises(ValueError):
+                        capture.parse_capture(path, timestep=timestep, rk=rk)
 
     def test_capture_parser_reads_source_bound_intel_list_directed_headers(self):
         fixture = ROOT / "tests/fixtures/pr99_group_failure_intel_header.raw"

@@ -1,0 +1,52 @@
+--- C2/module_em.F
++++ T39/module_em.F
+@@ -2528,19 +2528,8 @@
+    INTEGER :: pr87_diff_k_end, pr87_diff_i, pr87_diff_j, pr87_diff_k, pr87_diff_channel
+    LOGICAL :: pr87_diff_specified, pr87_capture_rain_diffusion
+    INTEGER :: pr92_u,pr92_target,pr92_i,pr92_j,pr92_k,pr92_dx,pr92_dy
+-   INTEGER,PARAMETER :: pr92_targets(3,12)=RESHAPE([ &
+-       127,5,22, &
+-       170,42,23, &
+-       171,43,23, &
+-       163,44,20, &
+-       158,47,20, &
+-       232,203,20, &
+-       203,213,21, &
+-       11,216,21, &
+-       2,218,13, &
+-       22,228,21, &
+-       41,229,14, &
+-       43,239,19], [3,12])
++   INTEGER,PARAMETER :: pr92_targets(3,1)=RESHAPE([ &
++       2,219,13], [3,1])
+    INTEGER :: time_step
+    INTEGER :: rk_order
+    REAL    :: dt         ! This is the large time step computed below
+@@ -2863,7 +2852,7 @@
+                pr87_rain_diffusion_increment)
+            ! Coordinate selection controls diagnostic I/O only, never a physical update.
+            IF (pr87_diff_channel>=7.AND.PRESENT(all_pair_diffusion_identity)) THEN
+-             IF (all_pair_diffusion_identity(1)==15) THEN
++             IF (all_pair_diffusion_identity(1)==39.AND.rk_step==1) THEN
+                OPEN(NEWUNIT=pr92_u,FILE='pr92_diffusion_producer.raw', &
+                     STATUS='UNKNOWN',POSITION='APPEND')
+                DO pr92_target=1,SIZE(pr92_targets,2)
+@@ -5086,15 +5075,15 @@
+                          group_failure_store_stage=pr99_stage, &
+                          group_failure_candidate64=pr99_candidate64, &
+                          group_failure_stored32=pr99_stored32, &
+-                         group_failure_enabled=itimestep==32)
+-    IF (.NOT.feasible .AND. itimestep==32 .AND. pr99_cell>0) &
++                         group_failure_enabled=itimestep==39 .AND. rk==2)
++    IF (.NOT.feasible .AND. itimestep==39 .AND. rk==2 .AND. pr99_cell>0) &
+       CALL write_pr99_group_failure(pr99_cell,pr99_pair,pr99_predicate,pr99_stage, &
+         pr99_candidate64,pr99_stored32,ANY(source_first_pair))
+     IF (.NOT.feasible) CALL write_pr91_actual_store_failures( &
+       pr91_stage,pr91_candidate,pr91_stored,pr91_adjustment,pr91_scale, &
+       pr91_cells,pr91_target_i,pr91_target_j,pr91_target_k)
+     IF (.NOT.feasible) CALL try_graupel_mixture_trial()
+-    IF (itimestep==32 .AND. pr99_cell>0) &
++    IF (itimestep==39 .AND. rk==2 .AND. pr99_cell>0) &
+       CALL write_pr99_group_retry_result(pr99_cell,pr99_pair,pr99_predicate,feasible)
+   END SUBROUTINE evaluate_joint_candidate
+ 
