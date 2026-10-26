@@ -1,0 +1,117 @@
+{
+  "command": [
+    "python3",
+    "tools/pr103_time_response.py",
+    "--input",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr102_execution_20261025/fivearm/fivearm_history_readback.json",
+    "--receipt",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr102_execution_20261025/fivearm/execution.json",
+    "--output",
+    "/var/tmp/pr103_time_response_postguard_20261026/allsavedtime_response_final.json"
+  ],
+  "current_source_and_input_pins": {
+    "documentation": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/PR103_TIME_RESPONSE_20261026.md",
+      "sha256_after_validation": "18b04ec3eb58bf334790d13b8fb30a42150a7f0eb706950a5bf351b76e92b0c6",
+      "sha256_before_validation": "18b04ec3eb58bf334790d13b8fb30a42150a7f0eb706950a5bf351b76e92b0c6",
+      "unchanged": true
+    },
+    "fivearm_execution": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr102_execution_20261025/fivearm/execution.json",
+      "sha256_after_validation": "cfb54c75dfd6d6b6e101a98a7f24e7ecd3b3cd1beba1d949c03ec7d5a7ddcd9d",
+      "sha256_before_validation": "cfb54c75dfd6d6b6e101a98a7f24e7ecd3b3cd1beba1d949c03ec7d5a7ddcd9d",
+      "unchanged": true
+    },
+    "fivearm_readback": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr102_execution_20261025/fivearm/fivearm_history_readback.json",
+      "sha256_after_validation": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2",
+      "sha256_before_validation": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2",
+      "unchanged": true
+    },
+    "focused_tests": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/tests/test_pr103_time_response.py",
+      "sha256_after_validation": "ae6bee36801056609fc24a2c951f256e631f9fe7cf02b50ec3c8225f05ed0e78",
+      "sha256_before_validation": "ae6bee36801056609fc24a2c951f256e631f9fe7cf02b50ec3c8225f05ed0e78",
+      "unchanged": true
+    },
+    "historical_response": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr103_time_response_20261026/allsavedtime_response.json",
+      "sha256_after_validation": "5b7550bbde89d1cbe1182295167ad80c36fc7e95843f3683a2226ddf38bc8f6b",
+      "sha256_before_validation": "5b7550bbde89d1cbe1182295167ad80c36fc7e95843f3683a2226ddf38bc8f6b",
+      "unchanged": true
+    },
+    "historical_source_pins": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr103_time_response_20261026/source_pins.json",
+      "sha256_after_validation": "e6185f1ed16f369231349e9bdebffb00ee2d372ddbd4b1ab73cde13ed3fd4e7e",
+      "sha256_before_validation": "e6185f1ed16f369231349e9bdebffb00ee2d372ddbd4b1ab73cde13ed3fd4e7e",
+      "unchanged": true
+    },
+    "prior_intermediate_validation_receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr103_time_response_20261026/postguard_rerun_20261026/validation_receipt.json",
+      "sha256_after_validation": "6d98bb5bf0a82e2cd71fa249690844ba959cd745f315bb578493dc3543bff368",
+      "sha256_before_validation": "6d98bb5bf0a82e2cd71fa249690844ba959cd745f315bb578493dc3543bff368",
+      "unchanged": true
+    },
+    "reader_code": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/tools/pr103_time_response.py",
+      "sha256_after_validation": "49df07b2a9feaf7cd0783d23c0f3da2b4d284648087c670efaed9ecb871d2f20",
+      "sha256_before_validation": "49df07b2a9feaf7cd0783d23c0f3da2b4d284648087c670efaed9ecb871d2f20",
+      "unchanged": true
+    }
+  },
+  "diff_check": "PASS",
+  "focused_tests": {
+    "command": "pytest -q tests/test_pr103_time_response.py",
+    "result": "11 passed"
+  },
+  "fresh_output": {
+    "bytes": 32552,
+    "path": "/var/tmp/pr103_time_response_postguard_20261026/allsavedtime_response_final.json",
+    "sha256": "5b7550bbde89d1cbe1182295167ad80c36fc7e95843f3683a2226ddf38bc8f6b"
+  },
+  "generated_at_utc": "2026-10-26T00:52:18.624664+00:00",
+  "historical_pins_file_modified": false,
+  "preserved_output_comparison": {
+    "byte_identical": true,
+    "metric_payload_equal": true,
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr103_time_response_20261026/allsavedtime_response.json",
+    "sha256": "5b7550bbde89d1cbe1182295167ad80c36fc7e95843f3683a2226ddf38bc8f6b"
+  },
+  "schema": "pr103_time_response_postguard_validation_v2",
+  "scope": {
+    "arms": {
+      "C": "COUPLED",
+      "H": "HYDRO",
+      "N": "STRUCTURED",
+      "OFF": "OFF",
+      "P": "P"
+    },
+    "fields": {
+      "Phi": "m2/s2",
+      "QC": "kg/kg dry",
+      "W": "m/s",
+      "pressure": "Pa"
+    },
+    "model_or_compiler_run": false,
+    "observation_skill": "NOT_EVALUATED",
+    "physical_approval": "FAIL_OPEN",
+    "regions": {
+      "buffer": 7644,
+      "support": 613
+    },
+    "times_seconds": [
+      0,
+      60,
+      120,
+      180,
+      240,
+      300,
+      360,
+      420,
+      480,
+      540,
+      600
+    ]
+  },
+  "status": "PASS_READ_ONLY_POSTPROCESS"
+}

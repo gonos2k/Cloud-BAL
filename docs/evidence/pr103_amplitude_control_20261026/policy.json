@@ -1,0 +1,16 @@
+{
+  "schema": "pr103_amplitude_control_policy_v1",
+  "role": "AMPLITUDE_MATCHED_CONTROL",
+  "classification": "ONE_RESEARCH_CONTROL_NO_STATISTICAL_OR_PHYSICAL_APPROVAL",
+  "inputs": "H, P, N are actual archived REAL32 readbacks on the inherited PR99 fixed free-face support",
+  "scale": "s = norm2(Nstored-Hstored) / norm2(Pstored-Hstored), one global scalar over both wind components and all native levels on free faces",
+  "ideal_control": "Astar = Hstored + s*(Pstored-Hstored) on free faces; Astar = Hstored on fixed/exterior faces",
+  "storage": "Cast Astar once to REAL32, then use the exact stored readback; never fit s after storage and never project or alter the uniform direction",
+  "norm_tolerance": "Before writing a candidate, derive the admissible readback norm mismatch from the L2 envelope of half the local REAL32 ULP at Astar, plus a binary64 operand-scaled arithmetic envelope. For H+s(P−H), use gamma4=4u/(1−4u) times (|H|+|s|(|P|+|H|)) componentwise, then an L2 norm; for subtraction, norm, and ratio calculations use operand-scaled binary64 bounds. Report the observed mismatch against this fixed bound",
+  "continuous_equality_reference": "Reconstruct Pcont = H + bP from the independently verified continuous PR99 projection exactly as PR102 does. Acont = H + s*(Pcont-H) is the reference for the inherited A_k b_k = 0 equality proof; do not claim the actual stored-P ideal has exact zero residual",
+  "stored_to_continuous_bound": "Bound ||Areadback-Acont||2 by s*||Pstored-Pcont||2 plus the REAL32 half-ULP L2 storage envelope, gamma4 formula-arithmetic envelope, and operand-scaled subtraction/norm/ratio envelope; require the actual stored-to-continuous distance to fit this bound, then report actual stored residual and archived native-consumer outcome separately",
+  "inherited_controls": "Reuse the receipt-bound PR99 support, native fixed carrier, zero exterior, source identities, and strict additional-change budget Delta. Require the control to satisfy the inherited stored readback budget; no solver, new weights, model, or prior",
+  "assessment": "Use existing archived native consumer gates and matched archived arm identities; source amplitude matching alone is not admission or validation",
+  "physical_approval": "FAIL_OPEN",
+  "observation_skill": "NOT_EVALUATED"
+}

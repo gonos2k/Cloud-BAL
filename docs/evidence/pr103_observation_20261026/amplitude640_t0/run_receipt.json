@@ -1,0 +1,195 @@
+{
+  "A640_T0_T2_vs_O_T0_T2": {
+    "bitwise_equal": true,
+    "changed_cells": 0,
+    "max_abs_delta_k": 0.0
+  },
+  "all_input_pins_unchanged": true,
+  "closure": {
+    "T0_history_valid_time_utc": "2026-08-16T13:00:00Z",
+    "arm": "AMPLITUDE",
+    "candidate_sha256": "9038d0a26896a630b7048091a97a2c0055b26934513392195eb8e609626e74e2",
+    "completed_steps": 32,
+    "executed_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+    "history_bytes": 1058940690,
+    "history_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/run/wrfout_d01_2026-08-16_13:00:00",
+    "history_sha256": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4",
+    "preflight_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/preflight.json",
+    "preflight_sha256": "b3d137c91ab90ee89cc25b3b8bf709d622f7b819f71a048f51f1527f06005b0b",
+    "processing_errors": [],
+    "returncode": 0,
+    "run_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/receipt.json",
+    "run_receipt_sha256": "76792551d703e5e05af778b39482269dcb09ed16b83a5780514e920fcd1e5296",
+    "run_timestamp_first": "2026-08-16_13:00:20",
+    "run_timestamp_last": "2026-08-16_13:10:40",
+    "status": "COMPLETE"
+  },
+  "command": "PYTHONDONTWRITEBYTECODE=1 python /var/tmp/pr103_observation_amplitude640_t0_20261026/run_amplitude640_t0.py",
+  "input_pin_count": 21,
+  "limitations": [
+    "closed 640-second run but T0 history only; no later forecast valid time",
+    "same-cycle input consistency only; no independent skill or physical approval",
+    "raw residuals only; no sigma/covariance or new QC rule"
+  ],
+  "metrics": {
+    "A640_T0": {
+      "field": "T2",
+      "history_sha256": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4",
+      "metrics": {
+        "excluded_counts_by_reason": {
+          "missing_lso_temperature_sentinel": 38,
+          "non_1300_report_time": 13
+        },
+        "mae_c": 0.833588257926535,
+        "matched_count": 765,
+        "max_abs_residual_c": 21.78634572051771,
+        "rmse_c": 1.309807498536879,
+        "signed_bias_c": -0.1891139100063588
+      },
+      "units": "K"
+    },
+    "O": {
+      "field": "T2",
+      "history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "metrics": {
+        "excluded_counts_by_reason": {
+          "missing_lso_temperature_sentinel": 38,
+          "non_1300_report_time": 13
+        },
+        "mae_c": 0.833588257926535,
+        "matched_count": 765,
+        "max_abs_residual_c": 21.78634572051771,
+        "rmse_c": 1.309807498536879,
+        "signed_bias_c": -0.1891139100063588
+      },
+      "units": "K"
+    }
+  },
+  "observation": {
+    "matched_records": 765,
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/lso/262281300.lso",
+    "records": 816,
+    "sha256": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+    "source_badflag_degF": -99.9,
+    "units": "degF",
+    "valid_time_utc": "2026-08-16T13:00:00Z"
+  },
+  "operation": "A640 T0 input-consistency readback using unchanged frozen PR103 comparator",
+  "output_sha256": "0edcfd203bf2674a3775c3e308f655fe074b7883b11c54236e03a65c6bae1bca",
+  "pins_before_after": {
+    "a20_run_receipt": {
+      "after": "67c148c22e4b812192547108e7f6ddf476ac3ee18c922de39b3512e968efaf3e",
+      "before": "67c148c22e4b812192547108e7f6ddf476ac3ee18c922de39b3512e968efaf3e",
+      "unchanged": true
+    },
+    "a20_runner": {
+      "after": "457b5fda867a28019c4ace61aed8f50993bd6059d2dc0fb1fb5c2728dd08b3e5",
+      "before": "457b5fda867a28019c4ace61aed8f50993bd6059d2dc0fb1fb5c2728dd08b3e5",
+      "unchanged": true
+    },
+    "a20_sidecar": {
+      "after": "5bbd205b4e7d49ed425ddcda433872e2fe128937e8c5c4d28be39f374f56dd14",
+      "before": "5bbd205b4e7d49ed425ddcda433872e2fe128937e8c5c4d28be39f374f56dd14",
+      "unchanged": true
+    },
+    "a_history": {
+      "after": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4",
+      "before": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4",
+      "unchanged": true
+    },
+    "a_preflight": {
+      "after": "b3d137c91ab90ee89cc25b3b8bf709d622f7b819f71a048f51f1527f06005b0b",
+      "before": "b3d137c91ab90ee89cc25b3b8bf709d622f7b819f71a048f51f1527f06005b0b",
+      "unchanged": true
+    },
+    "a_receipt": {
+      "after": "76792551d703e5e05af778b39482269dcb09ed16b83a5780514e920fcd1e5296",
+      "before": "76792551d703e5e05af778b39482269dcb09ed16b83a5780514e920fcd1e5296",
+      "unchanged": true
+    },
+    "comparator": {
+      "after": "fa7b890909368f5218c3b91a7aa31d95754703860f2151016f19912ab99a3144",
+      "before": "fa7b890909368f5218c3b91a7aa31d95754703860f2151016f19912ab99a3144",
+      "unchanged": true
+    },
+    "finite_helper": {
+      "after": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+      "before": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+      "unchanged": true
+    },
+    "fivearm_readback": {
+      "after": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2",
+      "before": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2",
+      "unchanged": true
+    },
+    "fivearm_v2_sidecar": {
+      "after": "1813cf577e1030ac8c20b1651c1a857c6dd938092bb662d41278d94ddda7bf8c",
+      "before": "1813cf577e1030ac8c20b1651c1a857c6dd938092bb662d41278d94ddda7bf8c",
+      "unchanged": true
+    },
+    "o_history": {
+      "after": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "before": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "unchanged": true
+    },
+    "observation": {
+      "after": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+      "before": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+      "unchanged": true
+    },
+    "source:src/include/lso_formats.inc": {
+      "after": "956becb489dcb7aee43857aef788c15e0fc0eec0303a179d801051ed71e3f96a",
+      "before": "956becb489dcb7aee43857aef788c15e0fc0eec0303a179d801051ed71e3f96a",
+      "unchanged": true
+    },
+    "source:src/include/surface_obs.inc": {
+      "after": "3edca9ceb40699ae14c71bce836232747ef141290e44decd025dead160028ebe",
+      "before": "3edca9ceb40699ae14c71bce836232747ef141290e44decd025dead160028ebe",
+      "unchanged": true
+    },
+    "source:src/lib/bgdata/wrf/module_wrf_lga.f90": {
+      "after": "efb48b0d83b5c3038928043a2ca36e06de25baf5d775a6587444b36757b2fa6c",
+      "before": "efb48b0d83b5c3038928043a2ca36e06de25baf5d775a6587444b36757b2fa6c",
+      "unchanged": true
+    },
+    "source:src/lib/gridconv.f": {
+      "after": "bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff",
+      "before": "bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff",
+      "unchanged": true
+    },
+    "source:src/lib/modules/module_map_utils.f90": {
+      "after": "b9fdabaa25e928f1db2f0e35f868e2c0ef92f9093c1de68ab9ced05238662d57",
+      "before": "b9fdabaa25e928f1db2f0e35f868e2c0ef92f9093c1de68ab9ced05238662d57",
+      "unchanged": true
+    },
+    "source:src/lib/modules/module_wrf_netcdf.f90": {
+      "after": "45d4d35f290e7db564b35bb422cb5f48d1c186f8de3e13d6f7f6d44e4ab5c9a0",
+      "before": "45d4d35f290e7db564b35bb422cb5f48d1c186f8de3e13d6f7f6d44e4ab5c9a0",
+      "unchanged": true
+    },
+    "source:src/lib/read_surface_obs.f": {
+      "after": "ba6ae0ed4547ed90a2f7200bcfb36c1cd4f295cc70539bb03740fe89c80629ad",
+      "before": "ba6ae0ed4547ed90a2f7200bcfb36c1cd4f295cc70539bb03740fe89c80629ad",
+      "unchanged": true
+    },
+    "upstream_binding": {
+      "after": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5",
+      "before": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5",
+      "unchanged": true
+    },
+    "wrf_projection_source": {
+      "after": "0c777e66ffbb0602479cadcc0ab484769a140c4cb2b3e9a8f757597086f0c76b",
+      "before": "0c777e66ffbb0602479cadcc0ab484769a140c4cb2b3e9a8f757597086f0c76b",
+      "unchanged": true
+    }
+  },
+  "published_output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr103_observation_20261026/amplitude640_t0/amplitude640_t0_input_consistency.json",
+  "published_runner": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr103_observation_20261026/amplitude640_t0/run_amplitude640_t0.py",
+  "result_bytes": 8608,
+  "runner_sha256": "3966cac7694e946afde1941321f8864210cee4673a4b5a9de14d96a4b135deec",
+  "schema": "pr103_amplitude640_t0_observation_run_receipt_v1",
+  "scope": "AMPLITUDE closed 640-second run; exact generated T0 only; no later forecast valid time and not independent forecast skill",
+  "scratch_output": "/var/tmp/pr103_observation_amplitude640_t0_20261026/amplitude640_t0_input_consistency.json",
+  "scratch_runner": "/var/tmp/pr103_observation_amplitude640_t0_20261026/run_amplitude640_t0.py",
+  "working_directory": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL"
+}

@@ -1,0 +1,96 @@
+gridconv_kernel.f(122): error #6321: An unterminated block exists.
+      else
+^
+compilation aborted for gridconv_kernel.f (code 1)
+pr103_gdtost_oracle_program.f90(1): error #5149: Illegal character in statement label field  [p]
+program pr103_gdtost_oracle
+^
+pr103_gdtost_oracle_program.f90(1): error #5149: Illegal character in statement label field  [r]
+program pr103_gdtost_oracle
+-^
+pr103_gdtost_oracle_program.f90(1): error #5149: Illegal character in statement label field  [o]
+program pr103_gdtost_oracle
+--^
+pr103_gdtost_oracle_program.f90(1): error #5149: Illegal character in statement label field  [g]
+program pr103_gdtost_oracle
+---^
+pr103_gdtost_oracle_program.f90(1): error #5149: Illegal character in statement label field  [r]
+program pr103_gdtost_oracle
+----^
+pr103_gdtost_oracle_program.f90(1): error #5118: First statement in file must not be continued
+program pr103_gdtost_oracle
+-----^
+pr103_gdtost_oracle_program.f90(2): error #5149: Illegal character in statement label field  [i]
+  implicit none
+--^
+pr103_gdtost_oracle_program.f90(2): error #5149: Illegal character in statement label field  [m]
+  implicit none
+---^
+pr103_gdtost_oracle_program.f90(2): error #5149: Illegal character in statement label field  [p]
+  implicit none
+----^
+pr103_gdtost_oracle_program.f90(3): error #5149: Illegal character in statement label field  [i]
+  integer, parameter :: nx = 8, ny = 8
+--^
+pr103_gdtost_oracle_program.f90(3): error #5149: Illegal character in statement label field  [n]
+  integer, parameter :: nx = 8, ny = 8
+---^
+pr103_gdtost_oracle_program.f90(3): error #5149: Illegal character in statement label field  [t]
+  integer, parameter :: nx = 8, ny = 8
+----^
+pr103_gdtost_oracle_program.f90(4): error #5149: Illegal character in statement label field  [r]
+  real :: field(nx, ny), value
+--^
+pr103_gdtost_oracle_program.f90(4): error #5149: Illegal character in statement label field  [e]
+  real :: field(nx, ny), value
+---^
+pr103_gdtost_oracle_program.f90(4): error #5149: Illegal character in statement label field  [a]
+  real :: field(nx, ny), value
+----^
+pr103_gdtost_oracle_program.f90(5): error #5149: Illegal character in statement label field  [i]
+  integer :: i, j
+--^
+pr103_gdtost_oracle_program.f90(5): error #5149: Illegal character in statement label field  [n]
+  integer :: i, j
+---^
+pr103_gdtost_oracle_program.f90(5): error #5149: Illegal character in statement label field  [t]
+  integer :: i, j
+----^
+pr103_gdtost_oracle_program.f90(7): error #5149: Illegal character in statement label field  [d]
+  do j = 1, ny
+--^
+pr103_gdtost_oracle_program.f90(7): error #5149: Illegal character in statement label field  [o]
+  do j = 1, ny
+---^
+pr103_gdtost_oracle_program.f90(8): error #5149: Illegal character in statement label field  [d]
+    do i = 1, nx
+----^
+pr103_gdtost_oracle_program.f90(3): error #5082: Syntax error, found ',' when expecting one of: ( : % [ . = =>
+  integer, parameter :: nx = 8, ny = 8
+---------^
+pr103_gdtost_oracle_program.f90(3): error #5082: Syntax error, found '=' when expecting one of: :: ) ( , : * <END-OF-STATEMENT> ; . % (/ + - [ ] /) . ** / > ? ...
+  integer, parameter :: nx = 8, ny = 8
+---------------------------^
+pr103_gdtost_oracle_program.f90(4): error #5082: Syntax error, found '::' when expecting one of: ) ,
+  real :: field(nx, ny), value
+-------^
+pr103_gdtost_oracle_program.f90(8): error #5082: Syntax error, found END-OF-STATEMENT when expecting one of: :: ) ( , : * . % + - [ . = ** / // .LT. < .LE. <= .EQ. == ...
+    do i = 1, nx
+----------------^
+pr103_gdtost_oracle_program.f90(10): error #5149: Illegal character in statement label field  [e]
+    end do
+----^
+pr103_gdtost_oracle_program.f90(11): error #5149: Illegal character in statement label field  [e]
+  end do
+--^
+pr103_gdtost_oracle_program.f90(11): error #5149: Illegal character in statement label field  [n]
+  end do
+---^
+pr103_gdtost_oracle_program.f90(11): error #5149: Illegal character in statement label field  [d]
+  end do
+----^
+pr103_gdtost_oracle_program.f90(10): error #5082: Syntax error, found IDENTIFIER 'DDO' when expecting one of: :: ) ( , : * <END-OF-STATEMENT> ; . % (/ + - [ ] /) . = ' ** / ...
+    end do
+------^
+pr103_gdtost_oracle_program.f90(12): catastrophic error: Too many errors, exiting
+compilation aborted for pr103_gdtost_oracle_program.f90 (code 1)

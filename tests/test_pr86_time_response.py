@@ -105,6 +105,106 @@ def make_native_input_binding(root: Path) -> dict:
 
 
 class TimeResponseTests(unittest.TestCase):
+    def test_amplitude_binding_checks_frozen_references_and_storage_bound(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            names = ("candidate", "reference_hydro", "reference_coupled", "original_p",
+                     "reference_structured", "boundary", "generator", "policy", "composition")
+            artifacts = {}
+            for name in names:
+                artifact = root / name
+                artifact.write_bytes(name.encode())
+                artifacts[name] = {"path": str(artifact), "sha256": response.sha256(artifact)}
+            proposal = {"schema": "pr103_amplitude_control_proposal_v1",
+                        "status": "PROPOSAL_REQUIRES_NATIVE_CONSUMER_AND_SOURCE_CAPTURE",
+                        "role": "AMPLITUDE_MATCHED_CONTROL", **artifacts,
+                        "parent_sha256": artifacts["original_p"]["sha256"],
+                        "composition_sha256": artifacts["composition"]["sha256"],
+                        "change_contract": {"changed_variables": ["U", "V"],
+                                             "non_target_variables_identical": True},
+                        "metrics": {"scale": 0.7, "stored_target_norm": 3.0,
+                                    "ideal_from_stored_p_norm": 3.0,
+                                    "stored_readback_norm": 3.0,
+                                    "readback_norm_error_bound": 1e-5,
+                                    "continuous_pr99_reference_norm": 4.0,
+                                    "continuous_pr99_layer_residual_l2": [0.0, 0.0],
+                                    "continuous_pr99_reference_error_bound": 1e-5}}
+            structured_receipt = root / "structured_proposal.json"
+            structured_receipt.write_text(json.dumps({"schema": "pr102_wind_structure_proposal_v1",
+                                                      "candidate": artifacts["reference_structured"]}))
+            structured_run = root / "structured_run.json"
+            structured_run.write_text(json.dumps({"arm": "STRUCTURED", "status": "COMPLETE",
+                                                  "returncode": 0,
+                                                  "candidate_wrfinput_sha256": artifacts["reference_structured"]["sha256"]}))
+            structured_run_preflight = root / "structured_run_preflight.json"
+            structured_run_preflight.write_text(json.dumps({"arm": "STRUCTURED", "duration_seconds": 640,
+                                                             "candidate_wrfinput_sha256": artifacts["reference_structured"]["sha256"]}))
+            pr102_evidence = root / "pr102_evidence.txt"
+            pr102_evidence.write_text("closed controls and captures")
+            pr102_execution_preflight = root / "pr102_execution_preflight.json"
+            pr102_execution_preflight.write_text(json.dumps({
+                "schema": "pr102_execution_preflight_v1", "status": "READY_FOR_ROOT_REVIEW_NO_LAUNCH",
+                "candidate_wrfinput_sha256": artifacts["reference_structured"]["sha256"],
+                "candidate_input_receipt_sha256": "pending",
+                "candidate_executable_sha256": response.PR102_BASE_C2_EXECUTABLE_SHA256,
+                "evidence_artifacts": [{"path": str(pr102_evidence), "sha256": response.sha256(pr102_evidence)}]}))
+            pr99_receipt = root / "pr99_receipt.json"
+            pr99_receipt.write_text("PR99 source proposal")
+            gravity = root / "gravity.json"
+            gravity.write_text('{"g":9.81}')
+            proposal["pr99_projection_receipt"] = {"path": str(pr99_receipt),
+                                                     "sha256": response.sha256(pr99_receipt)}
+            proposal["pr102_structured_receipt"] = {"path": str(structured_receipt),
+                                                      "sha256": response.sha256(structured_receipt)}
+            proposal["pr102_structured_run_receipt"] = {"path": str(structured_run),
+                                                          "sha256": response.sha256(structured_run)}
+            proposal["pr102_structured_run_preflight"] = {"path": str(structured_run_preflight),
+                                                           "sha256": response.sha256(structured_run_preflight)}
+            proposal["pr102_execution_preflight"] = {"path": str(pr102_execution_preflight),
+                                                       "sha256": response.sha256(pr102_execution_preflight)}
+            proposal["gravity"] = {"path": str(gravity), "sha256": response.sha256(gravity), "g_m_s2": 9.81}
+            execution_preflight = json.loads(pr102_execution_preflight.read_text())
+            execution_preflight["candidate_input_receipt_sha256"] = response.sha256(structured_receipt)
+            pr102_execution_preflight.write_text(json.dumps(execution_preflight))
+            proposal["pr102_execution_preflight"]["sha256"] = response.sha256(pr102_execution_preflight)
+            reference_pins = {"PR102_REFERENCE_HYDRO_SHA256": artifacts["reference_hydro"]["sha256"],
+                              "PR102_REFERENCE_COUPLED_SHA256": artifacts["reference_coupled"]["sha256"],
+                              "PR102_ORIGINAL_P_C2_SHA256": artifacts["original_p"]["sha256"],
+                              "PR102_STRUCTURED_INPUT_SHA256": artifacts["reference_structured"]["sha256"],
+                              "PR102_BOUNDARY_C2_SHA256": artifacts["boundary"]["sha256"],
+                              "PR102_STRUCTURED_RUN_RECEIPT_SHA256": response.sha256(structured_run),
+                              "PR103_AMPLITUDE_POLICY_SHA256": artifacts["policy"]["sha256"]}
+            proposal_path = root / "proposal.json"
+            proposal_path.write_text(json.dumps(proposal))
+            with patch.multiple(response, **reference_pins):
+                binding = response._amplitude_control_input_binding(proposal_path)
+                self.assertEqual(binding["binding_kind"], "amplitude_control")
+                self.assertTrue(response._input_binding_unchanged(binding))
+                proposal["metrics"]["stored_readback_norm"] = 3.1
+                proposal_path.write_text(json.dumps(proposal))
+                with self.assertRaisesRegex(ValueError, "does not match its declared target bound"):
+                    response._amplitude_control_input_binding(proposal_path)
+
+    def test_amplitude_routes_require_matched_duration_and_pr103_gates(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with self.assertRaisesRegex(ValueError, "matched 640-second run"):
+                response.prepare("AMPLITUDE", 20, root / "wrong_duration")
+            with self.assertRaisesRegex(ValueError, "explicit base C2 build and PR103 prerequisite"):
+                response.prepare("AMPLITUDE", 640, root / "missing_preflight",
+                                 candidate_build_path=root / "build.json",
+                                 amplitude_control_input_receipt_path=root / "proposal.json")
+            with self.assertRaisesRegex(ValueError, "one 20-second step"):
+                response.prepare("AMPLITUDE_CAPTURE", 640, root / "capture_duration",
+                                 amplitude_control_input_receipt_path=root / "proposal.json")
+            with self.assertRaisesRegex(ValueError, "PR103 consumer assessment"):
+                response.prepare("AMPLITUDE_CAPTURE", 20, root / "capture_missing_consumer",
+                                 candidate_build_path=root / "diagnostic_build.json",
+                                 amplitude_control_input_receipt_path=root / "proposal.json")
+            with self.assertRaisesRegex(ValueError, "one 20-second step"):
+                response.prepare("AMPLITUDE_BASELINE20", 640, root / "baseline_duration",
+                                 amplitude_control_input_receipt_path=root / "proposal.json")
+
     def test_structured_capture_requires_matching_archived_consumer_pass(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

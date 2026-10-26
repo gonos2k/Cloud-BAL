@@ -1,0 +1,23 @@
+Authoritative source
+  klaps-v5.0_/src/lib/gridconv.f
+  SHA-256 bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff
+
+Included source lines
+  gdtost and binom bodies, source lines 1320-1464 inclusive
+
+Shared include
+  klaps-v5.0_/src/include/bgdata.inc
+  SHA-256 f37316c6b1db80fd191658ef441a548e0b2fd4f7dd342b51b3dcde8549faf7db
+  Only the two include statements were replaced by the same declared REAL
+  parameter: missingflag=1.0e37. The include file declares this exact
+  constant. No interpolation formula or body was changed.
+
+Test program
+  pr103_gdtost_oracle_program.f90 calls the extracted kernel on a linear
+  fractional point and an integral point. Expected results are 24 and 22.
+
+Scratch
+  /var/tmp/pr103_station_oracle_20261026/O0_retry
+  /var/tmp/pr103_station_oracle_20261026/O2_retry
+  The initial failed O0 attempt is retained separately under
+  initial_failed_attempt/ and is not part of the successful result.

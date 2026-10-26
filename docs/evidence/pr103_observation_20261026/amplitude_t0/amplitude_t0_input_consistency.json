@@ -1,0 +1,168 @@
+{
+  "A20_T2_vs_O_T2": {
+    "bitwise_equal": true,
+    "changed_cells": 0,
+    "max_abs_delta_k": 0.0
+  },
+  "arms": {
+    "A20": {
+      "field": "T2",
+      "history_sha256": "8d5e5ae716307d0396b13001bd58f22e788d0e449c0b6c86685c0fa74b165b3a",
+      "metrics": {
+        "excluded_counts_by_reason": {
+          "missing_lso_temperature_sentinel": 38,
+          "non_1300_report_time": 13
+        },
+        "mae_c": 0.833588257926535,
+        "matched_count": 765,
+        "max_abs_residual_c": 21.78634572051771,
+        "rmse_c": 1.309807498536879,
+        "signed_bias_c": -0.1891139100063588
+      },
+      "units": "K"
+    },
+    "O": {
+      "field": "T2",
+      "history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "metrics": {
+        "excluded_counts_by_reason": {
+          "missing_lso_temperature_sentinel": 38,
+          "non_1300_report_time": 13
+        },
+        "mae_c": 0.833588257926535,
+        "matched_count": 765,
+        "max_abs_residual_c": 21.78634572051771,
+        "rmse_c": 1.309807498536879,
+        "signed_bias_c": -0.1891139100063588
+      },
+      "units": "K"
+    }
+  },
+  "closure": {
+    "arm": "AMPLITUDE_BASELINE20",
+    "candidate_sha256": "9038d0a26896a630b7048091a97a2c0055b26934513392195eb8e609626e74e2",
+    "completed_steps": 1,
+    "executed_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+    "history_bytes": 83150556,
+    "history_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/BASELINE20_RUN/run/wrfout_d01_2026-08-16_13:00:00",
+    "history_sha256": "8d5e5ae716307d0396b13001bd58f22e788d0e449c0b6c86685c0fa74b165b3a",
+    "model_timestamp": "2026-08-16_13:00:20",
+    "preflight_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/BASELINE20_RUN/preflight.json",
+    "preflight_sha256": "6159b507350e0c1d816a5b8293692837f5663dba56d71e55658f36232854430e",
+    "processing_errors": [],
+    "returncode": 0,
+    "run_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/BASELINE20_RUN/receipt.json",
+    "run_receipt_sha256": "24871d0d7e6d823ed8d47d9a1b13a8aadb1675a6e55ba396ed3233bd252d695c",
+    "status": "COMPLETE"
+  },
+  "limits": [
+    "20-second closed run only; no future-640 inference",
+    "same-cycle input consistency only; no independent skill or physical approval",
+    "raw residuals only; no sigma/covariance or new QC rule"
+  ],
+  "observation": {
+    "matched_records": 765,
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/00/lapsprd/lso/262281300.lso",
+    "records": 816,
+    "sha256": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+    "source_badflag_degF": -99.9,
+    "units": "degF",
+    "valid_time_utc": "2026-08-16T13:00:00Z"
+  },
+  "operation": "apply unchanged PR103 13Z LSO/T2 same-cycle comparator to A20 generated T0 and pinned O T0",
+  "operator": {
+    "comparator_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/tools/pr103_surface_temperature_observation.py",
+    "comparator_sha256": "fa7b890909368f5218c3b91a7aa31d95754703860f2151016f19912ab99a3144",
+    "operator_label": "source-faithful diagnostic adapter; not a registered assimilation H",
+    "residual": "H(X)-Y = WRF T2 (K -> degC) minus station air temperature (degF -> degC)"
+  },
+  "pins_before_after": {
+    "a_history": {
+      "after": "8d5e5ae716307d0396b13001bd58f22e788d0e449c0b6c86685c0fa74b165b3a",
+      "before": "8d5e5ae716307d0396b13001bd58f22e788d0e449c0b6c86685c0fa74b165b3a",
+      "unchanged": true
+    },
+    "a_preflight": {
+      "after": "6159b507350e0c1d816a5b8293692837f5663dba56d71e55658f36232854430e",
+      "before": "6159b507350e0c1d816a5b8293692837f5663dba56d71e55658f36232854430e",
+      "unchanged": true
+    },
+    "a_receipt": {
+      "after": "24871d0d7e6d823ed8d47d9a1b13a8aadb1675a6e55ba396ed3233bd252d695c",
+      "before": "24871d0d7e6d823ed8d47d9a1b13a8aadb1675a6e55ba396ed3233bd252d695c",
+      "unchanged": true
+    },
+    "comparator": {
+      "after": "fa7b890909368f5218c3b91a7aa31d95754703860f2151016f19912ab99a3144",
+      "before": "fa7b890909368f5218c3b91a7aa31d95754703860f2151016f19912ab99a3144",
+      "unchanged": true
+    },
+    "finite_helper": {
+      "after": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+      "before": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+      "unchanged": true
+    },
+    "fivearm_readback": {
+      "after": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2",
+      "before": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2",
+      "unchanged": true
+    },
+    "o_history": {
+      "after": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "before": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "unchanged": true
+    },
+    "observation": {
+      "after": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+      "before": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+      "unchanged": true
+    },
+    "source:src/include/lso_formats.inc": {
+      "after": "956becb489dcb7aee43857aef788c15e0fc0eec0303a179d801051ed71e3f96a",
+      "before": "956becb489dcb7aee43857aef788c15e0fc0eec0303a179d801051ed71e3f96a",
+      "unchanged": true
+    },
+    "source:src/include/surface_obs.inc": {
+      "after": "3edca9ceb40699ae14c71bce836232747ef141290e44decd025dead160028ebe",
+      "before": "3edca9ceb40699ae14c71bce836232747ef141290e44decd025dead160028ebe",
+      "unchanged": true
+    },
+    "source:src/lib/bgdata/wrf/module_wrf_lga.f90": {
+      "after": "efb48b0d83b5c3038928043a2ca36e06de25baf5d775a6587444b36757b2fa6c",
+      "before": "efb48b0d83b5c3038928043a2ca36e06de25baf5d775a6587444b36757b2fa6c",
+      "unchanged": true
+    },
+    "source:src/lib/gridconv.f": {
+      "after": "bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff",
+      "before": "bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff",
+      "unchanged": true
+    },
+    "source:src/lib/modules/module_map_utils.f90": {
+      "after": "b9fdabaa25e928f1db2f0e35f868e2c0ef92f9093c1de68ab9ced05238662d57",
+      "before": "b9fdabaa25e928f1db2f0e35f868e2c0ef92f9093c1de68ab9ced05238662d57",
+      "unchanged": true
+    },
+    "source:src/lib/modules/module_wrf_netcdf.f90": {
+      "after": "45d4d35f290e7db564b35bb422cb5f48d1c186f8de3e13d6f7f6d44e4ab5c9a0",
+      "before": "45d4d35f290e7db564b35bb422cb5f48d1c186f8de3e13d6f7f6d44e4ab5c9a0",
+      "unchanged": true
+    },
+    "source:src/lib/read_surface_obs.f": {
+      "after": "ba6ae0ed4547ed90a2f7200bcfb36c1cd4f295cc70539bb03740fe89c80629ad",
+      "before": "ba6ae0ed4547ed90a2f7200bcfb36c1cd4f295cc70539bb03740fe89c80629ad",
+      "unchanged": true
+    },
+    "upstream_binding": {
+      "after": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5",
+      "before": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5",
+      "unchanged": true
+    },
+    "wrf_projection_source": {
+      "after": "0c777e66ffbb0602479cadcc0ab484769a140c4cb2b3e9a8f757597086f0c76b",
+      "before": "0c777e66ffbb0602479cadcc0ab484769a140c4cb2b3e9a8f757597086f0c76b",
+      "unchanged": true
+    }
+  },
+  "schema": "pr103_amplitude_t0_observation_input_consistency_v1",
+  "scope": "AMPLITUDE_BASELINE20 closed one-step 20-second run; exact T0 history only; not the future 640-second candidate and not independent forecast skill"
+}

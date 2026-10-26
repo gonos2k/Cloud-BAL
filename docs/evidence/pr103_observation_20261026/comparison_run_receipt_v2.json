@@ -1,0 +1,299 @@
+{
+  "arm_results": {
+    "C": {
+      "changed_cells": 0,
+      "history_sha256": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba",
+      "max_delta_k": 0.0,
+      "metrics": {
+        "excluded_counts_by_reason": {
+          "missing_lso_temperature_sentinel": 38,
+          "non_1300_report_time": 13
+        },
+        "mae_c": 0.833588257926535,
+        "matched_count": 765,
+        "max_abs_residual_c": 21.78634572051771,
+        "rmse_c": 1.309807498536879,
+        "signed_bias_c": -0.1891139100063588
+      },
+      "receipt_sha256": "0a7e1c3bcce58dea8433e9bffa615395d923cd05377c5068469af5dba29759cb",
+      "t2_same_as_O_bitwise": true
+    },
+    "H": {
+      "changed_cells": 0,
+      "history_sha256": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84",
+      "max_delta_k": 0.0,
+      "metrics": {
+        "excluded_counts_by_reason": {
+          "missing_lso_temperature_sentinel": 38,
+          "non_1300_report_time": 13
+        },
+        "mae_c": 0.833588257926535,
+        "matched_count": 765,
+        "max_abs_residual_c": 21.78634572051771,
+        "rmse_c": 1.309807498536879,
+        "signed_bias_c": -0.1891139100063588
+      },
+      "receipt_sha256": "1440db5a0178af11ac4d92854b3284cc35cb5a74e5e6f6a14cc59dcac3a00a64",
+      "t2_same_as_O_bitwise": true
+    },
+    "N": {
+      "changed_cells": 0,
+      "history_sha256": "fd18da17a47abeb862ac088f4ea185d34583de65d88245737b124065aa52165a",
+      "max_delta_k": 0.0,
+      "metrics": {
+        "excluded_counts_by_reason": {
+          "missing_lso_temperature_sentinel": 38,
+          "non_1300_report_time": 13
+        },
+        "mae_c": 0.833588257926535,
+        "matched_count": 765,
+        "max_abs_residual_c": 21.78634572051771,
+        "rmse_c": 1.309807498536879,
+        "signed_bias_c": -0.1891139100063588
+      },
+      "receipt_sha256": "313295e9cbf9e30a12a437c501bf3db2cf25c0e6762ec5d51c31d54ba311d4d6",
+      "t2_same_as_O_bitwise": true
+    },
+    "O": {
+      "changed_cells": 0,
+      "history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "max_delta_k": 0.0,
+      "metrics": {
+        "excluded_counts_by_reason": {
+          "missing_lso_temperature_sentinel": 38,
+          "non_1300_report_time": 13
+        },
+        "mae_c": 0.833588257926535,
+        "matched_count": 765,
+        "max_abs_residual_c": 21.78634572051771,
+        "rmse_c": 1.309807498536879,
+        "signed_bias_c": -0.1891139100063588
+      },
+      "receipt_sha256": "c4174b0363dc3b6eb5117ae1e011e9bee0f4f70d090036c607331fac7b0d1f8d",
+      "t2_same_as_O_bitwise": true
+    },
+    "P": {
+      "changed_cells": 0,
+      "history_sha256": "0a19bcc0ff51f8f4287a4fb2d4e6ee02de6c49a93d429a7f9f4bf26abdd8e96a",
+      "max_delta_k": 0.0,
+      "metrics": {
+        "excluded_counts_by_reason": {
+          "missing_lso_temperature_sentinel": 38,
+          "non_1300_report_time": 13
+        },
+        "mae_c": 0.833588257926535,
+        "matched_count": 765,
+        "max_abs_residual_c": 21.78634572051771,
+        "rmse_c": 1.309807498536879,
+        "signed_bias_c": -0.1891139100063588
+      },
+      "receipt_sha256": "d0a7920687aecbef15b91f2641638918f00beea67de5fb2af6e5597175bc5da2",
+      "t2_same_as_O_bitwise": true
+    }
+  },
+  "command": "python3 tools/pr103_surface_temperature_observation.py --output /var/tmp/pr103_observation_compare_v2_final_20261026/surface_temperature_input_consistency_v2.json",
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL",
+  "first_v2_output_sha256": "1813cf577e1030ac8c20b1651c1a857c6dd938092bb662d41278d94ddda7bf8c",
+  "geometry_audit": {
+    "anchor_source": "XLAT[0,0,0]/XLONG[0,0,0] because archived history lacks LAT_LL_T/LON_LL_T expected by get_wrf2_map",
+    "grid_points": 65988,
+    "i_delta_grid_units": {
+      "max_abs": 0.000749294758634278,
+      "rms": 0.0003452889383044356
+    },
+    "j_delta_grid_units": {
+      "max_abs": 0.0004816868297439214,
+      "rms": 0.00015239134530388177
+    },
+    "mass_grid_shape_yx": [
+      282,
+      234
+    ],
+    "meaning": "raw map output minus 1-based XLAT/XLONG indices; descriptive only, no fitted tolerance"
+  },
+  "limits": [
+    "same-cycle input consistency only",
+    "no station QC authority; no sigma/covariance",
+    "no independent skill or physical approval"
+  ],
+  "metrics": {
+    "excluded_counts_by_reason": {
+      "missing_lso_temperature_sentinel": 38,
+      "non_1300_report_time": 13
+    },
+    "mae_c": 0.833588257926535,
+    "matched_count": 765,
+    "max_abs_residual_c": 21.78634572051771,
+    "rmse_c": 1.309807498536879,
+    "signed_bias_c": -0.1891139100063588
+  },
+  "operation": "actual 13Z same-cycle LSO/T2 input-consistency readback for O/H/C/P/N",
+  "pre_inputs_manifest_sha256": "5db34b088ec39d96ad9d57d6c06aabd256aaf19dcef4a9aeead2a2b4c515c6c2",
+  "pre_post_hashes": {
+    "C": {
+      "after": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba",
+      "before": "e32992f7539a3b24d2eec4f06d5d7455accb97fa0de3ef50d415f9ac749670ba",
+      "unchanged": true
+    },
+    "H": {
+      "after": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84",
+      "before": "4e8e79eff2ceffc699fc59d8bb382b7936a6bd276068746c45bb4b072be35d84",
+      "unchanged": true
+    },
+    "N": {
+      "after": "fd18da17a47abeb862ac088f4ea185d34583de65d88245737b124065aa52165a",
+      "before": "fd18da17a47abeb862ac088f4ea185d34583de65d88245737b124065aa52165a",
+      "unchanged": true
+    },
+    "O": {
+      "after": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "before": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+      "unchanged": true
+    },
+    "P": {
+      "after": "0a19bcc0ff51f8f4287a4fb2d4e6ee02de6c49a93d429a7f9f4bf26abdd8e96a",
+      "before": "0a19bcc0ff51f8f4287a4fb2d4e6ee02de6c49a93d429a7f9f4bf26abdd8e96a",
+      "unchanged": true
+    },
+    "finite_helper": {
+      "after": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+      "before": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71",
+      "unchanged": true
+    },
+    "fivearm_readback": {
+      "after": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2",
+      "before": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2",
+      "unchanged": true
+    },
+    "ifx_profile": {
+      "after": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "before": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "unchanged": true
+    },
+    "lso": {
+      "after": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+      "before": "b70ee7a758bf2d27b938ff346e3fc4c40c4c79be22f746d0f0cb0cf2ce03b9fd",
+      "unchanged": true
+    },
+    "oracle_compare_script": {
+      "after": "900771bd32e9c8e00c9a681c2ca09f0de6e69d326c4b32a15a90fded98c2c39a",
+      "before": "900771bd32e9c8e00c9a681c2ca09f0de6e69d326c4b32a15a90fded98c2c39a",
+      "unchanged": true
+    },
+    "oracle_comparison": {
+      "after": "41a0e2c3a98e7f9a0d7259ddf35f92b460a66d17e51ed745eb49a8bd5d753b2e",
+      "before": "41a0e2c3a98e7f9a0d7259ddf35f92b460a66d17e51ed745eb49a8bd5d753b2e",
+      "unchanged": true
+    },
+    "oracle_o0_receipt": {
+      "after": "0a56f5754e4dae759858f9193ebe39d7ae7ed187c0837040ca1d2a8ddcadbcb6",
+      "before": "0a56f5754e4dae759858f9193ebe39d7ae7ed187c0837040ca1d2a8ddcadbcb6",
+      "unchanged": true
+    },
+    "oracle_o2_receipt": {
+      "after": "e4f1f4dd761e383b3901e66b8c4352ac9d9496a6dfd81e874c9d42a6e72096a3",
+      "before": "e4f1f4dd761e383b3901e66b8c4352ac9d9496a6dfd81e874c9d42a6e72096a3",
+      "unchanged": true
+    },
+    "oracle_program": {
+      "after": "166fe140ae050e3aeaf9f8a313583a5a7b680b9bcce62627a7375bb23ba6daa1",
+      "before": "166fe140ae050e3aeaf9f8a313583a5a7b680b9bcce62627a7375bb23ba6daa1",
+      "unchanged": true
+    },
+    "python_tests": {
+      "after": "a09b115b667944f2cbfb462943b6ebbc46895fe8296a597ad6fd665e9db6e270",
+      "before": "a09b115b667944f2cbfb462943b6ebbc46895fe8296a597ad6fd665e9db6e270",
+      "unchanged": true
+    },
+    "reducer": {
+      "after": "fa7b890909368f5218c3b91a7aa31d95754703860f2151016f19912ab99a3144",
+      "before": "fa7b890909368f5218c3b91a7aa31d95754703860f2151016f19912ab99a3144",
+      "unchanged": true
+    },
+    "source:src/include/lso_formats.inc": {
+      "after": "956becb489dcb7aee43857aef788c15e0fc0eec0303a179d801051ed71e3f96a",
+      "before": "956becb489dcb7aee43857aef788c15e0fc0eec0303a179d801051ed71e3f96a",
+      "unchanged": true
+    },
+    "source:src/include/surface_obs.inc": {
+      "after": "3edca9ceb40699ae14c71bce836232747ef141290e44decd025dead160028ebe",
+      "before": "3edca9ceb40699ae14c71bce836232747ef141290e44decd025dead160028ebe",
+      "unchanged": true
+    },
+    "source:src/lib/bgdata/wrf/module_wrf_lga.f90": {
+      "after": "efb48b0d83b5c3038928043a2ca36e06de25baf5d775a6587444b36757b2fa6c",
+      "before": "efb48b0d83b5c3038928043a2ca36e06de25baf5d775a6587444b36757b2fa6c",
+      "unchanged": true
+    },
+    "source:src/lib/gridconv.f": {
+      "after": "bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff",
+      "before": "bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff",
+      "unchanged": true
+    },
+    "source:src/lib/modules/module_map_utils.f90": {
+      "after": "b9fdabaa25e928f1db2f0e35f868e2c0ef92f9093c1de68ab9ced05238662d57",
+      "before": "b9fdabaa25e928f1db2f0e35f868e2c0ef92f9093c1de68ab9ced05238662d57",
+      "unchanged": true
+    },
+    "source:src/lib/modules/module_wrf_netcdf.f90": {
+      "after": "45d4d35f290e7db564b35bb422cb5f48d1c186f8de3e13d6f7f6d44e4ab5c9a0",
+      "before": "45d4d35f290e7db564b35bb422cb5f48d1c186f8de3e13d6f7f6d44e4ab5c9a0",
+      "unchanged": true
+    },
+    "source:src/lib/read_surface_obs.f": {
+      "after": "ba6ae0ed4547ed90a2f7200bcfb36c1cd4f295cc70539bb03740fe89c80629ad",
+      "before": "ba6ae0ed4547ed90a2f7200bcfb36c1cd4f295cc70539bb03740fe89c80629ad",
+      "unchanged": true
+    },
+    "upstream_binding": {
+      "after": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5",
+      "before": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5",
+      "unchanged": true
+    },
+    "wrf_projection_source": {
+      "after": "0c777e66ffbb0602479cadcc0ab484769a140c4cb2b3e9a8f757597086f0c76b",
+      "before": "0c777e66ffbb0602479cadcc0ab484769a140c4cb2b3e9a8f757597086f0c76b",
+      "unchanged": true
+    }
+  },
+  "result": {
+    "bytes": 317686,
+    "path": "/var/tmp/pr103_observation_compare_v2_final_20261026/surface_temperature_input_consistency_v2.json",
+    "sha256": "1813cf577e1030ac8c20b1651c1a857c6dd938092bb662d41278d94ddda7bf8c"
+  },
+  "same_as_first_v2_output": true,
+  "scope": "same-cycle input consistency only; not independent forecast skill",
+  "validated_source_pins": {
+    "finite_history_helper": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/tools/pr87_native_history.py",
+      "sha256": "d6feb0e5fd5d53a60d7256a7b3c4faaa3c7f2488b799af25278aec7529c28a71"
+    },
+    "fivearm_history_readback": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/docs/evidence/pr102_execution_20261025/fivearm/fivearm_history_readback.json",
+      "sha256": "d10f124bed615f0546594266971db263d6ba7db48ae3ee210e985f4c8c7db6b2"
+    },
+    "original_upstream_replay": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/pr103_amplitude_control_20261026/Cloud-BAL/tests/original_upstream_replay_20260816.json",
+      "sha256": "08b03eaf46c7b19e055af0da3585ee630c9578f8338910c91519ae9a90ef86e5"
+    },
+    "source_files": {
+      "src/include/lso_formats.inc": "956becb489dcb7aee43857aef788c15e0fc0eec0303a179d801051ed71e3f96a",
+      "src/include/surface_obs.inc": "3edca9ceb40699ae14c71bce836232747ef141290e44decd025dead160028ebe",
+      "src/lib/bgdata/wrf/module_wrf_lga.f90": "efb48b0d83b5c3038928043a2ca36e06de25baf5d775a6587444b36757b2fa6c",
+      "src/lib/gridconv.f": "bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff",
+      "src/lib/modules/module_map_utils.f90": "b9fdabaa25e928f1db2f0e35f868e2c0ef92f9093c1de68ab9ced05238662d57",
+      "src/lib/modules/module_wrf_netcdf.f90": "45d4d35f290e7db564b35bb422cb5f48d1c186f8de3e13d6f7f6d44e4ab5c9a0",
+      "src/lib/read_surface_obs.f": "ba6ae0ed4547ed90a2f7200bcfb36c1cd4f295cc70539bb03740fe89c80629ad"
+    },
+    "wrf_projection_source": {
+      "earth_radius_m": 6370000.0,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS/wrf_v4_8_kfarms_work/WRF-v4.8.0/share/module_llxy.F",
+      "sha256": "0c777e66ffbb0602479cadcc0ab484769a140c4cb2b3e9a8f757597086f0c76b"
+    }
+  },
+  "validation": [
+    "14 tests passed before this readback",
+    "IFX2026 O0/O2 exact-source gdtost/binom oracle: six cases, valid samples 0 REAL32 ULP from Python after rounding; missing inner returns source missingflag and wrapper exclusion",
+    "T2/XLAT/XLONG read with set_auto_mask(False) and pinned pr87_native_history._finite; all-zero check is uncomputed-diagnostic guard only"
+  ]
+}

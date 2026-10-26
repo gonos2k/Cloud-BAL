@@ -1,0 +1,74 @@
+{
+  "boundary_interpretation": "i=1.5 is in-domain: source gdtost uses its partial edge stencil; Python reproduces it. Positions <1 or >domain are excluded before interpolation to prevent out-of-domain extrapolation.",
+  "case_sources": "tests/pr103_gdtost_oracle_program.f90 + exact pinned gridconv.f gdtost/binom bodies",
+  "cases": {
+    "fractional": {
+      "ifx_o0_minus_python_r32": 0.0,
+      "ifx_o0_o2_ulp_distance": 0,
+      "ifx_o0_python_ulp_distance": 0,
+      "ifx_o0_r32": 24.0,
+      "ifx_o2_minus_python_r32": 0.0,
+      "ifx_o2_python_ulp_distance": 0,
+      "ifx_o2_r32": 24.0,
+      "python_value_r64_or_mask": 24.0,
+      "python_value_rounded_r32": 24.0
+    },
+    "integral": {
+      "ifx_o0_minus_python_r32": 0.0,
+      "ifx_o0_o2_ulp_distance": 0,
+      "ifx_o0_python_ulp_distance": 0,
+      "ifx_o0_r32": 22.0,
+      "ifx_o2_minus_python_r32": 0.0,
+      "ifx_o2_python_ulp_distance": 0,
+      "ifx_o2_r32": 22.0,
+      "python_value_r64_or_mask": 22.0,
+      "python_value_rounded_r32": 22.0
+    },
+    "missing_inner_stencil": {
+      "ifx_o0_minus_python_r32": 0.0,
+      "ifx_o0_o2_ulp_distance": 0,
+      "ifx_o0_python_ulp_distance": 0,
+      "ifx_o0_r32": 9.999999933815813e+36,
+      "ifx_o2_minus_python_r32": 0.0,
+      "ifx_o2_python_ulp_distance": 0,
+      "ifx_o2_r32": 9.999999933815813e+36,
+      "python_value_r64_or_mask": null,
+      "python_value_rounded_r32": 9.999999933815813e+36
+    },
+    "missing_outer_stencil": {
+      "ifx_o0_minus_python_r32": 0.0,
+      "ifx_o0_o2_ulp_distance": 0,
+      "ifx_o0_python_ulp_distance": 0,
+      "ifx_o0_r32": 76.875,
+      "ifx_o2_minus_python_r32": 0.0,
+      "ifx_o2_python_ulp_distance": 0,
+      "ifx_o2_r32": 76.875,
+      "python_value_r64_or_mask": 76.875,
+      "python_value_rounded_r32": 76.875
+    },
+    "near_edge_source_kernel": {
+      "ifx_o0_minus_python_r32": 0.0,
+      "ifx_o0_o2_ulp_distance": 0,
+      "ifx_o0_python_ulp_distance": 0,
+      "ifx_o0_r32": 1.0,
+      "ifx_o2_minus_python_r32": 0.0,
+      "ifx_o2_python_ulp_distance": 0,
+      "ifx_o2_r32": 1.0,
+      "python_value_r64_or_mask": 1.0,
+      "python_value_rounded_r32": 1.0
+    },
+    "quadratic_mixed": {
+      "ifx_o0_minus_python_r32": 0.0,
+      "ifx_o0_o2_ulp_distance": 0,
+      "ifx_o0_python_ulp_distance": 0,
+      "ifx_o0_r32": 90.5,
+      "ifx_o2_minus_python_r32": 0.0,
+      "ifx_o2_python_ulp_distance": 0,
+      "ifx_o2_r32": 90.5,
+      "python_value_r64_or_mask": 90.5,
+      "python_value_rounded_r32": 90.5
+    }
+  },
+  "comparison": "REAL32 ULP distance after rounding Python REAL64 result to binary32; actual differences only, no fitted pass tolerance",
+  "mask_interpretation": "Fortran returns missingflag for the missing inner stencil; Python wrapper reports invalid_model_stencil and maps that to float32(missingflag) for numeric ULP comparison."
+}

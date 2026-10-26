@@ -1,0 +1,38 @@
+profile=Cloud-BAL/tests/intel_toolchain.sh
+setvars=26084d08db985eadb61adc43c7f18821be9e75156b60f920de363ea51c70887e  /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh
+compiler=ifx (IFX) 2026.0.0 20260331
+909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef  /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx
+bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/src/lib/gridconv.f
+f37316c6b1db80fd191658ef441a548e0b2fd4f7dd342b51b3dcde8549faf7db  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/src/include/bgdata.inc
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -fixed -extend-source -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -c gridconv_kernel.f /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -c pr103_gdtost_oracle_program.f90 /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -o oracle gridconv_kernel.o pr103_gdtost_oracle_program.o pr103_gdtost_oracle_program.f90(14): warning #8889: Explicit interface or EXTERNAL declaration is required.   [GDTOST]
+  call gdtost(field, nx, ny, 3.5, 3.25, value, 0)
+-------^
+pr103_gdtost_oracle_program.f90(16): warning #8889: Explicit interface or EXTERNAL declaration is required.   [GDTOST]
+  call gdtost(field, nx, ny, 3.0, 3.0, value, 0)
+-------^
+pr103_gdtost_oracle_program.f90(24): warning #8889: Explicit interface or EXTERNAL declaration is required.   [GDTOST]
+  call gdtost(field, nx, ny, 4.5, 3.25, value, 0)
+-------^
+pr103_gdtost_oracle_program.f90(28): warning #8889: Explicit interface or EXTERNAL declaration is required.   [GDTOST]
+  call gdtost(field, nx, ny, 3.5, 3.25, value, 0)
+-------^
+pr103_gdtost_oracle_program.f90(33): warning #8889: Explicit interface or EXTERNAL declaration is required.   [GDTOST]
+  call gdtost(field, nx, ny, 4.5, 4.5, value, 0)
+-------^
+pr103_gdtost_oracle_program.f90(37): warning #8889: Explicit interface or EXTERNAL declaration is required.   [GDTOST]
+  call gdtost(field, nx, ny, 1.5, 4.5, value, 0)
+-------^
+fractional=  2.4000000000000000E+01
+integral=  2.2000000000000000E+01
+quadratic_mixed=  9.0500000000000000E+01
+missing_outer_stencil=  7.6875000000000000E+01
+missing_inner_stencil=  9.9999999338158125E+36
+near_edge_source_kernel=  1.0000000000000000E+00
+f0eb652d83aefc922396e912bce18472fe2ce38d37d8dccd20be9be6ad2c8202  oracle
+366bc7550930a1f98828df40742513276813b283a7d108b1de33f1ad0e690128  gridconv_kernel.f
+166fe140ae050e3aeaf9f8a313583a5a7b680b9bcce62627a7375bb23ba6daa1  pr103_gdtost_oracle_program.f90
+a8d45d18566d4c237b450d054f5cf15b865b2e9135927517b93747e7b294d2cf  command.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  kernel_build.log
+f6eece4bebe2e498407aa69321a2e4653d3a6ab7d523b3bf6fd66c9fb7a2398f  program_build.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  link.log
+01d3a45635e0011d49b3c88cb64b0e041e000120815a99096b2244e046472651  run.log

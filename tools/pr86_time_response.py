@@ -35,10 +35,14 @@ LAUNCH_ENVIRONMENT = {"OMP_NUM_THREADS": "1", "OMP_DYNAMIC": "FALSE"}
 LAUNCH_ENVIRONMENT_SHA256 = hashlib.sha256(
     b"export OMP_NUM_THREADS=1 OMP_DYNAMIC=FALSE").hexdigest()
 PR102_BASE_C2_EXECUTABLE_SHA256 = "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a"
+PR102_BASE_C2_BUILD_RECEIPT_SHA256 = "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb"
 PR102_ORIGINAL_P_C2_SHA256 = "10aff32bf15887a43141efbb1b14945234e8bbce741a89904d328fb3b1d75cb3"
 PR102_REFERENCE_HYDRO_SHA256 = "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c"
 PR102_REFERENCE_COUPLED_SHA256 = "d10c2b987856586c9b8105a69eaeda03951f85f29be3ec4e7118d4f79b478c2d"
 PR102_BOUNDARY_C2_SHA256 = "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7"
+PR102_STRUCTURED_INPUT_SHA256 = "b26e5f3d712732c3459d59b82a4b44fe53eebd9be1fd450d13640d2d8398343f"
+PR102_STRUCTURED_RUN_RECEIPT_SHA256 = "313295e9cbf9e30a12a437c501bf3db2cf25c0e6762ec5d51c31d54ba311d4d6"
+PR103_AMPLITUDE_POLICY_SHA256 = "32b916bb6789eeb83ba83798e639f48da73c6001444660d8113ed3c09d947696"
 
 
 def snapshot_schedule(duration: int) -> dict[int, str]:
@@ -93,6 +97,23 @@ def sha256(path: Path) -> str:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def _artifact_pins(value) -> list[dict]:
+    """Collect nested `{path, sha256}` artifact references from evidence records."""
+    rows = []
+    if isinstance(value, dict):
+        if isinstance(value.get("path"), str) and isinstance(value.get("sha256"), str):
+            rows.append({"path": value["path"], "sha256": value["sha256"]})
+        for child in value.values():
+            rows.extend(_artifact_pins(child))
+    elif isinstance(value, list):
+        for child in value:
+            rows.extend(_artifact_pins(child))
+    unique = {}
+    for row in rows:
+        unique[(row["path"], row["sha256"])] = row
+    return list(unique.values())
 
 
 def _candidate_build_binding(path: Path) -> dict:
@@ -207,6 +228,116 @@ def _wind_structure_input_binding(path: Path) -> dict:
             "change_contract": contract}
 
 
+def _amplitude_control_input_binding(path: Path) -> dict:
+    """Bind an amplitude-matched U/V proposal and its PR102 reference inputs."""
+    path = path.resolve()
+    receipt = json.loads(path.read_text())
+    if (receipt.get("schema") != "pr103_amplitude_control_proposal_v1" or
+            receipt.get("status") != "PROPOSAL_REQUIRES_NATIVE_CONSUMER_AND_SOURCE_CAPTURE" or
+            receipt.get("role") != "AMPLITUDE_MATCHED_CONTROL"):
+        raise ValueError("expected a source-bound PR103 amplitude-control proposal")
+    names = ("candidate", "reference_hydro", "reference_coupled", "original_p",
+             "reference_structured", "boundary", "generator", "policy", "composition")
+    artifacts = {name: receipt[name] for name in names}
+    for name, row in artifacts.items():
+        if sha256(Path(row["path"])) != row["sha256"]:
+            raise ValueError(f"amplitude-control proposal {name} artifact changed: {row['path']}")
+    source_receipts = {}
+    for name in ("pr99_projection_receipt", "pr102_structured_receipt",
+                 "pr102_structured_run_receipt", "pr102_structured_run_preflight",
+                 "pr102_execution_preflight"):
+        row = receipt.get(name)
+        if not isinstance(row, dict) or sha256(Path(row["path"])) != row.get("sha256"):
+            raise ValueError(f"amplitude-control source receipt is missing or changed: {name}")
+        source_receipts[name] = row
+    if source_receipts["pr102_structured_run_receipt"]["sha256"] != PR102_STRUCTURED_RUN_RECEIPT_SHA256:
+        raise ValueError("amplitude-control PR102 STRUCTURED run receipt differs from the closed run")
+    structured_run = json.loads(Path(source_receipts["pr102_structured_run_receipt"]["path"]).read_text())
+    structured_run_preflight = json.loads(
+        Path(source_receipts["pr102_structured_run_preflight"]["path"]).read_text())
+    structured_proposal = json.loads(Path(source_receipts["pr102_structured_receipt"]["path"]).read_text())
+    if (structured_run.get("arm") != "STRUCTURED" or structured_run.get("status") != "COMPLETE" or
+            structured_run.get("returncode") != 0 or
+            structured_run.get("candidate_wrfinput_sha256") != PR102_STRUCTURED_INPUT_SHA256 or
+            structured_proposal.get("schema") != "pr102_wind_structure_proposal_v1" or
+            structured_proposal.get("candidate", {}).get("sha256") != PR102_STRUCTURED_INPUT_SHA256 or
+            structured_run_preflight.get("arm") != "STRUCTURED" or
+            structured_run_preflight.get("duration_seconds") != 640 or
+            structured_run_preflight.get("candidate_wrfinput_sha256") != PR102_STRUCTURED_INPUT_SHA256):
+        raise ValueError("amplitude-control PR102 STRUCTURED source receipts are not the frozen closed pair")
+    if not isinstance(receipt.get("gravity"), dict) or \
+            sha256(Path(receipt["gravity"]["path"])) != receipt["gravity"].get("sha256"):
+        raise ValueError("amplitude-control promoted gravity receipt is missing or changed")
+    pr102_preflight = json.loads(Path(source_receipts["pr102_execution_preflight"]["path"]).read_text())
+    if (pr102_preflight.get("schema") != "pr102_execution_preflight_v1" or
+            pr102_preflight.get("status") != "READY_FOR_ROOT_REVIEW_NO_LAUNCH" or
+            pr102_preflight.get("candidate_input_receipt_sha256") !=
+            source_receipts["pr102_structured_receipt"]["sha256"] or
+            pr102_preflight.get("candidate_wrfinput_sha256") != PR102_STRUCTURED_INPUT_SHA256 or
+            pr102_preflight.get("candidate_executable_sha256") != PR102_BASE_C2_EXECUTABLE_SHA256 or
+            not isinstance(pr102_preflight.get("evidence_artifacts"), list) or
+            not pr102_preflight["evidence_artifacts"]):
+        raise ValueError("amplitude-control PR102 execution preflight does not match its frozen N proposal")
+    for row in pr102_preflight["evidence_artifacts"]:
+        dependency = Path(row["path"])
+        if sha256(dependency) != row["sha256"]:
+            raise ValueError(f"amplitude-control PR102 preflight evidence changed: {dependency}")
+    pr102_evidence = pr102_preflight["evidence_artifacts"]
+    source_receipts["gravity"] = receipt["gravity"]
+    if (artifacts["reference_hydro"]["sha256"] != PR102_REFERENCE_HYDRO_SHA256 or
+            artifacts["reference_coupled"]["sha256"] != PR102_REFERENCE_COUPLED_SHA256 or
+            artifacts["original_p"]["sha256"] != PR102_ORIGINAL_P_C2_SHA256 or
+            artifacts["reference_structured"]["sha256"] != PR102_STRUCTURED_INPUT_SHA256 or
+            artifacts["boundary"]["sha256"] != PR102_BOUNDARY_C2_SHA256 or
+            artifacts["policy"]["sha256"] != PR103_AMPLITUDE_POLICY_SHA256):
+        raise ValueError("amplitude-control proposal differs from the frozen PR102 H/C/P/N/boundary references")
+    if receipt.get("composition_sha256") != artifacts["composition"]["sha256"]:
+        raise ValueError("amplitude-control composition hash is inconsistent")
+    metrics = receipt.get("metrics", {})
+    scale = metrics.get("scale")
+    target_norm = metrics.get("stored_target_norm")
+    ideal_norm = metrics.get("ideal_from_stored_p_norm")
+    readback_norm = metrics.get("stored_readback_norm")
+    norm_bound = metrics.get("readback_norm_error_bound")
+    continuous_error = metrics.get("continuous_pr99_reference_error_bound")
+    continuous_norm = metrics.get("continuous_pr99_reference_norm")
+    residuals = metrics.get("continuous_pr99_layer_residual_l2")
+    for label, value in (("scale", scale), ("stored_target_norm", target_norm),
+                         ("ideal_from_stored_p_norm", ideal_norm),
+                         ("stored_readback_norm", readback_norm),
+                         ("readback_norm_error_bound", norm_bound),
+                         ("continuous_pr99_reference_norm", continuous_norm),
+                         ("continuous_pr99_reference_error_bound", continuous_error)):
+        if (isinstance(value, bool) or not isinstance(value, (int, float)) or
+                not math.isfinite(value) or value < 0):
+            raise ValueError(f"amplitude-control {label} must be finite and nonnegative")
+    if (not isinstance(residuals, list) or not residuals or
+            any(isinstance(value, bool) or not isinstance(value, (int, float)) or
+                not math.isfinite(value) or value < 0 for value in residuals)):
+        raise ValueError("amplitude-control continuous PR99 layer residuals must be finite and nonnegative")
+    if (scale <= 0 or target_norm <= 0 or continuous_norm <= 0 or
+            abs(readback_norm - target_norm) > norm_bound):
+        raise ValueError("amplitude-control stored norm does not match its declared target bound")
+    contract = receipt.get("change_contract", {})
+    if (contract.get("changed_variables") != ["U", "V"] or
+            contract.get("non_target_variables_identical") is not True or
+            receipt.get("parent_sha256") != artifacts["original_p"]["sha256"]):
+        raise ValueError("amplitude-control proposal lacks the U/V-only noninterference contract")
+    return {"binding_kind": "amplitude_control", "role": "COUPLED",
+            "proposal_role": receipt["role"], "receipt_path": str(path),
+            "receipt_sha256": sha256(path), "schema": receipt["schema"],
+            "status": receipt["status"], "artifacts": artifacts,
+            "source_receipts": source_receipts,
+            "pr102_execution_evidence": pr102_evidence,
+            "composition_sha256": artifacts["composition"]["sha256"],
+            "metrics": {name: metrics[name] for name in (
+                "scale", "stored_target_norm", "ideal_from_stored_p_norm",
+                "stored_readback_norm", "readback_norm_error_bound",
+                "continuous_pr99_reference_norm", "continuous_pr99_layer_residual_l2",
+                "continuous_pr99_reference_error_bound") if name in metrics},
+            "change_contract": contract}
+
+
 def _input_binding_unchanged(binding: dict | None) -> bool:
     if binding is None:
         return True
@@ -217,6 +348,8 @@ def _input_binding_unchanged(binding: dict | None) -> bool:
         return _native_input_binding(Path(binding["receipt_path"])) == binding
     if kind == "wind_structure":
         return _wind_structure_input_binding(Path(binding["receipt_path"])) == binding
+    if kind == "amplitude_control":
+        return _amplitude_control_input_binding(Path(binding["receipt_path"])) == binding
     return False
 
 
@@ -240,6 +373,179 @@ def _validate_wind_structure_template(binding: dict, template_receipt: dict) -> 
     if (artifacts["boundary"]["sha256"] != PR102_BOUNDARY_C2_SHA256 or
             artifacts["boundary"]["sha256"] != template_receipt["candidate_wrfbdy_sha256"]):
         raise ValueError("wind-structure boundary differs from the closed C2 matched boundary")
+
+
+def _validate_amplitude_control_template(binding: dict, template_receipt: dict) -> None:
+    artifacts = binding["artifacts"]
+    if (artifacts["reference_coupled"]["sha256"] != template_receipt["candidate_wrfinput_sha256"] or
+            artifacts["boundary"]["sha256"] != template_receipt["candidate_wrfbdy_sha256"]):
+        raise ValueError("amplitude-control proposal differs from the frozen COUPLED input or boundary")
+
+
+def _validate_pr103_preflight(path: Path, input_binding: dict, candidate_build: dict) -> dict:
+    """Recheck every frozen control and A-specific gate before forecast."""
+    path = path.resolve()
+    record = json.loads(path.read_text())
+    if (record.get("schema") != "pr103_execution_preflight_v1" or
+            record.get("status") != "READY_FOR_ROOT_REVIEW_NO_LAUNCH" or
+            record.get("launch_authorized") is not False or
+            record.get("arm") != "AMPLITUDE" or record.get("duration_seconds") != 640 or
+            record.get("expected_timesteps") != 32 or
+            record.get("candidate_input_receipt_path") != input_binding["receipt_path"] or
+            record.get("candidate_input_receipt_sha256") != input_binding["receipt_sha256"] or
+            record.get("candidate_wrfinput_sha256") != input_binding["artifacts"]["candidate"]["sha256"] or
+            record.get("candidate_build_receipt_sha256") != candidate_build["receipt_sha256"] or
+            record.get("candidate_executable_sha256") != PR102_BASE_C2_EXECUTABLE_SHA256 or
+            record.get("candidate_executable_sha256") != candidate_build["executable_sha256"] or
+            record.get("candidate_wrfbdy_sha256") != PR102_BOUNDARY_C2_SHA256 or
+            record.get("candidate_namelist_sha256") != "58c194b8846d25a6c7cbfedac1477fbf65fcc1a12705c8cb11851096ee7d2fc8"):
+        raise ValueError("PR103 prerequisite preflight does not bind this proposal and C2 executable")
+    controls = record.get("matched_controls")
+    if not isinstance(controls, dict) or set(controls) != {
+            "OFF", "HYDRO", "COUPLED", "PROJECTED", "STRUCTURED"}:
+        raise ValueError("PR103 preflight must bind the five closed O/H/C/P/N controls")
+    reference_inputs = {"HYDRO": PR102_REFERENCE_HYDRO_SHA256,
+                        "COUPLED": PR102_REFERENCE_COUPLED_SHA256,
+                        "PROJECTED": PR102_ORIGINAL_P_C2_SHA256,
+                        "STRUCTURED": PR102_STRUCTURED_INPUT_SHA256}
+    control_artifacts = []
+    for arm, row in controls.items():
+        receipt_pin, preflight_pin = row.get("receipt", {}), row.get("preflight", {})
+        receipt_path, preflight_path = Path(receipt_pin.get("path", "")), Path(preflight_pin.get("path", ""))
+        if (not receipt_path.is_file() or sha256(receipt_path) != receipt_pin.get("sha256") or
+                not preflight_path.is_file() or sha256(preflight_path) != preflight_pin.get("sha256")):
+            raise ValueError(f"PR103 {arm} control receipt/preflight pin changed")
+        control, control_preflight = json.loads(receipt_path.read_text()), json.loads(preflight_path.read_text())
+        if (control.get("arm") != arm or control.get("status") != "COMPLETE" or
+                control.get("returncode") != 0 or control.get("timestep_count") != 32 or
+                control.get("final_completed_step") != 32 or control.get("maximum_seen_timestep") != 32 or
+                control.get("earliest_fatal") is not None or control.get("fatal_lines") or
+                control.get("processing_errors") or control.get("duplicate_post_kdm6_timesteps") or
+                control.get("changed_staged_inputs") or control.get("changed_original_inputs") or
+                control.get("executed_executable_sha256") != PR102_BASE_C2_EXECUTABLE_SHA256 or
+                control.get("candidate_wrfbdy_sha256") != PR102_BOUNDARY_C2_SHA256 or
+                control.get("candidate_namelist_sha256") != record["candidate_namelist_sha256"] or
+                control_preflight.get("arm") != arm or control_preflight.get("duration_seconds") != 640 or
+                control_preflight.get("expected_timesteps") != 32 or
+                control_preflight.get("candidate_wrfbdy_sha256") != PR102_BOUNDARY_C2_SHA256 or
+                control_preflight.get("candidate_namelist_sha256") != record["candidate_namelist_sha256"] or
+                control_preflight.get("candidate_wrfinput_sha256") != control.get("candidate_wrfinput_sha256") or
+                control.get("candidate_wrfinput_sha256") != row.get("candidate_wrfinput_sha256") or
+                control.get("launch_environment", {}).get("OMP_NUM_THREADS") != "1" or
+                control.get("launch_environment", {}).get("OMP_DYNAMIC") != "FALSE"):
+            raise ValueError(f"PR103 {arm} control does not match the closed C2 forecast contract")
+        if arm in reference_inputs and control.get("candidate_wrfinput_sha256") != reference_inputs[arm]:
+            raise ValueError(f"PR103 {arm} control input differs from the frozen PR102 reference")
+        control_artifacts.extend((receipt_pin, preflight_pin))
+
+    consumer = record.get("native_consumer_assessment", {})
+    consumer_path = Path(consumer.get("path", ""))
+    if not consumer_path.is_file() or sha256(consumer_path) != consumer.get("sha256"):
+        raise ValueError("PR103 archived consumer assessment pin changed")
+    _validate_pr103_consumer_assessment(consumer_path, input_binding)
+    assessment = json.loads(consumer_path.read_text())
+    if (assessment.get("schema") != "pr103_archived_consumer_assessment_v1" or
+            assessment.get("status") != "PASS" or
+            assessment.get("candidate_wrfinput_sha256") != input_binding["artifacts"]["candidate"]["sha256"] or
+            assessment.get("proposal", {}).get("sha256") != input_binding["receipt_sha256"] or
+            assessment.get("candidate_parent_sha256") != input_binding["artifacts"]["original_p"]["sha256"]):
+        raise ValueError("PR103 archived consumer assessment does not pass for this candidate")
+    gates = assessment.get("gates", {})
+    if any(gates.get(name, {}).get("status") != "PASS"
+           for name in ("reference_constraint", "source_arithmetic")):
+        raise ValueError("PR103 archived consumer reference/source arithmetic gate did not pass")
+
+    noninterference_pin = record.get("actual_A20_noninterference", {})
+    noninterference_path = Path(noninterference_pin.get("path", ""))
+    if not noninterference_path.is_file() or sha256(noninterference_path) != noninterference_pin.get("sha256"):
+        raise ValueError("PR103 A20 noninterference evidence pin changed")
+    noninterference = json.loads(noninterference_path.read_text())
+    if (noninterference.get("status") != "PASS_CAPTURE_NONINTERFERENCE" or
+            noninterference.get("candidate_input_sha256") != input_binding["artifacts"]["candidate"]["sha256"] or
+            noninterference.get("control_arm") != "AMPLITUDE_BASELINE20" or
+            noninterference.get("diagnostic_arm") != "AMPLITUDE_CAPTURE" or
+            noninterference.get("t0_history", {}).get("status") != "PASS" or
+            noninterference.get("first20_trace", {}).get("status") != "PASS" or
+            noninterference.get("t1_post", {}).get("status") != "PASS"):
+        raise ValueError("PR103 A20 diagnostic noninterference comparison did not pass")
+    t0, first_trace, t1 = (noninterference["t0_history"], noninterference["first20_trace"],
+                           noninterference["t1_post"])
+    if (t0.get("field_count") != 30 or len(t0.get("fields", {})) != 30 or
+            not all(field.get("equal") is True for field in t0.get("fields", {}).values()) or
+            first_trace.get("record") != "20s POST_KDM6 timestep 1" or
+            not first_trace.get("record_sha256") or t1.get("field_count") != 18 or
+            len(t1.get("fields", {})) != 18 or
+            not all(field.get("equal") is True for field in t1.get("fields", {}).values())):
+        raise ValueError("PR103 A20 noninterference evidence does not cover exact T0, first POST_KDM6, and T1 fields")
+
+    cohort = record.get("native_source_capture_cohort", {})
+    captures = cohort.get("captures")
+    if (not isinstance(captures, dict) or set(captures) != {"HYDRO", "ORIGINAL_P", "STRUCTURED", "AMPLITUDE"} or
+            cohort.get("diagnostic_executable_sha256") != "aca04cd72a886d41fedcae51e2bbb9cc0b03688e4b9db96ddd12ebc62981b6e0" or
+            not cohort.get("diagnostic_build_receipt_sha256")):
+        raise ValueError("PR103 source-capture cohort does not contain matched H/P/N/A on the pinned diagnostic executable")
+    expected_capture_inputs = {"HYDRO": PR102_REFERENCE_HYDRO_SHA256,
+                               "ORIGINAL_P": PR102_ORIGINAL_P_C2_SHA256,
+                               "STRUCTURED": PR102_STRUCTURED_INPUT_SHA256,
+                               "AMPLITUDE": input_binding["artifacts"]["candidate"]["sha256"]}
+    capture_artifacts = []
+    for label, row in captures.items():
+        receipt_pin = row.get("receipt", {})
+        capture_path = Path(receipt_pin.get("path", ""))
+        if not capture_path.is_file() or sha256(capture_path) != receipt_pin.get("sha256"):
+            raise ValueError(f"PR103 {label} native source-capture receipt pin changed")
+        capture = json.loads(capture_path.read_text())
+        build = capture.get("diagnostic_build_receipt", {})
+        build_path = Path(build.get("path", ""))
+        build_record = json.loads(build_path.read_text()) if build_path.is_file() else {}
+        if (capture.get("schema") != "pr102_native_source_capture_v1" or
+                capture.get("status") != "COMPLETE" or
+                capture.get("candidate_wrfinput_sha256") != expected_capture_inputs[label] or
+                capture.get("completed_steps") != 1 or
+                set(capture.get("captured_sources", [])) != {"RU", "RV", "MUDF"} or
+                capture.get("noninterference", {}).get("status") != "PASS" or
+                capture.get("baseline_c2_executable_sha256") != PR102_BASE_C2_EXECUTABLE_SHA256 or
+                capture.get("diagnostic_executable_sha256") != cohort["diagnostic_executable_sha256"] or
+                not build_path.is_file() or sha256(build_path) != build.get("sha256") or
+                capture.get("diagnostic_build_receipt_sha256") != cohort["diagnostic_build_receipt_sha256"] or
+                build.get("sha256") != cohort["diagnostic_build_receipt_sha256"] or
+                build_record.get("schema") != "pr102_c2_native_capture_build_v1" or
+                build_record.get("status") != "PASS_C2_CAPTURE_OVERLAY" or
+                build_record.get("base_c2_receipt_sha256") != PR102_BASE_C2_BUILD_RECEIPT_SHA256 or
+                build_record.get("base_c2_executable_sha256") != PR102_BASE_C2_EXECUTABLE_SHA256 or
+                build_record.get("executable_sha256") != cohort["diagnostic_executable_sha256"] or
+                not capture.get("artifacts")):
+            raise ValueError(f"PR103 {label} source capture is incomplete or not matched")
+        capture_artifacts.append(receipt_pin)
+
+    dependencies = record.get("evidence_artifacts")
+    if not isinstance(dependencies, list) or not dependencies:
+        raise ValueError("PR103 prerequisite preflight has no candidate-bound evidence artifacts")
+    for row in dependencies:
+        artifact = Path(row["path"])
+        if sha256(artifact) != row["sha256"]:
+            raise ValueError(f"PR103 prerequisite evidence changed: {artifact}")
+    declared = {(row["path"], row["sha256"]) for row in dependencies}
+    required = {(row["path"], row["sha256"]) for row in [
+                {"path": input_binding["receipt_path"], "sha256": input_binding["receipt_sha256"]},
+                {"path": candidate_build["receipt_path"], "sha256": candidate_build["receipt_sha256"]},
+                *input_binding["source_receipts"].values(), *control_artifacts,
+                {"path": str(consumer_path), "sha256": consumer["sha256"]},
+                {"path": str(noninterference_path), "sha256": noninterference_pin["sha256"]},
+                *capture_artifacts]}
+    required.update((row["path"], row["sha256"]) for row in _artifact_pins(assessment))
+    required.update((row["path"], row["sha256"]) for row in _artifact_pins(noninterference))
+    required.update((row["path"], row["sha256"]) for row in _artifact_pins(input_binding))
+    required.update((row["path"], row["sha256"])
+                    for row in input_binding["pr102_execution_evidence"])
+    for row in required:
+        artifact_path = Path(row[0])
+        if not artifact_path.is_file() or sha256(artifact_path) != row[1]:
+            raise ValueError(f"PR103 nested evidence artifact changed: {artifact_path}")
+    if not required.issubset(declared):
+        raise ValueError("PR103 evidence manifest omits a required control or candidate gate artifact")
+    return {"path": str(path), "sha256": sha256(path), "schema": record["schema"],
+            "status": record["status"], "evidence_artifacts": dependencies}
 
 
 def _validate_pr102_preflight(path: Path, input_binding: dict, candidate_build: dict) -> dict:
@@ -301,6 +607,112 @@ def _validate_pr102_consumer_capture(path: Path, input_binding: dict) -> dict:
         artifact = Path(row["path"])
         if sha256(artifact) != row.get("sha256"):
             raise ValueError(f"PR102 archived consumer evidence changed: {artifact}")
+    return {"path": str(path), "sha256": sha256(path), "schema": record["schema"],
+            "status": record["status"], "artifacts": dependencies}
+
+
+def _validate_pr103_consumer_assessment(path: Path, input_binding: dict) -> dict:
+    """Require the candidate-specific PR103 archived-consumer assessment."""
+    path = path.resolve()
+    record = json.loads(path.read_text())
+    candidate_sha = input_binding["artifacts"]["candidate"]["sha256"]
+    expected_executable_sha = "ae83118c881da4dee24cdf43c15ecacda3cf07b2b2f5b403902acb10e7322c61"
+    expected_profile_sha = "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    if (record.get("schema") != "pr103_archived_consumer_assessment_v1" or
+            record.get("status") != "PASS" or record.get("execution_status") != "COMPLETE" or
+            record.get("candidate_wrfinput_sha256") != candidate_sha or
+            record.get("candidate_parent_sha256") != input_binding["artifacts"]["original_p"]["sha256"] or
+            record.get("proposal", {}).get("sha256") != input_binding["receipt_sha256"] or
+            record.get("base_c2_executable_sha256") != PR102_BASE_C2_EXECUTABLE_SHA256 or
+            record.get("archived_consumer_executable", {}).get("sha256") != expected_executable_sha or
+            record.get("compiler_profile", {}).get("sha256") != expected_profile_sha):
+        raise ValueError("PR103 archived consumer assessment does not bind this amplitude candidate")
+    actual_call = record.get("actual_call", {})
+    call_receipt_pin = actual_call.get("receipt", {})
+    call_output_pin = actual_call.get("output", {})
+    receipt_path = Path(call_receipt_pin.get("path", ""))
+    if (actual_call.get("arm") != "AMPLITUDE" or not receipt_path.is_file() or
+            sha256(receipt_path) != call_receipt_pin.get("sha256")):
+        raise ValueError("PR103 archived consumer call receipt is missing or changed")
+    call_receipt = json.loads(receipt_path.read_text())
+    expected_candidate_path = Path(input_binding["artifacts"]["candidate"]["path"]).resolve()
+    if (call_receipt.get("schema") != "pr102_archived_consumer_run_v1" or
+            call_receipt.get("status") != "COMPLETE" or call_receipt.get("returncode") != 0 or
+            call_receipt.get("issues") or
+            call_receipt.get("input", {}).get("sha256") != candidate_sha or
+            Path(call_receipt.get("input", {}).get("path", "")).resolve() != expected_candidate_path):
+        raise ValueError("PR103 archived consumer run receipt is not a closed call on this candidate")
+    candidate_dir = receipt_path.parent
+    launch_pin, log_pin = call_receipt.get("launch", {}), call_receipt.get("log", {})
+    launch_path, log_path = Path(launch_pin.get("path", "")), Path(log_pin.get("path", ""))
+    if (launch_path != candidate_dir / "launch.json" or log_path != candidate_dir / "run.log" or
+            not launch_path.is_file() or not log_path.is_file() or
+            sha256(launch_path) != launch_pin.get("sha256") or
+            sha256(log_path) != log_pin.get("sha256")):
+        raise ValueError("PR103 archived consumer launch or log is not bound by its closed receipt")
+    launch = json.loads(launch_path.read_text())
+    executable = record["archived_consumer_executable"]
+    profile = record["compiler_profile"]
+    bindings = launch.get("bindings", {})
+    expected_executable_path = Path(executable["path"]).resolve()
+    expected_profile_path = Path(profile["path"]).resolve()
+    if (launch.get("schema") != "pr102_archived_consumer_launch_v1" or
+            Path(launch.get("cwd", "")).resolve() != candidate_dir.resolve() or
+            not isinstance(launch.get("argv"), list) or len(launch["argv"]) < 8 or
+            Path(launch["argv"][4]).resolve() != expected_profile_path or
+            Path(launch["argv"][7]).resolve() != (candidate_dir / "consumer.exe").resolve() or
+            bindings.get(str(expected_candidate_path)) != candidate_sha or
+            bindings.get(str(expected_executable_path)) != expected_executable_sha or
+            bindings.get(str(expected_profile_path)) != expected_profile_sha):
+        raise ValueError("PR103 archived consumer launch does not bind candidate, executable, and profile")
+    for source_path, expected_sha in bindings.items():
+        if not Path(source_path).is_file() or sha256(Path(source_path)) != expected_sha:
+            raise ValueError(f"PR103 archived consumer launch source changed: {source_path}")
+    output = call_receipt.get("output", {})
+    output_path = Path(output.get("path", ""))
+    if (not output_path.is_file() or output_path != candidate_dir / "native_consumer_ww.bin" or
+            output.get("sha256") != call_output_pin.get("sha256") or
+            Path(call_output_pin.get("path", "")) != output_path or
+            sha256(output_path) != output.get("sha256") or
+            sha256(candidate_dir / "consumer.exe") != expected_executable_sha):
+        raise ValueError("PR103 archived consumer WW output or staged executable is not receipt-bound")
+    root_go = record.get("root_go", {})
+    root_go_path = Path(root_go.get("path", ""))
+    if (not root_go_path.is_file() or sha256(root_go_path) != root_go.get("sha256") or
+            Path(root_go.get("output_directory", "")).resolve() != candidate_dir.parent.resolve()):
+        raise ValueError("PR103 archived consumer root GO is missing or changed")
+    go_record = json.loads(root_go_path.read_text())
+    if (go_record.get("schema") != "pr103_archived_consumer_go_v1" or
+            go_record.get("status") != "GO" or go_record.get("launch_authorized") is not True or
+            go_record.get("proposal_sha256") != input_binding["receipt_sha256"] or
+            go_record.get("candidate_wrfinput_sha256") != candidate_sha or
+            go_record.get("archived_consumer_executable_sha256") != expected_executable_sha or
+            go_record.get("compiler_profile_sha256") != expected_profile_sha):
+        raise ValueError("PR103 archived consumer root GO does not bind this exact call")
+    before, after = record.get("source_bindings_before"), record.get("source_bindings_after")
+    if not isinstance(before, list) or not before or before != after:
+        raise ValueError("PR103 archived consumer source pins changed during the call")
+    for row in before:
+        source_path = Path(row["path"])
+        if not source_path.is_file() or sha256(source_path) != row.get("sha256"):
+            raise ValueError(f"PR103 archived consumer source pin changed: {source_path}")
+    for gate_name in ("reference_constraint", "source_arithmetic"):
+        gate = record.get("gates", {}).get(gate_name, {})
+        values = tuple(gate.get(name) for name in (
+            "observed_l2_pa_s", "allowed_l2_pa_s", "observed_max_abs_pa_s", "allowed_max_abs_pa_s"))
+        if (gate.get("status") != "PASS" or
+                any(isinstance(value, bool) or not isinstance(value, (int, float)) or
+                    not math.isfinite(value) or value < 0 for value in values) or
+                values[0] > values[1] or values[2] > values[3] or
+                gate.get("pointwise_exceedances", 0) != 0):
+            raise ValueError(f"PR103 archived consumer {gate_name} gate did not pass its finite bound")
+    dependencies = record.get("artifacts")
+    if not isinstance(dependencies, list) or not dependencies:
+        raise ValueError("PR103 archived consumer assessment has no artifact manifest")
+    for row in dependencies:
+        artifact = Path(row["path"])
+        if sha256(artifact) != row["sha256"]:
+            raise ValueError(f"PR103 archived consumer evidence changed: {artifact}")
     return {"path": str(path), "sha256": sha256(path), "schema": record["schema"],
             "status": record["status"], "artifacts": dependencies}
 
@@ -537,10 +949,14 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
             native_input_receipt_path: Path | None = None,
             wind_structure_input_receipt_path: Path | None = None,
             pr102_preflight_path: Path | None = None,
-            pr102_consumer_receipt_path: Path | None = None) -> dict:
+            pr102_consumer_receipt_path: Path | None = None,
+            amplitude_control_input_receipt_path: Path | None = None,
+            pr103_preflight_path: Path | None = None,
+            pr103_consumer_assessment_path: Path | None = None) -> dict:
     snapshot_schedule(duration)
     supplied_inputs = [path for path in (hydro_input_receipt_path, native_input_receipt_path,
-                                         wind_structure_input_receipt_path) if path is not None]
+                                         wind_structure_input_receipt_path,
+                                         amplitude_control_input_receipt_path) if path is not None]
     if len(supplied_inputs) > 1:
         raise ValueError("source-bound input receipts are mutually exclusive")
     if arm == "HYDRO":
@@ -565,8 +981,32 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         raise ValueError("STRUCTURED_BASELINE20 requires a source-bound PR102 proposal for one 20-second step")
     if arm == "STRUCTURED_BASELINE20" and candidate_build_path is None:
         raise ValueError("STRUCTURED_BASELINE20 requires the explicit base C2 build receipt")
-    if arm != "STRUCTURED_CAPTURE" and pr102_consumer_receipt_path is not None:
-        raise ValueError("PR102 archived consumer receipt is only valid for STRUCTURED_CAPTURE")
+    if arm not in {"STRUCTURED_CAPTURE", "AMPLITUDE_CAPTURE"} and pr102_consumer_receipt_path is not None:
+        raise ValueError("archived consumer receipt is only valid for one-step diagnostic capture arms")
+    amplitude_arms = {"AMPLITUDE", "AMPLITUDE_CAPTURE", "AMPLITUDE_BASELINE20"}
+    if amplitude_control_input_receipt_path is not None and arm not in amplitude_arms:
+        raise ValueError("amplitude-control input receipt is only valid for AMPLITUDE arms")
+    if arm == "AMPLITUDE" and (duration != 640 or amplitude_control_input_receipt_path is None):
+        raise ValueError("AMPLITUDE requires a source-bound PR103 proposal for the matched 640-second run")
+    if arm == "AMPLITUDE" and (candidate_build_path is None or pr103_preflight_path is None):
+        raise ValueError("AMPLITUDE requires the explicit base C2 build and PR103 prerequisite preflight")
+    if arm == "AMPLITUDE_CAPTURE" and (duration != 20 or amplitude_control_input_receipt_path is None):
+        raise ValueError("AMPLITUDE_CAPTURE requires a source-bound PR103 proposal for one 20-second step")
+    if arm == "AMPLITUDE_CAPTURE" and (candidate_build_path is None or pr102_consumer_receipt_path is None):
+        if pr103_consumer_assessment_path is None:
+            raise ValueError("AMPLITUDE_CAPTURE requires the explicit diagnostic C2 build and PR103 consumer assessment")
+    if arm == "AMPLITUDE_CAPTURE" and candidate_build_path is None:
+        raise ValueError("AMPLITUDE_CAPTURE requires the explicit diagnostic C2 build and PR103 consumer assessment")
+    if arm == "AMPLITUDE_BASELINE20" and (duration != 20 or amplitude_control_input_receipt_path is None):
+        raise ValueError("AMPLITUDE_BASELINE20 requires a source-bound PR103 proposal for one 20-second step")
+    if arm == "AMPLITUDE_BASELINE20" and candidate_build_path is None:
+        raise ValueError("AMPLITUDE_BASELINE20 requires the explicit base C2 build receipt")
+    if arm not in amplitude_arms and pr103_preflight_path is not None:
+        raise ValueError("PR103 prerequisite preflight is only valid for AMPLITUDE")
+    if arm != "AMPLITUDE_CAPTURE" and pr103_consumer_assessment_path is not None:
+        raise ValueError("PR103 consumer assessment is only valid for AMPLITUDE_CAPTURE")
+    if arm == "AMPLITUDE_CAPTURE" and pr102_consumer_receipt_path is not None:
+        raise ValueError("AMPLITUDE_CAPTURE requires the PR103 outer consumer assessment")
     if arm == "PROJECTED" and native_input_receipt_path is None:
         raise ValueError("PROJECTED requires a source-bound native projection input receipt")
     if arm == "PROJECTED" and candidate_build_path is None:
@@ -576,7 +1016,8 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
     if native_input_receipt_path is not None and arm == "COUPLED" and duration != 20:
         raise ValueError("COUPLED native projection input is limited to one 20-second step")
     template_arm = "OFF" if arm == "HYDRO" else "COUPLED" if arm in {
-        "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"} else arm
+        "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20",
+        "AMPLITUDE", "AMPLITUDE_CAPTURE", "AMPLITUDE_BASELINE20"} else arm
     runtime = Path(str(RUNTIME).format(arm=template_arm))
     receipt_path = Path(str(RUN_RECEIPT).format(arm=template_arm))
     receipt = json.loads(receipt_path.read_text())
@@ -600,7 +1041,9 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
                        _native_input_binding(native_input_receipt_path)
                        if native_input_receipt_path is not None else
                        _wind_structure_input_binding(wind_structure_input_receipt_path)
-                       if wind_structure_input_receipt_path is not None else None)
+                       if wind_structure_input_receipt_path is not None else
+                       _amplitude_control_input_binding(amplitude_control_input_receipt_path)
+                       if amplitude_control_input_receipt_path is not None else None)
     if (candidate_input and candidate_input.get("binding_kind", "hydro") == "hydro" and
             candidate_input["artifacts"]["wrfbdy"]["sha256"] != receipt["candidate_wrfbdy_sha256"]):
         raise ValueError("HYDRO boundary differs from the frozen matched boundary")
@@ -610,6 +1053,9 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
     elif candidate_input and candidate_input.get("binding_kind") == "wind_structure":
         _validate_wind_structure_template(candidate_input, receipt)
         wrfinput_sha256 = candidate_input["artifacts"]["candidate"]["sha256"]
+    elif candidate_input and candidate_input.get("binding_kind") == "amplitude_control":
+        _validate_amplitude_control_template(candidate_input, receipt)
+        wrfinput_sha256 = candidate_input["artifacts"]["candidate"]["sha256"]
     else:
         wrfinput_sha256 = (candidate_input["artifacts"]["wrfinput"]["sha256"] if candidate_input
                           else receipt["candidate_wrfinput_sha256"])
@@ -617,10 +1063,21 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
     if arm == "STRUCTURED":
         pr102_preflight = _validate_pr102_preflight(
             pr102_preflight_path, candidate_input, candidate_build)
+    pr103_preflight = None
+    if arm == "AMPLITUDE":
+        _require_pr102_base_c2(candidate_build)
+        pr103_preflight = _validate_pr103_preflight(
+            pr103_preflight_path, candidate_input, candidate_build)
+    if arm == "AMPLITUDE_BASELINE20":
+        _require_pr102_base_c2(candidate_build)
     pr102_consumer = None
     if arm == "STRUCTURED_CAPTURE":
         pr102_consumer = _validate_pr102_consumer_capture(
             pr102_consumer_receipt_path, candidate_input)
+    pr103_consumer = None
+    if arm == "AMPLITUDE_CAPTURE":
+        pr103_consumer = _validate_pr103_consumer_assessment(
+            pr103_consumer_assessment_path, candidate_input)
     namelist = runtime / "namelist.input"
     original_namelist = namelist.read_text()
     edited = edit_namelist(original_namelist, duration)
@@ -648,6 +1105,8 @@ def prepare(arm: str, duration: int, out: Path, safety_fraction: float = 0.85,
         "template_arm": template_arm, "candidate_input_binding": candidate_input,
         "pr102_execution_preflight": pr102_preflight,
         "pr102_native_consumer": pr102_consumer,
+        "pr103_execution_preflight": pr103_preflight,
+        "pr103_archived_consumer_assessment": pr103_consumer,
         "baseline_frozen_executable_sha256": sha256(exe), "candidate_build": candidate_build,
         "candidate_wrfbdy_sha256": receipt["candidate_wrfbdy_sha256"], "input_file_count": len(inputs),
         "input_hashes": inputs, "source_namelist_sha256": sha256(namelist),
@@ -683,7 +1142,7 @@ def _stage(prepared: dict, out: Path) -> Path:
         staged_input = stage / "wrfinput_d01"
         staged_input.unlink()
         input_artifact = (candidate_input["artifacts"]["candidate"]
-                          if candidate_input.get("binding_kind") in {"native_uv_projection", "wind_structure"}
+                          if candidate_input.get("binding_kind") in {"native_uv_projection", "wind_structure", "amplitude_control"}
                           else candidate_input["artifacts"]["wrfinput"])
         shutil.copy2(input_artifact["path"], staged_input)
         if sha256(staged_input) != prepared["candidate_wrfinput_sha256"]:
@@ -891,19 +1350,22 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
             issues.append("HYDRO launch input provenance differs from preflight")
     elif binding_kind == "hydro":
         issues.append("HYDRO source-bound input is only valid for the HYDRO arm")
-    elif binding_kind in {"native_uv_projection", "wind_structure"}:
+    elif binding_kind in {"native_uv_projection", "wind_structure", "amplitude_control"}:
         template_receipt = json.loads(Path(preflight["source_receipt"]).read_text())
         try:
             if binding_kind == "wind_structure":
                 _validate_wind_structure_template(candidate_input, template_receipt)
+            elif binding_kind == "amplitude_control":
+                _validate_amplitude_control_template(candidate_input, template_receipt)
             else:
                 _validate_native_template(candidate_input, template_receipt)
         except (KeyError, ValueError) as exc:
             issues.append(str(exc))
-        long_arm = arm in {"PROJECTED", "STRUCTURED"}
+        long_arm = arm in {"PROJECTED", "STRUCTURED", "AMPLITUDE"}
         expected_duration = 640 if long_arm else 20
         if (duration != expected_duration or preflight.get("duration_seconds") != expected_duration or
-                arm not in {"COUPLED", "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"} or candidate_input.get("role") != "COUPLED" or
+                arm not in {"COUPLED", "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20",
+                            "AMPLITUDE", "AMPLITUDE_CAPTURE", "AMPLITUDE_BASELINE20"} or candidate_input.get("role") != "COUPLED" or
                 preflight.get("template_arm") != "COUPLED" or original.get("arm") != arm or
                 original.get("candidate_input_binding") != candidate_input or
                 original.get("candidate_wrfinput_sha256") != preflight.get("candidate_wrfinput_sha256") or
@@ -916,12 +1378,20 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
         issues.append("PROJECTED arm requires its source-bound native projection input")
     if arm in {"STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"} and binding_kind != "wind_structure":
         issues.append(f"{arm} arm requires its source-bound PR102 wind proposal")
+    if arm in {"AMPLITUDE", "AMPLITUDE_CAPTURE", "AMPLITUDE_BASELINE20"} and binding_kind != "amplitude_control":
+        issues.append(f"{arm} arm requires its source-bound PR103 amplitude proposal")
     candidate_build = preflight.get("candidate_build")
-    if arm in {"PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"} and (not candidate_build or preflight.get("template_arm") != "COUPLED"):
+    if arm in {"PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20",
+               "AMPLITUDE", "AMPLITUDE_CAPTURE", "AMPLITUDE_BASELINE20"} and (not candidate_build or preflight.get("template_arm") != "COUPLED"):
         issues.append(f"{arm} requires the explicit C2 candidate build and COUPLED template")
     if arm == "STRUCTURED_BASELINE20":
         if duration != 20:
             issues.append("STRUCTURED_BASELINE20 is limited to one 20-second step")
+        try:
+            _require_pr102_base_c2(candidate_build)
+        except (KeyError, TypeError, ValueError) as exc:
+            issues.append(str(exc))
+    if arm in {"AMPLITUDE", "AMPLITUDE_BASELINE20"}:
         try:
             _require_pr102_base_c2(candidate_build)
         except (KeyError, TypeError, ValueError) as exc:
@@ -934,6 +1404,14 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
                 issues.append("PR102 prerequisite preflight changed or mismatches the STRUCTURED run")
         except (OSError, ValueError, KeyError, TypeError, AttributeError):
             issues.append("PR102 prerequisite preflight is missing or invalid")
+    if arm == "AMPLITUDE":
+        pin = preflight.get("pr103_execution_preflight") or {}
+        try:
+            gate = _validate_pr103_preflight(Path(pin["path"]), candidate_input, candidate_build)
+            if gate != pin:
+                issues.append("PR103 prerequisite preflight changed or mismatches the AMPLITUDE run")
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+            issues.append("PR103 prerequisite preflight is missing or invalid")
     if arm == "STRUCTURED_CAPTURE":
         pin = preflight.get("pr102_native_consumer") or {}
         try:
@@ -942,6 +1420,14 @@ def finalize_existing_run(arm: str, out: Path, duration: int,
                 issues.append("PR102 archived consumer receipt changed or mismatches STRUCTURED_CAPTURE")
         except (OSError, ValueError, KeyError, TypeError, AttributeError):
             issues.append("PR102 archived consumer receipt is missing or invalid")
+    if arm == "AMPLITUDE_CAPTURE":
+        pin = preflight.get("pr103_archived_consumer_assessment") or {}
+        try:
+            gate = _validate_pr103_consumer_assessment(Path(pin["path"]), candidate_input)
+            if gate != pin:
+                issues.append("PR103 consumer assessment changed or mismatches AMPLITUDE_CAPTURE")
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+            issues.append("PR103 consumer assessment is missing or invalid")
     candidate_build_unchanged = True
     if candidate_build_path is not None and (not candidate_build or
                                               Path(candidate_build["receipt_path"]) != candidate_build_path.resolve()):
@@ -1108,7 +1594,10 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
         native_input_receipt_path: Path | None = None,
         wind_structure_input_receipt_path: Path | None = None,
         pr102_preflight_path: Path | None = None,
-        pr102_consumer_receipt_path: Path | None = None) -> dict:
+        pr102_consumer_receipt_path: Path | None = None,
+        amplitude_control_input_receipt_path: Path | None = None,
+        pr103_preflight_path: Path | None = None,
+        pr103_consumer_assessment_path: Path | None = None) -> dict:
     runner_path = Path(__file__).resolve()
     runner_sha256_at_entry = sha256(runner_path)
     schedule = snapshot_schedule(duration)
@@ -1116,7 +1605,9 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     prepared = prepare(arm, duration, out, safety_fraction, candidate_build_path,
                        disk_reference_receipt_path, hydro_input_receipt_path,
                        native_input_receipt_path, wind_structure_input_receipt_path,
-                       pr102_preflight_path, pr102_consumer_receipt_path)
+                       pr102_preflight_path, pr102_consumer_receipt_path,
+                       amplitude_control_input_receipt_path, pr103_preflight_path,
+                       pr103_consumer_assessment_path)
     (out / "preflight.json").write_text(json.dumps({k: v for k, v in prepared.items()
                                                      if k != "namelist_text"}, indent=2) + "\n")
     if prepared["disk_guard"]["status"] != "PASS":
@@ -1147,6 +1638,16 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
         current_gate = _validate_pr102_consumer_capture(Path(gate["path"]), candidate_input)
         if current_gate != gate:
             raise RuntimeError("PR102 archived consumer receipt changed after preparation")
+    if arm == "AMPLITUDE_CAPTURE":
+        gate = prepared["pr103_archived_consumer_assessment"]
+        current_gate = _validate_pr103_consumer_assessment(Path(gate["path"]), candidate_input)
+        if current_gate != gate:
+            raise RuntimeError("PR103 archived consumer assessment changed after preparation")
+    if arm == "AMPLITUDE":
+        gate = prepared["pr103_execution_preflight"]
+        current_gate = _validate_pr103_preflight(Path(gate["path"]), candidate_input, candidate_build)
+        if current_gate != gate:
+            raise RuntimeError("PR103 prerequisite preflight changed after preparation")
     launch_provenance = {"launch_runner_source_path": str(runner_path),
                          "launch_runner_source_sha256": runner_sha256_at_entry,
                          "diagnostic_environment": prepared["diagnostic_environment"]}
@@ -1223,6 +1724,12 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
     identity = (candidate_build or {}).get("identity", "")
     run_identity = ("PR102 same-input C2 baseline executable, 20-second comparator"
                     if arm == "STRUCTURED_BASELINE20" else
+                    "PR103 amplitude-control same-input C2 baseline executable, 20-second comparator"
+                    if arm == "AMPLITUDE_BASELINE20" else
+                    "PR103 amplitude-control C2 source-capture diagnostic overlay"
+                    if arm == "AMPLITUDE_CAPTURE" else
+                    "PR103 amplitude-matched C2 forecast"
+                    if arm == "AMPLITUDE" else
                     "PR102 C2 source-capture diagnostic overlay"
                     if "source-capture diagnostic overlay" in identity else
                     "PR87 selected-object native candidate" if candidate_build else
@@ -1245,6 +1752,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
                "candidate_build": candidate_build, "candidate_build_unchanged": candidate_build_unchanged,
                "candidate_input_binding": candidate_input,
                "candidate_input_unchanged": candidate_input_unchanged,
+               "pr103_execution_preflight": prepared.get("pr103_execution_preflight"),
                "launch_runner_source_path": str(runner_path),
                "launch_runner_source_sha256": runner_sha256_at_entry,
                "launch_runner_source_sha256_status": "captured at run entry before model execution",
@@ -1263,7 +1771,7 @@ def run(arm: str, out: Path, duration: int, execute: bool, safety_fraction: floa
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--arm", choices=("OFF", "HYDRO", "COUPLED", "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20"), required=True)
+    parser.add_argument("--arm", choices=("OFF", "HYDRO", "COUPLED", "PROJECTED", "STRUCTURED", "STRUCTURED_CAPTURE", "STRUCTURED_BASELINE20", "AMPLITUDE", "AMPLITUDE_CAPTURE", "AMPLITUDE_BASELINE20"), required=True)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--duration-seconds", type=int, default=600)
     parser.add_argument("--execute", action="store_true", help="launch after hash and disk checks")
@@ -1280,6 +1788,12 @@ def main() -> int:
                         help="closed candidate-bound PR102 consumer/source-capture prerequisite preflight")
     parser.add_argument("--pr102-consumer-receipt", type=Path,
                         help="passing archived PR102 calc_ww consumer receipt for STRUCTURED_CAPTURE")
+    parser.add_argument("--amplitude-control-input-receipt", type=Path,
+                        help="source-bound PR103 amplitude-matched U/V proposal")
+    parser.add_argument("--pr103-preflight", type=Path,
+                        help="closed PR103 consumer/source-capture prerequisite preflight")
+    parser.add_argument("--pr103-consumer-assessment", type=Path,
+                        help="passing candidate-bound PR103 archived-consumer assessment for AMPLITUDE_CAPTURE")
     parser.add_argument("--safety-fraction", type=float, default=0.85)
     parser.add_argument("--disk-reference-receipt", type=Path,
                         help="calibrate the disk guard from a successful same-input run receipt")
@@ -1294,12 +1808,18 @@ def main() -> int:
         parser.error("--finalize uses the launch-bound native input receipt in preflight.json")
     if args.finalize and args.wind_structure_input_receipt is not None:
         parser.error("--finalize uses the launch-bound wind-structure input receipt in preflight.json")
+    if args.finalize and args.amplitude_control_input_receipt is not None:
+        parser.error("--finalize uses the launch-bound amplitude-control input receipt in preflight.json")
+    if args.finalize and args.pr103_consumer_assessment is not None:
+        parser.error("--finalize uses the launch-bound PR103 consumer assessment in preflight.json")
     out = args.output or DEFAULT_OUT / args.arm
     result = (finalize_existing_run(args.arm, out, args.duration_seconds, args.candidate_build) if args.finalize else
               run(args.arm, out, args.duration_seconds, args.execute, args.safety_fraction,
                   args.candidate_build, args.disk_reference_receipt, args.hydro_input_receipt,
                   args.native_input_receipt, args.wind_structure_input_receipt,
-                  args.pr102_preflight, args.pr102_consumer_receipt))
+                  args.pr102_preflight, args.pr102_consumer_receipt,
+                  args.amplitude_control_input_receipt, args.pr103_preflight,
+                  args.pr103_consumer_assessment))
     print(json.dumps({k: v for k, v in result.items() if k != "input_hashes"}, indent=2))
     return 0
 

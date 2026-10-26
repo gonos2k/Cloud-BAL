@@ -1,0 +1,25 @@
+profile=Cloud-BAL/tests/intel_toolchain.sh
+setvars=26084d08db985eadb61adc43c7f18821be9e75156b60f920de363ea51c70887e  /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh
+compiler=ifx (IFX) 2026.0.0 20260331
+909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef  /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx
+bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/src/lib/gridconv.f
+f37316c6b1db80fd191658ef441a548e0b2fd4f7dd342b51b3dcde8549faf7db  /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/src/include/bgdata.inc
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -fixed -extend-source -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -c gridconv_kernel.f 
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -stand f08 -warn all -check all -fpe0 -traceback -O0 -fp-model strict -fimf-arch-consistency=true -no-ftz -c pr103_gdtost_oracle_program.f90 
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx -o oracle gridconv_kernel.o pr103_gdtost_oracle_program.o 
+pr103_gdtost_oracle_program.f90(13): warning #8889: Explicit interface or EXTERNAL declaration is required.   [GDTOST]
+  call gdtost(field, nx, ny, 3.5, 3.25, value, 0)
+-------^
+pr103_gdtost_oracle_program.f90(15): warning #8889: Explicit interface or EXTERNAL declaration is required.   [GDTOST]
+  call gdtost(field, nx, ny, 3.0, 3.0, value, 0)
+-------^
+fractional=  2.4000000000000000E+01
+integral=  2.2000000000000000E+01
+cc95d2603f65bcd6cf8b1a6e38a5541084b6a5fae77818eb793348168325b800  oracle
+366bc7550930a1f98828df40742513276813b283a7d108b1de33f1ad0e690128  gridconv_kernel.f
+120fdf5be6057598ee6c10ec29c5f74032df6680928651819489c67d9d0d3310  pr103_gdtost_oracle_program.f90
+87d8adf625d7ded1058a5c201eb992a8e696fde1164015fd0ff46e9dd476914e  command.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  kernel_build.log
+4eb95631db0f6917c1d73c2834ea4f93970bfa653fbff0814132590d2ad2ee5b  program_build.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  link.log
+4dcfdcdb9ea28842c483d31aa7d146bb66eebbc6c4253c2915998cf24a54087c  run.log

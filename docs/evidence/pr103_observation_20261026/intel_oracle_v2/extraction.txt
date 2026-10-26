@@ -1,0 +1,23 @@
+Authoritative interpolation source:
+  klaps-v5.0_/src/lib/gridconv.f
+  SHA-256 bb48cb301f3fb612bcc0a4944f1d649d2aa16e6cc34d18d22caa82aa17c56cff
+  gdtost and binom lines 1320-1464 inclusive.
+
+Shared include:
+  klaps-v5.0_/src/include/bgdata.inc
+  SHA-256 f37316c6b1db80fd191658ef441a548e0b2fd4f7dd342b51b3dcde8549faf7db
+  Both includes are replaced only by the exact declared REAL constant
+  missingflag=1.0e37. The interpolation bodies and formulas are unchanged.
+
+Oracle coverage:
+  - linear field at a fractional coordinate and an integral coordinate;
+  - quadratic field with a mixed i*j term;
+  - missing outer stencil sample, exercising source linear fallback;
+  - missing inner sample, exercising the source missing result;
+  - in-domain partial edge stencil.
+
+Pinned compiler profile:
+  Cloud-BAL tests/intel_toolchain.sh; IFX 2026.0.0; O0/O2; strict FP flags.
+  Fresh scratch: /var/tmp/pr103_station_oracle_v2_20261026/O0 and /O2.
+  Successful receipts and all build/run logs are beside this file.
+  Python comparison report: ../gdtost_oracle_python_comparison_v2.json.

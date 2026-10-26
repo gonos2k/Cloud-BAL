@@ -1,0 +1,11 @@
+# PR103 execution status — 2026-10-26
+
+The amplitude-matched candidate (`9038d0a2…626e74e2`) passed the archived native consumer. The authorized 20-second baseline and diagnostic pair both closed with return code 0. A20 T0 had 30/30 fields equal, the captured first POST_KDM6 timestep matched, T1 had 18/18 fields equal, and the diagnostic receipt bound 57 source snapshots. Source pins matched before and after the readback.
+
+The one authorized matched-C2 AMPLITUDE forecast closed COMPLETE at 32/32 steps with return code 0. Receipt SHA-256: `76792551d703e5e05af778b39482269dcb09ed16b83a5780514e920fcd1e5296`; supervisor SHA-256: `1169b65374ca948d3974edf651921f14221fcc40e35ea438ff12a5176c8c5ff9`. All 1,349 launch-time source pins were unchanged. The forecast used the approved base C2 executable (`387f46df…62cc9a`), A input (`9038d0a2…626e74e2`), boundary (`885591e6…706b25d7`), and 640-second namelist (`58c194b8…7d2fc8`).
+
+The closed source-policy-v4 audit examined 192 retained completed states. The generic Q/N/B audit is **FAIL** with 173 state-level findings; the pair and field finding rows (161 and 93) may overlap. The exact source endpoint audit is **PASS** with zero failures. The active-ice policy split is **PASS** with zero failing states. These checks remain separate; no gate or tolerance was changed.
+
+The same-input 20-second-to-640-second bridge is **PASS**: T0 matches across 30 fields, the first 20-second POST_KDM6 trace record matches, and first-call T1 matches across 18 fields. First-step native source norms remain descriptive only. Physical approval remains FAIL_OPEN; observation skill remains NOT_EVALUATED. The six-arm saved-history response analysis is being completed separately.
+
+The preforecast [publication manifest](publication_manifest.json) and launch snapshot remain historical launch evidence. Closed receipt, audit, bridge, invocation, and source-pin evidence are in the separate [postclosure publication manifest](postclosure_publication_manifest.json) (SHA-256 `1ce9725626be9961e2b0f9deef3b0ca46278d9a17ad742765b0995f9ab8d9a1c`). No WRF histories, source binaries, executables, full traces, model logs, or field outputs were copied. The first 640-second preflight attempt remains classified **UNVALIDATED_FAILED**; the corrected v2 preflight is the one bound by root GO and the closed run.
