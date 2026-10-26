@@ -1,7 +1,8 @@
 # PR104 valid-time observation KG publication design
 
-Status: preparation only. No Graphify update, check-only plan, staging apply, or
-maintained-tree write has been run for PR104.
+Status: guarded-wrapper and focused-regression preparation only. No Graphify
+update, check-only plan, staging apply, or maintained-tree write has been run
+for PR104.
 
 ## Source scope
 
@@ -76,6 +77,23 @@ Keep `physical_approval: FAIL_OPEN` and `observation_skill: NOT_EVALUATED` in
 the eventual receipt unless independent evidence changes those states. A
 same-valid-time residual comparison and a fresh graph do not establish
 forecast skill or scientific approval.
+
+## Prepared manifest contract
+
+The PR104 helper accepts only `hydro_3600`, `amplitude_3600`,
+`structured_3600`, and `valid_time_observation` as the final gate set. Every
+gate must include `closed: true`, an evidence path and SHA-256, and a bounded
+scope. Gate state is preserved verbatim from `PASS`, `FAIL`, `INCOMPLETE`, or
+`NOT_EVALUATED`; the helper does not infer success from a closed run or replace
+a failed state with `PASS`. This permits publication of a complete audit even
+when a run or comparison fails, while keeping each failure visible. All four
+gates must be present and closed before a check-only plan can be generated.
+
+The copied PR103 wrapper is adapted only inside this PR104 KG directory. Its
+post-apply receipt literal writes `status: PASS` and `writes_performed: true`
+after the read-only plan fields so the earlier PR103 dict-unpack phase-label
+bug cannot recur. This status describes KG publication; runtime gate states
+remain separately pinned as supplied.
 
 ## Runtime evidence boundary
 

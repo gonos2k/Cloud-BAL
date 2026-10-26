@@ -1,0 +1,120 @@
+{
+  "coverage_counts": {
+    "all_803": {
+      "buffer_contained": 0,
+      "buffer_intersects": 0,
+      "full_4x4_inside_grid": 803,
+      "support_contained": 0,
+      "support_intersects": 0
+    },
+    "valid_765": {
+      "buffer_contained": 0,
+      "buffer_intersects": 0,
+      "full_4x4_inside_grid": 765,
+      "support_contained": 0,
+      "support_intersects": 0
+    }
+  },
+  "geometry": {
+    "buffer_columns": 196,
+    "history_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr99_c2_matched640_20261022/OFF/run/wrfout_d01_2026-08-16_13:00:00",
+    "history_receipt_sha256": "c4174b0363dc3b6eb5117ae1e011e9bee0f4f70d090036c607331fac7b0d1f8d",
+    "history_record_index": 0,
+    "history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+    "mask_geometry": "horizontal columns from unchanged original 613-level/16-column QC support and fixed 5-cell Chebyshev buffer (196 columns), projected from frozen QC composition; no output-driven mask",
+    "mass_grid_shape_yx": [
+      282,
+      234
+    ],
+    "projection": {
+      "dx": 5000.0,
+      "dy": 5000.0,
+      "lat1": 31.36752700805664,
+      "lon1": 119.8226318359375,
+      "stdlon": 126.0,
+      "truelat1": 30.0,
+      "truelat2": 60.0
+    },
+    "projection_method": "PR103 pinned Lambert mapping (6370000 m Earth radius) with old closed 13Z WRF XLAT[0,0]/XLONG[0,0] anchor and STAND_LON/TRUELAT1/TRUELAT2/DX/DY; same as PR103 source operator",
+    "stencil_method": "exact PR103 gdtost four-by-four gridpoint stencil: for mapped 1-based (i,j), four source grid indices per axis start at int(i)-1/int(j)-1 in 1-based terms; cells outside the mass grid count as not in mask; convert to the existing cropped active grid by subtracting the outer one-cell halo",
+    "support_columns": 16
+  },
+  "geometry_time_utc": "2026-08-16T13:00:00Z",
+  "interpretation": "Counts measure whether a station interpolation stencil intersects or is fully contained in fixed columns. They do not claim observation influence, station QC, representativeness, or independence. If intersection count is zero, the 14Z stations do not geometrically sample these fixed source regions under this interpolation stencil.",
+  "model_only_old_N_minus_A_T2_at_valid_14z_stations": {
+    "all_803_includes_sentinel_temperature_station_locations": true,
+    "arm_histories": {
+      "A": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr103_amplitude20_capture_20261026/AMPLITUDE640_RUN/run/wrfout_d01_2026-08-16_13:00:00",
+        "record_index": 10,
+        "sha256": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4"
+      },
+      "N": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr102_native_structure640_20261025/STRUCTURED640_RUN/run/wrfout_d01_2026-08-16_13:00:00",
+        "record_index": 10,
+        "sha256": "fd18da17a47abeb862ac088f4ea185d34583de65d88245737b124065aa52165a"
+      }
+    },
+    "grid_identity": {
+      "T2_shape_yx": [
+        282,
+        234
+      ],
+      "XLAT_equal_bitwise": true,
+      "XLONG_equal_bitwise": true
+    },
+    "metrics": {
+      "all_803": {
+        "count": 803,
+        "exact_nonzero_count": 803,
+        "max_absolute_K": 0.2840157245936439,
+        "mean_absolute_K": 0.007588768290715344,
+        "p95_absolute_K": 0.0382468522292072,
+        "rms_K": 0.028147911089433403,
+        "signed_mean_K": 6.336143655008954e-05
+      },
+      "valid_765": {
+        "count": 765,
+        "exact_nonzero_count": 765,
+        "max_absolute_K": 0.2840157245936439,
+        "mean_absolute_K": 0.007654788065568494,
+        "p95_absolute_K": 0.03820550136907739,
+        "rms_K": 0.028352540845277337,
+        "signed_mean_K": -7.795839834844788e-05
+      }
+    },
+    "model_valid_time_utc": "2026-08-16T13:10:00Z",
+    "operator": "PR103 pinned Lambert coordinate mapping and legacy gdtost 4x4 stencil, same projection geometry and metric as coverage test; direct N\u2212A model T2 in K. No observation-temperature subtraction.",
+    "run_receipt_sha256": {
+      "A": "76792551d703e5e05af778b39482269dcb09ed16b83a5780514e920fcd1e5296",
+      "N": "313295e9cbf9e30a12a437c501bf3db2cf25c0e6762ec5d51c31d54ba311d4d6"
+    },
+    "scope": "Evaluate pre-existing old closed N/A model T2 fields at all 803 14Z station coordinates and separately report the 765 whose temperature is non-sentinel. Temperature values are not used in a residual; the sentinel is used only to define this eligibility subset. No new forecast field is read.",
+    "station_coordinate_valid_time_utc": "2026-08-16T14:00:00Z",
+    "valid_765_subset_rule": "14Z LSO temperature field != declared -99.9 degF sentinel; no other filter"
+  },
+  "observation_time_utc": "2026-08-16T14:00:00Z",
+  "pins": {
+    "A_history_sha256": "67ec6197a5f1aed9e90f56c49d5af34e9f685167f7ac2427884b9bcdef8707a4",
+    "N_history_sha256": "fd18da17a47abeb862ac088f4ea185d34583de65d88245737b124065aa52165a",
+    "composition_sha256": "331eb9837c41a7aa663864c348f8fe18c44f8e55feed736900f5029685b1aa64",
+    "history_sha256": "e9a6ec6ca8af2f99b3ee4a9fedab13b42a4997a2ab6f68ac08e897117766470f",
+    "lso_sha256": "5897d4ec8d4979a71369f68de95c68f7229ae76fa6104619d893b204b9ad6ec9",
+    "projection_operator_sha256": "736ae3b5ec8f7e41dfd5543f00eb5b81c163a53e447e4c8de6dfcf5f182b62da"
+  },
+  "purpose": "fixed-mask station-coordinate coverage and old-history model-only N\u2212A signal; no observation residuals, scoring, filters, or new masks",
+  "schema": "pr104_14z_station_qc_mask_coverage_v1",
+  "source_inventory": {
+    "sentinel_temperature_records": 38,
+    "station_records": 803,
+    "valid_temperature_records_non_sentinel": 765
+  },
+  "valid_765_overlap_cell_count_histograms": {
+    "buffer": {
+      "0": 765
+    },
+    "support": {
+      "0": 765
+    }
+  }
+}

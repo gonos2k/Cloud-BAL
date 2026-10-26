@@ -63,3 +63,25 @@ The requested one-hour runs are not yet launched in this preparation record.
 Launch and closed receipts will be appended separately. A completed 640-second
 control or a successful preflight does not establish completion at 14:00.
 Physical approval remains `FAIL_OPEN`; independent skill is `NOT_EVALUATED`.
+
+## Subsequent launch and fixed evaluation
+
+The three requests were subsequently launched once each on 2026-10-26 at about
+06:37 UTC, with a reviewed 250-pin root GO and separately isolated outputs.
+Their launch records are under `execution/launch/` in the evidence directory.
+The preparation paragraph above is historical; completion is still pending.
+
+The primary observation comparison remains every common eligible 14Z station,
+with raw model−observation bias, MAE, RMSE, per-station residuals, and the maximum
+sample's share of squared error. The N−A contrast tests the frozen equal-amplitude
+pair; A−H and N−H are separate contrasts. No fitted station rejection, new QC
+threshold, alternative favorable time/mask, or combined cross-unit score is used.
+An unavailable 14Z model record must remain unavailable.
+
+The additional coverage audit finds no 14Z station interpolation stencil that
+intersects the original 16-column QC support or its fixed 196-column buffer.
+On the 765 eligible station locations, the old closed N−A 13:10 T2 operator
+response is nevertheless nonzero (RMS 0.02835 K). This is model-only sensitivity,
+not a 14Z observed residual and not direct validation inside the original cloud
+support. The raw 14Z comparison can assess the declared surface-temperature
+response but cannot approve the original cloud/wind field by itself.

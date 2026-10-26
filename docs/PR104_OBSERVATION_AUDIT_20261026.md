@@ -89,3 +89,66 @@ does not prove runtime use, scientific validity, or independence.
 
 The structured pins and record calculations are retained in
 [`actual_lso_and_provenance.json`](evidence/pr104_observation_audit_20261026/actual_lso_and_provenance.json).
+
+## Bounded station 22485 source follow-up
+
+The actual 14Z record (pinned LSO SHA-256 above, lines 6416–6418) gives
+station/provider `22485`/`KMA`, coordinates 34.62°N/128.54°E, elevation 0 m,
+HHMM 1400, the literal following line `BUOY`, and temperature 116.06°F with
+expected accuracy 1.08°F. The same station's 13Z raw LSO field is 114.44°F.
+The source-reader implementation at
+`src/upstream/read_surface_obs.f` (SHA-256
+`f9053d3ee62d7b917119528cd133fe3ad1d073c15dd747c30afc940ae816eab3`) reads
+report metadata at lines 110–119 and temperature/expected accuracy as degrees
+Fahrenheit at lines 123–125. It has a separate reader for a distinct `.lso_qc`
+file (lines 876–882 and 894–905); the raw LSO record itself carries no
+station-QC verdict through this reader interface.
+
+The retained replay inventory binds
+`ANAL/NE57/DABA/namelist/surface_analysis.nl` by SHA-256
+`725b1c8f6464a9a1e5a2e044ea81c44b5a196f4c576038af2707bb09a80cb107`.
+The published replay execution record (SHA-256
+`52994f8ab4a810e31138ccd22405682f2483595faac1af4e7af73c4e25d88f4e`, lines
+1349–1353) documents `USE_LSO_QC=0` and `L_REQUIRE_LSO=false`. This describes
+the replay configuration; it does not establish whether an upstream producer
+QC-processed the input before writing the pinned LSO.
+
+The raw temperatures are Fahrenheit and their Celsius conversions are
+correct. The `BUOY` label alone does not establish the measurement kind, and
+the retained inventory provides no station-level producer report or lineage.
+No authoritative station QC flag or verdict was found. Therefore the
+measurement kind, producer chain, and upstream station-QC status remain
+unresolved. All station observations remain in the valid-time comparison;
+no plausibility threshold or exclusion is introduced. Structured pins and
+record excerpt are in
+[`actual_lso_and_provenance.json`](evidence/pr104_observation_audit_20261026/actual_lso_and_provenance.json).
+
+## 14Z station coverage of the fixed QC region and old N−A signal
+
+Using all 803 14Z station coordinates and the old closed 13Z O-arm grid
+geometry, I projected each location with the pinned PR103 Lambert operator
+and checked the exact 4×4 `gdtost` stencil against the horizontal columns of
+the frozen QC support (16 columns) and its fixed 5-cell buffer (196 columns).
+No station stencil intersects either region: 0/803 and 0/765 valid-temperature
+stations for both support and buffer. All stencils are fully inside the WRF
+mass grid. The coverage test uses only coordinates and the declared −99.9°F
+sentinel to define the valid-temperature subset; it does not use temperature
+values as scores. This establishes that the 14Z stations do not geometrically
+sample the frozen source region under this operator and these masks. It does
+not imply the observations have no indirect influence through analyses or
+boundaries.
+
+As a separate model-only check, I applied the same source interpolation
+operator to the old closed N and A T2 fields at 13:10 UTC at station
+coordinates, without subtracting any observed temperatures. Across all 803
+locations the N−A signal is nonzero at 803, with RMS 0.02815 K and maximum
+absolute difference 0.28402 K. On the 765 locations with non-sentinel 14Z
+temperature, it remains nonzero at 765, with RMS 0.02835 K and maximum
+absolute difference 0.28402 K. These are descriptions of the old N−A fields
+sampled at a predeclared valid-time station set; they are not residuals,
+observation scores, or forecast skill results. The all-803 historical check is
+preserved alongside the valid-765 subset.
+
+Pins, exact stencils, coverage counts, and both model-only metric summaries
+are in
+[`station_mask_coverage_14z.json`](evidence/pr104_observation_audit_20261026/station_mask_coverage_14z.json).
