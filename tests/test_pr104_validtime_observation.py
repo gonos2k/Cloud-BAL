@@ -1,5 +1,6 @@
 import importlib.util
 from datetime import datetime, timezone
+from fractions import Fraction
 from pathlib import Path
 import tempfile
 import unittest
@@ -108,17 +109,139 @@ class ExplicitValidTimeObservationTests(unittest.TestCase):
 
     def test_operator_difference_requires_common_rows_and_reports_nonzero(self):
         row = {"station_id": "s1", "wmo_id": "w1", "provider": "TST",
-               "time_hhmm": 1400, "model_t2_c": 10.0}
-        result = MODULE.paired_operator_difference([{**row, "model_t2_c": 11.0}], [row], "H(XN) - H(XA)")
+               "time_hhmm": 1400, "model_t2_c": 10.0, "observation_c": 10.0,
+               "signed_model_minus_observation_c": 0.0, "lat": 35.0, "lon": 126.0,
+               "elev_m": 0.0, "temperature_expected_accuracy_f": 1.0}
+        result = MODULE.paired_operator_difference(
+            [{**row, "model_t2_c": 11.0, "signed_model_minus_observation_c": 1.0}],
+            [row], "H(XN) - H(XA)")
         self.assertEqual(result["paired_station_count"], 1)
         self.assertTrue(result["nonzero_signal"])
         self.assertEqual(result["max_abs_delta_c"], 1.0)
         with self.assertRaisesRegex(ValueError, "different station coverage"):
             MODULE.paired_operator_difference([row], [], "H(XN) - H(XA)")
 
+    def test_operator_difference_decomposes_paired_score_changes_exactly(self):
+        def row(station, prediction, error, observation=None):
+            observation = prediction - error if observation is None else observation
+            return {
+                "station_id": station, "wmo_id": f"w-{station}", "provider": "TST",
+                "time_hhmm": 1400, "model_t2_c": prediction, "observation_c": observation,
+                "signed_model_minus_observation_c": error,
+                "lat": 35.0, "lon": 126.0, "elev_m": 0.0,
+                "temperature_expected_accuracy_f": 1.0,
+            }
+
+        y_rows = [row("s1", 10.0, 1.0), row("s2", 20.0, -2.0)]
+        x_rows = [row("s1", 13.0, 4.0), row("s2", 19.0, -3.0)]
+        result = MODULE.paired_operator_difference(x_rows, y_rows, "H(X) - H(Y)")
+        scores = result["paired_station_score_differences"]
+
+        self.assertEqual(scores["prediction_delta_c"]["signed_total"], 2.0)
+        self.assertEqual(scores["prediction_delta_c"]["absolute_total"], 4.0)
+        self.assertEqual(scores["squared_error_delta_c2"]["signed_total"], 20.0)
+        self.assertEqual(scores["squared_error_delta_c2"]["absolute_total"], 20.0)
+        self.assertEqual(scores["absolute_error_delta_c"]["signed_total"], 4.0)
+        self.assertEqual(scores["absolute_error_delta_c"]["absolute_total"], 4.0)
+        self.assertEqual(scores["squared_error_delta_c2"]["largest_abs_contribution"],
+                         {"station_key": ["s1", "w-s1", "TST", 1400], "value": 15.0})
+        self.assertEqual(scores["squared_error_delta_c2"]["top_5_cumulative_signed_contribution"], 20.0)
+        self.assertEqual(scores["squared_error_delta_c2"]["top_5_cumulative_absolute_contribution"], 20.0)
+        self.assertEqual(scores["mean_mse_delta_c2"], 10.0)
+        self.assertEqual(scores["mean_mae_delta_c"], 2.0)
+        self.assertEqual(result["paired_station_score_rows"][0]["squared_error_delta_c2"], 15.0)
+        self.assertEqual(result["paired_station_score_rows"][0]["direct_squared_error_delta_c2"], 15.0)
+        self.assertEqual(scores["contribution_scope"], "all paired matched station records; no additional exclusions")
+
+    def test_operator_difference_emits_ordered_station_rows_and_cancellation(self):
+        def make_row(station, error, delta):
+            # Binary fractions make every expected value exactly representable.
+            error, delta = Fraction(error), Fraction(delta)
+            observation = Fraction(0)
+            f_y, f_x = observation + error, observation + error + delta
+            return {
+                "station_id": station, "wmo_id": station, "provider": "TST", "time_hhmm": 1400,
+                "lat": 35.0, "lon": 126.0, "elev_m": 0.0,
+                "temperature_expected_accuracy_f": 1.0,
+                "observation_c": float(observation), "model_t2_c": float(f_x),
+                "signed_model_minus_observation_c": float(f_x - observation),
+            }, {
+                "station_id": station, "wmo_id": station, "provider": "TST", "time_hhmm": 1400,
+                "lat": 35.0, "lon": 126.0, "elev_m": 0.0,
+                "temperature_expected_accuracy_f": 1.0,
+                "observation_c": float(observation), "model_t2_c": float(f_y),
+                "signed_model_minus_observation_c": float(f_y - observation),
+            }, error, delta
+
+        cases = [make_row("s1", Fraction(1, 4), Fraction(1, 2)),
+                 make_row("s2", Fraction(1, 4), Fraction(-1, 2)),
+                 make_row("s3", Fraction(32), Fraction(1, 4)),
+                 make_row("s4", Fraction(0), Fraction(-1, 4))]
+        x_rows = [item[0] for item in cases]
+        y_rows = [item[1] for item in cases]
+        result = MODULE.paired_operator_difference(x_rows, list(reversed(y_rows)), "H(X) - H(Y)")
+        station_rows = result["paired_station_score_rows"]
+        expected_prediction = [float(case[3]) for case in cases]
+        expected_squared = [float(2 * case[2] * case[3] + case[3] * case[3]) for case in cases]
+        self.assertEqual([row["station_key"][0] for row in station_rows], ["s1", "s2", "s3", "s4"])
+        self.assertEqual([row["prediction_delta_c"] for row in station_rows], expected_prediction)
+        self.assertEqual([row["squared_error_delta_c2"] for row in station_rows], expected_squared)
+        self.assertEqual(sum(expected_prediction), 0.0)
+        self.assertEqual(sum(abs(value) for value in expected_prediction), 1.5)
+        self.assertEqual(station_rows[2]["cross_term_c2"], 16.0)
+        self.assertEqual(station_rows[2]["squared_error_delta_c2"], expected_squared[2])
+        self.assertEqual(station_rows[2]["direct_squared_error_delta_c2"], expected_squared[2])
+        scores = result["paired_station_score_differences"]
+        self.assertEqual(scores["prediction_delta_c"]["signed_total"], 0.0)
+        self.assertEqual(scores["prediction_delta_c"]["absolute_total"], 1.5)
+        self.assertEqual(scores["squared_error_delta_c2"]["mean_signed_delta"],
+                         float(sum(Fraction(value) for value in expected_squared) / 4))
+        self.assertEqual(scores["mean_mse_delta_c2"],
+                         float(sum(2 * case[2] * case[3] + case[3] * case[3] for case in cases) / 4))
+
+    def test_operator_difference_rejects_shared_observation_mismatch(self):
+        row = {"station_id": "s1", "wmo_id": "w1", "provider": "TST", "time_hhmm": 1400,
+               "observation_c": 0.0, "model_t2_c": 1.0, "signed_model_minus_observation_c": 1.0,
+               "lat": 35.0, "lon": 126.0, "elev_m": 0.0,
+               "temperature_expected_accuracy_f": 1.0}
+        with self.assertRaisesRegex(ValueError, "different shared station observation metadata"):
+            MODULE.paired_operator_difference([row], [{**row, "observation_c": 0.25,
+                                                         "signed_model_minus_observation_c": 0.75}], "pair")
+
     def test_operator_difference_rejects_empty_common_support(self):
         with self.assertRaisesRegex(ValueError, "no matched station coverage"):
             MODULE.paired_operator_difference([], [], "H(XN) - H(XA)")
+
+    def test_output_exclusive_create_preserves_existing_file(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            output = Path(tempdir) / "report.json"
+            output.write_text("keep this report\n", encoding="utf-8")
+            argv = ["pr104_validtime_observation.py", "--valid-time", "2026-08-16T14:00:00Z",
+                    "--observation", str(Path(tempdir) / "obs.lso"),
+                    "--history", "H=h.nc", "--history", "A=a.nc", "--history", "N=n.nc",
+                    "--output", str(output)]
+            with patch("sys.argv", argv), \
+                    patch.object(MODULE.PR103, "read_lso", return_value=([], {})), \
+                    patch.object(MODULE, "load_histories", return_value={}), \
+                    patch.object(MODULE, "sha256", return_value="0" * 64):
+                with self.assertRaises(FileExistsError):
+                    MODULE.main()
+            self.assertEqual(output.read_text(encoding="utf-8"), "keep this report\n")
+
+    def test_output_rejects_nonfinite_json_before_creating_file(self):
+        with tempfile.TemporaryDirectory() as tempdir:
+            output = Path(tempdir) / "report.json"
+            argv = ["pr104_validtime_observation.py", "--valid-time", "2026-08-16T14:00:00Z",
+                    "--observation", str(Path(tempdir) / "obs.lso"),
+                    "--history", "H=h.nc", "--history", "A=a.nc", "--history", "N=n.nc",
+                    "--output", str(output)]
+            with patch("sys.argv", argv), \
+                    patch.object(MODULE.PR103, "read_lso", return_value=([], {})), \
+                    patch.object(MODULE, "load_histories", return_value={"bad_number": float("nan")}), \
+                    patch.object(MODULE, "sha256", return_value="0" * 64):
+                with self.assertRaises(ValueError):
+                    MODULE.main()
+            self.assertFalse(output.exists())
 
     def test_comparison_filters_to_requested_report_hour(self):
         observation = {"station_id": "s1", "wmo_id": "w1", "provider": "TST",
