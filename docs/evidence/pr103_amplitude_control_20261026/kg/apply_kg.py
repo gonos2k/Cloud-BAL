@@ -512,8 +512,11 @@ def apply(plan: dict, fingerprint: str, root_go_path: Path, out: Path) -> dict:
                 "snapshot_files_sha256": {name: digest(named / name) for name in SNAPSHOT_FILES},
             }
         receipt = {
-            "schema": "pr103_amplitude_control_selected_source_graphify_kg_v1", "status": "PASS",
-            **plan, "reviewed_plan_sha256": fingerprint,
+            **plan,
+            "schema": "pr103_amplitude_control_selected_source_graphify_kg_v1",
+            "status": "PASS", "writes_performed": True,
+            "preflight_status": plan["status"],
+            "reviewed_plan_sha256": fingerprint,
             "root_go_record": {"path": str(root_go_path.resolve()), "sha256": digest(root_go_path),
                                "reviewed_by": go["reviewed_by"], "decision": "GO"},
             "recorded_utc": datetime.now(timezone.utc).isoformat(),

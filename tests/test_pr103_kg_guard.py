@@ -21,6 +21,32 @@ sys.modules[APPLY_SPEC.name] = apply
 APPLY_SPEC.loader.exec_module(apply)
 
 
+class TestPublishedReceiptPhase(unittest.TestCase):
+    def test_publication_overrides_preflight_phase_fields(self):
+        # Evaluate the phase fields from the real receipt literal, including
+        # dictionary-unpack order, without running a filesystem publication.
+        import ast
+        tree = ast.parse((HERE / "apply_kg.py").read_text())
+        receipt = next(node.value for node in ast.walk(tree)
+                       if isinstance(node, ast.Assign)
+                       and any(isinstance(target, ast.Name) and target.id == "receipt"
+                               for target in node.targets)
+                       and isinstance(node.value, ast.Dict))
+        pairs = [(key, value) for key, value in zip(receipt.keys, receipt.values)
+                 if (key is None and isinstance(value, ast.Name) and value.id == "plan")
+                 or (isinstance(key, ast.Constant)
+                                    and key.value in {"schema", "status", "writes_performed", "preflight_status"})]
+        expression = ast.Expression(ast.Dict(keys=[key for key, _ in pairs],
+                                             values=[value for _, value in pairs]))
+        plan = {"schema": "preflight", "status": "PREFLIGHT_PASS_NO_WRITES", "writes_performed": False}
+        result = eval(compile(ast.fix_missing_locations(expression), "receipt phase", "eval"), {"plan": plan})
+        self.assertEqual(result["schema"], "pr103_amplitude_control_selected_source_graphify_kg_v1")
+        self.assertEqual(result["status"], "PASS")
+        self.assertIs(result["writes_performed"], True)
+        self.assertEqual(result["preflight_status"], "PREFLIGHT_PASS_NO_WRITES")
+        self.assertFalse(plan["writes_performed"])
+
+
 class TestRawSnapshotCollision(unittest.TestCase):
     def test_existing_automatic_day_gets_distinct_pr103_raw_name(self):
         self.assertEqual(preflight.raw_snapshot_name("2026-10-26", True),
