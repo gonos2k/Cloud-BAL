@@ -154,5 +154,44 @@
     "Difference boundary does not identify first internal QR/QS-changing operation or prove physical correctness/precipitation causality.",
     "No new forecast or Fortran compile in this review."
   ],
-  "reviewer": "Codex independent reviewer"
+  "reviewer": "Codex independent reviewer",
+  "prepare_receipt_readback": {
+    "all_wrfinput_candidate_pins_match": true,
+    "arms": {
+      "OFF": {
+        "prepare_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_unit12_off_drwuvr1f/PREPARE.json",
+        "prepare_sha256": "049c6358800d9c90ce05c7b934c7694e2c4bd76e198fdedc68905a5f11ab3e54",
+        "declared_input_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_native_12_15.B4Lwmh/real",
+        "candidate_source": null,
+        "wrfinput_sha256_in_prepare": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc",
+        "actual_extractor_candidate_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_native_12_15.B4Lwmh/real/wrfinput_d01",
+        "candidate_sha256": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc",
+        "prep_wrfinput_pin_matches_candidate": true,
+        "candidate_source_matches_candidate": true
+      },
+      "HYDRO": {
+        "prepare_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_unit12_hydro_jzh17x9p/PREPARE.json",
+        "prepare_sha256": "1f97fc32235903586ea4372d518948b770e6c4da6e1832c1a8f0605f56c8bcdb",
+        "declared_input_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_native_12_15.B4Lwmh/real",
+        "candidate_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/paired_parent_HYDRO/wrfinput_d01",
+        "wrfinput_sha256_in_prepare": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+        "actual_extractor_candidate_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/real_HYDRO/wrfinput_d01",
+        "candidate_sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+        "prep_wrfinput_pin_matches_candidate": true,
+        "candidate_source_matches_candidate": true
+      },
+      "LIQUID": {
+        "prepare_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_unit12_liquid_ade7no6e/PREPARE.json",
+        "prepare_sha256": "5281753822ceffbb857a4fe0fae28f56f209746cca34c5a218052cd18eeb7d8c",
+        "declared_input_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_native_12_15.B4Lwmh/real",
+        "candidate_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/paired_parent_LIQUID_HT/wrfinput_d01",
+        "wrfinput_sha256_in_prepare": "1dae2480a9ff4c4a386abf9ff5210f36ad3162330e2dc579d870d64b37be4470",
+        "actual_extractor_candidate_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/real_LIQUID_RADAR_RH1/wrfinput_d01",
+        "candidate_sha256": "1dae2480a9ff4c4a386abf9ff5210f36ad3162330e2dc579d870d64b37be4470",
+        "prep_wrfinput_pin_matches_candidate": true,
+        "candidate_source_matches_candidate": true
+      }
+    },
+    "scope_note": "PREPARE.input_source is the common metgrid/real ancestry for the experiment; candidate_source and wrfinput_d01 pin identify the arm-specific paired candidate where provided. The actual six-hour OFF trajectory path is explicitly bound separately in historical_lineage.json."
+  }
 }
