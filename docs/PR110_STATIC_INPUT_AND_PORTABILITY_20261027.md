@@ -43,6 +43,35 @@ entry point. [Native evidence](evidence/pr110_static_portability_20261027/static
 
 The archived file stores Dx/Dy=5000 with legacy `kilometers` attributes; this PR
 preserves the existing /1000 behavior rather than redefining producer units.
+Portable validation uses two distinct scopes:
+
+- An explicit PRoot guest root omits the reported research paths. The old PR71/
+  PR83 checks fail (2 failed / 2 passed); the revised checks pass (4 passed).
+  PRoot cannot execute the suite's sealed CLOEXEC memfd tests, so this guest-root
+  run is not a complete portable PASS.
+- The complete maintained command runs natively under a Linux seccomp notification
+  gate returning ENOENT for the configured research/toolchain prefixes, including
+  metadata lookups. It passes 208 Python modules and two shell suites, with
+  1,340 pytest cases passed and one optional reference case skipped. No module
+  is entirely skipped. Raw stat/lstat probes also confirm the absence behavior.
+
+The latter is nonadversarial syscall-absence qualification, not a new physical
+host, mount-isolated environment, or security sandbox. Prefixes and intercepted
+syscalls, commands, failed setup attempts and evidence are recorded in the
+[portable receipt](evidence/pr110_static_portability_20261027/portable_receipt.md).
+The tests and production guard are not weakened to accommodate either setup.
+
+Independent team reviews cover static input handling and the portable separation.
+The native harness is rerun after dependency-hash checks are moved before invoking
+nf-config. All 13 committed changed paths match the tested archive.
+
+Graphify updates are separate for KLAPS50 (41,232 nodes / 85,662 edges) and
+Cloud-BAL (15,404 / 27,204), each +15 nodes / +26 edges. Independent readback
+confirms the 140 prior snapshots plus four additions, derived wiki scope, source
+and pin preservation. Eight selected code/test paths were extracted; five other
+paths were hash-bound. Cross-file Fortran CALL extraction is partial.
+[Graph evidence](evidence/pr110_static_portability_20261027/kg/manifest.json).
+
 Focused fixture tests are not full model, scientific, or hosted-CI results.
 
 ## Research scope

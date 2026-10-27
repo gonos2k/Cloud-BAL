@@ -38,6 +38,11 @@ Linux Landlock with external research-file reads and Intel compiler execution
 denied. A new checkout on a host with those resources is not, by itself, a
 portability proof. See `PR109_MEMORY_AND_PORTABILITY_20261027.md` for the
 qualification scope and exact evidence.
+PR110 also removes the two residual external file-existence assumptions. Its
+qualification separately records focused tests in a guest root without those
+paths and the full native-kernel run with configured external lookups returning
+ENOENT. This is scoped local qualification, not a fresh physical-host CI result;
+see `PR110_STATIC_INPUT_AND_PORTABILITY_20261027.md`.
 
 The current checkout has no tracked `.github/workflows` file, so this document
 does not establish an active hosted CI check or a hosted-runner result.
