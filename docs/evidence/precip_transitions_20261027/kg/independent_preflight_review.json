@@ -1,0 +1,80 @@
+{
+  "schema": "cp02_kg_independent_preflight_review_v1",
+  "review_date_utc": "2026-10-27",
+  "decision": "GO_FOR_ROOT_APPLY",
+  "review_scope": "Independent preflight only; no maintained writes and no Graphify run.",
+  "source_commit": "cd2773a2951c9b635591124c970a1d3852620b8a",
+  "approval_base": "60319cf552fdbb08e2787d72a531b860c929243d",
+  "stage_sha256": "66fd36da305be0ab87b9f93f19073387c36b555459f40d33f07a2af21a61bf8e",
+  "plan_sha256": "21febf23674dcefcb6fb09146c60f63bee748cd046a7a2bf6bd1ce268ae98e5a",
+  "plan_file_sha256": "753aed1b6454364330b3514637ea9bd8100c06fd24e46e4a8829e4350f6cca7a",
+  "check_only_file_sha256": "411b47326a0cb46468aa6acb174d5d1fc5f6049ea11edd3ffd7a94b54080f58d",
+  "selection": {
+    "selected_paths": 4,
+    "hash_only_paths": 23,
+    "commit_diff_paths": 27,
+    "exact_diff_coverage": true,
+    "source_tree_clean": true
+  },
+  "check_only": {
+    "baseline_dated_snapshot_count": 164,
+    "expected_after": 168,
+    "maintained_state_match": true,
+    "plan_sha256": "21febf23674dcefcb6fb09146c60f63bee748cd046a7a2bf6bd1ce268ae98e5a",
+    "protected_content_and_pins_match": true,
+    "source_clean": true,
+    "source_commit": "cd2773a2951c9b635591124c970a1d3852620b8a",
+    "stage_sha256": "66fd36da305be0ab87b9f93f19073387c36b555459f40d33f07a2af21a61bf8e",
+    "staged_inventory_match": true,
+    "status": "CHECK_ONLY_PASS_NO_WRITES",
+    "targets": 21,
+    "writes_performed": false
+  },
+  "targets": {
+    "count": 21,
+    "exact_target_set": true,
+    "expected_snapshot_count_before": 164,
+    "expected_snapshot_count_after": 168,
+    "all_old_164_snapshot_member_hashes_preserved": true
+  },
+  "graph_deltas": {
+    "KLAPS50": {
+      "baseline_nodes": 41322,
+      "staged_nodes": 41360,
+      "old_node_ids_preserved": 41322,
+      "removed_old_node_ids": 0,
+      "added_node_ids": 38,
+      "baseline_edges": 85876,
+      "staged_edges": 85962,
+      "old_edges_preserved": 85876,
+      "removed_old_edges": 0,
+      "added_edges": 86,
+      "changed_existing_node_records": 7063,
+      "changed_existing_fields": [
+        "community",
+        "community_name"
+      ]
+    },
+    "Cloud-BAL": {
+      "baseline_nodes": 15494,
+      "staged_nodes": 15532,
+      "old_node_ids_preserved": 15494,
+      "removed_old_node_ids": 0,
+      "added_node_ids": 38,
+      "baseline_edges": 27419,
+      "staged_edges": 27505,
+      "old_edges_preserved": 27419,
+      "removed_old_edges": 0,
+      "added_edges": 86,
+      "changed_existing_node_records": 746,
+      "changed_existing_fields": [
+        "community",
+        "community_name"
+      ]
+    }
+  },
+  "protected_content_and_source_pins": "Direct call to pinned verify_protected_content passed; publisher check_state also passed it.",
+  "superseded_check_only_limitation": "An earlier check-only output for stage SHA 8fb6cf9fa0f702d212945c138591848ce605341890df89622e63d98fb2b21409 was overwritten when the publisher was rerun against the final stage. Its stdout is preserved in the task thread, but the superseded JSON/plan was not separately retained. This is a publication-process record limitation only; no scientific artifacts or maintained corpus data were lost.",
+  "maintained_writes_performed_by_reviewer": false,
+  "root_apply_authorized_by_this_review": false
+}

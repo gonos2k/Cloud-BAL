@@ -1,0 +1,53 @@
+{
+  "status": "GO",
+  "review_scope": "Independent integrity and consistency review of the frozen CP02 native-state extraction, final-v2 artifacts, first-hour trace note, and root transition report. This is not physical approval, forecast-skill validation, or causal attribution.",
+  "reviewed_files": {
+    "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/extract_cp02_losthits.py": {
+      "sha256": "13874ce9932a7d567505526c736aafde13d02ed5195cb7938f32d3c42b6c5454",
+      "bytes": 19134
+    },
+    "/var/tmp/cloudbal-precip-transitions/docs/CP02_FIRST_HOUR_TRACE_SCOPE_20261027.md": {
+      "sha256": "691de430d3e9c137ad0072d8c7567965c6e5e45cc49fb5d67f1574d09e337a9a",
+      "bytes": 5692
+    },
+    "/var/tmp/cloudbal-precip-transitions/docs/CP02_PRECIPITATION_TRANSITIONS_20261027.md": {
+      "sha256": "3f85b908534a15d9e34be9ffea2e7e95dedceb9942b9401178ff7a265c4cd018",
+      "bytes": 8150
+    },
+    "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/final-v2/extraction_receipt.json": {
+      "sha256": "2b06dd79233201275db2d3ea1cdb39e9f26ce7f355b7c8d45a1a64a176ba435e",
+      "bytes": 7456
+    },
+    "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/final-v2/losthit_native_profiles.csv": {
+      "sha256": "241b14f3d300ff4612d24eb4d6e51128e1bcba7992232cd9dc01abec2eb96316",
+      "bytes": 1355127
+    },
+    "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/final-v2/losthit_mapping.csv": {
+      "sha256": "49a336ba807251bfb2d270bdaeb494911551167ef75748fc7fec1cd8aa294375",
+      "bytes": 9980
+    },
+    "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/final-v2/precipitation_crosscheck.csv": {
+      "sha256": "7524e8fbf7dbec78aa2b064568493c9954d82f99da0bc2e8e5b09513cfa6886e",
+      "bytes": 5098
+    },
+    "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/final-v2/losthit_mean_profiles.png": {
+      "sha256": "a259790d4f13df4e24b77100719bab86fe76cc1d15a9e4a4a2c0220b0ef5e491",
+      "bytes": 265779
+    }
+  },
+  "checks": {
+    "extractor_syntax": "PASS: py_compile",
+    "canonical_selector": "PASS: exact threshold selector yields the 20 ranked points; target coordinates exactly match the pinned ODAM crop at those points",
+    "native_source_pins": "PASS: all 6 history SHA-256/size records, RESULT.json, mapper, and 6 mapper provenance files recomputed and match the receipt/source pins",
+    "source_field_contract": "PASS: extractor enforces variable presence, dimensions (Time,bottom_top,south_north,west_east), shape (1,39,282,234), exact units (K, Pa, kg kg-1), finite/unmasked data, positive corner pressure, and finite diagnostic temperature",
+    "mapping": "PASS: mapping CSV has 80 rows, ranks 1..20, corners 0..3 once per rank, weight sums 1, and native indices/corner order match the pinned comparison mapper",
+    "profile_rows": "PASS: 4680 unique arm×time×rank×level rows (3 arms × 2 times × 20 ranks × 39 levels); independently recomputed from all six native WRF files",
+    "native_profile_recompute_max_abs_diff": "T/P/PB and all six hydrometeor fields: 0; P_Pa: 0; T_K_diagnostic: 1.14e-13 K (floating-point order)",
+    "precipitation": "PASS: 60 point checks (20 × 3 arms); extracted remap-then-difference arrays are exactly array-equal to canonical NPZ vectors, with max absolute difference 0 mm",
+    "profile_summary_table": "PASS: note table for k=0..10 independently reproduced from the profile CSV",
+    "causal_scope": "PASS: both notes explicitly describe saved-state evidence and unavailable tendencies/budgets; no causal microphysics claim found",
+    "artifact_integrity": "PASS: all four final-v2 output hashes match extraction_receipt.json",
+    "rollback": "PASS: extractor stages outputs in a fresh sibling directory, refuses existing output/stage paths, and removes the stage on exceptions"
+  },
+  "result": "GO; reviewed pins, exact point mapping and precipitation bridge, all profile values, units/dimensions, report arithmetic, and bounded noncausal wording."
+}

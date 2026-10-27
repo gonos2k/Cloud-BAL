@@ -1,0 +1,155 @@
+{
+  "status": "PASS_SCOPED_NATIVE_STATE_EXTRACTION",
+  "selector": "canonical hour_13_arrays.npz: reference>=5 & OFF>=5 & ((HYDRO<5)|(LIQUID<5)); exactly 20 points",
+  "selector_source": {
+    "path": "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_hourly_20261027/rn1_recovery/hour_13_arrays.npz",
+    "sha256": "4290d0d2955ffde8555c2fa6c8d7655825f6e982cd2b3b7a2604d8149eea00fa",
+    "manifest_sha256": "4290d0d2955ffde8555c2fa6c8d7655825f6e982cd2b3b7a2604d8149eea00fa"
+  },
+  "mapping": "compare_six_hour_csi.py build_curvilinear_mapping; ODAM 253x149; native WRF 282x234; existing one-cell-halo; bilinear, no extrapolation",
+  "mapping_residual_max_deg": 2.842170943040401e-14,
+  "mapping_valid_points": 20,
+  "history_records": [
+    {
+      "arm": "OFF",
+      "valid_time": "2026-08-16_12:00:00",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_12:00:00",
+      "size": 328253340,
+      "sha256": "e25ccaa70e78b4d4d4d71d6f840286905b88cfae74cd0e638591d4b110310f61"
+    },
+    {
+      "arm": "OFF",
+      "valid_time": "2026-08-16_13:00:00",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_13:00:00",
+      "size": 328253340,
+      "sha256": "f6eeb5a7107ac273140f075b2595ac89f718001a2f092b6723b52b80495b5e0e"
+    },
+    {
+      "arm": "HYDRO",
+      "valid_time": "2026-08-16_12:00:00",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_12:00:00",
+      "size": 328253340,
+      "sha256": "203edd6d035b74a53d1e81cda11a58be22b18f056624f613ae3e0485e4a24388"
+    },
+    {
+      "arm": "HYDRO",
+      "valid_time": "2026-08-16_13:00:00",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_13:00:00",
+      "size": 328253340,
+      "sha256": "108ed8a27a73eae8f6aa1e9fc8993efbcc880c3fbc8e998a4cf91e7ea254de77"
+    },
+    {
+      "arm": "LIQUID",
+      "valid_time": "2026-08-16_12:00:00",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_12:00:00",
+      "size": 328253340,
+      "sha256": "354041bc46ba3e746ca20695ebd2a17a7926f00b411848da1234608cbc7764a3"
+    },
+    {
+      "arm": "LIQUID",
+      "valid_time": "2026-08-16_13:00:00",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_13:00:00",
+      "size": 328253340,
+      "sha256": "447546d38fb6d4af1c326b9b03340ad8238b40b9070eb113ea08d5a23dcc86af"
+    }
+  ],
+  "precipitation_crosscheck": [
+    {
+      "arm": "OFF",
+      "points": 20,
+      "max_abs_error_mm": 0.0,
+      "exact_array_equal": true,
+      "pass": true
+    },
+    {
+      "arm": "HYDRO",
+      "points": 20,
+      "max_abs_error_mm": 0.0,
+      "exact_array_equal": true,
+      "pass": true
+    },
+    {
+      "arm": "LIQUID",
+      "points": 20,
+      "max_abs_error_mm": 0.0,
+      "exact_array_equal": true,
+      "pass": true
+    }
+  ],
+  "input_pin_preservation": {
+    "before_sha256": "bf104306e7d1d500f11a7e0c6ac10dc7ad1579d89412aa6f3042e7e0969a8022",
+    "after_sha256": "bf104306e7d1d500f11a7e0c6ac10dc7ad1579d89412aa6f3042e7e0969a8022",
+    "identical": true
+  },
+  "source_provenance": [
+    {
+      "name": "inventory",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/inventory.json",
+      "sha256": "fc65b7ff026d2813ede107d3c60e58f702f6d6286ae8c0940196ff7283d3f460"
+    },
+    {
+      "name": "mask_receipt",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/mask_receipt.json",
+      "sha256": "b179bf6b1902c0decdbd7a3cf667cbeda9a359874f7151a3bbc05809dba7bec7"
+    },
+    {
+      "name": "mask",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/south_korea_land_mask_149x253_uint8_fortran.bin",
+      "sha256": "25a43d7e2981b6551cb753362f9d52ce11037a6e2d61a4750c1e21d152742b46"
+    },
+    {
+      "name": "analysis_coordinates",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/DFSD/20260816/klps_lc05_anal_20260816_1300",
+      "sha256": "bfa8e9d050244166ee53973be9593cdcad0e322d9b69209084c8dd19d159b23e"
+    },
+    {
+      "name": "run_contract",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/run_contract.md",
+      "sha256": "10e671b307d1936aec5602bf1897120cbbc0796a4c56d217649ef4f5ad1b12f1"
+    },
+    {
+      "name": "one_hour_reproduction",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/ONE_HOUR_REPRODUCTION.json",
+      "sha256": "aeb248edfe39df069e014ce360fcbc77e54157ec72fa6764aa98ed464a767c66"
+    }
+  ],
+  "thermodynamics": {
+    "temperature": "derived diagnostic, per-corner from theta=T+300 K and P+PB, then bilinear; p0=100000 Pa, Rd=287.05, Cp=1004.5",
+    "not_native_temperature_output": true
+  },
+  "fields": [
+    "T_theta_perturbation_K",
+    "P_perturbation_Pa",
+    "PB_base_pressure_Pa",
+    "T_K_diagnostic",
+    "P_Pa",
+    "QVAPOR_kgkg",
+    "QCLOUD_kgkg",
+    "QRAIN_kgkg",
+    "QICE_kgkg",
+    "QSNOW_kgkg",
+    "QGRAUP_kgkg"
+  ],
+  "limitations": [
+    "Only saved state and accumulated precipitation fields; no process tendency, conversion budget, or native microphysics rate diagnostics captured.",
+    "OFF/HYDRO/LIQUID differ in several initialization fields and share initial W; this is paired whole-initialization response, not isolated thermodynamic causality.",
+    "WRF T is perturbation potential temperature; temperature transformation is explicitly labeled diagnostic and is not claimed to duplicate the model thermodynamic routine exactly."
+  ],
+  "output_csv": "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/final-v2/losthit_native_profiles.csv",
+  "output_csv_sha256": "241b14f3d300ff4612d24eb4d6e51128e1bcba7992232cd9dc01abec2eb96316",
+  "rows": 4680,
+  "mapping_csv": "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/final-v2/losthit_mapping.csv",
+  "mapping_csv_sha256": "49a336ba807251bfb2d270bdaeb494911551167ef75748fc7fec1cd8aa294375",
+  "precipitation_crosscheck_csv": "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/final-v2/precipitation_crosscheck.csv",
+  "precipitation_crosscheck_csv_sha256": "7524e8fbf7dbec78aa2b064568493c9954d82f99da0bc2e8e5b09513cfa6886e",
+  "figure": "/var/tmp/cloudbal-precip-transitions/docs/evidence/precip_transitions_20261027/native_trace/final-v2/losthit_mean_profiles.png",
+  "figure_sha256": "a259790d4f13df4e24b77100719bab86fe76cc1d15a9e4a4a2c0220b0ef5e491",
+  "source_result": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/RESULT.json",
+    "sha256": "ec1afcfcd20c63710409c08ee177e3c8efdf60ef8f3df9abb8152af8a5492f01"
+  },
+  "source_mapping_code": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/compare_six_hour_csi.py",
+    "sha256": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0"
+  }
+}
