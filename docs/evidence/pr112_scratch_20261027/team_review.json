@@ -1,0 +1,23 @@
+{
+  "status": "pass",
+  "review": {
+    "files": [
+      {
+        "path": "tests/lapsprep_static_fixture.py",
+        "sha256": "d5b8cd137f795883de00aa29d9ac884bc1e071142a7290fb6e0a47b9e8022b91"
+      },
+      {
+        "path": "tests/run_lapsprep_vapor.sh",
+        "sha256": "be6690584af7c842f100f3c6df0f8c5a940769e23735ee6bef0745628302f4dc"
+      }
+    ],
+    "findings": "No blockers. The three malformed array fixtures place one bad cell at Fortran (x=2,y=1), outside the 2x2 SW/NE corner pair. The swlat_200 regression remains at SW. run_rejected checks nonzero status and absence of output for O0 and O2; all 12 static-grid rejection cases are included and passed in the run log.",
+    "independent_fixture_check": "Generated NetCDF readback confirmed one bad cell only, at y=1,x=2, for lat_array_missing, lat_array_nonfinite, and avg_array_missing; swlat_200 remains 200 at y=1,x=1."
+  },
+  "validation": {
+    "command": "From /var/tmp/cloudbal-pr112: CLOUD_BAL_TEST_SCRATCH_ROOT=../pr112-native bash tests/run_lapsprep_vapor.sh",
+    "result": "PASS; run log ends with 'actual lapsprep caller vapor regression passed' and retained-artifact notice. Relative scratch root resolved to /var/tmp/pr112-native/lapsprep_vapor_tests.HNq30l.",
+    "scope": "Pinned Intel profile; fresh external scratch; O0/free and O2/repro builds; full maintained LAPSPREP actual-caller regression script. Static-grid invalid cases rejected without output at both profiles.",
+    "limitations": "This records the native regression runner result only; it is not a full portable-platform claim or a model/scientific validation."
+  }
+}

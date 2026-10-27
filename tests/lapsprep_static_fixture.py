@@ -47,16 +47,17 @@ def write_static(root: Path, case: str) -> None:
         elif case == "lat_array_missing":
             lat = dataset.variables["lat"]
             lat.set_auto_mask(False)
-            lat[0, 0, 0, 0] = np.float32(1.0e20)
+            # Keep the single bad value off the southwest/northeast corner pair.
+            lat[0, 0, 0, 1] = np.float32(1.0e20)
             lat.missing_value = np.float32(1.0e20)
         elif case == "lat_array_nonfinite":
-            dataset["lat"][0, 0, 0, 0] = np.nan
+            dataset["lat"][0, 0, 0, 1] = np.nan
         elif case == "lon_400":
             dataset["lon"][0, 0, 0, 0] = 400.0
         elif case == "avg_array_missing":
             avg = dataset.variables["avg"]
             avg.set_auto_mask(False)
-            avg[0, 0, 0, 0] = np.float32(1.0e20)
+            avg[0, 0, 0, 1] = np.float32(1.0e20)
             avg.missing_value = np.float32(1.0e20)
         elif case == "lat_nan_marker":
             dataset["lat"].missing_value = np.float32(np.nan)

@@ -7,6 +7,7 @@ repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 workspace_root=$(realpath -e "${CLOUD_BAL_WORKSPACE_ROOT:-$repo_root/..}")
 scratch_root="${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}"
 mkdir -p "$scratch_root"
+scratch_root=$(cd "$scratch_root" && pwd -P)
 test_tmp=$(mktemp -d "$scratch_root/lapsprep_vapor_tests.XXXXXX")
 if [[ ${CLOUD_BAL_KEEP_TEST_OUTPUT:-0} == 1 ]]; then
   trap 'printf "lapsprep vapor test artifacts retained: %s\n" "$test_tmp"' EXIT

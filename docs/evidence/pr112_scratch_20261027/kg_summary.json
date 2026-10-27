@@ -1,0 +1,47 @@
+{
+  "capture_correction": "V1 dropped the leading space on the first Git porcelain row in each maintained root. V2 preserves those columns; all other rows and immutable artifacts were unchanged. The source-commit metadata was finalized from the base commit to the clean tested code commit. V1 retained; only V2 applied.",
+  "corpora": {
+    "Cloud-BAL": {
+      "communities": 1388,
+      "delta_edges": 0,
+      "delta_nodes": 0,
+      "edges": 27222,
+      "extracted_edges": 31,
+      "extracted_nodes": 17,
+      "nodes": 15413
+    },
+    "KLAPS50": {
+      "communities": 3368,
+      "delta_edges": 0,
+      "delta_nodes": 0,
+      "edges": 85679,
+      "extracted_edges": 31,
+      "extracted_nodes": 17,
+      "nodes": 41241
+    }
+  },
+  "hash_only_files": 4,
+  "independent_readback_sha256": "de6c5bdf5174a1f7fbe7ad58b70b0a189f4400c924f2bc647e755ad988338313",
+  "limitations": [
+    "Selected code-only incremental extraction; docs/evidence hash-bound, no semantic refresh",
+    "Node/edge counts unchanged; community assignments and hub labels can change",
+    "Historical Fortran cross-file CALL extraction is partial; graph freshness is not runtime/scientific validation",
+    "T39 OPEN, one-hour760s INCOMPLETE,14UTC skill NOT_EVALUATED remain unchanged"
+  ],
+  "plan_sha256": "6bc748055647ac49e15ab161cdb168feab0c424a17358abdb983cb3b10fa204a",
+  "result": "PASS",
+  "retained_local_evidence": {
+    "/var/tmp/pr112_kg_baseline_20261027.json": "748fd68309a14abe794c5e96245470cdb96792a7976b422fc024425ba83f1d96",
+    "/var/tmp/pr112_kg_baseline_20261027_v2.json": "dc101ad28813892d7abb2d6207f688aa5c7f2b041e9432299304d7e38c348040",
+    "/var/tmp/pr112_kg_publication_20261027_v2/apply_result.json": "db4b6cb4aff0bcbbbcb60f15d8b28b8f968ac2f3478d623124b8ee673ffd435d",
+    "/var/tmp/pr112_kg_publication_20261027_v2/publish_plan.json": "1c5870091ed12215174d232b7b31410a15f8d607469d428a9ad676671c8a7010",
+    "/var/tmp/pr112_kg_root_go.json": "367874e079c53753e633c1d9408a077c9c25a5ebf50ef9b4d4d35e04be373b18",
+    "/var/tmp/pr112_kg_stage_20261027_v2/stage_receipt.json": "4c43d181ac51638a86eae87eebde66acc9b5fef15df84c474db9634367d60b6d"
+  },
+  "selected_code_files": 2,
+  "snapshots_after": 152,
+  "snapshots_before": 148,
+  "source_commit": "df3e79155d6fcef5af52dc53845c37f0627270e6",
+  "stage_sha256": "3cf0027eaf9e82e55931824db912e957a83c0ed51243af23f9a3b9a9fdd21ee8",
+  "targets": 21
+}
