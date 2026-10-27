@@ -1,6 +1,7 @@
 """Tests for paired-point precipitation transition diagnostics."""
 from __future__ import annotations
 
+import csv
 from pathlib import Path
 import sys
 import tempfile
@@ -26,10 +27,17 @@ def sample_fields() -> dict[str, np.ndarray]:
     }
 
 
-def write_six_hours(directory: Path) -> None:
+def write_six_hours(directory: Path, *, all_dry: bool = False, arms_match_off: bool = False) -> None:
     directory.mkdir()
     for hour in range(13, 19):
-        np.savez(directory / f"hour_{hour}_arrays.npz", **sample_fields())
+        fields = sample_fields()
+        if all_dry:
+            for arm in ("reference", "OFF", "HYDRO", "LIQUID"):
+                fields[arm] = np.zeros_like(fields[arm])
+        if arms_match_off:
+            fields["HYDRO"] = fields["OFF"].copy()
+            fields["LIQUID"] = fields["OFF"].copy()
+        np.savez(directory / f"hour_{hour}_arrays.npz", **fields)
 
 
 class PrecipitationTransitionTests(unittest.TestCase):
@@ -134,6 +142,57 @@ class PrecipitationTransitionTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "must not already exist"):
                 run(source, output)
             self.assertEqual(sentinel.read_text(encoding="utf-8"), "preserve")
+
+    def test_real_plotting_run_off_candidate_has_rain_but_no_lost_hits(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source, output = root / "hours", root / "output"
+            write_six_hours(source, arms_match_off=True)
+            result = run(source, output)
+            self.assertEqual(result["hour_13_off_hit_lost_union_ge_5mm"], 0)
+            self.assertEqual(result["hour_13_hydro_lost_hits_ge_5mm"], 0)
+            self.assertEqual(result["hour_13_liquid_lost_hits_ge_5mm"], 0)
+            self.assertGreater(result["hour_13_off_hits_ge_5mm"], 0)
+            self.assertGreater(result["hour_13_hydro_hits_ge_5mm"], 0)
+            self.assertGreater(result["hour_13_liquid_hits_ge_5mm"], 0)
+            with (output / "hour_13_ge5mm_off_hit_lost_union.csv").open(
+                newline="", encoding="utf-8"
+            ) as stream:
+                self.assertEqual(next(csv.reader(stream))[0], "focus_rank")
+                self.assertEqual(list(csv.reader(stream)), [])
+            for name in (
+                "threshold_counts_and_transitions.csv", "continuous_metrics.csv",
+                "hour_13_ge5mm_off_hit_lost_union.csv", "summary.json",
+                "threshold_5mm_hit_transitions.png", "rain_point_distributions.png",
+                "hour_13_ge5mm_lost_hit_focus.png", "hourly_threshold_5mm_transitions.png",
+            ):
+                self.assertTrue((output / name).is_file(), name)
+                self.assertGreater((output / name).stat().st_size, 0, name)
+
+    def test_real_plotting_run_all_dry_keeps_empty_loss_outputs(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source, output = root / "hours", root / "output"
+            write_six_hours(source, all_dry=True)
+            result = run(source, output)
+            self.assertEqual(result["hour_13_off_hit_lost_union_ge_5mm"], 0)
+            self.assertEqual(result["hour_13_hydro_lost_hits_ge_5mm"], 0)
+            self.assertEqual(result["hour_13_liquid_lost_hits_ge_5mm"], 0)
+            focus_path = output / "hour_13_ge5mm_off_hit_lost_union.csv"
+            with focus_path.open(newline="", encoding="utf-8") as stream:
+                self.assertEqual(next(csv.reader(stream)), [
+                    "focus_rank", "flat_index_yx", "latitude", "longitude", "reference_mm", "OFF_mm",
+                    "HYDRO_mm", "LIQUID_mm", "OFF_hit_ge_5", "HYDRO_hit_ge_5", "LIQUID_hit_ge_5",
+                    "HYDRO_lost_hit", "LIQUID_lost_hit",
+                ])
+                self.assertEqual(list(csv.reader(stream)), [])
+            for name in (
+                "threshold_counts_and_transitions.csv", "continuous_metrics.csv",
+                "summary.json", "threshold_5mm_hit_transitions.png", "rain_point_distributions.png",
+                "hour_13_ge5mm_lost_hit_focus.png", "hourly_threshold_5mm_transitions.png",
+            ):
+                self.assertTrue((output / name).is_file(), name)
+                self.assertGreater((output / name).stat().st_size, 0, name)
 
     def test_run_removes_new_output_if_figure_creation_fails(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

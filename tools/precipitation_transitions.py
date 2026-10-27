@@ -94,12 +94,12 @@ def summarize_hour(hour: int, fields: dict[str, np.ndarray]) -> tuple[list[dict[
     return threshold_rows, continuous_rows
 
 
-def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
-    if not rows:
+def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: tuple[str, ...] = ()) -> None:
+    if not rows and not fieldnames:
         return
     with path.open("w", newline="", encoding="utf-8") as stream:
-        fieldnames = list(dict.fromkeys(key for row in rows for key in row))
-        writer = csv.DictWriter(stream, fieldnames=fieldnames)
+        columns = fieldnames or list(dict.fromkeys(key for row in rows for key in row))
+        writer = csv.DictWriter(stream, fieldnames=columns)
         writer.writeheader()
         writer.writerows(rows)
 
@@ -158,13 +158,20 @@ def create_figures(out: Path, hourly: dict[int, dict[str, np.ndarray]]) -> None:
     union = lost["HYDRO"] | lost["LIQUID"]
     fig, axes = plt.subplots(1, 2, figsize=(15, 7))
     lon, lat = fields["longitude"], fields["latitude"]
-    xmin, xmax = lon[union].min() - 0.45, lon[union].max() + 0.45
-    ymin, ymax = lat[union].min() - 0.18, lat[union].max() + 0.18
+    if union.any():
+        xmin, xmax = lon[union].min() - 0.45, lon[union].max() + 0.45
+        ymin, ymax = lat[union].min() - 0.18, lat[union].max() + 0.18
+    else:
+        xmin, xmax = lon.min() - 0.45, lon.max() + 0.45
+        ymin, ymax = lat.min() - 0.18, lat.max() + 0.18
     rank_by_index = {int(i): rank + 1 for rank, i in enumerate(np.flatnonzero(union))}
     for ax, arm in zip(axes, ("HYDRO", "LIQUID")):
         colors = np.where(lost[arm], "#d7301f", "#dddddd")
         ax.scatter(lon, lat, c=colors, s=7, linewidths=0)
-        midpoint = (lon[union].min() + lon[union].max()) / 2
+        if not union.any():
+            ax.text(0.5, 0.5, "No OFF ≥5 mm hits lost", transform=ax.transAxes,
+                    ha="center", va="center")
+        midpoint = (lon[union].min() + lon[union].max()) / 2 if union.any() else float(np.mean(lon))
         for side, label_x in (("left", xmin + 0.08), ("right", xmax - 0.08)):
             side_points = [int(i) for i in np.flatnonzero(union)
                            if (lon[i] <= midpoint) == (side == "left")]
@@ -229,7 +236,11 @@ def write_results(
             "LIQUID_hit_ge_5": int((first["LIQUID"][i] >= 5) & (ref[i] >= 5)),
             "HYDRO_lost_hit": int(lost_by["HYDRO"][i]), "LIQUID_lost_hit": int(lost_by["LIQUID"][i]),
         })
-    write_csv(output_dir / "hour_13_ge5mm_off_hit_lost_union.csv", focus_rows)
+    write_csv(output_dir / "hour_13_ge5mm_off_hit_lost_union.csv", focus_rows, (
+        "focus_rank", "flat_index_yx", "latitude", "longitude", "reference_mm", "OFF_mm",
+        "HYDRO_mm", "LIQUID_mm", "OFF_hit_ge_5", "HYDRO_hit_ge_5", "LIQUID_hit_ge_5",
+        "HYDRO_lost_hit", "LIQUID_lost_hit",
+    ))
     summary = {
         "hours_utc": list(range(13, 19)), "thresholds_mm": list(THRESHOLDS),
         "paired_points_per_hour": next(iter(sizes)), "hourly_flat_index_identity": True,

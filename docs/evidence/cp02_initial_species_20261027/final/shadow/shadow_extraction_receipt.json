@@ -1,0 +1,45 @@
+{
+  "valid_time_utc": "2026-08-16T12:00:00Z",
+  "source_hashes_unchanged_after_read": true,
+  "status": "PASS_EXACT_COORDINATE_SHADOW_EXTRACTION",
+  "point_mapping": "/var/tmp/cloudbal-precip-initial-trace/docs/evidence/precip_transitions_20261027/native_trace/final-v2/losthit_mapping.csv",
+  "point_mapping_sha256": "49a336ba807251bfb2d270bdaeb494911551167ef75748fc7fec1cd8aa294375",
+  "exact_point_count": 20,
+  "vertical_levels": 22,
+  "coordinate_matching": "exact latitude/longitude match in shadow grid for every canonical point; no vertical remapping",
+  "sources": [
+    {
+      "arm": "HYDRO",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/HYDRO_vapor2.wps.shadow.nc",
+      "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb",
+      "size": 99003376
+    },
+    {
+      "arm": "LIQUID_RADAR_RH1",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/LIQUID_RADAR_RH1_vapor2.wps.shadow.nc",
+      "sha256": "12a9cbc7b895bf5dd7020a85b4590f2f1ef334f74c0505865a961be30ab57bac",
+      "size": 120907599
+    }
+  ],
+  "prepared_payload": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_maintained_derived_O0_qej27s72/matched_control_chain12_O0.ym17bs9h/prepared/payload.nc",
+    "sha256": "03f6bb5da1986fa62972256483fb245ca4132d1dade3e056b3c3f435cd6e0097",
+    "source_anchor_sha256": "673b3b1d5ef9925b8136fd8071697687fc1e271f3c624d1ecce4b9573f446ca2",
+    "source_anchor_matches": true
+  },
+  "payload_to_hydro_shadow_background_exact": {
+    "rain": true,
+    "snow": true
+  },
+  "pair_receipt_sha256": "02df7d1abea0bdec013548d84e96ac14de91d216b35d80e4bdf9fb43b4a0a885",
+  "thermo_receipt_sha256": "114c9dbd2ca0c17e5ac67ed6c8d61c99c124554a8fd584a64650d2675e18df89",
+  "outputs": {
+    "profiles_sha256": "bc765f17fef5b02c4b75d58bd503114259f779cfeffe51ed9e82c6672d37f0ca",
+    "summary_sha256": "5ea4117c8bc0096796a1b14a9498659fd6dc90caa4868d1478d4b74e25a97653"
+  },
+  "limitations": [
+    "Shadow candidate/background fields are diagnostic products, not the ordinary WPS output itself.",
+    "The 22 shadow levels and 39 WRF mass levels are different vertical grids; no level-by-level numeric equality is asserted.",
+    "The ordinary OFF WPS stage is not archived as an inspectable NetCDF shadow for this comparison."
+  ]
+}
