@@ -21,7 +21,8 @@ HYDRO 한 건의 T39 포착용 실행을 시작했으며, 종료·원인 규명�
 
 PR108에서는 [입력·실행 실패 계약](PR108_INPUT_EXECUTION_CONTRACTS_20261026.md)을
 보강했다. PR109에서는 [DOUBLE 입력·출력 검증·portable 격리](PR109_MEMORY_AND_PORTABILITY_20261027.md)의
-남은 공백을 수정한다. 이 공학적 변경은 예보·관측 판정을 승격하지 않는다.
+남은 공백을 수정했다. PR110은 [정적 격자 입력과 portable 잔여 의존성](PR110_STATIC_INPUT_AND_PORTABILITY_20261027.md)을
+보강한다. 이 공학적 변경은 예보·관측 판정을 승격하지 않는다.
 
 ## 바로 다음 작업
 

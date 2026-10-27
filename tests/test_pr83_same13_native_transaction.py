@@ -27,9 +27,18 @@ class PR83Same13NativeTransactionTests(unittest.TestCase):
     def test_pr82_default_provenance_has_no_optional_pr83_paths(self) -> None:
         runner = load_module("pr82_native_runner", ROOT / "tests/run_pr82_same13_native_initialization.py")
         paths = runner.provenance_paths()
+        self.assertEqual(set(paths), {
+            "runner", "isolated_runtime_helper", "initialization_readback_checker",
+            "intel_setvars", "mpi_vars",
+        })
         self.assertNotIn("native_moment_initializer", paths)
         self.assertNotIn("native_moment_policy", paths)
-        self.assertTrue(all(isinstance(path, Path) and path.is_file() for path in paths.values()))
+        self.assertTrue(all(isinstance(path, Path) and path.is_absolute() for path in paths.values()))
+        self.assertEqual(paths["runner"], (ROOT / "tests/run_pr82_same13_native_initialization.py").resolve())
+        self.assertEqual(paths["isolated_runtime_helper"], ROOT / "tools/run_isolated_native.py")
+        self.assertEqual(paths["initialization_readback_checker"], ROOT / "tools/check_native_hybrid_geometry.py")
+        self.assertEqual(paths["intel_setvars"].name, "setvars.sh")
+        self.assertEqual(paths["mpi_vars"].parts[-4:-1], ("mpi", "2021.18", "env"))
 
     def test_policy_reject_writes_evidence_without_creating_native_run_or_candidate(self) -> None:
         wrapper = load_module("pr83_native_wrapper", ROOT / "tests/run_pr83_same13_native_initialization.py")

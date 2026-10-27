@@ -10,7 +10,6 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = Path("/var/tmp/pr68_velocity_native_20261007/source/module_mp_kdm6_combined_research.f90")
 PROCESS_PATCH = ROOT / "docs/evidence/pr70_coupled_process_cutoff_search_20261008.patch"
 VALIDITY_PATCH = ROOT / "docs/evidence/pr71_particle_output_contract_20261008.patch"
 COUNT_PATCH = ROOT / "docs/evidence/pr71_step_count_contract_20261008_v2.patch"
@@ -31,10 +30,13 @@ class GuardedComposerTests(unittest.TestCase):
 
     def test_step_patch_hash_mismatch_writes_nothing(self) -> None:
         with tempfile.TemporaryDirectory(prefix="pr71_guarded_bad_patch_") as temporary:
-            output = Path(temporary) / "checked.F"
+            temporary = Path(temporary)
+            source = temporary / "synthetic_source.f90"
+            source.write_text("synthetic input is sufficient for patch hash preflight\n")
+            output = temporary / "checked.F"
             result = subprocess.run(
                 [
-                    "python3", str(COMPOSER), str(SOURCE), str(PROCESS_PATCH),
+                    "python3", str(COMPOSER), str(source), str(PROCESS_PATCH),
                     str(VALIDITY_PATCH), str(COUNT_PATCH), str(output),
                     "--expected-validity-patch-sha256", VALIDITY_SHA256,
                     "--expected-step-count-patch-sha256", "0" * 64,
