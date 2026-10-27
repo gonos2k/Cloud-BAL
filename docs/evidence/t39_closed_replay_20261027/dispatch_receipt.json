@@ -1,0 +1,46 @@
+{
+  "schema": "pr107_postclosure_dispatch_v1",
+  "model_restarted": false,
+  "closed_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/HYDRO_T39/receipt.json",
+  "jobs": [
+    {
+      "name": "t39_join",
+      "command": [
+        "/usr/bin/python",
+        "/var/tmp/pr107_postclose_bundle_20261026/docs/evidence/pr107_t39_capture_20261026/postprocess_t39.py",
+        "--closed-receipt",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/HYDRO_T39/receipt.json",
+        "--group-raw",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/HYDRO_T39/run/pr99_group_failure.raw.gz",
+        "--producer-raw",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/HYDRO_T39/run/pr92_diffusion_producer.raw.gz",
+        "--consumer-raw",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/HYDRO_T39/run/pr92_graupel_source_capture.raw.gz",
+        "--output",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/postclosure/t39_join.json"
+      ],
+      "returncode": 0,
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/postclosure/t39_join.json",
+      "sha256": "a5d9feeac67965928923c4c9f269fe34f9f6408d9bd1467b4244c5411f934ed4"
+    },
+    {
+      "name": "prefix",
+      "command": [
+        "/usr/bin/python",
+        "/var/tmp/pr107_postclose_bundle_20261026/docs/evidence/pr107_t39_capture_20261026/compare_prefix.py",
+        "--old-hydro",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr104_validtime_forecast_20261026/HYDRO",
+        "--diagnostic-hydro",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/HYDRO_T39",
+        "--output",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/postclosure/prefix.json"
+      ],
+      "returncode": 0,
+      "output": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/postclosure/prefix.json",
+      "sha256": "e789a510cd16a20f70b0330600feb73404a514f45bee0a522a11972c89cc4328"
+    }
+  ],
+  "closed_receipt_sha256": "a71f157b19695cae4cb228cd92b91f05a837fdcd913b1eff3d0d25809697a697",
+  "status": "POSTPROCESS_COMPLETE",
+  "utc": "2026-10-26T17:55:44.728820+00:00"
+}

@@ -1,0 +1,239 @@
+{
+  "capture": {
+    "cell_ijk": [
+      199,
+      52,
+      21
+    ],
+    "compressed_sha256": "ab8aae9ff39984e239bc2773426eb7dd68ebdf72a445e94aa8982cddec4b26c8",
+    "event_key": [
+      "HYDRO_452f8640c13b0db9",
+      39,
+      2,
+      457238,
+      4,
+      1
+    ],
+    "group_predicate": 1,
+    "group_predicate_input": "(-1,-1) REAL32 sentinel after failed store",
+    "pair": 4,
+    "payload_sha256": "6370eba75fd084a4411279c8a8da8b847f4ad0a90645a218f47b7da3dec01310",
+    "rk": 2,
+    "run_id": "HYDRO_452f8640c13b0db9",
+    "run_receipt_sha256": "a71f157b19695cae4cb228cd92b91f05a837fdcd913b1eff3d0d25809697a697",
+    "store_failure_stage": 2,
+    "timestep": 39
+  },
+  "exact_classification": {
+    "base_moment_bits": [
+      "00000000",
+      "00000000"
+    ],
+    "candidate_is_inside_exact_strict_mass_cone": false,
+    "candidate_q_minus_900n_exact": "145/19807040628566084398385987584",
+    "candidate_ratio": 900.0000000000002,
+    "carrier_density_dt_real32": [
+      95346.625,
+      95329.203125,
+      0.521367073059082,
+      10.0
+    ],
+    "combined_q_minus_900n_exact": "2167/154742504910672534362390528",
+    "combined_ratio_delta_above_900": 4.487811674217249e-14,
+    "interpretation": "The exact captured REAL64 inputs and their formed REAL64 candidate are slightly above the strict upper bound. The pre-round candidate is rejected at store stage 2; separately, rounding q and n first would place that REAL32 pair inside the interval.",
+    "real32_rounded_candidate": {
+      "inside_strict_mass_bounds": true,
+      "n_bits": "29136AD5",
+      "q_bits": "2E0190E5",
+      "ratio": 899.9999780564222
+    },
+    "source_q_minus_900n_exact": "23/154742504910672534362390528",
+    "strict_mass_bounds": [
+      100,
+      900
+    ],
+    "transport_q_minus_900n_exact": "67/4835703278458516698824704"
+  },
+  "replays": [
+    {
+      "adjustment": 0,
+      "build_stdout": "driver.f90(41): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.\n      [transfer(int(z'0000000000000000',int64),0.0_real64),transfer(int(z'0000000000000000',int64),0.0_real64)],pair==1 .or. pair==3, &\n-------------------------------------------------------------------------------------------------------------------------------------^\nld: warning: libintlc.so.5, needed by /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so, not found (try using -rpath or -rpath-link)\n",
+      "candidate_hex": [
+        "3DC0321C9E375C92",
+        "3D226D5A966EC69E"
+      ],
+      "captured_store_succeeded": false,
+      "compile_argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "-free",
+        "core.f90",
+        "driver.f90",
+        "-module",
+        "/var/tmp/pr99-scalar-free-3dxq4c9c",
+        "-o",
+        "/var/tmp/pr99-scalar-free-3dxq4c9c/scalar_replay.exe"
+      ],
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+      "driver_sha256": "991679f31e1b3d0c1e8f6b39d0fecd671e960d7a2c8ae480f6b9ec140a17e464",
+      "executable_sha256": "5c9ceae1d1e2855a00a5ec769ec82d9aa44fb75e62eec16e2e17d2bb2f2c0443",
+      "group_predicate_input": "(-1,-1) REAL32 sentinel installed by form_candidate after store failure",
+      "group_predicate_input_hex": [
+        "BF800000",
+        "BF800000"
+      ],
+      "group_predicate_reached": true,
+      "instrumented_core_sha256": "a5f393fa23c0630f1d59245ddd0503d0ed2ef34e3a12362fc19dfc23eab4da9a",
+      "optimization": "FREE",
+      "profile_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "raw_capture_sha256": "6370eba75fd084a4411279c8a8da8b847f4ad0a90645a218f47b7da3dec01310",
+      "replay_adapter": "visibility-only wrapper calls frozen private grouped predicates",
+      "replayed_group_predicate": 1,
+      "replayed_pair_valid": false,
+      "replayed_volume_valid": true,
+      "run_argv": [
+        "bash",
+        "-c",
+        "source \"$1\" && exec \"$2\"",
+        "pr99-scalar-runtime",
+        "/var/tmp/cloudbal-t39-closure/tests/intel_toolchain.sh",
+        "/var/tmp/pr99-scalar-free-3dxq4c9c/scalar_replay.exe"
+      ],
+      "run_stdout": "RECOMPUTED_CANDIDATE 3DC0321C9E375C92 3D226D5A966EC69E\nSTORE_RESULT 2 BF800000 BF800000 0 F\nGROUP_INPUT BF800000 BF800000\nforrtl: warning (406): fort: (1): In call to PR99_REPLAY_GROUP_PREDICATES, an array temporary was created for argument #9\n\nImage              PC                Routine            Line        Source             \nscalar_replay.exe  000000000042BE5D  scalar_replay              39  driver.f90\nscalar_replay.exe  0000000000405D1D  Unknown               Unknown  Unknown\nlibc.so.6          00007C653AE5B1CA  Unknown               Unknown  Unknown\nlibc.so.6          00007C653AE5B28B  __libc_start_main     Unknown  Unknown\nscalar_replay.exe  0000000000405C05  Unknown               Unknown  Unknown\nGROUP_RESULT 1 F T\n",
+      "store_failure_stage": 2,
+      "store_output_hex": [
+        "BF800000",
+        "BF800000"
+      ],
+      "valid": false
+    },
+    {
+      "adjustment": 0,
+      "build_stdout": "driver.f90(41): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.\n      [transfer(int(z'0000000000000000',int64),0.0_real64),transfer(int(z'0000000000000000',int64),0.0_real64)],pair==1 .or. pair==3, &\n-------------------------------------------------------------------------------------------------------------------------------------^\nld: warning: libintlc.so.5, needed by /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so, not found (try using -rpath or -rpath-link)\n",
+      "candidate_hex": [
+        "3DC0321C9E375C92",
+        "3D226D5A966EC69E"
+      ],
+      "captured_store_succeeded": false,
+      "compile_argv": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz",
+        "-free",
+        "core.f90",
+        "driver.f90",
+        "-module",
+        "/var/tmp/pr99-scalar-repro-yzn9dvlh",
+        "-o",
+        "/var/tmp/pr99-scalar-repro-yzn9dvlh/scalar_replay.exe"
+      ],
+      "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+      "driver_sha256": "991679f31e1b3d0c1e8f6b39d0fecd671e960d7a2c8ae480f6b9ec140a17e464",
+      "executable_sha256": "e8bd16337056f70b2a88ec6740c629cbc367a403cf9c2720eac57767a2660e0f",
+      "group_predicate_input": "(-1,-1) REAL32 sentinel installed by form_candidate after store failure",
+      "group_predicate_input_hex": [
+        "BF800000",
+        "BF800000"
+      ],
+      "group_predicate_reached": true,
+      "instrumented_core_sha256": "a5f393fa23c0630f1d59245ddd0503d0ed2ef34e3a12362fc19dfc23eab4da9a",
+      "optimization": "REPRO",
+      "profile_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "raw_capture_sha256": "6370eba75fd084a4411279c8a8da8b847f4ad0a90645a218f47b7da3dec01310",
+      "replay_adapter": "visibility-only wrapper calls frozen private grouped predicates",
+      "replayed_group_predicate": 1,
+      "replayed_pair_valid": false,
+      "replayed_volume_valid": true,
+      "run_argv": [
+        "bash",
+        "-c",
+        "source \"$1\" && exec \"$2\"",
+        "pr99-scalar-runtime",
+        "/var/tmp/cloudbal-t39-closure/tests/intel_toolchain.sh",
+        "/var/tmp/pr99-scalar-repro-yzn9dvlh/scalar_replay.exe"
+      ],
+      "run_stdout": "RECOMPUTED_CANDIDATE 3DC0321C9E375C92 3D226D5A966EC69E\nSTORE_RESULT 2 BF800000 BF800000 0 F\nGROUP_INPUT BF800000 BF800000\nGROUP_RESULT 1 F T\n",
+      "store_failure_stage": 2,
+      "store_output_hex": [
+        "BF800000",
+        "BF800000"
+      ],
+      "valid": false
+    }
+  ],
+  "schema": "pr107_t39_first_group_replay_v1",
+  "scope": {
+    "claim": "Input-local replay of captured values through receipt-pinned C2 core; event was observed in the PR107 diagnostic overlay whose shared core-module hash matches C2.",
+    "not_claimed": "No full 2,533,440 by 4 group replay, forecast causality, or physical validation.",
+    "producer_stencil": "The first-producer stencil values are not captured for this grouped cell; source/transport rates are captured.",
+    "sentinel": "Predicate 1 is evaluated on the (-1,-1) sentinel installed after store rejection, so it is not an independent physical group failure."
+  },
+  "source_binding": {
+    "binding": "PR107 compiled module_em.o base source == C2 overlay module_em source; PR107 parent receipt == C2 overlay receipt; executed executable == HYDRO T39 run receipt",
+    "c2_cloud_bal_joint_transport_raw_module_sha256": "d6739028f90d8bedd822bb425cc9ce09b19ac75a2e263b8dec2888591e5fd72a",
+    "c2_module_em_source_sha256": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296",
+    "c2_overlay_build_receipt_sha256": "9c4802e12ea1d6a8f3c8b5ef1a5ff72116e5fbdbf9f6c78e906935622d45dafb",
+    "c2_preprocessed_cloud_bal_joint_transport_module_sha256": "a313a76477caea9c028f174208c3e4cfc694744d6729f8542721bf22dc3249c4",
+    "c2_preprocessed_module_em_sha256": "febf517179692f957ac1225710198cd29774c6cb42d837233cafe2ea89e3056b",
+    "hydro_t39_receipt_executed_executable_sha256": "7af1f907eb70e8f4ea234cbf18cfad0f408e8b374a0aecc9e695100bc485918c",
+    "pr107_executable_sha256": "7af1f907eb70e8f4ea234cbf18cfad0f408e8b374a0aecc9e695100bc485918c",
+    "pr107_executed_build_receipt_sha256": "b66d9f87b58f371f8fce79e2b7c9727cfd13096cd2db9c51efa435efff0e5767",
+    "pr107_module_em_object_base_source_sha256": "d82efa15ee1c0a44080a8ef40b8a8aef436661f2093b6f66bef7e666584aa296",
+    "pr107_module_em_object_sha256": "1b8d6afda1d0ada6fd02ab01091b5c93ca4ee3d773f86076600aeebc72dbb344",
+    "pr107_preprocessed_cloud_bal_joint_transport_module_sha256": "a313a76477caea9c028f174208c3e4cfc694744d6729f8542721bf22dc3249c4",
+    "pr107_preprocessed_module_em_sha256": "f671a8720ca46cc4c99b244140b0a03c6154ab0ba3d9f422810e2efe5b678338"
+  }
+}

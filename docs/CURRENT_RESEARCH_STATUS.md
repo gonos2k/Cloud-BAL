@@ -15,9 +15,13 @@
 | 위성 IR112 원자료 재생 | 9개 LAPS 지원 셀에서 S8A=필터된 최대 BT, S8W=평균 BT 확인 |
 | 전체 물·에너지·질량–바람·초기 충격·독립 skill | OPEN / NOT_EVALUATED |
 
-PR107에서는 단계·좌표 선택을 수정하고 pinned Intel 진단 빌드를 완료했다.
-HYDRO 한 건의 T39 포착용 실행을 시작했으며, 종료·원인 규명은 아직 미확인이다.
-[진단 변경과 실행 범위](PR107_T39_CAPTURE_20261026.md)를 따른다.
+PR107의 HYDRO T39 진단 실행은 38단계 완료 뒤 timestep 39에서 `INCOMPLETE`로 종료됐다.
+닫힌 receipt와 후처리 결과는 [T39 종료 포착·재생 인계](T39_CLOSED_REPLAY_20261027.md)에 기록했다.
+최초 T39/RK2 group 거부 셀 `(199,52,21)`은 알려진 fatal consumer `(2,219,13)`와 다르다.
+prefix 비간섭 비교는 HYDRO의 공통 0–600초 범위에 한정된다. Pinned Intel O0/O2에서
+최초 셀의 저장 거부와 별도 fatal 셀의 확산 producer를 국지 재생했다. 최초 후보의 정확 입력식은
+Q/B 상한 밖이며, fatal producer에서는 REAL128에서 REAL64로 각각 변환할 때 상한을 넘는다.
+최초 셀의 원래 생성 stencil과 수정 실행 검증은 미완료다. 물리 검증은 OPEN, T2는 NOT_EVALUATED다.
 
 PR108에서는 [입력·실행 실패 계약](PR108_INPUT_EXECUTION_CONTRACTS_20261026.md)을
 보강했다. PR109에서는 [DOUBLE 입력·출력 검증·portable 격리](PR109_MEMORY_AND_PORTABILITY_20261027.md)의
@@ -27,11 +31,10 @@ PR108에서는 [입력·실행 실패 계약](PR108_INPUT_EXECUTION_CONTRACTS_20
 
 ## 바로 다음 작업
 
-1. 기존 T15 producer/T32 공동 실패 근거를 보존하면서 진단 대상을 명시한다.
-   T39/RK1 `(2,219,13)`의 실제 source 생성과 T39/RK2 소비,
-   최초 group predicate·pair·cell·store stage·retry 결과를 연결한다.
-2. HYDRO 한 실행에서 원래 거부를 포착하고 국지 재생한다. callback 한 셀의
-   비트가 세 arm에서 같아도 첫 grouped 원인이 같다고 미리 판단하지 않는다.
+1. 보존된 T39 결과에서 group 첫 거부와 fatal consumer가 다른 셀임을 유지하고,
+   최초 셀 `(199,52,21)`의 source·transport 생성 입력을 추가로 연결한다.
+2. 보존된 국지 재생을 기준으로 source 표현의 공동 반올림·보존 계약을 검토한다.
+   별도 fatal 셀의 원인을 전체 group으로 일반화하거나 상한·cache를 임의 변경하지 않는다.
 3. 원인이 확인된 연산만 수정한다. 모델 정책을 바꾸면 같은 실행파일로 H/A/N의
    기존 640초·T39 이후·원래 1시간 종료점을 다시 검증한다.
 4. 완료된 동일 유효시각 자료에 기존 관측·paired 평가를 적용한다. 위성은 실제
@@ -39,7 +42,7 @@ PR108에서는 [입력·실행 실패 계약](PR108_INPUT_EXECUTION_CONTRACTS_20
 
 바람 투영·평활화, 허용오차, N/B prior, source cache 정책은 원인 확인 없이
 바꾸지 않는다. 극소량이라는 이유만으로 무조건 0 처리하지 않는다.
-진단 구현·시험 통과나 실행 시작은 실제 T39 포착·수정·1시간 완료를 대신하지 않는다.
+진단 구현·시험 통과나 이 불완전한 T39 포착은 수정·물리 검증·1시간 완료를 대신하지 않는다.
 
 ## 근거
 
