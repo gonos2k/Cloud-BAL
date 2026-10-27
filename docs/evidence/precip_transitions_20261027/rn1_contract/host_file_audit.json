@@ -1,0 +1,206 @@
+{
+  "scope": "Read-only inspection of canonical host RN1 files for CP02 valid hours 13-18 UTC; no model rerun or raw-RN1 replay.",
+  "inspected_at_utc": "2026-10-27",
+  "canonical_root": "/NHNHOME/DATA/yhlee_data/ODAM/20260816",
+  "source_evidence": "docs/evidence/precip_hourly_20261027/rn1_recovery/source_findings.md and manifest.json; source pins identify producer code, not historical executable or complete runtime inputs.",
+  "upstream_runtime_evidence": {
+    "status": "unresolved",
+    "detail": "The actual checked DAOU day directory lacks both same-hour and previous-hour candidate rain files for all six hours. Checked LOGO roots are absent and the environment utility needed to resolve KL05LOGO/KL05DAOU was not found. Bounded member checks of two ANAL archives and two ODAM archives yielded no input/control/log members. Other runtime roots and ANAL_MODL.tar were not examined, so per-hour execution-time fallback status remains unknown rather than inferred from these absences."
+  },
+  "hours": [
+    {
+      "valid_time_utc": "2026-08-16T13:00:00Z",
+      "filename": "DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161300",
+      "source_path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161300",
+      "bytes": 267686,
+      "sha256": "5f435e9e7845860636b8ac6d4a982563f1d709f4340dadb7828df2f2cda8e9a1",
+      "header": "2026081613+000hour     2026081622LST",
+      "header_matches_filename": true,
+      "value_count": 37697,
+      "finite_values": 37697,
+      "negative_values": 0,
+      "zero_values": 32176,
+      "positive_values": 5521,
+      "minimum": 0.0,
+      "maximum": 44.0,
+      "upstream_rain_input_timestamp": null,
+      "upstream_fallback_status": "unresolved; per-run input receipt/log and anal_rain candidates not available in inspected accessible locations"
+    },
+    {
+      "valid_time_utc": "2026-08-16T14:00:00Z",
+      "filename": "DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161400",
+      "source_path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161400",
+      "bytes": 267686,
+      "sha256": "54ba0fe609630eec8366b9f4a21fddd29baabbd1ad89e8a2ac4e769900887497",
+      "header": "2026081614+000hour     2026081623LST",
+      "header_matches_filename": true,
+      "value_count": 37697,
+      "finite_values": 37697,
+      "negative_values": 0,
+      "zero_values": 32373,
+      "positive_values": 5324,
+      "minimum": 0.0,
+      "maximum": 52.6,
+      "upstream_rain_input_timestamp": null,
+      "upstream_fallback_status": "unresolved; per-run input receipt/log and anal_rain candidates not available in inspected accessible locations"
+    },
+    {
+      "valid_time_utc": "2026-08-16T15:00:00Z",
+      "filename": "DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161500",
+      "source_path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161500",
+      "bytes": 267686,
+      "sha256": "00219ebc741da5bbdc79b408a1363e4a920d4f58d41118978234d2cbe089f346",
+      "header": "2026081615+000hour     2026081700LST",
+      "header_matches_filename": true,
+      "value_count": 37697,
+      "finite_values": 37697,
+      "negative_values": 0,
+      "zero_values": 30320,
+      "positive_values": 7377,
+      "minimum": 0.0,
+      "maximum": 46.6,
+      "upstream_rain_input_timestamp": null,
+      "upstream_fallback_status": "unresolved; per-run input receipt/log and anal_rain candidates not available in inspected accessible locations"
+    },
+    {
+      "valid_time_utc": "2026-08-16T16:00:00Z",
+      "filename": "DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161600",
+      "source_path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161600",
+      "bytes": 267686,
+      "sha256": "74f2b96af4e0686b15dc1c8a75e337f964a9e25841540a61b3d3546e22187af6",
+      "header": "2026081616+000hour     2026081701LST",
+      "header_matches_filename": true,
+      "value_count": 37697,
+      "finite_values": 37697,
+      "negative_values": 0,
+      "zero_values": 30051,
+      "positive_values": 7646,
+      "minimum": 0.0,
+      "maximum": 92.0,
+      "upstream_rain_input_timestamp": null,
+      "upstream_fallback_status": "unresolved; per-run input receipt/log and anal_rain candidates not available in inspected accessible locations"
+    },
+    {
+      "valid_time_utc": "2026-08-16T17:00:00Z",
+      "filename": "DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161700",
+      "source_path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161700",
+      "bytes": 267686,
+      "sha256": "77145a0b095203e452cc029cf56a97f1ff10a5485b69f76ab1d21219c15fa2d5",
+      "header": "2026081617+000hour     2026081702LST",
+      "header_matches_filename": true,
+      "value_count": 37697,
+      "finite_values": 37697,
+      "negative_values": 0,
+      "zero_values": 33191,
+      "positive_values": 4506,
+      "minimum": 0.0,
+      "maximum": 89.9,
+      "upstream_rain_input_timestamp": null,
+      "upstream_fallback_status": "unresolved; per-run input receipt/log and anal_rain candidates not available in inspected accessible locations"
+    },
+    {
+      "valid_time_utc": "2026-08-16T18:00:00Z",
+      "filename": "DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161800",
+      "source_path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161800",
+      "bytes": 267686,
+      "sha256": "f0b6834a27449904efb7f6242e47a6246d75ad1403d6eb24ce82c689f00557bc",
+      "header": "2026081618+000hour     2026081703LST",
+      "header_matches_filename": true,
+      "value_count": 37697,
+      "finite_values": 37697,
+      "negative_values": 0,
+      "zero_values": 30901,
+      "positive_values": 6796,
+      "minimum": 0.0,
+      "maximum": 117.1,
+      "upstream_rain_input_timestamp": null,
+      "upstream_fallback_status": "unresolved; per-run input receipt/log and anal_rain candidates not available in inspected accessible locations"
+    }
+  ],
+  "coverage_interpretation": {
+    "established": "Each retained RN1 file serializes the complete 149x253 crop (37,697 finite numeric values); file-level negative count is zero.",
+    "not_established": "No explicit missing/coverage bitmap is serialized. Full finite-value serialization and the fixed 3,688-point geographic evaluation mask do not establish radar/gauge observation coverage or independent observations.",
+    "source_processing": "RN1 is a processed radar/LNG-radar/AWS analysis with 5x5 max aggregation from a 1-km rain analysis and subsequent masks/AWS overrides; this is not an independent raw gauge truth field.",
+    "scale_warning": "The 5x5 source-cell maximum is across 1-km cells. It must not be described as a 5x5 neighborhood of 5-km cells."
+  },
+  "producer_source_verification": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/dfsd/ODAM/klps_lc05_dfsd_odam.f",
+    "current_sha256": "f0088086ee3db6fe7ef7aa8faa2e9d4bc9fedd282f9c3b67fdd56bf9f5ecce16",
+    "previously_pinned_sha256": "f0088086ee3db6fe7ef7aa8faa2e9d4bc9fedd282f9c3b67fdd56bf9f5ecce16",
+    "match": true
+  },
+  "bounded_runtime_search": {
+    "replay_script": "replay_audit.py",
+    "captured_output": "replay_audit_output.txt",
+    "search_mode": "nonrecursive exact-directory glob",
+    "patterns": [
+      "anal.tim",
+      "anal_rain_20260816*.gdat",
+      "*odam*.log",
+      "*odam*.out",
+      "run.log"
+    ],
+    "roots": [
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/SHEL",
+        "status": "present; zero matches for every listed pattern"
+      },
+      {
+        "path": "/NHNHOME/DATA/ANAL/NE57/SHEL",
+        "status": "absent; not searchable"
+      }
+    ],
+    "unsearched_scope": "Other runtime trees, archives, and directories are unsearched; no wider absence claim is made."
+  },
+  "wrapper_path_resolution": {
+    "wrapper": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/SHEL/klps_lc05_dfsd_odam.csh",
+    "source_contract": "Reads ANLTIM from ${KL05LOGO}/anal.tim; writes ${KL05LOGO}/${ANLTIM}/klps_dfsd_odam_log.${ANLTIM}; sets same-hour and previous-hour rain candidates under ${KL05DAOU}/DFSD/{ANLYMD,P01YMD}.",
+    "environment_file": "kl05_src not found in checked paths; actual KL05DAOU/KL05LOGO values cannot be resolved from an available environment file.",
+    "checked_actual_daou_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/DFSD/20260816",
+    "actual_daou_path_status": "present; has 8 klps_lc05_anal files, zero 20260816 RN1 outputs; all six same-hour and six previous-hour anal_rain candidate files absent",
+    "checked_log_roots": [
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAIO/LOGO",
+        "status": "absent"
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/LOGO",
+        "status": "absent"
+      }
+    ],
+    "checked_utility_paths": [
+      "/home/korea_keun/jobs/NE57/UTIL/ENVI/kl05_src",
+      "/home/yhlee/jobs/NE57/UTIL/ENVI/kl05_src",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/UTIL/ENVI/kl05_src"
+    ],
+    "utility_files_found": false
+  },
+  "archive_member_checks": {
+    "method": "Header/member-name listing only; no archive extraction. Exact filters targeted anal.tim, anal.min, anal_rain_20260816HH00.gdat (HH=13..18), and klps_dfsd_odam_log.20260816HH (HH=13..18).",
+    "archives": [
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ANAL.KL05.tar",
+        "bytes": 11948062720,
+        "listing_timeout_seconds": 60,
+        "observed_result": "No filtered member names; pipeline completed before timeout; tar exit status not captured separately."
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ANAL.20260831.tar",
+        "bytes": 9976320000,
+        "listing_timeout_seconds": 45,
+        "observed_result": "tar exit 0; no filtered member names."
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/dfsd.tar",
+        "bytes": 150190080,
+        "observed_result": "No member matched requested 20260816 hour-13..18 RN1/input/log patterns."
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/dfsd_new.tar",
+        "bytes": 293990400,
+        "observed_result": "Contains RN1 output copies for 20260816 13..18 UTC; no anal_rain/anal.tim/klps_dfsd_odam_log candidate matched."
+      }
+    ],
+    "unsearched": "/NHNHOME/DATA/yhlee_data/ANAL_MODL.tar (122270474240 bytes) and other runtime/archive trees; no claim is made about those sources."
+  }
+}

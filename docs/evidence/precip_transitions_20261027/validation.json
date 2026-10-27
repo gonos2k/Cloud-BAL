@@ -1,0 +1,54 @@
+{
+  "status": "PASS_SCOPED",
+  "source_base": "60319cf552fdbb08e2787d72a531b860c929243d",
+  "experiment": "CP02 2026-08-16 12UTC OFF/HYDRO/LIQUID; not C2 H/A/N",
+  "checks": {
+    "focused_pytest": {
+      "command": "python -m pytest -q tests/test_hourly_precip_scores.py tests/test_precipitation_transitions.py",
+      "passed": 26
+    },
+    "registered_python_modules": 312,
+    "full_portable_suite_run": false,
+    "original_contingencies_independently_recomputed": 108,
+    "new_transition_pairs_independently_recomputed": 72,
+    "native_profile_rows": 4680,
+    "unique_point_corner_rows": 80,
+    "native_precipitation_exact_values": 60,
+    "external_hashes_reread_by_root": 14,
+    "old_manifest_file_hashes_preserved": 39,
+    "old_code_document_hashes_preserved": 3,
+    "plot_visual_review": true,
+    "report_local_links_resolve": true
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "numpy": "1.26.4",
+    "matplotlib": "3.10.8"
+  },
+  "team_review": {
+    "transition_code": "precip_rn1_contract: GO after fresh-output cleanup test and legend correction; 26 focused tests",
+    "native_trace": {
+      "file": "native_team_review.json",
+      "sha256": "4405797148d1881377a7a4d96a211e2c5c4bc3e9e9765c3f0d8ab7e4f0c8cc19",
+      "reviewer": "precip_transition_diagnostics",
+      "status": "GO"
+    }
+  },
+  "model_forecasts_run": false,
+  "fortran_compilation_run": false,
+  "physics_changed": false,
+  "limitations": [
+    "RN1 upstream time/fallback/coverage/QC unresolved for each hour despite complete canonical files.",
+    "RN1 1-km 5x5 max + overrides and bilinear 5-km model have unmatched spatial representation; no matched-footprint score claimed.",
+    "20-point selection is post hoc diagnostic, not replacement scoring mask.",
+    "Native outputs are two snapshots; no first-microphysics process attribution or budgets.",
+    "No independent forecast skill or C2/T39 completion claim."
+  ],
+  "code": {
+    "tools/precipitation_transitions.py": "b82bf9e16fc0e93bea7008123a1879b379f78bacb8aa955fdbadd41df751a46e",
+    "tests/test_precipitation_transitions.py": "e30655ddd101b7758f961c445cab123e51727adb00ad369eb02e99deb97de785",
+    "docs/evidence/precip_transitions_20261027/native_trace/extract_cp02_losthits.py": "13874ce9932a7d567505526c736aafde13d02ed5195cb7938f32d3c42b6c5454",
+    "docs/evidence/precip_transitions_20261027/rn1_contract/replay_audit.py": "23ebf42f6c69e5a8c4393348087022ac9955cab228c2d6aa8b5402f83f6a20d4"
+  },
+  "workflow_note": "Two worker Graphify updates in the isolated worktree were superseded: seven generated graph artifacts preserved at /var/tmp/precip-unplanned-graph-update-20261027 and restored to HEAD before the separate scoped maintained-corpus update. No scientific output derived from those graphs."
+}
