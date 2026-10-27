@@ -127,6 +127,16 @@ CSI는 `H/(H+M+F)`, POD는 `H/(H+M)`, FAR는 `F/(H+F)`, 빈도편향은 `(H+F)/(
 
 공간도에서 보존된 RN1 참조는 36–37°N 동쪽·중부의 강수와 남부·제주 부근의 분포를 보이고, 세 예측장은 남부에서 남동쪽으로 이어지는 띠에 더 집중되어 보입니다. 이 차이는 첫 시간 분포의 정성적 관찰이며 새 공간 점수, 관측 coverage 진단, 또는 원인 설명으로 사용하지 않습니다. 평균량이나 CSI 하나만으로 위치 오차를 설명할 수 없다는 점을 함께 보여줍니다.
 
+## 강수 그림 재검토
+
+최초 그림은 경위도 축의 표시 비율에 `cos(위도)`를 잘못 적용해 동서 방향으로 늘어나 보였습니다. 현재 그림은 `1/cos(평균 위도)` 비율과 더 작은 표식을 사용합니다. 이 수정은 도형 표시만 바로잡으며, 강수 값·보간·mask·색 구간·스코어를 바꾸지 않았습니다. 직전 표시 검토는 [기록](evidence/precip_hourly_20261027/map_recheck/plot_review_before_fix.json), 최종 native audit와 배열 대조는 [native 첫 시간 audit](evidence/precip_hourly_20261027/map_recheck/native_firsthour.json), [보존 배열과의 bridge 확인](evidence/precip_hourly_20261027/map_recheck/npz_bridge.json)에 있습니다.
+
+native audit는 세 CP02 실험의 12:00·13:00 UTC history를 직접 읽었습니다. 파일의 `Times`가 두 시각과 일치하고 `RAINC`/`RAINNC` 단위는 mm이며, 12 UTC 초기 누적값은 모두 0입니다. 13–18 UTC 시간 증분에서 음수 reset은 없고 `RAINSH`는 0으로 확인됐습니다. 조사한 첫 시간에는 공통 고정 mask 3,688점으로의 보간값 point-sum에서 `RAINC`가 전체의 약 0.071–0.078%, `RAINNC`가 약 99.922–99.929%였습니다. 비교량은 각 성분의 누적 13 UTC값에서 12 UTC값을 뺀 뒤 합한 한 시간량입니다. point-sum은 격자점 값의 합이며 면적 적분이나 보존적 재격자가 아닙니다.
+
+그 동일 첫 시간 mask에서 OFF 예측 평균은 0.8832 mm, retained RN1 reference 평균은 0.8735 mm로 비슷하지만, 최대값은 각각 56.50 mm와 37.6 mm이고 RMSE는 4.0623 mm입니다. ≥0.1 mm 사건은 예측 696점, 참조 1,593점입니다. ≥10 mm에서 OFF는 H/M/F=7/52/83, POD=0.1186, FAR=0.9222입니다. 따라서 평균 총량의 근접성은 격자별 위치와 강도의 일치를 보여주지 않습니다. 이것은 첫 시간 보존 배열의 비교이며 raw RN1 재판독이 아닙니다. 원 RN1 파일의 coverage/QC mask가 없어 회색 nominal dry/trace 칸은 확인된 무강수로 단정할 수 없습니다.
+
+최종 그림과 native 성분 검사는 공간 표시 및 한 시간 산술이 기대한 의미를 갖는지 확인한 것입니다. 이를 강수 물리의 과학적 승인, 독립 관측 검증, 또는 최신 Cloud-BAL/C2 효과의 판정으로 확장하지 않습니다.
+
 재생성 도구는 저장소의 `tools/plot_hourly_precip_scores.py`입니다. 저장소 루트에서 빈 출력 디렉터리를 지정해 다음과 같이 실행합니다.
 
 ```sh
@@ -141,7 +151,7 @@ python3 tools/plot_hourly_precip_scores.py \
 
 세부 CSV는 보존된 72개 contingency table과 정렬된 첫 시간 배열에서 추가 계산한 6개 표를 포함합니다. 0.5 및 2.5 mm의 lead 2–6, 총 30개 조합은 `미평가`로 표시합니다. 평가된 모든 분할표의 공간 표본은 3,688점이고 `H+M+F+D=3688`; CSI, POD, FAR, 빈도편향은 저장 counts에서 다시 산출했습니다. 이 검산은 원시 RN1 배열을 다시 읽고 보간해 6시간 점수를 재생성한 검증은 아닙니다.
 
-재생성 도구의 제한 검증은 [validation.json](evidence/precip_hourly_20261027/validation.json)에 기록했습니다. scorer 집중 회귀시험 13개가 통과했고, CSV/JSON과 세 PNG 출력은 새 scratch 경로에서 재생성한 출력과 byte-match했습니다. 기존 출력 디렉터리 재사용 거부도 확인했습니다. 실행 환경은 Python 3.12.3, NumPy 1.26.4, Matplotlib 3.10.8입니다. 전체 portable/native 제품군, 모델 예보 재실행, 원시 RN1 재검증은 수행하지 않았습니다.
+재생성 도구의 제한 검증은 [validation.json](evidence/precip_hourly_20261027/validation.json)에 기록했습니다. scorer 집중 회귀시험 14개가 통과했고, CSV/JSON과 세 PNG 출력은 새 scratch 경로에서 재생성한 출력과 byte-match했습니다. 기존 출력 디렉터리 재사용 거부도 확인했습니다. 실행 환경은 Python 3.12.3, NumPy 1.26.4, Matplotlib 3.10.8입니다. 전체 portable/native 제품군, 모델 예보 재실행, 원시 RN1 재검증은 수행하지 않았습니다.
 
 기록된 RN1 원문 13–18 UTC 파일 여섯 개가 현재 원래 경로에 없습니다. 다른 위치에서 찾은 대체 파일은 보존된 해시와 파싱 통계가 맞지 않아 사용하지 않았습니다. 따라서 전체 6시간의 원자료 재판독·보간·점수 재실행은 미완료입니다. 남아 있는 첫 시간 정렬 배열로는 12–13 UTC에 대해 별도 연속 오차와 0.5/2.5 mm CSI를 산출했고, 이는 원문을 다시 판독한 결과가 아닙니다.
 

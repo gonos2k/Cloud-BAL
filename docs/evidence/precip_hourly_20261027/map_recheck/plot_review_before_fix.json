@@ -1,0 +1,32 @@
+{
+  "status": "NEEDS_PLOT_FIX",
+  "worktree": "/var/tmp/cloudbal-precip-validation",
+  "review_scope": "first-hour precipitation map rendering, retained arrays, receipt, color scale, and coordinate selection",
+  "findings": [
+    {
+      "severity": "blocker_for_map_interpretation",
+      "finding": "The geographic aspect correction is inverted. Matplotlib numeric aspect is y-unit/x-unit; to make longitude distances shorter by cos(latitude), the intended aspect is 1/cos(mean_lat). The current cos(mean_lat) expands the longitude dimension and distorts the plotted spatial pattern horizontally.",
+      "location": "tools/plot_hourly_precip_scores.py: make_first_hour_precipitation_plot"
+    },
+    {
+      "severity": "display_caveat",
+      "finding": "Square scatter markers may overlap neighboring retained grid points and make the sampled mask/precipitation edges appear broader than their point support. Treat the map as sampled point visualization, not area coverage or polygon boundaries; reduce marker size if a closer cell-footprint rendering is desired."
+    },
+    {
+      "severity": "scope_caveat",
+      "finding": "RN1 zero/trace values are shown gray, but the retained artifact has no coverage/QC mask; gray is not evidence of observed dry conditions. The receipt and report state this limitation."
+    }
+  ],
+  "checks_passed": [
+    "NPZ declares 12:00–13:00 UTC under supplied one-hour/mm RN1 convention.",
+    "NPZ reference, forecasts, coordinates, and flat indexes match the source aligned NPZ and fixed mask selection; no row/column reversal found.",
+    "Fields and maxima are finite and nonnegative; maxima are below 100 mm, so the over-range color is unused.",
+    "BoundaryNorm and nine-color palette map [0,0.1), [0.1,0.5), [0.5,1), [1,2.5), [2.5,5), [5,10), [10,20), [20,50), [50,100), with >=100 over; tick labels match those intervals."
+  ],
+  "sha256": {
+    "tools/plot_hourly_precip_scores.py": "9d627a6b7675b7871b8b6a7ff5da98794ce1b72b97a2d48db4f204927fa08dc0",
+    "docs/evidence/precip_hourly_20261027/first_hour_pairs.npz": "296d67585c0a97408da052cfc4b4987295373b204dbd4557e7bb09345ae59c5d",
+    "docs/evidence/precip_hourly_20261027/first_hour_pairs_receipt.json": "7236756636e6771ecef9284b940d5ed22e51f4389b0aa7248bb2047b396d5a73",
+    "docs/evidence/precip_hourly_20261027/derived/first_hour_precipitation.png": "7c0e1ecc4d82ae59ab4a2dd1d3cdb1a81f971f4f3a40fa4d862489b4cfebfdff"
+  }
+}

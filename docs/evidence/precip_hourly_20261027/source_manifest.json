@@ -31,20 +31,20 @@
   },
   "scoring_utility": {
     "path": "tools/plot_hourly_precip_scores.py",
-    "sha256": "9d627a6b7675b7871b8b6a7ff5da98794ce1b72b97a2d48db4f204927fa08dc0",
+    "sha256": "db8dcbb13a8e6c337499f6e97e13a336ad7ddbd4e44ac29c5850fe84d9048a8b",
     "test_path": "tests/test_hourly_precip_scores.py",
-    "test_sha256": "fc50a94076b23b57d7b43c87a36412a0d0531319cd89316ab6e508b9cac1e97b",
+    "test_sha256": "1b4309eabbc874d7127e35561c5c44a2e43d6d0a6700d8a24711f32602eeea56",
     "reproduction_command": "python3 tools/plot_hourly_precip_scores.py docs/evidence/precip_hourly_20261027/input_hourly_csi.csv --first-hour-pairs docs/evidence/precip_hourly_20261027/first_hour_pairs.npz --start-time 2026-08-16T12:00:00Z --output-dir /tmp/precip-hourly-reproduction"
   },
   "derived_outputs": {
     "hourly_scores.csv": "6adc387407ad0ce3e0432a46da7cef8878feb40014fb13e9983e59b3cd5a5337",
     "scores.json": "8443fa8e00e6c2b7db227e4dc9714f34219fb0ea498d62ed8505993ce6cb9fe1",
     "hourly_csi.png": "bb58cfb11405a4c1ffeed6cd0f99a546b79b556aec6fd02200fcef12f64df9bb",
-    "hourly_csi.pdf": "f3a43d00a42e8994b4893d9d28382cec1c9a0a9858641d2211741213fd7b8ace",
+    "hourly_csi.pdf": "fbb3d6a1c88c39bf7d654b344befb2014773ad2e5159039c1d9856852a5e2786",
     "hourly_csi_delta_vs_off.png": "b0ba228a9512d8f5483c4756046d303992c94735522646398cadb3ca45e6f883",
-    "hourly_csi_delta_vs_off.pdf": "f8aeb957b77ee59ce0ee9c68ddc2095847105f54af0630b6cf535a2d14493479",
-    "first_hour_precipitation.png": "7c0e1ecc4d82ae59ab4a2dd1d3cdb1a81f971f4f3a40fa4d862489b4cfebfdff",
-    "first_hour_precipitation.pdf": "af4632a03d6bc2db05cfa6a3585f971dc366976d10873b9eb506e5b5c332f050"
+    "hourly_csi_delta_vs_off.pdf": "a03e04a2df1373f19a2307db92702568fb7f767e48d45c8bd6cb749b9475bd00",
+    "first_hour_precipitation.png": "f29d2ea88341d8046b3b160bb55ec5a499d91a5f46ac3be558d97504f7027460",
+    "first_hour_precipitation.pdf": "69d00a939969782aa6062033eaea556248abcebdd7fbdcac6f19be988fa72b74"
   },
   "verification_scope": {
     "initial_time_utc": "2026-08-16T12:00:00Z",
@@ -125,9 +125,9 @@
   },
   "validation": {
     "path": "validation.json",
-    "sha256": "cb11b471b8840009e5666b99890c58dd76c5620080d6bb8b4633024c0d2a670b",
+    "sha256": "005fe42452374c38a9fbe10889d9794ce556442d2c6dd3cc2fee7396d7ffbc90",
     "status": "PASS_SCOPED",
-    "unit_tests": 13,
+    "unit_tests": 14,
     "fresh_render_byte_match": [
       "hourly_scores.csv",
       "scores.json",
@@ -139,10 +139,37 @@
     "full_portable_suite_rerun": false,
     "raw_RN1_replay": false,
     "new_forecast": false,
+    "map_display_correction": "cos(latitude) to 1/cos(latitude), marker size reduced; score outputs unchanged",
     "environment": {
       "python": "3.12.3",
       "numpy": "1.26.4",
       "matplotlib": "3.10.8"
+    }
+  },
+  "map_recheck": {
+    "native_firsthour.json": {
+      "path": "map_recheck/native_firsthour.json",
+      "sha256": "7a3bcd8a920b87b1c78f68781f668264b5fb3cb2f4ae7efaf5178723b958a1ff"
+    },
+    "npz_bridge.json": {
+      "path": "map_recheck/npz_bridge.json",
+      "sha256": "118845d754f2495e7735858d4e69d47febe30aa8020a9a3bacb8afa604c2f47a"
+    },
+    "native_firsthour_audit.py": {
+      "path": "map_recheck/native_firsthour_audit.py",
+      "sha256": "a5f7be59577e28a447757c9a12ba017db5caece83e085018e4f8a3564e631911"
+    },
+    "bridge_check.py": {
+      "path": "map_recheck/bridge_check.py",
+      "sha256": "d4d239fdbf4b681c1ee8b4c08289e7ef8c378bfa8379e151066c5714b95600a9"
+    },
+    "plot_review_before_fix.json": {
+      "path": "map_recheck/plot_review_before_fix.json",
+      "sha256": "1b229be788068266d56e5ab325f27010c4baafd22e5a6d8b8cb78f2467901798"
+    },
+    "plot_review_after_fix.json": {
+      "path": "map_recheck/plot_review_after_fix.json",
+      "sha256": "afb1e44097b9f6b07a54918fba6740efadc811c9a759d301e06021532239fc5b"
     }
   }
 }

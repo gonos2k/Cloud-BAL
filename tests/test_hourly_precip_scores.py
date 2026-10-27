@@ -24,6 +24,7 @@ from plot_hourly_precip_scores import (  # noqa: E402
     add_not_evaluated_rows,
     build_summary,
     load_and_score,
+    longitude_aspect_ratio,
     prepare_output_dir,
     score_first_hour_pairs,
 )
@@ -74,6 +75,12 @@ class HourlyPrecipScoreTests(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.temp.cleanup()
+
+    def test_longitude_plot_aspect_compensates_for_latitude(self) -> None:
+        self.assertAlmostEqual(longitude_aspect_ratio(0.0), 1.0)
+        self.assertAlmostEqual(longitude_aspect_ratio(60.0), 2.0)
+        with self.assertRaisesRegex(ValueError, "latitude must be finite"):
+            longitude_aspect_ratio(90.0)
 
     def test_scores_complete_fixed_contract(self) -> None:
         scored = load_and_score(self.csv_path, START, expected_cells=EXPECTED_CELLS)

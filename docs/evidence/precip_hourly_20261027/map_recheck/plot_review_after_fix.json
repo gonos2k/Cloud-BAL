@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "worktree": "/var/tmp/cloudbal-precip-validation",
+  "review_scope": "Corrected first-hour precipitation map, native accumulation audit, retained NPZ bridge, report claims, and source manifest",
+  "findings": [
+    "The map uses y/x aspect 1/cos(mean latitude), correcting the previous horizontal distortion; regression checks assert aspect 1 at the equator and 2 at 60 degrees.",
+    "Smaller square point markers retain the fixed 3,688 point locations. Legend explicitly says nominal <0.1 mm gray with coverage unverified.",
+    "Time, units, values, coordinates, and ordering are supported: three CP02 cases, 12–13 UTC one-hour differences, RAINC/RAINNC in mm, zero initial accumulators; native audit found no negative 13–18 UTC component increments and the helper separately checks RAINSH under the zero policy.",
+    "Retained NPZ model fields bridge to native remap within 1.14e-12 mm maximum difference; target coordinates match exactly. No row/column reversal found.",
+    "Color bins correctly show [0,0.1), [0.1,0.5), [0.5,1), [1,2.5), [2.5,5), [5,10), [10,20), [20,50), [50,100), and over-range; no plotted sample exceeds 100 mm.",
+    "Bounded check: first-hour OFF mean 0.8832 mm is close to retained RN1 mean 0.8735 mm, while RMSE is 4.0623 mm, maxima differ (56.50 vs 37.6 mm), and >=10 mm contingency is H/M/F 7/52/83. This supports no blanket claim of normality or spatial agreement; raw RN1 and its coverage/QC mask are unavailable."
+  ],
+  "sha256": {
+    "tools/plot_hourly_precip_scores.py": "db8dcbb13a8e6c337499f6e97e13a336ad7ddbd4e44ac29c5850fe84d9048a8b",
+    "tests/test_hourly_precip_scores.py": "1b4309eabbc874d7127e35561c5c44a2e43d6d0a6700d8a24711f32602eeea56",
+    "docs/evidence/precip_hourly_20261027/first_hour_pairs.npz": "296d67585c0a97408da052cfc4b4987295373b204dbd4557e7bb09345ae59c5d",
+    "docs/evidence/precip_hourly_20261027/first_hour_pairs_receipt.json": "7236756636e6771ecef9284b940d5ed22e51f4389b0aa7248bb2047b396d5a73",
+    "docs/evidence/precip_hourly_20261027/derived/first_hour_precipitation.png": "f29d2ea88341d8046b3b160bb55ec5a499d91a5f46ac3be558d97504f7027460",
+    "docs/evidence/precip_hourly_20261027/map_recheck/native_firsthour.json": "7a3bcd8a920b87b1c78f68781f668264b5fb3cb2f4ae7efaf5178723b958a1ff",
+    "docs/evidence/precip_hourly_20261027/map_recheck/npz_bridge.json": "118845d754f2495e7735858d4e69d47febe30aa8020a9a3bacb8afa604c2f47a"
+  }
+}

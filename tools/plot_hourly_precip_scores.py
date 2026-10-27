@@ -41,6 +41,13 @@ def safe_ratio(numerator: int, denominator: int) -> float | None:
     return numerator / denominator if denominator else None
 
 
+def longitude_aspect_ratio(latitude_deg: float) -> float:
+    """Return y/x plot aspect that compensates for longitude's cos(latitude) scale."""
+    if not math.isfinite(latitude_deg) or abs(latitude_deg) >= 90:
+        raise ValueError("latitude must be finite and strictly between -90 and 90 degrees")
+    return 1.0 / math.cos(math.radians(latitude_deg))
+
+
 def threshold_contingency(forecast: Any, reference: Any, threshold: float) -> dict[str, int]:
     """Count events with inclusive ``amount >= threshold`` comparisons."""
     import numpy as np
@@ -367,9 +374,9 @@ def make_first_hour_precipitation_plot(output_dir: Path, pairs_npz: Path) -> Non
 
     fig, axes = plt.subplots(2, 2, figsize=(11, 8), constrained_layout=True, sharex=True, sharey=True)
     for ax, values, label in zip(axes.flat, fields, labels):
-        points = ax.scatter(longitude, latitude, c=values, s=11, marker="s", cmap=cmap, norm=norm, linewidths=0)
+        points = ax.scatter(longitude, latitude, c=values, s=5, marker="s", cmap=cmap, norm=norm, linewidths=0)
         ax.set_title(label)
-        ax.set_aspect(float(np.cos(np.deg2rad(mean_lat))))
+        ax.set_aspect(longitude_aspect_ratio(mean_lat))
         ax.grid(True, linewidth=0.4, alpha=0.35)
     for ax in axes[-1, :]:
         ax.set_xlabel("Longitude (°E)")
@@ -380,7 +387,7 @@ def make_first_hour_precipitation_plot(output_dir: Path, pairs_npz: Path) -> Non
     colorbar = fig.colorbar(points, ax=axes, boundaries=boundaries, ticks=centers,
                             extend="max", spacing="uniform", shrink=0.9)
     colorbar.ax.set_yticklabels(bin_labels)
-    colorbar.set_label("Precipitation (mm per 1-hour window; dry/trace <0.1 mm in gray)")
+    colorbar.set_label("Precipitation (mm per 1-hour window; nominal <0.1 mm gray; coverage unverified)")
     fig.suptitle("First-hour precipitation · 2026-08-16 12–13 UTC · retained aligned reference, not raw RN1 replay")
     for suffix in ("png", "pdf"):
         fig.savefig(output_dir / f"first_hour_precipitation.{suffix}", dpi=180 if suffix == "png" else None)

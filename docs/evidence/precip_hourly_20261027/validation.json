@@ -19,12 +19,12 @@
         "--start-time",
         "2026-08-16T12:00:00Z",
         "--output-dir",
-        "/var/tmp/precip-pr-validation-xmskhuls/render"
+        "/var/tmp/precip-map-validation-7r7nx3rw/render"
       ],
       "returncode": 0
     }
   ],
-  "unit_tests": 13,
+  "unit_tests": 14,
   "full_portable_suite_rerun": false,
   "fresh_render_byte_matches": {
     "hourly_scores.csv": true,
@@ -32,6 +32,13 @@
     "hourly_csi.png": true,
     "hourly_csi_delta_vs_off.png": true,
     "first_hour_precipitation.png": true
+  },
+  "display_correction": "map aspect cos(latitude) -> 1/cos(latitude), smaller point markers",
+  "score_outputs_unchanged_from_5fd86f9": {
+    "hourly_scores.csv": true,
+    "scores.json": true,
+    "hourly_csi.png": true,
+    "hourly_csi_delta_vs_off.png": true
   },
   "pdf_byte_reproducibility": "not asserted: PDF creation metadata may differ",
   "output_reuse_rejected": true,
@@ -41,8 +48,8 @@
     "matplotlib": "3.10.8"
   },
   "code_sha256": {
-    "tools/plot_hourly_precip_scores.py": "9d627a6b7675b7871b8b6a7ff5da98794ce1b72b97a2d48db4f204927fa08dc0",
-    "tests/test_hourly_precip_scores.py": "fc50a94076b23b57d7b43c87a36412a0d0531319cd89316ab6e508b9cac1e97b"
+    "tools/plot_hourly_precip_scores.py": "db8dcbb13a8e6c337499f6e97e13a336ad7ddbd4e44ac29c5850fe84d9048a8b",
+    "tests/test_hourly_precip_scores.py": "1b4309eabbc874d7127e35561c5c44a2e43d6d0a6700d8a24711f32602eeea56"
   },
   "raw_RN1_replay": false,
   "new_forecast": false
