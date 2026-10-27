@@ -1,0 +1,242 @@
+{
+  "title": "Empty precipitation lost-hit CLI regression",
+  "date_utc": "2026-10-27",
+  "baseline": "a777d39:tools/precipitation_transitions.py",
+  "current_tool": "tools/precipitation_transitions.py",
+  "input_source": "docs/evidence/precip_hourly_20261027/rn1_recovery",
+  "input_source_sha256": {
+    "hour_13_arrays.npz": "4290d0d2955ffde8555c2fa6c8d7655825f6e982cd2b3b7a2604d8149eea00fa",
+    "hour_14_arrays.npz": "0d956ae398d823a2042112f9132b7c3e7f1eab0cc37a3c4c8da28e2a109142f8",
+    "hour_15_arrays.npz": "eea92b8ea040c0e7a6bc76007d22d73f5dc3a90673728f69fe965be1720973bd",
+    "hour_16_arrays.npz": "f7837ca8e51525f47bd13dabc1790510513f1d89b9bc8a2d41416c9ac35a5dd8",
+    "hour_17_arrays.npz": "b0ba89bbe4604808dde6d1b19d75b3874ae55eb8cc1996b679b704b33fe1b80f",
+    "hour_18_arrays.npz": "1235b76f494e01b47db3ab5ade598e80f89bbe5fc5445e14819133b41d7abcfb"
+  },
+  "transformation": {
+    "rainy_both_candidates_off": "Copy canonical six hourly NPZs; replace HYDRO and LIQUID with copies of OFF. Retains observed reference/OFF rain and hit counts.",
+    "all_four_fields_dry": "Copy canonical six hourly NPZs; zero reference, OFF, HYDRO, and LIQUID arrays; retain coordinates and paired indices."
+  },
+  "cases": {
+    "rainy_both_candidates_off": {
+      "input_files": [
+        {
+          "file": "hour_13_arrays.npz",
+          "sha256": "1ecf13cbe6a416d05093ca2a96148585190fff0c3ce5259521f948197b566e71",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 74,
+            "HYDRO": 74,
+            "LIQUID": 74
+          }
+        },
+        {
+          "file": "hour_14_arrays.npz",
+          "sha256": "fbf85a5d1837d20142a5d53d6ba703930512dcd5576fc86e66b7e86a30d55c15",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 59,
+            "HYDRO": 59,
+            "LIQUID": 59
+          }
+        },
+        {
+          "file": "hour_15_arrays.npz",
+          "sha256": "93273961046c48cd50f921797bd3cb989caddbb9d6beb5b5e5cc43f95bc259c1",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 85,
+            "HYDRO": 85,
+            "LIQUID": 85
+          }
+        },
+        {
+          "file": "hour_16_arrays.npz",
+          "sha256": "b30c5b688fafcf79dd614dbf0767573c4ccf02e99a3298502985e28c38c8ad8a",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 66,
+            "HYDRO": 66,
+            "LIQUID": 66
+          }
+        },
+        {
+          "file": "hour_17_arrays.npz",
+          "sha256": "12f2b0b897a3d528b27edb7ccf6295caab68e80410f0ec94917023440c82aebb",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 104,
+            "HYDRO": 104,
+            "LIQUID": 104
+          }
+        },
+        {
+          "file": "hour_18_arrays.npz",
+          "sha256": "a4c9522a00a566c7573b6ef2f3700d4bb2f48c77c09df94becfa7f6f8ff2c4d8",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 155,
+            "HYDRO": 155,
+            "LIQUID": 155
+          }
+        }
+      ],
+      "runs": {
+        "base_a777d39": {
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 287, in <module>\n    main()\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 283, in main\n    print(run(args.input_dir, args.output_dir))\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 272, in run\n    return write_results(output_dir, hourly, threshold_rows, continuous_rows, sizes)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 247, in write_results\n    create_figures(output_dir, hourly)\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 161, in create_figures\n    xmin, xmax = lon[union].min() - 0.45, lon[union].max() + 0.45\n                 ^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/numpy/core/_methods.py\", line 45, in _amin\n    return umr_minimum(a, axis, None, out, keepdims, initial, where)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: zero-size array to reduction operation minimum which has no identity",
+          "output_dir_exists": false,
+          "outputs": [],
+          "expected_failure_reproduced": true
+        },
+        "current": {
+          "exit_code": 0,
+          "stdout": "{'hours_utc': [13, 14, 15, 16, 17, 18], 'thresholds_mm': [0.1, 0.5, 1.0, 2.5, 5.0, 10.0], 'paired_points_per_hour': 3688, 'hourly_flat_index_identity': True, 'hour_13_off_hit_lost_union_ge_5mm': 0, 'hour_13_hydro_lost_hits_ge_5mm': 0, 'hour_13_liquid_lost_hits_ge_5mm': 0, 'hour_13_off_hits_ge_5mm': 74, 'hour_13_hydro_hits_ge_5mm': 74, 'hour_13_liquid_hits_ge_5mm': 74, 'hour_13_hydro_common_hits_ge_5mm': 74, 'hour_13_liquid_common_hits_ge_5mm': 74, 'scope': 'Unweighted statistics over the retained common 3688-point paired sample; no spatial coverage extrapolation.'}",
+          "stderr": "",
+          "output_dir_exists": true,
+          "outputs": [
+            "continuous_metrics.csv",
+            "hour_13_ge5mm_lost_hit_focus.png",
+            "hour_13_ge5mm_off_hit_lost_union.csv",
+            "hourly_threshold_5mm_transitions.png",
+            "rain_point_distributions.png",
+            "summary.json",
+            "threshold_5mm_hit_transitions.png",
+            "threshold_counts_and_transitions.csv"
+          ],
+          "corrected_pass": true,
+          "empty_focus_csv_header_only": true,
+          "all_eight_outputs_present": true
+        }
+      }
+    },
+    "all_four_fields_dry": {
+      "input_files": [
+        {
+          "file": "hour_13_arrays.npz",
+          "sha256": "a561a6ea43e5fe50f2219a435441ad509878b546941c916729163f7e106addc4",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 0,
+            "HYDRO": 0,
+            "LIQUID": 0
+          }
+        },
+        {
+          "file": "hour_14_arrays.npz",
+          "sha256": "a561a6ea43e5fe50f2219a435441ad509878b546941c916729163f7e106addc4",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 0,
+            "HYDRO": 0,
+            "LIQUID": 0
+          }
+        },
+        {
+          "file": "hour_15_arrays.npz",
+          "sha256": "a561a6ea43e5fe50f2219a435441ad509878b546941c916729163f7e106addc4",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 0,
+            "HYDRO": 0,
+            "LIQUID": 0
+          }
+        },
+        {
+          "file": "hour_16_arrays.npz",
+          "sha256": "a561a6ea43e5fe50f2219a435441ad509878b546941c916729163f7e106addc4",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 0,
+            "HYDRO": 0,
+            "LIQUID": 0
+          }
+        },
+        {
+          "file": "hour_17_arrays.npz",
+          "sha256": "a561a6ea43e5fe50f2219a435441ad509878b546941c916729163f7e106addc4",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 0,
+            "HYDRO": 0,
+            "LIQUID": 0
+          }
+        },
+        {
+          "file": "hour_18_arrays.npz",
+          "sha256": "a561a6ea43e5fe50f2219a435441ad509878b546941c916729163f7e106addc4",
+          "points": 3688,
+          "rain_hits_ge_5mm": {
+            "OFF": 0,
+            "HYDRO": 0,
+            "LIQUID": 0
+          }
+        }
+      ],
+      "runs": {
+        "base_a777d39": {
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 287, in <module>\n    main()\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 283, in main\n    print(run(args.input_dir, args.output_dir))\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 272, in run\n    return write_results(output_dir, hourly, threshold_rows, continuous_rows, sizes)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 247, in write_results\n    create_figures(output_dir, hourly)\n  File \"/tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py\", line 161, in create_figures\n    xmin, xmax = lon[union].min() - 0.45, lon[union].max() + 0.45\n                 ^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/numpy/core/_methods.py\", line 45, in _amin\n    return umr_minimum(a, axis, None, out, keepdims, initial, where)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: zero-size array to reduction operation minimum which has no identity",
+          "output_dir_exists": false,
+          "outputs": [],
+          "expected_failure_reproduced": true
+        },
+        "current": {
+          "exit_code": 0,
+          "stdout": "{'hours_utc': [13, 14, 15, 16, 17, 18], 'thresholds_mm': [0.1, 0.5, 1.0, 2.5, 5.0, 10.0], 'paired_points_per_hour': 3688, 'hourly_flat_index_identity': True, 'hour_13_off_hit_lost_union_ge_5mm': 0, 'hour_13_hydro_lost_hits_ge_5mm': 0, 'hour_13_liquid_lost_hits_ge_5mm': 0, 'hour_13_off_hits_ge_5mm': 0, 'hour_13_hydro_hits_ge_5mm': 0, 'hour_13_liquid_hits_ge_5mm': 0, 'hour_13_hydro_common_hits_ge_5mm': 0, 'hour_13_liquid_common_hits_ge_5mm': 0, 'scope': 'Unweighted statistics over the retained common 3688-point paired sample; no spatial coverage extrapolation.'}",
+          "stderr": "",
+          "output_dir_exists": true,
+          "outputs": [
+            "continuous_metrics.csv",
+            "hour_13_ge5mm_lost_hit_focus.png",
+            "hour_13_ge5mm_off_hit_lost_union.csv",
+            "hourly_threshold_5mm_transitions.png",
+            "rain_point_distributions.png",
+            "summary.json",
+            "threshold_5mm_hit_transitions.png",
+            "threshold_counts_and_transitions.csv"
+          ],
+          "corrected_pass": true,
+          "empty_focus_csv_header_only": true,
+          "all_eight_outputs_present": true
+        }
+      }
+    }
+  },
+  "canonical_unmodified_run": {
+    "command": "python tools/precipitation_transitions.py --input-dir docs/evidence/precip_hourly_20261027/rn1_recovery --output-dir <scratch>/canonical_unmodified_output",
+    "compared_outputs": {
+      "threshold_counts_and_transitions.csv": {
+        "byte_match": true,
+        "canonical_sha256": "5f3fd901c4b7579e6ff42558e0aa8fc9ad88851590fba1785934f1653866ea5f",
+        "regenerated_sha256": "5f3fd901c4b7579e6ff42558e0aa8fc9ad88851590fba1785934f1653866ea5f"
+      },
+      "continuous_metrics.csv": {
+        "byte_match": true,
+        "canonical_sha256": "d4ea2254972452588f60839da422c8929a7f08dda5ad083a79365007a11a01a7",
+        "regenerated_sha256": "d4ea2254972452588f60839da422c8929a7f08dda5ad083a79365007a11a01a7"
+      },
+      "hour_13_ge5mm_off_hit_lost_union.csv": {
+        "byte_match": true,
+        "canonical_sha256": "480ebe9282429e31c7882ba1305e74d96b7406d1e31c98249c7997deb72a3209",
+        "regenerated_sha256": "480ebe9282429e31c7882ba1305e74d96b7406d1e31c98249c7997deb72a3209"
+      },
+      "summary.json": {
+        "byte_match": true,
+        "canonical_sha256": "515b133bc3708782352b20e63e5e594721f05fcdb06fbec455fea78903c85f57",
+        "regenerated_sha256": "515b133bc3708782352b20e63e5e594721f05fcdb06fbec455fea78903c85f57"
+      }
+    },
+    "all_byte_match": true
+  },
+  "commands": [
+    "git show a777d39:tools/precipitation_transitions.py > <scratch>/precipitation_transitions_a777d39.py",
+    "python /tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py --input-dir /tmp/precip-empty-loss-regression-6ip9jmp2/rainy_both_candidates_off_inputs --output-dir /tmp/precip-empty-loss-regression-6ip9jmp2/rainy_both_candidates_off_base_a777d39_out",
+    "python /var/tmp/cloudbal-precip-initial-trace/tools/precipitation_transitions.py --input-dir /tmp/precip-empty-loss-regression-6ip9jmp2/rainy_both_candidates_off_inputs --output-dir /tmp/precip-empty-loss-regression-6ip9jmp2/rainy_both_candidates_off_current_out",
+    "python /tmp/precip-empty-loss-regression-6ip9jmp2/precipitation_transitions_a777d39.py --input-dir /tmp/precip-empty-loss-regression-6ip9jmp2/all_four_fields_dry_inputs --output-dir /tmp/precip-empty-loss-regression-6ip9jmp2/all_four_fields_dry_base_a777d39_out",
+    "python /var/tmp/cloudbal-precip-initial-trace/tools/precipitation_transitions.py --input-dir /tmp/precip-empty-loss-regression-6ip9jmp2/all_four_fields_dry_inputs --output-dir /tmp/precip-empty-loss-regression-6ip9jmp2/all_four_fields_dry_current_out",
+    "python /var/tmp/cloudbal-precip-initial-trace/tools/precipitation_transitions.py --input-dir /var/tmp/cloudbal-precip-initial-trace/docs/evidence/precip_hourly_20261027/rn1_recovery --output-dir /tmp/precip-empty-loss-regression-6ip9jmp2/canonical_unmodified_output"
+  ],
+  "retained_artifact": "rainy_both_candidates_off_empty_focus.png"
+}

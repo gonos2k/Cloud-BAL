@@ -1,0 +1,36 @@
+{
+  "status": "PASS_SCOPED",
+  "base_commit": "a777d395d7c6beed3546cad094f376301ffaf74a",
+  "experiment": "Archived CP02 2026-08-16 12UTC OFF/HYDRO/LIQUID; not C2 H/A/N",
+  "checks": {
+    "focused_tests_passed": 28,
+    "registered_python_modules": 313,
+    "full_portable_run": false,
+    "real_cli_empty_cases_passed": 2,
+    "baseline_cli_empty_cases_reproduced": 2,
+    "unchanged_canonical_csv_and_summary": 4,
+    "wrf_profile_rows": 4680,
+    "prior_PR115_12UTC_profile_values_exact": 21060,
+    "wps_full_slab_comparisons_exact": 120,
+    "wps_projection_record_identity": true,
+    "fresh_extractor_runs": 3,
+    "csv_outputs_unchanged_after_contract_checks": true,
+    "plots_visually_reviewed": true,
+    "report_links_valid": true,
+    "payload_and_shadow_coordinates_exact": true
+  },
+  "model_execution": false,
+  "fortran_compilation": false,
+  "physics_changed": false,
+  "findings": [
+    "Empty loss and all-dry cases retain all eight outputs including header-only focus CSV.",
+    "Actual OFF WPS QR/QS equals shadow background and candidate WPS equals corresponding shadow candidate on 20 shared pressures.",
+    "The first observed difference boundary is shadow analysis background to candidate, before WPS emission.",
+    "Each arm preserves sampled QRAIN/QSNOW from wrfinput to 12UTC history; P differs slightly."
+  ],
+  "limitations": [
+    "Exact compiled source revision/internal first operation unresolved; historical build hashes did not match investigated Git source revisions.",
+    "20 post-selected points and unweighted levels are not water mass or general skill.",
+    "No first-microphysics process budgets, new forecasts, C2 T39 fix, or matched RN1 footprint validation."
+  ]
+}

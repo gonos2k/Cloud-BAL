@@ -1,0 +1,140 @@
+{
+  "apply": {
+    "check_only_status": "CHECK_ONLY_PASS_NO_WRITES",
+    "check_only_writes": false,
+    "post_apply_readback_status": "POST_APPLY_READBACK_PASS",
+    "published_targets": 21,
+    "reviewed_by": "root: exact 21 target paths, seven-code scope, 168 prior snapshots, frozen clean source and check-only verified",
+    "root_decision": "GO",
+    "status": "APPLY_PASS",
+    "writes_performed": true
+  },
+  "apply_receipt_sha256": "ce94aaa413ff78eee380c65b45badd474f9b03de8d49f5e797b451c479802ec8",
+  "approval_and_graph_selection_base": "a777d395d7c6beed3546cad094f376301ffaf74a",
+  "baseline_sha256": "64091d042a05cbcdfb31a98ed24c1a34b2dcb64cfaca6943701a6e0a8f0d3f4a",
+  "changed_path_count": 28,
+  "check_only_sha256": "4cd93897b3b38e9a58f63b311b793e2e3bad41ca1c026126def17b392eb0ed14",
+  "corpora": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1374,
+        "edges": 27531,
+        "graph_sha256": "a30d28396f731910199482f162e95b03028a0d4c92da7daf90cb8c82d7483457",
+        "nodes": 15550
+      },
+      "before": {
+        "communities": 1382,
+        "edges": 27505,
+        "graph_sha256": "89fd52009f3af145d3d958cc2468fc8b3f675e7313b46565cd49da4854597ac1",
+        "nodes": 15532
+      },
+      "delta": {
+        "edge_keys_removed": 0,
+        "edges": 26,
+        "extraction_edges": 148,
+        "extraction_nodes": 47,
+        "node_ids_added": 18,
+        "node_ids_removed": 0,
+        "nodes": 18
+      },
+      "old_snapshots_preserved": 86,
+      "snapshots_after": 88
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3381,
+        "edges": 85987,
+        "graph_sha256": "dfe9a2d50c329f4d3b0489023ac78d045cb913b49e0e42d710adbe8acdb783ba",
+        "nodes": 41378
+      },
+      "before": {
+        "communities": 3375,
+        "edges": 85962,
+        "graph_sha256": "d054923d4263996bfc742c9de2d91b9973fb1aa77d5a5a0ee0129eee9c21ac23",
+        "nodes": 41360
+      },
+      "delta": {
+        "edge_keys_removed": 0,
+        "edges": 25,
+        "extraction_edges": 148,
+        "extraction_nodes": 47,
+        "node_ids_added": 18,
+        "node_ids_removed": 0,
+        "nodes": 18
+      },
+      "old_snapshots_preserved": 82,
+      "snapshots_after": 84
+    }
+  },
+  "date": "2026-10-27",
+  "derived_wiki": [
+    "wiki/graph-report.md",
+    "wiki/graph-report-klaps50.md",
+    "wiki/graph-report-cloud-bal.md",
+    "wiki/index.md Graph snapshot section only",
+    "wiki/log.md appended entry"
+  ],
+  "graphify": {
+    "interpreter": "/home/korea_keun/.local/share/uv/tools/graphifyy/bin/python3",
+    "maintained_write_target_count": 21,
+    "mode": "incremental scoped update, isolated staged copies",
+    "version": "0.9.53"
+  },
+  "hash_only_changed_paths": {
+    "README.md": "ff5148cfa4769a97a351f771d5ab6db2507372b116aab2301f745b0a4c02d62e",
+    "docs/CP02_INITIAL_SPECIES_TRACE_20261027.md": "66cfef8062d3097330a432c5d680a559376ec9721087f8dd3187fa2361ea498e",
+    "docs/PRECIP_EMPTY_LOSS_20261027.md": "491aa6d7a1990f0d0b0e84131e884627cb414634530e7b4b0b6efdd4eddcad9c",
+    "docs/evidence/cp02_initial_species_20261027/final/metgrid/metgrid_extraction_receipt.json": "634c93955266cf74a5ea319189a95bbe8b02b4a24df41f2019a4881e2dc01bcf",
+    "docs/evidence/cp02_initial_species_20261027/final/metgrid/metgrid_species_profiles.csv": "8ab1b253d6e5f732c1d6f54cf355e163d53deefce1518d60117698976b72ff89",
+    "docs/evidence/cp02_initial_species_20261027/final/metgrid/metgrid_species_summary.csv": "77d42698741c4d71eb1a226ba43e9dc62e7e41fa2b7f5b993e651b7d0fb992b8",
+    "docs/evidence/cp02_initial_species_20261027/final/shadow/shadow_extraction_receipt.json": "678842e14ea85c3c3b9e7fa060d51bda35bb2ea73d28b5ca656d58440cb79ab9",
+    "docs/evidence/cp02_initial_species_20261027/final/shadow/shadow_species_profiles.csv": "bc765f17fef5b02c4b75d58bd503114259f779cfeffe51ed9e82c6672d37f0ca",
+    "docs/evidence/cp02_initial_species_20261027/final/shadow/shadow_species_summary.csv": "5ea4117c8bc0096796a1b14a9498659fd6dc90caa4868d1478d4b74e25a97653",
+    "docs/evidence/cp02_initial_species_20261027/final/wps/readback.json": "0c792f9dc64de9f038579bf45476d73218e6bba3d92c880b859043418bebc919",
+    "docs/evidence/cp02_initial_species_20261027/final/wrf/extraction_receipt.json": "168c7ab42ce9690124cd63a41a7b6841893da1d8efd5966ad9481475ebdb0f18",
+    "docs/evidence/cp02_initial_species_20261027/final/wrf/initial_species_profiles.csv": "2593498801c80d128e26cdfc0101468b16a5309a5cbf725f92d6c451c15f1131",
+    "docs/evidence/cp02_initial_species_20261027/final/wrf/initial_species_summary.csv": "506e8aa92420d0eef622dd24b1526a9a6d09680aabc5fa9c30d2b0775192c186",
+    "docs/evidence/cp02_initial_species_20261027/historical_lineage.json": "bd63c453bae73e58658f2befa542471ccc7249f62816146bc07a8658ceaa32b7",
+    "docs/evidence/cp02_initial_species_20261027/initial_species_profiles.png": "3b381ae43fac64e088db756bbae29c11ff39d9b15efc34519dede002baca556f",
+    "docs/evidence/cp02_initial_species_20261027/manifest.json": "278fcae8eddbb6a261157585a04effa7042df732355ed4d8cea847294451f629",
+    "docs/evidence/cp02_initial_species_20261027/team_review.json": "b7361105582208f3ac2efa02f43ee9545c456fe65e75a259a5001655dedd4724",
+    "docs/evidence/cp02_initial_species_20261027/validation.json": "04261591dd03459de027635864a66ca818387f84da37edfb324b06fa8fe13db8",
+    "docs/evidence/precip_empty_loss_20261027/commands_and_transformations.md": "798951405acd337558f3f29999c0ba4c3f644991520a9582fd72440b3e9b8361",
+    "docs/evidence/precip_empty_loss_20261027/rainy_both_candidates_off_empty_focus.png": "5e66db254eb281db85697c17b9e1f9cade665d50f2190c6086f9191f2d718a8d",
+    "docs/evidence/precip_empty_loss_20261027/regression_receipt.json": "cb489c17bbfd38b8bf291984e5ca1810fd3aca17848b25b9477cfd174df34e87"
+  },
+  "limitations": [
+    "Graphify extracted Python AST structure from only the seven listed source paths; other 21 changed paths were SHA256-bound only.",
+    "Graph freshness does not establish runtime or scientific validation. The independent review notes the archived products/post-selected 20-point sample do not identify the first internal QR/QS-changing operation or prove physical correctness/precipitation causality; no new forecast or Fortran compile was performed.",
+    "Community label counts can shift through hub-based reclustering; these changes are graph organization, not scientific evidence."
+  ],
+  "plan_sha256": "92757305434c5bc657bb7c7a659f7497c2af48af8031149f7b36a0d34ff2c48b",
+  "post_apply_readback_sha256": "37f8743c73589158155994b35fd30ea45fae0ff5826a25221cb9ecec26807fea",
+  "root_go_sha256": "3115f60bac4fc64e6c9a78a177b4a2405d3e3b5576a6e9e6984721b9c66cb490",
+  "schema": "cp02_initial_species_graph_update_v1",
+  "selected_paths": {
+    "docs/evidence/cp02_initial_species_20261027/extract_initial_species.py": "030d97037ce42044926a09fbffc25007814aea0268592dd5db1c794dde22692e",
+    "docs/evidence/cp02_initial_species_20261027/extract_metgrid_species.py": "59abca4a597e45a65ff81384d3b33f4c0e59af6800b093246c72c10ee634ac5a",
+    "docs/evidence/cp02_initial_species_20261027/extract_shadow_species.py": "b58e3ea4361489516aa9ba9fa340d1cc81f21c590f1afcd11fee6dca5d892491",
+    "docs/evidence/cp02_initial_species_20261027/plot_initial_species.py": "6e1d6350f5662fa7f6f5bff1b9de87e4b992ef1bf15aefd4b9b3aec7f3023581",
+    "docs/evidence/cp02_initial_species_20261027/trace_wps_species.py": "aefa9fdc806e2217fc461df66759d4dfaa806be7922c739e07fc81acc8f8fcbd",
+    "tests/test_precipitation_transitions.py": "fa016d86d6a946f606484961941ac33a0337a85242a5163b76e14999fd4ba191",
+    "tools/precipitation_transitions.py": "cfb62f678d0adad863338a0bbd4d13d1cdb60f296029dcf0a44f8f577e929406"
+  },
+  "snapshots": {
+    "new_per_corpus": [
+      "2026-10-27-cp02-initial-species-graphify-raw",
+      "2026-10-27-cp02-initial-species"
+    ],
+    "old_inventory_sha256": {
+      "Cloud-BAL": "0155d3b33090d22b6807547f780b05b434930b8968708d1abbf6c3231bdc2f62",
+      "KLAPS50": "57ab2d5b70ad5b1f652081d4821a56c5bc2029a5874bfc5e64a339125cb812d8"
+    },
+    "preserved_before": 168,
+    "total_after": 172
+  },
+  "source_commit": "8d45862dd051d0ba76fc1e7fdb928505303d993e",
+  "stage_sha256": "fc5da8284f20f4f8c220c08b2bb872c34689792ea6d606446cbc88093dfe09a6",
+  "team_review_sha256": "b7361105582208f3ac2efa02f43ee9545c456fe65e75a259a5001655dedd4724",
+  "team_review_status": "GO"
+}

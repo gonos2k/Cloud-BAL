@@ -1,0 +1,36 @@
+{
+  "valid_time_utc": "2026-08-16T12:00:00Z",
+  "source_hashes_unchanged_after_read": true,
+  "status": "PASS_MAPPED_METGRID_QR_QS_EXTRACTION",
+  "point_mapping_path": "/var/tmp/cloudbal-precip-initial-trace/docs/evidence/precip_transitions_20261027/native_trace/final-v2/losthit_mapping.csv",
+  "point_mapping_sha256": "49a336ba807251bfb2d270bdaeb494911551167ef75748fc7fec1cd8aa294375",
+  "point_count": 20,
+  "levels": 21,
+  "interpolation": "existing four-corner bilinear mapping; mapping latitude/longitude checked against each met_em XLAT_M/XLONG_M grid",
+  "sources": [
+    {
+      "arm": "OFF",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_native_12_15.B4Lwmh/metgrid/met_em.d01.2026-08-16_12:00:00.nc",
+      "size": 146054308,
+      "sha256": "1b347e1fce9e8db7fd4dd4e6f5de7e542a58793a0b9af3e403b834e73bafbed5"
+    },
+    {
+      "arm": "HYDRO",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/metgrid_HYDRO/met_em.d01.2026-08-16_12:00:00.nc",
+      "size": 146054308,
+      "sha256": "a42ca71750143896056bc6e5018364fb1eea73f51099f788c639359bde8fe43a"
+    },
+    {
+      "arm": "LIQUID",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/metgrid_LIQUID_RADAR_RH1/met_em.d01.2026-08-16_12:00:00.nc",
+      "size": 146054308,
+      "sha256": "a6d6f8a884c3bc5716394692692d9208e376cc45b5f4d752556183b7b02d5d59"
+    }
+  ],
+  "profiles_sha256": "8ab1b253d6e5f732c1d6f54cf355e163d53deefce1518d60117698976b72ff89",
+  "summary_sha256": "77d42698741c4d71eb1a226ba43e9dc62e7e41fa2b7f5b993e651b7d0fb992b8",
+  "limitations": [
+    "metgrid levels are not the same as WRF bottom_top levels or the 22-level shadow coordinate; no levelwise cross-stage equality is asserted.",
+    "OFF and HYDRO/LIQUID metgrid files come from distinct recorded preparation paths; see source receipts."
+  ]
+}

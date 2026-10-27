@@ -152,6 +152,8 @@ The archived 12 UTC CP02 OFF/HYDRO/LIQUID experiment has
 and a [paired-point transition and RN1 representativeness analysis](docs/CP02_PRECIPITATION_TRANSITIONS_20261027.md).
 The first-hour lost-hit region is diagnostic, not a replacement scoring mask;
 these older CP02 results do not validate the separate C2 H/A/N forecasts.
+The [initial QR/QS trace](docs/CP02_INITIAL_SPECIES_TRACE_20261027.md) follows the archived preprocessing and native states;
+[empty-loss handling](docs/PRECIP_EMPTY_LOSS_20261027.md) keeps valid no-loss and all-dry analyses complete.
 The [conditional proofs](docs/CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md)
 state the assumptions behind identifiability, conservation, and wave-energy bounds.
 The [September 14 corrections](docs/CLOUD_BAL_DESIGN_REVIEW_20260907.md)

@@ -1,0 +1,227 @@
+{
+  "source_hashes_unchanged_after_read": true,
+  "all_native_grids_equal": true,
+  "status": "PASS_SCOPED_WRFINPUT_WRFOUT_POINT_EXTRACTION",
+  "point_mapping_csv": "/var/tmp/cloudbal-precip-initial-trace/docs/evidence/precip_transitions_20261027/native_trace/final-v2/losthit_mapping.csv",
+  "point_mapping_sha256": "49a336ba807251bfb2d270bdaeb494911551167ef75748fc7fec1cd8aa294375",
+  "point_count": 20,
+  "corners_per_point": 4,
+  "levels": 39,
+  "interpolation": "bilinear from archived final-v2 corner/weight mapping; no remapping recomputed",
+  "files": [
+    {
+      "arm": "OFF",
+      "stage": "wrfinput",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfinput_d01",
+      "size": 376278396,
+      "sha256": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc"
+    },
+    {
+      "arm": "OFF",
+      "stage": "wrfout_12",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_12:00:00",
+      "size": 328253340,
+      "sha256": "e25ccaa70e78b4d4d4d71d6f840286905b88cfae74cd0e638591d4b110310f61"
+    },
+    {
+      "arm": "HYDRO",
+      "stage": "wrfinput",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfinput_d01",
+      "size": 376278396,
+      "sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126"
+    },
+    {
+      "arm": "HYDRO",
+      "stage": "wrfout_12",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_12:00:00",
+      "size": 328253340,
+      "sha256": "203edd6d035b74a53d1e81cda11a58be22b18f056624f613ae3e0485e4a24388"
+    },
+    {
+      "arm": "LIQUID",
+      "stage": "wrfinput",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfinput_d01",
+      "size": 376278396,
+      "sha256": "1dae2480a9ff4c4a386abf9ff5210f36ad3162330e2dc579d870d64b37be4470"
+    },
+    {
+      "arm": "LIQUID",
+      "stage": "wrfout_12",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_12:00:00",
+      "size": 328253340,
+      "sha256": "354041bc46ba3e746ca20695ebd2a17a7926f00b411848da1234608cbc7764a3"
+    }
+  ],
+  "per_field_wrfinput_to_wrfout12_equality": [
+    {
+      "arm": "OFF",
+      "field": "QVAPOR",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "OFF",
+      "field": "QCLOUD",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "OFF",
+      "field": "QRAIN",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "OFF",
+      "field": "QICE",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "OFF",
+      "field": "QSNOW",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "OFF",
+      "field": "QGRAUP",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "OFF",
+      "field": "T",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "OFF",
+      "field": "P",
+      "exact_equal": false,
+      "max_abs_difference": 0.011634316092454355
+    },
+    {
+      "arm": "OFF",
+      "field": "PB",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "HYDRO",
+      "field": "QVAPOR",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "HYDRO",
+      "field": "QCLOUD",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "HYDRO",
+      "field": "QRAIN",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "HYDRO",
+      "field": "QICE",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "HYDRO",
+      "field": "QSNOW",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "HYDRO",
+      "field": "QGRAUP",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "HYDRO",
+      "field": "T",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "HYDRO",
+      "field": "P",
+      "exact_equal": false,
+      "max_abs_difference": 0.013910641219354147
+    },
+    {
+      "arm": "HYDRO",
+      "field": "PB",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "LIQUID",
+      "field": "QVAPOR",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "LIQUID",
+      "field": "QCLOUD",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "LIQUID",
+      "field": "QRAIN",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "LIQUID",
+      "field": "QICE",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "LIQUID",
+      "field": "QSNOW",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "LIQUID",
+      "field": "QGRAUP",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "LIQUID",
+      "field": "T",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    },
+    {
+      "arm": "LIQUID",
+      "field": "P",
+      "exact_equal": false,
+      "max_abs_difference": 0.011795205300018097
+    },
+    {
+      "arm": "LIQUID",
+      "field": "PB",
+      "exact_equal": true,
+      "max_abs_difference": 0.0
+    }
+  ],
+  "csv_sha256": "2593498801c80d128e26cdfc0101468b16a5309a5cbf725f92d6c451c15f1131",
+  "summary_csv_sha256": "506e8aa92420d0eef622dd24b1526a9a6d09680aabc5fa9c30d2b0775192c186",
+  "lineage_note": "Upstream paired preparation products are described in Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/PAIR_RECEIPT.json; this extractor focuses on the six-hour archive and does not claim a specific QR/QS assignment operation.",
+  "limitations": [
+    "Point extraction compares archived initial and first history states. Upstream provenance is in separate archived receipts and requires a separate source-field comparison to identify the exact species assignment.",
+    "Fields are bilinearly interpolated to 20 canonical points from four native corners; this summarizes collocated state, not every grid cell.",
+    "Saved state differences cannot identify the physical process or code operation that caused them."
+  ]
+}

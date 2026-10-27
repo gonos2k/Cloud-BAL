@@ -1,0 +1,122 @@
+{
+  "status": "PASS_LINEAGE_BOUND_FIRST_DIFFERENCE_OPEN",
+  "scope": "Historical source, options, and receipt chain for the CP02 2026-08-16 12Z OFF/HYDRO/LIQUID initial QR/QS state.",
+  "first_difference_status": "OPEN_NOT_REPRODUCED_BY_THIS_INVESTIGATION",
+  "warning": "This artifact identifies source-path candidates and binds archived inputs/outputs. It does not assert that the first QR/QS divergence occurs at a named source operation. The paired input arrays and all preceding source-stage arrays must be compared to establish that.",
+  "receipts": {
+    "pair_receipt": {
+      "path": "scratch/cp02_actual12_liquid_wps.HisIOM/PAIR_RECEIPT.json",
+      "sha256": "02df7d1abea0bdec013548d84e96ac14de91d216b35d80e4bdf9fb43b4a0a885",
+      "scope": "paired initial-state preparation only; no wrf forecast",
+      "difference_definition": "HYDRO to LIQUID is thermo isolation; OFF to HYDRO includes existing hydrometeor/pressure analysis branch"
+    },
+    "thermo_receipt": {
+      "path": "scratch/cp02_actual12_liquid_wps.HisIOM/THERMO_RECEIPT.json",
+      "sha256": "114c9dbd2ca0c17e5ac67ed6c8d61c99c124554a8fd584a64650d2675e18df89",
+      "scope": "actual 12 UTC target-free LIQUID_RADAR_RH1 thermodynamic candidate",
+      "cloud_analysis_present": 1,
+      "thermo_contract": "explicit_cloud_saturation_mixture_v1",
+      "thermo_target_rh": 1.0,
+      "source_manifest_mismatch_count": 0,
+      "note": "Original maintained tree read-only; private lapsprep.nl changed only to satisfy shadow WPS vapor contract."
+    },
+    "cp02_initial_input_prepares": [
+      "scratch/cp02_unit12_off_drwuvr1f/PREPARE.json",
+      "scratch/cp02_unit12_hydro_jzh17x9p/PREPARE.json",
+      "scratch/cp02_unit12_liquid_ade7no6e/PREPARE.json"
+    ],
+    "preparation_receipt_sha256": "02df7d1abea0bdec013548d84e96ac14de91d216b35d80e4bdf9fb43b4a0a885",
+    "options": {
+      "do_radar_ref": 0,
+      "lightning_option": 0,
+      "interpretation": "Reflectivity diagnostic off in this preparation; no rain-number initialization implied."
+    }
+  },
+  "source_and_executable_identity": {
+    "lapsprep_executable": {
+      "path": "scratch/upstream_lapsprep_build.HjBepF/klps_anal_prep.exe",
+      "sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65"
+    },
+    "lapsprep_build_source_pins": {
+      "path": "scratch/upstream_lapsprep_build.HjBepF/inputs.sha256",
+      "lapsprep_f90_sha256": "f69735e8a4e006db92930e3119b594fb8a9d5d7fbf41673a5e60ab73ae749579",
+      "module_lapsprep_wps_f90_sha256": "d75eadaea8440d4cec9437aa0670d6cb86f6e8ee2a627714fbfc180bce3a9078",
+      "source_commit_resolution": "module_lapsprep_wps digest matches git commit 0aa7590626dafd096de9db32946501d2b0d1b1fe; lapsprep.f90 build digest does not match any revision in the file's current git history (8 revisions checked), so no exact source commit is assigned to the linked binary.",
+      "cloud_bal_column_physics_f90_sha256": "f7d640bbee19a128af6556f16e346e9574d1845997d77eab48e844109f14e17d",
+      "cloud_bal_pipeline_f90_sha256": "188a2e1b9f467c6fa28e8f317e493975ddaf8dfbf5100398867666bbb6f2b478",
+      "commit_caveat": "The compiled lapsprep.f90 source hash is pinned but not matched to a git revision; 4f1c807 is only a historical relevant-file change point and is not claimed as the binary build commit.",
+      "compile_inputs_manifest_sha256": "de58792924a8ea5d2142f1876dfaaac0dcb948eddbb9be53d080b9e943655e78",
+      "cloud_bal_column_physics_source_commit_resolution": "hash-pinned to build input f7d640bbee19a128af6556f16e346e9574d1845997d77eab48e844109f14e17d; no exact git revision identified in this read-only search",
+      "cloud_bal_pipeline_source_commit_resolution": "hash-pinned to build input 188a2e1b9f467c6fa28e8f317e493975ddaf8dfbf5100398867666bbb6f2b478; no exact git revision identified in this read-only search",
+      "cloud_bal_column_physics_source_history_search": "No exact git revision matched pinned hash f7d640bbee19a128af6556f16e346e9574d1845997d77eab48e844109f14e17d among 17 revisions checked.",
+      "cloud_bal_pipeline_source_history_search": "No exact git revision matched pinned hash 188a2e1b9f467c6fa28e8f317e493975ddaf8dfbf5100398867666bbb6f2b478 among 23 revisions checked."
+    },
+    "metgrid": {
+      "path": "scratch/cp02_native_12_15.B4Lwmh/metgrid/metgrid.exe",
+      "sha256": "3107306ad0f8702e818eb84d8d4f9c96561b3632ffbaf2b157b5e284e1a18afe"
+    },
+    "real": {
+      "path": "scratch/cp02_host_process_domain_fm547n5i/host/main/real.exe",
+      "sha256": "58118b30f35f1e817cd500fc0047ee3e0b334975a3231faf3a46b3a5728c5c10"
+    },
+    "model": {
+      "path": "scratch/cp02_unit12_off_drwuvr1f/RUN_BOUND.json",
+      "wrf_executable_sha256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168"
+    }
+  },
+  "initial_wrfinput_candidates": {
+    "OFF": {
+      "path": "scratch/cp02_native_12_15.B4Lwmh/real/wrfinput_d01",
+      "sha256": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc",
+      "role": "actual OFF input identified by cp02_unit12_off_drwuvr1f/PREPARE.json input_source and files_sha256.wrfinput_d01; verified file hash matches",
+      "separate_pair_receipt_control": "scratch/cp02_actual12_liquid_wps.HisIOM/real_OFF/wrfinput_d01",
+      "separate_pair_receipt_control_sha256": "50766cfc41433873f3b3118ff51de56bf94b5e817a307a994b52f905ae177072",
+      "caveat": "PAIR_RECEIPT real_OFF output is not the actual OFF trajectory input; do not use it as CP02 OFF initial array."
+    },
+    "HYDRO": {
+      "path": "scratch/cp02_actual12_liquid_wps.HisIOM/real_HYDRO/wrfinput_d01",
+      "sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+      "paired_parent_copy": "scratch/cp02_actual12_liquid_wps.HisIOM/paired_parent_HYDRO/wrfinput_d01",
+      "role": "cloud/pressure analysis branch through shadow WPS, metgrid, real"
+    },
+    "LIQUID": {
+      "path": "scratch/cp02_actual12_liquid_wps.HisIOM/real_LIQUID_RADAR_RH1/wrfinput_d01",
+      "sha256": "1dae2480a9ff4c4a386abf9ff5210f36ad3162330e2dc579d870d64b37be4470",
+      "paired_parent_copy": "scratch/cp02_actual12_liquid_wps.HisIOM/paired_parent_LIQUID_HT/wrfinput_d01",
+      "role": "HYDRO state plus thermodynamic isolation"
+    },
+    "shared_hydro_liquid_boundary_sha256": "7d08315cb4106efedc97999d0ddc853770a5d3d47b3e9827459a5ce122f4cc18",
+    "note": "Actual six-hour OFF is scratch/cp02_native_12_15.B4Lwmh/real/wrfinput_d01 with SHA-256 5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc, as identified by cp02_unit12_off_drwuvr1f/PREPARE.json and independently verified. PAIR_RECEIPT real_OFF is a separate paired-preparation control and is not the six-hour OFF input."
+  },
+  "candidate_source_operations_not_first_difference_claims": [
+    {
+      "source": "src/lapsprep/lapsprep.f90",
+      "historical_commit": "UNRESOLVED_BUILD_COMMIT; 4f1c80746ab69b1ab351900f67cbe0568d1dd04c is relevant history but its blob does not match the compiled-source hash",
+      "relevant_lines": "438-447, 892-944, 1492-1495",
+      "operation": "LAPSPREP reads rain and snow as radar 3-D hydrometeor fields in kg m-3; zeros invalid cells, clips negative values to zero and applies hydrometeor_scale; under CAP_POLICY=TRANSFER moves excess cloud liquid to rain and ice to snow; converts concentration to dry-air mixing ratio by division by rho; the shadow path writes candidate mapped QR/QS into the WPS arrays.",
+      "evidence_class": "source-path hypothesis; actual archived pre/post QR/QS at this operation not compared here"
+    },
+    {
+      "source": "src/lapsprep/module_lapsprep_wps.f90",
+      "historical_commit": "0aa7590626dafd096de9db32946501d2b0d1b1fe",
+      "relevant_lines": "519-589",
+      "operation": "Writes rain/snow arrays as WPS QR/QS at pressure levels and a zero surface level; does not itself establish upstream array changes.",
+      "evidence_class": "serialization path, not a demonstrated first difference"
+    },
+    {
+      "source": "THERMO_RECEIPT and PAIR_RECEIPT",
+      "operation": "LIQUID cloud analysis and RH=1 thermodynamic branch change QR/QS; HYDRO to LIQUID receipt records QRAIN 125550 changed cells (max absolute delta 2.3545222575e-5, mean abs 3.2526882899e-9) and QSNOW 35173 changed cells (max absolute delta 2.3191609216e-5, mean abs 3.7362597046e-10).",
+      "evidence_class": "observed final-stage difference only; does not locate the first differing operation"
+    },
+    {
+      "source": "src/common/cloud_bal_pipeline.f90 and src/common/cloud_bal_column_physics.f90",
+      "build_source_sha256": {
+        "cloud_bal_pipeline.f90": "188a2e1b9f467c6fa28e8f317e493975ddaf8dfbf5100398867666bbb6f2b478",
+        "cloud_bal_column_physics.f90": "f7d640bbee19a128af6556f16e346e9574d1845997d77eab48e844109f14e17d"
+      },
+      "operation": "The HYDRO shadow analysis branch includes hydrometeor candidate publication/pressure analysis. Existing before/after shadow receipt attributes and whole-grid rain/snow counts show this branch changes rain and snow before WPS/metgrid/real.",
+      "evidence_class": "candidate upstream branch; first exact operation requires source-bound snapshots across candidate operations, not final counts"
+    }
+  ],
+  "earliest_operation_finding": "OPEN: source contains several possible QR/QS-changing operations and the paired receipt only compares final input states. Establishing the first difference requires identical incoming arrays plus exact binary/source-bound pre/post arrays at each candidate operation."
+}
