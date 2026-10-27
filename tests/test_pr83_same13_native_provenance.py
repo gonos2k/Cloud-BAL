@@ -17,4 +17,3 @@ def test_default_provenance_sources_exist_on_native_host():
 
     paths = runner.provenance_paths()
     assert all(path.is_file() for path in paths.values())
-

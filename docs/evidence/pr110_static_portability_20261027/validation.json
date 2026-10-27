@@ -38,6 +38,13 @@
     "scope": "Native Linux execution with configured research path operations returning ENOENT through a seccomp notification supervisor; not physical-host isolation or a security sandbox.",
     "shell_suites": 2
   },
+  "post_validation_formatting": {
+    "after_sha256": "eeaf4af30e4ae4125c3098c547e22e67ccfdadf94f77e1c261864017a1b200c4",
+    "before_sha256": "992e06682289406039573afa906226a3c543970bb2c5a661d8d8391857e7e2d7",
+    "change": "Remove extra trailing blank line; AST identical to tested/extracted source.",
+    "focused_native_test": "1 passed on the pinned native host; no forecast execution.",
+    "path": "tests/test_pr83_same13_native_provenance.py"
+  },
   "remaining_open": [
     "No complete native/Linux/realdata tier claim.",
     "No new physical-host CI execution.",
