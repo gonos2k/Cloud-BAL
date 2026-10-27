@@ -1,0 +1,54 @@
+{
+  "active_root_go_pin_count": 250,
+  "apply_result_sha256": "8a893ec31b0bf750fd56f20a07981fce7a1fb709aa905df6ec2d3da605c0adad",
+  "approval_base": "2dca6f5aeeb14a0f9f7dc22e58dd66a1ec01e2d7",
+  "baseline_dated_snapshot_count": 152,
+  "baseline_sha256": "08f5a9e13c09adf124ea9c764e21b9d3040e190274d4872d5039485cf14f5926",
+  "corpora": {
+    "Cloud-BAL": {
+      "communities": 1367,
+      "dated_snapshot_count": 80,
+      "edges": 27331,
+      "graph_sha256": "dd782b784d4a9602d055242061764b098958027a3480bdc561d9864e81f7c7ff",
+      "new_snapshots": [
+        "2026-10-27-precip-hourly-scores-graphify-raw",
+        "2026-10-27-precip-hourly-scores"
+      ],
+      "nodes": 15456,
+      "preserved_baseline_snapshot_count": 78
+    },
+    "KLAPS50": {
+      "communities": 3345,
+      "dated_snapshot_count": 76,
+      "edges": 85788,
+      "graph_sha256": "b46e578265340bc714d47c75d1c2a8c071dd493c0e77163cc24ad1f4034b0d7d",
+      "new_snapshots": [
+        "2026-10-27-precip-hourly-scores-graphify-raw",
+        "2026-10-27-precip-hourly-scores"
+      ],
+      "nodes": 41284,
+      "preserved_baseline_snapshot_count": 74
+    }
+  },
+  "dated_snapshot_count_after": 156,
+  "hash_only_path_count": 21,
+  "inherited_immutable_pin_count": 197,
+  "limitations": "Graphify AST extraction selected only the precipitation scorer and its focused test; the report and all evidence paths were hash-bound only. No semantic document refresh was run. Fortran cross-file CALL extraction is partial. Graph freshness does not establish runtime or scientific validation.",
+  "plan_sha256": "b93b6bc18f5bbb9c54f177dd850befe1588ec28bf364846d992258e3142cb549",
+  "runtime_or_scientific_validation": "NOT_ESTABLISHED_BY_GRAPH_UPDATE",
+  "schema": "precip_hourly_kg_postapply_readback_v1",
+  "selected_paths": [
+    "tests/test_hourly_precip_scores.py",
+    "tools/plot_hourly_precip_scores.py"
+  ],
+  "source_commit": "f414d68bd6783f5a65d98950511e3385526769df",
+  "stage_sha256": "24934cc96d82c9bc7eae3c65f3aa36de035e35d2c11686f37e12d7fa499c350c",
+  "status": "PASS",
+  "wiki_sha256": {
+    "graph-report-cloud-bal.md": "46e92f12d608a7c69298639c7a1117cd8772eb0cd52f25e0465ca49f84ac01b8",
+    "graph-report-klaps50.md": "f96f91fe2b605c3024447196117282f583408f0406b9911141de71f85abb1a55",
+    "graph-report.md": "c30deac240c64e5a5ac8c9d976c525443eeb7824f426f0f5d4f0db485074d760",
+    "index.md": "5ce31fe756c85eebad8d4cd2d09df9a1a5b906bf07c3db12b75991273beaca71",
+    "log.md": "c43a99a909416e1adc5c680687dc386c23bbd798117b84bb0419e0a0b2ba5572"
+  }
+}
