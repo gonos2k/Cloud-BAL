@@ -1,0 +1,72 @@
+{
+  "kg_manifest_sha256": "82306049c6936597669f3f256b2217393b9ecd0da37b38c37d869158508d83fc",
+  "native_receipt_sha256": "55386cd9bfea1e5a9337f91031e3b824d4c5e346644cc2a126570651b4847416",
+  "portable": {
+    "all_skipped_modules": 0,
+    "baseline_focused": {
+      "failed": 2,
+      "passed": 2
+    },
+    "bundle_sha256": "a5b34b995b58f3007a90b4fd339284bf37c2a2a3fa484fc3e1fa1b7cf04b0974",
+    "entrypoint": "tests/run_python_contract_tests.sh",
+    "exit_code": 0,
+    "members_sha256": {
+      "absence-probe-final.log": "7fc778d662b0b9bc5e748893f7f38a80bbba4511774f258fd34ff966b7626d4d",
+      "absent_supervisor.c": "984b9e32183add27fca858adb42a0a170b3db6c319a2bba05271fffa81f1e7fd",
+      "baseline-focused.log": "8ec6d669b4c0bf502b3f62cfa3fe26fa4ca0821a084fc6ced2378d9104acd097",
+      "baseline-seccomp-focused.log": "17f37adf91e722b1453817075ae94168827d6ad5f9f67935ad78190099fc282d",
+      "focused-seccomp-final.log": "ed3a5a27ca8f03a2bda786968e4581ce4b95e1980f33136756dfb18bd21d7c17",
+      "full-portable-seccomp-final.log": "4521c18a214ed900851765c6a43e8a95a5a5e9d6b67114fe8ed90397a57dfd68",
+      "probe_absence.py": "d79816be4c6392b7f070673cb0ca75b341b0300a2b63d7c5abdcf87d39378ec4",
+      "raw-stat-probe-final.log": "0816a986c8329d7be1c59d2cf7a91092053d9235323c132d495d7eeff2d8e8e6",
+      "receipt.md": "595634aff4f1056091f88f9364f8e5d7a01cc89b38887d293c4505b50bb5f08a",
+      "rootfs-updated-focused.log": "44178be163015033384cffd8b0f0ec02d28cb6648af3d8dbe3121b41f45ca4aa",
+      "scratch/raw_stat_probe.py": "ff5e4a9bda7b613f010ea612872109c8c646cc328647d4058c52678a85dc32dd"
+    },
+    "new_native_gate_focused": {
+      "passed": 10
+    },
+    "new_rootfs_focused": {
+      "passed": 4
+    },
+    "probed_external_paths": 10,
+    "pytest_modules": 201,
+    "pytest_passed": 1340,
+    "pytest_skipped": 1,
+    "python_modules": 208,
+    "receipt_sha256": "595634aff4f1056091f88f9364f8e5d7a01cc89b38887d293c4505b50bb5f08a",
+    "scope": "Native Linux execution with configured research path operations returning ENOENT through a seccomp notification supervisor; not physical-host isolation or a security sandbox.",
+    "shell_suites": 2
+  },
+  "post_validation_formatting": {
+    "after_sha256": "eeaf4af30e4ae4125c3098c547e22e67ccfdadf94f77e1c261864017a1b200c4",
+    "before_sha256": "992e06682289406039573afa906226a3c543970bb2c5a661d8d8391857e7e2d7",
+    "change": "Remove extra trailing blank line; AST identical to tested/extracted source.",
+    "focused_native_test": "1 passed on the pinned native host; no forecast execution.",
+    "path": "tests/test_pr83_same13_native_provenance.py"
+  },
+  "remaining_open": [
+    "No complete native/Linux/realdata tier claim.",
+    "No new physical-host CI execution.",
+    "T39 and one-hour forecast completion remain open; no model runs restarted."
+  ],
+  "schema": "pr110_validation_v1",
+  "source_commit": "bb2358de77d0496d13004b0fba0d6d96036d2934",
+  "status": "PASS_SCOPED",
+  "team_review": "Independent static and portable reviews GO; root addressed review findings and reran final native harness.",
+  "tested_source_sha256": {
+    "docs/CI_CONTRACT.md": "3fdc8a0c3340e10bbf31282610787c7e530b2639f66232e1a1b0aeb5e8bcbb90",
+    "docs/CURRENT_RESEARCH_STATUS.md": "d4ff9edbe3f18b89e146382a26593d3c81593b452645af37f0f92dd32f2d461c",
+    "docs/PR110_STATIC_INPUT_AND_PORTABILITY_20261027.md": "63dfd706c0aa62afcdc4bffdcbcf32207bd4adeb0c30c08b9cbf88b67c2a7e28",
+    "docs/evidence/pr110_static_portability_20261027/static_reader.json": "55386cd9bfea1e5a9337f91031e3b824d4c5e346644cc2a126570651b4847416",
+    "src/lapsprep/module_laps_static.f90": "8b06e6a05acce902e7159f165e5a7048abc7ac0c7c36bc6bb534f30a3a0926f9",
+    "tests/fixtures/pr110_static_reader/create_fixtures.py": "9e97b96abc45a791aa20a120da5d4d8259e61bdcdea426ac77cdaf88b56721b4",
+    "tests/fixtures/pr110_static_reader/reader_driver.f90": "1ba91b611e340ff618e67b9bc797c137373aac49af11f8507388da411de5093b",
+    "tests/run_pr110_static_reader.sh": "aba40fe70bb32e599c4606417127f7fc675c7e5160a89209553764edfc864137",
+    "tests/run_unit_tests.sh": "aca594b26f799ea36688db1773ef6a317df1e73ef59a41c13bdaeedf09e70355",
+    "tests/test_pr71_guarded_composer.py": "466e30d80d7e9bb8cba77c06ca1852e3b941496dbc4dbc2a77ea78c3f242d9d1",
+    "tests/test_pr83_same13_native_provenance.py": "992e06682289406039573afa906226a3c543970bb2c5a661d8d8391857e7e2d7",
+    "tests/test_pr83_same13_native_transaction.py": "3186242444f7d1cdeec307e4f3e3d8b6592af9e1819ef61d6f5911d2f9b324b8",
+    "tests/test_tier_exceptions.json": "6b2f33dec4289c85ef86db8182909c28b7ba99a05460332345227a6ea9a1456c"
+  }
+}

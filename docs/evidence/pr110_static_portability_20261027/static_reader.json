@@ -1,0 +1,158 @@
+{
+  "actual_static_sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b",
+  "command": "bash tests/run_pr110_static_reader.sh /var/tmp/pr110_root_native /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_/baseline/20260831_wind_golden/archive/ANAL/NE57/DABA/static.nest7grid",
+  "compiler_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "exit_code": 0,
+  "log_sha256": "5ab1607032e030cadfb53f2ebe5884dc5aaf888421a233b5185d179c05bb567d",
+  "positive_scope": "Synthetic actual-module values and optional archived static grid at both optimization levels; no full LAPSPREP or forecast run.",
+  "rejections": {
+    "O0": {
+      "bad_grid_type_length": {
+        "diagnostic": "laps_static: grid_type must fit one 132-character value",
+        "sha256": "45af07c2e4c0f0c74a189b787654577a29b161ad0e6048c1f6fab8ad21d9e8b9"
+      },
+      "bad_grid_type_rank": {
+        "diagnostic": "laps_static: grid_type must be rank-2 character data",
+        "sha256": "d374a8668a5a6f854b3c6096f08ff8bbf2143f51e8adc3b1e57a7c9286b7734f"
+      },
+      "bad_lat_rank": {
+        "diagnostic": "laps_static: lat must be a rank-4 REAL32 array",
+        "sha256": "80932f776ce1fc757d1a9a4edcca763a7da0ab6c43c1249845e9fd340ebaaecf"
+      },
+      "double_avg": {
+        "diagnostic": "laps_static: avg must be a rank-4 REAL32 array",
+        "sha256": "6c2ab7072b57dc2ff57b44f3a28c682f404d61e4e19975b1aaf5d84eaa3f77fe"
+      },
+      "double_dx": {
+        "diagnostic": "laps_static: Dx must be a one-element REAL32 variable",
+        "sha256": "6f5dd8ad719b8dd691654878f68b3bdc08cfe799f8edfb771119cbe79621762a"
+      },
+      "double_lat": {
+        "diagnostic": "laps_static: lat must be a rank-4 REAL32 array",
+        "sha256": "80932f776ce1fc757d1a9a4edcca763a7da0ab6c43c1249845e9fd340ebaaecf"
+      },
+      "long_dx": {
+        "diagnostic": "laps_static: Dx must have length one",
+        "sha256": "7c7beed3e3c1ddf792870df39876025bcfe51461ee8cd24ed07e8c20afc0692e"
+      },
+      "long_trailing_lat_axis": {
+        "diagnostic": "laps_static: lat record dimension must be one",
+        "sha256": "840fda4fe27a3b05d46f8beacbd86003bca79297358ce435f8894bf6c93d0205"
+      },
+      "missing_file": {
+        "diagnostic": "laps_static: open static file: No such file or directory",
+        "sha256": "aece9d2305c536e4e979f7ba9b290e2da904be3d87d6fbdc2835a56f1de67333"
+      },
+      "missing_lat": {
+        "diagnostic": "laps_static: find lat: NetCDF: Variable not found",
+        "sha256": "f192ffb8b00fb659efd27392e1ead0bb45a0b9fbf7eff00ec5705d0bbfcd5904"
+      },
+      "nan_dx": {
+        "diagnostic": "laps_static: Dx must be finite and positive",
+        "sha256": "2e7dde07efb9e9cad6c377377ae61fefd7a596dd80b7af8174f82095fd618f0b"
+      },
+      "nan_dy": {
+        "diagnostic": "laps_static: Dy must be finite and positive",
+        "sha256": "6a57ceea8060a4b9ec7d1766c60be8845faf9a5a3e179f795be7cc9f85509cea"
+      },
+      "negative_dx": {
+        "diagnostic": "laps_static: Dx must be finite and positive",
+        "sha256": "2e7dde07efb9e9cad6c377377ae61fefd7a596dd80b7af8174f82095fd618f0b"
+      },
+      "negative_dy": {
+        "diagnostic": "laps_static: Dy must be finite and positive",
+        "sha256": "6a57ceea8060a4b9ec7d1766c60be8845faf9a5a3e179f795be7cc9f85509cea"
+      },
+      "swapped_lat_axes": {
+        "diagnostic": "laps_static: lat must use dimensions x,y first",
+        "sha256": "c8cd01f5ed04b2eb5d0616c539b73c195d0c63381322a710ae5d9cf4eeba4871"
+      },
+      "zero_dx": {
+        "diagnostic": "laps_static: Dx must be finite and positive",
+        "sha256": "2e7dde07efb9e9cad6c377377ae61fefd7a596dd80b7af8174f82095fd618f0b"
+      },
+      "zero_dy": {
+        "diagnostic": "laps_static: Dy must be finite and positive",
+        "sha256": "6a57ceea8060a4b9ec7d1766c60be8845faf9a5a3e179f795be7cc9f85509cea"
+      }
+    },
+    "O2": {
+      "bad_grid_type_length": {
+        "diagnostic": "laps_static: grid_type must fit one 132-character value",
+        "sha256": "45af07c2e4c0f0c74a189b787654577a29b161ad0e6048c1f6fab8ad21d9e8b9"
+      },
+      "bad_grid_type_rank": {
+        "diagnostic": "laps_static: grid_type must be rank-2 character data",
+        "sha256": "d374a8668a5a6f854b3c6096f08ff8bbf2143f51e8adc3b1e57a7c9286b7734f"
+      },
+      "bad_lat_rank": {
+        "diagnostic": "laps_static: lat must be a rank-4 REAL32 array",
+        "sha256": "80932f776ce1fc757d1a9a4edcca763a7da0ab6c43c1249845e9fd340ebaaecf"
+      },
+      "double_avg": {
+        "diagnostic": "laps_static: avg must be a rank-4 REAL32 array",
+        "sha256": "6c2ab7072b57dc2ff57b44f3a28c682f404d61e4e19975b1aaf5d84eaa3f77fe"
+      },
+      "double_dx": {
+        "diagnostic": "laps_static: Dx must be a one-element REAL32 variable",
+        "sha256": "6f5dd8ad719b8dd691654878f68b3bdc08cfe799f8edfb771119cbe79621762a"
+      },
+      "double_lat": {
+        "diagnostic": "laps_static: lat must be a rank-4 REAL32 array",
+        "sha256": "80932f776ce1fc757d1a9a4edcca763a7da0ab6c43c1249845e9fd340ebaaecf"
+      },
+      "long_dx": {
+        "diagnostic": "laps_static: Dx must have length one",
+        "sha256": "7c7beed3e3c1ddf792870df39876025bcfe51461ee8cd24ed07e8c20afc0692e"
+      },
+      "long_trailing_lat_axis": {
+        "diagnostic": "laps_static: lat record dimension must be one",
+        "sha256": "840fda4fe27a3b05d46f8beacbd86003bca79297358ce435f8894bf6c93d0205"
+      },
+      "missing_file": {
+        "diagnostic": "laps_static: open static file: No such file or directory",
+        "sha256": "aece9d2305c536e4e979f7ba9b290e2da904be3d87d6fbdc2835a56f1de67333"
+      },
+      "missing_lat": {
+        "diagnostic": "laps_static: find lat: NetCDF: Variable not found",
+        "sha256": "f192ffb8b00fb659efd27392e1ead0bb45a0b9fbf7eff00ec5705d0bbfcd5904"
+      },
+      "nan_dx": {
+        "diagnostic": "laps_static: Dx must be finite and positive",
+        "sha256": "2e7dde07efb9e9cad6c377377ae61fefd7a596dd80b7af8174f82095fd618f0b"
+      },
+      "nan_dy": {
+        "diagnostic": "laps_static: Dy must be finite and positive",
+        "sha256": "6a57ceea8060a4b9ec7d1766c60be8845faf9a5a3e179f795be7cc9f85509cea"
+      },
+      "negative_dx": {
+        "diagnostic": "laps_static: Dx must be finite and positive",
+        "sha256": "2e7dde07efb9e9cad6c377377ae61fefd7a596dd80b7af8174f82095fd618f0b"
+      },
+      "negative_dy": {
+        "diagnostic": "laps_static: Dy must be finite and positive",
+        "sha256": "6a57ceea8060a4b9ec7d1766c60be8845faf9a5a3e179f795be7cc9f85509cea"
+      },
+      "swapped_lat_axes": {
+        "diagnostic": "laps_static: lat must use dimensions x,y first",
+        "sha256": "c8cd01f5ed04b2eb5d0616c539b73c195d0c63381322a710ae5d9cf4eeba4871"
+      },
+      "zero_dx": {
+        "diagnostic": "laps_static: Dx must be finite and positive",
+        "sha256": "2e7dde07efb9e9cad6c377377ae61fefd7a596dd80b7af8174f82095fd618f0b"
+      },
+      "zero_dy": {
+        "diagnostic": "laps_static: Dy must be finite and positive",
+        "sha256": "6a57ceea8060a4b9ec7d1766c60be8845faf9a5a3e179f795be7cc9f85509cea"
+      }
+    }
+  },
+  "scratch": "/var/tmp/pr110_root_native/pr110_static_reader.EXSMhX",
+  "source_sha256": {
+    "src/lapsprep/module_laps_static.f90": "8b06e6a05acce902e7159f165e5a7048abc7ac0c7c36bc6bb534f30a3a0926f9",
+    "tests/fixtures/pr110_static_reader/create_fixtures.py": "9e97b96abc45a791aa20a120da5d4d8259e61bdcdea426ac77cdaf88b56721b4",
+    "tests/fixtures/pr110_static_reader/reader_driver.f90": "1ba91b611e340ff618e67b9bc797c137373aac49af11f8507388da411de5093b",
+    "tests/run_pr110_static_reader.sh": "aba40fe70bb32e599c4606417127f7fc675c7e5160a89209553764edfc864137"
+  },
+  "status": "PASS_SCOPED"
+}

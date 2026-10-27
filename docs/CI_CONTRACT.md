@@ -38,6 +38,11 @@ Linux Landlock with external research-file reads and Intel compiler execution
 denied. A new checkout on a host with those resources is not, by itself, a
 portability proof. See `PR109_MEMORY_AND_PORTABILITY_20261027.md` for the
 qualification scope and exact evidence.
+PR110 also removes the two residual external file-existence assumptions. Its
+qualification separately records focused tests in a guest root without those
+paths and the full native-kernel run with configured external lookups returning
+ENOENT. This is scoped local qualification, not a fresh physical-host CI result;
+see `PR110_STATIC_INPUT_AND_PORTABILITY_20261027.md`.
 
 The current checkout has no tracked `.github/workflows` file, so this document
 does not establish an active hosted CI check or a hosted-runner result.
@@ -81,19 +86,20 @@ when those tools exist and reports a skip otherwise; its availability is not
 guaranteed by the Python environment.
 
 Run the portable tier locally from the repository root with an executable
-scratch filesystem. This workspace mounts `/tmp` with `noexec`, so do not
-install binary extension wheels there:
+scratch filesystem. Keep the virtual environment in the checkout scratch area
+and use a separate writable temporary directory outside the checkout; the
+production replay guard rejects temporary paths inside the repository.
 
 ```bash
 mkdir -p scratch
 venv_dir=$(mktemp -d "$PWD/scratch/python-contract.XXXXXX")
-trap 'rm -rf "$venv_dir"' EXIT
+tmp_dir=$(mktemp -d /var/tmp/python-contract-tmp.XXXXXX)
+trap 'rm -rf "$venv_dir" "$tmp_dir"' EXIT
 python3 -m venv "$venv_dir"
 "$venv_dir/bin/python" -m pip install --only-binary=:all: \
   'numpy==1.26.4' 'netCDF4==1.7.4' 'cftime==1.6.5' \
   'pytest==8.1.1' 'scipy==1.15.3' 'matplotlib==3.10.1'
-mkdir -p "$venv_dir/tmp"
-TMPDIR="$venv_dir/tmp" PYTHON_BIN="$venv_dir/bin/python" tests/run_python_contract_tests.sh
+TMPDIR="$tmp_dir" PYTHON_BIN="$venv_dir/bin/python" tests/run_python_contract_tests.sh
 ```
 
 ## Staged required-check plan

@@ -276,6 +276,7 @@ mkdir -p "$test_tmp/wps_mod" "$test_tmp/wps_root/lapsprd/lapsprep/wps"
 python3 "$repo_root/tests/check_wps_vapor.py" "$test_tmp/wps_root"
 bash "$repo_root/tests/run_pressure_wps_mapping.sh"
 bash "$repo_root/tests/run_lapsprep_vapor.sh"
+bash "$repo_root/tests/run_pr110_static_reader.sh" "$test_tmp/pr110_static_reader"
 
 "$CLOUD_BAL_FC" -c "${CLOUD_BAL_FIXED_FLAGS[@]}" \
   -o "$test_tmp/writeballaps.o" "$repo_root/src/balance/writeballaps.f"
