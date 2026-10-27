@@ -1,0 +1,104 @@
+{
+  "schema": "t39_kg_update_manifest_v1",
+  "status": "PASS",
+  "pull_request": "https://github.com/gonos2k/Cloud-BAL/pull/114",
+  "source_freeze": {
+    "commit": "6514cfe7a92549243c19e526ac9897e8d5ac2e63",
+    "approval_base": "60319cf552fdbb08e2787d72a531b860c929243d",
+    "graph_selection_base": "60319cf552fdbb08e2787d72a531b860c929243d",
+    "source_worktree_clean_at_preflight": true
+  },
+  "plan_sha256": "25a7ccb3b526d8723f4ab0b4341ff9c846561db7276f924a0f894e70dad0762d",
+  "stage_sha256": "e1d6af75d18e34d5b7a00f3c13d9fd1f28f40a219b6367e8d6f39cf9f18ed66a",
+  "fresh_baseline": {
+    "path": "/var/tmp/t39_kg_baseline_20261027.json",
+    "sha256": "741a77d43f759ef9763549f7ed798213b51a8d7455ad1e3d58bad50e8e68ae0d",
+    "dated_snapshots": 160
+  },
+  "stage_receipt": {
+    "path": "/var/tmp/t39_kg_stage_20261027/stage_receipt.json",
+    "sha256": "205d24ffb289592ccea306563556e4d0cc90bcfc50422db4d7b76f3f6f35f559",
+    "stage_sha256": "e1d6af75d18e34d5b7a00f3c13d9fd1f28f40a219b6367e8d6f39cf9f18ed66a"
+  },
+  "selected_code_paths": [
+    "tools/pr107_t39_first_group_replay.py",
+    "tests/test_pr107_t39_first_group_replay.py",
+    "docs/evidence/t39_closed_replay_20261027/callback_replay/run_callback_replay.py"
+  ],
+  "hash_only_paths": {"count": 27, "documentation": 3, "evidence": 24},
+  "corpora": {
+    "KLAPS50": {
+      "before": {"nodes": 41289, "edges": 85806, "communities": 3376, "dated_snapshots": 78},
+      "after": {"nodes": 41322, "edges": 85876, "communities": 3373, "dated_snapshots": 80},
+      "delta": {"nodes": 33, "edges": 70, "communities": -3},
+      "added_node_ids": 33,
+      "removed_node_ids": 0,
+      "integrity_errors": 0,
+      "graph_sha256": "e9e4a8f316fdffdfb25b9022f2c8d1da1bfb8eb362ae0f8e61d4fb433b933ced"
+    },
+    "Cloud-BAL": {
+      "before": {"nodes": 15461, "edges": 27349, "communities": 1357, "dated_snapshots": 82},
+      "after": {"nodes": 15494, "edges": 27419, "communities": 1358, "dated_snapshots": 84},
+      "delta": {"nodes": 33, "edges": 70, "communities": 1},
+      "added_node_ids": 33,
+      "removed_node_ids": 0,
+      "integrity_errors": 0,
+      "graph_sha256": "f0c2db46750d4e2931b67f7f6ce2250324d5f18b407acad7f941538bffd77e27"
+    }
+  },
+  "snapshots": {
+    "before": 160,
+    "after": 164,
+    "preserved_prior_snapshots": 160,
+    "new_names_per_corpus": [
+      "2026-10-27-t39-closed-replay-graphify-raw",
+      "2026-10-27-t39-closed-replay"
+    ]
+  },
+  "publication": {
+    "check_only": {
+      "status": "CHECK_ONLY_PASS_NO_WRITES",
+      "path": "/var/tmp/t39_kg_publication_20261027/check_only.json",
+      "sha256": "d1977f2c345c0a50b38dd694891591e212041240f58015cb7088511bfe56016c"
+    },
+    "published_targets": 21,
+    "apply": {
+      "status": "APPLY_PASS",
+      "path": "/var/tmp/t39_kg_publication_20261027/apply_result.json",
+      "sha256": "9f4384850c04cf4b7864218ab6359b285d4c6062d72c5e5788cd12c3b8ab2ccd"
+    },
+    "root_go": {
+      "path": "/var/tmp/t39_kg_publication_20261027/root_go.json",
+      "sha256": "57e6161544db51adbb4e8e73a2e6b4e8ea883168bd95a26eaacff5640eec0814"
+    },
+    "publish_plan_sha256": "c36e4f1ba4d65a74043fd5b72520d8c871e6c71f950d7e255b111c19eeb3ea9d"
+  },
+  "independent_postapply_readback": {
+    "status": "PASS",
+    "path": "independent_postapply_review.json",
+    "sha256": "a70266ad7e73146866ac86a0bb599e5a73ae25cf83151f55ca32e2f172bc4a51",
+    "checks": {
+      "published_targets": 21,
+      "prior_snapshots_preserved": 160,
+      "total_snapshots_after": 164,
+      "non_target_dirty_status_preserved": true,
+      "protected_content_verified": true,
+      "inherited_immutable_pins": 197,
+      "active_root_go_pins": 250,
+      "source_worktree_clean": true
+    }
+  },
+  "scientific_status": {
+    "first_group_and_fatal_callback_findings": "DISTINCT",
+    "native_o0_o2_results": "SCOPED_TO_CAPTURED_CALLBACK",
+    "forecast_physics_fix": "NONE",
+    "physical_validation": "OPEN",
+    "one_hour_status": "OPEN",
+    "14utc": "NOT_EVALUATED"
+  },
+  "limitations": [
+    "Fortran cross-file CALL extraction remains partial.",
+    "Community counts may shift during reclustering.",
+    "Graph freshness does not establish runtime or scientific validation."
+  ]
+}

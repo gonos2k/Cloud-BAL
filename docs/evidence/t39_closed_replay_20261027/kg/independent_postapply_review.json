@@ -1,0 +1,79 @@
+{
+  "apply_result_sha256": "9f4384850c04cf4b7864218ab6359b285d4c6062d72c5e5788cd12c3b8ab2ccd",
+  "checks": {
+    "active_root_go_pins": 250,
+    "all_21_published_targets_match_stage": true,
+    "all_prior_snapshot_members_match_baseline": true,
+    "apply_go_binding_matches": true,
+    "dated_snapshot_counts": {
+      "after": 164,
+      "before": 160
+    },
+    "exact_new_snapshot_directories": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-27-t39-closed-replay",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-10-27-t39-closed-replay-graphify-raw",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-27-t39-closed-replay",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-10-27-t39-closed-replay-graphify-raw"
+    ],
+    "hash_only_source_pins_match": 27,
+    "inherited_immutable_pins": 197,
+    "new_graph_targets_only": true,
+    "non_target_dirty_status_deltas": {
+      "Cloud-BAL": {
+        "added": [
+          "?? graphify-out/2026-10-27-t39-closed-replay-graphify-raw/",
+          "?? graphify-out/2026-10-27-t39-closed-replay/"
+        ],
+        "removed": []
+      },
+      "KLAPS50": {
+        "added": [],
+        "removed": []
+      }
+    },
+    "prior_dated_snapshots_preserved": 160,
+    "protected_content_verification": {
+      "method": "publisher.verify_protected_content(plan), independently invoked read-only after apply",
+      "status": "PASS"
+    },
+    "published_target_count": 21,
+    "selected_source_pins_match": 3,
+    "source_worktree_clean": true
+  },
+  "graphs": {
+    "Cloud-BAL": {
+      "added_edges": 70,
+      "added_nodes": 33,
+      "communities": 1358,
+      "edges": 27419,
+      "integrity_errors": 0,
+      "nodes": 15494,
+      "sha256": "f0c2db46750d4e2931b67f7f6ce2250324d5f18b407acad7f941538bffd77e27"
+    },
+    "KLAPS50": {
+      "added_edges": 70,
+      "added_nodes": 33,
+      "communities": 3373,
+      "edges": 85876,
+      "integrity_errors": 0,
+      "nodes": 41322,
+      "sha256": "e9e4a8f316fdffdfb25b9022f2c8d1da1bfb8eb362ae0f8e61d4fb433b933ced"
+    }
+  },
+  "limitations": [
+    "AST extraction was limited to three selected Python files; 27 hash-only paths were not extracted.",
+    "Fortran cross-file CALL extraction remains partial.",
+    "Graph freshness does not establish runtime or scientific validation."
+  ],
+  "plan_sha256": "25a7ccb3b526d8723f4ab0b4341ff9c846561db7276f924a0f894e70dad0762d",
+  "review_note": "Independent post-apply integrity and preservation readback only; no source change, forecast, or KG apply performed by reviewer.",
+  "schema": "t39_kg_independent_postapply_review_v1",
+  "source_commit": "6514cfe7a92549243c19e526ac9897e8d5ac2e63",
+  "source_sha256": {
+    "docs/evidence/t39_closed_replay_20261027/callback_replay/run_callback_replay.py": "7d66daac3e512f18a978eb14f666b38ededbbaf39048a7c543fe263ade63ba6a",
+    "tests/test_pr107_t39_first_group_replay.py": "1d12f4e06187f812ea1edd13185f18806227af474969d6192326248b5fed32e0",
+    "tools/pr107_t39_first_group_replay.py": "959d9f0ea9569180b1a3551fa9913fd4dddd1794da9359a7730ce58b867b1571"
+  },
+  "stage_sha256": "e1d6af75d18e34d5b7a00f3c13d9fd1f28f40a219b6367e8d6f39cf9f18ed66a",
+  "status": "PASS"
+}

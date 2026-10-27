@@ -1,0 +1,443 @@
+{
+  "arm": "HYDRO",
+  "executed_executable_sha256": "7af1f907eb70e8f4ea234cbf18cfad0f408e8b374a0aecc9e695100bc485918c",
+  "fatal_consumer": {
+    "cell": [
+      2,
+      219,
+      13
+    ],
+    "event_key": [
+      39,
+      2,
+      2,
+      219,
+      13
+    ],
+    "matching_store_failures": [
+      {
+        "candidate_bits64": [
+          "3676D01F0BF49AE5",
+          "35D9F4C29CF672CB",
+          "3746D5B76A91F326",
+          "36A9FB2054D81EE3",
+          "8000000000000000",
+          "8000000000000000",
+          "3FEBBCB880000000",
+          "4059000000000000",
+          "408C200000000000",
+          "40F4048780000000",
+          "40F404E7C0000000",
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "context": "CERTIFIER",
+        "failure_stage": 2
+      },
+      {
+        "candidate_bits64": [
+          "3676D01F0BF49AE5",
+          "35D9F4C29CF672CB",
+          "3746D5B76A91F326",
+          "36A9FB2054D81EE3",
+          "8000000000000000",
+          "8000000000000000",
+          "3FEBBCB880000000",
+          "4059000000000000",
+          "408C200000000000",
+          "40F4048780000000",
+          "40F404E7C0000000",
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "context": "FULL",
+        "failure_stage": 2
+      }
+    ],
+    "producer_identity_bounds": [
+      39,
+      1,
+      2,
+      233,
+      2,
+      281,
+      1,
+      39
+    ],
+    "recomputed_diffusion_r64_bits": [
+      "0000000000000000",
+      "0000000000000000"
+    ],
+    "source_r64_bits": [
+      "3746D5B76A91F326",
+      "36A9FB2054D81EE3"
+    ]
+  },
+  "final_completed_step": 38,
+  "group_capture": {
+    "candidate64_hex": [
+      "3DC0321C9E375C92",
+      "3D226D5A966EC69E"
+    ],
+    "cell": [
+      199,
+      52,
+      21
+    ],
+    "classification": "store_rejection",
+    "event_count": 1,
+    "first_event": {
+      "attempt": "BASELINE",
+      "attempt_scope": "BASELINE means the host-wide ANY(source_first_pair) flag was false at this attempt",
+      "cell": 457238,
+      "classification": "store_rejection",
+      "group_predicate": 1,
+      "group_shape": [
+        2533440,
+        4
+      ],
+      "grouped_predicate_input": "(-1,-1) REAL32 sentinel installed by form_candidate after store failure",
+      "hex": {
+        "HEX32_BASE": [
+          "00000000",
+          "00000000"
+        ],
+        "HEX32_CARRIERS_DT": [
+          "47BA3950",
+          "47BA309A",
+          "3F057850",
+          "41200000"
+        ],
+        "HEX32_STORED": [
+          "BF800000",
+          "BF800000"
+        ],
+        "HEX64_CANDIDATE": [
+          "3DC0321C9E375C92",
+          "3D226D5A966EC69E"
+        ],
+        "HEX64_INACTIVE_MASS_LIMIT": [
+          "0000000000000000"
+        ],
+        "HEX64_MASS_BOUNDS": [
+          "4059000000000000",
+          "408C200000000000"
+        ],
+        "HEX64_NUMBER_BOUNDS": [
+          "0000000000000000",
+          "0000000000000000"
+        ],
+        "HEX64_SOURCE_RATE": [
+          "3E40CE1401B7EC8D",
+          "3DA31ECF154C2509"
+        ],
+        "HEX64_TRANSPORT_RATE": [
+          "3E925255AA4A6B83",
+          "3DF4D88EFAA4515D"
+        ]
+      },
+      "i": 199,
+      "j": 52,
+      "k": 21,
+      "key": [
+        "HYDRO_452f8640c13b0db9",
+        39,
+        2,
+        457238,
+        4,
+        1
+      ],
+      "number_bounds_r64": [
+        0.0,
+        0.0
+      ],
+      "options": {
+        "OPT_bulk_volume_quantum_storage": true,
+        "OPT_inactive_mass_pair": false,
+        "OPT_inactive_q_quantum_pair": false,
+        "OPT_joint_constrained_storage": true,
+        "OPT_joint_quantum_absence": true,
+        "OPT_normal_q_adjustment": true,
+        "OPT_number_pair_bounds": true,
+        "OPT_source_first_fallback": false,
+        "OPT_strict_mass_pair": true
+      },
+      "pair": 4,
+      "post_graupel_mixture_feasible": false,
+      "post_graupel_mixture_scope": "feasibility after the inner try_graupel_mixture_trial fallback in the same evaluate_joint_candidate call; not the later outer RK3 source-first reevaluation",
+      "rk": 2,
+      "run_id": "HYDRO_452f8640c13b0db9",
+      "store_failure_stage": 2,
+      "store_succeeded": false,
+      "text": {
+        "R32_BASE": [
+          "0.0000000E+00",
+          "0.0000000E+00"
+        ],
+        "R32_CARRIERS": [
+          "95346.62",
+          "95329.20",
+          "0.5213671",
+          "10.00000"
+        ],
+        "R32_STORED": [
+          "-1.000000",
+          "-1.000000"
+        ],
+        "R64_CANDIDATE": [
+          "2.945989613457187E-011",
+          "3.273321792730207E-014"
+        ],
+        "R64_INACTIVE_MASS_LIMIT": [
+          "0.000000000000000E+000"
+        ],
+        "R64_MASS_BOUNDS": [
+          "100.000000000000",
+          "900.000000000000"
+        ],
+        "R64_NUMBER_BOUNDS": [
+          "0.000000000000000E+000",
+          "0.000000000000000E+000"
+        ],
+        "R64_SOURCE_RATE": [
+          "7.825434570298085E-009",
+          "8.694927300331206E-012"
+        ],
+        "R64_TRANSPORT_RATE": [
+          "2.730134076951023E-007",
+          "3.033482307723359E-010"
+        ]
+      },
+      "timestep": 39
+    },
+    "first_event_index": 0,
+    "first_event_key": [
+      "HYDRO_452f8640c13b0db9",
+      39,
+      2,
+      457238,
+      4,
+      1
+    ],
+    "group_predicate": 1,
+    "pair": 4,
+    "store_failure_stage": 2
+  },
+  "group_event_link_to_fatal_consumer": null,
+  "group_fatal_link_status": "DIFFERENT_CELL",
+  "group_pair_matches_fatal_callback_pair4": true,
+  "group_same_cell_as_fatal_consumer": false,
+  "hashes": {
+    "closed_receipt_sha256": "a71f157b19695cae4cb228cd92b91f05a837fdcd913b1eff3d0d25809697a697",
+    "consumer_capture": {
+      "file_sha256": "f2d52c400fedb20140593041902706a2c0e688b3536aea3464a44fe0415ce52a",
+      "uncompressed_payload_sha256": "33e8c23a5ffb5bfa371a4062d7e2ae9f7ef91d08b75593dce293779f1aba4a21"
+    },
+    "group_capture": {
+      "file_sha256": "ab8aae9ff39984e239bc2773426eb7dd68ebdf72a445e94aa8982cddec4b26c8",
+      "uncompressed_payload_sha256": "6370eba75fd084a4411279c8a8da8b847f4ad0a90645a218f47b7da3dec01310"
+    },
+    "producer_capture": {
+      "file_sha256": "609fce974d5687000eabb82621bc8447315adaa7118ea1f19106e52855d08bc4",
+      "uncompressed_payload_sha256": "c8f0e6ba3ebff526ae2d3f13cfa92e8940858015d678a1b10c0e3d6a7203bca6"
+    }
+  },
+  "interpretation_scope": "The first T39/RK2 grouped failure is reported independently. It is linked to the known T39/RK2 fatal consumer only when both records have the same (i,j,k). The producer join is independently bound by the fatal consumer's T39/RK1 identity bounds and channels 7 and 8; this does not establish a full-domain group cause or a comparison to a T39 baseline state.",
+  "parser_sha256": {
+    "pr92_source_replay": "4c9dda239beaa12428a4be0fb047495f14d68e73a37a6bb1d8fdb4af144da401",
+    "pr99_group_failure_capture": "d715a5bff16c627ee45eb1c4155c4965fa7c9c2a2a0d1d6a0cdca3afc3a6ff8b"
+  },
+  "producer_join": {
+    "channels": {
+      "7": {
+        "after32_bits": "000005B5",
+        "before32_bits": "00000000",
+        "diffusion64_bits": "3746D5B76A91F326",
+        "matches_consumer_recomputed_diffusion": false,
+        "matches_consumer_source_rate": true,
+        "metrics32_bits": [
+          "3F77E651",
+          "3F77E5FA",
+          "3F77E651",
+          "3F77E5FA",
+          "3F842DCF",
+          "3F842FCF",
+          "3F77E808",
+          "3F77E448",
+          "3F77E626",
+          "3F77E626"
+        ],
+        "producer_identity_bounds": [
+          39,
+          1,
+          2,
+          233,
+          2,
+          281,
+          1,
+          39
+        ],
+        "producer_key": [
+          39,
+          1,
+          7,
+          7,
+          2,
+          219,
+          13
+        ],
+        "scale32_bits": [
+          "3FD6BB00",
+          "C77B7245",
+          "3951B717",
+          "3951B717"
+        ],
+        "stencil32_bits": {
+          "-1": [
+            "00000000",
+            "00000000",
+            "00000000",
+            "00000000",
+            "44348B89",
+            "44319493",
+            "47AAAFB7",
+            "47A920E4",
+            "47A6711C"
+          ],
+          "0": [
+            "00000384",
+            "00000000",
+            "00000000",
+            "00000000",
+            "44836389",
+            "442C4C23",
+            "47AB4CF5",
+            "47AA6467",
+            "47A84FCA"
+          ],
+          "1": [
+            "00000000",
+            "00000000",
+            "00000000",
+            "00000000",
+            "43DDBF05",
+            "43973D5B",
+            "47AB8A26",
+            "47ABBD40",
+            "47AB2488"
+          ]
+        }
+      },
+      "8": {
+        "after32_bits": "00000002",
+        "before32_bits": "00000000",
+        "diffusion64_bits": "36A9FB2054D81EE3",
+        "matches_consumer_recomputed_diffusion": false,
+        "matches_consumer_source_rate": true,
+        "metrics32_bits": [
+          "3F77E651",
+          "3F77E5FA",
+          "3F77E651",
+          "3F77E5FA",
+          "3F842DCF",
+          "3F842FCF",
+          "3F77E808",
+          "3F77E448",
+          "3F77E626",
+          "3F77E626"
+        ],
+        "producer_identity_bounds": [
+          39,
+          1,
+          2,
+          233,
+          2,
+          281,
+          1,
+          39
+        ],
+        "producer_key": [
+          39,
+          1,
+          8,
+          5,
+          2,
+          219,
+          13
+        ],
+        "scale32_bits": [
+          "3FD6BB00",
+          "C77B7245",
+          "3951B717",
+          "3951B717"
+        ],
+        "stencil32_bits": {
+          "-1": [
+            "00000000",
+            "00000000",
+            "00000000",
+            "00000000",
+            "44348B89",
+            "44319493",
+            "47AAAFB7",
+            "47A920E4",
+            "47A6711C"
+          ],
+          "0": [
+            "00000001",
+            "00000000",
+            "00000000",
+            "00000000",
+            "44836389",
+            "442C4C23",
+            "47AB4CF5",
+            "47AA6467",
+            "47A84FCA"
+          ],
+          "1": [
+            "00000000",
+            "00000000",
+            "00000000",
+            "00000000",
+            "43DDBF05",
+            "43973D5B",
+            "47AB8A26",
+            "47ABBD40",
+            "47AB2488"
+          ]
+        }
+      }
+    },
+    "producer_identity_bounds": [
+      39,
+      1,
+      2,
+      233,
+      2,
+      281,
+      1,
+      39
+    ]
+  },
+  "run_id": "HYDRO_452f8640c13b0db9",
+  "run_returncode": 1,
+  "run_status": "INCOMPLETE",
+  "schema": "pr107_t39_group_consumer_producer_join_v1",
+  "selection": {
+    "group_rk": 2,
+    "group_timestep": 39,
+    "known_fatal_consumer": {
+      "i": 2,
+      "j": 219,
+      "k": 13,
+      "rk": 2,
+      "timestep": 39
+    },
+    "producer_channels": [
+      7,
+      8
+    ],
+    "producer_rk": 1,
+    "producer_timestep": 39
+  }
+}

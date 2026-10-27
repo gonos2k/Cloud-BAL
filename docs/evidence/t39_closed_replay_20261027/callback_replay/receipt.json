@@ -1,0 +1,244 @@
+{
+  "bindings": {
+    "build_receipt": "/var/tmp/cloudbal-t39-closure/docs/evidence/pr107_t39_capture_20261026/build_receipt.json",
+    "build_receipt_sha256": "b66d9f87b58f371f8fce79e2b7c9727cfd13096cd2db9c51efa435efff0e5767",
+    "closed_hydro_receipt": "/var/tmp/cloudbal-t39-closure/docs/evidence/t39_closed_replay_20261027/HYDRO_T39_receipt.json",
+    "closed_hydro_receipt_sha256": "a71f157b19695cae4cb228cd92b91f05a837fdcd913b1eff3d0d25809697a697",
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "intel_profile": "/var/tmp/cloudbal-t39-closure/tests/intel_toolchain.sh",
+    "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "math_source_unchanged": true,
+    "preprocessed_source": "/var/tmp/pr107_t39_native_capture_20261026/preprocessed/module_em.f90",
+    "preprocessed_source_sha256": "f671a8720ca46cc4c99b244140b0a03c6154ab0ba3d9f422810e2efe5b678338",
+    "profile_flags": {
+      "O0": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "O2": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ]
+    },
+    "transform_proof_sha256": "4c274500ee76892f41669287a885060f7cce63207f0482bf7fb821c5c70bc063",
+    "transformed_source": "/var/tmp/pr107_t39_source_20261026_v2/module_em.F",
+    "transformed_source_sha256": "c978b37a5f290770f899336a52195dbbc78ead87482e40d89f14f90db86263f6"
+  },
+  "capture_values": {
+    "rk1_b_source_bits64": "36A9FB2054D81EE3",
+    "rk1_q_source_bits64": "3746D5B76A91F326",
+    "rk2_b_source_bits64": "36A9FB2054D81EE3",
+    "rk2_q_source_bits64": "3746D5B76A91F326",
+    "rk2_recomputed_b_bits64": "0000000000000000",
+    "rk2_recomputed_q_bits64": "0000000000000000"
+  },
+  "compiler_runs": [
+    {
+      "build": "native",
+      "compiler_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "executable_sha256": "1a7ea7ef541586f526c45fefc8d443eb47b322309650da55e2dcefec7f0b2ca3",
+      "flags_variable": "CLOUD_BAL_FREE_FLAGS",
+      "log": "/var/tmp/t39-replay-design-20261027/callback_replay_final_20261027/O0/native.log",
+      "log_sha256": "6a1f5c0cd6ef902ced884cd7096c430f3306f6fa4049e4232f56f62b2e274eb7",
+      "optimization": "O0",
+      "status": "PASS",
+      "stdout": "RK1_Q 3746D5B76A91F326\nRK1_B 36A9FB2054D81EE3\nRK2_Q 0000000000000000\nRK2_B 0000000000000000"
+    },
+    {
+      "build": "probe",
+      "compiler_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-check",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O0",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "executable_sha256": "f57a681f927a6ec74e6d3aaa6e90d36bc23debb206b62ca9589c0f160a0f61d3",
+      "flags_variable": "CLOUD_BAL_FREE_FLAGS",
+      "log": "/var/tmp/t39-replay-design-20261027/callback_replay_final_20261027/O0/probe.log",
+      "log_sha256": "8c8ddd3793106616e2ba92a8fafd154ff4464141f7abad1e28462977861b686a",
+      "optimization": "O0",
+      "status": "PASS",
+      "stdout": "RK1_Q   2.04789837803060817207601712232763499E-0042 3746D5B76A91F326\nRK1_B   2.27544264225623130230668569147515010E-0045 36A9FB2054D81EE3\nRK2_Q   0.00000000000000000000000000000000000E+0000 0000000000000000\nRK2_B   0.00000000000000000000000000000000000E+0000 0000000000000000\nRK1_RATIO_EXACT_900 T   0.00000000000000000000000000000000000E+0000"
+    },
+    {
+      "build": "native",
+      "compiler_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "executable_sha256": "4983b1c16e311704f803d115d471b5c37bc83d881519c8cbe2596b228ad26e82",
+      "flags_variable": "CLOUD_BAL_REPRO_FLAGS",
+      "log": "/var/tmp/t39-replay-design-20261027/callback_replay_final_20261027/O2/native.log",
+      "log_sha256": "6a1f5c0cd6ef902ced884cd7096c430f3306f6fa4049e4232f56f62b2e274eb7",
+      "optimization": "O2",
+      "status": "PASS",
+      "stdout": "RK1_Q 3746D5B76A91F326\nRK1_B 36A9FB2054D81EE3\nRK2_Q 0000000000000000\nRK2_B 0000000000000000"
+    },
+    {
+      "build": "probe",
+      "compiler_flags": [
+        "-stand",
+        "f08",
+        "-warn",
+        "all",
+        "-fpe0",
+        "-traceback",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-fimf-arch-consistency=true",
+        "-no-ftz"
+      ],
+      "executable_sha256": "29811d25fbec94213def6b5c5c9a663c531238b84a9f750afec2672d62b3124a",
+      "flags_variable": "CLOUD_BAL_REPRO_FLAGS",
+      "log": "/var/tmp/t39-replay-design-20261027/callback_replay_final_20261027/O2/probe.log",
+      "log_sha256": "8c8ddd3793106616e2ba92a8fafd154ff4464141f7abad1e28462977861b686a",
+      "optimization": "O2",
+      "status": "PASS",
+      "stdout": "RK1_Q   2.04789837803060817207601712232763499E-0042 3746D5B76A91F326\nRK1_B   2.27544264225623130230668569147515010E-0045 36A9FB2054D81EE3\nRK2_Q   0.00000000000000000000000000000000000E+0000 0000000000000000\nRK2_B   0.00000000000000000000000000000000000E+0000 0000000000000000\nRK1_RATIO_EXACT_900 T   0.00000000000000000000000000000000000E+0000"
+    }
+  ],
+  "exact_rounding_analysis": {
+    "b64_bits": "36A9FB2054D81EE3",
+    "b64_exact_fraction": "7312990698741475/3213876088517980551083924184682325205044405987565585670602752",
+    "binary64_quotient_display_only": "900.00000000000011",
+    "delta_as_fraction_of_q_ulp": 0.48828125,
+    "exact_cone_test": "q64 <= 900*b64 is FALSE by exact Fraction comparison; this, not a rounded quotient display, establishes the REAL64 cone crossing",
+    "q64_bits": "3746D5B76A91F326",
+    "q64_exact_fraction": "3213716615657875/1569275433846670190958947355801916604025588861116008628224",
+    "q_minus_900_times_b_decimal_approx": "1.5557538194652854e-58",
+    "q_minus_900_times_b_exact_fraction": "125/803469022129495137770981046170581301261101496891396417650688",
+    "q_minus_900_times_b_positive": true,
+    "q_ulp": 3.1861838222649046e-58,
+    "stencil_origin": {
+      "b_quanta": 1,
+      "center_and_other_neighbors_zero": true,
+      "q_quanta": 900,
+      "quantum_exact_fraction": "1/713623846352979940529142984724747568191373312",
+      "west_b_bits": "00000001",
+      "west_q_bits": "00000384"
+    }
+  },
+  "fresh_output_dir": "/var/tmp/t39-replay-design-20261027/callback_replay_final_20261027",
+  "inputs": {
+    "callback_consumer_key": [
+      39,
+      2,
+      2,
+      219,
+      13
+    ],
+    "consumer_capture": "/var/tmp/cloudbal-t39-closure/docs/evidence/t39_closed_replay_20261027/pr92_graupel_source_capture.raw.gz",
+    "consumer_sha256": "f2d52c400fedb20140593041902706a2c0e688b3536aea3464a44fe0415ce52a",
+    "producer_b_record_key": [
+      39,
+      1,
+      8,
+      5,
+      2,
+      219,
+      13
+    ],
+    "producer_capture": "/var/tmp/cloudbal-t39-closure/docs/evidence/t39_closed_replay_20261027/pr92_diffusion_producer.raw.gz",
+    "producer_identity_bounds": [
+      39,
+      1,
+      2,
+      233,
+      2,
+      281,
+      1,
+      39
+    ],
+    "producer_q_record_key": [
+      39,
+      1,
+      7,
+      7,
+      2,
+      219,
+      13
+    ],
+    "producer_sha256": "609fce974d5687000eabb82621bc8447315adaa7118ea1f19106e52855d08bc4"
+  },
+  "instrumented_probe": {
+    "alterations": [
+      "routine signature: append exact128 output argument",
+      "declaration: expose existing REAL128 increment",
+      "initialization of probe output",
+      "probe write before original REAL128-to-REAL64 cast"
+    ],
+    "driver_sha256": "dad71f2a103ad0ae2d49b84f9154edab295b3035a8f77be48787a860d4faf069",
+    "module_sha256": "9b0115637fb650d464e500e14bf0bcd234d242feeb622199134d73fc786ba339",
+    "source": "same extracted helper with only listed observability changes; output REAL128 increment128 alongside original REAL64 result"
+  },
+  "limitations": [
+    "The REAL128 output is from an instrumented copy, not the production helper interface.",
+    "Rational cone comparison proves the rounded REAL64 pair lies above q=900*b; it does not by itself establish full grouped-transaction causality.",
+    "No tolerance or source policy was changed."
+  ],
+  "native_helper": {
+    "driver_sha256": "f879fd2a48f6d078b850f0b0a417cd91f6226a5e7f592980e4650ff0c324ad8b",
+    "extracted_module_sha256": "c2ec28215b34deb788ddea604b41869755c4b99f00a261d898d7f3b3399fe5fb",
+    "source": "C2 pinned preprocessed module_em.f90 module pr87_horizontal_diffusion64, routine horizontal_diffusion64; source arithmetic unmodified"
+  },
+  "replay_helper": "/var/tmp/cloudbal-t39-closure/docs/evidence/t39_closed_replay_20261027/callback_replay/run_callback_replay.py",
+  "replay_helper_sha256": "7d66daac3e512f18a978eb14f666b38ededbbaf39048a7c543fe263ade63ba6a",
+  "schema": "pr107_t39_callback_c2_horizontal_diffusion_replay_v2",
+  "scope": "bounded exact callback-cell producer helper replay; not a full C2 host transaction or forecast causal proof",
+  "status": "PASS_O0_O2_NATIVE_AND_PROBE"
+}

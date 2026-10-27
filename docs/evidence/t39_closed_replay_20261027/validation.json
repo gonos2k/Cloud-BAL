@@ -1,0 +1,39 @@
+{
+  "schema": "t39_closed_replay_validation_v1",
+  "base_commit": "60319cf",
+  "focused_pytest": {
+    "passed": 27,
+    "files": [
+      "tests/test_pr107_t39_postprocess.py",
+      "tests/test_pr99_group_failure_trace.py",
+      "tests/test_pr107_t39_first_group_replay.py"
+    ]
+  },
+  "registry_check": "PASS;312 Python modules registered; discovery only, not full suite",
+  "join_replay": "byte-identical to archived receipt-bound join",
+  "native_scope": {
+    "first_group": "pinned Intel O0/O2 input-local C2 core replay",
+    "fatal_callback": "pinned Intel O0/O2 unmodified helper and separately instrumented REAL128 probe; authoritative external scratch run",
+    "full_forecast_run": false
+  },
+  "prefix_scope": "archived HYDRO 0\u2013600 second noninterference PASS; not recomputed whole-history/trace in this publication",
+  "evidence_manifests_verified": {
+    "closure_files": 10,
+    "callback_files": 11
+  },
+  "source_sha256": {
+    "tools/pr107_t39_first_group_replay.py": "959d9f0ea9569180b1a3551fa9913fd4dddd1794da9359a7730ce58b867b1571",
+    "tests/test_pr107_t39_first_group_replay.py": "1d12f4e06187f812ea1edd13185f18806227af474969d6192326248b5fed32e0",
+    "docs/evidence/t39_closed_replay_20261027/callback_replay/run_callback_replay.py": "7d66daac3e512f18a978eb14f666b38ededbbaf39048a7c543fe263ade63ba6a",
+    "docs/T39_CLOSED_REPLAY_20261027.md": "47b1bb582050e7e3eca6dfc1c17f0a17a890c52717d85d54905ae3857728cfa2",
+    "docs/T39_C2_BUDGET_SCOPE_20261027.md": "d599fdee6d9a1bd0dd05edd5a6fd66d49326f641e704c3898244c9911fa3c9dc",
+    "docs/CURRENT_RESEARCH_STATUS.md": "ee84a42e937223040f303ddb60cf0c8543379626ac7dbea1421b88213b4ddfdd"
+  },
+  "remaining": [
+    "first-group source/transport producer stencil not captured",
+    "physical correction not implemented",
+    "H/A/N3600seconds incomplete",
+    "14UTC observations NOT_EVALUATED",
+    "host water/energy and IR112 forward operator OPEN"
+  ]
+}

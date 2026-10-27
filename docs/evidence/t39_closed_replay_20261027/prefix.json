@@ -1,0 +1,621 @@
+{
+  "common_inputs_and_executable_lineage": {
+    "base_c2_executable_sha256": "387f46df03e87b8693a57fdefc4ddb62a848e7a946ce417ee8b3d54d2c62cc9a",
+    "diagnostic_build_receipt": {
+      "path": "/var/tmp/pr107_t39_native_capture_20261026/build_receipt.json",
+      "sha256": "b66d9f87b58f371f8fce79e2b7c9727cfd13096cd2db9c51efa435efff0e5767"
+    },
+    "diagnostic_executable_path": "/var/tmp/pr107_t39_native_capture_20261026/wrf_pr107_t39_capture.exe",
+    "diagnostic_executable_sha256": "7af1f907eb70e8f4ea234cbf18cfad0f408e8b374a0aecc9e695100bc485918c",
+    "source_proof_path": "/var/tmp/pr107_t39_source_20261026_v2/proof.json",
+    "source_proof_sha256": "4c274500ee76892f41669287a885060f7cce63207f0482bf7fb821c5c70bc063",
+    "wrfbdy_sha256": "885591e6008e219d0b0f8a5a9c6cc3b48eae097d951d1ed731234108706b25d7",
+    "wrfinput_sha256": "46760bdf03e42cbc8e1f5b415e1b304b535d369689f95a421a287d1eb90b679c"
+  },
+  "diagnostic_receipt": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/HYDRO_T39/receipt.json",
+    "sha256": "a71f157b19695cae4cb228cd92b91f05a837fdcd913b1eff3d0d25809697a697"
+  },
+  "history": {
+    "compared_frames": 11,
+    "compared_timestamps": [
+      "2026-08-16_13:00:00",
+      "2026-08-16_13:01:00",
+      "2026-08-16_13:02:00",
+      "2026-08-16_13:03:00",
+      "2026-08-16_13:04:00",
+      "2026-08-16_13:05:00",
+      "2026-08-16_13:06:00",
+      "2026-08-16_13:07:00",
+      "2026-08-16_13:08:00",
+      "2026-08-16_13:09:00",
+      "2026-08-16_13:10:00"
+    ],
+    "differences": [],
+    "metadata": {
+      "MU": [
+        "float32",
+        [
+          "Time",
+          "south_north",
+          "west_east"
+        ],
+        [
+          282,
+          234
+        ],
+        "Pa",
+        ""
+      ],
+      "MUB": [
+        "float32",
+        [
+          "Time",
+          "south_north",
+          "west_east"
+        ],
+        [
+          282,
+          234
+        ],
+        "Pa",
+        ""
+      ],
+      "P": [
+        "float32",
+        [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        [
+          39,
+          282,
+          234
+        ],
+        "Pa",
+        ""
+      ],
+      "PB": [
+        "float32",
+        [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        [
+          39,
+          282,
+          234
+        ],
+        "Pa",
+        ""
+      ],
+      "PH": [
+        "float32",
+        [
+          "Time",
+          "bottom_top_stag",
+          "south_north",
+          "west_east"
+        ],
+        [
+          40,
+          282,
+          234
+        ],
+        "m2 s-2",
+        "Z"
+      ],
+      "PHB": [
+        "float32",
+        [
+          "Time",
+          "bottom_top_stag",
+          "south_north",
+          "west_east"
+        ],
+        [
+          40,
+          282,
+          234
+        ],
+        "m2 s-2",
+        "Z"
+      ],
+      "T": [
+        "float32",
+        [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        [
+          39,
+          282,
+          234
+        ],
+        "K",
+        ""
+      ],
+      "U": [
+        "float32",
+        [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east_stag"
+        ],
+        [
+          39,
+          282,
+          235
+        ],
+        "m s-1",
+        "X"
+      ],
+      "V": [
+        "float32",
+        [
+          "Time",
+          "bottom_top",
+          "south_north_stag",
+          "west_east"
+        ],
+        [
+          39,
+          283,
+          234
+        ],
+        "m s-1",
+        "Y"
+      ],
+      "W": [
+        "float32",
+        [
+          "Time",
+          "bottom_top_stag",
+          "south_north",
+          "west_east"
+        ],
+        [
+          40,
+          282,
+          234
+        ],
+        "m s-1",
+        "Z"
+      ]
+    },
+    "missing_expected_timestamps": {
+      "baseline": [],
+      "compact": []
+    },
+    "scope": "Exact numeric equality per frame for T, P, PB, PH, PHB, U, V, W, MU, and MUB at common 0..600 second history timestamps. Original dtype, dimension names and non-Time extents, units, and stagger are validated; no derived fields or destaggering are included.",
+    "status": "PASS"
+  },
+  "limitations": [
+    "This is output noninterference evidence for the compared HYDRO prefix only.",
+    "It does not classify or resolve the T39 grouped failure, and it is not physical validation."
+  ],
+  "old_receipt": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr104_validtime_forecast_20261026/HYDRO/receipt.json",
+    "sha256": "9e66baf0606cdcb9e798af1c5b8f78718e89c28709c9283a908168cae9e06843"
+  },
+  "raw_stage_trace": {
+    "baseline": {
+      "compressed_sha256": "bbeeaa10f7232c341d385c19eadfb1cfbf018f91ac65141e4fb322270f9a4829",
+      "expanded_sha256": "32d1e413c678ccfab935f464f76683a715e17cd39c019321b9334eed9450d071"
+    },
+    "common_prefix_steps": 30,
+    "compact": {
+      "compressed_sha256": "bbeeaa10f7232c341d385c19eadfb1cfbf018f91ac65141e4fb322270f9a4829",
+      "expanded_sha256": "32d1e413c678ccfab935f464f76683a715e17cd39c019321b9334eed9450d071"
+    },
+    "compared_state_records": 180,
+    "differences": [],
+    "scope": "Exact state metadata and big-endian serialized field bytes for six common completed states per step through min(step 30, compact completed prefix). Both whole traces were streamed to EOF and checked against their receipt-bound compressed and expanded hashes.",
+    "status": "PASS"
+  },
+  "schema": "pr107_hydro_diagnostic_prefix_comparison_v1",
+  "scope": "HYDRO only; shared 0..600 s prefix, exact POST_KDM6 trace state bytes, ten native history fields at 11 minute frames, and T1 PRE/POST captures.",
+  "status": "PASS",
+  "t1_pre_post": {
+    "captures": {
+      "post": {
+        "artifacts": [
+          {
+            "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr104_validtime_forecast_20261026/HYDRO/run/kdm6_first_call_post.raw.gz",
+            "sha256": "965735811109a21564ec23f95229e6ab2a9b37b6f0c1b889b286d2c9bdb556bd"
+          },
+          {
+            "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/HYDRO_T39/run/kdm6_first_call_post.raw.gz",
+            "sha256": "965735811109a21564ec23f95229e6ab2a9b37b6f0c1b889b286d2c9bdb556bd"
+          }
+        ],
+        "field_count": 18,
+        "fields": {
+          "BG": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "92ea7f4936733e47bb87144bf0e5d657caf3c54fa61bf03634175061b770cf7d",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "DELZ": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "8609498977f77df995d11faedaddd5b19cae4ea4dc72c4fdbb89f82b6009548e",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "DEN": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "a64ba045002c341854cac4530e6d84c9363aa2ab4907fa273004c49790379814",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "DIAGRHOG": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "a0194065fd02ea8cfb2d628bef5c2818864be9afaf976b8637a10374eea7f579",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "NC": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "f8a1b82c5565e9263f994e3ceab52fe3df7232bb58237da1a3687f52270536e6",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "NI": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "8aa7e6cd6ee1cbf48f12ba9c487cf2b35e7c7a9700da688b107fab153bbe2d03",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "NN": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "845872d69708a7fc37856d51a3d7371e92c07479ea865ea38168477ba5a416b4",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "NR": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "634b93fa87d2f1251d23673394dee8bbd25900325c2065f344ff8d2f8e3d840f",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "P": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "16128a74cf9ab809be68dc84e9d71cfb62d8cc57cde1c43c4d6627df2d146de8",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "PII": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "ebeafcffb9bdafeaecccd84e6b81c1dce1c5fce8cc4be95f9eeb485de040fb9b",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "Q": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "522fcc4132a6559fdf8c9f42d19a7a82d843b05aaf16c1ffb7a908b31934c9b4",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QC": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "c9c336c15aa443d6bc7e7e1fce6f9d18fed704f570ca79177d5b0817b8c37303",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QG": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "fbab997bf96ef6e63b4d3017405e4a75df023f9064286d0c143c9fb84c0ccf15",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QI": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "93fcc05091b52b8cd2034885b91d4c40728b6c209596d0651d6f49c6b8a8d029",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QR": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "5b6333ac9a08ec38b8926664249c529b0192aac28974abc9fd22843e5a389e0f",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QS": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "0f9102f0ff4e223ad5e37340a1a92e242012e7badeddb62e505b29ce7d55e3bf",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "TH": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "b19a8b017a2903b688fb11544b68e0495d121ee8f9339ce6eceaeeb627f6e1d1",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "XLAND": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "8fa602ad9dbbd2644ca2830fb5fb98dea21ec4de8824920d6ecceaac4c22c769",
+            "shape": [
+              280,
+              232
+            ]
+          }
+        }
+      },
+      "pre": {
+        "artifacts": [
+          {
+            "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr104_validtime_forecast_20261026/HYDRO/run/kdm6_first_call_pre.raw.gz",
+            "sha256": "78d0378e0b158c3560bdc4777500feb600f7fa1932e50c2d5df5f9584ab635f5"
+          },
+          {
+            "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/pr107_t39_capture_20261026/HYDRO_T39/run/kdm6_first_call_pre.raw.gz",
+            "sha256": "78d0378e0b158c3560bdc4777500feb600f7fa1932e50c2d5df5f9584ab635f5"
+          }
+        ],
+        "field_count": 18,
+        "fields": {
+          "BG": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "1ced771a8b10f66e5cfa3b49b7d463d732dfd6b6f87bcd5afd94dc6400231206",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "DELZ": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "8609498977f77df995d11faedaddd5b19cae4ea4dc72c4fdbb89f82b6009548e",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "DEN": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "a64ba045002c341854cac4530e6d84c9363aa2ab4907fa273004c49790379814",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "DIAGRHOG": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "6f6474346ae7d68445353d5f1bc26ca92f5c76ebfe0b03af204469bc39ae6ee8",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "NC": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "f4cff9771fe3c1741e93b85a142be4b3edd30a62390e3e37e6c3c49966f42af1",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "NI": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "04236fbd4cbad0894a1a0199dde33112e6a574cd07aee037c160b0487c9db701",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "NN": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "90d87214d487042b876df8ce91e6a88308567f8c772d053e61e7ea9138a09e0f",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "NR": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "37de13f1a7827ba351b80982f5cb2b2ca6cb18855cc4c32f37e5d26a418149c8",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "P": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "16128a74cf9ab809be68dc84e9d71cfb62d8cc57cde1c43c4d6627df2d146de8",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "PII": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "ebeafcffb9bdafeaecccd84e6b81c1dce1c5fce8cc4be95f9eeb485de040fb9b",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "Q": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "943b2fb326b27a813bfd5b3d6fc17a3ff4db0fb64667a7b0ed733873c30c7d8d",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QC": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "45b04107cb9c131baea10ad52bf800fdf2b44d762d9aa04da37300fcaf828d4b",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QG": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "5ee7f179e7bf8d169977d0c509951fd1b25d9c05ca175afafbf72850104b3ba0",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QI": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "14483bf98085e85428cb92fafc5ee265eaa476525375fc49b3d36224e6ce613b",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QR": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "82816b584e6d289729e1420fa249244468dd5f124bd573dd7955c4e09b590077",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "QS": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "5f4c5dffc78f10dbae196e3082f5d9d1b39950aaed038c535b6333a2e33a500d",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "TH": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "4d6db6edd31c3dfe51f87a96400bda4d45c3aa88c330df38d5a14b4ccec8a54d",
+            "shape": [
+              280,
+              39,
+              232
+            ]
+          },
+          "XLAND": {
+            "dtype": ">f4",
+            "equal": true,
+            "sha256": "8fa602ad9dbbd2644ca2830fb5fb98dea21ec4de8824920d6ecceaac4c22c769",
+            "shape": [
+              280,
+              232
+            ]
+          }
+        }
+      }
+    },
+    "method": "Existing native_kdm6_trace.read_dump; exact field bytes for PRE and POST.",
+    "status": "PASS",
+    "timestep": 1
+  }
+}
