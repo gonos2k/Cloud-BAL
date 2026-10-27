@@ -1,0 +1,96 @@
+{
+  "archive_sha256": "60258f295aa7a52069c7f6603e944763f49ead70437ea1973017e3e3109b3c04",
+  "baseline": "5c8f19e2db87a930767f6c6b8417c23d2a70ad56",
+  "changed_pins_from_pr111": [
+    "tests/lapsprep_static_fixture.py",
+    "tests/run_lapsprep_vapor.sh"
+  ],
+  "command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 CLOUD_BAL_TEST_SCRATCH_ROOT=../pr112-native CLOUD_BAL_KEEP_TEST_OUTPUT=1 bash tests/run_lapsprep_vapor.sh",
+  "compiler": "pinned Intel tests/intel_toolchain.sh",
+  "cwd": "/var/tmp/cloudbal-pr112",
+  "executables": {
+    "build-o2/lapsprep.exe": "747609b9ddb4293de665832640956e09074cbf082460be2fb7986621728d88d4",
+    "build/lapsprep.exe": "12f55029dbcf5e85622add863c3e83370d1531d5ce9edf1c6dfc22e5db71a727"
+  },
+  "logs": {
+    "avg_array_missing.O0.log": "f0c6127f4ee22b2a1ad842ee5ae4e9ce7d8f731408be14c714045b19a6a5d873",
+    "avg_array_missing.O2.log": "f0c6127f4ee22b2a1ad842ee5ae4e9ce7d8f731408be14c714045b19a6a5d873",
+    "lat_array_missing.O0.log": "b0f41b5a4d80c53bc979b8d11f7e8f8410b34acdf0d799719f33457d03d8cf3a",
+    "lat_array_missing.O2.log": "b0f41b5a4d80c53bc979b8d11f7e8f8410b34acdf0d799719f33457d03d8cf3a",
+    "lat_array_nonfinite.O0.log": "82c9b61952e0cd5c811b7f0341e6a050ba3907da287757f2e3426a088d915d65",
+    "lat_array_nonfinite.O2.log": "82c9b61952e0cd5c811b7f0341e6a050ba3907da287757f2e3426a088d915d65",
+    "relative_runner.log": "68d8a4a92668518feb23f9e415488a8a968386d370755aae1fd8c987e8184156"
+  },
+  "off_corner_array_indices_zero_based_record_z_y_x": {
+    "avg_array_missing": [
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "lat_array_missing": [
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "lat_array_nonfinite": [
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ]
+  },
+  "profiles": [
+    "O0",
+    "O2"
+  ],
+  "records_per_header_check": 23,
+  "result": "PASS_SCOPED",
+  "returncode": 0,
+  "scope": [
+    "Full maintained LAPSPREP caller regression with relative scratch path passed",
+    "Three malformed-array fixtures place their only bad value outside SW/NE pair",
+    "Production Fortran unchanged; standalone 17-case reader suite not rerun",
+    "Portable tier not rerun; no forecast/scientific approval"
+  ],
+  "scratch": "/var/tmp/pr112-native/lapsprep_vapor_tests.HNq30l",
+  "source_sha256": {
+    "src/common/cloud_bal_balance_operator.f90": "e6d32bb94e822aafe423a6e836bbd8af2aedaa192628270d31eea4c257bc169b",
+    "src/common/cloud_bal_column_physics.f90": "d17e97bb573381529ab3228ac54fb897a792f55e9c663c4aac54521fdc5c733a",
+    "src/common/cloud_bal_field_contracts.f90": "e6227763c858a7c552acbb5a145dbe08edc5938c7bb47487dc66593745216fc8",
+    "src/common/cloud_bal_grid_geometry.f90": "3e2b75c5a64730a65dd4762a4ed9cc8fe82017ca95a11cf40690bfa4bca3e703",
+    "src/common/cloud_bal_lapsprep_adapter.f90": "74cd6339780ba54ba9ea68800163c955d3726f652d2dfec41b85d1a9a07e4f35",
+    "src/common/cloud_bal_moisture.f90": "33fb244ae739d3204461232f01af702a06f90408555edf34d7df43c22b7dbba2",
+    "src/common/cloud_bal_pipeline.f90": "e1bad8706277d3dda95d941b6f3b0e19864f8f18d263b164d6db4d0718579770",
+    "src/common/cloud_bal_pressure_analysis.f90": "c81ebce5b07998dbe26e7ef40c4dcf787e53550be0c7af106b5f5e31710b0396",
+    "src/common/cloud_bal_real_netcdf.f90": "153df8431f890be7df2648230337c5e4160f7eecc1b77403f86a21e4a5c0c514",
+    "src/common/cloud_bal_stage_context.f90": "e08fb711c8be9bba2f2f162c97c62518a9b2d784157910628160479b74637a46",
+    "src/common/cloud_bal_stage_payload.f90": "4bb69f7d21643a17617e903fc1570dde198215d35b80fc1e5f0c8b006b20316a",
+    "src/common/cloud_bal_state.f90": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61",
+    "src/common/cloud_bal_wps_adapter.f90": "f063f9b3605fe2504b6d364f858cef82605105a0888825cd795ea03c7c65eacb",
+    "src/lapsprep/lapsprep.f90": "2c1a7c81042ab40928650d9286fb186e8725e52dc7d29e60bb71ac2cce00dfea",
+    "src/lapsprep/module_laps_static.f90": "efdf8b724383ecb7f3bb52b30d3f45edc89e987480090c10fe76cee25e7488af",
+    "src/lapsprep/module_lapsprep_wps.f90": "d41849677d965d3b8ad1e5834cbd74f99f958f3e9894b7157049ec1dae077cce",
+    "src/lapsprep/module_setup.f90": "14586ff3db4cfa69d1dad959d449f80d211a1dabacd2aec78fd6a7a65e46b799",
+    "tests/fixtures/pr110_static_reader/create_fixtures.py": "9e97b96abc45a791aa20a120da5d4d8259e61bdcdea426ac77cdaf88b56721b4",
+    "tests/fixtures/pr110_static_reader/reader_driver.f90": "1ba91b611e340ff618e67b9bc797c137373aac49af11f8507388da411de5093b",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/lapsprep_static_fixture.py": "d5b8cd137f795883de00aa29d9ac884bc1e071142a7290fb6e0a47b9e8022b91",
+    "tests/lapsprep_vapor_fixture.py": "9275ce0a1ffb064157e97e03fca9ee7626c47a1cf13d608ea0fca5e9f4d4a8b8",
+    "tests/lapsprep_vapor_stubs.f90": "95816a2bb7e58f90fb7d01ac86f4cff729d0f7a940c95475e9932c27d08dadf0",
+    "tests/run_lapsprep_vapor.sh": "be6690584af7c842f100f3c6df0f8c5a940769e23735ee6bef0745628302f4dc",
+    "tests/run_pr110_static_reader.sh": "b02ef47db268d2bef08aeccc2b0d1e5c947f134903e63a2832fcc7f3a33828df",
+    "tests/test_lapsprep_vapor.py": "e856d4109052dea0490706b4a699c75ecd4f943b848faa76ff4c5c89a5213952",
+    "tests/verify_lapsprep_static_wps.py": "caef6f68a99b9437fea3d3f5dbd0effc6764f9c3ac291947f300b470bd6e84bd",
+    "tools/compare_baseline.py": "5c137411243ca2d0c6ca87c1e305a5d0dc4e7b3e94a0d9ac8ed43e91175d5fe0"
+  },
+  "static_negative_cases_per_profile": 12,
+  "wps_header_checks": 4
+}
